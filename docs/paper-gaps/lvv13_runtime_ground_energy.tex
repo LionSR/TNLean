@@ -1732,9 +1732,81 @@ such operations and complex addition uses two.
 The theorem
 \leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coefficientCode\_height}
 also bounds the actual reduced output fractions by \(\mathcal H(H,b,k)\).
-These results do not yet bound all intermediate operand lengths or the
-cost of rational reduction. They also do not replace the separate
-contractions needed for inner products and local energy matrices.
+The intermediate contraction and matrix-element estimates described below
+extend these results. The cost of rational reduction and the complete
+polynomial-time optimization theorem remain separate obligations.
+
+Inner products are now evaluated by an explicit weighted mixed transfer.
+At a site its entries are
+\[
+  E_{(a,b),(c,d)}
+    =\sum_{s,t}\overline{A^s_{ac}}\,W_{st}B^t_{bd}.
+\]
+The theorem
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.decode\_weightedOverlapOfRationalParameters\_eq\_productOperator}
+identifies the rational boundary contraction with the matrix element of
+the product of the one-site operators, including both scalar caps.
+Identity physical weights give the actual Gram inner product of the
+represented left-block vectors by
+\leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.decode\_gramOfRationalParameters}.
+The counted evaluation performs exactly
+\[
+  n(15q^2+8)(D_aD_b)^2+13
+\]
+rational operations. It computes each transfer matrix and stores each
+intermediate row before continuing; it does not enumerate physical chain
+configurations.
+
+The local energy calculation uses the matrix-unit expansion
+\leanid{TNLean.MPS.AreaLaw.supported\_eq\_sum\_twoSiteMatrixUnitFactors}.
+Every operator supported on two distinct sites is a sum of \(q^4\)
+product operators, with coefficients read at any fixed reference
+configuration. The executable rational evaluation is identified with the
+matrix element of the actual supported operator by
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.decode\_twoSiteMatrixElementOfRationalParameters}.
+Its finite-sum counterpart
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.decode\_matrixElementOfLocalTerms}
+gives the full local-Hamiltonian matrix element. The counted evaluator
+\leanid{TNLean.MPS.AreaLaw.RationalLocalEnergyCost.run\_matrixElementOfLocalTerms}
+uses exactly
+\[
+  m\left[q^4\left(n(15q^2+8)(D_aD_b)^2+21\right)+2\right]
+\]
+rational operations for \(m\) local terms. These equalities concern
+explicit rational tensor and local operator data; approximation of the
+original data must still be charged to the available error margins.
+
+Intermediate scalar products have denominator and norm control as well.
+If an initial row has denominator \(N\) and entry norm bound \(R\), and
+each site matrix of order \(D\) has denominator \(M\) and norm bound \(C\), the row
+after \(t\) sites has denominator \(NM^t\) and entry norm bound
+\(R(DC)^t\). At the next site, the actual counted scalar-product
+accumulator over \(a\) coordinates has denominator \(NM^{t+1}\) and
+norm at most \(aR(DC)^tC\); see
+\leanid{TNLean.MPS.AreaLaw.RationalContractionCost.rowProduct\_next\_dot\_prefix\_bounds}.
+The corresponding stored-coordinate bounds and the heights of every
+rational product, subtraction and addition inside complex multiplication
+are formalized. The latter are given by
+\leanid{TNLean.MPS.AreaLaw.RationalContractionCost.complexMul\_primitive\_heights}.
+
+For the actual weighted input, define
+\[
+  P=2+nqD_a^2+nqD_b^2+nq^2.
+\]
+The two scalar caps, all local tensor entries, and all physical weights
+of common height \(H\) admit one denominator at most \(H^{2P}\).
+The theorem
+\leanid{TNLean.MPS.AreaLaw.OBCChainTensor.weightedTransfer\_prefix\_coordinate\_heights\_two\_pow}
+then proves directly that, if \(H\le2^h\), every stored weighted-prefix
+coordinate at \(t\le n\) has reduced numerator and denominator bounded by
+\[
+  2^{(6hP+D_aD_b+2q+3h+3)t}.
+\]
+Thus polynomial input bit bounds and bond dimensions give polynomial bit
+bounds for every such stored row. Completing the bit-cost proof still
+requires one bound covering the remaining scalar intermediate values,
+integer arithmetic and rational reduction, and the numerical routines
+that construct the retained bases and solve the semidefinite programs.
 
 The coordinate storage is counted by
 \leanid{TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.exists\_coordinates\_storage\_le\_polynomial}.

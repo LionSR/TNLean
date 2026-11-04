@@ -14,11 +14,14 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CanonicalSearch
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CertificateRounding
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CertificateSearch
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.CommonDenominator
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ComplexArithmeticHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ContractionHeights
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ContractionIntermediateBounds
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.DyadicPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ErrorBudgets
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.GramMeshes
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.InputEncoding
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalOperatorExpansion
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.OrthonormalInput
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.PolynomialPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCertificateTests
@@ -26,6 +29,11 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCodeHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContraction
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContractionCost
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCoordinates
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalGramContraction
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalGramContractionCost
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalGramInputBounds
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalLocalEnergy
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalLocalEnergyCost
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalMatrixCodes
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalMatrixHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalMatrixMeshes
@@ -42,3 +50,5 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.SpanEncodings
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.SupportCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.TensorParameters
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ViabilityStability
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.WeightedTransferBinaryBounds
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.WeightedTransferBounds

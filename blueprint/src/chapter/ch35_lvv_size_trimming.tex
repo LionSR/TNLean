@@ -470,6 +470,434 @@ a function of the Hamiltonian, the gap parameter and the input set.
     has length at most twice the height's binary length, plus one sign bit.
 \end{proof}
 
+\begin{definition}[Weighted mixed transfer matrices]
+    \label{def:lvv_weighted_mixed_transfer}
+    \lean{MPSChainTensor.weightedTransferMatrix,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.weightedTransfer,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.decode_weightedTransfer}
+    \leanok
+    Let $A_p^s\in\mathbb C^{D_a\times D_a}$ and
+    $B_p^t\in\mathbb C^{D_b\times D_b}$ be two site-dependent tensor
+    families, and let $W_p\in\mathbb C^{q\times q}$ be a physical
+    operator at site $p$. Their weighted mixed transfer matrix is
+    \begin{align*}
+      E_p&=\sum_{s,t=0}^{q-1}(W_p)_{st}
+        \bigl(\overline{A_p^s}\otimes B_p^t\bigr),\\
+      (E_p)_{(a,b),(c,d)}&=\sum_{s,t=0}^{q-1}
+        \overline{(A_p^s)_{ac}}(W_p)_{st}(B_p^t)_{bd}.
+    \end{align*}
+    Here the bar denotes entrywise complex conjugation, and the paired
+    virtual index has dimension $M=D_aD_b$.
+    For Gaussian-rational entries, compute each entry by a single sum
+    over the $q^2$ physical pairs. Interpreting its rational coordinates
+    as complex numbers gives precisely $E_p$.
+\end{definition}
+
+\begin{lemma}[The weighted transfer product]
+    \label{lem:lvv_weighted_transfer_product}
+    \lean{MPSChainTensor.prod_ofFn_conj_kronecker,
+        MPSChainTensor.prod_weightedTransferMatrix,
+        MPSChainTensor.prod_weightedTransferMatrix_apply}
+    \leanok
+    \uses{def:lvv_weighted_mixed_transfer}
+    For $n$ sites, write $A(\sigma)=A_0^{\sigma_0}\cdots
+    A_{n-1}^{\sigma_{n-1}}$ and similarly for $B(\tau)$.
+    Then
+    \begin{align*}
+      E_0\cdots E_{n-1}
+        &=\sum_{\sigma,\tau\in\{0,\ldots,q-1\}^n}
+          \left(\prod_{p=0}^{n-1}(W_p)_{\sigma_p\tau_p}\right)
+          \bigl(\overline{A(\sigma)}\otimes B(\tau)\bigr).
+    \end{align*}
+    In particular, every boundary entry is obtained by taking the
+    corresponding entries of $A(\sigma)$ and $B(\tau)$ in this sum.
+    The identity includes empty chains, with ordered matrix products
+    interpreted as identity matrices.
+\end{lemma}
+\begin{proof}\leanok
+    Expand the product of the finite sums defining the $E_p$.
+    The identity $(X\otimes Y)(X'\otimes Y')=XX'\otimes YY'$
+    separates each term into its two ordered matrix products.
+    Entrywise conjugation commutes with multiplication, while the
+    scalar weights multiply to the displayed product.
+    Indexing the resulting terms by the two physical configurations
+    gives the formula, and taking a matrix entry gives its boundary form.
+\end{proof}
+
+\begin{lemma}[Rational weighted overlaps and Gram inner products]
+    \label{lem:lvv_rational_weighted_overlap}
+    \lean{TNLean.MPS.AreaLaw.OBCChainTensor.weightedTransferSiteList,
+        TNLean.MPS.AreaLaw.OBCChainTensor.weightedOverlapOfRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.weightedOverlapOfRationalParameters_zero,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_weightedOverlapOfRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_weightedOverlapOfRationalParameters_eq_productOperator,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.identity,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.decode_identity,
+        TNLean.MPS.AreaLaw.OBCChainTensor.gramOfRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_gramOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentation.decode_gramOfRationalParameters}
+    \leanok
+    \uses{def:lvv_rational_row_contraction,def:lvv_weighted_mixed_transfer}
+    Consider two open chains on $n$ sites with Gaussian-rational scalar
+    caps $c_a,c_b$, rational local entries, and virtual dimensions bounded
+    by $D_a,D_b$. Let $a(\sigma)$ and $b(\tau)$ denote their contractions
+    before multiplication by the caps. Pad their virtual spaces with
+    zeros and form the rational weighted transfers $E_p$.
+    Start a row at the paired zero-coordinate basis vector, propagate it
+    through these transfers, and return its paired zero coordinate
+    multiplied by $\overline{c_a}c_b$.
+
+    Let $\mathcal W=\bigotimes_{p=0}^{n-1}W_p$ be the finite Kronecker
+    product. The resulting Gaussian rational has complex value
+    \begin{align*}
+      F&=\overline{c_a}c_b
+        \sum_{\sigma,\tau}
+          \overline{a(\sigma)}
+          \left(\prod_{p=0}^{n-1}(W_p)_{\sigma_p\tau_p}\right)b(\tau)\\
+       &=\overline{c_a}c_b\,
+         \overline a\mathbin{\cdot}\bigl(\mathcal W b\bigr).
+    \end{align*}
+    The finite Kronecker product here has entries
+    $\mathcal W_{\sigma\tau}=\prod_p(W_p)_{\sigma_p\tau_p}$.
+    Taking every $W_p$ to be the identity gives the Gram inner product
+    $F=\langle c_a a,c_b b\rangle$ of the actual physical coefficient
+    vectors, with the inner product conjugate-linear in its first argument.
+    Thus for rational representations of two vectors on the first
+    $n\le L$ sites, the same evaluation gives their left-block inner product.
+    At length zero, both contractions equal one and $F=\overline{c_a}c_b$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_contraction_correct,lem:lvv_weighted_transfer_product}
+    Rational arithmetic and zero-padding commute with their complex
+    interpretations. Sequential row contraction therefore gives the
+    paired zero-coordinate entry of $E_0\cdots E_{n-1}$.
+    Lemma~\ref{lem:lvv_weighted_transfer_product} expands that entry
+    into the configuration sum. The entry formula for the finite
+    Kronecker product identifies this sum with the product-operator
+    matrix element. For identity weights, $\mathcal W$ is the identity,
+    giving the Gram inner product after including the scalar caps.
+    The natural bijection between numbered configurations and left-block
+    configurations is an isometry and preserves this inner product.
+\end{proof}
+
+\begin{definition}[Counted weighted overlap contraction]
+    \label{def:lvv_rational_weighted_overlap_count}
+    \lean{TNLean.MPS.AreaLaw.RationalGramContractionCost.complexConj,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.sumFin,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedTerm,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedTransferEntry,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedTransfer,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.WeightedSite,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedRowProduct,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedContract,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.weightedOverlapOfRationalParameters}
+    \leanok
+    \uses{def:lvv_rational_contraction_count,def:lvv_weighted_mixed_transfer}
+    Use the arithmetic counts of
+    Definition~\ref{def:lvv_rational_contraction_count}.
+    Conjugating a Gaussian rational subtracts its imaginary part from
+    zero and therefore has count one. For each weighted transfer entry,
+    compute every term as $(\overline{x}\,w)y$ and accumulate the terms
+    over the single list of physical pairs, starting at zero.
+    Compute and retain all $M^2$ transfer entries before applying that
+    matrix to the current row, where $M=D_aD_b$.
+    Retain the entire new row before proceeding to the next site.
+    At the end, conjugate the first scalar cap, multiply it by the second,
+    and multiply this product by the selected boundary entry.
+\end{definition}
+
+\begin{lemma}[Arithmetic count of a weighted overlap]
+    \label{lem:lvv_rational_weighted_overlap_arithmetic_count}
+    \lean{TNLean.MPS.AreaLaw.RationalGramContractionCost.run_complexConj,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.run_sumFin,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.run_weightedTerm,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.run_weightedTransferEntry,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.run_weightedTransfer,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.run_weightedRowProduct,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.run_weightedContract,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.run_weightedOverlapOfRationalParameters}
+    \leanok
+    \uses{def:lvv_rational_weighted_overlap_count}
+    The counted weighted contraction returns the same rational value as
+    the paired transfer evaluation. Computing one transfer entry has
+    accumulated count $15q^2$, and computing a full transfer matrix has
+    count $15q^2M^2$. Including row propagation through $n$ sites and both
+    scalar caps gives the exact accumulated rational arithmetic count
+    \begin{align*}
+      n(15q^2+8)(D_aD_b)^2+13.
+    \end{align*}
+    Identity physical weights give the Gram evaluation with the same
+    count. At length zero the count is thirteen.
+    These are counts of rational arithmetic operations; bit-operation
+    costs additionally depend on the rational operand lengths.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_contraction_arithmetic_count}
+    A weighted term uses one conjugation and two complex products,
+    with count $1+6+6=13$. Adding it to the accumulated sum costs two
+    further operations, giving $15q^2$ for the $q^2$ physical pairs.
+    Evaluating the $M^2$ matrix entries adds their counts, and the stored
+    row update costs $8M^2$ by
+    Lemma~\ref{lem:lvv_rational_contraction_arithmetic_count}.
+    Induction along the sites gives $n(15q^2+8)M^2$.
+    The final conjugation and two scalar multiplications add thirteen,
+    and their computed value includes exactly the two scalar caps.
+\end{proof}
+
+\begin{lemma}[Expansion of a two-site operator into product operators]
+    \label{lem:lvv_two_site_product_expansion}
+    \lean{TNLean.MPS.AreaLaw.twoSiteMatrixUnitFactors,
+        TNLean.MPS.AreaLaw.rectKronecker_twoSiteMatrixUnitFactors,
+        TNLean.MPS.AreaLaw.twoSiteConfig,
+        TNLean.MPS.AreaLaw.supported_apply_eq_twoSiteConfig,
+        TNLean.MPS.AreaLaw.supported_eq_sum_twoSiteMatrixUnitFactors,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.matrixUnit,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.decode_matrixUnit,
+        TNLean.MPS.AreaLaw.twoSiteMatrixUnitCodeFactors,
+        TNLean.MPS.AreaLaw.decode_twoSiteMatrixUnitCodeFactors}
+    \leanok
+    Let $p\ne r$ be two sites, and suppose $X$ is supported on
+    $\{p,r\}$. Choose a reference configuration $\sigma_0$, and write
+    $\sigma_0[a,c]$ for its modification with labels $a$ at $p$ and
+    $c$ at $r$. With $E_{ab}=|a\rangle\langle b|$, define
+    \begin{align*}
+      K_{(a,c),(b,d)}&=X_{\sigma_0[a,c],\sigma_0[b,d]},\\
+      F_j^{abcd}&=\begin{cases}
+        E_{ab},&j=p,\\
+        E_{cd},&j=r,\\
+        I,&j\notin\{p,r\}.
+      \end{cases}
+    \end{align*}
+    Then $X$ is the sum of $q^4$ product operators
+    \begin{align*}
+      X=\sum_{a,b,c,d=0}^{q-1}
+        K_{(a,c),(b,d)}\bigotimes_j F_j^{abcd}.
+    \end{align*}
+    The factors $F_j^{abcd}$ have rational entries equal to zero or one,
+    so the same expansion can be evaluated from Gaussian-rational
+    coordinates of $K$.
+\end{lemma}
+\begin{proof}\leanok
+    A matrix element of $\bigotimes_jF_j^{abcd}$ vanishes unless its
+    input and output labels at $p,r$ are precisely $a,b,c,d$, and all
+    labels outside these sites agree. In that case its value is one.
+    If the exterior labels agree, support of $X$ identifies its matrix
+    element with the entry read at $\sigma_0[a,c],\sigma_0[b,d]$.
+    If they disagree, support forces that matrix element to vanish.
+    Taking matrix elements proves the expansion.
+\end{proof}
+
+\begin{lemma}[Rational matrix elements of a sum of local operators]
+    \label{lem:lvv_rational_local_matrix_elements}
+    \lean{TNLean.MPS.AreaLaw.OBCChainTensor.twoSiteMatrixElementOfRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_twoSiteMatrixElementOfRationalParameters_eq_sum,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_twoSiteMatrixElementOfRationalParameters,
+        TNLean.MPS.AreaLaw.OBCChainTensor.matrixElementOfLocalTerms,
+        TNLean.MPS.AreaLaw.OBCChainTensor.decode_matrixElementOfLocalTerms}
+    \leanok
+    Let $u,v$ be two rational open-chain states on $n$ sites, with their
+    scalar caps included. Suppose $X_1,\ldots,X_m$ are operators, each
+    supported on two distinct sites, and their local coefficient
+    matrices $K_i$ from
+    Lemma~\ref{lem:lvv_two_site_product_expansion} are given by
+    Gaussian-rational coordinates.
+    For each local term, evaluate the weighted overlap for every
+    product of matrix-unit factors, multiply it by the corresponding
+    entry of $K_i$, and sum over the $q^4$ local labels.
+    The returned rational value, interpreted as a complex number, is
+    $\langle u,X_iv\rangle$.
+    Adding these $m$ computed values gives
+    \begin{align*}
+      \sum_{i=1}^m\langle u,X_iv\rangle
+        =\left\langle u,\left(\sum_{i=1}^m X_i\right)v\right\rangle.
+    \end{align*}
+    In particular, for a normalized $u=v$ and a local Hamiltonian
+    $H=\sum_iX_i$, this evaluates the energy expectation
+    $\langle u,Hu\rangle$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_two_site_product_expansion,lem:lvv_rational_weighted_overlap}
+    Every weighted contraction returns the matrix element of the
+    corresponding product operator by
+    Lemma~\ref{lem:lvv_rational_weighted_overlap}.
+    Multiplying by the local entries and summing applies the expansion
+    of Lemma~\ref{lem:lvv_two_site_product_expansion}.
+    Linearity in the operator then gives the sum over local terms.
+    Both scalar caps are retained by each weighted contraction.
+\end{proof}
+
+\begin{definition}[Counted evaluation of local matrix elements]
+    \label{def:lvv_local_matrix_element_count}
+    \lean{TNLean.MPS.AreaLaw.RationalLocalEnergyCost.weightedMatrixElementTerm,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.twoSiteMatrixElementOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.matrixElementOfLocalTerms}
+    \leanok
+    \uses{def:lvv_rational_weighted_overlap_count}
+    Compute each weighted overlap once, multiply the resulting rational
+    value by its local matrix coefficient, and accumulate these terms
+    from zero over a single enumeration of the $q^4$ local labels.
+    For a sum of local operators, compute each local contribution once
+    and accumulate those values from zero as well.
+    Constructing the matrix-unit weights uses only index comparisons
+    and the rational constants zero and one, so it performs no charged
+    rational arithmetic operations.
+\end{definition}
+
+\begin{lemma}[Arithmetic count for local Hamiltonian matrix elements]
+    \label{lem:lvv_local_matrix_element_arithmetic_count}
+    \lean{TNLean.MPS.AreaLaw.RationalLocalEnergyCost.run_weightedMatrixElementTerm,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.run_twoSiteMatrixElementOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalLocalEnergyCost.run_matrixElementOfLocalTerms}
+    \leanok
+    \uses{def:lvv_local_matrix_element_count}
+    Put $M=D_aD_b$, and let
+    $C=n(15q^2+8)M^2+13$ be the weighted-overlap arithmetic count.
+    The counted evaluations return the actual rational local matrix
+    elements with exact accumulated counts
+    \begin{align*}
+      q^4(C+8)&\quad\text{for one two-site term},\\
+      m\bigl(q^4(C+8)+2\bigr)&\quad\text{for a sum of $m$ local terms}.
+    \end{align*}
+    The empty sum has value and count zero.
+    These counts concern rational arithmetic; the bit-operation charge
+    also depends on the lengths of the rational operands.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_weighted_overlap_arithmetic_count}
+    A weighted overlap contributes $C$ operations. Multiplication by
+    the local coefficient adds six, and addition to the accumulated
+    complex value adds two. The single sum over all $q^4$ labels
+    therefore has count $q^4(C+8)$.
+    The outer sum evaluates $m$ such contributions and adds each of
+    them to its own accumulated value at cost two, proving the second
+    formula. In both sums the computed values agree with the actual
+    rational evaluations term by term.
+\end{proof}
+
+\begin{lemma}[Bounds at every sequential contraction prefix]
+    \label{lem:lvv_contraction_intermediate_bounds}
+    \lean{TNLean.MPS.AreaLaw.RationalRectMatrixCode.partialDot_bounds,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowMul_bounds,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowProduct_bounds,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowProduct_take_bounds,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowProduct_basis_take_bounds,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.rowProduct_take_coordinate_heights,
+        TNLean.MPS.AreaLaw.RationalContractionCost.dot_prefix_bounds,
+        TNLean.MPS.AreaLaw.RationalContractionCost.dot_prefix_coordinate_heights,
+        TNLean.MPS.AreaLaw.RationalContractionCost.rowProduct_next_dot_prefix_bounds}
+    \leanok
+    Let $D,N,M,R,C$ be natural numbers, with $N,M>0$.
+    Suppose the entries of an initial rational row have denominator $N$
+    and norm at most $R$, and every entry of each successive square
+    site matrix of order $D$ has denominator $M$ and norm at most $C$.
+    The row after $t$ sites has denominator $NM^t$ and entry norms at most
+    $R(DC)^t$. At the next site, a scalar product accumulated over any
+    $a$ coordinates has denominator $NM^{t+1}$ and norm at most
+    $aR(DC)^tC$. These assertions hold for the actual stored rows and
+    counted scalar-product accumulators.
+    Each norm estimate gives reduced coordinate height at most its
+    denominator times the larger of one and the norm bound.
+\end{lemma}
+\begin{proof}\leanok
+    A product multiplies denominators and norms, while a partial sum
+    preserves a common denominator and has norm at most the sum of the
+    term norms. Induct along the list of matrices. Apply the same sum
+    estimate to every initial segment of the next scalar product, then
+    use the common-denominator height estimate.
+\end{proof}
+
+\begin{lemma}[Heights inside elementary complex arithmetic]
+    \label{lem:lvv_complex_arithmetic_heights}
+    \lean{TNLean.MPS.AreaLaw.RationalContractionCost.complexMul_primitive_heights,
+        TNLean.MPS.AreaLaw.RationalContractionCost.complexMul_coordinate_heights,
+        TNLean.MPS.AreaLaw.RationalContractionCost.complexMul_coordinate_heights_two_pow,
+        TNLean.MPS.AreaLaw.RationalContractionCost.complexAdd_primitive_heights,
+        TNLean.MPS.AreaLaw.RationalContractionCost.complexAdd_coordinate_heights,
+        TNLean.MPS.AreaLaw.RationalGramContractionCost.complexConj_primitive_heights}
+    \leanok
+    Suppose two Gaussian rationals have coordinate heights at most
+    $H_x,H_y$. The four rational products formed in their complex
+    multiplication have height at most $H_xH_y$. Its final rational
+    subtraction and addition have heights at most $2(H_xH_y)^2$.
+    Complex addition has coordinate heights at most $2H_xH_y$, and
+    complex conjugation preserves coordinate heights.
+    In particular, multiplication of inputs of heights at most
+    $2^{e_x},2^{e_y}$ returns coordinates of heights at most
+    $2^{2(e_x+e_y)+1}$.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced height of a rational product is at most the product of
+    the input heights. The height of a sum or difference is at most
+    twice their product. Apply these facts to the four multiplications
+    and the final two operations of complex multiplication. Changing
+    the sign of the imaginary coordinate preserves its reduced height.
+\end{proof}
+
+\begin{lemma}[Intermediate weighted-transfer bounds]
+    \label{lem:lvv_weighted_transfer_intermediate_bounds}
+    \lean{TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.zero,
+        TNLean.MPS.AreaLaw.HasGaussianIntegerDenominator.star,
+        TNLean.MPS.AreaLaw.RationalRectMatrixCode.weightedTransfer_bounds,
+        TNLean.MPS.AreaLaw.OBCChainTensor.zeroPadRationalParameters_bounds,
+        TNLean.MPS.AreaLaw.OBCChainTensor.weightedTransferSiteList_bounds,
+        TNLean.MPS.AreaLaw.OBCChainTensor.weightedTransfer_prefix_bounds}
+    \leanok
+    Let $M,C$ be natural numbers with $M>0$.
+    Suppose the two tensor families and physical weights have common
+    denominator $M$ and entry norms at most $C$.
+    Zero-padding preserves these bounds. Each weighted mixed-transfer
+    entry has denominator $M^3$ and norm at most $q^2C^3$.
+    For paired virtual dimension $D_aD_b$, the actual boundary-started
+    row after $t$ sites therefore has denominator $M^{3t}$, norm bound
+    $(D_aD_bq^2C^3)^t$, and coordinate height at most
+    $M^{3t}\max\{1,(D_aD_bq^2C^3)^t\}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_contraction_intermediate_bounds}
+    Zero and complex conjugation preserve a common denominator.
+    Each transfer entry sums $q^2$ products of three entries. Its
+    denominator and norm estimates follow immediately. Apply
+    Lemma~\ref{lem:lvv_contraction_intermediate_bounds} to the actual
+    paired boundary row, whose denominator and norm bound are one.
+\end{proof}
+
+\begin{lemma}[Polynomial binary precision at every weighted prefix]
+    \label{lem:lvv_weighted_transfer_prefix_bits}
+    \lean{TNLean.MPS.AreaLaw.OBCChainTensor.exists_common_weighted_parameter_denominator,
+        TNLean.MPS.AreaLaw.OBCChainTensor.exists_weightedTransfer_prefix_bounds_of_height,
+        TNLean.MPS.AreaLaw.weightedTransfer_normFactor_le_two_pow,
+        TNLean.MPS.AreaLaw.weightedTransfer_prefix_height_le_two_pow,
+        TNLean.MPS.AreaLaw.OBCChainTensor.weightedTransfer_prefix_coordinate_heights_two_pow}
+    \leanok
+    Consider two length-$n$ open chains with virtual bounds $D_a,D_b$.
+    Suppose all rational coordinates of their two scalar caps, local
+    tensor entries, and one-site physical weights have height at most $H$.
+    Put
+    \[
+      P=2+nqD_a^2+nqD_b^2+nq^2,\qquad
+      Q=D_aD_bq^2(2H)^3.
+    \]
+    There is a common input denominator $M\le H^{2P}$, including both
+    scalar caps. At every prefix $t\le n$, each entry of the actual
+    weighted-contraction row has denominator $M^{3t}$, norm at most
+    $Q^t$, and coordinate height at most $H^{6Pt}\max\{1,Q^t\}$.
+    If $H\le2^h$, these stored coordinate heights are at most
+    \[
+      2^{(6hP+D_aD_b+2q+3h+3)t}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_common_rational_denominator,
+        lem:lvv_weighted_transfer_intermediate_bounds}
+    The caps and actual local entries form a finite family of at most
+    $P$ complex parameters. Clear their denominators together, and
+    use the entry norm bound $2H$ in
+    Lemma~\ref{lem:lvv_weighted_transfer_intermediate_bounds}.
+    The common-denominator contribution is at most $H^{6Pt}$.
+    Finally $s\le2^s$ for natural $s$ gives
+    $Q\le2^{D_aD_b+2q+3h+3}$, which yields the stated bound.
+\end{proof}
+
 \begin{definition}[Binary length of a rational coordinate]
     \label{def:lvv_rational_coordinate_storage}
     \lean{TNLean.MPS.AreaLaw.rationalCoordinateBitCount}
