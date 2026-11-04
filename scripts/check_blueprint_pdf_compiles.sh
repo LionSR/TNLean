@@ -24,11 +24,9 @@ xdv="$print_dir/print.xdv"
 mkdir -p "$print_dir"
 cd "$src_dir"
 
-set +e
+status=0
 latexmk -e '$max_repeat=1' -xdv -interaction=nonstopmode \
-  -output-directory=../print print.tex
-status=$?
-set -e
+  -output-directory=../print print.tex || status=$?
 
 if [[ ! -f "$log" ]]; then
   echo "::error::XeTeX wrote no log at blueprint/print/print.log (latexmk status $status)"

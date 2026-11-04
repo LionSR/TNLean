@@ -20,11 +20,10 @@ two and three in `y` are constant multiples of the values on the same words in
 `x`, then the value on every word in `y` is the length-th power of the
 one-letter constant times the value on the word in `x`.
 
-This is the comparison of words of length `N` with their one-letter extensions
-that makes the phase of a symmetry of a matrix product vector multiplicative in
-the length (arXiv:1010.3732, lines 655--657 and 2590--2593); the source does
-not spell out the step. The statement is about an arbitrary algebra and
-functional, so it lives here rather than with its parent-Hamiltonian consumer.
+This comparison makes the phase of a symmetry of a matrix product vector
+multiplicative in the length (arXiv:1010.3732, lines 655--657 and 2590--2593).
+The statement concerns an arbitrary algebra and functional, so it lives here
+rather than with its parent-Hamiltonian consumer.
 -/
 
 open scoped BigOperators
