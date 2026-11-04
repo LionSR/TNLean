@@ -1889,6 +1889,17 @@ For ALVV, arXiv:1602.08828v2, Section 5.4:
   gap comparison. Issue #9849 remains open; the unrestricted printed theorem
   is not formalized.
 
+- [`alvv16_ff_truncated_norm.tex`](alvv16_ff_truncated_norm.tex)
+  (local correction, resolved) shows that the three-region replacement in the
+  proof of Theorem 5.15 (`t:aisff`, line 1599) has norm up to `4ℓ + 6`, not
+  `O(1)`: the windows are not truncated, and a commuting qubit chain with a
+  unique ground state and gap one attains `4ℓ + 6`. The printed choice
+  `ℓ = Θ̃(γ⁻¹ log² d)` is the one that works with this norm, so the theorem is
+  unaffected. The note also records that the argument gives bond dimension
+  `(d² + O(1))^{k+O(1)}` rather than `O(d^k)`, still of the stated form
+  `2^{Õ(γ⁻² log⁵ d)}`. The existence part of Theorem 5.15 is proved in
+  `ALVV/FrustrationFreeImprovingFamily.lean`.
+
 The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
 are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
 The note records the distinction between the source's site endpoints and its

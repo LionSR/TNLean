@@ -1,0 +1,81 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\title{The norm of the frustration-free three-region replacement in ALVV}
+\author{}
+\date{November 4, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\paragraph{Source.}
+The proof of \cite[Theorem~5.15]{Arad2016RigorousRG} (Theorem \texttt{t:aisff},
+lines 1592--1607) replaces the three bulk regions to the left of, between and to
+the right of two windows of width about $2\ell$ by the regional construction of
+\cite[Definition~5.10]{Arad2016RigorousRG}. It then states, at line 1599, that the
+replaced Hamiltonian $\widetilde H$ ``has norm $O(1)$'', and, at line 1606, that
+each improving operator $A_i$ has bond dimension $O(d^k)$, where $k$ is the
+degree of the Chebyshev filter.
+
+\paragraph{The norm statement fails.}
+The bonds in the two windows are not replaced, so $\widetilde H$ contains about
+$4\ell$ untruncated terms. Take qubits and
+$h_i=I-|00\rangle\langle00|$ on the qubits $i,i+1$. These are commuting
+orthogonal projections, diagonal in the computational basis. The energy of a
+basis configuration is the number of bonds not in the state $00$. Hence
+$|0\cdots0\rangle$ is the unique ground state, with energy $0$, and every other
+configuration has energy at least $1$. The chain is frustration free, with a
+unique ground state and gap $1$.
+On $|1\cdots1\rangle$ each window bond acts as $1$. For every regional
+parity layer, the product of the factors $I-h_i=|00\rangle\langle00|$ over a
+nonempty set of bonds annihilates $|1\cdots1\rangle$, so the layer term
+$I-P$ acts as $1$. With two windows of $2\ell$ bonds each and three regions
+containing bonds of both parities,
+\begin{align}
+    \widetilde H\,|1\cdots1\rangle & =(4\ell+6)\,|1\cdots1\rangle.
+    \label{eq:alvv_ff_norm_example}
+\end{align}
+Thus $\|\widetilde H\|=4\ell+6$, which grows with $\ell$.
+
+\paragraph{The conclusion is unaffected.}
+The parameter choice $\ell=\widetilde\Theta(\gamma^{-1}\log^2d)$ of the source
+is the one that works with $\|\widetilde H\|=\Theta(\ell)$. With the Chebyshev
+filter of degree $k=\ell^2$, the gap $\eta_1=\Theta(\gamma)$ and the upper bound
+$4\ell+6$, the filter contracts the excited spectrum by
+$\Delta=4\exp(-\Omega(\ell^{3/2}\gamma^{1/2}))$, while the number of improving
+operators is $D^2$ with $\log D=O(\ell\log(d\ell))$. The trade-off
+$D^{12}\Delta<10^{-5}$ therefore requires $\ell\gtrsim\gamma^{-1}\log^2(d\ell)$,
+the printed choice. With norm $O(1)$ the smaller choice
+$\ell=\widetilde\Theta(\gamma^{-1/2}\log d)$ would have sufficed, and the
+source would have obtained a better bound on $D$. The formalization uses the
+bound $\|\widetilde H\|\le4\ell+6$, proved in
+\leanid{TNLean.MPS.AreaLaw.ALVV.norm_threeRegion_le}.
+
+\paragraph{Bond dimension.}
+The replaced Hamiltonian has operator Schmidt rank of order $d^2$ at every cut,
+not of order $d$. The argument of the source therefore gives bond dimension of
+order $(d^2+O(1))^{k+O(1)}$ for the improving operators, not $O(d^k)$. The
+formalization proves the bound $(d^2+4)^{\ell^2+1}$ at every cut inside the
+prescribed region, with logarithm $O(u^5/g^2)$, $u=1+\log d+\log(1/g)$,
+$g=\min(\gamma,1)$. This is the form $2^{\widetilde O(\gamma^{-2}\log^5d)}$ of
+the theorem statement, which is unaffected.
+
+\paragraph{Formalized statement.}
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family}
+proves the existence part of Theorem~5.15 with these bounds. It needs neither
+uniqueness of the ground state nor frustration freeness, and it does not assume
+that the terms are projections: each term is replaced by its range projection,
+as at line 1457 of the source. The improvement is stated for viability error
+$\delta<1$, the boundary convention already used for Theorem~4.7. The running
+time is not formalized.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

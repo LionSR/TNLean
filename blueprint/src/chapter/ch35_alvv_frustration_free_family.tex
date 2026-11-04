@@ -1,0 +1,278 @@
+\chapter{An improving family for frustration-free chains}
+\label{ch:alvv_ff_improving_family}
+
+This chapter proves the existence part of
+\cite[Theorem~5.15]{Arad2016RigorousRG}: a gapped nearest-neighbour chain has,
+on every interval, a family of $D^2$ operators that improves the error of every
+viable subspace for its ground space, with
+$D=2^{O(\gamma^{-1}(\log d+\log\gamma^{-1})^3)}$ and with every operator of
+bond dimension $2^{O(\gamma^{-2}(\log d+\log\gamma^{-1})^5)}$
+(Theorem~\ref{thm:alvv_ff_improving_family}). The construction replaces three
+bulk regions at once by the regional construction of
+Definition~\ref{def:alvv_ff_regional_replacement}, applies a Chebyshev filter, and
+takes the operators among the matrix-entry slices of the filter. The proof of the
+source states that the replaced operator has norm $O(1)$; its norm can be
+$4\ell+6$, which is the bound used here and the one that fits the printed choice
+of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
+
+\section{Three regions replaced at once}
+
+\begin{lemma}[Products over disjoint regions and the union bound]
+    \label{lem:alvv_ff_family_union_bound}
+    \lean{TNLean.MPS.AreaLaw.ALVV.regionalProjection_union,
+        TNLean.MPS.AreaLaw.ALVV.re_inner_one_sub_mul_le,
+        TNLean.MPS.AreaLaw.ALVV.re_inner_one_sub_mul_mul_le}
+    \leanok
+    \uses{def:alvv_ff_regional_replacement}
+    If the projections $h_i$, $i\in S\cup T$, commute and $S\cap T=\emptyset$,
+    then $P_{S\cup T}=P_SP_T$. For pairwise commuting orthogonal projections
+    $Q_1,Q_2,Q_3$ and every vector $x$,
+    \begin{align}
+        \operatorname{Re}\langle x,(I-Q_1Q_2Q_3)x\rangle
+         & \le\sum_{j=1}^3\operatorname{Re}\langle x,(I-Q_j)x\rangle.
+        \label{eq:alvv_ff_family_union_bound}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The first identity follows by induction on the number of factors, moving the
+    factor of $T$ past the product over $S$. For two projections,
+    $I-Q_1Q_2=(I-Q_1)+Q_1(I-Q_2)$, and
+    $\langle x,Q_1(I-Q_2)x\rangle=\|Q_1(I-Q_2)x\|^2\le\|(I-Q_2)x\|^2$.
+    Apply this twice, with $Q_2Q_3$ in place of $Q_2$ the first time.
+\end{proof}
+
+\begin{lemma}[Gap for collapsed parity sets]
+    \label{lem:alvv_ff_family_parity_gap}
+    \lean{TNLean.MPS.AreaLaw.ALVV.parityReplacement_gap}
+    \leanok
+    \uses{thm:alvv_ff_collapsed_gap,lem:alvv_ff_chain_degree}
+    In the setting of Lemma~\ref{lem:alvv_ff_chain_comparison}, let $E$ be any
+    set of even bonds and $O$ any set of odd bonds, and let $\widetilde H$ be
+    defined by (\ref{eq:alvv_ff_regional_replacement}). Every unit vector
+    $x\perp\ker H$ satisfies
+    $\operatorname{Re}\langle x,\widetilde Hx\rangle\ge\gamma/(3(\gamma+4))$.
+\end{lemma}
+\begin{proof}\leanok
+    The proof of Lemma~\ref{lem:alvv_ff_chain_comparison} uses only that the
+    collapsed sets lie in one parity class each.
+\end{proof}
+
+\begin{definition}[The three-region replacement]
+    \label{def:alvv_ff_family_three_region}
+    \lean{TNLean.MPS.AreaLaw.ALVV.regionTermMatrix,
+        TNLean.MPS.AreaLaw.ALVV.threeRegionFamily}
+    \leanok
+    \uses{def:alvv_ff_matrix_replacement}
+    For a set of bonds $[x,y)$ let $R_{[x,y)}=(I-P_{E_{[x,y)}})+(I-P_{O_{[x,y)}})$
+    be the sum of its two regional layer terms. For natural numbers $a,b,\ell$
+    and $m$ bonds, the three-region replacement is
+    \begin{align}
+        \widetilde H & =\sum_{r<2\ell}(h_{a+r}+h_{b+r})
+        +R_{[0,a)}+R_{[a+2\ell,b)}+R_{[b+2\ell,m)}.
+        \label{eq:alvv_ff_family_three_region}
+    \end{align}
+    It is the two-window family of
+    Lemma~\ref{thm:chain_two_window_polynomial_rank}, with the three regional
+    terms as bulk operators.
+\end{definition}
+
+\begin{lemma}[Kernel, positivity, norm and gap of the replacement]
+    \label{lem:alvv_ff_family_three_region}
+    \lean{TNLean.MPS.AreaLaw.ALVV.threeRegionFamily_supported,
+        TNLean.MPS.AreaLaw.ALVV.regionTermMatrix_supported,
+        TNLean.MPS.AreaLaw.ALVV.toEuclideanCLM_regionTermMatrix,
+        TNLean.MPS.AreaLaw.ALVV.toEuclideanCLM_threeRegion,
+        TNLean.MPS.AreaLaw.ALVV.commute_chainTerm_of_mod_two_eq,
+        TNLean.MPS.AreaLaw.ALVV.isPositive_toEuclideanCLM_threeRegionFamily,
+        TNLean.MPS.AreaLaw.ALVV.isPositive_toEuclideanCLM_threeRegion,
+        TNLean.MPS.AreaLaw.ALVV.threeRegion_apply_eq_zero_iff,
+        TNLean.MPS.AreaLaw.ALVV.ker_threeRegion,
+        TNLean.MPS.AreaLaw.ALVV.norm_threeRegion_le,
+        TNLean.MPS.AreaLaw.ALVV.threeRegion_gap}
+    \leanok
+    \uses{def:alvv_ff_family_three_region,lem:alvv_ff_family_union_bound,
+        lem:alvv_ff_family_parity_gap,lem:alvv_ff_common_kernel_layers}
+    Let the terms $h_i$ be orthogonal projections supported on $[i,i+2)$ and
+    let $a+2\ell\le b$ and $b+2\ell\le m$. Then $\widetilde H$ is positive,
+    $\ker\widetilde H=\ker H$, and $\|\widetilde H\|\le4\ell+6$. If
+    $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$ for all
+    $y\perp\ker H$, every unit vector $x\perp\ker H$ satisfies
+    \begin{align}
+        \operatorname{Re}\langle x,\widetilde Hx\rangle
+         & \ge\frac{\gamma}{3(\gamma+4)}.
+        \label{eq:alvv_ff_family_gap}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Each term of (\ref{eq:alvv_ff_family_three_region}) is a projection or a
+    sum of two, so $\widetilde H$ is positive, and $\widetilde Hx=0$ exactly
+    when every term annihilates $x$; by
+    Lemma~\ref{lem:alvv_ff_common_kernel_layers} this happens exactly when
+    $h_ix=0$ for every bond, since every bond lies in a window or a region. The
+    norm bound is the triangle inequality over $4\ell$ projections and six
+    layer terms. Let $E$ and $O$ be the unions of the even and odd bonds of the
+    three regions. Then $P_E$ and $P_O$ are products of the three regional
+    products by Lemma~\ref{lem:alvv_ff_family_union_bound}, and
+    (\ref{eq:alvv_ff_family_union_bound}) bounds the replacement with the
+    collapsed sets $E,O$ by $\widetilde H$ in quadratic form; the windows are
+    exactly the bonds outside $E\cup O$. Lemma~\ref{lem:alvv_ff_family_parity_gap}
+    gives (\ref{eq:alvv_ff_family_gap}). Iterating the one-region theorem
+    instead is not possible, since after one replacement the terms are no
+    longer two-site projections.
+\end{proof}
+
+\begin{lemma}[Rank of a regional term at a cut]
+    \label{lem:alvv_ff_family_region_rank}
+    \lean{TNLean.MPS.AreaLaw.ALVV.rank_regionTermMatrix_le}
+    \leanok
+    \uses{lem:alvv_ff_matrix_product_rank}
+    For local dimension $q\ge1$ and every cut $[0,c)\mid[c,L)$, the regional
+    term $R_{[x,y)}$ has operator Schmidt rank at most $q^2+2$.
+\end{lemma}
+\begin{proof}\leanok
+    Write $R_{[x,y)}=2I-P_E-P_O$. The identity has rank one; the parity layer
+    containing the bond $c-1$ has rank at most $q^2$ and the other layer, with no
+    bond crossing the cut, has rank one, by
+    Lemma~\ref{lem:alvv_ff_matrix_product_rank}.
+\end{proof}
+
+\section{Slices over the complement of an interval}
+
+\begin{definition}[Slices of an operator]
+    \label{def:alvv_ff_family_slice}
+    \lean{TNLean.MPS.AreaLaw.regionalSlice}
+    \leanok
+    For an operator $X$ on the whole chain, a set of sites $J$ and two
+    configurations $x,y$ of $J^c$, the slice $X_{x,y}$ is the operator on $J$
+    with matrix entries $(X_{x,y})_{\sigma\tau}=X_{(\sigma,x),(\tau,y)}$.
+\end{definition}
+
+\begin{lemma}[Slice decomposition and interior ranks]
+    \label{lem:alvv_ff_family_slices}
+    \lean{TNLean.MPS.AreaLaw.exists_regionalSlice_decomposition,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_regionalSlice_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_le_card_sq,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_eq}
+    \leanok
+    \uses{def:alvv_ff_family_slice}
+    Let $N$ be the operator Schmidt rank of $X$ across $J$ and $J^c$. There are
+    slices $X_{x_r,y_r}$, $r<N$, and operators $M_r$ on $J^c$ with
+    $X=\sum_{r<N}M_r\otimes X_{x_r,y_r}$. For every set of sites $C$, each
+    slice has operator Schmidt rank across $J\cap C$ and $J\setminus C$ at most
+    that of $X$ across $C$ and $C^c$. Every operator on a bipartite space has
+    operator Schmidt rank at most the square of the dimension of either factor.
+\end{lemma}
+\begin{proof}\leanok
+    The operator Schmidt rank is the dimension of the span of the slices, and
+    a basis of a span can be chosen among the spanning vectors; expanding
+    every slice in that basis gives the decomposition. For the second
+    statement, write $X=\sum_tA_t\otimes B_t$ across $C$ and $C^c$; fixing
+    the coordinates outside $J$ to $x$ and $y$ turns each $A_t$ and $B_t$ into
+    an operator on $J\cap C$ and on $J\setminus C$, with the same number of
+    terms.
+\end{proof}
+
+\section{Ranks of the filter}
+
+\begin{lemma}[Rank of the filter at every cut]
+    \label{lem:alvv_ff_family_cut_rank}
+    \lean{TNLean.MPS.AreaLaw.ALVV.operatorSchmidtRank_aeval_threeRegion_cut_le}
+    \leanok
+    \uses{lem:alvv_ff_family_three_region,lem:alvv_ff_family_region_rank,
+        thm:alvv_two_window_interior_cut_rank,thm:alvv_bulk_cut_polynomial_rank}
+    For $q\ge1$, $a+2\ell\le b$, every polynomial $P$ of degree at most $k$
+    and every cut, $P(\widetilde H)$ has operator Schmidt rank at most
+    $(q^2+4)^{k+1}$.
+\end{lemma}
+\begin{proof}\leanok
+    At a cut inside a region, Lemma~\ref{thm:alvv_two_window_interior_cut_rank}
+    applies with the rank $q^2+2$ of Lemma~\ref{lem:alvv_ff_family_region_rank}.
+    At a cut inside a window, the crossing bond has rank at most $q^2$ and every
+    other term lies on one side, so
+    Lemma~\ref{thm:alvv_bulk_cut_polynomial_rank} gives $(q^2+2)^{k+1}$.
+\end{proof}
+
+\begin{lemma}[Rank of the filter across the interval]
+    \label{lem:alvv_ff_family_region_rank_filter}
+    \lean{TNLean.MPS.AreaLaw.ALVV.operatorSchmidtRank_aeval_threeRegion_region_le}
+    \leanok
+    \uses{lem:alvv_ff_family_three_region,thm:chain_two_window_polynomial_rank}
+    Let $q,\ell\ge1$, $a+2\ell\le b$, $b+2\ell\le L-1$ and let $P$ have degree at
+    most $\ell^2$. If an interval $J$ contains $[a+\ell,b+\ell+1)$ and at most
+    $2\ell$ further sites, then $P(\widetilde H)$ has operator Schmidt rank at
+    most $((q\ell^2)^{22\ell})^2$ across $J$ and $J^c$.
+\end{lemma}
+\begin{proof}\leanok
+    Lemma~\ref{thm:chain_two_window_polynomial_rank} gives rank at most
+    $(q\ell^2)^{17(\ell+\lfloor\ell^2/(2\ell)\rfloor)}\le(q\ell^2)^{34\ell}$
+    across $[a+\ell,b+\ell+1)$. Changing the region costs at most
+    $q^{2\cdot2\ell}\le(q\ell^2)^{4\ell}$, and $34\ell+4\ell\le44\ell$.
+\end{proof}
+
+\section{The improving family}
+
+\begin{theorem}[An improving family of small bond dimension]
+    \label{thm:alvv_ff_improving_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family}
+    \leanok
+    \uses{def:chain_model,thm:physical_dg_viable_family}
+    There is a universal constant $A\ge1$ with the following property. Let
+    $H=\sum_ih_i$ be a nearest-neighbour Hamiltonian on $(\C^q)^{\otimes L}$
+    with $0\le h_i\le\Id$, let $G=\ker H$, and let $\gamma>0$ satisfy
+    $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$ for every
+    $y\perp G$. Fix an interval $J$. Put
+    \begin{align}
+        g    & =\min(\gamma,1),      & d          & =\max(q,2),          & u & =1+\log d+\log(1/g),\notag \\
+        \ell & =\lceil Au^2/g\rceil, & \mathcal D & =(d\ell^2)^{22\ell}.
+        \label{eq:alvv_ff_family_parameters}
+    \end{align}
+    Then $\log\mathcal D\le22(A+1)(6+2\log(A+1))u^3/g$ and
+    $\log\bigl((d^2+4)^{\ell^2+1}\bigr)\le4(A+1)^2u^5/g^2$, and there are
+    $\mathcal D^2$ operators $W_j$ on $J$ and $\Delta>0$ with
+    $\mathcal D^{12}\Delta\le10^{-5}$ such that:
+    \begin{enumerate}
+        \item at every cut of $J$, each $W_j$ has operator Schmidt rank at most
+              $(d^2+4)^{\ell^2+1}$;
+        \item every subspace $S$ of the space of $J$ that is $\delta$-viable for
+              $G$ with $\delta<1$ gives a $\Delta/(1-\delta)^2$-viable span of the
+              subspaces $W_jS$.
+    \end{enumerate}
+    This is the existence part of \cite[Theorem~5.15]{Arad2016RigorousRG};
+    with a unique ground state $\Gamma$, $G$ is the span of $\Gamma$. The
+    operator Schmidt rank at a cut is the least bond dimension of an
+    open-boundary matrix product operator at that cut. Uniqueness of the ground
+    state and frustration freeness are not needed. The condition $\delta<1$ is
+    the boundary convention of Lemma~\ref{thm:physical_dg_viable_family}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_family_three_region,lem:alvv_ff_family_slices,
+        lem:alvv_ff_family_cut_rank,lem:alvv_ff_family_region_rank_filter,
+        thm:chain_polynomial_filter_parameters}
+    Replace every $h_i$ by its range projection; this keeps the supports and the
+    kernel and can only raise the quadratic form, as in the proof of the source.
+    Choose $A$ by the scalar budget of
+    Lemma~\ref{thm:chain_polynomial_filter_parameters}. If $q\le1$, the space of
+    $J$ has dimension at most one and the identity improves every viable
+    subspace. If $J$ has at most $4\ell$ sites, the configuration matrix units of
+    $J$, at most $d^{8\ell}\le\mathcal D^2$ of them, map every nonzero viable
+    subspace onto the whole space of $J$, and every operator on $J$ has rank at
+    most $(q^{4\ell})^2\le(q^2+4)^{\ell^2+1}$ at each cut.
+
+    Otherwise move the two cuts of $J$ inward by at most $\ell$ to obtain $a,b$
+    with $a+2\ell\le b$, $b+2\ell\le L-1$ and a collar of at most $2\ell$ sites,
+    and let $\widetilde H$ be the three-region replacement. By
+    Lemma~\ref{lem:alvv_ff_family_three_region} its eigenvalues are $0$ on
+    $G$ and at least $g/15$ on $G^\perp$, and at most $4\ell+6\le10\ell$.
+    The Chebyshev filter $K=P(\widetilde H)$ of degree $\ell^2$ with endpoints
+    $0$ and $g/20$ fixes $G$, expands it, and contracts $G^\perp$ by
+    \begin{align}
+        \Delta & =4\exp\Bigl(-4\ell^2\sqrt{\tfrac{g}{200\ell}}\Bigr),
+        \label{eq:alvv_ff_family_contraction}
+    \end{align}
+    and $\mathcal D^{12}\Delta\le10^{-5}$ by the scalar budget. The slices of $K$
+    over $J^c$ given by Lemma~\ref{lem:alvv_ff_family_slices} number at most
+    $\mathcal D^2$ by Lemma~\ref{lem:alvv_ff_family_region_rank_filter}, and they
+    improve viability by the two-factor form of error reduction by a spectral
+    projector. Their ranks at the cuts of $J$ are at most those of $K$, which
+    Lemma~\ref{lem:alvv_ff_family_cut_rank} bounds by $(q^2+4)^{\ell^2+1}$.
+\end{proof}
