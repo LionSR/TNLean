@@ -941,8 +941,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
-  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
-  restriction could be traded for the positive bond dimension the source assumes.
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`; since the
+  source blocks at least one site, `q ≥ 1` is adopted as the convention.
 - `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
   fixed-point state of a basis of normal tensors, eq. (19), is stated for an
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
@@ -1032,8 +1032,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
   unequal widths remove the former restriction to chain lengths divisible by
   `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
-  chain length; open: two-site gates between distant sites only at odd
-  separation, on disjoint stretches, which the trees do not need.
+  chain length (resolved); two-site gates between distant sites are covered
+  only at odd separation, on disjoint stretches, which the trees do not need.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
@@ -1082,11 +1082,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   seed condition for the non-normal chosen-vector conversion in #8469.
   It gives a mathematical (not Lean-checked) covariance obstruction to
   replacing that condition by equality of parent groundspaces. The informal
-  paper remark is not declared unconditionally false; its general phase
-  interpretation remains open.
-- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
-  that the claim that states in the same phase are related by a log-depth
-  circuit is formalized only between two normal tensors.
+  paper remark is read as conversion of whole ground spaces, which is
+  formalized; the chosen-vector condition is a further sufficient condition.
+- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction, resolved)
+  records that the claim that states in the same phase are related by a
+  log-depth circuit is formalized between two normal tensors, and for
+  non-normal tensors as conversion of whole parent ground spaces.
 
 For the phase relation of arXiv:2103.13367:
 
@@ -1858,6 +1859,14 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
+- [`lvv13_mpsapprox_log_factor.tex`](lvv13_mpsapprox_log_factor.tex)
+  (local correction, resolved) records that Lemma `l:mpsapprox`
+  (arXiv:1307.5143v1, lines 325–328) quotes the bond dimension
+  `exp(C (ln n)^{3/4} ε^{-1/4})` of Arad, Kitaev, Landau and Vazirani without
+  the tilde of their `e^{Õ(log^{3/4} n/ε^{1/4})}` (arXiv:1301.1162v1, lines 176
+  and 1503–1517). The formalized bound is that of the cited work, with the
+  hidden factor written out as `log log n`; the algorithm uses only a
+  polynomial bound.
 - [`lvv13_power_expansion_padding.tex`](lvv13_power_expansion_padding.tex)
   (local correction, resolved) records that the expansion `eq:a-exp`
   (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
@@ -1870,7 +1879,9 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   a chain of qubits with `ε₀ = (n - 1)/2` and gap `1/4` is an example. The
   corollary is formalized with the number of sampled words explicit in `C^m`,
   and `C^m ≤ n (1/η)^{ε₀/ε}` at the logarithmic power, which is polynomial
-  when `ε₀/ε` is bounded.
+  when `ε₀/ε` is bounded. The viable-set induction holds under that bound with
+  the sampled projector, and without it with Huang's Gaussian filter
+  (arXiv:1406.6355v6, §5.4) as the error-reduction operator.
 - [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
   (local correction, resolved) records that the step from `A v` to `K v` in the
   proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower

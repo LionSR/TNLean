@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.DualRepresentationAdjointBoundary
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Weak-Hopf representations realized by boundary operators
@@ -129,10 +130,7 @@ private theorem mul'_map_mul_eq_sum {ι κ : Type*} [Fintype ι] [Fintype κ]
     | tmul a' b' =>
       simp only [Algebra.TensorProduct.tmul_mul_tmul, TensorProduct.map_tmul,
         LinearMap.mul'_apply, hF, hG, Finset.sum_mul_sum]
-      apply Finset.sum_congr rfl
-      intro u _
-      apply Finset.sum_congr rfl
-      intro υ _
+      refine Finset.sum_congr₂ fun u _ υ _ ↦ ?_
       ring
 
 /-- The represented coproduct is multiplicative at every positive length.

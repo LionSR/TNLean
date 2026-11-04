@@ -55,21 +55,30 @@ namespace QuantumCircuit
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- Construct the evolutions of projected interaction-picture terms on disjoint regions.
+/-- **The propagators of projected interaction-picture terms on disjoint regions**: on the
+region `K j`, the projected relative evolution of `A` against `A - B j`. Osborne,
+arXiv:quant-ph/0508031v2, equations (2)–(13); Huang, arXiv:1406.6355v6, Section 5.4. -/
+noncomputable def disjointProjectedPropagator (q : ℕ) [NeZero q] {m : ℕ}
+    (K : Fin m → Finset ι) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A.IsHermitian)
+    (B : Fin m → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hB : ∀ j, (B j).IsHermitian)
+    (j : Fin m) : ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  projectedRelativeEvolution q (K j) hA (hA.sub (hB j))
+
+/-- The chosen evolutions of projected interaction-picture terms on disjoint regions.
 Their single ordered product approximates the relative evolution for the sum of the
 terms, with error at most the sum of the generator errors times elapsed time.
 
 This is an auxiliary assembly statement for Osborne, arXiv:quant-ph/0508031v2,
 equations (2)–(13), and Huang, arXiv:1406.6355v6, Section 5.4. The hypotheses do not yet
 choose a chain partition or prove its generator localization estimates. -/
-theorem exists_disjoint_projected_propagator_approximation (q : ℕ) [NeZero q] {m : ℕ}
+theorem disjointProjectedPropagator_spec (q : ℕ) [NeZero q] {m : ℕ}
     (K : Fin m → Finset ι)
     (hK : Pairwise fun j k ↦ Disjoint (K j : Set ι) (K k : Set ι))
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A.IsHermitian)
     (B : Fin m → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hB : ∀ j, (B j).IsHermitian) :
-    ∃ U : Fin m → ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ,
-      (∀ j, U j 0 = 1) ∧
+    let U := disjointProjectedPropagator q K hA B hB
+    (∀ j, U j 0 = 1) ∧
       (∀ j t, HasDerivAt (U j)
         ((Complex.I • siteExpectation q (K j) (heisenbergEvolution A t (B j))) * U j t) t) ∧
       (∀ j t, U j t ∈ Matrix.unitaryGroup (ι → Fin q) ℂ) ∧
@@ -82,18 +91,18 @@ theorem exists_disjoint_projected_propagator_approximation (q : ℕ) [NeZero q] 
             Matrix.hermitianUnitaryPath A (-t) *
               (List.ofFn fun j ↦ U j t).prod‖ ≤ (∑ j, ε j) * |t| := by
   classical
-  have hlocal (j : Fin m) :
-      ∃ U : ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ, U 0 = 1 ∧
-        (∀ t, HasDerivAt U
-          ((Complex.I • siteExpectation q (K j) (heisenbergEvolution A t (B j))) * U t) t) ∧
-        (∀ t, U t ∈ Matrix.unitaryGroup (ι → Fin q) ℂ) ∧
-        (∀ t, U t ∈ supportedOperators q (K j : Set ι)) := by
-    obtain ⟨U, h0, hd, hu, hs, -, -⟩ :=
-      exists_supported_projected_relative_evolution q (K j) hA (hA.sub (hB j))
+  intro U
+  have hU0 (j : Fin m) : U j 0 = 1 := (projectedRelativeEvolution_spec q (K j) hA (hA.sub (hB j))).1
+  have hUd (j : Fin m) (t : ℝ) : HasDerivAt (U j)
+      ((Complex.I • siteExpectation q (K j) (heisenbergEvolution A t (B j))) * U j t) t := by
     have hcancel : A - (A - B j) = B j := by abel
-    exact ⟨U, h0, by simpa only [hcancel] using hd, hu, hs⟩
-  choose U hU0 hUd hUunit hUsupport using hlocal
-  refine ⟨U, hU0, hUd, hUunit, hUsupport, ?_⟩
+    simpa only [U, disjointProjectedPropagator, hcancel] using
+      (projectedRelativeEvolution_spec q (K j) hA (hA.sub (hB j))).2.1 t
+  have hUunit (j : Fin m) (t : ℝ) : U j t ∈ Matrix.unitaryGroup (ι → Fin q) ℂ :=
+    (projectedRelativeEvolution_spec q (K j) hA (hA.sub (hB j))).2.2.1 t
+  have hUsupport (j : Fin m) (t : ℝ) : U j t ∈ supportedOperators q (K j : Set ι) :=
+    (projectedRelativeEvolution_spec q (K j) hA (hA.sub (hB j))).2.2.2.1 t
+  refine ⟨hU0, hUd, hUunit, hUsupport, ?_⟩
   intro t ε herror
   let G : ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ :=
     fun s ↦ heisenbergEvolution A s (∑ j, B j)
@@ -143,5 +152,31 @@ theorem exists_disjoint_projected_propagator_approximation (q : ℕ) [NeZero q] 
         (List.ofFn fun j ↦ U j t).prod‖ := by
       rw [mul_sub, ← mul_assoc, SpectralFilter.hermitianUnitaryPath_mul_neg, one_mul]
     _ ≤ _ := hcompare
+
+
+/-- Evolutions of projected interaction-picture terms on disjoint regions whose ordered
+product approximates the relative evolution for the sum of the terms: the existence form
+of `disjointProjectedPropagator_spec`. Osborne, arXiv:quant-ph/0508031v2,
+equations (2)–(13); Huang, arXiv:1406.6355v6, Section 5.4. -/
+theorem exists_disjoint_projected_propagator_approximation (q : ℕ) [NeZero q] {m : ℕ}
+    (K : Fin m → Finset ι)
+    (hK : Pairwise fun j k ↦ Disjoint (K j : Set ι) (K k : Set ι))
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A.IsHermitian)
+    (B : Fin m → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (hB : ∀ j, (B j).IsHermitian) :
+    ∃ U : Fin m → ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ,
+      (∀ j, U j 0 = 1) ∧
+      (∀ j t, HasDerivAt (U j)
+        ((Complex.I • siteExpectation q (K j) (heisenbergEvolution A t (B j))) * U j t) t) ∧
+      (∀ j t, U j t ∈ Matrix.unitaryGroup (ι → Fin q) ℂ) ∧
+      (∀ j t, U j t ∈ supportedOperators q (K j : Set ι)) ∧
+      ∀ (t : ℝ) (ε : Fin m → ℝ),
+        (∀ j s, s ∈ Set.uIcc 0 t →
+          ‖heisenbergEvolution A s (B j) -
+            siteExpectation q (K j) (heisenbergEvolution A s (B j))‖ ≤ ε j) →
+        ‖Matrix.hermitianUnitaryPath (A - ∑ j, B j) (-t) -
+            Matrix.hermitianUnitaryPath A (-t) *
+              (List.ofFn fun j ↦ U j t).prod‖ ≤ (∑ j, ε j) * |t| :=
+  ⟨disjointProjectedPropagator q K hA B hB, disjointProjectedPropagator_spec q K hK hA B hB⟩
 
 end QuantumCircuit
