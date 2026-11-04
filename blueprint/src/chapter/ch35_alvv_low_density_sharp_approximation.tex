@@ -4,14 +4,14 @@ Fix a bandwidth $\eta>0$. Let $H=\sum_i h_i$ be an open chain of $L$
 sites of local dimension $q\ge2$, where each $h_i$ is a positive
 contraction supported on its two adjacent sites. Write
 \[
-  \lambda_0=\min\sigma(H),\qquad
-  G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H,\qquad
-  r_\eta=\dim G(\eta).
+    \lambda_0=\min\sigma(H),\qquad
+    G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H,\qquad
+    r_\eta=\dim G(\eta).
 \]
 For a deficit $v>0$, put
 \[
- b=\min\{v,\eta/2\},\qquad g=\min\{b/6,1\},\qquad
- u=1+\log q+\log(1/g).
+    b=\min\{v,\eta/2\},\qquad g=\min\{b/6,1\},\qquad
+    u=1+\log q+\log(1/g).
 \]
 The results below concern the actual original bands. They assume neither
 an internal gap nor invariance of these bands under a clipped filter.
@@ -29,21 +29,21 @@ supporting the approximation conclusion of
     One regional space $W_0$ can be chosen before the accuracy so that
     it is $3/200$-viable for $G(\eta-b/2)$ and
     \[
-      \dim W_0\le r_\eta\exp\!\left[
-        \frac{K_b}{b/2}
-        \bigl(1+\log q+\log(1+1/(b/2))\bigr)^3\right].
+        \dim W_0\le r_\eta\exp\!\left[
+            \frac{K_b}{b/2}
+            \bigl(1+\log q+\log(1+1/(b/2))\bigr)^3\right].
     \]
     For each $0<\delta\le1$, put
     $a=16+\log(1/g)+\log(1/\delta)$.
     An integer $\ell\ge1$ can be chosen before the vector, with
     \[
-       \ell\le8/g+(7C)^{1/4}g^{-1/4}a^{3/4}.
+        \ell\le8/g+(7C)^{1/4}g^{-1/4}a^{3/4}.
     \]
     Every unit $\psi\in G(\eta-v)$ then has a unit approximation
     $\phi$ satisfying
     \[
-      |\langle\phi,\psi\rangle|\ge1-\delta,\qquad
-      \operatorname{SR}_{J:J^c}(\phi)
+        |\langle\phi,\psi\rangle|\ge1-\delta,\qquad
+        \operatorname{SR}_{J:J^c}(\phi)
         \le\dim W_0\,(q\ell^2)^{44\ell}.
     \]
 \end{lemma}
@@ -71,10 +71,10 @@ supporting the approximation conclusion of
     There is $K_\eta>0$, chosen before the chain, interval, deficit,
     accuracy and vector, such that the preceding $\phi$ may be chosen with
     \[
-      \log\operatorname{SR}_{J:J^c}(\phi)
-      \le\log r_\eta+
-       K_\eta\left(\frac{u^3}{g}
-         +g^{-1/4}a^{3/4}u\right)(1+\log a).
+        \log\operatorname{SR}_{J:J^c}(\phi)
+        \le\log r_\eta+
+        K_\eta\left(\frac{u^3}{g}
+        +g^{-1/4}a^{3/4}u\right)(1+\log a).
     \]
 \end{lemma}
 \begin{proof}\leanok
@@ -83,9 +83,9 @@ supporting the approximation conclusion of
     the initial exponent is at most $8K_bu^3/g$.
     The actual polynomial count has logarithm at most
     \[
-      44(1+\log(11+\beta))
-      \bigl(10/g+\beta g^{-1/4}a^{3/4}\bigr)u(1+\log a),
-      \qquad\beta=(7C)^{1/4}.
+        44(1+\log(11+\beta))
+        \bigl(10/g+\beta g^{-1/4}a^{3/4}\bigr)u(1+\log a),
+        \qquad\beta=(7C)^{1/4}.
     \]
     Add twice this logarithm to that of the initial dimension.
     This retains exactly one $\log r_\eta$.
@@ -133,12 +133,12 @@ supporting the approximation conclusion of
     There is $K_\eta>0$, depending only on the fixed bandwidth,
     with the following property. For $0<\delta\le1$, put
     \[
-      A=16+\log(1/g)+\log\frac{16(L+1)}\delta.
+        A=16+\log(1/g)+\log\frac{16(L+1)}\delta.
     \]
     There is an integer $B\ge1$, selected before the vector, satisfying
     \[
-      \log B\le K_\eta
-         \left(\frac{u^3}{g}+g^{-1/4}A^{3/4}u\right)(1+\log A).
+        \log B\le K_\eta
+        \left(\frac{u^3}{g}+g^{-1/4}A^{3/4}u\right)(1+\log A).
     \]
     Every unit $\psi\in G(\eta-v)$ has one unit open-boundary MPS
     approximation $\Phi$ of bond dimension at most $r_\eta B$,
@@ -147,7 +147,7 @@ supporting the approximation conclusion of
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:ld_sharp_logarithmic_cut_rank,
-      lem:regional_overlap_to_missing_mass,lem:normalized_sequential_prefix_mass}
+        lem:regional_overlap_to_missing_mass,lem:normalized_sequential_prefix_mass}
     Apply the cut-rank bound at accuracy $\delta/[16(L+1)]$ to each
     prefix. Round the same exponential rank factor upward once,
     independently of the vector. Every prefix then has missing mass
@@ -159,8 +159,8 @@ supporting the approximation conclusion of
 For the source range $0<v\le\eta$, the already proved capped-width
 estimate gives, with $B_\eta=\max\{12,\eta\}$,
 \[
-  1/g\le B_\eta/v,\qquad
-  \log(1/g)\le\log B_\eta+\log(1+1/v).
+    1/g\le B_\eta/v,\qquad
+    \log(1/g)\le\log B_\eta+\log(1+1/v).
 \]
 Thus the displayed ranks have the source's
 $v^{-1/4}\log(1/\delta)^{3/4}$ accuracy dependence, with only
