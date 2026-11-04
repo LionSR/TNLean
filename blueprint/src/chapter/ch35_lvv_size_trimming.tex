@@ -9,15 +9,19 @@ columns of a leading eigenvector of a density matrix of least energy among
 those whose boundary state is close to that point. The resulting selection is
 a function of the Hamiltonian, the gap parameter and the input set.
 
-\begin{lemma}[Dyadic approximation of a normalized open-chain state]
+\begin{lemma}[Dyadic approximation in the open-chain unit ball]
     \label{thm:lvv_dyadic_open_mps_approximation}
     \lean{TNLean.MPS.AreaLaw.one_add_pow_sub_one_le_mul_two_pow,
         TNLean.MPS.AreaLaw.mul_inv_two_pow_clog_natCeil_le,
+        TNLean.MPS.AreaLaw.LeftOpenMPSRepresentation.exists_unitBounded_of_norm_le_one,
+        TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists_dyadic_rational_approximation_of_norm_le_one,
+        TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists_dyadic_rational_approximation_at_error_of_norm_le_one,
+        TNLean.MPS.AreaLaw.exists_rational_leftFamily_approximation_of_norm_le_one,
         TNLean.MPS.AreaLaw.IsLeftOpenMPS.exists_dyadic_rational_approximation_at_error}
     \leanok
-    Let $1\le k\le L$, and let $v$ be a normalized left-block matrix product
+    Let $1\le k\le L$, and let $v$ be a left-block matrix product
     state on $k$ sites with local dimension $q$ and bond bound $b$. Put
-    $D=\max\{1,b\}$. For every $\epsilon>0$, define
+    $D=\max\{1,b\}$, and suppose $\|v\|\le1$. For every $\epsilon>0$, define
     \[
       K=q^k D^{k+1}(k+1)2^k,\qquad
       t=\left\lceil\log_2\max\{1,\lceil K/\epsilon\rceil\}\right\rceil.
@@ -25,6 +29,10 @@ a function of the Hamiltonian, the gap parameter and the input set.
     There is a vector $w$ with the same bond bound and Gaussian-rational
     tensor parameters of common coordinate height at most $2^{2t+5}$ such
     that $\|v-w\|\le\epsilon$.
+    A finite family of such vectors admits these approximations
+    simultaneously with the same height bound and without increasing its
+    cardinality. This approximating family is chosen before any ground
+    vector or viability witness is specified.
 \end{lemma}
 \begin{proof}\leanok
     Choose an equivalent open-chain representation with scalar cap and
@@ -35,6 +43,35 @@ a function of the Hamiltonian, the gap parameter and the input set.
       (1+\delta)^{k+1}-1\le\delta(k+1)2^k.
     \]
     The choice of $t$ gives $K2^{-t}\le\epsilon$, as required.
+\end{proof}
+
+\begin{lemma}[Viability under rounding of subnormalized columns]
+    \label{thm:lvv_subnormalized_column_rounding}
+    \lean{TNLean.MPS.AreaLaw.isViable_of_close_subnormalized_leftColumns,
+        TNLean.MPS.AreaLaw.isViable_of_approximating_leftFamily,
+        TNLean.MPS.AreaLaw.isViable_half_of_approximating_trimmed_leftFamily}
+    \leanok
+    Let $u$ have $m$ left columns in a finite family $S$, let $W$ be a right
+    isometry, and let $\Gamma$ be a unit target. Suppose $\|u\|\ge c>0$
+    and the normalized extension of $u$ has overlap at least $1-\delta$
+    with $\Gamma$. If a family $T$ approximates each member of $S$ within
+    distance $\theta\ge0$, then $T$ is viable with error at most
+    \[
+      \delta+\frac{2\sqrt m\,\theta}{c},
+      \qquad \text{provided }\frac{\sqrt m\,\theta}{c}<1.
+    \]
+    In particular, the trimmed witness bounds $c=37/48$ and
+    $1-\delta=7/12$ give error at most $1/2$ whenever
+    \[
+      \theta\le \frac{37}{1152(\sqrt m+1)}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Replace the columns independently. Their joint Euclidean error is at
+    most $\sqrt m\,\theta$. Extend by $W$ and divide by the original
+    norm, losing at most a factor $c^{-1}$. Normalizing the perturbed
+    witness costs at most twice this distance in overlap. The displayed
+    mesh bounds the total overlap loss by $1/12$.
 \end{proof}
 
 \begin{definition}[The family of minimizing boundary states]
@@ -185,6 +222,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
 \begin{lemma}[The size-trimming selection is viable before the ground state]
     \label{thm:lvv_size_trimmed_family}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelection_subset_span,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_le_one_of_mem_sizeTrimmingSelection,
         TNLean.MPS.AreaLaw.ChainHamiltonian.card_sizeTrimmingSelection_le,
         TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_sizeTrimmingSelection}
     \leanok
@@ -200,6 +238,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         |T| & \le(D+1)DK,\notag                      \\
         T   & \subseteq\operatorname{Span}(S).\notag
     \end{align}
+    Every member of $T$ has norm at most one.
     For every $E_0\in\mathbb R$ and every $\Gamma$, if $\Gamma$ is a normalized
     ground state of $H$ of energy $E_0$ with gap at least $\Delta$, then
     $(k,c/L)$-viability of $S$ for $\Gamma$ implies

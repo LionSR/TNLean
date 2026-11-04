@@ -39,17 +39,18 @@ namespace TNLean.MPS.AreaLaw
 /-- **Size trimming followed by bond trimming.** Independently trimming each member of the
 size-trimming selection through the internal bonds at the radius `m` gives the family
 `bondTrimSet hi m (h.sizeTrimmingSelection hq Δ S) = {trim_m u : u ∈ selection}`, which is
-`1 / 2`-viable whenever the input is `c / L`-viable. The selection and its trimming are
+`5 / 12`-viable whenever the input is `c / L`-viable, leaving a further `1 / 12` reserve
+for approximation. The selection and its trimming are
 functions of the Hamiltonian, the gap parameter and the input family, fixed before every
 ground pair. This is the library-bond version of LVV13, `algo53.tex`, Claims `c:2` and
 `c:trim`, lines 520–559, with the documented radius correction. -/
-theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection {L q i : ℕ}
+theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve {L q i : ℕ}
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) (hi : i ≤ L) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q i)) (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
     (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q i))) :
-    IsViable Γ (1 / 2) (bondTrimSet hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
+    IsViable Γ (5 / 12) (bondTrimSet hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
       (h.sizeTrimmingSelection hq Δ S) : Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨_, r, W, u, hW, _, hu, hcols, hΓu⟩ :=
@@ -59,10 +60,27 @@ theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection {L q i : ℕ
   have hΓu' : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu
-  have htrim := isViableMPS_bondTrimSet_of_columns hi (h.sizeTrimmingSelection hq Δ S) u W hW
-    hu hcols Γ hgs.1 hΓu' v hv hΓv (lvvReferenceBond q Δ L)
+  have htrim := isViableMPS_bondTrimSet_of_columns_with_reserve hi
+    (h.sizeTrimmingSelection hq Δ S) u W hW hu hcols Γ hgs.1 hΓu' v hv hΓv
+    (lvvReferenceBond q Δ L)
     (fun k hk0 hki ↦ hvMPS.rank_cutMatrix_le hk0 (lt_of_lt_of_le hki hi))
   exact htrim.2.2
+
+/-- Size trimming followed by independent bond trimming gives `1 / 2`-viability.
+Source: LVV13, `algo53.tex`, Claims `c:2` and `c:trim`, lines 520–559, with the
+documented radius correction. -/
+theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection {L q i : ℕ}
+    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+    (hL : 0 < L) (hq : 2 ≤ q) (hi : i ≤ L) {Δ : ℝ} (hΔ : 0 < Δ)
+    (S : Finset (LeftBlockVector L q i)) (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
+    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q i))) :
+    IsViable Γ (1 / 2) (bondTrimSet hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
+      (h.sizeTrimmingSelection hq Δ S) : Set (LeftBlockVector L q i)) := by
+  obtain ⟨z, hz, hoverlap, hsupport⟩ :=
+    h.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve hpos hL hq hi hΔ S E₀ Γ
+      hgs hviable
+  exact ⟨z, hz, by linarith, hsupport⟩
 
 /-- The polynomial size-trimming family followed by actual independent bond trimming: the
 existence form of `isViable_bondTrimSet_sizeTrimmingSelection`, with the trimmed family

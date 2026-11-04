@@ -1592,9 +1592,29 @@ The theorem
 then gives error at most \(\epsilon\) and parameter height at most
 \(2^{2t+5}\). Thus the dyadic exponent has logarithmic dependence on
 \(K/\epsilon\), despite the exponential path-count factor in \(K\).
-The remaining running-time step is to propagate this rationalization
-through bond trimming and sampled error reduction with their viability
-reserves and operation counts.
+The same mesh and height bound now hold for every open-chain vector of norm
+at most one, including the zero vector. A finite family in this unit ball
+can be approximated simultaneously, with unchanged cardinality and bond
+bound, before a ground vector is supplied.
+
+There is also a quantitative reserve after the actual Schmidt trimming.
+The theorem
+\leanid{TNLean.MPS.AreaLaw.bondTrimSet\_witness\_with\_reserve}
+gives a raw trimmed witness of norm between \(37/48\) and one whose
+normalization has ground-state overlap at least \(7/12\).
+The sharper overlap inequality therefore gives \(5/12\)-viability.
+For an auxiliary right dimension \(m\), the theorem
+\leanid{TNLean.MPS.AreaLaw.isViable\_half\_of\_approximating\_trimmed\_leftFamily}
+shows that a family approximating the raw trimmed columns at mesh
+\[
+  \theta\le\frac{37}{1152(\sqrt m+1)}
+\]
+retains the \(1/2\)-viability needed for error reduction.
+The proof uses the lower norm bound to control normalization, and requires
+no rationality of Schmidt projections. The remaining running-time work is
+to assemble these uniform approximations with the selected families and
+propagate their heights and operation counts through sampled error
+reduction.
 The theorem
 \leanid{TNLean.MPS.AreaLaw.rank\_boundarySupportedMatrix\_le}
 also proves directly that every matrix satisfying the support constraint,

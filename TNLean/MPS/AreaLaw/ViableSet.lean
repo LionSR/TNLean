@@ -14,6 +14,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BondTrimmingBound
 import TNLean.MPS.AreaLaw.ViableSet.BondTrimmingReference
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryNet
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryNetPolynomial
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryTraceNormSDP
 import TNLean.MPS.AreaLaw.ViableSet.ChainPadding
 import TNLean.MPS.AreaLaw.ViableSet.ChainPaddingCoordinates
@@ -45,6 +46,14 @@ import TNLean.MPS.AreaLaw.ViableSet.SampledProjectorPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction
 import TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CanonicalSearch
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.LeadingVectorPrecision
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.PowerIteration
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.RationalSearch
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.Selection
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.UniformCertificates
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveAccuracy
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveApproximation

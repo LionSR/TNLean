@@ -208,6 +208,8 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     \label{lem:lvv_bond_trimmed_family_viable}
     \lean{TNLean.MPS.AreaLaw.bondTrimmingRadius,
         TNLean.MPS.AreaLaw.mul_sqrt_bondTrimmingRadius_le,
+        TNLean.MPS.AreaLaw.bondTrimSet_witness_with_reserve,
+        TNLean.MPS.AreaLaw.isViableMPS_bondTrimSet_of_columns_with_reserve,
         TNLean.MPS.AreaLaw.isViableMPS_bondTrimSet_of_columns}
     \leanok
     \uses{def:lvv_bond_trimmed_family,def:lvv_viable_mps}
@@ -219,7 +221,8 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     of $u$ belongs to the finite set $S$ and
     $|\langle\Gamma,(I\otimes W)u\rangle|\ge11/12$.
     With $m=(48L)^2D$, the independently trimmed family $\mathcal T_m(S)$
-    is $(i,|S|,m,1/2)$-viable for $\Gamma$.
+    is $(i,|S|,m,5/12)$-viable for $\Gamma$, and hence also
+    $(i,|S|,m,1/2)$-viable.
     The quadratic radius replaces the printed linear radius
     of~\cite[Claim~2.10, source lines 549--559]{Landau2015Polynomial}, by
     the corrected single-cut estimate~\cite{gap:lvv13_trimming_radius}.
@@ -233,7 +236,16 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     $L\sqrt{D/(m+1)}\le1/48$. Thus the independently trimmed extension
     $w$ has $|\langle w,v\rangle|\ge37/48$ and $0<\|w\|\le1$.
     Normalize $z=w/\|w\|$. Then $|\langle z,v\rangle|\ge37/48$, and
-    $|\langle\Gamma,z\rangle|\ge1-2(1/48+11/48)=1/2$.
+    The sharper overlap inequality gives
+    \[
+      |\langle\Gamma,z\rangle|
+      \ge\frac{47}{48}\frac{37}{48}
+          -\sqrt{(1-|\langle\Gamma,v\rangle|^2)
+                    (1-|\langle z,v\rangle|^2)}
+      \ge\frac{7}{12}.
+    \]
+    Indeed the product inside the square root is at most
+    $(1/24)(2/3)=1/36$. Also $\|w\|\ge37/48$.
     The vector $z$ is supported on the trimmed family; its cardinality
     and bond bounds follow from
     Lemma~\ref{lem:lvv_bond_trimmed_family_bounds}.
@@ -298,7 +310,8 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
 
 \begin{lemma}[Size trimming followed by bond trimming]
     \label{thm:lvv_size_trimmed_family_bond_trim_set}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve}
     \leanok
     \uses{def:chain_model,def:lvv_viable_mps,def:lvv_bond_trimmed_family,
         def:lvv_size_trimming_selection}
@@ -310,7 +323,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     Lemma~\ref{lem:lvv_bond_trimming_reference}. Let $T_0$ be the
     size-trimming selection of $S$. For every normalized ground vector
     $\Gamma$ of energy $E_0$ and gap at least $\Delta$, $(i,c/L)$-viability
-    of $S$ implies $(i,1/2)$-viability of the trimmed family
+    of $S$ implies $(i,5/12)$-viability, and therefore $(i,1/2)$-viability, of the trimmed family
     $\mathcal T_m(T_0)$ of Definition~\ref{def:lvv_bond_trimmed_family},
     whose members are the independent trimmings of the members of $T_0$. The
     trimmed family is a function of $H$, $\Delta$ and $S$, fixed before every

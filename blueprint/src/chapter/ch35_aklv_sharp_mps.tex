@@ -231,7 +231,7 @@
     real part.
 \end{proof}
 
-\begin{theorem}[Physical per-cut approximation at fixed gap]
+\begin{lemma}[Physical per-cut approximation at fixed gap]
     \label{thm:aklv_fixed_gap_physical_per_cut}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_fixed_gap_physical_per_cut_approximation}
     \leanok
@@ -255,7 +255,7 @@
     Here $D$ is the same explicit AKLV rank budget as in
     Lemma~\ref{thm:aklv_sharp_physical_per_cut}; in particular, $y$ is
     either the exact ground vector or an actual filtered output.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Apply Lemma~\ref{thm:aklv_sharp_physical_per_cut}, then use
@@ -329,13 +329,13 @@
     representation. Its scalar normalization preserves that bound.
 \end{proof}
 
-\begin{theorem}[Sequential matrix product approximation at fixed gap]
+\begin{lemma}[Sequential matrix product approximation at fixed gap]
     \label{thm:aklv_fixed_gap_sequential_mps}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_fixed_gap_physical_sequential_mps_approximation}
     \leanok
     \uses{thm:aklv_sharp_sequential_mps,thm:aklv_fixed_gap_cubic_cost}
     Under the hypotheses of
-    Theorem~\ref{thm:aklv_fixed_gap_physical_per_cut}, for every
+    Lemma~\ref{thm:aklv_fixed_gap_physical_per_cut}, for every
     $0<\epsilon\le1$ the sequentially truncated vector $\Phi_0$ is nonzero
     and its normalization $\Phi$ is an open-boundary matrix product state
     satisfying $\lVert\Phi-\Omega\rVert\le\epsilon$.  Its explicit bond
@@ -344,7 +344,7 @@
       \log D\le 11C C_0(g_0)\frac{\log^3q}{g}
         \log\frac{2048(L+1)}{\epsilon^2}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Apply Theorem~\ref{thm:aklv_sharp_sequential_mps} and then
