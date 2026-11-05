@@ -168,8 +168,8 @@
     },
     {
       "id": "docs/paper-gaps/alvv16_approximation_parameters.tex",
-      "kind": "local-correction",
-      "status": "resolved-pending",
+      "kind": "narrower",
+      "status": "open",
       "paper": "alvv",
       "result": "Theorem 4.9, the parameters of the approximation",
       "issue": 9846,

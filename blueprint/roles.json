@@ -703,6 +703,8 @@
         "thm:lvv_uniform_successive_approximation",
         "thm:lvv_successive_arbitrary_accuracy",
         "thm:lvv_sampled_ground_state",
+        "thm:physical_dg_interval_tree_parameters",
+        "thm:physical_dg_normalized_mps_approximation",
         "thm:lvv_ground_state_program_spec",
         "thm:lvv_polynomial_running_time",
         "thm:lvv_sampled_program_success",
