@@ -183,12 +183,12 @@ Section 5): the position `k` of `P` is matched with `j` when `M_k ∩ M'_j ⊄ M
 `M_k ∩ M'_{j'} ⊆ M_{k-1}` for every `j' < j`. -/
 theorem matching_eq_of_flagVec_inf (P : MultiBlockCompression B S C)
     (Q : MultiBlockCompression B S' C')
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
-    (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
+    (hirr' : ∀ t ∈ S', Matrix.IsIrreducibleAction (C' t)) (hlet' : ∀ t ∈ S', ∃ i, C' t i ≠ 0)
     (k : Fin (S.card + P.z)) (j : Fin (S'.card + Q.z))
     (hj : ∃ v ∈ flagVec P k.succ, v ∈ flagVec Q j.succ ∧ v ∉ flagVec P k.castSucc)
     (hlt : ∀ j' < j, ∀ v ∈ flagVec P k.succ, v ∈ flagVec Q j'.succ → v ∈ flagVec P k.castSucc) :
-    P.matching Q hC hD hC' hD' k = j := by
+    P.matching Q hirr hlet hirr' hlet' k = j := by
   rw [MultiBlockCompression.matching_apply]
   refine le_antisymm (CoveringMatching.CoveringChain.jump_le_of_not_inf_le _ _ k ?_) ?_
   · obtain ⟨v, hv1, hv2, hv3⟩ := hj
@@ -202,8 +202,8 @@ theorem matching_eq_of_flagVec_inf (P : MultiBlockCompression B S C)
     exact hv3 h
   · by_contra hcon
     rw [not_le] at hcon
-    refine CoveringMatching.CoveringChain.not_inf_jump_succ_le (P.coveringChain hC hD)
-      (Q.coveringChain hC' hD') k ?_
+    refine CoveringMatching.CoveringChain.not_inf_jump_succ_le (P.coveringChain hirr hlet)
+      (Q.coveringChain hirr' hlet') k ?_
     intro x hx
     have h := hlt _ hcon (WordModule.toVec B x) ((mem_flag_iff_toVec_mem P _ _).1 hx.1)
       ((mem_flag_iff_toVec_mem Q _ _).1 hx.2)
@@ -217,25 +217,26 @@ the matching read on slots, `L j` a complement of `K_j = M_{j-1} ∩ M'_{π(j)}`
 `g_tilde = 𝔄' P_X Γ`. The examples record their supplied complements and explicit matrix factors;
 the general `unipotentFactor` construction also accepts these complements. -/
 def IsAdaptedFactorization (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
-    (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
+    (hirr' : ∀ t ∈ S', Matrix.IsIrreducibleAction (C' t)) (hlet' : ∀ t ∈ S', ∃ i, C' t i ≠ 0)
     (π : BlockIndex S P.z ≃ BlockIndex S' Q.z) (L : Fin (S.card + P.z) → Submodule ℂ B.WordModule)
     (Γ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
     (𝔄 : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ)
     (𝔄' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ)
     (X : ∀ b, Matrix (Fin (slotSize D' (π b))) (Fin (slotSize D b)) ℂ) : Prop :=
-  (∀ b, Q.ord (π b) = P.matching Q hC hD hC' hD' (P.ord b)) ∧
+  (∀ b, Q.ord (π b) = P.matching Q hirr hlet hirr' hlet' (P.ord b)) ∧
   (∀ j, Disjoint
-      ((P.flag j.castSucc ⊓ Q.flag (P.matching Q hC hD hC' hD' j).succ).restrictScalars ℂ)
+      ((P.flag j.castSucc ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' j).succ).restrictScalars ℂ)
       (L j) ∧
-    (P.flag j.castSucc ⊓ Q.flag (P.matching Q hC hD hC' hD' j).succ).restrictScalars ℂ ⊔ L j =
-      (P.flag j.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' j).succ).restrictScalars ℂ) ∧
+    (P.flag j.castSucc ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' j).succ).restrictScalars ℂ ⊔ L
+      j =
+      (P.flag j.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' j).succ).restrictScalars ℂ) ∧
   (∀ b, ∀ x ∈ L (P.ord b), Γ (WordModule.toVec B x) =
       Matrix.blockEmbed (slotSize D) b *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x)) ∧
   (∀ b, (∃ Y : Matrix (Fin (slotSize D b)) (Fin (slotSize D' (π b))) ℂ,
       X b * Y = 1 ∧ Y * X b = 1) ∧
     (∀ i, X b * slotTensor C b i = slotTensor C' (π b) i * X b) ∧
-    ∀ x ∈ P.flag (P.ord b).succ ⊓ Q.flag (P.matching Q hC hD hC' hD' (P.ord b)).succ,
+    ∀ x ∈ P.flag (P.ord b).succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' (P.ord b)).succ,
       Q.leftRow (π b) *ᵥ WordModule.toVec B x = X b *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x)) ∧
   (𝔄.BlockTriangular fun x => P.ord x.1) ∧ (∀ b, 𝔄.blockDiag' b = 1) ∧
   (𝔄'.BlockTriangular fun x => Q.ord x.1) ∧ (∀ b', 𝔄'.blockDiag' b' = 1) ∧

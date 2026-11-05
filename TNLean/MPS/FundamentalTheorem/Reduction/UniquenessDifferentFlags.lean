@@ -4,16 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixSubspaceFactorization
-import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
 
 /-!
 # Two reductions with different flags
 
-Let `P` and `Q` be two multi-block compressions of the same tensor `B`, onto normal blocks of
-positive bond dimension, with flags `M_k` and `M'_{k'}`, reading maps `W_b`, `W'_{b'}` and
+Let `P` and `Q` be two multi-block compressions of the same tensor `B`, onto nonzero irreducible
+blocks, with flags `M_k` and `M'_{k'}`, reading maps `W_b`, `W'_{b'}` and
 injections `V_b`, `V'_{b'}`. Fix a position `k` of `P` carrying the slot `b`, and let the matched
-position `k'` of `Q` carry the slot `b'`. With
-$$U = M_k ∩ M'_{k'},\qquad N = M_{k-1} + M'_{k'-1},$$
+position `k'` of `Q` carry the slot `b'`. With $$U = M_k ∩ M'_{k'},\qquad N = M_{k-1} + M'_{k'-1},$$
 there is a unique intertwiner `X`, `X C_b^i = C'_{b'}^i X`, with `W'_{b'} x = X W_b x` for every
 `x ∈ U`; it is invertible, and with `Y = X⁻¹` the difference `V'_{b'} - V_b Y` takes values in `N`.
 On a pair of zero slots, and on a pair of block slots with the same label of the same family, `X` is
@@ -106,8 +105,8 @@ end OneCompression
 section TwoCompressions
 
 variable (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
-  (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
-  (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
+  (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
+  (hirr' : ∀ t ∈ S', Matrix.IsIrreducibleAction (C' t)) (hlet' : ∀ t ∈ S', ∃ i, C' t i ≠ 0)
 
 /-- **Two compressions with different flags** (blueprint `thm:asym_uniq_different_flags`, *Two
 compressions with different flags*). Let the position `k` of `P` carry the slot `b`, and the matched
@@ -117,19 +116,19 @@ mutually inverse matrices `X`, `Y` such that `X` intertwines the diagonal blocks
 injections satisfy `V'_{b'} v - V_b Y v ∈ N` for every `v`. -/
 theorem exists_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : BlockIndex S P.z}
     (hb : P.ord b = k) {b' : BlockIndex S' Q.z}
-    (hb' : Q.ord b' = P.matching Q hC hD hC' hD' k) :
+    (hb' : Q.ord b' = P.matching Q hirr hlet hirr' hlet' k) :
     ∃ (X : Matrix (Fin (slotSize D' b')) (Fin (slotSize D b)) ℂ)
       (Y : Matrix (Fin (slotSize D b)) (Fin (slotSize D' b')) ℂ),
       X * Y = 1 ∧ Y * X = 1 ∧ (∀ i, X * slotTensor C b i = slotTensor C' b' i * X) ∧
-      (∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ,
+      (∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' k).succ,
         Q.leftRow b' *ᵥ WordModule.toVec B x = X *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x)) ∧
       ∀ v, (WordModule.toVec B).symm (Q.rightCol b' *ᵥ v - P.rightCol b *ᵥ (Y *ᵥ v)) ∈
-        P.flag k.castSucc ⊔ Q.flag (P.matching Q hC hD hC' hD' k).castSucc := by
+        P.flag k.castSucc ⊔ Q.flag (P.matching Q hirr hlet hirr' hlet' k).castSucc := by
   subst hb
-  have hPU := P.flag_sup_inf_eq Q hC hD hC' hD' (P.ord b)
-  have hQU := P.flag_sup_inf_eq' Q hC hD hC' hD' (P.ord b)
-  have hK := (P.flag_inf_inf_eq Q hC hD hC' hD' (P.ord b)).trans
-    (P.flag_inf_inf_eq' Q hC hD hC' hD' (P.ord b)).symm
+  have hPU := P.flag_sup_inf_eq Q hirr hlet hirr' hlet' (P.ord b)
+  have hQU := P.flag_sup_inf_eq' Q hirr hlet hirr' hlet' (P.ord b)
+  have hK := (P.flag_inf_inf_eq Q hirr hlet hirr' hlet' (P.ord b)).trans
+    (P.flag_inf_inf_eq' Q hirr hlet hirr' hlet' (P.ord b)).symm
   rw [← hb'] at hPU hQU hK ⊢
   set U := P.flag (P.ord b).succ ⊓ Q.flag (Q.ord b').succ with hU
   have hUP : U ≤ P.flag (P.ord b).succ := inf_le_left
@@ -198,15 +197,16 @@ theorem exists_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : BlockIndex 
 coordinates of `b`. -/
 theorem existsUnique_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : BlockIndex S P.z}
     (hb : P.ord b = k) {b' : BlockIndex S' Q.z}
-    (hb' : Q.ord b' = P.matching Q hC hD hC' hD' k) :
+    (hb' : Q.ord b' = P.matching Q hirr hlet hirr' hlet' k) :
     ∃! X : Matrix (Fin (slotSize D' b')) (Fin (slotSize D b)) ℂ,
       (∀ i, X * slotTensor C b i = slotTensor C' b' i * X) ∧
-      ∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ,
+      ∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' k).succ,
         Q.leftRow b' *ᵥ WordModule.toVec B x = X *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x) := by
-  obtain ⟨X, -, -, -, hint, hX, -⟩ := P.exists_intertwiner_of_matching Q hC hD hC' hD' k hb hb'
+  obtain ⟨X, -, -, -, hint, hX, -⟩
+    := P.exists_intertwiner_of_matching Q hirr hlet hirr' hlet' k hb hb'
   refine ⟨X, ⟨hint, hX⟩, fun X' hX' => ?_⟩
   subst hb
-  have hs := P.leftRow_surjOn_of_sup_eq (P.flag_sup_inf_eq Q hC hD hC' hD' (P.ord b))
+  have hs := P.leftRow_surjOn_of_sup_eq (P.flag_sup_inf_eq Q hirr hlet hirr' hlet' (P.ord b))
   refine Matrix.ext_iff_mulVec.2 fun v => ?_
   obtain ⟨x, hx, rfl⟩ := hs (Set.mem_univ v)
   rw [← hX'.2 x hx, hX x hx]
@@ -218,16 +218,16 @@ theorem existsUnique_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : Block
 -/
 theorem exists_smul_of_matching_inr (k : Fin (S.card + P.z)) {t : Fin P.z}
     (hk : P.ord (Sum.inr t) = k) {t' : Fin Q.z}
-    (hk' : Q.ord (Sum.inr t') = P.matching Q hC hD hC' hD' k) :
+    (hk' : Q.ord (Sum.inr t') = P.matching Q hirr hlet hirr' hlet' k) :
     ∃ c : ℂ, c ≠ 0 ∧
-      (∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ,
+      (∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' k).succ,
         Q.leftRow (Sum.inr t') *ᵥ WordModule.toVec B x =
           c • (P.leftRow (Sum.inr t) *ᵥ WordModule.toVec B x)) ∧
       ∀ v, (WordModule.toVec B).symm
           (Q.rightCol (Sum.inr t') *ᵥ v - c⁻¹ • (P.rightCol (Sum.inr t) *ᵥ v)) ∈
-        P.flag k.castSucc ⊔ Q.flag (P.matching Q hC hD hC' hD' k).castSucc := by
+        P.flag k.castSucc ⊔ Q.flag (P.matching Q hirr hlet hirr' hlet' k).castSucc := by
   obtain ⟨X, Y, hXY, -, -, hX, hV⟩ :=
-    P.exists_intertwiner_of_matching Q hC hD hC' hD' k hk hk'
+    P.exists_intertwiner_of_matching Q hirr hlet hirr' hlet' k hk hk'
   obtain ⟨c, rfl⟩ := Matrix.exists_eq_smul_one_of_subsingleton (n := Fin 1) X
   obtain ⟨hc, rfl⟩ := Matrix.ne_zero_and_eq_inv_smul_one_of_smul_one_mul_eq_one (n := Fin 1) hXY
   refine ⟨c, hc, fun x hx => ?_, fun v => ?_⟩
@@ -241,14 +241,14 @@ the same two members `M'_{j-1} = M_{k-1}`, `M'_j = M_k` as the position `k` of `
 matched with `k`. -/
 theorem matching_eq_of_flag_eq (k : Fin (S.card + P.z)) {j : Fin (S'.card + Q.z)}
     (h0 : Q.flag j.castSucc = P.flag k.castSucc) (h1 : Q.flag j.succ = P.flag k.succ) :
-    P.matching Q hC hD hC' hD' k = j := by
+    P.matching Q hirr hlet hirr' hlet' k = j := by
   rw [matching_apply]
   refine (CoveringMatching.CoveringChain.jump_unique _ _ k ?_).symm
   change P.flag k.castSucc ⊔ (P.flag k.succ ⊓ Q.flag j.castSucc) <
     P.flag k.castSucc ⊔ (P.flag k.succ ⊓ Q.flag j.succ)
   rw [h0, h1, inf_idem, sup_eq_left.2 inf_le_right,
     sup_eq_right.2 (P.flag_mono (Fin.castSucc_le_succ k))]
-  exact (P.flag_covBy hC hD k).lt
+  exact (P.flag_covBy hirr hlet k).lt
 
 /-- **Two compressions with different flags, for coinciding flags** (blueprint
 `thm:asym_uniq_different_flags`, *Two compressions with different flags*): when the position `j` of
@@ -256,18 +256,18 @@ theorem matching_eq_of_flag_eq (k : Fin (S.card + P.z)) {j : Fin (S'.card + Q.z)
 subspaces of *Two compressions with different flags* are `U = M_k` and `N = M_{k-1}`. -/
 theorem inf_eq_and_sup_eq_of_flag_eq (k : Fin (S.card + P.z)) {j : Fin (S'.card + Q.z)}
     (h0 : Q.flag j.castSucc = P.flag k.castSucc) (h1 : Q.flag j.succ = P.flag k.succ) :
-    P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ = P.flag k.succ ∧
-      P.flag k.castSucc ⊔ Q.flag (P.matching Q hC hD hC' hD' k).castSucc =
+    P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' k).succ = P.flag k.succ ∧
+      P.flag k.castSucc ⊔ Q.flag (P.matching Q hirr hlet hirr' hlet' k).castSucc =
         P.flag k.castSucc := by
-  rw [P.matching_eq_of_flag_eq Q hC hD hC' hD' k h0 h1, h0, h1]
+  rw [P.matching_eq_of_flag_eq Q hirr hlet hirr' hlet' k h0 h1, h0, h1]
   exact ⟨inf_idem _, sup_idem _⟩
 
 end TwoCompressions
 
 section SameFamily
 
-variable (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-  (hD : ∀ s ∈ S, 0 < D s)
+variable (P Q : MultiBlockCompression B S C) (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+  (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
 
 /-- **Two compressions with different flags, on a pair of block slots with the same label**
 (blueprint `thm:asym_uniq_different_flags`, *Two compressions with different flags*): for two
@@ -276,18 +276,18 @@ both carry the block `C_s`, the intertwiner of *Two compressions with different 
 `C_s` and is a nonzero scalar `λ` by Schur's lemma; so `W'_s = λ W_s` on `U = M_k ∩ M'_{k'}` and
 `V'_s ≡ λ⁻¹ V_s` modulo `N = M_{k-1} + M'_{k'-1}`. -/
 theorem exists_smul_of_matching_inl (k : Fin (S.card + P.z)) (s : {s // s ∈ S})
-    (hk : P.ord (Sum.inl s) = k) (hk' : Q.ord (Sum.inl s) = P.matching Q hC hD hC hD k) :
+    (hk : P.ord (Sum.inl s) = k) (hk' : Q.ord (Sum.inl s) = P.matching Q hirr hlet hirr hlet k) :
     ∃ c : ℂ, c ≠ 0 ∧
-      (∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC hD k).succ,
+      (∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr hlet k).succ,
         Q.leftRow (Sum.inl s) *ᵥ WordModule.toVec B x =
           c • (P.leftRow (Sum.inl s) *ᵥ WordModule.toVec B x)) ∧
       ∀ v, (WordModule.toVec B).symm
           (Q.rightCol (Sum.inl s) *ᵥ v - c⁻¹ • (P.rightCol (Sum.inl s) *ᵥ v)) ∈
-        P.flag k.castSucc ⊔ Q.flag (P.matching Q hC hD hC hD k).castSucc := by
+        P.flag k.castSucc ⊔ Q.flag (P.matching Q hirr hlet hirr hlet k).castSucc := by
   obtain ⟨X, Y, hXY, -, hint, hX, hV⟩ :=
-    P.exists_intertwiner_of_matching Q hC hD hC hD k hk hk'
-  have : Nonempty (Fin (D s.1)) := ⟨⟨0, hD s.1 s.2⟩⟩
-  obtain ⟨c, rfl⟩ := (hC s.1 s.2).eq_smul_one_of_commute (S := X) hint
+    P.exists_intertwiner_of_matching Q hirr hlet hirr hlet k hk hk'
+  have : Nonempty (Fin (D s.1)) := ⟨⟨0, dim_pos_of_exists_ne_zero (hlet s.1 s.2)⟩⟩
+  obtain ⟨c, rfl⟩ := exists_eq_smul_one_of_intertwines (hirr s.1 s.2) (X := X) hint
   obtain ⟨hc, rfl⟩ :=
     Matrix.ne_zero_and_eq_inv_smul_one_of_smul_one_mul_eq_one (n := Fin (D s.1)) hXY
   refine ⟨c, hc, fun x hx => ?_, fun v => ?_⟩
@@ -308,8 +308,8 @@ count as equal), then every invertible intertwiner `X` from the first to the sec
 the intertwiner of *Two compressions with different flags* for matched slots, is a nonzero multiple
 of the identification. This covers equal blocks at different labels of one family and blocks of two
 families. The statement holds for any two slots, matched or not, and uses only `X Y = 1`. -/
-theorem exists_ne_zero_eq_smul_of_slotTensor_eq (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-    (hD : ∀ s ∈ S, 0 < D s) {b : BlockIndex S P.z} {b' : BlockIndex S' Q.z}
+theorem exists_ne_zero_eq_smul_of_slotTensor_eq (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0) {b : BlockIndex S P.z} {b' : BlockIndex S' Q.z}
     (hdim : slotSize D b = slotSize D' b')
     (heq : ∀ i, Matrix.reindex (finCongr hdim) (finCongr hdim) (slotTensor C b i) =
       slotTensor C' b' i)
@@ -319,7 +319,7 @@ theorem exists_ne_zero_eq_smul_of_slotTensor_eq (hC : ∀ s ∈ S, Kraus.IsNorma
     ∃ c : ℂ, c ≠ 0 ∧
       X = c • Matrix.reindex (finCongr hdim) (Equiv.refl _)
         (1 : Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) ℂ) :=
-  have := isSimpleModule_slotTensor hC hD b
+  have := isSimpleModule_slotTensor hirr hlet b
   exists_ne_zero_eq_smul_reindex_one_of_intertwines hdim
     ((isIrreducibleAction_and_pos_iff_isSimpleModule _).2 this).1 heq hXY hint
 

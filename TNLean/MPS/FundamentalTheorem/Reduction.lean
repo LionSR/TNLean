@@ -9,12 +9,15 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.Reduction
 
 import TNLean.MPS.FundamentalTheorem.Reduction.AbsorbingCompression
+import TNLean.MPS.FundamentalTheorem.Reduction.AdmissibleBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
 import TNLean.MPS.FundamentalTheorem.Reduction.CompressionPeriodic
 import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
+import TNLean.MPS.FundamentalTheorem.Reduction.FiniteTraceTest
 import TNLean.MPS.FundamentalTheorem.Reduction.FiniteWordCompression
 import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
+import TNLean.MPS.FundamentalTheorem.Reduction.GaugeWordModule
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
 import TNLean.MPS.FundamentalTheorem.Reduction.IntegralRankOneAction
 import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
@@ -25,6 +28,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockDirectSum
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 import TNLean.MPS.FundamentalTheorem.Reduction.NormalizedCompressionSimilarity
 import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
+import TNLean.MPS.FundamentalTheorem.Reduction.ReachableSubspace
 import TNLean.MPS.FundamentalTheorem.Reduction.RingEmbedding
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
 import TNLean.MPS.FundamentalTheorem.Reduction.SingleBlock

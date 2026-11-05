@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem
 
+import TNLean.MPS.FundamentalTheorem.Arbitrary
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.FundamentalTheorem.FiniteLength
 import TNLean.MPS.FundamentalTheorem.InjectivePhase

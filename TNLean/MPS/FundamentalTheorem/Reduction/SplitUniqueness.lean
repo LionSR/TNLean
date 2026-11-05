@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
+import TNLean.MPS.FundamentalTheorem.Reduction.AdmissibleBlock
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness
 
 /-!
@@ -18,12 +19,11 @@ $B^i - \sum_s V_s C_s^i W_s$ vanishes, which is the zipper condition.
 For two split reductions `P` and `Q` of the same tensor onto the same family, with coordinate
 changes `g` and `g_tilde`, the relative gauge $h = \tilde g g^{-1}$ intertwines the two block
 diagonal tensors, so its block $h_{b'b}$ intertwines the diagonal block at `b` with the diagonal
-block at `b'`. For normal blocks this block vanishes unless the two blocks are gauge related, and it
-is a scalar multiple of a fixed intertwiner when they are; it also vanishes between a block slot and
-a zero slot. When no two blocks of the family are gauge related, the reading maps and injections of
-the two reductions agree up to one nonzero scalar per block,
-$$\widetilde W_s = \lambda_s W_s,\qquad \widetilde V_s = \lambda_s^{-1} V_s,$$
-as matrices, with no words attached.
+block at `b'`. For nonzero irreducible blocks this block vanishes unless the two blocks are gauge
+related, and it is a scalar multiple of a fixed intertwiner when they are; it also vanishes between
+a block slot and a zero slot. When no two blocks of the family are gauge related, the reading maps
+and injections of the two reductions agree up to one nonzero scalar per block, $$\widetilde W_s =
+\lambda_s W_s,\qquad \widetilde V_s = \lambda_s^{-1} V_s,$$ as matrices, with no words attached.
 
 This is the bare uniqueness of split compressions (blueprint `prop:asym_uniq_split`, *Uniqueness of
 split compressions, bare form*), for the multi-block reductions of blueprint `thm:asym_multiblock`,
@@ -101,47 +101,6 @@ end Matrix
 namespace MPSTensor
 
 variable {d DB : ℕ}
-
-/-! ### Intertwiners against a zero block -/
-
-/-- A matrix annihilated on the left by every letter of a normal tensor is zero: the words of a
-fixed positive length span the full matrix algebra, which contains the identity. -/
-theorem eq_zero_of_isNormal_of_forall_letter_mul_eq_zero {D m : ℕ} {A : MPSTensor d D}
-    (hA : Kraus.IsNormal A) {E : Matrix (Fin D) (Fin m) ℂ} (hE : ∀ i, A i * E = 0) : E = 0 := by
-  obtain ⟨N, hN0, hN⟩ := hA
-  let f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin m) ℂ :=
-    { toFun := fun M => M * E
-      map_add' := fun M M' => Matrix.add_mul M M' E
-      map_smul' := fun c M => by simp [Matrix.smul_mul] }
-  have hle : Kraus.wordSpan A N ≤ LinearMap.ker f := by
-    refine Submodule.span_le.2 (Set.range_subset_iff.2 fun σ => ?_)
-    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hN0.ne'
-    change Kraus.evalWord A (List.ofFn σ) * E = 0
-    rw [Kraus.evalWord_intertwine A (fun _ => (0 : Matrix (Fin m) (Fin m) ℂ)) E
-      (fun i => by rw [hE i, Matrix.mul_zero]), List.ofFn_succ, Kraus.evalWord_cons,
-      Matrix.zero_mul, Matrix.mul_zero]
-  rw [hN] at hle
-  have h1 := LinearMap.mem_ker.1 (hle (Submodule.mem_top (x := 1)))
-  change (1 : Matrix (Fin D) (Fin D) ℂ) * E = 0 at h1
-  rwa [Matrix.one_mul] at h1
-
-/-- A matrix annihilated on the right by every letter of a normal tensor is zero. -/
-theorem eq_zero_of_isNormal_of_forall_mul_letter_eq_zero {D m : ℕ} {A : MPSTensor d D}
-    (hA : Kraus.IsNormal A) {E : Matrix (Fin m) (Fin D) ℂ} (hE : ∀ i, E * A i = 0) : E = 0 := by
-  obtain ⟨N, hN0, hN⟩ := hA
-  let f : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin m) (Fin D) ℂ :=
-    { toFun := fun M => E * M
-      map_add' := fun M M' => Matrix.mul_add E M M'
-      map_smul' := fun c M => by simp [Matrix.mul_smul] }
-  have hle : Kraus.wordSpan A N ≤ LinearMap.ker f := by
-    refine Submodule.span_le.2 (Set.range_subset_iff.2 fun σ => ?_)
-    obtain ⟨k, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hN0.ne'
-    change E * Kraus.evalWord A (List.ofFn σ) = 0
-    rw [List.ofFn_succ, Kraus.evalWord_cons, ← Matrix.mul_assoc, hE, Matrix.zero_mul]
-  rw [hN] at hle
-  have h1 := LinearMap.mem_ker.1 (hle (Submodule.mem_top (x := 1)))
-  change E * (1 : Matrix (Fin D) (Fin D) ℂ) = 0 at h1
-  rwa [Matrix.mul_one] at h1
 
 /-! ### Blocks of a matrix between graded coordinate spaces -/
 
@@ -303,23 +262,26 @@ theorem blockEntry_intertwines (hP : P.remainder = 0) (hQ : Q.remainder = 0) (i 
     relativeGauge_mul_conjMatrix]
 
 /-- **Blocks that are not gauge related do not mix** (blueprint `prop:asym_uniq_split`, *Uniqueness
-of split compressions, bare form*, Schur step). For two split reductions and normal blocks `C t`,
-`C s` that are not gauge related, the block $h_{ts}$ of the relative gauge vanishes. -/
+of split compressions, bare form*, Schur step). For two split reductions and nonzero irreducible
+blocks `C t`, `C s` that are not gauge related, the block $h_{ts}$ of the relative gauge vanishes.
+-/
 theorem blockEntry_eq_zero_of_not_isGaugeRelated (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    {t s : {s // s ∈ S}} (ht : Kraus.IsNormal (C t.1)) (hs : Kraus.IsNormal (C s.1))
+    {t s : {s // s ∈ S}} (ht : Matrix.IsIrreducibleAction (C t.1))
+    (hs : Matrix.IsIrreducibleAction (C s.1))
     (hts : ¬ IsGaugeRelated (C t.1) (C s.1)) :
     blockEntry (P.relativeGauge Q) (Sum.inl t) (Sum.inl s) = 0 :=
-  (eq_zero_or_isGaugeRelated_of_intertwines ht hs
-    fun i => (blockEntry_intertwines hP hQ i (Sum.inl t) (Sum.inl s)).symm).resolve_right hts
+  eq_zero_of_intertwines_of_not_isGaugeRelated hs ht
+    (fun i => blockEntry_intertwines hP hQ i (Sum.inl t) (Sum.inl s)) fun h => hts h.symm
 
 /-- **A block slot does not mix with a zero slot of the other reduction** (blueprint
 `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*). The block of the relative
-gauge from a zero slot of `P` to a normal block slot of `Q` vanishes: it is a column killed by every
-letter of the block. -/
+gauge from a zero slot of `P` to a nonzero irreducible block slot of `Q` vanishes: it is a column
+killed by every letter of the block. -/
 theorem blockEntry_inl_inr_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    {s : {s // s ∈ S}} (hs : Kraus.IsNormal (C s.1)) (t : Fin P.z) :
+    {s : {s // s ∈ S}} (hs : Matrix.IsIrreducibleAction (C s.1)) (hl : ∃ i, C s.1 i ≠ 0)
+    (t : Fin P.z) :
     blockEntry (P.relativeGauge Q) (Sum.inl s) (Sum.inr t) = 0 := by
-  refine eq_zero_of_isNormal_of_forall_letter_mul_eq_zero hs fun i => ?_
+  refine eq_zero_of_forall_apply_mul_eq_zero hs hl fun i => ?_
   have h := blockEntry_intertwines hP hQ i (Sum.inl s) (Sum.inr t)
   change _ * 0 = C s.1 i * _ at h
   rw [Matrix.mul_zero] at h
@@ -327,12 +289,13 @@ theorem blockEntry_inl_inr_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
 
 /-- **A zero slot does not mix with a block slot of the other reduction** (blueprint
 `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*). The block of the relative
-gauge from a normal block slot of `P` to a zero slot of `Q` vanishes: it is a row killed by every
-letter of the block. -/
+gauge from a nonzero irreducible block slot of `P` to a zero slot of `Q` vanishes: it is a row
+killed by every letter of the block. -/
 theorem blockEntry_inr_inl_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (t : Fin Q.z) {s : {s // s ∈ S}} (hs : Kraus.IsNormal (C s.1)) :
+    (t : Fin Q.z) {s : {s // s ∈ S}} (hs : Matrix.IsIrreducibleAction (C s.1))
+    (hl : ∃ i, C s.1 i ≠ 0) :
     blockEntry (P.relativeGauge Q) (Sum.inr t) (Sum.inl s) = 0 := by
-  refine eq_zero_of_isNormal_of_forall_mul_letter_eq_zero hs fun i => ?_
+  refine eq_zero_of_forall_mul_apply_eq_zero hs hl fun i => ?_
   have h := blockEntry_intertwines hP hQ i (Sum.inr t) (Sum.inl s)
   change _ * C s.1 i = 0 * _ at h
   rw [Matrix.zero_mul] at h
@@ -340,11 +303,11 @@ theorem blockEntry_inr_inl_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
 
 /-- **Between gauge related blocks the relative gauge is a scalar multiple of one intertwiner**
 (blueprint `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, the line of
-intertwiners). If an invertible `Y` intertwines the normal block `C s` with `C t`,
+intertwiners). If an invertible `Y` intertwines the nonzero irreducible block `C s` with `C t`,
 `C t i * Y = Y * C s i`, then the block $h_{ts}$ of the relative gauge of two split reductions is
 `μ • Y` for a scalar `μ`. -/
 theorem exists_blockEntry_eq_smul_of_intertwines (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    {t s : {s // s ∈ S}} (hs : Kraus.IsNormal (C s.1))
+    {t s : {s // s ∈ S}} (hs : Matrix.IsIrreducibleAction (C s.1))
     {Y : Matrix (Fin (D t.1)) (Fin (D s.1)) ℂ} {Y' : Matrix (Fin (D s.1)) (Fin (D t.1)) ℂ}
     (hYY' : Y * Y' = 1) (hY'Y : Y' * Y = 1) (hY : ∀ i, C t.1 i * Y = Y * C s.1 i) :
     ∃ μ : ℂ, blockEntry (P.relativeGauge Q) (Sum.inl t) (Sum.inl s) = μ • Y := by
@@ -357,7 +320,7 @@ theorem exists_blockEntry_eq_smul_of_intertwines (hP : P.remainder = 0) (hQ : Q.
           rw [Matrix.mul_assoc, Matrix.mul_assoc, hYY', Matrix.mul_one]
       _ = C s.1 i * Y' := by
           rw [hY, ← Matrix.mul_assoc, hY'Y, Matrix.one_mul]
-  obtain ⟨μ, hμ⟩ := hs.eq_smul_one_of_commute (S := Y' * E) fun i => by
+  obtain ⟨μ, hμ⟩ := exists_eq_smul_one_of_intertwines hs (X := Y' * E) fun i => by
     rw [Matrix.mul_assoc, hE, ← Matrix.mul_assoc, hY', Matrix.mul_assoc]
   refine ⟨μ, ?_⟩
   calc E = Y * (Y' * E) := by rw [← Matrix.mul_assoc, hYY', Matrix.one_mul]
@@ -373,50 +336,51 @@ noncomputable def splitScalar (s : {s // s ∈ S}) : ℂ :=
 
 variable {P Q}
 
-/-- For split reductions and a normal block, the diagonal block of the relative gauge at a block
-slot is the scalar $\lambda_s$: $\widetilde W_s V_s = \lambda_s 1$. -/
+/-- For split reductions and a nonzero irreducible block, the diagonal block of the relative gauge
+at a block slot is the scalar $\lambda_s$: $\widetilde W_s V_s = \lambda_s 1$. -/
 theorem left_mul_right_eq_splitScalar_smul (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    {s : {s // s ∈ S}} (hs : Kraus.IsNormal (C s.1)) :
+    {s : {s // s ∈ S}} (hs : Matrix.IsIrreducibleAction (C s.1)) :
     Q.left s * P.right s = P.splitScalar Q s • 1 := by
-  obtain ⟨y, hy⟩ := hs.eq_smul_one_of_commute (S := Q.left s * P.right s) fun i => by
+  obtain ⟨y, hy⟩ := exists_eq_smul_one_of_intertwines hs (X := Q.left s * P.right s) fun i => by
     rw [← blockEntry_relativeGauge_inl_inl]
     exact blockEntry_intertwines hP hQ i (Sum.inl s) (Sum.inl s)
-  rcases Nat.eq_zero_or_pos (D s.1) with hD | hD
+  rcases Nat.eq_zero_or_pos (D s.1) with hlet | hlet
   · ext a b
     exact absurd a.2 (by omega)
   rw [hy, splitScalar, hy, Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin, smul_eq_mul,
-    ← mul_assoc, mul_comm _ y, mul_assoc, inv_mul_cancel₀ (by exact_mod_cast hD.ne'), mul_one]
+    ← mul_assoc, mul_comm _ y, mul_assoc, inv_mul_cancel₀ (by exact_mod_cast hlet.ne'), mul_one]
 
 /-- Without repeated blocks, the row of the relative gauge at a block slot has no nonzero block
 off its diagonal. -/
 theorem blockEntry_relativeGauge_inl_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
     ∀ b : BlockIndex S P.z, b ≠ Sum.inl s →
       blockEntry (P.relativeGauge Q) (Sum.inl s) b = 0 := by
   rintro (t | t) hb
-  · exact blockEntry_eq_zero_of_not_isGaugeRelated hP hQ (hC _ s.2) (hC _ t.2)
+  · exact blockEntry_eq_zero_of_not_isGaugeRelated hP hQ (hirr _ s.2) (hirr _ t.2)
       (hsep _ s.2 _ t.2 fun h => hb (congrArg Sum.inl (Subtype.ext h).symm))
-  · exact blockEntry_inl_inr_eq_zero hP hQ (hC _ s.2) t
+  · exact blockEntry_inl_inr_eq_zero hP hQ (hirr _ s.2) (hlet _ s.2) t
 
 /-- Without repeated blocks, the column of the relative gauge at a block slot has no nonzero
 block off its diagonal. -/
 theorem blockEntry_relativeGauge_eq_zero_inl (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
     ∀ b' : BlockIndex S Q.z, b' ≠ Sum.inl s →
       blockEntry (P.relativeGauge Q) b' (Sum.inl s) = 0 := by
   rintro (t | t) hb
-  · exact blockEntry_eq_zero_of_not_isGaugeRelated hP hQ (hC _ t.2) (hC _ s.2)
+  · exact blockEntry_eq_zero_of_not_isGaugeRelated hP hQ (hirr _ t.2) (hirr _ s.2)
       (hsep _ t.2 _ s.2 fun h => hb (congrArg Sum.inl (Subtype.ext h)))
-  · exact blockEntry_inr_inl_eq_zero hP hQ t (hC _ s.2)
+  · exact blockEntry_inr_inl_eq_zero hP hQ t (hirr _ s.2) (hlet _ s.2)
 
 /-- **The reading maps of split reductions without repeated blocks** (blueprint
 `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, last sentence). If no two
 blocks of the family are gauge related, then $\widetilde W_s = \lambda_s W_s$ as matrices, with no
 words attached. -/
 theorem left_eq_smul_of_split_of_pairwise_not_isGaugeRelated (hP : P.remainder = 0)
-    (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hQ : Q.remainder = 0) (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S,
+    ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
     Q.left s = P.splitScalar Q s • P.left s := by
   calc Q.left s = Matrix.blockProj (slotSize D) (Sum.inl s : BlockIndex S Q.z) *
@@ -424,16 +388,16 @@ theorem left_eq_smul_of_split_of_pairwise_not_isGaugeRelated (hP : P.remainder =
         rw [left, P.gaugeMatrix_eq_relativeGauge_mul Q, Matrix.mul_assoc]
     _ = (Q.left s * P.right s) * P.left s := by
         rw [blockProj_mul_eq_of_blockEntry_eq_zero _ s
-          (blockEntry_relativeGauge_inl_eq_zero hP hQ hC hsep s),
+          (blockEntry_relativeGauge_inl_eq_zero hP hQ hirr hlet hsep s),
           blockEntry_relativeGauge_inl_inl, Matrix.mul_assoc]
         rfl
     _ = P.splitScalar Q s • P.left s := by
-        rw [left_mul_right_eq_splitScalar_smul hP hQ (hC _ s.2), Matrix.smul_mul, Matrix.one_mul]
+        rw [left_mul_right_eq_splitScalar_smul hP hQ (hirr _ s.2), Matrix.smul_mul, Matrix.one_mul]
 
 /-- Without repeated blocks, the injections of two split reductions differ by the scalar of the
 reverse comparison, $\widetilde V_s = \lambda'_s V_s$, where $W_s \widetilde V_s = \lambda'_s 1$. -/
 theorem right_eq_splitScalar_smul (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
     Q.right s = Q.splitScalar P s • P.right s := by
   calc Q.right s = gaugeMatrixInv P.gauge * (Q.relativeGauge P *
@@ -441,72 +405,75 @@ theorem right_eq_splitScalar_smul (hP : P.remainder = 0) (hQ : Q.remainder = 0)
         rw [right, P.gaugeMatrixInv_eq_mul_relativeGauge Q, Matrix.mul_assoc]
     _ = P.right s * (P.left s * Q.right s) := by
         rw [mul_blockEmbed_eq_of_blockEntry_eq_zero _ s
-          (blockEntry_relativeGauge_eq_zero_inl hQ hP hC hsep s),
+          (blockEntry_relativeGauge_eq_zero_inl hQ hP hirr hlet hsep s),
           blockEntry_relativeGauge_inl_inl, ← Matrix.mul_assoc]
         rfl
     _ = Q.splitScalar P s • P.right s := by
-        rw [left_mul_right_eq_splitScalar_smul hQ hP (hC _ s.2), Matrix.mul_smul, Matrix.mul_one]
+        rw [left_mul_right_eq_splitScalar_smul hQ hP (hirr _ s.2), Matrix.mul_smul, Matrix.mul_one]
 
 /-- The scalars of the two directions are mutually inverse, $\lambda_s\lambda'_s = 1$, by
 biorthogonality of the reading map and the injection of `Q` at `s`. -/
 theorem splitScalar_mul_splitScalar (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
     P.splitScalar Q s * Q.splitScalar P s = 1 := by
-  have : NeZero (D s.1) := ⟨(hD _ s.2).ne'⟩
+  have : NeZero (D s.1) := ⟨(dim_pos_of_exists_ne_zero (hlet _ s.2)).ne'⟩
   have h := Q.left_mul_right_self s
-  rw [left_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hsep s,
-    right_eq_splitScalar_smul hP hQ hC hsep s, Matrix.smul_mul, Matrix.mul_smul,
+  rw [left_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hirr hlet hsep s,
+    right_eq_splitScalar_smul hP hQ hirr hlet hsep s, Matrix.smul_mul, Matrix.mul_smul,
     P.left_mul_right_self s, smul_smul] at h
   exact smul_left_injective ℂ one_ne_zero (h.trans (one_smul ℂ _).symm)
 
 /-- The scalar $\lambda_s$ of a block slot is nonzero. -/
 theorem splitScalar_ne_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
     P.splitScalar Q s ≠ 0 :=
-  left_ne_zero_of_mul_eq_one (splitScalar_mul_splitScalar hP hQ hC hD hsep s)
+  left_ne_zero_of_mul_eq_one (splitScalar_mul_splitScalar hP hQ hirr hlet hsep s)
 
 /-- **The injections of split reductions without repeated blocks** (blueprint
 `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, last sentence). If no two
 blocks of the family are gauge related, then $\widetilde V_s = \lambda_s^{-1} V_s$ as matrices, with
 no words attached. -/
 theorem right_eq_smul_of_split_of_pairwise_not_isGaugeRelated (hP : P.remainder = 0)
-    (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+    (hQ : Q.remainder = 0) (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S,
+    ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
     Q.right s = (P.splitScalar Q s)⁻¹ • P.right s := by
-  rw [right_eq_splitScalar_smul hP hQ hC hsep s,
-    ← eq_inv_of_mul_eq_one_right (splitScalar_mul_splitScalar hP hQ hC hD hsep s)]
+  rw [right_eq_splitScalar_smul hP hQ hirr hlet hsep s,
+    ← eq_inv_of_mul_eq_one_right (splitScalar_mul_splitScalar hP hQ hirr hlet hsep s)]
 
 /-- **Uniqueness of split reductions without repeated blocks** (blueprint `prop:asym_uniq_split`,
 *Uniqueness of split compressions, bare form*). Two split reductions of the same tensor onto the
-same family of normal blocks of positive bond dimension, no two of which are gauge related, have
-reading maps and injections that agree up to one nonzero scalar per block:
-$\widetilde W_s = \lambda_s W_s$ and $\widetilde V_s = \lambda_s^{-1} V_s$. -/
+same family of nonzero irreducible blocks, no two of which are gauge
+related, have reading maps and injections that agree up to one nonzero scalar per block: $\widetilde
+W_s = \lambda_s W_s$ and $\widetilde V_s = \lambda_s^{-1} V_s$. -/
 theorem exists_left_eq_smul_and_right_eq_inv_smul_of_split (hP : P.remainder = 0)
-    (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+    (hQ : Q.remainder = 0) (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S,
+    ∃ i, C s i ≠ 0)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) :
     ∃ c : {s // s ∈ S} → ℂ, ∀ s, c s ≠ 0 ∧ Q.left s = c s • P.left s ∧
       Q.right s = (c s)⁻¹ • P.right s :=
-  ⟨P.splitScalar Q, fun s => ⟨splitScalar_ne_zero hP hQ hC hD hsep s,
-    left_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hsep s,
-    right_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hD hsep s⟩⟩
+  ⟨P.splitScalar Q, fun s => ⟨splitScalar_ne_zero hP hQ hirr hlet hsep s,
+    left_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hirr hlet hsep s,
+    right_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hirr hlet hsep s⟩⟩
 
 /-- **Split reductions, subspace form** (*The asymmetric fundamental theorem of matrix product
-states*, Proposition 6.12). For two split reductions onto the same family of normal blocks of
-positive bond dimension, repeated blocks allowed, the range of `V_b` lies in the sum of the ranges
-of the `V_tilde_{b'}` over the slots `b'` whose diagonal block is gauge equivalent to that of `b`
-(zero slots are gauge equivalent to each other). Indeed `V_b = ∑_{b'} V_tilde_{b'} h_{b'b}` with
-`h = g_tilde g⁻¹`, and by Schur's lemma `h_{b'b} = 0` unless the two diagonal blocks are gauge
-equivalent. -/
+states*, Proposition 6.12). For two split reductions onto the same family of nonzero irreducible
+blocks, repeated blocks allowed, the range of `V_b` lies in the sum of
+the ranges of the `V_tilde_{b'}` over the slots `b'` whose diagonal block is gauge equivalent to
+that of `b` (zero slots are gauge equivalent to each other). Indeed
+`V_b = ∑_{b'} V_tilde_{b'} h_{b'b}` with `h = g_tilde g⁻¹`, and by Schur's lemma `h_{b'b} = 0`
+unless the two diagonal blocks are gauge equivalent. -/
 theorem range_rightCol_le_iSup_range_rightCol (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (b : BlockIndex S P.z) :
+    (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
+    (b : BlockIndex S P.z) :
     LinearMap.range (P.rightCol b).mulVecLin ≤
       ⨆ (b' : BlockIndex S Q.z) (_ : IsGaugeRelated (slotTensor C b) (slotTensor C b')),
         LinearMap.range (Q.rightCol b').mulVecLin := by
   have hirr : ∀ {z : ℕ} (c : BlockIndex S z), Matrix.IsIrreducibleAction (slotTensor C c) :=
     fun c => ((isIrreducibleAction_and_pos_iff_isSimpleModule _).2
-      (isSimpleModule_slotTensor hC hD c)).1
+      (isSimpleModule_slotTensor hirr hlet c)).1
   have hV : P.rightCol b = ∑ b', Q.rightCol b' * blockEntry (P.relativeGauge Q) b' b := by
     rw [rightCol, MultiBlockCompression.gaugeMatrixInv_eq_mul_relativeGauge Q P, Matrix.mul_assoc,
       mul_blockEmbed_eq_sum, Matrix.mul_sum]

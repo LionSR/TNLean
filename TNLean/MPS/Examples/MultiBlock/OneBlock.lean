@@ -175,9 +175,17 @@ theorem flagVec_one_firstCompression_and_lastCompression :
       flagVec lastCompression k = Submodule.span ℂ {e 0 - e 1} :=
   ⟨flagVec_first_one, flagVec_last_one⟩
 
+theorem isIrreducibleAction_blockC :
+    ∀ s ∈ oneSlot, Matrix.IsIrreducibleAction (blockC s) := fun s hs =>
+  isIrreducibleAction_of_isNormal _ (isNormal_blockC s hs) (blockC_pos s hs)
+
+theorem exists_ne_zero_blockC : ∀ s ∈ oneSlot, ∃ i, blockC s i ≠ 0 := fun s hs =>
+  exists_ne_zero_of_isNormal_of_pos (isNormal_blockC s hs) (blockC_pos s hs)
+
 theorem matching_first_last :
-    firstCompression.matching lastCompression isNormal_blockC blockC_pos isNormal_blockC
-        blockC_pos (firstCompression.ord (Sum.inl oneSlotMem)) =
+    firstCompression.matching lastCompression isIrreducibleAction_blockC exists_ne_zero_blockC
+      isIrreducibleAction_blockC
+        exists_ne_zero_blockC (firstCompression.ord (Sum.inl oneSlotMem)) =
       lastCompression.ord (Sum.inl oneSlotMem) := by
   refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨e 0, ?_, ?_, ?_⟩ ?_
   · rw [flagVec_first_one _ rfl]; exact Submodule.mem_span_singleton_self _
@@ -355,11 +363,13 @@ theorem left_right_matching_firstCompression_lastCompression :
     lastCompression.left oneSlotMem = !![1, 1] ∧ lastCompression.right oneSlotMem = !![1; 0] ∧
     (firstCompression.ord (Sum.inl oneSlotMem)).val = 0 ∧
     (lastCompression.ord (Sum.inl oneSlotMem)).val = 1 ∧
-    firstCompression.matching lastCompression isNormal_blockC blockC_pos isNormal_blockC blockC_pos
+    firstCompression.matching lastCompression isIrreducibleAction_blockC exists_ne_zero_blockC
+      isIrreducibleAction_blockC exists_ne_zero_blockC
         (firstCompression.ord (Sum.inl oneSlotMem)) = lastCompression.ord (Sum.inl oneSlotMem) ∧
     (let k := firstCompression.ord (Sum.inl oneSlotMem)
-     let m := firstCompression.matching lastCompression isNormal_blockC blockC_pos
-       isNormal_blockC blockC_pos k
+     let m := firstCompression.matching lastCompression isIrreducibleAction_blockC
+       exists_ne_zero_blockC
+       isIrreducibleAction_blockC exists_ne_zero_blockC k
      ((firstCompression.flag k.succ ⊓ lastCompression.flag m.succ).restrictScalars ℂ).map
          (WordModule.toVec tensorB).toLinearMap = Submodule.span ℂ {e 0} ∧
      ((firstCompression.flag k.castSucc ⊔ lastCompression.flag m.castSucc).restrictScalars ℂ).map
