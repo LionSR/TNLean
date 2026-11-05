@@ -10813,10 +10813,9 @@ removed after the dependency audit exposed it.
   `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
 - **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
   `MPS/AreaLaw/SnakeGridApproximation.lean`.
-- **Abstraction:** The former has the public lemma
-  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
-  module if a third caller needs it, so square-grid proofs can reuse it
-  without importing the chain area-law theorem.
+- **Abstraction:** The lemma `norm_inv_norm_smul_sub_le_two_mul` now lives in
+  `QICLean/Analysis/UnitNormalizationDistance.lean`. Square-grid proofs can
+  therefore import it without importing the chain area-law theorem.
 - **Notes:** Two occurrences; the square proof currently keeps this short
   calculation inside its normalization step and imports only the truncation core.
 
