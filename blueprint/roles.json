@@ -726,12 +726,14 @@
     "ch:gapped_chain_polynomial_filters": {
       "theorems": [
         "thm:alvv_ff_chain_replacement",
-        "thm:alvv_ff_corrected_rank"
+        "thm:alvv_ff_corrected_rank",
+        "thm:physical_soft_windows_and_mpo"
       ],
       "corollaries": [],
       "notes": {
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
-        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)"
+        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
+        "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy"
       }
     },
     "ch:peps_ft": {
