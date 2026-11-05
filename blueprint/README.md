@@ -75,7 +75,8 @@ amsmath/amssymb, `\ket`, `\bra`, `\C`, `\spn`, and its own label macros.
 - **Naming.** A figure is named after the label of the entry that owns it,
   without the kind prefix (`def:peps_tensor` becomes `figures/peps_tensor.tex`),
   with `_a`, `_b` when an entry holds several displays. A figure made for the
-  notes only uses a paper prefix such as `polypeps_` or `arealaw2d_`.
+  notes only uses a paper prefix such as `polypeps_`, `arealaw2d_`, or
+  `chain_`.
 - **Using a figure in a chapter.** Write the literal
   `\input{figures/<name>}` on its own line where the display stood, inside the
   entry. Never put it inside a `tenkzequation` and never wrap it in a macro: the
