@@ -1829,9 +1829,11 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   (scope restriction, open) records the cost model of the running time of
   Theorem 1 (arXiv:1307.5143v1, lines 213–219): the algorithm is a program
   over a type of linear-algebra queries, each charged a declared polynomial
-  cost in the dimensions of its arguments, and the polynomial bound holds for
-  the honest oracle; costs, the oracle and exact arithmetic are declared, not
-  derived, as in the source.
+  cost in the dimensions of its arguments; correctness and the polynomial
+  bound hold for every valid oracle (any solver returning optimal solutions of
+  the convex programs, nets of the required radius and cut decompositions of
+  the filters); costs and exact arithmetic are declared, not derived, as in
+  the source.
 - [`lvv13_leading_net_point.tex`](lvv13_leading_net_point.tex)
   (open gap) records that the leading-vector step of Lemma
   `l:leading` (arXiv:1307.5143v1, lines 493–495) is formalized for any

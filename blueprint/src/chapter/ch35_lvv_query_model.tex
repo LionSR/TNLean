@@ -291,6 +291,129 @@ declared costs of the operations performed along the way.
     number of operations is at most the cost.
 \end{proof}
 
+\subsection{Correctness for every valid oracle}
+\label{sec:lvv_valid_oracle}
+
+The honest oracle answers every operation with the object chosen by the
+definitions of the sweep. A solver is free to return any optimal solution of a
+convex program, any net of the required radius and any cut decomposition of
+the filters; the deterministic operations it must perform exactly. The
+computations are correct, with the same budgets and the same cost, for every
+oracle of this kind.
+
+\begin{definition}[Admissible filter factors and valid oracles]
+    \label{def:lvv_valid_oracle}
+    \lean{TNLean.MPS.AreaLaw.IsAdmissibleFilterFactors,
+        TNLean.MPS.AreaLaw.isAdmissibleFilterFactors_gaussianFilterFactors,
+        TNLean.MPS.AreaLaw.netPointBound,
+        TNLean.MPS.AreaLaw.netPointBound_mono,
+        TNLean.MPS.AreaLaw.isAdmissibleSampledFactors_sampledFactors,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.isValidOracle_honestOracle,
+        TNLean.MPS.AreaLaw.oracleNets,
+        TNLean.MPS.AreaLaw.oracleSolver}
+    \leanok
+    \uses{def:lvv_linear_algebra_query, def:lvv_boundary_program_solution,
+        def:huang_gaussian_filter_factors, def:lvv_energy_minimizer}
+    A family of left factors at a cut is \emph{admissible} when for every
+    Gaussian approximant it contains the left factors of some cut decomposition
+    of it; the chosen factors of
+    Definition~\ref{def:huang_gaussian_filter_factors} are admissible. An
+    oracle is \emph{valid} when it performs the extension, the trimming and the
+    application of a factor exactly, enumerates for every radius a net covering
+    the boundary densities of trace norm at most one with the standard point
+    bound, reports feasibility truthfully, returns at every feasible point the
+    vector of some solution of the convex program in the sense of
+    Definition~\ref{def:lvv_boundary_program_solution}, returns admissible
+    filter factors with the standard count and rank bounds, returns for the
+    sampled projector of any words a family of left factors containing a cut
+    decomposition of it with the standard count and rank bounds, and returns
+    for the final convex program a unit vector of least energy in the span. The
+    honest oracle is valid. The nets and the leading-vector assignment of an oracle at
+    a cut are its answers to the corresponding operations.
+\end{definition}
+
+\begin{lemma}[Error reduction with any admissible factors]
+    \label{thm:lvv_admissible_factors_viable}
+    \lean{TNLean.MPS.AreaLaw.isViable_errorReductionSet_of_isAdmissibleFilterFactors}
+    \leanok
+    \uses{def:lvv_valid_oracle, thm:huang_positive_chain_error_reduction_factors}
+    For every ground pair with the prescribed gap, half-viability of the input
+    family implies $c_\Delta/n$-viability of its image under every admissible
+    family of factors.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The proof of Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}
+    uses only a decomposition of the approximant nearest the ground state,
+    whose left factors an admissible family contains.
+\end{proof}
+
+\begin{theorem}[The computations are correct for every valid oracle]
+    \label{thm:lvv_valid_oracle_correct}
+    \lean{TNLean.MPS.AreaLaw.eval_feasible_ite_of_valid,
+        TNLean.MPS.AreaLaw.eval_extensionProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_sizeTrimmingProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_bondTrimmingProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_errorReductionProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_sweepStepProgram_of_valid,
+        TNLean.MPS.AreaLaw.isAdmissibleNet_oracleNets,
+        TNLean.MPS.AreaLaw.isAdmissibleSolver_oracleSolver,
+        TNLean.MPS.AreaLaw.card_oracleNets_le,
+        TNLean.MPS.AreaLaw.sweepStepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sweepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.groundStateProgram_spec_of_valid}
+    \leanok
+    \uses{def:lvv_valid_oracle, thm:lvv_size_trimming_selection_with,
+        thm:lvv_admissible_factors_viable, thm:lvv_ground_state_program_spec}
+    Run with any valid oracle, the four steps compute the extended family, the
+    size-trimming selection of the oracle's nets and solver, the trimmed family
+    and the error-reduced family, and the step computes the step of the sweep
+    with the oracle's factors. At every cut the output of the sweep computation
+    is viable for every ground pair with the prescribed gap, with the size and
+    bond budgets of Lemma~\ref{thm:lvv_sweep_spec}, and the ground-state
+    computation satisfies the conclusion of
+    Theorem~\ref{thm:lvv_ground_state_program_spec} verbatim.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The evaluation identities follow from the exact answers to the
+    deterministic operations and the truthful feasibility answers. Viability of
+    one step follows from Lemma~\ref{thm:lvv_size_trimming_selection_with} for
+    the oracle's nets and solver, which are admissible by validity, and from
+    Lemma~\ref{thm:lvv_admissible_factors_viable} for its factors; the budgets
+    follow from the point bound of its nets and the count and rank bounds of
+    its factors. Induct on the cut, and conclude as for the honest oracle, with
+    the least-energy property of the oracle's final answer in place of the
+    chosen minimizer.
+\end{proof}
+
+\begin{lemma}[Polynomial cost for every valid oracle]
+    \label{thm:lvv_valid_oracle_cost}
+    \lean{TNLean.MPS.AreaLaw.cost_sizeTrimmingProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_extensionProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_bondTrimmingProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_errorReductionProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sweepStepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sweepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_groundStateProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial_of_valid}
+    \leanok
+    \uses{thm:lvv_valid_oracle_correct, thm:lvv_program_cost,
+        thm:lvv_polynomial_running_time}
+    Under every valid oracle the computations cost at most the budgets of
+    Definition~\ref{def:lvv_cost_budgets}, so the bound of
+    Theorem~\ref{thm:lvv_polynomial_running_time} holds with the same
+    constants for every valid oracle.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The step budgets bound the costs because the oracle's nets have the
+    standard point bound, its factors the standard count, and its sweep
+    families the cardinality budget by
+    Theorem~\ref{thm:lvv_valid_oracle_correct}.
+\end{proof}
+
 \subsection{The sampled route and its success probability}
 \label{sec:lvv_sampled_program}
 
@@ -481,4 +604,31 @@ over the words, of the event on which every family is good.
     length once the number of words and the rank bound are replaced by their
     polynomial bounds in the documented scope. Sum over the cuts and add the
     final convex program.
+\end{proof}
+
+\begin{lemma}[The sampled route under every valid oracle]
+    \label{thm:lvv_valid_oracle_sampled}
+    \lean{TNLean.MPS.AreaLaw.isViableMPS_errorReductionSet_of_admissible_sampled,
+        TNLean.MPS.AreaLaw.eval_sampledSweepStepProgram_of_valid,
+        TNLean.MPS.AreaLaw.sampledSweepStepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sampledSweepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sampledGroundStateProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.measureReal_sampledGroundStateProgram_success_of_valid}
+    \leanok
+    \uses{def:lvv_valid_oracle, thm:lvv_valid_oracle_correct,
+        thm:lvv_sampled_program_success, thm:lvv_sampled_factors_viable}
+    Under every valid oracle, on good words the sampled sweep computation is
+    $\delta$-viable at every cut with the size and bond bounds of
+    Lemma~\ref{thm:lvv_sampled_sweep_spec}, the sampled ground-state
+    computation outputs a unit matrix product state with overlap at least
+    $1-8n\delta/\Delta$, and the success probability of
+    Theorem~\ref{thm:lvv_sampled_program_success} holds verbatim.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The sampled error-reduction step holds for any family of factors
+    containing a cut decomposition of the sampled projector with the standard
+    count and rank bounds, which validity provides; the rest is the proof of
+    Theorem~\ref{thm:lvv_sampled_program_success} with the oracle's answers in
+    place of the chosen ones.
 \end{proof}
