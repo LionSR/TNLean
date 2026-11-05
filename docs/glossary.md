@@ -2570,8 +2570,11 @@ lift, for correctness, the honest-oracle restriction recorded in
   correctness `groundStateProgram_spec_of_valid`, `sweepProgram_spec_of_valid` and
   the sampled variants `sampledGroundStateProgram_spec_of_valid`,
   `measureReal_sampledGroundStateProgram_success_of_valid`; cost
-  `cost_groundStateProgram_le_of_valid` and
-  `exists_groundStateProgram_cost_polynomial_of_valid`.
+  `cost_groundStateProgram_le_of_valid`,
+  `exists_groundStateProgram_cost_polynomial_of_valid`, and on the sampled route
+  `cost_sampledGroundStateProgram_le_of_valid` and
+  `exists_sampledGroundStateProgram_success_cost_polynomial_of_valid`; Theorem 1
+  with explicit accuracy `exists_theorem_one_of_valid`.
 - **Caveat:** feasibility answers must equal the honest ones, and optimal convex
   solutions are exact; numerical tolerance in the solver is not modelled.
 

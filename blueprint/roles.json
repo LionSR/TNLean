@@ -706,7 +706,9 @@
         "thm:lvv_ground_state_program_spec",
         "thm:lvv_polynomial_running_time",
         "thm:lvv_sampled_program_success",
-        "thm:lvv_valid_oracle_correct"
+        "thm:lvv_valid_oracle_correct",
+        "thm:lvv_theorem_one_accuracy",
+        "thm:lvv_sampled_theorem_one_valid"
       ],
       "corollaries": [],
       "notes": {
@@ -716,7 +718,9 @@
         "thm:lvv_ground_state_program_spec": "The ground-state computation run with honest answers outputs a matrix product state with the required overlap: the approximation part of Theorem 1 as an algorithm",
         "thm:lvv_polynomial_running_time": "Polynomial cost of the ground-state computation in the declared cost model: the running-time part of Theorem 1",
         "thm:lvv_sampled_program_success": "Theorem 1 on the sampled route as an algorithm, with its success probability over the sampled words",
-        "thm:lvv_valid_oracle_correct": "The algorithm is correct for every valid oracle, every solver returning optimal solutions, not only the chosen one"
+        "thm:lvv_valid_oracle_correct": "The algorithm is correct for every valid oracle, every solver returning optimal solutions, not only the chosen one",
+        "thm:lvv_theorem_one_accuracy": "Theorem 1 of Landau, Vazirani and Vidick with overlap 1 − η in cost polynomial in n and 1/η, for every valid oracle",
+        "thm:lvv_sampled_theorem_one_valid": "Theorem 1 on the sampled route for every valid oracle: accuracy 1 − η and polynomial cost on one event of probability at least 1 − 1/(2n²)"
       }
     },
     "ch:gapped_chain_polynomial_filters": {

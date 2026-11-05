@@ -365,7 +365,7 @@
    "context": "Theorem 1 (lines 213–219 of the source) counts each linear-algebra step, the matrix elements in an orthonormal basis of the span, the convex programs, the singular value decompositions and the leading eigenvectors, as one polynomial-time computation on data of polynomial dimension, and does not analyse it further.",
    "claims": "The algorithm runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) and outputs a matrix product state with overlap at least 1 − η with the ground state.",
    "impact": "The running time is a statement about declared costs and the honest oracle; the exponent 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup> is not reproduced, since the library's constant-cut bond differs from the source's.",
-   "plan": "The declaration of costs is the content of the source's claim. The honest-oracle restriction is lifted for correctness on both routes and for the success probability of the sampled route. The cost bound holds for every valid oracle on the Gaussian route; on the sampled route it is still stated for the honest oracle, and the valid-oracle sampled cost bound remains open."
+   "plan": "The declaration of costs is the content of the source's claim. The honest-oracle restriction is lifted for correctness on both routes and for the success probability of the sampled route. The cost bound holds for every valid oracle on both routes; on the sampled route it holds on the same event of probability at least 1 − 1/(2<i>n</i><sup>2</sup>) as the accuracy."
   }
  ]
 }

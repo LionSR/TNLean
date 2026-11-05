@@ -414,6 +414,40 @@ oracle of this kind.
     Theorem~\ref{thm:lvv_valid_oracle_correct}.
 \end{proof}
 
+\subsection{Theorem 1 with a polynomial in the length and the accuracy}
+\label{sec:lvv_theorem_one_form}
+
+\begin{theorem}[Theorem 1: polynomial time in the chain length and the accuracy]
+    \label{thm:lvv_theorem_one_accuracy}
+    \lean{TNLean.MPS.AreaLaw.lvvAccuracyParameter,
+        TNLean.MPS.AreaLaw.one_le_lvvAccuracyParameter,
+        TNLean.MPS.AreaLaw.four_mul_div_lvvAccuracyParameter_le,
+        TNLean.MPS.AreaLaw.padded_length_lvvAccuracyParameter_le,
+        TNLean.MPS.AreaLaw.exists_theorem_one_of_valid}
+    \leanok
+    \uses{thm:lvv_valid_oracle_correct, thm:lvv_valid_oracle_cost}
+    Fix $q\ge2$ and $\Delta>0$. There are $P\ge1$ and $d$, chosen before the
+    chain, such that for every chain of $n\ge1$ sites, every accuracy
+    $0<\eta$ with $\Delta\eta\le1$, every valid oracle and every ground pair of
+    gap $\Delta$, the ground-state computation at the accuracy parameter
+    $R=\max\{1,\lceil\sqrt{4n/(\Delta\eta)}\rceil\}$ outputs a unit open-boundary
+    matrix product state with overlap at least $1-\eta$ with the ground state,
+    and its cost is at most $P\,(17n/(\Delta\eta)+5n)^d$: a polynomial in $n$
+    and $1/\eta$ whose coefficient and degree depend on $q$ and $\Delta$ alone.
+    The printed form $n^{c}\,\mathrm{poly}(n/\eta)$ of Theorem~1 of
+    \cite{Landau2015Polynomial} leaves the degree of $1/\eta$ unspecified; in
+    its proof the final error reduction at precision $\eta/n$ has degree of
+    order $\log d/\varepsilon$ in $1/\eta$, and here the degree is likewise $d$
+    \cite{gap:lvv13_cost_model}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    With this $R$ one has $R^2\ge4n/(\Delta\eta)$, so $4n/(R^2\Delta)\le\eta$
+    and Theorem~\ref{thm:lvv_valid_oracle_correct} gives the overlap; and
+    $R\le\sqrt{4n/(\Delta\eta)}+1$ gives $n+2R^2+1\le17n/(\Delta\eta)+5n$, so
+    Lemma~\ref{thm:lvv_valid_oracle_cost} gives the cost.
+\end{proof}
+
 \subsection{The sampled route and its success probability}
 \label{sec:lvv_sampled_program}
 
@@ -544,7 +578,9 @@ over the words, of the event on which every family is good.
         TNLean.MPS.AreaLaw.sampledPrecisionConstant_pos,
         TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_one,
         TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_sq,
+        TNLean.MPS.AreaLaw.sampledPrecision_spec,
         TNLean.MPS.AreaLaw.exists_sampled_budgets_polynomial,
+        TNLean.MPS.AreaLaw.exists_sampledBond_polynomial,
         TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_polynomial}
     \leanok
     \uses{def:lvv_sampled_programs, thm:lvv_sampled_sweep_spec,
@@ -631,4 +667,34 @@ over the words, of the event on which every family is good.
     count and rank bounds, which validity provides; the rest is the proof of
     Theorem~\ref{thm:lvv_sampled_program_success} with the oracle's answers in
     place of the chosen ones.
+\end{proof}
+
+\begin{theorem}[Theorem 1 on the sampled route under every valid oracle]
+    \label{thm:lvv_sampled_theorem_one_valid}
+    \lean{TNLean.MPS.AreaLaw.cost_sampledSweepStepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sampledSweepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sampledGroundStateProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_cost_polynomial_of_valid}
+    \leanok
+    \uses{thm:lvv_valid_oracle_sampled, thm:lvv_valid_oracle_cost,
+        thm:lvv_sampled_program_cost, thm:lvv_sampled_program_success}
+    Fix $q\ge2$, $\Delta>0$, a bound $B$ on the ratio of ground energy to gap and
+    an accuracy $\eta>0$. There are $C,P\ge1$ and $p,d$, chosen before the chain,
+    such that for every chain of $n\ge1$ sites with a ground pair
+    $(\varepsilon_0,\Gamma)$ of gap $\Delta$ and $\varepsilon_0/\Delta\le B$, and
+    every valid oracle, with probability at least $1-1/(2n^2)$ over the sampled
+    words the sampled ground-state computation outputs a unit open-boundary
+    matrix product state of bond dimension at most $Cn^{p}$ with overlap at least
+    $1-\eta$ with $\Gamma$, and its cost is at most $P\,(n+1)^d$. Accuracy and
+    running time hold on one event, as in the statement of Theorem~1.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On good words the cost of a step under a valid oracle is bounded as in
+    Lemma~\ref{thm:lvv_sampled_program_cost}: the oracle's nets have the standard
+    point bound, its sampled factors number at most $\ell D$, and its families
+    have the size bounds of Lemma~\ref{thm:lvv_valid_oracle_sampled}. On the same
+    words the output has the required accuracy and bond dimension by that lemma.
+    The event that every family of words is good has probability at least
+    $1-1/(2n^2)$.
 \end{proof}

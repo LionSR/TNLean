@@ -98,6 +98,21 @@ of the source is not reproduced: the library's constant-cut bond is the one
 recorded in the note on the constant bond dimension, and the degree $d$ above
 is the degree of the uniform polynomial budgets of the sweep.
 
+The padding also changes how the accuracy enters the running time. At the
+accuracy parameter $R=\max\{1,\lceil\sqrt{4n/(\varepsilon\eta)}\rceil\}$
+the overlap is at least $1-\eta$ and the total declared cost is at most
+$P\,(17n/(\varepsilon\eta)+5n)^{d}$ for $\varepsilon\eta\le1$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_theorem_one_of_valid}
+    in \doclink{TNLean/MPS/AreaLaw/Algorithm/TheoremOne}.} This is polynomial
+in $n$ and $1/\eta$, and the degree of $1/\eta$ is the degree $d$ of the
+whole computation, which depends on the local dimension and the gap. The
+printed form $n^{c(d,\varepsilon)}\,\mathrm{poly}(n/\eta)$ could be read as
+asserting a degree of $1/\eta$ independent of them, but the source's proof
+does not give one: the final error reduction at precision $\varepsilon'/(np(n))$
+with $p(n)$ of order $1/\eta$ (lines~669--671) applies the decomposition
+(\path{e:decomp}, lines~580--592) with $d^{2\kappa\log(np(n))}\ell$ terms
+and $\kappa=O(1/\varepsilon)$, a number of degree of order
+$\log d/\varepsilon$ in $1/\eta$. The formalized bound has the same form.
+
 \section{The sampled route}
 
 As printed, the algorithm reduces the error with the sampled approximate
@@ -127,9 +142,12 @@ has been lifted for correctness on both routes: the sweep is viable for every
 optimal solution of the convex programs and every admissible family of
 factors, so the output is correct for every valid oracle, and on the sampled
 route the success probability holds for every valid oracle as well. The cost
-bound has been lifted on the Gaussian route only. On the sampled route the
-cost is still stated for the honest oracle; the valid-oracle sampled cost
-bound remains to be proved.
+bound has been lifted on both routes: on the Gaussian route the cost is at
+most $P\,(n+2R^2+1)^{d}$ for every valid oracle, and on the sampled route, on
+the event of probability at least $1-1/(2n^2)$ on which the output has the
+required overlap, the cost is at most a polynomial in $n$ fixed before the
+chain, for every valid oracle.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_cost_polynomial_of_valid}
+    in \doclink{TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

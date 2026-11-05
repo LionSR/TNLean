@@ -492,6 +492,23 @@ theorem sampledPrecisionConstant_le_sq {Δ η : ℝ} :
     sampledPrecisionConstant Δ η ≤ (Δ / 169) ^ 2 :=
   (min_le_left _ _).trans (min_le_right _ _)
 
+/-- The precision `δ = c / L` of the sampled route at accuracy `η` meets the hypotheses of the
+success theorems, and its overlap loss `8 L δ / Δ` is at most `η`. -/
+theorem sampledPrecision_spec {Δ η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) {L : ℕ} (hL : 1 ≤ L) :
+    0 < sampledPrecisionConstant Δ η / L ∧ sampledPrecisionConstant Δ η / L ≤ 1 ∧
+      sampledPrecisionConstant Δ η / L ≤ (Δ / 169) ^ 2 / L ∧
+      8 * L * (sampledPrecisionConstant Δ η / L) / Δ ≤ η := by
+  have hLr : (1 : ℝ) ≤ L := by exact_mod_cast hL
+  refine ⟨div_pos (sampledPrecisionConstant_pos hΔ hη) (by positivity),
+    (div_le_one (by positivity)).mpr (sampledPrecisionConstant_le_one.trans hLr),
+    div_le_div_of_nonneg_right sampledPrecisionConstant_le_sq (by positivity), ?_⟩
+  have hmin : sampledPrecisionConstant Δ η ≤ η * Δ / 8 := min_le_right _ _
+  have hLne : (L : ℝ) ≠ 0 := by positivity
+  have : 8 * L * (sampledPrecisionConstant Δ η / L) = 8 * sampledPrecisionConstant Δ η := by
+    field_simp
+  rw [this, div_le_iff₀ hΔ]
+  linarith
+
 /-- **The polynomial budgets of the sampled route** at the precision giving overlap
 `1 - η`, for ground energies with `ε₀ / Δ ≤ B`. LVV13, `algo53.tex`, Corollary `c:agsp`, in
 the documented scope. -/
@@ -517,6 +534,53 @@ theorem exists_sampled_budgets_polynomial (hq : 2 ≤ q) {Δ B η : ℝ} (hΔ : 
   simp only at this
   simpa only [sampledWordCount, sampledRankBound, sampledLetterBound, sampledPower, hδ] using this
 
+/-- **The output bond dimension of the sampled route is polynomial**: at the precision giving
+overlap `1 - η`, the bond bound of the success theorem is at most `C L^p`, uniformly over
+ground energies with `ε₀ / Δ ≤ B`. -/
+theorem exists_sampledBond_polynomial (hq : 2 ≤ q) {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
+    ∃ C p : ℕ, 1 ≤ C ∧ ∀ (L : ℕ) (E₀ : ℝ), 1 ≤ L → 0 ≤ E₀ → E₀ + 1 ≤ L → E₀ / Δ ≤ B →
+      sampledWordCount q L E₀ Δ (sampledPrecisionConstant Δ η / L) *
+          sampledRankBound q L E₀ Δ (sampledPrecisionConstant Δ η / L) *
+          (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ) *
+        max 1 (sampledRankBound q L E₀ Δ (sampledPrecisionConstant Δ η / L) *
+          max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) ≤ C * L ^ p := by
+  obtain ⟨C₁, p₁, hC₁, hbud⟩ := exists_sampled_budgets_polynomial (B := B) hq hΔ hη
+  obtain ⟨M, u, -, hradius⟩ := exists_bondTrimmingRadius_lvvReferenceBond_polynomial q Δ
+  set C₂ := lvvSizeTrimmingCoefficient q Δ with hC₂
+  set p₂ := lvvSizeTrimmingDegree q Δ with hp₂
+  set C := max 1 (C₁ * C₂ * (C₁ * max 1 ⌈M⌉₊)) with hC
+  set p := p₁ + p₂ + (p₁ + u) with hp
+  refine ⟨C, p, le_max_left _ _, fun L E₀ hL hE₀ hE₀L hEB ↦ ?_⟩
+  set δ := sampledPrecisionConstant Δ η / L with hδ
+  obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
+  have hradiusNat : max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L)) ≤
+      max 1 ⌈M⌉₊ * L ^ u := by
+    have hreal := (hradius L hL).trans
+      (mul_le_mul_of_nonneg_right (Nat.le_ceil M) (pow_nonneg (Nat.cast_nonneg L) u))
+    have hnat : bondTrimmingRadius L (lvvReferenceBond q Δ L) ≤ ⌈M⌉₊ * L ^ u := by
+      exact_mod_cast hreal
+    exact max_le
+      (by simpa only [one_mul] using Nat.mul_le_mul (le_max_left 1 ⌈M⌉₊) (one_le_pow₀ hL))
+      (hnat.trans (Nat.mul_le_mul_right _ (le_max_right 1 ⌈M⌉₊)))
+  have h1 : sampledWordCount q L E₀ Δ δ * sampledRankBound q L E₀ Δ δ * (C₂ * L ^ p₂) ≤
+      C₁ * L ^ p₁ * (C₂ * L ^ p₂) := Nat.mul_le_mul_right _ hℓD
+  have h2 : max 1 (sampledRankBound q L E₀ Δ δ *
+      max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) ≤
+      C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u) := by
+    refine max_le ?_ ?_
+    · calc
+        1 = 1 * 1 * 1 := by ring
+        _ ≤ C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u) :=
+          Nat.mul_le_mul (Nat.mul_le_mul hC₁ (le_max_left _ _)) (one_le_pow₀ hL)
+    · calc
+        _ ≤ C₁ * L ^ p₁ * (max 1 ⌈M⌉₊ * L ^ u) := Nat.mul_le_mul hD hradiusNat
+        _ = C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u) := by rw [pow_add]; ring
+  calc
+    _ ≤ C₁ * L ^ p₁ * (C₂ * L ^ p₂) * (C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u)) :=
+        Nat.mul_le_mul h1 h2
+    _ = C₁ * C₂ * (C₁ * max 1 ⌈M⌉₊) * L ^ p := by rw [hp, pow_add, pow_add]; ring
+    _ ≤ C * L ^ p := Nat.mul_le_mul_right _ (le_max_right _ _)
+
 /-- **Theorem 1 on the sampled route, with its success probability.** Fix `q ≥ 2`, `Δ > 0`, a bound
 `B` on the ratio of ground energy to gap, and an accuracy `η > 0`. There are `C ≥ 1` and `p`,
 chosen before the chain, such that for every chain of `L ≥ 1` sites with a ground pair `(E₀, Γ)`
@@ -540,64 +604,15 @@ theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B
                 (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I (C * L ^ p)
                   (sampledRankBound q L E₀ Δ δ))
             ‖ψ‖ = 1 ∧ 1 - η ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧ IsOpenMPS L q (C * L ^ p) (fun x ↦ ψ x)} := by
-  obtain ⟨C₁, p₁, hC₁, hbud⟩ := exists_sampled_budgets_polynomial (B := B) hq hΔ hη
-  obtain ⟨M, u, -, hradius⟩ := exists_bondTrimmingRadius_lvvReferenceBond_polynomial q Δ
-  set C₂ := lvvSizeTrimmingCoefficient q Δ with hC₂
-  set p₂ := lvvSizeTrimmingDegree q Δ with hp₂
-  set C := max 1 (C₁ * C₂ * (C₁ * max 1 ⌈M⌉₊)) with hC
-  set p := p₁ + p₂ + (p₁ + u) with hp
-  refine ⟨C, p, le_max_left _ _, ?_⟩
+  obtain ⟨C, p, hC, hbond⟩ := exists_sampledBond_polynomial (B := B) hq hΔ hη
+  refine ⟨C, p, hC, ?_⟩
   intro L _ h hs h0 h1 E₀ Γ hgs hEB δ
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  have hLr : (1 : ℝ) ≤ L := by exact_mod_cast hL
   obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
-  obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
-  have hδ0 : 0 < δ := div_pos (sampledPrecisionConstant_pos hΔ hη) (by positivity)
-  have hδ1 : δ ≤ 1 := (div_le_one (by positivity)).mpr
-    (sampledPrecisionConstant_le_one.trans hLr)
-  have hδc : δ ≤ (Δ / 169) ^ 2 / L :=
-    div_le_div_of_nonneg_right sampledPrecisionConstant_le_sq (by positivity)
-  have hover : 8 * L * δ / Δ ≤ η := by
-    have hmin : sampledPrecisionConstant Δ η ≤ η * Δ / 8 := min_le_right _ _
-    have hLne : (L : ℝ) ≠ 0 := by positivity
-    have : 8 * L * δ = 8 * sampledPrecisionConstant Δ η := by
-      simp only [δ]
-      field_simp
-    rw [this, div_le_iff₀ hΔ]
-    linarith
-  have hradiusNat : max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L)) ≤
-      max 1 ⌈M⌉₊ * L ^ u := by
-    have hreal := (hradius L hL).trans
-      (mul_le_mul_of_nonneg_right (Nat.le_ceil M) (pow_nonneg (Nat.cast_nonneg L) u))
-    have hnat : bondTrimmingRadius L (lvvReferenceBond q Δ L) ≤ ⌈M⌉₊ * L ^ u := by
-      exact_mod_cast hreal
-    exact max_le
-      (by simpa only [one_mul] using Nat.mul_le_mul (le_max_left 1 ⌈M⌉₊) (one_le_pow₀ hL))
-      (hnat.trans (Nat.mul_le_mul_right _ (le_max_right 1 ⌈M⌉₊)))
-  have hbond : sampledWordCount q L E₀ Δ δ * sampledRankBound q L E₀ Δ δ * (C₂ * L ^ p₂) *
-      max 1 (sampledRankBound q L E₀ Δ δ *
-        max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) ≤ C * L ^ p := by
-    have h1 : sampledWordCount q L E₀ Δ δ * sampledRankBound q L E₀ Δ δ * (C₂ * L ^ p₂) ≤
-        C₁ * L ^ p₁ * (C₂ * L ^ p₂) := Nat.mul_le_mul_right _ hℓD
-    have h2 : max 1 (sampledRankBound q L E₀ Δ δ *
-        max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) ≤
-        C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u) := by
-      refine max_le ?_ ?_
-      · calc
-          1 = 1 * 1 * 1 := by ring
-          _ ≤ C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u) :=
-            Nat.mul_le_mul (Nat.mul_le_mul hC₁ (le_max_left _ _)) (one_le_pow₀ hL)
-      · calc
-          _ ≤ C₁ * L ^ p₁ * (max 1 ⌈M⌉₊ * L ^ u) := Nat.mul_le_mul hD hradiusNat
-          _ = C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u) := by rw [pow_add]; ring
-    calc
-      _ ≤ C₁ * L ^ p₁ * (C₂ * L ^ p₂) * (C₁ * max 1 ⌈M⌉₊ * L ^ (p₁ + u)) :=
-          Nat.mul_le_mul h1 h2
-      _ = C₁ * C₂ * (C₁ * max 1 ⌈M⌉₊) * L ^ p := by rw [hp, pow_add, pow_add]; ring
-      _ ≤ C * L ^ p := Nat.mul_le_mul_right _ (le_max_right _ _)
+  obtain ⟨hδ0, hδ1, hδc, hover⟩ := sampledPrecision_spec hΔ hη hL
   refine (measureReal_sampledGroundStateProgram_success hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc
     (C * L ^ p) (sampledRankBound q L E₀ Δ δ)).trans (measureReal_mono fun I hI ↦ ?_)
   obtain ⟨hψ1, hψover, hψmps⟩ := hI
-  exact ⟨hψ1, le_trans (by linarith) hψover, hψmps.mono hbond⟩
+  exact ⟨hψ1, le_trans (by linarith) hψover, hψmps.mono (hbond L E₀ hL hE₀ hE₀L hEB)⟩
 
 end TNLean.MPS.AreaLaw
