@@ -11618,6 +11618,21 @@ removed after the dependency audit exposed it.
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
 
+### Centered clipping and elementary transports — promoted (2026-11-02)
+
+- **Seen:** two filter constructions in `MPS/AreaLaw/PhysicalDGViability.lean`
+  and the independent-scale construction in `IndependentPhysicalDGPower.lean`.
+- **Pattern:** prove Hermiticity term by term after clipping selected regional
+  matrices and subtracting real ground energies, then add the crossing terms.
+- **Abstraction:** `Matrix.isHermitian_sum_centered_partial_energyTruncation`
+  in QICLean's `Analysis/EnergyTruncation.lean`; all three constructions use it.
+- **Decision:** a matrix lemma replaces the repeated proof. The same three
+  constructions use `Finset.sdiff_eq_empty_iff_subset` directly for their collar
+  count and `Exists.imp` to forget the unused part of a polynomial decomposition.
+  The three gap restrictions in `PhysicalDGViability.lean` and
+  `PhysicalDGSampledNode.lean` use `Or.imp_right` and monotonicity of addition.
+  These existing lemmas suffice; no new tactic is introduced.
+
 ### Weighted soft remainders and finite operator sums — promoted (2026-11-02)
 
 - **Pattern:** Apply a scalar remainder through an exponential of the same
