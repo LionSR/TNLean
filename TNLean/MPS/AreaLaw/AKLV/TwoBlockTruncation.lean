@@ -55,7 +55,10 @@ noncomputable def aklvTwoBlockHamiltonian {L q : ℕ} (l r : ℕ)
     ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i
 
-private theorem card_two_cut_crossing_le (L l r : ℕ) :
+/-- At most two original neighbouring-site bonds cross two prescribed cuts, with a
+coincident crossing counted once. Auxiliary to ALVV, arXiv:1602.08828v2,
+`def:hard-trunc`, lines 873–886. -/
+theorem card_two_cut_crossing_le (L l r : ℕ) :
     ((Finset.univ : Finset (Fin (L - 1))).filter
       (fun i ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))).card ≤ 2 := by
   have hcard := Finset.card_le_card_of_injOn (fun i : Fin (L - 1) ↦ i.val + 1)
@@ -68,7 +71,11 @@ private theorem card_two_cut_crossing_le (L l r : ℕ) :
       omega)
   exact hcard.trans (by simpa using Finset.card_insert_le l ({r} : Finset ℕ))
 
-private theorem sum_three_regions_add_crossings {L q l r : ℕ} (hlr : l ≤ r)
+/-- The original bond sum is the sum of its three consecutive regional Hamiltonians and
+the crossing bonds. Empty regions and coincident cuts are included. Auxiliary to AKLV,
+arXiv:1301.1162v1, Section 6.1, and ALVV, arXiv:1602.08828v2, `def:hard-trunc`,
+lines 873–886. -/
+theorem sum_three_regions_add_crossings {L q l r : ℕ} (hlr : l ≤ r)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
     (∑ i, h i) = (∑ j, aklvRegionalHamiltonians l r h j) +
       ∑ i ∈ Finset.univ.filter

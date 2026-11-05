@@ -692,7 +692,9 @@
         "thm:chain_boundary_net_polynomial",
         "thm:alvv_collective_trim"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:physical_interleaved_ritz_polynomial"
+      ],
       "notes": {
         "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
         "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
@@ -729,13 +731,37 @@
       "theorems": [
         "thm:alvv_ff_chain_replacement",
         "thm:alvv_ff_corrected_rank",
-        "thm:physical_soft_windows_and_mpo"
+        "thm:physical_low_energy_interval_family",
+        "thm:physical_soft_windows_and_mpo",
+        "thm:fixed_bandwidth_low_energy_family",
+        "thm:interval_low_energy_family",
+        "thm:physical_low_density_minimum_dimension",
+        "thm:physical_low_density_entropy",
+        "thm:ld_sharp_single_witness",
+        "thm:low_energy_orthonormal_mps_basis",
+        "thm:uniform_physical_soft_improving_family"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:physical_original_low_energy_interval_family",
+        "cor:canonical_low_energy_family",
+        "cor:physical_low_density_log_dimension",
+        "cor:calibrated_uniform_physical_soft_family",
+        "cor:original_ground_reference_trimming_profile"
+      ],
       "notes": {
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
         "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
-        "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy"
+        "thm:physical_low_energy_interval_family": "A physical low-energy improving family with an explicit count on every prescribed interval, without a gap assumption",
+        "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy",
+        "thm:fixed_bandwidth_low_energy_family": "Actual buffered low-energy improving family with one common count and suppression bound, without a global spectral gap",
+        "thm:interval_low_energy_family": "One actual low-energy improving family on every prescribed interval, with canonical original targets and a common count-suppression envelope",
+        "thm:physical_low_density_minimum_dimension": "Actual original-window viable space on every interval from attained minima and calibrated nested sampling, with a fixed-bandwidth natural count bound",
+        "thm:physical_low_density_entropy": "Actual original-band regional entropy with coefficient one on the full-band logarithmic dimension and a fixed-bandwidth regularized cubic remainder",
+        "thm:ld_sharp_single_witness": "One actual normalized low-energy MPS with the sharper designated-cut rank and simultaneous global bond bound in every positive local dimension",
+        "thm:low_energy_orthonormal_mps_basis": "Actual linear image of an original inner-band orthonormal basis, with exact dimension, two-sided closeness and an orthonormal native MPS basis",
+        "thm:uniform_physical_soft_improving_family": "One actual pre-center physical soft family, its same represented matrix cluster and actual Chebyshev word powers under explicit corrected residual budgets",
+        "cor:calibrated_uniform_physical_soft_family": "Uniform numerical calibration and a natural polynomial cap for the same actual physical soft family, with all choices before the volume",
+        "cor:original_ground_reference_trimming_profile": "One original-ground reference, including flat spectra, and one radius for all parent intervals, with the exact weighted loss and polynomial rank and output-cost profiles"
       }
     },
     "ch:peps_ft": {
@@ -1476,15 +1502,44 @@
         "thm:aklv_sharp_sequential_mps",
         "thm:aklv_frustration_free_entropy",
         "thm:aklv_frustration_free_mps",
-        "thm:physical_dg_interval_entropy_bound"
+        "thm:physical_dg_interval_entropy_bound",
+        "thm:physical_canonical_ritz_polynomial",
+        "thm:physical_canonical_tree_joint_probability"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:canonical_ritz_energy"
+      ],
       "notes": {
         "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
         "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
         "thm:aklv_frustration_free_mps": "Matrix product approximation of a frustration-free ground vector with the cube-root accuracy dependence",
-        "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
+        "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9",
+        "thm:physical_canonical_ritz_polynomial": "Joint success of the actual canonical hierarchy and its same-root literal Ritz/MPS output",
+        "thm:physical_canonical_tree_joint_probability": "Joint original-ground-space viability on the actual sampled root hierarchy, with an unconditional failure bound.",
+        "cor:canonical_ritz_energy": "Same-family subtree energy certificate retained with the actual probabilistic Ritz/MPS output"
+      }
+    },
+    "sec:interval_cluster_truncation": {
+      "theorems": [
+        "thm:normalized_cluster_label_tail",
+        "thm:physical_cluster_label_mpo",
+        "thm:soft_hamiltonian_mpo_accuracy"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:normalized_cluster_label_tail": "The corrected path estimate specifies interaction labels and retains the lower-energy normalization.",
+        "thm:physical_cluster_label_mpo": "The finite label truncation has constructed operator tensors of dimension r squared times q to the r.",
+        "thm:soft_hamiltonian_mpo_accuracy": "One complete regional soft replacement at scale at least three times the order has an explicit bond bound at every norm accuracy."
+      }
+    },
+    "sec:physical_soft_resampling_tree": {
+      "theorems": [
+        "thm:physical_soft_resampling_tree"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:physical_soft_resampling_tree": "Constructs the actual corrected resampling tree from primitive chain data, with one original-target joint history event and unconditional size bounds."
       }
     }
   }

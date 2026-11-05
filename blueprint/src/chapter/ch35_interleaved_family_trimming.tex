@@ -1,0 +1,1093 @@
+\section{Actual interleaved family applications and collective trims}
+
+The lemmas below construct the current-space operation at every round and
+bound its viability, dimension and recorded ranks under explicit numerical
+budgets. Independent truncation and polynomial scales also construct actual
+physical families and a common reference at the required small accuracy.
+The fixed-child sampling estimate and finite stopping bound lead to joint
+success of the actual canonical product-Haar hierarchy. Its same successful
+root then yields the literal refinement and polynomial MPS Ritz conclusion.
+
+\begin{lemma}[One actual family image and interval trim]
+    \label{lem:interval_family_trim_step}
+    \lean{TNLean.MPS.AreaLaw.intervalFamilyTrimStep,
+        TNLean.MPS.AreaLaw.finrank_intervalFamilyTrimStep_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_intervalFamilyTrimStep,
+        TNLean.MPS.AreaLaw.isViable_intervalFamilyTrimStep_of_tensor_decomposition}
+    \leanok
+    Fix an interval $[p,r)$, retaining its whole exterior. Let $T$ be a
+    full-chain target and let $K=\sum_{i=1}^N F_i\otimes R_i$ in these
+    interval/exterior coordinates. Suppose $K$ preserves $T$ and $T^\perp$,
+    has minimum norm gain one on $T$, and squared contraction at most
+    $\Delta\ge0$ on $T^\perp$. It need not be the identity on $T$.
+    Let $U$ be mutually $\varepsilon$-close to $T$, with every vector of
+    $U$ an MPS of bond at most $D\ge1$. Suppose $S$ is $\delta$-viable for
+    $T$, where $0\le\delta<1$.
+
+    Apply the actual family to $S$, giving $V=\sum_iF_iS$, and collectively
+    trim an orthonormal basis of that actual space at threshold $\xi>0$.
+    Write $S'$ for the resulting space. It has dimension at most
+    $N\dim S$ and at most that many recorded spanning vectors, each with
+    weighted internal-cut rank $\xi^2\operatorname{SR}(v)\le N\dim S$.
+    For every $\theta>0$, put $m=\max\{r-p-1,0\}$ and
+    \begin{align}
+        f(\delta) & =\frac{\Delta\delta}{1-\delta+\Delta\delta}, &
+        E(\delta) & =(1+\theta)\bigl((1+\theta)f(\delta)
+        +(1+\theta^{-1})\varepsilon+2\xi\sqrt{mD^2}\bigr)
+        +(1+\theta^{-1})\varepsilon.
+        \label{eq:interval_family_trim_error}
+    \end{align}
+    The actual space $S'$ is $E(\delta)$-viable for that same $T$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv-interval-reference-weighted,lem:interval_recorded_generator_bounds}
+    The exact tensor decomposition gives
+    $K(S\otimes\mathcal H_{\rm out})\subseteq
+        V\otimes\mathcal H_{\rm out}$.
+    Normalized projection error reduction therefore makes $V$
+    $f(\delta)$-viable. Apply the weighted target-relative reference
+    estimate to its actual orthonormal basis and actual trim. The reference
+    rank is $D^2$, since the whole exterior is retained. The image span
+    has dimension at most $N\dim S$, and trimming does not increase it.
+    The recorded-rank theorem applies to the actual trimmed basis vectors.
+\end{proof}
+
+\begin{lemma}[Every round of the literal interleaved iteration]
+    \label{lem:interval_family_trim_iterates}
+    \lean{TNLean.MPS.AreaLaw.intervalFamilyTrimIterate,
+        TNLean.MPS.AreaLaw.intervalFamilyTrimIterate_zero,
+        TNLean.MPS.AreaLaw.intervalFamilyTrimIterate_succ,
+        TNLean.MPS.AreaLaw.finrank_intervalFamilyTrimIterate_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_intervalFamilyTrimIterate_succ,
+        TNLean.MPS.AreaLaw.isViable_intervalFamilyTrimIterate_of_tensor_decomposition}
+    \leanok
+    Retain one fixed target, reference, operator family and threshold as
+    in Lemma~\ref{lem:interval_family_trim_step}. Starting at the actual
+    initial space $S_0$, define
+    \begin{align}
+        S_{j+1}=\operatorname{Trim}_{\xi}
+        \bigl(\operatorname{span}\{F_iS_j:i\}\bigr).
+        \label{eq:interval_family_actual_iterates}
+    \end{align}
+    Then $\dim S_j\le N^j\dim S_0$. Every positive iterate has at most
+    $N^j\dim S_0$ recorded spanning vectors, each satisfying the same
+    bound on its weighted internal-cut rank. These are bounds for the
+    recorded vectors, not for their entire span.
+
+    Suppose $0\le\delta_j<1$ and $E(\delta_j)\le\delta_{j+1}$ for every
+    $j$, and suppose $S_0$ is $\delta_0$-viable for $T$. Then every actual
+    $S_j$ is $\delta_j$-viable for the same target.
+    The recursive assignment in (\ref{eq:interval_family_actual_iterates})
+    is the local correction documented in
+    \cite{gap:alvv16_approximation_parameters}; it does not reapply the
+    family to the unchanged initial sample.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_family_trim_step}
+    Induct on $j$, applying the actual one-step theorem each time.
+    Dimension multiplies by at most $N$; the positive-iterate recorded
+    vectors are exactly the output of the last collective trim.
+    Viability follows from $E(\delta_j)\le\delta_{j+1}$ and monotonicity
+    in the allowed error.
+\end{proof}
+
+\begin{lemma}[Reference budgets for every actual interleaved round]
+    \label{lem:interval_family_trim_reference_budget}
+    \lean{TNLean.MPS.AreaLaw.isViable_intervalFamilyTrimIterate_of_reference_budgets}
+    \leanok
+    In Lemma~\ref{lem:interval_family_trim_iterates}, suppose $0<a\le1$,
+    $\varepsilon\le a^2/16384$ and
+    $\xi\sqrt{mD^2}\le a/256$. Set $\theta=a/64$. It suffices to verify
+    the simpler numerical envelope
+    \begin{align}
+        0\le\delta_j<1,\qquad
+        \frac{\Delta\delta_j}{1-\delta_j+\Delta\delta_j}+a/16
+        \le\delta_{j+1}.
+        \label{eq:interval_family_reference_envelope}
+    \end{align}
+    Every literal iterate then has the viability and dimension bounds
+    of that lemma, with its actual weighted recorded ranks.
+
+    These are target-relative reference budgets. If $T$ is a clipped
+    low-energy space, its comparison with the original ground space is a
+    separate accuracy condition. No fixed constant comparison error is
+    silently absorbed into these small-overlap budgets.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_family_trim_iterates}
+    Since $0\le\delta_j<1$ and $\Delta\ge0$, the normalized filtered error
+    belongs to $[0,1]$. At $\theta=a/64$, the weighted reference and
+    threshold terms give $E(\delta_j)\le f(\delta_j)+a/16$.
+    Substitute (\ref{eq:interval_family_reference_envelope}).
+\end{proof}
+
+
+\begin{lemma}[Independent window and count bounds]
+    \label{lem:interleaved_filter_scale_count}
+    \lean{Real.one_le_interleaved_log_scale,
+        Real.exists_interleaved_log_absorption_constant,
+        Real.interleaved_log_polynomial_base_le,
+        Real.interleaved_filter_scale_count_bounds,
+        Real.interleaved_filter_scale_dominates_width}
+    \leanok
+    For each $K>0$ and lower threshold one can choose $C\ge21$ beyond
+    that threshold with $KJ^3\le C$, where $J=14+2\log(C+1)$.
+    Let $m\ge50$, $0<g\le1$, $w\ge1$, and put
+    \begin{align}
+        v    & =1+\log m+\log(1/g)+\log(1+w),\notag                          \\
+        \ell & =\left\lceil C(v^6/g+\sqrt w\,v^3/\sqrt g)\right\rceil,\notag \\
+        D    & =(m\ell^2)^{22\ell}.\notag
+    \end{align}
+    Here $v\ge1$. Then $\ell\ge21$, $Cv^6\le g\ell$,
+    $C\sqrt w\,v^3\le\sqrt g\,\ell$, and
+    $\ell\le(C+1)(v^6/g+\sqrt w\,v^3/\sqrt g)$. Moreover
+    \begin{align}
+        \log(m\ell^2) & \le Jv,\notag                                  \\
+        \log D        & \le22(C+1)J(v^7/g+\sqrt w\,v^4/\sqrt g).\notag
+    \end{align}
+    If $K\ge1$ and $KJ^3\le C$, the same explicit window satisfies
+    $K\log^3(m\ell^2)\le g\ell$ and
+    $Kw\log^2(m\ell^2)\le g\ell^2$.
+\end{lemma}
+\begin{proof}\leanok
+    Choose $C$ by cubic logarithmic absorption. Apply both contributions
+    to the ceiling separately. Its coarse upper bound is
+    $(C+1)(1+w)v^6/g$; take logarithms and use $\log v\le v$.
+    The exact count identity is $\log D=22\ell\log(m\ell^2)$.
+    The two lower scale bounds, together with $KJ^3\le C$ and
+    $C^2\ge C\ge KJ^2$, give the two width inequalities.
+\end{proof}
+
+
+
+
+\begin{lemma}[Sampling scale and small comparison accuracy]
+    \label{lem:interleaved_sample_accuracy}
+    \lean{Real.interleaved_sample_size_bounds,
+        Real.interleaved_overlap_accuracy_bounds,
+        Real.interleaved_accuracy_log_bounds}
+    \leanok
+    Let $r\ge1$, $D\ge2$, $L\ge0$, and set
+    \begin{align}
+        w & =1+\log r+2\log(L+1),   & A    & =\log D+w,\notag     \\
+        s & =\lceil4096rA\rceil,    &
+        a & =\frac{3}{32D^{12}s^5}, & \tau & =\frac{a^2}{2^{20}}.
+        \label{eq:interleaved_sample_accuracy}
+    \end{align}
+    Then $w,s\ge1$, $s\le4097rA$, $\log s\le13A$ and $0<a\le1/100$.
+    Moreover $0<\tau\le1$, $200\tau\le1$, $4\tau\le a^2/16384$, and
+    $24\log D\le\log(1/\tau)\le28+24\log D+10\log s$.
+\end{lemma}
+\begin{proof}\leanok
+    Apply the ceiling bound and expand the logarithm of
+    $1/\tau=2^{20}(32D^{12}s^5/3)^2$. Since $D^{12}s^5\ge4096$,
+    the overlap and accuracy bounds follow by multiplication of positive quantities.
+\end{proof}
+
+\begin{lemma}[Independent clipping and suppression at the same count]
+    \label{lem:interleaved_actual_suppression}
+    \lean{Real.interleaved_threshold_width_bounds,
+        Real.interleaved_actual_threshold_width_bounds,
+        Real.interleaved_actual_filter_tradeoff,
+        Real.exists_interleaved_physical_scalar_parameters}
+    \leanok
+    There are universal constants $C_{\rm tail},C\ge21$ with the following
+    property. For $m\ge50$, $r\ge1$, $L\ge0$ and $0<g\le1$, use
+    $w,v,\ell,D$ of Lemma~\ref{lem:interleaved_filter_scale_count} and
+    $s,a,\tau$ of Lemma~\ref{lem:interleaved_sample_accuracy}. Put
+    \begin{align}
+        \varepsilon & =200\tau,                                          &
+        t           & =C_{\rm tail}\bigl(1+\log(1/g)+\log(1/\tau)\bigr), &
+        \Delta      & =\frac{1}{200000D^{12}}.
+        \label{eq:interleaved_actual_cutoff}
+    \end{align}
+    Then $\ell,t\ge21$, $0<\varepsilon\le1$, $D^{12}\Delta<10^{-5}$ and
+    \begin{align}
+        288e^{11/8}e^{-(t-g)/8}                    & \le\varepsilon g/10^6,\notag \\
+        \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2 & \le\Delta
+        \label{eq:interleaved_actual_suppression}
+    \end{align}
+    for every $0<R\le3t+4\ell$. The logarithmic count bound of
+    Lemma~\ref{lem:interleaved_filter_scale_count} holds for these same constants.
+
+    More precisely, writing $B=\log(m\ell^2)$ and
+    $P=3\log D+\frac14\log800000$, the explicit ceilings give
+    $P\le t\le4000C_{\rm tail}(\ell B+w)$.
+    The numerical width estimate uses only $\log D=22\ell B$,
+    $1+\log(1/g)\le\ell B$ and $\log s\le13(\log D+w)$;
+    the stated ceilings derive each of these conditions.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interleaved_filter_scale_count,lem:interleaved_sample_accuracy}
+    Choose the tail constant first. Set $K=100000(4000C_{\rm tail})$
+    and choose $C$ so that $K(14+2\log(C+1))^3\le C$.
+    The two scale inequalities imply
+    $7tP^2\le(4g/5)\ell^4$ and $P\le72\ell B$.
+    The independent-width estimate then gives
+    $P\le\ell^2\sqrt{(4g/5)/R}$.
+    Exponentiating yields the second bound in
+    (\ref{eq:interleaved_actual_suppression}); the choice of $t$ gives the first.
+\end{proof}
+
+\begin{lemma}[One physical reference for all nearby clipped targets]
+    \label{lem:interleaved_common_clipped_reference}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_common_reference_for_clipped_targets}
+    \leanok
+    Let $G$ be the full ground space of a nearest-neighbour chain whose
+    local terms are positive contractions, with distinct lowest spectral
+    values and gap lower bound $\gamma>0$. Put $r=\dim G$ and
+    $g=\min\{\gamma,1\}$. For every $0<a\le1$, let $\tau=a^2/2^{20}$.
+    There is an actual space $U$ of dimension $r$, mutually $\tau$-close
+    to $G$, whose every vector is an MPS of bond $D_{\rm ref}=r^2B$.
+    A universal $K_{\rm ref}>0$ bounds $B\ge1$ by
+    \begin{align}
+        \log B & \le K_{\rm ref}
+        \bigl(u^3/g+g^{-1/4}b^{3/4}u\bigr)(1+\log b),\notag \\
+        u      & =1+\log q+\log(1/g),                     &
+        b      & =16+\log(1/g)+\log\frac{32r(L+1)}{\tau}.
+        \label{eq:interleaved_clipped_reference_count}
+    \end{align}
+    This same $U$ is mutually $4\tau$-close to every full-chain space
+    $T$ mutually $\tau$-close to $G$; in particular $4\tau\le a^2/16384$.
+    The capped-gap dependence is retained as in
+    \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    Choose the physical ground-space reference at accuracy $\tau$.
+    The two triangle estimates give $2(\tau+\tau)=4\tau$.
+    The reference therefore precedes every clipped target and interval.
+\end{proof}
+
+\begin{lemma}[Physically calibrated interleaved interval step]
+    \label{lem:physical_interleaved_family}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_filter_family}
+    \leanok
+    Under the physical hypotheses of
+    Lemma~\ref{lem:interleaved_common_clipped_reference}, choose
+    $m=\max\{q,50\}$ and all constants and parameters as in
+    Lemma~\ref{lem:interleaved_actual_suppression}. There is one common
+    reference $U$ satisfying (\ref{eq:interleaved_clipped_reference_count}).
+    Set $\xi_{\max}=a/(256D_{\rm ref}\sqrt{L+1})>0$.
+
+    For every interval $[p,r)$ of length greater than $4\ell$, the
+    Hamiltonian constructs a clipped target $T$ of dimension $\dim G$
+    and an actual family $\{F_i\}_{i=1}^N$, $N\le D^2$, before every
+    input space and threshold. The spaces $T,G$ are mutually
+    $\tau$-close, and $T,U$ are mutually $4\tau$-close.
+    For every $0<\xi\le\xi_{\max}$ and every $\delta$-viable $S$ for $T$,
+    where $0\le\delta<1$, form the actual current-space step
+    $V=\operatorname{Trim}_{\xi}(\operatorname{span}\{F_iS:i\})$.
+    Then $\dim V\le N\dim S$, with at most $N\dim S$ recorded spanning
+    vectors of weighted internal-cut rank at most $N\dim S$.
+    With $f(\delta)=\Delta\delta/(1-\delta+\Delta\delta)$, this same $V$
+    is $(f(\delta)+a/16)$-viable for $T$ and
+    $2(f(\delta)+a/16+\tau)$-viable for the original full ground space.
+    The whole exterior is retained; its reference rank bound is
+    $D_{\rm ref}^2$. No sampling or stopping assertion is included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
+\end{proof}
+
+
+\begin{lemma}[Actual interleaved rounds at the calibrated stopping count]
+    \label{lem:physical_interleaved_iterates}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_iterates}
+    \leanok
+    Use the physical hypotheses, constants, parameters, common reference and
+    interval families of Lemma~\ref{lem:physical_interleaved_family}.
+    Fix one long interval, its actual clipped target $T$, and a threshold
+    $0<\xi\le\xi_{\max}$. Let $S_0$ have dimension at most $s$ and be
+    $(1-a)$-viable for this $T$. Define the literal spaces
+    $S_{j+1}=\operatorname{Trim}_{\xi}(\operatorname{span}\{F_iS_j:i\})$ and
+    the scalar errors
+    \begin{align}
+        e_0     & =1-a,                                      &
+        e_{j+1} & =\frac{\Delta e_j}{1-e_j+\Delta e_j}+a/16, &
+        k       & =\left\lceil\log_D(D^2s)\right\rceil,
+        \label{eq:physical_interleaved_stopping}
+    \end{align}
+    where $k$ is the upper integer logarithm. Every $0\le e_j<1$, and
+    the actual $S_j$ is $e_j$-viable for the same clipped target.
+    The actual output $S_k$ is $1/200$-viable for $T$ and $3/200$-viable
+    for the original full ground space. It has dimension at most $D^6s^3$
+    and at most that many recorded spanning vectors, each of weighted
+    internal-cut rank at most $D^6s^3$.
+
+    The initial successful sample is a separate hypothesis here. The
+    conclusion concerns the literal current-space iteration and does not
+    assert an adaptive probability or a printed running time.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
+\end{proof}
+
+
+\begin{lemma}[A measurable event for one actual interleaved parent]
+    \label{lem:physical_interleaved_node_event}
+    \lean{TNLean.MPS.AreaLaw.sampledIntervalInterleavedTrim,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_node_event}
+    \leanok
+    Use the chain, constants and nominal sample bound $s$ of
+    Lemma~\ref{lem:physical_interleaved_iterates}. The physical families
+    and common reference are chosen before the child spaces and actual
+    sample dimension. Fix one long parent interval, its split point and
+    $0<\xi\le\xi_{\max}$. Let each child space be $3/200$-viable for
+    the same original full ground space and have dimension at most
+    $M=D^6s^3$. Form their actual adjacent-coordinate tensor merge $W$;
+    write $Q=\dim W$.
+
+    For each Haar unitary $U$ on $\C^Q$, let $S(U)$ be the span of the
+    first $\min(s,Q)$ columns of the rotated orthonormal basis of $W$.
+    Starting at this actual sample, apply the same family and collective
+    trim for $k=\lceil\log_D(D^2s)\rceil$ rounds, as in
+    (\ref{eq:physical_interleaved_stopping}). This defines the output.
+    There is a nonempty measurable event $\mathcal E$ with
+    \begin{align}
+        \Pr(\mathcal E^c) & \le(L+1)^{-2},   &
+        \Pr(\mathcal E)   & \ge1-(L+1)^{-2}.
+        \label{eq:physical_interleaved_parent_probability}
+    \end{align}
+    Every unitary in $\mathcal E$ gives that literal output with
+    dimension at most $M$, at most $M$ recorded spanning vectors of
+    weighted internal-cut rank at most $M$, viability $1/200$ for the
+    actual clipped target and viability $3/200$ for the original ground
+    space. The event is for this fixed pair of children; its choice is
+    not asserted to be measurable as the children vary.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
+\end{proof}
+
+
+\begin{lemma}[A balanced recursion from successful local choices]
+    \label{lem:balanced_interval_choice}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_interval_tree_of_choices}
+    \leanok
+    Fix a positive leaf width and a property $P_{[p,r)}$ of interval
+    subspaces. Suppose the full local space has this property at every
+    short leaf. At each long interval and split, fix a family of candidate
+    parent spaces indexed by $I_{J,k,S_1,S_2}$. Suppose whenever both
+    children have their respective properties, at least one candidate has
+    the parent property.
+
+    There is one fixed merge operation whose value at every such pair of
+    children is an actual successful candidate. Its balanced interval
+    recursion has $P_{[p,r)}$ at every valid interval. The candidate index
+    and the equality with the chosen parent operation are retained.
+    No measurable dependence on the children is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_invariant}
+    Choose one successful candidate for every valid pair of children
+    satisfying $P$. Define the operation by that candidate on such pairs,
+    and arbitrarily outside them. The candidate identity and parent
+    property follow from the chosen witness. Apply the interval induction.
+\end{proof}
+
+\begin{lemma}[An actual balanced tree with interleaved parent trims]
+    \label{lem:physical_interleaved_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_tree}
+    \leanok
+    Under the physical hypotheses and calibrated parameter choices of
+    Lemma~\ref{lem:physical_interleaved_node_event}, choose the physical
+    family on every interval longer than $4\ell$, before the child spaces.
+    One common reference and radius bound $\xi_{\max}$ serve every
+    interval. For each fixed $0<\xi\le\xi_{\max}$ there is one actual
+    balanced interval recursion with full local spaces at leaves of
+    length at most $4\ell$.
+
+    Every retained space is $3/200$-viable for the same original full
+    ground space, has dimension at most $M=D^6s^3$, and has at most $M$
+    recorded spanning vectors of weighted internal-cut rank at most $M$.
+    At each long parent, retain an actual chosen Haar unitary. The parent
+    operation equals the sample of its actual recursive children followed
+    by the literal $k=\lceil\log_D(D^2s)\rceil$ rounds of family application
+    and collective trimming. The family, clipped target and reference
+    stay fixed during those rounds.
+
+    This is an existential recursive construction with the fixed nominal
+    sample scale and failure target $(L+1)^{-2}$. It does not assert a
+    jointly measurable adaptive sampling procedure, an energy-estimation
+    invariant, final spectral extraction or a running-time bound. The
+    block leaves, capped-gap dependence and larger integer round count
+    remain as in \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_same_word_family}
+    Retain the same constructed targets, families and operation of
+    Lemma~\ref{lem:physical_interleaved_same_word_family}, and forget
+    its additional ordered-word conclusion.
+\end{proof}
+
+
+\begin{lemma}[Native MPS and Ritz extraction from the same interleaved root]
+    \label{lem:physical_interleaved_tree_ritz}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_ritz_approximation}
+    \leanok
+    Use the physical hypotheses and calibrated parameters of
+    Lemma~\ref{lem:physical_interleaved_tree}, retaining its common reference
+    bound $D_{\rm ref}$ and radius bound $\xi_{\max}$.
+    Before the requested accuracy, put
+    $N_{\rm tree}=\lceil1/a\rceil$ and $E_{\rm tree}=D_{\rm ref}N_{\rm tree}$.
+    Let $A=\|H\|-\mu>0$, $c=\gamma/A$, and
+    $K_{\rm raw}=I-\|H\|^{-1}H$. For every $\eta>0$, set
+    \begin{align}
+        \rho                & =\frac{\eta\gamma}{2A+\eta\gamma},               &
+        n                   & =\left\lceil\frac4c\log\frac1\rho\right\rceil+1, &
+        \varepsilon_{\rm f} & =\frac{c^2\rho}{32768}.
+        \label{eq:interleaved_final_accuracy}
+    \end{align}
+    Choose the actual physical final reference of dimension $r$, mutually
+    $\varepsilon_{\rm f}$-close to $G$, with all-span MPS bound
+    $b=r^2B_{\rm f}$ and the reference logarithmic estimate at that accuracy.
+    Define
+    \begin{align}
+        D_{\rm c} & =\max\{E_{\rm tree},b\},                         &
+        N_{\rm f} & =\left\lceil\frac{100D^{12}}{c\rho}\right\rceil, &
+        \xi       & =\frac1{1000D_{\rm c}N_{\rm f}\sqrt{L+1}}.
+        \label{eq:interleaved_final_common_radius}
+    \end{align}
+    Then $0<\xi\le\xi_{\max}$ and
+    $\sqrt{Lrb}\,\xi<\eta/(10000D^{12})$.
+    Construct the actual interleaved tree at this same $\xi$, retaining
+    its interval invariants and chosen parent unitaries. Let $S_0$ be its
+    full-chain root and $W_0$ its native coefficient image. With $M=D^6s^3$,
+    every vector of $W_0$ is an open MPS of bond at most
+    \begin{align}
+        B_{\rm out}=10^6(D_{\rm c}N_{\rm f})^2(L+1)M^2.
+        \label{eq:interleaved_root_final_bond}
+    \end{align}
+    The space $W_0$ is $3/200$-close to the original full ground space.
+
+    Starting from this very $S_0$, form its literal $n$ raw-filter and
+    collective-trim iterates at the same radius. Write $S$ for the terminal
+    space, $W$ for its native image and $R$ for the actual lowest-$r$
+    compressed Ritz space of $H$ on $W$. Then $n>0$, $W$ is $\rho$-close
+    to $G$, $\dim S\le M$, $R\subseteq W$, $\dim R=r$, and $R,G$ are
+    mutually $\eta/2$-close. Every vector of $R$ has the same MPS bound
+    (\ref{eq:interleaved_root_final_bond}).
+
+    The old one-final-trim root is not used. The capped-gap, block-leaf,
+    fixed-sampling and length-dependent count qualifications remain.
+    The final count in (\ref{eq:interleaved_final_accuracy}) is not identified
+    with the printed count; see \cite{gap:alvv16_final_filter_gain}.
+    No adaptive probability, source energy-estimation invariant or running
+    time is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_tree,lem:physical_dg_automatic_refinement,
+        lem:full_interval_viability,lem:full_interval_trim_native_mps}
+    The ceiling gives $aN_{\rm tree}\ge1$, hence
+    $1/(1000E_{\rm tree}\sqrt{L+1})\le\xi_{\max}$.
+    The automatic reference and radius choice therefore serves the new
+    interleaved tree and all final trims simultaneously. Whole-region
+    viability is closeness of the same native root. Its actual recorded
+    generators give the native MPS bound, including the extra count factor.
+    Apply the actual same-candidate raw-filter refinement to this root.
+    The projected trial energy and Ritz comparison give both errors, since
+    $A\rho/((1-\rho)\gamma)=\eta/2$. The terminal trimming generators
+    give the same all-span bond bound.
+\end{proof}
+
+
+\begin{corollary}[Uniform polynomial bond for the same interleaved Ritz space]
+    \label{cor:physical_interleaved_ritz_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation_with_constants}
+    \leanok
+    Fix the local dimension $q$ and a positive spectral gap $\gamma$.
+    There are $C>0$ and $k\in\mathbb N$, depending only on these two
+    parameters, with the following property. For every length $L$ and
+    positive nearest-neighbour contraction Hamiltonian satisfying the
+    degenerate-ground-space hypotheses above, let $r$ be its full ground
+    multiplicity. For every $\eta>0$, the actual interleaved tree,
+    common-radius refinement and compressed Ritz construction of
+    Lemma~\ref{lem:physical_interleaved_tree_ritz} yield an $r$-dimensional
+    space $R$, mutually $\eta/2$-close to the original ground space.
+    Every vector of this same $R$ is an open MPS of bond at most
+    \begin{align}
+        C\bigl((L+1)(r+1)(1+\eta^{-1})\bigr)^k.
+        \label{eq:interleaved_ritz_uniform_polynomial}
+    \end{align}
+    More precisely, there is a universal $C_{\deg}>0$, chosen before
+    $q,\gamma$, such that the chosen degree satisfies
+    \begin{align}
+        k\le C_{\deg}\frac{
+            (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2},
+        \qquad g=\min\{\gamma,1\}.
+        \label{eq:interleaved_ritz_gap_degree}
+    \end{align}
+    The same universal constant may be enlarged so that also
+    \begin{align}
+        \log\max\{C,1\}\le C_{\deg}\frac{
+            (1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
+        \label{eq:interleaved_ritz_log_coefficient}
+    \end{align}
+    Thus both estimates apply to the coefficient and degree selected for
+    this same output. The raw gap continues to enter through its cap.
+    The calibrated count is allowed to vary with $L$ and $r$.
+    The block leaves, fixed failure target, capped-gap dependence and
+    modified integer counts remain those of the preceding construction.
+    This is a coarse uniform polynomial bound, with no claim about the
+    printed sharp dependence on $q,\gamma$, adaptive joint probability,
+    energy estimation or running time.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_tree_ritz}
+    Put $w=1+\log r+2\log(L+1)$ and
+    $U=1+\log\max\{q,50\}+\log(1/\min\{\gamma,1\})$.
+    The bounds for $v=U+\log(1+w)$ give
+    $v^7\le(U+17)^7w$ and
+    $\sqrt w\,v^4\le(U+17)^4w$. Thus the actual calibrated count satisfies
+    $\log D\le K_Dw$ for a constant depending only on $q,\gamma$;
+    it has not been replaced by a fixed count. Its sample ceiling,
+    inverse reference accuracies and common-radius ceilings consequently
+    have polynomial bounds in $(L+1)(r+1)(1+\eta^{-1})$.
+    Apply the reference logarithmic profile at both actual accuracies.
+    The positive-contraction bound gives $\|H\|-\mu\le L+1$.
+    Substituting all these estimates in
+    (\ref{eq:interleaved_root_final_bond}) proves
+    (\ref{eq:interleaved_ritz_uniform_polynomial}) for the very same Ritz
+    space supplied by Lemma~\ref{lem:physical_interleaved_tree_ritz}.
+    To bound its exact degree, write
+    $p=\lceil2K_D\rceil$ and
+    $p_0=\lceil K(u^3/g+5g^{-1/4}u)\rceil$, where
+    $K=\max\{K_{\rm t},K_{\rm f}\}$ and $u\le U$.
+    The preceding count estimate gives $K_D\le C_DU^7/g$ with a universal
+    $C_D$, so $p\le(2C_D+1)U^7/g$ and
+    $p_0\le(6K+1)U^3/g$. The actual degree
+    $10(24p+21)p_0+60p+43$ therefore has the bound
+    (\ref{eq:interleaved_ritz_gap_degree}). For the selected prefactor,
+    its factored logarithmic estimate is at most
+    $10^7(K+1)(u^3/g+5g^{-1/4}u+1)
+        (1+K_D+\log(1/g)+\log(1+\gamma^{-1}))$.
+    Since $g\le\gamma$ and $\log(1/g)\le U$, its last two factors are
+    bounded by $7U^3/g$ and $(C_D+4)U^7/g$, respectively.
+    This gives (\ref{eq:interleaved_ritz_log_coefficient}), after enlarging
+    the same universal constant.
+\end{proof}
+
+\begin{lemma}[Ordered words in the same interleaved family]
+    \label{lem:physical_interleaved_same_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_filter_family_with_word_powers,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_iterates_with_word_powers,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_node_event_with_word_powers,
+        TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_tree_with_word_powers}
+    \leanok
+    The physical families, iterations, fixed-child events and balanced
+    recursion of Lemmas~\ref{lem:physical_interleaved_family}--\ref{lem:physical_interleaved_tree}
+    may be chosen with the following additional property of their same
+    actual interval family $F_1,\ldots,F_N$ and clipped target $T$.
+    For every $n\ge0$ and every $\delta$-viable regional space $S$ for $T$
+    with $\delta<1$, form the untrimmed space
+    \begin{align}
+        W_n(F,S) & =\operatorname{span}\{
+        F_{i_1}\cdots F_{i_n}s:i_1,\ldots,i_n\in\{1,\ldots,N\},\ s\in S\}.
+        \label{eq:interleaved_same_word_image}
+    \end{align}
+    Then $\dim W_n(F,S)\le(D^2)^n\dim S$, and this actual space is
+    $\Delta^n/(1-\delta)^2$-viable for the same $T$. The choices of
+    $T,N,F$ precede the power, input space and threshold.
+
+    In the balanced recursion, the actual target $T_J$ and its mutual
+    $\tau$-closeness to the original ground space are retained for every
+    long interval $J$, along with its actual family $F_J$ and these word
+    bounds. The merge operation still equals sampling followed by the
+    recorded interleaved rounds with that same $F_J$. The targets and
+    families are chosen before the radius and recursive operation.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:independent_physical_dg_word_family,
+        lem:interleaved_actual_suppression,lem:interleaved_common_clipped_reference,
+        lem:interval_family_trim_step,lem:interval_family_trim_iterates,
+        lem:balanced_interval_choice}
+    The actual physical filter supplies its tensor factors, minimum
+    target gain one, squared complementary contraction $\Delta$, and
+    every ordered-word estimate. The regional coordinate identity
+    places all these conclusions in the same coordinates. The common
+    reference and $\xi\sqrt{(r-p-1)D_{\rm ref}^2}\le a/256$ give the
+    actual trim-step error $f(\delta)+a/16$.
+
+    For the finite iteration, write $R=D^6$ and $b=1-e$ for success.
+    The calibrated scalar recurrence gives either $e_j\le1/200$ or
+    $b_j\ge R^ja$. The count
+    $k=\lceil\log_D(D^2s)\rceil$ reserves a final exit round and
+    gives $e_k\le1/200$. Apply the trim-step estimate at every actual
+    successor. The dimension and recorded weighted ranks are at most
+    $N^k\dim S_0\le(D^k)^2s\le D^6s^3$, while
+    $2(1/200+\tau)\le3/200$ transfers viability to the original ground
+    space. The word conclusion for $F,T$ is retained unchanged.
+
+    At a fixed parent, the tensor product $W$ of the two children is
+    $1/4$-viable for this same clipped $T$, with
+    $1\le Q=\dim W\le D^{12}s^6$. The corrected sphere-net bound
+    yields the actual measurable Haar event; its failure is bounded by
+    $\exp(32(\dim G)\log D+12(\dim G)\log s-s/16)\le e^{-s/64}\le(L+1)^{-2}$.
+    Each successful sample has dimension at most $s$ and
+    $(1-a)$-viability, so the actual iteration applies with the same
+    $F,T$. Its ordered-word estimate remains available for the original
+    child product as well as for other viable input spaces.
+
+    Choose the targets, families and word bounds together for all long
+    intervals before choosing the recursive operation. Full leaves obey
+    $q^{4\ell}\le D^6\le D^6s^3$ and the weighted-rank bound since
+    $\xi\le1$. The nonempty fixed-child event supplies each actual
+    successful unitary and parent. Apply the balanced interval induction
+    and retain its literal operation identity. No second family is
+    chosen for the untrimmed image.
+\end{proof}
+
+The family here is polynomial in the actual hard-clipped Hamiltonian.
+Its word property concerns the same target as the interleaved merge, and
+can therefore support a separate energy candidate formed from its child
+product. It does not identify the family with the soft-truncated family
+of the printed generation procedure, or establish the printed word count
+or running time; see \cite{gap:alvv16_approximation_parameters}.
+
+\subsection{Borel projections of the literal finite iteration}
+
+\begin{lemma}[The actual step and every finite iterate are Borel]
+    \label{lem:borel_literal_interval_family_trim_iterates}
+    \lean{TNLean.MPS.AreaLaw.intervalFamilyTrimStep_eq_trimMatrixRange,
+        TNLean.MPS.AreaLaw.measurable_projectionMatrix_intervalFamilyTrimStep,
+        TNLean.MPS.AreaLaw.measurable_projectionMatrix_intervalFamilyTrimIterate,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_intervalFamilyTrimIterate}
+    \leanok
+    Fix an interval, an operator family and the collective-trimming
+    threshold. The actual orthonormal-basis step of
+    Lemma~\ref{lem:interval_family_trim_step} agrees with the canonical
+    range trim of its actual family-image projection. Hence a constructed
+    initial space with Borel actual projection has a Borel actual
+    projection after every finite number of literal rounds. Its true
+    viability event is Borel for every fixed global target and real
+    error, retaining the whole interval exterior. Empty families, zero
+    spaces and zero rounds are included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_family_trim_step,lem:interval_family_trim_iterates}
+    The actual family-image projection is the joint support of the
+    operators times the current projection, and is Borel. The canonical
+    range trim is Borel across rank changes. Basis invariance identifies
+    this trim with the original step using its chosen orthonormal basis.
+    Apply induction to the existing recursion, which uses the preceding
+    current space and trims at every successor. The true tensor-coordinate
+    viability test gives the final event assertion.
+\end{proof}
+
+\begin{definition}[Canonical sampling followed by the literal iteration]
+    \label{def:canonical_sampled_interval_interleaved_parent}
+    \lean{TNLean.MPS.AreaLaw.canonicalSampledIntervalInterleavedTrim}
+    \leanok
+    Fix the interval configuration space $\C^C$, where $d=|C|$, and the
+    prescribed coordinate equivalence $e:\{1,\ldots,d\}\simeq C$.
+    Let $\Omega_C=\prod_{j=0}^d U(j)$. For an actual candidate space $W$,
+    relabel its actual orthogonal projection to a matrix on $\C^d$ and
+    take the canonical range-basis sample using the actual-rank coordinate
+    of $\omega\in\Omega_C$. Retain its first $\min(s,\dim W)$ columns and
+    carry this sample back through $e$. Apply the existing literal
+    interleaved iteration, with fixed family and threshold, for
+    $\lceil\log_D(D^2s)\rceil$ rounds when $D\ge2$ and $s\ge1$.
+    This retains the corrected integer count and current-space assignment
+    documented in \cite{gap:alvv16_approximation_parameters}.
+\end{definition}
+
+\begin{lemma}[The actual canonical sampled parent is jointly Borel]
+    \label{lem:borel_canonical_sampled_interval_interleaved_parent}
+    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim,
+        TNLean.MPS.AreaLaw.measurableSet_isViable_canonicalSampledIntervalInterleavedTrim}
+    \leanok
+    Fix the family, threshold, nominal sample bound and number of rounds
+    before the candidate and unitary variables. If the actual projection
+    of $W(x)$ is Borel, then the actual projection of the preceding
+    canonical sampled parent is jointly Borel in $(x,\omega)$. For every
+    fixed global target $G$ and real error $\delta$, the event that this
+    exact parent is $\delta$-viable for $G$ is Borel, with the whole parent
+    exterior retained. The true failure event is Borel as well.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_sampled_interval_interleaved_parent,
+        lem:borel_literal_interval_family_trim_iterates}
+    Fixed coordinate relabeling of the actual candidate projection is
+    continuous. The canonical sampled projection is jointly Borel across
+    rank changes, and its transport back to the interval is a fixed
+    coordinate isometry. Apply the preceding finite-iteration theorem
+    and the original viability test to the fixed global target.
+\end{proof}
+
+These results prove measurability of the actual finite parent construction.
+They do not assume that an arbitrary varying orthonormal-basis selection
+is measurable, and do not assert an adaptive success probability or a
+running-time bound.
+
+\subsection{Unconditional output size and uniform true parent failure}
+
+\begin{lemma}[Every canonical parent seed satisfies the recorded size bounds]
+    \label{lem:canonical_interleaved_parent_unconditional_profile}
+    \lean{TNLean.MPS.AreaLaw.canonicalSampledIntervalInterleavedTrim_profile}
+    \leanok
+    Let $D\ge2$, $s\ge1$, $N\le D^2$ and $\xi>0$. For any interval
+    candidate $W$ and every seed, the canonical sampled interleaved parent
+    has dimension at most $M=D^6s^3$. It has at most $M$ recorded generators,
+    each with weighted internal-cut Schmidt rank at most $M$.
+    No viability assumption on $W$ or its sample is needed. This is a
+    bound on the recorded generators, not on the Schmidt rank of their
+    entire span.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_sampled_interval_interleaved_parent,
+        lem:interval_family_trim_iterates}
+    The transported sample has dimension at most $s$ for every seed.
+    At the fixed count $k=\lceil\log_D(D^2s)\rceil$, the numerical profile
+    gives $N^ks\le D^6s^3$. Apply the existing dimension and recorded-rank
+    bounds of the literal iteration. The count is positive, so the final
+    recorded family has undergone an actual collective trim.
+\end{proof}
+
+\begin{lemma}[Uniform true failure of the physical canonical parent]
+    \label{lem:physical_canonical_interleaved_parent_true_failure}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_interval_parent_failure}
+    \leanok
+    Retain the physical hypotheses, universal constants, calibrated
+    parameters, common reference and ordered-word family of
+    Lemma~\ref{lem:physical_interleaved_iterates}. The actual clipped
+    target $T$, number of operators $N$ and family $(F_i)$ are chosen
+    before the radius, child spaces and seed. For every admissible radius,
+    the preceding dimension and recorded-rank bounds hold for every
+    candidate and seed.
+
+    Let two actual adjacent children be $3/200$-viable for the same
+    original full ground space $G$, with dimensions at most $M=D^6s^3$.
+    Form their actual adjacent-coordinate tensor merge $W$. On the fixed
+    product Haar space for the parent configuration space, the true event
+    that its canonical sampled interleaved output fails to be
+    $3/200$-viable for $G$ is Borel and has probability at most
+    \begin{align}
+        \beta=(L+1)^{-2}.
+    \end{align}
+    The entire parent exterior is retained. The block-leaf, fixed failure
+    scale, capped-gap and hard-clipped-family qualifications are unchanged;
+    see \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_iterates,
+        lem:canonical_interleaved_parent_unconditional_profile,
+        lem:borel_canonical_sampled_interval_interleaved_parent,
+        thm:actual_adjacent_interval_merge}
+    The merged input has dimension at most $M^2=D^{12}s^6$. Actual target
+    closeness transfers its original-ground-space viability to
+    quarter-viability for the chosen clipped target. The native canonical
+    Haar estimate then gives failure at most $\beta$ at the common overlap
+    $a=3/(32D^{12}s^5)$. The calibrated nominal sample bound is exactly
+    the one required by this estimate, since
+    $\log(1/\beta)=2\log(L+1)$.
+
+    For every successful sample, its dimension is at most $s$ and the
+    existing deterministic arbitrary-initial-space iteration proves the
+    desired output viability for the original $G$. Thus the true parent
+    failure set is contained in the true sample failure set. Monotonicity
+    of measure proves the bound. The actual Borel parent projection gives
+    measurability of the true failure event.
+\end{proof}
+
+This is a uniform one-parent result. Theorem~\ref{thm:physical_canonical_tree_joint_probability}
+combines the actual balanced tree's conditionally fresh coordinates into
+the joint probability estimate. No running-time assertion follows here.
+
+\subsection{Unconditional profiles throughout the sampled tree}
+
+\begin{lemma}[The full short-interval profile]
+    \label{lem:full_short_interval_dimension_rank_bounds}
+    \lean{TNLean.MPS.AreaLaw.interval_top_dimension_and_rank_bounds}
+    \leanok
+    Suppose $q\ge1$, $0\le\xi\le1$, and $q^{\mathrm{width}}\le M$.
+    The full space on an interval of length at most $\mathrm{width}$ has
+    dimension at most $M$ and an orthonormal recorded spanning family with
+    weighted internal-cut Schmidt ranks at most $M$. No viability premise
+    is required.
+\end{lemma}
+\begin{proof}\leanok
+    The number of sites in the interval is at most its length, so the
+    full dimension is at most $q^{\mathrm{width}}$. Use its orthonormal
+    basis and $\xi^2\le1$ in the existing full-space rank bound.
+\end{proof}
+
+\begin{lemma}[Every space of the actual canonical sampled recursion]
+    \label{lem:canonical_sampled_tree_unconditional_profile}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingTree_profile}
+    \leanok
+    Fix a positive leaf width, $q\ge1$, $D\ge2$, $s\ge1$ and
+    $0<\xi\le1$. Let $M=D^6s^3$, suppose $q^{\mathrm{width}}\le M$,
+    and fix one family of at most $D^2$ operators for each long interval.
+    For every global choice of interval unitaries, every retained space
+    of the existing canonical sampled balanced recursion has dimension at
+    most $M$ and the recorded weighted-rank bound $M$.
+    This holds on every history, including those where viability fails.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:canonical_interleaved_parent_unconditional_profile,
+        lem:full_short_interval_dimension_rank_bounds}
+    Apply the existing balanced-recursion invariant. A short leaf is its
+    actual full space. Every long parent is its actual canonical sample
+    and literal interleaved trim, which has the unconditional profile for
+    arbitrary children. No separate tree recursion is introduced.
+\end{proof}
+
+\begin{lemma}[One physical collection of data for all histories]
+    \label{lem:physical_canonical_interval_sampling_data}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_interval_sampling_data}
+    \leanok
+    Under the physical hypotheses and calibrated parameters of
+    Lemma~\ref{lem:physical_canonical_interleaved_parent_true_failure},
+    choose the common reference and the actual clipped target and operator
+    family of every long interval before the radius and all global unitary
+    choices. Retain their target comparisons and ordered-word certificates.
+    The same data give the preceding unconditional recorded profile on
+    every valid interval for every global choice. Each long parent also
+    retains its true original-ground-space failure bound $(L+1)^{-2}$
+    under bounded viable children.
+    The leaf width is $4\ell$, and the capped-gap, fixed failure scale and
+    hard-clipped-family qualifications remain unchanged.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_canonical_interleaved_parent_true_failure,
+        lem:canonical_sampled_tree_unconditional_profile}
+    Select the data once from the physical parent theorem. The original
+    spectral hypotheses give $q\ge2$ and nonzero ground-space dimension.
+    The actual common radius is at most one. The shared numerical leaf
+    estimate gives $q^{4\ell}\le D^6s^3$, so the deterministic invariant
+    applies. The selected families still satisfy their same local true
+    failure bounds; they are not selected again for different histories.
+\end{proof}
+
+Only the recorded size bounds are asserted on all intervals here.
+Theorem~\ref{thm:physical_canonical_tree_joint_probability} proves
+simultaneous viability and the joint probability estimate for one actual
+sampled root hierarchy.
+
+\subsection{Joint success for the actual physical sampled tree}
+
+\begin{definition}[The true joint event of one hierarchy]
+    \label{def:canonical_interval_sampling_tree_good}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingTreeGood}
+    \leanok
+    For fixed families, radius, global target and root interval $[p,r)$,
+    let $\mathcal G$ be the event that the literal sampled retained space
+    is $\delta$-viable at the root and at every internal interval of its
+    actual midpoint subdivision. No condition is imposed on other
+    overlapping intervals.
+\end{definition}
+
+\begin{lemma}[Measurability of true joint success]
+    \label{lem:borel_canonical_interval_sampling_tree_good}
+    \lean{TNLean.MPS.AreaLaw.measurableSet_canonicalIntervalSamplingTreeGood}
+    \leanok
+    For a valid root interval, the event $\mathcal G$ is Borel.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_interval_sampling_tree_good,
+        lem:borel_canonical_interval_sampling_tree}
+    Each actual retained-space viability event is Borel. Intersect the
+    root event with those for the finite list of its internal intervals.
+\end{proof}
+
+\begin{theorem}[Joint success of the actual physical sampled hierarchy]
+    \label{thm:physical_canonical_tree_joint_probability}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_tree_joint_probability}
+    \leanok
+    Under the physical hypotheses and calibrated parameters of
+    Lemma~\ref{lem:physical_canonical_interval_sampling_data}, choose the
+    same common reference, clipped targets and operator families before
+    the common radius and all global seeds. Retain all their target
+    comparisons and ordered-word certificates. For every admissible
+    radius, every retained space satisfies the unconditional dimension
+    and recorded-rank profile on every seed.
+
+    Let $\mathcal G$ require $3/200$-viability for the original full ground
+    space at the full-chain root and all internal intervals in that
+    root's actual subdivision. Under the specified finite product Haar
+    law,
+    \begin{align}
+        \mathbb P(\mathcal G^c) & \le\frac{L-1}{(L+1)^2},
+                                & \mathbb P(\mathcal G)   & \ge1-\frac{L-1}{(L+1)^2}.
+    \end{align}
+    Here the numerator is read as zero at $L=0$. The event is Borel.
+    The block-leaf, fixed failure scale, capped-gap and hard-clipped-family
+    qualifications remain explicit; see
+    \cite{gap:alvv16_approximation_parameters}. No running-time or
+    soft-Hamiltonian energy assertion is made by this theorem.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:physical_canonical_interval_sampling_data,
+        lem:borel_canonical_interval_sampling_tree_good,
+        thm:canonical_interval_joint_probability}
+    Select the physical data once. At every fixed baseline history, the
+    actual two children satisfy the common size bounds, independently of
+    whether previous viability conditions succeeded. When they are
+    viable, the retained physical parent estimate therefore bounds its
+    true failure probability by $(L+1)^{-2}$. Apply the joint conditional
+    estimate to the existing recursion. Its actual internal-interval list
+    has at most $L-1$ members. Measurability of true joint success and
+    the probability of its complement give the lower bound.
+\end{proof}
+
+
+\section{Probabilistic Ritz output from the same canonical root}
+
+\begin{theorem}[The same successful root yields a polynomial MPS Ritz space]
+    \label{thm:physical_canonical_ritz_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_ritz_polynomial_approximation}
+    \leanok
+    Let $H=\sum_i h_i$ be an open nearest-neighbour chain of positive
+    contractions. Let $\mu<\nu$ be actual spectral values, with
+    $\mu$ the ground energy and every other spectral value at least
+    $\mu+\gamma$, where $\gamma>0$. Write $G$ for the full ground space
+    and $r=\dim G$.
+
+    For fixed local dimension $q$ and gap lower bound $\gamma$, there
+    are $C>0$ and $k\in\mathbb N$, chosen before the length, interaction,
+    multiplicity, accuracy and seeds, with the following property.
+    Choose the physical targets, references and families once as in
+    Theorem~\ref{thm:physical_canonical_tree_joint_probability}, retaining
+    all their ordered-word certificates. These choices precede the
+    requested accuracy $\eta>0$.
+
+    Put $A=\|H\|-\mu$, $c=\gamma/A$, and use the reference and final
+    refinement parameters of Lemma~\ref{lem:physical_dg_automatic_refinement},
+    with $D_{\rm tree}=D_{\rm ref}\lceil1/a\rceil$ and
+    $D_{\rm filter}=D$. Its common radius $\xi$ is admissible for the
+    same canonical tree. The actual event $\mathcal G_\eta$ of joint
+    $3/200$-viability at its root and internal intervals is Borel and
+    satisfies
+    \begin{align}
+        \mathbb P(\mathcal G_\eta^c)
+         & \le\frac{\max\{L-1,0\}}{(L+1)^2},   &
+        \mathbb P(\mathcal G_\eta)
+         & \ge1-\frac{\max\{L-1,0\}}{(L+1)^2}.
+    \end{align}
+    The dimension and recorded-rank profiles hold on every seed.
+
+    For every $U\in\mathcal G_\eta$, let $S_0$ be that seed's actual
+    full-interval root. Apply the literal raw filter and collective trim
+    $n=\lceil(4/c)\log(1/\rho)\rceil+1$ times to this same $S_0$,
+    where $\rho=\eta\gamma/(2A+\eta\gamma)$, and let $W$ be its
+    terminal native space. Its actual compressed Ritz space $R$ has
+    dimension $r$, lies in $W$, and is mutually $\eta/2$-close to $G$.
+    Every vector in $R$ and every vector in the native initial root has
+    the same bond bound
+    \begin{align}
+        B_{\rm out}
+         & =10^6(D_*N_*)^2(L+1)(D^6s^3)^2,\notag    \\
+        B_{\rm out}
+         & \le C\bigl((L+1)(r+1)(1+1/\eta)\bigr)^k.
+        \label{eq:canonical_ritz_polynomial_bond}
+    \end{align}
+    The constants and radii are common to all successful seeds at that
+    accuracy. The block leaves, capped gap, hard-clipped family and
+    corrected integer counts remain as in
+    \cite{gap:alvv16_approximation_parameters,gap:alvv16_final_filter_gain}.
+    No measurability of a chosen Ritz basis or running time is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_canonical_tree_joint_probability,
+        lem:physical_dg_automatic_refinement,lem:full_interval_trim_native_mps,
+        lem:interleaved_filter_scale_count}
+    Select the physical data once. The scalar reference and refinement
+    estimates choose $C,k$ before length and accuracy. The inequality
+    $a\lceil1/a\rceil\ge1$ places the automatic radius below the same
+    physical tree radius. Apply the joint probability theorem at this
+    radius, preserving the chosen families and every actual root.
+
+    For each successful seed, full-interval viability is native closeness
+    to $G$, and its unconditional dimension bound is $D^6s^3$.
+    Lemma~\ref{lem:physical_dg_automatic_refinement} therefore applies to
+    this exact $S_0$. Its terminal space and Ritz space are the stated
+    literal constructions. The recorded initial generators and the
+    terminal trimming generators give the same all-span bond bound.
+    The count and reference estimates give
+    (\ref{eq:canonical_ritz_polynomial_bond}) independently of the seed.
+\end{proof}
+
+
+\begin{lemma}[Root energy from calibrated words]
+    \label{lem:calibrated_root_energy}
+    \lean{TNLean.MPS.AreaLaw.exists_canonical_root_energy_of_calibrated_words}
+    \leanok
+    Let $q\ge1$ and let $H=\sum_i h_i$ be a nearest-neighbour chain
+    of positive contractions. Let $\mu\in\operatorname{spec}(H)$, and suppose that
+    every spectral value is either $\mu$ or at least $\mu+\gamma$,
+    where $\gamma>0$. Let $G$ be its full ground space. Suppose that
+    $\ell\ge21$, $s\ge1$, $D\ge2$, and
+    $D=(\max(q,50)\ell^2)^{22\ell}$.
+    Put $a=3/(32D^{12}s^5)$, $\tau=a^2/1048576$, and
+    $\Delta=1/(200000D^{12})$.
+
+    Fix interval targets $T_J$ of dimension $\dim G$ and families
+    $\mathcal F_J$ such that $G$ is $\tau$-close to $T_J$.
+    For every $\delta<1$, every $\delta$-viable space $S$ for $T_J$,
+    and every integer $p\ge0$, suppose that the span $S_p$ of its
+    images under all length-$p$ words satisfies
+    $\dim S_p\le D^{2p}\dim S$ and is
+    $\Delta^p/(1-\delta)^2$-viable for $T_J$.
+    At any trimming radius, every seed for which the root and its listed internal intervals
+    are $3/200$-viable for $G$ then admits one energy function on
+    that subtree, with the bounds and updates of
+    Lemma~\ref{lem:canonical_interval_root_energy_assignment}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:canonical_interval_root_energy_assignment}
+    The spectral assumptions give $\mu=\min\operatorname{spec}(H)$.
+    Since $\ell\ge1$, the formula for $D$ gives $50\ell^2\le D$.
+    At $p=1$ and $\delta=1/4$, the word bound gives dimension
+    at most $D^2\dim S$ and error $\Delta/(1-1/4)^2$.
+    Lemma~\ref{lem:canonical_interval_root_energy_assignment} applies
+    to these same targets, families and successful seed.
+\end{proof}
+
+\begin{corollary}[Energy and Ritz output from one successful tree]
+    \label{cor:canonical_ritz_energy}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy}
+    \leanok
+    Under the hypotheses and with the same choices as
+    Theorem~\ref{thm:physical_canonical_ritz_polynomial}, every seed
+    $U\in\mathcal G_\eta$ admits one function $E_U(l,r)$ on interval
+    endpoints. It satisfies
+    $e_{[l,r)}-49/16\le E_U(l,r)\le e_{[l,r)}$ at the root and
+    each listed internal interval, where $e_{[l,r)}$ is the actual
+    minimum of the original regional Hamiltonian. At used short leaves
+    the value is exactly $e_{[l,r)}$.
+
+    At each listed long parent $[l,r)$, put $k=l+\lfloor(r-l)/2\rfloor$,
+    $u=l+\ell$, $v=r-\ell$, and let $e_L,e_R$ be the attained
+    minima on its two collars. The middle center is
+    $E_U(l,k)+E_U(k,r)-e_L-e_R-2$. The parent estimate is the minimum
+    of the actual raw soft matrix compressed to the one-word image of
+    these same two children under the selected family, minus three.
+    These are the updates of Lemma~\ref{lem:canonical_interval_root_energy_assignment}.
+
+    The function $E_U$ belongs to the original canonical tree and is
+    chosen once for that seed. The same original root, literal final
+    refinement, Ritz space, two-sided errors, and polynomial all-span
+    bound of Theorem~\ref{thm:physical_canonical_ritz_polynomial} are
+    retained. No second physical family or sampled tree is selected.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:physical_canonical_ritz_polynomial,lem:calibrated_root_energy}
+    Select the data of
+    Theorem~\ref{thm:physical_canonical_ritz_polynomial} once.
+    Its spectral assumptions and retained word certificates satisfy
+    Lemma~\ref{lem:calibrated_root_energy}. For each successful seed,
+    that lemma gives one energy function on the same root subtree.
+    Retain it together with the unchanged terminal refinement and
+    Ritz conclusions.
+\end{proof}

@@ -1,0 +1,54 @@
+\subsection{The regularized logarithmic estimate}
+
+\begin{corollary}[Logarithmic dimension bound]
+    \label{cor:physical_low_density_log_dimension}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_viable_subspace_log_bound}
+    \leanok
+    For every fixed bandwidth $\eta>0$ there is $K_\eta>0$, chosen
+    before the physical data, such that the following holds.
+    Let $H$ be a nearest-neighbour chain of supported positive contractions
+    with local dimension $q\ge2$, and let $J$ be any physical interval.
+    For every $v>0$ there is a $3/200$-viable subspace $W$ for
+    $G(\eta-v)$ such that
+    \begin{align}
+        \dim W\le\dim G(\eta)\,
+        \exp\!\left[\frac{K_\eta}{v}
+            \bigl(1+\log q+\log(1+1/v)\bigr)^3\right].
+        \label{eq:ld_log_dimension}
+    \end{align}
+    No spectral gap or sampling estimate is an additional premise.
+    The fixed-bandwidth and interval scope is recorded
+    in~\cite{gap:alvv16_low_energy_family_scope}.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:physical_low_density_minimum_dimension}
+    Let $C$ be the constant of
+    Theorem~\ref{thm:physical_low_density_minimum_dimension}.
+    Set $B=\max\{12,\eta\}$, $F=102+\log B$ and
+    $K_\eta=66(C+1)(6+2\log(C+1))BF^3$.
+    If $0<v\le\eta$, choose the numerical count base
+    $m=q\lceil e^{100}\rceil$ before applying that construction.
+    It satisfies $m\ge q$ and $\log m\ge100$.
+    For $g=\min\{\min(v,\eta/2)/6,1\}$, one has
+    $1/g\le B/v$ and
+    $1+\log m+\log(1/g)\le
+        F(1+\log q+\log(1+1/v))$.
+    The logarithm of its actual count therefore satisfies
+    $\log(D_0^3)\le(K_\eta/v)(1+\log q+\log(1+1/v))^3$.
+    Exponentiating and retaining the same space $W$ gives
+    (\ref{eq:ld_log_dimension}).
+    If $v>\eta$, every eigenvalue is larger than
+    $\lambda_0+\eta-v$, so $G(\eta-v)=0$; take $W=0$.
+\end{proof}
+
+For $L\ge2$ and $v=\mu/\log L$, the exponent in
+(\ref{eq:ld_log_dimension}) becomes
+\begin{align*}
+    K_\eta\frac{\log L}{\mu}
+    \left(1+\log q+\log\!\left(1+\frac{\log L}{\mu}\right)\right)^3.
+\end{align*}
+This is an explicit positive-logarithm form of the count in
+\cite[Proposition~prop:albootstrap-ld, lines 1107--1128]{Arad2016RigorousRG}.
+If the low-density hypothesis bounds $\dim G(\eta)$ by $r$, the same
+bound holds with multiplicity $r$. The entropy and accuracy-dependent
+matrix product approximation estimates require further arguments.

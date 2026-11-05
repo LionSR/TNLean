@@ -1,0 +1,105 @@
+\section{An orthonormal MPS basis for an approximate low-energy space}
+
+The individual approximation theorem also gives a basis for a space close
+to the original inner band. The basis vectors are first approximated with
+one common MPS bound. Their actual linear image determines the candidate
+space; its dimension and independence are conclusions. Orthogonalizing
+inside that same space costs the number of generators in the bond bound.
+This is the mathematical basis consequence described in
+\cite[line 288 and Theorem~thm:al-ld, lines 1096--1105]{Arad2016RigorousRG}.
+
+\begin{lemma}[The span of a finite indexed MPS family]
+    \label{lem:mps_indexed_family_span}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_mem_span_range}
+    \leanok
+    Let $(\phi_i)_{i\in I}$ be a finite indexed family of open-boundary
+    MPS of bond dimension at most $D$. Every vector in their span is
+    an MPS of bond dimension at most $|I|D$.
+    Repeated or zero family members and empty families are allowed.
+\end{lemma}
+\begin{proof}\leanok
+    Pass to the finite set of values of the family. Its cardinality is
+    at most $|I|$. Apply the finite-span cut-rank estimate and enlarge
+    the bond bound. No independence hypothesis is needed.
+\end{proof}
+
+\begin{theorem}[An actual approximate-band orthonormal MPS basis]
+    \label{thm:low_energy_orthonormal_mps_basis}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_low_energy_orthonormal_mps_basis}
+    \leanok
+    Fix a bandwidth $\eta>0$. There is $K_\eta>0$, chosen before
+    the chain and its physical data, with the following property.
+    Let $q>0$ and $H=\sum_i h_i$ be the actual positive-contraction
+    nearest-neighbour chain. Put
+    \[
+        G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H,\qquad
+        T=G(\eta-v),\qquad n=\dim T,\qquad r=\dim G(\eta),
+    \]
+    where $\lambda_0=\min\sigma(H)$ and $v>0$.
+    For $0<\delta\le1$, set
+    \begin{align*}
+        g        & =\min\{\min(v,\eta/2)/6,1\},                   &
+        u        & =1+\log q+\log(1/g),                             \\
+        \epsilon & =\frac{\delta}{8(n+1)},                        &
+        a        & =16+\log(1/g)+\log\frac{1024(L+1)(n+1)}\delta.
+    \end{align*}
+    An integer $B\ge1$ is chosen before the target basis and vectors,
+    with
+    \[
+        \log B\le K_\eta
+        \left(u^3/g+g^{-1/4}a^{3/4}u\right)(1+\log a).
+    \]
+    Take the actual standard orthonormal basis $(b_i)_{i=1}^n$ of $T$.
+    There is a family of unit MPS $\phi_i$, each of bond dimension at
+    most $rB$, with $\|\phi_i-b_i\|^2\le\epsilon/2$.
+    For the actual map $F:T\to\mathcal H$ defined by $Fb_i=\phi_i$
+    and its range $V$, one has
+    \[
+        F\text{ injective},\qquad
+        V=\operatorname{span}\{\phi_i\},\qquad \dim V=n\le r.
+    \]
+    The spaces $V$ and $T$ are $\delta$-close in both directions.
+    Moreover, $G(\eta)$ is $\delta$-close to $V$: every vector of $V$
+    retains at least the fraction $1-\delta$ of its squared norm upon
+    projection onto $G(\eta)$.
+    Every vector of $V$ is an MPS of bond dimension at most $nrB$.
+    In particular, the actual standard orthonormal basis of $V$ is an
+    orthonormal MPS family with that bond bound.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:ld_sharp_single_witness,lem:mps_indexed_family_span}
+    Apply the proved physical approximation at accuracy $\epsilon$.
+    Its common global rank factor is chosen before the target basis
+    and works for each of its unit vectors. Since
+    $128(L+1)/\epsilon=1024(L+1)(n+1)/\delta$, its accuracy variable
+    is exactly the displayed $a$.
+    Choose the actual normalized approximant $\phi_i$ to each $b_i$.
+    The distance bound retains its complex phase and gives
+    \[
+        \sum_i\|\phi_i-b_i\|^2
+        \le n\epsilon/2\le\delta/16<1.
+    \]
+    Parseval and finite Cauchy--Schwarz give
+    $\|Fx-x\|^2\le(\delta/16)\|x\|^2$ on $T$.
+    This proves injectivity and dimension equality, while the basis-defined
+    range is exactly the image span. Projection minimality gives forward
+    closeness, and equal-dimensional symmetry gives reverse closeness,
+    with error at most $\delta/16$, hence with error $\delta$.
+    Spectral cutoff inclusion gives $T\subseteq G(\eta)$, which
+    proves $n\le r$ and the asserted outer-band direction of closeness.
+    Apply Lemma~\ref{lem:mps_indexed_family_span} to the same family:
+    every vector of its range, including each vector of its standard
+    orthonormal basis, has bond at most $nrB$.
+\end{proof}
+
+If $T=0$, the constructed range is zero and both basis index sets are empty;
+the argument uses the same finite sums. Scalar local spaces, empty chains
+and every positive deficit are included. The number of output basis vectors
+is exactly $\dim G(\eta-v)$, not a claim of $r$ low-energy eigenstates.
+Under Assumption (LD), $n\le r=\operatorname{poly}(L)$, so the extra
+multiplicity factor and logarithm have their stated polynomial and
+logarithmic sizes. This is mathematical basis existence. It does not
+identify the family with the output of the probabilistic algorithm of
+\cite[Theorem~t:alg2, lines 1869--1874]{Arad2016RigorousRG}, and asserts
+neither its running time nor its advertised energy-output guarantee.
+The basis vectors are not claimed to be energy eigenstates.
