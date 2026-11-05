@@ -1,0 +1,45 @@
+\section{Buffered spectra of the constructed regional approximation}
+\label{sec:regional_soft_spectral}
+
+The represented Hermitian approximation can be fixed before all spectral
+cutoffs and buffers. This gives the following auxiliary for the
+approximating Hamiltonian in the efficient-filter construction of
+Arad, Landau, Vazirani and Vidick~\cite[lines 1412--1420 and 1446--1457]{Arad2016RigorousRG}.
+
+\begin{lemma}[One represented approximation for every buffered cutoff]
+    \label{lem:regional_soft_mpo_buffered_spectra}
+    \lean{TNLean.MPS.AreaLaw.exists_regional_softTruncations_mpo_buffered_spectral_comparison}
+    \leanok
+    Assume the local-interaction, regional lower-energy, order, scale and
+    accuracy hypotheses of Lemma~\ref{lem:regional_soft_hermitian_mpo},
+    and retain its definitions of $G$ and $D$.
+    There is one site-dependent operator chain $T$ of virtual dimension
+    $D$, with identity closing matrix, such that
+    \begin{align}
+        G=G^*,\qquad T=T^*,\qquad\|G-T\|\leq\xi.
+    \end{align}
+    For every $c\in\mathbb R$ and every $w>0$, put
+    \begin{align}
+        U      & =\|G\|+\xi,                               & a & =\min\{c-1,-U\}, \\
+        n      & =\left\lceil\frac{c-a}{2\xi}\right\rceil, &
+        \delta & =\frac{n(2\xi)^2}{(w+\xi)^2}.
+    \end{align}
+    Then the spectral space $E_T(c+w)$ is $\delta$-close to $E_G(c)$,
+    and $E_G(c+w)$ is $\delta$-close to $E_T(c)$.
+    The same operator chain serves every cutoff, buffer and vector.
+    No gap or restriction on the spectrum between the cutoffs is needed.
+\end{lemma}
+\begin{proof}\leanok
+    Construct $T$ using Lemma~\ref{lem:regional_soft_hermitian_mpo}.
+    Its norm bound gives $\|T\|\leq U$, so both spectra lie above $-U$.
+    Apply the two directed buffered comparisons from the companion
+    matrix theory to $G$ and $T$. They use the same lower endpoint,
+    window count and loss, and place no further condition on $T$.
+\end{proof}
+
+This compares the actual regional soft sum with its represented
+approximation. It does not establish the comparison with the original
+Hamiltonian or the final efficient-filter theorem. The construction
+continues to use the corrected interaction-label cluster estimate;
+the false printed physical-support estimate and its counterexamples
+remain recorded in \cite{gap:alvv16_cluster_approximation}.

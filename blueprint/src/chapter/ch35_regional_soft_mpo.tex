@@ -1,0 +1,88 @@
+\section{Finite families of regional soft replacements}
+\label{sec:regional_soft_mpo}
+
+The three regional replacements in the efficient-filter construction of
+Arad, Landau, Vazirani and Vidick~\cite[lines 1373--1392 and 1435--1442]{Arad2016RigorousRG}
+can be assembled using the same original interactions. The following
+operator approximation applies to any finite family of label sets. It
+retains the independent scale and Taylor order, the regional lower energies,
+and an exact real scalar shift.
+
+\begin{lemma}[An actual Hermitian approximation to regional soft replacements]
+    \label{lem:regional_soft_hermitian_mpo}
+    \lean{TNLean.MPS.AreaLaw.exists_regional_softTruncations_hermitian_mpo_of_accuracy}
+    \leanok
+    Let $H=\sum_{i=0}^{N-1}h_i$ act on $N+1$ sites of local dimension
+    $q\geq1$. Suppose the $h_i$ are Hermitian, satisfy $\|h_i\|\leq1$,
+    and are supported on the designated pairs $\{i,i+1\}$. Let
+    $I_j$, $0\leq j<s$, be sets of bond labels, write
+    $R_j=\sum_{i\in I_j}h_i$, and suppose $\epsilon_j I\leq R_j$.
+    For $m\geq1$, $t\geq3m$, $z\in\mathbb R$ and $\xi>0$, put
+    \begin{align}
+        G      & =H+zI+\sum_{j=0}^{s-1}
+        \bigl(\epsilon_jI+h_{m,t}(R_j-\epsilon_jI)-R_j\bigr),                        \\
+        \delta & =\frac{\xi}{\max\{1,s\}}, &
+        W      & =t2^{m+1},                & b & =2(e^{1/3}-1),                      \\
+        r      & =\max\left\{1,
+        \left\lceil\frac{\log\max\{1,N^2\}-\log\log(1+\delta/W)}
+        {-\log b}\right\rceil\right\},                                               \\
+        D_0    & =1+Nq^2,                  & D & =D_0+2s\bigl(D_0+(m+1)r^2q^r\bigr).
+    \end{align}
+    There is one actual site-dependent operator chain $T$ of virtual
+    dimension $D$, with identity closing matrix, such that
+    \begin{align}
+        G=G^*,\qquad T=T^*,\qquad \|G-T\|\leq\xi.
+    \end{align}
+    The family may be empty, and the label sets may overlap.
+\end{lemma}
+\begin{proof}\leanok
+    For each $j$ form the actual one-region replacement
+    $F_j=H-R_j+\epsilon_jI+h_{m,t}(R_j-\epsilon_jI)$.
+    The one-region construction gives an approximation of error $\delta$
+    and bond $D_0+(m+1)r^2q^r$. Construct its Hermitian part with twice
+    this bond and the same error. Combine all these Hermitian operators
+    by diagonal blocks, and represent $(1-s)H+zI$ exactly with bond $D_0$.
+    The identity
+    \begin{align}
+        G=(1-s)H+zI+\sum_j F_j
+    \end{align}
+    gives the stated dimension and Hermiticity. The error is at most
+    $s\delta\leq\xi$. The definition of $\delta$ also covers $s=0$.
+\end{proof}
+
+
+\begin{lemma}[An MPO for the selected regional replacements]
+    \label{lem:selected_regional_soft_mpo}
+    \lean{TNLean.MPS.AreaLaw.exists_selected_regional_softTruncations_hermitian_mpo_of_accuracy}
+    \leanok
+    \uses{lem:regional_soft_hermitian_mpo}
+    Retain the original interactions and parameters of
+    Lemma~\ref{lem:regional_soft_hermitian_mpo}. Let $I_j$, $0\leq j<v$,
+    be regional bond sets, let $S\subseteq\{0,\ldots,v-1\}$, and require
+    $p_jI\leq R_j$ only for $j\in S$. The same bond formula, with
+    $s=|S|$, gives actual Hermitian tensors approximating
+    \begin{align}
+        G=H+zI+\sum_{j\in S}
+        \bigl(p_jI+h_{m,t}(R_j-p_jI)-R_j\bigr)
+    \end{align}
+    to norm error at most $\xi$. An empty selected set is included.
+\end{lemma}
+\begin{proof}\leanok
+    Enumerate the selected set by $\{0,\ldots,|S|-1\}$ and apply
+    Lemma~\ref{lem:regional_soft_hermitian_mpo} to those actual
+    regional sums and lower energies. Reindexing the finite sum
+    identifies exactly the displayed matrix.
+\end{proof}
+
+For fixed $q$, the logarithm of the bond is
+$O_q(m+\log_+t+\log(N+1)+\log(s+1)+\log_+(\xi^{-1}))$.
+Thus logarithmic Taylor order, polynomial scale and region count, and
+inverse-polynomial accuracy give polynomial bond. All regional energies
+and the scalar shift remain explicit; no small norm of the uncentered
+operator is inferred. For five consecutive physical regions, the
+same-operator spectral comparison is proved separately, in the
+five-region soft representation. The final filter
+construction requires further arguments. The approximation uses the
+corrected interaction-label estimate; the printed physical-support
+estimate and its counterexamples remain recorded in
+\cite{gap:alvv16_cluster_approximation}.
