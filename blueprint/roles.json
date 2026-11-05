@@ -736,6 +736,15 @@
         "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy"
       }
     },
+    "ch:alvv_ff_improving_family": {
+      "theorems": [
+        "thm:alvv_ff_improving_family"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:alvv_ff_improving_family": "ALVV Theorem 5.15, existence part: the improving family for frustration-free chains"
+      }
+    },
     "ch:peps_ft": {
       "theorems": [
         "thm:fundamentalTheorem_PEPS"
