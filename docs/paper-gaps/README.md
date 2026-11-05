@@ -1732,6 +1732,15 @@ the source's order-`J` dependence directly. The fixed-length Gaussian and positi
 separately. The reciprocal-length reading of the printed time-cone formula is
 an explicit local correction.
 
+## ALVV: regional energy centers and scalar shifts
+
+[`alvv16_soft_regional_energy_centering.tex`](alvv16_soft_regional_energy_centering.tex)
+records the difference between the source's absolute-error input and its
+one-sided soft center, and the scalar shift required for a bounded regional
+norm. It states the actual central replacement, its positive regional matrix,
+attained minimum and energy bound on the original ground space. Transfer to
+the generated soft target and the recursive energy invariant remain separate.
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
@@ -1907,3 +1916,24 @@ The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
 are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
 The note records the distinction between the source's site endpoints and its
 selected bond indices.
+
+
+## Independent scales and the ground-space recursive witness
+
+[`alvv16_approximation_parameters.tex`](alvv16_approximation_parameters.tex)
+records the nonuniform parameter prescription in the proof of ALVV Theorem 4.9
+and the correction using independent clipping and polynomial scales. The explicit
+rank bound uses the capped gap, preserves one factor of the original ground-space
+dimension and supplies a common reference space for interval trimming. The note
+separates the actual recursive witness and its native root MPS bound from adaptive
+probability, the final filter-and-trim iteration, Ritz extraction and running time.
+The source algorithm remains open while those further steps are unproved.
+
+### Final error reduction for ALVV
+
+[`alvv16_final_filter_gain.tex`](alvv16_final_filter_gain.tex) records an
+exact two-qubit failure of the intermediate multiplicative fidelity gain
+in the proof of Theorem t:alg1. Normalized error contraction, a quantitative
+reference-space trimming budget and the projected trial-space energy
+estimate give a corrected route. The actual final iteration and its
+quantitative comparison remain open.

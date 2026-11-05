@@ -1476,6 +1476,24 @@
         "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
         "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
       }
+    },
+    "sec:interval_cluster_truncation": {
+      "theorems": [
+        "thm:normalized_cluster_label_tail",
+        "thm:physical_cluster_label_mpo",
+        "thm:soft_hamiltonian_mpo_accuracy"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:normalized_cluster_label_tail": "The corrected path estimate specifies interaction labels and retains the lower-energy normalization.",
+        "thm:physical_cluster_label_mpo": "The finite label truncation has constructed operator tensors of dimension r squared times q to the r.",
+        "thm:soft_hamiltonian_mpo_accuracy": "One complete regional soft replacement at scale at least three times the order has an explicit bond bound at every norm accuracy."
+      }
+    },
+    "sec:physical_soft_resampling_tree": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     }
   }
 }

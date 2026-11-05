@@ -8,6 +8,8 @@ import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness
 
+import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
+
 /-!
 # Improving families between buffered physical low-energy spaces
 
@@ -217,8 +219,8 @@ private theorem exists_five_region_physical_buffered_targets
       (by linarith only [hw, hbuffer]) hw hepsilon
   obtain ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hnorm, hres⟩ :=
-    exists_five_region_physical_truncation_residual L q a b ell t
-      (by omega) hell ht (hab.trans (Nat.le_succ b))
+    exists_five_region_independent_truncation_residual L q a b ell t
+      (by omega) hell (by linarith only [ht]) (hab.trans (Nat.le_succ b))
       (hbL.trans (Nat.sub_le L 1)) h hs h0 h1
   have hpos (T : Finset (Fin 5)) : (B t e T).PosSemidef :=
     (Matrix.centered_partially_clipped_sum_posSemidef_and_mulVec_eq_zero
