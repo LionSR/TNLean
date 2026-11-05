@@ -26,9 +26,9 @@ lines 1580–1609. Take a nearest-neighbour chain with terms `0 ≤ h_i ≤ 1`, 
 `G = ker H` and gap `γ`, and a prescribed interval `M`. Then there are `D²` operators `A_i` on
 `M`, with `D = 2^{O(u³/g)}` for `u = 1 + log d + log (1/g)` and `g = min (γ, 1)`, and a `Δ`
 with `D¹² Δ ≤ 10⁻⁵`, such that every `δ`-viable subspace `S` for `G` with `δ < 1` gives a
-`Δ / (1 - δ)²`-viable span of the `A_i S`. Each `A_i` has operator Schmidt rank at most
-`(d² + 4)^{ℓ² + 1}` at every cut inside `M`; this is the least open-boundary bond dimension of a
-matrix product operator for `A_i`, and its logarithm is `O(u⁵/g²)`.
+`Δ / (1 - δ)²`-viable span of the `A_i S`. At every cut inside `M`, each `A_i` has operator
+Schmidt rank, the least bond dimension at that cut of an open-boundary matrix product operator
+for `A_i`, at most `(d² + 4)^{ℓ² + 1}`, whose logarithm is `O(u⁵/g²)`.
 
 The construction follows the proof. Each term is replaced by its range projection (line 1457).
 The three bulk regions around two windows of `2ℓ` bonds are replaced at once by
@@ -639,8 +639,8 @@ There is one universal constant `A ≥ 1`, chosen before all data, such that wit
 * there are `D²` operators `W j` on `M` and `Δ > 0` with `D¹² Δ ≤ 10⁻⁵`, such that every
   subspace `S` of the space of `M` that is `δ`-viable for the ground space, with `δ < 1`, gives a
   `Δ / (1 - δ)²`-viable span of the `W j S`;
-* at every cut of `M`, each `W j` has operator Schmidt rank at most `(d² + 4)^{ℓ² + 1}`, the
-  least bond dimension of an open-boundary matrix product operator for `W j` at that cut, and
+* at every cut of `M`, each `W j` has operator Schmidt rank (the least bond dimension at that
+  cut of an open-boundary matrix product operator for `W j`) at most `(d² + 4)^{ℓ² + 1}`, and
   `log ((d² + 4)^{ℓ² + 1}) ≤ 4 (A + 1)² u⁵ / g²`, the source's `2^{Õ(γ⁻² log⁵ d)}`.
 
 Uniqueness of the ground state is not needed; with a unique ground state `Γ` the ground space

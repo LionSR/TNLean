@@ -215,7 +215,7 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
     \label{thm:alvv_ff_improving_family}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family}
     \leanok
-    \uses{def:chain_model,thm:physical_dg_viable_family}
+    \uses{def:chain_model}
     There is a universal constant $A\ge1$ with the following property. Let
     $H=\sum_ih_i$ be a nearest-neighbour Hamiltonian on $(\C^q)^{\otimes L}$
     with $0\le h_i\le\Id$, let $G=\ker H$, and let $\gamma>0$ satisfy
@@ -267,7 +267,8 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
     Lemma~\ref{lem:alvv_ff_family_three_region} its eigenvalues are $0$ on
     $G$ and at least $g/15$ on $G^\perp$, and at most $4\ell+6\le10\ell$.
     The Chebyshev filter $K=P(\widetilde H)$ of degree $\ell^2$ with endpoints
-    $0$ and $g/20$ fixes $G$, expands it, and contracts $G^\perp$ by
+    $0$ and $g/20$ fixes $G$, expands it, and satisfies
+    $\|Kx\|^2\le\Delta\|x\|^2$ for $x\perp G$, with
     \begin{align}
         \Delta & =4\exp\Bigl(-4\ell^2\sqrt{\tfrac{g}{200\ell}}\Bigr),
         \label{eq:alvv_ff_family_contraction}
