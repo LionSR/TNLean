@@ -1,0 +1,393 @@
+\section{Buffered filters at a fixed low-energy bandwidth}
+
+Theorem~\ref{thm:interval_low_energy_family} constructs one improving family
+on every prescribed interval. Lemma~\ref{lem:dyadic_interval_low_energy_family}
+makes the original-to-clipped comparison loss geometrically small while
+retaining one count and suppression bound.
+
+Fix a positive bandwidth $\eta_{\rm LD}$. Let $H=\sum_{i=0}^{L-2}h_i$ be
+an open chain with $q\ge2$, where $0\le h_i\le I$ and $h_i$ is supported
+on sites $i,i+1$. For integers $a,b,\ell$ with $\ell\ge1$,
+$a+2\ell\le b$ and $b+2\ell\le L-1$, partition the sites at
+$0,a+1,a+2\ell,b+1,b+2\ell,L$. Let $A_j$ be the sum of the bonds
+internal to region $j$, and let $Y$ be the sum of the four crossing bonds.
+The regional ground energies $e_j$ determine
+\begin{align}
+    H_0 & =\sum_{j=0}^4(A_j-e_jI)+Y=H-\Bigl(\sum_j e_j\Bigr)I,
+    \notag                                                     \\
+    B   & =\sum_{j\in\{0,2,4\}}
+    \bigl(\min(A_j,(e_j+\ell)I)-e_jI\bigr)
+    +\sum_{j\in\{1,3\}}(A_j-e_jI)+Y.
+    \label{eq:ld_family_clipping}
+\end{align}
+The minimum is defined by spectral calculus. Write $E_0=\min\sigma(H_0)$,
+$G(c)=\mathbf1_{(-\infty,E_0+c]}(H_0)\mathcal H$ and
+$F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
+
+\begin{lemma}[Buffered targets at an independent clipping threshold]
+    \label{lem:ld_buffered_targets_independent}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_independent_low_energy_targets_of_residual_budget_at_error}
+    \leanok
+    Keep the five physical regions and their integer window length $\ell$.
+    In the clipped sum of (\ref{eq:ld_family_clipping}), replace only the
+    clipping threshold by a real $t\ge0$; denote the result by $B_t$.
+    Let $w>0$, $\nu\ge0$, $19+\eta_{\rm LD}\le t$ and
+    $\xi=288e^{11/8}e^{-(t-\eta_{\rm LD})/8}$. Suppose
+    $\xi\le1$ and $2(6+\eta_{\rm LD})\xi\le\nu w^2$.
+    The actual original regional minima and centered ground energy can
+    be chosen with $0\le E_0\le4$ and $\|B_t\|\le3t+4\ell$.
+    For every $6w\le\eta\le\eta_{\rm LD}$, put
+    $F_t(c)=\mathbf1_{(-\infty,E_0+c]}(B_t)\mathcal H$,
+    $T_-=F_t(\eta-2w)$ and $T_+=F_t(\eta-w)$.
+    Then $T_-\subseteq T_+$, $G(\eta)$ is $\nu$-close to $T_+$,
+    and $T_-$ is $\nu$-close to $G(\eta-3w)$.
+    No spectral gap is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    The independent-threshold three-bulk residual is bounded by $\xi$
+    on every current low-energy space of bandwidth at most
+    $\eta_{\rm LD}$. Every partially clipped centered sum is positive.
+    For each positive $c\le\eta_{\rm LD}$,
+    \begin{align}
+        \left\lceil\frac{E_0+c}{2\xi}\right\rceil(2\xi)^2
+        \le 2(E_0+c)\xi+4\xi^2
+        \le2(6+c)\xi\le\nu w^2\le\nu(w+\xi)^2.
+        \label{eq:ld_family_window_budget}
+    \end{align}
+    Apply the comparison in both directions at $c=\eta-w$ and
+    $c=\eta-3w$. The buffer ensures that both cutoffs are positive.
+    The original regional normalization and the independent clipping
+    retain the norm ceiling $3t+4\ell$.
+\end{proof}
+
+\begin{lemma}[Buffered targets at a prescribed error]
+    \label{lem:ld_buffered_targets_at_error}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_targets_of_residual_budget_at_error}
+    \leanok
+    Let $w>0$, $\nu\ge0$, $19+\eta_{\rm LD}\le\ell$, and put
+    $\xi=288e^{11/8}e^{-(\ell-\eta_{\rm LD})/8}$.
+    Suppose that $\xi\le1$ and
+    $2(6+\eta_{\rm LD})\xi\le\nu w^2$.
+    The original regional minima, common regional ground vector and
+    centered ground vector can be chosen so that $0\le E_0\le4$,
+    $\|B\|\le7\ell$, and the following hold for every
+    $6w\le\eta\le\eta_{\rm LD}$. Set
+    $T_-=F(\eta-2w)$ and $T_+=F(\eta-w)$.
+    Then $T_-\subseteq T_+$, $G(\eta)$ is $\nu$-close to $T_+$,
+    and $T_-$ is $\nu$-close to $G(\eta-3w)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:ld_buffered_targets_independent}
+    Set $t=\ell$ in Lemma~\ref{lem:ld_buffered_targets_independent}.
+    Its norm ceiling is $3\ell+4\ell=7\ell$.
+\end{proof}
+
+\begin{lemma}[Buffered targets from a physical residual budget]
+    \label{lem:ld_buffered_targets}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_targets_of_residual_budget}
+    \leanok
+    If $\xi\le1$ and $2(6+\eta_{\rm LD})\xi\le w^2/200$, the
+    targets in Lemma~\ref{lem:ld_buffered_targets_at_error} have the
+    stated comparisons with $\nu=1/200$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:ld_buffered_targets_at_error}
+    Set $\nu=1/200$.
+\end{proof}
+
+\begin{theorem}[One physical family with a common count and suppression bound]
+    \label{thm:fixed_bandwidth_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_low_energy_family}
+    \leanok
+    For every $\eta_{\rm LD}>0$ there is a real constant
+    $C\ge\max\{100,19+\eta_{\rm LD}\}$ with the following property.
+    Choose an integer $m\ge q$, a width $w>0$, and set
+    \begin{align}
+        g    & =\min\{w,1\},                    &
+        u    & =1+\log m+\log(1/g),             &
+        \ell & =\left\lceil Cu^2/g\right\rceil, &
+        D    & =(m\ell^2)^{22\ell}.
+        \label{eq:ld_family_parameters}
+    \end{align}
+    Suppose the five regions fit as above. Then $\ell\ge21$ and
+    \begin{align}
+        \log D
+         & \le\frac{22(C+1)(6+2\log(C+1))}{g}\,u^3.
+        \label{eq:ld_family_log_count}
+    \end{align}
+    For the actual clipped matrix $B$ of
+    (\ref{eq:ld_family_clipping}), there is a family
+    $W_1,\ldots,W_N$ on $J=[a+\ell,b+\ell+1)$, with $N\le D^2$,
+    chosen before every cutoff $\eta$ and every subspace $S$.
+    For each $6w\le\eta\le\eta_{\rm LD}$ the two comparisons of
+    Lemma~\ref{lem:ld_buffered_targets} hold. There is a real polynomial
+    $p$ of degree exactly $\ell^2$, with $p(E_0+\eta-2w)=1$, and matrices
+    $M_i$ on $J^c$ such that, in the physical tensor coordinates,
+    \begin{align}
+        p(B)                                         & =\sum_{i=1}^N W_i\otimes M_i, &
+        \Delta                                       & =4\exp\left(-4\ell^2
+        \sqrt{\frac{w}{7\ell-(E_0+\eta-2w)}}\right), &
+        D^{12}\Delta                                 & \le10^{-5}.
+        \label{eq:ld_family_filter}
+    \end{align}
+    Whenever $S$ is $\delta$-viable for $T_+$ and $\delta<1$,
+    the actual image span $V=\sum_iW_iS$ has dimension at most
+    $N\dim S$ and is $\Delta/(1-\delta)^2$-viable for $T_-$.
+    No spectral gap is assumed. This is the interior five-region
+    construction supporting \cite[Theorem~t:aisgapless]{Arad2016RigorousRG};
+    its geometry and fixed-bandwidth quantifiers are recorded
+    in~\cite{gap:alvv16_low_energy_family_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:regional_low_energy_family}
+    Apply Lemma~\ref{lem:regional_low_energy_family} with $J=J_0$,
+    so both differences of regions are empty.
+    Choose $C$ from the fixed-bandwidth scalar estimate.
+    It supplies the residual budget and the suppression inequality at
+    this same $\ell$ and $D$. The previous theorem constructs $B$ and
+    its target spaces. The common polynomial family for this actual
+    clipped matrix, at degree $\ell^2$, supplies $W_i$ before the cutoff.
+    Its count fits $D^2$ since $q\le m$.
+    The Chebyshev filter between the cutoffs
+    $E_0+\eta-2w$ and $E_0+\eta-w$ gives the actual decomposition and
+    the viability conclusion. Its denominator
+    $R=7\ell-(E_0+\eta-2w)$ satisfies $0<R\le7\ell$.
+    Since $w\ge g>4g/5$, its suppression is bounded by the scalar
+    estimate with numerator $4g/5$, using the same count envelope $D$.
+\end{proof}
+
+
+\begin{corollary}[One canonical original target for every scale]
+    \label{cor:canonical_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_canonical_low_energy_family}
+    \leanok
+    In Theorem~\ref{thm:fixed_bandwidth_low_energy_family}, write
+    $\lambda_0=\min\sigma(H)$ for the actual minimum of the original
+    Hamiltonian. The same chosen family, actual polynomial and tensor
+    factors satisfy all the stated conclusions with
+    $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
+    The constructed energy shifts satisfy $\lambda_0=E_0+\sum_j e_j$,
+    and the original centered spectral space below $E_0+c$ equals this
+    canonical $G(c)$ for every real $c$.
+    Thus the original target spaces are independent of the regional
+    shifts and clipping scale. The fixed-bandwidth and interior-window
+    conditions are unchanged.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:fixed_bandwidth_low_energy_family}
+    The construction supplies a normalized $z$ with $H_0z=E_0z$ and
+    $H_0-E_0I\ge0$. Since $H_0=H-(\sum_j e_j)I$, the eigenvector attains
+    the lower bound $E_0+\sum_j e_j$ for $H$, which is therefore its
+    minimum. A scalar shift moves every eigenvalue and cutoff by the
+    same amount; the resulting spectral subspaces do not depend on the
+    chosen complete eigenbases. Substitute these identities into the
+    two spectral comparisons, retaining the constructed filter and its
+    actual middle factors.
+\end{proof}
+
+
+\subsection{A prescribed interval at every window scale}
+
+For $J=[p,r)\subseteq[0,L)$, split physical configurations to identify
+$\mathcal H$ isometrically with $\mathcal H_J\otimes\mathcal H_{J^c}$.
+This identification depends only on $J$, not on the selected window scale.
+Write $\lambda_0=\min\sigma(H)$ and
+$G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
+
+\begin{theorem}[An improving family on every prescribed interval]
+    \label{thm:interval_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_family}
+    \leanok
+    For every $\eta_{\rm LD}>0$ there is a constant
+    $C\ge\max\{100,19+\eta_{\rm LD}\}$ with the following property.
+    Let $q\ge2$, $m\ge q$, $w>0$, and choose $g,u,\ell,D$ by
+    (\ref{eq:ld_family_parameters}). Let $H$ be an actual chain of
+    supported positive-contraction bonds, and let $0\le p\le r\le L$.
+    Then $\ell\ge21$, the bound (\ref{eq:ld_family_log_count}) holds,
+    and there is a family $A_0,\ldots,A_{D^2-1}$ acting on $\mathcal H_J$,
+    chosen before every cutoff and every viable subspace, with the
+    following property. For every $6w\le\eta\le\eta_{\rm LD}$ there are
+    $T_-\subseteq T_+\subseteq\mathcal H$ and $\Delta>0$ such that
+    $G(\eta)$ is $1/200$-close to $T_+$, $T_-$ is $1/200$-close to
+    $G(\eta-3w)$, and $D^{12}\Delta\le10^{-5}$.
+    If $S\subseteq\mathcal H_J$ is $\delta$-viable for $T_+$ with
+    $\delta<1$, then $V=\sum_i A_iS$ satisfies
+    \begin{align}
+        \dim V & \le D^2\dim S,                                                &
+        V      & \text{ is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }T_-.
+        \label{eq:ld_interval_improvement}
+    \end{align}
+    Short intervals, empty intervals and intervals meeting the chain
+    endpoints are included. The local dimension is restricted to
+    $q\ge2$, as recorded in~\cite{gap:alvv16_low_energy_family_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:dyadic_interval_low_energy_family}
+    Set $i=0$ in Lemma~\ref{lem:dyadic_interval_low_energy_family}.
+    Then $m_i=m$ and $\nu_i=1/200$.
+\end{proof}
+
+\subsection{Geometrically decreasing spectral comparison loss}
+
+\begin{lemma}[A dyadic regional improving family]
+    \label{lem:dyadic_regional_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_regional_dyadic_low_energy_family}
+    \leanok
+    For each fixed $\eta_{\rm LD}>0$, one can choose
+    $C\ge\max\{100,19+\eta_{\rm LD}\}$ before the physical data.
+    Let $q\ge2$, $m\ge q$, $w>0$ and $i\ge0$. Put
+    \begin{align*}
+        m_i    & =m2^i,                     & g & =\min\{w,1\}, &
+        u_i    & =1+\log m_i+\log(1/g),                           \\
+        \ell_i & =\lceil Cu_i^2/g\rceil,    &
+        D_i    & =(m_i\ell_i^2)^{22\ell_i}, &
+        \nu_i  & =\frac1{200\,2^{4i}}.
+    \end{align*}
+    Then $\ell_i\ge21$ and the logarithmic count bound holds at
+    $(m_i,g,u_i,\ell_i,D_i)$. When the five regions fit at scale $\ell_i$,
+    form the actual normalization and clipping in
+    (\ref{eq:ld_family_clipping}); denote their spectral spaces by
+    $G_i(c),F_i(c)$. For every prescribed region $J$ with
+    $|J\mathbin{\triangle} J_0|\le2\ell_i$, there is a family of
+    $N\le D_i^2$ operators on $\mathcal H_J$, chosen before every cutoff
+    and viable subspace, with the following property.
+    For $6w\le\eta\le\eta_{\rm LD}$, take
+    $T_-=F_i(\eta-2w)$ and $T_+=F_i(\eta-w)$.
+    Then $T_-\subseteq T_+$, $G_i(\eta)$ is $\nu_i$-close to $T_+$,
+    and $T_-$ is $\nu_i$-close to $G_i(\eta-3w)$.
+    The same clipped polynomial of degree $\ell_i^2$ supplies the exact
+    tensor decomposition and a suppression factor $\Delta_i$ with
+    $D_i^{12}\Delta_i\le10^{-5}$. Its regional image of any
+    $\delta$-viable subspace for $T_+$ is
+    $\Delta_i/(1-\delta)^2$-viable for $T_-$ when $\delta<1$,
+    and its dimension increases by at most $N$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:fixed_bandwidth_low_density_filter_parameters,
+        lem:ld_buffered_targets_at_error,thm:actual_clipped_polynomial_family,
+        thm:collar_larger_count_base}
+    Use the same constant $C$ at every numerical base $m_i$.
+    Since $u_i=u_0+i\log2$, $C/g\ge100$, $u_0\ge1$ and
+    $\log2\ge1/2$, one has
+    $(C/g)(u_i^2-u_0^2)\ge100i\ge64i$.
+    Translating the ceiling by the integer $64i$ gives
+    $\ell_i\ge\ell_0+64i$. Hence the actual residual obeys
+    $\xi_i\le\xi_0\,2^{-4i}$, and the base residual estimate gives
+    $2(6+\eta_{\rm LD})\xi_i\le\nu_iw^2$.
+    Apply Lemma~\ref{lem:ld_buffered_targets_at_error}.
+    At degree $\ell_i^2$, the exact regional polynomial family satisfies
+    \begin{align}
+        N & \le(q\ell_i^2)^{40\ell_i}
+        q^{2|J_0\setminus J|+2|J\setminus J_0|}
+        \le(m_i\ell_i^2)^{44\ell_i}=D_i^2.
+        \label{eq:ld_regional_count_reserve}
+    \end{align}
+    The suppression estimate is calibrated for this same $C,m_i,g$ and
+    degree. No count is enlarged after its filter has been chosen.
+\end{proof}
+
+\begin{lemma}[Changing the retained region within the count reserve]
+    \label{lem:regional_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_regional_low_energy_family}
+    \leanok
+    The scalar choice of $C$ in the five-region construction can be made
+    before the geometry. Its bounds on $\ell$ and $\log D$ hold
+    unconditionally. When the five regions fit, put
+    $J_0=[a+\ell,b+\ell+1)$. For every set of sites $J$ satisfying
+    $|J_0\setminus J|+|J\setminus J_0|\le2\ell$, the construction has
+    a common family on $J$ with $N\le D^2$ and all the polynomial,
+    spectral comparison and viability conclusions of
+    Theorem~\ref{thm:fixed_bandwidth_low_energy_family}, with the same
+    actual global clipped matrix. The family precedes the cutoff and
+    the viable subspace.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_regional_low_energy_family}
+    Set $i=0$. Then $m_i=m$ and $\nu_i=1/200$.
+\end{proof}
+
+\begin{lemma}[Long intervals with inward effective cuts]
+    \label{lem:long_interval_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_long_interval_low_energy_family}
+    \leanok
+    The constant and all the improving-family bounds of
+    Theorem~\ref{thm:interval_low_energy_family} can be obtained whenever
+    $r-p>4\ell$, including intervals that meet a chain endpoint.
+    The original targets are the canonical $G(\eta)$ and $G(\eta-3w)$
+    of the same raw Hamiltonian. The family is extended by zero to exactly
+    $D^2$ operators, preserving every actual image span.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_long_interval_low_energy_family}
+    Set $i=0$. Then $m_i=m$ and $\nu_i=1/200$.
+\end{proof}
+
+
+\begin{lemma}[Accurate families on long prescribed intervals]
+    \label{lem:dyadic_long_interval_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_long_interval_dyadic_low_energy_family}
+    \leanok
+    Fix the parameters $C,m_i,g,u_i,\ell_i,D_i,\nu_i$ of
+    Lemma~\ref{lem:dyadic_regional_low_energy_family}. If
+    $J=[p,r)\subseteq[0,L)$ satisfies $r-p>4\ell_i$, there are exactly
+    $D_i^2$ operators on $\mathcal H_J$ with the same suppression and
+    viability conclusions. Their spectral comparisons use the canonical
+    original targets $G(\eta)$ and $G(\eta-3w)$, and each comparison
+    has loss $\nu_i$. The scalar bounds on $\ell_i$ and $\log D_i$
+    hold before the long-interval condition is imposed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:inward_effective_cuts,lem:dyadic_regional_low_energy_family}
+    Set $p'=\max\{p,\ell_i\}$, $r'=\min\{r,L-\ell_i\}$,
+    $a=p'-\ell_i$ and $b=r'-\ell_i-1$. The long-interval condition gives
+    $a+2\ell_i\le b$ and $b+2\ell_i\le L-1$.
+    The interval $J_0=[p',r')$ is contained in $J$, and at most
+    $2\ell_i$ sites are removed. Apply
+    Lemma~\ref{lem:dyadic_regional_low_energy_family} and
+    (\ref{eq:ld_regional_count_reserve}).
+    The constructed normalized ground vector identifies every original
+    target with the canonical raw-Hamiltonian target. Extending the
+    actual regional operators by zero preserves every image span,
+    hence also the viability conclusion and its dimension bound.
+\end{proof}
+
+\begin{lemma}[Accurate families on every prescribed interval]
+    \label{lem:dyadic_interval_low_energy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_dyadic_low_energy_family}
+    \leanok
+    For every fixed $\eta_{\rm LD}>0$, one constant
+    $C\ge\max\{100,19+\eta_{\rm LD}\}$ works before the physical
+    chain, $q\ge2$, numerical base $m\ge q$, interval $J=[p,r)$,
+    width $w>0$ and accuracy index $i\ge0$. Use the parameters of
+    Lemma~\ref{lem:dyadic_regional_low_energy_family}.
+    Then $\ell_i\ge21$ and
+    \begin{align*}
+        \log D_i\le
+        \frac{22(C+1)(6+2\log(C+1))}{g}\,u_i^3.
+    \end{align*}
+    There are operators $A_0,\ldots,A_{D_i^2-1}$ on $\mathcal H_J$,
+    chosen before the buffered cutoff and the viable source space.
+    For each $6w\le\eta\le\eta_{\rm LD}$ there are
+    $T_-\subseteq T_+$ and $\Delta_i>0$ such that $G(\eta)$ is
+    $\nu_i$-close to $T_+$, $T_-$ is $\nu_i$-close to
+    $G(\eta-3w)$, and $D_i^{12}\Delta_i\le10^{-5}$.
+    For every $\delta<1$ and every $\delta$-viable source $S$ for
+    $T_+$, the actual image $V=\sum_j A_jS$ has
+    $\dim V\le D_i^2\dim S$ and is
+    $\Delta_i/(1-\delta)^2$-viable for $T_-$.
+    All intervals, including empty intervals and intervals meeting
+    either endpoint, are included. No spectral gap is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_long_interval_low_energy_family,thm:short_region_larger_count_base}
+    If $r-p>4\ell_i$, apply
+    Lemma~\ref{lem:dyadic_long_interval_low_energy_family}.
+    Otherwise the actual configuration matrix units on $J$, extended
+    by zero, fit the count $D_i^2$ because $q\le m_i$ and
+    $|J|\le4\ell_i$. Set $T_-=T_+=G(\eta)$ and
+    $\Delta_i=(100000D_i^{12})^{-1}$.
+    Equality gives the upper comparison with any nonnegative loss;
+    the inclusion $G(\eta-3w)\subseteq G(\eta)$ gives the lower one.
+    The matrix units span the full retained space from every nonzero
+    source subspace, and the zero target requires no approximation.
+\end{proof}
