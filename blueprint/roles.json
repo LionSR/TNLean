@@ -702,24 +702,38 @@
       "theorems": [
         "thm:lvv_uniform_successive_approximation",
         "thm:lvv_successive_arbitrary_accuracy",
-        "thm:lvv_sampled_ground_state"
+        "thm:lvv_sampled_ground_state",
+        "thm:lvv_ground_state_program_spec",
+        "thm:lvv_polynomial_running_time",
+        "thm:lvv_sampled_program_success",
+        "thm:lvv_valid_oracle_correct",
+        "thm:lvv_theorem_one_accuracy",
+        "thm:lvv_sampled_theorem_one_valid"
       ],
       "corollaries": [],
       "notes": {
         "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
         "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension",
-        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio"
+        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio",
+        "thm:lvv_ground_state_program_spec": "The ground-state computation run with honest answers outputs a matrix product state with the required overlap: the approximation part of Theorem 1 as an algorithm",
+        "thm:lvv_polynomial_running_time": "Polynomial cost of the ground-state computation in the declared cost model: the running-time part of Theorem 1",
+        "thm:lvv_sampled_program_success": "Theorem 1 on the sampled route as an algorithm, with its success probability over the sampled words",
+        "thm:lvv_valid_oracle_correct": "The algorithm is correct for every valid oracle, every solver returning optimal solutions, not only the chosen one",
+        "thm:lvv_theorem_one_accuracy": "Theorem 1 of Landau, Vazirani and Vidick with overlap 1 − η in cost polynomial in n and 1/η, for every valid oracle",
+        "thm:lvv_sampled_theorem_one_valid": "Theorem 1 on the sampled route for every valid oracle: accuracy 1 − η and polynomial cost on one event of probability at least 1 − 1/(2n²)"
       }
     },
     "ch:gapped_chain_polynomial_filters": {
       "theorems": [
         "thm:alvv_ff_chain_replacement",
-        "thm:alvv_ff_corrected_rank"
+        "thm:alvv_ff_corrected_rank",
+        "thm:physical_soft_windows_and_mpo"
       ],
       "corollaries": [],
       "notes": {
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
-        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)"
+        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
+        "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy"
       }
     },
     "ch:alvv_ff_improving_family": {
@@ -1468,6 +1482,7 @@
         "thm:aklv_physical_sequence_entropy",
         "thm:aklv_sharp_sequential_mps",
         "thm:aklv_frustration_free_entropy",
+        "thm:aklv_frustration_free_mps",
         "thm:physical_dg_interval_entropy_bound"
       ],
       "corollaries": [],
@@ -1475,6 +1490,7 @@
         "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
         "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
+        "thm:aklv_frustration_free_mps": "Matrix product approximation of a frustration-free ground vector with the cube-root accuracy dependence",
         "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
       }
     }

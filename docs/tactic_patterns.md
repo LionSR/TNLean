@@ -21,6 +21,31 @@
   matrix results to QICLean together with the adjacent weighted-projection API.
 - **Decision:** Mathematical lemmas suffice; no new tactic is needed.
 
+### Overlap and residual of a vector near a unit target — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/VariableWindowRefinement.lean`,
+  `Initialization.lean` and `FrustrationFreeMPSApproximation.lean`.
+- **Pattern:** From `‖x‖ = ‖φ‖ = 1` and `‖x - φ‖ ^ 2 ≤ c`, expand `norm_sub_sq`,
+  compare the real part with `Complex.re_le_norm`, and conclude
+  `1 / 2 ≤ ‖⟪φ, x⟫_ℂ‖`; bound `‖x - ⟪φ, x⟫_ℂ • φ‖` by the norm of the projection
+  onto `(span {φ})ᗮ`.
+- **Abstraction:** A proposed lemma giving both the overlap lower bound
+  `1 - ‖x - φ‖ ^ 2 / 2 ≤ ‖⟪φ, x⟫_ℂ‖` and the residual bound, for use with
+  `Matrix.exists_phase_normalized_filter_output`.
+- **Notes:** Two occurrences of each half; promote at the third.
+
+### Dimension and gap bounds from an actual excitation — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/SharpPerCutApproximation.lean`
+  (`aklv_chain_dimension_and_gap_bounds`) and
+  `FrustrationFreeMPSApproximation.lean`
+  (`aklv_frustrationFree_dimension_and_gap_bounds`, ground energy zero).
+- **Pattern:** Two spectral values give `2 ≤ q` and a nonempty chain; the
+  gapped-ground-state predicate then gives `g ≤ 1`.
+- **Abstraction:** Derive the frustration-free statement from the general one at
+  `μ = 0`, or move the general one beside `gap_le_one_of_positive_nearest_neighbor_terms`.
+- **Notes:** Kept separate while the general file was being edited elsewhere.
+
 Living registry of repeated proof patterns, maintained under the process in
 [`docs/tactic_development.md`](tactic_development.md). Agents and contributors:
 **consult the promoted section before writing proofs; append candidates when
@@ -10171,6 +10196,18 @@ there is no need for a new tactic.
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
 
+### Transport finite buffering before comparing completed actions — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/SuppliedWindowCoordinates.lean` and
+  `MPS/MPU/SuppliedQuasiLocalAction.lean`.
+- **Pattern:** Prove that a sitewise physical bijection commutes with finite
+  prefix/window/suffix concatenation and identity buffering; then reindex
+  the actual periodic matrix equality before applying the named finite
+  evaluation theorem.
+- **Reuse:** Existing finite unitary reindexing and the canonical interval
+  inclusion theorem supply the algebraic steps. The complete window head
+  coordinate bijections are promoted at their existing owner and reused.
+- **Notes:** No second quasi-local relabelling or action structure is added.
 ### Cyclic local interaction in its defining coordinates — promoted
 - **Pattern:** expose a translated arbitrary interaction by applying the
   active-block isometry, then cancel the inverse isometry.
@@ -11581,3 +11618,16 @@ removed after the dependency audit exposed it.
 - **Decision:** These two sites remain below the rule of three. The entropy
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
+
+### Weighted soft remainders and finite operator sums — promoted (2026-11-02)
+
+- **Pattern:** Apply a scalar remainder through an exponential of the same
+  matrix, then restrict to the original or truncated low-energy space.
+- **Reuse:** QICLean's `SoftTruncationScaling` and `SoftTruncationRemainder`
+  provide the independent-scale estimate. `PhysicalScaledSoftTruncationResidual`
+  and `PhysicalScaledSoftTruncationReverse` use this common estimate with
+  their respective regional exponential moments.
+- **Finite sums:** `TraceChainLinearCombination` proves the varying-dimension
+  block sum once. Its equal-dimension and binary versions specialize that
+  theorem, and both the heat expansion and exact exterior construction use it.
+- **Mechanism:** Mathematical lemmas suffice; no custom tactic is introduced.

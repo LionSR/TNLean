@@ -1080,6 +1080,10 @@ with the corresponding composite embeddings.
     has $\Delta=0$, which admits no counit. The pre-bialgebra is therefore stated
     for a given functional with (\ref{eq:mpoalg_fusion_counit})
     \cite{gap:mrgscp22_pre_bialgebra_counit_scope}.
+    Lemma~\ref{lem:mpoalg_fusion_counit_existence} characterizes when such a
+    functional exists, and
+    Lemma~\ref{lem:mpoalg_fusion_counit_unital_representation} constructs it
+    for a family obtained from a unital representation.
     % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875
     %   (Definition 3.1), 880 and 1419 (counit of the dual algebra), 1421
     %   (representations are unital), 1640 (the dual is a pre-bialgebra).
@@ -1096,6 +1100,77 @@ with the corresponding composite embeddings.
         =\sum_j\delta_{ij}(B_c^{jk})_c=(B_c^{ik})_c$, and similarly on the
     other side. Spanning also gives uniqueness. For an identity block,
     $D_{c_0}^{-1}\tr(\delta_{ik}\Id)=\delta_{ik}$.
+\end{proof}
+
+\begin{lemma}[Existence of the counit]%
+    \label{lem:mpoalg_fusion_counit_existence}
+    \lean{MPOTensor.CompleteZipperFusionFamily.tracePairing,
+        MPOTensor.CompleteZipperFusionFamily.exists_tracePairing_eq,
+        MPOTensor.CompleteZipperFusionFamily.exists_counit_iff,
+        MPOTensor.CompleteZipperFusionFamily.toPreBialgebraOfUnitWitness}
+    \leanok
+    \uses{lem:mpoalg_fusion_coproduct_counit}
+    In the setting of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}, every
+    linear functional on $\mathcal B$ has the form
+    $X\mapsto\sum_c\tr(Y_cX_c)$ for some $Y=(Y_c)_c\in\mathcal B$. Hence a
+    functional with (\ref{eq:mpoalg_fusion_counit}) exists if and only if the
+    identity operator on one site is a one-site operator of the family,
+    \begin{align}
+        \sum_c\tr\big(Y_cB_c^{ik}\big)
+         & =\delta_{ik}
+        \qquad\text{for some }Y\in\mathcal B,
+        \label{eq:mpoalg_fusion_unit_witness}
+    \end{align}
+    and then $X\mapsto\sum_c\tr(Y_cX_c)$ is the counit of the fusion
+    coproduct.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 880, 1419 and 1421.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_family_trace_duality}
+    The block trace pairing $(Y,X)\mapsto\sum_c\tr(Y_cX_c)$ on $\mathcal B$
+    is nondegenerate, so by Lemma~\ref{thm:matrix_family_trace_duality} every
+    functional $\epsilon$ is $X\mapsto\sum_c\tr(Y_cX_c)$ for the element $Y$
+    that the pairing assigns to $\epsilon$. On the
+    elements $(B_c^{ik})_c$ this pairing is the left side of
+    (\ref{eq:mpoalg_fusion_unit_witness}), so (\ref{eq:mpoalg_fusion_counit})
+    and (\ref{eq:mpoalg_fusion_unit_witness}) are the same condition.
+\end{proof}
+
+\begin{lemma}[The counit of a family from a unital representation]%
+    \label{lem:mpoalg_fusion_counit_unital_representation}
+    \lean{MPOTensor.CompleteZipperFusionFamily.surjective_of_forall_letter_mem_range,
+        MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit,
+        MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit_apply,
+        MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit_letter,
+        MPOTensor.CompleteZipperFusionFamily.toPreBialgebraOfDualRepresentation}
+    \leanok
+    \uses{lem:mpoalg_fusion_coproduct_counit}
+    In the setting of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}, let
+    $\phi\colon\mathcal A\to\MN{d}$ be a unital representation of a complex
+    algebra $\mathcal A$, and let $\psi\colon\mathcal A^*\to\mathcal B$ be an
+    injective linear map with $\psi(\phi_{ik})=(B_c^{ik})_c$ for the matrix
+    coefficients $\phi_{ik}(x)=\phi(x)_{ik}$. Then $\psi$ is a linear
+    isomorphism, and $\psi(f)\mapsto f(\Id)$ is a functional with
+    (\ref{eq:mpoalg_fusion_counit}). Hence $\mathcal B$, with the fusion
+    coproduct and this counit, is a pre-bialgebra. This is the situation of
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}, where $\psi$ is the direct sum
+    of the irreducible representations of the dual algebra $\mathcal A^*$ and
+    the counit of $\mathcal A^*$ is evaluation at the unit.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 880 and 1419 (counit of
+    %   the dual algebra), 1070 and 1084 (boundary algebra), 1421
+    %   (representations are unital).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct, lem:mpoalg_fusion_coproduct_counit}
+    The range of $\psi$ contains the elements $(B_c^{ik})_c$, which span
+    $\mathcal B$ by Lemma~\ref{thm:mpoalg_fusion_coproduct}, so $\psi$ is
+    onto. On $(B_c^{ik})_c=\psi(\phi_{ik})$ the functional takes the value
+    $\phi_{ik}(\Id)=\phi(\Id)_{ik}=\delta_{ik}$. The pre-bialgebra structure
+    is that of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}.
 \end{proof}
 
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%
