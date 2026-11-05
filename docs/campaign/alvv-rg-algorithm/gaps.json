@@ -451,6 +451,27 @@
       "found": "A two-sided estimate does not make the shifted operator positive, and a parent estimate is not by itself an estimate for the middle region. Comparing the collar, middle and parent minima converts any parent estimate in [<i>e<sub>M</sub></i> − 8, <i>e<sub>M</sub></i>] into a middle estimate in the required one-sided range. The raw soft operator carries an extensive scalar, so its norm bound holds only after centring. Taking the least compressed energy minus 3 gives a parent estimate in [<i>e</i> − 49/16, <i>e</i>], and this is assigned recursively to every node of the tree for hard-truncated families.",
       "impact": "Without these corrections the energy estimates that the algorithm keeps along the tree are not justified as printed.",
       "plan": "In review: the node estimates and their recursive assignment. Open: their combination with the actual sampled soft tree, the identification with the paper's soft generation procedure and its energy-power count."
+    },
+    {
+      "id": "docs/paper-gaps/alvv16_ff_truncated_norm.tex",
+      "kind": "local-correction",
+      "status": "resolved-pending",
+      "paper": "alvv",
+      "result": "Theorem 5.15, the improving family for frustration-free chains",
+      "issue": 10577,
+      "stage": "alg:2",
+      "prs": {
+        "TNLean": [
+          10596
+        ]
+      },
+      "title": "The norm of the frustration-free three-region replacement",
+      "summary": "The proof states that the replaced chain has norm <i>O</i>(1); its untruncated windows give norm up to 4ℓ + 6. The printed choice of ℓ is the one that fits this norm, and the existence part of the theorem is proved with it.",
+      "context": "For the efficient frustration-free algorithm, the three bulk regions around two windows of about 2ℓ bonds are replaced by the regional construction, and a Chebyshev filter of the replaced chain supplies the improving family. The filter's contraction depends on the norm of the replaced chain.",
+      "claims": "The proof of Theorem 5.15 (line 1599 of the source) states that the replaced chain has norm <i>O</i>(1), and (line 1606) that each improving operator has bond dimension <i>O</i>(<i>d</i><sup><i>k</i></sup>).",
+      "found": "For qubits with <i>h</i><sub><i>i</i></sub> = 1 − |00⟩⟨00| on neighbouring sites (commuting projections, unique ground state, gap one), |1⋯1⟩ is an eigenvector of the replaced chain with eigenvalue 4ℓ + 6. The argument gives bond dimension (<i>d</i><sup>2</sup> + <i>O</i>(1))<sup><i>k</i>+<i>O</i>(1)</sup>, not <i>O</i>(<i>d</i><sup><i>k</i></sup>).",
+      "impact": "None on the statement: ℓ = Θ̃(γ<sup>−1</sup> log<sup>2</sup> <i>d</i>) is the choice that works with norm Θ(ℓ), and (<i>d</i><sup>2</sup> + 4)<sup>ℓ<sup>2</sup>+1</sup> still has the stated form 2<sup>Õ(γ<sup>−2</sup> log<sup>5</sup> <i>d</i>)</sup>.",
+      "plan": "Proved in review: the existence part of Theorem 5.15 with norm at most 4ℓ + 6, gap at least γ/15, D = (<i>d</i>ℓ<sup>2</sup>)<sup>22ℓ</sup> and bond dimension at most (<i>d</i><sup>2</sup> + 4)<sup>ℓ<sup>2</sup>+1</sup> at every interior cut. The running time is not formalized."
     }
   ]
 }

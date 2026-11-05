@@ -271,7 +271,9 @@
         "thm:spt_exact_ground_physical_class",
         "thm:spt_exact_phase_injective_classification"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:spt_exact_phase_injective_character_classification"
+      ],
       "notes": {
         "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
         "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
@@ -762,6 +764,15 @@
         "thm:uniform_physical_soft_improving_family": "One actual pre-center physical soft family, its same represented matrix cluster and actual Chebyshev word powers under explicit corrected residual budgets",
         "cor:calibrated_uniform_physical_soft_family": "Uniform numerical calibration and a natural polynomial cap for the same actual physical soft family, with all choices before the volume",
         "cor:original_ground_reference_trimming_profile": "One original-ground reference, including flat spectra, and one radius for all parent intervals, with the exact weighted loss and polynomial rank and output-cost profiles"
+      }
+    },
+    "ch:alvv_ff_improving_family": {
+      "theorems": [
+        "thm:alvv_ff_improving_family"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:alvv_ff_improving_family": "ALVV Theorem 5.15, existence part: the improving family for frustration-free chains"
       }
     },
     "ch:peps_ft": {

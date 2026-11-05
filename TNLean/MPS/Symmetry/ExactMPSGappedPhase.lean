@@ -15,14 +15,22 @@ ground-state lines. Blocking, scalar changes of the endpoint on-site actions,
 and isometric inclusion of the whole endpoint physical spaces are allowed.
 No virtual representation or factor system occurs in the condition.
 
-**Scope restriction (continuous exact MPS ground states):** The additional
-MPS condition concerns the regime of arXiv:1010.3732, Section II.F.2,
-lines 930–954, rather than arbitrary gapped Hamiltonian paths. A continuous
-finite-dimensional tensor family represents the ground lines, while its
-minimal injective bond dimension may change. The implication from a physical
-gap to continuous canonical bond data is not included as an assumption;
-its proof remains open, as recorded in
-`docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
+Restricting to gapped paths whose unique ground states are matrix product
+states is the source's own scope: arXiv:1010.3732 proves separation only
+within MPS (Section II.F.2, lines 923–952). The common blocking, the
+orthogonal endpoint inclusions, the endpoint characters, the path conditions
+and the pointwise one-site injective representatives are the clauses of
+Sections II.C.1–2, lines 404–466, read after the standard-form blocking of
+lines 349–356.
+
+**Scope restriction (continuous tensor realization):** `ExactMPSGroundPath`
+assumes a continuous tensor family of one ambient bond dimension whose
+periodic vectors span the ground lines. The source does not assume it; it
+derives a continuous choice of tensors from the gap (lines 938–941 and
+961–991). The phase relation is therefore stronger than the source's, so
+the converse classification proved from it is narrower than the source
+theorem. Recorded, with the plan for a pointwise converse, in
+`docs/paper-gaps/spc11_spt_classification_continuous_realization.tex`.
 -/
 
 open scoped Matrix

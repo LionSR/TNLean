@@ -1,0 +1,201 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Schuch--P\'erez-Garc{\'\i}a--Cirac SPT Classification: Continuous
+    Tensor Realization of the Ground-State Path}
+\author{}
+\date{2026-11-04}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{What the source states}
+
+Section~II.C of \cite{Schuch2011Phases} defines two Hamiltonians $H_0,H_1$ to
+be in the same phase under a symmetry $G$ when, after a common blocking, there
+are a phase gauge for $U^0_g$ and $U^1_g$, a representation
+$U_g=U^0_g\oplus U^1_g\oplus U^{\mathrm{path}}_g$ on
+$\mathcal H_0\oplus\mathcal H_1\oplus\mathcal H_{\mathrm{path}}$, and a
+translation-invariant two-local path $h_\gamma$ with the prescribed endpoints,
+$\|h_\gamma\|_{\mathrm{op}}\le1$, continuity in $\gamma$, a spectral gap above
+the ground-state manifold bounded below independently of $N$ and $\gamma$, and
+$[H_\gamma,U_g^{\otimes N}]=0$, the endpoint Hamiltonians being supported on
+orthogonal summands.\footnote{Source traceability:
+    \path{Papers/1010.3732/paper_v3.tex}, lines~404--466.}
+For gapped Hamiltonians with exact MPS ground states it suffices to treat
+parent Hamiltonians, all of which are interchangeable (lines~517--526).
+
+Section~II.F treats injective MPS, that is, unique ground states, after the
+standing reduction to standard form by blocking (lines~349--356 and
+807--818). It states that the phases are exactly labelled by the cohomology
+class of the virtual action $V_g$ in $U_g\mathcal P=\mathcal P(V_g\otimes\bar
+V_g)$ (lines~832--867). Equality of phases is the direct-sum interpolation
+(lines~870--921). Separation is proved only within MPS: ``there cannot be a
+smooth MPS path connecting two such states'' (lines~923--933), with the
+explicit caveat that the extension beyond MPS is only conjectured
+(lines~949--952).
+
+The separation hypothesis concerns the Hamiltonian path. The proof is to
+``show that along any well-behaved path $H_\gamma$, $\mathcal P_\gamma$ needs
+to change continuously'' (lines~938--941). It fixes $\gamma$, takes the unique
+ground state $|\mu[\mathcal P_\gamma]\rangle$ of $H_\gamma$ with $\mathcal
+P_\gamma$ in standard form (lines~957--960), proves continuity of the ground
+state from the gap (lines~961--989), and concludes: ``since $|\mu[\mathcal
+P_\gamma]\rangle$ is a polynomial in $\mathcal P_\gamma$, it follows that
+$\mathcal P_\gamma$ can be chosen to be a continuous function of $\gamma$ as
+well'' (lines~989--991). Appendix~C then works with continuous $\mathcal
+P_\gamma$ in one virtual space whose support may grow (lines~2653--2717). The
+summary at lines~1069--1072 speaks of ``a smooth gapped path $H_\gamma$''. The
+symmetry-breaking subsection glosses a well-behaved path of MPS as one that
+``yields a smooth and gapped path in the set of parent Hamiltonians''
+(lines~1213--1216), and its separation argument again derives continuity of
+the ground states from ``continuity and gappedness of $H_\gamma$''
+(lines~1251--1264). Thus continuity of the tensors $\mathcal P_\gamma$ is a
+conclusion of the source argument, not a hypothesis of the source theorem.
+
+\section{The formal phase condition, clause by clause}
+
+The relation \leanid{MPSTensor.IsSameExactMPSGappedPhase} consists of the
+following clauses.
+\begin{enumerate}
+    \item A common blocking length $k>0$ for both endpoints. Source: ``there
+          exists a finite $k$ such that after blocking $k$ sites''
+          (lines~409--411) and ``this definition should be understood after an
+          appropriate blocking of sites'' (lines~465--466). Matches.
+    \item A unitary representation $U$ on a common space $\mathbb C^m$ and
+          isometries $E_0,E_1$ of the blocked endpoint spaces with orthogonal
+          ranges, intertwining $U$ with the blocked endpoint actions. The ranges
+          and their orthogonal complement are invariant under the unitary $U$,
+          so $U=U^0\oplus U^1\oplus U^{\mathrm{path}}$ as in lines~447--453,
+          with orthogonality imposed even for equal representations
+          (lines~460--465). Matches.
+    \item Unit-modulus characters multiplying the blocked endpoint actions.
+          Source: the phase gauge $U^p_g\leftrightarrow e^{i\phi^p_g}U^p_g$
+          (lines~444--447), applied to the blocked system as lines~465--466
+          require. Matches.
+    \item Endpoint interactions equal to the canonical two-site parents of the
+          blocked, included tensors. Source: parent Hamiltonians
+          (lines~358--386) and their interchangeability (lines~517--526).
+          Matches.
+    \item A path of Hermitian two-site interactions with the prescribed
+          endpoints, operator norm at most one, continuity, one gap $\delta>0$
+          above the least spectral value for every parameter and every ring
+          length $N\ge2$, and commutation of every ring Hamiltonian with
+          $U_g^{\otimes N}$.\footnote{Formal declaration:
+              \leanid{MPSTensor.SymmetricGappedInteractionPath}.}
+          Source: items~1--4 of lines~415--428 and lines~447--453. Matches.
+    \item At every parameter and ring length $N\ge2$, the least-energy
+          eigenspace is the line of a nonzero periodic MPS vector, and the
+          periodic rays have a one-site injective representative of positive
+          bond dimension on the blocked chain. Source: separation within MPS
+          (lines~923--933), unique ground state $|\mu[\mathcal P_\gamma]\rangle$
+          with $\mathcal P_\gamma$ in standard form (lines~957--960), injective
+          meaning unique ground state (lines~813--816). Matches; nonvanishing
+          of the vector follows from the injective representative.
+    \item A common ambient bond dimension $M$ bounding these representatives.
+          Appendix~C and lines~989--991 place every $\mathcal P_\gamma$ in one
+          virtual space; the source never lets the bond dimension of the path
+          tensors grow without bound. We read this bound as part of the source
+          setting. Given it, quantum Wielandt theory supplies one blocking
+          after which every normal $\mathcal P_\gamma$ is one-site injective,
+          so the common blocking of clause~6 is the standing standard-form
+          convention of lines~349--356.
+    \item A continuous family $\gamma\mapsto B(\gamma)$ of tensors of the
+          ambient bond dimension whose periodic vectors span the least-energy
+          lines.\footnote{Formal declaration:
+              \leanid{MPSTensor.ExactMPSGroundPath}.}
+          This is \emph{stronger} than the source. The source derives such a
+          family from the gap (lines~938--941 and 961--991); it does not
+          assume it.
+\end{enumerate}
+
+\section{The endpoint domain}
+
+The classification theorems take one-site injective endpoints of positive
+bond dimension.\footnote{Formal declarations:
+    \leanid{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous} and
+    \leanid{MPSTensor.isSameExactMPSGappedPhase_iff_cohomologous_of_character}.}
+This is the source's standing convention, not a restriction. The source
+assumes without loss of generality that every MPS is in standard form, ``this
+might involve the blocking of sites of the original model''
+(lines~349--356), and it classifies ``the symmetry of the blocked MPS''
+(lines~816--818). The injective case of standard form is one-site
+injectivity of the blocked tensor. A tensor that becomes injective only after
+blocking $L$ sites enters through its $L$-blocked tensor and the blocked
+physical action, exactly as in the source. Positive bond dimension excludes
+only the zero tensor. The endpoint character is the phase gauge of
+lines~444--447 and Appendix~B, lines~2596--2632; this was resolved in
+\path{spc11_spt_interpolation_upper_range.tex}. The source labels phases by
+the virtual action determined by lines~836--842; the theorems quantify over
+any such prescribed action, whose existence for symmetric injective tensors
+is proved separately.\footnote{Formal declaration:
+    \leanid{MPSTensor.virtual_rep_of_symmetric_injective}.}
+The common blocking of the phase condition is the source's ``after an
+appropriate blocking''. No further statement for unblocked originals is
+needed.
+
+\section{Verdict}
+
+The forward direction is faithful. The formal construction produces every
+clause above, including the continuous tensor family, so it implies the
+source relation.\footnote{Formal declaration:
+    \leanid{MPSTensor.isSameExactMPSGappedPhase_of_isInjective_cohomologous}.}
+The converse is restricted. It assumes, through clause~8, that the ground
+lines of the gapped path have a continuous tensor realization in one bond
+dimension. The source asserts that this realization exists along every
+symmetric gapped path with unique MPS ground states. Its argument for that
+step is the remark that the MPS vector is a polynomial in the tensor, which
+gives continuity of the vector from the tensor but not the reverse. The
+blueprint theorem \path{thm:spt_classification} therefore stays
+\path{notready}. The explicit-domain theorems are recorded as
+scope-restricted entries whose statements name the continuous exact MPS
+phase condition.
+
+\section{Elimination plan}
+
+The source-faithful converse replaces clause~8 by the pointwise data of
+clauses~6 and~7: for every $\gamma$, a one-site injective tensor $A_\gamma$ of
+positive bond dimension at most $M$ whose periodic vectors span the
+least-energy eigenspace of every ring Hamiltonian, with no continuity in
+$\gamma$. The proof has three steps.
+\begin{enumerate}
+    \item Ground-line continuity. For a symmetric gapped interaction path
+          whose least-energy eigenspace is one-dimensional at every parameter,
+          show that its orthogonal projection is continuous in $\gamma$ for
+          every fixed $N\ge2$. This is finite-dimensional: the uniform gap
+          $\delta$ isolates the least eigenvalue, and the Riesz projection
+          around it depends continuously on the continuous Hamiltonian. This
+          is the source argument of lines~961--989.
+    \item Replace ambient continuity by line convergence. The current converse
+          uses continuity of the ambient family in two places: the common
+          physical character\footnote{Formal declaration:
+              \leanid{MPSTensor.ExactMPSGroundPath.exists_exact_symmetry}.}
+          and the local class stability along convergent
+          sequences.\footnote{Formal declaration:
+              \leanid{MPSTensor.eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays}.}
+          The character argument needs only a continuous invariant line at each
+          ring length, which step~1 supplies. The class-stability argument
+          needs convergence of normalized periodic vectors along a sequence;
+          unit vectors in the ground lines, rephased against the limit, converge
+          by step~1. The transfer bound from the physical gap is computed from
+          the finite-ring ground lines and the pointwise minimal
+          representatives, so it transfers unchanged once its inputs are
+          restated.
+    \item Restate the phase condition with the pointwise data and reprove the
+          converse. The forward direction is unaffected, because its
+          construction supplies the stronger continuous data.
+\end{enumerate}
+An alternative is to prove the source step literally: pointwise data with a
+uniform bond-dimension bound admit a continuous ambient realization. That
+statement needs a continuous choice through changes of minimal dimension,
+which the source does not justify, and the plan above avoids it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
