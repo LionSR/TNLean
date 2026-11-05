@@ -33,6 +33,9 @@ open scoped ENNReal InnerProductSpace TensorProduct ComplexOrder MatrixOrder Mat
 
 namespace TNLean.MPS.AreaLaw
 
+-- The final application matches the refined Ritz-space conclusion against the long
+-- statement, which exceeds the default budget at the current dependency pin.
+set_option maxHeartbeats 400000 in
 /-- The same successful canonical root is refined literally and its actual
 compressed Ritz space has a uniform polynomial all-span MPS bound. The
 physical family precedes accuracy and seeds; the polynomial coefficient
