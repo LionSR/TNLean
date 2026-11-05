@@ -31,7 +31,9 @@ written together with lecture notes that set the order and choice of results.
   qudit side. To avoid two formalizations of the same results, the TNLean
   issues on these topics (#5710, #6028, #6029, #7035, #7036, #7038, #7039,
   #7040, #7122, and the gauging trackers #7256, #7257, #7259 to #7262, #7281,
-  #7295) are left to that group, who report progress on them. Where TNLean
+  #7295) are left to that group. The open ones among them were closed on
+  2026-11-05 as handed over, each with a note of what main already proves;
+  an issue is reopened if the work returns here. Where TNLean
   already has a statement, theirs is stated so that the two agree under the
   isomorphism of the quasi-local algebras below.
 - **The quasi-local algebra.** TNLean defines `SpinChain.QuasiLocalAlgebra d`
