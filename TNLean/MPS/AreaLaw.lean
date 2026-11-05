@@ -12,6 +12,7 @@ import TNLean.MPS.AreaLaw.AKLV
 import TNLean.MPS.AreaLaw.ALVV
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
+import TNLean.MPS.AreaLaw.Algorithm
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BalancedIntervalTree
 import TNLean.MPS.AreaLaw.BandDissolution

@@ -22,22 +22,22 @@ complex vector space, $\Delta\colon\mathcal C\to\mathcal C\otimes\mathcal C$
 is coassociative,
 \begin{align}
     (\Delta\otimes\Id)\circ\Delta
-        &=(\Id\otimes\Delta)\circ\Delta,
+     & =(\Id\otimes\Delta)\circ\Delta,
     \label{eq:mrgscp22_coassoc}
 \end{align}
 and $\epsilon\in\mathcal C^*$ is a counit,
 \begin{align}
     (\epsilon\otimes\Id)\circ\Delta
-        &=(\Id\otimes\epsilon)\circ\Delta
-         =\Id
+     & =(\Id\otimes\epsilon)\circ\Delta
+    =\Id
     \label{eq:mrgscp22_counit}
 \end{align}
 (Definition~3.1).  A pre-bialgebra is an algebra $\mathcal A$ that is also
 a coalgebra such that the coproduct is multiplicative,
 \begin{align}
     \Delta(xy)
-        &=\Delta(x)\Delta(y)
-        \qquad (x,y\in\mathcal A)
+     & =\Delta(x)\Delta(y)
+    \qquad (x,y\in\mathcal A)
     \label{eq:mrgscp22_mult}
 \end{align}
 (Definition~4.1).\footnote{Source coordinates in \path{mpo.tex} from
@@ -74,14 +74,14 @@ projector of the fusion tensors, and on the elements
 $T^{ik}=(T_c^{ik})_c$ formed by one letter of every block it is
 \begin{align}
     \Delta(T^{ik})
-        &=\sum_jT^{ij}\otimes T^{jk}.
+     & =\sum_jT^{ij}\otimes T^{jk}.
     \label{eq:mrgscp22_letter}
 \end{align}
 These elements span $\mathcal B$.  Consequently, if
 $\epsilon\colon\mathcal B\to\C$ is a linear functional with
 \begin{align}
     \epsilon(T^{ik})
-        &=\delta_{ik},
+     & =\delta_{ik},
     \label{eq:mrgscp22_counit_letters}
 \end{align}
 then~(\ref{eq:mrgscp22_letter}) gives
@@ -115,22 +115,49 @@ representation of the unital algebra $\mathcal A$, so $\phi(1)=\Id$
 (line~1421).  Hence the counit of $\mathcal B$ is
 $\psi(f)\mapsto f(1)$, and $\psi(\phi_{ik})\mapsto\phi(1)_{ik}=\delta_{ik}$.
 
+Two further statements are formalized.  First, every linear functional on
+$\mathcal B$ is a trace pairing $X\mapsto\sum_c\tr(Y_cX_c)$ with some
+$Y\in\mathcal B$: put $(Y_c)_{yx}=\epsilon(E^c_{xy})$ for the matrix units
+$E^c_{xy}$ of the block $c$.  Consequently a functional
+with~(\ref{eq:mrgscp22_counit_letters}) exists if and only if the identity
+operator on one site is a one-site operator of the family,
+\begin{align}
+    \sum_c\tr\bigl(Y_cT_c^{ik}\bigr)
+     & =\delta_{ik}
+    \qquad\text{for some }Y\in\mathcal B,
+    \label{eq:mrgscp22_unit_condition}
+\end{align}
+and the trace pairing with such a $Y$ is the counit.  Second, the source's
+construction of the counit holds for every family whose letters come from
+the source's data.  Let $\phi\colon\mathcal A\to M_d(\C)$ be a unital
+representation of a complex algebra $\mathcal A$ and
+$\psi\colon\mathcal A^*\to\mathcal B$ an injective linear map with
+$\psi(\phi_{ik})=T^{ik}$.  The range of $\psi$ contains the spanning
+elements $T^{ik}$, so $\psi$ is a linear isomorphism, and
+$\psi(f)\mapsto f(1)$ is a functional
+with~(\ref{eq:mrgscp22_counit_letters}).  For such a family the
+pre-bialgebra structure on $\mathcal B$ needs no further argument.  Neither
+a coalgebra structure on $\mathcal A$ nor multiplicativity of $\psi$ is
+used.\footnote{Formal declarations:
+    \leanid{MPOTensor.CompleteZipperFusionFamily.exists_tracePairing_eq},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.exists_counit_iff},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.toPreBialgebraOfUnitWitness},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit_apply},
+    \leanid{MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit_letter}
+    and
+    \leanid{MPOTensor.CompleteZipperFusionFamily.toPreBialgebraOfDualRepresentation}
+    in \doclink{TNLean/MPS/MPDO/CompleteZipperFusionCoassoc}.  The blueprint
+    entries are \path{lem:mpoalg_fusion_counit_existence} and
+    \path{lem:mpoalg_fusion_counit_unital_representation} in
+    \path{blueprint/src/chapter/ch30_mpo_algebras.tex}.}
+
 \section{What is missing}
 
 A complete zipper fusion family records the blocks, the fusion tensors and
 their left inverses of Ref.~\cite{Bultinck2017Anyons}, not the unital
 algebra $\mathcal A$ or the unitality of $\phi$, and its fields do not force
-a functional with~(\ref{eq:mrgscp22_counit_letters}) to exist.  Writing a
-functional on $\mathcal B$ as $X\mapsto\sum_c\tr(Y_cX_c)$, such a functional
-exists exactly when the identity operator on one site is a one-site operator
-of the family,
-\begin{align}
-    \sum_c\tr\bigl(Y_cT_c^{ik}\bigr)
-        &=\delta_{ik}
-    \qquad\text{for some }Y\in\mathcal B.
-    \label{eq:mrgscp22_unit_condition}
-\end{align}
-This can fail, and then $\Delta$ may have no counit at all.  Take one block
+the condition~(\ref{eq:mrgscp22_unit_condition}).  This can fail, and then
+$\Delta$ may have no counit at all.  Take one block
 of bond dimension one, physical dimension two, letters
 $T^{ik}=\delta_{i1}\delta_{k2}$, no fusion channel ($N^c_{ab}=0$, so the
 fusion tensors are empty), and the left inverse that reads off the entry
@@ -140,21 +167,29 @@ reconstruction identity reduce to $\sum_jT^{ij}T^{jk}=0$.  The coproduct is
 $\Delta=0$ on $\mathcal B=\C$, so the left side of~(\ref{eq:mrgscp22_counit})
 vanishes for every $\epsilon$.
 
-The formal pre-bialgebra structure on $\mathcal B$ therefore takes a
-functional satisfying~(\ref{eq:mrgscp22_counit_letters}) as an argument.
-With it, the statement is the source's statement that $\mathcal A^*$ is a
-pre-bialgebra (line~1640), read on the boundary algebra.
+The pre-bialgebra structure on the boundary algebra of an arbitrary family
+therefore takes either a functional
+satisfying~(\ref{eq:mrgscp22_counit_letters}), a boundary element
+satisfying~(\ref{eq:mrgscp22_unit_condition}), or the source's data
+$(\mathcal A,\phi,\psi)$ for its letters as an argument.  With any of them,
+the statement is the source's statement that $\mathcal A^*$ is a
+pre-bialgebra (line~1640), read on the boundary algebra.  What is not
+formalized is the source's construction of the family itself: starting from
+a pre-bialgebra $\mathcal A$ with a unital injective physical
+representation, decomposing the tensor products of the irreducible
+representations of $\mathcal A^*$ to obtain the fusion tensors and their
+left inverses, and checking the fields of a complete zipper fusion family.
 
 \section{Elimination plan}
 
-The condition~(\ref{eq:mrgscp22_unit_condition}) holds whenever the family
-arises from the source's data, that is, from the irreducible representations
-of the dual of a pre-bialgebra together with a unital injective physical
-representation.  Formalizing that construction, from a pre-bialgebra to a
-complete zipper fusion family, supplies the functional and removes the
-argument.  Adding~(\ref{eq:mrgscp22_unit_condition}) as a field of the family
-instead would add a hypothesis to the results stated for the family of
-Ref.~\cite{Bultinck2017Anyons}, which does not assert it.
+Formalize that construction, from a pre-bialgebra with a unital injective
+physical representation to a complete zipper fusion family together with
+the identification $\psi$ of its letters.  The formalized source-data
+statement then supplies the counit for every family so constructed, and the
+scope restriction is discharged.  Adding~(\ref{eq:mrgscp22_unit_condition})
+as a field of the family instead would add a hypothesis to the results
+stated for the family of Ref.~\cite{Bultinck2017Anyons}, which does not
+assert it.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.UncleWallGram
 import QICLean.Algebra.MatrixTracePairing
 import QICLean.Channel.KrausCPTP
+import QICLean.Channel.KrausRectangularComposition
 import QICLean.Channel.Peripheral.UnitalKraus
 import Mathlib.Logic.Equiv.Fin.Basic
 
@@ -24,7 +25,7 @@ Lemma lowenergystates, lines 1196–1265.
 
 noncomputable section
 
-open scoped Matrix BigOperators InnerProductSpace
+open scoped Matrix BigOperators
 
 namespace MPSTensor
 
@@ -45,41 +46,6 @@ Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) (n : ℕ) :
     uncleWallGramMap A B R n 1 = uncleWallGram A B R n := by
   simp [uncleWallGramMap, Matrix.rectangularKrausMap, uncleWallGram]
-
-private theorem wordKrausMap_eq_pow (A : MPSTensor d a) (n : ℕ) :
-    Matrix.rectangularKrausMap (fun σ : Cfg d n ↦ Kraus.evalWord A (List.ofFn σ)) =
-      Kraus.mapLM A ^ n := by
-  apply LinearMap.ext
-  intro X
-  exact (Kraus.mapLM_pow_apply A n X).symm
-
-private theorem familyKrausMap_comp
-    {ι κ α β γ : Type*} [Fintype ι] [Fintype κ]
-    [Fintype β] [Fintype γ]
-    (C : ι → Matrix α β ℂ) (E : κ → Matrix β γ ℂ) :
-    (Matrix.rectangularKrausMap C).comp (Matrix.rectangularKrausMap E) =
-      Matrix.rectangularKrausMap (fun z : ι × κ ↦ C z.1 * E z.2) := by
-  apply LinearMap.ext
-  intro X
-  change (∑ i, C i * (∑ j, E j * X * (E j)ᴴ) * (C i)ᴴ) =
-    ∑ z : ι × κ, (C z.1 * E z.2) * X * (C z.1 * E z.2)ᴴ
-  simp only [Matrix.mul_sum, Matrix.sum_mul, Fintype.sum_prod_type,
-    Matrix.conjTranspose_mul, Matrix.mul_assoc]
-
-private theorem trace_familyKrausMap {ι : Type*} [Fintype ι]
-    (C : ι → Matrix (Fin a) (Fin a) ℂ) :
-    LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ) (Matrix.rectangularKrausMap C) =
-      ∑ z, Matrix.trace (C z) * star (Matrix.trace (C z)) := by
-  classical
-  rw [Matrix.linearMap_trace_eq_sum_apply_single]
-  simp only [Matrix.rectangularKrausMap, LinearMap.coe_mk, AddHom.coe_mk,
-    Matrix.sum_apply, Matrix.entry_mul_single_mul]
-  rw [Finset.sum_comm_cycle]
-  apply Finset.sum_congr rfl
-  intro z _
-  simp only [Matrix.trace, Matrix.diag_apply, Matrix.conjTranspose_apply,
-    star_sum, Finset.sum_mul, Finset.mul_sum]
-  exact Finset.sum_comm
 
 /-- The finite contraction of the five actual transfer maps. The two wall
 maps are rectangular and act on the actual A/B bond spaces. Source:
@@ -106,9 +72,11 @@ theorem trace_uncleTwoWallTransfer_eq_sum (A : MPSTensor d a) (B : MPSTensor d b
             star (uncleTwoWallCoefficient A B R L (List.ofFn u) (List.ofFn v)
               (List.ofFn w) (List.ofFn x) (List.ofFn y)) := by
   unfold uncleTwoWallTransfer uncleWallGramMap
-  rw [← wordKrausMap_eq_pow A p, ← wordKrausMap_eq_pow B q, ← wordKrausMap_eq_pow A t]
-  simp only [familyKrausMap_comp]
-  rw [trace_familyKrausMap]
+  rw [← Matrix.rectangularKrausMap_evalWord_ofFn A p,
+    ← Matrix.rectangularKrausMap_evalWord_ofFn B q,
+    ← Matrix.rectangularKrausMap_evalWord_ofFn A t]
+  simp only [Matrix.rectangularKrausMap_comp]
+  rw [Matrix.linearMap_trace_rectangularKrausMap]
   simp only [Fintype.sum_prod_type, uncleTwoWallCoefficient, Matrix.mul_assoc]
 
 /-- The two exterior A segments join under the operator trace. For the

@@ -186,6 +186,73 @@ theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 �
   intro z
   exact Submodule.span_mono hsubset (hvS z)
 
+/-- **Admissible filter factors**: a finite family of left factors containing, for every
+Gaussian approximant, the left factors of some cut decomposition of it. The chosen factors
+`gaussianFilterFactors` are admissible; so is the answer of any solver returning a cut
+decomposition of each approximant. -/
+def IsAdmissibleFilterFactors {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (c Delta : ℝ) (i : ℕ) (F : Finset (LeftBlockMatrix L q i)) : Prop :=
+  ∀ j : Fin (huangEnergyCount c Delta L), ∃ (ι : Type) (J : Finset ι)
+    (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
+    Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+        (huangFilterApproximant hq h h0 c Delta j) = ∑ t ∈ J, A t ⊗ₖ B t ∧
+      ∀ t ∈ J, A t ∈ F
+
+/-- The chosen Gaussian filter factors are admissible. -/
+theorem isAdmissibleFilterFactors_gaussianFilterFactors {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (c Delta : ℝ) (i : ℕ) :
+    IsAdmissibleFilterFactors hq h h0 c Delta i (gaussianFilterFactors hq h h0 c Delta i) :=
+  fun j ↦ ⟨_, Finset.univ, cutLeftFactor (huangFilterApproximant hq h h0 c Delta j),
+    cutRightFactor (huangFilterApproximant hq h h0 c Delta j),
+    (by
+      simpa using cutOperator_eq_sum_cutLeftFactor_kronecker (i := i)
+        (huangFilterApproximant hq h h0 c Delta j)),
+    fun k _ ↦ cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant hq h h0 c Delta) j k⟩
+
+/-- **Error reduction with any admissible filter factors.** For every ground pair with the
+prescribed gap, `1/2`-viability of the input family implies `c / L`-viability of its image
+under every admissible family of factors. Huang, arXiv:1406.6355v6, Section 5.4, Lemmas
+18--19, with LVV13, Claim `c:errorreduction`, lines 584--592. -/
+theorem isViable_errorReductionSet_of_isAdmissibleFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L)
+    (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
+    (hHΓ : (∑ j, h j) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
+    (hgap : ((∑ j, h j) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
+      (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef)
+    {F : Finset (LeftBlockMatrix L q i)} (hF : IsAdmissibleFilterFactors hq h h0 c Delta i F)
+    (S : Finset (LeftBlockVector L q i))
+    (hviable : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) :
+    IsViable Γ (c / L) (errorReductionSet F id S : Set (LeftBlockVector L q i)) := by
+  classical
+  obtain ⟨j, a, ha, -, herror⟩ :=
+    exists_huangFilterApproximant_near_ground hq h hs h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap
+  have ha0 : 0 < a := by linarith
+  obtain ⟨ι, J, A, B, hdecomp, hAF⟩ := hF j
+  have hsmall := huangFilterEta_amplitude_budget hc L ha
+  have hout := hviable.errorReduction_of_norm_sub_smul_groundProjection_le
+    hΓ hdecomp ha0 herror hsmall
+  have hη := (huangFilterEta_bounds hc L).1
+  have hloss : 4 * (4 * huangFilterEta c L) / a ≤ c / L := by
+    calc
+      _ ≤ 32 * huangFilterEta c L := by
+        apply (div_le_iff₀ ha0).mpr
+        nlinarith
+      _ ≤ c / L := huangFilterEta_length_budget hc hL
+  obtain ⟨v, hv1, hvΓ, hvS⟩ := hout
+  refine ⟨v, hv1, by linarith, ?_⟩
+  have hsubset : (errorReductionSet J A S : Set (LeftBlockVector L q i)) ⊆
+      errorReductionSet F id S := by
+    intro w hw
+    obtain ⟨k, hk, t, ht, rfl⟩ := Finset.mem_image₂.mp hw
+    exact Finset.mem_image₂.mpr ⟨_, hAF k hk, t, ht, rfl⟩
+  intro z
+  exact Submodule.span_mono hsubset (hvS z)
+
 /-- The left filter factors of the Gaussian error reduction, chosen before every ground
 pair and every input family: the existence form of `gaussianFilterFactors` and
 `isViable_errorReductionSet_gaussianFilterFactors`. -/

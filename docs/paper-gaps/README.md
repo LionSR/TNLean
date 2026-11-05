@@ -752,14 +752,19 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   pairs in the printed coupled pentagon, the missing summed primed fusion
   indices in the gauge display, and the analysis/synthesis convention. The
   general coupled pentagon and multiplicity gauge law remain proof obligations.
-- `glm23_wha_parent_completion.tex` distinguishes the weak-Hopf average
-  of the canonical support projection from averaging its complement. It
-  records the explicit adjoint-closure, positive-length unit-calibration,
-  and finite-family normalization hypotheses under which the support is
-  fixed, the weak-Hopf realization with its finite-set and Bell-pair
-  instances, and its derivation for any compatible tensor injective after
-  blocking (unit support comes from the ideal structure of the state boundary
-  space, without the identity at the injectivity length).
+- `glm23_wha_parent_completion.tex` (scope restriction, resolved)
+  distinguishes the weak-Hopf average of the canonical support projection
+  from averaging its complement. It records the explicit adjoint-closure,
+  positive-length unit-calibration, and finite-family normalization
+  hypotheses under which the support is fixed, the weak-Hopf realization with
+  its finite-set and Bell-pair instances, and its derivation for any
+  compatible tensor injective after blocking (unit support comes from the
+  ideal structure of the state boundary space, without the identity at the
+  injectivity length). For the Bell-pair state tensor, compatible with its
+  operator tensor and injective at one site, the average is
+  `E_n(X) = r⁻² tr(Q_n X) Q_n` and the support projection is `P_n = Q_n`, so
+  the uncompleted average `E_n(I − P_n)` vanishes at every positive length,
+  while `I − P_n ≠ 0` for `r ≥ 2` and `n ≥ 2`.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
@@ -789,8 +794,12 @@ For the matrix product operator algebras of arXiv:2204.05940:
   (Definitions 3.1 and 4.1), and that the fusion coproduct of a complete
   zipper fusion family satisfies both counit laws for the functional taking
   the Kronecker delta on the letters; that functional is the source's
-  evaluation at the unit, but its existence is not forced by the fields of
-  the family and is taken as an argument.
+  evaluation at the unit.  It exists exactly when the one-site identity is a
+  one-site operator of the family, and it is constructed for every family
+  whose letters are the images of the matrix coefficients of a unital
+  representation; for an arbitrary family its existence is not forced by the
+  fields and is taken as an argument, until the construction of the family
+  from a pre-bialgebra is formalized.
 
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
@@ -932,8 +941,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
-  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
-  restriction could be traded for the positive bond dimension the source assumes.
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`; since the
+  source blocks at least one site, `q ≥ 1` is adopted as the convention.
 - `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
   fixed-point state of a basis of normal tensors, eq. (19), is stated for an
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
@@ -1023,8 +1032,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
   unequal widths remove the former restriction to chain lengths divisible by
   `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
-  chain length; open: two-site gates between distant sites only at odd
-  separation, on disjoint stretches, which the trees do not need.
+  chain length (resolved); two-site gates between distant sites are covered
+  only at odd separation, on disjoint stretches, which the trees do not need.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
@@ -1073,11 +1082,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   seed condition for the non-normal chosen-vector conversion in #8469.
   It gives a mathematical (not Lean-checked) covariance obstruction to
   replacing that condition by equality of parent groundspaces. The informal
-  paper remark is not declared unconditionally false; its general phase
-  interpretation remains open.
-- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
-  that the claim that states in the same phase are related by a log-depth
-  circuit is formalized only between two normal tensors.
+  paper remark is read as conversion of whole ground spaces, which is
+  formalized; the chosen-vector condition is a further sufficient condition.
+- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction, resolved)
+  records that the claim that states in the same phase are related by a
+  log-depth circuit is formalized between two normal tensors, and for
+  non-normal tensors as conversion of whole parent ground spaces.
 
 For the phase relation of arXiv:2103.13367:
 
@@ -1838,6 +1848,15 @@ Tracked in [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
 
+- [`lvv13_cost_model.tex`](lvv13_cost_model.tex)
+  (scope restriction, open) records the cost model of the running time of
+  Theorem 1 (arXiv:1307.5143v1, lines 213–219): the algorithm is a program
+  over a type of linear-algebra queries, each charged a declared polynomial
+  cost in the dimensions of its arguments; correctness and the polynomial
+  bound hold for every valid oracle (any solver returning optimal solutions of
+  the convex programs, nets of the required radius and cut decompositions of
+  the filters); costs and exact arithmetic are declared, not derived, as in
+  the source.
 - [`lvv13_leading_net_point.tex`](lvv13_leading_net_point.tex)
   (open gap) records that the leading-vector step of Lemma
   `l:leading` (arXiv:1307.5143v1, lines 493–495) is formalized for any
@@ -1907,3 +1926,15 @@ The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
 are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
 The note records the distinction between the source's site endpoints and its
 selected bond indices.
+
+For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
+
+- [`aklv13_frustration_free_mps_rate.tex`](aklv13_frustration_free_mps_rate.tex)
+  (local correction, resolved) records that the exponent of the gap at line 867
+  is `+1/2`, as at line 835, and that the printed frustration-free bond
+  dimension `exp(O(ε^{-1/3} log^{2/3} n))` (lines 851–870) drops the factor
+  `log ℓ` of Lemma 4.2 (line 590) together with the starting rank
+  `exp(O(log³ d/ε))`. The formalized bound is
+  `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
+  `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
+  hypotheses; for accuracy `n^{-c}` it is of order `log^{2/3} n · log log n`.
