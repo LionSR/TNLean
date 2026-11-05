@@ -1506,7 +1506,7 @@
         "cor:canonical_ritz_energy": "Same-family subtree energy certificate retained with the actual probabilistic Ritz/MPS output"
       }
     },
-    "sec:corrected_cluster_mpo": {
+    "sec:interval_cluster_truncation": {
       "theorems": [
         "thm:normalized_cluster_label_tail",
         "thm:physical_cluster_label_mpo",
