@@ -59,39 +59,16 @@ explicit count. These qualifications are recorded in
 entry states them explicitly. The absence of a density hypothesis makes
 this an improving-family construction, not a low-density area law.
 
-Six completed modules, containing eleven public declarations, are
-extracted from local revision `9ad6cdd3c23da0ce9b5e6cc36edfec99f0211ff7`.
 They extend the independent-threshold residual in TNLean #10515. The
-finite-dimensional estimates come from the accepted QICLean #1016 and
-#1017 contributions on their common Mathlib 4.35-compatible revision.
-The nested-cutoff viability theorem additionally uses QICLean #1020;
-revision `965d1bb07d4903785411cb7b95a5e866a243fd0d` includes that proof.
-The existing private short-region spanning lemma is exposed as
-`exists_short_actual_region_spanning_family`, with its proof unchanged and
-its two existing callers updated. It also receives a mathematical blueprint
-entry. There are twelve newly public declarations in total.
-
-## Verification
-
-The extracted statements have been compared with the source and the
-explicit buffer calculation. Source-level blueprint synchronization,
-declaration roles, generated imports, and whitespace checks pass. The
-new mathematical sections and the three-page paper-gap note compile;
-their rendered statements have been inspected. The tactic-pattern scan
-finds no new repeated pattern requiring a separate abstraction.
-
-Strict read-only elaboration of the extracted interval proofs and the four
-required nested-cutoff lemmas passes with the Mathlib standard linters and
-warnings treated as errors. All twelve newly public TNLean declarations
-and the four QICLean lemmas depend only on `propext`, `Classical.choice`
-and `Quot.sound`. This checks the actual extracted proofs; the full modular
-build and compiled blueprint declaration checks are still pending.
+finite-dimensional estimates come from the accepted QICLean #1016 and #1017
+contributions on their common Mathlib 4.35-compatible revision. The existing
+private short-region spanning lemma is exposed as
+`exists_short_actual_region_spanning_family`, with its proof unchanged and its
+two existing callers updated. It also receives a mathematical blueprint entry.
+There are twelve newly public declarations in total.
 
 ## Mathlib 4.36 integration
 
-The main-branch upgrade to Mathlib 4.36 is incorporated through the
-recursive viable-tree contribution. The current QICLean revision is
-`8af1f77d468fed30b84644f923b8ae319a2bc432` (QICLean #1020), which includes
-the nested-cutoff lemmas and the accepted soft-truncation estimates on
-that toolchain. The TNLean proofs are unchanged. The direct proof and
-axiom checks above used Mathlib 4.35; verification on 4.36 is pending.
+The main-branch upgrade to Mathlib 4.36 is incorporated through the recursive
+viable-tree contribution. The TNLean proofs are unchanged. The direct proof
+and axiom checks above used Mathlib 4.35; verification on 4.36 is pending.

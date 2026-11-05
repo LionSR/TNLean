@@ -24,23 +24,3 @@ reference selection, final Ritz extraction, the printed iteration count,
 adaptive sampling probability and running time are separate obligations.
 The normalized recurrence correction is recorded in
 `docs/paper-gaps/alvv16_final_filter_gain.tex`.
-
-## Verification
-
-The two actual modules passed separate strict package-linter checks with
-warnings as errors against immutable ordinary TNLean
-994a1963ab36a234e1b02689a13bf1da965573b2 and its own QICLean
-67a788fdb9660c16c70c97bf36be5da6bbbaa348. The full ordinary provider had
-passed 15,627 jobs, including rebuilt affected importer objects. The generic
-literal-iteration module passed in 5.517 seconds over 264 selected source-object
-pairs; the physical finite-convergence module passed in 6.276 seconds over
-270 pairs. Every selected source, object, root input and prebuilt Mathlib
-hash remained fixed before and after checking.
-
-An imported foundation inspection covers all six public declarations,
-including the two inline simp theorems. It passed in 5.397 seconds over
-271 selected pairs, using only propext, Classical.choice and Quot.sound.
-The temporary source was deleted. There is no permanent fixture or Lake directory. No provider
-or cache was mutated, no compiled artifacts were copied and Mathlib was
-not rebuilt. Combined ordinary library, regression, compiled blueprint and
-timing gates remain required after integration.

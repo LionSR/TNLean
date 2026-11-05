@@ -46,28 +46,3 @@ remain separate. No adaptive joint probability, energy-estimation invariant,
 final spectral extraction or running time is asserted. The older common-root
 refinement theorem concerns its own one-final-trim tree and is not silently
 transferred to this different literal recursion.
-
-## Verification
-
-The immutable provider was TNLean 478e8a08f8d97cec4064070a29170a0953362d3e
-with its own QICLean 9578336a5123a76001a1218e271132091c828de2, after the full
-ordinary build. Explicit private dependency overrides were frozen QICLean
-731e9c2ffec00be39fef8fe6d68072ea7ccbba72 and TNLean 9d124cba60/fc033fde8c.
-The new generic helper and physical module were checked sequentially as actual
-modules with fresh private objects and package linter options. Selected
-source/object pairs, root inputs, unchanged Mathlib artifact and changed
-importer provenance were guarded. No provider/cache artifacts were copied
-or modified; the source worktree has no .lake.
-
-- IntervalMergeChoice: final strict 4.512 seconds, 2 protected source/object pairs.
-- PhysicalDGInterleavedTree: final strict 12.997 seconds, 750 pairs.
-- Imported two-public-declaration inspection: 8.064 seconds, 751 pairs;
-  only propext, Classical.choice and Quot.sound.
-
-The temporary inspection source was deleted. Source/blueprint coverage,
-roles, reader-facing prose, generated imports, whitespace and forbidden-token
-checks passed. The tactic scan's common-prefix forwarding match was recorded
-as reuse of one shared physical construction, rather than duplicated analytic
-reasoning; unnecessary type-exposure steps were removed from the tree.
-Ordinary combined builds and compiled blueprint checking remain integration
-gates.

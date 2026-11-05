@@ -7,13 +7,11 @@ parent. No nearby reference space or MPS approximation is supplied as a premise.
 
 ## Source and precise scope
 
-The source is ALVV, arXiv:1602.08828v2, `t:alg1`, especially lines 1801–1805 of the
-retained source `/tmp/alvv-low-density-source-20261102.tex`, SHA256
-`19d37facb8bf8da6ea5555cd7185c054d251ad4a06c2f44fcb92593235ad6b92`.
 That passage invokes the area law to replace the original ground space by a
 nearby space of polynomial bond dimension. The new reference is mutually
-`1/100000`-close, a stronger fixed accuracy than the printed `10^-4` reference.
-The scalar normalization and final spectral-filter arguments are not used.
+`1/100000`-close, a stronger fixed accuracy than the printed `10^-4`
+reference. The scalar normalization and final spectral-filter arguments are
+not used.
 
 The printed trimming lemma is `lem:trimming`, lines 660–697. Its corrected
 weighted reference estimate is recorded in the QICLean-owned note
@@ -98,33 +96,3 @@ The physical profile returns its numerical polynomial bound for every natural M.
 Substitution of an actual parent's candidate count, and its dimension estimate
 such as card(F)*Smax^2, remains a separate consumer. This batch does not assume
 or construct that parent's sampled output.
-
-## Verification and adoption
-
-The provider was immutable TN `38e847070a43b508cc3d01362efd7ced8cd8314f` and its own
-QICLean `4743a375465299fef1e1f536d22342fa1f745374`. Each actual-name strict check
-used default resource limits, source/object and build-input guards, and separate
-private output files. There was no Mathlib compilation, cache copying, provider
-mutation, ordinary Lake build, or new public supplied-reference hypothesis.
-
-Production strict checks passed:
-
-- `PhysicalGroundReference`: 9.630 seconds, 696 selected source/object pairs.
-- `PhysicalGroundReferencePolynomial`: 9.394 seconds, 700 selected pairs.
-- `PhysicalGroundReferenceTrimming`: final source with the trimming-gap citation,
-  9.059 seconds, 718 selected pairs. The previous mathematical source passed
-  in 9.081 seconds; this was a citation update, not an unchanged timing retry.
-
-The final imported audit of all three new public declarations passed in 7.969
-seconds with 719 selected source/object pairs and is recorded in the external
-manifest. Each depends only on `propext`, `Classical.choice`, and
-`Quot.sound`. All temporary audit commands are deleted before freezing.
-There are no proof holes, diagnostic commands, extra resource options, or new
-per-theorem fixtures in the contribution.
-
-The new chapter contains one entry for each public declaration and a
-scope-matched corollary for the common radius. Mathematical roles, reader-facing
-prose, generated imports, declaration correspondence, and the changed-file
-integrity scan are checked locally. A two-page standalone reader is rendered
-and visually checked. A dependency-aware ordinary full build, compiled complete
-book and declaration checks remain required during coordinated integration.

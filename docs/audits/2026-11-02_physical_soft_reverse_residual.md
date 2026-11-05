@@ -49,20 +49,7 @@ energy estimate, its spectral enlargement, estimated-center uniformity,
 several simultaneous replacements or the final GEN and running-time bounds.
 The existing cluster counterexamples and their false-source status remain.
 
-All checks read immutable fully built TNLean
-`994a1963ab36a234e1b02689a13bf1da965573b2` and its own QICLean
-`67a788fdb9660c16c70c97bf36be5da6bbbaa348`. The exposed existing counting
-module passed strict checking in 8.395 seconds; its unchanged existing hard
-importer passed in 7.136 seconds. The existing original-side module was freshly
-checked after its scope documentation was added, in 6.618 seconds. The final
-new physical module passed in 7.309 seconds with 122 selected source/object
-pairs guarded. An imported audit of the newly exposed counting declaration,
-the preceding original-side theorem and the new two-sided theorem passed in
-4.531 seconds; each reports only propext, Classical.choice and Quot.sound.
-
 Selected sources, objects, build inputs and the prebuilt Mathlib record were
-guarded. All outputs and temporary foundation commands remain under /tmp.
-The source worktree has no .lake directory. No shared provider, dependency
-cache or Mathlib source was changed. The ordinary integrated full-library,
-compiled-book and paper-gap-document checks remain pending. No permanent
-Lean test fixture is added.
+guarded. No shared provider, dependency cache or Mathlib source was changed.
+The ordinary integrated full-library, compiled-book and paper-gap-document
+checks remain pending. No permanent Lean test fixture is added.

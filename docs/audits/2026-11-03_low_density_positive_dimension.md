@@ -44,21 +44,3 @@ bound and global MPS bounds in one vector, would use nonuniform sequential
 rank budgets. It is not inferred by identifying two existential choices.
 No claim that this stronger conclusion or a running-time estimate has been
 proved is made by the present contribution.
-
-## Verification
-
-Actual-name private checks use the immutable ordinary-built TN provider
-`20cad76ebfa6e770263c4a5d5333917c5b226ed9` and its own exact QIC package
-`98ba564e3c9603dc93d2173e3dc87a85ce750456`. The checker guards selected
-source/object pairs, root inputs, the warmed Mathlib sentinel and changed
-importer dependencies; outputs are confined to `/tmp`. No provider, package
-or cache is modified, and no Mathlib source build is started.
-
-All three modules pass strict checks with default options: entropy in
-8.269 seconds, fixed-cut approximation in 9.407 seconds and global MPS
-approximation in 9.676 seconds. Imported foundation inspection covers all
-three public declarations and allows only `propext`, `Classical.choice`
-and `Quot.sound`. Temporary inspection commands are deleted after use.
-New reader entries state their quantifiers and scalar branches explicitly.
-Ordinary combined compilation and compiled blueprint declarations remain
-integration gates.

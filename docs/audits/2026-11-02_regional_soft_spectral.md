@@ -24,15 +24,8 @@ interaction-label estimate is still used. The false printed cluster
 estimate, the counterexamples and the independent-scale restriction remain
 recorded in `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 
-The strict actual-name source check passed in 5.014 seconds with 152
-selected source/object pairs guarded. Its imported public foundation audit
-passed in 4.797 seconds with 153 pairs and reported only `propext`,
-`Classical.choice` and `Quot.sound`. The fresh checks used exact fully
-warmed TNLean `5fc343a57d70eefd2902780107851ab9b0753a82` and its own QICLean
-`ba01733099b5a18bed5c9bfb62f95f175b4c9b57`, together with explicitly selected
-frozen new-source objects. Build inputs and the prebuilt Mathlib record
-were guarded. All outputs remain under `/tmp`. No provider, dependency
-cache or Mathlib source was changed. The source worktree has no `.lake`.
+Build inputs and the prebuilt Mathlib record were guarded. No provider,
+dependency cache or Mathlib source was changed.
 
 The mathematical book entry is included. Ordinary integrated full-library
 and compiled-book checks remain pending. Foundation commands occur only

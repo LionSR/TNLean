@@ -77,17 +77,3 @@ viable for the latter. The estimate here must be transferred quantitatively
 to that same target before it can bound the candidate compression. This
 contribution does not complete that transfer, the recursive energy invariant,
 the generation procedure, or its running-time bound.
-
-## Verification
-
-All five production modules passed private strict actual-name checking at
-the default resource budgets against the fully checked immutable provider
-TNLean 20cad76ebfa6e770263c4a5d5333917c5b226ed9 and its own QICLean
-98ba564e3c9603dc93d2173e3dc87a85ce750456. The imported audit covers all
-ten public declarations and finds only propext, Classical.choice and
-Quot.sound. Exact source/object and build-input hashes were guarded before
-and after each check, including the prebuilt Mathlib object. Private objects
-and the temporary foundation commands are confined to /tmp. Neither provider
-nor shared cache was modified; no Mathlib source was built. The manifest
-records the final hashes, durations and logs. Ordinary combined and compiled
-blueprint checks remain required after adoption.

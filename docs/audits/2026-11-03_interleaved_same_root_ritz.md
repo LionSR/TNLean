@@ -62,21 +62,3 @@ count n is in rho; it is not identified with the printed count, as recorded
 in the final-filter-gain note. No adaptive joint probability, source
 energy-estimation invariant or running time is asserted. Uniform polynomial
 simplification for the NEW variable-D profile is a separate corollary.
-
-## Verification
-
-The actual-name strict module check passed in 16.123 seconds with 763 protected
-source/object pairs at immutable TNLean 20cad76ebfa6e770263c4a5d5333917c5b226ed9,
-own QICLean 98ba564e3c9603dc93d2173e3dc87a85ce750456. No private dependency
-override was needed: all load-bearing modules were fully rebuilt in that
-provider before the check. An imported one-public-declaration inspection
-passed in 8.725 seconds with 764 pairs, using only propext, Classical.choice
-and Quot.sound. Its temporary source was deleted.
-
-Exact selected source/object and root-input hashes, Mathlib artifact and
-importer provenance were guarded. No provider/cache object was modified or
-copied; the source worktree contains no .lake. Blueprint/source coverage
-against read-only pinned dependencies, roles, reader-facing prose, generated
-imports, forbidden-token and whitespace checks passed. The tactic scan found
-no new repeated proof requiring promotion. Ordinary combined builds and
-compiled blueprint checking remain integration gates.

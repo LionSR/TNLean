@@ -29,10 +29,8 @@ uncountable intersection is asserted measurable.
 
 These statements support ALVV, arXiv:1602.08828v2, lines 749–755 and
 1777–1817. They do not assert a complete physical construction or a
-running-time bound. The checked TNLean/QICLean pair is 107e2726f6/68481832e0;
-new original-target history and generic joint-history statements are
-supplied from immutable checked copies. Ordinary integration and the
-compiled blueprint checks remain pending.
+running-time bound. Ordinary integration and the compiled blueprint checks
+remain pending.
 
 The integrated supporting node-energy and recursive-assignment entries are
 classified as lemmas by the repository's existing blueprint role data.

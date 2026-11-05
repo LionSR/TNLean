@@ -49,31 +49,3 @@ assignment attached to this probability event must restrict its node
 conclusions to that actual subtree; the earlier all-valid-interval energy
 existence theorem is stronger in this respect and cannot be inferred from
 the present joint event.
-
-## Provenance and verification
-
-The source-only TN worktree starts from checked
-435cbe7fe53e5d3a04c1b8eb2382753749f21a64 and contains a source-only
-cherry-pick of frozen ancestry commit fe9562d7eb. That module is unchanged.
-The worktree has no .lake directory. Only the new joint-failure module and
-its documentation form this contribution.
-
-The private actual-name check reads the immutable warmed TN provider at
-the same commit with its own QIC b2ea12a0139820758e161514968ed9ead661c5a7,
-and uses the frozen ancestry source/object override. Exact clean provider
-heads, the completed-build record, inputs, selected source/object hashes
-and the prebuilt Mathlib artifact hash are guarded before and after each
-check. Outputs are confined to /tmp/tnlean-balanced-joint-failure-20261103.
-No shared cache is changed and no Mathlib source is compiled.
-
-The strict check passes in 4.089 seconds with four guarded dependency pairs.
-The imported audit of the public theorem passes in 4.065 seconds with five
-pairs and depends only on propext, Classical.choice and Quot.sound. Temporary
-audit commands were deleted. No production fixture or diagnostic command
-is added.
-
-Source-only blueprint synchronisation uses read-only dependency sources
-from the same provider. Import generation, blueprint roles, reader-facing
-prose, forbidden-token, whitespace, dependency-label and tactic-pattern
-checks are recorded in the external manifest. Ordinary build and compiled
-blueprint checks remain for coordinated integration.

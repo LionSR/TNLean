@@ -37,21 +37,3 @@ The fixed-bandwidth and nontrivial local-dimension scope is recorded in
 `docs/paper-gaps/alvv16_low_energy_family_scope.tex`. The printed
 logarithmic simplification, low-energy entropy, MPS and running-time
 conclusions remain separate; none is asserted by this checkpoint.
-
-## Verification
-
-The final production source passed a strict actual-name private check in
-10.895 seconds against immutable TNLean
-`994a1963ab36a234e1b02689a13bf1da965573b2` and its own QICLean package
-`67a788fdb9660c16c70c97bf36be5da6bbbaa348`. Explicit private overrides
-supplied the checked new companion leaves. The checker guarded all 564
-selected TNLean/QICLean source-object pairs, root build inputs and the
-prebuilt Mathlib sentinel. An imported inspection of the physical public
-theorem passed in 8.912 seconds with only `propext`, `Classical.choice`
-and `Quot.sound`. Its temporary diagnostic source was removed.
-
-Blueprint source synchronization and reverse coverage, reader-facing
-prose, import syntax, proof-integrity and whitespace checks passed.
-Ordinary combined compilation and compiled blueprint checking remain
-integration checks. No build cache or provider source was changed, and
-no Mathlib source was compiled.

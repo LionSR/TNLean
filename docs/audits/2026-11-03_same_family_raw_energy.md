@@ -90,26 +90,3 @@ family is not identified with literal soft Generate, and no printed word
 count, adaptive sampling law or running-time bound is claimed. The false
 printed cluster and uniform soft-energy estimates keep their counterexamples
 and existing notes.
-
-## Shared quadratic-form proof and verification
-
-The three genuine scalar-shift expansions now use the shared complex matrix
-lemma in QICLean.Analysis.QuadraticScalarShift. The old native-regional and
-soft-parent public signatures are byte-identical. The operator-to-tensor
-coordinate calculation is reused from the separately frozen QICLean regional
-coordinate contribution. No duplicate scalar or coordinate proof remains.
-
-The actual new module passed final private strict checking in 10.547 seconds;
-the two updated consumers passed in 13.066 and 6.834 seconds, at default resource
-budgets. The imported audit checks all three public TNLean statements and
-the active complex scalar-shift lemma, with only propext, Classical.choice
-and Quot.sound. It uses immutable TNLean
-e2706cbe715c49745d4399d37dabe3d2559cc494 and its own QICLean
-de8a9d1286709f39d8c37d4d52d6e336925863e5. Each selected source/object,
-build input and prebuilt Mathlib hash is guarded before and after checking;
-all selected changed importers are freshly checked through explicit private
-objects. Exact records are in the manifest. Frozen coordinate and generic
-shift proof assets are preserved separately. New objects and temporary audit
-commands are confined to /tmp; neither source worktree has a .lake. No
-provider or shared cache was changed and no Mathlib source was compiled.
-Ordinary combined and compiled blueprint checks remain required after adoption.

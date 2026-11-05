@@ -16,21 +16,3 @@ The generic theorem explicitly requires commutation and a projection floor. The 
 application is responsible for deriving them. This contribution does not complete the
 simultaneous estimated-center construction, the efficient-filter theorem, or the printed
 uniform energy estimate. The false cluster estimate and its counterexamples are unchanged.
-
-## Verification
-
-Strict private actual-module checks used the fully warmed immutable TNLean provider
-`d316e8cbe52bd5f12bcfbeec687d1dbef7633586` and its own QICLean package
-`d1317fdb229a1048cc65ec5ab1912403ab6bcbc0`. Selected source and object hashes,
-both package configurations, warmed Mathlib and changed-importer closure were guarded.
-Outputs were written only under `/tmp`; no dependency or production cache was modified.
-The shared module passed in 4.855 seconds and its existing consumer in 6.660 seconds.
-
-An imported foundation audit checked both new public declarations and
-`exists_single_region_soft_truncation_residuals`; it passed in 4.354 seconds.
-All three depend only on `propext`, `Classical.choice` and `Quot.sound`.
-The audit commands remain temporary and are not part of the repository.
-Whitespace, generated imports and added-prose checks pass. The full source-to-blueprint
-scan in the source-only worktree cannot discover the absent dependency checkouts; its
-564 unresolved references are not a compiled declaration check. Ordinary combined builds,
-the dependency-aware source scan and compiled blueprint checks are required after adoption.

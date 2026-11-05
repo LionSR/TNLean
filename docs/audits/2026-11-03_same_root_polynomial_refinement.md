@@ -42,8 +42,4 @@ normalized-gain iteration are recorded in
 `docs/paper-gaps/alvv16_final_filter_gain.tex`. No running time or printed
 sharp inverse-gap estimate is asserted.
 
-Verification uses immutable source copies against the fully checked
-TNLean 88a5df56887b75b9a4d79c2c77153df6b2b7733c / QICLean
-32b5f3e04e232bb9ee2ee34a7bf5078b263b85b3 pair. The new source requires
-ordinary combined integration after its strict check and imported
-foundation audit. No Mathlib source build or cache mutation is used.
+No Mathlib source build or cache mutation is used.

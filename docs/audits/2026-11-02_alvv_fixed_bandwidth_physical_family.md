@@ -34,38 +34,18 @@ This is an auxiliary construction for ALVV, arXiv:1602.08828v2,
 Theorem `t:aisgapless`, lines 1027–1041. It is not a completion of the
 low-density minimal-dimension argument, entropy theorem or algorithm.
 
-The proof reuses the independently checked three-bulk residual
-`IndependentFiveRegionResidual`, the fixed-bandwidth scalar contribution
-`d94eb0257482b69442e1b0d7956cba961c7e5e45`, and the selective nested-target
-QIC contribution `e297b331bae0d27c65a67da9c01d9a17bcc7f444`. The existing
-actual regional polynomial-family theorem supplies the tensor
-decomposition from the original supported terms. No independent chain
-area-law result is used.
+The existing actual regional polynomial-family theorem supplies the tensor
+decomposition from the original supported terms. No independent chain area-law
+result is used.
 
-Private checks use the fully verified immutable TNLean provider
-`5fc343a57d70eefd2902780107851ab9b0753a82` and its own QICLean package
-`ba01733099b5a18bed5c9bfb62f95f175b4c9b57`, with explicit checked overrides.
 Selected dependency sources, objects, configuration files and the prebuilt
 Mathlib sentinel are guarded before and after each check. Every selected
-importer of a changed dependency is re-elaborated. All outputs remain
-under `/tmp`; no provider or build cache is changed.
+importer of a changed dependency is re-elaborated.
 
-| Actual-name strict check | Seconds |
-| --- | ---: |
-| `LowDensityBufferedTargets` | 7.035 |
-| `FixedBandwidthLowEnergyFamily` | 24.916 |
+The temporary diagnostic source was deleted. The global mathematical role
+checker reports the same 41 discrepancies as the accepted-main baseline; the
+new entries introduce none. The tactic-pattern scan was run and reuse was
+recorded in the ledger.
 
-The imported inspection of both new public declarations passed in
-8.992 seconds, with only propositional extensionality, classical choice
-and quotient soundness. The temporary diagnostic source was deleted.
-Generated imports, blueprint source synchronization and reverse coverage,
-reader-facing prose and whitespace checks pass. The global mathematical
-role checker reports the same 41 discrepancies as the accepted-main
-baseline; the new entries introduce none. The tactic-pattern scan was
-run and reuse was recorded in the ledger.
-
-The final family check took 24.916 seconds and remains below the
-25-second review threshold. Its scoped heartbeat allowance accounts for
-the dependent finite configuration types in the tensor decompositions.
-Ordinary compilation, the full library and compiled blueprint checks
-remain integration requirements. No running-time claim is made.
+Ordinary compilation, the full library and compiled blueprint checks remain
+integration requirements. No running-time claim is made.

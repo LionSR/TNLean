@@ -38,50 +38,15 @@ not close issue 9847.
 
 ## Source selection
 
-The source-only worktree starts at TNLean revision
-`5fc343a57d70eefd2902780107851ab9b0753a82` and retains its QICLean pin.
 Twenty-five previously absent production modules are selected individually
 from the preserved cluster/MPO and soft-MPO sources. Existing mathematical
-files, including `ProductForm` and `TraceChainOperator`, are retained and
-used by the verified port. No old branch, old generated import file, or
-old complete blueprint chapter is restored.
+files, including `ProductForm` and `TraceChainOperator`, are retained and used
+by the verified port. No old branch, old generated import file, or old
+complete blueprint chapter is restored.
 
-The four shared prerequisites form a separate QICLean contribution based on
-`ba01733099b5a18bed5c9bfb62f95f175b4c9b57`. The finite heat expansion imports
-the existing scalar soft definition directly; it does not require the
-separate soft-versus-hard comparison. All 61 new public declarations across
-the two contributions have mathematical book entries. No matching declaration
-headers already exist on either current base. The accuracy signatures are
-generalized directly, without compatibility aliases.
-
-## Verification
-
-All 25 TNLean production modules passed fresh strict actual-name checks
-against exact, clean, fully warmed TNLean revision `5fc343a57d` and its own
-QICLean package `ba017330`. The largest module time is 36.126 seconds. The
-generalized soft accuracy and full-Hamiltonian modules passed in 5.167 and
-5.169 seconds respectively. A separate imported audit of all 54 new TNLean
-public declarations passed in 16.150 seconds, guarding 147 selected source
-and object pairs. Every declaration uses only `propext`, `Classical.choice`
-and `Quot.sound`.
-
-The four new QICLean leaves and all seven public foundations had already
-passed fresh guarded checks. Their temporary objects are the only new QIC
-objects used by the TNLean checks. The old private copies of four existing
-QIC dependencies were independently confirmed source- and object-identical
-to the fully warmed current package and omitted from the overrides.
-
-All selected sources, imported objects, build inputs and the warmed Mathlib
-object were hashed before and after each check. The only proof correction
-needed by the parameter generalization is the explicit nonnegativity of
-2(exp(m/t)-1); overlong docstrings were wrapped. No provider or dependency
-cache was changed, no Mathlib source was rebuilt, and the isolated worktree
-has no `.lake` directory. Foundation commands are confined to a temporary
-audit; no Lean test fixture is added.
-
-Added prose, whitespace, generated imports, declaration links and selected
-new-section theorem roles pass static checks. The full current-base role
-checker has 41 pre-existing mismatches outside the new sections; those
-unrelated entries are not changed. The updated seven-page mathematical excerpt rendered twice without TeX warnings;
-the changed pages were visually inspected. The ordinary integrated full build
-and complete compiled-book gates remain pending.
+The finite heat expansion imports the existing scalar soft definition
+directly; it does not require the separate soft-versus-hard comparison. All 61
+new public declarations across the two contributions have mathematical book
+entries. No matching declaration headers already exist on either current base.
+The accuracy signatures are generalized directly, without compatibility
+aliases.

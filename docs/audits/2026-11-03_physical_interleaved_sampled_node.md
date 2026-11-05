@@ -36,21 +36,3 @@ Figure fig:merge-prime, lines 1668–1670, and lines 1797–1805. Long intervals
 capped-gap estimates and the larger integer count remain explicit. This is
 one fixed-child node theorem, not an adaptive measurable tree law or a
 running-time claim.
-
-## Verification
-
-The immutable provider was TNLean 478e8a08f8d97cec4064070a29170a0953362d3e
-with its own QICLean 9578336a5123a76001a1218e271132091c828de2. Private overrides
-were exactly frozen QICLean 731e9c2ffec00be39fef8fe6d68072ea7ccbba72 and TNLean
-9d124cba60d3be846d042883de9af8e7d4c4af8c. The source worktree contains no .lake.
-Selected source/object pairs, root inputs, Mathlib artifact and changed
-importer provenance were guarded. No provider or cache artifacts were
-modified or copied.
-
-The final strict check passed in 15.343 seconds with 747 protected pairs.
-An imported inspection of the definition and theorem passed in 9.409 seconds
-with 748 pairs, depending only on propext, Classical.choice and Quot.sound.
-The temporary source was deleted. Blueprint/source coverage with the
-read-only pinned dependencies, roles, reader-facing prose, generated imports,
-forbidden proof tokens and whitespace were checked. Ordinary combined builds
-and compiled blueprint validation remain integration gates.

@@ -29,29 +29,3 @@ The fixed-input measurable Haar events are preserved. No adaptive probability
 kernel or algorithmic running time is inferred. Automatic final-reference
 choice, the printed threshold inequality, finite refinement and same-root
 Ritz composition remain distinct subsequent steps.
-
-## Verification
-
-Against immutable ordinary TNLean 994a1963ab36a234e1b02689a13bf1da965573b2
-and its own QICLean 67a788fdb9660c16c70c97bf36be5da6bbbaa348, all changed
-actual modules passed strict package-linter checks with warnings as errors:
-
-- sampled parent: 14.065 seconds, 729 selected source-object pairs;
-- conditional tree: 13.856 seconds, 734 pairs;
-- automatic parameters: 13.853 seconds, 735 pairs.
-
-The unchanged native-root MPS and normalized-root witness importers were
-freshly re-elaborated above the changed dependency chain, in 12.982 and
-12.753 seconds respectively. The three original public signatures were
-compared byte for byte with the fixed provider. Selected sources, objects,
-root inputs and the prebuilt Mathlib object were guarded before and after.
-
-An imported foundation inspection covers all three new public statements,
-their three preserved fixed-radius corollaries and the two existing native
-root consequences. It passed in 8.993 seconds over 742 selected source-object
-pairs, using only propext, Classical.choice and Quot.sound. The temporary
-source was deleted. No
-permanent fixture or Lake directory is introduced, no provider/cache is
-modified, no compiled artifact is copied and Mathlib is not rebuilt.
-Combined ordinary library, regression, compiled blueprint and timing gates
-remain required after integration.

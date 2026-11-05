@@ -70,32 +70,3 @@ long dependent spectral and word certificate under specialized powers of u.
 There are no source options, diagnostic commands, supplied successful
 samples, spectral-gap or approximation assumptions absent from the physical
 inputs, or additional decomposition hypotheses.
-
-## Checks and scope
-
-The final production source passed its strict actual-name check in
-25.167 seconds against immutable TN 8048ec79 / QIC 8d0f7d15, guarding
-629 selected source/object pairs. The imported public foundation audit
-passed in 22.799 seconds with 630 guarded pairs and only propext,
-Classical.choice and Quot.sound. Temporary audit commands were deleted.
-The first complete mathematical source passed in 14.756 seconds; the final
-docstrings clarify the fixed soft order versus the varying cluster order.
-An earlier scalar-only successful check took 28.759 seconds; its evidence
-is retained, without a timing-only retry or a larger resource allowance.
-
-The new source/blueprint declaration, mathematical role, reader-facing
-prose and generated imports are checked locally. A four-page local reader
-includes the previous physical theorem and the new corollary; the new
-pages were visually inspected without overflow or clipping. Its unresolved
-references belong only to earlier omitted dependency lemmas in the previous
-chapter. Full dependency-aware declaration and compiled-book checks, and an
-ordinary build, remain required in the coordinated integration.
-
-The polynomial assertion is uniform in N for fixed q and g. The scale,
-soft order and filter degree are fixed before N. It makes no polynomial
-claim for independently growing soft order or filter degree, sharp inverse-gap claim,
-identification of the printed fourth-order choice, adaptive generating
-algorithm claim, or running-time claim. Natural-window geometry remains
-unchanged; collar transport to arbitrary intervals is a separate result.
-The false printed cluster and uniform soft-energy claims and their
-counterexamples remain documented in the existing paper-gap notes.

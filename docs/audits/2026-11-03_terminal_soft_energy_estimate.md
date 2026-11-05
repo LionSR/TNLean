@@ -18,13 +18,7 @@ interactions. The least actual compressed eigenvalue lies in
 estimate of width `49/16`. No original-Hamiltonian norm is substituted for
 the norm of the centered soft replacement.
 
-The production source passed in 14.350 seconds against the fully warmed
-TN revision `38e847070a43b508cc3d01362efd7ced8cd8314f` and its own QIC revision
-`4743a375465299fef1e1f536d22342fa1f745374`, using the new compression interval
-lemma as an explicit source/object override. All 206 selected dependency
-pairs, inputs and prebuilt Mathlib root were guarded. Imported foundation
-inspection passed in 4.999 seconds and reported only `propext`,
-`Classical.choice` and `Quot.sound`. Temporary inspection commands were removed.
+Temporary inspection commands were removed.
 
 The first coordinate application reached the default recursion limit.
 Giving the conjugation identity its actual named-coordinate type resolved

@@ -51,13 +51,9 @@ and contains the existing error-monotonicity theorem with its signature
 and proof unchanged. Both gapped consumers and the new short branch use
 that shared result. The existing gapped public signatures are unchanged.
 
-Private actual-name checks use the immutable fully verified provider
-TNLean `5fc343a57d70eefd2902780107851ab9b0753a82` and its own QICLean
-package `ba01733099b5a18bed5c9bfb62f95f175b4c9b57`. Every selected
-source, object, package input and prebuilt Mathlib sentinel is guarded.
-Every selected importer of a changed source is re-elaborated with an
-explicit override. Outputs remain private; no provider or cache is
-changed. The frozen earlier worktrees are unchanged.
+Every selected source, object, package input and prebuilt Mathlib sentinel is
+guarded. Every selected importer of a changed source is re-elaborated with an
+explicit override. Outputs remain private; no provider or cache is changed.
 
 | Actual-name check | Seconds |
 | --- | ---: |
@@ -72,10 +68,6 @@ changed. The frozen earlier worktrees are unchanged.
 | `ShortRegionViableFamily` | 5.68 |
 | `ChebyshevViability` | 9.296 |
 
-All changed production modules are below 25 seconds. The unchanged
-canonical-family regression is 26.933 seconds; its review warning is
-retained. The imported inspection of all eight new or affected physical
-public declarations passed in 7.943 seconds with only propositional
-extensionality, classical choice and quotient soundness. Temporary
-diagnostic commands are removed after inspection. Ordinary integration,
-full-library verification and compiled blueprint checks remain required.
+Temporary diagnostic commands are removed after inspection. Ordinary
+integration, full-library verification and compiled blueprint checks remain
+required.

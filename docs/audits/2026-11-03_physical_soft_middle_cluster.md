@@ -41,22 +41,3 @@ four or quantitative bound on that selection is asserted. The corrected
 interaction-label and soft-residual estimates are cited in the module and
 blueprint, and the unrestricted efficient source theorem is not marked
 complete by this auxiliary.
-
-## Verification
-
-The immutable provider was TNLean
-`6dcb693b498041f9f0e2efb8df37a5474aac2b17`, with its own QICLean package
-`79fb1403dd2ec8ca448204f89ccef73c1a77f509`.
-The final actual module passed strict private checking in 9.598 seconds,
-with 561 selected source/object pairs guarded before and after. No import
-overrides were required. An imported inspection passed in 9.142 seconds
-with 562 guarded pairs and reported only `propext`, `Classical.choice`
-and `Quot.sound`. Its temporary source was deleted.
-
-All attempt sources and their diagnostics remain separate and immutable
-under `/tmp/tnlean-physical-soft-middle-cluster-20261103`. The final
-handoff uses `frozen-overrides.json`; the earlier provisional map remains
-attached to its original, also checked source. No in-flight source,
-provider, dependency pin or cache was changed, and no Mathlib source was
-built. Full library and compiled blueprint verification remain coordinated
-integration checks.

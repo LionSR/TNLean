@@ -34,29 +34,3 @@ normalized recurrence, as documented in
 `docs/paper-gaps/alvv16_final_filter_gain.tex`. The collective trimming
 constant is documented in QICLean's published trimming-constant note.
 The full source algorithm and its running time are not asserted here.
-
-## Verification
-
-The three actual modules were checked separately with package linter
-options and warnings as errors against the immutable ordinary TNLean
-provider `1f0087d553cec4bf20448b0358489716cec64caf`, whose own QICLean package
-is `099049ed6805334c6517c66b4b9858480bc7e9c7`. This provider had passed its
-15,612-job full build, including every affected original tree and reference
-importer against the strengthened subspace core.
-
-The exposed full-interval coordinate identity passed in 5.529 seconds
-(256 selected source-object pairs); the weighted interval reference
-transport passed in 5.715 seconds (131 pairs); the actual filter-and-trim
-module passed in 7.163 seconds (263 pairs). All selected sources, objects,
-root inputs and prebuilt Mathlib hashes were guarded before and after.
-
-An imported foundation inspection of all nine added or newly public
-declarations, including the inline simp theorem, passed in 5.450 seconds
-(264 pairs). They depend only on `propext`, `Classical.choice` and
-`Quot.sound`. The temporary inspection source was deleted. No permanent
-fixture is added.
-
-The isolated source worktree has no Lake directory. No provider, package
-or cache was modified; no compiled artifacts were copied; Mathlib was not
-rebuilt. Ordinary combined full-library, regression, compiled blueprint
-and timing gates remain required after integration.

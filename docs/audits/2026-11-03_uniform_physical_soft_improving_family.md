@@ -65,27 +65,19 @@ lemma applies the existing actual-cluster Chebyshev theorem and its
 ordered-word estimate. These lemmas separate mathematical stages without
 introducing another predicate, structure, family or proof assumption.
 
-Rewriting the complete isometry-conjugation expression was expensive.
-The final proof transports the matrix equality through polynomial
-evaluation and invokes the existing canonical Kronecker-conjugation
-identity. The production source has no diagnostic commands or resource
-settings. Earlier statement-scope and default-heartbeat failures remain
-recorded in the private attempt logs; they are not verification evidence.
+Rewriting the complete isometry-conjugation expression was expensive. The
+final proof transports the matrix equality through polynomial evaluation and
+invokes the existing canonical Kronecker-conjugation identity. The production
+source has no diagnostic commands or resource settings.
 
-The final production source passed the strict actual-name check in
-18.311 seconds against immutable TN 8f85b0be / QIC cc2569b6, with 626
-selected source/object pairs guarded. The imported public foundation audit
-passed in 8.245 seconds and reports only propext, Classical.choice and
-Quot.sound. Temporary foundation commands were deleted after the check.
-No Mathlib source, provider cache or package input was rebuilt or changed.
+Temporary foundation commands were deleted after the check. No Mathlib source,
+provider cache or package input was rebuilt or changed.
 
-The new declaration resolves in the source/blueprint comparison; its
-entry and proof are marked complete. The source-only worktree has no
-companion checkouts, so its whole-library declaration scan cannot resolve
-external declarations. The complete dependency-aware blueprint and ordinary
-build remain required in the coordinated integration. A two-page local
-reader was rendered and visually inspected; its only unresolved references
-are the two earlier lemmas omitted from that isolated reader.
+The new declaration resolves in the source/blueprint comparison; its entry and
+proof are marked complete. The complete dependency-aware blueprint and
+ordinary build remain required in the coordinated integration. A two-page
+local reader was rendered and visually inspected; its only unresolved
+references are the two earlier lemmas omitted from that isolated reader.
 
 ## Remaining scope
 

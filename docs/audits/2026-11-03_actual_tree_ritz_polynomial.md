@@ -26,20 +26,3 @@ a uniform polynomial output bond for fixed physical parameters. It does not esta
 adaptive joint probability, the source energy-estimation invariant, source-sharp gap
 dependence, the printed final iteration count or computational running time. The existing
 paper-gap notes retain those distinctions.
-
-## Verification
-
-Strict actual-module checking used immutable warmed TNLean
-cd17d76b290c83200b59b48bc816e4856e3c9c1a and its own QICLean package
-0c26d87e4efdd19c85aaa402b4c0b153d3f65657, with an explicit new numerical-leaf override.
-The physical module passed in 16.245 seconds. The successful numerical source passed
-in 27.674 seconds and is preserved unchanged; that compilation time is recorded as a
-warning, with no timing-only retry or budget increase. The imported two-headline audit
-passed in 8.089 seconds and reports only propext, Classical.choice and Quot.sound.
-
-Selected source/object hashes, configuration inputs, warmed Mathlib and changed-importer
-closures were guarded. All outputs and audit commands remain under /tmp. No shared
-provider, cache or Mathlib source was modified, and no fixtures are committed.
-Generated imports, complete source-to-blueprint synchronization, added-prose and whitespace
-checks pass; the new contribution has no repeated tactic pattern at the scan thresholds.
-The physical blueprint role check also passes. Ordinary combined builds and compiled blueprint checks remain required after adoption.

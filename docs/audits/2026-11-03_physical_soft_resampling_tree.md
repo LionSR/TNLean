@@ -10,12 +10,35 @@ The common threshold is K(r+1)(L+2)^2, the finite number of rounds is qL, and th
 
 A short full root is exactly the full local space, with an empty merge list, so its success event is the whole seed space. This handles L=0 directly, rather than attempting to deduce positive success probability from the numerical bound 1. In a long interval, the whole chain is automatically nonempty; the one-interval physical theorem is specialized by the zero/successor decomposition of the original chain length. No extra positive-length hypothesis is added to the physical headline.
 
-The source is ALVV, arXiv:1602.08828v2, the repeated amplification discussion at local source lines 749–755 and `t:alg1` at lines 1777–1817. The retained local source is `/tmp/alvv-low-density-source-20261102.tex`, SHA256 `19d37facb8bf8da6ea5555cd7185c054d251ad4a06c2f44fcb92593235ad6b92`. The false printed cluster estimate and the corrected soft residual, complex sphere count and terminal-full-image convention remain documented in the existing paper-gap notes. The result is a corrected construction, not an identification with the printed fourth-order choice, a sharp inverse-gap estimate or a running-time bound. Recursive energy assignment and final Ritz approximation are separate compositions.
+The source is ALVV, arXiv:1602.08828v2, the repeated amplification discussion
+at local source lines 749–755 and `t:alg1` at lines 1777–1817. The false
+printed cluster estimate and the corrected soft residual, complex sphere count
+and terminal-full-image convention remain documented in the existing paper-gap
+notes. The result is a corrected construction, not an identification with the
+printed fourth-order choice, a sharp inverse-gap estimate or a running-time
+bound. Recursive energy assignment and final Ritz approximation are separate
+compositions.
 
-The initial complete mathematical module passed privately in 64.273 seconds; that successful source and evidence are retained. Folding the numerical fields, retaining the missing downstream numerical conclusions, and using the shared terminal-image definition gave another successful 57.040-second check. These exceeded the module time policy. A genuine ownership split moved interval selection, measurability, joint histories and unconditional profiles to a thin canonical interval module, importing no physical calibration. It passed in 6.208 seconds; the primitive-chain construction then passed in 18.119 seconds. No resource limit or checker flag was increased, and no unchanged-source timing retry was used. Exact final-byte results and imported foundation inspections are recorded in the external contribution manifest.
+Folding the numerical fields, retaining the missing downstream numerical
+conclusions, and using the shared terminal-image definition gave another
+successful 57.040-second check. These exceeded the module time policy. A
+genuine ownership split moved interval selection, measurability, joint
+histories and unconditional profiles to a thin canonical interval module,
+importing no physical calibration. No resource limit or checker flag was
+increased, and no unchanged-source timing retry was used.
 
-All checks read the immutable TN d5c2f758dda114f66280fea1ae77b019170918c0 / QIC 32b5f3e04e232bb9ee2ee34a7bf5078b263b85b3 provider with guarded temporary objects. Shared caches and provider sources remain unchanged, and no Mathlib source is compiled. The contribution remains in its existing source-only worktree; no further worktree is created.
+Shared caches and provider sources remain unchanged, and no Mathlib source is
+compiled.
 
-The final documented physical source passed in 52.396 seconds; its mathematical statements and proofs are unchanged from the successful 18.119-second split. This final timing remains a warning for the required ordinary CI-j1 verification; no unchanged-source retry was made. The new selection owner remains the exact successful 6.208-second source. One imported inspection of both new public declarations passed in 40.000 seconds with only `propext`, `Classical.choice` and `Quot.sound`; its temporary commands were deleted. Complete source correspondence, import generation, blueprint roles, reader-facing prose and integrity checks pass. A seventeen-page mathematical reader includes the preceding source statements and the exact new chapter. The new statements/proofs and bibliography were visually inspected with resolved references/citations and no overflowing displays. Ordinary combined builds and production timing remain for coordinated integration.
+This final timing remains a warning for the required ordinary CI-j1
+verification; no unchanged-source retry was made. The new selection owner
+remains the exact successful 6.208-second source. Complete source
+correspondence, import generation, blueprint roles, reader-facing prose and
+integrity checks pass. A seventeen-page mathematical reader includes the
+preceding source statements and the exact new chapter. The new
+statements/proofs and bibliography were visually inspected with resolved
+references/citations and no overflowing displays. Ordinary combined builds and
+production timing remain for coordinated integration.
 
-The source-only branch replays the already frozen interval-history dependency `597700dd4c7d542000967c5516480925e5155d7b` as local commit `9403cb6a5c`, and the root's unchanged image/getter dependency `2158b1daa8` as `e363010d09`. These dependencies are not authored again by this contribution. The final delta and manifest distinguish them explicitly.
+These dependencies are not authored again by this contribution. The final
+delta and manifest distinguish them explicitly.

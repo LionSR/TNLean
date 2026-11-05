@@ -25,16 +25,7 @@ arXiv:1602.08828v2, Figure `fig:algo1` and lines 1777–1817. It does not assert
 the analytic parent estimate for an arbitrary family. A physical application
 must establish that estimate using the same families and actual child spaces.
 
-The actual-name strict check passed in 5.120 seconds against immutable
-TNLean `435cbe7fe53e5d3a04c1b8eb2382753749f21a64` and its own QICLean
-`b2ea12a0139820758e161514968ed9ead661c5a7` package. Frozen source/object
-overrides supply the actual sampled tree, true guarded sections, actual
-root probability sum, and joint ancestry. All 188 selected dependency pairs
-and the build inputs were guarded. An imported one-name foundation audit
-passed in 4.771 seconds using only `propext`, `Classical.choice`, and
-`Quot.sound`; its temporary source was deleted. Default options were used.
-Generated imports, source/blueprint synchronization, reader prose, proof
-integrity, whitespace and pattern checks passed. The mathematical entry
-was rendered and inspected. Ordinary combined compilation and compiled
-blueprint declarations remain integration checks. No provider source,
-artifact, cache, pin, or Mathlib source was changed or built.
+Default options were used. The mathematical entry was rendered and inspected.
+Ordinary combined compilation and compiled blueprint declarations remain
+integration checks. No provider source, artifact, cache, pin, or Mathlib
+source was changed or built.

@@ -77,23 +77,3 @@ argument. All existing public signatures in both modules are unchanged.
 The native physical basis proof uses the existing linear equivalence that
 forgets the Euclidean norm, preserving the actual full-chain coefficients.
 No independent area-law or MPS-existence theorem is imported.
-
-## Verification
-
-Checks use the immutable ordinary-built TN provider
-`20cad76ebfa6e770263c4a5d5333917c5b226ed9` and its own exact QIC package
-`98ba564e3c9603dc93d2173e3dc87a85ce750456`, with explicit frozen-parent
-source/object overrides for the single-witness construction. Selected
-sources, objects, root inputs, the prebuilt Mathlib sentinel and changed
-importer dependencies are guarded. All new outputs are under `/tmp`;
-no provider, package or cache is modified and no Mathlib source build runs.
-
-Default actual-name strict checks pass for the companion generic module
-in 4.541 seconds, indexed finite-span helper in 4.663 seconds, full-interval
-consumer in 5.123 seconds, and physical basis theorem in 10.185 seconds.
-The imported six-name foundation inspection passes in 19.720 seconds,
-with only `propext`, `Classical.choice` and `Quot.sound`. Temporary
-inspection commands are deleted after use. Source/book correspondence,
-reader prose, role checks, integrity and whitespace checks are completed
-before freezing. Ordinary combined compilation and compiled blueprint
-declarations remain integration gates.

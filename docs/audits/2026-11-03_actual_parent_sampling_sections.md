@@ -6,4 +6,5 @@ For every fixed global target and real viability parameter, the actual guarded f
 
 These are auxiliary steps for Arad, Landau, Vazirani and Vidick, arXiv:1602.08828v2, Figure fig:algo1 and lines 1777–1817. They neither assume nor establish the fixed-input sampling bound or the full root-tree probability theorem.
 
-Strict checking passes at default options in 5.480 seconds. Imported inspection of both public statements passes in 4.853 seconds using only propext, Classical.choice and Quot.sound; the temporary inspection source is deleted. An initial definitional-equality comparison reached the default 200,000 heartbeat limit; explicitly unfolding only the guarded-event definition resolved it without increasing the budget. That diagnostic is preserved. Combined ordinary-build and compiled blueprint checks remain pending.
+That diagnostic is preserved. Combined ordinary-build and compiled blueprint
+checks remain pending.

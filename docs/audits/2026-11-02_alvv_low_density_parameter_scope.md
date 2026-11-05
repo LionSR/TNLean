@@ -36,35 +36,3 @@ its logarithmic dependence is kept explicit in the later bounds. Thus a
 fixed-parameter reading should not silently erase quantitative dependence
 that the source explicitly displays. The present auxiliary retains both
 the displayed count-base dependence and its fixed-bandwidth coefficient.
-
-## Verified scalar auxiliary
-
-The new parameter theorem is checked against fully verified TNLean
-`5fc343a57d70eefd2902780107851ab9b0753a82` and its own QICLean package
-`ba01733099b5a18bed5c9bfb62f95f175b4c9b57`. One constant A(etaLD), selected
-before every count base and width, simultaneously gives ell>=19+etaLD,
-the residual comparison budget and the count-suppression estimate at the
-same actual natural degree. There is no supplied physical projector,
-residual or gap premise. The actual physical family remains a subsequent
-construction using the shared independent-cutoff regional theorem.
-
-Actual-name strict private checking passed in 7.476 seconds. An imported
-inspection of the public theorem passed in 4.776 seconds and reports only
-`propext`, `Classical.choice` and `Quot.sound`. Selected source/object
-hashes, both package configurations and the warmed Mathlib sentinel were
-guarded before and after compilation. All new outputs remain under
-`/tmp/tnlean-fixed-bandwidth-ld-20261102`. The temporary diagnostic source
-and commands were deleted after use; there is no permanent fixture.
-
-No provider artifact or cache was changed, no ordinary build or Mathlib
-source compilation was started, and the source worktree has no Lake
-directory. Ordinary integration and compiled blueprint verification remain
-pending. No physical low-density area-law completion follows from the
-scalar lemma alone.
-
-Blueprint source/declaration coverage, generated imports, reader-facing prose
-and whitespace checks pass. The new supporting result is a lemma. The
-global role checker reports 41 discrepancies; the diagnostic output is
-byte-identical when the changed chapter is replaced in memory by its
-accepted-main source, so this contribution introduces no role discrepancy.
-The unrelated baseline entries are not changed here.

@@ -59,31 +59,3 @@ estimates on the actual space tree. A single simultaneous recursive scalar
 assignment, with true attained minima at the short leaves, is not constructed
 in this contribution. No adaptive joint sampling law or running-time theorem
 is claimed.
-
-## Verification
-
-All Lean outputs are private, actual-name objects under
-/tmp/tnlean-recursive-energy-20261103. The immutable checked provider is TN
-9ff185339e7556649699446504eda0c3e15bedf6 with its own QIC
-6878435c2a2483ba929687579b2575dd393d71bb. The private runner verifies exact
-heads, clean providers, the full-warm record, selected source/object hashes,
-build inputs and the prebuilt Mathlib artifact hash before and after each
-check. No shared cache is changed and no Mathlib source is compiled.
-
-The final strict checks take 7.670 seconds for SoftWordNodeEnergy and
-16.908 seconds for PhysicalDGTreeEnergyUpdates, with 175 and 781 guarded
-source/object pairs respectively. The imported audit of all five public
-declarations takes 8.309 seconds with 782 guarded pairs. Every declaration
-depends only on propext, Classical.choice and Quot.sound. Exact evidence is
-recorded in the external manifest accompanying this contribution. Production sources contain no diagnostic
-commands or test fixtures. The ordinary locked build and compiled blueprint
-gates remain for the coordinated integration.
-
-The source-only blueprint synchronisation check reads dependency sources
-from the same immutable provider, since the contribution worktree has no
-.lake directory. It passes; the existing duplicate IsOpenMPS.mono tag remains
-a pre-existing informational item. Import generation, blueprint roles,
-reader-facing prose, forbidden-token and whitespace checks pass. The tactic
-pattern scan finds no new repeated block in these modules; minimum-value
-comparisons reuse the existing shared theorem, and cutoff transport uses the
-standard equality lemmas without rewriting the large dependent family tuple.

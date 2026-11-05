@@ -46,33 +46,6 @@ original-target error is twice the sum of this quantity and tau. The actual
 image operator has minimum target norm gain one; identity action on a
 nonconstant low-energy band is not assumed.
 
-## Verification
-
-The selected source and object provider is TNLean
-cd17d76b290c83200b59b48bc816e4856e3c9c1a with its own QICLean dependency
-0c26d87e4efdd19c85aaa402b4c0b153d3f65657. It had passed a full ordinary build
-before these private checks. The guarded checks used actual module names,
-package linter options, fresh private objects and exact selected source,
-object, root-input and Mathlib artifact hashes. Changed importers were checked
-against explicit fresh overrides. No provider or dependency artifact was
-modified or copied.
-
-| Module | Strict seconds | Protected source/object pairs |
-|---|---:|---:|
-| InterleavedFilterParameters | 9.452 | 2 |
-| InterleavedTruncationCalibration | 5.092 | 4 |
-| InterleavedFilterSuppression | 6.807 | 5 |
-| PhysicalDGClippedReference | 10.533 | 708 |
-| PhysicalDGInterleavedFamily | 16.755 | 734 |
-
-The imported inspection of all fourteen public declarations passed in 7.899
-seconds with 735 protected pairs. Every declaration depends only on
-`propext`, `Classical.choice` and `Quot.sound`. Its temporary inspection source
-was deleted. Blueprint/source synchronization with the read-only companion
-sources, blueprint roles, reader-facing prose, generated imports, proof-token
-inspection and whitespace checks passed. Ordinary combined builds and
-compiled blueprint declaration checking remain the integration gates.
-
 ## Scope
 
 The physical theorem covers intervals longer than 4ell and retains capped-gap

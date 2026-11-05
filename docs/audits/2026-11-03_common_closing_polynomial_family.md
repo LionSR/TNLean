@@ -21,14 +21,3 @@ For the actual uniform native soft approximation, the coefficient matrices alrea
 The present theorem is exact structural algebra. A specialization must still supply the independently constructed native core and coefficients, derive the relevant physical approximation and cluster estimates, and address any subsequent adaptive probability argument. It is not a running-time or source-sharp bond theorem and does not change the recorded counterexamples to the printed cluster estimate. The spanning-family correction remains documented at https://sirui-lu.com/QICLean/paper-gaps/aklv13_interpolation_and_word_count.pdf.
 
 The geometric scope is ell>=1, q>=2, k>=1, a+2ell<=b and b+2ell<=L-1. The degree m and virtual dimension B may be zero. The blueprint entry `thm:common_closing_polynomial_family` states these hypotheses explicitly; it is an auxiliary to ALVV, arXiv:1602.08828v2, Proposition 5.7 and the soft construction, lines 1311–1420.
-
-## Verification
-
-The immutable checked provider is TNLean 6dcb693b498041f9f0e2efb8df37a5474aac2b17 with its own QICLean 79fb1403dd2ec8ca448204f89ccef73c1a77f509. New checked QIC degree, interpolation and parameter-interpolation leaves, together with the checked shared closing owner, were supplied by explicit immutable source/object overrides. Overlapping records were compared byte-for-byte. Every selected changed importer was guarded. All elaboration outputs were placed in unique private attempt directories.
-
-The final complete production source passed default strict checking in 12.996 seconds with 501 protected source/object pairs. An earlier completed check took 33.235 seconds, and a prior partial check took 25.983 seconds; both warning records are retained. The only source change after the earlier completed check was one English word in the introduction, required by the raw forbidden-token scan; the proof and statement are byte-for-byte unchanged. No resource limit was changed and no unchanged-source timing retry was run. The final imported public-foundation audit passed in 8.229 seconds with 502 protected pairs; its dependencies are exactly propext, Classical.choice and Quot.sound. The earlier 11.114-second audit is also retained. Temporary audit commands were deleted.
-
-No provider source, dependency cache or Mathlib object was changed. No Mathlib source build was run. Canonical ordinary and compiled blueprint gates remain integration requirements.
-
-
-Import aggregators, changed-prose checks, whitespace/proof-token checks and the tactic-pattern scan pass. The source-only blueprint scan resolves the new public reference; its whole-library result still includes missing companion declarations because this deliberately cache-free source worktree has no dependency checkouts. Canonical ordinary and compiled blueprint checks must therefore run in the integration environment.

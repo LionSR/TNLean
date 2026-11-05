@@ -56,10 +56,8 @@ prove that event measurable, but it is not needed for this upper bound.
 ## Source and remaining physical obligations
 
 This is a conditional auxiliary to ALVV, arXiv:1602.08828v2, repeated sampling
-in lines 749–755 and the `t:alg1` merge analysis in lines 1777–1817.
-The retained local source is `/tmp/alvv-low-density-source-20261102.tex`,
-SHA256 `19d37facb8bf8da6ea5555cd7185c054d251ad4a06c2f44fcb92593235ad6b92`.
-It is not a complete physical probability or energy theorem.
+in lines 749–755 and the `t:alg1` merge analysis in lines 1777–1817. It is not
+a complete physical probability or energy theorem.
 
 The intended actual H_J is QICLean's literal `canonicalHalfSamplingRawGood`
 for the same parent's actual candidate and finite sequence. That event retains
@@ -70,22 +68,3 @@ histories, prove their measurable guarded sections and probability bounds,
 and derive the local history-to-parent implication from the SAME family.
 Those analytic inputs are deliberately explicit here; none is counted as proved
 by this generic deterministic/measure-theoretic contribution.
-
-## Verification
-
-Against immutable TN 107e2726f679d75b51c621694d2216fb1cd0771a and its own
-QICLean 68481832e01180e472712ab6dc916199c7b3dd67, default actual-name strict
-checks passed in 3.977 seconds for the deterministic module (six guarded
-source/object pairs) and 4.075 seconds for the probability companion (eleven
-pairs). The imported audit of both public declarations passed in 3.929 seconds
-with twelve guarded pairs and only propext, Classical.choice, and Quot.sound.
-Temporary audit commands were deleted. There are no proof holes, diagnostic
-commands, resource-limit changes, or new permanent test fixtures.
-
-The source-only worktree has no .lake. Private checks wrote only separate
-/tmp outputs and changed no provider sources, objects, package checkouts or
-Mathlib artifacts. Generated imports, mathematical roles, new declaration
-correspondence, reader-facing prose, and source integrity are checked locally.
-The new chapter is rendered and visually checked as a standalone reader.
-An ordinary full build, compiled complete-book and dependency-aware declaration
-checks remain required in coordinated integration.

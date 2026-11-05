@@ -26,23 +26,3 @@ from the actual physical reference, iterating the actual operation and
 performing final Ritz extraction are separate obligations. The correction
 to the printed raw overlap gain is documented in
 `docs/paper-gaps/alvv16_final_filter_gain.tex`.
-
-## Verification
-
-The actual module passed strict package-linter checking with warnings as
-errors in 5.620 seconds over 268 selected source-object pairs. The read-only
-ordinary provider was TNLean 1f0087d553cec4bf20448b0358489716cec64caf with
-its own QICLean 099049ed6805334c6517c66b4b9858480bc7e9c7, together with
-explicit freshly checked source/object overrides for the actual trimming
-step and the affine-filter/normalization contributions. Every selected
-source, object, root input and prebuilt Mathlib hash was guarded before
-and after the check. No old-core importer was reused above a changed
-source dependency.
-
-All three public statements passed an imported foundation inspection in
-4.922 seconds over 269 selected pairs. They use only propext,
-Classical.choice and Quot.sound. The temporary inspection source was
-deleted. There is no permanent fixture or Lake directory in this source
-worktree, and no cache/provider mutation, artifact copy or Mathlib rebuild.
-Ordinary combined full-library, regression, compiled blueprint and timing
-gates remain required after integration.

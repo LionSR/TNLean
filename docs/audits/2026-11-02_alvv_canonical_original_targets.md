@@ -32,25 +32,14 @@ equality. This avoids duplicating a matrix eigenbasis calculation in the
 physical theorem. The derived nonempty configuration instance comes from
 $q\ge2$; no additional physical hypothesis is imposed.
 
-Private actual-name strict checks use the verified immutable TNLean
-provider `5fc343a57d70eefd2902780107851ab9b0753a82` and its own QICLean
-package `ba01733099b5a18bed5c9bfb62f95f175b4c9b57`, with explicit checked
-source and object overrides. All selected source, object and input hashes,
-including the prebuilt Mathlib sentinel, are guarded before and after
-checking. Changed-dependency importers are re-elaborated. No provider,
-ordinary build or cache is changed.
+All selected source, object and input hashes, including the prebuilt Mathlib
+sentinel, are guarded before and after checking. Changed-dependency importers
+are re-elaborated. No provider, ordinary build or cache is changed.
 
-The first complete direct eigenbasis proof passed in 89.845 seconds,
-exceeding the 50-second limit. Its source, result and hash are retained
-under `/tmp/tnlean-canonical-low-density-family-20261102/`; it is not the
-contribution being proposed. Factoring the generic presentation comparison
-reduced the final physical check to 43.416 seconds. This remains a
-25-second review warning and is below the 50-second limit. The generic
-QIC module passed in 21.351 seconds. These are source-changing proof
-refinements, not timing-only retries or raised verification limits.
+This remains a 25-second review warning and is below the 50-second limit.
+These are source-changing proof refinements, not timing-only retries or raised
+verification limits.
 
-The imported inspection of both new public declarations passed in
-9.700 seconds with only propositional extensionality, classical choice
-and quotient soundness. The temporary diagnostic source was deleted.
-Ordinary compilation, full-library verification and compiled blueprint
-checks remain integration requirements.
+The temporary diagnostic source was deleted. Ordinary compilation,
+full-library verification and compiled blueprint checks remain integration
+requirements.

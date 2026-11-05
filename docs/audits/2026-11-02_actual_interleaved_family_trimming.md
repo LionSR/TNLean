@@ -40,12 +40,10 @@ iterate has at most that many recorded generators, with the same bound on
 $\xi^2$ times their internal-cut Schmidt ranks. The bound is for those actual
 spanning vectors, not for all vectors in their span.
 
-A numerical envelope with $0\le\delta_j<1$ and
-$E(\delta_j)\le\delta_{j+1}$ proves viability of every actual iterate.
-With $0<a\le1$, $\theta=a/64$, reference error at most $a^2/16384$ and
-threshold error $\xi\sqrt{mD^2}\le a/256$, the simpler condition
-$f(\delta_j)+a/16\le\delta_{j+1}$ suffices. The numerical lemma is owned by
-QICLean, commit `9b5ccfb8`.
+A numerical envelope with $0\le\delta_j<1$ and $E(\delta_j)\le\delta_{j+1}$
+proves viability of every actual iterate. With $0<a\le1$, $\theta=a/64$,
+reference error at most $a^2/16384$ and threshold error $\xi\sqrt{mD^2}\le
+a/256$, the simpler condition $f(\delta_j)+a/16\le\delta_{j+1}$ suffices.
 
 ## Scope and remaining physical construction
 
@@ -62,33 +60,3 @@ comparison does not control the first trim of a nearly orthogonal sample. The
 independent cutoff and polynomial degree must eventually be calibrated at the
 same honest count and suppression bound. No adaptive joint probability, printed
 round count, energy-estimation invariant or running time is asserted here.
-
-## Verification
-
-The immutable provider was TN
-`f7bae89a06741bb61820b50cd4b421a2d42951e7`, with its own QIC
-`00ca963e4a79afd68d9d6f875dd468a21f1dccdd`. It had passed the 15,650-job
-ordinary full build with zero Mathlib source jobs. New sources and outputs were
-private. Every selected source/object pair, root input and warmed Mathlib object
-was guarded; no provider, artifact or cache was changed or copied.
-
-| Module | Strict time | Guarded source/object pairs |
-| --- | ---: | ---: |
-| `IntervalFamilyTrimming` | 7.557 s | 136 |
-| `IntervalFamilyTrimmingIteration` | 5.744 s | 137 |
-| `IntervalFamilyTrimmingBudget` | 6.422 s | 139 |
-| QIC `InterleavedTrimmingParameters` | 4.450 s | 0 |
-
-An imported inspection of all eleven new TN declarations and the QIC numerical
-lemma passed in 5.171 s with 140 guarded pairs. All twelve depend only on
-`propext`, `Classical.choice` and `Quot.sound`. The temporary inspection source
-was deleted. There are no proof placeholders or disabled production linters.
-
-The combined ordinary build, imported foundation audit and compiled blueprint
-verification remain required after integration.
-
-Source-level blueprint synchronization, blueprint roles, reader-facing prose,
-whitespace and the scoped tactic-pattern scan passed. No repeated tactic pattern
-was found at the configured thresholds. The existing common-radius prerequisite
-reference also receives its correct lemma-role word; its mathematical statement
-is unchanged.

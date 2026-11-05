@@ -64,30 +64,3 @@ running time. In particular, it does not identify arbitrary tensor choices
 from the previous pointwise existence theorem with the newly chosen
 uniform family. The next interpolation step must retain these actual fixed
 cores and polynomial cap coefficients.
-
-## Verification
-
-The final new uniform module passes actual-name strict checking at default
-limits in 9.097 seconds, with 514 guarded TNLean/QICLean source/object
-pairs. The common-closing owner passes in 4.643 seconds, and the extracted
-native-slice owner in 8.681 seconds. All selected existing importers of
-changed owners were re-elaborated against this same source graph; the
-pointwise public consumer passes in 8.329 seconds. The provider is held
-at TNLean 6dcb693b498041f9f0e2efb8df37a5474aac2b17 and its own QICLean
-79fb1403dd2ec8ca448204f89ccef73c1a77f509.
-
-An imported foundation inspection of all six new public names and five
-unchanged public consumers passes in 7.826 seconds, with only propext,
-Classical.choice and Quot.sound. Its temporary command source was deleted.
-Every check used a distinct immutable attempt source and override map,
-with the shared private elaboration lock and no resource-limit increases.
-The failed drafts are retained as diagnostics, not counted as verification.
-The index inference issue, an incorrect broad rewrite and an overly eager
-monotonicity tactic were replaced by explicit indices, a targeted equality
-and the exact power comparison.
-
-Generated imports, complete source/blueprint synchronization, reverse
-coverage, roles, reader prose, integrity, whitespace and tactic-pattern
-checks are recorded in the manifest. Ordinary combined compilation and
-complete compiled declaration lists remain integration checks. No provider,
-cache, dependency pin or Mathlib source was changed or built.

@@ -6,4 +6,5 @@ The proof uses strong induction on interval length. At every long parent both ch
 
 This elementary auxiliary supports the failure-probability sum in Arad, Landau, Vazirani and Vidick, arXiv:1602.08828v2, Figure fig:algo1 and lines 1777–1817. It constructs no sampled spaces and asserts no adaptive probability or running time.
 
-Strict checking passes at the default options in 4.388 seconds. Imported inspection of the definition and length theorem passes in 3.834 seconds with propext and Quot.sound only. The temporary inspection source is deleted. Combined ordinary-build and compiled blueprint checks remain pending.
+The temporary inspection source is deleted. Combined ordinary-build and
+compiled blueprint checks remain pending.

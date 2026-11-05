@@ -1,14 +1,11 @@
 # Fixed-input interval history probability and the same terminal image
 
 The public `canonicalHalfSampledIntervalHistory_probability` specializes the
-existing QIC fixed-K complete-parent theorem to the literal interval candidate,
-finite seed sequence, original global target and entire exterior. It is a
-conditional analytic auxiliary, not a primitive-Hamiltonian construction or a
-complete physical tree theorem. Its source context is ALVV,
-arXiv:1602.08828v2, lines 749–755 and 1801–1813 of the retained source
-`/tmp/alvv-low-density-source-20261102.tex`, SHA256
-`19d37facb8bf8da6ea5555cd7185c054d251ad4a06c2f44fcb92593235ad6b92`.
-The repeated-sampling and terminal-amplification correction remains at
+existing QIC fixed-K complete-parent theorem to the literal interval
+candidate, finite seed sequence, original global target and entire exterior.
+It is a conditional analytic auxiliary, not a primitive-Hamiltonian
+construction or a complete physical tree theorem. The repeated-sampling and
+terminal-amplification correction remains at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 
 ## Inputs and what is derived
@@ -62,29 +59,3 @@ conclusion is a deterministic consequence on this one original-target history.
 The energy application may therefore use the stronger last-image estimate;
 final retained viability alone is not substituted for it. No energy estimate
 or compressed trial-space success is assumed or asserted by this theorem.
-
-## Checked sources and ownership
-
-The immutable provider was TN 107e2726f679d75b51c621694d2216fb1cd0771a with its own
-QICLean 68481832e01180e472712ab6dc916199c7b3dd67. The exact new QIC joint-events
-closure and root CanonicalIntervalRawHistory objects were supplied by the root's
-complete override map; every selected changed importer is included there.
-The mathematical source passed default actual-name strict checking in 7.459
-seconds, with 205 guarded source/object pairs. The imported public foundation
-audit passed in 4.783 seconds with 206 pairs, using only propext,
-Classical.choice and Quot.sound. The first complete proof took 7.556 seconds
-and reported only four long-line style errors, repaired without changing its
-mathematical content. Temporary audit commands were deleted.
-
-The source-only worktree has no .lake and descends from provider source 107e27.
-Root's frozen source-only dependency 7ff1d7f9ff is included locally with identical
-source bytes before this separate delta. It does not move the provider or its
-QIC pin. Private checks wrote only temporary objects and changed no provider,
-cache, package checkout or Mathlib artifact. There are no new proof holes,
-source resource options or permanent test fixtures.
-
-The new blueprint entry states the analytic hypotheses explicitly. New
-source/declaration correspondence, mathematical roles, reader-facing prose,
-generated imports and integrity checks pass locally, and the mathematical
-reader is rendered and visually checked. An ordinary full build and compiled
-complete-book checks remain required during coordinated integration.

@@ -38,33 +38,3 @@ claimed. The cluster counterexamples and error note remain. The spectral compari
 same-operator MPO composition, source-scale parameter bounds and running time remain
 separate. GEN's symmetric input estimate is not silently identified with the one-sided
 interval required by the soft definition.
-
-## Verification
-
-The strict actual-module checks used the immutable fully warmed TNLean provider
-f7bae89a06741bb61820b50cd4b421a2d42951e7 and its own QICLean package
-00ca963e4a79afd68d9d6f875dd468a21f1dccdd. Selected source/object hashes, configuration
-inputs, warmed Mathlib and changed-importer closures were guarded. Only temporary output
-objects under /tmp were written; no provider or dependency cache was modified and no Mathlib
-source was built.
-
-The final strict times were 5.577 seconds for FiveRegionSoftStructure, 8.087 seconds for
-SoftFamilyResiduals, and 6.117 seconds for FiveRegionSoftResiduals. The imported audit of
-all four public declarations passed in 5.063 seconds, each with only propext,
-Classical.choice and Quot.sound. Temporary audit commands are not committed.
-
-The final theorem constructs explicit orthonormal eigenbasis/eigenvalue witnesses with their
-actual eigenvector equations. These are chosen internally from the canonical Hermitian
-spectral data. A prior proof-dependent quantified signature failed during elaboration;
-rewriting through full canonical spectral coordinates also exhausted the default heartbeat
-budget. Explicit spectral witnesses and a targeted equality for H−G remove both issues
-without increasing limits or adding mathematical hypotheses.
-
-Generated imports, whitespace, blueprint roles and added-prose checks pass. The complete
-source-to-blueprint scan also passes using the immutable provider's dependency sources
-read-only, without creating dependency checkouts in the source-only worktree. All four
-public declarations have matching mathematical entries. The tactic-pattern scan reports
-only two pre-existing patterns outside the changed sources; no new repeated pattern
-reaches its promotion threshold.
-
-Ordinary combined builds and compiled declaration/book checks remain required after adoption.

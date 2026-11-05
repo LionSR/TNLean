@@ -21,8 +21,4 @@ to all soft spectral targets is not asserted to be a measurable event.
 The fixed-input probability theorem and physical improving-family data
 remain separate parts of the construction.
 
-Verification uses an immutable source copy against the fully checked
-TNLean 107e2726f679d75b51c621694d2216fb1cd0771a and QICLean
-68481832e01180e472712ab6dc916199c7b3dd67 pair, with the jointly measurable
-QICLean history contribution supplied by its checked source and object.
 The integration build and compiled blueprint checks remain pending.

@@ -25,20 +25,10 @@ an extra excitation premise. A gap-implication-only final wrapper must split
 internally between this exact branch and the existing nonflat automatic
 refinement. The initial and final trimming radii need not coincide.
 
-The production source passed a serialized strict private check in 6.296
-seconds against fully verified TN
-`107e2726f679d75b51c621694d2216fb1cd0771a` and its own QIC
-`68481832e01180e472712ab6dc916199c7b3dd67`, with 271 selected source/object
-pairs, root inputs and the prebuilt Mathlib object guarded. The final proof
-uses the direct Ritz inclusion and dimension theorems rather than an
-analytic error-zero specialization. Imported foundation inspection passed
-in 4.828 seconds and reported only `propext`, `Classical.choice` and
-`Quot.sound`; temporary inspection commands were removed. Earlier partial
-proof diagnostics and the superseded analytic specialization are preserved.
+The final proof uses the direct Ritz inclusion and dimension theorems rather
+than an analytic error-zero specialization. Earlier partial proof diagnostics
+and the superseded analytic specialization are preserved.
 
-Full source blueprint synchronization passed with the exact verified QIC
-and Mathlib sources resolved read-only. Generated imports, reader-facing
-prose, tactic scanning and whitespace checks passed. The repeated flat
-spectral and full-dimension MPS arguments are recorded as a two-occurrence
-candidate in the tactic ledger. Combined ordinary gates remain required.
-No provider, dependency pin, cache or Mathlib source was modified.
+The repeated flat spectral and full-dimension MPS arguments are recorded as a
+two-occurrence candidate in the tactic ledger. Combined ordinary gates remain
+required. No provider, dependency pin, cache or Mathlib source was modified.

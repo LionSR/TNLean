@@ -51,35 +51,3 @@ lines 1777–1817 and Figure fig:merge-prime at lines 1668–1670. This is a
 measurability and dependence auxiliary. Conditional failure estimates,
 their summation, literal soft Generate and a running-time theorem are
 separate obligations.
-
-## Provenance and verification
-
-The proper source-only TN worktree starts from the checked TN
-435cbe7fe53e5d3a04c1b8eb2382753749f21a64. Its dependency commits are the
-frozen interval law fb1e4ac27e, canonical operation c6a3e88eb9, and literal
-parent Borel theorem 222d3719df, cherry-picked without build artifacts.
-Those dependency sources are unchanged. The worktree has no .lake directory.
-Only the new tree module and its documentation form this contribution.
-
-The private checker reads the immutable warmed provider at the same TN
-commit with its own QIC b2ea12a0139820758e161514968ed9ead661c5a7. Explicit
-checked source/object overrides supply the frozen root law, canonical
-operation, actual family-image projection and two literal-parent leaves.
-Every changed selected importer is re-elaborated; none is silently reused
-with a changed dependency. Exact provider heads, clean state, build inputs,
-selected source/object hashes and the prebuilt Mathlib artifact hash are
-verified before and after checking. Provider sources, HEAD and build
-artifacts are unchanged; no Mathlib source is compiled.
-
-The actual-name strict check passes in 5.929 seconds with 176 guarded
-source/object pairs. The imported audit of all four public declarations
-passes in 5.294 seconds with 177 pairs. All depend only on propext,
-Classical.choice and Quot.sound. The temporary audit commands are deleted.
-All outputs and detailed guards are confined to
-/tmp/tnlean-sampled-tree-borel-20261103. No production fixture or diagnostic
-command is added.
-
-The external manifest records source hashes and the source-only blueprint,
-import, role, prose, forbidden-token, whitespace and dependency-label checks.
-The ordinary locked build and compiled blueprint checks remain for
-coordinated integration with the already-frozen dependencies.

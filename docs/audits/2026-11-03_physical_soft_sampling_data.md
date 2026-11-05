@@ -8,6 +8,17 @@ The reference is the already established original-ground reference, including it
 
 The paper passage is ALVV, arXiv:1602.08828v2, `lem:trimming`, local source lines 660–697, the efficient Chebyshev/generating discussion at lines 1311–1420, and `t:alg1` at lines 1777–1817. In particular, lines 1801–1805 replace the original target by a nearby matrix product reference and choose a trimming precision. The fixed constant-accuracy reference/radius here is a corrected auxiliary; it is not identified with the paper's final-accuracy choice in equation `eq:algo-xi-dg`. The existing false cluster estimate record and corrected soft-residual and complex sphere-count notes remain unchanged. No sharp inverse-gap dependence, printed fourth-order identification, adaptive generating algorithm or running-time result is asserted.
 
-Verification uses the immutable TN `88a5df56887b75b9a4d79c2c77153df6b2b7733c` / QIC `32b5f3e04e232bb9ee2ee34a7bf5078b263b85b3` provider, standard strict options and fresh temporary output objects. The selected dependency graph includes the freshly checked numerical owner. No shared source, provider object or Mathlib cache is modified. Detailed source hashes and check results are in the external contribution manifest.
+The selected dependency graph includes the freshly checked numerical owner. No
+shared source, provider object or Mathlib cache is modified. Detailed source
+hashes and check results are in the external contribution manifest.
 
-The final production module passed strict checking in 9.860 seconds. Its imported foundation inspection passed in 7.790 seconds with only `propext`, `Classical.choice` and `Quot.sound`; the temporary commands were deleted. The public numerical owner independently passed strict checking in 14.991 seconds, with an unchanged statement/proof and unchanged existing physical corollary. The new declarations have exact blueprint correspondences. Source synchronization uses the guarded provider's dependency source directories read-only, because the source-only contribution deliberately has no Lake directory. Aggregator, role, prose and integrity checks pass. The seven-page mathematical reader, including the preceding construction/reference statements, has been compiled and visually inspected without unresolved references, citations or overflowing displays. The bibliography adds the published companion-library note already cited by the corrected sampling discussion. An ordinary combined build and complete compiled declaration check remain for coordinated integration.
+The new declarations have exact blueprint correspondences. Source
+synchronization uses the guarded provider's dependency source directories
+read-only, because the source-only contribution deliberately has no Lake
+directory. Aggregator, role, prose and integrity checks pass. The seven-page
+mathematical reader, including the preceding construction/reference
+statements, has been compiled and visually inspected without unresolved
+references, citations or overflowing displays. The bibliography adds the
+published companion-library note already cited by the corrected sampling
+discussion. An ordinary combined build and complete compiled declaration check
+remain for coordinated integration.

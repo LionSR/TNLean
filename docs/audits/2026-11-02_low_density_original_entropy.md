@@ -42,33 +42,3 @@ intervals; see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 
 The sharper accuracy-dependent MPS rate and running time remain separate.
 No independent area-law or entropy theorem supplies the physical tail estimate.
-
-## Verification
-
-All checks read only the fully built TN5e19c052124518e40871bb67a1ce5398dd3b6416
-provider and its own QIC518e8d2053793d108d1ad52638a89f22028bafca package.
-The private source closure includes the unchanged public exposure of the
-inverse-scale improving-error lemma and the scalar entropy coefficient from
-QIC9de8464c. Every selected importer of a changed existing source was
-re-elaborated before use. Outputs and temporary diagnostics are confined to
-`/tmp/tnlean-ld-entropy-5e19-20261102`.
-
-Final strict timings and foundation evidence are recorded in the immutable
-manifest accompanying this checkpoint. The three production files use the
-default heartbeat budget; no higher option is retained. No ordinary/full build
-or compiled blueprint declaration check is claimed here; these remain for
-coordinated integration. Shared sources, caches and Mathlib were untouched.
-
-Integration must regenerate the AreaLaw and root import aggregators for the
-three new modules and register `ch35_alvv_low_density_entropy.tex` in the
-area-law chapter. Generated aggregators and the chapter router are deliberately
-excluded from this source-only contribution.
-
-Final actual-name strict checks passed in 10.864 seconds (original-band
-refinement), 11.903 seconds (capped entropy), and 8.662 seconds (regularized
-entropy). The fresh imported three-name inspection passed in 8.038 seconds
-and reported only `propext`, `Classical.choice` and `Quot.sound`. Temporary
-inspection sources were removed. Source blueprint resolution, mathematical
-role classification, added-prose review, the tactic pattern scan and whitespace
-checks passed. Production files contain no proof-integrity blockers or test
-commands.

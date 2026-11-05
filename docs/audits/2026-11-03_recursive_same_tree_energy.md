@@ -68,30 +68,3 @@ constructions. No efficient computation or adaptive joint sampling law is
 asserted. The existing false printed cluster and soft-energy records and
 counterexamples remain unchanged. The scope is recorded in
 [the regional centering note](https://sirui-lu.com/TNLean/paper-gaps/alvv16_soft_regional_energy_centering.pdf).
-
-## Verification and provenance
-
-The source-only worktree is based on TN
-435cbe7fe53e5d3a04c1b8eb2382753749f21a64. It has no .lake directory.
-All checks read the immutable fully warmed TN provider at that same commit,
-with its own QIC b2ea12a0139820758e161514968ed9ead661c5a7. The guarded
-runner verifies clean exact heads, the full-warm record, build inputs,
-selected source/object hashes and the prebuilt Mathlib artifact hash before
-and after each check. Outputs are confined to
-/tmp/tnlean-tree-energy-recursion-20261103. No provider or shared build
-cache is changed and no Mathlib source is compiled.
-
-BalancedRegionalEnergy passes the actual-name strict check in 5.609 seconds
-with 177 guarded dependency pairs. PhysicalDGTreeEnergyAssignment passes
-in 19.879 seconds with 783 pairs. The imported audit of all four public
-declarations passes in 8.776 seconds with 784 pairs; all depend only on
-propext, Classical.choice and Quot.sound. The temporary audit commands were
-deleted after recording the result. No production fixture or diagnostic
-command is added.
-
-The source-only blueprint synchronisation check uses the same provider's
-read-only dependency sources, since the worktree has no .lake directory.
-Import generation, blueprint roles, reader-facing prose, forbidden-token,
-whitespace and tactic-pattern checks are recorded in the external manifest.
-The ordinary locked build, compiled blueprint and rendered scope note remain
-for coordinated integration.

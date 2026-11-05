@@ -37,13 +37,8 @@ of the uncentered G or computational running time is claimed. The corrected
 interaction-label construction does not restore the false printed cluster
 estimate; its existing counterexamples and gap note remain unchanged.
 
-The production module passed a fresh strict actual-name check in 6.056
-seconds against exact fully warmed TNLean `5fc343a57d` and own QICLean
-`ba017330`. Its imported public foundation audit passed in 5.138 seconds,
-guarding 150 selected source/object pairs. The theorem uses only `propext`,
-`Classical.choice` and `Quot.sound`. All outputs are temporary; no provider
-or dependency cache was changed and no Mathlib source was rebuilt. The own
-source-only worktree has no `.lake` directory.
+All outputs are temporary; no provider or dependency cache was changed and no
+Mathlib source was rebuilt.
 
 The mathematical book entry is included. Ordinary integrated full-build
 and complete-book checks remain pending. Foundation commands stay under

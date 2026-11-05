@@ -27,14 +27,5 @@ accuracy. Deriving its decreasing values from the actual enlarged
 count bases and constructing the corresponding improving families
 remain the next steps. No entropy or MPS theorem is asserted here.
 
-The final module passed strict actual-name private checking in 6.494
-seconds against immutable TNLean
-`d316e8cbe52bd5f12bcfbeec687d1dbef7633586` and its own QICLean package
-`d1317fdb229a1048cc65ec5ab1912403ab6bcbc0`, guarding 114 selected
-source/object pairs and the build inputs and prebuilt Mathlib sentinel.
-An imported inspection of the new theorem and old specialization passed
-in 4.479 seconds, reporting only `propext`, `Classical.choice` and
-`Quot.sound`. The temporary diagnostic source was removed.
-Blueprint source synchronization and reverse coverage, reader-facing
-prose and whitespace checks passed. Ordinary combined compilation and
+The temporary diagnostic source was removed. Ordinary combined compilation and
 compiled blueprint checking remain integration checks.

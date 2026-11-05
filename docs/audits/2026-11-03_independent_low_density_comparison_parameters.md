@@ -28,27 +28,3 @@ is explicit. These are conditional physical-comparison and scalar results;
 the actual sharp family, fixed-cut approximation and global MPS are not
 claimed here. The scope note remains
 `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
-
-## Verification
-
-Actual-name strict private checks read only the fully built TNcd17d76b290c83200b59b48bc816e4856e3c9c1a
-provider and its own QIC0c26d87e4efdd19c85aaa402b4c0b153d3f65657 package.
-They used source/object/input guards and transitive changed-importer checks,
-with output confined to `/tmp/tnlean-sharp-ld-cd17-20261103`.
-The independent comparison passed in 6.533 s, the old specializations in 5.688 s,
-and the scalar parameters in 4.816 s. All use the default heartbeat budget.
-Final imported-foundation evidence and exact hashes are in the immutable
-manifest. No ordinary/full build or compiled blueprint declaration check is
-claimed for this source-only checkpoint. No provider, cache or Mathlib source
-was modified.
-
-Integration must regenerate AreaLaw/root imports for the two new production
-modules and register `ch35_alvv_low_density_sharp_parameters.tex` in the
-area-law chapter. Generated aggregators and chapter input registration are
-excluded from this contribution.
-
-The imported four-declaration inspection passed in 4.745 seconds, with only
-`propext`, `Classical.choice` and `Quot.sound`. Its temporary source was
-removed. Source blueprint declaration resolution, role classification,
-added-prose review, the tactic pattern scan, proof-integrity inspection and
-whitespace checks passed. The default heartbeat budget suffices throughout.

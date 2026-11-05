@@ -30,19 +30,12 @@ One existing size-profile proof now unfolds the generalized operation and
 its actual endpoint coordinate. No second balanced tree, sampling-success
 predicate or desired final-space hypothesis is introduced.
 
-Verification uses immutable TNLean 38e847070a43b508cc3d01362efd7ced8cd8314f
-with its own QICLean 4743a375465299fef1e1f536d22342fa1f745374 and the
-prebuilt Mathlib 4.35.0-rc3 artifacts. The four new modules and six changed
-mathematical modules pass strict private elaboration with default resources
-and package flags. All eight affected mathematical consumers, including the
-existing final approximation and energy results, pass against the changed
-import closure. Foundation inspection of all nineteen public declarations
-in the changed mathematical files reports only the standard logical axioms,
-or none. The temporary inspection source was deleted.
+All eight affected mathematical consumers, including the existing final
+approximation and energy results, pass against the changed import closure. The
+temporary inspection source was deleted.
 
-The complete source declaration check, reverse coverage, generated imports,
-role and prose checks pass. The one-page mathematical excerpt was rendered
-and visually inspected without unresolved references or overfull boxes.
-No Mathlib source or ordinary cache was rebuilt. Combined ordinary build and
-compiled-book verification of these new sources remain pending the next
-coordinated integration. The work has not been pushed or published.
+The one-page mathematical excerpt was rendered and visually inspected without
+unresolved references or overfull boxes. No Mathlib source or ordinary cache
+was rebuilt. Combined ordinary build and compiled-book verification of these
+new sources remain pending the next coordinated integration. The work has not
+been pushed or published.

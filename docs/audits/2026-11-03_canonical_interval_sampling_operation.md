@@ -6,4 +6,6 @@ The recursively retained spaces are obtained by applying the existing balancedIn
 
 This definition supports Arad, Landau, Vazirani and Vidick, arXiv:1602.08828v2, Figure fig:algo1 and lines 1777–1817. Joint measurability of the recursive output, independence of the parent coordinate from its child outputs, and the complete success-probability estimate remain subsequent arguments.
 
-The actual definition passes strict checking at default options in 5.117 seconds. Imported foundation inspection uses only standard foundations. Its exact dependencies include the checked canonical sampled parent and finite-family image identity; the temporary inspection source is deleted. Combined ordinary-build and compiled blueprint checks remain pending.
+Its exact dependencies include the checked canonical sampled parent and
+finite-family image identity; the temporary inspection source is deleted.
+Combined ordinary-build and compiled blueprint checks remain pending.

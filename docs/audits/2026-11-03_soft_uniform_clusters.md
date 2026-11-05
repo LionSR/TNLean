@@ -56,33 +56,3 @@ choosing a chain. Construction of an actual MPO approximation, a common
 improving family, and an adaptive algorithm are further steps. In particular,
 a pointwise choice depending on an estimated middle energy is not a family
 chosen before all random samples. No such exchange of choices is asserted.
-
-## Verification
-
-The two numerical lemmas pass strict elaboration together in 3.952 seconds;
-the physical theorem passes in 7.585 seconds. Both checks use the package's
-strict implicit arguments, standard Mathlib linters, warnings as errors and
-default proof-resource limits. Their dependency sources and objects are
-protected by hashes against the fully built TNLean 88ab31ce / QICLean e817ea0
-pair, with the separately checked spectral-precision, physical-cluster and
-soft-norm dependencies supplied explicitly.
-
-These are private, source-level checks against Lean/Mathlib 4.35.0-rc3.
-All three new declarations have only the standard axioms `propext`,
-`Classical.choice` and `Quot.sound` (imported inspection: 4.747 seconds).
-The temporary inspection source was deleted. A read-only mathematical review
-confirmed the constants, witness order and preservation of the original
-regional data. Complete source/blueprint synchronization, theorem roles,
-reader-facing prose, generated imports, pattern scan and whitespace checks
-pass. The two-page mathematical excerpt compiles without overfull boxes.
-
-Ordinary combined build and compiled blueprint checks remain required after
-integration. Upstream main has independently advanced to Mathlib 4.36.0-rc1;
-artifacts from that version are not mixed into these checks. No Mathlib
-source was compiled and no ordinary build cache was modified.
-
-One early local check was rejected by the source-hash guard after its
-temporary input changed before completion. It is excluded from verification.
-Subsequent checks each use a distinct immutable temporary source and import
-map. Other failed diagnostics are retained separately from the successful
-source records.

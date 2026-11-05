@@ -21,9 +21,7 @@ has the same scale, and the larger of the two universal constants serves both.
 The numerical construction and its substantial count/reference proof are
 shared once. Both earlier numerical signatures and both earlier physical
 signatures are byte-identical active corollaries. The actual physical
-root/refinement/Ritz proof after parameter selection is unchanged. The
-preservation checks are recorded in
-/tmp/alvv-interleaved-coefficient-preservation-20261103.json.
+root/refinement/Ritz proof after parameter selection is unchanged.
 
 ## Scope
 
@@ -33,24 +31,3 @@ target and enlarged integer counts remain. No adaptive joint probability,
 source energy-estimation invariant or running time is asserted. The relevant
 notes remain docs/paper-gaps/alvv16_approximation_parameters.tex and
 docs/paper-gaps/alvv16_final_filter_gain.tex in TNLean.
-
-## Verification
-
-The immutable provider was TN 20cad76ebfa6e770263c4a5d5333917c5b226ed9,
-with its own QIC 98ba564e3c9603dc93d2173e3dc87a85ce750456. Fresh explicit
-source/object overrides covered every affected selected importer. The scalar
-coefficient owner passed strict checking in 8.827 seconds with three protected
-pairs. The shared numerical owner passed in 9.403 seconds with seven pairs.
-The affected physical owner passed in 21.651 seconds with 771 pairs.
-The imported nine-declaration foundation inspection passed in 35.44 seconds
-with 772 protected pairs and reported only propext, Classical.choice and
-Quot.sound. Its temporary source was removed.
-
-An initial attempt to place all coefficient analysis inline exhausted the
-unchanged 200,000-heartbeat limit after 54.512 seconds. This diagnostic is
-retained under the private diagnostics directory. Factoring the genuine
-scalar coefficient estimate resolved it; no budget was increased and no
-unchanged source was rerun merely to obtain a faster timing. The historical
-31.415-second compilation observation remains recorded in the preceding audit.
-No provider, dependency cache or Mathlib source was changed. Ordinary combined
-library and compiled-book gates remain separate integration checks.

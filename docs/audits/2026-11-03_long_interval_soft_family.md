@@ -25,13 +25,8 @@ public theorem assumes neither a decomposition nor an improving family.
 Its ordered-word estimate is derived in the enlarged tensor split. No
 viability assertion is moved directly between different tensor splits.
 
-The two modules passed private strict checks in 17.628 and 15.197 seconds,
-respectively, against the immutable TNLean provider
-`107e2726f679d75b51c621694d2216fb1cd0771a` and its own QICLean package
-`68481832e01180e472712ab6dc916199c7b3dd67`. Imported inspections of both
-public declarations passed in 7.680 seconds and report only `propext`,
-`Classical.choice`, and `Quot.sound`. The temporary inspection commands
-were deleted. Ordinary integrated verification remains subsequent work.
+The temporary inspection commands were deleted. Ordinary integrated
+verification remains subsequent work.
 
 Earlier attempts at retaining the complete native formula in the public
 statement reached the default normalization limit. Bounded diagnostics
@@ -39,10 +34,7 @@ confirmed that the matrix-action arguments and the whole decomposition are
 definitionally equal after substituting local coordinate definitions. The
 final proof uses core unfolding of those local definitions, separates the
 natural-core conclusion, and checks the global pullback over abstract finite
-spaces. No resource or transparency option was changed. The original failed
-attempts remain under `/tmp/tnlean-long-soft-family-20261103`; the newer
-comparison diagnostics remain under
-`/tmp/tnlean-long-soft-family-compact-20261103`.
+spaces. No resource or transparency option was changed.
 
 These are explicit-budget, long-interval auxiliaries to ALVV Proposition 5.7.
 They do not assert the printed fourth-order parameter choice, its sharper

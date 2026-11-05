@@ -61,27 +61,3 @@ bounds remain separate. The false printed cluster and soft-energy claims
 retain their counterexamples and gap notes. The existing current-space
 assignment correction, long-interval scope, capped gap and larger integer
 stopping count are unchanged.
-
-## Verification
-
-All four actual-name modules passed private strict checking at the default
-budgets: family 19.479 seconds, iteration 15.663 seconds, node 17.198 seconds,
-and tree 16.327 seconds. An earlier successful family check took 28.930
-seconds; this duration is retained as a compile-time warning. The later
-check followed an explicit source-citation correction, not a timing-only
-retry. No resource limit was raised.
-
-The provider was immutable TNLean 20cad76ebfa6e770263c4a5d5333917c5b226ed9,
-with its own QICLean 98ba564e3c9603dc93d2173e3dc87a85ce750456. All selected
-source/object pairs, root build inputs and the prebuilt Mathlib object were
-guarded before and after checking. Every selected importer above a changed
-module was freshly checked with its explicit private object. The imported
-foundation audit covers all nine public declarations in the four changed
-modules, including the former signatures and unchanged sampling operation;
-only propext, Classical.choice and Quot.sound occur. Exact hashes, logs and
-durations are recorded in the manifest.
-
-All new objects and temporary foundation commands are under /tmp. The source
-worktree has no .lake. Neither provider nor shared cache was changed, and
-no Mathlib source was built. Ordinary combined build and compiled blueprint
-checks remain required after adoption.

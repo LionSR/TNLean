@@ -7,15 +7,12 @@ are chosen before the radius, child spaces and seed. The original source
 hypotheses on the nearest-neighbour positive contractions and full gapped
 ground space are unchanged.
 
-The deterministic profile is stronger than a success-conditioned bound:
-for every candidate W and every canonical seed, the actual output has
-dimension at most M = D^6 s^3 and at most M recorded generators, each with
-weighted internal-cut Schmidt rank at most M. No viability or dimension
-premise on W is used for this profile. The sample dimension is at most s
-for every seed, using the shared exact dimension lemmas in QIC
-a6f67c7df7b26defe34cce2b4b7abc2eac61f581; the existing power-count and collective-trimming
-bounds then give the result. It does not assert this Schmidt-rank bound
-for every vector of the span.
+The deterministic profile is stronger than a success-conditioned bound: for
+every candidate W and every canonical seed, the actual output has dimension at
+most M = D^6 s^3 and at most M recorded generators, each with weighted
+internal-cut Schmidt rank at most M. No viability or dimension premise on W is
+used for this profile. It does not assert this Schmidt-rank bound for every
+vector of the span.
 
 For two actual adjacent children with dimension at most M and original
 G-viability error 3/200, their actual merged candidate has dimension at
@@ -45,33 +42,18 @@ actual hard-clipped family. The assignment and integer-round corrections
 remain in the existing approximation-parameter note. Whole-tree adaptive
 probability and runtime are separate conclusions.
 
-The source-only branch starts from TN 222d3719 and uses the immutable
-LVV native uniform contribution bba5090d, its b1a63b62 prerequisite and
-the shared sample-dimension leaf above. Actual-name private checks used
-held TN 435cbe7fe5 / own QIC b2ea12a0, with fresh explicit source/object
-overrides and exact selected source, object, root-input, prebuilt-Mathlib
-and changed-importer guards. The unconditional profile passed in
-5.166 seconds with 167 protected pairs. The complete final physical
-factory passed in 14.185 seconds with 764 pairs. The combined four-public
-imported foundation inspection passed in 8.269 seconds with 765 pairs,
-using only propext, Classical.choice and Quot.sound. Its temporary source
-was deleted.
+Its temporary source was deleted.
 
-Two rejected final-transfer attempts reached the default 200000-heartbeat
-limit (32.250 and 18.528 seconds). A targeted exact denominator-associativity
-rewrite replaced simplification through the full physical parameter
-expressions; the final proof budget is unchanged. Failed logs, guards,
-results and the earlier source are preserved in the private diagnostics.
-The first failed timing is a recorded diagnostic, not a claim that an
-unchanged final module meets a raised threshold. The final source passed
-in 14.185 seconds; canonical timing gates still apply during integration.
+A targeted exact denominator-associativity rewrite replaced simplification
+through the full physical parameter expressions; the final proof budget is
+unchanged. Failed logs, guards, results and the earlier source are preserved
+in the private diagnostics. The first failed timing is a recorded diagnostic,
+not a claim that an unchanged final module meets a raised threshold.
 
-Generated imports, reader-facing prose, source blueprint synchronization,
-proof integrity and whitespace checks passed. TN source blueprint checking
-used a read-only dependency resolver pointed at the exact verified QIC and
-Mathlib provider sources. The tactic scan was recorded: the shared sampler
-dimension lemma avoids repeating its instance-sensitive proof, and the
-new factory applies the existing physical construction and deterministic
-iteration. The source-only worktree has no .lake. No provider/cache was
-modified, no compiled artifact was copied and no Mathlib source was built.
-Canonical build and compiled-book gates remain coordinated integration.
+TN source blueprint checking used a read-only dependency resolver pointed at
+the exact verified QIC and Mathlib provider sources. The tactic scan was
+recorded: the shared sampler dimension lemma avoids repeating its
+instance-sensitive proof, and the new factory applies the existing physical
+construction and deterministic iteration. No provider/cache was modified, no
+compiled artifact was copied and no Mathlib source was built. Canonical build
+and compiled-book gates remain coordinated integration.

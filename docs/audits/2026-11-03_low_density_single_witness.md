@@ -81,27 +81,3 @@ for `0 < v <= eta`, and the substitution `v = mu/log L` is valid for
 deficit and three-quarter-power logarithmic-accuracy terms in the source
 macros at lines 176–177. The coefficient on the full-band logarithmic
 dimension is one. No basis construction or running time is asserted.
-
-## Verification
-
-Actual-name private checks use the held ordinary-built TN provider
-`20cad76ebfa6e770263c4a5d5333917c5b226ed9` and its own exact QIC package
-`98ba564e3c9603dc93d2173e3dc87a85ce750456`. Selected source/object pairs,
-root inputs, the prebuilt Mathlib sentinel and changed-importer dependencies
-are guarded. All output is confined to `/tmp`; providers and caches remain
-unchanged and no Mathlib source build is started.
-
-The new variable construction, uniform specialization, designated-mass
-assembly and physical theorem pass strict checks at the default options
-in 5.500, 5.348, 5.202 and 21.540 seconds respectively. All three existing
-direct consumers of the uniform module pass against the changed import
-closure: `MPSApproximation` in 6.016 seconds, the gapped global theorem in
-9.233 seconds, and the original low-energy global theorem in 9.273 seconds.
-The positive-dimension strict global theorem also passes in 9.266 seconds.
-An imported five-name foundation inspection passes in 7.999 seconds with
-only `propext`, `Classical.choice` and `Quot.sound`. Temporary inspection
-commands are deleted after use.
-
-Ordinary combined compilation and compiled blueprint declarations remain
-integration gates. This contribution depends on the frozen positive-dimension
-checkpoint and changes no companion source or dependency pin.

@@ -31,21 +31,3 @@ lines 1373–1392. They do not identify the symmetric GEN input estimate with th
 function's one-sided interval, prove the final prescribed filter parameters, establish the
 source's computational running time, or revive the false printed cluster approximation.
 The interaction-label cluster estimate, explicit bond and spectral losses are retained.
-
-## Verification
-
-Strict actual-module checks used fully warmed immutable TNLean 5e19c052124518e40871bb67a1ce5398dd3b6416
-and its own QICLean package 518e8d2053793d108d1ad52638a89f22028bafca. Selected source/object
-hashes, configuration inputs, warmed Mathlib and changed-importer closures were guarded.
-Private explicit overrides provide the new QIC generic comparison and new selected-region
-MPO module. Only temporary output objects were written under /tmp. No provider, production
-cache or Mathlib source was changed.
-
-SelectedRegionalSoftMPO passed in 5.519 seconds; FiveRegionSoftRepresentation passed
-in 7.339 seconds. The generic QIC comparison passed in 5.223 seconds. The imported audit
-of all three public statements passed in 4.940 seconds, with only propext, Classical.choice
-and Quot.sound. Audit commands and fixtures are not committed.
-
-Generated imports, complete source-to-blueprint synchronization, added-prose and whitespace
-checks pass. The new contribution has no repeated tactic pattern at the current scan
-thresholds. Ordinary combined builds and compiled declaration/book checks remain required after adoption.

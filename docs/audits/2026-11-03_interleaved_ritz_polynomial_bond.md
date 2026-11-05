@@ -23,17 +23,3 @@ The quantitative bound is coarse; the printed sharp dependence, adaptive joint
 probability, energy-estimation invariant and running time are not claimed.
 The relevant deviations remain in `docs/paper-gaps/alvv16_approximation_parameters.tex`
 and `docs/paper-gaps/alvv16_final_filter_gain.tex`.
-
-## Verification
-
-The private strict actual-module check used the immutable TN provider
-`20cad76ebfa6e770263c4a5d5333917c5b226ed9` and its own QIC revision
-`98ba564e3c9603dc93d2173e3dc87a85ce750456`, with explicit freshly checked
-source/object overrides for the additive numerical and same-root results.
-It passed in 31.415 seconds with 769 protected source/object pairs.
-The imported one-declaration foundation inspection passed in 7.790 seconds
-with 770 protected pairs and reported only `propext`, `Classical.choice`
-and `Quot.sound`. The temporary inspection source was removed.
-No dependency cache, provider source or object was changed; no Mathlib source
-was compiled. Ordinary combined-library and compiled-book verification remain
-separate integration checks.

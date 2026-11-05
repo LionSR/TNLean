@@ -26,19 +26,10 @@ assert physical section bounds or assume success of the actual long-node
 operation. Establishing those section bounds for a particular sampled
 operation is a separate mathematical step.
 
-The final actual-name strict check passed in 4.941 seconds against immutable
-TNLean `435cbe7fe53e5d3a04c1b8eb2382753749f21a64` and its own QICLean
-`b2ea12a0139820758e161514968ed9ead661c5a7` package, with the frozen geometry,
-ancestry, interval law and finite-list probability results supplied as
-explicit source/object overrides. All 43 selected dependency pairs and the
-build inputs were guarded. A three-name imported foundation inspection
-passed in 4.819 seconds with only `propext`, `Classical.choice`, and
-`Quot.sound`; its temporary source was deleted. Default options were used.
-The earlier root-only checkpoint is retained under the private
-`superseded-root-only` directory and is superseded by this shared-union proof.
+Default options were used. The earlier root-only checkpoint is retained under
+the private `superseded-root-only` directory and is superseded by this
+shared-union proof.
 
-Generated imports, source/blueprint synchronization, reader prose, proof
-integrity, whitespace and pattern checks passed. The mathematical entry
-was rendered and inspected. Ordinary combined compilation and compiled
-blueprint declarations remain integration checks. No provider source,
-artifact, cache, pin, or Mathlib source was changed or built.
+The mathematical entry was rendered and inspected. Ordinary combined
+compilation and compiled blueprint declarations remain integration checks. No
+provider source, artifact, cache, pin, or Mathlib source was changed or built.

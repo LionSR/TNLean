@@ -6,4 +6,4 @@ All data come from the original nearest-neighbour positive contractions and posi
 
 The theorem is auxiliary to ALVV, arXiv:1602.08828v2, Figure `fig:algo1`, lines 1627–1632, and the energy-estimation argument at lines 1805–1807. It establishes an original-Hamiltonian energy relation. It does not identify the source's generated soft Hamiltonian with that original regional operator, prove the full recursive energy invariant, or assert running time.
 
-Strict actual-name elaboration passes at the default budget in 11.999 seconds, with 114 protected source/object pairs. Imported foundation inspection passes in 4.774 seconds with only `propext`, `Classical.choice` and `Quot.sound`; its temporary source is deleted. Combined adoption checks remain required.
+Combined adoption checks remain required.

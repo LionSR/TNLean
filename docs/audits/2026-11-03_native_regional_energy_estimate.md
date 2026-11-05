@@ -16,35 +16,6 @@ native matrix, local low-energy witness or compressed minimum is
 assumed. Empty intervals, L=0 and q=1 remain covered by the stated
 positive local dimension hypothesis.
 
-## Construction and verification of the minimum
-
-Designated nearest-neighbour supports imply that the original regional
-matrix is supported on J. Fix the zero configuration of its complement
-and take the actual matrix slice on J. The supported-matrix identity
-shows that its identity extension is the original regional matrix.
-Hermiticity and positive scalar lower bounds restrict to this slice.
-The positive shift by the native canonical minimum lifts back to the
-full space. These two comparisons identify that canonical minimum with
-the actual attained full regional minimum returned by
-`exists_regional_ground_energy_bound`.
-
-The tensor coordinate isometry is exactly the one used in the current
-regional improving families: complementary configurations followed by
-native interval configurations, the product orthonormal basis, and the
-exchange of factors. A singleton instance of the existing Kronecker
-conjugation theorem proves the intertwining with the actual native
-matrix. No representation identity is supplied as a hypothesis.
-
-Pull S tensor the full complement back through this isometry. The
-original-ground energy theorem constructs a nonzero vector in that
-physical candidate with centered energy at most three times its squared
-norm. Transport it to the tensor product. The previously proved tensor
-energy minimum lemma produces a genuine unit local vector in S, giving
-the variational upper bound e+3 for the actual compression. Positivity
-of K-eI gives the lower bound e. The generic matrix comparison and
-compression arguments are owned by the separate QICLean module
-`Analysis/CompressionEnergyBounds.lean`.
-
 ## Relation to the source energy-estimation step
 
 This is a conditional variational auxiliary supporting ALVV,
@@ -64,18 +35,3 @@ It does not change the retained merge space, its recorded dimension, or
 its bond bound. It makes no runtime claim and does not use the false
 printed cluster estimate. The corrected cluster construction and its
 explicit dependence remain separate.
-
-## Verification
-
-The exact physical module passed private strict actual-name elaboration
-in 14.155 seconds at the default heartbeat budget. Its imported public foundation
-audit passed in 4.620 seconds, with only propext, Classical.choice and
-Quot.sound. It reads the immutable
-checked TNLean provider 478e8a08f8d97cec4064070a29170a0953362d3e and
-QICLean 9578336a5123a76001a1218e271132091c828de2, with only the new
-checked QIC comparison leaf supplied as an explicit private object.
-The source/object closure, build inputs and prebuilt Mathlib object
-were guarded before and after checking. New objects are only under
-/tmp; no provider source or shared cache was changed and no Mathlib
-source was built. Ordinary combined and compiled-book checks remain
-required after adoption.

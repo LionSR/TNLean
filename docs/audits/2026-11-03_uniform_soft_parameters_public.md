@@ -4,4 +4,6 @@ The numerical existence theorem in `ALVV/UniformPhysicalSoftCalibration.lean` is
 
 The choices precede the chain length and interactions. At fixed local dimension and positive gap, the soft order, scale, residual cutoff, filter degree and precision determine the same corrected residual and sampling budgets, and the same natural polynomial member-bond bound. This is an auxiliary to ALVV, arXiv:1602.08828v2, Proposition 5.7 and Theorem 5.8 (`prop:Cheby-AGSP-eff`, `t:aisefficient`), local source lines 1311–1420. It does not identify the printed fourth-order choice or assert a running-time estimate. The existing soft-residual and cluster-approximation gap notes remain applicable.
 
-The actual production module was checked privately against the immutable TN `88a5df56887b75b9a4d79c2c77153df6b2b7733c` and QIC `32b5f3e04e232bb9ee2ee34a7bf5078b263b85b3`, using the standard strict options and guarded prebuilt dependencies. The strict check passed in 14.991 seconds. No Mathlib source or shared cache was changed. A separate imported foundation inspection covers both the newly public numerical theorem and the unchanged physical-family theorem; it passed in 7.716 seconds and found only `propext`, `Classical.choice` and `Quot.sound`. The temporary inspection commands were deleted. The corresponding blueprint now separates the numerical lemma from its physical corollary.
+No Mathlib source or shared cache was changed. The temporary inspection
+commands were deleted. The corresponding blueprint now separates the numerical
+lemma from its physical corollary.

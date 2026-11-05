@@ -23,10 +23,5 @@ premise. Scalar residual hypotheses remain explicit. Uniform calibration,
 the original-reference radius, probability and the complete algorithm are
 separate statements; no running-time assertion is made here.
 
-The final source passed private strict checking in 17.350 seconds at the
-immutable TNLean provider `88a5df56887b75b9a4d79c2c77153df6b2b7733c`, with
-its own QICLean package `32b5f3e04e232bb9ee2ee34a7bf5078b263b85b3`.
-The imported public foundation inspection passed in 7.923 seconds, reporting
-only `propext`, `Classical.choice` and `Quot.sound`; its temporary commands
-were deleted. No resource or transparency option was changed. These are
-private checks; ordinary integrated verification remains subsequent work.
+No resource or transparency option was changed. These are private checks;
+ordinary integrated verification remains subsequent work.

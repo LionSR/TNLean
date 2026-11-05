@@ -26,22 +26,12 @@ existing root-subtree argument uses the specified relation on the actual
 merge list and attained regional minima outside that list. Thus the reusable
 recursion does not require sampling success on all overlapping intervals.
 
-Against the fully verified TN revision
-`107e2726f679d75b51c621694d2216fb1cd0771a` and its own QIC revision
-`68481832e01180e472712ab6dc916199c7b3dd67`, strict private checks passed in
-6.277 seconds for the exposed recursion and 6.853 seconds for the terminal
-node theorem. The four actual downstream consumers were re-elaborated with
-fresh source/object overrides; the existing canonical energy headline passed
-in 19.151 seconds. Imported foundation inspection of both new public results
-and the two existing assignment theorems passed in 4.780 seconds, reporting
-only `propext`, `Classical.choice` and `Quot.sound`. Temporary commands were
-removed. All selected dependencies, root inputs and prebuilt Mathlib objects
-were guarded, with serialized elaboration and unchanged default limits.
+Temporary commands were removed. All selected dependencies, root inputs and
+prebuilt Mathlib objects were guarded, with serialized elaboration and
+unchanged default limits.
 
-Full source blueprint synchronization passed using exact verified dependency
-sources read-only, as did generated imports, reader-facing prose, tactic
-scanning and whitespace checks. No provider, pin, cache or Mathlib source was
-modified. Combined ordinary gates remain required.
+No provider, pin, cache or Mathlib source was modified. Combined ordinary
+gates remain required.
 
 Target dimension, comparison and exact terminal-image viability remain
 explicit certificates for the same physical family and successful actual

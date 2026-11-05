@@ -70,35 +70,3 @@ and modified-tree qualifications remain in
 `docs/paper-gaps/alvv16_approximation_parameters.tex`. The new blueprint
 entries are supporting lemmas, not completion marks for the unrestricted
 source algorithm.
-
-## Verification
-
-Strict actual-module checks used the immutable provider TN
-`d316e8cbe52bd5f12bcfbeec687d1dbef7633586` with its own QIC
-`d1317fdb229a1048cc65ec5ab1912403ab6bcbc0`. The provider had passed the
-15,643-job full build with zero Mathlib source jobs. The new sources and
-objects were private, with guards on every selected source/object pair,
-root input and the warmed Mathlib object. No cache or provider was changed.
-
-| Module | Strict time | Guarded source/object pairs |
-| --- | ---: | ---: |
-| `FullIntervalTrimmingMPS` | 5.676 s | 260 |
-| `PhysicalDGAutomaticRefinement` | 10.226 s | 747 |
-| `PhysicalDGTreeApproximation` | 14.379 s | 766 |
-
-An imported inspection of all three new public theorems passed in 7.765 s
-with 767 guarded pairs. Each depends only on `propext`, `Classical.choice`
-and `Quot.sound`. The temporary inspection source was deleted. The initial
-inspection already reported those foundations but failed only the temporary
-file's header and hash-command linters; that attempt is preserved separately,
-and the corrected inspection disables only the hash-command linter locally.
-No production linter was disabled.
-
-These private checks do not replace the subsequent combined ordinary build,
-compiled blueprint declaration check and changed-module timing gates.
-
-The source-level blueprint declaration synchronization, blueprint role check,
-reader-facing prose check, whitespace check and scoped tactic-pattern scan
-passed. The scan found no repeated tactic pattern at its configured thresholds.
-The only existing blueprint sentence changed is the theorem-role word in the
-common-radius prerequisite reference, as required by the role checker.

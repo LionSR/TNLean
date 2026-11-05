@@ -19,16 +19,7 @@ This is a conditional auxiliary to ALVV, arXiv:1602.08828v2,
 Figure `fig:algo1` and lines 1777–1817. The fixed-child bound is an explicit
 analytic premise and is not asserted here for an arbitrary family.
 
-The actual-name strict check passed in 6.010 seconds against immutable
-TNLean `435cbe7fe53e5d3a04c1b8eb2382753749f21a64` and its own QICLean
-`b2ea12a0139820758e161514968ed9ead661c5a7` package, with the frozen actual
-sampled-tree and parent-section results as explicit source/object overrides.
-All 180 selected dependency pairs and the build inputs were guarded.
-An imported one-name foundation audit passed in 6.800 seconds using only
-`propext`, `Classical.choice`, and `Quot.sound`; its temporary source was
-deleted. Default elaboration options were retained. Source/blueprint
-synchronization, reader prose, generated imports, proof integrity,
-whitespace and pattern checks passed. The mathematical entry was rendered
-and inspected. Ordinary combined compilation and compiled blueprint
-checking remain integration checks. No shared source, artifact, cache,
-dependency pin, or Mathlib source was changed or built.
+Default elaboration options were retained. The mathematical entry was rendered
+and inspected. Ordinary combined compilation and compiled blueprint checking
+remain integration checks. No shared source, artifact, cache, dependency pin,
+or Mathlib source was changed or built.

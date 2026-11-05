@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 import QICLean.Analysis.SoftTruncationRestrictedResidual
-import QICLean.Analysis.EnergyTruncationShift
+import QICLean.Analysis.ShiftedSoftHardTruncation
 
 /-!
 # A regional hard tail with an arbitrary commuting interior

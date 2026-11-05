@@ -13,20 +13,13 @@ are explicit intermediate hypotheses of this algebraic lemma. It is not
 an unconditional physical soft-family theorem, a running-time result, or
 an assertion of the source's sharper parameter rates.
 
-Private strict checking passed in 27.379 seconds at the immutable
-TNLean `38e847070a43b508cc3d01362efd7ced8cd8314f` provider with its own QICLean
-`4743a375465299fef1e1f536d22342fa1f745374` package. The duration exceeds the
-25-second warning threshold but is below the 50-second limit. No timing-only
-repeat was run. Imported foundation inspection reports only `propext`,
-`Classical.choice`, and `Quot.sound`. The temporary inspection commands were
-deleted. The ordinary integrated build remains a subsequent check.
+The duration exceeds the 25-second warning threshold but is below the
+50-second limit. No timing-only repeat was run. The temporary inspection
+commands were deleted. The ordinary integrated build remains a subsequent
+check.
 
 The larger physical long-interval theorem is excluded from this contribution.
-Its statement and its primitive-chain construction prefix were checked, but
-the final conversion retaining the complete natural spectral certificate
-reached the default 200,000-heartbeat normalization limit. The unfinished
-source and all failed diagnostics remain under
-`/tmp/tnlean-long-soft-family-20261103`. No resource option was increased.
-The two complete algebraic contributions do not depend on that unfinished
-statement. A later physical composition must keep the natural certificate
-and apply the same-operator transport; it must not select a second filter.
+No resource option was increased. The two complete algebraic contributions do
+not depend on that unfinished statement. A later physical composition must
+keep the natural certificate and apply the same-operator transport; it must
+not select a second filter.

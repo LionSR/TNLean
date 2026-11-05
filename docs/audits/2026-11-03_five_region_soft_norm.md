@@ -30,31 +30,3 @@ It supplies neither a residual estimate nor a complete filter calibration.
 The companion harmonic-cap note remains owned by QICLean and is cited by
 its published URL; the TNLean note records only the physical norm and
 regional-centering consequence.
-
-## Verification
-
-The exact named production module passes strict private checking at default
-limits in 8.932 seconds, with 104 guarded TNLean/QICLean source/object pairs,
-against immutable TNLean 88ab31ce57bdbc4bcb65be00055d1db50df4f259 and its own
-QICLean package e817ea0a8a46440eddc361d41cc46b9e61ba10f4. The imported public
-foundation inspection passes in 4.526 seconds with 105 pairs and only
-propext, Classical.choice and Quot.sound. Its temporary source is deleted.
-
-Earlier broad-import private-cap checks took 58.230 and 55.571 seconds.
-The unnecessary residual-theory import was replaced by the actual original
-region, commuting soft-family and operator-cap dependencies, plus the
-existing Module tactic. The unchanged private cap then passed in 5.241
-seconds. This is a genuine dependency reduction; no unchanged-source
-check was repeated for timing. The first full public check's scalar-cast
-and proof-instance-style errors were repaired and are retained as failed
-diagnostics, not counted as successful evidence. No resource option was
-raised.
-
-Complete source/blueprint synchronization uses the immutable provider's
-QICLean and Mathlib source trees read-only, without adding a local cache.
-Generated imports, the public declaration's reader coverage, reader prose,
-integrity, whitespace and pattern checks pass. The new mathematical entry
-and physical note passage are rendered and inspected. Ordinary combined
-compilation and complete compiled blueprint declarations remain integration
-checks. The source-only worktree has no Lake environment; no provider,
-cache, pin or Mathlib source has changed.

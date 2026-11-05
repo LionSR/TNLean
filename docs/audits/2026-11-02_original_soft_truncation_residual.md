@@ -44,18 +44,7 @@ counterexamples remain unchanged in `docs/paper-gaps/alvv16_cluster_approximatio
 and the companion hard-truncation-window note at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 
-Strict actual-name checks passed in 8.521 seconds for the unchanged exposed
-regional identity's module, 7.625 seconds for its existing importer, and 7.127
-seconds for the new physical module. The imported audit of the two TNLean
-public declarations and two new QICLean prerequisites passed in 4.639 seconds;
-every declaration uses only `propext`, `Classical.choice` and `Quot.sound`.
-The physical check guarded 119 selected source/object pairs.
-
-Checks used immutable fully built TNLean
-`1f0087d553cec4bf20448b0358489716cec64caf` and its own QICLean package
-`099049ed6805334c6517c66b4b9858480bc7e9c7`, with explicit private new-source
-objects. Selected sources, objects, build inputs and the prebuilt Mathlib record
-were guarded. All new outputs remain under `/tmp`; the source worktree has no
-`.lake`. No provider, dependency cache or Mathlib source was changed. Full
+Selected sources, objects, build inputs and the prebuilt Mathlib record were
+guarded. No provider, dependency cache or Mathlib source was changed. Full
 ordinary integrated and compiled-book checks remain pending. No permanent
 foundation fixture is introduced.

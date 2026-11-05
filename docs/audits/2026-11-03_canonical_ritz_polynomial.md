@@ -36,27 +36,3 @@ explicit in `docs/paper-gaps/alvv16_approximation_parameters.tex` and
 `docs/paper-gaps/alvv16_final_filter_gain.tex`. Neither the printed
 soft-truncated Generate procedure, measurable Ritz-basis selection, nor a
 running-time bound is asserted.
-
-## Verification
-
-The exact actual-name module passed strict checking in 21.262 seconds
-against immutable TNLean `435cbe7fe53e5d3a04c1b8eb2382753749f21a64` and its
-own QICLean `b2ea12a0139820758e161514968ed9ead661c5a7` package. Frozen explicit
-source/object overrides supply the physical joint factory and its complete
-new transitive dependencies. All 823 selected source/object pairs and build
-inputs were guarded. The imported public foundation audit passed in
-7.784 seconds and uses only `propext`, `Classical.choice`, and `Quot.sound`;
-its temporary source was deleted. Default options were retained. Earlier
-failed checks were corrected rather than counted as successful evidence.
-
-Generated imports, source/blueprint synchronization, reader prose, proof
-integrity, whitespace and pattern checks passed. The new main result is
-registered in its actual chapter's role table. The local full role report
-also identifies seven pre-existing supporting-environment/reference changes
-in earlier frozen reader entries; those require combined role normalization.
-The new entry has no role mismatch. Its mathematical entry and the updated
-paper-gap passage were rendered and inspected. The new physical joint reader
-label is supplied by the immutable dependency's chapter in the combined
-blueprint. Ordinary combined compilation, complete role normalization and
-compiled blueprint declarations remain integration checks. No provider,
-cache, pin, artifact or Mathlib source was changed or built.

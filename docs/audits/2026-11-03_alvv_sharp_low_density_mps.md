@@ -86,27 +86,3 @@ public name. This module imports no independent area-law or MPS-existence
 result. The gapped global approximation reuses it with its public statement
 unchanged. All twelve remaining public theorem signatures in
 `MPSApproximation` are also unchanged.
-
-## Verification
-
-Private checks use the exact ordinary-built provider TN
-`478e8a08f8d97cec4064070a29170a0953362d3e` and its own QIC package
-`9578336a5123a76001a1218e271132091c828de2`. The guarded checker verifies
-selected source, object and build-input hashes, the prebuilt Mathlib
-sentinel, and the changed-importer closure; outputs are confined to `/tmp`.
-No provider or dependency cache is modified, and no Mathlib source build
-is started. The new mathematical modules use the default heartbeat budget.
-
-The independent-scale approximation, sharp logarithmic estimate and global
-MPS modules passed strict actual-name checks in 22.445, 12.932 and 9.375
-seconds respectively before final shared-helper formatting. The final global recheck passed in
-9.069 seconds. The shared helper and every selected affected consumer pass
-again after that final formatting change. Imported foundation inspection
-passed in 8.596 seconds and covers 23 public declarations: the new public
-results, moved public helpers, and the existing public approximation
-statements. Only `propext`, `Classical.choice` and `Quot.sound` occur.
-Temporary inspection commands are deleted after use.
-
-Ordinary combined compilation and compiled blueprint declaration checking
-remain integration gates. No broader completion of the six-paper programme
-is asserted by these results.

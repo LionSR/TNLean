@@ -39,13 +39,5 @@ efficient-generation theorem for its broader absolute-error input.
 The recursive construction of the required parent estimate remains a
 separate task. See the updated energy-centering paper-gap note.
 
-The actual production module passed strict private checking in 4.740
-seconds at default budgets against immutable TNLean
-20cad76ebfa6e770263c4a5d5333917c5b226ed9 and its own QICLean
-98ba564e3c9603dc93d2173e3dc87a85ce750456, with 115 selected source/object
-pairs guarded. The imported public foundation audit reports only
-propext, Classical.choice and Quot.sound. Its exact result and all source
-hashes are recorded in the manifest. New objects and temporary foundation
-commands remain under /tmp; no provider or shared cache was modified,
-and no Mathlib source was compiled. Ordinary combined and compiled
-blueprint checks remain required after adoption.
+Its exact result and all source hashes are recorded in the manifest. Ordinary
+combined and compiled blueprint checks remain required after adoption.

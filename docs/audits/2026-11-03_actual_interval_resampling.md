@@ -45,21 +45,13 @@ Schmidt-rank bound on their entire span. The polynomial all-vector estimate
 will use the existing separate span argument and the original reference's
 inverse-radius profile.
 
-All four new mathematical modules pass strict private elaboration with the
-package flags and unchanged default resources: 5.636, 5.537, 5.570 and 5.064
-seconds. Imported foundation inspection of all eleven public declarations,
-including the probability-measure instance, passes in 5.092 seconds with only
-the standard logical axioms. The temporary inspection source was deleted.
-The complete source declaration check and reverse public coverage pass,
-as do generated imports, roles, prose, whitespace and manifest agreement.
-The two-page mathematical excerpt was rendered and visually inspected with
-no unresolved references or overfull boxes.
+The temporary inspection source was deleted. The two-page mathematical excerpt
+was rendered and visually inspected with no unresolved references or overfull
+boxes.
 
-Checks use immutable TNLean 38e847070a43b508cc3d01362efd7ced8cd8314f with
-its own QICLean 4743a375465299fef1e1f536d22342fa1f745374 and prebuilt
-Mathlib 4.35.0-rc3. The already frozen generic interval argument is imported
-through exact checked private objects. No ordinary cache, provider source
-or Mathlib source was changed. Combined ordinary build and compiled blueprint
-checks remain pending the next coordinated integration. The physical family,
-reference, true fixed-child probability and energy applications must still be
-composed for the same corrected soft tree. No running-time result is claimed.
+The already frozen generic interval argument is imported through exact checked
+private objects. No ordinary cache, provider source or Mathlib source was
+changed. Combined ordinary build and compiled blueprint checks remain pending
+the next coordinated integration. The physical family, reference, true
+fixed-child probability and energy applications must still be composed for the
+same corrected soft tree. No running-time result is claimed.

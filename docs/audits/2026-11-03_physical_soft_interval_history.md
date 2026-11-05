@@ -29,13 +29,8 @@ a complete primitive-chain selection, sharp parameter estimate or running-time
 assertion. The corrected sampling, soft residual and cluster conventions remain
 those cited in the production module and the existing paper-gap notes.
 
-The final source passed default private strict checking in 19.985 seconds,
-with 737 selected TNLean/QICLean source-object pairs guarded against the immutable
-provider TN `d5c2f758dda114f66280fea1ae77b019170918c0` and its own QIC package
-`32b5f3e04e232bb9ee2ee34a7bf5078b263b85b3`. The imported public foundation
-inspection passed in 10.974 seconds with 738 guarded pairs and only `propext`,
-`Classical.choice` and `Quot.sound`. Temporary inspection commands were deleted.
-No resource or transparency option was changed.
+Temporary inspection commands were deleted. No resource or transparency option
+was changed.
 
 Earlier default-limit diagnostics are preserved with the private evidence.
 The proof was shortened by omitting unused public filter witnesses and giving

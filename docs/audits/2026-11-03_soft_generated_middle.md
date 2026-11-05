@@ -19,14 +19,3 @@ These are operator auxiliaries for ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff
 The corrected interaction-label cluster estimate and energy normalization remain essential. The nondegenerate counterexamples to the printed cluster estimate remain recorded in `docs/paper-gaps/alvv16_cluster_approximation.tex`. This contribution asserts neither the printed spatial selector nor its false bound. It also does not discharge the physical residual and spectral precision conditions at the printed fixed truncation order.
 
 The native tensors may depend on the supplied middle energy estimate. Consequently the existing probability theorem for a family fixed before all adaptive energy choices cannot yet be applied to literal soft GENERATE on this basis alone. Common pre-estimate families or adaptive measurability and probability estimates remain separate requirements. No running-time claim is made.
-
-## Verification
-
-The immutable provider is TNLean `88ab31ce57bdbc4bcb65be00055d1db50df4f259` with its own QICLean `e817ea0a8a46440eddc361d41cc46b9e61ba10f4`. Selected unchanged source and object hashes were guarded. All selected importers affected by the earlier shared coordinate promotion were freshly checked; the new principal-compression owner and affected Jordan consumer were also checked in their separate contribution. Only temporary private objects were written; no provider, dependency cache, or Mathlib source was built or modified.
-
-The complete production source passed the default strict checker in 9.116 seconds, with 515 source/object pairs guarded. The separate placement-norm leaf passed in 33.969 seconds; this exceeds the 25-second warning threshold and is retained without a timing-only retry. A preceding complete generic interval-helper check took 89.489 seconds under host contention; it is retained as earlier proof evidence and does not replace the completed-source timing. Diagnostic checks and intermediate errors remain in the private verification record.
-
-The imported foundation audit of both physical theorems and the placement-norm theorem passed in 17.258 seconds. Each depends only on `propext`, `Classical.choice`, and `Quot.sound`. Temporary audit commands were deleted. Canonical ordinary library and compiled blueprint gates remain integration requirements.
-
-
-The import-aggregator generator, changed-prose check, whitespace check, proof-token check, and tactic-pattern scan completed. The source-only blueprint scan resolves all three new references. Its whole-library result still reports missing companion declarations because this deliberately cache-free source worktree has no dependency checkouts; those pre-existing dependency references must be checked in the canonical integration environment. No cache was initialized to satisfy that scanner.
