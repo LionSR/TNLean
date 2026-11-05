@@ -82,6 +82,13 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
+- `spc11_spt_classification_continuous_realization.tex` (scope restriction,
+  open) compares the exact MPS phase condition and the injective endpoint
+  domain with the classification of arXiv:1010.3732, Section II.F. Every
+  clause matches the source except the continuous tensor realization of the
+  ground lines along the path, which the source derives from the gap and the
+  phase condition assumes; the endpoint domain is the source's standard-form
+  convention. The note gives the plan for the pointwise converse.
 - `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction, resolved)
   records that preservation of an on-site symmetry along the isometric
   deformation of arXiv:1010.3732 was first derived from exact symmetry of the
@@ -575,18 +582,19 @@ For the non-periodic MPS Fundamental Theorem background:
 - `rmp_nonperiodic_bnt_comparison_inputs.tex` compares the current
   canonical-form/BNT/after-blocking proof boundary against the local paper
   sources.
-- `pgvwc07_direct_sum_input.tex` explains the older MPS representation
-  paper's direct-sum input behind block-injective canonical form.
+- `pgvwc07_direct_sum_input.tex` (local correction, resolved) explains the
+  older MPS representation paper's direct-sum input behind block-injective
+  canonical form, and records the convention that its pairwise different
+  block states are pairwise nonproportional, equivalently gauge-phase
+  inequivalent blocks.
 - `pgvwc07_ti_canonical_form_positive_blocks.tex` records the convention
   that every listed block of the translation-invariant canonical form has
   positive bond dimension, used once when condition C1 forces a single block.
 - [`pgvwc07_open_parent_domain.tex`](pgvwc07_open_parent_domain.tex)
-  (scope restriction, open) records the explicit length-at-least-two and
-  common-physical-alphabet domain of the actual varying-bond open-parent
-  kernel theorem. The candidate proves canonical normalization and the
-  actual ground-state line, with no local-section or kernel supplier.
-  The unrestricted printed Theorem 9 is not certified by that restricted
-  entry; hosted proof validation also remains pending.
+  (local correction, resolved) records that the length bound `N ≥ 2` of the
+  varying-bond open-parent uniqueness theorem is the source's setup of a
+  chain with an adjacent interaction term; with it, the formal result is
+  Theorem 9 for arbitrary physical and bond dimensions.
 - `pgvwc07_ti_uniqueness_scope.tex` records that the block-separation lemmas
   do not formalize the uniqueness theorem for the translation-invariant
   canonical form, states the corrected root-of-unity conclusion, and records
@@ -596,7 +604,11 @@ For the non-periodic MPS Fundamental Theorem background:
 - `pgvwc07_quadratic_reconstruction_phase.tex` records the unit-modulus phase
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
-  corrected same-state conclusion up to an $N$th-root phase.
+  corrected conclusion for every solution up to a unit phase. It records that
+  the nonzero state and the size condition `N > 2 L_0 + D^4` belong to the
+  source's setup, that the existence clause and the same-state case are
+  formalized, and the endpoint-invertibility argument that remains for an
+  arbitrary solution.
 - `ssvcw05_sequential_bond_upper_bound_scope.tex` records the upper bounds
   `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of the
   successive decompositions, the formalized "minimal resources" (bond dimensions
