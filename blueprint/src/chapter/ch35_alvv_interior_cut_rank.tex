@@ -1,0 +1,92 @@
+\chapter{Operator Schmidt rank at cuts inside a bulk region}
+\label{ch:alvv_interior_cut_rank}
+
+Item~4 of Theorem~4.2 of Arad, Landau, Vazirani and
+Vidick~\cite{Arad2016RigorousRG} bounds the operator Schmidt rank of a
+polynomial filter at cuts that lie inside one of the three bulk regions,
+away from the two windows. At such a cut every term of the Hamiltonian
+except one bulk operator lies on one side, so the Hamiltonian is a rank-one
+operator on each side plus the bulk operator.
+
+\begin{lemma}[Rank at a cut inside one bulk region]
+    \label{thm:alvv_bulk_cut_polynomial_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_sum_le_pow_of_bulk}
+    \leanok
+    Let $S$ be a set of sites of a finite system with local dimension $q$,
+    and let $H=\sum_\beta F_\beta$ be a finite sum of operators. Suppose that
+    every $F_\beta$ with $\beta\ne\beta_0$ acts on $S$ or on its complement,
+    and that $F_{\beta_0}$ has operator Schmidt rank at most $B$ across
+    $S$ and its complement. Then for every complex polynomial $P$ of degree
+    at most $k$,
+    \begin{align}
+        \operatorname{OSR}_{S\mid S^c}\bigl(P(H)\bigr)
+         & \le(B+2)^{k+1}.
+        \label{eq:alvv_bulk_cut_polynomial_rank}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Collect the terms acting on $S$ into $A$ and those acting on $S^c$ into
+    $C$. In the coordinates of $S$ and $S^c$, $A=A'\otimes1$ and
+    $C=1\otimes C'$, so each has operator Schmidt rank at most one, and
+    subadditivity gives rank at most $B+2$ for $H=A+F_{\beta_0}+C$.
+    Submultiplicativity gives rank at most $(B+2)^j$ for $H^j$, including
+    $H^0=1$. Since $P(H)$ is a combination of $H^j$ with $j\le k$,
+    \begin{align}
+        \operatorname{OSR}_{S\mid S^c}\bigl(P(H)\bigr)
+         & \le\sum_{j=0}^k(B+2)^j\le(B+2)^{k+1},\notag
+    \end{align}
+    where the last step uses $B+2\ge2$.
+\end{proof}
+
+\begin{lemma}[Rank at cuts inside the three bulk regions]
+    \label{thm:alvv_two_window_interior_cut_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_middle_cut_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_left_cut_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_right_cut_le}
+    \leanok
+    \uses{thm:alvv_bulk_cut_polynomial_rank}
+    Let $L,q,\ell,a,b$ be natural numbers with $a\le b$, and let $F_\alpha$,
+    $\alpha\in\mathcal I$, be the two-window family of
+    Lemma~\ref{thm:chain_two_window_polynomial_rank}: the window terms
+    $F_{x_r}$ and $F_{y_r}$ supported on $[a+r,a+r+2)$ and $[b+r,b+r+2)$
+    for $0\le r<2\ell$, and the bulk operators $F_\lambda,F_\mu,F_\rho$
+    supported on $J_L=[0,a+1)$, $J_M=[a+2\ell,b+1)$ and
+    $J_R=[b+2\ell,L)$. Put $H=\sum_\alpha F_\alpha$, let $P$ have degree at
+    most $k$, and consider the cut between the sites $c-1$ and $c$, that is,
+    the bipartition $[0,c)\mid[c,L)$. Suppose that one of the following holds:
+    \begin{enumerate}
+        \item $a+2\ell+1\le c\le b$, and $F_\mu$ has operator Schmidt rank at
+              most $B$ at the cut;
+        \item $c\le a$, and $F_\lambda$ has operator Schmidt rank at most $B$
+              at the cut;
+        \item $b+2\ell+1\le c$, and $F_\rho$ has operator Schmidt rank at
+              most $B$ at the cut.
+    \end{enumerate}
+    Then
+    \begin{align}
+        \operatorname{OSR}_{[0,c)\mid[c,L)}\bigl(P(H)\bigr)
+         & \le(B+2)^{k+1}.
+        \label{eq:alvv_two_window_interior_cut_rank}
+    \end{align}
+    This is item~4 of Theorem~4.2 of~\cite{Arad2016RigorousRG}, where $B$
+    bounds the Schmidt rank of the bulk operator of the region containing
+    the cut. For $B\ge2$ the right side of
+    (\ref{eq:alvv_two_window_interior_cut_rank}) is at most $B^{2k+2}$,
+    the printed form $B^{O(k)}$. For $B\le1$ the printed form fails: if
+    $F_\mu=0$ and the parts of $H$ on the two sides of the cut are diagonal
+    with distinct entries $\alpha_i$ and $\beta_j$, the rank of $P(H)$ at the
+    cut is the rank of the matrix $\bigl(P(\alpha_i+\beta_j)\bigr)_{ij}$,
+    which is $k+1$ for suitable entries. The two boundary terms cannot be
+    absorbed into the base, and
+    (\ref{eq:alvv_two_window_interior_cut_rank}) is the corrected statement.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:alvv_bulk_cut_polynomial_rank}
+    In each case every term other than the named bulk operator lies on one
+    side of the cut. In the first case the left window, which ends at site
+    $a+2\ell$, and $J_L$ lie in $[0,c)$, while the right window and $J_R$ lie
+    in $[c,L)$. In the second case all window terms and $J_M,J_R$ lie in
+    $[c,L)$. In the third case all window terms and $J_L,J_M$ lie in $[0,c)$.
+    Lemma~\ref{thm:alvv_bulk_cut_polynomial_rank} gives
+    (\ref{eq:alvv_two_window_interior_cut_rank}).
+\end{proof}

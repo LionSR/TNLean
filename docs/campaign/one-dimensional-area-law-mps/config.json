@@ -2,7 +2,7 @@
   "slug": "one-dimensional-area-law-mps",
   "pageTitle": "One-Dimensional Area Law · TNLean",
   "heading": "Area law and matrix product state approximation for gapped one-dimensional ground states",
-  "lede": "For a chain of quantum spins whose Hamiltonian has a spectral gap above a unique ground state, the entanglement entropy of every region is at most a constant times the number of its boundary edges, and the ground state is close to a matrix product state whose bond dimension grows only polynomially with the length of the chain. Both theorems are proved directly on the chain by a short one-dimensional argument, written up in a note in the TNLean repository. This page tracks their Lean 4 formalization.",
+  "lede": "For a chain of quantum spins whose Hamiltonian has a spectral gap above a unique ground state, the entanglement entropy of every region is at most a constant times the number of its boundary edges, and the ground state is close to a matrix product state whose bond dimension grows only polynomially with the length of the chain. Both theorems are proved directly on the chain by a short one-dimensional argument, written up in a companion note in gapped-2d-notes. This page tracks their Lean 4 formalization.",
   "description": "Progress of the Lean 4 formalization of the one-dimensional area law and matrix product state approximation for gapped chains.",
   "tabs": [
     {
@@ -70,8 +70,8 @@
       "stream": 9547
     }
   },
-  "sources": "https://github.com/LionSR/TNLean/tree/main/docs/notes/one_dimensional_note",
-  "citationPattern": "tnlean_one_dimensional|one_dimensional_note|TNLean2026OneDimensional",
+  "sources": "https://github.com/LionSR/gapped-2d-notes/tree/main/one_dimensional_area_law_and_mps",
+  "citationPattern": "tnlean_one_dimensional|one_dimensional_note|one_dimensional_area_law_and_mps|TNLean2026OneDimensional",
   "leanDirs": [
     "TNLean/MPS/AreaLaw"
   ],

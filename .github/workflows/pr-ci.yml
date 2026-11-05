@@ -1347,16 +1347,19 @@ jobs:
           key: blueprint-print-aux-${{ github.run_id }}
           restore-keys: blueprint-print-aux-
 
-      # As in blueprint.yml: a stale auxiliary file can name a macro that a
-      # changed preamble no longer defines, so a failed seeded build is retried
-      # from a clean print directory and only a broken source fails the step.
-      - name: Build blueprint PDF
+      # One XeTeX pass over the print volume catches every TeX error that the
+      # web build misses; settling cross-references would double the job, so
+      # the check stops after one run and reads the log itself. As in
+      # blueprint.yml, a stale auxiliary file can name a macro that a changed
+      # preamble no longer defines, so a failed seeded run is retried from a
+      # clean print directory and only a broken source fails the step.
+      - name: Check blueprint PDF compiles
         id: print-pdf
         run: |
-          if ! leanblueprint pdf; then
-            echo "::warning::Seeded PDF build failed; rebuilding from a clean print directory"
+          if ! scripts/check_blueprint_pdf_compiles.sh; then
+            echo "::warning::Seeded PDF check failed; retrying from a clean print directory"
             rm -rf blueprint/print
-            leanblueprint pdf
+            scripts/check_blueprint_pdf_compiles.sh
           fi
 
       # The focused FT-MPS volume compiles the \ifftmpsvolume branches, which

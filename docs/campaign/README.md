@@ -34,7 +34,7 @@ Six campaigns are shown as tabs of one site. The first two share the label
 | Directory | Campaign | Tracker |
 |-----------|----------|---------|
 | `openai-area-law-peps-proof/` | Two-dimensional area law and polynomial PEPS approximation | #8733 |
-| `one-dimensional-area-law-mps/` | One-dimensional area law and matrix product state approximation, proved on the chain from the repository note `docs/notes/one_dimensional_note` | #9547 |
+| `one-dimensional-area-law-mps/` | One-dimensional area law and matrix product state approximation, proved on the chain from the companion note `gapped-2d-notes/one_dimensional_area_law_and_mps` | #9547 |
 | `hastings-area-law/` | Hastings' proof of the one-dimensional area law, arXiv:0705.2024 | #9829 |
 | `lvv-ground-state-algorithm/` | Polynomial-time ground states of gapped chains after Landau, Vazirani and Vidick, arXiv:1307.5143 | #9832 |
 | `aklv-area-law/` | Improved one-dimensional area law after Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162 | #9831 |

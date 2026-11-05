@@ -1,0 +1,700 @@
+\section{The algorithm and its running time}
+\label{sec:lvv_query_model}
+
+Theorem~1 of \cite{Landau2015Polynomial} asserts that the ground state is found
+in time $n^{c(d,\varepsilon)}\,\mathrm{poly}(n/\eta)$. The paper counts each
+linear-algebra step as one polynomial-time computation on data of polynomial
+dimension and does not analyse it further. This section fixes the cost model in
+which that count is made and states the running time in it; the declared
+costs, the honest answering of every operation and exact arithmetic are
+recorded in~\cite{gap:lvv13_cost_model}.
+
+A computation is a finite tree of operations: it either returns a value or
+performs one operation and continues with a computation depending on the
+answer. An oracle assigns an answer to every operation; running a computation
+with an oracle produces its value, and the cost of the run is the sum of the
+declared costs of the operations performed along the way.
+
+\begin{definition}[The linear-algebra operations]
+    \label{def:lvv_linear_algebra_query}
+    \lean{TNLean.MPS.AreaLaw.LinearAlgebraQuery,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.honestOracle,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.queryCost,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.one_le_queryCost,
+        TNLean.MPS.AreaLaw.extensionCost,
+        TNLean.MPS.AreaLaw.netCost,
+        TNLean.MPS.AreaLaw.convexProgramCost,
+        TNLean.MPS.AreaLaw.schmidtTrimCost,
+        TNLean.MPS.AreaLaw.filterFactorsCost,
+        TNLean.MPS.AreaLaw.applyFactorCost,
+        TNLean.MPS.AreaLaw.energyMinimizerCost}
+    \leanok
+    \uses{def:lvv_sweep_step, def:lvv_finite_boundary_selection,
+        def:chain_boundary_trace_norm_net, def:huang_gaussian_filter_factors,
+        def:lvv_energy_minimizer}
+    The operations of the algorithm, each with its honest answer and its
+    declared cost, are the following. Every operation carries the chain length
+    $L$ and the local dimension $q$; the cost is one unit plus a polynomial in
+    the dimensions named.
+    \begin{enumerate}
+        \item The extension $v\otimes|k\rangle$ of a vector $v$ on the first
+              $i-1$ sites by a basis state of site $i$, for a vector of bond
+              dimension at most $b$: cost $1+qb^2$.
+        \item The trace-norm net of radius $\eta$ on the boundary contractions at
+              a cut with a bond of dimension $m$; the honest answer is the net
+              of Definition~\ref{def:chain_boundary_trace_norm_net}: cost one
+              plus $(qm)^2$ times the cardinality bound of the net.
+        \item Feasibility of the size-trimming convex program over the span of a
+              family $S$ of $s$ vectors of bond dimension at most $b$, at a
+              boundary point $X$ with tolerance $\eta$, and the leading
+              eigenvector of a solution of least left energy; the honest answers
+              are those of Definition~\ref{def:lvv_finite_boundary_selection}:
+              cost $1+Lqb^2(sm)^3$ each.
+        \item The Schmidt trimming of a vector of bond dimension at most $b$ to
+              $m$ terms at every internal bond: cost $1+Lqb^3$.
+        \item The left factors at a cut of the Gaussian filters of
+              Definition~\ref{def:huang_gaussian_filter_factors}, $E$ filters
+              of rank at most $R$: cost $1+ERLq^2$.
+        \item The application of a left factor of rank at most $r$ to a vector
+              of bond dimension at most $b$: cost $1+Lq^2r^2b^2$.
+        \item A unit vector of least energy in the span of a family of $s$
+              vectors of bond dimension at most $b$ on the whole chain, the
+              final convex program; the honest answer is the vector of
+              Definition~\ref{def:lvv_energy_minimizer}: cost $1+Lqb^2s^3$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[The solution of the final convex program]
+    \label{def:lvv_energy_minimizer}
+    \lean{TNLean.MPS.AreaLaw.exists_energy_minimizer,
+        TNLean.MPS.AreaLaw.energyMinimizer,
+        TNLean.MPS.AreaLaw.energyMinimizer_spec}
+    \leanok
+    Let $H$ be a matrix on a finite-dimensional space and $S$ a finite family
+    of vectors whose span $U$ is nonzero. The unit sphere of $U$ is compact and
+    the energy $v\mapsto\operatorname{Re}\langle v,Hv\rangle$ is continuous,
+    so a unit vector of $U$ of least energy exists; one such vector is chosen,
+    and $0$ is taken when the span is zero. It is the leading eigenvector of a
+    pure optimal solution of the final convex program of
+    \cite{Landau2015Polynomial}.
+\end{definition}
+
+\begin{definition}[The steps of the algorithm as computations]
+    \label{def:lvv_step_programs}
+    \lean{TNLean.MPS.AreaLaw.LinearAlgebraQuery.unionOver,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.eval_unionOver,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.cost_unionOver,
+        TNLean.MPS.AreaLaw.leftColumnsOf,
+        TNLean.MPS.AreaLaw.extensionProgram,
+        TNLean.MPS.AreaLaw.sizeTrimmingProgram,
+        TNLean.MPS.AreaLaw.bondTrimmingProgram,
+        TNLean.MPS.AreaLaw.errorReductionProgram,
+        TNLean.MPS.AreaLaw.sweepStepProgram,
+        TNLean.MPS.AreaLaw.sweepProgram}
+    \leanok
+    \uses{def:lvv_linear_algebra_query, def:lvv_sweep}
+    A computation on a finite family performs a computation at each member and
+    unites the finite sets returned. The four steps of the algorithm are the
+    computations that extend every member of the family by every basis state;
+    for every bond dimension up to the uniform cut bound enumerate the net,
+    test feasibility at every point and keep the left columns of the leading
+    eigenvector at every feasible point; trim every member; and apply every
+    left factor of the Gaussian filters to every member. One step of the sweep
+    performs them in order with the bond budget of
+    Definition~\ref{def:lvv_successive_budgets} declared for the vectors
+    handled, and the sweep performs the step at every cut starting from the
+    scalar singleton.
+\end{definition}
+
+\begin{lemma}[The computations compute the sweep]
+    \label{thm:lvv_eval_sweep_program}
+    \lean{TNLean.MPS.AreaLaw.eval_extensionProgram,
+        TNLean.MPS.AreaLaw.eval_sizeTrimmingProgram,
+        TNLean.MPS.AreaLaw.eval_bondTrimmingProgram,
+        TNLean.MPS.AreaLaw.eval_errorReductionProgram,
+        TNLean.MPS.AreaLaw.eval_sweepStepProgram,
+        TNLean.MPS.AreaLaw.eval_sweepProgram}
+    \leanok
+    \uses{def:lvv_step_programs}
+    Run with the honest oracle, the four computations return the extended
+    family, the size-trimming selection, the trimmed family and the
+    error-reduced family of the mathematical development, the step returns the
+    step of the sweep, and the sweep computation returns the sweep at every
+    cut. In particular the outputs satisfy the viability, cardinality and bond
+    bounds of Lemma~\ref{thm:lvv_sweep_spec}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Running a union over a family gives the union of the runs, and each run of
+    one operation is its honest answer. The identifications are then the
+    definitions of the four families, read member by member; the size-trimming
+    selection is the union over bond dimensions of the left columns at the
+    feasible net points. The step and the sweep follow by composition and by
+    induction on the cut.
+\end{proof}
+
+\begin{definition}[The ground-state computation]
+    \label{def:lvv_ground_state_program}
+    \lean{TNLean.MPS.AreaLaw.groundStateProgram,
+        TNLean.MPS.AreaLaw.eval_groundStateProgram}
+    \leanok
+    \uses{def:lvv_step_programs, def:lvv_energy_minimizer,
+        def:lvv_padded_interaction}
+    For an accuracy parameter $R\ge1$, pad the chain by $2R^2$ sites with the
+    penalty of Definition~\ref{def:lvv_padded_interaction}, run the sweep
+    computation on the padded chain at gap parameter $\min\{\Delta,1\}$ up to
+    the cut after the original $L$ sites, read the final family on the original
+    chain, and return the unit vector of least energy in its span. Run with the
+    honest oracle, the output is the chosen energy minimizer over the final
+    family of the padded sweep.
+\end{definition}
+
+\begin{theorem}[The ground-state computation finds the ground state]
+    \label{thm:lvv_ground_state_program_spec}
+    \lean{TNLean.MPS.AreaLaw.one_sub_le_norm_inner_of_norm_sub_sq_le,
+        TNLean.MPS.AreaLaw.groundStateProgram_spec}
+    \leanok
+    \uses{def:lvv_ground_state_program, thm:lvv_sweep_spec,
+        thm:lvv_padding_prefix_mps, thm:chain_range_one_overlap_energy,
+        thm:lvv_left_span_bond}
+    Let $L\ge1$, $q\ge2$, $\Delta>0$ and $R\ge1$, and let $H=\sum_j h_j$ be an
+    adjacent-pair interaction with $0\le h_j\le I$. For every unit ground
+    vector $\Gamma$ with projector gap $\Delta$, the output $\psi$ of the
+    ground-state computation with the honest oracle is a unit vector with
+    \begin{align}
+        |\langle\Gamma,\psi\rangle|\ge1-\frac{4L}{R^2\Delta},
+    \end{align}
+    and an open-boundary matrix product state whose bond dimension is at most
+    the cardinality budget times the bond budget of the sweep on the padded
+    chain. Choosing $R^2\ge4L/(\Delta\eta)$ gives overlap at least $1-\eta$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{thm:lvv_padding_prefix_mps} the span of the final family of
+    the padded sweep, read on the original chain, contains a unit vector $w$
+    with $\|w-\Gamma\|^2\le2\delta$, where $\delta=c_{\min\{\Delta,1\}}/N$ and
+    $N=L+2R^2$; a unit vector within squared distance $2\delta$ of a unit
+    vector has overlap at least $1-\delta$ with it. By
+    Lemma~\ref{thm:chain_range_one_overlap_energy} the energy of $w$ exceeds the
+    ground energy by at most $8L\delta$, hence so does the least energy of the
+    span, and the gap lemma gives overlap at least $1-8L\delta/\Delta$ for the
+    minimizer; since $\delta\le1/(2R^2)$ this is at least $1-4L/(R^2\Delta)$.
+    The bond bound is that of a vector in the span of the final family.
+\end{proof}
+
+\begin{definition}[Polynomially bounded functions]
+    \label{def:nat_polynomial_bounded}
+    \lean{TNLean.IsNatPolynomialBounded,
+        TNLean.IsNatPolynomialBounded.const,
+        TNLean.IsNatPolynomialBounded.id,
+        TNLean.IsNatPolynomialBounded.of_le,
+        TNLean.IsNatPolynomialBounded.add,
+        TNLean.IsNatPolynomialBounded.mul,
+        TNLean.IsNatPolynomialBounded.pow,
+        TNLean.IsNatPolynomialBounded.max_one,
+        TNLean.IsNatPolynomialBounded.exists_one_le}
+    \leanok
+    A function $f$ from the natural numbers to themselves is polynomially
+    bounded when $f(n)\le P\,(n+1)^d$ for all $n\ge1$, for natural numbers $P$
+    and $d$ chosen before $n$. Constants and the identity are polynomially
+    bounded, and the class is closed under pointwise domination, sums,
+    products, powers and taking the maximum with one; the coefficient $P$ can be
+    taken positive.
+\end{definition}
+
+\begin{definition}[The cost budgets]
+    \label{def:lvv_cost_budgets}
+    \lean{TNLean.MPS.AreaLaw.sweepStepCostBound,
+        TNLean.MPS.AreaLaw.sweepStepCostBound_mono,
+        TNLean.MPS.AreaLaw.groundStateCostBound,
+        TNLean.MPS.AreaLaw.netCost_mono,
+        TNLean.MPS.AreaLaw.convexProgramCost_mono,
+        TNLean.MPS.AreaLaw.energyMinimizerCost_mono}
+    \leanok
+    \uses{def:lvv_linear_algebra_query, def:lvv_successive_budgets}
+    The cost budget of one step of the sweep on a family of at most $s$
+    members is the sum of the declared costs of $qs$ extensions, of one net
+    enumeration and at most two convex programs per net point for every bond
+    dimension up to the uniform cut bound, of one trimming per member of the
+    selection, of the filter factors, and of one application per factor and
+    trimmed member, with the cardinality and bond budgets of
+    Definition~\ref{def:lvv_successive_budgets} in place of the actual
+    dimensions. The budget of the ground-state computation on the padded chain
+    of $N$ sites is $N$ steps at the cardinality budget plus the final convex
+    program.
+\end{definition}
+
+\begin{lemma}[The cost of the computations]
+    \label{thm:lvv_program_cost}
+    \lean{TNLean.MPS.AreaLaw.cost_extensionProgram_le,
+        TNLean.MPS.AreaLaw.cost_feasible_ite_le,
+        TNLean.MPS.AreaLaw.cost_sizeTrimmingProgram_le,
+        TNLean.MPS.AreaLaw.cost_bondTrimmingProgram_le,
+        TNLean.MPS.AreaLaw.cost_errorReductionProgram_le,
+        TNLean.MPS.AreaLaw.cost_sweepStepProgram_le,
+        TNLean.MPS.AreaLaw.cost_sweepProgram_le,
+        TNLean.MPS.AreaLaw.cost_groundStateProgram_le}
+    \leanok
+    \uses{def:lvv_cost_budgets, thm:lvv_eval_sweep_program,
+        thm:lvv_size_trimmed_family_polynomial, def:chain_boundary_trace_norm_net}
+    Run with the honest oracle, each step costs at most its budget, one step of
+    the sweep on a family $S$ costs at most the step budget at $|S|$, the sweep
+    up to cut $i\le L$ costs at most $i$ step budgets at the cardinality budget,
+    and the ground-state computation costs at most its budget on the padded
+    chain.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The cost of a union over a family is the sum of the costs, bounded by the
+    cardinality times the largest cost. The extended family has at most $q|S|$
+    members, the net has the cardinality bound of
+    Definition~\ref{def:chain_boundary_trace_norm_net}, the selection has the polynomial
+    cardinality of Lemma~\ref{thm:lvv_size_trimmed_family_polynomial}, trimming
+    does not increase cardinality, and the filter factors number at most the
+    energy count times the rank bound. The families of the sweep have at most
+    the cardinality budget members by Lemma~\ref{thm:lvv_sweep_spec}, which
+    bounds every step uniformly, and the number of steps is at most the padded
+    chain length.
+\end{proof}
+
+\begin{theorem}[Polynomial running time]
+    \label{thm:lvv_polynomial_running_time}
+    \lean{TNLean.MPS.AreaLaw.isNatPolynomialBounded_sweepStepCostBound,
+        TNLean.MPS.AreaLaw.isNatPolynomialBounded_groundStateCostBound,
+        TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial}
+    \leanok
+    \uses{thm:lvv_program_cost, thm:lvv_successive_polynomial_budgets,
+        lem:lvv_bond_trimming_radius_polynomial, def:nat_polynomial_bounded}
+    Fix $q\ge2$ and $\Delta>0$. There are natural numbers $P\ge1$ and $d$,
+    chosen before the chain, such that for every chain of $L\ge1$ sites, every
+    adjacent-pair interaction with $0\le h_j\le I$ and every accuracy parameter
+    $R$, the ground-state computation run with the honest oracle performs at
+    most as many operations as its cost, and its cost is at most
+    $P\,(L+2R^2+1)^d$. With $R^2$ of order $L/(\Delta\eta)$ this is the bound
+    $n^{c}\,\mathrm{poly}(n/\eta)$ of Theorem~1 of
+    \cite{Landau2015Polynomial}, with $c$ depending on $q$ and $\Delta$ through
+    $P$ and $d$; the printed form $c=2^{O(\log^3 d/\varepsilon)}$ of the exponent
+    is not reproduced, as explained in~\cite{gap:lvv13_cost_model}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Every quantity entering the step budget is bounded by a polynomial in the
+    chain length with coefficients chosen before it: the cardinality and bond
+    budgets and the filter counts by
+    Lemma~\ref{thm:lvv_successive_polynomial_budgets}, the net cardinality and
+    the net cost by the corrected net exponent, the selection cardinality by its
+    definition, and the trimming radius by
+    Lemma~\ref{lem:lvv_bond_trimming_radius_polynomial}. Polynomially bounded
+    functions are closed under sums, products and powers, so the step budget,
+    and then the budget of the ground-state computation on the padded chain, are
+    polynomially bounded. Every operation costs at least one unit, so the
+    number of operations is at most the cost.
+\end{proof}
+
+\subsection{Correctness for every valid oracle}
+\label{sec:lvv_valid_oracle}
+
+The honest oracle answers every operation with the object chosen by the
+definitions of the sweep. A solver is free to return any optimal solution of a
+convex program, any net of the required radius and any cut decomposition of
+the filters; the deterministic operations it must perform exactly. The
+computations are correct, with the same budgets and the same cost, for every
+oracle of this kind.
+
+\begin{definition}[Admissible filter factors and valid oracles]
+    \label{def:lvv_valid_oracle}
+    \lean{TNLean.MPS.AreaLaw.IsAdmissibleFilterFactors,
+        TNLean.MPS.AreaLaw.isAdmissibleFilterFactors_gaussianFilterFactors,
+        TNLean.MPS.AreaLaw.netPointBound,
+        TNLean.MPS.AreaLaw.netPointBound_mono,
+        TNLean.MPS.AreaLaw.isAdmissibleSampledFactors_sampledFactors,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle,
+        TNLean.MPS.AreaLaw.LinearAlgebraQuery.isValidOracle_honestOracle,
+        TNLean.MPS.AreaLaw.oracleNets,
+        TNLean.MPS.AreaLaw.oracleSolver}
+    \leanok
+    \uses{def:lvv_linear_algebra_query, def:lvv_boundary_program_solution,
+        def:huang_gaussian_filter_factors, def:lvv_energy_minimizer}
+    A family of left factors at a cut is \emph{admissible} when for every
+    Gaussian approximant it contains the left factors of some cut decomposition
+    of it; the chosen factors of
+    Definition~\ref{def:huang_gaussian_filter_factors} are admissible. An
+    oracle is \emph{valid} when it performs the extension, the trimming and the
+    application of a factor exactly, enumerates for every radius a net covering
+    the boundary densities of trace norm at most one with the standard point
+    bound, reports feasibility truthfully, returns at every feasible point the
+    vector of some solution of the convex program in the sense of
+    Definition~\ref{def:lvv_boundary_program_solution}, returns admissible
+    filter factors with the standard count and rank bounds, returns for the
+    sampled projector of any words a family of left factors containing a cut
+    decomposition of it with the standard count and rank bounds, and returns
+    for the final convex program a unit vector of least energy in the span. The
+    honest oracle is valid. The nets and the leading-vector assignment of an oracle at
+    a cut are its answers to the corresponding operations.
+\end{definition}
+
+\begin{lemma}[Error reduction with any admissible factors]
+    \label{thm:lvv_admissible_factors_viable}
+    \lean{TNLean.MPS.AreaLaw.isViable_errorReductionSet_of_isAdmissibleFilterFactors}
+    \leanok
+    \uses{def:lvv_valid_oracle, thm:huang_positive_chain_error_reduction_factors}
+    For every ground pair with the prescribed gap, half-viability of the input
+    family implies $c_\Delta/n$-viability of its image under every admissible
+    family of factors.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The proof of Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}
+    uses only a decomposition of the approximant nearest the ground state,
+    whose left factors an admissible family contains.
+\end{proof}
+
+\begin{theorem}[The computations are correct for every valid oracle]
+    \label{thm:lvv_valid_oracle_correct}
+    \lean{TNLean.MPS.AreaLaw.eval_feasible_ite_of_valid,
+        TNLean.MPS.AreaLaw.eval_extensionProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_sizeTrimmingProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_bondTrimmingProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_errorReductionProgram_of_valid,
+        TNLean.MPS.AreaLaw.eval_sweepStepProgram_of_valid,
+        TNLean.MPS.AreaLaw.isAdmissibleNet_oracleNets,
+        TNLean.MPS.AreaLaw.isAdmissibleSolver_oracleSolver,
+        TNLean.MPS.AreaLaw.card_oracleNets_le,
+        TNLean.MPS.AreaLaw.sweepStepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sweepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.groundStateProgram_spec_of_valid}
+    \leanok
+    \uses{def:lvv_valid_oracle, thm:lvv_size_trimming_selection_with,
+        thm:lvv_admissible_factors_viable, thm:lvv_ground_state_program_spec}
+    Run with any valid oracle, the four steps compute the extended family, the
+    size-trimming selection of the oracle's nets and solver, the trimmed family
+    and the error-reduced family, and the step computes the step of the sweep
+    with the oracle's factors. At every cut the output of the sweep computation
+    is viable for every ground pair with the prescribed gap, with the size and
+    bond budgets of Lemma~\ref{thm:lvv_sweep_spec}, and the ground-state
+    computation satisfies the conclusion of
+    Theorem~\ref{thm:lvv_ground_state_program_spec} verbatim.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The evaluation identities follow from the exact answers to the
+    deterministic operations and the truthful feasibility answers. Viability of
+    one step follows from Lemma~\ref{thm:lvv_size_trimming_selection_with} for
+    the oracle's nets and solver, which are admissible by validity, and from
+    Lemma~\ref{thm:lvv_admissible_factors_viable} for its factors; the budgets
+    follow from the point bound of its nets and the count and rank bounds of
+    its factors. Induct on the cut, and conclude as for the honest oracle, with
+    the least-energy property of the oracle's final answer in place of the
+    chosen minimizer.
+\end{proof}
+
+\begin{lemma}[Polynomial cost for every valid oracle]
+    \label{thm:lvv_valid_oracle_cost}
+    \lean{TNLean.MPS.AreaLaw.cost_sizeTrimmingProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_extensionProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_bondTrimmingProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_errorReductionProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sweepStepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sweepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_groundStateProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial_of_valid}
+    \leanok
+    \uses{thm:lvv_valid_oracle_correct, thm:lvv_program_cost,
+        thm:lvv_polynomial_running_time}
+    Under every valid oracle the computations cost at most the budgets of
+    Definition~\ref{def:lvv_cost_budgets}, so the bound of
+    Theorem~\ref{thm:lvv_polynomial_running_time} holds with the same
+    constants for every valid oracle.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The step budgets bound the costs because the oracle's nets have the
+    standard point bound, its factors the standard count, and its sweep
+    families the cardinality budget by
+    Theorem~\ref{thm:lvv_valid_oracle_correct}.
+\end{proof}
+
+\subsection{Theorem 1 with a polynomial in the length and the accuracy}
+\label{sec:lvv_theorem_one_form}
+
+\begin{theorem}[Theorem 1: polynomial time in the chain length and the accuracy]
+    \label{thm:lvv_theorem_one_accuracy}
+    \lean{TNLean.MPS.AreaLaw.lvvAccuracyParameter,
+        TNLean.MPS.AreaLaw.one_le_lvvAccuracyParameter,
+        TNLean.MPS.AreaLaw.four_mul_div_lvvAccuracyParameter_le,
+        TNLean.MPS.AreaLaw.padded_length_lvvAccuracyParameter_le,
+        TNLean.MPS.AreaLaw.exists_theorem_one_of_valid}
+    \leanok
+    \uses{thm:lvv_valid_oracle_correct, thm:lvv_valid_oracle_cost}
+    Fix $q\ge2$ and $\Delta>0$. There are $P\ge1$ and $d$, chosen before the
+    chain, such that for every chain of $n\ge1$ sites, every accuracy
+    $0<\eta$ with $\Delta\eta\le1$, every valid oracle and every ground pair of
+    gap $\Delta$, the ground-state computation at the accuracy parameter
+    $R=\max\{1,\lceil\sqrt{4n/(\Delta\eta)}\rceil\}$ outputs a unit open-boundary
+    matrix product state with overlap at least $1-\eta$ with the ground state,
+    and its cost is at most $P\,(17n/(\Delta\eta)+5n)^d$: a polynomial in $n$
+    and $1/\eta$ whose coefficient and degree depend on $q$ and $\Delta$ alone.
+    The printed form $n^{c}\,\mathrm{poly}(n/\eta)$ of Theorem~1 of
+    \cite{Landau2015Polynomial} leaves the degree of $1/\eta$ unspecified; in
+    its proof the final error reduction at precision $\eta/n$ has degree of
+    order $\log d/\varepsilon$ in $1/\eta$, and here the degree is likewise $d$
+    \cite{gap:lvv13_cost_model}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    With this $R$ one has $R^2\ge4n/(\Delta\eta)$, so $4n/(R^2\Delta)\le\eta$
+    and Theorem~\ref{thm:lvv_valid_oracle_correct} gives the overlap; and
+    $R\le\sqrt{4n/(\Delta\eta)}+1$ gives $n+2R^2+1\le17n/(\Delta\eta)+5n$, so
+    Lemma~\ref{thm:lvv_valid_oracle_cost} gives the cost.
+\end{proof}
+
+\subsection{The sampled route and its success probability}
+\label{sec:lvv_sampled_program}
+
+As printed, the algorithm reduces the error with the sampled approximate
+ground-state projector of Definition~\ref{def:lvv_sampled_projector}, whose
+words are drawn uniformly at random, with the ground energy as an input. The
+computation on this route is deterministic in the words, one family of words
+per cut being an input; the success probability of Theorem~1 is the probability,
+over the words, of the event on which every family is good.
+
+\begin{definition}[The left factors of the sampled projector]
+    \label{def:lvv_sampled_factors}
+    \lean{TNLean.MPS.AreaLaw.sampledScale,
+        TNLean.MPS.AreaLaw.sampledProjector_eq_sum_smul,
+        TNLean.MPS.AreaLaw.sampledLeftFactor,
+        TNLean.MPS.AreaLaw.sampledFactors,
+        TNLean.MPS.AreaLaw.cutOperator_sampledProjector_eq_sum,
+        TNLean.MPS.AreaLaw.card_sampledFactors_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_of_mem_sampledFactors,
+        TNLean.MPS.AreaLaw.errorReductionSet_sampledFactors}
+    \leanok
+    \uses{def:lvv_sampled_projector, def:lvv_cut_left_factors}
+    The sampled projector $K=C^m\ell^{-1}\sum_t P_{I_t}$ is the sum over the
+    words of $C^m\ell^{-1}P_{I_t}$. Its left factors at a cut are the chosen
+    left factors of Definition~\ref{def:lvv_cut_left_factors} of every word,
+    scaled by $C^m/\ell$; in cut coordinates $K$ is the sum over the words and
+    their factors of the scaled left factor tensored with the right factor.
+    When every word has operator-Schmidt rank at most $D$ at every cut, there
+    are at most $\ell D$ factors, each of rank at most $D$ at every internal
+    cut, and the error-reduced family of the factors is that of the indexed
+    scaled factors.
+\end{definition}
+
+\begin{lemma}[The sampled error-reduction step with its output named]
+    \label{thm:lvv_sampled_factors_viable}
+    \lean{TNLean.MPS.AreaLaw.isViableMPS_errorReductionSet_sampledFactors}
+    \leanok
+    \uses{def:lvv_sampled_factors, thm:lvv_mps_error_reduction}
+    Let $S$ be half-viable with at most $s$ members of bond dimension at most
+    $b$, let every word have rank at most $D$ at every cut, and let the sampled
+    projector be within $\eta<1/2$ of the ground projection. Then the family
+    $\{Au: A \text{ a sampled factor},\ u\in S\}$ has at most $\ell Ds$ members
+    of bond dimension at most $D\max\{1,b\}$ and is $4\eta$-viable.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The deterministic error-reduction step applied to the decomposition of $K$
+    into the scaled factors, whose index set has cardinality at most $\ell D$.
+\end{proof}
+
+\begin{definition}[Good words and the sampled sweep]
+    \label{def:lvv_sampled_sweep}
+    \lean{TNLean.MPS.AreaLaw.IsViable.mono,
+        TNLean.MPS.AreaLaw.sampledPower,
+        TNLean.MPS.AreaLaw.sampledWordCount,
+        TNLean.MPS.AreaLaw.sampledLetterBound,
+        TNLean.MPS.AreaLaw.sampledRankBound,
+        TNLean.MPS.AreaLaw.GoodWords,
+        TNLean.MPS.AreaLaw.sampledSweepStep,
+        TNLean.MPS.AreaLaw.sampledSweep,
+        TNLean.MPS.AreaLaw.sampledSweep_succ}
+    \leanok
+    \uses{def:lvv_sampled_factors, def:lvv_successive_step,
+        def:lvv_size_trimming_selection}
+    At viability precision $\delta$ the power is $m=\lceil((n-\varepsilon_0)/\Delta)
+        \log(8/\delta)\rceil$, the number of words $\ell$ and the letter bound
+    $\kappa$ are those of Lemma~\ref{thm:lvv_sampled_projector}
+    at precision $\delta/8$, and the rank bound is $D=q^{2\kappa}$. A family of
+    words is \emph{good} when its sampled projector is within $\delta/8$ of the
+    power projector and every letter occurs at most $\kappa$ times in every
+    word. One step of the sampled sweep is the step of
+    Definition~\ref{def:lvv_successive_step} with the sampled factors of the
+    given words applied to the size-trimming selection of the extension; the
+    sampled sweep applies it at every cut with the words assigned to that cut,
+    starting from the scalar singleton.
+\end{definition}
+
+\begin{lemma}[The sampled sweep on good words]
+    \label{thm:lvv_sampled_sweep_spec}
+    \lean{TNLean.MPS.AreaLaw.measureReal_goodWords_ge,
+        TNLean.MPS.AreaLaw.isViableMPS_sampledSweepStep,
+        TNLean.MPS.AreaLaw.sampledSweep_spec}
+    \leanok
+    \uses{def:lvv_sampled_sweep, thm:lvv_sampled_factors_viable,
+        thm:lvv_size_trimmed_family_bond_trim_set, thm:lvv_sampled_projector}
+    The words are good with probability at least $1-1/(2n^3)$. For a ground
+    pair with gap $\Delta$ and a precision $0<\delta\le\min\{1,c_\Delta/n\}$, one
+    step on good words takes a $\delta$-viable family to a $\delta$-viable family
+    with at most $\ell q^{2\kappa}C n^{p}$ members of bond dimension at most
+    $q^{2\kappa}\max\{1,m_n\}$, and the sampled sweep on good words is
+    $\delta$-viable at every cut with these bounds at every positive cut.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Extension keeps $\delta$-viability, which is $c_\Delta/n$-viability; the
+    trimmed size-trimming selection is half-viable with polynomial size; on good
+    words the sampled projector is within $\delta/4$ of the ground projection,
+    so the sampled error-reduction step restores $\delta$-viability. Induct on
+    the cut.
+\end{proof}
+
+\begin{definition}[The sampled computations]
+    \label{def:lvv_sampled_programs}
+    \lean{TNLean.MPS.AreaLaw.sampledSweepStepProgram,
+        TNLean.MPS.AreaLaw.eval_sampledSweepStepProgram,
+        TNLean.MPS.AreaLaw.sampledSweepProgram,
+        TNLean.MPS.AreaLaw.eval_sampledSweepProgram,
+        TNLean.MPS.AreaLaw.sampledGroundStateProgram,
+        TNLean.MPS.AreaLaw.eval_sampledGroundStateProgram,
+        TNLean.MPS.AreaLaw.stepWordsMeasure}
+    \leanok
+    \uses{def:lvv_step_programs, def:lvv_sampled_sweep, def:lvv_energy_minimizer}
+    The sampled step and sweep as computations, with the sampled factors of the
+    words of the cut obtained by one operation, and the sampled ground-state
+    computation, which sweeps the chain and returns the unit vector of least
+    energy in the span of the final family; run with the honest oracle they
+    compute the sampled sweep and the chosen energy minimizer. The words are
+    distributed by the product over the cuts of the law of $\ell$ independent
+    uniform words.
+\end{definition}
+
+\begin{theorem}[Theorem 1 on the sampled route, with its success probability]
+    \label{thm:lvv_sampled_program_success}
+    \lean{TNLean.MPS.AreaLaw.sampledGroundStateProgram_spec,
+        TNLean.MPS.AreaLaw.measureReal_forall_goodWords_ge,
+        TNLean.MPS.AreaLaw.measureReal_sampledGroundStateProgram_success,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant_pos,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_one,
+        TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_sq,
+        TNLean.MPS.AreaLaw.sampledPrecision_spec,
+        TNLean.MPS.AreaLaw.exists_sampled_budgets_polynomial,
+        TNLean.MPS.AreaLaw.exists_sampledBond_polynomial,
+        TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_polynomial}
+    \leanok
+    \uses{def:lvv_sampled_programs, thm:lvv_sampled_sweep_spec,
+        thm:chain_range_one_overlap_energy, thm:lvv_left_span_bond,
+        thm:lvv_sampled_polynomial_bounds}
+    Fix $q\ge2$, $\Delta>0$, a bound $B$ on the ratio of ground energy to gap and
+    an accuracy $\eta>0$. There are $C\ge1$ and $p$, chosen before the chain,
+    such that for every chain of $n\ge1$ sites with a ground pair
+    $(\varepsilon_0,\Gamma)$ of gap $\Delta$ and $\varepsilon_0/\Delta\le B$,
+    with probability at least $1-1/(2n^2)$ over the sampled words, the sampled
+    ground-state computation run with the honest oracle outputs a unit
+    open-boundary matrix product state of bond dimension at most $Cn^{p}$ with
+    overlap at least $1-\eta$ with $\Gamma$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On good words the final family is $\delta$-viable, so its span contains a
+    unit vector of overlap at least $1-\delta$ with $\Gamma$, whose energy exceeds
+    the ground energy by at most $8n\delta$; the least energy of the span is no
+    larger, and the gap lemma gives overlap at least $1-8n\delta/\Delta$ for the
+    minimizer, which is $1-\eta$ at the precision $\delta=\min\{\alpha,
+        \eta\Delta/8\}/n$. The event that every family of words is good has
+    probability at least $1-n\cdot1/(2n^3)$ by the union bound over the cuts,
+    since every coordinate of the product law is the law of one family. The
+    size and bond budgets are polynomial by the uniform bounds of the sampled
+    projector in the documented scope.
+\end{proof}
+
+\begin{lemma}[Polynomial cost of the sampled computation on good words]
+    \label{thm:lvv_sampled_program_cost}
+    \lean{TNLean.MPS.AreaLaw.sampledStepCostBound,
+        TNLean.MPS.AreaLaw.sampledStepCostBound_mono,
+        TNLean.MPS.AreaLaw.cost_sampledSweepStepProgram_le,
+        TNLean.MPS.AreaLaw.sampledSizeBudget,
+        TNLean.MPS.AreaLaw.cost_sampledSweepProgram_le,
+        TNLean.MPS.AreaLaw.sampledGroundStateCostBound,
+        TNLean.MPS.AreaLaw.sampledGroundStateCostBound_mono,
+        TNLean.MPS.AreaLaw.cost_sampledGroundStateProgram_le,
+        TNLean.MPS.AreaLaw.isNatPolynomialBounded_sampledGroundStateCostBound,
+        TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_cost_polynomial}
+    \leanok
+    \uses{def:lvv_sampled_programs, thm:lvv_sampled_sweep_spec,
+        thm:lvv_program_cost, def:nat_polynomial_bounded, thm:lvv_sampled_polynomial_bounds}
+    In the setting of Theorem~\ref{thm:lvv_sampled_program_success}, with the
+    same budgets declared, there are $P\ge1$ and $d$, chosen before the chain,
+    such that on every good family of words the sampled ground-state computation
+    run with the honest oracle performs at most as many operations as its cost,
+    and its cost is at most $P\,(n+1)^d$. Together with the success probability
+    this is the probabilistic polynomial running time of Theorem~1, with the
+    exponent depending on the bound on the ratio of ground energy to gap.
+\end{lemma}
+\begin{proof}
+    \leanok
+    On good words every family of the sampled sweep has at most $\ell q^{2\kappa}
+        Cn^p$ members, so each step costs at most a budget in the number of words,
+    the rank budget, the bond budget and this size, polynomial in the chain
+    length once the number of words and the rank bound are replaced by their
+    polynomial bounds in the documented scope. Sum over the cuts and add the
+    final convex program.
+\end{proof}
+
+\begin{lemma}[The sampled route under every valid oracle]
+    \label{thm:lvv_valid_oracle_sampled}
+    \lean{TNLean.MPS.AreaLaw.isViableMPS_errorReductionSet_of_admissible_sampled,
+        TNLean.MPS.AreaLaw.eval_sampledSweepStepProgram_of_valid,
+        TNLean.MPS.AreaLaw.sampledSweepStepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sampledSweepProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.sampledGroundStateProgram_spec_of_valid,
+        TNLean.MPS.AreaLaw.measureReal_sampledGroundStateProgram_success_of_valid}
+    \leanok
+    \uses{def:lvv_valid_oracle, thm:lvv_valid_oracle_correct,
+        thm:lvv_sampled_program_success, thm:lvv_sampled_factors_viable}
+    Under every valid oracle, on good words the sampled sweep computation is
+    $\delta$-viable at every cut with the size and bond bounds of
+    Lemma~\ref{thm:lvv_sampled_sweep_spec}, the sampled ground-state
+    computation outputs a unit matrix product state with overlap at least
+    $1-8n\delta/\Delta$, and the success probability of
+    Theorem~\ref{thm:lvv_sampled_program_success} holds verbatim.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The sampled error-reduction step holds for any family of factors
+    containing a cut decomposition of the sampled projector with the standard
+    count and rank bounds, which validity provides; the rest is the proof of
+    Theorem~\ref{thm:lvv_sampled_program_success} with the oracle's answers in
+    place of the chosen ones.
+\end{proof}
+
+\begin{theorem}[Theorem 1 on the sampled route under every valid oracle]
+    \label{thm:lvv_sampled_theorem_one_valid}
+    \lean{TNLean.MPS.AreaLaw.cost_sampledSweepStepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sampledSweepProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.cost_sampledGroundStateProgram_le_of_valid,
+        TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_cost_polynomial_of_valid}
+    \leanok
+    \uses{thm:lvv_valid_oracle_sampled, thm:lvv_valid_oracle_cost,
+        thm:lvv_sampled_program_cost, thm:lvv_sampled_program_success}
+    Fix $q\ge2$, $\Delta>0$, a bound $B$ on the ratio of ground energy to gap and
+    an accuracy $\eta>0$. There are $C,P\ge1$ and $p,d$, chosen before the chain,
+    such that for every chain of $n\ge1$ sites with a ground pair
+    $(\varepsilon_0,\Gamma)$ of gap $\Delta$ and $\varepsilon_0/\Delta\le B$, and
+    every valid oracle, with probability at least $1-1/(2n^2)$ over the sampled
+    words the sampled ground-state computation outputs a unit open-boundary
+    matrix product state of bond dimension at most $Cn^{p}$ with overlap at least
+    $1-\eta$ with $\Gamma$, and its cost is at most $P\,(n+1)^d$. Accuracy and
+    running time hold on one event, as in the statement of Theorem~1.
+\end{theorem}
+\begin{proof}
+    \leanok
+    On good words the cost of a step under a valid oracle is bounded as in
+    Lemma~\ref{thm:lvv_sampled_program_cost}: the oracle's nets have the standard
+    point bound, its sampled factors number at most $\ell D$, and its families
+    have the size bounds of Lemma~\ref{thm:lvv_valid_oracle_sampled}. On the same
+    words the output has the required accuracy and bond dimension by that lemma.
+    The event that every family of words is good has probability at least
+    $1-1/(2n^2)$.
+\end{proof}
