@@ -5,19 +5,19 @@
 % Section 4 (part1_arealaw.tex, proof of Lemma lem:buffer, paragraph "Energy of the optimized vector"): for Y split by X_j the conjugated term <phi, K h_Y K^{-1} phi> with K = L_m ... L_1 reduces to <phi, L_j h_Y L_j^{-1} phi>, because the outer filters L_{j+1}, ..., L_m are stripped from the outside in by the stripping identity eq:strip and the inner filters L_1, ..., L_{j-1} commute with h_Y (Lemma lem:singlesplit: Y is contained in X_i for i > j and disjoint from X_i for i < j).
 % Ink-to-index: the top wire is X_{j-1}, the middle wire the ring X_j \ X_{j-1}, the bottom wire Lambda \ X_j; L_j^{-1} and L_j are the two-wire gates on the top two wires (their support X_j), h_Y the two-wire gate on the bottom two wires (Y meets the ring and the outside but not X_{j-1}). Read left to right: L_j^{-1} acts first, then h_Y, then L_j; all wires are contracted with phi on both ends.
 \begin{tenkzequation}
-\begin{tabular}{c}
-  $\langle\phi,Kh_YK^{-1}\phi\rangle
-  \;=\;
-  \Bigl\langle\phi,\;$
-  \begin{quantikz}
-    \lstick{$X_{j-1}$} & \gate[2]{L_j^{-1}} & & \gate[2]{L_j} & \\
-    \lstick{$X_j\setminus X_{j-1}$} & & \gate[2]{h_Y} & & \\
-    \lstick{$\Lambda\setminus X_j$} & & & &
-  \end{quantikz}
-  $\;\phi\Bigr\rangle$
-  \\[2pt]
-  {\small outer filters $L_{j+1},\dots,L_m$: stripped by the stripping identity, $[L_k,\rho_k]=0$}
-  \\[-1pt]
-  {\small inner filters $L_1,\dots,L_{j-1}$: disjoint from $Y$, commute with $h_Y$}
-\end{tabular}
+    \begin{tabular}{c}
+        $\langle\phi,Kh_YK^{-1}\phi\rangle
+            \;=\;
+            \Bigl\langle\phi,\;$
+        \begin{quantikz}
+            \lstick{$X_{j-1}$} & \gate[2]{L_j^{-1}} & & \gate[2]{L_j} & \\
+            \lstick{$X_j\setminus X_{j-1}$} & & \gate[2]{h_Y} & & \\
+            \lstick{$\Lambda\setminus X_j$} & & & &
+        \end{quantikz}
+        $\;\phi\Bigr\rangle$
+        \\[2pt]
+        {\small outer filters $L_{j+1},\dots,L_m$: stripped by the stripping identity, $[L_k,\rho_k]=0$}
+        \\[-1pt]
+        {\small inner filters $L_1,\dots,L_{j-1}$: disjoint from $Y$, commute with $h_Y$}
+    \end{tabular}
 \end{tenkzequation}
