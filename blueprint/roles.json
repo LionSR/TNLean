@@ -1477,7 +1477,7 @@
         "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
       }
     },
-    "sec:corrected_cluster_mpo": {
+    "sec:interval_cluster_truncation": {
       "theorems": [
         "thm:normalized_cluster_label_tail",
         "thm:physical_cluster_label_mpo",
