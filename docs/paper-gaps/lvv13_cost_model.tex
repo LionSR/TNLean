@@ -90,6 +90,24 @@ of the source is not reproduced: the library's constant-cut bond is the one
 recorded in the note on the constant bond dimension, and the degree $d$ above
 is the degree of the uniform polynomial budgets of the sweep.
 
+\section{The sampled route}
+
+As printed, the algorithm reduces the error with the sampled approximate
+ground-state projector, whose words are drawn uniformly at random, with the
+ground energy as an input. The computation on this
+route\footnote{\leanid{TNLean.MPS.AreaLaw.sampledGroundStateProgram} and
+    \leanid{TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_polynomial}
+    in \doclink{TNLean/MPS/AreaLaw/Algorithm/SampledProgram}.} takes one family
+of words per cut as an input and is deterministic in them; a sampling
+operation is therefore not a query with a declared cost but the law of the
+input, the product over the cuts of the law of $\ell$ independent uniform
+words. The success probability of Theorem~1 is the probability, under that
+law, of the event that every family of words is good, which is at least
+$1-1/(2n^2)$ by the union bound over the cuts; on that event the output has
+overlap at least $1-\eta$ with the ground state. The size and bond budgets of
+this route are polynomial only for a bounded ratio of ground energy to gap,
+as recorded in the note on the ground energy in the running time.
+
 \section{Elimination plan}
 
 The declaration of costs is the content of the source's running-time claim
