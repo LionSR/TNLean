@@ -596,7 +596,11 @@ For the non-periodic MPS Fundamental Theorem background:
 - `pgvwc07_quadratic_reconstruction_phase.tex` records the unit-modulus phase
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
-  corrected same-state conclusion up to an $N$th-root phase.
+  corrected conclusion for every solution up to a unit phase. It records that
+  the nonzero state and the size condition `N > 2 L_0 + D^4` belong to the
+  source's setup, that the existence clause and the same-state case are
+  formalized, and the endpoint-invertibility argument that remains for an
+  arbitrary solution.
 - `ssvcw05_sequential_bond_upper_bound_scope.tex` records the upper bounds
   `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of the
   successive decompositions, the formalized "minimal resources" (bond dimensions

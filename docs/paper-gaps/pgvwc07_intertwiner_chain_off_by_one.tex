@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The printed dependence step}
 
@@ -102,20 +102,28 @@ of Theorem~7 of Ref.~\cite{PerezGarcia2007Matrix}.
 The current formal quadratic-system structure stores gauges attached only to
 the $D^4$ sites. From these fields, it constructs the $D^4-1$ internal-cut
 intertwiners and proves the $D^4-2$ relations between consecutive internal
-cuts. It contains no gauges for the two endpoint cuts.
+cuts. The two endpoint gauges are fields of the system, but no inversion
+equation constrains them, so the structure alone gives no endpoint
+intertwiners.
 
-The endpoint intertwiners in
-(\ref{eq:pgvwc07_intertwiner_chain_off_by_one_complete_cut_family}) must
-therefore come from comparison of the surrounding physical cut
-representations. The existing theorem
+The existing theorem
 \leanid{MPSTensor.exists_intertwiner_of_fixedLength_mpv_eq}
 constructs every endpoint and internal cut from condition C1 and actual
-fixed-length equality, when $N\ge2L_0+D^4$. Such a comparison uses that
-both tensors represent the same state; it cannot establish that an
-arbitrary algebraic solution represents the state. The residual phase freedom
-and the corrected same-state conclusion are recorded in
-\path{docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex}. The endpoint
-intertwiners do not follow from the internal quadratic equations alone.
+fixed-length equality, when $N\ge2L_0+D^4$. This is the complete cut family
+of (\ref{eq:pgvwc07_intertwiner_chain_off_by_one_complete_cut_family}) for
+two representations of the same state, and it carries the corrected
+uniqueness theorem for the translation-invariant canonical form. The
+same-state reconstruction converse
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase_of_same_state}
+uses the same complete family.
+
+For an arbitrary solution of the system over the canonical window, the
+endpoint gauges are forced to be invertible by the internal equations once
+condition C1 holds at a length of at most $D^4-2$, which the quantum Wielandt
+inequality guarantees for $D\geq2$. The internal equations then supply all
+$D^4+1$ cut intertwiners. That argument, and its formalization status, are
+recorded in
+\path{docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex}.
 
 \section{Verdict}
 
@@ -128,15 +136,11 @@ all $D^4$ adjacent relations in
 available, linear dependence and the subsequent chain-combination argument
 follow.
 
-The internal quadratic equations still supply only the shorter chain;
-no dependence of that shorter family is claimed. For the corrected same-state
-converse, the full-cut argument is now used by
-\leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase_of_same_state}.
-The candidate is not assumed canonical or injective, and the separate actual
-state equality is retained. This source-written application is pending hosted
-verification and integration. The construction of a solution over the actual
-unique OBC canonical window, and any stronger classification of arbitrary
-algebraic solutions, remain separate obligations.
+The correction is resolved: every formalized use of the dependence step, in
+the corrected uniqueness theorem and in the same-state reconstruction
+converse, builds the complete cut family. The remaining application, to an
+arbitrary solution of the reconstruction system, is tracked by the phase note
+cited above, whose status stays open until it is formalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}

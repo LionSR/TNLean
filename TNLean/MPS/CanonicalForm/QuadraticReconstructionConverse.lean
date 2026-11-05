@@ -16,12 +16,18 @@ not assumed canonical or injective. Its explicit rephasing is a solution of
 the same system, retains the actual length-N state, and is exactly gauged
 to the canonical tensor.
 
-**Scope restriction (same state and full cut regime):** the supplied
-solution must separately represent the prescribed nonzero state, and
-N > 2 L0 + D^4 supplies both endpoint cuts. These conditions are not derived
-from the internal quadratic equations. The construction of a solution from
-an actual unique OBC canonical window remains separate. See
-`docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex` and
+**Scope restriction (same-state solutions):** the supplied solution must
+separately represent the prescribed state, whereas the phase-corrected
+source converse applies to every solution over the canonical OBC window.
+Both endpoint cuts are taken here from that state equality rather than
+from the endpoint gauges of the system. The size condition
+N > 2 L0 + D^4 is the source's own setup (hypothesis (iii) of Theorem 7,
+whose proof Theorem 8 reuses), and nonvanishing of the state is the
+convention that a state is a nonzero vector; neither is a restriction.
+Existence of a solution over the canonical OBC window is
+`MPSTensor.exists_quadraticSolution_canonicalOBCWindow`. See
+`docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex`, which also
+records the plan for arbitrary solutions, and
 `docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 8 and proof, lines 1154--1176,

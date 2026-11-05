@@ -559,64 +559,149 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
 \begin{lemma}[Obtaining the translation-invariant canonical form]
     \label{thm:pgvwc07_quadratic_reconstruction}
     \notready
-    \uses{def:pgvwc07_quadratic_system}
-    Consider a translation-invariant state on an $N$-site ring with unique
-    open-boundary canonical form such that the rank of each reduced density
-    operator of successive spins is bounded by $D^2$, and form the quadratic
-    system of Definition~\ref{def:pgvwc07_quadratic_system} over the window of
-    $D^4$ open-boundary canonical matrices starting after the injectivity
-    onset. Write $A=(A_i)_i$ for its canonical translation-invariant tensor.
+    \uses{def:pgvwc07_quadratic_system, def:pgvwc07_ti_canonical_representation,
+        def:l_blk_injective}
+    % Status: part 1 is checked as the existence lemma for the original
+    % canonical open-boundary window, and part 2 is checked only for
+    % solutions that represent the given state (same-state lemma). The
+    % endpoint invertibility step below, which removes that restriction,
+    % is not yet checked; see the two cited paper-gap notes.
+    Consider a nonzero translation-invariant state on a ring of $N$ sites
+    with unique open-boundary canonical form such that the rank of each
+    reduced density operator of successive spins is bounded by $D^2$.
+    Suppose that the state admits a translation-invariant matrix product
+    representation of bond dimension $D$ satisfying condition C1 at length
+    $L_0$, and that
+    \begin{align}
+        N & >2L_0+D^4.
+        \label{eq:pgvwc07_quadratic_reconstruction_size}
+    \end{align}
+    Under condition C1 the canonical form of the state has a single block.
+    Its weight only rescales the state, so write $A=(A_i)_i$ for the
+    canonical tensor normalized by $\sum_iA_iA_i^{\dagger}=\Id$. The
+    open-boundary canonical matrices at the $D^4$ sites after the onset
+    $L_0$ act between spaces of dimension $D^2$; form the quadratic system
+    of Definition~\ref{def:pgvwc07_quadratic_system} over this window.
     \begin{enumerate}
-        \item If the state admits a translation-invariant matrix product
-              representation satisfying injectivity (condition C1), then the system has a
-              solution.
-        \item Let $B=(B_i)_i$ be the tensor of a solution and suppose in
-              addition that its length-$N$ trace-MPS representation is the
-              given state. Then there are a unitary $U$ and a scalar
-              $\xi\in\C$ such that $|\xi|=1$, $\xi^N=1$, and
+        \item The system has a solution.
+        \item Let $B=(B_i)_i$ be the tensor of any solution. Then there are
+              a unitary $U$ and a scalar $\xi\in\C$ with $|\xi|=1$ such that
               \begin{align}
                   A_i & =\xi UB_iU^{\dagger}
                   \qquad\text{for every }i.
                   \label{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}
               \end{align}
-              Consequently the explicitly rephased tensor
-              $\widehat B_i:=\xi B_i$ still represents the same length-$N$
-              state and is exactly unitarily conjugate to $A$.
+              Consequently the rephased tensor $\widehat B_i:=\xi B_i$
+              represents the same length-$N$ state as $A$, and $B$ itself
+              represents that state exactly when $\xi^N=1$.
     \end{enumerate}
-    The unrestricted representation claim and exact conjugacy in
-    \cite[Theorem~8]{PerezGarcia2007Matrix} carry a residual finite-ring phase defect
-    \cite{gap:pgvwc07_quadratic_reconstruction_phase}, which is resolved by the explicit
-    phase $\xi$ in (\ref{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}).
+    The size condition (\ref{eq:pgvwc07_quadratic_reconstruction_size}) is
+    hypothesis (iii) of \cite[Theorem~7]{PerezGarcia2007Matrix}, whose proof
+    the source reuses for \cite[Theorem~8]{PerezGarcia2007Matrix}; it also
+    places the whole window, including both endpoint cuts, in the range where
+    the open-boundary matrices have size $D^2\times D^2$, as the system
+    requires. A state is a nonzero vector, and nonvanishing also follows from
+    the faithful open-boundary canonical form. The printed theorem asserts
+    that every solution represents the state and is exactly unitarily
+    conjugate to $A$. The phase symmetry of the system refutes both
+    assertions, and the unit phase $\xi$ in
+    (\ref{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}) is the
+    correction \cite{gap:pgvwc07_quadratic_reconstruction_phase}.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner, lem:pgvwc07_quadratic_system_units, lem:pgvwc07_solution_chain}
-    The canonical representation solves the system by the freedom in the
-    open-boundary representation. For the converse, assume that the solution
-    tensor $B$ represents the given length-$N$ state. Comparing its
-    open-boundary representation with the canonical one gives intertwiners
-    at all $D^4+1$ cuts around the $D^4$-site window, including both endpoint
-    cuts, together with the $D^4$ adjacent relations
-    \cite{gap:pgvwc07_intertwiner_chain_off_by_one}. Linear dependence in
-    $M_{D^2}(\C)$ then provides the hypothesis of
-    Lemma~\ref{lem:pgvwc07_chain_combination}. The internal construction in
-    Lemma~\ref{lem:pgvwc07_solution_chain} gives only $D^4-1$ intertwiners
-    and $D^4-2$ relations, so it does not force this dependence for an
-    arbitrary algebraic solution.
+    \uses{lem:quadratic_original_canonical_obc_window,
+        lem:quadratic_same_state_unitary_phase,
+        lem:quadratic_prescribed_prefix_basis,
+        lem:quadratic_virtual_cut_slicing,
+        lem:pgvwc07_quadratic_system_units,
+        lem:pgvwc07_chain_combination,
+        lem:pgvwc07_kronecker_intertwiner}
+    Part~1 is Lemma~\ref{lem:quadratic_original_canonical_obc_window}. The
+    canonical equations of the open-boundary form identify its bonds with
+    the physical cut ranks, condition C1 forces rank $D^2$ at every cut of
+    the window, and the physical cut bases supply the two gauges. Neither
+    uniqueness of the open-boundary canonical form nor the rank bound is
+    needed as a hypothesis; the rank bound is derived.
 
-    Given the full cut chain, the combination lemma and the slice
-    extraction of Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} give a
-    nonzero matrix $R$ and a scalar $x\neq0$ with
-    $RB_i=\tfrac1x A_iR$. The two normalizations
-    (\ref{eq:quadratic_system_normalization}), the invariance of the positive
-    diagonal fixed point, and the uniqueness of the transfer-map fixed point
-    under injectivity give $|x|=1$ and
-    $RR^{\dagger}=c\Id$ for some $c>0$. Thus $U=c^{-1/2}R$ is unitary and
-    $A_i=xUB_iU^{\dagger}$ for every $i$. Since $A$ and $B$ represent the
-    same nonzero length-$N$ state, their coefficients satisfy
-    $V^{(N)}(A)=x^NV^{(N)}(B)=V^{(N)}(B)$, and hence $x^N=1$. The tensor
-    $\widehat B_i=xB_i$ therefore represents the same state and satisfies
-    $A_i=U\widehat B_iU^{\dagger}$.
+    For part~2, fix a solution $(B,Y_j,Z_j)$ over the window, with sites
+    $0\le j\le m-1$ and $m=D^4$. By
+    Lemmas~\ref{lem:quadratic_prescribed_prefix_basis}
+    and~\ref{lem:quadratic_virtual_cut_slicing}, after a geometric rescaling
+    of the bases that removes the canonical weight, the window matrices are
+    $A^{[j]}_i=P_j(A_i\otimes\Id)P_{j+1}^{-1}$ with invertible
+    $P_0,\ldots,P_m$. Put $G_j=Y_jP_j$ and $H_j=P_{j+1}^{-1}Z_j$. The system
+    becomes
+    \begin{align}
+        B_i\otimes\Id & =G_j(A_i\otimes\Id)H_j &  & \forall\,i,j,
+        \label{eq:pgvwc07_quadratic_reconstruction_gauged}             \\
+        G_{j+1}H_j    & =\Id                   &  & \forall\,j\le m-2,
+        \label{eq:pgvwc07_quadratic_reconstruction_gauged_inverse}
+    \end{align}
+    so by Lemma~\ref{lem:pgvwc07_quadratic_system_units} the matrices
+    $G_1,\ldots,G_{m-1}$ are invertible and $H_j=G_{j+1}^{-1}$ for
+    $j\le m-2$. Only the endpoint gauges $G_0$ and $H_{m-1}$ are not
+    constrained by an inversion equation. Multiplying
+    (\ref{eq:pgvwc07_quadratic_reconstruction_gauged}) along consecutive
+    sites telescopes: a word $w$ of length $\ell$ placed at the sites
+    $a,\ldots,a+\ell-1$ satisfies
+    \begin{align}
+        B_w\otimes\Id & =G_a(A_w\otimes\Id)H_{a+\ell-1}.
+        \label{eq:pgvwc07_quadratic_reconstruction_words}
+    \end{align}
+
+    Suppose that the words of length $\ell$ in $A$ span $\MN{D}$ for some
+    $1\le\ell\le m-2$. Choose coefficients $c_w$ with
+    $\sum_wc_wA_w=\Id$ and put $X=\sum_wc_wB_w$. Placing the words at the
+    sites $1,\ldots,\ell$, at the sites $0,\ldots,\ell-1$, and at the sites
+    $m-\ell,\ldots,m-1$ in (\ref{eq:pgvwc07_quadratic_reconstruction_words})
+    gives
+    \begin{align}
+        X\otimes\Id & =G_1G_{\ell+1}^{-1}=G_0G_\ell^{-1}=G_{m-\ell}H_{m-1}.
+        \label{eq:pgvwc07_quadratic_reconstruction_endpoints}
+    \end{align}
+    The first expression is invertible, so $G_0$ and $H_{m-1}$ are
+    invertible. With $G_m=H_{m-1}^{-1}$ and $K_k=G_k^{-1}$, all $D^4+1$ cuts
+    of the window carry invertible matrices satisfying
+    \begin{align}
+        K_k(B_i\otimes\Id) & =(A_i\otimes\Id)K_{k+1}
+        \qquad(0\le k\le m-1).
+        \label{eq:pgvwc07_quadratic_reconstruction_full_chain}
+    \end{align}
+    These $D^4+1$ matrices in the $D^4$-dimensional space $M_{D^2}(\C)$ are
+    linearly dependent \cite{gap:pgvwc07_intertwiner_chain_off_by_one}, so
+    Lemmas~\ref{lem:pgvwc07_chain_combination}
+    and~\ref{lem:pgvwc07_kronecker_intertwiner} give a nonzero matrix $R$
+    and a scalar $x\neq0$ with $RB_i=x^{-1}A_iR$ for every $i$.
+
+    If $D=1$ the window has one site, the system reads $B_i=cA_i$ for a
+    scalar $c$, and the normalization
+    (\ref{eq:quadratic_system_normalization}) gives $|c|=1$, so part~2
+    holds with $U=1$ and $\xi=\overline c$. If $D\ge2$, a spanning length
+    $\ell\le m-2$ exists: condition C1 makes the transfer map of $A$ primitive and
+    forces the letters to span a space of some dimension $d'\ge2$, since a
+    single matrix generates a commutative algebra. The quantum Wielandt
+    inequality then bounds the least spanning length by
+    $(D^2-d'+1)D^2\le D^4-D^2\le m-2$.
+
+    Let $\Lambda>0$ satisfy $\sum_iA_i^{\dagger}\Lambda A_i=\Lambda$. Then
+    $\sum_iB_i^{\dagger}R^{\dagger}\Lambda RB_i=|x|^{-2}R^{\dagger}\Lambda R$.
+    The normalization (\ref{eq:quadratic_system_normalization}) makes
+    $Y\mapsto\sum_iB_i^{\dagger}YB_i$ trace preserving, and
+    $\operatorname{tr}(R^{\dagger}\Lambda R)>0$, so $|x|=1$. Next
+    $\sum_iA_iRR^{\dagger}A_i^{\dagger}
+        =|x|^2R\bigl(\sum_iB_iB_i^{\dagger}\bigr)R^{\dagger}=RR^{\dagger}$,
+    and $\Id$ is the only fixed point of $Y\mapsto\sum_iA_iYA_i^{\dagger}$,
+    so $RR^{\dagger}=c\Id$ with $c>0$. Thus $U=c^{-1/2}R$ is unitary and
+    $A_i=xUB_iU^{\dagger}$; take $\xi=x$. Unitary conjugation preserves the
+    traces of products, so $V^{(N)}(A)=\xi^NV^{(N)}(B)$, which gives the
+    final assertion because $V^{(N)}(A)\neq0$.
+
+    When the solution tensor is known to represent the given state, the
+    endpoint matrices of (\ref{eq:pgvwc07_quadratic_reconstruction_full_chain})
+    can instead be obtained by comparing the two representations at the
+    endpoint cuts. This case, with $\xi^N=1$, is
+    Lemma~\ref{lem:quadratic_same_state_unitary_phase}.
 \end{proof}
 
 %% ---------------------------------------------------------

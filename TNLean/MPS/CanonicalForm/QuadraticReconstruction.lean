@@ -286,8 +286,11 @@ the uniqueness proof at lines 1080-1086.
 **Local fix (`docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex`):**
 The internal chain alone has only `m - 1` intertwiners and does not force a
 linear dependence. For the source window `m = D ^ 4`, the dimension argument
-requires `D ^ 4 + 1` cut intertwiners. The two endpoint cuts are deliberately
-not invented here; they must come from a future open-boundary gauge comparison. -/
+requires `D ^ 4 + 1` cut intertwiners. The endpoint gauges of a solution are
+not constrained by an inversion equation, so the two endpoint cuts are not
+constructed here; for the canonical window they become invertible once a
+condition-C1 length of at most `D ^ 4 - 2` is available, as recorded in
+`docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex`. -/
 def chainIntertwiner (s t : QuadraticReconstructionSolution A) (j : ℕ) (h : j + 1 < m) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   t.leftGauge ⟨j + 1, h⟩ * s.rightGauge ⟨j, Nat.lt_of_succ_lt h⟩
