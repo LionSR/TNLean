@@ -79,6 +79,7 @@ import TNLean.Algebra.FlagBlockTriangular
 import TNLean.Algebra.FlatDensityEntropy
 import TNLean.Algebra.FlatDensityRenyiEntropy
 import TNLean.Algebra.FrequencyCounts
+import TNLean.Algebra.FunctionalWordComparison
 import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
@@ -141,6 +142,7 @@ import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
+import TNLean.Algebra.NatPolynomialBound
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius

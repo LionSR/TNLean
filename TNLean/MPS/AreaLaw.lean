@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.AKLV
 import TNLean.MPS.AreaLaw.ALVV
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
+import TNLean.MPS.AreaLaw.Algorithm
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation

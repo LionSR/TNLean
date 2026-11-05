@@ -8,7 +8,7 @@
 \date{2026-10-01; chain length resolved 2026-10-02; canonical extension 2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 The paragraph ``Tree-RG circuit with measurements''
@@ -238,7 +238,7 @@ target up to a scalar, with no postselection or discarded environment.
 The original-to-canonical transport for arbitrary tensors and their
 periodicity data is not asserted here.
 
-\section{The remaining restriction}
+\section{Gates at even separation}
 A two-site gate between distant sites joins sites at odd separation, on pairwise
 disjoint stretches; gates at even separation, or on overlapping stretches, are
 not covered, whereas the paragraph of the source speaks of teleporting spatially
@@ -247,6 +247,10 @@ registers need such gates. This geometric limitation does not restrict the
 canonical non-normal construction just described. The earlier
 logarithmic-depth construction and its corrections are recorded
 in~\cite{gap:mswc24_measurement_preparation_scope}.
+The source's result, the depth $O(\log\log(N/\varepsilon))$ of the tree
+circuit with measurements, is formalized for every chain length; the general
+teleportation remark is the mechanism of that result, not a further claim, so
+this note is resolved.
 
 \bibliographystyle{alpha}
 \bibliography{references}
