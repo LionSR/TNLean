@@ -1988,5 +1988,7 @@ The source algorithm remains open while those further steps are unproved.
 exact two-qubit failure of the intermediate multiplicative fidelity gain
 in the proof of Theorem t:alg1. Normalized error contraction, a quantitative
 reference-space trimming budget and the projected trial-space energy
-estimate give a corrected route. The actual final iteration and its
-quantitative comparison remain open.
+estimate give a corrected route. For a supplied viable root, the literal
+filter-and-trim iterate, its Ritz space and a polynomial bond bound are
+constructed (`docs/audits/2026-11-03_same_root_polynomial_refinement.md`);
+the comparison with the source's printed quantitative choices remains open.
