@@ -2,7 +2,7 @@
 \label{ch:one_dimensional_chain}
 
 % The chain specialization of the 2026 area-law and PEPS manuscripts, following the
-% TNLean note docs/notes/one_dimensional_note. Every constant is explicit. The model is
+% companion note gapped-2d-notes/one_dimensional_area_law_and_mps. Every constant is explicit. The model is
 % stated natively on the chain of L sites. The chain proof uses only the site-generic
 % layer TNLean/Lattice and QICLean. The separate strip extension reuses lattice counting;
 % the square-grid snake specialization at the end of the chapter also uses the
@@ -63,6 +63,7 @@ Theorem~B a second way, by a sequential preparation protocol.
         \min\Bigl\{1,\ 2e^{e/2}\exp\Bigl(-\frac{w}{32\sqrt{(1+J/\Delta)\,
                 \mathcal B_A}}\Bigr)\Bigr\}.
     \end{align}
+    \input{figures/chain_tilt}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -152,6 +153,10 @@ Theorem~B a second way, by a sequential preparation protocol.
     and has norm at most $2J$. Thus this is a range-$R$ chain Hamiltonian
     with local dimension $q^2$ and interaction bound $2J$, also when
     $q=0$ or $L=0$.
+    In the schematic below, the swapped region $D$ is written as $R$ inside
+    a chain partition $I=R\cup Q\cup C$, and $F_R$ acts on a two-replica
+    ground vector $\Psi=\Omega\otimes\Omega$ to produce $\Phi=F_R\Psi$:
+    \input{figures/chain_replica_swap}
 \end{definition}
 \begin{proof}
     \leanok
@@ -293,6 +298,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     interval $[l,r)$. For a natural number $N$ put
     $B(N)=1+N\log^2\bigl(e\,q^{R+1}\bigr)$, so that $B(N)\ge1$ and
     $B_R=B(N_R)$.
+    \input{figures/chain_cuts}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -426,6 +432,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     its metric enlargements by $iR$, so this gives the single-splitting
     lemma of \cite[Part~I]{TNLean2026OneDimensional}. The coordinate
     statement also holds for arbitrary endpoints $l,r$ and for $R=0$.
+    \input{figures/chain_shells}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -829,6 +836,11 @@ Theorem~B a second way, by a sequential preparation protocol.
     information-reset proof in Part~II of~\cite{TNLean2026OneDimensional},
     on a contiguous chain; the domain distinction is recorded
     in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+    When $I$ is partitioned into disjoint regions $R,Q,C$ (with $R$ playing
+    the role of $D$, and $R',Q',C'$ the second replica), the untruncated
+    two-sided Gaussian filter over $\mathbb R$ before restricting to
+    $[-T,T]$ and localizing to $M_{\mathrm{loc}}$ is illustrated by
+    \input{figures/chain_qc_gaussian_filter}
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:chain_swapped_doubled_hamiltonian,
@@ -883,6 +895,10 @@ Theorem~B a second way, by a sequential preparation protocol.
     This is the support-separation step in Part~II
     of~\cite{TNLean2026OneDimensional}, on a contiguous
     chain; see~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+    Writing $R$ for the outer region $D$ and $Z_R$ for its crossing support
+    $Z$ as in~\cite{TNLean2026OneDimensional}, the separation between
+    $N_\ell(Q\cup Z_R)$ and the cores $R_0,C_0$ is illustrated by
+    \input{figures/chain_reset}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -935,6 +951,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     is assumed. This is the contiguous-chain form of the information-reset
     lemma in Part~II of~\cite{TNLean2026OneDimensional}; the domain distinction
     is recorded in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+    \input{figures/chain_split}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1101,6 +1118,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \end{align}
     These are the constants in Lemma~4.2 of
     \cite{TNLean2026OneDimensional}.
+    \input{figures/chain_filter_product}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1125,6 +1143,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     since $0\le C_E^{\mathrm{pol}}/(m_{\mathrm{pol}}\Delta)\le1/4$.
     Substituting these estimates into the weighted entropy comparison
     proves (\ref{eq:chain_polynomial_discount}).
+    \input{figures/chain_qc_single_split}
 \end{proof}
 
 \begin{lemma}[The interval bound with the printed constants]
@@ -1223,6 +1242,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     the tail radius $1/(32\sqrt{(1+\vartheta)B_j})$. The error terms sum to
     $1024e\vartheta\sum_jB_ja_j^2\le4096e\vartheta B_R/m$, and the overlap
     losses to $m\log2$.
+    \input{figures/chain_pinning}
 \end{proof}
 
 \section{Closing the argument}
@@ -2574,7 +2594,9 @@ Theorem~B a second way, by a sequential preparation protocol.
         D=N_{w+1}(T),\qquad C=I\setminus N_{2w+2}(T),
         \qquad R_0=T,\quad C_0=E.
     \end{align}
-    The regions $D,C$ are disjoint, $T\subseteq D$, and $E\subseteq C$.
+    The regions $D,C$ are disjoint, $T\subseteq D$, and $E\subseteq C$
+    (in the schematic below, $D=N_{w+1}(T)$ is written as $R=T^{+(w+1)}$):
+    \input{figures/chain_logsep}
     If $y\notin D$, then $|x-y|>w+1>w$ for every $x\in T$.
     If $y\notin C$, choose $x\in T$ with $|x-y|\le2w+2$.
     For every $e\in E$, the separation hypothesis and the triangle

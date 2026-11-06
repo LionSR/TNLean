@@ -663,8 +663,10 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     Lemmas~\ref{lem:quadratic_prescribed_prefix_basis}
     and~\ref{lem:quadratic_actual_physical_window_solution}, the window
     matrices are $A^{[j]}_i=P_j^{-1}(\lambda A_i\otimes\Id)P_{j+1}$ with
-    invertible $P_0,\ldots,P_m$; replacing $P_j$ by $\lambda^{-j}P_j$ gives
-    $A^{[j]}_i=P_j^{-1}(A_i\otimes\Id)P_{j+1}$. Put $G_j=Y_jP_j^{-1}$ and
+    invertible $P_0,\ldots,P_m$. The matrices $Q_j=\lambda^{j}P_j$ satisfy
+    $A^{[j]}_i=Q_j^{-1}(A_i\otimes\Id)Q_{j+1}$, since
+    $\lambda^{j}\cdot\lambda\cdot\lambda^{-j-1}=1$; we write $P_j$ for $Q_j$
+    from now on. Put $G_j=Y_jP_j^{-1}$ and
     $H_j=P_{j+1}Z_j$. The system
     becomes
     \begin{align}
@@ -720,7 +722,8 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     $\operatorname{tr}(R^{\dagger}\Lambda R)>0$, so $|x|=1$. Next
     $\sum_iA_iRR^{\dagger}A_i^{\dagger}
         =|x|^2R\bigl(\sum_iB_iB_i^{\dagger}\bigr)R^{\dagger}=RR^{\dagger}$,
-    and $\Id$ is the only fixed point of $Y\mapsto\sum_iA_iYA_i^{\dagger}$,
+    and condition C1 makes the fixed-point space of
+    $Y\mapsto\sum_iA_iYA_i^{\dagger}$ one-dimensional, spanned by $\Id$,
     so $RR^{\dagger}=c\Id$ with $c>0$. Thus $U=c^{-1/2}R$ is unitary and
     $A_i=xUB_iU^{\dagger}$ (Lemma~\ref{lem:pgvwc07_intertwiner_unitary});
     take $\xi=x$. Unitary conjugation preserves the

@@ -684,7 +684,13 @@ description of current `main`.
   proportional theorem via the unused bridges at `MPS/Defs.lean:244,294`.
 
 ## D6. PEPS insertion/transfer machinery rebuilt at edge, region, and coarse granularities — abstraction-gap, impact 6/10, effort 8/10
-- **Status**: open ([#4522](https://github.com/LionSR/TNLean/issues/4522))
+- **Status**: retired 2026-11-05 ([#4522](https://github.com/LionSR/TNLean/issues/4522)).
+  The singleton-region case is not a reindexing: the region weight sums
+  freely over the labels of edges away from the region, so the region
+  coefficient is the edge coefficient times the product of those bond
+  dimensions (`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`), and
+  removing that factor would change the definition every region result
+  rests on.
 - **Evidence**: the shared configuration calculus has landed
   ([PR #4623](https://github.com/LionSR/TNLean/pull/4623),
   [PR #5188](https://github.com/LionSR/TNLean/pull/5188)); `hostMerge` is

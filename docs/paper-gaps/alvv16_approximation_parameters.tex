@@ -1,0 +1,258 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,dsfont}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Independent Parameters in the ALVV Ground-State Approximation}
+\author{}
+\date{October 28, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The quantitative conclusion}
+
+Theorem~4.9 of Arad, Landau, Vazirani and Vidick~\cite{Arad2016RigorousRG},
+\href{https://arxiv.org/abs/1602.08828v2}{arXiv:1602.08828v2}, asserts a
+fixed-cut Schmidt-rank bound of the form
+\begin{align}
+    s(\delta)\le r\exp\!\left[\widetilde O\!\left(
+        \gamma^{-1}\log^3d+
+        \gamma^{-1/4}\log^{3/4}(1/\delta)\log d\right)\right].
+    \label{eq:alvv_approximation_rank}
+\end{align}
+The subsequent global matrix product state bound replaces $\delta$ by
+$\delta/n$. This note concerns the parameter choice in that proof, not a
+counterexample to either conclusion.
+The source is \path{local_alg_arxiv_v2.tex}, line 1080; the relevant
+independent-parameter estimate is Corollary~4.6,
+\path{c:goodagsphardtrunc}, lines 979--1005.
+
+\section{The source assumptions and the normalized gap}
+
+Assumption (DG) in the source, lines 275--279, requires a ground energy
+$\epsilon_0$ and a second smallest distinct eigenvalue $\epsilon_1$, with
+$\epsilon_1-\epsilon_0\ge\gamma$. Thus the distinct spectral values in the
+formal statements express a source hypothesis. Scalar Hamiltonians are
+outside this stated setting.
+
+The local normalization $0\le h_i\le\Id$ does not force the gap to be at
+most one. On three qubits, put
+$P=\Id\otimes\ketbra{1}{1}\otimes\Id$ and take both nearest-neighbour
+terms to equal $P$. The first is supported on sites $1,2$ and the second
+on sites $2,3$. Each term is a positive contraction, while
+$H=2P$ has spectrum $\{0,2\}$, ground-space dimension four and gap two.
+ALVV states the local normalization at source lines 267 and 806; no
+global assumption $\gamma\le1$ is stated there or in Assumption (DG).
+
+The bounds below use $g=\min\{\gamma,1\}$. Decreasing a supplied gap
+lower bound to $g$ is always legitimate. Comparing the resulting bound
+with the printed inverse powers of the original $\gamma>1$ requires an
+additional uniform spectral bound or a separate large-gap argument.
+That comparison remains open here.
+
+\section{The printed choice is not uniform in the gap}
+
+Corollary~4.6 gives the decay exponent
+\begin{align}
+    E=\frac{\ell^2\sqrt\gamma}{\sqrt{t+\ell}}.
+    \label{eq:alvv_approximation_exponent}
+\end{align}
+The proof of Theorem~4.9 prescribes
+$t=\Theta(\gamma^{-1/4}\log(1/\delta))$ and
+$\ell=\Theta(t^{3/4})$.
+If the constants in these comparisons are universal, this does not make
+$E$ a sufficiently large multiple of $\log(1/\delta)$ for all gaps.
+For example, let $g=\gamma\downarrow0$ and
+$\delta=\exp(-g^{-2})$. Then
+\begin{align}
+    t      & =\Theta(g^{-9/4}),                                &
+    \ell   & =\Theta(g^{-27/16}),                              &
+    \ell/t & \longrightarrow0,\notag                             \\
+    E      & =\Theta(g^{-7/4})=o\!\left(\log(1/\delta)\right).
+    \label{eq:alvv_approximation_prescription}
+\end{align}
+This regime is compatible with inverse-polynomial accuracy by taking
+$n$ of order $\exp(g^{-2})$. Rounding $n$ or $\ell$ changes none of these
+comparisons. Thus the corollary's decay estimate does not justify the
+claimed accuracy from this prescription with universal constants.
+The obstruction concerns the prescription; it does not disprove
+(\ref{eq:alvv_approximation_rank}).
+
+\section{A choice retaining the two scales}
+
+The corrected prescription of this section is formalized, so the failure of
+the printed choice is resolved. What remains open is the comparison with the
+printed bound for gaps larger than one, where the formal bound uses
+$g=\min\{\gamma,1\}$.
+
+Normalize the gap to $0<g\le1$. For a target scale $0<\tau\le1$, put
+$u=1+\log(1/g)+\log(1/\tau)$. There is a universal constant $C\ge21$
+for which $t=Cu$ satisfies
+\begin{align}
+    288e^{11/8}e^{-(t-g)/8}\le\frac{\tau g}{10^6}.
+    \label{eq:alvv_approximation_tail}
+\end{align}
+The actual centered five-region Hamiltonian, with three bulks clipped at
+$t$ and windows of length $2\ell$, has norm at most $3t+4\ell$.
+For any $a\ge0$ with $a\le t$, choose
+\begin{align}
+    b    & =(7ta^2/g)^{1/4},              &
+    \ell & =\left\lceil7/g+b\right\rceil.
+    \label{eq:alvv_approximation_choice}
+\end{align}
+Then $\ell\ge1$, $7\le\ell g$, $7ta^2\le g\ell^4$, and
+$\ell\le8/g+b$. These inequalities control both regimes in the
+physical norm budget. For $0<R\le3t+4\ell$:
+if $\ell\le t$, then $R\le7t$ and $a^2R\le g\ell^4$;
+if $t\le\ell$, then $a\le\ell$, $R\le7\ell$ and
+$a^2R\le7\ell^3\le g\ell^4$.
+Consequently
+\begin{align}
+    a\le\ell^2\sqrt{g/R}.
+    \label{eq:alvv_approximation_corrected_exponent}
+\end{align}
+In particular, when $t=Ca$, the same integer choice satisfies
+\begin{align}
+    \ell\le\frac8g+(7C)^{1/4}g^{-1/4}a^{3/4}.
+    \label{eq:alvv_approximation_quarter_power}
+\end{align}
+The low-cluster spectral separation is $4g/5$ rather than $g$.
+Using $4g/5$ in (\ref{eq:alvv_approximation_choice}) only changes the
+universal constants: the inverse-gap term becomes $10/g$ and the
+fourth-root coefficient becomes $(35C/4)^{1/4}$.
+Thus both logarithms in $u$ are retained, while the accuracy dependence
+has the power required in (\ref{eq:alvv_approximation_rank}).
+
+\section{The resulting fixed-cut estimate}
+
+Write $r=\dim G$, $u=1+\log q+\log(1/g)$ and
+$a=16+\log(1/g)+\log(1/\delta)$.
+The normalized physical approximation now gives one universal constant $K>0$
+such that every original unit $\psi\in G$ has a unit approximant $\phi$ with
+$|\langle\phi,\psi\rangle|\ge1-\delta$ and
+\begin{align}
+    \log\operatorname{SR}_{J:J^c}(\phi)
+    \le\log r+K\bigl(g^{-1}u^3+g^{-1/4}a^{3/4}u\bigr)(1+\log a).
+    \label{eq:alvv_approximation_explicit_rank}
+\end{align}
+The initial viable subspace is fixed before the accuracy and vector are
+chosen. Its dimension contributes $rD_0^{24}$, and the independent
+polynomial family contributes $D_1^2$. Thus the integer rank budget is
+$rD_0^{24}D_1^2$, retaining only one factor $r$.
+The vector is normalized after taking the viable-space projection witness
+and is transported to the original Hilbert space by the actual cut isometry.
+No rank or overlap assumption is supplied.
+The construction covers intervals, including empty intervals; a prefix
+interval gives the source's fixed cut.
+
+The gap in (\ref{eq:alvv_approximation_explicit_rank}) is explicitly
+$g=\min(\gamma,1)$. For $0<\gamma\le1$, the estimate has the source's
+quarter-power gap and three-quarter-power accuracy dependence, with the
+logarithmic correction displayed. For larger supplied gaps it uses $g=1$;
+it does not assert an improvement proportional to $\gamma^{-1}$ or
+$\gamma^{-1/4}$ in that regime. Comparing the capped estimate with the
+unrestricted printed quantitative expression requires a universal upper
+bound on a nontrivial nearest-neighbour ground-space gap, or a separate
+large-gap argument. That comparison is not proved here.
+The closed spectral cutoff retaining the entire original ground space is
+as documented in the companion
+\href{https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf}
+{spectral-projector note}.
+
+\section{One global matrix product state}
+
+Put $b=16+\log(1/g)+\log(16(n+1)/\delta)$.
+The simultaneous-cut construction chooses an integer $B\ge1$ before
+any ground vector, with one universal $K>0$ such that
+\begin{align}
+    \log B \le K\bigl(g^{-1}u^3+g^{-1/4}b^{3/4}u\bigr)(1+\log b).
+    \label{eq:alvv_approximation_global_bond}
+\end{align}
+Every original unit $\psi\in G$ has a unit open-boundary matrix product
+approximant $\Phi$ of bond dimension at most $rB$, absolute overlap at least
+$1-\delta$, and squared norm error at most $\delta/2$.
+
+The final vector is not assembled from the separate fixed-cut approximants.
+Those vectors are used only to bound the original marginal's discarded mass
+by $2\delta_c$, where $\delta_c=\delta/(16(n+1))$.
+The single product of the original marginals' leading spectral projections
+has squared norm error at most the sum of those discarded masses, hence
+at most $\delta/8$. Its normalization gives $\Phi$ and preserves every
+bond bound. Choosing $B=\lceil e^E\rceil$ for the common logarithmic rank
+budget costs at most one in $\log B$ and retains the single factor $r$.
+
+The remaining quantitative comparison concerns the cap $g=\min(\gamma,1)$
+for larger supplied gaps, as discussed above. The low-energy extension and
+the binary-tree algorithm are separate results and are not asserted here.
+
+
+\section*{The bounded recursive witness construction}
+
+For the same original full ground space, a balanced recursion can be
+constructed with full local spaces at leaves of length at most $4\ell$.
+At every longer parent, one actual family is chosen from the Hamiltonian
+before the sampling size and the child spaces. Its literal ordered words
+act on the actual Haar coordinate sample, followed by one collective trim.
+Writing $D_{\rm ref}=r^2B$, take
+\[
+    A=1+\log r+\log D+\log(1/\beta),\qquad
+    s=\lceil4096rA\rceil,\qquad
+    M=D^6s^3,\qquad
+    \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
+\]
+The corrected fixed-input failure bound
+(\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
+is at most $\beta<1$, uniformly
+for parent dimensions at most $D^{12}s^6$. Choosing successful unitaries
+therefore gives actual recursively selected spaces, all $3/200$-viable
+for the original ground space. Each has at most $M$ recorded generators,
+whose internal-cut Schmidt ranks are at most
+$10^6D_{\rm ref}^2(n+1)M$. This bound concerns the recorded generators,
+not arbitrary linear combinations in their span. The whole exterior is
+retained; the squared reference factor is not replaced by $D_{\rm ref}$.
+
+The independent scalar tail and filter conditions remain hypotheses of
+this bounded result. It uses block leaves and one final trim, whereas
+Figure~\texttt{fig:merge-prime} of the source places trimming within the
+error-reduction rounds. It proves existence of one recursively selected
+tree, not a joint probability theorem for the adaptive algorithm. A
+pointwise choice of a measurable hull of each bad set does not by itself
+supply measurable dependence on the earlier spaces. The source theorem
+\texttt{t:alg1} remains separate: its full parameter selection, modified
+merge analysis, adaptive probability, energy-estimation invariant, final
+spectral extraction and computational cost require their own proofs.
+
+
+\section*{Automatic parameters for this witness}
+
+The numerical tail and filter conditions in the bounded witness above can
+be derived uniformly from the physical input. Choose a universal $C\ge1$
+from the scalar parameter theorem, before the chain and Hamiltonian, and put
+\[
+    m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
+    \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+\]
+Then $\ell\ge21$ and
+\[
+    \log D\le22(C+1)(6+2\log(C+1))v^3/g.
+\]
+Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
+estimate holds uniformly up to $8\ell$, hence throughout the required
+range $R\le3t+4\ell=7\ell$. The truncation tail estimate is at most
+$g/(10^6m)$, which supplies the required extra factor $1/m$.
+Thus the physical recursive witness has a version with no supplied
+numerical tail or filter hypotheses. The families still precede every
+sampling size and child space.
+
+This parameter substitution does not identify the witness with the
+printed modified merge procedure. Its block leaves, final trim, capped
+gap and ranks of recorded generators remain as stated above. It does
+not prove an adaptive joint success probability, the energy-estimation
+invariant, final spectral extraction or the claimed running time.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

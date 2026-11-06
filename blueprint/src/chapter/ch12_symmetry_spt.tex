@@ -911,10 +911,10 @@ of the virtual projective representation.
     For $p=0,1$, let $A_p$ be an injective MPS tensor whose parent Hamiltonian
     $H_p$ has a unique ground state and is symmetric under a unitary
     representation $U^p$ of $G$ on $\mc H_p$. Choose the endpoint phase
-    gauges. After a common finite blocking, the embedded endpoints admit a
-    continuous symmetric MPS path with corresponding translationally invariant,
-    finite-range parent Hamiltonians that vary smoothly and remain uniformly
-    gapped if and only if their virtual projective representations determine
+    gauges. After a common finite blocking, the embedded endpoints are joined
+    by a continuous, uniformly gapped, symmetric path of translationally
+    invariant two-site Hamiltonians whose ground states are unique and are
+    MPS if and only if their virtual projective representations determine
     the same class in $H^2(G,\mathrm U(1))$.
 
     More precisely, for the forward construction there exist a path-sector
@@ -925,17 +925,31 @@ of the virtual projective representation.
         U_g   & =U_g^0\oplus U_g^1\oplus U_g^{\mathrm{path}}.
         \notag
     \end{align}
-    The converse quantifies over smooth paths of MPS with corresponding
-    parent Hamiltonians \cite[Section~II.F, lines~929--953]{Schuch2011Phases}.
+    The converse quantifies over such Hamiltonian paths. Continuity of the
+    tensors along the path is a step of the source argument, derived from the
+    gap, and not a hypothesis \cite[Section~II.F.2]{Schuch2011Phases}.
+
+    The injective endpoint domain is the source convention of standard form
+    after blocking. The forward direction is proved in full. The converse is
+    proved for paths whose ground states admit a continuous tensor
+    realization of bounded bond dimension
+    (Theorem~\ref{thm:spt_exact_phase_injective_classification} and
+    Corollary~\ref{cor:spt_exact_phase_injective_character_classification}).
+    The converse without that realization remains open
+    \cite{gap:spc11_spt_classification_continuous_realization}.
 \end{theorem}
 
 \begin{proof}
+    \uses{thm:spt_exact_phase_injective_classification,
+        cor:spt_exact_phase_injective_character_classification}
     First deform each blocked injective MPS to its isometric form; the
     deformation preserves the symmetry relation
     \begin{align}
         U_g\mc P & =\mc P(V_g\otimes\overline{V_g}).
         \notag
     \end{align}
+    The uniform gap makes each finite-ring ground line continuous in the
+    path parameter; the source then chooses the tensors continuously.
     On an interval where the minimal injective bond dimension is fixed,
     continuous tensors with exact symmetry admit continuous virtual gauges
     by Lemma~\ref{thm:spt_tensor_path_class_invariance}. Their factor
@@ -1251,9 +1265,11 @@ and the regrouping of physical registers into bonds.
 
     This describes the continuous exact MPS regime of
     \cite[Section~II.F.2]{Schuch2011Phases}. It assumes no virtual action,
-    factor system, or continuous canonical bond data. The classification
-    implication, including changes of minimal bond dimension, remains
-    open as recorded in \cite{gap:spc11_spt_interpolation_upper_range}.
+    factor system, or continuous canonical bond data. Every condition except
+    the continuous tensor family is part of the source's phase relation for
+    paths with unique MPS ground states; the source derives that family from
+    the gap instead of assuming it
+    \cite{gap:spc11_spt_classification_continuous_realization}.
 \end{definition}
 
 \begin{lemma}[Elementary properties of MPS rays and path reversal]
