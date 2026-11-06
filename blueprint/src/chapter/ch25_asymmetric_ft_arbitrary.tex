@@ -41,7 +41,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     $B'$ has the periodic traces of the direct sum of the family.
 \end{proof}
 
-\begin{theorem}[The family is determined by the states]
+\begin{lemma}[The family is determined by the states]
     \label{thm:asym_arbitrary_family_unique}
     \lean{MPSTensor.MultiBlockCompression.z_sub_z_eq_and_exists_equiv_isGaugeRelated_of_sameMPV₂Pos}
     \leanok
@@ -52,7 +52,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     $(C'_t)_{t\in S'}$ with $z'$ zero blocks. If $B$ and $B'$ have the same
     periodic vectors at every positive length, then $z-z'=D_B-D_{B'}$ and a
     bijection $S\to S'$ pairs gauge related blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -60,13 +60,13 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     The two families have equal sums of word traces on every nonempty word.
     Group the members of both families into gauge classes; the traces of
     pairwise non-gauge-related admissible tensors are linearly independent
-    (Corollary~\ref{cor:asym_uniq_trace_independence}), so each class has
+    (Lemma~\ref{cor:asym_uniq_trace_independence}), so each class has
     the same multiplicity in both families. Gauge related blocks have equal
     bond dimension, and the dimension count of
     Theorem~\ref{thm:asym_multiblock}(vii) gives $z-z'=D_B-D_{B'}$.
 \end{proof}
 
-\begin{theorem}[Invariant flags]
+\begin{lemma}[Invariant flags]
     \label{thm:asym_arbitrary_flags}
     \lean{MPSTensor.exists_compositionSeries_wordModule,
         MPSTensor.finrank_subquot_eq_one_of_forall_smul_eq_zero,
@@ -95,7 +95,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     \end{enumerate}
     Under these conditions the tensors of paired steps, in any bases, are
     gauge related.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -110,7 +110,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     implies (iii) because invariant flags exist.
 \end{proof}
 
-\begin{theorem}[Every invariant flag is the flag of a reduction]
+\begin{lemma}[Every invariant flag is the flag of a reduction]
     \label{thm:asym_arbitrary_flag_reduction}
     \lean{MPSTensor.exists_multiBlockCompression_mem_iff_and_flag_eq_and_ord_eq}
     \leanok
@@ -120,7 +120,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     the steps in $S$ with $r-|S|$ zero blocks, whose invariant flag is the
     given one, with the block of a step $k\in S$ at position $k$ and the zero
     blocks at the zero steps.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -131,7 +131,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     the tensors of the steps on the diagonal.
 \end{proof}
 
-\begin{theorem}[A common block diagonal limit]
+\begin{lemma}[A common block diagonal limit]
     \label{thm:asym_arbitrary_limit}
     \lean{MPSTensor.MultiBlockCompression.exists_isUnit_and_tendsto_mul_zeroPad_mul_inv,
         MPSTensor.sameMPV₂Pos_of_tendsto_mul_zeroPad_mul_inv}
@@ -148,7 +148,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     Conversely, if $\widehat B$ and $\widehat B'$ have a common limit $L$ in
     this sense, then $B$ and $B'$ have the same periodic vectors at every
     positive length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -160,7 +160,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     equal word traces, and zero padding does not change them.
 \end{proof}
 
-\begin{theorem}[Weighted states]
+\begin{corollary}[Weighted states]
     \label{thm:asym_arbitrary_weighted}
     \lean{MPSTensor.tfae_weightedStates,
         MPSTensor.forall_trace_pow_mul_mpv_eq_iff_exists_equiv_isGaugeRelated,
@@ -185,7 +185,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     the periodic vectors of $A\otimes\mathbb E_{B,B}$ and
     $B\otimes\mathbb E_{B,A}$ are equivalent, where $\mathbb E_{B,A}$ is
     the mixed transfer matrix.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \leanok
@@ -197,7 +197,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     Theorem~\ref{thm:asym_arbitrary_ft} gives the reductions. Expanding
     $\tr(V^N)=\sum_\mu\mu^N$ writes both sides as sums of periodic vectors of
     the admissible tensors $\mu C_s$ and $\nu C'_t$, and
-    Theorem~\ref{thm:asym_arbitrary_family_unique} matches them. The
+    Lemma~\ref{thm:asym_arbitrary_family_unique} matches them. The
     dependence statement is the case $V=\mathbb E_{B,B}$,
     $U=\mathbb E_{B,A}$.
 \end{proof}
