@@ -1,0 +1,245 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{Corrected regional soft-truncation residuals and parameter bounds}
+\author{}
+\date{2026-11-03}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source permits an estimated regional energy}
+
+Definition \texttt{def:soft-trunc} of
+\href{https://arxiv.org/abs/1602.08828v2}{ALVV, arXiv:1602.08828v2},
+source lines 1178--1185, defines the regional replacement as
+\begin{align}
+ \widetilde A=e'I+h_{m,t}(A-e'I),\qquad e-10\leq e'\leq e,
+\end{align}
+where $e$ is the actual minimum energy of the regional Hamiltonian $A$.
+Lemma \texttt{lem:exp-approx}, beginning at line 1195, allows $t\geq m\geq2$.
+The ten-unit interval is part of the source statement; replacing $e'$ by
+$e$ proves a specialization, not uniformity over all allowed estimates.
+
+\section{The corrected bounds presently proved}
+
+For positive-contraction nearest-neighbour interactions, the formalization
+constructs the genuine minimum energies $e_0,e_1,e_2$ of three consecutive
+internal regional sums $A_0,A_1,A_2$, together with normalized attaining
+vectors. It centers the full original Hamiltonian by their sum:
+\begin{align}
+ H=\sum_i h_i-\Bigl(\sum_j e_j\Bigr)I,
+ \qquad X=A_1-e_1I,
+ \qquad G=H-X+h_{m,t}(X).
+\end{align}
+The attained original and soft ground energies $E$ and $\mu$ satisfy
+$0\leq\mu\leq E\leq2$. Positivity of the actual regional sums and the
+actual crossing bonds gives $G\geq0$; functional calculus gives $G\leq H$.
+No gap or simplicity assumption is imposed.
+
+Write $V_M(c)$ for the closed spectral space of $M$ below $c$, and put
+$\varepsilon_{m,t}(T)=(t/m)(T/t)^m$. For $m\geq2$ and $t>0$, the same
+constructed $G$ satisfies the following two statements:
+\begin{align}
+ \|(H-G)|_{V_H(E+\eta)}\|
+ &\leq32e^{-(T-\eta)/8}+\varepsilon_{m,t}(T),
+ &&\eta>0,\quad T\geq\eta+7,\\
+ \|(H-G)|_{V_G(\mu+\eta)}\|
+ &\leq16e^{-(T-U)/8}+\varepsilon_{m,t}(T),
+ &&\eta\geq0,\quad U=2(\eta+8),\quad t,T\geq U.
+\end{align}
+The regional minima are selected before $t,m$; the actual soft operator and
+its ground energy are selected before $\eta,T$.
+
+The reverse proof obtains its coercive floor from
+$h_{m,t}(x)\geq U-\varepsilon_{m,t}(U)$ for $x\geq U$.
+Since $t\geq U$ and $m\geq2$,
+$\varepsilon_{m,t}(U)\leq U/m\leq U/2$.
+The floor is therefore at least $\eta+8$. The actual boundary contains at
+most two bonds, so the Sylvester denominator is at least
+$(\eta+8)-(\mu+\eta)-4\geq2$.
+The boundary count, energy bound, commutation and projection inequality
+are derived from the original interactions. They are not supplied as
+hypotheses of the physical theorem.
+
+The corresponding formal statements are
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_single_region_original_soft_truncation_residual}
+and
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_single_region_soft_truncation_residuals}.
+
+These are separate corrected auxiliary statements. They do not assert the
+printed uniform energy estimate, its printed spectral enlargement, or the
+complete efficient-filter construction. The separate counterexamples to the printed cluster estimate are recorded in
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_cluster_approximation.pdf}{the cluster-approximation note}.
+
+\section{Estimated centers and simultaneous replacements}
+
+The energy-center restriction is removed in a further corrected auxiliary
+statement. Four ordered cuts determine five consecutive regions with
+internal sums $A_j$ and an actual crossing set $J$. Put $C=|J|\leq4$.
+The original interactions determine attained regional minima $e_j$ and
+an attained original ground energy $E\in[0,C]$ before every selected set
+$S$, every family of estimates $p_j\in[e_j-10,e_j]$ on $S$, and every
+scale $t>0$ and order $m\geq2$. Define
+\begin{align}
+ B&=\sum_j\left(
+  \begin{cases}
+   p_jI+h_{m,t}(A_j-p_jI),&j\in S,\\
+   A_j,&j\notin S
+  \end{cases}-e_jI\right),\\
+ D&=10|S|,\qquad G=B+\sum_{i\in J}h_i.
+\end{align}
+The actual common interior satisfies $B+DI\geq0$ and commutes with
+every $A_j$. The attained soft ground energy obeys
+$-D\leq\mu\leq E\leq C$. For $\eta\geq0$,
+\begin{align}
+ \|(H-G)|_{V_H(E+\eta)}\|
+ &\leq |S|\left(8Ce^{-(T-\eta-3C-12)/8}+\varepsilon_{m,t}(T)\right),
+ &&T\geq\eta+3C+12,\\
+ \|(H-G)|_{V_G(\mu+\eta)}\|
+ &\leq |S|\left(8Ce^{-(T-U)/8}+\varepsilon_{m,t}(T)\right),
+ &&U=2(\eta+D+3C+2),\quad t,T\geq U.
+\end{align}
+The same $G$, ground data and actual orthonormal eigenbases precede
+$\eta,T$. The boundary count, positivity correction, commutation and
+projection floors are derived from the original local terms.
+
+In the reverse argument the shifted soft energy is at most $C+D+\eta$,
+while the high-energy floor is at least $U/2=\eta+D+3C+2$.
+Consequently the actual denominator is at least two after subtracting
+the boundary contribution $2C$. No positivity or spectral gap of $G$
+is assumed. If the source's three bulk regions are selected, then
+$|S|\leq3$, $D\leq30$ and $U\leq2(\eta+44)$.
+
+The public physical statement is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_residuals}.
+The accompanying regional construction is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_structure}.
+The two restricted-norm estimates for a general common regional
+interior are
+\leanid{TNLean.MPS.AreaLaw.ALVV.norm_simultaneous_soft_original_residual}
+and
+\leanid{TNLean.MPS.AreaLaw.ALVV.norm_simultaneous_soft_reverse_residual}.
+Empty intervals, repeated cuts and an empty selected set are included.
+
+\section{The remaining source comparison}
+
+The exact-center specialization no longer prevents a simultaneous
+estimated-center comparison. The open qualification concerns the
+explicit scale and cutoff conditions and the subsequent conclusions:
+the corrected residuals are now composed with the actual spectral
+comparison and an actual Hermitian MPO for the same soft Hamiltonian.
+The source's final filter parameter choices require further arguments.
+The corrected results do not assert the printed
+uniform energy estimate, its spectral enlargement, a polynomial
+construction with the source's dependence on varying parameters, or a
+running-time theorem. In particular, a bound polynomial in the chain
+length for fixed order cannot substitute for a bound uniform in an
+order chosen as a function of that length.
+
+For the same actual $G$, write $\rho_H,\rho_G$ for the corrected
+original and reverse residual bounds at width $\eta$. Its normalized
+ground vector gives $0\leq E-\mu\leq\rho_G$. For positive window width
+$h$ and buffer $w$, the count $k=\lceil(\eta+h)/(2h)\rceil$ gives losses
+$k(\rho_H+h)^2/(w+h)^2$ and $k(\rho_G+h)^2/(w+h)^2$ in the two
+directions. The forward target cutoff is $\mu+\eta+\rho_G+w$; the
+reverse target cutoff is $E+\eta+w$. An arbitrary requested operator
+accuracy also gives actual Hermitian MPO tensors for this exact $G$
+when $t\geq3m$, with the explicit corrected cluster bond. These
+conclusions are stated in
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_representation}.
+They make no numerical small-loss or efficient-GEN claim without the
+remaining parameter derivations.
+
+The source's GEN input at lines 1360--1362 permits a symmetric estimate
+$|\varepsilon'_M-\varepsilon_M|\leq10$, whereas Definition
+\texttt{def:soft-trunc} uses a lower estimate in a ten-unit interval.
+The present statement has exactly the latter one-sided range. Passing
+from the GEN input to suitable actual regional lower centers remains
+part of the algorithmic argument; it is not inferred from the existence
+of the true minimum energies. The separate false cluster estimate and
+its counterexamples are unchanged.
+
+\section{A full-operator norm ceiling with the original regional shifts}
+
+For the five-region construction, let the two intervening site windows
+have widths at most $2\ell$. Retain the same attained original minima
+$e_j$ and the estimates $e_j-10\le p_j\le e_j$ on the three bulks
+$j\in\{0,2,4\}$. The actual softened Hamiltonian retains the entire
+shift $-\sum_j e_jI$. Each softened centered term is at least $-10I$
+and at most $t(1+\log m)I$; the two unchanged centered windows are at
+most $2\ell I$ each, and the actual crossing sum is at most $4I$.
+Thus
+\begin{align}
+ -30I\le G\le\bigl(3t(1+\log m)+4\ell+4\bigr)I,
+ \qquad
+ \|G\|\le3t(1+\log m)+4\ell+34.
+\end{align}
+This norm estimate selects no new regional minima or soft ground energy.
+It is proved by
+\leanid{TNLean.MPS.AreaLaw.ALVV.norm_five_region_soft_three_bulk_le}.
+The factor $1+\log m$ is the corrected harmonic cap; see the
+\href{https://sirui-lu.com/QICLean/paper-gaps/alvv16_soft_truncation_log_bound.pdf}
+{companion note on the soft-truncation logarithmic bound}.
+The later precision and filter calibration remain separate statements.
+
+\section{A common physical family before the estimated centers}
+
+The corrected residual inequalities now give an actual common physical
+improving family under their explicit numerical budgets. The construction
+chooses the same original minima once, then fixed native middle tensors
+and polynomial closing coefficients before every allowed lower center.
+The finite interpolation family is also chosen before all three estimates.
+For each estimate, its represented matrix is exactly
+\begin{align}
+ \widehat G_p=G_p-F_2+p_2I+\iota Z\bigl(e^{(p_2-e_2)/t}\bigr).
+\end{align}
+The physical comparison derives this matrix's own closed low cluster,
+its dimension and both directed comparisons to the original ground space.
+The common polynomial decomposition supplies an actual Chebyshev operator
+and every ordered-word power, with count
+$(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor}$.
+This is proved in
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_uniform_physical_soft_improving_family}.
+
+The statement retains $t\ge3m$, both corrected residual inequalities,
+the explicit logarithmic native bond and the minimum-gain convention for
+the unsquared filter. It does not identify the source's fourth-order
+parameter choice or assert the complete adaptive generating algorithm.
+The counterexamples to the printed cluster estimate and the original
+uniform soft-energy estimate remain unchanged.
+
+\section{Calibrating the actual common family before the volume}
+
+For fixed local dimension $q\ge2$ and positive gap $\gamma$, the
+corrected construction now selects one natural $u\ge2$ before the
+chain length. It uses $\ell=u^8$, $m=u^{10}$, $k=u^{16}$,
+$t=3m$ and $T=u^9$. With the actual common count $D$ and norm ceiling
+$M$, put $\tau=(D^{24}M^{10})^{-1}$ and retain the same precision
+$\xi=\min\{1,\tau\gamma^2/[20000(M+\gamma+8)]\}$.
+Both residual budgets are derived, as are
+\begin{align}
+ \Delta\le (D^{12}M^{10})^{-1},\qquad
+ \frac{3\tau}{200}\le\frac1{100}
+      \left(\frac{3}{100D^2}\right)^2,\qquad
+ D^{12}\Delta\le10^{-5}.
+\end{align}
+The logarithmic cluster order also gives natural constants
+$C_{\rm pol},p_{\rm pol}$ before the volume, bounding the actual
+member-bond allowance by $C_{\rm pol}(N+1)^{p_{\rm pol}}$.
+The original common family, its represented matrices, derived targets,
+filters and all ordered-word powers are retained in
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_uniform_physical_soft_improving_family}.
+
+This is a fixed-parameter polynomial bound: the soft order $m$ and filter
+degree $k$ are selected before $N$, while the cluster order varies with
+$N$ according to its specified logarithmic formula. The result does not identify the printed fourth-order
+choice, establish sharp inverse-gap dependence, or prove the full adaptive
+soft generating algorithm and its running time. The existing false-source
+claims and counterexamples are unchanged.
+
+\end{document}

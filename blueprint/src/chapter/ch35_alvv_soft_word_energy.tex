@@ -1,0 +1,346 @@
+\section{Raw compressed energy of the specified word family}
+
+The following conditional lemma uses a specified target and its own
+family with stated bounds. It constructs the soft regional operator and its actual
+compression; no candidate quadratic-energy bound or compressed minimum is assumed.
+It supports the separate energy-estimation image in
+\cite[Figure \texttt{fig:algo1}, line 1631]{Arad2016RigorousRG}.
+
+\begin{lemma}[A regional energy estimate from the same word family]
+    \label{lem:soft_same_word_compressed_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_word_compressed_energy_estimate}
+    \leanok
+    Let $H=\sum_i h_i$ be a chain with positive local dimension,
+    $0\le h_i\le I$ and the designated nearest-neighbour supports.
+    Write $G$ for its full ground space. Fix $l\le u\le v\le r\le L$
+    with $u-l,r-v\le2\ell$, and integers
+    $\ell\ge21$, $D\ge2$, $s\ge1$, $50\ell^2\le D$. Put
+    \begin{align}
+        a      & =\frac{3}{32D^{12}s^5},  &
+        \tau   & =\frac{a^2}{2^{20}},     &
+        \Delta & =\frac{1}{200000D^{12}}.
+    \end{align}
+    Let $T$ be a specified full-chain space of dimension $\dim G$,
+    with $G$ $\tau$-close to $T$. Let $F_1,\ldots,F_N$ be a specified
+    family on the native Hilbert space of $[l,r)$. Assume that it satisfies the following
+    bounds: for every $1/4$-viable $S$ for $T$, the actual one-word
+    image $\sum_iF_iS$ has dimension at most $D^2\dim S$ and is
+    $\Delta/(3/4)^2$-viable for that same $T$. All viability statements
+    use the canonical regional tensor coordinates and retain the full
+    environment.
+
+    Let $P,M$ be the original internal sums on $[l,r)$ and $[u,v)$.
+    Their actual attained minima $e_P,e_M$ are chosen before $p$ and the
+    child spaces. For $e_M-10\le p\le e_M$, define
+    \begin{align}
+        R    & =P-M+pI+h_{12,768}(M-pI),         &
+        \rho & =32e^{-42}+\frac1{64}<\frac1{16}.
+        \label{eq:soft_word_raw_operator}
+    \end{align}
+    Define $K_{\rm raw}$ by restricting $R$ to one fixed complementary
+    configuration. It is Hermitian and $R=K_{\rm raw}\otimes I$.
+    Its matrix is defined before the attained minimum $e_{\rm s}$ of
+    $R$, which satisfies $e_{\rm s}\le e_P\le e_{\rm s}+\rho$.
+
+    Fix any split $l\le k\le r$ and child spaces $S_1,S_2$ that are
+    $3/200$-viable for the original $G$ on their respective intervals.
+    Let $W$ be their actual tensor merge in $[l,r)$ coordinates and
+    let $V=\sum_iF_iW$. Then $\dim V\le D^2\dim W$ and $V\ne\{0\}$.
+    The actual orthogonal compression of $K_{\rm raw}$ to $V$ has a
+    constructed orthonormal eigenbasis, with eigenvalues in decreasing
+    order. Its last eigenvalue $\lambda_V$ satisfies
+    \begin{align}
+        e_{\rm s}\le\lambda_V\le e_{\rm s}+3, \\
+        e_P-3-\rho\le\lambda_V-3\le e_P.
+        \label{eq:soft_word_raw_energy}
+    \end{align}
+    The definition of the estimate $p_V=\lambda_V-3$ does not use the
+    unknown scalar $e_{\rm s}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:native_soft_parent_energy,thm:actual_adjacent_interval_merge}
+    The actual central replacement gives $C=R-e_{\rm s}I\ge0$ with
+    norm at most $A=768(1+\log12)+4\ell+14$, and energy at most
+    $2+\rho$ on $G$. The scalar estimates give $A+1\le D$,
+    $\tau\le1/[1024(D+1)]$, and
+    $\Delta/(3/4)^2\le1/[100(D+1)]$.
+
+    The child merge is $3/100$-viable for $G$. Transport through the
+    $\tau$-comparison makes it $1/4$-viable for the same $T$.
+    Apply the word bound for that same family to this actual $W$ to obtain
+    $V$. Pull $V\otimes\mathcal H_{[l,r)^c}$ back to a physical
+    subspace $U$. The positive-energy transfer gives energy at most
+    $9/4$ on $T$, and its actual projection onto $U$ gives energy
+    at most three. Since $\dim T=\dim G>0$ and the projection loss
+    is less than one, some such projected vector is nonzero.
+
+    The exact regional tensor identity carries $R$ to
+    $K_{\rm raw}\otimes I$. Adding the scalar $e_{\rm s}$ to its
+    centered energy gives a nonzero tensor trial vector of raw energy
+    at most $e_{\rm s}+3$ times its squared norm. An environmental
+    slice gives a local unit trial vector in $V$, so the actual least
+    compressed energy is at most $e_{\rm s}+3$. The positive shift
+    $K_{\rm raw}-e_{\rm s}I\ge0$ gives its lower bound. Choose the
+    actual ordered eigenbasis of that compression and apply the
+    minimum comparison to obtain (\ref{eq:soft_word_raw_energy}).
+\end{proof}
+
+The properties of the target and family above hold for the same objects
+in the calibrated hard-truncation construction. The following results apply the conditional lemma to those actual tree
+families and construct one simultaneous recursive assignment of estimates. The downward bias by three is a
+correction for the one-sided center interface; the source's printed
+energy update uses the raw compressed minimum. No literal soft-Generate,
+MPO implementation of this energy routine, or running-time conclusion
+is asserted; see \cite{gap:alvv16_soft_regional_energy_centering}.
+
+
+\begin{definition}[Certified one-sided regional updates]
+    \label{def:soft_word_energy_update}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsRegionalLowerEnergyEstimate}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsSoftWordEnergyUpdate}
+    \lean{TNLean.MPS.AreaLaw.ALVV.HasSoftWordNodeEnergyUpdate}
+    \leanok
+    A lower energy estimate of width $c$ on an original regional operator
+    $A$ is a scalar $p$ for which there exist a scalar $e$ and a unit
+    vector $x$ such that $Ax=ex$, $A-eI\ge0$ and $e-c\le p\le e$.
+    For fixed child spaces and a fixed family, a soft word energy update
+    at center $p_M$ is the scalar $\lambda-3$, where $\lambda$ is the
+    last eigenvalue in an actual complete orthonormal eigenbasis, ordered
+    by decreasing eigenvalues, of the raw native soft operator compressed
+    to the literal one-word child image.
+
+    The node update property means that attained collar minima $c_L,c_R$
+    can be selected before the child estimates, so that every pair of
+    lower child estimates of width $49/16$ haves such an update at center
+    $p_1+p_2-c_L-c_R-2$, again of width $49/16$ for the parent.
+\end{definition}
+
+\begin{lemma}[A one-sided node energy update]
+    \label{lem:soft_word_node_energy_update}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_soft_word_node_energy_update}
+    \leanok
+    Retain the physical hypotheses, parameters, specified target and its
+    own family from Lemma~\ref{lem:soft_same_word_compressed_energy}.
+    Fix a split $l\le k\le r$ and child spaces that are $3/200$-viable
+    for the original ground space. The actual collar minima $c_L,c_R$
+    can be chosen before the child estimates. If
+    \[
+        e_{[l,k)}-\frac{49}{16}\le p_1\le e_{[l,k)},\qquad
+        e_{[k,r)}-\frac{49}{16}\le p_2\le e_{[k,r)},
+    \]
+    where each regional minimum is attained, put
+    \[
+        p_M=p_1+p_2-c_L-c_R-2.
+    \]
+    Then $e_M-10\le p_M\le e_M$. Form the same raw soft operator
+    and its actual compression on the same one-word child image as
+    in~(\ref{eq:soft_word_raw_operator}). Its least compressed eigenvalue
+    $\lambda$ determines
+    \[
+        p=\lambda-3,\qquad e_P-\frac{49}{16}\le p\le e_P.
+    \]
+    An actual complete orthonormal eigenbasis of the compression, with
+    eigenvalues in decreasing order, is constructed as part of this assertion.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:soft_same_word_compressed_energy,lem:regional_central_energy_estimate,thm:actual_adjacent_interval_merge}
+    The single connecting bond gives
+    $e_{[l,k)}+e_{[k,r)}\le e_P\le
+        e_{[l,k)}+e_{[k,r)}+1$. Consequently
+    \[
+        e_P-\frac{57}{8}\le p_1+p_2\le e_P.
+    \]
+    Since $57/8\le8$, subtracting the two actual collar minima and two
+    gives the stated middle center. Apply the same-family compression
+    estimate with that center. Its bound $e_P-3-\rho\le\lambda-3\le e_P$
+    and $\rho<1/16$ imply the asserted width $49/16$.
+    Attained minima chosen in the two arguments agree by their positive
+    spectral shifts and normalized eigenvectors; no common minimizing
+    vector for the different decompositions is needed.
+\end{proof}
+
+\begin{lemma}[Energy updates for the actual interleaved tree]
+    \label{thm:physical_interleaved_tree_energy_updates}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_energy_updates}
+    \leanok
+    The calibrated interleaved interval-tree construction may retain
+    exactly its same targets, operator families, retained spaces, dimension
+    bounds and generator rank bounds, while also satisfying the following
+    assertion. For every long parent $[l,r)$, take collars $[l,l+\ell)$
+    and $[r-\ell,r)$. For every split and the actual two child spaces
+    of that tree, all one-sided child estimates of width $49/16$ have
+    the same-family node update of Lemma~\ref{lem:soft_word_node_energy_update}.
+    The constants remain uniform in the chain length, local dimension,
+    ground-space dimension and trimming accuracy. The explicit parameter
+    formulas and their dependence on these data are unchanged.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_interleaved_same_word_family,lem:soft_word_node_energy_update}
+    Choose the interleaved tree once, including its targets and word
+    families. Its actual child spaces are $3/200$-viable for the full
+    original ground space. The spectral-gap assumption identifies the
+    specified lowest spectral value with the canonical minimum. The
+    actual count satisfies $D\ge50\ell^2$, and the retained word estimate
+    at power one is exactly the hypothesis of the node lemma. Since a
+    long parent has length greater than $4\ell$, the displayed collars
+    are disjoint and satisfy the required width bounds. Apply the node
+    lemma to these same targets, families and child spaces.
+\end{proof}
+
+The node update now supplies a simultaneous recursive scalar assignment
+on that same tree, as proved below. The distinction between the calibrated
+hard-clipped family and literal soft Generate, and the absence of a
+running-time conclusion, remain.
+
+
+\begin{definition}[A realized recursive energy assignment]
+    \label{def:balanced_regional_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsSoftWordNodeEnergyRealization}
+    \lean{TNLean.MPS.AreaLaw.ALVV.IsBalancedRegionalEnergyAssignment}
+    \leanok
+    Fix the physical interactions, the operator families on long intervals,
+    and the retained-space tree. A realized node update consists of attained
+    collar minima $c_L,c_R$, a valid middle center
+    \begin{align}
+        p_M=p_1+p_2-c_L-c_R-2\in[e_M-10,e_M],
+    \end{align}
+    and the actual raw-compression update $p=\lambda_V-3$ using the
+    specified word family and actual child spaces.
+
+    A balanced regional energy assignment is one function $(l,r)\mapsto p_{l,r}$
+    with the following properties. For every valid interval,
+    \begin{align}
+        e_{[l,r)}-\frac{49}{16}\le p_{l,r}\le e_{[l,r)}.
+    \end{align}
+    If $r-l\le4\ell$, then $p_{l,r}=e_{[l,r)}$ and this minimum is
+    attained by a normalized eigenvector with positive spectral shift.
+    Otherwise, put $k=l+\lfloor(r-l)/2\rfloor$. The value $p_{l,r}$
+    realizes the node update with child values $p_{l,k},p_{k,r}$ and
+    with the actual retained spaces on those two children.
+\end{definition}
+
+\begin{lemma}[Recursive estimates on a fixed physical tree]
+    \label{lem:balanced_regional_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_balanced_regional_energy_assignment}
+    \leanok
+    Let $0\le h_i\le I$ have the designated nearest-neighbour supports,
+    with positive local dimension. Fix a balanced retained-space tree of
+    positive leaf width $4\ell$ and fixed operator families at its long
+    intervals. Suppose that the same-family node update property of
+    Definition~\ref{def:soft_word_energy_update} holds at each balanced split.
+    Then one balanced regional energy assignment exists on this fixed tree.
+    No regional minimum or scalar estimate is supplied as an input.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:soft_word_energy_update,def:balanced_regional_energy_assignment,
+        thm:regional_energy_node_relation_assignment,thm:actual_adjacent_interval_merge}
+    Recurse on the interval length. At a short leaf, choose an actual
+    attained minimum of its original regional Hamiltonian. At a long node,
+    first compute the two shorter child estimates. Their certified errors
+    permit the fixed node update, which constructs a parent value of the
+    same width $49/16$ and its literal compression certificate.
+
+    The recursion returns each value together with its error certificate.
+    Its defining equation proves that every long-node value uses precisely
+    the two values already assigned to its children. Thus the same function
+    works simultaneously on all valid intervals, including endpoints and
+    intervals of length zero.
+\end{proof}
+
+\begin{lemma}[Recursive energy estimates for the actual interleaved tree]
+    \label{lem:physical_interleaved_tree_recursive_energy}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_recursive_energy}
+    \leanok
+    The calibrated physical interleaved tree can retain its same targets,
+    operator families, retained spaces and literal merge identities while
+    carrying one balanced regional energy assignment. All the original
+    parameter formulas, dimension bounds, generator rank bounds and
+    ordered-word conclusions remain valid for those same objects.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_interleaved_tree_energy_updates,lem:balanced_regional_energy_assignment}
+    Construct the physical tree once. Its actual node updates hold for
+    every split and hence for each balanced split. Apply the preceding
+    recursion to these same families and retained spaces.
+\end{proof}
+
+This construction proves the corrected simultaneous one-sided energy
+invariant on the existing hard-clipped interval tree. It does not identify
+its family with literal soft Generate, establish the source's printed
+energy-power count, or prove a running-time bound.
+
+
+\begin{lemma}[Scalar estimates restricted to one actual root]
+    \label{lem:balanced_root_regional_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_balanced_root_regional_energy_assignment}
+    \leanok
+    Fix a valid root, the operator families and the retained-space
+    operation as in Lemma~\ref{lem:balanced_regional_energy_assignment}.
+    It suffices that the certified node update hold at each internal
+    interval in that root's actual merge list. There is then one
+    scalar function with one-sided error at most $49/16$ at the root
+    and those listed internal nodes, attained minima at their actual
+    short leaves, and the literal same-family raw update at each
+    listed internal node.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:root_energy_node_relation_assignment,def:soft_word_energy_update,def:balanced_interval_merge_list,
+        thm:actual_adjacent_interval_merge}
+    Use the same well-founded scalar recursion. Its node relation
+    requires the actual raw update when the interval belongs to the
+    root list and an original attained minimum otherwise. Thus the
+    extension outside the chosen root depends on the fixed interval
+    geometry, with no test against an unknown ground space. The shared
+    recursive construction proves the lower-energy bound and its
+    defining node relation. Restrict the conclusions to the root and
+    its listed nodes. The original minima at short leaves are unchanged.
+\end{proof}
+
+\begin{lemma}[Energy estimates on the actual jointly viable sampled root]
+    \label{lem:canonical_interval_root_energy_assignment}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_canonical_interval_root_energy_assignment}
+    \leanok
+    Retain the physical interactions and count bounds of
+    Lemma~\ref{lem:soft_same_word_compressed_energy}, and its fixed
+    calibrated targets and one-word families on each long interval.
+    The target and family bounds are fixed before the threshold and
+    all sampling choices. For a choice $\omega$, let $S_\omega$ be
+    the existing balanced tree of
+    Definition~\ref{def:canonical_interval_sampling_operation}.
+    Suppose its actual root and all listed internal intervals are
+    $3/200$-viable for the same full original ground space.
+
+    There is one scalar function $E$ with
+    \begin{align}
+        e_J-\frac{49}{16}\le E(J)\le e_J
+    \end{align}
+    at the root and each of its listed internal intervals. At an
+    actual short root or a short child of a listed interval, $E$
+    is the attained original regional minimum. At every listed long
+    node, take the actual balanced children and their already-assigned
+    scalar values. The parent value is the actual raw compressed
+    minimum on the \emph{same} family's one-word child image, minus
+    three. Its middle center is obtained from those child values and
+    the two attained collar minima, and lies in $[e_M-10,e_M]$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_merge_closure,lem:soft_word_node_energy_update,
+        lem:balanced_root_regional_energy_assignment,
+        def:canonical_interval_sampling_operation}
+    A short child is the full local space and hence viable. A long
+    child is in its parent's merge list and therefore in the original
+    root list by closure. Its actual viability is among the stated
+    joint-success conditions. Thus both children of every used long
+    node satisfy exactly the viability hypotheses of the proved
+    physical energy update. Apply that result to its fixed target and
+    own family. The preceding scalar recursion now applies to these
+    used node updates, without selecting a second family or retained
+    space.
+\end{proof}
+
+The last conclusion is restricted to the actual root subtree. It does
+not infer viability or raw energy updates at all overlapping intervals
+from a joint-success event on one root. Values on other valid intervals are
+only a mathematical minimum extension. Literal soft Generate, its
+printed energy-power count and the source running time remain separate;
+see \cite{gap:alvv16_soft_regional_energy_centering}.

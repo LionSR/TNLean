@@ -1,0 +1,158 @@
+\section{The actual corrected soft resampling tree}
+\label{sec:physical_soft_resampling_tree}
+
+The interval families below are obtained from the original Hamiltonian,
+with one choice on every possible long interval before all regional centers
+and seed sequences. Only the internal intervals of the actual balanced root
+enter the probability estimate. The same regional minima, represented soft
+matrices and spectral targets are retained for the energy argument.
+
+The construction uses the corrected soft and cluster estimates in
+\cite{gap:alvv16_soft_regional_residuals,gap:alvv16_cluster_approximation},
+the corrected complex sphere count in
+\cite{gap:alvv16_random_sampling_net_count}, and the terminal full-image
+convention in~\cite{gap:alvv16_bootstrap_constants}. It is a corrected
+auxiliary construction for~\cite[lines 749--755 and 1777--1817]{Arad2016RigorousRG}.
+It is not identified with the printed fourth-order choice or its sharp
+dependence on the gap, and no running-time estimate is asserted.
+
+\begin{lemma}[Choosing the interval families while preserving their data]
+    \label{lem:canonical_interval_resampling_selection}
+    \lean{TNLean.MPS.AreaLaw.exists_canonical_interval_resampling_tree_with_certificate}\leanok
+    Fix $q\ge1$, a positive leaf width $w$, a common threshold $\theta\ge2$,
+    a number of rounds $R$, a family parameter $D$, $0<\xi\le1$ and a
+    common count $M_*$ such that
+    \[
+        q^w\le M_*,\qquad D^2\theta\le M_*.
+    \]
+    Fix a global target $G$. Suppose that, on every valid long interval
+    $J$, there exists a family $F_J$ of $n_J\le D^2$ operators satisfying
+    an additional assertion $C_J(n_J,F_J)$. Suppose its actual physical
+    dimension is at most $2^R$, and that every fixed $0.04$-viable
+    candidate satisfies
+    \[
+        \mu_J(H_J(W)^c)\le\beta,
+    \]
+    with the same literal original-target history $H_J(W)$ implying
+    $3/200$-viability of the complete parent. Then all families may be
+    selected simultaneously, preserving every assertion $C_J$.
+
+    For their same canonical balanced tree, the exact root/list event
+    $\mathcal G_{0,L}$ of Definition~\ref{def:canonical_interval_resampling_good}
+    is measurable and
+    \[
+        \mathbb P(\mathcal G_{0,L}^c)\le(L-1)_+\beta.
+    \]
+    It is the whole seed space if $L\le w$. For every seed and every
+    valid retained interval, the space has dimension at most $M_*$
+    and at most $M_*$ spanning generators satisfying
+    \[
+        \xi^2\operatorname{SR}_j(u_i)\le M_*
+    \]
+    at every internal cut $j$. This bound concerns the recorded generators.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:actual_interval_original_target_joint_probability,
+        lem:canonical_interval_resampling_good_measurable,
+        lem:actual_interval_resampling_tree_profile}
+    Choose one of the assumed families on each interval, retaining its
+    additional data. Apply the existing joint-history estimate and the
+    unconditional recorded-rank estimate to those same families.
+    A short full root is the full local space and has an empty merge
+    list, so its joint event is the whole seed space.
+\end{proof}
+
+\begin{theorem}[A physical corrected soft resampling tree]
+    \label{thm:physical_soft_resampling_tree}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_resampling_tree}\leanok
+    Fix $q\ge2$ and $\gamma>0$, and put $g=\min\{\gamma,1\}$.
+    There are natural numbers $u\ge2$, $K,C_{\rm count}\ge1$, a positive
+    real $C_\xi$ and a natural $P_\xi$, before every chain length and
+    Hamiltonian, with the following properties. Use the numerical
+    quantities in (\ref{eq:calibrated_soft_parameters}), evaluated at $g$,
+    and denote their approximation precision by $\xi_{\rm MPO}$.
+    All residual, positivity, scale and closeness inequalities, and
+    the bounds on the contraction in
+    Lemma~\ref{lem:uniform_soft_parameters}, are retained.
+
+    Let $H=\sum_i h_i$ on $L$ sites, with nearest-neighbour supports and
+    $0\le h_i\le I$. Suppose $\mu\in\operatorname{spec}H$ and every
+    spectral value equals $\mu$ or is at least $\mu+\gamma$.
+    Put $G=\ker(H-\mu I)$, $r=\dim G$ and $Z=(L+1)(r+1)$. Set
+    \begin{align}
+        w              & =4\ell,                 & \theta & =K(r+1)(L+2)^2, & R & =qL,\notag \\
+        M_{\rm common} & =\max\{q^w,D^2\theta\}.
+        \label{eq:physical_soft_tree_schedule}
+    \end{align}
+    One may choose $0<\xi_{\rm init}\le1$ and one native family $F_J$
+    for every valid long interval $J$, before all center estimates,
+    seed sequences and final approximation accuracies, such that
+    \begin{align}
+        \xi_{\rm init}^{-2} & \le C_\xi Z^{P_\xi},  &
+        M_{\rm common}      & \le C_{\rm count}Z^2, & n_J & \le D^2.
+        \label{eq:physical_soft_tree_size}
+    \end{align}
+
+    Each selected family retains the geometry, five attained regional
+    minima, common minimizing vector, and represented-target conclusions
+    of Lemma~\ref{lem:physical_soft_interval_history}. In particular the
+    native matrices $W_{J,i}$ satisfy $F_{J,i}=W_{J,i}$ as operators.
+    For every admissible triple of center estimates, its own Hermitian
+    represented matrix $\widehat G_J$ is within $\xi_{\rm MPO}$ of the
+    same centered five-region soft matrix and has norm at most
+    $M+\xi_{\rm MPO}$. Its spectral spaces at $E+g/4$ and $E+3g/4$
+    coincide, have dimension $r$, and are mutually $3\tau/200$-close to
+    the original $G$. The relation $E+\sum_j e_j=\mu$ is retained.
+    For every $0.04$-viable initial candidate, on its same literal
+    original-target history the same terminal untrimmed image is $\Delta/(91/100)^2$-viable for every one of
+    these targets. Neither a new family nor another target approximant
+    is selected for that assertion.
+
+    Form the actual complete-parent balanced tree using these fixed
+    families, threshold, radius and finite sequences. Its exact joint
+    history event $\mathcal G_{0,L}$ is measurable and
+    \begin{align}
+        \mathbb P(\mathcal G_{0,L}^c)\le\frac1{(L+1)^2}.
+        \label{eq:physical_soft_tree_probability}
+    \end{align}
+    On this event the actual root and every listed internal interval
+    are $3/200$-viable for the original target, and every listed parent
+    has its same original-target history. No success at other overlapping
+    intervals is asserted. If $L\le w$, this event is the whole seed space.
+
+    For every seed, independently of success, every actual retained
+    interval has dimension at most $M_{\rm common}$ and a spanning family
+    of at most $M_{\rm common}$ vectors with
+    \begin{align}
+        \xi_{\rm init}^2\operatorname{SR}_j(u_i)\le M_{\rm common}
+        \label{eq:physical_soft_tree_recorded_ranks}
+    \end{align}
+    at every internal cut. The statement includes empty whole chains
+    and flat spectra and assumes neither a reference space nor an
+    initial matrix product representation.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:physical_soft_sampling_data,lem:physical_soft_interval_history,
+        lem:canonical_interval_resampling_selection}
+    Choose the uniform numerical data and the independent original-ground
+    reference once. Its common radius supplies every interval's exact
+    weighted trimming budget. Apply the physical interval-history
+    construction once at each long interval, preserving its complete
+    minimum and target data. The original gap implies the same gap with
+    $g=\min\{\gamma,1\}$. Every long interval belongs to a nonempty whole
+    chain, so the one-interval construction applies without restricting
+    the full theorem's chain length.
+
+    Apply the selection lemma to these proven physical assertions.
+    The finite interval law has failure coefficient
+    \[
+        \beta=R\frac{1/q}{(L+2)^4}.
+    \]
+    The common scalar schedule gives
+    $(L-1)_+\beta\le(L+1)^{-2}$. The same selection lemma supplies
+    measurability, the short-root identity and the unconditional recorded
+    profiles. The reference inverse-square estimate and common-count
+    estimate give (\ref{eq:physical_soft_tree_size}). All center-dependent
+    target and terminal-image conclusions are those of the same selected
+    physical families.
+\end{proof}

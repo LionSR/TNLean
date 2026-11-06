@@ -1,0 +1,199 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{The scope of the buffered low-energy filter construction}
+\author{}
+\date{November 2, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\paragraph{Source and hypotheses.}
+Arad, Landau, Vazirani and Vidick,
+\cite[Theorem~t:aisgapless, lines 1027--1041]{Arad2016RigorousRG},
+construct a common improving family between two nearby low-energy targets.
+Their Assumption (LD), lines 281--284, fixes a positive bandwidth $\eta$.
+The physical construction here retains the quantifiers
+$\forall\eta_{\rm LD}>0\ \exists C_{\eta_{\rm LD}}$ before the chain,
+its local dimension, its interactions and the narrower width.
+Thus the hidden constants may depend on this declared fixed bandwidth.
+A stronger estimate uniform in an arbitrary variable bandwidth is not
+asserted. The explicit logarithmic local-dimension dependence is retained.
+
+\paragraph{Geometry and buffers.}
+The common five-region intermediate construction uses
+$\ell\ge1$, $a+2\ell\le b$ and $b+2\ell\le L-1$, with native interval
+$J_0=[a+\ell,b+\ell+1)$.
+For a prescribed interval $J=[p,r)$ longer than $4\ell$, inward effective
+cuts give $J_0\subseteq J$ with $|J\setminus J_0|\le2\ell$.
+The exact regional polynomial decomposition absorbs this collar cost into
+the same squared count. If $r-p\le4\ell$, actual configuration matrix
+units give the required improving family directly, including the zero
+target. Thus the new prescribed-interval family covers empty intervals,
+short intervals and intervals meeting either chain endpoint, without an
+assumed partition or fit condition. Its original targets use the same raw
+Hamiltonian's canonical minimum at every scale.
+The intermediate improving-family statement retains $q\ge2$.
+The final entropy, fixed-cut approximation and global MPS consequences now
+include every positive local dimension. For $q=1$, the regional dimension
+bound gives zero entropy and every cut matrix has rank at most one; the
+original unit vector is its own exact bond-one approximation. This
+algebraic branch also covers the empty chain. It changes no physical
+construction for $q\ge2$ and is not a counterexample to the source.
+The buffered cutoffs satisfy $6w\le\eta_1\le\eta_{\rm LD}$.
+The source condition $\eta_1\ge2\mu/\log n$ gives exactly this condition
+under $w=\mu/(3\log n)$ for $n\ge2$. The lower original cutoff is then
+$\eta_1-3w=\eta_1-\mu/\log n$, as in the source.
+
+\paragraph{One degree and one count envelope.}
+The clipping threshold is $t=\ell$, where
+$\ell=\lceil C_{\eta_{\rm LD}}(1+\log m+\log(1/g))^2/g\rceil$,
+$g=\min\{w,1\}$ and $m\ge q\ge2$.
+The actual polynomial degree is $\ell^2$ and the count envelope is
+$D=(m\ell^2)^{22\ell}$.
+The same choice proves both $N\le D^2$ and $D^{12}\Delta\le10^{-5}$.
+Only this numerical count base is enlarged; the physical dimension and
+Hamiltonian are unchanged. Increasing an upper bound on $D$ after choosing
+a filter would not justify the latter inequality and is not used.
+
+\paragraph{Decreasing the comparison loss.}
+For each integer $i\ge0$, replace only the numerical count base by
+$m_i=m2^i$ and use the same fixed-bandwidth constant $C$.
+The resulting scale satisfies $\ell_i\ge\ell_0+64i$, and hence the
+physical truncation residual decreases by at least $2^{-4i}$.
+The original-to-clipped comparisons on every prescribed interval have
+loss $\nu_i=1/(200\,2^{4i})$, with
+$D_i=(m_i\ell_i^2)^{22\ell_i}$ and the same-degree inequality
+$D_i^{12}\Delta_i\le10^{-5}$. Long intervals retain the actual clipped
+polynomial and regional factors; short intervals use actual matrix units.
+The physical local dimension and interactions remain unchanged.
+Thus the fixed comparison floor of the index-zero construction is not
+being iterated as if it vanished. The actual images of one fixed constant-viable original upper-band
+space now give arbitrarily accurate original lower-band spaces.
+Their tails yield the entropy bound stated below. The sharper source
+approximation rate uses the independent scales below.
+
+\paragraph{Independent scales for sharper approximation.}
+The buffered spectral comparison now permits a real threshold $t$ independent
+of the integer window $\ell$, retaining the actual norm bound $3t+4\ell$.
+For every fixed bandwidth one can choose
+$t=C_\eta(16+\log(1/g)+\log(1/\delta))$ and an integer window bounded by
+$8/g+(7C_\eta)^{1/4}g^{-1/4}(16+\log(1/g)+\log(1/\delta))^{3/4}$.
+The same choice gives the squared-buffer residual budget and the required
+Chebyshev suppression. The actual regional polynomial family at these scales is now constructed,
+with exact degree $\ell^2$, collar-adjusted count at most
+$(m\ell^2)^{44\ell}$, comparison loss $\delta/100$ and squared suppression
+at most $\delta/8$. The same clipped matrix and tensor factors are retained.
+The canonical original minimum and all-cutoff spectral identity are proved
+before the cutoff and viable source are chosen. One constant-viable original
+outer-band space is then fixed before the accuracy. The actual polynomial
+images of this same space give normalized cut approximations. Their rank
+satisfies, with $u=1+\log q+\log(1/g)$ and
+$a=16+\log(1/g)+\log(1/\delta)$,
+\begin{align*}
+ \log\operatorname{SR}(\phi)
+ \le\log\dim G(\eta_{\rm LD})+
+ K_{\eta_{\rm LD}}\bigl(u^3/g+g^{-1/4}a^{3/4}u\bigr)(1+\log a).
+\end{align*}
+The two comparison losses are each $\delta/100$; they are transferred
+individually by the canonical identities, without assuming original-band
+invariance. At accuracy $\delta/[16(L+1)]$, the missing marginal masses
+are summable. The actual sequential projection product, followed by
+normalization, gives one MPS with simultaneous bond bound at every cut,
+overlap at least $1-\delta$ and squared distance at most $\delta/2$.
+The logarithmic bond bound has the displayed form with
+$a=16+\log(1/g)+\log(16(L+1)/\delta)$ and coefficient exactly one
+on $\log\dim G(\eta_{\rm LD})$.
+
+\paragraph{Strict overlap and a single approximation vector.}
+For local dimension at least two, apply the same proved constructions at
+half the requested accuracy. This gives overlap strictly greater than
+$1-\delta$, as printed, without a new physical hypothesis. The fixed-cut
+accuracy variable becomes $16+\log(1/g)+\log(2/\delta)$ and the global
+one becomes $16+\log(1/g)+\log(32(L+1)/\delta)$, retaining the same
+three-quarter power and the same fixed-bandwidth coefficients.
+The source's one approximation vector is now obtained by nonuniform
+sequential rank budgets. The designated cut uses fixed-cut accuracy
+$\delta/64$ and all other internal cuts use $\delta/[64(L+1)]$.
+Their actual missing marginal masses sum to at most $\delta/16$.
+One ordered product of the corresponding leading marginal projections,
+followed by normalization, retains the sharp designated-cut rank and
+all global MPS bonds simultaneously. Both rounded integer factors are
+chosen before the designated cut and vector. The two logarithmic
+accuracy variables are $16+\log(1/g)+\log(128/\delta)$ and
+$16+\log(1/g)+\log(128(L+1)/\delta)$, with the same three-quarter
+power and a fixed-bandwidth coefficient. Boundary cuts have rank at
+most one, so empty chains and endpoint cuts are included. This is a
+joint construction, rather than an identification of two separate
+existential witnesses.
+
+\paragraph{A mathematical MPS basis.}
+Let $n=\dim G(\eta_{\rm LD}-v)$ and $r=\dim G(\eta_{\rm LD})$.
+A common global factor $B$ is chosen before the actual orthonormal basis
+of the inner band, at accuracy $\epsilon=\delta/[8(n+1)]$.
+Choose its actual normalized MPS approximants $\phi_i$ and define $F$
+by sending the target basis vectors to these recorded vectors.
+Their summed squared error is at most $\delta/16<1$, so $F$ is
+injective and its actual range $V=\operatorname{span}\{\phi_i\}$
+has dimension exactly $n\le r$. The range and inner band are close in
+both directions; enlarging the projecting space gives the required
+outer-band closeness to $V$. All vectors of $V$ have native MPS bond
+at most $nrB$, hence so does its actual standard orthonormal basis.
+The zero inner band gives the zero range and empty bases with no
+separate nonzero-space premise. This is a mathematical basis-existence
+consequence of the source introduction, line 288. It makes no claim that
+the probabilistic algorithm in Theorem~t:alg2 computes these vectors,
+returns this number of states, attains its advertised energy threshold,
+or satisfies its running-time bound.
+
+\paragraph{Remaining conclusions.}
+The long-interval construction assumes no global spectral gap and supplies
+the actual polynomial and tensor factors of one global clipped matrix.
+The short-interval branch uses actual matrix units and does not assert a
+polynomial filter with an independently supplied suppression bound.
+The subsequent least-dimension argument now gives an actual
+$3/200$-viable regional space for $G(\eta_{\rm LD}-v)$, with dimension
+at most $\dim G(\eta_{\rm LD})D_0^3$. It uses the same canonical
+targets and actual count schedule, derives a finite first count comparison,
+and applies the corrected sample of size
+$\lfloor p/(2D^2)\rfloor$ inside the next optimal space. Its image has
+dimension strictly below the preceding minimum $p$; the companion
+sampling note records the correction\footnote{\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_low_density_sampling.pdf}}.
+Choosing the numerical count base $m=q\lceil e^{100}\rceil$ before
+the physical construction gives
+\begin{align*}
+ \dim W\le\dim G(\eta_{\rm LD})\exp\!\left[
+ \frac{K_{\eta_{\rm LD}}}{v}
+ \bigl(1+\log q+\log(1+1/v)\bigr)^3\right],
+\end{align*}
+where $K_{\eta_{\rm LD}}$ precedes the chain, local dimension,
+interactions, interval and deficit. For $0<v\le\eta_{\rm LD}$,
+the cap satisfies $v/2\le\min(v,\eta_{\rm LD}/2)$; larger deficits
+give the zero target. Thus the logarithmic count estimate introduces
+no additional upper bound on the requested positive deficit.
+The accurate interval families now give, for every unit vector
+$\psi\in G(\eta_{\rm LD}-v)$, the actual regional entropy bound
+\begin{align*}
+ S(\psi_J)\le\log\dim G(\eta_{\rm LD})+\frac{K_{\eta_{\rm LD}}}{v}
+ \bigl(1+\log q+\log(1+1/v)\bigr)^3.
+\end{align*}
+The coefficient on the full-band logarithmic dimension is exactly one.
+The proof fixes one viable outer-band space before all accuracy choices,
+then controls tails of one actual reduced state by its image spaces.
+No spectral gap or invariance of an original band under a clipped polynomial
+is assumed. Every positive deficit and every interval is included.
+The sharper accuracy-dependent MPS approximation now follows from the
+independent-scale families as above. An actual inner-band basis image now
+also has the exact inner dimension,
+approximates that band in both directions, and admits a standard
+orthonormal basis of MPS. A running-time bound and identification with the
+source algorithm remain separate. Closed spectral
+cutoffs and the absence of a positivity claim for the Chebyshev polynomial
+follow the companion spectral-projector and positivity notes.
+
+\bibliographystyle{plain}
+\bibliography{../../blueprint/src/references}
+\end{document}
