@@ -260,4 +260,5 @@ import TNLean.Algebra.UnitaryRepresentationAlgebra
 import TNLean.Algebra.UnitaryRepresentationBlocks
 import TNLean.Algebra.UnitaryVectorSwap
 import TNLean.Algebra.WordAlgebra
+import TNLean.Algebra.WordAlgebraNilpotent
 import TNLean.Algebra.ZModSmallDifference

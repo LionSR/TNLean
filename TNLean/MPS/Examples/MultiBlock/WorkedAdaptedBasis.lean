@@ -586,7 +586,8 @@ theorem isAdaptedFactorization_redG_redGt :
       (toC atInt).submatrix tauGt tauGt
     let PX : Matrix (BlockSpace dims labels 1) (BlockSpace dims labels 1) ℂ :=
       (toC pxInt).submatrix tauGt tauG
-    IsAdaptedFactorization redG redGt isNormal_blocks dims_pos isNormal_blocks' dims_pos
+    IsAdaptedFactorization redG redGt isIrreducibleAction_blocks exists_ne_zero_blocks
+      isIrreducibleAction_blocks' exists_ne_zero_blocks'
       (Equiv.refl (BlockIndex labels 1)) complement gammaGauge 𝔄 𝔄' intertwiner ∧
     (∑ b, Matrix.blockEmbed (slotSize dims) b * intertwiner b *
       Matrix.blockProj (slotSize dims) b) = PX ∧
