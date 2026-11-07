@@ -1,0 +1,215 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Buffers in the ALVV Low-Energy Improving-Family Construction}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source regime}
+
+Theorem~4.8 of Arad, Landau, Vazirani and Vidick~\cite{Arad2016RigorousRG},
+\href{https://arxiv.org/abs/1602.08828v2}{arXiv:1602.08828v2}, has source
+label \texttt{t:aisgapless}. In \path{local_alg_arxiv_v2.tex}, line~1027,
+its bandwidths satisfy
+\begin{align}
+    \eta_{\mathrm{LD}}\ge\eta_1\ge\frac{2\mu}{\log n},\qquad \mu>0.
+    \label{eq:ld_source_bandwidth}
+\end{align}
+The proof at lines~1037--1040 uses the buffer
+\begin{align}
+    w=\frac{\mu}{3\log n}.
+    \label{eq:ld_source_buffer}
+\end{align}
+For an integer $n\ge2$, one has $\log n>0$, hence $w>0$ and
+$\eta_1\ge6w>3w$. The source's two clipped cutoffs differ by $w$, while
+the lower original cutoff is smaller than the upper original cutoff by $3w$.
+In the bounded statement below, $\eta$ denotes this source cutoff $\eta_1$,
+rather than the density bandwidth $\eta_{\mathrm{LD}}$.
+These inequalities concern $n\ge2$. They do not supply an argument for
+$n=0$ or $n=1$, where the positive-log substitution is unavailable.
+
+\section{The bounded five-region conclusion}
+
+The physical construction considered here has local dimension $q\ge2$,
+window parameter $\ell\ge1$, and integer positions satisfying
+\begin{align}
+    a+2\ell\le b,\qquad b+2\ell\le L-1.
+    \label{eq:ld_five_region_geometry}
+\end{align}
+In particular, $L\ge4\ell+1\ge5$; small chains are not covered by this
+geometry. Let the supported nearest-neighbour terms satisfy $0\le h_i\le I$.
+Their actual regional minima $e_j$ define the centered original Hamiltonian
+$H_0=H-(\sum_j e_j)I$, whose ground energy $E_0$ lies in $[0,4]$.
+Clip the three bulks, retain the two windows, and denote the resulting
+centered Hamiltonian by $\widetilde H$.
+
+For $\varepsilon>0$, $w>0$ and $3w<\eta$, put
+\begin{align}
+    C_*&=288e^{11/8},\notag\\
+    t&=21+\eta+8\log\!\left(
+       \frac{C_*}{\min\{1,\varepsilon w^2/[2(6+\eta)]\}}\right),\notag\\
+    R&=3t+4\ell.
+    \label{eq:ld_common_threshold}
+\end{align}
+The bounded conclusion uses this one actual truncation for all
+spectral comparisons and for the polynomial decomposition. Its targets are
+\begin{align}
+    T_-&=\mathbf1_{(-\infty,E_0+\eta-2w]}(\widetilde H)\mathcal H,\notag\\
+    T_+&=\mathbf1_{(-\infty,E_0+\eta-w]}(\widetilde H)\mathcal H.
+    \label{eq:ld_nested_targets}
+\end{align}
+They satisfy $T_-\subseteq T_+$, and the one-sided comparisons are
+\begin{align}
+    \mathbf1_{(-\infty,E_0+\eta]}(H_0)\mathcal H
+      &\text{ is }\varepsilon\text{-close to }T_+,\notag\\
+    T_-&\text{ is }\varepsilon\text{-close to }
+      \mathbf1_{(-\infty,E_0+\eta-3w]}(H_0)\mathcal H.
+    \label{eq:ld_physical_sandwich}
+\end{align}
+The reference energy is the original centered ground energy $E_0$.
+No equality with the clipped ground energy, equality of the two target
+spaces, or spectral gap between their cutoffs is asserted.
+
+The strict inequality $3w<\eta$ makes the lower original bandwidth positive.
+The existing finite spectral-window comparison uses lower floor zero and
+requires its source cutoff to exceed that floor. At $\eta=3w$ and $E_0=0$
+this condition fails. A negative lower floor with an adjusted window-count
+constant could address that endpoint, but the bounded statement does not
+claim it. The source regime (\ref{eq:ld_source_bandwidth}) for $n\ge2$
+already lies strictly inside the stated buffer range.
+
+The common polynomial family on $J=[a+\ell,b+\ell+1)$ has at most $D^2$
+operators, where $D=(q\ell^2)^{20\ell}$. Applying the actual degree-$\ell^2$
+Chebyshev polynomial gives the squared shrinking coefficient
+\begin{align}
+    \Delta=\left(2\exp\!\left[-2\ell^2
+      \sqrt{\frac{w}{R-(E_0+\eta-2w)}}\right]\right)^2.
+    \label{eq:ld_explicit_filter_error}
+\end{align}
+The finite decomposition concerns that same polynomial of
+$\widetilde H$. It transfers viability from $T_+$ to $T_-$ with error
+$\Delta/(1-\delta)^2$. The unsquared polynomial need not be positive;
+the relevant closed-cutoff and sign corrections are documented in the
+companion spectral-projector and Chebyshev-positivity notes.
+
+\section{Returning to the original spectral windows}
+
+The same constructed family can be applied to a subspace viable for the
+original upper window, with both comparison losses retained. If
+$\delta\ge0$ and $2(\delta+\varepsilon)<1$, the first comparison gives
+viability $2(\delta+\varepsilon)$ for $T_+$. After the filter, the error
+for $T_-$ is $\Delta/[1-2(\delta+\varepsilon)]^2$. Transferring once more
+to the original lower window gives
+\begin{align}
+    \delta_{\mathrm{out}}=
+      2\left(\frac{\Delta}{[1-2(\delta+\varepsilon)]^2}
+        +\varepsilon\right).
+    \label{eq:ld_original_window_error}
+\end{align}
+Both transfers use ALVV's closeness-composition lemma
+(\texttt{l:close}, source lines 484--489).
+The family, actual polynomial and exterior tensor factors are the same
+ones chosen before the viable subspace. No additional closeness or
+factorization hypothesis is introduced. This corollary does not remove
+the geometric or buffer restrictions and does not identify
+(\ref{eq:ld_original_window_error}) with the clipped-target error.
+
+\section{The interior parameter substitution}
+
+Fix $\eta_{\mathrm{LD}}>0$ and set $\varepsilon=1/200$. Define
+\begin{align}
+    g&=\min\{w,1\},& u&=1+\log q+\log(1/g),\notag\\
+    T&=21+\eta_{\mathrm{LD}}+
+      8\log\bigl(400C_*(6+\eta_{\mathrm{LD}})\bigr).
+    \label{eq:ld_parameter_cap}
+\end{align}
+For $\eta_1\le\eta_{\mathrm{LD}}$, the actual threshold obeys
+$t\le T+16\log(1/g)$. Indeed,
+$g^2/[400(6+\eta_{\mathrm{LD}})]$ is a positive lower bound for both
+members of the minimum in its denominator.
+
+One constant $A\ge21$, depending only on the fixed density bandwidth,
+can be chosen before the chain, local dimension, $\mu$, target bandwidth
+and Hamiltonian. Set $\ell=\lceil Au^2/g\rceil$ and
+$D=(q\ell^2)^{20\ell}$. Then
+\begin{align}
+    \log D&\le
+      \frac{22(A+1)[6+2\log(A+1)]}{g}\,u^3,\notag\\
+    D^{12}\Delta&<10^{-5}.
+    \label{eq:ld_interior_tradeoff}
+\end{align}
+The proof uses $\ell\ge\log(1/g)$ to bound the physical norm denominator
+by $(3T+52)\ell$. The existing scalar filter estimate allows the larger
+count $(q\ell^2)^{22\ell}$ and the smaller width $4g/5$. The actual
+width is at least $g$, and the strictly smaller actual count gives the
+strict inequality in (\ref{eq:ld_interior_tradeoff}).
+
+With $w=\mu/(3\log L)$, the source inequality gives $\eta_1\ge6w$ for
+$L\ge2$. Thus this choice produces the actual family in every eligible
+interior geometry. The exact logarithmic estimate retains the cap in
+(\ref{eq:ld_parameter_cap}); it is not replaced by an uncapped expression
+at finite lengths. For fixed $\mu$, the cap disappears when
+$\log L\ge\mu/3$.
+
+The bound (\ref{eq:ld_interior_tradeoff}) concerns the clipped-filter
+parameter. For the original windows, the error remains
+(\ref{eq:ld_original_window_error}) with $\varepsilon=1/200$.
+Its additive term is already $1/100$, before the positive filter
+contribution. No final original-window error of $1/100$ is asserted.
+Such a target requires a smaller comparison error.
+
+\section{Prescribed intervals and the explicit source scale}
+
+For $L\ge2$ and $q\ge2$, the construction now applies to every prescribed
+interval, including empty intervals and either chain endpoint. If
+$|J|>4\ell$, inward effective cuts give a core $J_0\subseteq J$ with
+$|J\setminus J_0|\le2\ell$. The actual polynomial is decomposed on $J$,
+using the existing regional transport and collar count. The joint count is
+$D=(q\ell^2)^{22\ell}$. Its strict tradeoff comes from
+$w\ge g>4g/5$, so the physical contraction is strictly smaller than the
+comparison contraction even at the full joint count.
+
+For $|J|\le4\ell$, the existing configuration matrix units give the
+family. They span the full regional space from every nonzero viable
+subspace. Choosing $\Delta=1/(200000D^{12})$ gives a strict tradeoff;
+zero targets are handled directly. In this case the two target spaces can
+be the original spectral spaces, so their comparison losses are zero.
+No separate short-region matrix-unit construction is introduced.
+
+The cap is absorbed explicitly. Put $M=\max\{1,\eta_{\mathrm{LD}}/6\}$.
+Since $w\le\eta_{\mathrm{LD}}/6$, one has
+\begin{align*}
+    1/g&\le M/w,& \log(1/g)&=\max\{\log(1/w),0\}.
+\end{align*}
+For $K=22(A+1)[6+2\log(A+1)]$, the actual joint count therefore obeys
+\begin{align}
+    \log D\le 3KM\frac{\log L}{\mu}
+      \left[1+\log q+
+        \max\left\{\log\left(\frac{3\log L}{\mu}\right),0\right\}\right]^3.
+    \label{eq:ld_all_interval_source_count}
+\end{align}
+This is a finite source-scale estimate. It does not assert the false
+identity $g=w$ when $w>1$. The same family also gives the original-window
+error in (\ref{eq:ld_original_window_error}) with $\varepsilon=1/200$;
+that error is distinct from the improving-family parameter $\Delta$.
+
+\section{Remaining qualifications}
+
+The finite theorem uses the positive-log convention $L\ge2$ and
+nontrivial qudit dimension $q\ge2$, at fixed positive density bandwidth.
+Its displayed count is retained explicitly rather than replaced by an
+unspecified soft asymptotic expression. The full source programme also
+requires the low-density bootstrap and sampled merge-tree induction.
+Efficient central tensor representations and running-time claims are
+separate. The false soft-cluster estimate is not used.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

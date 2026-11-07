@@ -1,0 +1,79 @@
+\section{An improving family between buffered physical low-energy spaces}
+
+\begin{lemma}[A common polynomial family at two cutoffs]
+    \label{lem:chebyshev_nested_polynomial_family}
+    \lean{TNLean.MPS.AreaLaw.exists_chebyshev_nested_viability_of_polynomial_family}
+    \leanok
+    Let $B$ be Hermitian with $\|B\|\le R$, let $u<v\le R$, and fix a
+    unitary identification with $\mathcal H_J\otimes\mathcal H_{J^c}$.
+    Suppose fixed operators $W_1,\ldots,W_N$ on $\mathcal H_J$ span the
+    first factors of every polynomial in $B$ of degree at most $k$.
+    There is a real polynomial $p$ of degree exactly $k$, with $p(u)=1$,
+    and operators $M_j$ such that
+    \begin{align*}
+        p(B)   & =\sum_{j=1}^N W_j\otimes M_j,                                &
+        \Delta & =\left(2\exp\left[-2k\sqrt{\frac{v-u}{R-u}}\right]\right)^2.
+    \end{align*}
+    These choices precede every subspace $S$ and every $\delta<1$.
+    If $S$ is $\delta$-viable for the spectral space below $v$, then
+    $\sum_j W_jS$ is $\Delta/(1-\delta)^2$-viable for the spectral space
+    below $u$, and has dimension at most $N\dim S$.
+    The cutoffs are closed. No spectral gap between them is assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    Construct the rescaled Chebyshev polynomial from the actual Hermitian
+    operator. Its absolute value is at least one below $u$ and at most
+    $\sqrt\Delta$ above $v$. The common family supplies the tensor factors
+    of this same polynomial. The nested-target viability estimate of
+    \cite[``Viability reduction between spectral cutoffs'']{QICLean2026Blueprint}
+    gives the conclusion.
+\end{proof}
+
+\begin{lemma}[A physical buffered low-energy improving family]
+    \label{lem:physical_low_energy_filter_family}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_physical_low_energy_filter_family}
+    \leanok
+    Let $0\le h_i\le\Id$ be supported nearest-neighbour terms, with
+    $q\ge2$, $\ell\ge1$, $a+2\ell\le b$, and $b+2\ell\le L-1$.
+    Let $\varepsilon,w>0$ and $3w<\eta$. Use the threshold
+    (\ref{eq:physical_low_energy_threshold}) with $\delta=\varepsilon$.
+    There are attained regional minima and an original centered ground
+    energy $E_0\in[0,4]$. For the resulting three-bulk clipped Hamiltonian
+    $\widetilde H$, put
+    \begin{align*}
+        T_- & =\mathbf1_{(-\infty,E_0+\eta-2w]}(\widetilde H)\mathcal H, &
+        T_+ & =\mathbf1_{(-\infty,E_0+\eta-w]}(\widetilde H)\mathcal H.
+    \end{align*}
+    Then $T_-\subseteq T_+$, the original spectral space below $E_0+\eta$
+    is $\varepsilon$-close to $T_+$, and $T_-$ is $\varepsilon$-close to
+    the original spectral space below $E_0+\eta-3w$.
+
+    On $J=\{a+\ell,\ldots,b+\ell\}$ there is one family of $N\le D^2$
+    operators, where $D=(q\ell^2)^{20\ell}$, containing the first factors
+    of an actual degree-$\ell^2$ Chebyshev filter of $\widetilde H$.
+    It improves every $\delta$-viable subspace for $T_+$ to a
+    $\Delta/(1-\delta)^2$-viable subspace for $T_-$, where
+    \begin{align*}
+        \Delta=\left(2\exp\left[-2\ell^2
+            \sqrt{\frac{w}{3t+4\ell-(E_0+\eta-2w)}}\right]\right)^2.
+    \end{align*}
+    The family, polynomial, and tensor factors are chosen before $S$ and
+    $\delta$. This interior, buffered statement supports
+    \cite[Theorem~4.8]{Arad2016RigorousRG}; the source parameter substitution and arbitrary intervals are treated
+    in Theorem~\ref{thm:physical_low_energy_interval_family}. The low-density
+    induction remains separate. See \cite{gap:alvv16_low_energy_family_buffers}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:five_region_physical_truncation_residual,
+        thm:actual_clipped_polynomial_family,
+        lem:chebyshev_nested_polynomial_family}
+    The residual estimate at bandwidth $\eta$ controls both smaller
+    bandwidths $\eta-w$ and $\eta-3w$ for the same threshold.
+    Apply the finite spectral-window comparison in opposite orders at
+    those bandwidths. The actual regional polynomial family with
+    $k=\ell^2$ has the claimed cardinality. Apply Lemma~\ref{lem:chebyshev_nested_polynomial_family}
+    to this family and the same clipped Hamiltonian, whose norm is at
+    most $3t+4\ell$.
+\end{proof}
