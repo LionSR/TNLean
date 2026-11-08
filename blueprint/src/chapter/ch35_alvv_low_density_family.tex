@@ -1,6 +1,6 @@
 \section{Buffered filters at a fixed low-energy bandwidth}
 
-Theorem~\ref{thm:interval_low_energy_family} constructs one improving family
+Lemma~\ref{thm:interval_low_energy_family} constructs one improving family
 on every prescribed interval. Lemma~\ref{lem:dyadic_interval_low_energy_family}
 makes the original-to-clipped comparison loss geometrically small while
 retaining one count and suppression bound.
@@ -95,7 +95,7 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     Set $\nu=1/200$.
 \end{proof}
 
-\begin{theorem}[One physical family with a common count and suppression bound]
+\begin{lemma}[One physical family with a common count and suppression bound]
     \label{thm:fixed_bandwidth_low_energy_family}
     \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_low_energy_family}
     \leanok
@@ -137,7 +137,7 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     construction supporting \cite[Theorem~t:aisgapless]{Arad2016RigorousRG};
     its geometry and fixed-bandwidth quantifiers are recorded
     in~\cite{gap:alvv16_low_energy_family_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:regional_low_energy_family}
     Apply Lemma~\ref{lem:regional_low_energy_family} with $J=J_0$,
@@ -157,11 +157,11 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
 \end{proof}
 
 
-\begin{corollary}[One canonical original target for every scale]
+\begin{lemma}[One canonical original target for every scale]
     \label{cor:canonical_low_energy_family}
     \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_five_region_canonical_low_energy_family}
     \leanok
-    In Theorem~\ref{thm:fixed_bandwidth_low_energy_family}, write
+    In Lemma~\ref{thm:fixed_bandwidth_low_energy_family}, write
     $\lambda_0=\min\sigma(H)$ for the actual minimum of the original
     Hamiltonian. The same chosen family, actual polynomial and tensor
     factors satisfy all the stated conclusions with
@@ -172,7 +172,7 @@ $F(c)=\mathbf1_{(-\infty,E_0+c]}(B)\mathcal H$.
     Thus the original target spaces are independent of the regional
     shifts and clipping scale. The fixed-bandwidth and interior-window
     conditions are unchanged.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:fixed_bandwidth_low_energy_family}
     The construction supplies a normalized $z$ with $H_0z=E_0z$ and
@@ -194,7 +194,7 @@ This identification depends only on $J$, not on the selected window scale.
 Write $\lambda_0=\min\sigma(H)$ and
 $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
 
-\begin{theorem}[An improving family on every prescribed interval]
+\begin{lemma}[An improving family on every prescribed interval]
     \label{thm:interval_low_energy_family}
     \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_family}
     \leanok
@@ -220,7 +220,7 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
     Short intervals, empty intervals and intervals meeting the chain
     endpoints are included. The local dimension is restricted to
     $q\ge2$, as recorded in~\cite{gap:alvv16_low_energy_family_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:dyadic_interval_low_energy_family}
     Set $i=0$ in Lemma~\ref{lem:dyadic_interval_low_energy_family}.
@@ -297,7 +297,7 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
     $|J_0\setminus J|+|J\setminus J_0|\le2\ell$, the construction has
     a common family on $J$ with $N\le D^2$ and all the polynomial,
     spectral comparison and viability conclusions of
-    Theorem~\ref{thm:fixed_bandwidth_low_energy_family}, with the same
+    Lemma~\ref{thm:fixed_bandwidth_low_energy_family}, with the same
     actual global clipped matrix. The family precedes the cutoff and
     the viable subspace.
 \end{lemma}
@@ -311,7 +311,7 @@ $G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
     \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_long_interval_low_energy_family}
     \leanok
     The constant and all the improving-family bounds of
-    Theorem~\ref{thm:interval_low_energy_family} can be obtained whenever
+    Lemma~\ref{thm:interval_low_energy_family} can be obtained whenever
     $r-p>4\ell$, including intervals that meet a chain endpoint.
     The original targets are the canonical $G(\eta)$ and $G(\eta-3w)$
     of the same raw Hamiltonian. The family is extended by zero to exactly

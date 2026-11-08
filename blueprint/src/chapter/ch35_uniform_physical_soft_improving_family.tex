@@ -1,7 +1,7 @@
 \section{One physical soft improving family before all energy estimates}
 \label{sec:uniform_physical_soft_improving_family}
 
-Theorem~\ref{thm:uniform_physical_soft_improving_family} combines the
+Lemma~\ref{thm:uniform_physical_soft_improving_family} combines the
 uniform regional comparison with fixed middle tensors and a common
 polynomial family. It constructs an improving operator for the very
 same represented soft Hamiltonian, uniformly over the three estimated
@@ -11,7 +11,7 @@ This is a corrected auxiliary to
 qualifications remain those of
 \cite{gap:alvv16_soft_regional_residuals,gap:alvv16_cluster_approximation}.
 
-\begin{theorem}[A common physical family for all lower regional estimates]
+\begin{lemma}[A common physical family for all lower regional estimates]
     \label{thm:uniform_physical_soft_improving_family}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_uniform_physical_soft_improving_family}
     \leanok
@@ -111,7 +111,7 @@ qualifications remain those of
     \end{align}
     has dimension at most $D^r\dim S$ and is
     $\Delta^r/(1-\delta)^2$-viable for $T_p^c$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:alvv_five_soft_uniform_clusters,lem:uniform_native_soft_middle,
       thm:common_closing_polynomial_family}
@@ -152,7 +152,7 @@ are separate conclusions.
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_uniform_physical_soft_filter_family}
     \leanok
     Under the hypotheses and notation of
-    Theorem~\ref{thm:uniform_physical_soft_improving_family}, one may
+    Lemma~\ref{thm:uniform_physical_soft_improving_family}, one may
     retain just the five attained regional minima, their common unit
     minimizing vector, $E\in[0,4]$, and one core family $W$ with count
     at most $D$ and the same member bond bound.

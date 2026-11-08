@@ -62,7 +62,7 @@ dependence on the gap, and no running-time estimate is asserted.
     list, so its joint event is the whole seed space.
 \end{proof}
 
-\begin{theorem}[A physical corrected soft resampling tree]
+\begin{lemma}[A physical corrected soft resampling tree]
     \label{thm:physical_soft_resampling_tree}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_resampling_tree}\leanok
     Fix $q\ge2$ and $\gamma>0$, and put $g=\min\{\gamma,1\}$.
@@ -130,7 +130,7 @@ dependence on the gap, and no running-time estimate is asserted.
     at every internal cut. The statement includes empty whole chains
     and flat spectra and assumes neither a reference space nor an
     initial matrix product representation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:physical_soft_sampling_data,lem:physical_soft_interval_history,
         lem:canonical_interval_resampling_selection}

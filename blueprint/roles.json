@@ -694,9 +694,7 @@
         "thm:chain_boundary_net_polynomial",
         "thm:alvv_collective_trim"
       ],
-      "corollaries": [
-        "cor:physical_interleaved_ritz_polynomial"
-      ],
+      "corollaries": [],
       "notes": {
         "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
         "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
@@ -735,6 +733,7 @@
         "thm:alvv_ff_corrected_rank",
         "thm:physical_soft_windows_and_mpo"
       ],
+      "corollaries": [],
       "notes": {
         "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
         "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
@@ -1490,6 +1489,7 @@
         "thm:aklv_frustration_free_mps",
         "thm:physical_dg_interval_entropy_bound"
       ],
+      "corollaries": [],
       "notes": {
         "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",

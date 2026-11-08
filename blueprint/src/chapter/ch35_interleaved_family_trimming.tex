@@ -500,7 +500,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
 \end{proof}
 
 
-\begin{corollary}[Uniform polynomial bond for the same interleaved Ritz space]
+\begin{lemma}[Uniform polynomial bond for the same interleaved Ritz space]
     \label{cor:physical_interleaved_ritz_polynomial}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation,
         TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree,
@@ -542,7 +542,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     This is a coarse uniform polynomial bound, with no claim about the
     printed sharp dependence on $q,\gamma$, adaptive joint probability,
     energy estimation or running time.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:physical_interleaved_tree_ritz}
     Put $w=1+\log r+2\log(L+1)$ and
@@ -800,7 +800,7 @@ running-time bound.
     measurability of the true failure event.
 \end{proof}
 
-This is a uniform one-parent result. Theorem~\ref{thm:physical_canonical_tree_joint_probability}
+This is a uniform one-parent result. Lemma~\ref{thm:physical_canonical_tree_joint_probability}
 combines the actual balanced tree's conditionally fresh coordinates into
 the joint probability estimate. No running-time assertion follows here.
 
@@ -871,7 +871,7 @@ the joint probability estimate. No running-time assertion follows here.
 \end{proof}
 
 Only the recorded size bounds are asserted on all intervals here.
-Theorem~\ref{thm:physical_canonical_tree_joint_probability} proves
+Lemma~\ref{thm:physical_canonical_tree_joint_probability} proves
 simultaneous viability and the joint probability estimate for one actual
 sampled root hierarchy.
 
@@ -901,7 +901,7 @@ sampled root hierarchy.
     root event with those for the finite list of its internal intervals.
 \end{proof}
 
-\begin{theorem}[Joint success of the actual physical sampled hierarchy]
+\begin{lemma}[Joint success of the actual physical sampled hierarchy]
     \label{thm:physical_canonical_tree_joint_probability}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_tree_joint_probability}
     \leanok
@@ -926,7 +926,7 @@ sampled root hierarchy.
     qualifications remain explicit; see
     \cite{gap:alvv16_approximation_parameters}. No running-time or
     soft-Hamiltonian energy assertion is made by this theorem.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:physical_canonical_interval_sampling_data,
         lem:borel_canonical_interval_sampling_tree_good,
@@ -944,7 +944,7 @@ sampled root hierarchy.
 
 \section{Probabilistic Ritz output from the same canonical root}
 
-\begin{theorem}[The same successful root yields a polynomial MPS Ritz space]
+\begin{lemma}[The same successful root yields a polynomial MPS Ritz space]
     \label{thm:physical_canonical_ritz_polynomial}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_ritz_polynomial_approximation}
     \leanok
@@ -958,7 +958,7 @@ sampled root hierarchy.
     are $C>0$ and $k\in\mathbb N$, chosen before the length, interaction,
     multiplicity, accuracy and seeds, with the following property.
     Choose the physical targets, references and families once as in
-    Theorem~\ref{thm:physical_canonical_tree_joint_probability}, retaining
+    Lemma~\ref{thm:physical_canonical_tree_joint_probability}, retaining
     all their ordered-word certificates. These choices precede the
     requested accuracy $\eta>0$.
 
@@ -997,7 +997,7 @@ sampled root hierarchy.
     corrected integer counts remain as in
     \cite{gap:alvv16_approximation_parameters,gap:alvv16_final_filter_gain}.
     No measurability of a chosen Ritz basis or running time is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_canonical_tree_joint_probability,
         lem:physical_dg_automatic_refinement,lem:full_interval_trim_native_mps,
@@ -1054,12 +1054,12 @@ sampled root hierarchy.
     to these same targets, families and successful seed.
 \end{proof}
 
-\begin{corollary}[Energy and Ritz output from one successful tree]
+\begin{lemma}[Energy and Ritz output from one successful tree]
     \label{cor:canonical_ritz_energy}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy}
     \leanok
     Under the hypotheses and with the same choices as
-    Theorem~\ref{thm:physical_canonical_ritz_polynomial}, every seed
+    Lemma~\ref{thm:physical_canonical_ritz_polynomial}, every seed
     $U\in\mathcal G_\eta$ admits one function $E_U(l,r)$ on interval
     endpoints. It satisfies
     $e_{[l,r)}-49/16\le E_U(l,r)\le e_{[l,r)}$ at the root and
@@ -1078,13 +1078,13 @@ sampled root hierarchy.
     The function $E_U$ belongs to the original canonical tree and is
     chosen once for that seed. The same original root, literal final
     refinement, Ritz space, two-sided errors, and polynomial all-span
-    bound of Theorem~\ref{thm:physical_canonical_ritz_polynomial} are
+    bound of Lemma~\ref{thm:physical_canonical_ritz_polynomial} are
     retained. No second physical family or sampled tree is selected.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_canonical_ritz_polynomial,lem:calibrated_root_energy}
     Select the data of
-    Theorem~\ref{thm:physical_canonical_ritz_polynomial} once.
+    Lemma~\ref{thm:physical_canonical_ritz_polynomial} once.
     Its spectral assumptions and retained word certificates satisfy
     Lemma~\ref{lem:calibrated_root_energy}. For each successful seed,
     that lemma gives one energy function on the same root subtree.

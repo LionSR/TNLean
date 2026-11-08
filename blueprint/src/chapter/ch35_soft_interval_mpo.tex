@@ -126,7 +126,7 @@ bound or the unrestricted soft-truncation lemma of
     bound. No approximate heat operator is raised to the power $m$.
 \end{proof}
 
-\begin{theorem}[A complete soft Hamiltonian at prescribed norm accuracy]
+\begin{lemma}[A complete soft Hamiltonian at prescribed norm accuracy]
     \label{thm:soft_hamiltonian_mpo_accuracy}
     \lean{TNLean.MPS.AreaLaw.softHeat_base_bounds,
         TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_accuracy,
@@ -162,7 +162,7 @@ bound or the unrestricted soft-truncation lemma of
         \|\widetilde H-T\|&\leq\xi.
         \label{eq:soft_interval_full_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
         lem:trace_chain_linear_combination}

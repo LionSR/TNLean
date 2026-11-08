@@ -205,7 +205,7 @@ interactions is imposed.
     $|\mathcal I_r|\leq N^2$.
 \end{proof}
 
-\begin{theorem}[Normalized interaction-label tail on a path]
+\begin{lemma}[Normalized interaction-label tail on a path]
     \label{thm:normalized_cluster_label_tail}
     \lean{TNLean.Lattice.ClusterExpansion.norm_exp_sub_truncatedExp_pathGraph_le}
     \leanok
@@ -225,7 +225,7 @@ interactions is imposed.
     \end{align}
     The number $\lambda$ is any lower energy. No commutation of the terms
     is required for this estimate.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mandatory_cluster_part_norm, thm:cluster_label_window_geometry,
         thm:cluster_window_inclusion_exclusion, thm:cluster_label_window_weights}
@@ -432,7 +432,7 @@ These identities use the corrected interaction-label cutoff. A retained
 component of $s$ labels is designated on $s+1$ physical sites; the cutoff
 is not the source's selector based on the minimal physical support of a
 word product. The normalization and error estimate of
-Theorem~\ref{thm:normalized_cluster_label_tail} are unchanged. The
+Lemma~\ref{thm:normalized_cluster_label_tail} are unchanged. The
 Schmidt-rank count and a matrix product operator representation are
 established next.
 
@@ -545,7 +545,7 @@ established next.
     into the first tensor. This constructs the stated tensors.
 \end{proof}
 
-\begin{theorem}[Actual matrix product operator for the corrected truncation]
+\begin{lemma}[Actual matrix product operator for the corrected truncation]
     \label{thm:physical_cluster_label_mpo}
     \lean{TNLean.MPS.AreaLaw.exists_mpo_cluster_truncation,
         TNLean.MPS.AreaLaw.exists_mpo_cluster_approximation}
@@ -564,7 +564,7 @@ established next.
         e^{\beta\lambda}\|e^{-\beta H}-M_r\|
         \leq e^{N^2b^r}-1.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_cluster_all_cut_rank,
         thm:operator_chain_from_all_cut_ranks, thm:normalized_cluster_label_tail}

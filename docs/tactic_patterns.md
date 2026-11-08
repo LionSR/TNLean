@@ -1,17 +1,5 @@
 # Tactic Pattern Ledger
 
-### Regional lift and inclusion of sites — promoted (2026-11-03)
-
-- **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
-  and the native middle approximation in `MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean`.
-- **Pattern:** Compare the entries of a regional local lift with placement
-  along the inclusion of the same sites, then identify the exterior matching
-  condition with agreement away from the inclusion.
-- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/EntropySupport.lean`.
-- **Decision:** The existing coordinate identity is stated once and reused;
-  the support characterization and selected singleton calculation retain their
-  mathematical statements.
-
 ### Matrix positivity on the Euclidean operator space — promoted (2026-10-29)
 
 - **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
@@ -81,51 +69,6 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Promoted
-
-### Full short-interval size bounds — promoted (2026-11-03)
-
-- **Pattern:** Bound the full interval dimension by `q ^ width`, then use
-  its orthonormal basis to obtain the recorded weighted-rank bound. The
-  physical leaf count also compares `q ^ (4 * ell)` with `D ^ 6 * s ^ 3`.
-- **Helpers:** `interval_top_dimension_and_rank_bounds` in
-  `MPS/AreaLaw/IntervalFullSpaceProfile.lean` and the Mathlib-only
-  `Nat.viable_tree_leaf_count_le` in QICLean's `Analysis/ViableNodeLeafCount.lean`.
-- **Refactored occurrences:** `IntervalSamplingTree.lean`,
-  `PhysicalDGIntervalTree.lean` and `PhysicalDGInterleavedTree.lean` use the
-  corresponding helper without changing public signatures. The actual
-  canonical sampled-tree invariant and its physical data construction
-  reuse these same lemmas.
-- **Decision:** Physical-coordinate dimension and recorded-rank reasoning
-  stays in TNLean; pure natural-number arithmetic belongs to QICLean.
-  Neither helper assumes viability, and no new tactic is needed.
-
-
-### Retaining the same calibrated physical parameters — existing construction (2026-11-03)
-
-- **Seen:** `PhysicalDGInterleavedFamily.lean`, `PhysicalDGInterleavedIteration.lean`,
-  `PhysicalDGInterleavedNode.lean` and `PhysicalDGInterleavedTree.lean`.
-- **Pattern:** Unpack the shared scalar and reference data, retain their bounds,
-  and introduce the local names for the reference estimate. The scanner matches
-  the type exposure and tuple introduction in the earlier three consumers.
-- **Reuse:** `exists_physical_dg_interleaved_filter_family` constructs the analytic
-  parameters once. The iteration, sampled node and tree retain those same data;
-  none repeats the tail, suppression or reference proof.
-- **Decision:** This is forwarding through different mathematical conclusions,
-  not repeated analytic reasoning. No tactic is introduced. The tree omits
-  unnecessary type-exposure steps for the count and sampling size. The stronger
-  constructions also retain the ordered-word bounds of their same family;
-  the former public conclusions are projections of those shared proofs.
-
-### Lower bound for the interleaved logarithmic scale — promoted (2026-11-03)
-
-- **Pattern:** Derive `1 ≤ 1 + log m + log (1/g) + log (1+w)` from
-  `m ≥ 2`, `0 < g ≤ 1`, and `w ≥ 1` by logarithm monotonicity.
-- **Helper:** `Real.one_le_interleaved_log_scale` in
-  `MPS/AreaLaw/InterleavedFilterParameters.lean`, previously private.
-- **Occurrences:** the count and width estimates in that module and the
-  actual cutoff estimate in `InterleavedFilterSuppression.lean`.
-- **Decision:** Expose the existing mathematical lemma with its unchanged
-  statement and proof; the new consumer reuses it directly.
 
 ### Nonempty bond from a trace-one matrix — promoted (2026-10-31)
 

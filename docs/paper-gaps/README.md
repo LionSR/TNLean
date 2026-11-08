@@ -1754,15 +1754,6 @@ the source's order-`J` dependence directly. The fixed-length Gaussian and positi
 separately. The reciprocal-length reading of the printed time-cone formula is
 an explicit local correction.
 
-## ALVV: regional energy centers and scalar shifts
-
-[`alvv16_soft_regional_energy_centering.tex`](alvv16_soft_regional_energy_centering.tex)
-records the difference between the source's absolute-error input and its
-one-sided soft center, and the scalar shift required for a bounded regional
-norm. It states the actual central replacement, its positive regional matrix,
-attained minimum and energy bound on the original ground space. Transfer to
-the generated soft target and the recursive energy invariant remain separate.
-
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)

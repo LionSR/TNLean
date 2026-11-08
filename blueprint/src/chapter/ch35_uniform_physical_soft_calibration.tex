@@ -1,8 +1,8 @@
 \section{Uniform numerical parameters and polynomial bond bounds}
 \label{sec:uniform_physical_soft_calibration}
 
-Corollary~\ref{cor:calibrated_uniform_physical_soft_family} chooses the
-parameters of Theorem~\ref{thm:uniform_physical_soft_improving_family}
+Lemma~\ref{cor:calibrated_uniform_physical_soft_family} chooses the
+parameters of Lemma~\ref{thm:uniform_physical_soft_improving_family}
 before the chain length. It retains that theorem's actual family and
 bounds its permitted member bond by one natural polynomial. The
 parameter dependence is a corrected auxiliary to
@@ -42,7 +42,7 @@ qualifications in
     Since $B_N\ge1$, this is exactly the displayed member-bond bound.
 \end{proof}
 
-\begin{corollary}[A calibrated common physical soft family]
+\begin{lemma}[A calibrated common physical soft family]
     \label{cor:calibrated_uniform_physical_soft_family}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_uniform_physical_soft_improving_family}
     \leanok
@@ -84,7 +84,7 @@ qualifications in
     \end{align}
     For every positive-contraction nearest-neighbour Hamiltonian and
     natural two-window geometry of
-    Theorem~\ref{thm:uniform_physical_soft_improving_family}, all that
+    Lemma~\ref{thm:uniform_physical_soft_improving_family}, all that
     theorem's conclusions hold with these same numerical choices.
     Thus one actual original minimum tuple, native core, polynomial
     closing coefficients and common left family precede every allowed
@@ -93,12 +93,12 @@ qualifications in
     (\ref{eq:calibrated_soft_member_bond}). The approximants, their own
     closed spectral clusters, actual Chebyshev operators and all ordered
     word powers are unchanged.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:uniform_soft_parameters,thm:uniform_physical_soft_improving_family}
     Lemma~\ref{lem:uniform_soft_parameters} supplies the common numerical
     choices and polynomial member-bond bound.
-    Apply Theorem~\ref{thm:uniform_physical_soft_improving_family}
+    Apply Lemma~\ref{thm:uniform_physical_soft_improving_family}
     once to the supplied original interactions with the derived
     numerical budgets. Retain the same family and all its conclusions together
     with~(\ref{eq:calibrated_soft_member_bond}); no other approximant,

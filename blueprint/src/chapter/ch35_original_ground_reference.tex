@@ -1,7 +1,7 @@
 \section{An original-ground reference and one common trimming radius}
 \label{sec:original_ground_reference}
 
-Corollary~\ref{cor:original_ground_reference_trimming_profile} constructs
+Lemma~\ref{cor:original_ground_reference_trimming_profile} constructs
 one reference from the original ground space and chooses one radius for all
 interval trims. Its loss bound retains the whole exterior and is independent
 of the candidate dimension. These are auxiliaries to the reference argument
@@ -74,7 +74,7 @@ collective-trimming estimate in~\cite{gap:alvv16_trimming_constant}.
     These choices also cover the exact flat-spectrum reference.
 \end{proof}
 
-\begin{corollary}[One reference and radius for all interval trims]
+\begin{lemma}[One reference and radius for all interval trims]
     \label{cor:original_ground_reference_trimming_profile}
     \lean{TNLean.MPS.AreaLaw.exists_physical_ground_reference_trimming_profile}
     \leanok
@@ -106,7 +106,7 @@ collective-trimming estimate in~\cite{gap:alvv16_trimming_constant}.
     The loss in (\ref{eq:original_reference_radius_budget}) has no factor
     depending on $M$. Empty intervals and intervals without internal
     cuts are included.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:original_ground_reference_polynomial,
         lem:alvv-interval-reference-weighted}

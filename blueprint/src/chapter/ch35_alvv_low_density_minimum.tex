@@ -8,7 +8,7 @@ For a prescribed interval $J=[p,r)\subseteq[0,L)$, use its fixed
 configuration splitting to identify
 $\mathcal H=\mathcal H_J\otimes\mathcal H_{J^c}$.
 
-\begin{theorem}[A viable subspace at a fixed bandwidth]
+\begin{lemma}[A viable subspace at a fixed bandwidth]
     \label{thm:physical_low_density_minimum_dimension}
     \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_viable_subspace}
     \leanok
@@ -37,7 +37,7 @@ $\mathcal H=\mathcal H_J\otimes\mathcal H_{J^c}$.
     $m=\max\{q,\lceil e^{100}\rceil\}$.
     These fixed-bandwidth quantifiers and the restriction $q\ge2$ are
     recorded in~\cite{gap:alvv16_low_energy_family_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:interval_low_energy_family}
@@ -46,7 +46,7 @@ $\mathcal H=\mathcal H_J\otimes\mathcal H_{J^c}$.
     $\lambda_0$ gives $\rho\ge1$. The targets increase, and
     $\dim T_j\le\rho$.
 
-    At width $w_j$, apply Theorem~\ref{thm:interval_low_energy_family}
+    At width $w_j$, apply Lemma~\ref{thm:interval_low_energy_family}
     with upper cutoff $\eta_j=\eta_{\rm LD}-3w_j$.
     Since $6w_j\le\eta_{\rm LD}/2$, its buffer
     $6w_j\le\eta_j\le\eta_{\rm LD}$ holds. Its original upper and

@@ -23,7 +23,7 @@ This is the mathematical basis consequence described in
     the bond bound. No independence hypothesis is needed.
 \end{proof}
 
-\begin{theorem}[An actual approximate-band orthonormal MPS basis]
+\begin{lemma}[An actual approximate-band orthonormal MPS basis]
     \label{thm:low_energy_orthonormal_mps_basis}
     \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_low_energy_orthonormal_mps_basis}
     \leanok
@@ -65,7 +65,7 @@ This is the mathematical basis consequence described in
     Every vector of $V$ is an MPS of bond dimension at most $nrB$.
     In particular, the actual standard orthonormal basis of $V$ is an
     orthonormal MPS family with that bond bound.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ld_sharp_single_witness,lem:mps_indexed_family_span}
     Apply the proved physical approximation at accuracy $\epsilon$.

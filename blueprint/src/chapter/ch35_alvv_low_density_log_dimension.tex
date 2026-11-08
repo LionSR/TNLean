@@ -1,6 +1,6 @@
 \subsection{The regularized logarithmic estimate}
 
-\begin{corollary}[Logarithmic dimension bound]
+\begin{lemma}[Logarithmic dimension bound]
     \label{cor:physical_low_density_log_dimension}
     \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_viable_subspace_log_bound}
     \leanok
@@ -19,11 +19,11 @@
     No spectral gap or sampling estimate is an additional premise.
     The fixed-bandwidth and interval scope is recorded
     in~\cite{gap:alvv16_low_energy_family_scope}.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_low_density_minimum_dimension}
     Let $C$ be the constant of
-    Theorem~\ref{thm:physical_low_density_minimum_dimension}.
+    Lemma~\ref{thm:physical_low_density_minimum_dimension}.
     Set $B=\max\{12,\eta\}$, $F=102+\log B$ and
     $K_\eta=66(C+1)(6+2\log(C+1))BF^3$.
     If $0<v\le\eta$, choose the numerical count base
