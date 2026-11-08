@@ -1,6 +1,6 @@
 \section{Interior low-energy parameters at the source buffer scale}
 
-\begin{theorem}[A uniform bound for the physical truncation threshold]
+\begin{lemma}[A uniform bound for the physical truncation threshold]
     \label{thm:low_energy_threshold_bound}
     \lean{Real.low_energy_threshold_le}
     Fix $\eta_{\mathrm{LD}}>0$, and let $0\le\eta_1\le\eta_{\mathrm{LD}}$
@@ -13,14 +13,14 @@
         \label{eq:ld_uniform_threshold}
     \end{align}
     Then $t\le T+16\log(1/g)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The positive number $z_0=g^2/[400(6+\eta_{\mathrm{LD}})]$ is at most
     both $1$ and $w^2/[400(6+\eta_1)]$. Bound the denominator in
     (\ref{eq:ld_uniform_threshold}) below by $z_0$ and expand the logarithm.
 \end{proof}
 
-\begin{theorem}[A strict finite count-contraction tradeoff]
+\begin{lemma}[A strict finite count-contraction tradeoff]
     \label{thm:low_energy_scalar_parameters}
     \lean{Real.exists_low_energy_scalar_parameters}
     For each fixed $\eta_{\mathrm{LD}}>0$ there is a constant $A\ge21$
@@ -43,7 +43,7 @@
         D^{12}\Delta&<10^{-5}.
         \label{eq:ld_strict_tradeoff}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:low_energy_threshold_bound}
     Set $C_H=(3T+52)/2$ and use the joint scalar parameter estimate.
@@ -55,7 +55,7 @@
     therefore makes its non-strict numerical tradeoff strict for $D$.
 \end{proof}
 
-\begin{theorem}[A physical interior family at the low-energy buffer scale]
+\begin{lemma}[A physical interior family at the low-energy buffer scale]
     \label{thm:interior_low_energy_original_family}
     \lean{TNLean.MPS.AreaLaw.exists_interior_low_energy_original_filter_family}
     Fix $\eta_{\mathrm{LD}}>0$. One constant $A\ge21$ can be chosen before
@@ -86,7 +86,7 @@
     \cite[Theorem~4.8]{Arad2016RigorousRG}. The exact count retains
     $g=\min\{\mu/(3\log L),1\}$. See
     \cite{gap:alvv16_low_energy_family_buffers}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:low_energy_scalar_parameters,cor:original_low_energy_filter_family}
     Since $L\ge2$, its logarithm is positive and

@@ -1,4 +1,4 @@
-\begin{theorem}[A physical low cluster with independent approximation scales]
+\begin{lemma}[A physical low cluster with independent approximation scales]
     \label{thm:independent_physical_dg_cluster_parameters}
     \lean{TNLean.MPS.AreaLaw.exists_independent_physical_dg_cluster_parameters}
     \leanok
@@ -19,13 +19,13 @@
     $\operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+g,\infty)$.
     Use the five cuts $(0,a+1,a+2\ell,b+1,b+2\ell,N)$.
     Then all the conclusions of
-    Theorem~\ref{thm:five_region_scaled_low_cluster} hold with these $t,\ell$
+    Lemma~\ref{thm:five_region_scaled_low_cluster} hold with these $t,\ell$
     and $\xi=\tau g/10^6$.
     In particular, the actual clipped low cluster has the dimension of the
     full original ground space and is mutually $\tau/200$-close to it.
     The clipped Hamiltonian has norm at most $3t+4\ell$ and spectral
     separation $4g/5$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:independent_truncation_threshold_constant,
