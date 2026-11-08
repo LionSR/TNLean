@@ -29,21 +29,19 @@ with the parameters of `lemmaOne_errorBudget`. That gives the error
 For short lengths `l < 12R + 8` the trivial factorization `O_B = 0`, `O_L = O_R = 1` has
 error `1`, which the constant `a` absorbs.
 
-**Scope restriction (quantitative bounds):** The three factorization existence theorems
-below use `ξ = 8 max(2v/ΔE, 1)` from the chain Lieb–Robinson estimate. That estimate is linear
-in the size of the support, as in the source (lines 96–112), but its prefactor grows with `J`
-and its second operator acts on one site, so `(v, 2)` is not shown to be a Lieb–Robinson pair
-in the source's sense. The length `ξ` and the constants are not homogeneous in the energy
-scale. The exponential conclusions require `ξ' > 6ξ`; at this fixed length the endpoint
-`ξ' = 6ξ` is not established, rather than disproved. In units of the gap it is reached for the
-length `ζ = (5/4) ξ̂` of the chain Lieb–Robinson estimate with inflated velocity, by
-`exists_projectorFactorization_endpoint`, with the same restriction on the pair. The constants
-are uniform in chain length and local dimension. For these unscaled statements the polynomial
-bound in `ξ` required at lines 258–262 is not established; in units of the gap it is
-`exists_projectorFactorization_pow` (`C₁ ≤ K ξ̂³` at rate `κ ξ̂`, `κ > 6`). Documented in
+**Scope restriction (fixed length and energy units):** the three factorization existence
+statements below use `ξ = 8 max(2v/ΔE, 1)` and require `ξ' > 6ξ`; at that fixed
+length the square-root prefactor does not give the endpoint. The numerical
+finite-support bound in `TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean` identifies
+this length with the physical pair `(8v,8)`. In units of the gap, the endpoint
+`exists_projectorFactorization_endpoint` uses the enlarged length
+`ζ = (5/4) ξ̂`, with an admissible physical pair and constant at most `K ζ³`.
+The unscaled constants here are not homogeneous in energy, so their polynomial
+bound in `ξ` alone is not asserted. The normalized polynomial and endpoint
+statements are proved in `LemmaOneConstant.lean`. The fixed-length and Gaussian
+parameter corrections are recorded in
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`. Elimination: establish a
-Lieb–Robinson bound with a numerical prefactor for arbitrary supports; this remains open.
+`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
 ## Main declarations
 

@@ -23,7 +23,7 @@ in the source relation is asserted here
     $\lVert A\rVert_1$ denotes the sum of the singular values of $A$.
 \end{definition}
 
-\begin{theorem}[Trace norm of chain operators]
+\begin{lemma}[Trace norm of chain operators]
     \label{thm:qc_chain_trace_norm}
     \uses{def:qc_approx_local_channel_conversion}
     \lean{QuantumCircuit.chainTraceNorm_nonneg,
@@ -35,7 +35,7 @@ in the source relation is asserted here
     $\lVert A\rVert_1\ge0$, $\lVert0\rVert_1=0$,
     $\lVert A\rVert_1=0$ if and only if $A=0$, and
     $\lVert A+B\rVert_1\le\lVert A\rVert_1+\lVert B\rVert_1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Enumerating the configurations reduces each claim to the corresponding
@@ -43,7 +43,7 @@ in the source relation is asserted here
     equivalence that preserves zero and addition.
 \end{proof}
 
-\begin{theorem}[Zero error and monotonicity]
+\begin{lemma}[Zero error and monotonicity]
     \label{thm:qc_approx_conversion_properties}
     \uses{def:qc_approx_local_channel_conversion}
     \lean{QuantumCircuit.IsLocalChannelConversion.approx,
@@ -55,7 +55,7 @@ in the source relation is asserted here
     Increasing the depth or error bound preserves approximate conversion.
     Approximate conversion with error zero is equivalent to exact conversion
     with the same depth bound.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:qc_chain_trace_norm}
     \leanok
@@ -64,7 +64,7 @@ in the source relation is asserted here
     from $\lVert A\rVert_1=0$ if and only if $A=0$.
 \end{proof}
 
-\begin{theorem}[Composition of approximate conversions]
+\begin{lemma}[Composition of approximate conversions]
     \label{thm:qc_approx_conversion_trans}
     \uses{def:qc_approx_local_channel_conversion}
     \lean{QuantumCircuit.IsLocalChannelProtocol.chainTraceNorm_map_le,
@@ -75,7 +75,7 @@ in the source relation is asserted here
     $\tau$ with depth $T_2$ and error $\varepsilon_2$, then $\rho$ is
     approximately converted into $\tau$ with depth $T_1+T_2$ and error
     $\varepsilon_1+\varepsilon_2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{lem:qc_local_channel_conversion_trans, thm:qc_chain_trace_norm}
     \leanok
@@ -109,7 +109,7 @@ in the source relation is asserted here
     if they are asymptotically locally convertible in both directions.
 \end{definition}
 
-\begin{theorem}[Local channel phase equivalence]
+\begin{lemma}[Local channel phase equivalence]
     \label{thm:qc_local_channel_phase_equivalence}
     \uses{def:qc_asymptotic_local_channel_conversion}
     \lean{QuantumCircuit.IsAsymptoticLocalChannelConversion.refl,
@@ -121,7 +121,7 @@ in the source relation is asserted here
     \leanok
     Local channel phase equivalence is an equivalence relation on eventually
     Hermitian families, and in particular on density-matrix families.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:qc_approx_conversion_trans}
     \leanok

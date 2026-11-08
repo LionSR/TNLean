@@ -28,7 +28,7 @@
     (\ref{eq:mpo_inserted_boundary}).
 \end{definition}
 
-\begin{theorem}[Full rank and continuous extended boundary spaces]
+\begin{lemma}[Full rank and continuous extended boundary spaces]
     \label{thm:mpo_mixed_extended_boundary_rank}
     \lean{MPSTensor.MPOSymmetry.span_range_mul_nonzero_mul_of_span_eq_top,
         MPSTensor.MPOSymmetry.span_range_insertedEvalWord_eq_top,
@@ -55,7 +55,7 @@
     mixed tensor and insertion $W(\gamma)$, the dimension is
     $(D_0+D_1)^2$ and the projections are continuous
     through both endpoints, at every fixed positive length.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:one_block_injective_of_injective,
@@ -74,7 +74,7 @@
     $W(\gamma)$ give the required hypotheses.
 \end{proof}
 
-\begin{theorem}[Exact intersection of extended supports]
+\begin{lemma}[Exact intersection of extended supports]
     \label{thm:mpo_mixed_extended_intersection}
     \lean{MPSTensor.span_range_insertedLetters_eq_top,
         MPSTensor.exists_leftInverse_insertedLetters,
@@ -98,7 +98,7 @@
         \cap(\C^d\otimes\mathcal S'_{W,L})
         =\mathcal S'_{W,L+1}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_extended_boundary_rank}
@@ -117,7 +117,7 @@
     $\Gamma'_{W,L+1}(X)$. No inverse of $W$ is used.
 \end{proof}
 
-\begin{theorem}[The extended open-chain kernel]
+\begin{lemma}[The extended open-chain kernel]
     \label{thm:mpo_mixed_extended_open_kernel}
     \lean{MPSTensor.contiguousRestrictₗ_mem_of_restriction_closed,
         MPSTensor.MPOSymmetry.restrictLast_insertedGroundSpace_mem,
@@ -149,7 +149,7 @@
     interpolation has open kernels of dimension $(D_0+D_1)^2$, and their
     orthogonal projections are continuous at
     every fixed $N\geq2$, including at $\gamma=0,1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_extended_intersection,

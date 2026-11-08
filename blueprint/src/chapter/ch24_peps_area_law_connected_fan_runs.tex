@@ -2,14 +2,14 @@
 \label{sec:area_law_fan_cut_runs}
 
 The connected pieces of
-Theorem~\ref{thm:area_law_fan_cut_piece_connected} meet across every
+Lemma~\ref{thm:area_law_fan_cut_piece_connected} meet across every
 retained adjacency by
-Theorem~\ref{thm:area_law_fan_inactive_radial_intersection}.
+Lemma~\ref{thm:area_law_fan_inactive_radial_intersection}.
 This glues the pieces along each run of
 Definition~\ref{def:area_law_fan_runs} in the fan construction of
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
-\begin{theorem}[Connectedness of a run after radial deletion]
+\begin{lemma}[Connectedness of a run after radial deletion]
     \label{thm:area_law_fan_cut_run_connected}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_cut_inter_ball_isConnected}
     \leanok
@@ -21,16 +21,16 @@ Definition~\ref{def:area_law_fan_runs} in the fan construction of
     colours agree. For each connected component $R$ of this graph,
     put $T_R=\bigcup_{i\in R}P_i$. Then
     $(T_R\setminus L)\cap B_\infty(c,r)$ is nonempty and connected.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs,
         thm:area_law_fan_cut_piece_connected,
         thm:area_law_fan_inactive_radial_intersection}
     Each piece $S_i$ is nonempty and connected by
-    Theorem~\ref{thm:area_law_fan_cut_piece_connected}.
+    Lemma~\ref{thm:area_law_fan_cut_piece_connected}.
     Every edge of $R$ joins consecutive triangles of the same colour, so
-    Theorem~\ref{thm:area_law_fan_inactive_radial_intersection} gives
+    Lemma~\ref{thm:area_law_fan_inactive_radial_intersection} gives
     $S_i\cap S_j\ne\varnothing$ along that edge.
 
     Because $R$ is a connected component, it is nonempty and any two of

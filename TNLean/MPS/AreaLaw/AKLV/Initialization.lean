@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.FavorableFilter
+import QICLean.Analysis.NormSquaredTriangle
 import QICLean.Channel.FilterNormalization
 import QICLean.Entropy.FilterPrefix
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
@@ -35,7 +36,13 @@ open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matri
 
 namespace TNLean.MPS.AreaLaw
 
-private theorem exists_cut_product_filtered_output {L q k D : ℕ}
+/-- A fixed unit vector `φ` of an operator `K` that preserves its orthogonal complement,
+contracts squared norms there by `δ`, and has operator Schmidt rank at most `D` at the cut
+`k`, with `Dδ ≤ 1/2`, is approximated by a phase-aligned normalized image `Kχ/‖Kχ‖` of a
+product vector `χ`: this image has Schmidt rank at most `D` at the cut and squared distance
+at most `4Dδ` from `φ`. AKLV, arXiv:1301.1162v1, Lemma 2.2 (`lem:mu1`), lines 332–337,
+and the state of constant overlap in Section 5, lines 862–863. -/
+theorem exists_cut_product_filtered_output {L q k D : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (φ : EuclideanSpace ℂ (Fin L → Fin q)) (hφ : ‖φ‖ = 1)
     (hfix : toEuclideanLin K φ = φ) {delta : ℝ} (hdelta : 0 ≤ delta) (hD : 0 < D)
@@ -224,8 +231,7 @@ theorem exists_aklv_physical_product_initialization :
     exact hclose.trans (div_le_div_of_nonneg_right
       (Real.exp_le_one_iff.mpr (by linarith)) (by norm_num))
   have hψΩ : ‖ψ - Ω‖ ^ 2 ≤ 1 / 16 := by
-    have htri := norm_sub_le_norm_sub_add_norm_sub ψ φ Ω
-    have hsquare := (pow_le_pow_left₀ (norm_nonneg _) htri 2).trans add_sq_le
+    have hsquare := norm_sub_sq_le_two_mul_add ψ φ Ω
     nlinarith
   exact ⟨hq, hg1, hs, hlogD, e, E0, E, φ, p, hregional, hEeq, hE0, hE6,
     hBpos, hBnorm, hE, hφ, heigen, hprojector, hclose, hdegree, hpE, hfix, hrank,

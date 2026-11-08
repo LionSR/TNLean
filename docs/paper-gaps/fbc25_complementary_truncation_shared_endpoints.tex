@@ -1,0 +1,86 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+\importpaperaux{fbc25-}{2502.20257/main-tnlean}
+
+\title{The Length of the Complementary Truncated Symmetry}
+\author{}
+\date{2026-10-30}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Printed relation}
+
+The truncated symmetry \(U^L_g\) of \papereqref{fbc25}{eq:truncsym} closes a
+string of matrix product unitary tensors with the source triangles \(Y_2^g\)
+and \(Y_1^g\). The superscript is its total length, including the two endpoint
+sites: the composition rule
+\(\bigl(\lambda^L_{h^{-1},g^{-1}}\otimes\lambda^R_{g,h}\bigr)U^{L-2}_gU^L_h
+=U^L_{gh}\) and the on-site example
+\(U^L_g=u_g^{\otimes(L-1)}\otimes\mathbf 1\) both use this reading
+\cite[lines~3672 and 5622]{FrancoRubio2025MPUGauging}. The source then states
+\begin{align}
+    U^L_gU^\infty_{g^{-1}} & =U^{\infty-L}_{g^{-1}},
+    \label{eq:fbc25_complementary_printed}
+\end{align}
+with \(U^{\infty-L}_{g^{-1}}\) the truncated symmetry supported in the
+complement of \(U^L_g\) \cite[lines~2175--2181]{FrancoRubio2025MPUGauging}, and
+its twisted form \(U^LU^\infty=\sigma U^{\infty-L}\) at an involutive element
+\cite[lines~5344--5348]{FrancoRubio2025MPUGauging}, whose proof is left to the
+reader.
+
+\section{Shared endpoint sites}
+
+Place a ring of \(H=n+m+2\) sites in the order \((a,p,b,q)\), with \(p\) of
+length \(n\) and \(q\) of length \(m\), and let \(U^L\) have total length
+\(L=n+2\) and endpoint sites \(a,b\). On \(p\) the product
+\(U^LU^\infty_{g^{-1}}\) is the identity. At \(a\) and \(b\) its outputs are
+the endpoint legs of \(U^L\), and in general it does not act trivially there.
+In the on-site example with \(U^L_g=u_g^{\otimes(L-1)}\otimes\mathbf 1\), the
+product acts by \(u_g^{-1}\) on \(b\), which lies in the support of \(U^L_g\),
+and by \(u_g^{-1}\) on every site of \(q\). No operator supported on the
+\(H-L=m\) sites of \(q\) equals it unless \(u_g\) is a scalar.
+
+The complementary truncated symmetry therefore has bulk \(q\) and the same two
+endpoint sites, traversed from \(b\) to \(a\). Its total length is
+\begin{align}
+    m+2 & =(H-L)+2,
+    \label{eq:fbc25_complementary_length}
+\end{align}
+two more than the printed \(\infty-L\). At each shared endpoint site the leg of
+\(U^L\) and the leg of the complement are matched along the identification of
+the two source dimensions \(d_l=d_r\); in the source's construction
+\(X_1=(\mathbf 1\otimes T^*)Y_2^\dagger\) of \papereqref{fbc25}{eq:modif_XY} the
+curly leg of the first-cut factors is the thick leg of \(Y_2\).
+
+\section{Formal treatment}
+
+The formal relation is
+\begin{align}
+    \bigl(U^{n+2}\otimes I_q\bigr)\,\mathcal U^{(n+m+2)}
+     & =\sigma\,\bigl(I_p\otimes U^{m+2}_{(b,q,a)}\bigr)
+    \label{eq:fbc25_complementary_formal}
+\end{align}
+for the inverse-compatible source factors, at every pair of bulk lengths, with
+the endpoint legs matched as above.\footnote{Formal declarations:
+    \leanid{MPOTensor.SourceFactors.complementaryTruncatedSymmetry} and
+    \leanid{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_mul_groupedMPO}
+    in \doclink{TNLean/MPS/MPU/InverseCompatiblePleasantProperties}.}
+No hypothesis is added; only the length of the complementary truncated
+symmetry is corrected.
+
+\textbf{Verdict: resolved local fix.}
+The printed complementary length \(\infty-L\) is two short. The complementary
+truncated symmetry shares both endpoint sites with \(U^L\), and the corrected
+relation (\ref{eq:fbc25_complementary_formal}) is proved.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

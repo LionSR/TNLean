@@ -96,8 +96,11 @@ virtual-boundary nondecay and virtual local covariance.
 
 \begin{definition}[Periodic finite-chain symmetry overlap]
     \label{def:source_periodic_string_overlap}
-    \notready
-    \uses{def:mpv}
+    \leanok
+    \uses{def:mpv, lem:ldp_observable_transfer_products}
+    % The raw overlap is inner_mpvState_toEuclideanLin specialized using
+    % physicalObservableTransfer_finKronecker_const; its normalized form is
+    % mpvExpectation_finKronecker_const_eq_trace_div.
     For the periodic length-$L$ matrix product vector $|\Psi_L(A)\rangle$, the
     source quantity is
     \begin{align}
@@ -332,7 +335,7 @@ virtual-boundary nondecay and virtual local covariance.
     nontriviality condition explicitly.
 \end{remark}
 
-\begin{theorem}[Projective physical endpoint criterion]
+\begin{lemma}[Projective physical endpoint criterion]
     \label{thm:projective_physical_string_order}
     \lean{MPSTensor.hasPhysicalStringOrder_iff_exists_fixed_letter}
     \leanok
@@ -349,7 +352,7 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     This is the explicitly corrected criterion, rather than the
     unchanged printed assertion above.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_string_peripheral_letter_criterion,
         lem:physical_string_scalar_phases, lem:physical_string_endpoint_pairing}
@@ -367,7 +370,7 @@ virtual-boundary nondecay and virtual local covariance.
 
 \input{chapter/ch12_symmetry_stationary_physical_density}
 
-\begin{theorem}[Physical state symmetry and twisted spectral radius]
+\begin{lemma}[Physical state symmetry and twisted spectral radius]
     \label{thm:pgwsvc08_physical_symmetry}
     \lean{MPSTensor.stationaryBlockDensity_invariant_iff_spectralRadius_eq_one}
     \leanok
@@ -385,7 +388,7 @@ virtual-boundary nondecay and virtual local covariance.
         \label{eq:stationary_density_symmetry}
     \end{align}
     Scalar unitaries are included in this fixed-$u$ statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -396,13 +399,13 @@ virtual-boundary nondecay and virtual local covariance.
         thm:stationary_density_covariance}
     By Lemma~\ref{lem:canonical_fixed_space_irreducible}, the source purity
     hypothesis makes $\E_A$ irreducible.
-    If $\rho(\E_u)=1$, Theorem~\ref{thm:irreducible_twisted_spectral_radius}
+    If $\rho(\E_u)=1$, Lemma~\ref{thm:irreducible_twisted_spectral_radius}
     gives a unitary $V$ and a phase $\mu$ satisfying
     $B_i=\sum_j u_{ij}A_j=\mu VA_iV^\dagger$.
     Lemma~\ref{lem:irreducible_twisted_transfer_reduction} then gives
     $V^\dagger\Lambda V=\Lambda$ for the faithful normalized stationary
     dual density.
-    Theorem~\ref{thm:stationary_density_covariance} now proves physical
+    Lemma~\ref{thm:stationary_density_covariance} now proves physical
     invariance.
 
     Conversely, invariance gives $\varrho_N(B,\Lambda)=\varrho_N(A,\Lambda)$.
@@ -422,7 +425,7 @@ virtual-boundary nondecay and virtual local covariance.
     If $\rho(\E_u)<1$, its powers tend to zero, hence
     $G_N\to0$ by (\ref{eq:stationary_density_mixed_gram}). This contradicts
     the positive uniform bound. The twisted spectral-radius upper bound of
-    Theorem~\ref{thm:irreducible_twisted_spectral_radius} therefore forces
+    Lemma~\ref{thm:irreducible_twisted_spectral_radius} therefore forces
     $\rho(\E_u)=1$.
 \end{proof}
 
@@ -547,14 +550,14 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Transfer-map covariance and doubled commutation are equivalent]%
+\begin{lemma}[Transfer-map covariance and doubled commutation are equivalent]%
     \label{thm:condC2_iff_condC3}
     \lean{MPSTensor.condC2_iff_condC3}
     \leanok
     \uses{def:condC2, def:condC3}
     Transfer-map covariance and commutation in the doubled transfer
     picture are equivalent for any matrix $V$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -586,14 +589,14 @@ virtual-boundary nondecay and virtual local covariance.
     The two formulas are the same identity read from opposite sides.
 \end{proof}
 
-\begin{theorem}[Local physical intertwining implies transfer-map covariance]%
+\begin{lemma}[Local physical intertwining implies transfer-map covariance]%
     \label{thm:condC1_imp_condC2}
     \lean{MPSTensor.condC1_imp_condC2}
     \leanok
     \uses{def:condC1, def:condC2, lem:unitary_kraus_mixing}
     If $V$ and $u$ are unitary and the local physical intertwining
     relation holds, then the transfer map is covariant.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -626,7 +629,7 @@ virtual-boundary nondecay and virtual local covariance.
     $u$-boxes disappear by the unitary Kraus-mixing identity.
 \end{proof}
 
-\begin{theorem}[Transfer-map covariance implies local physical intertwining]%
+\begin{lemma}[Transfer-map covariance implies local physical intertwining]%
     \label{thm:condC2_imp_condC1_of_injective}
     \lean{MPSTensor.condC2_imp_condC1_of_injective}
     \leanok
@@ -635,7 +638,7 @@ virtual-boundary nondecay and virtual local covariance.
     transfer map is covariant.  Then there is $u$ with
     $uu^\dagger=\Id$ satisfying the local physical intertwining relation.
     Covariance and coisometry of $V$ alone suffice for the conclusion.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -670,7 +673,7 @@ virtual-boundary nondecay and virtual local covariance.
     $B^i = \sum_j u_{ij} A^j$.
 \end{proof}
 
-\begin{theorem}[Twisted-transfer eigenvalues have modulus at most one]%
+\begin{lemma}[Twisted-transfer eigenvalues have modulus at most one]%
     \label{thm:twisted_transfer_spectral_radius_le_one}
     \lean{MPSTensor.twistedTransfer_spectralRadius_le_one}
     \leanok
@@ -679,7 +682,7 @@ virtual-boundary nondecay and virtual local covariance.
     satisfy $u u^\dagger = \Id$.
     If $\E_u(X) = \lambda X$ for some nonzero $X \in \MN{D}$, then
     $|\lambda| \le 1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -692,11 +695,11 @@ virtual-boundary nondecay and virtual local covariance.
     share a common positive definite fixed point.
     Gauging both families by that fixed point puts them in a common
     trace-preserving gauge.
-    Theorem~\ref{thm:eigenvalue_bound} then applies to the mixed transfer
+    Lemma~\ref{thm:eigenvalue_bound} then applies to the mixed transfer
     operator in that gauge, and similarity preserves the eigenvalue $\lambda$.
 \end{proof}
 
-\begin{theorem}[Modulus-one twisted eigenvalue implies gauge-phase equivalence]%
+\begin{lemma}[Modulus-one twisted eigenvalue implies gauge-phase equivalence]%
     \label{thm:twisted_transfer_modulus_one_gauge_phase}
     \lean{MPSTensor.twistedTransfer_modulus_one_implies_gaugePhase}
     \leanok
@@ -710,7 +713,7 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     for some nonzero $X \in \MN{D}$ with $|\lambda|=1$, then $A$ is
     gauge-phase equivalent to the companion tensor $B_u$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -724,12 +727,12 @@ virtual-boundary nondecay and virtual local covariance.
     trace-preserving gauge.
     In that gauge, (\ref{eq:symmetry_twisted_eigen_mod_one}) becomes a
     modulus-one peripheral eigenvalue for an irreducible mixed transfer
-    operator, so Theorem~\ref{thm:modulus_one_gauge_irr_tp} yields
+    operator, so Lemma~\ref{thm:modulus_one_gauge_irr_tp} yields
     gauge-phase equivalence.
     Undoing the common trace-preserving gauge gives the claim for $A$ and $B_u$.
 \end{proof}
 
-\begin{theorem}[Virtual-boundary nondecay gives companion gauge-phase equivalence]%
+\begin{lemma}[Virtual-boundary nondecay gives companion gauge-phase equivalence]%
     \label{thm:string_order_implies_twisted_gauge_phase}
     \lean{MPSTensor.gaugePhaseEquiv_twisted_of_hasStringOrder}
     \leanok
@@ -739,7 +742,7 @@ virtual-boundary nondecay and virtual local covariance.
     If virtual-boundary nondecay holds for $u$ with boundary parameter
     $\Lambda$, then $A$ is gauge-phase equivalent to the companion tensor
     $B_u$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -747,14 +750,14 @@ virtual-boundary nondecay and virtual local covariance.
     If $\rho(\E_u) < 1$, Lemma~\ref{lem:boundary_string_order_tendsto_zero}
     contradicts Definition~\ref{def:has_string_order} by forcing every
     virtual-boundary sequence to decay to zero, so $\rho(\E_u) \ge 1$.
-    Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one} shows that every
+    Lemma~\ref{thm:twisted_transfer_spectral_radius_le_one} shows that every
     eigenvalue has modulus at most $1$, so some peripheral eigenvalue has
     modulus exactly $1$.
-    Applying Theorem~\ref{thm:twisted_transfer_modulus_one_gauge_phase} then
+    Applying Lemma~\ref{thm:twisted_transfer_modulus_one_gauge_phase} then
     gives the gauge-phase equivalence.
 \end{proof}
 
-\begin{theorem}[Gauge-phase equivalence with the companion tensor yields a virtual unitary]%
+\begin{lemma}[Gauge-phase equivalence with the companion tensor yields a virtual unitary]%
     \label{thm:virtual_unitary_of_twisted_gauge_phase}
     \lean{MPSTensor.virtualUnitary_of_gaugePhaseEquiv_twisted}
     \leanok
@@ -768,7 +771,7 @@ virtual-boundary nondecay and virtual local covariance.
          & = \mu\, V A^i V^\dagger.
         \label{eq:symmetry_phased_covariance}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -785,7 +788,7 @@ virtual-boundary nondecay and virtual local covariance.
     $|\mu|=1$.
 \end{proof}
 
-\begin{theorem}[Virtual unitary gives a twisted-transfer eigenmatrix]%
+\begin{lemma}[Virtual unitary gives a twisted-transfer eigenmatrix]%
     \label{thm:twisted_transfer_eigen_of_virtual_unitary}
     \lean{MPSTensor.twistedTransfer_eigen_of_virtualUnitary}
     \leanok
@@ -797,7 +800,7 @@ virtual-boundary nondecay and virtual local covariance.
         \E_u(V) & = \mu V.
         \label{eq:symmetry_virtual_eigenmatrix}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -807,7 +810,7 @@ virtual-boundary nondecay and virtual local covariance.
     relation.
 \end{proof}
 
-\begin{theorem}[Boundary-state invariance of the virtual unitary]%
+\begin{lemma}[Boundary-state invariance of the virtual unitary]%
     \label{thm:boundary_state_invariant_of_virtual_unitary}
     \lean{MPSTensor.boundaryState_invariant_of_virtualUnitary}
     \leanok
@@ -827,7 +830,7 @@ virtual-boundary nondecay and virtual local covariance.
         V^\dagger \Lambda V & = \Lambda.
         \label{eq:symmetry_boundary_invariance}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -856,7 +859,7 @@ virtual-boundary nondecay and virtual local covariance.
     \uses{thm:twisted_transfer_eigen_of_virtual_unitary, def:string_order_boundary_param}
     With the boundary matrices $X = V^\dagger$ and $Y = V$ from the
     virtual local-covariance unitary $V$,
-    Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary} gives
+    Lemma~\ref{thm:twisted_transfer_eigen_of_virtual_unitary} gives
     $\E_u^L(V)=\mu^L V$.
     Therefore
     \begin{align}
@@ -868,7 +871,7 @@ virtual-boundary nondecay and virtual local covariance.
     whose norm is constantly $1$.
 \end{proof}
 
-\begin{theorem}[Virtual local covariance iff a unitary peripheral eigenmatrix exists]%
+\begin{lemma}[Virtual local covariance iff a unitary peripheral eigenmatrix exists]%
     \label{thm:local_symmetry_iff_spectral_radius}
     \lean{MPSTensor.localSymmetry_iff_spectralRadius_one}
     \leanok
@@ -879,25 +882,25 @@ virtual-boundary nondecay and virtual local covariance.
     Then virtual local covariance holds if and only if there exist a unitary
     $V \in \MN{D}$ and a phase $\mu$ with $|\mu|=1$ such that
     $\E_u(V) = \mu V$.
-    By Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one}, this
+    By Lemma~\ref{thm:twisted_transfer_spectral_radius_le_one}, this
     eigenmatrix condition is equivalent to the peripheral-spectrum condition $\rho(\E_u)=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:twisted_transfer_eigen_of_virtual_unitary, thm:twisted_transfer_modulus_one_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary}
-    Theorem~\ref{thm:twisted_transfer_eigen_of_virtual_unitary} gives the
+    Lemma~\ref{thm:twisted_transfer_eigen_of_virtual_unitary} gives the
     forward direction.
     Conversely, for a unitary peripheral eigenmatrix,
-    Theorem~\ref{thm:twisted_transfer_modulus_one_gauge_phase} gives
+    Lemma~\ref{thm:twisted_transfer_modulus_one_gauge_phase} gives
     gauge-phase equivalence with the companion tensor; then
-    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} yields a virtual
+    Lemma~\ref{thm:virtual_unitary_of_twisted_gauge_phase} yields a virtual
     unitary and phase satisfying the local covariance relation, and
-    Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives the
+    Lemma~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives the
     boundary-state invariance needed for virtual local covariance.
 \end{proof}
 
-\begin{theorem}[Virtual-boundary nondecay $\Leftrightarrow$ virtual local covariance]%
+\begin{lemma}[Virtual-boundary nondecay $\Leftrightarrow$ virtual local covariance]%
     \label{thm:string_order_iff_local_symmetry}
     \lean{MPSTensor.stringOrder_iff_localSymmetry}
     \leanok
@@ -907,23 +910,23 @@ virtual-boundary nondecay and virtual local covariance.
     $\tr(\Lambda)=1$, and $\E_A^\dagger(\Lambda)=\Lambda$. Then
     virtual-boundary nondecay for $u$ holds if and only if $A,u,\Lambda$
     satisfy virtual local covariance.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:string_order_implies_twisted_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase, thm:boundary_state_invariant_of_virtual_unitary, lem:has_string_order_of_local_symmetry}
     If virtual-boundary nondecay holds,
-    Theorem~\ref{thm:string_order_implies_twisted_gauge_phase} gives a
+    Lemma~\ref{thm:string_order_implies_twisted_gauge_phase} gives a
     gauge-phase equivalence with the companion tensor.
-    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} extracts a virtual
+    Lemma~\ref{thm:virtual_unitary_of_twisted_gauge_phase} extracts a virtual
     unitary and phase from that equivalence, and
-    Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} shows that the
+    Lemma~\ref{thm:boundary_state_invariant_of_virtual_unitary} shows that the
     same unitary preserves the boundary state, so one obtains virtual local
     covariance. Conversely, Lemma~\ref{lem:has_string_order_of_local_symmetry}
     turns virtual local covariance into a nondecaying virtual-boundary sequence.
 \end{proof}
 
-\begin{theorem}[Virtual unitary from virtual-boundary nondecay]%
+\begin{lemma}[Virtual unitary from virtual-boundary nondecay]%
     \label{thm:virtual_unitary_of_string_order}
     \lean{MPSTensor.virtualUnitary_of_stringOrder}
     \leanok
@@ -958,15 +961,15 @@ virtual-boundary nondecay and virtual local covariance.
             \tn[skin=ring]{V^\dagger}
         \end{tenkz}.
     \end{tenkzequation}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:string_order_implies_twisted_gauge_phase, thm:virtual_unitary_of_twisted_gauge_phase}
-    By Theorem~\ref{thm:string_order_implies_twisted_gauge_phase},
+    By Lemma~\ref{thm:string_order_implies_twisted_gauge_phase},
     virtual-boundary nondecay first gives gauge-phase equivalence with the
     companion tensor.
-    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} then normalizes the
+    Lemma~\ref{thm:virtual_unitary_of_twisted_gauge_phase} then normalizes the
     resulting intertwiner to a unitary and produces the phase $\mu$.
 \end{proof}
 

@@ -11,7 +11,7 @@ combine along each equal-color run to form a connected component of the cut
 square, as used in the initial-star construction of
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
-\begin{theorem}[Connected components of a cut fan square]
+\begin{lemma}[Connected components of a cut fan square]
     \label{thm:area_law_fan_cut_component_correspondence}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_connectedComponents_equiv}
     \leanok
@@ -37,7 +37,7 @@ square, as used in the initial-star construction of
     \end{align}
     Equivalently, the map $R\mapsto U_R$ is a bijection from $\mathcal R$ onto
     $\mathcal C(\Omega)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_law_fan_runs,
@@ -46,13 +46,13 @@ square, as used in the initial-star construction of
         thm:area_law_fan_run_cover,
         thm:area_law_fan_cut_runs_disjoint,
         thm:area_law_fan_cut_run_connected}
-    By Theorem~\ref{thm:area_law_cell_fan_closed_ball},
+    By Lemma~\ref{thm:area_law_cell_fan_closed_ball},
     $Q=\overline B_\infty(c,r)$, so $\Omega\subset Q$.
-    By Theorem~\ref{thm:area_law_fan_run_cover}, the sets $T_R$ cover
+    By Lemma~\ref{thm:area_law_fan_run_cover}, the sets $T_R$ cover
     $Q$, so the sets $U_R$ cover $\Omega$.
-    By Theorem~\ref{thm:area_law_fan_cut_runs_disjoint}, the sets $U_R$ are
+    By Lemma~\ref{thm:area_law_fan_cut_runs_disjoint}, the sets $U_R$ are
     pairwise disjoint. Since $U_R=(T_R\setminus L)\cap B_\infty(c,r)$,
-    Theorem~\ref{thm:area_law_fan_cut_run_connected} shows that every
+    Lemma~\ref{thm:area_law_fan_cut_run_connected} shows that every
     $U_R$ is nonempty and connected in $\Omega$.
 
     Each triangle $P_i$ is compact and closed, so each finite union $T_R$ is

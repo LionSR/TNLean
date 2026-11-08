@@ -90,7 +90,7 @@
     the three-site space.
 \end{definition}
 
-\begin{theorem}[Matrices of the two adjacent factor actions]
+\begin{lemma}[Matrices of the two adjacent factor actions]
     \label{thm:pair_lift_kronecker_matrices}
     \lean{MPSTensor.leftPairLift_toMatrix_reindex}
     \lean{MPSTensor.rightPairLift_toMatrix_reindex}
@@ -120,7 +120,7 @@
     \cite[Definition~D.2]{Cirac2016MPDO_arXiv}; here
     $\mc H_A=\mc H_X=\mc H_B=\mc H$. No assertion is made for unequal factor
     spaces.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -129,7 +129,7 @@
     coordinate is unchanged, which contributes $\delta_{a,a'}$.
 \end{proof}
 
-\begin{theorem}[Three-site translated local terms]
+\begin{lemma}[Three-site translated local terms]
     \label{thm:local_term_two_three_ax_xb_lifts}
     \lean{MPSTensor.localTerm_two_three_zero_eq_leftPairLift_parentInteraction}
     \lean{MPSTensor.localTerm_two_three_one_eq_rightPairLift_parentInteraction}
@@ -147,7 +147,7 @@
         h^{(3)}_1(A,2) & =q(A)_{XB}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $\sigma=(a,x,b)$ be a three-site configuration. For the first
@@ -174,7 +174,7 @@
     translated parent term gives the two displayed equations.
 \end{proof}
 
-\begin{theorem}[Three-site commutation from overlapping supports]
+\begin{lemma}[Three-site commutation from overlapping supports]
     \label{thm:local_term_two_three_commute_from_ax_xb}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_commutation}
     \leanok
@@ -188,15 +188,15 @@
     $AX$ and $XB$ actions; the construction of the
     \cite[Appendix~D.2]{Cirac2016MPDO_arXiv} projectors associated with the
     \cite[Appendix~B]{Cirac2016MPDO_arXiv} basic-vector form is a separate step.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}, the two translated
+    By Lemma~\ref{thm:local_term_two_three_ax_xb_lifts}, the two translated
     local terms are $q(A)_{AX}$ and $q(A)_{XB}$. The assumed overlapping
     support condition says exactly that these two lifted endomorphisms commute.
 \end{proof}
 
-\begin{theorem}[Three-site commutation from two-site representatives]
+\begin{lemma}[Three-site commutation from two-site representatives]
     \label{thm:local_term_two_three_commute_from_two_site_q}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_projectors}
     \leanok
@@ -205,7 +205,7 @@
     $XB$ actions commute. Suppose that $q(A)=Q_{AX}$ and $q(A)=Q_{XB}$.
     Then the first two translated length-two local terms on the three-site
     chain commute.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The lift identities identify the translated terms with the lifted actions
@@ -222,7 +222,7 @@
     $h^{(3)}_0(A,2)$ and $h^{(3)}_1(A,2)$.
 \end{proof}
 
-\begin{theorem}[Three-site commutation from source projectors]
+\begin{lemma}[Three-site commutation from source projectors]
     \label{thm:local_term_two_three_commute_from_source_q}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2}
     \leanok
@@ -235,17 +235,17 @@
     equalities to the $AX$ and $XB$ faces, the first two translated length-two
     local terms on the three-site chain commute. Thus,
     $h^{(3)}_0(A,2)h^{(3)}_1(A,2) = h^{(3)}_1(A,2)h^{(3)}_0(A,2)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    The lift identities of Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
+    The lift identities of Lemma~\ref{thm:local_term_two_three_ax_xb_lifts}
     identify the translated terms with $(Q_{AX})_{AX}$ and $(Q_{XB})_{XB}$.
     After forgetting the kernel-intersection equation, the
     \cite[Definition~D.2]{Cirac2016MPDO_arXiv} condition says exactly that
     these two lifted projectors commute.
 \end{proof}
 
-\begin{theorem}[Three-site commutation from complementary Appendix projectors]
+\begin{lemma}[Three-site commutation from complementary Appendix projectors]
     \label{thm:local_term_two_three_commute_from_complement_ax_xb}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_overlapping_two_site_complement}
     \lean{MPSTensor.localTerm_two_three_zero_one_commute_of_appendixD2_complement}
@@ -257,10 +257,10 @@
     $q(A)=1-Q_{AX}=1-Q_{XB}$. Then the first two translated length-two local
     terms on the three-site chain commute,
     $h^{(3)}_0(A,2)h^{(3)}_1(A,2) = h^{(3)}_1(A,2)h^{(3)}_0(A,2)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    The lift identities of Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
+    The lift identities of Lemma~\ref{thm:local_term_two_three_ax_xb_lifts}
     identify the translated terms with $(1-Q_{AX})_{AX}$ and
     $(1-Q_{XB})_{XB}$. The Appendix~D.2 condition implies the overlapping
     two-site commutation condition after forgetting the kernel-intersection
@@ -512,7 +512,7 @@
     \end{align}
 \end{remark}
 
-\begin{theorem}[Chain ground-space vectors are frustration-free]
+\begin{lemma}[Chain ground-space vectors are frustration-free]
     \label{thm:chain_ground_space_implies_frustration_free}
     \lean{MPSTensor.isFrustrationFree_of_mem_chainGroundSpace}
     \leanok
@@ -520,7 +520,7 @@
     Assume $N>0$ and $L\le N$. Let $\psi$ be a vector in the periodic chain
     ground space $G_L^{(N)}(A)$. Then $\psi$ satisfies all local zero-energy
     equations: for every site $i$, one has $h_i(A,L)\psi=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

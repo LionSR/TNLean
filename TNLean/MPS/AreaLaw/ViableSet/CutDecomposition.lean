@@ -4,14 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
-import TNLean.MPS.AreaLaw.Huang.RegionalRightContraction
+import QICLean.Entropy.RegionalRightContraction
 
 /-!
 # Cut decompositions with bounded left-factor bonds
 
 One operator with simultaneous cut-rank bounds admits a product decomposition at any
-chosen cut whose left factors retain those bounds at every earlier cut. The factors
-are constructed by linear functionals on the right operator-block span. No matrix
+chosen cut whose left factors retain those bounds at every earlier cut. The factors are
+the named `cutLeftFactor` and `cutRightFactor`, the right contractions of the cut
+operator along chosen linear functionals on its right operator-block span. No matrix
 product presentation or prescribed family of suitable factors is assumed.
 
 Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, Claim
@@ -73,10 +74,67 @@ theorem operatorSchmidtRank_cutOperator_leftConfigOfFin {L q i k : ℕ}
   rw [← hmat]
   exact (operatorSchmidtRank_reindex_prodCongr _ fL fR).symm
 
+/-- The chosen linear functionals on the right operator-block span of an operator at the
+cut after `i` sites; the right contractions along them are the left factors of a shortest
+cut decomposition. LVV13, `algo53.tex`, `e:decomp`, lines 584--591. -/
+noncomputable def cutDecompositionFunctional {L q i : ℕ}
+    (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (j : Fin (operatorSchmidtRank
+      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K))) :
+    Matrix ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)
+      ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) ℂ →ₗ[ℂ] ℂ :=
+  Classical.choose (exists_operatorRightContraction_decomposition
+    (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K)) j
+
+/-- **The left factors of the chosen cut decomposition** of an operator at the cut after
+`i` sites: the right contractions of the cut operator along the chosen functionals.
+LVV13, `algo53.tex`, `e:decomp`, lines 584--591. -/
+noncomputable def cutLeftFactor {L q i : ℕ} (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (j : Fin (operatorSchmidtRank
+      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K))) :
+    LeftBlockMatrix L q i :=
+  operatorRightContraction (cutDecompositionFunctional K j)
+    (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K)
+
+/-- The right factors of the chosen cut decomposition. -/
+noncomputable def cutRightFactor {L q i : ℕ} (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (j : Fin (operatorSchmidtRank
+      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K))) :
+    Matrix ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)
+      ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) ℂ :=
+  Classical.choose (Classical.choose_spec (exists_operatorRightContraction_decomposition
+    (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K))) j
+
+/-- The chosen factors decompose the cut operator. -/
+theorem cutOperator_eq_sum_cutLeftFactor_kronecker {L q i : ℕ}
+    (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
+    Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+      ∑ j, cutLeftFactor K j ⊗ₖ cutRightFactor K j :=
+  Classical.choose_spec (Classical.choose_spec (exists_operatorRightContraction_decomposition
+    (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K)))
+
+/-- Every chosen left factor retains a simultaneous global cut-rank bound at its internal
+cuts. LVV13, `algo53.tex`, the internal bond assertion in Claim `c:errorreduction`,
+line 591. -/
+theorem operatorSchmidtRank_cutLeftFactor_le {L q i R : ℕ} (hi : i ≤ L)
+    (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hK : ∀ k : ℕ, operatorSchmidtRank
+      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) K) ≤ R)
+    (j : Fin (operatorSchmidtRank
+      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K)))
+    (k : ℕ) (hki : k < i) :
+    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      ((cutLeftFactor K j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ R := by
+  classical
+  rw [operatorSchmidtRank_cutOperator_leftConfigOfFin hi hki.le]
+  exact (Entropy.operatorSchmidtRank_rightContraction_subset_le
+    (leftBlock_mono hki.le) K (cutDecompositionFunctional K j)).trans (hK k)
+
 /-- A simultaneous global cut-rank bound gives a shortest decomposition at the chosen
-cut, and every left factor retains the same bound at its internal cuts. The all-cuts
-hypothesis includes endpoints and therefore also covers chains of length at most one
-and the bound zero. LVV13, `algo53.tex`, `e:decomp`, lines 584--591. -/
+cut, and every left factor retains the same bound at its internal cuts: the existence
+form of the chosen factors `cutLeftFactor` and `cutRightFactor`. The all-cuts hypothesis
+includes endpoints and therefore also covers chains of length at most one and the bound
+zero. LVV13, `algo53.tex`, `e:decomp`, lines 584--591. -/
 theorem exists_cutDecomposition_of_operatorSchmidtRank_le {L q i R : ℕ}
     (hi : i ≤ L) (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hK : ∀ k : ℕ, operatorSchmidtRank
@@ -88,16 +146,8 @@ theorem exists_cutDecomposition_of_operatorSchmidtRank_le {L q i R : ℕ}
         ∑ j, A j ⊗ₖ B j ∧
       ∀ j k, 0 < k → k < i → operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
-          ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ R := by
-  classical
-  obtain ⟨φ, B, hdecomp⟩ := exists_operatorRightContraction_decomposition
-    (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K)
-  refine ⟨_, fun j ↦ operatorRightContraction (φ j)
-    (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K), B,
-    hK i, hdecomp, ?_⟩
-  intro j k _ hki
-  rw [operatorSchmidtRank_cutOperator_leftConfigOfFin hi hki.le]
-  exact (Entropy.operatorSchmidtRank_rightContraction_subset_le
-    (leftBlock_mono hki.le) K (φ j)).trans (hK k)
+          ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ R :=
+  ⟨_, cutLeftFactor K, cutRightFactor K, hK i, cutOperator_eq_sum_cutLeftFactor_kronecker K,
+    fun j k _ hki ↦ operatorSchmidtRank_cutLeftFactor_le hi K hK j k hki⟩
 
 end TNLean.MPS.AreaLaw

@@ -34,17 +34,17 @@ $q:\mathbb C^\times\longrightarrow U(1)$ be the phase homomorphism
 $q(z)=z/|z|$.  Then
 \begin{align}
     q\circ i
-        & =\operatorname{id}_{U(1)},
-    &
+     & =\operatorname{id}_{U(1)},
+     &
     \frac{z}{i(q(z))}
-        & =|z|\in\mathbb R_{>0}.
+     & =|z|\in\mathbb R_{>0}.
     \label{eq:fbc25_circle_polar_retraction}
 \end{align}
 Consequently, if $\omega$ is a $\mathbb C^\times$-valued $2$-cocycle, then
 $q\circ\omega$ is a $U(1)$-valued $2$-cocycle and its radial residual is
 \begin{align}
     \frac{\omega(g,h)}{i(q(\omega(g,h)))}
-        & =|\omega(g,h)|.
+     & =|\omega(g,h)|.
     \label{eq:fbc25_circle_radial_residual}
 \end{align}
 The right-hand side of
@@ -53,7 +53,7 @@ the one-point block space.  The finite-group positive-cocycle theorem gives a
 positive $1$-cochain $\chi$ such that
 \begin{align}
     |\omega(g,h)|
-        & =\frac{\chi(g)\chi(h)}{\chi(gh)}.
+     & =\frac{\chi(g)\chi(h)}{\chi(gh)}.
     \label{eq:fbc25_circle_positive_coboundary}
 \end{align}
 Thus $\omega$ and $i\circ q\circ\omega$ are cohomologous.  Every
@@ -65,8 +65,8 @@ by $q$ is its left inverse.  Combining this injectivity with the finite-group
 surjectivity above gives
 \begin{align}
     H^2(G,U(1))
-        & \cong H^2(G,\mathbb C^\times)
-        \qquad (G\text{ finite}),
+     & \cong H^2(G,\mathbb C^\times)
+    \qquad (G\text{ finite}),
     \label{eq:fbc25_circle_h2_equivalence}
 \end{align}
 for algebraic group cohomology with trivial coefficient actions.
@@ -77,9 +77,9 @@ The formal proof implements the phase map, the polar identity, the positive
 one-block trivialization, and the induced maps on the canonical degree-two
 group cohomology object.
 \footnote{Formal declarations:
-\leanid{TNLean.Algebra.circleH2ToComplexUnitsH2\_surjective}
-and \leanid{TNLean.Algebra.circleH2EquivComplexUnitsH2} in
-\doclink{TNLean/Algebra/CircleCohomology}.}
+    \leanid{TNLean.Algebra.circleToComplexUnits\_map\_surjective}
+    and \leanid{TNLean.Algebra.circleToComplexUnits\_map\_bijective} in
+    \doclink{TNLean/Algebra/CircleCohomology}.}
 
 \textbf{Verdict: resolved clarification.}
 The source's finite-group equivalence is available for the algebraic

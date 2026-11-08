@@ -7,7 +7,7 @@ to the canonical regional parent interactions on a finite graph.
 The anticommutator estimate below is an explicit hypothesis.
 Deriving it from properties of a boundary state is a separate question.
 
-\begin{theorem}[Disjoint regional interactions commute]%
+\begin{lemma}[Disjoint regional interactions commute]%
     \label{thm:peps_disjoint_region_interactions_commute}
     \lean{TNLean.PEPS.regionReplaceConfig,
         TNLean.PEPS.regionLocalTerm_mulVec_apply,
@@ -23,7 +23,7 @@ Deriving it from properties of a boundary state is a separate question.
     Let $R,S$ be disjoint vertex regions and let $h_R,h_S$
     be arbitrary linear operators on their respective physical spaces.
     Their extensions to the full physical space commute.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The extension of $h_R$ sums only the physical indices in $R$
@@ -32,7 +32,7 @@ Deriving it from properties of a boundary state is a separate question.
     identifies the two compositions.
 \end{proof}
 
-\begin{theorem}[Gap from overlapping-pair estimates]%
+\begin{lemma}[Gap from overlapping-pair estimates]%
     \label{thm:peps_finite_overlap_gap}
     \lean{TNLean.PEPS.regionParentHamiltonianES_norm_gap_of_quadraticForm,
         TNLean.PEPS.regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator,
@@ -59,7 +59,7 @@ Deriving it from properties of a boundary state is a separate question.
     If another positive parent with the same regional kernels satisfies
     $H'\ge\kappa H$ for some $\kappa>0$, its norm gap is at least
     $\kappa(1-m\varepsilon)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the expansion of $H^2$, the diagonal terms sum to $H$ since
@@ -92,7 +92,7 @@ Deriving it from properties of a boundary state is a separate question.
     volume.
 \end{proof}
 
-\begin{theorem}[Unit gap for commuting canonical parents]%
+\begin{lemma}[Unit gap for commuting canonical parents]%
     \label{thm:peps_commuting_region_parent_unit_gap}
     \lean{TNLean.PEPS.regionParentHamiltonianES_unit_norm_gap_of_commute,
         TNLean.PEPS.regionParentHamiltonianES_unit_norm_gap_of_pairwise_disjoint}
@@ -103,7 +103,7 @@ Deriving it from properties of a boundary state is a separate question.
     their sum satisfies $H^2\ge H$ and has norm gap at least one
     on $(\ker H)^\perp$. In particular, this holds for
     pairwise disjoint regions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every cross term in the projector expansion is nonnegative.

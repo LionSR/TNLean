@@ -1,4 +1,4 @@
-\begin{theorem}[Dimension of a complete regular boundary image]%
+\begin{lemma}[Dimension of a complete regular boundary image]%
     \label{thm:peps_regular_open_boundary_dimension}
     \lean{TNLean.PEPS.rank_regularOpenRegionMatrix_of_isGInjective_of_connected}
     \leanok
@@ -8,14 +8,14 @@
     its original tensors are $G$-injective for the regular incident-edge action.
     The open contraction $A_R$ has
     $\dim\operatorname{im}A_R=|G|^{b-1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The contracted block is $G$-injective on its invariant boundary space.
     Its restriction to that space is an isomorphism onto its physical image.
     The invariant regular boundary space has dimension $|G|^{b-1}$.
 \end{proof}
 
-\begin{theorem}[Obstruction to containment of all boundary states]%
+\begin{lemma}[Obstruction to containment of all boundary states]%
     \label{thm:peps_small_open_boundary_obstruction}
     \lean{TNLean.PEPS.not_range_le_regularOpenRegionMatrix_of_small_boundary}
     \leanok
@@ -29,14 +29,14 @@
     This is a dimension comparison relevant to the closed bondwise equivalence
     in \cite[Section 7]{Schuch2010PEPS}; the source does not assert such
     containment for arbitrary open boundary tensors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Containment would give
     $|G|^{b-1}\leq\operatorname{rank}(LM)\leq\operatorname{rank}M\leq|B|$,
     contrary to the strict inequality.
 \end{proof}
 
-\begin{theorem}[A two-site open-boundary obstruction]%
+\begin{lemma}[A two-site open-boundary obstruction]%
     \label{thm:peps_two_site_open_boundary_obstruction}
     \lean{TNLean.PEPS.exists_boundaryNumbering_twoSite_not_range_le}
     \leanok
@@ -49,7 +49,7 @@
     $M:(\mathbb C^4)^{\otimes6}\to\mathcal P$ and every linear physical map
     $L:\mathcal P\to\mathcal H_R$, the image of $LM$ does not contain the
     complete regular boundary image.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The positive bounded rectangle is connected and its perimeter gives
     six crossing bonds; since $4^6=4096<7776=6^5$, the dimension obstruction

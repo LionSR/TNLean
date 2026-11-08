@@ -22,7 +22,7 @@
     $G$-injective.
 \end{definition}
 
-\begin{theorem}[The invariant boundary support]%
+\begin{lemma}[The invariant boundary support]%
     \label{thm:peps_regular_boundary_support_embedding}
     \lean{TNLean.PEPS.regularBoundarySupportEmbedding_mem_invariants,
         TNLean.PEPS.regularBoundarySupportEmbedding_conjTranspose_mul,
@@ -35,7 +35,7 @@
     \]
     The restriction to the regular invariant boundary is recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Distinct relative configurations give disjoint translation
@@ -45,7 +45,7 @@
     otherwise, which are precisely the entries of $P_G$.
 \end{proof}
 
-\begin{theorem}[A finite supported Gibbs representation]%
+\begin{lemma}[A finite supported Gibbs representation]%
     \label{thm:peps_regular_boundary_supported_gram_gibbs}
     \lean{TNLean.PEPS.IsGInjective.injective_regularBoundaryRestrictedMap,
         TNLean.PEPS.IsGInjective.regularBoundarySupportedGram_posDef,
@@ -65,7 +65,7 @@
     This establishes a finite Gibbs representation on the invariant
     support. It does not assert short-range interactions among
     the original virtual legs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The embedding takes values in the invariant subspace, where

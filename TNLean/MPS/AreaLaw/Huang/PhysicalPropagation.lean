@@ -24,29 +24,36 @@ open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
-/-- A physical nearest-neighbor chain has a uniform propagation approximation of
-simultaneously bounded operator-Schmidt rank at every cut. Its actual block width is
-`2 r + 2`, where `r` is the explicitly chosen radius; `chainPropagationRadius_width_le`
-gives the time-linear, logarithmic-length and logarithmic-precision width bound.
-Osborne, arXiv:quant-ph/0508031v2, equations (12)--(13); Huang, Lemma 19. -/
-theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
+/-- **The physical chain propagator.** The grid propagator at the Lieb--Robinson radius of
+the time window and accuracy, with grid width `2r + 2`. Huang, arXiv:1406.6355v6,
+Section 5.4, Lemma 19. -/
+noncomputable def physicalChainPropagator {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hHerm : ∀ i, (h i).IsHermitian) (T epsilon : ℝ) (t : ℝ) :
+    Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
+  chainGridPropagator (w := 2 * chainPropagationRadius L T epsilon + 2) hq (by omega)
+    (chainPropagationRadius L T epsilon) h hHerm t
+
+/-- The physical chain propagator approximates the evolution within the time window at
+the prescribed accuracy, with simultaneous cut-rank bounds. Huang, arXiv:1406.6355v6,
+Section 5.4, Lemma 19. -/
+theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
-    ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
+    let K := physicalChainPropagator hq h hHerm T epsilon
+    (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) := by
-  intro r
+  intro r K
   let w := 2 * r + 2
-  obtain ⟨K, hK⟩ := exists_chainGrid_propagator_approximation
-    (w := w) (r := r) hq le_rfl h hs hHerm hnorm
+  have hK (t : ℝ) := chainGridPropagator_spec (w := w) (r := r) hq le_rfl h hs hHerm hnorm t
   have hC := chainGridLRPrefactor_pos
   have hv : 0 ≤ chainGridLRVelocity := by unfold chainGridLRVelocity; positivity
-  refine ⟨K, ?_, ?_⟩
+  refine ⟨?_, ?_⟩
   · intro t ht
     have hexp : Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) ≤
         Real.exp (chainGridLRVelocity * T - (r : ℝ) / 2) :=
@@ -63,11 +70,55 @@ theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q
         ((Nat.div_le_self (L - 1) w).trans (Nat.sub_le L 1)) hT hepsilon
   · intro t cut
     have hexponent : 2 * (w + (2 * r + 2)) = 8 * r + 8 := by dsimp only [w]; ring
-    simpa only [hexponent] using (hK t).2 cut
+    simpa only [K, physicalChainPropagator, hexponent] using (hK t).2 cut
+
+/-- The physical chain propagator approximates the evolution within the time window at
+the prescribed accuracy, with simultaneous cut-rank bounds: the existence form of
+`physicalChainPropagator_spec`. Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
+theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
+    (hnorm : ∀ i, ‖h i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
+    let r := chainPropagationRadius L T epsilon
+    ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
+      (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
+      ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
+        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+          q ^ (8 * r + 8) :=
+  ⟨physicalChainPropagator hq h hHerm T epsilon,
+    physicalChainPropagator_spec hq h hs hHerm hnorm hT hepsilon⟩
+
+/-- **The propagator of a positive chain**: the physical chain propagator, with
+Hermiticity of the terms derived from positivity. Huang, arXiv:1406.6355v6, Section 2
+and Section 5.4, Lemma 19. -/
+noncomputable def positiveChainPropagator {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (T epsilon : ℝ) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
+  physicalChainPropagator hq h (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
+    T epsilon t
 
 /-- The propagation conclusion for the original positive-contraction interactions,
 with Hermiticity and norm bounds derived internally. This is the physical normalization
 in Huang, arXiv:1406.6355v6, Section 2 and Section 5.4, Lemma 19. -/
+theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
+    let r := chainPropagationRadius L T epsilon
+    let K := positiveChainPropagator hq h h0 T epsilon
+    (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
+      ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
+        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+          q ^ (8 * r + 8) :=
+  physicalChainPropagator_spec hq h hs
+    (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
+    (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)) hT hepsilon
+
+/-- The propagation conclusion for the original positive-contraction interactions: the
+existence form of `positiveChainPropagator_spec`. Huang, arXiv:1406.6355v6, Section 2
+and Section 5.4, Lemma 19. -/
 theorem exists_positive_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
@@ -78,10 +129,8 @@ theorem exists_positive_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q
       (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
-          q ^ (8 * r + 8) := by
-  let : NeZero q := ⟨by omega⟩
-  exact exists_physical_chain_propagator_approximation hq h hs
-    (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
-    (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)) hT hepsilon
+          q ^ (8 * r + 8) :=
+  ⟨positiveChainPropagator hq h h0 T epsilon,
+    positiveChainPropagator_spec hq h hs h0 h1 hT hepsilon⟩
 
 end TNLean.MPS.AreaLaw

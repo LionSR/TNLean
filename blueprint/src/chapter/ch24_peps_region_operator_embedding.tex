@@ -15,7 +15,7 @@ identity on the remaining sites.
 % eq:hole-encoder, lines 13--97, at adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is not a source-labelled frame, reset-ownership, or approximation theorem.
 
-\begin{theorem}[Equality of regional and site embeddings]
+\begin{lemma}[Equality of regional and site embeddings]
     \label{thm:peps_region_site_embedding}
     \lean{TNLean.PEPS.agreeOff_region_iff,
         TNLean.PEPS.regionLocalTerm_eq_embedOp}
@@ -30,7 +30,7 @@ identity on the remaining sites.
              0, & \text{otherwise}.
          \end{cases}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $j_R(R)=R$, agreement outside the image of $j_R$ is precisely
@@ -41,7 +41,7 @@ identity on the remaining sites.
     (\ref{eq:peps_region_embedding_entries}) for both operators.
 \end{proof}
 
-\begin{theorem}[Full-region coordinate identification]
+\begin{lemma}[Full-region coordinate identification]
     \label{thm:peps_region_embedding_coordinates}
     \lean{TNLean.PEPS.dependentRegionOperatorLift_eq_reindex_embedOp}
     \leanok
@@ -56,7 +56,7 @@ identity on the remaining sites.
          & =(E_{j_R}(H))_{\theta_q^{-1}(\alpha),\theta_q^{-1}(\beta)}.
         \label{eq:peps_region_embedding_coordinates}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The restrictions of $\theta_q^{-1}(\alpha)$ and

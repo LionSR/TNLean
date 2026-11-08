@@ -18,7 +18,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     Its inverse sends a site $x$ to $x-a$. Empty intervals are included.
 \end{definition}
 
-\begin{theorem}[A subinterval in increasing coordinates]
+\begin{lemma}[A subinterval in increasing coordinates]
     \label{thm:physical_interval_subinterval_coordinates}
     \lean{TNLean.MPS.AreaLaw.intervalShiftOrderIso_mem_subinterval}
     \uses{def:physical_interval_increasing_coordinates}
@@ -30,12 +30,12 @@ finite chain. Subtraction of natural numbers is truncated at zero.
         \label{eq:physical_interval_subinterval_coordinates}
     \end{align}
     No ordering of $u,v$ is required: if $v<u$, both conditions are false.
-\end{theorem}
-\begin{proof}
+\end{lemma}
+\begin{proof}\leanok
     Substitute $e_{c,d}(i)=c+i$ and compare the endpoint inequalities.
 \end{proof}
 
-\begin{theorem}[The length of the natural subinterval]
+\begin{lemma}[The length of the natural subinterval]
     \label{thm:physical_interval_subinterval_length}
     \lean{TNLean.MPS.AreaLaw.intervalShift_subinterval_length_le}
     If $c\le u\le d$ and $v\le d$, then
@@ -44,8 +44,8 @@ finite chain. Subtraction of natural numbers is truncated at zero.
         \label{eq:physical_interval_subinterval_length}
     \end{align}
     This includes $v<u$, when the subinterval length is zero.
-\end{theorem}
-\begin{proof}
+\end{lemma}
+\begin{proof}\leanok
     If $u\le v$, the left side equals $v-c$. If $v<u$, it equals $u-c$.
     Each is at most $d-c$.
 \end{proof}
@@ -84,7 +84,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     The virtual space remains the supplied $B$-dimensional space.
 \end{definition}
 
-\begin{theorem}[Reading a nested physical interval in natural coordinates]
+\begin{lemma}[Reading a nested physical interval in natural coordinates]
     \label{thm:physical_interval_nested_trace}
     \lean{MPOTensor.trace_identityExtendInterval_nested_natural}
     \uses{def:physical_interval_increasing_coordinates,
@@ -103,8 +103,8 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     where the identity extension starts at $a-c$ inside the natural chain
     of length $d-c$. The closing matrix and virtual space are unchanged.
     Empty intervals and zero physical or virtual dimension are included.
-\end{theorem}
-\begin{proof}
+\end{lemma}
+\begin{proof}\leanok
     When the two physical configurations agree outside the core interval,
     all exterior letters are identities, and the ordered product is the
     original core product. Otherwise one exterior letter is zero. This
@@ -114,7 +114,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     recovers its natural matrix.
 \end{proof}
 
-\begin{theorem}[A physical complement operator as a retained matrix]
+\begin{lemma}[A physical complement operator as a retained matrix]
     \label{thm:physical_interval_retained_matrix}
     \lean{TNLean.MPS.AreaLaw.exists_retainedMatrix_of_physical_localLift}
     Let $V$ be a finite physical site set and $e:\{0,\ldots,T-1\}\to V$
@@ -132,8 +132,8 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     \end{align}
     The retained matrix is obtained from the supplied regional matrix
     by this coordinate identification. No interior operator is required.
-\end{theorem}
-\begin{proof}
+\end{lemma}
+\begin{proof}\leanok
     \uses{def:retained_interval_coordinates}
     Relabel the canonical extension along $e$ using covariance of the
     regional lift. The resulting natural complement matrix is reindexed
@@ -143,9 +143,10 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     interval.
 \end{proof}
 
-\begin{theorem}[A trace-chain representation on a supported interval]
+\begin{lemma}[A trace-chain representation on a supported interval]
     \label{thm:supported_interval_trace_chain}
     \lean{TNLean.MPS.AreaLaw.exists_traceChainOperator_of_supported_interval}
+    \leanok
     \uses{def:chain_model,def:trace_chain_operator,
         def:physical_interval_increasing_coordinates}
     Let $0\le c\le d\le L$ and let $A$ be supported on the interval
@@ -153,8 +154,9 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     on a chain of $d-c$ sites and a closing matrix whose trace contraction,
     transported by $i\mapsto c+i$ and extended by the identity outside $J$,
     equals $A$. Empty intervals and zero local dimension are included.
-\end{theorem}
+\end{lemma}
 \begin{proof}
+    \leanok
     \uses{thm:finite_matrix_trace_chain,def:physical_interval_increasing_coordinates}
     The support hypothesis supplies a matrix on the interval coordinates.
     Pull it back along the increasing identification, represent that finite
@@ -162,10 +164,11 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     This supplies no efficient bond bound.
 \end{proof}
 
-\begin{theorem}[Inward effective cuts with a bounded collar]
+\begin{lemma}[Inward effective cuts with a bounded collar]
     \label{thm:inward_effective_cuts}
     \lean{TNLean.MPS.AreaLaw.inward_effective_cuts}
     \uses{def:chain_model}
+    \leanok
     Let $\ell\ge1$, $0\le p\le r\le L$ and $r-p>4\ell$.
     Put $p'=\max(p,\ell)$, $r'=\min(r,L-\ell)$,
     $a=p'-\ell$ and $b=r'-\ell-1$. Then
@@ -178,8 +181,9 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     Also $(p'-p)+(r-r')\le2\ell$ and, for
     $J_0=\{p',\ldots,r'-1\}$ and $J=\{p,\ldots,r-1\}$,
     $J_0\subseteq J$ and $|J\setminus J_0|\le2\ell$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
+    \leanok
     The long-interval assumption allows moving each endpoint inward by at
     most $\ell$ while retaining length at least $2\ell+1$.
     Substitute the definitions in the endpoint inequalities. The removed

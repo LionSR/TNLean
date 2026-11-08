@@ -1,0 +1,235 @@
+\section{The sampled approximate ground-state projector}
+\label{sec:lvv_sampled_projector}
+
+The power $A$ of Definition~\ref{def:lvv_power_projector} is a sum over all
+$n^m$ words of length $m$. Landau, Vazirani and Vidick replace it by the average
+of polynomially many words chosen at random, and control the error by a matrix
+concentration inequality~\cite[lines 606--649]{Landau2015Polynomial}. The
+notation is that of Section~\ref{sec:lvv_power_projector}: the chain has $L\ge1$
+sites, $n=L$, $P_i=1-H_i$ for $i=0,\ldots,L-1$ with $H_{L-1}=0$, and
+$C=(1-\varepsilon_0/n)^{-1}$.
+
+\begin{lemma}[Range of the ground energy]
+    \label{lem:lvv_ground_energy_range}
+    \lean{TNLean.MPS.AreaLaw.groundEnergy_nonneg_and_le,
+        TNLean.MPS.AreaLaw.powerNormalization,
+        TNLean.MPS.AreaLaw.one_le_powerNormalization}
+    \leanok
+    \uses{def:chain_model}
+    The ground energy satisfies $0\le\varepsilon_0\le n-1$. Hence
+    $C=(1-\varepsilon_0/n)^{-1}$ is defined and $C\ge1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $0\le H_i\le1$ for the $n-1$ bonds, $0\le H\le n-1$, and
+    $\varepsilon_0=\langle\Gamma,H\Gamma\rangle$ for the unit vector $\Gamma$.
+    Then $0<1-\varepsilon_0/n\le1$.
+\end{proof}
+
+\begin{definition}[The sampled projector]
+    \label{def:lvv_sampled_projector}
+    \lean{TNLean.MPS.AreaLaw.sampledProjector,
+        TNLean.MPS.AreaLaw.scaledBondComplementWord,
+        TNLean.MPS.AreaLaw.sampledProjector_eq_average,
+        TNLean.MPS.AreaLaw.wordMeasure,
+        TNLean.MPS.AreaLaw.sampleMeasure,
+        TNLean.MPS.AreaLaw.measureReal_wordMeasure_singleton}
+    \leanok
+    \uses{def:lvv_power_letters}
+    For words $I_1,\ldots,I_\ell$ of length $m$ in the letters
+    $0,\ldots,n-1$, put
+    \begin{align}
+        K=C^m\frac1\ell\sum_{j=1}^\ell P_{I_j}.
+        \label{eq:lvv_sampled_projector}
+    \end{align}
+    The words are drawn independently, each uniformly from the $n^m$ words, so
+    that the letters of all words are independent and uniform on
+    $\{0,\ldots,n-1\}$. This is the sampling operator
+    of~\cite[line 611]{Landau2015Polynomial}.
+\end{definition}
+
+\begin{lemma}[Matrix Bernstein inequality for averages]
+    \label{thm:lvv_matrix_bernstein}
+    \lean{Matrix.measureReal_le_norm_average_sub_le}
+    \leanok
+    Let $X_1,\ldots,X_\ell$ be independent identically distributed random
+    $D\times D$ complex matrices, $\ell\ge1$, with $\mathbb E X_k=X$ and
+    $\|X_k-X\|\le R$ almost surely, and put
+    $\sigma^2=\max\bigl(\|\mathbb E(X_1-X)(X_1-X)^*\|,
+        \|\mathbb E(X_1-X)^*(X_1-X)\|\bigr)$. For $t\ge0$,
+    \begin{align*}
+        \Pr\Bigl(\Bigl\|\frac1\ell\sum_{k=1}^\ell X_k-X\Bigr\|\ge t\Bigr)
+        \le2D\exp\Bigl(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\Bigr).
+    \end{align*}
+    This is~\cite[lines 616--624]{Landau2015Polynomial}, derived there
+    from~\cite[Theorem~1.6]{Tropp2012User}; the variance is the maximum of the
+    operator norms of the two expectations~\cite{gap:lvv13_matrix_bernstein_variance_norm}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The summands $Z_k=(X_k-X)/\ell$ are independent and centred, with
+    $\|Z_k\|\le R/\ell$ and variance parameter $\sigma^2/\ell$. The rectangular
+    matrix Bernstein inequality of~\cite[Theorem~1.6]{Tropp2012User} at $t$
+    gives the bound, since
+    $(t^2/2)/(\sigma^2/\ell+Rt/(3\ell))=\ell t^2/(2\sigma^2+2Rt/3)$.
+\end{proof}
+
+\begin{lemma}[Mean and range of a sampled term]
+    \label{lem:lvv_sampled_term}
+    \lean{TNLean.MPS.AreaLaw.integral_scaledBondComplementWord,
+        TNLean.MPS.AreaLaw.norm_scaledBondComplementWord_sub_le,
+        TNLean.MPS.AreaLaw.norm_bondComplement_le_one,
+        TNLean.MPS.AreaLaw.norm_bondComplementWord_le_one}
+    \leanok
+    \uses{def:lvv_sampled_projector, def:lvv_power_projector}
+    For a uniform word $I$ of length $m$, $\mathbb E[C^mP_I]=A$ and
+    $\|C^mP_I-A\|\le C^m+1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_power_expansion, thm:lvv_power_projector_basic,
+        lem:lvv_ground_energy_range}
+    Every word has probability $n^{-m}$, so
+    $\mathbb E[C^mP_I]=C^mn^{-m}\sum_IP_I=A$ by
+    Lemma~\ref{thm:lvv_power_expansion}. Since $0\le P_i\le1$, every letter
+    has norm at most one, and so does every word. With $\|A\|=1$ from
+    Lemma~\ref{thm:lvv_power_projector_basic} and $C\ge1$,
+    $\|C^mP_I-A\|\le C^m+1$.
+\end{proof}
+
+\begin{lemma}[Accuracy of the sampled projector]
+    \label{lem:lvv_sampled_accuracy}
+    \lean{TNLean.MPS.AreaLaw.measureReal_le_norm_sampledProjector_sub_le}
+    \leanok
+    \uses{def:lvv_sampled_projector, def:lvv_power_projector}
+    Let $\ell\ge1$, $t>0$ and $R=C^m+1$. Then
+    \begin{align*}
+        \Pr(\|K-A\|\ge t)\le2q^n\exp\Bigl(-\frac{\ell t^2}{2R^2+2Rt/3}\Bigr).
+    \end{align*}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_matrix_bernstein, lem:lvv_sampled_term}
+    The terms $X_k=C^mP_{I_k}$ are independent and identically distributed, with
+    $K=\ell^{-1}\sum_kX_k$. By Lemma~\ref{lem:lvv_sampled_term} their mean is
+    $A$ and $\|X_k-A\|\le R$, so both variance terms are at most $R^2$, and
+    Lemma~\ref{thm:lvv_matrix_bernstein} applies in dimension $q^n$. If
+    $q=0$, every matrix vanishes and the event is empty.
+\end{proof}
+
+\begin{lemma}[Multiplicity of the letters]
+    \label{lem:lvv_letter_multiplicity}
+    \lean{TNLean.MPS.AreaLaw.letterCount,
+        TNLean.MPS.AreaLaw.measureReal_le_letterCount_le,
+        TNLean.MPS.AreaLaw.measureReal_exists_le_letterCount_le}
+    \leanok
+    \uses{def:lvv_sampled_projector}
+    Let $Y_j(I)$ be the number of occurrences of the letter $j$ in the word $I$,
+    and let $t\ge0$. For a uniform word $I$ of length $m$,
+    \begin{align*}
+        \Pr\bigl(Y_j(I)\ge m/n+t\bigr)
+        \le\exp\Bigl(-\frac{t^2/2}{m/n+t/3}\Bigr),
+    \end{align*}
+    and the probability that $Y_j(I_k)\ge m/n+t$ for some letter $j$ and some
+    word $I_k$ among $\ell$ independent uniform words is at most $\ell n$ times
+    the same bound.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $Y_j(I)-m/n=\sum_{p=1}^m Z_p$ with
+    $Z_p=\mathbf 1[I_p=j]-1/n$. The $Z_p$ are independent and centred, with
+    $|Z_p|\le1$ and $\mathbb EZ_p^2=1/n-1/n^2\le1/n$. The Hermitian matrix
+    Bernstein inequality for bounded summands, in dimension one, which is
+    Bernstein's inequality~\cite[Theorem~6.1]{Tropp2012User}, gives the first
+    bound; this is the tail $e^{-\Omega(a^2)}$
+    of~\cite[lines 646--648]{Landau2015Polynomial}. The second follows by a union
+    bound over the $\ell$ words and the $n$ letters.
+\end{proof}
+
+\begin{lemma}[Accuracy and multiplicity of the sampled projector]
+    \label{thm:lvv_sampled_projector}
+    \lean{TNLean.MPS.AreaLaw.one_sub_le_measureReal_sampledProjector,
+        TNLean.MPS.AreaLaw.one_sub_inv_pow_three_le_measureReal_sampledProjector,
+        TNLean.MPS.AreaLaw.exists_sampledProjector,
+        TNLean.MPS.AreaLaw.sampledProjectorWordCount,
+        TNLean.MPS.AreaLaw.sampledProjectorLetterBound}
+    \leanok
+    \uses{def:lvv_sampled_projector, def:lvv_power_projector}
+    Let $\eta>0$, let $m\ge0$ and $R=C^m+1$, and let $\ell\ge1$ and $\kappa$
+    satisfy
+    \begin{align}
+        \ell\ge\frac{2R^2+2R\eta/3}{\eta^2}\log(8q^nn^3),\qquad
+        \kappa\ge\frac{2m}n+2\log(4\ell n^4).
+        \label{eq:lvv_sampled_parameters}
+    \end{align}
+    With probability at least $1-1/(2n^3)$, in particular at least $1-1/n^3$,
+    the operator $K$ of~(\ref{eq:lvv_sampled_projector}) satisfies
+    $\|K-A\|<\eta$, and every letter occurs at most $\kappa$ times in every word.
+    The values
+    \begin{align*}
+        \ell=\Bigl\lceil\frac{2R^2+2R\eta/3}{\eta^2}\log(8q^nn^3)\Bigr\rceil+1,
+        \qquad
+        \kappa=\Bigl\lceil\frac{2m}n+2\log(4\ell n^4)\Bigr\rceil
+    \end{align*}
+    satisfy~(\ref{eq:lvv_sampled_parameters}). If moreover
+    $m\ge((n-\varepsilon_0)/\Delta)\log(1/\eta)$, then for these values there are
+    words $I_1,\ldots,I_\ell$ with $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$,
+    $\|K-A\|<\eta$, every letter occurring at most $\kappa$ times in every word,
+    and every $P_{I_k}$ of operator Schmidt rank at most $q^{2\kappa}$ across
+    every cut.
+
+    This is~\cite[lines 626--649]{Landau2015Polynomial}, with $\ell$ stated
+    through $C^m$. The source states $\ell=n^{O(1/\varepsilon)}$, using
+    $C^{2m}=n^{O(1/\varepsilon)}$; this fails when $\varepsilon_0$ is of order
+    $n$, and holds when $\varepsilon_0/\varepsilon$ is bounded, by
+    Lemma~\ref{lem:lvv_power_normalization_size}~\cite{gap:lvv13_runtime_ground_energy}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:lvv_sampled_accuracy, lem:lvv_letter_multiplicity,
+        lem:lvv_ground_energy_range, thm:lvv_power_threshold,
+        thm:lvv_power_word_rank}
+    Put $D=2R^2+2R\eta/3$. By Lemma~\ref{lem:lvv_sampled_accuracy},
+    $\Pr(\|K-A\|\ge\eta)\le2q^ne^{-\ell\eta^2/D}\le2q^n/(8q^nn^3)=1/(4n^3)$ for
+    $q\ge1$, and the probability vanishes for $q=0$. Put $t=\kappa-m/n$ and
+    $a=\log(4\ell n^4)>0$, so that $t\ge m/n+2a$. Then
+    $t^2\ge t\,m/n+2at\ge2a(m/n+t/3)$, and
+    Lemma~\ref{lem:lvv_letter_multiplicity} bounds the probability that some
+    letter occurs more than $\kappa$ times in some word by
+    $\ell ne^{-a}=1/(4n^3)$. The complement of the two events has probability
+    at least $1-1/(2n^3)>0$, and so contains a choice of words. For such a
+    choice, Lemma~\ref{thm:lvv_power_threshold} gives
+    $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$, and
+    Lemma~\ref{thm:lvv_power_word_rank} gives the rank bound.
+\end{proof}
+
+\begin{lemma}[Size of the normalization]
+    \label{lem:lvv_power_normalization_size}
+    \lean{TNLean.MPS.AreaLaw.powerNormalization_eq,
+        TNLean.MPS.AreaLaw.powerNormalization_pow_le_exp,
+        TNLean.MPS.AreaLaw.powerNormalization_pow_ceil_le}
+    \leanok
+    \uses{lem:lvv_ground_energy_range}
+    If $0\le\varepsilon_0<n$, then
+    $C^m\le\exp(\varepsilon_0m/(n-\varepsilon_0))$ for every $m$. If
+    $0\le\varepsilon_0\le n-1$, $\Delta>0$, $0<\eta\le1$ and
+    $m=\lceil((n-\varepsilon_0)/\Delta)\log(1/\eta)\rceil$, then
+    $C^m\le n\,\eta^{-\varepsilon_0/\Delta}$. In particular, the number $\ell$
+    of Lemma~\ref{thm:lvv_sampled_projector} is polynomial in $n$ and
+    $1/\eta$ when $\varepsilon_0/\Delta$ is bounded.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $C=1+\varepsilon_0/(n-\varepsilon_0)\le e^{\varepsilon_0/(n-\varepsilon_0)}$,
+    the first bound follows. For the second, $n-\varepsilon_0\ge1$ gives
+    $C\le n$, and if $m\ge1$, then $m-1\le((n-\varepsilon_0)/\Delta)\log(1/\eta)$,
+    so $C^m\le n\exp\bigl((\varepsilon_0/\Delta)\log(1/\eta)\bigr)
+        =n\eta^{-\varepsilon_0/\Delta}$.
+\end{proof}

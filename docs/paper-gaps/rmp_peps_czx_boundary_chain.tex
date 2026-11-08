@@ -114,9 +114,28 @@ Here $\rho_R$ is the unnormalized partial trace of the actual closed PEPS.
 Its trace is nonzero because it is positive semidefinite of positive rank.
 Division by that trace preserves the proved support and rank.
 
+\section{Cyclic coordinate rectangles}
+The bounded-region restriction is removed for positive proper cyclic
+coordinate intervals by \leanid{TNLean.PEPS.openRegionWeight_czxWrappingRectangle}.
+For an arbitrary torus start $s$, the region is
+$R_s=\{s+(i,j):0\le i<w,\ 0\le j<h\}$, with $0<w<W$ and $0<h<H$.
+Both intervals may cross their coordinate seams. The translation bijects
+the actual crossing bonds and all incident labels, preserves the four
+directional legs and bottom/left pair reversal, and reindexes the actual
+contraction without exterior-label multiplicities. Thus the bounded
+faithful boundary map and its printed MPO intertwiner transport to $R_s$.
+Translated plaquette extensions also give the actual reduced-density
+support and rank $2^{2w+2h}$. The corresponding statements are
+\leanid{TNLean.PEPS.regionPhysicalProductMatrix_czxWrappingRectangleBoundaryMatrix_review},
+\leanid{TNLean.PEPS.range_regionReducedDensity_czxWrappingRectangle}, and
+\leanid{TNLean.PEPS.rank_regionReducedDensity_czxWrappingRectangle}.
+Full-width cylinders are excluded: their boundary topology differs.
+
 \section{Remaining scope}
-The exact support and its dimension, including trace normalization, are
-now proved for the stated rectangles. The source's explicit reduced-state
+The exact support and its dimension are now proved for positive proper
+bounded and cyclic coordinate rectangles. The explicit trace-normalized
+statements above retain their bounded-rectangle formulation.
+The source's explicit reduced-state
 projection, its nonzero eigenvalues, the Gram normalization of $F_R$, and
 entropy remain open. The support theorem alone does not imply flatness or
 that $F_R$ itself is an isometry. General nonrectangular regions and

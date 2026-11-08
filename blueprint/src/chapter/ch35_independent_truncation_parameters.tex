@@ -1,13 +1,13 @@
 \section{Independent approximation parameters}
 
-\begin{theorem}[A filter exponent in both norm regimes]
+\begin{lemma}[A filter exponent in both norm regimes]
     \label{thm:independent_truncation_filter_exponent}
     \lean{Real.independent_truncation_filter_exponent}
     \leanok
     Let $\ell,a\ge0$, $a\le t$, $7\le\ell g$, and
     $7ta^2\le g\ell^4$. For every $0<R\le3t+4\ell$,
     one has $a\le\ell^2\sqrt{g/R}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If $t\le\ell$, then $a\le\ell$ and $R\le7\ell$, whence
@@ -16,7 +16,7 @@
     the same inequality. Divide by $R$ and take square roots.
 \end{proof}
 
-\begin{theorem}[An integer window at an independent threshold]
+\begin{lemma}[An integer window at an independent threshold]
     \label{thm:independent_truncation_filter_scale}
     \lean{Real.exists_independent_truncation_filter_scale}
     \leanok
@@ -27,7 +27,7 @@
         \label{eq:independent_truncation_integer_scale}
     \end{align}
     and $a\le\ell^2\sqrt{g/R}$ for every $0<R\le3t+4\ell$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:independent_truncation_filter_exponent}
@@ -37,7 +37,7 @@
     Apply the two-regime exponent bound.
 \end{proof}
 
-\begin{theorem}[The quarter-power gap and accuracy scales]
+\begin{lemma}[The quarter-power gap and accuracy scales]
     \label{thm:quarter_power_truncation_filter_scale}
     \lean{Real.exists_quarter_power_truncation_filter_scale}
     \leanok
@@ -52,7 +52,7 @@
     estimate of \cite[Theorem~4.9]{Arad2016RigorousRG}; the printed
     prescription is corrected as in
     \cite{gap:alvv16_approximation_parameters}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:independent_truncation_filter_scale}
@@ -60,7 +60,7 @@
     $(7Ca^3/g)^{1/4}=(7C)^{1/4}g^{-1/4}a^{3/4}$.
 \end{proof}
 
-\begin{theorem}[One logarithmic threshold for every projection accuracy]
+\begin{lemma}[One logarithmic threshold for every projection accuracy]
     \label{thm:independent_truncation_threshold_constant}
     \lean{Real.exists_independent_truncation_threshold_constant}
     \leanok
@@ -71,7 +71,7 @@
         288e^{11/8}e^{-(Cu-g)/8}\le\tau g/10^6.
         \label{eq:independent_truncation_uniform_tail}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Set $K=288e^{11/8}10^6$ and $C=32+8\log K$.

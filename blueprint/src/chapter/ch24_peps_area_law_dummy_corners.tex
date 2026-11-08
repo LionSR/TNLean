@@ -9,7 +9,7 @@ cell individually; see \cite[Section~11]{OpenAI2026AreaLaw}.
 % Source: 10-geometry.tex, lines 160--191, 200--207 and 299--310.
 % Constancy of the opposing dummy region and its label remains separate.
 
-\begin{theorem}[Dummy-cell corner on a full fine-cell side]
+\begin{lemma}[Dummy-cell corner on a full fine-cell side]
     \label{thm:area_law_dummy_corner_side}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_side}
     \leanok
@@ -20,7 +20,7 @@ cell individually; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $w\in P_{k_0}$. For $\varepsilon\in\{0,1\}^2$, set
     $x=o+2^{k_0}(w+\varepsilon)$. If $x$ lies on the side $S_{\ell_k,z,s}$,
     then $x=a_{\ell_k,z,s}$ or $x=b_{\ell_k,z,s}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_contact_index,thm:area_law_fine_cell_containment,
         thm:area_law_fine_belt_scales,thm:area_law_cell_fan_mark_vertices,
@@ -39,7 +39,7 @@ cell individually; see \cite[Section~11]{OpenAI2026AreaLaw}.
     contradicting $q>0$.
 \end{proof}
 
-\begin{theorem}[Dummy-cell corner on an elementary fine-cell segment]
+\begin{lemma}[Dummy-cell corner on an elementary fine-cell segment]
     \label{thm:area_law_dummy_corner_elementary_side}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_elementarySide}
     \leanok
@@ -51,7 +51,7 @@ cell individually; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $\overline{Q_{k,z}}$ and let $[u,v]$ be one of its elementary segments.
     For $\varepsilon\in\{0,1\}^2$, if the corner
     $x=o+2^{k_0}(w+\varepsilon)$ belongs to $[u,v]$, then $x=u$ or $x=v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_corner_side,thm:area_law_elementary_side_geometry}
     Since $[u,v]$ lies on a full side $[a,b]$ of $\overline{Q_{k,z}}$, the

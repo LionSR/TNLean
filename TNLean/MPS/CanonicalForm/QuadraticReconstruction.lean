@@ -27,11 +27,15 @@ equations displayed at MPSarchive.tex lines 1139-1152:
   window;
 * `∑ i, B i * (B i)ᴴ = 1`.
 
-The reconstruction theorem (MPSarchive.tex lines 1154-1165) asserts that the
-system is solvable whenever the state admits a translation-invariant
-representation with condition C1, and that any solution is unitarily conjugate
-to the canonical one. Its proof reduces, as in the uniqueness theorem
-`thm-uniq`, to two lemmas formalized below: the chain-combination lemma
+The printed reconstruction theorem (MPSarchive.tex lines 1154-1165) claims
+solvability from condition C1 and an unrestricted exact unitary conclusion.
+Its corrected converse holds for every solution over the canonical window up
+to a unit-modulus phase; the left endpoint gauge of a solution, which no
+inversion equation constrains, is shown invertible from a spanning length
+inside the window. See
+`docs/paper-gaps/pgvwc07_quadratic_reconstruction_phase.tex` and the companion
+`QuadraticReconstructionConverse` module. The algebraic proof uses, as in the uniqueness
+theorem `thm-uniq`, the two lemmas formalized below: the chain-combination lemma
 `lem-same-matr` (lines 1022-1049) and the Kronecker intertwiner lemma
 `lem-horn` (lines 1053-1058).
 
@@ -283,8 +287,12 @@ the uniqueness proof at lines 1080-1086.
 **Local fix (`docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex`):**
 The internal chain alone has only `m - 1` intertwiners and does not force a
 linear dependence. For the source window `m = D ^ 4`, the dimension argument
-requires `D ^ 4 + 1` cut intertwiners. The two endpoint cuts are deliberately
-not invented here; they must come from a future open-boundary gauge comparison. -/
+requires `D ^ 4 + 1` cut intertwiners. The endpoint gauges of a solution are
+not constrained by an inversion equation, so the two endpoint cuts are not
+constructed here; for the canonical window the left endpoint gauge is
+invertible by `MPSTensor.isUnit_gauge_zero_of_isNBlkInjective`, the right
+endpoint gauge is nonzero, and the complete chain is
+`MPSTensor.exists_intertwiner_of_gauged`. -/
 def chainIntertwiner (s t : QuadraticReconstructionSolution A) (j : ℕ) (h : j + 1 < m) :
     Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
   t.leftGauge ⟨j + 1, h⟩ * s.rightGauge ⟨j, Nat.lt_of_succ_lt h⟩

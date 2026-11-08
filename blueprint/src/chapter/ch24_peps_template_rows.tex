@@ -1,4 +1,4 @@
-\begin{theorem}[Horizontal sections of sampled polygons]
+\begin{lemma}[Horizontal sections of sampled polygons]
     \label{thm:area_law_sample_rows}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.latticeRow,
@@ -16,33 +16,22 @@
     }
     \leanok
     \uses{def:area_law_template}
-    Let $P$ be one of the real polygons of a template, put
-    $S=P\cap\mathbb Z^2$, and for $y\in\mathbb Z$ write
-    $R_y(S)=\{x\in\mathbb Z:(x,y)\in S\}$.
-    Every nonempty real horizontal section of $P$ is a closed interval
-    $[a,b]$ whose lattice intersection rounds the endpoints:
+    For a template polygon $P$, set $S=P\cap\mathbb Z^2$ and $R_y(S)=\{x\in\mathbb Z:(x,y)\in S\}$ ($y\in\mathbb Z$). Every nonempty horizontal section of $P$ is a compact interval $[a,b]$ with
     \begin{align}
-        R_y(S) & =[\lceil a\rceil,\lfloor b\rfloor]\cap\mathbb Z.
+        R_y(S) & =[\lceil a\rceil,\lfloor b\rfloor]\cap\mathbb Z,
     \end{align}
-    When this integer interval is nonempty, its endpoints are its attained
-    minimum and maximum; for every real $c$ and integers $m,y$, rounding
-    commutes with integer shifts:
+    attaining its extrema when nonempty, and for all $c\in\mathbb R$ and $m,y\in\mathbb Z$,
     \begin{align}
         \lceil c+my\rceil   & =\lceil c\rceil+my,   \\
         \lfloor c+my\rfloor & =\lfloor c\rfloor+my.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Because a finite convex hull is compact and convex, its intersection with
-    a horizontal line is a compact interval connecting its attained extrema.
-    Intersecting that interval with $\mathbb Z$ rounds the lower endpoint
-    upward and the upper endpoint downward, and integer translation commutes
-    with both floor and ceiling, establishing the initial row step in the
-    proof of Lemma~9.4 of \cite{OpenAI2026AreaLaw}.
+    Since $P$ is compact and convex, its horizontal section at $y$ is a compact interval $[a,b]$; intersecting with $\mathbb Z$ gives $[\lceil a\rceil,\lfloor b\rfloor]\cap\mathbb Z$, and integer shifts commute with $\lceil\cdot\rceil$ and $\lfloor\cdot\rfloor$ (\cite[Lemma~9.4]{OpenAI2026AreaLaw}).
 \end{proof}
 
-\begin{theorem}[Area of a template]
+\begin{lemma}[Area of a template]
     \label{thm:area_law_template_area}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box,
@@ -51,18 +40,14 @@
     }
     \leanok
     \uses{def:area_law_template}
-    If $C_{\rm tpl}\ge1$, a template satisfies $|T|\le9ns_0$.
-\end{theorem}
+    If $C_{\rm tpl}\ge1$, a template $T$ satisfies $|T|\le9ns_0$.
+\end{lemma}
 \begin{proof}
     \leanok
-    Each nonempty sample lies in an integer square of radius $s_0$ centered at
-    any one of its sites and therefore contains at most $(2s_0+1)^2$ sites,
-    whereas empty samples contribute zero. Summing over the $N_0$ pieces and
-    using $(2s_0+1)^2\le9s_0(s_0+1)$ together with $N_0(s_0+1)\le n$ yields
-    $|T|\le9ns_0$.
+    Each nonempty piece sample lies in a $\ell_\infty$-ball of radius $s_0$ and thus has cardinality at most $(2s_0+1)^2\le9s_0(s_0+1)$; summing over the $N_0$ pieces with $N_0(s_0+1)\le C_{\rm tpl}N_0(s_0+1)\le n$ gives $|T|\le9ns_0$.
 \end{proof}
 
-\begin{theorem}[Rows and unions under ambient dilation]
+\begin{lemma}[Rows and unions under ambient dilation]
     \label{thm:area_law_dilation_rows_union}
     \lean{
         TNLean.Lattice.mem_ambientDilation_iff,
@@ -76,35 +61,24 @@
     }
     \leanok
     \uses{def:area_law_template,thm:area_law_sample_rows}
-    For a finite $S\subset\mathbb Z^2$, let
-    $S_r=S+([-r,r]^2\cap\mathbb Z^2)$, so a point belongs to $S_r$ if and only
-    if both of its coordinate differences from some point of $S$ are at most
-    $r$ in absolute value. Ambient dilation is monotone in both $S$ and $r$,
-    satisfies $(S_r)_t=S_{r+t}$, and has horizontal rows
+    For finite $S\subset\mathbb Z^2$, set $S_r=S+([-r,r]^2\cap\mathbb Z^2)$. Ambient dilation is monotone in $(S,r)$, satisfies $(S_r)_t=S_{r+t}$, and has rows
     \begin{align}
         R_y(S_r) & =
         \bigcup_{z=y-r}^{y+r}\ \bigcup_{a\in R_z(S)}
-        ([a-r,a+r]\cap\mathbb Z),
+        ([a-r,a+r]\cap\mathbb Z).
     \end{align}
-    where each nonempty row $R_z(S)$ of a sampled polygon contributes the
-    interval from its minimum minus $r$ to its maximum plus $r$.
-    When $S=\bigcup_{i\in I}S_i$ is a finite union of possibly empty,
-    overlapping, or disconnected pieces, every $r,t\ge0$ satisfy
+    For any finite union $S=\bigcup_{i\in I}S_i$ and $r,t\ge0$,
     \begin{align}
         S_r\setminus S_t   & \subseteq\bigcup_{i\in I}((S_i)_r\setminus(S_i)_t), \\
         |S_r\setminus S_t| & \le\sum_{i\in I}|(S_i)_r\setminus(S_i)_t|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    The coordinate bounds defining $S_r$ decompose directly into vertical and
-    horizontal intervals to give the row formula. For a finite union
-    $S=\bigcup_{i\in I}S_i$, any point in $S_r\setminus S_t$ lies within
-    distance $r$ of some constituent $S_i$ while avoiding $(S_i)_t$, which
-    gives the set inclusion and, by union subadditivity, the cardinality bound.
+    Decomposing $[-r,r]^2\cap\mathbb Z^2$ by vertical and horizontal coordinates gives the formula for $R_y(S_r)$, and for $S=\bigcup_{i\in I}S_i$, any $x\in S_r\setminus S_t$ lies in $(S_i)_r\setminus(S_i)_t$ for some $i\in I$, yielding the inclusion and subadditivity bound.
 \end{proof}
 
-\begin{theorem}[Supporting strips of allowed polygons]
+\begin{lemma}[Supporting strips of allowed polygons]
     \label{thm:area_law_polygon_strips}
     \leanok
     \lean{
@@ -114,69 +88,46 @@
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
     }
     \uses{def:area_law_template}
-    Each allowed polygon equals the intersection of the supporting strips for
-    the four linear forms $x,y,x+y,x-y$, or equivalently the intersection of all
-    closed supporting slabs with allowed normal directions.
-\end{theorem}
+    Every allowed polygon equals the intersection of its supporting strips for the four linear forms $x,y,x+y,x-y$ (equivalently, all closed supporting slabs with allowed normal directions).
+\end{lemma}
 \begin{proof}
     \leanok
-    Every supporting slab contains the convex hull of the vertices, and the
-    extrema of each linear form over the finite vertex set are attained.
-    Conversely, for a triangle, dividing the three oriented side functionals by
-    its nonzero signed determinant (of either sign) produces nonnegative
-    barycentric coordinates, while for a rectangle the orthogonal side
-    coordinates in $[0,1]$ produce four nonnegative convex weights; since every
-    allowed normal is a scalar multiple of one of $x,y,x+y,x-y$, the four
-    supporting strips cut out the polygon.
+    Each supporting slab contains the convex hull of the vertices; conversely, normalizing the side functionals of a triangle (by its nonzero signed determinant) or a rectangle gives nonnegative barycentric or product-interval coordinates whenever the four strip bounds for $x,y,x+y,x-y$ hold.
 \end{proof}
 
 % Auxiliary to Definition 9.3 (scanner:template), 08-scanner.tex, lines 546--569.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Finite integer points in allowed polygons]
+\begin{lemma}[Finite integer points in allowed polygons]
     \label{thm:area_law_polygon_integer_points_finite}
     \lean{TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.finite_integerPoints}
     \leanok
     \uses{def:area_law_template}
-    Let $P\subseteq\mathbb R^2$ be a closed nondegenerate triangle or
-    rectangle whose sides have slopes in $\{0,\infty,1,-1\}$.
-    Then $P\cap\mathbb Z^2$ is finite.
-\end{theorem}
+    For any closed nondegenerate triangle or rectangle $P\subseteq\mathbb R^2$ with side slopes in $\{0,\infty,1,-1\}$, the set $P\cap\mathbb Z^2$ is finite.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_polygon_strips}
-    By Theorem~\ref{thm:area_law_polygon_strips}, there exist
-    $l_x,u_x,l_y,u_y\in\mathbb R$ such that
-    $P\subseteq[l_x,u_x]\times[l_y,u_y]$, which implies
+    By Lemma~\ref{thm:area_law_polygon_strips}, $P\subseteq[l_x,u_x]\times[l_y,u_y]$ for some $l_x,u_x,l_y,u_y\in\mathbb R$, so
     \begin{align}
         P\cap\mathbb Z^2 & \subseteq
         ([\lceil l_x\rceil,\lfloor u_x\rfloor]\cap\mathbb Z)
-        \times([\lceil l_y\rceil,\lfloor u_y\rfloor]\cap\mathbb Z).\notag
+        \times([\lceil l_y\rceil,\lfloor u_y\rfloor]\cap\mathbb Z),\notag
     \end{align}
-    Because each integer interval is finite, their Cartesian product and its
-    subset $P\cap\mathbb Z^2$ are finite.
+    which is a subset of a finite Cartesian product.
 \end{proof}
 
 % Auxiliary to Definition 9.3 (scanner:template) and 10-geometry.tex,
 % lines 299--318 and 732--740.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[A template for the integer points of a fan run]
+\begin{lemma}[A template for the integer points of a fan run]
     \label{thm:area_law_fan_run_template}
     \lean{TNLean.PEPS.AreaLaw.Geometry.CellFanRun.exists_template}
     \leanok
     \uses{def:area_law_template,def:area_law_dyadic_cells,def:area_law_cell_fan,
         def:area_law_fan_runs}
-    Let $C_{\mathrm{tpl}},C_B\in\mathbb R$ satisfy
-    $C_{\mathrm{tpl}}\ge1$ and $C_B\ge16C_{\mathrm{tpl}}$.
-    Fix any origin $o\in\mathbb R^2$, scale $\ell\in\mathbb N$, and
-    cell index $z\in\mathbb Z^2$, together with midpoint subdivisions and a
-    two-coloring of the fan triangles of the closed dyadic square of side
-    $u=2^\ell$. For any run $R$ whose lattice intersection
-    $T_R\cap\mathbb Z^2$ is nonempty, there exists a template $T$ with
-    parameters $s_0=2^\ell$ and $n=\lceil C_Bu\rceil$, formed by at most eight
-    polygonal pieces, such that $x\in T$ if and only if $x\in T_R$ for every
-    $x\in\mathbb Z^2$.
-\end{theorem}
+    Let $C_{\mathrm{tpl}}\ge1$ and $C_B\ge16C_{\mathrm{tpl}}$. Fix $o\in\mathbb R^2$, $\ell\in\mathbb N$, $z\in\mathbb Z^2$, and midpoint subdivisions and a two-coloring of the fan triangles of the closed dyadic square of side $u=2^\ell$. For any run $R$ with $T_R\cap\mathbb Z^2\ne\varnothing$, there exists a template $T$ with $s_0=2^\ell$, $n=\lceil C_Bu\rceil$, and at most $8$ polygonal pieces such that $T=T_R\cap\mathbb Z^2$.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -185,29 +136,14 @@
         thm:area_law_fan_run_cover,
         thm:area_law_polygon_integer_points_finite,
         thm:area_law_dyadic_cell_distance}
-    Select the $m$ fan triangles $P_e$ indexed by $R$. Because
-    $T_R\cap\mathbb Z^2$ is nonempty, at least one such triangle contains a
-    lattice point, while Theorem~\ref{thm:area_law_cell_fan_count} gives
-    $1\le m\le8$. Assigning to each piece $P_e$ its finite lattice sample
-    $P_e\cap\mathbb Z^2$ via
-    Theorem~\ref{thm:area_law_polygon_integer_points_finite} (allowing empty
-    individual samples) yields a union equal to $T_R\cap\mathbb Z^2$ across all
-    shared edges.
-
-    By Theorem~\ref{thm:area_law_cell_fan_cover}, every piece lies in the same
-    closed dyadic square of side $u$, so
-    Theorem~\ref{thm:area_law_dyadic_cell_distance} with equal cell indices and
-    radius zero bounds the maximum-norm diameter of each piece and of the total
-    sample by $u=s_0$. Since $u\ge1$ and $C_B\ge16$, both $s_0$ and $n$ are
-    positive and satisfy
+    By Lemmas~\ref{thm:area_law_cell_fan_count}, \ref{thm:area_law_fan_run_cover}, and~\ref{thm:area_law_polygon_integer_points_finite}, the $m\in\{1,\ldots,8\}$ fan triangles $P_e$ ($e\in R$) have finite samples $P_e\cap\mathbb Z^2$ with union $T_R\cap\mathbb Z^2$. By Lemmas~\ref{thm:area_law_cell_fan_cover} and~\ref{thm:area_law_dyadic_cell_distance}, all pieces lie in a closed square of side $u=s_0$, bounding their $\ell_\infty$-diameters by $s_0$, and since $u\ge1$,
     \begin{align}
         C_{\mathrm{tpl}}m(s_0+1) & \le8C_{\mathrm{tpl}}(u+1)
-        \le16C_{\mathrm{tpl}}u\le C_Bu\le n,\notag
+        \le16C_{\mathrm{tpl}}u\le C_Bu\le n.\notag
     \end{align}
-    verifying all scale and diameter conditions of a template.
 \end{proof}
 
-\begin{theorem}[Rounded affine row profiles]
+\begin{lemma}[Rounded affine row profiles]
     \label{thm:area_law_affine_row_profiles}
     \leanok
     \lean{
@@ -220,31 +156,19 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
     }
     \uses{thm:area_law_polygon_strips,thm:area_law_sample_rows}
-    For each sampled polygon $S$ there exist eight integers
-    $l_x,u_x,l_y,u_y,l_+,u_+,l_-,u_-$ such that $R_y(S)$ is empty outside
-    $[l_y,u_y]$ and, for $y\in[l_y,u_y]$,
+    For each sampled polygon $S$ there exist $l_x,u_x,l_y,u_y,l_+,u_+,l_-,u_-\in\mathbb Z$ such that $R_y(S)=\varnothing$ for $y\notin[l_y,u_y]$ and, for $y\in[l_y,u_y]$,
     \begin{align}
         R_y(S) & =
         [\max(l_x,l_+-y,l_-+y),\min(u_x,u_+-y,u_-+y)]\cap\mathbb Z.
     \end{align}
-    The nonempty rows $R_y(S)$ form an integer interval of $y$-values across
-    which the attained lower and upper endpoints each change by at most one per
-    row step; restricting to a vertical window preserves consecutive occupied
-    columns and allows any sampled point to shift to an occupied adjacent row
-    with horizontal displacement at most one.
-\end{theorem}
+    The $y\in\mathbb Z$ with $R_y(S)\ne\varnothing$ form an integer interval on which $\min R_y(S)$ and $\max R_y(S)$ are $1$-Lipschitz in $y$.
+\end{lemma}
 \begin{proof}
     \leanok
-    Rounding the real lower strip bounds upward and the upper bounds downward
-    commutes with integer shifts in $y$, expressing the lower row endpoint as
-    the maximum of three affine functions of slopes $0,-1,1$ and the upper
-    endpoint as the minimum of three such functions. Pairwise comparisons
-    between these lower and upper affine branches carve out an interval of
-    nonempty rows, and because each affine branch changes by at most one per
-    unit step in $y$, so do their maximum and minimum.
+    Applying Lemma~\ref{thm:area_law_sample_rows} to the four strip bounds of Lemma~\ref{thm:area_law_polygon_strips} rounds the lower and upper bounds to $\max(l_x,l_+-y,l_-+y)$ and $\min(u_x,u_+-y,u_-+y)$, which are $1$-Lipschitz in $y$ and satisfy the lower$\le$upper condition on an interval of $y\in\mathbb Z$.
 \end{proof}
 
-\begin{theorem}[Single-piece ambient dilation layers]
+\begin{lemma}[Single-piece ambient dilation layers]
     \label{thm:area_law_piece_depth_layers}
     \leanok
     \lean{
@@ -258,30 +182,17 @@
     }
     \uses{thm:area_law_affine_row_profiles,thm:area_law_dilation_rows_union,
         thm:area_law_template_area}
-    For any sampled piece $S$, each dilated horizontal row $R_y(S_r)$ is an
-    interval of at most $2s_0+2r+1$ sites, and increasing the radius from $r$
-    to $r+1$ adds at most four sites to each nonempty row of $S_r$. When $S$
-    is nonempty, there exist integers $a\le b$ with $b-a\le2s_0$ such that the
-    occupied rows of $S_r$ are $[a-r,b+r]\cap\mathbb Z$, and for every
-    $1\le j\le s_0$ (including when $S$ is empty),
+    For any sampled piece $S$, each $R_y(S_r)$ is an integer interval of length at most $2s_0+2r+1$ with $|R_y(S_{r+1})\setminus R_y(S_r)|\le4$ whenever $R_y(S_r)\ne\varnothing$. When $S\ne\varnothing$, the occupied rows of $S_r$ form $[a-r,b+r]\cap\mathbb Z$ for some $a\le b$ with $b-a\le2s_0$, and for every $1\le j\le s_0$ (including $S=\varnothing$),
     \begin{align}
         |S_j\setminus S_{j-1}| & \le24(s_0+1).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Intersecting $S$ with a vertical radius-$r$ window yields consecutive
-    occupied columns whose horizontal $r$-neighborhood is a single interval of
-    width bounded by $2s_0+2r+1$. Passing from radius $j-1$ to radius $j$
-    shifts any clamped row index by at most one vertical step (moving the
-    horizontal endpoints by at most one) and widens the horizontal radius by one,
-    so each previously occupied row gains at most two sites per end (four in
-    total). Summing at most four new sites across the old occupied rows and
-    adding the two newly occupied extreme rows bounds $|S_j\setminus S_{j-1}|$
-    by $12s_0+12j-2\le24(s_0+1)$.
+    By Lemmas~\ref{thm:area_law_dilation_rows_union} and~\ref{thm:area_law_affine_row_profiles}, $R_y(S_r)$ is an interval of width at most $2s_0+2r+1$, and incrementing $r=j-1\mapsto j$ shifts each row endpoint by at most $2$ (adding at most $4$ sites on each of the at most $2s_0+2j-1$ old rows) while adding two extreme rows of width at most $2s_0+2j+1$, giving $|S_j\setminus S_{j-1}|\le 4(2s_0+2j-1)+2(2s_0+2j+1)=12s_0+12j-2\le24(s_0+1)$.
 \end{proof}
 
-\begin{theorem}[Template depth layers with an explicit constant]
+\begin{lemma}[Template depth layers with an explicit constant]
     \label{thm:area_law_template_depth_layers}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le}
@@ -291,19 +202,13 @@
     \begin{align}
         |T_j\setminus T_{j-1}| & \le n.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Summing the single-piece layer bound across the $N_0$ pieces (whether
-    overlapping, empty, or disconnected) and applying the template scale bound
-    gives
+    By Lemmas~\ref{thm:area_law_dilation_rows_union} and~\ref{thm:area_law_piece_depth_layers},
     \begin{align}
         |T_j\setminus T_{j-1}|
          & \le24N_0(s_0+1)
         \le C_{\rm tpl}N_0(s_0+1)\le n.
     \end{align}
 \end{proof}
-
-These geometric estimates govern only the lattice cardinalities of templates
-and their dilations; the entropy and physical area-law bounds follow in the
-subsequent sections.

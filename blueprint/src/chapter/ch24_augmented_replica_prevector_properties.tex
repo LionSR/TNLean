@@ -19,7 +19,7 @@ For $\Omega\in\mathbb C^X$ and an irreducible representation $\lambda$ of $S_k$,
 \end{align*}
 where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled pair on $D\times D$, following the conventions of \cite[Section~7]{OpenAI2026AreaLaw}.
 
-\begin{theorem}[Norm and nonvanishing under the site identification]
+\begin{lemma}[Norm and nonvanishing under the site identification]
     \label{thm:al_augmented_prevector_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.norm_augmentedReplicaPrevector_eq_global,
         TNLean.PEPS.AreaLaw.Scan.augmentedReplicaPrevector_ne_zero_iff_global}
@@ -31,7 +31,7 @@ where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled
     coordinate bijection. Put $\zeta_{k,\lambda}=v_{k,\lambda}\circ G_k$.
     Then $\|\xi_{k,\lambda}\|_2=\|\zeta_{k,\lambda}\|_2$, and
     $\xi_{k,\lambda}\ne0$ if and only if $\zeta_{k,\lambda}\ne0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Because the site identification is a bijection, reindexing the sum of
@@ -41,7 +41,7 @@ where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled
 \end{proof}
 
 
-\begin{theorem}[Full copy symmetry of the augmented initial vector]
+\begin{lemma}[Full copy symmetry of the augmented initial vector]
     \label{thm:al_augmented_prevector_symmetry}
     \lean{TNLean.PEPS.AreaLaw.Scan.symProj_mulVec_augmentedReplicaPrevector}
     \leanok
@@ -51,7 +51,7 @@ where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled
     \begin{align*}
         P_{\mathrm{sym}}\xi_{k,\lambda}=\xi_{k,\lambda}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Simultaneous permutation of the $k$ copies fixes $\Omega^{\otimes k}$ and $U_k$,
@@ -62,7 +62,7 @@ where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled
     and averaging over $S_k$ gives $P_{\mathrm{sym}}\xi_{k,\lambda}=\xi_{k,\lambda}$.
 \end{proof}
 
-\begin{theorem}[Isotypic projection at each auxiliary site]
+\begin{lemma}[Isotypic projection at each auxiliary site]
     \label{thm:al_augmented_prevector_auxiliary_label}
     \lean{TNLean.PEPS.AreaLaw.Scan.labelProj_auxiliary_mulVec_augmentedReplicaPrevector}
     \leanok
@@ -73,7 +73,7 @@ where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled
     \begin{align*}
         \Pi_{\{b\},\lambda}\xi_{k,\lambda}=\xi_{k,\lambda}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_subsystem_action}

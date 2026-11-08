@@ -13,7 +13,7 @@
     Indeed, $\log(1/g)\le1/g-1$ and $1/g\ge1$.
 \end{definition}
 
-\begin{theorem}[Robustness above a logarithmic threshold]
+\begin{lemma}[Robustness above a logarithmic threshold]
     \label{thm:aklv_logarithmic_robustness}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_logarithmic_robustness}
     \leanok
@@ -35,7 +35,7 @@
     \end{align*}
     This strengthens the sufficient threshold in
     \cite[Theorem~6.1]{Arad2013AreaLaw} within the stated window range.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_two_block_scaled_low_cluster,
@@ -46,9 +46,9 @@
     Set $C_1=10^6\cdot64e^{3/4}$ and $\tau=e^{-t/16}$.
     The inequalities $\log C_1\le61$ and $t\ge1024-16\log g$ give
     \begin{align*}
-        g+11&\le t,&
+        g+11 & \le t,                               &
         g+8\log\frac{C_1}{\tau g}
-            &=\frac t2+g+8(\log C_1-\log g)\le t.
+             & =\frac t2+g+8(\log C_1-\log g)\le t.
     \end{align*}
     Hence $0<\tau\le1$ and $t\ge\Theta(g,\tau)$.
     The actual spectral comparison supplies the required gap and squared
@@ -56,7 +56,7 @@
     preserves the norm and eigenvalue and gives the asserted vector.
 \end{proof}
 
-\begin{theorem}[Robustness for a window with at least six interactions]
+\begin{lemma}[Robustness for a window with at least six interactions]
     \label{thm:aklv_physical_robustness}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_robustness}
     \leanok
@@ -84,11 +84,11 @@
     \cite[Theorem~6.1]{Arad2013AreaLaw} for the original bounded-term setting
     and the stated window range. The support and normalization corrections
     are recorded in \cite{gap:aklv13_two_block_robustness}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_logarithmic_robustness}
-    Theorem~\ref{thm:aklv_logarithmic_robustness} gives $g\le1$ and
+    Lemma~\ref{thm:aklv_logarithmic_robustness} gives $g\le1$ and
     the actual truncated ground vector above $T(g)$.
     Since $E_0\ge0$, the polynomial threshold implies
     $t\ge1024/g\ge T(g)$, so the conclusion follows.

@@ -1,4 +1,4 @@
-\chapter{Perron--Frobenius Theory for Channels and Transfer Maps}\label{ch:qpf}
+\chapter{Perron--Frobenius theory for channels and transfer maps}\label{ch:qpf}
 
 Quantum Perron--Frobenius theory governs the fixed points and spectral structure
 of positive and completely positive maps. For injective and irreducible transfer
@@ -14,7 +14,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \section{Positive definiteness}
 
 
-\begin{theorem}[Transfer-map PSD fixed point --- irreducible version]
+\begin{lemma}[Transfer-map PSD fixed point --- irreducible version]
     \label{thm:transfer_psd_fp_pd_irred}
     \lean{Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible}
     \leanok
@@ -22,7 +22,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     Let $A$ be an MPS tensor whose transfer map $\E_A$ is irreducible. If
     $\rho\geq0$, $\rho\neq0$, and $\E_A(\rho)=\rho$, then $\rho$ is positive
     definite.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -31,7 +31,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     Theorem~\cite[``PSD fixed point is positive definite --- irreducible version'']{QICLean2026Blueprint} applies.
 \end{proof}
 
-\begin{theorem}[PSD fixed point is positive definite]
+\begin{lemma}[PSD fixed point is positive definite]
     \label{thm:psd_fp_pd}
     \lean{Kraus.posSemidef_fixedPoint_isPosDef}
     \leanok
@@ -39,19 +39,19 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     Let $A$ be an injective MPS tensor and let $\rho \ge 0$,
     $\rho \neq 0$, be a fixed point of $\E_A$. Then $\rho$ is positive
     definite.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:injective_irreducible, thm:transfer_psd_fp_pd_irred}
     Because injectivity implies irreducibility of the transfer map,
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred} yields positive definiteness.
+    Lemma~\ref{thm:transfer_psd_fp_pd_irred} yields positive definiteness.
 \end{proof}
 
 
 \section{Uniqueness}
 
 
-\begin{theorem}[Irreducible fixed-point uniqueness]
+\begin{lemma}[Irreducible fixed-point uniqueness]
     \label{thm:psd_fp_unique_irred}
     \lean{Kraus.posSemidef_fixedPoint_unique_of_irreducible}
     \leanok
@@ -59,7 +59,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     Let $A$ be an MPS tensor whose transfer map is irreducible. If
     $\rho,\sigma\geq0$ are fixed points of $\E_A$ and $\rho\neq0$, then
     $\sigma=c\rho$ for some $c\in\C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_cp}
@@ -67,25 +67,25 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     Theorem~\cite[``Irreducible fixed-point uniqueness --- CP version'']{QICLean2026Blueprint} applies.
 \end{proof}
 
-\begin{theorem}[Uniqueness of PSD fixed point]
+\begin{lemma}[Uniqueness of PSD fixed point]
     \label{thm:psd_fp_unique}
     \lean{Kraus.posSemidef_fixedPoint_unique}
     \leanok
     \uses{def:injective, def:transfer_map}
     Let $A$ be an injective MPS tensor. If $\rho,\sigma\geq0$ are nonzero
     fixed points of $\E_A$, then $\sigma=c\rho$ for some $c\in\C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:injective_irreducible, thm:psd_fp_unique_irred}
     Because injectivity implies irreducibility of the transfer map,
-    Theorem~\ref{thm:psd_fp_unique_irred} yields uniqueness up to scaling.
+    Lemma~\ref{thm:psd_fp_unique_irred} yields uniqueness up to scaling.
 \end{proof}
 
 
 \section{Existence and the Perron--Frobenius theorem}
 
-\begin{theorem}[Existence of PSD fixed point]\label{thm:psd_fp_exists}
+\begin{lemma}[Existence of PSD fixed point]\label{thm:psd_fp_exists}
     \lean{Kraus.exists_posSemidef_fixedPoint}
     \leanok
     \uses{def:transfer_map}
@@ -94,7 +94,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     trace-preserving.
     Then there exists $\rho \ge 0$, $\rho \neq 0$,
     with $\E_A(\rho) = \rho$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -120,7 +120,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \begin{proof}
     \leanok
     \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique}
-    Theorems~\ref{thm:psd_fp_exists},~\ref{thm:psd_fp_pd},
+    Lemmas~\ref{thm:psd_fp_exists},~\ref{thm:psd_fp_pd},
     and~\ref{thm:psd_fp_unique} together provide existence, positive
     definiteness, and uniqueness up to scaling.
 \end{proof}
@@ -140,8 +140,8 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \begin{proof}\leanok
     \uses{thm:psd_fp_exists, thm:transfer_psd_fp_pd_irred, thm:psd_fp_unique_irred}
     Existence is the channel fixed-point theorem
-    (Theorem~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
-    to positive definite, and Theorem~\ref{thm:psd_fp_unique_irred} gives
+    (Lemma~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
+    to positive definite, and Lemma~\ref{thm:psd_fp_unique_irred} gives
     uniqueness up to scalar multiple.
 \end{proof}
 
@@ -183,7 +183,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     calculation).
 \end{proof}
 
-\begin{theorem}[Square-root trace-preserving gauge from an adjoint fixed point]%
+\begin{lemma}[Square-root trace-preserving gauge from an adjoint fixed point]%
     \label{thm:tp_gauge_from_adjoint_fixed}
     \lean{Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint}
     \leanok
@@ -198,7 +198,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     \end{align}
     Then $B$ is trace-preserving:
     $\sum_i (B^i)^\dagger B^i = \Id$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Specializing
@@ -211,7 +211,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     Section~\ref{sec:app_qpf_gauge}.
 \end{proof}
 
-\begin{theorem}[Square-root trace-preserving gauge from an adjoint eigenvector]%
+\begin{lemma}[Square-root trace-preserving gauge from an adjoint eigenvector]%
     \label{thm:tp_gauge_from_adjoint_eigenvector}
     \lean{Kraus.tpGauge_isTP_of_map_conjTranspose_eigenvector}
     \leanok
@@ -226,12 +226,12 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     \end{align}
     Then $B$ is trace-preserving:
     $\sum_i (B^i)^\dagger B^i = \Id$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Rescaling $A$ by $r^{-1/2}$ turns the eigenvector equation into a
     fixed-point equation because the adjoint transfer map is quadratic in
-    the tensor, and Theorem~\ref{thm:tp_gauge_from_adjoint_fixed} then gives
+    the tensor, and Lemma~\ref{thm:tp_gauge_from_adjoint_fixed} then gives
     the result.
 \end{proof}
 
@@ -256,14 +256,14 @@ Evans~\cite{Evans1978Spectral}; the gauge construction follows
 Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 
 
-\begin{theorem}[Irreducibility of the transfer map of an irreducible tensor]%
+\begin{lemma}[Irreducibility of the transfer map of an irreducible tensor]%
     \label{thm:transfer_map_irreducible_of_tensor}
     \lean{Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily}
     \leanok
     \uses{def:irreducible_tensor, def:transfer_map}
     If an MPS tensor $A$ is irreducible, then its transfer map $\E_A$ is
     irreducible.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     If $P$ is a nontrivial invariant projection for $\E_A$, then
@@ -276,7 +276,7 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     the family $\{A^i\}$, contradicting irreducibility of $A$.
 \end{proof}
 
-\begin{theorem}[Positive-definite adjoint eigenvector for irreducible tensors]%
+\begin{lemma}[Positive-definite adjoint eigenvector for irreducible tensors]%
     \label{thm:posDef_adjoint_eigenvector}
     \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
     \leanok
@@ -289,11 +289,11 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     Then there exist a positive definite matrix~$\sigma$
     and a positive real $r > 0$ such that
     $\E_A^\dagger(\sigma) = r\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_map_irreducible_of_tensor}
-    By Theorem~\ref{thm:transfer_map_irreducible_of_tensor}, $\E_A$ is
+    By Lemma~\ref{thm:transfer_map_irreducible_of_tensor}, $\E_A$ is
     irreducible, and since $\mathcal K_A = \E_A$
     (the corresponding theorem in the companion quantum-channel volume~\cite[``Kraus-map form of the transfer map'']{QICLean2026Blueprint}), its Kraus map $\mathcal K_A$ is
     irreducible too (the corresponding theorem in the companion quantum-channel volume~\cite[``Irreducibility in Kraus-map notation'']{QICLean2026Blueprint}). Applying
@@ -303,7 +303,7 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     $\E_A^\dagger(\sigma) = r\sigma$.
 \end{proof}
 
-\begin{theorem}[TP-gauge existence for irreducible tensors]%
+\begin{lemma}[TP-gauge existence for irreducible tensors]%
     \label{thm:tp_data_irreducible}
     \lean{MPSTensor.exists_tp_data_of_irreducible}
     \leanok
@@ -319,21 +319,21 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         \label{eq:qpf_irred_tp_gauge}
     \end{align}
     and $\sum_i (B^i)^\dagger B^i = \Id$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_eigenvector, lem:tp_gauge_equiv}
-    Theorem~\ref{thm:posDef_adjoint_eigenvector} provides a positive definite
+    Lemma~\ref{thm:posDef_adjoint_eigenvector} provides a positive definite
     $\sigma$ and $r > 0$ with $\E_A^\dagger(\sigma) = r\sigma$. For
     $c = r^{-1/2}$ and $A'^i = cA^i$, this gives $\E_{A'}^\dagger(\sigma) = \sigma$.
     By the square-root trace-preserving eigenvector gauge construction
-    (Theorem~\ref{thm:tp_gauge_from_adjoint_eigenvector}), the tensor defined by
+    (Lemma~\ref{thm:tp_gauge_from_adjoint_eigenvector}), the tensor defined by
     (\ref{eq:qpf_irred_tp_gauge}) satisfies
     $\sum_i (B^i)^\dagger B^i = \Id$, and Lemma~\ref{lem:tp_gauge_equiv} gives
     the required gauge equivalence to $r^{-1/2}A$.
 \end{proof}
 
-\begin{theorem}[Unital-gauge existence for irreducible tensors]%
+\begin{lemma}[Unital-gauge existence for irreducible tensors]%
     \label{thm:unital_data_irreducible}
     \lean{MPSTensor.exists_unital_data_of_irreducible}
     \leanok
@@ -349,11 +349,11 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
         \label{eq:qpf_irred_unital_gauge}
     \end{align}
     and $\sum_i B^i(B^i)^\dagger = \Id$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:posDef_adjoint_eigenvector, thm:unital_gauge_of_pd_fixed_point}
-    Applying Theorem~\ref{thm:posDef_adjoint_eigenvector} to the
+    Applying Lemma~\ref{thm:posDef_adjoint_eigenvector} to the
     conjugate-transposed Kraus family (to which irreducibility and the nonzero
     Kraus hypothesis transfer) and translating the resulting adjoint eigenvector
     equation back gives $\E_A(\rho)=r\rho$ with $\rho$ positive definite and

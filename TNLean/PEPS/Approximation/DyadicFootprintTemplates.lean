@@ -658,9 +658,13 @@ abbrev TemplateIndex : Type :=
 instance : Finite TemplateIndex := by
   have h1 : Finite {g // referenceRepainting.IsUnmodifiedGuide g} :=
     referenceRepainting.finite_isUnmodifiedGuide.to_subtype
-  have h2 : Finite {c : ℝ × ℝ // IsSquareCorner 1 c} :=
-    (Set.toFinite ({(0, 0), (1, 0), (0, 1), (1, 1)} : Set (ℝ × ℝ))).subset
-      (fun c hc => by rcases hc with rfl | rfl | rfl | rfl <;> simp) |>.to_subtype
+  have h2 : Finite {c : ℝ × ℝ // IsSquareCorner 1 c} := by
+    have hs : {c : ℝ × ℝ | IsSquareCorner 1 c} ⊆
+        ({(0, 0), (1, 0), (0, 1), (1, 1)} : Set (ℝ × ℝ)) := by
+      intro c hc
+      simp only [Set.mem_ofPred_eq, IsSquareCorner] at hc
+      rcases hc with rfl | rfl | rfl | rfl <;> simp
+    exact ((Set.toFinite _).subset hs).to_subtype
   infer_instance
 
 /-- The template guide of an index, in units of `t` about the mark: the reference guide about the

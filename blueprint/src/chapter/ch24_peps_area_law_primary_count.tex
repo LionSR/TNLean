@@ -33,7 +33,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
     \end{align}
 \end{definition}
 
-\begin{theorem}[Exact primary membership]
+\begin{lemma}[Exact primary membership]
     \label{thm:area_law_primary_pitch_membership}
     \lean{TNLean.PEPS.AreaLaw.Geometry.mem_primaryPitchIndices_iff}
     \leanok
@@ -44,7 +44,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
         j\in\mathcal P_k & \quad\Longleftrightarrow\quad
         D_k\cap U_j\ne\varnothing.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_nesting}
     Only the reverse implication needs proof. A point $x\in D_k\cap U_j$
@@ -55,7 +55,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
     $\lfloor(x_i-o'_i)/s\rfloor=j_i$ and $j\in B_z$.
 \end{proof}
 
-\begin{theorem}[Primary count from the layer-cell count]
+\begin{lemma}[Primary count from the layer-cell count]
     \label{thm:area_law_primary_pitch_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_le}
     \leanok
@@ -64,7 +64,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
     \begin{align}
         |\mathcal P_k| & \le4|I_k|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_dyadic_cells}
     Since $k\le p$, we have $r\le s$. In each coordinate,
@@ -76,7 +76,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
     $|\mathcal P_k|\le4|I_k|$.
 \end{proof}
 
-\begin{theorem}[Primary count from the cut boundary]
+\begin{lemma}[Primary count from the cut boundary]
     \label{thm:area_law_primary_boundary_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_primaryPitchIndices_boundary_le}
     \leanok
@@ -86,7 +86,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
     \begin{align}
         |\mathcal P_k| & \le32(2C_0+1)^2|\partial_\Lambda A|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_primary_pitch_count,thm:area_law_dyadic_layer_count}
     Combine $|\mathcal P_k|\le4|I_k|$ with
@@ -96,7 +96,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
 % Source: 10-geometry.tex, geometry:primary-scale, lines 709--729;
 % primary error sum, lines 791--795.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[The primary error sum over finitely many layers]
+\begin{lemma}[The primary error sum over finitely many layers]
     \label{thm:area_law_initial_primary_error_sum}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_primaryPitchIndices_error_sum_bound}
     \leanok
@@ -117,7 +117,7 @@ $o'=o+t(a,b)$. The count below is the primary count in
     \end{align}
     The coefficient $M$ is chosen before all geometric data, the
     integer sequences, and $F$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

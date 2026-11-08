@@ -11,14 +11,14 @@ $k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These entries concern initial boundaries, without a nonempty endpoint premise.
 
-\begin{theorem}[Initial birth boundaries avoid the lattice]
+\begin{lemma}[Initial birth boundaries avoid the lattice]
     \label{thm:area_law_initial_birth_boundary_lattice}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_avoid_lattice}
     \leanok
     \uses{def:area_law_initial_birth_regions,def:area_law_dyadic_origin}
     For every initial identifier $i$,
     $\partial X_i^0\cap\mathbb Z^2=\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_cover,thm:area_law_fan_triangle_contact,
         thm:area_law_cell_fan_intersections,thm:area_law_cell_fan_mark_vertices,
@@ -55,14 +55,14 @@ $k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
     integer-translated line avoids $\mathbb Z^2$.
 \end{proof}
 
-\begin{theorem}[Initial open boundaries avoid the lattice]
+\begin{lemma}[Initial open boundaries avoid the lattice]
     \label{thm:area_law_initial_open_boundary_lattice}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion_frontier_avoid_lattice}
     \leanok
     \uses{def:area_law_initial_open_regions,def:area_law_dyadic_origin}
     Every initial identifier $i$ satisfies
     $\partial\operatorname{int}(X_i^0)\cap\mathbb Z^2=\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_birth_boundary_lattice,
         def:area_law_initial_open_regions}
@@ -71,7 +71,7 @@ $k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
     transfers the birth-boundary avoidance to the open region.
 \end{proof}
 
-\begin{theorem}[Closed and open membership agree at lattice points]
+\begin{lemma}[Closed and open membership agree at lattice points]
     \label{thm:area_law_initial_lattice_membership}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_lattice_mem_iff_initialOpenRegion}
     \leanok
@@ -79,7 +79,7 @@ $k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
         def:area_law_dyadic_origin}
     For every identifier $i$ and every $v\in\mathbb Z^2$,
     $v\in X_i^0$ if and only if $v\in\operatorname{int}(X_i^0)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_birth_boundary_lattice,
         def:area_law_initial_open_regions}

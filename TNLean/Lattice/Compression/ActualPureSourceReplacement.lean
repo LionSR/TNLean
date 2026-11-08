@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCompressedDensity
 import TNLean.Lattice.Compression.ActualPureSourceMatrix
+import TNLean.Algebra.FinSumPermutation
 
 /-! # Source replacement on the recorded product input
 
@@ -58,10 +59,7 @@ theorem sourceReplacedDensity_pure_eq_sum_actualColumns
     rw [LinearIsometryEquiv.symm_apply_apply]
   unfold sourceReplacedDensity Word.sourceOperatorDensity
   dsimp only
-  apply Finset.sum_congr rfl
-  intro ξ _
-  apply Finset.sum_congr rfl
-  intro ζ _
+  refine Finset.sum_congr₂ fun ξ _ ζ _ ↦ ?_
   apply congrArg (fun M ↦
     (coefficient (fun _ : P ↦ true) w ξ *
       conj (coefficient (fun _ : P ↦ true) w ζ)) • M)

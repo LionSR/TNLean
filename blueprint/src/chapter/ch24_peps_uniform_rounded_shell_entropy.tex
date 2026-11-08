@@ -6,7 +6,7 @@ auxiliary estimates make the shell coefficient uniform on any interval with
 a positive lower endpoint. The pointwise entropy input is stated explicitly;
 these estimates do not establish the physical improvement in Proposition~9.5.
 
-\begin{theorem}[Uniform rounded-shell coefficient]
+\begin{lemma}[Uniform rounded-shell coefficient]
     \label{thm:area_law_uniform_rounded_shell_coefficient}
     \lean{TNLean.PEPS.AreaLaw.Scan.rounded_shell_coefficient_uniform_le}
     \leanok
@@ -16,7 +16,7 @@ these estimates do not establish the physical improvement in Proposition~9.5.
         \left(24+\frac{64}{2^e-1}\right)(C_2+1)^{\eta e}
          & \le\left(24+\frac{64}{2^b-1}\right)(C_2+1)^{\eta e_0}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The denominator $2^b-1$ is positive and is at most $2^e-1$.
@@ -26,7 +26,7 @@ these estimates do not establish the physical improvement in Proposition~9.5.
     whose factors are nonnegative, gives the result.
 \end{proof}
 
-\begin{theorem}[Conditional entropy of rounded shells with uniform coefficients]
+\begin{lemma}[Conditional entropy of rounded shells with uniform coefficients]
     \label{thm:area_law_uniform_rounded_shell_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_rounded_shell_le_uniform_rpow}
     \leanok
@@ -52,14 +52,14 @@ these estimates do not establish the physical improvement in Proposition~9.5.
          & \le C\left(24+\frac{64}{2^b-1}\right)
         (C_2+1)^{\eta e_0}s^{1+\eta e}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,
         thm:area_law_rounded_collar_power,
         thm:area_law_uniform_rounded_shell_coefficient,
         thm:area_law_rectangle_shell_entropy,thm:area_law_regional_state_identities}
-    The fixed parameter bounds give $0<\eta<1$. Theorem~\ref{thm:area_law_bootstrap_collar_clearance} chooses
+    The fixed parameter bounds give $0<\eta<1$. Lemma~\ref{thm:area_law_bootstrap_collar_clearance} chooses
     a threshold $N\ge1$ for which $L_s\ge1$, $2L_s\le s$ and
     $D_0L_s+L_s\le D_0s$ for every allowed safety parameter.
     In particular, $L_s\le s$. Choose $K=\lfloor\log_2L_s\rfloor$.

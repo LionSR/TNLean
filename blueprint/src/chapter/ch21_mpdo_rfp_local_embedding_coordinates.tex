@@ -9,14 +9,14 @@
     complementary cyclic interval.
 \end{definition}
 
-\begin{theorem}[Local embeddings in window-complement coordinates]
+\begin{lemma}[Local embeddings in window-complement coordinates]
     \label{thm:mpdo_cyclic_local_embedding_reindex}
     \lean{MPOTensor.reindex_embedLocalOperator_windowComplement}
     \leanok
     \uses{def:mpdo_cyclic_window_complement_coordinates}
     In cyclic window-complement coordinates, every local embedding has the form
     $E_i^L(B)=B\otimes\Id_{\mathrm{comp}}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -27,7 +27,7 @@
     $B\otimes\Id_{\mathrm{comp}}$.
 \end{proof}
 
-\begin{theorem}[Two-site local embeddings in pair coordinates]
+\begin{lemma}[Two-site local embeddings in pair coordinates]
     \label{thm:mpdo_generic_two_site_translation_identities}
     \lean{MPOTensor.reindex_embedLocalOperator_two_zero,
         MPOTensor.reindex_embedLocalOperator_two_one}
@@ -36,7 +36,7 @@
     pairs, embedding an arbitrary two-site operator $B$ beginning at site zero
     gives $B$, while embedding it beginning at site one gives
     $SBS^{-1}$, where $S(x\otimes y)=y\otimes x$ exchanges the two factors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

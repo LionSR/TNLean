@@ -1,6 +1,6 @@
 \section{Discarded middle-cut mass of the qutrit family}
 
-\begin{theorem}[Projection overlap with the middle marginal]
+\begin{lemma}[Projection overlap with the middle marginal]
     \label{thm:qutrit_middle_projection_bound}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMarginal_posSemidef,
         TNLean.MPS.AreaLaw.EntropyScaling.trace_qutritMiddleMarginal,
@@ -14,7 +14,7 @@
         \operatorname{Re}\tr(P\rho)\le1-p+(r-1)t.
         \label{eq:qutrit_middle_projection_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_orthonormal,
         thm:qutrit_entropy_scaling_marginal,
@@ -34,7 +34,7 @@
     of the Schmidt weights, namely one.
 \end{proof}
 
-\begin{theorem}[Discarded middle-cut mass]
+\begin{lemma}[Discarded middle-cut mass]
     \label{thm:qutrit_middle_discarded_mass}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.kyFanNorm_qutritMiddleMarginal_le,
         TNLean.MPS.AreaLaw.EntropyScaling.one_sub_kyFanNorm_qutritMiddleMarginal_ge,
@@ -43,7 +43,7 @@
         TNLean.MPS.AreaLaw.EntropyScaling.one_sub_kyFanNorm_qutritMiddleMarginal_zero}
     \leanok
     \uses{def:qutrit_entropy_scaling_middle}
-    Under the hypotheses of Theorem~\ref{thm:qutrit_middle_projection_bound},
+    Under the hypotheses of Lemma~\ref{thm:qutrit_middle_projection_bound},
     let $\|\rho\|_{(D)}$ denote the sum of its largest $D$ eigenvalues,
     with zero eigenvalues appended when $D>3^N$.
     For every integer $D\ge0$,
@@ -58,7 +58,7 @@
     in~\cite{Schuch2008EntropyScaling}.
     At $D=0$ the discarded mass is one. For $D\ge1+2^N$, the lower
     bound in~(\ref{eq:qutrit_middle_tail_bound}) is nonpositive.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_middle_projection_bound}
     A maximizing spectral projection has rank $\min(D,3^N)$ and

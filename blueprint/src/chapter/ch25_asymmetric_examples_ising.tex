@@ -67,7 +67,7 @@ point can depend on the chain length~\cite[Theorem~4.14]{Cirac2016MPDO_arXiv}.
 
 Definition~\ref{def:asymex_ising_gsymbol_tensor} gives the printed
 $G$-symbol tensor with all quantum-dimension factors. The diagonal bond
-similarity of Theorem~\ref{thm:asymex_ising_gsymbol_similarity} relates it
+similarity of Lemma~\ref{thm:asymex_ising_gsymbol_similarity} relates it
 to the $F$-symbol blocks used here. The additional factor $\sqrt2$ on the
 $\sigma$ block multiplies its periodic operator by $2^{N/2}$.
 
@@ -76,17 +76,17 @@ trace of the ordered product of local matrices. The first physical
 index is the output and the second is the input.
 
 The vacuum and fermion kernels are identified in
-Theorem~\ref{thm:asymex_ising_path_operators}; the fermion is a partial
+Lemma~\ref{thm:asymex_ising_path_operators}; the fermion is a partial
 isometry whose initial space is the admissible-path subspace
 (Corollary~\ref{cor:asymex_ising_fermion_partial_isometry}). The fusion
 identities with the $\sigma$ block are in
-Theorems~\ref{thm:asymex_ising_sigma_fusion}
+Lemmas~\ref{thm:asymex_ising_sigma_fusion}
 and~\ref{thm:asymex_ising_sigma_square}, with the scaling factors retained.
-The word-span certificates are in Theorem~\ref{thm:asymex_ising_normal}.
+The word-span certificates are in Lemma~\ref{thm:asymex_ising_normal}.
 For weighted direct sums, the compression and periodic trace formula
-are given in Theorems~\ref{thm:asymex_ising_compression}
+are given in Lemmas~\ref{thm:asymex_ising_compression}
 and~\ref{thm:asymex_ising_trace}; the weighted action on the state
-family is in Theorem~\ref{thm:asymex_ising_action_trace}.
+family is in Lemma~\ref{thm:asymex_ising_action_trace}.
 
 The quantum dimensions of $1$, $\psi$, and $\sigma$ are $1,1,\sqrt2$,
 respectively; they are the Perron--Frobenius dimensions of the fusion rules
@@ -145,7 +145,7 @@ before writing down the tensors.
     the local action is $(M\cdot A)^i=\sum_jM^{ij}\otimes A^j$.
 \end{definition}
 
-\begin{theorem}[Exact arithmetic in \texorpdfstring{$\Z[\sqrt2]$}{Z[sqrt(2)]}]%
+\begin{lemma}[Exact arithmetic in \texorpdfstring{$\Z[\sqrt2]$}{Z[sqrt(2)]}]%
     \label{thm:asymex_zsqrt2_ring}
     % Principal declaration: MPSTensor.complexOfZsqrt2_mul.
     \lean{zsqrt2ToComplex_injective, zsqrt2ToComplex_ne_zero,
@@ -161,7 +161,7 @@ before writing down the tensors.
     If the one-site matrices of a tensor over $\Z[\sqrt2]$ include a
     nonzero $\Z[\sqrt2]$-multiple of every matrix unit, its complex
     embedding is injective at one site.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -172,7 +172,7 @@ before writing down the tensors.
     sums and tensor products proves compatibility with local products
     and actions. Finally, dividing each designated one-site matrix by
     its nonzero scalar factor exhibits every matrix unit in the complex
-    span, as in Theorem~\ref{thm:asymex_normal_units}.
+    span, as in Lemma~\ref{thm:asymex_normal_units}.
 \end{proof}
 
 \begin{definition}[The three tensors \texorpdfstring{$A_1$, $A_\psi$, $A_\sigma$}{A1, Apsi, Asigma}]%
@@ -242,7 +242,7 @@ before writing down the tensors.
     to the subring $\Z[\sqrt2]=\{a+b\sqrt2:a,b\in\Z\}$ of $\C$.
 \end{definition}
 
-\begin{theorem}[Sector vanishing of the three tensors]%
+\begin{lemma}[Sector vanishing of the three tensors]%
     \label{thm:asymex_ising_sector_vanishing}
     \lean{IsingTwist.isingOneZ_eq_zero_of_rho_ne,
         IsingTwist.isingPsiZ_eq_zero_of_rho_ne,
@@ -252,7 +252,7 @@ before writing down the tensors.
     For each tensor $A \in \{A_1, A_\psi, \widehat A_\sigma\}$ and each pair
     of fusion-tree labels $(k,h)$, if $\rho(k) \ne \rho(h)$ then
     $A(k,h) = 0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -304,7 +304,7 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
     $\tr(E_{a_0b_{N-1}})=\delta_{b_{N-1},a_0}$.
 \end{proof}
 
-\begin{theorem}[Vacuum projection and fermion action on closed paths]%
+\begin{lemma}[Vacuum projection and fermion action on closed paths]%
     \label{thm:asymex_ising_path_operators}
     % Principal declarations: IsingTwist.mpo_isingOne_apply and
     % IsingTwist.mpo_isingPsi_apply (the two kernels).
@@ -336,7 +336,7 @@ $\mathcal K_N=\spn_{\C}\{\ket{h}:q_N(h)=1\}$.
         Q_NS_N      & =S_NQ_N=S_N,      \\
         S_N^\dagger & =S_N.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -386,7 +386,7 @@ $S_N$ is a self-adjoint signed permutation involution.
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:asymex_ising_path_operators},
+    By Lemma~\ref{thm:asymex_ising_path_operators},
     $S_N^\dagger S_N=S_N^2=Q_N$. The constant word with label
     $1=(1,\psi,\psi)$ is not closed, since $r(1)=\psi$ and
     $\ell(1)=1$, so the vacuum kernel vanishes on its diagonal entry
@@ -411,7 +411,7 @@ By multilinearity of the periodic contraction,
     \label{eq:asymex_ising_sigma_scale}
 \end{align}
 
-\begin{theorem}[Sigma action on the constant closed path]%
+\begin{lemma}[Sigma action on the constant closed path]%
     \label{thm:asymex_ising_sigma_product}
     \lean{IsingTwist.mpo_isingSigma_mulVec_const_six,
         IsingTwist.mpo_isingSigma_normalized_mulVec_const_six}
@@ -426,7 +426,7 @@ By multilinearity of the periodic contraction,
         O_N(A_\sigma)\ket{6}^{\otimes N}
          & =\ket{0}^{\otimes N}+\ket{3}^{\otimes N}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -464,7 +464,7 @@ the source prints only the fusion rules themselves. The theorems below
 prove the corresponding operator identities for the tensors of
 Definition~\ref{def:asymex_ising_tensors}. These tensors use the F-symbols
 directly, without the square roots of quantum dimensions that the source
-divides them by; by Theorem~\ref{thm:asymex_ising_gsymbol_similarity} this
+divides them by; by Lemma~\ref{thm:asymex_ising_gsymbol_similarity} this
 choice does not change the periodic
 operators~\cite{gap:bmwshv17_ising_boundary_tensor_normalization}. The
 same abstract algebra is realized by the topological defects of the
@@ -510,7 +510,7 @@ product tensor.
     matrix.
 \end{proof}
 
-\begin{theorem}[Fusion with the sigma operator]%
+\begin{lemma}[Fusion with the sigma operator]%
     \label{thm:asymex_ising_sigma_fusion}
     % Principal declarations: the four products; the gauges and the
     % letter lemmas are the verification data of the proof.
@@ -535,7 +535,7 @@ product tensor.
          & =O_N(\widehat A_\sigma)\,O_N(A_\psi)
         =O_N(\widehat A_\sigma).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -545,7 +545,7 @@ product tensor.
     a signed permutation matrix $G$ of size $12$, and $H=G^{\mathsf T}$. The
     matrices of all three tensors are multiples of single matrix units,
     so each conjugated matrix of the product tensor is a short explicit
-    sum. By Theorem~\ref{thm:asymex_ising_sector_vanishing}, both sides
+    sum. By Lemma~\ref{thm:asymex_ising_sector_vanishing}, both sides
     of~(\ref{eq:asymex_ising_fusion_similarity}) vanish unless the two
     physical labels have the same middle label $\rho$, and the remaining
     identities are checked in exact arithmetic over $\Z[\sqrt2]$.
@@ -578,12 +578,12 @@ product tensor.
 \begin{proof}
     \leanok
     Both sides of each identity in
-    Theorem~\ref{thm:asymex_ising_sigma_fusion} are linear in
+    Lemma~\ref{thm:asymex_ising_sigma_fusion} are linear in
     $O_N(\widehat A_\sigma)$. Dividing by the factor $(\sqrt2)^N$
     of~(\ref{eq:asymex_ising_sigma_scale}) gives the four identities.
 \end{proof}
 
-\begin{theorem}[The square of the sigma operator]%
+\begin{lemma}[The square of the sigma operator]%
     \label{thm:asymex_ising_sigma_square}
     % Principal declarations: IsingTwist.isingSigma_mul_isingSigma and
     % IsingTwist.isingSigma_normalized_mul_self.
@@ -606,7 +606,7 @@ product tensor.
          & =O_N(A_1)+O_N(A_\psi).
         \label{eq:asymex_ising_sigma_square}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -618,7 +618,7 @@ product tensor.
     the two rows $e_2\pm e_7$. These two rows carry the F-move of
     $F^{\sigma\sigma\sigma}_{\sigma}$, and $GG^{\mathsf T}=G^{\mathsf T}G=2\Id$. The target
     tensor $T$ is the direct sum of $2A_1$ and $2A_\psi$. As in the proof
-    of Theorem~\ref{thm:asymex_ising_sigma_fusion}, the identity
+    of Lemma~\ref{thm:asymex_ising_sigma_fusion}, the identity
     (\ref{eq:asymex_ising_fusion_similarity}) is checked in exact
     arithmetic within each sector of $\rho$. The periodic operator of
     $T$ is $2^N\bigl(O_N(A_1)+O_N(A_\psi)\bigr)$ by additivity and the
@@ -631,7 +631,7 @@ product tensor.
 
 
 
-\begin{theorem}[The source's tensors are bond-similar to the formal tensors]
+\begin{lemma}[The source's tensors are bond-similar to the formal tensors]
     \label{thm:asymex_ising_gsymbol_similarity}
     % Principal declaration: IsingTwist.mpo_isingStringNetTensor.
     \lean{IsingTwist.mpo_isingStringNetTensor,
@@ -659,7 +659,7 @@ product tensor.
     $O_N(S_\sigma)=2^{-N/2}O_N(\widehat A_\sigma)$, and the operators
     $O_N(S_1)$, $O_N(S_\psi)$, $O_N(S_\sigma)$ satisfy the Ising fusion rules
     at every positive length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -683,13 +683,13 @@ product tensor.
 \label{sec:asymex_ising_ring}
 
 The embedding of $\Z[\sqrt2]$ into $\C$ from
-Theorem~\ref{thm:asymex_zsqrt2_ring} preserves the matrix-unit spanning
-criterion of Theorem~\ref{thm:asymex_normal_units}.
+Lemma~\ref{thm:asymex_zsqrt2_ring} preserves the matrix-unit spanning
+criterion of Lemma~\ref{thm:asymex_normal_units}.
 Here that criterion establishes one-site injectivity, not the
 spectral-radius-one normalization required of a normal tensor (NT)
 in the CPSV convention.
 
-\begin{theorem}[One-site injectivity of the three tensors]%
+\begin{lemma}[One-site injectivity of the three tensors]%
     \label{thm:asymex_ising_normal}
     \lean{IsingTwist.isingOne_isNormal, IsingTwist.isingPsi_isNormal,
         IsingTwist.isingSigma_isNormal}
@@ -699,7 +699,7 @@ in the CPSV convention.
     local matrices of $A_1$ span $\MN{3}$, those of $A_\psi$ span
     $\MN{3}$, and the sixteen nonzero local matrices of $\sqrt2A_\sigma$
     span $\MN{4}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -707,7 +707,7 @@ in the CPSV convention.
     Every matrix unit of the relevant auxiliary matrix algebra occurs,
     up to a nonzero factor in $\Z[\sqrt2]$, among the local matrices.
     This follows directly from the tables.
-    Theorem~\ref{thm:asymex_zsqrt2_ring} gives the spanning statement
+    Lemma~\ref{thm:asymex_zsqrt2_ring} gives the spanning statement
     over $\C$.
 \end{proof}
 
@@ -756,7 +756,7 @@ In the periodic diagrams below, $L$ denotes the number of sites.
 \begin{center}
     % Formula: O_L(Theta_2) O_L(sqrt2 A_sigma) = O_L(B), the stacked product
     %   of Definition~\ref{def:asymex_ising_bond_object} closed into full
-    %   periodic operators (data file, section 1.2, and Theorem~\ref{thm:asymex_ising_trace}
+    %   periodic operators (data file, section 1.2, and Lemma~\ref{thm:asymex_ising_trace}
     %   below).
     % Ink-to-index map: the upper row of operator nodes is Theta_2, the
     %   lower row is sqrt2 A_sigma; the physical legs h_1,...,h_L of the top
@@ -823,7 +823,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     four. The zero block has dimension $16=24-2\cdot4$.
 \end{definition}
 
-\begin{theorem}[Orthogonality of the Ising gauge]%
+\begin{lemma}[Orthogonality of the Ising gauge]%
     \label{thm:asymex_ising_gauge_unitary}
     \lean{MPSTensor.signedPermMatrix_mul_mul_transpose,
         IsingTwist.isingGaugeZ_mul_transpose, IsingTwist.isingGaugeZ_transpose_mul}
@@ -838,7 +838,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     \end{align}
     The Ising gauge $G$ satisfies $GG^{\mathsf T}=G^{\mathsf T}G=\Id$,
     so its transpose is its inverse.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -849,7 +849,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
     twenty-four rows.
 \end{proof}
 
-\begin{theorem}[The local block identity for the Ising product tensor]%
+\begin{lemma}[The local block identity for the Ising product tensor]%
     \label{thm:asymex_ising_letter_identity}
     % Principal declaration: IsingTwist.isingGaugeZ_conj.
     \lean{IsingTwist.isingGaugeZ_conj, IsingTwist.isingBondObject_conjMatrix}
@@ -863,14 +863,14 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
         \oplus3(\sqrt2A_\sigma)^{(h,h')}\oplus0_{16}.
         \label{eq:asymex_ising_local_blocks}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_ising_sector_vanishing, thm:asymex_ising_gauge_unitary}
     If $\rho(h)\neq\rho(h')$, every summand in
     (\ref{eq:asymex_ising_product_letters}) vanishes by
-    Theorem~\ref{thm:asymex_ising_sector_vanishing}.
+    Lemma~\ref{thm:asymex_ising_sector_vanishing}.
     The right-hand side of~(\ref{eq:asymex_ising_local_blocks}) also
     vanishes. Otherwise, the sum defining $B^{(h,h')}$ restricts to
     $\rho(g)=\rho(h)$. Formula~(\ref{eq:asymex_ising_gauge_conj})
@@ -883,7 +883,7 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
 \subsection{Compression onto the \texorpdfstring{$\sigma$}{sigma} tensor}%
 \label{sec:asymex_ising_compression}
 
-\begin{theorem}[Compression of the Ising product tensor]%
+\begin{lemma}[Compression of the Ising product tensor]%
     \label{thm:asymex_ising_compression}
     % Principal declaration: IsingTwist.isingCompression.
     \lean{IsingTwist.isingCompression,
@@ -902,47 +902,47 @@ $[F^{\psi\sigma\psi}_\sigma]=-1$.
         W_sB^{(h,h')}V_s & =(\mu_s\sqrt2A_\sigma)^{(h,h')},
     \end{align}
     where $\mu_0=5$ and $\mu_1=3$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge, thm:asymex_zsqrt2_ring}
-    Theorem~\ref{thm:asymex_ising_letter_identity} gives the block-diagonal
+    Lemma~\ref{thm:asymex_ising_letter_identity} gives the block-diagonal
     form of every conjugated local matrix over $\Z[\sqrt2]$.
-    Theorem~\ref{thm:asymex_zsqrt2_ring} preserves this identity over
+    Lemma~\ref{thm:asymex_zsqrt2_ring} preserves this identity over
     $\C$. If $\iota_s$ and $p_s$ are the coordinate inclusion and
     projection for block $s$, set $V_s=G^{-1}\iota_s$ and $W_s=p_sG$.
     Then $W_sV_t=p_s\iota_t$, and
     (\ref{eq:asymex_ising_local_blocks}) gives the compression identity.
     Block diagonality gives triangularity as in
-    Theorem~\ref{thm:asymex_explicit_gauge}, and clause~(vii) of
+    Lemma~\ref{thm:asymex_explicit_gauge}, and clause~(vii) of
     Theorem~\ref{thm:asym_multiblock} gives the zero-block dimension
     $24-(4+4)=16$.
 \end{proof}
 
-\begin{theorem}[The extension splits]%
+\begin{lemma}[The extension splits]%
     \label{thm:asymex_ising_split}
     % Principal declaration: IsingTwist.isingBondObject_remainder.
     \lean{IsingTwist.isingBondObject_remainder}
     \leanok
     \uses{thm:asymex_ising_compression}
     The remainder of the compression in
-    Theorem~\ref{thm:asymex_ising_compression} vanishes identically.
+    Lemma~\ref{thm:asymex_ising_compression} vanishes identically.
     Thus the extension splits, and each nonzero block has local
     intertwiners in both directions. For every pair $(h,h')$,
     \begin{align}
         B^{(h,h')}V_s & =V_s(\mu_s\sqrt2A_\sigma)^{(h,h')}, \\
         W_sB^{(h,h')} & =(\mu_s\sqrt2A_\sigma)^{(h,h')}W_s.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_ising_letter_identity, prop:asym_split_intertwiners}
     Every conjugated local matrix is block diagonal by
-    Theorem~\ref{thm:asymex_ising_letter_identity}. Its off-diagonal
+    Lemma~\ref{thm:asymex_ising_letter_identity}. Its off-diagonal
     blocks, which form the conjugated remainder, therefore vanish.
-    Proposition~\ref{prop:asym_split_intertwiners} then gives the two
+    Corollary~\ref{prop:asym_split_intertwiners} then gives the two
     intertwining identities.
 \end{proof}
 
@@ -951,7 +951,7 @@ a single letter of the pair alphabet.
 
 \begin{center}
     % Formula: B V_s = V_s C_s and W_s B = C_s W_s of
-    %   Theorem~\ref{thm:asymex_ising_split}, with C_s = mu_s sqrt2 A_sigma.
+    %   Lemma~\ref{thm:asymex_ising_split}, with C_s = mu_s sqrt2 A_sigma.
     % Ink-to-index map: the ring node V_s (resp. W_s) is the compression map
     %   into (resp. out of) the bond space; the labelled node B carries the
     %   physical letter h and the open virtual legs are the bond spaces of B
@@ -983,7 +983,7 @@ a single letter of the pair alphabet.
 For a tensor $T$ and a word $w=(i_1,\ldots,i_{|w|})$, write
 $T^w=T^{i_1}\cdots T^{i_{|w|}}$.
 
-\begin{theorem}[The trace identity for the Ising product tensor]%
+\begin{lemma}[The trace identity for the Ising product tensor]%
     \label{thm:asymex_ising_trace}
     \lean{IsingTwist.isingBondObject_trace_evalWord, IsingTwist.isingTwist_mpo}
     \leanok
@@ -999,13 +999,13 @@ $T^w=T^{i_1}\cdots T^{i_{|w|}}$.
         O_N(\Theta_2)O_N(\sqrt2A_\sigma)
          & =(5^N+3^N)O_N(\sqrt2A_\sigma).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_ising_compression, prop:asym_compression_trace}
-    Proposition~\ref{prop:asym_compression_trace} applied to the
-    compression in Theorem~\ref{thm:asymex_ising_compression} gives
+    Lemma~\ref{prop:asym_compression_trace} applied to the
+    compression in Lemma~\ref{thm:asymex_ising_compression} gives
     $\tr(B^w)$ as the sum of the two weighted block traces.
     Pulling each weight out of the matrix product contributes
     $5^{|w|}$ and $3^{|w|}$. The zero block contributes nothing because
@@ -1102,7 +1102,7 @@ chain length that the surrounding prose calls $N$.
     nonvanishing condition on the weights.
 \end{definition}
 
-\begin{theorem}[The three outputs for two sigma labels]
+\begin{lemma}[The three outputs for two sigma labels]
     \label{thm:asymex_ising_sigma}
     \lean{TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_one,
         TNLean.Algebra.IsingCrossing.coefficient_sigma_sigma_psi,
@@ -1118,7 +1118,7 @@ chain length that the surrounding prose calls $N$.
     \end{align}
     In contrast, the base fusion multiplicity is
     $N_{\sigma\sigma}^{\sigma}=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:asymex_ising_coefficients}
@@ -1129,7 +1129,7 @@ chain length that the surrounding prose calls $N$.
     labels $1$ and $\psi$.
 \end{proof}
 
-\begin{theorem}[Associativity of the structure coefficients]
+\begin{lemma}[Associativity of the structure coefficients]
     \label{thm:asymex_ising_assoc}
     \lean{TNLean.Algebra.IsingCrossing.coefficient_assoc}
     \leanok
@@ -1140,7 +1140,7 @@ chain length that the surrounding prose calls $N$.
         \sum_e c_{a,b,e}^{(L)}c_{e,c,d}^{(L)}
          & =\sum_f c_{b,c,f}^{(L)}c_{a,f,d}^{(L)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:asymex_ising_coefficients}
@@ -1192,14 +1192,14 @@ from~(\ref{eq:asymex_ising_sigma_product}):
 The factor $2^N$ comes from two factors of $\sqrt2$ at each site,
 not from a length-independent normalization.
 
-\begin{theorem}[One-site injectivity of the fusion-tree product-state tensors]%
+\begin{lemma}[One-site injectivity of the fusion-tree product-state tensors]%
     \label{thm:asymex_ising_action_normal}
     \lean{IsingTwist.productState_isNormal}
     \leanok
     \uses{def:asymex_ising_action, def:normal}
     Every fusion-tree product-state tensor $T$ has auxiliary dimension
     $D=1$ and satisfies $\spn_{\C}\{T(i) : i\} = \MN{1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1207,7 +1207,7 @@ not from a length-independent normalization.
     $\C$. The local matrix indexed by $h_0$ is the scalar $1$.
 \end{proof}
 
-\begin{theorem}[The action tensor is diagonal]%
+\begin{lemma}[The action tensor is diagonal]%
     \label{thm:asymex_ising_action_diagonal}
     \lean{IsingTwist.sectorActionZ, IsingTwist.sectorAction_eq}
     \leanok
@@ -1222,7 +1222,7 @@ not from a length-independent normalization.
     \end{align}
     Here $E_{ij}$ denotes the matrix unit in $\MN{10}$, with
     indices starting at zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1237,7 +1237,7 @@ not from a length-independent normalization.
     All other entries vanish.
 \end{proof}
 
-\begin{theorem}[Compression of the weighted Verlinde action]%
+\begin{lemma}[Compression of the weighted Verlinde action]%
     \label{thm:asymex_ising_action_compression}
     % Principal declaration: IsingTwist.sectorCompression.
     \lean{IsingTwist.sectorSlots, IsingTwist.sectorLabel, IsingTwist.sectorWeights,
@@ -1245,7 +1245,7 @@ not from a length-independent normalization.
         IsingTwist.sectorAction_z_eq, IsingTwist.sectorAction_dim_eq}
     \leanok
     \uses{thm:asymex_ising_action_diagonal, thm:asym_multiblock}
-    The action tensor of Theorem~\ref{thm:asymex_ising_action_diagonal}
+    The action tensor of Lemma~\ref{thm:asymex_ising_action_diagonal}
     has the block triangular form of Theorem~\ref{thm:asym_multiblock}
     with four weighted bond-dimension-one product-state tensors.
     Two generate $\ket{\sigma1\sigma}^{\otimes N}$, with weights
@@ -1254,7 +1254,7 @@ not from a length-independent normalization.
     $\ket{\psi1\psi}^{\otimes N}$, each with weight $2$, from the
     summand indexed by $\sigma$.
     The zero block has dimension six, and $10=1+1+1+1+6$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1268,26 +1268,26 @@ not from a length-independent normalization.
         \label{eq:asymex_ising_action_blocks}
     \end{align}
     This follows by permuting the diagonal matrices of
-    Theorem~\ref{thm:asymex_ising_action_diagonal}.
+    Lemma~\ref{thm:asymex_ising_action_diagonal}.
     Block diagonality gives triangularity and identifies the four
-    target tensors as in Theorem~\ref{thm:asymex_explicit_gauge},
+    target tensors as in Lemma~\ref{thm:asymex_explicit_gauge},
     coordinate projections and inclusions form the reduction pairs, and
     clause~(vii) of Theorem~\ref{thm:asym_multiblock} gives the
     zero-block dimension $10-4=6$.
 \end{proof}
 
-\begin{theorem}[The extension of the action tensor splits]%
+\begin{lemma}[The extension of the action tensor splits]%
     \label{thm:asymex_ising_action_split}
     \lean{IsingTwist.sectorAction_remainder}
     \leanok
     \uses{thm:asymex_ising_action_compression}
     The remainder $R$ of the compression of
-    Theorem~\ref{thm:asymex_ising_action_compression} vanishes identically:
+    Lemma~\ref{thm:asymex_ising_action_compression} vanishes identically:
     \begin{align}
         R = 0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1296,7 +1296,7 @@ not from a length-independent normalization.
     conjugated remainder and hence the remainder vanish.
 \end{proof}
 
-\begin{theorem}[The weighted Verlinde action]%
+\begin{lemma}[The weighted Verlinde action]%
     \label{thm:asymex_ising_action_trace}
     \lean{IsingTwist.sectorAction_trace_evalWord, IsingTwist.thetaThree_mpo_sectorState}
     \leanok
@@ -1318,13 +1318,13 @@ not from a length-independent normalization.
     \end{align}
     The two contributions to $\ket{\sigma1\sigma}^{\otimes N}$ come
     from the summands indexed by $1$ and $\psi$, with different weights.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_ising_action_compression, prop:asym_compression_trace}
-    Proposition~\ref{prop:asym_compression_trace} applied to the
-    compression in Theorem~\ref{thm:asymex_ising_action_compression}
+    Lemma~\ref{prop:asym_compression_trace} applied to the
+    compression in Lemma~\ref{thm:asymex_ising_action_compression}
     gives the sum of the four weighted block traces.
     For each target tensor $\mu\psi_{h_0}$,
     $\tr((\mu\psi_{h_0})^w)=\mu^{|w|}\tr(\psi_{h_0}^w)$.

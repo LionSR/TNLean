@@ -40,7 +40,9 @@ open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
-private lemma chainSupport_edist_le {L R : ℕ} (X : ChainSupport L R)
+/-- The path distance between two sites of a range-`R` support is at most `R`.
+Hastings, arXiv:0705.2024v4, finite-range condition, lines 90–94. -/
+theorem ChainSupport.edist_le {L R : ℕ} (X : ChainSupport L R)
     (x : Fin L) (hx : x ∈ X.1) (z : Fin L) (hz : z ∈ X.1) :
     (SimpleGraph.pathGraph L).edist x z ≤ (R : ℕ∞) := by
   rw [SimpleGraph.pathGraph_edist]
@@ -78,7 +80,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
     QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset
       (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) a ha h hHerm
       (fun k ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hSupport k))
-      R (fun k x hx z hz ↦ chainSupport_edist_le (X k) x hx z hz)
+      R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
       (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget S
       (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) y
       (by simpa only [Finset.coe_singleton] using
@@ -146,7 +148,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
   have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) a ha h hHerm
     (fun k ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hSupport k))
-    R (fun k x hx z hz ↦ chainSupport_edist_le (X k) x hx z hz)
+    R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
     (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget 2 0 hGrowth S
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) ⌊ℓ⌋₊ t
   have hN : (S.biUnion fun x ↦

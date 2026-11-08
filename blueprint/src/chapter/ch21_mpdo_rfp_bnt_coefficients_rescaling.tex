@@ -1,4 +1,4 @@
-\begin{theorem}[Positivity of the rescaling-stable MPDO]%
+\begin{lemma}[Positivity of the rescaling-stable MPDO]%
     \label{thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.mpo_R_entry_formula}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_isMPDO}
@@ -19,11 +19,11 @@
     satisfy the cyclic bond-matching condition: consecutive letters share
     their bond bit around the ring. In the product, $W$ is evaluated on
     the corresponding bond bits. It is the local factor from
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence},
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence},
     with eigenvalues $\{1,7/25\}$. Thus $\rho^{(N)}(R)$ is $(25/32)^N$ times
     the Hadamard product of the rank-one bond-matching indicator with the
     pullback of the $N$-fold Kronecker power of $W$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The entrywise factorization follows by induction on the chain
     length, using the rank-one contraction identity
@@ -41,14 +41,14 @@
     therefore give positivity.
 \end{proof}
 
-\begin{theorem}[Unitality of the transfer map]%
+\begin{lemma}[Unitality of the transfer map]%
     \label{thm:mpdo_rescaling_transfer_unital}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_one}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     For the explicit four-letter tensor $A$, the transfer map
     $\E_A(Y)=\sum_a A^aY(A^a)^\dagger$ satisfies $\E_A(\Id)=\Id$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Evaluating the four matrix entries of $\E_A(\Id)$ from the
@@ -56,14 +56,14 @@
     off-diagonal entries vanish.
 \end{proof}
 
-\begin{theorem}[Traceless diagonal eigenvector of the transfer map]%
+\begin{lemma}[Traceless diagonal eigenvector of the transfer map]%
     \label{thm:mpdo_rescaling_transfer_diag_alt}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_diag_alt}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     For $Z=\diag(1,-1)$, the transfer map satisfies
     $\E_A(Z)=\frac{7}{25}Z$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Evaluating $\sum_a A^aZ(A^a)^\dagger$ entrywise shows that its
@@ -71,35 +71,35 @@
     $-7/25$.
 \end{proof}
 
-\begin{theorem}[Annihilation of the first off-diagonal matrix unit]%
+\begin{lemma}[Annihilation of the first off-diagonal matrix unit]%
     \label{thm:mpdo_rescaling_transfer_single_zero_one}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_single01}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     For the matrix unit $E_{01}$, the transfer map satisfies
     $\E_A(E_{01})=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substitution of the four matrices $A^a$ shows that every entry of
     $\sum_a A^aE_{01}(A^a)^\dagger$ is zero.
 \end{proof}
 
-\begin{theorem}[Annihilation of the second off-diagonal matrix unit]%
+\begin{lemma}[Annihilation of the second off-diagonal matrix unit]%
     \label{thm:mpdo_rescaling_transfer_single_one_zero}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.transferMap_A_single10}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     For the matrix unit $E_{10}$, the transfer map satisfies
     $\E_A(E_{10})=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substitution of the four matrices $A^a$ shows that every entry of
     $\sum_a A^aE_{10}(A^a)^\dagger$ is zero.
 \end{proof}
 
-\begin{theorem}[Spectra of the local factor and the transfer map]%
+\begin{lemma}[Spectra of the local factor and the transfer map]%
     \label{thm:mpdo_bnt_label_rescaling_stable_spectral}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         wMat_eigenvalue_eq_oneLabelChi_entry}
@@ -117,7 +117,7 @@
     are also the nonzero eigenvalues of $\E_A$.
     % The explicit one-label tensor-attached clause below uses these two
     % eigenvalues as the diagonal entries of its chi matrix.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_rescaling_transfer_unital, thm:mpdo_rescaling_transfer_diag_alt, thm:mpdo_rescaling_transfer_single_zero_one, thm:mpdo_rescaling_transfer_single_one_zero}
     The uniform and alternating vectors are eigenvectors of the explicit
@@ -162,7 +162,7 @@
     Hence the standard matrix-unit basis lies in the span of the letters.
 \end{proof}
 
-\begin{theorem}[Canonical form of \texorpdfstring{$R$}{R}]%
+\begin{lemma}[Canonical form of \texorpdfstring{$R$}{R}]%
     \label{thm:mpdo_bnt_label_rescaling_stable_cf}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_toMPSTensor_isCPSVCanonicalForm}
     \leanok
@@ -176,7 +176,7 @@
     $\mu=\sqrt{337/512}$. This is the unique positive weight for which
     the normalized block $\mu^{-1}R^{\bullet\bullet}$ has an idempotent
     transfer map, and hence spectral radius one.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpdo_bnt_label_rescaling_stable_injective}
     By Lemma~\ref{lem:mpdo_bnt_label_rescaling_stable_injective}, the $16$
@@ -197,7 +197,7 @@
     reconstruction with the identity coisometry.
 \end{proof}
 
-\begin{theorem}[Non-nilpotency of the retained horizontal block]%
+\begin{lemma}[Non-nilpotency of the retained horizontal block]%
     \label{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         physTraceTransfer_R_not_isNilpotent}
@@ -220,7 +220,7 @@
     Consequently neither $\mathcal T_R$ nor
     $\mathcal T_{\widehat R}$ is nilpotent. Thus the retained basis element
     satisfies the non-nilpotency condition in the definition of simplicity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_doubled_phys_trace_transfer, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf}
     A nilpotent idempotent is zero, but the $(0,0)$ entry of
@@ -238,7 +238,7 @@
     multiplication by $\mu$, forcing $\mathcal T_R$ to be nilpotent.
 \end{proof}
 
-\begin{theorem}[Simplicity of the rescaling-stable dimer]
+\begin{lemma}[Simplicity of the rescaling-stable dimer]
     \label{thm:mpdo_bnt_label_rescaling_stable_simple}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.oneSiteDoubledEquiv}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
@@ -252,27 +252,27 @@
     After the canonical relabeling of the doubled physical alphabet,
     the basis of normal tensors has one member, $\widehat R$, and its physical-trace
     transfer is non-nilpotent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_representative_sector_decomposition, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} gives the MPDO
     condition. For the one-site blocking, the doubled-index tensor is the
     canonical physical relabeling of $R^{\bullet\bullet}$, and refining the
-    canonical form from Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_cf}
+    canonical form from Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_cf}
     to its basis-of-normal-tensors sector presentation leaves $\widehat R$ as
     the sole representative, whose physical-trace transfer is non-nilpotent by
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}.
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_non_nilpotent}.
 \end{proof}
 
-\begin{theorem}[The rescaling-stable tensor is a renormalization fixed
+\begin{lemma}[The rescaling-stable tensor is a renormalization fixed
         point]%
     \label{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.isRFPViaTS_R}
     \leanok
     \uses{def:is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The tensor $R$ of
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is a
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_length_dependence} is a
     renormalization fixed point in the sense of Definition~\ref{def:is_rfp_via_ts}.
     The refinement map $T$ from one site to two sites is completely positive
     and trace preserving, with
@@ -286,7 +286,7 @@
     so that the four Kraus operators resolve the identity.
     These maps satisfy $T[M_1(X)]=M_2(X)$ and $S[M_2(X)]=M_1(X)$
     for every boundary matrix $X$, with $M=R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Identify each physical index $p\in\{0,1,2,3\}$ with a pair of bits
     $(p',p'')\in\{0,1\}^2$, and write $i_1\ast i_2:=(i_1',i_2'')$
@@ -302,7 +302,7 @@
     and therefore vanishes whenever either bond match fails.
     Write $e_0=(1,1)$ and $e_1=(1,-1)$ for the eigenvectors of $W$,
     with eigenvalues $\lambda_0=1$ and $\lambda_1=7/25$
-    (Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}).
+    (Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_spectral}).
     The two Kraus operators of $T$ have amplitudes
     $\sqrt{25\lambda_s/64}$ on $e_s$. For $b,b'\in\{0,1\}$,
     the eigendecomposition of $W$ gives
@@ -331,7 +331,7 @@
 
 % Source: arXiv:1606.00608, Theorem 4.14(ii), lines 972--985,
 % and Appendix C.4, lines 1929--1947 and 2011--2029.
-\begin{theorem}[Vertical BNT and algebra structure for \texorpdfstring{$R$}{R}]%
+\begin{lemma}[Vertical BNT and algebra structure for \texorpdfstring{$R$}{R}]%
     \label{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         R_oneLabelBNTAlgebraTensorClause}
@@ -400,7 +400,7 @@
          & =\frac{32}{25}\left(\frac{25}{32}\right)^2.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:is_normal_tensor_of_is_normal_left_canonical, lem:mpo_doubled, thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
@@ -512,7 +512,7 @@ network equal to $\tr(W^L)=\tr(\chi_{0,0,0}^L)$:
     $\rho^{(L)}(R)=(25/32)^L O_L(M_0)$ is asserted.
 \end{remark}
 
-\begin{theorem}[Closed-operator factorization and local diagonalization for \texorpdfstring{$R$}{R}]%
+\begin{lemma}[Closed-operator factorization and local diagonalization for \texorpdfstring{$R$}{R}]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         mpo_R_eq_B_mul_wN_mul_transpose}
@@ -536,23 +536,23 @@ network equal to $\tr(W^L)=\tr(\chi_{0,0,0}^L)$:
     $H=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$ and
     $\chi=\diag(1,\tfrac{7}{25})$, one has $H\chi H=2W$.
     Thus the entries of $\chi$ are the eigenvalues of the local factor $W$.
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     identifies this matrix as the coefficient matrix
     $\chi_{0,0,0}$ of a vertical basis of normal tensors with one element.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Let $\phi$ read the first bits of a cyclic-bond-matching string.
     Given a bit string $a$, each adjacent pair of entries of $a$ determines
     one physical index around the ring. This gives the unique matching
     string whose image under $\phi$ is $a$, and defines $B$.
     Injectivity gives $B^{\mathsf T}B=\Id$. Rewriting the entrywise formula
-    of Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} through this
+    of Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} through this
     embedding gives
     $\rho^{(N)}(R)=(25/32)^N B W_N B^{\mathsf T}$.
     The identity $H\chi H=2W$ follows by direct $2\times2$ computation.
 \end{proof}
 
-\begin{theorem}[Trace-power formula for the structure coefficients]%
+\begin{lemma}[Trace-power formula for the structure coefficients]%
     \label{thm:mpdo_bnt_label_rescaling_stable_chi_uniform}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiTracePowerForm}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
@@ -571,13 +571,13 @@ network equal to $\tr(W^L)=\tr(\chi_{0,0,0}^L)$:
         \notag
     \end{align}
     The equality of traces follows from the diagonalization in
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}.
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_chi_attachment}.
     Here $W^L$ is the ordinary matrix power of the fixed $2\times2$
     matrix $W$, not the Kronecker power $W_L$ in $\rho^{(L)}(R)$.
-    Theorem~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     identifies these coefficients with the structure coefficients of the
     vertical basis of normal tensors $\{M_0\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The coefficients are defined by the diagonal entries of $\chi$.
     Since these entries are positive,

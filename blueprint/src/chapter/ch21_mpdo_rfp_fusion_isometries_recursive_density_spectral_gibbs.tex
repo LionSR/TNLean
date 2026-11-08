@@ -103,7 +103,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     % Scope tracking: docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex.
 \end{definition}
 
-\begin{theorem}[Terminal spectral projectors from a fusion decomposition]%
+\begin{lemma}[Terminal spectral projectors from a fusion decomposition]%
     \label{thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     \lean{MPOTensor.BNTFusionTensorClause.terminalEigenvalue_nonneg}
     \lean{MPOTensor.BNTFusionTensorClause.%
@@ -150,7 +150,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     direct sum of nonzero sectors, and its adjoint gives exact reconstruction.
     This corrects the fusion-map convention in Figure~11. See
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Positivity of the physical density operator makes each terminal bond
     matrix positive semidefinite. Its spectral theorem gives the
@@ -158,11 +158,11 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     independence makes every retained diagonal entry of
     $\chi_{\alpha,\beta,\gamma}$ equal to one, so recursive coisometric
     conjugation preserves orthogonality and the spectral sum.
-    Corollary~\ref{cor:mpdo_fusion_clause_topological_density_factor_commutator}
+    Lemma~\ref{cor:mpdo_fusion_clause_topological_density_factor_commutator}
     gives the final two identities.
 \end{proof}
 
-\begin{theorem}[Terminal spectral projectors for an RFP MPDO with
+\begin{lemma}[Terminal spectral projectors for an RFP MPDO with
         length-independent structure coefficients]%
     \label{thm:mpdo_terminal_spectral_projector_refinement}
     \lean{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}
@@ -212,7 +212,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
 
     This establishes the spectral decomposition of
     \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_topological_projector_recursion, thm:mpdo_topological_density_decomposition, cor:mpdo_topological_density_factor_commutator}
     Positivity of the one-site density operator passes to every fixed BNT
@@ -280,7 +280,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_length_one}.
 \end{definition}
 
-\begin{theorem}[Fusion decomposition gives a commuting Gibbs decomposition
+\begin{lemma}[Fusion decomposition gives a commuting Gibbs decomposition
         on the retained vertical space for chains of at least two sites]%
     \label{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     \lean{MPOTensor.BNTFusionTensorClause.%
@@ -355,7 +355,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     local interaction in \cite{Cirac2016MPDO_arXiv} uses two spins but does
     not state a length-one convention; see
     \cite{gap:cpsv16_topological_gibbs_length_one}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_fusion_clause_topological_density_decomposition, cor:mpdo_fusion_clause_topological_density_factor_commutator, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Each diagonal entry of $\mu$ is strictly positive, so its negative
@@ -374,7 +374,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     retained density operator.
 \end{proof}
 
-\begin{theorem}[Commuting Gibbs decomposition on the retained vertical space
+\begin{lemma}[Commuting Gibbs decomposition on the retained vertical space
         for chains of at least two sites]%
     \label{thm:mpdo_topological_gibbs_at_least_two}
     \lean{MPOTensor.topologicalGibbsDecomposition_of_isRFPViaTS}
@@ -387,7 +387,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
     independent of $L$ for all positive lengths. Then the commuting Gibbs
     decomposition on the retained vertical space in
-    Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+    Lemma~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     holds for every $L=N+2$, with $N\in\N$.
 
     The Hamiltonian and projectors act on the retained nonzero vertical
@@ -395,15 +395,15 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
     The conclusion holds for $L=N+2$ (see
     \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+    Applying Lemma~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     to the fusion decomposition on the nonzero product sectors given by the
     RFP condition, together with the assumed length independence of its
     structure coefficients, yields the decomposition.
 \end{proof}
 
-\begin{theorem}[Fusion decomposition gives a physical commuting Gibbs
+\begin{lemma}[Fusion decomposition gives a physical commuting Gibbs
         decomposition for chains of at least two sites]%
     \label{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     \lean{MPOTensor.BNTFusionTensorClause.%
@@ -464,7 +464,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     local interaction in \cite{Cirac2016MPDO_arXiv} uses two spins but gives
     no length-one convention. See
     \cite{gap:cpsv16_topological_gibbs_length_one}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Let $V$ be the coisometry restricted to the retained rows and let $k$ be
     the retained logarithmic multiplicity energy. The physical energy
@@ -488,7 +488,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     (\ref{eq:rfp_physical_gibbs_sum}).
 \end{proof}
 
-\begin{theorem}[Physical commuting Gibbs decomposition for chains of at least
+\begin{lemma}[Physical commuting Gibbs decomposition for chains of at least
         two sites]%
     \label{thm:mpdo_physical_coordinate_gibbs_at_least_two}
     \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
@@ -501,7 +501,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$ of this same decomposition are
     independent of $L$ for all positive lengths. Then the physical commuting
     Gibbs decomposition of
-    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    Lemma~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     holds for every $L=N+2$, with $N\in\N$.
 
     The retained one-site energy is conjugated by the adjoint
@@ -511,10 +511,10 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_physical_complement}.
     The conclusion holds for $L=N+2$ (see
     \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying
-    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    Lemma~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     to the fusion decomposition on the nonzero product sectors given by the
     RFP condition, together with the assumed length independence of its
     structure coefficients, yields the physical commuting Gibbs decomposition.
@@ -619,9 +619,9 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
 \end{theorem}
 \begin{proof}\leanok
     Applying
-    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    Lemma~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     to the fusion decomposition on the nonzero product sectors given by
-    Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}, whose
+    Lemma~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}, whose
     structure coefficients are length independent by hypothesis, yields the
     claim.
 \end{proof}

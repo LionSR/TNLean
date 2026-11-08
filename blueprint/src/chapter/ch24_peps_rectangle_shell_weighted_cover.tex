@@ -1,6 +1,6 @@
 \section{Weighted dyadic covering of rectangle shells}
 
-\begin{theorem}[Summation of selected dyadic squares by scale]
+\begin{lemma}[Summation of selected dyadic squares by scale]
     \label{thm:area_law_capped_sum_by_scale}
     \lean{TNLean.PEPS.AreaLaw.Geometry.sum_cappedDyadicPartition_by_scale}
     \leanok
@@ -16,7 +16,7 @@
     \cite[Lemma~9.4, lines~656--664]{OpenAI2026AreaLaw}, this finite summation
     by scale holds without sign conditions on $f$, including when
     $S=\varnothing$ or $K=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_capped_dyadic_partition}
@@ -31,7 +31,7 @@
 \end{proof}
 
 % Finite capped-partition moment estimate.
-\begin{theorem}[A dyadic moment bound from scale counts]
+\begin{lemma}[A dyadic moment bound from scale counts]
     \label{thm:area_law_capped_dyadic_moment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.sum_rpow_cappedDyadicPartition_le}
     \leanok
@@ -48,7 +48,7 @@
     In the covering argument of
     \cite[Lemma~9.4, lines~656--664]{OpenAI2026AreaLaw}, this finite moment
     estimate holds including when $S=\varnothing$ or $K=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_capped_sum_by_scale,thm:area_law_weighted_dyadic_sum}
     Grouping the selected squares by scale and applying the finite weighted
@@ -63,7 +63,7 @@
     is nonnegative, and the last inequality follows from $e>0$ and $2^K\le L$.
 \end{proof}
 
-\begin{theorem}[Weighted dyadic covering of a rectangle shell]
+\begin{lemma}[Weighted dyadic covering of a rectangle shell]
     \label{thm:area_law_rectangle_shell_weighted_cover}
     \lean{TNLean.PEPS.AreaLaw.IntRect.sum_rpow_cappedDyadicPartition_shell_le}
     \leanok
@@ -78,7 +78,7 @@
         \sum_{(k,z)\in\mathcal P_K(S_j)}(2^k)^{1+e}
          & \le \left(24+\frac{64}{2^e-1}\right)sL^e.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_rectangle_shell_cap_count,
@@ -91,7 +91,7 @@
         2^K N_K & \le24s, \\
         2^k N_k & \le64s.
     \end{align}
-    Applying Theorem~\ref{thm:area_law_capped_dyadic_moment} with $A=24s$,
+    Applying Lemma~\ref{thm:area_law_capped_dyadic_moment} with $A=24s$,
     $B=64s$, and the cap bounds $2^K\le L<2^{K+1}$ and factoring out $s$
     gives the bound.
     If $j=0$, the shell and its partition are empty. If $K=0$, the

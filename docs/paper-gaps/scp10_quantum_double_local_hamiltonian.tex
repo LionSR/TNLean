@@ -108,12 +108,51 @@ following statements require further arguments:
           identification, including the appropriate topological sectors;
     \item a comparison of that explicit common kernel with the existing
           PEPS parent Hamiltonian, rather than merely local annihilation;
-    \item the actual unblocked arbitrary-group $T$-to-$K$ physical
-          renormalization, with its redundant factors and normalization.
+    \item a globally compatible tiling of the local arbitrary-group
+          $T$-to-$K$ physical renormalization described below.
 \end{enumerate}
 The local physical relabelling between the review's dual tensor and the
-clockwise tensor does not construct the last operation. Generic parent
+clockwise tensor alone does not construct an elementary-tensor renormalization. Generic parent
 classification results do not establish the second or third item unless
 their local kernels are identified with the explicit Hamiltonian here.
+
+\section{Local elementary-tensor renormalization}
+The new local construction contracts four elementary tensors
+$T(r,r';s,s';x)=\delta_{r,r'}\delta_{s,s'}\delta_{x,sr^{-1}}$
+from source lines 2886--2894, retaining eight boundary labels and all four
+physical spins. The available \path{tc-lattice.pdf} and
+\path{tc-2x2-renorm.pdf} were inspected. With boundary colors N,E,S,W and
+physical sites NE,SE,SW,NW, the original arrows give
+$(qp^{-1},rq^{-1},sr^{-1},ps^{-1})$. These are inverse to the printed
+clockwise coordinates of Equation (7.10). Thus the physical change of
+basis must include $J\ket g=\ket{g^{-1}}$ on each spin; it exchanges the
+left and right actions. This orientation comparison is proved, rather
+than inferred from the unavailable \path{renorm-as-diff-doubles} figure.
+
+The source pair permutation $D(a,b)=(a,b^{-1}a)$ has inverse
+$D^{-1}(a,d)=(a,ad^{-1})$, and need not be an involution.
+For the physical permutation and reconstruction set
+\begin{align}
+    P(x)&=(x_1^{-1},x_2^{-1},x_3^{-1},x_1^{-1}x_2^{-1}x_3^{-1}x_4^{-1}),\\
+    P^{-1}(a,b,c,h)&=(a^{-1},b^{-1},c^{-1},h^{-1}abc),\\
+    Q(a,b,c,h)&=(a,b,c,(abc)^{-1}h).
+\end{align}
+Writing $c(\alpha)$ and $d(\alpha)$ for the first and second labels of
+the four pairs, the actual contracted block satisfies
+\begin{align}
+    B_{D^{-1}\alpha}(P^{-1}y)
+    &=\delta_{d(\alpha),1}\delta_{y_4,1}R_{c(\alpha)}(y_1,y_2,y_3)
+      =\delta_{d(\alpha),1}K_{c(\alpha)}(Qy),\\
+    R_{(p,q,r,s)}(a,b,c)&=\delta_{(a,b,c),(pq^{-1},qr^{-1},rs^{-1})}.
+\end{align}
+This retains a physical identity ket in the fourth register and four
+virtual identity covectors, not uniform regular-invariant virtual states.
+There is no dimension claim of four nontrivial additional physical factors
+beside a full four-spin $K$: the retained physical tensor has three spins,
+with one identity spin retained and reconstructible. The block identity
+has coefficient one. Counting the common-color orbit gives
+$RR^\dagger=|G|I$, and $|G|^{-1/2}R$ is a coisometry.
+The entire assertion is local; it proves no torus tiling, full-lattice
+common kernel or topological degeneracy.
 
 \end{document}

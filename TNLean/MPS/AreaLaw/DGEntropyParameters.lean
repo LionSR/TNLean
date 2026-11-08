@@ -34,7 +34,7 @@ namespace Real
 
 /-- Auxiliary to the entropy estimate in ALVV, arXiv:1602.08828v2,
 proof of `thm:al-dg`, lines 1085–1087. Cubic logarithmic bounds at
-dyadic numerical count bases have one integer rank schedule. This is
+dyadic numerical count bases admit one integer rank schedule. This is
 a scalar statement and assumes no physical change of local dimension. -/
 private theorem exists_cubic_dyadic_rank_majorant
     (q r : ℕ) (g K : ℝ) (D : ℕ → ℕ)
