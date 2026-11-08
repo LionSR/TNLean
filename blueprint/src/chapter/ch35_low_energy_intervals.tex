@@ -1,6 +1,6 @@
 \section{Low-energy families on prescribed intervals}
 
-\begin{theorem}[The capped width and its logarithm]
+\begin{lemma}[The capped width and its logarithm]
     \label{thm:low_energy_cap}
     \lean{Real.low_energy_cap_bound}
     \leanok
@@ -8,14 +8,14 @@
     $g=\min\{w,1\}$ and $M=\max\{1,\eta_{\mathrm{LD}}/6\}$.
     Then $g^{-1}\le M/w$ and
     $\log(g^{-1})=\max\{\log(w^{-1}),0\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If $w\le1$, then $g=w$ and $M\ge1$.
     If $w>1$, then $g=1$ and $w\le\eta_{\mathrm{LD}}/6\le M$.
 \end{proof}
 
-\begin{theorem}[An explicit count at the source scale]
+\begin{lemma}[An explicit count at the source scale]
     \label{thm:low_energy_source_count}
     \lean{Real.low_energy_count_le_source_scale}
     \leanok
@@ -32,24 +32,24 @@
           \max\left\{\log\left(\frac{3\log L}{\mu}\right),0\right\}\right]^3.
         \label{eq:ld_source_scale_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:low_energy_cap}
     Apply the two preceding bounds and use $1/w=3\log L/\mu$.
 \end{proof}
 
-\begin{theorem}[The joint scalar count and strict contraction]
+\begin{lemma}[The joint scalar count and strict contraction]
     \label{thm:low_energy_joint_scalar_parameters}
     \lean{Real.exists_low_energy_joint_scalar_parameters}
     \leanok
     Under the numerical assumptions of
-    Theorem~\ref{thm:low_energy_scalar_parameters}, the constant can be
+    Lemma~\ref{thm:low_energy_scalar_parameters}, the constant can be
     chosen so that its logarithmic bound and strict tradeoff hold at the
     larger count $D=(q\ell^2)^{22\ell}$. The lower bound $\ell\ge21$
     and logarithmic estimate hold for every $q\ge2$ and $0<g\le1$ at the
     chosen scale, before any physical threshold or ground energy is given.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:low_energy_threshold_bound}
@@ -59,7 +59,7 @@
     count retains the strict product bound.
 \end{proof}
 
-\begin{theorem}[One spanning family on a short region]
+\begin{lemma}[One spanning family on a short region]
     \label{thm:short_region_spanning_family}
     \lean{TNLean.MPS.AreaLaw.exists_short_actual_region_spanning_family}
     \leanok
@@ -69,7 +69,7 @@
     chosen before every target subspace. If a nonzero target has a
     $\delta$-viable subspace $S\subseteq\mathcal H_J$ with $\delta<1$,
     then $\sum_jF_jS=\mathcal H_J$, and this enlargement is zero-viable.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Configuration matrix units send every nonzero subspace onto a family
@@ -78,14 +78,14 @@
     units; extend their family by zero to the stated count.
 \end{proof}
 
-\begin{theorem}[Enlarging the five-region target region]
+\begin{lemma}[Enlarging the five-region target region]
     \label{thm:low_energy_regional_family}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_family_on_larger_region}
     \leanok
     Let $q\ge2$, $\ell\ge1$, $a+2\ell\le b$, and
     $b+2\ell\le L-1$. Let $\varepsilon,w>0$ and $3w<\eta$, with
     supported positive unit nearest-neighbour terms as in
-    Theorem~\ref{thm:physical_low_energy_filter_family}. Put
+    Lemma~\ref{thm:physical_low_energy_filter_family}. Put
     $J_0=\{a+\ell,\ldots,b+\ell\}$. Let $J$ be any set of sites with
     $J_0\subseteq J$ and $|J\setminus J_0|\le2\ell$, and set
     $D=(q\ell^2)^{22\ell}$. The attained regional energies, threshold,
@@ -96,7 +96,7 @@
     clipped upper target and $\delta<1$, then $\sum_jW_jS$ has dimension
     at most $N\dim S$ and is $\Delta/(1-\delta)^2$-viable for the clipped
     lower target, with the same explicit $\Delta$ as in that theorem.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_low_energy_filter_family,
@@ -110,7 +110,7 @@
     the same clipped Hamiltonian.
 \end{proof}
 
-\begin{theorem}[A low-energy improving family on every interval]
+\begin{lemma}[A low-energy improving family on every interval]
     \label{thm:physical_low_energy_interval_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_low_energy_interval_family}
     \leanok
@@ -141,7 +141,7 @@
     $\Delta/(1-\delta)^2$-viable for $T_-$.
     This supports \cite[Theorem~4.8]{Arad2016RigorousRG} with the finite
     parameters displayed above.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:low_energy_source_count,thm:low_energy_joint_scalar_parameters,
@@ -160,11 +160,11 @@
     Thus both cases give the same dimension and viability conclusions.
 \end{proof}
 
-\begin{theorem}[The same family on the original spectral windows]
+\begin{lemma}[The same family on the original spectral windows]
     \label{thm:physical_original_low_energy_interval_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_original_low_energy_interval_family}
     \leanok
-    All choices in Theorem~\ref{thm:physical_low_energy_interval_family}
+    All choices in Lemma~\ref{thm:physical_low_energy_interval_family}
     can be retained simultaneously with the following additional conclusion.
     If $S$ is $\delta$-viable for the original upper window,
     $\delta\ge0$ and $2(\delta+1/200)<1$, then $\sum_jF_jS$ is viable
@@ -174,7 +174,7 @@
     \end{align*}
     Its dimension is still at most $D^2\dim S$. The improving-family
     parameter and the final original-window error remain distinct.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_low_energy_interval_family}
