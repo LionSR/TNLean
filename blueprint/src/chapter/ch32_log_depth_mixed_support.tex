@@ -1,4 +1,4 @@
-\begin{theorem}[Central input coordinates and polar support]
+\begin{lemma}[Central input coordinates and polar support]
     \label{thm:ldp_mixed_support_coordinates}
     \lean{MPSPreparation.centralInputMatrix_mul,
         MPSPreparation.mixedProductMap_mul,
@@ -12,7 +12,7 @@
     a central input factor and satisfies $V^\dagger V=\Pi$, where $\Pi$
     is the polar support projector. Splitting the physical configurations
     into left, central, and reversed-right parts preserves this identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_left_product, thm:ldp_central_coefficients, thm:ldpolar_support}
@@ -32,7 +32,7 @@
     A single physical site already satisfies the capacity condition
     $d^q=D^2=4$.
 \end{definition}
-\begin{theorem}[Failure of the full-input pseudoinverse isometry]
+\begin{lemma}[Failure of the full-input pseudoinverse isometry]
     \label{thm:ldp_full_input_counterexample}
     \lean{MPSPreparation.mixedPolarFullInputCounterexample_spec}
     \leanok
@@ -44,7 +44,7 @@
     the full-input pseudoinverse extension in
     \cite[footnote~3 to equations~(13)--(15)]{Malz2024Preparation} therefore
     fails even for a normal tensor with sufficient physical dimension.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_left_product}
@@ -56,7 +56,7 @@
     its final diagonal entry.
 \end{proof}
 
-\begin{theorem}[Mixed sequential preparation on the polar support]
+\begin{lemma}[Mixed sequential preparation on the polar support]
     \label{thm:ldp_mixed_polar_support}
     \lean{MPSPreparation.exists_mixed_sequential_polarIsoMatrix_on_support,
         MPSPreparation.exists_mixed_sequential_polar_support_of_split,
@@ -79,12 +79,12 @@
     $D^2$, and every inward site map is isometric on its bond space.
     Either endpoint may be the centre, and zero support is allowed.
     As recorded in~\cite{gap:mswc24_mixed_polar_injectivity_scope}
-    (with a normal counterexample in Theorem~\ref{thm:ldp_full_input_counterexample}),
+    (with a normal counterexample in Lemma~\ref{thm:ldp_full_input_counterexample}),
     this provides the support-domain correction of footnotes~3 and~4 to
     equations~(13)--(15) of~\cite{Malz2024Preparation}: for a non-injective
     block, the printed full-input identity fails because
     $V^\dagger V=\Pi\ne\Id_{D^2}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_mixed_support_coordinates, thm:ldp_mixed_sequential_general}

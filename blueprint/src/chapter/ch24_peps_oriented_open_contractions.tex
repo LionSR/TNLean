@@ -102,7 +102,7 @@ of a torus.
     open vector, and open span.
 \end{definition}
 
-\begin{theorem}[The complete regional contraction range]%
+\begin{lemma}[The complete regional contraction range]%
     \label{thm:peps_oriented_open_range}
     \lean{TNLean.PEPS.graphOrientedOpenBondCoordinates_eq_sum_prod,
         TNLean.PEPS.graphOpenRegionNetwork_orientedAveragingSite_coherent,
@@ -128,7 +128,7 @@ of a torus.
     exactly when $J_R\psi\in\mathcal S_R(U,W,o)$.
     The boundary coefficients may be arbitrary linear combinations of
     all $\theta$, including entangled boundary vectors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding $|G|^{-1}\sum_{g\in G}$ in~(\ref{eq:peps_oriented_site}) at each
     $v\in R$ gives $|G|^{-|R|}\sum_{q:R\to G}$ and factors over
@@ -167,7 +167,7 @@ of a torus.
     representation is $E_v^{-1}\rho_v^o(g)E_v$.
 \end{definition}
 
-\begin{theorem}[$G$-injectivity of the oriented average]%
+\begin{lemma}[$G$-injectivity of the oriented average]%
     \label{thm:peps_oriented_average_g_injective}
     \lean{TNLean.PEPS.regularSiteMap_graphOrientedAveragingSite,
         TNLean.PEPS.isGInjective_graphOrientedAveragingSite,
@@ -181,7 +181,7 @@ of a torus.
     (Definition~\ref{def:peps_g_injective}); with physical numbering $P_v$ and
     virtual numbering $E_v$, $P_v\Pi_v E_v$ is $G$-injective for
     $E_v^{-1}\rho_v^o E_v$, without assuming unitarity or semi-regularity of $U$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Comparing~(\ref{eq:peps_oriented_site}) at $W=1$ with~(\ref{eq:peps_oriented_incident})
     identifies the local map as $\Pi_v$. Since $\Pi_v\rho_v^o(g)=\Pi_v$ and
@@ -191,7 +191,7 @@ of a torus.
 
 \subsection{Internal support and regional blocks}
 
-\begin{theorem}[Oriented internal factors determine parent support]%
+\begin{lemma}[Oriented internal factors determine parent support]%
     \label{thm:peps_oriented_parent_support}
     \lean{TNLean.PEPS.graphOrientedOpenInternalFactor_mem_range_of_factors,
         TNLean.PEPS.graphRegionInternalBondSlice_orientedAveragingSite,
@@ -216,16 +216,16 @@ of a torus.
     and the same holds for the internal slice of every $\phi\in\operatorname{im}\mathcal C_R$.
     If $\mathcal R$ covers $E$, then every regrouped parent vector in
     $\mathcal P_{\mathcal R}(A^{U,W,o})$ lies in $\operatorname{im}F^{\otimes E}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_open_range,thm:peps_parent_support_product_range}
     By~(\ref{eq:peps_oriented_internal}), $I_e(q)\in\{\operatorname{vec}(W^2U_g),\operatorname{vec}((W^2U_g)^{\mathsf T})\}\subseteq\operatorname{im}F$.
     Choosing $F$-preimages of each $I_e(q)$ yields~(\ref{eq:peps_oriented_internal_support}),
-    and Theorem~\ref{thm:peps_oriented_open_range} extends this by linearity to
+    and Lemma~\ref{thm:peps_oriented_open_range} extends this by linearity to
     $\operatorname{im}\mathcal C_R$. If $\mathcal R$ covers $E$, each edge $e$
     is internal to some $R\in\mathcal R$, so every $e$-slice of a regrouped
     vector in $\mathcal P_{\mathcal R}(A^{U,W,o})$ lies in $\operatorname{im}F$;
-    Theorem~\ref{thm:peps_parent_support_product_range} then gives membership
+    Lemma~\ref{thm:peps_parent_support_product_range} then gives membership
     in $\operatorname{im}F^{\otimes E}$.
 \end{proof}
 
@@ -252,7 +252,7 @@ of a torus.
     $c_R(F;\tau,\sigma)=\prod_{e\in E_{R^c}}F_e((\tau_h,\tau_t),(\sigma_h,\sigma_t))$.
 \end{definition}
 
-\begin{theorem}[Regional blocks of an edge-family product]%
+\begin{lemma}[Regional blocks of an edge-family product]%
     \label{thm:peps_oriented_bond_family_blocks}
     \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondFamilyMatrix}
     \leanok
@@ -269,7 +269,7 @@ of a torus.
     \end{align}
     where $\gamma_Y,\gamma_X$ are the crossing endpoint labels determined
     by $\tau,\sigma$, and $J_{X,R},J_{Y,R}$ regroup regional coordinates.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Partitioning $\prod_{e\in E}$ across $E=E_{R^c}\sqcup\partial E_R\sqcup E_R$
     in Definition~\ref{def:peps_oriented_bond_family} yields $c_R(F;\tau,\sigma)$
@@ -278,7 +278,7 @@ of a torus.
     $J_{X,R}$ and $J_{Y,R}$.
 \end{proof}
 
-\begin{theorem}[Composition and adjoints of edge-family products]%
+\begin{lemma}[Composition and adjoints of edge-family products]%
     \label{thm:peps_oriented_bond_family_algebra}
     \lean{TNLean.PEPS.graphNumberedBondFamilyMatrix_conjTranspose,
         TNLean.PEPS.graphNumberedBondFamilyMatrix_mul,
@@ -290,7 +290,7 @@ of a torus.
     $M(F)^\dagger=M(F^\dagger)$,
     $M(F)M(L)=M((F_eL_e)_e)$, and $M((I)_e)=I$; in particular,
     $(\forall e\in E,\ F_eL_e=I)\implies M(F)M(L)=I$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugation distributes over $\prod_{e\in E}$, and under the bond-coordinate
     bijection the intermediate configuration sum factors over $e\in E$ into

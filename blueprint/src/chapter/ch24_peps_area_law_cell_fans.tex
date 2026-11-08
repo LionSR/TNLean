@@ -34,7 +34,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \input{figures/area_law_cell_fan}
 \end{definition}
 
-\begin{theorem}[A dyadic square as a maximum-norm ball]
+\begin{lemma}[A dyadic square as a maximum-norm ball]
     \label{thm:area_law_cell_fan_closed_ball}
     \lean{TNLean.PEPS.AreaLaw.Geometry.closedBall_cellFanCenter_eq_closure_dyadicCell}
     \leanok
@@ -46,7 +46,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \begin{align}
         \overline{B}_\infty(c,r) & =\overline Q.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_closures}
     The coordinate description of $\overline Q$ gives
@@ -54,14 +54,14 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     These inequalities are equivalent to $\|x-c\|_\infty\le r$.
 \end{proof}
 
-\begin{theorem}[Fan vertices are cell marks]
+\begin{lemma}[Fan vertices are cell marks]
     \label{thm:area_law_cell_fan_mark_vertices}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks}
     \leanok
     \uses{def:area_law_cell_fan,def:area_law_belt_cell_marks}
     The center and both endpoints of every elementary segment belong
     to the nine-point mark set $M_{\ell,z}$ of the same cell.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,def:area_law_belt_cell_marks}
     The center has relative coordinates $(1/2,1/2)$. Every segment
@@ -69,20 +69,20 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     belong to $\{0,1/2,1\}$.
 \end{proof}
 
-\begin{theorem}[Number of fan triangles]
+\begin{lemma}[Number of fan triangles]
     \label{thm:area_law_cell_fan_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_cellFanSlot_bounds}
     \leanok
     \uses{def:area_law_cell_fan}
     Every such fan has between four and eight triangles.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
     Each of the four sides contributes either one or two elementary
     segments.
 \end{proof}
 
-\begin{theorem}[Exact cover by fan triangles]
+\begin{lemma}[Exact cover by fan triangles]
     \label{thm:area_law_cell_fan_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_cover}
     \leanok
@@ -91,7 +91,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \begin{align}
         Q=\bigcup_e P_e.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
     Every point of $Q$ lies on the segment from $c$ to some point of the
@@ -100,7 +100,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     vertex lies in $Q$, and convexity keeps each triangle in $Q$.
 \end{proof}
 
-\begin{theorem}[Intersections of fan triangles]
+\begin{lemma}[Intersections of fan triangles]
     \label{thm:area_law_cell_fan_intersections}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_inter_eq}
     \leanok
@@ -112,7 +112,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \end{align}
     Thus a shared perimeter endpoint gives a shared radial segment,
     while disjoint elementary segments intersect only at $c$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
     A point different from $c$ determines a unique perimeter point
@@ -138,7 +138,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     These are the coordinate indices of the shifted pitch square.
 \end{definition}
 
-\begin{theorem}[Closed-cell containment in a primary birth region]
+\begin{lemma}[Closed-cell containment in a primary birth region]
     \label{thm:area_law_nonbelt_primary_containment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.closure_nonbeltCell_subset_primaryBirthRegion}
     \leanok
@@ -154,7 +154,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
         \overline{D_k\cap I_{a,b}(j(z))},
     \end{align}
     where $I_{a,b}(j)$ is the corresponding open pitch interior.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_nonbelt_pitch_index,def:area_law_primary_regions,
         thm:area_law_fine_cell_containment,thm:area_law_dyadic_closures}
@@ -165,7 +165,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     inclusion even when a side of the fine cell meets the boundary of $I_{a,b}(j(z))$.
 \end{proof}
 
-\begin{theorem}[Unique primary identifier]
+\begin{lemma}[Unique primary identifier]
     \label{thm:area_law_nonbelt_unique_primary}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_primary_of_nonbeltCell}
     \leanok
@@ -174,7 +174,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     Under the preceding hypotheses, there is a unique retained
     primary pitch index whose birth region contains $\overline{Q_\ell(z)}$,
     namely $j(z)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_nonbelt_primary_containment,
         thm:area_law_primary_pitch_membership,thm:area_law_primary_diameter_separation}
@@ -189,7 +189,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
 % especially 308--316, and geometry:initial-stars, lines 352--363;
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Constant radius of an elementary base]
+\begin{lemma}[Constant radius of an elementary base]
     \label{thm:area_law_cell_fan_base_radius}
     \lean{TNLean.PEPS.AreaLaw.Geometry.norm_sub_cellFanCenter_of_mem_base}
     \leanok
@@ -202,7 +202,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \end{align}
     This is the base-radius identity in the fan construction
     of \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
     In the affine parametrization of a side, one relative coordinate

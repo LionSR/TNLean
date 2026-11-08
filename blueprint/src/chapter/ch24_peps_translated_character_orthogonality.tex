@@ -1,4 +1,4 @@
-\begin{theorem}[Arbitrarily translated irreducible character pairings]
+\begin{lemma}[Arbitrarily translated irreducible character pairings]
     \label{thm:peps_translated_character_pairing}
     \lean{Representation.sum_character_inv_mul_character_translate,
         Representation.sum_character_inv_mul_character_translate_eq_zero}
@@ -18,7 +18,7 @@
     vanishes. This is an auxiliary group identity for
     \cite[charge-detection proof]{Schuch2010PEPS}, lines 2464--2486;
     it makes no assertion about a measurement on the original spins.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Change variables from $g$ to $ag$. Apply character-weighted Schur
     orthogonality to $\sum_g\chi_\sigma(g^{-1})\tau(g)$, multiply by
@@ -28,7 +28,7 @@
     of their representations.
 \end{proof}
 
-\begin{theorem}[Translated charge-vector orthogonality and normalization]
+\begin{lemma}[Translated charge-vector orthogonality and normalization]
     \label{thm:peps_translated_character_inner_product}
     \lean{Representation.sum_star_character_mul_character_translate,
         Representation.sum_star_character_mul_character_translate_eq_zero,
@@ -54,7 +54,7 @@
     \cite[charge-detection proof]{Schuch2010PEPS}, lines 2464--2486.
     Vectors belonging to the same irreducible representation need not be
     orthogonal for different translations.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Replace the conjugated character by its value at the inverse group
     element. For the norm, put $\tau=\sigma$ and $b=a$; the factor

@@ -71,13 +71,17 @@ theorem tendsto_transferMap_blockTensor_of_spectralRadius_lt_one
   rw [hEP] at hR ⊢
   have hpow := pow_tendsto_zero_of_spectralRadius_lt_one _ hR
   have happ : Tendsto (fun q : ℕ => ((E - P) ^ q) X) atTop (nhds 0) := by
-    have := ((ContinuousLinearMap.apply ℂ _ X).continuous.tendsto 0).comp hpow
+    have := ((LinearMap.toContinuousLinearMap
+      ({ toFun := fun T => T X
+         map_add' := fun _ _ => rfl
+         map_smul' := fun _ _ => rfl } :
+        (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ]
+          Matrix (Fin D) (Fin D) ℂ)).continuous.tendsto 0).comp hpow
     convert this using 1
     · funext q
-      simp only [Function.comp_apply, ContinuousLinearMap.apply_apply, ← map_pow]
+      simp only [← map_pow]
       rfl
     · simp only [map_zero]
-      rfl
   have hTP : IsTracePreservingMap E := Kraus.isTracePreservingMap_mapLM_of_isTP A hA
   have hlim : Tendsto (fun q : ℕ => P X + ((E - P) ^ q) X) atTop (nhds (P X)) := by
     simpa using (tendsto_const_nhds (x := P X)).add happ

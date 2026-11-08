@@ -8,6 +8,7 @@ import TNLean.MPS.MPDO.BNTMultiplicityNormalization
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The two-site multiplicity spectrum from the BNT algebra clause
@@ -48,6 +49,8 @@ noncomputable section
 namespace MPOTensor
 
 namespace BNTAlgebraTensorClause
+
+variable {d D : ℕ}
 
 /-- A source-derived two-site vertical canonical decomposition together with the
 sector relabelling and multiplicity-spectrum equality of Appendix C.4.
@@ -178,10 +181,7 @@ noncomputable def toTwoSiteExactSectorGauge
     simp only [productIndex, BNTProductMultiplicityIndex,
       Fintype.sum_sigma, Fintype.sum_prod_type,
       DiagonalChiFamily.tracePowerCoeff, pow_one]
-    apply Finset.sum_congr rfl
-    intro α _
-    apply Finset.sum_congr rfl
-    intro β _
+    refine Finset.sum_congr₂ fun α _ β _ ↦ ?_
     simp only [← Finset.mul_sum, ← Finset.sum_mul, mul_assoc]
     ring
   have hProductDimPos : ∀ γ, 0 < productDim γ := by
@@ -324,15 +324,9 @@ noncomputable def toTwoSiteExactSectorGauge
         simp only [productIndex, BNTProductMultiplicityIndex,
           Fintype.sum_sigma, Fintype.sum_prod_type,
           DiagonalChiFamily.tracePowerCoeff, mul_pow]
-        apply Finset.sum_congr rfl
-        intro α _
-        apply Finset.sum_congr rfl
-        intro β _
+        refine Finset.sum_congr₂ fun α _ β _ ↦ ?_
         rw [mul_assoc, Fintype.sum_mul_sum, Fintype.sum_mul_sum]
-        apply Finset.sum_congr rfl
-        intro q _
-        apply Finset.sum_congr rfl
-        intro r _
+        refine Finset.sum_congr₂ fun q _ r _ ↦ ?_
         rw [Finset.mul_sum]
         ring_nf
   have hPBlocked : MPSTensor.SameMPV₂Pos

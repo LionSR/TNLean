@@ -1,0 +1,434 @@
+\section{Boundary factors of torus cuts}%
+\label{sec:peps_torus_cut_boundary_factors}
+
+For a region whose lift is simply connected, the torus vectors of all
+commuting closures factor across the boundary of the region through one
+common boundary factor, up to a single unitary acting on the complement.
+
+\begin{lemma}[Boundary routes through two rooted trees]%
+    \label{thm:peps_regular_boundary_route}
+    \lean{TNLean.PEPS.regularWalkHolonomy_inducedWalk,
+        TNLean.PEPS.regularRegionTreeWalk,
+        TNLean.PEPS.regularRegionTreeWalk_holonomy,
+        TNLean.PEPS.regularBoundaryRoute,
+        TNLean.PEPS.regularBoundaryRoute_holonomy,
+        TNLean.PEPS.regularBoundaryTreeRoute,
+        TNLean.PEPS.regularBoundaryTreeRoute_holonomy,
+        TNLean.PEPS.regularCombinedBoundaryTransport,
+        TNLean.PEPS.regularCombinedBoundaryTransport_apply,
+        TNLean.PEPS.regularCombinedBoundaryTransport_tail,
+        TNLean.PEPS.regularCombinedBoundaryTransport_head}
+    \leanok
+    \uses{thm:peps_regular_walk_holonomy,
+        thm:peps_regular_region_cycle_holonomy,
+        thm:peps_regular_region_tree_gauge,
+        def:peps_regionComplementBoundaryConfig}
+    Choose rooted spanning trees in a region $R$ and its complement $S$,
+    with normalized gauges $k_R,k_S$. Let $F_R,F_S$ be their
+    crossing-label maps. After rereading each crossing bond as the
+    same native edge on either side, define $M=F_S\circ F_R^{-1}$.
+    If $f$ joins $v_f\in R$ to $w_f\in S$, write $D_f$ for its
+    directed bond operator from $v_f$ to $w_f$. Then
+    \begin{align}
+        M(\theta)_f & =m_f\theta_f,
+                    & m_f           & =k_S(w_f)^{-1}D_fk_R(v_f).
+        \label{eq:peps_boundary_route_multiplier}
+    \end{align}
+    Thus $D_f=u_f$ when the region endpoint is the smaller endpoint,
+    and $D_f=u_f^{-1}$ when it is the larger endpoint.
+
+    Fix a reference crossing $f_0$. Starting at the complementary root,
+    construct the closed walk $p_f$ by following its tree to
+    $w_{f_0}$, crossing backwards to $v_{f_0}$, following the region tree
+    to $v_f$, crossing to $w_f$, and following the complementary tree
+    back to its root. Its holonomy is
+    \begin{align}
+        H(u,p_f) & =m_fm_{f_0}^{-1}.
+    \end{align}
+    The construction and identity permit arbitrary bond operators.
+    Inclusion of an induced-region walk in the ambient graph preserves
+    its holonomy. This gives the routes for the cycle argument in
+    \cite[Theorem~6.9]{Schuch2010PEPS}; the route passes through $R$.
+    For commuting torus closures, the complementary loops of
+    Lemma~\ref{thm:peps_torus_simply_connected_boundary_loops} have
+    the same winding, and hence the required holonomy.
+\end{lemma}
+
+\begin{proof}\leanok
+    The two boundary equivalences multiply at the region and
+    complementary endpoints, giving the crossing multiplier
+    (\ref{eq:peps_boundary_route_multiplier}).
+    Along each chosen tree path from $v$ to $w$, the original bond
+    holonomy is $k(w)k(v)^{-1}$. Multiplying the five successive
+    portions of $p_f$ in reverse traversal order and cancelling the
+    root gauges gives $m_fm_{f_0}^{-1}$. Induced-walk inclusion retains
+    each ordered native edge and hence each directed factor.
+\end{proof}
+
+\begin{lemma}[Region walk crossing numbers from geometric lifts]%
+    \label{thm:peps_region_walk_winding}
+    \lean{TNLean.PEPS.torusWalkWinding_of_isTorusRegionIntegerLift,
+        TNLean.PEPS.torusWalkWinding_eq_of_isSimplyConnected}
+    \leanok
+    \uses{thm:peps_torus_walk_winding,
+        thm:peps_torus_region_integer_lift_gauge,
+        thm:peps_regular_boundary_route,
+        thm:peps_torus_region_realization}
+    Let $L:R\to\mathbb Z^2$ be an integer lift preserving each native
+    horizontal and vertical unit step, and write the torus periods as
+    $W$ and $H$. For any induced-region walk $p:v\to t$,
+    its ambient seam crossing numbers are
+    \begin{align}
+        N(p)=\left(
+        \left\lfloor\frac{L_1(t)}{W}\right\rfloor
+        -\left\lfloor\frac{L_1(v)}{W}\right\rfloor,
+        \left\lfloor\frac{L_2(t)}{H}\right\rfloor
+        -\left\lfloor\frac{L_2(v)}{H}\right\rfloor
+        \right).
+        \label{eq:peps_region_deck_winding}
+    \end{align}
+    As auxiliary interior-walk identities for the path argument
+    in \cite[proof of Theorem~6.9]{Schuch2010PEPS}, if the closed-cell realization of $R$ is simply connected,
+    any two induced-region walks with the same endpoints have equal
+    seam crossing numbers; no integer lift is assumed in this case.
+\end{lemma}
+
+\begin{proof}\leanok
+    In the additive group $\mathbb Z^2$, written
+    multiplicatively with the universal commuting closure elements
+    $g=(0,-1)$ and $h=(1,0)$, the walk holonomy is $N(p)$ by
+    Lemma~\ref{thm:peps_torus_walk_winding}. The lift gauge is the pair
+    of integer deck coordinates. Its native gradient is the
+    closure assignment on every internal edge, so its walk holonomy
+    is the difference of the endpoint deck coordinates. Inclusion of
+    the induced walk preserves the native holonomy, giving
+    (\ref{eq:peps_region_deck_winding}). In the simply connected case,
+    Lemma~\ref{thm:peps_torus_region_realization} gives the lift;
+    applying (\ref{eq:peps_region_deck_winding}) to both walks gives
+    equality.
+\end{proof}
+
+\begin{lemma}[Complement cycle words from torus winding data]%
+    \label{thm:peps_torus_complement_cycle_words}
+    \lean{TNLean.PEPS.regularBoundaryCrossingAdj,
+        TNLean.PEPS.regularBoundaryInsideVertex,
+        TNLean.PEPS.regularBoundaryOutsideVertex,
+        TNLean.PEPS.regularCombinedBoundaryTransport_insideOutside,
+        TNLean.PEPS.torusBoundaryTreeRoute,
+        TNLean.PEPS.torusBoundaryTreeRoute_holonomy,
+        TNLean.PEPS.regularRegionCycleWord_eval_torusClosure_of_winding_eq}
+    \leanok
+    \uses{thm:peps_regular_boundary_route,
+        thm:peps_regular_region_cycle_holonomy,
+        thm:peps_torus_walk_winding}
+    On a native torus of width and height at least three, choose rooted
+    spanning trees in $R$ and $S=R^c$. For each native crossing bond $f$,
+    membership determines its inside endpoint $v_f$, its outside endpoint
+    $w_f$, and its directed step from $v_f$ to $w_f$. Choose a reference
+    bond $f_0$, and form the two-tree route $q_f$ of
+    Lemma~\ref{thm:peps_regular_boundary_route} from these endpoints.
+    For arbitrary native bond operators its holonomy is
+    \begin{align}
+        H(u,q_f) & =m_fm_{f_0}^{-1},
+                 & m_f               & =(F_S\circ F_R^{-1})(\mathbf 1)_f.
+    \end{align}
+
+    Suppose loops $p_f$ in the induced complementary graph,
+    based at its normalized root, have been chosen independently of the
+    closure labels. Assume their ambient seam crossing numbers satisfy
+    \begin{align}
+        \operatorname{wind}(p_f) & =\operatorname{wind}(q_f).
+    \end{align}
+    For every commuting pair $g,h$, let $u^{g,h}$ be the native
+    closure assignment, $\omega_S^{g,h}$ its complementary tree residuals,
+    and $m_f^{g,h}$ its combined crossing multipliers. Then the genuine
+    complementary walk words satisfy
+    \begin{align}
+        \operatorname{ev}_{\omega_S^{g,h}}W_{T_S}(p_f)
+         & =m_f^{g,h}(m_{f_0}^{g,h})^{-1}.
+    \end{align}
+    Thus the same words give the relative identity simultaneously for
+    all commuting closure pairs. This is a geometry-to-group identity
+    for the accessible complement argument in
+    \cite[Theorem~6.9]{Schuch2010PEPS}, local source lines 1935--1990.
+    It neither assumes a group-valued relative holonomy equation nor
+    asserts existence of the complementary loops with these winding numbers;
+    the remaining scope is recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Region membership selects the two endpoints of every crossing bond.
+    The directed factor is its original operator or its inverse according
+    to that selection, so the two-tree route has the stated
+    combined multiplier ratio. Evaluation of a complementary word at
+    its tree residual equals the original root-loop holonomy.
+    Inclusion in the ambient graph preserves that holonomy. Equal winding
+    numbers give equal commuting-closure holonomies, identifying the
+    complementary loop holonomy with the reference-route ratio.
+\end{proof}
+
+\begin{lemma}[Cycle-controlled permutation of boundary coordinates]%
+    \label{thm:peps_cycle_controlled_boundary}
+    \lean{TNLean.PEPS.regularCycleControlledBoundaryMatrix_mem_unitaryGroup,
+        TNLean.PEPS.regularCycleControlledBoundary,
+        TNLean.PEPS.regularCycleControlledBoundaryMatrix,
+        TNLean.PEPS.regularCycleControlledBoundaryMatrix_mul_coordinates,
+        TNLean.PEPS.regularComplementWalkControlMatrix,
+        TNLean.PEPS.regularComplementWalkControlMatrix_mem_unitaryGroup}
+    \leanok
+    \uses{def:peps_regular_region_coordinates}
+    Fix spanning-tree physical coordinates $(y,a,r,z)$ of a finite
+    region and any function $W:G^C\to G^{\partial R}$ of its cycle
+    labels. The permutation
+    $\sigma_W(y,a,r,z)=(W(z)^{-1}y,a,r,z)$ is reversible, with inverse
+    $(y,a,r,z)\mapsto(W(z)y,a,r,z)$, and its matrix $U_W$ on the
+    original half-edge physical basis is unitary. In particular, fixed
+    complementary walks define such a matrix by evaluating their
+    cycle words; this construction is independent of all bond assignments.
+
+    For the canonical block $M_R^u$, let $b_u$ be its boundary
+    map and $\omega$ its cycle residual tuple. Its transformed
+    coefficients satisfy
+    \begin{align}
+        (U_WM_R^u)\bigl(\alpha(y,a,r,z),\theta\bigr)
+         & =|G|^{-|R|}\sum_{x\in G}
+        \mathbf 1_{\{y=W(z)^{-1}x b_u(\theta)\}}
+        \mathbf 1_{\{z=x\omega x^{-1}\}}.
+        \label{eq:peps_cycle_controlled_coefficients}
+    \end{align}
+    In this algebraic coordinate operation associated with
+    \cite[\S6.3]{Schuch2010PEPS}, the cycle constraint is retained without any assumption on the
+    relation between $W$ and the crossing maps.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_projector_coordinates}
+    The inverse translates only $y$, so it leaves its own controlling
+    tuple $z$ fixed. Group cancellation proves the inverse identities.
+    A permutation of the physical group basis is unitary. Its action
+    on coefficient functions is precomposition with $\sigma_W^{-1}$;
+    substituting $W(z)y$ for $y$ in
+    (\ref{eq:peps_twisted_projector_coordinates}) gives
+    (\ref{eq:peps_cycle_controlled_coefficients}).
+\end{proof}
+
+\begin{lemma}[Combined boundary shift removal from given complement walks]%
+    \label{thm:peps_cycle_controlled_relative_walks}
+    \lean{TNLean.PEPS.regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relative_walk_words}
+    \leanok
+    \uses{thm:peps_cycle_controlled_boundary,
+        thm:peps_regular_region_cycle_holonomy,
+        thm:peps_regular_boundary_route}
+    Let $S$ be the complement of $R$, and identify their crossing bonds
+    by the same native edges. Choose a region gauge $k_R$ and a rooted
+    spanning tree in $S$, with normalized gauge $k_S$ and cycle residuals
+    $\omega_S$. Let $F_R,F_S$ be the boundary maps and set
+    $M=F_S\circ F_R^{-1}$ under this crossing identification. Write
+    $m_f=M(\mathbf 1)_f$, so that $M(\theta)_f=m_f\theta_f$.
+    Fix a reference crossing bond $f_0$ and a walk $p_f$ entirely
+    in the induced graph on $S$ for each crossing bond $f$. Assume
+    \begin{align}
+        \operatorname{ev}_{\omega_S}W_T(p_f) & =m_fm_{f_0}^{-1}.
+        \label{eq:peps_control_relative_walks}
+    \end{align}
+    Define $W(z)_f=\operatorname{ev}_zW_T(p_f)$. With the complementary
+    boundary input reread from $F_R^{-1}\theta$, the coefficients
+    satisfy
+    \begin{align}
+        (U_WM_S^u)\bigl(\alpha_S(y,a,r,z),F_R^{-1}\theta\bigr)
+         & =|G|^{-|S|}\sum_{x\in G}
+        \mathbf 1_{\{y_f=xm_{f_0}\theta_f\ (f\in\partial S)\}}
+        \mathbf 1_{\{z=x\omega_S x^{-1}\}}.
+        \label{eq:peps_control_common_transport}
+    \end{align}
+    Here $\theta_f$ denotes the label on the corresponding crossing bond
+    of $R$. This is an auxiliary conditional statement in the complement
+    argument of \cite[\S6.3]{Schuch2010PEPS}. Constructing the required
+    complement walks with (\ref{eq:peps_control_relative_walks}) remains
+    the geometric step described in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    At the reindexed input, the complementary boundary map
+    is $M(\theta)_f=m_f\theta_f$. On the cycle support, conjugation
+    of the constructed words gives
+    \begin{align}
+        W(x\omega_S x^{-1})_f   & =xm_fm_{f_0}^{-1}x^{-1}, \\
+        W(z)_f^{-1}xm_f\theta_f & =xm_{f_0}\theta_f.
+        \label{eq:peps_control_relative_cancellation}
+    \end{align}
+    Substituting~(\ref{eq:peps_control_relative_cancellation}) into
+    (\ref{eq:peps_cycle_controlled_coefficients}) retains the cycle indicator.
+\end{proof}
+
+\begin{lemma}[Relative boundary factor of controlled complementary blocks]%
+    \label{thm:peps_controlled_complement_boundary_factor}
+    \lean{TNLean.PEPS.regularControlledComplementMatrix_factorization,
+        TNLean.PEPS.regularControlledComplementMatrix,
+        TNLean.PEPS.regularControlledComplementMatrix_sum_factorization}
+    \leanok
+    \uses{thm:peps_regular_boundary_invariants}
+    Assume the complement walks satisfy the relative-word
+    identities of (\ref{eq:peps_control_relative_walks}). Number the
+    $b=n+1$ crossing bonds and use reference boundary coordinates
+    $y=(t,d)$ and $\theta=(a,r)$, where $d,r\in G^n$. For the
+    controlled complementary matrix at the reindexed input
+    $F_R^{-1}\theta$, put $x=t a^{-1}m_{f_0}^{-1}$. Its coefficient is
+    \begin{align}
+        |G|^{-|S|}\mathbf 1_{\{d=r\}}
+        \mathbf 1_{\{z=x\omega_Sx^{-1}\}}.
+    \end{align}
+    The normalized boundary factor is
+    $|G|^{-n/2}\mathbf 1_{\{d=r\}}$.
+    Its remaining factor is
+    $|G|^{n/2-|S|}\mathbf 1_{\{z=x\omega_Sx^{-1}\}}$.
+    The trees, numbering, and control walks may be fixed before an
+    arbitrary finite family of bond assignments. The same factor then
+    separates from every coherent linear combination of their
+    complementary matrices; the residual coefficients are combined
+    with the same weights.
+
+    This statement retains the virtual reference label $a$ in the
+    residual coefficient. It is an auxiliary coefficient statement,
+    rather than a conclusion about the full physical bipartite state;
+    for commuting torus closures, the complementary loops of
+    Lemma~\ref{thm:peps_torus_simply_connected_boundary_loops} realize
+    its geometric walk condition.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_cycle_controlled_relative_walks}
+    Equality under a common left translation is equivalent to equality
+    of all relative labels and equality of the reference labels.
+    The latter fixes $x=t a^{-1}m_{f_0}^{-1}$ uniquely. The finite
+    translation sum therefore has one surviving term. Multiplication
+    by $|G|^{n/2}$ isolates the normalized maximally entangled
+    coefficient, and linearity gives the coherent sum identity.
+\end{proof}
+
+\begin{lemma}[Common boundary factor of controlled canonical cuts]%
+    \label{thm:peps_controlled_projector_cut_boundary_factor}
+    \lean{TNLean.PEPS.regularControlledProjectorCutMatrix_eq_native_contraction,
+        TNLean.PEPS.regularControlledProjectorCutMatrix,
+        TNLean.PEPS.regularControlledProjectorCutMatrix_coordinates,
+        TNLean.PEPS.regularReferenceRegionAncilla,
+        TNLean.PEPS.regularReferenceRegionAncilla_dotProduct,
+        TNLean.PEPS.regularControlledProjectorCutMatrix_sum_factorization}
+    \leanok
+    \uses{thm:peps_controlled_complement_boundary_factor, def:peps_regular_region_coordinates}
+    Retain the same complement walk identities, and suppose
+    every cycle residual in $R$ is the identity. Contract the
+    two canonical region matrices, applying the fixed controlled
+    physical permutation only in $S$. Reindexing their common boundary
+    sum by $F_R$ preserves the original contraction.
+
+    Let $d_R,d_S\in G^n$ be the relative boundary labels. In the
+    spanning-tree physical coordinates the contracted
+    coefficient is
+    \begin{align}
+        |G|^{-|R|-|S|}\mathbf 1_{\{d_R=d_S\}}
+        \mathbf 1_{\{z_R=\mathbf 1\}}
+        \sum_{x\in G}\mathbf 1_{\{z_S=x\omega_Sx^{-1}\}}.
+        \label{eq:peps_controlled_canonical_cut_factor}
+    \end{align}
+    In particular neither reference boundary label nor the common
+    multiplier $m_{f_0}$ occurs in the result.
+
+    Let $N_R$ be the number of choices of the reference boundary label,
+    internal reference labels, and normalized vertex labels in $R$.
+    The fixed region ancillary vector is
+    $\phi_R=N_R^{-1/2}\mathbf 1_{\{z_R=\mathbf 1\}}$; it has norm
+    one. For any finite sector family obeying the stated
+    residual and walk conditions, and any coefficients $\lambda_i$,
+    the coherent cut sum has the exact factorization
+    \begin{align}
+        \Omega_{|G|^n}(d_R,d_S)\,\phi_R\,
+        \biggl(|G|^{n/2}\sqrt{N_R}\,|G|^{-|R|-|S|}
+        \sum_i\lambda_i\sum_{x\in G}
+        \mathbf 1_{\{z_S=x\omega_{S,i}x^{-1}\}}\biggr).
+    \end{align}
+    Both normalized factors are fixed before the sector family and
+    its coefficients; all sector dependence is on the complementary
+    cycle coordinates. These are auxiliary canonical-cut statements
+    associated with \cite[Theorem~6.9]{Schuch2010PEPS}. The
+    geometric conditions and transfer to the original physical
+    tensors remain separate steps, as recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_projector_coordinates}
+    Changing the common boundary summation variable by its
+    reversible region boundary map and substituting the two
+    spanning-tree coefficient formulas fixes the
+    shared boundary configuration for each complementary translation via the complementary boundary indicator. Its relative labels equal $d_S$,
+    and the interior translation sum gives
+    $\mathbf 1_{\{d_R=d_S\}}$. This proves
+    (\ref{eq:peps_controlled_canonical_cut_factor}). There are exactly
+    $N_R$ unrestricted region ancillary configurations, while its
+    cycle tuple is fixed, proving normalization. Extracting the two
+    square-root normalization factors and using linearity yields the
+    finite sector sum.
+\end{proof}
+
+\begin{lemma}[A common canonical torus cut factor from simple connectedness and winding]%
+    \label{thm:peps_torus_controlled_boundary_factor}
+    \lean{TNLean.PEPS.exists_unitary_torusControlledBoundaryFactor_of_isSimplyConnected_and_winding}
+    \leanok
+    \uses{thm:peps_controlled_projector_cut_boundary_factor,
+        thm:peps_torus_region_realization,
+        thm:peps_torus_region_integer_lift_gauge,
+        thm:peps_torus_complement_cycle_words}
+    Let both torus dimensions be at least three. Suppose the
+    closed-cell realization of $R$ is simply connected. Choose rooted
+    spanning trees in $R$ and $S$, number their nonempty crossing bonds
+    by $\{0,\ldots,n\}$, and choose fixed complementary root
+    loops $p_f$. Assume their ambient torus windings equal those of
+    the native two-tree routes from the reference crossing to $f$.
+
+    There exists one unitary $U$ on the original complementary
+    half-edge physical basis, chosen before all closure sectors and
+    coefficients, with the following property. For every finite family
+    of commuting pairs $(g_i,h_i)$ and coefficients $\lambda_i$, form
+    the canonical cut contractions
+    \begin{align}
+        K_i(\alpha,\beta)
+         & =\sum_{\theta}
+        M_R^{g_i,h_i}(\alpha,\theta)
+        (UM_S^{g_i,h_i})(\beta,\theta),
+        \label{eq:peps_torus_canonical_cut_contraction}
+    \end{align}
+    where the same native crossing edges are reread on the two sides.
+    In the fixed spanning-tree and relative boundary coordinates,
+    their coherent sum is
+    \begin{align}
+        \sum_i\lambda_i K_i
+         & =\Omega_{|G|^n}\otimes\phi_R\otimes\chi_{\lambda},
+    \end{align}
+    with the same normalized maximally entangled factor and the same
+    normalized region ancillary vector as in
+    Lemma~\ref{thm:peps_controlled_projector_cut_boundary_factor}.
+    The remaining complementary coefficient is
+    \begin{align}
+        \chi_{\lambda}(z_S)
+         & =|G|^{n/2}\sqrt{N_R}\,|G|^{-|R|-|S|}
+        \sum_i\lambda_i\sum_{x\in G}
+        \mathbf 1_{\{z_S=x\omega_{S,i}x^{-1}\}}.
+    \end{align}
+    Thus no group-valued flatness, relative-word identity, mixed Gram
+    formula, or tensor factorization is assumed as a hypothesis.
+    This is an auxiliary canonical-cut consequence in the argument of
+    \cite[Theorem~6.9]{Schuch2010PEPS}. Existence of the required
+    complementary loops for the paper's disk geometry and transfer
+    to the original physical site tensors remain separate steps;
+    see \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    Simple connectedness of the realization gives an integer
+    coordinate lift. For every commuting pair its normalized gauge
+    gives identity region cycle residuals. Equality of the given
+    loop windings with the native routes gives the complement
+    relative-word identities simultaneously for all commuting pairs.
+    Evaluating the fixed walk words constructs $U$, and applying the
+    coherent canonical-cut factorization before reindexing the shared
+    boundary sum recovers the original contraction
+    (\ref{eq:peps_torus_canonical_cut_contraction}).
+\end{proof}

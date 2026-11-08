@@ -39,7 +39,7 @@ one physical alphabet.
     added as a label to represent products with a state on the left.
 \end{definition}
 
-\begin{theorem}[Exact decompositions of the disjoint-union family]
+\begin{lemma}[Exact decompositions of the disjoint-union family]
     \leanok
     \label{thm:glm_triangular_boundary_exact}
     \lean{MPOTensor.isBiorthogonalDecomposition_triangularTensor}
@@ -50,7 +50,7 @@ one physical alphabet.
     $\widetilde V_{uv}^{w\mu},\widetilde W_{uv}^{w\mu}$ give an exact
     biorthogonal decomposition of $T_uT_v$ into the $T_w$ channels with
     multiplicities $\widetilde N_{uv}^w$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_triangular_padding_products, thm:glm_triangular_padding_decomposition}
@@ -63,7 +63,7 @@ one physical alphabet.
     empty sum.
 \end{proof}
 
-\begin{theorem}[Blocking with arbitrary finite labels]
+\begin{lemma}[Blocking with arbitrary finite labels]
     \leanok
     \label{thm:glm_triangular_boundary_blocking}
     \lean{MPSTensor.IsBiorthogonalDecomposition.blockMPO_fintype}
@@ -73,7 +73,7 @@ one physical alphabet.
     family. Blocking the incoming tensors and every target tensor by a
     common positive length preserves the decomposition and both
     rectangular matrices.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_zipper_blocking}
@@ -82,7 +82,7 @@ one physical alphabet.
     product, and biorthogonality has no physical indices to change.
 \end{proof}
 
-\begin{theorem}[Relabelling the simultaneous inverse]
+\begin{lemma}[Relabelling the simultaneous inverse]
     \leanok
     \label{thm:glm_triangular_boundary_inverse_relabel}
     \lean{MPOTensor.exists_blockTensor_leftInverse_of_labelEquiv}
@@ -101,7 +101,7 @@ one physical alphabet.
     \end{align}
     The right side is zero for different labels; for equal labels the
     virtual coordinates are compared in their common bond space.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_complete_zipper_of_compression_blocked}
@@ -111,7 +111,7 @@ one physical alphabet.
     that identity.
 \end{proof}
 
-\begin{theorem}[The triangular family's simultaneous inverse]
+\begin{lemma}[The triangular family's simultaneous inverse]
     \leanok
     \label{thm:glm_triangular_boundary_inverse}
     \lean{MPOTensor.exists_triangular_blockTensor_leftInverse}
@@ -123,7 +123,7 @@ one physical alphabet.
     individually injective blocked tensors, and a simultaneous inverse
     satisfying (\ref{eq:glm_triangular_block_inverse}).
     No simultaneous inverse or joint spanning condition is a premise.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_triangular_padding_injectivity,
@@ -135,7 +135,7 @@ one physical alphabet.
     excluded original relation, while a relation between the two kinds is
     impossible by disjoint physical support. Relabelling the union by a
     finite ordinal and applying
-    Theorem~\ref{thm:glm_triangular_boundary_inverse_relabel} then gives the
+    Lemma~\ref{thm:glm_triangular_boundary_inverse_relabel} then gives the
     simultaneous inverse.
 \end{proof}
 
@@ -145,7 +145,7 @@ one physical alphabet.
     \lean{MPOTensor.triangularBlockLength, MPOTensor.triangularBlockLength_pos}
     \uses{thm:glm_triangular_boundary_inverse}
     Under the hypotheses of
-    Theorem~\ref{thm:glm_triangular_boundary_inverse}, choose one of its
+    Lemma~\ref{thm:glm_triangular_boundary_inverse}, choose one of its
     lengths $L$. Thus $L>0$, every $T_c^{[L]}$ is injective, and the family
     has a simultaneous block inverse. Its physical dimension is
     $(d+1)^L$.
@@ -161,9 +161,9 @@ one physical alphabet.
     \uses{def:glm_triangular_boundary_family, def:glm_triangular_boundary_length,
         def:mpdo_complete_zipper_fusion_family, def:glm_boundary_decomposition}
     Assume the individual block hypotheses of
-    Theorem~\ref{thm:glm_triangular_boundary_inverse} and the original
+    Lemma~\ref{thm:glm_triangular_boundary_inverse} and the original
     exact fusion and action decompositions of
-    Theorem~\ref{thm:glm_triangular_boundary_exact}.
+    Lemma~\ref{thm:glm_triangular_boundary_exact}.
     Use the chosen $L>0$ to define a complete zipper fusion family on the
     same disjoint-union label set. Its bond dimensions and multiplicities
     are $\Delta_c$ and $\widetilde N_{uv}^w$; its tensors are precisely

@@ -29,7 +29,7 @@ the slot set and all finite index sets may be empty.
     separated into its two registers.
 \end{definition}
 
-\begin{theorem}[Preparation and finite sums of sources]
+\begin{lemma}[Preparation and finite sums of sources]
     \label{thm:peps_source_preparation_sums}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotVector_eq_vector}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSlots_eq_appendIso_symm}
@@ -47,7 +47,7 @@ the slot set and all finite index sets may be empty.
         Q_{(\theta_{e,a_e})_e,\mathcal H}.
         \label{eq:peps_source_preparation_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_joint_source_vector,def:peps_source_inventory}
@@ -79,14 +79,14 @@ the slot set and all finite index sets may be empty.
     with no finite-dimensionality assumption on the private spaces.
 \end{definition}
 
-\begin{theorem}[Coordinates of source preparation]
+\begin{lemma}[Coordinates of source preparation]
     \label{thm:peps_prepared_matrix_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_sum_smul}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_eq_sum_basis}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSlots_eq_sum_basis}
     \leanok
     \uses{def:peps_prepared_matrix}
-    For finite families as in Theorem~\ref{thm:peps_source_preparation_sums},
+    For finite families as in Lemma~\ref{thm:peps_source_preparation_sums},
     \begin{align}
         K_T\bigl((\sum_j d_e(j)\theta_{e,j})_e\bigr)
          & =\sum_{a\in\prod_e J_e}
@@ -100,7 +100,7 @@ the slot set and all finite index sets may be empty.
     (\ref{eq:peps_prepared_matrix_sum}) with $d_e(a_e)=\eta_e(a_e)$ and
     left-hand side $K_T(\eta)$, and the same expansion holds for
     $Q_{\eta,\mathcal H}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_preparation_sums}
@@ -127,7 +127,7 @@ the slot set and all finite index sets may be empty.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Density expansion for finite component families]
+\begin{lemma}[Density expansion for finite component families]
     \label{thm:peps_prepared_density_components}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_density_sum_smul}
     \leanok
@@ -145,7 +145,7 @@ the slot set and all finite index sets may be empty.
         C_{T,T'}(\rho;a,b).
         \label{eq:peps_prepared_density_components}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_prepared_matrix_coordinates}
@@ -155,7 +155,7 @@ the slot set and all finite index sets may be empty.
     gives (\ref{eq:peps_prepared_density_components}).
 \end{proof}
 
-\begin{theorem}[Coordinate density expansion of a weighted gate]
+\begin{lemma}[Coordinate density expansion of a weighted gate]
     \label{thm:peps_prepared_gate_density}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_density_eq_sum_basis}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_gate_density_eq_sum_basis}
@@ -182,19 +182,19 @@ the slot set and all finite index sets may be empty.
         C_{T_\xi,T_\zeta}(\rho;a,b).
         \label{eq:peps_prepared_gate_density}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_prepared_matrix_coordinates}
     Expanding each $\eta_{\xi,e}$ in its orthonormal basis via
-    Theorem~\ref{thm:peps_prepared_matrix_coordinates} gives
+    Lemma~\ref{thm:peps_prepared_matrix_coordinates} gives
     (\ref{eq:peps_prepared_density_basis}), and substituting
     (\ref{eq:peps_prepared_density_basis}) into
     $G\rho G^\dagger=\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}K_\xi\rho K_\zeta^\dagger$
     gives (\ref{eq:peps_prepared_gate_density}).
 \end{proof}
 
-\begin{theorem}[Operator norm of a prepared branch]
+\begin{lemma}[Operator norm of a prepared branch]
     \label{thm:peps_prepared_matrix_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_preparedMatrix_le_one}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_preparedMatrix_tmul_le_one}
@@ -206,7 +206,7 @@ the slot set and all finite index sets may be empty.
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \texttt{04-compression.tex}, lines 409--427), then $\|K_T(a)\|\le1$ for
     every $a$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_source_inventory,def:peps_party_layout}
@@ -219,7 +219,7 @@ the slot set and all finite index sets may be empty.
     $\|K_T(a)\|\le1$.
 \end{proof}
 
-\begin{theorem}[Density coefficients constructed from a gate]
+\begin{lemma}[Density coefficients constructed from a gate]
     \label{thm:peps_actual_gate_density}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_finite_density_expansion}
     \leanok
@@ -247,16 +247,16 @@ the slot set and all finite index sets may be empty.
     giving the exact source-coordinate density identity preceding the random
     replacement in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 233--355).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_finite_source_gate,thm:peps_prepared_gate_density,
         thm:peps_prepared_matrix_contraction}
-    Theorem~\ref{thm:peps_finite_source_gate} provides $U_e,V_e$, the unit
+    Lemma~\ref{thm:peps_finite_source_gate} provides $U_e,V_e$, the unit
     vectors $\eta_{\xi,e}$, and the allowed source-free compositions $T_\xi$
     with $F_\xi=T_\xi Q_{\eta_\xi,\mathcal H_{\rm in}}$. Standard basis vectors
-    have unit norm, so Theorem~\ref{thm:peps_prepared_matrix_contraction} gives
+    have unit norm, so Lemma~\ref{thm:peps_prepared_matrix_contraction} gives
     $\|K_\xi(a)\|\le1$. Since $M_\xi=K_{T_\xi}(\eta_\xi)$,
-    Theorem~\ref{thm:peps_prepared_gate_density} gives
+    Lemma~\ref{thm:peps_prepared_gate_density} gives
     (\ref{eq:peps_actual_gate_density}).
 \end{proof}

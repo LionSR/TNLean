@@ -24,17 +24,17 @@ fixed-point condition.
 \end{definition}
 
 Closing the virtual indices by the trace produces a periodic vector that
-Theorem~\ref{thm:cpsv16_example_34_mpv} identifies as
+Lemma~\ref{thm:cpsv16_example_34_mpv} identifies as
 $\ket{0}^{\otimes N}+\ket{+}^{\otimes N}$.
-Theorem~\ref{thm:cpsv16_example_34_cid} establishes physical correlation
+Lemma~\ref{thm:cpsv16_example_34_cid} establishes physical correlation
 independence across arbitrary disjoint regions, while
-Theorem~\ref{thm:cpsv16_example_34_not_rfp} proves that the tensor is not
+Lemma~\ref{thm:cpsv16_example_34_not_rfp} proves that the tensor is not
 a renormalization fixed point. Finally,
-Theorem~\ref{thm:cpsv16_example_34_blocked_overlap} evaluates the length-$n$
+Lemma~\ref{thm:cpsv16_example_34_blocked_overlap} evaluates the length-$n$
 overlap between the two product-state blocks.
 
 
-\begin{theorem}[Positive-length amplitudes]
+\begin{lemma}[Positive-length amplitudes]
     \label{thm:cpsv16_example_34_mpv}
     \lean{MPSTensor.cpsvExample34_mpv}
     \leanok
@@ -49,7 +49,7 @@ overlap between the two product-state blocks.
     Hence the generated MPV is
     $\ket{0}^{\otimes N}+\ket{+}^{\otimes N}$, where
     $\ket{+}=(\ket0+\ket1)/\sqrt2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -59,7 +59,7 @@ overlap between the two product-state blocks.
     $(1/\sqrt2)^N$ to every word.
 \end{proof}
 
-\begin{theorem}[Physical correlations are independent of distance]
+\begin{lemma}[Physical correlations are independent of distance]
     \label{thm:cpsv16_example_34_cid}
     \lean{MPSTensor.cpsvExample34_isPhysicalCID}
     \leanok
@@ -67,7 +67,7 @@ overlap between the two product-state blocks.
     The tensor in Definition~\ref{def:cpsv16_example_34_tensor} satisfies
     physical correlation independence for arbitrary disjoint physical regions,
     including adjacent regions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -77,7 +77,7 @@ overlap between the two product-state blocks.
     the two complementary gap lengths only through their sum.
 \end{proof}
 
-\begin{theorem}[Failure of the renormalization fixed-point equation]
+\begin{lemma}[Failure of the renormalization fixed-point equation]
     \label{thm:cpsv16_example_34_not_rfp}
     \lean{MPSTensor.cpsvExample34_not_isTransferIdempotent,
         MPSTensor.cpsvExample34_not_hasPhysicalBlockingIsometry}
@@ -86,7 +86,7 @@ overlap between the two product-state blocks.
     The transfer map is not idempotent, and the tensor has no physical blocking
     isometry. Thus it does not satisfy the pure-state renormalization
     fixed-point equation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -103,7 +103,7 @@ overlap between the two product-state blocks.
     isometry.
 \end{proof}
 
-\begin{theorem}[Blocked product-state overlap]
+\begin{lemma}[Blocked product-state overlap]
     \label{thm:cpsv16_example_34_blocked_overlap}
     \lean{MPSTensor.cpsvExample34_blocked_overlap}
     \leanok
@@ -116,7 +116,7 @@ overlap between the two product-state blocks.
          & =\left(\frac{1}{\sqrt2}\right)^n.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

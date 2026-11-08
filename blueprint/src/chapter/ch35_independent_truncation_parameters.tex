@@ -1,0 +1,81 @@
+\section{Independent approximation parameters}
+
+\begin{lemma}[A filter exponent in both norm regimes]
+    \label{thm:independent_truncation_filter_exponent}
+    \lean{Real.independent_truncation_filter_exponent}
+    \leanok
+    Let $\ell,a\ge0$, $a\le t$, $7\le\ell g$, and
+    $7ta^2\le g\ell^4$. For every $0<R\le3t+4\ell$,
+    one has $a\le\ell^2\sqrt{g/R}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $t\le\ell$, then $a\le\ell$ and $R\le7\ell$, whence
+    $a^2R\le7\ell^3\le g\ell^4$.
+    If $\ell\le t$, then $R\le7t$ and the fourth-power hypothesis gives
+    the same inequality. Divide by $R$ and take square roots.
+\end{proof}
+
+\begin{lemma}[An integer window at an independent threshold]
+    \label{thm:independent_truncation_filter_scale}
+    \lean{Real.exists_independent_truncation_filter_scale}
+    \leanok
+    Let $0<g\le1$ and $0\le a\le t$.
+    There is an integer $\ell\ge1$ such that
+    \begin{align}
+        \ell\le8/g+(7ta^2/g)^{1/4},
+        \label{eq:independent_truncation_integer_scale}
+    \end{align}
+    and $a\le\ell^2\sqrt{g/R}$ for every $0<R\le3t+4\ell$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:independent_truncation_filter_exponent}
+    Put $b=(7ta^2/g)^{1/4}$ and $\ell=\lceil7/g+b\rceil$.
+    Then $7\le\ell g$, $7ta^2\le g\ell^4$ and
+    $\ell\le7/g+b+1\le8/g+b$.
+    Apply the two-regime exponent bound.
+\end{proof}
+
+\begin{lemma}[The quarter-power gap and accuracy scales]
+    \label{thm:quarter_power_truncation_filter_scale}
+    \lean{Real.exists_quarter_power_truncation_filter_scale}
+    \leanok
+    Let $C\ge1$, $0<g\le1$, and $a\ge0$.
+    There is an integer $\ell\ge1$ such that
+    \begin{align}
+        \ell\le8/g+(7C)^{1/4}g^{-1/4}a^{3/4},
+        \label{eq:independent_truncation_quarter_scale}
+    \end{align}
+    and $a\le\ell^2\sqrt{g/R}$ for every $0<R\le3Ca+4\ell$.
+    This is the independent parameter choice used for the approximation
+    estimate of \cite[Theorem~4.9]{Arad2016RigorousRG}; the printed
+    prescription is corrected as in
+    \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:independent_truncation_filter_scale}
+    Take $t=Ca$ and use
+    $(7Ca^3/g)^{1/4}=(7C)^{1/4}g^{-1/4}a^{3/4}$.
+\end{proof}
+
+\begin{lemma}[One logarithmic threshold for every projection accuracy]
+    \label{thm:independent_truncation_threshold_constant}
+    \lean{Real.exists_independent_truncation_threshold_constant}
+    \leanok
+    There is a universal constant $C\ge21$ such that, for every
+    $0<g\le1$ and $0<\tau\le1$, the number
+    $u=1+\log(1/g)+\log(1/\tau)$ satisfies $Cu\ge21$ and
+    \begin{align}
+        288e^{11/8}e^{-(Cu-g)/8}\le\tau g/10^6.
+        \label{eq:independent_truncation_uniform_tail}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Set $K=288e^{11/8}10^6$ and $C=32+8\log K$.
+    Since $K\ge1$ and $u\ge1$, one has
+    $(Cu-g)/8\ge\log(K/(\tau g))$.
+    Exponentiating and multiplying by $288e^{11/8}$ proves the estimate.
+\end{proof}

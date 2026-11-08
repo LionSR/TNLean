@@ -1,0 +1,113 @@
+\section{Low frequencies and the central cut}
+
+Index the interaction alphabet of Definition~\ref{def:aklv_window_alphabet} by
+$I=\{0,\ldots,s-1\}\sqcup\{L,R\}$, retaining distinct labels when operators
+coincide. Write $G=H_L+\sum_{j=0}^{s-1}H_j+H_R$. Let $C_{d,\beta}$ denote the sum of all ordered
+words of length $d$ with full occurrence vector $\beta$.
+The binomial counts below use the correction in
+\cite{gap:aklv13_interpolation_and_word_count}.
+
+\begin{lemma}[Moving a chain cut]
+    \label{thm:aklv_cut_transport}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_le_pow_dist_mul}
+    \leanok
+    Let $K$ be an operator on an $L$-site chain of local dimension $q\ge1$.
+    For any two prefix cuts $i,j\ge0$,
+    \begin{align*}
+        \operatorname{OSR}_j(K)\le q^{2|i-j|}\operatorname{OSR}_i(K).
+    \end{align*}
+    Prefixes are intersected with the finite chain. This is the cut movement
+    used in \cite[Lemma~4.2]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two prefixes differ on at most $|i-j|$ sites. The finite-partition
+    operator Schmidt rank inequality costs the square of their configuration
+    dimension, at most $q^{2|i-j|}$.
+\end{proof}
+
+\begin{lemma}[The same frequency operator at a target cut]
+    \label{thm:aklv_target_frequency_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_window_one_marker_target_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_full_frequency_slice_target_le}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Suppose $q\ge1$, $a+s+1\le L$, and $0\le u<s$.
+    For arbitrary complex weights on the full frequency vectors of total $m+k$,
+    put
+    \begin{align*}
+        Q=\sum_{\substack{\beta:\ \sum_b\beta(b)=m+k \\\beta(u)=k}}
+        \lambda_\beta C_{m+k,\beta}.
+    \end{align*}
+    At every target cut $c$,
+    \begin{align*}
+        \operatorname{OSR}_c(Q)
+        \le \binom{m+s}{s}\binom{m+2k+1}{2k+1}
+        q^{2k+2|a+u+1-c|}.
+    \end{align*}
+    The same inequality holds for the residual ordinary-frequency presentation
+    of this operator.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_window_frequency_rank,thm:aklv_cut_transport}
+    Renaming the alphabet identifies the full-frequency slice with the actual
+    residual coefficient family. Inserting the distinguished count is a
+    bijection of the frequency vectors, so the weighted sums agree exactly.
+    Apply the fixed-frequency estimate at $a+u+1$, then move this same
+    operator to $c$. The two powers of $q$ multiply to the displayed exponent.
+\end{proof}
+
+\begin{lemma}[Actual low-frequency pieces of a Hamiltonian power]
+    \label{thm:aklv_low_frequency_power}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_low_frequency_power_decomposition}
+    \leanok
+    \uses{def:aklv_window_alphabet}
+    Suppose $q\ge1$, $s\ge1$, and $a+s+1\le L$. For every $\ell\ge0$ there
+    are operators $Q_{u,k}$, indexed by $0\le u<s$ and
+    $0\le k\le\lfloor\ell/s\rfloor$, such that
+    \begin{align}
+        G^\ell & =\sum_{u=0}^{s-1}\sum_{k=0}^{\lfloor\ell/s\rfloor}Q_{u,k},
+        \label{eq:aklv_low_frequency_power}                                 \\
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(Q_{u,k})
+               & \le\binom{\ell-k+s}{s}\binom{\ell+k+1}{2k+1}
+        q^{2k+2|u+1-\lfloor s/2\rfloor|}.\notag
+    \end{align}
+    These are the selected pieces in \cite[Lemma~4.2]{Arad2013AreaLaw}.
+    Their number is $s(\lfloor\ell/s\rfloor+1)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_target_frequency_rank}
+    Choose a minimum-frequency middle interaction as a function only of the
+    middle occurrence counts. Every full frequency vector of total $\ell$
+    has a selected count at most $\lfloor\ell/s\rfloor$.
+    Define $Q_{u,k}$ as the sum of the actual coefficients whose selected
+    interaction is $H_u$ and whose count there is $k$. The full ordered-word
+    expansion partitions into these disjoint parts, giving
+    (\ref{eq:aklv_low_frequency_power}).
+    For a fixed part use the weight $1$ when the selector chooses $H_u$ and
+    $0$ otherwise. Lemma~\ref{thm:aklv_target_frequency_rank}, with
+    $m=\ell-k$ and $c=a+\lfloor s/2\rfloor$, gives the bound.
+    The source interaction index is $u+1$.
+\end{proof}
+
+\begin{lemma}[An explicit rank bound before optimization]
+    \label{thm:aklv_power_rank_sum}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_power_le_sum}
+    \leanok
+    Under the hypotheses of Lemma~\ref{thm:aklv_low_frequency_power},
+    \begin{align*}
+        \operatorname{OSR}_{a+\lfloor s/2\rfloor}(G^\ell)
+        \le\sum_{u=0}^{s-1}\sum_{k=0}^{\lfloor\ell/s\rfloor}
+        \binom{\ell-k+s}{s}\binom{\ell+k+1}{2k+1}
+        q^{2k+2|u+1-\lfloor s/2\rfloor|}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_low_frequency_power}
+    Apply subadditivity of operator Schmidt rank to
+    (\ref{eq:aklv_low_frequency_power}) and then the individual bounds.
+\end{proof}
+

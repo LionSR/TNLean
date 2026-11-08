@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.FixedPoint.StationarySupport
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.PhysicalObservableRealization
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Converse from zero correlation length to a renormalization fixed point
@@ -147,10 +148,7 @@ theorem directSumSectorRankOne_apply (j : Fin r)
               (finSigmaFinEquiv ⟨j, e⟩)) * R a c := Finset.sum_comm
         _ = ∑ b, ∑ e, R a c * l e b * X (finSigmaFinEquiv ⟨j, b⟩)
               (finSigmaFinEquiv ⟨j, e⟩) := by
-                apply Finset.sum_congr rfl
-                intro b _
-                apply Finset.sum_congr rfl
-                intro e _
+                refine Finset.sum_congr₂ fun b _ e _ ↦ ?_
                 ring
     · simp [Matrix.sum_apply, Sigma.mk.injEq, Ne.symm hk']
   · simp [Matrix.sum_apply, Sigma.mk.injEq, Ne.symm hk]

@@ -9,14 +9,14 @@ Write $\mathcal D=\prod_c\MN{D_c}$ and
 $A^w=(A_c^{i_1}\cdots A_c^{i_n})_c$ for a simultaneous word tuple.
 The product and scalar operations on $\mathcal D$ are componentwise.
 
-\begin{theorem}[A common simultaneous spanning length]
+\begin{lemma}[A common simultaneous spanning length]
     \label{thm:glm_boundary_spanning}
     \lean{MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective}
     \leanok
     Let $A_c$ be individually injective tensors with $D_c>0$, no two of
     which are equivalent by an invertible similarity and a nonzero scalar.
     Then some $L>0$ satisfies $\operatorname{span}\{A^w:|w|=L\}=\mathcal D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Choose nonzero scalars $\zeta_c$ and Perron gauges so that
@@ -40,7 +40,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     No complex conjugation occurs in this pairing.
 \end{definition}
 
-\begin{theorem}[The boundary map determines a representation]
+\begin{lemma}[The boundary map determines a representation]
     \label{thm:glm_boundary_representation}
     \lean{MPSTensor.familyTraceAdjoint_wordTuple,
         MPSTensor.familyTraceAdjoint_map_mul,
@@ -59,7 +59,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
         \label{eq:glm_boundary_representation}
     \end{align}
     The map $\rho$ need not preserve the ambient identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Nondegeneracy of the trace pairing and
@@ -70,14 +70,14 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     $M,N\in\mathcal D$. Length one gives the local-letter identity.
 \end{proof}
 
-\begin{theorem}[Splitting an arbitrary idempotent]
+\begin{lemma}[Splitting an arbitrary idempotent]
     \label{thm:glm_boundary_idempotent}
     \lean{Matrix.exists_rankFactorization_of_idempotent}
     \leanok
     Every idempotent $P\in M_D(K)$ over a field factors as $P=WV$,
     $VW=I_m$, with $m=\operatorname{rank}P$. This includes $m=0$ and
     imposes no self-adjointness condition.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Choose a basis of $\operatorname{ran}P$. Let $W$ include these
@@ -86,7 +86,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     $VW=I_m$ and $WV=P$.
 \end{proof}
 
-\begin{theorem}[Biorthogonal matrix-algebra representations]
+\begin{lemma}[Biorthogonal matrix-algebra representations]
     \label{thm:glm_boundary_matrix_blocks}
     \lean{Matrix.exists_matrixUnitFactorization,
         Matrix.sum_multiplicityBlocks_mul,
@@ -109,7 +109,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
         \label{eq:glm_boundary_matrix_reconstruct}
     \end{align}
     Zero-dimensional factors and zero multiplicities are allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_idempotent}
@@ -174,7 +174,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[Restriction to incoming bond blocks]
+\begin{lemma}[Restriction to incoming bond blocks]
     \label{thm:glm_boundary_incoming_blocks}
     \lean{MPSTensor.mpvWithBoundary_sandwich_of_intertwiner,
         MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport_restrict,
@@ -194,7 +194,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     action tensors of $T_a\cdot A_x$, with their respective biorthogonality
     relations. Only the target block family requires a simultaneous
     spanning length.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_reverse}
@@ -210,7 +210,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     decompositions.
 \end{proof}
 
-\begin{theorem}[Fusion and action tensors from source block hypotheses]
+\begin{lemma}[Fusion and action tensors from source block hypotheses]
     \label{thm:glm_boundary_source_decomposition}
     \lean{MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective,
         MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective}
@@ -249,7 +249,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     \cite[Appendix~A]{GarreRubio2023MPOSym}, these action maps have incoming
     bond space $\mathbb C^{\chi_a}\otimes\mathbb C^{D_x}$ and outgoing bond
     space $\mathbb C^{D_y}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_spanning,thm:glm_boundary_incoming_blocks}
@@ -269,7 +269,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     $\bigoplus_c(\mathbb C^{N_{ab}^c}\otimes\mathbb C^{\chi_c})$.
 \end{definition}
 
-\begin{theorem}[Zipper identities from exact decomposition]
+\begin{lemma}[Zipper identities from exact decomposition]
     \leanok
     \label{thm:glm_boundary_zipper_identities}
     \lean{MPOTensor.CompleteZipperFusionFamily.biorthogonalAnalysis_mul_synthesis,
@@ -286,7 +286,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
         \label{eq:glm_boundary_zipper_identities}
     \end{align}
     The product $S_{ab}H_{ab}$ may be a proper, non-self-adjoint idempotent.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Collecting the separate biorthogonality equations and summing the exact
@@ -315,7 +315,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     simultaneous left inverse, define the required family.
 \end{proof}
 
-\begin{theorem}[Blocking preserves the exact fusion maps]
+\begin{lemma}[Blocking preserves the exact fusion maps]
     \leanok
     \label{thm:glm_boundary_zipper_blocking}
     \lean{MPSTensor.IsBiorthogonalDecomposition.ofWords,
@@ -331,7 +331,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     $V_{ab}^{c\mu}$ and $W_{ab}^{c\mu}$. For positive-dimensional normal
     blocks with no scalar-gauge duplicates, some common positive blocking
     gives a complete zipper fusion family with these same maps.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition,def:glm_boundary_zipper_family,
@@ -345,23 +345,23 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     yields the complete zipper fusion family with the same rectangular maps.
 \end{proof}
 
-\begin{theorem}[Complete fusion family from arbitrary-boundary closedness]
+\begin{lemma}[Complete fusion family from arbitrary-boundary closedness]
     \leanok
     \label{thm:glm_boundary_complete_family}
     \lean{MPOTensor.IsBoundaryClosed.exists_completeZipperFusionFamily}
     \uses{def:glm_boundary_closedness,def:glm_boundary_zipper_family}
     Under the block and arbitrary-boundary closedness assumptions of
-    Theorem~\ref{thm:glm_boundary_source_decomposition}, there are exact
+    Lemma~\ref{thm:glm_boundary_source_decomposition}, there are exact
     unblocked fusion maps, finite multiplicities, and a complete zipper
     family after one positive physical blocking. Its blocks are precisely
     the blocked source tensors, and its synthesis, analysis, and
     multiplicities are the original unblocked ones.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_zipper_blocking}
     Choosing the exact decomposition for each incoming pair and applying
-    Theorem~\ref{thm:glm_boundary_zipper_blocking} at one common blocking
+    Lemma~\ref{thm:glm_boundary_zipper_blocking} at one common blocking
     length produces the complete zipper fusion family with the original
     synthesis, analysis, and multiplicities.
 \end{proof}
@@ -371,13 +371,13 @@ The fusion-symbol conventions of the two sources differ. In
 analysis (our $V$) and its hatted partner is synthesis (our $W$).
 Writing $S_L,S_R$ and $H_L,H_R$ for the two synthesis and analysis trees,
 the synthesis-oriented matrix $P$ of
-Theorem~\ref{thm:mpdo_complete_zipper_printed_fmove} satisfies
+Lemma~\ref{thm:mpdo_complete_zipper_printed_fmove} satisfies
 $S_RP=S_L$. Its inverse $Q$ satisfies $H_L=QH_R$ and is the
 $F$-symbol of \cite{GarreRubio2023MPOSym} when the printed upper indices
 index rows. Thus the inverse-oriented indexed equation in
-Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon} gives that
+Lemma~\ref{thm:mpdo_complete_zipper_fusion_pentagon} gives that
 pentagon identity. Under the synthesis-basis gauges of
-Theorem~\ref{thm:mpdo_complete_zipper_fmatrix_gauge},
+Lemma~\ref{thm:mpdo_complete_zipper_fmatrix_gauge},
 $P'=G_R^{-1}PG_L$ and $Q'=G_L^{-1}QG_R$.
 The common final-bond identity factor is suppressed in these formulas.
 
@@ -391,7 +391,7 @@ The common final-bond identity factor is suppressed in these formulas.
     synthesis matrices.
 \end{definition}
 
-\begin{theorem}[Uniqueness of the fusion multiplicities]
+\begin{lemma}[Uniqueness of the fusion multiplicities]
     \leanok
     \label{thm:glm_boundary_multiplicity_unique}
     \lean{MPSTensor.IsBiorthogonalDecomposition.trace_evalWord_eq_sum_multiplicity,
@@ -401,7 +401,7 @@ The common final-bond identity factor is suppressed in these formulas.
     For separated, positive-dimensional injective targets, two exact
     biorthogonal decompositions of the same tensor over these targets
     have identical multiplicities.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_decomposition,thm:glm_boundary_spanning}
@@ -416,7 +416,7 @@ The common final-bond identity factor is suppressed in these formulas.
     $N_c=N'_c$.
 \end{proof}
 
-\begin{theorem}[Unique multiplicity gauge on the letter support]
+\begin{lemma}[Unique multiplicity gauge on the letter support]
     \leanok
     \label{thm:glm_boundary_multiplicity_gauge}
     \lean{MPSTensor.rectangularIntertwiner_eq_zero_of_wordTupleSpanTop,
@@ -434,7 +434,7 @@ The common final-bond identity factor is suppressed in these formulas.
          & =\sum_\nu(Y_c^{-1})_{\nu\kappa}B^iW_{c\nu}.
         \label{eq:glm_boundary_multiplicity_gauge}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_spanning,def:glm_boundary_existing_zipper,
@@ -442,12 +442,12 @@ The common final-bond identity factor is suppressed in these formulas.
     An intertwiner between distinct blocks intertwines every simultaneous
     word tuple. By spanning it intertwines a tuple that is the identity
     in one block and zero in the other, so the intertwiner vanishes.
-    Theorem~\ref{thm:asym_zipper_uniqueness} now gives the unique
+    Lemma~\ref{thm:asym_zipper_uniqueness} now gives the unique
     invertible multiplicity gauges. No adjoint relation or ambient
     identity is required.
 \end{proof}
 
-\begin{theorem}[Periodic expansions with the exact multiplicities]
+\begin{lemma}[Periodic expansions with the exact multiplicities]
     \leanok
     \label{thm:glm_boundary_periodic_expansions}
     \lean{MPSTensor.IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity,
@@ -462,7 +462,7 @@ The common final-bond identity factor is suppressed in these formulas.
         \label{eq:glm_boundary_periodic_expansions}
     \end{align}
     Both identities concern the original, unblocked tensors.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_multiplicity_unique}
@@ -473,7 +473,7 @@ The common final-bond identity factor is suppressed in these formulas.
     positive chain length.
 \end{proof}
 
-\begin{theorem}[Periodic block independence]
+\begin{lemma}[Periodic block independence]
     \leanok
     \label{thm:glm_boundary_periodic_independence}
     \lean{MPSTensor.WordTupleSpanTop.linearIndependent_mpv,
@@ -482,7 +482,7 @@ The common final-bond identity factor is suppressed in these formulas.
     algebra simultaneously at length $L$, their periodic block vectors
     are linearly independent at $L$. On the doubled physical alphabet,
     the same conclusion gives independent periodic block operators.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A relation $\sum_c z_c\tr(A_c^w)=0$ for every word of length $L$
@@ -491,7 +491,7 @@ The common final-bond identity factor is suppressed in these formulas.
     gives $z_c=0$. Vectorizing operator entries preserves these relations.
 \end{proof}
 
-\begin{theorem}[Associativity of the exact fusion multiplicities]
+\begin{lemma}[Associativity of the exact fusion multiplicities]
     \leanok
     \label{thm:glm_boundary_fusion_associative}
     \lean{MPOTensor.IsMPOFusionAlgebra.associative_of_linearIndependent,
@@ -504,7 +504,7 @@ The common final-bond identity factor is suppressed in these formulas.
         \sum_eN_{ab}^eN_{ec}^q & =\sum_fN_{bc}^fN_{af}^q.
         \label{eq:glm_boundary_fusion_associative}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence}
@@ -513,7 +513,7 @@ The common final-bond identity factor is suppressed in these formulas.
     comparing coefficients of each $O_q$ yields the associativity relation.
 \end{proof}
 
-\begin{theorem}[The exact action multiplicities form a NIM-rep]
+\begin{lemma}[The exact action multiplicities form a NIM-rep]
     \leanok
     \label{thm:glm_boundary_action_nimrep}
     \lean{MPOTensor.isNIMRep_of_periodic_expansions_of_isInjective}
@@ -526,7 +526,7 @@ The common final-bond identity factor is suppressed in these formulas.
         \sum_cN_{ab}^cM_{cx}^y & =\sum_zM_{bx}^zM_{az}^y.
         \label{eq:glm_boundary_action_nimrep}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence,
@@ -540,7 +540,7 @@ The common final-bond identity factor is suppressed in these formulas.
     coefficients is an equality of their natural-number multiplicities.
 \end{proof}
 
-\begin{theorem}[Fusion and action laws from arbitrary boundaries]
+\begin{lemma}[Fusion and action laws from arbitrary boundaries]
     \leanok
     \label{thm:glm_boundary_source_multiplicities}
     \lean{MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible}
@@ -554,7 +554,7 @@ The common final-bond identity factor is suppressed in these formulas.
     (\ref{eq:glm_boundary_fusion_associative}), and the NIM relation
     (\ref{eq:glm_boundary_action_nimrep}). No unit, duality, or
     commutativity assumption is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_periodic_expansions,

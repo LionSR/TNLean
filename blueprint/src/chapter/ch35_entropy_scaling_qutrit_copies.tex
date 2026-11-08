@@ -14,37 +14,37 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Normalization of the repeated family]
+\begin{lemma}[Normalization of the repeated family]
     \label{thm:qutrit_entropy_scaling_copies_norm}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.norm_qutritCopies}
     \leanok
     \uses{def:qutrit_entropy_scaling_copies}
     For every $N\ge1$, $\|\chi_M\|=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_normalization,thm:chain_copy_product_inner}
-    By Theorems~\ref{thm:qutrit_entropy_scaling_normalization}
+    By Lemmas~\ref{thm:qutrit_entropy_scaling_normalization}
     and~\ref{thm:chain_copy_product_inner},
     $\|\chi_M\|=\|\psi_{2N}\|^{N^2}=1$.
 \end{proof}
 
-\begin{theorem}[A uniform four-bit entropy bound]
+\begin{lemma}[A uniform four-bit entropy bound]
     \label{thm:qutrit_entropy_scaling_copies_entropy}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_interval_qutritCopies_le}
     \leanok
     \uses{def:qutrit_entropy_scaling_copies}
     For every $N\ge1$ and every interval $I\subseteq[0,M)$,
     $S_{\chi_M}(I)\le4\log2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_family_entropy,thm:chain_copy_interval_entropy,thm:qutrit_entropy_scaling_normalization}
-    By Theorem~\ref{thm:qutrit_entropy_scaling_family_entropy} each single-copy
+    By Lemma~\ref{thm:qutrit_entropy_scaling_family_entropy} each single-copy
     region has entropy at most $2\log2$, and $I$ partially intersects at most
-    two copies, so Theorem~\ref{thm:chain_copy_interval_entropy} gives
+    two copies, so Lemma~\ref{thm:chain_copy_interval_entropy} gives
     $S_{\chi_M}(I)\le2(2\log2)=4\log2$.
 \end{proof}
 
-\begin{theorem}[The single-copy overlap obstruction]
+\begin{lemma}[The single-copy overlap obstruction]
     \label{thm:qutrit_entropy_scaling_copy_overlap}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.normSq_overlap_qutritFamily_le_kyFan}
     \leanok
@@ -56,16 +56,16 @@
         |\langle\psi_{2N},\phi\rangle|^2\le\|\rho_N\|_{(D)}.
         \label{eq:qutrit_entropy_scaling_kyfan}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_of_mps}
-    By Lemma~\ref{thm:chain_cut_rank_of_mps} the middle-cut coefficient
+    By Theorem~\ref{thm:chain_cut_rank_of_mps} the middle-cut coefficient
     matrix of $\phi$ has rank at most $D$, so Eckart--Young gives
     (\ref{eq:qutrit_entropy_scaling_kyfan}) for $D<3^N$, while for $D\ge3^N$
     Cauchy--Schwarz gives $|\langle\psi_{2N},\phi\rangle|^2\le1=\|\rho_N\|_{(D)}$.
 \end{proof}
 
-\begin{theorem}[The single-copy scalar error obstruction]
+\begin{lemma}[The single-copy scalar error obstruction]
     \label{thm:qutrit_entropy_scaling_copy_scalar_error}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritFamily_scalar_error_lower_bound}
     \leanok
@@ -77,15 +77,15 @@
         \label{eq:qutrit_entropy_scaling_scalar_tail}
         \frac{2^N-(D-1)}{N2^N}\le T(f).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_copy_overlap,thm:qutrit_middle_discarded_mass,thm:qutrit_entropy_scaling_normalization}
-    By Theorem~\ref{thm:qutrit_middle_discarded_mass} and
+    By Lemma~\ref{thm:qutrit_middle_discarded_mass} and
     (\ref{eq:qutrit_entropy_scaling_kyfan}),
     $(2^N-(D-1))/(N2^N)\le1-\|\rho_N\|_{(D)}\le1-f\le T(f)$.
 \end{proof}
 
-\begin{theorem}[Exponential bond dimension from scalar error]
+\begin{lemma}[Exponential bond dimension from scalar error]
     \label{thm:qutrit_entropy_scaling_scalar_dimension}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge_of_scalar_error_lt_one}
     \leanok
@@ -95,17 +95,17 @@
     $D\ge2^N(1-2t)+1$ (with constant $2$ in place of the printed $8$ of
     \cite[lines 475--479]{Schuch2008EntropyScaling};
     see~\cite{gap:swvc08_qutrit_copy_constant}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_mps_copy_error_amplification,thm:qutrit_entropy_scaling_copy_scalar_error,thm:qutrit_entropy_scaling_normalization}
-    Theorem~\ref{thm:chain_mps_copy_error_amplification} yields a unit
+    Lemma~\ref{thm:chain_mps_copy_error_amplification} yields a unit
     single-copy MPS $\phi$ of bond dimension at most $D$ with
     $(N/2)T(|\langle\psi_{2N},\phi\rangle|^2)\le t$, so
     (\ref{eq:qutrit_entropy_scaling_scalar_tail}) gives
     $(2^N-(D-1))/(2\cdot2^N)\le t$.
 \end{proof}
 
-\begin{theorem}[Exponential bond dimension from full trace error]
+\begin{lemma}[Exponential bond dimension from full trace error]
     \label{thm:qutrit_entropy_scaling_trace_dimension}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge}
     \leanok
@@ -119,7 +119,7 @@
     (with constant $2$ and unnormalized error $\delta$ in place of $8$ and the
     optimized error of \cite[lines 475--479]{Schuch2008EntropyScaling};
     see~\cite{gap:swvc08_qutrit_copy_constant}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_scalar_dimension,thm:qutrit_entropy_scaling_copies_norm}
     For $\delta\ge1$, $2^N(1-2\delta)+1\le0\le D$. For $\delta<1$, $\Phi\ne0$
@@ -131,7 +131,7 @@
         \le\bigl\|\lvert\chi_M\rangle\langle\chi_M\rvert-
         \lvert\Phi\rangle\langle\Phi\rvert\bigr\|_1=\delta<1,
     \end{align}
-    so Theorem~\ref{thm:qutrit_entropy_scaling_scalar_dimension} and
+    so Lemma~\ref{thm:qutrit_entropy_scaling_scalar_dimension} and
     (\ref{eq:qutrit_entropy_scaling_actual_error}) give
     (\ref{eq:qutrit_entropy_scaling_trace_dim}).
 \end{proof}
@@ -148,7 +148,7 @@
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_trace_dimension}
     Since $1-2\delta>0$, for all sufficiently large $N$
-    Theorem~\ref{thm:qutrit_entropy_scaling_trace_dimension} gives
+    Lemma~\ref{thm:qutrit_entropy_scaling_trace_dimension} gives
     \begin{align}
         \label{eq:qutrit_entropy_scaling_polynomial_contradiction}
         C(2N^3)^k<2^N(1-2\delta)+1\le D,

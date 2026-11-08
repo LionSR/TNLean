@@ -1,132 +1,13 @@
 For a normal PEPS, the tensors become injective after blocking around every edge,
 and each site separates two injective regions whose complements are also injective.
 With union closure in hand, these hypotheses yield the Fundamental
-Theorem for normal PEPS (Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected})
+Theorem for normal PEPS (Corollary~\ref{thm:fundamentalTheorem_normalPEPS_connected})
 on a connected graph \cite[Section~4]{Molnar2018NormalPEPS}, with gauges unique
 modulo balanced edge scalars.
 Corollaries specialize the result to closed chains, translation-invariant matrix
 product states, and the square lattice.
 
-\begin{definition}[Normal PEPS blocking hypotheses]%
-    \label{def:peps_normalPEPSBlockingHypotheses}
-    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses}
-    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.injective_chain_at_edge}
-    \lean{TNLean.PEPS.%
-        NormalPEPSBlockingHypotheses.endpoint_disjoint_cover_at_edge}
-    \lean{TNLean.PEPS.%
-        NormalPEPSBlockingHypotheses.endpoint_injective_disjoint_cover_at_edge}
-    \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.mem_withSite_iff}
-    \leanok
-    \uses{def:peps_normalEdgeBlockingHypotheses, def:peps_normalOneSiteSeparationHypotheses}
-    The \emph{normal PEPS blocking hypotheses} for a region-injectivity
-    assignment $\inj$ combine the edge-blocking hypotheses of
-    Definition~\ref{def:peps_normalEdgeBlockingHypotheses} (an injective
-    partition $(R_e,B_e,C_e)$ around each edge $e=\{u_e,v_e\}$ with
-    $u_e\in R_e$ and $v_e\in B_e$) and the one-site separation hypotheses of
-    Definition~\ref{def:peps_normalOneSiteSeparationHypotheses} (for each
-    $v\in V$, regions $R_v$ and $S_v=R_v\cup\{v\}$ with $v\notin R_v$ and
-    $\inj(R_v)$, $\inj(V\setminus R_v)$, $\inj(S_v)$, $\inj(V\setminus S_v)$).
-    Thus $w\in S_v\Longleftrightarrow w=v\lor w\in R_v$. The following two
-    panels show their square-lattice source realization; they do not restrict
-    the abstract definition to this lattice.
-    \begin{tenkzequation}
-        % Formula verdict: A1=(4-6,2-3), A2=(3-4,4-6), and A3 is their
-        % complement in the 7-by-7 source frame; the marked edge
-        % (4,3)-(4,4) has one endpoint in A1 and the other in A2.
-        % Ink-to-index verdict: every dot is an ordinary tensor, every lattice
-        % edge is a virtual contraction, and the three fills encode the
-        % edge-centred disjoint cover used by the blocking hypothesis.
-        % Contraction/boundary verdict: the panel has 84 internal virtual
-        % contractions and 28 cut virtual bonds, with no exposed physical
-        % indices, hence boundary type (V,P)=(28,0).
-        % Source verdict: exact square-lattice specialization of the first
-        % hypothesis in arXiv:1804.04964, paper_normal.tex:1475--1499.
-        \tenkzkernel
-        \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=7,
-                west=open, east=open, north=open, south=open]
-            \tndeclare{species}{blocked-edge}{hue=source:red!65!black}
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{}
-            \tnwire[species=blocked-edge]{(4,3)}{(4,4)}
-            \tnmark[form=enclosure, species=selected, tint]
-            {(4,2) .. (6,3)}{$A_1$}
-            \tnmark[form=enclosure, species=secondary, tint]
-            {(3,4) .. (4,6)}{$A_2$}
-            \tnmark[form=enclosure, species=complement, label pos=n]
-            {(1,1) .. (7,7) - (4,2) .. (6,3) - (3,4) .. (4,6)}{$A_3$}
-        \end{tenkz}
-        $\qquad\text{edge blocking}$
-    \end{tenkzequation}
-    \begin{tenkzequation}
-        % Formula verdict: R=(2-4,2-4)-(4,4), S=(2-4,2-4), and
-        % S=R union {v} for v=(4,4); the marked site is present in both panels.
-        % Ink-to-index verdict: every dot is an ordinary tensor and every
-        % lattice edge is a virtual contraction; region fills encode only the
-        % one-site set comparison, while the marked site identifies v.
-        % Contraction/boundary verdict: each 5-by-5 panel has 40 internal
-        % virtual contractions and 20 cut virtual bonds, with no exposed
-        % physical indices, hence boundary type (V,P)=(20,0).
-        % Source verdict: exact discrete form of the one-site comparison in
-        % arXiv:1804.04964, paper_normal.tex:1405--1429 and 1519--1544.
-        $\text{and}\qquad$
-        \tenkzkernel
-        \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5,
-                west=open, east=open, north=open, south=open]
-            \tndeclare{species}{marked-site}{hue=source:blue}
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot, species=marked-site]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{}
-            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
-            {(2,2) .. (4,4) - (4,4)}{$R$}
-        \end{tenkz}
-        $\qquad\subset\qquad$
-        \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5,
-                west=open, east=open, north=open, south=open]
-            \tndeclare{species}{marked-site}{hue=source:blue}
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot, species=marked-site]{} & \tn[skin=dot]{} \\
-            \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} &
-            \tn[skin=dot]{} & \tn[skin=dot]{}
-            \tnmark[form=enclosure, species=selected, tint, label pos=nw]
-            {(2,2) .. (4,4)}{$S$}
-        \end{tenkz}
-        $\qquad S=R\cup\{v\}$
-    \end{tenkzequation}
-\end{definition}
-
-\begin{theorem}[Square-lattice normal blocking hypotheses from margin covers]%
+\begin{lemma}[Square-lattice normal blocking hypotheses from margin covers]%
     \label{thm:peps_normalSquarePEPSBlockingHypotheses_of_marginCovers}
     \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_of_marginCovers}
     \lean{TNLean.PEPS.normalSquarePEPSBlockingHypotheses_edgeBlocking_of_marginCovers}
@@ -152,10 +33,10 @@ product states, and the square lattice.
     $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$, and
     $R_e\cup B_e\cup C_e=V$; at each site $v$ the regions $R_v,S_v$ satisfy
     $w\in S_v\Longleftrightarrow w=v\lor w\in R_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Pair the edge-blocking hypotheses of
-    Theorem~\ref{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
+    Lemma~\ref{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     with the given one-site separation hypotheses
     (Definition~\ref{def:peps_normalOneSiteSeparationHypotheses}).
 \end{proof}
@@ -171,80 +52,15 @@ product states, and the square lattice.
     unique up to the scalar freedom of the graph
     \cite[Section~4, following Theorem~3]{Molnar2018NormalPEPS}.
     The connected-graph form with shared blocking and single-crossing edges is
-    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected}, with per-edge
-    uniqueness in Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
+    Corollary~\ref{thm:fundamentalTheorem_normalPEPS_connected}, with per-edge
+    uniqueness in Lemma~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
     The source's remark that translationally invariant systems admit
     translationally invariant gauges when the proportionality scalar $\lambda$
     is not absorbed is realized on the torus by
-    Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}.
+    Corollary~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}.
 \end{theorem}
 
-\begin{definition}[Doubly injective regions]%
-    \label{def:peps_regionInjectivityDataPair}
-    \lean{TNLean.PEPS.regionInjectivityDataPair}
-    \leanok
-    \uses{def:peps_regionInjectivityData}
-    For two region-injectivity assignments $\inj_1,\inj_2$ on $V$, the doubly
-    injective assignment $\inj_{1,2}$ is defined by
-    $\inj_{1,2}(R)\Longleftrightarrow\inj_1(R)\wedge\inj_2(R)$.
-\end{definition}
-
-\begin{definition}[Two normal PEPS tensors]%
-    \label{def:peps_normalPEPSPairHypotheses}
-    \lean{TNLean.PEPS.NormalPEPSPairHypotheses}
-    \leanok
-    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityDataPair}
-    Two PEPS tensors $A$ and $B$ on a finite simple graph form a
-    \emph{pair of normal PEPS tensors} if they satisfy the normal blocking
-    hypotheses (Definition~\ref{def:peps_normalPEPSBlockingHypotheses}) for the
-    doubly injective assignment $\inj_{A,B}$
-    (Definition~\ref{def:peps_regionInjectivityDataPair}) and have positive
-    bond dimensions $D_A(e)>0$ and $D_B(e)>0$ for every edge $e$, following
-    \cite[Section~3]{Molnar2018NormalPEPS}. Because a zero-dimensional boundary
-    bond leaves a region with no boundary configurations so that injectivity
-    holds vacuously, positivity is recorded explicitly
-    \cite{gap:peps_injective_ft_section3_route}.
-\end{definition}
-
-\begin{theorem}[Equal bond dimensions from the normal blocking hypotheses]%
-    \label{thm:peps_bondDim_eq_of_normalBlocking}
-    \lean{TNLean.PEPS.bondDim_eq_of_normalBlocking}
-    \lean{TNLean.PEPS.bondDim_apply_eq_of_blockingData}
-    \leanok
-    \uses{def:peps_normalPEPSPairHypotheses, def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityDataPair}
-    Let $A$ and $B$ be a pair of normal PEPS tensors
-    (Definition~\ref{def:peps_normalPEPSPairHypotheses}) on a finite simple
-    graph with physical dimension $d>0$, generating the same state, such that
-    at every edge $e$ the single-crossing condition
-    $\{g\in E:g\text{ joins }R_e\text{ and }B_e\}=\{e\}$ holds. Then
-    $D_A(e)=D_B(e)$ for every edge $e$. The one-edge form assumes only the
-    blocking datum at a single edge $e$ with $D_A,D_B>0$.
-    In \cite[Section~3]{Molnar2018NormalPEPS}, this follows because the
-    insertion correspondence $X\mapsto Y$ on the blocked three-site chain is an
-    algebra isomorphism $\MN{D_A(e)}\cong\MN{D_B(e)}$.
-    \begin{proof}
-        \leanok
-        \uses{thm:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
-        Fix $e\in E$. Blocking $A$ and $B$ into $(R_e,B_e,C_e)$ yields two
-        three-site chains on $K_3$ with injective super-sites
-        (Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective}). The coarse state
-        coefficients satisfy
-        $\Coeff_{\mathrm{coarse}}(A)=c_A\Coeff_A$ and
-        $\Coeff_{\mathrm{coarse}}(B)=c_B\Coeff_B$ with positive merge-collapse
-        constants $c_A,c_B>0$ (products of bond dimensions on edges non-incident
-        to the blocks). Rescaling one super-site of $A$ by $c_B$ and of $B$ by
-        $c_A$ equates the coarse states while preserving bond dimensions and
-        super-site injectivity. By
-        Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}, matched
-        insertions on the coarse bond between $R_e$ and $B_e$ define an algebra
-        isomorphism between the full coarse bond matrix algebras, forcing equal
-        coarse bond dimensions. Under $\{g\in E:g\text{ joins }R_e\text{ and }B_e\}=\{e\}$, the coarse bond dimension is $D_A(e)$ (respectively
-        $D_B(e)$), so $D_A(e)=D_B(e)$.
-    \end{proof}
-\end{theorem}
-
-\begin{theorem}[Fundamental Theorem for normal PEPS on a connected graph]%
+\begin{corollary}[Fundamental Theorem for normal PEPS on a connected graph]%
     \label{thm:fundamentalTheorem_normalPEPS_connected}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS}
     \leanok
@@ -274,7 +90,7 @@ product states, and the square lattice.
         \label{eq:peps_normal_ft_transfer}
     \end{align}
     for an invertible $Z_e$ and every insertion $X$ on $e$, where $D_A=D_B$
-    follows from Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}
+    follows from Lemma~\ref{thm:peps_bondDim_eq_of_normalBlocking}
     \cite[Section~4]{Molnar2018NormalPEPS} (cf.\ Theorem~\ref{thm:fundamentalTheorem_PEPS}).
     % Source-faithful reading: Section 4 of \cite{Molnar2018NormalPEPS} uses
     % one common blocking of the two states and enlarges the endpoint regions
@@ -282,10 +98,10 @@ product states, and the square lattice.
     \begin{proof}
         \leanok
         \uses{thm:peps_bondDim_eq_of_normalBlocking, lem:peps_injectiveRegion_union_pos, thm:peps_region_edge_gauge_of_coeff_transfer, thm:gaugeConsistency}
-        By Theorem~\ref{thm:peps_bondDim_eq_of_normalBlocking}, $D_A=D_B$, and
+        By Lemma~\ref{thm:peps_bondDim_eq_of_normalBlocking}, $D_A=D_B$, and
         by Lemma~\ref{lem:peps_injectiveRegion_union_pos}, injective regions of
         $A$ and $B$ are closed under unions. At each $e\in E$,
-        Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} yields an
+        Lemma~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} yields an
         invertible gauge $X_e$ via (\ref{eq:peps_normal_ft_transfer}) whose
         orientation-adapted absorption $\widetilde B=B^X$ satisfies
         $C_A(e,M;\sigma)=C_{\widetilde B}(e,M;\sigma)$ for all $M$ and $\sigma$.
@@ -297,11 +113,11 @@ product states, and the square lattice.
         Contracting against the nonzero closed state gives
         $\prod_{v\in V}\lambda_v=1$; a spanning-tree factorization on the
         connected graph absorbs $\lambda_v^{-1}$ into the edge gauges as in
-        Theorem~\ref{thm:gaugeConsistency}.
+        Lemma~\ref{thm:gaugeConsistency}.
     \end{proof}
-\end{theorem}
+\end{corollary}
 
-\begin{theorem}[Uniqueness of the normal-PEPS gauges up to a constant]%
+\begin{lemma}[Uniqueness of the normal-PEPS gauges up to a constant]%
     \label{thm:fundamentalTheorem_normalPEPS_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_gauge_unique}
     \leanok
@@ -323,13 +139,13 @@ product states, and the square lattice.
         $e\in E$. By the blocking hypotheses and
         Lemma~\ref{lem:peps_injectiveRegion_union_pos}, both $R_e$ and
         $V\setminus R_e=B_e\cup C_e$ are injective for $A$. By
-        Theorem~\ref{thm:peps_gaugeConj_eq_of_coeffIdentities}, the orientation-adapted
+        Lemma~\ref{thm:peps_gaugeConj_eq_of_coeffIdentities}, the orientation-adapted
         absorbing gauges $X_{\mathrm{abs},e}$ and $X'_{\mathrm{abs},e}$ induce
         equal conjugations on $\MN{D_A(e)}$, so
         $X'_{\mathrm{abs},e}=c_e X_{\mathrm{abs},e}$ for some $c_e\in\C^\times$;
         unwinding the orientation adaptation gives $X'_e=c_e X_e$.
     \end{proof}
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[A common physical action on a tensor network]%
     \label{def:peps_physical_tensor_action}
@@ -342,7 +158,7 @@ product states, and the square lattice.
     and setting $B_v(\eta,\sigma)=\sum_\tau U_{\sigma\tau}A_v(\eta,\tau)$.
 \end{definition}
 
-\begin{theorem}[State of a physical tensor action]%
+\begin{lemma}[State of a physical tensor action]%
     \label{thm:peps_state_physical_tensor_action}
     \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
     \leanok
@@ -354,14 +170,14 @@ product states, and the square lattice.
     \begin{align}
         \Coeff_B=U^{\otimes V}\Coeff_A.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand the local matrix products in the contraction and exchange the
     finite sums. The product of the physical coefficients is
     $\prod_vU_{\sigma_v\tau_v}$, giving the stated product action.
 \end{proof}
 
-\begin{theorem}[Positive physical dimension from an injective region]%
+\begin{lemma}[Positive physical dimension from an injective region]%
     \label{thm:peps_physical_dimension_pos_of_region}
     \lean{TNLean.PEPS.physicalDim_pos_of_nonempty_injectiveRegion}
     \leanok
@@ -369,7 +185,7 @@ product states, and the square lattice.
     \uses{def:peps_regionInjectivityDataOf}
     If all virtual bond spaces are nonzero and a nonempty region is
     injective, then the common physical dimension $d$ is positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Positive bond dimensions give the boundary configuration $\beta_e=0$
     on every boundary edge. Linear independence gives the nonzero blocked
@@ -381,7 +197,7 @@ product states, and the square lattice.
     a contradiction.
 \end{proof}
 
-\begin{theorem}[Regional injectivity from the state and bond dimensions]%
+\begin{lemma}[Regional injectivity from the state and bond dimensions]%
     \label{thm:peps_regional_injectivity_from_state}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_sameState_of_bondDim_eq}
     \leanok
@@ -390,7 +206,7 @@ product states, and the square lattice.
     Let $A$ and $B$ have the same state and the same positive bond
     dimensions. If a region $R$ and its complement are injective for $A$,
     then $R$ is injective for $B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_region_partial_state, thm:peps_region_partial_state_same_state}
     Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
@@ -402,7 +218,7 @@ product states, and the square lattice.
          & =\operatorname{span}\{\psi^\tau_{A,R}\}_\tau.
         \notag
     \end{align}
-    Since $A$ and $B$ have the same state, Theorem~\ref{thm:peps_region_partial_state_same_state}
+    Since $A$ and $B$ have the same state, Lemma~\ref{thm:peps_region_partial_state_same_state}
     gives
     \begin{align}
         \psi^\tau_{A,R}
@@ -442,12 +258,12 @@ product states, and the square lattice.
     For each edge blocking, the complement of each of the three regions
     is the disjoint union of the other two, hence is injective for $A$.
     The one-site comparison regions already have injective complements.
-    Theorem~\ref{thm:peps_regional_injectivity_from_state} therefore proves
+    Lemma~\ref{thm:peps_regional_injectivity_from_state} therefore proves
     injectivity of each selected region for $B$. All regions and their
     incidence properties are retained, and the bond spaces stay nonzero.
 \end{proof}
 
-\begin{theorem}[Virtual gauges for a normal on-site symmetry]%
+\begin{lemma}[Virtual gauges for a normal on-site symmetry]%
     \label{thm:peps_normal_onsite_symmetry_gauge}
     \lean{TNLean.PEPS.gaugeEquiv_physicalTensorAction_of_normal_symmetry}
     \leanok
@@ -467,7 +283,7 @@ product states, and the square lattice.
     application in~\cite[lines~1696--1713]{Molnar2018NormalPEPS}.
     Connectivity is needed to absorb the component scalars, as recorded
     in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_physical_tensor_action, thm:peps_state_physical_tensor_action,
         def:peps_normal_pair_blockings_from_state,
@@ -478,11 +294,11 @@ product states, and the square lattice.
     gives the required shared injective regions for $A$ and $B$, retaining
     the single-crossing property of each distinguished edge.
     A one-site comparison region containing its distinguished site is
-    nonempty, so Theorem~\ref{thm:peps_physical_dimension_pos_of_region}
+    nonempty, so Lemma~\ref{thm:peps_physical_dimension_pos_of_region}
     gives $d>0$. Apply the connected normal Fundamental Theorem to this pair.
 \end{proof}
 
-\begin{theorem}[Multiplication of endpoint gauge matrices]%
+\begin{lemma}[Multiplication of endpoint gauge matrices]%
     \label{thm:peps_endpoint_gauge_mul}
     \lean{TNLean.PEPS.edgeGaugeAt_mul}
     \leanok
@@ -491,14 +307,14 @@ product states, and the square lattice.
     Let $X$ and $Y$ be invertible edge-matrix families, and write
     $M_{v,e}(X)$ for the endpoint action of $X_e$ at $v$. Then
     $M_{v,e}(XY)=M_{v,e}(X)M_{v,e}(Y)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At the first endpoint this is matrix multiplication. At the second,
     $(XY)^{-\mathsf T}=X^{-\mathsf T}Y^{-\mathsf T}$, where
     $X^{-\mathsf T}=(X^{-1})^{\mathsf T}$.
 \end{proof}
 
-\begin{theorem}[Composition of virtual gauge actions]%
+\begin{lemma}[Composition of virtual gauge actions]%
     \label{thm:peps_gauge_action_composition}
     \lean{TNLean.PEPS.gaugeVertex_applyGauge}
     \leanok
@@ -506,7 +322,7 @@ product states, and the square lattice.
     \uses{def:gaugeVertex, def:applyGauge}
     For invertible edge-matrix families $X$ and $Y$, the vertex tensors
     satisfy $(A^X)^Y_v=A^{YX}_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_endpoint_gauge_mul}
     Expand both gauge actions and exchange the finite sums. On each
@@ -514,7 +330,7 @@ product states, and the square lattice.
     $M_{v,e}(Y)M_{v,e}(X)=M_{v,e}(YX)$.
 \end{proof}
 
-\begin{theorem}[Composition of physical tensor actions]%
+\begin{lemma}[Composition of physical tensor actions]%
     \label{thm:peps_physical_action_composition}
     \lean{TNLean.PEPS.physicalTensorAction_mul_component}
     \leanok
@@ -522,13 +338,13 @@ product states, and the square lattice.
     \uses{def:peps_physical_tensor_action}
     For physical matrices $U,W\in\MN{d}$, the vertex tensors satisfy
     $(U\cdot(W\cdot A))_v=((UW)\cdot A)_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Exchange the finite sums over the two physical indices and use
     $(UW)_{\sigma\kappa}=\sum_\tau U_{\sigma\tau}W_{\tau\kappa}$.
 \end{proof}
 
-\begin{theorem}[Physical and virtual tensor actions commute]%
+\begin{lemma}[Physical and virtual tensor actions commute]%
     \label{thm:peps_physical_virtual_commute}
     \lean{TNLean.PEPS.physicalTensorAction_applyGauge_component}
     \leanok
@@ -536,7 +352,7 @@ product states, and the square lattice.
     \uses{def:peps_physical_tensor_action, def:gaugeVertex, def:applyGauge}
     For a physical matrix $U$ and an invertible edge-matrix family $X$,
     the vertex tensors satisfy $(U\cdot A^X)_v=(U\cdot A)^X_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $M_{v,e}=M_{v,e}(X)$ and let $\eta,\eta'$ range over the
     virtual indices of the legs incident to $v$. Exchanging the sums gives
@@ -551,14 +367,14 @@ product states, and the square lattice.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Projective bond representations of a normal symmetry group]%
+\begin{lemma}[Projective bond representations of a normal symmetry group]%
     \label{thm:peps_normal_virtual_representation}
     \lean{TNLean.PEPS.exists_virtualRepresentation_of_normal_symmetry}
     \leanok
 
     \uses{def:projective_rep, thm:peps_normal_onsite_symmetry_gauge}
     Let $A$ satisfy all the graph and blocking hypotheses of
-    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}. Let $H$ be a group
+    Lemma~\ref{thm:peps_normal_onsite_symmetry_gauge}. Let $H$ be a group
     and $U:H\to\GL_d(\C)$ a representation such that
     $U(g)^{\otimes V}\Coeff_A=\Coeff_A$ for every $g\in H$.
     Then each edge $e$ admits a homomorphism
@@ -577,7 +393,7 @@ product states, and the square lattice.
     This proves the projective-representation assertion
     in~\cite[Applications, line~1713]{Molnar2018NormalPEPS}, with the
     connectedness correction in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_normal_onsite_symmetry_gauge,
         def:peps_normal_pair_blockings_from_state,
@@ -585,7 +401,7 @@ product states, and the square lattice.
         thm:peps_gauge_action_composition,
         thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:cocycle_of_assoc}
     Choose gauges $Z(g)$ from
-    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}.
+    Lemma~\ref{thm:peps_normal_onsite_symmetry_gauge}.
     Composition and commutation give
     $(U(gh)\cdot A)_v=A^{Z(h)Z(g)}_v$.
     The same transformed tensor is also $A^{Z(gh)}_v$.

@@ -88,7 +88,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     An original circuit is an ordered composition of private single-party contractions and $N$ nonprivate contractions $G_j=\sum_\xi c_{j,\xi}M_{j,\xi}$, where each $M_{j,\xi}$ is an allowed monomial on a specified participating party set (with outside registers as spectators) containing at most $r$ pair effects, and $\sum_\xi|c_{j,\xi}|\le S$.
 \end{definition}
 
-\begin{theorem}[Common auxiliary vector and operator error]
+\begin{lemma}[Common auxiliary vector and operator error]
     \label{thm:peps_circuit_effect_error}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.referenceEval_apply}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_auxiliaryVector}
@@ -103,7 +103,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
         \|\widetilde T-|\Gamma\rangle\otimes T\|\le 2\delta N.
         \label{eq:peps_circuit_effect_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsExpansionBounded}
@@ -138,10 +138,10 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_tmul}
     \lean{TNLean.Lattice.PartyCircuit.preparation_mapOwner_heq}
     \uses{cor:peps_pair_effects_rescaling}
-    By Corollary~\ref{cor:peps_pair_effects_rescaling}, each nonprivate gate $G_j$ has a source-only contraction $\widetilde G_j$ and unit auxiliary vector $\Gamma_j$ with $\|\widetilde G_j-|\Gamma_j\rangle\otimes G_j\|\le 2\delta$. Setting $\Gamma=\bigotimes_{j=1}^N\Gamma_j$ and inducting over the circuit composition via $\|B_2B_1-A_2A_1\|\le\|B_2-A_2\|+\|B_1-A_1\|$ for contractions (while private gates and permutations contribute $0$) yields (\ref{eq:peps_circuit_effect_error}).
+    By Lemma~\ref{cor:peps_pair_effects_rescaling}, each nonprivate gate $G_j$ has a source-only contraction $\widetilde G_j$ and unit auxiliary vector $\Gamma_j$ with $\|\widetilde G_j-|\Gamma_j\rangle\otimes G_j\|\le 2\delta$. Setting $\Gamma=\bigotimes_{j=1}^N\Gamma_j$ and inducting over the circuit composition via $\|B_2B_1-A_2A_1\|\le\|B_2-A_2\|+\|B_1-A_1\|$ for contractions (while private gates and permutations contribute $0$) yields (\ref{eq:peps_circuit_effect_error}).
 \end{proof}
 
-\begin{theorem}[Preservation of participating parties]
+\begin{lemma}[Preservation of participating parties]
     \label{thm:peps_replacement_participants}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.replacementLocationsEquiv}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_replacementLocationsEquiv}
@@ -149,7 +149,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \leanok
     \uses{def:peps_original_circuit}
     The nonprivate gates of the original circuit correspond bijectively to the expanded gates of the replacement circuit, preserving each gate's participating party set.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_replacementLocationsEquiv}
@@ -165,7 +165,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     By structural induction on the circuit, each nonprivate gate maps to a single replacement gate with identical participating parties, while private gates, auxiliary preparations, permutations, and spectator framings add no expanded gates.
 \end{proof}
 
-\begin{theorem}[Physical density error]
+\begin{lemma}[Physical density error]
     \label{thm:peps_source_only_density_error}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
@@ -179,7 +179,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
         \label{eq:peps_source_only_density_error}
     \end{align}
     In particular, if $N\le M$ and $\varepsilon>0$, setting $\delta=\varepsilon/(8\max\{1,M\})$ gives $\|\widetilde\rho-\rho\|_1\le\varepsilon/2$ (including when $x$ is a whole-party product of unit vectors).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \lean{Matrix.appendAuxiliaryVector}
@@ -217,7 +217,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     giving (\ref{eq:peps_source_only_density_error}) and the $\varepsilon/2$ bound for $\delta=\varepsilon/(8\max\{1,M\})$.
 \end{proof}
 
-\begin{theorem}[Regional dimensions without padding]
+\begin{lemma}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
     \leanok
@@ -231,8 +231,8 @@ All registers are retained until the final partial trace, on arbitrary finite-di
         \dim\mathcal H_A=\prod_{p\in A}d_p\le D^{|A|},
         \label{eq:peps_family_regional_dimension}
     \end{align}
-    and for $N\le M$ and $\delta=\varepsilon/(8\max\{1,M\})$ as in Theorem~\ref{thm:peps_source_only_density_error}, the regional reduced densities on $A$ satisfy $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
-\end{theorem}
+    and for $N\le M$ and $\delta=\varepsilon/(8\max\{1,M\})$ as in Lemma~\ref{thm:peps_source_only_density_error}, the regional reduced densities on $A$ satisfy $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_only_density_error,
@@ -242,22 +242,22 @@ All registers are retained until the final partial trace, on arbitrary finite-di
         thm:peps_basis_physical_list_restriction,
         def:peps_family_physical_output,
         thm:peps_basis_regional_readouts}
-    Theorem~\ref{thm:peps_basis_physical_dimensions} gives (\ref{eq:peps_family_regional_dimension}), and applying Theorem~\ref{thm:peps_source_only_density_error} to the regional readout decomposing the physical registers into $A$ and $A^c$ (Theorem~\ref{thm:peps_basis_regional_readouts}) yields $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
+    Lemma~\ref{thm:peps_basis_physical_dimensions} gives (\ref{eq:peps_family_regional_dimension}), and applying Lemma~\ref{thm:peps_source_only_density_error} to the regional readout decomposing the physical registers into $A$ and $A^c$ (Lemma~\ref{thm:peps_basis_regional_readouts}) yields $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
 \end{proof}
 
-\begin{theorem}[Constant-dimensional regional density estimate]
+\begin{lemma}[Constant-dimensional regional density estimate]
     \label{thm:peps_constant_family_regional_density}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
     \leanok
     \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
     If $d_p=d$ for all $p$, the discarded private memory is finite-dimensional, $N\le M$, and $\delta=\varepsilon/(8\max\{1,M\})$, then the regional reduced densities on $A$ for a whole-party unit product input satisfy $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_source_only_density_error,def:peps_family_physical_output}
-    Specialize Theorem~\ref{thm:peps_source_only_density_error} to $d_p=d$ and the regional readout on $A$ (Definition~\ref{def:peps_family_physical_output}).
+    Specialize Lemma~\ref{thm:peps_source_only_density_error} to $d_p=d$ and the regional readout on $A$ (Definition~\ref{def:peps_family_physical_output}).
 \end{proof}
 
-\begin{theorem}[Resources of the constructed source-only circuit]
+\begin{lemma}[Resources of the constructed source-only circuit]
     \label{thm:peps_source_only_resources}
     \lean{TNLean.Lattice.PartyCircuit.sum_norm_replacementCoefficients_le}
     \lean{TNLean.Lattice.PartyCircuit.card_replacementLabels_le}
@@ -278,7 +278,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
         \label{eq:peps_replacement_resource_bound}
     \end{align}
     Combining sources per unordered party pair gives $\binom q2\le\binom b2$ pair-source slots at a $q$-party gate, at most $N\binom b2$ source slots in total, and at most $b$ expanded gates incident to any party.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement_uniform_resources}
@@ -305,7 +305,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsExpansionBounded.at_gate}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount_eq_card_incidentGates}
     \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants}
-    By Corollary~\ref{cor:peps_pair_effects_rescaling}, cyclic insertion averaging and rescaling by $(1+\delta)^{-1}<1$ keep the coefficient $\ell_1$-norm at most $S$ and expand each of the $K$ monomials into $m^r$ terms, where $\lceil x\rceil+1\le x+2$ gives (\ref{eq:peps_replacement_resource_bound}). Summing $\binom q2\le\binom b2$ over the $N$ gates bounds the total source slots by $N\binom b2$, and Theorem~\ref{thm:peps_replacement_participants} preserves each party's gate participation count.
+    By Lemma~\ref{cor:peps_pair_effects_rescaling}, cyclic insertion averaging and rescaling by $(1+\delta)^{-1}<1$ keep the coefficient $\ell_1$-norm at most $S$ and expand each of the $K$ monomials into $m^r$ terms, where $\lceil x\rceil+1\le x+2$ gives (\ref{eq:peps_replacement_resource_bound}). Summing $\binom q2\le\binom b2$ over the $N$ gates bounds the total source slots by $N\binom b2$, and Lemma~\ref{thm:peps_replacement_participants} preserves each party's gate participation count.
 \end{proof}
 
 % These statements establish the effect-elimination part of the proof of

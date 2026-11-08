@@ -1,0 +1,200 @@
+\section{The fourth-root rank bound and sequential approximation}
+
+\begin{definition}[Uniform logarithmic coefficients]
+    \label{def:aklv_accuracy_log_coefficients}
+    \lean{TNLean.MPS.AreaLaw.aklvInitialRankLogCoefficient,
+        TNLean.MPS.AreaLaw.aklvAccuracyLogCoefficient}
+    \leanok
+    For $A\ge1$, put
+    \begin{align*}
+        C_0(A) & =100(A+1)(8+2\log(A+1)),\notag \\
+        C(A)   & =10001C_0(A)+800000.
+    \end{align*}
+\end{definition}
+
+\begin{lemma}[The initial scale]
+    \label{thm:aklv_initial_log_rank_scale}
+    \lean{TNLean.MPS.AreaLaw.aklv_initial_width_bounds}
+    \leanok
+    \uses{def:aklv_accuracy_log_coefficients,def:aklv_accuracy_rank_budget}
+    Let $A\ge1$, $q\ge1$ and $0<g\le1$. Set
+    $u=1+\log q+\log(1/g)$ and $s_0=\lceil Au^2/g\rceil$.
+    Then $u,s_0\ge1$, $1/g,\log(1/g)\le s_0$,
+    $T(g)\le1040s_0$, and
+    \begin{align*}
+        s_0      & \le(A+1)u^2/g,   &
+        \log D_0 & \le C_0(A)u^3/g.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The ceiling is at least $Au^2/g$ and at most $Au^2/g+1$.
+    Since $u\ge1$ and $g\le1$, the latter is at most $(A+1)u^2/g$.
+    Apply the logarithm to the base of $D_0$, use $\log u\le u$,
+    and multiply by its exponent $32(2s_0+1)$.
+\end{proof}
+
+\begin{lemma}[The two degree regimes]
+    \label{thm:aklv_accuracy_two_degree_regimes}
+    \lean{TNLean.MPS.AreaLaw.aklvAccuracyIncrement_lt_log_add_one,
+        TNLean.MPS.AreaLaw.aklvAccuracyDegree_le_large_square,
+        TNLean.MPS.AreaLaw.aklvAccuracyDegree_le_initial_square,
+        TNLean.MPS.AreaLaw.aklvAccuracyIncrement_pos}
+    \leanok
+    \uses{def:aklv_accuracy_parameters,thm:aklv_initial_log_rank_scale}
+    Suppose $0<g\le1$, $0<\rho\le1$, $1/g\le s_0$, and
+    $T(g)\le1040s_0$. For the accuracy parameters $z,m,s,t,\ell$,
+    one has $m\ge1$ and
+    \begin{align*}
+        z\le s_0 & \implies \ell\le66s_0^2,\notag              \\
+        s_0\le z & \implies m<z+1\ \text{ and }\ \ell\le66m^2.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $r=(z^3/g)^{1/4}$ and $W=2t+s$. In the first regime,
+    $r\le s_0$, hence $m\le s_0$, and $W\le4225s_0$.
+    Therefore $z\sqrt{W/g}\le65s_0^2$.
+    In the second regime, $r\le z$, hence $m<z+1$, and
+    $W\le4225z$. The identity $r^4=z^3/g$ gives
+    $z\sqrt{W/g}\le65m^2$. Taking ceilings gives both bounds.
+\end{proof}
+
+\begin{lemma}[Logarithmic costs of a quadratic degree]
+    \label{thm:aklv_quadratic_degree_log_rank}
+    \lean{TNLean.MPS.AreaLaw.aklv_rank_exponent_le_of_degree_le_square,
+        TNLean.MPS.AreaLaw.aklv_log_rank_le_initial_cost,
+        TNLean.MPS.AreaLaw.aklv_log_rank_le_accuracy_cost}
+    \leanok
+    Suppose $q\ge2$, $1\le n\le s$, and $\ell\le66n^2$.
+    Put $F=[q(\ell+1)]^{32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}$.
+    Then
+    \begin{align*}
+        \lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1 & \le76n,\notag                                  \\
+        \log F                                         & \le10000\log\bigl([q(n^2+1)]^{32(2n+1)}\bigr).
+    \end{align*}
+    If also $z\ge1$ and $n\le z+1$, then
+    $\log F\le400000n(1+\log q+\log(z+1))$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The quotient is at most $66n$ and the square root at most $9n$.
+    Bound $q(\ell+1)$ by $67q(n^2+1)$ for the first comparison,
+    and by $67q(z+1)^2$ for the second. The inequality
+    $\log q\ge\log2\ge1/2$ absorbs the numerical constants.
+\end{proof}
+
+\begin{lemma}[The uniform fourth-root logarithmic rank bound]
+    \label{thm:aklv_accuracy_fourth_root_log_rank}
+    \lean{TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_cost,
+        TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log_le_fourthRoot}
+    \leanok
+    \uses{thm:aklv_accuracy_rank_log,thm:aklv_accuracy_two_degree_regimes,
+        thm:aklv_quadratic_degree_log_rank,thm:aklv_initial_log_rank_scale}
+    In the accuracy-dependent argument of \cite[Section~7]{Arad2013AreaLaw},
+    for $q\ge2$, $A\ge1$, $0<g\le1$ and $0<\rho\le1$, use
+    $s_0=\lceil Au^2/g\rceil$ and the actual common rank budget $B$.
+    Then
+    \begin{align*}
+        \log B & \le10001\log D_0+
+        400000m(1+\log q+\log(z+1)),\notag    \\
+        \log B & \le C(A)\left[\frac{u^3}{g}+
+            \left(\frac{z^3}{g}\right)^{1/4}
+            (u+\log(z+1))\right].
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Split at $z=s_0$. Below that scale, absorb the filter cost into
+    $10000\log D_0$. Above it, use the fourth-root increment in the
+    second quadratic-degree estimate. The exact boundary rank costs at
+    most $s_0\log q+2m\log q$. The first term is absorbed by
+    $\log D_0$. Finally $r\ge1$ and $m<r+1\le2r$.
+    The degree remains $\lceil z\sqrt{(2t+s)/g}\rceil$ throughout.
+\end{proof}
+
+\begin{lemma}[Sharp actual approximants at every physical cut]
+    \label{thm:aklv_sharp_physical_per_cut}
+    \lean{TNLean.MPS.AreaLaw.aklv_chain_dimension_and_gap_bounds,
+        TNLean.MPS.AreaLaw.exists_aklv_sharp_physical_per_cut_approximation}
+    \leanok
+    \uses{thm:aklv_physical_accuracy_window,thm:aklv_accuracy_fourth_root_log_rank}
+    There are universal $A\ge1$ and $C>0$ such that the following holds.
+    Let $\Omega$ be a unit ground vector of a nearest-neighbour sum of
+    supported positive contractions, at energy $\mu$, with positive
+    rank-one projector gap $g$ and $\mu+g$ in its spectrum.
+    Then $q\ge2$ and $g\le1$. For every $0<\rho\le1$ and every cut,
+    the actual filter image or exact boundary alternative has squared
+    error at most $\rho$, rank at most $B$, and the preceding logarithmic
+    rank bound. No fitting window or upper-gap bound is assumed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The two distinct spectral values force $q\ge2$ and a nonempty chain.
+    An endpoint unitary orthogonalizes the unique ground vector while
+    changing the energy by at most one, giving $g\le1$.
+    Apply the actual accuracy-window construction and its uniform rank
+    comparison. The failed-window case retains the ground vector itself.
+\end{proof}
+
+\begin{lemma}[Discarded mass from a cut approximant]
+    \label{thm:aklv_cut_approximation_tail}
+    \lean{TNLean.MPS.AreaLaw.one_sub_kyFanNorm_le_of_unit_cut_rank_approximation}
+    \leanok
+    If $\Omega,y$ are unit chain vectors, $\|y-\Omega\|^2\le\rho$,
+    and $\operatorname{SR}_k(y)\le D$, then the mass beyond the $D$
+    leading eigenvalues of the left marginal of $\Omega$ is at most $\rho$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Expanding the squared distance gives
+    $|\langle\Omega,y\rangle|^2\ge1-\rho$.
+    The variational Schmidt-overlap inequality bounds that overlap by
+    the sum of the $D$ largest marginal eigenvalues. If $D$ exceeds the
+    marginal dimension, its discarded mass is zero.
+\end{proof}
+
+\begin{definition}[The actual sequential spectral approximant]
+    \label{def:aklv_sequential_spectral_approximant}
+    \lean{TNLean.MPS.AreaLaw.aklvSpectralTruncation,
+        TNLean.MPS.AreaLaw.aklvNormalizedSpectralTruncation}
+    \leanok
+    Let $P_k$ be the projection onto the $D$ leading eigenvectors of
+    the left marginal of $\Omega$. Apply their lifted projections in
+    the order $L-1,L-2,\ldots,1$, obtaining $\Phi_0$.
+    Put $\Phi=\Phi_0/\|\Phi_0\|$ when $\Phi_0\ne0$.
+\end{definition}
+
+\begin{theorem}[Sequential assembly and the sharp MPS bound]
+    \label{thm:aklv_sharp_sequential_mps}
+    \lean{TNLean.MPS.AreaLaw.aklvNormalizedSpectralTruncation_spec,
+        TNLean.MPS.AreaLaw.exists_aklv_sharp_physical_sequential_mps_approximation}
+    \leanok
+    \uses{thm:aklv_sharp_physical_per_cut,thm:aklv_cut_approximation_tail,
+        def:aklv_sequential_spectral_approximant,
+        thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
+    For the preceding physical data and $0<\epsilon\le1$, choose
+    \begin{align*}
+        \rho & =\frac{\epsilon^2}{16(L+1)},       &
+        z    & =\log\frac{2048(L+1)}{\epsilon^2}, & D & =B.
+    \end{align*}
+    The actual vector $\Phi_0$ is nonzero, and its normalization is an
+    open-boundary matrix product state of bond dimension at most $D$,
+    with $\|\Phi-\Omega\|\le\epsilon$. Moreover
+    \begin{align*}
+        \log D\le C\left[\frac{u^3}{g}+
+            \left(\frac{z^3}{g}\right)^{1/4}(u+\log(z+1))\right].
+    \end{align*}
+    The constants precede the chain, gap and accuracy. The actual
+    excited spectral value is retained among the physical hypotheses.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each discarded mass is at most $\rho$. The general sequential
+    projection inequality gives
+    $\|\Phi_0-\Omega\|^2\le(L-1)\rho\le\epsilon^2/16$.
+    Thus $\Phi_0\ne0$, and normalization at most doubles its distance
+    to the unit vector $\Omega$. The same ordered product has every
+    internal cut rank at most $D$ and hence an actual matrix product
+    representation. Its scalar normalization preserves that bound.
+\end{proof}

@@ -17,7 +17,7 @@ The following statement gives the commutation and density order in the
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L130-L205}{stationarity argument}
 at the original norm minimum.
 
-\begin{theorem}[Commutation and density order at a minimum]
+\begin{lemma}[Commutation and density order at a minimum]
     \label{thm:peps_actual_patch_minimum_stationarity}
     \lean{
         TNLean.PEPS.normalizedRegularizedPatchMarginal_stationarity_of_isMinOn,
@@ -33,7 +33,7 @@ at the original norm minimum.
         [K_j,\rho_j]=0.
     \]
     Equal regions at different indices retain independent densities.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_patch_minimizer,thm:peps_ordered_patch_marginal_coordinates}

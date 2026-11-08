@@ -5,7 +5,7 @@ The following bounds concern the source replacement and its prescribed
 star and sample alphabets (without asserting an identification of the
 sampled physical operator with a contraction of local tensors).
 
-\begin{theorem}[Finite coordinates for the original input]
+\begin{lemma}[Finite coordinates for the original input]
     \label{thm:peps_finite_whole_party_input}
     \lean{TNLean.Lattice.PartyCircuit.ProductInput.finiteDimensional_wholePartyMem}
     \leanok
@@ -13,7 +13,7 @@ sampled physical operator with a contraction of local tensors).
     $H_p$ (with no bound on $\dim H_p$), the ordered memory
     $\bigotimes_{p\in P}H_p$ is finite-dimensional and admits a finite
     orthonormal basis.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A finite tensor product of finite-dimensional spaces $H_p$ (including
@@ -21,7 +21,7 @@ sampled physical operator with a contraction of local tensors).
 \end{proof}
 
 
-\begin{theorem}[Source positions after the physical output exchange]
+\begin{lemma}[Source positions after the physical output exchange]
     \label{thm:peps_physical_first_source_count}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le}
     \leanok
@@ -29,20 +29,20 @@ sampled physical operator with a contraction of local tensors).
     occurrences of arity at most $a$ has physical-first source replacement
     with at most $N\binom a2$ source positions (independent of accuracy
     and private dimensions).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:peps_physical_first_occurrences}
     \leanok
     Each replacement gate has $\binom{|\text{participants}|}{2}\le\binom a2$
     source slots, and the physical output exchange adds no gates or sources
-    (Theorem~\ref{thm:peps_physical_first_occurrences}).
+    (Lemma~\ref{thm:peps_physical_first_occurrences}).
 \end{proof}
 
-\begin{theorem}[Polynomial sample count from original resources]
+\begin{lemma}[Polynomial sample count from original resources]
     \label{thm:peps_physical_first_sample_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power}
     \leanok
-    In the setting of Theorem~\ref{thm:peps_physical_first_source_count},
+    In the setting of Lemma~\ref{thm:peps_physical_first_source_count},
     let $L\ge1$, let $n,s,d,p,\ell\in\mathbb N$, and suppose
     \begin{align}
         N\le C_NL^n,\qquad 0\le B\le C_BL^s,\qquad 0\le D\le C_DL^d,
@@ -58,19 +58,19 @@ sampled physical operator with a contraction of local tensors).
         L^{2(n+4\ell s+4d+p)}.
         \label{eq:peps_physical_first_sample_polynomial}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_first_source_count,thm:peps_source_sampling_polynomial}
-    By Theorem~\ref{thm:peps_physical_first_source_count} and
+    By Lemma~\ref{thm:peps_physical_first_source_count} and
     (\ref{eq:peps_physical_first_sample_resource_bounds}), the source count
     is at most $C_{\rm src}L^n$; substituting this and
     (\ref{eq:peps_physical_first_sample_resource_bounds}) into
-    Theorem~\ref{thm:peps_source_sampling_polynomial} yields
+    Lemma~\ref{thm:peps_source_sampling_polynomial} yields
     (\ref{eq:peps_physical_first_sample_polynomial}).
 \end{proof}
 
-\begin{theorem}[Polynomial branch counts after the physical exchange]
+\begin{lemma}[Polynomial branch counts after the physical exchange]
     \label{thm:peps_physical_first_branch_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power}
     \leanok
@@ -89,13 +89,13 @@ sampled physical operator with a contraction of local tensors).
         \label{eq:peps_physical_first_branch_polynomial}
     \end{align}
     branches.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_effect_replacement_polynomial}
     The physical output exchange preserves branch labels and coefficient
     sums, so substituting (\ref{eq:peps_physical_first_branch_inputs}) into
-    Theorem~\ref{thm:peps_effect_replacement_polynomial} gives
+    Lemma~\ref{thm:peps_effect_replacement_polynomial} gives
     (\ref{eq:peps_physical_first_branch_polynomial}).
 \end{proof}
 
@@ -106,11 +106,11 @@ sampled physical operator with a contraction of local tensors).
     \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences}
     Let $E$ be the bijection from original nonprivate gate occurrences to
     physical-first replacement gate occurrences obtained by composing the
-    correspondences of Theorems~\ref{thm:peps_replacement_participants}
+    correspondences of Lemmas~\ref{thm:peps_replacement_participants}
     and~\ref{thm:peps_physical_first_occurrences}.
 \end{definition}
 
-\begin{theorem}[Original participants and link locality]
+\begin{lemma}[Original participants and link locality]
     \label{thm:peps_physical_first_original_locality}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
@@ -120,38 +120,38 @@ sampled physical operator with a contraction of local tensors).
     replacement gate occurrences and participating root assignment, every
     resulting star or sample link joins two parties from a common gate of
     the original circuit.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences,
         thm:compression_original_gate_locality}
-    By Theorems~\ref{thm:peps_replacement_participants}
+    By Lemmas~\ref{thm:peps_replacement_participants}
     and~\ref{thm:peps_physical_first_occurrences}, $E$ preserves
-    participating sets; Theorem~\ref{thm:compression_original_gate_locality}
+    participating sets; Lemma~\ref{thm:compression_original_gate_locality}
     places both endpoints of each link in the participating set of its
     gate.
 \end{proof}
 
-\begin{theorem}[Original lifetime bound controls the link degree]
+\begin{lemma}[Original lifetime bound controls the link degree]
     \label{thm:peps_physical_first_original_degree}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
     \leanok
     If every original gate involves at most $b$ parties and each party
     participates in at most $b$ original nonprivate occurrences, then in
-    Theorem~\ref{thm:peps_physical_first_original_locality} each party is
+    Lemma~\ref{thm:peps_physical_first_original_locality} each party is
     incident to at most $2b(b-1)$ links (counting parallel links
     separately).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_first_original_locality}
-    By Theorem~\ref{thm:peps_physical_first_original_locality}, $E$
+    By Lemma~\ref{thm:peps_physical_first_original_locality}, $E$
     preserves arity and lifetime participation; each of the at most $b$
     participating gates at a party contributes at most $b-1$ star links and
     $b-1$ sample links, giving at most $2b(b-1)$ links.
 \end{proof}
 
-\begin{theorem}[Polynomial virtual dimensions of the source alphabets]
+\begin{lemma}[Polynomial virtual dimensions of the source alphabets]
     \label{thm:peps_source_alphabet_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
     \leanok
@@ -167,13 +167,13 @@ sampled physical operator with a contraction of local tensors).
         \label{eq:peps_source_alphabet_polynomial}
     \end{align}
     independent of private-memory and source Schmidt dimensions.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_alphabet_card,
         def:compression_distributed_links}
     By Definition~\ref{def:compression_distributed_links} and
-    Theorem~\ref{thm:compression_operator_alphabet_card}
+    Lemma~\ref{thm:compression_operator_alphabet_card}
     (\cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}), star and
     sample link alphabets have cardinalities at most $(C_ML^u)^2=C_M^2L^{2u}$
     and $k\leq C_kL^v$; since $L\geq1$, both are bounded by

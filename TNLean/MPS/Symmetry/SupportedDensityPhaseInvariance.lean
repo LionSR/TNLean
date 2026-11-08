@@ -73,8 +73,7 @@ theorem eventually_cohomologousTo_of_continuous_supported_density
           (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
             (Matrix.supportFrame_dimension_pos_of_trace_one
               (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)))) := by
-  apply (Filter.eventually_congr (.of_forall fun _ ↦
-    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
+  apply (eventually_H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   have hD : 0 < D t₀ := Matrix.supportFrame_dimension_pos_of_trace_one
     (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)
   obtain ⟨a, b, S, ha, hab, hSopen, ht₀, hJcont, hJ₀, hJ⟩ :=

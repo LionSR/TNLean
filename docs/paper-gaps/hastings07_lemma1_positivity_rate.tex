@@ -7,7 +7,7 @@
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 \title{The Rate of the Positive Version of Hastings' Lemma~1}
 \author{}
-\date{October 22, 2026}
+\date{October 28, 2026}
 \begin{document}
 \maketitle
 \gapnote{local-correction}{resolved}
@@ -49,10 +49,45 @@ The decay length doubles and the constant becomes $(\sqrt2+4)\sqrt{C_1}$.%
 \footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_factorization}
     in \path{TNLean/MPS/AreaLaw/Hastings/PositiveFactorization.lean}.}
 
+\section{An enlarged source length}
+
+The loss of a factor of two concerns a fixed decay length. The source
+chooses its Lieb--Robinson pair existentially, so a larger admissible
+length can absorb this loss. Let $\zeta$ be the length of the established
+factorization with a constant polynomial in $\zeta$. Its positive form
+satisfies
+\begin{align}
+    \|O_BO_LO_R-P_0\|\le K\zeta^3e^{-l/(12\zeta)},
+    \label{eq:hastings07_lemma1_positivity_rate_fixed_length}
+\end{align}
+with $K$ depending only on the range. For every $s\ge2\zeta$, the same
+operators satisfy
+\begin{align}
+    \|O_BO_LO_R-P_0\|\le Ks^3e^{-l/(6s)}.
+    \label{eq:hastings07_lemma1_positivity_rate_enlarged_length}
+\end{align}
+Indeed $\zeta^3\le s^3$ and $12\zeta\le6s$, so both the coefficient and
+the exponential on the right increase.
+
+With $c_R=2(R+1)2^{2R+1}e^{2R}$, the pair
+$v=40c_RJ$, $\xi_C=80$ has numerical prefactor $4$, arbitrary finite
+observable supports, and the reciprocal-length commutator decay of
+\path{hastings07_lemma1_decay_length.tex}. Its source length
+$s=\max\{2v/\Delta E,80\}$ is at least
+$2\zeta=40(1+c_RJ/\Delta E)$. Thus
+(\ref{eq:hastings07_lemma1_positivity_rate_enlarged_length}) has the source
+rate $\xi'=6s$, for a new admissible length. It is proved by
+\leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_source}.
+The contraction form at the same length and rate is
+\leanid{TNLean.MPS.AreaLaw.exists_projectorFactorization_source}.
+
 \section{Conclusion}
 
-The correction changes the decay length of the positive version of Lemma~1
-from $\xi'$ to $2\xi'$. The note added also shows that the rest of the proof
+At a fixed length the correction changes the decay length of the positive
+version of Lemma~1 from $\xi'$ to $2\xi'$. Choosing the enlarged source
+length above restores the common rate $\xi'=6s$; it does not strengthen
+the fixed-length repair or make its operators positive definite.
+The note added also shows that the rest of the proof
 of the area law needs no positivity of $O_B$, so the bound of the main
 theorem keeps its form, and only its constants change if the positive version
 is used.

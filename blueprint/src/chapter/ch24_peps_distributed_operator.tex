@@ -127,12 +127,12 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     A pair $(\eta_p,\xi_p)\in\bigl(\prod_{\ell\in I_p}D_\ell\bigr)\times\bigl(\prod_{g\in G_p}\Lambda_g\bigr)$ is star-consistent if $\eta_p(g,\mathrm{star},q)=\xi_p(g)$ for every $(g,\mathrm{star},q)\in I_p$.
 \end{definition}
 
-\begin{theorem}[Consistency of shared assignments]
+\begin{lemma}[Consistency of shared assignments]
     \label{thm:compression_operator_shared_consistency}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sharedLinkLabels_consistent}
     \leanok
     For every $(\kappa,j)\in\bigl(\prod_{g\in G}\Lambda_g\bigr)\times J_k^S$ and $p\in P$, the pair $(\eta(\kappa,j)_p,\kappa_p)$ is star-consistent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_shared_labels,def:compression_operator_consistency}
@@ -175,24 +175,24 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     From a globally consistent configuration $(\eta,(\xi_p)_{p\in P})$, recover $\kappa_g:=\xi_{r_g}(g)$ for $g\in G$ and $j_s:=\eta_{(g,\mathrm{sample},s)}$ for $s\in S$.
 \end{definition}
 
-\begin{theorem}[Every participant agrees with the root]
+\begin{lemma}[Every participant agrees with the root]
     \label{thm:compression_operator_root_agreement}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.gateLabel_eq_root}
     \leanok
     In any globally consistent configuration $(\eta,(\xi_p)_{p\in P})$, one has $\xi_p(g)=\kappa_g$ for all $p\in P$ and $g\in G_p$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_consistency,def:compression_operator_recovery}
     For $p=r_g$, $\xi_{r_g}(g)=\kappa_g$ by Definition~\ref{def:compression_operator_recovery}; for $p\in P_g\setminus\{r_g\}$, Definition~\ref{def:compression_operator_consistency} at $p$ and $r_g$ gives $\xi_p(g)=\eta_{(g,\mathrm{star},p)}=\xi_{r_g}(g)=\kappa_g$.
 \end{proof}
 
-\begin{theorem}[Recovery of every virtual label]
+\begin{lemma}[Recovery of every virtual label]
     \label{thm:compression_operator_link_recovery}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sharedLinkLabels_recover}
     \leanok
     If $(\kappa,j)$ is recovered from a globally consistent configuration $(\eta,(\xi_p)_{p\in P})$ via Definition~\ref{def:compression_operator_recovery}, then $\eta(\kappa,j)=\eta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_consistency,def:compression_operator_recovery,def:compression_operator_shared_labels}
@@ -203,7 +203,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     \label{def:compression_operator_configuration_bijection}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.consistentConfigEquiv}
     \leanok
-    By Theorems~\ref{thm:compression_operator_root_agreement} and~\ref{thm:compression_operator_link_recovery}, the map $(\kappa,j)\mapsto(\eta(\kappa,j),(\kappa_p)_{p\in P})$ is a bijection from $(\prod_{g\in G}\Lambda_g)\times J_k^S$ onto the set of globally consistent configurations, with inverse given by Definition~\ref{def:compression_operator_recovery}.
+    By Lemmas~\ref{thm:compression_operator_root_agreement} and~\ref{thm:compression_operator_link_recovery}, the map $(\kappa,j)\mapsto(\eta(\kappa,j),(\kappa_p)_{p\in P})$ is a bijection from $(\prod_{g\in G}\Lambda_g)\times J_k^S$ onto the set of globally consistent configurations, with inverse given by Definition~\ref{def:compression_operator_recovery}.
 \end{definition}
 
 \begin{definition}[Reading endpoint configurations]
@@ -213,36 +213,36 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     Given endpoint label pairs $(\eta_\ell^-,\eta_\ell^+)\in D_\ell^2$ for $\ell\in\mathcal L$, the endpoint reader at $p\in P$ assigns to $\ell\in I_p$ the label $\eta_\ell^-$ if $u_\ell=p$ and $\eta_\ell^+$ otherwise.
 \end{definition}
 
-\begin{theorem}[Reading diagonal endpoint labels]
+\begin{lemma}[Reading diagonal endpoint labels]
     \label{thm:compression_operator_diagonal_reader}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.endpointLabels_diagonal}
     \leanok
     For diagonal endpoint labels $(\eta_\ell,\eta_\ell)_{\ell\in\mathcal L}$, the endpoint reader of Definition~\ref{def:compression_operator_endpoint_reader} at $p\in P$ returns $\eta_p=\eta|_{I_p}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_endpoint_reader,def:compression_operator_link_labels}
     Both branches of Definition~\ref{def:compression_operator_endpoint_reader} return $\eta_\ell$ for $\ell\in I_p$.
 \end{proof}
 
-\begin{theorem}[Samples of a shared assignment]
+\begin{lemma}[Samples of a shared assignment]
     \label{thm:compression_operator_shared_samples}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.localSamples_sharedLinkLabels}
     \leanok
     For every $(\kappa,j)$ and $p\in P$, one has $j(\eta(\kappa,j)_p)=j_p$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_shared_labels,def:compression_operator_sample_labels}
     By Definitions~\ref{def:compression_operator_sample_labels} and~\ref{def:compression_operator_shared_labels}, $j(\eta(\kappa,j)_p)_s=\eta(\kappa,j)_{(g,\mathrm{sample},s)}=j_s=(j_p)_s$ for $s\in S_p$.
 \end{proof}
 
-\begin{theorem}[Each scalar coefficient appears once]
+\begin{lemma}[Each scalar coefficient appears once]
     \label{thm:compression_operator_coefficient_product}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.prod_rootCoefficient}
     \leanok
     For every $\kappa\in\prod_{g\in G}\Lambda_g$, one has $\prod_{p\in P}C_p(\kappa_p)=\prod_{g\in G}c_g(\kappa_g)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_root_coefficients}
@@ -263,7 +263,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     Contracting the endpoint tensors of Definition~\ref{def:compression_operator_endpoint_tensor} with identity bond matrices $I_{D_\ell}$ on all $\ell\in\mathcal L$ defines the operator $\sigma:\prod_{p\in P}Y_p\to\prod_{p\in P}X_p$.
 \end{definition}
 
-\begin{theorem}[Reduction to one label per link]
+\begin{lemma}[Reduction to one label per link]
     \label{thm:compression_operator_link_sum}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_eq_linkSum}
     \leanok
@@ -274,14 +274,14 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
         \prod_{p\in P}A_p(\eta_p;x_p,y_p).
         \label{eq:compression_operator_link_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_operator,thm:compression_operator_diagonal_reader}
-    Identity bond matrices in Definition~\ref{def:compression_operator_operator} restrict the endpoint sum to diagonal labels $(\eta_\ell,\eta_\ell)$, where Theorem~\ref{thm:compression_operator_diagonal_reader} gives the local argument $\eta_p$.
+    Identity bond matrices in Definition~\ref{def:compression_operator_operator} restrict the endpoint sum to diagonal labels $(\eta_\ell,\eta_\ell)$, where Lemma~\ref{thm:compression_operator_diagonal_reader} gives the local argument $\eta_p$.
 \end{proof}
 
-\begin{theorem}[Identity-bond factorization across a vertex partition]
+\begin{lemma}[Identity-bond factorization across a vertex partition]
     \label{thm:peps_identity_cut_factorization}
     \lean{TNLean.Lattice.DependentBondNetwork.flattening_network_one_eq_mul,
         TNLean.Lattice.DependentBondNetwork.rank_flattening_network_one_le}
@@ -299,14 +299,14 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
          & \le |K_S|=\prod_{e\in\partial S}|D_e|.
         \label{eq:peps_identity_cut_rank}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{cor:peps_group_tensor_network,thm:peps_group_contraction_nuclear}
-    With identity bond matrices, Corollary~\ref{cor:peps_group_tensor_network} and Theorem~\ref{thm:peps_group_contraction_nuclear} factor $F_S$ over $\eta\in K_S$ as (\ref{eq:peps_identity_cut_factor}), and the column count $|K_S|$ of $U_S$ gives (\ref{eq:peps_identity_cut_rank}).
+    With identity bond matrices, Corollary~\ref{cor:peps_group_tensor_network} and Lemma~\ref{thm:peps_group_contraction_nuclear} factor $F_S$ over $\eta\in K_S$ as (\ref{eq:peps_identity_cut_factor}), and the column count $|K_S|$ of $U_S$ gives (\ref{eq:peps_identity_cut_rank}).
 \end{proof}
 
-\begin{theorem}[Cut ranks of distributed product-basis columns]
+\begin{lemma}[Cut ranks of distributed product-basis columns]
     \label{thm:compression_operator_column_cut_rank}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.flattening_contractedOperator_column_eq_mul,
         TNLean.Lattice.Compression.DistributedOperatorContraction.rank_flattening_contractedOperator_column_le}
@@ -324,15 +324,15 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
          & \le\prod_{\ell\in\partial S}|D_\ell|.
         \label{eq:compression_column_cut_rank}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_identity_cut_factorization,
         def:peps_ket_column_dependent_fix_input,def:compression_operator_operator}
-    By Definitions~\ref{def:compression_operator_operator} and~\ref{def:peps_ket_column_dependent_fix_input}, the identity-bond contraction of $(A_{p,z})_{p\in P}$ on $\mathcal L$ is $x\mapsto\sigma(x,z)$, so Theorem~\ref{thm:peps_identity_cut_factorization} gives (\ref{eq:compression_column_cut_factor}) and (\ref{eq:compression_column_cut_rank}).
+    By Definitions~\ref{def:compression_operator_operator} and~\ref{def:peps_ket_column_dependent_fix_input}, the identity-bond contraction of $(A_{p,z})_{p\in P}$ on $\mathcal L$ is $x\mapsto\sigma(x,z)$, so Lemma~\ref{thm:peps_identity_cut_factorization} gives (\ref{eq:compression_column_cut_factor}) and (\ref{eq:compression_column_cut_rank}).
 \end{proof}
 
-\begin{theorem}[Exact branch and sample evaluation]
+\begin{lemma}[Exact branch and sample evaluation]
     \label{thm:compression_operator_branch_sum}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum}
     \leanok
@@ -344,14 +344,14 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
         \sum_{j\in J_k^S}\prod_{p\in P}T_p(\kappa_p,j_p)_{x_p,y_p}.
         \label{eq:compression_operator_branch_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_link_sum,def:compression_operator_local_tensor,def:compression_operator_configuration_bijection,thm:compression_operator_shared_samples,thm:compression_operator_coefficient_product}
-    Substituting (\ref{eq:compression_operator_local_tensor}) into (\ref{eq:compression_operator_link_sum}), reindexing globally consistent configurations by the bijection of Definition~\ref{def:compression_operator_configuration_bijection}, and applying Theorems~\ref{thm:compression_operator_shared_samples} and~\ref{thm:compression_operator_coefficient_product} yields (\ref{eq:compression_operator_branch_sum}).
+    Substituting (\ref{eq:compression_operator_local_tensor}) into (\ref{eq:compression_operator_link_sum}), reindexing globally consistent configurations by the bijection of Definition~\ref{def:compression_operator_configuration_bijection}, and applying Lemmas~\ref{thm:compression_operator_shared_samples} and~\ref{thm:compression_operator_coefficient_product} yields (\ref{eq:compression_operator_branch_sum}).
 \end{proof}
 
-\begin{theorem}[Rectangular matrix form of exact evaluation]
+\begin{lemma}[Rectangular matrix form of exact evaluation]
     \label{thm:compression_operator_matrix_sum}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix}
     \leanok
@@ -363,35 +363,35 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
         \sum_{j\in J_k^S}\bigotimes_{p\in P}T_p(\kappa_p,j_p).
         \label{eq:compression_operator_matrix_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_branch_sum}
     Evaluating the $(x,y)$ entry of the right-hand side of (\ref{eq:compression_operator_matrix_sum}) gives (\ref{eq:compression_operator_branch_sum}).
 \end{proof}
 
-\begin{theorem}[Exact virtual dimensions]
+\begin{lemma}[Exact virtual dimensions]
     \label{thm:compression_operator_alphabet_card}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.card_alphabet}
     \leanok
     Every star edge $\ell=(g,\mathrm{star},q)$ has $|D_\ell|=|\Lambda_g|$, and every sample edge $\ell=(g,\mathrm{sample},s)$ has $|D_\ell|=k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:compression_operator_alphabets}
     Immediate from Definition~\ref{def:compression_operator_alphabets} since $|J_k|=k$.
 \end{proof}
 
-\begin{theorem}[Uniform virtual dimension bound]
+\begin{lemma}[Uniform virtual dimension bound]
     \label{thm:compression_operator_alphabet_bound}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.card_alphabet_le}
     \leanok
     If $|\Lambda_g|\le M$ for all $g\in G$, then $|D_\ell|\le\max\{M,k\}$ for all $\ell\in\mathcal L$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_alphabet_card}
-    Immediate from Theorem~\ref{thm:compression_operator_alphabet_card}.
+    Immediate from Lemma~\ref{thm:compression_operator_alphabet_card}.
 \end{proof}
 
 \begin{definition}[Density-branch coefficient]
@@ -401,7 +401,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     For $\Lambda_g=K_g\times B_g$, $a_g:K_g\to\C$, $b_g:B_g\to\C$, and $w_g\in\C$, define $c_g(\xi,\zeta):=w_g a_g(\xi)\overline{b_g(\zeta)}$.
 \end{definition}
 
-\begin{theorem}[Density-pair specialization]
+\begin{lemma}[Density-pair specialization]
     \label{thm:compression_operator_density_pair}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_densityPair_eq}
     \leanok
@@ -413,20 +413,20 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
         \sum_{j\in J_k^S}\bigotimes_p T_p((\xi,\zeta)_p,j_p).
         \label{eq:compression_operator_density_pair}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_matrix_sum,def:compression_operator_density_coefficient}
     Substitute Definition~\ref{def:compression_operator_density_coefficient} into (\ref{eq:compression_operator_matrix_sum}).
 \end{proof}
 
-\begin{theorem}[A scalar in one vertex tensor]
+\begin{lemma}[A scalar in one vertex tensor]
     \label{thm:peps_dependent_network_scalar}
     \lean{TNLean.PEPS.DependentBondNetwork.network_mul_at_vertex}
     \leanok
     \uses{def:peps_dependent_network}
     Replacing $A_p$ at a single vertex $p$ by $sA_p$ ($s\in\C$) multiplies the contraction $\mathcal N_A(B)(\sigma)$ of Definition~\ref{def:peps_dependent_network} by $s$ while preserving all links and virtual dimensions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -449,7 +449,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Contraction in enumerated coordinates]
+\begin{lemma}[Contraction in enumerated coordinates]
     \label{thm:compression_operator_finite_coordinates}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.operatorCoeff_toPartyNetwork}
     \leanok
@@ -460,7 +460,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
          & = \sigma\bigl((u_p(x(a_p)))_p,(v_p(y(a_p)))_p\bigr).
         \label{eq:compression_coordinate_operator}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:compression_operator_finite_coordinates,thm:compression_operator_link_sum}
     Reindexing the contraction sum (\ref{eq:compression_operator_link_sum}) along the bijection $\prod_e\vartheta_e$ and substituting (\ref{eq:compression_finite_coordinates}) gives (\ref{eq:compression_coordinate_operator}).

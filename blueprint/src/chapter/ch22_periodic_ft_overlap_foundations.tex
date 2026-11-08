@@ -1,4 +1,4 @@
-\begin{theorem}[Sector scalars from a product tensor identity]
+\begin{lemma}[Sector scalars from a product tensor identity]
     \label{thm:periodic_product_tensor_phase_extraction}
     \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul}
     \leanok
@@ -28,7 +28,7 @@
     contraction with the maps $F_u$ and $\Omega_u$ produces the displayed
     product-tensor identity, this extraction isolates the sector scalars
     $\kappa_v$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each sector choose the coordinate functional at the nonzero reference
@@ -43,7 +43,7 @@
     $(A_v^i)_{r,c}=(\kappa_v B_v^i)_{r,c}$ for every entry.
 \end{proof}
 
-\begin{theorem}[Product-one sector scalars after choosing a root]
+\begin{lemma}[Product-one sector scalars after choosing a root]
     \label{thm:periodic_product_one_phase_extraction}
     \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul}
     \leanok
@@ -70,13 +70,13 @@
     for every sector $v$ and every letter $i$.
 
     As in \cite[Appendix~A, lines~1072--1080]{DeLasCuevas2017Irreducible}, after
-    Theorem~\ref{thm:periodic_product_tensor_phase_extraction} extracts
+    Lemma~\ref{thm:periodic_product_tensor_phase_extraction} extracts
     scalars independent of the sector coordinates, choosing a common $m$-th
     root of their product leaves a product-one family of sector scalars.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:periodic_product_tensor_phase_extraction} yields
+    Lemma~\ref{thm:periodic_product_tensor_phase_extraction} yields
     scalars $\mu_v$ with $\prod_v\mu_v=z$ and $A_v^i=\mu_vB_v^i$. Since
     $m>0$, the identities $\xi^m=z$ and $z\ne0$ imply $\xi\ne0$, so the
     ratios $\kappa_v=\mu_v/\xi$ satisfy
@@ -84,13 +84,13 @@
     $A_v^i=(\kappa_v\xi)B_v^i$.
 \end{proof}
 
-\begin{theorem}[Left-canonical scalar normalization]
+\begin{lemma}[Left-canonical scalar normalization]
     \label{thm:left_canonical_scalar_normalization}
     \lean{MPSTensor.norm_eq_one_of_leftCanonical_smul}
     \leanok
     Let $A$ have positive bond dimension, and let $c\in\C$. If both $A$ and
     the scalar multiple $cA$ are left-canonical, then $|c|=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Left-canonicity of $cA$ gives
@@ -102,7 +102,7 @@
     hence $|c|=1$.
 \end{proof}
 
-\begin{theorem}[Left-canonical sector scalar normalization]
+\begin{lemma}[Left-canonical sector scalar normalization]
     \label{thm:left_canonical_sector_scalar_normalization}
     \lean{MPSTensor.kappa_norm_eq_one_of_leftCanonical_smul}
     \leanok
@@ -114,10 +114,10 @@
     In \cite[Appendix~A, lines~1082--1084]{DeLasCuevas2017Irreducible}, once
     the sectorwise proportionality relation is established, left-canonicity
     forces each sector scalar to have unit modulus.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:left_canonical_scalar_normalization}, applied to $B$
+    By Lemma~\ref{thm:left_canonical_scalar_normalization}, applied to $B$
     and the scalar $\kappa\xi$, one has $|\kappa\xi|=1$. Since $|\xi|=1$, the
     multiplicativity of the complex norm gives $|\kappa|=1$.
 \end{proof}
@@ -151,7 +151,7 @@
     adjoint-transfer relation.
 \end{definition}
 
-\begin{theorem}[Single-site cyclic grading]
+\begin{lemma}[Single-site cyclic grading]
     \label{thm:offdiag_shift_adjoint_cyclic_shift}
     \lean{MPSTensor.offDiag_shift_of_adjoint_cyclic_shift}
     \leanok
@@ -165,7 +165,7 @@
     of Definition~\ref{def:cyclic_sector_decomp} expresses the single-site
     grading behind \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible} as
     $P_{k+1}A^i=A^iP_k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Put $K_i=(A^i)^\dagger$ and let $\Phi_K$ be the Kraus map of the family
@@ -184,38 +184,38 @@
     $P_{k+1}A^i=A^iP_k$.
 \end{proof}
 
-\begin{theorem}[Off-diagonal reconstruction]
+\begin{lemma}[Off-diagonal reconstruction]
     \label{thm:eq_sum_offdiag_adjoint_cyclic_shift}
     \lean{MPSTensor.eq_sum_offDiag_of_adjoint_cyclic_shift}
     \leanok
     \uses{thm:offdiag_shift_adjoint_cyclic_shift}
-    Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
+    Under the hypotheses of Lemma~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
     assume in addition that $\sum_{u=0}^{m-1} P_u=\Id$. In the inverse
     cyclic indexing convention above (reparametrizing
     \cite[eq.~Aoffdiag]{DeLasCuevas2017Irreducible}), every physical letter
     then decomposes as $A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Inserting $\sum_u P_u=\Id$ on the right of $A^i$ and applying
-    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} together with
+    Lemma~\ref{thm:offdiag_shift_adjoint_cyclic_shift} together with
     $P_u^2=P_u$ term by term yields $A^i=\sum_{u=0}^{m-1}P_{u+1}A^iP_u$.
 \end{proof}
 
-\begin{theorem}[Word cyclic grading]
+\begin{lemma}[Word cyclic grading]
     \label{thm:offdiag_shift_eval_word_adjoint_cyclic_shift}
     \lean{MPSTensor.offDiag_shift_evalWord_of_adjoint_cyclic_shift}
     \leanok
     \uses{thm:offdiag_shift_adjoint_cyclic_shift}
-    Under the hypotheses of Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
+    Under the hypotheses of Lemma~\ref{thm:offdiag_shift_adjoint_cyclic_shift},
     a word $w=i_1\cdots i_\ell$ satisfies $P_{k+\ell} A^w=A^w P_k$.
     Thus the single-site grading accumulates one cyclic step for each letter of
     the word.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By induction on the length of $w$,
-    Theorem~\ref{thm:offdiag_shift_adjoint_cyclic_shift} shifts the projector
+    Lemma~\ref{thm:offdiag_shift_adjoint_cyclic_shift} shifts the projector
     past the first letter and the induction hypothesis shifts it past the
     remaining word.
 \end{proof}

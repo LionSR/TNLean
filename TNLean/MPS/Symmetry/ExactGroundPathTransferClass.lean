@@ -134,8 +134,7 @@ theorem ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bou
   refine isMulCoboundary₂_div_of_eventually_at_all_points ω ?_ t s
   intro t₀
   have hQ : Continuous (fun t : unitInterval => Q.tensor t) := Q.continuous.domRestrict
-  apply (Filter.eventually_congr (.of_forall fun _ ↦
-    H2π_eq_iff_isMulCoboundary₂_div _ _)).mp
+  apply (eventually_H2π_eq_iff_isMulCoboundary₂_div _ _).mp
   exact eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
     D hD hBound A
     (fun t => Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM (A t)

@@ -5,58 +5,40 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.AreaLaw
 import TNLean.MPS.AreaLaw.Hastings.MPSFromEntropy
-import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
+import TNLean.MPS.AreaLaw.Hastings.LiebRobinson
 import TNLean.MPS.AreaLaw.MPSApproximation
 
 /-!
-# Matrix product state approximation of the gapped ground state from Lemma 1
+# Matrix product state approximation of a gapped ground state
 
-Let `Ω` be a gapped ground vector of a finite-range Hamiltonian on the chain of `L` sites with
-local dimension `q ≥ 1`, and suppose Lemma 1 holds around `Ω` with constants `ξ' > 0` and
-`C₁ ≥ 1`. The area law bounds the entropy of every initial segment by `S_max`. With
-`k₀ = ⌈exp(2 S_max)/2⌉`, truncating every cut onto the `k'` leading eigenvectors of its left
-marginal, for `k' ≥ k₀`, gives an open-boundary matrix product state `Φ` of bond dimension at
-most `k'` with `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
+Let `Ω` be a gapped ground vector on a chain of `L` sites. Approximate
+factorization with constants `ξ' > 0` and `C₁ ≥ 1`, together with an
+entropy bound `Smax` at every cut, gives a matrix product state `Φ` of
+bond dimension at most `k'` for every `k' ≥ k₀ = ceil(exp(2 Smax)/2)`.
+The squared error is at most
+`(L-1) * 4 C₁² exp(2/ξ') * (k'/k₀)^(-1/(ξ' log q))`.
+Hastings, arXiv:0705.2024v4, lines 505–557, uses the entropy bound from
+lines 130–144 to choose the common threshold.
 
-For `q = 1` the chain space is one-dimensional, the truncation is exact and `Φ = Ω`, so the
-bound holds although `log q = 0`; the source assumes `q ≥ 2`.
+This module supplies both hypotheses from the Hamiltonian assumptions,
+using `Smax = areaLawBound ξ' C₁ q`. For `q = 1`, truncation is exact.
 
-Source: Hastings, *An area law for one-dimensional quantum systems*, arXiv:0705.2024v4,
-section "Matrix Product States", lines 505–557, with `S_max` from eq. `entbd` (lines 130–137).
-This discharges the per-cut entropy hypothesis of
-`isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy`, recorded in
+**Scope restriction (auxiliary parameters):** the endpoints below use
+`lemmaOneLength R (J/ΔE) 1` or `ζ = lemmaOneEndpointLength R J ΔE`.
+The corresponding physical Lieb–Robinson velocities include a term
+proportional to the gap, rather than being expressed as a fixed multiple of `J`. Moreover,
+the auxiliary entropy bound at these lengths has the corrected doubled
+exponent. The common order-`J` source-parameter conclusion, with the
+printed entropy maximum in `k₀`, is proved in
+`Hastings/SourceConsequences.lean`. The auxiliary bounds remain valid.
+See `docs/paper-gaps/hastings07_lemma1_decay_length.tex`,
+`docs/paper-gaps/hastings07_doubling_constants.tex`, and
 `docs/paper-gaps/hastings07_mps_entropy_stage.tex`.
 
-`isOpenMPS_norm_sub_sq_le_of_gappedGroundState` takes Lemma 1 as a hypothesis, as
-`regionEntropy_prefix_le_of_factorization` does.
-`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState` supplies it from Lemma 1 with a
-polynomial constant (`exists_projectorFactorization_pow`), so it takes only the hypotheses of
-Hastings' theorem: finite range, bounded interaction strength and a spectral gap. In units of
-the gap, with `ξ̂ = lemmaOneLength R (J/ΔE) 1` and a fixed `κ > 6`, Lemma 1 holds at the rate
-`ξ' = κ ξ̂` with constant `K ξ̂³`, where `K` depends only on `R` and `κ`; the constant is
-replaced by `C₁ = max (K ξ̂³) 1`, which only weakens Lemma 1.
-
-**Scope restriction (quantitative bounds of Lemma 1):** the theorems inherit the restriction of
-Lemma 1 with a polynomial constant. At the length `ξ̂`, the bound holds at the rate `ξ' = κ ξ̂`
-for every fixed `κ > 6`, with `K` depending on `κ`, and the printed endpoint `ξ' = 6ξ` is not
-reached there. It is reached for the inflated length `ζ = lemmaOneEndpointLength R J ΔE =
-(5/4) ξ̂`, at `ξ' = 6ζ` (`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint`).
-The length `ζ` may stand in for the source's `ξ`: the source fixes `ξ = max(2v/ΔE, ξ_C)` only
-through some Lieb–Robinson pair, and a bound valid for `|t| ≤ l/v` stays valid for a larger
-velocity (lines 96–112), so raising the chain velocity by `5/4` is a legitimate choice.
-Both lengths come from the chain Lieb–Robinson estimate, whose prefactor grows with `J` and
-whose second operator acts on one site, so neither is shown to be the source's
-`max(2v/ΔE, ξ_C)` for a pair satisfying eq. `lrb` (lines 96–112, 139–142). The bond dimension
-`k₀ = ⌈exp(2 S_max)/2⌉` inherits this through the area-law bound `S_max`. Documented in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
-
-The error is the squared norm, documented in
-`docs/paper-gaps/hastings07_mps_error_measure.tex`. The value of `S_max` carries the local fix
-of `TNLean.MPS.AreaLaw.Hastings.areaLawBound`.
-
-**Local fix (constant):** the constant `e^{2/ξ'}` replaces the printed `e^{1/ξ'}`, because the
-constraint is available only at even exponents. Documented in
+**Local fix (error and constant):** the error is the squared norm of an
+unnormalized truncation, and `exp(2/ξ')` replaces the printed `exp(1/ξ')`
+because the constraint is available only at even exponents. See
+`docs/paper-gaps/hastings07_mps_error_measure.tex` and
 `docs/paper-gaps/hastings07_schmidt_tail_constant.tex`.
 -/
 

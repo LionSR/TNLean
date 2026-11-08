@@ -14,7 +14,7 @@
     and let $B_{\chi,p}$ denote the canonical column obtained by replacing $A_v$ with the local regular averaging projectors $P_v$ (\cite[charge-pair creation]{Schuch2010PEPS}, lines 2505--2558).
 \end{definition}
 
-\begin{theorem}[The correlated weight in tree coordinates]
+\begin{lemma}[The correlated weight in tree coordinates]
     \label{thm:peps_regular_correlated_charge_coordinates}
     \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix_coordinates,
         TNLean.PEPS.regularChargePairOpenRegionMatrix_eq_image,
@@ -28,9 +28,9 @@
         =\chi(pa_{e_1}^{-1}a_{e_0}) B_{1,1}(c,\theta). \label{eq:correlated_charge_tree_coords}
     \end{align}
     If every site is regular $G$-injective with product physical map $T_R=\bigotimes_{v\in R}T_v$, then $T_R B_{\chi,p}=C_{\chi,p}$, and $C_{1,1}$ is the unweighted open contraction.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_regular_region_projector_coordinates}, nonvanishing of $\prod_{v\in R}P_v$ forces $q_v=r_v x$ and $a_e=x\eta_e$, so $x$ cancels in $a_{e_1}^{-1}a_{e_0}=\eta_{e_1}^{-1}\eta_{e_0}$, giving (\ref{eq:correlated_charge_tree_coords}); $T_vP_v=T_v$ implies $T_RB_{\chi,p}=C_{\chi,p}$.
+    By Lemma~\ref{thm:peps_regular_region_projector_coordinates}, nonvanishing of $\prod_{v\in R}P_v$ forces $q_v=r_v x$ and $a_e=x\eta_e$, so $x$ cancels in $a_{e_1}^{-1}a_{e_0}=\eta_{e_1}^{-1}\eta_{e_0}$, giving (\ref{eq:correlated_charge_tree_coords}); $T_vP_v=T_v$ implies $T_RB_{\chi,p}=C_{\chi,p}$.
 \end{proof}
 
 \begin{definition}[A unitary on two internal reference labels]
@@ -41,7 +41,7 @@
     For distinct internal bonds $e_0\neq e_1$, let $U_R(Q)$ denote the operator $Q\otimes I$ acting on $(a_{e_0},a_{e_1})$ in the tree coordinates $c=(y,a,r,z)$, conjugated by the physical coordinate permutation.
 \end{definition}
 
-\begin{theorem}[Boundary-uniform preparation on the original spins]
+\begin{lemma}[Boundary-uniform preparation on the original spins]
     \label{thm:peps_regular_physical_charge_pair_creation}
     \lean{
         TNLean.PEPS.exists_unitary_regularChargeReferencePreparation,
@@ -66,20 +66,20 @@
         W C_{1,1}(\cdot,\theta)=C_{\chi,p}(\cdot,\theta)
         \qquad\text{for all }\theta. \label{eq:physical_charge_pair_creation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_regular_charge_pair_normalization},Theorem~\ref{thm:peps_regular_charge_labels}, and Lemma~\ref{lem:peps_unitary_vector_swap}, equal norms and orthogonality (for $\chi\neq 1$) yield a simultaneous-translation-invariant unitary $Q$ satisfying (\ref{eq:charge_ref_prep_Q}).
+    By Lemma~\ref{thm:peps_regular_charge_pair_normalization},Lemma~\ref{thm:peps_regular_charge_labels}, and Lemma~\ref{lem:peps_unitary_vector_swap}, equal norms and orthogonality (for $\chi\neq 1$) yield a simultaneous-translation-invariant unitary $Q$ satisfying (\ref{eq:charge_ref_prep_Q}).
     By Lemma~\ref{lem:peps_permutation_matrix_commutation} and (\ref{eq:correlated_charge_tree_coords}), $U_R(Q)$ commutes with vertex translations and $P_R$ and maps $B_{1,1}\mapsto B_{\chi,p}$.
     Since $T_R^*T_R=c_RP_R$ ($c_R>0$), $U_R(Q)$ lifts to a regional unitary $W$ satisfying $WT_R=T_RU_R(Q)$, giving (\ref{eq:physical_charge_pair_creation}).
 \end{proof}
 
-\begin{theorem}[Six-spin charge-pair preparation]
+\begin{lemma}[Six-spin charge-pair preparation]
     \label{thm:peps_torus_physical_charge_pair_creation}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusPhysicalChargePairCreation}
     \leanok
     \uses{thm:peps_regular_physical_charge_pair_creation}
     On a finite torus with periods $L_x\ge 3$ and $L_y\ge 4$ and a regular $G$-isometric four-leg tensor, at every translated $2\times 3$ block $R$ (including across either seam, with the five-edge tree formed by its four vertical bonds and outer horizontal bond, and remaining horizontal chords $e_0\neq e_1$, without parent-Hamiltonian claims), for every regular irreducible character $\chi$ and $p\in G$ there exists a six-spin unitary $W$ satisfying (\ref{eq:physical_charge_pair_creation}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Passing the four-leg $G$-isometry to the incident-edge coordinates on $R$ with its five-edge tree and chords $e_0\neq e_1$, Theorem~\ref{thm:peps_regular_physical_charge_pair_creation} yields $W$ satisfying (\ref{eq:physical_charge_pair_creation}).
+    Passing the four-leg $G$-isometry to the incident-edge coordinates on $R$ with its five-edge tree and chords $e_0\neq e_1$, Lemma~\ref{thm:peps_regular_physical_charge_pair_creation} yields $W$ satisfying (\ref{eq:physical_charge_pair_creation}).
 \end{proof}

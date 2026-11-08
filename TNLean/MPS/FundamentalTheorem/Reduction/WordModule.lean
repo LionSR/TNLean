@@ -57,6 +57,10 @@ lemma wordRep_ofList (B : MPSTensor d D) (w : List (Fin d)) :
 /-- The word-algebra module `ℂ^D` of a tensor. -/
 abbrev WordModule (B : MPSTensor d D) := B.wordRep.asModule
 
+/-- Identification of the module with the coordinate space. -/
+noncomputable abbrev WordModule.toVec (B : MPSTensor d D) : B.WordModule ≃ₗ[ℂ] (Fin D → ℂ) :=
+  B.wordRep.asModuleEquiv
+
 lemma asModuleEquiv_ofWord_smul (B : MPSTensor d D) (w : List (Fin d)) (v : B.WordModule) :
     B.wordRep.asModuleEquiv (ofWord w • v) = Kraus.evalWord B w *ᵥ B.wordRep.asModuleEquiv v := by
   rw [Representation.asModuleEquiv_map_smul, ofWord, Representation.asAlgebraHom_of, wordRep_ofList,

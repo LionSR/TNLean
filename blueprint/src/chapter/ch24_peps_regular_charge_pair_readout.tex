@@ -5,7 +5,7 @@
     \leanok
 \end{definition}
 
-\begin{theorem}[Two-spin readout of the correlated regional pair]
+\begin{lemma}[Two-spin readout of the correlated regional pair]
     \label{thm:peps_regular_charge_pair_endpoint_readout}
     In an auxiliary finite-region form of the charge-pair outcomes in \cite{Schuch2010PEPS}, lines 2505--2558, let all sites of a finite simple graph be regular $G$-isometric, let $e_0\ne e_1$ be internal bonds of $R$, and let $C_\chi(p;\theta)$ denote the open contraction weighted by $\chi(p\eta_{e_1}^{-1}\eta_{e_0})$.
     There exist two complete positive orthogonal projective measurements $\{Q_{0,r}\}_r$ and $\{Q_{1,r}\}_r$ on the endpoint spins of $e_0$ and $e_1$ (chosen before $\chi$, $p\in G$, and crossing labels $\theta$, without extra tree, Gram, factorization, nonzero-state, or parent-Hamiltonian hypotheses, and with physical-image-complement projectors annihilating $C_\chi(p;\theta)$) such that
@@ -20,13 +20,13 @@
         thm:peps_regular_physical_charge_pair_slices,
         thm:peps_regular_two_site_all_charge_measurement}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_regular_physical_charge_pair_slices}, factoring the bond sum at $e_0$ (resp.\ $e_1$) expresses the two endpoint factors as a shared-bond charge column with character $\chi$ (resp.\ $\chi^\vee$).
-    Applying Theorem~\ref{thm:peps_regular_two_site_all_charge_measurement} termwise and summing over the remaining bond labels yields (\ref{eq:charge_pair_endpoint_readout}).
+    By Lemma~\ref{thm:peps_regular_physical_charge_pair_slices}, factoring the bond sum at $e_0$ (resp.\ $e_1$) expresses the two endpoint factors as a shared-bond charge column with character $\chi$ (resp.\ $\chi^\vee$).
+    Applying Lemma~\ref{thm:peps_regular_two_site_all_charge_measurement} termwise and summing over the remaining bond labels yields (\ref{eq:charge_pair_endpoint_readout}).
 \end{proof}
 
-\begin{theorem}[Two-spin outcomes of the prepared six-spin torus pair]
+\begin{lemma}[Two-spin outcomes of the prepared six-spin torus pair]
     \label{thm:peps_torus_physical_charge_pair_readout}
     In the regular finite-torus specialization of \cite{Schuch2010PEPS}, lines 2505--2558, let the native four-leg tensor be regular $G$-isometric on a torus with periods $L_x\ge 3$ and $L_y\ge 4$.
     On every translated $2\times 3$ block $R$ (including across either periodic seam, with its derived five-edge tree and horizontal chords $e_0\neq e_1$, corresponding to the top and middle references of the vertically inverted source figure without parent-Hamiltonian claims), there exist two complete two-spin measurements $\{Q_{0,r}\}_r,\{Q_{1,r}\}_r$ (chosen before all regular irreducible characters $\chi$ and $p\in G$) and, for each $(\chi,p)$, a six-spin unitary $W_{\chi,p}$ preparing $C_\chi(p;\theta)=W_{\chi,p}C_{1,1}(1;\theta)$ for all $\theta$ so that (\ref{eq:charge_pair_endpoint_readout}) holds.
@@ -34,7 +34,7 @@
     \uses{thm:peps_regular_charge_pair_endpoint_readout,
         thm:peps_torus_physical_charge_pair_creation}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combining the six-spin preparation unitary $W_{\chi,p}$ of Theorem~\ref{thm:peps_torus_physical_charge_pair_creation} on $R$ with the endpoint measurements of Theorem~\ref{thm:peps_regular_charge_pair_endpoint_readout} yields (\ref{eq:charge_pair_endpoint_readout}) on $W_{\chi,p}C_{1,1}(1;\theta)$ for all $\theta$.
+    Combining the six-spin preparation unitary $W_{\chi,p}$ of Lemma~\ref{thm:peps_torus_physical_charge_pair_creation} on $R$ with the endpoint measurements of Lemma~\ref{thm:peps_regular_charge_pair_endpoint_readout} yields (\ref{eq:charge_pair_endpoint_readout}) on $W_{\chi,p}C_{1,1}(1;\theta)$ for all $\theta$.
 \end{proof}

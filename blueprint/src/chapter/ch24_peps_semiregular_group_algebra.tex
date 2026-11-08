@@ -1,4 +1,4 @@
-\begin{theorem}[Semi-regularity and the group algebra]
+\begin{lemma}[Semi-regularity and the group algebra]
     \label{thm:peps_semiregular_group_algebra}
     \lean{Representation.linearIndependent_iff_injective_asAlgebraHom,
         Representation.isSemiRegular_of_linearIndependent,
@@ -16,7 +16,7 @@
     More generally, for a representation of a monoid over a commutative
     semiring, independence of its operators is equivalent to injectivity
     of its monoid-algebra homomorphism.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_trace}
     The trace-dual identity gives independence for a semi-regular
@@ -33,7 +33,7 @@
     the last assertion with independence of the group operators.
 \end{proof}
 
-\begin{theorem}[Reversing a semi-regular bond]
+\begin{lemma}[Reversing a semi-regular bond]
     \label{thm:peps_semiregular_dual}
     \lean{Representation.IsSemiRegular.dual,
         Representation.isSemiRegular_dual_iff}
@@ -44,7 +44,7 @@
     $\rho^*(g)=\rho(g^{-1})^{\mathsf T}$ is semi-regular.
     This justifies reversing the bond orientation in the contraction
     convention of \cite[Definition~5.1 and Lemma~5.2]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_group_algebra}
     Inversion permutes the group indices, and transposition is injective
@@ -54,7 +54,7 @@
     original operators.
 \end{proof}
 
-\begin{theorem}[Nonzero tensor factors of a semi-regular representation]
+\begin{lemma}[Nonzero tensor factors of a semi-regular representation]
     \label{thm:peps_semiregular_nonzero_tensor}
     \lean{Representation.IsSemiRegular.tprod_of_nontrivial,
         Representation.IsSemiRegular.tprod_left_of_nontrivial}
@@ -67,7 +67,7 @@
     This strengthens the tensor-product assertion in
     \cite[Lemma~5.2]{Schuch2010PEPS}: the second factor need not contain
     the trivial representation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_group_algebra, thm:peps_semiregular_trace,
         thm:peps_semiregular_equivalence}
@@ -81,7 +81,7 @@
     other order.
 \end{proof}
 
-\begin{theorem}[Irreducibility of the contragredient]
+\begin{lemma}[Irreducibility of the contragredient]
     \label{thm:peps_irreducible_dual}
     \lean{Representation.isIrreducible_dual}
     \leanok
@@ -89,7 +89,7 @@
     representation of a group is irreducible. No unitarity or finite-group
     hypothesis is needed. This is an algebraic ingredient for the
     conjugate charge in \cite{Schuch2010PEPS}, lines 2514--2518.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The annihilator of an invariant dual subspace is invariant in the
     original representation, since the group action on the dual uses

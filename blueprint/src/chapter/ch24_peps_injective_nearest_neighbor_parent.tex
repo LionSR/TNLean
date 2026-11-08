@@ -34,7 +34,7 @@
     if $v$ is isolated, then $v\in\{v\}\in\mathcal R_{\mathrm{aug}}$.
 \end{proof}
 
-\begin{theorem}[The nearest-neighbor parent space]%
+\begin{lemma}[The nearest-neighbor parent space]%
     \label{thm:peps_injective_nearest_neighbor_parent_space}
     \lean{TNLean.PEPS.regionParentGroundSpace_edgePairs_eq_span,
         TNLean.PEPS.regionParentGroundSpace_edgeAndIsolated_eq_span,
@@ -54,7 +54,7 @@
     These are the nearest-neighbor and isolated-site forms of the
     virtual-pair argument in
     \cite[Section~IV.C.1]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Combine Lemma~\ref{lem:peps_injective_nearest_neighbor_cover} with
@@ -71,7 +71,7 @@
     \uses{thm:peps_injective_nearest_neighbor_parent_space}
     For interactions $h_R\ge 0$ with $\ker h_R=\mathcal G_R(A)$ and
     $H_{\mathcal R}=\sum_{R\in\mathcal R}h_R^{\mathrm{global}}$, the hypotheses
-    of Theorem~\ref{thm:peps_injective_nearest_neighbor_parent_space} yield
+    of Lemma~\ref{thm:peps_injective_nearest_neighbor_parent_space} yield
     $\ker H_{\mathcal R_{\mathrm{edge}}}=\spn\{\Psi(A)\}$ (when every vertex
     has a neighbor) and $\ker H_{\mathcal R_{\mathrm{aug}}}=\spn\{\Psi(A)\}$
     (on any finite graph), both of dimension $1$ when $A$ is an injective PEPS
@@ -80,5 +80,5 @@
 
 \begin{proof}\leanok
     Since $h_R\ge 0$, $\ker H_{\mathcal R}=\bigcap_{R\in\mathcal R}\ker h_R^{\mathrm{global}}=\mathcal P_{\mathcal R}(A)$,
-    so Theorem~\ref{thm:peps_injective_nearest_neighbor_parent_space} applies.
+    so Lemma~\ref{thm:peps_injective_nearest_neighbor_parent_space} applies.
 \end{proof}

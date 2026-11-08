@@ -6,7 +6,7 @@ lines 67--78, proof lines 79--94). Throughout, $\Omega$ is a unit vector in a
 finite-dimensional space with a distinguished orthonormal basis
 $\{\ket z\}$, and $\sigma$ is an operator on that space.
 
-\begin{theorem}[Columns of an operator and the trace norm]
+\begin{lemma}[Columns of an operator and the trace norm]
     \label{thm:peps_ket_column_hilbert_schmidt}
     \lean{TNLean.Lattice.Compression.sum_norm_sq_le_traceNorm_reindex_sq}
     \leanok
@@ -15,26 +15,26 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
     \begin{align}
         \sum_z \lVert E\ket z\rVert^2 & \le \lVert E\rVert_1^2 .
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\{\ket z\}$ is orthonormal, $\sum_z\lVert E\ket z\rVert^2=\lVert E\rVert_2^2\le\lVert E\rVert_1^2$.
 \end{proof}
 
-\begin{theorem}[Selection of one index]
+\begin{lemma}[Selection of one index]
     \label{thm:peps_ket_column_selection}
     \lean{TNLean.Lattice.Compression.exists_ne_zero_norm_sq_le_of_sum}
     \leanok
     For vectors $f_z$ and scalars $a_z\in\C$ on a finite index set with
     $\sum_z\lVert f_z\rVert^2\le\eta^2$ and $\sum_z|a_z|^2=1$, there exists
     $z$ with $a_z\ne0$ and $\lVert f_z\rVert^2\le\eta^2|a_z|^2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The set $S=\{z:a_z\ne0\}$ satisfies $\sum_{z\in S}|a_z|^2=1$; if $\lVert f_z\rVert^2>\eta^2|a_z|^2$ for all $z\in S$, summing over $S$ would give $\eta^2<\sum_{z\in S}\lVert f_z\rVert^2\le\eta^2$.
 \end{proof}
 
-\begin{theorem}[Normalization within twice the error]
+\begin{lemma}[Normalization within twice the error]
     \label{thm:peps_ket_column_normalization}
     \lean{TNLean.Lattice.Compression.normalize_sub_le_two_mul,
         TNLean.Lattice.Compression.exists_phase_normalize_sub_le}
@@ -44,13 +44,13 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
     Consequently, if $v=f+a\Omega$ with $a\ne0$ and
     $\lVert f\rVert\le\eta|a|$, then $v\ne0$ and some $\theta\in\R$ satisfies
     $\lVert v/\lVert v\rVert-e^{i\theta}\Omega\rVert\le2\eta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $|\lVert w\rVert-1|\le\lVert w-\Omega\rVert\le\eta<1$, we have $w\ne0$ and $\lVert w/\lVert w\rVert-\Omega\rVert\le|1-\lVert w\rVert|+\lVert w-\Omega\rVert\le2\eta$. Applying this to $w=v/a=\Omega+f/a$ and setting $e^{i\theta}=a/|a|$ gives $\lVert v/\lVert v\rVert-e^{i\theta}\Omega\rVert=\lVert w/\lVert w\rVert-\Omega\rVert\le2\eta$.
 \end{proof}
 
-\begin{theorem}[Nonzero column close to a pure state]
+\begin{lemma}[Nonzero column close to a pure state]
     \label{thm:peps_ket_column_vector}
     \lean{TNLean.Lattice.Compression.exists_column_ne_zero_of_traceNorm_sub_pure_le,
         TNLean.Lattice.Compression.exists_eq_column_ne_zero_of_traceNorm_sub_pure_le,
@@ -63,12 +63,12 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
     \begin{align}
         \Big\lVert\frac{v}{\lVert v\rVert}-e^{i\theta}\Omega\Big\rVert & \le2\eta .
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_hilbert_schmidt,thm:peps_ket_column_selection,
         thm:peps_ket_column_normalization}
-    With $E=\sigma-\ket\Omega\langle\Omega|$, $f_z=E\ket z$, and $a_z=\braket{\Omega}{z}$, Theorem~\ref{thm:peps_ket_column_hilbert_schmidt} gives $\sum_z\lVert f_z\rVert^2\le\eta^2$ while $\sum_z|a_z|^2=1$. Theorem~\ref{thm:peps_ket_column_selection} selects $z$ with $a_z\ne0$ and $\lVert f_z\rVert\le\eta|a_z|$, and Theorem~\ref{thm:peps_ket_column_normalization} applied to $v=\sigma\ket z=f_z+a_z\Omega$ concludes.
+    With $E=\sigma-\ket\Omega\langle\Omega|$, $f_z=E\ket z$, and $a_z=\braket{\Omega}{z}$, Lemma~\ref{thm:peps_ket_column_hilbert_schmidt} gives $\sum_z\lVert f_z\rVert^2\le\eta^2$ while $\sum_z|a_z|^2=1$. Lemma~\ref{thm:peps_ket_column_selection} selects $z$ with $a_z\ne0$ and $\lVert f_z\rVert\le\eta|a_z|$, and Lemma~\ref{thm:peps_ket_column_normalization} applied to $v=\sigma\ket z=f_z+a_z\Omega$ concludes.
 \end{proof}
 
 \begin{definition}[Operator networks and fixed inputs on directed multigraphs]
@@ -82,7 +82,7 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
     For a directed-multigraph network (Definition~\ref{def:peps_dependent_network}) with virtual alphabets $X_e$, bond matrices $B_e$, and output-input physical pairs $(s_v,r_v)$ defining the operator $\sigma=(\sigma_{\tau\rho})$, the fixed-input network at input configuration $z$ replaces each vertex tensor $A_v$ by $A_{v,z}(\eta,s):=A_v(\eta,(s,z_v))$ on the same multigraph, alphabets $X_e$, and bond matrices $B_e$, so its contraction is $\tau\mapsto\sigma_{\tau z}=(\sigma\ket z)_\tau$.
 \end{definition}
 
-\begin{theorem}[Ket column of an operator network on a directed multigraph]
+\begin{lemma}[Ket column of an operator network on a directed multigraph]
     \label{thm:peps_ket_column_dependent}
     \lean{TNLean.Lattice.Compression.exists_fixInput_network_of_traceNorm_sub_pure_le}
     \leanok
@@ -91,11 +91,11 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
     let $\sigma$ be the operator of an operator network (Definition~\ref{def:peps_ket_column_dependent_fix_input}) with matching output and input spaces at each vertex, and let $\lVert\Omega\rVert=1$ with
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$. Then for some
     product-basis input $z$, the fixed-input network on the same multigraph, virtual alphabets, and bond matrices evaluates to $\psi=\sigma\ket z\ne0$ with $\lVert\psi/\lVert\psi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some $\theta\in\R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_vector,def:peps_ket_column_dependent_fix_input}
-    Apply Theorem~\ref{thm:peps_ket_column_vector} to $\sigma$ and identify $\sigma\ket z$ with the fixed-input contraction via Definition~\ref{def:peps_ket_column_dependent_fix_input}.
+    Apply Lemma~\ref{thm:peps_ket_column_vector} to $\sigma$ and identify $\sigma\ket z$ with the fixed-input contraction via Definition~\ref{def:peps_ket_column_dependent_fix_input}.
 \end{proof}
 
 \begin{definition}[Operator tensors and fixed inputs on a simple graph]
@@ -110,7 +110,7 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
     For a tensor $A$ on a finite simple graph $G=(V,E)$ with physical dimension $d^2$ (read as $(s_v,r_v)\in\{0,\dots,d-1\}^2$) defining the operator $\sigma$ on $(\C^d)^{\otimes V}$, the fixed-input tensor at $z\in\{0,\dots,d-1\}^V$ has physical dimension $d$, vertex components $A_v(\,\cdot\,,(s_v,z_v))$, the same bond dimensions as $A$ on all $e\in E$, and state $\sigma\ket z$.
 \end{definition}
 
-\begin{theorem}[Ket column of an operator tensor on a simple graph]
+\begin{lemma}[Ket column of an operator tensor on a simple graph]
     \label{thm:peps_ket_column_tensor}
     \lean{TNLean.PEPS.Approximation.exists_fixInput_stateCoeff_of_traceNorm_sub_pure_le}
     \leanok
@@ -119,11 +119,11 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
     if the operator $\sigma$ of an operator tensor $A$ (Definition~\ref{def:peps_ket_column_tensor_fix_input}) and a unit vector $\Omega$ satisfy
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$, then for some
     $z$ the fixed-input tensor retains the bond dimensions of $A$ and evaluates to $\psi=\sigma\ket z\ne0$ with $\lVert\psi/\lVert\psi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some $\theta\in\R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_vector,def:peps_ket_column_tensor_fix_input}
-    Apply Theorem~\ref{thm:peps_ket_column_vector} to $\sigma$ and use Definition~\ref{def:peps_ket_column_tensor_fix_input}.
+    Apply Lemma~\ref{thm:peps_ket_column_vector} to $\sigma$ and use Definition~\ref{def:peps_ket_column_tensor_fix_input}.
 \end{proof}
 
 The final assembly of \cite[\S8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
@@ -164,10 +164,10 @@ An operator tensor on the open square is a square-grid tensor with physical dime
 
 \begin{proof}\leanok
     \uses{thm:peps_square_grid_contraction}
-    Immediate entrywise from Definitions~\ref{def:peps_ket_column_tensor_fix_input} and~\ref{def:peps_ket_column_square_fix_input} and Theorem~\ref{thm:peps_square_grid_contraction}.
+    Immediate entrywise from Definitions~\ref{def:peps_ket_column_tensor_fix_input} and~\ref{def:peps_ket_column_square_fix_input} and Lemma~\ref{thm:peps_square_grid_contraction}.
 \end{proof}
 
-\begin{theorem}[Ket column of an operator network on the open square]
+\begin{lemma}[Ket column of an operator network on the open square]
     \label{thm:peps_ket_column_square}
     \lean{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le,
         TNLean.PEPS.Approximation.Vector.Tensor.exists_fixInput_contract_of_traceNorm_sub_pure_le}
@@ -177,11 +177,11 @@ An operator tensor on the open square is a square-grid tensor with physical dime
     if the operator $\sigma$ of an operator network with edge dimensions $D_e$ and a unit vector $\Omega$ satisfy
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$, then for some
     $z$ the fixed-input tensors of Definition~\ref{def:peps_ket_column_square_fix_input} have edge dimensions $D_e$ and evaluate to $\Phi=\sigma\ket z\ne0$ with $\lVert\Phi/\lVert\Phi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some $\theta\in\R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_vector}
-    Apply Theorem~\ref{thm:peps_ket_column_vector} to $\sigma$ and use Definition~\ref{def:peps_ket_column_square_fix_input}.
+    Apply Lemma~\ref{thm:peps_ket_column_vector} to $\sigma$ and use Definition~\ref{def:peps_ket_column_square_fix_input}.
 \end{proof}
 
 \begin{corollary}[Column extraction for the main theorem]
@@ -201,7 +201,7 @@ An operator tensor on the open square is a square-grid tensor with physical dime
 
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_square}
-    By Theorem~\ref{thm:peps_ket_column_square}, the fixed-input PEPS $\Phi=\sigma\ket z\ne0$ retains $D_e\le B$ and satisfies the error bound; since $\Phi\ne0$, no contraction sum is empty, so $D_e>0$ for all $e$.
+    By Lemma~\ref{thm:peps_ket_column_square}, the fixed-input PEPS $\Phi=\sigma\ket z\ne0$ retains $D_e\le B$ and satisfies the error bound; since $\Phi\ne0$, no contraction sum is empty, so $D_e>0$ for all $e$.
 \end{proof}
 
 \subsection{Error and normalization of the protocol}
@@ -224,7 +224,7 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
     By induction on $n$, using $\lVert x_{t+1}-r_{t+1}\rVert\le\lVert S_t(x_t-r_t)\rVert+\lVert S_tr_t-r_{t+1}\rVert\le\lVert x_t-r_t\rVert+\lVert S_tr_t-r_{t+1}\rVert$ and $\lVert x_{t+1}\rVert\le\lVert x_t\rVert$.
 \end{proof}
 
-\begin{theorem}[Error and normalization of the protocol]
+\begin{lemma}[Error and normalization of the protocol]
     \label{thm:peps_protocol_density}
     \lean{TNLean.Lattice.PartyCircuit.norm_protocol_sub_reference_le}
     \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_protocol_density_sub_le}
@@ -247,23 +247,23 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
         \lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1
          & \leq(C_{\rm comp}+2C_{\rm ch}C_{\rm step}+2C_{\rm hole})L^{-5}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_protocol_telescoping}
     Lemma~\ref{lem:peps_protocol_telescoping} gives $\lVert\Psi\rVert\le\lVert r_0\rVert\le1$ and $\lVert\Psi-\Omega\otimes\Xi\rVert\le nC_{\rm step}L^{-20}\le C_{\rm ch}C_{\rm step}L^{-17}$. Since $\Tr_{\rm private}|\Omega\otimes\Xi\rangle\langle\Omega\otimes\Xi|=\lVert\Xi\rVert^2|\Omega\rangle\langle\Omega|$ and $1-\lVert\Xi\rVert^2\le 2(1-\lVert\Xi\rVert)\le 2C_{\rm hole}L^{-57}$, contractivity of $\Tr_{\rm private}$ and $L\ge1$ give (\ref{eq:peps_protocol_dens_err}), and the triangle inequality with $\lVert\sigma-\Tr_{\rm private}|\Psi\rangle\langle\Psi|\rVert_1\le C_{\rm comp}L^{-5}$ gives the final bound.
 \end{proof}
 
-\begin{theorem}[Retained norm and trace of the protocol]
+\begin{lemma}[Retained norm and trace of the protocol]
     \label{thm:peps_protocol_retained_norm}
     \lean{TNLean.Lattice.PartyCircuit.protocol_norm_and_trace_deficit_le}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_protocol_density} (\cite[Section~8.1]{OpenAI2026PolynomialPEPS}), with $\varepsilon = C_{\rm ch}C_{\rm step}L^{-17}$, $\delta = C_{\rm hole}L^{-57}$, and $\rho=\Tr_{\rm private}|\Psi\rangle\langle\Psi|$,
+    Under the hypotheses of Lemma~\ref{thm:peps_protocol_density} (\cite[Section~8.1]{OpenAI2026PolynomialPEPS}), with $\varepsilon = C_{\rm ch}C_{\rm step}L^{-17}$, $\delta = C_{\rm hole}L^{-57}$, and $\rho=\Tr_{\rm private}|\Psi\rangle\langle\Psi|$,
     \begin{align}
         \lVert\Psi\rVert & \geq 1-\delta-\varepsilon,  \\
         1-\tr\rho        & \leq 2(\delta+\varepsilon).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_density}
@@ -272,7 +272,7 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
 
 \subsection{Column selection after discarding a product reference}
 
-\begin{theorem}[A column from the compressed density]
+\begin{lemma}[A column from the compressed density]
     \label{thm:peps_product_reference_column}
     \lean{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_product_reference}
     \lean{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference}
@@ -296,9 +296,9 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
         -e^{i\theta}\Omega\Big\rVert & \leq2\alpha.
     \end{align}
     (Routing precedes column selection as in Corollary~\ref{cor:peps_ket_column_square_main}; see \cite{gap:polypeps_product_reference_column}.)
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_square, cor:peps_ket_column_square_main}
-    Since $\Tr_{\rm private}|\Omega\otimes\Xi\rangle\langle\Omega\otimes\Xi|=\lVert\Xi\rVert^2|\Omega\rangle\langle\Omega|$, contractivity of $\Tr_{\rm private}$ gives $\lVert\Tr_{\rm private}|\Psi\rangle\langle\Psi|-|\Omega\rangle\langle\Omega|\rVert_1\le 2\varepsilon+(1-\lVert\Xi\rVert^2)\le 2\varepsilon+2\delta$, so $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\le\alpha<1$ and Theorem~\ref{thm:peps_ket_column_square} and Corollary~\ref{cor:peps_ket_column_square_main} apply.
+    Since $\Tr_{\rm private}|\Omega\otimes\Xi\rangle\langle\Omega\otimes\Xi|=\lVert\Xi\rVert^2|\Omega\rangle\langle\Omega|$, contractivity of $\Tr_{\rm private}$ gives $\lVert\Tr_{\rm private}|\Psi\rangle\langle\Psi|-|\Omega\rangle\langle\Omega|\rVert_1\le 2\varepsilon+(1-\lVert\Xi\rVert^2)\le 2\varepsilon+2\delta$, so $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\le\alpha<1$ and Lemma~\ref{thm:peps_ket_column_square} and Corollary~\ref{cor:peps_ket_column_square_main} apply.
 \end{proof}

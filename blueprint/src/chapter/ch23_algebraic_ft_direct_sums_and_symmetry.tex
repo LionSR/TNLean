@@ -9,7 +9,7 @@ not derive the block matching appearing in
 \cite[Theorem~2.10]{Cirac2016MPDO_arXiv}. In the source proof, that matching
 is obtained from BNT overlap, independence, and coefficient comparison; the
 corresponding global block-diagonal gauge is given by
-Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
+Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 
 \begin{lemma}[Gauge equivalence of direct sums with phase-weight absorption]%
     \label{lem:gauge_equiv_block_gauge_phase_weight}
@@ -177,7 +177,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{proof}
     \leanok
     \uses{thm:piAlgEquiv_decomposition}
-    Theorem~\ref{thm:piAlgEquiv_decomposition} applied to the product-algebra
+    Lemma~\ref{thm:piAlgEquiv_decomposition} applied to the product-algebra
     automorphism built from the per-block linear extensions yields the block
     permutation and inner conjugations.
 \end{proof}
@@ -301,9 +301,9 @@ specialization needed here; no additional formal declaration is required.
 
 The same-index lemmas above assume a fixed block correspondence. The equal-case
 sector matching with initially different sector counts and bond dimensions is
-Theorem~\ref{thm:ft_sector_bnt_equal_sector_data_different_dims} of
+Corollary~\ref{thm:ft_sector_bnt_equal_sector_data_different_dims} of
 Chapter~\ref{ch:ft_proof}; its global-gauge consequence is
-Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
+Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 
 %% ---------------------------------------------------------
 \section{Translation-invariant reduction and global symmetry}%
@@ -315,7 +315,7 @@ a reduction statement: equal states force one tensor to be a gauge of the
 other and inherit injectivity. Composing two gauges of the same tensor then
 yields the scalar law underlying the global-symmetry consequences.
 
-\begin{theorem}[Translation-invariant reduction corollary]%
+\begin{lemma}[Translation-invariant reduction corollary]%
     \label{thm:ti_reduction_corollary}
     \lean{MPSChainTensor.ti_reduction_corollary}
     \leanok
@@ -332,10 +332,10 @@ yields the scalar law underlying the global-symmetry consequences.
               all~$i$.
         \item $B$ is injective.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{thm:ti_tensors_single_gauge}
-    Theorem~\ref{thm:ti_tensors_single_gauge} gives a single gauge matrix
+    Lemma~\ref{thm:ti_tensors_single_gauge} gives a single gauge matrix
     $X$ with $B^i = X A^i X^{-1}$ for all $i$.
     Since gauge equivalence preserves injectivity, $B$ is injective as well.
 \end{proof}

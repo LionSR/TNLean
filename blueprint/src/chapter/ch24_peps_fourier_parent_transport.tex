@@ -5,13 +5,13 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
 
 \subsection{Regional coordinate changes}
 
-\begin{theorem}[The reverse coordinate identity]%
+\begin{lemma}[The reverse coordinate identity]%
     \label{thm:peps_fourier_reverse_coordinates}
     \lean{TNLean.PEPS.mul_conjTranspose_eq_one_of_representation_coordinates,
         TNLean.PEPS.representation_coordinates_conjTranspose}
     \leanok
     If $L(g)=QU(g)Q^\dagger$, then $QQ^\dagger=I$; if also $Q^\dagger Q=I$, then $U(g)=Q^\dagger L(g)Q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating $L(g)=QU(g)Q^\dagger$ at $g=1$ gives $QQ^\dagger=I$, and left/right multiplication by $Q^\dagger,Q$ with $Q^\dagger Q=I$ gives $U(g)=Q^\dagger L(g)Q$.
 \end{proof}
@@ -29,7 +29,7 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
     \end{align}
 \end{definition}
 
-\begin{theorem}[Composition of product coordinate matrices]%
+\begin{lemma}[Composition of product coordinate matrices]%
     \label{thm:peps_fourier_product_composition}
     \lean{TNLean.PEPS.mixedPhysicalProductMatrix_mul,
         TNLean.PEPS.mixedPhysicalProductMatrix_one,
@@ -39,12 +39,12 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
     \leanok
     \uses{def:peps_fourier_regional_matrix}
     Product coordinate matrices multiply factorwise, satisfying $B(P)B(Q)=B(PQ)$ and $B(I)=I$; in particular, $QQ^\dagger=I$ implies $Q_R(Q^\dagger)_R=I$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Factoring the matrix product over the tensor factors in (\ref{eq:peps_fourier_regional_matrix}) gives $\overline Q\,\overline{Q^\dagger}=\overline{QQ^\dagger}=I$ at tail crossings, $QQ^\dagger=I$ at head crossings, and $B(QQ^\dagger)=I$ on $E_R$.
 \end{proof}
 
-\begin{theorem}[Fourier transformation of open generators]%
+\begin{lemma}[Fourier transformation of open generators]%
     \label{thm:peps_fourier_open_contractions}
     \lean{TNLean.PEPS.graphOpenBoundaryFactor_coordinates,
         TNLean.PEPS.graphOpenInternalFactor_coordinates,
@@ -62,41 +62,41 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
         Q_R\mathcal C_R(U)c & =\mathcal C_R(L)Q_{\partial R}c.
         \label{eq:peps_fourier_open_superposition}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Vectorizing $L(q_hq_t^{-1})=QU(q_hq_t^{-1})Q^\dagger$ transforms each internal bond factor by $B(Q)$, while $L(g)Q=QU(g)$ (head crossing) and $Q^\dagger L(q_t^{-1})=U(q_t^{-1})Q^\dagger$ (tail crossing) transform each $f\in\partial E_R$ by $Q_f$; expanding site averages gives (\ref{eq:peps_fourier_open_generator}), and summing against $c(\theta)$ gives (\ref{eq:peps_fourier_open_superposition}).
 \end{proof}
 
-\begin{theorem}[Exact equality of every regional range]%
+\begin{lemma}[Exact equality of every regional range]%
     \label{thm:peps_fourier_regional_ranges}
     \lean{TNLean.PEPS.graphRegionCoordinateMatrix_maps_openBondSpace,
         TNLean.PEPS.graphRegionCoordinateMatrix_map_openBondSpace}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_fourier_open_contractions}, $Q_R\mathcal G_R(U)=\mathcal G_R(L)$ for every region $R$.
-\end{theorem}
+    Under the hypotheses of Lemma~\ref{thm:peps_fourier_open_contractions}, $Q_R\mathcal G_R(U)=\mathcal G_R(L)$ for every region $R$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_fourier_open_contractions,
         thm:peps_fourier_reverse_coordinates,
         thm:peps_fourier_product_composition}
-    Equation~(\ref{eq:peps_fourier_open_generator}) gives $Q_R\mathcal G_R(U)\subseteq\mathcal G_R(L)$, while applying (\ref{eq:peps_fourier_open_generator}) to $Q^\dagger$ via Theorem~\ref{thm:peps_fourier_reverse_coordinates} and $Q_R(Q^\dagger)_R=I$ (Theorem~\ref{thm:peps_fourier_product_composition}) gives $\mathcal G_R(L)\subseteq Q_R\mathcal G_R(U)$.
+    Equation~(\ref{eq:peps_fourier_open_generator}) gives $Q_R\mathcal G_R(U)\subseteq\mathcal G_R(L)$, while applying (\ref{eq:peps_fourier_open_generator}) to $Q^\dagger$ via Lemma~\ref{thm:peps_fourier_reverse_coordinates} and $Q_R(Q^\dagger)_R=I$ (Lemma~\ref{thm:peps_fourier_product_composition}) gives $\mathcal G_R(L)\subseteq Q_R\mathcal G_R(U)$.
 \end{proof}
 
 \subsection{Exterior blocks and complete kernels}
 
-\begin{theorem}[Global Fourier blocks preserve local ranges]%
+\begin{lemma}[Global Fourier blocks preserve local ranges]%
     \label{thm:peps_fourier_exterior_blocks}
     \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix_coordinates_maps,
         TNLean.PEPS.graphNumberedBondMatrix_coordinates_maps_regionParentGroundSpace}
     \leanok
     \uses{def:peps_fourier_regional_matrix}
     For $\mathcal Q=\bigotimes_{f\in E}B(Q)$ in numbered site coordinates, every exterior block of $\mathcal Q$ maps $\mathcal G_R(U)$ into $\mathcal G_R(L)$, so $\mathcal Q\mathcal P_{\mathcal R}(U)\subseteq\mathcal P_{\mathcal R}(L)$ for any region family $\mathcal R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_coordinate_blocks}
-    Specialize Theorem~\ref{thm:peps_oriented_coordinate_blocks} to trivial edge orientations $o_e=0$ ($\forall e\in E$), where $Q_e=Q$ and the oriented global matrix reduces to $\mathcal Q$.
+    Specialize Lemma~\ref{thm:peps_oriented_coordinate_blocks} to trivial edge orientations $o_e=0$ ($\forall e\in E$), where $Q_e=Q$ and the oriented global matrix reduces to $\mathcal Q$.
 \end{proof}
 
-\begin{theorem}[Canonical parents in different representation coordinates]%
+\begin{lemma}[Canonical parents in different representation coordinates]%
     \label{thm:peps_fourier_coordinate_parent}
     \lean{TNLean.PEPS.graphNumberedBondMatrix_coordinates_rightInverse,
         TNLean.PEPS.graphNumberedBondMatrix_coordinates_injective,
@@ -113,11 +113,11 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
         \label{eq:peps_fourier_coordinate_parent}
     \end{align}
     so $\dim\mathcal P_{\mathcal R}(U)=\dim\mathcal P_{\mathcal R}(L)$, and for any finite $\mathcal R$ and positive local interactions $H,K$ with local kernels $\mathcal G_R(U),\mathcal G_R(L)$, $\mathcal Q(\ker H)=\ker K$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_global_coordinate_inverse,
         thm:peps_oriented_coordinate_parent,thm:peps_region_parent_common_kernel}
-    Specializing Theorems~\ref{thm:peps_oriented_global_coordinate_inverse} and~\ref{thm:peps_oriented_coordinate_parent} to $o_e=0$ ($\forall e\in E$) yields $\mathcal Q\mathcal Q^\dagger=\mathcal Q^\dagger\mathcal Q=I$ and (\ref{eq:peps_fourier_coordinate_parent}); Theorem~\ref{thm:peps_region_parent_common_kernel} identifies $\ker H=\mathcal P_{\mathcal R}(U)$ and $\ker K=\mathcal P_{\mathcal R}(L)$.
+    Specializing Lemmas~\ref{thm:peps_oriented_global_coordinate_inverse} and~\ref{thm:peps_oriented_coordinate_parent} to $o_e=0$ ($\forall e\in E$) yields $\mathcal Q\mathcal Q^\dagger=\mathcal Q^\dagger\mathcal Q=I$ and (\ref{eq:peps_fourier_coordinate_parent}); Lemma~\ref{thm:peps_region_parent_common_kernel} identifies $\ker H=\mathcal P_{\mathcal R}(U)$ and $\ker K=\mathcal P_{\mathcal R}(L)$.
 \end{proof}
 
 \begin{definition}[Dimension restoration followed by Fourier transformation]%
@@ -126,10 +126,10 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
         TNLean.PEPS.canonicalSemiRegularFourierParentEquiv}
     \leanok
     \uses{thm:peps_copy_parent_equivalence,thm:peps_fourier_coordinate_parent}
-    For $d_i>0$ and an isometry $Q:\C^{\coprod_i\{0,\ldots,d_i-1\}^2}\to\C^G$ satisfying $L(g)=QD^{[d]}(g)Q^\dagger$, define $T=\mathcal Q M_d$ by composing the copy-restoration map $M_d$ (Theorem~\ref{thm:peps_copy_parent_equivalence}) with $\mathcal Q$ (Theorem~\ref{thm:peps_fourier_coordinate_parent}).
+    For $d_i>0$ and an isometry $Q:\C^{\coprod_i\{0,\ldots,d_i-1\}^2}\to\C^G$ satisfying $L(g)=QD^{[d]}(g)Q^\dagger$, define $T=\mathcal Q M_d$ by composing the copy-restoration map $M_d$ (Lemma~\ref{thm:peps_copy_parent_equivalence}) with $\mathcal Q$ (Lemma~\ref{thm:peps_fourier_coordinate_parent}).
 \end{definition}
 
-\begin{theorem}[The weighted canonical parent in the regular group basis]%
+\begin{lemma}[The weighted canonical parent in the regular group basis]%
     \label{thm:peps_fourier_semiregular_parent}
     \lean{TNLean.PEPS.map_regionParentGroundSpace_semiRegular_fourier_eq,
         TNLean.PEPS.finrank_regionParentGroundSpace_semiRegular_fourier_eq,
@@ -144,11 +144,11 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
         \dim\mathcal P_{\mathcal R}(A_{\mathrm{reg}}), \notag
     \end{align}
     and for finite $\mathcal R$ and positive local interactions $H,K$ with these regional kernels, $T(\ker H)=\ker K$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_copy_parent_equivalence,thm:peps_fourier_coordinate_parent,
         thm:peps_region_parent_common_kernel}
-    Composing $M_d:\mathcal P_{\mathcal R}(A_d)\xrightarrow{\cong}\mathcal P_{\mathcal R}(D^{[d]})$ (Theorem~\ref{thm:peps_copy_parent_equivalence}) with $\mathcal Q:\mathcal P_{\mathcal R}(D^{[d]})\xrightarrow{\cong}\mathcal P_{\mathcal R}(A_{\mathrm{reg}})$ (Theorem~\ref{thm:peps_fourier_coordinate_parent}) and applying Theorem~\ref{thm:peps_region_parent_common_kernel} yields the claims.
+    Composing $M_d:\mathcal P_{\mathcal R}(A_d)\xrightarrow{\cong}\mathcal P_{\mathcal R}(D^{[d]})$ (Lemma~\ref{thm:peps_copy_parent_equivalence}) with $\mathcal Q:\mathcal P_{\mathcal R}(D^{[d]})\xrightarrow{\cong}\mathcal P_{\mathcal R}(A_{\mathrm{reg}})$ (Lemma~\ref{thm:peps_fourier_coordinate_parent}) and applying Lemma~\ref{thm:peps_region_parent_common_kernel} yields the claims.
 \end{proof}
 
 % This supplied-Fourier comparison is distinct from deriving the blocks and

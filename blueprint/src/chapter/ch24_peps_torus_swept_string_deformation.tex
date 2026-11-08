@@ -51,7 +51,7 @@
     corresponding direction.
 \end{definition}
 
-\begin{theorem}[Native directed bond tables, including both seams]%
+\begin{lemma}[Native directed bond tables, including both seams]%
     \label{thm:peps_torus_swept_string_transport}
     \lean{TNLean.PEPS.torusSweptStringInitialOperators_right_transport,
         TNLean.PEPS.torusSweptStringInitialOperators_up_transport,
@@ -73,7 +73,7 @@
     $\overline{p_y}<\overline{p_y+1}$.
     These formulas hold on every native edge, including crossing bonds
     of $P_v$ and edges on either torus seam.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_swept_patch_transport}
@@ -85,14 +85,14 @@
     recovering the ordered edge coefficient gives the stated formulas.
 \end{proof}
 
-\begin{theorem}[The second sweep acts only on the newly added vertices]%
+\begin{lemma}[The second sweep acts only on the newly added vertices]%
     \label{thm:peps_torus_swept_string_successive}
     \lean{TNLean.PEPS.torusSweptStringOperators_second_eq_sweep}
     \leanok
     \uses{def:peps_torus_swept_string_assignment}
     The bond assignments satisfy $u^{(2)}=(u^{(1)})^{B,g}$.
     Thus no vertex in $S_1$ receives the gauge $g^{-1}$ twice.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The sets $S_1$ and $B$ are disjoint and have union $S_2$.
@@ -101,7 +101,7 @@
     the ordered endpoint formula proves the asserted equality.
 \end{proof}
 
-\begin{theorem}[Closed coefficient equality of the three presentations]%
+\begin{lemma}[Closed coefficient equality of the three presentations]%
     \label{thm:peps_torus_swept_string_state}
     \lean{TNLean.PEPS.stateCoeff_torusSweptStringOperators,
         TNLean.PEPS.stateCoeff_torusSweptStringOperators_first_eq_second}
@@ -114,7 +114,7 @@
     $\Psi_a(u^{(0)})=\Psi_a(u^{(1)})=\Psi_a(u^{(2)})$.
     The changed crossing bonds are included in each contraction;
     no equality of fixed boundary columns is asserted.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_swept_patch_state}

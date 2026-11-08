@@ -1,4 +1,4 @@
-\begin{theorem}[Cycle operations from an arbitrary bond assignment]
+\begin{lemma}[Cycle operations from an arbitrary bond assignment]
     \label{thm:peps_actual_cycle_physical_permutation}
     \lean{
         TNLean.PEPS.exists_unitary_regularActualCyclePhysicalPermutation,
@@ -17,8 +17,8 @@
     \end{align}
     While $T$ and $\phi$ remain explicit, an occupied-to-vacant plaquette interpretation requires an explicit holonomy calculation, and the full four-endpoint braid of \cite{gap:rmp_peps_quantum_double_g_isometry} is not asserted here.
     \uses{thm:peps_regular_gauged_cycle_permutation}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     On internal edges $e=(t(e),h(e))$, tree edges satisfy $u_e=k_{u,h(e)}k_{u,t(e)}^{-1}$ and chords satisfy $\omega_{u,e}=k_{u,h(e)}^{-1}u_e k_{u,t(e)}$, so reconstruction from $(k_u,\omega_u)$ recovers $u$.
-    Applying the common-background unitary $W_\phi$ of Theorem~\ref{thm:peps_regular_gauged_cycle_permutation} to $(k_u,\omega_u)$ while preserving exterior bonds yields the open and closed contraction identities.
+    Applying the common-background unitary $W_\phi$ of Lemma~\ref{thm:peps_regular_gauged_cycle_permutation} to $(k_u,\omega_u)$ while preserving exterior bonds yields the open and closed contraction identities.
 \end{proof}

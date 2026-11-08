@@ -286,7 +286,7 @@ theorem notMem_closedEdgeBand_of_nor_eq_two_mul {n : ℝ} {e e' : SquareEdge} (h
 after its main births and deaths.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:160–165, 207–220`. -/
-def mainWords {ι : Type*} (A B C : ι) : Set (ℝ → ι) :=
+noncomputable def mainWords {ι : Type*} (A B C : ι) : Set (ℝ → ι) :=
   {edgeStartWord A B C, mainWordOne A B C, mainWordTwo A B C, mainWordThree B C, mainWordFour B C,
     mainWordFive B C}
 
@@ -303,7 +303,7 @@ noncomputable def auxWordExchanged {ι : Type*} (A B C : ι) : ℝ → ι :=
 three births, and the word after the lens exchange.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:187–214`. -/
-def auxWords {ι : Type*} (A B C : ι) : Set (ℝ → ι) :=
+noncomputable def auxWords {ι : Type*} (A B C : ι) : Set (ℝ → ι) :=
   {bandWord C [], auxWordOne B C, auxWordTwo A B C, auxWord A B C, auxWordExchanged A B C}
 
 section Words

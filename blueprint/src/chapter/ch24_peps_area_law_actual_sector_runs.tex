@@ -17,7 +17,7 @@ and $\ell+1$, and cell index $(0,0)$. Let $\mathcal J$ index their
 eight corresponding elementary bases, and write $P_s^{\rm S}$ and
 $P_s^{\rm L}$ for the closed triangles. Let
 $\sigma:\mathcal J\to\mathcal I$ be the unique assignment of
-Theorem~\ref{thm:area_law_actual_sector_assignment}.
+Lemma~\ref{thm:area_law_actual_sector_assignment}.
 For the smaller fan, write $b_s^-$ and $b_s^+$ for the initial and
 final endpoints of the oriented base $s$. Two bases are adjacent when
 $b_s^+=b_t^-$ or $b_t^+=b_s^-$.
@@ -34,7 +34,7 @@ These local runs appear in \cite[Section~11]{OpenAI2026AreaLaw}.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These entries do not assert active-ray enumeration or the full star theorem.
 
-\begin{theorem}[Initial identifiers on cyclic runs]
+\begin{lemma}[Initial identifiers on cyclic runs]
     \label{thm:area_law_initial_sector_run_assignment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_run_assignment}
     \leanok
@@ -52,7 +52,7 @@ These local runs appear in \cite[Section~11]{OpenAI2026AreaLaw}.
     \end{align}
     Distinct components carrying the same identifier remain distinct terms
     of the union.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_sector_colors,
         thm:area_law_actual_sector_assignment,def:area_law_fan_runs}
@@ -68,7 +68,7 @@ These local runs appear in \cite[Section~11]{OpenAI2026AreaLaw}.
     $R\in\mathcal R$ yields the decomposition into the run regions $Y_R$.
 \end{proof}
 
-\begin{theorem}[The case with no change of identifier]
+\begin{lemma}[The case with no change of identifier]
     \label{thm:area_law_initial_sector_no_active}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_of_no_active_sector}
     \leanok
@@ -79,7 +79,7 @@ These local runs appear in \cite[Section~11]{OpenAI2026AreaLaw}.
     $s,t\in\mathcal J$. Then there is a unique identifier
     $i\in\mathcal I$ such that
     $\overline B_\infty(v,r)\subseteq U_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_run_monochromatic,
         thm:area_law_initial_sector_run_assignment,

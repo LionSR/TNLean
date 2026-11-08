@@ -32,7 +32,7 @@ intertwiners.
     orthogonal complement of an invariant subspace is invariant. Thus
     every invariant subspace has an invariant complement and the module
     is semisimple. Every step of the flag of
-    Theorem~\ref{thm:asym_flag_theorem} then has an invariant complement,
+    Lemma~\ref{thm:asym_flag_theorem} then has an invariant complement,
     the module is the direct sum of these complements, and a basis
     adapted to the direct sum makes every $B^i$ block diagonal with the
     blocks prescribed by the flag.
@@ -84,7 +84,7 @@ intertwiners.
     relations follow from the biorthogonality of the pairs.
 \end{proof}
 
-\begin{theorem}[Faithful stationary splitting]
+\begin{lemma}[Faithful stationary splitting]
     \label{thm:asym_stationary_splitting}
     \lean{MPSTensor.isSemisimpleModule_wordModule_of_hasInvariantProjectorClosure,
         MPSTensor.isSemisimpleModule_wordModule_of_leftCanonical_of_posDef_fixedPoint,
@@ -106,7 +106,7 @@ intertwiners.
     its compression may be chosen as in
     Corollary~\ref{cor:asym_fusion_tensors_star} with zero remainder and
     two-sided sitewise intertwiners.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -215,7 +215,7 @@ space of $B$ and therefore still permit unmatched zero diagonal blocks.
     gauge related.
 \end{proof}
 
-\begin{theorem}[Uniqueness of split compressions up to multiplicity gauge]
+\begin{lemma}[Uniqueness of split compressions up to multiplicity gauge]
     \label{thm:asym_zipper_uniqueness}
     \lean{MPSTensor.ZipperDecomposition.V_mul_W_eq_multiplicityGauge_smul,
         MPSTensor.ZipperDecomposition.V_mul_W_eq_zero_of_not_isGaugeRelated,
@@ -248,7 +248,7 @@ space of $B$ and therefore still permit unmatched zero diagonal blocks.
     % PR #7969 plans the MPO-algebra reading as
     %   thm:mpoalg_zipper_fusion_uniqueness; after it merges, that entry should
     %   \uses this theorem and cor:asym_zipper_fusion_uniqueness.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -293,7 +293,7 @@ space of $B$ and therefore still permit unmatched zero diagonal blocks.
     \leanok
     \uses{thm:asym_zipper_uniqueness}
     Viewing the stacked product $T_aT_b$ and the blocks $T_c$ as tensors on
-    the pair alphabet, Theorem~\ref{thm:asym_zipper_uniqueness} gives the
+    the pair alphabet, Lemma~\ref{thm:asym_zipper_uniqueness} gives the
     unique invertible multiplicity gauges $Y_{ab}^c$.
 \end{proof}
 
@@ -316,7 +316,7 @@ space of $B$ and therefore still permit unmatched zero diagonal blocks.
 \begin{proof}
     \leanok
     \uses{thm:asym_zipper_uniqueness}
-    Theorem~\ref{thm:asym_zipper_uniqueness} for the action tensor
+    Lemma~\ref{thm:asym_zipper_uniqueness} for the action tensor
     $T_a\cdot A_x$ and the normal blocks $A_y$ gives the unique multiplicity
     gauges $X_{ax}^y$.
 \end{proof}
@@ -392,7 +392,7 @@ space of $B$ and therefore still permit unmatched zero diagonal blocks.
 
 When $\ket{V^{(N)}(B)}=\lambda^N\ket{V^{(N)}(A)}$ for a scalar
 $\lambda\in\C^\times$, rescaling $B$ to $\lambda^{-1}B$ reduces this
-proportional case (Theorem~\ref{thm:mps_proportional_reduction_exists}) to
+proportional case (Lemma~\ref{thm:mps_proportional_reduction_exists}) to
 Corollary~\ref{cor:asym_single_block}, yielding
 $WB^{i_1}\cdots B^{i_N}V=\lambda^NA^{i_1}\cdots A^{i_N}$ with remainder
 $R^i=B^i-\lambda\,VA^iW$.

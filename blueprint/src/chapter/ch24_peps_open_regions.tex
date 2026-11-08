@@ -1,0 +1,545 @@
+\section{Open regions and their physical cuts}%
+\label{sec:peps_open_regions}
+
+A finite region of a PEPS contracts to an open tensor whose virtual legs are
+the bonds leaving the region. This section introduces the open tensor, cuts
+the physical vector along the boundary of a region, and defines the canonical
+regions of regular tensors, with and without group elements inserted on their
+bonds.
+
+\begin{definition}[The open tensor of a finite region]%
+    \label{def:peps_open_region_contraction}
+    \lean{TNLean.PEPS.RegionIncidentConfig, TNLean.PEPS.regionIncidentBoundaryLabel,
+        TNLean.PEPS.isRegionIncidentEdge_of_regionVertex, TNLean.PEPS.regionIncidentWeight,
+        TNLean.PEPS.openRegionWeight, TNLean.PEPS.openRegionMap,
+        TNLean.PEPS.openRegionMap_apply, TNLean.PEPS.openRegionMap_single,
+        TNLean.PEPS.openRegionCoefficientMatrix, TNLean.PEPS.openRegionMap_apply_eq_mulVec,
+        TNLean.PEPS.toMatrix_openRegionMap,
+        TNLean.PEPS.regionExteriorMultiplicity}
+    \leanok
+    For a region $R$ in a finite PEPS graph, let $T_R(\mu;\sigma)$ be
+    the contraction of its site tensors with physical configuration
+    $\sigma$, fixing the crossing-bond labels $\mu$ and summing only
+    the internal-bond labels. It defines the linear map from the
+    crossing virtual indices to the physical system of $R$.
+    No edge wholly outside $R$ enters this contraction. This is the
+    finite-region tensor used when blocking and cutting the PEPS in
+    \cite[Section~6, proof of Theorem~6.9]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[Exact contraction across a physical cut]%
+    \label{thm:peps_open_region_cut}
+    \lean{TNLean.PEPS.regionBlockedWeight_eq_exterior_mul_openRegionWeight,
+        TNLean.PEPS.regionExteriorMultiplicity_eq_prod,
+        TNLean.PEPS.regionInteriorBondProd_eq_exterior_mul_exterior,
+        TNLean.PEPS.regionExteriorMultiplicity_ne_zero,
+        TNLean.PEPS.stateCoeff_eq_openRegionComplement,
+        TNLean.PEPS.stateCoeff_eq_openRegionComplement_of_regularBonds,
+        TNLean.PEPS.stateCoeff_rectangle_eq_openRegionComplement_of_regularBonds}
+    \leanok
+    \uses{def:peps_open_region_contraction}
+    Suppose every bond space has positive dimension. The coefficient
+    of the PEPS at physical configurations $\sigma$ on $R$ and $\tau$
+    on its complement is exactly
+    \begin{align}
+        \psi(\sigma,\tau)=\sum_\mu T_R(\mu;\sigma)T_{R^c}(\mu;\tau).
+        \label{eq:peps_open_region_cut}
+    \end{align}
+    In particular this holds for regular bonds of any finite group.
+    If the region coefficient is instead defined by summing global
+    edge assignments, it equals $T_R$ multiplied by the product of
+    the dimensions of all edges wholly outside $R$.
+
+    This is an exact finite-region contraction identity. Identifying
+    its cut maps with isometries on the regular invariant boundary
+    remains a separate step in \cite[Theorem~6.9]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    Splitting each edge assignment into its incident and exterior parts separates
+    the exterior labels, which do not occur in any tensor of $R$ and therefore sum
+    to the stated multiplicity. Applying the existing coefficient
+    identity for the globally indexed region tensors on the two sides multiplies
+    their exterior multiplicities to the product of all
+    non-crossing bond dimensions; cancelling this nonzero product
+    gives (\ref{eq:peps_open_region_cut}). Regular bond dimensions are $|G|>0$.
+\end{proof}
+
+\begin{definition}[Regular coordinates of the physical cut]%
+    \label{def:peps_regular_physical_cut}
+    \lean{TNLean.PEPS.groupBondTensor,
+        TNLean.PEPS.regularLabelTranslation,
+        TNLean.PEPS.regularRegionBoundaryConfigEquiv,
+        TNLean.PEPS.regularOpenRegionMatrix,
+        TNLean.PEPS.regularOpenComplementMatrix,
+        TNLean.PEPS.regularPhysicalCutMatrix}
+    \leanok
+    \uses{def:peps_open_region_contraction}
+    Express every bond in a group basis, and enumerate the $b=n+1$
+    crossing bonds. Before the virtual reduction in
+    \cite[Proof of Theorem~6.9]{Schuch2010PEPS}, let $A$ and $B$ be the open tensors of the
+    region and its complement, with their columns indexed by $G^b$ in
+    the same crossing-bond order, and let $K$ be the matrix of physical
+    PEPS coefficients on these two systems.
+\end{definition}
+
+\begin{lemma}[Invariant regular boundary vectors]%
+    \label{thm:peps_regular_boundary_invariants}
+    \lean{TNLean.PEPS.regularBoundaryRepresentation_apply,
+        TNLean.PEPS.regularBoundaryRepresentation,
+        TNLean.PEPS.regularBoundaryRelativeEquiv,
+        TNLean.PEPS.regularBoundaryRelativeEquiv_smul,
+        TNLean.PEPS.regularBoundaryInvariantsEquiv,
+        TNLean.PEPS.finrank_regularBoundaryInvariants_succ,
+        TNLean.PEPS.finrank_regularBoundaryInvariants,
+        TNLean.PEPS.regularBoundaryOrbitBasis,
+        TNLean.PEPS.regularBoundaryOrbitBasis_apply,
+        TNLean.PEPS.regularBoundaryOrbitBasis_eq_sum,
+        TNLean.PEPS.regularBoundaryOrbitBasis_dotProduct}
+    \leanok
+    \uses{thm:peps_regular_blocking_coordinates}
+    Let $b\geq1$ and let $G$ act on $G^b$ by simultaneous left
+    multiplication. Its invariant functions have dimension $|G|^{b-1}$.
+    In the invariant-boundary calculation used in the proof of
+    \cite[Theorem~6.9]{Schuch2010PEPS}, writing $a=(a_0,\ldots,a_{b-1})$ makes the relative coordinates
+    $(a_0^{-1}a_i)_{i=1}^{b-1}$ label the orbits, and the equal-weight orbit
+    vectors form an orthogonal basis, each of squared norm $|G|$.
+\end{lemma}
+\begin{proof}\leanok
+    The bijection $a\mapsto(a_0,(a_0^{-1}a_i)_{i>0})$ changes the action to
+    left multiplication of its first coordinate alone. Invariant functions
+    are therefore arbitrary functions of the remaining $b-1$ labels.
+    Distinct orbits are disjoint, and each contains exactly $|G|$ elements.
+\end{proof}
+
+\begin{definition}[The virtual regular boundary state]%
+    \label{def:peps_regular_boundary_state}
+    \lean{TNLean.PEPS.regularBoundaryProjector,
+        TNLean.PEPS.regularBoundarySchmidtMatrix,
+        TNLean.PEPS.regularBoundaryState,
+        TNLean.PEPS.regularBoundaryDensity,
+        TNLean.PEPS.regularBoundaryTranslationState}
+    \leanok
+    \uses{thm:peps_regular_boundary_invariants, thm:peps_group_averaging}
+    Set $b=n+1$ and $r=|G|^n$, and let $P$ be the averaging projector
+    on $\mathbb C[G^b]$. The unnormalized bipartite boundary vector has
+    coefficients
+    \begin{align}
+        \Psi(a,c)=\sum_{z\in G}\prod_{i=0}^{b-1}\delta_{a_i,zc_i}
+        =|G|P_{a,c}.
+    \end{align}
+    For the virtual vectors used
+    in the proof of \cite[Theorem~6.9]{Schuch2010PEPS}, its normalized coefficient matrix is $C=P/\sqrt r$, and its reduced
+    density operator is $\rho=P/r$.
+\end{definition}
+
+\begin{lemma}[Flat spectrum of the virtual regular boundary]%
+    \label{thm:peps_regular_boundary_density}
+    \lean{TNLean.PEPS.regularBoundaryProjector_mul_self,
+        TNLean.PEPS.rank_regularBoundaryProjector,
+        TNLean.PEPS.regularBoundaryProjector_apply,
+        TNLean.PEPS.regularBoundaryProjector_conjTranspose,
+        TNLean.PEPS.trace_regularBoundaryProjector,
+        TNLean.PEPS.regularBoundaryProjector_transpose,
+        TNLean.PEPS.regularBoundarySchmidtMatrix_mul_projector,
+        TNLean.PEPS.regularBoundaryProjector_mul_schmidtMatrix,
+        TNLean.PEPS.regularBoundarySchmidtMatrix_mul_conjTranspose,
+        TNLean.PEPS.schmidtCoeffMatrix_regularBoundaryState,
+        TNLean.PEPS.partialTrace_regularBoundaryState,
+        TNLean.PEPS.regularBoundaryDensity_posSemidef,
+        TNLean.PEPS.trace_regularBoundaryDensity,
+        TNLean.PEPS.regularBoundaryState_dotProduct,
+        TNLean.PEPS.rank_regularBoundaryDensity,
+        TNLean.PEPS.regularBoundaryDensity_mul_self,
+        TNLean.PEPS.regularBoundaryProjector_mulVec_of_mem_invariants,
+        TNLean.PEPS.regularBoundaryDensity_mulVec_of_mem_invariants,
+        TNLean.PEPS.regularBoundaryTranslationState_apply,
+        TNLean.PEPS.regularBoundaryTranslationState_eq_sum_prod,
+        TNLean.PEPS.regularBoundaryState_eq_smul_translationState}
+    \leanok
+    \uses{def:peps_regular_boundary_state, thm:peps_regular_boundary_invariants}
+    The averaging matrix $P$ is real, symmetric, and idempotent, with
+    rank and trace $r$. Its entries are $|G|^{-1}$ on pairs in the same
+    orbit and zero otherwise. The vector with coefficient matrix $C$
+    has norm one, and tracing out its second factor gives
+    $CC^\dagger=\rho=P/r$. Hence $\rho$ is positive, has trace one and
+    rank $r$, and satisfies $\rho^2=r^{-1}\rho$. On the invariant
+    boundary subspace it acts as multiplication by $r^{-1}$.
+\end{lemma}
+\begin{proof}\leanok
+    For each pair in the same orbit, exactly one translation sends one
+    configuration to the other. The entry formula follows by averaging.
+    Its symmetry gives $P=P^\dagger$, and averaging twice gives $P^2=P$.
+    The orbit count gives the rank; its trace follows either from the
+    diagonal entries or from its projection property. Now
+    $CC^\dagger=P/r$, whose trace is one. The remaining assertions follow
+    from $P^2=P$ and from $P$ being the identity on invariant vectors.
+\end{proof}
+
+\begin{lemma}[Boundary symmetry and projector insertion at the cut]%
+    \label{thm:peps_regular_open_region_projector}
+    \lean{TNLean.PEPS.regularLabelTranslation_apply,
+        TNLean.PEPS.regionIncidentBoundaryLabel_translation,
+        TNLean.PEPS.regionIncidentWeight_translation,
+        TNLean.PEPS.openRegionWeight_translation,
+        TNLean.PEPS.regularOpenRegionMatrix_translation,
+        TNLean.PEPS.matrix_mul_regularBoundaryProjector_of_translation,
+        TNLean.PEPS.regularOpenRegionMatrix_mul_projector,
+        TNLean.PEPS.regularPhysicalCutMatrix_eq_mul_transpose,
+        TNLean.PEPS.regularPhysicalCutMatrix_eq_mul_projector_mul_transpose,
+        TNLean.PEPS.regularOpenRegionMatrix_mul_schmidtMatrix_mul_transpose}
+    \leanok
+    \uses{def:peps_regular_physical_cut, def:peps_regular_boundary_state}
+    Suppose the coefficient tensor at every site is invariant under
+    simultaneous left translation of all its virtual group labels.
+    Then the open tensor of every region is invariant under
+    simultaneous left translation of its crossing labels. Consequently
+    $AP=A$ and the physical cut satisfies
+    \begin{align}
+        K=AB^{\mathsf T}=APB^{\mathsf T},\qquad
+        ACB^{\mathsf T}=\frac{K}{\sqrt r},
+        \quad C=\frac P{\sqrt r},\quad r=|G|^n.
+        \label{eq:peps_open_region_projector_cut}
+    \end{align}
+    In the group bases of regular and dual regular legs, this is the
+    inherited boundary symmetry of the proof of
+    \cite[Theorem~6.9]{Schuch2010PEPS}. It identifies the contraction
+    with evaluation on the virtual boundary state, up to the scalar
+    $\sqrt r$ in (\ref{eq:peps_open_region_projector_cut}). It does not assert isometry of $A,B$ or normalization of
+    the physical vector.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_open_region_cut}
+    Translating every incident-edge assignment by the same group element
+    permutes the internal summation and translates the crossing
+    labels, while local invariance leaves the product of site coefficients
+    unchanged. Averaging this symmetry gives $AP=A$. The exact cut
+    identity gives $K=AB^{\mathsf T}$, and inserting $P$ and then
+    $C=P/\sqrt r$ yields the remaining formulas.
+\end{proof}
+
+\begin{lemma}[Independent finite choices]%
+    \label{thm:peps_finite_indicator_sum}
+    \lean{Fintype.prod_sum_boole}
+    \leanok
+    Let $I$ be a finite set, let $J_i$ be finite sets indexed by $i\in I$,
+    and let $P_i$ be a condition on $J_i$. In every commutative semiring,
+    \begin{align}
+        \prod_{i\in I}\sum_{j\in J_i}\mathbf1_{P_i(j)}
+        =\sum_{f\in\prod_{i\in I}J_i}
+        \mathbf1_{\{P_i(f_i)\text{ for every }i\in I\}}.
+    \end{align}
+    Thus multiplying the separate numbers of admissible choices counts
+    the admissible simultaneous choices.
+\end{lemma}
+
+\begin{proof}\leanok
+    Distributing the finite product over the finite sums reduces each summand to a product of
+    zero-one indicators, which is the indicator of the conjunction of their conditions.
+\end{proof}
+
+\begin{lemma}[Physical maps commute with the open-region contraction]%
+    \label{thm:peps_region_physical_maps}
+    \lean{TNLean.PEPS.regionPhysicalProductMatrix_mul,
+        TNLean.PEPS.regionPhysicalProductMatrix,
+        TNLean.PEPS.regionPhysicalProductMatrix_one,
+        TNLean.PEPS.regionPhysicalProductMatrix_conjTranspose,
+        TNLean.PEPS.regionPhysicalProductMatrix_isIsometry,
+        TNLean.PEPS.regionPhysicalMap,
+        TNLean.PEPS.regionPhysicalMap_apply,
+        TNLean.PEPS.regionPhysicalMap_comp,
+        TNLean.PEPS.regionPhysicalMap_openRegionWeight}
+    \leanok
+    \uses{def:peps_open_region_contraction}
+    For a region $R$, let $F_v$ be a physical matrix at each vertex, allowing
+    different input and output dimensions at different vertices. Their product
+    matrix is
+    \begin{align}
+        F_R(\tau,\sigma)=\prod_{v\in R}F_v(\tau_v,\sigma_v).
+    \end{align}
+    Then $(FL)_R=F_RL_R$, $(F^\dagger)_R=F_R^\dagger$, and identity local maps
+    give the identity on the physical space of the region. In particular,
+    local isometries give an isometry $F_R$.
+
+    For the physical operation on a block in
+    \cite[\S6.1, accessible virtual coordinates]{Schuch2010PEPS}, applying $F_R$ to the open-region tensor is the contraction of the
+    transformed site coefficients:
+    \begin{align}
+        (F_R T_R)(\tau,\mu)=
+        \sum_{\eta:\eta|_{\partial R}=\mu}
+        \prod_{v\in R}\sum_s F_v(\tau_v,s)A_v(s,\eta|_v).
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Expanding the matrix products and interchanging the finite sums over physical
+    and virtual labels factors the sum over independent physical labels at
+    each vertex. Composition follows from the same finite distributivity;
+    complex conjugation gives the adjoint identity. Applying these identities
+    to $F_v^\dagger F_v=\mathbb 1$ proves the isometry assertion.
+\end{proof}
+
+\begin{definition}[Local regular Gram kernel]%
+    \label{def:peps_regular_site_gram}
+    \lean{TNLean.PEPS.regularLegRepresentation,
+        TNLean.PEPS.regularLegRepresentation_fin,
+        TNLean.PEPS.regularLegRepresentation_apply,
+        TNLean.PEPS.regularLegRepresentation_unitary,
+        TNLean.PEPS.regularLegProjector,
+        TNLean.PEPS.regularLegProjector_fin,
+        TNLean.PEPS.regularLegProjector_apply,
+        TNLean.PEPS.regularSiteMap,
+        TNLean.PEPS.toMatrix_regularSiteMap,
+        TNLean.PEPS.tensorSiteGram}
+    \leanok
+    Let $E_v$ be the set of virtual legs incident to a site $v$.
+    In the group basis, its coefficient map $A_v$ has entries
+    $A_v(s,\eta)=a_v(\eta;s)$, for $\eta\in G^{E_v}$.
+    Simultaneous left translation acts on functions by
+    $(U_gf)(\eta)=f(g^{-1}\eta)$, and its invariant projector has entries
+    \begin{align}
+        P_v(\eta,\theta)=\frac1{|G|}\sum_{g\in G}
+        \mathbf 1_{\{\eta=g\theta\}}.
+    \end{align}
+    The local Gram kernel is
+    $\sum_s\overline{a_v(\eta;s)}a_v(\theta;s)$.
+\end{definition}
+
+\begin{lemma}[Gram formula at an isometric regular site]%
+    \label{thm:peps_regular_site_gram}
+    \lean{TNLean.PEPS.IsGIsometric.exists_regularSiteGram,
+        TNLean.PEPS.IsGInjective.regularSiteMap_translation}
+    \leanok
+    \uses{def:peps_regular_site_gram}
+    If $A_v$ is $G$-isometric, there is $c_v>0$ such that
+    \begin{align}
+        \sum_s\overline{a_v(\eta;s)}a_v(\theta;s)
+        =\frac{c_v}{|G|}\sum_{g\in G}
+        \mathbf 1_{\{\eta=g\theta\}}.
+        \label{eq:peps_regular_site_gram}
+    \end{align}
+    Its coefficients are invariant under simultaneous left translation;
+    this invariance already follows from $G$-injectivity.
+    This is the group-basis form of
+    \cite[Definition~6.1]{Schuch2010PEPS}, with the positive scalar
+    convention of \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    The defining adjoint identity is $A_v^\dagger A_v=c_vP_v$.
+    Evaluating both sides in the group basis gives
+    (\ref{eq:peps_regular_site_gram}).
+    The identity $A_vU_g=A_v$ gives coefficient invariance.
+\end{proof}
+
+\begin{definition}[The canonical regular-projector region]%
+    \label{def:peps_regular_projector_open_region}
+    \lean{TNLean.PEPS.RegionHalfEdgeConfig,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix,
+        TNLean.PEPS.regularSiteMap_regularLegProjector,
+        TNLean.PEPS.isGIsometric_regularLegProjector,
+        TNLean.PEPS.regularProjectorOpenRegionMatrix_apply,
+        TNLean.PEPS.regionIncidentBoundaryLabel_regularGroup_iff}
+    \leanok
+    \uses{def:peps_open_region_contraction, def:peps_regular_site_gram,
+        thm:peps_finite_indicator_sum}
+    Let $R$ be a finite region of the original graph, $E_R$ its incident
+    edges, and $\partial R$ its crossing edges. Write $E_v$ for the
+    incident edges at $v$ and put $\kappa=|G|$. The canonical physical
+    configuration is $\alpha=(\alpha_v)_{v\in R}$, with
+    $\alpha_v\in G^{E_v}$. The local canonical site map is the regular
+    averaging projector $P_v$; it is $G$-isometric with factor one.
+    Define the canonical open-region coefficient matrix by
+    \begin{align}
+        B_R(\alpha,\theta)
+         & =\sum_{\substack{\eta\in G^{E_R}                    \\
+                \eta|_{\partial R}=\theta}}
+        \prod_{v\in R}P_v(\alpha_v,\eta|_{E_v})\notag          \\
+         & =\kappa^{-|R|}\sum_{\eta\in G^{E_R}}\sum_{q\in G^R}
+        \mathbf1_{\{\eta|_{\partial R}=\theta\}}
+        \mathbf1_{\{\alpha_v=q_v\eta|_{E_v}\ (v\in R)\}}.
+        \label{eq:peps_projector_region}
+    \end{align}
+    Every internal bond is summed once, and no exterior bond label
+    occurs. As in the exposed virtual coordinates
+    of \cite[Observation after Lemma~6.3]{Schuch2010PEPS}, encoding group labels in finite coordinates preserves
+    the boundary condition.
+\end{definition}
+
+\begin{lemma}[Accessibility of a regular region]%
+    \label{thm:peps_regular_open_region_accessibility}
+    \lean{TNLean.PEPS.IsGInjective.exists_regularProjectorCoefficients,
+        TNLean.PEPS.IsGIsometric.exists_regularProjectorCoefficients,
+        TNLean.PEPS.IsGInjective.regularSiteMap_projector_coefficients,
+        TNLean.PEPS.regionPhysicalMap_eq_regularProjectorOpenRegionMatrix,
+        TNLean.PEPS.regionPhysicalProductMatrix_mul_regularOpenRegionMatrix,
+        TNLean.PEPS.regionPhysicalMap_regularProjectorOpenRegionMatrix,
+        TNLean.PEPS.exists_regularProjectorOpenRegionMatrix}
+    \leanok
+    \uses{def:peps_regular_projector_open_region, def:peps_g_injective}
+    Suppose the local regular site maps $A_v$ are $G$-isometric,
+    with positive factors $c_v$. Let $T_R(\theta)$ be the
+    contracted physical column with crossing labels $\theta$,
+    and write $B_R(\theta)$ for the column in
+    Definition~\ref{def:peps_regular_projector_open_region}. With
+    $L_v=c_v^{-1}A_v^\dagger$, one has
+    \begin{align}
+        \left(\bigotimes_{v\in R}L_v\right)T_R(\theta)
+         & =B_R(\theta),\notag \\
+        \left(\bigotimes_{v\in R}A_v\right)B_R(\theta)
+         & =T_R(\theta).
+        \label{eq:peps_region_accessibility}
+    \end{align}
+    The reverse identity needs only the local invariance of the
+    $G$-injective site maps. More generally, any local matrices
+    $F_v$ satisfying $F_vA_v=P_v$ give the forward identity.
+    Such matrices also exist for arbitrary regular $G$-injective sites,
+    by their local left-inverse property.
+    These assertions concern the contracted columns and
+    do not require the physical maps to be inverse on unused
+    coordinates. No region Gram identity is assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_site_gram, thm:peps_region_physical_maps}
+    The local identities are
+    $c_v^{-1}A_v^\dagger A_v=P_v$ and $A_vP_v=A_v$.
+    The first follows from the local regular Gram kernel; the second
+    follows from virtual invariance by averaging the group action.
+    Applying the physical product maps inside the internal-bond
+    contraction turns each local coefficient into the corresponding
+    matrix product, giving~(\ref{eq:peps_region_accessibility}).
+    Expanding $P_v$ and distributing the finite products gives
+    the translation formula~(\ref{eq:peps_projector_region}).
+\end{proof}
+
+\begin{definition}[Regular bonds with inserted group operators]%
+    \label{def:peps_regular_twisted_region}
+    \lean{TNLean.PEPS.regularTwistedLabels,
+        TNLean.PEPS.regularTwistedSite,
+        TNLean.PEPS.regularTwistedOpenRegionMatrix}
+    \leanok
+    \uses{def:peps_regular_physical_cut}
+    Order the endpoints of each bond $e$, writing them as $s(e)<t(e)$.
+    For an assignment $u_e\in G$, the inserted regular matrix makes
+    the label at $t(e)$ equal to $u_e$ times the label at $s(e)$.
+    Equivalently, replacing the coefficient at vertex $v$ by
+    \begin{align}
+        A^u_{v,s}(\eta)=A_{v,s}(\eta^u),\qquad
+        \eta^u_e=
+        \begin{cases}u_e\eta_e, & v=t(e), \\ \eta_e,&v=s(e),
+        \end{cases}
+    \end{align}
+    and contracting the internal bonds with a fixed crossing configuration
+    gives the open map $T_R^u$.
+\end{definition}
+
+\begin{definition}[The canonical projector region with bond insertions]%
+    \label{def:peps_regular_projector_twisted_region}
+    \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_one,
+        TNLean.PEPS.regularProjectorTwistedRegionMatrix_apply}
+    \leanok
+    \uses{def:peps_regular_twisted_region,
+        def:peps_regular_projector_open_region, thm:peps_finite_indicator_sum}
+    For arbitrary inserted group elements $u_e$, including those on
+    crossing bonds, define
+    \begin{align}
+        B_R^u(\alpha,\theta)
+         & =\sum_{\substack{\eta\in G^{E_R}                    \\
+                \eta|_{\partial R}=\theta}}
+        \prod_{v\in R}P_v(\alpha_v,\eta^u|_{E_v})              \\
+         & =\kappa^{-|R|}\sum_{\eta\in G^{E_R}}\sum_{q\in G^R}
+        \mathbf1_{\{\eta|_{\partial R}=\theta\}}
+        \mathbf1_{\{\alpha_v=q_v\eta^u|_{E_v}\ (v\in R)\}}.
+        \label{eq:peps_twisted_projector_region}
+    \end{align}
+    Here the half-edge modification $\eta^u$ is that of
+    Definition~\ref{def:peps_regular_twisted_region}. Identity insertions
+    recover $B_R$ as the finite contraction of the local
+    averaging-projector sites with the inserted regular operators.
+\end{definition}
+
+\begin{lemma}[Accessibility with arbitrary regular bond insertions]%
+    \label{thm:peps_regular_twisted_region_accessibility}
+    \lean{TNLean.PEPS.regionPhysicalMap_eq_regularProjectorTwistedRegionMatrix,
+        TNLean.PEPS.regionPhysicalMap_regularProjectorTwistedRegionMatrix,
+        TNLean.PEPS.exists_regularProjectorTwistedRegionMatrix_of_isGInjective,
+        TNLean.PEPS.exists_regularProjectorTwistedRegionMatrix}
+    \leanok
+    \uses{def:peps_regular_projector_twisted_region}
+    Let the original regular site maps $A_v$ be $G$-injective, and
+    choose local matrices $F_v$ satisfying $F_vA_v=P_v$. The same
+    matrices work for every region and every assignment of inserted
+    group elements:
+    \begin{align}
+        \left(\bigotimes_{v\in R}F_v\right)T_R^u(\theta)=B_R^u(\theta),
+        \qquad
+        \left(\bigotimes_{v\in R}A_v\right)B_R^u(\theta)=T_R^u(\theta).
+    \end{align}
+    If the sites are $G$-isometric with factors $c_v>0$, one may take
+    $F_v=c_v^{-1}A_v^\dagger$. No connectedness or global Gram formula
+    is required. These are the accessibility identities of
+    \cite[Observation after Lemma~6.3]{Schuch2010PEPS}, extended
+    algebraically to arbitrary bond insertions.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_open_region_accessibility,
+        thm:peps_region_physical_maps}
+    Applying the physical product map inside the contraction preserves
+    the local identity $F_vA_v=P_v$ at the modified
+    virtual label $\eta^u|_{E_v}$, proving the forward equality.
+    In the reverse direction, $A_vP_v=A_v$ gives
+    $A_vF_vA_v=A_v$ at the modified label, and expanding the local
+    averages yields the finite-sum formula
+    (\ref{eq:peps_twisted_projector_region}) for $B_R^u$.
+\end{proof}
+
+\begin{lemma}[The torus closure as a twisted graph contraction]%
+    \label{thm:peps_regular_torus_closure_cut_identification}
+    \lean{TNLean.PEPS.torusClosureEdgeAssignment_right,
+        TNLean.PEPS.torusIncidentSite,
+        TNLean.PEPS.torusClosureEdgeAssignment,
+        TNLean.PEPS.torusClosureEdgeAssignment_up,
+        TNLean.PEPS.torusRightEdge_head_of_wrap,
+        TNLean.PEPS.torusUpEdge_head_of_wrap,
+        TNLean.PEPS.torusRegularBondConfigEquiv,
+        TNLean.PEPS.torusClosureBondConfigEquiv,
+        TNLean.PEPS.torusClosureBondConfigEquiv_right,
+        TNLean.PEPS.torusClosureBondConfigEquiv_up,
+        TNLean.PEPS.torusClosureTwistedLabels_top,
+        TNLean.PEPS.torusClosureTwistedLabels_right,
+        TNLean.PEPS.torusClosureTwistedLabels_down,
+        TNLean.PEPS.torusClosureTwistedLabels_left,
+        TNLean.PEPS.torusGClosure_eq_stateCoeff_twisted,
+        TNLean.PEPS.torusGClosure_assembleRegion_eq_regularPhysicalCutMatrix,
+        TNLean.PEPS.torusGClosure_cut_eq_regularPhysicalCutState}
+    \leanok
+    \uses{def:peps_torus_g_closure, def:peps_regular_twisted_region}
+    On a torus of width and height at least three, the four incident
+    graph edges are exactly the top, right, down and left virtual legs.
+    The closure vector $\psi_{g,h}$ equals the contraction of
+    the graph tensor with ordered-head assignment
+    \begin{align}
+        u_e=
+        \begin{cases}
+            h^{-1}, & e\text{ is a horizontal wrap bond}, \\
+            g,      & e\text{ is a vertical wrap bond},   \\
+            1,      & \text{otherwise}.
+        \end{cases}
+    \end{align}
+    Its coefficient vector across any region cut is the twisted
+    physical cut state. No commutativity or isometry assumption is
+    required for these contraction identities. The circumference
+    restriction ensures that the simple graph distinguishes all four
+    incident virtual legs \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Enumerating the graph bonds by horizontal and vertical torus bonds,
+    at a horizontal wrap bond the ordered head is the native tail;
+    replacing its summed label by $h$ times the native tail label makes the inserted $h^{-1}$ give the original native tail, while
+    the other endpoint gives the native head. At a vertical wrap bond,
+    the ordered head is the native head, so the assignment is $g$.
+    All four site labels then coincide with those of the native closure
+    contraction under a bijective change of labels, and reading the resulting
+    identity in the two sets of physical cut coordinates gives the cut statements.
+\end{proof}

@@ -8,6 +8,7 @@ import TNLean.MPS.MPU.SourceFactorChoice
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The gate statements for every choice of compact decompositions
@@ -89,6 +90,56 @@ theorem reindex_mul_kronecker [Fintype m'] [Fintype n'] (er : m ≃ m') (el : n 
         (Matrix.reindex er er A ⊗ₖ Matrix.reindex el el B) := by
   rw [Matrix.kroneckerMap_reindex, Matrix.reindex_apply, Matrix.reindex_apply,
     Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
+
+/-- A common coordinate relabeling preserves the local adjoint gate equation.
+Source context: CPSV17, `UUdaggertrick`, lines 1214–1252; this is its
+physical-pair coordinate transport. -/
+theorem reindex_adjoint_certificate
+    {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (e : ι ≃ κ) {A B : Matrix (ι × ι) (ι × ι) ℂ}
+    {x : Matrix ι ι ℂ} {σ : ℂ}
+    (h : A = σ • (x ⊗ₖ xᴴ) * Bᴴ) :
+    Matrix.reindex (e.prodCongr e) (e.prodCongr e) A =
+      σ • (Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᴴ) *
+        (Matrix.reindex (e.prodCongr e) (e.prodCongr e) B)ᴴ := by
+  let p := e.prodCongr e
+  let E := Matrix.reindexLinearEquiv ℂ ℂ p p
+  have h' := congrArg E h
+  rw [Matrix.smul_mul, map_smul] at h'
+  conv_rhs at h' => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
+  have hx : E (x ⊗ₖ xᴴ) = Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᴴ := by
+    simp only [E, p, Matrix.coe_reindexLinearEquiv]
+    rw [Matrix.conjTranspose_reindex]
+    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e x xᴴ).symm
+  rw [hx] at h'
+  simp only [E, p, Matrix.coe_reindexLinearEquiv, Matrix.conjTranspose_reindex] at h'
+  rw [Matrix.smul_mul]
+  exact h'
+
+/-- A common coordinate relabeling preserves the local transposition gate equation.
+Source context: CPSV17, `UUtransposetrick`, lines 1258–1288; this is its
+physical-pair coordinate transport. -/
+theorem reindex_transposition_certificate
+    {ι κ : Type*} [Fintype ι] [Fintype κ]
+    (e : ι ≃ κ) {A B : Matrix (ι × ι) (ι × ι) ℂ}
+    {x : Matrix ι ι ℂ} {σ : ℂ}
+    (h : A = σ • (x ⊗ₖ xᵀ) * Bᵀ) :
+    Matrix.reindex (e.prodCongr e) (e.prodCongr e) A =
+      σ • (Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᵀ) *
+        (Matrix.reindex (e.prodCongr e) (e.prodCongr e) B)ᵀ := by
+  let p := e.prodCongr e
+  let E := Matrix.reindexLinearEquiv ℂ ℂ p p
+  have h' := congrArg E h
+  rw [Matrix.smul_mul, map_smul] at h'
+  conv_rhs at h' => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
+  have hx : E (x ⊗ₖ xᵀ) = Matrix.reindex e e x ⊗ₖ (Matrix.reindex e e x)ᵀ := by
+    simp only [E, p, Matrix.coe_reindexLinearEquiv]
+    rw [Matrix.transpose_reindex]
+    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e x xᵀ).symm
+  rw [hx] at h'
+  simp only [E, p, Matrix.coe_reindexLinearEquiv, Matrix.transpose_reindex] at h'
+  rw [Matrix.smul_mul]
+  exact h'
 
 omit [DecidableEq m] [DecidableEq n] in
 /-- A product vector times a Kronecker product is the product of the two vector-matrix
@@ -334,10 +385,7 @@ theorem trace_mul_eq_sourceV_mul_sourceU_swap {ρ : Matrix (Fin D) (Fin D) ℂ}
       exact Finset.sum_comm
     _ = ∑ l, ∑ α, ∑ β, ∑ r, f α β l r := Finset.sum_comm
     _ = ∑ l, ∑ α, ∑ r, ∑ β, f α β l r := by
-      apply Finset.sum_congr rfl
-      intro l _
-      apply Finset.sum_congr rfl
-      intro α _
+      refine Finset.sum_congr₂ fun l _ α _ ↦ ?_
       exact Finset.sum_comm
     _ = ∑ l, ∑ r, ∑ α, ∑ β, f α β l r := by
       apply Finset.sum_congr rfl

@@ -89,7 +89,7 @@ $[0,1]$ by its nonnegative upper bound).
     \end{align}
 \end{proof}
 
-\begin{theorem}[Growth of the rounded band count]
+\begin{lemma}[Growth of the rounded band count]
     \label{thm:area_law_band_count_growth}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_le_K}
     \leanok
@@ -97,7 +97,7 @@ $[0,1]$ by its nonnegative upper bound).
     $K_n=\lfloor\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)\rfloor$
     \cite[Section~9]{OpenAI2026AreaLaw}, every integer $B\ge0$ satisfies
     $B\le K_n$ for all sufficiently large $n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $1-\ell-\mu>0$, eventually $n^{1-\ell-\mu}\ge16B$ and
     $n^{1-\ell},n^\mu\ge2$, so
@@ -111,7 +111,7 @@ $[0,1]$ by its nonnegative upper bound).
     and dividing by $8\lfloor n^\mu\rfloor>0$ yields $B\le K_n$.
 \end{proof}
 
-\begin{theorem}[Scanner estimate from the conclusions of its inputs]
+\begin{lemma}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
         TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le,
@@ -154,7 +154,7 @@ $[0,1]$ by its nonnegative upper bound).
         \widetilde S_Q(j) & \le C_e(nL^e+n)+n^{-247}.
         \label{eq:al_scanner_truncated_entropies}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts,lem:al_continuity_fixed_coefficient}
     Applying Lemma~\ref{lem:al_continuity_fixed_coefficient} with
@@ -205,21 +205,21 @@ $[0,1]$ by its nonnegative upper bound).
     and charge-list constant $C_1$ under the test geometry and entropy inputs of
     \cite[Proposition~9.2]{OpenAI2026AreaLaw}, there is a ground vector
     $\widetilde\Omega$ of $\widetilde H$ with gap $g/2$ satisfying
-    Theorem~\ref{thm:al_scan_truncation_inputs} such that, for every auxiliary
+    Lemma~\ref{thm:al_scan_truncation_inputs} such that, for every auxiliary
     dimension, total weight $W\ge1$ ($a=W/K$), and replica vectors, if the scan
     rounds satisfy the conclusions of Propositions~7.4 and~8.1 for
     $(W,\widetilde\Omega)$ with the replica conditions of
-    Theorem~\ref{thm:al_scanner_from_inputs}, then the conclusions of
-    Theorem~\ref{thm:al_scanner_from_inputs} hold (Proposition~9.2 conditional
+    Lemma~\ref{thm:al_scanner_from_inputs}, then the conclusions of
+    Lemma~\ref{thm:al_scanner_from_inputs} hold (Proposition~9.2 conditional
     on Propositions~7.4 and~8.1 for the scan rounds).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
         thm:al_scan_truncation_inputs}
     Combine the truncation inputs for $\widetilde\Omega$ from
-    Theorem~\ref{thm:al_scan_truncation_inputs} and the scan-round history
-    inputs from Theorem~\ref{thm:al_scan_actual_history_facts} (which persist
+    Lemma~\ref{thm:al_scan_truncation_inputs} and the scan-round history
+    inputs from Lemma~\ref{thm:al_scan_actual_history_facts} (which persist
     under increasing $C_0$ and the logarithmic power once $\log n\ge1$ and
     decreasing $c_0$) with the assumed conclusions of Propositions~7.4 and~8.1,
-    and apply Theorem~\ref{thm:al_scanner_from_inputs}.
+    and apply Lemma~\ref{thm:al_scanner_from_inputs}.
 \end{proof}

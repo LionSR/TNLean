@@ -11,7 +11,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These are scoped assertions about actual cells, not the full proposition.
 
-\begin{theorem}[Elementary sides lie on a nondegenerate square boundary]
+\begin{lemma}[Elementary sides lie on a nondegenerate square boundary]
     \label{thm:area_law_elementary_side_boundary_geometry}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_geometry}
     \leanok
@@ -29,7 +29,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
         a_2=b_2\in\{p_2,q_2\}.
     \end{align}
     No layer-membership or late-scale assumption is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_unsplit_side_endpoints,
         thm:area_law_elementary_side_geometry}
@@ -40,7 +40,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     coordinate by $t$ or $t/2$.
 \end{proof}
 
-\begin{theorem}[Unique opposing fine cell or dummy neighborhood]
+\begin{lemma}[Unique opposing fine cell or dummy neighborhood]
     \label{thm:area_law_unique_elementary_side_opponent}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_elementarySide_opponent}
     \leanok
@@ -65,7 +65,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     The dummy neighborhood is a single region even when several coarse
     cells contribute to it. No further lower bound on the opposing
     layer index is imposed beyond $h\ge k_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_elementary_side_opponent,
         thm:area_law_elementary_side_boundary_geometry,

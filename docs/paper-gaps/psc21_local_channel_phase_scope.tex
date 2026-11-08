@@ -97,6 +97,36 @@ gate into fewer than $2q^2$ nearest-neighbour gates on the original chain is
 not formalized, so no bound on the original-chain depth of a blocked
 conversion is asserted.
 
+\section{Regrouping an existing local channel protocol}
+For $M,k,d\ge1$ there is an internal comparison in the enlarged-site model: a depth-$T$
+protocol on $Mk$ sites can be regrouped into $M$ sites with exactly the
+conjugated channel on every input operator. The identity also holds with an
+arbitrary untouched external reference. If every intermediate local dimension
+is positive and at most $B$, every regrouped dimension is positive and at most
+$B^k$.\footnote{Formal
+    declarations: \leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_regrouped}
+    and \leanid{QuantumCircuit.regroupChannel_blockSites_reference} in
+    \doclink{TNLean/Circuit/Channel/RegroupedProtocol}.}
+
+The resulting depth is at most $2T$ for even $M$ and $3T$ in general.
+The original gates whose left sites belong to one block are composed into
+one channel on that block and its successor. Alternating bond colors suffice
+on an even ring; an odd ring uses a third color for its closing bond.
+For $M=3,k=2$, the disjoint original bonds $(1,2),(3,4),(5,0)$ become a
+triangle. Thus the direct partition into whole-block matching layers need
+not use only two layers. This does not exclude other implementations of the
+same channel. Onsite operations remain free; when $M=1$ the entire regrouped
+channel has depth zero. The $M=2$ bound is $2T$.
+
+Consequently, an unblocked conversion of depth at most $T$ followed by a
+blocked conversion of depth at most $U$ composes with depth bound $2T+U$
+for even $M$, or $3T+U$ in general.\footnote{Formal declaration:
+    \leanid{QuantumCircuit.IsLocalChannelConversion.then_blocked}.}
+This comparison implements grouping of an existing protocol. It supplies
+neither the reverse fixed-physical-port compiler nor the source's fixed
+number of classical-communication blocks, and does not prove the phase
+classification.
+
 \section{Remaining scope}
 The equivalence proved here belongs to the enlarged-site local-channel model.
 It is not identified with the source's phase equivalence or asserted to be

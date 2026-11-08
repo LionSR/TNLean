@@ -35,24 +35,24 @@
     An incoming exterior action $U_e(g)$ is equivalently outgoing for
     $U_e^\vee(g)=U_e(g^{-1})^{\mathsf T}$, since
     $U_e^\vee(g^{-1})^{\mathsf T}=U_e(g)$. Semi-regularity is preserved
-    by this change of orientation, by Theorem~\ref{thm:peps_semiregular_dual}.
+    by this change of orientation, by Lemma~\ref{thm:peps_semiregular_dual}.
 \end{definition}
 
-\begin{theorem}[Removal of both internal group labels]%
+\begin{lemma}[Removal of both internal group labels]%
     \label{thm:peps_three_block_remove_labels}
     \lean{TNLean.PEPS.ThreeBlockDependent.exists_remove_internal_labels}
     \leanok
     \uses{def:peps_three_block_core_action}
     Every $p:E\to G$ admits $q:V\to G$ such that
     $f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1}=1$ for $e\notin C_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Setting $q_0=1$, $q_1=p_0^{-1}$, $q_2=p_0^{-1}p_1^{-1}$, and $q_v=1$ for
     $v\notin T$ gives $q_1p_0q_0^{-1}=1$ on $e=0$ and
     $q_2p_1q_1^{-1}=p_0^{-1}p_1^{-1}p_1p_0=1$ on $e=1$.
 \end{proof}
 
-\begin{theorem}[Intersection of the full graph cuts]%
+\begin{lemma}[Intersection of the full graph cuts]%
     \label{thm:peps_three_block_cut_intersection}
     \lean{TNLean.PEPS.ThreeBlockDependent.cutSpace_left_inf_right}
     \leanok
@@ -65,12 +65,12 @@
         \label{eq:peps_three_block_cut_intersection}
     \end{align}
     This assertion does not require semi-regularity or unitarity of $U_e$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_cut_intersection,thm:peps_three_block_remove_labels}
     Since $C_L\cap C_R=(E\setminus\{0\})\cap(E\setminus\{1\})=C_0$, combining
-    Theorem~\ref{thm:peps_three_block_remove_labels} with
-    Theorem~\ref{thm:peps_open_cut_intersection} yields~(\ref{eq:peps_three_block_cut_intersection}).
+    Lemma~\ref{thm:peps_three_block_remove_labels} with
+    Lemma~\ref{thm:peps_open_cut_intersection} yields~(\ref{eq:peps_three_block_cut_intersection}).
 \end{proof}
 
 \begin{definition}[Identity tensors at the exterior endpoints]%
@@ -93,14 +93,14 @@
     $\widetilde T_v=I_{\C^{\mathcal X_v}}$ (hence surjective) for $v\notin T$.
 \end{definition}
 
-\begin{theorem}[Extension of core injectivity]%
+\begin{lemma}[Extension of core injectivity]%
     \label{thm:peps_three_block_extended_injectivity}
     \lean{TNLean.PEPS.ThreeBlockDependent.isGInjective_extendedTensor}
     \leanok
     \uses{def:peps_three_block_identity_extension,def:peps_three_block_core_action}
     If the three $T_v$, $v\in T$, are $G$-injective for $\rho_v$,
     all eleven $\widetilde T_v$ are $G$-injective for $\rho_v^f$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By~(\ref{eq:peps_three_block_identity_extension}) and
     Definition~\ref{def:peps_three_block_core_action},
@@ -108,7 +108,7 @@
     $(\widetilde T_v,\rho_v^f)=(I_{\C^{\mathcal X_v}},I)$ for $v\notin T$.
 \end{proof}
 
-\begin{theorem}[Nonempty alphabets of semi-regular representations]%
+\begin{lemma}[Nonempty alphabets of semi-regular representations]%
     \label{thm:peps_semiregular_alphabet_nonempty}
     \lean{TNLean.PEPS.ThreeBlockDependent.nonempty_of_isSemiRegular,TNLean.PEPS.ThreeBlockDependent.nonempty_bonds_of_isSemiRegular}
     \leanok
@@ -116,7 +116,7 @@
     A semi-regular matrix representation on $\C^X$, for finite $X$,
     has $X\ne\varnothing$. Hence independently semi-regular $U_e$
     yield a choice of one coordinate in each $X_e$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:peps_semiregular}, a semi-regular representation
     contains the trivial representation and hence has a nonzero invariant
@@ -139,13 +139,13 @@
     on $T$ and $\tau$ elsewhere. Then $r_Ta_T(s,\tau)=s$.
 \end{definition}
 
-\begin{theorem}[Recovery after constant physical extension]%
+\begin{lemma}[Recovery after constant physical extension]%
     \label{thm:peps_three_core_extension_injective}
     \lean{TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension_injective}
     \leanok
     \uses{def:peps_three_core_physical_coordinates}
     If an exterior physical configuration $\tau$ exists, $J_T$ is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating $J_T\psi=J_T\chi$ at $a_T(s,\tau)$ gives
     $\psi(s)=(J_T\psi)(a_T(s,\tau))=(J_T\chi)(a_T(s,\tau))=\chi(s)$.
@@ -170,7 +170,7 @@
     an arbitrary joint tensor on the doubled cut and $\Sigma_{T\setminus Q}$.
 \end{definition}
 
-\begin{theorem}[Localization of lifted graph contractions]%
+\begin{lemma}[Localization of lifted graph contractions]%
     \label{thm:peps_three_core_localization}
     \lean{TNLean.PEPS.ThreeBlockDependent.corePhysicalExtension_coreLiftedCutMap,
         TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_boundary_slice,TNLean.PEPS.ThreeBlockDependent.comap_liftedCutSpace_eq_coreLiftedCutSpace}
@@ -187,7 +187,7 @@
         J_T^{-1}(\widehat{\mathcal S}_{A,Q,C}) & =\mathcal K_{A,Q,C}.
         \label{eq:peps_three_core_localization}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $Q\subseteq T$, only the boundary factor in~(\ref{eq:peps_three_core_lifted_cut})
     depends on $V\setminus T$, so $M^\uparrow$ and $N_\tau$ give the two
@@ -247,7 +247,7 @@
     so that $m(j_{\xi_0}X)=X$.
 \end{definition}
 
-\begin{theorem}[Elimination of auxiliary exterior endpoints]%
+\begin{lemma}[Elimination of auxiliary exterior endpoints]%
     \label{thm:peps_three_block_open_boundary_exact}
     \lean{TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_core_exterior,
         TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_openBoundaryMap,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_openBoundarySpace}
@@ -258,7 +258,7 @@
     $\sum_\beta F(\beta)=\sum_\eta\sum_\xi F(a(\eta,\xi))$, giving
     $K_{A,T,C_0}(M)=\zeta_A(m(M))$; if an exterior configuration $\xi_0$
     exists, $\mathcal K_{A,T,C_0}=\mathcal O_A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting $\beta=a(\eta,\xi)$ into~(\ref{eq:peps_three_core_lifted_cut})
     and summing over $\xi$ yields $m(M)$ inside~(\ref{eq:peps_three_block_open_boundary}),
@@ -325,7 +325,7 @@
     For any fixed $\xi_0$, $m_{Q,C}(j_{\xi_0}M)=M$.
 \end{definition}
 
-\begin{theorem}[Exact minimal regional contraction ranges]%
+\begin{lemma}[Exact minimal regional contraction ranges]%
     \label{thm:peps_three_block_regional_boundary_exact}
     \lean{TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_region_outside,
         TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_regionalBoundaryMap,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_regionalBoundarySpace}
@@ -339,7 +339,7 @@
     \end{align}
     If a complementary configuration $\xi_0$ exists, then
     $\mathcal K_{A,Q,C}=\mathcal G_{A,Q,C}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Splitting $\beta=a_Q(\eta,\xi)$ in~(\ref{eq:peps_three_core_lifted_cut})
     leaves $w_C(a_Q(\eta,\xi))=w_{Q,C}(\eta)$ and $\prod_{v\in Q}A_v(\eta_v,s_v)$
@@ -348,7 +348,7 @@
     $K_{A,Q,C}(j_{\xi_0}M)=\Gamma_{A,Q,C}(m_{Q,C}(j_{\xi_0}M))=\Gamma_{A,Q,C}(M)$.
 \end{proof}
 
-\begin{theorem}[Core-localized intersection of the doubled cuts]%
+\begin{lemma}[Core-localized intersection of the doubled cuts]%
     \label{thm:peps_three_block_core_lifted_intersection}
     \lean{TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_inf_eq_openBoundarySpace}
     \leanok
@@ -363,15 +363,15 @@
         \mathcal K_{\widetilde A,S,C_R}=\mathcal O_{\widetilde A}.
         \label{eq:peps_three_block_core_lifted_intersection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_alphabet_nonempty,thm:peps_three_core_localization,
         thm:peps_lifted_cut_intersection,thm:peps_three_block_cut_intersection,
         thm:peps_three_block_extended_injectivity,thm:peps_three_block_open_boundary_exact}
-    By Theorems~\ref{thm:peps_semiregular_alphabet_nonempty}
+    By Lemmas~\ref{thm:peps_semiregular_alphabet_nonempty}
     and~\ref{thm:peps_three_block_extended_injectivity}, all bond alphabets are
     nonempty, $\widetilde T_v$ is $G$-injective on $V$ and surjective on
-    $V\setminus T$, and $R\cup S=T$. Theorem~\ref{thm:peps_lifted_cut_intersection}
+    $V\setminus T$, and $R\cup S=T$. Lemma~\ref{thm:peps_lifted_cut_intersection}
     and~(\ref{eq:peps_three_block_cut_intersection}) give
     \begin{align}
         \widehat{\mathcal S}_{\widetilde A,R,C_L}\cap
@@ -383,10 +383,10 @@
     \end{align}
     Applying $J_T^{-1}$ via~(\ref{eq:peps_three_core_localization}) and
     $\mathcal K_{\widetilde A,T,C_0}=\mathcal O_{\widetilde A}$ from
-    Theorem~\ref{thm:peps_three_block_open_boundary_exact} yields~(\ref{eq:peps_three_block_core_lifted_intersection}).
+    Lemma~\ref{thm:peps_three_block_open_boundary_exact} yields~(\ref{eq:peps_three_block_core_lifted_intersection}).
 \end{proof}
 
-\begin{theorem}[Open-boundary intersection for $G$-injective tensors]%
+\begin{lemma}[Open-boundary intersection for $G$-injective tensors]%
     \label{thm:peps_general_three_block_intersection}
     \lean{TNLean.PEPS.ThreeBlockDependent.regionalBoundarySpace_inf_eq_openBoundarySpace}
     \leanok
@@ -468,13 +468,13 @@
     % figs3/grow-N, figs3/grow-M, figs3/grow-intersect, figs3/prove-grow.
     % The source's incoming exterior arrows are expressed by the
     % contragredient representation when an exterior edge is oriented outward.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_alphabet_nonempty,
         thm:peps_three_block_regional_boundary_exact,
         thm:peps_three_block_core_lifted_intersection}
     Semi-regularity yields one complementary virtual configuration for
-    each region, so Theorem~\ref{thm:peps_three_block_regional_boundary_exact}
+    each region, so Lemma~\ref{thm:peps_three_block_regional_boundary_exact}
     identifies the two six-leg ranges with
     $\mathcal K_{\widetilde A,R,C_L}$ and
     $\mathcal K_{\widetilde A,S,C_R}$ without restricting their joint

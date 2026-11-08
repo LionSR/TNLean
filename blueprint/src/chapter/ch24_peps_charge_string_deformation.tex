@@ -1,4 +1,4 @@
-\begin{theorem}[Weighted contractions under vertex gauges]
+\begin{lemma}[Weighted contractions under vertex gauges]
     \label{thm:peps_regular_weighted_gauge_transport}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_diagonal_vertexGauge,
         TNLean.PEPS.regularWeightedOpenRegionWeight_vertexGauge,
@@ -19,7 +19,7 @@
     \end{align}
     and for independent diagonal weights $U_{u_e}\operatorname{diag}(f_e)$, the closed contraction is preserved under $u\mapsto u'$ and $f_e(t)\mapsto f'_e(t)=f_e(\ell_{t(e)}t)$.
     In particular (\cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581), setting $\ell|_S=k^{-1}$ and $\ell|_{S^c}=1$ for $t(e_0)\in S$ and $t(e_1)\notin S$ transforms $\chi(p\eta_1^{-1}\eta_0)\mapsto\chi(p\eta_1^{-1}k^{-1}\eta_0)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting $\eta_e\mapsto\ell_{t(e)}^{-1}\eta_e$ maps the head label $u_e\eta_e\mapsto\ell_{h(e)}^{-1}u_e'\eta_e$ and boundary label $\theta_e\mapsto\theta'_e$, while local left-translation invariance cancels the vertex factors $\ell_v^{-1}$, yielding (\ref{eq:weighted_open_gauge_invariance}).
 \end{proof}
@@ -32,7 +32,7 @@
     At $v=(x,y)$, define the central charge bond $e_c$ (\cite{Schuch2010PEPS}, lines 2569--2581) as the ordered native horizontal edge joining $(x+1,y+1)$ to $(x+2,y+1)$.
 \end{definition}
 
-\begin{theorem}[The native charge--flux deformation]
+\begin{lemma}[The native charge--flux deformation]
     \label{thm:peps_torus_charge_string_deformation}
     \lean{TNLean.PEPS.torusSweptStringChargeEdge_tail_mem,
         TNLean.PEPS.IsGIsometric.graphInsertedBondNetwork_torusChargeStringDeformation}
@@ -41,7 +41,7 @@
         def:peps_torus_charge_string_edge,
         thm:peps_torus_swept_string_transport}
     On a torus with periods $w\ge 5$ and $H\ge 4$ and a regular $G$-isometric four-leg tensor, at every position $v$ (including across both seams) and for any scalar function $\chi$ and $j\in\{1,2\}$, the closed contraction with initial flux string $u^{(0)}_k$ and diagonal weight $\operatorname{diag}(\chi(pt))$ on $e_c$ equals the closed contraction with swept flux string $u^{(j)}_k$ and diagonal weight $\operatorname{diag}(\chi(pk^{-1}t))$ on $e_c$ (realizing the virtual gauge identity of \cite{Schuch2010PEPS}, lines 2560--2581, without identifying a physical braid or reunion protocol).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Since both endpoints of $e_c$ lie in the swept set $S_j$ of Theorem~\ref{thm:peps_torus_swept_string_transport}, $\ell_{t(e_c)}=k^{-1}$ in either seam orientation; applying Theorem~\ref{thm:peps_regular_weighted_gauge_transport} with (\ref{eq:vertex_gauge_transform}) gives the equality.
+    Since both endpoints of $e_c$ lie in the swept set $S_j$ of Lemma~\ref{thm:peps_torus_swept_string_transport}, $\ell_{t(e_c)}=k^{-1}$ in either seam orientation; applying Lemma~\ref{thm:peps_regular_weighted_gauge_transport} with (\ref{eq:vertex_gauge_transform}) gives the equality.
 \end{proof}

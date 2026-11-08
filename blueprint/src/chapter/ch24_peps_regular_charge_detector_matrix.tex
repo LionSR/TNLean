@@ -11,7 +11,7 @@
     \cite[charge detection]{Schuch2010PEPS}, lines 2470--2486.
 \end{definition}
 
-\begin{theorem}[Matrix properties and translation covariance of the charge projection]
+\begin{lemma}[Matrix properties and translation covariance of the charge projection]
     \label{thm:peps_regular_charge_detector_matrix}
     \lean{TNLean.PEPS.regularChargeTranslationMatrix_eq_kronecker,
         TNLean.PEPS.regularChargeDetectorMatrix_properties,
@@ -32,7 +32,7 @@
     \[
         D_\chi((zr,ws),(za,wb))=D_\chi((r,s),(a,b)).
     \]
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Express the previously constructed orthogonal projection and unitary
     translations in the canonical orthonormal basis. The two independent
@@ -40,7 +40,7 @@
     entries in their commutation identity gives the entry covariance.
 \end{proof}
 
-\begin{theorem}[Action on charge coefficient vectors]
+\begin{lemma}[Action on charge coefficient vectors]
     \label{thm:peps_regular_charge_detector_matrix_eigenvectors}
     \lean{TNLean.PEPS.regularChargeDetectorMatrix_chargeVector,
         TNLean.PEPS.regularChargeDetectorMatrix_other_chargeVector}
@@ -58,7 +58,7 @@
     \]
     These matrix identities are auxiliary to the original-spin detector in
     \cite[charge detection]{Schuch2010PEPS}, lines 2474--2486.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Express the selected-charge and distinct-charge actions of the Hilbert-space
     projection in the canonical basis.

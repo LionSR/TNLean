@@ -1,0 +1,34 @@
+%% =========================================================
+%% Chapter: Physics examples of the multi-block asymmetric
+%% compression theorem, second of three chapters: Kramers--Wannier
+%% duality and the Fibonacci and Ising fusion operators. The
+%% Fibonacci anomaly file is input right after the Fibonacci file
+%% and supplies the closing \subsection of that section.
+%% =========================================================
+
+\chapter{Fusion of non-invertible symmetry operators}%
+\label{ch:asymmetric_examples_non_invertible}
+
+This chapter continues the physical examples of the multi-block asymmetric
+compression theorem (Theorem~\ref{thm:asym_multiblock}) begun in
+Chapter~\ref{ch:asymmetric_examples} with symmetry operators that have no
+inverse: Kramers--Wannier
+duality~\cite{KramersWannier1941,Aasen2016Topological,Seiberg2024Majorana,Lootens2023Dualities},
+and the Fibonacci~\cite[Appendix~D.1]{Bultinck2017Anyons} and
+Ising~\cite[Appendix~D.2]{Bultinck2017Anyons} fusion categories and their
+anyon chains~\cite{Feiguin2007GoldenChain}, together with the review's
+Fibonacci operator~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix}.
+Building on the general
+definitions of Chapter~\ref{ch:mpo_symmetry_basics} (fusion rules, units,
+invertible and non-invertible labels, Perron--Frobenius dimensions,
+symmetric matrix product states with their nonnegative integer
+representations, and the zipper condition), each section constructs
+the explicit local tensors, evaluates their fusion tables, and computes
+their periodic compressions and anomaly invariants. The next chapter treats
+group symmetries in the same way.
+
+\input{chapter/ch25_asymmetric_examples_kramers_wannier.tex}%
+\input{chapter/ch25_asymmetric_examples_fibonacci.tex}%
+\input{chapter/ch25_asymmetric_examples_fibonacci_anomaly.tex}%
+\input{chapter/ch25_asymmetric_examples_ising.tex}%
+\input{chapter/ch25_asymmetric_examples_ising_three.tex}%

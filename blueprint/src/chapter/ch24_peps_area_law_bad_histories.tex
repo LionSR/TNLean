@@ -5,7 +5,7 @@ Retain the finite histories and physical graph from Section~\ref{sec:al_finite_s
 fill--charge pairs, so the charge at index $t$ sees the front after $t+1$ fills.
 All probabilities below are classical finite-history probabilities (\cite[Section~9, charge ancestry and availability]{OpenAI2026AreaLaw}).
 
-\begin{theorem}[Ancestry extracted from assignments]
+\begin{lemma}[Ancestry extracted from assignments]
     \label{thm:al_scan_actual_ancestry}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.ChargeAncestry,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.bandState_has_chargeAncestry,
@@ -25,12 +25,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     Assume $T\ne\varnothing$, $8Km\le L$, and $\operatorname{dist}_\infty(T,Z)>2L+10r$.
     Every assigned site $x\in A$ has a selected-charge path with strictly increasing times rooted at an initially assigned site or scheduled fill slot; if nonempty, $x$ lies in the last charge ball and successive anchors have graph distance $\le 2r$.
     Initial assignments persist, a scheduled fill cannot create a bad lead, and every bad endpoint was initially in $Y$ and lies in $A\cap T_L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on the fill--charge steps: if a charge assigns $x$, choose a same-side predecessor in that ball (which lies in $A$ by $\operatorname{dist}_\infty(T,Z)>2L+10r$). Iterating back to an initial assignment or scheduled fill yields the path.
 \end{proof}
 
-\begin{theorem}[Length and time window of a bad ancestry]
+\begin{lemma}[Length and time window of a bad ancestry]
     \label{thm:al_scan_ancestry_window}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.ancestryFront,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.front_mono,
@@ -49,12 +49,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         D<4rs,\qquad k-(t+1)\le 4n(rs+1).
         \label{eq:al_scan_bad_window}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each charge shifts oriented depth by at most $2r$, so lead $>D/2$ gives $D/2<2rs-(j(k)-j(t))$ and $j(k)-j(t)<2rs$; combining with (\ref{eq:al_scan_front_speed}) at $a=t,b=k$ yields (\ref{eq:al_scan_bad_window}).
 \end{proof}
 
-\begin{theorem}[Probability of prescribed labelled hits]
+\begin{lemma}[Probability of prescribed labelled hits]
     \label{thm:al_scan_selected_chain_probability}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargeWeight_selected_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_le_of_selected,
@@ -64,12 +64,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \leanok
     \uses{def:al_scan_actual_histories}
     For $M>0$ and fixed initial offsets, prescribing a side and label in one band at $s$ distinct times has probability at most $(2M)^{-s}$, and a union of such prescriptions is bounded by the sum of $(2M)^{-s}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each sorted candidate list contains a label at most once, so each hit fixes at most one of $2M$ choices; independence across distinct times and the union bound give the result.
 \end{proof}
 
-\begin{theorem}[Counting spatial label paths]
+\begin{lemma}[Counting spatial label paths]
     \label{thm:al_scan_anchor_path_count}
     \lean{TNLean.PEPS.AreaLaw.Scan.nearbyChargeLabels,
         TNLean.PEPS.AreaLaw.Scan.chargeAnchorPaths,
@@ -85,12 +85,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         B=\mu\bigl(1+2(2r)(2r+1)\bigr).
         \label{eq:al_scan_anchor_branching}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each step has at most $B$ choices inside a graph $2r$-ball, which contains at most $1+2(2r)(2r+1)$ sites.
 \end{proof}
 
-\begin{theorem}[Distinct charge times in a terminal interval]
+\begin{lemma}[Distinct charge times in a terminal interval]
     \label{thm:al_scan_timed_path_count}
     \lean{TNLean.PEPS.AreaLaw.Scan.timedChargePaths,
         TNLean.PEPS.AreaLaw.Scan.card_timedChargePaths_le,
@@ -105,12 +105,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \leanok
     \uses{thm:al_scan_ancestry_window}
     The window $\{0\le t<k:k-(t+1)\le W\}$ has size $v\le\min\{k,W+1\}$ (with $v\le 9nrs$ for $n,r,s>0$ and $W=4n(rs+1)$), and pairing $s$-element subsets with a label family of size $b$ yields at most $\binom vs b$ chronologically ordered paths.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     There are $\binom vs$ strictly increasing $s$-tuples of times in the window, and $4n(rs+1)+1\le 9nrs$ for $n,r,s\ge1$.
 \end{proof}
 
-\begin{theorem}[Finite cover of bad ancestries]
+\begin{lemma}[Finite cover of bad ancestries]
     \label{thm:al_scan_bad_path_cover}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.ChargeAncestry.labels_mem_chargeAnchorPaths,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.ChargeAncestry.length_le,
@@ -131,12 +131,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         \qquad v_s(k)=\min\{k,4n(rs+1)+1\}.
         \label{eq:al_scan_bad_path_cover}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:al_scan_actual_ancestry}, \ref{thm:al_scan_ancestry_window}, \ref{thm:al_scan_anchor_path_count}, and~\ref{thm:al_scan_timed_path_count} over $0\le s\le k$ with $D<4rs$.
+    Combine Lemmas~\ref{thm:al_scan_actual_ancestry}, \ref{thm:al_scan_ancestry_window}, \ref{thm:al_scan_anchor_path_count}, and~\ref{thm:al_scan_timed_path_count} over $0\le s\le k$ with $D<4rs$.
 \end{proof}
 
-\begin{theorem}[Binomial cancellation]
+\begin{lemma}[Binomial cancellation]
     \label{thm:al_scan_binomial_cancellation}
     \lean{TNLean.PEPS.AreaLaw.Scan.choose_le_exp_mul_div_pow,
         TNLean.PEPS.AreaLaw.Scan.choose_mul_pow_le_of_window_bound}
@@ -148,12 +148,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         \binom vs a^s\le(eCa)^s.
         \label{eq:al_scan_binomial_cancellation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $\binom vs\le v^s/s!$ and $s^s/s!\le e^s$.
 \end{proof}
 
-\begin{theorem}[Compact collar cardinality]
+\begin{lemma}[Compact collar cardinality]
     \label{thm:al_scan_compact_collar_card}
     \lean{TNLean.PEPS.AreaLaw.Scan.card_ambientDilation_le_of_layers,
         TNLean.PEPS.AreaLaw.Scan.card_compact_collar_le}
@@ -161,12 +161,12 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \uses{def:al_scan_actual_histories}
     If $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$, then
     $|A\cap T_L|\le |T_L|\le |T|+nL$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Sum $|T_d\setminus T_{d-1}|\le n$ over $1\le d\le L$ from $T_0=T$.
 \end{proof}
 
-\begin{theorem}[Exact prefix-history marginals]
+\begin{lemma}[Exact prefix-history marginals]
     \label{thm:al_scan_prefix_marginal}
     \lean{TNLean.PEPS.AreaLaw.Scan.prefixHistory,
         TNLean.PEPS.AreaLaw.Scan.prefixHistory_self,
@@ -175,30 +175,30 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \leanok
     \uses{def:al_scan_actual_histories}
     For $j\le N$ and $M>0$, any function of the length-$j$ prefix history has the same expectation under length-$N$ and length-$j$ history weights.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each appended step has total weight $1$; induct from $j$ to $N$.
 \end{proof}
 
-\begin{theorem}[Finite bad-endpoint bound]
+\begin{lemma}[Finite bad-endpoint bound]
     \label{thm:al_scan_bad_endpoint_probability}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.IsBadBandEndpoint,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.badEndpointTail,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_bad_endpoint_domainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_path_cover,thm:al_scan_selected_chain_probability,thm:al_scan_anchor_path_count}
-    For fixed offsets, band, side, and endpoint in $A$, under the hypotheses of Theorem~\ref{thm:al_scan_actual_ancestry} and $n,M>0$, the probability of assignment with lead $>D/2$ at time $k$ is at most
+    For fixed offsets, band, side, and endpoint in $A$, under the hypotheses of Lemma~\ref{thm:al_scan_actual_ancestry} and $n,M>0$, the probability of assignment with lead $>D/2$ at time $k$ is at most
     \begin{align}
         R_k=\sum_{\substack{0\le s\le k \\D<4rs}}
         \binom{v_s(k)}s\left(\frac{B}{2M}\right)^s.
         \label{eq:al_scan_bad_endpoint_tail}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:al_scan_selected_chain_probability} to the cover (\ref{eq:al_scan_bad_path_cover}) with $q=(2M)^{-1}$.
+    Apply Lemma~\ref{thm:al_scan_selected_chain_probability} to the cover (\ref{eq:al_scan_bad_path_cover}) with $q=(2M)^{-1}$.
 \end{proof}
 
-\begin{theorem}[Bands, sides, compact endpoints, and offsets]
+\begin{lemma}[Bands, sides, compact endpoints, and offsets]
     \label{thm:al_scan_bad_history_probability}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.IsGoodCompletedHistory,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.isGoodOldHistory_of_isGoodCompletedHistory,
@@ -208,26 +208,26 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \leanok
     \uses{thm:al_scan_bad_endpoint_probability,thm:al_scan_actual_ancestry}
     For $m>0$, both the bad completed-history probability at time $k$ and the bad old-history probability after the preceding fill are at most $2K|A\cap T_L|R_k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:al_scan_actual_ancestry}, every bad endpoint lies in $A\cap T_L$ and fills cannot create a bad lead; union-bound (\ref{eq:al_scan_bad_endpoint_tail}) over $K$ bands, $2$ sides, and $A\cap T_L$, and average over offsets.
+    By Lemma~\ref{thm:al_scan_actual_ancestry}, every bad endpoint lies in $A\cap T_L$ and fills cannot create a bad lead; union-bound (\ref{eq:al_scan_bad_endpoint_tail}) over $K$ bands, $2$ sides, and $A\cap T_L$, and average over offsets.
 \end{proof}
 
-\begin{theorem}[All times on one full history]
+\begin{lemma}[All times on one full history]
     \label{thm:al_scan_bad_all_times}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.IsGoodThrough,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.IsGoodThrough.old,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_domainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_history_probability,thm:al_scan_prefix_marginal,thm:al_scan_compact_collar_card}
-    Under the layer bound of Theorem~\ref{thm:al_scan_compact_collar_card}, the probability that some prefix ($k\le N$) of a length-$N$ history is bad (either completed or after a fill) is at most
+    Under the layer bound of Lemma~\ref{thm:al_scan_compact_collar_card}, the probability that some prefix ($k\le N$) of a length-$N$ history is bad (either completed or after a fill) is at most
     $2K(|T|+nL)\sum_{k=0}^N R_k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:al_scan_bad_history_probability}, \ref{thm:al_scan_prefix_marginal}, and~\ref{thm:al_scan_compact_collar_card} with a union bound over $0\le k\le N$.
+    Combine Lemmas~\ref{thm:al_scan_bad_history_probability}, \ref{thm:al_scan_prefix_marginal}, and~\ref{thm:al_scan_compact_collar_card} with a union bound over $0\le k\le N$.
 \end{proof}
 
-\begin{theorem}[Finite geometric bad-history tail]
+\begin{lemma}[Finite geometric bad-history tail]
     \label{thm:al_scan_bad_geometric_tail}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.badChargeRatio,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.geometricBadTail,
@@ -236,15 +236,15 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_all_times,thm:al_scan_binomial_cancellation,thm:al_scan_timed_path_count}
-    For $r>0$ and $\rho=9e\,nrB/(2M)$, the bad-prefix probability of Theorem~\ref{thm:al_scan_bad_all_times} is at most
+    For $r>0$ and $\rho=9e\,nrB/(2M)$, the bad-prefix probability of Lemma~\ref{thm:al_scan_bad_all_times} is at most
     \begin{align}
         2K(|T|+nL)(N+1)
         \sum_{\substack{0\le s\le N \\D<4rs}}\rho^s.
         \label{eq:al_scan_bad_geometric_tail}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply (\ref{eq:al_scan_binomial_cancellation}) with $v_s(k)\le 9nrs$ (Theorem~\ref{thm:al_scan_timed_path_count}) to (\ref{eq:al_scan_bad_endpoint_tail}) for each $0\le k\le N$.
+    Apply (\ref{eq:al_scan_binomial_cancellation}) with $v_s(k)\le 9nrs$ (Lemma~\ref{thm:al_scan_timed_path_count}) to (\ref{eq:al_scan_bad_endpoint_tail}) for each $0\le k\le N$.
 \end{proof}
 
 \begin{figure}[ht]
@@ -331,7 +331,7 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     Use $1+2(2r)(2r+1)\le 13r^2$ ($r\ge1$) for (\ref{eq:al_scan_bad_ratio_cube}); $4rJ\le D<4rs$ implies $s\ge J$ and $\rho^s\le n^{-aJ}$; and $N+1\le 2n^2$ bounds the prefactor by $8(C_T+1)n^7\le n^8$.
 \end{proof}
 
-\begin{theorem}[Bad-history probability at the source scales]
+\begin{lemma}[Bad-history probability at the source scales]
     \label{thm:al_scan_bad_history_inverse_power}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_badHistory_bound_le_rpow,
         TNLean.PEPS.AreaLaw.Scan.eventually_bad_history_probability_le}
@@ -348,13 +348,13 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         \label{eq:al_scan_bad_history_scales}
     \end{align}
     For all sufficiently large $n$, uniformly over finite domains,
-    nonempty $T$ with $|T|\le C_Tn^2$, and scanners satisfying Theorem~\ref{thm:al_scan_compact_collar_card}, $\operatorname{dist}_\infty(T,Z)>2L+10r$, and anchor multiplicity $\le b$, the probability that any prefix through $nm$ pairs is bad is at most $n^{-p}$ (giving $n^{-200}$ at $p=200$ in \cite[Lemma~9.1]{OpenAI2026AreaLaw}).
-\end{theorem}
+    nonempty $T$ with $|T|\le C_Tn^2$, and scanners satisfying Lemma~\ref{thm:al_scan_compact_collar_card}, $\operatorname{dist}_\infty(T,Z)>2L+10r$, and anchor multiplicity $\le b$, the probability that any prefix through $nm$ pairs is bad is at most $n^{-p}$ (giving $n^{-200}$ at $p=200$ in \cite[Lemma~9.1]{OpenAI2026AreaLaw}).
+\end{lemma}
 \begin{proof}\leanok
-    Choose $J\in\mathbb N$ with $p+8\le\kappa J/2$; Lemma~\ref{lem:al_scan_rounded_radius} and (\ref{eq:al_scan_bad_ratio_cube}) eventually yield $\rho\le n^{-\kappa/2}$ and $4rJ\le D$, so Theorem~\ref{thm:al_scan_bad_geometric_tail} and Lemma~\ref{lem:al_scan_fixed_ancestry_cutoff} give the bound $n^{-p}$.
+    Choose $J\in\mathbb N$ with $p+8\le\kappa J/2$; Lemma~\ref{lem:al_scan_rounded_radius} and (\ref{eq:al_scan_bad_ratio_cube}) eventually yield $\rho\le n^{-\kappa/2}$ and $4rJ\le D$, so Lemma~\ref{thm:al_scan_bad_geometric_tail} and Lemma~\ref{lem:al_scan_fixed_ancestry_cutoff} give the bound $n^{-p}$.
 \end{proof}
 
-\begin{theorem}[Geometry and probabilities of the scan]
+\begin{lemma}[Geometry and probabilities of the scan]
     \label{thm:al_scan_histories}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.HistoryProperties,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.historyProperties_of_scales,
@@ -366,7 +366,7 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         thm:al_scan_physical_prefix_approximation,thm:al_scan_status_cuts,
         thm:al_scan_bad_history_inverse_power,
         thm:al_scan_uniform_bad_old,lem:al_scan_rounded_radius}
-    Under the hypotheses and scales (\ref{eq:al_scan_bad_history_scales}) of Theorem~\ref{thm:al_scan_bad_history_inverse_power} with $r_0=r$ and $3b\le C_1$, assume that for all $1\le d\le L$,
+    Under the hypotheses and scales (\ref{eq:al_scan_bad_history_scales}) of Lemma~\ref{thm:al_scan_bad_history_inverse_power} with $r_0=r$ and $3b\le C_1$, assume that for all $1\le d\le L$,
     \begin{align}
         |T|\le C_Tn^2,\qquad
         |T_d\setminus T_{d-1}|\le n,\qquad
@@ -380,7 +380,7 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         \item At each round and $p'\in[0,1]$, each label splits with terminal-leaf probability $\le 10D/m$.
         \item A full history fails to be good at some time with probability $\le n^{-p}$; at a charge round on a good old history, each split term is sampled on its splitting side with probability $\ge[2(C_1+1)nD]^{-1}$ and move equal to the old $Y$-part of its designated support.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Eventually $n\ge2$, $1\le 2r_0\le D$, $4(D+2r_0)\le m$, and $8Km\le L$. Combine Theorems~\ref{thm:al_scan_designated_sampling}, \ref{thm:al_scan_terminal_split}, and~\ref{thm:al_scan_nested_band_metrics} for (1); Theorems~\ref{thm:al_scan_unconditional_split_interval}, \ref{thm:al_scan_physical_prefix_approximation}, \ref{thm:al_scan_status_cuts}, and~\ref{thm:al_scan_split_count} for (2); Theorem~\ref{thm:al_scan_designated_dilution} for (3); and Theorems~\ref{thm:al_scan_bad_history_inverse_power} and~\ref{thm:al_scan_designated_sampling} for (4).
+    Eventually $n\ge2$, $1\le 2r_0\le D$, $4(D+2r_0)\le m$, and $8Km\le L$. Combine Lemmas~\ref{thm:al_scan_designated_sampling}, \ref{thm:al_scan_terminal_split}, and~\ref{thm:al_scan_nested_band_metrics} for (1); Lemmas~\ref{thm:al_scan_unconditional_split_interval}, \ref{thm:al_scan_physical_prefix_approximation}, \ref{thm:al_scan_status_cuts}, and~\ref{thm:al_scan_split_count} for (2); Lemma~\ref{thm:al_scan_designated_dilution} for (3); and Lemmas~\ref{thm:al_scan_bad_history_inverse_power} and~\ref{thm:al_scan_designated_sampling} for (4).
 \end{proof}

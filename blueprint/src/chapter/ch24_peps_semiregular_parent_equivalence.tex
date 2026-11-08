@@ -14,7 +14,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
 
 \subsection{Irreducible coordinates and the regular representation}
 
-\begin{theorem}[Positive irreducible multiplicities]%
+\begin{lemma}[Positive irreducible multiplicities]%
     \label{thm:peps_semiregular_matrix_blocks}
     \lean{TNLean.PEPS.exists_unitary_matrix_blocks,
         TNLean.PEPS.exists_minimalSemiRegular_matrix}
@@ -32,23 +32,23 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     If $U$ is semi-regular, then $D=\bigoplus_iD_i$ is unitary and
     semi-regular. The dimensions, multiplicities, and coordinate matrix
     are conclusions, rather than additional assumptions on $U$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_unitary_character_blocks,
         thm:peps_semiregular_remove_copies}
     In the orthonormal irreducible rows of
-    Theorem~\ref{thm:peps_unitary_character_blocks}, the matrices of the
+    Lemma~\ref{thm:peps_unitary_character_blocks}, the matrices of the
     action on one row of each component give $D_i$, while the common action on
     its $m_i$ rows gives $D_i\otimes I_{m_i}$ after exchanging the row
     and matrix indices. Changing between these orthonormal coordinates
     and the original basis via $Q$ yields
     (\ref{eq:peps_semiregular_matrix_blocks}), with the character multiplicity
     equal to the number of rows.
-    Theorem~\ref{thm:peps_semiregular_remove_copies} then gives semi-regularity,
+    Lemma~\ref{thm:peps_semiregular_remove_copies} then gives semi-regularity,
     and the direct sum of the unitary $D_i$ is unitary.
 \end{proof}
 
-\begin{theorem}[Removing copies preserves semi-regularity]%
+\begin{lemma}[Removing copies preserves semi-regularity]%
     \label{thm:peps_semiregular_remove_copies}
     \lean{TNLean.PEPS.isSemiRegular_blockMatrixRepresentation_of_intertwiner}
     \leanok
@@ -56,10 +56,10 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     $U(g)=Q(\bigoplus_iD_i(g)\otimes I_{m_i})Q^\dagger$.
     Then $D=\bigoplus_iD_i$ is semi-regular, without requiring $Q$ to be
     isometric or the $D_i$ to be irreducible.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_group_algebra,lem:peps_twirled_representation}
-    By Theorem~\ref{thm:peps_semiregular_group_algebra}, semi-regularity is
+    By Lemma~\ref{thm:peps_semiregular_group_algebra}, semi-regularity is
     equivalent to linear independence of $\{D(g)\}_{g\in G}$. If
     $\sum_gc_gD(g)=0$, then $\sum_gc_gD_i(g)=0$ for each $i$, so
     Lemma~\ref{lem:peps_twirled_representation} gives
@@ -67,7 +67,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     hence $c_g=0$ for all $g\in G$.
 \end{proof}
 
-\begin{theorem}[The character after dimension multiplicities]%
+\begin{lemma}[The character after dimension multiplicities]%
     \label{thm:peps_semiregular_regular_character}
     \lean{TNLean.PEPS.character_blockMatrixRepresentation,
         TNLean.PEPS.irreducibleCharacterFinset_blockMatrixRepresentation,
@@ -88,10 +88,10 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
                           & \sum_i d_i^2            & =|G|.
         \label{eq:peps_semiregular_regular_character}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_trace}
-    By Theorem~\ref{thm:peps_semiregular_trace}, traces are additive under
+    By Lemma~\ref{thm:peps_semiregular_trace}, traces are additive under
     $\bigoplus$ and multiplicative under $\otimes$, and character
     orthogonality with semi-regularity identifies $\{\chi_{D_i}:i\in I\}$ as
     the complete set of irreducible characters of $G$. Hence
@@ -112,7 +112,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Fourier identification with the regular representation]%
+\begin{lemma}[Fourier identification with the regular representation]%
     \label{thm:peps_semiregular_block_fourier}
     \lean{TNLean.PEPS.irreducibleBlockFourierMatrix_injective,
         TNLean.PEPS.irreducibleBlockFourierMatrix_intertwining,
@@ -130,7 +130,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
         Q^\dagger Q & = I, & QQ^\dagger & = I, & L(g) & = QD^{[d]}(g)Q^\dagger.
         \label{eq:peps_semiregular_unitary_fourier}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_regular_character,lem:peps_twirled_representation}
     Multiplicativity $D_i(gh)=D_i(g)D_i(h)$ gives $TL(g)=D^{[d]}(g)T$
@@ -181,7 +181,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     $E_v:\mathcal V_v\xrightarrow{\sim}\C^p$.
 \end{definition}
 
-\begin{theorem}[The canonical averaging tensor is G-injective]%
+\begin{lemma}[The canonical averaging tensor is G-injective]%
     \label{thm:peps_semiregular_averaging_g_injective}
     \lean{TNLean.PEPS.graphIncidentMatrix_one,
         TNLean.PEPS.graphIncidentMatrix_mul,
@@ -199,7 +199,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     is $G$-injective for $\rho_v$ (Definition~\ref{def:peps_g_injective}), and
     in numbered coordinates its local map $A_v=E_vP_vJ_v$ is $G$-injective for
     $\rho_v^{\mathrm{num}}$, without assuming unitarity or semi-regularity of $U$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Factoring~(\ref{eq:peps_semiregular_incident_action}) over
     $f\in\operatorname{Inc}(v)$ and using
@@ -222,7 +222,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     chosen enumeration $e$, and put $A_{\mathrm{reg}}=A(L,e^G)$.
 \end{definition}
 
-\begin{theorem}[Arbitrary semi-regular canonical parent spaces]%
+\begin{lemma}[Arbitrary semi-regular canonical parent spaces]%
     \label{thm:peps_semiregular_canonical_parent_equivalence}
     \lean{TNLean.PEPS.nonempty_canonicalSemiRegularParentEquiv,
         TNLean.PEPS.finrank_regionParentGroundSpace_arbitrarySemiRegular_eq,
@@ -242,25 +242,25 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     positive local parent Hamiltonians with regional kernels
     $\mathcal G_{R_i}(A(U,e))$ and $\mathcal G_{R_i}(A_{\mathrm{reg}})$ are
     linearly isomorphic.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_matrix_blocks,
         thm:peps_semiregular_block_fourier,
         thm:peps_copy_positive_parent,
         thm:peps_fourier_coordinate_parent,thm:peps_region_parent_common_kernel}
-    With $D_i,d_i,m_i,Q$ from Theorem~\ref{thm:peps_semiregular_matrix_blocks},
+    With $D_i,d_i,m_i,Q$ from Lemma~\ref{thm:peps_semiregular_matrix_blocks},
     $Q^\dagger$ induces $\mathcal P_{\mathcal R}(A(U,e))\cong\mathcal P_{\mathcal R}(A(D^{[m]},e^{X^{[m]}}))$,
-    Theorem~\ref{thm:peps_copy_positive_parent} gives
+    Lemma~\ref{thm:peps_copy_positive_parent} gives
     $\mathcal P_{\mathcal R}(A(D^{[m]},e^{X^{[m]}}))\cong\mathcal P_{\mathcal R}(A(D^{[d]},e^{X^{[d]}}))$,
-    and Theorems~\ref{thm:peps_semiregular_block_fourier}
+    and Lemmas~\ref{thm:peps_semiregular_block_fourier}
     and~\ref{thm:peps_fourier_coordinate_parent} give
     $\mathcal P_{\mathcal R}(A(D^{[d]},e^{X^{[d]}}))\cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}})$.
     Composing these yields~(\ref{eq:peps_semiregular_canonical_parent_equivalence}),
-    and Theorem~\ref{thm:peps_region_parent_common_kernel} identifies the
+    and Lemma~\ref{thm:peps_region_parent_common_kernel} identifies the
     positive Hamiltonian kernels with the two parent spaces.
 \end{proof}
 
-\begin{theorem}[Physical G-injective tensors and their canonical parents]%
+\begin{lemma}[Physical G-injective tensors and their canonical parents]%
     \label{thm:peps_semiregular_physical_canonical_parent}
     \lean{TNLean.PEPS.nonempty_gInjectiveCanonicalParentEquiv}
     \leanok
@@ -270,20 +270,20 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     physical incident space. If $\mathcal R=(R_i)_i$ covers $V$, then
     $\mathcal P_{\mathcal R}(A)\cong\mathcal P_{\mathcal R}(A(U,e))$, without
     requiring constant incidence or semi-regularity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_averaging_g_injective,
         thm:peps_range_parent_g_comparison,
         thm:peps_range_parent_equivalence}
-    By Theorem~\ref{thm:peps_semiregular_averaging_g_injective}, $A(U,e)_v$ is
-    $G$-injective for $\rho_v^{\mathrm{num}}$. Theorem~\ref{thm:peps_range_parent_g_comparison}
+    By Lemma~\ref{thm:peps_semiregular_averaging_g_injective}, $A(U,e)_v$ is
+    $G$-injective for $\rho_v^{\mathrm{num}}$. Lemma~\ref{thm:peps_range_parent_g_comparison}
     provides maps $F_v$ injective on $\operatorname{im}A(U,e)_v$ with
-    $A_v=F_vA(U,e)_v$, and Theorem~\ref{thm:peps_range_parent_equivalence}
+    $A_v=F_vA(U,e)_v$, and Lemma~\ref{thm:peps_range_parent_equivalence}
     shows that $\bigotimes_{v\in V}F_v$ restricts under vertex coverage to an
     isomorphism $\mathcal P_{\mathcal R}(A(U,e))\xrightarrow{\sim}\mathcal P_{\mathcal R}(A)$.
 \end{proof}
 
-\begin{theorem}[Complete kernels for semi-regular G-injective tensors]%
+\begin{lemma}[Complete kernels for semi-regular G-injective tensors]%
     \label{thm:peps_semiregular_g_injective_parent_kernel}
     \lean{TNLean.PEPS.nonempty_semiRegularGInjectiveParentEquiv,
         TNLean.PEPS.finrank_regionParentGroundSpace_semiRegularGInjective_eq,
@@ -308,12 +308,12 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     the global sums $H=\sum_i H_i^{\mathrm{global}}$ and
     $K=\sum_i K_i^{\mathrm{global}}$ satisfy $\ker H\cong\ker K$, with no
     requirement that $p=|G|^k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_semiregular_physical_canonical_parent,
         thm:peps_semiregular_canonical_parent_equivalence,thm:peps_region_parent_common_kernel}
     In the enumeration $e^X$ of Definition~\ref{def:peps_semiregular_incident_enumeration},
-    Theorems~\ref{thm:peps_semiregular_physical_canonical_parent}
+    Lemmas~\ref{thm:peps_semiregular_physical_canonical_parent}
     and~\ref{thm:peps_semiregular_canonical_parent_equivalence} compose to
     \begin{align}
         \mathcal P_{\mathcal R}(A)
@@ -321,7 +321,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
         \cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}}),
     \end{align}
     giving~(\ref{eq:peps_semiregular_physical_parent_equivalence}), and
-    Theorem~\ref{thm:peps_region_parent_common_kernel} gives
+    Lemma~\ref{thm:peps_region_parent_common_kernel} gives
     $\ker H=\mathcal P_{\mathcal R}(A)\cong\mathcal P_{\mathcal R}(A_{\mathrm{reg}})=\ker K$.
 \end{proof}
 

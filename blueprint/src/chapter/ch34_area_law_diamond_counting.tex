@@ -13,7 +13,7 @@
     $D_R(a)=\{x\in\Z^2:\ell(a,x)\le R\}$.
 \end{definition}
 
-\begin{theorem}[Exact lattice diamond count]
+\begin{lemma}[Exact lattice diamond count]
     \label{thm:area_diamond_count}
     \uses{def:area_lattice_diamond}
     \lean{TNLean.PEPS.AreaLaw.card_latticeDiamond,
@@ -28,7 +28,7 @@
     $\ell$-displacement at most $1$, the bound $|S|\le v_R$ also holds
     whenever each $x\in S$ is joined to $a$ by a $G$-walk of length at most
     $R$, or when $d_G(a,x)\le R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_lattice_diamond,thm:area_walk_displacement}
@@ -41,7 +41,7 @@
         \label{eq:area_diamond_rows}
     \end{align}
     For injective $\iota$, $\iota(S)\subseteq D_R(\iota(a))$ gives
-    $|S|\le v_R$, and Theorem~\ref{thm:area_walk_displacement} reduces the
+    $|S|\le v_R$, and Lemma~\ref{thm:area_walk_displacement} reduces the
     walk and $d_G(a,x)\le R$ hypotheses to $\ell(\iota(a),\iota(x))\le R$.
 \end{proof}
 
@@ -78,12 +78,12 @@
     \uses{thm:area_diamond_count,thm:area_support_count,
         thm:area_chain_growth}
     Every nonempty $X\in\mathcal F$ lies in a radius-$R$ ball around any
-    $a\in X$, so $|X|\le v_R$ by Theorem~\ref{thm:area_diamond_count}, and
+    $a\in X$, so $|X|\le v_R$ by Lemma~\ref{thm:area_diamond_count}, and
     $X\mapsto X\setminus\{a\}$ injects $\{X\in\mathcal F:a\in X\}$ into the
     power set of at most $v_R-1$ sites, giving
     $|\{X\in\mathcal F:a\in X\}|\le\mu_R$ by
-    Theorem~\ref{thm:area_support_count}. Bounding $w_X\le J$ yields
-    (\ref{eq:area_diamond_site}), and Theorem~\ref{thm:area_chain_growth}
+    Lemma~\ref{thm:area_support_count}. Bounding $w_X\le J$ yields
+    (\ref{eq:area_diamond_site}), and Lemma~\ref{thm:area_chain_growth}
     with $v=v_R$ and $b=\mu_RJ$ yields~(\ref{eq:area_diamond_chain}).
 \end{proof}
 
@@ -106,7 +106,7 @@ on $V$, and let $w_X\in\R$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Nonnegative target weights]
+\begin{lemma}[Nonnegative target weights]
     \label{thm:area_target_domination}
     \uses{def:area_target_chain,def:area_chain_weight}
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_nonneg,
@@ -114,7 +114,7 @@ on $V$, and let $w_X\in\R$.
     \leanok
     If $w_Y\ge0$ for all $Y\in\mathcal F$, then $0\le T_n^y(X)\le W_n(X)$ for
     every finite $X\subseteq V$ and $n\ge0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_target_chain,def:area_chain_weight}
@@ -123,7 +123,7 @@ on $V$, and let $w_X\in\R$.
     $w_Y\ge0$.
 \end{proof}
 
-\begin{theorem}[Exact exclusion of distant targets]
+\begin{lemma}[Exact exclusion of distant targets]
     \label{thm:area_target_zero}
     \uses{def:area_target_chain}
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_no_walk,
@@ -135,7 +135,7 @@ on $V$, and let $w_X\in\R$.
     any $w_Y\in\R$, $T_n^y(X)=0$ whenever no walk of length at most $(n+1)R$
     joins $a$ to $y$, and in particular whenever $(n+1)R<d_G(a,y)$ (including
     $d_G(a,y)=\infty$).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_target_chain}
@@ -146,12 +146,12 @@ on $V$, and let $w_X\in\R$.
     in~(\ref{eq:area_target_step}).
 \end{proof}
 
-\begin{theorem}[Graph-distance indicator bound]
+\begin{lemma}[Graph-distance indicator bound]
     \label{thm:area_target_indicator}
     \uses{def:area_target_chain}
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_indicator_pow}
     \leanok
-    Under the range hypothesis of Theorem~\ref{thm:area_target_zero}, suppose
+    Under the range hypothesis of Lemma~\ref{thm:area_target_zero}, suppose
     $w_Y\ge0$, $|Y|\le v\in\N$ for all $Y\in\mathcal F$, and
     $\sum_{Y\in\mathcal F:\,x\in Y}w_Y\le b$ for all $x\in V$ ($b\ge0$). For
     $X\in\mathcal F$, $a\in X$, and $n\ge0$,
@@ -161,31 +161,31 @@ on $V$, and let $w_X\in\R$.
     \end{align}
     which holds with $v=v_R$ and $b=\mu_RJ$ in the setting of
     Theorem~\ref{thm:area_diamond_budget}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_target_domination,thm:area_target_zero,
         thm:area_chain_growth}
-    Combine $T_n^y(X)\le W_n(X)\le(vb)^n$ (Theorems~\ref{thm:area_target_domination}
+    Combine $T_n^y(X)\le W_n(X)\le(vb)^n$ (Lemmas~\ref{thm:area_target_domination}
     and~\ref{thm:area_chain_growth}) when $d_G(a,y)\le(n+1)R$ with
-    $T_n^y(X)=0$ (Theorem~\ref{thm:area_target_zero}) when
+    $T_n^y(X)=0$ (Lemma~\ref{thm:area_target_zero}) when
     $d_G(a,y)>(n+1)R$.
 \end{proof}
 
 \section{Exponential generating series}
 
-\begin{theorem}[Exponential coefficient bound]
+\begin{lemma}[Exponential coefficient bound]
     \label{thm:area_chain_exponential}
     \uses{def:area_target_chain}
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:area_target_indicator}, for
+    Under the hypotheses of Lemma~\ref{thm:area_target_indicator}, for
     $d_G(a,y)=D\in\N$, $\mu\ge0$, and $\kappa=vb$,
     \begin{align}
         T_n^y(X) & \le e^{\mu R-\mu D}(\kappa e^{\mu R})^n.
         \label{eq:area_chain_exponential}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_target_domination,thm:area_chain_growth,thm:area_target_zero}
@@ -212,7 +212,7 @@ on $V$, and let $w_X\in\R$.
     \uses{def:area_chain_series}
     \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:area_chain_exponential}, the
+    Under the hypotheses of Lemma~\ref{thm:area_chain_exponential}, the
     series~(\ref{eq:area_chain_series}) from the proof of
     \cite[Lemma~4.1]{OpenAI2026AreaLaw} converges and satisfies
     \begin{align}
@@ -236,17 +236,17 @@ on $V$, and let $w_X\in\R$.
     summability and~(\ref{eq:area_chain_series_bound}).
 \end{proof}
 
-\begin{theorem}[Series vanishing between components]
+\begin{lemma}[Series vanishing between components]
     \label{thm:area_chain_series_zero}
     \uses{def:area_chain_series}
     \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_eq_zero_of_edist_eq_top}
     \leanok
-    Under the range hypothesis of Theorem~\ref{thm:area_target_zero}, if
+    Under the range hypothesis of Lemma~\ref{thm:area_target_zero}, if
     $d_G(a,y)=\infty$, then $S_t^y(X)=0$ for all $t\in\R$ and $w_Y\in\R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_target_zero,def:area_chain_series}
-    By Theorem~\ref{thm:area_target_zero}, $T_n^y(X)=0$ for all $n\ge0$ in
+    By Lemma~\ref{thm:area_target_zero}, $T_n^y(X)=0$ for all $n\ge0$ in
     (\ref{eq:area_chain_series}).
 \end{proof}

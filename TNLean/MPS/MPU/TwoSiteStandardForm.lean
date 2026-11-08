@@ -78,6 +78,18 @@ structure TwoSiteStandardFormData
         u (t, s) (finProdFinEquiv.symm j) *
           X₁ ((finProdFinEquiv.symm i).2, γ) s
 
+/-- The supplied unshifted unitary identifies the physical pair with its
+left and right intermediate spaces, so their matrix sizes multiply to d².
+Source: arXiv:1703.09188, StandardForm/SF, lines 603–622. -/
+theorem TwoSiteStandardFormData.left_mul_right
+    {d D ℓ r : ℕ} {W : MPOTensor (d * d) D}
+    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData W u v) : ℓ * r = d * d := by
+  have h₁ := S.u_unitary.1.card_le u
+  have h₂ := S.u_unitary.2.card_le u
+  simpa only [Fintype.card_prod, Fintype.card_fin] using Nat.le_antisymm h₂ h₁
+
 /-- The two-site block of a simple MPU in canonical form II has the standard
 form supplied by its source cuts, with both gates unitary.
 
@@ -143,6 +155,22 @@ noncomputable def twoSiteDirectBlockEquiv (d k : ℕ) :
       Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) :=
   (finCongr (congrArg (MPSTensor.blockPhysDim d) (Nat.mul_comm 2 k))).trans
     (twoSiteBlockedPhysicalEquiv d k)
+
+/-- Decoding the actual two-site physical identification concatenates the
+original two block words in their given order. Source: CPSV17, StandardForm,
+lines 603–617; this is the original-site blocking convention. -/
+theorem wordOfBlock_twoSiteDirectBlockEquiv_symm (d k : ℕ)
+    (i : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) :
+    MPSTensor.wordOfBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm i) =
+      MPSTensor.wordOfBlock d k (finProdFinEquiv.symm i).1 ++
+        MPSTensor.wordOfBlock d k (finProdFinEquiv.symm i).2 := by
+  change MPSTensor.wordOfBlock d (2 * k)
+    (Fin.cast (congrArg (MPSTensor.blockPhysDim d) (Nat.mul_comm 2 k).symm)
+      (MPSTensor.iteratedBlockIndex d k 2
+        (twoSiteBlockEquiv (MPSTensor.blockPhysDim d k) i))) = _
+  rw [MPSTensor.wordOfBlock_cast_length d (Nat.mul_comm 2 k).symm,
+    MPSTensor.wordOfBlock_iteratedBlockIndex]
+  simp [twoSiteBlockEquiv, Kraus.wordOfBlock, Kraus.flattenBlockedWord, List.ofFn_succ]
 
 private theorem reindexPhysical_blockTwo_blockTensor_of_eq
     {d D : ℕ} (U : MPOTensor d D) (k L : ℕ) (hL : L = k * 2) :

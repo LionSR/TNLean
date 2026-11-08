@@ -8,7 +8,7 @@ fixed horizon together with the pre-charge histories before that horizon;
 writing $Q_{jg}$ and $Y_{jg}$ for the near and middle regions of terminal
 $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
-\begin{theorem}[Scanner-root sharp lower estimate]
+\begin{lemma}[Scanner-root sharp lower estimate]
     \label{thm:actual_scan_sharp_lower_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_sharp_lower_norm}
     \leanok
@@ -79,20 +79,20 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
         \leq-\log N_k.
         \label{eq:actual_scan_sharp_lower_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:al_scan_band_nesting,thm:al_augmented_root_compression,
         thm:al_scan_actual_round_global_energy,thm:al_scan_nested_band_metrics,
         thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
-    By Theorems~\ref{thm:al_scan_band_nesting}
+    By Lemmas~\ref{thm:al_scan_band_nesting}
     and~\ref{thm:al_scan_nested_band_metrics}, the disjoint near and middle
     terminal regions nest across bands, so the regional sharp lower norm
     bound applies at $t=a/2$ and $s=1/4$ (where $20t\leq r_{\rm mom},1$
     becomes $10a\leq r_{\rm mom},1$). For an isometric frame $Z$ of the
     simultaneous symmetric subspace and the ordered product $M_k$ of
-    compressed band means, Theorem~\ref{thm:al_augmented_root_compression}
+    compressed band means, Lemma~\ref{thm:al_augmented_root_compression}
     gives
     \begin{align}
         w_k & =M_k^{-1/4}Z^*u_k,
@@ -100,7 +100,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
             & v_k                & =Z\frac{w_k}{\|w_k\|}.
         \label{eq:actual_scan_root_compression}
     \end{align}
-    Theorems~\ref{thm:al_scan_actual_round_global_energy},
+    Lemmas~\ref{thm:al_scan_actual_round_global_energy},
     \ref{thm:al_scan_actual_fill_admission},
     and~\ref{thm:al_scan_actual_charge_admissible} identify the regional
     defect in $v_k$ with $\delta_k=(\mu_k-e_0)/\gamma$ for
@@ -129,7 +129,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Lower label-defect inequality]
+\begin{lemma}[Lower label-defect inequality]
     \label{thm:actual_sharp_lower_label_defect}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect_label_bound}
     \leanok
@@ -140,7 +140,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
         2kS'-\varepsilon_k\leq2\log\dim\ell_k.
         \label{eq:actual_sharp_lower_label_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -149,7 +149,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     $2(kS'-\log\dim\ell_k)\leq 2|\log\dim\ell_k-kS'|=\varepsilon_k$.
 \end{proof}
 
-\begin{theorem}[Vanishing lower remainder]
+\begin{lemma}[Vanishing lower remainder]
     \label{thm:actual_sharp_lower_remainder_limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_sharpLowerRemainder_of_label_dimension}
     \leanok
@@ -157,7 +157,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     For fixed $a>0$ and $c,C_f\in\mathbb R$, if $\log\dim\ell_k-kS'=o(k)$
     (as holds for the physical Schmidt--Bell label sequence), then
     $R_k^-\to0$ as $k\to\infty$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -169,14 +169,14 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     $R_k^-\to0$.
 \end{proof}
 
-\begin{theorem}[Sharp lower rate for the physical prevector]
+\begin{lemma}[Sharp lower rate for the physical prevector]
     \label{thm:actual_scan_supplied_prevector_sharp_lower}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_sharp_lower}
     \leanok
     \uses{thm:actual_scan_sharp_lower_norm,def:actual_sharp_lower_remainder,
         def:al_scan_status_marginals,def:al_scan_auxiliary_coordinates}
     Under the scanner and gap hypotheses of
-    Theorem~\ref{thm:actual_scan_sharp_lower_norm} at horizon $nm$ with
+    Lemma~\ref{thm:actual_scan_sharp_lower_norm} at horizon $nm$ with
     $K_{\rm mom}\geq0$, $a>0$, and $10a\leq\min\{r_{\rm mom},1\}$, let
     $u_k$ be the augmented replica prevector of a label sequence $\ell_k$
     having nonzero original-coordinate vectors of norm at most one for all
@@ -195,8 +195,8 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
         \label{eq:actual_scan_supplied_prevector_rate}
     \end{align}
     with $N_k,\delta_k,L_g$ as in
-    Theorem~\ref{thm:actual_scan_sharp_lower_norm}.
-\end{theorem}
+    Lemma~\ref{thm:actual_scan_sharp_lower_norm}.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -204,7 +204,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
         thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_norm,
         thm:al_augmented_prevector_symmetry,
         def:al_scan_auxiliary_coordinates}
-    By Theorems~\ref{thm:al_augmented_prevector_norm},
+    By Lemmas~\ref{thm:al_augmented_prevector_norm},
     \ref{thm:al_augmented_prevector_symmetry},
     and~\ref{thm:actual_sharp_lower_label_defect}, $u_k$ satisfies the
     norm, symmetry, and label bound (\ref{eq:actual_scan_sharp_lower_label})
@@ -213,6 +213,6 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     cover $Q_{jg},Y_{jg},(Q_{jg}\cup Y_{jg})^c$. Dividing
     (\ref{eq:actual_scan_sharp_lower_bound}) by $k>0$ gives
     (\ref{eq:actual_scan_supplied_prevector_rate}), and
-    Theorem~\ref{thm:actual_sharp_lower_remainder_limit} gives
+    Lemma~\ref{thm:actual_sharp_lower_remainder_limit} gives
     $R_k^-\to0$.
 \end{proof}

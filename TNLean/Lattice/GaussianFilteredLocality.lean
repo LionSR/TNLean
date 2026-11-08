@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Circuit.SiteExpectation
 import TNLean.Lattice.GaussianFilteredTerm
 import TNLean.Lattice.GaussianTail
+import QICLean.Analysis.GaussianFilter.CommutatorSeries
 
 /-!
 # Commutators of Gaussian-filtered terms
@@ -86,16 +87,6 @@ theorem norm_map_gaussianFilteredTerm_le_mass (q ΔE : ℝ) {H : Matrix n n ℂ}
       gcongr
       exact mul_le_of_le_one_right hε measureReal_le_one
 
-/-- The commutator with `O`, as a continuous linear map on matrices. -/
-noncomputable def commutatorCLM (O : Matrix n n ℂ) : Matrix n n ℂ →L[ℂ] Matrix n n ℂ :=
-  LinearMap.toContinuousLinearMap
-    { toFun := fun M => M * O - O * M
-      map_add' := fun M N => by simp only [Matrix.add_mul, Matrix.mul_add]; abel
-      map_smul' := fun c M => by simp [smul_sub] }
-
-@[simp] theorem commutatorCLM_apply (O M : Matrix n n ℂ) : commutatorCLM O M = M * O - O * M :=
-  rfl
-
 /-- If `‖[W(t), O]‖ ≤ ε` for all `|t| ≤ T`, then `‖[W_tilde, O]‖` is at most `ε` plus `2 ‖W‖ ‖O‖`
 times the Gaussian mass of the complement of `[-T, T]`. Hastings, arXiv:cond-mat/0508554v3,
 proof of eq. `lbnd`, lines 1419–1456. -/
@@ -107,13 +98,17 @@ theorem norm_commutator_gaussianFilteredTerm_le_mass (q ΔE : ℝ) {H : Matrix n
     ‖gaussianFilteredTerm q ΔE H W * O - O * gaussianFilteredTerm q ΔE H W‖ ≤
       ε + 2 * ‖W‖ * ‖O‖ *
         (gaussianReal 0 (q / ΔE ^ 2).toNNReal).real (Set.Icc (-T) T)ᶜ := by
-  have := norm_map_gaussianFilteredTerm_le_mass q ΔE hH W (commutatorCLM O) hε
-    (C := 2 * ‖W‖ * ‖O‖) (by simpa using hloc) fun t => by
+  have := norm_map_gaussianFilteredTerm_le_mass q ΔE hH W (GaussianFilter.commutatorCLM O) hε
+    (C := 2 * ‖W‖ * ‖O‖) (fun t ht => by
+      rw [GaussianFilter.commutatorCLM_apply, norm_sub_rev]
+      exact hloc t ht) fun t => by
       set f := hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t)
-      calc ‖commutatorCLM O f‖ ≤ ‖f * O‖ + ‖O * f‖ := norm_sub_le _ _
-        _ ≤ ‖f‖ * ‖O‖ + ‖O‖ * ‖f‖ := add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
+      rw [GaussianFilter.commutatorCLM_apply]
+      calc ‖O * f - f * O‖ ≤ ‖O * f‖ + ‖f * O‖ := norm_sub_le _ _
+        _ ≤ ‖O‖ * ‖f‖ + ‖f‖ * ‖O‖ := add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
         _ = 2 * ‖W‖ * ‖O‖ := by rw [norm_intertwinerIntegrand hH hH W t]; ring
-  simpa using this
+  rw [norm_sub_rev]
+  simpa only [GaussianFilter.commutatorCLM_apply] using this
 
 /-- **Localization of a filtered term by partial trace.** If the normalized partial trace onto
 `K` approximates `W(t)` within `ε` for all `|t| ≤ T`, then it approximates `W_tilde` within `ε` plus

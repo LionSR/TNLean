@@ -1,0 +1,133 @@
+\section{Group actions on torus bonds}%
+\label{sec:peps_torus_bond_actions}
+
+The invariance of a $G$-injective tensor lets a string of $U_g$'s on the
+virtual bonds be deformed across the sites of a network
+\cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}. To
+state this on the torus, orient the horizontal edges to the right and the
+vertical edges downwards, as in the source, and let the bonds carry
+operators.
+
+\begin{definition}[Torus network with operators on the bonds]%
+    \label{def:peps_torus_bond_network}
+    \lean{TNLean.PEPS.torusBondNetwork, TNLean.PEPS.torusLegKernel,
+        TNLean.PEPS.torusLegKernel_apply, TNLean.PEPS.torusLegKernel_mul,
+        TNLean.PEPS.torusLegMatrix, TNLean.PEPS.torusLegRep,
+        TNLean.PEPS.torusLegRep_apply, TNLean.PEPS.torusDress}
+    \leanok
+    \uses{def:peps_torus_site_tensor}
+    Let each torus site $v$ carry a four-leg tensor $A_v=(A_v)_{t_v,r_v,d_v,\ell_v}$ (top, right, down, left), and place $D\times D$ matrices $O^{\mathrm h}_v$ on the horizontal bond $v\to v+(1,0)$ and $O^{\mathrm v}_v$ on the vertical bond $v+(0,1)\to v$. The dressed torus contraction is
+    \begin{align}
+        \mathcal N(A,O)
+         & =\sum_{t,r,d,\ell}\prod_v(A_v)_{t_v,r_v,d_v,\ell_v}
+        (O^{\mathrm h}_v)_{\ell_{v+(1,0)},r_v}
+        (O^{\mathrm v}_v)_{t_v,d_{v+(0,1)}}.
+        \label{eq:peps_torus_bond_network}
+    \end{align}
+    For a representation $g\mapsto U_g$ on $\C^D$, $U_g$ acts on the four legs of $v$ by $U_g\otimes U_g^{-1}\otimes U_g^{-1}\otimes U_g$ (incoming top/left, outgoing right/down) \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[Diagonal operators on the bonds]%
+    \label{lem:peps_torus_bond_network_diagonal}
+    \lean{TNLean.PEPS.torusBondNetwork_diagonal,
+        TNLean.PEPS.torusBondNetwork_one,
+        TNLean.PEPS.stateCoeff_torusSiteTensor_eq_torusBondNetwork}
+    \leanok
+    \uses{def:peps_torus_bond_network, lem:peps_torus_site_tensor_contraction}
+    If every bond operator in (\ref{eq:peps_torus_bond_network}) is diagonal, $O=\operatorname{diag}(\omega)$, then $\mathcal N(A,O)$ sums over one index per bond weighted by $\prod_e\omega_{e,i_e}$. In particular, $\mathcal N(A,I)$ is the bare contraction of $A_v$, and for $w,h\ge3$ and $A_v=a^{\sigma(v)}$ it equals the torus PEPS coefficient of $a$ at $\sigma$ (Lemma~\ref{lem:peps_torus_site_tensor_contraction}).
+\end{lemma}
+
+\begin{proof}\leanok
+    Diagonal bond weights $(O_e)_{i,j}=\delta_{i,j}\omega_{e,i}$ vanish unless the two half-edge labels of each bond coincide.
+\end{proof}
+
+\begin{lemma}[Moving bond operators into the site tensors]%
+    \label{lem:peps_torus_bond_network_gauge}
+    \lean{TNLean.PEPS.torusBondNetwork_gauge}
+    \leanok
+    \uses{def:peps_torus_bond_network}
+    For site matrices $P_v,Q_v$, replacing each bond operator $O_e$ ($e:u\to w$) in (\ref{eq:peps_torus_bond_network}) by $P_w O_e Q_u$ equals $\mathcal N(\widetilde A,O)$, where $\widetilde A_v$ absorbs $P_v$ on its incoming legs (top, left) and $Q_v$ on its outgoing legs (right, down).
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand $(P_w O_e Q_u)_{i,j}=\sum_{k,m}(P_w)_{i,k}(O_e)_{k,m}(Q_u)_{m,j}$ in (\ref{eq:peps_torus_bond_network}), exchange the summation order of $(i,j)$ and $(k,m)$, and reindex $P_{v+(1,0)}$ and $Q_{v+(0,1)}$ by unit torus shifts.
+\end{proof}
+
+\begin{lemma}[Deformation of a string of $U_g$'s]%
+    \label{thm:peps_torus_operator_string_deformation}
+    \lean{TNLean.PEPS.vecMul_torusLegMatrix_of_comp_eq,
+        TNLean.PEPS.torusWestSouthOperatorString,
+        TNLean.PEPS.torusNorthEastOperatorString,
+        TNLean.PEPS.torusBondNetwork_westSouthOperatorString_eq,
+        TNLean.PEPS.IsGInjective.torusBondNetwork_westSouthOperatorString_eq}
+    \leanok
+    \uses{def:peps_g_injective, lem:peps_torus_bond_network_gauge}
+    Let $a$ satisfy $\mathcal{P}(a)(U_g\otimes U_g^{-1}\otimes U_g^{-1}\otimes U_g)=\mathcal{P}(a)$ for all $g\in G$ (Definition~\ref{def:peps_torus_bond_network}), and fix an $m\times n$ site rectangle $R$ with $m<w$ and $n<h$. Place $U_g$ on vertical bonds crossed rightward and $U_g^{-1}$ on horizontal bonds crossed downward. Then the operator string $O^{\mathrm{WS}}$ along the west and south boundary of $R$ and the string $O^{\mathrm{NE}}$ along its north and east boundary satisfy
+    \begin{align}
+        \mathcal N(a,O^{\mathrm{WS}}) & =\mathcal N(a,O^{\mathrm{NE}})
+        \label{eq:peps_torus_string_deformation}
+    \end{align}
+    \cite[Section~``Two dimensions: $G$-injective PEPS'', eq.~(2d:move-strings) and Lemma~``Deformations of the string'']{Schuch2010PEPS}. Only $U_g$-invariance is used (not completeness of irreducible sectors).
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $\Phi_v=g^{-1}$ for $v\in R$ and $\Phi_v=1$ for $v\notin R$, and apply Lemma~\ref{lem:peps_torus_bond_network_gauge} to $O^{\mathrm{NE}}$ with $P_v=U_{\Phi_v}$ and $Q_v=U_{\Phi_v}^{-1}$. On bonds with both endpoints in $R$ or both outside $R$, $P_w I Q_u=I$. On north/east crossing bonds, $U_g^{-1}U_g=I$ cancels $O^{\mathrm{NE}}$; on west/south crossing bonds, $P_w I Q_u$ produces $U_g^{-1}$ (vertical) and $U_g$ (horizontal), yielding $O^{\mathrm{WS}}$. Finally $\widetilde a_v=a_v$ by $U_{\Phi_v}$-invariance.
+\end{proof}
+
+\begin{definition}[Torus PEPS with group closures]%
+    \label{def:peps_torus_g_closure}
+    \lean{TNLean.PEPS.torusHorizontalClosure, TNLean.PEPS.torusVerticalClosure,
+        TNLean.PEPS.torusGClosure}
+    \leanok
+    \uses{def:peps_torus_bond_network}
+    On a $w\times\ell$ torus let $H_v=U_h$ when $v+(1,0)$ crosses the
+    horizontal seam and $H_v=\mathbb 1$ elsewhere; let $V_v=U_g$ when
+    the vertical bond crosses the vertical seam and $V_v=\mathbb 1$
+    elsewhere. Define the vector $\ket{\mathcal M(A\mid g,h)}$ by contracting
+    the site tensors with these bond operators. Its coefficient at
+    $\sigma$ is
+    \begin{align}
+        \mathcal M(A\mid g,h)_\sigma
+        =\sum_{(t_v,r_v,b_v,l_v)_v}\prod_v
+        A^{\sigma(v)}_{t_v,r_v,b_v,l_v}
+        H_v(l_{v+(1,0)},r_v)V_v(t_v,b_{v+(0,1)}).
+        \label{eq:peps_torus_closure_coeff}
+    \end{align}
+    This is \cite[Definition~5.6]{Schuch2010PEPS}, which uses a square
+    lattice; the same contraction defines the vector on a rectangle.
+    The four-site diagram suppresses the physical legs at fixed $\sigma$.
+    Crossings without a vertex do not denote contractions.
+\end{definition}
+
+\begin{center}
+    % Source/formula: SCP10 eq:2d:peps-with-ug-uh and
+    % eq:peps_torus_closure_coeff on a 2-by-2 torus.
+    % Each A has top/right/bottom/left virtual ports 90/0/270/180.
+    % H1,H2 carry U_h on the two horizontal returns; G1,G2 carry
+    % U_g on the two vertical returns. The physical indices are fixed.
+    % Every port is contracted; resulting boundary signature is (V,P)=(0,0).
+    % Crossing curves share no index unless they meet at a tensor.
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none]
+        \tn[at=(2,2), skin=box, name=NW, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(2,3), skin=box, name=NE, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(3,2), skin=box, name=SW, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(3,3), skin=box, name=SE, ports={0:virtual,90:virtual,180:virtual,270:virtual}]{A}
+        \tn[at=(2,1), skin=box, name=H1, ports={0:virtual,180:virtual}]{U_h}
+        \tn[at=(3,4), skin=box, name=H2, ports={0:virtual,180:virtual}]{U_h}
+        \tn[at=(1,2), skin=box, name=G1, ports={90:virtual,270:virtual}]{U_g}
+        \tn[at=(4,3), skin=box, name=G2, ports={90:virtual,270:virtual}]{U_g}
+        \tnwire{NW.0}{NE.180}
+        \tnwire{SW.0}{SE.180}
+        \tnwire{NW.270}{SW.90}
+        \tnwire{NE.270}{SE.90}
+        \tnwire{H1.0}{NW.180}
+        \tnwire[route=arc]{NE.0}{H1.180}
+        \tnwire{SE.0}{H2.180}
+        \tnwire[route=arc]{H2.0}{SW.180}
+        \tnwire{G1.270}{NW.90}
+        \tnwire[route=arc]{SW.270}{G1.90}
+        \tnwire{SE.270}{G2.90}
+        \tnwire[route=arc]{G2.270}{NE.90}
+    \end{tenkz}
+\end{center}

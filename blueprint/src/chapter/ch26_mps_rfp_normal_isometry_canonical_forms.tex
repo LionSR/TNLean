@@ -33,7 +33,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     Chapter~\ref{ch:spectral}).
 \end{definition}
 
-\begin{theorem}[Auxiliary block-family hypotheses from peripheral primitivity]%
+\begin{lemma}[Auxiliary block-family hypotheses from peripheral primitivity]%
     \label{thm:canonical_from_primitive}
     \lean{MPSTensor.IsCanonicalForm.of_peripheral_primitive}
     \leanok
@@ -44,7 +44,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $\sigma_\partial(\E_{A_k})=\{1\}$. Then $(\mu_k,A_k)_{k=1}^r$ satisfies
     the auxiliary hypotheses of Definition~\ref{def:is_canonical_form},
     and $O_{A_kA_k}(N)\to1$ for every~$k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -58,12 +58,12 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $O_{A_kA_k}(N)\to1$.
 \end{proof}
 
-\begin{theorem}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
+\begin{lemma}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
     \lean{MPSTensor.rfp_nt_structural}
     \leanok
     \uses{def:mps_transfer_idempotence, def:normal, def:injective}
     If $A$ is a normal RFP tensor, then $A$ is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The RFP condition $\E_A^2=\E_A$ gives coefficients $V_{i_1i_2,j}$
     such that
@@ -79,7 +79,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     establishing injectivity.
 \end{proof}
 
-\begin{theorem}[Left-canonical normal RFP tensor is injective]%
+\begin{lemma}[Left-canonical normal RFP tensor is injective]%
     \label{thm:rfp_nt_structural_of_left_canonical}
     \lean{MPSTensor.rfp_nt_structural_of_leftCanonical}
     \leanok
@@ -88,13 +88,13 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $\sum_i (A^i)^\dagger A^i = \Id$.
     As in the left-canonical step of \cite[Appendix~B]{Cirac2016MPDO_arXiv},
     $A$ is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_injective}
-    Theorem~\ref{thm:rfp_nt_injective} applies directly.
+    Lemma~\ref{thm:rfp_nt_injective} applies directly.
 \end{proof}
 
-\begin{theorem}[Unitary diagonal fixed point for a left-canonical normal RFP]%
+\begin{lemma}[Unitary diagonal fixed point for a left-canonical normal RFP]%
     \label{thm:rfp_nt_cfii_diagonal_fixed_point}
     \lean{MPSTensor.rfp_nt_cfii_diagonal_fixedPoint}
     \leanok
@@ -106,18 +106,18 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     diagonal positive definite matrix $\Lambda$ such that, for
     $B^i := U^\dagger A^i U$, $\sum_i (B^i)^\dagger B^i = \Id$ and
     $\E_B(\Lambda) = \Lambda$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible, thm:form_II}
-    Theorem~\ref{thm:rfp_nt_structural_of_left_canonical} shows that $A$ is
-    injective, and Theorem~\ref{thm:injective_irreducible} implies that its
+    Lemma~\ref{thm:rfp_nt_structural_of_left_canonical} shows that $A$ is
+    injective, and Lemma~\ref{thm:injective_irreducible} implies that its
     transfer map $\E_A$ is irreducible. Canonical form~II
-    (Theorem~\ref{thm:form_II}) then yields a unitary matrix $U$ preserving the
+    (Lemma~\ref{thm:form_II}) then yields a unitary matrix $U$ preserving the
     left-canonical condition and a diagonal positive-definite matrix $\Lambda$
     satisfying $\E_B(\Lambda) = \Lambda$ for $B^i = U^\dagger A^i U$.
 \end{proof}
 
-\begin{theorem}[Rank-one classification for RFP transfer maps]%
+\begin{lemma}[Rank-one classification for RFP transfer maps]%
     \label{thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \leanok
@@ -126,18 +126,18 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     fixed point $\rho$ of the transfer map $\E_A$. Then
     $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)} \rho$
     is the rank-one fixed-point projection.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:exponential_convergence_primitive}
     Exponential convergence of primitive channels
-    (Theorem~\ref{thm:exponential_convergence_primitive}) gives
+    (Lemma~\ref{thm:exponential_convergence_primitive}) gives
     $\lVert \E_A^n(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$.
     Transfer-map idempotence implies $\E_A^n = \E_A$ for all $n \ge 1$, so
     $\lVert \E_A(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$ for all
     $n\ge 1$. Letting $n \to \infty$ yields $\E_A = P_\rho$.
 \end{proof}
 
-\begin{theorem}[Diagonal Kraus form for a normal fixed point]%
+\begin{lemma}[Diagonal Kraus form for a normal fixed point]%
     \label{thm:rfp_nt_structural_full}
     \lean{MPSTensor.rfp_nt_structural_full}
     \leanok
@@ -152,7 +152,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         D^{-1}\delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     After the diagonal fixed-point reduction, write the conjugated tensor as
     $B$ and its positive diagonal fixed point as $\rho$. The rank-one
@@ -193,14 +193,14 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     Conjugating back gives $A^i=X\Lambda U^iX^{-1}$.
 \end{proof}
 
-\begin{theorem}[Diagonal Kraus form with square-sum normalization]%
+\begin{lemma}[Diagonal Kraus form with square-sum normalization]%
     \label{thm:rfp_nt_structural_full_sq_sum}
     \lean{MPSTensor.rfp_nt_structural_full_sqSum}
     \leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
-    In the decomposition of Theorem~\ref{thm:rfp_nt_structural_full}, the
+    In the decomposition of Lemma~\ref{thm:rfp_nt_structural_full}, the
     diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     From $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, squaring
@@ -208,7 +208,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $\sum_\alpha \Lambda_\alpha^2 = \frac{D}{\tr\rho}\sum_\alpha \rho_{\alpha,\alpha} = D$.
 \end{proof}
 
-\begin{theorem}[Unit pair-index form for a normal fixed point]%
+\begin{lemma}[Unit pair-index form for a normal fixed point]%
     \label{thm:rfp_nt_structural_full_unit_pair}
     \lean{MPSTensor.rfp_nt_structural_full_unit_pair}
     \leanok
@@ -224,10 +224,10 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         \delta_{\alpha,\alpha'}\delta_{\beta,\beta'}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:isometry_canonical_form_of_rfp_nt}
-    Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} gives
+    Lemma~\ref{thm:isometry_canonical_form_of_rfp_nt} gives
     $A^i = X\sqrt{\Lambda}\,U^i X^{-1}$ with $U$ a unit pair-index isometry;
     setting $\widetilde\Lambda_\alpha = \sqrt{\Lambda_\alpha}$ yields
     $A^i = X\widetilde\Lambda\,U^i X^{-1}$ with $\widetilde\Lambda$ diagonal
@@ -289,7 +289,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     gauge proves the converse.
 \end{proof}
 
-\begin{theorem}[Trace-normalized square-root form for a normal fixed point]%
+\begin{lemma}[Trace-normalized square-root form for a normal fixed point]%
     \label{thm:isometry_canonical_form_of_rfp_nt}
     \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}
     \leanok
@@ -306,10 +306,10 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         A^i & =X\sqrt{\rho_0}\,U^iX^{-1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:rfp_nt_structural_full_sq_sum}
-    By Theorem~\ref{thm:rfp_nt_structural_full_sq_sum}, $A$ admits a
+    By Lemma~\ref{thm:rfp_nt_structural_full_sq_sum}, $A$ admits a
     decomposition $A^i = X\widetilde\Lambda U_0^i X^{-1}$ with
     $\sum_\alpha \widetilde\Lambda_\alpha^2 = D$. Rescaling to the unit
     pair-index convention via $U^i = \sqrt{D}\,U_0^i$ and setting
@@ -386,7 +386,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         = \delta_{x,y} \tr(Z)$, which is the $(x,y)$ entry of $\tr(Z)\,I$.
 \end{proof}
 
-\begin{theorem}[The square-root form implies the fixed-point property]%
+\begin{lemma}[The square-root form implies the fixed-point property]%
     \label{thm:is_rfp_of_isometry_canonical_form}
     \lean{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}
     \leanok
@@ -397,7 +397,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         \notag
     \end{align}
     In particular, $A$ is a renormalization fixed point \cite[Section~3]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:unit_pair_isometry_transfer}
     Writing $A^i = X\sqrt\rho\,U^i X^{-1}$ and pulling the index-independent
@@ -416,7 +416,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $\E_A \circ \E_A = \E_A$.
 \end{proof}
 
-\begin{theorem}[Normal-tensor fixed-point characterization]%
+\begin{lemma}[Normal-tensor fixed-point characterization]%
     \label{thm:normal_rfp_iff_isometry_canonical_form}
     \lean{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
     \leanok
@@ -430,18 +430,18 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
         \notag
     \end{align}
     and in particular the bond dimension of $A$ is positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_bond_dim_pos, thm:cpsv_normal_tp_gauge, thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal, lem:rfp_parent_gauge_invariance, lem:isometry_canonical_form_gauge_invariant, thm:isometry_canonical_form_of_rfp_nt, thm:is_rfp_of_isometry_canonical_form}
-    Theorem~\ref{thm:cpsv_normal_bond_dim_pos} first gives positive bond
+    Lemma~\ref{thm:cpsv_normal_bond_dim_pos} first gives positive bond
     dimension from normality. For the forward implication,
-    Theorem~\ref{thm:cpsv_normal_tp_gauge} places $A$ in trace-preserving
+    Lemma~\ref{thm:cpsv_normal_tp_gauge} places $A$ in trace-preserving
     Perron gauge while preserving idempotence and normality;
-    Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt} then puts the gauged
+    Lemma~\ref{thm:isometry_canonical_form_of_rfp_nt} then puts the gauged
     tensor in square-root form, and
     Lemma~\ref{lem:isometry_canonical_form_gauge_invariant} transfers that
     decomposition back to $A$. Conversely,
-    Theorem~\ref{thm:is_rfp_of_isometry_canonical_form} shows that the
+    Lemma~\ref{thm:is_rfp_of_isometry_canonical_form} shows that the
     square-root form implies transfer idempotence.
 \end{proof}
 
@@ -538,7 +538,7 @@ representation.
     \label{fig:rfp_block_multiplicity_routing}
 \end{figure}
 Here $j$ indexes the distinct normal blocks and $q$ their repeated copies;
-Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum} establishes the joint
+Lemma~\ref{thm:residual_isometry_of_rfp_direct_sum} establishes the joint
 isometry condition across distinct blocks.
 % Scope restriction: cross-block orthogonality omitted here; see
 % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.

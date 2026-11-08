@@ -21,7 +21,7 @@ Schmidt rank across any other cut (lines 544--553).
     choice of kept eigenvectors gives a trimming projection.
 \end{definition}
 
-\begin{theorem}[Trimming does not increase cut ranks]
+\begin{lemma}[Trimming does not increase cut ranks]
     \label{thm:chain_trim_cut_ranks}
     \lean{
         TNLean.MPS.AreaLaw.cutMatrix_chainTrim,
@@ -37,7 +37,7 @@ Schmidt rank across any other cut (lines 544--553).
     $\operatorname{rank}M_j(\operatorname{trim}^i_P\psi)\le
         \operatorname{rank}M_j(\psi)$ at every cut $j$. No assumption on $L$
     or $q$ is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_supported_cut_rank}
     The first bound holds because $PC$ has rank at most that of $P$. For
@@ -51,7 +51,7 @@ Schmidt rank across any other cut (lines 544--553).
     If there are no configurations, both coefficient matrices are empty.
 \end{proof}
 
-\begin{theorem}[Trimming error on the chain]
+\begin{lemma}[Trimming error on the chain]
     \label{thm:chain_trim_error}
     \lean{
         TNLean.MPS.AreaLaw.norm_chainTrim_le,
@@ -69,7 +69,7 @@ Schmidt rank across any other cut (lines 544--553).
     The source states error $\epsilon$ for $m=D/\epsilon$, which is false;
     the bound above gives error $\epsilon$ for $m+1\ge D/\epsilon^2$
     \cite{gap:lvv13_trimming_radius}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The cut coordinates at $i$ preserve norms and inner products, and in
     them the trimmed vector is $(P\otimes1)$ applied to the cut vector of
@@ -90,7 +90,7 @@ a bond dimension independent of the length of the chain, and that trimming a
 vector of low energy keeps its energy low. The bond dimension they state,
 $\exp(O(\varepsilon^{-1}\log^3d\log(1/\delta)))$, comes from Arad, Kitaev,
 Landau and Vazirani~\cite{Arad2013AreaLaw}; the one below comes from the
-area law of this chapter and has different constants
+area law of Chapter~\ref{ch:one_dimensional_chain} and has different constants
 \cite{gap:lvv13_constant_bond}. The energy bound after trimming is the
 corrected one of~\cite{gap:lvv13_trimming_energy}. For the ground state, a
 smaller trimming error recovers the energy bound of the source's corollary.
@@ -110,7 +110,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     It depends neither on the length of the chain nor on a cut.
 \end{definition}
 
-\begin{theorem}[Trimming the ground state to a constant bond dimension]
+\begin{lemma}[Trimming the ground state to a constant bond dimension]
     \label{thm:chain_constant_bond_overlap}
     \lean{
         TNLean.MPS.AreaLaw.ChainHamiltonian.one_sub_le_re_inner_chainTrim,
@@ -130,7 +130,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     real and nonnegative. This is the statement of the source with the bond
     dimension of Definition~\ref{def:chain_constant_bond} in place of the
     stated one \cite{gap:lvv13_constant_bond}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_prefix_spectral_bounds}
     The reduced state $\rho$ of $\Omega$ on the first $k$ sites is $CC^{*}$
@@ -145,7 +145,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
         \sqrt{1-\delta}\ge1-\delta$.
 \end{proof}
 
-\begin{theorem}[The energy after trimming]
+\begin{lemma}[The energy after trimming]
     \label{thm:chain_trim_energy}
     \lean{
         TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le,
@@ -175,7 +175,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     source $H$ is a sum of nearest-neighbour terms $0\le H_i\le1$ and $K$ is
     the term across the cut; its printed bound $E_0+6\sqrt\delta$ does not
     follow from its argument \cite{gap:lvv13_trimming_energy}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The gap gives $H\ge E_0$, so $\delta\ge0$, and
     $|\langle\Omega,w\rangle|\ge1-\delta/\Delta$. Since $u$, $w$ and $\Omega$
@@ -191,7 +191,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     theorem the squared norm of the discarded part is at most $2\eta$.
 \end{proof}
 
-\begin{theorem}[A state of constant rank across one cut]
+\begin{lemma}[A state of constant rank across one cut]
     \label{thm:chain_constant_rank_state}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond}
     \leanok
@@ -199,7 +199,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     Let $\Omega$ be a gapped ground vector, with energy $E_0$ and gap
     $\Delta>0$, of a finite-range chain Hamiltonian with term norms at most
     $J\ge0$ and local dimension $q\ge1$, which splits at the cut $k$ as in
-    Theorem~\ref{thm:chain_trim_energy}, and let $\delta>0$. Put
+    Lemma~\ref{thm:chain_trim_energy}, and let $\delta>0$. Put
     $\delta_0=\min\{\delta,1/12\}$. There is a
     unit vector $v$ with $\operatorname{rank}M_k(v)\le B_{\delta_0}$,
     $\operatorname{Re}\langle v,\Omega\rangle\ge1-\delta$, and
@@ -210,14 +210,14 @@ smaller trimming error recovers the energy bound of the source's corollary.
     This is the corollary of~\cite[lines 361--364]{Landau2015Polynomial},
     with the bond dimension $B_{\delta_0}$ fixed independently of the chain
     length and the cut.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_constant_bond_overlap, thm:chain_trim_energy}
     Take $v$ the normalized trimmed vector of $\Omega$ at $B_{\delta_0}$.
-    Theorem~\ref{thm:chain_constant_bond_overlap} gives
+    Lemma~\ref{thm:chain_constant_bond_overlap} gives
     $\operatorname{Re}\langle v,\Omega\rangle\ge1-\delta_0\ge1-\delta$
     and shows that the trimmed vector is nonzero; its rank is at most
-    $B_{\delta_0}$. Theorem~\ref{thm:chain_trim_energy} with $w=\Omega$,
+    $B_{\delta_0}$. Lemma~\ref{thm:chain_trim_energy} with $w=\Omega$,
     energy excess $0$, $\delta_B=\delta_0$ and $\eta=2\delta_0$ gives
     \begin{align}
         \operatorname{Re}\langle v,Hv\rangle
@@ -229,7 +229,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
 
 \subsection{Numerical estimates for trimming}
 
-\begin{theorem}[A numerical trimming bound]
+\begin{lemma}[A numerical trimming bound]
     \label{thm:chain_numerical_trim_bound}
     \lean{TNLean.MPS.AreaLaw.trimming_energy_fraction_le_six_mul_sqrt}
     \leanok
@@ -239,7 +239,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     \end{align}
     This is an auxiliary numerical estimate for the energy bound
     of~\cite[lines 509--515]{Landau2015Polynomial}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Put $r=\sqrt c\le1/40$. Then $\sqrt{2c}\le17r/12$,
     $8c\le r/5$, and $6r(1-8c)\ge597r/100$. Thus
@@ -247,7 +247,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     The denominator $1-8c$ is positive.
 \end{proof}
 
-\begin{theorem}[The numerical constant for trimming]
+\begin{lemma}[The numerical constant for trimming]
     \label{thm:chain_numerical_trim_constant}
     \lean{
         TNLean.MPS.AreaLaw.lvv_trimming_constant_bounds,
@@ -267,11 +267,11 @@ smaller trimming error recovers the energy bound of the source's corollary.
     \begin{align}
         \frac{8c+4\sqrt{2c}}{1-8c}\le6\sqrt c\le\frac{\Delta}{12}. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_numerical_trim_bound}
     One has $\Delta^2\le16$, $c/\Delta=\Delta/28561$, and
     $\sqrt c=\Delta/169$. Substitution gives the three stated inequalities
     and $6\sqrt c\le\Delta/12$. Since $c\le16/28561<1/1600$,
-    Theorem~\ref{thm:chain_numerical_trim_bound} gives the remaining bound.
+    Lemma~\ref{thm:chain_numerical_trim_bound} gives the remaining bound.
 \end{proof}

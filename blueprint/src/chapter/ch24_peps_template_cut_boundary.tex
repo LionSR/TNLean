@@ -5,7 +5,7 @@ Let $\Lambda\subset\mathbb Z^2$ be any finite induced domain, $A\subseteq\Lambda
 and $Z$ the endpoints of its unordered crossing edges. No connectedness
 assumption is imposed on $\Lambda$ or $A$.
 
-\begin{theorem}[Comparison with the ambient boundary]
+\begin{lemma}[Comparison with the ambient boundary]
     \label{thm:area_law_physical_ambient_boundary}
     \leanok
     \lean{
@@ -17,7 +17,7 @@ assumption is imposed on $\Lambda$ or $A$.
     For any finite ambient set $U$ disjoint from $Z$, inclusion into the
     lattice sends $\partial_\Lambda(A\cap U)$ injectively into $\partial U$.
     In particular, $|\partial_\Lambda(A\cap U)|\le|\partial U|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Orient a physical crossing edge from $p\in A\cap U$ to
@@ -26,7 +26,7 @@ assumption is imposed on $\Lambda$ or $A$.
     crosses $U$. Inclusion preserves unordered pairs injectively.
 \end{proof}
 
-\begin{theorem}[Separation of template dilations]
+\begin{lemma}[Separation of template dilations]
     \label{thm:area_law_template_dilation_separation}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.disjoint_ambientDilation}
@@ -34,14 +34,14 @@ assumption is imposed on $\Lambda$ or $A$.
     Suppose $D_0\ge1$, $s_0\ge1$, and
     $\operatorname{dist}_\infty(T,Z)>4D_0s_0$.
     For $0\le j\le s_0$, the ambient dilation $T_j$ is disjoint from $Z$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A point $z\in T_j\cap Z$ would be within distance $j\le s_0$ of a
     point of $T$, contradicting $4D_0s_0<\operatorname{dist}_\infty(T,Z)$.
 \end{proof}
 
-\begin{theorem}[Physical template boundary bounds]
+\begin{lemma}[Physical template boundary bounds]
     \label{thm:area_law_template_physical_boundary}
     \leanok
     \lean{
@@ -60,11 +60,11 @@ assumption is imposed on $\Lambda$ or $A$.
     \end{align}
     These are the physical edge estimates in
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The preceding separation estimate excludes cut endpoints from $T_j$
-    and its shell. By Theorem~\ref{thm:area_law_physical_ambient_boundary}
+    and its shell. By Lemma~\ref{thm:area_law_physical_ambient_boundary}
     and Lemma~\ref{lem:area_law_template_ambient_boundary},
     \begin{align}
         |\partial_\Lambda(A\cap T_j)|             & \le|\partial T_j|\le4n,             \\
@@ -113,7 +113,7 @@ assumption is imposed on $\Lambda$ or $A$.
     dyadic square inequalities.
 \end{proof}
 
-\begin{theorem}[Graph neighborhoods separated from a cut]
+\begin{lemma}[Graph neighborhoods separated from a cut]
     \label{thm:area_law_graph_neighborhood_cut_clearance}
     \lean{TNLean.PEPS.AreaLaw.graphNeighborhood_subset_of_cut_clearance}
     \leanok
@@ -130,7 +130,7 @@ assumption is imposed on $\Lambda$ or $A$.
     the cut-exclusion step in the proof of
     \cite[Theorem~1.1]{OpenAI2026AreaLaw}; separation from the earlier
     members of a family is a further geometric condition.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_scan_ambient_rows}
     Let $x$ be joined to $y\in A\cap T_L$ by a path of length at most $R$.
@@ -143,7 +143,7 @@ assumption is imposed on $\Lambda$ or $A$.
     Thus $x\in A$; the depth bound at $x$ gives $x\in T_{L+R}$.
 \end{proof}
 
-\begin{theorem}[Exclusion of the exterior and a remote union]
+\begin{lemma}[Exclusion of the exterior and a remote union]
     \label{thm:area_law_graph_neighborhood_remote_exclusion}
     \lean{TNLean.PEPS.AreaLaw.exterior_union_subset_graphNeighborhood_compl_of_clearance}
     \leanok
@@ -163,10 +163,10 @@ assumption is imposed on $\Lambda$ or $A$.
     In the application to \cite[Theorem~1.1, lines~825--838 of
         Section~11]{OpenAI2026AreaLaw}, $J$ is the whole union of earlier
     pieces of the same family.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_graph_neighborhood_cut_clearance}
-    By Theorem~\ref{thm:area_law_graph_neighborhood_cut_clearance},
+    By Lemma~\ref{thm:area_law_graph_neighborhood_cut_clearance},
     every $x\in N_R^\Lambda(S)$ belongs to $A$ and to
     $T+[-(L+R),L+R]^2_{\mathbb Z}$. Thus it lies outside
     $\Lambda\setminus A$. The dilation gives a point $t\in T$

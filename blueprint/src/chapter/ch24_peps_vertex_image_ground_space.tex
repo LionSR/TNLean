@@ -28,7 +28,7 @@
     \cite[Section~IV.C.1]{Cirac2021Matrix}.
 \end{definition}
 
-\begin{theorem}[Intersection of the one-site images]%
+\begin{lemma}[Intersection of the one-site images]%
     \label{thm:peps_vertex_image_ground_space}
     \lean{TNLean.PEPS.vertexImageProjection_mulVec_eq_self_iff,
         TNLean.PEPS.globalVertexTensorMap_leftInverse_eq_self_of_mem,
@@ -56,7 +56,7 @@
     This assertion holds for an arbitrary finite graph. It identifies
     the product site image, before imposing virtual bond constraints;
     it does not assert uniqueness of a PEPS parent ground state.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_injective_vertex_reconstruction}

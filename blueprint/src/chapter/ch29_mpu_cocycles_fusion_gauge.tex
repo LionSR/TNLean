@@ -1,0 +1,1609 @@
+\section{Scalar three-cocycles and fusion-tensor gauge freedom}
+\label{sec:mpug_scalar_gauge}
+
+Let $G$ be a group and write $\C^\times$ for the multiplicative group of
+nonzero complex numbers. The fusion tensors have the scalar gauge freedom
+\begin{align}
+    F^>_{g,h} & \longmapsto \beta_{g,h}F^>_{g,h},      \\
+    F^<_{g,h} & \longmapsto \beta_{g,h}^{-1}F^<_{g,h}.
+    \label{eq:mpug_fusion_gauge}
+\end{align}
+% Source anchor: arXiv:2502.20257, eq:scalar_fus_ten.
+This specifies the fusion-tensor gauge freedom of \cite{FrancoRubio2025MPUGauging}
+for the scalar functions $\beta$, $\omega$, $\gamma$, $L$, $\sigma$, and $\Xi$,
+with representation-level data as in
+Definition~\ref{def:mpug_group_representation}.
+
+\begin{lemma}[Scalar factors of an identity Kronecker product]
+    \label{thm:mpug_kronecker_identity_factors}
+    \lean{Matrix.exists_eq_smul_one_of_kronecker_eq_one}
+    \leanok
+    Let $M$ and $N$ be nonempty sets with decidable equality, and let
+    $A\in\operatorname{Mat}_M(\C)$ and $B\in\operatorname{Mat}_N(\C)$. If
+    $A\otimes B=\mathbf 1$, then there is a nonzero $c\in\C$ such that
+    \begin{align}
+        A & =c\mathbf 1, & B & =c^{-1}\mathbf 1.
+        \label{eq:mpug_kronecker_identity_factors}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    For any $i_0\in M$ and $j_0\in N$, the
+    $((i_0,j_0),(i_0,j_0))$ entry gives
+    $A_{i_0i_0}B_{j_0j_0}=1$. Thus $c=A_{i_0i_0}$ is nonzero and
+    $B_{j_0j_0}=c^{-1}$. Comparing every
+    $((i,j_0),(i',j_0))$ entry gives $A_{ii'}=c\delta_{ii'}$; comparing every
+    $((i_0,j),(i_0,j'))$ entry gives $B_{jj'}=c^{-1}\delta_{jj'}$.
+\end{proof}
+
+\begin{lemma}[Unitarity from an adjoint Kronecker product]
+    \label{thm:matrix_unitary_adjoint_kronecker}
+    \lean{Matrix.isUnitaryBetween_of_conjTranspose_kronecker}
+    \leanok
+    Let $M,N$ be nonempty finite sets, and let
+    $K\colon\C^N\to\C^M$ be a complex matrix. If
+    $K^\dagger\otimes K\colon\C^{M\times N}\to\C^{N\times M}$
+    is unitary, then $K$ is unitary between its coordinate spaces:
+    \begin{align}
+        K^\dagger K & =I_N, \\
+        KK^\dagger  & =I_M.
+    \end{align}
+    In the matrix implication used in
+    \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}, no equality of
+    $|M|$ and $|N|$ is assumed; the tensor-network identity to which it is
+    applied is a separate result.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_kronecker_identity_factors}
+    The isometry identity for $K^\dagger\otimes K$ gives
+    \begin{align}
+        (KK^\dagger)\otimes(K^\dagger K) & =I_{M\times N}.
+    \end{align}
+    By Lemma~\ref{thm:mpug_kronecker_identity_factors}, there is a
+    nonzero $c\in\C$ with $KK^\dagger=cI_M$ and
+    $K^\dagger K=c^{-1}I_N$. Consequently,
+    \begin{align}
+        (KK^\dagger)^2
+         & =K(K^\dagger K)K^\dagger
+        =c^{-1}KK^\dagger=I_M.
+    \end{align}
+    For any $i\in M$, the $(i,i)$ entry gives $c^2=1$, while positivity
+    of the Gram matrix gives $c=(KK^\dagger)_{ii}\geq0$.
+    Thus $c=1$, and the two scalar Gram identities become
+    $K^\dagger K=I_N$ and $KK^\dagger=I_M$.
+\end{proof}
+\begin{lemma}[Unitary factors of a unitary Kronecker product]
+    \label{thm:mpug_unitary_kronecker_factors}
+    \lean{Matrix.exists_pos_real_rescaling_mem_unitaryGroup_of_kronecker_mem_unitaryGroup,
+        Matrix.exists_pos_real_smul_unitary_factors_of_kronecker_mem_unitaryGroup}
+    \leanok
+    Let $M$ and $N$ be nonempty finite sets. If
+    $K_1\in\operatorname{Mat}_M(\C)$ and
+    $K_2\in\operatorname{Mat}_N(\C)$ satisfy that $K_1\otimes K_2$ is
+    unitary, then there are a positive real number $\delta$ and unitary
+    matrices $W_1,W_2$ such that
+    \begin{align}
+        K_1 & =\delta W_1, & K_2 & =\delta^{-1}W_2.
+        \label{eq:mpug_unitary_kronecker_factors}
+    \end{align}
+    Equivalently, $\delta^{-1}K_1$ and $\delta K_2$ are unitary.
+    % Source anchor: arXiv:2502.20257, Lemma lem:deco, lines 1052--1066.
+    This is only the tensor-factor step in the decomposition result
+    of~\cite{FrancoRubio2025MPUGauging}; it does not construct or compare the
+    three-legged decompositions occurring there.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_kronecker_identity_factors}
+    Unitarity gives
+    \begin{align}
+        (K_1^\dagger K_1)\otimes(K_2^\dagger K_2)=\mathbf 1.
+    \end{align}
+    Lemma~\ref{thm:mpug_kronecker_identity_factors} gives a nonzero
+    $c\in\C$ such that
+    $K_1^\dagger K_1=c\mathbf 1$ and
+    $K_2^\dagger K_2=c^{-1}\mathbf 1$. Positivity of the first Gram matrix
+    makes $c$ a positive real number. Taking $\delta=\sqrt c$ shows directly
+    that $\delta^{-1}K_1$ and $\delta K_2$ have identity Gram matrices; these
+    are $W_1$ and $W_2$ in
+    (\ref{eq:mpug_unitary_kronecker_factors}).
+\end{proof}
+
+\begin{lemma}[Cross-product rigidity]
+    \label{thm:mpug_cross_product_rigidity}
+    \lean{Kraus.IsNormal.eq_smul_of_cross_mul_eq,
+        Kraus.IsInjective.eq_smul_of_cross_mul_eq}
+    \leanok
+    \uses{def:injective, def:normal}
+    Let $A_i$ and $B_i$ be two families of square matrices of the same size,
+    indexed by the same finite alphabet, and suppose that, for every $i,j$,
+    \begin{align}
+        B_iA_j & =A_iB_j.
+        \label{eq:mpug_cross_product_rigidity}
+    \end{align}
+    If $A$ is injective, or more generally normal, then there is a scalar
+    $c\in\C$ with $B_i=cA_i$ for every $i$;
+    % Source anchor: arXiv:2502.20257, prop:MPUsplus, lines 1255--1325.
+    in~\cite[lines~1255--1325]{FrancoRubio2025MPUGauging}, this
+    commuting-tensor step shows that the tensor commuting with a normal
+    matrix product unitary tensor is a multiple of it.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:decomposition_map, thm:normal_tensor_gram_rigidity}
+    Let $N\geq1$ be a blocking length at which the length-$N$ words of $A$
+    span the full matrix algebra, and decompose the identity as
+    $\mathbf 1=\sum_\sigma c_\sigma A^{\sigma_1}\cdots A^{\sigma_N}$. The
+    cross relation moves the marked letter successively through the word,
+    \begin{align}
+        B_iA^{\sigma_1}\cdots A^{\sigma_N}
+         & =A_iA^{\sigma_1}\cdots A^{\sigma_{N-1}}B^{\sigma_N}.
+        \notag
+    \end{align}
+    When $N=1$, the middle word on the right is absent. Thus $B_i=A_iC$ with
+    $C=\sum_\sigma c_\sigma
+        A^{\sigma_1}\cdots A^{\sigma_{N-1}}B^{\sigma_N}$.
+    Substituting this identity into
+    (\ref{eq:mpug_cross_product_rigidity}) gives
+    $A_i(CA_j-A_jC)=0$ for all $i$ and $j$. Multiplying on the left by a
+    length-$N$ word, whose last letter absorbs one of the $A_i$, and
+    recombining the words into the identity gives $CA_j=A_jC$. A matrix
+    commuting with every letter of a normal family is a multiple of the
+    identity, so $C=c\mathbf 1$ and $B_i=cA_i$. The injective case is the
+    case of blocking length one.
+\end{proof}
+
+\begin{definition}[Canonical boundaries under physical adjunction]
+    \label{def:mpug_adjoint_canonical_boundaries}
+    \lean{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpdo_physical_adjoint}
+    Let $\mathcal U$ be an MPU with a canonical-form-II presentation and
+    recorded positive diagonal fixed matrix $\rho$, with
+    $\operatorname{tr}\rho=1$. Its physical adjoint has letters
+    $(\mathcal U^\dagger)^{ij}=\overline{\mathcal U^{ji}}$; the virtual
+    indices are not transposed. Give its normalized flattening the
+    conjugated canonical blocks with the physical indices exchanged, and
+    retain the same full support and the same fixed matrix $\rho$.
+    As in the reflected boundaries of
+    \cite[lines~1164--1254]{FrancoRubio2025MPUGauging}, this defines
+    canonical-form-II data for $\mathcal U^\dagger$ with the same left and
+    right boundaries $I,\rho$.
+    % This construction does not assert preservation of simplicity.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_physical_adjoint_identities,
+        def:mpu_physical_adjoint_cfii_data,
+        thm:mpu_physical_adjoint_normalized_flattening,
+        thm:cpsv_map_star_transfer_fixed_point}
+    Physical adjunction preserves periodic unitarity and conjugates the
+    canonical blocks without changing their dimensions. Writing
+    $\mathcal E_{\mathcal U}$ for the transfer map of $\mathcal U$, the
+    conjugated fixed-point equation is
+    \begin{align}
+        \mathcal E_{\mathcal U^\dagger}(\rho)
+         & =\overline{\mathcal E_{\mathcal U}(\overline\rho)}
+        =\overline{\mathcal E_{\mathcal U}(\rho)}
+        =\overline\rho=\rho,
+    \end{align}
+    using $\overline\rho=\rho$ and $\mathcal E_{\mathcal U}(\rho)=\rho$. The transfer map is invariant under the physical-index permutation, so the
+    conjugated data share the same fixed matrix.
+\end{proof}
+
+\begin{lemma}[Canonical boundary contractions]
+    \label{thm:mpug_simple_canonical_boundary_contractions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair,
+        MPOTensor.IsMPUCanonicalFormII.doubleLayer_boundary_contractions}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_double_layer}
+    Let $\mathcal U$ be a simple MPU with a canonical-form-II presentation
+    and recorded fixed matrix $\rho$. Let $W$ be its unnormalized double layer,
+    put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
+    $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$, the
+    boundary removals used in the six-tensor argument of
+    \cite[lines~1164--1254]{FrancoRubio2025MPUGauging} hold:
+    \begin{align}
+        W^{ij}W^{kl}       & =W^{ij}|\rho)(\Phi|W^{kl},
+        \label{eq:mpug_simple_canonical_split}          \\
+        (\Phi|W^{ij}W^{kl} & =\delta_{ij}(\Phi|W^{kl},
+        \label{eq:mpug_simple_canonical_bdry_left}      \\
+        W^{ij}W^{kl}|\rho) & =\delta_{kl}W^{ij}|\rho).
+        \label{eq:mpug_simple_canonical_bdry_right}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
+        thm:mpu_supplied_projector_simple2,
+        thm:mpu_all_later_simple_blockings}
+    Aligning the simplicity fixed vectors with the canonical fixed pair using
+    the stabilized normalized transfer power gives~(\ref{eq:mpug_simple_canonical_split}) and
+    $(\Phi|W^{ij}|\rho)=\delta_{ij}$. Contracting~(\ref{eq:mpug_simple_canonical_split}) on
+    the left with $(\Phi|$ yields~(\ref{eq:mpug_simple_canonical_bdry_left}); contracting on the right with $|\rho)$ yields~(\ref{eq:mpug_simple_canonical_bdry_right}).
+\end{proof}
+
+\begin{lemma}[Canonical boundary contractions for a simple physical adjoint]
+    \label{thm:mpug_adjoint_canonical_boundary_contractions}
+    \lean{MPOTensor.IsMPUCanonicalFormII.physicalAdjoint_doubleLayer_boundary_contractions}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpu_double_layer}
+    Let $\mathcal U$ be an MPU with a canonical-form-II presentation and
+    recorded fixed matrix $\rho$. Assume that $\mathcal U^\dagger$ is
+    simple. Let $W_\dagger$ be the unnormalized double layer of
+    $\mathcal U^\dagger$, put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
+    $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
+    \begin{align}
+        (\Phi|W_\dagger^{ij}W_\dagger^{kl}
+         & =\delta_{ij}(\Phi|W_\dagger^{kl}, \\
+        W_\dagger^{ij}W_\dagger^{kl}|\rho)
+         & =\delta_{kl}W_\dagger^{ij}|\rho).
+    \end{align}
+    The simplicity assumption is precisely the additional hypothesis used
+    for the reflected reduction in
+    \cite[lines~1221--1254]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_adjoint_canonical_boundaries,
+        thm:mpug_simple_canonical_boundary_contractions}
+    Passing the canonical presentation to $\mathcal U^\dagger$ with
+    the same $\rho$ and applying
+    Lemma~\ref{thm:mpug_simple_canonical_boundary_contractions}
+    to the simple tensor $\mathcal U^\dagger$ yields both boundary
+    contractions.
+\end{proof}
+
+\begin{definition}[The three-tensor contraction $s$]
+    \label{def:mpug_adjoint_simple_contraction}
+    \lean{MPOTensor.adjointSimpleContraction}
+    \leanok
+    Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
+    dimension $D$, and let $\rho$ be a complex $D\times D$ matrix.
+    Define an MPO tensor $s$ of the same dimensions by
+    \begin{align}
+        s^{ij}_{ab}
+         & =\sum_{p,q=0}^{d-1}\sum_{x,r,t=0}^{D-1}
+        \mathcal U^{ip}_{xb}\,
+        \overline{\mathcal U^{qp}_{xr}}\,
+        \mathcal U^{qj}_{at}\,\rho_{tr}.
+        \label{eq:mpug_adjoint_simple_contraction}
+    \end{align}
+    For the tensor marked $s$ in
+    \cite[lines~1190--1218]{FrancoRubio2025MPUGauging}, the left open bond
+    is on the bottom tensor, the right open bond is on the top tensor,
+    only $t=r$ contributes when $\rho$ is diagonal, and no factor $1/d$
+    occurs because the letters in this contraction are unnormalized.
+\end{definition}
+
+\begin{lemma}[The two reductions of the six-tensor network]
+    \label{thm:mpug_adjoint_simple_cross_product}
+    \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_cross_mul}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpug_adjoint_simple_contraction}
+    Let $\mathcal U$ have a canonical-form-II presentation with recorded
+    fixed matrix $\rho$, and assume that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Construct $s$ from this same $\rho$
+    by (\ref{eq:mpug_adjoint_simple_contraction}). For all physical
+    indices $i,j,k,l$, the two reductions in
+    \cite[lines~1164--1254]{FrancoRubio2025MPUGauging} give
+    \begin{align}
+        s^{ij}\mathcal U^{kl} & =\mathcal U^{ij}s^{kl}.
+        \label{eq:mpug_adjoint_simple_cross_product}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_simple_canonical_boundary_contractions,
+        thm:mpug_adjoint_canonical_boundary_contractions}
+    For fixed open indices $i,j,k,l,a,b$, the six-tensor network expands as
+    \begin{align}
+        \mathcal N^{ij,kl}_{ab}
+         & =\sum_{p,q,v,w}\sum_{x,m,n,z,r,t}
+        \mathcal U^{ip}_{xm}\mathcal U^{kq}_{mb}
+        \overline{\mathcal U^{vp}_{xn}}
+        \overline{\mathcal U^{wq}_{nr}}
+        \mathcal U^{vj}_{az}\mathcal U^{wl}_{zt}\rho_{tr}.
+    \end{align}
+    The first sum ranges over physical indices and the second over virtual
+    indices. Applying the right-boundary contraction to the lower two
+    layers gives $\mathcal N^{ij,kl}_{ab}=(s^{ij}\mathcal U^{kl})_{ab}$.
+    Regrouping the same finite sum and applying the left-boundary
+    contraction for the physical adjoint to the upper two layers gives
+    $\mathcal N^{ij,kl}_{ab}=(\mathcal U^{ij}s^{kl})_{ab}$.
+    Both expressions are therefore equal.
+\end{proof}
+
+\begin{lemma}[The contraction $s$ is a scalar multiple of the MPU tensor]
+    \label{thm:mpug_adjoint_simple_scalar}
+    \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_eq_smul}
+    \leanok
+    \discussion{7317}
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
+        def:mpdo_physical_adjoint, def:mpug_adjoint_simple_contraction}
+    Let $\mathcal U$ have a canonical-form-II presentation with recorded
+    fixed matrix $\rho$, and suppose that both $\mathcal U$ and
+    $\mathcal U^\dagger$ are simple. Then, as in the proportionality
+    conclusion of \cite[lines~1255--1325]{FrancoRubio2025MPUGauging}, the
+    tensor $s$ constructed from this $\rho$ satisfies
+    \begin{align}
+        s^{ij} & =\delta\mathcal U^{ij}
+    \end{align}
+    for a single scalar $\delta\in\C$ and every physical pair $i,j$.
+    % This theorem proves only proportionality. Normalization requires
+    % the separate source-factor and trace arguments below; the raw
+    % proportionality theorem itself does not evaluate its scalar.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_adjoint_simple_cross_product,
+        thm:mpu_canonical_form_ii_normal, thm:mpug_cross_product_rigidity}
+    With $\widetilde{\mathcal U}^{ij}=d^{-1/2}\mathcal U^{ij}$,
+    canonical form II gives $d,D>0$ and normality of
+    $\widetilde{\mathcal U}$. Scaling
+    (\ref{eq:mpug_adjoint_simple_cross_product}) gives
+    $s^{ij}\widetilde{\mathcal U}^{kl}
+        =\widetilde{\mathcal U}^{ij}s^{kl}$.
+    Cross-product rigidity, using blocking to an injective tensor, gives
+    $s^{ij}=c\widetilde{\mathcal U}^{ij}$ for a single scalar $c$, so
+    $\delta=c/\sqrt d$ satisfies $s^{ij}=\delta\mathcal U^{ij}$.
+\end{proof}
+
+\subsection{Scalar cochains and group cohomology}
+
+\begin{definition}[Scalar cochains and normalization]
+    \label{def:mpug_scalar_cochains}
+    \lean{TNLean.Algebra.ScalarThreeCochain,
+        TNLean.Algebra.ScalarCocycle.IsNormalized,
+        TNLean.Algebra.ScalarThreeCochain.IsNormalized}
+    \leanok
+    \uses{def:scalar_cocycle}
+    By Definition~\ref{def:scalar_cocycle}, a scalar $2$-cochain
+    is a function $\beta\colon G^2\to\C^\times$. A scalar $3$-cochain is a
+    function $\omega\colon G^3\to\C^\times$. Following the paper's later
+    standing convention, it is normalized when, for all $g,h,k\in G$,
+    \begin{align}
+        \omega(e,h,k) & = 1, \\
+        \omega(g,e,k) & = 1, \\
+        \omega(g,h,e) & = 1.
+        \label{eq:mpug_three_normalized}
+    \end{align}
+    The standing convention of~\cite{FrancoRubio2025MPUGauging} makes every
+    fusion tensor involving the identity trivial, which is what forces all
+    three identity axes. As recorded in
+    \cite{gap:fbc25_three_cocycle_normalization_typo}, the three-axis form
+    corrects the printed display, which repeats the third axis in place of
+    the first two.
+    % Source anchor: arXiv:2502.20257, standing convention at lines 1936--1937
+    %   and its display eq:triv_omegas, whose printed form repeats
+    %   omega(g,h,e) three times.
+    % Local fix: docs/paper-gaps/fbc25_three_cocycle_normalization_typo.tex.
+    The scalar $2$-cochain $\beta$ is normalized when
+    $\beta(e,g)=\beta(g,e)=1$ for every $g\in G$.
+\end{definition}
+
+\begin{definition}[Scalar three-cocycle]
+    \label{def:mpug_three_cocycle}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    As in~\cite{FrancoRubio2025MPUGauging}, a scalar $3$-cochain is a
+    $3$-cocycle when, for all $g,h,k,l\in G$,
+    \begin{align}
+        \omega(gh,k,l)\omega(g,h,kl)
+         & =\omega(g,h,k)\omega(g,hk,l)\omega(h,k,l).
+        \label{eq:mpug_three_cocycle}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, eq:3-cocycle.
+\end{definition}
+
+\begin{definition}[Three-coboundary and fusion-tensor gauge action]
+    \label{def:mpug_fusion_gauge}
+    \lean{TNLean.Algebra.ScalarThreeCochain.coboundary,
+        TNLean.Algebra.ScalarThreeCochain.fusionGauge}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a scalar $2$-cochain $\beta$, define
+    \begin{align}
+        (d\beta)(g,h,k)
+         & =\frac{\beta(g,hk)\beta(h,k)}
+        {\beta(g,h)\beta(gh,k)},
+        \label{eq:mpug_coboundary}        \\
+        (\beta\mathbin{\triangleright}\omega)(g,h,k)
+         & =(d\beta)(g,h,k)\omega(g,h,k).
+        \label{eq:mpug_gauge_action}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, eq:omegagauge.
+    As in~\cite{FrancoRubio2025MPUGauging}, formula~(\ref{eq:mpug_gauge_action})
+    is the change of $\omega$ induced by (\ref{eq:mpug_fusion_gauge}).
+\end{definition}
+
+\begin{lemma}[Identity and composition of fusion gauges]
+    \label{thm:mpug_gauge_action}
+    \lean{TNLean.Algebra.ScalarThreeCochain.fusionGauge_one,
+        TNLean.Algebra.ScalarThreeCochain.fusionGauge_comp}
+    \leanok
+    \uses{def:mpug_fusion_gauge}
+    Let $1$ denote the constant scalar $2$-cochain and let
+    $(\beta\gamma)(g,h)=\beta(g,h)\gamma(g,h)$. Then
+    \begin{align}
+        1\mathbin{\triangleright}\omega & =\omega,
+        \label{eq:mpug_gauge_identity}                                                  \\
+        \gamma\mathbin{\triangleright}
+        (\beta\mathbin{\triangleright}\omega)
+                                        & =(\beta\gamma)\mathbin{\triangleright}\omega.
+        \label{eq:mpug_gauge_composition}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_fusion_gauge}
+    The constant cochain has $d1=1$. Commutativity of $\C^\times$ gives
+    $d(\beta\gamma)=(d\beta)(d\gamma)$, and substitution into
+    (\ref{eq:mpug_gauge_action}) gives
+    (\ref{eq:mpug_gauge_identity}) and
+    (\ref{eq:mpug_gauge_composition}).
+\end{proof}
+
+\begin{lemma}[A three-coboundary is a three-cocycle]
+    \label{thm:mpug_coboundary_cocycle}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isCocycle_coboundary}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    For every scalar $2$-cochain $\beta$, the cochain $d\beta$ satisfies
+    (\ref{eq:mpug_three_cocycle}).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    Expanding the two sides gives the same product after cancellation:
+    \begin{align}
+         & (d\beta)(gh,k,l)(d\beta)(g,h,kl) \\
+         & \quad =
+        \frac{\beta(k,l)\beta(h,kl)\beta(g,hkl)}
+        {\beta(ghk,l)\beta(gh,k)\beta(g,h)} \\
+         & \quad =
+        (d\beta)(g,h,k)(d\beta)(g,hk,l)(d\beta)(h,k,l).
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Products and fusion gauges preserve three-cocycles]
+    \label{thm:mpug_gauge_preserves_cocycle}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.mul,
+        TNLean.Algebra.ScalarThreeCochain.IsCocycle.fusionGauge}
+    \leanok
+    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    The pointwise product of two scalar $3$-cocycles is a scalar
+    $3$-cocycle. Consequently, if $\omega$ satisfies
+    (\ref{eq:mpug_three_cocycle}), then so does
+    $\beta\mathbin{\triangleright}\omega$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_three_cocycle, thm:mpug_coboundary_cocycle}
+    Multiplying the two instances of (\ref{eq:mpug_three_cocycle}) and
+    reordering their factors in $\C^\times$ shows that the pointwise product of
+    two $3$-cocycles is a $3$-cocycle. Applying this product identity to
+    $(d\beta)\omega$, together with Lemma~\ref{thm:mpug_coboundary_cocycle}
+    for $d\beta$, yields the second claim.
+\end{proof}
+
+\begin{lemma}[Normalization under a fusion gauge]
+    \label{thm:mpug_gauge_preserves_normalization}
+    \lean{TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary_iff,
+        TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary,
+        TNLean.Algebra.ScalarThreeCochain.IsNormalized.mul,
+        TNLean.Algebra.ScalarThreeCochain.IsNormalized.fusionGauge}
+    \leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
+    The $3$-coboundary $d\beta$ is normalized if and only if there is a
+    constant $c\in\C^\times$ such that, for every $g\in G$,
+    \begin{align}
+        \beta(e,g) & =c=\beta(g,e).
+        \label{eq:mpug_coboundary_normalized_iff}
+    \end{align}
+    In particular, a normalized scalar $2$-cochain has normalized
+    $3$-coboundary. Hence $\beta\mathbin{\triangleright}\omega$ is normalized
+    whenever both $\beta$ and $\omega$ are normalized.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
+    Setting one argument at a time equal to $e$ in
+    (\ref{eq:mpug_coboundary}), if $d\beta$ is normalized, then
+    (\ref{eq:mpug_three_normalized}) for $d\beta$ at $(e,e,g)$ and at
+    $(g,e,e)$ gives $\beta(e,g)=\beta(e,e)=\beta(g,e)$. Conversely,
+    (\ref{eq:mpug_coboundary_normalized_iff}) gives
+    \begin{align}
+        (d\beta)(e,h,k) & =1, \\
+        (d\beta)(g,e,k) & =1, \\
+        (d\beta)(g,h,e) & =1.
+        \label{eq:mpug_coboundary_normalized_converse}
+    \end{align}
+    Taking the common constant to be $1$ proves the normalized-$\beta$
+    corollary. Since pointwise products preserve
+    (\ref{eq:mpug_coboundary_normalized_converse}), the gauged cochain
+    $\beta\mathbin{\triangleright}\omega$ of (\ref{eq:mpug_gauge_action}) is
+    normalized whenever both $\beta$ and $\omega$ are normalized.
+\end{proof}
+
+\begin{definition}[Cohomologous scalar three-cochains]
+    \label{def:mpug_cohomologous_to}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo}
+    \leanok
+    \uses{def:mpug_fusion_gauge}
+    Two scalar $3$-cochains $\omega$ and $\eta$ are cohomologous when
+    $\omega=\beta\mathbin{\triangleright}\eta$ for some scalar
+    $2$-cochain $\beta$.
+\end{definition}
+
+\begin{lemma}[Cohomologous-to is an equivalence relation]
+    \label{thm:mpug_cohomologous_to_equivalence}
+    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.refl,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.symm,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.trans,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.equivalence}
+    \leanok
+    \uses{def:mpug_cohomologous_to, thm:mpug_gauge_action}
+    Cohomologous-to is reflexive, symmetric, and transitive.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_gauge_action}
+    Reflexivity uses the constant cochain $1$. If $\omega=
+        \beta\mathbin{\triangleright}\eta$, then
+    \begin{align}
+        \beta^{-1}\mathbin{\triangleright}\omega
+         & =(\beta\beta^{-1})\mathbin{\triangleright}\eta
+        =\eta,
+    \end{align}
+    which proves symmetry. Composition formula
+    (\ref{eq:mpug_gauge_composition}) proves transitivity.
+\end{proof}
+
+\begin{definition}[Trivial scalar gauge class]
+    \label{def:mpug_trivial_gauge_class}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass}
+    \leanok
+    \uses{def:mpug_cohomologous_to}
+    A scalar $3$-cochain has trivial gauge class when it is cohomologous to
+    the constant cochain $1$.
+\end{definition}
+
+\begin{lemma}[Cocycles and classes for trivial coefficients]
+    \label{thm:mpug_h2_trivial_coefficients}
+    \lean{TNLean.Algebra.isMulCocycle₂_iff,
+        TNLean.Algebra.H2π_eq_iff_isMulCoboundary₂_div}
+    \leanok
+    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle, def:h2_cx}
+    Let $G$ act trivially on $\C^\times$, and let
+    $f(g,h)=\omega(g,h)$. The multiplicative cocycle equation
+    \begin{align}
+        f(gh,k)f(g,h)
+         & =f(h,k)f(g,hk)
+        \label{eq:mpug_h2_cocycle_comparison}
+    \end{align}
+    is equivalent to Definition~\ref{def:is_cocycle}.
+
+    If $\pi$ denotes the canonical map from multiplicative $2$-cocycles to
+    degree-two group cohomology, then for any two cocycles $\omega_1$ and
+    $\omega_2$,
+    \begin{align}
+        \omega_1\sim\omega_2
+         & \quad\Longleftrightarrow\quad
+        \pi(\omega_1)=\pi(\omega_2).
+        \label{eq:mpug_h2_class_comparison}
+    \end{align}
+    % Source anchor: arXiv:2502.20257, lines 1927--1931.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle,
+        thm:coboundary_iff_cohomologous_one}
+    Since $\C^\times$ is commutative,
+    (\ref{eq:mpug_h2_cocycle_comparison}) is obtained from the cocycle
+    equation by interchanging the two factors on each side.
+    By Lemma~\ref{thm:coboundary_iff_cohomologous_one},
+    $\omega_1\sim\omega_2$ holds when $\omega_1\omega_2^{-1}$ is a
+    coboundary. In additive notation this ratio is the difference of the
+    corresponding cochains, so the quotient criterion for $\pi$ gives
+    (\ref{eq:mpug_h2_class_comparison}).
+\end{proof}
+
+\begin{lemma}[Every class has a scalar cocycle representative]
+    \label{thm:mpug_h2_group_cohomology_comparison}
+    \lean{TNLean.Algebra.ScalarCocycle.exists_H2π_eq}
+    \leanok
+    \uses{def:h2_cx, thm:mpug_h2_trivial_coefficients}
+    Endowing $\C^\times$ with the trivial $G$-action, every element of
+    $H^2\bigl(G,\C^\times_{\mathrm{triv}}\bigr)$ is the class $\pi(\omega)$ of
+    a scalar $2$-cocycle $\omega$. Together with
+    (\ref{eq:mpug_h2_class_comparison}), this identifies the
+    $H^2(H,\C^\times)$ appearing in the pair $(H,\psi)$ of
+    \cite[lines~1927--1931]{FrancoRubio2025MPUGauging} with the scalar
+    $2$-cocycles modulo $\sim$:
+    \begin{align}
+        Z^2(G,\C^\times)/{\sim}
+         & \simeq H^2\bigl(G,\C^\times_{\mathrm{triv}}\bigr).
+        \label{eq:mpug_h2_equivalence}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_h2_trivial_coefficients}
+    Currying and uncurrying identify a multiplicative representative
+    $f:G\times G\to\C^\times$ in the inhomogeneous cochain complex with a
+    scalar $2$-cochain, and by (\ref{eq:mpug_h2_cocycle_comparison}) the
+    cocycle conditions agree.
+\end{proof}
+
+\begin{definition}[Scalar three-cocycles in degree-three group cohomology]
+    \label{def:mpug_h3_group_cohomology}
+    \lean{TNLean.Algebra.scalarRepresentationEquiv,
+        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain,
+        TNLean.Algebra.ScalarCocycle.ofInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.ofInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.toCocycles,
+        TNLean.Algebra.ScalarThreeCochain.ofCocycles,
+        TNLean.Algebra.ScalarThreeCochain.cocyclesEquiv,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass}
+    \leanok
+    \uses{def:mpug_three_cocycle, thm:mpug_h2_group_cohomology_comparison}
+    Giving $\C^\times$ the trivial $G$-action and writing it additively as in
+    Lemma~\ref{thm:mpug_h2_group_cohomology_comparison}, a scalar
+    $n$-cochain for $n=2,3$ is an inhomogeneous $n$-cochain
+    $G^n\to\C^\times$ of this representation, and conversely. Under this
+    identification a scalar $3$-cocycle is an inhomogeneous $3$-cocycle, and
+    every inhomogeneous $3$-cocycle arises this way. The class of a scalar
+    $3$-cocycle $\omega$ is its image
+    \begin{align}
+        [\omega] & \in H^3\bigl(G,\C^\times_{\mathrm{triv}}\bigr)
+        \label{eq:mpug_h3_class}
+    \end{align}
+    in the degree-three cohomology of the inhomogeneous cochain complex.
+\end{definition}
+
+\begin{theorem}[Fusion-gauge classes are degree-three cohomology classes]
+    \label{thm:mpug_h3_group_cohomology}
+    \lean{TNLean.Algebra.groupCohomology_π_eq_zero_iff,
+        TNLean.Algebra.scalarRepresentationEquiv_ofMul_eq_zero_iff,
+        TNLean.Algebra.ScalarCohomology.ofMulDistribMulAction_ρ_apply,
+        TNLean.Algebra.ScalarThreeCochain.d_toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.isCocycle_iff_d_eq_zero,
+        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain_apply,
+        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain,
+        TNLean.Algebra.ScalarThreeCochain.fusionGauge_eq_iff,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_exists_d_eq,
+        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq,
+        TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero,
+        TNLean.Algebra.ScalarThreeCochain.anomalyClass_surjective}
+    \leanok
+    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    With the trivial action, the differentials of the inhomogeneous cochain
+    complex in degrees two and three are, multiplicatively,
+    \begin{align}
+        (d\beta)(g,h,k)
+         & =\frac{\beta(h,k)\beta(g,hk)}{\beta(gh,k)\beta(g,h)},
+        \label{eq:mpug_h3_d2}                                    \\
+        (d\omega)(g,h,k,l)
+         & =\frac{\omega(h,k,l)\omega(g,hk,l)\omega(g,h,k)}
+        {\omega(gh,k,l)\omega(g,h,kl)}.
+        \label{eq:mpug_h3_d3}
+    \end{align}
+    Hence (\ref{eq:mpug_h3_d2}) is the three-coboundary
+    (\ref{eq:mpug_coboundary}), and $d\omega=1$ is the three-cocycle equation
+    (\ref{eq:mpug_three_cocycle}). For scalar $3$-cocycles $\omega$ and
+    $\eta$,
+    \begin{align}
+        \omega\text{ and }\eta\text{ are cohomologous}
+         & \iff [\omega]=[\eta],
+        \label{eq:mpug_h3_cohomologous} \\
+        \omega\text{ has trivial gauge class}
+         & \iff [\omega]=0,
+        \label{eq:mpug_h3_trivial}
+    \end{align}
+    and every class in $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of a
+    scalar $3$-cocycle. No normalization of the cochains is assumed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    In degree $n$ the inhomogeneous differential of a cochain $f$ with
+    trivial action is the alternating sum of $f$ at the $n+2$ faces
+    obtained by dropping the first argument, multiplying two adjacent
+    arguments, or dropping the last argument. For $n=2,3$ this is
+    (\ref{eq:mpug_h3_d2}) and (\ref{eq:mpug_h3_d3}) written multiplicatively.
+    A cocycle has zero class exactly when it lies in the image of the
+    preceding differential, since the cohomology is the cokernel of that
+    differential into the cocycles. By (\ref{eq:mpug_gauge_action}),
+    $\beta\mathbin{\triangleright}\eta=\omega$ holds exactly when
+    $d\beta=\omega\eta^{-1}$, whose additive form is the difference of the
+    two cochains. This gives (\ref{eq:mpug_h3_cohomologous}), and taking
+    $\eta=1$ gives (\ref{eq:mpug_h3_trivial}). Surjectivity holds because
+    every inhomogeneous $3$-cocycle is a scalar $3$-cocycle.
+\end{proof}
+
+\begin{definition}[Cyclic invariant of a scalar three-cochain]
+    \label{def:mpug_cyclic_invariant}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a scalar $3$-cochain $\omega$, an element $g\in G$, and a natural
+    number $n$, set
+    \begin{align}
+        I_{g,n}(\omega)
+         & =\prod_{k=0}^{n-1}\omega(g,g^k,g).
+        \label{eq:mpug_cyclic_invariant}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Gauge invariance of the cyclic invariant]
+    \label{thm:mpug_cyclic_invariant_gauge}
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_coboundary,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.cyclicInvariant_eq,
+        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_eq_one_of_isTrivialGaugeClass,
+        TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one}
+    \leanok
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    Let $g^n=e$. For every scalar $2$-cochain $\beta$,
+    \begin{align}
+        I_{g,n}(d\beta)                              & =1,               \\
+        I_{g,n}(\beta\mathbin{\triangleright}\omega) & =I_{g,n}(\omega).
+    \end{align}
+    Consequently cohomologous $3$-cochains have the same cyclic invariant,
+    every $3$-cochain with trivial gauge class has $I_{g,n}(\omega)=1$, and a
+    cyclic invariant different from $1$ shows that the gauge class of
+    $\omega$ is nontrivial. No normalization of $\beta$ or $\omega$ is
+    assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
+        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    By (\ref{eq:mpug_coboundary}),
+    \begin{align}
+        (d\beta)(g,g^k,g)
+         & =\frac{\beta(g,g^{k+1})}{\beta(g,g^k)}\cdot
+        \frac{\beta(g^k,g)}{\beta(g^{k+1},g)}.
+    \end{align}
+    Both quotients telescope over $k=0,\dots,n-1$, giving
+    $\beta(g,g^n)/\beta(g,e)$ and $\beta(e,g)/\beta(g^n,g)$, which equal $1$
+    because $g^n=e$. Multiplying by $\omega$ pointwise proves the second
+    identity, and the remaining statements follow from
+    Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
+\end{proof}
+
+\begin{definition}[Restriction of scalar three-cochains]
+    \label{def:mpug_cochain_restriction}
+    \lean{TNLean.Algebra.ScalarThreeCochain.comap,
+        TNLean.Algebra.ScalarThreeCochain.comap_apply}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    For a group homomorphism $f\colon H\to G$, the restriction of a scalar
+    $3$-cochain $\omega$ on $G$ is
+    $(f^*\omega)(a,b,c)=\omega(f(a),f(b),f(c))$.
+\end{definition}
+
+\begin{lemma}[Restriction preserves cocycles and gauge classes]
+    \label{thm:mpug_cochain_restriction}
+    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.comap,
+        TNLean.Algebra.ScalarThreeCochain.comap_fusionGauge,
+        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.comap,
+        TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap}
+    \leanok
+    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
+    Restriction along $f$ sends $3$-cocycles to $3$-cocycles and satisfies
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$, where
+    $(f^*\beta)(a,b)=\beta(f(a),f(b))$. Hence it preserves the relation of
+    being cohomologous and sends cochains with trivial gauge class to
+    cochains with trivial gauge class.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
+        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
+        def:mpug_trivial_gauge_class}
+    Since $f(ab)=f(a)f(b)$, for all $a,b,c,d\in H$
+    \begin{align}
+        (f^*\omega)(ab,c,d)\,(f^*\omega)(a,b,cd)
+         & =\omega\bigl(f(a)f(b),f(c),f(d)\bigr)\,
+        \omega\bigl(f(a),f(b),f(c)f(d)\bigr),
+        \notag                                                              \\
+        (d f^*\beta)(a,b,c)
+         & =\frac{\beta\bigl(f(a),f(b)f(c)\bigr)\beta\bigl(f(b),f(c)\bigr)}
+        {\beta\bigl(f(a),f(b)\bigr)\beta\bigl(f(a)f(b),f(c)\bigr)}
+        =(d\beta)\bigl(f(a),f(b),f(c)\bigr).
+        \notag
+    \end{align}
+    The first line and the corresponding expansion of the right-hand side
+    of (\ref{eq:mpug_three_cocycle}) turn the cocycle relation for $f^*\omega$
+    into (\ref{eq:mpug_three_cocycle}) at $f(a),f(b),f(c),f(d)$. The second
+    line, which is (\ref{eq:mpug_coboundary}) evaluated at $f(a),f(b),f(c)$,
+    gives $d(f^*\beta)=f^*(d\beta)$, hence
+    $f^*(\beta\mathbin{\triangleright}\omega)
+        =(f^*\beta)\mathbin{\triangleright}f^*\omega$. The last two claims
+    follow from Definitions~\ref{def:mpug_cohomologous_to}
+    and~\ref{def:mpug_trivial_gauge_class}.
+\end{proof}
+
+\subsection{The anomaly three-cocycle from fusion tensors}
+
+For matrix product operator tensors $M$ and $N$ of bond dimensions $D_M$
+and $D_N$, write $MN$ for the stacked product tensor, whose periodic operators
+are the products of those of $M$ and $N$, and write $\mathsf a$ for the
+bond associator of Definition~\ref{def:mpdo_operator_product_associator},
+the permutation from $\C^{D_1}\otimes(\C^{D_2}\otimes\C^{D_3})$, the bond
+space of $M(NP)$, to $(\C^{D_1}\otimes\C^{D_2})\otimes\C^{D_3}$, the bond
+space of $(MN)P$.
+
+\begin{lemma}[Composition of reductions]
+    \label{thm:mpug_reduction_composition}
+    \lean{MPSTensor.IsReduction.trans,
+        MPSTensor.IsReduction.mulTensor_kronId,
+        MPSTensor.IsReduction.mulTensor_idKron,
+        MPSTensor.IsReduction.mulTensor_assoc_left,
+        MPSTensor.IsReduction.mulTensor_assoc_right}
+    \leanok
+    \uses{def:mps_rectangular_reduction, def:mpdo_operator_product,
+        def:mpdo_operator_product_associator}
+    Reductions compose: if $(V_1,W_1)$ reduces $C$ onto $B$ and
+    $(V_2,W_2)$ reduces $B$ onto $A$, then $(V_2V_1,W_1W_2)$ reduces $C$
+    onto $A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
+    of $A$, then $(V\otimes\mathbf 1,W\otimes\mathbf 1)$ reduces $XP$ onto
+    $AP$ and $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $PX$ onto
+    $PA$. A reduction $(V,W)$ of $M(NP)$ gives the reduction
+    $(V\mathsf a^{-1},\mathsf aW)$ of $(MN)P$, and conversely.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpdo_operator_product_eval_word}
+    The first claim is immediate from the intertwining equations. For the
+    second, Lemma~\ref{lem:mpdo_operator_product_eval_word} expands a word of
+    $XP$ along a configuration pair $(\sigma,\tau)$ as a sum over the
+    contracted middle configurations $\rho$, and $V\otimes\mathbf 1$ and
+    $W\otimes\mathbf 1$ act on the first factor only:
+    \begin{align}
+        (V\otimes\mathbf 1)\,(XP)^{\sigma\tau}\,(W\otimes\mathbf 1)
+         & =\sum_\rho VX^{\sigma\rho}W\otimes P^{\rho\tau}
+        =\sum_\rho A^{\sigma\rho}\otimes P^{\rho\tau}
+        =(AP)^{\sigma\tau}.
+        \notag
+    \end{align}
+    The case $PX$ is the same with the factors exchanged. For the third, the
+    letters satisfy
+    $((MN)P)^{i}\,\mathsf a=\mathsf a\,(M(NP))^{i}$, so the words do too.
+\end{proof}
+
+\begin{lemma}[Scalar comparison of two reductions]
+    \label{thm:mpug_dressed_proportionality}
+    \lean{MPSTensor.IsReduction.exists_isDressedProportional,
+        MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero,
+        MPSTensor.IsDressedProportional.pullback,
+        MPSTensor.IsReduction.exists_mul_evalWord_ne_zero}
+    \leanok
+    \uses{thm:mps_reduction_boundary_dressed_uniqueness}
+    Let $A$ be normal with positive bond dimension, and let $(V,W)$ and
+    $(V',W')$ reduce $B$ onto $A$, where $B$ and $A$ generate the same
+    matrix product vectors on nonempty chains. Then there is a unique
+    $z\in\C^\times$ such that $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all
+    sufficiently long words $\mathbf w$. If
+    $XA^{\mathbf w}=z\,YA^{\mathbf w}$ for all long words, then
+    $XVB^{\mathbf w}=z\,YVB^{\mathbf w}$ for all long words.
+\end{lemma}
+
+\begin{proof}\leanok
+    Existence is Lemma~\ref{thm:mps_reduction_boundary_dressed_uniqueness}.
+    Uniqueness holds because $VB^{\mathbf w}W=A^{\mathbf w}$ and a normal
+    tensor has nonzero words of every multiple of its injectivity length.
+    For the last claim, once both exterior parts of a long word
+    $\mathbf w=\mathbf p\mathbf c\mathbf q$ exceed the residual nilpotency
+    length, $VB^{\mathbf w}=A^{\mathbf p\mathbf c}VB^{\mathbf q}$.
+\end{proof}
+
+\begin{definition}[The anomaly three-cochain]
+    \label{def:mpug_anomaly_three_cochain}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation,
+        MPOTensor.GroupFamily.FusionData,
+        MPOTensor.GroupFamily.FusionData.leftV,
+        MPOTensor.GroupFamily.FusionData.rightV,
+        MPOTensor.GroupFamily.FusionData.IsAssociator,
+        MPOTensor.GroupFamily.FusionData.omega}
+    \leanok
+    \uses{def:mpug_group_representation, def:mpdo_operator_product,
+        def:mpo_to_mps, def:mps_rectangular_reduction,
+        def:mpdo_operator_product_associator, def:normal}
+    Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
+    bond dimension whose doubled-index tensors are normal and whose periodic
+    operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
+    fusion tensors is, for every pair $g,h$, a reduction
+    $(F^<_{g,h},F^>_{g,h})$ of $O_gO_h$ onto $O_{gh}$. The triple product
+    $T=(O_gO_h)O_k$ reduces onto $O_{ghk}$ along the two fusion trees with
+    left boundaries
+    \begin{align}
+        V^{L} & =F^<_{gh,k}\,(F^<_{g,h}\otimes\mathbf 1),                  &
+        V^{R} & =F^<_{g,hk}\,(\mathbf 1\otimes F^<_{h,k})\,\mathsf a^{-1},
+    \end{align}
+    where the target bond space of $F^<_{g,hk}$, that of $O_{g(hk)}$, is
+    identified with that of $O_{(gh)k}$ through the equality
+    $g(hk)=(gh)k$ in $G$; the same identification enters the right
+    boundaries $W^L=(F^>_{g,h}\otimes\mathbf 1)F^>_{gh,k}$ and
+    $W^R=\mathsf a(\mathbf 1\otimes F^>_{h,k})F^>_{g,hk}$.
+    The anomaly three-cochain value $\omega(g,h,k)\in\C^\times$ is the scalar with
+    $V^LT^{\mathbf w}=\omega(g,h,k)\,V^RT^{\mathbf w}$ for all long words
+    $\mathbf w$. Equivalently $T^{\mathbf w}W^R=\omega(g,h,k)\,T^{\mathbf w}W^L$
+    for the right boundaries, which is the defining display of
+    \cite{FrancoRubio2025MPUGauging} before its three-cocycle equation.
+    No normalization of $\omega$ is imposed.
+\end{definition}
+
+\begin{center}
+    % Formula: V^LT^{\mathbf w}=\omega(g,h,k)\,V^RT^{\mathbf w} with
+    % V^L=F^<_{gh,k}(F^<_{g,h}\otimes\mathbf 1) and
+    % V^R=F^<_{g,hk}(\mathbf 1\otimes F^<_{h,k})\mathsf a^{-1}; source:
+    % arXiv:2502.20257, the display before eq:3-cocycle, lines 1505--1535
+    % (drawn there with right boundaries).
+    % Ink-to-index map: the bracketed three-row column stands for the word
+    % \mathbf w of T=(O_gO_h)O_k, rows O_g, O_h, O_k from top to bottom;
+    % each pill has its single side west.  The inner pill fuses two rows,
+    % and the outer pill fuses its output with the remaining row.  The
+    % associator \mathsf a only regroups the Kronecker factors of the triple
+    % bond and is not drawn.
+    % Contraction set: the middle physical indices, the bonds between the
+    % pills, and the bonds from the pills into the word; the three east
+    % virtual legs, the single west leg, and the outer physical legs remain
+    % open.
+    % Boundary signature: (virtual-west=1 | virtual-east=3 |
+    % physical-up=1 | physical-down=1) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={op,op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{F^<_{gh,k}}
+        \tnfuse[at=(1,2), name=Fi, skin=pill]{F^<_{g,h}}
+        \tn[at=(3,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=Tk, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_k}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{Tk.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Fi.180}
+        \tnwire{Fo.0@3}{Tk.180}
+        \tnwire{Fi.0@1}{Tg.180}
+        \tnwire{Fi.0@2}{Th.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{Tk.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+    \quad $=\omega(g,h,k)$ \quad
+    \begin{tenkz}[rows={op,op,op}, cols=3, bonds=none]
+        \tnfuse[at=(1,1), name=Fo, skin=pill, wires=3]{F^<_{g,hk}}
+        \tnfuse[at=(2,2), name=Fi, skin=pill]{F^<_{h,k}}
+        \tn[at=(1,2), void=sealed]{}
+        \tn[at=(1,3), name=Tg, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_g}
+        \tn[at=(2,3), name=Th, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_h}
+        \tn[at=(3,3), name=Tk, skin=mpo, ports={90:physical, 270:physical, 180:virtual, 0:virtual}]{O_k}
+        \tnwire{Tg.270}{Th.90}
+        \tnwire{Th.270}{Tk.90}
+        \tnwire{open w}{Fo.180}
+        \tnwire{Fo.0@1}{Tg.180}
+        \tnwire{Fo.0@2}{Fi.180}
+        \tnwire{Fi.0@1}{Th.180}
+        \tnwire{Fi.0@2}{Tk.180}
+        \tnwire{Tg.0}{open e}
+        \tnwire{Th.0}{open e}
+        \tnwire{Tk.0}{open e}
+        \tnmark[form=bracket, label pos=90]{Tg}{\mathbf w}
+    \end{tenkz}
+\end{center}
+
+\begin{lemma}[The two fusion trees are reductions]
+    \label{thm:mpug_fusion_trees_reductions}
+    \lean{MPOTensor.GroupFamily.FusionData.isReduction_left,
+        MPOTensor.GroupFamily.FusionData.isReduction_right}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_reduction_composition}
+    The pairs $(V^L,W^L)$ and $(V^R,W^R)$ of
+    Definition~\ref{def:mpug_anomaly_three_cochain} are reductions of the
+    triple product $(O_gO_h)O_k$ onto $O_{ghk}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Tensoring the reduction $(F^<_{g,h},F^>_{g,h})$ with the
+    identity on the third factor and composing with $(F^<_{gh,k},F^>_{gh,k})$
+    gives $(V^L,W^L)$. Similarly, tensoring $(F^<_{h,k},F^>_{h,k})$ with the
+    identity on the first factor, composing with $(F^<_{g,hk},F^>_{g,hk})$,
+    and conjugating by the associator $\mathsf a$ gives $(V^R,W^R)$; all
+    three steps follow from Lemma~\ref{thm:mpug_reduction_composition}.
+\end{proof}
+
+\begin{lemma}[Characterization of the anomaly three-cochain]
+    \label{thm:mpug_anomaly_three_cochain_spec}
+    \lean{MPOTensor.GroupFamily.FusionData.isAssociator_omega,
+        MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_fusion_trees_reductions,
+        thm:mpug_dressed_proportionality}
+    The scalar $\omega(g,h,k)$ exists, is nonzero, and is the only scalar
+    with the dressed identity of
+    Definition~\ref{def:mpug_anomaly_three_cochain}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_fusion_trees_reductions} both fusion trees are
+    reductions of $T$ onto the normal tensor $O_{ghk}$, and $T$ and
+    $O_{ghk}$ have the same periodic operators on nonempty chains, so
+    Lemma~\ref{thm:mpug_dressed_proportionality} yields existence and
+    uniqueness.
+\end{proof}
+
+\begin{theorem}[The anomaly three-cocycle]
+    \label{thm:mpug_anomaly_three_cocycle}
+    \lean{MPOTensor.GroupFamily.FusionData.isCocycle_omega,
+        MPOTensor.GroupFamily.FusionData.isCocycle_omega_of_isRepresentation}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
+    For every $g,h,k,l\in G$,
+    \begin{align}
+        \omega(gh,k,l)\,\omega(g,h,kl)
+         & =\omega(g,h,k)\,\omega(g,hk,l)\,\omega(h,k,l).
+        \label{eq:mpug_anomaly_three_cocycle}
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
+        thm:mpug_dressed_proportionality}
+    The five fusion trees of the fourfold product $((O_gO_h)O_k)O_l$ are
+    reductions onto $O_{ghkl}$. Two trees that differ by one change of
+    bracketing are related against long words by one value of $\omega$:
+    either directly, through Lemma~\ref{thm:mpug_reduction_composition}
+    with an identity factor, or after pulling back along a fusion tensor
+    by Lemma~\ref{thm:mpug_dressed_proportionality}. Write
+    $\mathsf a_{p,q,r}$ for $\mathsf a$ on $\C^p\otimes\C^q\otimes\C^r$.
+    Identifying the boundaries uses the naturality of $\mathsf a$, for
+    $X\colon\C^n\to\C^m$,
+    \begin{align}
+        \mathsf a^{-1}_{m,q,r}\,(X\otimes\mathbf 1_q\otimes\mathbf 1_r)
+         & =(X\otimes\mathbf 1_{qr})\,\mathsf a^{-1}_{n,q,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,m,r}\,(\mathbf 1_p\otimes X\otimes\mathbf 1_r)
+         & =(\mathbf 1_p\otimes(X\otimes\mathbf 1_r))\,\mathsf a^{-1}_{p,n,r},
+        \notag                                                                  \\
+        \mathsf a^{-1}_{p,q,m}\,(\mathbf 1_{pq}\otimes X)
+         & =(\mathbf 1_p\otimes(\mathbf 1_q\otimes X))\,\mathsf a^{-1}_{p,q,n},
+        \notag
+    \end{align}
+    and the pentagon identity for the reassociation permutations,
+    \begin{align}
+        (\mathbf 1_p\otimes\mathsf a^{-1}_{q,r,s})\,\mathsf a^{-1}_{p,qr,s}\,
+        (\mathsf a^{-1}_{p,q,r}\otimes\mathbf 1_s)
+         & =\mathsf a^{-1}_{p,q,rs}\,\mathsf a^{-1}_{pq,r,s}.
+        \notag
+    \end{align}
+    The two paths around the pentagon
+    compare the same pair of trees, and uniqueness of the scalar on a
+    nonvanishing word gives (\ref{eq:mpug_anomaly_three_cocycle}).
+\end{proof}
+
+\begin{lemma}[Independence of the fusion tensors]
+    \label{thm:mpug_anomaly_three_cocycle_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.relativeScalar,
+        MPOTensor.GroupFamily.FusionData.isDressedProportional_relativeScalar,
+        MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge,
+        MPOTensor.GroupFamily.FusionData.omega_cohomologousTo}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
+    Let $\omega$ and $\omega'$ come from two choices of fusion tensors, and
+    let $\beta_{g,h}\in\C^\times$ be the scalar with
+    $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
+    words of $B=O_gO_h$. Then
+    \begin{align}
+        \omega'(g,h,k)
+         & =\frac{\beta_{g,hk}\,\beta_{h,k}}{\beta_{g,h}\,\beta_{gh,k}}
+        \,\omega(g,h,k),
+    \end{align}
+    so the cohomology class of $\omega$ does not depend on the fusion
+    tensors, as in (\ref{eq:mpug_fusion_gauge}).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec,
+        thm:mpug_dressed_proportionality}
+    By the two parts of Lemma~\ref{thm:mpug_dressed_proportionality}, the
+    left boundaries of the two choices of the tree fusing $g$ with $h$
+    first differ by $\beta_{g,h}\beta_{gh,k}$, and those of the tree fusing
+    $h$ with $k$ first differ by $\beta_{h,k}\beta_{g,hk}$; comparing with
+    Lemma~\ref{thm:mpug_anomaly_three_cochain_spec} gives the ratio for
+    $\omega'$.
+\end{proof}
+
+\begin{definition}[The anomaly class]
+    \label{def:mpug_anomaly_class}
+    \lean{MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass}
+    \leanok
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_h3_group_cohomology}
+    Let the doubled-index tensors be normal. The anomaly class in
+    $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of the anomaly
+    three-cocycle $\omega$, for any choice of fusion tensors.
+\end{definition}
+
+\begin{corollary}[The anomaly class is independent of the fusion tensors]
+    \label{cor:mpug_anomaly_class}
+    \lean{MPOTensor.GroupFamily.FusionData.anomalyClass_omega_eq,
+        MPOTensor.GroupFamily.FusionData.anomalyClass_omega,
+        MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff}
+    \leanok
+    \uses{def:mpug_anomaly_class, thm:mpug_anomaly_three_cocycle,
+        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_h3_group_cohomology}
+    The class $[\omega]\in H^3(G,\C^\times_{\mathrm{triv}})$ of the anomaly
+    three-cocycle is the same for every choice of fusion tensors. It vanishes
+    exactly when $\omega$ has trivial gauge class.
+\end{corollary}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_anomaly_three_cocycle_gauge,
+        thm:mpug_h3_group_cohomology}
+    Two choices of fusion tensors give cohomologous three-cocycles by
+    Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, hence equal classes
+    by (\ref{eq:mpug_h3_cohomologous}). The second statement is
+    (\ref{eq:mpug_h3_trivial}).
+\end{proof}
+
+\subsection{Daggered fusion tensors}
+
+\begin{lemma}[The dagger of a reduction]
+    \label{thm:mpug_reduction_dagger}
+    \lean{MPSTensor.IsReduction.physicalAdjointTensor,
+        MPSTensor.IsReduction.mapStar,
+        MPOTensor.toMPSTensor_physicalAdjointTensor,
+        MPSTensor.IsReduction.of_target_intertwine,
+        MPSTensor.IsReduction.of_reindexBond_source,
+        MPOTensor.mulTensor_mul_idKron_of_intertwine}
+    \leanok
+    \uses{def:mps_rectangular_reduction, def:mpdo_physical_adjoint, def:mpo_to_mps}
+    Let $(V,W)$ reduce the doubled-index tensor of $K$ onto that of $M$. Then
+    the entrywise complex conjugates $(\overline V,\overline W)$ reduce the
+    physical adjoint $K^\dagger$ onto $M^\dagger$. Moreover, if $Q R=\Id$ and
+    $A'^{i}Q=QA^{i}$ for every letter, a reduction $(V,W)$ of $B$ onto $A$
+    gives the reduction $(QV,WR)$ of $B$ onto $A'$; a relabelling of the bond
+    coordinates of the source is absorbed into the two boundaries by the
+    corresponding permutation matrices.
+\end{lemma}
+
+\begin{proof}\leanok
+    The doubled-index tensor of $K^\dagger$ is the entrywise conjugate of that
+    of $K$ with the two physical coordinates exchanged. Entrywise conjugation
+    is multiplicative, so $\overline V\,\overline{B^{\mathbf w}}\,\overline W
+        =\overline{A^{\mathbf w}}$ for every word, and relabelling the physical
+    alphabet preserves a reduction. For the second statement,
+    $A'^{\mathbf w}=QA^{\mathbf w}R$ for every word, so
+    $QVB^{\mathbf w}WR=QA^{\mathbf w}R=A'^{\mathbf w}$ and $QVWR=QR=\Id$.
+\end{proof}
+
+\begin{definition}[Daggered fusion tensors]
+    \label{def:mpug_dagger_fusion_tensors}
+    \lean{MPSTensor.reindexBondMatrix,
+        MPOTensor.GroupFamily.IsRepresentation.bondDim_mul_inv_rev,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGaugeInv,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGaugeInv,
+        MPOTensor.GroupFamily.FusionData.daggerFusionV,
+        MPOTensor.GroupFamily.FusionData.daggerFusionW}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_dagger_inverse_gauge,
+        def:mpug_product_bond_swap}
+    Let $g\mapsto\mathcal U_g$ be a representation by simple injective MPU
+    tensors in canonical form, with dagger-inverse gauges $T_g$ and a choice
+    of fusion tensors $(F^<_{g,h},F^>_{g,h})$. For $g,h\in G$ the daggered
+    fusion tensors are
+    \begin{align}
+        \widetilde F^<_{g,h}                                      & =T_{(gh)^{-1}}\,
+        \bigl(F^<_{h^{-1},g^{-1}}\bigr)^\dagger
+        \bigl(T^\dagger_{g^{-1}}\otimes T^\dagger_{h^{-1}}\bigr), &
+        \widetilde F^>_{g,h}                                      & =\bigl(T_{g^{-1}}\otimes T_{h^{-1}}\bigr)
+        \bigl(F^>_{h^{-1},g^{-1}}\bigr)^\dagger T^\dagger_{(gh)^{-1}},
+    \end{align}
+    where the dagger conjugates every entry and exchanges the two bond legs
+    on the same side, and the bond spaces of $\mathcal U_x$ and
+    $\mathcal U_{x^{-1}}$, which have equal dimension, are identified by the
+    corresponding permutation matrices.
+\end{definition}
+
+\begin{lemma}[The gauges intertwine the inverse tensors]
+    \label{thm:mpug_dagger_leg_gauges}
+    \lean{MPSTensor.mul_reindexBondMatrix_mul_gauge,
+        MPSTensor.reindexBondMatrix_rfl,
+        MPSTensor.reindexBondMatrix_mul_symm,
+        MPSTensor.reindexBondMatrix_gauge_mul_inv,
+        MPSTensor.reindexBondMatrix_gauge_inv_mul,
+        MPOTensor.GroupFamily.reindex_toMPSTensor_congr,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge_mul_inv,
+        MPOTensor.GroupFamily.IsRepresentation.tensor_mul_daggerLegGaugeInv,
+        MPOTensor.GroupFamily.IsRepresentation.toMPSTensor_mul_daggerTargetGauge,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_inv}
+    \leanok
+    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_dagger_inverse_gauge}
+    For every $x\in G$ and every physical pair $i,j$,
+    $\mathcal U_x^{ij}\,T_{x^{-1}}=T_{x^{-1}}\,(\mathcal U^\dagger_{x^{-1}})^{ij}$,
+    and similarly
+    $\mathcal U_{gh}\,T_{(gh)^{-1}}=T_{(gh)^{-1}}\,\mathcal U^\dagger_{(gh)^{-1}}$
+    letterwise; all four gauges are unitary.
+\end{lemma}
+
+\begin{proof}\leanok
+    Apply the gauge equation of Lemma~\ref{thm:mpug_dagger_inverse_gauge}
+    at $x^{-1}$, using $(x^{-1})^{-1}=x$, and at
+    $(gh)^{-1}=h^{-1}g^{-1}$, using $(h^{-1}g^{-1})^{-1}=gh$; then cancel
+    $T T^\dagger=\Id$.
+\end{proof}
+
+\begin{lemma}[Daggered fusion tensors are fusion tensors]
+    \label{thm:mpug_dagger_fusion_reduction}
+    \lean{MPOTensor.GroupFamily.FusionData.isReduction_daggerFusion}
+    \leanok
+    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_reduction_dagger,
+        thm:mpug_dagger_leg_gauges, thm:mpug_physical_adjoint_product_reversal}
+    For every $g,h\in G$ the daggered fusion tensors
+    $(\widetilde F^<_{g,h},\widetilde F^>_{g,h})$ reduce
+    $\mathcal U_g\mathcal U_h$ onto $\mathcal U_{gh}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_reduction_dagger}, the conjugates of
+    $(F^<_{h^{-1},g^{-1}},F^>_{h^{-1},g^{-1}})$ reduce the physical adjoint of
+    $\mathcal U_{h^{-1}}\mathcal U_{g^{-1}}$ onto that of
+    $\mathcal U_{h^{-1}g^{-1}}$. By
+    Lemma~\ref{thm:mpug_physical_adjoint_product_reversal} the former is
+    $\mathcal U^\dagger_{g^{-1}}\mathcal U^\dagger_{h^{-1}}$ after the
+    product-bond swap. Lemma~\ref{thm:mpug_dagger_leg_gauges} replaces the
+    target by $\mathcal U_{gh}$ and, one factor at a time, the source by
+    $\mathcal U_g\mathcal U_h$; each replacement multiplies the two boundaries
+    by a gauge and its inverse, as in Lemma~\ref{thm:mpug_reduction_dagger}.
+\end{proof}
+
+\begin{lemma}[The scalars comparing daggered and chosen fusion tensors]
+    \label{thm:mpug_dagger_zeta}
+    \lean{MPOTensor.GroupFamily.FusionData.daggerZeta,
+        MPOTensor.GroupFamily.FusionData.daggerZeta_defzeta}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    For every $g,h\in G$ there is a scalar $\zeta_{g,h}\in\C^\times$ such that,
+    for all sufficiently long words $\mathbf w$ of $B=\mathcal U_g\mathcal U_h$,
+    \begin{align}
+        \widetilde F^<_{g,h}B^{\mathbf w} & =\zeta_{g,h}\,F^<_{g,h}B^{\mathbf w},      &
+        B^{\mathbf w}\widetilde F^>_{g,h} & =\zeta_{g,h}^{-1}\,B^{\mathbf w}F^>_{g,h}.
+    \end{align}
+    This is the defining equation of the scalars $\zeta_{g,h}$ in
+    \cite[lines~1570--1637]{FrancoRubio2025MPUGauging}, in boundary-dressed
+    form. The relation of $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}$ to the
+    dagger-inverse signs is Lemma~\ref{thm:mpug_dagger_zeta_relation}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_dagger_fusion_reduction} both pairs reduce $B$
+    onto the normal tensor $\mathcal U_{gh}$, and $B$ and $\mathcal U_{gh}$
+    have the same periodic operators on nonempty chains. The two-sided
+    comparison of reductions gives one nonzero scalar $z$ with both identities
+    for $z$ and $z^{-1}$; by the uniqueness in
+    Lemma~\ref{thm:mpug_dressed_proportionality}, $z=\zeta_{g,h}$.
+\end{proof}
+
+\begin{lemma}[The dagger of a boundary-dressed comparison]
+    \label{thm:mpug_dagger_dressed_transport}
+    \lean{MPSTensor.IsDressedProportional.mapStar,
+        MPSTensor.IsDressedProportional.reindexPhysical,
+        MPSTensor.IsDressedProportional.physicalAdjointTensor,
+        MPSTensor.IsDressedProportional.of_reindexBond_source,
+        MPOTensor.GroupFamily.IsRepresentation.daggerBoundary,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGaugeInv_mul,
+        MPOTensor.GroupFamily.IsRepresentation.isDressedProportional_daggerBoundary,
+        MPOTensor.GroupFamily.FusionData.daggerFusionV_eq_daggerBoundary}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    For a left boundary $X$ of $B'=\mathcal U_{h^{-1}}\mathcal U_{g^{-1}}$ with
+    values in the bond space of $\mathcal U_{h^{-1}g^{-1}}$, write
+    \begin{align}
+        \widetilde X & =T_{(gh)^{-1}}\,X^\dagger
+        \bigl(T^\dagger_{g^{-1}}\otimes T^\dagger_{h^{-1}}\bigr),
+    \end{align}
+    a left boundary of $B=\mathcal U_g\mathcal U_h$, where the dagger
+    conjugates every entry and exchanges the two bond legs on the same side;
+    in particular $\widetilde F^<_{g,h}$ is obtained from $F^<_{h^{-1},g^{-1}}$.
+    If $XB'^{\mathbf w}=zYB'^{\mathbf w}$ for all sufficiently long words, then
+    $\widetilde XB^{\mathbf w}=\overline z\,\widetilde YB^{\mathbf w}$ for all
+    sufficiently long words.
+\end{lemma}
+
+\begin{proof}\leanok
+    Entrywise conjugation is multiplicative and the doubled-index tensor of
+    the physical adjoint of $B'$ is the conjugate of that of $B'$ with the
+    physical coordinates exchanged, so the conjugated relation holds against
+    the physical adjoint with scalar $\overline z$. The physical adjoint of
+    $B'$ is $\mathcal U^\dagger_{g^{-1}}\mathcal U^\dagger_{h^{-1}}$ after the
+    product-bond swap, and the leg gauges of
+    Lemma~\ref{thm:mpug_dagger_leg_gauges} intertwine it, one factor at a
+    time, with $B$; each step multiplies the two boundaries on the right by the
+    same invertible matrix. Multiplying on the left by $T_{(gh)^{-1}}$ gives
+    the claim.
+\end{proof}
+
+\begin{lemma}[The double dagger of a fusion tensor]
+    \label{thm:mpug_double_dagger_fusion}
+    \lean{MPSTensor.reindexBondMatrix_mul_reindexBondMatrix,
+        MPSTensor.reindexBondMatrix_mul_reindexBondMatrix_assoc,
+        MPSTensor.reindexBondMatrix_self,
+        MPSTensor.reindexBondMatrix_map_star,
+        MPSTensor.reindexBondMatrix_conjTranspose,
+        MPSTensor.reindex_finCongr_eq,
+        MPOTensor.kronId_map_star, MPOTensor.idKron_map_star,
+        MPOTensor.equiv_toMatrix_map_star, MPOTensor.kronId_smul, MPOTensor.idKron_smul,
+        MPOTensor.productBondSwap_mul_idKron_mul_kronId_mul_productBondSwap,
+        MPOTensor.productBondSwap_mul_idKron_mul_kronId_mul_productBondSwap_assoc,
+        MPOTensor.GroupFamily.castMat_eq_reindexBondMatrix,
+        MPOTensor.GroupFamily.IsRepresentation.daggerInverseGauge_congr,
+        MPOTensor.GroupFamily.IsRepresentation.transpose_daggerInverseGauge_inv_mul_conjTranspose,
+        MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge_inv_map_star_mul,
+        MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_map_star_mul,
+        MPOTensor.GroupFamily.FusionData.V_congr,
+        MPOTensor.GroupFamily.FusionData.daggerLegGauge_double,
+        MPOTensor.GroupFamily.FusionData.daggerBoundary_daggerFusionV}
+    \leanok
+    \uses{thm:mpug_dagger_dressed_transport, thm:mpug_dagger_inverse_scalar}
+    Applying the operation of Lemma~\ref{thm:mpug_dagger_dressed_transport}
+    to $\widetilde F^<_{h^{-1},g^{-1}}$ gives
+    \begin{align}
+        \widetilde{\widetilde F^<_{h^{-1},g^{-1}}}
+         & =\sigma_{h^{-1}g^{-1}}\,\overline{\sigma_{g^{-1}}}\,
+        \overline{\sigma_{h^{-1}}}\,F^<_{g,h}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The two entrywise conjugations cancel, and conjugating the leg gauges of
+    $(h^{-1},g^{-1})$ by the two product-bond swaps exchanges their tensor
+    factors. Equation (\ref{eq:mpug_dagger_inverse_scalar}) at $y$ gives
+    $T_y(T_{y^{-1}})^*=\sigma_y\mathbf 1$, hence, taking adjoints,
+    $T_{y^{-1}}^{\mathsf T}T_y^\dagger=\overline{\sigma_y}\,\mathbf 1$. At
+    $y=g^{-1}$ and $y=h^{-1}$ this collapses the leg gauges to
+    $\overline{\sigma_{g^{-1}}}\,\overline{\sigma_{h^{-1}}}\,\mathbf 1$, and at
+    $y=h^{-1}g^{-1}$ the first form collapses the target gauges to
+    $\sigma_{h^{-1}g^{-1}}\mathbf 1$; the bond identifications of equal group
+    elements compose to the identity.
+\end{proof}
+
+\begin{lemma}[The relation between $\zeta$ and the dagger-inverse signs]
+    \label{thm:mpug_dagger_zeta_relation}
+    \lean{MPOTensor.GroupFamily.FusionData.daggerZeta_mul_star_daggerZeta_inv}
+    \leanok
+    \uses{thm:mpug_dagger_zeta, thm:mpug_dagger_dressed_transport,
+        thm:mpug_double_dagger_fusion, thm:mpug_dagger_inverse_scalar,
+        thm:mpug_dressed_proportionality}
+    For all $g,h\in G$,
+    \begin{align}
+        \zeta_{g,h}\,\overline{\zeta_{h^{-1},g^{-1}}}
+         & =\frac{\sigma_g\sigma_h}{\sigma_{gh}}.
+    \end{align}
+    This is the first identity of the proposition on the scalars $\zeta$ in
+    \cite[lines~1570--1678]{FrancoRubio2025MPUGauging}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_dagger_zeta} at $(h^{-1},g^{-1})$ and
+    Lemma~\ref{thm:mpug_dagger_dressed_transport}, the double dagger of
+    Lemma~\ref{thm:mpug_double_dagger_fusion} equals
+    $\overline{\zeta_{h^{-1},g^{-1}}}\,\widetilde F^<_{g,h}$ against long words, and
+    by Lemma~\ref{thm:mpug_dagger_zeta} at $(g,h)$ this is
+    $\overline{\zeta_{h^{-1},g^{-1}}}\,\zeta_{g,h}F^<_{g,h}$. The left boundary
+    $F^<_{g,h}$ is nonzero against arbitrarily long words, so
+    $\zeta_{g,h}\overline{\zeta_{h^{-1},g^{-1}}}
+        =\sigma_{h^{-1}g^{-1}}\overline{\sigma_{g^{-1}}}\,\overline{\sigma_{h^{-1}}}$.
+    Finally $\overline{\sigma_x}=\sigma_x^{-1}$ and
+    $\sigma_x\sigma_{x^{-1}}=1$ by Lemma~\ref{thm:mpug_dagger_inverse_scalar},
+    so $\overline{\sigma_{x^{-1}}}=\sigma_x$ and
+    $\sigma_{h^{-1}g^{-1}}=\sigma_{(gh)^{-1}}=\sigma_{gh}^{-1}$.
+\end{proof}
+
+\begin{lemma}[The three-cocycle of the daggered fusion tensors]
+    \label{thm:mpug_dagger_omega_gauge}
+    \lean{MPOTensor.GroupFamily.FusionData.dagger,
+        MPOTensor.GroupFamily.FusionData.daggerZeta_eq_relativeScalar,
+        MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge_daggerZeta}
+    \leanok
+    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dagger_zeta,
+        thm:mpug_anomaly_three_cocycle_gauge}
+    The daggered fusion tensors are a choice of fusion tensors, and if
+    $\widetilde\omega$ denotes their three-cocycle, then
+    \begin{align}
+        \omega(g,h,k) & =\frac{\zeta_{g,hk}\zeta_{h,k}}{\zeta_{g,h}\zeta_{gh,k}}\,
+        \widetilde\omega(g,h,k).
+    \end{align}
+    The second identity of the proposition on the scalars $\zeta$ in
+    \cite[lines~1570--1678]{FrancoRubio2025MPUGauging} follows once
+    $\widetilde\omega(g,h,k)\,\overline{\omega(k^{-1},h^{-1},g^{-1})}=1$, which
+    is obtained by taking the dagger of the two fusion trees and is not part of
+    this statement.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:mpug_dagger_fusion_reduction} the daggered tensors are
+    reductions, and by Lemma~\ref{thm:mpug_dagger_zeta} they are compared with
+    the chosen ones by $\zeta$; Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}
+    gives the change of the three-cocycle.
+\end{proof}
+
+\subsection{Reductions through action tensors}
+
+\begin{definition}[The action tensor]
+    \label{def:mpug_action_tensor}
+    \lean{MPOTensor.actTensor}
+    \leanok
+    \uses{def:mpo_tensor, def:mps_tensor}
+    For a matrix product operator tensor $T$ of bond dimension $D_1$ and a
+    matrix product state tensor $B$ of bond dimension $D_2$, the action
+    tensor $T\cdot B$ has bond dimension $D_1D_2$ and letters
+    \begin{align}
+        (T\cdot B)^i
+         & =\sum_jT^{ij}\otimes B^j.
+        \label{eq:mpug_action_tensor}
+    \end{align}
+    It is the tensor whose local decomposition onto an image block gives the
+    action tensors of the periodic-boundary case of
+    \cite[``Periodic boundary condition case'']{GarreRubio2023MPOSym}.
+\end{definition}
+
+\begin{lemma}[The action tensor generates the acted state]
+    \label{thm:mpug_action_tensor_periodic}
+    \lean{MPOTensor.evalWord_actTensor, MPOTensor.mpv_actTensor,
+        MPOTensor.mpo_mulVec_mpv}
+    \leanok
+    \uses{def:mpug_action_tensor, def:mpo_family, def:mpv_state}
+    For every word $\sigma$ of length $N$,
+    \begin{align}
+        (T\cdot B)^{\sigma}
+         & =\sum_{\tau}T^{\sigma\tau}\otimes B^{\tau},
+        \label{eq:mpug_action_tensor_word}
+    \end{align}
+    the sum running over words $\tau$ of length $N$. Consequently
+    $\ket{V^{(N)}(T\cdot B)}=\rho^{(N)}(T)\ket{V^{(N)}(B)}$ for every $N$.
+\end{lemma}
+
+\begin{center}
+    % Formula: \ket{V^{(N)}(T\cdot B)}=\rho^{(N)}(T)\ket{V^{(N)}(B)}, the
+    % consequence of (\ref{eq:mpug_action_tensor_word}).
+    % Ink-to-index map: the left ring is the periodic vector of the action
+    % tensor T\cdot B; on the right the upper row is T and the lower row B,
+    % and the vertical leg at each site is the summed index j of
+    % (\ref{eq:mpug_action_tensor}).
+    % Contraction set: the periodic virtual bonds of each ring and the
+    % summed indices j; the physical legs \sigma_n remain open.
+    % Boundary signature: (virtual-west=0 | virtual-east=0 |
+    % physical-up=3 | physical-down=0) on both sides.
+    \tenkzkernel
+    \begin{tenkz}[rows={ket}, cols=4, boundary=periodic]
+        \tn[ports={90:physical:$\sigma_1$}]{T\cdot B} &
+        \tn[ports={90:physical:$\sigma_2$}]{T\cdot B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[ports={90:physical:$\sigma_N$}]{T\cdot B}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={op,ket}, cols=4, boundary=periodic]
+        \tn[skin=mpo, ports={90:physical:$\sigma_1$}]{T} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_2$}]{T} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[skin=mpo, ports={90:physical:$\sigma_N$}]{T} \\
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{B} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{B} &
+        \tn[skin=dots, ports={180:virtual, 0:virtual}]{} &
+        \tn[label pos=s, ports={180:virtual, 0:virtual}]{B}
+    \end{tenkz}
+\end{center}
+
+\begin{proof}\leanok
+    Induction on $N$: the empty word gives $\mathbf 1\otimes\mathbf 1$, and
+    one more letter multiplies both sides by $(T\cdot B)^i$, since
+    $(T^{\sigma\tau}\otimes B^{\tau})(T^{ij}\otimes B^j)
+        =T^{\sigma\tau}T^{ij}\otimes B^{\tau}B^j$. Taking traces and using
+    $\tr(X\otimes Y)=\tr X\,\tr Y$ gives
+    $V^{(N)}(T\cdot B)_\sigma
+        =\sum_\tau\tr(T^{\sigma\tau})\tr(B^\tau)
+        =(\rho^{(N)}(T)V^{(N)}(B))_\sigma$.
+\end{proof}
+
+\begin{lemma}[Reductions through action tensors]
+    \label{thm:mpug_action_tensor_reductions}
+    \lean{MPSTensor.IsReduction.actTensor_idKron,
+        MPSTensor.IsReduction.actTensor_kronId,
+        MPOTensor.actTensor_mulTensor,
+        MPOTensor.actTensor_mulTensor_mul_assocMatrix,
+        MPOTensor.assocInvMatrix_mul_actTensor_mulTensor,
+        MPSTensor.IsReduction.actTensor_assoc_left,
+        MPSTensor.IsReduction.actTensor_assoc_right,
+        MPOTensor.actTensor_mul_kronId_of_intertwine,
+        MPSTensor.IsDressedProportional.actTensor_idKron,
+        MPSTensor.IsDressedProportional.actTensor_kronId}
+    \leanok
+    \uses{def:mpug_action_tensor, def:mpdo_operator_product,
+        def:mpdo_operator_product_associator, def:mpo_to_mps,
+        def:mps_rectangular_reduction}
+    If $(V,W)$ reduces $B$ onto $A$, then
+    $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $T\cdot B$ onto
+    $T\cdot A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
+    of $Y$, then $(V\otimes\mathbf 1,W\otimes\mathbf 1)$ reduces $X\cdot B$
+    onto $Y\cdot B$. The letters satisfy
+    $((MN)\cdot A)^i\,\mathsf a=\mathsf a\,(M\cdot(N\cdot A))^i$, so a
+    reduction $(V,W)$ of $M\cdot(N\cdot A)$ onto $Z$ gives the reduction
+    $(V\mathsf a^{-1},\mathsf aW)$ of $(MN)\cdot A$ onto $Z$, and a reduction
+    $(V,W)$ of $(MN)\cdot A$ onto $Z$ gives the reduction
+    $(V\mathsf a,\mathsf a^{-1}W)$ of $M\cdot(N\cdot A)$ onto $Z$, as in
+    Lemma~\ref{thm:mpug_reduction_composition}. If $P$ intertwines the
+    letters of two operator tensors, $X'^{ij}P=PX^{ij}$ for all $i,j$, then
+    $(X'\cdot B)^i\,(P\otimes\mathbf 1)=(P\otimes\mathbf 1)\,(X\cdot B)^i$.
+    Finally, a relation
+    $VB^{\mathbf w}=z\,V'B^{\mathbf w}$ for all long words lifts to
+    $(\mathbf 1\otimes V)(T\cdot B)^{\mathbf w}
+        =z\,(\mathbf 1\otimes V')(T\cdot B)^{\mathbf w}$, and the analogous
+    relation for the doubled-index tensor of $X$ lifts through
+    $V\otimes\mathbf 1$ to $X\cdot B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_action_tensor_periodic, thm:mpug_reduction_composition}
+    By Lemma~\ref{thm:mpug_action_tensor_periodic}, every word of
+    $T\cdot B$ is the sum~(\ref{eq:mpug_action_tensor_word}) of Kronecker
+    products of a word of $T$ and a word of $B$ of the same length. A
+    boundary of the form $\mathbf 1\otimes V$ passes through the first
+    factor of each summand:
+    \begin{align}
+        (\mathbf 1\otimes V)\,(T\cdot B)^{\sigma}\,(\mathbf 1\otimes W)
+         & =\sum_\tau T^{\sigma\tau}\otimes VB^{\tau}W
+        =\sum_\tau T^{\sigma\tau}\otimes A^{\tau}
+        =(T\cdot A)^{\sigma},
+        \notag
+    \end{align}
+    which is the reduction of the state. For the operator, the word
+    $X^{\sigma\tau}$ is the word of the doubled-index tensor of $X$ on the
+    pair configuration $(\sigma,\tau)$, so
+    $(V\otimes\mathbf 1)(X\cdot B)^\sigma(W\otimes\mathbf 1)
+        =\sum_\tau VX^{\sigma\tau}W\otimes B^\tau
+        =(Y\cdot B)^\sigma$. For a dressed proportionality, if
+    $VB^{\tau}=z\,V'B^{\tau}$ for all words $\tau$ of length at least $N_0$,
+    then for every word $\sigma$ of such a length
+    \begin{align}
+        (\mathbf 1\otimes V)\,(T\cdot B)^{\sigma}
+         & =\sum_\tau T^{\sigma\tau}\otimes VB^{\tau}
+        =z\sum_\tau T^{\sigma\tau}\otimes V'B^{\tau}
+        =z\,(\mathbf 1\otimes V')\,(T\cdot B)^{\sigma},
+        \notag
+    \end{align}
+    because every $\tau$ in the sum has the length of $\sigma$; the same
+    substitution on the pair words of $X$ gives the lift through
+    $V\otimes\mathbf 1$. For the intertwiner,
+    $(X'^{ij}\otimes B^j)(P\otimes\mathbf 1)=X'^{ij}P\otimes B^j
+        =PX^{ij}\otimes B^j=(P\otimes\mathbf 1)(X^{ij}\otimes B^j)$.
+    The letter identity is the reassociation of Kronecker products:
+    \begin{align}
+        ((MN)\cdot A)^i
+         & =\sum_{j,k}(M^{ij}\otimes N^{jk})\otimes A^k
+        =\mathsf a\,\Bigl(\sum_{j,k}M^{ij}\otimes(N^{jk}\otimes A^k)\Bigr)
+        \,\mathsf a^{-1}
+        =\mathsf a\,(M\cdot(N\cdot A))^i\,\mathsf a^{-1}.
+        \notag
+    \end{align}
+\end{proof}

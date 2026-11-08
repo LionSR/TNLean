@@ -18,18 +18,18 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
     $O_\theta(M)=\mathbf 1_{[-\theta,\theta]}(M)$.
 \end{definition}
 
-\begin{theorem}[The cut-off is an orthogonal projection]
+\begin{lemma}[The cut-off is an orthogonal projection]
     \label{thm:hastings_spectral_cutoff_projection}
     \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     For $M=M^\dagger$ and $\theta\in\R$, $O_\theta(M)^2=O_\theta(M)=O_\theta(M)^\dagger$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The indicator $f=\mathbf 1_{[-\theta,\theta]}$ is real-valued with $f^2=f$.
 \end{proof}
 
-\begin{theorem}[A cut-off moves a nearly annihilated vector little]
+\begin{lemma}[A cut-off moves a nearly annihilated vector little]
     \label{thm:hastings_spectral_cutoff_obd}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le}
     \leanok
@@ -44,7 +44,7 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
     $\theta=\Delta E^{-1}J^2e^{-l/(6\xi)}$, (\ref{eq:hastings_spectral_cutoff_obd})
     gives $\lVert(O_L-1)\Psi_0\rVert\le Ce^{-l/(6\xi)}$ as in
     \cite[eq.~(obd)]{Hastings2007AreaLaw}, and similarly for $O_R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Set $h(t)=t^{-1}\mathbf 1_{\lvert t\rvert>\theta}(t)$, so
     $1-\mathbf 1_{[-\theta,\theta]}(t)=t\,h(t)$ and $\lvert h(t)\rvert\le\theta^{-1}$.
@@ -52,19 +52,19 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
     (\ref{eq:hastings_spectral_cutoff_obd}).
 \end{proof}
 
-\begin{theorem}[The cut-off reduces the operator]
+\begin{lemma}[The cut-off reduces the operator]
     \label{thm:hastings_spectral_cutoff_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     For $M=M^\dagger$ and $\theta\ge0$, $\lVert M\,O_\theta(M)\rVert\le\theta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $M\,O_\theta(M)=g(M)$ with $g(t)=t\,\mathbf 1_{[-\theta,\theta]}(t)$
     and $\lvert g(t)\rvert\le\theta$.
 \end{proof}
 
-\begin{theorem}[The cut-off estimate]
+\begin{lemma}[The cut-off estimate]
     \label{thm:hastings_spectral_cutoff_pair_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_le_of_isStarProjection,
         TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le}
@@ -75,24 +75,24 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
     particular, for $M_L=M_L^\dagger$, $M_R=M_R^\dagger$, $\theta\ge0$, and
     commuting $O_L=O_\theta(M_L)$, $O_R=O_\theta(M_R)$,
     $\lVert(M_L+M_R)O_LO_R\rVert\le2\theta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $(A+B)OO'=(AO)O'+(BO')O$, $\lVert O\rVert,\lVert O'\rVert\le1$, and
-    Theorem~\ref{thm:hastings_spectral_cutoff_norm}.
+    Lemma~\ref{thm:hastings_spectral_cutoff_norm}.
 \end{proof}
 
-\begin{theorem}[Two cut-offs move a vector by at most the sum]
+\begin{lemma}[Two cut-offs move a vector by at most the sum]
     \label{thm:hastings_spectral_cutoff_two}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection}
     \leanok
     For an orthogonal projection $O$, any operator $O'$, and any vector $\Psi$,
     $\lVert\Psi-OO'\Psi\rVert\le\lVert\Psi-O\Psi\rVert+\lVert\Psi-O'\Psi\rVert$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $\Psi-OO'\Psi=(\Psi-O\Psi)+O(\Psi-O'\Psi)$ and use $\lVert O\rVert\le1$.
 \end{proof}
 
-\begin{theorem}[Support of the cut-off]
+\begin{lemma}[Support of the cut-off]
     \label{thm:hastings_spectral_cutoff_support}
     \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift,
         TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff}
@@ -100,13 +100,13 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
     \uses{def:hastings_spectral_cutoff}
     For $K=K^\dagger$ on a region $D$, $O_\theta(K\otimes1_{D^c})=O_\theta(K)\otimes1_{D^c}$;
     thus $O_\theta(M)$ is supported on $D$ whenever $M=M^\dagger$ is.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The unital $*$-homomorphism $K\mapsto K\otimes1_{D^c}$ commutes with the
     functional calculus on the finite spectrum of $K$.
 \end{proof}
 
-\begin{theorem}[Cut-offs on disjoint regions commute]
+\begin{lemma}[Cut-offs on disjoint regions commute]
     \label{thm:hastings_spectral_cutoff_commute}
     \lean{TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint,
         TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn}
@@ -115,9 +115,9 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
     If $M=M^\dagger$ and $M'=(M')^\dagger$ are supported on disjoint regions
     $X$ and $Y$, then $[O_\theta(M),O_{\theta'}(M')]=0$ for all
     $\theta,\theta'\in\R$; in particular, $[O_L,O_R]=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:hastings_spectral_cutoff_support}, $O_\theta(M)$ and
+    By Lemma~\ref{thm:hastings_spectral_cutoff_support}, $O_\theta(M)$ and
     $O_{\theta'}(M')$ are supported on disjoint regions $X$ and $Y$, hence
     commute.
 \end{proof}

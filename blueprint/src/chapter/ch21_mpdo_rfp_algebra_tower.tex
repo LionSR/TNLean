@@ -43,7 +43,7 @@
     for the multiplication induced by $c^{(1)}$.
 \end{definition}
 
-\begin{theorem}[Idempotent transfer maps and stationary support algebras]%
+\begin{lemma}[Idempotent transfer maps and stationary support algebras]%
     \label{thm:mpdo_blocked_fixed_point_algebra_tower_from_zcl}
     \lean{MPOTensor.hasBlockedAdjointFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed}
     \leanok
@@ -56,7 +56,7 @@
         \notag
     \end{align}
     with multiplication $m_n(x,y) = xy$ and inclusion $\iota_n(x) = x$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Under the trace-preserving normalization and the faithful fixed point, Wolf's
     fixed-point-algebra theorem gives the $*$-subalgebra
@@ -114,7 +114,7 @@ of matrix algebras. This argument concerns the vertical canonical forms,
 not the fixed-point algebras $\Fix(E_n^\dagger)$ of
 Definition~\ref{def:mpdo_blocked_fixed_point_algebra_tower}.
 
-\begin{theorem}[Stabilized blocked adjoint fixed points yield support algebras]%
+\begin{lemma}[Stabilized blocked adjoint fixed points yield support algebras]%
     \label{thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
     \lean{MPOTensor.hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed}
     \leanok
@@ -127,7 +127,7 @@ Definition~\ref{def:mpdo_blocked_fixed_point_algebra_tower}.
         \notag
     \end{align}
     then there is a compatible family of support algebras.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The trace-preserving map and its positive-definite fixed point give a
     $*$-subalgebra $\Fix(E_1^\dagger)$, and setting
@@ -164,14 +164,14 @@ coefficients.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Reconstruction from coordinates]%
+\begin{lemma}[Reconstruction from coordinates]%
     \label{thm:mpdo_reconstruct_blocked_coefficients}
     \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_apply}
     \leanok
     \uses{def:mpdo_blocked_coefficients}
     Reconstructing a coordinate family $(a_i)_{i\in I_n}$ gives
     $\sum_i a_i b_i^{(n)}$ in $\mathcal{A}_n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     This is the finite-basis reconstruction formula for the chosen basis of
     $\mathcal{A}_n$.
@@ -193,7 +193,7 @@ coefficients.
     structure coefficients of the vertical operators $O_L(M_\alpha)$.
 \end{definition}
 
-\begin{theorem}[Reconstruction of multiplication from its coefficients]%
+\begin{lemma}[Reconstruction of multiplication from its coefficients]%
     \label{thm:mpdo_mul_coefficients_reconstruct}
     \lean{MPOTensor.AlgebraStructureData.coe_mul_eq_sum_blockedStructureCoefficients}
     \leanok
@@ -201,10 +201,10 @@ coefficients.
     In the ambient bond-space matrix algebra,
     $b_i^{(n)} b_j^{(n)}
         = \sum_{k \in I_{2n}} c^{(n)}_{i,j,k} b_k^{(2n)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the reconstruction formula of
-    Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
+    Lemma~\ref{thm:mpdo_reconstruct_blocked_coefficients} to the element
     $m_n(b_i^{(n)},b_j^{(n)}) \in \mathcal{A}_{2n}$ yields the expansion.
 \end{proof}
 
@@ -222,7 +222,7 @@ coefficients.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Reconstruction of inclusion from its coefficients]%
+\begin{lemma}[Reconstruction of inclusion from its coefficients]%
     \label{thm:mpdo_inclusion_coefficients_reconstruct}
     \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedInclusionCoefficients}
     \leanok
@@ -231,7 +231,7 @@ coefficients.
     $b_i^{(n)}$ under $\iota_n$:
     $\sum_{j \in I_{n+1}} d^{(n)}_{ij} b_j^{(n+1)}
         = \iota_n(b_i^{(n)})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_blocked_coefficients}
     Coefficient extraction and reconstruction are mutually inverse coordinate
@@ -239,7 +239,7 @@ coefficients.
     to $\iota_n(b_i^{(n)})$ therefore returns the same element.
 \end{proof}
 
-\begin{theorem}[Reconstruction of compatible adjoint fixed points]%
+\begin{lemma}[Reconstruction of compatible adjoint fixed points]%
     \label{thm:mpdo_fixedpoint_coefficients_reconstruct}
     \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_of_fixedPoint}
     \leanok
@@ -248,14 +248,14 @@ coefficients.
     $E_n^\dagger X = X$ for a positive blocking size $n$, then
     $X \in \mathcal{A}_n$. Writing $(X_i)_{i \in I_n}$ for its coordinates
     gives $X = \sum_{i \in I_n} X_i b_i^{(n)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Compatibility identifies $\mathcal{A}_n$ with the adjoint fixed-point algebra of
     $E_n$, so $X$ belongs to $\mathcal{A}_n$.
-    Theorem~\ref{thm:mpdo_reconstruct_blocked_coefficients} then reconstructs it.
+    Lemma~\ref{thm:mpdo_reconstruct_blocked_coefficients} then reconstructs it.
 \end{proof}
 
-\begin{theorem}[Descent of blocked adjoint fixed points]%
+\begin{lemma}[Descent of blocked adjoint fixed points]%
     \label{thm:mpdo_adjoint_fix_descent}
     \lean{MPOTensor.adjoint_transferMap_apply_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
@@ -263,7 +263,7 @@ coefficients.
     If an MPO tensor has a compatible family of support algebras, then for
     every positive blocking size $n$ and every $X$,
     $E_n^{\dagger}X=X$ implies $E_1^{\dagger}X=X$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Compatibility at size $n$ places $X$ in $\mathcal{A}_n$. The inclusion
     $\iota_n$ places the same ambient matrix $X$ in $\mathcal{A}_{n+1}$.
@@ -305,7 +305,7 @@ coefficients.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Finite-order adjoint eigenvalues under compatibility]%
+\begin{lemma}[Finite-order adjoint eigenvalues under compatibility]%
     \label{thm:mpdo_algebra_root_of_unity_eigenvalue}
     \lean{MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
@@ -313,15 +313,15 @@ coefficients.
     Assume there is a compatible family of support algebras. If $X\ne 0$,
     $E_1^\dagger X=\lambda X$, and $\lambda^n=1$ for some $n>0$, then
     $\lambda=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Lemma~\ref{lem:mpdo_adjoint_blocked_eigenvector},
-    $E_n^\dagger X=\lambda^n X=X$. Theorem~\ref{thm:mpdo_adjoint_fix_descent} gives
+    $E_n^\dagger X=\lambda^n X=X$. Lemma~\ref{thm:mpdo_adjoint_fix_descent} gives
     $E_1^\dagger X=X$. Thus $\lambda X=X$, so $(\lambda-1)X=0$. Since
     $X\ne0$, one obtains $\lambda=1$.
 \end{proof}
 
-\begin{theorem}[Equality of compatible adjoint fixed-point algebras]%
+\begin{lemma}[Equality of compatible adjoint fixed-point algebras]%
     \label{thm:mpdo_adjoint_fix_equality_from_algebra}
     \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
@@ -329,13 +329,13 @@ coefficients.
     If an MPO tensor has a compatible family of support algebras, then
     $\Fix(E_n^{\dagger})=\Fix(E_1^{\dagger})$ for every positive blocking
     size $n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combining Theorem~\ref{thm:mpdo_adjoint_fix_descent} with
+    Combining Lemma~\ref{thm:mpdo_adjoint_fix_descent} with
     Lemma~\ref{lem:mpdo_adjoint_fix_reverse} gives both inclusions.
 \end{proof}
 
-\begin{theorem}[Compatibility of the stationary family of support algebras]%
+\begin{lemma}[Compatibility of the stationary family of support algebras]%
     \label{thm:mpdo_stationary_tower_from_algebra}
     \lean{MPOTensor.stationaryOfFaithfulFixedPoint_compatible_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
@@ -345,9 +345,9 @@ coefficients.
     stationary family $\mathcal{A}_n = \Fix(E_1^\dagger)$ is
     itself compatible with $M$: for every positive blocking size $n$,
     $\Fix(E_1^\dagger)=\Fix(E_n^\dagger)$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Compatible support algebras do not imply an idempotent transfer map]%
+\begin{lemma}[Compatible support algebras do not imply an idempotent transfer map]%
     \label{thm:mpdo_algebra_tower_not_imply_zcl}
     \lean{MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL}
     \leanok
@@ -357,7 +357,7 @@ coefficients.
     positive-definite fixed point, and which has a compatible family of
     support algebras, although its doubled-tensor transfer map is not
     idempotent.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For the phase-flip channel with Kraus operators
     $K_0=\frac35 \Id$ and $K_1=\frac45 Z$, where $Z=\diag(1,-1)$,
@@ -390,9 +390,9 @@ coefficients.
     Hence a nonzero matrix $X$ with $E^\dagger X=\lambda X$ and
     $\lambda^n=1$ lies in $\Fix(E^\dagger)$, so $(\lambda-1)X=0$ and
     $\lambda=1$ by
-    Theorem~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}. Compatibility does
+    Lemma~\ref{thm:mpdo_algebra_root_of_unity_eigenvalue}. Compatibility does
     not imply $E^2=E$, as
-    Theorem~\ref{thm:mpdo_algebra_tower_not_imply_zcl} shows. More
+    Lemma~\ref{thm:mpdo_algebra_tower_not_imply_zcl} shows. More
     generally, on $\MN{D}$ with $D\ge2$, let $\Pi_{\mathrm{diag}}$ be the
     projection onto diagonal matrices. For $0<\varepsilon<1$, set
     $E(X)=\varepsilon X+(1-\varepsilon)\Pi_{\mathrm{diag}}(X)$, so that
@@ -488,7 +488,7 @@ coefficients.
     one-site and two-site vertical canonical forms is required for the maps
     in (\ref{eq:mpdo_reconstruction_maps}); it does not follow from a choice
     of bases in the support algebras. In particular,
-    Theorem~\ref{thm:mpdo_algebra_tower_not_imply_zcl} rules out deriving
+    Lemma~\ref{thm:mpdo_algebra_tower_not_imply_zcl} rules out deriving
     idempotence of the doubled-tensor transfer map from compatibility alone.
     % Source-faithful completion requires the BNT-label hypotheses as a
     % separate condition; the support-algebra condition does not imply them.
@@ -525,7 +525,7 @@ positivity and operator multiplication.
     diagonal entries.
 \end{definition}
 
-\begin{theorem}[Trace of a power of a diagonal matrix]%
+\begin{lemma}[Trace of a power of a diagonal matrix]%
     \label{thm:mpdo_trace_matrix_pow}
     \lean{MPOTensor.DiagonalChiFamily.trace_matrix_pow}
     \leanok
@@ -541,7 +541,7 @@ positivity and operator multiplication.
     where $r_{\alpha,\beta,\gamma}$ is the size of
     $\chi_{\alpha,\beta,\gamma}$ and $\chi_{\alpha,\beta,\gamma,k}$ are its
     diagonal entries.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Diagonal matrices raise to powers entrywise and the trace of a diagonal matrix
     is the sum of its entries.

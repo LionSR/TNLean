@@ -47,23 +47,23 @@ identifier even when disconnected.
     \input{figures/area_law_primary_regions}
 \end{definition}
 
-\begin{theorem}[Finite rectangular decomposition]
+\begin{lemma}[Finite rectangular decomposition]
     \label{thm:area_law_primary_fragment_union}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_eq_iUnion_primaryFragment}
     \leanok
     \uses{def:area_law_primary_regions}
     For the data of Definition~\ref{def:area_law_primary_regions},
     $R_j=\bigcup_{z\in J_j}F_{j,z}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_nesting}
     Intersecting $D_k=\bigcup_{z\in I_k}C_{k,z}$
-    (Theorem~\ref{thm:area_law_dyadic_nesting}) with $U_j$, commuting closure
+    (Lemma~\ref{thm:area_law_dyadic_nesting}) with $U_j$, commuting closure
     with the finite union, and dropping the empty terms $z\notin J_j$ gives
     $R_j=\bigcup_{z\in J_j}F_{j,z}$.
 \end{proof}
 
-\begin{theorem}[Closed cell fragments]
+\begin{lemma}[Closed cell fragments]
     \label{thm:area_law_primary_fragment_rectangles}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryFragment_eq_closedRectangle,
         TNLean.PEPS.AreaLaw.Geometry.primaryFragment_subset_closure_dyadicCell,
@@ -84,7 +84,7 @@ identifier even when disconnected.
     For every fragment $F_{j,z}$ (including empty ones) and all $x,y\in F_{j,z}$,
     $F_{j,z}\subseteq\overline{C_{k,z}}$, $\|x-y\|_\infty\le r$, and
     $\operatorname{diam}_\infty F_{j,z}\le r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_cell_distance}
     Any point of $C_{k,z}\cap U_j$ satisfies
@@ -92,11 +92,11 @@ identifier even when disconnected.
     $i=1,2$, so taking closures of the coordinate intersections gives
     (\ref{eq:area_law_primary_fragment_rect}). Monotonicity of closure gives
     $F_{j,z}\subseteq\overline{C_{k,z}}$, and
-    Theorem~\ref{thm:area_law_dyadic_cell_distance} at index radius $0$ gives
+    Lemma~\ref{thm:area_law_dyadic_cell_distance} at index radius $0$ gives
     $\|x-y\|_\infty\le r$ and $\operatorname{diam}_\infty F_{j,z}\le r$.
 \end{proof}
 
-\begin{theorem}[Primary diameter and separation]
+\begin{lemma}[Primary diameter and separation]
     \label{thm:area_law_primary_diameter_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_subset_closure_pitchInterior,
         TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_le,
@@ -108,7 +108,7 @@ identifier even when disconnected.
     $R_j\subseteq\overline{U_j}$, $\|x-y\|_\infty\le s$, and
     $\operatorname{diam}_\infty R_j\le s$. For distinct $i\ne j$ in $\Z^2$,
     every $x\in R_i$ and $y\in R_j$ satisfy $\|x-y\|_\infty\ge t$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_primary_regions}
     By (\ref{eq:area_law_primary_regions}),
@@ -119,7 +119,7 @@ identifier even when disconnected.
 \end{proof}
 
 % Source: 10-geometry.tex, lines 192--197, 239--249 and 784--789.
-\begin{theorem}[Separation of primary births in layers of the same parity]
+\begin{lemma}[Separation of primary births in layers of the same parity]
     \label{thm:area_law_primary_same_parity_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_separation_of_same_parity}
     \leanok
@@ -132,20 +132,20 @@ identifier even when disconnected.
     $(k,i)\ne(h,j)$, then every $x\in R_{k,i}$ and $y\in R_{h,j}$ satisfy
     $\|x-y\|_\infty\ge\min\{t_k,r_k/2\}$ (an auxiliary separation estimate for
     \cite[Section~11]{OpenAI2026AreaLaw}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_primary_diameter_separation,
         thm:area_law_dyadic_nonadjacent,def:area_law_primary_regions}
     If $k=h$, then $i\ne j$ and
-    Theorem~\ref{thm:area_law_primary_diameter_separation} gives
+    Lemma~\ref{thm:area_law_primary_diameter_separation} gives
     $\|x-y\|_\infty\ge t_k$. If $k\ne h$, then $|k-h|\ge2$, and since
     $R_{k,i}\subseteq\overline{D_k}$ and $R_{h,j}\subseteq\overline{D_h}$,
-    Theorem~\ref{thm:area_law_dyadic_nonadjacent} with $C_0\ge2$ gives
+    Lemma~\ref{thm:area_law_dyadic_nonadjacent} with $C_0\ge2$ gives
     $\|x-y\|_\infty\ge(C_0-1)\max\{r_k,r_h\}/2\ge r_k/2$.
 \end{proof}
 
-\begin{theorem}[Number of fragments of one primary]
+\begin{lemma}[Number of fragments of one primary]
     \label{thm:area_law_primary_fragment_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_primaryFragmentIndices_le}
     \leanok
@@ -156,7 +156,7 @@ identifier even when disconnected.
         =\bigl(s/r+2\bigr)^2.
         \label{eq:area_law_primary_fragment_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_primary_regions}
     With $N=2^{p-k}=s/r$ and $q_i=\lfloor(v_{j,i}-o_i)/r\rfloor$, any
@@ -166,7 +166,7 @@ identifier even when disconnected.
 
 % Source: 10-geometry.tex, lines 299--306 and 352--356,
 % the adjacent-mesh arithmetic used in geometry:initial-stars.
-\begin{theorem}[Adjacent fine meshes]
+\begin{lemma}[Adjacent fine meshes]
     \label{thm:area_law_adjacent_fine_meshes}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_mono,
         TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_succ,
@@ -177,10 +177,10 @@ identifier even when disconnected.
     Definition~\ref{def:area_law_fine_belt_scales} are nondecreasing, and for
     every $k\in\N$, $\ell_{k+1}\in\{\ell_k,\ell_k+1\}$ and
     $t_{k+1}\in\{t_k,2t_k\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_exponent_gaps}
-    By Theorem~\ref{thm:area_law_exponent_gaps}, $0\le\zeta\le1$, so
+    By Lemma~\ref{thm:area_law_exponent_gaps}, $0\le\zeta\le1$, so
     $\zeta k\le\zeta(k+1)\le\zeta k+1$; taking floors gives
     $\ell_k\le\ell_{k+1}\le\ell_k+1$, and exponentiating gives
     $t_{k+1}=2^{\ell_{k+1}}\in\{t_k,2t_k\}$.

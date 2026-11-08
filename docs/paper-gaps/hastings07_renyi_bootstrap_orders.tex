@@ -33,8 +33,12 @@ replacing $F(\xi',D)$.
 The formalized Rényi bootstrap lemma covers the orders $0<\alpha<1$ satisfying
 (\ref{eq:hastings07_renyi_bootstrap_orders_conv}), with the function
 $4\ln D-\ln\bigl(1-(D^2)^{1-\alpha}e^{-2\alpha/\xi'}\bigr)/(1-\alpha)$ in place
-of $F(\xi',D)$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture}
-    in \doclink{TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma}.}
+of $F(\xi',D)$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/SourceConsequences}.}
+Both the factorization and the Rényi bounds use the common source
+length $s=\max(80c_RJ/\Delta E,80)$ and $\xi'=6s$, with velocity
+$40c_RJ$ and numerical decay length $80$; the constants depend only on
+the interaction range.
 Order $1$ is the von Neumann entropy, bounded by the formalized
 Lemma~2. Orders $\alpha>1$, for which
 (\ref{eq:hastings07_renyi_bootstrap_orders_conv}) always holds, are not covered
@@ -52,8 +56,8 @@ the eigenvalues of $\rho$ and the concavity of the logarithm,
 and dividing by $1-\alpha<0$ gives $S_\alpha(\rho)\le S(\rho)$. Applied to the
 formalized Lemma~2, this covers every order $\alpha>1$, with $F(\xi',D)$ itself
 as the function replacing $F(\xi',D)$, so the restriction is removed.\footnote{%
-    \leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt}
-    in \doclink{TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma}; the inequality
+    \leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/SourceConsequences}; the inequality
     (\ref{eq:hastings07_renyi_bootstrap_orders_jensen}) is
     \leanid{Entropy.inv_one_sub_mul_log_sum_rpow_le_probabilityEntropy} in the
     companion library QICLean.}

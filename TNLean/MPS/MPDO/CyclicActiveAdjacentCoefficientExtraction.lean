@@ -314,7 +314,7 @@ private theorem sum_sector_trace_two_eq_cyclicActive_pow_two
     _ = ∑ r : {r : Fin F.sectorCount // F.IsCyclicActiveSector r},
         Matrix.trace (F.neighboringOperator q r) *
           Matrix.trace (F.neighboringOperator r h) := by
-      apply Finset.sum_congr_set
+      apply Finset.sum_congr_set {r | F.IsCyclicActiveSector r}
       · intro r hr
         rfl
       intro r hr
@@ -354,7 +354,7 @@ private theorem sum_sector_trace_three_eq_cyclicActive_pow_three
           Matrix.trace (F.neighboringOperator q a) *
             Matrix.trace (F.neighboringOperator a b) *
               Matrix.trace (F.neighboringOperator b h) := by
-      apply Finset.sum_congr_set
+      apply Finset.sum_congr_set {a | F.IsCyclicActiveSector a}
       · intro a ha
         rfl
       intro a ha
@@ -384,7 +384,7 @@ private theorem sum_sector_trace_three_eq_cyclicActive_pow_three
               Matrix.trace (F.neighboringOperator b h) := by
       apply Finset.sum_congr rfl
       intro a _
-      apply Finset.sum_congr_set
+      apply Finset.sum_congr_set {b | F.IsCyclicActiveSector b}
       · intro b hb
         rfl
       intro b hb

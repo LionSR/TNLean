@@ -5,14 +5,14 @@ construction then gives a separate dimension-dependent depth constant.
 The two constants need not be optimal. Throughout this section, the
 physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
 
-\begin{theorem}[Polynomial-exponential error at an explicit scale]
+\begin{lemma}[Polynomial-exponential error at an explicit scale]
     \label{thm:ldp_polynomial_exponential_scale}
     \lean{mul_pow_mul_exp_neg_le_of_le}
     \leanok
     Let $K,r>0$, $N\ge1$, and let $k$ be a nonnegative integer. If
     $a\ge\max(k,1)/r$, $b\ge\max(\log K,0)/r$, and
     $q\ge a\log(N/\varepsilon)+b$, then $KN^ke^{-rq}\le\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:ldp_log_threshold_error}
@@ -22,7 +22,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     Lemma~\ref{lem:ldp_log_threshold_error} yields $KN^ke^{-rq}\le\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Explicit scale with a minimum usable block length]
+\begin{lemma}[Explicit scale with a minimum usable block length]
     \label{thm:ldp_explicit_usable_scale}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_min_of_rate}
     \leanok
@@ -47,7 +47,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     a sufficient quantitative condition; as recorded
     in~\cite{gap:mswc24_inhomogeneous_scope}, qualitative convergence alone
     does not give the assumed rate.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_polynomial_exponential_scale, thm:ldp_inhomogeneous,
@@ -55,12 +55,12 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     Since $\log(N/\varepsilon)\ge0$, the selected scale satisfies
     $q\ge L$ and $q\ge3D+1$. If $q\le N$, the block circuit has depth
     at most $2C_bq$, and
-    Theorem~\ref{thm:ldp_polynomial_exponential_scale} bounds its error.
+    Lemma~\ref{thm:ldp_polynomial_exponential_scale} bounds its error.
     If $q>N$, exact preparation has depth at most $C_eN$ and error zero.
     Thus $C=\max(2C_b,C_e)$ works, independently of all rate data.
 \end{proof}
 
-\begin{theorem}[Pair rate from ordered mixing]
+\begin{lemma}[Pair rate from ordered mixing]
     \label{thm:ldp_ordered_mixing_pair_rate}
     \lean{MPSPreparation.exists_isPairApproximable_of_ordered_mixing,
         MPSPreparation.le_remainderBlockLengths,
@@ -73,7 +73,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     relative to $X\mapsto\operatorname{Tr}(X)\sigma$, with $K,r>0$.
     For every $1\le q\le N$, the remainder-absorbing partition has
     $q\le\ell_j<2q$ and normalized pair error at most $C_pKN e^{-rq}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_inhomogeneous_normalized_pairs}
@@ -83,27 +83,27 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     estimate gives pair error at most $C_pMKe^{-rq}\le C_pNKe^{-rq}$.
 \end{proof}
 
-\begin{theorem}[Selected coefficient from ordered mixing]
+\begin{lemma}[Selected coefficient from ordered mixing]
     \label{thm:ldp_ordered_mixing_explicit_scale}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_min_of_ordered_mixing}
     \leanok
     There is $C=C(d,D)$ such that for each faithful density matrix $\sigma$
     and $K,r>0$, there is $b\ge1$ with the following property. Every
     nonzero chain satisfying the ordered mixing hypothesis of
-    Theorem~\ref{thm:ldp_ordered_mixing_pair_rate} has a unit approximation
+    Lemma~\ref{thm:ldp_ordered_mixing_pair_rate} has a unit approximation
     of error at most $\varepsilon$, prepared in depth
     $T\le C\min(N,q)$ with
     $q=\lceil r^{-1}\log(N/\varepsilon)+b\rceil\ge3D+1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_ordered_mixing_pair_rate, thm:ldp_explicit_usable_scale}
     Taking $k=1$, $L=0$, prefactor $C_pK$, $a=1/r$, and
     $b=\max(\log(C_pK),0)/r+3D+1$ in
-    Theorem~\ref{thm:ldp_explicit_usable_scale} yields the claim.
+    Lemma~\ref{thm:ldp_explicit_usable_scale} yields the claim.
 \end{proof}
 
-\begin{theorem}[Every prescribed slope above half the correlation length]
+\begin{lemma}[Every prescribed slope above half the correlation length]
     \label{thm:ldp_all_length_prescribed_slope}
     \lean{MPSPreparation.exists_isPreparedInDepth_allLength_of_slope}
     \leanok
@@ -121,7 +121,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     Refining the sufficient blocking scale in
     \cite{Malz2024Preparation}, this bound makes no assertion at $a=\xi/2$ or
     at the spectral-bound endpoint $t=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_block_approximation_error, thm:ldp_approximating_state_depth,

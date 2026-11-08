@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The printed assertions}
 
@@ -31,11 +31,11 @@ $B=(B_i)_i$ for the tensor component of a solution. The printed conclusion is
 therefore
 \begin{align}
     V^{(N)}(B)
-        &=V^{(N)}(A),
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_printed_state}\\
+     & =V^{(N)}(A),
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_printed_state} \\
     A_i
-        &=UB_iU^\dagger
-        \qquad\text{for every }i
+     & =UB_iU^\dagger
+    \qquad\text{for every }i
     \label{eq:pgvwc07_quadratic_reconstruction_phase_printed_conjugacy}
 \end{align}
 for some unitary $U$. Here $V^{(N)}(B)$ denotes the length-$N$ trace-MPS
@@ -53,14 +53,14 @@ structure. A window has matrices $A_i^{[j]}$ for $0\leq j<m$. A solution
 consists of matrices $Y_j,Z_j$ and a tensor $B$ satisfying
 \begin{align}
     B_i\otimes\Id
-        &=Y_jA_i^{[j]}Z_j,
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_system_gauge}\\
+     & =Y_jA_i^{[j]}Z_j,
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_system_gauge}   \\
     Y_{j+1}Z_j
-        &=\Id
-        \qquad(0\leq j<m-1),
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_system_inverse}\\
+     & =\Id
+    \qquad(0\leq j<m-1),
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_system_inverse} \\
     \sum_iB_iB_i^\dagger
-        &=\Id.
+     & =\Id.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_system_normalization}
 \end{align}
 This is the shifted indexing of the system printed immediately before
@@ -69,40 +69,40 @@ Theorem~8 \cite[lines~1142--1152]{PerezGarcia2007Matrix}.
 Let $\eta\in\C$ have unit modulus. Define
 \begin{align}
     B_i^{(\eta)}
-        &:=\eta B_i,
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_rescaled_tensor}\\
+     & :=\eta B_i,
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_rescaled_tensor}     \\
     Y_j^{(\eta)}
-        &:=\overline{\eta}^{\,j}Y_j,
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_rescaled_left_gauge}\\
+     & :=\overline{\eta}^{\,j}Y_j,
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_rescaled_left_gauge} \\
     Z_j^{(\eta)}
-        &:=\eta^{j+1}Z_j.
+     & :=\eta^{j+1}Z_j.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_rescaled_right_gauge}
 \end{align}
 Since $\overline\eta\eta=1$, the gauge equation transforms as
 \begin{align}
     Y_j^{(\eta)}A_i^{[j]}Z_j^{(\eta)}
-        &=\overline\eta^{\,j}\eta^{j+1}
-          Y_jA_i^{[j]}Z_j
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_gauge_rescaling_step}\\
-        &=\eta(B_i\otimes\Id)
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_gauge_rescaling_tensor}\\
-        &=B_i^{(\eta)}\otimes\Id.
+     & =\overline\eta^{\,j}\eta^{j+1}
+    Y_jA_i^{[j]}Z_j
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_gauge_rescaling_step}   \\
+     & =\eta(B_i\otimes\Id)
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_gauge_rescaling_tensor} \\
+     & =B_i^{(\eta)}\otimes\Id.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_gauge_rescaling_result}
 \end{align}
 The internal inverse equation becomes
 \begin{align}
     Y_{j+1}^{(\eta)}Z_j^{(\eta)}
-        &=\overline\eta^{\,j+1}\eta^{j+1}Y_{j+1}Z_j
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_inverse_rescaling_step}\\
-        &=\Id.
+     & =\overline\eta^{\,j+1}\eta^{j+1}Y_{j+1}Z_j
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_inverse_rescaling_step} \\
+     & =\Id.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_inverse_rescaling_result}
 \end{align}
 Finally, the normalization is unchanged:
 \begin{align}
     \sum_iB_i^{(\eta)}(B_i^{(\eta)})^\dagger
-        &=\eta\overline\eta\sum_iB_iB_i^\dagger
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_normalization_rescaling_step}\\
-        &=\Id.
+     & =\eta\overline\eta\sum_iB_iB_i^\dagger
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_normalization_rescaling_step} \\
+     & =\Id.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_normalization_rescaling_result}
 \end{align}
 Thus every solution belongs to a full unit-modulus phase family of solutions.
@@ -115,7 +115,7 @@ Every length-$N$ coefficient is homogeneous of degree $N$ in the local tensor.
 Therefore
 \begin{align}
     V^{(N)}(B^{(\eta)})
-        &=\eta^N V^{(N)}(B).
+     & =\eta^N V^{(N)}(B).
     \label{eq:pgvwc07_quadratic_reconstruction_phase_finite_ring_effect}
 \end{align}
 Suppose $V^{(N)}(B)$ is the prescribed nonzero state. If $\eta^N\neq1$, then
@@ -129,7 +129,7 @@ The exact-conjugacy claim can nevertheless fail. Take $d=D=1$, let the single
 canonical matrix be
 \begin{align}
     A_0
-        &=1,
+     & =1,
     \label{eq:pgvwc07_quadratic_reconstruction_phase_product_tensor}
 \end{align}
 and choose $N>3$. This tensor represents a nonzero product state, satisfies
@@ -137,7 +137,7 @@ condition C1 with onset $L_0=1$, has rank-one reduced states, and has no
 Schmidt-value degeneracy. Let $\eta\neq1$ be an $N$th root of unity and set
 \begin{align}
     B_0
-        &=\eta A_0.
+     & =\eta A_0.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_product_rephasing}
 \end{align}
 The phase construction above makes $B$ the tensor component of a solution, and
@@ -146,9 +146,9 @@ $V^{(N)}(B)=V^{(N)}(A)$. In bond dimension one, unitary conjugation acts
 trivially:
 \begin{align}
     UB_0U^\dagger
-        &=B_0
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_scalar_conjugation}\\
-        &\neq A_0.
+     & =B_0
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_scalar_conjugation} \\
+     & \neq A_0.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_scalar_conjugation_failure}
 \end{align}
 Hence exact unitary conjugacy fails even after restricting to solutions that
@@ -163,85 +163,98 @@ each of the $D^4+1$ cuts and one relation across each of the $D^4$ sites. The
 off-by-one correction is recorded separately in
 \path{docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex}.
 
-The current quadratic-system structure produces only the internal-cut
-intertwiners. The two endpoint intertwiners must come from uniqueness of the
-open-boundary representation. That comparison is available only after the
-solution tensor is already known to represent the same state as the canonical
-tensor. It cannot prove that an arbitrary algebraic solution represents the
-state, even up to phase.
+The inversion equations of the quadratic system constrain only the gauges at
+the $D^4-1$ internal cuts. The two endpoint gauges are unknowns of the system,
+but no equation states that they are invertible. There are two ways to supply
+the endpoint intertwiners. If the solution tensor is known to represent the
+prescribed state, comparison of the surrounding physical cut representations
+supplies them; condition C1 and the fixed-length equality give that comparison
+in the size regime $N>2L_0+D^4$. For an arbitrary solution over the canonical
+window, the left endpoint gauge is forced to be invertible by the internal
+equations themselves once the words of some length $1\leq\ell\leq D^4-2$ span
+the matrix algebra; this argument is given in
+Section~\ref{sec:pgvwc07_quadratic_reconstruction_phase_endpoints} below.
 
-Once the same-state hypothesis supplies the endpoint cuts, the corrected chain
-argument gives a nonzero matrix $R$ and a nonzero scalar $x$ satisfying
+Once the endpoint intertwiners are available, the corrected chain argument
+gives a nonzero matrix $R$ and a nonzero scalar $x$ satisfying
 \begin{align}
     RB_i
-        &=x^{-1}A_iR
-        \qquad\text{for every }i.
+     & =x^{-1}A_iR
+    \qquad\text{for every }i.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_intertwiner}
 \end{align}
 The normalization and fixed-point argument then gives
 \begin{align}
     |x|
-        &=1,
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_intertwiner_modulus}\\
+     & =1,
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_intertwiner_modulus} \\
     RR^\dagger
-        &=c\Id
-        \qquad\text{for some }c>0.
+     & =c\Id
+    \qquad\text{for some }c>0.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_intertwiner_norm}
 \end{align}
 Thus $U=c^{-1/2}R$ is unitary and
 \begin{align}
     A_i
-        &=xUB_iU^\dagger
-        \qquad\text{for every }i.
+     & =xUB_iU^\dagger
+    \qquad\text{for every }i.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_unit_phase_conjugacy}
 \end{align}
-Because $A$ and $B$ generate the same nonzero length-$N$ state,
-(\ref{eq:pgvwc07_quadratic_reconstruction_phase_unit_phase_conjugacy}) implies
+Unitary conjugation preserves traces of products, so
+(\ref{eq:pgvwc07_quadratic_reconstruction_phase_unit_phase_conjugacy}) gives
 \begin{align}
     V^{(N)}(A)
-        &=x^NV^{(N)}(B)
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_same_state_phase_relation}\\
-        &=V^{(N)}(B),
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_same_state_equality}\\
+     & =x^NV^{(N)}(B).
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_same_state_phase_relation}
+\end{align}
+If $A$ and $B$ generate the same nonzero length-$N$ state, then
+\begin{align}
     x^N
-        &=1.
+     & =1.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_root_condition}
 \end{align}
-The last conclusion uses that the state vector is nonzero.
 
 \section{Corrected theorem}
 
-The mathematically justified reconstruction statement keeps the existence
-clause of Theorem~8 and restricts its converse. Let $B$ be the tensor of a
-solution whose length-$N$ trace-MPS representation is the prescribed state.
-Then there are a unitary $U$ and a scalar $\xi\in\C$ such that
+The corrected statement keeps the hypotheses of Theorem~8 and weakens only its
+conclusion by the unavoidable phase. Write $A$ for the canonical tensor,
+normalized by $\sum_iA_iA_i^\dagger=\Id$; under condition C1 the canonical
+form has a single block, whose weight only rescales the state. The system does
+not see this weight: its normalization equation fixes the scale of every
+solution tensor. The comparison is therefore with the unital block $A$, and a
+canonical tensor of weight $\lambda\in(0,1]$ equals $\lambda A$. Let $B$ be the
+tensor of any solution of the system over the canonical window. Then there are
+a unitary $U$ and a scalar $\xi\in\C$ such that
 \begin{align}
     |\xi|
-        &=1,
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_corrected_unit_modulus}\\
-    \xi^N
-        &=1,
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_corrected_root_condition}\\
+     & =1,
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_corrected_unit_modulus} \\
     A_i
-        &=\xi UB_iU^\dagger
-        \qquad\text{for every }i.
+     & =\xi UB_iU^\dagger
+    \qquad\text{for every }i.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_corrected_conjugacy}
 \end{align}
-Equivalently, define the explicitly rephased tensor by
+Equivalently, the explicitly rephased tensor
 \begin{align}
     \widehat B_i
-        &:=\xi B_i.
+     & :=\xi B_i
     \label{eq:pgvwc07_quadratic_reconstruction_phase_corrected_rephasing}
 \end{align}
-Then
+satisfies
 \begin{align}
     V^{(N)}(\widehat B)
-        &=V^{(N)}(B),
-    \label{eq:pgvwc07_quadratic_reconstruction_phase_rephased_same_state}\\
+     & =V^{(N)}(A),
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_rephased_same_state} \\
     A_i
-        &=U\widehat B_iU^\dagger
-        \qquad\text{for every }i.
+     & =U\widehat B_iU^\dagger
+    \qquad\text{for every }i.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_rephased_exact_conjugacy}
+\end{align}
+The solution tensor $B$ itself generates the vector $V^{(N)}(A)$ exactly when
+\begin{align}
+    \xi^N
+     & =1.
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_corrected_root_condition}
 \end{align}
 The first relation is unit gauge-phase equivalence between $B$ and $A$, while
 the second is exact gauge equivalence after the displayed scalar
@@ -249,24 +262,170 @@ rephasing.\footnote{The corresponding formal predicates are
     \leanid{MPSTensor.UnitGaugePhaseEquiv} and
     \leanid{MPSTensor.GaugeEquiv} in \doclink{TNLean/MPS/Defs}.}
 
-\section{Open classification gap and verdict}
+\section{Scope decision}
+
+The following readings of Theorem~8 are adopted.
+
+\begin{enumerate}
+    \item Nonvanishing of the state is a convention. A state is a nonzero
+          vector, and the theorem's hypothesis that the state has an
+          open-boundary canonical form already forces it: the faithful
+          densities of that form exclude the zero vector.
+    \item The size condition $N>2L_0+D^4$ is the source's own setup. It is
+          hypothesis (iii) of Theorem~7 \cite[lines~1002--1015]{PerezGarcia2007Matrix},
+          and the proof of Theorem~8 \cite[lines~1167--1176]{PerezGarcia2007Matrix}
+          proceeds by reasoning as in that proof. The system itself
+          \cite[lines~1139--1152]{PerezGarcia2007Matrix} also requires the
+          open-boundary matrices at the sites $L_0+1,\ldots,L_0+D^4$ to have
+          size $D^2\times D^2$, which by the proposition on condition C1
+          \cite[lines~911--920]{PerezGarcia2007Matrix} holds when the whole
+          window, with both endpoint cuts, lies between $L_0$ and $N-L_0$.
+          Stating the size condition therefore adds no hypothesis.
+    \item The existence clause is formalized under the source's hypotheses.
+          It assumes condition C1 for some translation-invariant
+          representation, the size condition, and the canonical equations of
+          the given open-boundary representation; uniqueness of the
+          open-boundary canonical form and the rank bound are not needed as
+          hypotheses.
+    \item The hypothesis that the solution tensor represents the prescribed
+          state is a genuine restriction. It is part of the printed
+          conclusion, not a hypothesis of the source, and the phase-corrected
+          conclusion above holds for every solution by the argument of
+          Section~\ref{sec:pgvwc07_quadratic_reconstruction_phase_endpoints}.
+          The source-labelled reconstruction entry of the blueprint states the
+          corrected theorem for every solution, and its formal anchor carries
+          no such hypothesis.
+\end{enumerate}
+
+\section{The formalized parts}
+
+The theorem
+\leanid{MPSTensor.exists_quadraticSolution_canonicalOBCWindow}
+is the existence clause. Its inputs are a translation-invariant tensor
+satisfying condition C1 at $L_0$, the size condition, and an open-boundary
+representation of the same length-$N$ vector satisfying the source canonical
+equations: row normalization, the faithful density recursion, and the scalar
+initial density. The density recursion identifies every original bond
+dimension with the actual physical cut rank, the periodic representation
+bounds these ranks by $D^2$, condition C1 forces rank exactly $D^2$ across the
+window, and the physical cut bases supply the gauges. Nonvanishing of the
+state is derived from faithfulness. The window entries are the original site
+entries in the derived doubled coordinates.
+
+The theorem
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase}
+is the corrected converse for every solution over the canonical window. Its
+inputs are those of the existence clause, a canonical form for the
+translation-invariant tensor, and a solution of the system over the original
+canonical window. It returns the weight $\lambda\in(0,1]$ of the single
+canonical block with $\sum_iA_iA_i^\dagger=\lambda^2\Id$, a unitary $U$ and a
+unit-modulus $\xi$ with $A_i=\lambda\xi UB_iU^\dagger$, where $A$ now denotes
+the canonical tensor itself. The theorem
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge}
+gives the rephased solution of the same system, its equality of length-$N$
+vectors with the unital block $\lambda^{-1}A$, exact unitary conjugacy, and
+the criterion that $B$ itself represents that vector exactly when $\xi^N=1$.
+
+The theorem
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase_of_same_state}
+is the converse for same-state solutions over an arbitrary window. It consumes a solution, a canonical
+tensor satisfying condition C1 at $L_0$, the size condition, and the equality
+of the actual nonzero length-$N$ vectors. The solution tensor is not assumed
+canonical or injective. The weighted finite-length uniqueness theorem derives
+that the canonical weight is one and gives the unitary and the $N$th-root
+phase. The predicate form is
+\leanid{MPSTensor.QuadraticReconstructionSolution.unitGaugePhaseEquiv_of_same_state}.
+The same-system rephasing
+\leanid{MPSTensor.QuadraticReconstructionSolution.rephase}
+multiplies the tensor by $\xi$, $Y_j$ by $\xi^{-j}$ and $Z_j$ by $\xi^{j+1}$,
+and
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge_of_same_state}
+gives a solution of the same system with the same actual length-$N$ vector and
+exact unitary gauge equivalence after rephasing.
+
+\section{Endpoint invertibility for an arbitrary solution}
+\label{sec:pgvwc07_quadratic_reconstruction_phase_endpoints}
+
+This argument removes the restriction in item~4 of the scope decision. Use
+zero-based sites $0\leq j\leq m-1$ with $m=D^4$. The physical
+cut bases of the canonical window give invertible matrices
+$P_0,\ldots,P_m$ with
+\begin{align}
+    A_i^{[j]}
+     & =P_j(A_i\otimes\Id)P_{j+1}^{-1},
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_window_gauges}
+\end{align}
+after a geometric rescaling that removes the canonical weight. For a solution
+$(B,Y_j,Z_j)$ put $G_j=Y_jP_j$ and $H_j=P_{j+1}^{-1}Z_j$. Then
+\begin{align}
+    B_i\otimes\Id
+     & =G_j(A_i\otimes\Id)H_j,
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_gauged_system} \\
+    G_{j+1}H_j
+     & =\Id
+    \qquad(0\leq j\leq m-2).
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_gauged_inverse}
+\end{align}
+Hence $G_1,\ldots,G_{m-1}$ are invertible and $H_j=G_{j+1}^{-1}$ for
+$j\leq m-2$, while $G_0$ and $H_{m-1}$ are unconstrained. A word $w$ of length
+$\ell$ placed at the sites $a,\ldots,a+\ell-1$ satisfies
+\begin{align}
+    B_w\otimes\Id
+     & =G_a(A_w\otimes\Id)H_{a+\ell-1}.
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_gauged_words}
+\end{align}
+Suppose that the words of length $\ell$ in $A$ span $M_D(\C)$ for some
+$1\leq\ell\leq m-2$. Choose $c_w$ with $\sum_wc_wA_w=\Id$ and put
+$X=\sum_wc_wB_w$. Placing the words at the sites $1,\ldots,\ell$ and at
+$0,\ldots,\ell-1$ gives
+\begin{align}
+    X\otimes\Id
+     & =G_1G_{\ell+1}^{-1}
+    =G_0G_\ell^{-1}.
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_endpoint_identity}
+\end{align}
+The first expression is invertible, so $G_0$ is invertible. The right endpoint
+gauge $H_{m-1}$ is nonzero, because $B_i\otimes\Id=G_{m-1}(A_i\otimes\Id)H_{m-1}$
+and some $B_i$ is nonzero by the normalization equation. With $K_0=G_0^{-1}$
+and $K_{k+1}=H_k$, all $D^4+1$ cuts carry nonzero matrices with
+\begin{align}
+    K_k(B_i\otimes\Id)
+     & =(A_i\otimes\Id)K_{k+1}
+    \qquad(0\leq k\leq m-1),
+    \label{eq:pgvwc07_quadratic_reconstruction_phase_full_chain}
+\end{align}
+which is the complete cut family of the off-by-one note. The dependence
+argument uses only that these matrices are nonzero. Linear dependence, the
+chain-combination lemma, the slice extraction, and the fixed-point argument
+then give (\ref{eq:pgvwc07_quadratic_reconstruction_phase_corrected_conjugacy}).
+
+The spanning length exists when $D\geq2$: the adjoint family of the unital
+block is trace preserving and satisfies condition C1, so it is primitive; its
+letters span a space of dimension $d'\geq2$, since a single matrix generates
+word spans of dimension at most one. The quantum Wielandt inequality then
+bounds the least spanning length by $(D^2-d'+1)D^2\leq D^4-D^2\leq m-2$. If
+$D=1$, the window has one site and $G_0$ is a nonzero scalar: the gauge
+equation at that site expresses a nonzero $B_i$ through $G_0$, so $G_0$ is
+invertible without a spanning length.
+
+The formal counterparts are
+\leanid{MPSTensor.exists_physicalCutWindow_invertible_gauges} for the matrices
+in (\ref{eq:pgvwc07_quadratic_reconstruction_phase_window_gauges}),
+\leanid{MPSTensor.isUnit_gauge_zero_of_isNBlkInjective} for
+(\ref{eq:pgvwc07_quadratic_reconstruction_phase_endpoint_identity}),
+\leanid{MPSTensor.exists_intertwiner_of_gauged} for the complete chain and the
+nonzero intertwiner, and
+\leanid{MPSTensor.exists_isNBlkInjective_le_of_canonical} for the spanning
+length.
+
+\section{Verdict}
 
 The phase family proves that the unrestricted conclusion of Theorem~8 and the
-exact finite-ring conclusion of Theorem~7 are false as printed. The corrected
-same-state theorem above is the conclusion supported by the endpoint-cut
-argument.
+exact finite-ring conclusion of Theorem~7 are false as printed. The faithful
+target is the corrected theorem above, for every solution over the canonical
+window. Both its existence clause and its converse for every solution are
+formalized with the source's hypotheses, so this note is resolved.
 
-A stronger classification remains open: the current quadratic equations have
-not been shown to imply that every solution is phase-gauge equivalent to the
-canonical tensor. The known phase-rescaled solutions do not show that they are
-the only spurious solutions. Proving such a result would require either a new
-argument deriving endpoint compatibility from the internal equations or an
-enlarged reconstruction system that includes endpoint data explicitly.
-
-The blueprint therefore retains the algebraic reconstruction route but does
-not claim that an arbitrary solution represents the prescribed state. Its
-converse is restricted to same-state solutions and records the unavoidable
-$N$th-root phase before exact rephasing.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -42,7 +42,7 @@ Section 11, `geometry:initial-stars`, lines 352–370, and
 `prop:two-families`, lines 308–323, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 The color assignment is arbitrary, and the change set may be empty. -/
-def cellFanCutPiece (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+noncomputable def cellFanCutPiece (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2)
     (s : CellFanSlot (fun _ : Fin 4 ↦ true)) : Set (ℝ × ℝ) :=
   ((cellFanPolygon o ℓ z (fun _ ↦ true) s).region \
@@ -60,7 +60,7 @@ Section 11, `geometry:initial-stars`, lines 352–370, and
 `prop:two-families`, lines 308–323, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 The origin, signed cell index, dyadic exponent and binary coloring are arbitrary. -/
-def cellFanClosedHalfPiece (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+noncomputable def cellFanClosedHalfPiece (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2)
     (s : CellFanSlot (fun _ : Fin 4 ↦ true)) : Set (ℝ × ℝ) :=
   cellFanCutPiece o ℓ z family s ∩
