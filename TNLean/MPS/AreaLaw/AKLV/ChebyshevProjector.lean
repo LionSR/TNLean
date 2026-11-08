@@ -439,11 +439,11 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
   let PR := Matrix.energyTruncation (rightCutBlock h b y) t
   have hPL : PL ∈ QuantumCircuit.supportedOperators q
       (interval L 0 (a.val + 1) : Set (Fin L)) :=
-    Submodule.sub_mem _ (LocalSolution.cfc_mem_supportedOperators _ hX)
+    Submodule.sub_mem _ (QuantumCircuit.cfc_mem_supportedOperators _ hX)
       (Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _))
   have hPR : PR ∈ QuantumCircuit.supportedOperators q
       (interval L (a.val + 2 * w) L : Set (Fin L)) :=
-    LocalSolution.cfc_mem_supportedOperators _ hY
+    QuantumCircuit.cfc_mem_supportedOperators _ hY
   have hHt : Ht = (∑ r, W r) + PL + PR := by
     dsimp [Ht, twoSidedEnergyTruncation, PL, PR]
     rw [middleCutBlock_window h a b hab hwindow m]
