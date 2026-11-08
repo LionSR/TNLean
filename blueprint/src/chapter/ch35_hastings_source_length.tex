@@ -58,7 +58,7 @@ $e^{-d/\xi_C}$ in the cone $v|t|\le d$, as explained in
     a vanishing commutator.
 \end{proof}
 
-\begin{theorem}[Positive factorization at the admissible length]
+\begin{lemma}[Positive factorization at the admissible length]
     \label{thm:hastings_source_length_factorization}
     \lean{TNLean.MPS.AreaLaw.two_mul_lemmaOneEndpointLength_le_sourceLength,
         TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_sourceLength}
@@ -78,7 +78,7 @@ $e^{-d/\xi_C}$ in the cone $v|t|\le d$, as explained in
     This uses positivity in the semidefinite sense of the note added to
     \cite{Hastings2007AreaLaw}; it does not assert strict positivity of
     the projections.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_endpoint}
     The scalar inequality $2\zeta\le\Xi$ follows from
@@ -88,7 +88,7 @@ $e^{-d/\xi_C}$ in the cone $v|t|\le d$, as explained in
     decay length using $2\zeta\le\Xi$.
 \end{proof}
 
-\begin{theorem}[The printed entropy-bound shape at the constructed length]
+\begin{lemma}[The printed entropy-bound shape at the constructed length]
     \label{thm:hastings_source_length_entropy}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_printed,
         TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_sourceLength}
@@ -102,7 +102,7 @@ $e^{-d/\xi_C}$ in the cone $v|t|\le d$, as explained in
     \end{align*}
     For nearest-neighbour interactions $c_0$ is numerical. More generally,
     the same form holds with $\Xi$ replaced by any $s\ge2\zeta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_area_law,thm:hastings_area_law_bound_le}
     At $\xi_0'=6\zeta$, the factorization constant is

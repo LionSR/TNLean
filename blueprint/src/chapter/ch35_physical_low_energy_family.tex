@@ -1,6 +1,6 @@
 \section{An improving family between buffered physical low-energy spaces}
 
-\begin{theorem}[A common polynomial family at two cutoffs]
+\begin{lemma}[A common polynomial family at two cutoffs]
     \label{thm:chebyshev_nested_polynomial_family}
     \lean{TNLean.MPS.AreaLaw.exists_chebyshev_nested_viability_of_polynomial_family}
     \leanok
@@ -19,7 +19,7 @@
     $\sum_j W_jS$ is $\Delta/(1-\delta)^2$-viable for the spectral space
     below $u$, and has dimension at most $N\dim S$.
     The cutoffs are closed. No spectral gap between them is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Construct the rescaled Chebyshev polynomial from the actual Hermitian
@@ -30,7 +30,7 @@
     gives the conclusion.
 \end{proof}
 
-\begin{theorem}[A physical buffered low-energy improving family]
+\begin{lemma}[A physical buffered low-energy improving family]
     \label{thm:physical_low_energy_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_physical_low_energy_filter_family}
     \leanok
@@ -63,7 +63,7 @@
     \cite[Theorem~4.8]{Arad2016RigorousRG}; the source parameter substitution,
     short chains, boundary regions, and the low-density induction remain
     separate. See \cite{gap:alvv16_low_energy_family_buffers}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:five_region_physical_truncation_residual,
@@ -79,11 +79,11 @@
 \end{proof}
 
 
-\begin{corollary}[Improvement between original spectral windows]
+\begin{lemma}[Improvement between original spectral windows]
     \label{cor:original_low_energy_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_original_low_energy_filter_family}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:physical_low_energy_filter_family},
+    Under the hypotheses of Lemma~\ref{thm:physical_low_energy_filter_family},
     the same family, polynomial and tensor factors may be chosen before
     every subspace $S$ and parameter $\delta$. If $\delta\ge0$,
     $2(\delta+\varepsilon)<1$, and $S$ is $\delta$-viable for the original
@@ -98,7 +98,7 @@
     This conclusion retains both losses from the physical spectral
     comparisons. It does not assert that its final error is the error
     between the clipped targets.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:physical_low_energy_filter_family}
