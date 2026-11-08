@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The printed assertions}
 
@@ -170,9 +170,9 @@ the endpoint intertwiners. If the solution tensor is known to represent the
 prescribed state, comparison of the surrounding physical cut representations
 supplies them; condition C1 and the fixed-length equality give that comparison
 in the size regime $N>2L_0+D^4$. For an arbitrary solution over the canonical
-window, the endpoint gauges are forced to be invertible by the internal
-equations themselves once condition C1 holds at a length that leaves one
-interior site free on each side of the window; this argument is given in
+window, the left endpoint gauge is forced to be invertible by the internal
+equations themselves once the words of some length $1\leq\ell\leq D^4-2$ span
+the matrix algebra; this argument is given in
 Section~\ref{sec:pgvwc07_quadratic_reconstruction_phase_endpoints} below.
 
 Once the endpoint intertwiners are available, the corrected chain argument
@@ -219,7 +219,10 @@ If $A$ and $B$ generate the same nonzero length-$N$ state, then
 The corrected statement keeps the hypotheses of Theorem~8 and weakens only its
 conclusion by the unavoidable phase. Write $A$ for the canonical tensor,
 normalized by $\sum_iA_iA_i^\dagger=\Id$; under condition C1 the canonical
-form has a single block, whose weight only rescales the state. Let $B$ be the
+form has a single block, whose weight only rescales the state. The system does
+not see this weight: its normalization equation fixes the scale of every
+solution tensor. The comparison is therefore with the unital block $A$, and a
+canonical tensor of weight $\lambda\in(0,1]$ equals $\lambda A$. Let $B$ be the
 tensor of any solution of the system over the canonical window. Then there are
 a unitary $U$ and a scalar $\xi\in\C$ such that
 \begin{align}
@@ -247,7 +250,7 @@ satisfies
     \qquad\text{for every }i.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_rephased_exact_conjugacy}
 \end{align}
-The solution tensor $B$ itself represents the prescribed state exactly when
+The solution tensor $B$ itself generates the vector $V^{(N)}(A)$ exactly when
 \begin{align}
     \xi^N
      & =1.
@@ -289,9 +292,9 @@ The following readings of Theorem~8 are adopted.
           conclusion, not a hypothesis of the source, and the phase-corrected
           conclusion above holds for every solution by the argument of
           Section~\ref{sec:pgvwc07_quadratic_reconstruction_phase_endpoints}.
-          The source-labelled reconstruction entry of the blueprint therefore
-          states the corrected theorem for every solution and stays without a
-          formal anchor until that argument is formalized.
+          The source-labelled reconstruction entry of the blueprint states the
+          corrected theorem for every solution, and its formal anchor carries
+          no such hypothesis.
 \end{enumerate}
 
 \section{The formalized parts}
@@ -310,8 +313,22 @@ state is derived from faithfulness. The window entries are the original site
 entries in the derived doubled coordinates.
 
 The theorem
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase}
+is the corrected converse for every solution over the canonical window. Its
+inputs are those of the existence clause, a canonical form for the
+translation-invariant tensor, and a solution of the system over the original
+canonical window. It returns the weight $\lambda\in(0,1]$ of the single
+canonical block with $\sum_iA_iA_i^\dagger=\lambda^2\Id$, a unitary $U$ and a
+unit-modulus $\xi$ with $A_i=\lambda\xi UB_iU^\dagger$, where $A$ now denotes
+the canonical tensor itself. The theorem
+\leanid{MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge}
+gives the rephased solution of the same system, its equality of length-$N$
+vectors with the unital block $\lambda^{-1}A$, exact unitary conjugacy, and
+the criterion that $B$ itself represents that vector exactly when $\xi^N=1$.
+
+The theorem
 \leanid{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase_of_same_state}
-is the converse for same-state solutions. It consumes a solution, a canonical
+is the converse for same-state solutions over an arbitrary window. It consumes a solution, a canonical
 tensor satisfying condition C1 at $L_0$, the size condition, and the equality
 of the actual nonzero length-$N$ vectors. The solution tensor is not assumed
 canonical or injective. The weighted finite-length uniqueness theorem derives
@@ -329,8 +346,8 @@ exact unitary gauge equivalence after rephasing.
 \section{Endpoint invertibility for an arbitrary solution}
 \label{sec:pgvwc07_quadratic_reconstruction_phase_endpoints}
 
-This is the elimination plan for the restriction in item~4 of the scope
-decision. Use zero-based sites $0\leq j\leq m-1$ with $m=D^4$. The physical
+This argument removes the restriction in item~4 of the scope decision. Use
+zero-based sites $0\leq j\leq m-1$ with $m=D^4$. The physical
 cut bases of the canonical window give invertible matrices
 $P_0,\ldots,P_m$ with
 \begin{align}
@@ -359,49 +376,55 @@ $\ell$ placed at the sites $a,\ldots,a+\ell-1$ satisfies
 \end{align}
 Suppose that the words of length $\ell$ in $A$ span $M_D(\C)$ for some
 $1\leq\ell\leq m-2$. Choose $c_w$ with $\sum_wc_wA_w=\Id$ and put
-$X=\sum_wc_wB_w$. Placing the words at the sites $1,\ldots,\ell$, at
-$0,\ldots,\ell-1$, and at $m-\ell,\ldots,m-1$ gives
+$X=\sum_wc_wB_w$. Placing the words at the sites $1,\ldots,\ell$ and at
+$0,\ldots,\ell-1$ gives
 \begin{align}
     X\otimes\Id
      & =G_1G_{\ell+1}^{-1}
-    =G_0G_\ell^{-1}
-    =G_{m-\ell}H_{m-1}.
+    =G_0G_\ell^{-1}.
     \label{eq:pgvwc07_quadratic_reconstruction_phase_endpoint_identity}
 \end{align}
-The first expression is invertible, so $G_0$ and $H_{m-1}$ are invertible.
-With $G_m=H_{m-1}^{-1}$ and $K_k=G_k^{-1}$, all $D^4+1$ cuts carry invertible
-matrices with
+The first expression is invertible, so $G_0$ is invertible. The right endpoint
+gauge $H_{m-1}$ is nonzero, because $B_i\otimes\Id=G_{m-1}(A_i\otimes\Id)H_{m-1}$
+and some $B_i$ is nonzero by the normalization equation. With $K_0=G_0^{-1}$
+and $K_{k+1}=H_k$, all $D^4+1$ cuts carry nonzero matrices with
 \begin{align}
     K_k(B_i\otimes\Id)
      & =(A_i\otimes\Id)K_{k+1}
     \qquad(0\leq k\leq m-1),
     \label{eq:pgvwc07_quadratic_reconstruction_phase_full_chain}
 \end{align}
-which is the complete cut family of the off-by-one note. Linear dependence,
-the chain-combination lemma, the slice extraction, and the fixed-point
-argument then give (\ref{eq:pgvwc07_quadratic_reconstruction_phase_corrected_conjugacy}).
+which is the complete cut family of the off-by-one note. The dependence
+argument uses only that these matrices are nonzero. Linear dependence, the
+chain-combination lemma, the slice extraction, and the fixed-point argument
+then give (\ref{eq:pgvwc07_quadratic_reconstruction_phase_corrected_conjugacy}).
 
-The spanning length exists. If $D=1$, the window has one site, the system reads
-$B_i=cA_i$, and normalization gives $|c|=1$. If $D\geq2$, condition C1 makes
-the transfer map of $A$ primitive and its letters span a space of dimension
-$d'\geq2$, so the quantum Wielandt inequality bounds the least spanning length
-by $(D^2-d'+1)D^2\leq D^4-D^2\leq m-2$. The companion library proves this
-inequality, and the existing physical-window construction supplies the
-matrices in (\ref{eq:pgvwc07_quadratic_reconstruction_phase_window_gauges}).
-What remains to be formalized is the endpoint identity
-(\ref{eq:pgvwc07_quadratic_reconstruction_phase_endpoint_identity}) and its
-assembly with the existing chain-combination, slice-extraction, and
-fixed-point results.
+The spanning length exists when $D\geq2$: the adjoint family of the unital
+block is trace preserving and satisfies condition C1, so it is primitive; its
+letters span a space of dimension $d'\geq2$, since a single matrix generates
+word spans of dimension at most one. The quantum Wielandt inequality then
+bounds the least spanning length by $(D^2-d'+1)D^2\leq D^4-D^2\leq m-2$. If
+$D=1$, the window has one site and $G_0$ is a nonzero scalar: the gauge
+equation at that site expresses a nonzero $B_i$ through $G_0$, so $G_0$ is
+invertible without a spanning length.
+
+The formal counterparts are
+\leanid{MPSTensor.exists_physicalCutWindow_invertible_gauges} for the matrices
+in (\ref{eq:pgvwc07_quadratic_reconstruction_phase_window_gauges}),
+\leanid{MPSTensor.isUnit_gauge_zero_of_isNBlkInjective} for
+(\ref{eq:pgvwc07_quadratic_reconstruction_phase_endpoint_identity}),
+\leanid{MPSTensor.exists_intertwiner_of_gauged} for the complete chain and the
+nonzero intertwiner, and
+\leanid{MPSTensor.exists_isNBlkInjective_le_of_canonical} for the spanning
+length.
 
 \section{Verdict}
 
 The phase family proves that the unrestricted conclusion of Theorem~8 and the
 exact finite-ring conclusion of Theorem~7 are false as printed. The faithful
 target is the corrected theorem above, for every solution over the canonical
-window. Its existence clause and its same-state case are formalized. The case
-of an arbitrary solution remains open in the formalization, with the endpoint
-invertibility argument as the elimination plan; the status of this note stays
-open until it is formalized.
+window. Both its existence clause and its converse for every solution are
+formalized with the source's hypotheses, so this note is resolved.
 
 
 \bibliographystyle{alpha}

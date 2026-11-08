@@ -556,16 +556,46 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     Lemma~\ref{lem:pgvwc07_quadratic_system_units}.
 \end{proof}
 
+\begin{lemma}[Intertwiner from a complete chain of cuts]
+    \label{lem:pgvwc07_complete_chain_intertwiner}
+    \lean{MPSTensor.exists_intertwiner_of_kronecker_chain}
+    \leanok
+    \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner}
+    Let $B,C\in\MN{D}^d$ and let $W_0,\ldots,W_{D^4}$ be nonzero matrices on
+    the doubled bond space with
+    \begin{align}
+        W_k(C_i\otimes\Id) & =(B_i\otimes\Id)W_{k+1}
+        \qquad(0\le k\le D^4-1,\ \text{every }i).
+        \label{eq:pgvwc07_complete_chain_relation}
+    \end{align}
+    Then there are a nonzero matrix $R\in\MN{D}$ and a scalar $x\neq0$ with
+    $RC_i=\tfrac1xB_iR$ for every $i$. This is the dependence step of the
+    proof of \cite[Theorem~7]{PerezGarcia2007Matrix}, with the corrected
+    count of $D^4+1$ cuts \cite{gap:pgvwc07_intertwiner_chain_off_by_one}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $\MN{D^2}$ has dimension $D^4$, there is a first index $n\ge1$
+    such that $W_0,\ldots,W_{n-1}$ are linearly independent and
+    $W_n=\sum_{k<n}\lambda_kW_k$; some $\lambda_k$ is nonzero because
+    $W_n\neq0$, so the polynomial equation
+    (\ref{eq:chain_combination_polynomial}) has positive degree and a nonzero
+    root $x$. Lemma~\ref{lem:pgvwc07_chain_combination}, applied to right
+    multiplication by $C_i\otimes\Id$ and left multiplication by
+    $B_i\otimes\Id$, gives a nonzero combination $W$ of $W_0,\ldots,W_{n-1}$
+    with $W(C_i\otimes\Id)=(\tfrac1xB_i\otimes\Id)W$ for every $i$, and
+    Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} extracts a nonzero
+    multiplicity slice $R$.
+\end{proof}
+
 \begin{lemma}[Obtaining the translation-invariant canonical form]
     \label{thm:pgvwc07_quadratic_reconstruction}
-    \notready
+    \lean{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase,
+        MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge}
+    \leanok
     \uses{def:pgvwc07_quadratic_system, def:pgvwc07_ti_canonical_representation,
         def:l_blk_injective}
-    % Status: part 1 is checked as the existence lemma for the original
-    % canonical open-boundary window, and part 2 is checked only for
-    % solutions that represent the given state (same-state lemma). The
-    % endpoint invertibility step below, which removes that restriction,
-    % is not yet checked; see the two cited paper-gap notes.
     Consider a nonzero translation-invariant state on a ring of $N$ sites
     with unique open-boundary canonical form such that the rank of each
     reduced density operator of successive spins is bounded by $D^2$.
@@ -610,13 +640,16 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     \uses{lem:quadratic_original_canonical_obc_window,
-        lem:quadratic_same_state_unitary_phase,
         lem:quadratic_prescribed_prefix_basis,
-        lem:quadratic_virtual_cut_slicing,
+        lem:quadratic_actual_physical_window_solution,
         lem:pgvwc07_quadratic_system_units,
-        lem:pgvwc07_chain_combination,
-        lem:pgvwc07_kronecker_intertwiner}
+        lem:quadratic_window_spanning_length,
+        lem:quadratic_gauged_endpoint,
+        lem:quadratic_gauged_complete_chain,
+        lem:pgvwc07_intertwiner_unitary,
+        lem:quadratic_solution_rephasing}
     Part~1 is Lemma~\ref{lem:quadratic_original_canonical_obc_window}. The
     canonical equations of the open-boundary form identify its bonds with
     the physical cut ranks, condition C1 forces rank $D^2$ at every cut of
@@ -625,12 +658,16 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     needed as a hypothesis; the rank bound is derived.
 
     For part~2, fix a solution $(B,Y_j,Z_j)$ over the window, with sites
-    $0\le j\le m-1$ and $m=D^4$. By
+    $0\le j\le m-1$ and $m=D^4$, and write $\lambda A$ for the canonical
+    tensor of weight $\lambda$. By
     Lemmas~\ref{lem:quadratic_prescribed_prefix_basis}
-    and~\ref{lem:quadratic_virtual_cut_slicing}, after a geometric rescaling
-    of the bases that removes the canonical weight, the window matrices are
-    $A^{[j]}_i=P_j(A_i\otimes\Id)P_{j+1}^{-1}$ with invertible
-    $P_0,\ldots,P_m$. Put $G_j=Y_jP_j$ and $H_j=P_{j+1}^{-1}Z_j$. The system
+    and~\ref{lem:quadratic_actual_physical_window_solution}, the window
+    matrices are $A^{[j]}_i=P_j^{-1}(\lambda A_i\otimes\Id)P_{j+1}$ with
+    invertible $P_0,\ldots,P_m$. The matrices $Q_j=\lambda^{j}P_j$ satisfy
+    $A^{[j]}_i=Q_j^{-1}(A_i\otimes\Id)Q_{j+1}$, since
+    $\lambda^{j}\cdot\lambda\cdot\lambda^{-j-1}=1$; we write $P_j$ for $Q_j$
+    from now on. Put $G_j=Y_jP_j^{-1}$ and
+    $H_j=P_{j+1}Z_j$. The system
     becomes
     \begin{align}
         B_i\otimes\Id & =G_j(A_i\otimes\Id)H_j &  & \forall\,i,j,
@@ -653,36 +690,30 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     Suppose that the words of length $\ell$ in $A$ span $\MN{D}$ for some
     $1\le\ell\le m-2$. Choose coefficients $c_w$ with
     $\sum_wc_wA_w=\Id$ and put $X=\sum_wc_wB_w$. Placing the words at the
-    sites $1,\ldots,\ell$, at the sites $0,\ldots,\ell-1$, and at the sites
-    $m-\ell,\ldots,m-1$ in (\ref{eq:pgvwc07_quadratic_reconstruction_words})
-    gives
+    sites $1,\ldots,\ell$ and at the sites $0,\ldots,\ell-1$ in
+    (\ref{eq:pgvwc07_quadratic_reconstruction_words}) gives
     \begin{align}
-        X\otimes\Id & =G_1G_{\ell+1}^{-1}=G_0G_\ell^{-1}=G_{m-\ell}H_{m-1}.
+        X\otimes\Id & =G_1G_{\ell+1}^{-1}=G_0G_\ell^{-1}.
         \label{eq:pgvwc07_quadratic_reconstruction_endpoints}
     \end{align}
-    The first expression is invertible, so $G_0$ and $H_{m-1}$ are
-    invertible. With $G_m=H_{m-1}^{-1}$ and $K_k=G_k^{-1}$, all $D^4+1$ cuts
-    of the window carry invertible matrices satisfying
+    The first expression is invertible, so $G_0$ is invertible
+    (Lemma~\ref{lem:quadratic_gauged_endpoint}). Such a spanning length
+    exists when $D\ge2$ by Lemma~\ref{lem:quadratic_window_spanning_length}.
+    If $D=1$ the window has one site and $G_0$ is a nonzero scalar, because
+    $B_i\otimes\Id=G_0(A_i\otimes\Id)H_0$ and some $B_i$ is nonzero by the
+    normalization (\ref{eq:quadratic_system_normalization}).
+
+    Every $H_j$ is nonzero for the same reason. With $K_0=G_0^{-1}$ and
+    $K_{k+1}=H_k$, all $D^4+1$ cuts of the window carry nonzero matrices
+    satisfying
     \begin{align}
         K_k(B_i\otimes\Id) & =(A_i\otimes\Id)K_{k+1}
         \qquad(0\le k\le m-1).
         \label{eq:pgvwc07_quadratic_reconstruction_full_chain}
     \end{align}
-    These $D^4+1$ matrices in the $D^4$-dimensional space $M_{D^2}(\C)$ are
-    linearly dependent \cite{gap:pgvwc07_intertwiner_chain_off_by_one}, so
-    Lemmas~\ref{lem:pgvwc07_chain_combination}
-    and~\ref{lem:pgvwc07_kronecker_intertwiner} give a nonzero matrix $R$
-    and a scalar $x\neq0$ with $RB_i=x^{-1}A_iR$ for every $i$.
-
-    If $D=1$ the window has one site, the system reads $B_i=cA_i$ for a
-    scalar $c$, and the normalization
-    (\ref{eq:quadratic_system_normalization}) gives $|c|=1$, so part~2
-    holds with $U=1$ and $\xi=\overline c$. If $D\ge2$, a spanning length
-    $\ell\le m-2$ exists: condition C1 makes the transfer map of $A$ primitive and
-    forces the letters to span a space of some dimension $d'\ge2$, since a
-    single matrix generates a commutative algebra. The quantum Wielandt
-    inequality then bounds the least spanning length by
-    $(D^2-d'+1)D^2\le D^4-D^2\le m-2$.
+    Lemma~\ref{lem:pgvwc07_complete_chain_intertwiner} gives a nonzero
+    matrix $R$ and a scalar $x\neq0$ with $RB_i=x^{-1}A_iR$ for every $i$
+    (Lemma~\ref{lem:quadratic_gauged_complete_chain}).
 
     Let $\Lambda>0$ satisfy $\sum_iA_i^{\dagger}\Lambda A_i=\Lambda$. Then
     $\sum_iB_i^{\dagger}R^{\dagger}\Lambda RB_i=|x|^{-2}R^{\dagger}\Lambda R$.
@@ -691,16 +722,22 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     $\operatorname{tr}(R^{\dagger}\Lambda R)>0$, so $|x|=1$. Next
     $\sum_iA_iRR^{\dagger}A_i^{\dagger}
         =|x|^2R\bigl(\sum_iB_iB_i^{\dagger}\bigr)R^{\dagger}=RR^{\dagger}$,
-    and $\Id$ is the only fixed point of $Y\mapsto\sum_iA_iYA_i^{\dagger}$,
+    and condition C1 makes the fixed-point space of
+    $Y\mapsto\sum_iA_iYA_i^{\dagger}$ one-dimensional, spanned by $\Id$,
     so $RR^{\dagger}=c\Id$ with $c>0$. Thus $U=c^{-1/2}R$ is unitary and
-    $A_i=xUB_iU^{\dagger}$; take $\xi=x$. Unitary conjugation preserves the
+    $A_i=xUB_iU^{\dagger}$ (Lemma~\ref{lem:pgvwc07_intertwiner_unitary});
+    take $\xi=x$. Unitary conjugation preserves the
     traces of products, so $V^{(N)}(A)=\xi^NV^{(N)}(B)$, which gives the
     final assertion because $V^{(N)}(A)\neq0$.
+
+    The rephased tensor $\widehat B_i=\xi B_i$ is the tensor of the rephased
+    solution of Lemma~\ref{lem:quadratic_solution_rephasing}, and
+    $A_i=U\widehat B_iU^{\dagger}$.
 
     When the solution tensor is known to represent the given state, the
     endpoint matrices of (\ref{eq:pgvwc07_quadratic_reconstruction_full_chain})
     can instead be obtained by comparing the two representations at the
-    endpoint cuts. This case, with $\xi^N=1$, is
+    endpoint cuts, over an arbitrary window. This case, with $\xi^N=1$, is
     Lemma~\ref{lem:quadratic_same_state_unitary_phase}.
 \end{proof}
 
@@ -857,26 +894,17 @@ on a finite ring by an $N$th-root phase
 \begin{proof}
     \leanok
     \uses{lem:pgvwc07_cut_vectors_linearIndependent,
-        lem:pgvwc07_cut_intertwiner, lem:pgvwc07_chain_combination,
-        lem:pgvwc07_kronecker_intertwiner}
+        lem:pgvwc07_cut_intertwiner, lem:pgvwc07_complete_chain_intertwiner}
     Consider the $D^4+1$ cuts after $L_0,\ldots,L_0+D^4$ sites; each leaves
     at least $L_0$ sites on both sides, so by
     Lemma~\ref{lem:pgvwc07_cut_vectors_linearIndependent} the cut vectors of
     $B$ are linearly independent there, and
     Lemma~\ref{lem:pgvwc07_cut_intertwiner} gives invertible matrices
     $W_0,\ldots,W_{D^4}$ on the doubled bond space with
-    $W_k(C_i\otimes\Id)=(B_i\otimes\Id)W_{k+1}$. Since $\MN{D^2}$ has
-    dimension $D^4$, there is a first index $n\ge1$ such that
-    $W_0,\ldots,W_{n-1}$ are linearly independent and
-    $W_n=\sum_{k<n}\lambda_kW_k$; some $\lambda_k$ is nonzero because $W_n$
-    is invertible, so the polynomial equation
-    (\ref{eq:chain_combination_polynomial}) has positive degree and a nonzero
-    root $x$. Lemma~\ref{lem:pgvwc07_chain_combination}, applied to right
-    multiplication by $C_i\otimes\Id$ and left multiplication by
-    $B_i\otimes\Id$, gives a nonzero combination $W$ of $W_0,\ldots,W_{n-1}$
-    with $W(C_i\otimes\Id)=(\tfrac1xB_i\otimes\Id)W$ for every $i$, and
-    Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} extracts a nonzero
-    multiplicity slice $R$ satisfying (\ref{eq:pgvwc07_fixed_length_intertwiner}).
+    $W_k(C_i\otimes\Id)=(B_i\otimes\Id)W_{k+1}$.
+    Lemma~\ref{lem:pgvwc07_complete_chain_intertwiner} then gives a nonzero
+    $R$ and a scalar $x\neq0$ satisfying
+    (\ref{eq:pgvwc07_fixed_length_intertwiner}).
 \end{proof}
 
 \begin{lemma}[Unitarity of the intertwiner]
