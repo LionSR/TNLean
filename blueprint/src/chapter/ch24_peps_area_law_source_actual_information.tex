@@ -10,7 +10,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \texttt{08-scanner.tex}, lines 868--911 and 936--941, at revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 
-\begin{theorem}[The scalar information expression]
+\begin{lemma}[The scalar information expression]
     \label{thm:sharp-information-scalar}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpInformationBound,
         TNLean.PEPS.AreaLaw.Scan.two_information_le_sharpInformationBound}
@@ -36,7 +36,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \]
     and the information bridge gives
     $2I\leq2S'+G_{\rm pre}-G_{\rm post}+2c+C$, then $2I\leq F+r$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -48,7 +48,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     correction gives $2I\leq F+r$.
 \end{proof}
 
-\begin{theorem}[The fixed-instance replica limit]
+\begin{lemma}[The fixed-instance replica limit]
     \label{thm:sharp-information-replica-limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.information_le_of_eventually_sharpInformationBound}
     \leanok
@@ -60,7 +60,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         +\frac{2u_k}{W}+l_k,
     \]
     then $2I\leq F(S,c,B_{\rm pre},\log z,W,\tau,\delta,A,C)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -72,7 +72,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     the replica limit, with the physical size and weight already fixed.
 \end{proof}
 
-\begin{theorem}[Original-state information from one source-selected point]
+\begin{lemma}[Original-state information from one source-selected point]
     \label{thm:source-actual-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_actual_mutualInformation_bound,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le}
     \leanok
@@ -101,7 +101,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     The fixed physical and round-step constants precede $C_e$; $C_e$ precedes
     the size threshold and the finite physical system.  The state, spectral
     set and labels precede $W$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

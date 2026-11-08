@@ -130,7 +130,7 @@
     Hence $X A^\alpha A^\nu=A^\alpha Y_\nu$.
 \end{proof}
 
-\begin{theorem}[Trace identities with length-$L_0$ probes from cyclic-window constraints]
+\begin{lemma}[Trace identities with length-$L_0$ probes from cyclic-window constraints]
     \label{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSpaceMap}
     \leanok
@@ -146,7 +146,7 @@
          & = \tr\left(A^\beta A^\alpha Y_\nu\right).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -173,7 +173,7 @@
     length-$L_0$ word $\beta$.
 \end{proof}
 
-\begin{theorem}[Length-word trace separation for the boundary block window]
+\begin{lemma}[Length-word trace separation for the boundary block window]
     \label{thm:block_window_matrix_equation_trace_word_products}
     \lean{MPSTensor.block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective}
     \leanok
@@ -190,7 +190,7 @@
     Then, for every word $\alpha$ of length $L_0$ and every complementary word
     $\nu$,
     $X A^\alpha A^\nu = A^\alpha Y_\nu$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -203,7 +203,7 @@
         \notag
     \end{align}
     Since $A$ is $L_0$-block-injective, $\Gamma_{L_0}$ is injective by
-    Theorem~\ref{thm:ground_space_map_injective_blk}. Hence
+    Lemma~\ref{thm:ground_space_map_injective_blk}. Hence
     $X A^\alpha A^\nu=A^\alpha Y_\nu$.
 \end{proof}
 
@@ -223,14 +223,14 @@
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
+    Lemma~\ref{thm:closure_property_boundary_block_window_trace_word_ground_space_map}
     gives, for every word $\beta$ of length $L_0$,
     \begin{align}
         \tr\left(A^\beta X A^\alpha A^\nu\right)
          & = \tr\left(A^\beta A^\alpha Y_\nu\right).
         \notag
     \end{align}
-    Theorem~\ref{thm:block_window_matrix_equation_trace_word_products} then
+    Lemma~\ref{thm:block_window_matrix_equation_trace_word_products} then
     gives the displayed matrix equation.
 \end{proof}
 
@@ -471,7 +471,7 @@
          & = \Gamma_{L_0+1}\!\left(Y_{M+1-L_0}(\tau^-_\eta(\mu))\right).
         \notag
     \end{align}
-    Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space}
+    Lemma~\ref{thm:boundary_closing_right_products_chain_ground_space}
     gives, for every $j$,
     $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
     Lemma~\ref{lem:closed_boundary_restriction_from_right_products} identifies

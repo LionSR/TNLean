@@ -2,7 +2,7 @@
 \label{sec:peps_actual_patch_regulator_trace}
 
 In the setting of the finite local coordinates, nested regions, and positive weights
-$a_j>0$ of Theorem~\ref{thm:peps_actual_patch_minimum_stationarity}, suppose now
+$a_j>0$ of Lemma~\ref{thm:peps_actual_patch_minimum_stationarity}, suppose now
 that $\|\Omega\|=1$. For $b=e^{-R}$, let $x$ be a feasible minimum
 of the same ordered norm objective. For an index $j$, let $\sigma_j$ be
 the marginal of the original vector $\Omega$ on $X_j$, let $\rho_j$
@@ -13,7 +13,7 @@ The next implication isolates the spectral estimate in the
 taking the entropy and distance bounds as explicit assumptions whose derivation
 from the physical area law and Hamiltonian gap remains a separate step.
 
-\begin{theorem}[Regulator trace from the original marginal]
+\begin{lemma}[Regulator trace from the original marginal]
     \label{thm:peps_actual_patch_regulator_trace}
     \lean{TNLean.PEPS.trace_regularizedPatchRegulator_le_quarter_of_isMinOn}
     \leanok
@@ -22,7 +22,7 @@ from the physical area law and Hamiltonian gap remains a separate step.
     $S(\sigma_j)\le C(1+u)$ and the full trace-norm distance satisfies
     $\|\rho_j-\sigma_j\|_1\le\tfrac1{16}$,
     then $\operatorname{tr}T_j\le\tfrac14$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_patch_minimum_stationarity}

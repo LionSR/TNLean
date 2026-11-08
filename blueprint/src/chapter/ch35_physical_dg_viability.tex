@@ -6,11 +6,11 @@ For an interval $J$, identify the full Hilbert space with
 $\mathcal H_J\otimes\mathcal H_{J^c}$ by restriction of configurations,
 with the interval factor first.
 
-\begin{theorem}[The operator-family conclusion in the gapped case]
+\begin{lemma}[The operator-family conclusion in the gapped case]
     \label{thm:physical_dg_viable_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_viable_family}
-    \leanok
     \uses{def:chain_model}
+    \leanok
     There is a universal real constant $A\ge21$ with the following property.
     Let $H=\sum_{i\in\mathcal B_L}h_i$ be an original nearest-neighbour
     Hamiltonian on $(\C^q)^{\otimes L}$, where each $h_i$ is supported on
@@ -54,7 +54,7 @@ with the interval factor first.
     \cite{gap:alvv16_spectral_projector_boundary}.
     An efficient matrix-product representation, running-time estimate,
     entropy consequence and approximation theorem are separate assertions.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:short_actual_region_improving_family,thm:inward_effective_cuts,
@@ -79,11 +79,11 @@ with the interval factor first.
     members; its sum of image subspaces is unchanged.
 \end{proof}
 
-\begin{theorem}[A small viable subspace on every interval]
+\begin{lemma}[A small viable subspace on every interval]
     \label{thm:physical_interval_bootstrap}
     \lean{TNLean.MPS.AreaLaw.exists_physical_interval_viable_subspace}
-    \leanok
     \uses{def:chain_model}
+    \leanok
     There is a universal real constant $A\ge21$ with the following property.
     Let $H=\sum_{i\in\mathcal B_L}h_i$ be the original nearest-neighbour
     Hamiltonian on $(\C^q)^{\otimes L}$, with $h_i$ supported on
@@ -108,7 +108,7 @@ with the interval factor first.
     its area-law proof at line 1080. The printed arbitrary-subset claim is
     outside this assertion; its spatial scope and numerical corrections
     are recorded in~\cite{gap:alvv16_bootstrap_constants}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_dg_viable_family}
@@ -123,14 +123,14 @@ with the interval factor first.
     sampling argument; it asserts no entropy estimate or efficient construction.
 \end{proof}
 
-\begin{theorem}[One scale for interval bootstrapping and all accuracies]
+\begin{lemma}[One scale for interval bootstrapping and all accuracies]
     \label{thm:physical_interval_all_accuracy_family}
     \lean{TNLean.MPS.AreaLaw.exists_accuracy_physical_interval_family_and_bootstrap}
-    \leanok
     \uses{def:chain_model}
+    \leanok
     There is a universal real constant $A\ge21$ with the following property.
     Let $H,q,\mu,\nu,\gamma,G,J$ satisfy the physical hypotheses of
-    Theorem~\ref{thm:physical_interval_bootstrap}. Set $g=\min(\gamma,1)$,
+    Lemma~\ref{thm:physical_interval_bootstrap}. Set $g=\min(\gamma,1)$,
     $c_A=6+2\log(A+1)$ and, for each integer $m\ge q$, put
     \begin{align}
         u_m          & =1+\log m+\log(1/g),     & \ell_m & =\lceil Au_m^2/g\rceil,\notag \\
@@ -165,19 +165,20 @@ with the interval factor first.
     site spaces remain $\C^q$. The statement is restricted to intervals,
     as required for the physical use of
     \cite[Proposition 4.10]{Arad2016RigorousRG}; it supplies no entropy theorem.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:dg_accuracy_scalar_parameters,
-        thm:independent_long_middle_actual_dg_family,
-        thm:squared_chebyshev_error_eq,thm:short_region_larger_count_base}
+    \uses{thm:dg_accuracy_scalar_parameters,thm:five_region_scaled_low_cluster,
+        thm:actual_clipped_polynomial_family,thm:collar_larger_count_base,
+        thm:short_region_larger_count_base,thm:inward_effective_cuts}
     Use the single accuracy-dependent scalar choice for every $m$.
-    On a long interval apply the independent family with $t=\ell_m$,
-    $\varepsilon=1/m$ and $\Delta_m=1/(10^5\mathcal D_m^{12})$.
-    The scalar contraction estimate gives the required filter bound for
-    every spectral width at most $7\ell_m$, and the tail is at most
-    $g/(10^6m)$. On a short interval use the fixed configuration matrix-unit
-    family with the same count base.
+    On a long interval its tail bound is at most $g/(10^6m)$, so the scaled
+    physical cluster with $\tau=1/m$ is mutually $1/(200m)$-close to $G$
+    and has the same dimension. Transfer the actual polynomial family to
+    $J$, absorb its collar using the larger numerical base, and apply
+    the actual-cluster Chebyshev estimate. On a short interval use the
+    fixed configuration matrix-unit family, with the same count base.
+    In both cases extend by zero to exactly $\mathcal D_m^2$ operators.
     At $m=q$, weaken mutual closeness to $1/200$ and apply the existing
     quantitative bootstrap bound of
     \cite[``A quantitative bootstrap bound'']{QICLean2026Blueprint} to obtain

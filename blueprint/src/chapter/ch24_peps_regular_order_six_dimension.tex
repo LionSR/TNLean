@@ -1,11 +1,11 @@
-\begin{theorem}[A positive square-sum of six]%
+\begin{lemma}[A positive square-sum of six]%
     \label{thm:peps_order_six_dimensions}
     \lean{TNLean.PEPS.positive_dimensions_of_sum_sq_eq_six}
     \leanok
     Let $(d_i)_{i\in I}$ be a finite family of positive integers satisfying
     $\sum_i d_i^2=6$, and suppose some $d_i>1$. There is exactly one index
     $j$ with $d_j=2$, every other $d_i$ equals one, $|I|=3$, and $\sum_i d_i=4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The square of any selected dimension is at most six. Thus a dimension
     larger than one must equal two. Removing that index leaves square-sum two,
@@ -13,7 +13,7 @@
     two indices to remain. The total dimension is therefore four.
 \end{proof}
 
-\begin{theorem}[The smallest semi-regular dimension at noncommutative order six]%
+\begin{lemma}[The smallest semi-regular dimension at noncommutative order six]%
     \label{thm:peps_order_six_smallest_semiregular}
     \lean{TNLean.PEPS.exists_smallestSemiRegular_dimension_four_of_order_six}
     \leanok
@@ -29,7 +29,7 @@
     no unitarity assumption on $\sigma$ is required.
     This is the order-six specialization of the block construction in
     \cite[Section 7]{Schuch2010PEPS}, without assuming a character table in advance.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The orthonormal regular Fourier basis gives positive dimensions
     with $\sum_i d_i^2=|G|=6$. Noncommutativity forces some $d_i>1$.

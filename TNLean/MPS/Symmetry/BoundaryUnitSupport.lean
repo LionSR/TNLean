@@ -21,10 +21,12 @@ canonical orthogonal projection onto the MPS ground space gives \(Q_nP_n=P_n\).
 There is no nonzero-dimension assumption, and no assertion about length zero.
 
 This supplies a sufficient condition for the unit-support normalization used in
-GLM23 Appendix B. A physical unital weak-Hopf realization would still have to
-produce and identify the boundary in these hypotheses. No weak Hopf algebra,
-integral, adjoint closure, or general block-injective classification is
-constructed here. In particular, \(Q_n\) is not asserted to be the ambient
+GLM23 Appendix B, for an arbitrary operator tensor. The represented unit of a
+weak-Hopf representation need not be the identity at the injectivity length;
+its unit support is derived instead from the ideal structure of the state
+boundary space in `TNLean.MPS.Symmetry.WeakHopfParentAverage`. No weak Hopf
+algebra, integral, adjoint closure, or general block-injective classification
+is constructed here. In particular, \(Q_n\) is not asserted to be the ambient
 identity, a projection, or an adjoint-preserving representation at every length.
 
 ## References

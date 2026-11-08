@@ -1,0 +1,196 @@
+\section{Entropy of a connected cut}%
+\label{sec:peps_connected_cut_entropy}
+
+For a connected region with connected complement, the reduced state of a
+regular $G$-isometric network on the region has a flat spectrum, and its rank
+is fixed by the number of bonds that cross the cut.
+
+\begin{lemma}[Entropy of the virtual regular boundary]%
+    \label{thm:peps_regular_boundary_entropy}
+    \lean{TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity,
+        TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity_eq_mul_log,
+        TNLean.PEPS.vonNeumannEntropy_regularBoundaryDensity_eq_boundaryLength}
+    \leanok
+    Before identifying the virtual
+    boundary with a physical PEPS region in
+    \cite[Theorem~6.9]{Schuch2010PEPS}, the normalized virtual reduced
+    density operator for $b=n+1$ regular boundary legs has von Neumann entropy
+    \begin{align}
+        S(\rho)=\log(|G|^n)=n\log|G|=b\log|G|-\log|G|.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
+    The identity $\rho^2=r^{-1}\rho$ applied to each eigenvector gives
+    eigenvalue $0$ or $r^{-1}$. With $0\log0=0$, each entropy summand
+    is therefore its eigenvalue times $\log r$. Their sum is
+    $\operatorname{tr}\rho\log r=\log r$. Since $r=|G|^n$ and $|G|>0$,
+    the logarithm laws give the stated expressions.
+\end{proof}
+
+\begin{lemma}[Physical realization of a regular boundary state]%
+    \label{thm:peps_regular_boundary_physical_realization}
+    \lean{TNLean.PEPS.physicalRegularBoundaryState_eq_kronecker_mulVec,
+        TNLean.PEPS.physicalRegularBoundarySchmidtMatrix,
+        TNLean.PEPS.physicalRegularBoundaryState,
+        TNLean.PEPS.physicalRegularBoundaryProjector,
+        TNLean.PEPS.physicalRegularBoundaryDensity,
+        TNLean.PEPS.physicalRegularBoundarySchmidtMatrix_mul_conjTranspose,
+        TNLean.PEPS.partialTrace_physicalRegularBoundaryState,
+        TNLean.PEPS.physicalRegularBoundaryProjector_conjTranspose,
+        TNLean.PEPS.physicalRegularBoundaryProjector_mul_self,
+        TNLean.PEPS.physicalRegularBoundaryProjector_isStarProjection,
+        TNLean.PEPS.rank_physicalRegularBoundaryProjector,
+        TNLean.PEPS.trace_physicalRegularBoundaryProjector,
+        TNLean.PEPS.physicalRegularBoundaryDensity_posSemidef,
+        TNLean.PEPS.trace_physicalRegularBoundaryDensity,
+        TNLean.PEPS.rank_physicalRegularBoundaryDensity,
+        TNLean.PEPS.physicalRegularBoundaryDensity_mul_self,
+        TNLean.PEPS.spectrum_physicalRegularBoundaryDensity_subset,
+        TNLean.PEPS.vonNeumannEntropy_physicalRegularBoundaryDensity}
+    \leanok
+    Let $A:\mathbb C[G^b]\to\mathcal H_A$ and
+    $B:\mathbb C[G^b]\to\mathcal H_B$ satisfy $A^\dagger A=B^\dagger B=P$.
+    Applying $A\otimes B$ to the normalized virtual boundary vector gives
+    coefficient matrix $ACB^{\mathsf T}$ and reduced density
+    $\rho_A=APA^\dagger/r$. The matrix $Q=APA^\dagger$ is an orthogonal
+    projector of rank $r$. Thus $\rho_A$ is positive, has trace one and
+    rank $r$, and $\rho_A^2=r^{-1}\rho_A$; its spectrum is contained in
+    $\{0,r^{-1}\}$, and $S(\rho_A)=n\log|G|$.
+
+    This proves the preservation of the boundary spectrum under specified
+    maps isometric on the invariant subspace. Applying it to a physical
+    PEPS region still requires identification of these maps and this
+    boundary vector with the geometric contraction in
+    \cite[Theorem~6.9]{Schuch2010PEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
+    The coefficient matrix transforms by $C\mapsto ACB^{\mathsf T}$.
+    Since $P$ is real symmetric, $B^\dagger B=P$ gives
+    $B^{\mathsf T}\overline B=P$, so the partial trace is
+    $ACPC^\dagger A^\dagger=APA^\dagger/r$.
+    The equation $A^\dagger A=P$ and $P^2=P$ show $Q^2=Q$ and
+    $Q=Q^\dagger$. The map $A$ preserves inner products on
+    $\operatorname{ran}P$, and is therefore injective there; its image
+    is $\operatorname{ran}Q$, of dimension $r$. The trace and spectrum
+    follow from the projection property, and
+    Lemma~\ref{thm:peps_flat_density_entropy} gives the entropy.
+\end{proof}
+
+\begin{lemma}[Normalization of specified physical cut maps]%
+    \label{thm:peps_regular_boundary_normalization}
+    \lean{TNLean.PEPS.normalizedRegularBoundaryMap_conjTranspose_mul,
+        TNLean.PEPS.normalizedRegularBoundaryMap,
+        TNLean.PEPS.physicalRegularBoundarySchmidtMatrix_normalizedRegularBoundaryMap,
+        TNLean.PEPS.vonNeumannEntropy_normalizedRegularBoundaryState}
+    \leanok
+    \uses{thm:peps_regular_boundary_physical_realization,
+        thm:peps_regular_open_region_projector}
+    Let $M^\dagger M=c_AP$ and $N^\dagger N=c_BP$, with $c_A,c_B>0$.
+    Then $\widehat M=M/\sqrt{c_A}$ and
+    $\widehat N=N/\sqrt{c_B}$ are isometric on the invariant boundary
+    subspace. The normalized bipartite vector with coefficient matrix
+    \begin{align}
+        \widehat M C\widehat N^{\mathsf T}
+        =\frac{MPN^{\mathsf T}}{\sqrt{c_A}\sqrt{c_B}\sqrt r}
+        \label{eq:peps_regular_boundary_normalized_matrix}
+    \end{align}
+    has reduced von Neumann entropy $n\log|G|$.
+    For the cut maps of
+    Lemma~\ref{thm:peps_regular_open_region_projector}, the numerator
+    is the physical PEPS coefficient matrix $K$.
+
+    The Gram identities are explicit assumptions in this statement.
+    Lemma~\ref{thm:peps_connected_regular_region_gram} derives them
+    from local $G$-isometry for connected untwisted regions, including
+    regions containing cycles. The twisted torus contractions of
+    \cite[Theorem~6.9]{Schuch2010PEPS} remain separate.
+    The scalar convention is recorded in
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+\begin{proof}\leanok
+    Since $c_A>0$, the product of the normalization scalar and its
+    conjugate is $c_A^{-1}$. Thus
+    $\widehat M^\dagger\widehat M=P$, and similarly for $N$.
+    Pulling the scalars out of the coefficient matrix gives
+    (\ref{eq:peps_regular_boundary_normalized_matrix}), and applying
+    Lemma~\ref{thm:peps_regular_boundary_physical_realization} to the
+    normalized maps yields the entropy.
+\end{proof}
+
+\begin{theorem}[Entropy of a connected untwisted finite cut]%
+    \label{thm:peps_connected_untwisted_cut_entropy}
+    \lean{TNLean.PEPS.regularRegionGramFactor_pos,
+        TNLean.PEPS.regularRegionGramFactor,
+        TNLean.PEPS.ofReal_regularRegionGramFactor,
+        TNLean.PEPS.regularOpenComplementMatrix_eq_regularOpenRegionMatrix,
+        TNLean.PEPS.regularPhysicalCutState,
+        TNLean.PEPS.exists_positive_gram_regularOpenRegionMatrix_of_connected,
+        TNLean.PEPS.exists_normalization_regularPhysicalCutState_of_connected}
+    \leanok
+    \uses{thm:peps_connected_regular_region_gram,
+        thm:peps_regular_boundary_normalization}
+    Consider a finite graph PEPS with regular bonds and a $G$-isometric
+    tensor at every site. Assume that both $R$ and its complement
+    induce nonempty connected graphs, and that $b>0$ bonds cross the cut.
+    For the untwisted contraction there is a positive normalization of
+    the physical PEPS vector to a unit vector. Its reduced state
+    on $R$ has rank $r=|G|^{b-1}$ and a flat spectrum:
+    $\rho_R^2=r^{-1}\rho_R$. Its von Neumann entropy is
+    \begin{align}
+        S(\rho_R)=(b-1)\log|G|.
+    \end{align}
+    This finite untwisted statement is a restricted consequence of the
+    calculation in \cite[Theorem~6.9]{Schuch2010PEPS}; it does not assert
+    the theorem for arbitrary torus closures. The remaining scope is
+    recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{theorem}
+\begin{proof}\leanok
+    Each local isometry gives a positive Gram factor. Applying
+    Lemma~\ref{thm:peps_connected_regular_region_gram} on both sides
+    of the cut and normalizing the two maps by their positive factors
+    expresses the resulting coefficient matrix as a positive scalar multiple of
+    the PEPS cut matrix, so the regular boundary realization gives
+    its norm and reduced entropy.
+\end{proof}
+
+\begin{lemma}[A local controlled operation removing a boundary twist]%
+    \label{thm:peps_regular_boundary_untwisting}
+    \lean{TNLean.PEPS.regularTweezerEquiv_apply,
+        TNLean.PEPS.regularTweezerEquiv,
+        TNLean.PEPS.regularTweezerEquiv_symm_apply,
+        TNLean.PEPS.regularTweezer_relative_label,
+        TNLean.PEPS.regularTweezerEquiv_symm_apply_twisted,
+        TNLean.PEPS.regularTweezerEquiv_symm_apply_conjugated,
+        TNLean.PEPS.regularTweezerMatrix,
+        TNLean.PEPS.regularTweezerMatrix_mem_unitaryGroup,
+        TNLean.PEPS.regularTweezerState,
+        TNLean.PEPS.regularTweezerState_factorization,
+        TNLean.PEPS.regularTweezerState_mulVec}
+    \leanok
+    The permutation
+    \begin{align}
+        F(a,b,c)=(cb^{-1}a,b,c),\qquad
+        F^{-1}(a,b,c)=(bc^{-1}a,b,c)
+    \end{align}
+    acts unitarily in the group basis. If $c=tb$, then
+    $F^{-1}(ta,b,tb)=(a,b,tb)$. In particular this removes the
+    conjugated twist $t=x^{-1}gx$ from the first label using the
+    accessible reference pair $b,c$.
+
+    On the bipartite coefficient vector
+    $\mathbf 1_{\{a=td\}}\mathbf 1_{\{c=tb\}}$, applying this inverse
+    permutation to the first side gives
+    $\mathbf 1_{\{a=d\}}\mathbf 1_{\{c=tb\}}$. All dependence on $t$
+    is then confined to the reference pair on that side. This proves
+    the local coordinate operation in
+    \cite{Schuch2010PEPS}, displayed at local source lines 1961--1965.
+    Identifying these coordinates with a whole torus contraction is
+    a further step.
+\end{lemma}
+\begin{proof}\leanok
+    Group cancellation verifies the two inverse permutations and
+    $cb^{-1}=t$. A permutation of an orthonormal basis is unitary.
+    Substitution in the two indicator functions yields the factorization.
+\end{proof}

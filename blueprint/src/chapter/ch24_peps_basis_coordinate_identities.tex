@@ -2,115 +2,97 @@
 
 \subsection{Register identifications and tensor coordinates}
 
-A register has an owner in a set $P$ and a complex inner product space.
+A register has an owner in $P$ and a complex inner product space.
 For a finite ordered register list $a$, let $M(a)$ be its
 right-associated tensor memory, with $M(\varnothing)=\C$ and a
-terminal factor $\C$. Write $ab$ for concatenation, and
-$J_{a,b}:M(ab)\longrightarrow M(a)\otimes M(b)$ for the concatenation
-isometry. For a selection $f:P\to\{0,1\}$, let $a_f$ retain the
-registers with $f(p)=1$, in their original order, and write
-$\bar f=1-f$. The partition isometry is
-$U_f^a:M(a)\longrightarrow M(a_f)\otimes M(a_{\bar f})$.
-Equal register lists are identified by the natural isometry
-$E_{a=b}$. All tensor products below retain these conventions.
+terminal factor $\C$. Write $ab$ for concatenation and
+$J_{a,b}:M(ab)\to M(a)\otimes M(b)$ for the concatenation
+isometry. For $f:P\to\{0,1\}$, let $a_f$ retain the
+registers with $f(p)=1$ in their original order, write
+$\bar f=1-f$, and let
+$U_f^a:M(a)\to M(a_f)\otimes M(a_{\bar f})$ be the partition isometry.
+Equal register lists $a=b$ are identified by the canonical isometry
+$E_{a=b}:M(a)\to M(b)$.
 
-\begin{theorem}[Equality identifications of tensor memories]
+\begin{lemma}[Equality identifications of tensor memories]
     \label{thm:peps_basis_memory_equalities}
     \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr_apply_heq,
         TNLean.Lattice.PartyCircuit.Layout.memCongr_tmul_heq,
         TNLean.Lattice.PartyCircuit.Layout.memCongr_symm,
         TNLean.Lattice.PartyCircuit.Layout.appendIso_symm_tmul_heq}
     \leanok
-    For equal register lists $a=a'$, the identification $E_{a=a'}$
-    preserves each vector after identifying its underlying space, and
-    $E_{a'=a}=E_{a=a'}^{-1}$. For $a=a'$ and $b=b'$, the tensor
-    $E_{a=a'}x\otimes E_{b=b'}y$ is the same tensor as $x\otimes y$
-    under the induced identification. More generally, if $x'$ and $y'$
-    agree with $x$ and $y$ under these identifications, then
-    $J_{a,b}^{-1}(x\otimes y)$ and
-    $J_{a',b'}^{-1}(x'\otimes y')$ agree under the identification
-    $M(ab)=M(a'b')$.
-\end{theorem}
+    For equal register lists $a=a'$ and $b=b'$, under the induced identifications $M(a)=M(a')$, $M(b)=M(b')$, and $M(ab)=M(a'b')$, every $x\in M(a)$ and $y\in M(b)$ satisfy
+    \begin{align}
+        E_{a=a'}x                  & = x,                 &
+        E_{a'=a}                   & = E_{a=a'}^{-1},     &
+        E_{a=a'}x\otimes E_{b=b'}y & = x\otimes y. \notag
+    \end{align}
+    More generally, if $x'\in M(a')$ and $y'\in M(b')$ agree with $x$ and $y$, then $J_{a,b}^{-1}(x\otimes y)$ agrees with $J_{a',b'}^{-1}(x'\otimes y')$ under $M(ab)=M(a'b')$.
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Identifying the equal register lists and their equal vectors turns
-    each identification into the identity, reducing all assertions to
-    equalities of the same vectors or isometries.
+    Substituting $a'=a$, $b'=b$, $x'=x$, and $y'=y$ reduces $E_{a=a'}$ and $E_{b=b'}$ to identity maps.
 \end{proof}
 
 
-\begin{theorem}[Equality identifications with a head register]
+\begin{lemma}[Equality identifications with a head register]
     \label{thm:peps_basis_head_memory_congruence}
     \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr_cons_tmul}
     \leanok
     \uses{thm:peps_basis_memory_equalities}
-    Let $r$ be a register with space $U$, let $a=b$ be equal register
-    lists, and let $u\in U$ and $x\in M(a)$. Then
-    $E_{ra=rb}(u\otimes x)=u\otimes E_{a=b}x$.
-\end{theorem}
+    For a register $r$ with space $U$, equal register lists $a=b$, $u\in U$, and $x\in M(a)$,
+    \begin{align}
+        E_{ra=rb}(u\otimes x) & = u\otimes E_{a=b}x. \notag
+    \end{align}
+\end{lemma}
 \begin{proof}\leanok
-    Identifying the equal tail lists reduces both sides to $u\otimes x$.
+    Substituting $b=a$ reduces both sides to $u\otimes x$ by Lemma~\ref{thm:peps_basis_memory_equalities}.
 \end{proof}
 
-\begin{theorem}[Head tensor identifications under equality of memories]
+\begin{lemma}[Head tensor identifications under equality of memories]
     \label{thm:peps_basis_head_memory_equalities}
     \lean{TNLean.Lattice.PartyCircuit.Layout.selectedHead_heq,
         TNLean.Lattice.PartyCircuit.Layout.complementaryHead_heq,
         TNLean.Lattice.PartyCircuit.Layout.add_heq}
     \leanok
-    Let $r$ be a register with space $U$, let $a=a'$ and $b=b'$ be
-    equal register lists, and suppose $z\in M(a)\otimes M(b)$ and
-    $z'\in M(a')\otimes M(b')$ agree after these identifications.
-    Write $\alpha$ for the tensor associativity isometry and $L$ for
-    the isometry exchanging the first two factors. For every $u\in U$,
-    after identifying the memories,
-    $\alpha^{-1}(u\otimes z)=\alpha^{-1}(u\otimes z')$ and
-    $L(u\otimes z)=L(u\otimes z')$.
-    More generally, for equal complex inner product
-    spaces $A=B$ and vectors $x,y\in A$ and $x',y'\in B$ agreeing
-    under this equality, $x+y$ agrees with $x'+y'$.
-\end{theorem}
+    Let $r$ be a register with space $U$, let $a=a'$ and $b=b'$, and suppose $z\in M(a)\otimes M(b)$ and $z'\in M(a')\otimes M(b')$ agree under these identifications.
+    For the tensor associativity isometry $\alpha$, the first-two-factor swap isometry $L$, and every $u\in U$,
+    $\alpha^{-1}(u\otimes z)$ and $L(u\otimes z)$ agree with $\alpha^{-1}(u\otimes z')$ and $L(u\otimes z')$.
+    Likewise, if $A=B$ and $x,y\in A$ agree with $x',y'\in B$, then $x+y$ agrees with $x'+y'$.
+\end{lemma}
 \begin{proof}\leanok
-    Identifying the equal lists or spaces and their equal vectors
-    reduces each pair to the same tensor or sum.
+    Substituting the equal lists or spaces and vectors reduces each pair to the same expression.
 \end{proof}
 
-\begin{theorem}[The final scalar factor]
+\begin{lemma}[The final scalar factor]
     \label{thm:peps_basis_final_scalar}
     \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr_append_nil_appendIso_symm_tmul,
         TNLean.Lattice.PartyCircuit.Layout.appendIso_symm_tmul_one_eq_memCongr_symm}
     \leanok
-    For every register list $a$, vector $x\in M(a)$ and scalar $z\in\C$,
-    $E_{a\varnothing=a}J_{a,\varnothing}^{-1}(x\otimes z)=zx$.
-    In particular,
-    $J_{a,\varnothing}^{-1}(x\otimes1)=E_{a\varnothing=a}^{-1}x$.
-\end{theorem}
+    For every register list $a$, $x\in M(a)$, and $z\in\C$,
+    \begin{align}
+        E_{a\varnothing=a}J_{a,\varnothing}^{-1}(x\otimes z) & = zx,                              &
+        J_{a,\varnothing}^{-1}(x\otimes1)                    & = E_{a\varnothing=a}^{-1}x. \notag
+    \end{align}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    By induction on $a$, expanding the concatenation isometry on elementary
-    tensors moves the scalar through each tensor factor; linearity then
-    gives the identity for arbitrary vectors, and setting $z=1$ yields the
-    second assertion.
+    Induction on $a$ on elementary tensors, extended by linearity in $x$, gives the first identity; setting $z=1$ gives the second.
 \end{proof}
 
-Let $q:P\to Q$ be any map. Write $q_*a$ for the register list
-obtained by replacing each owner $p$ by $q(p)$, retaining the
-ordered register spaces, and let $T_q^a:M(a)\to M(q_*a)$ be the
-tensor product of their identity maps.
+For $q:P\to Q$, let $q_*a$ replace each owner $p$ in $a$ by $q(p)$ while retaining the ordered register spaces, and let $T_q^a:M(a)\to M(q_*a)$ be the tensor product of the factor identity maps.
 
-\begin{theorem}[Restriction after changing owner labels]
+\begin{lemma}[Restriction after changing owner labels]
     \label{thm:peps_basis_owner_restriction}
     \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_mapOwner}
     \leanok
-    For any selection $g$ on $Q$, one has $(q_*a)_g=q_*(a_{g\circ q})$.
-\end{theorem}
+    For any $g:Q\to\{0,1\}$, one has $(q_*a)_g=q_*(a_{g\circ q})$.
+\end{lemma}
 
 \begin{proof}\leanok
-    Selecting a register after changing its owner retains it precisely
-    when its original owner satisfies $g\circ q$. The ordered spaces
-    on the two sides therefore agree.
+    A register with owner $p\in P$ has $g(q(p))=1$ if and only if $(g\circ q)(p)=1$.
 \end{proof}
 
 \begin{definition}[Selected memory under changing owner labels]
@@ -118,139 +100,96 @@ tensor product of their identity maps.
     \lean{TNLean.Lattice.PartyCircuit.Layout.restrictMapOwnerIso}
     \leanok
     \uses{thm:peps_basis_owner_restriction}
-    The selected-memory isometry
-    $T_{q,g}^a:M(a_{g\circ q})\to M((q_*a)_g)$ is $T_q^{a_{g\circ q}}$
-    followed by the identification of the equal register lists in
-    Theorem~\ref{thm:peps_basis_owner_restriction}.
+    Using Lemma~\ref{thm:peps_basis_owner_restriction}, define the selected-memory isometry
+    $T_{q,g}^a := E_{q_*(a_{g\circ q})=(q_*a)_g}\circ T_q^{a_{g\circ q}}:M(a_{g\circ q})\to M((q_*a)_g)$.
 \end{definition}
 
-\begin{theorem}[Changing owners preserves memory vectors]
+\begin{lemma}[Changing owners preserves memory vectors]
     \label{thm:peps_basis_owner_memory}
     \lean{TNLean.Lattice.PartyCircuit.Layout.mem_mapOwner,
         TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_apply_heq}
     \leanok
-    For any $q:P\to Q$ and register list $a$, the ordered tensor spaces
-    satisfy $M(q_*a)=M(a)$. Under this equality, $T_q^a x=x$ for
-    every $x\in M(a)$.
-\end{theorem}
+    For any $q:P\to Q$ and register list $a$, one has $M(q_*a)=M(a)$, and $T_q^a x=x$ under this equality for every $x\in M(a)$.
+\end{lemma}
 
 \begin{proof}
     \leanok
-    We proceed by induction on the register list. Because relabelling
-    leaves each head space unchanged, applying the induction hypothesis to
-    its tail makes the isometry on the resulting tensor product act as the
-    identity first on elementary tensors and then by linearity.
+    By induction on $a$: relabelling preserves the head register space, and the induction hypothesis on the tail makes $T_q^a$ the identity on elementary tensors and hence by linearity on $M(a)$.
 \end{proof}
 
-\begin{theorem}[Partitioning commutes with changing owners]
+\begin{lemma}[Partitioning commutes with changing owners]
     \label{thm:peps_basis_owner_partition}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_mapOwner_heq,
         TNLean.Lattice.PartyCircuit.Layout.partitionIso_mapOwner}
     \leanok
-    For every $q:P\to Q$, selection $g$ on $Q$, register list $a$,
-    and $x\in M(a)$,
+    For every $q:P\to Q$, $g:Q\to\{0,1\}$, register list $a$, and $x\in M(a)$,
     \begin{align}
         U_g^{q_*a}T_q^a x
-         & =(T_{q,g}^a\otimes T_{q,\bar g}^a)U_{g\circ q}^a x.
+         & =(T_{q,g}^a\otimes T_{q,\bar g}^a)U_{g\circ q}^a x,
         \label{eq:peps_basis_owner_partition}
     \end{align}
-    After identifying the selected and complementary tensor spaces,
-    this is the same vector as $U_{g\circ q}^a x$.
-\end{theorem}
+    which agrees with $U_{g\circ q}^a x$ under the memory identifications of Lemma~\ref{thm:peps_basis_owner_memory}.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_basis_owner_restriction,thm:peps_basis_owner_memory}
-    We proceed by induction on $a$. Since the first register has the same
-    selection value before and after relabelling, combining the
-    corresponding associativity or exchange isometry with the induction
-    hypothesis on the tail---while the selected-memory isometries preserve
-    the underlying vectors---gives~(\ref{eq:peps_basis_owner_partition}).
+    By induction on $a$: the head register has selection value $g(q(p))=(g\circ q)(p)$, so combining the head associativity or exchange isometry with the induction hypothesis on the tail and Definition~\ref{def:peps_basis_owner_restriction} gives~(\ref{eq:peps_basis_owner_partition}), while Lemma~\ref{thm:peps_basis_owner_memory} identifies both sides with $U_{g\circ q}^a x$.
 \end{proof}
 
-\begin{theorem}[A partition with no selected registers]
+\begin{lemma}[A partition with no selected registers]
     \label{thm:peps_basis_empty_selection}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_of_forall_false}
     \leanok
-    If $f$ vanishes at the owner of every register in $a$, then
-    $a_f=\varnothing$, $a_{\bar f}=a$, and, under these list
-    identifications, $U_f^a x=1\otimes x$ for every $x\in M(a)$.
-\end{theorem}
+    If $f(p)=0$ for every owner $p$ in $a$, then $a_f=\varnothing$, $a_{\bar f}=a$, and $U_f^a x=1\otimes x$ under these identifications for every $x\in M(a)$.
+\end{lemma}
 
 \begin{proof}
     \leanok
-    The filtered lists have the stated forms, and inducting on $a$ with
-    the complementary-head partition formula exchanges the scalar unit
-    with each head factor before linearity extends the identity from
-    elementary tensors to every vector.
+    Inducting on $a$ with $f(p)=0$ at each head register swaps the scalar factor $1\in M(\varnothing)$ past each head factor on elementary tensors, and linearity extends the identity to $M(a)$.
 \end{proof}
 
-\begin{theorem}[Grouping equal register lists]
+\begin{lemma}[Grouping equal register lists]
     \label{thm:peps_basis_grouping_equality}
     \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_apply_heq}
     \leanok
-    Let $\mathbf p$ be an ordered list without repetitions containing
-    every owner of registers in $a$ and $b$. Suppose $a=b$ and that
-    $x\in M(a)$ and $y\in M(b)$ agree under this identification.
-    Write $G_{\mathbf p,a}$ for the isometry that successively
-    collects the registers of each party in the prescribed order.
-    Then $G_{\mathbf p,a}x$ and $G_{\mathbf p,b}y$ agree under
-    the equality of their grouped register lists.
-\end{theorem}
+    Let $\mathbf p$ be a repetition-free party list containing all owners in $a$ and $b$, and let $G_{\mathbf p,a}$ be the successive party-grouping isometry along $\mathbf p$. If $a=b$ and $x\in M(a)$ agrees with $y\in M(b)$, then $G_{\mathbf p,a}x$ agrees with $G_{\mathbf p,b}y$.
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Identifying $a=b$ and $x=y$ shows that the two isometries perform the
-    same successive partitions of the same ordered registers.
+    Substituting $b=a$ and $y=x$ makes both sides $G_{\mathbf p,a}x$.
 \end{proof}
 
-\begin{theorem}[The first party of a grouped tensor]
+\begin{lemma}[The first party of a grouped tensor]
     \label{thm:peps_basis_first_party_grouping}
     \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_cons_partition_tmul}
     \leanok
     \uses{def:peps_party_partition}
-    Let $P$ be any party set and let $(p,\mathbf p)$ be an ordered
-    list without repetitions containing every owner in the ordered
-    register list $a$. Write $a_p$ and $a_{\bar p}$ for its registers
-    owned by $p$ and its remaining registers, respectively. Let $U_p^a$
-    be the partition isometry and $G_{\mathbf p,a}$ the grouping
-    isometry in the prescribed order. Each grouped memory has one
-    memory factor per listed party, with a terminal factor $\C$.
-
-    Since $p$ is absent from $\mathbf p$, removing its registers
-    leaves the registers of each party in $\mathbf p$ unchanged.
-    Let $E$ identify the resulting equal grouped tail memories.
-    For every $x\in M(a_p)$ and $y\in M(a_{\bar p})$,
+    Let $(p,\mathbf p)$ be a repetition-free list in $P$ containing all owners in $a$. Write $a_p$ and $a_{\bar p}$ for the registers of $a$ owned by $p$ and its complement, $U_p^a:M(a)\to M(a_p)\otimes M(a_{\bar p})$ for the partition isometry, and $E$ for the identification of the grouped memories of $a$ and $a_{\bar p}$ along $\mathbf p$. For every $x\in M(a_p)$ and $y\in M(a_{\bar p})$,
     \begin{align}
         G_{(p,\mathbf p),a}(U_p^a)^{-1}(x\otimes y)
          & =x\otimes E G_{\mathbf p,a_{\bar p}}y.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_party_partition}
-    By the recursive grouping identity,
-    $G_{(p,\mathbf p),a}=(1\otimes E G_{\mathbf p,a_{\bar p}})U_p^a$,
-    so cancelling $U_p^a(U_p^a)^{-1}$ and applying the tensor product map
-    to $x\otimes y$ gives the result.
+    By Definition~\ref{def:peps_party_partition}, $G_{(p,\mathbf p),a}=(1\otimes E G_{\mathbf p,a_{\bar p}})U_p^a$; applying this to $(U_p^a)^{-1}(x\otimes y)$ cancels $U_p^a(U_p^a)^{-1}$.
 \end{proof}
 
 % Source: polynomial-PEPS, 04-compression.tex, lines 565--588.
-\begin{theorem}[Grouping a party with no registers]
+\begin{lemma}[Grouping a party with no registers]
     \label{thm:peps_basis_empty_first_party}
     \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_cons_of_owners_mem_tail_heq}
     \leanok
     \uses{def:peps_party_partition}
-    Let $(q,\mathbf q)$ be an ordered list of distinct parties, and let
-    $a$ be a register list whose owners all belong to $\mathbf q$.
-    Under the identifications $a_q=\varnothing$ and
-    $a_{\bar q}=a$, isolating the empty exterior factor used in the proof of
-    Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}, every $x\in M(a)$ satisfies
+    Let $(q,\mathbf q)$ be a repetition-free party list, and let $a$ be a register list whose owners all lie in $\mathbf q$. Under $a_q=\varnothing$ and $a_{\bar q}=a$ (isolating the empty exterior factor in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}), every $x\in M(a)$ satisfies
     \begin{align}
         G_{(q,\mathbf q),a}x=1\otimes G_{\mathbf q,a}x.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -258,11 +197,7 @@ tensor product of their identity maps.
         thm:peps_basis_grouping_equality,
         thm:peps_basis_first_party_grouping,
         thm:peps_basis_memory_equalities}
-    Since the order has no repetitions and all owners lie in the tail,
-    the first party owns no register, and the partition identity
-    gives $U_q^a x=1\otimes x$. Applying the first-party grouping identity
-    to this tensor and identifying the complementary register list with $a$
-    yields the tail isometry $G_{\mathbf q,a}$.
+    Since $q\notin\mathbf q$, $q$ owns no register of $a$, so Lemma~\ref{thm:peps_basis_empty_selection} gives $U_q^a x=1\otimes x$ under $a_q=\varnothing$ and $a_{\bar q}=a$. Applying Lemma~\ref{thm:peps_basis_first_party_grouping} and Lemmas~\ref{thm:peps_basis_memory_equalities} and~\ref{thm:peps_basis_grouping_equality} yields $1\otimes G_{\mathbf q,a}x$.
 \end{proof}
 
 \begin{definition}[Joining two partitioned memories]
@@ -270,9 +205,7 @@ tensor product of their identity maps.
     \lean{TNLean.Lattice.PartyCircuit.Layout.appendPartitionIso,
         TNLean.Lattice.PartyCircuit.Layout.appendPartitionIso_tmul}
     \leanok
-    For register lists $a_1,a_2,b_1,b_2$, let $K$ be the isometry
-    that exchanges the middle two factors and concatenates the two
-    resulting pairs. For every $x_i\in M(a_i)$ and $y_i\in M(b_i)$,
+    For register lists $a_1,a_2,b_1,b_2$, let $K:\bigl(M(a_1)\otimes M(a_2)\bigr)\otimes\bigl(M(b_1)\otimes M(b_2)\bigr)\to M(a_1b_1)\otimes M(a_2b_2)$ be the isometry defined on elementary tensors $x_i\in M(a_i)$, $y_i\in M(b_i)$ by
     \begin{align}
         K\bigl((x_1\otimes x_2)\otimes(y_1\otimes y_2)\bigr)
          & =J_{a_1,b_1}^{-1}(x_1\otimes y_1)
@@ -280,28 +213,21 @@ tensor product of their identity maps.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Partitioning a concatenation]
+\begin{lemma}[Partitioning a concatenation]
     \label{thm:peps_basis_partition_concat}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_append_tmul}
     \leanok
-    For any selection $f$, register lists $a,b$, and vectors
-    $x\in M(a)$, $y\in M(b)$, identify $(ab)_f=a_fb_f$ and
-    $(ab)_{\bar f}=a_{\bar f}b_{\bar f}$. With $K$ from
-    Definition~\ref{def:peps_basis_partition_join} for these four lists,
+    For any $f:P\to\{0,1\}$, register lists $a,b$, $x\in M(a)$, and $y\in M(b)$, under $(ab)_f=a_fb_f$, $(ab)_{\bar f}=a_{\bar f}b_{\bar f}$, and $K$ from Definition~\ref{def:peps_basis_partition_join},
     \begin{align}
         U_f^{ab}J_{a,b}^{-1}(x\otimes y)
          & =K(U_f^a x\otimes U_f^b y).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_basis_partition_join}
-    We proceed by induction on $a$ and extend by linearity in $x$: a
-    selected head adjoins its factor to the first joined memory, whereas an
-    excluded head adjoins it to the second, and in each case associativity
-    together with the exchange of the middle factors reduces the assertion
-    to the tail.
+    By induction on $a$ and linearity in $x$: a head register with $f(p)=1$ or $f(p)=0$ adjoins its factor to the first or second factor of $M(a_fb_f)\otimes M(a_{\bar f}b_{\bar f})$, and associativity with the middle-factor swap in Definition~\ref{def:peps_basis_partition_join} reduces the claim to the tail.
 \end{proof}
 
 \begin{definition}[Bases adapted to a partition]
@@ -309,141 +235,104 @@ tensor product of their identity maps.
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionBasis,
         TNLean.Lattice.PartyCircuit.Layout.partitionAppendBasis}
     \leanok
-    Choose orthonormal bases $b_A,b_E$ of $M(a_f),M(a_{\bar f})$,
-    and $b_D,b_F$ of $M(b_f),M(b_{\bar f})$, indexed by finite sets
-    $X,Y,I,L$, respectively. Their partition bases on the original
-    memories are $D^a_{x,y}=(U_f^a)^{-1}(b_A(x)\otimes b_E(y))$
-    and $D^b_{i,j}=(U_f^b)^{-1}(b_D(i)\otimes b_F(j))$.
-    On the selected and complementary concatenated memories, take
-    $C_{x,i}=J_{a_f,b_f}^{-1}(b_A(x)\otimes b_D(i))$ and
-    $F_{y,j}=J_{a_{\bar f},b_{\bar f}}^{-1}(b_E(y)\otimes b_F(j))$,
-    transferred along the corresponding list equalities.
+    Given orthonormal bases $(b_A(x))_{x\in X}$ of $M(a_f)$, $(b_E(y))_{y\in Y}$ of $M(a_{\bar f})$, $(b_D(i))_{i\in I}$ of $M(b_f)$, and $(b_F(j))_{j\in L}$ of $M(b_{\bar f})$, define orthonormal bases of $M(a)$, $M(b)$, $M((ab)_f)$, and $M((ab)_{\bar f})$ (under $(ab)_f=a_fb_f$ and $(ab)_{\bar f}=a_{\bar f}b_{\bar f}$) by
+    \begin{align}
+        D^a_{x,y} & = (U_f^a)^{-1}(b_A(x)\otimes b_E(y)),                          &
+        D^b_{i,j} & = (U_f^b)^{-1}(b_D(i)\otimes b_F(j)), \notag                     \\
+        C_{x,i}   & = J_{a_f,b_f}^{-1}(b_A(x)\otimes b_D(i)),                      &
+        F_{y,j}   & = J_{a_{\bar f},b_{\bar f}}^{-1}(b_E(y)\otimes b_F(j)). \notag
+    \end{align}
 \end{definition}
 
-\begin{theorem}[Coordinates before and after a joint partition]
+\begin{lemma}[Coordinates before and after a joint partition]
     \label{thm:peps_basis_partition_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_partitionBasis_tmul,
         TNLean.Lattice.PartyCircuit.Layout.partitionBasis_coordinates,
         TNLean.Lattice.PartyCircuit.Layout.partitionBasis_coordinates_of_eq}
     \leanok
-    With the bases of Definition~\ref{def:peps_basis_partition_bases},
-    every $x\in X$, $y\in Y$, $i\in I$, $j\in L$ satisfies
+    With the bases of Definition~\ref{def:peps_basis_partition_bases}, every $x\in X$, $y\in Y$, $i\in I$, $j\in L$, and $z\in M(ab)$ satisfy
     \begin{align}
         U_f^{ab}J_{a,b}^{-1}(D^a_{x,y}\otimes D^b_{i,j})
          & =C_{x,i}\otimes F_{y,j},\label{eq:peps_basis_partition_columns} \\
         \langle D^a_{x,y}\otimes D^b_{i,j},J_{a,b}z\rangle
-         & =\langle C_{x,i}\otimes F_{y,j},U_f^{ab}z\rangle
+         & =\langle C_{x,i}\otimes F_{y,j},U_f^{ab}z\rangle.
         \label{eq:peps_basis_partition_coefficients}
     \end{align}
-    The second identity holds for every $z\in M(ab)$. It also holds
-    for a register list $c$ with a specified equality $c=ab$ and
-    $z\in M(c)$: apply $E_{c=ab}$ before $J_{a,b}$ on the left,
-    and transfer $C$ and $F$ to $M(c_f)$ and $M(c_{\bar f})$ on
-    the right, where the partition is $U_f^c$.
-\end{theorem}
+    For $c=ab$ and $z\in M(c)$, (\ref{eq:peps_basis_partition_coefficients}) holds with $J_{a,b}E_{c=ab}z$ on the left and $U_f^c z$ against $C_{x,i},F_{y,j}$ transferred to $M(c_f),M(c_{\bar f})$ on the right.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_basis_partition_bases,thm:peps_basis_partition_concat}
-    Applying the concatenation identity to the two partition-basis
-    columns and cancelling the inverse partition isometries gives
-    (\ref{eq:peps_basis_partition_columns}). Taking inner products
-    through the isometries then yields
-    (\ref{eq:peps_basis_partition_coefficients}), and identifying $c=ab$
-    establishes the final assertion.
+    Applying Lemma~\ref{thm:peps_basis_partition_concat} to $D^a_{x,y}\otimes D^b_{i,j}$ and cancelling $U_f^a(U_f^a)^{-1}$ and $U_f^b(U_f^b)^{-1}$ in Definition~\ref{def:peps_basis_partition_bases} gives~(\ref{eq:peps_basis_partition_columns}). Unitarity of $U_f^{ab}J_{a,b}^{-1}$ then yields~(\ref{eq:peps_basis_partition_coefficients}), and substituting $c=ab$ gives the final form.
 \end{proof}
 
 \begin{definition}[Physical coordinates on the selected output]
     \label{def:peps_basis_partition_output_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionOutputIso}
     \leanok
-    For any register lists $a,b$ and selection $f$, let $b_A$ be
-    an orthonormal basis of
-    $M(a_f)$ indexed by a finite set $X$. Denote its coordinate
-    isometry by $b_A^\#$. The selected output isometry is
-    $O=(b_A^\#\otimes1)J_{a_f,b_f}$, after identifying
-    $(ab)_f=a_fb_f$.
+    For register lists $a,b$, selection $f$, and an orthonormal basis $(b_A(x))_{x\in X}$ of $M(a_f)$ with coordinate isometry $b_A^\#:M(a_f)\to\C^X$, define the selected output isometry (under $(ab)_f=a_fb_f$) by
+    \begin{align}
+        O := (b_A^\#\otimes 1)J_{a_f,b_f}:M((ab)_f)\to \C^X\otimes M(b_f). \notag
+    \end{align}
 \end{definition}
 
-\begin{theorem}[Coordinates of the selected output]
+\begin{lemma}[Coordinates of the selected output]
     \label{thm:peps_basis_partition_output_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionOutputIso_basis,
         TNLean.Lattice.PartyCircuit.Layout.partitionOutputIso_coordinates}
     \leanok
     \uses{def:peps_basis_partition_output_coordinates,def:peps_basis_partition_bases}
-    With the selected output isometry just defined, for any
-    orthonormal basis $b_D$ of $M(b_f)$
-    indexed by a finite set $I$, and any $x\in X$, $i\in I$,
+    With $O$ from Definition~\ref{def:peps_basis_partition_output_coordinates}, an orthonormal basis $(b_D(i))_{i\in I}$ of $M(b_f)$, $C_{x,i}=J_{a_f,b_f}^{-1}(b_A(x)\otimes b_D(i))$ from Definition~\ref{def:peps_basis_partition_bases}, and the standard basis $(e_x)_{x\in X}$ of $\C^X$, every $x\in X$, $i\in I$, and $z\in M((ab)_f)$ satisfy
     \begin{align}
         O C_{x,i} & =e_x\otimes b_D(i),        \\
         \langle e_x\otimes b_D(i),Oz\rangle
                   & =\langle C_{x,i},z\rangle.
     \end{align}
-    Here $e_x$ is the standard basis of $\C^X$,
-    $C_{x,i}=J_{a_f,b_f}^{-1}(b_A(x)\otimes b_D(i))$ in the
-    identified selected memory, and $z\in M((ab)_f)$ is arbitrary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_basis_partition_output_coordinates,def:peps_basis_partition_bases}
-    The concatenation isometry sends $C_{x,i}$ to
-    $b_A(x)\otimes b_D(i)$. Taking the coordinates of the first
-    factor gives $e_x\otimes b_D(i)$. Preservation of inner products
-    gives the second identity.
+    By Definitions~\ref{def:peps_basis_partition_bases} and~\ref{def:peps_basis_partition_output_coordinates}, $OC_{x,i}=(b_A^\#\otimes 1)(b_A(x)\otimes b_D(i))=e_x\otimes b_D(i)$, and unitarity of $O$ gives $\langle e_x\otimes b_D(i),Oz\rangle=\langle OC_{x,i},Oz\rangle=\langle C_{x,i},z\rangle$.
 \end{proof}
 
-\begin{theorem}[Tensor coordinates under owner relabelling]
+\begin{lemma}[Tensor coordinates under owner relabelling]
     \label{thm:peps_basis_owner_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_tensorBasis_coordinates}
     \leanok
-    Let $q:P\to Q$, let $a,b$ be register lists, and let $b_A,b_D$
-    be orthonormal bases of $M(q_*a),M(q_*b)$ indexed by finite sets
-    $X,I$. For every $z\in M(ab)$, $x\in X$, $i\in I$,
+    For $q:P\to Q$, register lists $a,b$, orthonormal bases $(b_A(x))_{x\in X}$ of $M(q_*a)$ and $(b_D(i))_{i\in I}$ of $M(q_*b)$, and $z\in M(ab)$, under $q_*(ab)=(q_*a)(q_*b)$,
     \begin{align}
         \langle (T_q^a)^{-1}b_A(x)\otimes(T_q^b)^{-1}b_D(i),J_{a,b}z\rangle
          & =\langle b_A(x)\otimes b_D(i),
-        J_{q_*a,q_*b}T_q^{ab}z\rangle,
+        J_{q_*a,q_*b}T_q^{ab}z\rangle.
     \end{align}
-    with $q_*(ab)=(q_*a)(q_*b)$ identified on the right.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Because changing owners commutes with concatenation, applying that
-    identity to the two transferred basis columns and using preservation of
-    inner products by the owner and concatenation isometries gives the result.
+    Since $J_{q_*a,q_*b}T_q^{ab}=(T_q^a\otimes T_q^b)J_{a,b}$, unitarity of $T_q^a\otimes T_q^b$ gives the equality.
 \end{proof}
 
 \subsubsection{Physical register lists and regional dimensions}
 
-For a nonnegative integer $d$, write $[d]=\{0,\ldots,d-1\}$.
-If $d=0$, this set is empty. Let $\mathbf p=(p_0,\ldots,p_{m-1})$
-be an ordered list of parties. Repetitions are permitted unless
-excluded explicitly.
+For $d\in\N$, write $[d]=\{0,\ldots,d-1\}$ (with $[0]=\varnothing$), and let $\mathbf p=(p_0,\ldots,p_{m-1})$ be an ordered party list (with repetitions permitted unless excluded).
 
-\begin{theorem}[Owners and restrictions of physical lists]
+\begin{lemma}[Owners and restrictions of physical lists]
     \label{thm:peps_basis_physical_list_restriction}
     \lean{TNLean.Lattice.PartyCircuit.familyPhysicalLayout_owners,
         TNLean.Lattice.PartyCircuit.restrict_familyPhysicalLayout}
     \leanok
     \uses{def:peps_family_physical_output}
-    Let $d_p$ be arbitrary nonnegative local dimensions, and write
-    $a_{\mathbf d}(\mathbf p)$ for the register list with space
-    $\C^{d_{p_i}}$ in position $i$. The owner sequence of
-    $a_{\mathbf d}(\mathbf p)$ is precisely
-    $\mathbf p$. Restriction by any selection $f$ retains exactly
-    the corresponding subsequence:
+    For local dimensions $d_p\in\N$, let $a_{\mathbf d}(\mathbf p)$ be the register list with space $\C^{d_{p_i}}$ and owner $p_i$ at position $i$. Its owner sequence is $\mathbf p$, and for any selection $f$,
     \begin{align}
         (a_{\mathbf d}(\mathbf p))_f & =a_{\mathbf d}(\mathbf p_f).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Taking owners reads the same ordered party list. Filtering the
-    registers commutes with assigning their spaces, giving the
-    restriction identity.
+    Projecting to owners recovers $\mathbf p$, and filtering registers by $f$ commutes with mapping $p_i\mapsto (p_i,\C^{d_{p_i}})$.
 \end{proof}
 
 \begin{definition}[Physical coordinates of a region]
@@ -452,48 +341,29 @@ excluded explicitly.
     \lean{TNLean.Lattice.PartyCircuit.filteredPartyEquiv,
         TNLean.Lattice.PartyCircuit.familyRestrictedPhysicalBasis}
     \leanok
-    Suppose $\mathbf p$ has no repetitions and contains every party
-    of $P$, and let $A\subseteq P$ be finite. Reading the party at
-    each position of the filtered list $\mathbf p_A$ is a bijection
-    from its positions to $A$. Reindex the ordered standard tensor
-    basis of these registers by this bijection. Its indices are
-    assignments $x_p\in[d_p]$ for $p\in A$.
-    Transfer along the physical-list restriction identity to obtain
-    bases on the memories selected by $A$. The common-dimension
-    case is obtained by setting $d_p=d$.
+    If $\mathbf p$ lists $P$ without repetitions and $A\subseteq P$ is finite, the position-to-party map on $\mathbf p_A$ is a bijection onto $A$. Reindexing the standard tensor basis of $M(a_{\mathbf d}(\mathbf p_A))$ by this bijection and transporting along Lemma~\ref{thm:peps_basis_physical_list_restriction} yields an orthonormal basis of $M((a_{\mathbf d}(\mathbf p))_A)$ indexed by $\mathcal X_A:=\prod_{p\in A}[d_p]$ (with $d_p=d$ in the constant-dimension case).
 \end{definition}
 
-\begin{theorem}[Physical dimensions of lists and regions]
+\begin{lemma}[Physical dimensions of lists and regions]
     \label{thm:peps_basis_physical_dimensions}
     \lean{TNLean.Lattice.PartyCircuit.length_filter_region,
         TNLean.Lattice.PartyCircuit.finrank_restrict_familyPhysicalLayout,
         TNLean.Lattice.PartyCircuit.card_familyRegionalPhysicalIndex,
         TNLean.Lattice.PartyCircuit.finrank_restrict_familyPhysicalLayout_le}
     \leanok
-    For arbitrary nonnegative local dimensions $d_p$ and finite $A\subseteq P$,
-    \begin{align}
-        \#\prod_{p\in A}[d_p] & =\prod_{p\in A}d_p.
-    \end{align}
-    If $\mathbf p$ has no repetitions and contains every party of
-    $P$, then $|\mathbf p_A|=|A|$ and
+    For $d_p\in\N$ and finite $A\subseteq P$, $\#\prod_{p\in A}[d_p]=\prod_{p\in A}d_p$.
+    If $\mathbf p$ lists $P$ without repetitions, then $|\mathbf p_A|=|A|$ and
     \begin{align}
         \dim M((a_{\mathbf d}(\mathbf p))_A) & =\prod_{p\in A}d_p.
     \end{align}
-    In particular, for a common dimension $d_p=d$, both the number
-    of regional configurations and the selected memory dimension are $d^{|A|}$.
-    If $D$ is a nonnegative integer and $d_p\le D$ for every
-    $p\in A$, the selected memory dimension is at most $D^{|A|}$.
-\end{theorem}
+    In particular, $\dim M((a_{\mathbf d}(\mathbf p))_A)=d^{|A|}$ when $d_p=d$, and $\dim M((a_{\mathbf d}(\mathbf p))_A)\le D^{|A|}$ when $d_p\le D$ on $A$.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_family_physical_output,
         thm:peps_basis_physical_list_restriction,def:peps_basis_region_coordinates}
-    Counting the assignments indexing each tensor basis shows that an
-    exhaustive ordering without repetitions contains each element of $A$
-    once, so its filtered list has length $|A|$ and the dimension equals
-    the number of basis elements; multiplying the inequalities $d_p\le D$
-    over $A$ yields the upper bound.
+    Since $\mathbf p$ contains each $p\in A$ once, $|\mathbf p_A|=|A|$, and the basis of Definition~\ref{def:peps_basis_region_coordinates} has cardinality $\#\prod_{p\in A}[d_p]=\prod_{p\in A}d_p\le D^{|A|}$.
 \end{proof}
 
 \begin{definition}[Physical and regional coordinate isometries]
@@ -502,118 +372,74 @@ excluded explicitly.
         TNLean.Lattice.PartyCircuit.familyRegionalPhysicalIndexEquiv,
         TNLean.Lattice.PartyCircuit.familyRegionalPhysicalReadout}
     \leanok
-    For any set $P$ and finite $A\subseteq P$, splitting an assignment
-    into its restrictions to $A$ and $P\setminus A$ is a bijection,
-    for both constant
-    dimension $d$ and arbitrary local dimensions $d_p$.
-    Now suppose $\mathbf p$ lists $P$ without repetitions, and let
-    $b$ be a private register list with finite-dimensional memory
-    $M(b)$ of dimension $r$. Fix its standard orthonormal basis
-    $\gamma_0,\ldots,\gamma_{r-1}$. Let $E_x$ denote the labelled
-    physical standard basis, and define the coordinate isometry
-    $R:M(a b)\to\C^{\mathcal X\times[r]}$ by
+    Let $\mathbf p$ list $P$ without repetitions, let $a=a_{\mathbf d}(\mathbf p)$ have assignment set $\mathcal X=\prod_{p\in P}[d_p]$ and labelled standard basis $(E_x)_{x\in\mathcal X}$, and let $b$ be a private register list with orthonormal basis $(\gamma_i)_{i\in[r]}$ of $M(b)$. Define the coordinate isometry $R:M(ab)\to\C^{\mathcal X\times[r]}$ and, for finite $A\subseteq P$ under the restriction bijection $\mathcal X\simeq\mathcal X_A\times\mathcal X_{P\setminus A}$ ($s\sqcup t\leftrightarrow(s,t)$), the regional coordinate isometry $R_A:M(ab)\to\C^{\mathcal X_A\times(\mathcal X_{P\setminus A}\times[r])}$ by
     \begin{align}
-        R(v)(x,i)=\langle E_x\otimes\gamma_i,J_{a,b}v\rangle,
+        R(v)(x,i)       & = \langle E_x\otimes\gamma_i,J_{a,b}v\rangle, &
+        R_A(v)(s,(t,i)) & = R(v)(s\sqcup t,i).
     \end{align}
-    where $a$ is the chosen physical list and $\mathcal X$ its
-    assignment set. The regional coordinate isometry
-    $R_A:M(ab)\to\C^{\mathcal X_A\times(\mathcal X_{P\setminus A}\times[r])}$
-    is obtained by separating the physical assignment into its
-    regional and exterior restrictions, with the private index
-    retained in the latter coordinate pair.
 \end{definition}
 
-\begin{theorem}[Regional coordinate formulas and contraction bounds]
+\begin{lemma}[Regional coordinate formulas and contraction bounds]
     \label{thm:peps_basis_regional_readouts}
     \lean{TNLean.Lattice.PartyCircuit.norm_familyRegionalPhysicalReadout_le_one,
         TNLean.Lattice.PartyCircuit.familyRegionalPhysicalReadout_apply}
     \leanok
-    Under the hypotheses of
-    Definition~\ref{def:peps_basis_physical_readouts}, let $s,t$ be
-    assignments on $A,P\setminus A$, respectively, and let $s\sqcup t$
-    be their unique common assignment on $P$. For every
-    $v\in M(ab)$ and $i\in[r]$, both choices of physical dimensions
-    satisfy $R_A(v)(s,(t,i))=R(v)(s\sqcup t,i)$ and
-    $\|R_A\|_{\rm op}\le1$.
-\end{theorem}
+    In the setting of Definition~\ref{def:peps_basis_physical_readouts}, for every $v\in M(ab)$, $s\in\mathcal X_A$, $t\in\mathcal X_{P\setminus A}$, and $i\in[r]$, both general and constant local dimensions satisfy
+    \begin{align}
+        R_A(v)(s,(t,i))  & = R(v)(s\sqcup t,i), &
+        \|R_A\|_{\rm op} & \le 1. \notag
+    \end{align}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_basis_physical_readouts}
-    Evaluating the reindexed product-basis coordinates at
-    $(s,(t,i))$ recovers the original product-basis coordinate at
-    $(s\sqcup t,i)$, and because the coordinate map is an isometry, its
-    operator norm is at most $1$.
+    Both properties follow directly from Definition~\ref{def:peps_basis_physical_readouts} since $R_A$ is a reindexed coordinate isometry.
 \end{proof}
 
 \subsubsection{Ordered party tensor coordinates}
 
-Let $a_p$ select all registers of $a$ owned by $p$. For every $p$,
-choose an orthonormal basis $b_p$ of $M(a_p)$ indexed by a finite
-set $I_p$. For any ordered party list
-$\mathbf p=(p_0,\ldots,p_{m-1})$, let $B^{\mathbf p}$ be its
-right-associated product basis on
-$M(a_{p_0})\otimes\cdots\otimes M(a_{p_{m-1}})\otimes\C$.
+Let $a_p$ select the registers of $a$ owned by $p$, let $(b_p(x))_{x\in I_p}$ be a finite orthonormal basis of $M(a_p)$, and for $\mathbf p=(p_0,\ldots,p_{m-1})$ let $B^{\mathbf p}$ be the right-associated product basis of $M(a_{p_0})\otimes\cdots\otimes M(a_{p_{m-1}})\otimes\C$.
 
-\begin{theorem}[Recursion for party tensor coordinates]
+\begin{lemma}[Recursion for party tensor coordinates]
     \label{thm:peps_basis_party_recursion}
     \lean{TNLean.Lattice.PartyCircuit.partyListBasis_nil_apply,
         TNLean.Lattice.PartyCircuit.partyListBasis_repr_nil,
         TNLean.Lattice.PartyCircuit.partyListBasis_cons_apply,
         TNLean.Lattice.PartyCircuit.partyListBasis_repr_cons_tmul}
     \leanok
-    The empty list has one basis index, with column $1$, and the
-    coordinate of $z\in\C$ at this index is $z$. If a party $p$
-    is adjoined to the head of an arbitrary list $\mathbf p$, its
-    basis column with index $(x_0,x_{\rm tail})$ is
-    $b_p(x_0)\otimes B^{\mathbf p}_{x_{\rm tail}}$.
-    For every $u\in M(a_p)$ and tail vector $v$,
+    For the empty list, $B^\varnothing_\bullet=1$ and $\langle B^\varnothing_\bullet,z\rangle=z$ for $z\in\C$. For a prepended party $p$, $B^{p\mathbf p}_{(x_0,x_{\rm tail})}=b_p(x_0)\otimes B^{\mathbf p}_{x_{\rm tail}}$, and every $u\in M(a_p)$ and tail vector $v$ satisfy
     \begin{align}
         \langle B^{p\mathbf p}_{(x_0,x_{\rm tail})},u\otimes v\rangle
          & =\langle b_p(x_0),u\rangle
         \langle B^{\mathbf p}_{x_{\rm tail}},v\rangle.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    The empty basis is the scalar singleton basis. The recursive
-    tensor basis has the stated columns. Its coordinate on an
-    elementary tensor is the product of the two factor coordinates.
+    This follows from the recursive definition of $B^{\mathbf p}$ and the inner product on tensor products.
 \end{proof}
 
-\begin{theorem}[Matrix entries of ordered local tensor maps]
+\begin{lemma}[Matrix entries of ordered local tensor maps]
     \label{thm:peps_basis_party_map_entries}
     \lean{TNLean.Lattice.PartyCircuit.partyListBasis_repr_tensorPartyMaps,
         TNLean.Lattice.PartyCircuit.partyLabelledBasis_apply,
         TNLean.Lattice.PartyCircuit.partyLabelledBasis_repr_tensorPartyMaps}
     \leanok
-    Let $a,c$ be register lists, and for every $p$ choose finite
-    orthonormal bases $b_p,c_p$ of $M(a_p),M(c_p)$ and a continuous
-    linear map $A_p:M(a_p)\to M(c_p)$. For any ordered party list,
-    the product map $A_{p_0}\otimes\cdots\otimes A_{p_{m-1}}\otimes1$
-    has matrix entries
+    For register lists $a,c$, finite orthonormal bases $b_p,c_p$ of $M(a_p),M(c_p)$ with product bases $B^{\mathbf p},C^{\mathbf p}$, and linear maps $A_p:M(a_p)\to M(c_p)$, the operator $A_{\mathbf p}:=A_{p_0}\otimes\cdots\otimes A_{p_{m-1}}\otimes1$ has matrix entries
     \begin{align}
         \left\langle C^{\mathbf p}_x,
-        (\bigotimes_{i=0}^{m-1}A_{p_i})B^{\mathbf p}_y\right\rangle
+        A_{\mathbf p}B^{\mathbf p}_y\right\rangle
          & =\prod_{i=0}^{m-1}\langle c_{p_i}(x_i),A_{p_i}b_{p_i}(y_i)\rangle.
     \end{align}
-    If $P$ is finite and $\mathbf p$ lists all of $P$ without
-    repetitions, reindex the columns by party assignments: the
-    labelled column at $y$ is the ordered column at
-    $(y(p_0),\ldots,y(p_{m-1}))$. In these labelled bases the matrix
-    entry at $(x,y)$ equals
-    $\prod_{p\in P}\langle c_p(x_p),A_pb_p(y_p)\rangle$.
-\end{theorem}
+    When $\mathbf p$ lists a finite set $P$ without repetitions, reindexing by $y\mapsto(y(p_0),\ldots,y(p_{m-1}))$ gives $\langle C_x,A_{\mathbf p}B_y\rangle=\prod_{p\in P}\langle c_p(x_p),A_pb_p(y_p)\rangle$.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_basis_party_recursion}
-    By induction on the party list, applying the first local map to the
-    first basis column and using the product coordinate formula separates
-    the head factor from the tail, with the empty product equal to $1$.
-    For labelled coordinates, reindexing both bases by the exhaustive
-    ordering replaces the product over positions by the product over $P$.
+    Induction on $\mathbf p$ using Lemma~\ref{thm:peps_basis_party_recursion} gives the first identity, and reindexing along the bijection $\{0,\ldots,m-1\}\to P$ ($i\mapsto p_i$) gives the second.
 \end{proof}
 
 These are the tensor-coordinate identities used in
@@ -622,66 +448,44 @@ These are the tensor-coordinate identities used in
 565--588.
 
 
-\begin{theorem}[Matrix entries of party restrictions]
+\begin{lemma}[Matrix entries of party restrictions]
     \label{thm:peps_actual_party_word_entries}
     \lean{TNLean.Lattice.PartyCircuit.Word.partyGroupedBasis_repr_eval,
         TNLean.Lattice.PartyCircuit.Word.partyGroupedBasis_matrix_eval}
     \leanok
     \uses{def:peps_party_grouped_basis,thm:peps_party_restriction}
-    Let $P$ be finite, fix an ordering of all parties without
-    repetitions, and let $W:\mathcal H_a\to\mathcal H_z$ be a
-    source-free composition. For each $p$, choose finite orthonormal
-    bases $(b_p(i))_{i\in I_p}$ and $(c_p(j))_{j\in J_p}$ of its
-    input and output memories. Let $B_y,C_x$ be the corresponding
-    product basis columns, mapped to the original register
-    orders by the inverse grouping isometries. Then
+    Let $P$ be finite with a fixed repetition-free ordering, let $W:\mathcal H_a\to\mathcal H_z$ be a source-free composition, and let $B_y,C_x$ be the party-grouped product bases of $\mathcal H_a,\mathcal H_z$ from Definition~\ref{def:peps_party_grouped_basis} built from local orthonormal bases $(b_p(i))_{i\in I_p}$ and $(c_p(j))_{j\in J_p}$. Then
     \begin{align}
         \langle C_x,WB_y\rangle
          & =\prod_{p\in P}
         \langle c_p(x_p),W|_{\{p\}}b_p(y_p)\rangle.
         \label{eq:peps_actual_party_word_entries}
     \end{align}
-    Thus the matrix of $W$ is the product of the matrices of its
-    singleton restrictions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_actual_singleton_factorization,
         thm:peps_basis_party_map_entries}
-    Applying the operator factorization
-    (\ref{eq:peps_actual_singleton_factorization}) to the input
-    basis column cancels the grouping isometry against its inverse in
-    the definition of $B_y$. Taking coordinates in the output
-    product basis then gives (\ref{eq:peps_actual_party_word_entries})
-    by the tensor-coordinate formula, from which equality of the matrices
-    follows entrywise.
+    Applying~(\ref{eq:peps_actual_singleton_factorization}) to $B_y$ cancels the grouping isometry against its inverse in Definition~\ref{def:peps_party_grouped_basis}, and Lemma~\ref{thm:peps_basis_party_map_entries} yields~(\ref{eq:peps_actual_party_word_entries}).
 \end{proof}
 
-\begin{theorem}[Mixed matrices of three source-free compositions]
+\begin{lemma}[Mixed matrices of three source-free compositions]
     \label{thm:peps_actual_party_mixed_matrix}
     \lean{TNLean.Lattice.PartyCircuit.Word.partyGroupedBasis_mixed_matrix}
     \leanok
     \uses{def:peps_party_grouped_basis,def:peps_dependent_physical_product,
         thm:peps_party_restriction}
-    In the same bases and party order, let
-    $W,V:\mathcal H_a\to\mathcal H_z$ and
-    $U:\mathcal H_a\to\mathcal H_a$ be three independently chosen
-    source-free compositions. Denote their matrices by $M_W,M_V,M_U$,
-    and the matrices of their restrictions at $p$ by $A_p,B_p,X_p$,
-    respectively. Then
+    In the setting of Lemma~\ref{thm:peps_actual_party_word_entries}, let $W,V:\mathcal H_a\to\mathcal H_z$ and $U:\mathcal H_a\to\mathcal H_a$ be source-free compositions with matrices $M_W,M_V,M_U$, and let $A_p,B_p,X_p$ be the matrices of $W|_{\{p\}},V|_{\{p\}},U|_{\{p\}}$. Then
     \begin{align}
         M_W M_U M_V^\dagger
          & =\bigotimes_{p\in P}(A_pX_pB_p^\dagger).
         \label{eq:peps_actual_party_mixed_matrix}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_actual_party_word_entries,thm:peps_party_product_conjugation}
-    Applying (\ref{eq:peps_actual_party_word_entries}) to each of
-    $W,U,V$ in the same input and output bases and invoking the finite
-    product-conjugation identity gives
-    (\ref{eq:peps_actual_party_mixed_matrix}).
+    Combining~(\ref{eq:peps_actual_party_word_entries}) for $W,U,V$ with Lemma~\ref{thm:peps_party_product_conjugation} gives~(\ref{eq:peps_actual_party_mixed_matrix}).
 \end{proof}
 
 These are auxiliary identities for

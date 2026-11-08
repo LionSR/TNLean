@@ -5,7 +5,7 @@ Sector pairings in both directions determine a finite bijection between BNT
 canonical forms, and normalization forces every intertwining gauge scalar to be
 a unit phase.
 
-\begin{theorem}[Bijective matching under eventual proportionality]
+\begin{lemma}[Bijective matching under eventual proportionality]
     \label{thm:sector_bnt_proportional_bijective_match}
     \lean{MPSTensor.bijective_match_of_eventuallyProportional}
     \leanok
@@ -19,7 +19,7 @@ a unit phase.
          & \not\longrightarrow 0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Applying the full-basis matching theorem first from $Q$ to $P$ and then to
@@ -213,26 +213,26 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
     preserves products and inverses.
 \end{proof}
 
-\begin{theorem}[Global gauge from a copy-weight matching]%
+\begin{lemma}[Global gauge from a copy-weight matching]%
     \label{thm:sector_bnt_global_gauge_of_copy_weight_matching}
     \lean{MPSTensor.sector_bnt_global_gauge_of_copy_weight_matching}
     \leanok
     \uses{def:sector_bnt_copy_weight_matching, thm:sector_bnt_global_gauge_of_matched_weights}
-    Reformulating Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}
+    Reformulating Lemma~\ref{thm:sector_bnt_global_gauge_of_matched_weights}
     in terms of copy-weight matchings, suppose that the sectors of $P$ and $Q$
     are matched, with bond-dimension equalities, nonzero phases, and block
     gauges satisfying $Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}$. If the same
     phases also give a copy-weight matching, then the flattened $Q$-tensor is
     obtained from the matched-coordinate $P$-tensor by the direct-sum gauge
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The copy-weight matching gives
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$. Together with
     $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$, these are exactly the two
     hypotheses (\ref{eq:ft_matched_weights_hypotheses}) of
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
+    Lemma~\ref{thm:sector_bnt_global_gauge_of_matched_weights}.
 \end{proof}
 
 
@@ -244,7 +244,7 @@ relations. They are not conclusions of CPSV16 Theorem~2.10. In particular,
 their additional hypotheses fail for the proportional BNT forms in
 Remark~\ref{rem:proportional_length_scalar_gap}.
 
-\begin{theorem}[Additional proportional global gauge under copy-weight matching]%
+\begin{lemma}[Additional proportional global gauge under copy-weight matching]%
     \label{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
     \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching}
     \leanok
@@ -259,7 +259,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     % Per-sector unit-modulus restriction eliminated by the exact matcher;
     % closure recorded in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The proportional sector-matching theorem gives $\beta$, $X_k$, and
@@ -267,11 +267,11 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$. Since $|\zeta_k|=1$, each
     $\zeta_k$ is nonzero. A copy-weight matching gives
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$, so
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} gives the
+    Lemma~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} gives the
     direct-sum gauge.
 \end{proof}
 
-\begin{theorem}[Additional proportional global gauge under coefficient identities]%
+\begin{lemma}[Additional proportional global gauge under coefficient identities]%
     \label{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}
     \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
     \leanok
@@ -290,7 +290,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     % Per-sector unit-modulus restriction eliminated by the exact matcher;
     % closure recorded in
     % docs/paper-gaps/cpsv16_global_vs_persector_unit_witness.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The sector-matching theorem gives $\beta$, $X_k$, and $|\zeta_k|=1$ with
@@ -299,6 +299,6 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     $c_N^{(\beta(k))}(P)=\zeta_k^Nc_N^{(k)}(Q)$ produce
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$ by
     Definition~\ref{def:sector_bnt_copy_weight_matching_of_coeff_identity}.
-    Theorem~\ref{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
+    Lemma~\ref{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
     then applies to this copy-weight matching.
 \end{proof}

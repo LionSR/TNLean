@@ -47,7 +47,7 @@
     Definition~\ref{def:peps_regular_projector_twisted_region}.
 \end{definition}
 
-\begin{theorem}[Supported expansion of invariant half-edge functions]%
+\begin{lemma}[Supported expansion of invariant half-edge functions]%
     \label{thm:peps_regular_invariant_state_span}
     \lean{TNLean.PEPS.eq_sum_regularProjectorClosedState_of_invariant,
         TNLean.PEPS.eq_sum_supported_regularProjectorClosedState_of_invariant,
@@ -68,7 +68,7 @@
     $u\in\mathcal P$ also vanishes when $u(\alpha)\notin\mathcal P$.
     This is the finite regular-coordinate calculation associated with
     the closure argument of \cite[Theorem~5.5]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_regular_half_edge_closed}
@@ -96,7 +96,7 @@
     to vanish outside its prescribed support.
 \end{proof}
 
-\begin{theorem}[Physical contraction of the regular closed coefficients]%
+\begin{lemma}[Physical contraction of the regular closed coefficients]%
     \label{thm:peps_regular_closed_physical_contraction}
     \lean{TNLean.PEPS.regularProjectorClosedState_eq_twistedRegionMatrix,
         TNLean.PEPS.sum_regularProjectorClosedState_eq_stateCoeff}
@@ -110,7 +110,7 @@
         =\sum_{\eta\in G^E}\prod_v
         A_{v,\sigma_v}\bigl(\alpha(u,\eta)_v\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_open_region_accessibility}

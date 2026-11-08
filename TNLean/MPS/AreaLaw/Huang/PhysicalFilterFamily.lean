@@ -21,7 +21,7 @@ The precision and rank budgets are the conservative polynomial bounds from
 `FilterPolynomial`. No printed sharper dependence on the inverse gap is asserted.
 The construction uses Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19,
 in place of the energy-dependent power sampler of LVV; see
-`docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
 open Matrix
@@ -29,8 +29,53 @@ open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
-/-- A finite family of Gaussian approximants chosen before ground-state data.
-Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
+/-- **The Gaussian filter approximants of Huang's construction.** At each node of the
+energy mesh, the Gaussian approximant of the positive chain with Huang's variance, time
+window and accuracy. Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
+noncomputable def huangFilterApproximant {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (c Delta : ℝ) (j : Fin (huangEnergyCount c Delta L)) :
+    Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
+  positiveChainGaussianApproximant hq h h0 (huangFilterVariance c Delta L)
+    (timeMeshNode L (huangEnergyMesh c Delta L) j) (huangFilterTime c Delta L)
+    (huangFilterEta c L) (huangFilterEta c L)
+
+/-- Each Huang approximant has cut rank at most the uniform filter rank bound at every
+cut, and lies within `3 η` of the Gaussian filter at its mesh node. Huang,
+arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
+theorem huangFilterApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (j : Fin (huangEnergyCount c Delta L)) :
+    (∀ cut, operatorSchmidtRank
+      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
+        (huangFilterApproximant hq h h0 c Delta j)) ≤ huangFilterRankBound q c Delta L) ∧
+    ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
+      ((∑ i, h i) - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 -
+        huangFilterApproximant hq h h0 c Delta j‖ ≤ 3 * huangFilterEta c L := by
+  classical
+  have hL : 0 ≤ (L : ℝ) := Nat.cast_nonneg L
+  have hη := (huangFilterEta_bounds hc L).1
+  have hT := (huangFilterTime_pos hc hDelta L).le
+  have hδ := (huangEnergyMesh_bounds hc hDelta L).1
+  obtain ⟨-, hN, herror, hrank⟩ := positiveChainGaussianApproximant_spec
+    hq h hs h0 h1 (huangFilterVariance c Delta L)
+    (timeMeshNode L (huangEnergyMesh c Delta L) j) hT hη hη
+  have hE : |timeMeshNode L (huangEnergyMesh c Delta L) j| ≤ (L : ℝ) :=
+    abs_le.mpr (timeMeshNode_mem hL hδ j)
+  have hNbound : positiveChainGaussianSampleCount h (timeMeshNode L (huangEnergyMesh c Delta L) j)
+      (huangFilterTime c Delta L) (huangFilterEta c L) ≤ huangFilterSampleCount c Delta L := by
+    apply (Nat.cast_le (α := ℝ)).mp
+    exact (hN.trans (by gcongr; linarith)).trans (Nat.le_ceil _)
+  refine ⟨fun cut ↦ (hrank cut).trans (Nat.mul_le_mul_right _ hNbound), ?_⟩
+  have htail := huangFilterTime_tail_le hc hDelta L
+  unfold huangFilterApproximant
+  linarith
+
+/-- A finite family of approximate Gaussian filters over the energy mesh, with uniform
+cut-rank bounds: the existence form of `huangFilterApproximant_spec`. Huang,
+arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
@@ -42,33 +87,10 @@ theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
           huangFilterRankBound q c Delta L) ∧
       ∀ j, ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
         ((∑ i, h i) - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 - Q j‖ ≤
-          3 * huangFilterEta c L := by
-  classical
-  have hL : 0 ≤ (L : ℝ) := Nat.cast_nonneg L
-  have hη := (huangFilterEta_bounds hc L).1
-  have hT := (huangFilterTime_pos hc hDelta L).le
-  have hδ := (huangEnergyMesh_bounds hc hDelta L).1
-  have hex (j : Fin (huangEnergyCount c Delta L)) :
-      ∃ Q : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-        (∀ cut, operatorSchmidtRank
-          (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) Q) ≤
-            huangFilterRankBound q c Delta L) ∧
-        ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
-          ((∑ i, h i) - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 - Q‖ ≤
-            3 * huangFilterEta c L := by
-    obtain ⟨N, Q, -, hN, herror, hrank⟩ := exists_positive_chain_gaussian_approximation
-      hq h hs h0 h1 (huangFilterVariance c Delta L)
-      (timeMeshNode L (huangEnergyMesh c Delta L) j) hT hη hη
-    have hE : |timeMeshNode L (huangEnergyMesh c Delta L) j| ≤ (L : ℝ) :=
-      abs_le.mpr (timeMeshNode_mem hL hδ j)
-    have hNbound : N ≤ huangFilterSampleCount c Delta L := by
-      apply (Nat.cast_le (α := ℝ)).mp
-      exact (hN.trans (by gcongr; linarith)).trans (Nat.le_ceil _)
-    refine ⟨Q, fun cut ↦ (hrank cut).trans (Nat.mul_le_mul_right _ hNbound), ?_⟩
-    have htail := huangFilterTime_tail_le hc hDelta L
-    linarith
-  choose Q hQ using hex
-  exact ⟨Q, fun j ↦ (hQ j).1, fun j ↦ (hQ j).2⟩
+          3 * huangFilterEta c L :=
+  ⟨huangFilterApproximant hq h h0 c Delta,
+    fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1,
+    fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).2⟩
 
 /-- An energy eigenvalue of a sum of positive contractions lies in the length window.
 Supporting estimate for Huang, arXiv:1406.6355v6, Section 5.4, Lemma 18. -/
@@ -93,29 +115,25 @@ theorem abs_eigenvalue_positive_chain_le_length {L q : ℕ}
   rw [heig, norm_smul, hΓ, mul_one, mul_one, Complex.norm_real, Real.norm_eq_abs] at hn
   exact hn.trans hHnorm
 
-/-- One member of the finite family approximates a positive multiple of the ground
-projection, with amplitude at least one half. The family is chosen before the eigenvalue
-and ground vector. Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
-theorem exists_positive_chain_ground_filter_family {L q : ℕ} (hq : 1 ≤ q)
+/-- For every gapped ground pair, one Huang approximant is within `4 η` of a positive
+multiple `a |Γ⟩⟨Γ|`, `1/2 ≤ a ≤ 1`, of the ground projection. Huang, arXiv:1406.6355v6,
+Section 5.4, Lemmas 18--19. -/
+theorem exists_huangFilterApproximant_near_ground {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
-    {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
-    ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      (∀ j cut, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (Q j)) ≤
-          huangFilterRankBound q c Delta L) ∧
-      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)), ‖Γ‖ = 1 →
-        (∑ i, h i) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →
-        ((∑ i, h i) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
-          (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef →
-        ∃ (j : Fin (huangEnergyCount c Delta L)) (a : ℝ),
-          1 / 2 ≤ a ∧ a ≤ 1 ∧
-          ‖Q j - (a : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
-            4 * huangFilterEta c L := by
-  obtain ⟨Q, hQrank, hQerror⟩ := exists_positive_chain_filter_family hq h hs h0 h1 hc hDelta
-  refine ⟨Q, hQrank, ?_⟩
-  intro E₀ Γ hΓ hHΓ hgap
+    {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta)
+    (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
+    (hHΓ : (∑ i, h i) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
+    (hgap : ((∑ i, h i) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
+      (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef) :
+    ∃ (j : Fin (huangEnergyCount c Delta L)) (a : ℝ),
+      1 / 2 ≤ a ∧ a ≤ 1 ∧
+      ‖huangFilterApproximant hq h h0 c Delta j -
+        (a : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
+          4 * huangFilterEta c L := by
+  have hQerror (j : Fin (huangEnergyCount c Delta L)) :=
+    (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).2
   have hE₀ := abs_eigenvalue_positive_chain_le_length h h0 h1 hΓ hHΓ
   obtain ⟨j, hj⟩ := exists_timeMeshNode_abs_sub_le (Nat.cast_nonneg L)
     (huangEnergyMesh_bounds hc hDelta L).1 (abs_le.mp hE₀)
@@ -136,12 +154,39 @@ theorem exists_positive_chain_ground_filter_family {L q : ℕ} (hq : 1 ≤ q)
   have hsuppression := huangFilterVariance_suppression_le hc hDelta L
   have hfirst := hQerror j
   rw [norm_sub_rev] at hfirst
-  have htriangle := (norm_sub_le_norm_sub_add_norm_sub (Q j)
+  have htriangle := (norm_sub_le_norm_sub_add_norm_sub (huangFilterApproximant hq h h0 c Delta j)
     (GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
       ((∑ i, h i) - (E : ℂ) • 1) 0 1)
     ((a : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).trans
       (add_le_add hfirst (hspec.trans hsuppression))
   simpa only [show 3 * huangFilterEta c L + huangFilterEta c L =
     4 * huangFilterEta c L by ring] using htriangle
+
+
+/-- A finite family of approximate Gaussian filters, one of which is close to a multiple
+of the ground projection for every gapped ground pair: the existence form of
+`huangFilterApproximant_spec` and `exists_huangFilterApproximant_near_ground`. Huang,
+arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
+theorem exists_positive_chain_ground_filter_family {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
+    ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
+      (∀ j cut, operatorSchmidtRank
+        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (Q j)) ≤
+          huangFilterRankBound q c Delta L) ∧
+      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)), ‖Γ‖ = 1 →
+        (∑ i, h i) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →
+        ((∑ i, h i) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
+          (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef →
+        ∃ (j : Fin (huangEnergyCount c Delta L)) (a : ℝ),
+          1 / 2 ≤ a ∧ a ≤ 1 ∧
+          ‖Q j - (a : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
+            4 * huangFilterEta c L :=
+  ⟨huangFilterApproximant hq h h0 c Delta,
+    fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1,
+    fun E₀ Γ hΓ hHΓ hgap ↦
+      exists_huangFilterApproximant_near_ground hq h hs h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap⟩
 
 end TNLean.MPS.AreaLaw

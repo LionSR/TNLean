@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSectorFactorization
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Virtual transport of physical-sector factorizations
@@ -116,10 +117,7 @@ noncomputable def ofVirtualMatrices (F : PhysicalSectorFactorization K)
       Matrix.smul_apply, smul_eq_mul]
     simp_rw [Finset.sum_mul]
     rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro gamma _
-    apply Finset.sum_congr rfl
-    intro delta _
+    refine Finset.sum_congr₂ fun gamma _ delta _ ↦ ?_
     ring
   have hConj :
       F.physicalIsometry * physicalSlice L beta alpha *
@@ -144,10 +142,7 @@ noncomputable def ofVirtualMatrices (F : PhysicalSectorFactorization K)
     simp_rw [hF]
     rw [Finset.sum_mul]
     simp_rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro gamma _
-    apply Finset.sum_congr rfl
-    intro delta _
+    refine Finset.sum_congr₂ fun gamma _ delta _ ↦ ?_
     ring
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hkh]
     have hF (gamma delta : Fin D) :=
@@ -187,10 +182,7 @@ Source context: arXiv:1606.00608, Section 2.3, equation `II_Aiplusk1`, lines
   apply Finset.sum_congr rfl
   intro delta _
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro gamma _
-  apply Finset.sum_congr rfl
-  intro beta _
+  refine Finset.sum_congr₂ fun gamma _ beta _ ↦ ?_
   ring
 
 end MPOTensor.PhysicalSectorFactorization

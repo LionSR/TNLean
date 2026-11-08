@@ -25,12 +25,19 @@ quotient, which is either a zero module or, by the identification theorem, one o
 
 * `WordAlgebra.traceWord_congr`, `WordAlgebra.traceWord_eq_add_quotient`: word traces are
   invariant under isomorphism and additive over an invariant submodule.
+* `WordAlgebra.traceWord_eq_sum_subquot`, `MPSTensor.trace_evalWord_eq_sum_traceWord_subquot`:
+  word traces are the sums of the word traces on the steps of an invariant flag.
 * `MPSTensor.finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero`: a family of normal blocks
   whose word traces sum to zero is empty.
 * `MPSTensor.exists_flagData`: the flag theorem.
 * `MPSTensor.isEmpty_linearEquiv_wordModule_of_mpv_ne`,
   `MPSTensor.pairwise_isEmpty_linearEquiv_of_linearIndependent`: distinct, or linearly
   independent, periodic vectors give non-isomorphic word modules.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`def:asym_flag_data`, *Labelled invariant flag*, and `thm:asym_flag_theorem`, *The flag theorem*.
 -/
 
 universe u
@@ -79,6 +86,41 @@ lemma traceWord_eq_add_quotient (K : Submodule (WordAlgebra d) M) (w : List (Fin
     (Algebra.lsmul ℂ ℂ M (ofWord w)) hf, traceWord_def, traceWord_def]
   congr 1
 
+/-- Word traces are additive over a step `A ≤ B` of invariant subspaces: the trace on `B` is the
+trace on `A` plus the trace on `B / A` (blueprint `lem:asym_trace_additivity`, *Trace additivity
+over an invariant submodule*). -/
+lemma traceWord_eq_add_subquot {A B : Submodule (WordAlgebra d) M} (hAB : A ≤ B)
+    (w : List (Fin d)) :
+    traceWord B w = traceWord A w + traceWord (Submodule.subquot A B) w := by
+  have : FiniteDimensional ℂ B :=
+    Module.Finite.of_injective (B.subtype.restrictScalars ℂ) B.subtype_injective
+  rw [traceWord_eq_add_quotient (A.comap B.subtype) w,
+    traceWord_congr (Submodule.comapSubtypeEquivOfLe hAB) w]
+
+omit [FiniteDimensional ℂ M] in
+/-- Word traces vanish on the zero subspace. -/
+lemma traceWord_bot (w : List (Fin d)) :
+    traceWord (⊥ : Submodule (WordAlgebra d) M) w = 0 := by
+  rw [traceWord_def, Subsingleton.elim (Algebra.lsmul ℂ ℂ (⊥ : Submodule (WordAlgebra d) M)
+    (ofWord w : WordAlgebra d)) 0, map_zero]
+
+/-- **Traces along an invariant flag** (*The asymmetric fundamental theorem of matrix product
+states*, Lemma 4.1), module form: for a chain `0 = N_0 ≤ N_1 ≤ ⋯ ≤ N_r` of invariant subspaces, the
+word trace on `N_r` is the sum of the word traces on the steps `N_k / N_{k-1}`. -/
+lemma traceWord_eq_sum_subquot {r : ℕ} (N : Fin (r + 1) → Submodule (WordAlgebra d) M)
+    (h0 : N 0 = ⊥) (hmono : Monotone N) (w : List (Fin d)) :
+    traceWord (N (Fin.last r)) w =
+      ∑ k : Fin r, traceWord (Submodule.subquot (N k.castSucc) (N k.succ)) w := by
+  induction r with
+  | zero =>
+    rw [Fin.last_zero, h0, traceWord_bot, Finset.univ_eq_empty, Finset.sum_empty]
+  | succ r ih =>
+    rw [Fin.sum_univ_castSucc]
+    have h := ih (N ∘ Fin.castSucc) h0 (hmono.comp Fin.strictMono_castSucc.monotone)
+    simp only [Function.comp_apply] at h
+    simp only [Fin.succ_castSucc]
+    rw [← h, ← Fin.succ_last, traceWord_eq_add_subquot (hmono (Fin.castSucc_le_succ _))]
+
 end Quotient
 
 end WordAlgebra
@@ -88,6 +130,18 @@ namespace MPSTensor
 open WordAlgebra
 
 variable {d D : ℕ} {ι : Type*}
+
+/-- **Traces along an arbitrary invariant flag** (*The asymmetric fundamental theorem of matrix
+product states*, Lemma 4.1): for a flag `0 = M_0 ⊆ M_1 ⊆ ⋯ ⊆ M_r = ℂ^{D_B}` of subspaces invariant
+under every letter of `B` and every word `w`, the empty word included, `tr B^w` is the sum of the
+traces induced on the steps `M_k / M_{k-1}`. -/
+theorem trace_evalWord_eq_sum_traceWord_subquot {DB : ℕ} (B : MPSTensor d DB) {r : ℕ}
+    (M : Fin (r + 1) → Submodule (WordAlgebra d) B.WordModule) (h0 : M 0 = ⊥)
+    (hlast : M (Fin.last r) = ⊤) (hmono : Monotone M) (w : List (Fin d)) :
+    (Kraus.evalWord B w).trace =
+      ∑ k : Fin r, traceWord (Submodule.subquot (M k.castSucc) (M k.succ)) w := by
+  rw [← traceWord_wordModule, ← traceWord_eq_sum_subquot M h0 hmono w, hlast]
+  exact traceWord_congr Submodule.topEquiv.symm w
 
 /-- On a normal tensor of positive bond dimension some generator acts nontrivially. -/
 lemma exists_ofWord_smul_ne_zero_of_isNormal (B : MPSTensor d D) (hB : Kraus.IsNormal B)

@@ -6,10 +6,10 @@
 \input{command}
 \title{Half-Chain Spectrum: Canonical Orientation, Normalization, and Decay}
 \author{}
-\date{2026-10-04}
+\date{2026-10-04, revised 2026-11-02}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{Source and index convention}
 Theorem~6 of~\cite{PerezGarcia2007MPSReps}, preceded by the calculation
@@ -102,7 +102,7 @@ The more general explicit-gap theorem allows singular nonnegative fixed
 points. Such points are outside the faithful canonical hypotheses of the
 source and are not asserted to be normal.
 
-\section{Remaining weighted multiblock scope}
+\section{Weighted multiblock canonical forms}
 The canonical form in Theorem~4 is a weighted direct sum; the three
 canonical conditions apply separately to its blocks. Condition C2 does
 not alone make the original representation a single faithful unital block.
@@ -115,15 +115,108 @@ The phrase ``just one block'' at source lines 960--963 therefore requires
 an asymptotic dominant-block interpretation rather than literal deletion
 of all subleading weighted blocks at finite length.
 
-The new source-hypothesis corollary treats an explicitly one-block
-canonical tensor. It repairs the previously missing derivation of
-normality in that setting; it does not formalize the reduction from an
-arbitrary weighted canonical representation satisfying C2 to its dominant
-block. That reduction, including the disappearing subleading physical
-contribution and spectral normalization, remains open here. Accordingly,
-the unrestricted source theorem is not marked as completely formalized.
-The boundary-index and decay corrections in the preceding sections remain
-resolved independently of this representation-scope obligation.
+The one-block source-hypothesis corollary treats an explicitly one-block
+canonical tensor and derives normality in that setting. The reduction from
+an arbitrary weighted canonical representation satisfying C2 to its
+dominant block, and the physical spectral comparison, are given below.
+The boundary-index and decay corrections in the preceding sections are
+independent of this reduction.
+
+The physical disappearance estimate can be separated from the remaining
+peripheral-simplicity step. For canonical block weights $0<w_j\leq1$,
+positivity and unitality imply $\|\psi_N(A^j)\|\leq D_j$ at every length:
+the squared norm is the trace of a transfer power and all transfer
+eigenvalues have modulus at most one. Hence the exact weighted decomposition
+gives
+\begin{align}
+    \left\|\psi_N(A)-\sum_{w_j=1}\psi_N(A^j)\right\|
+     & \leq\sum_{w_j<1}w_j^ND_j\longrightarrow0.
+    \label{eq:pgvwc07_weighted_remainder_estimate}
+\end{align}
+The declarations
+\leanid{MPSTensor.norm_mpvState_le_bondDimension_of_unital} and
+\leanid{MPSTensor.PGVWC07CanonicalFormData.tendsto_norm_mpvState_sub_unitWeight_sum}
+write this estimate directly from the canonical hypotheses, without
+assuming any convergence or decay, and both are Lean-checked.
+
+This estimate does not identify the retained sum with a unique block.
+The one-block formalization of C2 excludes other peripheral eigenvalue
+values. For several blocks that exclusion alone cannot assert algebraic
+simplicity: repeated unit-weight blocks still have peripheral value one
+with multiplicity. The source's generic exclusion of eigenvalues degenerate
+in magnitude must be distinguished from a statement about distinct values.
+No additional simplicity hypothesis is silently incorporated into the
+weighted disappearance estimate. The generic multiplicity condition is now used explicitly in
+\leanid{MPSTensor.PGVWC07CanonicalFormData.exists_dominantNormalBlock_physical_limit_of_c2}:
+every peripheral eigenvalue is one and has algebraic multiplicity one.
+Canonical sector projections are actual nonzero eigenvectors with eigenvalues
+$w_j^2$. Positivity gives $r(\mathcal E_A)\leq\|\mathcal E_A(I)\|$,
+so radius one forces a unit weight; simplicity excludes two such sectors.
+Every block eigenvalue lifts to $w_j^2$ times that eigenvalue in the full
+transfer map, which makes the retained block normal. Combined with the
+physical remainder estimate, this derives convergence to the unique dominant
+normal block. These statements are Lean-checked under the multiplicity-aware
+reading of C2 stated above.
+
+That reading is the one under which Theorem~6 holds. If C2 only asked that
+$1$ be the unique peripheral eigenvalue as a distinct value, the theorem
+would fail for several blocks. For the two letters
+$A_0=\operatorname{diag}(1,0)$ and $A_1=\operatorname{diag}(0,1)$ the
+transfer spectrum is $\{1,1,0,0\}$, so $1$ is the only eigenvalue of
+modulus one as a value. The canonical form has two unit-weight blocks of
+dimension one, each with $\Lambda=1$, and the normalized ring vector is
+$2^{-1/2}(|0^N\rangle+|1^N\rangle)$. Its half-chain spectrum is
+$(\tfrac12,\tfrac12,0,\ldots)$ at every length, which is not the
+spectrum of $\Lambda\otimes\Lambda$ for any positive diagonal $\Lambda$
+of trace one; the source's assertion that C2 leaves just one block fails
+as well. The source excludes this case by its remark that generic maps
+have no eigenvalues degenerate in magnitude, so its C2 counts the
+peripheral eigenvalue with algebraic multiplicity. With spectral radius
+one, a canonical representation always has a unit-weight block, whose
+sector projection is an eigenvector for $1$; so asking that $1$ be the only
+unit-modulus eigenvalue and algebraically simple is exactly the requirement
+that $\mathcal E_A$ have one eigenvalue of modulus one counted with
+multiplicity.
+
+The finite normalization and spectral comparison are in
+\path{TNLean/MPS/ParentHamiltonian/HalfChainPhysicalStability.lean}.
+For a vector $\psi$ on $2L$ sites, let $K_\psi$ be its coefficient matrix,
+$(K_\psi)_{\sigma\tau}=\psi(\sigma\tau)$ for configurations $\sigma,\tau$
+of the two halves, let $R_\psi=K_\psi K_\psi^\dagger$ be its reduced matrix,
+and let $\widehat\psi=\|\psi\|^{-1}\psi$, with $\widehat0=0$. For two such
+vectors $\psi,\phi$, reading each as its coefficient matrix gives
+\begin{align}
+    \|R_\psi-R_\phi\|
+    \leq(\|\psi\|+\|\phi\|)\|\psi-\phi\|,
+    \label{eq:halfchain_note_reduced_stability}
+\end{align}
+with no factor depending on the growing physical dimension. The finite
+normalization is the actual squared ring norm, and
+\begin{align}
+    \|\widehat\psi-\widehat\phi\|
+    \leq2\|\psi-\phi\|+2\bigl|\|\phi\|-1\bigr|,
+    \label{eq:halfchain_note_normalized_remainder}
+\end{align}
+including zero-norm finite lengths. Weyl's inequality at each finite size
+then bounds every difference of ordered padded half-chain eigenvalues by
+$2\|\widehat\psi-\widehat\phi\|$.
+
+The capstone
+\leanid{MPSTensor.PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2}
+in \path{TNLean/MPS/ParentHamiltonian/HalfChainGeneralCanonicalSpectrum.lean}
+combines the derived dominant block and physical remainder with these
+bounds. Its normalized faithful diagonal fixed point is derived from the
+canonical data, not added as a hypothesis. The actual weighted tensor's
+ordered normalized half-chain spectrum converges to that of the doubled
+dominant fixed point, and the finite norm is eventually positive. The
+ambient bond dimension is not separately assumed positive; the radius-one
+normalization excludes zero dimension.
+
+This capstone spells out generic C2 with algebraic multiplicity, consistent
+with the source's exclusion of eigenvalues degenerate in magnitude. It
+does not silently change the weaker distinct-value C2 hypothesis of the
+one-block theorem. With the conventions above, Theorem~6 is therefore
+formalized for a canonical representation with any number of blocks.
 
 \bibliographystyle{alpha}
 \bibliography{references}

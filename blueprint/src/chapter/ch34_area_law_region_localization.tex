@@ -1,18 +1,18 @@
 \section{Localization from an arbitrary region}
 
-\begin{theorem}[Elementary commutator bound]
+\begin{lemma}[Elementary commutator bound]
     \label{thm:qc_commutator_norm_bound}
     \lean{norm_commutator_le}
     \leanok
     For any two elements $X,A$ of a normed ring,
     $\|XA-AX\|\leq2\|A\|\|X\|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The triangle inequality and submultiplicativity give
     $\|XA-AX\|\leq\|X\|\|A\|+\|A\|\|X\|$.
 \end{proof}
 
-\begin{theorem}[Transferring time evolution across a commutator]
+\begin{lemma}[Transferring time evolution across a commutator]
     \label{thm:qc_commutator_reverse_evolution}
     \lean{norm_exp_commutator_eq}
     \leanok
@@ -21,7 +21,7 @@
     \begin{align*}
         \|[e^{tK}Ae^{-tK},B]\|=\|[A,e^{-tK}Be^{tK}]\|.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $K^*=-K$, the element $U=e^{tK}$ is unitary with $U^*=e^{-tK}$.
     Using $U^*U=UU^*=1$,
@@ -51,7 +51,7 @@
     \cite[Lemma~4.1]{OpenAI2026AreaLaw}, whose decay rate is $1/2$.
 \end{definition}
 
-\begin{theorem}[Localization from a region]
+\begin{lemma}[Localization from a region]
     \label{thm:area_region_localization}
     \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization,
         TNLean.PEPS.AreaLaw.quasilocal_region_localization}
@@ -74,14 +74,14 @@
     \end{align*}
     The same bound holds with $C=2C_0(R)$, $v=v(R,J)$ and $c=1/2$, the
     constants of Definition~\ref{def:area_graph_ball_localization_constants}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:quasilocal-lr,thm:qc_commutator_norm_bound,
         thm:qc_commutator_reverse_evolution,
         lem:qc_site_expectation_properties,lem:qc_site_expectation_commutator,
         def:area_graph_ball_localization_constants}
     Let $C_0=C_0(R)$, $v=v(R,J)$ and $c=1/2$. By
-    Lemma~\ref{lem:quasilocal-lr}, the singleton localization estimate holds
+    Theorem~\ref{lem:quasilocal-lr}, the singleton localization estimate holds
     with these constants.
     If $y\notin N_l(S)$, then $N_l(y)$ is disjoint from $S$.
     For an on-site unitary $U$ at $y$, the operator

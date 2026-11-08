@@ -625,6 +625,15 @@ theorem mulTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTenso
   rw [mulTensor_apply, mulTensor_apply, submatrix_sum_mul_kronId, kronId_mul_submatrix_sum]
   simp only [hX]
 
+/-- An intertwiner of the letters of two tensors, tensored with the identity on the left,
+intertwines the letters of their products with a common factor on the left. -/
+theorem mulTensor_mul_idKron_of_intertwine {X' : MPOTensor d D₁} {X : MPOTensor d D₂}
+    (R : MPOTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
+    (hX : ∀ i l, X' i l * P = P * X i l) (i l : Fin d) :
+    mulTensor R X' i l * idKron D₃ P = idKron D₃ P * mulTensor R X i l := by
+  rw [mulTensor_apply, mulTensor_apply, submatrix_sum_mul_idKron, idKron_mul_submatrix_sum]
+  simp only [hX]
+
 end MPOTensor
 
 namespace MPOTensor

@@ -17,7 +17,7 @@
     $U\mapsto S_NU^{\mathsf T}S_N$.
 \end{definition}
 
-\begin{theorem}[Pointwise comparison of symmetry invariance]
+\begin{lemma}[Pointwise comparison of symmetry invariance]
     \label{thm:mpu_pointwise_symmetry_invariance_comparison}
     \lean{MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise}
     \leanok
@@ -29,7 +29,7 @@
     $\mathcal T[V^{(N)}]=V^{(N)}$. Then $\mathcal U$ is
     $\mathcal S$-invariant if and only if $\mathcal V$ is
     $\mathcal T$-invariant.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpu_finite_chain_operator_symmetry}
@@ -38,7 +38,7 @@
     invariance.
 \end{proof}
 
-\begin{theorem}[An involution converts a combined fixed equation]
+\begin{lemma}[An involution converts a combined fixed equation]
     \label{thm:mpu_involution_combined_fixed_equation}
     \lean{Matrix.swapCombined_fixed_iff_leftMul}
     \leanok
@@ -50,7 +50,7 @@
          & \quad\Longleftrightarrow\quad F(QX)=QX.
         \label{eq:mpu_involution_combined_fixed}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Replacing $F(QX)$ by $F(X)Q$ and multiplying on the left by the
@@ -58,7 +58,7 @@
     (\ref{eq:mpu_involution_combined_fixed}).
 \end{proof}
 
-\begin{theorem}[Symmetry invariance under the one-sided swap]
+\begin{lemma}[Symmetry invariance under the one-sided swap]
     \label{thm:mpu_one_sided_swap_invariance}
     \lean{MPOTensor.shiftPhysicalSwap_mul_self,
         MPOTensor.isInvariantUnderSymmetry_shiftSwapDagger_iff,
@@ -81,7 +81,7 @@
     \cite{gap:mpu_swap_symmetry_one_sided}, the local transformation
     $\widetilde{\mathcal U}=\mathbb S\mathcal U$ acts on one physical leg
     rather than by two-sided conjugation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:threeMPU2_chain_formulas,
@@ -112,7 +112,7 @@
     three equivalences of invariance.
 \end{proof}
 
-\begin{theorem}[Continuous involutive physical left actions]
+\begin{lemma}[Continuous involutive physical left actions]
     \label{thm:mpu_continuous_involutive_left_action}
     \lean{MPOTensor.continuous_ketLeftMul,
         MPOTensor.ketLeftMul_involutive}
@@ -122,7 +122,7 @@
     The map $\mathcal U\mapsto Q\mathcal U$, acting on the output physical
     leg, is continuous on the space of local tensors. If $Q^2=I$, this map
     is an involution.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each tensor entry is a finite linear combination of the original entries.
@@ -130,7 +130,7 @@
     $P(Q\mathcal U)=(PQ)\mathcal U$; hence $Q^2=I$ gives the involution.
 \end{proof}
 
-\begin{theorem}[Canonical form under a physical output unitary]
+\begin{lemma}[Canonical form under a physical output unitary]
     \label{thm:mpu_canonical_form_physical_left_action}
     \lean{MPOTensor.isMPUCanonicalForm_ketLeftMul}
     \leanok
@@ -140,7 +140,7 @@
     physical output, is again in canonical form. Its canonical blocks
     have the same dimensions and weights, and the same ambient
     coisometry.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_map_rotate_physical,
@@ -152,7 +152,7 @@
     normalization, and distributes over the canonical block decomposition.
 \end{proof}
 
-\begin{theorem}[Symmetry-preserving paths under a physical involution]
+\begin{lemma}[Symmetry-preserving paths under a physical involution]
     \label{thm:mpu_symmetry_path_transport}
     \lean{MPOTensor.joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul,
         MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul}
@@ -175,7 +175,7 @@
     the tensors after unused virtual directions are adjoined up to a common
     dimension. As recorded in \cite{gap:mpu_symmetry_ancilla_transport},
     identity-ancilla stabilization is outside the statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_continuous_involutive_left_action,
@@ -189,11 +189,11 @@
     fixed-dimension equivalence applies to the paths between the enlarged
     tensors because the action of $Q$ commutes with adjoining unused
     virtual directions and
-    Theorem~\ref{thm:mpu_canonical_form_physical_left_action} preserves
+    Lemma~\ref{thm:mpu_canonical_form_physical_left_action} preserves
     canonical form at both endpoints.
 \end{proof}
 
-\begin{theorem}[Strict swap comparison]
+\begin{lemma}[Strict swap comparison]
     \label{thm:mpu_strict_swap_comparison}
     \lean{MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff,
@@ -211,20 +211,20 @@
     transposition, and strict equivalence under conjugation is preserved.
     As recorded in \cite{gap:mpu_symmetry_ancilla_transport},
     identity-ancilla stabilization is outside this statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_one_sided_swap_invariance,
         thm:mpu_symmetry_path_transport,
         thm:threeMPU2_chain_formulas}
     Since the swap $Q=\mathbb S$ is a unitary involution and
-    Theorem~\ref{thm:mpu_one_sided_swap_invariance} gives the three
+    Lemma~\ref{thm:mpu_one_sided_swap_invariance} gives the three
     pointwise invariance equivalences,
-    Theorem~\ref{thm:mpu_symmetry_path_transport} yields the three
+    Lemma~\ref{thm:mpu_symmetry_path_transport} yields the three
     strict-equivalence correspondences.
 \end{proof}
 
-\begin{theorem}[Physical left actions commute with blocking]
+\begin{lemma}[Physical left actions commute with blocking]
     \label{thm:mpu_physical_left_action_blocking}
     \lean{MPOTensor.blockTensor_ketLeftMul}
     \leanok
@@ -237,7 +237,7 @@
         \label{eq:mpu_left_action_blocking}
     \end{align}
     The identity includes the empty block, with $Q^{\otimes0}=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding each output-leg action in the ordered product of $k$ local
@@ -247,7 +247,7 @@
     configurations gives (\ref{eq:mpu_left_action_blocking}).
 \end{proof}
 
-\begin{theorem}[Symmetry-preserving paths after positive blocking]
+\begin{lemma}[Symmetry-preserving paths after positive blocking]
     \label{thm:mpu_positive_block_symmetry_path_transport}
     \lean{MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul}
     \leanok
@@ -267,20 +267,20 @@
     under $\mathcal T^{[k]}$. As recorded in
     \cite{gap:mpu_symmetry_ancilla_transport}, no identity ancillas are
     included in this comparison.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_symmetry_path_transport,
         thm:mpu_physical_left_action_blocking}
     For each positive blocking length $k$, the matrix $Q^{\otimes k}$ is
     again a unitary involution on the blocked physical space, so
-    Theorem~\ref{thm:mpu_symmetry_path_transport} applies to
+    Lemma~\ref{thm:mpu_symmetry_path_transport} applies to
     $\mathcal U^{[k]}$ and $\mathcal V^{[k]}$. Identifying the transformed
     endpoints by (\ref{eq:mpu_left_action_blocking}) and quantifying over
     $k>0$ gives the equivalence.
 \end{proof}
 
-\begin{theorem}[Swap comparison after positive blocking]
+\begin{lemma}[Swap comparison after positive blocking]
     \label{thm:mpu_positive_block_swap_comparison}
     \lean{MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_shiftSwapDagger_iff,
         MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_shiftSwapTranspose_iff,
@@ -300,7 +300,7 @@
     blocked adjunction. The analogous statements hold for transposition
     and conjugation; as in \cite{gap:mpu_symmetry_ancilla_transport}, no
     ancilla enlargement is asserted.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_positive_block_symmetry_path_transport,
@@ -316,6 +316,6 @@
     $\overline{B_N}=B_N$. Hence on every blocked tensor the same
     one-sided involution gives the three symmetry-invariance
     correspondences, and
-    Theorem~\ref{thm:mpu_positive_block_symmetry_path_transport} with
+    Lemma~\ref{thm:mpu_positive_block_symmetry_path_transport} with
     $Q=\mathbb S$ completes the proof.
 \end{proof}

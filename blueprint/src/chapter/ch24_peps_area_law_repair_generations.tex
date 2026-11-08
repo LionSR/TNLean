@@ -1,0 +1,636 @@
+\section{Current and final regions of the repair family}
+\label{sec:area_law_repair_generations}
+
+The uniform repair induction controls every generation of the recursive
+family of Definition~\ref{def:area_law_repair_stage}. This section follows the
+regions from one generation to the next: which current regions survive, the
+final region of each retained identifier, the terminal interiors left behind,
+and the number of sites and identifiers produced in finitely many generations.
+
+% Source: 10-geometry.tex, retained identifiers, lines 398--409;
+% comparisons with later actual regions, lines 584--591.
+\begin{definition}[Inclusions between generations]
+    \label{def:area_law_repair_inclusions}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairNextOldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairRegionLift_eq_oldInclusion}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    With $\iota_{j,j+1}:I_j\to I_{j+1}$ the retained-identifier inclusion of
+    Definition~\ref{def:area_law_repair_stage}, define $\iota_{j,j+\ell}:I_j\to I_{j+\ell}$ recursively by
+    \begin{align}
+        \iota_{j,j} & =\operatorname{id}_{I_j},
+                    & \iota_{j,j+\ell+1}
+                    & =\iota_{j+\ell,j+\ell+1}\circ\iota_{j,j+\ell}.
+        \label{eq:area_law_repair_inclusions}
+    \end{align}
+\end{definition}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% comparisons with later actual regions, lines 584--591.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Decrease of retained current regions]
+    \label{thm:area_law_repair_current_inclusion_subset}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_subset}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    For all $j,n\ge0$ and $i\in I_j$, $R_{\iota_{j,j+n}(i)}^{(j+n)}\subseteq R_i^{(j)}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_successor_regions,def:area_law_repair_inclusions}
+    Induct on $n$ using $R_{\iota_{j,j+1}(i)}^{(j+1)}=R_i^{(j)}\setminus Q_{K_j}\subseteq R_i^{(j)}$
+    from (\ref{eq:area_law_repair_successor}) and (\ref{eq:area_law_repair_inclusions}).
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% current regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Current regions under successive inclusions]
+    \label{thm:area_law_repair_current_inclusion_add}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_add}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    For all $j,n,m\ge0$ and $i\in I_j$,
+    \begin{align}
+        R_{\iota_{j,j+(n+m)}(i)}^{(j+(n+m))}
+         & =R_{\iota_{j+n,(j+n)+m}(\iota_{j,j+n}(i))}^{((j+n)+m)}.\notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_successor_regions,def:area_law_repair_inclusions}
+    Induct on $m$: $m=0$ is immediate, and at $m+1$ both sides subtract the same removal union
+    $Q_{K_{j+n+m}}$ by (\ref{eq:area_law_repair_successor}) and (\ref{eq:area_law_repair_inclusions}).
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% termination, lines 538--541; current regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Removal by an empty mark family]
+    \label{thm:area_law_repair_removal_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet_eq_empty}
+    \leanok
+    \uses{def:area_law_simultaneous_remnants}
+    If $K=\varnothing$, then $\bigcup_{p\in K}Q(v_p,S_p)=\varnothing$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Immediate since the index set $K$ is empty.
+\end{proof}
+
+\begin{lemma}[Current regions after an empty generation]
+    \label{thm:area_law_repair_current_empty_step}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_one_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    If $K_j=\varnothing$, then $R_{\iota_{j,j+1}(i)}^{(j+1)}=R_i^{(j)}$ for every $i\in I_j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_simultaneous_remnants,thm:area_law_repair_removal_empty}
+    By (\ref{eq:area_law_repair_successor}) and Lemma~\ref{thm:area_law_repair_removal_empty},
+    $R_{\iota_{j,j+1}(i)}^{(j+1)}=R_i^{(j)}\setminus\varnothing=R_i^{(j)}$.
+\end{proof}
+
+\begin{lemma}[Stability after an empty generation]
+    \label{thm:area_law_repair_current_empty_later}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    If $K_j=\varnothing$, then $R_{\iota_{j,j+n}(i)}^{(j+n)}=R_i^{(j)}$ for all $n\ge0$ and $i\in I_j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_ancestors,thm:area_law_repair_current_empty_step}
+    Since $K_j=\varnothing$ implies $K_{j+n}=\varnothing$ for all $n\ge0$, induction on $n$ via
+    Lemma~\ref{thm:area_law_repair_current_empty_step} and (\ref{eq:area_law_repair_inclusions})
+    yields the identity.
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% current and final regions, lines 558--561 and 584--591.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Final regions at an empty generation]
+    \label{thm:area_law_repair_final_current_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion_eq_current_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    For $i\in I_j$, let $R_i^{(\infty,j)}=\bigcap_{n\ge0}R_{\iota_{j,j+n}(i)}^{(j+n)}$.
+    If $K_j=\varnothing$, then $R_i^{(\infty,j)}=R_i^{(j)}$ for every $i\in I_j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_inclusions,thm:area_law_repair_current_empty_later}
+    By Lemma~\ref{thm:area_law_repair_current_empty_later}, every term in
+    $\bigcap_{n\ge0}R_{\iota_{j,j+n}(i)}^{(j+n)}$ equals $R_i^{(j)}$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% replacement instructions, lines 398--409; final actual regions,
+% lines 558--561; comparison with earlier actual regions, lines 584--591.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Auxiliary consequence of the retained-region construction.
+\begin{lemma}[Final regions of retained identifiers]
+    \label{thm:area_law_repair_final_retention}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion_eq_final_oldInclusion}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    For every $j,n\ge0$ and $i\in I_j$, $R_i^{(\infty,j)}=R_{\iota_{j,j+n}(i)}^{(\infty,j+n)}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_inclusions,
+        thm:area_law_repair_current_inclusion_subset,
+        thm:area_law_repair_current_inclusion_add}
+    Since $A_m=R_{\iota_{j,j+m}(i)}^{(j+m)}$ decreases in $m$
+    (Lemma~\ref{thm:area_law_repair_current_inclusion_subset}), Lemma~\ref{thm:area_law_repair_current_inclusion_add}
+    gives $R_i^{(\infty,j)}=\bigcap_{m\ge0}A_m=\bigcap_{m\ge0}A_{n+m}=R_{\iota_{j,j+n}(i)}^{(\infty,j+n)}$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% replacement instructions, lines 398--409; final actual regions,
+% lines 558--561; comparison with earlier actual regions, lines 584--591.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Auxiliary consequence of the existing retained-region construction.
+\begin{lemma}[Earlier final regions at an empty generation]
+    \label{thm:area_law_repair_final_current_later_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion_eq_current_oldInclusion_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    If $K_{j+n}=\varnothing$ ($j,n\ge0$), then
+    $R_i^{(\infty,j)}=R_{\iota_{j,j+n}(i)}^{(j+n)}$ for every $i\in I_j$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_repair_final_retention,
+        thm:area_law_repair_final_current_empty}
+    Combine Lemmas~\ref{thm:area_law_repair_final_retention} and
+    \ref{thm:area_law_repair_final_current_empty} at generation $j+n$.
+\end{proof}
+
+% Source: 10-geometry.tex, ordering before geometry:birth-separation,
+% lines 565--571. The dummy is excluded from the physical order.
+\begin{definition}[Birth rank]
+    \label{def:area_law_repair_birth_rank}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionBirthRank,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageBirthRank}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Define $\operatorname{rk}_j:I_j\to\mathbb N$ by assigning $\operatorname{rk}_0(i)=0$ to
+    initial primaries and the dummy $*_0$, $\operatorname{rk}_0(i)=1$ to initial belts, and for
+    $i\in I_j$ and fresh $q\in I_{j+1}$,
+    \begin{align}
+        \operatorname{rk}_{j+1}(\iota_{j,j+1}(i))
+         & =\operatorname{rk}_j(i),
+         & \operatorname{rk}_{j+1}(q) & =j+2.
+        \label{eq:area_law_repair_birth_rank}
+    \end{align}
+    The dummy is excluded from the physical order. Birth rank prescribes
+    the order of the birth classes; ties within each class may be broken
+    arbitrarily, as prescribed before
+    \cite[Lemma~11.5]{OpenAI2026AreaLaw}.
+\end{definition}
+
+% Source: 10-geometry.tex, terminal interiors, lines 398--409;
+% open actual regions and closed birth regions, lines 558--561.
+% This set is not identified with the full exceptional remainder, which
+% also involves the current dummy region and the treatment of interfaces.
+\begin{definition}[Accumulated terminal interiors]
+    \label{def:area_law_repair_terminal_interiors}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairTerminalInteriors}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    With $E_{\mathrm{term}}(\mathcal D_j)$ the terminal-square interiors at generation $j$
+    (Definition~\ref{def:area_law_repair_terminal_children}), define
+    \begin{align}
+        \mathcal E_{\mathrm{term}}
+         & =\bigcup_{j\ge0}E_{\mathrm{term}}(\mathcal D_j).
+        \label{eq:area_law_repair_terminal_interiors}
+    \end{align}
+\end{definition}
+
+% Source: 10-geometry.tex, geometry:bad-sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Sites in one terminal square]
+    \label{thm:area_law_repair_terminal_square_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_repairHalfSide_le}
+    \leanok
+    \uses{def:area_law_repair_square,def:peps_closed_square_sample}
+    For finite $\Lambda\subset\mathbb Z^2$, $v\in\mathbb R^2$, $S>0$, and $S_*\in\mathbb R$ with
+    $d(S)<S_*$, the closed square sample $K(v,r)$ (Definition~\ref{def:peps_closed_square_sample})
+    satisfies $|K(v,d(S))|\le(2S_*+1)^2$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_closed_square_card}
+    Since $0<d(S)<S_*$, $K(v,d(S))\subseteq K(v,S_*)$, and Lemma~\ref{thm:peps_closed_square_card}
+    at radius $S_*$ gives $|K(v,S_*)|\le(2S_*+1)^2$.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:bad-sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Terminal sites in finitely many generations]
+    \label{thm:area_law_repair_terminal_prefix_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_repairTerminalInteriorSites_prefix_le}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_children}
+    For any $o\in\mathbb R^2$, $S_*\in\mathbb R$, $C_0\ge2$, $k_0\ge50{,}000{,}000$, finite
+    $\Lambda\subset\mathbb Z^2$, $A\subseteq\Lambda$, and $N\in\mathbb N$,
+    \begin{align}
+        \left|A\cap\bigcup_{0\le j<N}E_{\mathrm{term}}(\mathcal D_j)\right|
+         & \le (2S_*+1)^2\sum_{0\le j<N}|K_j|.
+        \label{eq:area_law_repair_terminal_prefix_sites}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_finite_marks,
+        thm:area_law_repair_terminal_square_sites}
+    Each $K_j$ is finite (Lemma~\ref{thm:area_law_repair_finite_marks}) and each terminal square at
+    generation $j$ contains $\le(2S_*+1)^2$ lattice sites
+    (Lemma~\ref{thm:area_law_repair_terminal_square_sites}); summing over $p\in K_j$ ($d(S_p)<S_*$)
+    and $0\le j<N$ yields (\ref{eq:area_law_repair_terminal_prefix_sites}).
+\end{proof}
+% Source: 10-geometry.tex, termination, lines 538--541;
+% final regions, lines 558--561; exceptional sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Terminal interiors before an empty generation]
+    \label{thm:area_law_repair_terminal_interiors_before_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairTerminalInteriors_eq_iUnion_lt_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_terminal_interiors}
+    If $N\in\mathbb N$ satisfies $K_N=\varnothing$, then
+    $\mathcal E_{\mathrm{term}}=\bigcup_{0\le j<N}E_{\mathrm{term}}(\mathcal D_j)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_terminal_children,thm:area_law_repair_empty_persistence}
+    By Lemma~\ref{thm:area_law_repair_empty_persistence}, $K_j=\varnothing$ and hence
+    $E_{\mathrm{term}}(\mathcal D_j)=\varnothing$ for all $j\ge N$.
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--417;
+% geometry:repair-induction, lines 474--478 and 526--541;
+% final regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Current regions avoid accumulated terminal interiors]
+    \label{thm:area_law_repair_current_terminal_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_disjoint_terminalInteriors_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_interiors,
+        lem:area_law_repair_metric_invariants}
+    Under the metric hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}, if
+    $K_N=\varnothing$ ($N\in\mathbb N$), then $R_i^{(N)}\cap\mathcal E_{\mathrm{term}}=\varnothing$
+    for every $i\in I_N$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_terminal_interiors_before_empty,
+        def:area_law_repair_terminal_children,def:area_law_repair_ancestors,
+        thm:area_law_repair_current_terminal_disjoint}
+    By Lemma~\ref{thm:area_law_repair_terminal_interiors_before_empty},
+    $\mathcal E_{\mathrm{term}}=\bigcup_{j<N}E_{\mathrm{term}}(\mathcal D_j)\subseteq\mathcal E_N$,
+    and $R_i^{(N)}\cap\mathcal E_N=\varnothing$ by Lemma~\ref{thm:area_law_repair_current_terminal_disjoint}.
+\end{proof}
+
+% Source: 10-geometry.tex, positive boundary, lines 102--105;
+% replacement instructions, lines 398--417; lattice partition, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Unique final-region membership outside terminal interiors]
+    \label{thm:area_law_repair_final_lattice_partition_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_terminal_or_unique_final_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,
+        def:area_law_dyadic_origin,def:area_law_repair_terminal_interiors,
+        lem:area_law_repair_metric_invariants}
+    At $o=(\sqrt2,\sqrt3)$, under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}
+    with $S_*\ge1$, $b=|\partial_\Lambda A|>0$, and $K_N=\varnothing$ ($N\in\mathbb N$), every
+    $z\in\mathbb Z^2$ satisfies exactly one of:
+    \begin{enumerate}
+        \item $z\in\mathcal E_{\mathrm{term}}$ and $z\notin R_i^{(\infty,N)}$ for all $i\in I_N$;
+        \item $z\notin\mathcal E_{\mathrm{term}}$ and there exists a unique $i\in I_N$ with
+              $z\in R_i^{(\infty,N)}$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_current_terminal_empty,
+        thm:area_law_repair_final_current_empty,
+        thm:area_law_repair_current_disjoint,
+        thm:area_law_repair_lattice_cover_before,
+        def:area_law_repair_terminal_interiors}
+    Since $R_i^{(\infty,N)}=R_i^{(N)}$ (Lemma~\ref{thm:area_law_repair_final_current_empty}),
+    Lemma~\ref{thm:area_law_repair_current_terminal_empty} gives (1) when
+    $z\in\mathcal E_{\mathrm{term}}$, while for $z\notin\mathcal E_{\mathrm{term}}$
+    Lemmas~\ref{thm:area_law_repair_lattice_cover_before} and
+    \ref{thm:area_law_repair_current_disjoint} give existence and uniqueness in (2).
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:trim-radius, lines 393--399.
+\begin{lemma}[Closed removal sets]
+    \label{thm:area_law_repair_removal_closed}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isClosed_repairRemovalSet}
+    \leanok
+    \uses{def:area_law_repair_square,def:area_law_simultaneous_remnants}
+    For any finite $K$, $Q_K=\bigcup_{p\in K}Q(v_p,S_p)$ is closed.
+\end{lemma}
+\begin{proof}\leanok
+    Finite union of closed squares $Q(v_p,S_p)$.
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 393--417;
+% remembered closed births and current regions, lines 558--561.
+\begin{lemma}[Current regions remain inside their births]
+    \label{thm:area_law_repair_current_birth_containment}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_subset_birth}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_successor_regions}
+    For every $j\ge0$ and $i\in I_j$,
+    \begin{align}
+        R_i^{(j)} & \subseteq B_i^{(j)}.
+        \label{eq:area_law_repair_current_birth_containment}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    By induction on $j$: at $j=0$, $R_i^{(0)}=\operatorname{int}B_i^{(0)}\subseteq B_i^{(0)}$
+    by (\ref{eq:area_law_repair_initial}); at $j+1$, (\ref{eq:area_law_repair_successor}) gives
+    $R_i^{(j+1)}=R_i^{(j)}\setminus Q_{K_j}\subseteq B_i^{(j)}=B_i^{(j+1)}$ for old $i$ and
+    $R_q^{(j+1)}=\operatorname{int}B_q^{(j+1)}\subseteq B_q^{(j+1)}$ for fresh $q$.
+\end{proof}
+
+% Source: 10-geometry.tex, initial regions, lines 172--177,
+% 212--218 and 313--316; replacement instructions, lines 393--417;
+% open actual regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Openness of current regions]
+    \label{thm:area_law_repair_current_open}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isOpen_repairStage_current}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    For every $j\ge0$ and $i\in I_j$, $R_i^{(j)}$ is open.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:area_law_initial_open_regions,
+        def:area_law_repair_successor_regions,thm:area_law_repair_finite_marks,
+        thm:area_law_repair_removal_closed}
+    Induct on $j$: $R_i^{(0)}$ is an interior, and at $j+1$ subtracting the closed set $Q_{K_j}$
+    (Lemmas~\ref{thm:area_law_repair_finite_marks} and \ref{thm:area_law_repair_removal_closed})
+    from open $R_i^{(j)}$ or taking $\operatorname{int}B_q^{(j+1)}$ yields open sets.
+\end{proof}
+
+% Source: 10-geometry.tex, actual regions and dummy exclusion, lines 558--568;
+% final restriction to the cut, lines 777--789.
+\begin{definition}[Lattice sites in the current regions]
+    \label{def:area_law_repair_region_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairStage.regionSites,
+        TNLean.PEPS.AreaLaw.Geometry.RepairStage.RetainedRegionIndex}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    For a stage $\mathcal D$ with current regions $(R_i)_{i\in I}$ and dummy $*$, and a finite
+    cut $A\subseteq\Lambda$, define the finite site sets and retained index set
+    \begin{align}
+        X_i(A) & = A\cap R_i,
+               & I_A          & = \{i\in I\setminus\{*\}:X_i(A)\ne\varnothing\}.
+        \label{eq:area_law_repair_region_sites}
+    \end{align}
+\end{definition}
+
+% Source: 10-geometry.tex, initial dummy region, lines 172--177;
+% geometry:bad-sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Counting surviving dummy sites]
+    \label{thm:area_law_repair_dummy_sites_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_repairStage_dummySites_le}
+    \leanok
+    \uses{def:area_law_repair_region_sites}
+    With $b=|\partial_\Lambda A|$, every generation $j\ge0$ satisfies
+    \begin{align}
+        |X_{*_j}(A)|
+         & \le 2\bigl(2(C_0+1)2^{k_0}+1\bigr)^2 b.
+        \label{eq:area_law_repair_dummy_sites_count}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_repair_current_birth_containment,
+        thm:area_law_neighborhood_endpoint_distance,
+        thm:area_law_cell_counts}
+    By (\ref{eq:area_law_repair_current_birth_containment}) and
+    Lemma~\ref{thm:area_law_neighborhood_endpoint_distance}, every $x\in X_{*_j}(A)\subseteq\overline{N_{k_0}}$
+    lies within $\ell_\infty$-distance $r=(C_0+1)2^{k_0}$ of some $z\in Z$ ($|Z|\le2b$), and each
+    such ball contains $(2r+1)^2$ lattice sites (Lemma~\ref{thm:area_law_cell_counts}).
+\end{proof}
+
+% Source: 10-geometry.tex, final lattice partition, lines 558--561;
+% geometry:bad-sites, lines 694--707.
+\begin{definition}[Exceptional lattice sites]
+    \label{def:area_law_repair_exceptional_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStageExceptionalSites}
+    \leanok
+    \uses{def:area_law_repair_region_sites,
+        def:area_law_repair_terminal_interiors}
+    At generation $N$, define the exceptional lattice sites of $A$ by
+    \begin{align}
+        D_N(A)
+         & = A\cap\bigl(R_{*_N}^{(N)}\cup\mathcal E_{\mathrm{term}}\bigr).
+        \label{eq:area_law_repair_exceptional_sites}
+    \end{align}
+\end{definition}
+
+% Source: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+% Section 11, geometry:bad-sites, lines 694--707.
+\begin{lemma}[Exceptional sites at an empty generation]
+    \label{thm:area_law_repair_exceptional_sites_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_repairStageExceptionalSites_le_prefix}
+    \leanok
+    \uses{def:area_law_repair_exceptional_sites,def:area_law_hamiltonian}
+    If $K_N=\varnothing$, then with $C_{\mathrm{dum}}=2\bigl(2(C_0+1)2^{k_0}+1\bigr)^2$ and
+    $b=|\partial_\Lambda A|$,
+    \begin{align}
+        |D_N(A)|
+         & \le C_{\mathrm{dum}}b+(2S_*+1)^2\sum_{0\le j<N}|K_j|.
+        \label{eq:area_law_repair_exceptional_sites_prefix_count}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_terminal_interiors_before_empty,
+        thm:area_law_repair_dummy_sites_count,
+        thm:area_law_repair_terminal_prefix_sites}
+    By Lemma~\ref{thm:area_law_repair_terminal_interiors_before_empty},
+    $D_N(A)=X_{*_N}(A)\cup\bigl(A\cap\bigcup_{0\le j<N}E_{\mathrm{term}}(\mathcal D_j)\bigr)$,
+    so (\ref{eq:area_law_repair_dummy_sites_count}) and
+    (\ref{eq:area_law_repair_terminal_prefix_sites}) yield
+    (\ref{eq:area_law_repair_exceptional_sites_prefix_count}).
+\end{proof}
+
+% Source: 10-geometry.tex, finiteness after restriction to the cut,
+% lines 777--780.
+\begin{lemma}[Finiteness of the retained identifiers]
+    \label{lem:area_law_repair_region_sites_finite}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairStage.finite_retainedRegionIndex}
+    \leanok
+    \uses{def:area_law_repair_region_sites}
+    If $(R_i)_{i\in I}$ are pairwise disjoint, then $I_A$ is finite for every finite $A$.
+\end{lemma}
+\begin{proof}\leanok
+    The nonempty sets $(X_i(A))_{i\in I_A}$ are pairwise disjoint subsets of the finite set $A$.
+\end{proof}
+
+% Source: 10-geometry.tex, birth order, lines 565--568;
+% final restriction to the cut and finite partition, lines 777--780.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Ordering the retained regions at an empty generation]
+    \label{thm:area_law_repair_ordered_partition_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.exists_orderedTwoFamilyPartition_of_isEmpty}
+    \leanok
+    \uses{def:area_law_two_family_partition,def:area_law_repair_region_sites,
+        def:area_law_repair_exceptional_sites,def:area_law_repair_birth_rank,
+        def:area_law_dyadic_origin,lem:area_law_repair_metric_invariants}
+    At $o=(\sqrt2,\sqrt3)$, under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}
+    with $S_*\ge1$, $|\partial_\Lambda A|>0$, and $K_N=\varnothing$ ($N\in\mathbb N$), there exist
+    an ordered two-family partition (Definition~\ref{def:area_law_two_family_partition}) of $A$
+    with pieces $(X_i)_{0\le i<m}$, labels $(f_i)_{0\le i<m}$, residual $D=D_N(A)$, and a bijection
+    $e:\{0,\ldots,m-1\}\to I_A^{(N)}$ such that
+    \begin{align}
+        X_i    & = A\cap R_{e(i)}^{(N)},                                         &
+        f_i    & = \xi_{e(i)}^{(N)},                                             &
+        i\le j & \implies \operatorname{rk}_N(e(i))\le\operatorname{rk}_N(e(j)).
+        \label{eq:area_law_repair_ordered_partition_empty}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_repair_region_sites_finite,
+        thm:area_law_repair_current_disjoint,
+        thm:area_law_repair_final_lattice_partition_empty,
+        thm:area_law_repair_final_current_empty,
+        thm:area_law_repair_current_terminal_empty}
+    By Lemma~\ref{thm:area_law_repair_current_disjoint} and
+    Lemma~\ref{lem:area_law_repair_region_sites_finite}, $I_A^{(N)}$ is finite; choose a bijection
+    $e:\{0,\ldots,m-1\}\to I_A^{(N)}$ with $\operatorname{rk}_N\circ e$ nondecreasing.
+    Lemmas~\ref{thm:area_law_repair_final_current_empty},
+    \ref{thm:area_law_repair_current_terminal_empty}, and
+    \ref{thm:area_law_repair_final_lattice_partition_empty} then show that $(X_i)_{0\le i<m}$ and
+    $D=D_N(A)$ form an ordered two-family partition of $A$ satisfying
+    (\ref{eq:area_law_repair_ordered_partition_empty}).
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 393--417;
+% geometry:total-repairs, lines 682--691; restriction to A, lines 777--789.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Counting retained regions in finitely many generations]
+    \label{thm:area_law_repair_retained_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.finite_and_card_repairStage_retainedRegionIndex_le}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_region_sites}
+    For every $N\in\mathbb N$, $I_A^{(N)}$ (Definition~\ref{def:area_law_repair_region_sites}) is
+    finite and satisfies
+    \begin{align}
+        |I_A^{(N)}| & \le |I_A^{(0)}|+8\sum_{0\le j<N}|K_j|.
+        \label{eq:area_law_repair_retained_prefix_count}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_initial_open_disjoint,
+        lem:area_law_repair_region_sites_finite,
+        thm:area_law_repair_finite_marks,thm:area_law_cell_fan_run_count,
+        def:area_law_repair_successor_regions}
+    $I_A^{(0)}$ is finite by Lemma~\ref{thm:area_law_initial_open_disjoint} and
+    Lemma~\ref{lem:area_law_repair_region_sites_finite}. At step $j$, old regions shrink while at
+    most $8|K_j|$ fresh identifiers are born (Lemmas~\ref{thm:area_law_repair_finite_marks} and
+    \ref{thm:area_law_cell_fan_run_count}), so $|I_A^{(j+1)}|\le|I_A^{(j)}|+8|K_j|$.
+\end{proof}
+
+% Source: 10-geometry.tex, birth classes, lines 565--568;
+% geometry:total-repairs, lines 685--692; nonprimary errors, lines 796--798.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[Counting identifiers of positive birth rank]
+    \label{thm:area_law_repair_positive_rank_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_prefix_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_repair_birth_rank}
+    With $B>0$ from Lemma~\ref{thm:area_law_initial_belt_count} and $b=|\partial_\Lambda A|$,
+    for every $N\in\mathbb N$, the set $I_N^+=\{i\in I_N:\operatorname{rk}_N(i)>0\}$ is finite and satisfies
+    \begin{align}
+        |I_N^+| & \le B(2C_0+1)^2b+8\sum_{0\le j<N}|K_j|.
+        \label{eq:area_law_repair_positive_rank_prefix_count}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_initial_belt_count,
+        def:area_law_repair_birth_rank,
+        def:area_law_repair_successor_regions,
+        thm:area_law_repair_finite_marks,thm:area_law_cell_fan_run_count}
+    At $N=0$, $I_0^+=\mathcal I_{\mathrm{belt}}$ has $|I_0^+|\le B(2C_0+1)^2b$ by
+    Lemma~\ref{thm:area_law_initial_belt_count}; at step $j$, at most $8|K_j|$ fresh identifiers
+    (of rank $j+2>0$) are added by Definition~\ref{def:area_law_repair_successor_regions} and
+    Lemma~\ref{thm:area_law_cell_fan_run_count}, so $|I_{j+1}^+|\le|I_j^+|+8|K_j|$.
+\end{proof}
+
+\begin{lemma}[A uniform count of retained positive-rank identifiers]
+    \label{thm:area_law_repair_retained_positive_rank_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_positive_rank_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_repair_birth_rank,
+        def:area_law_repair_region_sites,
+        lem:area_law_repair_metric_invariants}
+    For every $S_*>1$, there exists $L>0$ such that under the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, for every $N\in\mathbb N$, the set
+    $I_{A,N}^+=\{i\in I_A^{(N)}:\operatorname{rk}_N(i)>0\}$ is finite and satisfies
+    \begin{align}
+        |I_{A,N}^+| & \le L(2C_0+1)^2|\partial_\Lambda A|.
+        \label{eq:area_law_repair_retained_positive_rank_count}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_positive_rank_prefix_count,
+        thm:area_law_repair_total_mark_prefix_count}
+    Since $I_{A,N}^+\subseteq I_N^+$, combining (\ref{eq:area_law_repair_positive_rank_prefix_count})
+    of Lemma~\ref{thm:area_law_repair_positive_rank_prefix_count} with
+    (\ref{eq:area_law_repair_total_mark_prefix_count}) of
+    Lemma~\ref{thm:area_law_repair_total_mark_prefix_count} gives
+    (\ref{eq:area_law_repair_retained_positive_rank_count}) with $L=B+8M$.
+\end{proof}
+
+\begin{lemma}[The nonprimary error sum at a finite generation]
+    \label{thm:area_law_repair_retained_nonprimary_error_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_positive_rank_error_sum_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_repair_characteristic_length,
+        def:area_law_repair_region_sites,def:area_law_repair_birth_rank,
+        lem:area_law_repair_metric_invariants}
+    For every $S_*>1$, with $L>0$ from Lemma~\ref{thm:area_law_repair_retained_positive_rank_count},
+    under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}, for any $C_B>0$,
+    $N\in\mathbb N$, and $n_i=\lceil C_B\tau_N(i)\rceil$ ($i\in I_{A,+}^{(N)}=I_{A,N}^+$),
+    \begin{align}
+        \sum_{i\in I_{A,+}^{(N)}}(n_i^{100})^{-1}
+         & \le L(2C_0+1)^2|\partial_\Lambda A|.
+        \label{eq:area_law_repair_retained_nonprimary_error_sum}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_characteristic_length_positive,
+        thm:area_law_repair_retained_positive_rank_count}
+    For every $i\in I_{A,+}^{(N)}$, $i\ne *_N$ gives $\tau_N(i)>0$
+    (Lemma~\ref{thm:area_law_repair_characteristic_length_positive}), so $n_i=\lceil C_B\tau_N(i)\rceil\ge1$
+    and $(n_i^{100})^{-1}\le1$; summing over $I_{A,+}^{(N)}$ and applying
+    (\ref{eq:area_law_repair_retained_positive_rank_count}) gives
+    (\ref{eq:area_law_repair_retained_nonprimary_error_sum}).
+\end{proof}

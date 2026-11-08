@@ -3,7 +3,7 @@
 \section{Identifying the fusion and action comparisons}
 \label{sec:glm_mixed_comparison}
 
-\begin{theorem}[Entries of the two action trees]
+\begin{lemma}[Entries of the two action trees]
     \leanok
     \label{thm:glm_action_tree_entries}
     \lean{MPOTensor.fusionThenActionSynthesis_apply,
@@ -38,7 +38,7 @@
     \end{align}
     These formulas hold for arbitrary matrices of the indicated shapes.
     Empty intermediate bond spaces give empty sums.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding each matrix product and separating a product bond into its two
@@ -48,7 +48,7 @@
     incoming coordinates as the fusion-then-action tree.
 \end{proof}
 
-\begin{theorem}[Trace formulas for the two fusion comparisons]
+\begin{lemma}[Trace formulas for the two fusion comparisons]
     \leanok
     \label{thm:glm_fusion_comparison_traces}
     \lean{MPOTensor.CompleteZipperFusionFamily.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one,
@@ -75,7 +75,7 @@
          & =n_d^{-1}\operatorname{tr}(H_{\rm L}^{t}S_{\rm R}^{q}).
         \label{eq:glm_fusion_comparison_traces}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpdo_complete_zipper_printed_fmove}
@@ -124,7 +124,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Identification of the source fusion matrix]
+\begin{lemma}[Identification of the source fusion matrix]
     \leanok
     \label{thm:glm_source_fusion_comparison}
     \lean{MPOTensor.ofBiorthogonal_inversePrintedFMatrix_eq_fusionFMatrix}
@@ -139,7 +139,7 @@
     \end{align}
     for every $t\in\mathcal I_{\rm L}(a,b,c;d)$ and
     $q\in\mathcal I_{\rm R}(a,b,c;d)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_fusion_comparison_traces}
@@ -150,7 +150,7 @@
     flattening, so their normalized traces agree.
 \end{proof}
 
-\begin{theorem}[Identification of the auxiliary action comparison]
+\begin{lemma}[Identification of the auxiliary action comparison]
     \leanok
     \label{thm:glm_auxiliary_action_comparison}
     \lean{MPOTensor.triangular_printedFMatrix_eq_actionLMatrix}
@@ -171,7 +171,7 @@
     whenever $i<M_{az}^{y}$, $j<M_{bx}^{z}$, $k<M_{cx}^{y}$, and
     $\mu<N_{ab}^{c}$. Thus the auxiliary row $(z,j,i)$ is reordered as
     $(z,i,j)$ and the auxiliary column $(c,\mu,k)$ as $(c,k,\mu)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_fusion_comparison_traces,thm:glm_action_tree_entries}
@@ -186,9 +186,9 @@
 
 Only virtual maps occur in these coefficient identifications. They therefore
 apply equally to a commonly blocked auxiliary family with those same maps.
-Theorem~\ref{thm:glm_triangular_boundary_inverse} constructs the common
+Lemma~\ref{thm:glm_triangular_boundary_inverse} constructs the common
 blocking needed for the auxiliary family. Its specialization to the
-coupled pentagon is Theorem~\ref{thm:glm_actual_mixed_pentagon}.
+coupled pentagon is Lemma~\ref{thm:glm_actual_mixed_pentagon}.
 
 % Exact source convention: Papers/2203.12563/REsubmission.tex,
 % Fsymbolsdef, eq:F_symbol2, 1Fsymbol, and coupledpent (lines 554--562).

@@ -12,28 +12,27 @@
     \leanok
     \uses{def:peps_torus_geometry_translation,
         thm:peps_torus_rectangle_cut_connectivity}
-    Suppose both periods of the native square torus are at least three.
-    The graph is connected. For every vertex $v$, the subgraphs
-    induced by $\{v\}$ and its complement are connected, and the
-    boundary of $\{v\}$ has exactly four bonds. The native top, right,
-    down, and left legs enumerate these incident bonds bijectively.
+    On the native square torus $\Gamma=\Z_{L_x}\times\Z_{L_y}$ with
+    $L_x,L_y\ge 3$ (Definition~\ref{def:peps_torus_geometry_translation}),
+    $\Gamma$ is connected. For every vertex $v$, the induced subgraphs on
+    $\{v\}$ and $V\setminus\{v\}$ are connected, $|\partial E_{\{v\}}|=4$,
+    and the native top, right, down, and left legs bijectively enumerate
+    $\operatorname{Inc}(v)=\partial E_{\{v\}}$.
     The regular virtual-space and period restrictions are recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{lemma}
 
 \begin{proof}\leanok
-    A singleton is the coordinate rectangle of side lengths one.
-    Its complement is connected by the unused row and column
-    construction. The same rectangular connectivity argument applied
-    to both full coordinate intervals gives connectivity of the torus.
-    The four native legs exhaust the incident bonds and are distinct:
-    horizontal and vertical bonds cannot agree, and opposite bonds
-    have different origins when the corresponding period exceeds two.
-    Every incident bond has just one endpoint at $v$, so these are
-    precisely the crossing bonds of the singleton.
+    Since $\{v\}$ is a $1\times 1$ coordinate rectangle and $L_x,L_y\ge 3$,
+    Lemma~\ref{thm:peps_torus_rectangle_cut_connectivity} gives connectivity
+    of $\{v\}$, $V\setminus\{v\}$, and $\Gamma$. The four native legs exhaust
+    $\operatorname{Inc}(v)$ and are distinct because horizontal and vertical
+    bonds are disjoint while opposite bonds have distinct origins when
+    $L_x,L_y>2$; each incident bond has one endpoint in $\{v\}$, so
+    $\operatorname{Inc}(v)=\partial E_{\{v\}}$.
 \end{proof}
 
-\begin{theorem}[Single-site physical support of a regular torus PEPS]%
+\begin{lemma}[Single-site physical support of a regular torus PEPS]%
     \label{thm:peps_regular_torus_singleton_support}
     \lean{TNLean.PEPS.torusSingletonBoundaryEquiv,
         TNLean.PEPS.range_regionReducedDensity_torus_singleton_of_regular,
@@ -44,76 +43,78 @@
     \leanok
     \uses{lem:peps_torus_singleton_geometry, def:peps_g_injective,
         def:peps_normalized_region_reduced_density}
-    Let regular $G$-injective tensors of physical dimension $d$ be
-    placed at the vertices of the native square torus, with both
-    periods at least three. The tensors may vary with the vertex.
-    Their closed vector is nonzero. For every vertex $v$,
-    \[
-        \operatorname{ran}\rho_{\{v\}}=\mathcal G_{\{v\}},
-        \qquad
-        \operatorname{rank}\rho_{\{v\}}=|G|^3\leq d.
-    \]
-    The normalized density satisfies
-    \[
-        0\leq S(\widehat\rho_{\{v\}})\leq3\log|G|,
-        \qquad S_0(\widehat\rho_{\{v\}})=3\log|G|.
-    \]
+    Place site-dependent regular $G$-injective tensors $A_v$ of physical
+    dimension $d$ on $\Z_{L_x}\times\Z_{L_y}$ with $L_x,L_y\ge 3$. Then
+    $\Psi(A)\ne 0$, and for every vertex $v$ the reduced and normalized
+    densities $\rho_{\{v\}}$ and $\widehat\rho_{\{v\}}$
+    (Definition~\ref{def:peps_normalized_region_reduced_density}) satisfy
+    \begin{align}
+        \operatorname{ran}\rho_{\{v\}} & = \mathcal G_{\{v\}},
+                                       & \operatorname{rank}\rho_{\{v\}} & = |G|^3\leq d,
+        \label{eq:peps_torus_singleton_support_rank}                                      \\
+        0\leq S(\widehat\rho_{\{v\}})  & \leq 3\log|G|,
+                                       & S_0(\widehat\rho_{\{v\}})       & = 3\log|G|.
+        \label{eq:peps_torus_singleton_support_entropy}
+    \end{align}
     No isometry or flat spectrum is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_support,
         thm:peps_regular_region_dimension,
         thm:peps_regular_region_entropy_bound,
         lem:peps_torus_singleton_geometry}
-    Applying the connected regular-cut statements to the singleton and
-    its connected complement, whose four crossing bonds give three
-    relative boundary labels, yields the support and entropy formulas.
-    Because the density acts on a $d$-dimensional physical space, its rank
-    $|G|^3$ is at most $d$.
+    By Lemma~\ref{lem:peps_torus_singleton_geometry}, $\{v\}$ and
+    $V\setminus\{v\}$ are connected with $|\partial E_{\{v\}}|-1=3$. Applying
+    Theorem~\ref{thm:peps_regular_region_support}, Lemma~\ref{thm:peps_regular_region_dimension},
+    and Theorem~\ref{thm:peps_regular_region_entropy_bound} yields~(\ref{eq:peps_torus_singleton_support_rank})--(\ref{eq:peps_torus_singleton_support_entropy}),
+    with $|G|^3=\operatorname{rank}\rho_{\{v\}}\leq d$ since $\rho_{\{v\}}$ acts on $\C^d$.
 \end{proof}
 
-\begin{theorem}[Local rigidity for equal regular torus states]%
+\begin{lemma}[Local rigidity for equal regular torus states]%
     \label{thm:peps_regular_torus_local_rigidity}
     \lean{TNLean.PEPS.regionGroundSpace_torus_singleton_eq_of_sameState_regular,
         TNLean.PEPS.card_group_eq_of_sameState_regular_torus}
     \leanok
     \uses{lem:peps_torus_singleton_geometry, def:peps_g_injective,
         def:peps_region_ground_space}
-    On a native square torus with both periods at least three, two
-    regular $G$-injective descriptions of the same closed physical
-    vector have the same single-site ground spaces at every vertex.
-    If the two descriptions use regular representations of different
-    finite groups $G$ and $H$, the equality of their closed vectors
-    implies $|G|=|H|$. No assertion about the multiplication laws or
-    individual bond gauges follows from this rank argument.
-\end{theorem}
+    On $\Z_{L_x}\times\Z_{L_y}$ with $L_x,L_y\ge 3$, if regular $G$-injective
+    and $H$-injective tensors $A$ and $B$ satisfy $\Psi(A)=\Psi(B)$, then
+    $\mathcal G_{\{v\}}(A)=\mathcal G_{\{v\}}(B)$ for every vertex $v$ and
+    $|G|=|H|$. No assertion about the multiplication laws or individual bond
+    gauges follows from this rank argument.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_same_state_regular_region_spaces,
         thm:peps_regular_group_order_rigidity,
         lem:peps_torus_singleton_geometry}
-    Equal closed vectors give equal reduced densities. Their ranges
-    recover the local ground spaces. The common single-site density
-    has rank both $|G|^3$ and $|H|^3$, so the group orders agree.
+    By Lemma~\ref{lem:peps_torus_singleton_geometry} and
+    Lemma~\ref{thm:peps_same_state_regular_region_spaces},
+    $\Psi(A)=\Psi(B)$ implies $\rho_{\{v\}}(A)=\rho_{\{v\}}(B)$ and hence
+    $\mathcal G_{\{v\}}(A)=\operatorname{ran}\rho_{\{v\}}(A)=\mathcal G_{\{v\}}(B)$.
+    Lemma~\ref{thm:peps_regular_group_order_rigidity} then gives
+    $|G|^3=\operatorname{rank}\rho_{\{v\}}(A)=\operatorname{rank}\rho_{\{v\}}(B)=|H|^3$,
+    so $|G|=|H|$.
 \end{proof}
 
-\begin{theorem}[Physical support of a bounded regular torus rectangle]%
+\begin{lemma}[Physical support of a bounded regular torus rectangle]%
     \label{thm:peps_regular_torus_rectangle_support}
     \lean{TNLean.PEPS.range_regionReducedDensity_torus_rectangle_of_regular}
     \leanok
     \uses{def:peps_g_injective, def:peps_region_ground_space,
         def:peps_region_reduced_density}
-    Consider regular $G$-injective tensors on a native square torus
-    with periods at least three. Let $R$ be a coordinate rectangle
-    of positive side lengths, bounded by the coordinate intervals,
-    with each side length strictly smaller than the corresponding
-    torus period. Then $\operatorname{ran}\rho_R=\mathcal G_R$.
-\end{theorem}
+    For regular $G$-injective tensors on $\Z_{L_x}\times\Z_{L_y}$ with
+    $L_x,L_y\ge 3$ and any coordinate rectangle $R$ of side lengths
+    $1\le\ell_x<L_x$ and $1\le\ell_y<L_y$, the reduced density
+    $\rho_R$ (Definition~\ref{def:peps_region_reduced_density}) satisfies
+    $\operatorname{ran}\rho_R=\mathcal G_R$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_support}
-    The rectangle is connected, and its complement is connected by
-    paths along an unused row and an unused column. The torus is
-    connected, so the exact support theorem applies.
+    Since $1\le\ell_x<L_x$ and $1\le\ell_y<L_y$, both $R$ and $V\setminus R$
+    (via an unused row and column) are connected, so
+    Theorem~\ref{thm:peps_regular_region_support} yields
+    $\operatorname{ran}\rho_R=\mathcal G_R$.
 \end{proof}

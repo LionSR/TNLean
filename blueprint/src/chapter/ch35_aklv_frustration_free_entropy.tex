@@ -1,0 +1,58 @@
+\section{Entropy of the original frustration-free vector at every cut}
+
+\begin{lemma}[Entropy bounded by the smaller side]
+    \label{lem:aklv_region_entropy_short_side}
+    \lean{TNLean.MPS.AreaLaw.aklv_regionEntropy_le_short_side}
+    \notready
+    Let $\Omega$ be a unit vector on an $L$-site chain of local dimension
+    $q$. For every $0\le k\le L$,
+    \begin{align}
+        S_\Omega(k)\le\min(k,L-k)\log q.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\notready
+    The actual cut coefficient matrix has rank at most
+    $q^{\min(k,L-k)}$. Its Gram matrix is the regional density matrix,
+    with trace one. Bound its entropy by the logarithm of its rank.
+\end{proof}
+
+\begin{theorem}[Uniform entropy of a frustration-free ground vector]
+    \label{thm:aklv_frustration_free_entropy}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_physical_entropy_bound}
+    \notready
+    There is a universal $C>0$ with the following property. Let $q\ge2$,
+    let $0\le h_i\le I$ be nearest-neighbour terms on an $L$-site chain,
+    and let $\Omega$ be a unit vector satisfying
+    $H\Omega=0$ and $H\ge g(I-|\Omega\rangle\langle\Omega|)$ for
+    $H=\sum_i h_i$ and $0<g\le1$. Then every $0\le k\le L$ satisfies
+    \begin{align}
+        S_\Omega(k)\le\frac Cg
+        \left(1+\log q+\log\frac1g\right)^3.
+        \label{eq:aklv_ff_entropy_bound}
+    \end{align}
+    This is a sufficient logarithmic rate for the frustration-free
+    construction in~\cite[Section~4]{Arad2013AreaLaw}; the logarithm of
+    the inverse gap is retained as in
+    \cite{gap:aklv13_two_block_robustness}.
+\end{theorem}
+\begin{proof}\notready
+    \uses{lem:aklv_region_entropy_short_side,
+        lem:aklv_frustration_free_filter,
+        lem:aklv_frustration_free_scalar_parameters}
+    Put $u=1+\log q+\log(1/g)$, $g_0=g/8192$ and
+    $u_0=1+\log q+\log(1/g_0)$. The scalar parameter choice gives
+    $s=\lceil Au_0^2/g_0\rceil\ge21$, $\ell=s^2$ and $t=1024/g$,
+    with universal positive constants $W,R$ satisfying
+    $s\le Wu^2/g$ and $\log D\le Ru^3/g$.
+    If a window of width $s$ fits with center $k$, its actual filter
+    fixes the original vector $\Omega$, has cut rank at most $D$ and
+    squared shrinking factor $\delta$ with $D\delta\le10^{-5}$.
+    The favorable approximate-projector entropy estimate
+    of~\cite[Corollary~2.4]{Arad2013AreaLaw} gives
+    $S_\Omega(k)\le4\log D\le4Ru^3/g$.
+    If the window does not fit, then $\min(k,L-k)\le s$.
+    The smaller-side bound gives
+    $S_\Omega(k)\le s\log q\le Wu^3/g$, since $\log q\le u$.
+    Taking $C=4R+W$ proves~(\ref{eq:aklv_ff_entropy_bound}).
+\end{proof}

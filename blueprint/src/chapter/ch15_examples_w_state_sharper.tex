@@ -1,4 +1,4 @@
-\begin{theorem}[Trace pairings across a cut]%
+\begin{lemma}[Trace pairings across a cut]%
     \label{thm:w_state_one_sided_cut_rank}
     \lean{MPSTensor.blockTracePairing_range_le_of_forall_mem,
         MPSTensor.sq_dim_le_finrank_of_forall_mem}
@@ -11,7 +11,7 @@
     of functions on words of length $R$, then every function
     $\sigma\mapsto\sum_j\tr(X_jB^j_\sigma)$ also lies in $V$.
     If the specified block $B^j$ is $R$-block injective, then $D_j^2\le\dim V$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -30,7 +30,7 @@
     $V$, so $D_j^2\le\dim V$.
 \end{proof}
 
-\begin{theorem}[W-state bound from unequal cuts]%
+\begin{lemma}[W-state bound from unequal cuts]%
     \label{thm:w_state_asymmetric_bound}
     \lean{MPSTensor.lt_of_sum_mpv_eq_smul_wIndicator_asymmetric,
         MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_asymmetric}
@@ -51,7 +51,7 @@
     Here $b-1$ means zero when $b=0$.
     The threshold in~(\ref{eq:w_state_asymmetric_bound}) is at most $2F$;
     for $L_0\ge3$ it is $L_0+F$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -61,13 +61,13 @@
     piece of length $N-L_0\ge F$, whose word tuples span the product algebra
     by Lemma~\ref{lem:pgvwc07_block_tuple_span}.
     Individual injectivity on the first side and
-    Theorem~\ref{thm:w_state_one_sided_cut_rank} give $D_j^2\le2$, since
+    Lemma~\ref{thm:w_state_one_sided_cut_rank} give $D_j^2\le2$, since
     the W-state cut rank is at most two. Thus every $D_j=1$.
 
     For scalar letters $b_i^j$, unitality reads $\sum_i|b_i^j|^2=1$. Because a
     nonzero scalar spans the one-dimensional matrix algebra, the same blocks
     are injective at length one, and applying
-    Theorem~\ref{thm:w_state_canonical_bound} at length one gives
+    Lemma~\ref{thm:w_state_canonical_bound} at length one gives
     \begin{align}
         N & <2\max\{1,6(b-1)\}
         =\max\{2,12(b-1)\}
@@ -90,7 +90,7 @@
     eigenvalue, then $S_{D^2}(B)=\MN{D}$.
 \end{lemma}
 
-\begin{theorem}[Cubic bound from a nonzero one-step eigenvalue]%
+\begin{lemma}[Cubic bound from a nonzero one-step eigenvalue]%
     \label{thm:w_state_nonzero_eigenvalue_bound}
     \lean{MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_nonzero_eigenvalue}
     \leanok
@@ -108,7 +108,7 @@
     \end{align}
     For positive $D$, $L=D^2$, so this gives $D=\Omega(N^{1/3})$.
     The maximum with one includes $D=N=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -116,6 +116,6 @@
     Positive-length injectivity implies full word span at every larger length,
     so Lemma~\ref{lem:w_state_nonzero_eigenvalue_word_span} gives injectivity
     at length $D_j^2$ in each block. Since $D_j\le D$, injectivity propagates
-    to the common length $L$, and Theorem~\ref{thm:w_state_asymmetric_bound}
+    to the common length $L$, and Lemma~\ref{thm:w_state_asymmetric_bound}
     with $b\le D$ yields the stated bound.
 \end{proof}

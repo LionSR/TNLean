@@ -81,7 +81,7 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--370.
-\begin{theorem}[Isolated star at a fine-cell mark]
+\begin{lemma}[Isolated star at a fine-cell mark]
     \label{thm:area_law_initial_mark_isolated_star}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_isIsolatedStar}
     \leanok
@@ -96,7 +96,7 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     layer. Let $k\ge k_0$, let $z$ index a fine cell of layer $k$,
     and let $v$ be one of its nine marks. Then $Q_{t_k/128}(v)$ is an
     isolated star of the initial open regions with their colors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Put $r=t_k/64$, so that $t_k/128=r/2$. Take $\sigma$ to be the
     sector assignment. Each scaled triangle $W_s(v,r/2)$ lies in
@@ -113,7 +113,7 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 325--349, with
 % the proof in lines 351--370.
-\begin{theorem}[Isolated stars of the initial mesh]
+\begin{lemma}[Isolated stars of the initial mesh]
     \label{thm:area_law_initial_stars}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialMarks_isolatedStars,
         TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_hasIsolatedStars,
@@ -135,7 +135,7 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     \end{enumerate}
     In particular, for every finite domain and cut, the initial stage
     of the recursive family has isolated stars with constant $a_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_mark_isolated_star,
         thm:area_law_fine_layer_mark_separation,

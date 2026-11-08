@@ -224,8 +224,16 @@ theorem IsTrueVertex.mem_closure_ne {X ι : Type*} [TopologicalSpace X] {f : X �
   obtain ⟨l₁, l₂, -, h12, -, -, h1, h2, -⟩ := h
   by_cases hP : l₁ = P
   · subst hP
-    exact closure_mono (fun p (hp : f p = l₂) => by rw [mem_ofPred_eq, hp]; exact Ne.symm h12) h2
-  · exact closure_mono (fun p (hp : f p = l₁) => by rw [mem_ofPred_eq, hp]; exact hP) h1
+    refine closure_mono ?_ h2
+    intro p hp
+    have hp' : f p = l₂ := hp
+    rw [mem_ofPred_eq, hp']
+    exact Ne.symm h12
+  · refine closure_mono ?_ h1
+    intro p hp
+    have hp' : f p = l₁ := hp
+    rw [mem_ofPred_eq, hp']
+    exact hP
 
 /-- **Outer-hole enlargement on the birth side.** If a point `y` has clearance `a Q` from every
 point of `Z`, where `t ≤ Q`, then it has clearance `(a / 2) Q` from every point within `2 ε t` of

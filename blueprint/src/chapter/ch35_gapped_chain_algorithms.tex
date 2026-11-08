@@ -1,0 +1,26 @@
+\chapter{Viable sets and their trimming}
+\label{ch:gapped_chain_algorithms}
+
+Landau, Vazirani and Vidick~\cite{Landau2015Published} construct ground-state
+approximations by successive viable sets. Their sampling bound depends on
+the ground energy, as discussed in~\cite{gap:lvv13_runtime_ground_energy}.
+Arad, Landau, Vazirani and Vidick~\cite{Arad2016RigorousRG} give a more
+efficient renormalization algorithm. At each cut, a viable set is a small
+family of vectors on the sites to its left whose span contains the left
+part of a good approximation to the ground state.
+
+This chapter develops the operations on viable sets: approximate
+ground-state projectors, gluing at a cut, size and bond trimming, and error
+reduction. The next chapter assembles them into successive viable families
+and a matrix product state.
+
+\input{chapter/ch35_lvv_viable_sets}
+\input{chapter/ch35_lvv_power_projector}
+\input{chapter/ch35_lvv_sampled_projector}
+\input{chapter/ch35_chain_trimming}
+\input{chapter/ch35_chain_gluing}
+\input{chapter/ch35_lvv_size_trimming}
+\input{chapter/ch35_collective_trimming}
+\input{chapter/ch35_lvv_successive_trimming}
+\input{chapter/ch35_lvv_error_reduction}
+\input{chapter/ch35_lvv_endpoints}

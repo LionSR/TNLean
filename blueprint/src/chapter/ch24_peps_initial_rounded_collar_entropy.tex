@@ -5,7 +5,7 @@ allows the initial rectangle estimate to be expressed as a strict reduction
 of its exponent on the shell. The following statements provide this initial
 input to the proof of Proposition~9.5, lines~693--729.
 
-\begin{theorem}[A homogeneous bound for the rounded scale]
+\begin{lemma}[A homogeneous bound for the rounded scale]
     \label{thm:area_law_rounded_collar_power}
     \lean{TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le}
     \leanok
@@ -14,7 +14,7 @@ input to the proof of Proposition~9.5, lines~693--729.
     \begin{align}
         L_s^e\le(C_2+1)^{\eta e}s^{\eta e}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The ceiling estimate gives
@@ -27,7 +27,7 @@ input to the proof of Proposition~9.5, lines~693--729.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Uniform initial entropy of the rounded collar]
+\begin{lemma}[Uniform initial entropy of the rounded collar]
     \label{thm:area_law_initial_rounded_collar_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_initial_rounded_collar_le_rpow}
     \leanok
@@ -56,16 +56,16 @@ input to the proof of Proposition~9.5, lines~693--729.
     The exponent $1+\eta e_0$ is strictly smaller than $1+e_0$.
     This estimates the shell; the improvement of the safe-box exponent
     still requires the remaining physical comparison argument.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_initial_rectangle_shell_entropy,
         thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,
         thm:area_law_rounded_collar_power}
     Choose $C$ and $e_0$ from
-    Theorem~\ref{thm:area_law_initial_rectangle_shell_entropy}.
+    Lemma~\ref{thm:area_law_initial_rectangle_shell_entropy}.
     The fixed parameter bounds give $0<\ell<1$, and hence $0<\eta<1$.
-    For each $C_2>0$, Theorem~\ref{thm:area_law_bootstrap_collar_clearance}
+    For each $C_2>0$, Lemma~\ref{thm:area_law_bootstrap_collar_clearance}
     gives a threshold $N\ge1$ for which $2L_s\le s$ and
     $D_0L_s+L_s\le D_0s$ for every allowed safety parameter.
     In particular, $L_s\le s$. The initial shell estimate and the homogeneous

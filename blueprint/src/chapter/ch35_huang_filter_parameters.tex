@@ -32,7 +32,7 @@ not assertions of the sharper printed quantitative bounds.
     $T_L$ and accuracy $\eta_L$. The variance of the time Gaussian is $\sigma_L$.
 \end{definition}
 
-\begin{theorem}[Positivity of the scalar choices]
+\begin{lemma}[Positivity of the scalar choices]
     \label{thm:huang_filter_parameter_positivity}
     \lean{TNLean.MPS.AreaLaw.huangFilterEta_bounds,
         TNLean.MPS.AreaLaw.huangFilterScale_ge_eight,
@@ -44,7 +44,7 @@ not assertions of the sharper printed quantitative bounds.
     \uses{def:huang_filter_parameters}
     For every length, $0<\eta_L<1/64$, $a_L\ge8$, $\sigma_L>0$,
     $\log(2/\eta_L)>0$ and $T_L>0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The denominator defining $\eta_L$ exceeds $64c$. Thus $1/\eta_L>1$
@@ -52,7 +52,7 @@ not assertions of the sharper printed quantitative bounds.
     follow from $\Delta>0$ and the definitions.
 \end{proof}
 
-\begin{theorem}[Tail and spectral suppression]
+\begin{lemma}[Tail and spectral suppression]
     \label{thm:huang_filter_scalar_errors}
     \lean{TNLean.MPS.AreaLaw.huangFilterTime_tail_le,
         TNLean.MPS.AreaLaw.huangFilterVariance_suppression_le}
@@ -63,7 +63,7 @@ not assertions of the sharper printed quantitative bounds.
         2e^{-T_L^2/(2\sigma_L)}\le\eta_L,\qquad
         e^{-\sigma_L\Delta^2/8}\le\eta_L.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Put $s=\log(2/\eta_L)>0$. Since
@@ -72,7 +72,7 @@ not assertions of the sharper printed quantitative bounds.
     $-\log(1/\eta_L)-1\le-\log(1/\eta_L)$.
 \end{proof}
 
-\begin{theorem}[Accuracy of the energy mesh]
+\begin{lemma}[Accuracy of the energy mesh]
     \label{thm:huang_energy_mesh_accuracy}
     \lean{TNLean.MPS.AreaLaw.huangEnergyMesh_bounds,
         TNLean.MPS.AreaLaw.huangEnergyMesh_accuracy}
@@ -83,7 +83,7 @@ not assertions of the sharper printed quantitative bounds.
         |E-E_0|\le\Delta/2,\qquad
         \sigma_L(E_0-E)^2\le1.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The first assertion follows from $a_L+1\ge9$. For the weighted error,
@@ -94,7 +94,7 @@ not assertions of the sharper printed quantitative bounds.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Normalization and final precision budgets]
+\begin{lemma}[Normalization and final precision budgets]
     \label{thm:huang_filter_precision_budgets}
     \lean{TNLean.MPS.AreaLaw.huangFilterEta_length_budget,
         TNLean.MPS.AreaLaw.huangFilterEta_amplitude_budget}
@@ -102,14 +102,14 @@ not assertions of the sharper printed quantitative bounds.
     \uses{thm:huang_filter_parameter_positivity}
     If $L\ge1$, then $32\eta_L\le c/L$. If $c_0\ge1/2$, then
     $4\eta_L<c_0/2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The first inequality follows from $L\le2(c+L+1)$ after clearing positive
     denominators. The second follows from $\eta_L<1/64$ and $c_0\ge1/2$.
 \end{proof}
 
-\begin{theorem}[Uniform logarithmic growth]
+\begin{lemma}[Uniform logarithmic growth]
     \label{thm:huang_filter_logarithmic_growth}
     \lean{TNLean.MPS.AreaLaw.exists_huangFilter_log_bounds,
         TNLean.MPS.AreaLaw.exists_huangFilter_radius_log_bound}
@@ -124,7 +124,7 @@ not assertions of the sharper printed quantitative bounds.
         T_L            & \le B(\log(L+1)+1),    \\
         8r_L+8         & \le D(\log(L+1)+1).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Take $K=64(c+1)/c$, $A=8\log K+9$, and
@@ -138,7 +138,7 @@ not assertions of the sharper printed quantitative bounds.
     where $v,C$ are the universal propagation constants.
 \end{proof}
 
-\begin{theorem}[Uniform natural-degree polynomials]
+\begin{lemma}[Uniform natural-degree polynomials]
     \label{thm:huang_filter_uniform_polynomial}
     \lean{TNLean.MPS.AreaLaw.exists_huangFilter_bond_polynomial,
         TNLean.MPS.AreaLaw.exists_huangFilter_count_polynomials,
@@ -151,7 +151,7 @@ not assertions of the sharper printed quantitative bounds.
     $E_LR_L$ are all at most $P(L+1)^d$ for every $L$. In particular, these
     are polynomial bounds with natural degree, uniform in the chain length.
     The coefficient may also be chosen to be a positive integer.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\log(L+1)+1\le L+1$, the energy count is bounded by

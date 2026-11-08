@@ -3,10 +3,14 @@
 This document records the Lean statements of the one-dimensional specialization
 of the September 24, 2026 manuscripts *A two-dimensional area law from a global
 spectral gap* and *Polynomial PEPS approximation of gapped square-grid ground
-states*, following the repository note
-[`docs/notes/one_dimensional_note`](../notes/one_dimensional_note/one_dimensional_area_law_and_mps.tex)
+states*, following the companion note
+[`one_dimensional_area_law_and_mps`](https://github.com/LionSR/gapped-2d-notes/tree/main/one_dimensional_area_law_and_mps)
 (Theorems A and B there). The modules live in `TNLean/MPS/AreaLaw/` and
-the blueprint chapter is `blueprint/src/chapter/ch35_one_dimensional_chain.tex`.
+the blueprint chapters are `blueprint/src/chapter/ch35_one_dimensional_preliminaries.tex`
+(chains and local Hamiltonians), `ch35_one_dimensional_open_mps.tex` (open-boundary
+matrix product states and sequential truncation), `ch35_one_dimensional_chain.tex`
+(Theorems A and B) and `ch35_one_dimensional_protocol.tex` (the second proof of
+Theorem B by the preparation protocol).
 
 The model is stated natively on the chain of `L` sites (`Fin L`), with local
 dimension `q`, supports of range `R` (nonempty sets of sites of diameter at most

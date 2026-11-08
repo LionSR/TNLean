@@ -3,15 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ChebyshevViability
-import QICLean.Analysis.LowEnergyCoordinates
-import QICLean.Analysis.ViableSubspaceCoordinates
-import QICLean.Analysis.ViableSubspaceBootstrap
-import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
-import TNLean.MPS.AreaLaw.Basic
-import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
-import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.PolynomialFilterParameters
+import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 
 /-!
 # Physical improving families at independent scales
@@ -89,110 +81,38 @@ theorem exists_independent_long_middle_actual_dg_family :
   classical
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
     D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm h hs h0 h1 mu H hH G hmu hgap
-  let a := max p ell - ell
-  let b := min r (L - ell) - ell - 1
-  obtain ⟨_haEnd, _hbEnd, hab, hb, _hpp, _hpq, _hqq, _hlen,
-    _hleft, _hright, _htotal, hsub, hcollar⟩ :=
-    inward_effective_cuts L ell p r hell hpr hrL hlong
-  obtain ⟨e, E0, _hground, _horigin, hE0, hE4, hnorm,
-    v, lam, heigen, hclosed, _hband, hdim, hTG, hGT, _hnewgap⟩ :=
-    exists_five_region_physical_scaled_low_cluster L q a b ell t
-      (by omega) hell ht
-      (hab.trans (Nat.le_succ b)) (hb.trans (Nat.sub_le L 1))
-      h hs h0 h1 mu g (epsilon * g / 1000000) epsilon hg hg1 hepsilon hepsilon1
-      htail le_rfl hmu hgap
-  let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
-  let Areg : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
-    ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
-  let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
-    (fun i ↦ i.val + 1 ∈
-      ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-  let Y := ∑ i ∈ Cross, h i
-  let K : Finset (Fin 5) := {0, 2, 4}
-  let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    (∑ j, ((if j ∈ K then
-      cfc (fun x : ℝ ↦ min x (e j + t)) (Areg j) else Areg j) -
-        (e j : ℂ) • 1)) + Y
-  let eta0 := E0 + g / 10
-  let eta1 := E0 + 9 * g / 10
-  let upper := 3 * t + 4 * (ell : ℝ)
-  let T := Submodule.spectralSpanLE v lam eta0
-  have hellR : 1 ≤ (ell : ℝ) := by exact_mod_cast hell
-  have hsep : eta0 < eta1 := by dsimp only [eta0, eta1]; linarith only [hg]
-  have hendpoint : eta1 ≤ upper := by
-    dsimp only [eta1, upper]
-    linarith only [hE4, hg1, ht, hellR]
-  have hR0 : 0 < upper - eta0 := by
-    dsimp only [eta0, upper]
-    linarith only [hE4, hg1, ht, hellR]
-  have hRbudget : upper - eta0 ≤ 3 * t + 4 * (ell : ℝ) := by
-    dsimp only [eta0, upper]
-    linarith only [hE0, hg]
-  have hwidth : eta1 - eta0 = 4 * g / 5 := by dsimp only [eta0, eta1]; ring
-  have hcontract := hfilter (upper - eta0) hR0 hRbudget
-  rw [← hwidth] at hcontract
-  have hB : B.IsHermitian := by
-    have hterm (j : Fin 5) : IsSelfAdjoint
-        ((if j ∈ K then
-          cfc (fun x : ℝ ↦ min x (e j + t)) (Areg j) else Areg j) -
-            (e j : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) := by
-      apply IsSelfAdjoint.sub
-      · split_ifs
-        · exact IsSelfAdjoint.cfc
-        · exact IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)
-      · exact IsSelfAdjoint.smul (by simp [IsSelfAdjoint]) (by simp [IsSelfAdjoint])
-    exact ((isSelfAdjoint_sum Finset.univ fun j _ ↦ hterm j).add
-      (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i))).isHermitian
-  have hdegree : 1 ≤ ell ^ 2 := by
-    rw [pow_two]
-    simpa only [Nat.one_mul] using Nat.mul_le_mul hell hell
-  let J0 := interval L (a + ell) (b + ell + 1)
-  let D0 := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
-  obtain ⟨N, W, hNraw, hdecomp⟩ :=
-    exists_actual_regional_clipped_polynomial_family_fin
-      L q a b ell (ell ^ 2) hell hq hdegree hab hb h hs e t Jtarget
-  change N ≤ D0 ^ 2 * q ^
-    (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) at hNraw
-  have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
-  have hN : N ≤ D ^ 2 := by
-    have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
-      simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
-    exact hN'.trans (collar_card_le_square_of_larger_count_base
-      q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell hcollar le_rfl)
-  have hcheb := Matrix.chebyshev_viability_of_actual_cluster_polynomial_family
-    B hB v lam heigen W Tm (by
-      intro Q hQ
-      obtain ⟨M, _hmatrix, hconj⟩ := hdecomp Q hQ
-      exact ⟨M, hconj⟩)
-    (D ^ 2) hN eta0 eta1 upper hsep hendpoint hclosed hnorm
-  let CW := fun i : Fin N ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
-    (n := Jtarget → Fin q) (W i)
+  obtain ⟨T, N, CW, hN, hTG, hGT, hdim, hpower⟩ :=
+    exists_independent_long_middle_actual_dg_word_family m q ell t g epsilon Delta
+      hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
+      L p r hpr hrL hlong h hs h0 h1 mu hmu hgap
   obtain ⟨_f, F, _hF, _hzero, hspan⟩ :=
     Submodule.exists_clm_family_extension_of_card_le
       (by simpa only [Fintype.card_fin] using hN) CW
   refine ⟨T, F, hTG, hGT, hdim, ?_⟩
   intro S δ hS hδ grow
-  obtain ⟨hdimension, hviable⟩ := hcheb S δ hS hδ
+  obtain ⟨hdimension, hviable⟩ := hpower 1 S δ hS hδ
+  have hwordspan :
+      (⨆ w : Fin 1 → Fin N,
+        S.map (List.ofFn (fun j ↦ CW (w j))).prod.toLinearMap) =
+      ⨆ i : Fin N, S.map (CW i).toLinearMap := by
+    simp only [List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, mul_one]
+    exact (show Function.Surjective (fun w : Fin 1 → Fin N ↦ w 0) from
+      fun i ↦ ⟨fun _ ↦ i, rfl⟩).iSup_comp
+        (fun i : Fin N ↦ S.map (CW i).toLinearMap)
+  rw [hwordspan] at hdimension hviable
   constructor
   · change Module.finrank ℂ
-        (↥((⨆ i : Fin (D ^ 2), S.map ((F i).toLinearMap)) :
+        (↥((⨆ i : Fin (D ^ 2), S.map (F i).toLinearMap) :
           Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q)))) ≤
-      D ^ 2 * Module.finrank ℂ S
+        D ^ 2 * Module.finrank ℂ S
     rw [hspan S]
-    exact hdimension
+    simpa only [pow_one] using hdimension
   · change Submodule.IsViable (𝕜 := ℂ)
       (E := EuclideanSpace ℂ (Jtarget → Fin q))
       (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
       (Delta / (1 - δ) ^ 2)
-      ((⨆ i : Fin (D ^ 2), S.map ((F i).toLinearMap)) :
-        Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q)))
+      (⨆ i : Fin (D ^ 2), S.map (F i).toLinearMap)
       (T.map Tm.toLinearEquiv.toLinearMap)
     rw [hspan S]
-    have hcontract' :
-        (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
-          Real.sqrt ((eta1 - eta0) / (upper - eta0)))) ^ 2 ≤ Delta := by
-      simpa only [Nat.cast_pow] using hcontract
-    exact Submodule.IsCloseTo.of_le hviable
-      (div_le_div_of_nonneg_right hcontract' (sq_nonneg _))
+    simpa only [pow_one] using hviable
 end TNLean.MPS.AreaLaw

@@ -1,7 +1,7 @@
 \section{Local physical ranges of G-injective tensors}%
 \label{sec:peps_g_injective_physical_ranges}
 
-\begin{theorem}[Invariant virtual space and physical range]%
+\begin{lemma}[Invariant virtual space and physical range]%
     \label{thm:peps_g_injective_invariants_range}
     \lean{TNLean.PEPS.IsGInjective.ker_eq_ker_averageMap,
         TNLean.PEPS.IsGInjective.bijective_invariants_rangeRestrict,
@@ -42,7 +42,7 @@
             \tn[ports={180:virtual, 0:physical}]{T}
         \end{tenkz}
     \end{tenkzequation}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Invariance gives $T P_G=T$. If $Tx=0$, then $T P_Gx=0$;
@@ -52,7 +52,7 @@
     surjectivity onto the physical range.
 \end{proof}
 
-\begin{theorem}[Comparison of physical ranges]%
+\begin{lemma}[Comparison of physical ranges]%
     \label{thm:peps_g_injective_physical_range_equivalence}
     \lean{TNLean.PEPS.IsGInjective.rangeEquiv,
         TNLean.PEPS.IsGInjective.rangeEquiv_apply,
@@ -65,7 +65,7 @@
     $F:\operatorname{im}T\to\operatorname{im}S$ such that
     $F(Tx)=Sx$ for every $x\in\mathcal V$, and this map is an
     isomorphism.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Compose the inverse of

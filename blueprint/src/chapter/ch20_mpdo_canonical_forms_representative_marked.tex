@@ -19,7 +19,7 @@
     copies lying over each $j$.
 \end{definition}
 
-\begin{theorem}[Representative-grouped Lemma L]
+\begin{lemma}[Representative-grouped Lemma L]
     \label{thm:representative_grouped_insert_eq}
     \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero}
     \lean{MPSTensor.SectorDecomposition.insertedTensor_basis_eq_of_firstSiteActionAgree}
@@ -45,9 +45,9 @@
     explicitly, whereas the post-blocked theorem below derives the needed
     finite representative separation from the full BNT canonical-form
     hypotheses (with the sharp $3D^5$ bound given in
-    Theorem~\ref{thm:sharp_bnt_block_separation} and compared with the source
+    Lemma~\ref{thm:sharp_bnt_block_separation} and compared with the source
     in \cite{gap:cpgsv17_bicf_block_separation}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -128,7 +128,7 @@
     first over $q$ gives the stated coefficient $c_j^{(|w|+1)}$.
 \end{proof}
 
-\begin{theorem}[Algebraic marked-letter extension of representative separation]
+\begin{lemma}[Algebraic marked-letter extension of representative separation]
     \label{thm:representative_grouped_marked_separation}
     \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero}
     \lean{MPSTensor.SectorDecomposition.markedTensor_basis_eq_of_trace_agree}
@@ -149,7 +149,7 @@
 
     This extends the argument of \cite[Appendix~C.3, lines~1848--1858]{Cirac2016MPDO_arXiv}
     from first-site physical marks to general marked matrices in the marked slot.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -166,12 +166,12 @@
     Under eventual separation, applying
     Corollary~\ref{cor:nonvanishing_finite_power_sum} to the nonzero weights
     above each fixed representative as in
-    Theorem~\ref{thm:representative_grouped_insert_eq} selects a
+    Lemma~\ref{thm:representative_grouped_insert_eq} selects a
     sufficiently large $L$ with $c_j^{(L+1)}\neq0$ and proves $C_j=E_j$.
 \end{proof}
 
 % Source anchors: CPSV16 Appendix C.3, lines 1835--1858 and 1909--1919.
-\begin{theorem}[Full-coordinate marked trace identity]
+\begin{lemma}[Full-coordinate marked trace identity]
     \label{thm:cpsv_full_coordinate_marked_trace_identity}
     \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedBlocks}
@@ -182,7 +182,7 @@
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_representative_sector_decomposition, def:marked_representative_direct_sum, lem:marked_representative_trace_expansion}
     Let $T_{\mathrm{grp}}$ be the full grouped tensor of
-    Theorem~\ref{thm:cpsv_canonical_form_bnt_refinement}, and let
+    Lemma~\ref{thm:cpsv_canonical_form_bnt_refinement}, and let
     $P_{\mathrm{rep}}$ be its representative sector decomposition.
     For a marked family $(C_j^s)_j$, define the marked tensor
     $\widehat C_{\mathrm{grp}}$ on all grouped listed coordinates as follows.
@@ -200,7 +200,7 @@
         \label{eq:cpsv_full_coordinate_marked_trace_identity}
     \end{align}
     The exponent $|w|+1$ includes the factor at the marked site.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_representative_sector_decomposition, lem:marked_representative_trace_expansion}
@@ -212,7 +212,7 @@
     (\ref{eq:cpsv_full_coordinate_marked_trace_identity}).
 \end{proof}
 
-\begin{theorem}[Retained-coordinate representative-grouped Lemma L]
+\begin{lemma}[Retained-coordinate representative-grouped Lemma L]
     \label{thm:cpsv_retained_representative_grouped_lemma_l}
     \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         groupedMarkedTensor_basis_eq_of_trace_agree}
@@ -237,20 +237,20 @@
         \label{eq:cpsv_retained_first_site_action}
     \end{align}
     for every representative $j$ and every physical letter $i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_representative_sector_decomposition, thm:representative_grouped_marked_separation, thm:representative_grouped_insert_eq}
-    Theorem~\ref{thm:cpsv_full_coordinate_marked_trace_identity} rewrites
+    Lemma~\ref{thm:cpsv_full_coordinate_marked_trace_identity} rewrites
     (\ref{eq:cpsv_retained_marked_trace_agreement}) into marked-trace
     agreement for $P_{\mathrm{rep}}$. Its representatives have eventual
-    word-tuple separation, and every copy weight is nonzero. Theorem~\ref{thm:representative_grouped_marked_separation}
+    word-tuple separation, and every copy weight is nonzero. Lemma~\ref{thm:representative_grouped_marked_separation}
     therefore gives $C_j=E_j$.
 
     First-site agreement for $T_{\mathrm{grp}}$ also holds for
     $P_{\mathrm{rep}}$ because their matrix product vectors agree at every
     positive length. Applying
-    Theorem~\ref{thm:representative_grouped_insert_eq} gives
+    Lemma~\ref{thm:representative_grouped_insert_eq} gives
     (\ref{eq:cpsv_retained_first_site_action}), namely
     \begin{align}
         (YC_j)^i & =(ZC_j)^i.
@@ -260,7 +260,7 @@
 
 % Source anchors: CPSV16 Appendix C.3, lines 1835--1858, and
 % Proposition 4.13, lines 1873--1887.
-\begin{theorem}[Original-coordinate marked Lemma L]
+\begin{lemma}[Original-coordinate marked Lemma L]
     \label{thm:cpsv_original_coordinate_marked_lemma_l}
     \lean{MPSTensor.trace_marked_mul_evalWord_of_coisometry_reconstruction}
     \lean{MPSTensor.linearMarkedTensor_coisometry_reconstruction}
@@ -307,7 +307,7 @@
     \cite[Appendix~C.3, lines~1835--1858]{Cirac2016MPDO_arXiv}: first-site agreement
     at positive system sizes suffices to separate representatives at a nonzero tail
     length without requiring empty-word data.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_retained_representative_grouped_lemma_l}
@@ -320,7 +320,7 @@
     Applying (\ref{eq:cpsv_original_marked_trace}) to both sides of
     (\ref{eq:cpsv_original_linear_marked_agreement}) and removing the block
     gauge by cyclicity of trace reduces the hypothesis to
-    Theorem~\ref{thm:cpsv_retained_representative_grouped_lemma_l} on the
+    Lemma~\ref{thm:cpsv_retained_representative_grouped_lemma_l} on the
     representatives; the resulting equality of the full grouped
     marked tensors, together with
     (\ref{eq:cpsv_original_coisometry_reconstruction}), gives $F_A=G_A$.
@@ -393,7 +393,7 @@
     physical index $i$.
 \end{proof}
 
-\begin{theorem}[Representative separation after injective blocking]
+\begin{lemma}[Representative separation after injective blocking]
     \label{thm:postblocked_representative_grouped_insert_eq}
     \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_of_basis_injective}
     \lean{MPSTensor.IsBNTCanonicalForm.eventuallyRepresentativeWordTupleSpan_blockTensor}
@@ -447,7 +447,7 @@
     No additional common-length hypothesis is required.
     % The remaining MPDO scope question is the relation with the horizontal
     % copy-indexed hypotheses; see docs/paper-gaps/cpgsv17_bicf_block_separation.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -515,7 +515,7 @@
     $YA_j=ZA_j$ before blocking.
 \end{proof}
 
-\begin{corollary}[Marked-letter separation for a BNT canonical form]
+\begin{lemma}[Marked-letter separation for a BNT canonical form]
     \label{cor:bnt_marked_representative_separation}
     \lean{MPSTensor.IsBNTCanonicalForm.markedTensor_basis_eq_of_trace_agree}
     \leanok
@@ -524,14 +524,14 @@
     form. If their closed marked chains agree for every marked index $s$ and
     every unmarked word $w$ of positive length, then $C_j^s=E_j^s$ for every
     representative $j$ and every marked index $s$.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:postblocked_representative_grouped_insert_eq, thm:representative_grouped_marked_separation}
     Because the BNT canonical-form hypotheses give eventual representative
     word-tuple separation,
-    Theorem~\ref{thm:representative_grouped_marked_separation} yields
+    Lemma~\ref{thm:representative_grouped_marked_separation} yields
     $C_j^s=E_j^s$.
 \end{proof}
 
@@ -574,7 +574,7 @@
         \sum_z g_{u,z}A_j^z.
         \notag
     \end{align}
-    Corollary~\ref{cor:bnt_marked_representative_separation} identifies the
+    Lemma~\ref{cor:bnt_marked_representative_separation} identifies the
     two marks on every minimal representative. Taking their weighted direct
     sums and restoring the common block-diagonal similarity gives
     $C^u=E^u$.

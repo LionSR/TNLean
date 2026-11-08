@@ -6,7 +6,7 @@ rank-two arguments are followed by a general construction using positive
 metrics in the real affine spaces of prefix Gram matrices. The latter
 removes the spectral conditioning hypothesis at every fixed bond bound.
 
-\begin{theorem}[Contraction does not increase a cut rank]
+\begin{lemma}[Contraction does not increase a cut rank]
     \label{thm:mpu_schmidt_span_contraction}
     \lean{Matrix.rank_contract_right_le, Matrix.rank_contract_left_le}
     \leanok
@@ -17,7 +17,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     Similarly, for finite $I$ and a matrix
     $M:(A\times I)\times J\to K$, contraction
     $M_f(i,j)=\sum_a f(a)M((a,i),j)$ does not increase rank.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In the first case write $M_f=MQ$, where
     $Q_{(j',a),j}=\delta_{j',j}f(a)$.
@@ -26,7 +26,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     Rank cannot increase under multiplication on either side.
 \end{proof}
 
-\begin{theorem}[A constant number of recursive calls]
+\begin{lemma}[A constant number of recursive calls]
     \label{thm:mpu_constant_branching_cost}
     \lean{MPUCircuit.cost_le_pow_of_constant_branching}
     \leanok
@@ -34,13 +34,13 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     $r\geq2$. Suppose $T_0\leq a$ and $T_{j+1}\leq rT_j+C$ for
     every nonnegative integer $j$. Then
     $T_L\leq(a+C)r^L-C$ for every nonnegative integer $L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on $L$, the induction step uses
     $r((a+C)r^L-C)+C\leq(a+C)r^{L+1}-C$, since $(r-2)C\geq0$.
 \end{proof}
 
-\begin{theorem}[Commuting unitary polar factors]
+\begin{lemma}[Commuting unitary polar factors]
     \label{thm:mpu_two_kraus_polar}
     \lean{Matrix.exists_unitary_polar_factor, Matrix.commute_of_unitary_conj_eq, Matrix.mul_conjTranspose_eq_of_unitary_polar_factor, Matrix.unitary_polar_conj_eq_of_two_kraus, Matrix.exists_commuting_unitary_polar_factors}
     \leanok
@@ -49,7 +49,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     There are unitaries $V,W$ such that
     $E=V\sqrt{E^\dagger E}$, $F=W\sqrt{F^\dagger F}$, and
     $E^\dagger E$ commutes with $V^\dagger W$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The equality-of-Gram-matrices extension theorem gives unitary
     polar factors, including at zero singular values. Their output
@@ -60,7 +60,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     gives the commutation assertion.
 \end{proof}
 
-\begin{theorem}[Coherent recording and erasure of two sectors]
+\begin{lemma}[Coherent recording and erasure of two sectors]
     \label{thm:mpu_two_sector_merging}
     \lean{Matrix.twoSectorEncoder_mul_self, Matrix.twoSectorEncoder, Matrix.zeroFlagProjection, Matrix.twoSectorEncoder_conjTranspose, Matrix.twoSectorEncoder_mem_unitaryGroup, Matrix.twoSectorEncoder_merge, Matrix.one_kronecker_commute_kronecker_one, Matrix.twoSectorEncoder_merge_kronecker}
     \leanok
@@ -78,14 +78,14 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     \end{align}
     Thus every input with its record qubit zero has its record zero
     at the end.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Multiplying the blocks using $P^2=P$,
     $P(I-P)=(I-P)P=0$, and $(I-P)^2=I-P$ eliminates the cross terms, since
     matrices acting on distinct tensor factors commute.
 \end{proof}
 
-\begin{theorem}[Combining sector erasure with its final factor]
+\begin{lemma}[Combining sector erasure with its final factor]
     \label{thm:mpu_two_sector_cancellation}
     \lean{Matrix.isStarProjection_half_one_add, Matrix.flagHadamard, Matrix.flagHadamard_mul_diagonal_mul, Matrix.flagHadamard_mul_controlled_mul, Matrix.diagonal_mul_twoSectorEncoder, Matrix.diagonal_mul_twoSectorEncoder_of_mem_unitaryGroup}
     \leanok
@@ -99,7 +99,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
         \operatorname{diag}(B,B)\mathcal E((I+B^\dagger C)/2)
         =\mathcal H\operatorname{diag}(B,C)\mathcal H.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The first identity follows by multiplying the Hadamard blocks.
     For the second, multiply those same blocks with $B$ and
@@ -154,7 +154,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     are independent, so they span the original Schmidt spaces.
 \end{proof}
 
-\begin{theorem}[Exact circuits at cut rank two]
+\begin{lemma}[Exact circuits at cut rank two]
     \label{thm:mpu_rank_two_exact_circuits}
     Let $N\geq1$. Every $N$-qubit unitary whose operator Schmidt rank
     is at most two at each consecutive cut has an exact circuit of
@@ -162,7 +162,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     $O(\log(N+1))$ auxiliary qubits initialized and returned to zero.
     Arbitrary pairs may interact. Routing on a line gives gate count
     and depth $O(N^{1+\log_2 6})$ with the same auxiliary-space bound.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:mpu_schmidt_span_contraction,
         thm:mpu_constant_branching_cost, lem:mpu_two_schmidt_sectors,
@@ -193,7 +193,7 @@ In \cite{MPUSchmidtObstructions2026}, the following finite-dimensional
 examples constrain a possible recursive
 proof, rather than providing a circuit complexity lower bound.
 
-\begin{theorem}[A spin-one reflection]
+\begin{lemma}[A spin-one reflection]
     \label{thm:mpu_spin_one_reflection}
     \lean{MPUSchmidtObstruction.coupling_conjTranspose, MPUSchmidtObstruction.spinOne, MPUSchmidtObstruction.coupling, MPUSchmidtObstruction.reflection, MPUSchmidtObstruction.paddedSpinOne, MPUSchmidtObstruction.qubitReflection, MPUSchmidtObstruction.coupling_sq, MPUSchmidtObstruction.reflection_mem_unitaryGroup, MPUSchmidtObstruction.qubitReflection_mem_unitaryGroup}
     \leanok
@@ -204,21 +204,21 @@ proof, rather than providing a circuit complexity lower bound.
     Consequently $U=(I+2H)/3$ is unitary.
     Adjoining the identity on a two-dimensional sector gives
     the three-qubit unitary $\widehat U=U\oplus I_2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Direct multiplication gives the two identities for $H$.
     Substitution yields $U^\dagger U=U^2=I$.
     The direct-sum extension is unitary on both orthogonal sectors.
 \end{proof}
 
-\begin{theorem}[Scalar-plus-skew-symmetric unitary matrices]
+\begin{lemma}[Scalar-plus-skew-symmetric unitary matrices]
     \label{thm:mpu_spin_one_unitary_space}
     \lean{MPUSchmidtObstruction.eq_zero_of_scalarSkew_mem_unitaryGroup, MPUSchmidtObstruction.scalarSkew, MPUSchmidtObstruction.scalarSkewLinearMap, MPUSchmidtObstruction.leftOperatorSpace, MPUSchmidtObstruction.scalarSkew_mulVec, MPUSchmidtObstruction.eq_smul_one_of_mem_leftOperatorSpace_of_unitary, MPUSchmidtObstruction.spinOne_zero_mem_leftOperatorSpace, MPUSchmidtObstruction.leftOperatorSpace_not_spanned_by_unitaries}
     \leanok
     Put $W=\{aI_3+K:a\in\mathbb C,\ K^T=-K\}$.
     Every unitary matrix in $W$ is scalar, and $W$ is not spanned
     by its unitary matrices.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A skew-symmetric matrix of odd size has a nonzero kernel vector.
     Norm preservation on that vector forces $|a|=1$.
@@ -227,14 +227,14 @@ proof, rather than providing a circuit complexity lower bound.
     The nonzero spin matrix $J_1$ belongs to $W$ and is not scalar.
 \end{proof}
 
-\begin{theorem}[An operator space with no unitary matrix]
+\begin{lemma}[An operator space with no unitary matrix]
     \label{thm:mpu_qubit_unitary_space_obstruction}
     \lean{MPUSchmidtObstruction.paddedScalarSkew_not_mem_unitaryGroup, MPUSchmidtObstruction.paddedScalarSkew, MPUSchmidtObstruction.paddedScalarSkewLinearMap, MPUSchmidtObstruction.qubitLeftOperatorSpace, MPUSchmidtObstruction.not_mem_unitaryGroup_of_mem_qubitLeftOperatorSpace}
     \leanok
     Put $D=\operatorname{diag}(1/3,1/3,1/3,1)$ and
     $\widehat W=\{aD+(K\oplus0):a\in\mathbb C,\ K^T=-K\}$.
     No matrix in $\widehat W$ is unitary.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_spin_one_unitary_space}
     The last coordinate forces $|a|=1$.
@@ -245,14 +245,14 @@ proof, rather than providing a circuit complexity lower bound.
 
 % The Schmidt-space identifications in the next theorem are not yet
 % formalized. The matrix identities and obstructions above are formalized.
-\begin{theorem}[A Schmidt-space obstruction at rank four]
+\begin{lemma}[A Schmidt-space obstruction at rank four]
     \label{thm:mpu_spin_one_schmidt_obstruction}
     The spin-one reflection has operator Schmidt rank four and left
     Schmidt space $W$. Its three-qubit extension has the same rank
     and left Schmidt space $\widehat W$.
     Thus an original Schmidt space of a unitary can fail to have
     even one unitary element.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:mpu_spin_one_reflection,
         thm:mpu_qubit_unitary_space_obstruction}
@@ -264,7 +264,7 @@ proof, rather than providing a circuit complexity lower bound.
     the stated spaces.
 \end{proof}
 
-\begin{theorem}[The rational controlled Pauli operator]
+\begin{lemma}[The rational controlled Pauli operator]
     \label{thm:mpu_pauli_control_unitary}
     \lean{MPUPauliControl.oneSite_mem_unitaryGroup, MPUPauliControl.coordinateInt, MPUPauliControl.pauliCombination, MPUPauliControl.oneSite, MPUPauliControl.witness, MPUPauliControl.pauliCombination_mul_self, MPUPauliControl.pauliCombination_conjTranspose, MPUPauliControl.coordinateInt_sum_sq, MPUPauliControl.witness_mem_unitaryGroup}
     \leanok
@@ -281,7 +281,7 @@ proof, rather than providing a circuit complexity lower bound.
     Each vector has Euclidean norm one. Hence each $n_j\cdot\sigma$
     and the controlled operator
     $V=\sum_j(n_j\cdot\sigma)\otimes|j\rangle\langle j|$ are unitary.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the two-dimensional Pauli matrices shows that each of the eight
     integer rows has squared length $225$.
@@ -289,7 +289,7 @@ proof, rather than providing a circuit complexity lower bound.
     so unitarity follows from unitarity of each block.
 \end{proof}
 
-\begin{theorem}[The three-dimensional control coefficient space]
+\begin{lemma}[The three-dimensional control coefficient space]
     \label{thm:mpu_pauli_control_space_obstruction}
     \lean{MPUPauliControl.not_forall_normSq_controlLinearCombination, MPUPauliControl.controlLinearCombination, MPUPauliControl.controlDiagonal, MPUPauliControl.controlCoefficientMap, MPUPauliControl.controlCoefficientSpace, MPUPauliControl.coefficient, MPUPauliControl.controlDiagonal_not_mem_unitaryGroup, MPUPauliControl.controlCoefficientSpace_not_mem_unitaryGroup, MPUPauliControl.controlCoefficientMap_injective, MPUPauliControl.finrank_controlCoefficientSpace, MPUPauliControl.controlCoefficientMap_apply, MPUPauliControl.witness_eq_sum_pauli_kronecker, MPUPauliControl.coefficient_linearIndependent, MPUPauliControl.coefficient_mem_controlCoefficientSpace, MPUPauliControl.controlCoefficientSpace_eq_span}
     \leanok
@@ -299,7 +299,7 @@ proof, rather than providing a circuit complexity lower bound.
     $\operatorname{span}_{\mathbb C}\{B_1,B_2,B_3\}$.
     It contains no unitary matrix. The controlled Pauli operator
     satisfies $V=\sum_{a=1}^3\sigma_a\otimes B_a$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_pauli_control_unitary}
     The first three diagonal entries recover the coordinates of $v$.
@@ -311,12 +311,12 @@ proof, rather than providing a circuit complexity lower bound.
     by linearity of the displayed coefficients.
 \end{proof}
 
-\begin{theorem}[A Schmidt-space obstruction at bond dimension three]
+\begin{lemma}[A Schmidt-space obstruction at bond dimension three]
     \label{thm:mpu_pauli_control_schmidt_obstruction}
     There is a four-qubit unitary with an open-boundary matrix product
     representation of bond dimensions $3,3,2$ whose right Schmidt
     space at the first cut contains no unitary matrix.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:mpu_pauli_control_unitary, thm:mpu_pauli_control_space_obstruction}
     Let $q_0=e_1$, $q_1=e_2$, $q_2=e_3$,
@@ -337,7 +337,7 @@ proof, rather than providing a circuit complexity lower bound.
     orthogonal vectors in the real plane $\mathbb C$ are impossible.
 \end{proof}
 
-\begin{theorem}[Exact controlled Pauli circuits]
+\begin{lemma}[Exact controlled Pauli circuits]
     \label{thm:mpu_orthogonal_walk_circuits}
     Let $n_0\in\mathbb R^3$ be a unit vector and $O_i\in O(3)$.
     Put $n(x)=O_1^{x_1}\cdots O_n^{x_n}n_0$ and
@@ -347,7 +347,7 @@ proof, rather than providing a circuit complexity lower bound.
     with $2n$ two-qubit gates, at most $n+1$ one-qubit gates, and
     no auxiliary qubits. With its target at one end of a line,
     it has an adjacent-gate circuit of size and depth $O(n)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:mpu_pauli_control_unitary}
     With $s_i=\det O_i$ and $R_i=s_iO_i\in SO(3)$,
@@ -365,7 +365,7 @@ proof, rather than providing a circuit complexity lower bound.
     adjacent swaps and restores every logical position.
 \end{proof}
 
-\begin{theorem}[Approximation with a small quantum target]
+\begin{lemma}[Approximation with a small quantum target]
     \label{thm:mpu_controlled_target_approximation}
     Let $n,t\geq1$ and
     $U=\sum_{y\in\{0,1\}^n}|y\rangle\langle y|\otimes V(y)$
@@ -379,7 +379,7 @@ proof, rather than providing a circuit complexity lower bound.
     and all auxiliaries return exactly to zero.
     In particular, $t\leq c\log_2N$ for a fixed $c$ gives polynomial
     resources in $N,D,\log(1/\varepsilon)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     For $q=2^t$, a right-canonical representation of the normalized
     Choi vector has letter matrices of norm at most one.
@@ -407,7 +407,7 @@ proof, rather than providing a circuit complexity lower bound.
 
 \section{Completions and general approximation}
 
-\begin{theorem}[Exchanging orthogonal isometric images]
+\begin{lemma}[Exchanging orthogonal isometric images]
     \label{thm:mpu_orthogonal_isometry_swap}
     \lean{Matrix.gram_sub_of_orthogonal_isometries, Matrix.orthogonalIsometrySwap, Matrix.orthogonalIsometrySwap_mem_unitaryGroup, Matrix.orthogonalIsometrySwap_mul_left, Matrix.orthogonalIsometrySwap_mul_right}
     \leanok
@@ -415,7 +415,7 @@ proof, rather than providing a circuit complexity lower bound.
     finite-dimensional complex Hilbert spaces with $J^\dagger V=0$.
     Then $(V-J)^\dagger(V-J)=2I$, and
     $S=I-(V-J)(V-J)^\dagger$ is a unitary satisfying $SJ=V$ and $SV=J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Orthogonality gives both cross Gram terms zero. For $W=V-J$,
     one has $W^\dagger W=2I$ and $(WW^\dagger)^2=2WW^\dagger$.
@@ -432,14 +432,14 @@ the completion has ranks at most $(D+1)^2$. This bounds one completion;
 it does not bound repeated completion by a constant independent of
 recursion depth.
 
-\begin{theorem}[A positive defect can increase bond dimension]
+\begin{lemma}[A positive defect can increase bond dimension]
     \label{thm:mpu_positive_defect_rank_growth}
     For every $m\geq1$ there is a contraction $E$ which is an operator
     Schmidt factor of an open-boundary bond-two MPU with an exact
     $2m$-gate circuit, such that the positive defect
     $\sqrt{I-E^\dagger E}$ has operator cut rank $2^m$.
     The same contraction admits a signed unitary completion of bond two.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     For $q=2^m$ and $h=\pi/(2q)$, define
     $\Theta|i,j\rangle=h(i-j)|i,j\rangle$ on two $m$-qubit blocks.
@@ -455,7 +455,7 @@ recursion depth.
     gives the signed completion.
 \end{proof}
 
-\begin{theorem}[General quasipolynomial approximation]
+\begin{lemma}[General quasipolynomial approximation]
     \label{thm:mpu_general_quasipolynomial_approximation}
     Let $N\geq1$ and let $U$ be an $N$-qubit unitary of consecutive
     operator cut ranks at most $D$. For $0<\varepsilon<1$, there are
@@ -469,7 +469,7 @@ recursion depth.
     \end{align}
     This bounds the auxiliary output error, without asserting exact
     auxiliary erasure or a bound on arbitrary auxiliary inputs.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:mpu_schmidt_span_contraction}
     At each balanced cut, an Auerbach basis of the left Schmidt space
@@ -498,7 +498,7 @@ recursion depth.
 
 \section{Uniform families without exact-length full rank}
 
-\begin{theorem}[Uniform all-length polynomial circuits]
+\begin{lemma}[Uniform all-length polynomial circuits]
     \label{thm:mpu_uniform_averaged_boundary_circuits}
     Fix a physical dimension $d\geq2$, a finite-dimensional bond space,
     matrices $A^{ij}$ and boundary vectors $l,r$. Suppose
@@ -512,7 +512,7 @@ recursion depth.
     sites on a line. The constants and polynomial exponent depend
     on the fixed presentation; no exact-length full-rank assumption
     is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Let $E_+$ be the span of all positive-word columns $A_wr$ and
     quotient by the vectors annihilated by all positive-word rows
@@ -563,20 +563,20 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \section{Polynomial exact circuits at arbitrary fixed cut rank}
 
-\begin{theorem}[Real affine identities of cap Grams]
+\begin{lemma}[Real affine identities of cap Grams]
     \label{thm:mpu_real_affine_gram_identities}
     \lean{MPUCircuit.isHermitian_of_mem_real_affineSpan, MPUCircuit.trace_mul_eq_of_mem_real_affineSpan}
     \leanok
     The real affine hull of a set of Hermitian matrices consists of
     Hermitian matrices. If $\operatorname{Tr}(XQ)=z$ on the original
     set, with $Q$ fixed, the same identity holds on its real affine hull.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Both properties are preserved by
     $X,Y,Z\mapsto c(X-Y)+Z$ for every real $c$.
 \end{proof}
 
-\begin{theorem}[Compactness and a positive determinant maximizer]
+\begin{lemma}[Compactness and a positive determinant maximizer]
     \label{thm:mpu_compact_affine_gram_slice}
     \lean{Matrix.isCompact_setOf_posSemidef_trace_mul_eq_one, Matrix.isCompact_affineSubspace_inter_posSemidef, Matrix.PosSemidef.posDef_of_isMaxOn_det_re, Matrix.exists_posDef_isMaxOn_det_re_of_isCompact, Matrix.exists_posDef_det_re_max_of_trace_mul_eq_one}
     \leanok
@@ -587,7 +587,7 @@ left multiplication, right vector $b$ and left functional the trace.
     has a positive definite maximizer. More generally, this last
     assertion holds for any compact set of positive semidefinite
     matrices containing a positive definite matrix.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The entire set $\{X\succeq0:\operatorname{Tr}(XQ)=1\}$ is the
     continuous image of the compact set of density matrices under
@@ -607,7 +607,7 @@ left multiplication, right vector $b$ and left functional the trace.
     put $Q=P^{-1}/r$.
 \end{definition}
 
-\begin{theorem}[Determinant stationarity on a Hermitian affine space]
+\begin{lemma}[Determinant stationarity on a Hermitian affine space]
     \label{thm:mpu_determinant_stationarity}
     \lean{Matrix.hasDerivAt_det_one_add_smul, Matrix.hasDerivAt_det_add_smul, Matrix.IsHermitian.star_trace_mul_eq, Matrix.trace_nonsing_inv_mul_eq_zero_of_isLocalMax_det, Matrix.PosDef.eventually_posDef_add_real_smul, Matrix.PosDef.trace_nonsing_inv_mul_sub_eq_zero_of_isMaxOn_det}
     \leanok
@@ -620,7 +620,7 @@ left multiplication, right vector $b$ and left functional the trace.
     part of a real affine space $\mathcal C$ of Hermitian matrices,
     then $\operatorname{Tr}(P^{-1}(X-P))=0$ for every
     $X\in\mathcal C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Differentiate the determinant polynomial of $I+zP^{-1}H$ and
     multiply by $\det P$. The positive definite matrices form the
@@ -632,7 +632,7 @@ left multiplication, right vector $b$ and left functional the trace.
     real determinant yields the complex trace identity.
 \end{proof}
 
-\begin{theorem}[Algebra of the balanced dual metric]
+\begin{lemma}[Algebra of the balanced dual metric]
     \label{thm:mpu_dual_gram_metric_algebra}
     \lean{MPUCircuit.dualGramMetric_posDef, MPUCircuit.trace_mul_dualGramMetric_eq_one, MPUCircuit.dualGramMetric_mul, MPUCircuit.mul_dualGramMetric, MPUCircuit.dualGramMetric_inv, MPUCircuit.trace_dualGramMetric_inv_mul_inv}
     \leanok
@@ -644,12 +644,12 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
     If $\operatorname{Tr}(P^{-1}(X-P))=0$, then
     $\operatorname{Tr}(XQ)=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The identities $PP^{-1}=P^{-1}P=I$ and $\operatorname{Tr}I=r$ give both claims.
 \end{proof}
 
-\begin{theorem}[A balanced positive metric on an affine space]
+\begin{lemma}[A balanced positive metric on an affine space]
     \label{thm:mpu_affine_gram_balancing}
     \lean{MPUCircuit.exists_posDef_dualGramMetric_on_affineSubspace}
     \leanok
@@ -664,7 +664,7 @@ left multiplication, right vector $b$ and left functional the trace.
         \operatorname{Tr}(PQ_*)=1\quad(P\in\mathcal C),\qquad
         \operatorname{Tr}(Q_*^{-1}P_*^{-1})=r^2.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_compact_affine_gram_slice,
         thm:mpu_determinant_stationarity,
@@ -687,7 +687,7 @@ left multiplication, right vector $b$ and left functional the trace.
     contraction is $C=(\sqrt Q)^{-1}(\sqrt P)^{-1}$.
 \end{definition}
 
-\begin{theorem}[The contraction of balanced metrics]
+\begin{lemma}[The contraction of balanced metrics]
     \label{thm:mpu_balanced_gram_contraction}
     \lean{MPUCircuit.balancedGramContraction_eq, MPUCircuit.balancedGramContraction_gram, MPUCircuit.balancedGramContraction_vec_inner}
     \leanok
@@ -697,7 +697,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $C=\sqrt r\,I$, $C^\dagger C=rI$, and
     $\langle\operatorname{vec}C,\operatorname{vec}C\rangle=r^2$.
     Thus the corresponding contraction bra has norm $r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The positive square root commutes with inversion and with
     multiplication by nonnegative real scalars. Therefore
@@ -705,7 +705,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Canceling $\sqrt P$ and taking the trace of $C^\dagger C$ gives $\operatorname{Tr}(C^\dagger C)=r^2$.
 \end{proof}
 
-\begin{theorem}[Optimality within positive-metric joining]
+\begin{lemma}[Optimality within positive-metric joining]
     \label{thm:mpu_balanced_gram_contraction_optimality}
     \lean{MPUCircuit.card_sq_le_trace_inv_mul_inv_of_trace_mul_eq_one, MPUCircuit.trace_dualGramMetric_inv_mul_inv_re, MPUCircuit.dualGramMetric_minimizes_inverse_trace}
     \leanok
@@ -720,7 +720,7 @@ left multiplication, right vector $b$ and left functional the trace.
     joining contraction norm $r$ is optimal among these normalized
     positive metrics. This assertion concerns this joining method;
     it gives no lower bound on arbitrary circuit complexity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_dual_gram_metric_algebra}
     For $X=\sqrt Q\sqrt P$ and $Y=\sqrt{Q^{-1}}\sqrt{P^{-1}}$, one has
@@ -746,7 +746,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the left virtual space is one dimensional.
 \end{definition}
 
-\begin{theorem}[Concatenation of density-weighted transfers]
+\begin{lemma}[Concatenation of density-weighted transfers]
     \label{thm:mpu_density_transfer_concatenation}
     \lean{MPUCircuit.intervalGramTransfer_concat, MPUCircuit.prefixInputGram_concat}
     \leanok
@@ -756,13 +756,13 @@ left multiplication, right vector $b$ and left functional the trace.
     $\mathcal T^B_\sigma(\mathcal T^A_\rho(P))$.
     In particular,
     $P_{FA}(\rho\otimes\sigma)=\mathcal T^A_\sigma(P_F(\rho))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the finite sums, using $(AB)^\dagger=B^\dagger A^\dagger$,
     and permuting the independent physical indices gives the identity.
 \end{proof}
 
-\begin{theorem}[Density matrices determine the entire interval Gram]
+\begin{lemma}[Density matrices determine the entire interval Gram]
     \label{thm:mpu_density_gram_separation}
     \lean{MPUCircuit.trace_intervalGramTransfer, MPUCircuit.eq_one_of_trace_density_mul_eq_one, MPUCircuit.intervalInputGram_eq_one_of_density_tests}
     \leanok
@@ -773,7 +773,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $K(P,Q)=I$. More generally, any complex matrix $K$ satisfying
     $\operatorname{Tr}(\rho K)=1$ for every density matrix is the
     identity; no Hermitian hypothesis on $K$ is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Trace cyclicity and permutation of the finite sums give the
     pairing identity. For every nonzero vector $v$, test against
@@ -793,7 +793,7 @@ left multiplication, right vector $b$ and left functional the trace.
     over the real scalars.
 \end{definition}
 
-\begin{theorem}[Positivity of physical prefix Grams]
+\begin{lemma}[Positivity of physical prefix Grams]
     \label{thm:mpu_prefix_gram_positivity}
     \lean{MPUCircuit.prefixInputGram_eq_sum_sandwich, MPUCircuit.prefixInputGram_posSemidef, MPUCircuit.posSemidef_of_mem_densityPrefixGrams, MPUCircuit.isHermitian_of_mem_prefixGramAffineHull}
     \leanok
@@ -802,7 +802,7 @@ left multiplication, right vector $b$ and left functional the trace.
     matrix in $\mathcal C_F$ is Hermitian. In the convention
     $(F_a)_{bv}=F_{ab}(v)$, one has
     $P_F(\rho)=\sum_aF_a^\dagger\rho^T F_a$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the matrix entries gives the sandwich formula.
     The transpose of a positive semidefinite matrix is positive
@@ -811,7 +811,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \uses{thm:mpu_real_affine_gram_identities}
 \end{proof}
 
-\begin{theorem}[Compatibility of the entire affine hull across intervals]
+\begin{lemma}[Compatibility of the entire affine hull across intervals]
     \label{thm:mpu_prefix_affine_hull_transfer}
     \lean{MPUCircuit.intervalGramTransfer_mem_densityPrefixGrams_concat, MPUCircuit.intervalGramTransfer_mem_prefixGramAffineHull_concat}
     \leanok
@@ -821,7 +821,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $\mathcal T^A_\sigma(\mathcal C_F)\subseteq\mathcal C_{FA}$.
     The density factors may each be entangled throughout their
     respective intervals.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_density_transfer_concatenation}
     The concatenation identity sends $P_F(\rho)$ to
@@ -839,7 +839,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $(LA_{ab}R)_{uv}$.
 \end{definition}
 
-\begin{theorem}[The full isometry identity from density tests]
+\begin{lemma}[The full isometry identity from density tests]
     \label{thm:mpu_vectorized_density_isometry}
     \lean{MPUCircuit.vectorizedWeightedInterval_gram, MPUCircuit.vectorizedWeightedInterval_isometry_of_density_tests}
     \leanok
@@ -849,7 +849,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Hence $V$ is an isometry if
     $\operatorname{Tr}(RR^\dagger\mathcal T_\rho(L^\dagger L))=1$
     for every input density matrix $\rho$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_density_gram_separation}
     The inner product of two vectorized matrices is their
@@ -857,7 +857,7 @@ left multiplication, right vector $b$ and left functional the trace.
     physical output index and applying density separation gives the equivalence.
 \end{proof}
 
-\begin{theorem}[Interval isometries from affine Gram normalization]
+\begin{lemma}[Interval isometries from affine Gram normalization]
     \label{thm:mpu_affine_interval_isometry}
     \lean{MPUCircuit.intervalInputGram_eq_one_of_prefixGramAffineHull, MPUCircuit.vectorizedWeightedInterval_isometry_of_prefixGramAffineHull}
     \leanok
@@ -867,7 +867,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $\operatorname{Tr}(XQ)=1$ for every $X\in\mathcal C_{FA}$.
     The interval map with amplitudes $\sqrt P A_{ab}\sqrt Q$ is
     an isometry.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_prefix_affine_hull_transfer,
         thm:mpu_vectorized_density_isometry}
@@ -877,7 +877,7 @@ left multiplication, right vector $b$ and left functional the trace.
     together with the positive square-root identities completes the proof.
 \end{proof}
 
-\begin{theorem}[Balanced metrics at two consecutive cuts]
+\begin{lemma}[Balanced metrics at two consecutive cuts]
     \label{thm:mpu_two_cut_balanced_isometry}
     \lean{MPUCircuit.exists_balanced_prefix_metrics_interval_isometry}
     \leanok
@@ -891,7 +891,7 @@ left multiplication, right vector $b$ and left functional the trace.
     affine spaces and satisfy the inverse-metric trace identities
     $r^2,s^2$. The interval map with amplitudes
     $\sqrt P A_{ab}\sqrt{S^{-1}/s}$ is an isometry.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_affine_gram_balancing,
         thm:mpu_affine_interval_isometry,
@@ -914,7 +914,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Global unitarity normalizes the cap Gram matrices]
+\begin{lemma}[Global unitarity normalizes the cap Gram matrices]
     \label{thm:mpu_global_cap_gram_normalization}
     \lean{MPUPrefixGram.trace_prefixGram_mul_suffixGram, MPUPrefixGram.prefixGram_posSemidef, MPUPrefixGram.suffixGram_posSemidef, MPUPrefixGram.trace_prefixGram_mul_suffixGram_of_isIsometry, MPUPrefixGram.trace_prefixGram_mul_suffixGram_normalizedIdentity, MPUPrefixGram.prefixGram_eq_prefixInputGram}
     \leanok
@@ -930,7 +930,7 @@ left multiplication, right vector $b$ and left functional the trace.
     In particular, the maximally mixed suffix input normalizes every
     trace-one prefix input. The rectangular prefix formula agrees
     with the one-row prefix Gram above.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Writing $U^\dagger U$ as the sum of the rank-one Grams of its rows,
     the vectorization trace identity turns each product-density
@@ -941,7 +941,7 @@ left multiplication, right vector $b$ and left functional the trace.
     tensor product yields the normalized formula.
 \end{proof}
 
-\begin{theorem}[Positive definite cap Gram matrices from minimal spans]
+\begin{lemma}[Positive definite cap Gram matrices from minimal spans]
     \label{thm:mpu_minimal_cap_gram_witnesses}
     \lean{MPUPrefixGram.prefixGram_normalizedIdentity_posDef_of_span_eq_top, MPUPrefixGram.suffixGram_normalizedIdentity_posDef_of_span_eq_top, MPUPrefixGram.exists_posDef_prefixInputGram_normalizer_of_isIsometry, MPUPrefixGram.exists_posDef_mem_densityPrefixGrams_of_span_eq_top, MPUPrefixGram.exists_posDef_mem_prefixGramAffineHull_of_span_eq_top}
     \leanok
@@ -953,7 +953,7 @@ left multiplication, right vector $b$ and left functional the trace.
     maximally mixed Gram is positive definite. Under global isometry,
     it provides a positive definite trace normalizer for every
     trace-one prefix input.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_global_cap_gram_normalization}
     The unnormalized suffix Gram is the frame operator of its
@@ -973,7 +973,7 @@ left multiplication, right vector $b$ and left functional the trace.
     physical operator has coefficients $F_{ab}A_{cd}G_{ef}$.
 \end{definition}
 
-\begin{theorem}[Reassociation of the physical indices]
+\begin{lemma}[Reassociation of the physical indices]
     \label{thm:mpu_factorization_reassociation}
     \lean{MPUCircuit.factorizedOperator_reassociate, MPUCircuit.factorizedOperator_isometry_reassociate}
     \leanok
@@ -981,14 +981,14 @@ left multiplication, right vector $b$ and left functional the trace.
     The operators obtained by contracting $(FA)G$ and $F(AG)$
     differ only by reassociation of their physical index triples.
     Global isometry is preserved by this reassociation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the two finite virtual sums, applying associativity of
     scalar multiplication, and reindexing the physical coordinates by
     the natural product associativity bijections gives the identity.
 \end{proof}
 
-\begin{theorem}[An affine normalizer from global isometry]
+\begin{lemma}[An affine normalizer from global isometry]
     \label{thm:mpu_affine_normalizer_global_isometry}
     \lean{MPUCircuit.exists_posDef_prefixGramAffineHull_normalizer_of_isIsometry}
     \leanok
@@ -997,7 +997,7 @@ left multiplication, right vector $b$ and left functional the trace.
     nonzero, and the suffix columns span the bond space. Then a
     positive definite matrix $Q$ satisfies
     $\operatorname{Tr}(XQ)=1$ for every $X\in\mathcal C_F$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_minimal_cap_gram_witnesses,
         thm:mpu_real_affine_gram_identities}
@@ -1005,7 +1005,7 @@ left multiplication, right vector $b$ and left functional the trace.
     trace normalization to the real affine hull gives the normalizer.
 \end{proof}
 
-\begin{theorem}[Balanced interval isometries from global isometry]
+\begin{lemma}[Balanced interval isometries from global isometry]
     \label{thm:mpu_balanced_interval_global_isometry}
     \lean{MPUCircuit.exists_balanced_interval_isometry_of_factorizedOperator_isometry}
     \leanok
@@ -1019,7 +1019,7 @@ left multiplication, right vector $b$ and left functional the trace.
     metrics normalizing the entire affine spaces and their
     inverse-metric traces equal to $r^2,s^2$. The middle interval
     with amplitudes $\sqrt P A_{cd}\sqrt{S^{-1}/s}$ is an isometry.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_factorization_reassociation,
         thm:mpu_affine_normalizer_global_isometry,
@@ -1043,7 +1043,7 @@ left multiplication, right vector $b$ and left functional the trace.
     matrices are those of $F(AG)$ and $(FA)G$, respectively.
 \end{definition}
 
-\begin{theorem}[Minimal cut ranks give spanning caps]
+\begin{lemma}[Minimal cut ranks give spanning caps]
     \label{thm:mpu_minimal_cut_ranks_spanning_caps}
     \lean{MPUCircuit.spans_eq_top_of_rank_mul_eq_card, MPUCircuit.coefficientFlattening_eq_mul, MPUCircuit.spans_eq_top_of_coefficientFlattening_rank_eq_card, MPUCircuit.secondCutCoefficientFlattening_apply, MPUCircuit.spans_eq_top_of_twoCutCoefficientFlattening_ranks}
     \leanok
@@ -1056,7 +1056,7 @@ left multiplication, right vector $b$ and left functional the trace.
     imply all four spanning conditions for $F,AG,FA,G$.
     The two cut matrices contain the same physical coefficients,
     grouped at their respective cuts.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Rank of a product is bounded by the rank of each factor, and
     each factor has rank at most $r$. Both ranks therefore equal
@@ -1065,7 +1065,7 @@ left multiplication, right vector $b$ and left functional the trace.
     and associativity gives the equality of regrouped coefficients.
 \end{proof}
 
-\begin{theorem}[Balanced interval isometries from minimal cut ranks]
+\begin{lemma}[Balanced interval isometries from minimal cut ranks]
     \label{thm:mpu_balanced_interval_minimal_cut_ranks}
     \lean{MPUCircuit.exists_balanced_interval_isometry_of_coefficientFlattening_ranks}
     \leanok
@@ -1076,8 +1076,8 @@ left multiplication, right vector $b$ and left functional the trace.
     physical cut matrices have ranks $r,s$, then the balanced
     positive metrics, affine normalization identities, contraction
     traces $r^2,s^2$ and middle-interval isometry of
-    Theorem~\ref{thm:mpu_balanced_interval_global_isometry} exist.
-\end{theorem}
+    Lemma~\ref{thm:mpu_balanced_interval_global_isometry} exist.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_minimal_cut_ranks_spanning_caps,
         thm:mpu_balanced_interval_global_isometry}
@@ -1085,7 +1085,7 @@ left multiplication, right vector $b$ and left functional the trace.
     and apply the global-isometry result.
 \end{proof}
 
-\begin{theorem}[Simultaneous balanced metrics at all minimal cuts]
+\begin{lemma}[Simultaneous balanced metrics at all minimal cuts]
     \label{thm:mpu_simultaneous_balanced_cut_metrics}
     \lean{MPUCircuit.exists_balanced_prefix_metric_of_factorizedOperator_isometry, MPUCircuit.exists_simultaneous_balanced_prefix_metrics_of_factorizedOperator_isometries, MPUCircuit.exists_simultaneous_balanced_prefix_metrics_of_coefficientFlattening_ranks}
     \leanok
@@ -1107,7 +1107,7 @@ left multiplication, right vector $b$ and left functional the trace.
     All these identities hold for the same chosen family. In
     particular, the metrics may be chosen at every cut of a finite
     minimal chain before its interval isometries are formed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Global isometry and minimality give a positive normalizer and
     a positive point at each cut, so affine determinant balancing
@@ -1123,7 +1123,7 @@ left multiplication, right vector $b$ and left functional the trace.
     and scalar coefficient one.
 \end{definition}
 
-\begin{theorem}[The endpoint affine spaces and metrics]
+\begin{lemma}[The endpoint affine spaces and metrics]
     \label{thm:mpu_endpoint_gram_normalization}
     \lean{MPUCircuit.intervalInputGram_scalar_bonds, MPUCircuit.prefixInputGram_eq_trace_smul_one_of_isIsometry, MPUCircuit.densityPrefixGrams_eq_singleton_one_of_isIsometry, MPUCircuit.prefixGramAffineHull_eq_singleton_one_of_isIsometry, MPUCircuit.emptyPrefixCap_isIsometry, MPUCircuit.emptyPrefixCap_prefixGramAffineHull, MPUCircuit.dualGramMetric_one_of_card_eq_one, MPUCircuit.dualGramMetric_one_unit}
     \leanok
@@ -1135,7 +1135,7 @@ left multiplication, right vector $b$ and left functional the trace.
     physical Gram set and real affine hull equal $\{I\}$. This
     also holds for the empty prefix. The one-dimensional identity
     is its own dual metric.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_density_gram_separation}
     Closing the scalar bonds gives $K(I,I)=U^\dagger U$.
@@ -1158,7 +1158,7 @@ left multiplication, right vector $b$ and left functional the trace.
     vectorized over the two remaining virtual bonds.
 \end{definition}
 
-\begin{theorem}[The balanced merger has uniform success amplitude]
+\begin{lemma}[The balanced merger has uniform success amplitude]
     \label{thm:mpu_balanced_merger_success_amplitude}
     \lean{MPUCircuit.normalizedBalancedGramContraction_vec_inner, MPUCircuit.weighted_interval_normalized_contraction, MPUCircuit.contractedWeightedIntervals_balanced, MPUCircuit.contractedWeightedIntervals_balanced_gram}
     \leanok
@@ -1174,7 +1174,7 @@ left multiplication, right vector $b$ and left functional the trace.
     If that parent map is an isometry, the contracted map has input
     Gram $r^{-2}I$. The success probability is therefore the same
     for every input, including entangled inputs.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_balanced_gram_contraction}
     The unnormalized contraction has squared Hilbert--Schmidt norm
@@ -1194,7 +1194,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Unitary reflections and isometric planes]
+\begin{lemma}[Unitary reflections and isometric planes]
     \label{thm:mpu_amplification_reflections}
     \lean{Matrix.subspaceReflection_mem_unitaryGroup, Matrix.amplificationPlane_conjTranspose_mul_self, Matrix.isStarProjection_mul_conjTranspose_of_isometry, Matrix.subspaceAmplificationStep_mem_unitaryGroup}
     \leanok
@@ -1205,7 +1205,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $V_\theta V_\theta^\dagger$ is an orthogonal projection.
     If $P$ is also an orthogonal projection, $Q_\theta$ is unitary
     on the entire output space.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Square $I-2P$, use the orthogonal Gram identities, and use
     $V_\theta^\dagger V_\theta=I$ to square its image projection.
@@ -1213,7 +1213,7 @@ left multiplication, right vector $b$ and left functional the trace.
     is unitary.
 \end{proof}
 
-\begin{theorem}[Exact rotation of an isometric subspace]
+\begin{lemma}[Exact rotation of an isometric subspace]
     \label{thm:mpu_exact_subspace_amplification}
     \lean{Matrix.subspaceAmplificationStep_mul_plane, Matrix.subspaceAmplificationStep_pow_mul_plane, Matrix.subspaceAmplificationStep_pow_eq_good}
     \leanok
@@ -1227,7 +1227,7 @@ left multiplication, right vector $b$ and left functional the trace.
     In particular, for $\ell\geq0$ and
     $\theta=\pi/(4\ell+2)$,
     $Q_\theta^\ell V_\theta=G$ exactly, with no residual phase.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the two reflections on the orthogonal images of $G,H$
     and using the trigonometric addition identities gives the one-step rotation.
@@ -1248,7 +1248,7 @@ left multiplication, right vector $b$ and left functional the trace.
     The two row blocks represent the two values of a new binary flag.
 \end{definition}
 
-\begin{theorem}[Exact attenuation of uniform success]
+\begin{lemma}[Exact attenuation of uniform success]
     \label{thm:mpu_uniform_success_attenuation}
     \lean{Matrix.attenuationRotation_mem_unitaryGroup, Matrix.attenuatedIsometry_conjTranspose_mul_self, Matrix.attenuatedSuccessProjection_isStarProjection, Matrix.attenuatedIsometry_success_gram}
     \leanok
@@ -1263,7 +1263,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
     Thus a nonnegative attenuation coefficient multiplies the
     original nonnegative success amplitude by $t$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since the two flag coefficients satisfy $t^2+s^2=1$, multiplying the
     two-by-two rotation and the block matrices uses this identity
@@ -1283,7 +1283,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Decomposition from uniform success probability]
+\begin{lemma}[Decomposition from uniform success probability]
     \label{thm:mpu_uniform_postselection_decomposition}
     \lean{Matrix.uniformPostselection_decomposition}
     \leanok
@@ -1297,14 +1297,14 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
     Thus both isometric subspaces follow from the uniform probability
     identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Projection identities give the two projected Grams $p^2I$ and
     $(1-p^2)I$, and their mixed Gram is zero. Dividing by their
     positive amplitudes and adding the projected parts recovers $V$.
 \end{proof}
 
-\begin{theorem}[Exact amplification from the initial isometry]
+\begin{lemma}[Exact amplification from the initial isometry]
     \label{thm:mpu_uniform_postselection_amplification}
     \lean{Matrix.postselectionAmplificationStep_mem_unitaryGroup, Matrix.amplificationPlane_postselection_eq_self, Matrix.postselectionAmplificationStep_pow_mul, Matrix.postselectionAmplificationStep_pow_eq_success, Matrix.projection_mul_eq_self_of_uniform_probability_one}
     \leanok
@@ -1320,7 +1320,7 @@ left multiplication, right vector $b$ and left functional the trace.
     For $\theta=\pi/(4\ell+2)$ and $\ell\geq1$,
     $Q^\ell V=(\sin\theta)^{-1}PV$ exactly.
     If instead $V^\dagger PV=I$, then already $PV=V$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_amplification_reflections,
         thm:mpu_exact_subspace_amplification,
@@ -1343,7 +1343,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[A dimension bound for exact amplification]
+\begin{lemma}[A dimension bound for exact amplification]
     \label{thm:mpu_exact_amplification_budget}
     \lean{QuantumCircuit.amplificationRounds_pos, QuantumCircuit.amplificationRounds_le, QuantumCircuit.amplificationAngle_pos, QuantumCircuit.amplificationAngle_lt_pi_div_two, QuantumCircuit.amplificationAngle_le_inv, QuantumCircuit.amplificationAngle_sin_pos_le_inv}
     \leanok
@@ -1357,7 +1357,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
     Thus the merger success amplitude $1/r$ can be attenuated to
     the prescribed exact angle, with at most $r$ amplification rounds.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Positivity and the ceiling inequalities give the lower bound on
     $\ell(r)$. Since $\pi\leq4$, its ceiling is at most $r$.
@@ -1379,7 +1379,7 @@ left multiplication, right vector $b$ and left functional the trace.
     regarded as a function on the full prefix.
 \end{definition}
 
-\begin{theorem}[Slicing and ranks of physical cuts]
+\begin{lemma}[Slicing and ranks of physical cuts]
     \label{thm:mpu_minimal_physical_cut_spaces}
     \lean{MPSPreparation.cutCoefficientMatrix_adjacent, MPSPreparation.cutCoefficientMatrix_restrictions, MPSPreparation.extendCutPrefix_restriction, MPSPreparation.finrank_cutColumnSpace, MPSPreparation.cutSliceLinearMap_maps_columnSpace, MPSPreparation.cutSlice_apply_restriction, MPSPreparation.cutCoefficientRank_pos, MPSPreparation.card_cutPrefixConfig_zero, MPSPreparation.card_cutSuffixConfig_last, MPSPreparation.cutCoefficientRank_zero, MPSPreparation.cutCoefficientRank_last, MPSPreparation.cutColumnSpace_zero_eq_top, MPSPreparation.cutCoefficientMatrix_last, MPSPreparation.fullCutVector_mem, MPSPreparation.fullCutVector_restriction, MPSPreparation.fullCutVector_ne_zero}
     \leanok
@@ -1391,7 +1391,7 @@ left multiplication, right vector $b$ and left functional the trace.
     at the two endpoint cuts it is one. The initial cut space is the
     full one-dimensional space, and the last-cut vector is a nonzero
     member of the last cut space.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The adjacent-cut identity follows by separating sites before,
     at, and after the new letter. Slices take coefficient columns
@@ -1413,7 +1413,7 @@ left multiplication, right vector $b$ and left functional the trace.
     configurations on the two subsets of physical sites.
 \end{definition}
 
-\begin{theorem}[Cut rank is independent of site numbering]
+\begin{lemma}[Cut rank is independent of site numbering]
     \label{thm:mpu_physical_cut_numbering_rank}
     \lean{MPSPreparation.cutCoefficientMatrix_eq_reindex_cutMatrix, MPSPreparation.cutCoefficientRank_eq_cutRank}
     \leanok
@@ -1424,7 +1424,7 @@ left multiplication, right vector $b$ and left functional the trace.
     after the preceding row and column bijections. Thus the two
     matrices have the same rank. No assumption on the local dimension
     or on the nonvanishing of $\psi$ is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The site bijections reconstruct the same physical configuration,
     so corresponding entries agree. Reindexing rows and columns by
@@ -1443,7 +1443,7 @@ left multiplication, right vector $b$ and left functional the trace.
     forms give an open-boundary chain of bond dimensions $r_k$.
 \end{definition}
 
-\begin{theorem}[Reconstruction in cut coordinates]
+\begin{lemma}[Reconstruction in cut coordinates]
     \label{thm:mpu_minimal_cut_coordinate_reconstruction}
     \lean{MPSPreparation.exists_cutBasisFamily_with_endpoints, MPSPreparation.cutEvaluationMatrix_apply, MPSPreparation.cutEvaluationMap_step, MPSPreparation.cutEvaluationMatrix_step, MPSPreparation.cutEvaluationMatrix_eq_initial_mul_eval, MPSPreparation.initialCutEvaluation_row, MPSPreparation.initialCutEvaluation_mul_apply, MPSPreparation.cutPrefixChain_eval_entry, MPSPreparation.minimalCutChain_coeff}
     \leanok
@@ -1456,7 +1456,7 @@ left multiplication, right vector $b$ and left functional the trace.
     provided each intermediate rank fits the padding dimension.
     Thus the resulting rectangular open-boundary chain has exactly
     the original coefficients, including their normalization and phase.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Fixing the two one-dimensional endpoint bases and choosing bases
     at the other cuts, composition of the evaluation maps gives
@@ -1465,7 +1465,7 @@ left multiplication, right vector $b$ and left functional the trace.
     column evaluates $\psi$.
 \end{proof}
 
-\begin{theorem}[Existence of a minimal finite-chain representation]
+\begin{lemma}[Existence of a minimal finite-chain representation]
     \label{thm:mpu_minimal_finite_chain_representation}
     \lean{MPSPreparation.exists_obcChainTensor_coeff_eq_bondDim_eq_cutCoefficientRank}
     \leanok
@@ -1474,7 +1474,7 @@ left multiplication, right vector $b$ and left functional the trace.
     consecutive physical cut ranks satisfy $r_k\leq D$ has an
     exact open-boundary matrix-product representation with bond
     dimension $r_k$ at each cut.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In the chain of coordinate slices with the endpoint bases fixed
     above, the bond dimensions are the physical cut ranks by construction,
@@ -1491,7 +1491,7 @@ left multiplication, right vector $b$ and left functional the trace.
     in that basis.
 \end{definition}
 
-\begin{theorem}[Full-rank factorization at every physical cut]
+\begin{lemma}[Full-rank factorization at every physical cut]
     \label{thm:mpu_minimal_cut_factors}
     \lean{MPSPreparation.cutCoefficientMatrix_eq_prefix_mul_suffix, MPSPreparation.cutPrefixMatrix_rank, MPSPreparation.cutSuffixMatrix_rank, MPSPreparation.cutPrefixMatrix_rows_and_cutSuffixMatrix_cols_span, MPSPreparation.cutPrefixMatrix_step, MPSPreparation.cutSlice_column, MPSPreparation.cutSuffixMatrix_step, MPSPreparation.minimalCutChain_cutCoefficientMatrix_factorization, MPSPreparation.cutPrefixMatrix_zero, MPSPreparation.cutSuffixMatrix_last, MPSPreparation.exists_obcChainTensor_minimal_factorizations}
     \leanok
@@ -1504,7 +1504,7 @@ left multiplication, right vector $b$ and left functional the trace.
     by its site matrix. The normalized endpoint factors are one.
     All these factors and spanning properties can be chosen together
     with the exact minimal open-boundary representation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Basis reconstruction gives the factorization. The basis evaluation
     map is injective, while coefficient columns span the cut space;
@@ -1524,7 +1524,7 @@ left multiplication, right vector $b$ and left functional the trace.
     most $4ac_d$ gates after routing.
 \end{definition}
 
-\begin{theorem}[Conjunction on the entire logical space]
+\begin{lemma}[Conjunction on the entire logical space]
     \label{thm:mpu_reversible_zero_conjunction}
     \lean{QuantumCircuit.zeroConjunctionPerm_apply_clean, QuantumCircuit.zeroConjunctionIncrement_update, QuantumCircuit.zeroPrefixBit_eq_one, QuantumCircuit.zeroConjunctionStep_state, QuantumCircuit.zeroConjunctionStep_isLocalPerm, QuantumCircuit.isPairProduct_zeroConjunctionStep, QuantumCircuit.isPairProduct_zeroConjunctionPerm}
     \leanok
@@ -1536,7 +1536,7 @@ left multiplication, right vector $b$ and left functional the trace.
     first $j+1$ data coordinates are all zero. Each step acts on
     at most three sites. The full conjunction has a
     neighboring-pair circuit of at most $4c_da^2$ gates.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on the completed prefix, at the next step its temporary
     coordinate is still zero, and the previous Boolean value records
@@ -1556,7 +1556,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $K(d,a)=8c_da^2+4a$.
 \end{definition}
 
-\begin{theorem}[Exact initialized-register reflections]
+\begin{lemma}[Exact initialized-register reflections]
     \label{thm:mpu_clean_zero_register_reflection}
     \lean{QuantumCircuit.zeroRegisterReflection_mul_cleanEmbedding, QuantumCircuit.zeroScratchPhaseLocal_mem_unitary, QuantumCircuit.isPairProduct_zeroScratchPhase, QuantumCircuit.isPairProduct_zeroRegisterReflection, QuantumCircuit.zeroRegisterReflection_mem_unitary, QuantumCircuit.zeroRegisterReflection_eq_diagonal, QuantumCircuit.zeroRegisterReflection_apply_clean, QuantumCircuit.zeroRegisterReflectionGateCount_eq, QuantumCircuit.isPairProduct_embedOp_zeroRegisterReflection, QuantumCircuit.embedOp_zeroRegisterReflection_apply_clean, QuantumCircuit.isPairProduct_neg_one}
     \leanok
@@ -1572,7 +1572,7 @@ left multiplication, right vector $b$ and left functional the trace.
     all other logical sites are unrestricted. For an empty tested
     register the reflection is the global phase $-I$, implemented
     by one neighboring-pair gate when $n\geq2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     On a clean temporary register the final Boolean value tests
     exactly whether the entire data register is zero. The diagonal
@@ -1583,7 +1583,7 @@ left multiplication, right vector $b$ and left functional the trace.
     uses swap routing.
 \end{proof}
 
-\begin{theorem}[Products in padded bond coordinates]
+\begin{lemma}[Products in padded bond coordinates]
     \label{thm:mpu_padded_bond_products}
     \lean{Matrix.zeroPad_mul, Matrix.zeroPad_mulVec}
     \leanok
@@ -1591,7 +1591,7 @@ left multiplication, right vector $b$ and left functional the trace.
     their products whenever the intermediate bond dimension is no
     larger than the common padding dimension. The outer dimensions
     need not satisfy this bound.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In the product sum, terms outside the intermediate bond space
     vanish. The remaining terms are exactly the rectangular product.
@@ -1611,7 +1611,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Dilation of a partial isometry]
+\begin{lemma}[Dilation of a partial isometry]
     \label{thm:mpu_partial_isometry_dilation}
     \lean{Matrix.partialIsometryDilation_mem_unitaryGroup, Matrix.partialIsometryDilation_mul_fromRows, Matrix.partialIsometryDilation_initial_gram, Matrix.partialIsometryDilation_success_gram}
     \leanok
@@ -1625,21 +1625,21 @@ left multiplication, right vector $b$ and left functional the trace.
     The total output Gram is $V^\dagger V$, and projection onto
     the first output copy has Gram $(AV)^\dagger AV$.
     The first-copy identity holds for arbitrary $A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Both $A^\dagger A$ and $AA^\dagger$ are projections.
     Block multiplication gives $\mathcal D_A^\dagger\mathcal D_A=I$,
     the displayed action, and its projected Gram.
 \end{proof}
 
-\begin{theorem}[A normalized row followed by a reset]
+\begin{lemma}[A normalized row followed by a reset]
     \label{thm:mpu_normalized_row_reset}
     \lean{Matrix.vecMulVec_single_mul_conjTranspose_mul}
     \leanok
     If $\sum_x\overline{w_x}w_x=1$, the matrix
     $A=|z\rangle\sum_xw_x\langle x|$ satisfies
     $AA^\dagger A=A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Multiplying the two outer products and using the unit norm of the row gives $AA^\dagger A=A$.
 \end{proof}
@@ -1655,7 +1655,7 @@ left multiplication, right vector $b$ and left functional the trace.
     is the two-copy dilation of that reset matrix.
 \end{definition}
 
-\begin{theorem}[The explicit unitary bond dilation]
+\begin{lemma}[The explicit unitary bond dilation]
     \label{thm:mpu_normalized_bond_dilation}
     \lean{MPUCircuit.normalizedBondDilation_mem_unitaryGroup, MPUCircuit.normalizedBondReset_mul_conjTranspose_mul, MPUCircuit.normalizedBondDilation_mul_fromRows, MPUCircuit.normalizedBondDilation_first_branch}
     \leanok
@@ -1667,7 +1667,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the normalized contraction and resets the bond pair to the
     specified basis state. Its second branch records the complementary
     initial component.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The normalized contraction has vectorized norm one, so the bond
     reset is a partial isometry, and its explicit dilation together with the
@@ -1684,7 +1684,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Exact synthesis with a dimension bound]
+\begin{lemma}[Exact synthesis with a dimension bound]
     \label{thm:mpu_quantitative_unitary_synthesis}
     \lean{QuantumCircuit.isPairProduct_unitaryGateCount, QuantumCircuit.isPairProduct_ctrlOp_le_exponential, QuantumCircuit.isPairProduct_twoLevel_le_exponential, QuantumCircuit.unitaryGateCount_le_hilbertDimension_pow, QuantumCircuit.isPairProduct_le_hilbertDimension_pow, QuantumCircuit.exists_isPairProduct_apply_embedding_eq}
     \leanok
@@ -1700,7 +1700,7 @@ left multiplication, right vector $b$ and left functional the trace.
     A special two-level gate with $k$ controls has cost at most
     $4n3^k$; a special two-level gate between arbitrary configurations
     has cost at most $(2n+1)(4n3^n)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Eliminate matrix entries by two-level unitaries, express each
     by controlled one-site gates, and route its two-site factors.
@@ -1708,14 +1708,14 @@ left multiplication, right vector $b$ and left functional the trace.
     Extension of orthonormal columns gives the isometry assertion.
 \end{proof}
 
-\begin{theorem}[Arbitrary placement of a circuit]
+\begin{lemma}[Arbitrary placement of a circuit]
     \label{thm:mpu_arbitrary_circuit_placement}
     \lean{QuantumCircuit.IsPairProduct.embedOp_injective}
     \leanok
     On a chain of $n$ sites with positive local dimension,
     injectively placing a neighboring-pair circuit of $K$ gates
     requires at most $2nK$ neighboring-pair gates.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each placed gate acts on two distinct sites. Swaps bring them
     together and restore their positions at cost at most $2n$.
@@ -1729,7 +1729,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Set $t_r=r\sin\theta(r)$.
 \end{definition}
 
-\begin{theorem}[Exact merging at inverse-rank probability]
+\begin{lemma}[Exact merging at inverse-rank probability]
     \label{thm:mpu_exact_uniform_merging}
     \lean{Matrix.postselectionAmplificationStep_pow_eq_first_branch, MPUCircuit.mergingAttenuation_pos_le_one, Matrix.postselectionSuccess_attenuatedIsometry_eq_first_branch, Matrix.exists_exact_uniform_merging}
     \leanok
@@ -1744,14 +1744,14 @@ left multiplication, right vector $b$ and left functional the trace.
         \binom{rPV}{0}.
     \end{align}
     The equality includes the phase and holds on all coherent inputs.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The attenuated amplitude is $t_r/r=\sin\theta(r)$.
     Exact amplification gives its normalized successful part.
     The two scalar normalizations cancel to leave $rPV$.
 \end{proof}
 
-\begin{theorem}[Circuits for image reflections]
+\begin{lemma}[Circuits for image reflections]
     \label{thm:mpu_image_reflection_circuits}
     \lean{Matrix.subspaceReflection_image, QuantumCircuit.IsPairProduct.subspaceReflection_image, QuantumCircuit.IsPairProduct.pow, QuantumCircuit.IsPairProduct.postselectionAmplificationStep}
     \leanok
@@ -1765,14 +1765,14 @@ left multiplication, right vector $b$ and left functional the trace.
     On $n\geq2$ sites of positive local dimension $d$, an
     amplification round with reflection
     costs $K,L$ costs at most $2n+K+L$, including its phase.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Unitary conjugation gives the identity. Concatenate the forward
     circuit, the reflection, and the inverse circuit. Repetition
     concatenates copies; the prescribed global phase costs at most $2n$.
 \end{proof}
 
-\begin{theorem}[Balanced recursion with polynomial overhead]
+\begin{lemma}[Balanced recursion with polynomial overhead]
     \label{thm:mpu_polynomial_overhead_recursion}
     \lean{MPUCircuit.cost_le_pow_of_geometric_overhead, MPUCircuit.cost_le_polynomial_of_geometric_overhead, MPUCircuit.cost_le_polynomial_clog_of_geometric_overhead}
     \leanok
@@ -1786,7 +1786,7 @@ left multiplication, right vector $b$ and left functional the trace.
     interval length is compatible with polynomial total cost
     at a fixed child-call factor. For integer $r$, one may take
     $k=\lceil\log_2 r\rceil$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Induction uses $(r-q-1)Cq^j\geq0$ at each step.
     The binary upper bound on $r$ gives the polynomial estimate.
@@ -1803,7 +1803,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Schmidt rank.
 \end{definition}
 
-\begin{theorem}[Minimal physical cuts of a finite unitary]
+\begin{lemma}[Minimal physical cuts of a finite unitary]
     \label{thm:mpu_minimal_physical_unitary_cuts}
     \lean{MPUCircuit.exists_minimal_obcChainTensor_of_unitary, MPUCircuit.operatorCoefficientTensor_apply, MPUCircuit.operatorCoefficientTensor_ne_zero, MPUCircuit.physicalCutConfigEquiv_pair}
     \leanok
@@ -1815,7 +1815,7 @@ left multiplication, right vector $b$ and left functional the trace.
     consecutive operator Schmidt ranks are at most $D$ and its
     length is positive, it therefore has an exact open-boundary
     representation with those ranks as its bond dimensions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The configuration bijections act site by site. A zero paired
     tensor would make the entire unitary matrix zero, contradicting
@@ -1831,7 +1831,7 @@ left multiplication, right vector $b$ and left functional the trace.
     factors are operator-valued prefix rows and suffix columns.
 \end{definition}
 
-\begin{theorem}[Simultaneous metrics from the finite unitary]
+\begin{lemma}[Simultaneous metrics from the finite unitary]
     \label{thm:mpu_metrics_from_finite_unitary}
     \lean{MPUCircuit.exists_cutBases_simultaneous_balanced_metrics_of_unitary, MPUCircuit.factorizedOperator_minimalOperatorFactors, MPUCircuit.minimalOperatorFactors_isIsometry, MPUCircuit.minimalOperatorFactors_spans, MPUCircuit.exists_simultaneous_balanced_minimalOperator_metrics}
     \leanok
@@ -1851,7 +1851,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
     No separate factorization, spanning, isometry, or metric hypotheses
     are needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The constructed factors give the original unitary with its
     configurations bijectively relabelled, so their operator is
@@ -1861,7 +1861,7 @@ left multiplication, right vector $b$ and left functional the trace.
     determinant balancing to these derived factors gives the metrics.
 \end{proof}
 
-\begin{theorem}[Dimensions of encoded bond registers]
+\begin{lemma}[Dimensions of encoded bond registers]
     \label{thm:mpu_encoded_bond_register_dimensions}
     \lean{MPUCircuit.bond_register_dimension_bounds, MPUCircuit.nonempty_bond_register_embedding, MPUCircuit.exists_bond_register_embedding_zero, MPUCircuit.two_bond_register_dimension_le, MPUCircuit.leaf_packet_dimension_le}
     \leanok
@@ -1872,7 +1872,7 @@ left multiplication, right vector $b$ and left functional the trace.
     and one physical site have padded dimension at most $d^3rs$.
     The same bound holds after increasing the packet to at least
     two sites for pair-gate synthesis.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The ceiling logarithm gives both dimension inequalities.
     Embed the finite basis by cardinality and interchange its
@@ -1899,7 +1899,7 @@ left multiplication, right vector $b$ and left functional the trace.
     applies to the entire logical space.
 \end{definition}
 
-\begin{theorem}[Composition and inverse calls with one workspace]
+\begin{lemma}[Composition and inverse calls with one workspace]
     \label{thm:mpu_clean_unitary_composition}
     \lean{QuantumCircuit.IsCleanImplementation.mul, QuantumCircuit.IsCleanImplementation.one, QuantumCircuit.IsCleanImplementation.pow, QuantumCircuit.IsCleanImplementation.conjTranspose, QuantumCircuit.IsCleanImplementation.star, QuantumCircuit.IsCleanImplementation.inv, QuantumCircuit.IsCleanImplementation.mulVec, QuantumCircuit.IsCleanImplementation.logical_mem_unitary, QuantumCircuit.IsCleanImplementation.conjTranspose_of_isometry, QuantumCircuit.IsCleanImplementation.kronecker_one}
     \leanok
@@ -1911,7 +1911,7 @@ left multiplication, right vector $b$ and left functional the trace.
     workspace to its initialized state on every logical input.
     The identities persist after tensoring with an arbitrary
     finite reference identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Multiplying the two intertwining identities and taking the Gram
     of $UJ=JZ$ gives $Z^\dagger Z=I$; ambient and logical unitarity
@@ -1919,7 +1919,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the intertwining identity with a reference system.
 \end{proof}
 
-\begin{theorem}[Encoding and implementing isometric columns]
+\begin{lemma}[Encoding and implementing isometric columns]
     \label{thm:mpu_initialized_isometry_synthesis}
     \lean{QuantumCircuit.exists_isPairProduct_mul_initializedBasisMatrix_eq, QuantumCircuit.initializedBasisMatrix_isIsometry, QuantumCircuit.mul_initializedBasisMatrix, QuantumCircuit.exists_isPairProduct_isCleanImplementation, QuantumCircuit.isCleanImplementation_zeroRegisterReflection}
     \leanok
@@ -1935,7 +1935,7 @@ left multiplication, right vector $b$ and left functional the trace.
     inclusions coincide, this is an initialized-workspace implementation.
     The constructed zero-register reflection also satisfies this
     complete logical-space identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Encoded columns remain orthonormal. Extend them to a unitary
     with their prescribed input columns and synthesize that finite
@@ -1955,7 +1955,7 @@ left multiplication, right vector $b$ and left functional the trace.
     gives the corresponding operator interval.
 \end{definition}
 
-\begin{theorem}[One metric family for every interval]
+\begin{lemma}[One metric family for every interval]
     \label{thm:mpu_metrics_for_all_minimal_intervals}
     \lean{MPSPreparation.cutCoefficientMatrix_interval, MPSPreparation.cutIntervalSliceLinearMap_maps_columnSpace, MPSPreparation.cutPrefixMatrix_interval, MPSPreparation.cutIntervalSlice_column, MPSPreparation.cutSuffixMatrix_interval, MPSPreparation.joinCutPrefix_assoc, MPSPreparation.cutIntervalSlice_comp, MPSPreparation.cutIntervalMatrix_comp, MPSPreparation.cutIntervalMatrix_adjacent, MPUCircuit.prefixInputGram_physical_reindex, MPUCircuit.densityPrefixGrams_physical_reindex, MPUCircuit.prefixGramAffineHull_physical_reindex, MPUCircuit.pairPhysicalConfig_joinCutPrefix, MPUCircuit.minimalOperatorPrefix_concat, MPUCircuit.prefixGramAffineHull_minimalOperatorPrefix_concat, MPUCircuit.minimalOperatorInterval_isometry_of_cut_metrics, MPUCircuit.pairPhysicalConfig_joinCutInterval, MPUCircuit.minimalOperatorInterval_comp, MPUCircuit.exists_simultaneous_balanced_interval_isometries_of_unitary}
     \leanok
@@ -1966,7 +1966,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $A_{j,l}=A_{j,k}A_{k,l}$, with physical configurations concatenated.
     The statement includes inputs entangled among the interval sites;
     it requires no externally chosen interval isometries.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Prefix and suffix restrictions give the interval factorization
     in the minimal cut bases. Physical reindexing preserves the
@@ -1987,7 +1987,7 @@ left multiplication, right vector $b$ and left functional the trace.
     binary flag. The remaining coordinates carry the identity.
 \end{definition}
 
-\begin{theorem}[Exact joining with erased bond and binary flags]
+\begin{lemma}[Exact joining with erased bond and binary flags]
     \label{thm:mpu_balanced_interval_dilation}
     \lean{Matrix.basisResetOutput_gram, Matrix.reindex_rows_gram, Matrix.partialIsometryDilation_one_kronecker, MPUCircuit.regroupedIntervalChildren_eq_reindex, MPUCircuit.regroupedIntervalChildren_gram, MPUCircuit.liftedNormalizedBondReset_mul_children, MPUCircuit.balancedIntervalDilation_eq_local, MPUCircuit.liftedNormalizedBondReset_mul_conjTranspose_mul, MPUCircuit.balancedIntervalDilation_mem_unitaryGroup, MPUCircuit.dilatedBalancedIntervalChildren_gram, MPUCircuit.dilatedBalancedIntervalChildren_success_gram, MPUCircuit.dilatedBalancedIntervalChildren_normalized_success, MPUCircuit.balancedInterval_merging_exact}
     \leanok
@@ -2000,7 +2000,7 @@ left multiplication, right vector $b$ and left functional the trace.
     attenuation and $\ell_r$ exact amplification rounds, the result
     is the parent isometry, with the joining bonds and both binary
     flags reset. The global phase is retained.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The normalized contraction row has norm one. Its partial-isometry
     dilation is unitary, and its first branch contracts precisely
@@ -2018,7 +2018,7 @@ left multiplication, right vector $b$ and left functional the trace.
     copies of the joining-pair space in the dilation.
 \end{definition}
 
-\begin{theorem}[A circuit for the bond dilation]
+\begin{lemma}[A circuit for the bond dilation]
     \label{thm:mpu_bond_dilation_packet}
     \lean{MPUCircuit.bondDilationPacket_dimension_le, MPUCircuit.exists_bondDilationPacket_embedding_zero, MPUCircuit.exists_normalizedBondDilation_circuit}
     \leanok
@@ -2028,7 +2028,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the bond dilation on its entire encoded space. Its dimension is
     at most $2d^3r^2$, and its gate count is at most
     $38(2d^3r^2)^6$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Choosing a cardinality embedding, exchanging the prescribed reset
     vector with zero, and extending the encoded logical unitary to the
@@ -2046,7 +2046,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Denote the zero-register gate bound by $K_d(a)$.
 \end{definition}
 
-\begin{theorem}[Selected flags with one common scratch pool]
+\begin{lemma}[Selected flags with one common scratch pool]
     \label{thm:mpu_selected_flag_reflection}
     \lean{QuantumCircuit.selectedZeroRegisterSites_castAdd, QuantumCircuit.selectedZeroRegisterSites_natAdd, QuantumCircuit.selectedZeroRegisterLogical_mem_unitary, QuantumCircuit.selectedZeroRegisterLogical_eq_one_sub, QuantumCircuit.isPairProduct_selectedZeroRegisterReflection, QuantumCircuit.isCleanImplementation_selectedZeroRegisterReflection, QuantumCircuit.selectedZeroRegisterLogical_empty, QuantumCircuit.exists_isPairProduct_isCleanImplementation_selectedZeroRegister, QuantumCircuit.selectedZeroRegisterPoolSites_castAdd, QuantumCircuit.selectedZeroRegisterPoolSites_natAdd, QuantumCircuit.isPairProduct_selectedZeroRegisterReflectionPool, QuantumCircuit.isCleanImplementation_selectedZeroRegisterReflectionPool, QuantumCircuit.exists_isPairProduct_isCleanImplementation_selectedZeroRegisterPool}
     \leanok
@@ -2056,7 +2056,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $2(n+A)K_d(a)$ gates when $a>0$. For $a=0$, one neighboring-pair
     gate implements the required phase $-1$. Unselected logical
     sites are unrestricted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Place the reversible zero conjunction on the selected flags and
     the first $a$ scratch sites, apply its phase, and reverse it.
@@ -2073,7 +2073,7 @@ left multiplication, right vector $b$ and left functional the trace.
     one of a qudit, and let it be the identity on the other levels.
 \end{definition}
 
-\begin{theorem}[A circuit for the prescribed attenuation]
+\begin{lemma}[A circuit for the prescribed attenuation]
     \label{thm:mpu_physical_success_attenuation}
     \lean{MPUCircuit.attenuationQuditRotation_mem_unitary, MPUCircuit.attenuationQuditRotation_mulVec_zero, MPUCircuit.isPairProduct_siteOp_attenuationQuditRotation, MPUCircuit.isPairProduct_siteOp_mergingAttenuation}
     \leanok
@@ -2082,7 +2082,7 @@ left multiplication, right vector $b$ and left functional the trace.
     At any site of an $n\geq2$ qudit chain it costs at most $2n$
     neighboring-pair gates. The prescribed merger attenuation
     $t=r\sin(\pi/(4\ell_r+2))$ satisfies the required inequality.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The binary rotation is extended by the identity. Its first
     column gives the asserted amplitudes. Route its single-site
@@ -2102,7 +2102,7 @@ left multiplication, right vector $b$ and left functional the trace.
     physical sites, logical auxiliary sites, then scratch sites.
 \end{definition}
 
-\begin{theorem}[Register counts and compatible bond encodings]
+\begin{lemma}[Register counts and compatible bond encodings]
     \label{thm:mpu_common_register_layout}
     \lean{MPUCircuit.internalCutEmbedding_bounds, MPUCircuit.card_bondRegisterSite, MPUCircuit.card_amplificationFlagSite, MPUCircuit.card_auxiliarySite, MPUCircuit.card_logicalSite, MPUCircuit.card_globalSite, MPUCircuit.globalSiteCount_eq, MPUCircuit.globalSiteCount_le, MPUCircuit.physicalLogicalSites_apply, MPUCircuit.auxiliaryLogicalSites_apply, MPUCircuit.logicalGlobalSites_apply, MPUCircuit.scratchGlobalSites_apply, MPUCircuit.bondDim_le_registerCapacity, MPUCircuit.registerCapacity_le_mul_bondDim, MPUCircuit.bondRegisterEncoding_zero}
     \leanok
@@ -2116,7 +2116,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $q$ qudits, with bond label zero represented by physical zero.
     For $N=1$ the layout has one site; pair-gate synthesis may append
     one initialized padding site.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Count the finite products and disjoint unions defining the site
     sets. Ceiling-logarithmic capacity gives the dimension inequalities.
@@ -2135,7 +2135,7 @@ left multiplication, right vector $b$ and left functional the trace.
     agrees with the vectorized joining contraction.
 \end{definition}
 
-\begin{theorem}[Compatible physical joining circuit]
+\begin{lemma}[Compatible physical joining circuit]
     \label{thm:mpu_compatible_bond_dilation}
     \lean{MPUCircuit.compatibleBondDilationCfg_left, MPUCircuit.compatibleBondDilationCfg_right, MPUCircuit.compatibleBondDilationCfg_dilation, MPUCircuit.compatibleBondDilationCfg_attenuation, MPUCircuit.compatibleBondDilationCfg_injective, MPUCircuit.compatibleBondDilationEmbedding_zero, MPUCircuit.exists_compatibleNormalizedBondDilation_circuit, MPUCircuit.compatibleBondDilationPacket_dimension_le, MPUCircuit.exists_compatibleNormalizedBondDilation_circuit_bounded}
     \leanok
@@ -2146,7 +2146,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the entire attenuation qudit. Its reset vector is all zero.
     For $q=\lceil\log_dD\rceil$ and $D>0$, the packet dimension is
     at most $d^4D^2$ and its gate count is at most $38(d^4D^2)^6$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The product encoding is injective and maps the specified reset
     labels and flags to zero. Extend the encoded full logical unitary,
@@ -2165,7 +2165,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the physical letter, with both bond registers in zero.
 \end{definition}
 
-\begin{theorem}[A clean circuit for every leaf isometry]
+\begin{lemma}[A clean circuit for every leaf isometry]
     \label{thm:mpu_clean_leaf_circuit}
     \lean{MPUCircuit.exists_leaf_logical_unitary, MPUCircuit.exists_exact_clean_leaf_circuit, MPUCircuit.leaf_workspace_dimension_le, MPUCircuit.leaf_workspace_gateCount_le, MPUCircuit.leaf_workspace_dimension_le_of_width_le}
     \leanok
@@ -2177,7 +2177,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $q=\lceil\log_dD\rceil$ and $D>0$, the dimension including
     scratch is at most $d^4D^2$, and the gate cost is at most
     $38(d^4D^2)^6$. The assertion also covers $q=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Encode the orthonormal output columns and extend them to a full
     logical unitary with the prescribed initialized input columns.
@@ -2186,7 +2186,7 @@ left multiplication, right vector $b$ and left functional the trace.
     ensures cleanup of adjoint calls as well.
 \end{proof}
 
-\begin{theorem}[Exact amplification with reused workspace]
+\begin{lemma}[Exact amplification with reused workspace]
     \label{thm:mpu_exact_clean_amplification_circuit}
     \lean{MPUCircuit.exists_exact_clean_amplification_circuit}
     \leanok
@@ -2206,7 +2206,7 @@ left multiplication, right vector $b$ and left functional the trace.
     cleanly along $J$, so its adjoint may use the same workspace.
     The given circuits are the induction data for this recursive
     step.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Ambient unitarity and the clean identity imply full logical
     unitarity of $Z$, hence cleanup of the inverse child call.
@@ -2227,7 +2227,7 @@ left multiplication, right vector $b$ and left functional the trace.
     local circuit, preserving the logical and scratch blocks.
 \end{definition}
 
-\begin{theorem}[Clean placement into a larger shared pool]
+\begin{lemma}[Clean placement into a larger shared pool]
     \label{thm:mpu_clean_circuit_placement}
     \lean{QuantumCircuit.cleanImplementationSites_castAdd, QuantumCircuit.cleanImplementationSites_natAdd, QuantumCircuit.initializedBasisMatrix_zeroWorkspace_mul_apply, QuantumCircuit.IsCleanImplementation.embedOp, QuantumCircuit.isPairProduct_isCleanImplementation_embedOp}
     \leanok
@@ -2237,7 +2237,7 @@ left multiplication, right vector $b$ and left functional the trace.
     larger scratch pool to zero. If the local dimension $d$ is
     positive and the local circuit has $K$ gates, its routed circuit on $n+A$ sites has at most $2(n+A)K$ gates.
     No additional cleanup hypothesis is required for the placed circuit.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The initialized basis inclusion selects the zero-scratch columns.
     In these columns, the placed matrix identity is precisely the
@@ -2245,7 +2245,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Injective site placement gives the stated routing bound.
 \end{proof}
 
-\begin{theorem}[An explicit logarithmic branching exponent]
+\begin{lemma}[An explicit logarithmic branching exponent]
     \label{thm:mpu_explicit_amplified_recursion_bound}
     \lean{MPUCircuit.amplification_gateCount_le, MPUCircuit.prescribed_amplification_gateCount_le, MPUCircuit.gateCount_add_overhead_le_pow, MPUCircuit.gateCount_le_polynomial_of_balanced_height, MPUCircuit.amplification_branching_exponent_le}
     \leanok
@@ -2264,7 +2264,7 @@ left multiplication, right vector $b$ and left functional the trace.
     For $D>0$, the branching exponent satisfies
     $\lceil\log_2(4D+2)\rceil\leq\lceil\log_2D\rceil+3$.
     These assertions are numerical consequences of the stated recurrence.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting the joining and reflection bounds into the exact
     amplification gate count and inducting on $j$ gives
@@ -2283,7 +2283,7 @@ left multiplication, right vector $b$ and left functional the trace.
     one-dimensional bases.
 \end{definition}
 
-\begin{theorem}[The normalized root is the original unitary]
+\begin{lemma}[The normalized root is the original unitary]
     \label{thm:mpu_normalized_minimal_interval_root}
     \lean{MPUCircuit.prefixInputGram_minimalOperatorPrefix_zero, MPUCircuit.prefixInputGram_minimalOperatorPrefix_last, MPUCircuit.prefixGramAffineHull_minimalOperatorPrefix_zero, MPUCircuit.prefixGramAffineHull_minimalOperatorPrefix_last, MPUCircuit.eq_one_of_mem_minimalOperatorPrefixHull_zero, MPUCircuit.eq_one_of_mem_minimalOperatorPrefixHull_last, MPUCircuit.minimalOperatorInterval_full_apply, MPUCircuit.weightedMinimalOperatorInterval_full_apply, MPUCircuit.weightedMinimalOperatorInterval_full_submatrix, MPUCircuit.exists_normalized_minimalInterval_family_of_unitary}
     \leanok
@@ -2294,7 +2294,7 @@ left multiplication, right vector $b$ and left functional the trace.
     original unitary, entry by entry, including its complex phase.
     This family and all its interval isometries follow from
     unitarity without further metric or interval hypotheses.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The empty prefix has Gram equal to its input trace. At the final
     cut, global unitarity gives the same identity. Every normalized
@@ -2303,7 +2303,7 @@ left multiplication, right vector $b$ and left functional the trace.
     with the original matrix. Identity endpoint weights preserve it.
 \end{proof}
 
-\begin{theorem}[The source transpose convention for a balanced metric]
+\begin{lemma}[The source transpose convention for a balanced metric]
     \label{thm:mpu_balanced_source_conditioning}
     \lean{MPUCircuit.trace_transpose_inv_mul_transpose_inv, MPUCircuit.trace_transpose_dualGramMetric_inv_mul_transpose_inv, MPUCircuit.sqrt_re_trace_transpose_dualGramMetric_inv_mul_transpose_inv}
     \leanok
@@ -2318,7 +2318,7 @@ left multiplication, right vector $b$ and left functional the trace.
     These metrics give an explicit candidate of joining norm $r$.
     Unlike the appendix of \cite{Styliaris2025MPUCircuits}, this
     assertion does not restrict the infimum to physical cap Grams.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reverse the matrix product under transpose and use invariance
     of trace under transpose. The balanced inverse-trace identity
@@ -2341,7 +2341,7 @@ left multiplication, right vector $b$ and left functional the trace.
     boundary bond registers.
 \end{definition}
 
-\begin{theorem}[Disjoint children and the exact parent register]
+\begin{lemma}[Disjoint children and the exact parent register]
     \label{thm:mpu_interval_register_support}
     \lean{MPUCircuit.intervalLogicalSupport_disjoint, MPUCircuit.joiningFlagSupport_disjoint_left, MPUCircuit.joiningFlagSupport_disjoint_right, MPUCircuit.intervalLogicalSupport_split, MPUCircuit.cutBondRegisterWidth_le, MPUCircuit.cutBondRegisterWidth_internal, MPUCircuit.cutBondSiteEmbedding_disjoint, MPUCircuit.cutBondSiteEmbedding_mem_left, MPUCircuit.cutBondSiteEmbedding_mem_right, MPUCircuit.leafLogicalSiteEmbedding_mem, MPUCircuit.leafPacketSites_mem, MPUCircuit.intervalConsecutiveSupport_disjoint, MPUCircuit.interval_supportedOperators_commute, MPUCircuit.cutBondSiteEmbedding_range_iff, MPUCircuit.leafLogicalSiteEmbedding_range, MPUCircuit.leafPacketSites_range, MPUCircuit.cutBondRegisterWidth_zero, MPUCircuit.cutBondRegisterWidth_last, MPUCircuit.intervalInteriorAuxiliarySupport_split, MPUCircuit.intervalInteriorAuxiliarySupport_leaf, MPUCircuit.isIntervalInteriorInitialized_split, MPUCircuit.intervalLogicalSupport_full, MPUCircuit.isIntervalInteriorInitialized_leaf, MPUCircuit.leafConsecutiveSites_range, MPUCircuit.leaf_embedOp_mem_supportedOperators}
     \leanok
@@ -2354,7 +2354,7 @@ left multiplication, right vector $b$ and left functional the trace.
     A leaf has no interior auxiliary sites, and its packet placement
     is injective with range equal to its interval support. Thus no
     neighboring bond register is borrowed at an endpoint.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Separate physical sites, bond sites, and flags. The two boundary
     sides at a joining cut are different registers; its flags belong
@@ -2373,7 +2373,7 @@ left multiplication, right vector $b$ and left functional the trace.
     selected flag. Denote its basis-inclusion matrix by $E$.
 \end{definition}
 
-\begin{theorem}[The constructed reflection is the initialized-range reflection]
+\begin{lemma}[The constructed reflection is the initialized-range reflection]
     \label{thm:mpu_initialized_flag_projection}
     \lean{QuantumCircuit.initializedBasisMatrix_mul_conjTranspose, QuantumCircuit.zeroFlagEmbedding_apply_selected, QuantumCircuit.mem_range_zeroFlagEmbedding_iff, QuantumCircuit.zeroFlagEmbedding_range_projection, QuantumCircuit.isStarProjection_zeroFlagEmbedding_range, QuantumCircuit.selectedZeroRegisterLogical_eq_subspaceReflection, QuantumCircuit.exists_isPairProduct_isCleanImplementation_zeroFlagReflection}
     \leanok
@@ -2391,7 +2391,7 @@ left multiplication, right vector $b$ and left functional the trace.
     with the selected-reflection gate bound and returns the whole
     pool to zero on every logical input. No reflection identity or
     circuit decomposition is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Multiplying an injective basis inclusion by its adjoint sums
     orthogonal basis projections over its image. The image of the
@@ -2410,7 +2410,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the distinguished label zero is represented by physical zero.
 \end{definition}
 
-\begin{theorem}[Minimal bonds fit the allocated registers]
+\begin{lemma}[Minimal bonds fit the allocated registers]
     \label{thm:mpu_endpoint_bond_encodings}
     \lean{MPUCircuit.cutBondDim_le_registerCapacity, MPUCircuit.cutBondRegisterEncoding_zero, MPUCircuit.minimalCutRank_eq_one_of_endpoint, MPUCircuit.minimalCutBondRegisterEncoding_zero, MPUCircuit.minimalCutBondDim_le_registerCapacity, MPUCircuit.minimalCutBondRegisterEncoding_endpoint, MPUCircuit.exists_minimalCut_bondEncodings_of_unitary}
     \leanok
@@ -2420,7 +2420,7 @@ left multiplication, right vector $b$ and left functional the trace.
     any separate endpoint rank assumption.
     Consequently the entire endpoint label space is represented by
     the unique empty configuration.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Nonvanishing of the operator coefficient tensor gives rank one
     at the empty and complete cuts. Its remaining cut ranks fit the
@@ -2439,7 +2439,7 @@ left multiplication, right vector $b$ and left functional the trace.
     records these nonempty child intervals and their single-site leaves.
 \end{definition}
 
-\begin{theorem}[Every physical site and joining cut occurs once]
+\begin{lemma}[Every physical site and joining cut occurs once]
     \label{thm:mpu_balanced_interval_tree}
     \lean{MPUCircuit.midpoint_child_lengths, MPUCircuit.midpoint_child_balance, MPUCircuit.clog_two_midpoint, MPUCircuit.balancedIntervalTree_one, MPUCircuit.balancedIntervalTree_split, MPUCircuit.midpoint_child_clog_lt, MPUCircuit.balancedIntervalTree_height, MPUCircuit.IsIntervalPartition.leafSites, MPUCircuit.IsIntervalPartition.cuts, MPUCircuit.balancedIntervalTree_isIntervalPartition, MPUCircuit.balancedIntervalTree_leafSites, MPUCircuit.balancedIntervalTree_cuts, MPUCircuit.balancedIntervalTree_leafSites_nodup, MPUCircuit.balancedIntervalTree_cuts_nodup, MPUCircuit.mem_balancedIntervalTree_cuts, MPUCircuit.count_balancedIntervalTree_cut, MPUCircuit.balancedIntervalTree_numLeaves, MPUCircuit.balancedIntervalTree_numNodes, MPUCircuit.exists_balancedIntervalPartition}
     \leanok
@@ -2450,7 +2450,7 @@ left multiplication, right vector $b$ and left functional the trace.
     internal cuts, also in physical order. Every such cut occurs
     once. Its height is $\lceil\log_2N\rceil$,
     including lengths which are not powers of two.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Strong induction on the interval length constructs its two
     strictly shorter nonempty children. Concatenate their site and
@@ -2470,7 +2470,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $C=(2D+1)M+D(1+B+L)$.
 \end{definition}
 
-\begin{theorem}[Numerical amplification count on the constructed tree]
+\begin{lemma}[Numerical amplification count on the constructed tree]
     \label{thm:mpu_actual_tree_gate_count}
     \lean{MPUCircuit.treeGateCount_add_overhead_le_height, MPUCircuit.amplificationTreeGateCount_const_eq_treeGateCount, MPUCircuit.amplification_node_gateCount_le, MPUCircuit.amplificationTreeGateCount_le_treeGateCount, MPUCircuit.amplificationTreeGateCount_add_overhead_le_height, MPUCircuit.amplificationTreeGateCount_le_height, MPUCircuit.amplificationTreeGateCount_balanced_le_polynomial}
     \leanok
@@ -2488,7 +2488,7 @@ left multiplication, right vector $b$ and left functional the trace.
     of the corresponding recursive circuits is a separate assertion.
     Setting every round count equal to $D$ gives the recursion
     with child multiplier $2D+1$ and additive term $C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each node has cost at most $(2D+1)(T_1+T_2)+C$.
     Keeping the reserve $C$ in the induction invariant proves the
@@ -2507,7 +2507,7 @@ left multiplication, right vector $b$ and left functional the trace.
     physical output, its right bond label, and its left bond label.
 \end{definition}
 
-\begin{theorem}[Coherent interval metrics and leaf circuits]
+\begin{lemma}[Coherent interval metrics and leaf circuits]
     \label{thm:mpu_minimal_leaf_circuits}
     \lean{MPUCircuit.minimalLeafInterval_isometry_of_interval_isometry, MPUCircuit.exists_normalized_minimalInterval_family_with_leaf_circuits_of_unitary}
     \leanok
@@ -2522,7 +2522,7 @@ left multiplication, right vector $b$ and left functional the trace.
     to zero on every logical input. For left and right register widths
     $q_-,q_+$, its gate count is at most
     $38\bigl(d^{2+q_-+q_+}\bigr)^6$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Choosing normalized bases at the two endpoint cuts determines the
     balanced metrics and all interval isometries from unitarity.
@@ -2542,7 +2542,7 @@ left multiplication, right vector $b$ and left functional the trace.
     the chosen common site.
 \end{definition}
 
-\begin{theorem}[Leaf circuits in the complete register]
+\begin{lemma}[Leaf circuits in the complete register]
     \label{thm:mpu_minimal_leaf_placement}
     \lean{MPUCircuit.auxiliarySiteCount_pos_of_two_le, MPUCircuit.placed_leaf_circuit_isCleanImplementation, MPUCircuit.exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_unitary}
     \leanok
@@ -2557,7 +2557,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
     where $n_{\mathrm{tot}}$ is the total number of physical, bond,
     flag, and workspace qudits.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Place the local circuit using the two site embeddings. The clean
     implementation identity is preserved under placement. A local
@@ -2575,7 +2575,7 @@ left multiplication, right vector $b$ and left functional the trace.
     applying $U$ to the first site and the identity to the second.
 \end{definition}
 
-\begin{theorem}[The one-site endpoint is one pair gate]
+\begin{lemma}[The one-site endpoint is one pair gate]
     \label{thm:mpu_single_site_padding}
     \lean{MPUCircuit.singleSitePaddedOperator_mem_unitary, MPUCircuit.singleSitePaddedOperator_isNeighbourGate, MPUCircuit.singleSitePaddedOperator_isPairProduct, MPUCircuit.singleSitePaddedOperator_isCleanImplementation, MPUCircuit.exists_singleSite_clean_pair_circuit}
     \leanok
@@ -2584,7 +2584,7 @@ left multiplication, right vector $b$ and left functional the trace.
     qudit. The padding qudit remains zero for every physical
     input, and the complete scalar phase is retained. In fact the
     padded operator is $U\otimes I$ on the full two-site space.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The padded operator is unitary and supported on the sole neighboring
     pair. Its initialized columns are the columns of $U$ tensored with
@@ -2606,7 +2606,7 @@ left multiplication, right vector $b$ and left functional the trace.
     by the two selected-zero reflections and the amplification rounds.
 \end{definition}
 
-\begin{theorem}[An exact circuit for the encoded joining step]
+\begin{lemma}[An exact circuit for the encoded joining step]
     \label{thm:mpu_encoded_merging}
     \lean{MPUCircuit.embedOp_suffix_eq_reindex, MPUCircuit.initializedBasisMatrix_appendBasisEmbedding, MPUCircuit.isCleanImplementation_embedOp_suffix, MPUCircuit.embedOp_prefix_eq_reindex, MPUCircuit.isCleanImplementation_embedOp_prefix, MPUCircuit.compatibleBondDilationEmbedding_eq_append, MPUCircuit.isCleanImplementation_oneSiteBasis, MPUCircuit.isCleanImplementation_compatible_attenuation, MPUCircuit.exists_compatible_merging_preparation_circuit, MPUCircuit.exists_placed_compatible_merging_preparation_circuit, MPUCircuit.joiningSuccessProjection_merging_preparation, MPUCircuit.diagonal_mul_initializedBasisMatrix, MPUCircuit.appendBasisEmbedding_merging_flags, MPUCircuit.mergingFlagProjection_mul_encoded_basis, MPUCircuit.encoded_merging_preparation_success, MPUCircuit.isCleanImplementation_zeroWorkspace_empty, MPUCircuit.exists_clean_encoded_merging_preparation, MPUCircuit.success_gram_of_encoded_columns, MPUCircuit.exists_encoded_uniform_merging_circuit}
     \leanok
@@ -2634,7 +2634,7 @@ left multiplication, right vector $b$ and left functional the trace.
     The same full logical unitary is supported in any set containing
     both child supports, the initialized input flags, and the joining
     packet, including on padded logical states.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Construct the bond dilation and the attenuation rotation on the
     prescribed product basis. Their successful physical branch is
@@ -2665,7 +2665,7 @@ remain separate assertions.
     injection, using the fixed consecutive ordering of logical sites.
 \end{definition}
 
-\begin{theorem}[Every interval flag selection fits the common workspace]
+\begin{lemma}[Every interval flag selection fits the common workspace]
     \label{thm:mpu_interval_initialization}
     \lean{MPUCircuit.card_logicalAuxiliarySupport_le, MPUCircuit.intervalInteriorAuxiliarySupport_subset_auxiliary_range, MPUCircuit.joiningAuxiliarySupport_subset_auxiliary_range, MPUCircuit.intervalAuxiliaryInitializationSupport_subset_auxiliary_range, MPUCircuit.card_intervalInteriorAuxiliarySupport_le, MPUCircuit.card_joiningAuxiliarySupport_le, MPUCircuit.card_intervalAuxiliaryInitializationSupport_le, MPUCircuit.logicalSupportSites_range, MPUCircuit.logicalSupportSites_initialized_iff}
     \leanok
@@ -2676,7 +2676,7 @@ remain separate assertions.
     fit in the common workspace. Their finite selections are
     constructed, and testing the selected consecutive coordinates
     for zero is equivalent to testing the original logical support.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each support is contained in the image of the auxiliary-site
     injection. Inject it into the full auxiliary register and compare
@@ -2695,7 +2695,7 @@ remain separate assertions.
     prescribed spectator encoding on the remaining sites.
 \end{definition}
 
-\begin{theorem}[Joint child columns follow from individual columns]
+\begin{lemma}[Joint child columns follow from individual columns]
     \label{thm:mpu_joint_child_columns}
     \lean{MPUCircuit.mul_embedOp_disjoint_apply, MPUCircuit.placedConfigEquiv_fst, MPUCircuit.placedConfigEquiv_snd, MPUCircuit.jointPlacedConfigEquiv_left, MPUCircuit.jointPlacedConfigEquiv_right, MPUCircuit.jointPlacedConfigEquiv_snd, MPUCircuit.agreeOffPair_iff_outside_eq, MPUCircuit.reindex_mul_embedOp_of_disjoint, MPUCircuit.initializedBasisMatrix_jointPlacedBasisEmbedding, MPUCircuit.jointPlacedColumns_of_individual}
     \leanok
@@ -2706,7 +2706,7 @@ remain separate assertions.
     for every encoded spectator state. No extra joint column identity
     is assumed. In these coordinates the product of the placed
     operators is $X\otimes Y\otimes I$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the matrix product of the two disjoint placed operators,
     agreement of the remaining coordinates reduces the sum to the two
@@ -2736,7 +2736,7 @@ remain separate assertions.
     \end{align}
 \end{definition}
 
-\begin{theorem}[An explicit uniform numerical resource bound]
+\begin{lemma}[An explicit uniform numerical resource bound]
     \label{thm:mpu_uniform_numeric_resources}
     \lean{MPUCircuit.bondRegisterWidth_le_bondDim, MPUCircuit.placedLeafGateCount_le_uniform, MPUCircuit.joiningPacketGateCount_le_uniform, MPUCircuit.selectedZeroRegisterReflectionPoolGateCount_le_uniform, MPUCircuit.uniformReflectionGateCount_le_cubic, MPUCircuit.uniformCircuitTreeGateCount_le_polynomial, MPUCircuit.uniformCircuitTreeGateCount_le_polynomial_bond}
     \leanok
@@ -2756,7 +2756,7 @@ remain separate assertions.
     The coefficient $c(d,D)(D+1)^3$ is polynomial in $D$ for fixed
     $d$, of degree at most sixteen. This theorem bounds the numerical
     recursion and does not assume complete recursive circuit existence.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The capacity bound gives joining-packet dimension at most $d^4D^2$
     and $q\leq D$. Monotonicity of $K_d$ gives the uniform reflection
@@ -2767,7 +2767,7 @@ remain separate assertions.
     $\lceil\log_2(4D+2)\rceil\leq\lceil\log_2D\rceil+3$ gives the polynomial bound.
 \end{proof}
 
-\begin{theorem}[Selected-zero reflections act only on their flags]
+\begin{lemma}[Selected-zero reflections act only on their flags]
     \label{thm:mpu_selected_reflection_support}
     \lean{QuantumCircuit.embedOp_diagonal, QuantumCircuit.selectedZeroRegisterLogical_eq_embedOp, QuantumCircuit.selectedZeroRegisterLogical_mem_supportedOperators, QuantumCircuit.selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset}
     \leanok
@@ -2775,7 +2775,7 @@ remain separate assertions.
     of qudits is zero is supported on those qudits. All states of
     the remaining logical qudits are allowed. This includes the empty
     selection, whose reflection is the scalar minus identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A diagonal operator placed on a selected packet depends only on
     the selected configuration, and has a Kronecker delta on the
@@ -2783,7 +2783,7 @@ remain separate assertions.
     all-zero reflection gives the placed reflection.
 \end{proof}
 
-\begin{theorem}[Exact amplification preserves interval support]
+\begin{lemma}[Exact amplification preserves interval support]
     \label{thm:mpu_amplification_support}
     \lean{MPSPreparation.subspaceReflection_mem_supportedOperators, MPSPreparation.pow_mem_supportedOperators, MPSPreparation.subspaceReflection_image_mem_supportedOperators, MPSPreparation.postselectionAmplificationStep_mem_supportedOperators, MPSPreparation.postselectionAmplification_mem_supportedOperators, MPSPreparation.postselectionAmplification_mem_supportedOperators_of_projection_support}
     \leanok
@@ -2798,7 +2798,7 @@ remain separate assertions.
     Support of the two projections themselves suffices to derive
     support of their reflections. No initialization of the remaining
     logical sites is imposed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugating the initialized reflection by $Z$ gives the displayed
     image reflection. Operators supported on $S$ are closed under
@@ -2818,7 +2818,7 @@ remain separate assertions.
     setting every strict-interior auxiliary to zero.
 \end{definition}
 
-\begin{theorem}[Interval encodings preserve every recorded coordinate]
+\begin{lemma}[Interval encodings preserve every recorded coordinate]
     \label{thm:mpu_interval_column_encoding}
     \lean{MPUCircuit.intervalPacketSites_range, MPUCircuit.intervalPacketSites_disjoint, MPUCircuit.intervalPacketLogicalSite_mem, MPUCircuit.intervalPacketLogicalSite_surjective, MPUCircuit.intervalPhysicalZeroConfig_physical, MPUCircuit.intervalBoundaryConfig_right, MPUCircuit.intervalBoundaryConfig_left, MPUCircuit.intervalBoundaryConfig_physical, MPUCircuit.intervalBoundaryConfig_interior}
     \leanok
@@ -2828,7 +2828,7 @@ remain separate assertions.
     include the zero-width endpoint registers. Consecutive child
     packets are disjoint and their site enumerations have
     the prescribed interval supports.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Read the physical and two boundary registers to recover the
     encoded coordinates. The two boundary embeddings have disjoint
@@ -2845,7 +2845,7 @@ remain separate assertions.
     its two consecutive restrictions to $\lbrack j,m)$ and $\lbrack m,k)$.
 \end{definition}
 
-\begin{theorem}[The computed joining parent is the weighted MPU interval]
+\begin{lemma}[The computed joining parent is the weighted MPU interval]
     \label{thm:mpu_actual_parent_isometry}
     \lean{MPUCircuit.normalizedJoiningParent_balancedIntervalChildren, MPUCircuit.weightedMinimalOperatorInterval_comp_eq_reindex, MPUCircuit.normalizedJoiningParent_minimalOperatorIntervals, MPUCircuit.normalizedJoiningParent_minimalOperatorIntervals_isIsometry, MPUCircuit.exists_normalized_joining_parent_isometries_of_unitary}
     \leanok
@@ -2860,7 +2860,7 @@ remain separate assertions.
     positive metric family satisfying these conditions exists, and
     all its joining parents are isometries simultaneously, with no
     separate parent-isometry assumption.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The normalized bond reset cancels the two weighted metrics at
     the common cut. Multiplication of the minimal interval
@@ -2879,7 +2879,7 @@ remain separate assertions.
     on those sites allows every outside logical configuration.
 \end{definition}
 
-\begin{theorem}[Supported global children determine their joint columns]
+\begin{lemma}[Supported global children determine their joint columns]
     \label{thm:mpu_supported_child_columns}
     \lean{MPUCircuit.initializedBasisMatrix_placedBasisEmbedding, MPUCircuit.reindex_embedOp_placedConfigEquiv, MPUCircuit.placedColumns_iff_localColumns, MPUCircuit.jointPlacedColumns_of_supported_individual}
     \leanok
@@ -2889,7 +2889,7 @@ remain separate assertions.
     with output map $V\otimes W\otimes I$ for every spectator encoding.
     Local child matrices and the joint column identity are derived;
     neither is an additional hypothesis.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Support gives local matrices. Relabel the complete configuration
     by a child packet and its complement; the global identity is then
@@ -2907,7 +2907,7 @@ remain separate assertions.
     the consecutive site coordinates.
 \end{definition}
 
-\begin{theorem}[Coordinate regrouping has additive circuit cost]
+\begin{lemma}[Coordinate regrouping has additive circuit cost]
     \label{thm:mpu_quantitative_site_permutation}
     \lean{Equiv.Perm.swapFactorsAux_length_le, Equiv.Perm.swapFactors_length_le_card, QuantumCircuit.permOp_list_prod, QuantumCircuit.isPairProduct_permOp, QuantumCircuit.IsPairProduct.conjugate_permOp, QuantumCircuit.workspaceFixedSitePerm_castAdd, QuantumCircuit.workspaceFixedSitePerm_natAdd, QuantumCircuit.isCleanImplementation_permOp_workspaceFixedSitePerm, QuantumCircuit.IsCleanImplementation.conjugate_workspaceFixedSitePerm, QuantumCircuit.isPairProduct_isCleanImplementation_conjugate_workspaceFixedSitePerm}
     \leanok
@@ -2918,7 +2918,7 @@ remain separate assertions.
     a logical site permutation fixing the appended workspace preserves
     every all-input clean implementation identity. For a register of total size $n+A$,
     this conjugation costs at most $K+4(n+A)^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The finite permutation factors into at most $n$ transpositions,
     each routed with at most $2n$ neighboring swaps. Placing the
@@ -2944,7 +2944,7 @@ remain separate assertions.
     An interval implementation satisfies this complete column identity.
 \end{definition}
 
-\begin{theorem}[Joint columns from child implementations]
+\begin{lemma}[Joint columns from child implementations]
     \label{thm:mpu_actual_interval_child_columns}
     \lean{MPUCircuit.minimalIntervalChildColumns_of_supported_individual}
     \leanok
@@ -2954,7 +2954,7 @@ remain separate assertions.
     child maps as its initialized columns, with the identity on every
     configuration outside their combined support. No joint column
     identity is an additional assumption.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The child supports are disjoint. Their individual column identities
     therefore determine the columns of their product by finite matrix
@@ -2975,7 +2975,7 @@ remain separate assertions.
     interval columns, including arbitrary outside configurations.
 \end{definition}
 
-\begin{theorem}[Interval recursion from leaf and merging circuits]
+\begin{lemma}[Interval recursion from leaf and merging circuits]
     \label{thm:mpu_actual_interval_recursion}
     \lean{MPUCircuit.IsMinimalIntervalCircuitImplementation.mono, MPUCircuit.exists_minimalInterval_circuit_of_partition}
     \leanok
@@ -2987,7 +2987,7 @@ remain separate assertions.
     tree gate bound. All logical support, workspace cleanup, and
     interval column identities are retained. Increasing a bound
     preserves these identities.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on the consecutive interval partition, the leaves use the
     given single-site circuits. Each node uses the given merging rule
@@ -3007,7 +3007,7 @@ remain separate assertions.
     inclusion is determined by the allocated logical registers.
 \end{definition}
 
-\begin{theorem}[Coordinates of the joining packet]
+\begin{lemma}[Coordinates of the joining packet]
     \label{thm:mpu_actual_joining_packet}
     \lean{MPUCircuit.joiningBondPacketSites_disjoint_flags, MPUCircuit.joiningPacketLogicalSites_left, MPUCircuit.joiningPacketLogicalSites_right, MPUCircuit.joiningPacketLogicalSites_flag, MPUCircuit.exists_joiningPacket_suffix_coordinates}
     \leanok
@@ -3017,7 +3017,7 @@ remain separate assertions.
     to these sites in this order. Both the remaining
     prefix size and this permutation are derived from the site
     inclusions; neither is an additional geometric assumption.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The allocated bond and flag sites are disjoint. Their injective
     enumerations give the packet inclusion. Its cardinality does not
@@ -3036,7 +3036,7 @@ remain separate assertions.
     prefix basis inclusion.
 \end{definition}
 
-\begin{theorem}[Factorization of a product-compatible basis encoding]
+\begin{lemma}[Factorization of a product-compatible basis encoding]
     \label{thm:mpu_prefix_basis_encoding}
     \lean{MPUCircuit.appendBasisEmbedding_prefixBasisEmbedding}
     \leanok
@@ -3044,7 +3044,7 @@ remain separate assertions.
     encoding, and its prefix is independent of the bond label.
     Then the prefix inclusion is injective, and its product with the
     prescribed suffix is the full encoding.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Prefix equality, together with equality of the fixed suffix,
     gives equality of full encoded configurations. Full injectivity
@@ -3062,7 +3062,7 @@ remain separate assertions.
     its initialized complement inclusion.
 \end{definition}
 
-\begin{theorem}[Restrictions of the joint output encoding]
+\begin{lemma}[Restrictions of the joint output encoding]
     \label{thm:mpu_actual_joint_output_encoding}
     \lean{MPUCircuit.jointPlacedBasisEmbedding_left, MPUCircuit.jointPlacedBasisEmbedding_right, MPUCircuit.jointPlacedBasisEmbedding_outside, MPUCircuit.initializedComplementEmbedding_zero, MPUCircuit.intervalJointOutputEmbedding_left_support, MPUCircuit.intervalJointOutputEmbedding_right_support, MPUCircuit.intervalBoundaryConfig_right_eq_away, MPUCircuit.intervalBoundaryConfig_left_eq_away, MPUCircuit.intervalJointOutputEmbedding_eq_away_joining_bonds}
     \leanok
@@ -3072,7 +3072,7 @@ remain separate assertions.
     allocated bond registers. Every other coordinate, including
     initialized interior auxiliaries and outside spectators, is
     independent of those labels.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Restricting the joint product inclusion to its disjoint coordinate
     blocks shows that the interval boundary configuration reads a bond label
@@ -3090,7 +3090,7 @@ remain separate assertions.
     prescribed physical and boundary coordinates.
 \end{definition}
 
-\begin{theorem}[Interval columns of the leaf circuits]
+\begin{lemma}[Interval columns of the leaf circuits]
     \label{thm:mpu_actual_leaf_columns}
     \lean{MPUCircuit.intervalPacketLogicalSite_leafIntervalSiteEquiv, MPUCircuit.leafConsecutiveSites_eq_comp_intervalPacketSites, MPUCircuit.embedOp_reindex_siteEquiv, MPUCircuit.leafIntervalConfigEquiv_leafInput, MPUCircuit.leafIntervalConfigEquiv_leafOutput, MPUCircuit.initializedBasisMatrix_reindex_of_mapping, MPUCircuit.leafColumns_reindex_interval, MPUCircuit.minimalLeafInterval_reindex, MPUCircuit.isMinimalIntervalColumnImplementation_leaf_of_columns, MPUCircuit.exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_unitary}
     \leanok
@@ -3101,7 +3101,7 @@ remain separate assertions.
     operators remain the same, with their gate counts, support,
     and all-input workspace cleanup. The outside configurations are
     arbitrary. No separate interval column identity is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The packet coordinate bijection fixes the physical and
     boundary sites. Carry the input and output basis inclusions
@@ -3121,7 +3121,7 @@ remain separate assertions.
     includes the physical chain with every auxiliary zero.
 \end{definition}
 
-\begin{theorem}[The root interval gives the physical unitary]
+\begin{lemma}[The root interval gives the physical unitary]
     \label{thm:mpu_actual_root_columns}
     \lean{MPUCircuit.intervalPacketSites_full_range, MPUCircuit.outsidePlacedConfig_full_subsingleton, MPUCircuit.minimalIntervalInputEmbedding_full_apply, MPUCircuit.minimalIntervalOutputEmbedding_full_apply, MPUCircuit.minimalIntervalRootColumns_eq_physical_of_fullInterval, MPUCircuit.minimalIntervalRootColumns_eq_physical, MPUCircuit.physicalGlobalConfigEmbedding_apply, MPUCircuit.initializedBasisMatrix_physicalGlobalConfigEmbedding, MPUCircuit.physicalGlobalColumns_of_clean_logicalColumns, MPUCircuit.minimalIntervalRootColumns_eq_physical_global}
     \leanok
@@ -3137,7 +3137,7 @@ remain separate assertions.
     where $J$ initializes every logical auxiliary and scratch qudit.
     The physical output and the scalar phase follow from the given
     unitary; they are not additional assumptions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The full packet contains every logical site, so its outside
     configuration is unique. Both endpoint bond registers have width
@@ -3157,14 +3157,14 @@ remain separate assertions.
     initializes all three groups to zero.
 \end{definition}
 
-\begin{theorem}[Complete circuit registers]
+\begin{lemma}[Complete circuit registers]
     \label{thm:mpu_complete_register}
     \lean{MPUCircuit.circuitPaddingCount_le_one, MPUCircuit.completeCircuitSiteCount_le, MPUCircuit.completePhysicalConfigEmbedding_apply}
     \leanok
     The complete register has at most $5N(q+1)+1$ sites, where $q$ is the
     bond-register width. Its physical basis inclusion is the physical configuration
     followed by zeros on the logical auxiliaries, scratch pool, and padding.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since the padding count is at most one, the common register bound and
     the three successive initialized inclusions give the stated layout.
@@ -3178,26 +3178,26 @@ remain separate assertions.
     these two flags and retain arbitrary configurations on all other outside sites.
 \end{definition}
 
-\begin{theorem}[Initialized joining flags]
+\begin{lemma}[Initialized joining flags]
     \label{thm:mpu_joint_flags}
     \lean{MPUCircuit.joiningFlag_outside_childPackets, MPUCircuit.intervalJointOutputEmbedding_joiningFlag_zero}
     \leanok
     The joining flags lie outside both child packets. The joint output inclusion,
     with these outside flags initialized, has both joining flags equal to zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The joining flag sites are disjoint from both interval packets. Their outside
     inclusion sets these two coordinates to zero.
 \end{proof}
 
-\begin{theorem}[The active joining packet]
+\begin{lemma}[The active joining packet]
     \label{thm:mpu_actual_packet_encoding}
     \lean{MPUCircuit.intervalJointOutputEmbedding_joiningPacket_active}
     \leanok
     The joint child output restricted to the joining packet is
     the active compatible bond code, with the shared right and left labels in
     contraction order and both flags zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating the prescribed boundary configurations on the two shared bond
     registers and using the initialized joining-flag identities gives the code.
@@ -3212,7 +3212,7 @@ remain separate assertions.
     bijection to place the joining packet at the end.
 \end{definition}
 
-\begin{theorem}[Derived product coordinates]
+\begin{lemma}[Derived product coordinates]
     \label{thm:mpu_actual_suffix_factorization}
     \lean{MPUCircuit.pullbackBasisEmbedding_apply, MPUCircuit.suffixCoordinates_prefix_not_mem, MPUCircuit.joiningPacketLogicalSites_range_left, MPUCircuit.joiningPacketLogicalSites_range_right, MPUCircuit.regroupedIntervalJointOutputEmbedding_apply, MPUCircuit.exists_regroupedIntervalJointOutput_product_coordinates}
     \leanok
@@ -3220,14 +3220,14 @@ remain separate assertions.
     a prefix encoding independent of the joining labels, followed by the compatible
     joining-packet code. The prefix encoding is injective. Neither the site
     bijection nor its factorization is an additional hypothesis.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In the ordered joining packet and its complementary site bijection,
     every prefix site is independent of the joining labels, so injectivity of the full
     joint output code therefore implies injectivity of its prefix factor.
 \end{proof}
 
-\begin{theorem}[The encoded merger in original coordinates]
+\begin{lemma}[The encoded merger in original coordinates]
     \label{thm:mpu_permuted_encoded_merger}
     \lean{MPSPreparation.permOp_conjTranspose, MPSPreparation.permOp_conjTranspose_mul_mul, MPSPreparation.permOp_conjugate_mem_supportedOperators, MPSPreparation.permOp_mul_rectangular, MPSPreparation.conjugate_workspaceFixedSitePerm_columns, MPUCircuit.exists_permuted_encoded_uniform_merging_circuit}
     \leanok
@@ -3237,7 +3237,7 @@ remain separate assertions.
     coordinates. Its logical support, initialized columns, and scalar phase are
     preserved. Each child conjugation and the final return costs at most $4g^2$
     neighboring-pair gates, where $g$ is the complete logical and scratch site count.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugating both child circuits into the suffix coordinates, applying the supported
     encoded merger, and conjugating its logical and physical operators back gives the merged circuit.
@@ -3245,7 +3245,7 @@ remain separate assertions.
     rectangular initialized columns to the permuted coordinates.
 \end{proof}
 
-\begin{theorem}[Complete merger gate bound]
+\begin{lemma}[Complete merger gate bound]
     \label{thm:mpu_actual_merger_resources}
     \lean{MPUCircuit.permutedEncodedUniformMergingGateCount_le_uniform}
     \leanok
@@ -3257,7 +3257,7 @@ remain separate assertions.
     \end{align}
     where $M$ is the common node bound and $F$ is the common reflection bound.
     The quadratic routing reserve is included in $M$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Bound the joining preparation by the common packet bound, both reflections
     by $F$, and the prescribed number of amplification rounds by $r\leq D$.
@@ -3272,7 +3272,7 @@ remain separate assertions.
     outside configurations, and move those configurations before the joining labels.
 \end{definition}
 
-\begin{theorem}[Joining with arbitrary spectator states]
+\begin{lemma}[Joining with arbitrary spectator states]
     \label{thm:mpu_joining_spectators}
     \lean{MPUCircuit.joiningSpectatorColumns_eq_reindex, MPUCircuit.normalizedJoiningParent_joiningSpectatorColumns, MPUCircuit.normalizedJoiningParent_joiningSpectatorColumns_isIsometry, MPUCircuit.regroupedWeightedChildren_joiningSpectatorColumns}
     \leanok
@@ -3280,7 +3280,7 @@ remain separate assertions.
     this regrouping. Thus its isometry follows from the normalized parent
     isometry. The regrouped child tensor is the weighted child
     Kronecker tensor, with every spectator coordinate retained.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the joining contraction entrywise passes the spectator Kronecker delta
     through its finite sum, and reindexing the child product with the
@@ -3295,20 +3295,20 @@ remain separate assertions.
     between their label sets, carrying each encoded configuration to itself.
 \end{definition}
 
-\begin{theorem}[Coordinates of basis inclusions]
+\begin{lemma}[Coordinates of basis inclusions]
     \label{thm:mpu_basis_encoding_coordinates}
     \lean{MPUCircuit.basisEncodingEquivOfRangeEq_apply, MPUCircuit.initializedBasisMatrix_trans, MPUCircuit.initializedBasisMatrix_equivOfRangeEq, MPUCircuit.initializedBasisMatrix_prodMap, MPUCircuit.initializedBasisMatrix_append_joiningChild}
     \leanok
     The matrices of initialized basis inclusions respect composition and products.
     The derived label bijection relates equal-range encodings. Appending
     a compatible active joining code is the corresponding product basis inclusion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Equal images and injectivity determine the label bijection. Matrix
     multiplication of the basis inclusions reduces to their Kronecker deltas.
 \end{proof}
 
-\begin{theorem}[Pullback of initialized flag spaces]
+\begin{lemma}[Pullback of initialized flag spaces]
     \label{thm:mpu_initialized_encoding_coordinates}
     \lean{MPUCircuit.mem_range_pullbackBasisEmbedding_iff, MPUCircuit.range_pullbackBasisEmbedding_eq_zeroFlagEmbedding}
     \leanok
@@ -3316,7 +3316,7 @@ remain separate assertions.
     its image to the zero-flag inclusion on the reindexed selected sites.
     This gives the complete initialized input subspace, retaining arbitrary
     configurations outside the selected flags.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Membership in the pulled-back image is membership in the original image
     after the site bijection. The zero conditions are precisely its reindexed
@@ -3333,7 +3333,7 @@ remain separate assertions.
     this site bijection.
 \end{definition}
 
-\begin{theorem}[Child and parent inputs]
+\begin{lemma}[Child and parent inputs]
     \label{thm:mpu_actual_input_regrouping}
     \lean{MPUCircuit.mem_range_finEmbeddingAppend_iff, MPUCircuit.mem_range_intervalPacketSites_iff, MPUCircuit.not_mem_parentPacket_iff, MPUCircuit.intervalPhysicalZeroConfig_join_left, MPUCircuit.intervalPhysicalZeroConfig_join_right, MPUCircuit.intervalPhysicalZeroConfig_joiningFlag_zero, MPUCircuit.intervalPacket_restriction_apply, MPUCircuit.intervalJointInitializedOutsideEmbedding_parentOutside, MPUCircuit.intervalJointInputEmbedding_eq_parent_input, MPUCircuit.placedBasisEmbedding_restriction, MPUCircuit.minimalIntervalInputEmbedding_zero_auxiliary, MPUCircuit.mem_range_minimalIntervalInputEmbedding_iff, MPUCircuit.range_minimalIntervalInputEmbedding_eq_zeroFlagEmbedding, MPUCircuit.range_intervalJointInputEmbedding_eq_parent, MPUCircuit.range_intervalJointInputEmbedding_eq_zeroFlagEmbedding, MPUCircuit.minimalIntervalJointInitializedChildColumns_of_supported_individual}
     \leanok
@@ -3342,7 +3342,7 @@ remain separate assertions.
     selected by the parent auxiliary sites. The two child column identities,
     together with their support conditions, therefore give the joint initialized
     child columns; no input bijection or joint-column identity is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The parent support is the union of the two child supports and the joining
     flags, whose complement gives the remaining-site bijection. Evaluating the two
@@ -3350,7 +3350,7 @@ remain separate assertions.
     identities with the resulting initialized inclusion gives the joint columns.
 \end{proof}
 
-\begin{theorem}[Joining reset gives the parent output]
+\begin{lemma}[Joining reset gives the parent output]
     \label{thm:mpu_actual_output_reset}
     \lean{MPUCircuit.cutBondSiteEmbedding_mem_intervalInterior, MPUCircuit.intervalBoundaryConfig_join_zero_left, MPUCircuit.intervalBoundaryConfig_join_zero_right, MPUCircuit.intervalJointOutputEmbedding_zero_eq_parent_support, MPUCircuit.intervalJointOutputEmbedding_zero_eq_parent}
     \leanok
@@ -3359,7 +3359,7 @@ remain separate assertions.
     that label is the parent output inclusion, after joining the physical
     outputs and reindexing the arbitrary remaining configuration. This equality
     includes both joining flags and every interior auxiliary.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating on the left child, right child, joining flags, and parent complement,
     the reset code makes both shared bond configurations zero, the flags are
@@ -3367,7 +3367,7 @@ remain separate assertions.
     agree with the parent boundary configuration.
 \end{proof}
 
-\begin{theorem}[Operator cut ranks of ordinary MPOs]
+\begin{lemma}[Operator cut ranks of ordinary MPOs]
     \label{thm:mpu_periodic_operator_cut_rank}
     \lean{MPUCircuit.cutCoefficientRank_traceBoundary_le, MPUCircuit.cutCoefficientRank_mpv_le, MPUCircuit.operatorCoefficientTensor_mpo_eq_mpv, MPUCircuit.cutCoefficientRank_operatorCoefficientTensor_mpo_le, MPUCircuit.cutCoefficientRank_openBoundary_le, MPUCircuit.cutCoefficientRank_operatorCoefficientTensor_traceBoundary_le, MPUCircuit.cutCoefficientRank_operatorCoefficientTensor_openBoundary_le, MPUCircuit.cutCoefficientRank_operatorCoefficientTensor_mpo_le_all}
     \leanok
@@ -3376,7 +3376,7 @@ remain separate assertions.
     arbitrary trace boundary. Scalar left and right open boundaries give the bound
     $\chi$. These statements require no unitarity, normalization, minimality, or
     canonical-form assumption.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Splitting the ordered word at the physical cut factors a trace contraction
     through its two open virtual indices; scalar open boundaries factor through
@@ -3385,7 +3385,7 @@ remain separate assertions.
     corresponding ordinary matrix-product tensor.
 \end{proof}
 
-\begin{theorem}[Reindexing and cancellation of exact columns]
+\begin{lemma}[Reindexing and cancellation of exact columns]
     \label{thm:mpu_column_coordinate_transport}
     \lean{MPUCircuit.matrix_columns_reindex, MPUCircuit.normalizedJoiningParent_submatrix_columns, QuantumCircuit.IsCleanImplementation.logical_columns_of_ambient}
     \leanok
@@ -3393,41 +3393,41 @@ remain separate assertions.
     column identities. Input-column reindexing commutes with the normalized joining
     parent. A full clean implementation through an isometric initialized inclusion
     also determines the logical columns from its ambient columns.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By the matrix reindexing product identity, reindexing input columns passes
     through the joining finite sum. To recover logical columns, multiply the
     ambient identity by the adjoint of the initialized inclusion.
 \end{proof}
 
-\begin{theorem}[The reset label in the output inclusion]
+\begin{lemma}[The reset label in the output inclusion]
     \label{thm:mpu_joining_reset_columns}
     \lean{MPUCircuit.initializedBasisMatrix_mul_basisResetOutput, MPUCircuit.joiningSpectatorColumns_basisResetOutput}
     \leanok
     Multiplication of an initialized basis inclusion by the reset columns selects
     its prescribed reset label. The same identity retains every spectator
     configuration in the regrouped joining tensor.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the basis inclusion leaves only the reset label through its Kronecker delta, while
     the spectator delta is unchanged.
 \end{proof}
 
-\begin{theorem}[The joining packet lies in the parent interval]
+\begin{lemma}[The joining packet lies in the parent interval]
     \label{thm:mpu_joining_packet_support}
     \lean{MPUCircuit.joiningPacketLogicalSites_mem_interval, MPUCircuit.joiningPacketSites_range_subset_interval}
     \leanok
     The two shared bond registers and both joining flags lie inside the parent
     interval support. Consequently the range of the ordered joining packet
     is contained in that support.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The joining cut is strictly between the parent endpoints. Its two bond
     registers belong to the respective interval boundary and interior sets, and
     its flags belong to the parent interior, so the site-coordinate bijection gives the partition.
 \end{proof}
 
-\begin{theorem}[The one-site case and empty padding]
+\begin{lemma}[The one-site case and empty padding]
     \label{thm:mpu_single_site_complete}
     \lean{MPUCircuit.completeCircuitSiteCount_one, MPUCircuit.circuitPaddingCount_eq_zero_of_two_le, MPUCircuit.completeCircuitSiteCount_eq_global_of_two_le, MPUCircuit.exists_clean_pair_circuit_of_siteCount_eq, MPUCircuit.completePhysicalConfigEmbedding_pullback_of_two_le, MPUCircuit.exists_singleSite_complete_clean_pair_circuit, MPUCircuit.exists_complete_clean_pair_circuit_of_global}
     \leanok
@@ -3436,14 +3436,14 @@ remain separate assertions.
     $N\geq2$, the additional padding is empty: any exact circuit on the physical,
     logical auxiliary, and scratch register transfers to the complete register
     with the same gate count and physical columns.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At one site the complete register has two sites, and reindexing the padded physical
     unitary along this equality of site counts gives the one-site case; at longer lengths, appending the
     empty padding configuration and reindexing along the resulting site equality gives the general case.
 \end{proof}
 
-\begin{theorem}[Derived support conditions for an interval merger]
+\begin{lemma}[Derived support conditions for an interval merger]
     \label{thm:mpu_actual_merging_support}
     \lean{MPUCircuit.intervalConsecutiveSupport_left_subset, MPUCircuit.intervalConsecutiveSupport_right_subset, MPUCircuit.interval_children_mem_parent_supportedOperators, MPUCircuit.interval_initializedSites_range_subset_reindexed_parent, MPUCircuit.interval_joiningSuffix_range_subset_reindexed_parent}
     \leanok
@@ -3451,14 +3451,14 @@ remain separate assertions.
     The selected initialized sites remain in the parent support after a
     site-coordinate change. If that change puts the joining packet last,
     its entire suffix range also lies in the reindexed parent support.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By the consecutive support decomposition at the joining cut, the selected
     sites are the parent auxiliaries, and the suffix range is the image
     of the joining packet.
 \end{proof}
 
-\begin{theorem}[Joint child columns in the derived encoded coordinates]
+\begin{lemma}[Joint child columns in the derived encoded coordinates]
     \label{thm:mpu_encoded_joint_columns}
     \lean{MPUCircuit.encodedJointColumns_of_coordinate_identities, MPUCircuit.normalizedJoiningParent_input_reindex_isIsometry, MPUCircuit.normalizedJoiningParent_spectator_reindex_isIsometry}
     \leanok
@@ -3466,14 +3466,14 @@ remain separate assertions.
     joint child columns to the compatible encoded joining columns. The
     normalized parent remains an isometry under input reindexing and addition
     of arbitrary spectator identity factors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Composing the initialized basis inclusions, reindexing the matrix products, and applying
     the normalized joining contraction before reindexing the input leaves the finite
     sum unchanged, while the spectator identity preserves the isometry.
 \end{proof}
 
-\begin{theorem}[The encoded contraction gives the parent columns]
+\begin{lemma}[The encoded contraction gives the parent columns]
     \label{thm:mpu_encoded_actual_parent_columns}
     \lean{MPUCircuit.initializedBasisMatrix_pullback_rows, MPUCircuit.encodedJoiningParent_pullback_columns, MPUCircuit.regroupedIntervalJointOutputEmbedding_reset_apply, MPUCircuit.initializedBasisMatrix_regroupedOutput_mul_normalizedParent, MPUCircuit.encodedJoiningParent_minimalIntervalColumns}
     \leanok
@@ -3484,7 +3484,7 @@ remain separate assertions.
     joining flags are reset to zero. Arbitrary outside configurations are retained.
     The parent-column and reset equalities are consequences, rather than additional
     assumptions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_column_coordinate_transport,
         thm:mpu_joining_reset_columns,
@@ -3495,20 +3495,20 @@ remain separate assertions.
     the parent inclusion, including its unchanged outside register.
 \end{proof}
 
-\begin{theorem}[Joint initialized columns determine the parent invariant]
+\begin{lemma}[Joint initialized columns determine the parent invariant]
     \label{thm:mpu_parent_invariant_from_joint_columns}
     \lean{MPUCircuit.isMinimalIntervalColumnImplementation_of_joint_initialized_columns}
     \leanok
     An operator satisfying the parent columns on the joint child input
     satisfies every initialized parent column, with the outside configuration
     unrestricted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The derived joint input-coordinate bijection covers the parent input inclusion.
     Evaluating the joint column identity at the inverse image of each parent column gives the parent identity.
 \end{proof}
 
-\begin{theorem}[The minimal-interval circuit merger]
+\begin{lemma}[The minimal-interval circuit merger]
     \label{thm:mpu_actual_minimal_interval_merger}
     \lean{MPUCircuit.exists_minimalInterval_merging_circuit}
     \leanok
@@ -3524,7 +3524,7 @@ remain separate assertions.
     \end{align}
     where $K$ and $F$ are the uniform joining and reflection bounds. The same
     workspace is returned to zero on every logical input.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_permuted_encoded_merger,
         thm:mpu_actual_merging_support,
@@ -3564,7 +3564,7 @@ remain separate assertions.
     resource estimate, and identifying the root columns with $U$ completes the construction.
 \end{proof}
 
-\begin{theorem}[Exact circuits for arbitrary MPUs]
+\begin{lemma}[Exact circuits for arbitrary MPUs]
     \label{thm:mpu_general_exact_polynomial_circuits}
     \lean{MPUCircuit.exists_clean_exact_circuit_of_bounded_cutCoefficientRank, MPUCircuit.exists_clean_exact_circuit_of_periodic_mpo_unitary, MPUCircuit.exists_clean_operatorNorm_approximate_circuit_of_bounded_cutCoefficientRank, MPUCircuit.exists_clean_operatorNorm_approximate_circuit_of_periodic_mpo_unitary}
     \leanok
@@ -3580,7 +3580,7 @@ remain separate assertions.
     in zero. The same form of bound holds on a line.
     In particular, both exact and arbitrarily accurate operator-norm
     circuit implementations have polynomial resources at fixed $D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpu_affine_gram_balancing,
         thm:mpu_balanced_interval_minimal_cut_ranks,

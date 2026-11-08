@@ -33,7 +33,7 @@ preserved.
     $(U_Nv)_\sigma=v_{e\circ\sigma}$.
 \end{definition}
 
-\begin{theorem}[Reflection of the mixed family and joint support]
+\begin{lemma}[Reflection of the mixed family and joint support]
     \label{thm:mpo_joint_endpoint_swap_support}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_swap,
         MPSTensor.MPOSymmetry.bondInterpolationMatrix_reflect_swap,
@@ -60,7 +60,7 @@ preserved.
         \label{eq:mpo_joint_endpoint_swap_support}
     \end{align}
     These identities require no spanning or dimension assumptions.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_phase_boundary}
@@ -75,7 +75,7 @@ preserved.
     by the same isometry, giving the parent interaction identity.
 \end{proof}
 
-\begin{theorem}[Conjugation of the periodic Hamiltonian and component vectors]
+\begin{lemma}[Conjugation of the periodic Hamiltonian and component vectors]
     \label{thm:mpo_joint_endpoint_swap_periodic}
     \lean{MPSTensor.periodicInteractionHamiltonianES_physicalReindex_conj,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_eq_conj_reflect_swap,
@@ -92,7 +92,7 @@ preserved.
     \end{align}
     The same identity holds for an arbitrary common linear combination
     of the component vectors, with its coefficient vector unchanged.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_endpoint_swap_support}
@@ -106,7 +106,7 @@ preserved.
     cross-label overlap.
 \end{proof}
 
-\begin{theorem}[The second endpoint and a common bound for both endpoints]
+\begin{lemma}[The second endpoint and a common bound for both endpoints]
     \label{thm:mpo_joint_both_periodic_endpoints}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_one_eq_actual,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_endpoints_eq_actual,
@@ -136,12 +136,12 @@ preserved.
     \end{align}
     Empty block families and zero physical alphabets are permitted.
     The statement concerns the two endpoints only.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_endpoint_swap_periodic,thm:mpo_joint_periodic_gap,
         thm:martingale_isometric_conjugation_gap}
-    For the reversed pair $(A_1,A_0)$, Theorem~\ref{thm:mpo_joint_periodic_gap}
+    For the reversed pair $(A_1,A_0)$, Lemma~\ref{thm:mpo_joint_periodic_gap}
     requires positive dimensions $D_1^x$.
     Conjugacy sends the reversed kernel to the original kernel; it also
     sends the reversed component span to the span in

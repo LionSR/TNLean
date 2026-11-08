@@ -6,10 +6,9 @@
 \paragraph{The four-site block and its boundary.}
 Number the corners clockwise from the upper right by $0,1,2,3$.
 The block in \cite[Observation~6.6]{Schuch2010PEPS} has four internal
-bonds $x_0,x_1,x_2,x_3$ and eight separate boundary bonds.
-Top and bottom pairs are ordered left to right; left and right pairs
-are ordered top to bottom. Each diagonal leg is an open physical index.
-The defining contraction of
+bonds $x_0,x_1,x_2,x_3$, eight boundary bonds (ordered left to right on
+top/bottom and top to bottom on left/right), and four diagonal open
+physical legs $\sigma_0,\ldots,\sigma_3$. The contraction of
 Definition~\ref{def:peps_two_by_two_tensor} is
 % Formula: B(alpha;sigma)=sum_x product_i A_i(lambda_i(alpha,x);sigma_i).
 % Ink-to-index: upper left=3, upper right=0, lower right=1, lower left=2.
@@ -44,26 +43,20 @@ Definition~\ref{def:peps_two_by_two_tensor} is
         \tnmark[form=label, label pos=w]{on reblockX3 0.5}{$x_3$}
     \end{tenkz}
 \end{tenkzequation}
-For arbitrary fine tensors, contracting these blocks around the torus gives
-$W\Psi_f=\Psi_B$ with scalar factor one, for every positive coarse period.
-Here $W$ only regroups the four physical registers per block.
-For regular $G$-isometric fine tensors with local factors $c_i>0$,
-Theorem~\ref{thm:peps_two_by_two_gram} instead concerns the Gram operator:
-$B^*B=c_BP_8$, with $c_B=|G|\prod_i c_i$.
-The internal cycle contributes the factor $|G|$; it does not alter the
-exact geometric contraction equality.
+For arbitrary fine tensors and every positive coarse period, contracting
+these blocks around the torus gives $W\Psi_f=\Psi_B$ with scalar factor one,
+where $W$ regroups the four physical registers per block. For
+regular $G$-isometric fine tensors with local factors $c_i>0$,
+Lemma~\ref{thm:peps_two_by_two_gram} gives the Gram identity
+$B^*B=c_BP_8$ with $c_B=|G|\prod_i c_i$ (the internal cycle contributes
+$|G|$ to $c_B$ without changing $W\Psi_f=\Psi_B$).
 
 \paragraph{Relative coordinates separate the second bond.}
-For any finite group, put $d=|G|$ and
-$E|a,b\rangle=|a,a^{-1}b\rangle$. Its inverse is the source map
-$T|a,r\rangle=|a,ar\rangle$.
-For $q\in G$, cancellation gives
-$E(L_q\otimes L_q)E^{-1}=L_q\otimes1$.
-The following two-bond coefficient diagram is the relative-coordinate
-step in \cite[Observation~6.5]{Schuch2010PEPS}, after identifying the
-local physical supports with invariant coordinates.
-The paired endpoints $(a,b)$ and $(c,d')$ are replaced by
-$(a,r)$ and $(c,s)$, respectively.
+For any finite group $G$ of order $d=|G|$, $E|a,b\rangle=|a,a^{-1}b\rangle$
+has inverse $T|a,r\rangle=|a,ar\rangle$ and satisfies
+$E(L_q\otimes L_q)E^{-1}=L_q\otimes1$ for all $q\in G$. Replacing the
+paired endpoints $(a,b)$ and $(c,d')$ by $(a,r)$ and $(c,s)$ gives the
+relative-coordinate step in \cite[Observation~6.5]{Schuch2010PEPS}:
 % Source: renorm-gg-sym and renorm-g-id-and-split, with all other
 % incident indices grouped outside the displayed pair. Fixing neighboring
 % averaging labels fixes the common regular matrix L_q on the two bonds.
@@ -90,20 +83,14 @@ $(a,r)$ and $(c,s)$, respectively.
         \tnwire[name=relativeBellBond]{relativeIdentityLeft.0}{relativeIdentityRight.180}
     \end{tenkz}
 \end{tenkzequation}
-The lower contraction is the unnormalized equality vector
-$\sum_{r\in G}|r,r\rangle=\sqrt d\,\omega$, where
-$\omega=d^{-1/2}\sum_{r\in G}|r,r\rangle$ has norm one.
-The two endpoint registers remain distinct physical systems.
-No commutativity of $G$ is used.
+The lower contraction is $\sum_{r\in G}|r,r\rangle=\sqrt d\,\omega$ for
+the unit vector $\omega=d^{-1/2}\sum_{r\in G}|r,r\rangle$ on the two
+distinct endpoint registers. No commutativity of $G$ is assumed.
 
 \paragraph{The original tensor and the four surplus registers.}
-Let every fine site carry the same regular $G$-isometric tensor $A$.
-After taking relative coordinates on each paired boundary, write
-$\eta_j=(u_j,u_jr_j)$ for $j=t,r,b,l$.
-The target tensor $C$ has coefficients
-$C(\eta;(s,\tau))=A(u;s)\prod_j\delta_{\tau_j,r_j}$.
-Here $E$ acts on all four paired legs.
-Thus the local factorization in the source fixed-point figure is
+When every fine site carries the same regular $G$-isometric tensor $A$,
+writing $\eta_j=(u_j,u_jr_j)$ ($j=t,r,b,l$) on the four paired boundaries
+gives the target tensor $C(\eta;(s,\tau))=A(u;s)\prod_j\delta_{\tau_j,r_j}$:
 % Source: renorm-fixedpoint, right-hand side, original A and four I tensors.
 % The displayed boundary coordinates are E eta=(u,r), not eta itself.
 % Eight separate virtual legs (u_t,u_r,u_b,u_l,r_t,r_r,r_b,r_l);
@@ -127,27 +114,21 @@ Thus the local factorization in the source fixed-point figure is
             ports={90:virtual:$r_l$,270:physical:$\tau_l$}]{1}
     \end{tenkz}
 \end{tenkzequation}
-The local physical map $F_v$ obeys
-$F_vB_v=\sqrt{c_{B,v}/c_{A,v}}\,C_v$ and preserves inner products
-on $\operatorname{ran}B_v$.
-The factor $c_{A,v}$ is the unchanged isometry factor of the original
-coarse tensor with its surplus registers, as in
-Theorem~\ref{thm:peps_regular_graph_surplus_isometry}.
-Each surplus virtual edge joins two identity tensors and becomes the
-physical equality pair in the preceding diagram.
+By Lemma~\ref{thm:peps_regular_graph_surplus_isometry}, the local
+physical map $F_v$ preserves inner products on $\operatorname{ran}B_v$
+and satisfies $F_vB_v=\sqrt{c_{B,v}/c_{A,v}}\,C_v$ with unchanged
+isometry factor $c_{A,v}$, while each surplus virtual edge contracts two
+identity tensors into $\sqrt d\,\omega$.
 
 \paragraph{The normalized fixed-point state.}
-Suppose the coarse torus has periods $w,h\geq3$, the fine torus has
-periods $2w,2h$, and every bond is untwisted.
-Let $S_f=W^{-1}\operatorname{ran}(\bigotimes_v B_v)$ and let $Q$ regroup
-the original and surplus output registers. Then
-$I=Q(\bigotimes_vF_v)W|_{S_f}$ is a physical support isometry.
-For $\Omega=\bigotimes_{e\in E(\Gamma)}\omega_e$, put
-$R=(\prod_v\sqrt{c_{B,v}/c_{A,v}})d^{|E(\Gamma)|/2}>0$.
-The state identity is $I\Psi_f=R\Psi_c\otimes\Omega$.
-Both original PEPS states are nonzero, and $\|\Omega\|=1$, so normalization
-gives the following identity from
-Theorem~\ref{thm:peps_two_by_two_original_normalized}.
+On a coarse torus of periods $w,h\geq3$ (fine periods
+$2w,2h$) where every bond is untwisted, let $S_f=W^{-1}\operatorname{ran}(\bigotimes_v B_v)$ and let
+$Q$ regroup the original and surplus output registers. Then
+$I=Q(\bigotimes_vF_v)W|_{S_f}$ is an isometry on $S_f$, and for
+$\Omega=\bigotimes_{e\in E(\Gamma)}\omega_e$ and
+$R=(\prod_v\sqrt{c_{B,v}/c_{A,v}})d^{|E(\Gamma)|/2}>0$, one has
+$I\Psi_f=R\Psi_c\otimes\Omega$. Normalizing via
+Lemma~\ref{thm:peps_two_by_two_original_normalized} gives
 % Source: renorm-fixedpoint, global untwisted periodic specialization.
 % A state box has no virtual boundary; its entire physical alphabet is bundled.
 % Left: the one fine physical port is contracted into the support map I.
@@ -171,9 +152,7 @@ Theorem~\ref{thm:peps_two_by_two_original_normalized}.
             ports={0:physical:$\tau$}]{\Omega}
     \end{tenkz}
 \end{tenkzequation}
-The coarse state uses the same original tensor $A$.
-The displayed map is an isometry on the derived physical support;
-no surjectivity onto either ambient physical space is assumed.
-The scalar-one geometric reblocking also covers coarse periods one and two.
-The Bell-separation and normalized-state assertions here retain the
-untwisted, $w,h\geq3$ hypotheses.
+where $\widehat\Psi_c$ uses the same original tensor $A$, $I$ is an isometry on
+$S_f$ (no surjectivity onto either ambient physical space is assumed),
+and the Bell-separation and normalization claims retain the untwisted
+$w,h\geq3$ hypotheses (whereas $W\Psi_f=\Psi_B$ also holds for $w,h\in\{1,2\}$).

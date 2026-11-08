@@ -47,8 +47,8 @@ three-cocycle obstruction to an invariant single-block state, without
 classifying multi-block families or excluding direct sums of the regular
 representation.
 
-Theorem~\ref{thm:asymex_fib_anomaly_nim_rep} records the explicit regular
-action on two blocks, and Theorem~\ref{thm:asymex_fib_anomaly_no_go}
+Lemma~\ref{thm:asymex_fib_anomaly_nim_rep} records the explicit regular
+action on two blocks, and Lemma~\ref{thm:asymex_fib_anomaly_no_go}
 establishes the single-block obstruction under the hypotheses just stated.
 Neither result classifies all invariant families with several blocks.
 
@@ -75,13 +75,13 @@ Neither result classifies all invariant families with several blocks.
     the block $B_\tau$ of Definition~\ref{def:asymex_fib}.
 \end{definition}
 
-\begin{theorem}[The Fibonacci relation for the fusion matrix]%
+\begin{lemma}[The Fibonacci relation for the fusion matrix]%
     \label{thm:asymex_fib_anomaly_matrix_sq}
     \lean{FibonacciCompression.fibFusionMatrix_sq}
     \leanok
     \uses{def:asymex_fib_anomaly_nim}
     $N_\tau^2=N_\tau+\Id_2$, as matrices with nonnegative integer entries.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -89,7 +89,7 @@ Neither result classifies all invariant families with several blocks.
     $N_\tau^2=\begin{pmatrix}1&1\\1&2\end{pmatrix}=N_\tau+\Id_2$.
 \end{proof}
 
-\begin{theorem}[The fusion ring on the periodic operators]%
+\begin{lemma}[The fusion ring on the periodic operators]%
     \label{thm:asymex_fib_anomaly_fusion_algebra}
     \lean{FibonacciCompression.isMPOFusionAlgebra_fibBlock}
     \leanok
@@ -146,7 +146,7 @@ Neither result classifies all invariant families with several blocks.
     In the diagrams the system size is denoted by $L$: the first
     contraction is $O_\tau(L)O_\tau(L)$ and the second is
     $O_1(L)O_\tau(L)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -154,8 +154,8 @@ Neither result classifies all invariant families with several blocks.
     The case $a=b=1$ is the admissibility projector composed with itself,
     the cases $\{a,b\}=\{1,\tau\}$ are the two unit laws obtained by
     block-triangular compression over $\Z[\sigma]$ and embedding into the
-    complex matrices via Theorem~\ref{thm:asymex_golden_ring}, and
-    Theorem~\ref{thm:asymex_fib_fusion} settles the case $a=b=\tau$.
+    complex matrices via Lemma~\ref{thm:asymex_golden_ring}, and
+    Lemma~\ref{thm:asymex_fib_fusion} settles the case $a=b=\tau$.
     Together, these four identities determine all coefficients in
     Eq.~\ref{eq:asymex_fib_anomaly_fusion_algebra}.
 \end{proof}
@@ -164,12 +164,12 @@ The pair of states is the all-$\tau$ product tensor and the chain
 tensor of Definition~\ref{def:asymex_fib_states}, and the identities
 $O_1\Psi_1=\Psi_1$, $O_\tau\Psi_1=\Psi_\tau$, and
 $O_\tau\Psi_\tau=\Psi_1+\Psi_\tau$ are those of
-Theorem~\ref{thm:asymex_fib_state_action}. The content beyond that
+Lemma~\ref{thm:asymex_fib_state_action}. The content beyond that
 theorem is the remaining identity $O_1\Psi_\tau=\Psi_\tau$ and the
 packaging of all four as the regular representation of the fusion
 matrices.
 
-\begin{theorem}[The regular representation on a pair of normal states]%
+\begin{lemma}[The regular representation on a pair of normal states]%
     \label{thm:asymex_fib_anomaly_nim_rep}
     \lean{FibonacciCompression.isMPOSymmetricFamily_fibNimTargets,
         FibonacciCompression.mpo_fibOne_mulVec_chain}
@@ -216,7 +216,7 @@ matrices.
     $\Psi_1(1)=\ket{1}$ and $\Psi_\tau(1)=-s^2\ket{1}$.
 
     The following diagrams recall the operator fusion intertwiners of
-    Theorem~\ref{thm:asymex_fib_fusion_tensors}. Here $B$ is the stacked
+    Lemma~\ref{thm:asymex_fib_fusion_tensors}. Here $B$ is the stacked
     operator square and $C_s$ denotes an operator target block, not the
     state tensor $C$ of Eq.~\ref{eq:asymex_fib_anomaly_states}.
     The state action uses the separate action tensors described in the
@@ -257,7 +257,7 @@ matrices.
             \tn[label pos=s, ports={90:physical:$i$}]{C_s} & \tn[skin=ring]{W_s}
         \end{tenkz}
     \end{center}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -294,7 +294,7 @@ matrices.
     \end{align}
     This proves Eq.~\ref{eq:asymex_fib_anomaly_nim_rep}.
     The operator fusion intertwiners of
-    Theorem~\ref{thm:asymex_fib_fusion_tensors} give the compatible
+    Lemma~\ref{thm:asymex_fib_fusion_tensors} give the compatible
     operator identity $O_\tau^2=O_1+O_\tau$; the state identities above
     follow from the action decompositions in
     Eq.~\ref{eq:asymex_fib_anomaly_action_blocks}.
@@ -302,15 +302,15 @@ matrices.
 
 The action above uses the admissibility projector and chain amplitudes on the
 two-label physical space from earlier in this section, with unnormalized
-periodic contractions; as noted after Theorem~\ref{thm:asymex_fib_state_action},
+periodic contractions; as noted after Lemma~\ref{thm:asymex_fib_state_action},
 the identities do not extend to length zero.
 
-By Theorem~\ref{thm:asymex_fib_anomaly_integral_action} of
+By Lemma~\ref{thm:asymex_fib_anomaly_integral_action} of
 Chapter~\ref{ch:mpo_symmetry_basics}, any length-independent scalar action on a
 normal tensor takes nonnegative integer values, which drives the single-block
 no-go below.
 
-\begin{theorem}[A nonzero length-independent eigenvalue is impossible]%
+\begin{lemma}[A nonzero length-independent eigenvalue is impossible]%
     \label{thm:asymex_fib_anomaly_eigenvalue_zero}
     \lean{FibonacciCompression.fibTau_eigenvalue_eq_zero}
     \leanok
@@ -320,7 +320,7 @@ no-go below.
     $\Psi_A(N)=\ket{V^{(N)}(A)}$. If a single scalar $c\in\C$ satisfies
     $O_\tau(N)\Psi_A(N)=c\Psi_A(N)$ for every $N\geq1$, then $c=0$.
     No unit-fixing hypothesis is required for this conclusion.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -328,7 +328,7 @@ no-go below.
         ex:mpo_symmetry_fibonacci}
     Suppose $c\neq0$ and suppress $N\geq1$ in the notation. The unit law
     $O_1O_\tau=O_\tau$ of
-    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} gives
+    Lemma~\ref{thm:asymex_fib_anomaly_fusion_algebra} gives
     \begin{align}
         c\,O_1\Psi_A
          & =O_1O_\tau\Psi_A=O_\tau\Psi_A=c\Psi_A.
@@ -336,7 +336,7 @@ no-go below.
     Cancelling $c$ yields $O_1\Psi_A=\Psi_A$ for every $N\geq1$. Hence $A$
     is symmetric under the Fibonacci fusion algebra with eigenvalues
     $(c_1,c_\tau)=(1,c)$, and
-    Theorem~\ref{thm:mpo_symmetric_character} makes $c\in\N$ with
+    Lemma~\ref{thm:mpo_symmetric_character} makes $c\in\N$ with
     \begin{align}
         c^2 & =c_\tau c_\tau=c_1+c_\tau=1+c.
     \end{align}
@@ -344,7 +344,7 @@ no-go below.
     (Example~\ref{ex:mpo_symmetry_fibonacci}), so $c=0$.
 \end{proof}
 
-\begin{theorem}[No normal matrix product state is Fibonacci symmetric]%
+\begin{lemma}[No normal matrix product state is Fibonacci symmetric]%
     \label{thm:asymex_fib_anomaly_no_go}
     \lean{FibonacciCompression.not_exists_normal_fibonacci_symmetric}
     \leanok
@@ -364,14 +364,14 @@ no-go below.
     absence of a nonnegative integer $m$ satisfying $m^2=m+1$.
 
     The explicit pair $A,C$ of
-    Theorem~\ref{thm:asymex_fib_anomaly_nim_rep} shows that two normal
+    Lemma~\ref{thm:asymex_fib_anomaly_nim_rep} shows that two normal
     blocks suffice. Among nonempty finite families of word-normal
     tensors of positive bond dimension, fixed by $O_1$ and carrying
     length-independent nonnegative integer action coefficients at
     every positive length, the minimal number of blocks is therefore
     two. This counts tensor blocks, not the dimension of their
     periodic-vector span at each short length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -380,7 +380,7 @@ no-go below.
     Suppose $A$ and $c$ satisfy
     Eq.~\ref{eq:asymex_fib_anomaly_symmetry}. Then $A$ is symmetric under
     the Fibonacci fusion algebra of
-    Theorem~\ref{thm:asymex_fib_anomaly_fusion_algebra} with eigenvalues
+    Lemma~\ref{thm:asymex_fib_anomaly_fusion_algebra} with eigenvalues
     $(c_1,c_\tau)=(1,c)$. A fusion character $m$ with values in $\N$ would
     satisfy $m_1=1$ and
     \begin{align}

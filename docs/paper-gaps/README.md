@@ -82,6 +82,13 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
+- `spc11_spt_classification_continuous_realization.tex` (scope restriction,
+  open) compares the exact MPS phase condition and the injective endpoint
+  domain with the classification of arXiv:1010.3732, Section II.F. Every
+  clause matches the source except the continuous tensor realization of the
+  ground lines along the path, which the source derives from the gap and the
+  phase condition assumes; the endpoint domain is the source's standard-form
+  convention. The note gives the plan for the pointwise converse.
 - `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction, resolved)
   records that preservation of an on-site symmetry along the isometric
   deformation of arXiv:1010.3732 was first derived from exact symmetry of the
@@ -209,6 +216,16 @@ For the MPU index of arXiv:1703.09188:
   swap labels in Figure `fig:TR-ancilla` agree with $\widetilde U_3$ and differ
   from the claimed $\widetilde U_2$ endpoint when $N\geq3$ and $d\geq2$, and
   that reversing those crossed swaps gives the intended local correction.
+- `mpu_qca_complete_block_heisenberg_scope.tex` (scope restriction, resolved)
+  records the supplied two-site standard-form scope of the finite MPU
+  Heisenberg identity, the forward and inverse finite propagation built on it
+  with radius measured in the block length, and the canonical and bare-MPU
+  construction of the induced QCA with source radius $4D^4$.
+- `mpu_qca_index_normalization.tex` (local correction) records that the
+  Appendix relation $\operatorname{ind}_{\mathrm{MPU}}=-2\log_2(\ell/d)$
+  conflicts with the defining formula of the MPU index, corrects it to
+  $-\log_2$ of the positive rational QCA index, and records the reversed
+  adjoint order in the printed transport of the left support factor.
 
 For the MPU symmetry-defect gauging paper:
 
@@ -220,11 +237,21 @@ For the MPU symmetry-defect gauging paper:
   or a replacement in unbuffered defect formulas. This local correction is
   formally verified and resolved; the literal printed pair still fails at
   empty length.
+- `fbc25_controlled_z_split_index_class_scope.tex` records that for the
+  controlled-`Z` example the formal statement is the invariant behind the
+  source's remark on the combined `ℤ₂ × ℤ₂` phase: the bond implementation of
+  the two symmetries on the split-index tensor is by anticommuting matrices,
+  so its projective class is nontrivial. The identification of this class with
+  the phase, from the cited split-index classification, is not formalized.
 - `fbc25_truncated_symmetry_endpoint_unitarity_scope.tex` records that the
   all-length truncated-symmetry theorem proves unitarity between endpoint
   coordinate spaces, while the finite-group endpoint identifications
   \(d_l=d_r=d\), the interior action condition, and the complementary
   finite-chain relation remain outside that theorem.
+- `fbc25_complementary_truncation_shared_endpoints.tex` records that the
+  complementary truncated symmetry in `eq:complementary` and `eq:UUU` shares
+  both endpoint sites with `U^L`, so its total length is two more than the
+  printed `∞-L`; the corrected relation is formally verified and resolved.
 - `fbc25_gauss_law_commuting_projector_source_audit.tex` pins the oriented
   matter--link space and multiplication convention of the local Gauss-law
   representation, the cited three-defect associator calculation, the
@@ -270,6 +297,9 @@ restriction are recorded separately.
 - `gnvw12_support_algebra_full_matrix_scope.tex` records the remaining open
   restriction from arbitrary finite-dimensional $C^*$-algebra factors to
   full complex matrix factors.
+- `gnvw12_shift_example_subscript.tex` records the resolved correction that
+  the scalar support factor in the printed shift example carries the odd
+  subscript, and checks both shift orientations against the index.
 - `sw04_support_covariance_scope.tex` records that the formal
   support-algebra covariance theorem treats star-automorphisms of a homogeneous
   one-dimensional nearest-neighbour chain, while Schumacher--Werner allow
@@ -552,11 +582,19 @@ For the non-periodic MPS Fundamental Theorem background:
 - `rmp_nonperiodic_bnt_comparison_inputs.tex` compares the current
   canonical-form/BNT/after-blocking proof boundary against the local paper
   sources.
-- `pgvwc07_direct_sum_input.tex` explains the older MPS representation
-  paper's direct-sum input behind block-injective canonical form.
+- `pgvwc07_direct_sum_input.tex` (local correction, resolved) explains the
+  older MPS representation paper's direct-sum input behind block-injective
+  canonical form, and records the convention that its pairwise different
+  block states are pairwise nonproportional, equivalently gauge-phase
+  inequivalent blocks.
 - `pgvwc07_ti_canonical_form_positive_blocks.tex` records the convention
   that every listed block of the translation-invariant canonical form has
   positive bond dimension, used once when condition C1 forces a single block.
+- [`pgvwc07_open_parent_domain.tex`](pgvwc07_open_parent_domain.tex)
+  (local correction, resolved) records that the length bound `N ≥ 2` of the
+  varying-bond open-parent uniqueness theorem is the source's setup of a
+  chain with an adjacent interaction term; with it, the formal result is
+  Theorem 9 for arbitrary physical and bond dimensions.
 - `pgvwc07_ti_uniqueness_scope.tex` records that the block-separation lemmas
   do not formalize the uniqueness theorem for the translation-invariant
   canonical form, states the corrected root-of-unity conclusion, and records
@@ -566,7 +604,11 @@ For the non-periodic MPS Fundamental Theorem background:
 - `pgvwc07_quadratic_reconstruction_phase.tex` records the unit-modulus phase
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
-  corrected same-state conclusion up to an $N$th-root phase.
+  corrected conclusion for every solution up to a unit phase. It records that
+  the nonzero state and the size condition `N > 2 L_0 + D^4` belong to the
+  source's setup, that the existence clause and the same-state case are
+  formalized, and the endpoint-invertibility argument that remains for an
+  arbitrary solution.
 - `ssvcw05_sequential_bond_upper_bound_scope.tex` records the upper bounds
   `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of the
   successive decompositions, the formalized "minimal resources" (bond dimensions
@@ -605,6 +647,14 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   printed comparison of two cut matrices, derived by a single-letter route
   that is an alternative proof on the printed range and a TNLean
   reconstruction on the short rings below twice the injectivity length).
+- `cpgsv21_physical_deformation_general_graph.tex` (clarification, resolved)
+  records that the ground-space correspondence of arXiv:2011.12127,
+  Section IV.C, under invertible on-site maps is formalized on every finite
+  simple graph, and that on a cycle with `N ≥ 3` and `0 < L < N` the common
+  parent space of the arcs is the periodic matrix-product ground space, so the
+  periodic-chain correspondence follows from the graph theorem. For `L = N`
+  the closed graph region and the chain construction use different boundary
+  prescriptions, and the one- and two-site rings are not simple cycles.
 - `cpgsv21_block_diagonal_parent_ground_space.tex` records the degenerate
   parent-Hamiltonian block-diagonal boundary-condition theorem behind the
   periodic block decomposition and the BNT ground-space span. The fixed-window
@@ -695,10 +745,12 @@ note.
   $p$-refinable while its transfer map is no longer trace preserving. The
   corrected statement adds trace preservation of the transfer map, which the
   source's definition of $p$-divisibility presupposes. The note also records
-  why the formal forward canonicalization hypothesis, stated over the
+  why the former forward canonicalization hypothesis, stated over the
   generated-family reading of irreducible form, is refuted rather than
-  dischargeable, and lists the unformalized ingredients of the printed
-  argument.
+  dischargeable. The corrected block-form theorem is proved without an
+  extra canonicalization premise, and the refuted premises and their
+  conditional forward/bundled theorems are retired. This forward gap is
+  resolved; the converse root-selection gap below remains open.
 - `dccsp17_root_kraus_rank_thm41.tex` records the Kraus-rank step that the
   converse implication of Theorem 4.1 uses without proof.
 - `dccsp17_orbit_phase_wraparound.tex` (local correction) records that the
@@ -712,20 +764,29 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   pairs in the printed coupled pentagon, the missing summed primed fusion
   indices in the gauge display, and the analysis/synthesis convention. The
   general coupled pentagon and multiplicity gauge law remain proof obligations.
-- `glm23_wha_parent_completion.tex` distinguishes the weak-Hopf average
-  of the canonical support projection from averaging its complement. It
-  records the explicit adjoint-closure, positive-length unit-calibration,
-  and finite-family normalization hypotheses under which the support is
-  fixed, and the still-open physical weak-Hopf realization.
+- `glm23_wha_parent_completion.tex` (scope restriction, resolved)
+  distinguishes the weak-Hopf average of the canonical support projection
+  from averaging its complement. It records the explicit adjoint-closure,
+  positive-length unit-calibration, and finite-family normalization
+  hypotheses under which the support is fixed, the weak-Hopf realization with
+  its finite-set and Bell-pair instances, and its derivation for any
+  compatible tensor injective after blocking (unit support comes from the
+  ideal structure of the state boundary space, without the identity at the
+  injectivity length). For the Bell-pair state tensor, compatible with its
+  operator tensor and injective at one site, the average is
+  `E_n(X) = r⁻² tr(Q_n X) Q_n` and the support projection is `P_n = Q_n`, so
+  the uncompleted average `E_n(I − P_n)` vanishes at every positive length,
+  while `I − P_n ≠ 0` for `r ≥ 2` and `n ≥ 2`.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
   trivial action of `ψ` is forced by the source's identification of that phase
   with part of `𝓜_TY`.
-- `glm23_reps3_su24_module_list.tex` records that completeness of the listed
-  `Rep(S₃)` and `su(2)₄` phases is formalized only on one block, with a
-  two-block representation of `Rep(S₃)` showing that the representation
-  identity alone does not determine the list.
+- `glm23_reps3_su24_module_list.tex` (scope restriction, resolved) records
+  that completeness of the listed `Rep(S₃)` and `su(2)₄` phases holds on any
+  number of blocks once the duality `M_{a*} = M_aᵀ` of a module category is
+  imposed, with a two-block representation of `Rep(S₃)` showing that the
+  representation identity alone does not determine the list.
 - `glm23_mpo_symmetric_mps_scope.tex` records that the formal layer of fusion
   algebras, symmetric families, and nonnegative integer representations uses
   only the periodic-boundary form of the source's arbitrary-boundary
@@ -738,6 +799,20 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   representations with trivial unit action are classified directly, and
   sketches the Perron--Frobenius argument for any number of blocks.
 
+For the matrix product operator algebras of arXiv:2204.05940:
+
+- `mrgscp22_pre_bialgebra_counit_scope.tex` (scope restriction, open) records
+  that the formal pre-bialgebra structure now carries the source's counit
+  (Definitions 3.1 and 4.1), and that the fusion coproduct of a complete
+  zipper fusion family satisfies both counit laws for the functional taking
+  the Kronecker delta on the letters; that functional is the source's
+  evaluation at the unit.  It exists exactly when the one-site identity is a
+  one-site operator of the family, and it is constructed for every family
+  whose letters are the images of the matrix coefficients of a unital
+  representation; for an arbitrary family its existence is not forced by the
+  fields and is taken as an argument, until the construction of the family
+  from a pre-bialgebra is formalized.
+
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
 
@@ -749,6 +824,13 @@ arXiv:2504.16985:
 
 For the MPU action on injective MPS blocks in arXiv:2502.20257:
 
+- `fbc25_boundary_dressed_l_symbols.tex` (local fix, resolved) records that
+  the scalar gauges of fusion and action tensors and the L-symbols are
+  defined by comparison against long words, since the reduction theorem gives
+  no bare-scalar uniqueness; proves the gauge law of the L-symbols in that
+  form; and shows that rescaled tensors realize every scalar gauge, so the
+  single-block, stabilizer-form and block-independence arguments hold
+  verbatim.
 - `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
   footnote's sheaf-cohomology comparison from the algebraic group cohomology
   of a finite discrete group and records the direct phase-and-radial proof of
@@ -871,8 +953,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
-  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
-  restriction could be traded for the positive bond dimension the source assumes.
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`; since the
+  source blocks at least one site, `q ≥ 1` is adopted as the convention.
 - `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
   fixed-point state of a basis of normal tensors, eq. (19), is stated for an
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
@@ -962,8 +1044,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
   unequal widths remove the former restriction to chain lengths divisible by
   `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
-  chain length; open: two-site gates between distant sites only at odd
-  separation, on disjoint stretches, which the trees do not need.
+  chain length (resolved); two-site gates between distant sites are covered
+  only at odd separation, on disjoint stretches, which the trees do not need.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
@@ -1012,11 +1094,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   seed condition for the non-normal chosen-vector conversion in #8469.
   It gives a mathematical (not Lean-checked) covariance obstruction to
   replacing that condition by equality of parent groundspaces. The informal
-  paper remark is not declared unconditionally false; its general phase
-  interpretation remains open.
-- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
-  that the claim that states in the same phase are related by a log-depth
-  circuit is formalized only between two normal tensors.
+  paper remark is read as conversion of whole ground spaces, which is
+  formalized; the chosen-vector condition is a further sufficient condition.
+- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction, resolved)
+  records that the claim that states in the same phase are related by a
+  log-depth circuit is formalized between two normal tensors, and for
+  non-normal tensors as conversion of whole parent ground spaces.
 
 For the phase relation of arXiv:2103.13367:
 
@@ -1070,10 +1153,15 @@ For the finite-round extension of arXiv:2103.13367:
   One source block may already contain sequential measurements at many sites;
   the adaptive tree does not record the required source-block decomposition.
 
-- `pgvwc07_half_chain_spectrum_conventions.tex` records the boundary-index
-  convention in the half-chain calculation, normalization by the actual
-  finite-ring norm, exact finite-size zero padding, and the non-sharp geometric
-  transfer-error estimate used for ordered physical eigenvalue convergence.
+- `pgvwc07_half_chain_spectrum_conventions.tex` (scope restriction, resolved)
+  records the boundary-index convention in the half-chain calculation,
+  normalization by the actual finite-ring norm, exact finite-size zero
+  padding, and the non-sharp geometric transfer-error estimate used for
+  ordered physical eigenvalue convergence. It also records that Condition C2
+  counts the peripheral eigenvalue with algebraic multiplicity (with distinct
+  values only, the two-block GHZ tensor violates Theorem 6), and that under
+  this reading Theorem 6 is formalized for weighted canonical forms with any
+  number of blocks.
 
 For the periodic decomposition in PGVWC07 Theorem 5:
 
@@ -1307,12 +1395,12 @@ proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
 ### Local solution of gapped Hamiltonians after Hastings: the finite-range approximation
 
 [hastings05_filtered_term_approximation.tex](hastings05_filtered_term_approximation.tex)
-(local correction, resolved) records two deviations in the finite-range approximation `M_i` of
-a Gaussian-filtered term in Hastings, *Solving Gapped Hamiltonians Locally*
-(arXiv:cond-mat/0508554v3, lines 285–320). First, the printed Gaussian weight
-`e^{-(tΔE)²/2}` of eq. `mid` stands for `e^{-(tΔE)²/(2q)}`. Second, `M_i` is taken to be the
-normalized partial trace of the filtered term onto a neighbourhood of the support of `H_i`,
-rather than the source's truncated evolution. Its support lies within radius `l + R`
+(local correction, resolved) records the normalized-partial-trace approximation to a
+Gaussian-filtered term in Hastings, *Solving Gapped Hamiltonians Locally*
+(arXiv:cond-mat/0508554v3, lines 285–320). The printed Gaussian weight
+`e^{-(tΔE)²/2}` of eq. `mid` stands for `e^{-(tΔE)²/(2q)}`. In this auxiliary construction,
+the filtered term is traced onto a neighbourhood of the support of `H_i`.
+Its support lies within radius `l + R`
 of the anchor when the neighbourhood radius is `l`. The source radius therefore requires
 `l = l_proj - R` and `R ≤ l_proj`; the norm bound is unchanged, and the localization
 estimate is analogous to the source's, with different constants.
@@ -1321,21 +1409,62 @@ the degenerate case. Its closed neighbourhood must be strictly smaller than
 the support separation; the decay estimate also requires a positive time-window
 slope `c₁` with `v c₁ < 1/2`.
 
+[hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
+(local correction, resolved) records the separate construction using the source's
+truncated Hamiltonian. `GaussianFilteredTruncation.lean` proves the comparison of the two
+evolutions and the actual truncated Gaussian integral, including support, Hermiticity,
+norm contraction, and the explicit shell-dependent error. The exponential decay theorem
+in `GaussianFilteredTruncationDecay.lean` assumes a polynomial bound on the omitted shell.
+This growth hypothesis is absent from the source's general metric setting. The separate
+`GaussianFilteredMetricTruncation.lean` proves the actual physical metric cutoff without
+it, by summing weighted omitted-term errors on the bounded-degree interaction graph.
+The constants and corrected factorization length are explicit; the Gaussian parameter
+and the truncation families are not replaced by the partial-trace construction.
+
 ### Local solution of gapped Hamiltonians: a basis of a degenerate ground space
 
 [hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
-(local correction, resolved) records the treatment of a degenerate ground space in Hastings,
-*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1705). In an
-eigenbasis of `P M_j P` with eigenvalues `r ≠ s`, the off-diagonal part of `P M_i P` has norm
-at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approximate eigenvector of
-`M_i` up to that off-diagonal part. Every dimension is treated: one compression with simple
-spectrum gives `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`, and repeated eigenvalues are resolved by the
-source's iteration over further compressions, made rigorous by an identity for the matrix
-elements at each level and assembled by induction over any number of levels; the cross terms the
-sketch omits are kept (a local correction). The basis is given. Eq. `oibu` is proved with an
-explicit constant independent of the size of the system, for any number of levels; its printed
-dependence `O(J²/(c₁ l ΔE δλ_j))` is not established, the constant growing like `(v/ΔE)^D` on a
-lattice of dimension `D`.
+(local correction, resolved) records the corrected basis choice in Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1708).
+An orthonormal basis is constructed in every finite ground-space dimension. The
+physical summed bounds require a polynomial sphere bound with constants independent
+of system size, which the source does not assume.
+The recursive spectral splits select at most `n - 1` original indices, retain both
+compression cross terms, and stop on scalar subspaces even when their dimension exceeds one.
+No basis, spectral separation or finite-dimensional conditioning is supplied as a hypothesis.
+The resulting uniform estimate applies to the source's actual truncated terms `M_i`,
+using a second filter under the original Hamiltonian. The generator range and norm budget
+remain in the velocity; observable support cardinality and diameter enter separate factors.
+The printed quantitative dependence is replaced by an explicit dimension-dependent constant
+and graph shell sum at rate `γ / 2^n`. In dimension two the separate original-term estimate
+retains rate `γ / 2`. Uniformity of the direct truncated-term estimate requires fixed
+localization support parameters. For a radius that grows with the number of sites, the
+perturbation comparison instead adds `(n - 1)` times the total truncation error to the
+original-term bound; that error must also be controlled uniformly.
+
+[hastings05_geometric_growth_scope.tex](hastings05_geometric_growth_scope.tex)
+(scope restriction, resolved) distinguishes the source's metric and finite-range assumptions
+from polynomial shell and sphere bounds. The actual physical metric truncation estimate
+is now proved without such a growth hypothesis.
+Finite binary trees have uniformly bounded degree and exponentially growing spheres;
+they refute the missing implication about geometry, not the source conclusions.
+The general metric exponential truncated-term estimate follows from a weighted
+Lieb–Robinson tail, with constants uniform in the site set and Hamiltonian. The unrestricted
+summed basis assertion is false, as shown by the physical counterexample below; the
+polynomial-growth theorem is a corrected statement.
+
+[hastings05_tree_basis_counterexample.tex](hastings05_tree_basis_counterexample.tex)
+(false source, resolved) gives a self-contained mathematical counterexample to (oibu)
+on arbitrary metric lattices. A qubit Hamiltonian on a finite `256`-ary tree has ground
+dimension two, gap at least `735/2048`, and interaction terms with fixed radius and norm
+bounds. At `l_proj = R = 1` the actual truncated terms equal these terms, but their summed
+off-diagonal norms are at least `2^(L-2)` in every ground-space basis, with maximal
+compressed spread between three and four. This is a fixed-radius counterexample; no
+failure along a size-dependent radius is asserted. Lean verifies the positive lift,
+the number-sector decomposition, and the lower bound on sectors with at least two
+particles. The concrete tree incidence operators and the full ground-space
+classification remain mathematical proofs in the note. The separately verified
+polynomial-growth basis theorem remains valid.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 
@@ -1363,10 +1492,13 @@ assumptions. That application requires deriving uniform factorization and
 entropy bounds and applying them to the approximation theorem. For chains
 with at least two sites, the entropy bound gives a common positive integer
 `k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
-Both bounds are now derived: the area law gives the entropy bound, and Lemma 1
-with a constant independent of the chain gives the factorization, so the estimate
-holds under the Hamiltonian assumptions alone, with the quantitative restrictions of
-the formalized Lemma 1.
+Both bounds are derived at the common source length `s = max(80c_R J/ΔE,80)`,
+using the admissible pair `(40c_R J,80)`. The threshold is
+`k₀ = ceil(exp(2 Smax)/2)` with the printed entropy maximum
+`Smax = c₀(6s) log(6s) log q 2^((6s) log q)`. Thus the factorization, entropy
+threshold and approximation use one interaction-proportional velocity, with
+constants independent of chain length. The earlier gap-rescaled estimates remain
+valid auxiliary statements.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
@@ -1385,28 +1517,55 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 *Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3, lines 640–704).
 The printed expectation bound alone gives only `√(ε/x)`. The scalar recurrence
 `b_m = (ε + 2 b_{m−1})^{1−1/h}` and its bound with coefficient `2ʰ − 1`
-are proved, but their application to the full hierarchy remains open.
+are proved as scalar statements; the complete hierarchy uses the corrected
+norm-deficiency recurrence below.
 Comparing successive normalized vectors by the triangle inequality gives an
 accumulated majorant involving `∑_{j<m} b_j`, with coefficient `3^{m−1}`.
 That estimate neither proves nor refutes the source's smaller recurrence.
 The complete hierarchy is controlled instead by measuring every deficiency
 against the ground state: `D_{m+1}² ≤ 2 D_m² + ((ε + 2 K D_m)/x_m)²`, which with
 the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial in `N`.
+The explicit adaptive radii satisfy `x_m ≤ 9K exp(−r/(4h))` for `m≤h`.
+One closing-link window has deficiency at most `(3^(h+1)−1) exp(−r/8)`.
+The length `r ≥ 512h²(1+max(0,log(J_eff/Δ)))` makes this deficiency less than
+one, the tree-plus-closing radius sum at most `Δ/4`, and the total scalar
+truncation error `2^h J_eff r exp(−r)` at most `Δ/8`. The actual one-dimensional
+periodic grouping derives `K=8ℓJ=J_eff r`, with `r=ηℓ` and `J_eff=8J/η`,
+independently of physical chain length. An explicit integer radius quadratic in
+`log M` satisfies the length inequality for the block count it produces, including
+arbitrary physical lengths and the one-block case. These bounds are derived
+rather than supplied as final energy budgets.
+
+### Local solution of gapped Hamiltonians: coordinate slices in arbitrary dimension
+
+[hastings05_coordinate_slices.tex](hastings05_coordinate_slices.tex)
+(scope restriction, resolved for full coordinate boxes) gives the coordinate-slice option
+of Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3,
+lines 745–756). The physical local terms are explicitly assigned to coarse edges of slices
+of width `2ℓ`. Their sum is unchanged, their internal and boundary supports are derived,
+and their residual and centred norms are bounded by `N_phys ε` and `2N_phys J`.
+The resulting projection retains a nearby unit vector at every node, and the physical
+Hamiltonian's gap gives the `2n` retained-state count. Full rectangular boxes in every
+dimension satisfy the coverage and coarse-count bounds, giving the explicit sufficient
+length `512(clog₂ N_phys+2)^3(1+max(0,log(2J/Δ)))`. The statement concerns this coordinate
+geometry; no polynomial bound on the coordinate extent of arbitrary sparse embeddings
+or unspecified bond-dimension formula is asserted.
 
 ### Local solution of gapped Hamiltonians: the supercell of the translation-invariant case
 
 [hastings05_translation_supercell.tex](hastings05_translation_supercell.tex)
-(scope restriction, resolved) concerns the translation-invariant case of Hastings,
-*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
-1603–1642). The source assumes ground-state momenta that are rational with
-denominators independent of the system size, and derives a supercell whose
-translations leave every ground state unchanged. The first formalization assumed such a
-subgroup directly. The supercell is now derived from the momentum sectors of an abelian
-translation group, its translations are shown to carry any site to a distance of order the
-linear size, and the composite bound proves the low-energy commutator exponentially small in
-that size for the filtered terms, and eq. `blecm` applied to the source's truncated terms `M_i`
-themselves, with covariant truncations, gives it for the `M_i` with no truncation error. The note records a slip at line 1638, and
-notes that the size-dependent case of lines 1643–1652 is not covered.
+(clarification, resolved) treats the translation-invariant case of Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1603–1654).
+The bounded-denominator argument constructs the supercell from the momentum sectors and
+uses a distant translate. The general argument instead applies Cayley–Hamilton to
+conjugation on the actual ground-space operator algebra, of dimension `n²`. Its recurrence
+has coefficient sum at most `2^(n²)-1`. Finitely many translates at separation proportional
+to the linear size give exponential smallness even when momentum denominators grow.
+The explicit rate is `γ/[4(m+1)]`, with `m≥max(1,n²)`, and one prefactor covers small sizes.
+Only the Hamiltonian must be invariant: the second observable is translated directly,
+so a chosen local decomposition need not be covariant. The source's actual truncated
+terms are covered through their proved locality and norm bounds. The note also records
+the coordinate slip at line 1638.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 
@@ -1432,13 +1591,12 @@ notes that the size-dependent case of lines 1643–1652 is not covered.
 
 ### Local solution of gapped Hamiltonians: Gaussian commutator coefficients
 
-[hastings05_gaussian_series_coefficients.tex](hastings05_gaussian_series_coefficients.tex)
-(local correction, resolved) records the variance-power correction in Hastings,
-*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
-1005–1009). The even Gaussian moment of order `k` contains `(q/ΔE²)^(k/2)`,
-not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
-factor already supplies the alternating sign. The finite-polynomial
-variational bound is unaffected; the infinite expansion remains unformalized.
+[QICLean paper-gap note](https://sirui-lu.com/QICLean/paper-gaps/hastings05_gaussian_series_coefficients.pdf) records the variance-power correction in
+Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, source lines 1005–1009). At commutator order
+`2r`, the variance appears to power `r`. QICLean proves the resulting
+norm-convergent Gaussian expansion independently of TNLean's finite-polynomial
+variational bound.
 
 ### Local solution of gapped Hamiltonians: the final state in the energy estimate
 
@@ -1452,6 +1610,28 @@ the bound for every final state, with error `∑_m 2^{h-1-m} x_m`, for the links
 chain. The link `(N, 1)` closing the periodic chain is the joining operator of no level; one
 further window for it inside the final space, whose deficiency is the next step of the same
 recursion, gives eq. `hchy` for the periodic sum with one more radius `x_h`.
+The projections and their windows are now constructed from the actual edge operators.
+For every physical chain length `M≥1`, the actual periodic grouping uses
+`N=max(1,⌊M/(2ℓ)⌋)` blocks and puts the remainder in the last block. At most `4ℓ`
+local terms contribute to an edge, giving centred norm `8ℓJ` independently of `M`.
+The integer radius is the maximum of `⌈R⌉` and the ceiling of
+`(512/η)(⌈log₂M⌉+2)²(1+max(0,log((8J_b/η)/Δ)))`, with `J_b=max(J,JC)`;
+it derives the quantitative
+length condition without divisibility or an implicit choice of block count.
+The full Gaussian-filtered terms sum to the original Hamiltonian. Their local
+differences from the truncated terms give the total norm error `δ≤Δ/8`;
+no small unfiltered-interaction difference is assumed. The final energy increases
+by `2δ`, so the count uses the original Hamiltonian's gap. The complete statements
+are in `RoundedPeriodicApproximation.lean`. The source-facing theorem
+`exists_periodicPhysicalHierarchy` in `PeriodicPhysicalHierarchy.lean` constructs
+these actual truncated Gaussian terms from the original interactions. It derives
+their localization from the cyclic metric and the uniform ball bound
+`2⌈R⌉+1`, including exact filtering at zero range. The source's condition (low)
+remains its only local ground-vector premise; no localization or pair-operator
+estimate is a further hypothesis. Every state kept by the closing window is also kept by every node below the
+root, so it preserves the hierarchical, tree-shaped representation called a
+generalized matrix product state in the source. The source bounds no intermediate
+retained-space dimension and no conventional matrix product bond dimension.
 
 ### Local solution of gapped Hamiltonians: the number of final states
 
@@ -1460,8 +1640,9 @@ recursion, gives eq. `hchy` for the periodic sum with one more radius `x_h`.
 the hierarchical construction in Hastings, *Solving gapped Hamiltonians locally*
 (arXiv:cond-mat/0508554v3, source lines 722–730). If `H − E₀ ≥ ΔE (1 − P)` for the ground
 projection `P` of trace `n`, then orthonormal states of energy at most `E₀ + θ ΔE` number at
-most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The energy under `H` is
-taken as a hypothesis.
+most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The general counting
+theorem takes the energy under `H` as a hypothesis. The constructed periodic hierarchy
+derives it from the local windows, the truncation bound, and the explicit projection length.
 
 [hastings05_mplt_positivity.tex](hastings05_mplt_positivity.tex)
 (local-correction, resolved) records that Hastings' matrix product form at every temperature,
@@ -1498,7 +1679,10 @@ formalization uses the terms whose support meets the support of `H_C`; then `S` 
 (arXiv:cond-mat/0508554v3, source lines 1342–1347) prints `β/β₀` in the exponent where the
 source's bound on `ρ_m` (lines 1334–1341) gives the number `n` of factors, the smallest even
 integer with `β/n ≤ β₀`. Since `β/β₀ ≤ n < β/β₀ + 2`, the printed bound does not follow. The
-formalization proves the bound with `n`, for every `n ≥ 1`.
+formalization proves the bound with `n`, for every `n ≥ 1`. It now constructs the
+minimal positive even count `2*ceil((β/β₀)/2)` at positive temperature, proves its
+exact interval and minimality, and derives the trace-error corollary with
+`β/β₀+2` in the exponent.
 
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
@@ -1534,7 +1718,7 @@ from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
 [hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
-(scope restriction, resolved) records how the approximation `M_i` of Hastings,
+(local correction, resolved) records how the approximation `M_i` of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, eqs. `mid` and
 `apb`, source lines 285–320, proved at lines 1458–1533), is formalized. The
 truncation keeps any family of terms acting inside a set `K` that contains the
@@ -1543,34 +1727,37 @@ at most `N(l_proj)` for the source's choice. The time integral of the
 Lieb–Robinson bound, which the source absorbs into `g(t, l_proj)`, is bounded by `T`
 times its value at `T`, and the constants are explicit. The weight of eq. `mid` is
 read as that of eq. `thd`. The exponential form `J O(e^{-l_proj/l_fac})` of eq. `facld`
-(lines 322–349) is formalized under an explicit polynomial bound on the number of omitted
-terms meeting `K` (scope restriction), with `l_fac = 2 / min(c₁ΔE, μ − c₁v)`.
+(lines 322–349) is proved for the source's general finite metric spaces, with constants
+chosen before the site set and Hamiltonian. A separate polynomial-shell specialization
+remains valid. The printed minimum of decay lengths is corrected to a minimum of rates;
+see
+[hastings05_geometric_growth_scope.tex](hastings05_geometric_growth_scope.tex).
 
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
-(scope restriction, open) compares the chain Lieb–Robinson estimate with
-Hastings's bound (arXiv:0705.2024v4, lines 96–112). The chain commutator bound is
-linear in the support, as in the source. Its quadratic localization factor enters
-with supports of at most `6R` sites for the parts and of `O(R + l)` sites for the
-boundary operator, where the faster decay of that term absorbs the polynomial in
-`l`; it changes the constant, not the length or the rate. It differs in having a prefactor that
-grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to be
-a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
-applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
-`16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
-local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K ξ̂³`
-with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
-(lines 258–262). The endpoint rate `ξ' = 6ξ` is reached at the length
-`(5/4) ξ̂` of a Lieb–Robinson pair with inflated velocity, which the source
-allows because it fixes `ξ` only through some pair (lines 96–112); at a fixed
-length the argument needs `ξ' > 6ξ`. A Lieb–Robinson pair in the source's
-form remains open under issue #9811.
+(local correction, resolved) identifies the Lieb–Robinson pairs used in
+Hastings's factorization (arXiv:0705.2024v4, lines 96–112 and 139–142). The
+commutator estimate now has numerical prefactor `4`, a linear first-support
+factor, and an arbitrary finite second support. With `c_R = 2(R+1)2^(2R+1)e^(2R)`,
+every positive velocity `v ≥ 8c_R J` and length scale `ξ_C ≥ 8` satisfy the
+time-cone bound. Rescaling `H` by `1/ΔE` multiplies physical time by `ΔE`;
+the velocities `8ΔE(1+c_R J/ΔE)` and `10ΔE(1+c_R J/ΔE)` give exactly the
+factorization lengths `ξ̂ = 16(1+c_R J/ΔE)` and `ζ = (5/4)ξ̂`. The endpoint
+factorization has error `K ζ³ exp(-l/(6ζ))`, uniformly in chain length and
+local dimension, with `K` depending only on `R`. For `J > 0` the pair
+`(40c_R J,80)` has velocity proportional to `J` and source length at least
+`2ζ`. All five source-parameter bootstrap, Rényi, entropy-gain and matrix product
+state conclusions now use that same length and pair. The auxiliary velocities
+containing `ΔE` are kept as valid auxiliary estimates; the new pair gives
+the source's order-`J` dependence directly. The fixed-length Gaussian and positivity corrections remain documented
+separately. The reciprocal-length reading of the printed time-cone formula is
+an explicit local correction.
 
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
-(false source, open) records two nondegenerate counterexamples to Theorem
+(false source, resolved) records two nondegenerate counterexamples to Theorem
 `thm:cluster-approx` of Arad, Landau, Vazirani and Vidick,
 arXiv:1602.08828v2 (source lines 1270–1291 and 1924–1968). On two qubits a
 positive rank-one local projection disproves the printed physical-site cutoff
@@ -1579,27 +1766,47 @@ when the cutoff counts interaction labels. The complementary exponential need
 not have norm at most one under the source's explicit allowance of negative
 local terms. A corrected theorem must specify both the cutoff and the energy
 dependence. The printed theorem is not formalized; the existing normalized
-Hastings estimates are unaffected. The analytic approximation used by
-`lem:exp-approx-eff` remains to be corrected, separately from the exact matrix
-product operator construction. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
+Hastings estimates are unaffected. The note proves a corrected estimate with
+the cutoff on interaction labels and a normalization by a lower energy bound;
+the soft-truncation matrix product operator of `lem:exp-approx-eff` is
+formalized through it, at scale three times the order. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
 and [#9847](https://github.com/LionSR/TNLean/issues/9847).
+
+## ALVV: the first energy estimate of soft truncation
+
+[`alvv16_soft_truncation_energy_estimate.tex`](alvv16_soft_truncation_energy_estimate.tex)
+(false source, resolved) records a nondegenerate three-qubit family on which
+the first estimate of Lemma `lem:exp-approx` of Arad, Landau, Vazirani and
+Vidick, arXiv:1602.08828v2 (source lines 1193–1255), fails at every fixed
+truncation scale. The proof replaces a moment of the regional operator by a
+power of the shifted Hamiltonian, which operator order does not justify. The
+note proves a corrected comparison for one interval from an exponential moment
+of the regional operator, with scale at most four times the order. The gap
+prescription and the simultaneous replacement on several regions remain open.
+Tracked in [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 
 - [`hastings05_planar_domain_scope.tex`](hastings05_planar_domain_scope.tex)
-  (scope restriction, open) records that the matrix product form of Trotter
-  products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
-  1017–1079), stated there for an arbitrary lattice and metric, is formalized for
-  finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
-  two-dimensional area law. The centre-indexed theorem preserves the source's
-  radius bound, including centres outside their supports; the original
-  diameter-bounded statement is a corollary. The source's count of at most
-  `nS` index components per site remains unproved: for a product of `m`
-  factors the construction carries `m` components of `q²` values at every site,
-  one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
+  (local correction, resolved) records the local index counts in
+  Section IV of Hastings (arXiv:cond-mat/0508554v3). The product form of
+  Trotter products, truncated cluster expansions, and their even powers is
+  proved on arbitrary finite metric spaces. The coefficient functions depend
+  only on indices in the prescribed metric neighborhoods; centres may lie
+  outside interaction supports. The Trotter form now carries one `q²`-valued
+  component for each factor that touches the site, and none for other factors.
+  Thus `n` steps have at most `nS` components, with per-site index cardinality
+  at most `(q²)^(nS)`, as proved in `TNLean/Lattice/TrotterIndexCount.lean`.
   The truncated operator of the high-temperature expansion (lines 1256–1279) has
-  the product form on every nonempty such domain; on the empty domain only the
-  identity has a product form. Its index count is not established either.
+  the product form on every nonempty finite set of sites; on the empty set only the
+  identity has a product form. Its index cardinality at site `i` is at most
+  `q² (1 + 2^M_i)`, where `M_i` counts interaction centres in the ball of
+  radius `l + R` about `i`; an `m`-th power raises this bound to the `m`-th
+  power. Empty-support terms contribute scalar factors and require no labels.
+  On an integer lattice of dimension `D`, the local ball count is polynomial
+  in its radius, giving the source's exponential index range in `l^D`.
+  For arbitrary metric spaces the bound remains in terms of local ball volume;
+  polynomial volume growth is stated explicitly when it is used.
 
 ## Viable sets of Landau, Vazirani and Vidick, arXiv:1307.5143
 
@@ -1653,17 +1860,15 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
 
-- [`lvv13_sampling_ground_energy.tex`](lvv13_sampling_ground_energy.tex)
-  (false preprint claim, published correction identified) records the missing
-  ground-energy dependence in the sampled projection of arXiv:1307.5143v1.
-  A commuting chain with zero local minima, a unique ground vector and gap
-  `1/8` shows that polynomially many independent uniform words do not
-  approximate the ground projection with the claimed high probability
-  at the required power when the ground energy is extensive. The published Methods theorem and its supplementary proof
-  include the ground energy in the exponent. Formalizing that corrected
-  construction, and deriving a different construction for the unrestricted
-  uniform polynomial conclusion, remain open.
-
+- [`lvv13_cost_model.tex`](lvv13_cost_model.tex)
+  (scope restriction, open) records the cost model of the running time of
+  Theorem 1 (arXiv:1307.5143v1, lines 213–219): the algorithm is a program
+  over a type of linear-algebra queries, each charged a declared polynomial
+  cost in the dimensions of its arguments; correctness and the polynomial
+  bound hold for every valid oracle (any solver returning optimal solutions of
+  the convex programs, nets of the required radius and cut decompositions of
+  the filters); costs and exact arithmetic are declared, not derived, as in
+  the source.
 - [`lvv13_leading_net_point.tex`](lvv13_leading_net_point.tex)
   (open gap) records that the leading-vector step of Lemma
   `l:leading` (arXiv:1307.5143v1, lines 493–495) is formalized for any
@@ -1689,10 +1894,70 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
-
+- [`lvv13_mpsapprox_log_factor.tex`](lvv13_mpsapprox_log_factor.tex)
+  (local correction, resolved) records that Lemma `l:mpsapprox`
+  (arXiv:1307.5143v1, lines 325–328) quotes the bond dimension
+  `exp(C (ln n)^{3/4} ε^{-1/4})` of Arad, Kitaev, Landau and Vazirani without
+  the tilde of their `e^{Õ(log^{3/4} n/ε^{1/4})}` (arXiv:1301.1162v1, lines 176
+  and 1503–1517). The formalized bound is that of the cited work, with the
+  hidden factor written out as `log log n`; the algorithm uses only a
+  polynomial bound.
+- [`lvv13_power_expansion_padding.tex`](lvv13_power_expansion_padding.tex)
+  (local correction, resolved) records that the expansion `eq:a-exp`
+  (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
+  `n` letters while the Hamiltonian has `n - 1` terms; it is read with
+  `H_n = 0`, so that the last letter is the identity and the identity is exact.
+- [`lvv13_runtime_ground_energy.tex`](lvv13_runtime_ground_energy.tex)
+  (false source, open) records that the proof of Corollary `c:agsp`
+  (arXiv:1307.5143v1, line 644) uses `C^{2m} = n^{O(1/ε)}` with
+  `C = (1 - ε₀/n)⁻¹`, which fails when the ground energy `ε₀` is of order `n`;
+  a chain of qubits with `ε₀ = (n - 1)/2` and gap `1/4` is an example. The
+  corollary is formalized with the number of sampled words explicit in `C^m`,
+  and `C^m ≤ n (1/η)^{ε₀/ε}` at the logarithmic power, which is polynomial
+  when `ε₀/ε` is bounded. The viable-set induction holds under that bound with
+  the sampled projector, and without it with Huang's Gaussian filter
+  (arXiv:1406.6355v6, §5.4) as the error-reduction operator.
 - [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
   (local correction, resolved) records that the step from `A v` to `K v` in the
   proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
   bound on `‖A v‖`; a two-dimensional example disproves it without one. The
   source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
   `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.
+
+For ALVV, arXiv:1602.08828v2, Section 5.4:
+
+- `alvv16_ff_rank.tex` gives an exact eight-qubit counterexample to the
+  operator Schmidt rank bound in Theorem 5.14(2) for an interior region:
+  the replacement has rank seven while the printed bound is six.
+  The example has orthogonal local projections and a unique frustration-free
+  ground state. It also records the squared-norm correction in the independent
+  gap comparison. Issue #9849 remains open; the unrestricted printed theorem
+  is not formalized.
+
+- [`alvv16_ff_truncated_norm.tex`](alvv16_ff_truncated_norm.tex)
+  (local correction, resolved) shows that the three-region replacement in the
+  proof of Theorem 5.15 (`t:aisff`, line 1599) has norm up to `4ℓ + 6`, not
+  `O(1)`: the windows are not truncated, and a commuting qubit chain with a
+  unique ground state and gap one attains `4ℓ + 6`. The printed choice
+  `ℓ = Θ̃(γ⁻¹ log² d)` is the one that works with this norm, so the theorem is
+  unaffected. The note also records that the argument gives bond dimension
+  `(d² + O(1))^{k+O(1)}` rather than `O(d^k)`, still of the stated form
+  `2^{Õ(γ⁻² log⁵ d)}`. The existence part of Theorem 5.15 is proved in
+  `ALVV/FrustrationFreeImprovingFamily.lean`.
+
+The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
+are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
+The note records the distinction between the source's site endpoints and its
+selected bond indices.
+
+For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
+
+- [`aklv13_frustration_free_mps_rate.tex`](aklv13_frustration_free_mps_rate.tex)
+  (local correction, resolved) records that the exponent of the gap at line 867
+  is `+1/2`, as at line 835, and that the printed frustration-free bond
+  dimension `exp(O(ε^{-1/3} log^{2/3} n))` (lines 851–870) drops the factor
+  `log ℓ` of Lemma 4.2 (line 590) together with the starting rank
+  `exp(O(log³ d/ε))`. The formalized bound is
+  `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
+  `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
+  hypotheses; for accuracy `n^{-c}` it is of order `log^{2/3} n · log log n`.

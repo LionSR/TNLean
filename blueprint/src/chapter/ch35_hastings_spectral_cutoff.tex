@@ -4,145 +4,120 @@
 % Hastings, arXiv:0705.2024v4, law16.tex, lines 829--841 (step four of the
 % proof of Lemma 1, equation obd).
 
-In the proof of Lemma~1 of \cite{Hastings2007AreaLaw}, the localized filtered
-terms $M_L$ and $M_R$ nearly annihilate the ground vector, and the operators
-$O_L$ and $O_R$ are their spectral projections onto the small eigenvalues.
-This section proves that such a cut-off moves a vector by at most the norm of
-the vector's image under $M$ divided by the threshold, that it reduces $M$ to
-norm at most the threshold, and that the cut-offs of operators supported on
-disjoint regions are supported there and commute. The source cuts off at the
-eigenvalues at most the threshold; here the cut-off keeps the eigenvalues of
-absolute value at most the threshold, because the terms need not be positive
-and the source later uses the norm bound on
-$M_LO_L$~\cite{gap:hastings07_spectral_cutoff_threshold}. Norms of operators
-are operator norms.
+In step four of the proof of \cite[Lemma~1]{Hastings2007AreaLaw}, the localized
+filtered operators $M_L$ and $M_R$ nearly annihilate $\Psi_0$, and $O_L,O_R$
+are their spectral projections onto $[-\theta,\theta]$ (two-sided rather than
+$(-\infty,\theta]$ because $M_L,M_R$ need not be positive and the proof bounds
+$\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{definition}[Spectral cut-off]
     \label{def:hastings_spectral_cutoff}
     \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff}
     \leanok
-    For a Hermitian matrix $M$ and a real number $\theta$, the spectral
-    cut-off $O_\theta(M)$ is the spectral projection of $M$ onto its
-    eigenvalues of absolute value at most $\theta$, that is $f(M)$ for the
-    function $f$ equal to $1$ on $[-\theta,\theta]$ and to $0$ elsewhere.
+    For $M=M^\dagger$ and $\theta\in\R$, the spectral cut-off is
+    $O_\theta(M)=\mathbf 1_{[-\theta,\theta]}(M)$.
 \end{definition}
 
-\begin{theorem}[The cut-off is an orthogonal projection]
+\begin{lemma}[The cut-off is an orthogonal projection]
     \label{thm:hastings_spectral_cutoff_projection}
     \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff}
     \leanok
     \uses{def:hastings_spectral_cutoff}
-    For a Hermitian matrix $M$ and every $\theta$, the cut-off $O_\theta(M)$
-    is an orthogonal projection.
-\end{theorem}
+    For $M=M^\dagger$ and $\theta\in\R$, $O_\theta(M)^2=O_\theta(M)=O_\theta(M)^\dagger$.
+\end{lemma}
 \begin{proof}\leanok
-    The function $f$ is real and satisfies $f^2=f$.
+    The indicator $f=\mathbf 1_{[-\theta,\theta]}$ is real-valued with $f^2=f$.
 \end{proof}
 
-\begin{theorem}[A cut-off moves a nearly annihilated vector little]
+\begin{lemma}[A cut-off moves a nearly annihilated vector little]
     \label{thm:hastings_spectral_cutoff_obd}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le}
     \leanok
     \uses{def:hastings_spectral_cutoff}
-    Let $M$ be Hermitian and $\theta>0$. For every vector $\Psi$,
+    For $M=M^\dagger$, $\theta>0$, and any vector $\Psi$,
     \begin{align}
         \lVert\Psi-O_\theta(M)\Psi\rVert
          & \le\frac{\lVert M\Psi\rVert}{\theta}.
         \label{eq:hastings_spectral_cutoff_obd}
     \end{align}
-    The threshold $\theta$ is free. The source bounds $\lVert M_L\Psi_0\rVert$
-    by $C\Delta E^{-1}J^2e^{-l/3\xi}$ for an unspecified constant $C$ of order
-    one. With $\theta=\Delta E^{-1}J^2e^{-l/6\xi}$ this gives
-    $\lVert(O_L-1)\Psi_0\rVert\le Ce^{-l/6\xi}$, the bound
-    $O(e^{-l/6\xi})$ of the source, and likewise for $O_R$; the constant, the
-    residual and the threshold are fixed where Lemma~1 is assembled.
-\end{theorem}
+    For $\lVert M_L\Psi_0\rVert\le C\Delta E^{-1}J^2e^{-l/(3\xi)}$ and
+    $\theta=\Delta E^{-1}J^2e^{-l/(6\xi)}$, (\ref{eq:hastings_spectral_cutoff_obd})
+    gives $\lVert(O_L-1)\Psi_0\rVert\le Ce^{-l/(6\xi)}$ as in
+    \cite[eq.~(obd)]{Hastings2007AreaLaw}, and similarly for $O_R$.
+\end{lemma}
 \begin{proof}\leanok
-    Let $h(t)=1/t$ for $\lvert t\rvert>\theta$ and $h(t)=0$ otherwise. Then
-    $1-O_\theta(M)=h(M)M$, since $t\,h(t)=1-f(t)$ for every real $t$. The
-    eigenvalues of $h(M)$ lie in $[-1/\theta,1/\theta]$, so $\lVert h(M)\rVert\le
-        1/\theta$ and
-    $\lVert\Psi-O_\theta(M)\Psi\rVert=\lVert h(M)M\Psi\rVert\le
-        \lVert M\Psi\rVert/\theta$.
+    Set $h(t)=t^{-1}\mathbf 1_{\lvert t\rvert>\theta}(t)$, so
+    $1-\mathbf 1_{[-\theta,\theta]}(t)=t\,h(t)$ and $\lvert h(t)\rvert\le\theta^{-1}$.
+    Then $1-O_\theta(M)=h(M)M$ with $\lVert h(M)\rVert\le\theta^{-1}$, giving
+    (\ref{eq:hastings_spectral_cutoff_obd}).
 \end{proof}
 
-\begin{theorem}[The cut-off reduces the operator]
+\begin{lemma}[The cut-off reduces the operator]
     \label{thm:hastings_spectral_cutoff_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
     \leanok
     \uses{def:hastings_spectral_cutoff}
-    Let $M$ be Hermitian and $\theta\ge0$. Then
-    $\lVert M\,O_\theta(M)\rVert\le\theta$.
-\end{theorem}
+    For $M=M^\dagger$ and $\theta\ge0$, $\lVert M\,O_\theta(M)\rVert\le\theta$.
+\end{lemma}
 \begin{proof}\leanok
-    The operator $M\,O_\theta(M)$ is $g(M)$ for $g(t)=t\,f(t)$, and
-    $\lvert g(t)\rvert\le\theta$ for every real $t$.
+    Write $M\,O_\theta(M)=g(M)$ with $g(t)=t\,\mathbf 1_{[-\theta,\theta]}(t)$
+    and $\lvert g(t)\rvert\le\theta$.
 \end{proof}
 
-\begin{theorem}[The cut-off estimate]
+\begin{lemma}[The cut-off estimate]
     \label{thm:hastings_spectral_cutoff_pair_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_le_of_isStarProjection,
         TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le}
     \leanok
     \uses{thm:hastings_spectral_cutoff_projection,thm:hastings_spectral_cutoff_norm}
-    Let $O$ and $O'$ be commuting orthogonal projections with
-    $\lVert AO\rVert\le a$ and $\lVert BO'\rVert\le b$. Then
-    $\lVert(A+B)OO'\rVert\le a+b$. In particular, if $M_L$ and $M_R$ are
-    Hermitian, $\theta\ge0$, and their cut-offs $O_L$ and $O_R$ at $\theta$
-    commute, then $\lVert(M_L+M_R)O_LO_R\rVert\le2\theta$.
-\end{theorem}
+    If $O,O'$ are commuting orthogonal projections with $\lVert AO\rVert\le a$
+    and $\lVert BO'\rVert\le b$, then $\lVert(A+B)OO'\rVert\le a+b$. In
+    particular, for $M_L=M_L^\dagger$, $M_R=M_R^\dagger$, $\theta\ge0$, and
+    commuting $O_L=O_\theta(M_L)$, $O_R=O_\theta(M_R)$,
+    $\lVert(M_L+M_R)O_LO_R\rVert\le2\theta$.
+\end{lemma}
 \begin{proof}\leanok
-    Since $OO'=O'O$, $(A+B)OO'=(AO)O'+(BO')O$, and projections have norm at
-    most one.
+    Use $(A+B)OO'=(AO)O'+(BO')O$, $\lVert O\rVert,\lVert O'\rVert\le1$, and
+    Lemma~\ref{thm:hastings_spectral_cutoff_norm}.
 \end{proof}
 
-\begin{theorem}[Two cut-offs move a vector by at most the sum]
+\begin{lemma}[Two cut-offs move a vector by at most the sum]
     \label{thm:hastings_spectral_cutoff_two}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection}
     \leanok
-    If $O$ is an orthogonal projection and $O'$ any operator, then for every
-    vector $\Psi$,
+    For an orthogonal projection $O$, any operator $O'$, and any vector $\Psi$,
     $\lVert\Psi-OO'\Psi\rVert\le\lVert\Psi-O\Psi\rVert+\lVert\Psi-O'\Psi\rVert$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Write $\Psi-OO'\Psi=(\Psi-O\Psi)+O(\Psi-O'\Psi)$ and use
-    $\lVert O\rVert\le1$.
+    Write $\Psi-OO'\Psi=(\Psi-O\Psi)+O(\Psi-O'\Psi)$ and use $\lVert O\rVert\le1$.
 \end{proof}
 
-\begin{theorem}[Support of the cut-off]
+\begin{lemma}[Support of the cut-off]
     \label{thm:hastings_spectral_cutoff_support}
     \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift,
         TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff}
     \leanok
     \uses{def:hastings_spectral_cutoff}
-    Let $K$ be a Hermitian operator on the sites of a region $D$, and let
-    $K\otimes1$ be its extension by the identity outside $D$. Then
-    $O_\theta(K\otimes1)=O_\theta(K)\otimes1$. In particular, the cut-off of
-    an operator supported on $D$ is supported on $D$.
-\end{theorem}
+    For $K=K^\dagger$ on a region $D$, $O_\theta(K\otimes1_{D^c})=O_\theta(K)\otimes1_{D^c}$;
+    thus $O_\theta(M)$ is supported on $D$ whenever $M=M^\dagger$ is.
+\end{lemma}
 \begin{proof}\leanok
-    The map $K\mapsto K\otimes1$ is a unital homomorphism of star algebras,
-    and such homomorphisms commute with the continuous functional calculus.
-    The spectrum is finite, so $f$ is continuous on it.
+    The unital $*$-homomorphism $K\mapsto K\otimes1_{D^c}$ commutes with the
+    functional calculus on the finite spectrum of $K$.
 \end{proof}
 
-\begin{theorem}[Cut-offs on disjoint regions commute]
+\begin{lemma}[Cut-offs on disjoint regions commute]
     \label{thm:hastings_spectral_cutoff_commute}
     \lean{TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint,
         TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn}
     \leanok
     \uses{thm:hastings_spectral_cutoff_support}
-    Let $K$ and $K'$ be Hermitian operators on disjoint regions $X$ and $Y$.
-    For all thresholds $\theta$ and $\theta'$, the cut-offs
-    $O_\theta(K\otimes1)$ and $O_{\theta'}(K'\otimes1)$ commute. Applied to
-    $M_L$, supported left of the cut, and $M_R$, supported right of it, this
-    shows that $O_L$ and $O_R$ are commuting orthogonal projections.
-\end{theorem}
+    If $M=M^\dagger$ and $M'=(M')^\dagger$ are supported on disjoint regions
+    $X$ and $Y$, then $[O_\theta(M),O_{\theta'}(M')]=0$ for all
+    $\theta,\theta'\in\R$; in particular, $[O_L,O_R]=0$.
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:hastings_spectral_cutoff_support} the two cut-offs are
-    extensions by the identity of operators on $X$ and on $Y$, and such
-    extensions commute when $X$ and $Y$ are disjoint. A Hermitian operator
-    supported on a region is such an extension of a Hermitian operator on
-    that region, so the same holds for Hermitian operators supported on $X$
-    and on $Y$.
+    By Lemma~\ref{thm:hastings_spectral_cutoff_support}, $O_\theta(M)$ and
+    $O_{\theta'}(M')$ are supported on disjoint regions $X$ and $Y$, hence
+    commute.
 \end{proof}

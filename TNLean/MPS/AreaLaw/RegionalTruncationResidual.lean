@@ -171,7 +171,7 @@ This is an auxiliary weighted spectral estimate for ALVV,
 arXiv:1602.08828v2, Theorem t:ais, lines 1010--1024, and AKL14,
 arXiv:1406.3898, Theorem lowspec, lines 1102--1168. It is not the full physical
 truncation-error or subspace-closeness theorem. -/
-private theorem exists_nearestNeighbour_weighted_low_restriction
+theorem exists_nearestNeighbour_weighted_low_restriction
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i ∈ I ∪ J, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)

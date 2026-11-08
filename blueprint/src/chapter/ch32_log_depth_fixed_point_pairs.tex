@@ -49,7 +49,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[Positivity of the fixed-point tensor]
+\begin{lemma}[Positivity of the fixed-point tensor]
     \label{thm:prep_fixed_point_tensor_psd}
     \lean{MPSTensor.fixedPointTensor_reshape_eq}
     \lean{MPSTensor.posSemidef_fixedPointTensor_reshape}
@@ -59,7 +59,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     physical pair $(l,r)$, the fixed-point tensor $P_\infty$ of any
     $\sigma\in\MN{D}$ is $(\sqrt{\sigma})^T\otimes\Id$. It is positive
     semidefinite.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The entry at $((l,r),(\alpha,\beta))$ is
@@ -91,7 +91,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     $\Omega=\bigotimes_k\ket{\omega}_{R_kL_{k+1}}$.
 \end{definition}
 
-\begin{theorem}[The transfer map of the fixed-point tensor]
+\begin{lemma}[The transfer map of the fixed-point tensor]
     \label{thm:prep_transfer_fixed_point_tensor}
     \lean{MPSTensor.transferMap_fixedPointTensor_apply}
     \lean{MPSTensor.transferMap_fixedPointTensor}
@@ -101,7 +101,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     $\E_{P_\infty}(X)=\tr(X)\,\sigma$ for every $X\in\MN{D}$. As in
     \cite{Malz2024Preparation}, when $\tr\sigma=1$, $\E_{P_\infty}$ is the
     projection $X\mapsto\tr(X)\,\sigma$ onto the fixed point $\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     With $S=\sqrt\sigma$, one has $S^\dagger=S$ and $S^2=\sigma$. Since
@@ -115,7 +115,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \end{align}
 \end{proof}
 
-\begin{theorem}[The periodic state of the fixed-point tensor]
+\begin{lemma}[The periodic state of the fixed-point tensor]
     \label{thm:prep_mpv_fixed_point_tensor}
     \lean{MPSTensor.mpv_fixedPointTensor}
     \leanok
@@ -124,7 +124,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     physical pairs $c_k=(l_k,r_k)$ on $N$ sites,
     $V^{(N)}(P_\infty)_c=\Omega(c)$, where $\Omega$ is the pair product
     state~(\ref{eq:prep_pair_product}) of the entangled pair of $\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{center}
     % Formula: V^{(N)}(P_infty)_c = tr(prod_k sqrt(sigma) |l_k><r_k|)
@@ -183,7 +183,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     along the cyclic shift of the sites gives~(\ref{eq:prep_pair_product}).
 \end{proof}
 
-\begin{theorem}[The fixed-point tensor is a renormalization fixed point]
+\begin{lemma}[The fixed-point tensor is a renormalization fixed point]
     \label{thm:prep_fixed_point_tensor_rfp}
     \lean{MPSTensor.isTransferIdempotent_fixedPointTensor}
     \lean{MPSTensor.hasPhysicalBlockingIsometry_fixedPointTensor}
@@ -193,26 +193,26 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     Let $\sigma$ be positive semidefinite with $\tr\sigma=1$. Then
     $\E_{P_\infty}^2=\E_{P_\infty}$, and $P_\infty$ has a physical blocking
     isometry.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:prep_transfer_fixed_point_tensor,
         thm:physical_blocking_isometry_iff_transfer_idempotence}
-    By Theorem~\ref{thm:prep_transfer_fixed_point_tensor},
+    By Lemma~\ref{thm:prep_transfer_fixed_point_tensor},
     $\E_{P_\infty}$ is the projection $X\mapsto\tr(X)\,\sigma$, which is
     idempotent because $\tr\sigma=1$. The physical blocking isometry
     follows from
     Theorem~\ref{thm:physical_blocking_isometry_iff_transfer_idempotence}.
 \end{proof}
 
-\begin{theorem}[Normalization of the entangled pair]
+\begin{lemma}[Normalization of the entangled pair]
     \label{thm:prep_pair_norm}
     \lean{MPSTensor.fixedPointPair_norm_sq}
     \leanok
     \uses{def:prep_pair_product_state}
     Let $\sigma$ be positive semidefinite, with entangled pair $\omega$.
     Then $\braket{\omega}{\omega}=\tr\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     With $S=\sqrt\sigma$,
@@ -229,7 +229,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     $(p_{k-1}^2,p_k^1)_k$.
 \end{definition}
 
-\begin{theorem}[Overlap and normalization of pair product states]
+\begin{lemma}[Overlap and normalization of pair product states]
     \label{thm:prep_pair_product_norm}
     \lean{MPSTensor.pairProductState_inner}
     \lean{MPSTensor.pairProductState_norm_sq}
@@ -243,7 +243,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     $\braket{\Omega}{\Omega}=\braket{\omega}{\omega}^N$. If $\omega$ is the
     entangled pair of a positive semidefinite $\sigma$ with $\tr\sigma=1$,
     then $\braket{\Omega}{\Omega}=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:prep_bond_regrouping, thm:prep_pair_norm}
@@ -252,10 +252,10 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     reindexing along the bond regrouping of
     Definition~\ref{def:prep_bond_regrouping} gives
     $\sum_c\overline{\Omega(c)}\Omega'(c)$. The last statement follows
-    from Theorem~\ref{thm:prep_pair_norm}.
+    from Lemma~\ref{thm:prep_pair_norm}.
 \end{proof}
 
-\begin{theorem}[Convergence of the blocked transfer map from a spectral gap]
+\begin{lemma}[Convergence of the blocked transfer map from a spectral gap]
     \label{thm:prep_blocked_transfer_limit_gap}
     \lean{MPSTensor.tendsto_transferMap_blockTensor_of_spectralRadius_lt_one}
     \leanok
@@ -267,20 +267,20 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \cite{Malz2024Preparation},
     $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$ for every
     $X\in\MN{D}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:prep_transfer_fixed_point_tensor, thm:blocked_transfer_map}
     With $P=\E_{P_\infty}$, the projection $X\mapsto\tr(X)\,\sigma$ of
-    Theorem~\ref{thm:prep_transfer_fixed_point_tensor}, the powers of an
+    Lemma~\ref{thm:prep_transfer_fixed_point_tensor}, the powers of an
     operator of spectral radius less than one tend to zero, so
     $(\E_A-P)^q(X)\to0$. Since $\E_A$ is trace preserving and fixes
     $\sigma$, $\E_A^q=P+(\E_A-P)^q$ for $q\ge1$. Finally
     $\E_{A^{[q]}}=\E_A^q$ for every tensor by
-    Theorem~\ref{thm:blocked_transfer_map}.
+    Lemma~\ref{thm:blocked_transfer_map}.
 \end{proof}
 
-\begin{theorem}[Convergence of the blocked transfer map of a normal tensor]
+\begin{lemma}[Convergence of the blocked transfer map of a normal tensor]
     \label{thm:prep_blocked_transfer_limit_normal}
     \lean{MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive,
         MPSTensor.isNormalTensor_of_isIrreducibleFamily_leftCanonical}
@@ -294,7 +294,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$. Then
     $\E_{A^{[q]}}(X)\to\E_{P_\infty}(X)$ as $q\to\infty$, for every
     $X\in\MN{D}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:prep_blocked_transfer_limit_gap,
@@ -304,6 +304,6 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     primitive maps~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},
     $\E_A$ minus the projection $X\mapsto\tr(X)\,\sigma$ has spectral radius
     less than one. That projection is $\E_{P_\infty}$ by
-    Theorem~\ref{thm:prep_transfer_fixed_point_tensor}, and
-    Theorem~\ref{thm:prep_blocked_transfer_limit_gap} applies.
+    Lemma~\ref{thm:prep_transfer_fixed_point_tensor}, and
+    Lemma~\ref{thm:prep_blocked_transfer_limit_gap} applies.
 \end{proof}

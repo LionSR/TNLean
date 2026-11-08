@@ -8,7 +8,7 @@ retained in the normalization argument. The following spectral estimates
 do not construct the energy guesses or prove the normalized energy
 conclusion of that lemma.
 
-\begin{theorem}[The Gaussian spectral multiplier]
+\begin{lemma}[The Gaussian spectral multiplier]
     \label{thm:huang_gaussian_spectral_multiplier}
     \lean{TNLean.MPS.AreaLaw.gaussianIntertwiner_shift_eq_cfc}
     \leanok
@@ -21,7 +21,7 @@ conclusion of that lemma.
         =f(H),\qquad
         f(x)=\exp\bigl(-h(x-E)^2/2\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     In an orthonormal eigenbasis of $H$, the Gaussian characteristic
@@ -30,7 +30,7 @@ conclusion of that lemma.
     coefficients of $f(H)$.
 \end{proof}
 
-\begin{theorem}[Suppression above an approximate ground energy]
+\begin{lemma}[Suppression above an approximate ground energy]
     \label{thm:huang_approximate_energy_suppression}
     \lean{TNLean.MPS.AreaLaw.norm_gaussianIntertwiner_shift_sub_rankOne_le}
     \leanok
@@ -44,7 +44,7 @@ conclusion of that lemma.
         \le\exp(-h\Delta^2/8),\qquad
         c_0=\exp\bigl(-h(E_0-E)^2/2\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The ground coefficient is $c_0$ and cancels exactly. Every excited
@@ -54,7 +54,7 @@ conclusion of that lemma.
     dimension factor.
 \end{proof}
 
-\begin{theorem}[A lower bound for the retained amplitude]
+\begin{lemma}[A lower bound for the retained amplitude]
     \label{thm:huang_gaussian_ground_amplitude}
     \lean{TNLean.MPS.AreaLaw.gaussian_ground_amplitude_bounds}
     \leanok
@@ -62,7 +62,7 @@ conclusion of that lemma.
     \begin{align}
         e^{-1/2}\le\exp\bigl(-h(E_0-E)^2/2\bigr)\le1.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The exponent lies between $-1/2$ and zero. Apply monotonicity of the

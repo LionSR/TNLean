@@ -7,6 +7,7 @@ import TNLean.MPS.MPDO.Boundary
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.ParentHamiltonian.Basic
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Finite cuts of boundary-weighted matrix product operators
@@ -148,10 +149,7 @@ theorem embedLocalOperator_commute_mpoWithBoundary (T : MPOTensor d D)
   rw [reindex_embedLocalOperator_windowComplement,
     mpoWithBoundary_reindex_windowComplement T hX]
   simp only [Finset.mul_sum, Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro a _
-  apply Finset.sum_congr rfl
-  intro b _
+  refine Finset.sum_congr₂ fun a _ b _ ↦ ?_
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
     Matrix.one_mul, Matrix.mul_one, (hcomm (Matrix.single b a 1 * X)).eq]
 

@@ -59,7 +59,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
         \notag
     \end{align}
     Extending to all positive exponents and applying the unequal-cardinality
-    multiset-recovery lemma (Theorem~\ref{thm:bounded_power_sum_multiset})
+    multiset-recovery lemma (Lemma~\ref{thm:bounded_power_sum_multiset})
     with $\zeta \neq 0$ and the weight non-vanishing assumption yields the
     multiplicity match and the multiset equality.
 \end{proof}
@@ -98,7 +98,7 @@ As in \cite[Appendix~A]{Cirac2016MPDO_arXiv}, the exact matching shows that
 equal MPV families force each basis sector of one canonical form to pair with
 a unique basis sector of the other.
 
-\begin{theorem}[Exact single-sector matching]
+\begin{lemma}[Exact single-sector matching]
     \label{thm:sector_bnt_exact_block_match}
     \lean{MPSTensor.exists_block_match_exact}
     \leanok
@@ -108,17 +108,17 @@ a unique basis sector of the other.
     $Q$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
     equivalence after identifying the matched bond dimensions, and a
     non-decaying cross-overlap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_exact_match}
     Equality at every positive length gives eventual nonzero proportionality
     with scalar $1$, so
-    Theorem~\ref{thm:sector_bnt_proportional_exact_match} applies to the chosen
+    Lemma~\ref{thm:sector_bnt_proportional_exact_match} applies to the chosen
     sector.
 \end{proof}
 
-\begin{theorem}[Strong existential matching, full-basis form]
+\begin{lemma}[Strong existential matching, full-basis form]
     \label{thm:sector_bnt_forall_unit_k_exists_j_nondecaying_overlap_of_sameMPV}
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_sameMPV}
     \leanok
@@ -128,12 +128,12 @@ a unique basis sector of the other.
     of $P$ with matched bond dimension $\dim_P(j) = \dim_Q(k)$, a gauge-phase
     equivalence after identifying the matched bond dimensions, and a
     non-decaying cross-overlap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_full_basis_match}
     Converting equality to eventual nonzero proportionality with scalar $1$ and
-    applying Theorem~\ref{thm:sector_bnt_proportional_full_basis_match} yields
+    applying Lemma~\ref{thm:sector_bnt_proportional_full_basis_match} yields
     the conclusion.
 \end{proof}
 

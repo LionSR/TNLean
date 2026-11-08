@@ -21,7 +21,7 @@
     \cite[fluxon-braiding passage]{Schuch2010PEPS}, lines 2340--2423.
 \end{definition}
 
-\begin{theorem}[Endpoints, partner avoidance, and final adjacency]
+\begin{lemma}[Endpoints, partner avoidance, and final adjacency]
     \label{thm:peps_torus_swept_physical_endpoint_route}
     \lean{TNLean.PEPS.torusSweptPhysicalBRoute_length,
         TNLean.PEPS.torusSweptPhysicalBRoute_start,
@@ -37,7 +37,7 @@
     None of its thirteen bases equals $A_2=p(-1,1)$, $A_1=p(3,1)$, or $B_2$.
     These assertions hold at every translated position, including either
     periodic seam; no extra adjacency or endpoint-avoidance hypothesis is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluate the first and last coordinates and count the twelve successive
     unit steps. The final adjacency is the native rightward bond. Distinct
@@ -61,7 +61,7 @@
     successive elementary movement step.
 \end{definition}
 
-\begin{theorem}[Thirty distinct sites contain the full route]
+\begin{lemma}[Thirty distinct sites contain the full route]
     \label{thm:peps_torus_swept_physical_route_footprint}
     \lean{TNLean.PEPS.card_sweptPhysicalRouteFootprintCoordinates,
         TNLean.PEPS.torusSweptPhysicalRouteCoordinate_injective,
@@ -81,7 +81,7 @@
     This result establishes the lattice geometry only. It does not assert the composition
     of the physical movement operators, the resulting bond assignment,
     a winding-number calculation, or the prescribed physical braid.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Count the union of the finite corner lists. Each offset range is shorter
     than its period, so equality of residue classes implies equality of
