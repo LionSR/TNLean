@@ -11,12 +11,12 @@ is nonempty; see \cite{gap:aklv13_two_block_robustness}.
     For $g,\tau>0$ put
     \begin{align}
         \Theta(g,\tau)=\max\left\{g+11,\,
-            g+8\log\frac{10^6\cdot64e^{3/4}}{\tau g}\right\}.
+        g+8\log\frac{10^6\cdot64e^{3/4}}{\tau g}\right\}.
         \label{eq:aklv_cluster_threshold}
     \end{align}
 \end{definition}
 
-\begin{theorem}[Gap preservation and a phased ground vector for the actual truncation]
+\begin{lemma}[Gap preservation and a phased ground vector for the actual truncation]
     \label{thm:aklv_two_block_scaled_low_cluster}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_two_block_scaled_low_cluster}
     \leanok
@@ -53,7 +53,7 @@ is nonempty; see \cite{gap:aklv13_two_block_robustness}.
     \end{align}
     Every eigenvalue also lies in
     $(-\infty,E_0+g/10]\cup[E_0+9g/10,\infty)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_normalized_two_block_residual,def:aklv_two_block_threshold}
@@ -64,7 +64,7 @@ is nonempty; see \cite{gap:aklv13_two_block_robustness}.
     Set $\xi=64e^{3/4}e^{-(t-g)/8}$.
     The threshold (\ref{eq:aklv_cluster_threshold}) gives
     $t\ge g+11$ and $\xi\le\tau g/10^6$.
-    Theorem~\ref{thm:aklv_normalized_two_block_residual} bounds the actual
+    Lemma~\ref{thm:aklv_normalized_two_block_residual} bounds the actual
     residual on each partially clipped space below $E_0+g$ by $\xi$.
     Restrict further to the original cutoff $E_0+g/40$ and the truncated
     cutoff $E_0+19g/20$.

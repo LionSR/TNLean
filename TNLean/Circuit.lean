@@ -53,8 +53,11 @@ import TNLean.Circuit.SpectatorOscillationSupport
 import TNLean.Circuit.SpectatorSiteExpectation
 import TNLean.Circuit.SupportProjection
 import TNLean.Circuit.SupportedComplementProduct
+import TNLean.Circuit.SupportedFunctionalCalculus
 import TNLean.Circuit.SupportedGaussianIntegral
+import TNLean.Circuit.SupportedGroundSpace
 import TNLean.Circuit.SupportedMatrixElements
+import TNLean.Circuit.SupportedNormalizedGroundSpace
 import TNLean.Circuit.Teleportation
 import TNLean.Circuit.UniformPostselection
 import TNLean.Circuit.UniformSuccessAttenuation

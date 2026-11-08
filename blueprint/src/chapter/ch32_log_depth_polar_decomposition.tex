@@ -34,19 +34,19 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     functional calculus.
 \end{definition}
 
-\begin{theorem}[Positive part]
+\begin{lemma}[Positive part]
     \label{thm:ldpolar_pos}
     \lean{Matrix.posSemidef_polarPos, Matrix.polarPos_mul_polarPos}
     \leanok
     \uses{def:ldpolar_matrix}
     The positive part is positive semidefinite and $P^2=M^\dagger M$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Properties of the positive square root.
 \end{proof}
 
-\begin{theorem}[Support projector]
+\begin{lemma}[Support projector]
     \label{thm:ldpolar_support}
     \lean{Matrix.isHermitian_polarSupport, Matrix.polarSupport_mul_polarSupport,
         Matrix.polarSupport_mul_polarPos, Matrix.mul_polarSupport,
@@ -56,7 +56,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     The support projector is Hermitian and idempotent, and
     $\Pi P=P$ and $M\Pi=M$. The ranges of $\Pi$ and $P$ coincide, so $\Pi$
     is the orthogonal projector onto the range of $P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The first three identities are the pointwise identities $\chi=\bar\chi$,
@@ -66,23 +66,23 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     $\sqrt x\,g(x)=\chi(x)$ on the nonnegative spectrum, and $P=\Pi P$.
 \end{proof}
 
-\begin{theorem}[Polar decomposition]
+\begin{lemma}[Polar decomposition]
     \label{thm:ldpolar_decomposition}
     \lean{Matrix.polarIso_mul_polarPos, Matrix.conjTranspose_polarIso_mul_polarIso}
     \leanok
     \uses{def:ldpolar_matrix}
     Every complex matrix satisfies $M=VP$ and $V^\dagger V=\Pi$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_support}
-    $VP=M\,g(M^\dagger M)P=M\Pi=M$ by Theorem~\ref{thm:ldpolar_support}.
+    $VP=M\,g(M^\dagger M)P=M\Pi=M$ by Lemma~\ref{thm:ldpolar_support}.
     Since $g(M^\dagger M)$ is Hermitian,
     $V^\dagger V=g(M^\dagger M)\,M^\dagger M\,g(M^\dagger M)$, which is the
     functional calculus of $x\,g(x)^2=\chi(x)$ on the nonnegative spectrum.
 \end{proof}
 
-\begin{theorem}[Polar decomposition of an injective matrix]
+\begin{lemma}[Polar decomposition of an injective matrix]
     \label{thm:ldpolar_injective}
     \lean{Matrix.polarSupport_eq_one_of_injective,
         Matrix.isIsometry_polarIso_of_injective,
@@ -91,17 +91,17 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     \uses{def:ldpolar_matrix}
     If $M$ is injective, then $\Pi=\Id$, $V^\dagger V=\Id$, and $P$ is
     positive definite.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldpolar_pos}
     For injective $M$ the matrix $M^\dagger M$ is positive definite, so
     $\chi=1$ on its spectrum. Then $V^\dagger V=\Pi=\Id$ by
-    Theorem~\ref{thm:ldpolar_decomposition}, and $P$ is invertible since
+    Lemma~\ref{thm:ldpolar_decomposition}, and $P$ is invertible since
     $P^2=M^\dagger M$ is.
 \end{proof}
 
-\begin{theorem}[Existence of the polar decomposition]
+\begin{lemma}[Existence of the polar decomposition]
     \label{thm:ldpolar_exists}
     \lean{Matrix.exists_polar_decomposition}
     \leanok
@@ -109,7 +109,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     $M\in\C^{m\times k}$ factors as $M=VP$ with $P\in\MN{k}$ positive
     semidefinite and $V^\dagger V=\Pi$, where $\Pi$ is a Hermitian
     idempotent whose range is the range of $P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_pos, thm:ldpolar_support, thm:ldpolar_decomposition}
@@ -117,7 +117,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     stated properties.
 \end{proof}
 
-\begin{theorem}[Polar factors of a left product]
+\begin{lemma}[Polar factors of a left product]
     \label{thm:ldpolar_left_product}
     \lean{Matrix.gram_mul_eq_of_conjTranspose_mul_self_mul_eq,
         Matrix.polarPos_mul_of_gram_eq, Matrix.polarSupport_mul_of_gram_eq,
@@ -130,7 +130,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     isometry whose initial projector fixes the range of $M$. Then the positive
     part of $KM$ is $P$, its support projector is $\Pi$, and its partial
     isometry is $KV$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If $K^\dagger KM=M$, then $(KM)^\dagger KM=M^\dagger K^\dagger KM=M^\dagger M$.
@@ -170,14 +170,14 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     Both composites are the identity entrywise.
 \end{proof}
 
-\begin{theorem}[Injective tensors have injective physical matrices]
+\begin{lemma}[Injective tensors have injective physical matrices]
     \label{thm:ldpolar_injective_physical}
     \lean{MPSTensor.injective_physicalMatrix_mulVec_of_isInjective}
     \leanok
     \uses{def:ldpolar_physical_matrix, def:injective}
     If $B$ is injective, then $\widehat B\colon\C^{D^2}\to\C^n$ is
     injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Let $\widehat Bx=0$ and consider the linear functional
@@ -200,7 +200,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     $\sum_jW_{ij}B^j_{\alpha\beta}$.
 \end{proof}
 
-\begin{theorem}[Transfer map of a rotated tensor]
+\begin{lemma}[Transfer map of a rotated tensor]
     \label{thm:ldpolar_transfer_rotate}
     \lean{MPSTensor.transferMap_rotatePhysical_apply,
         MPSTensor.transferMap_rotatePhysical_eq}
@@ -213,7 +213,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
         \notag
     \end{align}
     Consequently, if $B_{W^\dagger W}=B$, then $\E_{B_W}=\E_B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Expanding $(B_W)^i=\sum_jW_{ij}B^j$ in
@@ -255,7 +255,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     By definition.
 \end{proof}
 
-\begin{theorem}[Polar decomposition of a tensor]
+\begin{lemma}[Polar decomposition of a tensor]
     \label{thm:ldpolar_tensor_decomposition}
     \lean{MPSTensor.rotatePhysical_polarIsoMatrix_polarPosTensor,
         MPSTensor.conjTranspose_polarIsoMatrix_mul_polarIsoMatrix,
@@ -270,7 +270,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     $B=P_V$, with $V^\dagger V=\Pi$, the matrix $P$ positive
     semidefinite, $\Pi$ a Hermitian idempotent, and
     $\sum_l\Pi_{kl}P^l=P^k$ for every $k$.
-\end{theorem}
+\end{lemma}
 
 \begin{center}
     % Formula: B^i = sum_k V_{ik} P^k, that is, B = P_V.
@@ -303,16 +303,16 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
         lem:ldpolar_pos_tensor_matrix, thm:ldpolar_pos, thm:ldpolar_support,
         thm:ldpolar_decomposition}
     By Lemma~\ref{lem:ldpolar_physical_matrix_rotate}, the physical matrix
-    of $P_V$ is $VP=\widehat B$ by Theorem~\ref{thm:ldpolar_decomposition},
+    of $P_V$ is $VP=\widehat B$ by Lemma~\ref{thm:ldpolar_decomposition},
     and a tensor is determined by its physical matrix. The remaining
-    identities are Theorems~\ref{thm:ldpolar_pos},
+    identities are Lemmas~\ref{thm:ldpolar_pos},
     \ref{thm:ldpolar_support} and~\ref{thm:ldpolar_decomposition},
     reindexed along the identification of $\{0,\dots,D^2-1\}$ with the
     virtual pairs; the last one is $\Pi P=P$ read through
     Lemma~\ref{lem:ldpolar_physical_matrix_rotate}.
 \end{proof}
 
-\begin{theorem}[Transfer map of the positive part]
+\begin{lemma}[Transfer map of the positive part]
     \label{thm:ldpolar_transfer}
     \lean{MPSTensor.transferMap_polarPosTensor}
     \leanok
@@ -322,16 +322,16 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     injective $B$), the Supplemental Material uses the polar decomposition of
     an arbitrary blocked tensor with $V^\dagger V=\Pi$, where the identities
     $V^\dagger V=\Pi$ and $\Pi P=P$ give $\E_P=\E_B$ for every tensor.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition, thm:ldpolar_transfer_rotate}
-    By Theorem~\ref{thm:ldpolar_tensor_decomposition}, $B=P_V$; since
-    $V^\dagger V=\Pi$ and $P_\Pi=P$, Theorem~\ref{thm:ldpolar_transfer_rotate}
+    By Lemma~\ref{thm:ldpolar_tensor_decomposition}, $B=P_V$; since
+    $V^\dagger V=\Pi$ and $P_\Pi=P$, Lemma~\ref{thm:ldpolar_transfer_rotate}
     gives $\E_{P_V}=\E_P$.
 \end{proof}
 
-\begin{theorem}[Polar factors of a rotated tensor]
+\begin{lemma}[Polar factors of a rotated tensor]
     \label{thm:ldpolar_tensor_rotate}
     \lean{MPSTensor.polarIsoMatrix_rotatePhysical,
         MPSTensor.polarPosTensor_rotatePhysical,
@@ -347,14 +347,14 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     tensor $P$ and support projector $\Pi$. In particular, relabelling the
     physical index of $X$ by a bijection relabels the rows of $V$ and does not
     change $P$ or $\Pi$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:ldpolar_physical_matrix_rotate, thm:ldpolar_left_product}
     The physical matrix of $X_W$ is $W\widehat X$
     (Lemma~\ref{lem:ldpolar_physical_matrix_rotate}), and $X_{W^\dagger W}=X$
     reads $W^\dagger W\widehat X=\widehat X$, so
-    Theorem~\ref{thm:ldpolar_left_product} and reindexing give the polar factors
+    Lemma~\ref{thm:ldpolar_left_product} and reindexing give the polar factors
     of $X_W$. A relabelling by a
     bijection is the rotation by its permutation matrix, which is an isometry;
     this gives $P$ and $\Pi$. For $V$ the relabelling is read off directly:
@@ -364,7 +364,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     (Definition~\ref{def:ldpolar_matrix}).
 \end{proof}
 
-\begin{theorem}[Polar factors of an injective tensor]
+\begin{lemma}[Polar factors of an injective tensor]
     \label{thm:ldpolar_tensor_injective}
     \lean{MPSTensor.isIsometry_polarIsoMatrix_of_isInjective,
         MPSTensor.posDef_polarPosMatrix_of_isInjective}
@@ -372,17 +372,17 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     \uses{def:ldpolar_tensor, def:injective}
     As in \cite[eq.~(8)]{Malz2024Preparation}, if $B$ is injective, then
     $V^\dagger V=\Id_{D^2}$ and $P$ is positive definite.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_injective_physical, thm:ldpolar_injective,
         thm:ldpolar_tensor_decomposition}
-    By Theorem~\ref{thm:ldpolar_injective_physical}, $\widehat B$ is
-    injective, so Theorem~\ref{thm:ldpolar_injective} and reindexing give the
+    By Lemma~\ref{thm:ldpolar_injective_physical}, $\widehat B$ is
+    injective, so Lemma~\ref{thm:ldpolar_injective} and reindexing give the
     claim.
 \end{proof}
 
-\begin{theorem}[Support projector of a matrix supported on a set of columns]
+\begin{lemma}[Support projector of a matrix supported on a set of columns]
     \label{thm:ldpolar_support_diagonal}
     \lean{Matrix.polarSupport_eq_diagonal_of_support}
     \leanok
@@ -390,13 +390,13 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     Let $S$ be a set of column indices of $M$, let the columns of $M$ outside
     $S$ vanish, and let $Mx=0$ imply $x=0$ for every vector $x$ supported on
     $S$. Then $\Pi$ is the coordinate projector $\Pi_S$ onto $S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_support, thm:ldpolar_pos}
     Since $M\Pi_S=M$, the matrix $Q=P(\Id-\Pi_S)$ has
     $Q^\dagger Q=(\Id-\Pi_S)M^\dagger M(\Id-\Pi_S)=0$, so $Q=0$. As
-    $\Pi=PR$ for some $R$ by Theorem~\ref{thm:ldpolar_support}, and $\Pi$ and $P$ are
+    $\Pi=PR$ for some $R$ by Lemma~\ref{thm:ldpolar_support}, and $\Pi$ and $P$ are
     Hermitian, $\Pi(\Id-\Pi_S)=R^\dagger Q=0$, that is, $\Pi=\Pi\Pi_S$.
     Conversely, $M\Pi_S(\Id-\Pi)=M(\Id-\Pi)=0$, and every column of
     $\Pi_S(\Id-\Pi)$ is supported on $S$, so $\Pi_S(\Id-\Pi)=0$. Hence
@@ -419,7 +419,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     and this reading is not proved.
 \end{definition}
 
-\begin{theorem}[Polar factors of a tensor injective on a set of bond pairs]
+\begin{lemma}[Polar factors of a tensor injective on a set of bond pairs]
     \label{thm:ldpolar_tensor_injective_on}
     \lean{MPSTensor.isInjectiveOn_univ_iff,
         MPSTensor.IsInjectiveOn.eq_zero_of_mulVec_eq_zero,
@@ -435,7 +435,7 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     $\sum_i\overline{V_{ix}}V_{iy}$ is $1$ if $x=y\in S$ and $0$ otherwise,
     and $P^x=0$ for every pair $x\notin S$. For every tensor $B$ there is a
     matrix $G$ on the bond pairs with $V_{ix}=\sum_aB^i_aG_{ax}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_support_diagonal, thm:ldpolar_tensor_decomposition,
@@ -444,30 +444,30 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
     conversely. For $x$ supported on $S$ with $\widehat Bx=0$, the functional
     $Y\mapsto\sum_{\alpha,\beta}Y_{\alpha\beta}x_{\alpha\beta}$ vanishes on
     every $B^i$, hence on every matrix unit in $S$, so $x=0$ on $S$. Then
-    Theorem~\ref{thm:ldpolar_support_diagonal} gives $\Pi=\Pi_S$, the column
+    Lemma~\ref{thm:ldpolar_support_diagonal} gives $\Pi=\Pi_S$, the column
     identity is $V^\dagger V=\Pi_S$, and $P^x=\sum_y(\Pi_S)_{xy}P^y=0$ for
     $x\notin S$ because $\Pi P=P$. Finally $V=\widehat BR$ for some $R$ by
     Lemma~\ref{lem:ldp_orthogonal_sum_polar}; reindexing gives $G$.
 \end{proof}
 
-\begin{theorem}[Transfer map of the positive part of a blocked tensor]
+\begin{lemma}[Transfer map of the positive part of a blocked tensor]
     \label{thm:ldpolar_blocked_transfer}
     \lean{MPSTensor.transferMap_polarPosTensor_blockTensor}
     \leanok
     \uses{def:ldpolar_tensor, def:blocked_tensor, def:transfer_map}
     Let $A$ be a tensor and $P$ the positive-part tensor of the blocked
     tensor $A^{[q]}$. Then $\E_P=\E_A^q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_transfer, thm:blocked_transfer_map}
-    $\E_P=\E_{A^{[q]}}$ by Theorem~\ref{thm:ldpolar_transfer}, and
+    $\E_P=\E_{A^{[q]}}$ by Lemma~\ref{thm:ldpolar_transfer}, and
     $\E_{A^{[q]}}=\E_A^q$ by
-    Theorem~\ref{thm:blocked_transfer_map}
+    Lemma~\ref{thm:blocked_transfer_map}
     \cite[eq.~(6)]{Malz2024Preparation}.
 \end{proof}
 
-\begin{theorem}[Isometric form of the blocked periodic state]
+\begin{lemma}[Isometric form of the blocked periodic state]
     \label{thm:ldpolar_blocked_state}
     \lean{MPSTensor.mpv_blockedConfigEquiv_eq_sum_polar}
     \leanok
@@ -490,14 +490,14 @@ $\ket{V^{(qM)}(A)}=V^{\otimes M}\ket{V^{(M)}(P)}$ for every $M$
         \sum_j\beta_j\ket{v_{\mathrm{pos},j}}$ of
     \cite[Supplemental Material]{Malz2024Preparation} with the positive part
     kept whole rather than split into its normal blocks.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:mpv_rotate_physical, thm:ldpolar_tensor_decomposition,
         lem:eval_word_block}
     By Lemma~\ref{lem:mpv_rotate_physical}, the right-hand side is
     $V^{(M)}(P_V)_\sigma$, and $P_V=A^{[q]}$ by
-    Theorem~\ref{thm:ldpolar_tensor_decomposition}. Finally
+    Lemma~\ref{thm:ldpolar_tensor_decomposition}. Finally
     $V^{(M)}(A^{[q]})_\sigma=V^{(qM)}(A)_{\widetilde\sigma}$ by
     Lemma~\ref{lem:eval_word_block}.
 \end{proof}

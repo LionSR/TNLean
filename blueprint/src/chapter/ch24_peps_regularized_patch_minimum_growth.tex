@@ -17,7 +17,7 @@ or entropy-and-distance hypotheses, which a physical application of the
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L453-L481}{minimum-growth argument}
 must verify.
 
-\begin{theorem}[Growth under a regulator trace bound]
+\begin{lemma}[Growth under a regulator trace bound]
     \label{thm:peps_patch_minimum_growth_regulator}
     \lean{TNLean.PEPS.log_regularizedPatchMinimum_exp_neg_le_of_regulator_trace}
     \leanok
@@ -30,7 +30,7 @@ must verify.
     \begin{align*}
         \log N(R)\le\frac{\kappa}{2}\left(R_0+\frac R4\right).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_actual_patch_minimum_log_derivative,cor:peps_regularized_patch_log_minimum_continuous,thm:peps_regularized_patch_log_minimum,thm:peps_regularized_patch_minimum,cor:peps_regularized_patch_exp_bounds}
     Write $g(r)=\log N(r)$. At each $r\in[R_0,R)$, an attained minimizing tuple
@@ -50,7 +50,7 @@ must verify.
     \end{align*}
 \end{proof}
 
-\begin{theorem}[Growth from the original marginal entropy and distance]
+\begin{lemma}[Growth from the original marginal entropy and distance]
     \label{thm:peps_patch_minimum_growth_entropy_distance}
     \lean{TNLean.PEPS.log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance}
     \leanok
@@ -69,13 +69,13 @@ must verify.
         \log N(R)\le\frac{\kappa}{2}
         \left((16C+\log8)(1+u)+\frac R4\right).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_actual_patch_regulator_trace,thm:peps_patch_minimum_growth_regulator}
     Because $R_0\ge0$ and both the entropy bound $S(\sigma_j)\le C(1+u)$ and the
     trace-norm bound $\|\rho_j(r,x)-\sigma_j\|_1\le\tfrac1{16}$ hold at every
     $r\in[R_0,R)$, the regulator trace estimate gives
     $\operatorname{Re}\tr T_j(r,x)\le\tfrac14$ for each minimizing tuple $x$
-    and index $j$. Applying Theorem~\ref{thm:peps_patch_minimum_growth_regulator}
+    and index $j$. Applying Lemma~\ref{thm:peps_patch_minimum_growth_regulator}
     with $R_0=(16C+\log8)(1+u)$ then yields the stated bound.
 \end{proof}

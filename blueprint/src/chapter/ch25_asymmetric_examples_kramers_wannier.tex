@@ -50,13 +50,13 @@ and as asymmetric compressions of stacked tensors.
 Closing the virtual bonds by the ordinary trace on a ring of $N>0$ sites,
 without dividing by the bond dimension, defines the operator
 $K_N(a,b)=\tr(W^{a_0b_0}\cdots W^{a_{N-1}b_{N-1}})$.
-Theorem~\ref{thm:asymex_kw_kernel} and Corollary~\ref{cor:asymex_kw_square}
+Lemma~\ref{thm:asymex_kw_kernel} and Corollary~\ref{cor:asymex_kw_square}
 determine its normalization relative to the source defect.
-Theorem~\ref{thm:asymex_kw_bimodule_absorption} proves that $W$ is normal,
-and Theorem~\ref{thm:asymex_kw_normal} that $T$ and $\eta T$ are;
+Lemma~\ref{thm:asymex_kw_bimodule_absorption} proves that $W$ is normal,
+and Lemma~\ref{thm:asymex_kw_normal} that $T$ and $\eta T$ are;
 Corollary~\ref{cor:asymex_kw_exchange} gives the exchange of Ising couplings,
 Lemma~\ref{lem:asymex_kw_states} describes the action on product and
-GHZ states, and Theorem~\ref{thm:asymex_kw_compression} establishes the
+GHZ states, and Lemma~\ref{thm:asymex_kw_compression} establishes the
 compression of the squared tensor.
 
 Consider $N\geq1$ qubits on a periodic chain, with sites
@@ -150,7 +150,7 @@ We also write $D=K_N$ for this unnormalized operator, retaining $D$ in the
 square identity below. The normalized operators will be denoted
 $\mathcal D_N$ and $U_N$, not $D$.
 
-\begin{theorem}[Periodic kernel]
+\begin{lemma}[Periodic kernel]
     \label{thm:asymex_kw_kernel}
     \lean{KWExample.kwTensor_apply,
         KWExample.kwTensor_mpo_eq_prod,
@@ -164,7 +164,7 @@ $\mathcal D_N$ and $U_N$, not $D$.
          & =\prod_{j\in I_N}(-1)^{s'_j(s_j+s_{j+1})}.
         \label{eq:asymex_kw_kernel}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -185,7 +185,7 @@ For subsequent calculations, put $q(a,b)=\sum_j a_j(b_j+b_{j+1})$,
 so $(K_N)_{ab}=(-1)^{q(a,b)}$. Exponents may be calculated modulo two.
 Unless indicated otherwise, site sums and products run over $I_N$.
 
-\begin{theorem}[Spin-flip absorption and noninvertibility]
+\begin{lemma}[Spin-flip absorption and noninvertibility]
     \label{thm:asymex_kw_absorption}
     \lean{KWExample.kwTensor_mpo_flip_input,
         KWExample.kwTensor_mpo_flip_output,
@@ -198,7 +198,7 @@ Unless indicated otherwise, site sums and products run over $I_N$.
     For every $N>0$, the unnormalized operator satisfies
     $K_N\eta=\eta K_N=K_N$. If $\eta v=-v$, then $K_Nv=0$.
     In particular, $K_N$ is not invertible.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Complementing either input or output leaves the kernel unchanged:
@@ -395,7 +395,7 @@ normalizations of the duality operator are
     \leanok
     If $K_Nv=0$, then~(\ref{eq:asymex_kw_gram}) gives
     $0=K_N^\dagger K_Nv=2^N(v+\eta v)$, so $\eta v=-v$. Conversely,
-    Theorem~\ref{thm:asymex_kw_absorption} shows that $K_N$ annihilates
+    Lemma~\ref{thm:asymex_kw_absorption} shows that $K_N$ annihilates
     $\mathcal H_N^-$. The absorption relation $\eta K_N=K_N$ puts the
     image in $\mathcal H_N^+$. Conversely, for $\eta y=y$,
     $K_N(2^{-(N+1)}K_N^\dagger y)=2^{-1}(y+\eta y)=y$, so every vector in
@@ -462,7 +462,7 @@ elements read with the arguments exchanged, that is, by the transpose
 $\mathcal D_N^{\mathsf T}$. Since the kernel is real,
 $\mathcal D_N^{\mathsf T}=\mathcal D_N^\dagger$.
 
-\begin{proposition}[Fusion relations of the duality defect]
+\begin{lemma}[Fusion relations of the duality defect]
     \label{prop:asymex_kw_defect_fusion}
     \lean{KWExample.kwDefect, KWExample.spinFlip_mul_self,
         KWExample.kwDefect_mul_spinFlip, KWExample.spinFlip_mul_kwDefect,
@@ -485,12 +485,12 @@ $\mathcal D_N^{\mathsf T}=\mathcal D_N^\dagger$.
         \mathcal D_N\mathcal D_N^{\mathsf T}\mathcal D_N & =2\mathcal D_N.
         \label{eq:asymex_kw_defect_fusion}
     \end{align}
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The spin flip is an involution, and the second line is
-    Theorem~\ref{thm:asymex_kw_absorption} rescaled. The third line is
+    Lemma~\ref{thm:asymex_kw_absorption} rescaled. The third line is
     (\ref{eq:asymex_kw_gram}) multiplied by $2^{-N}$, because the kernel
     is real. Multiplying $\mathcal D_N\mathcal D_N^{\mathsf T}=\Id+\eta$
     on the right by $\mathcal D_N$ and using $\eta\mathcal D_N=\mathcal
@@ -511,7 +511,7 @@ The partial-isometry convention of Ref.~\cite{Seiberg2024Majorana}
 has the scale of $U_N$. Since the kernel is real,
 $U_N^\dagger=2^{-(N+1)/2}K_N^{\mathsf T}$.
 
-\begin{proposition}[Relations of the adjoint normalized duality]
+\begin{lemma}[Relations of the adjoint normalized duality]
     \label{prop:asymex_kw_adjoint_relations}
     \lean{KWExample.kwTranslation, KWExample.kwTranslation_mul_siteX,
         KWExample.kwTranslation_mul_siteZZ, KWExample.kwTranslation_mul_self,
@@ -549,7 +549,7 @@ $U_N^\dagger=2^{-(N+1)/2}K_N^{\mathsf T}$.
         (U_N^\dagger)^{2N}               & =P_+.
         \label{eq:asymex_kw_adjoint_algebra}
     \end{align}
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -562,7 +562,7 @@ $U_N^\dagger=2^{-(N+1)/2}K_N^{\mathsf T}$.
     $(K_N^{\mathsf T})^2=K_N^{\mathsf T}K_NT^{-1}$, and
     (\ref{eq:asymex_kw_gram}) gives the square. The absorption and
     commutation relations follow from
-    Theorem~\ref{thm:asymex_kw_absorption} and $TK_N=K_NT$, and the
+    Lemma~\ref{thm:asymex_kw_absorption} and $TK_N=K_NT$, and the
     adjoint relation from $K_N=K_N^{\mathsf T}T$. The two products
     with the adjoint are~(\ref{eq:asymex_kw_gram}) rescaled. Finally,
     $P_+$ commutes with $T$, $T^N=\Id$ and $P_+^2=P_+$, so
@@ -576,7 +576,7 @@ Ref.~\cite{Seiberg2024Majorana} prints for its noninvertible
 translation, with its translation read as $T^{-1}$ and its projection
 $(1+\eta)/2$ read as $P_+$. The proposition shows that $U_N^\dagger$
 satisfies these relations. That reference defines its operator by an
-explicit product of local factors; Proposition~\ref{prop:asymex_kw_circuit}
+explicit product of local factors; Lemma~\ref{prop:asymex_kw_circuit}
 below shows that, after the exchange of $X$ and $Z$, this product is
 exactly $U_N^\dagger$, with no scalar factor.
 The noninvertibility here concerns
@@ -603,7 +603,7 @@ comparing this lattice relation with a size-independent fusion algebra.
     sites $N-1$ and $0$ does not occur.
 \end{definition}
 
-\begin{proposition}[The circuit is the rotated adjoint duality]
+\begin{lemma}[The circuit is the rotated adjoint duality]
     \label{prop:asymex_kw_circuit}
     \lean{KWExample.hadamard_mul_ssCircuit_mul_hadamard,
         KWExample.ssCircuit_mul_siteZ, KWExample.ssCircuit_mul_siteXX,
@@ -646,7 +646,7 @@ comparing this lattice relation with a size-independent fusion algebra.
     range of $C_N$ exactly when $\eta_Zy=y$: the kernel is the sector
     $\eta_Z=-1$, and on the sector $\eta_Z=+1$ the circuit acts
     unitarily, as stated in~\cite{Seiberg2024Majorana}.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -677,10 +677,10 @@ comparing this lattice relation with a size-independent fusion algebra.
     $e^{-2\pi iN/8}=((1-i)/\sqrt2)^N$. Checking the eight values of
     $(c_0,b_{N-1},c_{N-1})$ shows that the remaining boundary factor is
     $(-1)^{b_{N-1}(c_{N-1}+c_0)}$, the sign of the closing bond. By
-    Theorem~\ref{thm:asymex_kw_kernel} the entry is
+    Lemma~\ref{thm:asymex_kw_kernel} the entry is
     $2^{-(N+1)/2}(K_N)_{bc}=\bra{c}U_N^\dagger\ket{b}$, which
     proves~(\ref{eq:asymex_kw_circuit}). The remaining relations are
-    those of Proposition~\ref{prop:asymex_kw_adjoint_relations}
+    those of Lemma~\ref{prop:asymex_kw_adjoint_relations}
     conjugated by the Hadamard gate, which commutes with $T^{-1}$.
     If $C_Nv=0$, then $C_N^\dagger C_Nv=\tfrac12(v+\eta_Zv)=0$;
     conversely, if $\eta_Zv=-v$, then $C_Nv=C_N\eta_Zv=-C_Nv$. The range
@@ -718,7 +718,7 @@ positive length span its virtual matrix algebra. This differs from
 operator normality in~(\ref{eq:asymex_kw_gram}) and does not impose a
 normalization on the spectral radius of a transfer map.
 
-\begin{theorem}[Normality of the two translation tensors]
+\begin{lemma}[Normality of the two translation tensors]
     \label{thm:asymex_kw_normal}
     \lean{KWExample.shiftMPS_isNormal, KWExample.flipShiftMPS_isNormal}
     \leanok
@@ -726,7 +726,7 @@ normalization on the spectral radius of a transfer map.
     The translation tensor and the flipped translation tensor are normal:
     the four matrices of each are the four matrix units of $\MN{2}$, which
     already span $\MN{2}$ at word length one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -735,7 +735,7 @@ normalization on the spectral radius of a transfer map.
     and hence normal.
 \end{proof}
 
-\begin{theorem}[Split compression of the squared duality]
+\begin{lemma}[Split compression of the squared duality]
     \label{thm:asymex_kw_compression}
     % Principal declaration: KWExample.kwSquare_dim_eq.
     \lean{KWExample.kwSquare_compression, KWExample.kwSquare_dim_eq,
@@ -754,7 +754,7 @@ normalization on the spectral radius of a transfer map.
         \notag
     \end{align}
     Thus the extension splits.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -777,13 +777,13 @@ normalization on the spectral radius of a transfer map.
     \end{align}
     After clearing the denominator, these are equalities of integer
     matrices. Block diagonality gives the triangularity condition and
-    the vanishing remainder. By Theorem~\ref{thm:asymex_explicit_gauge},
+    the vanishing remainder. By Lemma~\ref{thm:asymex_explicit_gauge},
     the coordinate projections and inclusions form the compression pairs,
     and clause (vii) of Theorem~\ref{thm:asym_multiblock} establishes
     the dimension count.
 \end{proof}
 
-\begin{theorem}[Periodic data of the squared duality]
+\begin{lemma}[Periodic data of the squared duality]
     \label{thm:asymex_kw_trace}
     \lean{KWExample.kwSquare_trace_evalWord}
     \leanok
@@ -795,18 +795,18 @@ normalization on the spectral radius of a transfer map.
     \end{align}
     This is~(\ref{eq:asymex_kw_fusion}) at the level of periodic
     coefficients.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_kw_compression, prop:asym_compression_trace}
-    Proposition~\ref{prop:asym_compression_trace} applied to the
-    compression of Theorem~\ref{thm:asymex_kw_compression} gives
+    Lemma~\ref{prop:asym_compression_trace} applied to the
+    compression of Lemma~\ref{thm:asymex_kw_compression} gives
     $\tr(B^w)=\tr((2T)^w)+\tr((2\eta T)^w)$. Pulling the weight $2$ out
     of each word evaluation contributes the factor $2^{|w|}$.
 \end{proof}
 
-\begin{theorem}[The sitewise intertwiners of the split case]
+\begin{lemma}[The sitewise intertwiners of the split case]
     \label{thm:asymex_kw_intertwiners}
     % Principal declaration: KWExample.kwSquare_mul_right0_eq.
     \lean{KWExample.kwSquareLeft0, KWExample.kwSquareLeft1,
@@ -846,14 +846,14 @@ normalization on the spectral radius of a transfer map.
     Then $W_1V_1=W_2V_2=\Id_2$, and for every index pair,
     $B^{s's}V_1=V_1(2T)^{s's}$, $B^{s's}V_2=V_2(2\eta T)^{s's}$,
     $W_1B^{s's}=(2T)^{s's}W_1$ and $W_2B^{s's}=(2\eta T)^{s's}W_2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:asymex_explicit_gauge}
     The matrices $W_1,W_2$ are the two row blocks of $G$, and $V_1,V_2$
     are the corresponding column blocks of $G^{-1}$, as in
-    Theorem~\ref{thm:asymex_explicit_gauge}. Each intertwining identity
+    Lemma~\ref{thm:asymex_explicit_gauge}. Each intertwining identity
     is verified by multiplying the explicit matrices and clearing the
     denominator, while clause (iv) of Theorem~\ref{thm:asym_multiblock}
     also yields the two normalizations.
@@ -861,10 +861,10 @@ normalization on the spectral radius of a transfer map.
 
 \begin{center}
     % Formula: the four sitewise identities of
-    % Theorem~\ref{thm:asymex_kw_intertwiners}: B^{s's}V_1=V_1(2T)^{s's},
+    % Lemma~\ref{thm:asymex_kw_intertwiners}: B^{s's}V_1=V_1(2T)^{s's},
     % B^{s's}V_2=V_2(2\eta T)^{s's}, W_1B^{s's}=(2T)^{s's}W_1, and
     % W_2B^{s's}=(2\eta T)^{s's}W_2.
-    % Source: Theorem~\ref{thm:asymex_kw_intertwiners}.
+    % Source: Lemma~\ref{thm:asymex_kw_intertwiners}.
     % Ink-to-index map: the ring is the compression map $V_1$, $W_1$,
     % $V_2$ or $W_2$; the square node is the source $B$ or its target
     % $2T$ or $2\eta T$.
@@ -1091,7 +1091,7 @@ change the weights of these fixed tensors.
 In the following two results, $B$ denotes the relevant action tensor,
 rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
 
-\begin{theorem}[The duality on the product state splits]
+\begin{lemma}[The duality on the product state splits]
     \label{thm:asymex_kw_plus}
     % Principal declaration: KWExample.plus_dim_eq.
     \lean{KWExample.plusCompression, KWExample.plus_dim_eq, KWExample.plus_remainder_eq_zero,
@@ -1108,7 +1108,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
         \tr(B^w) & =\tr((2C_0)^w)+\tr((2C_1)^w).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1124,11 +1124,11 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
     Diagonality gives the triangularity condition, identifies the
     matched blocks, and makes the remainder zero. The coordinate
     compression pairs satisfy the stated word identities by
-    Theorem~\ref{thm:asymex_explicit_gauge}. The trace identity follows
-    from Proposition~\ref{prop:asym_compression_trace}.
+    Lemma~\ref{thm:asymex_explicit_gauge}. The trace identity follows
+    from Lemma~\ref{prop:asym_compression_trace}.
 \end{proof}
 
-\begin{theorem}[The duality on the ferromagnetic state does not split]
+\begin{lemma}[The duality on the ferromagnetic state does not split]
     \label{thm:asymex_kw_ghz}
     % Principal declaration: KWExample.kwGHZ_dim_eq.
     \lean{KWExample.kwGHZCompression, KWExample.kwGHZ_dim_eq,
@@ -1160,7 +1160,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
         \notag
     \end{align}
     and $R^iR^j=0$ for all letters $i,j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1171,7 +1171,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
     $(1,1,0,0)$. Thus the matched blocks are both $A_+$, and the
     coordinate compression pairs give the asserted reductions.
     Every word evaluation of $A_+$ is $1$, so
-    Proposition~\ref{prop:asym_compression_trace} gives
+    Lemma~\ref{prop:asym_compression_trace} gives
     $\tr(B^w)=1+1=2$ for nonempty $w$.
 
     Subtracting the matched diagonal contributions in the original
@@ -1180,7 +1180,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
     multiplication gives $R^iR^j=0$. The general bound in clause (vi)
     of Theorem~\ref{thm:asym_multiblock} also gives vanishing at lengths
     at least $|S|+z=4$, where $S$ is the set of two matched slots, while
-    Theorem~\ref{thm:asymex_kw_ghz_intertwiner} establishes the
+    Lemma~\ref{thm:asymex_kw_ghz_intertwiner} establishes the
     obstruction to a sitewise splitting.
 \end{proof}
 
@@ -1188,7 +1188,7 @@ A word reduction need not provide a pair of sitewise intertwiners.
 Here the periodic coefficients have merged into two copies of the same
 product state, but the virtual action still has a one-sided obstruction.
 
-\begin{theorem}[One-sided sitewise intertwiners for the merged target]
+\begin{lemma}[One-sided sitewise intertwiners for the merged target]
     \label{thm:asymex_kw_ghz_intertwiner}
     \lean{KWExample.kwGHZ_left_intertwiner_eq_zero,
         KWExample.kwGHZ_right_intertwiner,
@@ -1201,7 +1201,7 @@ product state, but the virtual action still has a one-sided obstruction.
     product-state target. A nonzero sitewise right intertwiner does
     exist: the first coordinate vector satisfies $B^ie_0=e_0$ for both
     letters.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1221,7 +1221,7 @@ product state, but the virtual action still has a one-sided obstruction.
 This obstruction rules out a sitewise split copy of the product-state
 target: such a splitting would require a nonzero left intertwiner.
 It does not obstruct the word reductions or the periodic trace formula
-in Theorem~\ref{thm:asymex_kw_ghz}. Those statements retain the
+in Lemma~\ref{thm:asymex_kw_ghz}. Those statements retain the
 finite-chain action $K_Ng_N=2p_N$ while distinguishing it from a split
 virtual direct sum.
 
@@ -1274,11 +1274,11 @@ gauge.
     rule is $\eta^2=\Id$. Exchanging the physical indices of every tensor
     in the periodic trace transposes the operator. The relations
     (\ref{eq:asymex_kw_bimodule}) are then
-    Theorem~\ref{thm:asymex_kw_absorption} and
+    Lemma~\ref{thm:asymex_kw_absorption} and
     (\ref{eq:asymex_kw_gram}), using that the kernel is real.
 \end{proof}
 
-\begin{theorem}[Absorption of the spin flip is a gauge equivalence]
+\begin{lemma}[Absorption of the spin flip is a gauge equivalence]
     \label{thm:asymex_kw_bimodule_absorption}
     \lean{KWExample.kwTensor_isNormal,
         KWExample.exists_gauge_mulTensor_kwTensor_flipTensor,
@@ -1296,7 +1296,7 @@ gauge.
         \notag
     \end{align}
     for all $s',s$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1336,7 +1336,7 @@ four matrices of Definition~\ref{def:asymex_kw} gives
 with $X^{-1}=X$ and $Y^{-1}=Y$. The proof above does not use these
 matrices.
 
-\begin{theorem}[Fusion of the duality with its adjoint]
+\begin{lemma}[Fusion of the duality with its adjoint]
     \label{thm:asymex_kw_bimodule_fusion}
     \lean{KWExample.z2Tensor_isNormal,
         KWExample.exists_compression_mulTensor_kwTensor_kwTransposeTensor,
@@ -1348,7 +1348,7 @@ matrices.
     Theorem~\ref{thm:asym_multiblock} for the two bond-one targets
     $2O_0$ and $2O_1$, with exactly two zero slots: $4=1+1+2$. The same
     holds for $\sum_m(W^{\mathsf T})^{s'm}\otimes W^{ms}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1362,5 +1362,5 @@ matrices.
 
 The biorthogonal compression pairs of this theorem are fusion tensors
 for the channels $\Id$ and $\eta$ in the product of the duality with
-its adjoint. The stacked square of Theorem~\ref{thm:asymex_kw_compression}
+its adjoint. The stacked square of Lemma~\ref{thm:asymex_kw_compression}
 has no zero slot, whereas the product with the adjoint has two.

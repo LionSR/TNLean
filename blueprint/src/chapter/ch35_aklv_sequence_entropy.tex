@@ -1,6 +1,6 @@
 \section{Entropy from the actual changing-target sequence}
 
-\begin{theorem}[Degrees and logarithmic filter costs]
+\begin{lemma}[Degrees and logarithmic filter costs]
     \label{thm:aklv_sequence_entropy_cost}
     \lean{TNLean.MPS.AreaLaw.aklvSequenceDegree_le_linear,
         TNLean.MPS.AreaLaw.aklvSequenceFilterRank_two_le,
@@ -10,12 +10,12 @@
     Let $q\ge2$, $0<g\le1$, $s\ge1$, $1/g\le s$, and
     $T(g)\le1040s$. For the actual selected degrees and filter ranks,
     \begin{align*}
-        1\le\ell_j&\le240s(j+1),&F_j&\ge2,\notag\\
-        \log F_j&\le200000(j+1)^2\log D_0.
+        1\le\ell_j & \le240s(j+1),             & F_j & \ge2,\notag \\
+        \log F_j   & \le200000(j+1)^2\log D_0.
     \end{align*}
     These estimates are used in the entropy summation of
     \cite[Section~6]{Arad2013AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Put $W_j=2t_j+s$. The selected thresholds satisfy
@@ -28,7 +28,7 @@
     Compare with $\log D_0=32(2s+1)\log b$.
 \end{proof}
 
-\begin{theorem}[Growth of the actual rank products]
+\begin{lemma}[Growth of the actual rank products]
     \label{thm:aklv_sequence_rank_growth}
     \lean{TNLean.MPS.AreaLaw.aklvSequenceRankBound_growth}
     \leanok
@@ -36,14 +36,14 @@
     For $q\ge2$, the actual product ranks satisfy
     $R_i\le R_{i+1}$ and $R_i\ge2^{i+1}$.
     Thus $R_N\ge N$ for every finite marginal dimension $N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The initial rank is at least two, and each successive multiplier
     $F_{i+1}$ is at least two. Induction gives both conclusions.
 \end{proof}
 
-\begin{theorem}[Finite entropy summation at the actual ranks]
+\begin{lemma}[Finite entropy summation at the actual ranks]
     \label{thm:aklv_sequence_finite_entropy}
     \lean{TNLean.MPS.AreaLaw.probabilityEntropy_le_aklvSequenceRankBound}
     \leanok
@@ -54,7 +54,7 @@
         \sum_{a\ge R_i}p_a\le2^{-i}/16.
     \end{align*}
     Then its entropy is at most $300000\log R_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The finite rank-tail entropy inequality, with cutoff $N$, gives
@@ -87,7 +87,7 @@
     $0\le k\le L$,
     \begin{align*}
         S_k(\Omega)\le\frac{C}{g}
-            (1+\log q+\log(1/g))^3.
+        (1+\log q+\log(1/g))^3.
     \end{align*}
     No fitting-window, local-dimension or upper-gap premise is required.
     The actual first excited energy and the displayed logarithmic gap

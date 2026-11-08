@@ -1,6 +1,6 @@
 \section{Regional exponential moments on the original spectral window}
 
-\begin{theorem}[An actual exponentially weighted restriction]
+\begin{lemma}[An actual exponentially weighted restriction]
     \label{thm:nearest_neighbour_weighted_low_restriction}
     \lean{TNLean.MPS.AreaLaw.exists_nearestNeighbour_weighted_low_restriction}
     \leanok
@@ -12,7 +12,7 @@
     If $0<s\le1/8$ and $C<u-e$, then the actual map
     $e^{s(A-(r+u)\Id)}Q|_G$ takes values in $\operatorname{ran}Q$ and has
     norm at most $C/(u-e-C)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_local_imaginary_time}
     The original-bond imaginary-time estimate bounds both the conjugated
@@ -24,7 +24,7 @@
     has norm at most $C$. Its norm estimate gives the claimed map and bound.
 \end{proof}
 
-\begin{theorem}[A physical interval exponential moment]
+\begin{lemma}[A physical interval exponential moment]
     \label{thm:interval_regional_exponential_moment}
     \lean{TNLean.MPS.AreaLaw.exists_interval_regional_exponential_moment}
     \leanok
@@ -43,8 +43,8 @@
     $G_\eta=\mathbf1_{(-\infty,E_0+\eta]}(H_c)\mathcal H$,
     \begin{align}
         \left\|\left.e^{(A_J-\varepsilon'_J\Id)/8}
-              \right|_{G_\eta}\right\|
-          \le5e^{(17+\eta)/8}.
+        \right|_{G_\eta}\right\|
+        \le5e^{(17+\eta)/8}.
         \label{eq:interval_regional_exponential_moment}
     \end{align}
     The bound is independent of the chain length, local dimension and
@@ -55,10 +55,10 @@
     of \cite{Arad2016RigorousRG}. The first printed uniform energy estimate
     is addressed separately in
     \cite{gap:alvv16_soft_truncation_energy_estimate}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:five_region_bond_partition,thm:disjoint_regional_clipping,
-      thm:nearest_neighbour_weighted_low_restriction}
+        thm:nearest_neighbour_weighted_low_restriction}
     Use repeated cuts to realize the three intervals as a consecutive
     five-region partition with two empty regions. Its actual crossing
     set has at most two bonds. Disjoint regional minimizers give

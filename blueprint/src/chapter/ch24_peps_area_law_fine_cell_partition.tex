@@ -9,7 +9,7 @@ endpoint set $Z$, the integer width $C_0$, and the fine exponents $\ell_k$.
 % These statements assign half-open fine cells. They do not assign the
 % final primary and belt regions or prove the full two-family proposition.
 
-\begin{theorem}[Unique fine cell outside the initial neighborhood]
+\begin{lemma}[Unique fine cell outside the initial neighborhood]
     \label{thm:area_law_unique_fine_cell}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_fineCell_of_not_mem_dyadicNeighborhood}
     \leanok
@@ -18,7 +18,7 @@ endpoint set $Z$, the integer width $C_0$, and the fine exponents $\ell_k$.
     Suppose that $Z$ is nonempty and $C_0\ge2$. For every initial layer index
     $k_0$ and every $x\notin N_{k_0}$, there is a unique pair $(k,z)$
     with $k\ge k_0$, $z\in F_{k,\ell_k}$, and $x\in C_{\ell_k,z}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_unique_layer,thm:area_law_fine_layer_count,
         thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales,
@@ -30,7 +30,7 @@ endpoint set $Z$, the integer width $C_0$, and the fine exponents $\ell_k$.
     $C_{\ell_h,w}\subseteq D_h$, so $h=k$, and $w=c_{\ell_k}(x)=z$.
 \end{proof}
 
-\begin{theorem}[Exact cover by the dummy region and fine cells]
+\begin{lemma}[Exact cover by the dummy region and fine cells]
     \label{thm:area_law_dummy_fine_cells_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_fineCells_eq_univ}
     \leanok
@@ -41,7 +41,7 @@ endpoint set $Z$, the integer width $C_0$, and the fine exponents $\ell_k$.
         \mathbb R^2=N_{k_0}\cup\bigcup_{k\ge k_0}
         \bigcup_{z\in F_{k,\ell_k}}C_{\ell_k,z}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_unique_fine_cell}
     Every $x\in\mathbb R^2$ either lies in $N_{k_0}$ or belongs to the fine

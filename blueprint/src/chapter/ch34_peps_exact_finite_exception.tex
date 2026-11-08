@@ -1,93 +1,79 @@
 \section{Removing finitely many exceptional sizes}
 \label{sec:peps_exact_finite_exception}
 
-For natural numbers $q,L$, real numbers $C,c$, and a vector $\Omega$ in the
-physical space $(\mathbb C^q)^{\otimes L^2}$ of the open $L\times L$ square,
-write $\mathcal A_{C,c}(L,\Omega)$ if there are a
-nonzero PEPS $\Phi$ on the original square graph and a real phase $\theta$
-such that every edge dimension satisfies $1\le D_e\le CL^c$ and
+For $q,L\in\N$, $C,c\in\R$, and $\Omega\in(\mathbb C^q)^{\otimes L^2}$ on the
+open $L\times L$ square, write $\mathcal A_{C,c}(L,\Omega)$ if there exist a
+nonzero PEPS $\Phi$ on the square graph with bond dimensions
+$1\le D_e\le CL^c$ and $\theta\in\R$ such that (with $0^{-1}=0$)
 \begin{align}
     \bigl\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\bigr\|\le L^{-1}.
     \label{eq:peps_finite_error}
 \end{align}
-For $L=0$ the square has no edges, so the edge bound is vacuous, and the
-right-hand side $L^{-1}$ is read with $0^{-1}=0$.
 
-For real $J,\Delta$, let $\mathcal G_{q,J,\Delta}(L)$ be the set of triples
-$(H,E_0,\Omega)$ with the following properties. The Hamiltonian is a sum of
-site terms and nearest-neighbor edge terms supported on their designated
-sites or endpoints, each of operator norm at most $J$. Its total sum is
-Hermitian; individual terms need not be. The remaining conditions are
+For $J,\Delta\in\R$, let $\mathcal G_{q,J,\Delta}(L)$ be the set of triples
+$(H,E_0,\Omega)$ where $H=H^\dagger=\sum_X h_X$ is a sum of site and
+nearest-neighbor edge terms on the $L\times L$ square with $\|h_X\|\le J$, and
 \begin{align}
     \|\Omega\| & =1,\label{eq:peps_finite_ground}                           \\
     H\Omega    & =E_0\Omega,\notag                                          \\
     H-E_0I     & \ge\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr).\notag
 \end{align}
-Several statements below hold for an arbitrary family of unit states
-$\mathcal F$, which assigns to every $L$ a set $\mathcal F(L)$ of unit vectors
-on the open $L\times L$ square. The ground vectors of the model form the family
-$\mathcal F_{q,J,\Delta}$, where $\Omega\in\mathcal F_{q,J,\Delta}(L)$ if
-$(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ for some $H$ and $E_0$.
+A family of unit states $\mathcal F$ assigns to each $L$ a set
+$\mathcal F(L)\subseteq\{\Omega\in(\mathbb C^q)^{\otimes L^2}:\|\Omega\|=1\}$;
+in particular,
+$\mathcal F_{q,J,\Delta}(L)=\{\Omega:\exists H,E_0,\,(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)\}$.
 
-\begin{theorem}[Increasing the polynomial prefactor]
+\begin{lemma}[Increasing the polynomial prefactor]
     \label{thm:peps_prefactor_monotone}
     \lean{TNLean.PEPS.Approximation.HasPEPSApproximation.mono_prefactor}
     \leanok
-    Let $q,L$ be natural numbers, $C,C',c$ real numbers with $C\le C'$, and
-    $\Omega$ a vector on the open square. If $\mathcal A_{C,c}(L,\Omega)$,
-    then $\mathcal A_{C',c}(L,\Omega)$.
-\end{theorem}
+    If $C\le C'$ and $\mathcal A_{C,c}(L,\Omega)$, then
+    $\mathcal A_{C',c}(L,\Omega)$.
+\end{lemma}
 \begin{proof}
     \leanok
-    Retaining the same PEPS and phase preserves the normalized vector and its
-    approximation error, while $L^c\ge0$ implies $D_e\le CL^c\le C'L^c$ on
-    every edge.
+    Since $L^c\ge0$, the same $(\Phi,\theta)$ satisfies
+    $1\le D_e\le CL^c\le C'L^c$ and~(\ref{eq:peps_finite_error}).
 \end{proof}
 
 \begin{lemma}[Removing the small sizes at a named prefactor]
     \label{lem:peps_remove_small_sizes_named}
     \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_sufficiently_large_le}
     \leanok
-    Fix integers $q\ge1$, $L\ge2$ and $L_0\ge0$, real $C$ and $c\ge0$, and a
-    unit vector $\Omega$ on the square of side $L$. If
-    $\mathcal A_{C,c}(L,\Omega)$ holds whenever $L\ge L_0$, then
-    $\mathcal A_{C',c}(L,\Omega)$ holds with $C'=\max\{C,q^{L_0^2}\}$.
+    Fix $q\ge1$, $L\ge2$, $L_0\ge0$, $C\in\R$, $c\ge0$, and unit vector
+    $\Omega\in(\mathbb C^q)^{\otimes L^2}$. If
+    $L\ge L_0\implies\mathcal A_{C,c}(L,\Omega)$, then
+    $\mathcal A_{C',c}(L,\Omega)$ with $C'=\max\{C,q^{L_0^2}\}$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_small_size_approximation,thm:peps_prefactor_monotone}
-    If $L<L_0$, Theorem~\ref{thm:peps_exact_small_size_approximation} gives
-    $\mathcal A_{C',c}(L,\Omega)$. Otherwise the assumed approximation
-    combines with Theorem~\ref{thm:peps_prefactor_monotone}, since $C\le C'$.
+    For $L<L_0$, Lemma~\ref{thm:peps_exact_small_size_approximation} gives
+    $\mathcal A_{C',c}(L,\Omega)$; for $L\ge L_0$, combine
+    $\mathcal A_{C,c}(L,\Omega)$ with Lemma~\ref{thm:peps_prefactor_monotone}
+    using $C\le C'$.
 \end{proof}
 
-\begin{theorem}[A uniform prefactor for every size]
+\begin{lemma}[A uniform prefactor for every size]
     \label{thm:peps_remove_finite_exceptions}
     \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large}
     \leanok
-    Following the finite-size argument
-    in~\cite[Section~8]{OpenAI2026PolynomialPEPS}
-    (\texttt{07-assembly.tex}, lines 203--214), fix integers $q\ge1$ and
-    $L_0\ge0$, a family of unit states $\mathcal F$, real $C$, and $c\ge0$.
-    Suppose $\mathcal A_{C,c}(L,\Omega)$ holds for every integer
-    $L\ge\max\{2,L_0\}$ and every $\Omega\in\mathcal F(L)$.
-    There is one $C'>0$ with $C'\ge C$ such that
-    $\mathcal A_{C',c}(L,\Omega)$ holds for every integer $L\ge2$ and every
-    $\Omega\in\mathcal F(L)$.
-    The exponent $c$ is unchanged, and $C'$ is independent of $L$ and $\Omega$.
-    For the family $\mathcal F_{q,J,\Delta}$, $C'$ is independent of the
-    Hamiltonian and the ground energy as well.
-\end{theorem}
+    Following~\cite[Section~8]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 203--214), fix $q\ge1$, $L_0\ge0$, a
+    unit-state family $\mathcal F$, $C\in\R$, and $c\ge0$. If
+    $\mathcal A_{C,c}(L,\Omega)$ holds for all $L\ge\max\{2,L_0\}$ and
+    $\Omega\in\mathcal F(L)$, then there exists $C'\ge\max\{C,q^{L_0^2}\}>0$
+    (independent of $L$ and $\Omega$) such that $\mathcal A_{C',c}(L,\Omega)$
+    holds for all $L\ge2$ and $\Omega\in\mathcal F(L)$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_remove_small_sizes_named}
-    Take $C'=\max\{C,q^{L_0^2}\}$, which is positive and at least $C$.
-    Since every member of the family is a unit vector,
-    Lemma~\ref{lem:peps_remove_small_sizes_named} applies to every
-    $\Omega\in\mathcal F(L)$ with $L\ge2$.
+    Apply Lemma~\ref{lem:peps_remove_small_sizes_named} with
+    $C'=\max\{C,q^{L_0^2}\}>0$ to each $\Omega\in\mathcal F(L)$ for $L\ge2$.
 \end{proof}
 
-\begin{theorem}[Equivalence with the sufficiently large size statement]
+\begin{lemma}[Equivalence with the sufficiently large size statement]
     \label{thm:peps_approximation_iff_large}
     \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_iff_sufficiently_large}
     \leanok
@@ -106,19 +92,16 @@ $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ for some $H$ and $E_0$.
         \forall(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L),\notag \\
          & \qquad\mathcal A_{C,c}(L,\Omega).\notag
     \end{align}
-    In both assertions, the constants $C,c$ are independent of the size,
-    Hamiltonian, ground energy, and ground vector.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_remove_finite_exceptions}
-    Assertion~(\ref{eq:peps_finite_uniform}) implies
-    (\ref{eq:peps_finite_large}) with $L_0=0$ and the same constants.
-    Conversely, for fixed $q,J,\Delta$ and constants $C,c,L_0$ satisfying
-    (\ref{eq:peps_finite_large}),
-    Theorem~\ref{thm:peps_remove_finite_exceptions} produces a single positive
-    prefactor $C'\ge C$ valid for every $L\ge2$ with the same positive exponent
-    $c$, establishing~(\ref{eq:peps_finite_uniform}).
+    Taking $L_0=0$ gives
+    (\ref{eq:peps_finite_uniform})$\implies$(\ref{eq:peps_finite_large}).
+    Conversely, applying Lemma~\ref{thm:peps_remove_finite_exceptions} to
+    $\mathcal F_{q,J,\Delta}$ converts $(C,c,L_0)$ from
+    (\ref{eq:peps_finite_large}) into $(C',c)$ satisfying
+    (\ref{eq:peps_finite_uniform}).
 \end{proof}
 
 % The equivalence does not prove either existence assertion on its own.
@@ -128,26 +111,24 @@ $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ for some $H$ and $E_0$.
 \subsection{Approximation from a compressed dyadic operator network}
 \label{sec:peps_ground_state_assembly}
 
-For large sizes, \cite[Section~8.1]{OpenAI2026PolynomialPEPS}
-(\texttt{07-assembly.tex}, lines 9--63) obtains from the protocol of its
-Proposition~7.1 and its compression theorem a party operator network with
-polynomial link dimensions whose operator is within $CL^{-5}$ of
-$|\Omega\rangle\langle\Omega|$ in trace norm. The statement below records this
-output, at constants fixed in advance, as an assumption and derives from it the
-approximation for all sufficiently large sizes. It is one step of the proof of
-Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
+For large $L$, \cite[Section~8.1]{OpenAI2026PolynomialPEPS}
+(\texttt{07-assembly.tex}, lines 9--63) combines Proposition~7.1 and the
+compression theorem to obtain a party operator network with polynomial link
+dimensions within $CL^{-5}$ of $|\Omega\rangle\langle\Omega|$ in trace norm.
+The statements below derive the large-size approximation from this network
+assumption as one step toward Theorem~\ref{thm:openai_polynomial_peps}.
 
-\begin{theorem}[Increasing the polynomial exponent]
+\begin{lemma}[Increasing the polynomial exponent]
     \label{thm:peps_exponent_monotone}
     \lean{TNLean.PEPS.Approximation.HasPEPSApproximation.mono_exponent}
     \leanok
-    Let $L\ge1$, $C\ge0$ and $c\le c'$. If $\mathcal A_{C,c}(L,\Omega)$, then
-    $\mathcal A_{C,c'}(L,\Omega)$.
-\end{theorem}
+    For $L\ge1$, $C\ge0$, and $c\le c'$,
+    $\mathcal A_{C,c}(L,\Omega)\implies\mathcal A_{C,c'}(L,\Omega)$.
+\end{lemma}
 \begin{proof}
     \leanok
-    Retaining the same PEPS and phase preserves the approximation error, while
-    $L\ge1$ and $C\ge0$ yield $CL^c\le CL^{c'}$.
+    Since $L\ge1$ and $C\ge0$, the same $(\Phi,\theta)$ satisfies
+    $D_e\le CL^c\le CL^{c'}$ and~(\ref{eq:peps_finite_error}).
 \end{proof}
 
 \begin{definition}[Compressed dyadic operator networks at given constants]
@@ -155,23 +136,20 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
     \lean{TNLean.PEPS.Approximation.DyadicOperatorNetworkAt}
     \leanok
     \uses{def:peps_dyadic_hv_routing, def:peps_party_operator_fix_input}
-    Capturing the conclusion of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS}
-    (\texttt{07-assembly.tex}, lines 53--63), together with the anchors of
-    lines 102--114 and the network properties of Proposition~7.1 used in the
-    proof of Lemma~8.2 (lines 128--131), fix an integer $q\ge2$, a family of
-    states $\mathcal F$, reals $C,C_1,k$ and natural numbers $B,\Delta_0,c,L_0$.
-    Compressed dyadic operator networks exist for $\mathcal F$ at these
-    constants if for every integer $L\ge\max\{2,L_0\}$ and every
-    $\Omega\in\mathcal F(L)$ there is an operator party
-    network with the following properties. Every party is attached to a dyadic
-    block inside the padded square, with at most $B$ parties per block; every
-    party has at most $\Delta_0$ links; the two anchors of every link differ in
-    each coordinate by at most $c$ times the side of either endpoint block; every
-    link dimension is at most $C_1L^k$; and the operator $\sigma$ of the network,
-    with the physical pair of each party read at the fold of its anchor, satisfies
+    Following~\cite[Section~8.1, Proposition~7.1, and Lemma~8.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{07-assembly.tex}, lines 53--63, 102--114, 128--131), fix $q\ge2$,
+    a state family $\mathcal F$, $C,C_1,k\in\R$, and
+    $B,\Delta_0,c,L_0\in\N$. Compressed dyadic operator networks exist for
+    $\mathcal F$ at $(C,C_1,k,B,\Delta_0,c,L_0)$ if for every
+    $L\ge\max\{2,L_0\}$ and $\Omega\in\mathcal F(L)$ there is an operator
+    party network on the padded square with at most $B$ parties per dyadic
+    block, degree at most $\Delta_0$, link anchor separation at most $c$ times
+    either endpoint block side in each coordinate, link dimensions at most
+    $C_1L^k$, and contracted operator $\sigma$ (with each party's physical
+    pair read at the fold of its anchor) satisfying
     \begin{align}
         \bigl\lVert\sigma-|\Omega\rangle\langle\Omega|\bigr\rVert_1
-         & \le CL^{-5}.
+         & \le CL^{-5}. \notag
     \end{align}
 \end{definition}
 
@@ -181,35 +159,31 @@ Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
     \leanok
     \uses{def:peps_large_size_dyadic_operator_network}
     Following~\cite[Section~8]{OpenAI2026PolynomialPEPS}
-    (\texttt{07-assembly.tex}, lines 53--206) once the compressed network has
-    been obtained, let $\mathcal F$ be a family of unit states. If compressed
-    dyadic operator networks exist for $\mathcal F$ at the constants
-    $C,C_1,k,B,\Delta_0,c,L_0$ in the sense of
-    Definition~\ref{def:peps_large_size_dyadic_operator_network}, and
+    (\texttt{07-assembly.tex}, lines 53--206), if compressed dyadic operator
+    networks exist for a unit-state family $\mathcal F$ at
+    $(C,C_1,k,B,\Delta_0,c,L_0)$
+    (Definition~\ref{def:peps_large_size_dyadic_operator_network}) and
     $\chi=8(2c+1)B\Delta_0$, then
-    $\mathcal A_{\max\{C_1,1\}^\chi,\max\{k,0\}\chi+1}(L,\Omega)$ for every
-    $L\ge2$ with $L\ge\max\{L_0,\lceil2C\rceil\}$ and every
-    $\Omega\in\mathcal F(L)$.
+    $\mathcal A_{\max\{C_1,1\}^\chi,\max\{k,0\}\chi+1}(L,\Omega)$ holds for
+    all $L\ge\max\{2,L_0,\lceil2C\rceil\}$ and $\Omega\in\mathcal F(L)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_party_column_routing_polynomial, thm:peps_exponent_monotone}
-    Replacing $C_1$ by $\max\{C_1,1\}$ and $k$ by $\max\{k,0\}$ preserves the
-    link bound since $L\ge1$. For $L\ge\max\{2,L_0,\lceil2C\rceil\}$ one has
-    $2C\le L\le L^4$, hence $2CL^{-5}\le L^{-1}\le1/2$ and $CL^{-5}<1$.
-    Theorem~\ref{thm:peps_party_column_routing_polynomial} with $\eta=CL^{-5}$
-    gives $\mathcal A_{C_1^\chi,k\chi}(L,\Omega)$ with $\chi=8(2c+1)B\Delta_0$,
-    and Theorem~\ref{thm:peps_exponent_monotone} raises the exponent to
+    Replace $C_1,k$ by $\max\{C_1,1\},\max\{k,0\}$. For
+    $L\ge\max\{2,L_0,\lceil2C\rceil\}$, $2C\le L\le L^4$ gives
+    $2CL^{-5}\le L^{-1}\le1/2$ and $CL^{-5}<1$.
+    Lemma~\ref{thm:peps_party_column_routing_polynomial} with $\eta=CL^{-5}$
+    yields $\mathcal A_{C_1^\chi,k\chi}(L,\Omega)$, and
+    Lemma~\ref{thm:peps_exponent_monotone} raises the exponent to
     $k\chi+1>0$.
 \end{proof}
 
-The compressed network itself comes from the protocol of
-\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} and the compression theorem
-\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}. The following statements carry out
-this step of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS}
-(\texttt{07-assembly.tex}, lines 45--63) from the protocol bounds of
-Definition~\ref{def:peps_dyadic_protocol} at given constants, which
-Proposition~\ref{prop:peps_dyadic_protocol} supplies.
+The next three statements derive
+Definition~\ref{def:peps_large_size_dyadic_operator_network} from the protocol
+bounds of Definition~\ref{def:peps_dyadic_protocol}
+(supplied by Lemma~\ref{prop:peps_dyadic_protocol}) and
+\cite[Proposition~7.1, Theorem~5.2, and Section~8.1]{OpenAI2026PolynomialPEPS}.
 
 \begin{lemma}[Operator party networks from compressed protocol densities]
     \label{lem:peps_protocol_compressed_party_network}
@@ -221,39 +195,30 @@ Proposition~\ref{prop:peps_dyadic_protocol} supplies.
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_hv_routing,
         def:compression_operator_finite_coordinates}
-    Let a protocol satisfy the bounds of
-    Definition~\ref{def:peps_dyadic_protocol} with count constant $C_N$ and error
-    constant $C_E\ge0$ on a square of side $L\ge1$, for a unit vector $\Omega$.
-    Composing its changes gives one
-    distributed construction, with the recorded expansions of its gates, whose
-    physical density is that of the final vector, the
-    physical configurations of the parties being identified with the
-    configurations of the square. Let $\tau$ be a distributed operator contraction
-    on the parties of the protocol with
+    Let a protocol for a unit vector $\Omega$ on the $L\times L$ square
+    ($L\ge1$) satisfy Definition~\ref{def:peps_dyadic_protocol} with constants
+    $C_N$, $C_E\ge0$, and $b$, and final state $\Psi_n$. If $\tau$ is a
+    distributed operator contraction on the protocol parties with
     $\lVert\tau-\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|\rVert_1\le\varepsilon$,
-    link alphabets of size at most $C_1L^\alpha$, at most $\Delta_0$ links at each
-    party, and links only between two parties of a common nonprivate gate. Then
-    enumerating the link alphabets gives an operator party network on the dyadic
-    anchors of the protocol with the same link bounds, separation constant $b$,
-    and, with the physical pair of each party read at the fold of its anchor,
+    link dimensions at most $C_1L^\alpha$, degree at most $\Delta_0$, and links
+    only between parties of a common nonprivate gate, then enumerating the link
+    alphabets yields an operator party network on the protocol's dyadic anchors
+    with the same link and degree bounds, separation constant $b$, and
+    contracted operator $\sigma$ satisfying
     \begin{align}
         \bigl\lVert\sigma-|\Omega\rangle\langle\Omega|\bigr\rVert_1
-         & \le\varepsilon+(2C_NC_E+2C_E)L^{-10}.
+         & \le\varepsilon+(2C_NC_E+2C_E)L^{-10}. \notag
     \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_dyadic_protocol_consequences, thm:compression_operator_finite_coordinates}
-    The unit-square party of a genuine site has anchor equal to that site, which
-    the fold fixes, and every other party has physical dimension one. Hence
-    reading each party at the fold of its anchor recovers the configuration of
-    the square, and Theorem~\ref{thm:compression_operator_finite_coordinates}
-    identifies $\sigma$ with $\tau$ in these coordinates. The trace norm is
-    invariant under this relabelling, so the triangle inequality and the density
-    estimate of Theorem~\ref{thm:peps_dyadic_protocol_consequences} give the bound.
-    The endpoints of a link are participants of a common nonprivate gate of some
-    change, so the separation bound of the same theorem applies, and each party
-    lies on at most $\Delta_0$ links.
+    Reading each unit-square party at its fold-fixed site anchor and every
+    other party at physical dimension $1$ identifies $\sigma$ with $\tau$ by
+    Lemma~\ref{thm:compression_operator_finite_coordinates}. The triangle
+    inequality and the density and separation bounds of
+    Lemma~\ref{thm:peps_dyadic_protocol_consequences} then yield the trace
+    norm and anchor-separation bounds.
 \end{proof}
 
 \begin{lemma}[Bounds on the composed protocol circuit]
@@ -265,77 +230,60 @@ Proposition~\ref{prop:peps_dyadic_protocol} supplies.
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.isExpansionBounded_toDistributedConstruction_circuit}
     \leanok
     \uses{def:peps_dyadic_protocol}
-    Let $W$ be the circuit obtained by composing the $T$ changes
-    $W_0,\ldots,W_{T-1}$ of a protocol, with its initial and final register
-    layouts identified with the input and output layouts of the protocol. Repeated
-    occurrences of one gate are counted separately. Every nonprivate gate of $W$
-    has the set of participating parties of a nonprivate gate of some $W_t$ with
-    $t<T$. If the protocol satisfies the bounds of
-    Definition~\ref{def:peps_dyadic_protocol} with expansion constant $C_K$ and
-    constants $b,k,r$, then $W$ has at most $Tb$ nonprivate gates, every party
-    participates in at most $b$ of them, and every nonprivate gate of $W$ has at
-    most $\lfloor C_KL^k\rfloor$ monomials, at most $r$ pair effects in each
-    monomial, and absolute coefficient sum at most $C_KL^k$.
+    Let $W$ be the composition of the $T$ changes $W_0,\ldots,W_{T-1}$ of a
+    protocol satisfying Definition~\ref{def:peps_dyadic_protocol} with
+    constants $C_K,b,k,r$. Every nonprivate gate of $W$ has the participant set
+    of a nonprivate gate of some $W_t$ ($t<T$), $W$ has at most $Tb$
+    nonprivate gates, each party participates in at most $b$ of them, and each
+    nonprivate gate has at most $\lfloor C_KL^k\rfloor$ monomials, at most $r$
+    pair effects per monomial, and absolute coefficient sum at most $C_KL^k$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Identifying equal layouts changes neither the gates nor their participating
-    sets, so it suffices to treat the composite of the changes. Its nonprivate
-    gates are those of the changes, listed in order. Write $N(X)$ for the number of
-    nonprivate gates of a circuit $X$ and $n_p(X)$ for the number of them in which
-    the party $p$ participates. Hence $N(W)=\sum_{t<T}N(W_t)\le Tb$, and
-    $n_p(W)=\sum_{t<T}n_p(W_t)\le b$ is the lifetime bound of the protocol. The monomial
-    and expansion bounds hold for every change and therefore for every gate of
-    the composite.
+    Write $N(X)$ for the nonprivate gate count of $X$ and $n_p(X)$ for the
+    participation count of party $p$. Then
+    $N(W)=\sum_{t<T}N(W_t)\le Tb$ and $n_p(W)=\sum_{t<T}n_p(W_t)\le b$, while
+    each gate inherits its participant set, monomial count, and coefficient sum
+    from its change $W_t$.
 \end{proof}
 
-\begin{theorem}[Compressed dyadic operator networks from the protocol bounds]
+\begin{lemma}[Compressed dyadic operator networks from the protocol bounds]
     \label{thm:peps_large_size_network_from_protocol}
     \lean{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_large_size_dyadic_operator_network}
-    Fix $q\ge2$, a family of unit states $\mathcal F$, a count constant $C_N$,
-    an expansion constant $C_K$, an error constant $C_E$ and constants
-    $b,k,r,L_0$. Suppose that for every $L\ge\max\{2,L_0\}$ and every
-    $\Omega\in\mathcal F(L)$ there is a protocol
-    satisfying the Section~8 bounds of
-    Definition~\ref{def:peps_dyadic_protocol} with these constants. Then
-    compressed dyadic operator networks exist for $\mathcal F$, in the sense of
-    Definition~\ref{def:peps_large_size_dyadic_operator_network}, at the error
-    constant $1+2C_NC_E+2C_E$, the link prefactor
-    $C_\Sigma(r,b,\max\{C_N,0\}b,q,\max\{C_K,0\},C_K)$, the link exponent
-    $\alpha_{\mathrm{net}}(r,b,3,0,k,k,5)$, the block bound $b$, the degree
-    bound $2b(b-1)$, the separation constant $b$ and the threshold $L_0$.
-\end{theorem}
+    Fix $q\ge2$, a unit-state family $\mathcal F$, and constants
+    $C_N,C_K,C_E,b,k,r,L_0$. If every $L\ge\max\{2,L_0\}$ and
+    $\Omega\in\mathcal F(L)$ admit a protocol satisfying
+    Definition~\ref{def:peps_dyadic_protocol}, then compressed dyadic operator
+    networks exist for $\mathcal F$
+    (Definition~\ref{def:peps_large_size_dyadic_operator_network}) with error
+    constant $1+2C_NC_E+2C_E$, link prefactor
+    $C_\Sigma(r,b,\max\{C_N,0\}b,q,\max\{C_K,0\},C_K)$, link exponent
+    $\alpha_{\mathrm{net}}(r,b,3,0,k,k,5)$, block bound $b$, degree bound
+    $2b(b-1)$, separation constant $b$, and threshold $L_0$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_distributed_construction_compression_of_le, def:peps_compression_constants,
         lem:peps_protocol_compressed_party_network,
         lem:peps_protocol_circuit_bounds}
-    For fixed $q$ and $\mathcal F$, the
-    protocols across all sides $L\ge\max\{2,L_0\}$ and all states of the
-    family form a single family of distributed constructions indexed by their
-    size. In this
-    family the number of nonprivate gates is at most $bC_NL^3$, each gate involves
-    at most $b$ parties, each party participates in at most $b$ gates, every
-    physical dimension is at most $q$, and every gate is exactly the sum of its
-    recorded expansion, with at most $C_KL^k$ monomials, absolute coefficient sum
-    at most $C_KL^k$, and at most $r$ pair effects per monomial.
-    Theorem~\ref{thm:peps_distributed_construction_compression_of_le} in its
-    coefficient-sum form, with $p=5$ and coefficient-sum degree $s=k$, then gives
-    constants $C_p=C_\Sigma(r,b,\max\{C_N,0\}b,q,\max\{C_K,0\},C_K)$ and
-    $\alpha=\alpha_{\mathrm{net}}(r,b,3,0,k,k,5)$, chosen before the family member,
-    and for each protocol a distributed operator contraction within $L^{-5}$ of its
-    physical density, with link alphabets of size at most $C_pL^\alpha$, at most
-    $2b(b-1)$ links at each party, and links only between parties of a common
-    gate. Lemma~\ref{lem:peps_protocol_compressed_party_network} turns it into an
-    operator party network with at most $b$ parties per block, degree $2b(b-1)$,
-    separation constant $b$, link dimensions at most $C_pL^\alpha$, and
+    By Lemma~\ref{lem:peps_protocol_circuit_bounds}, the composed circuits for
+    $L\ge\max\{2,L_0\}$ and $\Omega\in\mathcal F(L)$ have at most $bC_NL^3$
+    nonprivate gates, $\le b$ parties per gate, $\le b$ gates per party,
+    physical dimensions $\le q$, and gate expansions with $\le C_KL^k$
+    monomials, coefficient sum $\le C_KL^k$, and $\le r$ pair effects per
+    monomial. Applying
+    Lemma~\ref{thm:peps_distributed_construction_compression_of_le} with
+    $p=5$ and $s=k$ produces a contraction $\tau$ within $\varepsilon=L^{-5}$
+    of the physical density with link size $\le C_pL^\alpha$ and degree
+    $\le 2b(b-1)$, where
+    $C_p=C_\Sigma(r,b,\max\{C_N,0\}b,q,\max\{C_K,0\},C_K)$ and
+    $\alpha=\alpha_{\mathrm{net}}(r,b,3,0,k,k,5)$. Since $1\le C_NL^2$ and
+    $1-C_EL^{-57}\le\lVert\Xi\rVert\le1$ give $C_N,C_E\ge0$,
+    Lemma~\ref{lem:peps_protocol_compressed_party_network} yields
     \begin{align}
         \bigl\lVert\sigma-|\Omega\rangle\langle\Omega|\bigr\rVert_1
-         & \le L^{-5}+(2C_NC_E+2C_E)L^{-10}\le(1+2C_NC_E+2C_E)L^{-5}.
+         & \le L^{-5}+(2C_NC_E+2C_E)L^{-10}\le(1+2C_NC_E+2C_E)L^{-5}. \notag
     \end{align}
-    Here $C_N\ge0$, since there are at least one and at most $C_NL^2$ parties,
-    and $C_E\ge0$, since $1-C_EL^{-57}\le\lVert\Xi\rVert\le1$. The error constant
-    $1+2C_NC_E+2C_E$ does not involve the expansion constant.
 \end{proof}

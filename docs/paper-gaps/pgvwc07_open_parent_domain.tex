@@ -1,0 +1,94 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Domain of the Varying-Bond Open Parent Theorem}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{Source and actual conclusion}
+PGVWC07~\cite{PerezGarcia2007Matrix}, arXiv:quant-ph/0608197, Theorem 9 and proof,
+\path{Papers/quant-ph_0608197/MPSarchive.tex}, lines 1195--1237,
+starts from a canonical open-boundary representation whose blocked site
+families satisfy C1. The local interaction is the orthogonal projector
+onto the complement of the corresponding two-site boundary range.
+
+The formalization constructs these projectors and their open
+sum, derives the adjacent coefficient sections from the actual kernel,
+reconstructs the full chain by the printed canonical adjoint method,
+and closes the singleton endpoint bonds. The dependent-physical-space
+continuation allows arbitrary physical dimensions at the different sites.
+Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ be the site matrices of an
+open chain of $N$ sites with $D_0=D_N=1$. Let $h_{j,j+1}$ be the local
+projector on the adjacent pair $j,j+1$, extended by the identity, and let
+$H=\sum_{j=0}^{N-2}h_{j,j+1}$ be the open parent Hamiltonian. Let $\Omega$
+be the open-chain vector with coefficients
+$\Omega(i_0,\ldots,i_{N-1})=(B^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}})_{0,0}$.
+For $N\ge2$, the conclusion is
+\begin{align}
+    H\ge0,\qquad \|\Omega\|=1,\qquad
+    \ker H=\mathbb C\Omega,\qquad \dim\ker H=1.
+    \label{eq:pgvwc07_open_parent_domain_ground_state_line}
+\end{align}
+The unit norm and both kernel inclusions are derived from the supplied
+site matrices. There is no assumed ground state, local annihilation
+condition, larger-block boundary, or canonical-form supplier.
+
+\section{The length convention}
+The source regroups the spins of an open chain into consecutive blocks,
+writes $B^{[1]},\ldots,B^{[M]}$ for the blocked site families, and defines
+the Hamiltonian as the sum of the adjacent terms,
+\begin{align}
+    H=\sum_jh_{j,j+1}
+    \label{eq:pgvwc07_open_parent_domain_source_hamiltonian}
+\end{align}
+(lines~1195--1205). Its proof begins with the equation
+$h_{j,j+1}\otimes I\,\ket\phi=0$ for every adjacent pair
+(lines~1212--1217). The setup is therefore a blocked chain with at least one
+adjacent pair, $M\ge2$; in the notation above, $N\ge2$.
+
+On a chain of one blocked site there is no adjacent pair, the sum
+(\ref{eq:pgvwc07_open_parent_domain_source_hamiltonian}) is empty, and every
+vector is annihilated. That case is not a local Hamiltonian in the sense of the
+source; it is a degenerate reading of the setup, not a gap in the theorem. On
+the empty chain the configuration space is one-dimensional and the
+statement holds trivially.
+
+\textbf{Local fix (chains with an adjacent pair).} The formal theorem assumes
+$N\ge2$, the source's setup of an open chain with at least one adjacent pair of
+blocked sites. With this convention the formal conclusion
+(\ref{eq:pgvwc07_open_parent_domain_ground_state_line}) is Theorem~9 for
+arbitrary physical and bond dimensions. Uniqueness of the ground state is
+uniqueness of the ground-state line, as in the source's normalization step
+(lines~1233--1236). The intermediate statements for a common physical alphabet
+are special cases used in the proof, not a restriction of the final theorem.
+
+\section{Verdict}
+\textbf{Verdict: local correction, resolved.} The length bound $N\ge2$ is the
+source's setup, a chain with an adjacent interaction term. Under it the
+varying-bond open parent Hamiltonian has the normalized canonical state as its
+unique ground-state line, with arbitrary physical dimensions.
+
+\section{Formalization}
+The actual local terms and their kernel characterization are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCProjectorKernel.lean}.
+The full-chain adjoint induction is in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCReconstruction.lean},
+and actual boundary-state annihilation is in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCBoundaryStates.lean}.
+The scalar-endpoint normalization and final kernel statements are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingOBCParentUniqueness.lean}.
+The actual dependent-physical-space parent, physical support extraction,
+common-alphabet comparison and final normalized state line are in
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentHamiltonian.lean},
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalKernelSupport.lean},
+\path{TNLean/MPS/ParentHamiltonian/UniformPhysicalParentComparison.lean}, and
+\path{TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentUniqueness.lean}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

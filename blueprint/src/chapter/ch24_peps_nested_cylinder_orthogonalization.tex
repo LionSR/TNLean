@@ -29,7 +29,7 @@ nested regions and inside subspaces.
     this is distinct from the dimension of the cylinder. In particular, $\mathcal C_R(0)=0$.
 \end{definition}
 
-\begin{theorem}[Projectors onto cylinders]
+\begin{lemma}[Projectors onto cylinders]
     \label{thm:peps_cylinder_projector}
     \lean{
         TNLean.PEPS.range_dependentRegionOperatorLift,
@@ -46,7 +46,7 @@ nested regions and inside subspaces.
         P_{\mathcal C_R(S)} & =P_S\otimes I_{V\setminus R}.
         \label{eq:peps_cylinder_projector}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Each complementary slice of $(A\otimes I)x$ is $A$ applied to the
@@ -57,7 +57,7 @@ nested regions and inside subspaces.
     (\ref{eq:peps_cylinder_projector}).
 \end{proof}
 
-\begin{theorem}[Sums and images of cylinders]
+\begin{lemma}[Sums and images of cylinders]
     \label{thm:peps_cylinder_operations}
     \lean{
         TNLean.PEPS.dependentRegionCylinder_sup,
@@ -77,7 +77,7 @@ nested regions and inside subspaces.
         \mathcal C_R(S)                    & =\mathcal C_U(S\otimes\mathcal H_{U\setminus R}).
         \label{eq:peps_cylinder_containing}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_cylinder_projector}
@@ -111,7 +111,7 @@ nested regions and inside subspaces.
     When $n>0$, we have $W_0=0$ and $\widetilde S_0=S_0$.
 \end{definition}
 
-\begin{theorem}[Earlier spans and projected cylinders]
+\begin{lemma}[Earlier spans and projected cylinders]
     \label{thm:peps_nested_cylinder_images}
     \lean{
         TNLean.PEPS.dependentRegionCylinder_nestedCylinderEarlierInside,
@@ -128,7 +128,7 @@ nested regions and inside subspaces.
         \label{eq:peps_cylinder_global_image}
     \end{align}
     If $S_j\subseteq W_j$, then $\widetilde S_j=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_cylinder_operations,thm:peps_cylinder_projector}
@@ -144,7 +144,7 @@ nested regions and inside subspaces.
     $(I-P_{W_j})s=0$.
 \end{proof}
 
-\begin{theorem}[Orthogonal cylinders with the same prefix spans]
+\begin{lemma}[Orthogonal cylinders with the same prefix spans]
     \label{thm:peps_nested_cylinder_orthogonalization}
     \lean{
         TNLean.PEPS.finrank_nestedCylinderInnovation_le,
@@ -167,7 +167,7 @@ nested regions and inside subspaces.
     \end{align}
     Each inside rank satisfies $\dim\widetilde S_j\leq\dim S_j$, and hence
     $\sum_j\dim\widetilde S_j\leq\sum_j\dim S_j$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_nested_cylinder_images}
@@ -189,7 +189,7 @@ nested regions and inside subspaces.
     and sum over $j$.
 \end{proof}
 
-\begin{theorem}[Sum of the orthogonal cylinder projectors]
+\begin{lemma}[Sum of the orthogonal cylinder projectors]
     \label{thm:peps_nested_cylinder_projector_sum}
     \lean{
         TNLean.PEPS.nestedCylinderInnovation_projector_sum,
@@ -207,7 +207,7 @@ nested regions and inside subspaces.
     even without nesting, if every $R_j\subseteq U$, the projector onto
     $\sum_j\mathcal C_j$ is supported on $U$: there is an orthogonal
     projector $B$ on $\mathcal H_U$ whose identity extension is that projector.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_nested_cylinder_orthogonalization,thm:peps_cylinder_projector,

@@ -3,11 +3,9 @@
 
 The power $A$ of Definition~\ref{def:lvv_power_projector} is a sum over all
 $n^m$ words of length $m$. Landau, Vazirani and Vidick replace it by the average
-of randomly chosen words, and control the error by a matrix
+of polynomially many words chosen at random, and control the error by a matrix
 concentration inequality~\cite[lines 606--649]{Landau2015Polynomial}. The
-sample count below retains the ground-energy dependence of the published
-Methods~\cite[Proposition~1, p.~6]{Landau2015Published}. The notation is that
-of Section~\ref{sec:lvv_power_projector}: the chain has $L\ge1$
+notation is that of Section~\ref{sec:lvv_power_projector}: the chain has $L\ge1$
 sites, $n=L$, $P_i=1-H_i$ for $i=0,\ldots,L-1$ with $H_{L-1}=0$, and
 $C=(1-\varepsilon_0/n)^{-1}$.
 
@@ -51,7 +49,32 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     of~\cite[line 611]{Landau2015Polynomial}.
 \end{definition}
 
+\begin{lemma}[Matrix Bernstein inequality for averages]
+    \label{thm:lvv_matrix_bernstein}
+    \lean{Matrix.measureReal_le_norm_average_sub_le}
+    \leanok
+    Let $X_1,\ldots,X_\ell$ be independent identically distributed random
+    $D\times D$ complex matrices, $\ell\ge1$, with $\mathbb E X_k=X$ and
+    $\|X_k-X\|\le R$ almost surely, and put
+    $\sigma^2=\max\bigl(\|\mathbb E(X_1-X)(X_1-X)^*\|,
+        \|\mathbb E(X_1-X)^*(X_1-X)\|\bigr)$. For $t\ge0$,
+    \begin{align*}
+        \Pr\Bigl(\Bigl\|\frac1\ell\sum_{k=1}^\ell X_k-X\Bigr\|\ge t\Bigr)
+        \le2D\exp\Bigl(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\Bigr).
+    \end{align*}
+    This is~\cite[lines 616--624]{Landau2015Polynomial}, derived there
+    from~\cite[Theorem~1.6]{Tropp2012User}; the variance is the maximum of the
+    operator norms of the two expectations~\cite{gap:lvv13_matrix_bernstein_variance_norm}.
+\end{lemma}
 
+\begin{proof}
+    \leanok
+    The summands $Z_k=(X_k-X)/\ell$ are independent and centred, with
+    $\|Z_k\|\le R/\ell$ and variance parameter $\sigma^2/\ell$. The rectangular
+    matrix Bernstein inequality of~\cite[Theorem~1.6]{Tropp2012User} at $t$
+    gives the bound, since
+    $(t^2/2)/(\sigma^2/\ell+Rt/(3\ell))=\ell t^2/(2\sigma^2+2Rt/3)$.
+\end{proof}
 
 \begin{lemma}[Mean and range of a sampled term]
     \label{lem:lvv_sampled_term}
@@ -71,9 +94,9 @@ $C=(1-\varepsilon_0/n)^{-1}$.
         lem:lvv_ground_energy_range}
     Every word has probability $n^{-m}$, so
     $\mathbb E[C^mP_I]=C^mn^{-m}\sum_IP_I=A$ by
-    Theorem~\ref{thm:lvv_power_expansion}. Since $0\le P_i\le1$, every letter
+    Lemma~\ref{thm:lvv_power_expansion}. Since $0\le P_i\le1$, every letter
     has norm at most one, and so does every word. With $\|A\|=1$ from
-    Theorem~\ref{thm:lvv_power_projector_basic} and $C\ge1$,
+    Lemma~\ref{thm:lvv_power_projector_basic} and $C\ge1$,
     $\|C^mP_I-A\|\le C^m+1$.
 \end{proof}
 
@@ -94,7 +117,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     The terms $X_k=C^mP_{I_k}$ are independent and identically distributed, with
     $K=\ell^{-1}\sum_kX_k$. By Lemma~\ref{lem:lvv_sampled_term} their mean is
     $A$ and $\|X_k-A\|\le R$, so both variance terms are at most $R^2$, and
-    Theorem~\ref{thm:lvv_matrix_bernstein} applies in dimension $q^n$. If
+    Lemma~\ref{thm:lvv_matrix_bernstein} applies in dimension $q^n$. If
     $q=0$, every matrix vanishes and the event is empty.
 \end{proof}
 
@@ -122,13 +145,13 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     $Z_p=\mathbf 1[I_p=j]-1/n$. The $Z_p$ are independent and centred, with
     $|Z_p|\le1$ and $\mathbb EZ_p^2=1/n-1/n^2\le1/n$. The Hermitian matrix
     Bernstein inequality for bounded summands, in dimension one, which is
-    Bernstein's inequality~\cite[Theorem~6.1]{Tropp2012TailBounds}, gives the first
+    Bernstein's inequality~\cite[Theorem~6.1]{Tropp2012User}, gives the first
     bound; this is the tail $e^{-\Omega(a^2)}$
     of~\cite[lines 646--648]{Landau2015Polynomial}. The second follows by a union
     bound over the $\ell$ words and the $n$ letters.
 \end{proof}
 
-\begin{theorem}[Accuracy and multiplicity of the sampled projector]
+\begin{lemma}[Accuracy and multiplicity of the sampled projector]
     \label{thm:lvv_sampled_projector}
     \lean{TNLean.MPS.AreaLaw.one_sub_le_measureReal_sampledProjector,
         TNLean.MPS.AreaLaw.one_sub_inv_pow_three_le_measureReal_sampledProjector,
@@ -158,16 +181,14 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     words $I_1,\ldots,I_\ell$ with $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$,
     $\|K-A\|<\eta$, every letter occurring at most $\kappa$ times in every word,
     and every $P_{I_k}$ of operator Schmidt rank at most $q^{2\kappa}$ across
-    every internal cut.
+    every cut.
 
-    This is the finite probability estimate underlying
-    \cite[lines 626--649]{Landau2015Polynomial}, with the sample count
-    stated through $C^m$. The preprint's energy-independent exponent fails
-    for extensive ground energy. The published Methods retain that energy
-    contribution~\cite[Proposition~1, p.~6]{Landau2015Published}; the explicit
-    normalization estimate in Lemma~\ref{lem:lvv_power_normalization_size}
-    records it here~\cite{gap:lvv13_sampling_ground_energy}.
-\end{theorem}
+    This is~\cite[lines 626--649]{Landau2015Polynomial}, with $\ell$ stated
+    through $C^m$. The source states $\ell=n^{O(1/\varepsilon)}$, using
+    $C^{2m}=n^{O(1/\varepsilon)}$; this fails when $\varepsilon_0$ is of order
+    $n$, and holds when $\varepsilon_0/\varepsilon$ is bounded, by
+    Lemma~\ref{lem:lvv_power_normalization_size}~\cite{gap:lvv13_runtime_ground_energy}.
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -183,9 +204,9 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     letter occurs more than $\kappa$ times in some word by
     $\ell ne^{-a}=1/(4n^3)$. The complement of the two events has probability
     at least $1-1/(2n^3)>0$, and so contains a choice of words. For such a
-    choice, Theorem~\ref{thm:lvv_power_threshold} gives
+    choice, Lemma~\ref{thm:lvv_power_threshold} gives
     $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$, and
-    Theorem~\ref{thm:lvv_power_word_rank} gives the rank bound.
+    Lemma~\ref{thm:lvv_power_word_rank} gives the rank bound.
 \end{proof}
 
 \begin{lemma}[Size of the normalization]
@@ -200,7 +221,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     $0\le\varepsilon_0\le n-1$, $\Delta>0$, $0<\eta\le1$ and
     $m=\lceil((n-\varepsilon_0)/\Delta)\log(1/\eta)\rceil$, then
     $C^m\le n\,\eta^{-\varepsilon_0/\Delta}$. In particular, the number $\ell$
-    of Theorem~\ref{thm:lvv_sampled_projector} is polynomial in $n$ and
+    of Lemma~\ref{thm:lvv_sampled_projector} is polynomial in $n$ and
     $1/\eta$ when $\varepsilon_0/\Delta$ is bounded.
 \end{lemma}
 

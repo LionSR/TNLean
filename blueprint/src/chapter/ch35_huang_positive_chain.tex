@@ -5,7 +5,7 @@ The original positive adjacent-pair model of \cite{Landau2015Polynomial}, also u
 in \cite[Section~5.4]{Huang2015GroundState}, is a special case of the finite-range
 chain model. The following identification preserves its operator exactly.
 
-\begin{theorem}[Distinct adjacent-pair supports]
+\begin{lemma}[Distinct adjacent-pair supports]
     \label{thm:huang_adjacent_supports}
     \lean{TNLean.MPS.AreaLaw.nearestNeighborChainSupport_injective,
         TNLean.MPS.AreaLaw.card_nearestNeighborChainSupport}
@@ -13,7 +13,7 @@ chain model. The following identification preserves its operator exactly.
     The map $i\mapsto\{i,i+1\}$ from the original edge indices
     $0\le i<L-1$ into the nonempty range-one supports is injective. Each such
     support has cardinality two.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The least site of the pair is its edge index. Its two consecutive sites are
@@ -37,7 +37,7 @@ chain model. The following identification preserves its operator exactly.
     These terms define a range-one chain Hamiltonian with local norm bound one.
 \end{definition}
 
-\begin{theorem}[The interaction terms are preserved]
+\begin{lemma}[The interaction terms are preserved]
     \label{thm:huang_positive_chain_terms}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term,
         TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_eq_zero,
@@ -50,7 +50,7 @@ chain model. The following identification preserves its operator exactly.
     singleton terms vanish. Every term is supported on its assigned support,
     is Hermitian, and satisfies $0\le\widetilde h_X\le I$ and
     $\|\widetilde h_X\|\le1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Injectivity makes the assignment well-defined. A zero term has all the
@@ -60,7 +60,7 @@ chain model. The following identification preserves its operator exactly.
     differ.
 \end{proof}
 
-\begin{theorem}[Equality of the Hamiltonian operators]
+\begin{lemma}[Equality of the Hamiltonian operators]
     \label{thm:huang_positive_chain_operator}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_operator}
     \leanok
@@ -68,7 +68,7 @@ chain model. The following identification preserves its operator exactly.
     The constructed finite-range operator is exactly
     $\widetilde H=\sum_X\widetilde h_X=\sum_{i=0}^{L-2}h_i$.
     This includes chains with zero or one site and local dimension zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Restrict the support sum to the image of the injective edge-support map;

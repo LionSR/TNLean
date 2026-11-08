@@ -9,11 +9,11 @@
 \title{The Anomaly Class of the Two-Qubit $\mathbb{Z}_2\times\mathbb{Z}_2$
 Tensors: From Detector Values to the Class}
 \author{}
-\date{2026-09-30}
+\date{2026-10-29}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{wip}
+\gapnote{scope-restriction}{resolved}
 
 \section{The target statement}
 
@@ -108,12 +108,51 @@ exact dressed representation.\footnote{
     \leanid{Z2Z2Condensation.omega\_cohomologousTo\_kleinCocycle} in
     \doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass}.}
 
-\textbf{Verdict: detector separation resolved; the family comparison is still open.}
-The conclusion concerns the exact dressed family $M'_g$. It does not assign
-an anomaly class to the original odd-ring projective family, nor establish
-transport to the even-ring or two-site-blocked original family. That family
-comparison remains outside this result, as tracked by issue \#8041, so the
-restriction stays live until it is settled.
+\section{Resolution for the original two-site-blocked family}
+
+Write $U_{g,L}$ for the periodic operator of $M_g$ on a ring of $L$ sites,
+so that $U_g=U_{g,L}$ above. Let $B_g=M_g^{[2]}$ be the original tensor
+blocked by two physical sites. After regrouping physical configurations in
+pairs, its operator on $N>0$ blocked sites is $U_{g,2N}$. Since
+$\lambda(g,h)^{2N}=1$, this family is an exact representation; its
+doubled-index tensors are normal by blocking and physical relabeling.
+
+The anomaly calculation uses its own fusion witnesses. For $g\in\{x,xy\}$,
+the stacked square $M_g\cdot M_g$ of bond dimension four reduces onto $M_e$
+when $g=x$ and onto $-M_e$ when $g=xy$; let $V_g$ be the $1\times4$ left
+compression matrix of this reduction. Blocking two sites keeps both
+compression matrices, and the target $-M_e$ becomes $B_e$, since its
+blocked letters are products of two letters. Let
+$T_g=(M_g\cdot M_g)\cdot M_g$ be the raw triple tensor, with letters $T_g^a$
+indexed by the sixteen pair labels $a$, and let $\mathrm{Id}$ be the
+identity on the bond space of $M_g$, of dimension two. Integer matrix
+multiplication gives, for every letter $a$,
+\begin{align}
+    (V_g\otimes\mathrm{Id})\,T_g^a
+     & =s_g\,(\mathrm{Id}\otimes V_g)\,T_g^a,
+    \qquad s_x=1,\quad s_{xy}=-1.
+    \label{eq:glm23z2z2_raw_tree_comparison}
+\end{align}
+The two sides of \eqref{eq:glm23z2z2_raw_tree_comparison} are the two
+fusion trees of $g\otimes g\otimes g$, so $s_g$ is the associator of the
+blocked fusion witnesses on $\{e,g\}$. The identity extends from letters to
+nonempty words, and hence to blocked words. The restriction to $\{e,y\}$
+has bond dimension one and identity fusion matrices. This computes the
+three detectors of the blocked family as $(+1,+1,-1)$, for every
+fusion choice. Let $\omega_B$ be the anomaly three-cochain of any choice of
+fusion tensors of the blocked family. Detector completeness gives
+$[\omega_B]=[\omega_{\mathrm{II}}]\neq0$.\footnote{
+    \leanid{Z2Z2Condensation.blockedFamily\_isNormalRepresentation},
+    \leanid{Z2Z2Condensation.omega\_blockedFamily\_cohomologousTo\_kleinCocycle},
+    and \leanid{Z2Z2Condensation.raw\_odd\_square\_ne\_identity} in
+    \doclink{TNLean/MPS/Examples/AnomalousCondensation/Z2Z2BlockedAnomaly}.}
+
+\textbf{Verdict: detector separation and the original blocked-family boundary
+    are resolved.} The odd-ring obstruction remains explicit:
+$U_{xy,L}^2=-U_{e,L}\neq U_{e,L}$ for odd $L$. No anomaly class of an exact
+representation is assigned to that raw odd-ring family. The explicit
+two-qubit tensors remain a construction of this repository, not tensors
+printed in the source, and no tensor classification is asserted.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -82,17 +82,33 @@ $S_{\max}$ for every cut. Taking $k_0=\lceil\exp(2S_{\max})/2\rceil$ then
 supplies the entropy threshold for the ground state, with $k_0$ independent of
 $j$ and $N$. The application also requires deriving Lemma~1 with uniform
 constants from the Hamiltonian assumptions.
-Both deductions are formalized. For the gapped ground state around which
-Lemma~1 holds, the area law supplies the entropy threshold, and the matrix
-product state estimate follows. Lemma~1 is in turn supplied for every gapped
-chain of finite range with a constant $C_1$ independent of the chain length,
-so the estimate holds under the source's Hamiltonian assumptions alone, with
-$k_0$ independent of $N$.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_gappedGroundState}
-    and
-    \leanid{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState}
-    in \doclink{TNLean/MPS/AreaLaw/Hastings/MPSGroundState}.} The quantitative
-restrictions of the formalized Lemma~1, which $k_0$ inherits, are recorded in
-\path{hastings07_lemma1_decay_length.tex}.
+Both deductions are formalized. To retain the source's velocity of
+order $J$, put $c_R=2(R+1)2^{2R+1}e^{2R}$ and choose the admissible
+Lieb--Robinson pair $(v,\xi_C)=(40c_RJ,80)$ for $J>0$. At the corresponding
+length $s=\max(80c_RJ/\Delta E,80)$, factorization holds with
+$\xi'=6s$ and $C_1=\max(Ks^3,1)$, and the entropy of every initial segment
+is at most
+\begin{align}
+    S_{\max}=c_0\xi'\ln\xi'\ln D\,2^{\xi'\ln D}.
+    \label{eq:hastings07_mps_entropy_source_max}
+\end{align}
+Here $K$ and $c_0$ depend only on the interaction range. The zero-interaction
+case satisfies the same entropy and approximation inequalities. Choosing
+$k_0=\lceil e^{2S_{\max}}/2\rceil$ therefore discharges the entropy premise
+at every cut and gives (\ref{eq:hastings07_mps_entropy_stage_bound}) under
+the Hamiltonian assumptions alone. The threshold and all constants are
+independent of the chain length.\footnote{
+    \leanid{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_source}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/SourceConsequences}.}
+
+The earlier estimates at the gap-rescaled lengths $\hat\xi$ and
+$\tilde\xi$ remain valid auxiliary theorems. Their physical velocities
+contain terms proportional to the gap, rather than being expressed as
+fixed multiples of $J$. Their entropy threshold is the corrected auxiliary area-law bound,
+whereas (\ref{eq:hastings07_mps_entropy_source_max}) is the printed shape
+at the enlarged source length. These distinctions are recorded in
+\path{hastings07_lemma1_decay_length.tex} and
+\path{hastings07_doubling_constants.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

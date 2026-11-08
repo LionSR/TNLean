@@ -3,7 +3,7 @@
 All entropies in this subsection use natural logarithms. Write
 $H_2(p)=-p\log p-(1-p)\log(1-p)$, with $0\log0=0$.
 
-\begin{theorem}[Regional flag decomposition]
+\begin{lemma}[Regional flag decomposition]
     \label{thm:qutrit_entropy_scaling_region_mixture}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionState_qutritState_decomposition}
     \leanok
@@ -14,7 +14,7 @@ $H_2(p)=-p\log p-(1-p)\log(1-p)$, with $0\log0=0$.
         \rho_A(p)=(1-p)\rho_A(0)+p\rho_A(1).
         \label{eq:qutrit_entropy_scaling_region_mixture}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The defining sum gives
     $\ket{\psi_{2N}(p)}=\sqrt{1-p}\ket{\psi_{2N}(0)}
@@ -39,7 +39,7 @@ $H_2(p)=-p\log p-(1-p)\log(1-p)$, with $0\log0=0$.
     at $p=0,1$.
 \end{proof}
 
-\begin{theorem}[Entropy bound on every region]
+\begin{lemma}[Entropy bound on every region]
     \label{thm:qutrit_entropy_scaling_region_entropy}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_qutritState_le,
         TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_qutritState_empty,
@@ -54,7 +54,7 @@ $H_2(p)=-p\log p-(1-p)\log(1-p)$, with $0\log0=0$.
     The empty and full regions both have entropy zero.
     This bounds the entropy of the state in~\cite{Schuch2008EntropyScaling}
     without a connectedness assumption on $A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_region_mixture,
         thm:qutrit_entropy_scaling_normalization}
@@ -74,14 +74,14 @@ $H_2(p)=-p\log p-(1-p)\log(1-p)$, with $0\log0=0$.
     at most one and again entropy zero.
 \end{proof}
 
-\begin{theorem}[Uniform regional bound for the inverse-length family]
+\begin{lemma}[Uniform regional bound for the inverse-length family]
     \label{thm:qutrit_entropy_scaling_family_entropy}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_qutritFamily_le}
     \leanok
     \uses{def:qutrit_entropy_scaling_state}
     For $N>0$ and every region $A$, the source's choice $p_N=1/N$ satisfies
     $S(\rho_A(p_N))\le2\log2$, or two bits.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_region_entropy}
     Substitute $p_N=1/N$ into

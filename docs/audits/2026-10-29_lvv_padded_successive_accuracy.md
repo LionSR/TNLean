@@ -54,7 +54,7 @@ corrections and conservative bounds remain in force:
 
 - [Quadratic trimming radius](https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf).
 - `docs/paper-gaps/lvv13_constant_bond.tex`.
-- `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+- `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 
 The theorem concerns finite families, retained spans, and MPS ranks.
 It makes no computational running-time claim or claim to every printed
@@ -64,49 +64,96 @@ rank-one projector-gap ground-state condition. No supplied ancillary gap,
 cut decomposition, viable witness, MPS approximation, or attained excited
 energy is assumed.
 
-## Verification
+## Initial verification
 
-Private checks used the fully ordinary-verified TN mathematical snapshot
-`8ace1dccea363b9ea3ee1611083fa3d73292f8a7`, whose clean documentation-only
-successor is `bc299f74db315cdb8a077e0b678c0eba1f7e0028`, with the exact QIC
-package `34cb0c3a24a9cfb8073e1fe7bb1087bc409fb951`. Fresh selected guards
-covered 405 imported TN/QIC source and ordinary-object pairs. The import
-readiness check reported zero pending dependencies for all six selected
-roots. Provider sources and objects were read-only. New objects were
-written only to a fresh private namespace under the system temporary
-directory; no build artifact was copied and no Mathlib source was built.
+The construction is extracted onto TNLean `6da5dd6c42`, with QICLean pinned
+to public revision `648432e86018a50272372ecf2e80c8263e81b601`
+([QICLean #1002](https://github.com/LionSR/QICLean/pull/1002)).
+The extracted sources contain no `sorry`, `admit`, `native_decide`,
+`unsafeCast` or new axiom declarations.
 
-All nine actual new production modules passed separate Lean elaboration
-with the strict CI flags, including both automatic implicit options disabled,
-Mathlib standard linters, and warnings as errors. The final headline module
-passed in 5.34 seconds. A separate imported foundation audit inspected all
-35 new public declarations; each depends only on the standard foundations
-`propext`, `Classical.choice`, and `Quot.sound` (or a subset). The audit was
-kept under the system temporary directory and is not a repository fixture.
+Generated import completeness and the production-file length check pass.
+The proof-pattern scan was run; the functional-calculus pattern is recorded
+in the ledger, and the uniform bond estimates reuse `IsOpenMPS.mono`.
+All newly introduced blueprint labels and citations resolve. The role check
+reports only the four existing mismatches in the base revision's
+`ch35_aklv_energy_truncation.tex`. The ground-energy note compiles with its
+bibliography without unresolved references or layout warnings.
 
-Ordinary target/full-library and compiled blueprint verification remain
-integration gates; these private checks do not replace them. No ordinary
-build was queued by this contribution. The new chapter is intended after
-`ch35_lvv_successive_construction.tex`; generated aggregators and chapter
-registration are deliberately left to integration.
+The mathematical sources at commit `105ba5beb5` passed fresh verification
+on 2026-10-29. The subsequent changes only clarify the chapter introduction
+and record these results.
 
-### Checked source hashes
+- The canonical locked full-library build passed (15,045 jobs), including
+  the complete QICLean library at the pinned revision.
+- All 36 changed mathematical modules passed separate Lean elaboration
+  with warnings as errors, both automatic implicit options disabled,
+  Mathlib standard linters and the package synthesis-depth limit.
+- Axiom inspection of the complete successor, successive-family,
+  uniform approximation and arbitrary-accuracy theorems reported only
+  `propext`, `Classical.choice` and `Quot.sound`.
+- Blueprint/source synchronization passed, and every new reference
+  resolves in the active blueprint. After the full build,
+  `leanblueprint checkdecls` checked all 30,601 blueprint declaration names.
+- `python3 scripts/paper_gap_leanid_sync.py --check` passed for all 3,287
+  declaration names cited in the paper-gap notes.
 
-| Production source | SHA-256 |
-|---|---|
-| `TNLean/Circuit/SiteEmbeddingOrder.lean` | `b5fa82a9469b98c7a4dcff2bfd310ee8f5bbe48acbdcce87bc0de43436dda2b5` |
-| `TNLean/Circuit/ProductBasisPenalty.lean` | `c7a6805f6ee0ea6711ced58d93862320700c38d29981bf43a3711b71a7f9d9eb` |
-| `TNLean/MPS/AreaLaw/ViableSet/PrefixColumn.lean` | `aa730b760d904cc53a5feba88b200023a3d2ee99aa5713ff9e94804e46b9b8ae` |
-| `TNLean/MPS/AreaLaw/ViableSet/PrefixExtraction.lean` | `fbdcbf33a545b8d9f3badd5b2bbdf384dd0cdccb4edbc4024dce925ad4aab205` |
-| `TNLean/MPS/AreaLaw/ViableSet/ChainPadding.lean` | `ad65b263686ae392903109ac230f38253c49934dd10a3affc86bfcfc626bd9af` |
-| `TNLean/MPS/AreaLaw/ViableSet/ChainPaddingCoordinates.lean` | `e6751d43fbcc670f45162eaffc6625e858e90fbf71fa532db4626735f5c08ab7` |
-| `TNLean/MPS/AreaLaw/ViableSet/ChainPaddingGroundState.lean` | `997aff9f9b0dfedc9bb7f1e4b7bf450f2a67d6010a94288591edc8cab7bbcaad` |
-| `TNLean/MPS/AreaLaw/ViableSet/PrefixMPS.lean` | `00064f02146030af590b602f2637a3c2a0c5cad4abbc9c286bbb6bac9718d08b` |
-| `TNLean/MPS/AreaLaw/ViableSet/SuccessiveAccuracy.lean` | `3a130b520222ab675defbfe4c0ef37f171e48735756a6d5dc8e902ae6fb0ca8e` |
+The manual axiom inspection used standard input and left no Lean fixture.
+These checks are recorded in
+[TNLean #10362](https://github.com/LionSR/TNLean/pull/10362).
 
-## Completed combined verification
+## Reconciliation with the sampled construction on October 30
 
-TNLean `da3ab8dcc9` and QICLean `4276de2e` passed full builds, strict
-checks, imported foundation audits and compiled blueprint checks. The
-complete phase records, timing qualifications and remaining scope are
-recorded in [the integration audit](2026-10-29_verified_soft_residual_refinement_range.md).
+TNLean main at `b285e741bc` includes the sampled successive construction
+from #10339. Its `ViableSet/CutDecomposition.lean` and `ViableSet/FinalMPS.lean`
+are identical to the corresponding sources used here. They therefore no
+longer occur in this pull request's mathematical changes.
+
+The shared cut decomposition and final-span estimates each have one detailed
+blueprint entry. The sampled and Gaussian constructions use those entries.
+All sections are included from the gapped-chain chapter, with gluing, trimming,
+error reduction and the endpoint lemmas preceding the constructions. The final
+MPS extraction and product-state extension conclude the viable-set development.
+Only the principal approximation results are designated as theorems.
+
+The ground-energy discussion is consolidated in
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`. It distinguishes the false
+energy-independent estimate in the preprint from the published correction,
+preserves both counterexamples, and describes the Gaussian existence result.
+The former sampling-note path and bibliography entry have been removed.
+
+QICLean is pinned to `a505cd42d30f9d1ae5629700a11b8d5b95981fbc`, the public
+revision of #1002 after its merge of QICLean main. The pin cannot yet be
+removed: `Matrix.PosSemidef.gap_mono` and
+`Matrix.PosSemidef.tensorSum_gap`, used in `ChainPaddingGroundState.lean`,
+are absent from TNLean main's QICLean revision `14ecc5b64b`.
+The duplicate TNLean declaration
+`Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` is removed from
+`MPS/Core/Blocking.lean`; the imported QICLean theorem now supplies it under
+the same name.
+
+Verification after reconciliation:
+
+- The canonical locked full-library build passes (15,118 jobs), including
+  the updated QICLean dependency. The initial build exposed the duplicate
+  adjoint-injectivity declaration above; the full build was repeated after
+  its removal.
+- `MPS/Core/Blocking.lean` passes strict elaboration with warnings as errors,
+  both automatic implicit options disabled, Mathlib standard linters and
+  the package synthesis-depth limit.
+- Imported axiom inspection of the four principal successive-construction
+  theorems again reports only `propext`, `Classical.choice` and `Quot.sound`.
+- Blueprint/source synchronization, generated imports and manifest agreement
+  pass. The active blueprint has no duplicate labels, and every reference
+  in the changed chapters resolves.
+- The role check reports twenty discrepancies across seven files, each
+  unchanged from the merged main revision `b285e741bc`. None concerns the
+  revised viable-set or Gaussian sections.
+- The changed chapter sources and consolidated note pass the pinned formatter
+  and LaTeX lint checks. The six-page note compiles with its bibliography,
+  without unresolved references or overfull boxes, and has been visually
+  checked.
+- After the full build, `leanblueprint checkdecls` passes for all 31,097
+  blueprint declaration names, and the paper-gap declaration check passes
+  for all 3,397 cited declaration heads. Both checks run under the repository
+  build lock.

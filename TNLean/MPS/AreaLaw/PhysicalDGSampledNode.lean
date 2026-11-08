@@ -123,11 +123,9 @@ theorem exists_physical_dg_sampled_interval_node_event :
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hg : 0 < g := lt_min hgamma (by norm_num)
   have hg1 : g ≤ 1 := min_le_right gamma 1
-  have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z := by
-    intro z hz
-    rcases hgap z hz with hzmu | hzlower
-    · exact Or.inl hzmu
-    · exact Or.inr (by dsimp only [g]; linarith only [min_le_left gamma 1, hzlower])
+  have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z :=
+    fun z hz ↦ (hgap z hz).imp_right
+      ((add_le_add le_rfl (min_le_left gamma 1)).trans ·)
   intro m ell t Delta hqm hm hell ht htail hfilter D htrade p r hpr hrL hlong
   have hmR : (50 : ℝ) ≤ m := by exact_mod_cast hm
   have hm0 : (0 : ℝ) < m := by linarith only [hmR]

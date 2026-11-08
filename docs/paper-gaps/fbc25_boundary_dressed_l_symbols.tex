@@ -1,0 +1,122 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{command}
+
+\title{Boundary-Dressed Gauge Scalars and L-Symbols}
+\author{}
+\date{2026-10-30}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed statements}
+
+Let $g\mapsto O_g$ be a group of matrix product operators and let $A_x$,
+$x\in\mathsf X$, be normal matrix product state tensors permuted by it.
+Fusion tensors $F^<_{g,h},F^>_{g,h}$ reduce the stacked product $O_gO_h$ onto
+$O_{gh}$, and action tensors $A^\Gamma_{g,x},A^{\text{ref}\Gamma}_{g,x}$
+reduce $O_g\cdot A_x$ onto $A_{gx}$.  Ref.~\cite{FrancoRubio2025MPUGauging}
+states that these tensors are unique up to scalars,
+\footnote{Source coordinates in \path{Papers/2502.20257/main.tex}:
+    \texttt{eq:scalar\_fus\_ten} at lines~1500--1504 and
+    \texttt{eq:scalar\_act\_ten} at lines~1871--1873.}
+\begin{align}
+    F^>_{g,h}
+        &\mapsto\beta_{g,h}F^>_{g,h},
+    &F^<_{g,h}
+        &\mapsto\beta_{g,h}^{-1}F^<_{g,h},
+    \label{eq:fbc25_dressed_fusion_gauge}\\
+    A^{\text{ref}\Gamma}_{g,x}
+        &\mapsto\gamma_{g,x}A^{\text{ref}\Gamma}_{g,x},
+    &A^{\Gamma}_{g,x}
+        &\mapsto\gamma_{g,x}^{-1}A^{\Gamma}_{g,x},
+    \label{eq:fbc25_dressed_action_gauge}
+\end{align}
+and defines the $L$-symbol $L^x_{g,h}\in\mathbb C^\times$ as the scalar
+relating the two contractions of fusion and action tensors that reduce
+$(O_gO_h)\cdot A_x$ onto $A_{(gh)x}$.
+\footnote{\texttt{eq:defL} at lines~1875--1913.}
+It then asserts the gauge law
+\begin{align}
+    L^x_{g,h}
+        &\mapsto\frac{\gamma_{gh,x}\beta_{g,h}}{\gamma_{g,hx}\gamma_{h,x}}
+          L^x_{g,h}
+    \label{eq:fbc25_dressed_l_gauge}
+\end{align}
+at line~1918 and the compatibility with the anomaly three-cocycle at
+line~1923.
+
+\section{What the reduction theorem provides}
+
+The only uniqueness statement for reductions onto a normal tensor is
+Theorem~22 of Ref.~\cite{Molnar2018SemiInjective}.
+\footnote{\path{cornerproblem.tex} of
+    \href{https://arxiv.org/abs/1706.07329v2}{arXiv:1706.07329v2},
+    lines~3156--3162.}
+If $(V,W)$ and $(V',W')$ reduce $B$ onto a normal $A$ with equal
+positive-length vectors, there is $z\ne0$ with
+\begin{align}
+    VB^{\mathbf w}
+        &=z\,V'B^{\mathbf w},
+    &B^{\mathbf w}W
+        &=z^{-1}B^{\mathbf w}W'
+    \label{eq:fbc25_dressed_comparison}
+\end{align}
+for every word $\mathbf w$ longer than twice the nilpotency length.  Neither
+source shows $V=zV'$ itself.  The scalars $\beta_{g,h}$ and $\gamma_{g,x}$
+relating two choices of tensors, and the $L$-symbols, are therefore not
+defined as bare scalars by the printed argument.
+
+\section{The local fix}
+
+All three families are defined by the dressed comparison
+(\ref{eq:fbc25_dressed_comparison}): $\beta_{g,h}$ compares the left fusion
+tensors of two choices against long words of $O_gO_h$, $\gamma_{g,x}$
+compares the left action tensors against long words of $O_g\cdot A_x$, and
+$L^x_{g,h}$ compares the two left boundaries against long words of
+$(O_gO_h)\cdot A_x$.  Each is unique, because the left boundary of a
+reduction onto a normal tensor of positive bond dimension does not vanish on
+arbitrarily long words.
+
+With these definitions the gauge law (\ref{eq:fbc25_dressed_l_gauge}) holds
+exactly.  Changing the action tensors of $h$ and then of $g$ multiplies the
+first boundary by $\gamma_{h,x}\gamma_{g,hx}$ against long words, after
+pulling the second comparison back along the reduction by the action of $h$.
+Changing the fusion tensor and then the action tensor of $gh$ multiplies the
+second boundary by $\beta_{g,h}\gamma_{gh,x}$.  Comparing the two
+expressions for the first boundary of the original choice on a word on which
+it does not vanish gives (\ref{eq:fbc25_dressed_l_gauge}).
+
+Conversely, rescaling actual tensors as in
+(\ref{eq:fbc25_dressed_fusion_gauge}) and
+(\ref{eq:fbc25_dressed_action_gauge}) is again a choice of fusion and action
+tensors, and its dressed comparison scalars are exactly $\beta$ and
+$\gamma$.  Hence every joint scalar gauge of the $L$-symbols is realized by
+tensors.  This is what the later arguments of the source use: the single-block
+statement that $\omega=L=1$ in some gauge (line~1926), the stabilizer form of
+nonanomalous $L$-symbols (\texttt{lemma:h1h2}, lines~7028--7042), and the
+block-independence criterion (\texttt{prop:BI\_psi}, lines~7042--7064).  All
+three hold verbatim for the dressed scalars.
+
+Recovering bare scalars, that is $F'^<=\beta^{-1}F^<$ for every pair of
+choices, would require an argument absent from both sources and is not
+asserted.\footnote{Formal declarations:
+\leanid{MPOTensor.GroupFamily.FusionData.rescale},
+\leanid{MPOTensor.GroupFamily.BlockActionData.relativeScalar},
+\leanid{MPOTensor.GroupFamily.BlockActionData.lSymbol\_eq\_gauge}, and
+\leanid{MPOTensor.GroupFamily.BlockActionData.lSymbol\_rescale} in
+\doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocksGauge}.}
+
+\textbf{Verdict: resolved local fix.}
+The dressed scalars satisfy every printed relation, and every printed gauge is
+realized by rescaled tensors.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

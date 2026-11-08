@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.ComplexSqrt
 import TNLean.PEPS.RegularRegionCoordinates
 import TNLean.PEPS.RegularProjectorOpenRegion
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Canonical blocked-region coefficients in spanning-tree coordinates
@@ -206,10 +207,7 @@ private theorem projector_matrix_apply_pointwise (R : Finset V)
   classical
   rw [regularProjectorOpenRegionMatrix_apply, Fintype.sum_prod_type]
   apply congrArg ((Fintype.card G : ℂ)⁻¹ ^ R.card * ·)
-  apply Finset.sum_congr rfl
-  intro η _
-  apply Finset.sum_congr rfl
-  intro q _
+  refine Finset.sum_congr₂ fun η _ q _ ↦ ?_
   have hlocal : (∀ w : Vertex R,
       α w = q w • (fun e => η ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩)) ↔
       ∀ w (e : IncidentEdge Γ w.1),

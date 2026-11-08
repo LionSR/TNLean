@@ -8,7 +8,7 @@
     upward bond value is always $g$, including the vertical seam.
 \end{definition}
 
-\begin{theorem}[Opposite fluxes on adjacent plaquettes]%
+\begin{lemma}[Opposite fluxes on adjacent plaquettes]%
     \label{thm:peps_torus_shared_flux_pair}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSharedPlaquetteInsertion,
         TNLean.PEPS.torusSharedPlaquetteInsertion_eq_treeCycleAssignment}
@@ -22,7 +22,7 @@
     $(g,g^{-1})$. The ordered insertion is precisely $k_v(g)$ on the
     derived middle chord of the translated six-site spanning tree.
     These assertions hold at every position, including both seams.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The shared upward side of the left plaquette is the reversed left side
     of the right plaquette, while the remaining bond values are identities.
@@ -30,7 +30,7 @@
     completes the identification.
 \end{proof}
 
-\begin{theorem}[Coherent opposite-pair creation on six original spins]%
+\begin{lemma}[Coherent opposite-pair creation on six original spins]%
     \label{thm:peps_torus_translated_flux_creation}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedPhysicalFluxCreation,
         TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedGlobalFluxCreation}
@@ -60,7 +60,7 @@
     at least four and three. Its parent-Hamiltonian interpretation and
     unrestricted geometry remain separate; see
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the chosen-cycle creation theorem to the derived middle
     chord with the ordered element $k_v(g)$, inversion commutes with

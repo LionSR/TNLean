@@ -32,31 +32,7 @@ outcomes.
         QuantumCircuit.IsPreparedWithMeasurementsInDepth}
     \leanok
     \uses{def:qc_local_circuit}
-    The local labels are $\{0,\dots,d-1\}$. For a set $S$ of sites of the
-    ring of $N$ sites and a string $m\colon S\to\{0,\dots,d-1\}$, let $P_m$
-    be the projection onto the span of the basis vectors $\ket{x}$ with
-    $x_i=m_i$ for every $i\in S$; these are the outcome projections of a
-    measurement of the sites of $S$ in the computational basis, and $P_m$ is
-    the projection onto the configurations agreeing on $S$ with any
-    configuration extending $m$. A \emph{protocol} consists of a product
-    vector $\ket{\pi}$, a local circuit $U$ of depth $T_1$, a set $S$ of
-    measured sites, and for every $m$ unitaries $v_{m,i}$ on the sites $i$,
-    with product $V_m=\bigotimes_iv_{m,i}$. It \emph{prepares} a vector
-    $\ket{\psi}$ if $\ket{\pi}\neq0$ and for every $m$ with
-    $P_mU\ket{\pi}\neq0$ there is $c\in\mathbb C$ with
-    $V_mP_mU\ket{\pi}=c\ket{\psi}$. A vector is \emph{prepared with
-        measurements in depth $T$} if a protocol with $T_1\leq T$ prepares
-    it.
-
-    The model is that of \cite{Piroli2021LOCC}, where the class of such
-    preparations is called $\mathrm{QCcc}$. The correction $V_m$ may depend on
-    the whole string $m$: classical communication is global and free, and the
-    single-site corrections are not counted. Ancillas are sites of the ring,
-    and the local unitaries between the layers of the circuit, acting on a
-    site and its ancillas and free in \cite{Piroli2021LOCC}, are counted here
-    as gates. The correction $V_m$ is a local unitary in the sense of
-    \cite{Piroli2021LOCC}. So every preparation in this sense is one in the
-    sense of \cite{Piroli2021LOCC}, of no larger depth.
+    For $S\subseteq\Z_N$ and $m\colon S\to\{0,\dots,d-1\}$, let $P_m$ be the computational-basis projection onto $\operatorname{span}\{\ket x:x|_S=m\}$. A \emph{measurement protocol} $(\ket\pi,U,S,(v_{m,i}))$ consists of a product vector $\ket\pi$, a depth-$T_1$ local circuit $U$, a measured site set $S$, and single-site unitaries $v_{m,i}\in\mathrm U(d)$ forming $V_m=\bigotimes_i v_{m,i}$ (representing $\mathrm{QCcc}$ of~\cite{Piroli2021LOCC} with free classical communication and single-site corrections). It \emph{prepares} $\ket\psi$ if $\ket\pi\neq0$ and $\forall m,\,P_mU\ket\pi\neq0\implies\exists c\in\C,\,V_mP_mU\ket\pi=c\ket\psi$. A vector $\ket\psi$ is \emph{prepared with measurements in depth $T$} if prepared by a protocol with $T_1\leq T$.
 \end{definition}
 
 \begin{lemma}[Outcomes of nonzero probability]
@@ -71,21 +47,11 @@ outcomes.
         QuantumCircuit.MeasurementProtocol.IsPreparationOf.ne_zero}
     \leanok
     \uses{def:qc_measurement_preparation}
-    The outcome projections satisfy $\sum_mP_m=\mathbb 1$, and a product of
-    unitaries on the sites is unitary; a unitary matrix maps only the zero
-    vector to zero. Hence, for a protocol with
-    $\ket{\pi}\neq0$, some outcome has $P_mU\ket{\pi}\neq0$, then
-    $V_mP_mU\ket{\pi}\neq0$, and every vector that the protocol prepares is
-    nonzero.
+    Since $\sum_m P_m=\mathbb 1$ and $U,V_m$ are unitary, every protocol with $\ket\pi\neq0$ has some outcome $m$ with $P_mU\ket\pi\neq0$ and $V_mP_mU\ket\pi\neq0$, so every vector $\ket\psi$ prepared by the protocol satisfies $\ket\psi\neq0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    For each configuration $x$ exactly one string $m$, the restriction of $x$
-    to $S$, has $P_m\ket{x}\neq0$. So $\sum_mP_mU\ket{\pi}=U\ket{\pi}$, which
-    is nonzero because $U$ is unitary; the unitary $V_m=\bigotimes_iv_{m,i}$,
-    with $V_m^\dagger V_m=\bigotimes_iv_{m,i}^\dagger v_{m,i}=\mathbb 1$,
-    keeps a nonzero vector nonzero, and $V_mP_mU\ket{\pi}=c\ket{\psi}\neq0$ forces
-    $\ket{\psi}\neq0$.
+    Since $\sum_m P_m=\mathbb 1$, $\sum_m P_mU\ket\pi=U\ket\pi\neq0$, so $P_mU\ket\pi\neq0$ for some $m$; unitarity of $V_m=\bigotimes_i v_{m,i}$ then gives $c\ket\psi=V_mP_mU\ket\pi\neq0$, forcing $\ket\psi\neq0$.
 \end{proof}
 
 \begin{lemma}[Protocols without measurements]
@@ -95,21 +61,11 @@ outcomes.
         QuantumCircuit.smul_productVector}
     \leanok
     \uses{def:qc_measurement_preparation, lem:qc_measurement_outcomes}
-    A nonzero vector prepared in depth $T$ is prepared with measurements in
-    depth $T$. Conversely, if a protocol measuring no site, with $T_1\leq T$,
-    prepares $\ket{\psi}$, then there are unitaries $u_i$ on the sites $i$
-    such that $\bigotimes_iu_i\ket{\psi}$ is prepared in depth $T$.
+    Every nonzero vector prepared in depth $T$ is prepared with measurements in depth $T$ ($S=\varnothing$, $v_{m,i}=\mathbb 1$). Conversely, if a protocol with $S=\varnothing$ and $T_1\leq T$ prepares $\ket\psi$, then $\bigotimes_i u_i\ket\psi$ is prepared in depth $T$ for single-site unitaries $u_i=v_{\varnothing,i}^\dagger$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Taking $S=\emptyset$ and $v_{m,i}=\mathbb 1$ gives the first statement.
-    Conversely, when no site is measured, $P_m=\mathbb 1$ for the unique
-    string $m$, so $V_mU\ket{\pi}=c\ket{\psi}$ with $c\neq0$ by
-    Lemma~\ref{lem:qc_measurement_outcomes}. Setting $u_i=v_{m,i}^\dagger$
-    gives $\bigotimes_iu_i\ket{\psi}=U(c^{-1}\ket{\pi})$, where
-    $c^{-1}\ket{\pi}$ is the product vector obtained by multiplying one site's
-    vector by $c^{-1}$, and padding the circuit $U$ of depth at most $T$ with
-    empty layers brings its depth to $T$.
+    When $S=\varnothing$, the unique outcome has $P_\varnothing=\mathbb 1$, so $V_\varnothing U\ket\pi=c\ket\psi$ with $c\neq0$ by Lemma~\ref{lem:qc_measurement_outcomes}, giving $(\bigotimes_i v_{\varnothing,i}^\dagger)\ket\psi=U(c^{-1}\ket\pi)$ at depth $T$ (padding $U$ with $T-T_1$ empty layers).
 \end{proof}
 
 \begin{lemma}[Layers of permutation gates]
@@ -123,37 +79,14 @@ outcomes.
         Matrix.finKronecker_permMatrix_mulVec}
     \leanok
     \uses{def:qc_local_circuit}
-    Let $\sigma$ be a permutation of the configurations of a finite set of
-    sites, such as the ring, that changes only the sites of a set $X$, the new
-    values at these sites depending only on the old values there. Its
-    permutation matrix $P_\sigma$, $(P_\sigma v)(x)=v(\sigma x)$, is a unitary
-    acting on $X$. Examples are the shift $x\mapsto x+f(x)e_t$ at a site $t\in
-        X$, with values in $\mathbb Z_d$ and $f$ reading only the sites of
-    $X\setminus\{t\}$. If $\sigma_k$, $k\in K$, are such permutations for
-    pairwise disjoint pairs $\{k,k+1\}$, the layer of the gates $P_{\sigma_k}$
-    acts as $v\mapsto v\circ\rho$, where $\rho(x)$ agrees with $\sigma_k(x)$
-    on the pair $\{k,k+1\}$ and with $x$ off all the pairs; here the sites
-    form the ring. For shifts $\sigma_k\colon x\mapsto x+f_k(x)e_{t_k}$ this
-    reads $\rho(x)_{t_k}=x_{t_k}+f_k(x)$, and $\rho(x)_i=x_i$ at every site
-    $i$ that is none of the $t_k$. Finally, for permutations $\tau_i$ of the
-    labels of the sites $i$ of the ring, the product $\bigotimes_iP_{\tau_i}$ acts as
-    $v\mapsto v\circ\tau$, where $\tau(x)_i=\tau_i(x_i)$.
+    Let $\sigma$ be a configuration permutation supported on $X\subseteq I$ (i.e., $\sigma(x)|_{X^c}=x|_{X^c}$ and $\sigma(x)|_X$ depends only on $x|_X$, such as a shift $x\mapsto x+f(x|_{X\setminus\{t\}})e_t$ in $\mathbb Z_d$ at $t\in X$). Then $(P_\sigma v)(x)=v(\sigma x)$ defines a unitary $P_\sigma\in\mathcal A_X$. For pairwise disjoint ring bonds $\{k,k+1\}$ ($k\in K$) and local permutations $\sigma_k$, the layer of gates $P_{\sigma_k}$ acts as $v\mapsto v\circ\rho$, where $\rho|_{\{k,k+1\}}=\sigma_k|_{\{k,k+1\}}$ and $\rho$ fixes sites outside $\bigcup_{k\in K}\{k,k+1\}$. For single-site label permutations $\tau_i$, $(\bigotimes_i P_{\tau_i}v)(x)=v(\tau_0(x_0),\dots,\tau_{N-1}(x_{N-1}))$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Enumerating $X$ writes $P_\sigma$ as $Y\otimes\mathbb 1$ with
-    $Y_{u,w}=1$ if $w=\sigma(x)|_X$ for some $x$ with $x|_X=u$, and $0$
-    otherwise; permutation matrices are unitary. By induction over the
-    pairs, $P_{\sigma_a}P_\rho=P_{\rho\sigma_a}$, where $\rho\sigma_a$
-    agrees with $\sigma_a$ on the pair $\{a,a+1\}$ (which the earlier pairs
-    do not meet) and with $\sigma_k$ on each earlier pair $\{k,k+1\}$ (because
-    $\sigma_a(x)$ agrees with $x$ there). Finally, the entry of
-    $\bigotimes_iP_{\tau_i}$ at $(x,y)$ is $\prod_i[y_i=\tau_i(x_i)]$, which is
-    $1$ if $y=\tau(x)$ and $0$ otherwise.
+    Under $I=X\sqcup X^c$, $P_\sigma=Y\otimes\mathbb 1_{X^c}\in\mathcal A_X$ is a permutation matrix and hence unitary. By induction on $K$, $P_{\sigma_a}P_\rho=P_{\rho\sigma_a}$ acts as $\sigma_k$ on each disjoint bond $\{k,k+1\}$, and $(\bigotimes_i P_{\tau_i})_{x,y}=\prod_i\delta_{y_i,\tau_i(x_i)}$.
 \end{proof}
 
-From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with
-$d\ge1$.
+From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{definition}[Measurement rounds]
     \label{def:qc_measurement_rounds}
@@ -164,34 +97,7 @@ $d\ge1$.
         QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth}
     \leanok
     \uses{def:qc_measurement_preparation}
-    A \emph{measurement round} consists of a local circuit $U$, a set $S$ of
-    sites measured in the computational basis, and for every outcome
-    $m\colon S\to\mathbb Z_d$ unitaries $v_{m,i}$ on the sites $i$, with product
-    $V_m=\bigotimes_{i}v_{m,i}$. Its operator for the outcome $m$ is $V_{m}P_{m}U$,
-    with $P_m$ the outcome projection of
-    Definition~\ref{def:qc_measurement_preparation}, and its depth is the
-    number of layers of $U$. With a product vector it is a protocol in the sense
-    of that definition. The \emph{outputs} of a sequence of rounds
-    $R_1,\dots,R_n$ from a vector $\ket v$ are the vectors
-    $K_n\cdots K_1\ket v$, with $K_j$ the operator of $R_j$ for some outcome. A
-    vector $\ket\psi$ is \emph{prepared with measurement rounds in depth $T$}
-    if there are a product vector $\ket\pi\neq0$ and rounds of total depth at
-    most $T$ such that every nonzero output from $\ket\pi$ is a multiple of
-    $\ket\psi$.
-
-    Every round is a protocol of $\mathrm{QCcc}_\ell$ of
-    \cite{Piroli2021LOCC} of no larger depth, in the sense of
-    Definition~\ref{def:qc_measurement_preparation}; that paper performs a
-    single round and notes that ``one could also define a more general scheme
-    with multiple rounds of LOCC''. A sequence of rounds is a composition of
-    such transformations, with the depth counted as the total number of layers.
-    The number of rounds is not bounded: the tree circuit of
-    Chapter~\ref{ch:log_depth_preparation} with $k$ levels uses $2k$ rounds,
-    whereas in the class $\mathrm{QCcc}^{(k)}_\ell$ of the paragraph ``Phases
-    of matter'' of \cite{Piroli2021LOCC} the number $k$ of composed
-    transformations does not depend on the system size. Several rounds are needed when
-    a correction must precede gates that do not commute with it, as for a
-    teleported register on which an isometry acts.
+    A \emph{measurement round} $R=(U,S,(v_{m,i}))$ of depth $\operatorname{depth}(R)=\operatorname{depth}(U)$ has outcome operators $K_m=V_mP_mU$ ($V_m=\bigotimes_i v_{m,i}$). The \emph{outputs} of rounds $R_1,\dots,R_n$ from $\ket v$ are the vectors $K_{m_n}^{(n)}\cdots K_{m_1}^{(1)}\ket v$. A vector $\ket\psi$ is \emph{prepared with measurement rounds in depth $T$} if there exist a product vector $\ket\pi\neq0$ and rounds $R_1,\dots,R_n$ with $\sum_{j=1}^n\operatorname{depth}(R_j)\le T$ such that every nonzero output from $\ket\pi$ is a scalar multiple of $\ket\psi$ (iterating the single-round $\mathrm{QCcc}_\ell$ scheme of~\cite{Piroli2021LOCC}).
 \end{definition}
 
 \begin{lemma}[Outputs of rounds]
@@ -208,22 +114,11 @@ $d\ge1$.
         QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth}
     \leanok
     \uses{def:qc_measurement_rounds, lem:qc_measurement_outcomes}
-    The output of the protocol of a round and a product vector $\ket\pi$ for
-    the outcome $m$ is $V_{m}P_{m}U\ket\pi$. For a nonzero vector some outcome of a
-    round gives a nonzero vector, so a nonzero vector has a nonzero output
-    under every sequence of rounds, and a vector prepared with measurement
-    rounds is nonzero. The outputs of a multiple $c\ket v$ are the multiples by
-    $c$ of the outputs of $\ket v$, and the outputs of a concatenation of two
-    sequences are the outputs of the second sequence from the outputs of the
-    first. A vector prepared with measurements in depth $T$ is prepared with
-    one measurement round in depth $T$.
+    Every $\ket v\neq0$ produces at least one nonzero output under any sequence of rounds $\mathcal R$, so any vector prepared with measurement rounds is nonzero. Outputs scale linearly with $c\ket v$, compose under concatenation $\mathcal R_1\mathbin{+\!+}\mathcal R_2$, and a $1$-round preparation coincides with Definition~\ref{def:qc_measurement_preparation}.
 \end{lemma}
 \begin{proof}
     \leanok
-    Since $\sum_{m}P_{m}=\mathbb 1$ and $U$ is unitary, some $P_{m}U\ket v$ is
-    nonzero, and the unitary $V_m$ keeps it nonzero. The other statements
-    follow by induction over the sequence of rounds and from the linearity of
-    the operators.
+    Since $\sum_m P_m=\mathbb 1$ and $U,V_m$ are unitary, $\ket v\neq0\implies\exists m,\,V_mP_mU\ket v\neq0$; induction on $\mathcal R$ and linearity of $K_m$ yield the remaining claims.
 \end{proof}
 
 \begin{definition}[Implementation by rounds]
@@ -232,11 +127,7 @@ $d\ge1$.
         QuantumCircuit.MeasurementRound.IsRoundsImplementationOn}
     \leanok
     \uses{def:qc_measurement_rounds}
-    Let $E$ be a set of vectors and $W$ a matrix. A round \emph{implements}
-    $W$ on $E$ if for every outcome $m$ there is $c\in\mathbb C$ with
-    $V_{m}P_{m}U\ket v=cW\ket v$ for every $\ket v\in E$. A sequence of rounds
-    \emph{implements} $W$ on $E$ if every output from every $\ket v\in E$ is a
-    multiple of $W\ket v$.
+    A round $R$ \emph{implements} $W$ on a vector set $E$ if $\forall m,\exists c\in\C,\forall\ket v\in E,\,V_mP_mU\ket v=cW\ket v$. A round sequence $\mathcal R$ \emph{implements} $W$ on $E$ if every output of $\mathcal R$ from $\ket v\in E$ is a scalar multiple of $W\ket v$.
 \end{definition}
 
 \begin{lemma}[Implementations compose]
@@ -248,23 +139,11 @@ $d\ge1$.
         QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth}
     \leanok
     \uses{def:qc_round_implementation, lem:qc_measurement_rounds_outputs}
-    If a round $R$ implements $W$ on $E$ and $\ket v\in E$, every output of $R$
-    followed by rounds $R'$ is a multiple of an output of $R'$ from $W\ket v$.
-    The empty sequence implements $\mathbb 1$ on every set, and a sequence
-    implementing $W$ on $E$ implements it on every subset of $E$. If a sequence
-    $\mathcal R$ implements $W$ on $E$, $W$ maps $E$ into $E'$, and a sequence
-    $\mathcal R'$ implements $W'$ on $E'$, then $\mathcal R$ followed by
-    $\mathcal R'$ implements $W'W$ on $E$. If $\mathcal R$ implements $W$ on
-    $E$ and the product vector $\ket\pi\neq0$ lies in $E$, then $W\ket\pi$ is
-    prepared with measurement rounds in the total depth of $\mathcal R$.
+    The empty sequence implements $\mathbb 1$, implementation is downward closed in $E$, and if $\mathcal R$ implements $W$ on $E$ with $W(E)\subseteq E'$ and $\mathcal R'$ implements $W'$ on $E'$, then $\mathcal R\mathbin{+\!+}\mathcal R'$ implements $W'W$ on $E$. In particular, if $\ket\pi\in E$ is a nonzero product vector, $W\ket\pi$ is prepared with measurement rounds in depth $\sum_{R\in\mathcal R}\operatorname{depth}(R)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    An output of the concatenation is an output $\ket w$ of $\mathcal R'$ from
-    an output $c\,W\ket v$ of $\mathcal R$, hence $\ket w=c\ket{w'}$ with
-    $\ket{w'}$ an output of $\mathcal R'$ from $W\ket v\in E'$, and
-    $\ket{w'}=c'\,W'W\ket v$. The last statement is the definition of
-    preparation with measurement rounds.
+    By Lemma~\ref{lem:qc_measurement_rounds_outputs}, any output of $\mathcal R\mathbin{+\!+}\mathcal R'$ from $\ket v\in E$ is an output of $\mathcal R'$ from $cW\ket v$ ($W\ket v\in E'$), hence equals $cc'W'W\ket v$.
 \end{proof}
 
 \begin{definition}[Preparation with measurements and a circuit]
@@ -272,11 +151,7 @@ $d\ge1$.
     \lean{QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth}
     \leanok
     \uses{def:qc_measurement_preparation, def:qc_local_circuit}
-    A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in
-        depth $T$} if $\ket\psi=U\ket\varphi$ for a vector $\ket\varphi$
-    prepared with measurements in depth $T_1$ and a local circuit $U$ of depth
-    $T_2$, with $T_1+T_2\leq T$. The circuit $U$ does not depend on the
-    outcomes of the measurements.
+    A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in depth $T$} if $\ket\psi=U\ket\varphi$ for $\ket\varphi$ prepared with measurements in depth $T_1$ and a local circuit $U$ (independent of measurement outcomes) of depth $T_2$ with $T_1+T_2\leq T$.
 \end{definition}
 
 \begin{lemma}[Trace norm of a difference of pure states]
@@ -284,30 +159,20 @@ $d\ge1$.
     \lean{Matrix.traceNorm_vecMulVec_le, Matrix.traceNorm_pureStateProj_sub_le,
         Matrix.traceNormPureSub, Matrix.traceNormPureSub_le}
     \leanok
-    For vectors $\ket u,\ket v$ of a finite-dimensional Hilbert space,
-    $\lVert\ket u\bra v\rVert_1\leq\lVert u\rVert\,\lVert v\rVert$. For unit
-    vectors $\ket\psi,\ket\varphi$,
-    \begin{align*}
+    For vectors $\ket u,\ket v$, $\lVert\ket u\bra v\rVert_1\leq\lVert u\rVert\,\lVert v\rVert$. For unit vectors $\ket\psi,\ket\varphi$,
+    \begin{align}
         \bigl\lVert\ket\psi\bra\psi-\ket\varphi\bra\varphi\bigr\rVert_1
-        \leq2\sqrt{2\bigl(1-\lvert\braket{\psi|\varphi}\rvert\bigr)}.
-    \end{align*}
+         & \leq2\sqrt{2\bigl(1-\lvert\braket{\psi|\varphi}\rvert\bigr)}.\notag
+    \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
-    Let $U$ be a unitary with
-    $\lVert X\rVert_1=\operatorname{tr}(X^\dagger U)$ for $X=\ket u\bra v$.
-    Then $\lVert X\rVert_1=\lvert\braket{u|Uv}\rvert\leq\lVert u\rVert\,
-        \lVert v\rVert$. For the second statement, choosing a phase $c$ with
-    $\braket{\psi|c\varphi}=\lvert\braket{\psi|\varphi}\rvert$ and setting
-    $\ket{\varphi'}=c\ket\varphi$ gives
-    $\ket{\varphi'}\bra{\varphi'}=\ket\varphi\bra\varphi$ and
-    \begin{align*}
+    Choosing $U$ unitary with $\lVert\ket u\bra v\rVert_1=\operatorname{tr}(\ket v\bra u U)=\lvert\braket{u|Uv}\rvert\leq\lVert u\rVert\,\lVert v\rVert$ gives the first bound. With $\ket{\varphi'}=c\ket\varphi$ ($|c|=1$, $\braket{\psi|\varphi'}=\lvert\braket{\psi|\varphi}\rvert$),
+    \begin{align}
         \ket\psi\bra\psi-\ket\varphi\bra\varphi
-        =\ket{\psi-\varphi'}\bra\psi+\ket{\varphi'}\bra{\psi-\varphi'}.
-    \end{align*}
-    By the triangle inequality the trace norm is at most
-    $2\lVert\psi-\varphi'\rVert$, where
-    $\lVert\psi-\varphi'\rVert^2=2-2\lvert\braket{\psi|\varphi}\rvert$.
+         & =\ket{\psi-\varphi'}\bra\psi+\ket{\varphi'}\bra{\psi-\varphi'},\notag
+    \end{align}
+    so the triangle inequality gives $\lVert\ket\psi\bra\psi-\ket\varphi\bra\varphi\rVert_1\le 2\lVert\psi-\varphi'\rVert=2\sqrt{2(1-\lvert\braket{\psi|\varphi}\rvert)}$.
 \end{proof}
 
 \begin{definition}[Asymptotic preparation with measurements]
@@ -315,23 +180,7 @@ $d\ge1$.
     \lean{QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth}
     \leanok
     \uses{def:qc_measurement_circuit_preparation}
-    Let $f\colon\mathbb N\to\mathbb R$ and let $\ket{\varphi_N}$ be a vector on
-    the ring of $N$ sites for every $N$. The sequence $(\ket{\varphi_N})_N$ is
-    \emph{asymptotically prepared with measurements in depth $f$} if there are
-    vectors $\ket{\psi_N}$ such that for all large $N$ the vector
-    $\ket{\psi_N}$ is a unit vector prepared with measurements and a circuit
-    in depth at most $f(N)$, and
-    $\lVert\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}\rVert_1\to0$.
-
-    In the paragraph ``Phases of matter'' of \cite{Piroli2021LOCC}, a
-    sequence $(\ket{\psi_M})_M$ is mapped to a sequence $(\ket{\varphi_M})_M$
-    if, for some $k$, compositions of $k$ channels, each a circuit of depth
-    $f(M)$ assisted by measurements and classical communication, map
-    $\ket{\psi_M}$ to states $\sigma_M$ with
-    $\lVert\sigma_M-\ket{\varphi_M}\bra{\varphi_M}\rVert_1\to0$, where $f$
-    is polylogarithmic; the definition above specializes this relation to a
-    sequence of initial product states with $k=2$ (measurements followed by a
-    circuit) and $\sigma_N=\ket{\psi_N}\bra{\psi_N}$.
+    A sequence $(\ket{\varphi_N})_N$ on $N$-site rings is \emph{asymptotically prepared with measurements in depth $f\colon\mathbb N\to\mathbb R$} if there exist unit vectors $\ket{\psi_N}$ prepared with measurements and a circuit in depth at most $f(N)$ for all large $N$ such that $\lim_{N\to\infty}\lVert\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}\rVert_1=0$ (specializing~\cite[paragraph ``Phases of matter'']{Piroli2021LOCC}).
 \end{definition}
 
 \begin{lemma}[Asymptotic preparation from overlap errors]
@@ -340,19 +189,11 @@ $d\ge1$.
     \leanok
     \uses{def:qc_asymptotic_measurement_preparation,
         lem:qc_pure_state_trace_norm}
-    Let $\varepsilon_N\to0$, let $\ket{\varphi_N}$ be unit vectors for all
-    large $N$, and suppose that for all large $N$ some unit vector
-    $\ket\psi$ with $1-\lvert\braket{\psi|\varphi_N}\rvert\leq\varepsilon_N$
-    is prepared with measurements and a circuit in depth at most $f(N)$. Then
-    $(\ket{\varphi_N})_N$ is asymptotically prepared with measurements in
-    depth $f$.
+    If $\varepsilon_N\to0$ and for all large $N$, $\lVert\varphi_N\rVert=1$ and some unit vector $\ket{\psi_N}$ prepared with measurements and a circuit in depth at most $f(N)$ satisfies $1-\lvert\braket{\psi_N|\varphi_N}\rvert\leq\varepsilon_N$, then $(\ket{\varphi_N})_N$ is asymptotically prepared with measurements in depth $f$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Choosing such a vector $\ket{\psi_N}$ for every large $N$,
-    Lemma~\ref{lem:qc_pure_state_trace_norm} bounds the trace norm of
-    $\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}$ by
-    $2\sqrt{2\varepsilon_N}$, which tends to zero.
+    By Lemma~\ref{lem:qc_pure_state_trace_norm}, $\lVert\ket{\psi_N}\bra{\psi_N}-\ket{\varphi_N}\bra{\varphi_N}\rVert_1\le 2\sqrt{2\varepsilon_N}\to0$.
 \end{proof}
 
 \begin{lemma}[Layers acting on configurations]
@@ -366,36 +207,18 @@ $d\ge1$.
         QuantumCircuit.embedOp_mulVec_productVector}
     \leanok
     \uses{def:qc_local_circuit, lem:qc_permutation_layers}
-    Let $X_k$ be operators on pairwise disjoint sets $S_k$ of sites, each
-    acting by a map $f_k$ of the configurations of $S_k$, that is
-    $X_kv=v\circ f_k$ for every vector $v$; then $X_k$ has the entry $1$ at
-    $(u,f_k(u))$ and $0$ elsewhere. The product of the $X_k$ acts by the map
-    $\rho$ with $\rho(x)|_{S_k}=f_k(x|_{S_k})$ for every $k$ and
-    $\rho(x)_i=x_i$ at every site $i$ outside all the $S_k$. A permutation
-    $\tau$ of the sites acts as $v\mapsto v\circ(x\mapsto x\circ\tau)$. If $X$
-    acts on the sites of $S$ and the product vector $\ket\pi$ is $\ket z$ on
-    every site of $S$, then $(X\ket\pi)(y)=X_{y|_S,(z,\dots,z)}\pi'(y)$, where
-    $\ket{\pi'}$ is the product vector with the all-ones vector at the sites
-    of $S$ and the vectors of $\ket\pi$ elsewhere.
+    If operators $X_k$ on pairwise disjoint site sets $S_k$ act by $(X_k v)(u)=v(f_k(u))$ (so $(X_k)_{u,w}=\delta_{w,f_k(u)}$), then $\prod_k\operatorname{embed}_{S_k}(X_k)$ acts by $v\mapsto v\circ\rho$, where $\rho(x)|_{S_k}=f_k(x|_{S_k})$ and $\rho(x)|_{(\bigcup_k S_k)^c}=x|_{(\bigcup_k S_k)^c}$. A site permutation $\tau$ acts by $v\mapsto v\circ(x\mapsto x\circ\tau)$. If $X\in\mathcal A_S$ and $\ket\pi=\bigotimes_i\ket{v_i}$ has $\ket{v_i}=\ket z$ for all $i\in S$, then $(X\ket\pi)(y)=X_{y|_S,(z,\dots,z)}\prod_{i\notin S}v_i(y_i)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Applying $X_k$ to the basis vector $\ket u$ gives the entries. The entry of
-    the product at $(x,y)$ is $\prod_k[y|_{S_k}=f_k(x|_{S_k})]$ when $x$ and
-    $y$ agree outside the $S_k$, and $0$ otherwise; this is $1$ exactly when
-    $y=\rho(x)$. For the product vector, only the configuration $y'$ agreeing
-    with $y$ outside $S$ and equal to $(z,\dots,z)$ on $S$ contributes.
+    The matrix entry of $\prod_k\operatorname{embed}_{S_k}(X_k)$ at $(x,y)$ is $\prod_k\delta_{y|_{S_k},f_k(x|_{S_k})}\delta_{y|_{(\bigcup_k S_k)^c},x|_{(\bigcup_k S_k)^c}}=\delta_{y,\rho(x)}$, and for $X\in\mathcal A_S$ only the input configuration equal to $(z,\dots,z)$ on $S$ and $y|_{S^c}$ on $S^c$ contributes to $(X\ket\pi)(y)$.
 \end{proof}
 
 \begin{definition}[GHZ-type states]
     \label{def:qc_ghz_state}
     \lean{QuantumCircuit.ghzState, QuantumCircuit.ghzState_apply}
     \leanok
-    Let $b,M\geq0$ and $\alpha\in\mathbb C^b$. The \emph{GHZ-type
-        state} on $M$ sites of dimension $b$ is
-    $\ket{\chi_M}=\sum_{i=0}^{b-1}\alpha_i\ket{i}^{\otimes M}$. For $M\geq1$
-    and the sites numbered $0,\dots,M-1$, its amplitude at a configuration $s$
-    is $\alpha_{s_0}$ if all $s_n$ are equal and $0$ otherwise.
+    For $b,M\geq0$ and $\alpha\in\mathbb C^b$, the \emph{GHZ-type state} on $M$ sites is $\ket{\chi_M}=\sum_{i=0}^{b-1}\alpha_i\ket{i}^{\otimes M}$ (for $M\ge1$, $\chi_M(s)=\alpha_{s_0}$ if $s_0=\cdots=s_{M-1}$ and $0$ otherwise).
 \end{definition}
 
 \begin{theorem}[GHZ-type states in constant depth with measurements]
@@ -407,42 +230,16 @@ $d\ge1$.
     \leanok
     \uses{def:qc_measurement_preparation, lem:qc_permutation_layers,
         def:qc_ghz_state}
-    Generalizing the $\mathrm{QCcc}_2$ construction of
-    \cite[Example~1]{Piroli2021LOCC} to qudits to realize the constant-depth
-    preparation of $\ket{\chi_M}$ stated in the paragraph ``Long-range MPS
-    using measurements'' of \cite{Malz2024Preparation}, let $M\geq1$, $b\geq1$
-    and $\alpha\in\mathbb C^b$ nonzero, with the labels
-    $\{0,\dots,b-1\}=\mathbb Z_b$. On the ring of $2M$ sites of dimension $b$,
-    numbered $0,\dots,2M-1$, place the system qudit $n\in\{0,\dots,M-1\}$ at
-    the site $2n$ and its ancilla at the site $2n+1$. The GHZ-type state
-    $\ket{\chi_M}=\sum_{i\in\mathbb Z_b}\alpha_i\ket{i}^{\otimes M}$ of
-    Definition~\ref{def:qc_ghz_state} on the system qudits, with every ancilla
-    in $\ket{0}$, is prepared with measurements in depth $2$, with every
-    measurement outcome yielding this exact state.
+    Generalizing~\cite[Example~1]{Piroli2021LOCC} and~\cite[paragraph ``Long-range MPS using measurements'']{Malz2024Preparation}, let $M,b\geq1$ and $0\neq\alpha\in\mathbb C^b$. On the ring of $2M$ sites of dimension $b$ with system sites $2n$ and ancilla sites $2n+1$ ($0\le n<M$), $\ket{\chi_M}_{\rm sys}\otimes\ket{0}^{\otimes M}_{\rm anc}$ is prepared with measurements in depth $2$, deterministically across all outcomes.
 \end{theorem}
 \begin{proof}
     \leanok
-    The amplitude of $\ket{\chi_M}$ at $s$ is $\alpha_{s_0}$ if all $s_n$ are
-    equal and $0$ otherwise, with values taken in $\mathbb Z_b$. Starting from
-    the nonzero product vector (since $\alpha\neq0$) that places
-    $\sum_i\alpha_i\ket{i}$ on system qudit $0$, $\sum_i\ket{i}$ on the other
-    system qudits, and $\ket{0}$ on the ancillas, a first layer of gates
-    $\ket{k}\ket{a}\mapsto\ket{k}\ket{a+k}$ on system qudit $n$ and its
-    ancilla followed by a second layer of gates
-    $\ket{a}\ket{k}\mapsto\ket{a-k}\ket{k}$ on ancilla $n$ and system qudit
-    $n+1$ for $n<M-1$ produces
-    \begin{align*}
-        \sum_{k}\alpha_{k_0}\bigotimes_{n=0}^{M-1}\ket{k_n}
-        \bigotimes_{n=0}^{M-2}\ket{k_n-k_{n+1}}\otimes\ket{0},
-    \end{align*}
-    where the last factor is the last ancilla. Measuring the ancillas $n<M-1$
-    with outcome $m$ forces $k_{n+1}=k_n-m_n$, leaving the system qudits in
-    $\sum_i\alpha_i\bigotimes_n\ket{i-p_n}$ with prefix sums
-    $p_n=m_0+\cdots+m_{n-1}$. Applying the single-site permutation corrections
-    $X^{p_n}$ on system qudit $n$ and $X^{-m_n}$ on ancilla $n$, whose
-    configuration-by-configuration action together with that of the two
-    permutation-gate layers is given by Lemma~\ref{lem:qc_permutation_layers},
-    then yields $\ket{\chi_M}$ with every ancilla in $\ket{0}$.
+    Start from $\bigl(\sum_{i\in\mathbb Z_b}\alpha_i\ket i\bigr)_0\otimes\bigotimes_{n=1}^{M-1}\bigl(\sum_{i\in\mathbb Z_b}\ket i\bigr)_{2n}\otimes\bigotimes_{n=0}^{M-1}\ket 0_{2n+1}\neq0$. Applying the layer of shifts $\ket k_{2n}\ket a_{2n+1}\mapsto\ket k_{2n}\ket{a+k}_{2n+1}$ ($0\le n<M$) and the layer $\ket a_{2n+1}\ket k_{2n+2}\mapsto\ket{a-k}_{2n+1}\ket k_{2n+2}$ ($0\le n<M-1$) produces
+    \begin{align}
+        \sum_{k\in\mathbb Z_b^M}\alpha_{k_0}\bigotimes_{n=0}^{M-1}\ket{k_n}_{2n}
+        \bigotimes_{n=0}^{M-2}\ket{k_n-k_{n+1}}_{2n+1}\otimes\ket{0}_{2M-1}.\notag
+    \end{align}
+    Measuring ancillas $2n+1$ ($n<M-1$) with outcomes $m_n\in\mathbb Z_b$ fixes $k_n=k_0-p_n$ where $p_n=\sum_{j=0}^{n-1}m_j$, and applying $\bigotimes_{n=0}^{M-1}X^{p_n}_{2n}\otimes\bigotimes_{n=0}^{M-2}X^{-m_n}_{2n+1}$ (Lemma~\ref{lem:qc_permutation_layers}) yields $\ket{\chi_M}_{\rm sys}\otimes\ket 0^{\otimes M}_{\rm anc}$.
 \end{proof}
 
 \input{chapter/ch33_local_quantum_circuits_adaptive}

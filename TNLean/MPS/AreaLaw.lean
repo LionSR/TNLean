@@ -9,8 +9,10 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
 import TNLean.MPS.AreaLaw.AKLV
+import TNLean.MPS.AreaLaw.ALVV
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
+import TNLean.MPS.AreaLaw.Algorithm
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BalancedIntervalTree
 import TNLean.MPS.AreaLaw.BandDissolution
@@ -170,9 +172,16 @@ import TNLean.MPS.AreaLaw.SharpPhysicalCompression
 import TNLean.MPS.AreaLaw.SharpRankCount
 import TNLean.MPS.AreaLaw.ShiftedHeatMPO
 import TNLean.MPS.AreaLaw.ShortRegionViableFamily
+import TNLean.MPS.AreaLaw.SnakeGridApproximation
+import TNLean.MPS.AreaLaw.SnakeGridAreaLaw
+import TNLean.MPS.AreaLaw.SnakeGridGeometry
+import TNLean.MPS.AreaLaw.SnakeGridParameters
 import TNLean.MPS.AreaLaw.SoftTruncatedHamiltonianMPO
 import TNLean.MPS.AreaLaw.SoftTruncationMPO
 import TNLean.MPS.AreaLaw.SoftTruncationMPOAccuracy
+import TNLean.MPS.AreaLaw.StripApproximation
+import TNLean.MPS.AreaLaw.StripBufferDiscount
+import TNLean.MPS.AreaLaw.StripGeometry
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian

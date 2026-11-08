@@ -3,44 +3,26 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.ViableSet.SampledPowerRank
-import TNLean.MPS.AreaLaw.ViableSet.CutDecomposition
-import TNLean.MPS.AreaLaw.ViableSet.ErrorReduction
+import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
 
 /-!
-# Sampled left factors for viable-set error reduction
+# Error reduction by the sampled power projector
 
-For positive nearest-neighbour contractions with a unit gapped ground vector,
-choose an accuracy `0 < δ ≤ 1`. The physical sampler is used at
-`Q = 8 / δ` and `η = δ / 8`, so its actual sampled operator is within `δ / 4`
-of the ground projection. Its simultaneous spatial rank bound constructs a
-cut decomposition with at most `r = ℓ * q^(2u)` terms. Every left factor retains
-rank at most `r` at each internal cut.
+Sampling and deterministic error reduction give one family of left factors at each
+cut. With `ℓ` words and multiplicity bound `κ`, there are at most `ℓ * q^(2κ)`
+factors, each with operator Schmidt rank at most `q^(2κ)` at every internal left cut.
+These factors are chosen before the input viable family.
 
-The resulting family `{A_j s}` improves any half-viable input family to error
-`δ`. Its cardinality is at most `a * s` with `a ≤ r`, and its MPS bond is at
-most `r * max 1 b`. The sample is chosen before the cut and the input family;
-at each cut, the factors are chosen before all possible input families.
-Neither a successful sample nor a suitable decomposition is assumed.
+**Local fix (witness normalization):** approximation error `δ / 4` yields viability
+error `δ`, as recorded in `docs/paper-gaps/lvv13_error_reduction_witness_norm.tex`.
+The two approximations are each made at precision `δ / 8`.
 
-**Scope restriction (specified ground energy):** `E0` is an input to the
-normalization, word length and sample count, chosen before the sampled family.
-The count retains `exp (2 * E0 * log (8 / δ) / Δ)`. This is an existence theorem
-for specified ground energy, not a construction uniform in an unknown ground
-energy or a polynomial bound with energy-independent degree. The source-version
-boundary is recorded in `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
-Selection of the word length and relative-error sample budget without an exact
-energy input remains separate. The overall scalar itself is immaterial after
-normalizing the output vectors, as the published Methods observes.
+The normalization and sample count depend explicitly on the specified ground energy.
+This theorem does not assert that these counts have polynomial growth uniformly over
+unbounded ground-energy-to-gap ratios.
 
-The normalization uses the proved overlap-loss factor `4` by sampling to error
-`δ / 4`; the correction to the printed witness-normalization step is recorded
-in `docs/paper-gaps/lvv13_error_reduction_witness_norm.tex`.
-
-Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, Claim `c:errorreduction`,
-lines 580--592 of `algo53.tex`, and the published Methods, Proposition 1,
-p. 6, https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf,
-DOI 10.1038/nphys3345.
+Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`,
+Claim `c:errorreduction`, lines 580–592, and Corollary `c:agsp`, lines 626–649.
 -/
 
 open Matrix
@@ -48,69 +30,56 @@ open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder Kronecker
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The sampled normalized power constructs a left-factor family that improves every
-half-viable input family at a chosen cut. Ground energy is specified before sampling.
-LVV13, Claim c:errorreduction, lines 580--592; published Methods, Proposition 1, p. 6. -/
-theorem exists_sampled_nn_errorReduction
-    {L q : ℕ} (hq : 1 ≤ q)
+/-- The sampled projector supplies both the decomposition and its simultaneous left
+rank bounds for deterministic error reduction. LVV13, Claim `c:errorreduction`,
+lines 580–592, with the documented witness-normalization correction. -/
+theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (h i) (interval L i.val (i.val + 2)))
-    (hpos : ∀ i, (h i).PosSemidef) (hu : ∀ i, h i ≤ 1)
-    {E0 Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (hHΩ : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (E0 : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (E0 : ℂ) • 1 - (Δ : ℂ) •
-      (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hΔ : 0 < Δ) {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1)
-    {p : ℕ} (hp : 0 < p) (hpD : 2 * (q : ℝ) ^ L < (4 : ℝ) ^ p) :
-    let n := Fintype.card (Fin (L - 1)) + 1
-    let Q := 8 / δ
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i (i + 2))) (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ)
+    {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1) :
     let η := δ / 8
-    let m := ⌈((n : ℝ) - E0) / Δ * Real.log Q⌉₊
-    let C := (1 - E0 / n)⁻¹
-    let ℓ := ⌈16 * (p : ℝ) ^ 2 * (n : ℝ) ^ 2 *
-      Real.exp (2 * E0 * Real.log Q / Δ) / η ^ 2⌉₊ + 1
-    let u := ⌈((m : ℝ) / n + Real.log (2 * (n : ℝ) * ℓ)) / Real.log 2⌉₊
-    let r := ℓ * q ^ (2 * u)
-    0 < ℓ ∧ ∃ σ : Fin ℓ → Fin m → Option (Fin (L - 1)),
-      let K := (ℓ : ℂ)⁻¹ • ∑ b,
-        (C : ℂ) ^ m • (List.ofFn fun j ↦ 1 - (σ b j).elim 0 h).prod
-      ‖K - ((C : ℂ) • (1 - (Fintype.card (Fin (L - 1)) + 1 : ℂ)⁻¹ • ∑ i, h i)) ^ m‖ < η ∧
-      ‖K - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ < δ / 4 ∧
-      (∀ b a, WordMultiplicity.countsFinsupp (σ b) a < u) ∧
-      (∀ k : ℕ, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) K) ≤ r) ∧
-      ∀ i : ℕ, i ≤ L → ∃ (a : ℕ) (A : Fin a → LeftBlockMatrix L q i)
-        (B : Fin a → RightBlockMatrix L q i),
-        a ≤ r ∧ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
-          ∑ j, A j ⊗ₖ B j ∧
+    let m := ⌈((L - E₀) / Δ) * Real.log (1 / η)⌉₊
+    let ℓ := sampledProjectorWordCount q L E₀ η m
+    let D := q ^ (2 * sampledProjectorLetterBound L ℓ m)
+    ∃ I : Fin ℓ → Fin m → Fin L,
+      ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 ∧
+      ∀ i : ℕ, i ≤ L → ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
+        (B : Fin N → RightBlockMatrix L q i),
+        N ≤ ℓ * D ∧ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B j ∧
         (∀ j k, 0 < k → k < i → operatorSchmidtRank
           (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
-            ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ r) ∧
-        ∀ (s b : ℕ) (S : Finset (LeftBlockVector L q i)),
-          IsViableMPS Ω s b (1 / 2) S →
-          IsViableMPS Ω (a * s) (r * max 1 b) δ (errorReductionSet Finset.univ A S) := by
+            ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D) ∧
+        ∀ (s b : ℕ) (S : Finset (LeftBlockVector L q i)), IsViableMPS Γ s b (1 / 2) S →
+          IsViableMPS Γ (ℓ * D * s) (D * max 1 b) δ
+            (errorReductionSet Finset.univ A S) := by
   classical
-  intro n Q η m C ℓ u r
-  have hQ : 1 ≤ Q := (le_div_iff₀ hδ).mpr (by linarith only [hδ1])
-  have hη : 0 < η := div_pos hδ (by norm_num)
-  have hsum : η + 1 / Q = δ / 4 := by
-    dsimp only [η, Q]
-    field_simp
-    ring
-  obtain ⟨hℓ, σ, hA, hProj, hcounts, hrank⟩ :=
-    exists_sampled_nn_power_approximation_with_rank hq h hs hpos hu hΩ hHΩ hgap hΔ hQ hη hp hpD
-  let K := (ℓ : ℂ)⁻¹ • ∑ b,
-    (C : ℂ) ^ m • (List.ofFn fun j ↦ 1 - (σ b j).elim 0 h).prod
-  have hProj' : ‖K - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ < δ / 4 := by
-    rwa [hsum] at hProj
-  refine ⟨hℓ, σ, hA, hProj', hcounts, hrank, fun i hi ↦ ?_⟩
-  obtain ⟨a, A, B, ha, hdec, hleft⟩ := exists_cutDecomposition_of_operatorSchmidtRank_le
-    hi _ hrank
-  refine ⟨a, A, B, ha, hdec, hleft, fun s b S hS ↦ ?_⟩
-  have hred := hS.errorReduction_of_norm_sub_groundProjection_le
-    (J := Finset.univ) hi hΩ hdec
-    (fun j _ k hk hki ↦ hleft j k hk hki) hProj'.le (by linarith only [hδ1])
-  have hcard : (Finset.univ : Finset (Fin a)).card = a := by simp
-  simpa only [hcard, show 4 * (δ / 4) = δ by ring] using hred
+  intro η m ℓ D
+  obtain ⟨I, hpower, hsample, hcount, _⟩ :=
+    exists_sampledProjector h hs h0 h1 hgs hΔ (div_pos hδ (by norm_num)) m (Nat.le_ceil _)
+  have hproj : ‖sampledProjector h E₀ I -
+      vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 := by
+    calc
+      _ ≤ ‖sampledProjector h E₀ I - powerProjector (∑ j, h j) L E₀ m‖ +
+          ‖powerProjector (∑ j, h j) L E₀ m -
+            vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ :=
+          norm_sub_le_norm_sub_add_norm_sub _ _ _
+      _ < η + η := add_lt_add_of_lt_of_le hsample hpower
+      _ = δ / 4 := by dsimp only [η]; ring
+  refine ⟨I, hproj, fun i hi ↦ ?_⟩
+  obtain ⟨N, A, B, hN, hdec, hleft⟩ := exists_sampledProjector_cutDecomposition hi h E₀ I
+    (fun t k ↦ operatorSchmidtRank_cutOperator_bondComplementWord_le_all hq h hs (I t)
+      (hcount t) k)
+  refine ⟨N, A, B, hN, hdec, hleft, fun s b S hS ↦ ?_⟩
+  have hout := IsViableMPS.errorReduction_of_norm_sub_groundProjection_le
+    (J := Finset.univ) hi hS hgs.1 hdec
+    (fun j _ k hk0 hki ↦ hleft j k hk0 hki) hproj.le (by linarith only [hδ1])
+  have hout' : IsViableMPS Γ (N * s) (D * max 1 b) δ
+      (errorReductionSet Finset.univ A S) := by
+    simpa only [Finset.card_univ, Fintype.card_fin, show 4 * (δ / 4) = δ by ring] using hout
+  exact ⟨hout'.1.trans (Nat.mul_le_mul_right s hN), hout'.2⟩
 
 end TNLean.MPS.AreaLaw

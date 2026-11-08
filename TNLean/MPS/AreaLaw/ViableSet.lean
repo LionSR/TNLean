@@ -36,10 +36,14 @@ import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
 import TNLean.MPS.AreaLaw.ViableSet.PrefixColumn
 import TNLean.MPS.AreaLaw.ViableSet.PrefixExtraction
 import TNLean.MPS.AreaLaw.ViableSet.PrefixMPS
+import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
+import TNLean.MPS.AreaLaw.ViableSet.SampledFactors
 import TNLean.MPS.AreaLaw.ViableSet.SampledGroundLine
 import TNLean.MPS.AreaLaw.ViableSet.SampledPowerRank
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjector
+import TNLean.MPS.AreaLaw.ViableSet.SampledProjectorPolynomial
+import TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction
 import TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span

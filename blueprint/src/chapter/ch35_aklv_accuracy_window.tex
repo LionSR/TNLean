@@ -11,13 +11,13 @@
     \uses{def:aklv_logarithmic_threshold}
     For squared accuracy $\rho>0$, initial width $s_0$ and gap $g$, set
     \begin{align*}
-        z&=\log(128/\rho),& m&=\left\lceil\sqrt{\sqrt{z^3/g}}\right\rceil,\notag\\
-        s&=s_0+2m,& t&=T(g)+16z,\notag\\
-        \ell&=\left\lceil z\sqrt{(2t+s)/g}\right\rceil.
+        z    & =\log(128/\rho),                           & m & =\left\lceil\sqrt{\sqrt{z^3/g}}\right\rceil,\notag \\
+        s    & =s_0+2m,                                   & t & =T(g)+16z,\notag                                   \\
+        \ell & =\left\lceil z\sqrt{(2t+s)/g}\right\rceil.
     \end{align*}
 \end{definition}
 
-\begin{theorem}[Accuracy and shrinking estimates]
+\begin{lemma}[Accuracy and shrinking estimates]
     \label{thm:aklv_accuracy_parameter_bounds}
     \lean{TNLean.MPS.AreaLaw.aklvAccuracyLog_bounds,
         TNLean.MPS.AreaLaw.aklvAccuracyThreshold_bounds,
@@ -29,13 +29,13 @@
     For $0<\rho\le1$ and $0<g\le1$, one has $z\ge1$,
     $e^{-z}=\rho/128$, $t\ge T(g)>0$, and
     \begin{align*}
-        e^{-t/16}&\le\rho/128,\notag\\
+        e^{-t/16}             & \le\rho/128,\notag    \\
         \delta:=\left(2e^{-2\ell\sqrt{(9g/10)/(2t+s)}}\right)^2
-            &\le\rho^2/4096,\notag\\
-        16\delta+e^{-t/16}/50&\le\rho.
+                              & \le\rho^2/4096,\notag \\
+        16\delta+e^{-t/16}/50 & \le\rho.
     \end{align*}
     Also $\sqrt{\sqrt{z^3/g}}\le m<\sqrt{\sqrt{z^3/g}}+1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The identity for $e^{-z}$ follows from the logarithm.
@@ -49,7 +49,7 @@
     The increment bounds are the defining ceiling inequalities.
 \end{proof}
 
-\begin{theorem}[Centered-window geometry]
+\begin{lemma}[Centered-window geometry]
     \label{thm:aklv_centered_window_geometry}
     \lean{TNLean.MPS.AreaLaw.aklv_centered_window_iff,
         TNLean.MPS.AreaLaw.aklv_initial_window_of_enlarged,
@@ -58,14 +58,14 @@
     Let $0\le k\le L$ be a cut and $s$ a natural width. A window
     $a+\lfloor s/2\rfloor=k$, $a+s+1\le L$ exists exactly when
     \begin{align*}
-        \lfloor s/2\rfloor&\le k,&
-        s-\lfloor s/2\rfloor+1&\le L-k.
+        \lfloor s/2\rfloor     & \le k,   &
+        s-\lfloor s/2\rfloor+1 & \le L-k.
     \end{align*}
     If $s=s_0+2m$ and this window fits, the initial window starting at
     $a_0=a+m$ fits at the same cut.
     If the window does not fit, then
     $\min\{k,L-k\}\le s-\lfloor s/2\rfloor$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The starting point is $a=k-\lfloor s/2\rfloor$.
@@ -74,7 +74,7 @@
     Negating either margin condition gives the asserted short-side bound.
 \end{proof}
 
-\begin{theorem}[An exact finite-dimensional boundary alternative]
+\begin{lemma}[An exact finite-dimensional boundary alternative]
     \label{thm:aklv_exact_boundary_rank}
     \lean{TNLean.MPS.AreaLaw.aklv_rank_cutMatrix_le_pow_min,
         TNLean.MPS.AreaLaw.aklv_centered_window_or_exact_rank}
@@ -85,13 +85,13 @@
     If $q\ge1$, either the prescribed width $s$ fits at $k$ or
     $\Omega$ itself is an exact approximant of rank at most
     $q^{s-\lfloor s/2\rfloor}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Both endpoint coefficient ranks are at most one. Moving sites from
     the nearer endpoint to $k$ costs at most one factor $q$ per site.
     Apply the short-side bound of
-    Theorem~\ref{thm:aklv_centered_window_geometry} when the window fails
+    Lemma~\ref{thm:aklv_centered_window_geometry} when the window fails
     to fit. This includes $k=0,L$ and chains shorter than the window.
 \end{proof}
 
@@ -107,7 +107,7 @@
     \end{align*}
 \end{definition}
 
-\begin{theorem}[The logarithm of the exact rank budget]
+\begin{lemma}[The logarithm of the exact rank budget]
     \label{thm:aklv_accuracy_rank_log}
     \lean{TNLean.MPS.AreaLaw.aklvAccuracyRankBound_log}
     \leanok
@@ -115,9 +115,9 @@
     For $q\ge1$, the budget has exactly the logarithmic expression
     \begin{align*}
         \log B=\max\{\log D_0+E\log(q(\ell+1)),\
-            (s-\lfloor s/2\rfloor)\log q\}.
+        (s-\lfloor s/2\rfloor)\log q\}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     All factors are positive. The logarithm preserves the larger of the two
@@ -144,7 +144,7 @@
 
 % The source's uniform fourth-root logarithmic comparison and final global
 % MPS assembly are not asserted by this exact-budget per-cut theorem.
-\begin{theorem}[Actual accuracy-dependent approximants at every cut]
+\begin{lemma}[Actual accuracy-dependent approximants at every cut]
     \label{thm:aklv_physical_accuracy_window}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_accuracy_window}
     \leanok
@@ -162,11 +162,11 @@
     $\|y-\Omega\|^2\le\rho$ and $\operatorname{SR}_k(y)\le B$.
     It is either $\Omega$ exactly or an actual accuracy-dependent filter
     image at the same cut.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If the enlarged window fails to fit, use
-    Theorem~\ref{thm:aklv_exact_boundary_rank} with $y=\Omega$.
+    Lemma~\ref{thm:aklv_exact_boundary_rank} with $y=\Omega$.
     Otherwise its initial window fits at the same cut. The coherent
     construction gives its actual initial vector $x$, of rank at most $D_0$.
     This physical construction also derives $g\le1$.

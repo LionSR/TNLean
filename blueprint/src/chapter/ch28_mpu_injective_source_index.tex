@@ -1,4 +1,4 @@
-\begin{theorem}[Canonical representative of an injective MPU]
+\begin{lemma}[Canonical representative of an injective MPU]
     \label{thm:mpu_injective_cfii_representative}
     \lean{MPOTensor.IsMPU.exists_cfii_representative_of_isInjective}
     \leanok
@@ -13,7 +13,7 @@
         \mathcal V^{ij} & =X\mathcal U^{ij}X^{-1}, \\
         V^{(N)}         & =U^{(N)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_reduced_cfii_representative,
@@ -30,7 +30,7 @@
     with $X=Q$.
 \end{proof}
 
-\begin{theorem}[Source ranks and index of a simple injective MPU]
+\begin{lemma}[Source ranks and index of a simple injective MPU]
     \label{thm:mpu_simple_injective_source_index}
     \lean{MPOTensor.IsMPU.rightRank_mul_leftRank_of_isInjective_of_isMPUSimple,
         MPOTensor.IsMPU.index_eq_logb_of_isInjective_of_isMPUSimple}
@@ -46,7 +46,7 @@
         \operatorname{ind}(\mathcal U)
               & =\frac12\bigl(\log_2 r-\log_2\ell\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_injective_cfii_representative,

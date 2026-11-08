@@ -1,4 +1,4 @@
-\begin{theorem}[Resolving the partner label in a regional charge pair]
+\begin{lemma}[Resolving the partner label in a regional charge pair]
     \label{thm:peps_closed_charge_pair_resolution}
     \lean{TNLean.PEPS.sum_openRegionWeight_regularCorrelatedChargePair}
     \leanok
@@ -16,13 +16,13 @@
     both sides are the open contractions of the original site tensors with the
     character weight correlated between the two labels.
     \uses{def:peps_regular_correlated_charge_state}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the original open contraction and interchanging its finite label
     sums allows the diagonal indicator to fix $q=\eta_{e_1}$.
 \end{proof}
 
-\begin{theorem}[Original-spin preparation of the closed correlated pair]
+\begin{lemma}[Original-spin preparation of the closed correlated pair]
     \label{thm:peps_closed_charge_pair_preparation}
     \lean{TNLean.PEPS.exists_unitary_regularClosedChargePairPreparation,
         TNLean.PEPS.regularClosedChargePairPreparation_normSq_ne_zero}
@@ -49,7 +49,7 @@
     It does not identify the prescribed charge--flux braid, its flux-string
     background, or the reunion experiment of lines 2560--2615; see
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_closed_charge_pair_resolution,

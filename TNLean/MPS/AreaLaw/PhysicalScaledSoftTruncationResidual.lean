@@ -14,7 +14,7 @@ operator on the whole original low-energy window. The scalar remainder is
 factored through an exponential of the same regional operator. No moment or
 residual estimate is assumed in the physical theorem.
 
-**Scope restriction (scale at most four times the order):** The scale is positive and at
+**Local fix (corrected residual comparison):** The scale is positive and at
 most four times the positive order. This is a corrected auxiliary to ALVV,
 arXiv:1602.08828v2, `def:soft-trunc` and `lem:exp-approx`, lines 1175–1255,
 rather than the printed first uniform energy estimate or the reverse

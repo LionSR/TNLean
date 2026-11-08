@@ -43,7 +43,7 @@ used in Lemma bdcf before the Appendix A contraction step.
 This is the repeated-block consequence of the sector-match case in
 arXiv:1708.00029, Appendix A, lines 961--1117. -/
 theorem periodicOverlap_gaugeEquiv_of_sector_match
-    [NeZero D] (A B : MPSTensor d D)
+    (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     {dimA dimB : Fin m → ℕ}

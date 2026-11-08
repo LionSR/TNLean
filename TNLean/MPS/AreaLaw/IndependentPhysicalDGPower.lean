@@ -135,18 +135,11 @@ theorem exists_independent_long_middle_actual_dg_word_family :
   have hwidth : eta1 - eta0 = 4 * g / 5 := by dsimp only [eta0, eta1]; ring
   have hcontract := hfilter (upper - eta0) hR0 hRbudget
   rw [← hwidth] at hcontract
-  have hB : B.IsHermitian := by
-    have hterm (j : Fin 5) : IsSelfAdjoint
-        ((if j ∈ K then
-          cfc (fun x : ℝ ↦ min x (e j + t)) (Areg j) else Areg j) -
-            (e j : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) := by
-      apply IsSelfAdjoint.sub
-      · split_ifs
-        · exact IsSelfAdjoint.cfc
-        · exact IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)
-      · exact IsSelfAdjoint.smul (by simp [IsSelfAdjoint]) (by simp [IsSelfAdjoint])
-    exact ((isSelfAdjoint_sum Finset.univ fun j _ ↦ hterm j).add
-      (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i))).isHermitian
+  have hB : B.IsHermitian :=
+    Matrix.isHermitian_sum_centered_partial_energyTruncation Areg
+      (fun _ ↦ (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian)
+      K e (fun j ↦ e j + t) _
+      (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   have hdegree : 1 ≤ ell ^ 2 := by
     rw [pow_two]
     simpa only [Nat.one_mul] using Nat.mul_le_mul hell hell
@@ -160,14 +153,12 @@ theorem exists_independent_long_middle_actual_dg_word_family :
   have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
-      simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
+      simpa only [hdiff,
+        Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
     exact hN'.trans (collar_card_le_square_of_larger_count_base
       q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell hcollar le_rfl)
   have hcheb := Matrix.chebyshev_word_power_viability_of_actual_cluster_polynomial_family
-    B hB v lam heigen W Tm (by
-      intro Q hQ
-      obtain ⟨M, _hmatrix, hconj⟩ := hdecomp Q hQ
-      exact ⟨M, hconj⟩)
+    B hB v lam heigen W Tm (fun Q hQ ↦ (hdecomp Q hQ).imp fun _ hM ↦ hM.2)
     (D ^ 2) hN eta0 eta1 upper hsep hendpoint hclosed hnorm
   let CW := fun i : Fin N ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
     (n := Jtarget → Fin q) (W i)

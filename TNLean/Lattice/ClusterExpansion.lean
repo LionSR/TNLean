@@ -13,6 +13,7 @@ import TNLean.Lattice.ClusterExpansion.ClusterFactorization
 import TNLean.Lattice.ClusterExpansion.ClusterPart
 import TNLean.Lattice.ClusterExpansion.CrossingComponentSum
 import TNLean.Lattice.ClusterExpansion.CrossingIntervalCount
+import TNLean.Lattice.ClusterExpansion.LocalIndexCount
 import TNLean.Lattice.ClusterExpansion.MandatoryLabels
 import TNLean.Lattice.ClusterExpansion.NearestNeighborIntervalRank
 import TNLean.Lattice.ClusterExpansion.NearestNeighborPath

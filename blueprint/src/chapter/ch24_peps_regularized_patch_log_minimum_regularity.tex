@@ -18,7 +18,7 @@ The minimum is positive and attained. No nesting or commutation is required.
 The \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L433-L451}{common Lipschitz estimate}
 applies before taking the minimum.
 
-\begin{theorem}[A common Lipschitz constant for the logarithmic minimum]
+\begin{lemma}[A common Lipschitz constant for the logarithmic minimum]
     \label{thm:peps_patch_log_minimum_lipschitz}
     \lean{TNLean.PEPS.lipschitzOnWith_log_regularizedPatchMinimum_exp_neg}
     \leanok
@@ -31,7 +31,7 @@ applies before taking the minimum.
         |\log N(s)-\log N(t)|\le K|s-t|.
     \end{align*}
     Zero weights, repeated regions and the empty product are included.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_patch_uniform_log_radius_derivative,thm:peps_regularized_patch_log_minimum}
     For every feasible $x$, the derivative of $\log F_x$ exists throughout
@@ -43,14 +43,14 @@ applies before taking the minimum.
     is needed.
 \end{proof}
 
-\begin{theorem}[Absolute continuity of the logarithmic minimum]
+\begin{lemma}[Absolute continuity of the logarithmic minimum]
     \label{thm:peps_patch_log_minimum_absolutely_continuous}
     \lean{TNLean.PEPS.absolutelyContinuousOnInterval_log_regularizedPatchMinimum_exp_neg}
     \leanok
     \uses{def:peps_regularized_patch_minimum}
     Under the same hypotheses, $\log N$ is absolutely continuous on $[0,T]$.
     This includes $T=0$ and $\kappa=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_patch_log_minimum_lipschitz}
     A Lipschitz function on a compact real interval is absolutely continuous.

@@ -46,7 +46,7 @@ all block labels jointly.
     it retains all $d_0$ coordinates.
 \end{definition}
 
-\begin{theorem}[Shared letters at the virtual inclusion]
+\begin{lemma}[Shared letters at the virtual inclusion]
     \label{thm:mpo_joint_shared_letter_inclusion}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_firstPhysical_mul_inclusion,
         MPSTensor.MPOSymmetry.jointMixedEndpointBase_inclusion_adjoint_mul_firstPhysical}
@@ -55,7 +55,7 @@ all block labels jointly.
     Every shared first-endpoint letter satisfies
     $C_x^{\iota_0(i)}V_x=V_x(A_x^0)^i$ and
     $V_x^*C_x^{\iota_0(i)}=(A_x^0)^iV_x^*$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_joint_mixed_family}
@@ -64,7 +64,7 @@ all block labels jointly.
     Multiplication by the first coordinate inclusion gives both identities.
 \end{proof}
 
-\begin{theorem}[Cropped edge coefficients factor through one-sided cores]
+\begin{lemma}[Cropped edge coefficients factor through one-sided cores]
     \label{thm:mpo_joint_edge_factors}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeBoundaryMap_eq_columns_core,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeBoundaryMap_eq_columns_core}
@@ -80,7 +80,7 @@ all block labels jointly.
         \label{eq:mpo_joint_last_core_factor}
     \end{align}
     No spanning or positive-dimension hypothesis is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_shared_letter_inclusion,def:mpo_joint_boundary_columns}
@@ -99,7 +99,7 @@ all block labels jointly.
     (\ref{eq:mpo_joint_last_core_factor}) in coordinates.
 \end{proof}
 
-\begin{theorem}[Every rectangular boundary is attained]
+\begin{lemma}[Every rectangular boundary is attained]
     \label{thm:mpo_joint_boundary_extraction}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstBoundaryExtraction_surjective,
         MPSTensor.MPOSymmetry.jointMixedLastBoundaryExtraction_surjective}
@@ -108,7 +108,7 @@ all block labels jointly.
     $(X_x)_x\mapsto(X_xV_x)_x$ are surjective onto their respective
     rectangular boundary spaces. The assertion includes empty label
     sets and zero-dimensional fibers.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $Y_x\in\C^{D_x^0\times D_x}$ and $Z_x\in\C^{D_x\times D_x^0}$,
@@ -126,7 +126,7 @@ all block labels jointly.
     $\widehat B_R=(I_{d_0}\otimes U_R^*)B_R$.
 \end{definition}
 
-\begin{theorem}[Only the boundary polar weights remain]
+\begin{lemma}[Only the boundary polar weights remain]
     \label{thm:mpo_joint_polar_edge_coefficients}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeCompressedMap_eq_polarPos_core,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeCompressedMap_eq_polarPos_core,
@@ -146,7 +146,7 @@ all block labels jointly.
                         & =\Phi_{R,D}((X_xV_x)_x).
     \end{align}
     The matrices $P_L,P_R$ retain all cross-label entries.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_boundary_polar,thm:mpo_joint_edge_factors}
@@ -158,7 +158,7 @@ all block labels jointly.
     multiplying by their inverses gives the normalized coefficients.
 \end{proof}
 
-\begin{theorem}[Exact normalized edge supports]
+\begin{lemma}[Exact normalized edge supports]
     \label{thm:mpo_joint_normalized_edge_supports}
     \lean{MPSTensor.MPOSymmetry.map_jointMixedFirstEdgeCompressed_range_eq_core,
         MPSTensor.MPOSymmetry.map_jointMixedLastEdgeCompressed_range_eq_core}
@@ -173,13 +173,13 @@ all block labels jointly.
     \end{align}
     Neither equality changes an interior tensor or assumes that the
     polar frame fills its ambient physical alphabet.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_polar_edge_coefficients,thm:mpo_joint_boundary_extraction}
     The coefficient identities give the forward inclusions.
     The reverse inclusions follow by choosing the padded square
-    boundaries from Theorem~\ref{thm:mpo_joint_boundary_extraction}.
+    boundaries from Lemma~\ref{thm:mpo_joint_boundary_extraction}.
 \end{proof}
 
 For a chain of length at least three, the first and last constraints
@@ -209,14 +209,14 @@ No sum of edge operators is asserted here.
     $P_L\otimes I_{d_0}$ and $I_{d_0}\otimes P_R$.
 \end{definition}
 
-\begin{theorem}[Normalized Euclidean support]
+\begin{lemma}[Normalized Euclidean support]
     \label{thm:mpo_joint_edge_euclidean_support}
     \lean{MPSTensor.MPOSymmetry.map_jointMixedFirstEdgeNormalization_support,
         MPSTensor.MPOSymmetry.map_jointMixedLastEdgeNormalization_support}
     \leanok
     \uses{def:mpo_joint_edge_normalization_equiv}
     With $E_x=D_x$, one has $e_L(S_L)=T_{L,D}$ and $e_R(S_R)=T_{R,D}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_normalized_edge_supports}
@@ -224,7 +224,7 @@ No sum of edge operators is asserted here.
     Euclidean norms are specified, so the two range equalities apply directly.
 \end{proof}
 
-\begin{theorem}[Canonical constraints in both directions]
+\begin{lemma}[Canonical constraints in both directions]
     \label{thm:mpo_joint_edge_deformed_constraints}
     \lean{MPSTensor.MPOSymmetry.jointMixedFirstEdgeNormalization_deformed_constraints,
         MPSTensor.MPOSymmetry.jointMixedLastEdgeNormalization_deformed_constraints}
@@ -236,7 +236,7 @@ No sum of edge operators is asserted here.
     $\mathcal D_f(h)=\Pi_{(f^{-1}(\ker h))^\perp}$. Then
     $\mathcal D_{e^{-1}}(h_S)=h_T$ and
     $\mathcal D_e(h_T)=h_S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_edge_euclidean_support}
@@ -253,7 +253,7 @@ No sum of edge operators is asserted here.
     $U:E\to F$, and an operator $H:F\to F$, define $K=U^*HU$ on $E$.
 \end{definition}
 
-\begin{theorem}[Compression intertwines on a reducing image]
+\begin{lemma}[Compression intertwines on a reducing image]
     \label{thm:mpo_rectangular_compression_intertwines}
     \lean{LinearIsometry.apply_compression_of_commute,
         LinearIsometry.compression_adjoint_apply_of_commute,
@@ -269,7 +269,7 @@ No sum of edge operators is asserted here.
         U((\ker K)^\perp) & \subseteq(\ker H)^\perp.
     \end{align}
     No surjectivity or self-adjointness assumption is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpo_rectangular_compression}
@@ -282,7 +282,7 @@ No sum of edge operators is asserted here.
     $\langle w,Uv\rangle=\langle U^*w,v\rangle=0$.
 \end{proof}
 
-\begin{theorem}[A norm gap restricts without loss]
+\begin{lemma}[A norm gap restricts without loss]
     \label{thm:mpo_rectangular_compression_gap}
     \lean{LinearIsometry.norm_gap_compression_of_commute}
     \leanok
@@ -293,7 +293,7 @@ No sum of edge operators is asserted here.
     $\delta\lVert v\rVert\le\lVert Kv\rVert$ for every
     $v\in(\ker K)^\perp$. The assertion includes zero-dimensional
     domain or codomain.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_rectangular_compression_intertwines}

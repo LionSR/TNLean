@@ -26,7 +26,7 @@ trace.
     \cite[Appendix~D, lines~2109--2113]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Physical closures of the strong fixed-point relation]
+\begin{lemma}[Physical closures of the strong fixed-point relation]
     \label{thm:mpdo_strong_rfp_phys_close}
     \lean{MPOTensor.strongRFP_tensor_relation_iff_physClose,
         MPOTensor.isStrongRFP_iff_physClose}
@@ -43,7 +43,7 @@ trace.
     Hence the strong renormalization fixed-point relation is equivalent to the
     existence of $P\geq0$ and a two-site unitary $U$ satisfying
     (\ref{eq:mpdo_strong_rfp_closure}) for every $X$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -103,7 +103,7 @@ trace.
     $Y_{(i,u),(j,v)}P_{p,q}$.
 \end{proof}
 
-\begin{theorem}[Global operator identity for a fixed choice of the defining matrices]
+\begin{lemma}[Global operator identity for a fixed choice of the defining matrices]
     \label{thm:mpdo_strong_rfp_global_operator_identity}
     \lean{MPOTensor.strongRFP_physCloseN_eq_localized_preparation,
         MPOTensor.strongRFP_physCloseN_eq_reindex_singleKrausMap_kronecker,
@@ -124,12 +124,12 @@ trace.
     \end{align}
     Closing the virtual indices with the identity yields the corresponding
     formula for the periodic operators $\rho^{(k)}(M)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_global_renormalization_maps, def:finite_tuple_regroupings, lem:mpdo_localized_first_site_preparation, lem:phys_close_identity}
-    Applying Theorem~\ref{thm:mpdo_global_renormalization_maps} to the local map
+    Applying Lemma~\ref{thm:mpdo_global_renormalization_maps} to the local map
     $Y\mapsto U(Y\otimes P)U^\dagger$ and the identity
     (\ref{eq:mpdo_strong_rfp_closure}) gives the localized closure
     equality. Expanding the regroupings $R_1$ and $R_2$, localized unitary
@@ -139,7 +139,7 @@ trace.
     Lemma~\ref{lem:phys_close_identity} gives the periodic formula.
 \end{proof}
 
-\begin{theorem}[Rank invariance under unitary conjugation]
+\begin{lemma}[Rank invariance under unitary conjugation]
     \label{thm:unitary_single_kraus_rank}
     \lean{Matrix.rank_singleKrausMap_of_mem_unitaryGroup}
     \leanok
@@ -148,13 +148,13 @@ trace.
         \operatorname{rank}(VAV^\dagger) & =\operatorname{rank}A.
         \label{eq:unitary_single_kraus_rank}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Left and right multiplication by invertible matrices preserve rank.
 \end{proof}
 
-\begin{theorem}[Geometric periodic rank growth of a strong fixed point]
+\begin{lemma}[Geometric periodic rank growth of a strong fixed point]
     \label{thm:mpdo_strong_rfp_periodic_rank_growth}
     \lean{MPOTensor.strongRFP_rank_mpo_add_two,
         MPOTensor.strongRFP_rank_mpo_add_one,
@@ -176,7 +176,7 @@ trace.
     Consequently every strong fixed point admits a single positive operator
     $P$ whose matrix rank is the factor in both formulas, without assuming
     normalization of $P$ or positivity of the periodic operators.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -185,7 +185,7 @@ trace.
     while rank is multiplicative under Kronecker products. Applying these
     facts to (\ref{eq:mpdo_strong_rfp_global_closure}) gives the recurrence.
     Induction from chain length one gives the geometric formula. Finally,
-    Theorem~\ref{thm:mpdo_strong_rfp_phys_close} provides the same positive
+    Lemma~\ref{thm:mpdo_strong_rfp_phys_close} provides the same positive
     operator $P$ for any tensor satisfying the existential strong fixed-point
     relation.
 \end{proof}

@@ -66,7 +66,7 @@
     multiset of entries.
 \end{definition}
 
-\begin{theorem}[Multiplicity trace normalization]%
+\begin{lemma}[Multiplicity trace normalization]%
     \label{thm:mpdo_bnt_multiplicity_trace_normalization}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison.sum_twoEntry_eq_sum_products}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison.sum_products_eq}
@@ -91,7 +91,7 @@
         =m_\gamma.
         \label{eq:rfp_trace_normalization}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Summing the multiset equality of the two spectra shows that, for each
     $\alpha,\beta,\gamma$, the resulting product sum satisfies
@@ -201,7 +201,7 @@
     every positive length.
 \end{definition}
 
-\begin{theorem}[BNT structure coefficients and product formulas]%
+\begin{lemma}[BNT structure coefficients and product formulas]%
     \label{thm:mpdo_bnt_label_theorem_data_source_formulas}
     \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_trace_pow}
     \lean{MPOTensor.BNTLabelTheoremData.coeff_eq_ofChi_coeff}
@@ -262,7 +262,7 @@
         m_\alpha m_\beta.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The assumed positive diagonal matrices satisfy
     $c^{(L)}_{\alpha,\beta,\gamma}
@@ -271,7 +271,7 @@
     length one, gives the stated formulas.
 \end{proof}
 
-\begin{theorem}[Positive diagonal matrices for the blocked coefficients]%
+\begin{lemma}[Positive diagonal matrices for the blocked coefficients]%
     \label{thm:mpdo_bnt_label_theorem_data_to_positive_blocked_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelTheoremData.toPositiveBlockedStructureChiTracePowerForm}
     \lean{MPOTensor.BNTLabelTheoremData.positiveBlockedChi_toDiagonal_of_pos}
@@ -292,7 +292,7 @@
         =\chi_{\sigma_n(i),\sigma_n(j),\tau_n(k)}$.
     Thus the two matrices have equal size, diagonal entries, and traces of all
     powers.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the construction of positive diagonal matrices for blocked
     coefficients to the comparison maps and the positive diagonal matrices

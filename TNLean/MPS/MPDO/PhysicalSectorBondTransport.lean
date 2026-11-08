@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Transport of adjacent physical-sector bonds
@@ -532,10 +533,7 @@ private theorem leftPairMatrix_physicalPairBond
     apply Finset.sum_congr rfl
     intro s _
     simp_rw [Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro c _
-    apply Finset.sum_congr rfl
-    intro e _
+    refine Finset.sum_congr₂ fun c _ e _ ↦ ?_
     ring
   change (if x.2.2 = y.2.2 then S else 0) = _
   calc

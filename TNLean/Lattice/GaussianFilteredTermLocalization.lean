@@ -64,8 +64,11 @@ Hastings, *Solving Gapped Hamiltonians Locally*, arXiv:cond-mat/0508554v3, `proj
 the setting at lines 169–190, eq. `lbnd` (lines 266–283, proved at lines 1419–1456), the
 approximation `M_i` with eqs. `mid`, `odef`, `hpdef` and `apb` (lines 285–320, proved at
 lines 1458–1533), eq. `facld` (lines 322–348), the sum `M = ∑ᵢ M_i` at lines 359–374, and
-the unique ground state at lines 375–387. The overlap of the ground states of `M` and `H`
-(lines 362–367) is stated there only to order of magnitude and is not formalized here.
+the unique ground state at lines 375–387. The ground-state overlap of `M` and `H`
+(lines 362–367), including an explicit logarithmic radius, is proved in
+`TNLean/Lattice/GaussianGroundStateOverlap.lean`. The projection is onto the canonical
+full ground eigenspace; the unique-ground-state case also gives phase-minimized norm
+accuracy.
 -/
 
 open GaussianFilter Matrix QuantumCircuit

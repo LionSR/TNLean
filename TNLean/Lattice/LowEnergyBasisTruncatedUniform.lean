@@ -20,10 +20,7 @@ of eq. `oibu` and lines 1698–1708, with the corrected constants and weakened d
 
 The Hamiltonian range and norm budget determine the propagation velocity. The larger
 supports of the truncated observables enter their support cardinality and diameter only.
-No cumulative error proportional to the number of terms is introduced. The
-corrected decay rate is `γ / 2^n`, with the explicit coefficient depending on the
-ground-space dimension. The generic correction is documented in the companion note
-https://sirui-lu.com/QICLean/paper-gaps/hastings05_basis_refinement.pdf.
+No cumulative error proportional to the number of terms is introduced.
 
 **Scope restriction (geometric growth):** this physical sum assumes a polynomial
 sphere bound with constants independent of system size. Source lines 169–190 do not
@@ -36,8 +33,6 @@ recorded in `docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
 
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
-
-open ApproximateDiagonalization
 
 namespace TNLean.Lattice
 

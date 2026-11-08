@@ -1,10 +1,22 @@
 \section{Supported projected relative evolution}
 
-\begin{theorem}[Supported projected relative evolution]
+\begin{definition}[The projected relative evolution]
+    \label{def:qc_projected_relative_evolution}
+    \lean{QuantumCircuit.projectedRelativeEvolution,
+        QuantumCircuit.projectedRelativeEvolution_spec}
+    \leanok
+    \uses{def:qc_site_expectation}
+    In the setting of Lemma~\ref{thm:qc_supported_projected_relative_evolution}
+    below, the projected relative evolution of $H'$ against $H$ on $K$ is the
+    unique differentiable path $U$ with $U(0)=1$ and $U'(t)=iG_K(t)U(t)$. It is
+    unitary, acts on $K$, and satisfies the comparison estimate of that lemma.
+\end{definition}
+
+\begin{lemma}[Supported projected relative evolution]
     \label{thm:qc_supported_projected_relative_evolution}
     \lean{QuantumCircuit.exists_supported_projected_relative_evolution}
     \leanok
-    \uses{def:qc_site_expectation}
+    \uses{def:qc_site_expectation,def:qc_projected_relative_evolution}
     Following \cite{OpenAI2026PolynomialPEPS}, let $I$ be a finite set of
     sites, let $q\geq1$, and let $K\subseteq I$, with empty site sets and
     empty regions included.
@@ -24,7 +36,7 @@
     \begin{align*}
         \|e^{itH'}e^{-itH}-U(t)\|\leq\varepsilon |t|.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:qc_site_expectation_properties,lem:al_site_expectation_order}
@@ -45,7 +57,7 @@
 \end{proof}
 
 
-\begin{theorem}[Supported Gaussian averaging from projection estimates]
+\begin{lemma}[Supported Gaussian averaging from projection estimates]
     \label{thm:qc_supported_gaussian_projection_bounds}
     \lean{QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds}\leanok
     \uses{def:qc_site_expectation}
@@ -79,7 +91,7 @@
     \end{align}
     This is the averaging argument used in the information-reset proofs
     of~\cite{OpenAI2026PolynomialPEPS,TNLean2026OneDimensional}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qc_supported_projected_relative_evolution,
         lem:qc_site_expectation_properties}

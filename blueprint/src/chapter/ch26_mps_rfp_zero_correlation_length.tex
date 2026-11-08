@@ -130,7 +130,7 @@
 % docs/paper-gaps/cpsv16_pure_zcl_adjacent_gap_cid_scope.tex.
 % The raw-weight counterexample is implemented through the auxiliary BNT sector
 % data; no duplicate `CPSVCanonicalFormData` package has been added.
-\begin{theorem}[Two source gaps in the zero-correlation-length characterization]
+\begin{lemma}[Two source gaps in the zero-correlation-length characterization]
     \label{thm:cpsv_theorem_zcl_pure_status}
     \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:source_bnt_zcl, def:mps_transfer_idempotence, def:has_nncph_ground_spaces, thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid, thm:is_positive_gap_physical_cid_of_is_rfp}
     \notready
@@ -166,7 +166,7 @@
     the source weight normalization.
 
     For the forward implication, the Bell-pair chain of
-    Theorem~\ref{thm:bell_pair_chain_not_cid} is a normal tensor with idempotent
+    Lemma~\ref{thm:bell_pair_chain_not_cid} is a normal tensor with idempotent
     transfer map, but its expectation on adjacent regions differs from its
     expectation when the regions are shifted by one site. Thus transfer map
     idempotence does not imply correlation independence when adjacent regions are
@@ -175,22 +175,22 @@
     \textbf{Local fix (false source claim for adjacent regions):}
     The printed forward implication in \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}
     asserts correlation independence for all disjoint regions, including adjacent
-    ones. However, the Bell-pair counterexample (Theorem~\ref{thm:bell_pair_chain_not_cid})
+    ones. However, the Bell-pair counterexample (Lemma~\ref{thm:bell_pair_chain_not_cid})
     shows that transfer idempotence does not imply correlation independence for adjacent
     regions; the source derivation uses $\E_A^n=\E_A$, which holds only for $n\ge1$,
     whereas adjacent regions insert $\E_A^0=\Id$. Documented in
     \cite{gap:cpsv16_pure_zcl_adjacent_gap_cid_scope}.
-    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} establishes the
+    Lemma~\ref{thm:is_positive_gap_physical_cid_of_is_rfp} establishes the
     forward implication when both complementary gaps are positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid}
-    Theorem~\ref{thm:halved_weight_zcl_not_rfp} refutes the reverse implication,
-    and Theorem~\ref{thm:bell_pair_chain_not_cid} refutes the forward
+    Lemma~\ref{thm:halved_weight_zcl_not_rfp} refutes the reverse implication,
+    and Lemma~\ref{thm:bell_pair_chain_not_cid} refutes the forward
     implication.
 \end{proof}
 
-\begin{theorem}[Auxiliary weighted-sector example]%
+\begin{lemma}[Auxiliary weighted-sector example]%
     \label{thm:halved_weight_zcl_not_rfp}
     \lean{MPSTensor.halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp}
     \lean{MPSTensor.halvedWeightTensor_isPhysicalBNTZCL}
@@ -222,7 +222,7 @@
     \end{align}
     Its length-$N$ matrix-product-vector coefficient is
     $V^{(N)}(A)=1+2^{-N}$.
-\end{theorem}
+\end{lemma}
 % The theorem above is implemented through the auxiliary
 % `IsBNTCanonicalForm` interface; a duplicate `CPSVCanonicalFormData` package
 % for these matrices has not been added.
@@ -254,7 +254,7 @@
     $1=v$ and $1/4=v/2$, respectively, which is impossible.
 \end{proof}
 
-\begin{theorem}[Adjacent regions obstruct the RFP--CID forward implication]%
+\begin{lemma}[Adjacent regions obstruct the RFP--CID forward implication]%
     \label{thm:bell_pair_chain_not_cid}
     \lean{MPSTensor.bellPairChainTensor}
     \lean{MPSTensor.bellPairChainTensor_isNormalTensor}
@@ -332,7 +332,7 @@
     independent of distance in the unrestricted sense of
     Definition~\ref{def:source_physical_cid}. The block $\E_A^{0}=1$ between
     adjacent observables is not governed by idempotence.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The letters are the rescaled matrix units
     $A^{(\alpha,\beta)}=\sqrt{1/2}\,\ketbra{\alpha}{\beta}$, so a conjugated
@@ -366,7 +366,7 @@
     positive complementary gaps.
 \end{proof}
 
-\begin{theorem}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
+\begin{lemma}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
     \label{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isTransferIdempotent_directSum}
     \leanok
@@ -377,13 +377,13 @@
     physical correlations independent of distance and $\E_{j,j'}=0$ for all
     $j\ne j'$. Thus $A$ has positive-gap BNT zero correlation length
     (Definition~\ref{def:is_positive_gap_bnt_zcl}). As shown in
-    Theorem~\ref{thm:bell_pair_chain_not_cid}, this does not extend to adjacent
+    Lemma~\ref{thm:bell_pair_chain_not_cid}, this does not extend to adjacent
     regions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:is_positive_gap_physical_cid_of_is_rfp, thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     Idempotence implies positive-gap physical CID by
-    Theorem~\ref{thm:is_positive_gap_physical_cid_of_is_rfp}. On each
+    Lemma~\ref{thm:is_positive_gap_physical_cid_of_is_rfp}. On each
     off-diagonal bond block, idempotence of $\E_A$ gives
     $\E_{j,j'}\circ\E_{j,j'}=\E_{j,j'}$. Distinct irreducible left-canonical
     blocks satisfy $\rho(\E_{j,j'})<1$. Since the spectrum of an idempotent is
@@ -392,7 +392,7 @@
     $\E_{j,j'}=0$.
 \end{proof}
 
-\begin{theorem}[Basis direct sum is in CPSV canonical form]%
+\begin{lemma}[Basis direct sum is in CPSV canonical form]%
     \label{thm:bnt_cf_basis_direct_sum_is_cpsv_cf}
     \lean{MPSTensor.IsBNTCanonicalForm.isCPSVCanonicalForm_basisDirectSum}
     \leanok
@@ -402,17 +402,17 @@
     $A=\bigoplus_j A_j$ is in CPSV canonical form
     (Definition~\ref{def:cpsv_canonical_form}), with unit retained weights,
     retained blocks $(A_j)_j$, and the identity ambient coisometry.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{cor:sector_bnt_cf_basis_normal}
     Every retained dimension is positive. Each $A_j$ is irreducible and
     left-canonical, hence normal by
-    Corollary~\ref{cor:sector_bnt_cf_basis_normal}. The unit-weight retained
+    Lemma~\ref{cor:sector_bnt_cf_basis_normal}. The unit-weight retained
     direct sum equals $A$, so the identity coisometry gives the required exact
     reconstruction.
 \end{proof}
 
-\begin{theorem}[Auxiliary BNT basis gives a basis for its direct sum]%
+\begin{lemma}[Auxiliary BNT basis gives a basis for its direct sum]%
     \label{thm:bnt_cf_basis_is_bnt_for_direct_sum}
     \lean{MPSTensor.IsBNTCanonicalForm.isCPSVBasisOfNormalTensors_basisDirectSum}
     \lean{MPSTensor.IsBNTCanonicalForm.isBNT_basisDirectSum}
@@ -430,19 +430,19 @@
     \end{align}
     and the states $\{|V^{(N)}(A_j)\rangle\}_j$ are linearly independent for
     all sufficiently large $N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{cor:sector_bnt_cf_basis_normal, thm:mpv_decomposition}
     Every basis block is irreducible and left-canonical with normalized
     self-overlap converging to $1$, hence a normal tensor by
-    Corollary~\ref{cor:sector_bnt_cf_basis_normal}. The direct sum is the
+    Lemma~\ref{cor:sector_bnt_cf_basis_normal}. The direct sum is the
     unit-weight block-diagonal tensor, so its length-$N$ matrix-product vector
     splits as the sum of the block vectors by
     Theorem~\ref{thm:mpv_decomposition}. Eventual linear independence is part
     of the auxiliary BNT sector hypotheses.
 \end{proof}
 
-\begin{theorem}[Multiplicity-one fixed point implies positive-gap ZCL]%
+\begin{lemma}[Multiplicity-one fixed point implies positive-gap ZCL]%
     \label{thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL}
     \leanok
@@ -460,17 +460,17 @@
         \E_{j,j'} & =0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:bnt_cf_basis_is_bnt_for_direct_sum, thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
-    By Theorem~\ref{thm:bnt_cf_basis_is_bnt_for_direct_sum}, the distinct basis
+    By Lemma~\ref{thm:bnt_cf_basis_is_bnt_for_direct_sum}, the distinct basis
     tensors of $P$ are a basis of normal tensors for $A$. The basis blocks are
     irreducible, left-canonical, and pairwise gauge-phase distinct, so
-    Theorem~\ref{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum} applies to
+    Lemma~\ref{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum} applies to
     the direct sum.
 \end{proof}
 
-\begin{theorem}[Simultaneous inverse for BNT word evaluations]%
+\begin{lemma}[Simultaneous inverse for BNT word evaluations]%
     \label{thm:bnt_word_tuple_simultaneous_inverse}
     \lean{MPSTensor.WordTupleSpanTop.exists_simultaneous_left_inverse}
     \leanok
@@ -483,7 +483,7 @@
          & =\delta_{j,k}\delta_{a,x}\delta_{b,y}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The tuple whose $j$-th component is the matrix unit
     $\ketbra{a}{b}$ and whose other components vanish belongs to the full
@@ -491,7 +491,7 @@
     identity.
 \end{proof}
 
-\begin{theorem}[Two-sided virtual multiplication by physical observables]%
+\begin{lemma}[Two-sided virtual multiplication by physical observables]%
     \label{thm:physical_observable_word_span_mul}
     \lean{MPSTensor.physicalObservableTransfer_coeff_mul,
         MPSTensor.exists_physicalObservableTransfer_mul_of_mem_span}
@@ -503,7 +503,7 @@
     \cite[Lemma~2]{Malz2024Preparation}, there is an operator $O$ on $L$
     physical sites whose inserted transfer map implements the two-sided
     multiplication $\E_O(X)=MXN^\dagger$ for every virtual matrix $X$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $M=\sum_\sigma c_\sigma A^\sigma$ and
     $N=\sum_\tau e_\tau A^\tau$. Set
@@ -513,7 +513,7 @@
         A^\sigma X(A^\tau)^\dagger=MXN^\dagger$.
 \end{proof}
 
-\begin{theorem}[Sector-supported physical observable realization]%
+\begin{lemma}[Sector-supported physical observable realization]%
     \label{thm:bnt_sector_supported_physical_observable}
     \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_matrixUnit}
     \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_sectorSupported}
@@ -531,10 +531,10 @@
     \end{align}
     In particular, arbitrary virtual matrix-unit maps supported on one sector
     are realized by physical observables.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:bnt_word_tuple_simultaneous_inverse, thm:physical_observable_word_span_mul}
-    Applying Theorem~\ref{thm:bnt_word_tuple_simultaneous_inverse}
+    Applying Lemma~\ref{thm:bnt_word_tuple_simultaneous_inverse}
     independently to the left and right word evaluations shows that the
     observable with coefficients
     \begin{align}
@@ -549,7 +549,7 @@
     (\ref{eq:zcl_sector_rank_one}).
 \end{proof}
 
-\begin{theorem}[Multiplicity-one BNT rank-one observables at the sharp blocking length]%
+\begin{lemma}[Multiplicity-one BNT rank-one observables at the sharp blocking length]%
     \label{thm:bnt_rank_one_observables_sharp_length}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
     \leanok
@@ -562,13 +562,13 @@
     exists a length $L\leq3D^5$ such that, for every basis sector $j$ and every
     $R,l\in\MN{D_j}$, a physical observable on $L$ sites realizes the
     sector-supported insertion (\ref{eq:zcl_sector_rank_one}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:sharp_bnt_block_separation, thm:bnt_sector_supported_physical_observable}
-    Theorem~\ref{thm:sharp_bnt_block_separation} gives a positive
+    Lemma~\ref{thm:sharp_bnt_block_separation} gives a positive
     $L\leq3D^5$ for which the simultaneous word evaluations span the product
     matrix algebra, so applying
-    Theorem~\ref{thm:bnt_sector_supported_physical_observable} at this length
+    Lemma~\ref{thm:bnt_sector_supported_physical_observable} at this length
     yields the observable.
 \end{proof}
 
@@ -617,7 +617,7 @@
     pairing and iterating proves the eigenvector formula.
 \end{proof}
 
-\begin{theorem}[Subleading spectral pair excludes positive-gap CID]%
+\begin{lemma}[Subleading spectral pair excludes positive-gap CID]%
     \label{thm:zcl_subleading_pair_excludes_cid}
     \lean{MPSTensor.IsBNTCanonicalForm.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair}
     \leanok
@@ -633,7 +633,7 @@
     \end{align}
     Then $A$ does not have positive-gap physical correlations independent of
     distance (Definition~\ref{def:is_positive_gap_physical_cid}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:zcl_direct_sum_sector_calculus, thm:bnt_rank_one_observables_sharp_length}
     Let $\rho_j$ be the trace-one positive fixed point of $\E_j$. At the
@@ -696,7 +696,7 @@
         =\tr(u\E_{A_j}^{n_1}(v))$.
 \end{proof}
 
-\begin{theorem}[Unconditional reverse implication at the multiplicity-one representative]%
+\begin{lemma}[Unconditional reverse implication at the multiplicity-one representative]%
     \label{thm:positive_gap_bnt_zcl_unconditional_converse}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}
     \leanok
@@ -707,7 +707,7 @@
     % **Local fix (arXiv:1606.00608, line 1250):** the proof uses arbitrary
     % trace probes rather than the source's unjustified spectral inference.
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:positive_gap_bnt_rank_one_probe_expectation, thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     For any fixed sector $j$ and arbitrary $u,v\in\MN{D_j}$, applying
@@ -726,7 +726,7 @@
     $\E_A^2=\E_A$.
 \end{proof}
 
-\begin{theorem}[Positive-gap BNT zero correlation length at the
+\begin{lemma}[Positive-gap BNT zero correlation length at the
         multiplicity-one representative]
     \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp}
     \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent}
@@ -743,17 +743,17 @@
     % **Local fix (arXiv:1606.00608, line 1250):** only the forward implication
     % uses the eigenvalue-free correction.
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:positive_gap_bnt_zcl_unconditional_converse, thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
     The forward implication is
-    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse}.
+    Lemma~\ref{thm:positive_gap_bnt_zcl_unconditional_converse}.
     Conversely, transfer idempotence implies positive-gap physical
     correlation independence, while the BNT hypotheses give local
     orthogonality for the distinct sectors.
 \end{proof}
 
-\begin{theorem}[Physical BNT zero correlation length at the multiplicity-one
+\begin{lemma}[Physical BNT zero correlation length at the multiplicity-one
         representative]
     \label{thm:physical_bnt_zcl_multiplicity_one_implies_rfp}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL}
@@ -765,16 +765,16 @@
     % **Local fix (arXiv:1606.00608, line 1250):** the proof passes through the
     % corrected positive-gap converse at the multiplicity-one representative.
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:positive_gap_bnt_zcl_unconditional_converse, lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
     Since physical correlation independence includes all positive-gap
     configurations, restricting to those configurations and applying
-    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} yields
+    Lemma~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} yields
     $\E_A^2=\E_A$.
 \end{proof}
 
-\begin{theorem}[Positive-gap BNT zero correlation length gives commuting
+\begin{lemma}[Positive-gap BNT zero correlation length gives commuting
         parent ground spaces]
     \label{thm:positive_gap_bnt_zcl_unconditional_nncph}
     \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum}
@@ -795,16 +795,16 @@
     % **Local fix (arXiv:1606.00608, line 1250):** this is the corrected
     % multiplicity-one implication, not the printed three-way equivalence.
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:positive_gap_bnt_zcl_unconditional_converse, thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
-    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} gives
+    Lemma~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} gives
     $\E_A^2=\E_A$. The multiplicity-one fixed-point theorem
     \ref{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces} gives the
     stated interactions and ground spaces.
 \end{proof}
 
-\begin{theorem}[Positive-gap zero correlation length and commuting parent
+\begin{corollary}[Positive-gap zero correlation length and commuting parent
         ground spaces for the basis direct sum]
     \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_nncph_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}
@@ -819,11 +819,11 @@
     \end{align}
     This equivalence holds for the multiplicity-one direct sum of distinct BNT
     basis tensors with positive complementary gaps.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp},
+    By Lemma~\ref{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp},
     positive-gap BNT zero correlation length is equivalent to transfer
     idempotence. The latter is equivalent to the all-chain commuting parent
     ground-space condition by
@@ -839,9 +839,9 @@
     existence of an eigenvalue $\lambda$ with $0<|\lambda|<1$, which omits
     non-idempotent channels whose non-trivial Jordan blocks occur at eigenvalue
     zero. At multiplicity one,
-    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} resolves this
+    Lemma~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} resolves this
     unconditionally using trace probes
     (Lemma~\ref{lem:positive_gap_bnt_rank_one_probe_expectation}), while
-    Theorem~\ref{thm:zcl_subleading_pair_excludes_cid} covers the spectral
+    Lemma~\ref{thm:zcl_subleading_pair_excludes_cid} covers the spectral
     case when a nonzero subleading eigenpair exists.
 \end{remark}

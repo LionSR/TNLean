@@ -73,12 +73,9 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
       (min_le_left ηloc (c₁ * Δ / 2)) (Nat.cast_nonneg ℓ)))
   have hExpGap : Real.exp (-(c₁ * (ℓ : ℝ) * Δ) / 2) ≤
       Real.exp (-(min ηloc (c₁ * Δ / 2) * (ℓ : ℝ))) := by
-    apply Real.exp_le_exp.mpr
-    rw [neg_div]
-    apply neg_le_neg
-    calc min ηloc (c₁ * Δ / 2) * (ℓ : ℝ) ≤ c₁ * Δ / 2 * (ℓ : ℝ) :=
-          mul_le_mul_of_nonneg_right (min_le_right _ _) (Nat.cast_nonneg ℓ)
-      _ = c₁ * (ℓ : ℝ) * Δ / 2 := by ring
+    rw [show -(c₁ * (ℓ : ℝ) * Δ) / 2 = -(c₁ * Δ / 2 * (ℓ : ℝ)) by ring]
+    gcongr
+    exact min_le_right _ _
   have hError : ‖gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
       J * C * Real.exp (-(min ηloc (c₁ * Δ / 2) * (ℓ : ℝ))) :=
     haE.trans (mul_le_mul_of_nonneg_left hExpLoc (mul_nonneg hJ.le hC))

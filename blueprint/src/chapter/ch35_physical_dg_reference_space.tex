@@ -1,21 +1,6 @@
 \section{A fixed reference space for collective trimming}
 
-\begin{theorem}[Increasing an allowed bond dimension]
-    \label{thm:open_mps_bond_mono}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.mono}
-    \leanok
-    If a vector has an open-boundary matrix product representation of bond
-    dimension at most $D$, and $D\le D'$, then it has one of bond dimension
-    at most $D'$. Empty chains and zero bounds are included.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:chain_cut_rank_of_mps}
-    Each internal cut has rank at most $D\le D'$. Apply the cut-rank
-    characterization.
-\end{proof}
-
-\begin{theorem}[A reference span from approximants to a basis]
+\begin{lemma}[A reference span from approximants to a basis]
     \label{thm:mps_basis_reference_subspace}
     \lean{TNLean.MPS.AreaLaw.exists_reference_subspace_of_isOpenMPS_basis_approximations}
     \leanok
@@ -30,10 +15,10 @@
     There is a fixed subspace $U$ of dimension $r$, mutually
     $\varepsilon$-close to $T$, such that every vector of $U$ has exact
     matrix product bond dimension at most $rD$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:open_mps_finite_span,thm:open_mps_bond_mono}
+    \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
     Define $F:T\to(\C^q)^{\otimes N}$ by $Fu_i=\phi_i$ and put $U=FT$.
     The coefficient Cauchy--Schwarz inequality gives
     \begin{align}
@@ -51,13 +36,13 @@
     throughout this one space $U$. No orthogonality of the $\phi_i$ is needed.
 \end{proof}
 
-\begin{theorem}[A physical ground-space reference for trimming]
+\begin{lemma}[A physical ground-space reference for trimming]
     \label{thm:physical_dg_mps_reference_subspace}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_isOpenMPS_reference_subspace}
     \leanok
     There is a universal constant $K>0$ with the following property.
     Let $H,q,\mu,\nu,\gamma,G$ satisfy the physical hypotheses of
-    Theorem~\ref{thm:physical_interval_bootstrap} on $N$ sites.
+    Lemma~\ref{thm:physical_interval_bootstrap} on $N$ sites.
     Put $r=\dim G$, $g=\min(\gamma,1)$ and $u=1+\log q+\log(1/g)$.
     For $0<\varepsilon\le1$, set
     \begin{align}
@@ -80,7 +65,7 @@
     The viable spaces of the merge tree remain to be constructed by
     tensoring, sampling, filtering and trimming. The coefficient-one
     entropy theorem remains a statement about the original space $G$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_dg_normalized_mps_approximation,
@@ -95,79 +80,17 @@
         =\varepsilon/(4r).
     \end{align*}
     Their total squared error is at most $\varepsilon/4$.
-    The preceding theorem gives $U$ with bond bound $r(rB)=r^2B$.
+    The preceding lemma gives $U$ with bond bound $r(rB)=r^2B$.
     Substitution of $\delta_{\mathrm{basis}}$ into the global logarithmic
     bound gives (\ref{eq:physical_reference_accuracy}) and
     (\ref{eq:physical_reference_bond}).
 \end{proof}
 
-\begin{theorem}[Trimming through a common reference]
-    \label{thm:chain_trimming_near_reference}
-    \lean{TNLean.MPS.AreaLaw.isCloseTo_leftSupportSubmodule_chainTrimSubspace_of_reference}
-    \leanok
-    Let $0\le i\le N$ and $m=\max\{i-1,0\}$.
-    Let $S$ be a subspace of the first $i$ sites, with an orthonormal basis,
-    and let $G,U$ be subspaces of the whole chain. Suppose that
-    $\delta,\varepsilon\ge0$, $\xi>0$, and $S\otimes\mathcal H_R$ is
-    $\delta$-close to $G$. Suppose also that $G$ and $U$ are mutually
-    $\varepsilon$-close and that every vector of $U$ has matrix product
-    bond dimension at most $D$.
-    The actual collective trim $\operatorname{Trim}_{\xi}(S)$, defined by
-    its successive spectral projections, satisfies
-    \begin{align}
-        \operatorname{Trim}_{\xi}(S)\otimes\mathcal H_R
-        \text{ is }\bigl(4\delta+6\varepsilon+4\xi\sqrt{mD}\bigr)
-        \text{-close to }G.
-        \label{eq:trimming_reference_error}
-    \end{align}
-    The trimming constant is the corrected one documented in
-    \cite{gap:alvv16_trimming_constant}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:alvv_collective_trim,thm:chain_cut_rank_of_mps}
-    Transfer first from $G$ to $U$. The block space is
-    $2(\delta+\varepsilon)$-viable for $U$.
-    Its collective trim is therefore
-    $2(\delta+\varepsilon)+2\xi\sqrt{mD}$-viable for $U$.
-    Transfer back from $U$ to $G$ and expand
-    $2\bigl(2(\delta+\varepsilon)+2\xi\sqrt{mD}+\varepsilon\bigr)$.
-\end{proof}
 
-\begin{theorem}[Collective trimming for the physical ground space]
-    \label{thm:physical_dg_collective_trimming}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_collective_trimming_bound}
-    \leanok
-    Let $0<\varepsilon\le1$ and impose the physical hypotheses of
-    Theorem~\ref{thm:physical_dg_mps_reference_subspace}. There are the same
-    universal constant $K>0$ and common integer $B\ge1$, with logarithmic
-    bound (\ref{eq:physical_reference_bond}), for which the following holds.
-    For every block of the first $i\le N$ sites and every actual
-    $\delta$-viable subspace $S$ for $G$, where $\delta\ge0$, put
-    $m=\max\{i-1,0\}$. Its collective trim at threshold $\xi>0$ is
-    \begin{align}
-        4\delta+6\varepsilon+4\xi\sqrt{mr^2B}
-        \label{eq:physical_collective_trimming_error}
-    \end{align}
-    viable for $G$.
-    The basis used for trimming is chosen internally, and $B$ is chosen
-    before $i,S,\delta,\xi$.
-    The capped-gap restriction remains that of
-    Theorem~\ref{thm:physical_dg_mps_reference_subspace}.
-    This proves the reference-space trimming step in
-    \cite[proof for degenerate ground spaces, lines 1801--1805]{Arad2016RigorousRG}.
-    The construction of the sampled viable spaces and the merge-tree
-    induction remain separate.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:physical_dg_mps_reference_subspace,thm:chain_trimming_near_reference}
-    Choose the one reference space $U$ before the block and viable space.
-    Every vector of $U$ has bond dimension at most $r^2B$.
-    Apply the preceding theorem with $D=r^2B$ to the actual subspace $S$.
-\end{proof}
 
-\begin{theorem}[Collective trimming on an arbitrary interval]
+
+
+\begin{lemma}[Collective trimming on an arbitrary interval]
     \label{thm:interval_trimming_reference}
     \lean{TNLean.MPS.AreaLaw.intervalTrimCut,
         TNLean.MPS.AreaLaw.intervalTrimCut_mono,
@@ -194,7 +117,7 @@
     has dimension at most $s$, and each recorded trimmed vector has
     Schmidt rank at most $s/\xi^2$ across every internal interval cut.
     These statements retain the whole exterior of $J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:alvv_collective_trim}
     An internal prefix of $J$ has at most two global boundaries, hence
@@ -206,11 +129,11 @@
     rank bounds.
 \end{proof}
 
-\begin{theorem}[One physical reference for all interval trims]
+\begin{lemma}[One physical reference for all interval trims]
     \label{thm:physical_dg_interval_trimming}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_collective_trimming_bound}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:physical_dg_mps_reference_subspace},
+    Under the hypotheses of Lemma~\ref{thm:physical_dg_mps_reference_subspace},
     let $0<\varepsilon\le1$. The same universal constant and integer
     $B\ge1$ satisfying (\ref{eq:physical_reference_bond}) can be chosen
     before every interval $J=[p,r)\subseteq[0,N)$ and every
@@ -223,14 +146,14 @@
     The capped-gap dependence is unchanged. This two-boundary estimate
     does not identify the trimming radius with the printed tree parameters
     in~\cite[lines 1801--1805]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_dg_mps_reference_subspace,thm:interval_trimming_reference}
     Choose the one common reference before the interval and $S$, and
-    apply the preceding theorem with $D=D_{\rm ref}$.
+    apply the preceding lemma with $D=D_{\rm ref}$.
 \end{proof}
 
-\begin{theorem}[Merging adjacent interval spaces for one global target]
+\begin{lemma}[Merging adjacent interval spaces for one global target]
     \label{thm:actual_adjacent_interval_merge}
     \lean{TNLean.MPS.AreaLaw.adjacentIntervalMerge,
         TNLean.MPS.AreaLaw.isViable_adjacentIntervalMerge,
@@ -246,9 +169,9 @@
     $(\delta_1+\delta_2)$-viable for the same $G$ and has dimension at
     most $(\dim S_1)(\dim S_2)$.
     Empty child intervals are included, and no product structure of $G$
-    is assumed. This is the chain-coordinate form of
+    is assumed. This is the specialization to adjacent intervals of
     \cite[Lemma on tensoring, lines 500--523]{Arad2016RigorousRG}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The actual restrictions to the two disjoint intervals and their full
     common exterior give one three-factor image of $G$. Tensoring the
@@ -259,7 +182,7 @@
 \end{proof}
 
 
-\begin{theorem}[One sampled and trimmed physical parent interval]
+\begin{lemma}[One sampled and trimmed physical parent interval]
     \label{thm:physical_dg_sampled_node}
     \lean{TNLean.MPS.AreaLaw.exists_measurable_interval_word_image_event,
         TNLean.MPS.AreaLaw.exists_physical_dg_sampled_interval_node_event}
@@ -273,9 +196,9 @@
     Suppose the physical filter parameters satisfy $m\ge\max\{q,50\}$,
     $\ell\ge1$, $t\ge21$, the inequalities
     \[
-      288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
-      \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
-      \quad(0<R\le3t+4\ell),
+        288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
+        \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
+        \quad(0<R\le3t+4\ell),
     \]
     and $D^{12}\Delta\le10^{-5}$, where
     $D=(m\ell^2)^{22\ell}$.
@@ -290,10 +213,10 @@
     There is a measurable event of Haar unitaries whose failure measure
     is at most
     \[
-      \eta=\begin{cases}
-        0,&Q\le s,\\
-        \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16},&s<Q.
-      \end{cases}
+        \eta=\begin{cases}
+            0,                                                & Q\le s, \\
+            \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16}, & s<Q.
+        \end{cases}
     \]
     For every unitary in this event, sample $\min\{s,Q\}$ basis vectors,
     apply all actual length-$a$ operator words, and collectively trim
@@ -306,7 +229,7 @@
     adaptive measurability, or a recursively selected tree. It uses one
     final collective trim rather than identifying this operation with
     the source's interleaved trims.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The merge is $3/100$-viable for $G$. Transfer to the constructed
     target costs at most $2(3/100+10^{-4})<1/4$.
@@ -377,7 +300,7 @@
     dimension, and an orthonormal basis spans it.
 \end{proof}
 
-\begin{theorem}[A recursive witness tree from fixed-input node events]
+\begin{lemma}[A recursive witness tree from fixed-input node events]
     \label{thm:sampled_interval_witness_tree}
     \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
     \leanok
@@ -387,8 +310,8 @@
     before choosing the child spaces and the sampling size. Let $r_G\ge1$,
     $D\ge2$, $0<\beta<1$, and choose
     \[
-      A=1+\log r_G+\log D+\log(1/\beta),\quad
-      s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
+        A=1+\log r_G+\log D+\log(1/\beta),\quad
+        s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
     \]
     Assume $q^w\le M$ and $0<\xi\le1$.
     Suppose that, for every pair of $3/200$-viable child spaces of
@@ -402,7 +325,7 @@
     generators with $\xi^2\operatorname{SR}(u_i)\le M$.
     This auxiliary theorem assumes the certified node events; it does
     not assume final viable spaces or assert an adaptive probability.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The actual merged dimension is at most $M^2=D^{12}s^6$. The uniform
     failure bound is at most $\beta<1$, hence every certified Haar event
@@ -413,22 +336,22 @@
     actual recursion.
 \end{proof}
 
-\begin{theorem}[An actual recursive tree for the physical ground space]
+\begin{lemma}[An actual recursive tree for the physical ground space]
     \label{thm:physical_dg_recursive_interval_spaces}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_recursive_interval_spaces}
     \leanok
     \uses{thm:physical_dg_sampled_node,thm:sampled_interval_witness_tree}
     Under the physical hypotheses and explicit scalar conditions of
-    Theorem~\ref{thm:physical_dg_sampled_node}, choose the same common
+    Lemma~\ref{thm:physical_dg_sampled_node}, choose the same common
     reference bound $B$ and put $D_{\rm ref}=r_G^2B$ and
     $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$.
-    The Hamiltonian constructs one family of at most $D^2$ operators for
-    every valid interval of length greater than $4\ell$, before every
-    $\beta$, sampling size and child space.
+    There is a family of at most $D^2$ operators for every valid interval of
+    length greater than $4\ell$, chosen before every $\beta$, sampling size
+    and child space.
     For $0<\beta<1$, take
     \[
-      A=1+\log r_G+\log D+\log(1/\beta),\qquad
-      s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
+        A=1+\log r_G+\log D+\log(1/\beta),\qquad
+        s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
     \]
     Then $s\le4097r_GA$. There is one parent operation whose values on
     all admissible children are the literal sampled-word image and final
@@ -439,7 +362,7 @@
     Each such space has at most $M$ recorded spanning vectors, with
     internal-cut Schmidt ranks at most
     \[
-      10^6D_{\rm ref}^2(L+1)M.
+        10^6D_{\rm ref}^2(L+1)M.
     \]
     The whole exterior is retained in the viability statements.
 
@@ -449,7 +372,7 @@
     interleaved-trim algorithm, adaptive joint probability, energy
     estimation, final spectral extraction or running time; these
     distinctions are recorded in~\cite{gap:alvv16_approximation_parameters}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Choose the physical reference and all fixed parent families before
     the sampling size. The uniform failure estimate makes every
@@ -469,18 +392,17 @@
     \uses{thm:physical_dg_recursive_interval_spaces,thm:dg_accuracy_scalar_parameters}
     There are universal constants $C\ge1$ and $K>0$, chosen before the
     chain and Hamiltonian, with the following property. Under the physical
-    hypotheses of the preceding theorem put
+    hypotheses of the preceding lemma put
     \[
-      g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
-      v=1+\log m+\log(1/g),\quad
-      \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+        g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
+        v=1+\log m+\log(1/g),\quad
+        \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
     \]
     Then $\ell\ge21$ and
     \[
-      \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
+        \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
     \]
-    The common reference and the actual parent families of the preceding
-    theorem can be constructed with these parameters, before every
+    The common reference and the actual parent families of the preceding lemma can be constructed with these parameters, before every
     sampling size and child space. For every $0<\beta<1$, its actual
     balanced recursion has the same original-ground-space viability
     $3/200$, dimension bound $M=D^6s^3$, recorded-generator count $M$
@@ -488,7 +410,7 @@
     No numerical tail or filter estimate is assumed.
 
     The capped gap, block leaves, one final trim and distinction from the
-    printed adaptive algorithm remain those of the preceding theorem and
+    printed adaptive algorithm remain those of the preceding lemma and
     \cite{gap:alvv16_approximation_parameters}. The recorded-generator
     rank bound is not assigned unchanged to their entire span.
 \end{theorem}
@@ -500,60 +422,4 @@
     $g/(10^6m)$. Since $m\ge50$, all hypotheses of the conditional
     recursive-witness theorem follow. Its actual families, operation and
     recorded spanning vectors give the conclusion.
-\end{proof}
-
-
-\begin{lemma}[Full-interval generators and native matrix product states]
-    \label{lem:full_interval_mps_span}
-    \lean{TNLean.MPS.AreaLaw.fullIntervalRead,
-        TNLean.MPS.AreaLaw.rank_cutMatrix_fullIntervalRead,
-        TNLean.MPS.AreaLaw.isOpenMPS_fullIntervalRead_of_rank_le,
-        TNLean.MPS.AreaLaw.isOpenMPS_fullIntervalRead_of_mem_span}
-    \leanok
-    \uses{thm:open_mps_finite_span}
-    Read a vector on $[0,L)$ on native chain configurations by restricting
-    the configuration to the recorded interval sites. Its regional cut
-    after $k$ sites has the same rank as its native chain coefficient
-    matrix at that cut. Hence a recorded vector of internal Schmidt ranks
-    at most $R$ is an open-boundary matrix product state of bond at most
-    $R$ in the native chain coordinates. If $n$ such vectors span a space,
-    every vector in that space, read in the same coordinates, has bond
-    at most $nR$.
-\end{lemma}
-\begin{proof}\leanok
-    Identify the full interval with the full left block and apply the
-    existing left-block cut identity. The internal-cut characterization
-    gives the generator representation. Apply the finite-span theorem to
-    the actual finite image of the recorded generators; its cardinality
-    is at most $n$, including repeated or zero generators.
-\end{proof}
-
-\begin{theorem}[Native matrix product states in the actual recursive root]
-    \label{thm:physical_dg_interval_tree_mps}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_mps}
-    \leanok
-    \uses{thm:physical_dg_interval_tree_parameters,lem:full_interval_mps_span}
-    In the automatic-parameter theorem, retain the same actual parent
-    families, literal operations, balanced recursion and original global
-    ground-space viability at every interval. Put $M=D^6s^3$ and
-    $D_{\rm ref}=r_G^2B$ as before. Every vector in the actual recursively
-    constructed root space on $[0,L)$, read on native chain configurations,
-    is an open-boundary matrix product state of bond at most
-    \[
-      10^6D_{\rm ref}^2(L+1)M^2.
-    \]
-    This is the bound for the entire root space. The bound for each
-    recorded generator is $10^6D_{\rm ref}^2(L+1)M$.
-    No independent matrix product approximation replaces the root space.
-    The capped gap, block leaves and one final trim remain explicit;
-    adaptive joint probability, final spectral extraction and running
-    time remain separate, as recorded
-    in~\cite{gap:alvv16_approximation_parameters}.
-\end{theorem}
-\begin{proof}\leanok
-    The automatic tree gives at most $n\le M$ recorded generators of the
-    actual root, each with internal-cut ranks at most
-    $R=10^6D_{\rm ref}^2(L+1)M$. The preceding lemma gives bond $nR\le MR$
-    for every vector in their span. The literal parent identities and all
-    intermediate viability conclusions are retained unchanged.
 \end{proof}

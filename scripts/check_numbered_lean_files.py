@@ -56,8 +56,6 @@ SEMANTIC_EXCEPTIONS: dict[str, str] = {
         "Z2 x Z2 is the anomalous symmetry group whose condensation defect is formalized.",
     "TNLean/MPS/ParentHamiltonian/Martingale/EmbeddedC2.lean":
         "Condition C2 is Nachtergaele's martingale condition formalized by this module.",
-    "TNLean/MPS/Periodic/Symmetry/Corollary41.lean":
-        "Corollary 4.1 is the source result formalized by this module.",
 }
 
 # This guidance is intentionally naming-specific.  The size checker gives

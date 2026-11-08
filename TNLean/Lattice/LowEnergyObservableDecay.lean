@@ -19,12 +19,12 @@ to the distance between anchors.
 
 **Scope restriction (geometric growth):** the two physical observable-decay theorems
 use a polynomial sphere bound, absent from source lines 169–190, through the current
-partial-trace localization estimate. They remain valid auxiliary estimates;
-the growth-free physical-metric estimate of eq. `blecm` is a separate statement.
-The scalar time-window and anchor-conversion lemmas live in
-`GaussianTruncationDecayBound` and `GraphDegreeTail`. See
-`docs/paper-gaps/hastings05_geometric_growth_scope.tex` for the separate false
-unrestricted summation claim.
+partial-trace localization estimate. They remain valid auxiliary estimates. The
+growth-free physical-metric version of eq. `blecm`, including the actual truncated
+operators, is proved in `LowEnergyMetricCommutator.lean`. The scalar time-window
+and anchor-conversion lemmas now live in `GaussianTruncationDecayBound` and
+`GraphDegreeTail`. See `docs/paper-gaps/hastings05_geometric_growth_scope.tex` for
+the separate false unrestricted summation claim.
 -/
 
 open GaussianFilter Matrix QuantumCircuit

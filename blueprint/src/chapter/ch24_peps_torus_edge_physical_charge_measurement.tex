@@ -9,7 +9,7 @@
     including bonds that cross either coordinate seam.
 \end{definition}
 
-\begin{theorem}[Nonzero native two-spin charged columns]
+\begin{lemma}[Nonzero native two-spin charged columns]
     \label{thm:peps_torus_edge_charge_nonzero}
     \lean{TNLean.PEPS.IsGIsometric.openRegionWeight_torusEdgeCharacterSite_ne_zero}
     \leanok
@@ -20,7 +20,7 @@
     $p\in G$, and every native boundary configuration $\theta$, the charged
     open column on the two endpoints of a chosen right or up edge is nonzero.
     This asserts no nonvanishing under an arbitrary global exterior contraction.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At each endpoint a perpendicular incident edge differs from the shared edge,
     so both sites have remaining boundary legs. Because native incident-edge
@@ -29,7 +29,7 @@
     physical endpoint bijection preserve nonvanishing.
 \end{proof}
 
-\begin{theorem}[Native complete two-spin charge detection]
+\begin{lemma}[Native complete two-spin charge detection]
     \label{thm:peps_torus_edge_physical_charge_measurement}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusEdgePhysicalAllChargeMeasurement}
     \leanok
@@ -51,7 +51,7 @@
     the ordered edge. This is the finite-torus specialization of
     \cite[Detection of chargeons]{Schuch2010PEPS}, lines 2464--2486; it includes
     no parent-Hamiltonian assertion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For the complete physical pair measurement in native incident-edge
     coordinates, the indicator action holds on every original open-region

@@ -102,7 +102,7 @@ of a torus.
     open vector, and open span.
 \end{definition}
 
-\begin{theorem}[The complete regional contraction range]%
+\begin{lemma}[The complete regional contraction range]%
     \label{thm:peps_oriented_open_range}
     \lean{TNLean.PEPS.graphOrientedOpenBondCoordinates_eq_sum_prod,
         TNLean.PEPS.graphOpenRegionNetwork_orientedAveragingSite_coherent,
@@ -128,21 +128,16 @@ of a torus.
     exactly when $J_R\psi\in\mathcal S_R(U,W,o)$.
     The boundary coefficients may be arbitrary linear combinations of
     all $\theta$, including entangled boundary vectors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Expanding the normalized group average separately at every vertex
-    yields the factor $|G|^{-|R|}$ and the sum over $q:R\to G$,
-    after which we regroup the incidence product by internal and crossing edges.
-    Summation over one internal virtual index gives either
-    $(U_{q_h}W)(WU_{q_t^{-1}})$ or
-    $(U_{q_t}W)(WU_{q_h^{-1}})$ with the physical indices interchanged.
-    Commutation with $W$ gives~(\ref{eq:peps_oriented_internal}).
-    Each crossing edge retains its original $\theta_e$, giving
-    (\ref{eq:peps_oriented_open}); commuting the scalar products also
-    gives the internal-first form of the same sum.
-    The bijections of incidence and numbered labels preserve every finite
-    sum. Finally, the regional range is the span of all its boundary
-    columns, proving~(\ref{eq:peps_oriented_range}).
+    Expanding $|G|^{-1}\sum_{g\in G}$ in~(\ref{eq:peps_oriented_site}) at each
+    $v\in R$ gives $|G|^{-|R|}\sum_{q:R\to G}$ and factors over
+    $\partial E_R\sqcup E_R$. Summing the internal virtual index on $e=(t,h)\in E_R$
+    yields $(U_{q_h}W)(WU_{q_t^{-1}})_{x_h,x_t}$ ($o_e=0$) or
+    $(U_{q_t}W)(WU_{q_h^{-1}})_{x_t,x_h}$ ($o_e=1$), which equals~(\ref{eq:peps_oriented_internal})
+    since $WU_g=U_gW$, while crossing edges retain $B_e(q;\theta_e,x_e)$,
+    proving~(\ref{eq:peps_oriented_open}) and~(\ref{eq:peps_oriented_regroup}).
+    Spanning over $\theta\in X^{\partial E_R}$ gives~(\ref{eq:peps_oriented_range}).
 \end{proof}
 
 \begin{definition}[Oriented incident representation]%
@@ -166,16 +161,13 @@ of a torus.
         \end{cases}
         \label{eq:peps_oriented_incident}
     \end{align}
-    Matrix multiplication gives $\rho_v^o(1)=1$ and
-    $\rho_v^o(gh)=\rho_v^o(g)\rho_v^o(h)$. At a tail this follows
-    from $(U_{(gh)^{-1}})^T=(U_{g^{-1}})^T(U_{h^{-1}})^T$.
-    Thus these matrices act as a representation by multiplication on
-    coefficient vectors. If $E_v$ changes numbered virtual coefficients
-    to incidence coefficients, the numbered representation is
-    $E_v^{-1}\rho_v^o(g)E_v$.
+    Since $(U_{(gh)^{-1}})^{\mathsf T}=(U_{g^{-1}})^{\mathsf T}(U_{h^{-1}})^{\mathsf T}$
+    at native tails, $\rho_v^o(1)=I$ and $\rho_v^o(gh)=\rho_v^o(g)\rho_v^o(h)$.
+    With the virtual-to-incidence coordinate map $E_v$, the numbered
+    representation is $E_v^{-1}\rho_v^o(g)E_v$.
 \end{definition}
 
-\begin{theorem}[$G$-injectivity of the oriented average]%
+\begin{lemma}[$G$-injectivity of the oriented average]%
     \label{thm:peps_oriented_average_g_injective}
     \lean{TNLean.PEPS.regularSiteMap_graphOrientedAveragingSite,
         TNLean.PEPS.isGInjective_graphOrientedAveragingSite,
@@ -185,25 +177,21 @@ of a torus.
     \uses{def:peps_oriented_incident_representation,
         def:peps_oriented_averaging_tensor,def:peps_g_injective}
     The local coefficient map of $A^{U,1,o}_v$ is
-    $\Pi_v=|G|^{-1}\sum_g\rho_v^o(g)$, and is $G$-injective.
-    With physical numbering $P_v$ and virtual numbering $E_v$, its
-    local map is $P_v\Pi_v E_v$ and is $G$-injective for
-    $E_v^{-1}\rho_v^o E_v$.
-    This assertion needs neither unitarity nor semi-regularity of $U$.
-\end{theorem}
+    $\Pi_v=|G|^{-1}\sum_{g\in G}\rho_v^o(g)$, which is $G$-injective
+    (Definition~\ref{def:peps_g_injective}); with physical numbering $P_v$ and
+    virtual numbering $E_v$, $P_v\Pi_v E_v$ is $G$-injective for
+    $E_v^{-1}\rho_v^o E_v$, without assuming unitarity or semi-regularity of $U$.
+\end{lemma}
 \begin{proof}\leanok
-    Comparing~(\ref{eq:peps_oriented_site}) at $W=1$ with
-    (\ref{eq:peps_oriented_incident}) coefficient by coefficient identifies
-    the local map with $\Pi_v$.
-    The group average satisfies $\Pi_v\rho_v^o(g)=\Pi_v$ and fixes
-    every invariant vector. Hence its restriction to the invariant
-    subspace is injective. The invertible coordinate changes $P_v,E_v$
-    preserve both assertions.
+    Comparing~(\ref{eq:peps_oriented_site}) at $W=1$ with~(\ref{eq:peps_oriented_incident})
+    identifies the local map as $\Pi_v$. Since $\Pi_v\rho_v^o(g)=\Pi_v$ and
+    $\Pi_v$ acts as the identity on the $\rho_v^o$-invariant subspace, $\Pi_v$
+    and its conjugate-multiplied form $P_v\Pi_v E_v$ are $G$-injective.
 \end{proof}
 
 \subsection{Internal support and regional blocks}
 
-\begin{theorem}[Oriented internal factors determine parent support]%
+\begin{lemma}[Oriented internal factors determine parent support]%
     \label{thm:peps_oriented_parent_support}
     \lean{TNLean.PEPS.graphOrientedOpenInternalFactor_mem_range_of_factors,
         TNLean.PEPS.graphRegionInternalBondSlice_orientedAveragingSite,
@@ -213,36 +201,32 @@ of a torus.
     \leanok
     \uses{def:peps_oriented_open_coefficients,
         def:peps_region_parent_hamiltonian}
-    Let $F:\C^Z\to\C^{X\times X}$. Assume both coefficient vectors
-    of $W^2U_g$ and $(W^2U_g)^T$ belong to $\operatorname{im}F$
-    for every $g$. Then each $I_e(q)$ belongs to $\operatorname{im}F$.
-    Assume also $WU_g=U_gW$. Fixing the physical crossing labels $x$
-    in an open vector leaves
+    Let $F:\C^Z\to\C^{X\times X}$. If $\operatorname{vec}(W^2U_g)$ and
+    $\operatorname{vec}((W^2U_g)^{\mathsf T})$ belong to $\operatorname{im}F$
+    for all $g\in G$, then $I_e(q)\in\operatorname{im}F$ for every $e\in E_R$
+    and $q:R\to G$. If also $WU_g=U_gW$, fixing the crossing labels $x$ in
+    (\ref{eq:peps_oriented_open}) gives
     \begin{align}
         |G|^{-|R|}\sum_q
         \left(\prod_{e\in\partial E_R}B_e(q;\theta_e,x_e)\right)
         \bigotimes_{e\in E_R}I_e(q)
-        \ \in\operatorname{im}F^{\otimes E_R}.
+        \ \in\operatorname{im}F^{\otimes E_R},
         \label{eq:peps_oriented_internal_support}
     \end{align}
-    This holds for every vector in the regional range after taking its
-    internal physical slice. If a region family $\mathcal R$ contains
-    both endpoints of every edge in some member, every vector in its
-    parent space $\mathcal P_{\mathcal R}(A^{U,W,o})$ lies, after
-    regrouping, in $\operatorname{im}F^{\otimes E}$.
-\end{theorem}
+    and the same holds for the internal slice of every $\phi\in\operatorname{im}\mathcal C_R$.
+    If $\mathcal R$ covers $E$, then every regrouped parent vector in
+    $\mathcal P_{\mathcal R}(A^{U,W,o})$ lies in $\operatorname{im}F^{\otimes E}$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_open_range,thm:peps_parent_support_product_range}
-    Each orientation selects one of the two assumed matrix orders.
-    Choosing a preimage under $F$ for every $I_e(q)$ and taking their
-    product with the scalar coefficient in
-    (\ref{eq:peps_oriented_internal_support}) produces a vector whose image under
-    $F^{\otimes E_R}$ is the displayed sum.
-    Span closure proves the assertion for every regional vector.
-    For a global parent vector, choose a region containing the endpoints
-    of a prescribed edge. Every one-edge slice then belongs to
-    $\operatorname{im}F$. The product-range criterion gives the
-    full $E$-fold range.
+    By~(\ref{eq:peps_oriented_internal}), $I_e(q)\in\{\operatorname{vec}(W^2U_g),\operatorname{vec}((W^2U_g)^{\mathsf T})\}\subseteq\operatorname{im}F$.
+    Choosing $F$-preimages of each $I_e(q)$ yields~(\ref{eq:peps_oriented_internal_support}),
+    and Lemma~\ref{thm:peps_oriented_open_range} extends this by linearity to
+    $\operatorname{im}\mathcal C_R$. If $\mathcal R$ covers $E$, each edge $e$
+    is internal to some $R\in\mathcal R$, so every $e$-slice of a regrouped
+    vector in $\mathcal P_{\mathcal R}(A^{U,W,o})$ lies in $\operatorname{im}F$;
+    Lemma~\ref{thm:peps_parent_support_product_range} then gives membership
+    in $\operatorname{im}F^{\otimes E}$.
 \end{proof}
 
 \begin{definition}[Products of edge-dependent physical maps]%
@@ -253,25 +237,22 @@ of a torus.
         TNLean.PEPS.graphNumberedBondFamilyMatrix_eq_submatrix}
     \leanok
     For $F_e:\C^{X\times X}\to\C^{Y\times Y}$, define
-    $M(F)=\bigotimes_{e\in E}F_e$, expressed in the numbered site
-    coordinates through the incidence-to-bond bijections.
-    Thus $M(F)_{\tau,\sigma}=\prod_eF_e((\tau_h,\tau_t),(\sigma_h,\sigma_t))$
-    in bond coordinates. Fix exterior endpoint labels $\gamma_Y,\gamma_X$.
-    On a crossing edge put
+    $M(F)=\bigotimes_{e\in E}F_e$, expressed in numbered site coordinates via
+    $M(F)_{\tau,\sigma}=\prod_{e\in E}F_e((\tau_h,\tau_t),(\sigma_h,\sigma_t))$.
+    For fixed exterior endpoint labels $\gamma_Y,\gamma_X$ and $e\in\partial E_R$, put
     \begin{align}
         F_{e,R}^{\gamma_Y,\gamma_X}(y,x)
         =\begin{cases}
              F_e((\gamma_{Y,e},y),(\gamma_{X,e},x)), & t\in R, \\
-             F_e((y,\gamma_{Y,e}),(x,\gamma_{X,e})), & h\in R.
+             F_e((y,\gamma_{Y,e}),(x,\gamma_{X,e})), & h\in R,
          \end{cases}
         \label{eq:peps_oriented_crossing_block}
     \end{align}
-    For fixed exterior physical configurations $\tau,\sigma$, let
-    $c_R(F;\tau,\sigma)$ be the product of their matrix coefficients
-    on all $e\in E_{R^c}$.
+    and for exterior configurations $\tau,\sigma$ set
+    $c_R(F;\tau,\sigma)=\prod_{e\in E_{R^c}}F_e((\tau_h,\tau_t),(\sigma_h,\sigma_t))$.
 \end{definition}
 
-\begin{theorem}[Regional blocks of an edge-family product]%
+\begin{lemma}[Regional blocks of an edge-family product]%
     \label{thm:peps_oriented_bond_family_blocks}
     \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondFamilyMatrix}
     \leanok
@@ -288,17 +269,16 @@ of a torus.
     \end{align}
     where $\gamma_Y,\gamma_X$ are the crossing endpoint labels determined
     by $\tau,\sigma$, and $J_{X,R},J_{Y,R}$ regroup regional coordinates.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Partitioning the defining product for $M(F)$ into exterior, crossing,
-    and internal edges yields $c_R$ on the exterior edges, while fixing the outside
-    endpoint of each crossing edge gives
-    (\ref{eq:peps_oriented_crossing_block}). The internal factors are
-    unchanged. The coordinate bijections identify their product with
-    (\ref{eq:peps_oriented_family_block}).
+    Partitioning $\prod_{e\in E}$ across $E=E_{R^c}\sqcup\partial E_R\sqcup E_R$
+    in Definition~\ref{def:peps_oriented_bond_family} yields $c_R(F;\tau,\sigma)$
+    on $E_{R^c}$,~(\ref{eq:peps_oriented_crossing_block}) on $\partial E_R$,
+    and $F_e$ on $E_R$, giving~(\ref{eq:peps_oriented_family_block}) under
+    $J_{X,R}$ and $J_{Y,R}$.
 \end{proof}
 
-\begin{theorem}[Composition and adjoints of edge-family products]%
+\begin{lemma}[Composition and adjoints of edge-family products]%
     \label{thm:peps_oriented_bond_family_algebra}
     \lean{TNLean.PEPS.graphNumberedBondFamilyMatrix_conjTranspose,
         TNLean.PEPS.graphNumberedBondFamilyMatrix_mul,
@@ -308,14 +288,11 @@ of a torus.
     \uses{def:peps_oriented_bond_family}
     With compatible finite endpoint alphabets,
     $M(F)^\dagger=M(F^\dagger)$,
-    $M(F)M(L)=M((F_eL_e)_e)$, and $M((1)_e)=1$.
-    In particular, $F_eL_e=1$ on every edge implies $M(F)M(L)=1$.
-\end{theorem}
+    $M(F)M(L)=M((F_eL_e)_e)$, and $M((I)_e)=I$; in particular,
+    $(\forall e\in E,\ F_eL_e=I)\implies M(F)M(L)=I$.
+\end{lemma}
 \begin{proof}\leanok
-    Conjugation distributes over each coefficient product.
-    For composition, the sum over the intermediate site configuration
-    is, under the bond-coordinate bijection, a sum over independent
-    intermediate edge labels. It factors into the products $F_eL_e$.
-    The product of edgewise Kronecker deltas is the delta of the
-    complete configuration, proving the identity assertion.
+    Conjugation distributes over $\prod_{e\in E}$, and under the bond-coordinate
+    bijection the intermediate configuration sum factors over $e\in E$ into
+    $\prod_{e\in E}(F_eL_e)$, while $\prod_{e\in E}\delta_{(\tau_h,\tau_t),(\sigma_h,\sigma_t)}=\delta_{\tau,\sigma}$.
 \end{proof}

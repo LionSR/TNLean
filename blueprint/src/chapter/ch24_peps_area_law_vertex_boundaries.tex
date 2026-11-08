@@ -20,7 +20,7 @@
     These are the conventions of \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
 \end{definition}
 
-\begin{theorem}[Boundaries of the empty and full cuts]
+\begin{lemma}[Boundaries of the empty and full cuts]
     \label{thm:area_law_vertex_boundaries_trivial}
     \lean{TNLean.PEPS.AreaLaw.innerBoundary_empty,
         TNLean.PEPS.AreaLaw.innerBoundary_univ,
@@ -30,25 +30,25 @@
     \uses{def:area_law_vertex_boundaries}
     Both $\partial_{\rm in}A$ and $Z_A$ are empty when $A=\varnothing$ or
     $A=\Lambda$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In both cases $\partial_\Lambda A=\varnothing$, since no edge joins a site of
     $A$ to a site of $\Lambda\setminus A$.
 \end{proof}
 
-\begin{theorem}[Degree bound for induced lattice domains]
+\begin{lemma}[Degree bound for induced lattice domains]
     \label{thm:area_law_lattice_degree}
     \lean{TNLean.PEPS.AreaLaw.domainGraph_degree_le_four}
     \leanok
     \uses{def:area_law_domain}
     Every site of a finite induced square-lattice domain has degree at most four.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The neighbors of $(a,b)$ form a subset of
     $\{(a+1,b),(a-1,b),(a,b+1),(a,b-1)\}$.
 \end{proof}
 
-\begin{theorem}[Comparison of edge and vertex boundaries]
+\begin{lemma}[Comparison of edge and vertex boundaries]
     \label{thm:area_law_vertex_boundary_counts}
     \lean{TNLean.PEPS.AreaLaw.edgeBoundary_card_le_four_mul_innerBoundary_card,
         TNLean.PEPS.AreaLaw.edgeBoundary_card_le_two_mul_endpointBoundary_card}
@@ -57,7 +57,7 @@
     For every cut in a finite induced lattice domain,
     $|\partial_\Lambda A|\le4|\partial_{\rm in}A|$ and
     $|\partial_\Lambda A|\le2|Z_A|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_vertex_boundaries,thm:area_law_lattice_degree}
     Let $G_A$ have exactly the crossing edges, with degrees $d_A(x)$.
@@ -73,7 +73,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Vertex bounds assuming the uniform edge area law]
+\begin{lemma}[Vertex bounds assuming the uniform edge area law]
     \label{thm:area_law_conditional_vertex_bounds}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_four_mul_innerBoundary_card,
         TNLean.PEPS.AreaLaw.regionalEntropy_le_two_mul_endpointBoundary_card,
@@ -86,7 +86,7 @@
     Then the same constant gives
     $S_\Omega(A)\le4C|\partial_{\rm in}A|$ and
     $S_\Omega(A)\le2C|Z_A|$ uniformly for those instances.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_vertex_boundary_counts}
     Multiply the two boundary-cardinality inequalities by $C\ge0$ and apply

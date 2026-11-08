@@ -14,14 +14,14 @@ is a separate argument.
     \uses{def:aklv_logarithmic_threshold}
     For gap parameter $g$, fixed window width $s$, and $i\ge0$, set
     \begin{align*}
-        \beta_i&=2^{-i},& t_i&=T(g)+16i\log2,\notag\\
-        \ell_i&=\left\lceil5\sqrt{(2t_i+s)/g}\right\rceil.
+        \beta_i & =2^{-i},                                    & t_i & =T(g)+16i\log2,\notag \\
+        \ell_i  & =\left\lceil5\sqrt{(2t_i+s)/g}\right\rceil.
     \end{align*}
     Here $T(g)=1024+16\log(1/g)$. The rounded degrees are used at indices
     $i\ge1$; initialization uses degree $s^2$.
 \end{definition}
 
-\begin{theorem}[Dyadic threshold and degree estimates]
+\begin{lemma}[Dyadic threshold and degree estimates]
     \label{thm:aklv_sequence_parameter_bounds}
     \lean{TNLean.MPS.AreaLaw.aklvSequenceWeight_zero_succ,
         TNLean.MPS.AreaLaw.aklvSequenceWeight_pos_le_one,
@@ -36,11 +36,11 @@ is a separate argument.
     $0<\beta_i\le1$. For $0<g\le1$, one has $t_i\ge T(g)>0$,
     $e^{-t_i/16}\le\beta_i$, and
     \begin{align*}
-        5\sqrt{(2t_i+s)/g}&\le\ell_i<5\sqrt{(2t_i+s)/g}+1,\notag\\
+        5\sqrt{(2t_i+s)/g} & \le\ell_i<5\sqrt{(2t_i+s)/g}+1,\notag \\
         \delta_i:=\left(2e^{-2\ell_i\sqrt{(9g/10)/(2t_i+s)}}\right)^2
-            &\le\frac1{256}.
+                           & \le\frac1{256}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The threshold identity gives
@@ -60,19 +60,19 @@ is a separate argument.
     \uses{def:aklv_sequence_parameters}
     Define
     \begin{align*}
-        D_i&=[q(\ell_i+1)]^{32(\lfloor\ell_i/s\rfloor+
-                 \lfloor\sqrt{\ell_i}\rfloor+1)},\notag\\
-        R_i&=[q(s^2+1)]^{32(2s+1)}\prod_{j=1}^iD_j.
+        D_i & =[q(\ell_i+1)]^{32(\lfloor\ell_i/s\rfloor+
+        \lfloor\sqrt{\ell_i}\rfloor+1)},\notag           \\
+        R_i & =[q(s^2+1)]^{32(2s+1)}\prod_{j=1}^iD_j.
     \end{align*}
 \end{definition}
 
-\begin{theorem}[Successive rank budgets]
+\begin{lemma}[Successive rank budgets]
     \label{thm:aklv_sequence_rank_product}
     \lean{TNLean.MPS.AreaLaw.aklvSequenceRankBound_zero_succ}
     \leanok
     \uses{def:aklv_sequence_rank_product}
     One has $R_0=[q(s^2+1)]^{32(2s+1)}$ and $R_{i+1}=D_{i+1}R_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Separate the final factor from the finite product.
@@ -91,15 +91,15 @@ is a separate argument.
     $\phi$, real polynomial $p$ of degree $\ell_{i+1}$ and scalar $c$ of
     modulus one, with
     \begin{align*}
-        B_{i+1}\phi&=E\phi,&
-        B_{i+1}-EI&\ge\tfrac9{10}g(I-|\phi\rangle\langle\phi|),\notag\\
-        \|\phi-\Omega\|^2&\le\beta_{i+1}/100,& p(E)&=1,\notag\\
-        K&=p(B_{i+1}),& K\phi&=\phi,\notag\\
-        Kx&\ne0,& y&=cKx/\|Kx\|.
+        B_{i+1}\phi       & =E\phi,                                            &
+        B_{i+1}-EI        & \ge\tfrac9{10}g(I-|\phi\rangle\langle\phi|),\notag                        \\
+        \|\phi-\Omega\|^2 & \le\beta_{i+1}/100,                                & p(E)  & =1,\notag    \\
+        K                 & =p(B_{i+1}),                                       & K\phi & =\phi,\notag \\
+        Kx                & \ne0,                                              & y     & =cKx/\|Kx\|.
     \end{align*}
 \end{definition}
 
-\begin{theorem}[A physical dyadic refinement]
+\begin{lemma}[A physical dyadic refinement]
     \label{thm:aklv_dyadic_refinement}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_dyadic_filtered_output}
     \leanok
@@ -114,10 +114,10 @@ is a separate argument.
     If $\|x\|=1$ and $\|x-\Omega\|^2\le\beta_i/16$, there is an actual
     refinement $y$ with
     \begin{align*}
-        \|y\|&=1,& \|y-\Omega\|^2&\le\beta_{i+1}/16,\notag\\
-        \operatorname{SR}_k(y)&\le D_{i+1}\operatorname{SR}_k(x).
+        \|y\|                  & =1,                                & \|y-\Omega\|^2 & \le\beta_{i+1}/16,\notag \\
+        \operatorname{SR}_k(y) & \le D_{i+1}\operatorname{SR}_k(x).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The physical refinement returns minimizing energies for the same three
@@ -148,7 +148,7 @@ is a separate argument.
     The target satisfies $\|\phi_0-\Omega\|^2\le e^{-T(g)/16}/100$.
 \end{definition}
 
-\begin{theorem}[A coherent physical changing-target sequence]
+\begin{lemma}[A coherent physical changing-target sequence]
     \label{thm:aklv_coherent_changing_targets}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_changing_target_sequence}
     \leanok
@@ -168,19 +168,19 @@ is a separate argument.
     actual product-filter initialization and actual refinement
     $\psi_i\mapsto\psi_{i+1}$ at every step, satisfying
     \begin{align*}
-        \|\psi_i\|&=1,& \|\psi_i-\Omega\|^2&\le2^{-i}/16,\notag\\
-        \operatorname{SR}_k(\psi_i)&\le R_i,&
-        \log R_0&\le\frac{198(A+1)(6+2\log(A+1))}{g}\,u^3.
+        \|\psi_i\|                  & =1,                                       & \|\psi_i-\Omega\|^2 & \le2^{-i}/16,\notag \\
+        \operatorname{SR}_k(\psi_i) & \le R_i,                                  &
+        \log R_0                    & \le\frac{198(A+1)(6+2\log(A+1))}{g}\,u^3.
     \end{align*}
     The rank budget here is the exact product in
     Definition~\ref{def:aklv_sequence_rank_product}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Obtain the fixed minima and the actual initial state from
-    Theorem~\ref{thm:aklv_physical_product_initialization}.
+    Lemma~\ref{thm:aklv_physical_product_initialization}.
     At index $i$, consider unit vectors satisfying the asserted error and
-    rank bounds. Theorem~\ref{thm:aklv_dyadic_refinement} constructs a next
+    rank bounds. Lemma~\ref{thm:aklv_dyadic_refinement} constructs a next
     vector from the actual current vector, with its actual refinement
     relation, while preserving these bounds. Choose this next vector and
     iterate the resulting dependent successor map recursively on $i$.

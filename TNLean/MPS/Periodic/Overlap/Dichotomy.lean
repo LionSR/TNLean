@@ -55,8 +55,6 @@ theorem periodicOverlapDichotomy
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
       ∨ ∃ (hdim : D₁ = D₂),
           RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) A) B := by
-  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
-  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   -- APPENDIX CASE SPLIT (arXiv:1708.00029 lines 915--1117):
   --   * m_a ≠ m_b            → `periodicOverlap_tendsto_zero_of_ne_period`
   --   * m_a = m_b, D₁ ≠ D₂ → `periodicOverlap_tendsto_zero_of_ne_dim`

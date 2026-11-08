@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[margin=25mm]{geometry}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,dsfont}
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \input{command}
@@ -10,7 +10,7 @@
 \date{October 28, 2026}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{wip}
+\gapnote{scope-restriction}{open}
 
 \section{The quantitative conclusion}
 
@@ -44,7 +44,6 @@ $P=\Id\otimes\ketbra{1}{1}\otimes\Id$ and take both nearest-neighbour
 terms to equal $P$. The first is supported on sites $1,2$ and the second
 on sites $2,3$. Each term is a positive contraction, while
 $H=2P$ has spectrum $\{0,2\}$, ground-space dimension four and gap two.
-This corrects the normalization comparison in tracker~\ghissue{9809}.
 ALVV states the local normalization at source lines 267 and 806; no
 global assumption $\gamma\le1$ is stated there or in Assumption (DG).
 
@@ -83,6 +82,11 @@ The obstruction concerns the prescription; it does not disprove
 (\ref{eq:alvv_approximation_rank}).
 
 \section{A choice retaining the two scales}
+
+The corrected prescription of this section is formalized, so the failure of
+the printed choice is resolved. What remains open is the comparison with the
+printed bound for gaps larger than one, where the formal bound uses
+$g=\min\{\gamma,1\}$.
 
 Normalize the gap to $0<g\le1$. For a target scale $0<\tau\le1$, put
 $u=1+\log(1/g)+\log(1/\tau)$. There is a universal constant $C\ge21$
@@ -194,12 +198,14 @@ before the sampling size and the child spaces. Its literal ordered words
 act on the actual Haar coordinate sample, followed by one collective trim.
 Writing $D_{\rm ref}=r^2B$, take
 \[
-  A=1+\log r+\log D+\log(1/\beta),\qquad
-  s=\lceil4096rA\rceil,\qquad
-  M=D^6s^3,\qquad
-  \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
+    A=1+\log r+\log D+\log(1/\beta),\qquad
+    s=\lceil4096rA\rceil,\qquad
+    M=D^6s^3,\qquad
+    \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
 \]
-The corrected fixed-input failure bound is at most $\beta<1$, uniformly
+The corrected fixed-input failure bound
+(\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
+is at most $\beta<1$, uniformly
 for parent dimensions at most $D^{12}s^6$. Choosing successful unitaries
 therefore gives actual recursively selected spaces, all $3/200$-viable
 for the original ground space. Each has at most $M$ recorded generators,
@@ -226,12 +232,12 @@ The numerical tail and filter conditions in the bounded witness above can
 be derived uniformly from the physical input. Choose a universal $C\ge1$
 from the scalar parameter theorem, before the chain and Hamiltonian, and put
 \[
-  m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
-  \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+    m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
+    \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
 \]
 Then $\ell\ge21$ and
 \[
-  \log D\le22(C+1)(6+2\log(C+1))v^3/g.
+    \log D\le22(C+1)(6+2\log(C+1))v^3/g.
 \]
 Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
 estimate holds uniformly up to $8\ell$, hence throughout the required
@@ -246,27 +252,6 @@ printed modified merge procedure. Its block leaves, final trim, capped
 gap and ranks of recorded generators remain as stated above. It does
 not prove an adaptive joint success probability, the energy-estimation
 invariant, final spectral extraction or the claimed running time.
-
-
-\section*{Native matrix product states at the actual root}
-
-The actual recursively selected root space can be read on the original
-chain coordinates. Its regional internal cuts are the native chain cuts.
-If its at most $M$ recorded generators have ranks at most
-$R=10^6D_{\rm ref}^2(n+1)M$, the finite-span estimate gives bond at most
-\[
-  MR=10^6D_{\rm ref}^2(n+1)M^2
-\]
-for every vector in this actual root space. The extra factor $M$ is
-retained: the per-generator bound is not assigned unchanged to the whole
-span. The families, actual recursive operations and original-ground-space
-viability at every intermediate interval are the same as above. No
-independent matrix product approximation is substituted for the root.
-
-This conclusion does not perform the source's final spectral extraction
-or establish its running time or adaptive joint success probability.
-Any later normalized witness must be obtained from whole-region viability
-of this actual root, with its coordinate and norm identifications proved.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

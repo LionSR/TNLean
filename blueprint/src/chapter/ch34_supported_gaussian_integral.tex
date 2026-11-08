@@ -1,6 +1,6 @@
 \section{A supported Gaussian integral}
 
-\begin{theorem}[Supported Gaussian approximation]
+\begin{lemma}[Supported Gaussian approximation]
     \label{thm:area_supported_gaussian_integral}
     \lean{TNLean.PEPS.AreaLaw.exists_supported_gaussian_integral,
         TNLean.PEPS.AreaLaw.supported_gaussian_integral}
@@ -44,12 +44,12 @@
     empty domains, and empty regions are included. If $J\geq0$, the
     estimate holds with $C=2C_0(R)$, $v=v(R,J)$ and $c=1/2$, the constants
     of Definition~\ref{def:area_graph_ball_localization_constants}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_region_localization,
         thm:qc_supported_gaussian_projection_bounds,
         def:area_graph_ball_localization_constants}
-    Take constants $C,v,c$ from Theorem~\ref{thm:area_region_localization}
+    Take constants $C,v,c$ from Lemma~\ref{thm:area_region_localization}
     with $C,v\ge0$; when $J\ge0$, take $2C_0(R)$, $v(R,J)$ and $1/2$.
     Both $W$ and $D$ act on $Q\cup Z$. Regional localization on
     $B=N_l(Q\cup Z)$ gives the projection estimates with
@@ -57,7 +57,7 @@
         \varepsilon_o & =C|\Lambda|e^{vT-cl},\notag      \\
         \varepsilon_g & =\|D\|C|\Lambda|e^{vT-cl}.\notag
     \end{align}
-    Apply Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} with all
+    Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with all
     three regions equal to $B$. It constructs the required path before
     $\eta,T$, and gives the support and norm assertions. Its error bound is
     \begin{align}

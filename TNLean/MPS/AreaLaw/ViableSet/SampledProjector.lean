@@ -28,19 +28,15 @@ Throughout, `n = L` is the number of sites, and of letters. The probability spac
 The ground energy satisfies `0 ≤ ε₀ ≤ n - 1` (`groundEnergy_nonneg_and_le`), so `C ≥ 1` is well
 defined; neither bound is assumed.
 
-**Local fix (energy-dependent sample count):** the preprint states
-`ℓ = n^{O(1/ε)}`, using an energy-independent bound for `C^{2m}`. This fails
-when the allowed ground energy grows linearly with the length. The published
-Methods, Proposition 1, author PDF p. 6, retain the ground-energy contribution
-to the complexity exponent. The present finite probability estimate keeps
-`R = C^m + 1` explicit:
-`ℓ = ⌈(2R² + 2Rη/3) η⁻² log (8 q^n n³)⌉ + 1`.
-The proved estimate `C^m ≤ n (1/η)^{ε₀/Δ}` makes the energy dependence visible;
-the multiplicity bound `κ = ⌈2m/n + 2 log (4 ℓ n⁴)⌉` retains `log ℓ`.
-The published correction and the remaining unknown-energy selection problem
-are recorded in `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
-Neither an energy-independent sample count nor an unknown-energy trial
-algorithm is asserted here.
+**Local fix (number of sampled words):** the source states `ℓ = n^{O(1/ε)}`, using
+`C^{2m} = n^{O(1/ε)}` at `m = Θ((n/ε) log (q(n)/c_ε))` (line 644). Since
+`C^m ≤ exp (ε₀ m/(n - ε₀))` (`powerNormalization_pow_le_exp`), this holds when `ε₀/ε` is bounded,
+but it fails when `ε₀` grows linearly in `n`, which the hypotheses `0 ≤ H_i ≤ 1` allow. The
+corollary is therefore formalized with `ℓ` explicit in `R = C^m + 1`,
+`ℓ = ⌈(2R² + 2Rη/3) η⁻² log (8 q^n n³)⌉ + 1`, and `powerNormalization_pow_ceil_le` gives
+`C^m ≤ n (1/η)^{ε₀/Δ}` at the logarithmic power, which is polynomial when `ε₀/Δ` is bounded. The
+multiplicity bound `κ = ⌈2m/n + 2 log (4 ℓ n⁴)⌉` inherits the term `log ℓ`. Documented in
+`docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 
 The words range over the `n` letters of the padded expansion, whose last letter is the identity;
 see `docs/paper-gaps/lvv13_power_expansion_padding.tex`.
@@ -76,9 +72,6 @@ see `docs/paper-gaps/lvv13_power_expansion_padding.tex`.
   decomposition `e:decomp`, lines 584–588; the expansion `eq:a-exp`, lines 606–609; Definition
   `d:sagsp`, line 611; Theorem `t:mcb`, lines 616–624; Corollary `c:agsp` and its proof,
   lines 626–649.
-* Z. Landau, U. Vazirani, T. Vidick, *A polynomial time algorithm for the ground state
-  of one-dimensional gapped local Hamiltonians*, Nature Physics 11 (2015), Methods,
-  Proposition 1, author PDF p. 6: https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf.
 * J. A. Tropp, *User-friendly tail bounds for sums of random matrices*, Found. Comput. Math. 12
   (2012), Theorem 1.6.
 -/

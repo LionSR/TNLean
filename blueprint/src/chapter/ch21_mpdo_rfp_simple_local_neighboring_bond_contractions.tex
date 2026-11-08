@@ -19,12 +19,12 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Neighboring bond contraction]
+\begin{lemma}[Neighboring bond contraction]
     \label{thm:mpdo_neighboring_bond_contraction}
     \lean{MPOTensor.physicalSlice_neighboring_contraction}
     \leanok
     \uses{def:mpdo_sector_eta}
-    In the setting of Theorem~\ref{thm:mpdo_sector_factorization}, for all
+    In the setting of Lemma~\ref{thm:mpdo_sector_factorization}, for all
     sectors $k,h$ and virtual indices $\beta_1,\alpha_3$, contracting the
     shared virtual bond of two neighboring factorized slices leaves the
     neighboring operator between the outer sector tensors, providing the
@@ -42,13 +42,13 @@
         \left[(r_h)_{\alpha_3}\right]_{r_2,r_2'}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_sector_factorization}
     Substituting the sector factorization
-    (Theorem~\ref{thm:mpdo_sector_factorization}) into each slice, the
+    (Lemma~\ref{thm:mpdo_sector_factorization}) into each slice, the
     outer sector tensors decouple from the bond sum, and the inner sum over
     the shared bond $\gamma$ reads
     \begin{align}
@@ -159,7 +159,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Neighboring operators under virtual-matrix transformation]
+\begin{lemma}[Neighboring operators under virtual-matrix transformation]
     \label{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices_neighboringOperator}
     \leanok
@@ -174,7 +174,7 @@
          & =\eta^K_{k,h}(YX).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -210,20 +210,20 @@
     physical decomposition.
 \end{definition}
 
-\begin{theorem}[Range projection of a matrix-block inclusion]
+\begin{lemma}[Range projection of a matrix-block inclusion]
     \label{thm:block_inclusion_projection}
     \lean{Matrix.sigmaBlockInclusion_mul_conjTranspose_eq_blockProjection}
     \leanok
     For the canonical inclusion $V_s$ of a matrix block,
     $V_sV_s^\dagger$ is the projection onto that block.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The identity follows by computing the entries of the inclusion and its
     conjugate transpose.
 \end{proof}
 
-\begin{theorem}[Flattened sector as an isometric virtual corner]
+\begin{lemma}[Flattened sector as an isometric virtual corner]
     \label{thm:mpdo_flattened_sector_virtual_compression}
     \lean{MPSTensor.SectorDecomposition.flatBlockInclusion,
         MPSTensor.SectorDecomposition.flatBlockInclusion_isometry,
@@ -249,7 +249,7 @@
         A^iV_s          & =V_s(\mu_sA_s^i), \notag         \\
         V_s^\dagger A^i & =(\mu_sA_s^i)V_s^\dagger. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -280,7 +280,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Neighboring operators under virtual compression]
+\begin{lemma}[Neighboring operators under virtual compression]
     \label{thm:mpdo_physical_sector_factorization_virtual_compression_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
     \leanok
@@ -295,7 +295,7 @@
          & =\eta^K_{k,h}(VV^\dagger).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -304,7 +304,7 @@
     $Y=V$.
 \end{proof}
 
-\begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
+\begin{lemma}[Virtual-gauge invariance of physical-sector factorizations]
     \label{thm:mpdo_physical_sector_factorization_gauge}
     \lean{MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv,
         MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_eq_ofVirtualMatrices,
@@ -319,7 +319,7 @@
     the same physical decomposition and the same neighboring operators.  In
     particular, positive semidefiniteness of all neighboring operators is
     invariant under the gauge.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -349,7 +349,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Directed-cut annihilation of one-site matrix spaces]%
+\begin{lemma}[Directed-cut annihilation of one-site matrix spaces]%
     \label{thm:mpdo_directed_cut_one_site_spaces}
     \lean{MPOTensor.PhysicalSectorFactorization.%
         oneSiteSectorMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
@@ -360,7 +360,7 @@
     \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}, let $S$ and $C$
     be sets of sectors. If $\eta_{k,h}=0$ for every $k\in S$ and $h\in C$,
     then $XY=0$ for every $X\in\mc A_S$ and $Y\in\mc A_C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -392,7 +392,7 @@
     leaves every physical-slice factorization unchanged.
 \end{definition}
 
-\begin{theorem}[Rephasing identities for the sector data]%
+\begin{lemma}[Rephasing identities for the sector data]%
     \label{thm:mpdo_physical_sector_rephasing_invariance}
     \lean{MPOTensor.PhysicalSectorFactorization.rephase_neighboringOperator}
     \lean{MPOTensor.PhysicalSectorFactorization.rephase_cyclicNeighboringProduct}
@@ -406,7 +406,7 @@
     $\eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}$, while leaving every sector
     virtual matrix, the nonzero neighboring support, and every complete cyclic
     product of neighboring operators unchanged.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[Vanishing right tensors on inactive sectors]
     \label{def:mpdo_physical_sector_inactive_right_zero}
@@ -460,7 +460,7 @@
         lines~1383--1387 and~1434--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Identification of the neighboring operators]
+\begin{lemma}[Identification of the neighboring operators]
     \label{thm:mpdo_inverse_map_factorization_neighboring_operator}
     \lean{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta}
     \leanok
@@ -474,7 +474,7 @@
          & =\sum_\gamma (r_k)_\gamma\otimes(l_h)_\gamma.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[Zero-weight inverse-map reparameterization]
     \label{def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
@@ -498,7 +498,7 @@
     leaving the physical-slice factorization unchanged.
 \end{definition}
 
-\begin{theorem}[Neighboring operators after zero-weight reparameterization]
+\begin{lemma}[Neighboring operators after zero-weight reparameterization]
     \label{thm:mpdo_zero_weight_reparameterized_neighboring_operator}
     \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}
     \lean{MPOTensor.probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero}
@@ -516,7 +516,7 @@
     \end{align}
     Thus a zero-weight sector has no outgoing support edge. Since
     $p_h=0$ also gives $l_h=0$, it has no incoming support edge either.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -526,7 +526,7 @@
     Lemma~\ref{lem:mpdo_sector_tensor_left_zero_of_weight_zero}.
 \end{proof}
 
-\begin{corollary}[SAL gives an algebraic physical-sector factorization]
+\begin{lemma}[SAL gives an algebraic physical-sector factorization]
     \label{cor:mpdo_sal_raw_physical_sector_factorization}
     \lean{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL}
     \leanok
@@ -536,7 +536,7 @@
     and equations \texttt{formK} and \texttt{etarl}; coherent positivity of
     the neighboring operators, recurrence, and primitivity are not part of
     this conclusion.
-\end{corollary}
+\end{lemma}
 
 \begin{definition}[Finite-chain coordinates of a physical-sector factorization]
     \label{def:mpdo_physical_sector_chain_coordinates}
@@ -572,7 +572,7 @@
     where site labels are read modulo $N$.
 \end{definition}
 
-\begin{theorem}[Finite-chain decomposition of a physical-sector factorization]
+\begin{lemma}[Finite-chain decomposition of a physical-sector factorization]
     \label{thm:mpdo_physical_sector_chain_decomposition}
     \lean{MPOTensor.PhysicalSectorFactorization.mpo_submatrix_sector_eq_cyclicNeighboringProduct,
         MPOTensor.PhysicalSectorFactorization.mpo_reindex_sectorChainEquiv_eq_blockDiagonal}
@@ -588,7 +588,7 @@
          & =\bigoplus_{k_0,\ldots,k_{N-1}}\Omega_k.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -674,7 +674,7 @@
     denoting the resulting matrix by $\mc K_{2;k,h}(X)$.
 \end{definition}
 
-\begin{theorem}[Two-site closure factorization]
+\begin{lemma}[Two-site closure factorization]
     \label{thm:mpdo_two_site_sector_closure_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure_eq}
     \leanok
@@ -685,7 +685,7 @@
          & =B_{k,h}(X)\otimes\eta_{k,h}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpdo_two_site_sector_closure, def:mpdo_minimal_neighboring_operator, def:mpdo_sector_boundary_operator, def:phys_close, def:mpdo_physical_sector_factorization}
@@ -725,7 +725,7 @@
     denoting the resulting matrix by $\mc K_{3;k,l,h}(X)$.
 \end{definition}
 
-\begin{theorem}[Three-site closure factorization]
+\begin{lemma}[Three-site closure factorization]
     \label{thm:mpdo_three_site_sector_closure_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure_eq}
     \leanok
@@ -788,7 +788,7 @@
             \tn[label pos=225, ports={90:physical:$L_h$, 270:physical:$L_h$}]{l_h}
         \end{tenkz}
     \end{center}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpdo_three_site_sector_closure, def:mpdo_minimal_neighboring_operator, def:mpdo_sector_boundary_operator, def:phys_close, def:mpdo_physical_sector_factorization}
@@ -909,7 +909,7 @@
 
 % This coordinate-invariance theorem is project-derived.  It transports the
 % data in CPSV16 Theorem 4.9(iv), but is not a theorem stated in that source.
-\begin{theorem}[Unitary-between physical-coordinate invariance of neighboring trace factorizations]
+\begin{lemma}[Unitary-between physical-coordinate invariance of neighboring trace factorizations]
     \label{thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
     \lean{MPOTensor.PhysicalSectorFactorization.ofChangePhysicalBasis,
         MPOTensor.PhysicalSectorFactorization.toChangePhysicalBasis,
@@ -940,7 +940,7 @@
     \cite[Theorem~4.9(iv) and Appendix~C.2, lines~1381--1450]
     {Cirac2016MPDO_arXiv}, though this project-derived equivalence is not
     stated there).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -960,7 +960,7 @@
 % These presentation-independence statements are project-derived.  CPSV16
 % supplies the transported data and the source settings for gauge and support
 % restriction, but does not state either equivalence below.
-\begin{theorem}[Gauge and support-coordinate independence of neighboring trace factorizations]
+\begin{lemma}[Gauge and support-coordinate independence of neighboring trace factorizations]
     \label{thm:mpdo_neighboring_trace_factorization_presentation_invariant}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.ofGaugeEquiv,
         MPOTensor.PhysicalSectorFactorization.exists_neighboringTraceFactorization_iff_of_gaugeEquiv,
@@ -1002,7 +1002,7 @@
     the gauge transformation is discussed in Section~2.3, lines~187--195 and
     the support-restriction setting is that of Appendix~C.2, lines~1680--1691
     and 1733--1770).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1047,7 +1047,7 @@
     resulting equivalence reversed, proves the claim.
 \end{proof}
 
-\begin{theorem}[Trace of the three-site neighboring operator]
+\begin{lemma}[Trace of the three-site neighboring operator]
     \label{thm:mpdo_physical_sector_three_site_neighboring_operator_trace}
     \lean{MPOTensor.PhysicalSectorFactorization.trace_threeSiteNeighboringOperator,
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
@@ -1064,7 +1064,7 @@
         =a_kb_h.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1103,7 +1103,7 @@
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Cyclic trace identity for rectangular powers'']{QICLean2026Blueprint}.
 
 
-\begin{theorem}[Unit closure traces from a neighboring trace factorization]
+\begin{lemma}[Unit closure traces from a neighboring trace factorization]
     \label{thm:mpdo_neighboring_trace_unit_closure}
     \lean{MPOTensor.PhysicalSectorFactorization.leftTraceMatrix,
         MPOTensor.PhysicalSectorFactorization.rightTraceMatrix,
@@ -1150,7 +1150,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \cite[Appendix~C.2, lines~1755--1759]{Cirac2016MPDO_arXiv} constrains
     only the weighted sum over the representatives of a basis of normal
     tensors, not each representative separately.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1173,7 +1173,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $\tr(\mathcal T_M^{\,N})$.
 \end{proof}
 
-\begin{theorem}[Partial traces of the sector closures]
+\begin{lemma}[Partial traces of the sector closures]
     \label{thm:mpdo_sector_closure_partial_traces}
     \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_twoSiteSectorClosure}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.partialTraceRight_twoSiteSectorClosure}
@@ -1196,7 +1196,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         \notag
     \end{align}
     and summing the scalar coefficient over $l$ gives $a_kb_h$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

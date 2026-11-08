@@ -21,7 +21,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     $2\sqrt2A_1$, and $2\sqrt2A_\psi$, of dimensions $4,4,3,3$.
 \end{definition}
 
-\begin{theorem}[Four-channel Ising product]%
+\begin{lemma}[Four-channel Ising product]%
     \label{thm:asymex_ising_three_trace}
     \lean{IsingTwist.thetaThree_mpo_mul_isingSigma,
         IsingTwist.isingBondObjectThree_trace_evalWord}
@@ -43,7 +43,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
         \bigl(\operatorname{tr}(A_1^w)+\operatorname{tr}(A_\psi^w)\bigr).
         \label{eq:asymex_ising_three_trace}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -57,7 +57,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     element gives (\ref{eq:asymex_ising_three_trace}).
 \end{proof}
 
-\begin{theorem}[Compression of the three-object product]%
+\begin{lemma}[Compression of the three-object product]%
     \label{thm:asymex_ising_three_compression}
     \lean{IsingTwist.isingBondObjectThree_compression_exists,
         IsingTwist.isingThreeCompression, IsingTwist.isingBondObjectThree_dim_eq,
@@ -70,7 +70,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     The auxiliary dimensions satisfy $40=4+4+3+3+26$: in an
     upper-triangular presentation, twenty-six additional one-dimensional
     diagonal blocks vanish.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -82,7 +82,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     four target dimensions from forty leaves $z=26$ zero diagonal blocks.
 \end{proof}
 
-\begin{theorem}[A split four-channel Ising compression]%
+\begin{lemma}[A split four-channel Ising compression]%
     \label{thm:asymex_ising_three_split}
     \lean{IsingTwist.isingThreeSplitCompression,
         IsingTwist.isingBondObjectThree_split_remainder,
@@ -100,7 +100,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     In its auxiliary coordinates the letters are the direct sum of
     $5\widehat A_\sigma$, $3\widehat A_\sigma$,
     $2\sqrt2 A_1$, $2\sqrt2 A_\psi$, and twenty-six zero matrices.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

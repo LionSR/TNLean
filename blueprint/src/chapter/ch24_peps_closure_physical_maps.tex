@@ -1,0 +1,439 @@
+\section{Physical maps and closures of \texorpdfstring{$G$}{G}-injective tensors}%
+\label{sec:peps_closure_physical_maps}
+
+Linear maps applied on every site commute with the contraction of the torus.
+This section uses them, with the averaging projector, to show that closures in
+distinct pair-conjugacy classes give linearly independent vectors for regular
+and semi-regular $G$-injective tensors.
+
+\begin{definition}[Products of physical linear maps]%
+    \label{def:peps_physical_product_map}
+    \lean{TNLean.PEPS.physicalMapSite,
+        TNLean.PEPS.physicalProductMatrix,
+        TNLean.PEPS.physicalProductMap,
+        TNLean.PEPS.physicalProductMap_apply,
+        TNLean.PEPS.torusPhysicalMap,
+        TNLean.PEPS.torusPhysicalMap_apply}
+    \leanok
+    Let $F$ be a rectangular physical matrix. Its product over a finite
+    site set $\Lambda$ has coefficients
+    \begin{align}
+        (F^{\otimes\Lambda})_{\tau,\sigma}
+        =\prod_{v\in\Lambda}F_{\tau(v),\sigma(v)}.
+    \end{align}
+    The transformed site tensor is
+    $(FA)^q_{t,r,b,l}=\sum_s F_{q,s}A^s_{t,r,b,l}$.
+    Input and output physical dimensions may differ.
+\end{definition}
+
+\begin{lemma}[Physical maps commute with torus contraction]%
+    \label{thm:peps_torus_physical_map_contraction}
+    \lean{TNLean.PEPS.siteMap_physicalMapSite,
+        TNLean.PEPS.torusPhysicalMap_torusBondNetwork,
+        TNLean.PEPS.torusPhysicalMap_torusGClosure}
+    \leanok
+    \uses{def:peps_physical_product_map, def:peps_torus_g_closure}
+    Applying $F$ at every physical site composes the local site map
+    with $F$ and preserves every virtual bond operator. In particular,
+    \begin{align}
+        F^{\otimes\Lambda}\ket{\mathcal M(A\mid g,h)}
+        =\ket{\mathcal M(FA\mid g,h)}.
+    \end{align}
+    As the physical inverse
+    operation used in \cite[Theorem~5.9]{Schuch2010PEPS}, the identity holds for arbitrary torus bond operators, with no
+    invariance or injectivity hypothesis.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expanding the physical product map and the virtual contraction,
+    interchanging the finite sums, and factoring the physical sum over sites
+    replaces each site coefficient by $\sum_s F_{q,s}A^s$ while leaving
+    the virtual bond coefficients unchanged.
+\end{proof}
+
+\begin{lemma}[Physical product maps and Schmidt rank]%
+    \label{thm:peps_physical_product_cut_rank}
+    \lean{TNLean.PEPS.physicalProductMatrix_split,
+        TNLean.PEPS.physicalCutMatrix,
+        TNLean.PEPS.physicalCutMatrix_physicalProductMap,
+        TNLean.PEPS.rank_physicalCutMatrix_physicalProductMap_le,
+        TNLean.PEPS.rank_physicalCutMatrix_eq_of_physicalProductMaps}
+    \leanok
+    \uses{def:peps_physical_product_map}
+    For a partition $\Lambda=R\sqcup R^c$, let $C_R(\psi)$ be the
+    coefficient matrix of a physical vector in the two sets of
+    configuration coordinates. Then
+    \begin{align}
+        C_R(F^{\otimes\Lambda}\psi)
+        =F^{\otimes R}C_R(\psi)(F^{\otimes R^c})^{\mathsf T}.
+    \end{align}
+    Consequently its rank cannot increase. In the rank argument
+    used in \cite[Corollary~6.10]{Schuch2010PEPS}, if physical product maps
+    send $\psi$ to $\phi$ and $\phi$ back to $\psi$, their Schmidt
+    ranks agree across every partition, even when neither product map is
+    invertible on the full physical space.
+\end{lemma}
+
+\begin{proof}\leanok
+    Splitting a physical configuration into its restrictions to $R$ and
+    $R^c$ factors the product coefficient over these restrictions,
+    so the resulting two physical sums give the two matrix products.
+    Since matrix multiplication cannot increase rank, applying this inequality
+    to the forward and reverse actions proves equality.
+\end{proof}
+
+\begin{lemma}[Recovering site coefficients from physical composition]%
+    \label{thm:peps_site_coefficients_composition}
+    \lean{TNLean.PEPS.siteMap_injective,
+        TNLean.PEPS.physicalMapSite_eq_iff_siteMap_comp}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_physical_product_map}
+    The four-leg coefficients are uniquely determined by the site map.
+    For a physical matrix $F$ and tensors $A,B$, the coefficient identity
+    $FA=B$ is equivalent to $F\mathcal P(A)=\mathcal P(B)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The entry of $\mathcal P(A)$ in physical row $s$ and virtual column
+    $(t,r,b,l)$ is $A^s_{t,r,b,l}$. Composition by $F$ gives exactly
+    $\sum_sF_{q,s}A^s_{t,r,b,l}$.
+\end{proof}
+
+\begin{lemma}[Constancy of labels away from the torus seams]%
+    \label{thm:peps_torus_nonseam_connectivity}
+    \lean{TNLean.PEPS.IsTorusNonseamCompatible.eq_origin,
+        TNLean.PEPS.IsTorusNonseamCompatible}
+    \leanok
+    \uses{def:peps_torus_regular_coordinates}
+    Let $q:\mathbb Z_w\times\mathbb Z_h\to X$ be labels in any set $X$, where $w,h>0$.
+    Suppose that $q_{x+1,y}=q_{x,y}$ whenever $x+1\ne0$, and
+    $q_{x,y}=q_{x,y+1}$ whenever $y+1\ne0$. By the synchronization away from the closure seams used in
+    \cite[Theorem~5.9]{Schuch2010PEPS}, $q_{x,y}=q_{0,0}$ at every vertex.
+\end{lemma}
+\begin{proof}\leanok
+    Inducting along the representatives $0,\ldots,w-1$ in the horizontal direction
+    and then along $0,\ldots,h-1$ in the vertical direction avoids crossing
+    any closure seam; the same argument includes a circumference of one.
+\end{proof}
+
+\begin{definition}[The averaging-projector site]%
+    \label{def:peps_regular_averaging_site}
+    \lean{TNLean.PEPS.averagingSite,
+        TNLean.PEPS.siteMap_averagingSite,
+        TNLean.PEPS.averagingSite_apply,
+        TNLean.PEPS.averagingSite_invariant,
+        TNLean.PEPS.isGInjective_averagingSite}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $U$ be any representation of a finite group $G$ on a virtual
+    space with finite basis $V$, and write $R_q$ for its four-leg
+    representation. Take the physical basis to be $V^4$ and define $A_0$ by
+    \begin{align}
+        (A_0)^s_{t,r,b,l}
+                        & =\frac1{|G|}\sum_{q\in G}(R_q)_{s,(t,r,b,l)}, \\
+        \mathcal P(A_0) & =\Pi=\frac1{|G|}\sum_{q\in G}R_q.
+        \label{eq:peps_averaging_site}
+    \end{align}
+    Then $\Pi R_q=\Pi$ and $\Pi$ is the identity on invariant vectors,
+    so $A_0$ is $G$-injective. Unitarity is not required for these
+    statements \cite[Definition~5.1]{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[Isometry of the regular projector site]%
+    \label{thm:peps_regular_averaging_site_isometry}
+    \lean{TNLean.PEPS.isGIsometric_regularAveragingSite}
+    \leanok
+    \uses{def:peps_regular_averaging_site, def:peps_torus_regular_coordinates}
+    For four regular virtual legs, $A_0$ is $G$-isometric with
+    normalization factor one.
+\end{lemma}
+
+\begin{proof}\leanok
+    The unitary group average is self-adjoint and idempotent, so
+    $\Pi^\dagger\Pi=\Pi$. Its invariance was established in
+    Definition~\ref{def:peps_regular_averaging_site}.
+\end{proof}
+
+\begin{lemma}[Group-average expansion of the torus projector contraction]%
+    \label{thm:peps_torus_projector_expansion}
+    \lean{TNLean.PEPS.torusBondNetwork_single,
+        TNLean.PEPS.torusBondSiteLabelsEquiv,
+        TNLean.PEPS.torusBondNetwork_sum,
+        TNLean.PEPS.torusBondNetwork_mul,
+        TNLean.PEPS.torusDress_single,
+        TNLean.PEPS.torusBondNetwork_averagingSite}
+    \leanok
+    \uses{def:peps_torus_regular_coordinates, def:peps_regular_averaging_site}
+    Let $U$ be a finite-dimensional representation of a finite group $G$, and let
+    $\Pi$ be the four-leg averaging projector. Write $e(v)$ and $n(v)$ for the
+    neighbours east and north of $v$, and let $s_v=(t_v,r_v,b_v,l_v)$ denote the
+    physical basis label of the projector site. For arbitrary bond operators
+    $O^H_v,O^V_v$, set
+    \begin{align}
+        H_v(q)=U_{q_{e(v)}}O^H_vU_{q_v^{-1}},\qquad
+        V_v(q)=U_{q_v}O^V_vU_{q_{n(v)}^{-1}}.
+        \label{eq:peps_torus_projector_bond_operators}
+    \end{align}
+    The torus contraction of the projector sites has coefficient
+    \begin{align}
+        \Psi_\Pi(s)=|G|^{-N}\sum_{q:\mathbb Z_w\times\mathbb Z_h\to G}
+        \prod_v H_v(q)_{l_{e(v)},r_v}\,V_v(q)_{t_v,b_{n(v)}},
+        \qquad N=wh.
+    \end{align}
+    As in the expansion of the projector contraction in
+    \cite[Theorem~5.9]{Schuch2010PEPS}, no semi-regularity or unitarity assumption is required for this identity.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_torus_bond_network_gauge}
+    The bond-end indices are in bijection with the four indices read at the sites.
+    For identity sites, the Kronecker deltas leave the product of the bond entries.
+    Expanding the group average independently at every vertex and applying finite distributivity
+    gives a sum over vertex labels and the factor $|G|^{-N}$. Absorbing each
+    four-leg operator into the neighbouring bonds gives $H_v(q)$ and $V_v(q)$ as in
+    (\ref{eq:peps_torus_projector_bond_operators}).
+\end{proof}
+
+\begin{lemma}[Extracting the torus closure operators]%
+    \label{thm:peps_torus_projector_extraction}
+    \lean{TNLean.PEPS.matrixLinearFunctional_eq_sum,
+        TNLean.PEPS.torusOutputBondPairing,
+        TNLean.PEPS.torusOutputBondPairing_bondProduct,
+        TNLean.PEPS.torusDeltaPairing,
+        TNLean.PEPS.torusSeamPairing,
+        TNLean.PEPS.torusDeltaPairing_apply_rep,
+        TNLean.PEPS.torusSeamPairing_apply_rep,
+        TNLean.PEPS.torusMatrixEntry,
+        TNLean.PEPS.torusHorizontalExtractionPairing,
+        TNLean.PEPS.torusVerticalExtractionPairing,
+        TNLean.PEPS.torusProjectorExtraction,
+        TNLean.PEPS.torusProjectorExtraction_bondProduct,
+        TNLean.PEPS.torusDeltaPairing_apply_mul_inv,
+        TNLean.PEPS.torusHorizontalExtractionPairing_constant,
+        TNLean.PEPS.torusVerticalExtractionPairing_constant,
+        TNLean.PEPS.torusProjectorExtraction_constant_bondProduct,
+        TNLean.PEPS.torusHorizontalExtractionPairing_nonseam,
+        TNLean.PEPS.torusVerticalExtractionPairing_nonseam,
+        TNLean.PEPS.torusProjectorExtraction_label_bondProduct,
+        TNLean.PEPS.torusProjectorExtraction_sum_label_bondProduct,
+        TNLean.PEPS.torusProjectorExtraction_torusGClosure,
+        TNLean.PEPS.torusProjectorExtraction_normalization_pos}
+    \leanok
+    \uses{def:peps_semiregular, def:peps_regular_averaging_site,
+        def:peps_torus_g_closure, def:peps_delta_operator}
+    Let $U$ be a semi-regular representation of a finite group $G$ on
+    a virtual space with finite basis $V$. Let $\Lambda$ be a rectangular
+    torus with positive width and height, and let $A_0$ be the averaging-
+    projector site. There is one explicit linear map
+    $E:\C^{\Lambda\to V^4}\to\operatorname{Mat}_{V\times V}(\C)$,
+    independent of $g,h$, such that
+    \begin{align}
+        E\ket{\mathcal M(A_0\mid g,h)}
+        =|G|^{-|\Lambda|}\sum_{x\in G}
+        U_{xhx^{-1}}\otimes U_{xgx^{-1}}.
+        \label{eq:peps_projector_extraction}
+    \end{align}
+    Here the tensor product is written in the product basis, with the
+    horizontal factor first. The coefficient $|G|^{-|\Lambda|}$ is
+    strictly positive. This is an explicit contraction realizing the
+    independence argument of \cite[Theorem~5.9]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_semiregular_trace, thm:peps_torus_projector_expansion,
+        thm:peps_torus_nonseam_connectivity}
+    Put $\delta_p(M)=\tr(U_{p^{-1}}M\Delta)$ and
+    $\phi=\sum_p\delta_p$. Trace duality gives
+    $\delta_p(U_z)=\delta_{p,z}$ and $\phi(U_z)=1$.
+    Retain the horizontal seam bond $(-1,0)$ and the vertical seam bond
+    $(0,-1)$. Apply $\delta_1$ to every nonseam output bond and $\phi$
+    to every other seam output bond. On each retained bond use a matrix
+    entry functional. Explicitly, for fixed rows $(i,k)$ and columns
+    $(j,l)$, denote these horizontal and vertical functionals by
+    $\kappa^h_v$ and $\kappa^v_v$, respectively. If $E_{a,b}$ is a
+    matrix unit and $\beta$ assigns four end labels to each pair of bonds,
+    define
+    \begin{align}
+        (Ef)_{(i,k),(j,l)}
+        =\sum_\beta f(\mathcal A(\beta))\prod_{v\in\Lambda}
+        \kappa^h_v(E_{\beta_v^{hH},\beta_v^{hT}})
+        \kappa^v_v(E_{\beta_v^{vH},\beta_v^{vT}}),
+    \end{align}
+    where $\mathcal A(\beta)$ is the four-leg configuration read from
+    the bond ends, in top, right, bottom, left order. Finite distributivity
+    evaluates this contraction separately on each bond.
+    For a vertex labelling $q$, a nonseam horizontal bond gives
+    $\delta_1(U_{q_{v+e_1}q_v^{-1}})=\delta_{q_{v+e_1},q_v}$;
+    a nonseam vertical bond gives
+    $\delta_1(U_{q_vq_{v+e_2}^{-1}})=\delta_{q_v,q_{v+e_2}}$.
+    Lemma~\ref{thm:peps_torus_nonseam_connectivity} forces $q_v=x$
+    at every vertex. All discarded seam factors then equal one, and
+    the retained factors are $U_{xhx^{-1}}$ and $U_{xgx^{-1}}$.
+    The normalized projector expansion of
+    Lemma~\ref{thm:peps_torus_projector_expansion} gives the coefficient
+    $|G|^{-|\Lambda|}$, giving~(\ref{eq:peps_projector_extraction}).
+\end{proof}
+
+\begin{lemma}[Closure vectors and the local inverse]%
+    \label{thm:peps_regular_g_injective_closure_inverse}
+    \lean{TNLean.PEPS.IsGInjective.exists_torusGClosure_averagingSite,
+        TNLean.PEPS.torusPhysicalMap_averagingSite}
+    \leanok
+    \uses{def:peps_regular_averaging_site}
+    Let $A$ be $G$-injective for any finite virtual representation $U$
+    and write $T=\mathcal P(A)$. There is a local rectangular matrix
+    $L$ with $LT=\Pi$ such that, for every closure pair,
+    \begin{align}
+        L^{\otimes\Lambda}\ket{\mathcal M(A\mid g,h)}
+         & =\ket{\mathcal M(A_0\mid g,h)},
+        \label{eq:peps_projector_closure_forward} \\
+        T^{\otimes\Lambda}\ket{\mathcal M(A_0\mid g,h)}
+         & =\ket{\mathcal M(A\mid g,h)}.
+        \label{eq:peps_projector_closure_reverse}
+    \end{align}
+    The reverse identity requires only virtual invariance of $A$.
+    These are contraction identities for the inverse argument
+    of \cite[Theorem~5.9]{Schuch2010PEPS}; no unitarity or local
+    isometry hypothesis is needed.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_site_coefficients_composition, thm:peps_g_injective_left_inverse, thm:peps_torus_physical_map_contraction}
+    The local inverse and virtual invariance give $LT=\Pi$ and
+    $T\Pi=T$. By Lemma~\ref{thm:peps_site_coefficients_composition},
+    these are coefficient identities, and applying
+    Lemma~\ref{thm:peps_torus_physical_map_contraction} at every
+    physical site in both directions completes the proof. No inverse on the entire
+    physical space is required.
+\end{proof}
+
+\begin{lemma}[Independent closures of semi-regular $G$-injective tensors]%
+    \label{thm:peps_semiregular_g_injective_closure_independence}
+    \lean{TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_of_isSemiRegular,
+        TNLean.PEPS.IsGInjective.torusGClosure_ne_zero_of_isSemiRegular,
+        TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting_of_isSemiRegular}
+    \leanok
+    \uses{def:peps_semiregular}
+    Let $U$ be a semi-regular representation of a finite group $G$,
+    and let $A$ be $G$-injective for its four-leg virtual representation.
+    On every nonempty rectangular torus, the closure vectors
+    $\ket{\mathcal M(A\mid C)}$, indexed by simultaneous-conjugacy
+    classes $C$ of pairs, are linearly independent. Every closure
+    vector is therefore nonzero. In particular, the family indexed
+    by commuting pair classes is independent.
+
+    The commuting-family assertion proves the independence component
+    of \cite[Theorem~5.9]{Schuch2010PEPS}, without a local isometry
+    assumption. Independence for noncommuting classes and size-one
+    tori are auxiliary extensions. No identification with the
+    parent-Hamiltonian ground space is asserted
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_g_injective_closure_inverse, thm:peps_torus_projector_extraction, thm:peps_pair_conjugacy_operator_independence}
+    Choosing the same local inverse $L$ for every closure vector and denoting by $N$ the number of vertices, the explicit map $E$ gives
+    \begin{align}
+        E L^{\otimes\Lambda}\ket{\mathcal M(A\mid C)}
+         & =|G|^{-N}\Omega_C.
+        \label{eq:peps_semiregular_closure_extraction}
+    \end{align}
+    Thus $|G|^N E L^{\otimes\Lambda}$ sends any proposed linear
+    relation among the physical vectors to a relation among the
+    independent operators $\Omega_C$, whose coefficients vanish by
+    Lemma~\ref{thm:peps_pair_conjugacy_operator_independence}.
+    Each vector is therefore nonzero, and restriction to the commuting classes
+    preserves independence.
+\end{proof}
+
+\begin{lemma}[Independent regular isometric closure vectors]%
+    \label{thm:peps_regular_torus_closure_independence}
+    \lean{TNLean.PEPS.IsGIsometric.torusGClosure_dotProduct_eq_zero_of_pairConjugacyClass_ne,
+        TNLean.PEPS.IsGIsometric.exists_torusGClosure_dotProduct_self,
+        TNLean.PEPS.IsGIsometric.torusGClosure_dotProduct_self_ne_zero,
+        TNLean.PEPS.IsGIsometric.torusGClosure_ne_zero,
+        TNLean.PEPS.IsGIsometric.torusGClosureClass_orthogonal,
+        TNLean.PEPS.IsGIsometric.linearIndependent_torusGClosureClass,
+        TNLean.PEPS.IsGIsometric.linearIndependent_torusGClosureClass_commuting}
+    \leanok
+    \uses{thm:peps_torus_pair_conjugacy}
+    For a uniform regular $G$-isometric tensor, the vector associated
+    to each pair-conjugacy class is nonzero, and distinct class vectors
+    are orthogonal. Their family is therefore linearly independent.
+    More precisely,
+    \begin{align}
+        \|\psi_{g,h}\|^2=c^N|G|^N|Z_G(g)\cap Z_G(h)|>0.
+    \end{align}
+    Restricting to commuting classes proves the independence assertion
+    underlying \cite[Theorem~5.9]{Schuch2010PEPS} in the regular
+    $G$-isometric case. The all-class assertion is an auxiliary extension:
+    no ground-state claim is made for noncommuting closures. Semi-regular
+    $G$-injective independence is proved in
+    Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence};
+    ground-space identification remains separate
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_torus_closure_overlap}
+    A simultaneous intertwiner exists exactly when the two closure pairs
+    are simultaneously conjugate. Thus the overlap between distinct
+    classes vanishes. For a self-overlap the intertwiners form
+    $Z_G(g)\cap Z_G(h)$, which contains the identity. Taking the inner
+    product of a finite linear relation with each nonzero class vector
+    proves independence. Independence is inherited by the commuting
+    subfamily.
+\end{proof}
+
+\begin{lemma}[Independent closures of regular $G$-injective tensors]%
+    \label{thm:peps_regular_g_injective_closure_independence}
+    \lean{TNLean.PEPS.IsGInjective.torusGClosure_ne_zero,
+        TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass,
+        TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting}
+    \leanok
+    \uses{def:peps_torus_regular_coordinates,
+        thm:peps_semiregular_g_injective_closure_independence}
+    For a regular $G$-injective tensor on any nonempty rectangular torus,
+    every closure vector is nonzero and the vectors indexed by
+    distinct pair-conjugacy classes are linearly independent. In
+    particular the family indexed by commuting classes is independent.
+    The latter is the regular-representation independence component of
+    \cite[Theorem~5.9]{Schuch2010PEPS}, with no isometry hypothesis.
+    Independence for all pair classes is an auxiliary extension and
+    makes no ground-space assertion. The semi-regular representation result appears in
+    Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence};
+    ground-space identification remains separate
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_torus_regular_coordinates,
+        thm:peps_semiregular_g_injective_closure_independence}
+    The native regular representation is semi-regular by its group-basis
+    equivalence with the group-algebra regular representation, so
+    Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence} applies directly.
+\end{proof}
+
+\begin{lemma}[Schmidt ranks of regular $G$-injective closure superpositions]%
+    \label{thm:peps_regular_g_injective_closure_rank_transport}
+    \lean{TNLean.PEPS.IsGInjective.rank_physicalCutMatrix_torusGClosure_sum}
+    \leanok
+    Let $A$ be regular $G$-injective. For every finite family of closure
+    pairs and every physical partition $R$, the two vectors
+    \begin{align}
+        \sum_s\lambda_s\ket{\mathcal M(A\mid g_s,h_s)},\qquad
+        \sum_s\lambda_s\ket{\mathcal M(A_0\mid g_s,h_s)}
+        \label{eq:peps_closure_superposition_pair}
+    \end{align}
+    have the same Schmidt rank across $R$. This is the local
+    deformation step of \cite[Corollary~6.10]{Schuch2010PEPS}; no
+    particular boundary-rank formula is asserted here.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_g_injective_closure_inverse,
+        thm:peps_physical_product_cut_rank}
+    The same forward and reverse physical product maps act on every
+    summand. By linearity they recover the superpositions
+    (\ref{eq:peps_closure_superposition_pair}) from each other, and Lemma~\ref{thm:peps_physical_product_cut_rank}
+    gives equality of their coefficient-matrix ranks.
+\end{proof}

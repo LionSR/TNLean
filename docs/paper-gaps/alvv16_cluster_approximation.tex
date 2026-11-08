@@ -10,7 +10,7 @@
 \date{October 25, 2026}
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{resolved}
 
 \section{The printed estimate}
 
@@ -160,15 +160,15 @@ The printed theorem is not formalized in TNLean. The existing Hastings
 cluster estimates retain the partition function and the weight
 $(e^{\beta J}-1)e^{SJ\beta}$; they do not assert
 (\ref{eq:alvv_cluster_printed}). Their formalized statements remain
-unaffected. A corrected energy-normalized estimate for the interaction-label cutoff
-is given below. The efficient soft-truncation approximation in
-Lemma~\texttt{lem:exp-approx-eff} still requires its propagation through
-the polynomial approximation, with the resulting error and degree bounds.
+unaffected. The efficient soft-truncation approximation in
+Lemma~\texttt{lem:exp-approx-eff}, whose proof invokes this theorem, is
+formalized instead through the corrected interaction-label estimate of the
+section on the corrected normalized estimate and the section on the soft
+interval at compatible heat times below.
 The exact matrix product operator construction of the selected expansion
 is a separate algebraic question. The correction is tracked by
 \href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854} and
 \href{https://github.com/LionSR/TNLean/issues/9847}{issue 9847}.
-
 
 \section{A corrected normalized interaction-label estimate}
 
@@ -203,12 +203,12 @@ one of these windows. Finite inclusion and exclusion, followed by grouping
 according to $U=\bigcup F$, therefore gives
 \begin{align}
     e^{-\beta H}-M_r^{\mathrm{lab}}
-      &=\sum_{U\in\mathcal U_r}c_UR_U^H(\beta),
-    &\mathcal U_r&=\{\bigcup F:\varnothing\ne F\subseteq\mathcal W_r\},
-    \label{eq:alvv_cluster_mandatory_union}\\
-    c_U&=\sum_{\substack{\varnothing\ne F\subseteq\mathcal W_r\\
-                         \bigcup F=U}}(-1)^{|F|+1},
-    &|c_U|&\leq2^{|U|}.
+        & =\sum_{U\in\mathcal U_r}c_UR_U^H(\beta),
+        & \mathcal U_r                                           & =\{\bigcup F:\varnothing\ne F\subseteq\mathcal W_r\},
+    \label{eq:alvv_cluster_mandatory_union}                                                                              \\
+    c_U & =\sum_{\substack{\varnothing\ne F\subseteq\mathcal W_r                                                         \\
+            \bigcup F=U}}(-1)^{|F|+1},
+        & |c_U|                                                  & \leq2^{|U|}.
     \label{eq:alvv_cluster_union_coefficient}
 \end{align}
 The coefficient bound holds because distinct length-$r$ windows have
@@ -222,11 +222,11 @@ $r$ labels. An interval is determined by its endpoints, so
 $|\mathcal I_r|\leq N^2$. Consequently
 \begin{align}
     \sum_{U\in\mathcal U_r}b^{|U|}
-    &\leq\sum_{\varnothing\ne F\subseteq\mathcal I_r}
-          \prod_{C\in F}b^{|C|}
-     =\prod_{C\in\mathcal I_r}(1+b^{|C|})-1\\
-    &\leq\exp\Bigl(\sum_{C\in\mathcal I_r}b^{|C|}\Bigr)-1
-     \leq\exp(N^2b^r)-1.
+     & \leq\sum_{\varnothing\ne F\subseteq\mathcal I_r}
+    \prod_{C\in F}b^{|C|}
+    =\prod_{C\in\mathcal I_r}(1+b^{|C|})-1                  \\
+     & \leq\exp\Bigl(\sum_{C\in\mathcal I_r}b^{|C|}\Bigr)-1
+    \leq\exp(N^2b^r)-1.
     \label{eq:alvv_cluster_interval_weight}
 \end{align}
 The triangle inequality in (\ref{eq:alvv_cluster_mandatory_union}), the
@@ -250,9 +250,9 @@ the false printed physical-support assertion.
 
 For $t>0$, the defining finite sum has the exact heat expansion
 \begin{align*}
-    h_{m,t}(x)&=\sum_{a=0}^m c_a e^{-ax/t},&
-    c_a&=t(-1)^a\sum_{j=1}^m\frac{\binom ja}{j},&
-    \sum_{a=0}^m|c_a|&\leq t2^{m+1}.
+    h_{m,t}(x)        & =\sum_{a=0}^m c_a e^{-ax/t},             &
+    c_a               & =t(-1)^a\sum_{j=1}^m\frac{\binom ja}{j}, &
+    \sum_{a=0}^m|c_a| & \leq t2^{m+1}.
 \end{align*}
 The constant term is included. The scale factor $t$ is retained in the
 coefficient budget.
@@ -263,9 +263,9 @@ $Q_a=e^{\beta\epsilon}M_\ell^{\mathrm{lab}}(A;\beta)$.
 The normalized estimate at $e$ gives
 \begin{align*}
     \|e^{-\beta U}-Q_a\|
-       &\leq e^{-\beta(e-\epsilon)}
-                   (e^{N^2[2(e^\beta-1)]^\ell}-1)\\
-       &\leq e^{N^2[2(e^\beta-1)]^\ell}-1.
+     & \leq e^{-\beta(e-\epsilon)}
+    (e^{N^2[2(e^\beta-1)]^\ell}-1)        \\
+     & \leq e^{N^2[2(e^\beta-1)]^\ell}-1.
 \end{align*}
 Thus the large scalar in the shifted exponential cancels the
 normalization. It is not distributed among the original positive local
@@ -276,7 +276,7 @@ $b=2(e^{1/3}-1)\in(0,1)$ and every required heat time is at most $1/3$.
 Writing $W=3m2^{m+1}$, choose the explicit order
 \begin{align*}
     \ell=\max\left\{1,\left\lceil
-       \frac{\log\max\{1,N^2\}-\log\log(1+\xi/W)}{-\log b}
+    \frac{\log\max\{1,N^2\}-\log\log(1+\xi/W)}{-\log b}
     \right\rceil\right\}.
 \end{align*}
 Then $W(e^{N^2b^\ell}-1)\leq\xi$. Each heat operator is approximated
@@ -293,8 +293,8 @@ has actual site-dependent operator tensors $T$ with
     \|\widetilde H-T\|\leq\xi,\qquad
     D\leq1+Nq^2+(m+1)\ell^2q^\ell.
 \end{align*}
-For each fixed local dimension this is a polynomial bond budget through
-the logarithmic order. The formal result constructs the tensors and the
+For fixed local dimension and soft order $m$, this dimension bound is
+polynomial in the chain length and the inverse accuracy $\xi^{-1}$. The formal result constructs the tensors and the
 norm estimate; it does not establish a computational running time or the
 full multi-region algorithm.
 

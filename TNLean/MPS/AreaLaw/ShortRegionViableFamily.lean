@@ -76,22 +76,20 @@ open scoped TensorProduct
 namespace TNLean.MPS.AreaLaw
 
 /-- A short actual region admits a fixed family of configuration matrix units,
-extended by zero to the joint squared budget. The count base `m` may exceed
-the actual local dimension `q`; the matrix units still act on the original
-configuration space. Its images of a viable
+extended by zero to the joint squared budget. Its images of a viable
 subspace span the whole regional Hilbert space whenever the error is below
 one and the target is nonzero. The family is chosen before these viability
 data. Auxiliary to ALVV, arXiv:1602.08828v2, `t:ais`, lines 1010–1024.
 The boundary `δ < 1` is documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
-No coordinate transport or premise that the source subspace is nonzero is supplied. -/
-theorem exists_short_actual_region_spanning_family_of_count_base
-    (L q m ell : ℕ) (J : Finset (Fin L))
-    (hq : 2 ≤ q) (hqm : q ≤ m) (hell : 1 ≤ ell) (hJ : J.card ≤ 4 * ell)
+No coordinate transport or nonzero-subspace premise is supplied. -/
+private theorem exists_fixed_short_actual_region_clm_family
+    (L q ell : ℕ) (J : Finset (Fin L))
+    (hq : 2 ≤ q) (hell : 1 ≤ ell) (hJ : J.card ≤ 4 * ell)
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     [FiniteDimensional ℂ F] :
     let E := EuclideanSpace ℂ (J → Fin q)
-    let D : ℕ := (m * ell ^ 2) ^ (22 * ell)
+    let D : ℕ := (q * ell ^ 2) ^ (22 * ell)
     ∃ A : Fin (D ^ 2) → E →L[ℂ] E,
       ∀ (δ : ℝ) (S : Submodule ℂ E) (T : Submodule ℂ (E ⊗[ℂ] F)),
         Submodule.IsViable δ S T → δ < 1 → T ≠ ⊥ →
@@ -105,12 +103,8 @@ theorem exists_short_actual_region_spanning_family_of_count_base
     ((b.coord r.2).smulRight (b r.1)).toContinuousLinearMap
   have hcard : Fintype.card ((J → Fin q) × (J → Fin q)) ≤ D ^ 2 := by
     have hc := card_configuration_matrix_units_le_joint_square J.card q ell hq hell hJ
-    have hcount : ((q * ell ^ 2) ^ (22 * ell)) ^ 2 ≤
-        ((m * ell ^ 2) ^ (22 * ell)) ^ 2 :=
-      Nat.pow_le_pow_left
-        (Nat.pow_le_pow_left (Nat.mul_le_mul_right (ell ^ 2) hqm) (22 * ell)) 2
     simpa only [Fintype.card_prod, Fintype.card_fun, Fintype.card_fin,
-      Fintype.card_coe] using hc.trans hcount
+      Fintype.card_coe] using hc
   obtain ⟨_f, A, _hA, _hzero, hgrow⟩ :=
     Submodule.exists_clm_family_extension_of_card_le hcard W
   refine ⟨A, ?_⟩
@@ -123,23 +117,6 @@ theorem exists_short_actual_region_spanning_family_of_count_base
   refine ⟨htop, ?_⟩
   rw [htop]
   exact Submodule.isViable_top 0 le_rfl T
-
-/-- The native short-region family is the equal-count-base specialization.
-Auxiliary to ALVV, arXiv:1602.08828v2, `t:ais`, lines 1010–1024. -/
-theorem exists_short_actual_region_spanning_family
-    (L q ell : ℕ) (J : Finset (Fin L))
-    (hq : 2 ≤ q) (hell : 1 ≤ ell) (hJ : J.card ≤ 4 * ell)
-    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-    [FiniteDimensional ℂ F] :
-    let E := EuclideanSpace ℂ (J → Fin q)
-    let D : ℕ := (q * ell ^ 2) ^ (22 * ell)
-    ∃ A : Fin (D ^ 2) → E →L[ℂ] E,
-      ∀ (δ : ℝ) (S : Submodule ℂ E) (T : Submodule ℂ (E ⊗[ℂ] F)),
-        Submodule.IsViable δ S T → δ < 1 → T ≠ ⊥ →
-          (⨆ j, S.map (A j : E →ₗ[ℂ] E)) = ⊤ ∧
-          Submodule.IsViable 0 (⨆ j, S.map (A j : E →ₗ[ℂ] E)) T := by
-  exact exists_short_actual_region_spanning_family_of_count_base
-    (F := F) L q q ell J hq le_rfl hell hJ
 end TNLean.MPS.AreaLaw
 end
 
@@ -173,7 +150,7 @@ theorem exists_short_actual_region_improving_family
             (⨆ j, S.map (A j : E →ₗ[ℂ] E)) T := by
   intro E D
   obtain ⟨A, hA⟩ :=
-    exists_short_actual_region_spanning_family (F := F) L q ell J hq hell hJ
+    exists_fixed_short_actual_region_clm_family (F := F) L q ell J hq hell hJ
   have hDpos : 0 < D := by
     dsimp only [D]
     exact pow_pos (Nat.mul_pos (by omega : 0 < q)
@@ -237,7 +214,7 @@ theorem exists_short_actual_region_improving_family_of_count_base
   classical
   intro E D
   obtain ⟨A0, hA⟩ :=
-    exists_short_actual_region_spanning_family (F := F) L q ell J hq hell hJ
+    exists_fixed_short_actual_region_clm_family (F := F) L q ell J hq hell hJ
   have hcount : Fintype.card (Fin (((q * ell ^ 2) ^ (22 * ell)) ^ 2)) ≤ D ^ 2 := by
     simpa only [Fintype.card_fin] using
       (Nat.pow_le_pow_left

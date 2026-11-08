@@ -26,16 +26,6 @@ are retained, including at empty intervals. This establishes the entropy
 conclusion only; no efficient construction or matrix product approximation
 is asserted here. Supporting ALVV, arXiv:1602.08828v2, `thm:al-dg`,
 lines 1048–1099.
-
-The distinct spectral values express Assumption (DG) of the source,
-lines 275–279, which requires a second smallest eigenvalue.
-
-**Scope restriction (regions and gap dependence):** The entropy result is
-for intervals and uses `min gamma 1`. Its comparison with the printed
-rate is established for `0 < gamma ≤ 1`; see
-`docs/paper-gaps/alvv16_approximation_parameters.tex`. The interval
-restriction is documented at
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 -/
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix

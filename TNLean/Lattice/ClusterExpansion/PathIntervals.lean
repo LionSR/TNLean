@@ -70,7 +70,7 @@ theorem pathGraph_connected_of_ordConnected {C : Finset (Fin N)}
         (OrderEmbedding.subtype (· ∈ (C : Set (Fin N)))) hcov)
   rw [heq]
   have : Nonempty (C : Set (Fin N)) := ⟨⟨hne.choose, hne.choose_spec⟩⟩
-  exact ⟨hasse_preconnected_of_succ _⟩
+  exact ⟨preconnected_hasse_of_succOrder _⟩
 
 /-- A nonempty interval is determined by its endpoints. Auxiliary to the interaction-label
 geometry in ALVV, arXiv:1602.08828v2, `thm:cluster-approx`. -/

@@ -355,14 +355,10 @@ end FiniteProduct
 
 end
 
-
 section
 
 open Matrix
-
 open scoped BigOperators Kronecker
-
-section
 
 namespace FiniteProduct
 
@@ -411,6 +407,7 @@ theorem exists_changingRegional_family_fin
     ((splitEquiv β J).trans (Equiv.prodComm _ _))
     ((splitEquiv β J).trans (Equiv.prodComm _ _)))
     (e.symm.sum_comp (fun r ↦ Mnew r ⊗ₖ Wall r)).symm
+
 end FiniteProduct
-end
+
 end

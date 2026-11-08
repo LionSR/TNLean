@@ -168,8 +168,7 @@ theorem eventually_cohomologousTo_of_continuous_pointwise_compression
           (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
             (hr.trans_le (by
               simpa only [Fintype.card_fin] using Matrix.IsIsometry.card_le (J t₀) (hJ t₀))))) := by
-  apply (Filter.eventually_congr (.of_forall fun _ ↦
-    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
+  apply (eventually_H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   exact eventually_cohomologousTo_of_continuousOn_pointwise_compression
     hr D ω ρ A J Set.univ (fun t _ => hJ t) (fun t _ => hUnitary t)
     (fun t _ => hComm t) U (fun t _ => hCov t) C hC.continuousOn t₀
@@ -210,8 +209,7 @@ theorem eventually_cohomologousTo_of_continuousOn_invariant_compression
             (hr.trans_le (by
               simpa only [Fintype.card_fin] using
                 Matrix.IsIsometry.card_le (J t₀) (hJ t₀ (mem_of_mem_nhds hS)))))) := by
-  apply (Filter.eventually_congr (.of_forall fun _ ↦
-    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
+  apply (eventually_H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   let C : unitInterval → MPSTensor d r := fun t i => (J t)ᴴ * A t i * J t
   have hC : ContinuousOn C S := by
     rw [continuousOn_iff_continuous_domRestrict]

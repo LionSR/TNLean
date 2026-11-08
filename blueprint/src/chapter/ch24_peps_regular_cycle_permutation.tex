@@ -13,7 +13,7 @@
     sends $|\alpha\rangle$ to $|P_\phi\alpha\rangle$.
 \end{definition}
 
-\begin{theorem}[Permutation of inserted-cycle columns]%
+\begin{lemma}[Permutation of inserted-cycle columns]%
     \label{thm:peps_regular_cycle_permutation_columns}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_cyclePermutation,
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_cyclePhysicalPermutation}
@@ -31,7 +31,7 @@
         Q_\phi M_R(u_\omega)_{\cdot,\theta}
          & =M_R(u_{\phi\omega})_{\cdot,\theta}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In tree coordinates the coefficient is
     $|G|^{-|R|}\sum_x\mathbf 1_{y=x\theta,\ z=x\omega x^{-1}}$.
@@ -41,7 +41,7 @@
     stated direction.
 \end{proof}
 
-\begin{theorem}[Cycle permutations preserve the invariant support]%
+\begin{lemma}[Cycle permutations preserve the invariant support]%
     \label{thm:peps_regular_cycle_permutation_support}
     \lean{TNLean.PEPS.regularRegionCyclePermutation_coordinateTranslation,
         TNLean.PEPS.regularRegionCyclePhysicalPermutation_commute_vertexTranslation,
@@ -53,7 +53,7 @@
     independent vertex translations in tree coordinates. Consequently
     $Q_\phi$ commutes with every physical vertex translation and with the
     product of local regular invariant projectors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A vertex translation acts on every cycle by conjugation at the root.
     Its action on $y,a,r$ is independent of the cycle labels, so equivariance
@@ -62,7 +62,7 @@
     the product projector.
 \end{proof}
 
-\begin{theorem}[One original-spin unitary for every cycle assignment]%
+\begin{lemma}[One original-spin unitary for every cycle assignment]%
     \label{thm:peps_regular_cycle_permutation_physical}
     \lean{TNLean.PEPS.exists_unitary_regularCyclePhysicalPermutation}
     \leanok
@@ -81,7 +81,7 @@
     These are open contractions. This is an auxiliary consequence of the
     accessible-coordinate argument in \cite[Sections 6.2--6.3]{Schuch2010PEPS}; it
     does not identify $\phi$ with a prescribed string deformation or braid.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The product original physical map $A$ has $A^\dagger A=cP$ for a derived
     $c>0$ and the genuine product projector $P$. The permutation matrix is

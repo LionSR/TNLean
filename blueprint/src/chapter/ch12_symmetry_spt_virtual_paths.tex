@@ -1,0 +1,2126 @@
+\section{Virtual actions along symmetric paths}
+\label{sec:spt_virtual_path_algebra}
+
+The interpolation in the proof of Theorem~\ref{thm:spt_classification} first
+rephases the two endpoint virtual actions to a common factor system and then forms
+their direct sum; necessity rests on the discreteness of the class along a
+continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
+
+\begin{lemma}[Unitary rephasing of cohomologous virtual actions]
+    \label{thm:spt_unitary_rephasing}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.rephase,
+        TNLean.Algebra.circleScalar_mem_unitaryGroup,
+        TNLean.Algebra.ProjectiveRepresentation.rephase_mem_unitaryGroup,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous,
+        TNLean.Algebra.ProjectiveRepresentation.norm_factorSystem,
+        TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
+    \leanok
+    \uses{def:projective_rep, def:cohomologous_to}
+    Multiplying each matrix $V_g$ of a projective representation with factor system
+    $\omega$ by a scalar $\lambda_g\neq0$ gives a projective representation with
+    factor system $\lambda_g\lambda_h\lambda_{gh}^{-1}\omega(g,h)$.  Consequently, let
+    $V^0$ be a unitary projective representation whose factor system is the
+    pointwise phase $\omega_0/|\omega_0|$.  If $\omega_1$ is cohomologous to
+    $\omega_0$, then multiplying each $V_g^0$ by a unit-modulus scalar gives a unitary
+    projective representation with factor system $\omega_1/|\omega_1|$.
+    If two unitary virtual actions on spaces of positive dimension have factor
+    systems $\omega_0$ and $\omega_1$, then $|\omega_0(g,h)|=|\omega_1(g,h)|=1$.
+    If these systems are cohomologous, one can rephase the first action
+    to have the factor system of the second
+    \cite[Section~II.F.2, lines~886--921]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose $\lambda$ with
+    $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$, and put
+    $\psi_g=\lambda_g/|\lambda_g|$.  The unit-phase map $z\mapsto z/|z|$ is
+    multiplicative, so
+    \begin{align}
+        \frac{\omega_1(g,h)}{|\omega_1(g,h)|}
+         & =\psi_g\psi_h\psi_{gh}^{-1}\,\frac{\omega_0(g,h)}{|\omega_0(g,h)|}.
+        \notag
+    \end{align}
+    Hence $\psi_gV_g^0$ has factor system $\omega_1/|\omega_1|$, and multiplication
+    by a unit-modulus scalar preserves unitarity.
+    For a unitary virtual action,
+    $1=\|V_gV_h\|=|\omega(g,h)|\,\|V_{gh}\|=|\omega(g,h)|$.
+    Hence its factor system equals its pointwise unit phase.
+\end{proof}
+
+\begin{lemma}[Fixed-point path for cohomologous virtual actions]
+    \label{thm:spt_cohomologous_fixed_point_path}
+    \lean{MPSTensor.sptKron_eq_of_eq_smul,
+        MPSTensor.sptFixedPointAction_eq_of_forall_eq_smul,
+        MPSTensor.exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint}
+    \leanok
+    \uses{thm:spt_unitary_rephasing, thm:spt_direct_sum_fixed_point_path,
+        def:spt_fixed_point_tensor}
+    Let $D_0,D_1>0$, and let $V^0$ and $V^1$ be unitary projective
+    representations with cohomologous factor systems $\omega_0$ and
+    $\omega_1$. There is a unitary projective representation $V^{0\prime}$
+    with factor system $\omega_1$ whose fixed-point physical action, with
+    trivial character, equals that of $V^0$.
+    Set $D=D_0+D_1$ and $W_g=V^{0\prime}_{g^{-1}}\oplus V^1_{g^{-1}}$.
+    Under the common on-site action $U_g=W_g^T\otimes W_g^{-1}$, the
+    normalized bond interactions of Lemma~\ref{thm:spt_direct_sum_fixed_point_path}
+    give a symmetric gapped path between their two endpoint interactions on
+    the physical space of dimension $D^2$
+    \cite[Section~II.F.2]{Schuch2011Phases}. The normalized bond follows
+    the corrected second-block range of
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose $\lambda$ with
+    $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$.
+    Lemma~\ref{thm:spt_unitary_rephasing} gives
+    $V^{0\prime}_g=(\lambda_g/|\lambda_g|)V^0_g$ with factor system
+    $\omega_1$. Scalars cancel in $W^T\otimes W^{-1}$, so the first
+    fixed-point physical action is unchanged.
+    Lemma~\ref{thm:spt_direct_sum_fixed_point_path} now applies to
+    $V^{0\prime}\oplus V^1$.
+\end{proof}
+
+\begin{lemma}[Local continuous conjugators from matrix units]
+    \label{thm:spt_local_matrix_conjugator}
+    \lean{Matrix.matrixUnitConjugator, Matrix.matrixUnitConjugator_eq_smul,
+        Matrix.matrixUnitConjugator_intertwines,
+        Matrix.exists_continuous_local_matrixConjugator}
+    \leanok
+    Let $\alpha_t$ be a family of inner actions on $M_D(\C)$,
+    with $D>0$, such that $t\mapsto\alpha_t(M)$ is continuous
+    for every $M$. Suppose $\alpha_{t_0}=\operatorname{Ad}X_0$
+    with $X_0$ invertible. Fix $a\in\{1,\ldots,D\}$ and set
+    \begin{align}
+        X(t)_{ij}=(\alpha_t(E_{ja})X_0)_{ia}.
+        \notag
+    \end{align}
+    Then $X$ is continuous, $X(t_0)=X_0$, and
+    $\alpha_t(M)X(t)=X(t)M$. It is invertible in a neighborhood
+    of $t_0$. This is an auxiliary local construction for
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $\alpha_t=\operatorname{Ad}Y$, matrix-unit multiplication gives
+    $X(t)=(Y^{-1}X_0)_{aa}Y$. This proves the intertwining identity,
+    and gives $X(t_0)=X_0$. Continuity follows entrywise from the
+    formula. Its determinant is nonzero near $t_0$.
+\end{proof}
+
+\begin{lemma}[Continuous inverse coefficients of an injective tensor]
+    \label{thm:spt_continuous_inverse_coefficients}
+    \lean{MPSTensor.coefficientInverseMatrix,
+        MPSTensor.physicalMatrix_transpose_mul_coefficientInverseMatrix,
+        MPSTensor.continuous_coefficientInverseMatrix_family,
+        MPSTensor.coefficientInverseMatrix_reconstruct,
+        MPSTensor.virtualActionOfTensors, MPSTensor.virtualActionOfTensors_eq_conj,
+        MPSTensor.continuous_virtualActionOfTensors_family}
+    \leanok
+    Let $P$ be the physical matrix of a one-site injective tensor $A$.
+    Then $P^\dagger P$ is positive definite, and
+    \begin{align}
+        C_A=((P^\dagger P)^{-1}P^\dagger)^T,
+        \qquad P^T C_A=I.
+        \notag
+    \end{align}
+    Thus $C_A$ expands every virtual matrix in the tensor letters.
+    It depends continuously on a continuous injective family.
+    Replacing the letters of $A$ by gauge-equivalent letters of $B$
+    in this expansion defines their virtual conjugation action,
+    also continuously. This gives the inverse of the injective
+    tensor map used in \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Injectivity gives full column rank of $P$, so $P^\dagger P$ is
+    positive definite. Transpose the left-inverse identity to obtain
+    $P^TC_A=I$. Inversion is continuous on invertible matrices.
+    If $B^i=YA^iY^{-1}$, the coefficient expansion of $M$ becomes
+    $YMY^{-1}$ after replacing the letters.
+\end{proof}
+
+\begin{lemma}[Local virtual gauges from an exact tensor symmetry]
+    \label{thm:spt_local_virtual_gauge}
+    \lean{MPSTensor.exists_continuous_local_gauge_of_gaugeEquiv,
+        MPSTensor.exists_continuous_local_virtualGauge_of_isOnSiteSymmetric}
+    \leanok
+
+    A continuous pair of pointwise gauge-equivalent one-site injective
+    tensor families of fixed positive bond dimension admits locally
+    continuous invertible bond gauges near any prescribed initial gauge.
+    In particular, if a continuous injective family has exact on-site
+    symmetry, then for each group element its virtual symmetry matrix
+    can be chosen continuously and invertibly near each parameter.
+    No continuous virtual family is assumed.
+    This is the local, fixed-dimension step of
+    \cite[Section~II.F.2]{Schuch2011Phases}; interval gluing and changes
+    of minimal bond dimension remain separate steps, as recorded in
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_local_matrix_conjugator,
+        thm:spt_continuous_inverse_coefficients}
+    Construct the continuous inner action from inverse tensor
+    coefficients, then apply the matrix-unit conjugator formula.
+    Exact on-site symmetry gives pointwise gauge equivalence by the
+    injective fundamental theorem, so the argument applies to each twist.
+\end{proof}
+
+\begin{lemma}[Continuous gauges on an interval]
+    \label{thm:spt_global_virtual_gauge}
+    \lean{MPSTensor.gauge_covariance_of_invertible_intertwiner,
+        MPSTensor.exists_units_smul_of_invertible_intertwiners,
+        MPSTensor.exists_continuous_gauge_on_unitInterval}
+    \leanok
+
+    Let $A_t,B_t$, $t\in[0,1]$, be continuous, pointwise
+    gauge-equivalent tensor families of the same positive bond dimension,
+    with $A_t$ one-site injective. Given an invertible initial gauge $X_0$,
+    there is a continuous family of invertible matrices $X_t$ with that
+    initial value and $B_t^iX_t=X_tA_t^i$ for every $t,i$.
+    This proves the interval lifting of the local construction in
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_local_virtual_gauge}
+    The neighborhoods where local gauges are invertible cover the
+    interval. Choose a finite subdivision subordinate to this cover.
+    At each junction, injectivity implies that the two invertible
+    gauges differ by a nonzero scalar. Rescale the next gauge by that
+    constant and glue the continuous pieces. The same scalar matching
+    gives the prescribed initial gauge.
+\end{proof}
+
+\begin{lemma}[A constant character on continuous invariant ground lines]
+    \label{thm:spt_ground_line_character}
+    \lean{Matrix.mul_rankOne_idempotent_eq_trace_smul,
+        Matrix.trace_mul_mem_spectrum_of_rankOne_idempotent_commute,
+        Matrix.trace_mul_constant_of_continuous_rankOne_idempotent,
+        Matrix.exists_character_of_rankOne_idempotent_commute,
+        Matrix.exists_constant_character_of_continuous_rankOne_idempotent}
+    \leanok
+    Let $P_t$ be a continuous family of rank-one idempotents on a
+    finite-dimensional complex space, with parameter in a connected
+    space. Suppose each $P_t$ commutes with a fixed unitary representation
+    $U$ of a group $G$. There is one unit-modulus character $\chi$ such that
+    $U_gP_t=\chi(g)P_t$ for every $g,t$.
+    No finiteness assumption on $G$ is needed. Orthogonal projections
+    onto unique ground-state lines are a special case, provided their
+    continuity has been established. This is an ingredient for the phase
+    gauges allowed in \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    A matrix $X$ commuting with a rank-one idempotent $P$ satisfies
+    $XP=\operatorname{tr}(XP)P$. This scalar belongs to the finite
+    spectrum of $X$. For fixed $U_g$, its trace against $P_t$ varies
+    continuously and hence is constant on the connected parameter space.
+    The representation law and $P_t\ne0$ give the character law.
+    Unitarity puts each scalar on the unit circle.
+\end{proof}
+
+\begin{lemma}[A one-site character from chain lengths two and three]
+    \label{thm:spt_character_from_positive_lengths}
+    \lean{MPSTensor.mpv_blockTensor_eq_smul_of_mpv_eq_smul_from_two,
+        MPSTensor.eq_pow_div_of_mpv_eq_smul_from_two,
+        MPSTensor.exists_character_pow_of_mpv_eq_smul_from_two,
+        MPSTensor.exists_character_sameMPV_smul_of_mpv_eq_smul_from_two}
+    \leanok
+    \uses{def:injective}
+    Let $B$ be one-site injective with positive bond dimension and suppose
+    $\psi_N(A)=c_N\psi_N(B)$ for every $N\ge2$, with $|c_N|=1$.
+    Then $c_N=(c_3/c_2)^N$ for every $N\ge2$.
+    If the coefficients arise from group characters $c_N(g)$, the ratio
+    $\chi(g)=c_3(g)/c_2(g)$ is a unit-modulus character, and
+    $c_N(g)=\chi(g)^N$.
+    When $A(g)$ and $B$ have the same bond dimension, the tensors
+    $\chi(g)B$ and $A(g)$ have equal periodic vectors at all lengths,
+    including length one. This gives the one-site phase gauge in
+    \cite[Appendix~B]{Schuch2011Phases} from rings of length at least two.
+\end{lemma}
+
+\begin{proof}\leanok
+    For each $L\ge2$, block into words of length $L$. Every positive
+    blocked length corresponds to an original length at least two.
+    The injective proportionality theorem gives $c_{NL}=c_L^N$.
+    Comparing $2N$ and $3N$ in the two orders gives
+    $c_N^2=c_2^N$ and $c_N^3=c_3^N$. Division yields the claimed ratio.
+    The character law follows from those of $c_2,c_3$.
+    In equal bond dimension, injectivity extends the rephased agreement
+    from lengths at least two to every length.
+\end{proof}
+
+\begin{lemma}[Removing a physical symmetry character]
+    \label{thm:spt_physical_character_twist}
+    \lean{MPSTensor.physicalCharacterTwist,
+        MPSTensor.physicalCharacterTwist_apply,
+        MPSTensor.physicalCharacterUntwist,
+        MPSTensor.physicalCharacterUntwist_apply,
+        MPSTensor.twistedTensor_physicalCharacterTwist,
+        MPSTensor.twistedTensor_physicalCharacterUntwist,
+        MPSTensor.isOnSiteSymmetric_physicalCharacterUntwist}
+    \leanok
+    Multiplying an on-site unitary representation $U_g$ by a unit-modulus
+    character $\chi(g)$ gives another unitary representation.
+    Tensor twisting then acquires the scalar $\chi(g)$.
+    Consequently, if the twisted periodic vectors of $A$ equal those of
+    $\chi(g)A$ at every length, replacing $U_g$ by $\chi(g)^{-1}U_g$
+    makes the symmetry exact at every length.
+    This is the physical phase-gauge change allowed in
+    \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Scalars commute with the matrix action, and the character law gives
+    multiplicativity. Unit modulus preserves unitarity. Pulling the scalar
+    out of the physical sum scales the tensor, and hence scales its
+    length-$N$ vector by $\chi(g)^N$. The inverse character cancels it.
+\end{proof}
+
+\begin{lemma}[Orthogonal original endpoint spaces in the common representation]
+    \label{thm:spt_common_physical_endpoint_orthogonality}
+    \lean{MPSTensor.commonPhysicalEmbeddingLeft_conjTranspose_mul_right_eq_zero}
+    \leanok
+
+    The prescribed common physical embeddings of the two original tensor
+    spaces have orthogonal ranges. This holds for arbitrary original
+    tensors, without injectivity or symmetry assumptions, and gives
+    the orthogonal endpoint summands required by
+    \cite[Section~II.C.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_endpoints}
+    The two active coordinate frames occupy disjoint bond blocks.
+    Their retained orthogonal complements occupy the two separate
+    original physical summands. The mixed adjoint product therefore
+    reduces to the zero mixed product of the active frames.
+\end{proof}
+
+\begin{lemma}[A gapped fixed-point path retaining the original physical spaces]
+    \label{thm:spt_common_physical_fixed_point_path}
+    \lean{Matrix.commute_singleKrausMap_of_unitary_intertwiner,
+        MPSTensor.isometricInteractionExtension_commute_onSiteTensorPow,
+        MPSTensor.normalizedBondInteraction_translate_commute,
+        MPSTensor.commonPhysicalNormalizedBondInteraction,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_isStarProjection,
+        MPSTensor.continuous_commonPhysicalNormalizedBondInteraction,
+        MPSTensor.isometricInteractionExtension_ker_le_of_ker_le,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_zero_mem_spectrum,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_le_parent,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_translate_commute,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_spectrum_gap_one,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace,
+        MPSTensor.toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_ker_le_parent,
+        MPSTensor.commonPhysicalParentInteraction_commute_onSite,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_commute_onSiteTensorPow,
+        MPSTensor.commonPhysicalNormalizedBondInteraction_commute_onSite,
+        MPSTensor.commonPhysicalNormalizedBondGappedPath,
+        MPSTensor.commonPhysicalBondCanonicalParentComparisonPath,
+        MPSTensor.commonPhysicalLeftParentComparisonPath,
+        MPSTensor.commonPhysicalRightParentComparisonPath,
+        MPSTensor.commonPhysicalCanonicalFixedPointGappedPath}
+    \leanok
+
+    Let two positive-dimensional unitary virtual representations have the
+    same factor system. In the common physical representation consisting
+    of their direct-sum adjoint action and the two original physical
+    representations, the normalized bond interpolation gives a continuous
+    symmetric interaction path. Each periodic Hamiltonian, at every length
+    $N\ge2$, has ground energy zero, gap at least one, and ground space equal
+    to the periodic MPS line of the included weighted matrix-unit tensor.
+    The unused physical states have energy one. Symmetric affine comparisons
+    join its endpoints to the canonical two-site parents of the two included
+    fixed-point tensors. This realizes the common-space construction in
+    \cite[Section~II.F.2]{Schuch2011Phases} for the stated two-site setting.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_endpoints,
+        thm:spt_spectator_bond_transport,
+        thm:spt_normalized_bond_local_symmetry}
+    The enlarged local term is
+    $I-Q^{\otimes2}(I-h)Q^{\otimes2\dagger}$, where $Q$ includes the active
+    physical summand. Resolving each site into the active summand and its
+    orthogonal complement shows that the translated projections commute.
+    Their sum has spectrum in $\{0\}\cup[1,\infty)$, and its kernel is the
+    included old ground line. Physical covariance gives symmetry.
+    The ordered affine comparisons preserve the common zero modes and a
+    uniform positive gap; concatenate them with the bond interpolation.
+\end{proof}
+
+\begin{lemma}[The common-space bond path has an independent exact MPS realization]
+    \label{thm:spt_common_physical_fixed_point_ground_path}
+    \lean{MPSTensor.normalizedBondInterpolationMatrix_diagonal_ne_zero,
+        MPSTensor.weightedMatrixUnitInterpolation_isInjective,
+        MPSTensor.mpv_weightedMatrixUnitInterpolation_ne_zero,
+        MPSTensor.mpv_rotatePhysical_isometry_ne_zero,
+        MPSTensor.commonPhysicalWeightedMatrixUnitInterpolation_injective_representative,
+        MPSTensor.exactMPSGroundPath_commonPhysicalNormalizedBondInteraction,
+        MPSTensor.commonPhysicalNormalizedBondExactMPSGroundPath}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    For positive endpoint bond dimensions, the included weighted
+    matrix-unit interpolation is a continuous exact MPS realization of
+    the common-space normalized bond path. Its periodic vectors are
+    nonzero at every positive length. At each interior parameter the
+    tensor is one-site injective on the full direct-sum bond space; at
+    the endpoints it has the corresponding smaller injective
+    representative with the same positive-length periodic rays.
+    Its finite-chain ground eigenspaces are precisely those periodic
+    MPS lines. The ground-state certificate itself requires no
+    virtual representation; symmetry comes from the physical path.
+    This verifies the exact MPS interpolation in
+    \cite[Section~II.F.2]{Schuch2011Phases} in the stated setting.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_fixed_point_path}
+    Every weighted matrix-unit coefficient is nonzero in the interior,
+    so its letters span the full matrix algebra. At an endpoint, the
+    surviving corner is the smaller fixed-point tensor. A diagonal word
+    has nonzero trace, giving nonvanishing at every positive length;
+    an isometric physical inclusion preserves this property.
+    The previously computed kernel is exactly the included MPS line,
+    with least energy zero.
+\end{proof}
+
+\begin{lemma}[Local on-site commutation gives periodic symmetry]
+    \label{thm:spt_interaction_hamiltonian_symmetry}
+    \lean{MPSTensor.interactionHamiltonian_commute_onSiteTensorPow}
+    \leanok
+    If a two-site interaction commutes with the tensor square of an
+    on-site matrix, then its translation-invariant periodic Hamiltonian
+    commutes with the full tensor power at every chain length at least
+    two. Unitarity is not needed for this algebraic identity.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each embedded interaction term has the asserted commutation
+    identity. Summing over its translates gives the result.
+\end{proof}
+
+\begin{lemma}[Aligning unitary virtual factors]
+    \label{thm:spt_unitary_factor_alignment}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.norm_factor_eq_one_of_unitary,
+        TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq_of_unitary,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_unitary_cohomologous}
+    \leanok
+    A unitary projective representation on a nonzero finite-dimensional
+    space has a unit-modulus factor system. Two such representations with
+    cohomologous factor systems can therefore be rephased by unit-circle
+    scalars to have precisely the same factor system, preserving unitarity
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Take operator norms in the projective multiplication law. Both unitary
+    factors have norm one, so the scalar factor does also. Apply the
+    unit-circle representative of the cohomology relation to rephase the
+    second virtual representation.
+\end{proof}
+
+\begin{lemma}[Physical character changes preserve the same gapped path]
+    \label{thm:spt_character_gapped_path}
+    \lean{Matrix.finKronecker_const_smul,
+        MPSTensor.SymmetricGappedInteractionPath.physicalCharacterTwist,
+        MPSTensor.ExactMPSGroundPath.physicalCharacterTwist}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Multiplying the physical representation by a unit-modulus character
+    preserves the same symmetric gapped interaction path and the same
+    exact MPS ground realization. Both the Hamiltonians and their ground
+    spaces are unchanged. This is the physical phase-gauge freedom of
+    \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_physical_character_twist}
+    The length-$N$ physical action is multiplied by $\chi(g)^N$.
+    Scalar multiplication preserves commutation with the Hamiltonian.
+    Every other condition concerns the same interactions and tensor family.
+\end{proof}
+
+\begin{lemma}[Exact MPS ground lines along a canonical injective path]
+    \label{thm:spt_canonical_injective_ground_path}
+    \lean{MPSTensor.interactionHamiltonian_parent_groundSpace_eq_span_mpv,
+        MPSTensor.exactMPSGroundPath_of_canonicalInjective}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    A continuous one-site injective tensor family of fixed positive bond
+    dimension certifies the exact MPS ground lines of any physical path
+    whose local interactions are its canonical two-site parents.
+    At every periodic length at least two the parent kernel is precisely
+    the MPS line, with least energy zero. The periodic vectors are also
+    nonzero at length one. No additional virtual data are required by
+    this ground-state certificate.
+\end{lemma}
+
+\begin{proof}\leanok
+    One-site injectivity gives nonvanishing at each positive length.
+    The periodic parent-ground-space theorem identifies the kernel
+    with the range of the scalar-to-state map, hence the MPS line.
+    Positivity gives the least energy zero. Use the given tensor family
+    itself as the pointwise injective representative.
+\end{proof}
+
+\begin{definition}[Supported isometric bond lifts]
+    \label{def:spt_supported_bond_lift}
+    \lean{MPSTensor.isometricBondEmbedding, MPSTensor.supportedBondLift}
+    \leanok
+    Let $V:\C^D\to\C^E$ be an isometry, let $A_\gamma$ be a tensor
+    family, and let $T$ be a tensor on $\C^E$. The isometric bond
+    inclusion of $A$ has letters $VA^iV^\dagger$. The supported lift
+    with prescribed initial tensor $T$ has letters
+    \begin{align}
+        B_\gamma^i & =VA_\gamma^iV^\dagger
+        +T^i-VA_0^iV^\dagger.
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Supported bond lifts preserve the exact ground realization]
+    \label{thm:spt_supported_bond_lift}
+    \lean{MPSTensor.mpv_isometricBondEmbedding,
+        MPSTensor.continuous_isometricBondEmbedding,
+        MPSTensor.supportedBondLift_zero,
+        MPSTensor.supportedBondLift_intertwine,
+        MPSTensor.supportedBondLift_rowSupport,
+        MPSTensor.supportedBondLift_samePositiveMpvRay,
+        MPSTensor.continuousOn_supportedBondLift,
+        MPSTensor.ExactMPSGroundPath.of_supported_isometric_bond_intertwiner,
+        MPSTensor.ExactMPSGroundPath.supportedBondLift}
+    \leanok
+    \uses{def:spt_supported_bond_lift, def:spt_exact_mps_gapped_phase}
+    Suppose $T^iV=VA_0^i$ and $VV^\dagger T^i=T^i$ for every letter.
+    The supported lift satisfies $B_0=T$, depends continuously on a
+    continuous family $A_\gamma$, and has exactly the same periodic
+    vectors as $A_\gamma$ at every positive length. Consequently it
+    preserves an exact MPS ground realization of the same physical path,
+    including its pointwise injective representatives.
+\end{lemma}
+
+\begin{proof}\leanok
+    The correction annihilates $V$ on its right and is supported on
+    the range of $V$ on its left. Thus $B_\gamma^iV=VA_\gamma^i$
+    and $VV^\dagger B_\gamma^i=B_\gamma^i$. Multiplying along any
+    nonempty word and taking the trace gives the original periodic
+    vector. The correction is constant in the parameter, so continuity
+    is preserved. All ground-line conditions concern these same vectors.
+\end{proof}
+
+\begin{lemma}[Exact ground lines through the canonical fixed-point comparisons]
+    \label{thm:spt_common_physical_canonical_ground_path}
+    \lean{MPSTensor.interactionHamiltonian_affine_ker_eq_of_order,
+        MPSTensor.ExactMPSGroundPath.of_ordered_affine,
+        MPSTensor.commonPhysicalBondCanonicalParentComparisonExactMPSGroundPath,
+        MPSTensor.commonPhysicalLeftParentComparisonExactMPSGroundPath,
+        MPSTensor.commonPhysicalRightParentComparisonExactMPSGroundPath,
+        MPSTensor.ExactMPSGroundPath.trans_tensor_zero,
+        MPSTensor.ExactMPSGroundPath.trans_tensor_one,
+        MPSTensor.commonPhysicalCanonicalFixedPointExactMPSGroundPath,
+        MPSTensor.commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_zero,
+        MPSTensor.commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_one}
+    \leanok
+
+    The symmetric gapped path between the canonical parents of the two
+    included fixed-point tensors has an independent exact MPS ground
+    realization. Its initial and final tensors are precisely the included
+    weighted endpoint tensors. The affine parent comparisons use the
+    constant ground tensor at the corresponding endpoint.
+    More generally, an ordered affine comparison between positive
+    Hamiltonians with the same zero modes preserves that ground line.
+    This certifies the parent comparisons in
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_fixed_point_ground_path,
+        def:spt_exact_ground_path_concatenation}
+    If $0\le A\le B$ and $\ker A\subseteq\ker B$, positivity implies
+    equality of the two kernels. Every ordered affine combination has
+    the same kernel and least energy zero. Keep its MPS tensor constant.
+    At the two joins these tensors coincide with the endpoint
+    tensors of the bond interpolation. Concatenate the three exact
+    ground realizations; the endpoint equations follow from their
+    common parameterization.
+\end{proof}
+
+\begin{lemma}[Cohomologous unitary factors give a common-space path]
+    \label{thm:spt_common_physical_injective_path}
+    \lean{MPSTensor.commonPhysicalInjectiveGappedPath,
+        MPSTensor.rotatePhysical_covariance_of_circle_rephase,
+        MPSTensor.exists_commonPhysicalInjectiveGappedPath_of_cohomologous}
+    \leanok
+
+    Let two one-site injective tensors of positive bond dimension have
+    unitary physical representations and unitary virtual projective
+    representations giving their adjoint tensor covariances. If the
+    virtual factor systems are cohomologous, then the canonical
+    two-site parents of their prescribed common physical images are
+    joined by a symmetric uniformly gapped interaction path.
+    The embeddings retain both entire original physical spaces.
+    No chosen cochain or additional target intertwiner is an assumption.
+    This is the one-site injective, exactly covariant construction from
+    \cite[Section~II.F.2]{Schuch2011Phases}. The independent exact MPS
+    ground realization is constructed in
+    Definition~\ref{def:spt_common_physical_injective_ground_path}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_polar_endpoints,
+        thm:spt_common_physical_fixed_point_path,
+        thm:spt_unitary_factor_alignment}
+    A unit-circle rephasing aligns the factors and cancels out
+    of adjoint tensor covariance. The two common physical polar paths
+    therefore reach the prescribed included fixed-point tensors.
+    Join their canonical parents by the common-space fixed-point path,
+    reverse the first polar path, and concatenate.
+\end{proof}
+
+\begin{definition}[Concatenating exact MPS ground realizations]
+    \label{def:spt_exact_ground_path_concatenation}
+    \lean{MPSTensor.ExactMPSGroundPath.trans}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Two consecutive physical interaction paths with exact MPS ground
+    realizations can be concatenated when their ambient bond dimensions
+    agree and their endpoint tensors coincide under that identification.
+    The resulting continuous tensor path realizes the ground lines of
+    the concatenated physical interaction path.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_space_path_concatenation}
+    Use the first tensor family on the first half of the interval and
+    the second on the second half, with the same affine parameter changes
+    as the physical path. Endpoint equality gives continuity at the join.
+    Injective representatives, nonvanishing, and the ground-line identity
+    follow from the corresponding half of the path.
+\end{proof}
+
+\begin{lemma}[One-site paths give the independent exact MPS phase condition]
+    \label{thm:spt_exact_phase_one_site_path}
+    \lean{MPSTensor.blockKron_one_eq_submatrix,
+        MPSTensor.rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one,
+        MPSTensor.isSameExactMPSGappedPhase_of_oneSite_path}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Suppose the full endpoint physical representations have orthogonal
+    isometric inclusions in a common physical representation, intertwining
+    the on-site actions. A symmetric gapped path between their included
+    canonical parents, with an exact MPS ground realization whose endpoint
+    vector lines are the included endpoint lines, proves the independent
+    exact MPS phase condition with blocking length one and trivial
+    endpoint characters.
+\end{lemma}
+
+\begin{proof}\leanok
+    Identify a one-letter word with its single physical index. The blocked
+    action is the original action under this identification, and inclusion
+    of the blocked tensor gives exactly the original included tensor.
+    Isometry, orthogonality, and covariance are preserved by the same
+    reindexing. The given path and ground realization therefore provide
+    all the required data.
+\end{proof}
+
+\begin{lemma}[Unitary preparation of a virtual implementation]
+    \label{thm:spt_exact_phase_unitary_preparation}
+    \lean{MPSTensor.rotatePhysical_covariance_of_unitary_virtual_action,
+        MPSTensor.exists_unitary_covariant_preparation_with_virtual_class}
+    \leanok
+    Let an injective tensor of positive bond dimension have an
+    invertible virtual projective implementation of its exact physical
+    symmetry. A nonzero scalar rescaling and a bond change of basis give
+    an injective tensor with a unitary virtual implementation in the
+    same cohomology class. Its physical covariance is adjoint conjugation.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_prepared_polar_virtual_class}
+    The virtual implementation gives invariance of every periodic
+    vector. Apply the prepared polar construction preserving its virtual
+    class. At its injective endpoint the virtual matrices are unitary;
+    their inverses are therefore their adjoints.
+\end{proof}
+
+\begin{definition}[Three-stage exact ground realization]
+    \label{def:spt_exact_ground_reverse_three_stage}
+    \lean{MPSTensor.ExactMPSGroundPath.reverseTransTrans}
+    \leanok
+    \uses{def:spt_exact_ground_path_concatenation}
+    Three exact MPS ground realizations with a common ambient bond
+    dimension can be joined after reversing the first path, provided
+    their tensors agree at the two joins. This gives the continuous
+    ground realization of the same three-stage physical path.
+\end{definition}
+
+\begin{lemma}[Dimensions and endpoints of exact ground concatenation]
+    \label{thm:spt_exact_ground_three_stage_endpoints}
+    \lean{MPSTensor.ExactMPSGroundPath.trans_bondDimension,
+        MPSTensor.ExactMPSGroundPath.reverseTransTrans_tensor_zero,
+        MPSTensor.ExactMPSGroundPath.reverseTransTrans_tensor_one}
+    \leanok
+    \uses{def:spt_exact_ground_reverse_three_stage}
+    Concatenation retains the common ambient bond dimension. The initial
+    tensor of the three-stage realization is the final tensor of the
+    first, unreversed family, and its final tensor is the final tensor
+    of the third family.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_common_physical_canonical_ground_path}
+    Apply the endpoint identities for two successive concatenations;
+    reversal exchanges the endpoints of the first family.
+\end{proof}
+
+\begin{definition}[Exact polar ground families in the common bond space]
+    \label{def:spt_common_physical_polar_ground_paths}
+    \lean{MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath,
+        MPSTensor.commonPhysicalRightPolarExactMPSGroundPath}
+    \leanok
+    \uses{def:spt_common_physical_polar_paths, def:spt_supported_bond_lift}
+    The two common-space polar parent paths have exact MPS ground
+    realizations in the common bond space of dimension $D_0+D_1$.
+    For endpoint $j$, include the scaled polar tensor family by the
+    corresponding coordinate isometry and take its supported lift
+    with initial tensor the included weighted fixed-point endpoint.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_canonical_injective_ground_path,
+        thm:spt_supported_bond_lift,
+        thm:spt_common_physical_polar_endpoints}
+    The small-bond polar tensors are continuous and one-site injective,
+    and their canonical parents are the prescribed physical interactions.
+    The weighted endpoint satisfies the bond intertwining and row-support
+    identities. Its supported lift preserves all positive-length
+    periodic vectors and therefore the same exact ground realization.
+\end{proof}
+
+\begin{lemma}[Exact endpoints of the common polar ground families]
+    \label{thm:spt_common_physical_polar_ground_endpoints}
+    \lean{MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath_tensor_zero,
+        MPSTensor.commonPhysicalRightPolarExactMPSGroundPath_tensor_zero,
+        MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath_samePositiveMpvRay_one,
+        MPSTensor.commonPhysicalRightPolarExactMPSGroundPath_samePositiveMpvRay_one}
+    \leanok
+    \uses{def:spt_common_physical_polar_ground_paths}
+    At parameter zero, each polar ground family is exactly the included
+    weighted fixed-point tensor. At parameter one, its positive-length
+    periodic vector lines are those of the corresponding included
+    original tensor. Thus both fixed-point joins are exact tensor
+    identities, while the original endpoints have the required vector
+    lines.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_supported_bond_lift}
+    A supported lift has its prescribed initial tensor. At the other
+    endpoint its bond intertwiner preserves every nonempty word trace;
+    the fixed nonzero normalization changes only the vector line.
+\end{proof}
+
+\begin{definition}[Exact MPS realization of the full common-space path]
+    \label{def:spt_common_physical_injective_ground_path}
+    \lean{MPSTensor.commonPhysicalInjectiveExactMPSGroundPath}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    For two one-site injective tensors of positive bond dimension with
+    unitary physical and virtual actions giving exact adjoint covariance
+    and the same virtual factor system, the constructed common-space
+    path has a continuous exact MPS ground realization. It joins the
+    two included endpoint vector lines through the polar deformations
+    and the canonical fixed-point comparisons.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{thm:spt_supported_bond_lift,
+        thm:spt_common_physical_polar_ground_endpoints,
+        thm:spt_common_physical_canonical_ground_path,
+        thm:spt_common_physical_injective_path,
+        def:spt_exact_ground_reverse_three_stage}
+    The supported bond lifts preserve the polar periodic vectors and
+    give exactly the weighted fixed-point endpoint tensors. They
+    therefore join the canonical fixed-point ground realization.
+    Reverse the first polar family and concatenate the three families
+    with the same parameter changes as the physical path.
+\end{proof}
+
+\begin{lemma}[Cohomologous virtual factors give the independent exact MPS phase]
+    \label{thm:spt_exact_phase_forward}
+    \lean{MPSTensor.isSameExactMPSGappedPhase_of_unitary_common_factor,
+        MPSTensor.isSameExactMPSGappedPhase_of_unitary_cohomologous,
+        MPSTensor.isSameExactMPSGappedPhase_of_isInjective_cohomologous}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    Let $A_0,A_1$ be one-site injective tensors of positive bond dimension
+    with unitary physical actions. Suppose invertible virtual
+    projective representations implement their exact tensor symmetries.
+    If their factor systems are cohomologous, the tensors satisfy the
+    independent exact MPS phase condition. The whole endpoint physical
+    spaces have orthogonal isometric images in the constructed common
+    physical representation. No virtual family or physical path is
+    assumed. This proves the forward construction of
+    \cite[Section~II.F.2]{Schuch2011Phases} in the stated one-site,
+    trivial-character setting.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:spt_common_physical_injective_ground_path,
+        thm:spt_common_physical_endpoint_orthogonality,
+        thm:spt_exact_phase_one_site_path,
+        thm:spt_unitary_factor_alignment,
+        thm:spt_exact_phase_unitary_preparation,
+        thm:spt_exact_phase_gauge_invariance}
+    For unitary virtual actions with a common factor, use the constructed
+    common-space path and its exact ground realization. The physical
+    inclusions are isometric, orthogonal, and intertwine the original
+    endpoint actions. One-site blocking gives the phase condition.
+    A unit-circle rephasing aligns cohomologous unitary factors without
+    changing their adjoint covariance. For general invertible virtual
+    actions, prepare both endpoints with unitary virtual actions in
+    the same classes, apply the unitary construction, and transfer
+    the phase condition back by gauge invariance.
+\end{proof}
+
+\begin{lemma}[Chain characters from an independent physical path]
+    \label{thm:spt_physical_path_chain_character}
+    \lean{Matrix.eigenvector_of_mem_span_singleton,
+        Matrix.eigenvalue_constant_of_continuous_invariant_line,
+        Matrix.exists_constant_character_of_continuous_invariant_line,
+        MPSTensor.mem_span_mpv_of_commute_ground_line,
+        MPSTensor.ExactMPSGroundPath.exists_chain_character,
+        MPSTensor.ExactMPSGroundPath.exists_chain_character_mpv}
+    \leanok
+    \uses{def:spt_exact_mps_gapped_phase}
+    For an independent exact MPS ground-state path and every $N\ge2$,
+    there is one unit-modulus character $c_N$ such that the physical
+    symmetry acts on every length-$N$ ground vector by $c_N(g)$,
+    independently of the path parameter. The ambient tensors need not
+    be injective, and their minimal bond dimensions may change.
+\end{lemma}
+
+\begin{proof}\leanok
+    The nonzero periodic vectors depend continuously on the ambient tensors.
+    Commutation with the Hamiltonian preserves its unique ground line.
+    The eigenvalue on this line depends continuously on the vector and
+    belongs to the fixed finite symmetry spectrum; it is therefore
+    constant. Multiplication of symmetry operators gives the character
+    law, and unitarity gives unit modulus.
+\end{proof}
+
+\begin{lemma}[A common physical character with varying minimal dimension]
+    \label{thm:spt_varying_bond_physical_character}
+    \lean{LinearMap.map_eq_smul_of_span_singleton_eq,
+        MPSTensor.mpv_twistedTensor_eq_finKronecker_mulVec,
+        MPSTensor.SamePositiveMpvRay.symmetry_eigenvalue,
+        MPSTensor.ExactMPSGroundPath.exists_single_character,
+        MPSTensor.ExactMPSGroundPath.exists_exact_symmetry}
+    \leanok
+
+    An independent exact MPS ground-state path has one unit-modulus
+    character $\chi$ such that its physical symmetry acts on every
+    positive-length periodic vector by $\chi(g)^N$. Rephasing the physical
+    representation by $\chi^{-1}$ makes every ambient tensor exactly
+    symmetric, even when its minimal injective bond dimension varies.
+    No continuous choice of minimal tensors is assumed.
+    This removes the scalar character in the varying-dimension argument
+    of \cite[Appendices~B and~C]{Schuch2011Phases}; continuity of the
+    canonical virtual support remains to be established.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_physical_path_chain_character,
+        thm:spt_character_from_positive_lengths,
+        thm:spt_physical_character_twist}
+    Equality of nonzero vector rays transfers symmetry eigenvalues to
+    each pointwise minimal injective representative. The characters
+    $c_2$ and $c_3$ of the fixed finite-chain ground lines are independent
+    of the path parameter. The ratio $c_3/c_2$ determines the same one-site
+    character for each minimal representative, irrespective of dimension.
+    The fundamental theorem gives its length-one symmetry as well.
+    Transfer these identities back through equality of periodic rays,
+    and remove the common character from the physical action.
+\end{proof}
+
+\begin{lemma}[The physical converse with a fixed injective realization]
+    \label{thm:spt_fixed_bond_physical_converse}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_single_character_of_isInjective,
+        MPSTensor.ExactMPSGroundPath.exists_exact_symmetry_of_isInjective,
+        MPSTensor.ExactMPSGroundPath.exists_continuous_virtual_data_of_isInjective,
+        MPSTensor.ExactMPSGroundPath.exists_rephasing_endpoint_cohomology_of_isInjective}
+    \leanok
+
+    Suppose an independent exact MPS ground-state path has a continuous
+    ambient tensor realization that is one-site injective at every
+    parameter. Then one fixed unit-modulus physical character makes
+    the entire family exactly symmetric. Continuous invertible virtual
+    projective matrices and continuous factor systems follow, and the
+    endpoint factor systems are cohomologous. The endpoint classes agree
+    for any representatives of that common rephased symmetry.
+    Neither exact tensor symmetry nor a virtual path is an assumption.
+    The fixed injective realization is the scope restriction; the
+    varying-support converse remains open
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_physical_path_chain_character,
+        thm:spt_character_from_positive_lengths,
+        thm:spt_physical_character_twist,
+        thm:spt_tensor_path_class_invariance}
+    The chain characters are independent of the path parameter.
+    Their ratio $c_3/c_2$ gives one site character for every tensor.
+    Remove it from the physical action, lift the resulting exact tensor
+    symmetry to continuous virtual matrices, and apply the determinant
+    argument. Gauge uniqueness compares arbitrary endpoint choices.
+\end{proof}
+
+\begin{definition}[Schmidt coefficient matrix of the two-site ring]
+    \label{def:spt_two_site_schmidt_matrix}
+    \lean{MPSTensor.twoSiteSchmidtMatrix}
+    \leanok
+    The coefficient matrix across the one-site cut of the periodic
+    two-site MPS is $C_2(A)_{ij}=\operatorname{tr}(A^iA^j)$.
+\end{definition}
+
+\begin{lemma}[Minimal bond dimension is locally bounded below]
+    \label{thm:spt_minimal_bond_dimension_lower_bound}
+    \lean{MPSTensor.rank_twoSiteSchmidtMatrix_of_isInjective,
+        MPSTensor.twoSiteSchmidtMatrix_apply_eq_mpv,
+        MPSTensor.continuous_twoSiteSchmidtMatrix,
+        MPSTensor.SamePositiveMpvRay.rank_twoSiteSchmidtMatrix_eq,
+        MPSTensor.ExactMPSGroundPath.eventually_minimalBondDimension_ge}
+    \leanok
+    \uses{def:spt_two_site_schmidt_matrix, def:spt_exact_mps_gapped_phase}
+    A one-site injective tensor of bond dimension $D$ has
+    $\operatorname{rank}C_2(A)=D^2$. Along a continuous exact MPS ground
+    realization, suppose an injective representative at $t_0$ has
+    positive bond dimension $D_0$. In a neighborhood of $t_0$ in the
+    parameter interval, every injective representative of the same
+    positive-length periodic vector lines has bond dimension at least
+    $D_0$. This proves the local dimension-direction assertion in
+    \cite[Section~II.F.2, lines~1059--1068]{Schuch2011Phases}.
+    It uses the two-site vector and its continuity, and does not derive
+    a surviving single-bond projective subspace from the physical gap.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:ldpolar_injective_physical}
+    With $M$ the physical matrix and $W$ the swap of its two virtual
+    indices, $C_2=MWM^T$. Injectivity gives a left inverse of $M$,
+    so multiplication by that inverse and its transpose recovers $W$.
+    The two rank inequalities therefore give rank $D^2$.
+    Nonzero ray equality rescales $C_2$ by a nonzero scalar and preserves
+    its rank. The coefficient matrix depends continuously on the
+    ground tensor, and matrix rank is lower semicontinuous. Hence nearby
+    representative dimensions satisfy $D^2\ge D_0^2$, or $D\ge D_0$.
+\end{proof}
+
+\begin{lemma}[Two-site trace data determine the physical quotient]
+    \label{thm:spt_finite_two_site_trace_quotient}
+    \lean{MPSTensor.traceGram_eq_smul_of_twoSite_trace_eq,
+        MPSTensor.ker_linearCombination_eq_of_twoSite_trace_eq,
+        MPSTensor.bondDimension_eq_of_twoSite_trace_eq}
+    \leanok
+    Let $A^i\in M_D(\C)$ and $B^i\in M_E(\C)$ be one-site injective.
+    Suppose $c_2\ne0$ and
+    $\tr(B^iB^j)=c_2\tr(A^iA^j)$ for all physical indices $i,j$.
+    Then the coefficient maps $x\mapsto\sum_i x_iA^i$ and
+    $x\mapsto\sum_i x_iB^i$ have the same kernel, and $D=E$.
+    Their trace forms are the compositions of these coefficient maps
+    with the corresponding nondegenerate trace pairings.
+\end{lemma}
+
+\begin{proof}\leanok
+    Injectivity makes $M\mapsto(\tr(MA^i))_i$ and its analogue for $B$
+    injective. The proportionality of the two-site trace forms therefore
+    identifies the coefficient kernels. Both coefficient maps are
+    surjective, so rank--nullity gives $D^2=E^2$ and hence $D=E$.
+    The trace forms here are complex bilinear, rather than positive
+    Hermitian forms.
+\end{proof}
+
+\begin{lemma}[Three-site trace data determine multiplication]
+    \label{thm:spt_finite_three_site_trace_algebra}
+    \lean{MPSTensor.linearExtension_exists_unique_of_twoSite_trace_eq,
+        MPSTensor.linearExtension_mul_of_two_three_trace_eq}
+    \leanok
+    Let $A,B$ be one-site injective and suppose their two-site traces
+    satisfy the preceding proportionality, allowing $c_2=0$ for the
+    purely linear assertion. There is a unique linear map
+    $T:M_D(\C)\to M_E(\C)$ with $T(A^i)=B^i$.
+    If $c_3\ne0$ and
+    $\tr(B^iB^jB^k)=c_3\tr(A^iA^jA^k)$ for all $i,j,k$, then
+    $T(MN)=(c_2/c_3)T(M)T(N)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Use a left inverse of the trace-pairing map for $B$ to extend the
+    letter assignment. The letters of $A$ span the full matrix algebra,
+    giving uniqueness. Three-site traces prove the multiplication identity
+    on pairs of letters. Bilinearity extends it to arbitrary matrices.
+\end{proof}
+
+\begin{lemma}[Reconstruction from two finite rings]
+    \label{thm:spt_finite_ring_reconstruction}
+    \lean{MPSTensor.gaugeEquiv_smul_of_two_three_trace_eq,
+        MPSTensor.samePositiveMpvRay_of_two_three_trace_eq,
+        MPSTensor.samePositiveMpvRay_of_mpv_two_three_eq_smul}
+    \leanok
+    \uses{def:gauge_equiv}
+    Suppose two one-site injective tensors have proportional periodic
+    vectors at lengths two and three, with nonzero constants $c_2,c_3$.
+    They have the same minimal bond dimension, and $B$ is related by
+    a bond conjugation to $(c_3/c_2)A$. Consequently their periodic
+    vector rays agree at every positive length.
+    This finite-data assertion does not construct continuous canonical
+    coordinates through a changing bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_finite_two_site_trace_quotient,
+        thm:spt_finite_three_site_trace_algebra}
+    The dimension equality identifies the matrix spaces.
+    At positive bond dimension, the normalized map $(c_2/c_3)T$ is
+    a nonzero multiplicative linear endomorphism. Skolem--Noether represents it by conjugation with an
+    invertible matrix. Traces of words are invariant under conjugation;
+    multiplying every letter by $c_3/c_2$ rescales the length-$N$ vector
+    by its nonzero $N$th power. The zero-dimensional case is immediate.
+\end{proof}
+
+\begin{definition}[Coordinates for the trace-quotient product]
+    \label{def:spt_trace_quotient_product_coordinates}
+    \lean{Matrix.traceQuotientProductCoordinates}
+    \leanok
+    Let $G\in M_d(\C)$ be the complex-bilinear two-site trace form,
+    let $F:\C^r\to\C^d$ be a coefficient section, and put $C=GF$.
+    For contracted three-site columns $R:\C^{r\times r}\to\C^d$, set
+    \begin{align}
+        M        & =(C^\dagger C)^{-1}C^\dagger R,
+        \notag                                     \\
+        \mu(x,y) & =M(x_a y_b)_{(a,b)}.
+        \notag
+    \end{align}
+    The positive Hermitian matrix $C^\dagger C$ serves to invert the
+    section. No positivity of the bilinear trace form $G$ is assumed.
+\end{definition}
+
+\begin{lemma}[A fixed section of a constant-rank trace form]
+    \label{thm:spt_trace_quotient_fixed_section}
+    \lean{Matrix.exists_fixedSection_of_rank,
+        Matrix.exists_open_fixedSection_range}
+    \leanok
+    Let $G(t)$ be a continuous matrix family of constant rank $r$.
+    At any base point $t_0$ there is a coefficient section $F$ such
+    that $G(t_0)F$ is injective. For this fixed $F$, there is an open
+    neighborhood $S$ of $t_0$ on which $G(t)F$ remains injective and
+    has the same range as $G(t)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Choose coordinates on the range of $G(t_0)$ and lift them through
+    $G(t_0)$. The Hermitian Gram matrix of the resulting section is
+    invertible. Invertibility persists on an open neighborhood.
+    The section range is contained in the full range and both have
+    dimension $r$, so they coincide there.
+\end{proof}
+
+
+
+\begin{lemma}[Continuous multiplication coefficients at constant rank]
+    \label{thm:spt_trace_quotient_continuous_product}
+    \lean{Matrix.continuous_traceQuotientProductCoordinates,
+        Matrix.exists_open_continuous_traceQuotientProductCoordinates,
+        Matrix.exists_local_continuous_traceQuotientProductCoordinates}
+    \leanok
+    \uses{def:spt_trace_quotient_product_coordinates,
+        thm:spt_trace_quotient_fixed_section}
+    Suppose $G(t)$ has constant rank $r$, and for each fixed section
+    $F$ the contracted columns $R_F(t)$ depend continuously on $t$.
+    Then $F$ can be chosen so that the multiplication coefficients
+    $(C(t)^\dagger C(t))^{-1}C(t)^\dagger R_F(t)$ are continuous on
+    an open neighborhood of the base point. The conclusion includes
+    the section and its open neighborhood.
+\end{lemma}
+
+\begin{proof}\leanok
+    Use the preceding fixed section. Its Gram matrix is positive
+    definite throughout the neighborhood. Matrix inversion and
+    multiplication are continuous there.
+\end{proof}
+
+\begin{definition}[Contracted three-site trace columns]
+    \label{def:spt_trace_quotient_triple_columns}
+    \lean{Matrix.traceQuotientTripleColumns}
+    \leanok
+    For an ambient tensor $B$ and a coefficient section $F$, define
+    \begin{align}
+        R_F(B)_{j,(a,b)}
+         & =\tr\left[
+            \left(\sum_i F_{ia}B^i\right)
+            \left(\sum_k F_{kb}B^k\right)B^j
+            \right].
+        \notag
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Contraction of finite-ring trace data]
+    \label{thm:spt_trace_quotient_contraction}
+    \lean{Matrix.traceQuotientSection_pair,
+        Matrix.traceQuotientSection_triple,
+        Matrix.traceQuotientProductColumns_triple,
+        Matrix.continuous_traceQuotientTripleColumns}
+    \leanok
+    \uses{def:spt_trace_quotient_triple_columns}
+    Write $Qx=\sum_i(Fx)_i A^i$ and
+    $\Phi_A(X)=(\tr(XA^j))_j$.
+    If the two- and three-site traces of $B$ are proportional to those
+    of $A$, with constants $\alpha_2,\alpha_3$, then
+    \begin{align}
+        GFx                     & =\alpha_2\Phi_A(Qx),
+        \notag                                             \\
+        R_F(B)(x_a y_b)_{(a,b)} & =\alpha_3\Phi_A(Qx\,Qy).
+        \notag
+    \end{align}
+    The contracted columns depend continuously on a continuous ambient
+    tensor family in a fixed bond dimension.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the coefficient sums and use bilinearity and trilinearity
+    of the trace expressions. Continuity follows from the finite sums
+    and matrix products in their defining formula.
+\end{proof}
+
+\begin{lemma}[Recovery of the minimal matrix algebra]
+    \label{thm:spt_trace_quotient_matrix_algebra_recovery}
+    \lean{Matrix.traceQuotientProductCoordinates_recover,
+        Matrix.exists_linearEquiv_traceQuotientSection,
+        Matrix.traceQuotientProductCoordinates_algebraRecovery,
+        Matrix.traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq}
+    \leanok
+    \uses{def:spt_trace_quotient_product_coordinates,
+        thm:spt_trace_quotient_contraction}
+    Suppose $r=D^2$, $GF$ is injective, and the preceding trace
+    proportionalities hold with $\alpha_2\alpha_3\ne0$.
+    Then $Q:\C^r\to M_D(\C)$ is a linear isomorphism and
+    \begin{align}
+        Q\mu(x,y) & =\frac{\alpha_3}{\alpha_2}Qx\,Qy.
+        \notag
+    \end{align}
+    Consequently $E=(\alpha_3/\alpha_2)Q$ identifies $\mu$ with
+    matrix multiplication, and $\mu$ is associative.
+    The minimal tensor and the identification are used only pointwise;
+    neither is assumed continuous. Together with the preceding
+    continuity result, this gives continuous multiplication coefficients
+    at constant trace rank. Choosing continuous tensor matrices,
+    particularly through a change of rank, remains a separate step in
+    the reconstruction proposed in
+    \cite[Section~II.F.2, lines~953--993]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Injectivity of $GF$ implies injectivity of $Q$; the dimension
+    equality gives surjectivity. The left inverse
+    $(C^\dagger C)^{-1}C^\dagger$ cancels $C$ in the contracted
+    three-site identity. Rescaling $Q$ by $\alpha_3/\alpha_2$ makes
+    the resulting identification multiplicative. Associativity follows
+    from associativity of matrix multiplication and injectivity of $E$.
+\end{proof}
+
+\begin{lemma}[Local continuous algebra from an ambient tensor family]
+    \label{thm:spt_trace_quotient_continuous_algebra}
+    \lean{Matrix.exists_local_continuous_traceQuotientAlgebra}
+    \leanok
+    \uses{thm:spt_trace_quotient_continuous_product,
+        thm:spt_trace_quotient_matrix_algebra_recovery}
+    Let $B(t)$ be continuous in a fixed ambient bond dimension.
+    Suppose at each parameter it has a one-site injective representative
+    $A(t)$ whose two- and three-site traces are proportional to those
+    of $B(t)$ by nonzero constants $\alpha_2(t),\alpha_3(t)$.
+    Assume $D(t)^2=r$ is independent of $t$.
+    No continuity of $A(t)$ or the proportionality constants is required.
+    Near any base point, there is a fixed coefficient section for which
+    the multiplication coefficients are continuous and the product is
+    associative. At each parameter its normalized identification with
+    $M_{D(t)}(\C)$ is
+    \begin{align}
+        E_t x & =\frac{\alpha_3(t)}{\alpha_2(t)}
+        \sum_i(Fx)_iA^i(t).
+        \notag
+    \end{align}
+    This constant-dimension assertion does not construct a continuous
+    tensor realization through a change of rank
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The coefficient map of $A(t)$ is surjective, and its trace-pairing
+    map is injective. Their composition, multiplied by the nonzero
+    scalar $\alpha_2(t)$, therefore has rank $D(t)^2=r$.
+    Apply the continuous-section construction and the pointwise
+    matrix-algebra recovery on the resulting neighborhood.
+\end{proof}
+
+\begin{lemma}[A continuous unit for the local trace quotient]
+    \label{thm:spt_trace_quotient_continuous_unit}
+    \lean{Matrix.exists_local_continuous_traceQuotientUnit}
+    \leanok
+    \uses{thm:spt_trace_quotient_continuous_algebra}
+    Under the hypotheses of the preceding theorem, the section and
+    neighborhood can be chosen so that the quotient product also has
+    a continuous two-sided unit $u(t)$. The same pointwise normalized
+    identifications with the minimal matrix algebra remain available.
+    No continuous unit is assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    At the base point choose the unit $u_0$ using its matrix-algebra
+    identification. Left multiplication $L_t(u_0)$ is the identity at
+    the base point, and is invertible on a smaller open neighborhood.
+    Define $u(t)=L_t(u_0)^{-1}u_0$. Any pointwise two-sided unit satisfies
+    $L_t(u_0)u(t)=u_0$ and hence equals this continuous choice.
+\end{proof}
+
+\begin{definition}[Repeated bond copies of a product tensor]
+    \label{def:spt_repeated_product_tensor}
+    \lean{MPSTensor.repeatedProductTensor}
+    \leanok
+    Set $R_D^0=I_D$ and $R_D^1=0$.
+\end{definition}
+
+\begin{lemma}[Physical rays do not fix an ambient stationary space]
+    \label{thm:spt_redundant_bond_stationary_space}
+    \lean{MPSTensor.repeatedProductTensor_adjointMapLM,
+        MPSTensor.repeatedProductTensor_isUnital,
+        MPSTensor.repeatedProductTensor_fixedSpace_finrank,
+        MPSTensor.repeatedProductTensor_mpv,
+        MPSTensor.repeatedProductTensor_samePositiveMpvRay}
+    \leanok
+    \uses{def:spt_repeated_product_tensor}
+    The tensor $R_D$ is unital and its adjoint transfer map is the
+    identity on $M_D(\C)$. Its stationary space therefore has complex
+    dimension four when $D=2$. Yet the periodic vectors of $R_2$ are
+    twice those of $R_1$, so their positive-length rays agree.
+    In particular, the physical rays alone do not determine the
+    stationary-space dimension of an arbitrary ambient realization.
+\end{lemma}
+
+\begin{proof}\leanok
+    Only the zero physical letter contributes to either the transfer map
+    or a nonvanishing periodic word. The transfer map fixes every matrix,
+    while a nonvanishing periodic coefficient is the trace of $I_D$, namely
+    $D$. Thus the two realizations differ by the constant factor two.
+\end{proof}
+
+\begin{lemma}[Local continuous coordinates for a fixed-rank support]
+    \label{thm:spt_continuous_projection_frame}
+    \lean{Matrix.continuous_polarPos_family,
+        Matrix.polarIso_eq_mul_inv_polarPos_of_injective,
+        Matrix.continuous_polarIso_family_of_injective,
+        Matrix.exists_open_projected_frame_injective,
+        Matrix.exists_local_continuous_isometric_projected_frame,
+        Matrix.range_eq_of_isometric_frame_of_rank_eq,
+        Matrix.frame_mul_conjTranspose_eq_of_rank_eq,
+        Matrix.exists_local_continuous_projection_frame}
+    \leanok
+    Let $P(t)$ be a continuous family of orthogonal projections of rank $r$,
+    and let $J_0$ be an isometric frame with $J_0J_0^\dagger=P(t_0)$.
+    Near $t_0$, the polar isometry $J(t)$ of $P(t)J_0$ depends continuously
+    on $t$ and satisfies $J(t)^\dagger J(t)=I$ and
+    $J(t)J(t)^\dagger=P(t)$. The positive polar factor is continuous for
+    every continuous rectangular matrix family; its polar isometry is
+    continuous wherever the matrices are injective.
+    These are auxiliary ingredients for the support argument in
+    \cite[Appendix~C]{Schuch2011Phases}. Continuity and fixed rank of $P$
+    are hypotheses here; deriving the relevant canonical supports from
+    the physical gap remains open
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The Gram matrix of $P(t)J_0$ equals the identity at $t_0$ and remains
+    invertible nearby. Continuous functional calculus gives continuity
+    of its positive square root, and inversion is continuous on the
+    invertible matrices. Thus the polar isometry is continuous.
+    Its range lies in that of $P(t)$ and has the same dimension, so the
+    two orthogonal range projections coincide.
+\end{proof}
+
+\begin{lemma}[Continuous separated spectral corners]
+    \label{thm:spt_continuous_spectral_corner}
+    \lean{Matrix.spectralCornerRamp,
+        Matrix.continuous_spectralCornerRamp,
+        Matrix.spectralCornerRamp_eq_zero_of_le,
+        Matrix.spectralCornerRamp_eq_one_of_le,
+        Matrix.spectralCorner,
+        Matrix.isHermitian_spectralCorner,
+        Matrix.spectralCorner_mul_self,
+        Matrix.continuous_spectralCorner_family,
+        Matrix.spectralCorner_eq_cfc_highIndicator,
+        Matrix.commute_spectralCorner_of_commute,
+        Matrix.unitary_conj_spectralCorner_eq,
+        Matrix.isLocallyConstant_rank_of_continuous_projection_family,
+        Matrix.isLocallyConstant_rank_spectralCorner_family}
+    \leanok
+    Let $A(t)$ be a continuous Hermitian matrix family and let $a<b$.
+    Suppose every spectrum is contained in
+    $(-\infty,a]\cup[b,\infty)$. A continuous scalar function equal to
+    zero below $a$ and one above $b$ gives, by functional calculus, the
+    orthogonal spectral projection $P(t)$ onto the part above the cutoff.
+    This projection is continuous and has locally constant rank.
+    Every operator commuting with $A(t)$ commutes with $P(t)$; conjugation
+    by a commuting unitary fixes the corner projection.
+    The full density rank may change below the cutoff.
+    These facts provide auxiliary separated supports for the argument in
+    \cite[Appendix~C]{Schuch2011Phases}; continuity and spectral separation
+    of the relevant density remain explicit hypotheses.
+\end{lemma}
+
+\begin{proof}\leanok
+    The continuous ramp equals the spectral indicator on every spectrum,
+    so its functional calculus is Hermitian and idempotent.
+    Continuous functional calculus gives continuity, commutation, and
+    invariance under a commuting unitary. The trace of an idempotent
+    equals its integer rank. Its continuous trace therefore makes the
+    rank locally constant.
+\end{proof}
+
+\begin{lemma}[Continuous invariant compression preserves the factor]
+    \label{thm:spt_continuous_invariant_compression}
+    \lean{TNLean.Algebra.ProjectiveRepresentation.exists_local_continuous_unitary_compression,
+        TNLean.Algebra.ProjectiveRepresentation.continuous_factor_family}
+    \leanok
+
+    Suppose unitary projective matrices, continuous in the parameter for
+    each group element, act
+    on one fixed ambient space, and commutes with a continuous fixed-rank
+    family of orthogonal projections of nonzero rank. Near a prescribed
+    parameter, continuous isometric frames give continuous unitary
+    compressed projective matrices with exactly the original factor system.
+    A family of invertible projective matrices, continuous in the parameter
+    for each group element, on a positive
+    fixed dimension also has continuous scalar factors.
+    The continuous ambient representation and projections are explicit
+    auxiliary hypotheses for the argument in
+    \cite[Appendix~C]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_continuous_projection_frame,
+        thm:spt_invariant_bond_compression}
+    With $J(t)J(t)^\dagger=P(t)$, compress by
+    $J(t)^\dagger V_g(t)J(t)$. Invariance inserts the projection between
+    products, preserving the projective multiplication law and unitarity.
+    Matrix multiplication gives continuity. To recover the scalar factor,
+    take one diagonal entry of
+    $V_gV_h\operatorname{adj}(V_{gh})$ and divide by
+    $\det(V_{gh})$, which never vanishes.
+\end{proof}
+
+\begin{lemma}[Cohomology from a continuous injective tensor path]
+    \label{thm:spt_tensor_path_class_invariance}
+    \lean{MPSTensor.exists_continuous_virtualGauge_of_isOnSiteSymmetric,
+        MPSTensor.exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric,
+        MPSTensor.cohomologousTo_of_continuous_isOnSiteSymmetric_tensorPath}
+    \leanok
+
+    Let $A_t$ be a continuous family of one-site injective tensors
+    of fixed positive bond dimension, with exact on-site symmetry
+    under the same action of a group $G$.
+    Its virtual symmetry matrices can be chosen invertibly and
+    continuously in $t$, separately for each $g\in G$.
+    They give projective representations whose factor systems depend
+    continuously on $t$ for each pair $g,h$.
+    Any virtual representatives of the endpoint tensors have
+    cohomologous factor systems. No continuous virtual family is an
+    input, and no finiteness assumption on $G$ is needed.
+    This is the fixed-dimension, exact-symmetry part of
+    \cite[Section~II.F.2]{Schuch2011Phases}; varying minimal support and
+    extraction of continuous tensors from an independent ground-state
+    path remain open, as recorded in
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_global_virtual_gauge,
+        thm:spt_virtual_path_class_invariance}
+    Apply interval lifting separately to each symmetry twist.
+    Uniqueness of the injective bond gauge up to scalar gives the
+    projective multiplication law, using inverse-group indexing for
+    the virtual action. An entry of the product with an adjugate
+    gives continuous factor systems. The determinant argument proves
+    their endpoint cohomology, and gauge uniqueness identifies that
+    class with any prescribed endpoint representatives.
+\end{proof}
+
+\begin{lemma}[Cohomology along a fixed-dimension virtual path]
+    \label{thm:spt_virtual_path_class_invariance}
+    \lean{MPSTensor.continuous_rootOfUnity_path_const,
+        MPSTensor.exists_continuous_pow_root_path,
+        MPSTensor.continuous_projectiveFactor_of_unitaryMatrixPath,
+        MPSTensor.continuous_projectiveFactor_of_invertibleMatrixPath,
+        MPSTensor.projectiveFactor_endpoints_cohomologous_of_det_path,
+        MPSTensor.unitary_projectivePath_factor_endpoints_cohomologous,
+        MPSTensor.invertible_projectivePath_factor_endpoints_cohomologous}
+    \leanok
+    \uses{def:cohomologous_to}
+    Let $G$ be any group and $D>0$. Suppose matrices
+    $V_\gamma(g)\in\mathrm{GL}_D(\C)$ depend continuously on
+    $\gamma\in[0,1]$ for each $g\in G$ and obey
+    $V_\gamma(g)V_\gamma(h)=\omega_\gamma(g,h)V_\gamma(gh)$.
+    Then $\omega_0$ and $\omega_1$ are cohomologous as
+    $\C^\times$-valued factor systems. In particular, this holds for
+    unitary virtual matrices. This theorem assumes the
+    virtual path; extracting compatible continuous tensors from an
+    independent exact MPS ground-state path, including changes of
+    bond dimension, is a separate step in the classification theorem
+    \cite[Section~II.F.2, lines~930--946]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each $\det V_\gamma(g)$ is a continuous nonzero complex path, so it
+    has a continuous $D$th root $\beta_\gamma(g)$ on the interval.
+    Taking determinants in $V_\gamma(g)V_\gamma(h)=\omega_\gamma(g,h)V_\gamma(gh)$
+    gives $\beta_\gamma(g)^D\beta_\gamma(h)^D=\omega_\gamma(g,h)^D\beta_\gamma(gh)^D$,
+    so the rescaled factor system
+    \begin{align}
+        \eta_\gamma(g,h)
+         & =\omega_\gamma(g,h)\,\frac{\beta_\gamma(gh)}{\beta_\gamma(g)\beta_\gamma(h)}
+         &
+        \eta_\gamma(g,h)^D
+         & =1
+        \notag
+    \end{align}
+    takes values among the $D$th roots of unity.  It depends continuously on
+    $\gamma$, hence is constant, and $\eta_0=\eta_1$ reads
+    \begin{align}
+        \omega_1(g,h)
+         & =\psi(g)\psi(h)\psi(gh)^{-1}\omega_0(g,h),
+         &
+        \psi(g)
+         & =\beta_1(g)/\beta_0(g).
+        \notag
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Restriction to an invariant bond subspace]
+    \label{thm:spt_invariant_bond_compression}
+    \lean{Matrix.isometry_compression_mul_of_commute,
+        Matrix.isometry_compression_mem_unitaryGroup,
+        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_compression}
+    \leanok
+    \uses{def:projective_rep}
+    Let $V_g$ be a unitary projective representation on $\C^D$ with
+    factor system $\omega$, and let $J:\C^r\to\C^D$ be an isometry,
+    where $r>0$. Suppose $V_g$ commutes with $JJ^\dagger$ for every $g$.
+    Then $J^\dagger V_gJ$ is a unitary projective representation with
+    exactly the same factor system $\omega$.
+    This is the algebraic restriction in
+    \cite[Appendix~C]{Schuch2011Phases}. The invariant bond subspace
+    is given here; deriving it continuously from the physical gap
+    remains a separate problem, recorded in
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Invariance and $J^\dagger J=I$ give
+    $(J^\dagger XJ)(J^\dagger YJ)=J^\dagger XYJ$ whenever
+    $X$ preserves the included subspace. Apply this identity to $V_g,V_h$
+    for the projective law, and to $V_g,V_g^\dagger$ for unitarity.
+\end{proof}
+
+\begin{lemma}[Spectral corners retaining the base support]
+    \label{thm:spt_local_spectral_support}
+    \lean{Matrix.eventually_spectral_separation_of_continuousAt,
+        Matrix.exists_positive_spectral_cutoffs,
+        Matrix.spectralCorner_eq_supportProj_of_nonzero_spectrum_separation,
+        Matrix.exists_open_constantRank_spectralCorner,
+        Matrix.exists_local_continuous_spectral_frame,
+        Matrix.supportProj_mul_spectralCorner}
+    \leanok
+    Let $\sigma(t)$ be a continuous Hermitian matrix family, with
+    $\sigma(t_0)\geq 0$, and let $J_0$ be an isometric frame of its support.
+    There are $0<a<b$ and a neighborhood of $t_0$ on which the spectral
+    projection $P(t)$ onto the eigenvalues above the cutoffs has constant
+    rank and satisfies $P(t_0)=\operatorname{supp}\sigma(t_0)$.
+    The polar isometry $J(t)$ of $P(t)J_0$ is continuous there, with
+    $J(t_0)=J_0$, $J(t)^\dagger J(t)=I$, and
+    $J(t)J(t)^\dagger=P(t)$.
+    When $\sigma(t)\geq0$, the cutoff always satisfies
+    $\operatorname{supp}\sigma(t)\,P(t)=P(t)$, whether or not its spectrum
+    is separated at that parameter.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_continuous_spectral_corner,
+        thm:spt_continuous_projection_frame}
+    The real spectrum at $t_0$ is finite, so its nonzero positive values
+    have a positive lower bound. Choose both cutoffs below that bound.
+    Upper hemicontinuity of the spectrum preserves the intervening gap
+    nearby. Functional calculus gives a continuous orthogonal projection,
+    whose integer rank is locally constant. Apply the continuous-frame
+    construction to this projection. At $t_0$, $P(t_0)J_0=J_0$, whose
+    polar isometry is $J_0$ itself. The cutoff vanishes at zero, so its
+    range lies in the support of every positive semidefinite matrix.
+\end{proof}
+
+\begin{definition}[Individual matrix extension along an isometry]
+    \label{def:spt_supported_matrix_extension}
+    \lean{Matrix.isometryExtendByIdentity}
+    \leanok
+    For an isometry $K:\C^D\to\C^k$ and a matrix $X\in\MN{D}$, set
+    $\widetilde X=KXK^\dagger+(I-KK^\dagger)$.
+\end{definition}
+
+\begin{lemma}[Comparison of supported bond frames]
+    \label{thm:spt_supported_frame_comparison}
+    \lean{Matrix.isometryExtendByIdentity_mul_isometry,
+        Matrix.isometry_conjTranspose_mul_isometryExtendByIdentity,
+        Matrix.isometry_reconstruct_of_supportProj,
+        Matrix.commute_isometryExtendByIdentity_of_commute_compression,
+        Matrix.isometry_absorption_of_projector_absorption,
+        Matrix.isIsometry_conjTranspose_mul_of_absorption,
+        Matrix.isometry_double_compression_eq_of_absorption,
+        Matrix.commute_compression_of_commute_isometryExtendByIdentity,
+        Matrix.supportFrame_dimension_pos_of_trace_one}
+    \leanok
+    \uses{def:spt_supported_matrix_extension}
+    Let $K:\C^D\to\C^k$ be isometric. Then
+    $\widetilde X K=KX$ and $K^\dagger\widetilde X=XK^\dagger$.
+    If $\sigma\geq0$ has support $KK^\dagger$, then
+    $\sigma=K(K^\dagger\sigma K)K^\dagger$; commutation of $X$ with
+    $K^\dagger\sigma K$ implies commutation of $\widetilde X$ with $\sigma$.
+    If $J:\C^r\to\C^k$ is isometric and $KK^\dagger J=J$, then
+    $K^\dagger J$ is isometric and
+    $(K^\dagger J)^\dagger(K^\dagger M K)(K^\dagger J)=J^\dagger M J$.
+    The absorption $KK^\dagger JJ^\dagger=JJ^\dagger$ already implies
+    $KK^\dagger J=J$.
+    An operator $P$ commuting with $\widetilde X$ has compression
+    $K^\dagger P K$ commuting with $X$.
+    Finally, $\tr\sigma=1$ forces $D>0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Multiply the defining matrix extension by $K$ and $K^\dagger$ and
+    use $K^\dagger K=I$. The support projection absorbs $\sigma$ on
+    both sides, giving the reconstruction identity. The same identities
+    prove the commutation and nested-compression assertions.
+    Multiplication of $KK^\dagger JJ^\dagger=JJ^\dagger$ by $J$ gives
+    frame absorption. If $D=0$, the support is zero and hence
+    $\sigma=0$, contradicting its trace.
+\end{proof}
+
+\begin{lemma}[Local cohomology for a continuous supported density]
+    \label{thm:spt_supported_density_class_invariance}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuous_supported_density}
+    \leanok
+    \uses{def:projective_rep}
+    For $t\in[0,1]$, let $B(t)$ be a continuous tensor family of fixed
+    bond dimension $k$, and let $\sigma(t)$ be a continuous positive semidefinite matrix
+    family of trace one. Choose pointwise isometric support frames
+    $K(t):\C^{D(t)}\to\C^k$ and put
+    $A^i(t)=K(t)^\dagger B^i(t)K(t)$.
+    Suppose the unitary virtual actions of $A(t)$ implement a
+    fixed exact physical symmetry and commute with
+    $K(t)^\dagger\sigma(t)K(t)$.
+    If $A(t_0)$ is one-site injective, the virtual factor systems at
+    $t$ and $t_0$ are cohomologous for all sufficiently nearby $t$.
+    The dimensions $D(t)$, support frames and virtual actions need no
+    continuity, and no projective action is required on the complementary
+    bond space.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_local_spectral_support,
+        thm:spt_supported_frame_comparison,
+        thm:spt_local_invariant_compression}
+    Retain the separated spectral corner whose base value is the full
+    support of $\sigma(t_0)$, and extend $K(t_0)$ to its continuous
+    isometric frame $J(t)$. This corner lies in the support of
+    $\sigma(t)$ and is invariant under each individually extended virtual
+    matrix. Thus $K(t)^\dagger J(t)$ is an invariant isometric frame in
+    the minimal bond space. Its compression is the continuous
+    tensor $J(t)^\dagger B(t)J(t)$, which equals $A(t_0)$ at the base.
+    Apply local cohomology invariance under pointwise compression.
+\end{proof}
+
+\begin{lemma}[Cohomology under pointwise invariant compression]
+    \label{thm:spt_pointwise_invariant_compression}
+    \lean{Matrix.isometry_compression_conj_of_commute,
+        MPSTensor.cohomologousTo_of_continuous_injective_pointwise_compression}
+    \leanok
+    \uses{def:projective_rep}
+    Let $A(t)$ have bond dimension $D(t)$, and let $V_g(t)$ be a unitary
+    projective representation with factor $\omega_t$ implementing exact
+    covariance for a fixed physical action. Let
+    $J(t):\C^r\to\C^{D(t)}$ be isometric, where $r>0$, and suppose
+    $V_g(t)$ commutes with $J(t)J(t)^\dagger$.
+    If $C^i(t)=J(t)^\dagger A^i(t)J(t)$ is continuous and one-site
+    injective for $0\leq t\leq1$, then $\omega_1$ and $\omega_0$ are
+    cohomologous. No continuity of $D(t)$, $A(t)$, $J(t)$ or $V_g(t)$
+    is required, and the tensor letters need not preserve the included
+    bond subspace.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_invariant_bond_compression,
+        thm:spt_tensor_path_class_invariance}
+    Commutation with $JJ^\dagger$ gives
+    $J^\dagger X=(J^\dagger XJ)J^\dagger$ and
+    $X^\dagger J=J(J^\dagger XJ)^\dagger$. Hence conjugation descends
+    to the compressed tensors. The compressed virtual representation
+    has exactly the factor $\omega_t$. Apply cohomology invariance for
+    continuous injective tensor families to $C(t)$.
+\end{proof}
+
+\begin{lemma}[Local cohomology under invariant compression]
+    \label{thm:spt_local_invariant_compression}
+    \lean{MPSTensor.eventually_isInjective_of_continuousAt,
+        Set.Icc.eventually_forall_convexComb,
+        MPSTensor.eventually_cohomologousTo_of_continuousOn_pointwise_compression,
+        MPSTensor.eventually_cohomologousTo_of_continuous_pointwise_compression,
+        MPSTensor.eventually_cohomologousTo_of_continuousOn_invariant_compression}
+    \leanok
+    Under the pointwise compression assumptions, it suffices that $C(t)$
+    be continuous on a neighborhood of $t_0$ and injective at $t_0$.
+    Then $\omega_t$ and $\omega_{t_0}$ are cohomologous for all
+    sufficiently nearby $t$. For a fixed ambient bond space,
+    continuity of $A(t)$ and $J(t)$ on that neighborhood implies the
+    required continuity of $C(t)=J(t)^\dagger A(t)J(t)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_pointwise_invariant_compression}
+    The Gram matrix of the one-site physical coefficient matrix is
+    invertible at $t_0$ and remains invertible nearby. Thus injectivity
+    persists locally. Every sufficiently short affine subinterval
+    issuing from $t_0$ remains in this neighborhood. Reparametrize it
+    by $[0,1]$ and apply the pointwise compression theorem.
+\end{proof}
+
+\begin{lemma}[Symmetry of a unique stationary matrix]
+    \label{thm:spt_unique_stationary_symmetry}
+    \lean{MPSTensor.adjointMap_rotatePhysical_eq_of_unitary,
+        MPSTensor.adjointMap_conj_of_unitary_covariance,
+        MPSTensor.commute_stationaryMatrix_of_unitary_covariance,
+        MPSTensor.virtualAction_commute_stationaryMatrix_of_unique}
+    \leanok
+    Suppose a unitary physical action satisfies
+    $\sum_j u_{ij}A^j=XA^iX^\dagger$, where $X$ is unitary.
+    If the adjoint transfer map has a unique trace-one stationary
+    matrix $\sigma$, then $X\sigma=\sigma X$.
+    This conclusion requires neither invertibility nor positivity of
+    $\sigma$. In particular, it applies to a singular stationary density.
+\end{lemma}
+
+\begin{proof}\leanok
+    Unitary physical rotation leaves the adjoint transfer map unchanged.
+    Covariance consequently gives
+    $\mathcal E^*(XZX^\dagger)=X\mathcal E^*(Z)X^\dagger$.
+    Thus $X\sigma X^\dagger$ is another trace-one stationary matrix.
+    Uniqueness gives $X\sigma X^\dagger=\sigma$, which is equivalent
+    to commutation with $X$.
+\end{proof}
+
+\begin{lemma}[Stationary density under support compression]
+    \label{thm:spt_stationary_density_compression}
+    \lean{MPSTensor.stationaryMatrix_compression_unique}
+    \leanok
+    Suppose $\sigma\geq0$ is the unique trace-one stationary matrix
+    of the adjoint transfer map of $B$. For an isometric support frame
+    $K$, put $A^i=K^\dagger B^iK$. Then $K^\dagger\sigma K$ is the
+    unique trace-one stationary matrix of the adjoint transfer map of $A$.
+    No unitality assumption is needed for this implication.
+\end{lemma}
+
+\begin{proof}\leanok
+    Stationarity makes the support of $\sigma$ invariant under each
+    adjoint letter of $B$. The adjoint transfer map therefore intertwines
+    expansion $Z\mapsto KZK^\dagger$ with the compressed transfer map.
+    Compression preserves stationarity, and cyclicity of trace preserves
+    normalization. A trace-one stationary matrix for $A$ expands to one
+    for $B$; uniqueness and $K^\dagger K=I$ give the claim.
+\end{proof}
+
+\begin{lemma}[Local cohomology from unique stationary bond data]
+    \label{thm:spt_local_unique_stationary_class}
+    \lean{MPSTensor.eventually_cohomologousTo_of_continuousOn_unique_stationary_density,
+        MPSTensor.eventually_cohomologousTo_of_continuous_unique_stationary_density,
+        MPSTensor.eventually_cohomologousTo_of_continuous_unital_supported_family}
+    \leanok
+    Let $T$ be a topological space and let $B(t)$, $t\in T$, be a
+    continuous tensor family of fixed bond dimension. Let
+    $\sigma(t)\geq0$ be trace-one and adjoint stationary.
+    Let the minimal tensors be support compressions of $B(t)$,
+    with unitary projective actions implementing a fixed exact physical
+    symmetry. Suppose the compressed tensor at $t_0$ is one-site injective.
+    If $\sigma$ is continuous and unique among trace-one stationary
+    matrices on an open neighborhood of $t_0$, then the virtual factors
+    at nearby $t$ are cohomologous to the factor at $t_0$.
+    Alternatively, it suffices that $B(t)$ be unital and that its adjoint
+    fixed space at $t_0$ have complex dimension one. In this case density
+    continuity and local uniqueness follow automatically. Neither case
+    assumes continuity of the minimal support frames or virtual actions.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_stationary_density_compression,
+        thm:spt_unique_stationary_symmetry,
+        thm:spt_local_stationary_density,
+        thm:spt_local_spectral_support,
+        thm:spt_supported_frame_comparison,
+        thm:spt_local_invariant_compression}
+    Compression preserves stationary uniqueness. Exact physical covariance
+    then forces each virtual action to commute with the compressed
+    density. Apply the spectral-corner argument on the open neighborhood.
+    In the unital case, first construct the local unique continuous
+    density and identify the given pointwise stationary choice with it.
+\end{proof}
+
+\begin{lemma}[Local continuity of a normalized stationary density]
+    \label{thm:spt_local_stationary_density}
+    \lean{MPSTensor.exists_local_continuous_adjointStationaryDensity_of_unital,
+        MPSTensor.exists_open_continuousOn_stationaryDensity_of_unital}
+    \leanok
+    Let $B(t)$ be a continuous family of unital tensors of positive,
+    fixed bond dimension. Suppose the adjoint transfer map at $t_0$
+    has a one-dimensional fixed space over $\C$. Then there is an open
+    neighborhood of $t_0$ on which it has a unique trace-one stationary
+    matrix $\sigma(t)$. This matrix is positive semidefinite and continuous;
+    its rank may change. Consequently any pointwise choice of trace-one
+    stationary matrices agrees with this family and is continuous there.
+\end{lemma}
+
+\begin{proof}\leanok
+    Write $\mathcal E_t^*$ for the adjoint transfer map and choose a
+    trace-one matrix $\tau$. The linear operator
+    $F_t(X)=X-\mathcal E_t^*(X)+\tr(X)\tau$ is invertible at $t_0$:
+    trace preservation makes every vector in its kernel traceless, and
+    the one-dimensional stationary space then forces that vector to vanish.
+    Invertibility persists nearby, and $\sigma(t)=F_t^{-1}(\tau)$ is
+    continuous. Its trace is one and it is stationary. Existence of a
+    positive stationary state for a trace-preserving positive map
+    identifies it with that state. The same inverse proves uniqueness.
+\end{proof}
+
+\begin{lemma}[Continuous normalized Perron data]
+    \label{thm:spt_continuous_right_perron_data}
+    \lean{MPSTensor.continuous_rightPerronDensity_of_isInjective,
+        MPSTensor.exists_continuous_rightPerronPair_of_isInjective}
+    \leanok
+    Let $A(t)$ be a continuous family of one-site injective tensors
+    in a fixed positive bond dimension. Its positive right Perron
+    matrix $\rho(t)$ and positive Perron value $r(t)$ admit continuous
+    choices satisfying
+    \begin{align}
+        \rho(t)                    & >0, \notag           \\
+        \tr\rho(t)                 & =1, \notag           \\
+        \mathcal E_{A(t)}(\rho(t)) & =r(t)\rho(t). \notag
+    \end{align}
+    In fact, any pointwise choice of positive trace-one Perron matrices
+    is continuous. This is a consequence of positive-map
+    Perron--Frobenius theory, applied to the given tensor family
+    \cite[Theorem~6.3]{Wolf2012Quantum}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Perron--Frobenius theory gives a positive definite right eigenmatrix
+    and a positive definite left eigenmatrix at the same positive
+    eigenvalue. Pairing with the left eigenmatrix fixes the eigenvalue
+    of any normalized positive right eigenmatrix. Uniqueness then fixes
+    the matrix itself. Compactness of the density matrices and the
+    closed eigenvector equation give continuity of the normalized choice.
+    Finally $r(t)=\tr\mathcal E_{A(t)}(\rho(t))$ is continuous.
+\end{proof}
+
+\begin{lemma}[Local continuous unital normalization]
+    \label{thm:spt_continuous_unital_normalization}
+    \lean{MPSTensor.exists_local_continuous_unitalNormalization_of_isInjective}
+    \leanok
+    \uses{def:gauge_equiv}
+    Let $A(t)$ be continuous in a fixed positive bond dimension and
+    one-site injective at $t_0$. On an open neighborhood of $t_0$,
+    there are continuous Perron data as above and a continuous tensor
+    \begin{align}
+        \label{eq:spt_continuous_unital_tensor}
+        B^i(t)=r(t)^{-1/2}\rho(t)^{-1/2}A^i(t)\rho(t)^{1/2}.
+    \end{align}
+    The tensor $B(t)$ is unital and is gauge-equivalent to
+    $r(t)^{-1/2}A(t)$. The continuous tensor family is a hypothesis;
+    no choice from physical ground vectors is asserted here.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_local_invariant_compression,
+        thm:spt_continuous_right_perron_data,
+        thm:unital_gauge_of_pd_fixed_point}
+    Injectivity persists locally. Choose the normalized Perron data
+    there. Positive square roots and their inverses are continuous on
+    the positive definite matrices, so~(\ref{eq:spt_continuous_unital_tensor})
+    is continuous. The Perron equation gives
+    $\sum_iB^i(t)B^i(t)^\dagger=I$, and the invertible matrix
+    $\rho(t)^{-1/2}$ gives the stated bond conjugation.
+\end{proof}
+
+\begin{lemma}[Local continuous canonical bond data]
+    \label{thm:spt_continuous_canonical_normalization}
+    \lean{MPSTensor.exists_local_continuous_canonicalNormalization_of_isInjective}
+    \leanok
+    Under the preceding hypotheses, the neighborhood may be chosen
+    so that the unital tensor $B(t)$ also has a continuous normalized
+    adjoint stationary density $\sigma(t)$ satisfying
+    \begin{align}
+        \sigma(t)                      & \ge0, \notag       \\
+        \tr\sigma(t)                   & =1, \notag         \\
+        \mathcal E_{B(t)}^*(\sigma(t)) & =\sigma(t). \notag
+    \end{align}
+    This density is unique among all trace-one fixed matrices.
+    The one-dimensional fixed-space property is derived, rather than
+    assumed. These are local canonical data for the given tensor
+    family; reconstruction from a physical uniform gap remains separate
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:spt_continuous_unital_normalization,
+        thm:injective_irreducible,
+        thm:spt_local_stationary_density}
+    Gauge equivalence and nonzero scalar normalization preserve
+    injectivity. For the unital base tensor, the adjoint channel is
+    trace preserving and irreducible. Its normalized stationary density
+    is positive definite, and Perron--Frobenius theory makes its fixed
+    space one-dimensional. Apply the local continuous stationary-density
+    theorem and restrict the Perron data to the resulting smaller open
+    neighborhood.
+\end{proof}
+
+% Auxiliary results for local continuous minimal realizations.
+\begin{lemma}[Gram left inverses]
+    \label{thm:spt_gram_left_inverse}
+    \lean{Matrix.gramLeftInverse_mul, Matrix.continuous_gramLeftInverse}
+    \leanok
+    If a complex rectangular matrix $C$ has independent columns, then
+    $H=(C^\dagger C)^{-1}C^\dagger$ satisfies $HC=I$.
+    For a continuous family with independent columns, $H$ is continuous.
+\end{lemma}
+\begin{proof}\leanok
+    The Gram matrix is positive definite and hence invertible.
+    Matrix inversion is continuous on the invertible matrices.
+\end{proof}
+
+\begin{lemma}[Coordinates of a bilinear map]
+    \label{thm:spt_bilinear_coordinates}
+    \lean{Matrix.toLinearMap₂'_apply_mulVec_prod}
+    \leanok
+    Let $M$ have columns indexed by pairs $(a,b)$. The associated bilinear
+    map satisfies $\mu(x,y)=M(x\otimes y)$, where
+    $(x\otimes y)_{(a,b)}=x_a y_b$.
+\end{lemma}
+\begin{proof}\leanok
+    Expand both sides in the coordinate basis.
+\end{proof}
+
+\begin{lemma}[Polynomial correction of an idempotent]
+    \label{thm:spt_newton_idempotent}
+    \lean{idempotent_newton_defect, idempotent_newton_sub,
+        idempotent_newton_twice_sub_one, idempotent_newton_increment_bound,
+        idempotent_newton_tendsto_of_small_defect}
+    \leanok
+    In a complete normed ring with $\|1\|\le1$, set
+    $x_{n+1}=3x_n^2-2x_n^3$ and $d_n=x_n^2-x_n$.
+    Then $d_{n+1}=d_n^2(4d_n-3)$ and
+    $x_{n+1}-x_n=-(2x_n-1)d_n$.
+    If $\|d_0\|\le1/16$, the sequence converges to an idempotent.
+    More precisely,
+    \begin{align}
+        \|x_{n+1}-x_n\| & \le
+        \|2x_0-1\|\,\|d_0\|\,2^{-n}.
+        \notag
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Polynomial expansion gives the identities, including
+    $2x_{n+1}-1=(2x_n-1)(1-2d_n)$.
+    Induction gives $\|d_n\|\le4^{-n}\|d_0\|$ and
+    $\|2x_n-1\|\le2^n\|2x_0-1\|$. The increments are summable.
+    Completeness gives the limit; continuity of multiplication makes it
+    idempotent.
+\end{proof}
+
+\begin{lemma}[Continuous local idempotents]
+    \label{thm:spt_continuous_nearby_idempotent}
+    \lean{Matrix.exists_local_continuous_idempotent_in_adjoin}
+    \leanok
+    Let $X(t)$ be a continuous family of complex square matrices,
+    with $X(t_0)$ idempotent. On an open neighborhood of $t_0$ there is
+    a continuous family of idempotents $P(t)$, with $P(t_0)=X(t_0)$,
+    belonging pointwise to the unital algebra generated by $X(t)$.
+    No Hermiticity assumption is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_newton_idempotent}
+    Shrink the neighborhood so that the idempotency defect is at most
+    $1/16$ and $2X-I$ is bounded. Apply the preceding correction in the
+    complete normed algebra of bounded continuous matrix functions.
+    Each iterate belongs to the generated algebra, which is closed
+    by finite dimensionality. At $t_0$ every iterate equals $X(t_0)$.
+\end{proof}
+
+\begin{lemma}[Rank of an idempotent]
+    \label{thm:spt_idempotent_rank}
+    \lean{Matrix.trace_eq_rank_of_idempotent,
+        Matrix.exists_open_constantRank_of_idempotent}
+    \leanok
+    An idempotent complex matrix has trace equal to its rank.
+    Consequently the rank of a continuous family of idempotents is
+    locally constant, including for non-Hermitian idempotents.
+\end{lemma}
+\begin{proof}\leanok
+    The associated linear map is the projection onto its range.
+    Its trace is the dimension of that range. Continuity of the trace
+    and discreteness of the integer ranks give local constancy.
+\end{proof}
+
+\begin{lemma}[Continuous frames for a matrix range]
+    \label{thm:spt_continuous_idempotent_frame}
+    \lean{Matrix.exists_open_continuous_rangeFrame_of_constantRank,
+        Matrix.exists_local_continuous_rangeFrame_of_idempotent}
+    \leanok
+    A continuous matrix family of constant rank $D$ admits a local
+    continuous frame $C(t)=P(t)F$ for its range, with a fixed matrix $F$.
+    The matrices $H(t)=(C(t)^\dagger C(t))^{-1}C(t)^\dagger$ are continuous
+    and satisfy $H(t)C(t)=I_D$.
+    For an idempotent family it suffices that $P(t_0)$ have rank $D$;
+    in addition $P(t)C(t)=C(t)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_trace_quotient_fixed_section, thm:spt_gram_left_inverse,
+        thm:spt_idempotent_rank}
+    Choose a section at the base parameter. Injectivity persists nearby.
+    Equality of dimensions identifies its range with the matrix range.
+    Apply the Gram left inverse and the preceding local rank result.
+\end{proof}
+
+\begin{lemma}[Dimension of a primitive left ideal]
+    \label{thm:spt_primitive_left_ideal_dimension}
+    \lean{Matrix.finrank_range_mulRight_single,
+        Matrix.finrank_range_rightMul_of_matrixAlgebra}
+    \leanok
+    In $\MN{D}$ the left ideal $\MN{D}E_{ii}$ has
+    dimension $D$. The same holds under any algebra
+    isomorphism.
+\end{lemma}
+\begin{proof}\leanok
+    The ideal consists of matrices supported in column $i$.
+    That column is an arbitrary vector in $\C^D$.
+\end{proof}
+
+\begin{lemma}[Continuous primitive left ideals of a trace quotient]
+    \label{thm:spt_continuous_trace_quotient_primitive}
+    \lean{Matrix.exists_local_continuous_traceQuotientPrimitive}
+    \leanok
+    Suppose a continuous ambient tensor family has two-site and three-site
+    traces proportional, with nonzero factors, to those of pointwise
+    injective tensors of constant positive bond dimension $D$.
+    Its locally reconstructed trace-quotient algebra admits a continuous
+    idempotent $p(t)$ whose right multiplication has rank $D$.
+    Both the multiplication coordinates and this right-multiplication
+    matrix are continuous. No continuous choice of the pointwise minimal
+    tensors or algebra identifications is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_trace_quotient_continuous_unit,
+        thm:spt_continuous_nearby_idempotent,
+        thm:spt_primitive_left_ideal_dimension, thm:spt_idempotent_rank}
+    In the base matrix algebra choose a diagonal matrix unit and
+    pass it to the quotient. Keep its coordinates fixed and
+    correct its left-regular action to a nearby idempotent.
+    The generated-algebra property places the correction in the
+    left-regular representation. Apply it to the continuously chosen
+    unit to obtain $p(t)$. The principal left ideal has rank $D$ at
+    the base parameter, hence nearby by local constancy.
+\end{proof}
+
+\begin{definition}[Action in a frame of a left ideal]
+    \label{def:spt_left_ideal_frame_action}
+    \lean{Matrix.leftIdealFrameAction}
+    \leanok
+    For a bilinear product $\mu$, a frame $J$ of a principal left ideal,
+    and a left inverse $H$, define $L(x)v=H\mu(x,Jv)$.
+\end{definition}
+
+\begin{lemma}[Matrix realization in a left-ideal frame]
+    \label{thm:spt_left_ideal_frame_realization}
+    \lean{Matrix.leftIdealFrameAction_mulVec,
+        Matrix.leftIdealFrameAction_intertwines,
+        Matrix.exists_inner_of_framed_leftAction,
+        Matrix.exists_inner_of_leftIdealFrame,
+        Matrix.exists_linearEquiv_leftIdealFrameAction,
+        MPSTensor.gaugeEquiv_leftIdealFrameAction}
+    \leanok
+    \uses{def:spt_left_ideal_frame_action}
+    Suppose the quotient algebra is isomorphic to $\MN{D}$,
+    with $D>0$, and $J$ identifies $\C^D$ with a principal left
+    ideal, with $HJ=I$. The framed action is an algebra isomorphism
+    onto $\MN{D}$ and differs from the given identification
+    by an inner conjugation. It preserves traces. Applying it to
+    a family of letters therefore preserves that family's bond gauge
+    equivalence.
+\end{lemma}
+\begin{proof}\leanok
+    Associativity makes the left ideal invariant and gives
+    $JL(x)v=\mu(x,Jv)$. This action is multiplicative and unital.
+    Composing with the inverse of the given algebra identification
+    gives a unital endomorphism of the full matrix algebra.
+    The Skolem--Noether theorem makes it an inner conjugation.
+\end{proof}
+
+\begin{definition}[Coordinates of reconstructed letters]
+    \label{def:spt_trace_quotient_letter_coordinates}
+    \lean{Matrix.traceQuotientLetterCoordinates}
+    \leanok
+    For the two-site trace form $G$ and an injective section $F$, set
+    $q_i=((GF)^\dagger GF)^{-1}(GF)^\dagger G e_i$.
+\end{definition}
+
+\begin{lemma}[Recovery of the letters]
+    \label{thm:spt_trace_quotient_letter_recovery}
+    \lean{Matrix.traceQuotientLetterCoordinates_recover,
+        MPSTensor.gaugeEquiv_traceQuotientLetters,
+        Matrix.traceQuotientLetters_of_normalized_linearEquiv}
+    \leanok
+    \uses{def:spt_trace_quotient_letter_coordinates}
+    If $G_{ji}=\alpha_2\tr(A^iA^j)$ and the normalized
+    quotient identification satisfies
+    $E(x)=\kappa\sum_i(Fx)_i A^i$, with $\alpha_2\kappa\ne0$,
+    then $E(q_i)=\kappa A^i$. In any left-ideal frame the represented
+    letters are gauge-equivalent to $\kappa A$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_gram_left_inverse, thm:spt_left_ideal_frame_realization,
+        thm:spt_trace_quotient_contraction, thm:trace_pairing_injective}
+    Injectivity of the minimal tensor makes its trace pairing
+    nondegenerate. The Gram left inverse recovers the unique letter
+    coordinates. Apply the preceding inner-conjugacy statement.
+\end{proof}
+
+\begin{lemma}[Continuity of represented letters]
+    \label{thm:spt_continuous_left_ideal_letters}
+    \lean{Matrix.continuousOn_leftIdealFrameAction,
+        Matrix.continuousOn_traceQuotientLetterCoordinates}
+    \leanok
+    \uses{def:spt_left_ideal_frame_action,
+        def:spt_trace_quotient_letter_coordinates}
+    Continuous multiplication coefficients, frames, left inverses,
+    and letter coordinates give continuous represented letters.
+    The letter coordinates are continuous wherever the fixed section
+    is injective.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_gram_left_inverse}
+    The formulas are finite sums and matrix products. The only inverse
+    is the Gram inverse, which is continuous on this neighborhood.
+\end{proof}
+
+\begin{lemma}[Finite traces from positive-length periodic rays]
+    \label{thm:spt_positive_ray_finite_traces}
+    \lean{MPSTensor.exists_nonzero_two_three_trace_scalars_of_samePositiveMpvRay}
+    \leanok
+    If an ambient tensor and a one-site injective tensor of positive bond
+    dimension have the same periodic rays at every positive length,
+    their two-site and three-site word traces are proportional by
+    nonzero scalars $\alpha_2$ and $\alpha_3$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpoalg_length_dependent_phase_power}
+    Specialize the ray equality to lengths two and three and evaluate
+    each vector in the physical coordinate basis.
+\end{proof}
+
+\begin{lemma}[Local continuous minimal realization from finite traces]
+    \label{thm:spt_continuous_minimal_finite_trace_realization}
+    \lean{MPSTensor.exists_local_continuous_minimalTensor_of_two_three_trace_eq}
+    \leanok
+    Let $B(t)$ be continuous in a fixed ambient bond dimension.
+    Suppose pointwise one-site injective tensors $A(t)$ have a fixed
+    positive bond dimension $D$ and satisfy
+    \begin{align}
+        \tr(B^i(t)B^j(t))       & =\alpha_2(t)\tr(A^i(t)A^j(t)),
+        \notag                                                   \\
+        \tr(B^i(t)B^k(t)B^j(t)) & =
+        \alpha_3(t)\tr(A^i(t)A^k(t)A^j(t)),
+        \notag
+    \end{align}
+    with nonzero factors. Around each parameter there is a continuous
+    one-site injective tensor $C(t)$ of dimension $D$ that is
+    gauge-equivalent to $(\alpha_3(t)/\alpha_2(t))A(t)$.
+    The pointwise tensors, scalar factors, and gauges need not be
+    continuous. This is a reconstruction at constant minimal
+    dimension; the two trace identities alone make no assertion about
+    the ambient tensor's longer periodic rays.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_continuous_trace_quotient_primitive,
+        thm:spt_continuous_idempotent_frame,
+        thm:spt_left_ideal_frame_realization,
+        thm:spt_trace_quotient_letter_recovery,
+        thm:spt_continuous_left_ideal_letters}
+    Recover the continuous quotient product and unit, choose a
+    continuous primitive left ideal, and construct a continuous frame
+    for that ideal. Left multiplication in the frame represents
+    the recovered letters continuously. The pointwise inner-conjugacy
+    theorem identifies them with the normalized minimal tensor.
+\end{proof}
+
+\begin{lemma}[Local continuous minimal realization of periodic rays]
+    \label{thm:spt_continuous_minimal_ray_realization}
+    \lean{MPSTensor.exists_local_continuous_minimalTensor_of_samePositiveMpvRay}
+    \leanok
+    Suppose the continuous ambient family $B(t)$ has, at every parameter,
+    the same positive-length periodic rays as a pointwise one-site
+    injective tensor $A(t)$ of a fixed positive bond dimension.
+    Locally those same rays admit continuous one-site injective
+    representatives of that bond dimension. No continuity of the
+    given pointwise representatives is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_positive_ray_finite_traces,
+        thm:spt_continuous_minimal_finite_trace_realization,
+        thm:spt_exact_phase_gauge_invariance}
+    Obtain nonzero two-site and three-site trace factors from the
+    full ray equality. Apply the preceding reconstruction.
+    Nonzero scalar multiplication and bond conjugation preserve
+    every positive-length periodic ray.
+\end{proof}
+
+\begin{lemma}[Local continuous canonical realization of periodic rays]
+    \label{thm:spt_continuous_canonical_ray_realization}
+    \lean{MPSTensor.exists_local_continuous_unitalTensor_of_samePositiveMpvRay}
+    \leanok
+    Under the preceding hypotheses, the local representatives can
+    be chosen continuous, one-site injective, and unital, with a
+    continuous normalized adjoint stationary density $\sigma(t)$.
+    This density is positive semidefinite, has trace one, and is unique
+    among all trace-one fixed matrices of the adjoint transfer map.
+    The minimal bond dimension is constant and positive. Reconstruction
+    through a change of minimal dimension remains separate
+    \cite{gap:spc11_spt_interpolation_upper_range}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:spt_continuous_minimal_ray_realization,
+        thm:spt_continuous_canonical_normalization,
+        thm:spt_exact_phase_gauge_invariance}
+    Apply continuous Perron normalization to the reconstructed family
+    on a smaller neighborhood. Its scalar gauge preserves the full
+    ray family. Restrict the continuous unital tensor and stationary
+    density to the resulting ambient open neighborhood.
+\end{proof}
