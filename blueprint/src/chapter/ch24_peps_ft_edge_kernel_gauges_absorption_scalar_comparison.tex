@@ -1,4 +1,4 @@
-\begin{theorem}[Absorbing edge gauges into the second PEPS]%
+\begin{lemma}[Absorbing edge gauges into the second PEPS]%
     \label{thm:peps_edge_gauge_absorption}
     \lean{TNLean.PEPS.edge_gauge_absorption}
     \leanok
@@ -19,10 +19,10 @@
     % Ink-to-index/type verdict: paper_normal.tex:1212--1314 gives only
     % vertex-specific pictures, each with boundary (V,P)=(deg(v),1); the old
     % degree-four star cannot represent the theorem on an arbitrary graph.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:peps_absorbEdgeGauges_bondDim} ($D_{\widetilde B}=D_B$)
-    and Theorem~\ref{thm:peps_absorbEdgeGauges_component}
+    Combine Lemma~\ref{thm:peps_absorbEdgeGauges_bondDim} ($D_{\widetilde B}=D_B$)
+    and Lemma~\ref{thm:peps_absorbEdgeGauges_component}
     ((\ref{eq:peps_edge_gauge_absorption_comp})).
 \end{proof}
 
@@ -42,7 +42,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Post-absorption edge insertion equality]%
+\begin{lemma}[Post-absorption edge insertion equality]%
     \label{thm:peps_postAbsorptionEdgeInsertionEquality}
     \lean{TNLean.PEPS.post_absorption_edge_insertion_equality}
     \leanok
@@ -104,24 +104,24 @@
             \tn[skin=ring, species=operator, at=on edgeEqBChord 0.5]{X}
         \end{tenkz}
     \end{center}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_exists_edgeGaugeFamily, thm:peps_edge_gauge_absorption, def:peps_postAbsorptionEdgeInsertionEquality}
-    By Theorem~\ref{thm:peps_exists_edgeGaugeFamily}, each edge $e$ carries an
+    By Lemma~\ref{thm:peps_exists_edgeGaugeFamily}, each edge $e$ carries an
     invertible $X_e$ such that $C_A(e,X;\sigma)=C_B(e,X_e\phi_{h_e}(X)X_e^{-1};\sigma)$.
     Setting $Z_e=X_e^t$ and $\widetilde B=B^Z$ via
-    Theorem~\ref{thm:peps_edge_gauge_absorption} absorbs $X_e\cdot X_e^{-1}$ on
+    Lemma~\ref{thm:peps_edge_gauge_absorption} absorbs $X_e\cdot X_e^{-1}$ on
     each edge and yields (\ref{eq:peps_post_absorption_insertion}).
 \end{proof}
 
-\begin{theorem}[Local gauge recovery]%
+\begin{lemma}[Local gauge recovery]%
     \label{thm:localGauge_exists}
     \lean{TNLean.PEPS.localGauge_exists_of_factorizedLocalGauge}
     \leanok
     \uses{def:peps_hasFactorizedLocalGauge}
     If $A$ and $B$ satisfy the factorized local gauge hypothesis
     (Definition~\ref{def:peps_hasFactorizedLocalGauge}; cf.\
-    Theorems~\ref{thm:peps_virtualInsertionPhysicalRealization},
+    Lemmas~\ref{thm:peps_virtualInsertionPhysicalRealization},
     \ref{thm:peps_physical_to_virtual_insertion}, and
     \ref{thm:peps_postAbsorptionEdgeInsertionEquality}), then there exist
     incident-edge matrices $X_e$ such that
@@ -137,13 +137,13 @@
         A_v(\eta',\sigma).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Unpack the incident-edge invertible matrices and local component identity of
     Definition~\ref{def:peps_hasFactorizedLocalGauge}.
 \end{proof}
 
-\begin{theorem}[Gauge consistency]%
+\begin{lemma}[Gauge consistency]%
     \label{thm:gaugeConsistency}
     \lean{TNLean.PEPS.gaugeConsistency}
     \leanok
@@ -170,9 +170,9 @@
     \end{align}
     establishing the edge-gauge construction of
     \cite[Section~3]{Molnar2018NormalPEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_postAbsorptionEdgeInsertionEquality}, $\widetilde B=B^Z$
+    By Lemma~\ref{thm:peps_postAbsorptionEdgeInsertionEquality}, $\widetilde B=B^Z$
     satisfies (\ref{eq:peps_post_absorption_insertion}). Comparing each vertex
     $v$ with its complement gives $\widetilde B_v=\lambda_v A_v$ ($\lambda_v\in\C^\times$)
     with $\prod_v\lambda_v=1$; on the connected graph, a spanning-tree edge-scalar
@@ -215,7 +215,7 @@
     \cite[Section~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
-\begin{theorem}[Scalar reduction of the residual two-tensor gauges]%
+\begin{lemma}[Scalar reduction of the residual two-tensor gauges]%
     \label{thm:peps_twoInjectiveGaugeScalarReduction}
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
@@ -242,7 +242,7 @@
     (\ref{eq:peps_three_leg_compat}) vacuously), modeling the nonzero virtual
     bond spaces of \cite[Section~3]{Molnar2018NormalPEPS}
     (\cite{gap:peps_injective_ft_section3_route}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Taking $a=a'$ in (\ref{eq:peps_three_leg_compat}) gives $Z_{bc,b'c'}=0$ for
     $c\neq c'$ (from the first equality) and for $b\neq b'$ (from the second),
@@ -252,7 +252,7 @@
     $W=\lambda\Id_{\alpha\otimes\gamma}$.
 \end{proof}
 
-\begin{theorem}[Many-leg scalar factorization]%
+\begin{lemma}[Many-leg scalar factorization]%
     \label{thm:peps_piProductFormsScalar}
     \lean{TNLean.PEPS.piProduct_forms_scalar}
     \leanok
@@ -261,7 +261,7 @@
     $\prod_i(M_i)_{p_iq_i}=\prod_i(N_i)_{p_iq_i}$ for all $(p,q)$, then there
     exist $c_i\in\C^\times$ such that $M_i=c_iN_i$ for all $i$ and
     $\prod_i c_i=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since each $N_i$ is invertible, choose $(p^0,q^0)$ with
     $(N_i)_{p^0_iq^0_i}\neq 0$ for all $i$; then $(M_i)_{p^0_iq^0_i}\neq 0$ as
@@ -272,7 +272,7 @@
     and $\prod_i c_i=1$.
 \end{proof}
 
-\begin{theorem}[Pointwise product cancellation for two injective blocks]%
+\begin{lemma}[Pointwise product cancellation for two injective blocks]%
     \label{thm:peps_twoBlockPointwiseProductCancellation}
     \lean{TNLean.PEPS.twoBlockReciprocalScalarProportional_of_pointwise_mul_eq}
     \leanok
@@ -287,7 +287,7 @@
     \end{align}
     then there exists $\lambda\in\C^\times$ such that
     $A_1=\lambda B_1$ and $A_2=\lambda^{-1}B_2$.
-\end{theorem}
+\end{lemma}
 % This theorem is the rank-one cancellation step once
 % \cite[Section~3]{Molnar2018NormalPEPS} has been reduced to pointwise product
 % equality of separated coefficients.
@@ -310,7 +310,7 @@
     $(E_{ij})_{ab}=\delta_{ia}\delta_{jb}$.
 \end{definition}
 
-\begin{theorem}[Coefficient selection for one shared bond]%
+\begin{lemma}[Coefficient selection for one shared bond]%
     \label{thm:peps_twoBlockInsertedCoeff_singletonBond}
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_singletonBond_single}
     \leanok
@@ -323,7 +323,7 @@
         A_1(\eta_1,\mu,\sigma_1)A_2(\eta_2,\nu,\sigma_2).
         \label{eq:peps_singleton_bond_select}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $\mathcal B\setminus\{b\}=\varnothing$,
     \begin{align}
@@ -339,7 +339,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[One-bond two-injective comparison]%
+\begin{lemma}[One-bond two-injective comparison]%
     \label{thm:peps_twoInjectiveTensorInsertionComparison_singletonBond}
     \lean{TNLean.PEPS.two_injective_tensor_insertion_comparison_singletonBond}
     \leanok
@@ -350,15 +350,15 @@
         =C_{B_1,B_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)$ for all $X$, then there
     exists $\lambda\in\C^\times$ such that $A_1=\lambda B_1$ and
     $A_2=\lambda^{-1}B_2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Take $X=E_{\mu,\nu}$, apply (\ref{eq:peps_singleton_bond_select})
-    (Theorem~\ref{thm:peps_twoBlockInsertedCoeff_singletonBond}) to obtain
+    (Lemma~\ref{thm:peps_twoBlockInsertedCoeff_singletonBond}) to obtain
     (\ref{eq:peps_two_block_pointwise_prod}), and conclude by
-    Theorem~\ref{thm:peps_twoBlockPointwiseProductCancellation}.
+    Lemma~\ref{thm:peps_twoBlockPointwiseProductCancellation}.
 \end{proof}
 
-\begin{theorem}[Generalized two-injective-tensor comparison]%
+\begin{lemma}[Generalized two-injective-tensor comparison]%
     \label{thm:peps_twoInjectiveTensorInsertionComparison}
     \lean{TNLean.PEPS.two_injective_tensor_insertion_comparison}
     \lean{TNLean.PEPS.SameAwayFromBond, TNLean.PEPS.twoBlockInsertedCoeff}
@@ -439,7 +439,7 @@
     \end{center}
     Then there exists $\lambda\in\C^\times$ such that $A_1=\lambda B_1$ and
     $A_2=\lambda^{-1}B_2$ \cite[Section~3]{Molnar2018NormalPEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Setting $X=\Id_{D_b}$ in (\ref{eq:peps_two_block_inserted_eq}) and applying
@@ -466,7 +466,7 @@
         \label{eq:peps_residual_equality}
     \end{align}
     where $\rho^{b\to p}$ replaces $\rho_b$ by $p$
-    (cf.\ Theorem~\ref{thm:peps_twoInjectiveGaugeScalarReduction}). Evaluating
+    (cf.\ Lemma~\ref{thm:peps_twoInjectiveGaugeScalarReduction}). Evaluating
     (\ref{eq:peps_residual_equality}) shows $g_{\rho,\nu}=0$ for $\rho\neq\nu$
     and $g_{\rho^{b\to p},\rho^{b\to p}}=g_{\rho,\rho}$, so $g=\lambda\Id$ with
     $\lambda\in\C^\times$, and (\ref{eq:peps_two_block_schmidt_gauge}) yields

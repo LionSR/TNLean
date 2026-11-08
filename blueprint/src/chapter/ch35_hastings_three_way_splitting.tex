@@ -44,7 +44,7 @@ ground state $\Psi_0$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The splitting is exact]
+\begin{lemma}[The splitting is exact]
     \label{thm:hastings_three_way_splitting_sum}
     \lean{
         TNLean.MPS.AreaLaw.ChainHamiltonian.operator_eq_leftPart_add_bufferPart_add_rightPart,
@@ -66,7 +66,7 @@ ground state $\Psi_0$.
     If $H-E_0\ge\Delta(1-|\Psi_0\rangle\langle\Psi_0|)$, then $\Psi_0$ is a
     ground vector of $\widetilde H_L+\widetilde H_B+\widetilde H_R$ with ground
     energy $0$ and gap $\Delta$ \cite[lines 766--782]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $X\ne\emptyset$ and $\lbrack0,j-m)\cap\lbrack j+m,L)=\emptyset$, the three support
     classes partition the terms of $H$, giving $H=H_L+H_B+H_R$. Additivity of
@@ -76,7 +76,7 @@ ground state $\Psi_0$.
     $\langle\Psi_0,\widetilde M\Psi_0\rangle=0$ for $M=M^\dagger$.
 \end{proof}
 
-\begin{theorem}[Supports of the three parts]
+\begin{lemma}[Supports of the three parts]
     \label{thm:hastings_three_way_splitting_supports}
     \lean{
         TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_termSum,
@@ -91,7 +91,7 @@ ground state $\Psi_0$.
     The operators $H_L,\widetilde H_L$ are supported on $\lbrack0,j-m)$,
     $H_R,\widetilde H_R$ on $\lbrack j+m,L)$, and $H_B,\widetilde H_B$ on
     $\lbrack j-m-R,j+m+R)\cap\lbrack0,L)$ \cite[lines 774--778]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each buffer support $X$ in~(\ref{eq:hastings_three_way_parts}) meets both
     $\lbrack j-m,L)$ and $\lbrack0,j+m)$; since $\operatorname{diam}(X)\le R$,
@@ -99,7 +99,7 @@ ground state $\Psi_0$.
     (\ref{eq:hastings_ground_centered}) preserves supports.
 \end{proof}
 
-\begin{theorem}[Norm of the buffer part]
+\begin{lemma}[Norm of the buffer part]
     \label{thm:hastings_three_way_splitting_norm}
     \lean{
         TNLean.MPS.AreaLaw.ChainHamiltonian.norm_termSum_le,
@@ -118,10 +118,10 @@ ground state $\Psi_0$.
         \|\widetilde H_B\|\le4(m+R)\,2^{2R+1}J.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each site $x$ lies in at most $2^{2R+1}$ supports $X\subseteq[x-R,x+R]$ of
-    diameter at most $R$, and by Theorem~\ref{thm:hastings_three_way_splitting_supports}
+    diameter at most $R$, and by Lemma~\ref{thm:hastings_three_way_splitting_supports}
     every buffer support meets $[j-m-R,j+m+R)$ (at most $2(m+R)$ sites), giving
     at most $2(m+R)2^{2R+1}$ buffer terms. The triangle inequality and
     $\|\widetilde M\|\le 2\|M\|$ conclude.

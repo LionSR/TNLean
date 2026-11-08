@@ -67,14 +67,14 @@ finite physical alphabet $Y_v$.
         thm:peps_full_four_cut_canonical_equality}
     For the canonical averaging tensors $A^0$ and the product
     $\mathcal T=\bigotimes_vT_v$ of the local coefficient maps,
-    Theorem~\ref{thm:peps_full_four_cut_transport} gives
+    Lemma~\ref{thm:peps_full_four_cut_transport} gives
     $\mathcal I_A=\mathcal T(\mathcal I_{A^0})$ and
     $\mathcal Z_A=\mathcal T(\mathcal Z_{A^0})$, while
-    Theorem~\ref{thm:peps_full_four_cut_canonical_equality} gives
+    Lemma~\ref{thm:peps_full_four_cut_canonical_equality} gives
     $\mathcal I_{A^0}=\mathcal Z_{A^0}$.
 \end{proof}
 
-\begin{theorem}[Common physical image of cuts and closures]%
+\begin{lemma}[Common physical image of cuts and closures]%
     \label{thm:peps_full_four_cut_transport}
     \lean{TNLean.PEPS.DependentTorus.physicalMap_closure,
         TNLean.PEPS.DependentTorus.map_commutingClosureSpan,
@@ -89,7 +89,7 @@ finite physical alphabet $Y_v$.
     invariance of $A$ gives $\mathcal T(\mathcal Z_{A^0})=\mathcal Z_A$,
     and $G$-injectivity of $A$ gives
     $\mathcal I_A=\mathcal T(\mathcal I_{A^0})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_physical_contraction,
         thm:peps_dependent_common_inverse}
@@ -111,7 +111,7 @@ finite physical alphabet $Y_v$.
     and their product projection is $\mathcal P=\bigotimes_{v\in\Lambda}P_v$.
 \end{definition}
 
-\begin{theorem}[Moving a commuting closure to every cut]%
+\begin{lemma}[Moving a commuting closure to every cut]%
     \label{thm:peps_full_four_cut_forward}
     \lean{TNLean.PEPS.DependentTorus.canonicalClosure_mem_cutSpace,
         TNLean.PEPS.DependentTorus.commutingClosureSpan_le_fourCutSpace_canonical}
@@ -120,21 +120,21 @@ finite physical alphabet $Y_v$.
     Without assuming semi-regularity, $gh=hg$ implies
     $\zeta_{A^0}(g,h)\in\mathcal S_{A^0,C_{c,r}}$ for every $(c,r)$, and hence
     $\mathcal Z_{A^0}\subseteq\mathcal I_{A^0}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_labelled_closure_gauge, thm:peps_labelled_closure_support,
         thm:peps_dependent_vertex_gauge, thm:peps_dependent_cut_basis}
-    By Theorems~\ref{thm:peps_labelled_closure_gauge}
+    By Lemmas~\ref{thm:peps_labelled_closure_gauge}
     and~\ref{thm:peps_labelled_closure_support}, a vertex gauge shifts the
     seams to labels $p^{g,h;c,r}$ equal to $1$ off $C_{c,r}$. By
-    Theorems~\ref{thm:peps_dependent_vertex_gauge}
+    Lemmas~\ref{thm:peps_dependent_vertex_gauge}
     and~\ref{thm:peps_dependent_cut_basis}, $\mathcal C_{A^0,C_{c,r}}(M)=\zeta_{A^0}(g,h)$
     for $M(\eta)=\prod_{e\in C_{c,r}}U_e(p^{g,h;c,r}_e)_{\eta_{e,+},\eta_{e,-}}$;
     spanning and intersecting over $(c,r)$ gives
     $\mathcal Z_{A^0}\subseteq\mathcal I_{A^0}$.
 \end{proof}
 
-\begin{theorem}[Projected flat products are commuting closures]%
+\begin{lemma}[Projected flat products are commuting closures]%
     \label{thm:peps_full_four_cut_flat_projection}
     \lean{TNLean.PEPS.DependentTorus.canonicalProjector_bondProduct,
         TNLean.PEPS.DependentTorus.exists_canonicalProjector_bondProduct_eq_closure,
@@ -146,19 +146,19 @@ finite physical alphabet $Y_v$.
     $\mathcal P b_p=\mathcal N_{A^0}((U_e(p_e))_e)$.
     If $p$ is flat, then $\mathcal P b_p=\zeta_{A^0}(g,h)\in\mathcal Z_{A^0}$
     for some commuting pair $(g,h)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_average_projection,
         thm:peps_labelled_flat_classification, thm:peps_dependent_vertex_gauge}
-    Theorem~\ref{thm:peps_dependent_average_projection} gives
+    Lemma~\ref{thm:peps_dependent_average_projection} gives
     $\mathcal P b_p=\mathcal N_{A^0}((U_e(p_e))_e)$. For flat $p$,
-    Theorem~\ref{thm:peps_labelled_flat_classification} provides a vertex
+    Lemma~\ref{thm:peps_labelled_flat_classification} provides a vertex
     gauge to commuting seams $(g,h)$, and
-    Theorem~\ref{thm:peps_dependent_vertex_gauge} gives
+    Lemma~\ref{thm:peps_dependent_vertex_gauge} gives
     $\mathcal P b_p=\zeta_{A^0}(g,h)$.
 \end{proof}
 
-\begin{theorem}[Nonflat coefficients vanish in the four-cut intersection]%
+\begin{lemma}[Nonflat coefficients vanish in the four-cut intersection]%
     \label{thm:peps_full_four_cut_nonflat_zero}
     \lean{TNLean.PEPS.DependentTorus.coefficient_eq_zero_of_mem_fourCutSpace_not_flat}
     \leanok
@@ -166,16 +166,16 @@ finite physical alphabet $Y_v$.
         def:peps_bond_flat}
     If every $U_e$ is semi-regular, $\psi\in\mathcal I_{A^0}$, and $p$ is
     not flat, then $c_p(\psi)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_uncut_coefficients, thm:peps_labelled_uncut_flat}
     If $c_p(\psi)\ne0$, then on the cut of a plaquette where $p$ is not flat,
     (\ref{eq:peps_dependent_uncut_coefficients}) and
-    Theorem~\ref{thm:peps_labelled_uncut_flat} force $p$ to satisfy that
+    Lemma~\ref{thm:peps_labelled_uncut_flat} force $p$ to satisfy that
     plaquette equation, a contradiction.
 \end{proof}
 
-\begin{theorem}[Canonical four-cut equality]%
+\begin{lemma}[Canonical four-cut equality]%
     \label{thm:peps_full_four_cut_canonical_equality}
     \lean{TNLean.PEPS.DependentTorus.fourCutSpace_canonical_le_commutingClosureSpan,
         TNLean.PEPS.DependentTorus.fourCutSpace_canonical_eq_commutingClosureSpan}
@@ -184,22 +184,22 @@ finite physical alphabet $Y_v$.
     If all eight bond representations are semi-regular, then
     $\mathcal I_{A^0}\subseteq\mathcal Z_{A^0}$ and
     $\mathcal I_{A^0}=\mathcal Z_{A^0}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_average_projection, thm:peps_dependent_cut_expansion,
         thm:peps_full_four_cut_nonflat_zero, thm:peps_full_four_cut_flat_projection,
         thm:peps_full_four_cut_forward}
     For $\psi\in\mathcal I_{A^0}$, membership in $\mathcal S_{A^0,C_{0,0}}$
     gives $\mathcal P\psi=\psi$ by
-    Theorem~\ref{thm:peps_dependent_average_projection}. Since the four cuts
+    Lemma~\ref{thm:peps_dependent_average_projection}. Since the four cuts
     leave every bond uncut at least once, (\ref{eq:peps_dependent_extracted_expansion}),
-    Theorem~\ref{thm:peps_full_four_cut_nonflat_zero}, and
-    Theorem~\ref{thm:peps_full_four_cut_flat_projection} give
+    Lemma~\ref{thm:peps_full_four_cut_nonflat_zero}, and
+    Lemma~\ref{thm:peps_full_four_cut_flat_projection} give
     \begin{align}
         \psi=\mathcal P\psi=\sum_p c_p(\psi)\mathcal P b_p
         =\sum_{p\ \mathrm{flat}}c_p(\psi)\mathcal P b_p
         \in\mathcal Z_{A^0},
         \label{eq:peps_full_four_cut_reconstruction}
     \end{align}
-    and Theorem~\ref{thm:peps_full_four_cut_forward} gives the reverse inclusion.
+    and Lemma~\ref{thm:peps_full_four_cut_forward} gives the reverse inclusion.
 \end{proof}

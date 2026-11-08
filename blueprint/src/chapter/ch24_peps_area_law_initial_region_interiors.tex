@@ -8,7 +8,7 @@ boundary segments or corners, but their open interiors are pairwise disjoint.
 % 212--218 and 299--323, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These assertions concern the initial family before repairs.
 
-\begin{theorem}[Distinct runs have disjoint interiors]
+\begin{lemma}[Distinct runs have disjoint interiors]
     \label{thm:area_law_fan_run_disjoint_interiors}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_disjoint_interiors}
     \leanok
@@ -16,7 +16,7 @@ boundary segments or corners, but their open interiors are pairwise disjoint.
     Fix a translated dyadic square, a midpoint subdivision, and a
     two-coloring of its fan triangles. If $R\ne T$ are two runs, then
     $\operatorname{int}(T_R)\cap\operatorname{int}(T_T)=\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections,
         def:area_law_fan_runs}
@@ -32,7 +32,7 @@ boundary segments or corners, but their open interiors are pairwise disjoint.
     $\operatorname{int}(T_R)\cap\operatorname{int}(T_T)$ is empty.
 \end{proof}
 
-\begin{theorem}[Pairwise disjoint initial open regions]
+\begin{lemma}[Pairwise disjoint initial open regions]
     \label{thm:area_law_initial_open_disjoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion_pairwise_disjoint}
     \leanok
@@ -41,7 +41,7 @@ boundary segments or corners, but their open interiors are pairwise disjoint.
     an initial layer $k_0\ge 50{,}000{,}000$, and valid pitch residues
     at every layer. For any distinct initial region identifiers $i\ne j$,
     $\operatorname{int}(X_i^0)\cap\operatorname{int}(X_j^0)=\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_run_disjoint_interiors,
         thm:area_law_primary_fine_cell_cover,thm:area_law_fine_cells_disjoint,

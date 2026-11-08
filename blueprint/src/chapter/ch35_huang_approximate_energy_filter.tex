@@ -1,0 +1,70 @@
+\section{Gaussian filtering with an approximate energy}
+\label{sec:huang_approximate_energy_filter}
+
+Huang's error reduction uses a Gaussian filter centered at an estimate of
+the ground energy~\cite[Section 5.4, equation (19) and Lemma 18]{Huang2015GroundState}.
+The filter need not fix the ground vector: its ground amplitude must be
+retained in the normalization argument. The following spectral estimates
+do not construct the energy guesses or prove the normalized energy
+conclusion of that lemma.
+
+\begin{lemma}[The Gaussian spectral multiplier]
+    \label{thm:huang_gaussian_spectral_multiplier}
+    \lean{TNLean.MPS.AreaLaw.gaussianIntertwiner_shift_eq_cfc}
+    \leanok
+    Let $H$ be a finite-dimensional Hermitian matrix, let $E\in\mathbb R$
+    and let $h\ge0$. Let $\gamma_h$ be the centered Gaussian of variance
+    $h$, with the point-mass convention at $h=0$. Then
+    \begin{align}
+        G_h(H-EI)
+        :=\int e^{it(H-EI)}\,d\gamma_h(t)
+        =f(H),\qquad
+        f(x)=\exp\bigl(-h(x-E)^2/2\bigr).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    In an orthonormal eigenbasis of $H$, the Gaussian characteristic
+    function multiplies each eigenvector of energy $\lambda$ by
+    $\exp(-h(\lambda-E)^2/2)$. These are exactly the spectral
+    coefficients of $f(H)$.
+\end{proof}
+
+\begin{lemma}[Suppression above an approximate ground energy]
+    \label{thm:huang_approximate_energy_suppression}
+    \lean{TNLean.MPS.AreaLaw.norm_gaussianIntertwiner_shift_sub_rankOne_le}
+    \leanok
+    \uses{thm:huang_gaussian_spectral_multiplier}
+    Suppose that $\Gamma$ is a unit eigenvector of $H$ with energy
+    $E_0$. Put $P_\Gamma=|\Gamma\rangle\langle\Gamma|$, and suppose
+    that $H-E_0I\ge\Delta(I-P_\Gamma)$ for $\Delta>0$. If
+    $|E-E_0|\le\Delta/2$, then
+    \begin{align}
+        \bigl\|G_h(H-EI)-c_0P_\Gamma\bigr\|
+        \le\exp(-h\Delta^2/8),\qquad
+        c_0=\exp\bigl(-h(E_0-E)^2/2\bigr).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The ground coefficient is $c_0$ and cancels exactly. Every excited
+    energy $\lambda$ satisfies
+    $\lambda-E\ge\Delta/2$, so its Gaussian coefficient is at most
+    $\exp(-h\Delta^2/8)$. The spectral norm gives the bound without a
+    dimension factor.
+\end{proof}
+
+\begin{lemma}[A lower bound for the retained amplitude]
+    \label{thm:huang_gaussian_ground_amplitude}
+    \lean{TNLean.MPS.AreaLaw.gaussian_ground_amplitude_bounds}
+    \leanok
+    If $h(E_0-E)^2\le1$, then
+    \begin{align}
+        e^{-1/2}\le\exp\bigl(-h(E_0-E)^2/2\bigr)\le1.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    The exponent lies between $-1/2$ and zero. Apply monotonicity of the
+    exponential.
+\end{proof}

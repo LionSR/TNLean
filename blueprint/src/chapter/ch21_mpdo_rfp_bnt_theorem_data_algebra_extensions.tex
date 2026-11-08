@@ -125,7 +125,7 @@
     vertical canonical decomposition is an additional requirement.
 \end{definition}
 
-\begin{theorem}[Positivity of the physical trace in a retained vertical sector]%
+\begin{lemma}[Positivity of the physical trace in a retained vertical sector]%
     \label{thm:mpdo_algebra_clause_terminal_transfer_positivity}
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         physTraceTransfer_verticalBNTMPO_posSemidef}
@@ -168,7 +168,7 @@
     Then $T_\gamma\succeq0$. This follows from the chosen decomposition
     and positivity of the one-site operator $\rho^{(1)}(M)$; it does
     not require fusion maps or a renormalization fixed point hypothesis.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_sitewise_physical_coordinate_congruence}
@@ -225,7 +225,7 @@
     $1/2$. Hence neither matrix is Hermitian.
 \end{proof}
 
-\begin{theorem}[The nonunitary similarity pair is excluded from retained positive sectors]%
+\begin{lemma}[The nonunitary similarity pair is excluded from retained positive sectors]%
     \label{thm:mpdo_nonunitary_pair_not_retained_positive_sector}
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
         tensor_not_retained_positive_sector}
@@ -237,13 +237,13 @@
     as a retained sector of bond dimension two in a vertical canonical
     decomposition of an MPDO tensor satisfying
     Definition~\ref{def:mpdo_bnt_algebra_tensor_clause}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity, lem:mpdo_nonunitary_pair_terminal_not_positive}
     For any such retained sector, closing the physical legs gives a positive
     semidefinite matrix by
-    Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
+    Lemma~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
     Lemma~\ref{lem:mpdo_nonunitary_pair_terminal_not_positive} gives the
     contradiction for both tensors.
 \end{proof}
@@ -277,13 +277,13 @@
     letter~$i$.
 \end{definition}
 
-\begin{theorem}[Multiplicativity of the linear extension on each virtual block]%
+\begin{lemma}[Multiplicativity of the linear extension on each virtual block]%
     \label{thm:mpdo_virtual_perBlockLinearExtension_mul}
     \leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension}
     The linear extension on block $k$ satisfies $T_k(MN)=T_k(M)T_k(N)$ for all
     $M,N\in\MN{D_k}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension, thm:linear_ext_mul, lem:perBlockLinearExtension_mul}
@@ -291,12 +291,12 @@
     product vectors gives the identity on products of spanning letters.
 \end{proof}
 
-\begin{theorem}[Bijectivity of the linear extension on each virtual block]%
+\begin{lemma}[Bijectivity of the linear extension on each virtual block]%
     \label{thm:mpdo_virtual_perBlockLinearExtension_bijective}
     \leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension}
     The linear extension $T_k$ on block $k$ is bijective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:simplicity, lem:trace_ne_zero, lem:perBlockLinearExtension_bijective}
@@ -306,13 +306,13 @@
     Thus the kernel is zero, and finite dimensionality gives surjectivity.
 \end{proof}
 
-\begin{theorem}[Positive linear extensions on virtual blocks are unitarily implemented]%
+\begin{lemma}[Positive linear extensions on virtual blocks are unitarily implemented]%
     \label{thm:mpdo_positive_perBlockLinearExtension_unitary}
     \leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension}
     If $T_k$ is positive, then there is a unitary matrix $U_k$ such that
     $T_k(M)=U_kMU_k^\dagger$ for every $M\in\MN{D_k}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:mpdo_virtual_perBlockLinearExtension_bijective, thm:positive_perBlockLinearExtension_unitary}
@@ -321,7 +321,7 @@
     with a unitary matrix.
 \end{proof}
 
-\begin{theorem}[Closed matrix product vectors do not force a positive virtual extension]%
+\begin{lemma}[Closed matrix product vectors do not force a positive virtual extension]%
     \label{thm:mpdo_closed_mpv_not_force_positive_virtual_extension}
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
         perBlockLinearExtension_not_positive}
@@ -339,7 +339,7 @@
     as one-block families. They are injective and have equal closed matrix
     product vectors at every length, but the linear extension on their
     virtual block is not positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_virtual_perBlockLinearExtension, thm:mpdo_positive_perBlockLinearExtension_unitary, lem:mpdo_nonunitary_pair_no_positive_isometric_realization}

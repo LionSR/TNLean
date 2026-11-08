@@ -4,7 +4,7 @@ The following identities contract a finite matrix-unit factor before any
 fusion decomposition of the remaining matrices. They apply to every
 physical letter; no selection of matrix entries is required.
 
-\begin{theorem}[Reconstruction from matrix blocks]
+\begin{lemma}[Reconstruction from matrix blocks]
     \label{thm:asymex_matrix_unit_register_reconstruction}
     \lean{Matrix.sum_single_kronecker_submatrix}
     \leanok
@@ -17,7 +17,7 @@ physical letter; no selection of matrix entries is required.
         \sum_{a,b\in I}E_{ab}\otimes Z_{ab} & =Z.
         \label{eq:asymex_matrix_unit_register_reconstruction}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At the entry indexed by $((c,i),(d,j))$, the matrix unit
@@ -40,7 +40,7 @@ physical letter; no selection of matrix entries is required.
     the matrix obtained by reindexing its rows and columns along $e$ by $\mathcal R$.
 \end{definition}
 
-\begin{theorem}[Contraction in a stacked product]
+\begin{lemma}[Contraction in a stacked product]
     \label{thm:asymex_matrix_unit_register_contraction}
     \lean{MPOTensor.registerFusion_contraction}
     \leanok
@@ -57,7 +57,7 @@ physical letter; no selection of matrix entries is required.
          & =\left(\sum_{h\in H}X_h\otimes Z_h\right)\otimes E_{cd}.
         \label{eq:asymex_matrix_unit_register_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:asymex_matrix_unit_register_reassociation}

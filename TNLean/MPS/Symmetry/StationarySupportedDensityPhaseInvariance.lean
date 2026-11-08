@@ -163,8 +163,7 @@ private theorem eventually_class_of_continuousAt_pointwise_compression
   have hNhds : Filter.map ((↑) : S → T) (𝓝 (⟨t₀, ht₀⟩ : S)) = 𝓝 t₀ :=
     map_nhds_subtype_coe_eq_nhds ht₀ (hSopen.mem_nhds ht₀)
   rw [← hNhds, Filter.eventually_map]
-  exact (Filter.eventually_congr (.of_forall fun _ ↦
-    H2π_eq_iff_isMulCoboundary₂_div _ _)).mp hClass
+  exact (eventually_H2π_eq_iff_isMulCoboundary₂_div _ _).mp hClass
 
 
 end MPSTensor
@@ -240,8 +239,7 @@ theorem eventually_cohomologousTo_of_continuousOn_unique_stationary_density
           (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
             (Matrix.supportFrame_dimension_pos_of_trace_one
               (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)))) := by
-  apply (Filter.eventually_congr (.of_forall fun _ ↦
-    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
+  apply (eventually_H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   have hD : 0 < D t₀ := Matrix.supportFrame_dimension_pos_of_trace_one
     (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)
   obtain ⟨a, b, R, ha, hab, hRopen, ht₀, hRS, hJcont, hJ₀, hJ⟩ :=

@@ -1,4 +1,4 @@
-\begin{theorem}[First rightward endpoint step]
+\begin{lemma}[First rightward endpoint step]
     \label{thm:peps_initial_string_right_step}
     \lean{
         TNLean.PEPS.regularWalkHolonomy_torusSweptStringRightStep,
@@ -14,25 +14,25 @@
     \end{align}
     This is the first elementary step of the four-endpoint route in SCP10, Section~6.6 (local lines 2340--2423), without establishing the complete braid or reunion procedure \cite{gap:rmp_peps_quantum_double_g_isometry}.
     \uses{thm:peps_torus_swept_string_endpoint_holonomy,thm:peps_torus_plaquette_holonomy}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_torus_plaquette_holonomy}, replacing the shared upward bond $g\mapsto gh$ changes the clockwise products at $(1,1)$ and $(2,1)$ to $h(gh)^{-1}g=1$ and $g^{-1}(gh)=h$, yielding (\ref{eq:initial_right_step_holonomy}).
+    By Lemma~\ref{thm:peps_torus_plaquette_holonomy}, replacing the shared upward bond $g\mapsto gh$ changes the clockwise products at $(1,1)$ and $(2,1)$ to $h(gh)^{-1}g=1$ and $g^{-1}(gh)=h$, yielding (\ref{eq:initial_right_step_holonomy}).
 \end{proof}
 
-\begin{theorem}[Original-spin realization of the first rightward step]
+\begin{lemma}[Original-spin realization of the first rightward step]
     \label{thm:peps_initial_string_right_physical_step}
     \lean{
         TNLean.PEPS.IsGIsometric.exists_unitary_torusInitialStringRightPhysicalStep,
         TNLean.PEPS.torusFirstRightStepGauge
     }
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:peps_initial_string_right_step} with a regular $G$-isometric site tensor, there exists a six-spin unitary $W$ on the horizontal $3\times 2$ block $R$ (chosen before $g,h\in G$, boundary configurations $\theta$, and common exterior/crossing assignments $u_{\mathrm{ext}}$) such that
+    Under the hypotheses of Lemma~\ref{thm:peps_initial_string_right_step} with a regular $G$-isometric site tensor, there exists a six-spin unitary $W$ on the horizontal $3\times 2$ block $R$ (chosen before $g,h\in G$, boundary configurations $\theta$, and common exterior/crossing assignments $u_{\mathrm{ext}}$) such that
     \begin{align}
         W\Psi_R(u_0,\theta)=\Psi_R(u_1,\theta),\qquad (W\otimes I)\Psi(u_0;u_{\mathrm{ext}})=\Psi(u_1;u_{\mathrm{ext}}), \notag
     \end{align}
     retaining the continuing partner string (as a finite-torus elementary move from SCP10, Theorem~6.16 and Section~6.6, local lines 2271--2305 and 2340--2423, rather than the full braid).
     \uses{thm:peps_initial_string_right_step,thm:peps_gauged_horizontal_flux_move}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Setting vertex gauge labels $(h,1,1)$ on the lower row and $(g,g,g)$ on the upper row of $R$ expresses $u_0|_R$ as a single-chord canonical insertion $h$ and $u_1|_R$ as its extension to the middle chord ($g\mapsto gh$); applying Theorem~\ref{thm:peps_gauged_horizontal_flux_move} gives the open and closed identities.
+    Setting vertex gauge labels $(h,1,1)$ on the lower row and $(g,g,g)$ on the upper row of $R$ expresses $u_0|_R$ as a single-chord canonical insertion $h$ and $u_1|_R$ as its extension to the middle chord ($g\mapsto gh$); applying Lemma~\ref{thm:peps_gauged_horizontal_flux_move} gives the open and closed identities.
 \end{proof}

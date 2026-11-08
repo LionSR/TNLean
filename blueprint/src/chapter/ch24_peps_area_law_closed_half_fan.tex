@@ -32,14 +32,14 @@ distinct.
     When $A=\varnothing$, the center belongs to every $K_i$.
 \end{definition}
 
-\begin{theorem}[Intersection in the smaller closed square]
+\begin{lemma}[Intersection in the smaller closed square]
     \label{thm:area_law_fan_closed_half_intersection}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_cut_inter_closedHalfBall_nonempty_of_adj}
     \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
     If $i,j$ are consecutive perimeter positions with $f_i=f_j$, then
     $K_i\cap K_j$ is nonempty.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_law_fan_closed_half_piece,
@@ -62,28 +62,28 @@ distinct.
     intersection.
 \end{proof}
 
-\begin{theorem}[Connectedness of a retained piece]
+\begin{lemma}[Connectedness of a retained piece]
     \label{thm:area_law_fan_closed_half_piece_connected}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanClosedHalfPiece_isConnected}
     \leanok
     \uses{def:area_law_fan_closed_half_piece}
     Every $K_i$ is nonempty and connected.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_law_fan_closed_half_piece,
         thm:area_law_fan_cut_piece_connected,
         thm:area_law_fan_radial_union_deletion_convex}
-    Evaluating Theorem~\ref{thm:area_law_fan_cut_piece_connected} at
+    Evaluating Lemma~\ref{thm:area_law_fan_cut_piece_connected} at
     radius $r/2$ produces a point of
     $(P_i\setminus L)\cap B_\infty(c,r/2)$, which belongs to
     $K_i$. Because the deleted triangle is convex by
-    Theorem~\ref{thm:area_law_fan_radial_union_deletion_convex} and
+    Lemma~\ref{thm:area_law_fan_radial_union_deletion_convex} and
     both centered balls are convex, their intersection with the
     deleted triangle is a nonempty convex set and hence connected.
 \end{proof}
 
-\begin{theorem}[Connectedness of a retained run]
+\begin{lemma}[Connectedness of a retained run]
     \label{thm:area_law_fan_closed_half_run_connected}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_cut_inter_closedHalfBall_isConnected}
     \leanok
@@ -93,15 +93,15 @@ distinct.
     put $T_R=\bigcup_{i\in R}P_i$. Then
     $(T_R\setminus L)\cap\overline B_\infty(c,r/2)$ is nonempty
     and connected.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs,
         thm:area_law_fan_closed_half_piece_connected,
         thm:area_law_fan_closed_half_intersection}
     Each $K_i$ is nonempty and connected by
-    Theorem~\ref{thm:area_law_fan_closed_half_piece_connected}, and
-    Theorem~\ref{thm:area_law_fan_closed_half_intersection} gives
+    Lemma~\ref{thm:area_law_fan_closed_half_piece_connected}, and
+    Lemma~\ref{thm:area_law_fan_closed_half_intersection} gives
     a nonempty intersection along every retained edge.
     The component $R$ is nonempty, and any two of its vertices are
     joined by a finite path within $R$. Successive unions along these
@@ -122,7 +122,7 @@ distinct.
 % prop:two-families, lines 308--323;
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Connected components in the smaller closed square]
+\begin{lemma}[Connected components in the smaller closed square]
     \label{thm:area_law_closed_half_fan_components}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_closedHalf_connectedComponents_equiv}
     \leanok
@@ -147,7 +147,7 @@ distinct.
     Distinct runs carrying the same color correspond to distinct
     connected components; this provides the local component decomposition
     for the initial-star construction in \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_closed_half_run_connected,
         thm:area_law_fan_cut_runs_disjoint,
@@ -155,16 +155,16 @@ distinct.
         thm:area_law_sample_rows,
         thm:area_law_cell_fan_closed_ball}
     For each run $R$, set $V_R=T_R\cap\Omega_{1/2}$.
-    Theorem~\ref{thm:area_law_fan_closed_half_run_connected} shows
+    Lemma~\ref{thm:area_law_fan_closed_half_run_connected} shows
     that $V_R$ is nonempty and connected. These sets are pairwise
-    disjoint by Theorem~\ref{thm:area_law_fan_cut_runs_disjoint}.
+    disjoint by Lemma~\ref{thm:area_law_fan_cut_runs_disjoint}.
     The smaller closed square lies in
     $\overline B_\infty(c,r)$, which is the closed cell by
-    Theorem~\ref{thm:area_law_cell_fan_closed_ball}. The run cover
+    Lemma~\ref{thm:area_law_cell_fan_closed_ball}. The run cover
     therefore gives $\Omega_{1/2}=\bigcup_{R\in\mathcal R}V_R$.
 
     Each triangle is a finite convex hull, hence compact and closed,
-    as in Theorem~\ref{thm:area_law_sample_rows}. Every $T_R$ is a
+    as in Lemma~\ref{thm:area_law_sample_rows}. Every $T_R$ is a
     finite union of such triangles, so $V_R$ is relatively closed
     in $\Omega_{1/2}$. The disjoint cover gives
     \begin{align}

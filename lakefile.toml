@@ -17,17 +17,25 @@ git = "https://github.com/PatrickMassot/checkdecls.git"
 [[require]]
 name = "Gametheory"
 git = "https://github.com/LionSR/Brouwer.git"
-rev = "ec93e4daed4ad8b4784a9d760e492832e7711433"
+rev = "439aaeb9caa7a7f943f9e72afc77751cbc5b0098"
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.35.0-rc3"
+rev = "v4.36.0-rc1"
+
+[[require]]
+name = "cslib"
+git = "https://github.com/leanprover/cslib.git"
+# The last CSLib commit on Lean v4.36.0-rc1, the parent of its v4.36.0-rc2 bump; move it
+# with the next toolchain bump. Only the query framework under
+# `Cslib/Algorithms/Lean/Query/` is imported.
+rev = "acab13b776722f5efa897c780d6fa1a3069d709e"
 
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-rev = "acda92aa70e69b37507e422bceb5414036859fe6"
+rev = "603fc408b9f4c2a50f2475e1e44843fdc0a9c0ac"
 
 [[lean_lib]]
 name = "TNLean"

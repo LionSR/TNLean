@@ -9,7 +9,7 @@
     $A=cQ$, viewed as a tensor over the sixteen-letter ket-bra alphabet.
 \end{definition}
 
-\begin{theorem}[One-site injectivity of the mixed-Bell factor]%
+\begin{lemma}[One-site injectivity of the mixed-Bell factor]%
     \label{thm:mpdo_dimer_bond_injective}
     \lean{MPOTensor.TwistedDimer.sigmaDimer_isInjective,
         MPOTensor.TwistedDimer.sigmaDimer_sum_conjTranspose_mul}
@@ -17,7 +17,7 @@
     \uses{def:mpdo_twisted_dimer_bond_tensor, def:injective}
     The sixteen matrices $Q^{ij}$ span $\MN{4}$ and satisfy
     $\sum_{i,j}(Q^{ij})^\dagger Q^{ij}=(25/32)\Id$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpdo_twisted_dimer_bond_tensor}
@@ -48,12 +48,12 @@
         thm:is_normal_tensor_of_is_normal_left_canonical}
     The adjoint-square sum of $A$ is $c^2(25/32)\Id=\Id$.
     Nonzero scalar multiplication preserves injectivity, so
-    Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
+    Lemma~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
     gives normality. The one-site density operator of $Q$ has trace one;
     hence $\tr\mathcal B_A=c\tr\mathcal B_Q=c$.
 \end{proof}
 
-\begin{theorem}[Simplicity of the exact mixed-Bell factor]%
+\begin{lemma}[Simplicity of the exact mixed-Bell factor]%
     \label{thm:mpdo_dimer_bond_simple}
     \lean{MPOTensor.TwistedDimer.sigmaDimer_isSimple}
     \leanok
@@ -61,7 +61,7 @@
         thm:mpdo_twisted_dimer_bond_product, thm:cpsv_normal_separated_eventually_li}
     The tensor $Q$ is simple in the sense of
     \cite[Definition~4.7]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:mpdo_dimer_bond_normal_rep, lem:mpdo_dimer_bond_normal_rep,
@@ -71,7 +71,7 @@
     single representative $A$ and one copy of weight $c^{-1}$ recovers the
     positive-length matrix product vectors of $Q$ via the scalar word law.
     The singleton normal family is eventually linearly independent by
-    Theorem~\ref{thm:cpsv_normal_separated_eventually_li}.
+    Lemma~\ref{thm:cpsv_normal_separated_eventually_li}.
     A nilpotent complex matrix has zero trace, whereas
     $\tr\mathcal B_A=c\ne0$, so the only representative has
     nonnilpotent physical-trace transfer, as required.

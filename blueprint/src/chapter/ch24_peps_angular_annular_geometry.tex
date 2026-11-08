@@ -18,7 +18,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Then $s_0=n$ and $s_{j+1}=s_j/2$, equivalently $2s_{j+1}=s_j$.
 \end{definition}
 
-\begin{theorem}[Dyadic scale bounds]
+\begin{lemma}[Dyadic scale bounds]
     \label{thm:peps_dyadic_scale_bounds}
     \lean{TNLean.PEPS.Approximation.dyadicScale_pos,
         TNLean.PEPS.Approximation.dyadicScale_nonneg,
@@ -29,7 +29,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \uses{def:peps_dyadic_scales}
     If $n>0$, then $s_j>0$ for all $j\ge0$. If $n\ge0$, then
     $0\le s_j\le s_i\le n$ for $0\le i\le j$, and $2s_j\le n$ for $j>0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_dyadic_scales}
@@ -50,7 +50,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $\delta(x)=\min\{n,\operatorname{dist}_{\infty}(x,\mathcal V)\}$.
 \end{definition}
 
-\begin{theorem}[Capped-distance bounds and nearby marked points]
+\begin{lemma}[Capped-distance bounds and nearby marked points]
     \label{thm:peps_capped_distance_bounds}
     \lean{TNLean.PEPS.Approximation.le_cappedMarkDistance_iff,
         TNLean.PEPS.Approximation.cappedMarkDistance_le_cap,
@@ -69,7 +69,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
         \exists v\in\mathcal V:\operatorname{dist}_{\infty}(x,v)<r.
         \label{eq:peps_capped_distance_witness}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_capped_mark_distance}
@@ -81,7 +81,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     (\ref{eq:peps_capped_distance_witness}).
 \end{proof}
 
-\begin{theorem}[Dyadic stopping scale]
+\begin{lemma}[Dyadic stopping scale]
     \label{thm:peps_annular_cutoff}
     \lean{TNLean.PEPS.Approximation.exists_dyadicCutoff,
         TNLean.PEPS.Approximation.DyadicCutoff,
@@ -92,12 +92,12 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     There is an integer $m\ge0$ such that the scales $s_j=n/2^j$ satisfy
     $t\le s_m<2t$, and hence $s_j\ge t$ for $0\le j\le m$.
     Fix one such stopping index $m$ for the layer construction.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_dyadic_scales,thm:peps_dyadic_scale_bounds}
     Choosing $m\ge0$ with $2^m\le n/t<2^{m+1}$ gives $t\le s_m<2t$, and
-    Theorem~\ref{thm:peps_dyadic_scale_bounds} gives $s_j\ge s_m\ge t$ for
+    Lemma~\ref{thm:peps_dyadic_scale_bounds} gives $s_j\ge s_m\ge t$ for
     $0\le j\le m$.
 \end{proof}
 
@@ -123,7 +123,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     For $m>0$, $B_0=\{x\in X:\forall v\in\mathcal V,\ \operatorname{dist}_{\infty}(x,v)\ge n\}$.
 \end{definition}
 
-\begin{theorem}[Uncapped layer conditions]
+\begin{lemma}[Uncapped layer conditions]
     \label{thm:peps_annular_mark_witness}
     \lean{TNLean.PEPS.Approximation.mem_annularLayer_middle_iff,
         TNLean.PEPS.Approximation.mem_annularLayer_last_iff,
@@ -138,19 +138,19 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \end{align}
     In particular, whenever $j>0$ and $x\in B_j$, there exists
     $v\in\mathcal V$ with $\operatorname{dist}_{\infty}(x,v)<2s_j$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,
         thm:peps_capped_distance_bounds}
-    Since $s_j\le 2s_j\le n$ for $j>0$ by Theorem~\ref{thm:peps_dyadic_scale_bounds},
+    Since $s_j\le 2s_j\le n$ for $j>0$ by Lemma~\ref{thm:peps_dyadic_scale_bounds},
     rewriting the thresholds $s_j\le\delta(x)$ and $\delta(x)<2s_j$ in
-    (\ref{eq:peps_annular_layers}) via Theorem~\ref{thm:peps_capped_distance_bounds}
+    (\ref{eq:peps_annular_layers}) via Lemma~\ref{thm:peps_capped_distance_bounds}
     and (\ref{eq:peps_capped_distance_witness}) gives both identities and the
     witness $v\in\mathcal V$.
 \end{proof}
 
-\begin{theorem}[Cumulative layer identities]
+\begin{lemma}[Cumulative layer identities]
     \label{thm:peps_cumulative_layer_identities}
     \lean{TNLean.PEPS.Approximation.cumulativeLayer_zero,
         TNLean.PEPS.Approximation.cumulativeLayer_subset,
@@ -166,7 +166,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
         A_j=\{x\in X:j=m\text{ or }s_j\le\delta(x)\}.
         \label{eq:peps_cumulative_threshold}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,
@@ -174,7 +174,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     The definition $A_j=\bigcup_{i\le j}B_i$ immediately gives $A_0=B_0$,
     $B_j\subseteq A_j\subseteq X$, monotonicity, and $A_{j+1}=A_j\cup B_{j+1}$.
     If $x\in B_i$ with $i\le j\le m$, then either $i=j=m$ or
-    $\delta(x)\ge s_i\ge s_j$ by Theorem~\ref{thm:peps_dyadic_scale_bounds}.
+    $\delta(x)\ge s_i\ge s_j$ by Lemma~\ref{thm:peps_dyadic_scale_bounds}.
     Conversely, induction on $j$ using $s_j=2s_{j+1}$ and
     (\ref{eq:peps_annular_layers}) shows that every $x\in X$ with $j=m$ or
     $s_j\le\delta(x)$ lies in $A_j$, proving (\ref{eq:peps_cumulative_threshold}).
@@ -193,7 +193,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Exhaustion and cumulative separation]
+\begin{lemma}[Exhaustion and cumulative separation]
     \label{thm:peps_annular_separation}
     \lean{TNLean.PEPS.Approximation.annularLayer_disjoint,
         TNLean.PEPS.Approximation.cumulativeLayer_last,
@@ -211,7 +211,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     (\ref{eq:peps_angular_separation}) holds, then for every $x\in A_j$ and
     $y\in E$, $\operatorname{dist}_{\infty}(x,y)\ge as_j$ when $0\le j<m$ and
     $\operatorname{dist}_{\infty}(x,y)\ge as_j/2$ when $0\le j\le m$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_annular_cutoff,thm:peps_cumulative_layer_identities,
@@ -221,7 +221,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     (\ref{eq:peps_cumulative_threshold}) gives $A_m=X$ and
     $A_j=\{x\in X:\delta(x)\ge s_j\}$ for $j<m$. Thus $\max\{t,\delta(x)\}\ge s_j$
     for $x\in A_j$ with $j<m$, and $\max\{t,\delta(x)\}\ge t>s_m/2$ for $j=m$ by
-    Theorem~\ref{thm:peps_annular_cutoff}. When $\mathcal V=\varnothing$,
+    Lemma~\ref{thm:peps_annular_cutoff}. When $\mathcal V=\varnothing$,
     $\delta(x)=n\ge 2s_j$ for $j>0$, so $B_0=X$ and $B_j=\varnothing$ for $j>0$.
 \end{proof}
 
@@ -242,7 +242,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $U_{q,r}(A)=\bigcup_{i\in I_{q,r}(A)}Q_i$.
 \end{definition}
 
-\begin{theorem}[Cell ownership and diameter]
+\begin{lemma}[Cell ownership and diameter]
     \label{thm:peps_grid_ownership}
     \lean{TNLean.PEPS.Approximation.AngularGrid.mem_cell_owner,
         TNLean.PEPS.Approximation.AngularGrid.owner_eq_of_mem_cell,
@@ -253,7 +253,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Every $x\in\mathbb R^2$ satisfies $x\in Q_{\iota(x)}$, and $x\in Q_i$ implies
     $i=\iota(x)$ (so $Q_i\cap Q_j\ne\varnothing\implies i=j$). For
     $x,y\in Q_i$, $\operatorname{dist}_{\infty}(x,y)\le q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid}
@@ -279,7 +279,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Index-square bounds]
+\begin{lemma}[Index-square bounds]
     \label{thm:peps_grid_index_bounds}
     \lean{TNLean.PEPS.Approximation.AngularGrid.card_indexBox,
         TNLean.PEPS.Approximation.AngularGrid.mem_indexBox_of_dist_le,
@@ -289,7 +289,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     One has $|H_N(j)|=(2N+3)^2$ and $|\mathcal C_N(F)|\le |F|(2N+3)^2$.
     If $x\in Q_i$ and $\operatorname{dist}_{\infty}(x,c)\le u\le Nq$,
     then $i\in H_N(\iota(c))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_grid_index_squares,thm:peps_grid_ownership}
@@ -300,7 +300,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $j_k-N-1\le i_k\le j_k+N+1$ for $k=1,2$.
 \end{proof}
 
-\begin{theorem}[Selected-cell counts from a finite cover]
+\begin{lemma}[Selected-cell counts from a finite cover]
     \label{thm:peps_scaled_grid_count}
     \lean{TNLean.PEPS.Approximation.AngularGrid.touches_mem_candidateIndices,
         TNLean.PEPS.Approximation.AngularGrid.exists_selectedIndices_of_cover,
@@ -319,7 +319,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
         \le |F|\left(2\left\lceil\frac{R+r}{d}\right\rceil_++3\right)^2.
         \label{eq:peps_scaled_grid_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_grid_index_bounds,def:peps_angular_grid}
@@ -327,13 +327,13 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $\operatorname{dist}_{\infty}(y,x)\le r$ and
     $\operatorname{dist}_{\infty}(x,c)\le R$, so
     $\operatorname{dist}_{\infty}(y,c)\le R+r\le Nq$.
-    Theorem~\ref{thm:peps_grid_index_bounds} gives
+    Lemma~\ref{thm:peps_grid_index_bounds} gives
     $i\in H_N(\iota(c))\subseteq\mathcal C_N(F)$ and
     $|I_{q,r}(A)|\le|\mathcal C_N(F)|\le|F|(2N+3)^2$. In the scaled case,
     $Rs+rs=(R+r)s\le Nds=Nq$, giving (\ref{eq:peps_scaled_grid_count}).
 \end{proof}
 
-\begin{theorem}[Enlargement and cell selection]
+\begin{lemma}[Enlargement and cell selection]
     \label{thm:peps_grid_enlargement}
     \lean{TNLean.PEPS.Approximation.AngularGrid.near_union,
         TNLean.PEPS.Approximation.AngularGrid.near_mono,
@@ -349,12 +349,12 @@ in the September 24, 2026 polynomial-PEPS manuscript.
         A^{+r}\subseteq U_{q,r}(A)\subseteq A^{+(r+q)}.
         \label{eq:peps_grid_enlargement}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid,thm:peps_grid_ownership}
     The union and monotonicity laws follow directly from
-    Definition~\ref{def:peps_angular_grid}. By Theorem~\ref{thm:peps_grid_ownership},
+    Definition~\ref{def:peps_angular_grid}. By Lemma~\ref{thm:peps_grid_ownership},
     each $x\in A^{+r}$ lies in $Q_{\iota(x)}\subseteq U_{q,r}(A)$, and if
     $x\in Q_i\subseteq U_{q,r}(A)$ with $y\in Q_i$, $z\in A$, and
     $\operatorname{dist}_{\infty}(y,z)\le r$, then
@@ -362,7 +362,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     (\ref{eq:peps_grid_enlargement}).
 \end{proof}
 
-\begin{theorem}[Counting newly selected cells]
+\begin{lemma}[Counting newly selected cells]
     \label{thm:peps_new_cell_count}
     \lean{TNLean.PEPS.Approximation.AngularGrid.touches_new_of_not_old,
         TNLean.PEPS.Approximation.AngularGrid.exists_newIndices_scaled}
@@ -372,7 +372,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $d,s>0$ and $B\subseteq\bigcup_{c\in F}\overline B_\infty(c,Rs)$ for a finite
     set $F\subseteq\mathbb R^2$, then $I_{ds,rs}(A\cup B)\setminus I_{ds,rs}(A)$
     is finite with cardinality at most $|F|(2\lceil(R+r)/d\rceil_++3)^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid,thm:peps_scaled_grid_count}
@@ -382,7 +382,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     (\ref{eq:peps_scaled_grid_count}) bounds its cardinality.
 \end{proof}
 
-\begin{theorem}[Bounded covers and newly selected cells]
+\begin{lemma}[Bounded covers and newly selected cells]
     \label{thm:peps_annular_cell_count}
     \lean{TNLean.PEPS.Approximation.exists_annularLayer_cover,
         TNLean.PEPS.Approximation.exists_annularLayer_square_cover,
@@ -400,22 +400,22 @@ in the September 24, 2026 polynomial-PEPS manuscript.
         \label{eq:peps_annular_cell_count}
     \end{align}
     and for $1\le j\le m$, $|I_{ds_j,rs_j}(A_j)\setminus I_{ds_j,rs_j}(A_{j-1})|\le M$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_annular_mark_witness,thm:peps_scaled_grid_count,
         thm:peps_grid_ownership,thm:peps_new_cell_count,
         thm:peps_cumulative_layer_identities}
     For $j=0$, either $X=\varnothing$ or $B_0\subseteq X\subseteq\overline B_\infty(x_0,A_0s_0)$
-    for any $x_0\in X$. For $j>0$, Theorem~\ref{thm:peps_annular_mark_witness}
+    for any $x_0\in X$. For $j>0$, Lemma~\ref{thm:peps_annular_mark_witness}
     gives $B_j\subseteq\bigcup_{v\in\mathcal V}\overline B_\infty(v,2s_j)$.
-    Applying Theorem~\ref{thm:peps_scaled_grid_count} at scale $s=s_j$ yields
+    Applying Lemma~\ref{thm:peps_scaled_grid_count} at scale $s=s_j$ yields
     (\ref{eq:peps_annular_cell_count}), and applying
-    Theorem~\ref{thm:peps_new_cell_count} to $A_j=A_{j-1}\cup B_j$ gives the
+    Lemma~\ref{thm:peps_new_cell_count} to $A_j=A_{j-1}\cup B_j$ gives the
     bound for $I_{ds_j,rs_j}(A_j)\setminus I_{ds_j,rs_j}(A_{j-1})$.
 \end{proof}
 
-\begin{theorem}[Clearance under enlargement]
+\begin{lemma}[Clearance under enlargement]
     \label{thm:peps_enlargement_clearance}
     \lean{TNLean.PEPS.Approximation.AngularGrid.selectedRegion_clearance,
         TNLean.PEPS.Approximation.AngularGrid.near_core_clearance}
@@ -429,7 +429,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     \end{align}
     Moreover, if $x\in A^{+r}$ and $y\notin A^{+\rho}$, then
     $\rho-r<\operatorname{dist}_{\infty}(x,y)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_grid_enlargement,def:peps_angular_grid}
@@ -443,7 +443,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $\operatorname{dist}_{\infty}(y,z)\le\rho$, contradicting $y\notin A^{+\rho}$.
 \end{proof}
 
-\begin{theorem}[Cell clearance at a fixed scale]
+\begin{lemma}[Cell clearance at a fixed scale]
     \label{thm:peps_scaled_cell_clearance}
     \lean{TNLean.PEPS.Approximation.AngularGrid.angular_clearance_pos,
         TNLean.PEPS.Approximation.AngularGrid.angular_selectedRegion_clearance}
@@ -453,7 +453,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $u\in A$ and $v\in E$. For $x\in U_{ds,3a's/2}(A)$ and $y\in E^{+3a's/2}$,
     $\operatorname{dist}_{\infty}(x,y)\ge(a/2-3a'-d)s$, with $a/2-3a'-d>0$ when
     $0<a'<a/100$ and $d<a'/4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_enlargement_clearance}
@@ -462,7 +462,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $a>100a'$ and $d<a'/4$ we have $a/2-3a'-d>(50-3-1/4)a'>0$.
 \end{proof}
 
-\begin{theorem}[Old-group containment and physical buffers]
+\begin{lemma}[Old-group containment and physical buffers]
     \label{thm:peps_annular_cell_clearance}
     \lean{TNLean.PEPS.Approximation.AngularGrid.old_selectedRegion_subset,
         TNLean.PEPS.Approximation.AngularGrid.exterior_near_subset,
@@ -490,36 +490,36 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     $\Lambda\cap A_j^{+a's}$ (respectively $\Lambda\cap E^{+a's}$) has
     $\ell_\infty$-distance greater than $a's/2$ from $\Lambda\setminus R_\Lambda$
     (respectively $\Lambda\setminus C_\Lambda$).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_annular_separation,thm:peps_grid_enlargement,
         thm:peps_enlargement_clearance,thm:peps_scaled_cell_clearance}
     By (\ref{eq:peps_grid_enlargement}) and $d<a'/4$,
     $U_{ds,3a's/2}(A_{j-1})\subseteq A_{j-1}^{+(3a'/2+d)s}\subseteq A_{j-1}^{+2a's}$.
-    Combining Theorem~\ref{thm:peps_annular_separation} with
-    Theorem~\ref{thm:peps_scaled_cell_clearance} gives
+    Combining Lemma~\ref{thm:peps_annular_separation} with
+    Lemma~\ref{thm:peps_scaled_cell_clearance} gives
     (\ref{eq:peps_annular_clearance}) and $R_\Lambda\cap C_\Lambda=\varnothing$.
     Finally, (\ref{eq:peps_grid_enlargement}) and the second clause of
-    Theorem~\ref{thm:peps_enlargement_clearance} with $r=a's$ and $\rho=3a's/2$
+    Lemma~\ref{thm:peps_enlargement_clearance} with $r=a's$ and $\rho=3a's/2$
     yield the core inclusions and the buffer clearance $\rho-r=a's/2$.
 \end{proof}
 
-\begin{theorem}[Uniform width inside the cell buffer]
+\begin{lemma}[Uniform width inside the cell buffer]
     \label{thm:peps_annular_reset_width}
     \lean{TNLean.PEPS.Approximation.AngularGrid.exists_angular_cell_reset_width}
     \leanok
     For fixed real $K,C_3,C_4$ and $a'>0$, there exist $D\ge1$ and $L_0\ge2$
     such that $D\ge4C_4/(a'/3)$ and, for every $L\ge L_0$ and $s\ge D\log L$,
     $C_3(1+\log s)^K+C_4\log L<(a'/3)s$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_angular_reset_uniform_width}
-    Apply Theorem~\ref{thm:peps_angular_reset_uniform_width} with $c=a'/3$.
+    Apply Lemma~\ref{thm:peps_angular_reset_uniform_width} with $c=a'/3$.
 \end{proof}
 
-\begin{theorem}[Clearance of the closed ambient cell]
+\begin{lemma}[Clearance of the closed ambient cell]
     \label{thm:peps_selected_cell_closure_clearance}
     \lean{TNLean.PEPS.Approximation.AngularGrid.selected_cell_closure_clearance}
     \leanok
@@ -529,7 +529,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     If $\operatorname{dist}_\infty(x,y)\ge b$ for all $x\in U_{s,r}(A)$ and
     $y\in C$, then $\operatorname{dist}_\infty(x,y)\ge b$ for all
     $x\in\overline{Q_i}$ and $y\in C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_grid}
@@ -537,22 +537,22 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     and the latter set is closed, so it contains $\overline{Q_i}$.
 \end{proof}
 
-\begin{theorem}[Membership in a selected cell]
+\begin{lemma}[Membership in a selected cell]
     \label{thm:peps_selected_cell_owner}
     \lean{TNLean.PEPS.Approximation.AngularGrid.mem_selectedRegion_iff_touches_owner}
     \leanok
     \uses{def:peps_angular_grid}
     For $s>0$, $x\in U_{s,r}(A)$ if and only if $\iota(x)\in I_{s,r}(A)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_grid_ownership,def:peps_angular_grid}
-    By Theorem~\ref{thm:peps_grid_ownership}, $x\in Q_{\iota(x)}$ and $x\in Q_i$
+    By Lemma~\ref{thm:peps_grid_ownership}, $x\in Q_{\iota(x)}$ and $x\in Q_i$
     implies $i=\iota(x)$, so $x\in\bigcup_{i\in I_{s,r}(A)}Q_i$ if and only if
     $\iota(x)\in I_{s,r}(A)$.
 \end{proof}
 
-\begin{theorem}[Physical and integer sup distances]
+\begin{lemma}[Physical and integer sup distances]
     \label{thm:peps_physical_integer_sup_distance}
     \lean{TNLean.PEPS.Approximation.dist_sitePosition_eq_supDist}
     \leanok
@@ -564,7 +564,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
          & =\max\{|x_1-y_1|,|x_2-y_2|\}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_information_bound}

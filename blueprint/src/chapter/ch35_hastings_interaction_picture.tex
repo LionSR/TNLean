@@ -19,7 +19,7 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Interaction-picture factorization]
+\begin{lemma}[Interaction-picture factorization]
     \label{thm:hastings_interaction_picture}
     \lean{TNLean.MPS.AreaLaw.Hastings.interactionPropagator_hasDerivAt,
         TNLean.MPS.AreaLaw.Hastings.eq_interactionPropagator_of_hasDerivAt,
@@ -39,7 +39,7 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
     \end{align}
     and is unitary when $A=A^\dagger$ and $B=B^\dagger$
     \cite[lines 853--864]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Differentiating~(\ref{eq:hastings_interaction_propagator}) gives
     (\ref{eq:hastings_interaction_equation}) and
@@ -49,7 +49,7 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
     $(WV)'=0$, hence $W(t)V(t)=1$ and $W=U$.
 \end{proof}
 
-\begin{theorem}[Cut-off commutation estimate]
+\begin{lemma}[Cut-off commutation estimate]
     \label{thm:hastings_cutoff_commutation}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_hermitianUnitaryPath_mul_sub_le}
     \leanok
@@ -60,7 +60,7 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
     \end{align}
     (applied with $K=M_L+M_R$ and $X=O_LO_R$ in
     \cite[lines 878--880]{Hastings2007AreaLaw}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $\frac d{ds}(e^{iKs}X)=e^{iKs}\,iKX$ has norm $\|KX\|$, the mean
     value inequality on $[0,t]$ gives~(\ref{eq:hastings_cutoff_commutation}).
@@ -82,20 +82,20 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
     \cite[lines 891--897]{Hastings2007AreaLaw}).
 \end{definition}
 
-\begin{theorem}[The Gaussian average is a contraction]
+\begin{lemma}[The Gaussian average is a contraction]
     \label{thm:hastings_interaction_average_norm}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_le}
     \leanok
     \uses{def:hastings_interaction_average}
     If $A=A^\dagger$ and $B=B^\dagger$, then $\|P_B\|\leq1$ for every $h\ge0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_interaction_picture}
-    By Theorem~\ref{thm:hastings_interaction_picture}, $\|U(t)\|=1$, and
+    By Lemma~\ref{thm:hastings_interaction_picture}, $\|U(t)\|=1$, and
     $\gamma_h(\R)=1$.
 \end{proof}
 
-\begin{theorem}[Moving the cut-off past the boundary evolution]
+\begin{lemma}[Moving the cut-off past the boundary evolution]
     \label{thm:hastings_interaction_average_last}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_mul_sub_le,
         TNLean.MPS.AreaLaw.Hastings.norm_interactionAverage_mul_mul_sub_le}
@@ -110,14 +110,14 @@ $e^{i(A+B)t}=U(t)e^{iAt}$ with $A=M_L+M_R$ and $B=M_B$.
     \end{align}
     For $A=M_L+M_R$, $B=M_B$, $X=O_LO_R$, and $h=q/\Delta E^2$, this gives
     \cite[eq.~(last), lines 881--890]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_interaction_picture,thm:hastings_cutoff_commutation,
         thm:hastings_gaussian_absolute_moment}
     By~(\ref{eq:hastings_interaction_factorization}) and
     (\ref{eq:hastings_cutoff_commutation}),
     $\|e^{i(A+B)t}X-U(t)X\|=\|U(t)(e^{iAt}X-X)\|\leq|t|\,\|AX\|$. Integrating
-    against $\gamma_h$ via Theorem~\ref{thm:hastings_gaussian_absolute_moment}
+    against $\gamma_h$ via Lemma~\ref{thm:hastings_gaussian_absolute_moment}
     gives $\|\int e^{i(A+B)t}\,d\gamma_h\,X-P_BX\|\leq\sqrt h\,\|AX\|$, and the
     triangle inequality yields~(\ref{eq:hastings_interaction_average_last}).
 \end{proof}

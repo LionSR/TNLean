@@ -66,14 +66,14 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[BNT-refined horizontal form gives the BNT MPV representation]
+\begin{lemma}[BNT-refined horizontal form gives the BNT MPV representation]
     \label{thm:horizontal_cf_gives_mpv_representation}
     \lean{MPOTensor.IsHorizontalCF.hasHorizontalCFMPVRepresentation}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:horizontal_cf_mpv_representation}
     Every MPO tensor in normalized BNT-refined horizontal form has the
     associated positive-length BNT matrix-product-vector representation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -452,7 +452,7 @@ $\mathcal K_j$ with the label $j$:
 As in \cite[Appendix~C.2, lines~1666--1670]{Cirac2016MPDO_arXiv}, this
 contraction yields the inverse identity $K^{-1}K=\bigoplus_j\Id_j$.
 
-\begin{theorem}[Finite-word trace-separation criterion]
+\begin{lemma}[Finite-word trace-separation criterion]
     \label{thm:propblockinj_abstract}
     \lean{MPSTensor.hasFiniteWordTraceSeparation_of_propBlockInjective}
     \leanok
@@ -460,7 +460,7 @@ contraction yields the inverse identity $K^{-1}K=\bigoplus_j\Id_j$.
     If a block family has a common injective word length and finite words that
     select each block from the others, then the family has finite-word trace
     separation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

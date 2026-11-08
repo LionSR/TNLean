@@ -31,7 +31,7 @@ satisfying $L_kT_r=T_rL_k$.
     Following \cite[Section~6]{Schuch2010PEPS}, $\alpha$ is \emph{flat on $R$} if there exist $k_v\in G$ ($v\in R$) such that $k_v^{-1}\alpha_{v,e}=k_w^{-1}\alpha_{w,e}$ on every internal edge $e=(v,w)\in E_R$; write $D_R$ for the diagonal projector onto flat configurations on $R$.
 \end{definition}
 
-\begin{theorem}[Commutation of regional translations and flat support]%
+\begin{lemma}[Commutation of regional translations and flat support]%
     \label{thm:peps_regional_translation_commutation}
     \lean{TNLean.PEPS.regularRegionHalfEdgeRightEquiv_commute_gauge,
         TNLean.PEPS.regularRegionHalfEdgeRightMatrix_commute_vertexTranslation,
@@ -48,7 +48,7 @@ satisfying $L_kT_r=T_rL_k$.
     \leanok
     \uses{def:peps_regional_translation_averages,def:peps_regional_half_edge_flat}
     For all $k,r$, $L_kT_r=T_rL_k$, and flatness of $\alpha$, $L_k\alpha$, and $T_r\alpha$ on $R$ are equivalent. Consequently $W_r,U_k,P_R,D_R,B_{R,e},B_{R,f}$ commute pairwise as stated: $[W_r,U_k]=[W_r,P_R]=[D_R,W_r]=[D_R,U_k]=[D_R,P_R]=[B_{R,e},D_R]=[B_{R,e},U_k]=[B_{R,e},P_R]=[B_{R,e},B_{R,f}]=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By (\ref{eq:peps_regional_left_right_actions}), $(k_v\alpha_{v,e})r_e=k_v(\alpha_{v,e}r_e)$, and flatness is preserved by $T_r$ (right cancellation) and by $L_k$ (via $q\mapsto kq$). Thus the diagonal projector $D_R$ commutes with $W_r$ and $U_k$, and averaging in (\ref{eq:peps_regional_translation_averages}) yields the remaining commutators.
 \end{proof}
@@ -75,19 +75,19 @@ satisfying $L_kT_r=T_rL_k$.
     and set $b(u,\eta)_{x,e}=\eta_e$ at the unique endpoint $x\in R$ of $e\in\partial E_R$; this gives a bijection $(u,\eta)\mapsto b(u,\eta)$ with inverse $u_e=\alpha_{w,e}\alpha_{v,e}^{-1}$. For $\theta\in G^{\partial E_R}$, write $b(u,\theta)=b(u,\eta^\theta)$ where $\eta^\theta|_{E_R}=1$ and $\eta^\theta|_{\partial E_R}=\theta$.
 \end{definition}
 
-\begin{theorem}[Normalization of internal references]%
+\begin{lemma}[Normalization of internal references]%
     \label{thm:peps_regional_reference_normalization}
     \lean{TNLean.PEPS.regularRegionHalfEdgesOfBonds_right_normalize,
         TNLean.PEPS.regularRegionHalfEdgesOfBonds_apply_of_rightInvariant}
     \leanok
     \uses{def:peps_regional_quotient_coordinates,def:peps_regional_translation_averages}
     With $r|_{E_R}=\eta|_{E_R}$ and $r|_{E\setminus E_R}=1$, one has $T_r b(u,\eta|_{\partial E_R})=b(u,\eta)$. Hence if $f(T_r\alpha)=f(\alpha)$ whenever $r|_{\partial E_R}=1$, then $f(b(u,\eta))=f(b(u,\eta|_{\partial E_R}))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Apply $T_r$ directly to (\ref{eq:peps_regional_quotient_coordinates}).
 \end{proof}
 
-\begin{theorem}[Expansion in inserted regional columns]%
+\begin{lemma}[Expansion in inserted regional columns]%
     \label{thm:peps_regional_invariant_expansion}
     \lean{TNLean.PEPS.sum_regularRegionProjectorProduct_eq,
         TNLean.PEPS.eq_sum_regularProjectorTwistedRegionMatrix_of_invariant}
@@ -104,13 +104,13 @@ satisfying $L_kT_r=T_rL_k$.
         f(b(u,\theta))\,\Gamma_R(u)\ket\theta.
         \label{eq:peps_regional_supported_orbit_expansion}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regional_reference_normalization}
-    Left invariance gives (\ref{eq:peps_regional_left_average_fixed}); reindexing $\beta=b(u,\eta)$, applying Theorem~\ref{thm:peps_regional_reference_normalization}, and summing over $\eta|_{E_R}$ at fixed $\theta=\eta|_{\partial E_R}$ yields (\ref{eq:peps_regional_supported_orbit_expansion}).
+    Left invariance gives (\ref{eq:peps_regional_left_average_fixed}); reindexing $\beta=b(u,\eta)$, applying Lemma~\ref{thm:peps_regional_reference_normalization}, and summing over $\eta|_{E_R}$ at fixed $\theta=\eta|_{\partial E_R}$ yields (\ref{eq:peps_regional_supported_orbit_expansion}).
 \end{proof}
 
-\begin{theorem}[Removing flat internal insertions]%
+\begin{lemma}[Removing flat internal insertions]%
     \label{thm:peps_regional_flat_column_transport}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_regionGauge,
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_eq_open_of_flat,
@@ -127,12 +127,12 @@ satisfying $L_kT_r=T_rL_k$.
         \label{eq:peps_regional_column_boundary_transport}
     \end{align}
     Then the general inserted contraction satisfies $\Gamma_R[u]\ket\theta=\Gamma_R[u^k]\ket{\tau_{k,u}\theta}$; in particular, if $b(u,\theta)$ is flat on $R$, there exists $k\in G^R$ with $u^k=1$ and $\Gamma_R(u)\ket\theta=\Gamma_R\ket{\tau_{k,\bar u}\theta}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reindexing the bond variables by $\eta_e\mapsto k_v^{-1}\eta_e$ (if $v\in R$) or $k_w^{-1}u_e\eta_e$ (if $v\notin R,w\in R$) and using left invariance of $P_v$ gives $\Gamma_R[u]\ket\theta=\Gamma_R[u^k]\ket{\tau_{k,u}\theta}$. When $b(u,\theta)$ is flat on $R$, Definition~\ref{def:peps_regional_half_edge_flat} gives $k\in G^R$ with $k_v^{-1}=k_w^{-1}u_e$, i.e., $u^k_e=k_w^{-1}u_ek_v=1$ on $E_R$.
 \end{proof}
 
-\begin{theorem}[The regional range in regular coordinates]%
+\begin{lemma}[The regional range in regular coordinates]%
     \label{thm:peps_regional_range_invariant_flat}
     \lean{TNLean.PEPS.mem_regularProjectorOpenRegionRange_iff,
         TNLean.PEPS.mem_regularProjectorOpenRegionRange_of_invariant_flat,
@@ -146,10 +146,10 @@ satisfying $L_kT_r=T_rL_k$.
         \item $\forall r\text{ with }r|_{\partial E_R}=1,\ f(T_r\alpha)=f(\alpha)$;
         \item $f(\alpha)=0$ whenever $\alpha$ is not flat on $R$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regional_invariant_expansion,thm:peps_regional_flat_column_transport}
-    If (1)--(3) hold, every nonzero summand in (\ref{eq:peps_regional_supported_orbit_expansion}) has $b(u,\theta)$ flat on $R$, hence equals $\Gamma_R\ket{\tau_{k,\bar u}\theta}\in\operatorname{range}\Gamma_R$ by Theorem~\ref{thm:peps_regional_flat_column_transport}. Conversely, every column $\Gamma_R\ket\theta$ satisfies (1)--(3).
+    If (1)--(3) hold, every nonzero summand in (\ref{eq:peps_regional_supported_orbit_expansion}) has $b(u,\theta)$ flat on $R$, hence equals $\Gamma_R\ket{\tau_{k,\bar u}\theta}\in\operatorname{range}\Gamma_R$ by Lemma~\ref{thm:peps_regional_flat_column_transport}. Conversely, every column $\Gamma_R\ket\theta$ satisfies (1)--(3).
 \end{proof}
 
 \begin{definition}[Ambient regional constraints]%
@@ -170,7 +170,7 @@ satisfying $L_kT_r=T_rL_k$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Orthogonal regional constraints]%
+\begin{lemma}[Orthogonal regional constraints]%
     \label{thm:peps_ambient_regional_constraint_projection}
     \lean{TNLean.PEPS.regularRegionEdgeAverage_isStarProjection,
         TNLean.PEPS.regularRegionEdgeAverage_mul_self,
@@ -191,13 +191,13 @@ satisfying $L_kT_r=T_rL_k$.
         \operatorname{ran}Q_R                     & =\bigcap_{v\in R}\ker(A_v-I)\cap\bigcap_{e\subseteq R}\ker(B_e-I)\cap\ker(D_R-I).
         \label{eq:peps_ambient_regional_constraint_fixed}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_ambient_regional_constraint_commute}
-    Group averaging and diagonal $\{0,1\}$-entries make each $A_v,B_{R,e},D_R$ a self-adjoint idempotent, and commuting orthogonal projectors (Theorem~\ref{thm:peps_ambient_regional_constraint_commute}) have orthogonal-projector products with common fixed space (\ref{eq:peps_ambient_regional_constraint_fixed}).
+    Group averaging and diagonal $\{0,1\}$-entries make each $A_v,B_{R,e},D_R$ a self-adjoint idempotent, and commuting orthogonal projectors (Lemma~\ref{thm:peps_ambient_regional_constraint_commute}) have orthogonal-projector products with common fixed space (\ref{eq:peps_ambient_regional_constraint_fixed}).
 \end{proof}
 
-\begin{theorem}[Commutation for arbitrary overlapping regions]%
+\begin{lemma}[Commutation for arbitrary overlapping regions]%
     \label{thm:peps_ambient_regional_constraint_commute}
     \lean{TNLean.PEPS.regularGlobalConstraint_commute,
         TNLean.PEPS.regularGlobalRegionFlatProjector_commute_right,
@@ -212,7 +212,7 @@ satisfying $L_kT_r=T_rL_k$.
     \leanok
     \uses{def:peps_ambient_regional_constraints}
     For all $i,j\in V\sqcup E\sqcup\mathcal P(V)$, $C_iC_j=C_jC_i$, so any two finite products of the constraints $C_i$ commute; in particular, $Q_RQ_S=Q_SQ_R$ for all $R,S\subseteq V$ (\cite[Theorem~6.12]{Schuch2010PEPS}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By (\ref{eq:peps_regional_left_right_actions}), vertex and shared-edge translations commute and preserve flatness on every $R\subseteq V$, while diagonal projectors $D_R,D_S$ commute pairwise; hence $[C_i,C_j]=0$ for all $i,j$ and $[Q_R,Q_S]=0$.
 \end{proof}

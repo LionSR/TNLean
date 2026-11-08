@@ -21,7 +21,7 @@ on these bond matrix spaces, represented in their matrix-unit bases.
     of its final bond. Its physical indices are those of the original site tensors.
 \end{definition}
 
-\begin{theorem}[Derived rectangular references and window rate]
+\begin{lemma}[Derived rectangular references and window rate]
     \label{thm:ldp_rectangular_window_rate}
     \lean{VaryingBondChain.exists_compatible_actual_densities,
         VaryingBondChain.exists_rectangular_block_mixing_of_window_domination}
@@ -39,7 +39,7 @@ on these bond matrix spaces, represented in their matrix-unit bases.
         \le 2D(1-\eta)^{\lfloor(b-a)/s\rfloor}.
     \]
     Neither compatible references nor an interval convergence rate are hypotheses.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A fixed density of the full-cycle channel, propagated along suffixes,
     gives the references. Subtracting the trace-prepare minorizer from each complete
@@ -94,7 +94,7 @@ These need not be equal, and none is a physical spin index.
 \end{center}
 % TENKZ-RECTANGULAR-WINDOW-RESIDUAL-END
 
-\begin{theorem}[Physical preparation from rectangular local windows]
+\begin{lemma}[Physical preparation from rectangular local windows]
     \label{thm:ldp_rectangular_window_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
     \leanok
@@ -105,7 +105,7 @@ These need not be equal, and none is a physical spin index.
     $0<\varepsilon\le1$ admits a unit vector of physical ring preparation depth
     at most $C\log(N/\varepsilon)$ and normalized overlap error at most
     $\varepsilon$ against the original MPS.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The window on the ring of length $s$ forces $\eta\le1$. Weakening the minorization
     to $\eta/2$ and setting $r=-\log(1-\eta/2)/s>0$ gives

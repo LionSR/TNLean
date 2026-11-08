@@ -12,7 +12,7 @@
     \cite[Section~4.1]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Group and algebra invariant sectors]
+\begin{lemma}[Group and algebra invariant sectors]
     \label{thm:peps_unitary_representation_algebra}
     \lean{Subrepresentation.isAtom_of_isIrreducible_toRepresentation,
         Representation.isInvariantSubspace_generatedMatrixStarAlgebra_iff,
@@ -28,7 +28,7 @@
     subspace if and only if it intertwines every group operator there.
     Two irreducible invariant subspaces have the same algebra isotype
     if and only if their restricted group representations are equivalent.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $U(g)^*=U(g^{-1})$, closure under adjoints introduces no new
     generators. Invariance and intertwining extend from the generators
@@ -42,7 +42,7 @@
     algebra intertwiner.
 \end{proof}
 
-\begin{theorem}[Orthonormal irreducible matrix blocks]
+\begin{lemma}[Orthonormal irreducible matrix blocks]
     \label{thm:peps_unitary_irreducible_blocks}
     \lean{Representation.exists_unitary_irreducible_matrix_blocks}
     \leanok
@@ -58,7 +58,7 @@
         U(g)e_{i,a,j}=\sum_{j'}D_i(g)_{j'j}e_{i,a,j'}.
         \label{eq:peps_unitary_irreducible_rows}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the orthonormal adapted-basis decomposition of a
     finite-dimensional star algebra to $\mathcal A_U$, the preceding

@@ -60,6 +60,29 @@ theorem leftColumns_subset_span (S : Set (LeftBlockVector L q k)) (I : Finset ι
   apply (Submodule.starProjection_eq_self_iff).mp
   rw [← toLp_spanProjection_mulVec, hcol]
 
+/-- Extending the right factor preserves any subspace containing all left columns.
+This is the support assertion of LVV13, `algo53.tex`, Claim `c:2`, lines 520–527, for an
+arbitrary finite environment and an arbitrary right extension. -/
+theorem rightApply_mem_leftSupportSubmodule_of_columns {β : Type*} [Fintype β]
+    (S : Set (LeftBlockVector L q k))
+    (u : EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × β))
+    (W : Matrix ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) β ℂ)
+    (hu : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ Submodule.span ℂ S) :
+    WithLp.toLp 2 (fun z ↦ rightApply W u
+      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z)) ∈
+      leftSupportSubmodule S := by
+  classical
+  refine mem_leftSupportSubmodule.mpr (fun b ↦ ?_)
+  have hcol : cutColumn (WithLp.toLp 2 (fun z ↦ rightApply W u
+      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))) k b =
+      WithLp.toLp 2 (((schmidtCoeffMatrix (WithLp.ofLp u)) * Wᵀ).col b) := by
+    ext a
+    simp only [cutColumn_apply, cutMatrix_apply, Equiv.apply_symm_apply]
+    exact congrFun (congrFun (schmidtCoeffMatrix_ofLp_rightApply W u) a) b
+  rw [hcol, Matrix.col_mul_eq_mulVec_col, Matrix.mulVec_eq_sum, WithLp.toLp_sum]
+  simp only [op_smul_eq_smul, WithLp.toLp_smul]
+  exact Submodule.sum_mem _ (fun a _ ↦ Submodule.smul_mem _ _ (hu a))
+
 /-- Extending the right factor of an indexed vector leaves its left support in the span
 of the retained columns. The matrix on the right is arbitrary. This is the support step
 in LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
@@ -71,16 +94,9 @@ theorem rightApply_mem_leftSupportSubmodule_leftColumns (I : Finset ι)
       (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z)) ∈
       leftSupportSubmodule (leftColumns I u : Set (LeftBlockVector L q k)) := by
   classical
-  refine mem_leftSupportSubmodule.mpr (fun b ↦ ?_)
-  have hcol : cutColumn (WithLp.toLp 2 (fun z ↦ rightApply W (u i)
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))) k b =
-      WithLp.toLp 2 (((schmidtCoeffMatrix (WithLp.ofLp (u i))) * Wᵀ).col b) := by
-    ext a
-    simp only [cutColumn_apply, cutMatrix_apply, Equiv.apply_symm_apply]
-    exact congrFun (congrFun (schmidtCoeffMatrix_ofLp_rightApply W (u i)) a) b
-  rw [hcol, Matrix.col_mul_eq_mulVec_col, Matrix.mulVec_eq_sum, WithLp.toLp_sum]
-  simp only [op_smul_eq_smul, WithLp.toLp_smul]
-  refine Submodule.sum_mem _ (fun j _ ↦ Submodule.smul_mem _ _ (Submodule.subset_span ?_))
-  exact Finset.mem_image.mpr ⟨(i, j), Finset.mem_product.mpr ⟨hi, Finset.mem_univ _⟩, rfl⟩
+  apply rightApply_mem_leftSupportSubmodule_of_columns
+  intro a
+  exact Submodule.subset_span (Finset.mem_image.mpr
+    ⟨(i, a), Finset.mem_product.mpr ⟨hi, Finset.mem_univ _⟩, rfl⟩)
 
 end TNLean.MPS.AreaLaw

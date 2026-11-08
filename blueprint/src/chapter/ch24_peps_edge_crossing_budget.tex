@@ -13,7 +13,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[One inside endpoint]
+\begin{lemma}[One inside endpoint]
     \label{thm:area_law_crossing_inside_endpoint}
     \lean{
         TNLean.PEPS.AreaLaw.not_mem_crossingTerms_singleton,
@@ -22,13 +22,13 @@
     }
     \leanok
     No singleton $\{v\}$ meets both $A$ and $\Lambda\setminus A$. If $\{x,y\}$ meets both $A$ and $\Lambda\setminus A$, then $\{x,y\}\cap A=\{v\}$ is a singleton, and for a $q$-element alphabet ($q\ge0$), the configuration set on $\{x,y\}\cap A$ has cardinality $q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\{x,y\}\cap A\ne\varnothing$ and $\{x,y\}\setminus A\ne\varnothing$, exactly one of $x,y$ belongs to $A$, so $|\{x,y\}\cap A|=1$ and its $q$-alphabet configuration space has size $q^1=q$.
 \end{proof}
 
-\begin{theorem}[Crossing supports and unordered edges]
+\begin{lemma}[Crossing supports and unordered edges]
     \label{thm:area_law_crossing_support_count}
     \lean{
         TNLean.PEPS.AreaLaw.inl_not_mem_crossingTerms,
@@ -39,14 +39,14 @@
     \leanok
     \uses{def:area_law_nearest_neighbor_support,def:area_law_hamiltonian}
     For every $A\subseteq\Lambda$, $C(A)=\partial_\Lambda A\subseteq E_\Lambda$, so $|C(A)|=|\partial_\Lambda A|$, and for every $i\in C(A)$ and integer $q\ge0$, the $q$-alphabet configuration set on $S_i\cap A$ has cardinality $q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_crossing_inside_endpoint}
-    Apply Theorem~\ref{thm:area_law_crossing_inside_endpoint} to (\ref{eq:area_law_crossing_supports}).
+    Apply Lemma~\ref{thm:area_law_crossing_inside_endpoint} to (\ref{eq:area_law_crossing_supports}).
 \end{proof}
 
-\begin{theorem}[Exact weighted crossing sum]
+\begin{lemma}[Exact weighted crossing sum]
     \label{thm:area_law_nearest_neighbor_budget}
     \lean{TNLean.PEPS.AreaLaw.nearestNeighbor_crossing_budget}
     \leanok
@@ -58,14 +58,14 @@
         \label{eq:area_law_exact_crossing_sum}
     \end{align}
     (\cite[Section~4]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_crossing_support_count}
-    By Theorem~\ref{thm:area_law_crossing_support_count}, $d_{ij}=q$ for all $i\in C(A_j)$ and $|C(A_j)|=|\partial_\Lambda A_j|$.
+    By Lemma~\ref{thm:area_law_crossing_support_count}, $d_{ij}=q$ for all $i\in C(A_j)$ and $|C(A_j)|=|\partial_\Lambda A_j|$.
 \end{proof}
 
-\begin{theorem}[A square-grid maximizing family with controlled energy]
+\begin{lemma}[A square-grid maximizing family with controlled energy]
     \label{thm:square_zero_floor_maximizer_energy}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}
     \leanok
@@ -81,11 +81,11 @@
           & \le B. \label{eq:square_zero_floor_energy}
     \end{align}
     This specializes~\cite{QICLean2026ZeroFloorEnergy} to~\cite{OpenAI2026PolynomialPEPS}; see~\cite{gap:oai26_zero_floor_energy_scope} and~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,
         thm:area_law_crossing_support_count,thm:area_law_nearest_neighbor_budget}
-    Transporting the Hermitian parts of the terms of $H$ by $U$ (Theorem~\ref{thm:square_nearest_neighbor_terms}) gives site and edge terms of norm $\le J$ summing to $\widetilde H$, each split by at most one $D_j$. The zero-floor optimizer bound of~\cite{QICLean2026ZeroFloorEnergy} together with (\ref{eq:area_law_exact_crossing_sum}) gives a global maximizer $K$ with $|\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0|\le B$, and Theorem~\ref{thm:square_area_law_ground_gap} yields $\Delta(1-|\langle\widetilde\Omega,\phi\rangle|^2)\le\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0\le B$.
+    Transporting the Hermitian parts of the terms of $H$ by $U$ (Lemma~\ref{thm:square_nearest_neighbor_terms}) gives site and edge terms of norm $\le J$ summing to $\widetilde H$, each split by at most one $D_j$. The zero-floor optimizer bound of~\cite{QICLean2026ZeroFloorEnergy} together with (\ref{eq:area_law_exact_crossing_sum}) gives a global maximizer $K$ with $|\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0|\le B$, and Lemma~\ref{thm:square_area_law_ground_gap} yields $\Delta(1-|\langle\widetilde\Omega,\phi\rangle|^2)\le\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0\le B$.
 \end{proof}
 
 \subsection{Positive filters on the original square}
@@ -139,7 +139,7 @@
     Let $\sigma:V_L\to\Lambda$ be the canonical site bijection with configuration isometry $U$ and $D_j=\sigma(X_j)$ (extended by $\varnothing$ for $j\ge m$). Conjugating $F_j$ by the regional configuration bijection induced by $\sigma|_{X_j}$ defines $K_j(F)$ on $D_j$, with inverse $F_j(K)$.
 \end{definition}
 
-\begin{theorem}[All admissible families in either coordinate system]
+\begin{lemma}[All admissible families in either coordinate system]
     \label{thm:pinned_filter_coordinates}
     \lean{
         TNLean.PEPS.Approximation.Pinned.NestedFilter.canonicalMatrices_fromCanonical,
@@ -150,13 +150,13 @@
     \leanok
     \uses{def:pinned_filter_coordinates}
     Every feasible family $K$ satisfies $K(F(K))=K$, and every positive family $F$ with feasible $K(F)$ satisfies $F(K(F))=F$. If $a_j>0$ for all $j$, then $F$ is admissible if and only if each $K_j(F)$ is floor-zero feasible at weight $a_j$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Permutation conjugation preserves positivity and spectra, and for $a_j>0$ floor-zero feasibility is equivalent to $F_j\ge0$ and $\sum_r\lambda_r(F_j)^{2/a_j}=1$ (\cite{QICLean2026FilterFeasibility}).
 \end{proof}
 
-\begin{theorem}[Ascending output and global maximality]
+\begin{lemma}[Ascending output and global maximality]
     \label{thm:pinned_filter_output_maximum}
     \lean{
         TNLean.PEPS.Approximation.Pinned.liftLocal_eq_localLift,
@@ -177,11 +177,11 @@
         \label{eq:pinned_filter_coordinates}
     \end{align}
     If $a_j>0$ for all $j$, then $F$ is a maximizing admissible family if and only if $K(F)$ is feasible and maximizes $\|\widehat K'_{m-1}\cdots\widehat K'_0U\Omega\|$ over all feasible $K'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:pinned_filter_coordinates}
-    Since $U\widehat F_j=\widehat K_j(F)U$ (\cite{QICLean2026FilterOutput}) and $U$ is an isometry, (\ref{eq:pinned_filter_coordinates}) holds; Theorem~\ref{thm:pinned_filter_coordinates} then identifies the admissible and feasible maximization problems.
+    Since $U\widehat F_j=\widehat K_j(F)U$ (\cite{QICLean2026FilterOutput}) and $U$ is an isometry, (\ref{eq:pinned_filter_coordinates}) holds; Lemma~\ref{thm:pinned_filter_coordinates} then identifies the admissible and feasible maximization problems.
 \end{proof}
 
 \begin{definition}[Forward crossings of an original region]
@@ -195,20 +195,20 @@
     For $X\subseteq V_L$, let $b(X)$ denote the number of forward-oriented (rightward horizontal and upward vertical) grid edges with exactly one endpoint in $X$.
 \end{definition}
 
-\begin{theorem}[Forward and unordered crossing counts]
+\begin{lemma}[Forward and unordered crossing counts]
     \label{thm:pinned_filter_crossings}
     \lean{TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount}
     \leanok
     \uses{def:pinned_filter_crossings,def:pinned_filter_coordinates}
     For every $X\subseteq V_L$, $b(X)=|\partial_\Lambda\sigma(X)|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_square_bonds_boundary,thm:square_edge_boundary_card}
-    Combine Theorem~\ref{thm:peps_square_bonds_boundary} and Theorem~\ref{thm:square_edge_boundary_card} under the graph isomorphism $\sigma$.
+    Combine Lemma~\ref{thm:peps_square_bonds_boundary} and Lemma~\ref{thm:square_edge_boundary_card} under the graph isomorphism $\sigma$.
 \end{proof}
 
-\begin{theorem}[An original-grid maximizing family with energy and fidelity bounds]
+\begin{lemma}[An original-grid maximizing family with energy and fidelity bounds]
     \label{thm:pinned_square_maximizer_energy}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_pinned_maximizer_energy_fidelity}
     \leanok
@@ -223,10 +223,10 @@
         \label{eq:pinned_square_energy}
     \end{align}
     The adapted source definitions and scope are recorded in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:square_zero_floor_maximizer_energy,thm:pinned_filter_output_maximum,
         thm:pinned_filter_crossings,thm:square_area_law_hamiltonian_operator}
-    Pull the maximizer $K$ of Theorem~\ref{thm:square_zero_floor_maximizer_energy} back to $F=F(K)$ via Theorem~\ref{thm:pinned_filter_output_maximum}, and transport (\ref{eq:square_zero_floor_energy}) through $U$ using Theorem~\ref{thm:square_area_law_hamiltonian_operator} and Theorem~\ref{thm:pinned_filter_crossings}.
+    Pull the maximizer $K$ of Lemma~\ref{thm:square_zero_floor_maximizer_energy} back to $F=F(K)$ via Lemma~\ref{thm:pinned_filter_output_maximum}, and transport (\ref{eq:square_zero_floor_energy}) through $U$ using Lemma~\ref{thm:square_area_law_hamiltonian_operator} and Lemma~\ref{thm:pinned_filter_crossings}.
 \end{proof}

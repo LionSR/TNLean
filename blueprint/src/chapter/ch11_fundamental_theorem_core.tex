@@ -9,7 +9,7 @@ The proportional theorem below allows nonzero projective proportionality for
 all sufficiently large lengths; proportionality at every positive length is a
 special case.
 
-\begin{theorem}[Proportional sector matching with unit phases]%
+\begin{lemma}[Proportional sector matching with unit phases]%
     \label{thm:sector_bnt_proportional_sector_match_witnesses}
     \lean{MPSTensor.ft_sector_bnt_proportional_sector_match_witnesses}
     \leanok
@@ -51,11 +51,11 @@ special case.
          & = \zeta_k^N V^{(N)}(P_{\beta(k)})_\sigma.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_proportional_bijective_match, lem:sector_bnt_norm_phase_of_matched_mpv}
-    Theorem~\ref{thm:sector_bnt_proportional_bijective_match} gives a bijection
+    Lemma~\ref{thm:sector_bnt_proportional_bijective_match} gives a bijection
     $\beta:J(Q)\simeq J(P)$ together with equal bond dimensions, gauge-phase
     equivalence, and
     \begin{align}
@@ -185,7 +185,7 @@ special case.
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$.
 \end{proof}
 
-\begin{theorem}[Equal-case sector and copy matching with differing bond dimensions]%
+\begin{corollary}[Equal-case sector and copy matching with differing bond dimensions]%
     \label{thm:ft_sector_bnt_equal_sector_data_different_dims}
     \lean{MPSTensor.ft_sector_bnt_equal_sector_data}
     \leanok
@@ -208,7 +208,7 @@ special case.
          & =\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}.
         \notag
     \end{align}
-\end{theorem}
+\end{corollary}
 
 \begin{proof}\leanok
     First, Theorem~\ref{thm:sector_bnt_bijective_match_of_sameMPV} gives the
@@ -248,7 +248,7 @@ cancel before the block gauges are combined.
     $\{0,\ldots,\sum_k D_k-1\}$ of the combined tensor.
 \end{definition}
 
-\begin{theorem}[Global gauge from matched sectors and copy weights]%
+\begin{lemma}[Global gauge from matched sectors and copy weights]%
     \label{thm:sector_bnt_global_gauge_of_matched_weights}
     \lean{MPSTensor.sector_bnt_global_gauge_of_matched_weights}
     \leanok
@@ -278,7 +278,7 @@ cancel before the block gauges are combined.
          & = \bigoplus_k(\mathbf{1}_{r_k}\otimes X_k).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each matched copy,
@@ -330,7 +330,7 @@ cancel before the block gauges are combined.
     identities.
 \end{proof}
 
-\begin{theorem}[Full-basis global gauge in matched coordinates]%
+\begin{lemma}[Full-basis global gauge in matched coordinates]%
     \label{thm:sector_bnt_equal_global_gauge}
     \lean{MPSTensor.ft_sector_bnt_equal_global_gauge}
     \leanok
@@ -365,7 +365,7 @@ cancel before the block gauges are combined.
          & = X\,P_{\mathrm{matched}}^i\,X^{-1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:sector_bnt_equal_matched_copy_weight_witnesses, thm:sector_bnt_global_gauge_of_copy_weight_matching}
@@ -373,12 +373,12 @@ cancel before the block gauges are combined.
     $\beta$, the bond-dimension identifications, the phases $\zeta_k$, the
     block gauges $X_k$, and copy permutations $\tau_k$ satisfying
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$.
-    Theorem~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} combines
+    Lemma~\ref{thm:sector_bnt_global_gauge_of_copy_weight_matching} combines
     the block conjugacies into the flattened direct-sum conjugation by
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
 
-\begin{theorem}[Equal-MPV gauge after sector-coordinate permutation]%
+\begin{lemma}[Equal-MPV gauge after sector-coordinate permutation]%
     \label{thm:sector_bnt_equal_mps_gaugeEquiv_literal}
     \lean{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal}
     \leanok
@@ -401,11 +401,11 @@ cancel before the block gauges are combined.
     \end{align}
     where $P_{\mathrm{tot}}^i$ and $Q_{\mathrm{tot}}^i$ are both regarded as
     matrices in $\MN{D}$ using the total bond-dimension equality.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:sector_bnt_equal_global_gauge}
-    Theorem~\ref{thm:sector_bnt_equal_global_gauge} gives the
+    Lemma~\ref{thm:sector_bnt_equal_global_gauge} gives the
     flattened gauge after the sectors of $P$ have been reindexed by the
     bijection between basis blocks of $P$ and $Q$. The sector-coordinate
     permutation $\rho$, induced by this bijection, the copy permutations, and

@@ -9,7 +9,7 @@
     For joining labels $\mu$ on $E(L,S)$ and outer boundary labels $\theta$ on $\partial(L\cup S)$ (\cite{Schuch2010PEPS}, lines 2489--2507), let $\beta_L(\mu,\theta)$ and $\beta_S(\mu,\theta)$ denote the boundary configurations on $\partial L$ and $\partial S$ equal to $\mu$ on $E(L,S)$ and $\theta$ on $\partial(L\cup S)$.
 \end{definition}
 
-\begin{theorem}[Joining two open contractions]
+\begin{lemma}[Joining two open contractions]
     \label{thm:peps_graph_open_region_gluing}
     \lean{TNLean.PEPS.regionJoiningEdge_boundary,
         TNLean.PEPS.graphOpenRegionNetwork_union}
@@ -21,7 +21,7 @@
         =\sum_\mu \Psi_L(\beta_L(\mu,\theta))
         \otimes\Psi_S(\beta_S(\mu,\theta)). \label{eq:open_region_gluing}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Partitioning $E(L\cup S)=E(L)\sqcup E(S)\sqcup E(L,S)$ factors $\prod_{v\in L\cup S}A_v$ across $L$ and $S$, and summing over internal labels on $E(L)$ and $E(S)$ yields (\ref{eq:open_region_gluing}).
 \end{proof}
@@ -33,7 +33,7 @@
     For a rooted spanning tree of a connected region $R$, a permutation $\tau$ of $\partial R$ acts on the accessible coordinates $c=(y,a,r,z)$ (\cite{Schuch2010PEPS}, lines 2489--2507) via $y_b\mapsto y_{\tau b}$ while fixing $(a,r,z)$.
 \end{definition}
 
-\begin{theorem}[Original-spin implementation of a boundary exchange]
+\begin{lemma}[Original-spin implementation of a boundary exchange]
     \label{thm:peps_regular_boundary_register_transport}
     \lean{TNLean.PEPS.regularBoundaryRegisterPermutation_coordinateTranslation,
         TNLean.PEPS.exists_unitary_regularBoundaryRegisterTransport}
@@ -46,12 +46,12 @@
         W_\tau\Psi_R(\theta)=\Psi_R(\theta\circ\tau)
         \qquad\text{for all }\theta. \label{eq:boundary_register_transport}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Definition~\ref{def:peps_boundary_register_permutation} and Theorem~\ref{thm:peps_regular_coordinate_permutation_support}, $y_b\mapsto y_{\tau b}$ commutes with independent vertex translations and thus with $P_R$; Theorem~\ref{thm:peps_regular_physical_unitary_transport} lifts it to $W_\tau$ satisfying (\ref{eq:boundary_register_transport}).
+    By Definition~\ref{def:peps_boundary_register_permutation} and Lemma~\ref{thm:peps_regular_coordinate_permutation_support}, $y_b\mapsto y_{\tau b}$ commutes with independent vertex translations and thus with $P_R$; Lemma~\ref{thm:peps_regular_physical_unitary_transport} lifts it to $W_\tau$ satisfying (\ref{eq:boundary_register_transport}).
 \end{proof}
 
-\begin{theorem}[Diagonal weights on a joining bond]
+\begin{lemma}[Diagonal weights on a joining bond]
     \label{thm:peps_regular_boundary_charge_contraction}
     \lean{TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_boundary,
         TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_union}
@@ -64,7 +64,7 @@
         \Psi_L(\beta_L(\mu,\theta))\otimes
         \Psi_S(\beta_S(\mu,\theta)). \label{eq:boundary_charge_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since the tail $t(e)$ lies in exactly one of $L$ or $S$, its diagonal factor evaluates to $\chi(p\mu_e)$ on the shared joining label $\mu_e$, and (\ref{eq:open_region_gluing}) gives (\ref{eq:boundary_charge_contraction}).
 \end{proof}
@@ -76,7 +76,7 @@
     Each joining bond $e\in E(L,S)$ defines a boundary bond of both $\partial L$ and $\partial S$ with the same underlying edge.
 \end{definition}
 
-\begin{theorem}[Charge motion by independent original-spin operations]
+\begin{lemma}[Charge motion by independent original-spin operations]
     \label{thm:peps_regular_two_part_charge_motion}
     \lean{TNLean.PEPS.exists_unitary_regularTwoPartChargeMotion}
     \leanok
@@ -88,9 +88,9 @@
         (W_L\otimes W_S)\Psi_{L\cup S}^{e,\chi,p}(\theta)
         =\Psi_{L\cup S}^{f,\chi,p}(\theta). \label{eq:two_part_charge_motion}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:peps_regular_boundary_register_transport} to the transposition $\tau=(e\;f)$ on both $\partial L$ and $\partial S$ gives unitaries $W_L,W_S$ that transpose $\mu_e\leftrightarrow\mu_f$ in (\ref{eq:boundary_charge_contraction}), and relabeling $\mu\mapsto\mu\circ\tau$ yields (\ref{eq:two_part_charge_motion}).
+    Applying Lemma~\ref{thm:peps_regular_boundary_register_transport} to the transposition $\tau=(e\;f)$ on both $\partial L$ and $\partial S$ gives unitaries $W_L,W_S$ that transpose $\mu_e\leftrightarrow\mu_f$ in (\ref{eq:boundary_charge_contraction}), and relabeling $\mu\mapsto\mu\circ\tau$ yields (\ref{eq:two_part_charge_motion}).
 \end{proof}
 
 \begin{definition}[The two-column torus square]
@@ -102,7 +102,7 @@
     At $v=(x,y)$ on a torus (including across either seam), define the two columns $L_v=\{(x,y),(x,y+1)\}$ and $S_v=\{(x+1,y),(x+1,y+1)\}$, joined by the upper and lower horizontal bonds $e_{\mathrm{up}},e_{\mathrm{low}}\in E(L_v,S_v)$.
 \end{definition}
 
-\begin{theorem}[Derived native column geometry]
+\begin{lemma}[Derived native column geometry]
     \label{thm:peps_torus_two_column_charge_geometry}
     \lean{TNLean.PEPS.torusChargeMotionColumn_card,
         TNLean.PEPS.torusChargeMotionColumn_disjoint,
@@ -112,19 +112,19 @@
     \uses{def:peps_torus_two_column_charge_geometry,
         def:peps_torus_plaquette_flux_geometry}
     On a finite torus with periods $L_x,L_y\ge 3$, the columns $L_v,S_v$ of Definition~\ref{def:peps_torus_two_column_charge_geometry} satisfy $|L_v|=|S_v|=2$, $L_v\cap S_v=\emptyset$, are each connected, and have union $L_v\cup S_v$ equal to the plaquette region at $v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $L_x,L_y\ge 3$, $x\neq x+1$ and $y\neq y+1$, giving $|L_v|=|S_v|=2$ and $L_v\cap S_v=\emptyset$; the vertical edge connects each column, and $L_v\cup S_v$ is the support of the plaquette walk of Definition~\ref{def:peps_torus_plaquette_flux_geometry}.
 \end{proof}
 
-\begin{theorem}[The paper's two-column charge-motion operation on a finite torus]
+\begin{lemma}[The paper's two-column charge-motion operation on a finite torus]
     \label{thm:peps_torus_two_column_charge_motion}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTwoColumnChargeMotion}
     \leanok
     \uses{thm:peps_regular_two_part_charge_motion,
         thm:peps_torus_two_column_charge_geometry}
     For a regular $G$-isometric four-leg tensor on a torus with $L_x,L_y\ge 3$, at every translated square $L_v\cup S_v$ (including across both seams) there exist independent two-spin unitaries $W_{L_v},W_{S_v}$ (chosen before $\chi,p,\theta$) satisfying (\ref{eq:two_part_charge_motion}) with $(e,f)=(e_{\mathrm{up}},e_{\mathrm{low}})$, realizing the two-column charge move of \cite[Section~6.6]{Schuch2010PEPS}, lines 2489--2507 (with unrestricted lattice geometry in \cite{gap:rmp_peps_quantum_double_g_isometry}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:peps_regular_two_part_charge_motion} to the connected disjoint columns $L_v,S_v$ of Theorem~\ref{thm:peps_torus_two_column_charge_geometry} and joining bonds $e_{\mathrm{up}},e_{\mathrm{low}}$ yields $W_{L_v}\otimes W_{S_v}$ satisfying (\ref{eq:two_part_charge_motion}).
+    Applying Lemma~\ref{thm:peps_regular_two_part_charge_motion} to the connected disjoint columns $L_v,S_v$ of Lemma~\ref{thm:peps_torus_two_column_charge_geometry} and joining bonds $e_{\mathrm{up}},e_{\mathrm{low}}$ yields $W_{L_v}\otimes W_{S_v}$ satisfying (\ref{eq:two_part_charge_motion}).
 \end{proof}

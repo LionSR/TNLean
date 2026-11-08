@@ -1,6 +1,6 @@
 \section{Regional entropy continuity}
 
-\begin{theorem}[Entropy continuity on a fixed lattice region]
+\begin{lemma}[Entropy continuity on a fixed lattice region]
     \label{thm:area_law_regional_entropy_continuity}
     \lean{TNLean.PEPS.AreaLaw.abs_regionalEntropy_sub_le_sqrt_traceDistance}
     \leanok
@@ -17,7 +17,7 @@
     and $|A|\log q=0$.)
     In the scanner entropy estimate, this inequality provides the regional
     form of \cite[Lemma~2.1]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Partial trace contracts trace distance, so the reduced states on $A$ have
     trace distance at most $\delta$. Since each reduced state has trace one, the

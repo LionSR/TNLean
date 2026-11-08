@@ -21,7 +21,7 @@ Interpolation uses a spanning family of evaluations, as explained in
     frequencies.
 \end{definition}
 
-\begin{theorem}[Common recovery of every polynomial through a fixed degree]
+\begin{lemma}[Common recovery of every polynomial through a fixed degree]
     \label{thm:global_two_window_polynomial_recovery}
     \lean{TNLean.MPS.AreaLaw.exists_global_two_window_polynomial_recovery}
     \leanok
@@ -56,7 +56,7 @@ Interpolation uses a spanning family of evaluations, as explained in
     before $H$ and the entire polynomial coefficient family are supplied.
     The case $k=0$ is included. This is a scalar recovery identity; it imposes
     no spatial support, spectral, tensor rank, or matrix product hypothesis.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:crossing_frequency_index,thm:two_window_common_scalar_recovery,
         def:full_frequency_word_coefficient,def:two_marker_coefficient}

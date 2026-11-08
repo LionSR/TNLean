@@ -15,7 +15,7 @@ stated for operators applied to the ground vector and the truncation estimate
 for products over the retained letters of one clock word. The final entropy
 comparison treats the two copies as additional sites.
 
-\begin{theorem}[One clock realization for the three products]
+\begin{lemma}[One clock realization for the three products]
     \label{thm:al_amp_constraint_word_lists}
     \lean{Matrix.contractionWord_eq_prod_reverse,
         Matrix.contractionWord_partitionWords_fst,
@@ -30,7 +30,7 @@ comparison treats the two copies as additional sites.
     $k_i\Omega=0$ for all $i$, then every such product $D=G(u)$ satisfies
     $D|\Omega\rangle\langle\Omega|=|\Omega\rangle\langle\Omega|$ and
     $D^\dagger\Omega=\Omega$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Induct on $|w|$; since $k_i\Omega=0$ and $G_i^\dagger=G_i$, each factor
@@ -52,7 +52,7 @@ comparison treats the two copies as additional sites.
     operator $L(M)=((U\otimes I_Y)M(U\otimes I_Y)^\dagger)\otimes I_{Z'}$.
 \end{definition}
 
-\begin{theorem}[Restoring data under $\mathcal W$]
+\begin{lemma}[Restoring data under $\mathcal W$]
     \label{thm:al_amp_ancilla_transport}
     \lean{TNLean.PEPS.AreaLaw.ancillaTransport_mul_conjTranspose,
         TNLean.PEPS.AreaLaw.conjTranspose_mul_ancillaTransport,
@@ -85,7 +85,7 @@ comparison treats the two copies as additional sites.
     operators supported on $X\cup Y$ tensored with
     $p_x^{-1/2}|x\rangle\langle0|_{s'}\otimes I_{e'}$ and with ancilla
     operators on $(s',e')$, respectively.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\mathcal W$ is a coordinate permutation composed with a Kronecker
@@ -94,7 +94,7 @@ comparison treats the two copies as additional sites.
     direct evaluation on basis configurations.
 \end{proof}
 
-\begin{theorem}[The restoring estimates with the ancillas as spectators]
+\begin{lemma}[The restoring estimates with the ancillas as spectators]
     \label{thm:al_amp_restoring_transport}
     \lean{TNLean.PEPS.AreaLaw.restoringTransport_estimates,
         TNLean.PEPS.AreaLaw.restoringTransport_copy,
@@ -130,11 +130,11 @@ comparison treats the two copies as additional sites.
         \label{eq:al_amp_restoring_transport_adj}
     \end{align}
     Moreover, $B_0$ acts on $S_0\times(s',e')$ and $R_0$ acts on $S_0\times s'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_amp_ancilla_transport}
-    Conjugating Theorem~\ref{thm:al_amp_restoring_estimates} by the unitary
+    Conjugating Lemma~\ref{thm:al_amp_restoring_estimates} by the unitary
     $\mathcal W$ via (\ref{eq:al_amp_ancilla_transport}) preserves vector and
     operator norms, giving (\ref{eq:al_amp_restoring_transport_norms}) and
     (\ref{eq:al_amp_restoring_transport_adj}). Since $U$ acts only on $X$,
@@ -152,7 +152,7 @@ comparison treats the two copies as additional sites.
     and $g$ on $B$, the product vector $f\otimes g$ lives on $A\sqcup B$.
 \end{definition}
 
-\begin{theorem}[Regional entropies of relabelled and product vectors]
+\begin{lemma}[Regional entropies of relabelled and product vectors]
     \label{thm:al_amp_site_entropy}
     \lean{FiniteProduct.splitEquiv_symm_comp_relabel,
         FiniteProduct.reducedPure_relabelSites, FiniteProduct.entropy_relabelSites,
@@ -171,7 +171,7 @@ comparison treats the two copies as additional sites.
         I_{f\otimes g}(R:R')=I_f(R:R'),\qquad
         I_{f\otimes g}(T:R)=0. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Relabelling conjugates the reduced density matrix by the induced
@@ -193,7 +193,7 @@ comparison treats the two copies as additional sites.
     with its copy in $e'$ and fixes $\Lambda\setminus X$ and $s'$.
 \end{definition}
 
-\begin{theorem}[The enlarged sites]
+\begin{lemma}[The enlarged sites]
     \label{thm:al_amp_ancilla_sites}
     \lean{TNLean.PEPS.AreaLaw.ancillaSplit_apply,
         TNLean.PEPS.AreaLaw.kronecker_one_submatrix_ancillaSplit,
@@ -218,15 +218,15 @@ comparison treats the two copies as additional sites.
         I_\varphi(X'_{e'}:J)=I_\Omega(X':J).
         \label{eq:al_amp_ancilla_copy_mi}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\varphi=\tau_*(\Omega\otimes a\otimes b)$ with $\tau(X')=X'_{e'}$ and
-    $\tau(J)=J$, Theorem~\ref{thm:al_amp_site_entropy} yields
+    $\tau(J)=J$, Lemma~\ref{thm:al_amp_site_entropy} yields
     $I_{\Omega\otimes\chi}(e':J)=0$ and (\ref{eq:al_amp_ancilla_copy_mi}).
 \end{proof}
 
-\begin{theorem}[The local unitary and the entropy comparison on a region]
+\begin{lemma}[The local unitary and the entropy comparison on a region]
     \label{thm:al_amp_supported_polar}
     \lean{QuantumCircuit.embedOp_val_eq_kronecker_one_submatrix,
         QuantumCircuit.kronecker_one_submatrix_mem_supportedOperators,
@@ -236,25 +236,25 @@ comparison treats the two copies as additional sites.
     \uses{thm:area_law_amplification_unitary_error,thm:al_amp_entropy_comparison_scale}
     On a finite site set with local dimension $q$, suppose $R_0$ and $L'$ are
     supported on $S$ and satisfy the hypotheses of
-    Theorem~\ref{thm:area_law_amplification_unitary_error}. Then there is a
+    Lemma~\ref{thm:area_law_amplification_unitary_error}. Then there is a
     unitary $U$ supported on $S$ with
     $\|U\varphi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$. If $U$ is a
     unitary supported on a region disjoint from $X\cup J$, $I_\eta(X:J)=0$,
     $\|U\varphi-\eta\|\le C_1n^{-K/2}$ with $K\ge4(M+2)$, and
     $\log\dim\mathcal H_X\le C_2n^2$, then every $X'\subseteq X$ satisfies
     $I_\varphi(X':J)\le 8\sqrt{C_1}\,(1+C_2)\,n^{-M}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     In the tensor decomposition of $S$ and its complement (respectively
     $X\cup J$ and its complement), an operator supported on $S$ has the form
     $A\otimes I$ (respectively $I\otimes A$). Applying
-    Theorem~\ref{thm:area_law_amplification_unitary_error} in the first
-    decomposition and Theorem~\ref{thm:al_amp_entropy_comparison_scale} in the
+    Lemma~\ref{thm:area_law_amplification_unitary_error} in the first
+    decomposition and Lemma~\ref{thm:al_amp_entropy_comparison_scale} in the
     second gives both claims.
 \end{proof}
 
-\begin{theorem}[The local unitary and the entropy comparison on the enlarged sites]
+\begin{lemma}[The local unitary and the entropy comparison on the enlarged sites]
     \label{thm:al_amp_enlarged_steps}
     \lean{TNLean.PEPS.AreaLaw.exists_ancilla_unitary_of_good_realization,
         TNLean.PEPS.AreaLaw.mutualInformation_le_of_ancilla_unitary}
@@ -263,7 +263,7 @@ comparison treats the two copies as additional sites.
     On $\widetilde\Lambda=\Lambda\sqcup(s'\sqcup e')$, suppose $R_0$ is
     supported on $N\sqcup s'$, $L'\otimes I_{s'\sqcup e'}$ is supported on
     $N\subseteq\Lambda$, and the hypotheses of
-    Theorem~\ref{thm:area_law_amplification_unitary_error} hold. Then there is a
+    Lemma~\ref{thm:area_law_amplification_unitary_error} hold. Then there is a
     unitary $U$ supported on $N\sqcup s'$ with
     $\|U\varphi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$. If
     $X\subseteq N$, $\varphi=\mathcal W\varphi_{\rm copy}$ and
@@ -275,18 +275,18 @@ comparison treats the two copies as additional sites.
         I_\Omega(X':J)\le 8\sqrt{C_1}\,(1+C_2)\,n^{-M}.
         \label{eq:al_amp_enlarged_mi_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Applying Theorem~\ref{thm:al_amp_supported_polar} on $\widetilde\Lambda$
+    Applying Lemma~\ref{thm:al_amp_supported_polar} on $\widetilde\Lambda$
     with $S=N\sqcup s'$ gives $U$. Since $N\sqcup s'$ is disjoint from
     $e'\sqcup J$, $I_\eta(e':J)=0$ by (\ref{eq:al_amp_ancilla_transport}) and
-    Theorem~\ref{thm:al_amp_ancilla_sites}, and $I_\varphi(X'_{e'}:J)=I_\Omega(X':J)$
-    by (\ref{eq:al_amp_ancilla_copy_mi}), Theorem~\ref{thm:al_amp_supported_polar}
+    Lemma~\ref{thm:al_amp_ancilla_sites}, and $I_\varphi(X'_{e'}:J)=I_\Omega(X':J)$
+    by (\ref{eq:al_amp_ancilla_copy_mi}), Lemma~\ref{thm:al_amp_supported_polar}
     applied to $e'$ and $J$ yields (\ref{eq:al_amp_enlarged_mi_bound}).
 \end{proof}
 
-\begin{theorem}[The amplification radius is a power of the scale]
+\begin{lemma}[The amplification radius is a power of the scale]
     \label{thm:al_amp_radius_bound}
     \lean{TNLean.PEPS.AreaLaw.exists_amplificationRadius_le}
     \leanok
@@ -296,7 +296,7 @@ comparison treats the two copies as additional sites.
     $0\le\mathcal I\le C_0n^{1-\varepsilon}$, the radius $r$ of
     Definition~\ref{def:area_law_amplification_time_radius} with $w=n^{3/5}$
     satisfies $r\le Cn^{(1-\varepsilon)/\alpha}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $w=n^{3/5}\le n^{1-\varepsilon}$ and $\log n\le n^{1-\varepsilon}$ for
@@ -325,30 +325,30 @@ comparison treats the two copies as additional sites.
     $w=n^{3/5}$, $\mathcal I=I_\Omega(X:\Lambda\setminus S_0)$, and $\delta=n^{-2K}$,
     and choose $t_*$ and $r$ as in
     Definition~\ref{def:area_law_amplification_time_radius}, so
-    $r\le Cn^{(1-\varepsilon)/\alpha}$ by Theorem~\ref{thm:al_amp_radius_bound}.
-    Theorem~\ref{thm:al_amp_typical_projectors} and
-    Theorem~\ref{thm:al_amp_restoring_transport} provide $R_0,B_0,\varphi,\eta$
+    $r\le Cn^{(1-\varepsilon)/\alpha}$ by Lemma~\ref{thm:al_amp_radius_bound}.
+    Lemma~\ref{thm:al_amp_typical_projectors} and
+    Lemma~\ref{thm:al_amp_restoring_transport} provide $R_0,B_0,\varphi,\eta$
     satisfying (\ref{eq:al_amp_restoring_transport_norms}) and
     (\ref{eq:al_amp_restoring_transport_adj}). On clock words at time $t_*$,
-    Theorem~\ref{thm:al_lattice_excited_decay} bounds the excited component of
-    $\zeta=R_0\varphi$, Theorem~\ref{thm:al_lattice_constraint_omission} applied
+    Lemma~\ref{thm:al_lattice_excited_decay} bounds the excited component of
+    $\zeta=R_0\varphi$, Lemma~\ref{thm:al_lattice_constraint_omission} applied
     via $R_0\varphi=B_0(\Omega\otimes\xi)$ bounds the omitted events,
-    Theorem~\ref{thm:al_lattice_product_truncation} bounds the radius-$r$
+    Lemma~\ref{thm:al_lattice_product_truncation} bounds the radius-$r$
     truncation $L'$ supported on $N_{2r}^\Lambda(S_0)$, and
-    Theorem~\ref{thm:al_amp_constraint_word_lists} matches the filtered clock
-    products. By Theorem~\ref{thm:area_law_amplification_scale_bounds}, a good
+    Lemma~\ref{thm:al_amp_constraint_word_lists} matches the filtered clock
+    products. By Lemma~\ref{thm:area_law_amplification_scale_bounds}, a good
     realization makes all three errors at most $n^{-K}$. Applying
-    Theorem~\ref{thm:al_amp_enlarged_steps} with $N=N_{2r}^\Lambda(S_0)$,
+    Lemma~\ref{thm:al_amp_enlarged_steps} with $N=N_{2r}^\Lambda(S_0)$,
     $C_1=9$, and $C_2=C_0\log q$ gives a unitary $U$ on
     $N_{2r}^\Lambda(S_0)\sqcup s'$ with $\|U\varphi-\eta\|\le 9n^{-K/2}$ and,
     via (\ref{eq:al_amp_enlarged_mi_bound}),
     $I_\Omega(X':J)\le 24(1+C_0\log q)\,n^{-M}$ for every $X'\subseteq X$ and
     $J\subseteq\Lambda\setminus N_{2r}^\Lambda(S_0)$. Finally,
-    Theorem~\ref{thm:area_law_amplification_of_radius_output} yields the
+    Lemma~\ref{thm:area_law_amplification_of_radius_output} yields the
     cut-clearance form.
 \end{proof}
 
-\begin{theorem}[Amplification at the constants of its proof]
+\begin{lemma}[Amplification at the constants of its proof]
     \label{thm:area_law_amplification_explicit}
     \lean{TNLean.PEPS.AreaLaw.amplificationBound_explicit,
         TNLean.PEPS.AreaLaw.amplificationBoundAt_explicit}
@@ -361,7 +361,7 @@ comparison treats the two copies as additional sites.
     be the corresponding radius threshold. Then the amplification bound at
     $(C_0,M)$ holds with constant $C_2$ and threshold
     $\max\{N_2,N_{\rm rad}(C_2)\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_amplification}
@@ -369,7 +369,7 @@ comparison treats the two copies as additional sites.
     constructed in the proof of Theorem~\ref{thm:area_law_amplification}.
 \end{proof}
 
-\begin{theorem}[Uniform area law from the collar and two-family bounds]
+\begin{lemma}[Uniform area law from the collar and two-family bounds]
     \label{thm:area_law_conditional_collar_two_families}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_twoFamilies}
     \leanok
@@ -380,10 +380,10 @@ comparison treats the two copies as additional sites.
     decomposition (Definition~\ref{def:area_law_two_family_decomposition}). Then
     Theorem~\ref{thm:openai_uniform_area_law} holds, proving Theorem~1.1 of
     \cite{OpenAI2026AreaLaw} conditionally on Propositions~9.6 and~11.2.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_conditional_assembly,thm:area_law_amplification}
-    Combine Theorem~\ref{thm:area_law_conditional_assembly} with
+    Combine Lemma~\ref{thm:area_law_conditional_assembly} with
     Theorem~\ref{thm:area_law_amplification}.
 \end{proof}

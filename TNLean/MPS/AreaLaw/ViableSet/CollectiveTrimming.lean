@@ -77,6 +77,17 @@ theorem blockSplit_apply (i : ℕ) (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     blockSplit L q i ψ (x, y) = cutMatrix ψ i x y :=
   rfl
 
+/-- Joining the block coordinates restores a vector on the chain. -/
+theorem blockSplit_symm_eq (i : ℕ)
+    (u : EuclideanSpace ℂ
+      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) ×
+        ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q))) :
+    (blockSplit L q i).symm u = WithLp.toLp 2 (fun z ↦
+      u (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L i) z)) := by
+  ext z
+  simp [blockSplit, LinearIsometryEquiv.piLpCongrLeft_symm,
+    LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft']
+
 /-- `Span(S) ⊗ H_R` is the coordinate extension of `S` in block coordinates. -/
 theorem leftSupportSubmodule_eq_comap (i : ℕ) (S : Submodule ℂ (LeftBlockVector L q i)) :
     leftSupportSubmodule (S : Set (LeftBlockVector L q i)) =

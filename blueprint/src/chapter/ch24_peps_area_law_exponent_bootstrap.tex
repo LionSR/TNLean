@@ -22,7 +22,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Margins in the exponent estimates]
+\begin{lemma}[Margins in the exponent estimates]
     \label{thm:area_law_bootstrap_margins}
     \lean{
         TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds,
@@ -48,7 +48,7 @@
         \label{eq:area_law_bootstrap_energy_margin}
     \end{align}
     Moreover, $e_0>0$ and $e>e_*$ give $\kappa<(1-\ell)e$ and $g_0-\ell-\nu/4<1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Direct substitution of (\ref{eq:area_law_bootstrap_parameters})--(\ref{eq:area_law_bootstrap_separation})
     with $g_0=(1-e_0)/2\in(0,1/2)$, $\ell=g_0/10^5$, and $0<\kappa\le\min\{\ell,e_*/4\}$.
@@ -56,7 +56,7 @@
 
 % Source: 08-scanner.tex, lines 371--384 and 731--755, adc7f124.
 % The fixed C n^{-1000} contribution and replica remainder are excluded from A_n.
-\begin{theorem}[Principal energy term at the fixed bootstrap scales]
+\begin{lemma}[Principal energy term at the fixed bootstrap scales]
     \label{thm:area_law_bootstrap_principal_energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_principal_energy_bound}
     \leanok
@@ -81,7 +81,7 @@
     \end{align}
     There is $N\ge2$ (depending only on the fixed constants and $e_0$) such
     that $A_n(e)\le n^{-\nu/2}$ for all $n\ge N$ and $e\le e_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts,thm:area_law_bootstrap_margins}
     By Lemma~\ref{lem:al_scanner_scale_facts}, there is $C_1\ge1$ such that for
@@ -112,7 +112,7 @@
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_energy_expression_bound}
     \leanok
     \uses{thm:area_law_bootstrap_principal_energy}
-    Under the hypotheses of Theorem~\ref{thm:area_law_bootstrap_principal_energy},
+    Under the hypotheses of Lemma~\ref{thm:area_law_bootstrap_principal_energy},
     there is $N\ge2$ such that for all $n\ge N$ and $e\le e_0$,
     \begin{align}
         E_n(e) & =A_n(e)+Cn^{-1000}
@@ -124,10 +124,10 @@
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_principal_energy,def:area_law_bootstrap_parameters}
     Since $\nu/2=g_0/2000<1000$, we have $n^{-1000}\le n^{-\nu/2}$ for $n\ge2$;
-    combine with Theorem~\ref{thm:area_law_bootstrap_principal_energy}.
+    combine with Lemma~\ref{thm:area_law_bootstrap_principal_energy}.
 \end{proof}
 
-\begin{theorem}[Binary-entropy cost of the rounded bands]
+\begin{lemma}[Binary-entropy cost of the rounded bands]
     \label{thm:area_law_bootstrap_binary_entropy_cost}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound}
     \leanok
@@ -140,7 +140,7 @@
         K_n                 & \ge1,                         & a_n & >0, &
         \frac{h(\tau)}{a_n} & \le\frac{\log2}{4}\,n. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts}
     Since $\mu<1-\ell$, Lemma~\ref{lem:al_scanner_scale_facts} gives
@@ -148,7 +148,7 @@
     $h(\tau)/a_n=K_nh(\tau)/4\le(n\log2)/4$.
 \end{proof}
 
-\begin{theorem}[Additive comparison costs at fixed bootstrap scales]
+\begin{lemma}[Additive comparison costs at fixed bootstrap scales]
     \label{thm:area_law_bootstrap_comparison_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_budget_bound}
     \leanok
@@ -163,18 +163,18 @@
         nL_n^e+nD_n+n^{3/5}+\frac{h(\tau)}{a_n}+1
          & \le\left(5+\frac{\log2}{4}\right)n^{1+\eta e}. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_binary_entropy_cost,thm:area_law_bootstrap_margins}
-    Take $N$ from Theorem~\ref{thm:area_law_bootstrap_binary_entropy_cost} and
+    Take $N$ from Lemma~\ref{thm:area_law_bootstrap_binary_entropy_cost} and
     set $P=n^{1+\eta e}\ge n\ge1$. Then $nL_n^e\le P$, $n^{3/5}\le P$,
     $h(\tau)/a_n\le(\log2/4)P$, $1\le P$, and by
-    Theorem~\ref{thm:area_law_bootstrap_margins} ($\kappa<\eta e$),
+    Lemma~\ref{thm:area_law_bootstrap_margins} ($\kappa<\eta e$),
     $D_n\le n^\kappa+1\le2n^{\eta e}$, so $nD_n\le2P$.
 \end{proof}
 
-\begin{theorem}[Uniform bounds after finitely many exponent improvements]
+\begin{lemma}[Uniform bounds after finitely many exponent improvements]
     \label{thm:area_law_finite_exponent_improvement}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement}
     \leanok
@@ -193,10 +193,10 @@
         \label{eq:area_law_bootstrap_step}
     \end{align}
     Then there is $C>0$ such that $F_i(r)\le Cr^{1+e_*}$ for all $i$ and $r\ge1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_margins}
-    By Theorem~\ref{thm:area_law_bootstrap_margins}, $a=1-\ell\in(0,1)$.
+    By Lemma~\ref{thm:area_law_bootstrap_margins}, $a=1-\ell\in(0,1)$.
     Using $F_i(r)\le Vr^2$ from (\ref{eq:area_law_bootstrap_initial}) to absorb
     $1\le r<N_e$ at each step (\ref{eq:area_law_bootstrap_step}), iterate until
     $a^ne_0\le e_*$, where $r^{1+a^ne_0}\le r^{1+e_*}$.

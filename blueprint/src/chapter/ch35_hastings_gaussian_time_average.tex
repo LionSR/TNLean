@@ -29,7 +29,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     for $\Delta E\ne0$, and $\sqrt h=\sqrt{\max(q,0)}/\Delta E$ for $\Delta E>0$.
 \end{definition}
 
-\begin{theorem}[Gaussian time average across the gap]
+\begin{lemma}[Gaussian time average across the gap]
     \label{thm:hastings_gaussian_time_average_gap}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le}
     \leanok
@@ -44,7 +44,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     \cite[line 848]{Hastings2007AreaLaw}; the source's $q=(l/3)\Delta E/(2v)$
     yields $O(e^{-l/(6\xi)})$ whereas $q=(l/3)\Delta E/v$ recovers the printed
     $O(e^{-l/(3\xi)})$~\cite{gap:hastings07_gaussian_average_exponent}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:hastings_gaussian_time_average}
     In an orthonormal eigenbasis $(e_k)$ of $H$ with $He_k=\lambda_ke_k$
@@ -59,7 +59,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Comparison of two unitary evolutions]
+\begin{lemma}[Comparison of two unitary evolutions]
     \label{thm:hastings_unitary_path_difference}
     \lean{Matrix.norm_hermitianUnitaryPath_sub_le}
     \leanok
@@ -68,14 +68,14 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
         \|e^{iMt}-e^{iHt}\|\le\|M-H\|\,|t|.
         \label{eq:hastings_unitary_path_difference}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Duhamel's formula,
     $e^{iHt}-e^{iMt}=e^{iMt}\int_0^te^{-iMs}i(H-M)e^{iHs}\,ds$, and unitarity
     of $e^{iMt},e^{-iMs},e^{iHs}$ gives~(\ref{eq:hastings_unitary_path_difference}).
 \end{proof}
 
-\begin{theorem}[First absolute moment of a Gaussian tail]
+\begin{lemma}[First absolute moment of a Gaussian tail]
     \label{thm:hastings_gaussian_absolute_moment_tail}
     \lean{TNLean.Lattice.integral_compl_Icc_abs_gaussianReal_le}
     \leanok
@@ -85,7 +85,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
         \le \sqrt{2h/\pi}\,e^{-T^2/(2h)}.
         \label{eq:hastings_gaussian_absolute_moment_tail}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $h=0$, $\gamma_0=\delta_0$ gives $0$. For $h>0$, with
     $\varphi_h(t)=(2\pi h)^{-1/2}e^{-t^2/(2h)}$ and $(-h\varphi_h)'=t\varphi_h$,
@@ -96,21 +96,21 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[First absolute moment of a Gaussian]
+\begin{lemma}[First absolute moment of a Gaussian]
     \label{thm:hastings_gaussian_absolute_moment}
     \lean{TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi,
         TNLean.Lattice.integral_abs_gaussianReal_le}
     \leanok
     For every $h\ge0$,
     $\int|t|\,d\gamma_h(t)\le\sqrt{2h/\pi}\le\sqrt h$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_gaussian_absolute_moment_tail}
     Set $T=0$ in~(\ref{eq:hastings_gaussian_absolute_moment_tail}) and use
     $2\le\pi$.
 \end{proof}
 
-\begin{theorem}[Stability of the Gaussian time average]
+\begin{lemma}[Stability of the Gaussian time average]
     \label{thm:hastings_gaussian_time_average_stability}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_le,
         TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le_add}
@@ -123,7 +123,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
         \|P_q(M)-P_q(H)\|\le\frac{\sqrt q}{\Delta E}\,\|M-H\|,
         \label{eq:hastings_gaussian_stability_diff}
     \end{align}
-    and under the hypotheses of Theorem~\ref{thm:hastings_gaussian_time_average_gap},
+    and under the hypotheses of Lemma~\ref{thm:hastings_gaussian_time_average_gap},
     \begin{align}
         \bigl\|P_q(M)-|\Omega\rangle\langle\Omega|\bigr\|
         \le e^{-q/2}+\frac{\sqrt q}{\Delta E}\,\|M-H\|.
@@ -131,13 +131,13 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     \end{align}
     With $M=M_L+M_B+M_R$, (\ref{eq:hastings_gaussian_stability_proj}) is the
     first inequality of \cite[lines 849--864]{Hastings2007AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_unitary_path_difference,
         thm:hastings_gaussian_absolute_moment,
         thm:hastings_gaussian_time_average_gap}
     Integrating~(\ref{eq:hastings_unitary_path_difference}) against $\gamma_h$
-    and applying Theorem~\ref{thm:hastings_gaussian_absolute_moment} gives
+    and applying Lemma~\ref{thm:hastings_gaussian_absolute_moment} gives
     $\|P_q(M)-P_q(H)\|\le\|M-H\|\int|t|\,d\gamma_h\le(\sqrt q/\Delta E)\|M-H\|$,
     and combining~(\ref{eq:hastings_gaussian_stability_diff}) with
     (\ref{eq:hastings_gaussian_time_average_gap}) gives

@@ -49,7 +49,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     of~\cite[line 611]{Landau2015Polynomial}.
 \end{definition}
 
-\begin{theorem}[Matrix Bernstein inequality for averages]
+\begin{lemma}[Matrix Bernstein inequality for averages]
     \label{thm:lvv_matrix_bernstein}
     \lean{Matrix.measureReal_le_norm_average_sub_le}
     \leanok
@@ -65,7 +65,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     This is~\cite[lines 616--624]{Landau2015Polynomial}, derived there
     from~\cite[Theorem~1.6]{Tropp2012User}; the variance is the maximum of the
     operator norms of the two expectations~\cite{gap:lvv13_matrix_bernstein_variance_norm}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -94,9 +94,9 @@ $C=(1-\varepsilon_0/n)^{-1}$.
         lem:lvv_ground_energy_range}
     Every word has probability $n^{-m}$, so
     $\mathbb E[C^mP_I]=C^mn^{-m}\sum_IP_I=A$ by
-    Theorem~\ref{thm:lvv_power_expansion}. Since $0\le P_i\le1$, every letter
+    Lemma~\ref{thm:lvv_power_expansion}. Since $0\le P_i\le1$, every letter
     has norm at most one, and so does every word. With $\|A\|=1$ from
-    Theorem~\ref{thm:lvv_power_projector_basic} and $C\ge1$,
+    Lemma~\ref{thm:lvv_power_projector_basic} and $C\ge1$,
     $\|C^mP_I-A\|\le C^m+1$.
 \end{proof}
 
@@ -117,7 +117,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     The terms $X_k=C^mP_{I_k}$ are independent and identically distributed, with
     $K=\ell^{-1}\sum_kX_k$. By Lemma~\ref{lem:lvv_sampled_term} their mean is
     $A$ and $\|X_k-A\|\le R$, so both variance terms are at most $R^2$, and
-    Theorem~\ref{thm:lvv_matrix_bernstein} applies in dimension $q^n$. If
+    Lemma~\ref{thm:lvv_matrix_bernstein} applies in dimension $q^n$. If
     $q=0$, every matrix vanishes and the event is empty.
 \end{proof}
 
@@ -151,7 +151,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     bound over the $\ell$ words and the $n$ letters.
 \end{proof}
 
-\begin{theorem}[Accuracy and multiplicity of the sampled projector]
+\begin{lemma}[Accuracy and multiplicity of the sampled projector]
     \label{thm:lvv_sampled_projector}
     \lean{TNLean.MPS.AreaLaw.one_sub_le_measureReal_sampledProjector,
         TNLean.MPS.AreaLaw.one_sub_inv_pow_three_le_measureReal_sampledProjector,
@@ -188,7 +188,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     $C^{2m}=n^{O(1/\varepsilon)}$; this fails when $\varepsilon_0$ is of order
     $n$, and holds when $\varepsilon_0/\varepsilon$ is bounded, by
     Lemma~\ref{lem:lvv_power_normalization_size}~\cite{gap:lvv13_runtime_ground_energy}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -204,9 +204,9 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     letter occurs more than $\kappa$ times in some word by
     $\ell ne^{-a}=1/(4n^3)$. The complement of the two events has probability
     at least $1-1/(2n^3)>0$, and so contains a choice of words. For such a
-    choice, Theorem~\ref{thm:lvv_power_threshold} gives
+    choice, Lemma~\ref{thm:lvv_power_threshold} gives
     $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$, and
-    Theorem~\ref{thm:lvv_power_word_rank} gives the rank bound.
+    Lemma~\ref{thm:lvv_power_word_rank} gives the rank bound.
 \end{proof}
 
 \begin{lemma}[Size of the normalization]
@@ -221,7 +221,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     $0\le\varepsilon_0\le n-1$, $\Delta>0$, $0<\eta\le1$ and
     $m=\lceil((n-\varepsilon_0)/\Delta)\log(1/\eta)\rceil$, then
     $C^m\le n\,\eta^{-\varepsilon_0/\Delta}$. In particular, the number $\ell$
-    of Theorem~\ref{thm:lvv_sampled_projector} is polynomial in $n$ and
+    of Lemma~\ref{thm:lvv_sampled_projector} is polynomial in $n$ and
     $1/\eta$ when $\varepsilon_0/\Delta$ is bounded.
 \end{lemma}
 

@@ -128,7 +128,7 @@ theorem mem_zpowers_ofAdd_one (x : Multiplicative (ZMod n)) :
 `z ↦ z^n` multiplicatively. -/
 theorem norm_scalarRepresentation_apply
     (x : Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) :
-    (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom x = n • x := by
+    (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.asHom.hom x = n • x := by
   rw [Rep.norm_apply, Representation.norm, LinearMap.sum_apply]
   simp only [ScalarCohomology.ofMulDistribMulAction_ρ_apply, Finset.sum_const, Finset.card_univ,
     Fintype.card_multiplicative, ZMod.card]
@@ -145,17 +145,18 @@ theorem applyAsHom_ofAdd_one_sub_id :
 /-- The kernel of the norm map of the trivial representation of `ℤ_n` on `ℂˣ` is the group
 of `n`-th roots of unity. -/
 def normKerEquivRootsOfUnity :
-    LinearMap.ker (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom.toLinearMap ≃
+    LinearMap.ker
+      (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.asHom.hom.toLinearMap ≃
       rootsOfUnity n ℂ where
   toFun x := ⟨Additive.toMul ((scalarRepresentationEquiv _).symm x.1), by
     have hx := x.2
     rw [LinearMap.mem_ker] at hx
-    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom x.1 = 0 at hx
+    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.asHom.hom x.1 = 0 at hx
     rw [norm_scalarRepresentation_apply] at hx
     rw [mem_rootsOfUnity, ← toMul_nsmul, ← map_nsmul, hx, map_zero, toMul_zero]⟩
   invFun z := ⟨scalarRepresentationEquiv _ (Additive.ofMul z.1), by
     rw [LinearMap.mem_ker]
-    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom _ = 0
+    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.asHom.hom _ = 0
     rw [norm_scalarRepresentation_apply, ← map_nsmul, ← ofMul_pow,
       (mem_rootsOfUnity _ _).1 z.2, ofMul_one, map_zero]⟩
   left_inv x := by simp

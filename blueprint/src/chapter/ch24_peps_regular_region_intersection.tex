@@ -9,7 +9,7 @@ intersection step in \cite[Theorem~5.4]{Schuch2010PEPS}.
 % This regular-coordinate result does not complete Theorem 5.4 for arbitrary
 % semi-regular representations or arbitrary G-injective physical site maps.
 
-\begin{theorem}[Restriction and gluing of flat configurations]%
+\begin{lemma}[Restriction and gluing of flat configurations]%
     \label{thm:peps_regular_flat_union}
     \lean{TNLean.PEPS.IsRegularRegionHalfEdgeFlat.of_subset,
         TNLean.PEPS.internalEdge_union_of_no_cross,
@@ -20,7 +20,7 @@ intersection step in \cite[Theorem~5.4]{Schuch2010PEPS}.
     joins $R\setminus S$ to $S\setminus R$, then every internal edge of
     $R\cup S$ is internal to $R$ or $S$, and a half-edge configuration is
     flat on $R\cup S$ if and only if it is flat on both $R$ and $S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Restriction is immediate from Definition~\ref{def:peps_regional_half_edge_flat}.
     Conversely, for flatness potentials $k_R,k_S$ on $R,S$, setting
@@ -39,7 +39,7 @@ intersection step in \cite[Theorem~5.4]{Schuch2010PEPS}.
     on $R\cup S$.
 \end{proof}
 
-\begin{theorem}[Atomic characterization and nesting of regular ranges]%
+\begin{lemma}[Atomic characterization and nesting of regular ranges]%
     \label{thm:peps_regular_range_nested}
     \lean{TNLean.PEPS.mem_regularGlobalRegionRange_iff_fixed_flat,
         TNLean.PEPS.regularGlobalRegionRange_antitone}
@@ -50,17 +50,17 @@ intersection step in \cite[Theorem~5.4]{Schuch2010PEPS}.
     and $x(\alpha)=0$ whenever $\alpha|_R$ is not flat; hence
     $R\subseteq S$ implies
     $\widehat{\mathcal S}_S^0\subseteq\widehat{\mathcal S}_R^0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_actual_projector,thm:peps_regular_constraint_fixed_spaces,
         thm:peps_regular_flat_union}
-    Theorems~\ref{thm:peps_regular_actual_projector}
+    Lemmas~\ref{thm:peps_regular_actual_projector}
     and~\ref{thm:peps_regular_constraint_fixed_spaces} replace simultaneous
     vertex and edge invariance by individual fixedness $A_vx=x$ and
-    $B_ex=x$. Monotonicity follows from Theorem~\ref{thm:peps_regular_flat_union}.
+    $B_ex=x$. Monotonicity follows from Lemma~\ref{thm:peps_regular_flat_union}.
 \end{proof}
 
-\begin{theorem}[Intersection of regular regional ranges]%
+\begin{lemma}[Intersection of regular regional ranges]%
     \label{thm:peps_regular_region_intersection}
     \lean{TNLean.PEPS.regularGlobalRegionRange_inf_eq_union}
     \leanok
@@ -72,16 +72,16 @@ intersection step in \cite[Theorem~5.4]{Schuch2010PEPS}.
          & =\widehat{\mathcal S}_{R\cup S}^0.
         \label{eq:peps_regular_region_intersection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_range_nested,thm:peps_regular_flat_union}
-    By Theorems~\ref{thm:peps_regular_flat_union}
+    By Lemmas~\ref{thm:peps_regular_flat_union}
     and~\ref{thm:peps_regular_range_nested}, any
     $x\in\widehat{\mathcal S}_R^0\cap\widehat{\mathcal S}_S^0$ is fixed by
     all $A_v$ ($v\in R\cup S$) and $B_e$ ($e$ internal to $R\cup S$) and
     vanishes when $\alpha|_{R\cup S}$ is not flat, giving
     $\widehat{\mathcal S}_R^0\cap\widehat{\mathcal S}_S^0\subseteq\widehat{\mathcal S}_{R\cup S}^0$;
-    Theorem~\ref{thm:peps_regular_range_nested} gives the reverse inclusion.
+    Lemma~\ref{thm:peps_regular_range_nested} gives the reverse inclusion.
 \end{proof}
 
 \begin{definition}[Regional conditions on the core physical space]%
@@ -97,7 +97,7 @@ intersection step in \cite[Theorem~5.4]{Schuch2010PEPS}.
     $J_Tx$ on $\Gamma$ by $(J_Tx)(\alpha)=x(\alpha|_T)$.
 \end{definition}
 
-\begin{theorem}[Intersection on only the core physical factors]%
+\begin{lemma}[Intersection on only the core physical factors]%
     \label{thm:peps_regular_core_intersection}
     \lean{TNLean.PEPS.regularRegionRangeWithin_eq_comap,
         TNLean.PEPS.regularRegionRangeWithin_self,
@@ -114,7 +114,7 @@ intersection step in \cite[Theorem~5.4]{Schuch2010PEPS}.
          & =\operatorname{range}\Gamma_T.
         \label{eq:peps_regular_core_intersection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_intersection}
     Complementary slices of $J_Tx$ depend only on coordinates in
@@ -164,7 +164,7 @@ boundary data. The two horizontal internal labels are summed.
     \end{tenkz}
 \end{tenkzequation}
 
-\begin{theorem}[Four-legged regular intersection]%
+\begin{lemma}[Four-legged regular intersection]%
     \label{thm:peps_regular_three_block_intersection}
     \lean{TNLean.PEPS.threeBlockFourLegGraph_core_degree,
         TNLean.PEPS.threeBlockFourLegGraph_boundary_card,
@@ -179,11 +179,11 @@ boundary data. The two horizontal internal labels are summed.
         =\widehat{\mathcal S}_T^0$ and
     $\mathcal S_{R;T}^0\cap\mathcal S_{S;T}^0
         =\operatorname{range}\Gamma_T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_intersection,thm:peps_regular_core_intersection}
     Inspection of (\ref{eq:peps_three_block_edges}) gives the degree and
     boundary counts, $R\cap S=\{1\}$, $R\cup S=T$, and $\{0,2\}\notin E$;
-    Theorems~\ref{thm:peps_regular_region_intersection}
+    Lemmas~\ref{thm:peps_regular_region_intersection}
     and~\ref{thm:peps_regular_core_intersection} then yield both equalities.
 \end{proof}

@@ -1,4 +1,4 @@
-\begin{theorem}[Numbering preserves a regular region's physical range]%
+\begin{lemma}[Numbering preserves a regular region's physical range]%
     \label{thm:peps_regular_region_range}
     \lean{TNLean.PEPS.range_regularOpenRegionMatrix_eq_regionGroundSpace}
     \leanok
@@ -7,7 +7,7 @@
     crossing bonds identifies the columns of its open-region matrix
     $T_R$ with the open tensors defining $\mathcal G_R$.
     Thus $\operatorname{ran}T_R=\mathcal G_R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Numbering and converting between group labels and the chosen
@@ -54,7 +54,7 @@
     the required numbering exists.
 \end{proof}
 
-\begin{theorem}[Equal closed states have equal regular region spaces]%
+\begin{lemma}[Equal closed states have equal regular region spaces]%
     \label{thm:peps_same_state_regular_region_spaces}
     \lean{TNLean.PEPS.regionGroundSpace_eq_of_sameState_regular_connected}
     \leanok
@@ -66,7 +66,7 @@
     subgraphs are connected.
     This is a necessary local relation toward a Fundamental Theorem
     for regular $G$-injective PEPS.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_support}
@@ -75,7 +75,7 @@
     range of that common density.
 \end{proof}
 
-\begin{theorem}[Dimension and Schmidt rank of a regular connected cut]%
+\begin{lemma}[Dimension and Schmidt rank of a regular connected cut]%
     \label{thm:peps_regular_region_dimension}
     \lean{TNLean.PEPS.finrank_regionGroundSpace_of_regular_connected,
         TNLean.PEPS.rank_regionReducedDensity_of_regular_connected_cut,
@@ -90,7 +90,7 @@
     and the closed PEPS vector is nonzero.
     These are auxiliary untwisted-cut consequences of the invariant
     boundary calculation in \cite[Corollary~6.10]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_connected_regular_region_injectivity,
@@ -106,7 +106,7 @@
     vector cannot vanish.
 \end{proof}
 
-\begin{theorem}[The physical state determines the virtual group order]%
+\begin{lemma}[The physical state determines the virtual group order]%
     \label{thm:peps_regular_group_order_rigidity}
     \lean{TNLean.PEPS.card_group_eq_of_sameState_regular_connected_cut}
     \leanok
@@ -118,7 +118,7 @@
     both sides and at least two crossing bonds. Then $|G|=|H|$.
     Equality of the group orders is asserted; the multiplication
     laws are not determined by this rank argument.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_region_dimension}

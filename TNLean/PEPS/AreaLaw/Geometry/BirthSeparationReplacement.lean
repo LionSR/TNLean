@@ -67,10 +67,12 @@ theorem exists_pos_le_norm_sub_away_from_intPoints {X Y : Set (ℝ × ℝ)}
     {p | ¬ (‖p.1 - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧ ‖p.2 - ((i : ℝ), (j : ℝ))‖ < 1 / 4)}
   have hKc : IsCompact K := by
     refine (hX.prod hY).inter_right (isClosed_iInter fun i ↦ isClosed_iInter fun j ↦ ?_)
-    refine (IsOpen.isClosed_compl ?_)
-    exact (isOpen_lt (continuous_norm.comp (continuous_fst.sub continuous_const))
-      continuous_const).inter
-      (isOpen_lt (continuous_norm.comp (continuous_snd.sub continuous_const)) continuous_const)
+    have hO : IsOpen {p : (ℝ × ℝ) × (ℝ × ℝ) |
+        ‖p.1 - ((i : ℝ), (j : ℝ))‖ < 1 / 4 ∧ ‖p.2 - ((i : ℝ), (j : ℝ))‖ < 1 / 4} :=
+      (isOpen_lt (continuous_norm.comp (continuous_fst.sub continuous_const))
+        continuous_const).inter
+        (isOpen_lt (continuous_norm.comp (continuous_snd.sub continuous_const)) continuous_const)
+    exact hO.isClosed_compl
   rcases K.eq_empty_or_nonempty with hK | hK
   · refine ⟨1, one_pos, fun x hx y hy h ↦ ?_⟩
     have : (x, y) ∈ K :=

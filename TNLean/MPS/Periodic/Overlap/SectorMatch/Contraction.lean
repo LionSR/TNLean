@@ -68,7 +68,7 @@ normalization of the resulting sector phases; after that, the algebraic scalar
 extraction and the phase-coboundary lemma perform the κ/θ/φ telescoping. See
 docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 lemma sectorTensor_proportional_of_blockedMatch
-    [NeZero D] (A B : MPSTensor d D)
+    (A B : MPSTensor d D)
     {m : ℕ} [NeZero m]
     (hA_lc : IsLeftCanonical A) (hB_lc : IsLeftCanonical B)
     {dimA dimB : Fin m → ℕ}

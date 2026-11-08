@@ -26,7 +26,7 @@ noncomputable def intervalJointOutsideFlagSet {d D N : ℕ}
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val) :
     Set {s : Fin (logicalSiteCount d D N) // s ∉ Set.range (Fin.Embedding.append
       (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk))} :=
-  fun s ↦ (logicalSiteEquivFin d D N).symm s.val ∈ joiningFlagSupport d D N m.val
+  Set.ofPred fun s ↦ (logicalSiteEquivFin d D N).symm s.val ∈ joiningFlagSupport d D N m.val
 
 /-- The outside inclusion which initializes exactly the joining flags.
 

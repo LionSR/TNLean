@@ -1,7 +1,7 @@
 % SCP10, Lemma 6.2 and Observations 6.5--6.6, source lines 1704--1716 and 1825--1920.
 % Bonds are unnormalized; one internal cycle contributes one factor of |G|.
 
-\begin{theorem}[G-isometry under coordinate permutations]%
+\begin{lemma}[G-isometry under coordinate permutations]%
     \label{thm:peps_g_isometry_coordinate_equiv}
     \lean{TNLean.PEPS.IsGIsometric.of_coordinateEquiv}
     \leanok
@@ -12,7 +12,7 @@
     maps. Suppose $E\rho'(g)=\rho(g)E$ for every $g$ and $FT'=TE$.
     Then $T'$ is $G$-isometric for $\rho'$, with the same positive
     isometry factor as $T$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The map $E$ carries invariant vectors to invariant vectors.
@@ -22,7 +22,7 @@
         =c\langle Ex,Ey\rangle=c\langle x,y\rangle$ for invariant $x,y$.
 \end{proof}
 
-\begin{theorem}[Translation constraints around the internal square]%
+\begin{lemma}[Translation constraints around the internal square]%
     \label{thm:peps_two_by_two_translation_compatibility}
     \lean{TNLean.PEPS.twoByTwoSiteLegs_smul,
         TNLean.PEPS.twoByTwoSiteLegs_compatible_iff,
@@ -42,7 +42,7 @@
         \prod_{i=0}^3\delta_{\ell_i(\alpha,x),q_i\ell_i(\beta,y)}
         =|G|^4\sum_{g\in G}\delta_{\alpha,g\beta}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The internal bond shared by corners $0$ and $1$ gives
@@ -56,7 +56,7 @@
     of $y$.
 \end{proof}
 
-\begin{theorem}[Gram operator of the contracted four-site tensor]%
+\begin{lemma}[Gram operator of the contracted four-site tensor]%
     \label{thm:peps_two_by_two_gram}
     \lean{TNLean.PEPS.twoByTwoTensor_gram_expansion,
         TNLean.PEPS.exists_twoByTwoTensor_gram}
@@ -78,7 +78,7 @@
     Thus $B^*B=c_B P_8$, where $P_8$ averages simultaneous regular
     translation of the eight boundary bonds and
     $c_B=|G|\prod_i c_i>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The local isometries give
@@ -106,20 +106,20 @@
     \cite[Lemma~6.2 and Observations~6.5--6.6]{Schuch2010PEPS}.
 \end{proof}
 
-\begin{theorem}[G-isometry of the explicit two-by-two contraction]%
+\begin{lemma}[G-isometry of the explicit two-by-two contraction]%
     \label{thm:peps_two_by_two_isometry}
     \lean{TNLean.PEPS.twoByTwoTensor_translation,
         TNLean.PEPS.twoByTwoSeparatedTensor,
         TNLean.PEPS.isGIsometric_twoByTwoSeparatedTensor}
     \leanok
     \uses{thm:peps_two_by_two_gram,def:peps_two_by_two_tensor}
-    Under the hypotheses of Theorem~\ref{thm:peps_two_by_two_gram},
+    Under the hypotheses of Lemma~\ref{thm:peps_two_by_two_gram},
     the contracted map $B:\mathbb C^{G^8}\to\mathbb C^{P^4}$
     is $G$-isometric for simultaneous regular translation of the eight
     boundary labels. The eight separate labels may equivalently be ordered
     as four paired legs. All four physical registers are retained, and
     surjectivity onto their ambient tensor product is not required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Translate all four internal summation variables by $g$.
@@ -131,7 +131,7 @@
     Separating each paired leg merely reindexes these formulas.
 \end{proof}
 
-\begin{theorem}[Nonvanishing of the original fine and coarse states]%
+\begin{lemma}[Nonvanishing of the original fine and coarse states]%
     \label{thm:peps_two_by_two_nonzero}
     \lean{TNLean.PEPS.IsGIsometric.torusBondNetwork_one_ne_zero,
         TNLean.PEPS.IsGIsometric.twoByTwoFineState_ne_zero,
@@ -146,7 +146,7 @@
     coarse graph state obtained by placing the same original tensor $a$
     at every coarse vertex is also nonzero. Neither conclusion requires
     surjectivity onto the ambient physical space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reindex the four regular labels as an ordered quadruple. The coordinate

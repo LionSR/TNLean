@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.TraceNormContractionCoefficient
 import QICLean.Analysis.TraceNormVariational
 import TNLean.Algebra.UnitaryMulVecInner
+import TNLean.Algebra.UnitPhaseScalar
 
 /-!
 # Trace norm of a difference of pure states
@@ -83,9 +84,7 @@ theorem traceNorm_pureStateProj_sub_le {ψ φ : EuclideanSpace ℂ (Fin D)} (hψ
         push_cast
         ring
   set φ' : EuclideanSpace ℂ (Fin D) := c • φ with hφ'
-  have hcc : c * star c = 1 := by
-    rw [Complex.star_def, Complex.mul_conj, Complex.normSq_eq_norm_sq, hc1]
-    norm_num
+  have hcc : c * star c = 1 := Complex.mul_star_self_of_norm_eq_one hc1
   have hproj : pureStateProj (WithLp.ofLp φ') = pureStateProj (WithLp.ofLp φ) := by
     ext i j
     simp only [pureStateProj, vecMulVec_apply, hφ', WithLp.ofLp_smul, Pi.smul_apply,

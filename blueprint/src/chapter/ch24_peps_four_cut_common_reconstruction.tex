@@ -24,7 +24,7 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         U^{\mathrm v}_v(p^{\mathrm v}_v)(t_v,b_{v+n}).
         \label{eq:peps_common_bond_product}
     \end{align}
-    With bond representation $U_f$ and trace-dual functional $\delta_{f,k}(M)=\tr(U_f(k^{-1})M\Delta_{U_f})$ from Theorem~\ref{thm:peps_torus_projector_extraction} (\cite[Lemma~4.6]{Schuch2010PEPS}), set
+    With bond representation $U_f$ and trace-dual functional $\delta_{f,k}(M)=\tr(U_f(k^{-1})M\Delta_{U_f})$ from Lemma~\ref{thm:peps_torus_projector_extraction} (\cite[Lemma~4.6]{Schuch2010PEPS}), set
     \begin{align}
         E_p(\psi) & =\sum_{\beta:\mathcal B\to V^2}
         (\mathcal R\psi)(\beta)
@@ -34,7 +34,7 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
     \end{align}
 \end{definition}
 
-\begin{theorem}[Coefficient uniqueness for coherent bond sums]%
+\begin{lemma}[Coefficient uniqueness for coherent bond sums]%
     \label{thm:peps_four_cut_common_coefficient_uniqueness}
     \lean{TNLean.PEPS.torusBondCoefficientExtraction_bondProduct,
         TNLean.PEPS.torusBondCoefficientExtraction_sum,
@@ -49,19 +49,19 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         \label{eq:peps_common_bond_duality}
     \end{align}
     so $(B_p)_p$ is linearly independent and $\sum_pa_pB_p=\sum_pb_pB_p\iff\forall p,\ a_p=b_p$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_torus_projector_extraction}
-    Factoring (\ref{eq:peps_common_bond_extraction}) on (\ref{eq:peps_common_bond_product}) bond by bond via Theorem~\ref{thm:peps_torus_projector_extraction} gives $E_p(B_q)=\prod_{f\in\mathcal B}\delta_{p_f,q_f}=\delta_{p,q}$, from which (\ref{eq:peps_common_bond_duality}) and linear independence follow by linearity.
+    Factoring (\ref{eq:peps_common_bond_extraction}) on (\ref{eq:peps_common_bond_product}) bond by bond via Lemma~\ref{thm:peps_torus_projector_extraction} gives $E_p(B_q)=\prod_{f\in\mathcal B}\delta_{p_f,q_f}=\delta_{p,q}$, from which (\ref{eq:peps_common_bond_duality}) and linear independence follow by linearity.
 \end{proof}
 
-\begin{theorem}[Relative-label compatibility]%
+\begin{lemma}[Relative-label compatibility]%
     \label{thm:peps_four_cut_common_relative_compatibility}
     \lean{TNLean.PEPS.fourBlock_relativeLabel_compatibility,
         TNLean.PEPS.fourBlock_compatibility_commute}
     \leanok
     In \cite[Theorem~5.5]{Schuch2010PEPS}, for any $a,b,c,d\in G$, setting $h_1=b^{-1}a$, $h_2=d^{-1}c$, $v_1=c^{-1}a$, and $v_2=d^{-1}b$ gives $v_2h_1=h_2v_1$; if also $h_1=h_2$ and $v_1=v_2$, then $v_1h_1=h_1v_1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     $v_2h_1=(d^{-1}b)(b^{-1}a)=d^{-1}a=(d^{-1}c)(c^{-1}a)=h_2v_1$.
 \end{proof}
@@ -81,7 +81,7 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
     $(F_f\delta_k)_{i,j}=U_f(k)_{i,j}$ and $\psi\mapsto(\mathcal R\psi)(\tau[f\mapsto s])$ are linear.
 \end{proof}
 
-\begin{theorem}[An identity bond forces representation-matrix support]%
+\begin{lemma}[An identity bond forces representation-matrix support]%
     \label{thm:peps_four_cut_common_uncut_support}
     \lean{TNLean.PEPS.product_coordinateSlice_eq_smul,
         TNLean.PEPS.torusPhysicalBondSlice_averagingSite_mem_range}
@@ -94,14 +94,14 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         \label{eq:peps_common_product_slice}
     \end{align}
     Consequently, if $O_f=\Id$, then $S_{f,\tau}\mathcal N_{A^0}(O)\in\operatorname{ran}F_f$ for all $\tau$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_network_expansion,
         def:peps_four_cut_common_bond_slices}
     Splitting off $i=j$ gives (\ref{eq:peps_common_product_slice}). When $O_f=\Id$, the $f$-factor in (\ref{eq:peps_common_regrouped_average}) is $U_f(q_{h(f)}q_{t(f)}^{-1})=F_f\delta_{q_{h(f)}q_{t(f)}^{-1}}$, so (\ref{eq:peps_common_product_slice}) places each $q$-summand (and hence $S_{f,\tau}\mathcal N_{A^0}(O)$) in $\operatorname{ran}F_f$.
 \end{proof}
 
-\begin{theorem}[The four cuts derive a complete bond-product expansion]%
+\begin{lemma}[The four cuts derive a complete bond-product expansion]%
     \label{thm:peps_four_cut_common_bond_span}
     \lean{TNLean.PEPS.torusPhysicalBondSlice_mem_range_of_mem_torusCutSpace,
         TNLean.PEPS.torusBondRegrouping_mem_product_range_of_mem_fourTorusCutSpace,
@@ -125,17 +125,17 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         \psi & =\sum_pE_p(\psi)B_p.
         \label{eq:peps_common_extracted_expansion}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_boundary_span,
         thm:peps_four_cut_common_uncut_support,
         thm:peps_four_cut_common_product_range,
         thm:peps_four_cut_common_coefficient_uniqueness,
         def:peps_four_cut_common_bond_coefficients}
-    By Theorem~\ref{thm:peps_four_cut_common_boundary_span} and Theorem~\ref{thm:peps_four_cut_common_uncut_support}, $S_{f,\tau}\psi\in\operatorname{ran}F_f$ whenever $f$ is uncut in $(c,r)$. Since each $f=(v,d)$ on $(\Z/2\Z)^2$ is uncut in $(v_x,v_y)$, (\ref{eq:peps_common_product_range}) of Theorem~\ref{thm:peps_four_cut_common_product_range} gives $\mathcal R\psi\in\operatorname{ran}\mathcal T_F$, yielding (\ref{eq:peps_common_derived_bond_span}), and (\ref{eq:peps_common_bond_duality}) gives (\ref{eq:peps_common_extracted_expansion}).
+    By Lemma~\ref{thm:peps_four_cut_common_boundary_span} and Lemma~\ref{thm:peps_four_cut_common_uncut_support}, $S_{f,\tau}\psi\in\operatorname{ran}F_f$ whenever $f$ is uncut in $(c,r)$. Since each $f=(v,d)$ on $(\Z/2\Z)^2$ is uncut in $(v_x,v_y)$, (\ref{eq:peps_common_product_range}) of Lemma~\ref{thm:peps_four_cut_common_product_range} gives $\mathcal R\psi\in\operatorname{ran}\mathcal T_F$, yielding (\ref{eq:peps_common_derived_bond_span}), and (\ref{eq:peps_common_bond_duality}) gives (\ref{eq:peps_common_extracted_expansion}).
 \end{proof}
 
-\begin{theorem}[Trace extraction of a canonical network]%
+\begin{lemma}[Trace extraction of a canonical network]%
     \label{thm:peps_four_cut_common_network_extraction}
     \lean{TNLean.PEPS.torusBondCoefficientExtraction_averagingSite}
     \leanok
@@ -147,14 +147,14 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         \prod_{f\in\mathcal B}\delta_{f,p_f}(O^q_f).
         \label{eq:peps_common_network_extraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_network_expansion,
         thm:peps_torus_projector_extraction}
     Apply the linear functional (\ref{eq:peps_common_bond_extraction}) to (\ref{eq:peps_common_network_average}) term by term.
 \end{proof}
 
-\begin{theorem}[Nonflat coefficients vanish in the four-cut intersection]%
+\begin{lemma}[Nonflat coefficients vanish in the four-cut intersection]%
     \label{thm:peps_four_cut_common_nonflat_vanish}
     \lean{TNLean.PEPS.torusBondCoefficientExtraction_cutNetwork_eq_zero,
         TNLean.PEPS.torusBondCoefficientExtraction_eq_zero_of_mem_torusCutSpace,
@@ -169,12 +169,12 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         \label{eq:peps_common_failed_plaquette}
     \end{align}
     and $O_f=\Id$ on all bonds uncut by $(c,r)$, then $E_p(\mathcal N_{A^0}(O))=0$, hence $E_p(\psi)=0$ for all $\psi\in\mathcal S^{A^0}_{c,r}$. In particular, if $\psi\in\mathcal S^{A^0}$ and $p$ is not flat, then $E_p(\psi)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_network_extraction,
         thm:peps_torus_projector_extraction,
         thm:peps_four_cut_common_boundary_span}
-    In (\ref{eq:peps_common_network_extraction}), any nonzero summand $q$ has $\delta_{f,p_f}(O^q_f)\ne0$ on the four uncut bonds, so Theorem~\ref{thm:peps_torus_projector_extraction} forces $p^{\mathrm h}_v=q_{v+e}q_v^{-1}$ and $p^{\mathrm v}_v=q_vq_{v+n}^{-1}$ there, implying $p^{\mathrm v}_{(c+1,r)}p^{\mathrm h}_{(c,r+1)}=q_{(c+1,r)}q_{(c,r+1)}^{-1}=p^{\mathrm h}_{(c,r)}p^{\mathrm v}_{(c,r)}$ and contradicting (\ref{eq:peps_common_failed_plaquette}). Linearity over Theorem~\ref{thm:peps_four_cut_common_boundary_span} gives $E_p(\psi)=0$ on $\mathcal S^{A^0}_{c,r}$, and any nonflat $p$ satisfies (\ref{eq:peps_common_failed_plaquette}) at some $(c,r)$.
+    In (\ref{eq:peps_common_network_extraction}), any nonzero summand $q$ has $\delta_{f,p_f}(O^q_f)\ne0$ on the four uncut bonds, so Lemma~\ref{thm:peps_torus_projector_extraction} forces $p^{\mathrm h}_v=q_{v+e}q_v^{-1}$ and $p^{\mathrm v}_v=q_vq_{v+n}^{-1}$ there, implying $p^{\mathrm v}_{(c+1,r)}p^{\mathrm h}_{(c,r+1)}=q_{(c+1,r)}q_{(c,r+1)}^{-1}=p^{\mathrm h}_{(c,r)}p^{\mathrm v}_{(c,r)}$ and contradicting (\ref{eq:peps_common_failed_plaquette}). Linearity over Lemma~\ref{thm:peps_four_cut_common_boundary_span} gives $E_p(\psi)=0$ on $\mathcal S^{A^0}_{c,r}$, and any nonflat $p$ satisfies (\ref{eq:peps_common_failed_plaquette}) at some $(c,r)$.
 \end{proof}
 
 \begin{definition}[Product of the local invariant projectors]%
@@ -190,7 +190,7 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
     Right translation by $k\in G$ permutes $\Pi_{\rho_v}=|G|^{-1}\sum_{g\in G}\rho_v(g)$.
 \end{proof}
 
-\begin{theorem}[Projection fixes cut vectors and inserts averaging sites]%
+\begin{lemma}[Projection fixes cut vectors and inserts averaging sites]%
     \label{thm:peps_four_cut_common_average_projection}
     \lean{TNLean.PEPS.torusSitewiseAveragingProjector_cutMap,
         TNLean.PEPS.torusSitewiseAveragingProjector_eq_self_of_mem_cut,
@@ -206,16 +206,16 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         (U^{\mathrm v}_v(p^{\mathrm v}_v))_v).
         \label{eq:peps_common_project_bond_product}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_local_inverse,
         def:peps_four_cut_common_average_projection,
         thm:peps_four_cut_common_physical_contraction,
         thm:peps_torus_projector_expansion}
-    Invariance $\Pi_{\rho_v}\mathcal P(A^0_{\rho_v})=\mathcal P(A^0_{\rho_v})$ and (\ref{eq:peps_common_cut_recovery}) give $\mathcal Q_\rho\psi=\psi$, while applying $\mathcal Q_\rho$ to $B_p$ via Theorem~\ref{thm:peps_four_cut_common_physical_contraction} and Theorem~\ref{thm:peps_torus_projector_expansion} replaces the identity site tensors by $A^0_{\rho_v}$, yielding (\ref{eq:peps_common_project_bond_product}).
+    Invariance $\Pi_{\rho_v}\mathcal P(A^0_{\rho_v})=\mathcal P(A^0_{\rho_v})$ and (\ref{eq:peps_common_cut_recovery}) give $\mathcal Q_\rho\psi=\psi$, while applying $\mathcal Q_\rho$ to $B_p$ via Lemma~\ref{thm:peps_four_cut_common_physical_contraction} and Lemma~\ref{thm:peps_torus_projector_expansion} replaces the identity site tensors by $A^0_{\rho_v}$, yielding (\ref{eq:peps_common_project_bond_product}).
 \end{proof}
 
-\begin{theorem}[Projecting a flat product gives a commuting closure]%
+\begin{lemma}[Projecting a flat product gives a commuting closure]%
     \label{thm:peps_four_cut_common_flat_projection}
     \lean{TNLean.PEPS.exists_averagingProjector_bondProduct_eq_matchedClosure,
         TNLean.PEPS.averagingProjector_bondProduct_mem_matchedClosureSpan}
@@ -224,23 +224,23 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         def:peps_four_cut_common_bond_coefficients,
         def:peps_four_cut_common_closure,def:peps_bond_flat}
     For the matched actions $\rho_v$ and any flat bond labelling $p$, there exist $g,h\in G$ with $gh=hg$ such that $\mathcal Q_\rho B_p=\mathcal M_{A^0}(g,h)\in\mathcal Z_{A^0}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_bond_flat_classification,
         thm:peps_four_cut_common_average_projection,
         thm:peps_four_cut_common_vertex_gauge,
         def:peps_four_cut_common_average_projection}
-    By Theorem~\ref{thm:peps_bond_flat_classification}, $p$ is vertex-gauge equivalent to a seam pair $(g,h)$ with $gh=hg$; applying Theorem~\ref{thm:peps_four_cut_common_vertex_gauge} to (\ref{eq:peps_common_project_bond_product}) gives $\mathcal Q_\rho B_p=\mathcal M_{A^0}(g,h)\in\mathcal Z_{A^0}$.
+    By Lemma~\ref{thm:peps_bond_flat_classification}, $p$ is vertex-gauge equivalent to a seam pair $(g,h)$ with $gh=hg$; applying Lemma~\ref{thm:peps_four_cut_common_vertex_gauge} to (\ref{eq:peps_common_project_bond_product}) gives $\mathcal Q_\rho B_p=\mathcal M_{A^0}(g,h)\in\mathcal Z_{A^0}$.
 \end{proof}
 
-\begin{theorem}[Canonical four-cut closure with common alphabets]%
+\begin{lemma}[Canonical four-cut closure with common alphabets]%
     \label{thm:peps_four_cut_common_canonical_closure}
     \lean{TNLean.PEPS.fourTorusCutSpace_matchedAveraging_le_commutingClosureSpan,
         TNLean.PEPS.fourTorusCutSpace_matchedAveraging_eq_commutingClosureSpan}
     \leanok
     \uses{def:peps_four_cut_common_boundary,def:peps_four_cut_common_closure}
     On $X=(\Z/2\Z)^2$, if every bond representation $U_f$ is semi-regular, then $\mathcal S^{A^0}=\mathcal Z_{A^0}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_bond_span,
         thm:peps_four_cut_common_nonflat_vanish,
@@ -248,17 +248,17 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
         thm:peps_four_cut_common_flat_projection,
         thm:peps_four_cut_common_matched_membership,
         def:peps_four_cut_common_average_projection}
-    For $\psi\in\mathcal S^{A^0}$, applying $\mathcal Q_\rho$ (Theorem~\ref{thm:peps_four_cut_common_average_projection}) to (\ref{eq:peps_common_extracted_expansion}) and using Theorems~\ref{thm:peps_four_cut_common_nonflat_vanish} and~\ref{thm:peps_four_cut_common_flat_projection} gives
+    For $\psi\in\mathcal S^{A^0}$, applying $\mathcal Q_\rho$ (Lemma~\ref{thm:peps_four_cut_common_average_projection}) to (\ref{eq:peps_common_extracted_expansion}) and using Lemmas~\ref{thm:peps_four_cut_common_nonflat_vanish} and~\ref{thm:peps_four_cut_common_flat_projection} gives
     \begin{align}
         \psi & =\mathcal Q_\rho\psi=\sum_pE_p(\psi)\mathcal Q_\rho B_p
         =\sum_{p\text{ flat}}E_p(\psi)\mathcal Q_\rho B_p
         \in\mathcal Z_{A^0},
         \label{eq:peps_common_flat_reconstruction}
     \end{align}
-    while $\mathcal Z_{A^0}\subseteq\mathcal S^{A^0}$ holds by Theorem~\ref{thm:peps_four_cut_common_matched_membership}.
+    while $\mathcal Z_{A^0}\subseteq\mathcal S^{A^0}$ holds by Lemma~\ref{thm:peps_four_cut_common_matched_membership}.
 \end{proof}
 
-\begin{theorem}[Four-cut closure for independent tensors with common alphabets]%
+\begin{lemma}[Four-cut closure for independent tensors with common alphabets]%
     \label{thm:peps_four_cut_common_closure}
     \lean{TNLean.PEPS.fourTorusCutSpace_eq_matchedCommutingClosureSpan}
     \leanok
@@ -271,9 +271,9 @@ Throughout this subsection $G$ and $V$ are finite, torus periods are positive, $
          & =\spn_{\C}\{\mathcal M_A(g,h):g,h\in G,\ gh=hg\}.
         \label{eq:peps_common_four_cut_closure}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_local_inverse,
         thm:peps_four_cut_common_canonical_closure}
-    With $R_v=\mathcal P(A_v)$, Theorem~\ref{thm:peps_four_cut_common_local_inverse} and Theorem~\ref{thm:peps_four_cut_common_canonical_closure} give $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})=\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$.
+    With $R_v=\mathcal P(A_v)$, Lemma~\ref{thm:peps_four_cut_common_local_inverse} and Lemma~\ref{thm:peps_four_cut_common_canonical_closure} give $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})=\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$.
 \end{proof}

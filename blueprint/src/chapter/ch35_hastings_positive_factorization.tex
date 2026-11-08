@@ -24,42 +24,42 @@ unit vector $\Omega$ on the chain of $L$ sites.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Enlarging the error]
+\begin{lemma}[Enlarging the error]
     \label{thm:hastings_factorization_mono}
     \lean{TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt.mono}
     \leanok
     \uses{def:hastings_factorization_at}
     An approximate factorization at $(c,l)$ with error $\epsilon$ is also one
     with any error $\epsilon'\ge\epsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Only~(\ref{eq:hastings_factorization_at}) depends on $\epsilon$.
 \end{proof}
 
-\begin{theorem}[Supports are closed under adjoints]
+\begin{lemma}[Supports are closed under adjoints]
     \label{thm:hastings_supported_conj_transpose}
     \lean{Entropy.IsSupportedOn.conjTranspose}
     \leanok
     \uses{def:chain_model}
     If $A$ is supported on $S$, then $A^\dagger$ is supported on $S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     $(A^\dagger)_{x,y}=\overline{A_{y,x}}$ preserves the support condition on
     $x,y$.
 \end{proof}
 
-\begin{theorem}[The rank-one projection onto a unit vector]
+\begin{lemma}[The rank-one projection onto a unit vector]
     \label{thm:hastings_rank_one_projection}
     \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_vecMulVec_of_norm_eq_one}
     \leanok
     For $\|\Omega\|=1$, $P_0=|\Omega\rangle\langle\Omega|$ satisfies
     $P_0^2=P_0=P_0^\dagger$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     $P_0^\dagger=P_0$ and $P_0^2=\langle\Omega,\Omega\rangle P_0=P_0$.
 \end{proof}
 
-\begin{theorem}[An elementary bound]
+\begin{lemma}[An elementary bound]
     \label{thm:hastings_positivity_constant}
     \lean{TNLean.MPS.AreaLaw.Hastings.sqrt_one_sub_sq_add_le}
     \leanok
@@ -68,12 +68,12 @@ unit vector $\Omega$ on the chain of $L$ sites.
         \sqrt{1-(1-\epsilon)^2}+3\epsilon+\epsilon^2 & \le(\sqrt2+4)\sqrt\epsilon.
         \label{eq:hastings_positivity_constant}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $1-(1-\epsilon)^2\le2\epsilon$ and $\epsilon^2\le\epsilon\le\sqrt\epsilon$.
 \end{proof}
 
-\begin{theorem}[The positive repair at one cut]
+\begin{lemma}[The positive repair at one cut]
     \label{thm:hastings_positive_repair}
     \lean{TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt.conjTranspose_mul_self}
     \leanok
@@ -82,11 +82,11 @@ unit vector $\Omega$ on the chain of $L$ sites.
     $\epsilon$, then $O_B^\dagger O_B\ge0$ and $(O_B^\dagger O_B,O_L,O_R)$ is
     an approximate factorization at $(c,l)$ with error
     $(\sqrt2+4)\sqrt\epsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_supported_conj_transpose,
         thm:hastings_rank_one_projection, thm:hastings_positivity_constant}
-    By Theorem~\ref{thm:hastings_supported_conj_transpose}, $O_B^\dagger O_B\ge0$
+    By Lemma~\ref{thm:hastings_supported_conj_transpose}, $O_B^\dagger O_B\ge0$
     has the same support as $O_B$ and $\Vert O_B^\dagger O_B\Vert=\Vert O_B\Vert^2\le1$.
     For $\epsilon\le1$, the note-added bound with $Q=O_LO_R$ and
     (\ref{eq:hastings_positivity_constant}) give
@@ -100,7 +100,7 @@ unit vector $\Omega$ on the chain of $L$ sites.
     $\Vert O_B^\dagger O_BO_LO_R-P_0\Vert\le\Vert O_B^\dagger O_BO_LO_R\Vert+\Vert P_0\Vert\le2<(\sqrt2+4)\sqrt\epsilon$.
 \end{proof}
 
-\begin{theorem}[The positive version of Lemma~1]
+\begin{lemma}[The positive version of Lemma~1]
     \label{thm:hastings_positive_factorization}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_factorization}
     \leanok
@@ -114,14 +114,14 @@ unit vector $\Omega$ on the chain of $L$ sites.
     \end{align}
     This is $O_B^+$ of \cite[lines 912--943]{Hastings2007AreaLaw}, halving the
     rate of Lemma~1~\cite{gap:hastings07_lemma1_positivity_rate}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_positive_repair}
-    Apply Theorem~\ref{thm:hastings_positive_repair} with
+    Apply Lemma~\ref{thm:hastings_positive_repair} with
     $\sqrt{C_1e^{-l/\xi'}}=\sqrt{C_1}\,e^{-l/(2\xi')}$.
 \end{proof}
 
-\begin{theorem}[The factorization in the form used by the bootstrap]
+\begin{lemma}[The factorization in the form used by the bootstrap]
     \label{thm:hastings_factorization_bootstrap_form}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_factorization_of_isFactorizationAt}
     \leanok
@@ -129,8 +129,8 @@ unit vector $\Omega$ on the chain of $L$ sites.
     An approximate factorization at $(j,m)$ with error $\epsilon$ has $O_B$
     supported on $\lbrack0,j+m)$, $O_L$ on $\lbrack0,j)$, and $O_R$ on $\lbrack j,L)$
     satisfying~(\ref{eq:hastings_factorization_at}), supplying the scale-$m$
-    hypothesis of Theorem~\ref{thm:hastings_bootstrap_scale}.
-\end{theorem}
+    hypothesis of Lemma~\ref{thm:hastings_bootstrap_scale}.
+\end{lemma}
 \begin{proof}\leanok
     Since $\lbrack j-m,j+m)\cap\lbrack0,L)\subseteq\lbrack0,j+m)\cap\lbrack0,L)$, support on
     $\lbrack j-m,j+m)\cap\lbrack0,L)$ implies support on $\lbrack0,j+m)\cap\lbrack0,L)$.

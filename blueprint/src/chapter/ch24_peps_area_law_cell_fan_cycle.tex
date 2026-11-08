@@ -32,7 +32,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     where the side index is reduced modulo $4$.
 \end{definition}
 
-\begin{theorem}[Consecutive bases share their ordered endpoints]
+\begin{lemma}[Consecutive bases share their ordered endpoints]
     \label{thm:area_law_cell_fan_successor_endpoints}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_eq_cellFanStart_next}
     \leanok
@@ -42,7 +42,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     \begin{align}
         b_i & =a_{\tau(i)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan_successor,
         thm:area_law_indexed_side_interpolation,
@@ -59,7 +59,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     including the transition from side $3$ to side $0$.
 \end{proof}
 
-\begin{theorem}[Distinct elementary bases have distinct final endpoints]
+\begin{lemma}[Distinct elementary bases have distinct final endpoints]
     \label{thm:area_law_cell_fan_final_endpoint_injective}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_injective}
     \leanok
@@ -68,7 +68,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     four sides of $Q$ with elementary bases indexed by $\mathcal E$,
     the map $i\mapsto b_i$ from $\mathcal E$ to the square perimeter
     is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,thm:area_law_cell_fan_base_radius,
         thm:area_law_fan_triangle_contact,
@@ -82,7 +82,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     corresponding elementary segment. Thus $i=j$.
 \end{proof}
 
-\begin{theorem}[Endpoint adjacency is exactly the successor relation]
+\begin{lemma}[Endpoint adjacency is exactly the successor relation]
     \label{thm:area_law_cell_fan_successor_iff}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanEnd_eq_cellFanStart_iff}
     \leanok
@@ -91,7 +91,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     \begin{align}
         b_i=a_j & \quad\Longleftrightarrow\quad j=\tau(i).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_successor_endpoints,
         thm:area_law_cell_fan_final_endpoint_injective}

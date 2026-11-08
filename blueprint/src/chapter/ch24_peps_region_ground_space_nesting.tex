@@ -6,7 +6,7 @@ The regional contraction with arbitrary boundary conditions of
 implies a compatibility between nested regions. No injectivity or
 nonzero bond dimensions are needed.
 
-\begin{theorem}[Separation of nested incident labels]%
+\begin{lemma}[Separation of nested incident labels]%
     \label{thm:peps_nested_incident_labels}
     \lean{TNLean.PEPS.isRegionIncidentEdge_of_subset,
         TNLean.PEPS.RegionRemainderConfig,
@@ -25,7 +25,7 @@ nonzero bond dimensions are needed.
         \prod_{v\in R} A_v(\eta_R,\sigma_R(v)).
         \label{eq:peps_nested_boundary_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Restriction gives the decomposition of assignments, and its inverse
@@ -50,7 +50,7 @@ nonzero bond dimensions are needed.
     labels on $S^c$ and then applying $Q_{R,S,\tau}$.
 \end{definition}
 
-\begin{theorem}[Nesting of regional ground spaces]%
+\begin{lemma}[Nesting of regional ground spaces]%
     \label{thm:peps_region_ground_space_nested}
     \lean{TNLean.PEPS.openRegionWeight_nested_slice_mem_regionGroundSpace,
         TNLean.PEPS.regionGroundSpace_nested}
@@ -59,7 +59,7 @@ nonzero bond dimensions are needed.
     If $R\subseteq S$, then every $\phi_S\in\mathcal G_S$ and
     every complementary physical configuration $\tau$ satisfy
     $Q_{R,S,\tau}\phi_S\in\mathcal G_R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_nested_incident_labels}
@@ -83,7 +83,7 @@ nonzero bond dimensions are needed.
     for every $\phi_S\in\mathcal G_S$.
 \end{proof}
 
-\begin{theorem}[Monotonicity of common regional conditions]%
+\begin{lemma}[Monotonicity of common regional conditions]%
     \label{thm:peps_parent_regions_monotonicity}
     \lean{TNLean.PEPS.regionParentGroundSpace_le_of_regions_covered,
         TNLean.PEPS.regionParentGroundSpace_antitone_regions,
@@ -96,7 +96,7 @@ nonzero bond dimensions are needed.
     in that for $(R_i)$. In particular, for finite collections,
     any positive parent Hamiltonians built from these regions
     satisfy $\ker H_S\subseteq\ker H_R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_ground_space_nested,

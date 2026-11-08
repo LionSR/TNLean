@@ -1,4 +1,4 @@
-\begin{theorem}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}
+\begin{lemma}[Cyclic trace expansion for a closed MPS chain]\label{thm:trace_eval_word_eq_sum_cyclic}
     \lean{MPSTensor.trace_evalWord_eq_sum_cyclic}
     \leanok
     For a nonempty closed chain, the trace of the word
@@ -13,7 +13,7 @@
         \qquad \alpha_L=\alpha_0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -68,7 +68,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[The physical map is an isometric embedding]
+\begin{lemma}[The physical map is an isometric embedding]
     \label{thm:appendixB_physical_isometry_left_inverse}
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometryLeftInverse_comp}
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometry_injective}
@@ -85,7 +85,7 @@
         \notag
     \end{align}
     implies $U^*U=1$. In particular, $U$ is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -142,7 +142,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[The tensor powers are isometric embeddings]
+\begin{lemma}[The tensor powers are isometric embeddings]
     \label{thm:appendixB_physical_isometry_tensor_power}
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPowerLeftInverse_comp}
     \lean{MPSTensor.AppendixBStructuralData.physicalIsometryTensorPower_injective}
@@ -150,7 +150,7 @@
     \uses{def:appendixB_physical_isometry_tensor_power}
     For every $N\geq 0$, one has
     $U^{*\otimes N}U^{\otimes N}=1$. Hence $U^{\otimes N}$ is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -173,7 +173,7 @@
     is $v_p$, and the resulting left inverse makes $U^{\otimes N}$ injective.
 \end{proof}
 
-\begin{theorem}[Appendix B basis change and the parent interaction]
+\begin{lemma}[Appendix B basis change and the parent interaction]
     \label{lem:appendixB_basis_change_parent_interaction}
     \lean{MPSTensor.AppendixBStructuralData.parentInteraction_eq_coreTensor}
     \leanok
@@ -182,7 +182,7 @@
     $A_{\mathrm{core}}^i=\Lambda U^i$. The canonical local parent interaction
     is unchanged by this basis change:
     $q_L(A)=q_L(A_{\mathrm{core}})$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -245,7 +245,7 @@
     $P_{12}$ place it on the next bond.
 \end{definition}
 
-\begin{theorem}[Commutation of the adjacent virtual bond projectors]
+\begin{lemma}[Commutation of the adjacent virtual bond projectors]
     \label{thm:appendixB_virtual_bond_projectors_commute}
     \lean{MPSTensor.AppendixBStructuralData.leftVirtualBondProjection_comp_right}
     \leanok
@@ -284,7 +284,7 @@
             {(1,4)}{$\supp(P_{12})$}
         \end{tenkz}
     \end{center}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -294,13 +294,13 @@
     projectors gives the same double sum over $(k,\ell)$.
 \end{proof}
 
-\begin{theorem}[Surjectivity of the weighted boundary parametrization]
+\begin{lemma}[Surjectivity of the weighted boundary parametrization]
     \label{thm:appendixB_weighted_two_site_boundary_surjective}
     \lean{MPSTensor.AppendixBStructuralData.weightedTwoSiteBoundary_surjective}
     \leanok
     \uses{def:appendixB_two_site_bond_embedding}
     Strict positivity of the $\lambda_a$ makes $Y\mapsto v_Y$ surjective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -308,7 +308,7 @@
     $Y_{c,a}=\lambda_a^{-1}v_{a,c}$ satisfies $v_Y=v$.
 \end{proof}
 
-\begin{theorem}[The two-site basic-vector image]
+\begin{lemma}[The two-site basic-vector image]
     \label{thm:appendixB_two_site_basic_embedding_range}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBoundary}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicEmbedding_range}
@@ -319,7 +319,7 @@
     local-support family. For every boundary matrix $Y$,
     $U^{\otimes2}I_\varphi(v_Y) = \Gamma_2(\Lambda U)(Y)$.
     Consequently, $\ran(U^{\otimes2}I_\varphi)=G_2(\Lambda U)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -341,7 +341,7 @@
     projector onto $G_2(\Lambda U)$.
 \end{definition}
 
-\begin{theorem}[Range and complement of the two-site basic support projector]
+\begin{lemma}[Range and complement of the two-site basic support projector]
     \label{thm:appendixB_two_site_basic_support_projector}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_spec}
     \leanok
@@ -364,7 +364,7 @@
     \end{align}
     In particular, $q_2(\Lambda U)$ annihilates the image of
     $U^{\otimes2}I_\varphi$, while $P_2$ fixes that image pointwise.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -427,7 +427,7 @@
     $G_2(\bigoplus_j B_j)$.
 \end{definition}
 
-\begin{theorem}[Range of the residual-family bond embedding]
+\begin{lemma}[Range of the residual-family bond embedding]
     \label{thm:residual_family_two_site_support}
     \lean{MPSTensor.IsResidualIsometryFamily.residualFamilyPhysicalIsometryMatrix_isometry}
     \lean{MPSTensor.ResidualFamilyAppendixBData.twoSiteBondEmbedding_range}
@@ -457,7 +457,7 @@
     the common residual isometry required above exist.
     % Scope restriction (multiplicity-one canonical form): repeated copies remain
     % outside this statement; see docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

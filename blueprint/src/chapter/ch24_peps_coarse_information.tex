@@ -40,7 +40,7 @@ amplification.
     Each nonempty box $[\ell,h]$ is $\mathbb Z^2\cap[\ell-(\tfrac14,\tfrac14),h+(\tfrac14,\tfrac14)]$ (of $\ell_\infty$-diameter at most $D+\tfrac12<s_0$), and an empty box is $\mathbb Z^2\cap[-\tfrac14,-\tfrac18]^2$.
 \end{proof}
 
-\begin{theorem}[Coarse information outside a sublinear collar]
+\begin{lemma}[Coarse information outside a sublinear collar]
     \label{thm:peps_coarse_information}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_square,
         TNLean.PEPS.Approximation.coarse_mutualInformation_le_translated_square}
@@ -54,14 +54,14 @@ amplification.
         \label{eq:peps_coarse_information}
     \end{align}
     including for $X=\Lambda\cap T$, consistently open or closed rectangle sides, and after any common coordinate translation.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:area_law_collar_bound,thm:area_law_sublinear_collar,
         thm:peps_coarse_information_of_collar,
         thm:peps_coarse_information_square,lem:peps_box_union_of_intervals,
         lem:peps_box_union_template}
-    Lemma~\ref{lem:peps_box_union_of_intervals} shows that $T$ (or its pullback by a translation $d$) is a union of at most $N_0$ boxes, so combining Theorem~\ref{thm:peps_coarse_information_square} with Theorem~\ref{thm:area_law_sublinear_collar} (\cite[Proposition~9.6]{OpenAI2026AreaLaw}) at $D_0=13$ and $C_{\rm tpl}=24$ gives (\ref{eq:peps_coarse_information}).
+    Lemma~\ref{lem:peps_box_union_of_intervals} shows that $T$ (or its pullback by a translation $d$) is a union of at most $N_0$ boxes, so combining Lemma~\ref{thm:peps_coarse_information_square} with Lemma~\ref{thm:area_law_sublinear_collar} (\cite[Proposition~9.6]{OpenAI2026AreaLaw}) at $D_0=13$ and $C_{\rm tpl}=24$ gives (\ref{eq:peps_coarse_information}).
 \end{proof}
 
 \begin{lemma}[The coarse exponent is below one]
@@ -84,7 +84,7 @@ amplification.
         TNLean.PEPS.Approximation.coarseInformationThreshold}
     \leanok
     \uses{thm:area_law_uniform_collar_threshold}
-    For $C_{\rm tpl},A_0\in\mathbb R$, $N_0\in\mathbb Z$, collar threshold $N$, and amplification constants $(C_a,N_a)$, let $N_r$ be the threshold of Theorem~\ref{thm:area_law_uniform_collar_threshold} for $C_a$ and $\eta=K_{\rm c}^{-\beta_0}$ (so $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}$ for $n\ge N_r$ and $0\le r\le C_an^{(1-\varepsilon)/\alpha}$), where
+    For $C_{\rm tpl},A_0\in\mathbb R$, $N_0\in\mathbb Z$, collar threshold $N$, and amplification constants $(C_a,N_a)$, let $N_r$ be the threshold of Lemma~\ref{thm:area_law_uniform_collar_threshold} for $C_a$ and $\eta=K_{\rm c}^{-\beta_0}$ (so $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}$ for $n\ge N_r$ and $0\le r\le C_an^{(1-\varepsilon)/\alpha}$), where
     \begin{align}
         K_{\rm c}(C_{\rm tpl},N_0,A_0)     & =(\max\{C_{\rm tpl},0\}+1)(N_0+1)
         (\max\{A_0,1\}+4), \notag                                              \\
@@ -94,7 +94,7 @@ amplification.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Coarse information with explicit constants]
+\begin{lemma}[Coarse information with explicit constants]
     \label{thm:peps_coarse_information_of_collar_explicit}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_of_sublinearCollarBoundAt}
     \leanok
@@ -104,15 +104,15 @@ amplification.
     \begin{align}
         I_\Omega(X:E) & \le \max\{C_a,0\}. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_box_union_template,def:peps_coarse_information_constants,
         thm:area_law_uniform_collar_threshold}
-    For $T\ne\varnothing$, set $A=\max(A_0,1)$, $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$, $s_0=\lceil Au\rceil+1$, and $n=\lceil c_1(Au+3)\rceil$. Since $u\ge u_0\ge\max\{2,K_{\rm c}^{1/\varepsilon}\}$, Lemma~\ref{lem:peps_box_union_template} makes $T$ an $(n,s_0)$-template separated from the empty boundary of the cut $\Lambda$, with $u\le n\le K_{\rm c}u$ and $n^{1-\varepsilon}\le K_{\rm c}^{1-\varepsilon}u^{1-\varepsilon}\le u\le s_0$. Applying the collar bound and the amplification bound at $(\max(C,1),1)$ with $n\ge u\ge N_r$ gives $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$ by Theorem~\ref{thm:area_law_uniform_collar_threshold}, so $E\cap N_{2r}(S_0)=\varnothing$ and $I_\Omega(X:E)\le C_an^{-1}\le\max(C_a,0)$.
+    For $T\ne\varnothing$, set $A=\max(A_0,1)$, $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$, $s_0=\lceil Au\rceil+1$, and $n=\lceil c_1(Au+3)\rceil$. Since $u\ge u_0\ge\max\{2,K_{\rm c}^{1/\varepsilon}\}$, Lemma~\ref{lem:peps_box_union_template} makes $T$ an $(n,s_0)$-template separated from the empty boundary of the cut $\Lambda$, with $u\le n\le K_{\rm c}u$ and $n^{1-\varepsilon}\le K_{\rm c}^{1-\varepsilon}u^{1-\varepsilon}\le u\le s_0$. Applying the collar bound and the amplification bound at $(\max(C,1),1)$ with $n\ge u\ge N_r$ gives $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$ by Lemma~\ref{thm:area_law_uniform_collar_threshold}, so $E\cap N_{2r}(S_0)=\varnothing$ and $I_\Omega(X:E)\le C_an^{-1}\le\max(C_a,0)$.
 \end{proof}
 
-\begin{theorem}[Coarse information, assuming the sublinear collar bound]
+\begin{lemma}[Coarse information, assuming the sublinear collar bound]
     \label{thm:peps_coarse_information_of_collar}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_of_sublinearCollarBound}
     \leanok
@@ -120,15 +120,15 @@ amplification.
         thm:area_law_amplification,lem:peps_box_union_template,
         thm:area_law_uniform_collar_threshold}
     Fix $q,R,J$, $\Delta>0$, $N_0$, and $A_0$, and assume the sublinear collar bound (Definition~\ref{def:area_law_collar_bound}) for some $D_0,C_{\rm tpl}$. Then there exist $\beta<1$, $C$, and $u_0$ such that for every $u\ge u_0$, unit ground vector $\Omega$ with gap $\Delta$ of an admissible range-$R$, bound-$J$ Hamiltonian on a finite induced domain $\Lambda$, union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, $X\subseteq\Lambda\cap T$, and $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(E,T)>u^\beta$, one has $I_\Omega(X:E)\le C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_coarse_information_of_collar_explicit,thm:area_law_amplification,
         def:peps_coarse_information_constants,lem:peps_coarse_exponent_lt_one}
-    Combine the assumed collar constants $(C,N)$ with the amplification constants $(C_a,N_a)$ of Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, Lemma~\ref{lem:peps_coarse_exponent_lt_one} ($\beta=\beta_0<1$), and Theorem~\ref{thm:peps_coarse_information_of_collar_explicit}.
+    Combine the assumed collar constants $(C,N)$ with the amplification constants $(C_a,N_a)$ of Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, Lemma~\ref{lem:peps_coarse_exponent_lt_one} ($\beta=\beta_0<1$), and Lemma~\ref{thm:peps_coarse_information_of_collar_explicit}.
 \end{proof}
 
-\begin{theorem}[Coarse information on the square grid, assuming the collar bound]
+\begin{lemma}[Coarse information on the square grid, assuming the collar bound]
     \label{thm:peps_coarse_information_square}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_square_of_sublinearCollarBound,
         TNLean.PEPS.Approximation.finiteProductMutualInformation_relabel}
@@ -136,23 +136,23 @@ amplification.
     \uses{thm:peps_coarse_information_of_collar,def:polynomial_peps_model,
         lem:peps_box_union_template}
     Fix $q$, $J\in\mathbb R$, $\Delta>0$, $N_0$, and $A_0$, and assume the range-$1$ sublinear collar bound. There exist $\beta<1$, $C$, and $u_0$ such that for every $u\ge u_0$, open square grid with a model Hamiltonian (Definition~\ref{def:polynomial_peps_model}), unit ground vector $\Omega$ with gap $\Delta$, translation $c\in\mathbb Z^2$, union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, and site sets $X,E$ with $X+c\subseteq T$ and $\operatorname{dist}_\infty(E+c,T)>u^\beta$, one has $I_\Omega(X:E)\le C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Translating $T$ by $-c$ preserves box-union structure (Lemma~\ref{lem:peps_box_union_template}), diameters, distances, and regional entropies, reducing the claim to Theorem~\ref{thm:peps_coarse_information_of_collar} at $R=1$.
+    Translating $T$ by $-c$ preserves box-union structure (Lemma~\ref{lem:peps_box_union_template}), diameters, distances, and regional entropies, reducing the claim to Lemma~\ref{thm:peps_coarse_information_of_collar} at $R=1$.
 \end{proof}
 
-\begin{theorem}[Coarse information on finite induced domains]
+\begin{lemma}[Coarse information on finite induced domains]
     \label{thm:peps_coarse_information_finite_domain}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le}
     \leanok
     \uses{def:peps_box_union,def:area_law_hamiltonian}
     For integers $q\ge1$, $R,N_0\ge0$ and reals $J\ge0$, $\Delta>0$, $A_0$, there exist $\beta<1$, $C$, and $u_0$ such that for every $u\ge u_0$, finite induced domain $\Lambda$, unit ground vector $\Omega$ with gap $\Delta$ of an admissible range-$R$, bound-$J$ Hamiltonian on $\Lambda$, union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, $X\subseteq\Lambda\cap T$, and $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(T,E)>u^\beta$, one has $I_\Omega(X:E)\le C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_coarse_information_of_collar,thm:area_law_sublinear_collar}
-    Apply Theorem~\ref{thm:area_law_sublinear_collar} at $D_0=2R+11$ and $C_{\rm tpl}=24$, followed by Theorem~\ref{thm:peps_coarse_information_of_collar}.
+    Apply Lemma~\ref{thm:area_law_sublinear_collar} at $D_0=2R+11$ and $C_{\rm tpl}=24$, followed by Lemma~\ref{thm:peps_coarse_information_of_collar}.
 \end{proof}
 
 \begin{definition}[Closed-form collar constants at range $R$]
@@ -165,18 +165,18 @@ amplification.
     For $q,R\in\mathbb N$ and $J,\Delta\in\mathbb R$, let $C_{\rm box}(q,R,J,\Delta)$ be the safe-box constant of \cite[Proposition~9.5]{OpenAI2026AreaLaw} at range $R$ with transport constants $(\text{threshold }1/8,\ \text{entropy }200000\text{ of degree }2,\ \text{energy }3(18\pi^2+6144e^{\pi^2+1})\text{ of degree }4)$, and let $C(q,R,J,\Delta),N(q,R,J,\Delta)$ be the resulting collar constant and threshold of \cite[Proposition~9.6]{OpenAI2026AreaLaw} at truncation factor $10$.
 \end{definition}
 
-\begin{theorem}[The sublinear collar bound at range $R$ at closed-form constants]
+\begin{lemma}[The sublinear collar bound at range $R$ at closed-form constants]
     \label{thm:peps_collar_closed}
     \lean{TNLean.PEPS.Approximation.sublinearCollarBoundAt_closed}
     \leanok
     \uses{def:area_law_collar_bound,def:peps_closed_collar_constants}
     For $q,R\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$, and $D_0>2R+10$, the sublinear collar bound (Definition~\ref{def:area_law_collar_bound}) at $(R,D_0,C_{\rm tpl}=24)$ holds with $C(q,R,J,\Delta)$ and $N(q,R,J,\Delta)$ of Definition~\ref{def:peps_closed_collar_constants}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_sublinear_collar_explicit,
         thm:area_law_transport_bound_explicit}
-    Combine Theorem~\ref{thm:area_law_transport_bound_explicit} with Theorem~\ref{thm:area_law_sublinear_collar_explicit} at $C_{\rm tpl}=24$.
+    Combine Lemma~\ref{thm:area_law_transport_bound_explicit} with Lemma~\ref{thm:area_law_sublinear_collar_explicit} at $C_{\rm tpl}=24$.
 \end{proof}
 
 \begin{definition}[Closed-form coarse constants at range $R$]
@@ -199,17 +199,17 @@ amplification.
 % statement is thm:peps_coarse_information_square.
 % Source: polynomial-PEPS 02-information.tex, Proposition 3.1, lines 91--145.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Coarse information at range $R$ at closed-form constants]
+\begin{lemma}[Coarse information at range $R$ at closed-form constants]
     \label{thm:peps_coarse_information_closed}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_closed}
     \leanok
     \uses{def:peps_box_union,def:area_law_hamiltonian,
         def:peps_closed_coarse_constants}
     For $q,R,N_0\in\mathbb N$ ($q\ge1$), $J\ge0$, $\Delta>0$, $A_0\in\mathbb R$, $u\ge u_0(q,R,J,\Delta,N_0,A_0)$, any unit ground vector $\Omega$ with gap $\Delta$ of an admissible range-$R$, bound-$J$ Hamiltonian on a finite induced domain $\Lambda$, any union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, any $X\subseteq\Lambda\cap T$, and any $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(T,E)>u^{\beta_0}$, one has $I_\Omega(X:E)\le C_{\rm coarse}(q,R,J,\Delta)$ (extending \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS} from $R=1$ to general $R$).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_coarse_information_of_collar_explicit,thm:peps_collar_closed,
         thm:peps_collar_amplification_bound}
-    Combine Theorem~\ref{thm:peps_collar_closed} (at $D_0=2R+11$) and Theorem~\ref{thm:peps_collar_amplification_bound} with Theorem~\ref{thm:peps_coarse_information_of_collar_explicit}.
+    Combine Lemma~\ref{thm:peps_collar_closed} (at $D_0=2R+11$) and Lemma~\ref{thm:peps_collar_amplification_bound} with Lemma~\ref{thm:peps_coarse_information_of_collar_explicit}.
 \end{proof}

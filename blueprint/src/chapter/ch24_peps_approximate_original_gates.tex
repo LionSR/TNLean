@@ -23,7 +23,7 @@ trace-norm estimates do not involve private dimensions.
     participating set of cardinality different from $1$ (possibly $\varnothing$).
 \end{definition}
 
-\begin{theorem}[Contractivity of the original chronology]
+\begin{lemma}[Contractivity of the original chronology]
     \label{thm:peps_original_operator_contraction}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_evalWithGateMaps_le_one}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.norm_eval_le_one}
@@ -31,7 +31,7 @@ trace-norm estimates do not involve private dimensions.
     \uses{def:peps_approximate_original_operators}
     Under the hypotheses of Definition~\ref{def:peps_approximate_original_operators},
     $\|W_G\|\le1$. The same bound holds for every original contraction circuit.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By induction on the chronology, composition is submultiplicative in operator
@@ -76,7 +76,7 @@ trace-norm estimates do not involve private dimensions.
     the length of its prescribed monomial list.
 \end{definition}
 
-\begin{theorem}[Preservation of the original resource bounds]
+\begin{lemma}[Preservation of the original resource bounds]
     \label{thm:peps_rescaled_resources}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.nonprivateCount_rescaledOriginal}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants_rescaledOriginal}
@@ -89,7 +89,7 @@ trace-norm estimates do not involve private dimensions.
     participating sets, and each party's participation count. If each monomial
     has at most $r$ pair effects, $\sum_j|c_{g,j}|\le S$, and $k_g\le K$, the
     same three bounds hold for $\widetilde W_\delta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_rescaled_original,def:peps_rescaled_occurrences}
@@ -99,28 +99,28 @@ trace-norm estimates do not involve private dimensions.
     coefficient sums.
 \end{proof}
 
-\begin{theorem}[Two-factor telescoping estimate]
+\begin{lemma}[Two-factor telescoping estimate]
     \label{thm:peps_contraction_composition_error}
     \lean{TNLean.Lattice.PartyCircuit.norm_comp_sub_comp_le_one}
     \leanok
     Let $A,C:E\to F$ and $B,D:F\to G$ be bounded linear maps between
     complex inner-product spaces. If $\|B\|,\|C\|\le1$, then
     $\|BA-DC\|\le\|A-C\|+\|B-D\|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Combine $BA-DC=B(A-C)+(B-D)C$ with the triangle inequality and
     submultiplicativity of the operator norm.
 \end{proof}
 
-\begin{theorem}[Chronological operator error]
+\begin{lemma}[Chronological operator error]
     \label{thm:peps_approximate_chronological_error}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_rescaledOriginal_sub_evalWithGateMaps_le}
     \leanok
     \uses{def:peps_rescaled_original}
     If $\|T_g-G_g\|\le\delta$ for $\delta\ge0$ and the original chronology has
     $N$ nonprivate occurrences, then $\|\widetilde W_\delta-W_G\|\le2\delta N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_original_operator_contraction,thm:peps_contraction_composition_error}
@@ -131,7 +131,7 @@ trace-norm estimates do not involve private dimensions.
         \le2\delta.
         \label{eq:peps_rescaled_local_error}
     \end{align}
-    By Theorems~\ref{thm:peps_original_operator_contraction} and
+    By Lemmas~\ref{thm:peps_original_operator_contraction} and
     \ref{thm:peps_contraction_composition_error}, private maps and register
     permutations add no error while spectator identities preserve
     (\ref{eq:peps_rescaled_local_error}), so induction adds $2\delta$ per gate.
@@ -149,7 +149,7 @@ trace-norm estimates do not involve private dimensions.
     and $\widetilde\rho_\delta(x)=\operatorname{Tr}_{\rm discard}|K\widetilde W_\delta x\rangle\langle K\widetilde W_\delta x|$.
 \end{definition}
 
-\begin{theorem}[Physical error of approximate original gates]
+\begin{lemma}[Physical error of approximate original gates]
     \label{thm:peps_approximate_physical_error}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_budget}
@@ -161,13 +161,13 @@ trace-norm estimates do not involve private dimensions.
     $\delta=\varepsilon/(8\max\{1,M\})$ gives
     $\|\widetilde\rho_\delta(x)-\rho_G(x)\|_1\le\varepsilon/2$, and replacing
     $\varepsilon$ by $\varepsilon/2$ gives error at most $\varepsilon/4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_chronological_error,thm:peps_original_operator_contraction}
     For $u=K\widetilde W_\delta x$ and $v=KW_Gx$,
-    Theorem~\ref{thm:peps_original_operator_contraction} and the isometry $K$
-    give $\|u\|,\|v\|\le1$. By Theorem~\ref{thm:peps_approximate_chronological_error},
+    Lemma~\ref{thm:peps_original_operator_contraction} and the isometry $K$
+    give $\|u\|,\|v\|\le1$. By Lemma~\ref{thm:peps_approximate_chronological_error},
     \begin{align}
         \|\widetilde\rho_\delta(x)-\rho_G(x)\|_1
          & =\bigl\|\operatorname{Tr}_{\rm discard}
@@ -181,7 +181,7 @@ trace-norm estimates do not involve private dimensions.
     the remaining claims.
 \end{proof}
 
-\begin{theorem}[Natural inverse-power accuracy]
+\begin{lemma}[Natural inverse-power accuracy]
     \label{thm:peps_approximate_natural_accuracy}
     \lean{TNLean.Lattice.PartyCircuit.gateApproximation_error_inv_pow_le}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_inv_pow}
@@ -191,15 +191,15 @@ trace-norm estimates do not involve private dimensions.
     $\delta=L^{-(n+p+1)}$ gives
     $\|\widetilde\rho_\delta(x)-\rho_G(x)\|_1\le L^{-p}/4$
     for $\|x\|\le1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_physical_error}
-    Theorem~\ref{thm:peps_approximate_physical_error} gives
+    Lemma~\ref{thm:peps_approximate_physical_error} gives
     $\|\widetilde\rho_\delta(x)-\rho_G(x)\|_1\le4L^{-(n+p+1)}N\le(16C/L)L^{-p}/4\le L^{-p}/4$.
 \end{proof}
 
-\begin{theorem}[One fixed accuracy exponent for approximate gates]
+\begin{lemma}[One fixed accuracy exponent for approximate gates]
     \label{thm:peps_approximate_gate_real_accuracy}
     \lean{TNLean.Lattice.PartyCircuit.gateApproximation_error_real_pow_le}
     \leanok
@@ -207,29 +207,29 @@ trace-norm estimates do not involve private dimensions.
     $\lceil x\rceil_+=\max(0,\lceil x\rceil)$, set
     $q=n+\lceil p\rceil_++\lceil16C\rceil_+$; then $4L^{-q}N\le L^{-p}/4$,
     with $q$ independent of $L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     With $s=\lceil16C\rceil_+$, the bounds $16C\le s\le2^s\le L^s$ give
     $4L^{-q}N\le(16C/L^s)L^{-\lceil p\rceil_+}/4\le L^{-p}/4$.
 \end{proof}
 
-\begin{theorem}[Approximate original gates at real inverse-power accuracy]
+\begin{lemma}[Approximate original gates at real inverse-power accuracy]
     \label{thm:peps_approximate_original_real_accuracy}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_real_pow}
     \leanok
     Suppose a chronological contraction circuit has $N\le C L^n$ nonprivate
     gate occurrences, where $L\ge2$. Fix $p\in\R$, choose $q$ as in
-    Theorem~\ref{thm:peps_approximate_gate_real_accuracy}, let each original
+    Lemma~\ref{thm:peps_approximate_gate_real_accuracy}, let each original
     gate $G_g$ be approximated in operator norm to accuracy $\delta=L^{-q}$ by
     an allowed expansion $T_g$, and rescale its coefficients by $(1+L^{-q})^{-1}$.
     Then for $\|x\|\le1$,
     $\|\widetilde\rho_{L^{-q}}(x)-\rho_G(x)\|_1\le L^{-p}/4$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_gate_real_accuracy,thm:peps_approximate_physical_error}
-    Theorems~\ref{thm:peps_approximate_physical_error} and
+    Lemmas~\ref{thm:peps_approximate_physical_error} and
     \ref{thm:peps_approximate_gate_real_accuracy} give
     $\|\widetilde\rho_{L^{-q}}(x)-\rho_G(x)\|_1\le4L^{-q}N\le L^{-p}/4$.
 \end{proof}
@@ -244,7 +244,7 @@ trace-norm estimates do not involve private dimensions.
     $|c_{g,j}|\le C$.
 \end{definition}
 
-\begin{theorem}[Coefficient sums of gate expansions]
+\begin{lemma}[Coefficient sums of gate expansions]
     \label{thm:peps_gate_coefficient_sum}
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_coefficients_le}
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_coefficients_le_of_power_bounds}
@@ -258,14 +258,14 @@ trace-norm estimates do not involve private dimensions.
         \sum_{j=1}^{k}|c_j|\leq C_KC_CL^{u+v}.
         \label{eq:peps_termwise_polynomial_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Summing $|c_j|\le C$ over $1\le j\le k$ gives $kC$, and multiplying
     $k\le C_KL^u$ by $C_CL^v\ge0$ yields (\ref{eq:peps_termwise_polynomial_sum}).
 \end{proof}
 
-\begin{theorem}[Uniform coefficient sums for the original circuit]
+\begin{lemma}[Uniform coefficient sums for the original circuit]
     \label{thm:peps_original_coefficient_sum}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_of_isTermwiseBounded}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_of_termwise_power_bounds}
@@ -277,11 +277,11 @@ trace-norm estimates do not involve private dimensions.
     monomial has at most $r$ pair effects. Consequently, if $K\le C_KL^u$ and
     the termwise bounds are $(r,C_CL^v)$ with $L,C_C\ge0$, the uniform
     coefficient-sum bound is $C_KC_CL^{u+v}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_original_termwise_bounds,thm:peps_gate_coefficient_sum}
-    Theorem~\ref{thm:peps_gate_coefficient_sum} bounds $\sum_j|c_{g,j}|\le KC$
+    Lemma~\ref{thm:peps_gate_coefficient_sum} bounds $\sum_j|c_{g,j}|\le KC$
     at each nonprivate gate occurrence $g$, and (\ref{eq:peps_termwise_polynomial_sum})
     gives $C_KC_CL^{u+v}$ under the power bounds; composition, spectator
     registers, private operations, and register permutations preserve these

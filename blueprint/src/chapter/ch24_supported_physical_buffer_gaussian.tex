@@ -23,7 +23,7 @@
     \texttt{02-information.tex}, lines 486--508, at decay rate $\mu=1/2$.
 \end{definition}
 
-\begin{theorem}[Supported Gaussian approximation of the physical buffer]
+\begin{lemma}[Supported Gaussian approximation of the physical buffer]
     \label{thm:peps_supported_physical_buffer_gaussian}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_supported_buffer_gaussian_integral,
         TNLean.PEPS.Approximation.SquareHamiltonian.supported_buffer_gaussian_integral}
@@ -83,7 +83,7 @@
                        & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
         \label{eq:peps_supported_buffer_bounds}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_buffer_coordinates,
@@ -91,14 +91,14 @@
         thm:swapped_square_hamiltonian_interaction,
         thm:area_supported_gaussian_integral,
         def:peps_square_localization_constants}
-    Theorem~\ref{thm:swapped_square_hamiltonian_interaction} realizes $K'$ via
+    Lemma~\ref{thm:swapped_square_hamiltonian_interaction} realizes $K'$ via
     a range-$1$ interaction family of local dimension $q^2$ and term bound
     $2J\ge0$ using the Hermitian parts of the terms of $H$. By
-    Theorem~\ref{thm:peps_physical_buffer_coordinates}, $V$ is supported on
+    Lemma~\ref{thm:peps_physical_buffer_coordinates}, $V$ is supported on
     $a(Q)$ with $\|V\|\le\|W\|$; by
-    Theorem~\ref{thm:peps_swapped_doubled_boundary_bound}, $K'-K$ is supported
+    Lemma~\ref{thm:peps_swapped_doubled_boundary_bound}, $K'-K$ is supported
     on $a(Z_R)$ with $\|K'-K\|\le8JL^2$. Applying
-    Theorem~\ref{thm:area_supported_gaussian_integral} on $B$ with $|\Lambda|=L^2$
+    Lemma~\ref{thm:area_supported_gaussian_integral} on $B$ with $|\Lambda|=L^2$
     and the constants (\ref{eq:peps_square_localization_constants}) yields $U$
     solving (\ref{eq:peps_supported_buffer_unitary_ode}) independently of
     $\eta,T$, the bound $\|M_{\eta,T}\|\le\|V\|\le\|W\|$, and
@@ -142,11 +142,11 @@ on a finite domain $\Lambda$.
     Any $z\in Z_R(A)$ belongs to a range-$R$ support $X$ containing some
     $x\in A$ and $y\notin A$, so walks of length at most $R$ join $z$ to $x$
     and $y$. Each support is nonempty and at most $\mu_R$ supports contain any
-    given site by Theorem~\ref{thm:area_law_crossing_supports}, giving at most
+    given site by Lemma~\ref{thm:area_law_crossing_supports}, giving at most
     $\mu_R|\Lambda|$ supports in total.
 \end{proof}
 
-\begin{theorem}[The partially swapped Hamiltonian at range $R$]
+\begin{lemma}[The partially swapped Hamiltonian at range $R$]
     \label{thm:peps_swapped_local_hamiltonian}
     \lean{TNLean.Lattice.LocalHamiltonian.swappedDoubled,
         TNLean.Lattice.LocalHamiltonian.swappedDoubled_operator,
@@ -161,12 +161,12 @@ on a finite domain $\Lambda$.
     $K'=F_AKF_A^*$. Then $K'$ is a range-$R$ Hamiltonian of local dimension
     $q^2$ on the same supports with term norms at most $2J$, and $K'-K$ sums
     only over supports crossing $A$, so $\operatorname{supp}(K'-K)\subseteq Z_R(A)$
-    and (extending Theorem~\ref{thm:peps_swapped_doubled_boundary_bound})
+    and (extending Lemma~\ref{thm:peps_swapped_doubled_boundary_bound})
     \begin{align}
         \|K'-K\| & \le c_RJ|\Lambda|.
         \label{eq:peps_swapped_local_hamiltonian_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_crossing_supports_near_and_few}
@@ -177,13 +177,13 @@ on a finite domain $\Lambda$.
     to $\|K'-K\|$, yielding (\ref{eq:peps_swapped_local_hamiltonian_bound}).
 \end{proof}
 
-\begin{theorem}[Edge-boundary norm of the partially swapped Hamiltonian]
+\begin{lemma}[Edge-boundary norm of the partially swapped Hamiltonian]
     \label{thm:peps_swapped_doubled_edge_boundary}
     \lean{TNLean.Lattice.LocalHamiltonian.swapped_doubled_boundary_bound_edgeBoundary}
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
         def:peps_frame_sheet_swap,def:peps_crossing_supports}
-    Under the hypotheses of Theorem~\ref{thm:peps_swapped_local_hamiltonian},
+    Under the hypotheses of Lemma~\ref{thm:peps_swapped_local_hamiltonian},
     with $\partial_\Lambda A$ the edge boundary of $A$ in the induced
     nearest-neighbour graph of $\Lambda$,
     \begin{align}
@@ -192,20 +192,20 @@ on a finite domain $\Lambda$.
     \end{align}
     extending \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex},
     lines 416--424 and 513--524, to range $R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_swapped_local_hamiltonian,
         thm:peps_sheet_swap_doubled_term_norm,thm:area_law_crossing_supports}
-    By Theorems~\ref{thm:peps_swapped_local_hamiltonian} and
+    By Lemmas~\ref{thm:peps_swapped_local_hamiltonian} and
     \ref{thm:peps_sheet_swap_doubled_term_norm}, only crossing supports
     contribute to $K'-K$, each with norm at most $4J$.
-    Theorem~\ref{thm:area_law_crossing_supports} bounds their count by
+    Lemma~\ref{thm:area_law_crossing_supports} bounds their count by
     $v_R\mu_R|\partial_\Lambda A|$, and $c_R=4\mu_R$ yields
     (\ref{eq:peps_swapped_doubled_edge_boundary}).
 \end{proof}
 
-\begin{theorem}[Supported Gaussian approximation of the physical buffer at range $R$]
+\begin{lemma}[Supported Gaussian approximation of the physical buffer at range $R$]
     \label{thm:peps_supported_physical_buffer_gaussian_range}
     \lean{TNLean.Lattice.LocalHamiltonian.supported_buffer_gaussian_integral}
     \leanok
@@ -218,20 +218,20 @@ on a finite domain $\Lambda$.
     be disjoint with $Q=(A\cup C)^c$. Define $K,K',V$ as in
     (\ref{eq:peps_supported_buffer_operators}) in $\Lambda$-coordinates, and
     set $B=N_\ell(Q\cup Z_R(A))$ for $\ell\ge0$. Then the conclusions of
-    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} hold with
+    Lemma~\ref{thm:peps_supported_physical_buffer_gaussian} hold with
     \begin{align}
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
          & \le\|W\|\,2C_0(R)|\Lambda|(1+c_RJ|\Lambda|T)e^{v(R,2J)T-\ell/2}.
         \label{eq:peps_supported_buffer_range_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Combine Theorem~\ref{thm:peps_swapped_local_hamiltonian}
+    Combine Lemma~\ref{thm:peps_swapped_local_hamiltonian}
     ($\operatorname{supp}(K'-K)\subseteq Z_R(A)$ and
     $\|K'-K\|\le c_RJ|\Lambda|$) and
-    Theorem~\ref{thm:peps_physical_buffer_coordinates}
+    Lemma~\ref{thm:peps_physical_buffer_coordinates}
     ($\operatorname{supp}(V)\subseteq Q$ and $\|V\|\le\|W\|$) with
-    Theorem~\ref{thm:area_supported_gaussian_integral} at range $R$ and term
+    Lemma~\ref{thm:area_supported_gaussian_integral} at range $R$ and term
     bound $2J$.
 \end{proof}

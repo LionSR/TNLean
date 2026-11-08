@@ -14,7 +14,7 @@ Only copies partially intersected by the region need be estimated.
     Restriction along this embedding identifies the two configuration spaces.
 \end{definition}
 
-\begin{theorem}[The reduced state of a region in one copy]
+\begin{lemma}[The reduced state of a region in one copy]
     \label{thm:chain_copy_region_state}
     \lean{TNLean.MPS.AreaLaw.regionState_copyProduct,TNLean.MPS.AreaLaw.regionEntropy_copyProduct}
     \leanok
@@ -23,7 +23,7 @@ Only copies partially intersected by the region need be estimated.
     vector. Under the configuration identification above, the reduced state
     of $\Psi$ on $R_i$ equals that of $\eta_i$ on $R$. Consequently their
     entropies agree, including when $R$ is empty or the whole block.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $a$ for the configuration on $R$, $b$ for that on its complement
     within copy $i$, and $c$ for the configurations of all other copies.
@@ -43,7 +43,7 @@ Only copies partially intersected by the region need be estimated.
     Entropy is invariant under a bijective change of configuration coordinates.
 \end{proof}
 
-\begin{theorem}[Subadditivity across copies]
+\begin{lemma}[Subadditivity across copies]
     \label{thm:chain_copy_regions_entropy_sum}
     \lean{TNLean.MPS.AreaLaw.regionEntropy_copyRegions_le_sum}
     \leanok
@@ -51,7 +51,7 @@ Only copies partially intersected by the region need be estimated.
     For a unit block product and arbitrary regions $R_i$ in its respective
     copies, the entropy of the union of their embeddings is at most
     $\sum_i S_{\eta_i}(R_i)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_copy_region_state}
     The embedded regions are disjoint. Apply regional subadditivity
@@ -59,7 +59,7 @@ Only copies partially intersected by the region need be estimated.
     The empty family contributes the entropy of the empty region, which is zero.
 \end{proof}
 
-\begin{theorem}[A uniform bound for every contiguous region]
+\begin{lemma}[A uniform bound for every contiguous region]
     \label{thm:chain_copy_interval_entropy}
     \lean{TNLean.MPS.AreaLaw.regionEntropy_interval_copyProduct_le}
     \leanok
@@ -72,7 +72,7 @@ Only copies partially intersected by the region need be estimated.
         S_{\eta^{\otimes K}}(I)\le2B.
     \end{align}
     No positivity assumption on $L$ or the local dimension is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_copy_regions_entropy_sum}
     Intersect the interval with each copy and apply the preceding theorem.

@@ -24,7 +24,7 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     on the four sides, and reverse the native pair order on the bottom and left.
 \end{definition}
 
-\begin{theorem}[Native perimeter and distinct plaquette corners]%
+\begin{lemma}[Native perimeter and distinct plaquette corners]%
     \label{thm:czx_rectangle_perimeter}
     \lean{TNLean.PEPS.even_rectanglePerimeter,
         TNLean.PEPS.rectanglePerimeterEnd_eq_corner_add_one,
@@ -44,7 +44,7 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     coordinate seam) whose cyclic successor is addition in $\Z/P\Z$; every bond
     has its specified endpoint in $R$, the perimeter corners are distinct in
     the torus, and $P$ is even.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_torus_rectangle_boundary_card}
     The four native edge families are pairwise disjoint and injective,
@@ -52,7 +52,7 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     $w<W$, $h<H$ make the closed corner grid injective modulo $(W,H)$.
 \end{proof}
 
-\begin{theorem}[Exact coefficients and disjoint boundary columns]%
+\begin{lemma}[Exact coefficients and disjoint boundary columns]%
     \label{thm:czx_open_region_coefficients}
     \lean{TNLean.PEPS.czx_regionIncidentConfig_unique,
         TNLean.PEPS.openRegionWeight_czxPEPS,
@@ -66,7 +66,7 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     has boundary $\mu$, and $0$ otherwise. Distinct boundary columns $\mu$
     have disjoint physical supports, so $A_R^\dagger A_R$ is diagonal in the
     native boundary basis.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:peps_czx_tensor}, the four physical qubits at each
     $v\in R$ fix all four incident bond labels, uniquely determining the
@@ -85,7 +85,7 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     and put $\phi_R(\mu)=\prod_{e\in\partial R}(-1)^{a_eb_e}$.
 \end{definition}
 
-\begin{theorem}[Physical region pull-through]%
+\begin{lemma}[Physical region pull-through]%
     \label{thm:czx_region_physical_pullthrough}
     \lean{TNLean.PEPS.czxLegPhase_swap,
         TNLean.PEPS.czxLegFlip_swap,
@@ -101,11 +101,11 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
         U_RA_R|\mu\rangle & =\phi_R(\mu)A_R|f_R\mu\rangle.
         \label{eq:czx_region_physical_pullthrough}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_czx_pull_through,thm:peps_region_physical_maps}
-    Applying Theorem~\ref{thm:peps_czx_pull_through} and
-    Theorem~\ref{thm:peps_region_physical_maps} inside the finite contraction,
+    Applying Lemma~\ref{thm:peps_czx_pull_through} and
+    Lemma~\ref{thm:peps_region_physical_maps} inside the finite contraction,
     each internal bond contributes $((-1)^{ab})^2=1$ while each $e\in\partial R$
     contributes $(-1)^{a_eb_e}$; reindexing the incident-bond sum by simultaneous
     bit flips gives (\ref{eq:czx_region_physical_pullthrough}).
@@ -127,16 +127,16 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     $\mu(c)=E_R^{-1}\iota(c)$, and $F_R|c\rangle=A_R|\mu(c)\rangle$.
 \end{definition}
 
-\begin{theorem}[The contraction imposes the cyclic plaquette constraint]%
+\begin{lemma}[The contraction imposes the cyclic plaquette constraint]%
     \label{thm:czx_rectangle_boundary_support}
     \lean{TNLean.PEPS.czxRectangleBoundaryLabels_mem_range_of_openRegionWeight_ne_zero}
     \leanok
     \uses{def:czx_rectangle_boundary_labels}
     If $A_R|\mu\rangle\ne0$, then $E_R\mu=\iota(c)$ for some $c\in\{0,1\}^P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_perimeter,thm:czx_open_region_coefficients}
-    By Theorems~\ref{thm:czx_rectangle_perimeter} and
+    By Lemmas~\ref{thm:czx_rectangle_perimeter} and
     \ref{thm:czx_open_region_coefficients}, the unique nonzero incident-bond
     assignment equates adjacent physical qubits across each shared internal
     bond along straight sides and within one site tensor at each corner,
@@ -153,7 +153,7 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     corresponding adjacent pair.
 \end{definition}
 
-\begin{theorem}[Plaquette-bit configurations and a faithful effective boundary]%
+\begin{lemma}[Plaquette-bit configurations and a faithful effective boundary]%
     \label{thm:czx_rectangle_boundary_faithful}
     \lean{TNLean.PEPS.czxPlaquetteBondConfig_right,
         TNLean.PEPS.czxPlaquetteBondConfig_up,
@@ -170,16 +170,16 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     region configuration coefficient equals $1$, and for every $c\in\{0,1\}^P$
     there exists $\sigma_c$ with $F_R(\sigma_c,c')=\delta_{c,c'}$; in
     particular, $F_R$ is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_perimeter,thm:czx_open_region_coefficients}
     Extending $c\in\{0,1\}^P$ from the distinct perimeter corners
-    (Theorem~\ref{thm:czx_rectangle_perimeter}) by $0$ elsewhere produces
+    (Lemma~\ref{thm:czx_rectangle_perimeter}) by $0$ elsewhere produces
     $\sigma_c$ with $F_R(\sigma_c,c')=\delta_{c,c'}$ by
-    Theorem~\ref{thm:czx_open_region_coefficients}.
+    Lemma~\ref{thm:czx_open_region_coefficients}.
 \end{proof}
 
-\begin{theorem}[Exact physical image and its dimension]%
+\begin{lemma}[Exact physical image and its dimension]%
     \label{thm:czx_rectangle_physical_image}
     \lean{TNLean.PEPS.range_openRegionMap_czxRectangle,
         TNLean.PEPS.finrank_range_openRegionMap_czxRectangle}
@@ -187,16 +187,16 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     \uses{def:czx_rectangle_boundary_labels}
     One has $\operatorname{im}A_R=\operatorname{im}F_R$ and
     $\dim\operatorname{im}A_R=2^P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_boundary_support,thm:czx_rectangle_boundary_faithful}
-    Theorem~\ref{thm:czx_rectangle_boundary_support} gives
+    Lemma~\ref{thm:czx_rectangle_boundary_support} gives
     $\operatorname{im}A_R=\operatorname{im}F_R$, and the selectors $\sigma_c$
-    of Theorem~\ref{thm:czx_rectangle_boundary_faithful} show that the $2^P$
+    of Lemma~\ref{thm:czx_rectangle_boundary_faithful} show that the $2^P$
     columns of $F_R$ are linearly independent.
 \end{proof}
 
-\begin{theorem}[Physical action on the effective plaquette spins]%
+\begin{lemma}[Physical action on the effective plaquette spins]%
     \label{thm:czx_rectangle_effective_symmetry}
     \lean{TNLean.PEPS.regionPhysicalMap_czxRectangleBoundaryMatrix_column,
         TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_monomial}
@@ -209,34 +209,34 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
          & =(-1)^{\sum_i c_ic_{i+1}}F_R|\bar c\rangle.
         \label{eq:czx_rectangle_effective_symmetry}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:czx_region_physical_pullthrough,thm:czx_rectangle_boundary_faithful}
     Applying (\ref{eq:czx_region_physical_pullthrough}) of
-    Theorem~\ref{thm:czx_region_physical_pullthrough} to $\mu(c)$ and using
+    Lemma~\ref{thm:czx_region_physical_pullthrough} to $\mu(c)$ and using
     $\phi_R(\mu(c))=(-1)^{\sum_i c_ic_{i+1}}$ and $f_R\mu(c)=\mu(\bar c)$ gives
     (\ref{eq:czx_rectangle_effective_symmetry}).
 \end{proof}
 
-\begin{theorem}[The printed matrix product operator on the physical rectangle image]%
+\begin{lemma}[The printed matrix product operator on the physical rectangle image]%
     \label{thm:czx_rectangle_review_mpo}
     \lean{TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_review}
     \leanok
     \uses{def:czx_rectangle_boundary_labels,def:asymex_czx_review_tensor}
     The printed CZX matrix product operator $O(A)$ of
     Definition~\ref{def:asymex_czx_review_tensor} satisfies $U_RF_R=F_RO(A)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_effective_symmetry,thm:czx_rectangle_perimeter,
         thm:asymex_czx_kernel,thm:asymex_czx_review_kernel}
-    By Theorems~\ref{thm:asymex_czx_kernel} and
+    By Lemmas~\ref{thm:asymex_czx_kernel} and
     \ref{thm:asymex_czx_review_kernel}, $D_PX^{\otimes P}=(-1)^PX^{\otimes P}D_P$;
-    since $P$ is even by Theorem~\ref{thm:czx_rectangle_perimeter}, combining
+    since $P$ is even by Lemma~\ref{thm:czx_rectangle_perimeter}, combining
     with (\ref{eq:czx_rectangle_effective_symmetry}) gives $U_RF_R=F_RO(A)$
     (without substituting the normalized bra-ket display for the printed matrices).
 \end{proof}
 
-\begin{theorem}[Closed-state slices and reduced-density support]%
+\begin{lemma}[Closed-state slices and reduced-density support]%
     \label{thm:czx_rectangle_density_support}
     \lean{TNLean.PEPS.openRegionWeight_czxPlaquetteComplement,
         TNLean.PEPS.stateCoeff_czxPlaquetteComplement,
@@ -255,7 +255,7 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
          & \operatorname{rank}\rho_R                         & =2^P.
         \label{eq:czx_rectangle_density_support}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:czx_open_region_coefficients,thm:czx_rectangle_boundary_faithful,
         thm:czx_rectangle_physical_image,thm:peps_open_region_cut_unconditional,
@@ -263,16 +263,16 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     Extending $c\in\{0,1\}^P$ to global plaquette bits
     (Definition~\ref{def:czx_plaquette_witness}), the complement configuration
     has weight $1$ on $\mu(c)$ and $0$ on all $\mu\ne\mu(c)$ by
-    Theorem~\ref{thm:czx_open_region_coefficients}, so
-    Theorem~\ref{thm:peps_open_region_cut_unconditional} reduces the cut
+    Lemma~\ref{thm:czx_open_region_coefficients}, so
+    Lemma~\ref{thm:peps_open_region_cut_unconditional} reduces the cut
     contraction to $F_R|c\rangle$. Combining with
-    Theorems~\ref{thm:czx_rectangle_boundary_faithful},
+    Lemmas~\ref{thm:czx_rectangle_boundary_faithful},
     \ref{thm:czx_rectangle_physical_image}, and
     \ref{thm:peps_region_reduced_density_support} yields
     (\ref{eq:czx_rectangle_density_support}).
 \end{proof}
 
-\begin{theorem}[Trace normalization preserves the physical support]%
+\begin{lemma}[Trace normalization preserves the physical support]%
     \label{thm:czx_rectangle_density_normalization}
     \lean{TNLean.PEPS.trace_regionReducedDensity_czxRectangle_ne_zero,
         TNLean.PEPS.range_normalizedRegionReducedDensity_czxRectangle,
@@ -281,10 +281,10 @@ plaquette spins in \cite[lines~330--345]{ChenLiuWen2011CZX} with $\operatorname{
     \uses{def:peps_region_reduced_density,def:czx_rectangle_boundary_labels}
     One has $\operatorname{Tr}\rho_R\ne0$, and $\rho_R/\operatorname{Tr}\rho_R$
     has range $\operatorname{im}F_R$ and rank $2^P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_density_support,thm:peps_region_reduced_density_support}
-    By Theorems~\ref{thm:czx_rectangle_density_support} and
+    By Lemmas~\ref{thm:czx_rectangle_density_support} and
     \ref{thm:peps_region_reduced_density_support}, $\rho_R\ge0$ has rank
     $2^P>0$, so $\operatorname{Tr}\rho_R\ne0$ and rescaling by
     $(\operatorname{Tr}\rho_R)^{-1}$ preserves its range and rank.

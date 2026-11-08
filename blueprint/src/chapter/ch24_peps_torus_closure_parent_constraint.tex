@@ -1,4 +1,4 @@
-\begin{theorem}[Regular closures and local parent conditions]%
+\begin{lemma}[Regular closures and local parent conditions]%
     \label{thm:peps_regular_closure_parent_constraint}
     \lean{TNLean.PEPS.IsGInjective.commute_of_cornerParent_annihilates_torusGClosure,
         TNLean.PEPS.IsGInjective.regionParent_annihilates_torusGClosure_of_isSimplyConnected,
@@ -36,11 +36,11 @@
     closure span remains separate.
     The regular native-torus restriction and the missing reverse global spanning inclusion are recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Regular $G$-injectivity implies $\Psi_{g,h}\ne 0$. By
-    Theorem~\ref{thm:peps_regular_torus_parent_flatness},
+    Lemma~\ref{thm:peps_regular_torus_parent_flatness},
     $h_{P_0}^{\mathrm{global}}\Psi_{g,h}=0$ forces
     $\operatorname{hol}_{g,h}(P_0)=h^{-1}g^{-1}hg=1$, i.e., $gh=hg$.
 
@@ -53,5 +53,5 @@
     $h_R^{\mathrm{global}}\Psi_{g,h}=0$. Since $h_R\ge 0$,
     $\ker H=\bigcap_{R\in\mathcal R}\ker h_R^{\mathrm{global}}\supseteq\spn\{\Psi_{g,h}:gh=hg\}$.
     Linear independence of the commuting pair-conjugacy classes and
-    Theorem~\ref{thm:peps_pair_centralizer_count} then yield~(\ref{eq:peps_closure_parent_dim_bound}).
+    Lemma~\ref{thm:peps_pair_centralizer_count} then yield~(\ref{eq:peps_closure_parent_dim_bound}).
 \end{proof}

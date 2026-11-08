@@ -1,10 +1,16 @@
-\part{Area laws and efficient approximation}
+\part{The two-dimensional area law}
 \label{part:area_laws}
 
 Ground states of gapped local Hamiltonians satisfy area laws and are
 approximated efficiently by tensor networks \cite[Section~II.C]{Cirac2021Matrix}.
-This part proves the one-dimensional area law and the approximation by matrix
-product states, Hastings' area law, the relation between entropy scaling and
-approximability, algorithms for the ground state of gapped chains, and in two
-dimensions the area law for gapped Hamiltonians and the approximation by
-projected entangled pair states of polynomial bond dimension.
+This part proves that for every ground state of a finite-range Hamiltonian with
+a spectral gap on a finite lattice domain, the entropy of a region is bounded by
+a constant times the number of edges crossing its boundary
+\cite{OpenAI2026AreaLaw}. The proof starts from a first entropy bound on boxes,
+improves it by moving a boundary through a collar around a region, makes the
+information across a slightly wider collar smaller than any inverse power of
+the system size, and divides the region into two families of smaller regions
+whose entropies cancel. The first chapter collects the swaps of finite sites,
+the information reset, and the fact that a gapped ground state of a sum of two
+decoupled Hamiltonians is a product vector; the two following parts use them
+too.

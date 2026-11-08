@@ -31,7 +31,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \psi(\sigma,\alpha)$.
 \end{definition}
 
-\begin{theorem}[Mixed products on coherent sums]%
+\begin{lemma}[Mixed products on coherent sums]%
     \label{thm:peps_parent_support_mixed_action}
     \lean{TNLean.PEPS.mixedPhysicalProductMatrix_conjTranspose,
         TNLean.PEPS.mixedPhysicalProductMap_sum_prod}
@@ -51,7 +51,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \bigotimes_{f\in E}(K_fy_{f,a}).
         \label{eq:peps_parent_support_mixed_action}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugating each coefficient in
     (\ref{eq:peps_parent_support_mixed_product}) gives the adjoint
@@ -61,7 +61,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     defining $F_bx_{b,a}$ and $K_fy_{f,a}$.
 \end{proof}
 
-\begin{theorem}[Product ranges from one-coordinate slices]%
+\begin{lemma}[Product ranges from one-coordinate slices]%
     \label{thm:peps_parent_support_product_range}
     \lean{TNLean.PEPS.physicalProductMap_fixed_of_slices_fixed,
         TNLean.PEPS.physicalProductMap_slice_mem_range,
@@ -82,7 +82,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     $P\psi_{v,\tau}=\psi_{v,\tau}$ for every $v,\tau$, then
     $P^{\otimes S}\psi=\psi$; idempotence of $P$ is unnecessary.
     The assertions allow empty sets and impose no rank condition on $F$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each slice $(F^{\otimes S}\chi)_{v,\tau}=F(\sum_{\sigma_{S\setminus\{v\}}}\chi(\sigma)\prod_{w\ne v}F_{\tau_w,\sigma_w})$
     lies in $\operatorname{im}F$. Conversely, choose $L:\C^Y\to\C^X$ with
@@ -114,7 +114,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     Whenever the first case occurs, $u\in M_i$, so $m_i>0$.
 \end{definition}
 
-\begin{theorem}[Sparse action of multiplicity restoration]%
+\begin{lemma}[Sparse action of multiplicity restoration]%
     \label{thm:peps_parent_support_sparse_action}
     \lean{TNLean.PEPS.endpointEmbeddingMatrix_conjTranspose_mulVec,
         TNLean.PEPS.multiplicityBondAmplitude_comm,
@@ -125,7 +125,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \uses{def:peps_parent_support_copy_amplitude,
         thm:peps_full_multiplicity_bond_map}
     Let $F=E_YJE_X^\dagger:\C^{X\times X}\to\C^{Y\times Y}$
-    be the full endpoint multiplicity map (Theorem~\ref{thm:peps_full_multiplicity_bond_map}), where
+    be the full endpoint multiplicity map (Lemma~\ref{thm:peps_full_multiplicity_bond_map}), where
     $J\ket{i,a,b}=m_i^{-1/2}\sum_{u\in M_i}\ket{i,(a,u),(b,u)}$
     and an empty sum is zero. Its coefficient and action formulas are
     \begin{align}
@@ -140,7 +140,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     Moreover $a(y,z)=a(z,y)$, without assuming $M_i\ne\varnothing$ or input
     support conditions. More generally, for any coordinate inclusion
     $j:B\hookrightarrow A$ with $A$ finite, $(E_j^\dagger\phi)(i)=\phi(j(i))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $(E_j^\dagger\phi)(i)=\phi(j(i))$, $E_YJE_X^\dagger$ retains equal
     copy labels $c(y)=c(z)=(i,u)$ with weight $m_i^{-1/2}$ and vanishes when
@@ -151,7 +151,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     gives $a(y,z)=a(z,y)$.
 \end{proof}
 
-\begin{theorem}[Supported inverses of the multiplicity product]%
+\begin{lemma}[Supported inverses of the multiplicity product]%
     \label{thm:peps_parent_support_retractions}
     \lean{TNLean.PEPS.fullMultiplicityBondMap_mul_adjoint_mul,
         TNLean.PEPS.physicalProductMap_fullMultiplicityBondMap_leftInverse,
@@ -167,15 +167,15 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \mathcal F\mathcal F^\dagger\phi & =\phi.
         \label{eq:peps_parent_support_retractions}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_full_multiplicity_bond_map,
         thm:peps_physical_product_supported_isometry}
-    By Theorem~\ref{thm:peps_full_multiplicity_bond_map},
+    By Lemma~\ref{thm:peps_full_multiplicity_bond_map},
     $F^\dagger F=E_XE_X^\dagger$ and $E_X^\dagger E_X=I$, so $F=E_YJE_X^\dagger$
     satisfies $FF^\dagger F=F(E_XE_X^\dagger)=F$. Writing
     $\psi=E_X^{\otimes E}\chi$ and $\phi=\mathcal F\eta$,
-    Theorem~\ref{thm:peps_physical_product_supported_isometry} gives~(\ref{eq:peps_parent_support_retractions}).
+    Lemma~\ref{thm:peps_physical_product_supported_isometry} gives~(\ref{eq:peps_parent_support_retractions}).
 \end{proof}
 
 \subsection{One-ended boundary transformations}
@@ -195,7 +195,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     Write $B_z=B_z^1$ for unit weights.
 \end{definition}
 
-\begin{theorem}[Boundary filters and block matrices]%
+\begin{lemma}[Boundary filters and block matrices]%
     \label{thm:peps_parent_support_boundary_factors}
     \lean{TNLean.PEPS.multiplicityBoundaryMap_tail,
         TNLean.PEPS.multiplicityBoundaryMap_head,
@@ -220,7 +220,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
     Moreover $B_z^\dagger=B_z^{\mathsf T}$, and
     $(M_\lambda)_{x,r}=\lambda_{i(x)}M_{x,r}=\lambda_{i(r)}M_{x,r}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In $\sum_r(B_z^\lambda)_{r,x}M^{[m]}_{r,y}$, the Kronecker deltas in
     (\ref{eq:peps_parent_support_boundary_filter}) and $I_{M_i}$ force
@@ -232,7 +232,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     weight identity.
 \end{proof}
 
-\begin{theorem}[Adjoint boundary and internal factors]%
+\begin{lemma}[Adjoint boundary and internal factors]%
     \label{thm:peps_parent_support_boundary_adjoints}
     \lean{TNLean.PEPS.multiplicityBoundaryMap_adjoint_head,
         TNLean.PEPS.multiplicityBoundaryMap_adjoint_tail,
@@ -242,7 +242,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \leanok
     \uses{thm:peps_parent_support_boundary_factors}
     Suppose $\lambda_i\ne0$ for every $i$. With the notation of
-    Theorem~\ref{thm:peps_parent_support_boundary_factors},
+    Lemma~\ref{thm:peps_parent_support_boundary_factors},
     \begin{align}
         \left[B_z^\dagger(M^{[m]}_{\cdot,y})\right](x)
          & =\lambda_{i(y)}^{-1}a(y,z)(M_\lambda)_{x,b(y)}, \\
@@ -261,7 +261,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     In particular, for representations $D_i$ of dimensions $d_i$,
     $D=\bigoplus_iD_i$ and $W=\bigoplus_i d_i^{1/4}I_{d_i}$ satisfy
     $WD(g)=D(g)W=\bigoplus_i d_i^{1/4}D_i(g)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_parent_support_boundary_factors,
         thm:peps_full_multiplicity_bond_map,
@@ -272,7 +272,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     Since $\operatorname{vec}(\bigoplus_i T_i\otimes I_{M_i})=F\operatorname{vec}(\bigoplus_i\sqrt{m_i}\,T_i)$
     and $\operatorname{vec}(\bigoplus_i\sqrt{m_i}\,T_i)\in\operatorname{im}E_X$
     (Lemma~\ref{lem:peps_matching_sector_bond_inclusion}),
-    $F^\dagger F=E_XE_X^\dagger$ (Theorem~\ref{thm:peps_full_multiplicity_bond_map})
+    $F^\dagger F=E_XE_X^\dagger$ (Lemma~\ref{thm:peps_full_multiplicity_bond_map})
     yields~(\ref{eq:peps_parent_support_internal_adjoint}). Block diagonality
     gives $WD(g)=D(g)W$.
 \end{proof}
@@ -323,7 +323,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[The bond operator under coordinate regrouping]%
+\begin{lemma}[The bond operator under coordinate regrouping]%
     \label{thm:peps_parent_support_global_coordinates}
     \lean{TNLean.PEPS.graphNumberedBondMatrix_eq_submatrix,
         TNLean.PEPS.graphBondPhysicalEquiv_mulVec,
@@ -334,7 +334,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     $(N_F)_{\tau,\sigma}=(F^{\otimes E})_{j_{e^Y}\tau,j_{e^X}\sigma}$,
     $J_{e^Y}N_F=F^{\otimes E}J_{e^X}$, and $N_F^\dagger=N_{F^\dagger}$ (with
     $e^X,e^Y$ exchanged).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Immediate from~(\ref{eq:peps_parent_support_numbered_operator}) by
     reindexing the matrix-vector sum along the bijection $j_{e^X}$ and
@@ -353,7 +353,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     $S_{R,\sigma}\psi(x)=\psi(x\cup\sigma)$ for an exterior slice.
 \end{definition}
 
-\begin{theorem}[Regional blocks imply parent-space inclusions]%
+\begin{lemma}[Regional blocks imply parent-space inclusions]%
     \label{thm:peps_parent_support_block_criterion}
     \lean{TNLean.PEPS.regionSliceMap_mulVec,
         TNLean.PEPS.regionOperatorBlock_conjTranspose,
@@ -373,7 +373,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     for all $i,\tau,\sigma$, then
     $M\mathcal P_{\mathcal R}(A)\subseteq\mathcal P_{\mathcal R}(B)$, where
     $\mathcal P_{\mathcal R}(A)=\{\psi:\forall i,\sigma,\ S_{R_i,\sigma}\psi\in\mathcal G_{R_i}(A)\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Splitting the global sum over $(x,\sigma)$ yields~(\ref{eq:peps_parent_support_block_slice}),
     and conjugate transposition exchanges $(y,\tau)$ with $(x,\sigma)$. If
@@ -413,7 +413,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Factorization of regional bond-operator blocks]%
+\begin{lemma}[Factorization of regional bond-operator blocks]%
     \label{thm:peps_parent_support_bond_blocks}
     \lean{TNLean.PEPS.prod_edge_eq_exterior_boundary_internal,
         TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix}
@@ -431,7 +431,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         {j_{e^Y,R}(y),j_{e^X,R}(x)}.
         \label{eq:peps_parent_support_bond_blocks}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Partitioning the product in~(\ref{eq:peps_parent_support_numbered_operator})
     across $E=E_{R^c}\sqcup\partial E_R\sqcup E_R$ yields $c_{R,F}(\tau,\sigma)$ on
@@ -440,7 +440,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     under the coordinate bijections~(\ref{eq:peps_parent_support_bond_coordinates}).
 \end{proof}
 
-\begin{theorem}[Regional blocks of the multiplicity map]%
+\begin{lemma}[Regional blocks of the multiplicity map]%
     \label{thm:peps_parent_support_copy_blocks}
     \lean{TNLean.PEPS.fullMultiplicityBondMap_fixed_tail,
         TNLean.PEPS.fullMultiplicityBondMap_fixed_head,
@@ -464,7 +464,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         {j_{e^Y,R}(y),j_{e^X,R}(x)}.
         \label{eq:peps_parent_support_copy_blocks}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_parent_support_sparse_action,
         thm:peps_parent_support_bond_blocks}
@@ -522,7 +522,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     $\mathcal H_R(U,W)=\spn_{\C}\{H_R^{U,W}(\theta):\theta\in X^{\partial E_R}\}$.
 \end{definition}
 
-\begin{theorem}[Numbered regional ranges in open bond coordinates]%
+\begin{lemma}[Numbered regional ranges in open bond coordinates]%
     \label{thm:peps_parent_support_open_coordinates}
     \lean{TNLean.PEPS.regionBondPhysicalEquiv_openRegionWeight,
         TNLean.PEPS.map_regionGroundSpace_eq_graphOpenBondSpace,
@@ -543,18 +543,18 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     physical labels preserves every internal slice
     $\mathcal S_{R,\sigma}(\mathcal C_R\ket{\theta})$
     (Definition~\ref{def:peps_open_sector_slice}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_graph_open_averaging_bond_state}
     Decoding the numbered labels via $j_{e,R}^{-1}$ in~(\ref{eq:peps_parent_support_bond_coordinates})
-    and applying Theorem~\ref{thm:peps_graph_open_averaging_bond_state} yields
+    and applying Lemma~\ref{thm:peps_graph_open_averaging_bond_state} yields
     the first equality in~(\ref{eq:peps_parent_support_open_coordinates});
     spanning over $\theta$ gives the second, and bijectivity of $J_{e,R}$ gives
     the membership equivalence. The general slice invariance follows directly
     by reindexing the virtual boundary sum and fixing $\sigma$.
 \end{proof}
 
-\begin{theorem}[Edge coverage promotes internal support to global support]%
+\begin{lemma}[Edge coverage promotes internal support to global support]%
     \label{thm:peps_parent_support_internal_slices}
     \lean{TNLean.PEPS.regionInternalBondSlice_regionSliceMap_update,
         TNLean.PEPS.regionParentGroundSpace_mem_product_range_of_internal_slices}
@@ -580,7 +580,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         =(J_e\psi)(\beta[f\mapsto s]).
         \label{eq:peps_parent_support_slice_update}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_parent_support_product_range}
     Updating $f\in E_R$ modifies only its two inside incidences in $R$,
@@ -594,7 +594,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     $J_e\psi\in\operatorname{im}F^{\otimes E}$.
 \end{proof}
 
-\begin{theorem}[Bond-factor support of canonical parent vectors]%
+\begin{lemma}[Bond-factor support of canonical parent vectors]%
     \label{thm:peps_parent_support_factor_ranges}
     \lean{TNLean.PEPS.graphRegionInternalBondSlice_mem_range_of_factors,
         TNLean.PEPS.regionInternalBondSlice_mem_range_of_factors,
@@ -614,7 +614,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \subseteq\operatorname{im}F^{\otimes E}.
         \label{eq:peps_parent_support_factor_ranges}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_sector_weighted_slice,
         thm:peps_parent_support_internal_slices,
@@ -624,14 +624,14 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \chi(\alpha)=\sum_{q:R\to G}c_R(\theta,\sigma;q)
         \prod_{f=(t,h)\in E_R}x_{q_hq_t^{-1}}(\alpha_f).
     \end{align}
-    By Theorem~\ref{thm:peps_open_sector_weighted_slice} and
-    Theorem~\ref{thm:peps_parent_support_open_coordinates},
+    By Lemma~\ref{thm:peps_open_sector_weighted_slice} and
+    Lemma~\ref{thm:peps_parent_support_open_coordinates},
     $F^{\otimes E_R}\chi=\mathcal S_{R,\sigma}(\mathcal C_R(A(U,W,e))\ket{\theta})$,
     and linearity extends this to $\mathcal G_R(A(U,W,e))$.
-    Theorem~\ref{thm:peps_parent_support_internal_slices} then gives~(\ref{eq:peps_parent_support_factor_ranges}).
+    Lemma~\ref{thm:peps_parent_support_internal_slices} then gives~(\ref{eq:peps_parent_support_factor_ranges}).
 \end{proof}
 
-\begin{theorem}[Product multiplicity support of the repeated parent]%
+\begin{lemma}[Product multiplicity support of the repeated parent]%
     \label{thm:peps_parent_support_repeated_ranges}
     \lean{TNLean.PEPS.graphRegionInternalBondSlice_multiplicityRestored_mem_range,
         TNLean.PEPS.regionInternalBondSlice_mem_fullMultiplicityRange,
@@ -643,7 +643,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     representations of a finite group. Put
     $U'(g)=\bigoplus_i(D_i(g)\otimes I_{d_i})$, and let $F$ be the full
     endpoint multiplicity map with multiplicity $d_i$
-    (Theorem~\ref{thm:peps_full_multiplicity_bond_map}). Then
+    (Lemma~\ref{thm:peps_full_multiplicity_bond_map}). Then
     $\mathcal S_{R,\sigma}\phi\in\operatorname{im}F^{\otimes E_R}$ for every
     open column and every $\phi\in\mathcal G_R(A(U',I,e))$. For any
     edge-covering family $\mathcal R$,
@@ -653,18 +653,18 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         \label{eq:peps_parent_support_repeated_ranges}
     \end{align}
     Neither irreducibility nor unitarity of the $D_i$ is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_sector_weighted_slice,
         thm:peps_coherent_multiplicity_transport,
         thm:peps_parent_support_open_coordinates,
         thm:peps_parent_support_internal_slices}
-    By Theorems~\ref{thm:peps_open_sector_weighted_slice}
+    By Lemmas~\ref{thm:peps_open_sector_weighted_slice}
     and~\ref{thm:peps_coherent_multiplicity_transport}, $F^{\otimes E_R}$ maps
     the coherent sum with internal factors
     $\operatorname{vec}(\bigoplus_i\sqrt{d_i}\,D_i(q_hq_t^{-1}))$ and boundary
     coefficients $c_R^{U',I}(\theta,\sigma;q)$ to the open slice of $A(U',I,e)$.
-    Theorem~\ref{thm:peps_parent_support_open_coordinates} and linearity extend
+    Lemma~\ref{thm:peps_parent_support_open_coordinates} and linearity extend
     this to $\mathcal G_R(A(U',I,e))$, and
-    Theorem~\ref{thm:peps_parent_support_internal_slices} yields~(\ref{eq:peps_parent_support_repeated_ranges}).
+    Lemma~\ref{thm:peps_parent_support_internal_slices} yields~(\ref{eq:peps_parent_support_repeated_ranges}).
 \end{proof}

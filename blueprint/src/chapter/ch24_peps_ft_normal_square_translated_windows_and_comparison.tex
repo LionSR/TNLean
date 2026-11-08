@@ -65,7 +65,7 @@
     % docs/paper-gaps/peps_normal_ft_section3_route.tex.
 \end{definition}
 
-\begin{theorem}[Construction from translated edge windows]%
+\begin{lemma}[Construction from translated edge windows]%
     \label{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_of_windows}
     \lean{TNLean.PEPS.normalSquareTranslatedEdgeBlockingHypotheses_blockingData_of_windows}
@@ -90,7 +90,7 @@
     family exists for all edges simultaneously).
     % Detailed source-comparison status:
     % docs/paper-gaps/peps_normal_ft_section3_route.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Apply the blocking-datum constructor of
     Definition~\ref{def:peps_normalSquareTranslatedEdgeWindow} at each edge
@@ -128,7 +128,7 @@
     hold, and if $T$ admits a rectangular cover then $\inj_A(T)$ holds as well.
 \end{lemma}
 \begin{proof}\leanok
-    Theorem~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap} gives union
+    Lemma~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap} gives union
     closure for $\inj_A$; apply
     Lemmas~\ref{lem:peps_normalSquareRegionRS_injective_of_unionClosure}
     and~\ref{lem:peps_normalSquareRegionT_injective_of_cover}.
@@ -354,7 +354,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Union closure of the boundary countermodel]%
+\begin{lemma}[Union closure of the boundary countermodel]%
     \label{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure}
     \lean{TNLean.PEPS.%
         leftBoundaryRightEdgeInjectivityCountermodelSeven_unionClosure}
@@ -364,13 +364,13 @@
     Definition~\ref{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
     satisfies $\inj_{\partial}(A)\wedge\inj_{\partial}(B)\Longrightarrow
         \inj_{\partial}(A\cup B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $u\in A\cup B$, then $u\in A$ or $u\in B$, so $\inj_{\partial}(A)$ or
     $\inj_{\partial}(B)$ gives $v\in A\cup B$.
 \end{proof}
 
-\begin{theorem}[Rectangular conditions for the boundary countermodel]%
+\begin{lemma}[Rectangular conditions for the boundary countermodel]%
     \label{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular}
     \lean{TNLean.PEPS.%
         leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular}
@@ -380,13 +380,13 @@
     Every $R\in\mathcal R_{2\times 3}\cup\mathcal R_{3\times 2}$
     (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) on the
     $7\times 7$ lattice satisfies $\inj_{\partial}(R)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Any contiguous rectangle of width $w\ge 2$ containing $u=(0,2)$ has
     horizontal interval $I(0,w)\ni 1$, hence contains $v=(1,2)$.
 \end{proof}
 
-\begin{theorem}[No boundary blocking for the countermodel]%
+\begin{lemma}[No boundary blocking for the countermodel]%
     \label{thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}
     \lean{TNLean.PEPS.not_leftBoundaryRightEdge_blockingData_countermodelSeven}
     \leanok
@@ -396,13 +396,13 @@
     Definition~\ref{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
     admits no one-edge blocking datum $(R_e,B_e,C_e)$
     (Definition~\ref{def:peps_normalEdgeBlockingHypotheses}) at $e=\{u,v\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $u\in R_e$ and $\inj_{\partial}(R_e)$ holds, $v\in R_e$, contradicting
     $v\in B_e$ and $R_e\cap B_e=\varnothing$.
 \end{proof}
 
-\begin{theorem}[Rectangular injectivity does not force an open-boundary
+\begin{lemma}[Rectangular injectivity does not force an open-boundary
         blocking]%
     \label{thm:peps_rectangularInjectivity_not_boundaryBlockingData}
     \lean{TNLean.PEPS.exists_rectangularInjectivity_not_boundaryBlockingData}
@@ -416,15 +416,15 @@
     around the boundary edge $u$--$v$ (this abstract region countermodel does
     not concern the periodic torus setting of
     \cite[Theorem~3]{Molnar2018NormalPEPS}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Combine
-    Theorems~\ref{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure},
+    Lemmas~\ref{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure},
     \ref{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular},
     and~\ref{thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}.
 \end{proof}
 
-\begin{theorem}[Injectivity from normal edge blocking]%
+\begin{lemma}[Injectivity from normal edge blocking]%
     \label{thm:peps_normalEdgeBlockingHypotheses_injectiveChain}
     \lean{TNLean.PEPS.NormalEdgeBlockingData.injective_chain}
     \lean{TNLean.PEPS.NormalEdgeBlockingData.endpoint_disjoint_cover}
@@ -450,7 +450,7 @@
         R_e\cup B_e\cup C_e & =V.
         \label{eq:peps_edge_blocking_cover}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Immediate by projecting the fields of $d_e$ in
     Definition~\ref{def:peps_normalEdgeBlockingHypotheses}.

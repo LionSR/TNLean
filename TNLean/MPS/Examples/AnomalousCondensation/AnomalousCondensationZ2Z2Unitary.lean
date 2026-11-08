@@ -164,11 +164,6 @@ theorem mpo_symTensor_mul_self (g : Fin 4) :
   have hg : gmul g g = 0 := by fin_cases g <;> rfl
   rw [hg, mpo_symTensor_zero]
 
-/-- The inverse sign in bit coordinates. -/
-theorem fusionSign_self_eq (g : Fin 4) :
-    fusionSign g g = (-1 : ℂ) ^ ((g.val / 2) * (g.val % 2)) := by
-  fin_cases g <;> simp [fusionSign]
-
 private theorem signed_mpo_symTensor_mul (g : Fin 4) :
     (fusionSign g g ^ N • mpo (symTensor g) N) * mpo (symTensor g) N = 1 := by
   rw [Matrix.smul_mul, mpo_symTensor_mul_self, smul_smul, ← mul_pow]

@@ -46,28 +46,6 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
 
-private theorem range_mul_transpose_of_injective
-    {ι κ τ : Type*} [Fintype κ] [Fintype τ]
-    (T : Matrix ι κ ℂ) (S : Matrix τ κ ℂ)
-    (hS : Function.Injective (Matrix.mulVecLin S)) :
-    (Matrix.mulVecLin (T * S.transpose)).range = (Matrix.mulVecLin T).range := by
-  classical
-  obtain ⟨L, hL⟩ := (Matrix.mulVecLin S).exists_leftInverse_of_injective
-    (LinearMap.ker_eq_bot.mpr hS)
-  have hLS : LinearMap.toMatrix' L * S = 1 := by
-    simpa only [LinearMap.toMatrix'_comp, ← Matrix.toLin'_apply',
-      LinearMap.toMatrix'_toLin', LinearMap.toMatrix'_id] using
-      congrArg LinearMap.toMatrix' hL
-  have hSL : S.transpose * (LinearMap.toMatrix' L).transpose = 1 := by
-    rw [← Matrix.transpose_mul, hLS, Matrix.transpose_one]
-  have hsurj : Function.Surjective (Matrix.mulVecLin S.transpose) := by
-    intro x
-    refine ⟨Matrix.mulVecLin (LinearMap.toMatrix' L).transpose x, ?_⟩
-    rw [← LinearMap.comp_apply, ← Matrix.mulVecLin_mul, hSL, Matrix.mulVecLin_one]
-    rfl
-  rw [Matrix.mulVecLin_mul, LinearMap.range_comp,
-    LinearMap.range_eq_top.mpr hsurj, Submodule.map_top]
-
 /-- The globally indexed blocked map counts every exterior virtual assignment.
 Source: the finite-region contraction of CPGSV21, Section IV.C.1,
 lines 2003–2008. -/
@@ -148,11 +126,15 @@ theorem range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement
       linearIndependent_iff_injective_fintypeLinearCombination.mpr hC
     exact (hli.comp (regionComplementBoundaryConfigEquiv A R)
       (regionComplementBoundaryConfigEquiv A R).injective).fintypeLinearCombination_injective
+  have hsurj : Function.Surjective (Matrix.mulVecLin S.transpose) :=
+    (show LinearIndependent ℂ S.transpose.row from
+      Matrix.mulVec_injective_iff.mp hS).mulVec_surjective
   have hM : (fun σ τ => stateCoeff A (assembleRegionσ R σ τ)) = T * S.transpose := by
     funext σ τ
     rw [stateCoeff_eq_openRegionComplement_unconditional, Matrix.mul_apply]
     rfl
-  rw [range_regionReducedDensity_eq_cutRange, hM, range_mul_transpose_of_injective T S hS]
+  rw [range_regionReducedDensity_eq_cutRange, hM, Matrix.mulVecLin_mul,
+    LinearMap.range_comp, LinearMap.range_eq_top.mpr hsurj, Submodule.map_top]
   change (Matrix.toLin' (openRegionCoefficientMatrix A R)).range = _
   rw [← toMatrix_openRegionMap, Matrix.toLin'_toMatrix']
   rfl

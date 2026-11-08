@@ -35,14 +35,14 @@
     Immediate from $\mathcal G_R=\spn\{T_R(\mu;\cdot):\mu\}$ in~(\ref{eq:peps_region_ground_space}).
 \end{proof}
 
-\begin{theorem}[Boundary dimension bound]%
+\begin{lemma}[Boundary dimension bound]%
     \label{thm:peps_region_ground_space_dimension}
     \lean{TNLean.PEPS.finrank_regionGroundSpace_le}
     \leanok
     \uses{def:peps_region_ground_space}
     If the virtual space on a crossing edge $e\in\partial R$ has dimension
     $D_e$, then $\dim\mathcal G_R\leq\prod_{e\in\partial R}D_e$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By~(\ref{eq:peps_region_ground_space}), $\mathcal G_R$ is the range of the
@@ -50,7 +50,7 @@
     boundary space of dimension $\prod_{e\in\partial R}D_e$.
 \end{proof}
 
-\begin{theorem}[Local slices of a closed PEPS]%
+\begin{lemma}[Local slices of a closed PEPS]%
     \label{thm:peps_region_ground_space_slice}
     \lean{TNLean.PEPS.stateCoeff_slice_mem_regionGroundSpace,
         TNLean.PEPS.localOperator_stateCoeff_slice_eq_zero}
@@ -62,11 +62,11 @@
     frustration freeness in \cite[Section~IV.C.1]{Cirac2021Matrix} (local
     source lines 2008--2011), any linear operator $h_R$ with
     $\mathcal G_R\subseteq\ker h_R$ satisfies $h_R\psi(\cdot,\tau)=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_open_region_cut}
-    If a global virtual configuration exists, Theorem~\ref{thm:peps_open_region_cut}
+    If a global virtual configuration exists, Lemma~\ref{thm:peps_open_region_cut}
     gives $\psi(\sigma,\tau)=\sum_\mu T_R(\mu;\sigma)T_{R^c}(\mu;\tau)\in\mathcal G_R$
     by~(\ref{eq:peps_region_ground_space}); otherwise the defining sum for
     $\psi$ is empty and $\psi(\cdot,\tau)=0\in\mathcal G_R$. Thus

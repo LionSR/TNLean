@@ -5,7 +5,7 @@ The following statements concern the full vertex region in the construction
 of \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines 2003--2011.
 A term on this region acts on the entire graph.
 
-\begin{theorem}[Full-region physical range]%
+\begin{lemma}[Full-region physical range]%
     \label{thm:peps_full_region_range}
     \lean{TNLean.PEPS.not_isRegionBoundaryEdge_univ,
         TNLean.PEPS.openRegionWeight_univ,
@@ -18,7 +18,7 @@ A term on this region acts on the entire graph.
     configurations of the graph, every full-region open tensor is
     $\psi$, and $\mathcal G_V=\operatorname{span}\{\psi\}$.
     If $\psi=0$, this space is zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The full region has neither crossing bonds nor exterior edges.
@@ -27,7 +27,7 @@ A term on this region acts on the entire graph.
     space has one element, so its physical range is the asserted span.
 \end{proof}
 
-\begin{theorem}[Ground space with a full-region condition]%
+\begin{lemma}[Ground space with a full-region condition]%
     \label{thm:peps_parent_full_region_span}
     \lean{TNLean.PEPS.regionParentGroundSpace_eq_span_of_full_region,
         TNLean.PEPS.ker_regionParentHamiltonian_eq_span_of_full_region,
@@ -40,7 +40,7 @@ A term on this region acts on the entire graph.
     For a finite collection, every positive parent Hamiltonian
     with those regional kernels has this same kernel.
     It is one-dimensional when $\psi\ne0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_full_region_range,
@@ -53,7 +53,7 @@ A term on this region acts on the entire graph.
     formula for the span of a nonzero vector then complete the proof.
 \end{proof}
 
-\begin{theorem}[Canonical projectors and their unit gap]%
+\begin{lemma}[Canonical projectors and their unit gap]%
     \label{thm:peps_region_projector_unit_gap}
     \lean{TNLean.PEPS.canonicalRegionParentInteraction_isIdempotentElem,
         TNLean.PEPS.canonicalRegionParentInteraction_apply_eq_self,
@@ -70,7 +70,7 @@ A term on this region acts on the entire graph.
     contain only zero and one. On the orthogonal complement of
     either kernel the corresponding projector is the identity,
     and hence has unit norm gap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The canonical interaction is the orthogonal projector onto

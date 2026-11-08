@@ -1,0 +1,325 @@
+\section{\texorpdfstring{$G$}{G}-injectivity and group averaging}%
+\label{sec:peps_quantum_double}
+
+Let $G$ be a finite group. The quantum double model of $G$
+\cite{Kitaev2003FaultTolerant} carries a spin with basis
+$\{\ket{g}\}_{g\in G}$ on every edge of a square lattice; for
+$G=\mathbb{Z}_2$ it is the toric code. The review gives two PEPS
+representations \cite[Appendix~A, ``The Toric Code and quantum double
+    models'']{Cirac2021Matrix}. Their symmetries are phrased through the map
+$\mathcal{P}(A)=\sum A^i_{\alpha\beta\gamma\delta}\ket{i}\bra{\alpha\beta\gamma\delta}$
+from the virtual to the physical system
+\cite[Section~``MPS and PEPS'']{Schuch2010PEPS}.
+
+\begin{definition}[$G$-injective and $G$-isometric tensors]%
+    \label{def:peps_g_injective}
+    \lean{TNLean.PEPS.IsGInjective, TNLean.PEPS.IsGIsometric,
+        TNLean.PEPS.siteMap, TNLean.PEPS.siteMap_apply}
+    \leanok
+    Let $g\mapsto U_g$ be a representation of a finite group $G$ on the
+    virtual system of a tensor $A$, and let $\Pi_U$ be the projector onto the
+    $U_g$-invariant subspace. The tensor is $G$-injective if
+    $\mathcal{P}(A)U_g=\mathcal{P}(A)$ for every $g$ and $\mathcal{P}(A)$ is
+    injective on the invariant subspace
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+    It is $G$-isometric if in addition
+    $\mathcal{P}(A)$ restricted to the invariant subspace is a multiple of an
+    isometry, $\langle\mathcal{P}(A)x,\mathcal{P}(A)y\rangle
+        =c\,\langle x,y\rangle$ for invariant $x,y$ and one constant $c>0$
+    \cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+    When the virtual action factors as
+    $U_g=U_g^{\ell}\otimes U_g^r\otimes U_g^t\otimes U_g^b$,
+    the invariance of a four-leg tensor reads
+    % Formula: P(A)(U_g^ell tensor U_g^r tensor U_g^t tensor U_g^b)=P(A).
+    % Source: Papers/1001.3807/paper_v3.tex:1278--1288, figs3/ug-sym.
+    % Ink-to-index: each of the four cardinal rays is one virtual leg;
+    % its inserted matrix is the representation acting on that leg, including
+    % its contragredient when dictated by the bond orientation. The northeast
+    % ray is the physical index i. No physical index is suppressed.
+    % Contraction: each U matrix contracts its inward port with A and exposes
+    % its outward port. Both sides have (V,P)=(4,1).
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none]
+            \tn[at=(2,2), name=symmetricSite, label pos=225,
+                ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
+                        45:physical:$i$}]{A}
+            \tn[at=(2,1), name=symmetryLeft, skin=ring, label pos=270,
+                ports={180:virtual, 0:virtual}]{U_g^{\ell}}
+            \tn[at=(2,3), name=symmetryRight, skin=ring, label pos=270,
+                ports={180:virtual, 0:virtual}]{U_g^r}
+            \tn[at=(1,2), name=symmetryTop, skin=ring, label pos=180,
+                ports={90:virtual, 270:virtual}]{U_g^t}
+            \tn[at=(3,2), name=symmetryBottom, skin=ring, label pos=0,
+                ports={90:virtual, 270:virtual}]{U_g^b}
+            \tnwire{symmetryLeft.0}{symmetricSite.180}
+            \tnwire{symmetryRight.180}{symmetricSite.0}
+            \tnwire{symmetryTop.270}{symmetricSite.90}
+            \tnwire{symmetryBottom.90}{symmetricSite.270}
+        \end{tenkz}
+        $=$
+        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+            \tn[label pos=225,
+                ports={180:virtual, 0:virtual, 90:virtual, 270:virtual,
+                        45:physical:$i$}]{A}
+        \end{tenkz}
+    \end{tenkzequation}
+    The four factors include the contragredient actions required by the
+    orientations of the virtual bonds.
+\end{definition}
+
+\begin{lemma}[Left-inverse form of $G$-injectivity]%
+    \label{thm:peps_g_injective_left_inverse}
+    \lean{TNLean.PEPS.apply_averageMap_of_forall_comp_eq,
+        TNLean.PEPS.isGInjective_iff_exists_leftInverse}
+    \leanok
+    \uses{def:peps_g_injective}
+    A tensor is $G$-injective if and only if
+    $\mathcal{P}(A)U_g=\mathcal{P}(A)$ for every $g$ and $\mathcal{P}(A)$ has a
+    left inverse $L$ with $L\,\mathcal{P}(A)=\Pi_U$
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    An invariant map satisfies $\mathcal{P}(A)\Pi_U=\mathcal{P}(A)$, since
+    $\Pi_U$ is the average of the $U_g$. If $\mathcal{P}(A)$ is injective on
+    the invariant subspace, choose a linear map $L$ into the invariant
+    subspace with $L\,\mathcal{P}(A)x=x$ for invariant $x$; then
+    $L\,\mathcal{P}(A)=L\,\mathcal{P}(A)\Pi_U=\Pi_U$. Conversely, if
+    $L\,\mathcal{P}(A)=\Pi_U$ and $\mathcal{P}(A)x=0$ for an invariant $x$, then
+    $x=\Pi_Ux=L\,\mathcal{P}(A)x=0$.
+\end{proof}
+
+\begin{lemma}[$G$-injectivity for the trivial representation]%
+    \label{thm:peps_g_injective_trivial}
+    \lean{TNLean.PEPS.isGInjective_trivial_iff,
+        TNLean.PEPS.siteMap_injective_iff}
+    \leanok
+    \uses{def:peps_g_injective}
+    For the trivial representation, $G$-injectivity is injectivity of
+    $\mathcal{P}(A)$, that is, linear independence of the physical vectors
+    $A^{\bullet}_{\alpha\beta\gamma\delta}$ indexed by the virtual
+    configurations.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every vector is invariant under the trivial representation, and
+    $\mathcal{P}(A)$ is the linear map whose columns are the vectors
+    $A^{\bullet}_{\alpha\beta\gamma\delta}$.
+\end{proof}
+
+The group-theoretic input to $G$-injectivity is the averaging over the group
+and an operator $\Delta$ that inverts the expansion of an operator in the
+$U_g$'s \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+Throughout, $g\mapsto U_g$ is a representation of a finite group $G$ on a
+finite-dimensional complex space.
+
+\begin{lemma}[Group averaging]%
+    \label{thm:peps_group_averaging}
+    \lean{Representation.averageMap_linHom_apply,
+        Representation.mem_invariants_linHom_iff,
+        Representation.isProj_averageMap_linHom,
+        Representation.averageMap_linHom_apply_of_adjoint,
+        Representation.trace_adjoint_comp_averageMap_linHom}
+    \leanok
+    The map $\sigma(X)=\frac{1}{|G|}\sum_g U_gXU_g^{-1}$ is a projection onto
+    the operators commuting with every $U_g$. If the representation is unitary,
+    then $\sigma(X)=\frac{1}{|G|}\sum_g U_gXU_g^\dagger$ and
+    $\tr[Y^\dagger\sigma(X)]=\tr[\sigma(Y)^\dagger X]$, so $\sigma$ is the
+    orthogonal projector onto these operators for the Hilbert--Schmidt inner
+    product \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The map $\sigma$ is the average of the conjugation action
+    $X\mapsto U_gXU_g^{-1}$, so it is a projection onto the operators fixed
+    by every conjugation, and these are the operators commuting with every
+    $U_g$. For a unitary representation,
+    $\tr[Y^\dagger U_gXU_g^\dagger]=\tr[(U_g^\dagger YU_g)^\dagger X]$, and
+    summing over $g$, with $g$ replaced by $g^{-1}$, gives the symmetry of
+    $\sigma$.
+\end{proof}
+
+\begin{definition}[Isotypic projectors and the operator $\Delta$]%
+    \label{def:peps_delta_operator}
+    \lean{Representation.charProjector,
+        Representation.irreducibleCharacters,
+        Representation.characterMultiplicity,
+        Representation.deltaOperator}
+    \leanok
+    Let $\chi_U$ be the character of $U$, and let $\chi_1,\dots,\chi_r$ be the
+    distinct characters of the irreducible subrepresentations of $U$, with
+    $d_i=\chi_i(1)$ and multiplicities
+    $m_i=\frac{1}{|G|}\sum_g\chi_U(g)\chi_i(g^{-1})$. The isotypic projectors
+    are $P_i=\frac{d_i}{|G|}\sum_g\chi_i(g^{-1})U_g$, and
+    \begin{align*}
+        \Delta=\frac{1}{|G|}\sum_{i=1}^{r}\frac{d_i}{m_i}P_i
+    \end{align*}
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[Isotypic projectors from characters]%
+    \label{thm:peps_isotypic_projectors}
+    \lean{Representation.sum_character_inv_smul_eq,
+        Representation.exists_isInternal_isAtom,
+        Representation.charProjector_apply_of_mem,
+        Representation.irreducibleCharacters_finite,
+        Representation.characterMultiplicity_eq_finrank,
+        Representation.sum_charProjector_irreducibleCharacters,
+        Representation.trace_comp_charProjector}
+    \leanok
+    \uses{def:peps_delta_operator}
+    For irreducible representations $D^i$ and $D^j$ of $G$,
+    $\sum_g\chi_i(g^{-1})D^j(g)$ equals $\frac{|G|}{d_i}\Id$ if $D^i$
+    and $D^j$ are equivalent and $0$ otherwise. Consequently $P_i$ acts as
+    the identity on every irreducible subrepresentation of $U$ with
+    character $\chi_i$ and as zero on every other irreducible
+    subrepresentation, the number $m_i$ is the dimension of the space of
+    intertwining maps from $D^i$ to $U$, and
+    \begin{align*}
+        \sum_{i=1}^{r}P_i & =\Id, & \tr[U_kP_i] & =m_i\chi_i(k)
+    \end{align*}
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The operator $\sum_g\chi_i(g^{-1})D^j(g)$ commutes with every $D^j(h)$,
+    because characters are constant on conjugacy classes, so by Schur's lemma
+    it is a multiple of the identity; its trace is
+    $\sum_g\chi_i(g^{-1})\chi_j(g)$, which orthogonality of characters
+    evaluates. By Maschke's theorem $U$ is a direct sum of irreducible
+    subrepresentations. On each summand the projectors act as just
+    described, which gives $\sum_iP_i=\Id$, and the trace of
+    $U_kP_i$ is the sum of $\chi_i(k)$ over the summands with character
+    $\chi_i$. Orthogonality of characters counts these summands as $m_i$.
+\end{proof}
+
+\begin{lemma}[Block form of $\Delta$]%
+    \label{thm:peps_delta_block_form}
+    \lean{Representation.deltaOperator_apply_of_mem}
+    \leanok
+    \uses{def:peps_delta_operator}
+    On every irreducible subrepresentation of $U$ with character $\chi_i$,
+    $\Delta$ acts as the scalar $\frac{d_i}{m_i|G|}$. Thus, in a basis in which
+    $U_g\cong\bigoplus_iD^i(g)\otimes\Id_{m_i}$,
+    \begin{align*}
+        \Delta\cong\frac{1}{|G|}\bigoplus_i\frac{d_i}{m_i}\,
+        \Id_{d_i}\otimes\Id_{m_i}
+    \end{align*}
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_isotypic_projectors}
+    Only the projector of $\chi_i$ acts nontrivially on such a
+    subrepresentation, and it acts as the identity.
+\end{proof}
+
+\begin{lemma}[Expansion in the representation]%
+    \label{thm:peps_delta_expansion}
+    \lean{Representation.trace_comp_deltaOperator,
+        Representation.sum_trace_comp_deltaOperator_smul,
+        Representation.sum_trace_inv_comp_deltaOperator_comp_smul}
+    \leanok
+    \uses{def:peps_delta_operator}
+    For every $g\in G$,
+    \begin{align*}
+        \sum_h\tr[U_{h^{-1}}\Delta U_g]\,U_h
+        =\sum_h\tr[U_{gh^{-1}}\Delta]\,U_h=U_g .
+    \end{align*}
+    For a unitary representation $U_{h^{-1}}=U_h^\dagger$
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_isotypic_projectors}
+    By the trace formula for the projectors,
+    $\tr[U_k\Delta]=\frac{1}{|G|}\sum_i d_i\chi_i(k)$, so
+    $\sum_k\tr[U_{k^{-1}}\Delta]U_k=\sum_iP_i=\Id$. Substituting
+    $h=kg$ gives
+    $\sum_h\tr[U_{gh^{-1}}\Delta]U_h=\big(\sum_k\tr[U_{k^{-1}}\Delta]U_k\big)U_g
+        =U_g$, and the first expression equals the second by cyclicity of
+    the trace.
+\end{proof}
+
+\begin{definition}[Semi-regular representation]%
+    \label{def:peps_semiregular}
+    \lean{Representation.IsSemiRegular,
+        Representation.isSemiRegular_leftRegular}
+    \leanok
+    A representation of $G$ is semi-regular if it contains every irreducible
+    representation of $G$, that is, if every irreducible representation
+    admits a nonzero intertwining map into it
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}. The
+    left-regular representation is semi-regular.
+\end{definition}
+
+\begin{lemma}[Semi-regularity under representation equivalence]%
+    \label{thm:peps_semiregular_equivalence}
+    \lean{Representation.IsSemiRegular.of_equiv,
+        Representation.Equiv.isSemiRegular_iff}
+    \leanok
+    \uses{def:peps_semiregular}
+    Equivalent representations $\rho$ and $\sigma$ are semi-regular
+    simultaneously. Thus the occurrence condition of
+    \cite[Definition~4.5]{Schuch2010PEPS} is independent of coordinates.
+\end{lemma}
+
+\begin{proof}\leanok
+    If $e$ intertwines $\rho$ with $\sigma$ and is invertible, every
+    nonzero intertwiner $f$ from an irreducible representation into
+    $\rho$ gives a nonzero intertwiner $ef$ into $\sigma$. Applying the
+    same argument to $e^{-1}$ proves the converse.
+\end{proof}
+
+\begin{lemma}[Linear independence of a semi-regular representation]%
+    \label{thm:peps_semiregular_trace}
+    \lean{Representation.character_leftRegular,
+        Representation.deltaOperator_leftRegular,
+        Representation.sum_irreducibleCharacters_mul_of_isSemiRegular,
+        Representation.trace_inv_comp_comp_deltaOperator_of_isSemiRegular}
+    \leanok
+    \uses{def:peps_delta_operator, def:peps_semiregular}
+    If $U$ is semi-regular, then $\tr[U_{g^{-1}}U_h\Delta]=\delta_{g,h}$ for
+    all $g,h\in G$, with $U_{g^{-1}}=U_g^\dagger$ for a unitary
+    representation. For the left-regular representation
+    $\Delta=\frac{1}{|G|}\Id$
+    \cite[Section~``MPS: the $G$-injective case'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_delta_expansion, thm:peps_isotypic_projectors}
+    The character of the left-regular representation is $|G|\delta_{k,1}$,
+    so every character $\chi_i$ has multiplicity $d_i$ in it, and
+    $\Delta=\frac{1}{|G|}\sum_iP_i=\frac{1}{|G|}\Id$. Every
+    irreducible representation occurs in the left-regular representation,
+    and, since $U$ is semi-regular, in $U$; hence $U$ and the left-regular
+    representation have the same irreducible characters. Comparing the two
+    expressions for $\tr[U_k\Delta]$ in the left-regular representation gives
+    $\sum_id_i\chi_i(k)=|G|\delta_{k,1}$, and therefore
+    $\tr[U_{g^{-1}}U_h\Delta]=\frac{1}{|G|}\sum_id_i\chi_i(g^{-1}h)
+        =\delta_{g,h}$.
+\end{proof}
+
+\input{chapter/ch24_peps_semiregular_group_algebra}
+
+\begin{lemma}[Tensor products of semi-regular representations]%
+    \label{thm:peps_semiregular_tensor_product}
+    \lean{Representation.isIrreducible_of_finrank_eq_one,
+        Representation.IsSemiRegular.exists_mem_invariants_ne_zero,
+        Representation.IsSemiRegular.tprod_of_mem_invariants,
+        Representation.IsSemiRegular.tprod}
+    \leanok
+    \uses{def:peps_semiregular}
+    If $U$ and $V$ are semi-regular representations of $G$, then so is
+    $U\otimes V$
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    A one-dimensional representation is irreducible, so the semi-regular
+    representation $V$ contains the trivial representation and has a nonzero
+    invariant vector $v$. If $D$ is irreducible and $f$ is a nonzero
+    intertwining map from $D$ to $U$, then $x\mapsto f(x)\otimes v$ is a
+    nonzero intertwining map from $D$ to $U\otimes V$.
+\end{proof}

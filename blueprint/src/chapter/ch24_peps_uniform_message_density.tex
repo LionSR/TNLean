@@ -3,7 +3,7 @@
 
 The original gate operators, private operations, and physical output are fixed throughout; expanding a message replaces the monomial list at its original gate occurrence while preserving the evaluated operator exactly.
 
-\begin{theorem}[Homogeneous ceiling bound]
+\begin{lemma}[Homogeneous ceiling bound]
     \label{thm:homogeneous_ceiling_bound}
     \lean{Nat.ceil_le_add_one_mul_of_le_mul}
     \leanok
@@ -12,7 +12,7 @@ The original gate operators, private operations, and physical output are fixed t
         \lceil x\rceil\le(A+1)s.
         \label{eq:homogeneous_ceiling_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     $\lceil x\rceil\le x+1\le As+1\le As+s=(A+1)s$.
@@ -40,7 +40,7 @@ The original gate operators, private operations, and physical output are fixed t
     Resource bounds $(r,m,K,D,C)$ mean that every prescribed original gate expansion contains $\le K$ monomials, and each monomial has $\le r$ pair effects, $\le m$ messages (counted with multiplicity), scalar coefficient of modulus $\le C$, and message dimensions $\le D$.
 \end{definition}
 
-\begin{theorem}[Enlarging local bounds]
+\begin{lemma}[Enlarging local bounds]
     \label{thm:peps_message_gate_bounds_mono}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageGateApproximation.mono}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded.mono_dimension}
@@ -48,52 +48,52 @@ The original gate operators, private operations, and physical output are fixed t
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded.mono_coefficient}
     \leanok
     Increasing $\delta$, $D$, or $C$ in Definitions~\ref{def:peps_message_gate_approximation} and~\ref{def:peps_message_gate_resources} preserves the respective local approximation, resource, and termwise pair-effect bounds.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Apply transitivity of $\le$ at each original gate occurrence.
 \end{proof}
 
-\begin{theorem}[Message expansion preserves each local approximation]
+\begin{lemma}[Message expansion preserves each local approximation]
     \label{thm:peps_message_expand_gate_approximation}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_expandMessageGateLists}
     \leanok
     \uses{def:peps_message_gate_lists,def:peps_message_gate_approximation}
     Expanding every message in a local approximation of tolerance $\delta$ (Definition~\ref{def:peps_message_gate_approximation}) yields an allowed pair-effect local approximation of the same tolerance $\delta$ with the same $G_g$ and $C_g$ at each occurrence $g$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_gate_eval}
-    By Theorem~\ref{thm:peps_message_gate_eval}, each message expansion preserves allowedness and evaluates to the same operator $\widetilde G_g$, leaving $\|\widetilde G_g-G_g\|\le\delta$ and all private and participant data unchanged.
+    By Lemma~\ref{thm:peps_message_gate_eval}, each message expansion preserves allowedness and evaluates to the same operator $\widetilde G_g$, leaving $\|\widetilde G_g-G_g\|\le\delta$ and all private and participant data unchanged.
 \end{proof}
 
-\begin{theorem}[Term counts after bounded message expansion]
+\begin{lemma}[Term counts after bounded message expansion]
     \label{thm:peps_message_expand_monomial_count}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.monomialCount_expandMessageGateLists_le}
     \leanok
     \uses{def:peps_message_gate_resources}
     Under resource bounds $(r,m,K,D,C)$ with $D\ge1$, expanding messages produces at most $\lceil KD^m\rceil$ terms at each nonprivate gate occurrence.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_gate_size}
-    By Theorem~\ref{thm:peps_message_gate_size}, each of the $\le K$ monomials with $\le m$ messages expands into $\le D^m$ terms, giving $\le\lceil KD^m\rceil$ terms in total.
+    By Lemma~\ref{thm:peps_message_gate_size}, each of the $\le K$ monomials with $\le m$ messages expands into $\le D^m$ terms, giving $\le\lceil KD^m\rceil$ terms in total.
 \end{proof}
 
-\begin{theorem}[Individual coefficient bounds after message expansion]
+\begin{lemma}[Individual coefficient bounds after message expansion]
     \label{thm:peps_message_expand_termwise_bound}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
     \leanok
     \uses{def:peps_message_gate_resources,def:peps_message_gate_approximation}
     Under resource bounds $(r,m,K,D,C)$ with $D\ge1$, $C\ge0$ and Definition~\ref{def:peps_message_gate_approximation}, each expanded monomial has $\le r$ pair effects and scalar coefficient of modulus $\le KCD^m$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_gate_eval,thm:peps_message_gate_size}
-    By Theorems~\ref{thm:peps_message_gate_eval} and~\ref{thm:peps_message_gate_size}, message expansion preserves the pair-effect count $\le r$ and bounds the total absolute coefficient sum (hence each individual coefficient modulus) by $KCD^m$.
+    By Lemmas~\ref{thm:peps_message_gate_eval} and~\ref{thm:peps_message_gate_size}, message expansion preserves the pair-effect count $\le r$ and bounds the total absolute coefficient sum (hence each individual coefficient modulus) by $KCD^m$.
 \end{proof}
 
-\begin{theorem}[Uniform compression of original message-containing gates]
+\begin{lemma}[Uniform compression of original message-containing gates]
     \label{thm:peps_uniform_original_message_compression}
     \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_message_sampled_network}
     \leanok
@@ -116,30 +116,30 @@ The original gate operators, private operations, and physical output are fixed t
     \end{align}
     (\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}).
     % Source: 04-compression.tex, lines 132--175 and 590--600.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_approximate_operator_network,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:peps_message_gate_bounds_mono,thm:homogeneous_ceiling_bound}
-    Writing $C_+=\max\{C,0\}$, fix $q=n+\lceil p\rceil+\lceil16(1+(C_N)_+)\rceil$ and replace $C_K(q),C_C(q),C_M(q)$ by their positive parts via Theorem~\ref{thm:peps_message_gate_bounds_mono}. With $D_M=(1+C_M(q))L^{z(q)}\ge1$ and $K=C_K(q)L^{u(q)}$, expanding all messages preserves local tolerance $L^{-q}$ (Theorem~\ref{thm:peps_message_expand_gate_approximation}) and yields pair-effect lists with term cap and coefficient bound (Theorems~\ref{thm:homogeneous_ceiling_bound}, \ref{thm:peps_message_expand_monomial_count}, and~\ref{thm:peps_message_expand_termwise_bound})
+    Writing $C_+=\max\{C,0\}$, fix $q=n+\lceil p\rceil+\lceil16(1+(C_N)_+)\rceil$ and replace $C_K(q),C_C(q),C_M(q)$ by their positive parts via Lemma~\ref{thm:peps_message_gate_bounds_mono}. With $D_M=(1+C_M(q))L^{z(q)}\ge1$ and $K=C_K(q)L^{u(q)}$, expanding all messages preserves local tolerance $L^{-q}$ (Lemma~\ref{thm:peps_message_expand_gate_approximation}) and yields pair-effect lists with term cap and coefficient bound (Lemmas~\ref{thm:homogeneous_ceiling_bound}, \ref{thm:peps_message_expand_monomial_count}, and~\ref{thm:peps_message_expand_termwise_bound})
     \begin{align}
         K'=\left\lceil KD_M^{m_q}\right\rceil
            & \le\bigl(1+C_K(q)(1+C_M(q))^{m_q}\bigr)L^{u(q)+z(q)m_q}, \notag \\
         C' & =C_K(q)C_C(q)(1+C_M(q))^{m_q}L^{u(q)+v(q)+z(q)m_q}.
         \notag
     \end{align}
-    Applying Theorem~\ref{thm:peps_uniform_approximate_operator_network} to these expanded lists gives (\ref{eq:peps_uniform_msg_compression_bound}).
+    Applying Lemma~\ref{thm:peps_uniform_approximate_operator_network} to these expanded lists gives (\ref{eq:peps_uniform_msg_compression_bound}).
 \end{proof}
 
-\begin{theorem}[Uniform compression of exact original message expansions]
+\begin{lemma}[Uniform compression of exact original message expansions]
     \label{thm:peps_uniform_exact_original_message_compression}
     \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_exact_message_sampled_network}
     \leanok
     \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
-    Under the setup and bounds (\ref{eq:peps_uniform_msg_poly_inputs}) of Theorem~\ref{thm:peps_uniform_original_message_compression}, if there exist fixed $r,m,C_K,C_C,C_M,u,v,z$ such that every original gate admits an exact ($\delta=0$) local expansion with resource bounds $(r,m,C_KL^u,C_ML^z,C_CL^v)$, then for every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer $\alpha_p>0$ such that every construction of size $L\ge2$ admits an operator tensor network $\sigma_L$ satisfying (\ref{eq:peps_uniform_msg_compression_bound}) (\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}).
+    Under the setup and bounds (\ref{eq:peps_uniform_msg_poly_inputs}) of Lemma~\ref{thm:peps_uniform_original_message_compression}, if there exist fixed $r,m,C_K,C_C,C_M,u,v,z$ such that every original gate admits an exact ($\delta=0$) local expansion with resource bounds $(r,m,C_KL^u,C_ML^z,C_CL^v)$, then for every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer $\alpha_p>0$ such that every construction of size $L\ge2$ admits an operator tensor network $\sigma_L$ satisfying (\ref{eq:peps_uniform_msg_compression_bound}) (\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}).
     % Source: 04-compression.tex, lines 132--175.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_original_message_compression,thm:peps_message_gate_bounds_mono}
-    An exact expansion ($\delta=0$) satisfies $\delta\le L^{-q}$ for every integer $q$ by Theorem~\ref{thm:peps_message_gate_bounds_mono}, so Theorem~\ref{thm:peps_uniform_original_message_compression} applies directly.
+    An exact expansion ($\delta=0$) satisfies $\delta\le L^{-q}$ for every integer $q$ by Lemma~\ref{thm:peps_message_gate_bounds_mono}, so Lemma~\ref{thm:peps_uniform_original_message_compression} applies directly.
 \end{proof}

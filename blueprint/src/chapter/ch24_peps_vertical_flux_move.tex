@@ -1,4 +1,4 @@
-\begin{theorem}[Translated vertical six-site geometry]
+\begin{lemma}[Translated vertical six-site geometry]
     \label{thm:peps_vertical_two_plaquette_geometry}
     \lean{TNLean.PEPS.verticalTwoPlaquetteTree_isTree,
         TNLean.PEPS.verticalTwoPlaquetteRegion,
@@ -23,7 +23,7 @@
     one. The assertions include both periodic seams. This is the rotated
     finite-torus geometry for \cite[Theorem~6.16]{Schuch2010PEPS}, with scope
     recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_torus_coordinate_swap}
@@ -32,7 +32,7 @@
     isomorphism, and evaluate the six vertex coordinates.
 \end{proof}
 
-\begin{theorem}[Vertical movement on the original six spins]
+\begin{lemma}[Vertical movement on the original six spins]
     \label{thm:peps_torus_vertical_flux_move}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusVerticalFluxMove,
         TNLean.PEPS.torusVerticalFluxAssignment,
@@ -68,7 +68,7 @@
     assignments. This finite-torus realization of
     \cite[Theorem~6.16]{Schuch2010PEPS} has the stated regular-action and period
     restrictions; see \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The directed step evaluation cancels the sorting inversion. The four native directed

@@ -11,6 +11,7 @@ import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.SpectralTail
 import QICLean.Analysis.KyFanNorm
+import QICLean.Representation.RelativePin
 
 /-!
 # Sequential truncation of a chain vector
@@ -63,12 +64,6 @@ open scoped ComplexOrder InnerProductSpace Kronecker
 namespace Entropy
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
-
-/-- The local lift of a difference is the difference of the lifts. -/
-theorem localLift_sub {D : Finset V} (K K' : Matrix (RegionConfig n D) (RegionConfig n D) ℂ) :
-    localLift D (K - K') = localLift D K - localLift D K' := by
-  rw [sub_eq_add_neg, ← neg_one_smul ℂ K', localLift_add, localLift_smul, neg_one_smul,
-    ← sub_eq_add_neg]
 
 /-- A lift from a smaller region is a lift from any larger region. -/
 theorem exists_localLift_eq_localLift_of_subset {D D' : Finset V} (hDD : D ⊆ D')

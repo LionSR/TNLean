@@ -35,7 +35,7 @@ supported on $S$, and $E_S^{\mathcal K}$ the expectation of
 Definition~\ref{def:qc_spectator_expectation}. For $a,b\in J$, define the
 physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 
-\begin{theorem}[Physical support and spectator expectation]
+\begin{lemma}[Physical support and spectator expectation]
     \label{thm:al_spectator_support_fixed}
     \uses{def:qc_spectator_expectation,def:qc_local_circuit}
     \lean{QuantumCircuit.spectatorSiteExpectation_eq_self_iff}
@@ -47,7 +47,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
         \forall a,b\in J,\ B_{ab}\in\mathcal A_S.
         \label{eq:al_propagation_support_fixed}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_spectator_expectation,lem:qc_site_expectation_properties}
@@ -56,26 +56,26 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     $B_{ab}\in\mathcal A_S$ by Lemma~\ref{lem:qc_site_expectation_properties}.
 \end{proof}
 
-\begin{theorem}[Vanishing oscillation outside the physical support]
+\begin{lemma}[Vanishing oscillation outside the physical support]
     \label{thm:al_spectator_support_oscillation_zero}
     \uses{def:qc_site_oscillation,def:qc_local_circuit}
     \lean{QuantumCircuit.siteOscillation_eq_zero_of_not_mem_support}
     \leanok
     If $B_{ab}\in\mathcal A_S$ for all $a,b\in J$ and $y\notin S$, then
     $d_y(B)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_spectator_support_fixed,thm:qc_spectator_commutant,
         thm:qc_site_oscillation_commutant}
-    By Theorem~\ref{thm:al_spectator_support_fixed}, $E_S^{\mathcal K}(B)=B$.
+    By Lemma~\ref{thm:al_spectator_support_fixed}, $E_S^{\mathcal K}(B)=B$.
     For $U\in\mathcal A_{\{y\}}\subseteq\mathcal A_{I\setminus S}$,
-    Theorem~\ref{thm:qc_spectator_commutant} gives
+    Lemma~\ref{thm:qc_spectator_commutant} gives
     $[B,\widehat U]=[E_S^{\mathcal K}(B),\widehat U]=0$, so $d_y(B)=0$ by
-    Theorem~\ref{thm:qc_site_oscillation_commutant}.
+    Lemma~\ref{thm:qc_site_oscillation_commutant}.
 \end{proof}
 
-\begin{theorem}[Initial oscillation bounded by the support indicator]
+\begin{lemma}[Initial oscillation bounded by the support indicator]
     \label{thm:al_spectator_support_indicator}
     \uses{def:qc_site_oscillation,def:qc_local_circuit}
     \lean{QuantumCircuit.siteOscillation_le_support_indicator}
@@ -87,15 +87,15 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
         d_y(B) & \le2\|B\|\mathbf1_S(y).
         \label{eq:al_propagation_support_indicator}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_spectator_support_oscillation_zero,
         thm:qc_site_oscillation_bounds}
-    For $y\in S$, Theorem~\ref{thm:qc_site_oscillation_bounds} gives
+    For $y\in S$, Lemma~\ref{thm:qc_site_oscillation_bounds} gives
     $d_y(B)\le2\|B\|$; for $y\notin S$, both sides of
     (\ref{eq:al_propagation_support_indicator}) vanish by
-    Theorem~\ref{thm:al_spectator_support_oscillation_zero}.
+    Lemma~\ref{thm:al_spectator_support_oscillation_zero}.
 \end{proof}
 
 \subsection{Coefficients from the localization errors}
@@ -114,13 +114,13 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Nonnegativity of the shell coefficients]
+\begin{lemma}[Nonnegativity of the shell coefficients]
     \label{thm:al_channel_shell_coefficient_nonneg}
     \uses{def:al_channel_shell_coefficient}
     \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound_nonneg}
     \leanok
     For every real sequence $(\varepsilon_l)$ and $l\ge0$, $\eta_l\ge0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_channel_shell_coefficient}
@@ -129,7 +129,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     $\sqrt{\varepsilon_l}\ge0$.
 \end{proof}
 
-\begin{theorem}[Finite-radius physical shell bound]
+\begin{lemma}[Finite-radius physical shell bound]
     \label{thm:al_channel_shell_finite_bound}
     \uses{def:al_local_channel_shell,def:qc_site_oscillation,
         def:al_channel_shell_coefficient}
@@ -148,7 +148,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     \end{align}
     In particular, if $\|k-E_{K_j}(k)\|=0$ for all $0\le j\le L$, then
     $\Delta_j(B)=0$ for $1\le j\le L$, while $\eta_0=2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_shell_oscillation,def:al_channel_shell_coefficient}
@@ -162,7 +162,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     $\varepsilon_m=\varepsilon_{m+1}=0$, $\eta_{m+1}=0$.
 \end{proof}
 
-\begin{theorem}[Finite one-event oscillation increment]
+\begin{lemma}[Finite one-event oscillation increment]
     \label{thm:al_channel_finite_increment}
     \uses{def:al_local_root_channel,def:qc_site_oscillation,
         def:al_channel_shell_coefficient}
@@ -178,7 +178,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
          & \le d_y(B)+2\sum_{0\le l\le n,\ y\in K_l}
         \eta_l\sum_{z\in K_l}d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_shell_finite_bound,
@@ -187,18 +187,18 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
         thm:qc_site_oscillation_seminorm,
         thm:qc_site_oscillation_bounds,def:al_local_channel_shell}
     Set $a_l=\eta_l\sum_{z\in K_l}d_z(B)\ge0$ and induct on $n$. If
-    $y\notin K_n$, Theorem~\ref{thm:al_root_channel_outside_oscillation} gives
+    $y\notin K_n$, Lemma~\ref{thm:al_root_channel_outside_oscillation} gives
     $d_y(\mathcal E_n(B))\le d_y(B)$, which implies
     (\ref{eq:al_propagation_finite_increment}) since $a_l\ge0$. For $n=0$ and
     $y\in K_0$, $\mathcal E_0(B)=B+\Delta_0(B)$ and
-    Theorem~\ref{thm:al_channel_shell_finite_bound} give
+    Lemma~\ref{thm:al_channel_shell_finite_bound} give
     \begin{align}
         d_y(\mathcal E_0(B))
          & \le d_y(B)+d_y(\Delta_0(B))\le d_y(B)+2a_0.
         \label{eq:al_propagation_increment_zero}
     \end{align}
     For $y\in K_{n+1}$, $\mathcal E_{n+1}(B)=\mathcal E_n(B)+\Delta_{n+1}(B)$
-    and Theorem~\ref{thm:al_channel_shell_finite_bound} yield
+    and Lemma~\ref{thm:al_channel_shell_finite_bound} yield
     \begin{align}
         d_y(\mathcal E_{n+1}(B))
          & \le d_y(\mathcal E_n(B))+2\|\Delta_{n+1}(B)\|
@@ -211,7 +211,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 
 \subsection{Stretched-exponential localization errors}
 
-\begin{theorem}[Explicit stretched-exponential shell coefficients]
+\begin{lemma}[Explicit stretched-exponential shell coefficients]
     \label{thm:al_channel_shell_coefficient_exp}
     \uses{def:al_channel_shell_coefficient}
     \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound_le_exp}
@@ -227,7 +227,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
         \eta_l & \le A\exp(-bl^\alpha).
         \label{eq:al_propagation_exp_coefficient}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_channel_shell_coefficient}
@@ -249,7 +249,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     while $\eta_0=2\le A\exp(-b\cdot0^\alpha)$ at $l=0$.
 \end{proof}
 
-\begin{theorem}[Stretched-exponential physical shell bound]
+\begin{lemma}[Stretched-exponential physical shell bound]
     \label{thm:al_channel_shell_exp_bound}
     \uses{def:al_local_channel_shell,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_le_exp_sum_siteOscillation}
@@ -266,7 +266,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
          & \le A\exp(-bl^\alpha)\sum_{z\in K_l}d_z(B).
         \label{eq:al_propagation_exp_shell}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_shell_finite_bound,
@@ -276,7 +276,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     (\ref{eq:al_propagation_exp_coefficient}) and $\sum_{z\in K_l}d_z(B)\ge0$.
 \end{proof}
 
-\begin{theorem}[Stretched-exponential finite one-event increment]
+\begin{lemma}[Stretched-exponential finite one-event increment]
     \label{thm:al_channel_exp_increment}
     \uses{def:al_local_root_channel,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le_exp}
@@ -290,7 +290,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
          & \le d_y(B)+2\sum_{0\le l\le n,\ y\in K_l}
         A\exp(-bl^\alpha)\sum_{z\in K_l}d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_finite_increment,
@@ -308,7 +308,7 @@ simple graph on $I$, $a\in I$ an anchor with connected component $C(a)$,
 $N_l(a)=\{z\in I:d_G(a,z)\le l\}$, $R_a=\max_{z\in C(a)}d_G(a,z)$, and
 $\mathcal E_k$ the full root channel~(\ref{eq:qc_component_root_channel}).
 
-\begin{theorem}[Full-channel increment with an explicit finite cutoff]
+\begin{lemma}[Full-channel increment with an explicit finite cutoff]
     \label{thm:al_graph_channel_exp_increment}
     \uses{def:al_local_root_channel,def:qc_site_oscillation,
         def:qc_local_circuit}
@@ -325,14 +325,14 @@ $\mathcal E_k$ the full root channel~(\ref{eq:qc_component_root_channel}).
          & \le d_y(B)+2\sum_{0\le l\le n,\ d_G(a,y)\le l}
         A\exp(-bl^\alpha)\sum_{z\in N_l(a)}d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_exp_increment,thm:qc_graph_ball_stabilization,
         thm:qc_component_channel_stabilization}
-    Apply Theorem~\ref{thm:al_channel_exp_increment} with $K_l=N_l(a)$ and use
+    Apply Lemma~\ref{thm:al_channel_exp_increment} with $K_l=N_l(a)$ and use
     $\mathcal E_{N_n(a)}(B)=\mathcal E_k(B)$ from
-    Theorem~\ref{thm:qc_component_channel_stabilization} ($n\ge R_a$,
+    Lemma~\ref{thm:qc_component_channel_stabilization} ($n\ge R_a$,
     $k\in\mathcal A_{C(a)}$).
 \end{proof}
 
@@ -345,7 +345,7 @@ $l\in\N$ and $y,z\in I$, set
     m_l(y,z) & =\bigl|\{i\in F:y,z\in N_l(a_i)\}\bigr|.
 \end{align}
 
-\begin{theorem}[Finite shell sums as counts of labels]
+\begin{lemma}[Finite shell sums as counts of labels]
     \label{thm:al_graph_shell_sum_cardinality}
     \lean{TNLean.PEPS.AreaLaw.sum_graphBall_shell_eq_sum_card}
     \leanok
@@ -357,7 +357,7 @@ $l\in\N$ and $y,z\in I$, set
         w_l\sum_{z\in N_l(a_i)}v_z
          & =\sum_{l=0}^{n}w_l\sum_{z\in I}m_l(y,z)v_z.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Interchanging the sums over $i\in F$ and $z\in I$ at each $0\le l\le n$
@@ -375,7 +375,7 @@ $l\in\N$ and $y,z\in I$, set
     yields~(\ref{eq:al_propagation_shell_count}).
 \end{proof}
 
-\begin{theorem}[Sum of full-channel oscillation increments]
+\begin{lemma}[Sum of full-channel oscillation increments]
     \label{thm:al_graph_event_increment_cardinality}
     \uses{def:al_local_root_channel,def:qc_site_oscillation,
         def:qc_local_circuit}
@@ -397,7 +397,7 @@ $l\in\N$ and $y,z\in I$, set
          & \le2A\sum_{l=0}^{n}\exp(-bl^\alpha)
         \sum_{z\in I}m_l(y,z)d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_graph_channel_exp_increment,
@@ -433,14 +433,14 @@ $d_G(y,z)=\infty$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Vanishing kernel between distinct components]
+\begin{lemma}[Vanishing kernel between distinct components]
     \label{thm:al_graph_kernel_disconnected}
     \uses{def:al_graph_event_kernel}
     \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel_eq_zero_of_not_reachable}
     \leanok
     If $d_G(y,z)=\infty$, then $\mathsf A^{(N)}_{yz}=0$ for all $N\in\N$ and
     $D,b,\alpha\in\R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_graph_event_kernel}
@@ -449,7 +449,7 @@ $d_G(y,z)=\infty$.
     (\ref{eq:al_propagation_event_kernel}) vanishes.
 \end{proof}
 
-\begin{theorem}[Finite weighted row bound from ball growth]
+\begin{lemma}[Finite weighted row bound from ball growth]
     \label{thm:al_graph_kernel_finite_row}
     \uses{def:al_graph_event_kernel}
     \lean{TNLean.PEPS.AreaLaw.sum_graphChannelEventKernel_mul_exp_le}
@@ -473,7 +473,7 @@ $d_G(y,z)=\infty$.
         \exp\bigl(\theta(d_G^0(y,z))^\alpha\bigr)
          & \le D\mu K^2\sum_{l=0}^{N}(l+1)^4\exp\bigl(-(b/2)l^\alpha\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_graph_event_kernel,thm:al_graph_shell_sum_cardinality}
@@ -508,7 +508,7 @@ $d_G(y,z)=\infty$.
     (\ref{eq:al_propagation_finite_row}).
 \end{proof}
 
-\begin{theorem}[A uniform weighted row constant]
+\begin{lemma}[A uniform weighted row constant]
     \label{thm:al_graph_kernel_uniform_row}
     \uses{def:al_graph_event_kernel}
     \lean{TNLean.PEPS.AreaLaw.exists_graphChannelEventKernel_weighted_row_le}
@@ -525,7 +525,7 @@ $d_G(y,z)=\infty$.
         \exp\left(\frac{b}{2\,2^\alpha}(d_G^0(y,z))^\alpha\right)
          & \le V.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_graph_kernel_finite_row,lem:al_truncation_error}
@@ -554,14 +554,14 @@ $d_G(y,z)=\infty$.
 
 \subsection{Kernel bounds for root-channel families}
 
-\begin{theorem}[Kernel domination of root-channel increments]
+\begin{lemma}[Kernel domination of root-channel increments]
     \label{thm:al_actual_channel_kernel_domination}
     \uses{def:al_graph_event_kernel,def:al_local_root_channel,
         def:qc_site_oscillation,def:qc_local_circuit}
     \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel}
     \leanok
     Under the hypotheses of
-    Theorem~\ref{thm:al_graph_event_increment_cardinality} at cutoff
+    Lemma~\ref{thm:al_graph_event_increment_cardinality} at cutoff
     $N\ge\max_{i\in F}R_{a_i}$, with $\mathsf A^{(N)}$ defined by
     (\ref{eq:al_propagation_event_kernel}) for
     $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$, every $y\in I$ and $B$ satisfy
@@ -570,7 +570,7 @@ $d_G(y,z)=\infty$.
         \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
          & \le\sum_{z\in I}\mathsf A^{(N)}_{yz}d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_graph_event_increment_cardinality,def:al_graph_event_kernel}
@@ -585,7 +585,7 @@ $d_G(y,z)=\infty$.
     (\ref{eq:al_propagation_actual_domination}).
 \end{proof}
 
-\begin{theorem}[Uniform weighted rows and root-channel increments]
+\begin{lemma}[Uniform weighted rows and root-channel increments]
     \label{thm:al_actual_channel_uniform_bounds}
     \uses{def:al_graph_event_kernel,def:al_local_root_channel,
         def:qc_site_oscillation,def:qc_local_circuit}
@@ -612,15 +612,15 @@ $d_G(y,z)=\infty$.
         \sum_{i\in F}\bigl(d_y(\mathcal E_i(B))-d_y(B)\bigr)
          & \le\sum_{z\in I}\mathsf A^{(N)}_{yz}d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_graph_kernel_uniform_row,
         thm:al_actual_channel_kernel_domination}
-    Apply Theorem~\ref{thm:al_graph_kernel_uniform_row} with
+    Apply Lemma~\ref{thm:al_graph_kernel_uniform_row} with
     $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$ to obtain $R$ and
     (\ref{eq:al_propagation_actual_row}), and
-    Theorem~\ref{thm:al_actual_channel_kernel_domination} to obtain
+    Lemma~\ref{thm:al_actual_channel_kernel_domination} to obtain
     (\ref{eq:al_propagation_actual_increment}).
 \end{proof}
 
@@ -630,7 +630,7 @@ $d_G(y,z)=\infty$.
 % revision recorded at the start of this leaf.
 \subsection{Positive constraints on a finite lattice domain}
 
-\begin{theorem}[Anchor fibers after retaining labels]
+\begin{lemma}[Anchor fibers after retaining labels]
     \label{thm:al_retained_anchor_fibers}
     \lean{TNLean.PEPS.AreaLaw.card_anchor_fiber_subtype_le}
     \leanok
@@ -640,14 +640,14 @@ $d_G(y,z)=\infty$.
         \label{eq:al_propagation_retained_fiber}
         |\{i\in F_P:a_i=x\}| & \le|\{i\in F:a_i=x\}|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The inclusion $F_P\hookrightarrow F$ injects $\{i\in F_P:a_i=x\}$ into
     $\{i\in F:a_i=x\}$.
 \end{proof}
 
-\begin{theorem}[Uniform retained-channel bounds for lattice positive constraints]
+\begin{lemma}[Uniform retained-channel bounds for lattice positive constraints]
     \label{thm:al_lattice_channel_uniform_bounds}
     \uses{def:area_law_hamiltonian,def:al_graph_event_kernel,
         def:al_local_root_channel,def:qc_site_oscillation}
@@ -691,7 +691,7 @@ $d_G(y,z)=\infty$.
         \bigl(d_y(\mathcal E_X(B))-d_y(B)\bigr)
          & \le\sum_{z\in\Lambda}\mathsf A^{(N,P)}_{yz}d_z(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_lattice_positive_replacement,thm:al_lattice_counts,
@@ -704,8 +704,8 @@ $d_G(y,z)=\infty$.
          & \le C\exp(-cl^\alpha).
     \end{align}
     With $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$,
-    Theorem~\ref{thm:al_lattice_counts} and
-    Theorem~\ref{thm:al_retained_anchor_fibers} give, for all $x\in\Lambda$
+    Lemma~\ref{thm:al_lattice_counts} and
+    Lemma~\ref{thm:al_retained_anchor_fibers} give, for all $x\in\Lambda$
     and $l\in\N$,
     \begin{align}
         \label{eq:al_propagation_lattice_ball}
@@ -715,7 +715,7 @@ $d_G(y,z)=\infty$.
         \label{eq:al_propagation_lattice_retained_fiber}
         |\{X\in F_P:a_X=x\}|                   & \le\mu_R.
     \end{align}
-    Applying Theorem~\ref{thm:al_actual_channel_uniform_bounds} with $K=2$ and
+    Applying Lemma~\ref{thm:al_actual_channel_uniform_bounds} with $K=2$ and
     $\mu=\mu_R$ to the retained family $F_P$ using
     (\ref{eq:al_propagation_lattice_tail}),
     (\ref{eq:al_propagation_lattice_ball}), and
@@ -759,7 +759,7 @@ identically false predicate both sides of
     \end{align}
 \end{proof}
 
-\begin{theorem}[Finite distance and connected components]
+\begin{lemma}[Finite distance and connected components]
     \label{thm:al_graph_extended_components}
     \uses{def:al_graph_extended_metric}
     \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_ne_top,
@@ -767,7 +767,7 @@ identically false predicate both sides of
     \leanok
     For all $x,y\in V$, $\rho_G(x,y)\ne\infty$ if and only if $x$ and $y$ are
     connected in $G$ (and $\rho_G(x,y)=\infty$ otherwise).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_graph_extended_metric}
@@ -777,7 +777,7 @@ identically false predicate both sides of
 
 For $r\in[0,\infty]$, write $r_{\R}=r$ for $r<\infty$ and $\infty_{\R}=0$.
 
-\begin{theorem}[Real value of the extended graph distance]
+\begin{lemma}[Real value of the extended graph distance]
     \label{thm:al_graph_extended_real_value}
     \uses{def:al_graph_extended_metric}
     \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_toReal}
@@ -787,7 +787,7 @@ For $r\in[0,\infty]$, write $r_{\R}=r$ for $r<\infty$ and $\infty_{\R}=0$.
         \label{eq:al_propagation_extended_real_value}
         (\rho_G(x,y))_{\R} & =d_G^0(x,y).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_graph_extended_metric}
@@ -795,14 +795,14 @@ For $r\in[0,\infty]$, write $r_{\R}=r$ for $r<\infty$ and $\infty_{\R}=0$.
     $d_G(x,y)=\infty$.
 \end{proof}
 
-\begin{theorem}[Nonnegativity of the finite event kernel]
+\begin{lemma}[Nonnegativity of the finite event kernel]
     \label{thm:al_graph_event_kernel_nonneg}
     \uses{def:al_graph_event_kernel}
     \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel_nonneg}
     \leanok
     If $D\ge0$, then $\mathsf A^{(N)}_{yz}\ge0$ for all $b,\alpha\in\R$,
     $N\in\N$, and $y,z\in I$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_graph_event_kernel}
@@ -810,7 +810,7 @@ For $r\in[0,\infty]$, write $r_{\R}=r$ for $r<\infty$ and $\infty_{\R}=0$.
     $D\ge0$, $\exp(-bl^\alpha)>0$, and $m_l(y,z)\ge0$.
 \end{proof}
 
-By Theorems~\ref{thm:al_graph_extended_components}
+By Lemmas~\ref{thm:al_graph_extended_components}
 and~\ref{thm:al_graph_kernel_disconnected}, $\rho_G(y,z)=\infty$ implies
 $\mathsf A^{(N)}_{yz}=0$, while~(\ref{eq:al_propagation_extended_real_value})
 identifies $d_G^0(y,z)$ with $(\rho_G(y,z))_{\R}$ in the weighted-row bounds.

@@ -26,7 +26,8 @@ sites gives such unitaries by permuting the sites; `E₀/|G| ≥ λ_min(K)` then
 the number of translates.
 
 Lines 1005–1009 of the source record that its filtered local terms are one choice of the
-constants `a_k`; that instance is not part of this file.
+constants `a_k`; the actual Gaussian-filtered instance is proved in
+`TNLean.Lattice.GaussianVariationalLowerBound`.
 
 ## Main definitions
 

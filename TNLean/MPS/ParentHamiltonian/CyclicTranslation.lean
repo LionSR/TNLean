@@ -57,9 +57,26 @@ private theorem cyclicTranslateCfg_cyclicCfg {N L : ℕ} (hN : 0 < N)
   simp only [cyclicTranslateCfg, cyclicCfg]
   rw [cyclic_offset_translate k i s]
 
+/-- A cyclic window covering the whole ring reads its word cyclically translated
+by the negated starting site; the exterior configuration plays no role. -/
+theorem cyclicCfg_full_eq_cyclicTranslateCfg_neg {R : ℕ} (hR : 0 < R)
+    (i : Fin R) (ω τ : Fin R → Fin d) :
+    cyclicCfg hR R i ω τ = cyclicTranslateCfg (-i) ω := by
+  let _ : NeZero R := ⟨hR.ne'⟩
+  funext k
+  change (if h : (k.val + R - i.val) % R < R then
+    ω ⟨(k.val + R - i.val) % R, h⟩ else τ k) = ω (k + -i)
+  rw [dite_eq_left (Nat.mod_lt _ hR)]
+  congr 1
+  apply Fin.ext
+  have hi := i.isLt
+  rw [← sub_eq_add_neg, Fin.val_sub, Fin.val_mk]
+  congr 1
+  omega
+
 /-- A cyclic restriction of a translated state is the restriction of the
 original state at the translated starting site. -/
-private theorem cyclicRestrictₗ_cyclicTranslateState {N L : ℕ} (hN : 0 < N)
+theorem cyclicRestrictₗ_cyclicTranslateState {N L : ℕ} (hN : 0 < N)
     (s i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace d N) :
     cyclicRestrictₗ hN L i τ (cyclicTranslateState s ψ) =
       cyclicRestrictₗ hN L (i - s) (cyclicTranslateCfg s τ) ψ := by

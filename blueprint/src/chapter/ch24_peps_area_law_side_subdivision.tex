@@ -17,7 +17,7 @@ origin and neighboring-layer locality; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $o+2^\ell(z+\varepsilon)$.
 \end{definition}
 
-\begin{theorem}[An opposing corner on a cell side]
+\begin{lemma}[An opposing corner on a cell side]
     \label{thm:area_law_corner_side_subdivision}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_side}
     \leanok
@@ -29,7 +29,7 @@ origin and neighboring-layer locality; see \cite[Section~11]{OpenAI2026AreaLaw}.
     for any side of the cell indexed by $z$. If a corner $x$
     of the cell indexed by $w$ belongs to $[a,b]$, then
     $x=a$, $x=(a+b)/2$, or $x=b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_corner,def:area_law_cell_fan,
         thm:area_law_dyadic_closures,thm:area_law_fine_cell_containment,
