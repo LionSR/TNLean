@@ -798,6 +798,97 @@ theorem boundaryMinimizer_spec (S : Set (LeftBlockVector L q k))
     (exists_boundary_density_minimizer_max_eigenvector
       (a := CutLeft L q k) (s := CutSite L q k) (b := Fin m) P HL X η hX)))
 
+/-- **A solution of the size-trimming convex program** at the boundary point `X`: a feasible
+density `σ` of least left energy among the feasible densities, a unit eigenvector `u` of its
+largest eigenvalue `μ > 0`, fixed by the span projection. Every solver returning such data
+is admissible; the chosen `boundaryMinimizer` is one. LVV13, `algo53.tex`, equation
+`eq:conv` and lines 477--478. -/
+def IsBoundaryProgramSolution (S : Set (LeftBlockVector L q k))
+    (HL : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ)
+    (m : ℕ) (η : ℝ) (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
+    (σ : Matrix ((CutLeft L q k × CutSite L q k) × Fin m)
+      ((CutLeft L q k × CutSite L q k) × Fin m) ℂ)
+    (u : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) (μ : ℝ) : Prop :=
+  let P := reindex
+    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (spanProjection S)
+  σ.PosSemidef ∧ σ.trace = 1 ∧ (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * σ = σ ∧
+    rectangularTraceNorm (partialTraceFirst σ - X) ≤ η ∧
+    (∀ ρ : Matrix ((CutLeft L q k × CutSite L q k) × Fin m)
+        ((CutLeft L q k × CutSite L q k) × Fin m) ℂ,
+      ρ.PosSemidef → ρ.trace = 1 → (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ →
+      rectangularTraceNorm (partialTraceFirst ρ - X) ≤ η →
+      (σ * (HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))).trace.re ≤
+        (ρ * (HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))).trace.re) ∧
+    ‖u‖ = 1 ∧ 0 < μ ∧ σ *ᵥ WithLp.ofLp u = (μ : ℂ) • WithLp.ofLp u ∧
+    (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u ∧
+    ∀ (ν : ℝ) (w : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)),
+      w ≠ 0 → σ *ᵥ WithLp.ofLp w = (ν : ℂ) • WithLp.ofLp w → ν ≤ μ
+
+/-- The chosen minimizer, leading vector and leading value form a solution at every feasible
+point. -/
+theorem isBoundaryProgramSolution_boundaryMinimizer (S : Set (LeftBlockVector L q k))
+    (HL : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ)
+    (m : ℕ) (η : ℝ) {X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ}
+    (hX : (feasibleBoundaryDensities S m η X).Nonempty) :
+    IsBoundaryProgramSolution S HL m η X (boundaryMinimizer S HL m η X)
+      (boundaryLeadingVector S HL m η X) (boundaryLeadingValue S HL m η X) :=
+  boundaryMinimizer_spec S HL m η hX
+
+/-- **An admissible leading-vector assignment**: at every feasible boundary point it returns
+the leading vector of some solution of the convex program. This is what a solver of the
+program must satisfy for the algorithm to be correct. -/
+def IsAdmissibleLeadingVector (S : Set (LeftBlockVector L q k))
+    (HL : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ)
+    (m : ℕ) (η : ℝ)
+    (sol : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
+      EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) : Prop :=
+  ∀ X, (feasibleBoundaryDensities S m η X).Nonempty →
+    ∃ σ μ, IsBoundaryProgramSolution S HL m η X σ (sol X) μ
+
+theorem isAdmissibleLeadingVector_boundaryLeadingVector (S : Set (LeftBlockVector L q k))
+    (HL : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ)
+    (m : ℕ) (η : ℝ) :
+    IsAdmissibleLeadingVector S HL m η (boundaryLeadingVector S HL m η) :=
+  fun _ hX ↦ ⟨_, _, isBoundaryProgramSolution_boundaryMinimizer S HL m η hX⟩
+
+/-- **The family of left columns of a leading-vector assignment** at the feasible points of
+the boundary set `N`. LVV13, `algo53.tex`, equation `eq:conv`, lines 472–478, and Claim
+`c:2`, lines 520–527. -/
+noncomputable def boundaryFamily (S : Set (LeftBlockVector L q k)) (m : ℕ) (η : ℝ)
+    (N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
+    (sol : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
+      EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) :
+    Finset (LeftBlockVector L q k) :=
+  leftColumns (feasibleBoundaryPoints S m η N) (fun X ↦ gluingLeftCoordinates L q k m (sol X))
+
+/-- The family has at most `m |N|` members. LVV13, `algo53.tex`, Claim `c:2`, line 525. -/
+theorem card_boundaryFamily_le (S : Set (LeftBlockVector L q k)) (m : ℕ) (η : ℝ)
+    (N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
+    (sol : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
+      EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) :
+    (boundaryFamily S m η N sol).card ≤ m * N.card := by
+  classical
+  calc
+    _ ≤ (feasibleBoundaryPoints S m η N).card * m := card_leftColumns_le _ _
+    _ ≤ N.card * m := Nat.mul_le_mul_right m (Finset.card_filter_le _ _)
+    _ = m * N.card := Nat.mul_comm _ _
+
+/-- The family of an admissible assignment lies in the span of `S`. LVV13, `algo53.tex`,
+Claim `c:2`, line 526. -/
+theorem boundaryFamily_subset_span (S : Set (LeftBlockVector L q k))
+    (HL : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ)
+    (m : ℕ) (η : ℝ)
+    (N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
+    {sol : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
+      EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)}
+    (hsol : IsAdmissibleLeadingVector S HL m η sol) :
+    (boundaryFamily S m η N sol : Set (LeftBlockVector L q k)) ⊆ Submodule.span ℂ S :=
+  leftColumns_subset_span S _ _ fun X hX ↦ by
+    obtain ⟨σ, μ, hsolX⟩ := hsol X (mem_feasibleBoundaryPoints.mp hX).2
+    exact (gluingLeftCoordinates_spanProjection_eq_iff S _).mp hsolX.2.2.2.2.2.2.2.2.1
+
 /-- **The family of minimizing boundary states.** The left columns, in the gluing
 coordinates, of the chosen leading vectors at the feasible points of the boundary set `N`.
 The choices use only `S`, `H_L`, `m`, `η` and `N`. LVV13, `algo53.tex`, equation `eq:conv`,
@@ -807,20 +898,15 @@ noncomputable def boundaryMinimizerFamily (S : Set (LeftBlockVector L q k))
     (m : ℕ) (η : ℝ)
     (N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)) :
     Finset (LeftBlockVector L q k) :=
-  leftColumns (feasibleBoundaryPoints S m η N)
-    (fun X ↦ gluingLeftCoordinates L q k m (boundaryLeadingVector S HL m η X))
+  boundaryFamily S m η N (boundaryLeadingVector S HL m η)
 
 /-- The family has at most `m |N|` members. LVV13, `algo53.tex`, Claim `c:2`, line 525. -/
 theorem card_boundaryMinimizerFamily_le (S : Set (LeftBlockVector L q k))
     (HL : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ)
     (m : ℕ) (η : ℝ)
     (N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)) :
-    (boundaryMinimizerFamily S HL m η N).card ≤ m * N.card := by
-  classical
-  calc
-    _ ≤ (feasibleBoundaryPoints S m η N).card * m := card_leftColumns_le _ _
-    _ ≤ N.card * m := Nat.mul_le_mul_right m (Finset.card_filter_le _ _)
-    _ = m * N.card := Nat.mul_comm _ _
+    (boundaryMinimizerFamily S HL m η N).card ≤ m * N.card :=
+  card_boundaryFamily_le S m η N _
 
 /-- The family lies in the span of `S`. LVV13, `algo53.tex`, Claim `c:2`, line 526. -/
 theorem boundaryMinimizerFamily_subset_span (S : Set (LeftBlockVector L q k))
@@ -829,9 +915,7 @@ theorem boundaryMinimizerFamily_subset_span (S : Set (LeftBlockVector L q k))
     (N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)) :
     (boundaryMinimizerFamily S HL m η N : Set (LeftBlockVector L q k)) ⊆
       Submodule.span ℂ S :=
-  leftColumns_subset_span S _ _ fun _ hX ↦
-    (gluingLeftCoordinates_spanProjection_eq_iff S _).mp
-      (boundaryMinimizer_spec S HL m η (mem_feasibleBoundaryPoints.mp hX).2).2.2.2.2.2.2.2.2.1
+  boundaryFamily_subset_span S HL m η N (isAdmissibleLeadingVector_boundaryLeadingVector S HL m η)
 
 /-- Every column selected from a unit leading vector has norm at most one.
 Source: LVV13, `algo53.tex`, column extraction, lines 477–478. -/

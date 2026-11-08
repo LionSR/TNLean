@@ -21,6 +21,31 @@
   matrix results to QICLean together with the adjacent weighted-projection API.
 - **Decision:** Mathematical lemmas suffice; no new tactic is needed.
 
+### Overlap and residual of a vector near a unit target — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/VariableWindowRefinement.lean`,
+  `Initialization.lean` and `FrustrationFreeMPSApproximation.lean`.
+- **Pattern:** From `‖x‖ = ‖φ‖ = 1` and `‖x - φ‖ ^ 2 ≤ c`, expand `norm_sub_sq`,
+  compare the real part with `Complex.re_le_norm`, and conclude
+  `1 / 2 ≤ ‖⟪φ, x⟫_ℂ‖`; bound `‖x - ⟪φ, x⟫_ℂ • φ‖` by the norm of the projection
+  onto `(span {φ})ᗮ`.
+- **Abstraction:** A proposed lemma giving both the overlap lower bound
+  `1 - ‖x - φ‖ ^ 2 / 2 ≤ ‖⟪φ, x⟫_ℂ‖` and the residual bound, for use with
+  `Matrix.exists_phase_normalized_filter_output`.
+- **Notes:** Two occurrences of each half; promote at the third.
+
+### Dimension and gap bounds from an actual excitation — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/SharpPerCutApproximation.lean`
+  (`aklv_chain_dimension_and_gap_bounds`) and
+  `FrustrationFreeMPSApproximation.lean`
+  (`aklv_frustrationFree_dimension_and_gap_bounds`, ground energy zero).
+- **Pattern:** Two spectral values give `2 ≤ q` and a nonempty chain; the
+  gapped-ground-state predicate then gives `g ≤ 1`.
+- **Abstraction:** Derive the frustration-free statement from the general one at
+  `μ = 0`, or move the general one beside `gap_le_one_of_positive_nearest_neighbor_terms`.
+- **Notes:** Kept separate while the general file was being edited elsewhere.
+
 Living registry of repeated proof patterns, maintained under the process in
 [`docs/tactic_development.md`](tactic_development.md). Agents and contributors:
 **consult the promoted section before writing proofs; append candidates when
@@ -10228,6 +10253,18 @@ there is no need for a new tactic.
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
 
+### Transport finite buffering before comparing completed actions — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/SuppliedWindowCoordinates.lean` and
+  `MPS/MPU/SuppliedQuasiLocalAction.lean`.
+- **Pattern:** Prove that a sitewise physical bijection commutes with finite
+  prefix/window/suffix concatenation and identity buffering; then reindex
+  the actual periodic matrix equality before applying the named finite
+  evaluation theorem.
+- **Reuse:** Existing finite unitary reindexing and the canonical interval
+  inclusion theorem supply the algebraic steps. The complete window head
+  coordinate bijections are promoted at their existing owner and reused.
+- **Notes:** No second quasi-local relabelling or action structure is added.
 ### Cyclic local interaction in its defining coordinates — promoted
 - **Pattern:** expose a translated arbitrary interaction by applying the
   active-block isometry, then cancel the inverse isometry.
@@ -10833,10 +10870,9 @@ removed after the dependency audit exposed it.
   `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
 - **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
   `MPS/AreaLaw/SnakeGridApproximation.lean`.
-- **Abstraction:** The former has the public lemma
-  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
-  module if a third caller needs it, so square-grid proofs can reuse it
-  without importing the chain area-law theorem.
+- **Abstraction:** The lemma `norm_inv_norm_smul_sub_le_two_mul` now lives in
+  `QICLean/Analysis/UnitNormalizationDistance.lean`. Square-grid proofs can
+  therefore import it without importing the chain area-law theorem.
 - **Notes:** Two occurrences; the square proof currently keeps this short
   calculation inside its normalization step and imports only the truncation core.
 
@@ -11644,28 +11680,30 @@ removed after the dependency audit exposed it.
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
 
-### Injectivity of explicit rational complex coordinates — candidate (2026-11-04)
+### Centered clipping and elementary transports — promoted (2026-11-02)
 
-- **Pattern:** Apply real and imaginary coordinate projections to an equality
-  of complex values, then use injectivity of the rational-to-real cast.
-- **Seen:** `RationalMatrixCode.decode_injective` in
-  `ViableSet/BoundarySDP/RationalMatrixCodes.lean` and
-  `RationalComplexCode.decode_injective` in
-  `ViableSet/BoundarySDP/RationalCodeHeights.lean`.
-- **Reuse:** The scalar lemma is already used by the height theorem for
-  computed rational coordinates. No further copy is needed in this argument.
-- **Decision:** Two instances are recorded. If another matrix-decoding proof
-  needs this argument, move the scalar injectivity lemma to the lower-level
-  coordinate module and use it in the matrix proof as well.
+- **Seen:** two filter constructions in `MPS/AreaLaw/PhysicalDGViability.lean`
+  and the independent-scale construction in `IndependentPhysicalDGPower.lean`.
+- **Pattern:** prove Hermiticity term by term after clipping selected regional
+  matrices and subtracting real ground energies, then add the crossing terms.
+- **Abstraction:** `Matrix.isHermitian_sum_centered_partial_energyTruncation`
+  in QICLean's `Analysis/EnergyTruncation.lean`; all three constructions use it.
+- **Decision:** a matrix lemma replaces the repeated proof. The same three
+  constructions use `Finset.sdiff_eq_empty_iff_subset` directly for their collar
+  count and `Exists.imp` to forget the unused part of a polynomial decomposition.
+  The three gap restrictions in `PhysicalDGViability.lean` and
+  `PhysicalDGSampledNode.lean` use `Or.imp_right` and monotonicity of addition.
+  These existing lemmas suffice; no new tactic is introduced.
 
-### Six-matrix rounded-certificate transport — candidate (2026-11-04)
+### Weighted soft remainders and finite operator sums — promoted (2026-11-02)
 
-- **Pattern:** after replacing each of the six rounded certificate matrices by
-  its defining equality, discharge the corresponding entrywise closeness
-  hypothesis.  The three primary and three Gram coordinates produce the same
-  eight-line proof fragment.
-- **Occurrences:** three simultaneous rounding theorems in
-  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
-- **Candidate abstraction:** a small product-membership transport lemma should
-  package the six rewrites together.  Promote when the surrounding certificate
-  statements have stabilized; the present repetition is confined to one file.
+- **Pattern:** Apply a scalar remainder through an exponential of the same
+  matrix, then restrict to the original or truncated low-energy space.
+- **Reuse:** QICLean's `SoftTruncationScaling` and `SoftTruncationRemainder`
+  provide the independent-scale estimate. `PhysicalScaledSoftTruncationResidual`
+  and `PhysicalScaledSoftTruncationReverse` use this common estimate with
+  their respective regional exponential moments.
+- **Finite sums:** `TraceChainLinearCombination` proves the varying-dimension
+  block sum once. Its equal-dimension and binary versions specialize that
+  theorem, and both the heat expansion and exact exterior construction use it.
+- **Mechanism:** Mathematical lemmas suffice; no custom tactic is introduced.

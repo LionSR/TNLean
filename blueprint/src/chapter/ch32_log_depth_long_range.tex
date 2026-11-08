@@ -445,7 +445,9 @@ depth $O(q)$.
     prepared in depth $O(q)$ rather than in constant depth
     \cite{gap:mswc24_measurement_preparation_scope}. The same paragraph claims
     the depth $O(\log\log(N/\varepsilon))$ when the tree-RG circuit is also
-    assisted by measurements; for normal tensors and the chain lengths
-    divisible by $s2^{k+1}$ for some $k$ with $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$ this is Lemma~\ref{thm:ldp_loglog_depth}, and for
-    tensors that are not normal it is not formalized.
+    assisted by measurements; for normal tensors and every chain length this is
+    Lemma~\ref{thm:ldp_loglog_depth_every_length}, and for direct sums of
+    inequivalent normal blocks in canonical form it is
+    Lemma~\ref{thm:ldp_nonnormal_loglog}. The passage from an arbitrary
+    translation-invariant tensor to such a canonical form is not stated.
 \end{theorem}
