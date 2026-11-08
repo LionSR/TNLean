@@ -111,7 +111,7 @@ configurations. The spectral argument takes place on the original chain.
     Count the original unit bonds in the middle and bound $-m$ by $|m|$.
 \end{proof}
 
-\begin{theorem}[The physical Chebyshev projector of a clipped chain]
+\begin{lemma}[The physical Chebyshev projector of a clipped chain]
     \label{thm:aklv_normalized_chain_chebyshev}
     \lean{TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_chebyshev_filter,
         TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_chebyshev_agsp}
@@ -141,7 +141,7 @@ configurations. The spectral argument takes place on the original chain.
     Across $[0,a+w+1)$ the operator Schmidt rank of $K$ is at most $D$.
     For some real $\theta$,
     $\|\Omega-e^{i\theta}\phi\|^2\le e^{-t/16}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:aklv_chebyshev_ground_filter,
         lem:aklv_single_window_polynomial_rank,lem:aklv_clipped_chain_norm}
@@ -152,15 +152,15 @@ configurations. The spectral argument takes place on the original chain.
     to that same polynomial and that same clipped Hamiltonian.
 \end{proof}
 
-\begin{corollary}[An inverse-gap cutoff for the physical projector]
+\begin{lemma}[An inverse-gap cutoff for the physical projector]
     \label{cor:aklv_inverse_gap_chebyshev}
     \lean{TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_chebyshev_agsp_of_inverse_gap_cutoff}
     \leanok
-    All conclusions of Theorem~\ref{thm:aklv_normalized_chain_chebyshev}
+    All conclusions of Lemma~\ref{thm:aklv_normalized_chain_chebyshev}
     hold already for $t\ge32768/g$, with the same actual exterior clipping,
     polynomial, squared shrinking and rank bound. The normalized ground
     energy may be positive.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:aklv_inverse_gap_robustness,lem:aklv_chebyshev_ground_filter,
         lem:aklv_single_window_polynomial_rank,lem:aklv_clipped_chain_norm}
@@ -170,7 +170,7 @@ configurations. The spectral argument takes place on the original chain.
     construction and physical polynomial rank estimate.
 \end{proof}
 
-\begin{corollary}[Exact retention in a frustration-free chain]
+\begin{lemma}[Exact retention in a frustration-free chain]
     \label{cor:aklv_frustration_free_chebyshev}
     \lean{TNLean.MPS.AreaLaw.AKLV.exists_frustrationFree_chain_chebyshev_filter,
         TNLean.MPS.AreaLaw.AKLV.exists_frustrationFree_chain_chebyshev_agsp}
@@ -186,7 +186,7 @@ configurations. The spectral argument takes place on the original chain.
         \delta  & =\left(2\exp\left(-2k\sqrt{\frac{g}{2u}}\right)\right)^2.\notag
     \end{align}
     The same single-cut rank bound $D$ holds.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:aklv_normalized_chain_chebyshev}
     The original regional sums are positive.
