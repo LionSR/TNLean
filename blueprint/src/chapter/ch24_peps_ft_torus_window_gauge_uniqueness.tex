@@ -1,7 +1,7 @@
 \subsection{Gauge uniqueness from injective windows}
 \label{subsec:peps_window_gauge_uniqueness}
 
-\begin{theorem}[Inserted-edge identities from a normalized local gauge relation]%
+\begin{lemma}[Inserted-edge identities from a normalized local gauge relation]%
     \label{thm:peps_edge_absorbed_from_local}
     \lean{TNLean.PEPS.edgeAbsorbed_of_perVertex}
     \leanok
@@ -11,7 +11,7 @@
     $C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma)$ for every edge,
     inserted matrix and global physical configuration, after identifying
     the equal bond dimensions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The product of the local tensor weights in an inserted-edge coefficient
     acquires one factor of $\lambda$ at each vertex. Thus
@@ -19,7 +19,7 @@
     volume-power hypothesis removes this factor.
 \end{proof}
 
-\begin{theorem}[An injective comparison region determines the edge gauge]%
+\begin{lemma}[An injective comparison region determines the edge gauge]%
     \label{thm:peps_absorbed_gauge_unique_region}
     \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar_of_region}
     \leanok
@@ -29,7 +29,7 @@
     $C_A(e,M;\sigma)=C_{X\cdot B}(e,M;\sigma)$ at this edge, with the
     second family substituted for the first as well, for every $M,\sigma$.
     Then $X'_e=cX_e$ for some $c\in\mathbb C^\times$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each absorbed identity determines a conjugation-form region-insertion
     identity on $Q$. Injectivity on $Q$ and $Q^c$ identifies the two inner
@@ -39,7 +39,7 @@
     matrices; the resulting proportionality constant is $c$ or $c^{-1}$.
 \end{proof}
 
-\begin{theorem}[Gauge uniqueness at the minimal window sizes]%
+\begin{lemma}[Gauge uniqueness at the minimal window sizes]%
     \label{thm:peps_window_gauge_unique}
     \lean{TNLean.PEPS.torusGauge_unique_scalar_of_normalArcWindows}
     \leanok
@@ -63,7 +63,7 @@
     horizontal and one vertical reference edge. For covariant families,
     these reference comparisons determine all translates, with inverse
     scalar on edges whose stored endpoint order is reversed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,
         thm:peps_window_corner_injectivity, thm:peps_window_corner_geometry,

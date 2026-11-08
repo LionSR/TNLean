@@ -17,7 +17,7 @@
     blocked tensors $B_i^{[L]}$ with $L = \lcm_{j \in I}(p_j)$.
 \end{definition}
 
-\begin{theorem}[Common-period blocking preserves transfer-map primitivity]
+\begin{lemma}[Common-period blocking preserves transfer-map primitivity]
     \label{thm:common_period_blocking_primitive}
     \lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
     \leanok
@@ -25,10 +25,10 @@
     If each tensor $B_i$ has a primitive transfer map after blocking by its
     period $p_i \ge 1$, then each blocked tensor $B_i^{[L]}$ with
     $L = \lcm_j(p_j)$ also has a primitive transfer map.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Because each $p_i$ divides $L = \lcm_j(p_j)$,
-    Theorem~\ref{thm:primitive_blocking_divisible} implies that the transfer map
+    Lemma~\ref{thm:primitive_blocking_divisible} implies that the transfer map
     $\E_{B_i^{[L]}}$ is primitive for every $i \in I$.
 \end{proof}

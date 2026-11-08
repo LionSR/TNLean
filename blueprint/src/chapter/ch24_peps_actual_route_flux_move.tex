@@ -1,4 +1,4 @@
-\begin{theorem}[Cycle operations and their inverses]
+\begin{lemma}[Cycle operations and their inverses]
     \label{thm:peps_actual_bidirectional_cycle_operation}
     \lean{TNLean.PEPS.regularActualCycleDirectionalPermutation,
         TNLean.PEPS.exists_unitary_regularActualCycleBidirectionalPermutation,
@@ -9,48 +9,37 @@
     \leanok
     \uses{thm:peps_actual_cycle_physical_permutation}
     Following SCP10, lines 1765--1920 and Theorem~6.16, lines 2271--2305
-    (with the chosen tree and cycle permutation kept explicit), in a chosen
-    finite region with a spanning tree and root, a cycle
-    permutation commuting with simultaneous conjugation has one original-spin
-    unitary for the regular virtual action and $G$-isometric site maps. It acts on
-    the coordinates derived from every input. Its adjoint implements the
-    inverse permutation, with the same derived tree background and the unmodified
-    exterior retained. Both statements hold on all outgoing boundary columns
-    and on the closed contraction. A controlled two-chord permutation,
-    or its inverse, retains every ordered bond other than its selected second chord.
-\end{theorem}
+    (with the spanning tree $T\subset R$ and root $v_0\in R$ explicit), let $\phi$ be a cycle
+    permutation commuting with simultaneous conjugation and suppose the site maps are regular $G$-isometric.
+    There exists a single regional unitary $W_\phi$ acting on every bond assignment $u$ via its derived coordinates $(k_u,\omega_u)$ so that $W_\phi$ implements $\omega_u\mapsto\phi(\omega_u)$ and $W_\phi^*$ implements $\omega_u\mapsto\phi^{-1}(\omega_u)$, retaining $k_u$ and all exterior/crossing bonds on both open columns $\Psi_R(u,\theta)$ and closed states $\Psi(u)$.
+    For a controlled two-chord permutation $(c_0,c_1)\mapsto(c_0,c_0c_1)$ or $(c_0,c_0^{-1}c_1)$, every ordered bond $e\neq e_1$ is unchanged.
+\end{lemma}
 \begin{proof}\leanok
-    Recovering the input from its derived gauge and residuals, the uniform
-    operation implements the forward action and its adjoint implements the inverse action.
-    Endpoint reconstruction gives the directed bond elements, while the controlled
-    permutation changes only the second residual.
+    By Lemma~\ref{thm:peps_actual_cycle_physical_permutation}, reconstructing $u$ from $(k_u,\omega_u)$ yields a fixed unitary $W_\phi$ for $\phi$, while $W_\phi^*$ implements $\phi^{-1}$.
+    Directed bond transport satisfies $D_{ij}=k_i\omega_{ij}k_j^{-1}$, and the controlled permutation modifies only the second chord residual $\omega_{e_1}$.
 \end{proof}
 
-\begin{theorem}[Two-chord update from plaquette vacancy]
+\begin{lemma}[Two-chord update from plaquette vacancy]
     \label{thm:peps_actual_two_chord_transport}
     \lean{TNLean.PEPS.regularActualTwoChord_forwardTransport,
         TNLean.PEPS.regularActualTwoChord_reverseTransport}
     \leanok
     \uses{thm:peps_tree_gauge_transport,thm:peps_actual_bidirectional_cycle_operation}
-    As in the auxiliary calculations underlying SCP10, Theorem~6.16,
-    lines 2271--2305, let a five-edge spanning path have successive vertices
-    $v_0,\ldots,v_5$, with remaining chords $v_0v_5$ and $v_1v_4$ having the
-    same ordered orientation, and write $D_{ij}$ for the original directed bond
-    element from $v_i$ to $v_j$.
-    If the loop $v_1v_2v_3v_4v_1$ is vacant, the forward operation replaces
-    $D_{14}$ by $D_{45}^{-1}D_{05}D_{01}^{-1}$.
-    If the loop $v_0v_1v_4v_5v_0$ is vacant, the inverse operation replaces
-    $D_{14}$ by $D_{34}D_{23}D_{12}$.
-    No gauge, residual, coefficient or state equality is assumed.
-\end{theorem}
+    As in SCP10, Theorem~6.16, lines 2271--2305, let a five-edge spanning path have vertices
+    $v_0,\ldots,v_5$, with chords $v_0v_5$ and $v_1v_4$ of identical ordered orientation, and write $D_{ij}$ for the directed bond element on $v_i\to v_j$.
+    Under the forward ($+$) and inverse ($-$) operations $D_{14}\mapsto D'_{14}$ of Lemma~\ref{thm:peps_actual_bidirectional_cycle_operation},
+    \begin{align}
+        H(v_1v_2v_3v_4v_1)=1 & \implies D'_{14}=D_{45}^{-1}D_{05}D_{01}^{-1} \quad (+), \label{eq:two_chord_fwd} \\
+        H(v_0v_1v_4v_5v_0)=1 & \implies D'_{14}=D_{34}D_{23}D_{12} \quad (-), \label{eq:two_chord_rev}
+    \end{align}
+    with no prior gauge, residual, coefficient, or state-equality assumption.
+\end{lemma}
 \begin{proof}\leanok
-    Vacancy determines the residual relation after normalization by the
-    tree gauge. The controlled permutation then determines the middle residual.
-    Reconstructing the directed coefficient and cancelling the tree gradients
-    produces the stated three-bond formulas.
+    By Lemma~\ref{thm:peps_tree_gauge_transport}, vacancy fixes the target chord residual in terms of the tree gauge $k_u$.
+    Applying Lemma~\ref{thm:peps_actual_bidirectional_cycle_operation} updates the middle residual $\omega_{14}$, and cancelling the tree gradients $D_{i,i+1}=k_{i+1}k_i^{-1}$ yields (\ref{eq:two_chord_fwd})--(\ref{eq:two_chord_rev}).
 \end{proof}
 
-\begin{theorem}[Fixed native operations in both axes and both directions]
+\begin{lemma}[Fixed native operations in both axes and both directions]
     \label{thm:peps_actual_route_flux_operation}
     \lean{TNLean.PEPS.torusActualRouteFluxMove,
         TNLean.PEPS.torusActualRouteFluxReplacement,
@@ -63,63 +52,37 @@
         TNLean.PEPS.IsGIsometric.exists_unitary_torusActualRouteFluxUpdate}
     \leanok
     \uses{thm:peps_actual_two_chord_transport}
-    On a finite torus with both periods at least four, for any chosen position and
-    axis, the translated six-site tile provides its spanning path, root
-    and two chords. One original-spin unitary is chosen before every
-    bond assignment, direction, boundary configuration and target-vacancy proof.
-    Its forward action and adjoint action implement the cycle permutation
-    and its inverse. If the target plaquette is vacant, these operations are
-    the shared-bond updates
-    \[
+    On a finite $\mathbb{Z}_{L_x}\times\mathbb{Z}_{L_y}$ torus with $L_x,L_y\ge 4$, for any position and axis, the translated six-site tile defines its spanning path, root, and two chords.
+    A single six-spin unitary $W$ (chosen before all bond assignments $u$, directions, boundary labels $\theta$, and vacancy proofs) and its adjoint $W^*$ implement the forward and inverse cycle permutations on $\Psi_R(u,\theta)$ and $\Psi(u)$.
+    If the target plaquette is vacant ($H_{\mathrm{target}}(u)=1$) and $(B,V,T,L)$ are the bottom rightward, right upward, top rightward, and left upward directed bond elements of the source plaquette, the shared directed bond is updated via
+    \begin{align}
         \begin{array}{ccc}
-            \text{direction} & \text{shared bond}           & \text{updated element} \\
-            \text{right}     & \text{right upward side}     & T L B^{-1}             \\
-            \text{up}        & \text{top rightward side}    & V B L^{-1}             \\
-            \text{left}      & \text{left upward side}      & T^{-1} V B             \\
-            \text{down}      & \text{bottom rightward side} & V^{-1} T L
+            \text{direction} & \text{shared bond} & \text{updated element} \\
+            \text{right}     & V                  & T L B^{-1}             \\
+            \text{up}        & T                  & V B L^{-1}             \\
+            \text{left}      & L                  & T^{-1} V B             \\
+            \text{down}      & B                  & V^{-1} T L
         \end{array}
-    \]
-    Here $B,V,T,L$ are the original bottom rightward, right upward,
-    top rightward and left upward directed bond elements of the source plaquette.
-    Every other ordered coefficient, including each exterior and crossing bond,
-    is retained. Both periodic seams are included, and the ordered coefficient
-    is inverted precisely when the native positive step reverses the sorted edge.
-    The action holds on the open contraction and closed state.
-    This is a finite-torus specialization of the elementary physical movement
-    in SCP10, Theorem~6.16, lines 2271--2305, not the complete four-endpoint braid
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+        \label{eq:route_flux_updates}
+    \end{align}
+    while all other ordered coefficients (including exterior and crossing bonds) are unchanged, and ordered coefficients at periodic seams invert exactly when the positive step reverses the sorted edge.
+    This is a finite-torus specialization of the elementary movement in SCP10, Theorem~6.16, lines 2271--2305, not the complete four-endpoint braid \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
 \begin{proof}\leanok
-    Mapping the fixed six-vertex path to the induced tile in either axis gives
-    two parallel chords with the same sorting comparison at a seam.
-    Applying the shared two-chord calculation, identifying its vacancy loop with the
-    target plaquette, and retaining every unselected coefficient determines the
-    sorted coefficient from the directed middle bond element.
-    Applying the original-spin cycle unitary and its adjoint to the derived input
-    coordinates then yields the stated update.
+    Mapping $v_0,\ldots,v_5$ to the six-site tile in either axis gives two parallel chords with identical seam-sorting comparison.
+    Applying (\ref{eq:two_chord_fwd})--(\ref{eq:two_chord_rev}) from Lemma~\ref{thm:peps_actual_two_chord_transport} to the vacant target plaquette and acting with $W$ or $W^*$ yields (\ref{eq:route_flux_updates}).
 \end{proof}
 
-\begin{theorem}[Four numbered vacant-target physical moves]
+\begin{lemma}[Four numbered vacant-target physical moves]
     \label{thm:peps_vacant_plaquette_physical_move}
     \lean{TNLean.PEPS.torusVacantPlaquetteMoveRegion,
         TNLean.PEPS.torusVacantPlaquetteMoveTarget,
         TNLean.PEPS.IsGIsometric.exists_unitary_torusVacantPlaquetteMove}
     \leanok
     \uses{thm:peps_actual_route_flux_operation}
-    For the finite-torus route of width at least eight and height at least seven,
-    numbering right, up, left and down by $0,1,2,3$, at every source position and
-    direction there is a fixed six-spin operation implementing the
-    update above whenever the clockwise target holonomy is the identity.
-    The selected global operator is unitary and is the identity extension of
-    the regional operation or its adjoint. It is chosen before the input,
-    all exterior and crossing operators, every boundary configuration and the
-    vacancy proof. This is the elementary-operation consequence used in SCP10,
-    Section~6.6, lines 2340--2423; no complete braid is asserted here
-    \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+    On a finite torus with $L_x\ge 8$ and $L_y\ge 7$, indexing right, up, left, and down by $d\in\{0,1,2,3\}$, at every source position $v$ and direction $d$ there is a six-spin unitary $W_{v,d}$ (with global identity extension $\widehat W_{v,d}=W_{v,d}\otimes I$, chosen before $u$, $\theta$, and the vacancy proof) that implements the update (\ref{eq:route_flux_updates}) whenever the clockwise target holonomy satisfies $H_{\mathrm{target}}(u)=1$.
+    This is the elementary-operation consequence used in SCP10, Section~6.6, lines 2340--2423; no complete braid is asserted here \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
 \begin{proof}\leanok
-    For leftward and downward motion, taking the tile to the left or below the
-    source and applying the adjoint operation reverses the vacancy loop and
-    substitutes the three-bond update. Unitarity is preserved by
-    adjoints and by identity extension outside the six sites.
+    By Lemma~\ref{thm:peps_actual_route_flux_operation}, shifting the tile left ($d=2$) or down ($d=3$) and taking $W^*$ reverses the vacancy loop and substitutes the corresponding update from (\ref{eq:route_flux_updates}); adjoints and identity extensions preserve unitarity.
 \end{proof}

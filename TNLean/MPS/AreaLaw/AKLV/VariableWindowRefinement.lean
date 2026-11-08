@@ -29,7 +29,10 @@ open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matri
 
 namespace TNLean.MPS.AreaLaw
 
-private theorem normalized_cut_schmidtRank_le {L q k : ℕ}
+/-- A nonzero rescaling of a filtered image `Kx` has Schmidt rank at the cut `k` at most
+the operator Schmidt rank of `K` at that cut times the Schmidt rank of `x`. AKLV,
+arXiv:1301.1162v1, Definition 2.1 (`def:AGSP`), lines 296–314. -/
+theorem normalized_cut_schmidtRank_le {L q k : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (x : EuclideanSpace ℂ (Fin L → Fin q)) (c : ℂ) (hc : c ≠ 0)
     (hKx : toEuclideanLin K x ≠ 0) :
@@ -114,9 +117,8 @@ theorem exists_aklv_variable_window_filtered_output {L q a s : ℕ}
     hclose.trans (div_le_div_of_nonneg_right
       (Real.exp_le_one_iff.mpr (by linarith)) (by norm_num))
   have hxφ : ‖x - φ‖ ^ 2 ≤ 1 / 4 := by
-    have htri := norm_sub_le_norm_sub_add_norm_sub x Ω φ
-    rw [norm_sub_rev Ω φ] at htri
-    have hsq := (pow_le_pow_left₀ (norm_nonneg _) htri 2).trans add_sq_le
+    have hsq := norm_sub_sq_le_two_mul_add x Ω φ
+    rw [norm_sub_rev Ω φ] at hsq
     nlinarith
   have hoverlap : 1 / 2 ≤ ‖⟪φ, x⟫_ℂ‖ := by
     have hid := norm_sub_sq (𝕜 := ℂ) φ x
@@ -163,8 +165,7 @@ theorem exists_aklv_variable_window_filtered_output {L q a s : ℕ}
   have hψΩ : ‖ψ - Ω‖ ^ 2 ≤ 16 * delta + Real.exp (-t / 16) / 50 := by
     have hψφ : ‖ψ - φ‖ ^ 2 ≤ 8 * delta :=
       hcontract.trans (by nlinarith)
-    have htri := norm_sub_le_norm_sub_add_norm_sub ψ φ Ω
-    have hsq := (pow_le_pow_left₀ (norm_nonneg _) htri 2).trans add_sq_le
+    have hsq := norm_sub_sq_le_two_mul_add ψ φ Ω
     nlinarith
   refine ⟨p, hdegree, hpE, hfix, hrank, hKx, c, hc, hψunit, ?_, hcontract, hψΩ⟩
   exact (normalized_cut_schmidtRank_le K x c

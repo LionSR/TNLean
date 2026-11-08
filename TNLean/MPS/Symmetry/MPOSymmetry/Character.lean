@@ -26,8 +26,8 @@ permutation of the blocks, the source's statement of line 683, here for arbitrar
 The single-block obstruction proved here is the fusion-ring one, and it is not the source's.
 The source's obstruction of lines 610–636 is cohomological: for a single injective block without
 multiplicity it shows that the `F`-symbols are trivial, which also excludes group-like algebras
-with a nontrivial three-cocycle (line 738). That cohomological statement is not formalized here;
-a group-like fusion ring always has the trivial character.
+with a nontrivial three-cocycle (line 738). For exact fusion and action maps it is proved as
+`MPOTensor.exists_fusionFMatrix_eq_one_of_singleBlock`; group-like rings have trivial characters.
 
 **Scope restriction (periodic boundary):** the symmetry hypotheses are the periodic-boundary
 forms `MPOTensor.IsMPOSymmetric` and `MPOTensor.IsMPOSymmetricFamily` of the source's invariance

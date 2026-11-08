@@ -1,4 +1,4 @@
-\begin{theorem}[Regular torus parent constraints force plaquette flatness]%
+\begin{lemma}[Regular torus parent constraints force plaquette flatness]%
     \label{thm:peps_regular_torus_parent_flatness}
     \lean{TNLean.PEPS.IsGInjective.torusPlaquetteHolonomy_eq_one_of_parent_annihilates,
         TNLean.PEPS.IsGInjective.regionParent_not_annihilates_torusPlaquetteFlux,
@@ -8,23 +8,25 @@
     \leanok
     \uses{thm:peps_regular_region_parent_flatness,
         def:peps_region_parent_hamiltonian}
-    Let a native four-leg regular $G$-injective tensor be placed on
-    a square torus with both periods at least three. Insert arbitrary
-    regular group operators on its ordered bonds, and suppose that
-    the resulting physical PEPS vector is nonzero. If an original
-    plaquette parent term annihilates this vector, the holonomy
-    around that plaquette is the identity.
+    Place a native four-leg regular $G$-injective tensor on a square torus
+    $\Z_{L_x}\times\Z_{L_y}$ with $L_x,L_y\ge 3$, and insert regular group
+    operators $u$ on its ordered bonds so that the physical state satisfies
+    $\Psi(A^u)\ne 0$. If an original plaquette parent term $h_P^{\mathrm{global}}$
+    satisfies $h_P^{\mathrm{global}}\Psi(A^u)=0$, then the plaquette holonomy
+    is $\operatorname{hol}_u(P)=1$.
 
-    If the sum of all original plaquette parent terms annihilates
-    it, every elementary plaquette has identity holonomy. Equivalently,
-    writing $A_v$ for the rightward bond operator and $B_v$ for the
-    upward bond operator, one has
-    \[
-        B_{v+(1,0)}A_v=A_{v+(0,1)}B_v
-    \]
-    at every vertex. In particular, a nonzero one-bond flux state
-    with nonidentity flux is not annihilated by the original parent
-    term surrounding its endpoint.
+    If the parent Hamiltonian $H=\sum_P h_P^{\mathrm{global}}$
+    (Definition~\ref{def:peps_region_parent_hamiltonian}) satisfies
+    $H\Psi(A^u)=0$, then $\operatorname{hol}_u(P)=1$ for every elementary
+    plaquette $P$; equivalently, with rightward and upward bond operators
+    $A_v,B_v\in G$, every vertex $v$ obeys
+    \begin{align}
+        B_{v+(1,0)}A_v & = A_{v+(0,1)}B_v.
+        \label{eq:peps_torus_parent_flatness_transport}
+    \end{align}
+    In particular, a nonzero one-bond flux state $\Psi_g$ with $g\ne 1$
+    satisfies $h_P^{\mathrm{global}}\Psi_g\ne 0$ on the plaquette $P$
+    surrounding its endpoint.
 
     No $G$-isometry is assumed. This is a necessary local step in
     \cite[Theorem~5.5]{Schuch2010PEPS}; it does not claim that
@@ -32,20 +34,17 @@
     or that flatness alone gives the full torus ground-space classification.
     The regular native-torus scope and the remaining global representation step are recorded in
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Each native plaquette is the support of a four-step closed walk,
-    so its induced graph is connected. Apply local regular parent
-    flatness to the induced walk and then identify its holonomy with
-    the original native plaquette holonomy. Positivity of every
-    regional parent term implies that a vector killed by their sum
-    is killed by each term separately.
-
-    The ordered plaquette holonomy is
-    $B_v^{-1}A_{v+(0,1)}^{-1}B_{v+(1,0)}A_v$.
-    It is the identity exactly when the two two-step path products
-    around the square agree. The explicit one-bond insertion has its
-    prescribed group element as holonomy, giving the exclusion of
-    nonidentity flux.
+    Each native plaquette $P$ is the support of a four-step closed walk,
+    so its induced subgraph is connected; Theorem~\ref{thm:peps_regular_region_parent_flatness}
+    applied to the induced walk gives $h_P^{\mathrm{global}}\Psi(A^u)=0\implies\operatorname{hol}_u(P)=1$.
+    Since $h_P^{\mathrm{global}}\ge 0$, $H\Psi(A^u)=0$ implies
+    $h_P^{\mathrm{global}}\Psi(A^u)=0$ for every $P$.
+    The ordered plaquette holonomy
+    $\operatorname{hol}_u(P)=B_v^{-1}A_{v+(0,1)}^{-1}B_{v+(1,0)}A_v$ equals
+    $1$ if and only if~(\ref{eq:peps_torus_parent_flatness_transport}) holds.
+    A one-bond insertion of $g\ne 1$ has $\operatorname{hol}_u(P)=g\ne 1$,
+    so $h_P^{\mathrm{global}}\Psi_g\ne 0$.
 \end{proof}

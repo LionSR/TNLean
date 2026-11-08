@@ -6,7 +6,7 @@ The comparison of positive interactions with orthogonal projectors in
 to the regional PEPS interactions of Section~IV.C.1. All collections of
 regions below are finite.
 
-\begin{theorem}[Comparison with the regional parent projection]%
+\begin{lemma}[Comparison with the regional parent projection]%
     \label{thm:peps_region_parent_projection_comparison}
     \lean{TNLean.PEPS.IsRegionParentInteraction.ker_toEuclideanLin,
         TNLean.PEPS.IsRegionParentInteraction.exists_pos_comparison}
@@ -20,7 +20,7 @@ regions below are finite.
         \kappa_R P_R\le h_R\le C_R P_R.
         \label{eq:peps_region_parent_bounds}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The kernel is $\mathcal G_R$ in the physical Hilbert space.
@@ -29,7 +29,7 @@ regions below are finite.
     an upper bound. On the kernel all three operators vanish.
 \end{proof}
 
-\begin{theorem}[Order-preserving regional extension]%
+\begin{lemma}[Order-preserving regional extension]%
     \label{thm:peps_region_extension_order}
     \lean{TNLean.PEPS.regionLocalTerm_sub,
         TNLean.PEPS.regionLocalTerm_smul,
@@ -42,7 +42,7 @@ regions below are finite.
     collections $(h_i)_{i\in I}$ and $(k_i)_{i\in I}$ on the same
     regions satisfy $\kappa k_i\le h_i\le Ck_i$ for every $i$, their
     sums satisfy $\kappa H_k\le H_h\le CH_k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Tensoring a positive semidefinite difference with the identity
@@ -50,7 +50,7 @@ regions below are finite.
     summing the resulting inequalities gives the Hamiltonian comparison.
 \end{proof}
 
-\begin{theorem}[Comparison of finite PEPS parents]%
+\begin{lemma}[Comparison of finite PEPS parents]%
     \label{thm:peps_finite_parent_comparison}
     \lean{TNLean.PEPS.exists_pos_regionParentHamiltonian_comparison,
         TNLean.PEPS.exists_pos_regionParentHamiltonian_comparison_between}
@@ -63,7 +63,7 @@ regions below are finite.
     Consequently, for any two positive parents $H_h,H_k$ on the
     same family of regions, there are $a,b>0$ such that
     $aH_k\le H_h\le bH_k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_parent_projection_comparison,
@@ -76,7 +76,7 @@ regions below are finite.
     $a=\kappa_h/C_k$ and $b=C_h/\kappa_k$.
 \end{proof}
 
-\begin{theorem}[Transfer of the finite-volume gap]%
+\begin{lemma}[Transfer of the finite-volume gap]%
     \label{thm:peps_finite_parent_gap_transfer}
     \lean{TNLean.PEPS.ker_toEuclideanLin_regionParentHamiltonian_eq,
         TNLean.PEPS.regionParentHamiltonian_norm_gap_of_comparison,
@@ -93,7 +93,7 @@ regions below are finite.
     Existence of a strictly positive bound of this form is therefore
     independent of the choice of positive regional interactions.
     The comparison constants may depend on the finite collection.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_parent_common_kernel,

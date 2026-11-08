@@ -9,7 +9,7 @@ hypothesis below acts on these rectangular matrices directly and is
 sufficient for the claimed accuracy-dependent depth, though it is not
 implied by the qualitative convergence condition in that paragraph.
 
-\begin{theorem}[Rectangular blocking and zero padding]
+\begin{lemma}[Rectangular blocking and zero padding]
     \label{thm:ldp_rectangular_blocking}
     \lean{MPSPreparation.blockSite_singleton,
         MPSChainTensor.rectangularEval,
@@ -41,7 +41,7 @@ implied by the qualitative convergence condition in that paragraph.
     \end{align}
     The empty product on a bond space pads to $P_a$, whereas the
     empty product of ambient matrices is $I_D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on the interval length, each internal contraction uses
     $J_i^\dagger J_i=I_{D_i}$, and summing over the first physical index and
@@ -90,7 +90,7 @@ the contracted middle bond has dimension $D_{a+1}$.
     vanishes on inputs outside the outgoing bond corner.
 \end{definition}
 
-\begin{theorem}[Gram matrices and pairs on the bond spaces]
+\begin{lemma}[Gram matrices and pairs on the bond spaces]
     \label{thm:ldp_rectangular_gram_pairs}
     \lean{MPSTensor.exists_norm_gram_transferMatrix_sub_le_of_entries,
         MPSTensor.zeroPad_eq_embeddedBlockState,
@@ -119,7 +119,7 @@ the contracted middle bond has dimension $D_{a+1}$.
     Also $\sqrt{\widehat\sigma_i}=J_i\sqrt{\sigma_i}J_i^\dagger$,
     so the pair obtained from the padded reference is the
     padding of the pair on the bond space.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_rectangular_blocking,thm:ldp_sqrt_holder}
     Extending the matrix-unit coefficient matrix by zero and permuting its
@@ -133,7 +133,7 @@ the contracted middle bond has dimension $D_{a+1}$.
     and squares, the square-root and pair identities follow.
 \end{proof}
 
-\begin{theorem}[Ordered corner references and normalized error]
+\begin{lemma}[Ordered corner references and normalized error]
     \label{thm:ldp_rectangular_error}
     \lean{MPSPreparation.transferMatrix_cornerReferenceMap_eq_mul_diagonal,
         MPSPreparation.norm_transferMatrix_cornerReferenceMap_le,
@@ -154,7 +154,7 @@ the contracted middle bond has dimension $D_{a+1}$.
     positive-part state has pair error at most $C_DM\sqrt\delta$.
     The pair leaving a block uses the density at the next block's
     incoming bond.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_rectangular_gram_pairs,thm:ldp_varying_reference_products,thm:ldp_varying_reference_pairs,thm:ldp_normalization_triangle}
     Because $\operatorname{Tr}(P_b\widehat\sigma_b)=1$, composition removes
@@ -166,7 +166,7 @@ the contracted middle bond has dimension $D_{a+1}$.
     where the trivial error bound one is sharper.
 \end{proof}
 
-\begin{theorem}[Physical logarithmic depth from rectangular mixing]
+\begin{lemma}[Physical logarithmic depth from rectangular mixing]
     \label{thm:ldp_rectangular_preparation}
     \lean{mul_exp_neg_mul_le_of_div_log_le,
         MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing}
@@ -183,7 +183,7 @@ the contracted middle bond has dimension $D_{a+1}$.
     state admits a unit-vector approximation with error at most
     $\varepsilon$ prepared by a ring circuit of depth at most
     $C\log(N/\varepsilon)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_rectangular_error,thm:ldp_inhomogeneous_uniform_rate_from}
     Whole-ring mixing gives

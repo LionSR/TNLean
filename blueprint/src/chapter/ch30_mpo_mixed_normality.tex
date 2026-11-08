@@ -30,7 +30,7 @@ span of products of exactly $L$ letters of $T$. Thus
 $\mathcal S_{L+M}=\mathcal S_L\mathcal S_M$, where the product on the
 right denotes the span of all matrix products.
 
-\begin{theorem}[Three-site injectivity]
+\begin{lemma}[Three-site injectivity]
     \label{thm:mpo_mixed_normality}
     \lean{MPSTensor.MPOSymmetry.isNBlkInjective_mixedEndpointMPO_three,
         MPSTensor.MPOSymmetry.isNormal_mixedEndpointMPO}
@@ -39,7 +39,7 @@ right denotes the span of all matrix products.
     If both $T_0$ and $T_1$ are injective, then
     $\mathcal S_3=\End(K)$. In particular, $T$ is normal, with
     blocking length three.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $X:E_1\to E_0$ and any $0\leq\nu<m$, biorthogonality gives
@@ -135,7 +135,7 @@ matrix units force those indices to be $u$ and $v$, respectively.
 \end{tenkzequation}
 % TENKZ-MIXED-NORMALITY-SANDWICH-END
 
-\begin{theorem}[Positive action multiplicity]
+\begin{lemma}[Positive action multiplicity]
     \label{thm:mpo_mixed_positive_multiplicity}
     \lean{MPSTensor.MPOSymmetry.multiplicity_pos_of_injective_endpoint_action}
     \leanok
@@ -146,7 +146,7 @@ matrix units force those indices to be $u$ and $v$, respectively.
     If an exact biorthogonal action decomposition has $m\geq0$ copies
     of $A$, so that $(T\cdot A)^x=\sum_{\mu=0}^{m-1}W_\mu A^xV_\mu$,
     then $m>0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The $D^2$ matrices $A^y$ span the $D^2$-dimensional space
@@ -157,7 +157,7 @@ matrix units force those indices to be $u$ and $v$, respectively.
     only zero, contradicting injectivity since $\chi>0$.
 \end{proof}
 
-\begin{theorem}[Three-site injectivity from exact actions]
+\begin{lemma}[Three-site injectivity from exact actions]
     \label{thm:mpo_mixed_normality_exact_action}
     \lean{MPSTensor.MPOSymmetry.isNBlkInjective_mixedEndpointMPO_three_of_exact_action}
     \leanok
@@ -170,18 +170,18 @@ matrix units force those indices to be $u$ and $v$, respectively.
     have biorthogonal analysis and synthesis with common multiplicity
     $m\geq0$. Then the mixed operator is injective after blocking
     three sites.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_positive_multiplicity,thm:mpo_mixed_normality}
-    Theorem~\ref{thm:mpo_mixed_positive_multiplicity} applied at $p=0$
+    Lemma~\ref{thm:mpo_mixed_positive_multiplicity} applied at $p=0$
     gives $m>0$. The biorthogonality hypotheses and the injectivity
     of $T_0,T_1$ now give the conclusion by
-    Theorem~\ref{thm:mpo_mixed_normality}.
+    Lemma~\ref{thm:mpo_mixed_normality}.
 \end{proof}
 
 The operator construction and the one-site injectivity discussion occur
-in \cite[Section~5]{GarreRubio2023MPOSym}. Theorems
+in \cite[Section~5]{GarreRubio2023MPOSym}. Lemmas
 \ref{thm:mpo_mixed_normality} and
 \ref{thm:mpo_mixed_normality_exact_action} establish a three-site
 conclusion. The first uses only the two injective operator tensors and

@@ -1,8 +1,16 @@
 \section{Successive Schmidt trimming}
 \label{sec:lvv_successive_trimming}
 
-\begin{theorem}[Numbering the sites of a left block]
-    \label{thm:lvv_left_coordinates}
+The bond-trimming step of Landau, Vazirani and
+Vidick~\cite[Claim~2.10, source lines 549--559]{Landau2015Polynomial} trims every
+member of a viable set successively across all internal cuts. This section proves
+Lemma~\ref{thm:lvv_size_bond_trimmed_family}: after size trimming and bond
+trimming, a family chosen before the ground state is $1/2$-viable, with polynomial
+cardinality and polynomial bond dimension. The retained dimension is quadratic in the
+chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius}.
+
+\begin{lemma}[Numbering the sites of a left block]
+    \label{lem:lvv_left_coordinates}
     \lean{TNLean.MPS.AreaLaw.leftConfigOfFinEquiv,
         TNLean.MPS.AreaLaw.rank_cutMatrix_leftConfigOfFin}
     \leanok
@@ -11,7 +19,7 @@
     are canonically identified with configurations of an $i$-site chain.
     This identification preserves the rank of the coefficient matrix at
     every cut after $j$ sites, including the endpoint cuts.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The identification sends each site to the site with the same index.
@@ -39,8 +47,8 @@
     bond-trimming step of~\cite[source lines 549--559]{Landau2015Polynomial}.
 \end{definition}
 
-\begin{theorem}[Norm and bond dimensions after successive trimming]
-    \label{thm:lvv_successive_trimming_rank}
+\begin{lemma}[Norm and bond dimensions after successive trimming]
+    \label{lem:lvv_successive_trimming_rank}
     \lean{TNLean.MPS.AreaLaw.norm_successiveSchmidtTrim_le,
         TNLean.MPS.AreaLaw.rank_cutMatrix_successiveSchmidtTrim_le,
         TNLean.MPS.AreaLaw.rank_cutMatrix_successiveSchmidtTrim_le_of_le,
@@ -55,7 +63,7 @@
     $L-1$ internal bonds gives an open matrix product state of bond
     dimension at most $m$. Independent column trimming does not increase
     the joint norm $\|u\|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:chain_trim,thm:chain_trim_cut_ranks}
@@ -67,8 +75,8 @@
     sum $\|\widetilde u_a\|^2\le\|u_a\|^2$ over the environment index.
 \end{proof}
 
-\begin{theorem}[Accumulated overlap loss]
-    \label{thm:lvv_successive_trimming_overlap}
+\begin{lemma}[Accumulated overlap loss]
+    \label{lem:lvv_successive_trimming_overlap}
     \lean{TNLean.MPS.AreaLaw.norm_inner_sub_successiveSchmidtTrim_le}
     \leanok
     \uses{def:lvv_successive_trimming}
@@ -81,18 +89,18 @@
     Thus the overlap loss is at most $\varepsilon$ for unit vectors when
     $m+1\ge j^2D/\varepsilon^2$. This uses the corrected single-cut
     radius of~\cite{gap:lvv13_trimming_radius}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_trim_error,thm:lvv_successive_trimming_rank}
+    \uses{thm:chain_trim_error,lem:lvv_successive_trimming_rank}
     Write $\psi-\psi_j=\sum_{k=0}^{j-1}(\psi_k-\psi_{k+1})$.
     The corrected single-cut estimate bounds the pairing of the $k$th
     summand with $v$ by $\|\psi_k\|\|v\|\sqrt{D/(m+1)}$.
     Use $\|\psi_k\|\le\|\psi\|$ and the triangle inequality.
 \end{proof}
 
-\begin{theorem}[Overlap loss for independently trimmed columns]
-    \label{thm:lvv_columnwise_trimming_overlap}
+\begin{lemma}[Overlap loss for independently trimmed columns]
+    \label{lem:lvv_columnwise_trimming_overlap}
     \lean{TNLean.MPS.AreaLaw.norm_inner_sub_columnwiseSchmidtTrim_le,
         TNLean.MPS.AreaLaw.norm_inner_sub_leftColumnwiseSchmidtTrim_le}
     \leanok
@@ -107,12 +115,12 @@
         |\langle u-\widetilde u,v\rangle|
          & \le (L-1)\|u\|\|v\|\sqrt{\frac{D}{m+1}}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_successive_trimming_overlap}
+    \uses{lem:lvv_successive_trimming_overlap}
     The inner product is the sum of the inner products of the columns.
-    Theorem~\ref{thm:lvv_successive_trimming_overlap} bounds each summand by
+    Lemma~\ref{lem:lvv_successive_trimming_overlap} bounds each summand by
     $(L-1)\|u_a\|\|v_a\|\sqrt{D/(m+1)}$. Cauchy--Schwarz gives
     $\sum_a\|u_a\|\|v_a\|\le\|u\|\|v\|$, since the environment coordinates
     are orthonormal.
@@ -136,8 +144,8 @@
     These operations depend only on the input vectors and $m$.
 \end{definition}
 
-\begin{theorem}[Cardinality and bond dimensions of the trimmed family]
-    \label{thm:lvv_bond_trimmed_family_bounds}
+\begin{lemma}[Cardinality and bond dimensions of the trimmed family]
+    \label{lem:lvv_bond_trimmed_family_bounds}
     \lean{TNLean.MPS.AreaLaw.isLeftOpenMPS_leftSchmidtTrim,
         TNLean.MPS.AreaLaw.norm_leftSchmidtTrim_le,
         TNLean.MPS.AreaLaw.card_bondTrimSet_le,
@@ -151,18 +159,18 @@
     $\max\{1,m\}$. One has $\|\mathcal T_m u\|\le\|u\|$ and
     $\|\widetilde u\|\le\|u\|$. If every $u_a$ belongs to $S$, every column
     of $\widetilde u$ belongs to $\mathcal T_m(S)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_left_coordinates,thm:lvv_successive_trimming_rank}
+    \uses{lem:lvv_left_coordinates,lem:lvv_successive_trimming_rank}
     Number the first $i$ sites in order and apply successive trimming.
-    Theorem~\ref{thm:lvv_successive_trimming_rank} gives the norm and rank
+    Lemma~\ref{lem:lvv_successive_trimming_rank} gives the norm and rank
     bounds. An image of a finite set has at most the original cardinality.
     The column statement is the defining image membership.
 \end{proof}
 
-\begin{theorem}[Physical error of independent column trimming]
-    \label{thm:lvv_physical_column_trimming}
+\begin{lemma}[Physical error of independent column trimming]
+    \label{lem:lvv_physical_column_trimming}
     \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_rightApply_blockSplit_column_le,
         TNLean.MPS.AreaLaw.leftColumnwiseSchmidtTrim_mem_leftSupportSubmodule,
         TNLean.MPS.AreaLaw.norm_inner_sub_leftColumnwiseSchmidtTrim_rightApply_le}
@@ -181,23 +189,23 @@
     \end{align}
     If every column of $u$ belongs to $S$, then $w$ belongs to
     $\operatorname{Span}(\mathcal T_m(S))\otimes\mathcal H_R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_columnwise_trimming_overlap,
-        thm:lvv_bond_trimmed_family_bounds,thm:lvv_left_columns_right_extension,
+    \uses{lem:lvv_columnwise_trimming_overlap,
+        lem:lvv_bond_trimmed_family_bounds,thm:lvv_left_columns_right_extension,
         thm:alvv_collective_trim_coordinates}
     Put $v'=(I\otimes W^*)v$. Contracting the environment and then taking a
     column cannot increase an internal cut rank, so every column of $v'$
     has cut rank at most $D$. Since $W$ is an isometry, $\|v'\|\le\|v\|$.
-    Apply Theorem~\ref{thm:lvv_columnwise_trimming_overlap} to
+    Apply Lemma~\ref{lem:lvv_columnwise_trimming_overlap} to
     $\langle\phi-w,v\rangle=\langle u-\widetilde u,v'\rangle$.
     The support assertion follows because every column of $\widetilde u$
     belongs to $\mathcal T_m(S)$, and right extension preserves its span.
 \end{proof}
 
-\begin{theorem}[Viability after independent bond trimming]
-    \label{thm:lvv_bond_trimmed_family_viable}
+\begin{lemma}[Viability after independent bond trimming]
+    \label{lem:lvv_bond_trimmed_family_viable}
     \lean{TNLean.MPS.AreaLaw.bondTrimmingRadius,
         TNLean.MPS.AreaLaw.mul_sqrt_bondTrimmingRadius_le,
         TNLean.MPS.AreaLaw.isViableMPS_bondTrimSet_of_columns}
@@ -215,10 +223,10 @@
     The quadratic radius replaces the printed linear radius
     of~\cite[Claim~2.10, source lines 549--559]{Landau2015Polynomial}, by
     the corrected single-cut estimate~\cite{gap:lvv13_trimming_radius}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_physical_column_trimming,thm:lvv_bond_trimmed_family_bounds}
+    \uses{lem:lvv_physical_column_trimming,lem:lvv_bond_trimmed_family_bounds}
     For $\phi=(I\otimes W)u$, the overlap inequality through the common
     unit vector $\Gamma$ gives $|\langle\phi,v\rangle|\ge19/24$.
     The radius satisfies
@@ -228,11 +236,11 @@
     $|\langle\Gamma,z\rangle|\ge1-2(1/48+11/48)=1/2$.
     The vector $z$ is supported on the trimmed family; its cardinality
     and bond bounds follow from
-    Theorem~\ref{thm:lvv_bond_trimmed_family_bounds}.
+    Lemma~\ref{lem:lvv_bond_trimmed_family_bounds}.
 \end{proof}
 
-\begin{theorem}[A polynomial-rank reference for trimming]
-    \label{thm:lvv_bond_trimming_reference}
+\begin{lemma}[A polynomial-rank reference for trimming]
+    \label{lem:lvv_bond_trimming_reference}
     \lean{TNLean.MPS.AreaLaw.lvvReferenceBond,
         TNLean.MPS.AreaLaw.exists_bond_trimming_reference}
     \leanok
@@ -245,7 +253,7 @@
     Theorem~\ref{thm:chain_mps_approximation} at $R=J=1$.
     The function $r(L)$ is fixed independently of $\Gamma$ and has a
     polynomial bound in $L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:chain_mps_approximation_error}
@@ -257,13 +265,13 @@
     $L$ by $48L$.
 \end{proof}
 
-\begin{theorem}[Polynomial growth of the trimming radius]
-    \label{thm:lvv_bond_trimming_radius_polynomial}
+\begin{lemma}[Polynomial growth of the trimming radius]
+    \label{lem:lvv_bond_trimming_radius_polynomial}
     \lean{TNLean.MPS.AreaLaw.lvvReferenceBond_le_mul_rpow,
         TNLean.MPS.AreaLaw.bondTrimmingRadius_lvvReferenceBond_le_mul_rpow,
         TNLean.MPS.AreaLaw.exists_bondTrimmingRadius_lvvReferenceBond_polynomial}
     \leanok
-    \uses{thm:lvv_bond_trimming_reference}
+    \uses{lem:lvv_bond_trimming_reference}
     Fix $q$ and $\Delta$, and put
     \[
         s=\sqrt{(1+\Delta^{-1})B_1(q)},\qquad
@@ -279,7 +287,7 @@
     In particular, there are $C_1\ge0$ and $p_1\in\mathbb N$, depending
     only on $q,\Delta$, such that $(48L)^2r(L)\le C_1L^{p_1}$ for
     every $L\ge1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:chain_mps_approximation}
@@ -288,36 +296,63 @@
     Since $48L\ge1$, increasing the exponent preserves the inequality.
 \end{proof}
 
-\begin{theorem}[Size and bond trimming before the ground vector is supplied]
-    \label{thm:lvv_size_bond_trimmed_family}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_bond_trimmed_family_polynomial}
+\begin{lemma}[Size trimming followed by bond trimming]
+    \label{thm:lvv_size_trimmed_family_bond_trim_set}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection}
     \leanok
-    \uses{def:chain_model,def:lvv_viable_mps}
+    \uses{def:chain_model,def:lvv_viable_mps,def:lvv_bond_trimmed_family,
+        def:lvv_size_trimming_selection}
     Let $L\ge1$, $q\ge2$, $i\le L$, and $\Delta>0$. Fix a range-one chain
     Hamiltonian with positive semidefinite terms of norm at most one,
-    and a finite left family $S$ whose members have bond dimension at
-    most $\max\{1,b\}$. Use $c,D,p,A,C$ from
-    Theorem~\ref{thm:lvv_size_trimmed_family_polynomial}, and put
+    and a finite left family $S$. Use $c$ from
+    Definition~\ref{def:lvv_size_trimming_selection}, and put
     $m=(48L)^2r(L)$, with $r(L)$ from
-    Theorem~\ref{thm:lvv_bond_trimming_reference}. This bond radius is
-    polynomial in $L$ by Theorem~\ref{thm:lvv_bond_trimming_radius_polynomial}.
-    There is a finite left family $T$, chosen before every ground-state
-    energy $E_0$ and ground vector $\Gamma$, with $|T|\le CL^p$ and every
-    member of bond dimension at most $\max\{1,m\}$, such that
-    $(i,c/L)$-viability of $S$ for a normalized ground vector of energy
-    $E_0$ and gap at least $\Delta$ implies $(i,1/2)$-viability of $T$.
-\end{theorem}
+    Lemma~\ref{lem:lvv_bond_trimming_reference}. Let $T_0$ be the
+    size-trimming selection of $S$. For every normalized ground vector
+    $\Gamma$ of energy $E_0$ and gap at least $\Delta$, $(i,c/L)$-viability
+    of $S$ implies $(i,1/2)$-viability of the trimmed family
+    $\mathcal T_m(T_0)$ of Definition~\ref{def:lvv_bond_trimmed_family},
+    whose members are the independent trimmings of the members of $T_0$. The
+    trimmed family is a function of $H$, $\Delta$ and $S$, fixed before every
+    ground pair.
+    This is~\cite[Claim~2.10, source lines 549--559]{Landau2015Polynomial}
+    for the size-trimming selection, with the bond
+    $m=(48L)^2r(L)$ in place of the printed $48L\,r(L)$.
+\end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_size_trimmed_family_polynomial,
-        thm:lvv_bond_trimming_reference,thm:lvv_bond_trimmed_family_viable}
-    Choose the size-trimming family $T_0$ before $E_0,\Gamma$, retaining its
-    orthonormal right-column witness. Define $T=\mathcal T_m(T_0)$.
-    Independent trimming preserves the cardinality bound and gives the
-    stated bond bound. For each admissible ground pair, the size step
+    \uses{thm:lvv_size_trimmed_family,
+        lem:lvv_bond_trimming_reference,lem:lvv_bond_trimmed_family_viable}
+    For each admissible ground pair, Lemma~\ref{thm:lvv_size_trimmed_family}
     supplies a unit $u$, an isometry $W$, all columns of $u$ in $T_0$, and
     overlap at least $11/12$ for $(I\otimes W)u$.
     The reference theorem supplies $v$ of cut rank at most $r(L)$ and
     overlap at least $47/48$. Apply
-    Theorem~\ref{thm:lvv_bond_trimmed_family_viable}.
+    Lemma~\ref{lem:lvv_bond_trimmed_family_viable}.
+\end{proof}
+
+\begin{lemma}[Size and bond trimming before the ground vector is supplied]
+    \label{thm:lvv_size_bond_trimmed_family}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_bond_trimmed_family_polynomial}
+    \leanok
+    \uses{thm:lvv_size_trimmed_family_bond_trim_set,
+        thm:lvv_size_trimmed_family_polynomial}
+    In the setting of Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set},
+    with $C$ and $p$ from Lemma~\ref{thm:lvv_size_trimmed_family_polynomial},
+    there is a finite left family $T$, chosen before every ground-state
+    energy $E_0$ and ground vector $\Gamma$, with $|T|\le CL^p$ and every
+    member of bond dimension at most $\max\{1,m\}$, such that
+    $(i,c/L)$-viability of $S$ for a normalized ground vector of energy
+    $E_0$ and gap at least $\Delta$ implies $(i,1/2)$-viability of $T$.
+    This bond radius is polynomial in $L$ by
+    Lemma~\ref{lem:lvv_bond_trimming_radius_polynomial}. This is the
+    existence form of Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set},
+    with the trimmed family left unnamed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:lvv_bond_trimmed_family,thm:lvv_size_trimmed_family_polynomial}
+    Take $T=\mathcal T_m(T_0)$. Independent trimming preserves the
+    polynomial cardinality bound of the selection and gives the stated bond
+    bound.
 \end{proof}

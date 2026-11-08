@@ -172,7 +172,7 @@ theorem activeSector_reflTransGen_neighboringOperator_ne_zero
     Relation.ReflTransGen
       (fun a b : F.ActiveSector p ↦ F.neighboringOperator a b ≠ 0) k h := by
   by_contra hreach
-  let S : Set (F.ActiveSector p) := fun j ↦
+  let S : Set (F.ActiveSector p) := Set.ofPred fun j ↦
     Relation.ReflTransGen
       (fun a b : F.ActiveSector p ↦ F.neighboringOperator a b ≠ 0) k j
   have hkS : k ∈ S := Relation.ReflTransGen.refl

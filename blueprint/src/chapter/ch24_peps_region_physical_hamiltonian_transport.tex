@@ -10,7 +10,7 @@
     $(F_V)_{\tau\sigma}=\prod_{v\in V}(F_v)_{\tau_v\sigma_v}$.
 \end{definition}
 
-\begin{theorem}[Extension of local intertwining identities]%
+\begin{lemma}[Extension of local intertwining identities]%
     \label{thm:peps_region_physical_intertwining}
     \lean{TNLean.PEPS.regionSliceMap_ext,
         TNLean.PEPS.regionSliceMap_regionLocalTerm,
@@ -26,7 +26,7 @@
     sums satisfy $KF_V=F_VH$.
     These identities require neither positivity of the interactions
     nor invertibility of the physical maps.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_global_physical_map_slice}
@@ -38,7 +38,7 @@
     Summing the identities gives the full Hamiltonian identity.
 \end{proof}
 
-\begin{theorem}[Unitary physical conjugation]%
+\begin{lemma}[Unitary physical conjugation]%
     \label{thm:peps_region_physical_unitary_conjugation}
     \lean{TNLean.PEPS.regionPhysicalProductMatrix_isUnitaryBetween,
         TNLean.PEPS.globalPhysicalMatrix_isUnitaryBetween,
@@ -59,7 +59,7 @@
     \end{align}
     Consequently $H^F$ and $H$ have equal characteristic polynomials
     and equal spectra, with the same eigenvalue multiplicities.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_region_physical_intertwining}

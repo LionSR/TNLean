@@ -10,7 +10,7 @@ The following estimates concern the fixed-frequency step of
 additional $+1$ established in
 \cite{gap:aklv13_interpolation_and_word_count}.
 
-\begin{theorem}[Weighted frequencies from physical supports]
+\begin{lemma}[Weighted frequencies from physical supports]
     \label{thm:aklv_supported_frequency_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_one_marker_of_chain_supports_le}
     \leanok
@@ -23,7 +23,7 @@ additional $+1$ established in
         \sum_{\alpha\in E_t}\lambda_\alpha C_\alpha\right)
         \le |E_t|\binom{t+2k+1}{2k+1}q^{2k}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A term supported on the left has the form $A_a\otimes\mathbb 1$;
@@ -50,12 +50,12 @@ additional $+1$ established in
     \leanok
     On an $L$-site chain, fix integers $a,s\ge0$ with $a+s+1\le L$.
     Let $H_j$ be supported on $\{a+j,a+j+1\}$ for $0\le j<s$.
-    Let $H_L$ be supported on $[0,a+1)$ and $H_R$ on $[a+s,L)$.
+    Let $H_L$ be supported on ${\lbrack 0,a+1)}$ and $H_R$ on ${\lbrack a+s,L)}$.
     The interaction alphabet consists of these $s+2$ operators; its sum is
     $H_L+\sum_{j=0}^{s-1}H_j+H_R$.
 \end{definition}
 
-\begin{theorem}[Window frequency count and rank]
+\begin{lemma}[Window frequency count and rank]
     \label{thm:aklv_window_frequency_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_window_one_marker_le}
     \leanok
@@ -69,17 +69,15 @@ additional $+1$ established in
         \le \binom{t+s}{s}\binom{t+2k+1}{2k+1}q^{2k}.
     \end{align*}
     The coefficients may vanish or be linearly dependent.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_supported_frequency_rank}
     Every ordinary middle interaction lies entirely to the left or right of
     the cut after site $a+u$. The two exterior operators also lie on their
     respective sides. The distinguished term crosses exactly the adjacent
-    pair at that cut. Apply Theorem~\ref{thm:aklv_supported_frequency_rank}.
+    pair at that cut. Apply Lemma~\ref{thm:aklv_supported_frequency_rank}.
     The ordinary alphabet has $s+1$ elements, so stars and bars gives
     $|E_t|=\binom{t+s}{s}$.
 \end{proof}
 
-% The low-frequency partition, displacement to the central cut, and the
-% optimized rank estimate for an arbitrary polynomial remain separate.

@@ -14,7 +14,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{wip}
+\gapnote{false-source}{resolved}
 
 \section{The assertion}
 
@@ -95,13 +95,13 @@ $B=(4)$ is literally the positive-weight block $4(1)$, has the
 two-site refinement $A=(2)$, and has transfer map $x\mapsto16x$.
 The formal theorem proves that $B$ is in irreducible form, is
 $2$-refinable, and is not $2$-divisible as a channel.\footnote{See
-  \leanid{MPSTensor.refinement_normalization_counterexample} and
-  \leanid{MPSTensor.refinementScalarCounterexample} in
-  \path{TNLean/MPS/Periodic/Symmetry/RefinementNormalizationCounterexample.lean}.
-  At $p=1$ every tensor is $1$-refinable, while $1$-divisibility is
-  exactly the channel condition; see \leanid{MPSTensor.isPRefinable_one}
-  and \leanid{MPSTensor.isPDivisibleChannel_one_iff} in
-  \path{TNLean/MPS/Periodic/Symmetry/Theorem41OneSite.lean}.}
+    \leanid{MPSTensor.refinement_normalization_counterexample} and
+    \leanid{MPSTensor.refinementScalarCounterexample} in
+    \path{TNLean/MPS/Periodic/Symmetry/RefinementNormalizationCounterexample.lean}.
+    At $p=1$ every tensor is $1$-refinable, while $1$-divisibility is
+    exactly the channel condition; see \leanid{MPSTensor.isPRefinable_one}
+    and \leanid{MPSTensor.isPDivisibleChannel_one_iff} in
+    \path{TNLean/MPS/Periodic/Symmetry/Theorem41OneSite.lean}.}
 
 The printed argument breaks at its last line,
 \path{Papers/1708.00029/main.tex:806--810}. It constructs $\widetilde A$ with
@@ -149,13 +149,12 @@ generates, at every length including zero, the same matrix product vectors as
 a scalar-weighted direct sum of periodic left-canonical blocks with positive
 weights.\footnote{The definition is \leanid{MPSTensor.IsIrreducibleForm} in
     \path{TNLean/MPS/Periodic/Defs.lean}.} It does not fix the transfer map of the
-tensor. Two consequences follow for the forward canonicalization hypothesis,
-which asks, for every tensor $B$ in this formal irreducible form whose family
-is $p$-refinable, for a left-canonical tensor $\widetilde A$ with
-$\mathcal E_B=\mathcal E_{\widetilde A^{[p]}}$.\footnote{The hypothesis is
-    \leanid{MPSTensor.PRefinementCanonicalization} and the conditional forward
-    theorem is \leanid{MPSTensor.thm_4_1_p_refinement_forward}, both in
-    \path{TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean}.}
+tensor. Two consequences follow for the former forward canonicalization
+hypothesis, which asked, for every tensor $B$ in this formal irreducible form
+whose family is $p$-refinable, for a left-canonical tensor $\widetilde A$ with
+$\mathcal E_B=\mathcal E_{\widetilde A^{[p]}}$. That hypothesis and its
+conditional forward theorem have been retired in favour of the explicit
+block-form statement below.
 
 First, the scaling counterexample refutes the hypothesis at bond dimension
 one for every positive physical dimension and every $p\geq1$: the tensor
@@ -210,27 +209,21 @@ equal-case gauge is identified on the original orbit supports through
 \leanid{MPSTensor.isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks}
 proves the corrected forward implication for a direct sum of left-canonical
 periodic blocks with unit-modulus multiplicities, with no further hypothesis.
-What remains, tracked in
-\href{https://github.com/LionSR/TNLean/issues/7762}{issue \#7762}, a child
-of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}, is to
-retire the conditional formal theorems below in favour of this statement.
-Until then, every formal theorem whose proof consumes a refuted
-hypothesis carries an unfaithfulness marker naming this note: the conditional
-forward theorem, its blocked-stage variant, the bundled biconditional, and
-the three reduction theorems between the refuted hypotheses, namely
-\leanid{MPSTensor.peripheralEqualCase_periodicFT_of_sameMPV},
-\leanid{MPSTensor.pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV},
-and \leanid{MPSTensor.peripheralEqualCaseRootFromZGauge_of_rootChannel}. The
-hypotheses themselves are
-\leanid{MPSTensor.PeripheralEqualCaseRootChannelOfZGauge},
-\leanid{MPSTensor.PeripheralEqualCaseRootFromZGauge},
-\leanid{MPSTensor.PeripheralEqualCasePeriodicFTOfSameMPV}, and
-\leanid{MPSTensor.PRefinementCanonicalization}. The first implies the
-second, the second together with the blocked $Z$-gauge extraction
-hypothesis \leanid{MPSTensor.PeripheralEqualCaseZGaugeOfSameMPV} implies the
-third, and the third implies the fourth. For $p\geq1$ each of the four is
-refuted by the one-dimensional data $C = A^{(p)} = (\lambda)$ with the
-trivial $Z$-gauge, since no channel has $p$-th power $x\mapsto\lambda^2x$.
+The obsolete forward canonicalization premises and theorems are removed,
+including the former bundled equivalence and the reductions among refuted
+blocked-to-root premises. Their one-dimensional scaling counterexamples
+remain recorded above. The corrected block-form forward theorem is the
+public statement; it adds no canonicalization, equal-case, sector-phase,
+or root-construction hypothesis.
+
+The separate reverse implication still requires selecting a channel root
+with Kraus rank no greater than the physical dimension. Its conditional
+statement and bounded-root construction remain in
+\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean}; see
+\path{docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex} and
+\href{https://github.com/LionSR/TNLean/issues/664}{issue \#664}.
+This forward correction therefore does not resolve the unrestricted
+refinability--divisibility biconditional.
 
 \section{Conclusion}
 
@@ -242,8 +235,8 @@ preservation of $\mathcal E_B$, equivalently unit multiplicities, which the
 source's definition of $p$-divisibility presupposes; the printed argument then
 proves it. The formal forward canonicalization hypothesis inherits the
 counterexample and is refuted independently by non-unitary similarities, so
-it must be replaced by a restatement over block-form tensors with
-trace-preserving transfer map rather than discharged.
+it is replaced by the proved statement over explicit block-form tensors
+with trace-preserving transfer map, rather than discharged.
 
 \bibliographystyle{alpha}
 \bibliography{references}

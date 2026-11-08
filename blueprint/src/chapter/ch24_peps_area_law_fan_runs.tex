@@ -31,7 +31,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
 % Source: 10-geometry.tex, fan runs, lines 299--318;
 % replacement sectors, lines 398--417.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[At most eight runs in a cell fan]
+\begin{lemma}[At most eight runs in a cell fan]
     \label{thm:area_law_cell_fan_run_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_cellFanRun_le_eight}
     \leanok
@@ -39,7 +39,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     For every dyadic cell, every choice of midpoint subdivisions of its
     four sides, and every assignment of the two colors to its fan
     triangles, the number of runs is at most eight.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -49,20 +49,20 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     sides contributes one or two triangles, so there are at most eight.
 \end{proof}
 
-\begin{theorem}[Color constancy on a run]
+\begin{lemma}[Color constancy on a run]
     \label{thm:area_law_fan_run_color}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_color_eq}
     \leanok
     \uses{def:area_law_fan_runs}
     Any two triangles in the same run have the same color.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_fan_runs}
     Along every retained edge the colors agree. Following a finite
     path in a component gives the assertion.
 \end{proof}
 
-\begin{theorem}[Exact cover by run regions]
+\begin{lemma}[Exact cover by run regions]
     \label{thm:area_law_fan_run_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegions_cover}
     \leanok
@@ -71,7 +71,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     \begin{align}
         Q=\bigcup_R T_R.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_fan_runs,thm:area_law_cell_fan_cover}
     Every elementary segment belongs to one component. Thus the
@@ -79,7 +79,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     is $Q$.
 \end{proof}
 
-\begin{theorem}[Colors across adjacent distinct runs]
+\begin{lemma}[Colors across adjacent distinct runs]
     \label{thm:area_law_fan_run_opposite}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_adjacent_colors_ne}
     \leanok
@@ -87,21 +87,21 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     Suppose that two adjacent fan triangles belong to distinct runs.
     Their colors are different, and hence are opposite members of
     $\{0,1\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_fan_runs}
     If their colors agreed, their adjacency would be retained and
     they would lie in the same component.
 \end{proof}
 
-\begin{theorem}[A monochromatic fan gives one whole-cell region]
+\begin{lemma}[A monochromatic fan gives one whole-cell region]
     \label{thm:area_law_fan_run_monochromatic}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_all_equal}
     \leanok
     \uses{def:area_law_fan_runs}
     If every triangle has the same color, all triangles belong to a single
     run whose region is the whole closed square $Q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_fan_runs,thm:area_law_cell_fan_cover}
     The one or two elementary segments on each side are connected

@@ -49,7 +49,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     $\Gamma_{L_0}$ then removes.
 \end{proof}
 
-\begin{theorem}[The two boundary-crossing compatibilities]%
+\begin{lemma}[The two boundary-crossing compatibilities]%
     \label{thm:reduced_wrapped_boundary_compatibilities}
     \lean{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective}
     \leanok
@@ -66,7 +66,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \end{align}
     Here $C^+_\tau$ and $C^-_\tau$ are the complementary words exposed by the
     two boundary-crossing cyclic intervals, both of reduced length $L_0+1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -239,7 +239,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     the displayed product equation.
 \end{proof}
 
-\begin{theorem}[Pointwise reduction to compatible boundary conditions]
+\begin{lemma}[Pointwise reduction to compatible boundary conditions]
     \label{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
     \lean{MPSTensor.boundary_closing_product_eq_of_pointwise_compatible_boundary_assignments}
     \leanok
@@ -266,7 +266,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
         Y_M(\tau^+_\eta(\mu))A^jA^\sigma
          & =Y_{M+1-L_0}(\tau^-_\eta(\mu))A^jA^\sigma. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -306,7 +306,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    Applying Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} to the
+    Applying Lemma~\ref{thm:cyclic_window_boundary_matrix_transport} to the
     $L_0-1$ adjacent restrictions starting at $i_0=M+1-L_0$ determines the two
     endpoint words for $0\le r<L_0-1$ via
     \begin{align}
@@ -340,7 +340,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 \begin{proof}
     \leanok
     With $Y_r(\rho)=Y_{M+1-L_0+r}(\rho)$ and $i_0=M+1-L_0$,
-    Theorem~\ref{thm:cyclic_window_boundary_matrix_transport} applies to the
+    Lemma~\ref{thm:cyclic_window_boundary_matrix_transport} applies to the
     $L_0-1$ restrictions beginning at $M+1-L_0+r$, whose site labels satisfy
     \begin{align}
         i_0+r       & =M+1-L_0+r, \notag           \\
@@ -409,7 +409,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    With $i_0=M$, Theorem~\ref{thm:cyclic_window_boundary_matrix_transport}
+    With $i_0=M$, Lemma~\ref{thm:cyclic_window_boundary_matrix_transport}
     applies to the $M+2-L_0$ restrictions beginning at $M+r$ modulo $M+1$,
     whose site labels satisfy
     \begin{align}
@@ -473,7 +473,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     $X A^aA^\mu A^b =A^aY_\mu A^b =A^aA^\mu A^bX$.
 \end{proof}
 
-\begin{theorem}[Boundary matrix commutation from periodic closure]%
+\begin{lemma}[Boundary matrix commutation from periodic closure]%
     \label{thm:boundary_matrix_commutes}
     \lean{MPSTensor.boundary_matrix_commutes}
     \leanok
@@ -482,7 +482,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     boundary matrix $X\in\MN{D}$. If every cyclic restriction of length $L$ of
     $\psi$ lies in $G_L(A)$, with $N\ge2$ and $1<L\le N$, then
     $X A^j=A^jX$ for every $j=0,\ldots,d-1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -538,14 +538,14 @@ ground space is spanned by $V^{(N)}(A)$.
     A finite-dimensional ground space $S$ is one-dimensional if $\dim S=1$.
 \end{definition}
 
-\begin{theorem}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
+\begin{lemma}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
     \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
     \leanok
     \uses{def:has_unique_ground_state}
     For finite-dimensional $S$, $\dim S=1$ if and only if there exists a
     nonzero $\psi_0\in S$ such that every $\psi\in S$ is of the form
     $c\,\psi_0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -603,14 +603,14 @@ ground space is spanned by $V^{(N)}(A)$.
     $V^{(N)}(A)\in\mathcal G_{N,L}(A)$.
 \end{lemma}
 
-\begin{theorem}[Periodic MPS vector nonvanishing for block-injective tensors]%
+\begin{lemma}[Periodic MPS vector nonvanishing for block-injective tensors]%
     \label{thm:mpv_ne_zero_blk_injective}
     \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
     \leanok
     \uses{def:mpv, def:l_blk_injective}
     If $A$ is $L_0$-block-injective with $L_0>0$, $D\ge1$, and
     $N\ge L_0+1$, then $V^{(N)}(A)\ne0$ in the $N$-site space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

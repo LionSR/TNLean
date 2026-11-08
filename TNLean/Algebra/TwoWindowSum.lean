@@ -83,19 +83,9 @@ theorem Fin.sum_univ_eq_five_parts_of_two_windows
     hshift b (2 * ℓ) hbN, hshift (b + 2 * ℓ) (N - (b + 2 * ℓ)) (by omega)]
   exact Finset.sum_range_eq_five_parts_of_two_windows g a b ℓ N hab hbN
 
-
 section
 
 open Matrix
-
-open scoped BigOperators
-
-section
-
-open scoped BigOperators
-
-section
-
 open scoped BigOperators
 
 namespace Finset
@@ -127,6 +117,7 @@ private theorem sum_fin_window_eq_filter
     omega
   · intro r _
     rfl
+
 end Finset
 
 namespace Fin
@@ -173,7 +164,7 @@ theorem sum_univ_eq_actual_two_window_alphabet
   rcases hcover with h0 | hL | hM | hR | h4
   all_goals simp (disch := omega) only [ite_eq_left, ite_eq_right]
   all_goals simp
+
 end Fin
-end
-end
+
 end

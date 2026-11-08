@@ -228,8 +228,12 @@ theorem adjoint_groundSpaceMapES_bulkObservable_comp_tendsto_zero
       (nhds (0 : Matrix (Fin D₁ × Fin D₁) (Fin D₂ × Fin D₂) ℂ)) := by
     refine tendsto_pi_nhds.mpr fun ⟨b, a⟩ ↦ tendsto_pi_nhds.mpr fun ⟨e, c⟩ ↦ ?_
     exact tendsto_pi_nhds.mp (tendsto_pi_nhds.mp
-      (((ContinuousLinearMap.apply ℂ (Matrix (Fin D₂) (Fin D₁) ℂ))
-        (Matrix.single c a (1 : ℂ))).continuous.tendsto 0 |>.comp hF) e) b
+      ((LinearMap.toContinuousLinearMap
+        ({ toFun := fun T => T (Matrix.single c a (1 : ℂ))
+           map_add' := fun _ _ => rfl
+           map_smul' := fun _ _ => rfl } :
+          (Matrix (Fin D₂) (Fin D₁) ℂ →L[ℂ] Matrix (Fin D₂) (Fin D₁) ℂ) →ₗ[ℂ]
+            Matrix (Fin D₂) (Fin D₁) ℂ)).continuous.tendsto 0 |>.comp hF) e) b
   let S : Matrix (Fin D₁ × Fin D₁) (Fin D₂ × Fin D₂) ℂ ≃ₗ[ℂ]
       (EuclideanSpace ℂ (Fin D₂ × Fin D₂) →L[ℂ] EuclideanSpace ℂ (Fin D₁ × Fin D₁)) :=
     Matrix.toEuclideanLin.trans LinearMap.toContinuousLinearMap

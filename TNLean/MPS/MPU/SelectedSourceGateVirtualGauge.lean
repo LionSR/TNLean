@@ -227,7 +227,11 @@ private theorem raw_selected_factor_gate_relations
   · simpa only [Matrix.UnitaryGroup.inv_val, star_star] using
       rawV_selected_factor_gauge z er el X₁ X₂ TX₁ TX₂ W₁ W₂ hX₁ hX₂
 
-private theorem supplied_source_factor_gate_relations
+/-- Contract the four supplied source-factor relations to the literal gate
+relations. The input and output factors need not be the library's selected
+decompositions. Source: arXiv:1703.09188, `FundamentalMPU`, equations
+`SFuu` and `SFvv`, lines 624–648. -/
+theorem supplied_source_factor_gate_relations
     {d D : ℕ} {U V : MPOTensor d D}
     {ρU ρV : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρU) (T : SourceFactors V ρV)

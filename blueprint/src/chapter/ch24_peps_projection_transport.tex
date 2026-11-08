@@ -1,4 +1,4 @@
-\begin{theorem}[A projector and its complement]
+\begin{lemma}[A projector and its complement]
     \label{thm:peps_binary_projection_family}
     \lean{Matrix.binaryProjectionFamily_complete}
     \leanok
@@ -7,7 +7,7 @@
     either order is zero, and their sum is $I$. This auxiliary identity
     gives the two outcomes of the interference measurement in
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2605--2615.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Hermitian idempotence makes each operator its own product with its
@@ -29,7 +29,7 @@
     argument of \cite[Section~6.6]{Schuch2010PEPS}, lines 2582--2615.
 \end{definition}
 
-\begin{theorem}[Complete physical projection family]
+\begin{lemma}[Complete physical projection family]
     \label{thm:peps_scaled_projection_transport}
     \lean{Matrix.scaledProjectionTransport_properties,
         Matrix.exists_binaryProjectionFamily_transport}
@@ -43,7 +43,7 @@
     \end{align}
     This statement concerns the coefficient map itself, independently of
     any boundary configuration or state decomposition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -54,7 +54,7 @@
     completes the proof.
 \end{proof}
 
-\begin{theorem}[Return projection on pair coefficients]
+\begin{lemma}[Return projection on pair coefficients]
     \label{thm:peps_literal_pair_return_projection}
     \lean{TNLean.PEPS.regularChargePairReturnProjection_mulVec_braidedCoefficient,
         TNLean.PEPS.regularChargePairReturnProjection_commute}
@@ -70,7 +70,7 @@
     left translation of the two group registers. The latter assertion
     holds for every function $\chi:G\to\mathbb C$, without an
     irreducibility or normalization assumption.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

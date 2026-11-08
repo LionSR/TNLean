@@ -12,6 +12,7 @@ import QICLean.Entropy.LocalLift
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.FilterOutputCovariance
 import Mathlib.Data.List.OfFn
+import TNLean.Circuit.EntropySupport
 import Mathlib.Order.Interval.Finset.Nat
 import TNLean.Circuit.PairProduct
 import TNLean.MPS.MPDO.TraceChainOperator
@@ -463,14 +464,10 @@ end MPOTensor
 
 end
 
-
 section
 
 open Matrix
-
 open scoped BigOperators Kronecker
-
-section
 
 namespace TNLean.MPS.AreaLaw
 
@@ -508,11 +505,8 @@ theorem exists_traceChainOperator_of_supported_interval
   rw [hM, hcore]
   exact (QuantumCircuit.embedOp_embedOp Subtype.val_injective eI
     (MPOTensor.traceChainOperator Acore C0)).symm
-end TNLean.MPS.AreaLaw
-end
-end
 
-section
+end TNLean.MPS.AreaLaw
 
 namespace TNLean.MPS.AreaLaw
 
@@ -584,5 +578,7 @@ theorem inward_effective_cuts (L ell p q : ℕ)
     hleft, hright, htotal, ?_, ?_⟩
   · simpa only [haEnd, hbEnd] using hsub
   · simpa only [haEnd, hbEnd] using hcard
+
 end TNLean.MPS.AreaLaw
+
 end

@@ -26,7 +26,7 @@
     Let $P_\chi$ be the orthogonal projection onto $\mathcal H_\chi$.
 \end{definition}
 
-\begin{theorem}[Vectors and their Hilbert-space pairing]
+\begin{lemma}[Vectors and their Hilbert-space pairing]
     \label{thm:peps_regular_charge_subspace_vectors}
     \lean{TNLean.PEPS.regularChargeVector_mem_subspace,
         TNLean.PEPS.regularChargeVector_inner}
@@ -38,13 +38,13 @@
         \sum_{r,s\in G}\overline{A_\chi(p;x,y)_{r,s}}
         A_\psi(q;x',y')_{r,s}.
     \]
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Membership follows from the defining span. The inner product is the
     ordinary sum of the entrywise pairings.
 \end{proof}
 
-\begin{theorem}[The unknown translations preserve the complete charge subspace]
+\begin{lemma}[The unknown translations preserve the complete charge subspace]
     \label{thm:peps_regular_charge_subspace_translation}
     \lean{TNLean.PEPS.regularChargeTranslation_vector,
         TNLean.PEPS.regularChargeSubspace_map_translation}
@@ -56,14 +56,14 @@
         T_{z,w}A_\chi(p;x,y)=A_\chi(p;zx,wy),
         \qquad T_{z,w}\mathcal H_\chi=\mathcal H_\chi.
     \]
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The row and column covariance formula gives
     $T_{z,w}A_\chi(p;x,y)=A_\chi(p;zx,wy)$, and the inverse
     translations give the reverse inclusion of the subspaces.
 \end{proof}
 
-\begin{theorem}[The accessible projection and its selected-charge action]
+\begin{lemma}[The accessible projection and its selected-charge action]
     \label{thm:peps_regular_charge_detector}
     \lean{TNLean.PEPS.regularChargeDetector_isSymmetricProjection,
         TNLean.PEPS.regularChargeDetector_vector,
@@ -77,14 +77,14 @@
         \qquad P_\chi T_{z,w}=T_{z,w}P_\chi.
     \]
     Thus the same accessible projection works for all unknown translations.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Orthogonal projection fixes its range. A unitary preserving the subspace
     also preserves its orthogonal complement, and hence commutes with the
     corresponding projection.
 \end{proof}
 
-\begin{theorem}[Orthogonality of distinct full charge subspaces]
+\begin{lemma}[Orthogonality of distinct full charge subspaces]
     \label{thm:peps_regular_charge_subspace_orthogonality}
     \lean{TNLean.PEPS.regularChargeSubspace_isOrtho,
         TNLean.PEPS.regularChargeDetector_other_vector}
@@ -102,7 +102,7 @@
     \cite[charge detection]{Schuch2010PEPS}, lines 2474--2486;
     neither completeness of a physical measurement nor its original-spin
     implementation is asserted here.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Every generator of one span is orthogonal to every generator of the
     other by the charge-matrix pairing; extending by linearity and

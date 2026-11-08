@@ -82,14 +82,6 @@ theorem mul_rpow_le_mul_rpow_of_powerRatioThreshold_le {C η a b x : ℝ}
         mul_le_mul_of_nonneg_right hC' (rpow_nonneg hx0.le _)
     _ = η * x ^ b := by rw [mul_assoc, ← rpow_add hx0, sub_add_cancel]
 
-/-- Natural-number form of `mul_rpow_le_mul_rpow_of_powerRatioThreshold_le`:
-`C n ^ a ≤ η n ^ b` for every `n ≥ ⌈powerRatioThreshold C η (b - a)⌉₊`. -/
-theorem mul_rpow_le_mul_rpow_of_ceil_powerRatioThreshold_le {C η a b : ℝ} {n : ℕ}
-    (hC : 0 ≤ C) (hη : 0 < η) (hab : a < b)
-    (hn : ⌈powerRatioThreshold C η (b - a)⌉₊ ≤ n) :
-    C * (n : ℝ) ^ a ≤ η * (n : ℝ) ^ b :=
-  mul_rpow_le_mul_rpow_of_powerRatioThreshold_le hC hη hab (Nat.ceil_le.mp hn)
-
 /-- **A positive power exceeds a constant, with an explicit threshold.** If `0 < y`, then
 `b ≤ x ^ y` for every `x ≥ powerRatioThreshold (max b 0) 1 y = max 1 (max b 0 ^ (1 / y))`. -/
 theorem le_rpow_of_powerRatioThreshold_le {b y x : ℝ} (hy : 0 < y)

@@ -10,7 +10,7 @@ containment of the whole segment; see
 % prop:two-families, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % The conclusion is whole-segment containment, without uniqueness or labels.
 
-\begin{theorem}[Existence of an opposing closed region]
+\begin{lemma}[Existence of an opposing closed region]
     \label{thm:area_law_elementary_side_opponent}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent}
     \leanok
@@ -30,7 +30,7 @@ containment of the whole segment; see
         (k,z)\ne(h,w),\qquad
         e\subseteq\overline{Q_{\ell_h}(w)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_fine_cells_cover,thm:area_law_unique_fine_cell,
         thm:area_law_fine_cell_containment,thm:area_law_local_layer_indices,

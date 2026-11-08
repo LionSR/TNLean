@@ -8,7 +8,7 @@
 \date{2026-10-01}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{What the source states}
 The paragraph ``Discussion and outlook'' of~\cite{Malz2024Preparation} states:
@@ -42,14 +42,37 @@ vectors, since $2\varepsilon(x,y)$ is the squared distance from $x$ to the
 nearest unit multiple of $y$.
 
 \section{The restriction}
-Only the trivial phase of the classification without symmetry is covered: both
-tensors are normal. The normal-state theorem does not treat non-normal states or phases defined
-with a symmetry. Compatible coherent seeds give a sufficient non-normal
-conversion statement, while unequal GHZ sector probabilities obstruct
-chosen-vector conversion even for identical parent Hamiltonians; see
-\cite{gap:mswc24_same_phase_compatible_seed}. A complete interpretation
-requires a non-normal phase predicate specifying how the selected vector
-and its sector probabilities are transported.
+The theorem above covers the trivial phase of the classification without
+symmetry: both tensors are normal. Phases defined with a symmetry would need
+circuits that commute with the symmetry, which the source does not claim, and
+are not treated.
+
+\section{The non-normal case}
+For a non-normal tensor the parent Hamiltonian has a degenerate ground space,
+spanned by the periodic states of the blocks of the canonical form, and two
+such tensors lie in the same phase without symmetry exactly when they have the
+same number of blocks. The source's own construction of long-range states,
+eq.~(25), prepares the block states together with length-dependent
+coefficients. The object that a circuit between states of the same phase
+transports is therefore the ground space, and that statement is formalized:
+for two matched families of $b$ normal blocks, one nearest-neighbour unitary
+of depth $O(\log(N/\varepsilon))$ maps the fixed encoder of one ground space
+to that of the other within $\varepsilon$ in operator norm, uniformly over
+logical inputs and finite references; see
+\cite{gap:mswc24_coherent_sector_encoder_scope}.\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_log_depth_coherent_sectorEncoder_conversion}.}
+
+The stronger reading, in which one chosen normalized periodic vector is mapped
+to another chosen vector, is false: two tensors with the same parent
+Hamiltonian but sector probabilities $(4/5,1/5)$ and $(1/2,1/2)$ cannot be
+converted by a nearest-neighbour circuit of depth $T$ with infidelity below
+$9/5000$ once $N>4T+4$.\footnote{Formal declarations:
+    \leanid{MPSTensor.parentHamiltonian_repeatedBlockTensor_eq_ghzTensor} and
+    \leanid{MPSTensor.repeatedBlockTensor_infidelity_lower_bound}.}
+Equality of phases therefore does not transport sector probabilities, and the
+ground-space statement is the faithful reading of the source's remark.
+Compatible coherent seeds give a further sufficient condition for converting
+chosen vectors; see \cite{gap:mswc24_same_phase_compatible_seed}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

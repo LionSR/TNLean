@@ -69,6 +69,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OverlappingIntervalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.ParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicGapFromDivisibleOpen
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteractionSections
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicRangeComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.PositiveComparisonGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PrescribedGap
@@ -88,6 +89,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.SparseGroupedOpenGap
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
+import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorPhysicalEmbedding
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.SupportedParentProjection
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport

@@ -115,7 +115,7 @@
     on-site physical isometry.
     On a three-site chain, the two adjacent length-two local terms are the
     $AX$ and $XB$ actions of the canonical two-site parent interaction.
-    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation} constructs the
+    Lemma~\ref{thm:appendixB_overlapping_two_site_commutation} constructs the
     adjacent physical support projectors from the basic-vector expression and
     proves the overlapping relation
     \begin{align}
@@ -124,7 +124,7 @@
         (\widehat Q_{XB})_{XB}(\widehat Q_{AX})_{AX}.
         \notag
     \end{align}
-    Theorem~\ref{thm:three_site_commutator_chain_transport} carries this
+    Lemma~\ref{thm:three_site_commutator_chain_transport} carries this
     identity around a periodic chain. Consequently, for every $N>2$ and every
     pair of sites $i,j\in\Z/N\Z$,
     $h_i(A,2)h_j(A,2) = h_j(A,2)h_i(A,2)$.
@@ -135,7 +135,7 @@
     factorization. Although the full source implication additionally includes
     the ground-space spanning equation (whose local kernel-intersection analog
     in coefficient space is
-    Theorem~\ref{thm:appendixB_definition_d2_coefficient_analogue}),
+    Lemma~\ref{thm:appendixB_definition_d2_coefficient_analogue}),
     identifying those hatted maps with the source projectors remains separate
     and is not needed for the chain commutator.
 \end{remark}
@@ -167,7 +167,7 @@
     \end{align}
 \end{remark}
 
-\begin{theorem}[Eventual dimension of nearest-neighbor parent ground spaces]%
+\begin{lemma}[Eventual dimension of nearest-neighbor parent ground spaces]%
     \label{thm:nncph_eventual_ground_space_dimension}
     \lean{MPSTensor.HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq}
     \leanok
@@ -181,7 +181,7 @@
     $\dim_{\C}\ker H_2^{(N)}(B) = g$.
     As required in \cite[Section~IV]{Beigi2012Classification}, the
     ground-state degeneracy is therefore eventually constant.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:bnt_span, def:has_nncph_ground_spaces}
@@ -201,7 +201,7 @@
     ordered-pair basis of the two-site physical Hilbert space.
 \end{definition}
 
-\begin{theorem}[Hermitian commuting overlapping parent interactions]%
+\begin{lemma}[Hermitian commuting overlapping parent interactions]%
     \label{thm:two_site_parent_interaction_commuting_overlaps}
     \lean{MPSTensor.IsNNCPH.twoSiteParentInteractionMatrix_isHermitian_and_overlappingLifts_commute}
     \leanok
@@ -215,7 +215,7 @@
         (\Id\otimes Q_A)(Q_A\otimes\Id).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The parent interaction is the orthogonal projector onto the orthogonal
@@ -224,7 +224,7 @@
     left-associated tensor-product basis gives the displayed identity.
 \end{proof}
 
-\begin{theorem}[Spatial block actions of the two-site parent interaction]%
+\begin{lemma}[Spatial block actions of the two-site parent interaction]%
     \label{thm:two_site_parent_interaction_spatial_blocks}
     \lean{MPSTensor.IsNNCPH.exists_unitary_blockActions_of_twoSiteParentInteractionMatrix}
     \leanok
@@ -258,10 +258,10 @@
         \notag
     \end{align}
     on the last pair.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:two_site_parent_interaction_commuting_overlaps},
+    By Lemma~\ref{thm:two_site_parent_interaction_commuting_overlaps},
     applying the finite-dimensional spatial decomposition for two Hermitian
     overlapping operators to $Q_A$ in both positions gives the stated blocks.
 \end{proof}
@@ -292,7 +292,7 @@
     rotations are not identified.
 \end{definition}
 
-\begin{theorem}[Symmetric spatial form of a commuting positive interaction]
+\begin{lemma}[Symmetric spatial form of a commuting positive interaction]
     \label{thm:commuting_positive_interaction_symmetric_spatial_form}
     \lean{Matrix.exists_positive_etaPair_decomposition_of_overlappingLifts_commute}
     \lean{Matrix.etaPairSpatialBlockEquiv}
@@ -311,7 +311,7 @@
         \Id_{q,l}\otimes\eta_{q,h}\otimes\Id_{h,r}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the coordinates of the spatial decomposition for the two overlapping
@@ -337,7 +337,7 @@
     semidefinite.
 \end{proof}
 
-\begin{theorem}[Sector graph of a commuting parent interaction]
+\begin{lemma}[Sector graph of a commuting parent interaction]
     \label{thm:nncph_beigi_sector_graph}
     \lean{MPSTensor.IsNNCPH.nonempty_beigiSectorGraphData}
     \lean{MPSTensor.IsNNCPH.beigiSectorGraphData}
@@ -351,14 +351,14 @@
     three-site chain. Then, in the sense of
     Definition~\ref{def:beigi_sector_graph}, the complementary two-site
     interaction admits a finite sector graph.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:commuting_positive_interaction_symmetric_spatial_form}
     Because the canonical two-site parent interaction $Q_A$ is an orthogonal
     projector whose overlapping placements commute, $\Id-Q_A$ is a positive
     semidefinite orthogonal projector with commuting overlapping placements, so
-    Theorem~\ref{thm:commuting_positive_interaction_symmetric_spatial_form}
+    Lemma~\ref{thm:commuting_positive_interaction_symmetric_spatial_form}
     gives
     \begin{align}
         (U\otimes U)^*(\Id-Q_A)(U\otimes U)
@@ -374,7 +374,7 @@
     edge projection.
 \end{proof}
 
-\begin{theorem}[Ordered-cycle ground-space dimension formula]
+\begin{lemma}[Ordered-cycle ground-space dimension formula]
     \label{thm:beigi_ordered_cycle_ground_space_dimension}
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}
     \leanok
@@ -392,7 +392,7 @@
         \notag
     \end{align}
     where the sum is over ordered cycles and the indices are read modulo $N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The translated parent interactions commute. Hence the ordered product of
@@ -404,7 +404,7 @@
     edge contributes zero, leaving exactly the displayed ordered-cycle sum.
 \end{proof}
 
-\begin{theorem}[Period-two ordered-cycle ground-space dimension formula]
+\begin{lemma}[Period-two ordered-cycle ground-space dimension formula]
     \label{thm:beigi_ordered_cycle_ground_space_dimension_two}
     \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_two}
     \leanok
@@ -421,7 +421,7 @@
     In the length-two convention stated after equation~(4) of
     \cite[Section~III]{Beigi2012Classification}, the sum runs over ordered
     pairs, so $(a,b)$ and $(b,a)$ are distinct summands whenever $a\ne b$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:beigi_ordered_cycle_ground_space_dimension}

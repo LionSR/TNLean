@@ -55,7 +55,7 @@ unnormalized trace:
 \begin{center}
     % Formula: U_N(s,t)=\tr(A_1^{s_0t_0}\cdots A_1^{s_{N-1}t_{N-1}}), the
     % cyclic trace expanded in the proof of
-    % Theorem~\ref{thm:asymex_czy_kernel}.
+    % Lemma~\ref{thm:asymex_czy_kernel}.
     % Ink-to-index map: each node is A_1; its upper leg is the output s_n,
     % its lower leg the input t_n, and the horizontal legs are the bond-two
     % virtual index \alpha_n.
@@ -73,18 +73,18 @@ unnormalized trace:
     \end{tenkz}
 \end{center}
 
-In Theorems~\ref{thm:asymex_czy_kernel}
+In Lemmas~\ref{thm:asymex_czy_kernel}
 and~\ref{thm:asymex_czy_square_identity}, this cyclic trace yields an
 explicit sign kernel whose periodic square satisfies $U_N^2=I$ at every
-positive length. Theorems~\ref{thm:asymex_czy_compression}
+positive length. Lemmas~\ref{thm:asymex_czy_compression}
 and~\ref{thm:asymex_czy_printed_reduction} then compress the stacked
 square onto the bond-one identity and relate it by an orthogonal change
 of basis to the bond-three reduction $A_0$, while
-Theorem~\ref{thm:asymex_czy_reduced_nonsplit} rules out any zero-remainder
+Lemma~\ref{thm:asymex_czy_reduced_nonsplit} rules out any zero-remainder
 compression of $A_0$ onto the identity and leads to the indecomposability
 of its virtual space and the nontrivial associator of its fusion maps.
 
-\begin{theorem}[Periodic kernel of the CZY operator]
+\begin{lemma}[Periodic kernel of the CZY operator]
     \label{thm:asymex_czy_kernel}
     \lean{CZYCompression.mpo_czyTensor_apply}
     \leanok
@@ -95,7 +95,7 @@ of its virtual space and the nontrivial associator of its fusion maps.
         \label{eq:asymex_czy_kernel}
     \end{align}
     where $\bar t_n=1-t_n$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -113,7 +113,7 @@ of its virtual space and the nontrivial associator of its fusion maps.
     $\prod_n(-1)^{s_n(1-s_{n+1})}$, which is~(\ref{eq:asymex_czy_kernel}).
 \end{proof}
 
-\begin{theorem}[Compression of the stacked square onto the identity]
+\begin{lemma}[Compression of the stacked square onto the identity]
     \label{thm:asymex_czy_compression}
     \lean{CZYCompression.czySquare_compression, CZYCompression.czySquareLeft,
         CZYCompression.czySquareRight, CZYCompression.czySquare_isReduction,
@@ -133,7 +133,7 @@ of its virtual space and the nontrivial associator of its fusion maps.
         \notag
     \end{align}
     for every choice of four index pairs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -161,7 +161,7 @@ In a picture, the compression pair closes the bond of the stacked square
 onto the bond-one identity tensor, letter by letter:
 \begin{center}
     % Formula: W\widetilde A_0^{ij}V=\delta^{ij}, the one-letter case of
-    % W\widetilde A_0^wV=\delta^w in Theorem~\ref{thm:asymex_czy_compression}.
+    % W\widetilde A_0^wV=\delta^w in Lemma~\ref{thm:asymex_czy_compression}.
     % Ink-to-index map: W is the row vector (0,1,-1,0) and V the column vector
     % (0,1,0,0)^T on the bond \C^4=\C^2\otimes\C^2 of \widetilde A_0; the
     % physical legs are the output i and the input j; \delta is the bond-one
@@ -187,7 +187,7 @@ onto the bond-one identity tensor, letter by letter:
 The next theorem states that the two stacked copies of $A_1$ contract,
 on every ring of $N\geq1$ sites, to the identity:
 \begin{center}
-    % Formula: U_N^2=\Id (Theorem~\ref{thm:asymex_czy_square_identity}), with
+    % Formula: U_N^2=\Id (Lemma~\ref{thm:asymex_czy_square_identity}), with
     % entries \sum_j U_N(i,j)U_N(j,k)=\delta_{i,k}.
     % Ink-to-index map: on the left, both rows are A_1, the upper row with
     % output i_n and the lower row with input k_n, and the vertical wire at
@@ -222,7 +222,7 @@ on every ring of $N\geq1$ sites, to the identity:
     \end{tenkz}
 \end{center}
 
-\begin{theorem}[The stacked operator is the identity at every positive length]
+\begin{lemma}[The stacked operator is the identity at every positive length]
     \label{thm:asymex_czy_square_identity}
     \lean{CZYCompression.czySquare_trace_evalWord, CZYCompression.mpo_czySquare,
         CZYCompression.mpo_czyTensor_mul_self,
@@ -234,19 +234,19 @@ on every ring of $N\geq1$ sites, to the identity:
     Consequently $U_N^2=\Id$ for every $N\geq1$, odd $N$ included. At
     $N=0$ the empty periodic contraction of the stacked square is
     $\tr(\Id_4)=4$, so the restriction $N\geq1$ is necessary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Proposition~\ref{prop:asym_compression_trace} applied to the
-    compression of Theorem~\ref{thm:asymex_czy_compression} gives the
+    Lemma~\ref{prop:asym_compression_trace} applied to the
+    compression of Lemma~\ref{thm:asymex_czy_compression} gives the
     trace identity, and Lemma~\ref{lem:asym_mpo_trace_eq} turns it into
     the identity of periodic operators, since $\delta$ generates $\Id$.
     The product formula of the operator of a stacked tensor gives
     $U_N^2=\Id$.
 \end{proof}
 
-\begin{theorem}[Nonsplitting of the stacked square]
+\begin{lemma}[Nonsplitting of the stacked square]
     \label{thm:asymex_czy_no_intertwiner}
     \lean{CZYCompression.czySquare_right_intertwiner_eq_zero,
         CZYCompression.czySquare_left_intertwiner_eq_zero,
@@ -260,7 +260,7 @@ on every ring of $N\geq1$ sites, to the identity:
     compression of $\widetilde A_0$ onto $\delta$ has a nonzero remainder,
     and the algebra generated by the matrices of $\widetilde A_0$ is not
     closed under conjugate transposition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -292,7 +292,7 @@ on every ring of $N\geq1$ sites, to the identity:
     \end{align}
 \end{definition}
 
-\begin{theorem}[The printed change of basis]
+\begin{lemma}[The printed change of basis]
     \label{thm:asymex_czy_printed_reduction}
     \lean{CZYCompression.czyX11, CZYCompression.czyX11_mul_transpose,
         CZYCompression.czyX11_conj, CZYCompression.czyReducedPadInt_apply}
@@ -311,7 +311,7 @@ on every ring of $N\geq1$ sites, to the identity:
     of~\cite[Appendix~B]{Liu2025Bialgebraic} is orthogonal, and
     $X_{1,1}\widetilde A_0^{ij}X_{1,1}^{-1}=A_0^{ij}\oplus0$ for every
     index pair, exactly as printed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -322,7 +322,7 @@ on every ring of $N\geq1$ sites, to the identity:
         =2(A_0^{ij}\oplus0)$.
 \end{proof}
 
-\begin{theorem}[Compression of the reduced tensor]
+\begin{lemma}[Compression of the reduced tensor]
     \label{thm:asymex_czy_reduced_compression}
     \lean{CZYCompression.czyReduced_compression,
         CZYCompression.czyReduced_evalWord_remainder_eq_zero,
@@ -339,7 +339,7 @@ on every ring of $N\geq1$ sites, to the identity:
     \end{align}
     for every choice of three index pairs, and the periodic operator of $A_0$
     is the identity at every length $N\geq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -347,11 +347,11 @@ on every ring of $N\geq1$ sites, to the identity:
     The matrices $A_0^{00}$ and $A_0^{11}$ are upper triangular with
     diagonal $(0,1,0)$ while the mixed matrices vanish, so the diagonal is
     $(0,\delta^{ij},0)$, and the argument of
-    Theorem~\ref{thm:asymex_czy_square_identity} then equates the periodic
+    Lemma~\ref{thm:asymex_czy_square_identity} then equates the periodic
     operator of $A_0$ with the identity at every positive length.
 \end{proof}
 
-\begin{theorem}[The reduced tensor does not split]
+\begin{lemma}[The reduced tensor does not split]
     \label{thm:asymex_czy_reduced_nonsplit}
     \lean{CZYCompression.czyReduced_right_intertwiner_eq_zero,
         CZYCompression.czyReduced_left_intertwiner_eq_zero,
@@ -367,14 +367,14 @@ on every ring of $N\geq1$ sites, to the identity:
     proper subalgebra of the $3\times3$ matrices; as stated
     in~\cite[Section~II]{Liu2025Bialgebraic}, $A_0$ is therefore not
     injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     For $X=(a,b,c)^{\mathsf T}$, $A_0^{00}X=X$ gives $c=0$ and $a=-b$,
     and $A_0^{11}X=X$ then gives $b=0$. For $Y=(p,q,r)$,
     $YA_0^{00}=Y$ gives $p=0$ and $r=-q$, and $YA_0^{11}=Y$ gives $q=0$.
-    The argument of Theorem~\ref{thm:asymex_czy_no_intertwiner} then shows
+    The argument of Lemma~\ref{thm:asymex_czy_no_intertwiner} then shows
     that every compression remainder is nonzero and that the generated
     algebra fails to be closed under conjugate transposition; since the
     full $3\times3$ matrix algebra is closed under conjugate
@@ -382,7 +382,7 @@ on every ring of $N\geq1$ sites, to the identity:
 \end{proof}
 
 
-\begin{theorem}[Indecomposability of the reduced virtual space]
+\begin{lemma}[Indecomposability of the reduced virtual space]
     \label{thm:asymex_czy_reduced_indecomposable}
     \lean{CZYCompression.czyReduced_commutant_form,
         CZYCompression.czyReduced_commuting_idempotent,
@@ -396,7 +396,7 @@ on every ring of $N\geq1$ sites, to the identity:
     In particular, as asserted in~\cite[Section~II]{Liu2025Bialgebraic},
     no simultaneous bond similarity decomposes $A_0$ into a direct sum of
     injective matrix product operators.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -409,11 +409,11 @@ on every ring of $N\geq1$ sites, to the identity:
     therefore zero or the whole space.
     Any direct sum of two or more blocks would yield a nontrivial
     invariant decomposition, while
-    Theorem~\ref{thm:asymex_czy_reduced_nonsplit} excludes a single
+    Lemma~\ref{thm:asymex_czy_reduced_nonsplit} excludes a single
     injective block.
 \end{proof}
 
-\begin{theorem}[A one-sided fusion identity]
+\begin{lemma}[A one-sided fusion identity]
     \label{thm:asymex_czy_fusion}
     \lean{CZYCompression.czyY00_fusion}
     \leanok
@@ -430,7 +430,7 @@ on every ring of $N\geq1$ sites, to the identity:
     \end{align}
     Then $Y_{0,0}\sum_jA_0^{ij}\otimes A_0^{jk}=A_0^{ik}Y_{0,0}$ for all
     $i,k$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -438,11 +438,11 @@ on every ring of $N\geq1$ sites, to the identity:
     the identity for each index pair $(i,k)$.
 \end{proof}
 
-The identity of Theorem~\ref{thm:asymex_czy_fusion} moves $Y_{0,0}$ from the
+The identity of Lemma~\ref{thm:asymex_czy_fusion} moves $Y_{0,0}$ from the
 west of two stacked copies of $A_0$ to the east of one copy:
 \begin{center}
     % Formula: Y_{0,0}\sum_jA_0^{ij}\otimes A_0^{jk}=A_0^{ik}Y_{0,0}
-    % (Theorem~\ref{thm:asymex_czy_fusion}); compare the fusion tensors of
+    % (Lemma~\ref{thm:asymex_czy_fusion}); compare the fusion tensors of
     % \cite[Appendix~B]{Liu2025Bialgebraic}.
     % Ink-to-index map: the tall box is Y_{0,0}, a map from \C^3\otimes\C^3 to
     % \C^3, with its single bond leg on the west and its two product-bond legs
@@ -490,7 +490,7 @@ west of two stacked copies of $A_0$ to the east of one copy:
     \end{align}
 \end{definition}
 
-\begin{theorem}[Local fusion and the nontrivial triple]
+\begin{lemma}[Local fusion and the nontrivial triple]
     \label{thm:asymex_czy_nontrivial_associator}
     \lean{CZYCompression.czyY01_fusion, CZYCompression.czyY10_fusion,
         CZYCompression.czyY11_fusion, CZYCompression.czyFusion_nontrivial_triple}
@@ -502,7 +502,7 @@ west of two stacked copies of $A_0$ to the east of one copy:
     At the nontrivial triple, in the normalization
     of~\cite[Section~II]{Liu2025Bialgebraic}, these maps satisfy
     $Y_{0,1}(Y_{1,1}\otimes I_2)=-Y_{1,0}(I_2\otimes Y_{1,1})$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -512,7 +512,7 @@ west of two stacked copies of $A_0$ to the east of one copy:
     nontrivial triple.
 \end{proof}
 
-\begin{theorem}[Associativity on the physical images]
+\begin{lemma}[Associativity on the physical images]
     \label{thm:asymex_czy_supported_associativity}
     \lean{CZYCompression.czyDim, CZYCompression.czyFamilyInt,
         CZYCompression.czyFusionInt, CZYCompression.czyTripleInt,
@@ -536,7 +536,7 @@ west of two stacked copies of $A_0$ to the east of one copy:
     On the full virtual space, by contrast, the printed neutral fusions
     admit no scalar comparison: the entry in row one and column $(3,3,1)$
     is two on the left and zero on the right.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

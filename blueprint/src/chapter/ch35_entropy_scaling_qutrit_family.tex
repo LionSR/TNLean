@@ -1,7 +1,7 @@
 \section{The qutrit family for entropy scaling}
 
-The following family is the state introduced in~\cite{Schuch2008EntropyScaling},
-arXiv:0705.0292v2, at the start of the examples.
+The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
+(arXiv:0705.0292v2).
 
 \begin{definition}[Qutrit state and its weights]
     \label{def:qutrit_entropy_scaling_state}
@@ -13,22 +13,20 @@ arXiv:0705.0292v2, at the start of the examples.
         TNLean.MPS.AreaLaw.EntropyScaling.qutritHalves,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritHalves_append}
     \leanok
-    Let $N$ be a positive integer and let $0\le p\le1$. On $2N$ qutrits define
+    For $N\ge1$ and $0\le p\le1$, define on $2N$ qutrits
     \begin{align}
         \ket{\psi_{2N}(p)}
         =\sqrt{1-p}\ket{2}^{\otimes2N}
-        +\sqrt{p/2^N}\sum_{x\in{\{0,1\}}^N}\ket{x}\ket{x}.
+        +\sqrt{p/2^N}\sum_{x\in{\{0,1\}}^N}\ket{x}\ket{x},
         \label{eq:qutrit_entropy_scaling_state}
     \end{align}
-    The coefficient labels are a flag $\star$ and the binary words $x$ of
-    length $N$. Their half-chain words are $w_\star=(2,\ldots,2)$ and $w_x=x$,
-    and their squared coefficients are
-    $\lambda_\star=1-p$ and $\lambda_x=p/2^N$.
-    Splitting a chain configuration after its first $N$ sites gives its two
-    half-chain configurations. The source's family takes $p=p_N=1/N$.
+    indexed by $i\in\{\star\}\sqcup\{0,1\}^N$ with half-chain words
+    $w_\star=(2,\ldots,2)$, $w_x=x$ and weights $\lambda_\star=1-p$,
+    $\lambda_x=p/2^N$; the family of~\cite{Schuch2008EntropyScaling} sets
+    $p=p_N=1/N$.
 \end{definition}
 
-\begin{theorem}[Orthonormal Schmidt vectors]
+\begin{lemma}[Orthonormal Schmidt vectors]
     \label{thm:qutrit_entropy_scaling_orthonormal}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.orthonormal_qutritWord,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritWord_injective,
@@ -38,17 +36,16 @@ arXiv:0705.0292v2, at the start of the examples.
         TNLean.MPS.AreaLaw.EntropyScaling.qutritBasisMatrix_conjTranspose}
     \leanok
     \uses{def:qutrit_entropy_scaling_state}
-    The vectors $e_i=\ket{w_i}$ are a real orthonormal family, as are
-    $\ket{w_i}\ket{w_i}$. Thus the matrix $B$ with columns $e_i$ satisfies
+    The vectors $e_i=\ket{w_i}$ (and $\ket{w_i}\ket{w_i}$) are real and
+    orthonormal, so the matrix $B$ with columns $e_i$ satisfies
     $B^\dagger B=1$ and $B^\dagger=B^{\mathsf T}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    The binary words are distinct, and no binary word equals the flag word
-    when $N>0$. Apply orthonormality of the computational basis and of its
-    doubled configurations.
+    Since $N\ge1$, $w_\star\notin\{0,1\}^N$, so $i\mapsto w_i$ is injective into
+    the computational basis.
 \end{proof}
 
-\begin{theorem}[Normalization]
+\begin{lemma}[Normalization]
     \label{thm:qutrit_entropy_scaling_normalization}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.norm_qutritState,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritWeight_nonneg,
@@ -56,15 +53,14 @@ arXiv:0705.0292v2, at the start of the examples.
         TNLean.MPS.AreaLaw.EntropyScaling.norm_qutritFamily}
     \leanok
     \uses{def:qutrit_entropy_scaling_state}
-    The weights $\lambda_i$ are nonnegative and sum to one, and
-    $\|\psi_{2N}(p)\|=1$. In particular, $\|\psi_{2N}(1/N)\|=1$.
-\end{theorem}
+    For $0\le p\le1$, $\lambda_i\ge0$, $\sum_i\lambda_i=1$, and
+    $\|\psi_{2N}(p)\|=1$; in particular, $\|\psi_{2N}(1/N)\|=1$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_orthonormal}
-    There are $2^N$ binary words, so
-    $\sum_i\lambda_i=1-p+2^N(p/2^N)=1$.
-    Orthonormality in~(\ref{eq:qutrit_entropy_scaling_state}) gives the
-    asserted norm. For $N\ge1$, one has $0<1/N\le1$.
+    By Lemma~\ref{thm:qutrit_entropy_scaling_orthonormal} and
+    (\ref{eq:qutrit_entropy_scaling_state}),
+    $\|\psi_{2N}(p)\|^2=\sum_i\lambda_i=(1-p)+2^N(p/2^N)=1$.
 \end{proof}
 
 \begin{definition}[Middle coefficient matrix and marginal]
@@ -74,14 +70,12 @@ arXiv:0705.0292v2, at the start of the examples.
         TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMarginal}
     \leanok
     \uses{def:qutrit_entropy_scaling_state}
-    Write the state in the two half-chain coordinates, and let
-    $C_{a,b}=\langle a,b\mid\psi_{2N}(p)\rangle$.
-    Its left marginal is
-    $\rho=\operatorname{Tr}_{\mathrm{right}}
-        \ket{\psi_{2N}(p)}\!\bra{\psi_{2N}(p)}=CC^\dagger$.
+    In the two $N$-site half-chain coordinates, define the coefficient matrix
+    $C_{a,b}=\langle a,b\mid\psi_{2N}(p)\rangle$ and left marginal
+    $\rho=\operatorname{Tr}_{\mathrm{right}}\ket{\psi_{2N}(p)}\!\bra{\psi_{2N}(p)}=CC^\dagger$.
 \end{definition}
 
-\begin{theorem}[Identification with the chain marginal]
+\begin{lemma}[Identification with the chain marginal]
     \label{thm:qutrit_entropy_scaling_native_marginal}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritLeftConfigurationEquiv,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritRightConfigurationEquiv,
@@ -90,78 +84,72 @@ arXiv:0705.0292v2, at the start of the examples.
         TNLean.MPS.AreaLaw.EntropyScaling.regionState_qutritState_reindex}
     \leanok
     \uses{def:qutrit_entropy_scaling_middle}
-    Numbering the sites in each half from zero identifies $C$ with the
-    coefficient matrix of the actual chain cut after its first $N$ sites.
-    Under the same relabelling on the left half, $\rho$ is the regional
-    state of these first $N$ sites.
-\end{theorem}
+    Identifying $\lbrack0,2N)\simeq\lbrack0,N)\sqcup\lbrack0,N)$ via $j\mapsto j-N$ on $\lbrack N,2N)$
+    identifies $C$ with the chain cut matrix at $N$ and $\rho=CC^\dagger$ with
+    the regional state $\rho_{\lbrack0,N)}$.
+\end{lemma}
 \begin{proof}\leanok
-    Restrict a configuration to the first half and to the second half,
-    subtracting $N$ from the site indices of the latter. This is the same
-    decomposition as the two half-chain coordinates. Relabel the cut matrix
-    accordingly. Its product with its adjoint gives the asserted marginal.
+    Restricting configurations to $\lbrack0,N)$ and $\lbrack N,2N)$ matches the half-chain
+    product coordinates in Definition~\ref{def:qutrit_entropy_scaling_middle}.
 \end{proof}
 
-\begin{theorem}[Middle-cut Schmidt factorization]
+\begin{lemma}[Middle-cut Schmidt factorization]
     \label{thm:qutrit_entropy_scaling_schmidt}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMatrix_factorization,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleVector_eq}
     \leanok
     \uses{def:qutrit_entropy_scaling_middle,
         thm:qutrit_entropy_scaling_orthonormal}
-    With $B$ as above, $C=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger$.
-\end{theorem}
+    With $B$ from Lemma~\ref{thm:qutrit_entropy_scaling_orthonormal},
+    $C=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger$.
+\end{lemma}
 \begin{proof}\leanok
-    Split each doubled word in~(\ref{eq:qutrit_entropy_scaling_state}) at
-    the middle cut. Its two factors are both $e_i$, with coefficient
-    $\sqrt{\lambda_i}$. Since the vectors $e_i$ are real, their transpose
-    equals their adjoint in the coefficient matrix.
+    By~(\ref{eq:qutrit_entropy_scaling_state}) and $B^{\mathsf T}=B^\dagger$,
+    $C=\sum_i\sqrt{\lambda_i}\,e_ie_i^{\mathsf T}=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger$.
 \end{proof}
 
-\begin{theorem}[Diagonalization of the middle marginal]
+\begin{lemma}[Diagonalization of the middle marginal]
     \label{thm:qutrit_entropy_scaling_marginal}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMarginal_factorization}
     \leanok
     \uses{def:qutrit_entropy_scaling_middle,
         thm:qutrit_entropy_scaling_orthonormal}
     The left marginal satisfies $\rho=B\operatorname{diag}(\lambda_i)B^\dagger$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_schmidt,
         thm:qutrit_entropy_scaling_orthonormal}
-    Substitute the Schmidt factorization into $CC^\dagger$, use
-    $B^\dagger B=1$, and square the nonnegative square roots of the weights.
+    By Lemmas~\ref{thm:qutrit_entropy_scaling_schmidt}
+    and~\ref{thm:qutrit_entropy_scaling_orthonormal},
+    $\rho=CC^\dagger=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger=B\operatorname{diag}(\lambda_i)B^\dagger$.
 \end{proof}
 
-\begin{theorem}[Complete middle-cut spectrum]
+\begin{lemma}[Complete middle-cut spectrum]
     \label{thm:qutrit_entropy_scaling_spectrum}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.charpoly_qutritMiddleMarginal,
         TNLean.MPS.AreaLaw.EntropyScaling.charpoly_qutritFamily_middle,
         TNLean.MPS.AreaLaw.EntropyScaling.charpoly_regionState_qutritState}
     \leanok
     \uses{def:qutrit_entropy_scaling_middle}
-    The characteristic polynomial of the middle marginal, and therefore of
-    the actual first-$N$-site regional state, is
+    The characteristic polynomial of $\rho$ (and of $\rho_{[0,N)}$) is
     \begin{align}
         \det(tI-\rho)
         =t^{3^N-1-2^N}\bigl(t-(1-p)\bigr)
-        {\bigl(t-p/2^N\bigr)}^{2^N}.
+        {\bigl(t-p/2^N\bigr)}^{2^N},
         \label{eq:qutrit_entropy_scaling_charpoly}
     \end{align}
-    Thus its squared Schmidt coefficients are $1-p$, one copy of $p/2^N$
-    for each binary word, and the remaining zeros. This statement includes
-    zero weights at $p=0$ and $p=1$, and applies to $p=1/N$.
-\end{theorem}
+    so the eigenvalues of $\rho$ are $1-p$, $p/2^N$ (with multiplicity $2^N$),
+    and $0$ (with multiplicity $3^N-1-2^N$).
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_marginal,
         thm:qutrit_entropy_scaling_native_marginal,
         thm:qutrit_entropy_scaling_orthonormal}
-    The injective map from the labels to the half-chain words gives
-    $1+2^N\le3^N$. Apply the rectangular determinant identity to
-    $B\operatorname{diag}(\lambda_i)B^\dagger$ and
-    $\operatorname{diag}(\lambda_i)B^\dagger B
-        =\operatorname{diag}(\lambda_i)$. The remaining $3^N-1-2^N$
-    dimensions contribute zero eigenvalues. The diagonal entries give
-    the flag factor and the $2^N$ equal binary factors in
-    (\ref{eq:qutrit_entropy_scaling_charpoly}).
+    By Lemmas~\ref{thm:qutrit_entropy_scaling_marginal}
+    and~\ref{thm:qutrit_entropy_scaling_orthonormal},
+    $\rho=B\operatorname{diag}(\lambda_i)B^\dagger$ with $B^\dagger B=1_{1+2^N}$,
+    and $\det(tI-XY)=t^{3^N-(1+2^N)}\det(tI-YX)$ gives
+    (\ref{eq:qutrit_entropy_scaling_charpoly});
+    Lemma~\ref{thm:qutrit_entropy_scaling_native_marginal} transfers this to
+    $\rho_{[0,N)}$.
 \end{proof}

@@ -17,7 +17,7 @@
     \begin{align*}
         B=H'_L+\sum_{j=0}^{s-3}h_{a+1+j}+H'_R,
     \end{align*}
-    where $H'_L$ acts on $[0,a+2)$ and $H'_R$ acts on $[a+s-1,L)$.
+    where $H'_L$ acts on $[0,a+2)$ and $H'_R$ acts on ${[a+s-1,L)}$.
     This window has width $s-2$ and the same central cut, since
     \begin{align*}
         a+1+\left\lfloor\frac{s-2}{2}\right\rfloor
@@ -37,13 +37,13 @@
     decomposition of the same operator.
 \end{proof}
 
-\begin{theorem}[A clipped physical filter]
+\begin{lemma}[A clipped physical filter]
     \label{thm:aklv_clipped_physical_filter}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_clipped_chebyshev_filter}
     \leanok
     \uses{thm:aklv_physical_robustness,lem:aklv_clipped_hamiltonian_data}
     Under the physical hypotheses of
-    Theorem~\ref{thm:aklv_physical_robustness}, choose the three actual
+    Lemma~\ref{thm:aklv_physical_robustness}, choose the three actual
     reference minima and the normalized original ground energy $E_0$.
     For every
     \begin{align*}
@@ -58,11 +58,11 @@
     $\ell$, with $p(E)=1$, such that $K=p(B)$ fixes $\phi$ and
     \begin{align*}
         \|K-|\phi\rangle\langle\phi|\|
-        &\le A,
-        & A&=2\exp\left(-2\ell\sqrt{\frac{9g}{10(2t+s)}}\right),\\
+         & \le A,
+         & A                           & =2\exp\left(-2\ell\sqrt{\frac{9g}{10(2t+s)}}\right), \\
         \operatorname{OSR}_{a+\lfloor s/2\rfloor}(K)
-        &\le\bigl(q(\ell+1)\bigr)^ {
-            32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}.
+         & \le\bigl(q(\ell+1)\bigr)^ {
+                32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}.
     \end{align*}
     Moreover, $K$ preserves $\phi^\perp$ and
     $\|K\psi\|^2\le A^2$ for every unit $\psi\perp\phi$.
@@ -70,7 +70,7 @@
     This constructs the physical filter used after
     \cite[Theorem~6.1]{Arad2013AreaLaw}, for the stated window range;
     it does not assert the later varying-truncation entropy construction.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_physical_chebyshev_filter}
@@ -79,7 +79,7 @@
     gives
     \begin{align*}
         B-E\Id\ge\frac{9g}{10}
-            (\Id-|\phi\rangle\langle\phi|).
+        (\Id-|\phi\rangle\langle\phi|).
     \end{align*}
     The preceding lemma supplies the ceiling $2t+s$ and the shorter supported
     window at the original central cut. Apply the Chebyshev construction and
@@ -91,13 +91,13 @@
     $\phi^\perp$.
 \end{proof}
 
-\begin{corollary}[The clipped filter above a logarithmic threshold]
+\begin{lemma}[The clipped filter above a logarithmic threshold]
     \label{cor:aklv_logarithmic_clipped_filter}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_logarithmic_clipped_chebyshev_filter}
     \leanok
     \uses{def:aklv_logarithmic_threshold,thm:aklv_clipped_physical_filter}
     Under the physical hypotheses of
-    Theorem~\ref{thm:aklv_clipped_physical_filter}, one has $q\ge2$ and
+    Lemma~\ref{thm:aklv_clipped_physical_filter}, one has $q\ge2$ and
     $g\le1$. The regional minima can be chosen before $t$ so that every
     conclusion of that theorem holds already for
     \begin{align*}
@@ -105,14 +105,14 @@
     \end{align*}
     In particular, the actual ground vector, projector gap, spectral ceiling,
     and same-cut polynomial rank bound require no supplied auxiliary data.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_logarithmic_robustness,
         lem:aklv_clipped_hamiltonian_data,thm:aklv_physical_chebyshev_filter}
     Use the stronger logarithmic robustness theorem to construct the
     actual ground vector. The norm, spatial decomposition and Chebyshev
-    argument of Theorem~\ref{thm:aklv_clipped_physical_filter} then apply
+    argument of Lemma~\ref{thm:aklv_clipped_physical_filter} then apply
     unchanged to the same clipped matrix. The polynomial-threshold
     version follows from $T(g)\le1024/g$ and $E_0\ge0$.
 \end{proof}

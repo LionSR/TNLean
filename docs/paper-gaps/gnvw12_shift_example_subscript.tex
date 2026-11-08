@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\input{command}
+
+\title{Support Subscript in the GNVW Shift Example}
+\author{}
+\date{2026-10-30}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed example}
+
+The source Heisenberg shift sends the observable algebra at site $y$ to
+that at $y-1$ \cite[lines~609--621]{Gross2012IndexTheory}. Thus it moves
+observables left and states right. For each $x\in\mathbb Z$ write
+$E_x=\{2x,2x+1\}$, $L_x=\{2x-1,2x\}$ and $P_x=\{2x+1,2x+2\}$, and let
+$\mathcal R_{2x}$ and $\mathcal R_{2x+1}$ be the left and right support
+algebras of the image of $\mathcal A_{E_x}$ in the ordered
+$L_x\times P_x$ coordinates, as in equation \texttt{RR2x} of
+\cite[lines~1251--1266]{Gross2012IndexTheory}. The shift example at
+source line~1268 lists the two support algebras of the shift with the even
+subscript repeated for the scalar factor.
+
+\section{The corrected subscript}
+
+Translation by $-1$ sends $E_x$ onto $L_x$, so its finite image is the
+full left factor in the ordered $L_x\times P_x$ coordinates.
+Consequently
+\begin{align}
+    \mathcal R_{2x}   & =\mathcal A_{L_x}, &
+    \mathcal R_{2x+1} & =\mathbb C I.
+    \label{eq:gnvw12_shift_corrected_support_subscript}
+\end{align}
+The second subscript must be odd, as in
+(\ref{eq:gnvw12_shift_corrected_support_subscript}). For nontrivial
+on-site dimension, the full left factor and the scalar factor are
+distinct algebras, so the repeated even subscript cannot be read
+literally. The correction changes only the subscript; the surrounding
+argument of the source is unchanged.
+
+The actual sizes are $r(2x)=d^2$ and $r(2x+1)=1$, hence the positive
+rational index is $d$, as stated in
+\cite[lines~1325--1329]{Gross2012IndexTheory}. Translation by $+1$ has
+the opposite pair of support factors and index $d^{-1}$. The latter is a
+direct orientation check in the same coordinates, not a use of an
+index-composition or index-inversion law.
+
+\section{Status}
+
+The corrected support factors and both index values are proved for the
+homogeneous chain.%
+\footnote{Formal declarations:
+    \leanid{SpinChain.PropagatesWithin.supportAlgebras_quasiLocalTranslation_neg_one},
+    \leanid{SpinChain.PropagatesWithin.supportAlgebras_quasiLocalTranslation_one},
+    \leanid{SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_neg_one},
+    and
+    \leanid{SpinChain.PropagatesWithin.gnvwIndex_quasiLocalTranslation_one}
+    in \doclink{TNLean/QCA/GNVWShift}.}
+The homogeneous-chain restriction of these statements is a separate scope
+restriction, recorded in
+\path{docs/paper-gaps/gnvw12_site_dependent_adjacent_generation_scope.tex}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

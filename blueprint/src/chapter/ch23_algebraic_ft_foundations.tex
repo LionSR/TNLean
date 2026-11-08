@@ -123,13 +123,13 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     is vacuous.
 \end{definition}
 
-\begin{theorem}[Empty open-chain coefficient]
+\begin{lemma}[Empty open-chain coefficient]
     \label{thm:varying_bond_obc_coeff_zero}
     \lean{OBCChainTensor.coeff_zero}
     \leanok
     \uses{def:varying_bond_obc_coeff}
     At $N=0$, the open-chain coefficient is $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -138,14 +138,14 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     Its product contains no factors and therefore equals $1$.
 \end{proof}
 
-\begin{theorem}[Vanishing from a zero virtual dimension]
+\begin{lemma}[Vanishing from a zero virtual dimension]
     \label{thm:varying_bond_obc_zero_bond}
     \lean{OBCChainTensor.coeff_eq_zero_of_bondDim_eq_zero}
     \leanok
     \uses{def:varying_bond_obc_coeff}
     If $D_k=0$ for some $k\in\{0,\ldots,N\}$, then
     $c_A(\sigma)=0$ for every physical configuration $\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -169,13 +169,13 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     matrices into the off-diagonal blocks of an $ND\times ND$ cyclic matrix.
 \end{definition}
 
-\begin{theorem}[Empty padded-chain coefficient]
+\begin{lemma}[Empty padded-chain coefficient]
     \label{thm:varying_bond_obc_zero_pad_zero}
     \lean{OBCChainTensor.coeff_zeroPad_zero}
     \leanok
     \uses{def:varying_bond_obc_zero_pad, def:non_ti_chain}
     At $N=0$, the coefficient of the padded square chain is $D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -183,7 +183,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     The empty matrix product is the $D\times D$ identity, whose trace is $D$.
 \end{proof}
 
-\begin{theorem}[Zero-extension of a dependent finite sum]
+\begin{lemma}[Zero-extension of a dependent finite sum]
     \label{thm:pi_fin_sum_zero_extension}
     \lean{Fintype.sum_piFin_castLE_extend_zero}
     \leanok
@@ -192,7 +192,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     the sum of $f$ over $\prod_{i\in I}\{0,\ldots,r_i-1\}$ equals its sum over
     $\prod_{i\in I}\{0,\ldots,s_i-1\}$ after extending $f$ by zero outside
     the smaller Cartesian product.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -201,7 +201,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     original bound. Split the larger sum into this subset and its complement.
 \end{proof}
 
-\begin{theorem}[Cyclic path expansion for a square chain]
+\begin{lemma}[Cyclic path expansion for a square chain]
     \label{thm:chain_coeff_sum_cyclic}
     \lean{MPSChainTensor.coeff_eq_sum_cyclic}
     \leanok
@@ -215,7 +215,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
         (B_k^{\sigma_k})_{g(k),g(k+1)}.
         \label{eq:chain_coeff_sum_cyclic}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -224,7 +224,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     apply the cyclic trace expansion for a closed matrix product.
 \end{proof}
 
-\begin{theorem}[Positive-length coefficient preservation]
+\begin{lemma}[Positive-length coefficient preservation]
     \label{thm:varying_bond_obc_zero_pad_coeff}
     \lean{OBCChainTensor.coeff_zeroPad}
     \leanok
@@ -239,20 +239,20 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     No positivity assumption is imposed on the intermediate dimensions. The
     endpoint conditions already imply $D\geq1$ whenever such a chain exists.
     The equality concerns only this fixed length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:chain_coeff_sum_cyclic, thm:pi_fin_sum_zero_extension, def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
     Expanding the left-hand side by~(\ref{eq:chain_coeff_sum_cyclic}) and extending the
     dependent sum in~(\ref{eq:varying_bond_obc_coeff}) to the common dimension
-    $D$ via Theorem~\ref{thm:pi_fin_sum_zero_extension} isolates the rectangular bond ranges: every extended path
+    $D$ via Lemma~\ref{thm:pi_fin_sum_zero_extension} isolates the rectangular bond ranges: every extended path
     outside those ranges has a zero matrix entry. For the
     remaining paths, the one-dimensional endpoint spaces identify the last
     virtual coordinate with the first, so the products agree term by term.
 \end{proof}
 
-\begin{theorem}[Padded coefficient with a zero virtual dimension]
+\begin{lemma}[Padded coefficient with a zero virtual dimension]
     \label{thm:varying_bond_obc_zero_pad_zero_bond}
     \lean{OBCChainTensor.coeff_zeroPad_eq_zero_of_bondDim_eq_zero}
     \leanok
@@ -260,7 +260,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     Let $N\geq1$. If $D_k=0$ for some
     $k\in\{0,\ldots,N\}$, then the padded square-chain coefficient vanishes
     for every physical configuration.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -289,7 +289,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     depends on the fixed length $N$.
 \end{definition}
 
-\begin{theorem}[Fixed-length cyclic block average]
+\begin{lemma}[Fixed-length cyclic block average]
     \label{thm:chain_cyclic_block_average}
     \lean{MPSChainTensor.mpv_cyclicBlockTensor_eq_average}
     \leanok
@@ -306,7 +306,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     identifies this with the physical-configuration rotation in
     \cite[Theorem~3]{PerezGarcia2007Matrix}. This identity concerns only the
     fixed length $N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -337,7 +337,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 % Scope restriction (supplied OBC representation): PGVWC07 Theorem 3 also
 % obtains this input from purity via its OBC representation theorem. See
 % docs/paper-gaps/pgvwc07_site_independent_scope.tex.
-\begin{theorem}[Conditional site-independent matrices at fixed length]
+\begin{lemma}[Conditional site-independent matrices at fixed length]
     \label{thm:pgvwc07_site_independent_matrices}
     \lean{OBCChainTensor.pgvwc07_site_independent_matrices,
         OBCChainTensor.exists_pgvwc07_site_independent_tensor}
@@ -350,7 +350,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     bond dimension $ND$ with the same length-$N$ coefficients.
     The constructed tensor depends on $N$, and the equality holds only
     at this ring length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -389,6 +389,8 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 \end{proof}
 
 %% ---------------------------------------------------------
+\input{chapter/ch23_obc_canonical}
+
 \section{Quadratic reconstruction of the translation-invariant canonical form}%
 \label{sec:quadratic_reconstruction}
 %% ---------------------------------------------------------
@@ -554,70 +556,195 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     Lemma~\ref{lem:pgvwc07_quadratic_system_units}.
 \end{proof}
 
-\begin{theorem}[Obtaining the translation-invariant canonical form]
+\begin{lemma}[Intertwiner from a complete chain of cuts]
+    \label{lem:pgvwc07_complete_chain_intertwiner}
+    \lean{MPSTensor.exists_intertwiner_of_kronecker_chain}
+    \leanok
+    \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner}
+    Let $B,C\in\MN{D}^d$ and let $W_0,\ldots,W_{D^4}$ be nonzero matrices on
+    the doubled bond space with
+    \begin{align}
+        W_k(C_i\otimes\Id) & =(B_i\otimes\Id)W_{k+1}
+        \qquad(0\le k\le D^4-1,\ \text{every }i).
+        \label{eq:pgvwc07_complete_chain_relation}
+    \end{align}
+    Then there are a nonzero matrix $R\in\MN{D}$ and a scalar $x\neq0$ with
+    $RC_i=\tfrac1xB_iR$ for every $i$. This is the dependence step of the
+    proof of \cite[Theorem~7]{PerezGarcia2007Matrix}, with the corrected
+    count of $D^4+1$ cuts \cite{gap:pgvwc07_intertwiner_chain_off_by_one}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $\MN{D^2}$ has dimension $D^4$, there is a first index $n\ge1$
+    such that $W_0,\ldots,W_{n-1}$ are linearly independent and
+    $W_n=\sum_{k<n}\lambda_kW_k$; some $\lambda_k$ is nonzero because
+    $W_n\neq0$, so the polynomial equation
+    (\ref{eq:chain_combination_polynomial}) has positive degree and a nonzero
+    root $x$. Lemma~\ref{lem:pgvwc07_chain_combination}, applied to right
+    multiplication by $C_i\otimes\Id$ and left multiplication by
+    $B_i\otimes\Id$, gives a nonzero combination $W$ of $W_0,\ldots,W_{n-1}$
+    with $W(C_i\otimes\Id)=(\tfrac1xB_i\otimes\Id)W$ for every $i$, and
+    Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} extracts a nonzero
+    multiplicity slice $R$.
+\end{proof}
+
+\begin{lemma}[Obtaining the translation-invariant canonical form]
     \label{thm:pgvwc07_quadratic_reconstruction}
-    \notready
-    \uses{def:pgvwc07_quadratic_system}
-    Consider a translation-invariant state on an $N$-site ring with unique
-    open-boundary canonical form such that the rank of each reduced density
-    operator of successive spins is bounded by $D^2$, and form the quadratic
-    system of Definition~\ref{def:pgvwc07_quadratic_system} over the window of
-    $D^4$ open-boundary canonical matrices starting after the injectivity
-    onset. Write $A=(A_i)_i$ for its canonical translation-invariant tensor.
+    \lean{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase,
+        MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge}
+    \leanok
+    \uses{def:pgvwc07_quadratic_system, def:pgvwc07_ti_canonical_representation,
+        def:l_blk_injective}
+    Consider a nonzero translation-invariant state on a ring of $N$ sites
+    with unique open-boundary canonical form such that the rank of each
+    reduced density operator of successive spins is bounded by $D^2$.
+    Suppose that the state admits a translation-invariant matrix product
+    representation of bond dimension $D$ satisfying condition C1 at length
+    $L_0$, and that
+    \begin{align}
+        N & >2L_0+D^4.
+        \label{eq:pgvwc07_quadratic_reconstruction_size}
+    \end{align}
+    Under condition C1 the canonical form of the state has a single block.
+    Its weight only rescales the state, so write $A=(A_i)_i$ for the
+    canonical tensor normalized by $\sum_iA_iA_i^{\dagger}=\Id$. The
+    open-boundary canonical matrices at the $D^4$ sites after the onset
+    $L_0$ act between spaces of dimension $D^2$; form the quadratic system
+    of Definition~\ref{def:pgvwc07_quadratic_system} over this window.
     \begin{enumerate}
-        \item If the state admits a translation-invariant matrix product
-              representation satisfying injectivity (condition C1), then the system has a
-              solution.
-        \item Let $B=(B_i)_i$ be the tensor of a solution and suppose in
-              addition that its length-$N$ trace-MPS representation is the
-              given state. Then there are a unitary $U$ and a scalar
-              $\xi\in\C$ such that $|\xi|=1$, $\xi^N=1$, and
+        \item The system has a solution.
+        \item Let $B=(B_i)_i$ be the tensor of any solution. Then there are
+              a unitary $U$ and a scalar $\xi\in\C$ with $|\xi|=1$ such that
               \begin{align}
                   A_i & =\xi UB_iU^{\dagger}
                   \qquad\text{for every }i.
                   \label{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}
               \end{align}
-              Consequently the explicitly rephased tensor
-              $\widehat B_i:=\xi B_i$ still represents the same length-$N$
-              state and is exactly unitarily conjugate to $A$.
+              Consequently the rephased tensor $\widehat B_i:=\xi B_i$
+              represents the same length-$N$ state as $A$, and $B$ itself
+              represents that state exactly when $\xi^N=1$.
     \end{enumerate}
-    The unrestricted representation claim and exact conjugacy in
-    \cite[Theorem~8]{PerezGarcia2007Matrix} carry a residual finite-ring phase defect
-    \cite{gap:pgvwc07_quadratic_reconstruction_phase}, which is resolved by the explicit
-    phase $\xi$ in (\ref{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}).
-\end{theorem}
+    The size condition (\ref{eq:pgvwc07_quadratic_reconstruction_size}) is
+    hypothesis (iii) of \cite[Theorem~7]{PerezGarcia2007Matrix}, whose proof
+    the source reuses for \cite[Theorem~8]{PerezGarcia2007Matrix}; it also
+    places the whole window, including both endpoint cuts, in the range where
+    the open-boundary matrices have size $D^2\times D^2$, as the system
+    requires. A state is a nonzero vector, and nonvanishing also follows from
+    the faithful open-boundary canonical form. The printed theorem asserts
+    that every solution represents the state and is exactly unitarily
+    conjugate to $A$. The phase symmetry of the system refutes both
+    assertions, and the unit phase $\xi$ in
+    (\ref{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}) is the
+    correction \cite{gap:pgvwc07_quadratic_reconstruction_phase}.
+\end{lemma}
 
 \begin{proof}
-    \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner, lem:pgvwc07_quadratic_system_units, lem:pgvwc07_solution_chain}
-    The canonical representation solves the system by the freedom in the
-    open-boundary representation. For the converse, assume that the solution
-    tensor $B$ represents the given length-$N$ state. Comparing its
-    open-boundary representation with the canonical one gives intertwiners
-    at all $D^4+1$ cuts around the $D^4$-site window, including both endpoint
-    cuts, together with the $D^4$ adjacent relations
-    \cite{gap:pgvwc07_intertwiner_chain_off_by_one}. Linear dependence in
-    $M_{D^2}(\C)$ then provides the hypothesis of
-    Lemma~\ref{lem:pgvwc07_chain_combination}. The internal construction in
-    Lemma~\ref{lem:pgvwc07_solution_chain} gives only $D^4-1$ intertwiners
-    and $D^4-2$ relations, so it does not force this dependence for an
-    arbitrary algebraic solution.
+    \leanok
+    \uses{lem:quadratic_original_canonical_obc_window,
+        lem:quadratic_prescribed_prefix_basis,
+        lem:quadratic_actual_physical_window_solution,
+        lem:pgvwc07_quadratic_system_units,
+        lem:quadratic_window_spanning_length,
+        lem:quadratic_gauged_endpoint,
+        lem:quadratic_gauged_complete_chain,
+        lem:pgvwc07_intertwiner_unitary,
+        lem:quadratic_solution_rephasing}
+    Part~1 is Lemma~\ref{lem:quadratic_original_canonical_obc_window}. The
+    canonical equations of the open-boundary form identify its bonds with
+    the physical cut ranks, condition C1 forces rank $D^2$ at every cut of
+    the window, and the physical cut bases supply the two gauges. Neither
+    uniqueness of the open-boundary canonical form nor the rank bound is
+    needed as a hypothesis; the rank bound is derived.
 
-    Given the full cut chain, the combination lemma and the slice
-    extraction of Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} give a
-    nonzero matrix $R$ and a scalar $x\neq0$ with
-    $RB_i=\tfrac1x A_iR$. The two normalizations
-    (\ref{eq:quadratic_system_normalization}), the invariance of the positive
-    diagonal fixed point, and the uniqueness of the transfer-map fixed point
-    under injectivity give $|x|=1$ and
-    $RR^{\dagger}=c\Id$ for some $c>0$. Thus $U=c^{-1/2}R$ is unitary and
-    $A_i=xUB_iU^{\dagger}$ for every $i$. Since $A$ and $B$ represent the
-    same nonzero length-$N$ state, their coefficients satisfy
-    $V^{(N)}(A)=x^NV^{(N)}(B)=V^{(N)}(B)$, and hence $x^N=1$. The tensor
-    $\widehat B_i=xB_i$ therefore represents the same state and satisfies
+    For part~2, fix a solution $(B,Y_j,Z_j)$ over the window, with sites
+    $0\le j\le m-1$ and $m=D^4$, and write $\lambda A$ for the canonical
+    tensor of weight $\lambda$. By
+    Lemmas~\ref{lem:quadratic_prescribed_prefix_basis}
+    and~\ref{lem:quadratic_actual_physical_window_solution}, the window
+    matrices are $A^{[j]}_i=P_j^{-1}(\lambda A_i\otimes\Id)P_{j+1}$ with
+    invertible $P_0,\ldots,P_m$. The matrices $Q_j=\lambda^{j}P_j$ satisfy
+    $A^{[j]}_i=Q_j^{-1}(A_i\otimes\Id)Q_{j+1}$, since
+    $\lambda^{j}\cdot\lambda\cdot\lambda^{-j-1}=1$; we write $P_j$ for $Q_j$
+    from now on. Put $G_j=Y_jP_j^{-1}$ and
+    $H_j=P_{j+1}Z_j$. The system
+    becomes
+    \begin{align}
+        B_i\otimes\Id & =G_j(A_i\otimes\Id)H_j &  & \forall\,i,j,
+        \label{eq:pgvwc07_quadratic_reconstruction_gauged}             \\
+        G_{j+1}H_j    & =\Id                   &  & \forall\,j\le m-2,
+        \label{eq:pgvwc07_quadratic_reconstruction_gauged_inverse}
+    \end{align}
+    so by Lemma~\ref{lem:pgvwc07_quadratic_system_units} the matrices
+    $G_1,\ldots,G_{m-1}$ are invertible and $H_j=G_{j+1}^{-1}$ for
+    $j\le m-2$. Only the endpoint gauges $G_0$ and $H_{m-1}$ are not
+    constrained by an inversion equation. Multiplying
+    (\ref{eq:pgvwc07_quadratic_reconstruction_gauged}) along consecutive
+    sites telescopes: a word $w$ of length $\ell$ placed at the sites
+    $a,\ldots,a+\ell-1$ satisfies
+    \begin{align}
+        B_w\otimes\Id & =G_a(A_w\otimes\Id)H_{a+\ell-1}.
+        \label{eq:pgvwc07_quadratic_reconstruction_words}
+    \end{align}
+
+    Suppose that the words of length $\ell$ in $A$ span $\MN{D}$ for some
+    $1\le\ell\le m-2$. Choose coefficients $c_w$ with
+    $\sum_wc_wA_w=\Id$ and put $X=\sum_wc_wB_w$. Placing the words at the
+    sites $1,\ldots,\ell$ and at the sites $0,\ldots,\ell-1$ in
+    (\ref{eq:pgvwc07_quadratic_reconstruction_words}) gives
+    \begin{align}
+        X\otimes\Id & =G_1G_{\ell+1}^{-1}=G_0G_\ell^{-1}.
+        \label{eq:pgvwc07_quadratic_reconstruction_endpoints}
+    \end{align}
+    The first expression is invertible, so $G_0$ is invertible
+    (Lemma~\ref{lem:quadratic_gauged_endpoint}). Such a spanning length
+    exists when $D\ge2$ by Lemma~\ref{lem:quadratic_window_spanning_length}.
+    If $D=1$ the window has one site and $G_0$ is a nonzero scalar, because
+    $B_i\otimes\Id=G_0(A_i\otimes\Id)H_0$ and some $B_i$ is nonzero by the
+    normalization (\ref{eq:quadratic_system_normalization}).
+
+    Every $H_j$ is nonzero for the same reason. With $K_0=G_0^{-1}$ and
+    $K_{k+1}=H_k$, all $D^4+1$ cuts of the window carry nonzero matrices
+    satisfying
+    \begin{align}
+        K_k(B_i\otimes\Id) & =(A_i\otimes\Id)K_{k+1}
+        \qquad(0\le k\le m-1).
+        \label{eq:pgvwc07_quadratic_reconstruction_full_chain}
+    \end{align}
+    Lemma~\ref{lem:pgvwc07_complete_chain_intertwiner} gives a nonzero
+    matrix $R$ and a scalar $x\neq0$ with $RB_i=x^{-1}A_iR$ for every $i$
+    (Lemma~\ref{lem:quadratic_gauged_complete_chain}).
+
+    Let $\Lambda>0$ satisfy $\sum_iA_i^{\dagger}\Lambda A_i=\Lambda$. Then
+    $\sum_iB_i^{\dagger}R^{\dagger}\Lambda RB_i=|x|^{-2}R^{\dagger}\Lambda R$.
+    The normalization (\ref{eq:quadratic_system_normalization}) makes
+    $Y\mapsto\sum_iB_i^{\dagger}YB_i$ trace preserving, and
+    $\operatorname{tr}(R^{\dagger}\Lambda R)>0$, so $|x|=1$. Next
+    $\sum_iA_iRR^{\dagger}A_i^{\dagger}
+        =|x|^2R\bigl(\sum_iB_iB_i^{\dagger}\bigr)R^{\dagger}=RR^{\dagger}$,
+    and condition C1 makes the fixed-point space of
+    $Y\mapsto\sum_iA_iYA_i^{\dagger}$ one-dimensional, spanned by $\Id$,
+    so $RR^{\dagger}=c\Id$ with $c>0$. Thus $U=c^{-1/2}R$ is unitary and
+    $A_i=xUB_iU^{\dagger}$ (Lemma~\ref{lem:pgvwc07_intertwiner_unitary});
+    take $\xi=x$. Unitary conjugation preserves the
+    traces of products, so $V^{(N)}(A)=\xi^NV^{(N)}(B)$, which gives the
+    final assertion because $V^{(N)}(A)\neq0$.
+
+    The rephased tensor $\widehat B_i=\xi B_i$ is the tensor of the rephased
+    solution of Lemma~\ref{lem:quadratic_solution_rephasing}, and
     $A_i=U\widehat B_iU^{\dagger}$.
+
+    When the solution tensor is known to represent the given state, the
+    endpoint matrices of (\ref{eq:pgvwc07_quadratic_reconstruction_full_chain})
+    can instead be obtained by comparing the two representations at the
+    endpoint cuts, over an arbitrary window. This case, with $\xi^N=1$, is
+    Lemma~\ref{lem:quadratic_same_state_unitary_phase}.
 \end{proof}
 
 %% ---------------------------------------------------------
+\input{chapter/ch23_quadratic_same_state}
+\input{chapter/ch23_quadratic_prescribed_window}
+
 \section{Uniqueness of the translation-invariant canonical form at a fixed ring length}%
 \label{sec:pgvwc07_ti_uniqueness}
 %% ---------------------------------------------------------
@@ -745,7 +872,7 @@ on a finite ring by an $N$th-root phase
     entrywise.
 \end{proof}
 
-\begin{theorem}[Fixed-length intertwiner]
+\begin{lemma}[Fixed-length intertwiner]
     \label{thm:pgvwc07_fixed_length_intertwiner}
     \lean{MPSTensor.exists_intertwiner_of_fixedLength_mpv_eq,
         MPSTensor.exists_pgvwc07_chain_root}
@@ -762,31 +889,22 @@ on a finite ring by an $N$th-root phase
         RC_i & =\tfrac1x\,B_iR \qquad\text{for every }i.
         \label{eq:pgvwc07_fixed_length_intertwiner}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:pgvwc07_cut_vectors_linearIndependent,
-        lem:pgvwc07_cut_intertwiner, lem:pgvwc07_chain_combination,
-        lem:pgvwc07_kronecker_intertwiner}
+        lem:pgvwc07_cut_intertwiner, lem:pgvwc07_complete_chain_intertwiner}
     Consider the $D^4+1$ cuts after $L_0,\ldots,L_0+D^4$ sites; each leaves
     at least $L_0$ sites on both sides, so by
     Lemma~\ref{lem:pgvwc07_cut_vectors_linearIndependent} the cut vectors of
     $B$ are linearly independent there, and
     Lemma~\ref{lem:pgvwc07_cut_intertwiner} gives invertible matrices
     $W_0,\ldots,W_{D^4}$ on the doubled bond space with
-    $W_k(C_i\otimes\Id)=(B_i\otimes\Id)W_{k+1}$. Since $\MN{D^2}$ has
-    dimension $D^4$, there is a first index $n\ge1$ such that
-    $W_0,\ldots,W_{n-1}$ are linearly independent and
-    $W_n=\sum_{k<n}\lambda_kW_k$; some $\lambda_k$ is nonzero because $W_n$
-    is invertible, so the polynomial equation
-    (\ref{eq:chain_combination_polynomial}) has positive degree and a nonzero
-    root $x$. Lemma~\ref{lem:pgvwc07_chain_combination}, applied to right
-    multiplication by $C_i\otimes\Id$ and left multiplication by
-    $B_i\otimes\Id$, gives a nonzero combination $W$ of $W_0,\ldots,W_{n-1}$
-    with $W(C_i\otimes\Id)=(\tfrac1xB_i\otimes\Id)W$ for every $i$, and
-    Lemma~\ref{lem:pgvwc07_kronecker_intertwiner} extracts a nonzero
-    multiplicity slice $R$ satisfying (\ref{eq:pgvwc07_fixed_length_intertwiner}).
+    $W_k(C_i\otimes\Id)=(B_i\otimes\Id)W_{k+1}$.
+    Lemma~\ref{lem:pgvwc07_complete_chain_intertwiner} then gives a nonzero
+    $R$ and a scalar $x\neq0$ satisfying
+    (\ref{eq:pgvwc07_fixed_length_intertwiner}).
 \end{proof}
 
 \begin{lemma}[Unitarity of the intertwiner]
@@ -935,14 +1053,14 @@ on a finite ring by an $N$th-root phase
     \uses{thm:pgvwc07_fixed_length_intertwiner,
         lem:pgvwc07_intertwiner_unitary}
     For $\lambda_B=\lambda_C=1$,
-    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R\neq0$ and
+    Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R\neq0$ and
     $x\neq0$ with $RC_i=\tfrac1xB_iR$, and
     Lemma~\ref{lem:pgvwc07_intertwiner_unitary} turns $R$ into a unitary $U$
     with $|x|=1$ and $B_i=xUC_iU^\dagger$. The coefficients then satisfy
     $V^{(N)}(B)=x^NV^{(N)}(C)=x^NV^{(N)}(B)$, and since the state is nonzero,
     $x^N=1$; take $\xi=x$. For general weights, $\lambda_B^{-1}B$ and
     $\lambda_B^{-1}C$ represent the same state and the first is unital, so
-    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R$ and $x$ for
+    Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R$ and $x$ for
     this pair. The same $R$ satisfies
     $R\,(\lambda_C^{-1}C_i)=y^{-1}(\lambda_B^{-1}B_i)R$ with
     $y=x\lambda_C/\lambda_B$, and
@@ -967,10 +1085,10 @@ on a finite ring by an $N$th-root phase
     an $N$th root of unity are two canonical representations of the same
     nonzero state on $N>3$ sites, and unitary conjugation acts trivially in
     bond dimension one \cite{gap:pgvwc07_quadratic_reconstruction_phase}.
-    The corrected statement is Theorem~\ref{thm:pgvwc07_ti_uniqueness}.
+    The corrected statement is Lemma~\ref{thm:pgvwc07_ti_uniqueness}.
 \end{theorem}
 
-\begin{theorem}[Uniqueness of the canonical form, corrected]
+\begin{lemma}[Uniqueness of the canonical form, corrected]
     \label{thm:pgvwc07_ti_uniqueness}
     \lean{MPSTensor.pgvwc07_uniqueness_of_canonical_form,
         MPSTensor.pgvwc07_uniqueness_of_canonical_form_rephased,
@@ -991,10 +1109,10 @@ on a finite ring by an $N$th-root phase
     unit-modulus phase $\xi$.
 
     Uniqueness of the open-boundary canonical representation is not needed;
-    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} obtains the intertwiners
+    Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} obtains the intertwiners
     directly from injectivity, yielding the conclusion recorded in
     \cite{gap:pgvwc07_ti_uniqueness_scope}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1007,7 +1125,7 @@ on a finite ring by an $N$th-root phase
     $B$ with a single block: $\sum_iB_iB_i^\dagger=\lambda_B^2\,\Id$ with
     $0<\lambda_B\le1$. The tensors $\lambda_B^{-1}B$ and $\lambda_B^{-1}C$
     represent the same state and the first is unital and $L_0$-block
-    injective, so Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives
+    injective, so Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} gives
     $R\neq0$ and $x\neq0$ with $R\,(\lambda_B^{-1}C_i)=\tfrac1x(\lambda_B^{-1}B_i)R$,
     and $R$ is invertible by Lemma~\ref{lem:pgvwc07_intertwiner_unitary}.
     Hence $C_i=\tfrac1xR^{-1}B_iR$ is conjugate to a nonzero multiple of
@@ -1087,7 +1205,7 @@ on the bond as a physical operation on the local index.
 For an injective tensor $A$, the physical realisation map encodes the
 effect of inserting a virtual matrix $X$ on the bond as a $d\times d$
 operation on the physical indices. Its multiplicativity
-(Theorem~\ref{thm:physRealize_mul}) turns the bond algebra into an algebra
+(Lemma~\ref{thm:physRealize_mul}) turns the bond algebra into an algebra
 acting on the physical leg, and is the source of the algebra homomorphism
 used in the virtual bond gauge.
 
@@ -1148,7 +1266,7 @@ used in the virtual bond gauge.
     $\Phi_A\circ\Psi_A=\id_{\MN{D}}$.
 \end{proof}
 
-\begin{theorem}[Physical realisation is multiplicative]%
+\begin{lemma}[Physical realisation is multiplicative]%
     \label{thm:physRealize_mul}
     \lean{MPSTensor.physRealize_mul}
     \leanok
@@ -1156,7 +1274,7 @@ used in the virtual bond gauge.
     Let $A$ be an injective MPS tensor.
     For all $X,Y\in\MN{D}$,
     $O_A(XY)=O_A(X)O_A(Y)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1183,7 +1301,7 @@ used in the virtual bond gauge.
     \label{rem:physRealize_mul_general}
     \uses{thm:physRealize_mul, def:injective, def:decomposition_map}
     When $d>D^2$, the decomposition map $\Psi_A$ need not be unique.
-    Nevertheless, Theorem~\ref{thm:physRealize_mul} is already the
+    Nevertheless, Lemma~\ref{thm:physRealize_mul} is already the
     general injective statement: for the fixed choice of $\Psi_A$ in
     Definition~\ref{def:decomposition_map}, the associated physical
     realisation map $O_A$ is multiplicative.
@@ -1275,10 +1393,10 @@ insertion data.
     for some $Y$ depending on $X$.
     Since all three site tensors on each side are injective,
     the physical realisation maps $O_A,O_B$ are algebra homomorphisms
-    by Theorem~\ref{thm:physRealize_mul}.
+    by Lemma~\ref{thm:physRealize_mul}.
     Setting $T(X)=Y$ defines a $\C$-linear multiplicative map,
     hence a nonzero $\C$-algebra endomorphism of $\MN{D}$, which is
-    bijective by Theorem~\ref{thm:simplicity}.
+    bijective by Lemma~\ref{thm:simplicity}.
     Skolem--Noether (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) gives
     $Z\in\GL_D(\C)$ with $T(X)=Z^{-1}XZ$.
 \end{proof}

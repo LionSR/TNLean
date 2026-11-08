@@ -22,5 +22,6 @@ import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyDomainWall
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeData
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUDU
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUUU
+import TNLean.MPS.Examples.Z3Anomalous.Z3ClockAnomalyClass
 import TNLean.MPS.Examples.Z3Anomalous.Z3ClockDefect
 import TNLean.MPS.Examples.Z3Anomalous.Z3ClockTensor

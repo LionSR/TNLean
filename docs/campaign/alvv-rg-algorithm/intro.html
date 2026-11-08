@@ -1,0 +1,34 @@
+<!--
+  Campaign-specific introduction for the board of Arad, Landau, Vazirani and
+  Vidick, arXiv:1602.08828v2: the area laws of Theorems 4.9 and 4.11 and the
+  algorithm of Theorem 6.1. The generic board fills every `.thm[data-target]`
+  card's <dl class="tdl"> with the status of its target issue.
+-->
+<section>
+  <header>
+    <h2>The results</h2>
+    <p>A chain of <i>n</i> sites carries a quantum system of dimension <i>d</i> at each site, and <i>H</i> = ∑<sub><i>i</i></sub> <i>h<sub>i</sub></i> is a sum of nearest-neighbour terms with 0 ≤ <i>h<sub>i</sub></i> ≤ 1. Earlier area laws and algorithms assumed a unique ground state with a gap. This paper treats two wider classes. Under assumption (DG) the ground space has dimension <i>r</i>, polynomial in <i>n</i>, and a gap γ to the next eigenvalue. Under assumption (LD) there may be no gap, but the eigenvectors with energy within η of the ground energy ε<sub>0</sub> span a space of dimension <i>r</i>, polynomial in <i>n</i>.</p>
+  </header>
+  <div class="thms">
+    <article class="thm" data-target="9846">
+      <div class="eyebrow">Arad, Landau, Vazirani and Vidick 2016 · Theorems 4.9 and 4.11</div>
+      <h3>Area laws for degenerate and low-density spectra</h3>
+      <p class="stmt">Under (DG), every state ψ in the ground space has entanglement entropy across any cut at most</p>
+      <div class="formula"><math display="block"><mi>S</mi><mo stretchy="false">(</mo><mi>ψ</mi><mo stretchy="false">)</mo><mo>≤</mo><mi>ln</mi><mi>r</mi><mo>+</mo><mover><mi>O</mi><mo>~</mo></mover><mrow><mo>(</mo><mfrac><mrow><msup><mi>log</mi><mn>3</mn></msup><mi>d</mi></mrow><mi>γ</mi></mfrac><mo>)</mo></mrow></math></div>
+      <p class="defs">It is approximated within δ = 1/poly(<i>n</i>) by a state of Schmidt rank <i>r</i> exp(Õ(γ<sup>−1</sup> log<sup>3</sup> <i>d</i> + γ<sup>−1/4</sup> log<sup>3/4</sup>(1/δ) log <i>d</i>)) at that cut, and by a matrix product state whose bond dimension has the same form with δ/<i>n</i> in place of δ. Under (LD) the same holds for the eigenvectors with energy within η − μ/log <i>n</i> of ε<sub>0</sub>, with γ replaced by μ/log <i>n</i>. In Lean the (DG) entropy bound is proved on every interval of every chain, with ln <i>r</i> + <i>C</i>(1 + log <i>d</i> + log(1/<i>g</i>))<sup>3</sup>/<i>g</i> and <i>g</i> = min(γ, 1); its Schmidt-rank and matrix product state bounds are in review. The (LD) entropy bound and approximations are in review, with constants depending on the fixed window η and with log(1 + log <i>n</i>/μ) in place of the hidden logarithms.</p>
+      <p class="why">The entropy grows only with the logarithm of the degeneracy, so a polynomial number of ground states costs only a logarithm. The results extend the area law from a unique gapped ground state to ground spaces of polynomial dimension and, without any gap, to chains with few low-energy states.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+    <article class="thm" data-target="9848">
+      <div class="eyebrow">Arad, Landau, Vazirani and Vidick 2016 · Theorems 6.1–6.3</div>
+      <h3>A renormalization-group algorithm for low-energy states</h3>
+      <p class="stmt">Under (DG), with probability at least 1 − 1/<i>n</i>, the merge-tree algorithm returns a set of matrix product states whose span is δ-viable for the ground space, for any δ ≥ 1/poly(<i>n</i>), in time</p>
+      <div class="formula"><math display="block"><msup><mi>n</mi><mrow><mover><mi>O</mi><mo>~</mo></mover><mo stretchy="false">(</mo><msup><mi>γ</mi><mrow><mo>−</mo><mn>2</mn></mrow></msup><mo stretchy="false">)</mo></mrow></msup></math></div>
+      <p class="defs">A subspace is δ-viable for the ground space when every unit ground state has squared overlap at least 1 − δ with it. For frustration-free chains with a unique ground state the algorithm runs in time close to matrix multiplication, and under (LD) in time 2<sup>poly log <i>n</i></sup>. The formalization targets the existence statements behind the algorithm: a viable subspace of controlled dimension and bond dimension at every node of the merge tree. In review under (DG) is a corrected merge tree with hard-truncated improving families: with probability at least 1 − (<i>n</i> − 1)/(<i>n</i> + 1)<sup>2</sup> its refined root yields an <i>r</i>-dimensional space of matrix product states within η/2 of the ground space, of bond dimension polynomial in <i>n</i>, <i>r</i> and 1/η. The energy estimates the algorithm keeps along the tree are proved node by node but not yet combined with the sampled tree, and the three theorems as stated remain open. Running times are not formalized, since TNLean has no model of computation; the success probabilities are bounds on the sampling measure and are part of the mathematics.</p>
+      <p class="why">Each merge step doubles the length scale while keeping the description small, a rigorous form of the renormalization-group idea behind Wilson's numerical method and the density matrix renormalization group.</p>
+      <dl class="tdl"></dl>
+      <button class="pillbtn trace" type="button">Trace its prerequisites on the map</button>
+    </article>
+  </div>
+</section>

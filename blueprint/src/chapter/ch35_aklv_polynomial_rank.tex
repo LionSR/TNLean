@@ -5,13 +5,13 @@ Definition~\ref{def:aklv_window_alphabet}. All polynomial coefficients are compl
 The commuting-gap count uses the correction in
 \cite{gap:aklv13_interpolation_and_word_count}.
 
-\begin{theorem}[Regrouping a consecutive subwindow]
+\begin{lemma}[Regrouping a consecutive subwindow]
     \label{thm:aklv_subwindow_regrouping}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_subwindow_regrouping}
     \leanok
     \uses{def:aklv_window_alphabet}
     Let $b,m\ge0$ satisfy $b+m\le s$, and put $H'_j=H_{b+j}$ for $0\le j<m$.
-    There are operators $H'_L,H'_R$ supported on $[0,a+b+1)$ and $[a+b+m,L)$,
+    There are operators $H'_L,H'_R$ supported on ${\lbrack 0,a+b+1)}$ and ${\lbrack a+b+m,L)}$,
     respectively, such that each $H'_j$ is supported on
     $\{a+b+j,a+b+j+1\}$ and
     \begin{align}
@@ -20,7 +20,7 @@ The commuting-gap count uses the correction in
     \end{align}
     This is the shorter-window regrouping in
     \cite[Lemma~4.2]{Arad2013AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:aklv_window_alphabet}
@@ -32,7 +32,7 @@ The commuting-gap count uses the correction in
     (\ref{eq:aklv_regrouped_hamiltonian}).
 \end{proof}
 
-\begin{theorem}[A nonempty shorter window at the same cut]
+\begin{lemma}[A nonempty shorter window at the same cut]
     \label{thm:aklv_effective_window}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_centered_short_window,
         TNLean.MPS.AreaLaw.exists_aklv_effective_window}
@@ -48,7 +48,7 @@ The commuting-gap count uses the correction in
         \le16\bigl(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1\bigr).
     \end{align*}
     For $\ell\ge1$ one may take $m=\min\{s,2\lfloor\sqrt\ell\rfloor\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If $\ell=0$, take $m=1$ and $b=\lfloor s/2\rfloor$.
@@ -61,7 +61,7 @@ The commuting-gap count uses the correction in
     $\lfloor\ell/(2n)\rfloor\le n+1$. Substitution gives the stated exponent.
 \end{proof}
 
-\begin{theorem}[A uniform polynomial estimate in a bounded window]
+\begin{lemma}[A uniform polynomial estimate in a bounded window]
     \label{thm:aklv_width_polynomial_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_polynomial_of_width_le}
     \leanok
@@ -72,7 +72,7 @@ The commuting-gap count uses the correction in
         \operatorname{OSR}_{a+\lfloor s/2\rfloor}(P(G))
         \le\bigl(q(\ell+1)\bigr)^{3s+6\lfloor\ell/s\rfloor+5}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_power_rank_sum}
@@ -84,7 +84,7 @@ The commuting-gap count uses the correction in
         q^{2k+2|u+1-\lfloor s/2\rfloor|} & \le B^{2k+2s}.
     \end{align*}
     There are at most $B^2$ pieces and $k\le\lfloor\ell/s\rfloor$.
-    Theorem~\ref{thm:aklv_power_rank_sum} therefore bounds every $G^r$ by
+    Lemma~\ref{thm:aklv_power_rank_sum} therefore bounds every $G^r$ by
     $B^{3s+6\lfloor\ell/s\rfloor+4}$. Expand
     $P(G)=\sum_{r=0}^{\ell}p_rG^r$.
     Scalar multiplication does not increase rank; summing the at most
@@ -119,11 +119,11 @@ The commuting-gap count uses the correction in
     \leanok
     \uses{thm:aklv_effective_window,thm:aklv_subwindow_regrouping,
         thm:aklv_width_polynomial_rank}
-    Choose the shorter window from Theorem~\ref{thm:aklv_effective_window} and
+    Choose the shorter window from Lemma~\ref{thm:aklv_effective_window} and
     construct its actual exterior operators by
-    Theorem~\ref{thm:aklv_subwindow_regrouping}. Both the Hamiltonian and the
+    Lemma~\ref{thm:aklv_subwindow_regrouping}. Both the Hamiltonian and the
     central cut are unchanged. Apply
-    Theorem~\ref{thm:aklv_width_polynomial_rank} to that window and use its
+    Lemma~\ref{thm:aklv_width_polynomial_rank} to that window and use its
     exponent bound. This proves the first inequality, including zero degree.
     For positive degree, each of the three summands in the exponent is at
     most $\max\{\lfloor\ell/s\rfloor,\lfloor\sqrt\ell\rfloor\}$.

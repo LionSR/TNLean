@@ -10,15 +10,16 @@ import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
 # Uniform polynomial successive viable sets and final-span MPS approximation
 
 For fixed local dimension and positive gap, the natural polynomial coefficient and
-degree are chosen before the length and physical interaction. The successive families
-are then chosen from that interaction before any ground pair. Every such ground pair
-has a normalized approximation in the span of the final actual family.
+degree are chosen before the length and physical interaction. The Gaussian filter factors
+and the sweep are functions of that interaction, chosen before any ground pair. Every
+such ground pair has a normalized approximation in the span of the final family of the
+sweep.
 
 **Local fix (trimming radius):** The independent trimmings use the quadratic radius
 recorded at <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 The library constant-cut bound and corrected net exponent are documented in
 `docs/paper-gaps/lvv13_constant_bond.tex`; the conservative Gaussian error-reduction
-scope is documented in `docs/paper-gaps/lvv13_sampling_ground_energy.tex`.
+scope is documented in `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, final induction, lines 652--678,
 using Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. The conclusion concerns
@@ -31,36 +32,49 @@ open scoped InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
-/-- Natural polynomial budgets chosen before length bound every retained family and
-the normalized MPS extracted from its final span. Families are selected before ground
-data. LVV13, `algo53.tex`, final induction, lines 652--678, with the documented
-quadratic trimming correction and Huang's Gaussian error reduction. -/
+/-- **Uniform polynomial budgets for the sweep and the final-span approximation.** Natural
+polynomial budgets chosen before length bound every family of the sweep, every family of
+Gaussian filter factors and the normalized MPS extracted from the final span. The sweep is
+a function of the interaction, chosen before ground data. LVV13, `algo53.tex`, final
+induction, lines 652--678, with the documented quadratic trimming correction and Huang's
+Gaussian error reduction. -/
 theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-          (interval L j.val (j.val + 2))) (_h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
-      ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
-        S 0 = {emptyLeftVector L q} ∧
-        (∀ i : ℕ, i ≤ L → (S i).card ≤ P * (L + 1) ^ d ∧
-          (∀ v ∈ S i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
-          ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-            IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
-            IsViable Γ (lvvSuccessiveError Delta / L) (S i : Set (LeftBlockVector L q i))) ∧
+        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+          (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
+      (∀ i : ℕ, i ≤ L →
+        (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i).card ≤
+          P * (L + 1) ^ d ∧
+        ∀ A ∈ gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i,
+          ∀ k, k < i → operatorSchmidtRank
+            (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+              (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
+      (∀ i : ℕ, i ≤ L → (lvvSweep hq h hs h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
+        (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
         ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
           IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
-          ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
-            1 - lvvSuccessiveError Delta / L ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
-            IsOpenMPS L q (P * (L + 1) ^ d) (fun x ↦ ψ x) ∧
-            fullLeftEquiv L q ψ ∈ Submodule.span ℂ (S L : Set (LeftBlockVector L q L)) := by
+          IsViable Γ (lvvSuccessiveError Delta / L)
+            (lvvSweep hq h hs h0 h1 Delta i : Set (LeftBlockVector L q i))) ∧
+      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+        IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+        ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
+          1 - lvvSuccessiveError Delta / L ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
+          IsOpenMPS L q (P * (L + 1) ^ d) (fun x ↦ ψ x) ∧
+          fullLeftEquiv L q ψ ∈
+            Submodule.span ℂ (lvvSweep hq h hs h0 h1 Delta L : Set (LeftBlockVector L q L)) := by
   classical
   obtain ⟨P, d, hP, hbudgets⟩ := exists_lvvSuccessive_uniform_polynomial (q := q) (by omega) hDelta
   refine ⟨P, d, hP, ?_⟩
   intro L hL h hs h0 h1
-  obtain ⟨S, hS0, hS⟩ := exists_positive_chain_successive_viable_sets hq h hs h0 h1 hDelta hL
-  obtain ⟨hcardBudget, hbondBudget, hspanBudget⟩ := hbudgets L hL
-  refine ⟨S, hS0, ?_, ?_⟩
+  obtain ⟨hcardBudget, hbondBudget, hspanBudget, hfactorBudget, hrankBudget⟩ :=
+    hbudgets L hL
+  have hS := lvvSweep_spec hq h hs h0 h1 hDelta
+  refine ⟨fun i hi ↦ ⟨(card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1
+      (lvvSuccessiveError_pos hDelta) hDelta).trans hfactorBudget,
+    fun A hA k hki ↦ (operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0
+      h1 (lvvSuccessiveError_pos hDelta) hDelta hi hA k hki).trans hrankBudget⟩, ?_, ?_⟩
   · intro i hi
     obtain ⟨hcard, hMPS, hviable⟩ := hS i hi
     have hsize : (if i = 0 then 1 else lvvSuccessiveCardBound q Delta L) ≤
@@ -94,7 +108,7 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
     refine ⟨ψ, ?_, ?_, ?_, ?_⟩
     · simpa only [ψ, LinearIsometryEquiv.norm_map] using hvnorm
     · rwa [hinner]
-    · have hspan := isOpenMPS_leftChain_of_mem_span (S L) hMPS hvspan
+    · have hspan := isOpenMPS_leftChain_of_mem_span _ hMPS hvspan
       apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
       intro k hk0 hkL
       exact (hspan.rank_cutMatrix_le hk0 hkL).trans

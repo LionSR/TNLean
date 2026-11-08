@@ -21,7 +21,7 @@ matrix product operator approximation to the full time evolution.
     At $h=0$, the Gaussian is the unit mass at zero.
 \end{definition}
 
-\begin{theorem}[Mass and number of samples]
+\begin{lemma}[Mass and number of samples]
     \label{thm:huang_time_mesh_mass}
     \lean{TNLean.MPS.AreaLaw.timeMeshNode_mem,TNLean.MPS.AreaLaw.timeMeshCount_le,
         TNLean.MPS.AreaLaw.exists_timeMeshNode_abs_sub_le,
@@ -35,7 +35,7 @@ matrix product operator approximation to the full time evolution.
         w_j\ge0,\qquad \sum_jw_j=\gamma_h([-T,T])\le1,
         \qquad N\le2T/\delta+2.
     \]
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The cells are pairwise disjoint and cover $[-T,T]$, including the right endpoint.
@@ -44,7 +44,7 @@ matrix product operator approximation to the full time evolution.
     and the ceiling estimate gives the sample count.
 \end{proof}
 
-\begin{theorem}[Gaussian quadrature error]
+\begin{lemma}[Gaussian quadrature error]
     \label{thm:huang_time_mesh_error}
     \lean{TNLean.MPS.AreaLaw.norm_setIntegral_sub_timeMesh_sum_le,
         TNLean.MPS.AreaLaw.norm_integral_sub_timeMesh_sum_le}
@@ -62,7 +62,7 @@ matrix product operator approximation to the full time evolution.
         \le2e^{-T^2/(2h)}+M\delta.
     \]
     For the last estimate at $h=0$, the exponential term is understood as $2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:huang_time_mesh_mass}
@@ -72,7 +72,7 @@ matrix product operator approximation to the full time evolution.
     which is bounded by the displayed exponential term.
 \end{proof}
 
-\begin{theorem}[Quadrature at prescribed mesh error]
+\begin{lemma}[Quadrature at prescribed mesh error]
     \label{thm:huang_time_mesh_accuracy}
     \lean{TNLean.MPS.AreaLaw.timeMeshCount_accuracy_le,
         TNLean.MPS.AreaLaw.norm_integral_sub_timeMesh_accuracy_sum_le}
@@ -84,14 +84,14 @@ matrix product operator approximation to the full time evolution.
         N\le\frac{2T(M+1)}{\varepsilon}+2.
     \]
     The same nodes and weights work for every admissible integrand.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $M\delta\le\varepsilon$, the preceding theorem applies. Substitute the
     mesh into the sample-count bound.
 \end{proof}
 
-\begin{theorem}[Quadrature of Hermitian time evolution]
+\begin{lemma}[Quadrature of Hermitian time evolution]
     \label{thm:huang_unitary_quadrature}
     \lean{TNLean.MPS.AreaLaw.norm_hermitianUnitaryPath_sub_time_le,
         TNLean.MPS.AreaLaw.norm_gaussianIntertwiner_sub_unitary_timeMesh_sum_le}
@@ -106,7 +106,7 @@ matrix product operator approximation to the full time evolution.
     for the mesh $\varepsilon/(\|H\|+1)$, with at most
     $2T(\|H\|+1)/\varepsilon+2$ samples. This estimate applies in particular to a
     Hamiltonian shifted by an energy estimate.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The group law for the unitary path gives

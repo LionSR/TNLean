@@ -25,3 +25,27 @@ blueprint `\lean{...}` tag cites a removed name.
 | `MPSTensor.OnSiteSymmetry` | a Mathlib `MulAction G (Fin d)`; the unused matrix field `u` has no replacement |
 | `MPSTensor.TwistedTensor S A g` | `MPSTensor.TwistedTensor A g`, with the action supplied by the `MulAction` instance |
 | `MPSTensor.TwistedTensor_apply`, `MPSTensor.TwistedTensor_one`, `MPSTensor.TwistedTensor_mul` | the same names, without the structure argument and without the hypotheses `σ 1 = id` and `σ (g * h) = σ g ∘ σ h`, which are now the `MulAction` axioms |
+
+## Remaining operator representation and the word-algebra model
+
+The group-family operators already form the unitary-valued monoid homomorphism
+`GroupFamily.operatorRepresentation`, from the operator laws alone. The new
+`IsRawRepresentation.rep` composes this map with Mathlib's
+`Matrix.UnitaryGroup.embeddingGL`. Its action is the actual periodic MPO, and
+the existing natural-power theorem now follows from `MonoidHom.map_pow`
+instead of a second induction. The tensor-level predicates remain because
+they also specify injectivity, simplicity, and the dependent bond dimensions;
+these data are not part of an ordinary group representation.
+
+`WordAlgebra` already is Mathlib's `MonoidAlgebra ℂ (FreeMonoid (Fin d))`.
+This presentation is deliberate: the tensor word module is precisely
+`Representation.asModule` of its free-monoid representation. Transporting it to
+`FreeAlgebra ℂ (Fin d)` would add an algebra equivalence at every use without
+removing an independent mathematical structure. The existing equivalence
+`FreeAlgebra.equivMonoidAlgebraFreeMonoid` remains available when that
+presentation is required. No further word-algebra transport is warranted by
+the current consumers.
+
+Validation: source inspection, import/declaration synchronization, and prose
+checks. The new definition and its evaluation lemma are proved without `sorry`,
+CI passed, and the Blueprint entry is marked formalized.

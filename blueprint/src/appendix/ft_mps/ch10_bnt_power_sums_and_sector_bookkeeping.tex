@@ -83,13 +83,13 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     zero for every $k$, establishing the power-sum equality.
 \end{proof}
 
-\begin{theorem}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
+\begin{lemma}[Equal power sums imply equal multisets]\label{thm:power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq}
     \leanok
     Let $\alpha, \beta : \{0, \ldots, n-1\} \to \C$.
     If $\sum_i \alpha_i^k = \sum_i \beta_i^k$ for all $k \ge 1$,
     then the multisets $\{\alpha_i\}$ and $\{\beta_i\}$ are equal.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -100,7 +100,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     roots form equal multisets.
 \end{proof}
 
-\begin{theorem}[Representative dimensions are bounded by the total bond dimension]
+\begin{lemma}[Representative dimensions are bounded by the total bond dimension]
     \label{thm:sector_basis_dimension_le_total_dimension}
     \lean{MPSTensor.SectorDecomposition.basisDim_le_totalDim}
     \lean{MPSTensor.SectorDecomposition.basisCount_le_totalDim}
@@ -110,7 +110,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     the bond dimension of the flattened sector tensor. Then $D_j\leq D$.
     If every $D_j$ is positive and there are $g$ representatives, then also
     $g\leq D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -130,7 +130,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Blocked sector coefficients and combined tensor]%
+\begin{lemma}[Blocked sector coefficients and combined tensor]%
     \label{thm:sector_decomposition_block_tensor_mpv}
     \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
     \lean{MPSTensor.SectorDecomposition.sameMPV₂_blockTensor_toTensor}
@@ -145,13 +145,13 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \end{align}
     In addition, blocking the tensor formed from $P$ gives the same MPV family
     as the tensor formed from the blocked sector decomposition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:block_tensor_to_tensor_from_blocks}
     The coefficient identity in
     (\ref{eq:bnt_sector_block_coeff}) is $(\mu^p)^N=\mu^{pN}$. The tensor
-    identity is Theorem~\ref{thm:block_tensor_to_tensor_from_blocks} applied to
+    identity is Lemma~\ref{thm:block_tensor_to_tensor_from_blocks} applied to
     the flattened copy family.
 \end{proof}
 
@@ -243,7 +243,7 @@ The equal-MPV matching theorems in Chapter~\ref{ch:bnt} specialize an eventual
 proportionality argument; matching in both directions produces a bijection
 between the sector sets.
 
-\begin{theorem}[Exact sector matching under eventual proportionality]
+\begin{lemma}[Exact sector matching under eventual proportionality]
     \label{thm:sector_bnt_proportional_exact_match}
     \lean{MPSTensor.exists_block_match_exact_of_eventuallyProportional}
     \leanok
@@ -252,14 +252,14 @@ between the sector sets.
     eventually nonzero and proportional. For every sector $j$ of $P$, there is
     a sector $k$ of $Q$ with equal bond dimension, gauge-phase-equivalent basis
     tensor after the dimension identification, and non-decaying cross-overlap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:sector_bnt_combined_family_eventually_li, lem:sector_decomposition_coeff_not_eventually_zero, cor:sector_bnt_cf_basis_normal, thm:cpsv_normal_overlap_dichotomy, thm:gauge_phase_mpv_scaling}
     Suppose the chosen sector decays against every sector of $Q$, and separate
     all such $P$-sectors from the remaining ones. For each remaining sector,
     choose a $Q$-sector with non-decaying overlap. Both blocks are normal by the
-    canonical-form hypotheses. Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}
+    canonical-form hypotheses. Lemma~\ref{thm:cpsv_normal_overlap_dichotomy}
     rules out its decay alternative and gives equal bond dimensions and a
     gauge-phase relation with a unit phase. Gauge-phase covariance therefore
     expresses that $P$-sector MPV as a geometric scalar multiple of the chosen
@@ -271,23 +271,23 @@ between the sector sets.
     coefficient extraction then makes the chosen sector coefficient eventually
     zero, contradicting its power-sum nonvanishing, so a non-decaying partner
     exists. A second application of
-    Theorem~\ref{thm:cpsv_normal_overlap_dichotomy} rules out decay and gives
+    Lemma~\ref{thm:cpsv_normal_overlap_dichotomy} rules out decay and gives
     the required dimension equality and gauge-phase equivalence without assuming
     a modulus-one overlap limit.
 \end{proof}
 
-\begin{theorem}[Full-basis matching under eventual proportionality]
+\begin{lemma}[Full-basis matching under eventual proportionality]
     \label{thm:sector_bnt_proportional_full_basis_match}
     \lean{MPSTensor.forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional}
     \leanok
     \uses{thm:sector_bnt_proportional_exact_match}
     Under the same hypotheses, every sector of $Q$ has an equal-dimensional,
     gauge-phase-equivalent partner in $P$ with non-decaying cross-overlap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reversing the eventual proportionality and applying
-    Theorem~\ref{thm:sector_bnt_proportional_exact_match} to each sector of
+    Lemma~\ref{thm:sector_bnt_proportional_exact_match} to each sector of
     $Q$ produce a partner in $P$, and symmetry of the overlap converts that
     partner to the stated orientation.
 \end{proof}

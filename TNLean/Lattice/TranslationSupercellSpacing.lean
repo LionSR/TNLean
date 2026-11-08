@@ -94,6 +94,15 @@ end SimpleGraph
 
 namespace TNLean.Lattice
 
+/-- Translation by the `k`-th power advances a cell coordinate by `k`.
+Hastings, arXiv:cond-mat/0508554v3, lines 1603–1618. -/
+theorem coordinate_pow_smul {V Γ : Type*} [Group Γ] [MulAction Γ V]
+    {n : ℕ} (π : V → ZMod n) (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
+    (k : ℕ) (v : V) : π (e ^ k • v) = π v + (k : ZMod n) := by
+  induction k with
+  | zero => simp
+  | succ k ih => rw [pow_succ', mul_smul, he, ih, Nat.cast_succ]; abel
+
 /-- **Multiples of `q` reach far.** For `q ≥ 1` and residues `a`, `b` modulo `n`, some
 `b + qt` lies at circular distance more than `n / 2 - q` from `a`. -/
 theorem exists_lt_natAbs_valMinAbs_add {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q)
@@ -176,15 +185,11 @@ theorem exists_mem_supercell_lt_edist_add {Γ : Type*} [CommGroup Γ] [MulAction
     (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ R)
     (e : Γ) (he : ∀ v, π (e • v) = π v + 1) (x y : V) :
     ∃ g ∈ supercell Γ d H E₀, ((n / 2 : ℕ) : ℕ∞) < (R : ℕ∞) * G.edist x (g • y) + q := by
-  have hpow (k : ℕ) (v : V) : π (e ^ k • v) = π v + (k : ZMod n) := by
-    induction k with
-    | zero => simp
-    | succ k ih => rw [pow_succ', mul_smul, he, ih, Nat.cast_succ]; abel
   obtain ⟨t, ht⟩ := exists_lt_natAbs_valMinAbs_add hq (π x) (π y)
   refine ⟨(e ^ t) ^ q, pow_mem_supercell hden _, ?_⟩
   rw [← pow_mul, Nat.mul_comm t q]
   have hdist := SimpleGraph.natAbs_valMinAbs_sub_le_edist hR π hπ x (e ^ (q * t) • y)
-  rw [hpow] at hdist
+  rw [coordinate_pow_smul π e he] at hdist
   have h1 : ((n / 2 : ℕ) : ℕ∞) <
       ((π y + ((q * t : ℕ) : ZMod n) - π x).valMinAbs.natAbs : ℕ∞) + q := by
     exact_mod_cast ht

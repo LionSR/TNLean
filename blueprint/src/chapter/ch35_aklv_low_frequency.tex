@@ -7,7 +7,7 @@ words of length $d$ with full occurrence vector $\beta$.
 The binomial counts below use the correction in
 \cite{gap:aklv13_interpolation_and_word_count}.
 
-\begin{theorem}[Moving a chain cut]
+\begin{lemma}[Moving a chain cut]
     \label{thm:aklv_cut_transport}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_le_pow_dist_mul}
     \leanok
@@ -18,7 +18,7 @@ The binomial counts below use the correction in
     \end{align*}
     Prefixes are intersected with the finite chain. This is the cut movement
     used in \cite[Lemma~4.2]{Arad2013AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The two prefixes differ on at most $|i-j|$ sites. The finite-partition
@@ -26,7 +26,7 @@ The binomial counts below use the correction in
     dimension, at most $q^{2|i-j|}$.
 \end{proof}
 
-\begin{theorem}[The same frequency operator at a target cut]
+\begin{lemma}[The same frequency operator at a target cut]
     \label{thm:aklv_target_frequency_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_window_one_marker_target_le,
         TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_full_frequency_slice_target_le}
@@ -47,7 +47,7 @@ The binomial counts below use the correction in
     \end{align*}
     The same inequality holds for the residual ordinary-frequency presentation
     of this operator.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_window_frequency_rank,thm:aklv_cut_transport}
@@ -58,7 +58,7 @@ The binomial counts below use the correction in
     operator to $c$. The two powers of $q$ multiply to the displayed exponent.
 \end{proof}
 
-\begin{theorem}[Actual low-frequency pieces of a Hamiltonian power]
+\begin{lemma}[Actual low-frequency pieces of a Hamiltonian power]
     \label{thm:aklv_low_frequency_power}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_low_frequency_power_decomposition}
     \leanok
@@ -75,7 +75,7 @@ The binomial counts below use the correction in
     \end{align}
     These are the selected pieces in \cite[Lemma~4.2]{Arad2013AreaLaw}.
     Their number is $s(\lfloor\ell/s\rfloor+1)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_target_frequency_rank}
@@ -87,23 +87,23 @@ The binomial counts below use the correction in
     expansion partitions into these disjoint parts, giving
     (\ref{eq:aklv_low_frequency_power}).
     For a fixed part use the weight $1$ when the selector chooses $H_u$ and
-    $0$ otherwise. Theorem~\ref{thm:aklv_target_frequency_rank}, with
+    $0$ otherwise. Lemma~\ref{thm:aklv_target_frequency_rank}, with
     $m=\ell-k$ and $c=a+\lfloor s/2\rfloor$, gives the bound.
     The source interaction index is $u+1$.
 \end{proof}
 
-\begin{theorem}[An explicit rank bound before optimization]
+\begin{lemma}[An explicit rank bound before optimization]
     \label{thm:aklv_power_rank_sum}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aklv_power_le_sum}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:aklv_low_frequency_power},
+    Under the hypotheses of Lemma~\ref{thm:aklv_low_frequency_power},
     \begin{align*}
         \operatorname{OSR}_{a+\lfloor s/2\rfloor}(G^\ell)
         \le\sum_{u=0}^{s-1}\sum_{k=0}^{\lfloor\ell/s\rfloor}
         \binom{\ell-k+s}{s}\binom{\ell+k+1}{2k+1}
         q^{2k+2|u+1-\lfloor s/2\rfloor|}.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:aklv_low_frequency_power}
@@ -111,5 +111,3 @@ The binomial counts below use the correction in
     (\ref{eq:aklv_low_frequency_power}) and then the individual bounds.
 \end{proof}
 
-% The arbitrary-polynomial assembly, choice of a shorter window, binomial bounds
-% and optimized asymptotic estimate in AKLV Lemma 4.2 remain separate statements.

@@ -1,6 +1,6 @@
 \section{A physical low cluster with the required parameter bounds}
 
-\begin{theorem}[One scale for the original ground space and clipped cluster]
+\begin{lemma}[One scale for the original ground space and clipped cluster]
     \label{thm:five_region_dg_cluster_parameters}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_dg_cluster_parameters}
     \leanok
@@ -40,7 +40,7 @@
     Every closed low cutoff between $E_0+g/20$ and $E_0+19g/20$ gives $T$.
     Moreover $\dim T=\dim G$, $T,G$ are mutually $1/200$-close, and every
     eigenvalue of $B$ is at most $\eta_0$ or at least $\eta_1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
@@ -64,8 +64,8 @@
     cutoffs described in~\cite{gap:alvv16_spectral_projector_boundary}.
 \end{proof}
 
-\begin{theorem}[Physical residual with an independent clipping threshold]
-    \label{thm:five_region_physical_truncation_residual}
+\begin{lemma}[Physical residual with an independent clipping threshold]
+    \label{lem:five_region_physical_truncation_residual}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_physical_truncation_residual}
     \leanok
     Let $q\ge1$, $\ell\ge1$, $t\ge21$, $a+2\ell\le b+1$ and
@@ -91,7 +91,7 @@
         \le288e^{11/8}e^{-(t-\eta)/8}.
         \label{eq:five_region_independent_residual}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
@@ -107,7 +107,7 @@
     (\ref{eq:five_region_independent_residual}).
 \end{proof}
 
-\begin{theorem}[The physical cluster at a prescribed projection accuracy]
+\begin{lemma}[The physical cluster at a prescribed projection accuracy]
     \label{thm:five_region_scaled_low_cluster}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_physical_scaled_low_cluster}
     \leanok
@@ -138,7 +138,7 @@
     Moreover $\dim T=\dim G$, the spaces $T,G$ are mutually
     $\tau/200$-close, and every eigenvalue of $B$ is at most $E_0+g/10$
     or at least $E_0+9g/10$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
