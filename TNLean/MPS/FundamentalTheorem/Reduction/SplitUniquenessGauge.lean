@@ -84,10 +84,6 @@ theorem mem_gaugeClass {s₀ t : {s // s ∈ S}} :
   unfold gaugeClass
   simp only [Finset.mem_filter, Finset.mem_univ, true_and]
 
-theorem self_mem_gaugeClass (s₀ : {s // s ∈ S}) : s₀ ∈ gaugeClass C s₀ :=
-  mem_gaugeClass.2 ⟨1, 1, Matrix.mul_one 1, Matrix.mul_one 1, fun i => by
-    rw [Matrix.mul_one, Matrix.one_mul]⟩
-
 variable (C) in
 /-- The chosen inverse `Y_t⁻¹` of the intertwiner of a member `t` of the gauge class of `s₀`: an
 invertible matrix with `C s₀ i * Y_t⁻¹ = Y_t⁻¹ * C t i`. -/
@@ -345,16 +341,6 @@ theorem zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one (hP : P.remainder 
       zeroSlotBlock (Q.relativeGauge P) * zeroSlotBlock (P.relativeGauge Q) = 1 :=
   ⟨zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge hP hQ hC,
     zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge hQ hP hC⟩
-
-/-- For two reductions with the same number of zero slots and the same order, the second written
-as `P.withGauge g` (blueprint `thm:asym_uniq_same_flag`, *Two compressions with the same flag*),
-the relative gauge is the coordinate change $h = \tilde g g^{-1}$ of that theorem. -/
-theorem relativeGauge_withGauge (P : MultiBlockCompression B S C)
-    (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
-    (htri : ∀ i, (conjMatrix g (B i)).BlockTriangular fun x => P.ord x.1)
-    (hdiag : ∀ i b, (conjMatrix g (B i)).blockDiag' b = blockOf D C i b) :
-    P.relativeGauge (P.withGauge g htri hdiag) = coordChange P.gauge g :=
-  rfl
 
 end MultiBlockCompression
 

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.BalancedIntervalTree
 import TNLean.MPS.AreaLaw.IntervalSampledImage
-import TNLean.MPS.AreaLaw.IntervalFullSpaceProfile
 import QICLean.Analysis.ViableNodeSamplingParameters
 
 /-!
@@ -186,8 +185,15 @@ theorem exists_balanced_sampled_interval_tree {L q width D rG : ℕ}
   · intro p r hpr hrL
     apply balancedIntervalSpace_invariant operation hwidth P ?_ ?_ p r hpr hrL
     · intro p r _hpr _hrL hshort
-      have hprofile := interval_top_dimension_and_rank_bounds (L := L) hq hxi.le hxi1 hleaf hshort
-      exact ⟨Submodule.isViable_top _ (by norm_num) _, hprofile⟩
+      have hdim : Module.finrank ℂ
+          (EuclideanSpace ℂ (interval L p r → Fin q)) ≤ count := by
+        calc
+          _ = q ^ (interval L p r).card := by
+            rw [finrank_euclideanSpace, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
+          _ ≤ q ^ width := Nat.pow_le_pow_right hq ((card_interval_le _ _).trans hshort)
+          _ ≤ count := hleaf
+      exact ⟨Submodule.isViable_top _ (by norm_num) _, by simpa only [finrank_top] using hdim,
+        isIntervalSpanWithRankBound_top hq hdim hxi.le hxi1⟩
     · intro p k r hpk hkr hrL hlong S1 S2 hS1 hS2
       let J : LongIntervalIndex L width := ⟨(p, r), hpk.trans hkr, hrL, hlong⟩
       obtain ⟨_U, _heq, hP⟩ := hoperation J k hpk hkr S1 S2

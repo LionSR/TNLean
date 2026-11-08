@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.RFP.AppendixBStructuralData
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Appendix B virtual-bond support
@@ -217,10 +218,7 @@ theorem AppendixBStructuralData.leftVirtualBondProjection_comp_right
       simp_rw [← hStruct.replaceVirtualBonds_commute]
       simp only [Finset.mul_sum]
       rw [Finset.sum_comm]
-      apply Finset.sum_congr rfl
-      intro k _
-      apply Finset.sum_congr rfl
-      intro l _
+      refine Finset.sum_congr₂ fun k _ l _ ↦ ?_
       ring
     · simp [LinearMap.comp_apply, AppendixBStructuralData.leftVirtualBondProjection,
         AppendixBStructuralData.rightVirtualBondProjection, h01, h12]

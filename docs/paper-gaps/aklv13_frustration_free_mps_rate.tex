@@ -1,0 +1,139 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Bond Dimension of the Frustration-Free Matrix Product State Approximation of Arad, Kitaev, Landau and Vazirani}
+\author{}
+\date{2026-11-04}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+Arad, Kitaev, Landau and Vazirani~\cite{Arad2013AreaLaw},
+arXiv:1301.1162v1, \path{1dfrustrated34.tex}, Section~5, lines~851--870,
+consider a frustration-free nearest-neighbour chain of $n$ sites of
+dimension $d$, with terms $0\le H_i\le1$, a unique ground state $\Gamma$ and
+gap $\varepsilon$. They state that $\Gamma$ is within $1/\mathrm{poly}(n)$ of a
+matrix product state of bond dimension
+\begin{align}
+    \exp\bigl(O(\varepsilon^{-1/3}\log^{2/3}n)\bigr).
+    \label{eq:aklv13_ffmps_printed}
+\end{align}
+The argument (lines~862--870) starts from a state of constant overlap with
+$\Gamma$ and entanglement rank $\exp(O(\log^3d/\varepsilon))$, and applies an
+approximate ground-state projector with shrinking factor
+$\Delta=1/\mathrm{poly}(n)$. It takes $\ell=s^2$ and states that Lemma~4.2
+of Ref.~\cite{Arad2013AreaLaw} gives $\Delta=e^{-c\varepsilon^{-1/2}s^{3/2}}$ and rank
+$D=\exp(s\log d)$; then $s=O(\varepsilon^{-1/3}\log^{2/3}n)$.
+
+\section{The exponent of the gap at line 867}
+
+The exponent of $\varepsilon$ in $\Delta$ is $+1/2$; the sign at line~867 is
+a misprint. The Chebyshev polynomial of degree $\ell$ of the clipped
+Hamiltonian, whose norm is at most $s+2t$ with $t=O(1/\varepsilon)$, gives
+$\Delta=\exp(-\ell\sqrt{\varepsilon}/\sqrt{s+2t})$ (line~831). For $\ell=s^2$
+this is $\exp(-c\,\varepsilon^{1/2}s^{3/2})$ with $c=\sqrt{s}/\sqrt{s+2t}$, as
+in the proof of Theorem~4.3 of Ref.~\cite{Arad2013AreaLaw} (line~835). The choice of $s$ at
+line~868 makes $\varepsilon^{1/2}s^{3/2}=\log n$, which is the balance
+needed for $\Delta=1/\mathrm{poly}(n)$.
+
+The constant $c$ is bounded below only when $s$ is at least of order
+$1/\varepsilon$. With $s$ of order $\varepsilon^{-1/3}\log^{2/3}n$ this needs
+$\log n$ of order at least $1/\varepsilon$. The starting rank
+$\exp(O(\log^3d/\varepsilon))$ is also omitted from
+(\ref{eq:aklv13_ffmps_printed}). Both are covered by an additive term in
+$\log B$ that is independent of $n$.
+
+\section{The rank of the second projector}
+
+Lemma~4.2 of Ref.~\cite{Arad2013AreaLaw} (line~590) bounds the entanglement rank of a polynomial
+of degree $\ell$ by $(d\ell)^{O(\max(\ell/s,\sqrt{\ell}))}$. At $\ell=s^2$ this
+is $\exp(O(s(\log d+\log s)))$, and the proof of Theorem~4.3 keeps
+the same factor $\log(s^2+s)$ (lines~840--841). The count is sharp for the
+method: the binomial coefficient $\binom{s^2+s}{s}$ in the proof is at least
+$s^s$. Line~868 writes $D=\exp(s\log d)$ and drops $\log s$. With
+$s=\varepsilon^{-1/3}\log^{2/3}n$ the factor $\log s$ is of order
+$\log\log n+\log(1/\varepsilon)$. The source's lemmas therefore give
+\begin{align}
+    \log B=O\bigl(\varepsilon^{-1/3}\log^{2/3}n\,
+        (\log d+\log\log n+\log(1/\varepsilon))\bigr),
+    \label{eq:aklv13_ffmps_source}
+\end{align}
+not (\ref{eq:aklv13_ffmps_printed}). This is the factor hidden by the tilde
+in the general bound $e^{\tilde O(\log^{3/4}n/\varepsilon^{1/4})}$ of the same
+paper (lines~176 and 1503--1517).
+
+\section{What is formalized}
+
+For a nearest-neighbour chain of $L$ sites of dimension $q$ with terms
+$0\le h_j\le1$, a unit vector $\Omega$ with $H\Omega=0$ for $H=\sum_jh_j$,
+$H\ge g(I-|\Omega\rangle\langle\Omega|)$ with $g>0$ and $g$ in the spectrum of
+$H$, and for $0<\epsilon\le1$, put
+\begin{align}
+    u=1+\log q+\log\frac1g,\qquad
+    z=\log\frac{2048(L+1)}{\epsilon^2}.
+    \label{eq:aklv13_ffmps_parameters}
+\end{align}
+There are a universal constant $C>0$ and a bond dimension $D$ with
+\begin{align}
+    \log D\le C\Bigl[\frac{u^3}{g}
+        +\Bigl(\frac{z^2}{g}\Bigr)^{1/3}\bigl(u+\log(z+1)\bigr)\Bigr]
+    \label{eq:aklv13_ffmps_formal}
+\end{align}
+and a normalized open-boundary matrix product state $\Phi$ of bond dimension
+at most $D$ with $\lVert\Phi-\Omega\rVert\le\epsilon$.\footnote{%
+    \leanid{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_sequential_mps_approximation}
+    in \doclink{TNLean/MPS/AreaLaw/AKLV/FrustrationFreeMPSApproximation}.}
+The hypotheses are those of the source: $g$ is the gap itself, and $q\ge2$
+and $g\le1$ are derived.
+
+The proof follows lines~862--868. At each cut a product vector with squared
+overlap at least $1/(2D_0)$ with $\Omega$ is filtered by the projector of the
+entropy theorem, which gives a vector within squared distance $1/16$ of
+$\Omega$ and of rank at most $D_0$, with $\log D_0\le Ru^3/g$. A second
+projector of degree $\ell=s^2$ on a window of width
+$s=s_0+2\lceil6(z^2/g)^{1/3}\rceil$, with $s_0\ge1/g$ the window of the entropy
+theorem, has shrinking factor at most $\epsilon^2/(1024(L+1))$ at the clipping
+height $1024/g$. Here the exponent $+1/2$ of the gap is used. If the window
+does not fit, $\Omega$ itself has rank at most $q^{s-\lfloor s/2\rfloor}$.
+Sequential truncation of the leading Schmidt vectors then gives $\Phi$.
+
+\section{Comparison}
+
+Take $\epsilon=n^{-c}$ with $n=L$. Then $z=O(\log n)$, and for fixed $q$ and
+$g$ the bound (\ref{eq:aklv13_ffmps_formal}) reads
+\begin{align}
+    \log D=O\bigl(g^{-1/3}(\log n)^{2/3}\log\log n\bigr).
+    \label{eq:aklv13_ffmps_asymptotic}
+\end{align}
+This is (\ref{eq:aklv13_ffmps_source}) with the factor $\log s$ written out.
+It is smaller than the general bound $(\log n)^{3/4}$ of the same paper. The
+printed bound (\ref{eq:aklv13_ffmps_printed}), without the factor
+$\log\log n$, is not formalized and is not implied by Lemma~4.2 of Ref.~\cite{Arad2013AreaLaw}.
+The gap enters (\ref{eq:aklv13_ffmps_formal}) also through $\log(1/g)$ in
+$u$ and through the term $u^3/g$, which are independent of $n$; the inverse-gap
+logarithms are retained as in the entropy theorem,
+\path{docs/paper-gaps/aklv13_two_block_robustness.tex}.
+
+\section{Verdict}
+
+A local correction, resolved: the exponent at line~867 is read as $+1/2$, and
+the bond dimension of Section~5 is formalized with the factor $\log\ell$ of
+Lemma~4.2 of Ref.~\cite{Arad2013AreaLaw}, under the source's hypotheses.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

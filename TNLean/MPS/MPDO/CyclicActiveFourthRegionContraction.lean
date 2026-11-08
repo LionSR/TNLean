@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CyclicActiveRetainedCoordinates
 import TNLean.MPS.MPDO.SectorChainFiberContraction
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Contraction of a nonempty discarded suffix
@@ -553,10 +554,7 @@ theorem reindex_reducedBlockState_add_eq_suffixSectorContraction
       · subst h
         rw [Matrix.blockDiagonal'_apply_eq]
         simp only [suffixSectorContraction]
-        apply Finset.sum_congr rfl
-        intro q _
-        apply Finset.sum_congr rfl
-        intro z _
+        refine Finset.sum_congr₂ fun q _ z _ ↦ ?_
         rw [hconfig k x q z, hconfig k y q z]
         have hentry := congrFun (congrFun
           (F.reindex_mpo_sectorCoordinateTensor_eq_blockDiagonal

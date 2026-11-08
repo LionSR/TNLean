@@ -901,8 +901,9 @@ with the corresponding composite embeddings.
         W_{ab}^{c\mu}$ with $W_{ab}^{c\mu}V_{ab}^{d\nu}=\delta_{cd}\delta_{\mu\nu}\Id$,
     so the letters $V$ and $W$ are swapped. Lemma~\ref{thm:mpoalg_fusion_coproduct}
     reads this identity backwards: the fusion tensors of a complete zipper
-    fusion family define the coproduct. No part of the correspondence
-    concerning units, counits, or antipodes is stated here.
+    fusion family define the coproduct, and
+    Lemma~\ref{lem:mpoalg_fusion_coproduct_counit} identifies its counit. No
+    part of the correspondence concerning units or antipodes is stated here.
     % Source anchor: arXiv:2204.05940, mpo.tex line 1655
     %   (eq:splitting_algebraic) and 1725--1892 (basis change, F-symbols,
     %   pentagon).
@@ -964,48 +965,45 @@ with the corresponding composite embeddings.
     $\Delta(X)\Delta(Y)=\sum_{c,\mu}X^c_{ab,\mu}X_cY_cX^{c+}_{ab,\mu}$.
 \end{proof}
 
-\begin{definition}[Pre-bialgebra comultiplication]
+\begin{definition}[Pre-bialgebra]
     \label{def:mpoalg_pre_bialgebra}
-    \lean{PreBialgebra, PreBialgebra.coassoc_apply, PreBialgebra.comul_mul,
-        Bialgebra.toPreBialgebra, Bialgebra.preBialgebra_comul_apply}
+    \lean{PreBialgebra, Bialgebra.toPreBialgebra}
     \leanok
-    A pre-bialgebra comultiplication on an algebra $\mathcal A$ over a
-    commutative semiring $R$ is a linear map
-    $\Delta\colon\mathcal A\to\mathcal A\otimes\mathcal A$ that is
-    multiplicative and coassociative:
+    A pre-bialgebra over a commutative semiring $R$ is an algebra
+    $\mathcal A$ over $R$ with linear maps
+    $\Delta\colon\mathcal A\to\mathcal A\otimes\mathcal A$ and
+    $\epsilon\colon\mathcal A\to R$ such that $\Delta$ is multiplicative and
+    coassociative and $\epsilon$ is a counit:
     \begin{align}
         \Delta(xy)                    & =\Delta(x)\Delta(y),            &
         (\Delta\otimes\Id)\circ\Delta & =(\Id\otimes\Delta)\circ\Delta,
-        \label{eq:mpoalg_pre_bialgebra}
+        \label{eq:mpoalg_pre_bialgebra}                                   \\
+        (\epsilon\otimes\Id)\circ\Delta
+                                      & =\Id,                           &
+        (\Id\otimes\epsilon)\circ\Delta
+                                      & =\Id,
+        \label{eq:mpoalg_pre_bialgebra_counit}
     \end{align}
-    the second after the standard identification of the two triple tensor
-    products. Neither a counit nor $\Delta(\Id)=\Id\otimes\Id$ is required.
-    The comultiplication of every bialgebra is a pre-bialgebra
-    comultiplication.
+    after the standard identifications of the two triple tensor products and
+    of $R\otimes\mathcal A$ and $\mathcal A\otimes R$ with $\mathcal A$.
+    Neither $\Delta(\Id)=\Id\otimes\Id$ nor any relation between $\epsilon$
+    and the unit or the product is required. Every bialgebra is a
+    pre-bialgebra.
 
-    In \cite[Definition~4.1]{Molnar2022MPOAlgebrasI}, a pre-bialgebra is an
-    algebra that is also a coalgebra with multiplicative coproduct, and a
-    coalgebra \cite[Definition~3.1]{Molnar2022MPOAlgebrasI} is a
-    finite-dimensional complex vector space with a coassociative coproduct
-    $\Delta$ and a counit $\epsilon$ satisfying
-    $(\epsilon\otimes\Id)\circ\Delta=(\Id\otimes\epsilon)\circ\Delta=\Id$.
-    The source imposes no relation between the counit and the unit or the
-    product, and allows $\Delta(\Id)\neq\Id\otimes\Id$. The structure
-    defined here consists of the comultiplication axioms
-    (\ref{eq:mpoalg_pre_bialgebra}) only; the counit is not part of it, so
-    it is strictly weaker than the source's pre-bialgebra
-    \cite{gap:mrgscp22_pre_bialgebra_counit_scope}.
+    This is \cite[Definition~4.1]{Molnar2022MPOAlgebrasI}: an algebra that is
+    also a coalgebra \cite[Definition~3.1]{Molnar2022MPOAlgebrasI} with
+    multiplicative coproduct. The source works with finite-dimensional
+    complex vector spaces.
     % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875
-    %   (Definition 3.1) and 1409--1414 (Definition 4.1).
+    %   (Definition 3.1), 1407 and 1409--1414 (Definition 4.1).
 \end{definition}
 
-\begin{lemma}[The fusion coproduct is a pre-bialgebra comultiplication]%
+\begin{lemma}[The fusion coproduct is coassociative]%
     \label{thm:mpoalg_fusion_coproduct_coassoc}
     \lean{MPOTensor.CompleteZipperFusionFamily.tensorPairEquiv,
         MPOTensor.CompleteZipperFusionFamily.comul,
         MPOTensor.CompleteZipperFusionFamily.comul_letter,
-        MPOTensor.CompleteZipperFusionFamily.comul_coassoc,
-        MPOTensor.CompleteZipperFusionFamily.toPreBialgebra}
+        MPOTensor.CompleteZipperFusionFamily.comul_coassoc}
     \leanok
     \uses{thm:mpoalg_fusion_coproduct, def:mpoalg_pre_bialgebra}
     Write $\mathcal B=\bigoplus_c\MN{D_c}$. Distributing the tensor product
@@ -1023,13 +1021,9 @@ with the corresponding composite embeddings.
     and it is coassociative,
     $(\Delta\otimes\Id)\circ\Delta=(\Id\otimes\Delta)\circ\Delta$ after
     the standard identification of the two triple tensor products. Thus
-    $\Delta$ is a pre-bialgebra comultiplication on $\mathcal B$ in the sense
-    of Definition~\ref{def:mpoalg_pre_bialgebra}, while $\Delta(\Id)$ is the
-    support projector of Lemma~\ref{thm:mpoalg_fusion_coproduct} and need
-    not be the unit. No counit is constructed, so $(\mathcal B,\Delta)$ is
-    not shown to be a pre-bialgebra in the sense of
-    \cite[Definition~4.1]{Molnar2022MPOAlgebrasI}
-    \cite{gap:mrgscp22_pre_bialgebra_counit_scope}. The source assumes
+    $\Delta$ satisfies (\ref{eq:mpoalg_pre_bialgebra}), while $\Delta(\Id)$
+    is the support projector of Lemma~\ref{thm:mpoalg_fusion_coproduct} and
+    need not be the unit. The source assumes
     coassociativity and derives the associativity of fusion trees and the
     $F$-symbols; here it is proved from the fusion tensors.
     % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875
@@ -1049,6 +1043,134 @@ with the corresponding composite embeddings.
     span $\mathcal B$. By the letter formula applied twice, both send
     $(B_c^{il})_c$ to
     $\sum_{j,k}(B_c^{ij})_c\otimes(B_c^{jk})_c\otimes(B_c^{kl})_c$.
+\end{proof}
+
+\begin{lemma}[Counit of the fusion coproduct]%
+    \label{lem:mpoalg_fusion_coproduct_counit}
+    \lean{MPOTensor.CompleteZipperFusionFamily.rTensor_counit_comp_comul,
+        MPOTensor.CompleteZipperFusionFamily.lTensor_counit_comp_comul,
+        MPOTensor.CompleteZipperFusionFamily.counit_unique,
+        MPOTensor.CompleteZipperFusionFamily.identityBlockCounit,
+        MPOTensor.CompleteZipperFusionFamily.identityBlockCounit_letter,
+        MPOTensor.CompleteZipperFusionFamily.toPreBialgebra}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct_coassoc, def:mpoalg_pre_bialgebra}
+    In the setting of Lemma~\ref{thm:mpoalg_fusion_coproduct_coassoc}, let
+    $\epsilon\colon\mathcal B\to\C$ be a linear functional with
+    \begin{align}
+        \epsilon\big((B_c^{ik})_c\big)
+         & =\delta_{ik}.
+        \label{eq:mpoalg_fusion_counit}
+    \end{align}
+    Then $\epsilon$ satisfies (\ref{eq:mpoalg_pre_bialgebra_counit}) for
+    the fusion coproduct, so $(\mathcal B,\Delta,\epsilon)$ is a
+    pre-bialgebra in the sense of Definition~\ref{def:mpoalg_pre_bialgebra}.
+    There is at most one functional with (\ref{eq:mpoalg_fusion_counit}). If
+    one block is the identity operator, $B_{c_0}^{ik}=\delta_{ik}\Id$, then
+    $X\mapsto D_{c_0}^{-1}\tr X_{c_0}$ is such a functional.
+
+    In \cite[Section~4]{Molnar2022MPOAlgebrasI} the boundary algebra is the
+    dual algebra $\mathcal A^*$, whose counit is evaluation at the unit of
+    $\mathcal A$, and $(B_c^{ik})_c$ is the image of the matrix coefficient
+    $x\mapsto\phi(x)_{ik}$ of the physical representation $\phi$. Since
+    $\phi(\Id)=\Id$, the source's counit is the functional
+    (\ref{eq:mpoalg_fusion_counit}). The fusion data alone do not force such
+    a functional to exist: one block of bond dimension one whose letters form
+    a nonzero matrix $(B^{ik})_{ik}$ of square zero, with no fusion channel,
+    has $\Delta=0$, which admits no counit. The pre-bialgebra is therefore stated
+    for a given functional with (\ref{eq:mpoalg_fusion_counit})
+    \cite{gap:mrgscp22_pre_bialgebra_counit_scope}.
+    Lemma~\ref{lem:mpoalg_fusion_counit_existence} characterizes when such a
+    functional exists, and
+    Lemma~\ref{lem:mpoalg_fusion_counit_unital_representation} constructs it
+    for a family obtained from a unital representation.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 866--875
+    %   (Definition 3.1), 880 and 1419 (counit of the dual algebra), 1421
+    %   (representations are unital), 1640 (the dual is a pre-bialgebra).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct, thm:mpoalg_fusion_coproduct_coassoc}
+    Both sides of each identity in (\ref{eq:mpoalg_pre_bialgebra_counit})
+    are linear, and the elements $(B_c^{ik})_c$ span $\mathcal B$ by
+    Lemma~\ref{thm:mpoalg_fusion_coproduct}. By the letter formula and
+    (\ref{eq:mpoalg_fusion_counit}),
+    $(\epsilon\otimes\Id)\Delta\big((B_c^{ik})_c\big)
+        =\sum_j\delta_{ij}(B_c^{jk})_c=(B_c^{ik})_c$, and similarly on the
+    other side. Spanning also gives uniqueness. For an identity block,
+    $D_{c_0}^{-1}\tr(\delta_{ik}\Id)=\delta_{ik}$.
+\end{proof}
+
+\begin{lemma}[Existence of the counit]%
+    \label{lem:mpoalg_fusion_counit_existence}
+    \lean{MPOTensor.CompleteZipperFusionFamily.tracePairing,
+        MPOTensor.CompleteZipperFusionFamily.exists_tracePairing_eq,
+        MPOTensor.CompleteZipperFusionFamily.exists_counit_iff,
+        MPOTensor.CompleteZipperFusionFamily.toPreBialgebraOfUnitWitness}
+    \leanok
+    \uses{lem:mpoalg_fusion_coproduct_counit}
+    In the setting of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}, every
+    linear functional on $\mathcal B$ has the form
+    $X\mapsto\sum_c\tr(Y_cX_c)$ for some $Y=(Y_c)_c\in\mathcal B$. Hence a
+    functional with (\ref{eq:mpoalg_fusion_counit}) exists if and only if the
+    identity operator on one site is a one-site operator of the family,
+    \begin{align}
+        \sum_c\tr\big(Y_cB_c^{ik}\big)
+         & =\delta_{ik}
+        \qquad\text{for some }Y\in\mathcal B,
+        \label{eq:mpoalg_fusion_unit_witness}
+    \end{align}
+    and then $X\mapsto\sum_c\tr(Y_cX_c)$ is the counit of the fusion
+    coproduct.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 880, 1419 and 1421.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:matrix_family_trace_duality}
+    The block trace pairing $(Y,X)\mapsto\sum_c\tr(Y_cX_c)$ on $\mathcal B$
+    is nondegenerate, so by Lemma~\ref{thm:matrix_family_trace_duality} every
+    functional $\epsilon$ is $X\mapsto\sum_c\tr(Y_cX_c)$ for the element $Y$
+    that the pairing assigns to $\epsilon$. On the
+    elements $(B_c^{ik})_c$ this pairing is the left side of
+    (\ref{eq:mpoalg_fusion_unit_witness}), so (\ref{eq:mpoalg_fusion_counit})
+    and (\ref{eq:mpoalg_fusion_unit_witness}) are the same condition.
+\end{proof}
+
+\begin{lemma}[The counit of a family from a unital representation]%
+    \label{lem:mpoalg_fusion_counit_unital_representation}
+    \lean{MPOTensor.CompleteZipperFusionFamily.surjective_of_forall_letter_mem_range,
+        MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit,
+        MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit_apply,
+        MPOTensor.CompleteZipperFusionFamily.dualRepresentationCounit_letter,
+        MPOTensor.CompleteZipperFusionFamily.toPreBialgebraOfDualRepresentation}
+    \leanok
+    \uses{lem:mpoalg_fusion_coproduct_counit}
+    In the setting of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}, let
+    $\phi\colon\mathcal A\to\MN{d}$ be a unital representation of a complex
+    algebra $\mathcal A$, and let $\psi\colon\mathcal A^*\to\mathcal B$ be an
+    injective linear map with $\psi(\phi_{ik})=(B_c^{ik})_c$ for the matrix
+    coefficients $\phi_{ik}(x)=\phi(x)_{ik}$. Then $\psi$ is a linear
+    isomorphism, and $\psi(f)\mapsto f(\Id)$ is a functional with
+    (\ref{eq:mpoalg_fusion_counit}). Hence $\mathcal B$, with the fusion
+    coproduct and this counit, is a pre-bialgebra. This is the situation of
+    \cite[Section~4]{Molnar2022MPOAlgebrasI}, where $\psi$ is the direct sum
+    of the irreducible representations of the dual algebra $\mathcal A^*$ and
+    the counit of $\mathcal A^*$ is evaluation at the unit.
+    % Source anchor: arXiv:2204.05940, mpo.tex lines 880 and 1419 (counit of
+    %   the dual algebra), 1070 and 1084 (boundary algebra), 1421
+    %   (representations are unital).
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:mpoalg_fusion_coproduct, lem:mpoalg_fusion_coproduct_counit}
+    The range of $\psi$ contains the elements $(B_c^{ik})_c$, which span
+    $\mathcal B$ by Lemma~\ref{thm:mpoalg_fusion_coproduct}, so $\psi$ is
+    onto. On $(B_c^{ik})_c=\psi(\phi_{ik})$ the functional takes the value
+    $\phi_{ik}(\Id)=\phi(\Id)_{ik}=\delta_{ik}$. The pre-bialgebra structure
+    is that of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}.
 \end{proof}
 
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%

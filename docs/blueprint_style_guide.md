@@ -37,8 +37,8 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    The roles are data: `blueprint/roles.json` lists the theorems and corollaries
    of each chapter by label, and `python3 scripts/blueprint_roles.py --apply`
    sets every environment and the words of prose references from it
-   (`--check` reports mismatches). Add a new headline result to that file
-   rather than hand-editing environments.
+   (`--check` reports mismatches, and PR CI runs it). Add a new headline
+   result to that file rather than hand-editing environments.
    Each chapter opens with a paragraph that says, in ordinary words, what the
    chapter proves and names its theorems, and the chapter title says what is
    proved rather than listing construction names.

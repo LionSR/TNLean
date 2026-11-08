@@ -221,6 +221,14 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   `docs/audits/2026-10-29_zero_reference_implementation_helpers.md`.
   This is separate from #10296; local Lean verification was not run, and hosted
   acceptance and integration remain pending.
+- **Written helper slice (2026-11-03)**: at `5a13935af` the scan reports 41
+  candidates. Eighteen unused implementation helpers in thirteen files are
+  removed, minus 98 production Lean lines, and the edited scan reports 23. They
+  are `rfl` projections, restatements of a neighbouring lemma, or a
+  `positivity` or `fin_cases` check that nothing calls. The 23 retained
+  candidates either cite a source, are listed main results, or are kept by an
+  earlier decision. See `docs/audits/2026-11-03_zero_reference_helpers.md`.
+  Local Lean verification was not run.
 - **What**: top-level declarations whose name appears exactly once
   repo-wide (their own definition), including attribute-carrying
   declarations and instances cleared by a root build. Largest
@@ -676,7 +684,13 @@ description of current `main`.
   proportional theorem via the unused bridges at `MPS/Defs.lean:244,294`.
 
 ## D6. PEPS insertion/transfer machinery rebuilt at edge, region, and coarse granularities — abstraction-gap, impact 6/10, effort 8/10
-- **Status**: open ([#4522](https://github.com/LionSR/TNLean/issues/4522))
+- **Status**: retired 2026-11-05 ([#4522](https://github.com/LionSR/TNLean/issues/4522)).
+  The singleton-region case is not a reindexing: the region weight sums
+  freely over the labels of edges away from the region, so the region
+  coefficient is the edge coefficient times the product of those bond
+  dimensions (`regionInsertedCoeff_eq_smul_edgeInsertedCoeff`), and
+  removing that factor would change the definition every region result
+  rests on.
 - **Evidence**: the shared configuration calculus has landed
   ([PR #4623](https://github.com/LionSR/TNLean/pull/4623),
   [PR #5188](https://github.com/LionSR/TNLean/pull/5188)); `hostMerge` is

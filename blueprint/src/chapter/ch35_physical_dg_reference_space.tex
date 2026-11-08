@@ -1,21 +1,5 @@
 \section{A fixed reference space for collective trimming}
 
-\begin{lemma}[Increasing an allowed bond dimension]
-    \label{thm:open_mps_bond_mono}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.mono}
-    \leanok
-    If a vector has an open-boundary matrix product representation of bond
-    dimension at most $D$, and $D\le D'$, then it has one of bond dimension
-    at most $D'$. Empty chains and zero bounds are included.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:chain_cut_rank_of_mps}
-    Each internal cut has rank at most $D\le D'$. Apply the cut-rank
-    characterization.
-\end{proof}
-
-
 \begin{lemma}[A reference span from approximants to a basis]
     \label{thm:mps_basis_reference_subspace}
     \lean{TNLean.MPS.AreaLaw.exists_reference_subspace_of_isOpenMPS_basis_approximations}
@@ -34,7 +18,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:open_mps_finite_span,thm:open_mps_bond_mono}
+    \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
     Define $F:T\to(\C^q)^{\otimes N}$ by $Fu_i=\phi_i$ and put $U=FT$.
     The coefficient Cauchy--Schwarz inequality gives
     \begin{align}
@@ -96,11 +80,13 @@
         =\varepsilon/(4r).
     \end{align*}
     Their total squared error is at most $\varepsilon/4$.
-    The preceding theorem gives $U$ with bond bound $r(rB)=r^2B$.
+    The preceding lemma gives $U$ with bond bound $r(rB)=r^2B$.
     Substitution of $\delta_{\mathrm{basis}}$ into the global logarithmic
     bound gives (\ref{eq:physical_reference_accuracy}) and
     (\ref{eq:physical_reference_bond}).
 \end{proof}
+
+
 
 
 
@@ -164,7 +150,7 @@
 \begin{proof}\leanok
     \uses{thm:physical_dg_mps_reference_subspace,thm:interval_trimming_reference}
     Choose the one common reference before the interval and $S$, and
-    apply the preceding theorem with $D=D_{\rm ref}$.
+    apply the preceding lemma with $D=D_{\rm ref}$.
 \end{proof}
 
 \begin{lemma}[Merging adjacent interval spaces for one global target]
@@ -183,7 +169,7 @@
     $(\delta_1+\delta_2)$-viable for the same $G$ and has dimension at
     most $(\dim S_1)(\dim S_2)$.
     Empty child intervals are included, and no product structure of $G$
-    is assumed. This is the chain-coordinate form of
+    is assumed. This is the specialization to adjacent intervals of
     \cite[Lemma on tensoring, lines 500--523]{Arad2016RigorousRG}.
 \end{lemma}
 \begin{proof}\leanok
@@ -210,9 +196,9 @@
     Suppose the physical filter parameters satisfy $m\ge\max\{q,50\}$,
     $\ell\ge1$, $t\ge21$, the inequalities
     \[
-      288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
-      \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
-      \quad(0<R\le3t+4\ell),
+        288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
+        \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
+        \quad(0<R\le3t+4\ell),
     \]
     and $D^{12}\Delta\le10^{-5}$, where
     $D=(m\ell^2)^{22\ell}$.
@@ -227,10 +213,10 @@
     There is a measurable event of Haar unitaries whose failure measure
     is at most
     \[
-      \eta=\begin{cases}
-        0,&Q\le s,\\
-        \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16},&s<Q.
-      \end{cases}
+        \eta=\begin{cases}
+            0,                                                & Q\le s, \\
+            \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16}, & s<Q.
+        \end{cases}
     \]
     For every unitary in this event, sample $\min\{s,Q\}$ basis vectors,
     apply all actual length-$a$ operator words, and collectively trim
@@ -286,545 +272,6 @@
     parent length.
 \end{proof}
 
-\begin{definition}[Internal intervals of the balanced recursion]
-    \label{def:balanced_interval_merge_list}
-    \lean{TNLean.MPS.AreaLaw.balancedIntervalMergeList}
-    \leanok
-    Fix a leaf width $w\ge1$. Let $\mathcal I_w(p,r)$ be the ordered
-    list of internal intervals obtained by the subdivision in
-    Definition~\ref{def:balanced_interval_spaces}. A short interval
-    contributes the empty list. Otherwise, with
-    $k=p+\lfloor(r-p)/2\rfloor$, concatenate the lists for $[p,k)$ and
-    $[k,r)$, followed by the single parent $[p,r)$.
-\end{definition}
-
-\begin{lemma}[Number of merges below one root]
-    \label{lem:balanced_interval_merge_count}
-    \lean{TNLean.MPS.AreaLaw.length_balancedIntervalMergeList_le}
-    \leanok
-    For $p\le r$, the list $\mathcal I_w(p,r)$ has length at most
-    $\max\{r-p-1,0\}$. In particular, a root of $L$ sites has at most
-    $\max\{L-1,0\}$ merges.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:balanced_interval_merge_list}
-    Induct on $r-p$. A short interval has no merge. At a long interval,
-    both child lengths are positive and sum to $r-p$, so the inductive
-    bounds and the parent contribute at most
-    $(k-p-1)+(r-k-1)+1=r-p-1$ merges.
-\end{proof}
-
-\begin{lemma}[Closure of the actual merge list under descendants]
-    \label{lem:balanced_interval_merge_closure}
-    \lean{TNLean.MPS.AreaLaw.self_mem_balancedIntervalMergeList,
-        TNLean.MPS.AreaLaw.mem_balancedIntervalMergeList_trans}
-    \leanok
-    Every long interval belongs to its own internal merge list.
-    If $J\in\mathcal I_w(p,r)$ and $K\in\mathcal I_w(J)$, then
-    $K\in\mathcal I_w(p,r)$. In particular, each long midpoint child
-    of a listed interval is itself in that same root list.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:balanced_interval_merge_list}
-    The parent is the final entry of a long interval's list.
-    For transitivity, induct on the root length and split its list into
-    the two child lists and the parent. A listed interval in either
-    child has all its internal descendants in that child list by
-    induction. If the listed interval is the parent itself, the
-    assertion is immediate.
-\end{proof}
-
-\begin{definition}[Independent interval sampling choices]
-    \label{def:interval_sampling_choices}
-    \lean{TNLean.MPS.AreaLaw.IntervalSamplingChoices,
-        TNLean.MPS.AreaLaw.intervalSamplingMeasure,
-        TNLean.MPS.AreaLaw.instIsProbabilityMeasureIntervalSamplingMeasure}
-    \leanok
-    For each pair $J=(p,r)$ of endpoints in $\{0,\ldots,L\}$, let $d_J$
-    be the dimension of its physical configuration space and set
-    $\Omega_J=\prod_{a=0}^{d_J}\mathrm U(a)$. Give $\Omega_J$ its product
-    Haar probability measure. The interval sampling space is
-    $\Omega=\prod_J\Omega_J$, with the product probability law.
-    A balanced root uses only the coordinates of its internal intervals.
-\end{definition}
-
-\begin{lemma}[The law of an interval coordinate]
-    \label{lem:interval_sampling_marginal}
-    \lean{TNLean.MPS.AreaLaw.measurePreserving_intervalSamplingChoice}
-    \leanok
-    For each endpoint pair $J$, the coordinate map
-    $\Omega\to\Omega_J$ preserves the prescribed probability law.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:interval_sampling_choices}
-    This is the marginal formula for a finite product of probability
-    measures.
-\end{proof}
-
-\begin{definition}[Interval operations with independent coordinates]
-    \label{def:independent_interval_operation}
-    \lean{TNLean.MPS.AreaLaw.LongIntervalIndex.coordinate,
-        TNLean.MPS.AreaLaw.independentIntervalOperation}\leanok
-    Fix a positive leaf width $w$ and a space $\Omega_I$ at each finite
-    endpoint pair $I$. Put $\Omega=\prod_I\Omega_I$. For each valid long
-    interval $J=[p,r)$, prescribe a map $\mathcal M_J(W,u)$ from a candidate
-    subspace $W\subseteq\mathcal H_J$ and $u\in\Omega_{(p,r)}$ to a subspace
-    of $\mathcal H_J$. At a long parent and midpoint $k$, define
-    \begin{align}
-        S_\omega(p,r)=\mathcal M_{[p,r)}
-        \bigl(S_\omega(p,k)\otimes S_\omega(k,r),\omega_{(p,r)}\bigr),
-        \label{eq:independent_interval_parent}
-    \end{align}
-    where the child tensor product is identified with the actual adjacent
-    interval space. At short leaves retain $\mathcal H_J$. This is the
-    balanced recursion of Definition~\ref{def:balanced_interval_spaces}.
-    Coordinates of invalid or unused intervals remain unused. Each
-    $\Omega_I$ may contain a whole finite sequence of sampling variables.
-\end{definition}
-
-\begin{lemma}[Measurable projections and actual parent sections]
-    \label{lem:independent_interval_tree_sections}
-    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_and_dependsOn_independentIntervalTree,
-        TNLean.MPS.AreaLaw.independentIntervalTree_update_of_length_lt,
-        TNLean.MPS.AreaLaw.independentIntervalTree_update_parent,
-        TNLean.MPS.AreaLaw.measurableSet_isViable_independentIntervalTree,
-        TNLean.MPS.AreaLaw.measurableSet_guardedIntervalFailure_independentIntervalTree}\leanok
-    Give the coordinate spaces measurable structures. Suppose that for
-    every long $J$ and every candidate family $W:\Omega\to\operatorname{Sub}(\mathcal H_J)$
-    with measurable orthogonal projection, the projection onto
-    $\mathcal M_J(W(\omega),u)$ is measurable in $(\omega,u)$.
-    Then every valid $S_\omega(p,r)$ has measurable orthogonal projection and
-    depends only on coordinates $I=(a,b)$ with $b-a\le r-p$.
-    Its viability event for any fixed global target and the full exterior
-    is measurable, as is the guarded failure event of its two actual children
-    and parent.
-
-    If $J=[p,r)$ is long, changing only $\omega_J$ leaves both shorter
-    child spaces unchanged. For every replacement $u\in\Omega_J$,
-    \begin{align}
-        S_{\omega[J\leftarrow u]}(p,r)
-        =\mathcal M_J\bigl(S_\omega(p,k)\otimes S_\omega(k,r),u\bigr).
-        \label{eq:independent_interval_section}
-    \end{align}
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:independent_interval_operation,lem:borel_actual_adjacent_interval_merge}
-    Induct on the interval length. A short interval is the constant full
-    space. For a long interval, the actual adjacent child merge has measurable
-    projection by induction. Apply the parent hypothesis and compose with
-    coordinate evaluation. Both child lengths are smaller than the
-    parent length, so equality on all no longer coordinates fixes both
-    children and the parent coordinate. This proves dependence and
-    (\ref{eq:independent_interval_section}). The projection criterion for
-    viability gives its true event, and intersection with the two child
-    events gives the guarded event.
-\end{proof}
-
-\begin{definition}[The interval operation for fixed sampling choices]
-    \label{def:canonical_interval_sampling_operation}
-    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingOperation}
-    \leanok
-    Fix the interval families, trimming threshold, sample size and
-    number of rounds. Given $\omega\in\Omega$, the operation at a valid
-    long parent $[p,r)$ first forms the tensor merge of its adjacent
-    children. It samples that merge using the coordinate $\omega_{(p,r)}$
-    and applies the specified family's literal interleaved iteration.
-    At short or out-of-range parents set the operation to the full
-    space. Apply the balanced recursion of
-    Definition~\ref{def:balanced_interval_spaces} to this operation.
-\end{definition}
-
-
-\begin{definition}[Guarded failure at an actual node]
-    \label{def:guarded_interval_failure}
-    \lean{TNLean.MPS.AreaLaw.guardedIntervalFailure}
-    \leanok
-    Let a choice $\omega\in\Omega$ determine a merge operation, and write
-    $S_\omega(p,r)$ for its actual balanced interval space with fixed
-    positive leaf width $w$. Fix an arbitrary property $P_{p,r}$ of
-    interval spaces. For $J=(p,r)$ and $k=p+\lfloor(r-p)/2\rfloor$, define
-    \begin{align}
-       E_J=\{\omega:\;&P_{p,k}(S_\omega(p,k)),\quad
-                        P_{k,r}(S_\omega(k,r)),\nonumber\\
-                     &\neg P_{p,r}(S_\omega(p,r))\}.
-    \end{align}
-    Thus both actual children satisfy the property, while the same actual
-    parent fails it. No probability measure is involved in this definition.
-\end{definition}
-
-\begin{lemma}[A failed root has a guarded failed descendant]
-    \label{lem:balanced_interval_failure_ancestry}
-    \lean{TNLean.MPS.AreaLaw.exists_guardedIntervalFailure_of_root_failure,
-        TNLean.MPS.AreaLaw.root_failure_subset_iUnion_guardedIntervalFailure}
-    \leanok
-    Suppose $P_{p,r}(\mathcal H_{[p,r)})$ holds for every valid short
-    interval. For every valid root $p\le r\le L$,
-    \begin{align}
-       \{\omega:\neg P_{p,r}(S_\omega(p,r))\}
-       \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
-    \end{align}
-    In particular every failed root has a guarded failed descendant in
-    the actual root merge list. There is no hypothesis on long-node success,
-    the law of the choices, or measurability.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:balanced_interval_spaces,def:balanced_interval_merge_list,def:guarded_interval_failure}
-    Fix $\omega$ and induct on the root length. A short root is the full
-    local space and therefore cannot fail. At a long root, if either
-    midpoint child fails, apply the induction to that child. Its merge
-    list is contained in the root list. If both children satisfy the
-    property, the failed root itself lies in its guarded failure set and
-    is the last member of the root list. This gives the witness and hence
-    the set inclusion. Only descendants of the specified root are used.
-\end{proof}
-
-
-\begin{lemma}[Geometry of the listed internal intervals]
-    \label{thm:balanced_interval_merge_bounds}
-    \lean{TNLean.MPS.AreaLaw.bounds_of_mem_balancedIntervalMergeList}
-    \leanok
-    Let $p\le r$ and $w\ge1$. Every interval $[a,b)$ occurring in
-    $\mathcal I_w(p,r)$ satisfies
-    $p\le a\le b\le r$ and $w<b-a$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:balanced_interval_merge_list}
-    Induct on $r-p$. A short root contributes no interval. Otherwise
-    every listed interval belongs to one child list or is the root
-    itself. Each child has smaller length and lies inside the root;
-    apply the induction hypothesis to its list. The root has length
-    greater than $w$ by the subdivision rule.
-\end{proof}
-
-
-\begin{lemma}[Joint Borel projection of the actual sampled tree]
-    \label{lem:borel_canonical_interval_sampling_tree}
-    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_canonicalIntervalSamplingTree,
-        TNLean.MPS.AreaLaw.measurableSet_isViable_canonicalIntervalSamplingTree}
-    \leanok
-    Fix the families and parameters of
-    Definition~\ref{def:canonical_interval_sampling_operation}, and a
-    positive leaf width $w$. Write $S_\omega(p,r)$ for the existing
-    balanced interval space of that operation. For every valid interval
-    $p\le r\le L$, its actual ambient orthogonal projection is jointly
-    Borel in the entire family of interval choices $\omega$.
-
-    For any fixed full-chain target $G$ and real $\delta$, the event that
-    this same space is $\delta$-viable for $G$ is Borel. The target is
-    expressed in the original regional tensor coordinates, retaining the
-    whole exterior of $[p,r)$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:canonical_interval_sampling_operation,
-        lem:borel_actual_adjacent_interval_merge,
-        lem:borel_canonical_sampled_interval_interleaved_parent}
-    Induct on the interval length, simultaneously with the dependence
-    assertion below. A short interval is the constant full local space.
-    At a long interval, the child projections are jointly Borel by the
-    induction hypothesis. Their actual adjacent merge therefore has a
-    Borel projection. The canonical sampled parent is jointly Borel in
-    that constructed candidate and its own unitary-product coordinate.
-    Compose with the Borel coordinate evaluation
-    $\omega\mapsto\omega_{(p,r)}$ to obtain the actual parent projection.
-    The existing projection test for viability gives the stated event
-    for the fixed global target and full exterior.
-\end{proof}
-
-\begin{lemma}[Dependence only on no longer interval coordinates]
-    \label{lem:canonical_interval_sampling_tree_coordinate_dependence}
-    \lean{TNLean.MPS.AreaLaw.dependsOn_canonicalIntervalSamplingTree,
-        TNLean.MPS.AreaLaw.canonicalIntervalSamplingTree_update_of_length_lt}
-    \leanok
-    In the same construction, $S_\omega(p,r)$ depends only on the
-    coordinates $J=(a,b)$ satisfying $b-a\le r-p$, with natural-number
-    subtraction. Thus replacing any coordinate whose interval length
-    is strictly greater than $r-p$ leaves this actual retained space
-    unchanged. In particular, the actual two children of a long parent
-    are unchanged when the parent's own sampling coordinate is replaced.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:canonical_interval_sampling_operation,def:balanced_interval_spaces}
-    For a short interval the retained space is constant. At a long
-    interval, two choice families agreeing on all coordinates of length
-    at most $r-p$ agree on those used by either child, by induction.
-    They also agree on the parent coordinate $(p,r)$. The child merge
-    and canonical sampled parent are therefore identical. A coordinate
-    of strictly greater length is outside this set of possible
-    dependencies, giving the replacement assertion. Both children have
-    strictly smaller length than their long parent.
-\end{proof}
-
-These statements concern the literal existing sampled recursion. They do
-not assume a measurable subspace family, an independent replacement for
-an actual child, or a local probability bound. Summing conditional failure
-probabilities remains a separate argument.
-
-
-\begin{lemma}[A conditional bound for guarded and root failures]
-    \label{thm:balanced_interval_failure_probability}
-    \lean{TNLean.MPS.AreaLaw.balancedIntervalMergeCoordinate,
-        TNLean.MPS.AreaLaw.pi_guardedIntervalFailure_union_le,
-        TNLean.MPS.AreaLaw.pi_balancedIntervalSpace_root_failure_le,
-        TNLean.MPS.AreaLaw.intervalSamplingMeasure_guarded_failure_union_le,
-        TNLean.MPS.AreaLaw.intervalSamplingMeasure_root_failure_le}
-    \leanok
-    At each finite endpoint coordinate $I$, fix a probability space
-    $(\Omega_I,\mu_I)$, and put
-    $\Omega=\prod_I\Omega_I$ and $\mu=\bigotimes_I\mu_I$.
-    Let each whole choice $\omega\in\Omega$ determine an arbitrary
-    merge operation and its actual
-    balanced spaces $S_\omega$. Fix $p\le r\le L$ and $w\ge1$.
-    For each $J=(a,b)\in\mathcal I_w(p,r)$, the bounds
-    $p\le a\le b\le r\le L$ identify its actual finite endpoint
-    coordinate $c(J)=(a,b)$. Let $E_J$ be the guarded event from
-    Definition~\ref{def:guarded_interval_failure}.
-
-    Suppose that each listed $E_J$ is measurable and, for every whole
-    choice $\omega$, changing its own coordinate satisfies
-    \begin{align}
-        \mu_{c(J)}\{u:\omega[c(J)\leftarrow u]\in E_J\}\le\beta,
-    \end{align}
-    where $\beta\in[0,\infty]$. Then
-    \begin{align}
-        \mu\left(\bigcup_{J\in\mathcal I_w(p,r)}E_J\right)
-            \le \max\{r-p-1,0\}\beta.
-    \end{align}
-    If the full local space satisfies the property at every valid short
-    leaf, then the same outer-measure bound holds for
-    $\mu^*\{\omega:\neg P_{p,r}(S_\omega(p,r))\}$.
-    The section bounds and measurability are hypotheses of this
-    conditional measure estimate; no physical section estimate is
-    asserted here.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:balanced_interval_merge_bounds,lem:balanced_interval_merge_count,
-        lem:balanced_interval_failure_ancestry}
-    Each listed interval has valid endpoint coordinates by
-    Lemma~\ref{thm:balanced_interval_merge_bounds}.
-    Integrate each coordinate-section bound against the remaining
-    probability laws to obtain $\mu(E_J)\le\beta$.
-    Subadditivity bounds the union by its length times $\beta$,
-    counting repeated occurrences if any. Lemma~\ref{lem:balanced_interval_merge_count}
-    bounds that length by $\max\{r-p-1,0\}$.
-    Under the leaf hypothesis, Lemma~\ref{lem:balanced_interval_failure_ancestry}
-    includes root failure in this same guarded union.
-\end{proof}
-
-The product Haar law of Definition~\ref{def:interval_sampling_choices}
-is a special case. An interval coordinate may also contain a fixed
-finite product of samples; the same estimate applies.
-
-\begin{lemma}[Joint failure on the actual root tree]
-    \label{lem:balanced_interval_joint_failure_ancestry}
-    \lean{TNLean.MPS.AreaLaw.joint_failure_subset_iUnion_guardedIntervalFailure}
-    \leanok
-    Retain the hypotheses of
-    Lemma~\ref{lem:balanced_interval_failure_ancestry}. The failure of
-    simultaneous success at the root and all its listed internal nodes
-    satisfies
-    \begin{align}
-       \bigl\{\omega:\neg\bigl(&P_{p,r}(S_\omega(p,r))\ \land\nonumber\\
-         &\forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
-       \subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J.
-    \end{align}
-    The covering family is the same actual root merge list as before.
-    Only the short-leaf property is assumed; no probability or
-    long-node success estimate enters this assertion.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:balanced_interval_failure_ancestry,def:balanced_interval_merge_list,
-        def:guarded_interval_failure}
-    Fix $\omega$. Strengthen the property on each interval by setting
-    \begin{align}
-       Q_{a,b}(S)&=P_{a,b}(S)\ \land
-       \bigl(\forall K\in\mathcal I_w(a,b),\ P_K(S_\omega(K))\bigr).
-    \end{align}
-    A short interval has empty merge list, so the assumed leaf property
-    also holds for $Q$. Joint failure is precisely failure of $Q$ at
-    the root. Apply the preceding ancestry lemma to obtain a guarded
-    $Q$-failure at some listed node. Both children satisfy $Q$.
-
-    If that parent satisfied $P$, its entire internal list would satisfy
-    $P$: its two child lists do so by the child $Q$ statements, and the
-    remaining entry is the parent itself. This contradicts the parent
-    $Q$-failure. Thus its two children satisfy $P$ and the parent fails
-    $P$, giving the required guarded failure in the unchanged union.
-\end{proof}
-
-
-\begin{lemma}[Joint failure under independent coordinate laws]
-    \label{lem:independent_interval_joint_failure_probability}
-    \lean{TNLean.MPS.AreaLaw.pi_balancedIntervalSpace_joint_failure_le}\leanok
-    Under the hypotheses of
-    Lemma~\ref{thm:balanced_interval_failure_probability}, including
-    the short-leaf property, the outer measure of simultaneous failure
-    at the root or one of its actual listed internal intervals is at most
-    $\max\{r-p-1,0\}\beta$:
-    \begin{align*}
-        \mu^*\bigl\{\omega:\neg\bigl(&P_{p,r}(S_\omega(p,r))\ \land\\
-          &\forall J\in\mathcal I_w(p,r),\ P_J(S_\omega(J))\bigr)\bigr\}
-        \le\max\{r-p-1,0\}\beta.
-    \end{align*}
-    No union over other overlapping intervals is taken.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:balanced_interval_failure_probability,
-        lem:balanced_interval_joint_failure_ancestry}
-    The preceding deterministic ancestry result contains this joint
-    failure in the same union of guarded events. Apply monotonicity
-    of outer measure and the guarded-union estimate.
-\end{proof}
-
-\begin{lemma}[Fixed-child estimates for independent interval parents]
-    \label{lem:independent_interval_parent_probability}
-    \lean{TNLean.MPS.AreaLaw.measure_guarded_independentIntervalTree_update_le,
-        TNLean.MPS.AreaLaw.pi_independentIntervalTree_joint_failure_le}\leanok
-    Assume the measurability hypothesis of
-    Lemma~\ref{lem:independent_interval_tree_sections}. Fix a global target,
-    a nonnegative viability error $\delta$, and coordinate probability
-    laws $\mu_J$. Suppose that whenever the two actual child spaces of a
-    long $J$ are $\delta$-viable, its true fixed-child parent failure has
-    $\mu_J$-measure at most $\beta$.
-    Then the guarded own-coordinate failure section of $J$ has measure
-    at most $\beta$. This section conclusion also holds for arbitrary
-    coordinate measures.
-
-    Under the independent product probability law $\mu=\bigotimes_J\mu_J$,
-    the same root and its actual internal merge list satisfy
-    \begin{align}
-        \mu^*\bigl\{\omega:\neg\bigl(&S_\omega(p,r)\text{ is $\delta$-viable}\ \land\nonumber\\
-        &\forall J\in\mathcal I_w(p,r),\ S_\omega(J)
-        \text{ is $\delta$-viable}\bigr)\bigr\}
-        \le\max\{r-p-1,0\}\beta.
-    \end{align}
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:independent_interval_tree_sections,lem:independent_interval_joint_failure_probability}
-    By (\ref{eq:independent_interval_section}), fixing the other coordinates
-    gives the actual prescribed parent of the unchanged children.
-    If both children are viable, the guarded section is contained in
-    that parent's true failure event. Otherwise the guarded section is
-    empty. Its measure is therefore at most $\beta$ in either case.
-    All guarded events are measurable by
-    Lemma~\ref{lem:independent_interval_tree_sections}, and full short leaves
-    are viable because $\delta\ge0$. Apply the independent-coordinate
-    joint failure estimate to the actual root merge list.
-\end{proof}
-
-\input{chapter/ch35_interval_resampling}
-\input{chapter/ch35_balanced_interval_histories}
-
-\begin{lemma}[The section at an actual parent]
-    \label{lem:canonical_interval_sampling_parent_section}
-    \lean{TNLean.MPS.AreaLaw.canonicalIntervalSamplingTree_update_parent}
-    \leanok
-    Fix a valid long parent $[p,r)$ in the sampled balanced construction,
-    and put $k=p+\lfloor(r-p)/2\rfloor$. Replacing the coordinate
-    $\omega_{(p,r)}$ by $u$ leaves both actual child spaces unchanged.
-    The new retained parent is exactly the canonical sampled interleaved
-    parent of those same two child spaces, with choice $u$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:canonical_interval_sampling_tree_coordinate_dependence,
-        def:canonical_interval_sampling_operation,def:balanced_interval_spaces}
-    Each child is strictly shorter than the parent, so its retained space
-    is unchanged by the coordinate replacement. Unfold the defining
-    parent operation and use these two equalities. Its coordinate is now
-    precisely $u$.
-\end{proof}
-
-\begin{lemma}[Measurability of the actual guarded failure]
-    \label{lem:borel_guarded_canonical_interval_failure}
-    \lean{TNLean.MPS.AreaLaw.measurableSet_guardedIntervalFailure_canonicalSamplingTree}
-    \leanok
-    Fix a global target $G$ and real viability error $\delta$. For every
-    valid parent interval, the event that both actual midpoint children
-    are $\delta$-viable for $G$ and the actual parent is not is Borel.
-    Each regional target retains its full exterior.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:borel_canonical_interval_sampling_tree,def:guarded_interval_failure}
-    Intersect the two Borel child-success events with the complement of
-    the Borel parent-success event.
-\end{proof}
-
-
-\begin{lemma}[A true guarded section of the canonical sampled parent]
-    \label{thm:canonical_guarded_sampling_section}
-    \lean{TNLean.MPS.AreaLaw.rankUnitaryHaar_guarded_canonicalIntervalSamplingTree_update_le}
-    \leanok
-    Fix the actual canonical sampled interval operation, its families and
-    parameters, a whole seed $U$, and a valid long parent $[p,r)$.
-    Put $k=p+\lfloor(r-p)/2\rfloor$ and let
-    $S_1=S_U(p,k)$ and $S_2=S_U(k,r)$ be its actual two baseline
-    child spaces. Viability is measured for one original global target
-    $G$, with the whole regional exterior retained at each interval.
-
-    Suppose that whenever both $S_1$ and $S_2$ are $\delta$-viable, the
-    actual canonical sampled parent of this same pair, using its specified
-    family and fresh seed $v$, fails $\delta$-viability with probability
-    at most $\beta$. Then the true guarded section satisfies
-    \begin{align}
-        h_{p,r}\{v:U[(p,r)\leftarrow v]\in E_{p,r}\}\le\beta.
-    \end{align}
-    No measurability premise or comparison event is required.
-    This is a conditional section estimate; the fixed-child bound is
-    an explicit analytic hypothesis.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:canonical_interval_sampling_parent_section,
-        lem:canonical_interval_sampling_tree_coordinate_dependence,def:guarded_interval_failure}
-    Replacing the longer parent coordinate leaves each shorter child
-    space equal to its baseline value. The updated parent is the same
-    canonical sampled merge of $S_1,S_2$, evaluated at $v$.
-    If either baseline child fails viability, the guarded section is
-    empty. Otherwise guarded failure implies failure of this actual
-    fixed-child parent. Monotonicity of measure and the given estimate
-    prove the bound. The seed and original target are unchanged throughout.
-\end{proof}
-
-
-\begin{lemma}[Conditional joint success of the actual canonical hierarchy]
-    \label{thm:canonical_interval_joint_probability}
-    \lean{TNLean.MPS.AreaLaw.intervalSamplingMeasure_canonical_tree_joint_failure_le}
-    \leanok
-    Fix the actual canonical sampled operation, all its interval families
-    and parameters, one original global target $G$, a nonnegative
-    error $\delta$, and $\beta\in[0,\infty]$. Suppose that for every valid long parent and every
-    fixed whole seed, viability of its actual baseline children implies
-    a true failure bound $\beta$ for their same canonical sampled parent
-    under its own fresh seed.
-
-    Write $S_U(a,b)$ for the actual balanced spaces and $V_U(a,b)$ for
-    their $\delta$-viability for $G$, in the original regional coordinates
-    with the whole complement retained. For every $p\le r\le L$,
-    \begin{align}
-        \mu\left\{U:\neg\left(
-          V_U(p,r)\ \land
-          \bigl(\forall J\in\mathcal I_w(p,r),\ V_U(J)\bigr)
-        \right)\right\}
-        \le\max\{r-p-1,0\}\beta.
-    \end{align}
-    This is a conditional analytic implication. The fixed-child bound
-    remains an explicit premise, while event measurability, freshness,
-    and short-leaf viability are derived.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:borel_guarded_canonical_interval_failure,thm:canonical_guarded_sampling_section,
-        thm:balanced_interval_failure_probability,
-        lem:balanced_interval_joint_failure_ancestry}
-    The actual constructed projections make each listed guarded event
-    Borel. The fixed-child estimates and
-    Lemma~\ref{thm:canonical_guarded_sampling_section} bound every true
-    own-coordinate section by $\beta$. The guarded-union estimate in
-    Lemma~\ref{thm:balanced_interval_failure_probability} therefore
-    bounds their union by $\max\{r-p-1,0\}\beta$.
-    Since $\delta\ge0$, every full short leaf is viable. Joint failure
-    ancestry then includes failure at the root or any of its actual
-    listed descendants in this same guarded union. No additional union
-    over unrelated intervals is taken.
-\end{proof}
-
 \begin{lemma}[Recorded generators of the actual trimmed image]
     \label{lem:interval_recorded_generator_bounds}
     \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
@@ -863,8 +310,8 @@ finite product of samples; the same estimate applies.
     before choosing the child spaces and the sampling size. Let $r_G\ge1$,
     $D\ge2$, $0<\beta<1$, and choose
     \[
-      A=1+\log r_G+\log D+\log(1/\beta),\quad
-      s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
+        A=1+\log r_G+\log D+\log(1/\beta),\quad
+        s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
     \]
     Assume $q^w\le M$ and $0<\xi\le1$.
     Suppose that, for every pair of $3/200$-viable child spaces of
@@ -898,13 +345,13 @@ finite product of samples; the same estimate applies.
     Lemma~\ref{thm:physical_dg_sampled_node}, choose the same common
     reference bound $B$ and put $D_{\rm ref}=r_G^2B$ and
     $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$.
-    The Hamiltonian constructs one family of at most $D^2$ operators for
-    every valid interval of length greater than $4\ell$, before every
-    $\beta$, sampling size and child space.
+    There is a family of at most $D^2$ operators for every valid interval of
+    length greater than $4\ell$, chosen before every $\beta$, sampling size
+    and child space.
     For $0<\beta<1$, take
     \[
-      A=1+\log r_G+\log D+\log(1/\beta),\qquad
-      s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
+        A=1+\log r_G+\log D+\log(1/\beta),\qquad
+        s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
     \]
     Then $s\le4097r_GA$. There is one parent operation whose values on
     all admissible children are the literal sampled-word image and final
@@ -915,7 +362,7 @@ finite product of samples; the same estimate applies.
     Each such space has at most $M$ recorded spanning vectors, with
     internal-cut Schmidt ranks at most
     \[
-      10^6D_{\rm ref}^2(L+1)M.
+        10^6D_{\rm ref}^2(L+1)M.
     \]
     The whole exterior is retained in the viability statements.
 
@@ -938,25 +385,24 @@ finite product of samples; the same estimate applies.
 \end{proof}
 
 
-\begin{lemma}[Automatic parameters for the physical witness tree]
+\begin{theorem}[Automatic parameters for the physical witness tree]
     \label{thm:physical_dg_interval_tree_parameters}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree}
     \leanok
     \uses{thm:physical_dg_recursive_interval_spaces,thm:dg_accuracy_scalar_parameters}
     There are universal constants $C\ge1$ and $K>0$, chosen before the
     chain and Hamiltonian, with the following property. Under the physical
-    hypotheses of the preceding theorem put
+    hypotheses of the preceding lemma put
     \[
-      g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
-      v=1+\log m+\log(1/g),\quad
-      \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+        g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
+        v=1+\log m+\log(1/g),\quad
+        \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
     \]
     Then $\ell\ge21$ and
     \[
-      \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
+        \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
     \]
-    The common reference and the actual parent families of the preceding
-    theorem can be constructed with these parameters, before every
+    The common reference and the actual parent families of the preceding lemma can be constructed with these parameters, before every
     sampling size and child space. For every $0<\beta<1$, its actual
     balanced recursion has the same original-ground-space viability
     $3/200$, dimension bound $M=D^6s^3$, recorded-generator count $M$
@@ -964,10 +410,10 @@ finite product of samples; the same estimate applies.
     No numerical tail or filter estimate is assumed.
 
     The capped gap, block leaves, one final trim and distinction from the
-    printed adaptive algorithm remain those of the preceding theorem and
+    printed adaptive algorithm remain those of the preceding lemma and
     \cite{gap:alvv16_approximation_parameters}. The recorded-generator
     rank bound is not assigned unchanged to their entire span.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Apply the uniform scalar theorem with $m=\max\{q,50\}$.
     Set $t=\ell$ and $\Delta=10^{-5}D^{-12}$. Its uniform tradeoff for
@@ -977,500 +423,3 @@ finite product of samples; the same estimate applies.
     recursive-witness theorem follow. Its actual families, operation and
     recorded spanning vectors give the conclusion.
 \end{proof}
-
-
-\begin{lemma}[Full-interval generators and native matrix product states]
-    \label{lem:full_interval_mps_span}
-    \lean{TNLean.MPS.AreaLaw.fullIntervalRead,
-        TNLean.MPS.AreaLaw.rank_cutMatrix_fullIntervalRead,
-        TNLean.MPS.AreaLaw.isOpenMPS_fullIntervalRead_of_rank_le,
-        TNLean.MPS.AreaLaw.isOpenMPS_fullIntervalRead_of_mem_span}
-    \leanok
-    \uses{thm:open_mps_finite_span}
-    Read a vector on $[0,L)$ on native chain configurations by restricting
-    the configuration to the recorded interval sites. Its regional cut
-    after $k$ sites has the same rank as its native chain coefficient
-    matrix at that cut. Hence a recorded vector of internal Schmidt ranks
-    at most $R$ is an open-boundary matrix product state of bond at most
-    $R$ in the native chain coordinates. If $n$ such vectors span a space,
-    every vector in that space, read in the same coordinates, has bond
-    at most $nR$.
-\end{lemma}
-\begin{proof}\leanok
-    Identify the full interval with the full left block and apply the
-    existing left-block cut identity. The internal-cut characterization
-    gives the generator representation. Apply the finite-span theorem to
-    the actual finite image of the recorded generators; its cardinality
-    is at most $n$, including repeated or zero generators.
-\end{proof}
-
-\begin{lemma}[Native matrix product states in the actual recursive root]
-    \label{thm:physical_dg_interval_tree_mps}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_mps}
-    \leanok
-    \uses{thm:physical_dg_interval_tree_parameters,lem:full_interval_mps_span}
-    In the automatic-parameter theorem, retain the same actual parent
-    families, literal operations, balanced recursion and original global
-    ground-space viability at every interval. Put $M=D^6s^3$ and
-    $D_{\rm ref}=r_G^2B$ as before. Every vector in the actual recursively
-    constructed root space on $[0,L)$, read on native chain configurations,
-    is an open-boundary matrix product state of bond at most
-    \[
-      10^6D_{\rm ref}^2(L+1)M^2.
-    \]
-    This is the bound for the entire root space. The bound for each
-    recorded generator is $10^6D_{\rm ref}^2(L+1)M$.
-    No independent matrix product approximation replaces the root space.
-    The capped gap, block leaves and one final trim remain explicit;
-    adaptive joint probability, final spectral extraction and running
-    time remain separate, as recorded
-    in~\cite{gap:alvv16_approximation_parameters}.
-\end{lemma}
-\begin{proof}\leanok
-    The automatic tree gives at most $n\le M$ recorded generators of the
-    actual root, each with internal-cut ranks at most
-    $R=10^6D_{\rm ref}^2(L+1)M$. The preceding lemma gives bond $nR\le MR$
-    for every vector in their span. The literal parent identities and all
-    intermediate viability conclusions are retained unchanged.
-\end{proof}
-
-
-\begin{lemma}[Whole-interval viability in native coordinates]
-    \label{lem:full_interval_viability}
-    \lean{TNLean.MPS.AreaLaw.fullIntervalEquiv,
-        TNLean.MPS.AreaLaw.fullIntervalEquiv_apply,
-        TNLean.MPS.AreaLaw.nativeFullIntervalSpace,
-        TNLean.MPS.AreaLaw.map_nativeFullIntervalSpace_regionConfigurationSplit,
-        TNLean.MPS.AreaLaw.isViable_fullInterval_iff_isCloseTo}
-    \leanok
-    Let $S$ be a subspace on $[0,L)$ and $G$ a subspace of the original
-    chain Hilbert space. Reading the coefficients of $S$ on native chain
-    configurations is a linear isometry; denote its image by $S_{\rm nat}$.
-    Then $S$ is $\delta$-viable for $G$ in the full-interval split if and
-    only if $S_{\rm nat}$ is $\delta$-close to $G$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:full_interval_mps_span}
-    The full interval has empty exterior, so its exterior configuration
-    space has one element. Under the coefficient-reading isometry the
-    extended interval subspace is exactly the image of $S_{\rm nat}$.
-    Transport the orthogonal-projection inequality through that isometry.
-\end{proof}
-
-\begin{lemma}[A normalized witness in the same recursive root]
-    \label{lem:physical_dg_tree_unit_mps}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_unit_mps}
-    \leanok
-    Retain the physical hypotheses, automatic parameters, families and
-    recursive operation of Lemma~\ref{thm:physical_dg_interval_tree_mps}.
-    Let $S_{\rm nat}$ be the native image of its actual root and
-    $P$ its orthogonal projection. The same families and recursive spaces
-    can be chosen before every unit $\Gamma\in G$ so that
-    $S_{\rm nat}$ is $3/200$-close to $G$, and
-    \begin{align}
-        \phi&=\frac{P\Gamma}{\|P\Gamma\|}\in S_{\rm nat}, &
-        \|\phi\|&=1,\notag\\
-        |\langle\phi,\Gamma\rangle|^2&\ge\frac{197}{200}, &
-        \|\phi-\Gamma\|^2&\le\frac3{100}.
-    \end{align}
-    Moreover $\langle\phi,\Gamma\rangle=\|P\Gamma\|$ is a nonnegative
-    real number, and $\phi$ has native MPS bond at most
-    $10^6D_{\rm ref}^2(L+1)M^2$.
-    All intermediate viability statements and literal parent operations
-    remain those of the same recursive construction. The witness depends
-    on $\Gamma$; it does not perform final spectral extraction or establish
-    adaptive joint probability or computational cost. The precise scope
-    remains that of~\cite{gap:alvv16_approximation_parameters}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:physical_dg_interval_tree_mps,lem:full_interval_viability}
-    Whole-region viability gives closeness of the same native root to $G$.
-    Its projection of $\Gamma$ has squared norm at least $197/200$ and
-    is nonzero. Normalization gives the stated phase and overlap. Since
-    both vectors are unit, their squared distance is
-    $2-2\|P\Gamma\|$. Orthogonal projection is a contraction, so
-    $\|P\Gamma\|\ge\|P\Gamma\|^2\ge197/200$ and the distance
-    bound follows. Membership in the actual native root
-    retains its all-span MPS bound.
-\end{proof}
-
-\paragraph{The final refinement.}
-The final stage requires normalized error reduction and compressed
-spectral extraction from the repeatedly trimmed space. The intermediate
-multiplicative fidelity gain printed at line 1813 has an exact two-qubit
-counterexample. The corrected normalized error, trimming budgets and
-variational trial-space comparison are recorded in
-\cite{gap:alvv16_final_filter_gain}. Their composition with the actual
-recursive root remains a separate step.
-
-\begin{lemma}[A weighted reference bound for the actual interval trim]
-\label{lem:alvv-interval-reference-weighted}
-\lean{TNLean.MPS.AreaLaw.schmidtRank_cutEnvVector_interval_reference_le,
-    TNLean.MPS.AreaLaw.isCloseTo_prodExt_intervalTrimSubspace_of_reference_weighted}
-\leanok
-Let $G$ and $U$ be subspaces of the full-chain Hilbert space that are mutually
-$\varepsilon$-close. Suppose every vector of $U$ has an open-boundary matrix
-product representation of bond dimension at most $D\geq 1$. Let $S$ be a
-$\delta$-viable subspace on an interval $[p,r)$, and let $S'$ be its actual
-collective trim at threshold $\xi>0$. For every $\theta>0$, the subspace $S'$
-is viable for the same global target with error at most
-\[
- (1+\theta)\bigl((1+\theta)\delta+(1+\theta^{-1})\varepsilon
-       +2\xi\sqrt{\max\{r-p-1,0\}D^2}\bigr)
-       +(1+\theta^{-1})\varepsilon.
-\]
-The whole exterior of the interval is retained; the reference rank is $D^2$.
-\end{lemma}
-\begin{proof}\leanok
-\uses{thm:interval_trimming_reference}
-Use the interval/exterior coefficient isometry. A whole-chain matrix product
-vector has Schmidt rank at most $D^2$ across each internal interval cut
-with the exterior retained. Apply the weighted reference estimate for the
-actual collective trimming projections.
-\end{proof}
-
-\begin{lemma}[One actual filter and trim at the native root]
-\label{lem:alvv-native-root-filter-trim}
-\lean{TNLean.MPS.AreaLaw.fullIntervalFilter,
-    TNLean.MPS.AreaLaw.fullIntervalFilter_apply,
-    TNLean.MPS.AreaLaw.fullIntervalFilterTrimStep,
-    TNLean.MPS.AreaLaw.finrank_fullIntervalFilterTrimStep_le,
-    TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_fullIntervalFilterTrimStep,
-    TNLean.MPS.AreaLaw.isCloseTo_nativeFullIntervalSpace_filterTrimStep}
-\leanok
-Let $S$ be a subspace on the full interval and suppose its native image is
-$\delta$-close to a target $G$, where $0\leq\delta\leq\tfrac12$.
-Let $K$ preserve $G$ and $G^\perp$, satisfy $\|Kx\|\geq\|x\|$ on $G$, and
-satisfy $\|Kx\|^2\leq(1-c)\|x\|^2$ on $G^\perp$, where $0<c\leq1$.
-Suppose a fixed reference subspace is mutually $\varepsilon$-close to $G$
-and every vector of the reference is a matrix product vector of bond at most
-$D\geq1$. Assume
-\[
- \varepsilon\leq\frac{c^2\eta}{1024},\qquad
- \xi\sqrt{\max\{L-1,0\}D^2}\leq\frac{c\eta}{48},\qquad \xi>0.
-\]
-Conjugate $K$ to the full-interval coordinates, apply it to $S$, choose the
-standard orthonormal basis of this actual image, and collectively trim that
-basis at threshold $\xi$. The native image of the resulting actual space
-is close to the same $G$ with error at most
-\[
- (1-c/4)\delta+c\eta/8.
-\]
-Its dimension does not exceed $\dim S$. It has at most $\dim S$ recorded
-spanning vectors, each with internal Schmidt rank at most $\dim S/\xi^2$.
-This statement is an auxiliary with explicit normalized-filter premises;
-it does not supply the physical filter or the complete algorithm.
-\end{lemma}
-\begin{proof}\leanok
-\uses{lem:full_interval_viability,lem:alvv-interval-reference-weighted}
-The full-interval coordinate isometry identifies the literal image with
-$K(S)$ and leaves the full global target fixed up to this same isometry.
-Apply sharp normalized error reduction followed by the weighted-reference
-collective trimming estimate with $\theta=c/16$. The stated budgets give
-the displayed stable recurrence. Linear images and the span of the actual
-trimmed basis do not increase dimension; the collective trimming theorem
-gives the recorded-vector rank bound.
-\end{proof}
-
-
-\begin{lemma}[The physical raw-filter step at the same root]
-    \label{lem:physical_dg_native_root_filter_trim}
-    \lean{TNLean.MPS.AreaLaw.fullIntervalFilterTrimStep_normalized_affine_eq_raw,
-        TNLean.MPS.AreaLaw.physical_dg_normalized_ground_filter_spec,
-        TNLean.MPS.AreaLaw.isCloseTo_nativeFullIntervalSpace_filterTrimStep_of_physical_dg}
-    \leanok
-    Let $H=\sum_i h_i$ be the actual positive chain Hamiltonian. Suppose
-    $\mu,\nu\in\operatorname{spec}(H)$, $\mu<\nu$, $\gamma>0$, and every
-    spectral value is either $\mu$ or at least $\mu+\gamma$. Let $G$ be
-    the full original ground space. Put
-    \[
-        M=\|H\|,\qquad c=\frac{\gamma}{M-\mu},\qquad
-        K_{\rm raw}=1-H/M.
-    \]
-    Then $M>0$, $M-\mu>0$ and $0<c\le1$.
-    Let one reference $U$ be mutually $\varepsilon$-close to $G$, with
-    every vector of $U$ having MPS bond at most $D\ge1$. Assume the
-    reference and threshold budgets of
-    Lemma~\ref{lem:alvv-native-root-filter-trim}.
-    For any actual full-interval candidate $S$ whose native image is
-    $\delta$-close to $G$, $0\le\delta\le\tfrac12$, apply $K_{\rm raw}$,
-    choose the orthonormal basis of its actual image, and collectively
-    trim at threshold $\xi$. The native image of this actual next space
-    is close to the same $G$ with error at most
-    \[
-        (1-c/4)\delta+c\eta/8.
-    \]
-    No simple ground state or gap cap is assumed. The reference and
-    threshold budgets remain explicit; an automatic repeated refinement
-    and final spectral extraction are separate results.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:alvv-native-root-filter-trim}
-    Positivity and the actual second spectral value give $M>\mu\ge0$.
-    The actual gap gives $\mu+\gamma\le\nu\le M$.
-    The normalized affine filter
-    $B=(M1-H)/(M-\mu)$ fixes the full $G$ and contracts squared norms
-    on $G^\perp$ by at most $1-c$. It is the nonzero scalar multiple
-    $(1-\mu/M)^{-1}K_{\rm raw}$. Scalar normalization leaves each image
-    subspace unchanged, hence leaves its chosen orthonormal basis and
-    the actual collective trim unchanged. Apply
-    Lemma~\ref{lem:alvv-native-root-filter-trim} to $B$.
-    The normalized recurrence replaces the printed multiplicative overlap
-    gain as described in~\cite{gap:alvv16_final_filter_gain}.
-\end{proof}
-
-
-\begin{lemma}[Literal finite filter-and-trim iterates]
-    \label{lem:full_interval_filter_trim_iterates}
-    \lean{TNLean.MPS.AreaLaw.fullIntervalFilterTrimIterate,
-        TNLean.MPS.AreaLaw.fullIntervalFilterTrimIterate_zero,
-        TNLean.MPS.AreaLaw.fullIntervalFilterTrimIterate_succ,
-        TNLean.MPS.AreaLaw.finrank_fullIntervalFilterTrimIterate_le,
-        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_fullIntervalFilterTrimIterate_succ}
-    \leanok
-    Fix a full-interval candidate $S_0$, a native operator $K$ and a
-    threshold $\xi>0$. Define $S_{n+1}$ by applying $K$ to $S_n$ and
-    collectively trimming the orthonormal basis of that actual image.
-    Then $\dim S_n\le\dim S_0$ for every $n$. For every $n\ge1$,
-    $S_n$ has at most $\dim S_0$ recorded spanning vectors, each of whose
-    internal Schmidt ranks, multiplied by $\xi^2$, is at most $\dim S_0$.
-    The latter is a bound for each recorded vector, not for the entire span.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:alvv-native-root-filter-trim}
-    Induct on the actual repeated operation. A linear image does not
-    increase dimension, and collective trimming retains the span of at
-    most that many actual trimmed basis vectors. At every positive
-    iterate the collective-trimming rank theorem applies to those vectors.
-\end{proof}
-
-\begin{lemma}[Finite refinement of the same physical candidate]
-    \label{lem:physical_dg_finite_filter_trim}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_filterTrimIterate_isCloseTo,
-        TNLean.MPS.AreaLaw.physical_dg_filterTrimIterate_ceil_log_isCloseTo}
-    \leanok
-    Retain the physical hypotheses and raw filter of
-    Lemma~\ref{lem:physical_dg_native_root_filter_trim}. Fix $0<\rho\le1$
-    and one common reference and threshold satisfying its budgets with
-    $\eta=\rho$. Suppose the native initial candidate is
-    $\delta_0$-close to $G$, where $0\le\delta_0\le\tfrac12$.
-    The literal iterate with
-    $n=\lceil(4/c)\log(1/\rho)\rceil+1$ is $\rho$-close
-    to the same original full ground space. Its dimension and recorded
-    generators satisfy Lemma~\ref{lem:full_interval_filter_trim_iterates}.
-    The reference and threshold remain explicit; this lemma does not
-    identify the threshold with one previously used to build the initial
-    candidate, choose the physical reference, or give the iteration
-    count printed in the source.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:physical_dg_native_root_filter_trim,lem:full_interval_filter_trim_iterates}
-    Set $u_0=\delta_0$ and
-    $u_{n+1}=(1-c/4)u_n+c\rho/8$. The sequence is nonnegative, stays
-    at most one half, and controls the closeness of every actual iterate.
-    Moreover $u_n\le(1-c/4)^nu_0+\rho/2$, so eventually $u_n\le\rho$.
-    More precisely, $(1-c/4)^n\le e^{-cn/4}$, so the positive integer
-    $n=\lceil(4/c)\log(1/\rho)\rceil+1$ suffices. At this same iterate,
-    the recorded-generator conclusion applies.
-\end{proof}
-
-
-\begin{lemma}[One physical family for every smaller common threshold]
-    \label{lem:physical_dg_interval_tree_common_radius}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_sampled_interval_node_event_of_le_radius,
-        TNLean.MPS.AreaLaw.exists_physical_dg_recursive_interval_spaces_of_le_radius,
-        TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_of_le_radius}
-    \leanok
-    Retain the physical hypotheses, universal constants and automatic
-    scalar parameters of Lemma~\ref{thm:physical_dg_interval_tree_parameters}.
-    The one reference bound $D_{\rm tree}=r^2B$ determines
-    \[
-        \xi_{\rm tree}=\frac1{1000D_{\rm tree}\sqrt{L+1}}.
-    \]
-    The actual parent operator families can be chosen before every
-    threshold $0<\xi\le\xi_{\rm tree}$, sampling size and child space.
-    For every such threshold, the same dimension count and sampling-size
-    bounds hold. There is an actual recursive merge operation using that
-    threshold at every long parent, whose spaces remain $3/200$-viable
-    for the same original full global ground space.
-
-    At every interval, the actual space has at most
-    $\mathrm{count}=D^6s^3$ recorded generators. Each satisfies
-    $\xi^2\operatorname{SR}(v)\le\mathrm{count}$ at every internal cut.
-    These weighted bounds retain their dependence on the chosen threshold;
-    the fixed-threshold integer rank cap is not assigned to an arbitrarily
-    smaller threshold. The block leaves, final-trim convention and capped
-    gap remain those of the cited theorem. No adaptive joint probability
-    or running-time claim is added.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:interval_trimming_reference,thm:sampled_interval_witness_tree,
-        thm:dg_accuracy_scalar_parameters}
-    The physical improving families do not use the trimming threshold.
-    Choose them first. For fixed child spaces their measurable sampling
-    success event gives the same improved image. If the threshold is
-    decreased, the reference trimming estimate stays within its original
-    error budget. The actual trim therefore remains $3/200$-viable and
-    does not increase dimension. Apply the same recursive selection
-    argument to these actual operations. The collective trimming theorem
-    retains the weighted rank of each recorded vector at the chosen
-    threshold. The automatic numerical parameters are chosen exactly as
-    before and impose no further hypotheses.
-\end{proof}
-
-\begin{lemma}[A native bond bound after a positive trimming iterate]
-    \label{lem:full_interval_trim_native_mps}
-    \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_mem_nativeFullIntervalSpace_of_trimming_rank_bound}
-    \leanok
-    Let $S$ be a full-interval space spanned by at most $M$ recorded
-    vectors. Suppose $D\ge1$ and
-    $\xi=(1000D\sqrt{L+1})^{-1}$. If every recorded vector satisfies
-    $\xi^2\operatorname{SR}(v)\le M$ at every internal cut, every vector
-    of the corresponding native space has matrix product bond dimension
-    at most $10^6D^2(L+1)M^2$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:open_mps_finite_span}
-    The weighted inequality gives an integer Schmidt-rank bound
-    $10^6D^2(L+1)M$ for each recorded vector. A sum of at most $M$
-    such vectors has Schmidt rank at most $10^6D^2(L+1)M^2$.
-    Transport the full-interval coordinates to the native chain and use
-    the cut-rank characterization of matrix product vectors.
-\end{proof}
-
-\begin{lemma}[Automatic refinement and Ritz extraction in the same candidate]
-    \label{lem:physical_dg_automatic_refinement}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_automatic_same_candidate_refinement}
-    \leanok
-    Retain the physical hypotheses of
-    Lemma~\ref{lem:physical_dg_native_root_filter_trim}. Put
-    $A=\|H\|-\mu$ and $c=\gamma/A$. Fix integers
-    $D_{\rm tree},D_{\rm filter}\ge1$ and $\eta>0$, and define
-    \begin{align}
-        \rho&=\frac{\eta\gamma}{2A+\eta\gamma},&
-        n&=\left\lceil\frac4c\log\frac1\rho\right\rceil+1,&
-        \varepsilon_{\rm ref}&=\frac{c^2\rho}{32768}.
-        \label{eq:physical_dg_refinement_accuracy}
-    \end{align}
-    Choose $B\ge1$ with the reference bound
-    (\ref{eq:physical_reference_bond}) at accuracy
-    $\varepsilon_{\rm ref}$, and set
-    \begin{align}
-        b&=r^2B,&D_*&=\max(D_{\rm tree},b),&
-        N_*&=\left\lceil\frac{100D_{\rm filter}^{12}}{c\rho}\right\rceil,&
-        \xi&=\frac1{1000D_*N_*\sqrt{L+1}}.
-        \label{eq:physical_dg_refinement_threshold}
-    \end{align}
-    The reference space $U$, of dimension $r$, and this threshold can be
-    chosen before every initial candidate. The spaces $U,G$ are mutually
-    $\varepsilon_{\rm ref}$-close, and every vector of $U$ has bond
-    dimension at most $b$. Moreover
-    \begin{align}
-        0<\xi&\le\frac1{1000D_{\rm tree}\sqrt{L+1}},&
-        \sqrt{Lrb}\,\xi&<\frac{\eta}{10^4D_{\rm filter}^{12}}.
-        \label{eq:physical_dg_refinement_threshold_bounds}
-    \end{align}
-    Let the native initial candidate $S_0$ be $3/200$-close to $G$, with
-    $\dim S_0\le M$. Apply the literal raw filter and collective trim
-    $n$ times with this same $\xi$, and let $W$ be the terminal native
-    space. Its actual $r$-dimensional compressed Ritz space $R$ satisfies
-    $R\subseteq W$, and $R,G$ are mutually $\eta/2$-close.
-    Every vector of $R$ has matrix product bond dimension at most
-    $10^6(D_*N_*)^2(L+1)M^2$.
-
-    The reference estimate uses $g=\min(\gamma,1)$, as in
-    \cite{gap:alvv16_approximation_parameters}. The count in
-    (\ref{eq:physical_dg_refinement_accuracy}) is an internal
-    projection-accuracy count; it is not the iteration count printed in
-    \cite[lines 1809--1817]{Arad2016RigorousRG}. The corrected filter
-    recurrence is recorded in~\cite{gap:alvv16_final_filter_gain}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:physical_dg_mps_reference_subspace,
-        lem:physical_dg_finite_filter_trim,lem:full_interval_trim_native_mps}
-    The chosen reference and threshold give
-    $\varepsilon_{\rm ref}\le c^2\rho/1024$ and
-    $\xi\sqrt{(L-1)b^2}\le c\rho/48$. The actual normalized filter
-    recurrence therefore makes $W$ $\rho$-close to $G$ at the stated
-    positive integer $n$. Its dimension stays at most $M$, and its
-    recorded trimming vectors give the stated bond bound.
-    Orthogonally project $G$ into $W$. This has dimension $r$ and trial
-    energy at most $A\rho/(1-\rho)=\eta\gamma/2$ above $\mu$.
-    The compressed min--max principle and the original spectral gap give
-    mutual error at most $\eta/2$ for the actual Ritz space.
-\end{proof}
-
-\begin{lemma}[Ritz approximation from the actual common-threshold tree]
-    \label{lem:physical_dg_tree_ritz_approximation}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_tree_ritz_approximation}
-    \leanok
-    Retain the physical hypotheses and universal numerical constants of
-    Lemma~\ref{thm:physical_dg_interval_tree_parameters}. The actual
-    parent improving families can be chosen before every requested
-    accuracy $\eta>0$, common threshold, sampling size and child space.
-    Use $D_{\rm tree}$ and $D_{\rm filter}$ from that construction and
-    the common threshold and count $n$ of
-    Lemma~\ref{lem:physical_dg_automatic_refinement}. For each
-    $0<\beta<1$, put
-    $s=\lceil4096r(1+\log r+\log D_{\rm filter}+\log(1/\beta))\rceil$
-    and $M=D_{\rm filter}^6s^3$.
-
-    There is a recursively selected family of interval spaces given by
-    the actual adjacent tensor product, powered improving family,
-    sample-or-full selection and collective trim. Every interval space
-    is $3/200$-viable for the same full global ground space and has
-    dimension at most $M$. Starting from its actual full-chain root,
-    apply the literal raw filter and trim $n$ times at that same $\xi$.
-    The actual compressed Ritz space of the terminal native space has
-    dimension $r$, is mutually $\eta/2$-close to $G$, and every one of
-    its vectors has bond dimension at most
-    $10^6(D_*N_*)^2(L+1)M^2$.
-
-    The leaves are full blocks of length at most $4\ell$, and every
-    long parent has one final collective trim. This is an existence
-    theorem for those recursive choices. It does not assert an adaptive
-    joint sampling probability, the source energy-estimation invariant,
-    the printed final iteration count, or a running-time bound.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:physical_dg_interval_tree_common_radius,
-        lem:physical_dg_automatic_refinement}
-    Choose the actual improving families before the accuracy and
-    threshold. The automatic threshold is positive and at most
-    $\xi_{\rm tree}$, so the common-threshold recursive construction
-    applies. Whole-region viability is precisely closeness of its native
-    root to $G$. Apply
-    Lemma~\ref{lem:physical_dg_automatic_refinement} to that root.
-    The output is the Ritz space of its own literal refined space.
-\end{proof}
-
-\begin{lemma}[Borel actual adjacent-interval merge and its true viability event]
-    \label{lem:borel_actual_adjacent_interval_merge}
-    \lean{TNLean.MPS.AreaLaw.measurable_projectionMatrix_adjacentIntervalMerge,
-        TNLean.MPS.AreaLaw.measurableSet_isViable_adjacentIntervalMerge}
-    \leanok
-    Fix $p\le k\le r$ and an arbitrary global target
-    $G\subseteq\mathcal H_{[0,N)}$. Suppose that the actual orthogonal
-    projections of constructed child spaces
-    $S_1(x)\subseteq\mathcal H_{[p,k)}$ and
-    $S_2(x)\subseteq\mathcal H_{[k,r)}$ are Borel in $x$. Then the actual
-    adjacent-interval merge has a Borel orthogonal projection in the parent
-    configuration space. For every real $\delta$, the event that this same
-    parent is $\delta$-viable for $G$ is Borel. Its target is expressed in
-    the original parent/exterior coordinates, with the whole complement of
-    $[p,r)$ retained. Empty child intervals and zero-dimensional spaces are
-    included. This is a measurability auxiliary to the tensoring step in
-    \cite[lines 500--523]{Arad2016RigorousRG}, not an adaptive probability
-    assertion.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:actual_adjacent_interval_merge}
-    The actual regional tensor merge has a Borel projection, and the fixed
-    union-configuration equivalence relabels this projection continuously.
-    The tensor-coordinate projection test then makes the original viability
-    event Borel for the same fixed global target. No measurable comparison
-    target or separately chosen measurable hull is used.
-\end{proof}
-
-\input{chapter/ch35_interval_original_target_histories}
-\input{chapter/ch35_fixed_interval_raw_probability}

@@ -102,7 +102,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \leanok
     \uses{thm:hastings05_window_expectation, def:hastings05_hierarchy_sum,
         thm:hastings05_hierarchy_levels}
-    In the setting of Lemma~\ref{thm:hastings05_hierarchy_levels} with radii
+    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels} with radii
     $x_m\ge0$, every $P_k^m$ is an orthogonal projection, and any $\phi$ with
     $P_k^m\phi=\phi$ satisfies
     \begin{align}
@@ -116,7 +116,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     and Lemma~\ref{thm:hastings05_window_expectation} bounds the $M_k^m$ term.
 \end{proof}
 
-\begin{lemma}[Eq.~(hchy) for every final state]
+\begin{theorem}[Eq.~(hchy) for every final state]
     \label{thm:hastings05_hchy_every_state}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_le_add}
     \leanok
@@ -131,25 +131,25 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \end{align}
     \cite[eq.~(hchy), lines 709--720]{Hastings2006Solving},
     \cite{gap:hastings05_hierarchical_energy}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Since $T_k^m(c)=\operatorname{Re}\langle\Psi,T_k^m(M)\Psi\rangle$, apply
     (\ref{eq:hastings05_hierarchy_sum_expectation}) with $\|\phi\|=1$.
 \end{proof}
 
-\begin{lemma}[At most $2n$ final states]
+\begin{theorem}[At most $2n$ final states]
     \label{thm:hastings05_final_state_count_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_hierarchy}
     \leanok
     \uses{thm:hastings05_hchy_every_state, thm:hastings_final_state_count}
-    In the setting of Lemma~\ref{thm:hastings05_hchy_every_state}, if
+    In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, if
     $H=T_0^h(M)$ satisfies $H-E_0\ge\Delta E(1-P)$ for an orthogonal projection
     $P$ and $\Delta E>0$, and
     $\operatorname{Re}\langle\Psi,H\Psi\rangle+T_0^h(x)\le E_0+\Delta E/2$,
     then any orthonormal family kept by $P_0^h$ has size at most
     $2\operatorname{Re}\operatorname{tr}P$
     \cite[lines 722--730]{Hastings2006Solving}.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Combine (\ref{eq:hastings05_hchy_every_state}) with
     Lemma~\ref{thm:hastings_final_state_count}.
@@ -163,7 +163,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_closingLinkWindow_le}
     \leanok
     \uses{thm:hastings05_hierarchy_levels, thm:hastings05_level_against_ground_state}
-    In the setting of Lemma~\ref{thm:hastings05_hierarchy_levels}, if
+    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, if
     $W=W^\dagger$ satisfies $\|(W-c_W)\psi\|\le\epsilon$ and $\|W-c_W\|\le K$,
     then $R=P_0^hP_{x_h}(P_0^hWP_0^h,c_W)$ is an orthogonal projection with
     $\|\psi-R\psi\|\le D_{h+1}$.
@@ -178,7 +178,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_add_le_add}
     \leanok
     \uses{thm:hastings05_hchy_every_state, thm:hastings05_window_expectation}
-    In the setting of Lemma~\ref{thm:hastings05_hchy_every_state}, for
+    In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, for
     $W=W^\dagger$, $x_W\ge0$, and
     $R=P_0^hP_{x_W}(P_0^hWP_0^h,\operatorname{Re}\langle\Psi,W\Psi\rangle)$,
     every unit vector $\phi$ with $R\phi=\phi$ satisfies
@@ -233,11 +233,11 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     If each $M_k^m=(M_k^m)^\dagger$ is supported on $B_k^{m+1}$, then every
     $P_k^m$ is an orthogonal projection and
     Lemmas~\ref{thm:hastings05_hierarchy_sum_expectation},
-    \ref{thm:hastings05_hchy_every_state},
-    \ref{thm:hastings05_final_state_count_hierarchy},
     \ref{thm:hastings05_closing_link_window},
     \ref{thm:hastings05_hchy_periodic},
-    and~\ref{thm:hastings05_final_state_count_periodic} hold without assuming
+    and~\ref{thm:hastings05_final_state_count_periodic} and
+    Theorems~\ref{thm:hastings05_hchy_every_state}
+    and~\ref{thm:hastings05_final_state_count_hierarchy} hold without assuming
     $[P_{2k}^m,P_{2k+1}^m]=0$.
 \end{lemma}
 \begin{proof}\leanok

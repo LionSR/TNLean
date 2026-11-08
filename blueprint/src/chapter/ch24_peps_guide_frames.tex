@@ -568,3 +568,84 @@ outer sample.
     $C'L^{c'}$ tags, projector error at most $L^{-60}$ on $\Omega$, and at least one tag, discharging the hypotheses of
     Lemma~\ref{thm:peps_frame_small_rewrite_gate_sources} and bounding the pair sources by $2b$.
 \end{proof}
+
+\begin{lemma}[The direct repainting at the constants of the protocol]
+    \label{thm:peps_dyadic_direct_repainting_constants}
+    \lean{TNLean.PEPS.Approximation.IsDirectRepaintingRatio,
+        TNLean.PEPS.Approximation.directRepaintingRatio,
+        TNLean.PEPS.Approximation.directRepaintingRatio_pos,
+        TNLean.PEPS.Approximation.isDirectRepaintingRatio_of_le,
+        TNLean.PEPS.Approximation.isDirectRepaintingRatio_directRepaintingRatio,
+        TNLean.PEPS.Approximation.exists_isDirectRepaintingRatio,
+        TNLean.PEPS.Approximation.exists_isProtocolConstants_isDirectRepaintingRatio,
+        TNLean.PEPS.Approximation.IsDirectRepaintingRatio.hasTwoOwnerFootprints,
+        TNLean.PEPS.Approximation.directRepainting_step_of_protocolSeparations,
+        TNLean.PEPS.Approximation.IsProtocolConstants.directRepainting_step}
+    \leanok
+    \uses{thm:peps_dyadic_block_reading_ratio, thm:peps_guide_frame_rewrite_events,
+        thm:peps_protocol_constants}
+    For $\epsilon_0>0$ and any $K_0$, let
+    $\nu_3=\min(\epsilon_0/\max(K_0,1),1)/4$. Every $\nu\in(0,\nu_3]$ serves as
+    the ratio of Lemma~\ref{thm:peps_dyadic_sampled_ratio} for the direct
+    repaintings at levels $n\le K_0t$. This is a smallness condition on
+    $\nu$ given $K_0$ and $\epsilon_0$, so the constants of
+    Lemma~\ref{thm:peps_protocol_constants} can be chosen in the order
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, \texttt{06-geometry.tex}, lines
+    559--570, with such a $\nu$.
+
+    Fix such constants and $t>0$ at which the separations of
+    Lemma~\ref{thm:peps_protocol_constants} hold, for instance $t=D\log L$ with
+    $L\ge2$. Let $0<n\le K_0t$, let the holes have radius $h_n=\epsilon_0\min(n,t)$ and
+    the patches radius $u=\nu n/2$, and let $b$ be the patch bound of
+    Lemma~\ref{thm:peps_protocol_constants}. For the readings after a generic
+    displacement of two guides uniform on the $n$-blocks that differ only on one block,
+    the two-owner conditions for footprints of radius $2u=\nu n$ assumed in
+    Lemma~\ref{thm:peps_guide_frame_rewrite_events} hold, and the direct repainting of
+    the block is one gate as there, with this $b$ and at most $2b$ pair sources in
+    each monomial. The remaining hypotheses of that theorem on the input vector,
+    true-vertex sets, disjoint holes and patch data are retained; no further geometric
+    condition is imposed (lines 507--527 and 574--583).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_block_reading_ratio,
+        lem:peps_dyadic_small_radius,
+        thm:peps_protocol_constants,
+        thm:peps_frame_small_rewrite_gate_sources}
+    The hole radius satisfies $h_n\ge\epsilon_0n/\max(K_0,1)$ by
+    Lemma~\ref{lem:peps_dyadic_small_radius}, so $\nu\le\nu_3$ gives
+    $2\nu n\le h_n/2<h_n$ and $2\nu n\le n/2<n$, and
+    Lemma~\ref{thm:peps_dyadic_block_reading_ratio} gives the two-owner
+    condition with footprint radius $\nu n$. The
+    separation $3u+4r<n$, the patch count and $18\le b$ are those of
+    Lemma~\ref{thm:peps_protocol_constants}.
+    The source-bounded rewrite gives the same circuit with at most $2b$ pair sources
+    in each monomial.
+\end{proof}
+
+\begin{lemma}[Owners of the treated and directly repainted guides]
+    \label{thm:peps_dyadic_guide_owners}
+    \lean{TNLean.PEPS.Approximation.homogenize_mem,
+        TNLean.PEPS.Approximation.shiftGuide_mem,
+        TNLean.PEPS.Approximation.IsDisplacedReading.mem,
+        TNLean.PEPS.Approximation.blockGuide_mem_validLabels,
+        TNLean.PEPS.Approximation.blockRepainting_treated_mem_validLabels,
+        TNLean.PEPS.Approximation.guideFrame_owner_eq_iff}
+    \leanok
+    \uses{thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame}
+    At level $2^j$ ($j<k$), the level block guides (before and after a direct
+    repainting), the guides of Lemma~\ref{thm:peps_dyadic_repainting_valid_labels}
+    shifted to a block and homogenized on any set to a label in
+    $\mathcal L_{\rm val}$, and their readings after any displacement all take
+    values in $\mathcal L_{\rm val}$; for any guide $f$ with values in
+    $\mathcal L_{\rm val}$, two sites $u,v$ of its encoded frame under $\pi_S$
+    have $\pi_S(f(u))=\pi_S(f(v))$ if and only if $f(u)=f(v)$
+    (\cite[\texttt{06-geometry.tex}, lines 82--100, 328--339, 507--527]{OpenAI2026PolynomialPEPS}).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_repainting_valid_labels, thm:peps_dyadic_protocol_parties}
+    Shifting, homogenizing to a label in $\mathcal L_{\rm val}$, and taking a
+    reading preserve $\mathcal L_{\rm val}$-valuedness, and $\pi_S$ is injective on
+    $\mathcal L_{\rm val}$ by Lemma~\ref{thm:peps_dyadic_protocol_parties}.
+\end{proof}

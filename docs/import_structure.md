@@ -28,8 +28,11 @@ The generated files sort imports by module name; they do not encode dependency
 order as comments. TNLean now depends on QICLean, which owns the former
 foundational layers: general matrix analysis and topology; quantum channels,
 entropy, and Schwarz inequalities; quantum Perron--Frobenius and spectral
-theory; and the channel-generic finite-Kraus and quantum Wielandt APIs. Within
-TNLean, the remaining source follows these conceptual layers:
+theory; and the channel-generic finite-Kraus and quantum Wielandt APIs. It also
+depends on CSLib for the query-complexity framework (free monads over a query
+type, with oracle evaluation and query counting) in which the running time of
+the one-dimensional ground-state algorithm is stated. Within TNLean, the
+remaining source follows these conceptual layers:
 
 | Layer | Main areas | Responsibility |
 | --- | --- | --- |

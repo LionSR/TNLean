@@ -57,7 +57,7 @@
     Applying Lemma~\ref{thm:peps_regular_two_cycle_physical_flux_move} with common chord insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) yields (\ref{eq:translated_open_flux_move}).
 \end{proof}
 
-\begin{lemma}[A global torus flux movement at every position]%
+\begin{theorem}[A global torus flux movement at every position]%
     \label{thm:peps_torus_translated_global_flux_move}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTranslatedGlobalFluxMove}
     \leanok
@@ -70,7 +70,7 @@
         \widehat W_v\Psi(u_g^0;u)=\Psi(u_g^1;u) \label{eq:translated_global_flux_move}
     \end{align}
     on globally contracted torus states, realizing the local flux move of \cite[Theorem~6.16]{Schuch2010PEPS} across both seams (with unrestricted lattice scope recorded in \cite{gap:rmp_peps_quantum_double_g_isometry}).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     Applying Lemma~\ref{thm:peps_regular_two_cycle_global_flux_move} to the translated tree-chord data of Lemma~\ref{thm:peps_translated_two_plaquette_geometry} with insertion $k_y(g)$ from (\ref{eq:torus_translated_flux_ky}) gives (\ref{eq:translated_global_flux_move}), while (\ref{eq:translated_flux_holonomies}) gives the flux transport.

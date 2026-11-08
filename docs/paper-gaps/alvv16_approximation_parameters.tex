@@ -1,16 +1,16 @@
 \documentclass{article}
 \usepackage[margin=25mm]{geometry}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,dsfont}
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \input{command}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 \title{Independent Parameters in the ALVV Ground-State Approximation}
 \author{}
-\date{November 3, 2026}
+\date{October 28, 2026}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{wip}
+\gapnote{scope-restriction}{open}
 
 \section{The quantitative conclusion}
 
@@ -44,7 +44,6 @@ $P=\Id\otimes\ketbra{1}{1}\otimes\Id$ and take both nearest-neighbour
 terms to equal $P$. The first is supported on sites $1,2$ and the second
 on sites $2,3$. Each term is a positive contraction, while
 $H=2P$ has spectrum $\{0,2\}$, ground-space dimension four and gap two.
-This corrects the normalization comparison in tracker~\ghissue{9809}.
 ALVV states the local normalization at source lines 267 and 806; no
 global assumption $\gamma\le1$ is stated there or in Assumption (DG).
 
@@ -83,6 +82,11 @@ The obstruction concerns the prescription; it does not disprove
 (\ref{eq:alvv_approximation_rank}).
 
 \section{A choice retaining the two scales}
+
+The corrected prescription of this section is formalized, so the failure of
+the printed choice is resolved. What remains open is the comparison with the
+printed bound for gaps larger than one, where the formal bound uses
+$g=\min\{\gamma,1\}$.
 
 Normalize the gap to $0<g\le1$. For a target scale $0<\tau\le1$, put
 $u=1+\log(1/g)+\log(1/\tau)$. There is a universal constant $C\ge21$
@@ -194,12 +198,14 @@ before the sampling size and the child spaces. Its literal ordered words
 act on the actual Haar coordinate sample, followed by one collective trim.
 Writing $D_{\rm ref}=r^2B$, take
 \[
-  A=1+\log r+\log D+\log(1/\beta),\qquad
-  s=\lceil4096rA\rceil,\qquad
-  M=D^6s^3,\qquad
-  \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
+    A=1+\log r+\log D+\log(1/\beta),\qquad
+    s=\lceil4096rA\rceil,\qquad
+    M=D^6s^3,\qquad
+    \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
 \]
-The corrected fixed-input failure bound is at most $\beta<1$, uniformly
+The corrected fixed-input failure bound
+(\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
+is at most $\beta<1$, uniformly
 for parent dimensions at most $D^{12}s^6$. Choosing successful unitaries
 therefore gives actual recursively selected spaces, all $3/200$-viable
 for the original ground space. Each has at most $M$ recorded generators,
@@ -216,9 +222,8 @@ tree, not a joint probability theorem for the adaptive algorithm. A
 pointwise choice of a measurable hull of each bad set does not by itself
 supply measurable dependence on the earlier spaces. The source theorem
 \texttt{t:alg1} remains separate: its full parameter selection, modified
-merge analysis, adaptive probability, energy-estimation invariant and
-computational cost remain separate. The final spectral extraction for
-the modified witness is established in the refinement below.
+merge analysis, adaptive probability, energy-estimation invariant, final
+spectral extraction and computational cost require their own proofs.
 
 
 \section*{Automatic parameters for this witness}
@@ -227,12 +232,12 @@ The numerical tail and filter conditions in the bounded witness above can
 be derived uniformly from the physical input. Choose a universal $C\ge1$
 from the scalar parameter theorem, before the chain and Hamiltonian, and put
 \[
-  m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
-  \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+    m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
+    \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
 \]
 Then $\ell\ge21$ and
 \[
-  \log D\le22(C+1)(6+2\log(C+1))v^3/g.
+    \log D\le22(C+1)(6+2\log(C+1))v^3/g.
 \]
 Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
 estimate holds uniformly up to $8\ell$, hence throughout the required
@@ -245,277 +250,9 @@ sampling size and child space.
 This parameter substitution does not identify the witness with the
 printed modified merge procedure. Its block leaves, final trim, capped
 gap and ranks of recorded generators remain as stated above. It does
-not by itself prove an adaptive joint success probability, the
-energy-estimation invariant, final spectral extraction or the claimed
-running time. The separate refinement below supplies the spectral
-extraction for a common-threshold version of the modified tree.
-
-
-\section*{Native matrix product states at the actual root}
-
-The actual recursively selected root space can be read on the original
-chain coordinates. Its regional internal cuts are the native chain cuts.
-If its at most $M$ recorded generators have ranks at most
-$R=10^6D_{\rm ref}^2(n+1)M$, the finite-span estimate gives bond at most
-\[
-  MR=10^6D_{\rm ref}^2(n+1)M^2
-\]
-for every vector in this actual root space. The extra factor $M$ is
-retained: the per-generator bound is not assigned unchanged to the whole
-span. The families, actual recursive operations and original-ground-space
-viability at every intermediate interval are the same as above. No
-independent matrix product approximation is substituted for the root.
-
-This constant-accuracy conclusion alone does not perform final spectral
-extraction or establish running time or adaptive joint success probability.
-The normalized witness below uses whole-region viability of this actual
-root, with its coordinate and norm identifications proved.
-
-\section*{Normalized witnesses in this same root}
-
-The full interval has an empty exterior. Its viability inequality is
-therefore exactly the closeness inequality for the native image $S$ of
-the same recursively constructed root. Let $P_S$ be its orthogonal
-projection. For every unit $\Gamma\in G$, this gives
-$\|P_S\Gamma\|^2\ge197/200$. The actual normalized projection
-\[
-  \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
-\]
-has squared overlap at least $197/200$ and squared distance at most
-$3/100$, with $\langle\phi,\Gamma\rangle=\|P_S\Gamma\|$ real and
-nonnegative. It retains the all-span native MPS bound
-$10^6D_{\rm ref}^2(n+1)M^2$.
-The operator families and root precede the choice of $\Gamma$.
-This is an existential constant-accuracy witness in that root. Constant
-viability alone does not give an accurate ground-space basis without
-knowing $\Gamma$. The following construction supplies the required
-refinement and extraction for the modified common-threshold tree.
-
-
-\section*{Refinement and Ritz extraction at one common threshold}
-
-Let $\mu$ be the original ground energy, $\gamma$ the gap, and $r$ the
-actual ground-space dimension. The same physical improving families can
-be selected before every requested accuracy $\eta>0$. Put
-\[
-  A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
-  \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
-  \varepsilon=\frac{c^2\rho}{32768}.
-\]
-Choose the physical reference space at accuracy $\varepsilon$, with
-all-span MPS bond bound $b$, and let $b_0$ be the reference bound used in
-the tree. With $D$ the common filter count parameter, choose
-\[
-  b_* =\max\{b_0,b\},\qquad
-  N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
-  \xi=\frac1{1000b_*N\sqrt{n+1}}.
-\]
-This threshold satisfies both the tree bound and the final refinement
-budgets, including the strict inequality
-$\sqrt{nrb}\,\xi<\eta/(10000D^{12})$.
-Fix $0<\beta<1$, and put
-\[
-  s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
-  \qquad M=D^6s^3.
-\]
-Construct the actual balanced tree using this same $\xi$ at every long
-parent. Write $S_0$ for its root; $M$ bounds the number of its recorded
-generators.
-
-Starting from this actual root, apply the literal raw filter
-$K=I-H/\|H\|$ followed by collective trimming at $\xi$, for
-\[
-   j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
-\]
-steps. The retained space $W$ is $\rho$-close to the original full ground
-space, and its dimension is at most $M$. Let $R$ be the actual lowest
-$r$-dimensional Ritz space of the compression of the original $H$ to
-$W$. Then $R\subseteq W$, $\dim R=r$, and its two projection errors
-relative to the original ground space are at most $\eta/2$.
-Indeed the projected trial space has excess energy at most
-\[
-   \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
-\]
-and the original gap and the variational principle give the Ritz bounds.
-Every vector in $R$ has native MPS bond at most
-$10^6(b_*N)^2(n+1)M^2$. The factor $M^2$ is retained for the whole span.
-
-The formal statement is
-
-\noindent\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_tree_ritz_approximation}.\par
-It has no supplied initial viable space, reference, improving family or
-trial-energy bound. The tree and final iteration use one common threshold;
-an unrelated MPS approximant is not substituted for the root.
-
-This completes the final spectral extraction for the stated modified
-construction. It does not identify $j_*$ with the printed iteration
-count in terms of $\eta$, prove the interleaved merge procedure or the
-energy-estimation invariant, or establish adaptive success probability
-or running time. The correction to the printed final-filter gain is
-recorded in
-\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_final_filter_gain.pdf}{the final-filter note}.
-
-\section*{A uniform polynomial bound for that same output}
-
-For fixed local dimension $q$ and gap lower bound $\gamma>0$, the
-recorded bond of the same modified-tree Ritz output is now bounded by
-$CZ^k$, where $C>0$ and $k\in\mathbb N$ precede all physical inputs and
-$Z=(L+1)(r+1)(1+\eta^{-1})$. The two actual reference bounds have
-profiles at most $b_0+\log(Z^5)$; the inverse refinement parameters have
-cubic and quartic bounds in $Z$. With $\beta=1/2$, the actual sample
-bound is quadratic in $r$, so the recorded generator count is at most
-a constant times $Z^6$. The final natural bond is therefore bounded
-by a constant times $Z^{10p_0+23}$, for an integer $p_0$ depending only
-on the fixed physical parameters and universal reference constants.
-
-The formal statement is
-\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_tree_ritz_polynomial_approximation}.
-Its proof extracts the actual operation, balanced root, final literal
-iterates and compressed Ritz space from the explicit parent theorem.
-It does not replace that output by an independent MPS approximation.
-The same space has dimension $r$, mutual error parameter $\eta/2$ and
-one MPS bound for its entire span. This is a polynomial bound on the
-output witnesses of the stated modified construction; the source
-energy-estimation invariant, adaptive probability, source-sharp
-parameter dependence and computational running time remain separate.
-
-\section*{The interleaved assignment and integer round count}
-
-In Figure~\texttt{fig:merge-prime}, source lines 1668--1670, the procedure
-initializes $V=W'$ and then prints the same assignment
-$V=\operatorname{Trim}_{\xi}(\operatorname{span}\{A_iW':i\})$ in every
-round. Its right-hand side is independent of the current $V$, so every
-positive number of repetitions returns the same subspace. The subsequent
-analysis, which compounds the error reduction and the dimension growth
-across rounds, requires the intended recursive assignment
-\[
-  V_0=W',\qquad
-  V_{j+1}=\operatorname{Trim}_{\xi}
-    \bigl(\operatorname{span}\{A_iV_j:i\}\bigr).
-\]
-This is a local correction of the assignment, not an identification of a
-single trim after an operator-word image with those interleaved trims.
-An analysis of the corrected procedure must control the actual trim and
-viability at every round. In particular, a constant reference error that
-is sufficient after a complete powered-image improvement need not suffice
-immediately after a random sample with very small target overlap.
-
-There is a separate integer-round issue in
-\texttt{eq:algo-sk-dg}, source line 1797: the printed choice
-$k=\tfrac12\lceil\log_Ds\rceil$ need not be an integer, although the
-procedure declares $k\in\mathbb N$. For example, $s=D>1$ gives
-$k=1/2$. For $D>1$ and $s\ge1$, rounding instead to
-$\lceil\tfrac12\log_Ds\rceil$ gives the honest dimension range
-$s^2\le D^{2k}s<D^2s^2$, with the larger upper
-factor $D^2$. The previously constructed witness uses the explicitly
-larger integer power $\lceil\log_D(D^2s)\rceil$ and its own cubic count;
-its stated bounds are not the printed count with a missing rounding
-argument. Neither correction alone establishes the adaptive probability,
-energy-estimation invariant or computational cost of the source algorithm.
+not prove an adaptive joint success probability, the energy-estimation
+invariant, final spectral extraction or the claimed running time.
 
 \bibliographystyle{unsrt}
-\subsection*{The literal interleaved interval tree}
-A separate construction now uses the current-space family image followed
-by collective trimming at every round of every long parent. Its initial
-Haar event is measurable and nonempty, has failure at most $(L+1)^{-2}$
-for fixed children, and yields the actual recursive interval tree.
-Every retained interval space is $3/200$-viable for the same original
-full ground space, has dimension at most $M=D^6s^3$, and has a recorded
-spanning family of at most $M$ vectors with the corresponding weighted
-internal-cut ranks. The parent equality records an actual chosen Haar
-unitary for the actual recursive children.
-
-Here the calibrated window is
-\[
- \ell=\left\lceil C\left(v^6/g+\sqrt w\,v^3/\sqrt g\right)\right\rceil,
- \qquad w=1+\log r+2\log(L+1),
-\]
-with $v=1+\log m+\log(1/g)+\log(1+w)$ and
-$D=(m\ell^2)^{22\ell}$. Thus $D$ is honest but length- and rank-dependent.
-The construction retains full leaves of length at most $4\ell$, the capped
-gap and the explicit integer count $\operatorname{clog}_D(D^2s)$.
-This is distinct from the one-final-trim tree described above. The
-same interleaved root now has a native matrix product state bound and
-literal final refinement. Compressing the original Hamiltonian to that
-same refined space gives a Ritz subspace of dimension $r$, both directed
-errors at most $\eta/2$, and one bond bound for its entire span. For
-fixed $q$ and $\gamma>0$, constants $C>0$ and $k\in\mathbb N$ precede
-all physical inputs and give the bound $CZ^k$, where
-$Z=(L+1)(r+1)(1+\eta^{-1})$. Moreover, there is a universal
-$C_{\rm deg}$ such that
-\[
- k\le C_{\rm deg}\frac{(1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
-\]
-The prefactor can be controlled at the same scale: there is one
-universal $C_0>0$, chosen before $q,\gamma$, with
-$\log\max\{C,1\}\le C_0(1+\log\max\{q,50\}+\log(1/g))^{10}/g^2$
-and the same bound for $k$.
-No independent approximation is substituted for the recursive root.
-This existential theorem does not establish joint sampling probability
-or running time. The canonical construction below subsequently proves
-joint success and refines the same successful root. Identification with
-the printed soft generation procedure and its running time remains open.
-
-
-\section{The same family for interleaved merging and untrimmed words}
-
-Figure \texttt{fig:algo1}, source lines 1628--1631, uses the family
-returned by Generate both for the merge and for the separate untrimmed
-energy-estimation image of the child product. A second existence theorem
-for an independently chosen family does not identify these operators.
-
-The calibrated physical construction now retains the actual ordered-word
-property of its own family, together with its interleaved trimming step.
-The finite iteration, fixed-child sampling event and balanced tree retain
-these same data. In the tree, the actual target for each long interval
-and its quantitative closeness to the original ground space are retained
-before every radius and recursive operation. For a $\delta$-viable
-input $S$ and every power $n$, the literal ordered-word image has
-viability error at most $\Delta^n/(1-\delta)^2$ and dimension at most
-$(D^2)^n\dim S$. No second filter is chosen to obtain that conclusion.
-The four strengthened statements are
-\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_filter_family_with_word_powers},
-\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_iterates_with_word_powers},
-\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_node_event_with_word_powers}
-and
-\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_interval_tree_with_word_powers}.
-
-The operators in these statements are polynomials in a hard-clipped
-Hamiltonian. Their construction is not identified with the soft-truncated
-Generate procedure in \texttt{t:aisefficient}. A quantitative transfer
-of the actual soft regional energy estimate to this same target can
-support a corrected energy candidate; that transfer and the recursive
-energy invariant remain separate. The existing sufficient logarithmic
-word count is not an identification of the printed
-$4\lceil\log(1/\gamma)\rceil$. No running-time claim follows from
-retaining the word property. The counterexamples to the printed cluster
-and soft-energy estimates are unchanged.
-
-\section{Joint success and the actual canonical Ritz output}
-
-The corrected hard-clipped construction now uses one fixed finite product
-of Haar sampling laws for all endpoint pairs and all possible input ranks.
-Its true canonical-tree joint success event is Borel. Only the internal
-intervals of the actual full-chain subdivision are counted, giving failure
-at most $\max\{L-1,0\}/(L+1)^2$; all dimension and recorded-rank bounds
-hold independently of success. The physical references, targets, families
-and ordered-word certificates are selected together before the common
-radius and every seed.
-
-For every requested $\eta>0$, the automatic common radius is chosen before
-the seeds. Every successful seed then supplies its own actual root as the
-unchanged input to the literal final raw-filter-and-trim iteration. The
-compressed Ritz space of that terminal space has dimension $r$, mutual
-error $\eta/2$ with the original ground space, and a common all-span bond
-$B_{\rm out}\le C((L+1)(r+1)(1+1/\eta))^k$. At fixed $q,\gamma$, the
-coefficient and natural degree precede length, multiplicity, accuracy and
-seeds. The same bond bound holds for the actual initial native root.
-
-This result retains the hard-clipped family, block leaves, capped-gap
-bounds and corrected counts of the preceding sections. It does not
-identify that family with the printed soft-truncated Generate procedure,
-assert measurability of a chosen Ritz basis, or prove a running-time bound.
-The separate energy procedure is not supplied by the Ritz conclusion.
-
 \bibliography{references}
 \end{document}

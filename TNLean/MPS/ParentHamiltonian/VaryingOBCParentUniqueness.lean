@@ -13,13 +13,14 @@ Canonical adjoint reconstruction along the whole chain then reduces every kernel
 vector to a scalar multiple of the actual open-chain state. The state itself has
 unit norm, derived from the sitewise canonical equations and singleton endpoints.
 
-**Scope restriction (adjacent open chains):** the physical alphabet is common to
-the sites throughout this module, and the chain length is at least two in
+**Local fix (chains with an adjacent pair):** the chain length is at least two in
 `exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero`,
-`ker_obcParentHamiltonian_eq_span` and `finrank_ker_obcParentHamiltonian_eq_one`.
-The statements concern the actual ground-state line and allow scalar phase
-freedom of normalized vectors.
-The scope and remaining unrestricted source question are recorded in
+`ker_obcParentHamiltonian_eq_span` and `finrank_ker_obcParentHamiltonian_eq_one`,
+the source's setup of a Hamiltonian summed over adjacent pairs; a one-site chain
+has no interaction term. The statements concern the ground-state line, as the
+source's normalization step does. The physical alphabet is common to the sites
+throughout this module; these are the special cases from which the theorem for
+arbitrary physical dimensions is derived. Documented in
 `docs/paper-gaps/pgvwc07_open_parent_domain.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 9 and proof,

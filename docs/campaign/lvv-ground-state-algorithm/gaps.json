@@ -1,5 +1,5 @@
 {
- "reviewedAt": "2026-10-29T00:00:00Z",
+ "reviewedAt": "2026-11-03T00:00:00Z",
  "checked": [
   {
    "result": "Lemmas claim:energy-overlap and claim:overlap",
@@ -34,16 +34,18 @@
    "stage": "alg:5",
    "prs": {
     "TNLean": [
-     10271
+     10271,
+     10339,
+     10362
     ]
    },
    "title": "Ground energy in the exponent of the running time",
-   "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The sampled projector is formalized with the number of words explicit in <i>C</i><sup><i>m</i></sup>; the running time is not formalized.",
+   "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The viable-set induction is proved with the sampled projector under such a bound, and without it with Huang's Gaussian filter in place of the sampled projector; on the Gaussian route the running time is stated in the cost model of the note on the cost model.",
    "context": "The algorithm uses the operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> with <i>m</i> of order (<i>n</i>/ε) log <i>n</i>, and samples it by an average of words in the factors 1 − <i>H<sub>i</sub></i> multiplied by <i>C</i><sup><i>m</i></sup>, <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>. The size of <i>C</i><sup><i>m</i></sup> controls the variance in the matrix Bernstein bound, and hence the number of sampled words.",
    "claims": "Theorem 1 of arXiv:1307.5143v1 (lines 213–216 of the source) runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) with <i>c</i>(<i>d</i>, ε) = 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup>, with no dependence on the ground energy ε<sub>0</sub>. The proof of the sampling estimate (line 644) uses <i>C</i><sup>2<i>m</i></sup> = <i>n</i><sup><i>O</i>(1/ε)</sup>.",
    "found": "<i>C</i><sup><i>m</i></sup> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−<i>m</i></sup> is about e<sup>ε<sub>0</sub><i>m</i>/<i>n</i></sup> = <i>n</i><sup><i>O</i>(ε<sub>0</sub>/ε)</sup>. The hypotheses 0 ≤ <i>H<sub>i</sub></i> ≤ 1 allow ε<sub>0</sub> of order <i>n</i>, and then this factor, and with it the exponent of the running time, grows with <i>n</i>. Rescaling the sampled operator, which the source allows, does not change the relative accuracy that the number of samples must reach. The corrected exponent is 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε) + <i>O</i>(ε<sub>0</sub>/ε)</sup>.",
-   "impact": "The algorithm is polynomial-time whenever ε<sub>0</sub>/ε is bounded, in particular for frustration-free chains; for an extensive ground energy the stated bound does not give polynomial time. The formalization targets existence statements, not running times, so no formal statement depends on this.",
-   "plan": "The note records the failure and the corrected statement. Corollary c:agsp is proved with ℓ explicit in <i>C</i><sup><i>m</i></sup> and the bound <i>C</i><sup><i>m</i></sup> ≤ <i>n</i> η<sup>−ε<sub>0</sub>/ε</sup>; the dependence of the whole algorithm on ε<sub>0</sub> stays open."
+   "impact": "The algorithm is polynomial-time whenever ε<sub>0</sub>/ε is bounded, in particular for frustration-free chains; for an extensive ground energy the stated bound does not give polynomial time. The existence statements behind the algorithm do not depend on this: with Huang's Gaussian filter the induction holds under the paper's hypotheses alone.",
+   "plan": "The note records the failure and the corrected statement. Corollary c:agsp is proved with ℓ explicit in <i>C</i><sup><i>m</i></sup> and the bound <i>C</i><sup><i>m</i></sup> ≤ <i>n</i> η<sup>−ε<sub>0</sub>/ε</sup>, and the induction built on it is proved for a fixed bound on ε<sub>0</sub>/ε. The induction without that bound uses Huang's Gaussian filter (arXiv:1406.6355v6, §5.4). The dependence of the running time on ε<sub>0</sub> stays open with the running time itself."
   },
   {
    "id": "docs/paper-gaps/lvv13_constant_bond.tex",
@@ -298,6 +300,72 @@
    "found": "Without a lower bound on ‖<i>A v</i>‖ the implication fails: in ℂ<sup>2</sup> with Γ = <i>v</i> = <i>e</i><sub>1</sub>, <i>A</i> = δ·1 and <i>K</i> = <i>A</i> + δ|<i>e</i><sub>2</sub>⟩⟨<i>e</i><sub>1</sub>|, the overlap of <i>K v</i>/‖<i>K v</i>‖ with Γ is 1/√2. The source's <i>A</i> is Hermitian and fixes Γ (line 602), so ‖<i>A v</i>‖ ≥ |⟨Γ, <i>v</i>⟩| ≥ 1/2, and the triangle inequality gives 1 − δ − 4‖<i>K</i> − <i>A</i>‖.",
    "impact": "None for the claim, which is stated for an arbitrary polynomial <i>q</i>(<i>n</i>); a smaller sampling error restores the printed target error.",
    "plan": "Nothing further; the deterministic error-reduction step is proved with the corrected constant."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_matrix_bernstein_variance_norm.tex",
+   "repo": "QICLean",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Theorem t:mcb, the variance parameter of the matrix Bernstein bound",
+   "issue": 9822,
+   "stage": "alg:5",
+   "prs": {
+    "QICLean": [
+     984
+    ]
+   },
+   "title": "The variance parameter of the matrix Bernstein bound",
+   "summary": "The quoted matrix Bernstein bound takes the maximum of two matrices as its variance; read as the maximum of their norms, as in Tropp's theorem from which it is derived, the bound is proved.",
+   "context": "The sampled projector is an average of independent random matrices, and the matrix Bernstein bound controls how far such an average lies from its mean in operator norm. Its variance parameter measures the spread of a single sample.",
+   "claims": "Theorem t:mcb of arXiv:1307.5143v1 (lines 616–624 of the source) defines σ<sup>2</sup> as the maximum of the two positive semidefinite matrices E(<i>X<sub>i</sub></i> − <i>X</i>)(<i>X<sub>i</sub></i> − <i>X</i>)<sup>*</sup> and E(<i>X<sub>i</sub></i> − <i>X</i>)<sup>*</sup>(<i>X<sub>i</sub></i> − <i>X</i>), and places σ<sup>2</sup> in a scalar exponent.",
+   "found": "Two positive semidefinite matrices have no maximum in general, and a matrix cannot stand in the exponent. Tropp's rectangular inequality, from which the bound is derived, uses the larger of the two operator norms; with that reading the printed bound, with dimension factor 2<i>d</i>, follows.",
+   "impact": "A notational slip; the bound used by the sampled projector is unchanged.",
+   "plan": "Resolved: the bound with the norm reading is proved in QICLean and used by the sampled projector."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_mpsapprox_log_factor.tex",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Lemma l:mpsapprox, the sub-polynomial bond dimension",
+   "issue": 9840,
+   "stage": "alg:2",
+   "prs": {
+    "TNLean": [
+     10404
+    ]
+   },
+   "title": "A logarithmic factor in the sub-polynomial bond dimension",
+   "summary": "The paper quotes the bond dimension exp(<i>C</i>(ln <i>n</i>)<sup>3/4</sup>ε<sup>−1/4</sup>) without the tilde of its source, Arad, Kitaev, Landau and Vazirani; their bound, with the hidden factor written out as log log <i>n</i>, is proved.",
+   "context": "The area law shows that the ground state is close to a matrix product state of small bond dimension. The algorithm needs only a polynomial bond dimension, but the paper states the best known one as a lemma.",
+   "claims": "Lemma l:mpsapprox of arXiv:1307.5143v1 (lines 325–328 of the source): for every <i>c</i> > 0 there is <i>C</i> such that some vector of Schmidt rank at most exp(<i>C</i>(ln <i>n</i>)<sup>3/4</sup>ε<sup>−1/4</sup>) at every cut has overlap at least 1 − <i>n</i><sup>−<i>c</i></sup> with Γ.",
+   "found": "The cited work, arXiv:1301.1162v1, states <i>B</i> = e<sup><i>Õ</i>(log<sup>3/4</sup> <i>n</i>/ε<sup>1/4</sup>)</sup> (lines 176 and 1503–1517), where the tilde hides factors logarithmic in the exponent. Its derivation balances two terms and leaves a factor of order log log <i>n</i>.",
+   "impact": "None for the algorithm, which uses only a polynomial bond dimension. The lemma is formalized in the form its source proves.",
+   "plan": "Resolved: a matrix product state with log <i>D</i> = <i>O</i>((log <i>n</i>)<sup>3/4</sup> log log <i>n</i>) for fixed local dimension and gap, at accuracy 1/poly(<i>n</i>), is proved."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_cost_model.tex",
+   "kind": "narrower",
+   "status": "open",
+   "paper": "lvv",
+   "result": "Theorem 1, the cost model of the running time",
+   "issue": 10536,
+   "stage": "alg:6",
+   "prs": {
+    "TNLean": [
+     10559,
+     10561,
+     10563,
+     10576
+    ]
+   },
+   "title": "The cost model of the running time",
+   "summary": "The algorithm is a computation over linear-algebra operations, each charged a declared polynomial cost in the dimensions of its arguments; run with any valid oracle (a solver returning optimal solutions of the convex programs, nets of the required radius and cut decompositions of the filters) it computes a viable sweep, outputs a matrix product state with the required overlap, and costs at most <i>P</i>(<i>n</i> + 2<i>R</i><sup>2</sup> + 1)<sup><i>d</i></sup>. The costs and exact arithmetic are declared, not derived, as in the source.",
+   "context": "Theorem 1 (lines 213–219 of the source) counts each linear-algebra step, the matrix elements in an orthonormal basis of the span, the convex programs, the singular value decompositions and the leading eigenvectors, as one polynomial-time computation on data of polynomial dimension, and does not analyse it further.",
+   "claims": "The algorithm runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) and outputs a matrix product state with overlap at least 1 − η with the ground state.",
+   "impact": "The running time is a statement about declared costs and the honest oracle; the exponent 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup> is not reproduced, since the library's constant-cut bond differs from the source's.",
+   "plan": "The declaration of costs is the content of the source's claim. The honest-oracle restriction is lifted for correctness on both routes and for the success probability of the sampled route. The cost bound holds for every valid oracle on both routes; on the sampled route it holds on the same event of probability at least 1 − 1/(2<i>n</i><sup>2</sup>) as the accuracy."
   }
  ]
 }

@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.ALVV
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
 import TNLean.MPS.AreaLaw.AdjacentIntervalMergeMeasurable
+import TNLean.MPS.AreaLaw.Algorithm
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BalancedIntervalFailure
 import TNLean.MPS.AreaLaw.BalancedIntervalFailureProbability
@@ -201,6 +202,11 @@ import TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.PhysicalSameRootPolynomialRefinement
+import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationCloseness
+import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResidual
+import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResiduals
+import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationReverse
+import TNLean.MPS.AreaLaw.PhysicalSoftTruncationMPOApproximation
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityApproximation
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityEntropy
@@ -237,6 +243,7 @@ import TNLean.MPS.AreaLaw.RegionalCentralEnergyEstimate
 import TNLean.MPS.AreaLaw.RegionalEnergyEstimate
 import TNLean.MPS.AreaLaw.RegionalEnergyMerge
 import TNLean.MPS.AreaLaw.RegionalEnergyMergePhysical
+import TNLean.MPS.AreaLaw.RegionalExponentialMoment
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
 import TNLean.MPS.AreaLaw.RegionalLowDensityFamily
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors

@@ -9,7 +9,7 @@
 \date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source and the distinction}
 Garre-Rubio, Lootens and Moln\'ar define the canonical local parent term
@@ -41,9 +41,10 @@ The nonzeroness of this complement additionally needs $P\ne I$.
 \section{An elementary fusion-compatible test}
 The following example is a mathematical derivation, independently checked
 at the level of the displayed formulas. Its representation data, the
-integral normalization and the average at every length are formalized as
+integral normalization, the evaluation of the average, and the
+compatibility and injectivity of its state tensor are formalized as
 recorded in the final section; the weak-unit, weak-counit and antipode
-identities and the two-site evaluation of the average are not.
+identities are not, since no argument below uses them.
 Fix $r\ge2$, put $K=\mathbb C^r$, $V=K\otimes K$ and
 $\mathcal A=\operatorname{End}(V)$. For matrix units
 $e_{ij,kl}=|i,j\rangle\langle k,l|$, define
@@ -211,9 +212,9 @@ gives $\sum\Omega_{(1)}T(\Omega_{(2)})=1$ and hence the normalized boundary
 family $\sum\rho_n(\Omega_{(1)})\rho_n(T(\Omega_{(2)}))=Q_n$. Adjoint
 closure comes from star compatibility. With the average
 $E_n(B)=\sum\rho_n(\Omega_{(1)})B\rho_n(T(\Omega_{(2)}))$ defined from
-$\Delta(\Omega)$ itself, a compatible state tensor that is injective at one
-site satisfies $E_n(P_n)=P_n$, $E_n(I)=Q_n$ and $E_n(I-P_n)=Q_n-P_n$ for
-every $n>0$.\footnote{
+$\Delta(\Omega)$ itself, a compatible state tensor that is injective after
+blocking some number of sites satisfies $E_n(P_n)=P_n$, $E_n(I)=Q_n$ and
+$E_n(I-P_n)=Q_n-P_n$ for every $n>0$.\footnote{
     \doclink{TNLean/MPS/MPDO/WeakHopfRepresentation} and
     \doclink{TNLean/MPS/Symmetry/WeakHopfParentAverage}.}
 The weak Hopf algebra of a finite set, with
@@ -230,17 +231,42 @@ Appendix B. Its average is
 $E_n(B)=r^{-2}\sum_{p,q}\rho_n(e_{pq})B\rho_n(e_{qp})$ at every length, with
 $p,q$ ranging over pairs of indices.\footnote{
     \doclink{TNLean/MPS/Examples/BellPairWeakHopf}.}
-The two-site evaluation $E(X)=r^{-2}\operatorname{Tr}(QX)Q$ and the
-compatibility of the Bell-pair state tensor with its operator tensor are not
-formalized.
+Since $\rho_{n+1}(e_{pq})=r^{-n}|u_p\rangle\langle u_q|$, where
+$u_{(i,j)}=\sqrt r^{\,n}W_{n+1}|i,j\rangle$ has entries
+$(E_{\sigma_1}\cdots E_{\sigma_{n+1}})_{ij}$, the evaluation
+$E_n(X)=r^{-2}\operatorname{Tr}(Q_nX)Q_n$ holds at every length $n>0$, and
+at two sites it is the displayed $E(X)=r^{-2}\operatorname{Tr}(QX)Q$. The
+state tensor $A^{ij}=E_{ij}/\sqrt r$ is injective at one site and
+compatible with the operator tensor, with one output boundary for all
+positive lengths:
+$\rho_n(e_{(i,j),(k,l)})\psi^n_{A,Y}=\psi^n_{A,Y_{lk}E_{ji}}$. The range of
+$Q_n$ lies in the support and $Q_n$ is self-adjoint, so $P_n=Q_n$, and
+$E_n(P_n)=P_n$, $E_n(I-P_n)=0$, while $I-P_n\ne0$ for $r\ge2$ and
+$n\ge2$.\footnote{\doclink{TNLean/MPS/Examples/BellPairWeakHopf}.}
 
-One restriction remains. The unit-support step uses injectivity at one
-site, where $\rho_1(1)=I$; this is the setting of the two-site parent term
-of Appendix B. For a tensor injective only after blocking $L>1$ sites the
-result is proved under the extra hypothesis $Q_L=I$, which need not hold for
-weak Hopf algebras with $\Delta(1)\ne1\otimes1$. The elimination plan is
-to derive unit support directly from the module structure of the state
-boundary space.
+Unit support does not need $Q_L=I$ at the injectivity length $L$, which
+can fail when $\Delta(1)\ne1\otimes1$; it follows from the module
+structure of the state boundary space. Let $A$ be compatible and injective
+after blocking $L$ sites, and let $\mathcal F$ be the space of state
+boundaries $Z$ with $Q_m\Gamma_m(Z)=\Gamma_m(Z)$ for every $m>0$. Since
+$\rho_m$ is multiplicative for $m>0$ and $\rho_1(1)=I$,
+\[
+    (I\otimes Q_m)Q_{m+1}=Q_{m+1}=(Q_m\otimes I)Q_{m+1},
+\]
+so fixing the first or the last site of a vector fixed by $Q_{m+1}$ gives a
+vector fixed by $Q_m$. As
+$\Gamma_{m+1}(Z)(j\sigma)=\Gamma_m(ZA^j)(\sigma)$ and
+$\Gamma_{m+1}(Z)(\sigma j)=\Gamma_m(A^jZ)(\sigma)$, the space $\mathcal F$
+is stable under multiplication by every letter on either side. The words
+of length $L$ span all matrices, so $\mathcal F$ is a two-sided ideal of
+the bond matrix algebra. For each $X$, compatibility with the unit
+boundary gives $Z$ with $Q_m\Gamma_m(X)=\Gamma_m(Z)$ for all $m>0$;
+idempotence of $Q_m$ puts $Z$ in $\mathcal F$, and $Q_1=I$ gives
+$\Gamma_1(Z)=\Gamma_1(X)$. If $\mathcal F=0$, every one-site vector
+vanishes, and then so does every vector of positive length. Otherwise
+$\mathcal F$ is the whole algebra. In both cases
+$Q_n\Gamma_n(X)=\Gamma_n(X)$, hence $Q_nP_n=P_n$ and $E_n(P_n)=P_n$ for
+every $n>0$.\footnote{\doclink{TNLean/MPS/Symmetry/WeakHopfParentAverage}.}
 
 The periodic-parent results supply tensor cuts and cyclic-window transport
 under explicit local adjoint closure. Wrapping windows require the global

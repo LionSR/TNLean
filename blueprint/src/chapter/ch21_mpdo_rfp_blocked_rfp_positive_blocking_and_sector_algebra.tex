@@ -137,7 +137,7 @@ physical indices, as in
     remaining words $\sigma',\tau'$.
 \end{proof}
 
-\begin{lemma}[Closed MPO chains under physical blocking]
+\begin{theorem}[Closed MPO chains under physical blocking]
     \label{thm:mpdo_closed_chain_physical_blocking}
     \lean{MPOTensor.mpo_blockTensor_eq_reindex}
     \lean{MPOTensor.IsMPDO.blockTensor}
@@ -164,7 +164,7 @@ physical indices, as in
     when the one-site tensor and its two-site blocking are placed in vertical
     canonical form in
     \cite[Appendix~C.4, lines~1952--2017]{Cirac2016MPDO_arXiv}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpo_eval_word_block, lem:eval_word_block}

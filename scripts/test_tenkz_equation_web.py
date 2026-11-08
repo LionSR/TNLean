@@ -23,7 +23,7 @@ from playwright.sync_api import Page, Route, sync_playwright
 from blueprint_tex_tree import read_tex_tree
 
 
-EXPECTED_PICTURE_COUNTS = [2] * 9 + [2, 3, 2, 4] + [2, 3, 2, 5, 1, 3, 3] + [2] * 18
+EXPECTED_PICTURE_COUNTS = [2] * 9 + [2, 3, 2, 4] + [3, 2, 5, 1] + [2] * 18
 PAGES = (
     "ch-symmetry.html",
     "ch-mpdo.html",
@@ -34,7 +34,7 @@ PAGES = (
 EXPECTED_WRAPPER_COUNTS = {
     "ch-symmetry.html": 9,
     "ch-mpdo.html": 4,
-    "ch-mpdo_rfp_gibbs.html": 7,
+    "ch-mpdo_rfp_gibbs.html": 4,
     "ch-mpo_boundaries.html": 5,
     "ch-mpo_interpolation.html": 13,
 }

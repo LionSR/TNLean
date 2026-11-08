@@ -14,11 +14,15 @@ source length. The interaction can be any positive local operator. No local
 annihilation equation, parent-projector identity or extra simultaneous-span
 premise is supplied.
 
-**Scope restriction (separated canonical blocks):** the source's statement
-that the weighted block states are pairwise different is replaced by
-inequivalence under a gauge and a phase. This is the existing distinctness
-restriction of `PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge`, made explicit
-here as well. See
+**Local fix (projective distinctness of the blocks):** the source assumes that
+the weighted block states are pairwise different (lines 1329–1330); its proof of
+the direct-sum lemma (lines 1373–1377) needs them pairwise nonproportional, and
+that is the reading adopted. Gauge-phase-equivalent blocks give proportional
+states at every length, and inequivalent blocks give linearly independent states
+at the source length, so the explicit premise `BlocksNotGaugePhaseEquiv` is the
+source's hypothesis in length-independent form. The canonical form of Theorem 4
+carries no distinctness, so the premise is stated here rather than in
+`PGVWC07CanonicalFormData`. Documented in
 `docs/paper-gaps/pgvwc07_direct_sum_input.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 11 (`2blocks.1`),

@@ -101,13 +101,15 @@ No other weak-Hopf axiom is used.
     \label{thm:glm_wha_integral_normalization}
     \lean{Coalgebra.comul_injective,
         MPOTensor.WeakHopfRepresentation.exists_conjTranspose_mpoWithBoundary_eq,
+        MPOTensor.WeakHopfRepresentation.rep_star,
         MPOTensor.WeakHopfRepresentation.mul'_map_integral,
         MPOTensor.WeakHopfRepresentation.sum_rep_mul_rep_pullThrough}
     \leanok
     \uses{def:glm_wha_representation,thm:glm_coalgebra_adjoint_boundary,
         thm:glm_wha_represented_coproduct_mul}
     For a weak-Hopf representation, every boundary $X$ has one $Y$ with
-    $(O^N_{T,X})^\dagger=O^N_{T,Y}$ for all $N$. Also
+    $(O^N_{T,X})^\dagger=O^N_{T,Y}$ for all $N$, and
+    $\rho_N(x^*)=\rho_N(x)^\dagger$ for every $x\in H$. Also
     $\sum\Omega_{(1)}T_\Omega(\Omega_{(2)})=1$ in $H$, and for every finite
     expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$ and $N>0$,
     \begin{align}
@@ -118,7 +120,9 @@ No other weak-Hopf axiom is used.
 \begin{proof}
     \leanok
     \uses{thm:glm_coalgebra_adjoint_boundary}
-    Adjoint closure is Lemma~\ref{thm:glm_coalgebra_adjoint_boundary}. The
+    Adjoint closure is Lemma~\ref{thm:glm_coalgebra_adjoint_boundary}; the
+    same exchange of the two configurations in a coefficient product under the
+    involution of the dual gives $\rho_N(x^*)=\rho_N(x)^\dagger$. The
     counit axiom $(\epsilon\otimes\mathrm{id})\Delta(x)=1\otimes x$ makes
     $\Delta$ injective. By multiplicativity, the left-hand side of
     (\ref{eq:glm_wha_integral_normalization}) is
@@ -143,13 +147,64 @@ No other weak-Hopf axiom is used.
     \cite[Appendix~B]{GarreRubio2023MPOSym}.
 \end{definition}
 
+\begin{lemma}[Unit support of the represented unit]
+    \label{thm:glm_wha_unit_support}
+    \lean{MPOTensor.weakHopfRep_succ_apply_last,
+        MPOTensor.WeakHopfRepresentation.rep_one_mulVec_cons,
+        MPOTensor.WeakHopfRepresentation.rep_one_mulVec_snoc,
+        MPOTensor.WeakHopfRepresentation.rep_one_mulVec_mpvWithBoundary,
+        MPOTensor.WeakHopfRepresentation.toEuclideanLin_rep_one_comp_starProjection}
+    \leanok
+    \uses{def:glm_wha_representation,thm:glm_wha_represented_coproduct_mul,
+        def:glm_boundary_closedness,def:l_blk_injective,def:ground_space_map}
+    Let $T$ come from a weak-Hopf representation, and let $A$ be a state
+    tensor of bond dimension $D_A$ that is $L$-block injective for some $L$
+    and length-independently compatible with $T$. Put $Q_n=\rho_n(1)$. For
+    every $n>0$ and $X\in\MN{D_A}$, $Q_n\psi^n_{A,X}=\psi^n_{A,X}$; hence
+    $Q_nP_n=P_n$, with $P_n$ the projection onto $\mathcal S_A^n$. No
+    identity $Q_L=I$ at the blocking length is assumed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_represented_coproduct_mul}
+    Write $\Gamma_m(Z)=\psi^m_{A,Z}$. Splitting off the first or the last
+    site,
+    \begin{align*}
+        \rho_{m+1}(x)_{(s,\sigma),(t,\tau)}
+         & =\sum\phi(x_{(1)})_{st}\rho_m(x_{(2)})_{\sigma\tau}, \\
+        \rho_{m+1}(x)_{(\sigma,s),(\tau,t)}
+         & =\sum\rho_m(x_{(1)})_{\sigma\tau}\phi(x_{(2)})_{st}.
+    \end{align*}
+    For $m>0$, Lemma~\ref{thm:glm_wha_represented_coproduct_mul} gives
+    $\rho_m(1)\rho_m(y)=\rho_m(y)$, so
+    $(I\otimes Q_m)Q_{m+1}=Q_{m+1}=(Q_m\otimes I)Q_{m+1}$. Fixing the first
+    or the last site of a vector fixed by $Q_{m+1}$ therefore gives a vector
+    fixed by $Q_m$.
+
+    Let $\mathcal F$ be the space of $Z\in\MN{D_A}$ with
+    $Q_m\Gamma_m(Z)=\Gamma_m(Z)$ for every $m>0$. Since
+    $\Gamma_{m+1}(Z)(j\sigma)=\Gamma_m(ZA^j)(\sigma)$ and
+    $\Gamma_{m+1}(Z)(\sigma j)=\Gamma_m(A^jZ)(\sigma)$, the space
+    $\mathcal F$ is closed under multiplication by each $A^j$ on either side,
+    hence by every word. By (\ref{eq:mps_block_injective}) the words of
+    length $L$ span $\MN{D_A}$, so $\mathcal F$ is a two-sided ideal.
+
+    For $X\in\MN{D_A}$, compatibility with the boundary of the unit gives one
+    $Z$ with $Q_m\Gamma_m(X)=\Gamma_m(Z)$ for every $m>0$. As $Q_m^2=Q_m$,
+    $Z\in\mathcal F$, and $Q_1=I$ gives $\Gamma_1(Z)=\Gamma_1(X)$. If
+    $\mathcal F$ contains a nonzero matrix, it is all of $\MN{D_A}$ and
+    contains $X$. Otherwise $\Gamma_1(X)=\Gamma_1(Z)=0$ for every $X$, and
+    $\Gamma_{m+1}(Y)(j\sigma)=\Gamma_m(YA^j)(\sigma)$ shows that every
+    $\Gamma_m$ with $m>0$ vanishes. In both cases
+    $Q_n\Gamma_n(X)=\Gamma_n(X)$. Since $\mathcal S_A^n$ is the range of
+    $\Gamma_n$, $Q_nP_n=P_n$.
+\end{proof}
+
 \begin{lemma}[Weak-Hopf average of the canonical parent]
     \label{thm:glm_wha_parent_average}
     \lean{MPOTensor.WeakHopfRepresentation.weakHopfAverage_one,
         MPOTensor.WeakHopfRepresentation.weakHopfAverage_sub,
-        MPOTensor.WeakHopfRepresentation.weakHopfAverage_starProjection_of_rep_eq_one,
         MPOTensor.WeakHopfRepresentation.weakHopfAverage_starProjection,
-        MPOTensor.WeakHopfRepresentation.toEuclideanLin_rep_one_comp_starProjection,
         MPOTensor.WeakHopfRepresentation.isSymmetricProjection_weakHopfAverage_starProjection,
         MPOTensor.WeakHopfRepresentation.weakHopfAverage_parentInteractionES,
         MPOTensor.WeakHopfRepresentation.one_sub_weakHopfAverage_starProjection,
@@ -157,12 +212,13 @@ No other weak-Hopf axiom is used.
         MPOTensor.WeakHopfRepresentation.commute_one_sub_weakHopfAverage_mpoWithBoundary}
     \leanok
     \uses{def:glm_wha_average,thm:glm_wha_integral_normalization,
-        thm:glm_boundary_projection_average,thm:glm_boundary_parent_nonzero,
-        def:glm_boundary_closedness,def:injective,def:parent_interaction}
+        thm:glm_wha_unit_support,thm:glm_boundary_parent_local,
+        thm:glm_boundary_parent_nonzero,def:glm_boundary_closedness,
+        def:l_blk_injective,def:parent_interaction}
     Let $T$ come from a weak-Hopf representation, and let $A$ be a state
-    tensor of bond dimension $D_A$ that is injective at one site and length-independently compatible
-    with $T$. For every $n>0$, with $P_n$ the projection onto
-    $\mathcal S_A^n$ and $h_n=I-P_n$,
+    tensor of bond dimension $D_A$ that is $L$-block injective for some $L$
+    and length-independently compatible with $T$. For every $n>0$, with
+    $P_n$ the projection onto $\mathcal S_A^n$ and $h_n=I-P_n$,
     \begin{align}
         E_n(I)     & =Q_n, \notag                                \\
         E_n(P_n)   & =P_n, \label{eq:glm_wha_support_average}    \\
@@ -172,24 +228,26 @@ No other weak-Hopf axiom is used.
     In particular $E_n(P_n)$ is a Hermitian projection with
     $\operatorname{tr}E_n(P_n)=\operatorname{tr}(Q_nP_n)$, the symmetrized
     parent $I-E_n(P_n)$ commutes with every $O^n_{T,X}$, and it is nonzero
-    when $d^n>D_A^2$. More generally, (\ref{eq:glm_wha_support_average})
-    holds when $A$ is $L$-block injective for some $L>0$ and $Q_L=I$.
-    This is the projection, trace and nonvanishing claim of
+    when $d^n>D_A^2$. This is the projection, trace and nonvanishing claim of
     \cite[Appendix~B]{GarreRubio2023MPOSym} at every positive length; the
-    source's two-site term is the case $n=2$, and its injective tensor is
-    taken injective at one site \cite{gap:glm23_wha_parent_completion}.
+    source's two-site term is the case $n=2$
+    \cite{gap:glm23_wha_parent_completion}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_projection_average,thm:glm_boundary_parent_nonzero,
-        thm:glm_boundary_parent_local}
-    Choose a finite expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$ and
-    the boundaries $X_j=X_{a_j}$, $Y_j=X_{T_\Omega(b_j)}$ and $U=X_1$.
-    Lemma~\ref{thm:glm_wha_represented_coproduct_mul} gives $O^1_{T,U}=I$,
-    Lemma~\ref{thm:glm_wha_integral_normalization} gives adjoint closure and
-    (\ref{eq:glm_boundary_average_unit}) with $Q_n=O^n_{T,U}$, and
-    Lemma~\ref{thm:glm_boundary_projection_average} yields
-    (\ref{eq:glm_wha_support_average}). The identity $E_n(I)=Q_n$ is
+    \uses{thm:glm_wha_integral_normalization,thm:glm_wha_unit_support,
+        thm:glm_boundary_parent_local,thm:glm_boundary_parent_nonzero}
+    Choose a finite expansion $\Delta(\Omega)=\sum_{j\in J}a_j\otimes b_j$.
+    Lemma~\ref{thm:glm_wha_integral_normalization} gives adjoint closure,
+    so Lemma~\ref{thm:glm_boundary_parent_local} makes $P_n$ commute with
+    every $\rho_n(T_\Omega(b_j))$. With
+    (\ref{eq:glm_wha_boundary_normalization}) and
+    Lemma~\ref{thm:glm_wha_unit_support},
+    \begin{align*}
+        E_n(P_n) & =\sum_{j\in J}\rho_n(a_j)\rho_n(T_\Omega(b_j))P_n
+        =Q_nP_n=P_n.
+    \end{align*}
+    The identity $E_n(I)=Q_n$ is
     (\ref{eq:glm_wha_boundary_normalization}), and linearity gives
     $E_n(h_n)=Q_n-P_n$ and (\ref{eq:glm_wha_ambient_complement}).
     By (\ref{eq:glm_wha_ambient_complement}), $I-E_n(P_n)=h_n$, so
@@ -228,7 +286,7 @@ No other weak-Hopf axiom is used.
     representation. For $m\geq2$ it is not Hopf:
     $\Delta(1)=\sum_k\delta_k\otimes\delta_k\neq1\otimes1$. Its average is
     the pinching $E_n(B)=\sum_k\rho_n(\delta_k)B\rho_n(\delta_k)$, and for a
-    compatible state tensor injective at one site,
+    compatible state tensor that is $L$-block injective for some $L$,
     $\sum_k\rho_n(\delta_k)P_n\rho_n(\delta_k)=P_n$ for every $n>0$.
 \end{lemma}
 \begin{proof}
@@ -329,4 +387,172 @@ No other weak-Hopf axiom is used.
     $\sum\Omega_{(1)}S(\Omega_{(2)})=r^{-2}\sum_{p,q}e_{pp}=1$; multiplicativity
     of $\Delta$ gives (\ref{eq:glm_wha_integral_normalization}), and the same
     expansion computes $E_n$.
+\end{proof}
+
+\begin{definition}[The Bell-pair state tensor]
+    \label{def:glm_wha_bell_pair_state}
+    \lean{MPOTensor.BellPairWeakHopf.unitTensor,
+        MPOTensor.BellPairWeakHopf.stateTensor,
+        MPOTensor.BellPairWeakHopf.unitWordEntry}
+    \leanok
+    \uses{def:glm_wha_bell_pair}
+    With the notation of Definition~\ref{def:glm_wha_bell_pair}, let $E_{ij}$
+    be the matrix units of $M_r(\mathbb C)$ and let $A$ be the state tensor
+    with physical space $V$, bond dimension $r$ and letters
+    $A^{ij}=E_{ij}/\sqrt r$ \cite{gap:glm23_wha_parent_completion}. For a word
+    $\sigma=((s_1,t_1),\dots,(s_n,t_n))$ write
+    $E_\sigma=E_{s_1t_1}\cdots E_{s_nt_n}$, and for a pair $p=(i,j)$ let
+    $u_p\in V^{\otimes n}$ be the vector with entries $(E_\sigma)_{ij}$. Thus
+    $u_p(\sigma)=1$ exactly when $s_1=i$, $t_k=s_{k+1}$ for $k<n$ and $t_n=j$,
+    and $u_p=\sqrt r^{\,n-1}\,W_n|i,j\rangle$ for the map $W_n$ inserting $n-1$
+    normalized Bell pairs.
+\end{definition}
+
+\begin{lemma}[The represented coproduct of the Bell-pair algebra]
+    \label{thm:glm_wha_bell_pair_represented}
+    \lean{MPOTensor.BellPairWeakHopf.unitWordEntry_zero,
+        MPOTensor.BellPairWeakHopf.unitWordEntry_succ,
+        MPOTensor.BellPairWeakHopf.rep_single_apply,
+        MPOTensor.BellPairWeakHopf.rep_single_eq_vecMulVec,
+        MPOTensor.BellPairWeakHopf.rep_one_eq_sum,
+        MPOTensor.BellPairWeakHopf.sum_unitWordEntry_mul_trace,
+        MPOTensor.BellPairWeakHopf.evalWord_stateTensor,
+        MPOTensor.BellPairWeakHopf.mpvWithBoundary_stateTensor}
+    \leanok
+    \uses{def:glm_wha_bell_pair_state,thm:glm_wha_bell_pair,
+        thm:glm_wha_represented_coproduct_mul}
+    For $n\geq0$ and pairs $p,q$,
+    \begin{align*}
+        \rho_{n+1}(e_{pq}) & =r^{-n}\,|u_p\rangle\langle u_q|,
+    \end{align*}
+    so $Q_{n+1}=\rho_{n+1}(1)=r^{-n}\sum_p|u_p\rangle\langle u_p|$. For every
+    $r\times r$ matrix $Y$ and $q=(k,l)$,
+    \begin{align*}
+        \sum_\tau u_q(\tau)\operatorname{tr}(YE_\tau) & =r^nY_{lk},
+    \end{align*}
+    the sum running over words $\tau$ of length $n+1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_represented_coproduct_mul}
+    Both identities follow by induction on $n$ from the recursion
+    $u_{(i,j)}(\sigma)=\delta_{s_1i}\,u_{(t_1,j)}(\sigma')$, where $\sigma'$
+    drops the first letter of $\sigma$. At one site $\rho_1=\phi$, and
+    $\phi(e_{pq})_{\sigma\tau}=\delta_{\sigma p}\delta_{\tau q}=
+        u_p(\sigma)u_q(\tau)$. One more site splits off the first physical
+    coefficient through $\Delta(e_{ij,kl})=r^{-1}\sum_{a,b}e_{ia,kb}\otimes
+        e_{aj,bl}$; the first factor forces $a=t_1$ and $b=t'_1$ for the first
+    letters $(s_1,t_1)$ of $\sigma$ and $(s'_1,t'_1)$ of $\tau$, and the
+    induction hypothesis together with the recursion gives the factor
+    $r^{-(n+1)}u_p(\sigma)u_q(\tau)$. For the overlap, summing over the first
+    letter of $\tau$ leaves
+    $\sum_a\sum_{\tau'}u_{(a,l)}(\tau')\operatorname{tr}(YE_{ka}E_{\tau'})$;
+    the induction hypothesis gives $r^{n-1}(YE_{ka})_{la}=r^{n-1}Y_{lk}$ for
+    each of the $r$ values of $a$, and at length one the sum is
+    $\operatorname{tr}(YE_{kl})=Y_{lk}$.
+\end{proof}
+
+\begin{lemma}[Two-site evaluation of the Bell-pair average]
+    \label{thm:glm_wha_bell_pair_two_site}
+    \lean{MPOTensor.BellPairWeakHopf.weakHopfAverage_eq_trace_smul}
+    \leanok
+    \uses{thm:glm_wha_bell_pair,thm:glm_wha_bell_pair_represented}
+    For every $n>0$ and every operator $X$ on $V^{\otimes n}$, the average of
+    the Bell-pair weak Hopf algebra is
+    \begin{align*}
+        E_n(X) & =\frac{\operatorname{tr}(Q_nX)}{r^2}\,Q_n.
+    \end{align*}
+    At two sites this is the evaluation
+    $E(X)=r^{-2}\operatorname{Tr}(QX)Q$ of
+    \cite{gap:glm23_wha_parent_completion}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_bell_pair,thm:glm_wha_bell_pair_represented}
+    Write $n=m+1$ and $c_q=\langle u_q|X|u_q\rangle$, the bilinear pairing
+    without complex conjugation. By Lemma~\ref{thm:glm_wha_bell_pair} and
+    Lemma~\ref{thm:glm_wha_bell_pair_represented},
+    \begin{align*}
+        E_n(X) & =\frac{r^{-2m}}{r^2}\sum_{p,q}|u_p\rangle\langle u_q|X
+        |u_q\rangle\langle u_p|
+        =\frac{1}{r^2}\Bigl(r^{-m}\sum_qc_q\Bigr)\Bigl(r^{-m}\sum_p
+        |u_p\rangle\langle u_p|\Bigr),
+    \end{align*}
+    and the two factors are $\operatorname{tr}(Q_nX)$ and $Q_n$.
+\end{proof}
+
+\begin{lemma}[Compatibility and injectivity of the Bell-pair state]
+    \label{thm:glm_wha_bell_pair_compatible}
+    \lean{MPOTensor.BellPairWeakHopf.rep_single_mulVec_mpvWithBoundary,
+        MPOTensor.BellPairWeakHopf.isBoundaryCompatible,
+        MPOTensor.BellPairWeakHopf.isNBlkInjective_stateTensor}
+    \leanok
+    \uses{def:glm_wha_bell_pair_state,thm:glm_wha_bell_pair_represented,
+        thm:glm_wha_boundary_realization,def:l_blk_injective}
+    For $n>0$, pairs $p=(i,j)$, $q=(k,l)$ and every boundary $Y$,
+    \begin{align*}
+        \rho_n(e_{pq})\,\psi^n_{A,Y} & =\psi^n_{A,\,Y_{lk}E_{ji}}.
+    \end{align*}
+    Consequently the state tensor $A$ is length-independently compatible with
+    the tensor $T$ of the Bell-pair weak Hopf algebra: for every operator
+    boundary $X$ and state boundary $Y$ there is one $Z$ with
+    $O^n_{T,X}\psi^n_{A,Y}=\psi^n_{A,Z}$ for all $n>0$. The letters of $A$ are
+    nonzero multiples of the matrix units, so $A$ is injective at one site.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_bell_pair_represented,thm:glm_wha_boundary_realization}
+    With $n=m+1$ and $\psi^n_{A,Y}(\tau)=r^{-n/2}\operatorname{tr}(YE_\tau)$,
+    Lemma~\ref{thm:glm_wha_bell_pair_represented} gives
+    \begin{align*}
+        (\rho_n(e_{pq})\psi^n_{A,Y})(\sigma)
+         & =r^{-m}u_p(\sigma)\,r^{-n/2}\sum_\tau u_q(\tau)
+        \operatorname{tr}(YE_\tau)
+        =r^{-n/2}\,Y_{lk}\,u_p(\sigma),
+    \end{align*}
+    and $u_p(\sigma)=\operatorname{tr}(E_{ji}E_\sigma)$. By
+    Lemma~\ref{thm:glm_wha_boundary_realization} every boundary operator is
+    $O^n_{T,X}=\rho_n(x)$ for one $x\in H$ at all lengths; expanding
+    $x=\sum_{p,q}x_{pq}e_{pq}$ gives
+    $Z=\sum_{p,q}x_{pq}Y_{lk}E_{ji}$, with $(k,l)=q$ and $(i,j)=p$.
+\end{proof}
+
+\begin{lemma}[The uncompleted average of the Bell-pair parent vanishes]
+    \label{thm:glm_wha_bell_pair_parent}
+    \lean{MPOTensor.BellPairWeakHopf.unitWordEntry_mem_groundSpace,
+        MPOTensor.BellPairWeakHopf.starProjection_groundSpaceES_stateTensor,
+        MPOTensor.BellPairWeakHopf.weakHopfAverage_starProjection_stateTensor,
+        MPOTensor.BellPairWeakHopf.weakHopfAverage_parentInteractionES_stateTensor,
+        MPOTensor.BellPairWeakHopf.parentInteractionES_stateTensor_ne_zero}
+    \leanok
+    \uses{thm:glm_wha_bell_pair_represented,thm:glm_wha_bell_pair_compatible,
+        thm:glm_wha_unit_support,thm:glm_wha_parent_average,
+        thm:glm_wha_integral_normalization,thm:glm_boundary_parent_nonzero,
+        def:parent_interaction}
+    For the Bell-pair state tensor and every $n>0$, the support projection is
+    the represented unit, $P_n=Q_n$; at two sites
+    $P=Q=I_K\otimes|\Phi\rangle\langle\Phi|\otimes I_K$. Hence
+    \begin{align*}
+        E_n(P_n) & =P_n, & E_n(I-P_n) & =0,
+    \end{align*}
+    while $I-P_n\neq0$ for $r\geq2$ and $n\geq2$. The uncompleted average of
+    the canonical parent term thus vanishes, and the ambient complement
+    $I-E_n(P_n)=I-P_n$ of Lemma~\ref{thm:glm_wha_parent_average} does not
+    \cite{gap:glm23_wha_parent_completion}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_bell_pair_represented,thm:glm_wha_bell_pair_compatible,
+        thm:glm_wha_unit_support,thm:glm_wha_parent_average,
+        thm:glm_wha_integral_normalization,thm:glm_boundary_parent_nonzero}
+    Each $u_p$ is the state with boundary $r^{n/2}E_{ji}$, so by
+    Lemma~\ref{thm:glm_wha_bell_pair_represented} the range of $Q_n$ lies in
+    the support and $P_nQ_n=Q_n$. Lemma~\ref{thm:glm_wha_unit_support}
+    gives $Q_nP_n=P_n$, and $Q_n=\rho_n(1^*)=Q_n^\dagger$ by
+    Lemma~\ref{thm:glm_wha_integral_normalization}. Taking adjoints,
+    $P_n=P_n^\dagger=(Q_nP_n)^\dagger=P_nQ_n=Q_n$. The identities
+    $E_n(P_n)=P_n$ and $E_n(I-P_n)=Q_n-P_n=0$ are
+    Lemma~\ref{thm:glm_wha_parent_average}. For $r\geq2$ and $n\geq2$ the
+    physical dimension $r^{2n}$ exceeds $r^2$, the square of the bond
+    dimension, so $I-P_n\neq0$ by Lemma~\ref{thm:glm_boundary_parent_nonzero}.
 \end{proof}
