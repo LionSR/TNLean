@@ -373,7 +373,7 @@ of~\cite[lines 1270--1291 and 1935--1968]{Arad2016RigorousRG}.
 It is distinct from the printed spatial approximation estimate, whose
 obstructions are recorded in~\cite{gap:alvv16_cluster_approximation}.
 
-\begin{theorem}[Normalized norm of the empty-boundary cluster part]
+\begin{lemma}[Normalized norm of the empty-boundary cluster part]
     \label{thm:mandatory_cluster_part_norm}
     \lean{TNLean.Lattice.ClusterExpansion.norm_clusterPart_empty_boundary_le_of_lower_bound}
     \leanok
@@ -387,7 +387,7 @@ obstructions are recorded in~\cite{gap:alvv16_cluster_approximation}.
     \end{align}
     The real number $\lambda$ is any supplied lower energy. The background
     $H$ need not be the sum of the selected terms.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:hastings_cluster_part}
     The defining finite sum~(\ref{eq:mandatory_cluster_part}) is the
@@ -395,7 +395,7 @@ obstructions are recorded in~\cite{gap:alvv16_cluster_approximation}.
     applies, with no forbidden labels.
 \end{proof}
 
-\begin{theorem}[The mandatory-label part as a sum over exact supports]
+\begin{lemma}[The mandatory-label part as a sum over exact supports]
     \label{thm:mandatory_cluster_part_support_sum}
     \lean{TNLean.Lattice.ClusterExpansion.clusterPart_empty_boundary_eq_sum_clusterOp}
     \leanok
@@ -407,7 +407,7 @@ obstructions are recorded in~\cite{gap:alvv16_cluster_approximation}.
         R_U^H(\beta)=\sum_{\substack{A\subseteq K\\U\subseteq A}}E_A.
         \label{eq:mandatory_cluster_part_support_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_cluster_part_words, def:hastings_cluster_operator}
     At each word length, partition the words containing $U$ according to
@@ -438,7 +438,7 @@ interactions is imposed.
     at least $r$ labels.
 \end{definition}
 
-\begin{theorem}[Windows and connected components on a path]
+\begin{lemma}[Windows and connected components on a path]
     \label{thm:cluster_label_window_geometry}
     \lean{TNLean.Lattice.ClusterExpansion.ordConnected_of_pathGraph_connected,
         TNLean.Lattice.ClusterExpansion.pathGraph_connected_of_ordConnected,
@@ -458,7 +458,7 @@ interactions is imposed.
     belong to their respective windows. Moreover, $|\mathcal I_r|\leq N^2$.
     Every component of a union of members of $\mathcal W_r$ belongs to
     $\mathcal I_r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_clusters_meet}
     A walk cannot cross a missing label: adjacent labels differ by one.
@@ -475,7 +475,7 @@ interactions is imposed.
     the assertion about unions of windows.
 \end{proof}
 
-\begin{theorem}[Inclusion and exclusion over mandatory windows]
+\begin{lemma}[Inclusion and exclusion over mandatory windows]
     \label{thm:cluster_window_inclusion_exclusion}
     \lean{TNLean.Lattice.ClusterExpansion.sum_clusterOp_bad_windows_eq,
         TNLean.Lattice.ClusterExpansion.exp_sub_truncatedExp_eq_sum_clusterPart_windows,
@@ -503,7 +503,7 @@ interactions is imposed.
         ,\qquad |c_U|\leq2^{|U|}.
         \label{eq:cluster_window_coefficient}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mandatory_cluster_part_support_sum}
     Apply finite inclusion and exclusion to the events $I\subseteq A$,
@@ -516,7 +516,7 @@ interactions is imposed.
     families. Each sign has absolute value one.
 \end{proof}
 
-\begin{theorem}[Weighted unions of windows]
+\begin{lemma}[Weighted unions of windows]
     \label{thm:cluster_label_window_weights}
     \lean{TNLean.Lattice.ClusterExpansion.sum_pow_card_unions_pathWindows_le}
     \leanok
@@ -529,7 +529,7 @@ interactions is imposed.
         \leq\exp(N^2b^r)-1.
         \label{eq:cluster_label_window_weights}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cluster_label_window_geometry,
         thm:hastings_truncation_cluster_products}
@@ -548,7 +548,7 @@ interactions is imposed.
     $|\mathcal I_r|\leq N^2$.
 \end{proof}
 
-\begin{theorem}[Normalized interaction-label tail on a path]
+\begin{lemma}[Normalized interaction-label tail on a path]
     \label{thm:normalized_cluster_label_tail}
     \lean{TNLean.Lattice.ClusterExpansion.norm_exp_sub_truncatedExp_pathGraph_le}
     \leanok
@@ -567,7 +567,7 @@ interactions is imposed.
     \end{align}
     The number $\lambda$ is any lower energy. No commutation of the terms
     is required for this estimate.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mandatory_cluster_part_norm, thm:cluster_label_window_geometry,
         thm:cluster_window_inclusion_exclusion, thm:cluster_label_window_weights}
@@ -601,7 +601,7 @@ For a fixed criterion of large components, write
 Every operator in (\ref{eq:retained_allowed_labels}) is a finite sum of
 the existing exact-label coefficients.
 
-\begin{theorem}[Clusters of separated supports]
+\begin{lemma}[Clusters of separated supports]
     \label{thm:clusters_separated_supports}
     \lean{TNLean.Lattice.ClusterExpansion.isCluster_union_iff_of_no_adj,
         TNLean.Lattice.ClusterExpansion.noLargeCluster_union_iff_of_no_adj,
@@ -615,7 +615,7 @@ the existing exact-label coefficients.
     if and only if neither $B$ nor $D$ has a large component.
     A connected nonempty set $C$ is its own component and has no
     large component if and only if $C$ itself is not large.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_clusters_meet}
     The two supports have no edges between them. A connected component
@@ -625,7 +625,7 @@ the existing exact-label coefficients.
     a component meeting it.
 \end{proof}
 
-\begin{theorem}[Finite retained sums on separated label sets]
+\begin{lemma}[Finite retained sums on separated label sets]
     \label{thm:retained_separated_sum_product}
     \lean{TNLean.Lattice.ClusterExpansion.sum_retained_clusterOp_union_eq_mul}
     \leanok
@@ -633,7 +633,7 @@ the existing exact-label coefficients.
     Suppose nonadjacent labels correspond to commuting matrices.
     If $B,D\subseteq K$ are disjoint and no edge joins them, then
     $F(B\cup D)=F(B)F(D)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:clusters_separated_supports,
         thm:hastings_truncation_cluster_products}
@@ -644,7 +644,7 @@ the existing exact-label coefficients.
     sums gives the identity.
 \end{proof}
 
-\begin{theorem}[Grouping by the component containing a label]
+\begin{lemma}[Grouping by the component containing a label]
     \label{thm:retained_crossing_component_sum}
     \lean{TNLean.Lattice.ClusterExpansion.sum_retained_clusterOp_containing_eq}
     \leanok
@@ -659,7 +659,7 @@ the existing exact-label coefficients.
             E_C F\bigl(K\setminus(C\cup\partial C)\bigr).
         \label{eq:retained_crossing_component_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_clusters_meet, thm:clusters_separated_supports}
     Choose the unique component $C$ of $A$ containing $p$ and put
@@ -670,7 +670,7 @@ the existing exact-label coefficients.
     operator factors as $E_{C\cup B}=E_CE_B$.
 \end{proof}
 
-\begin{theorem}[The two exterior sides of an interval]
+\begin{lemma}[The two exterior sides of an interval]
     \label{thm:cluster_path_exterior_sides}
     \lean{TNLean.Lattice.ClusterExpansion.pathGraph_exterior_eq_sides,
         TNLean.Lattice.ClusterExpansion.pathGraph_sides_separated,
@@ -689,7 +689,7 @@ the existing exact-label coefficients.
     and these sets are disjoint and have no edge between them.
     Similarly, deleting a single label $p$ leaves the separated sets
     $L_p=\{j:j<p\}$ and $R_p=\{j:p<j\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cluster_label_window_geometry}
     The set $C$ is an interval. A vertex outside it lies entirely
@@ -699,7 +699,7 @@ the existing exact-label coefficients.
     label follows by splitting its complement according to order.
 \end{proof}
 
-\begin{theorem}[Physical nearest-neighbour crossing decomposition]
+\begin{lemma}[Physical nearest-neighbour crossing decomposition]
     \label{thm:physical_cluster_crossing_decomposition}
     \lean{TNLean.Lattice.ClusterExpansion.overlapGraph_nearestNeighbor_eq_pathGraph,
         TNLean.Lattice.ClusterExpansion.commute_nearestNeighbor_of_not_adj,
@@ -724,7 +724,7 @@ the existing exact-label coefficients.
     (\ref{eq:retained_allowed_labels}). Neither Hermiticity nor
     positivity of the interactions is needed for this identity.
     When $r=1$ the sum over crossing components is empty.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:retained_crossing_component_sum,
         thm:cluster_path_exterior_sides, thm:retained_separated_sum_product}
@@ -737,7 +737,7 @@ the existing exact-label coefficients.
     into $L(C)$ and $R(C)$.
 \end{proof}
 
-\begin{theorem}[Physical support of retained side sums]
+\begin{lemma}[Physical support of retained side sums]
     \label{thm:retained_cluster_physical_support}
     \lean{TNLean.Lattice.ClusterExpansion.isSupportedOn_sum_retained_clusterOp,
         TNLean.Lattice.ClusterExpansion.isSupportedOn_retained_nearestNeighbor_interval,
@@ -753,7 +753,7 @@ the existing exact-label coefficients.
     at most $p$, and labels $p<i$ give a factor acting only on sites
     strictly greater than $p$. These conclusions apply to all the
     side factors in (\ref{eq:physical_cluster_crossing_decomposition}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_cluster_operator_support}
     Each summand $E_A$, $A\subseteq B$, is supported on
@@ -768,12 +768,12 @@ These identities use the corrected interaction-label cutoff. A retained
 component of $s$ labels is designated on $s+1$ physical sites; the cutoff
 is not the source's selector based on the minimal physical support of a
 word product. The normalization and error estimate of
-Theorem~\ref{thm:normalized_cluster_label_tail} are unchanged. The
+Lemma~\ref{thm:normalized_cluster_label_tail} are unchanged. The
 Schmidt-rank count and a matrix product operator representation are
 established next.
 
 
-\begin{theorem}[Two-sided rank of a crossing interval]
+\begin{lemma}[Two-sided rank of a crossing interval]
     \label{thm:physical_cluster_interval_rank}
     \lean{TNLean.Lattice.ClusterExpansion.card_biUnion_nearestNeighbor_le,
         TNLean.Lattice.ClusterExpansion.operatorSchmidtRank_clusterOp_nearestNeighbor_le}
@@ -786,7 +786,7 @@ established next.
     \begin{align}
         \operatorname{OSR}(E_C)\leq q^r.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_cluster_operator_support, thm:cluster_label_window_geometry}
     Write $C=[a,b]$. All its bonds act within the physical interval
@@ -801,14 +801,14 @@ established next.
     is at most $|X|$. Apply this to the proved support of $E_C$.
 \end{proof}
 
-\begin{theorem}[Counting crossing label intervals]
+\begin{lemma}[Counting crossing label intervals]
     \label{thm:physical_cluster_crossing_count}
     \lean{TNLean.Lattice.ClusterExpansion.card_crossing_intervals_le}
     \leanok
     \uses{thm:cluster_label_window_geometry}
     For a fixed label $p$, there are at most $(r-1)^2$ connected
     label sets $C$ with $p\in C$ and $|C|<r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:cluster_label_window_geometry}
     For $r\leq1$ there are none. Otherwise send $C=[a,b]$ to
@@ -816,7 +816,7 @@ established next.
     and the two coordinates recover the endpoints and hence $C$.
 \end{proof}
 
-\begin{theorem}[All cut ranks of the label truncation]
+\begin{lemma}[All cut ranks of the label truncation]
     \label{thm:physical_cluster_all_cut_rank}
     \lean{TNLean.Lattice.ClusterExpansion.operatorSchmidtRank_truncatedExp_nearestNeighbor_le_count,
         TNLean.Lattice.ClusterExpansion.operatorSchmidtRank_truncatedExp_nearestNeighbor_le,
@@ -834,7 +834,7 @@ established next.
     \end{align}
     The bound $r^2q^r$ holds at every chain cut, including the two
     endpoint cuts. No Hermiticity or positivity is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_cluster_crossing_decomposition,
         thm:retained_cluster_physical_support,
@@ -851,7 +851,7 @@ established next.
     cover a chain with one site and no interactions.
 \end{proof}
 
-\begin{theorem}[Operator tensors from the actual cut ranks]
+\begin{lemma}[Operator tensors from the actual cut ranks]
     \label{thm:operator_chain_from_all_cut_ranks}
     \lean{MPOTensor.rank_pairedOperator_cutMatrix_eq,
         MPOTensor.exists_traceChainOperator_of_operatorSchmidtRank_le}
@@ -865,7 +865,7 @@ established next.
         =\operatorname{tr}\bigl(A_0^{\sigma_0,\tau_0}\cdots
              A_{L-1}^{\sigma_{L-1},\tau_{L-1}}\bigr).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Pair the two physical indices at each site. At every cut, the
     resulting coefficient matrix is a row and column permutation
@@ -877,7 +877,7 @@ established next.
     into the first tensor. This constructs the stated tensors.
 \end{proof}
 
-\begin{theorem}[Actual matrix product operator for the corrected truncation]
+\begin{lemma}[Actual matrix product operator for the corrected truncation]
     \label{thm:physical_cluster_label_mpo}
     \lean{TNLean.MPS.AreaLaw.exists_mpo_cluster_truncation,
         TNLean.MPS.AreaLaw.exists_mpo_cluster_approximation}
@@ -895,7 +895,7 @@ established next.
         e^{\beta\lambda}\|e^{-\beta H}-M_r\|
         \leq e^{N^2b^r}-1.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_cluster_all_cut_rank,
         thm:operator_chain_from_all_cut_ranks, thm:normalized_cluster_label_tail}

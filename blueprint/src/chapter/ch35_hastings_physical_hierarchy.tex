@@ -1,7 +1,7 @@
 \section{A periodic hierarchy from the physical local interactions}
 \label{sec:hastings05_physical_hierarchy}
 
-Theorem~\ref{thm:hastings05_physical_hierarchy} constructs the periodic
+Lemma~\ref{thm:hastings05_physical_hierarchy} constructs the periodic
 hierarchy from the original interactions, under the local residual
 assumption used at the start of
 \cite[Section~III, lines 493--507]{Hastings2006Solving}. The projection
@@ -132,7 +132,7 @@ dimension of the final retained space.
     the sum of its projection expectations by $\operatorname{tr}P_0$.
 \end{proof}
 
-\begin{theorem}[The physical periodic hierarchy under local residuals]
+\begin{lemma}[The physical periodic hierarchy under local residuals]
     \label{thm:hastings05_physical_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalTruncatedTerm,
         TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalTruncatedTerm_localization,
@@ -174,9 +174,9 @@ dimension of the final retained space.
     the retained space at every node of the constructed hierarchy.
     Every orthonormal family retained by $P$ has at most
     $2\operatorname{tr}P_0$ members.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    For positive $R$, apply Theorem~\ref{thm:hastings05_metric_filter}
+    For positive $R$, apply Lemma~\ref{thm:hastings05_metric_filter}
     with the uniform cyclic-ball bound $2\lceil R\rceil+1$. For $R=0$,
     use Lemma~\ref{lem:hastings05_zero_range}. The rounded fibre count
     gives all pair residual and norm estimates. The radius in
@@ -198,7 +198,7 @@ condition is a separate question
 describes retained subspaces; no bound for intermediate tensor dimensions
 is asserted here.
 
-\begin{corollary}[The hierarchy for a specified unique ground state]
+\begin{lemma}[The hierarchy for a specified unique ground state]
     \label{cor:hastings05_unique_physical_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy_of_isGappedGroundState}
     \leanok
@@ -221,7 +221,7 @@ is asserted here.
     This vector belongs to every descendant retained space, and the
     final retained space has dimension at most two. No local residual
     estimate is assumed.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     Start with the localization constants $c_1,\eta_{\rm loc},C$ and
     replace the rate by $\eta=\min(\eta_{\rm loc},c_1\Delta/2)$.

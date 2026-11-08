@@ -7,7 +7,7 @@ $\operatorname{spec}(H)\subseteq\{E_0\}\cup[E_0+\Delta,\infty)$.
 The estimates below give the local commutator bound of
 \cite[eqs.~(lc) and (blecm), lines 1548--1601]{Hastings2006Solving}.
 
-\begin{theorem}[Separated supports in an interaction graph]
+\begin{lemma}[Separated supports in an interaction graph]
     \label{thm:hastings05_graph_commutator}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_graphSeparation}
     \leanok
@@ -31,7 +31,7 @@ The estimates below give the local commutator bound of
         \label{eq:hastings05_graph_commutator}
     \end{align}
     Graph distances between different components are infinite.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $m>0$, set $T=m/(4v)$ and $a=T\Delta$.
     For every real $t$ with $|t|\le T$, the finite-support propagation
@@ -50,7 +50,7 @@ The estimates below give the local commutator bound of
     For $m=0$, the elementary commutator bound and $\|P_0\|\le1$ suffice.
 \end{proof}
 
-\begin{theorem}[Metric separation of arbitrary finite supports]
+\begin{lemma}[Metric separation of arbitrary finite supports]
     \label{thm:hastings05_metric_commutator}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_metricSeparation}
     \leanok
@@ -72,24 +72,24 @@ The estimates below give the local commutator bound of
         &\le(4|X|+4)\|W\|\,\|B\|e^{-\lambda\ell}.
         \label{eq:hastings05_metric_commutator}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Join two sites whose metric distance is at most $R$.
     Each interaction support has graph diameter at most two, cardinality
     at most $S+1$, and local interaction norm budget at most $SJ$.
     Metric separation by $\ell$ gives graph separation by
     $m=\lceil\ell/R\rceil_{\mathbb N}$. Apply
-    Theorem~\ref{thm:hastings05_graph_commutator} and use
+    Lemma~\ref{thm:hastings05_graph_commutator} and use
     $\gamma m\ge\lambda\ell$.
 \end{proof}
 
-\begin{theorem}[Observables in metric balls]
+\begin{lemma}[Observables in metric balls]
     \label{thm:hastings05_metric_ball_commutator}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_metricBalls}
     \leanok
     \uses{thm:hastings05_metric_commutator}
     Under the metric assumptions and constants of
-    Theorem~\ref{thm:hastings05_metric_commutator}, let
+    Lemma~\ref{thm:hastings05_metric_commutator}, let
     $W\in\mathcal A_{B(i,\rho)}$ and $B\in\mathcal A_{B(j,\rho)}$.
     Write $N_j=|B(j,\rho)|$. Then
     \begin{align}
@@ -98,22 +98,22 @@ The estimates below give the local commutator bound of
             e^{2\lambda\rho}e^{-\lambda d(i,j)}.
         \label{eq:hastings05_metric_ball_commutator}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The triangle inequality separates the two supports by
     $d(i,j)-2\rho$. Apply
-    Theorem~\ref{thm:hastings05_metric_commutator} with the two
+    Lemma~\ref{thm:hastings05_metric_commutator} with the two
     observables interchanged, and use
     $e^{-\lambda(d(i,j)-2\rho)}=e^{2\lambda\rho}e^{-\lambda d(i,j)}$.
 \end{proof}
 
-\begin{theorem}[The actual truncated Gaussian terms]
+\begin{lemma}[The actual truncated Gaussian terms]
     \label{thm:hastings05_actual_metric_commutator}
     \lean{TNLean.Lattice.norm_groundCompression_metric_truncated_commutator_le}
     \leanok
     \uses{thm:hastings05_metric_ball_commutator,thm:hastings05_metric_filter}
     Under the metric assumptions and constants of
-    Theorem~\ref{thm:hastings05_metric_commutator}, fix $\rho\ge R$
+    Lemma~\ref{thm:hastings05_metric_commutator}, fix $\rho\ge R$
     and an initial Gaussian parameter $a\ge0$. Define
     \begin{align}
         H_i^{\mathrm{loc}}&=\sum_{d(i,k)\le\rho-R}h_k,&
@@ -126,12 +126,12 @@ The estimates below give the local commutator bound of
         &\le(4N_j+4)J^2e^{2\lambda\rho}e^{-\lambda d(i,j)}.
         \label{eq:hastings05_actual_metric_commutator}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The metric-ball filter construction gives
     $M_i\in\mathcal A_{B(i,\rho)}$ and $\|M_i\|\le J$.
     Substitute these supported operators in
-    Theorem~\ref{thm:hastings05_metric_ball_commutator}.
+    Lemma~\ref{thm:hastings05_metric_ball_commutator}.
     Its second filter uses the original Hamiltonian and its gap.
 \end{proof}
 

@@ -1,6 +1,6 @@
 \section{The physical soft residual on the original spectral window}
 
-\begin{theorem}[A soft-truncation residual from the actual regional moment]
+\begin{lemma}[A soft-truncation residual from the actual regional moment]
     \label{thm:interval_physical_soft_truncation_residual}
     \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_truncation_residual}
     \leanok
@@ -9,7 +9,7 @@
     $J=[p,r)\subseteq[0,L)$, and let $A_J$ be its actual internal sum.
     The attained regional minima, the common regional minimizing vector,
     and the centered original ground data can be chosen as in
-    Theorem~\ref{thm:interval_regional_exponential_moment}, before every
+    Lemma~\ref{thm:interval_regional_exponential_moment}, before every
     approximate regional energy, window width and truncation order.
 
     Let $e_J-10\le\varepsilon'_J\le e_J$, $\eta\ge0$, and let $m\ge1$ be
@@ -34,7 +34,7 @@
     auxiliary to the physical soft truncation of \cite{Arad2016RigorousRG};
     it does not assert the first printed uniform energy estimate discussed
     in \cite{gap:alvv16_soft_truncation_energy_estimate}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:interval_regional_exponential_moment}
     Write $U=A_J-\varepsilon'_J\Id\ge0$ and

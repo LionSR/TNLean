@@ -14,7 +14,7 @@ explained in \cite{gap:hastings05_two_dim_ground_basis}.
     \leanok
     Let $H=\sum_i h_i$ satisfy the local support, norm-budget, gap and
     polynomial sphere assumptions of
-    Theorem~\ref{thm:hastings_full_hamiltonian_uniform_basis}.
+    Lemma~\ref{thm:hastings_full_hamiltonian_uniform_basis}.
     Let $W_j$ be a separate family of observables, supported on sets $K_j$
     containing anchors $c_j$, with diameter at most $R_{\rm obs}$ and
     cardinality at most $v_{\rm obs}$. Put
@@ -41,12 +41,12 @@ explained in \cite{gap:hastings05_two_dim_ground_basis}.
     by the graph triangle inequality, including disconnected components.
 \end{proof}
 
-\begin{theorem}[A uniform basis for locally truncated filters]
+\begin{lemma}[A uniform basis for locally truncated filters]
     \label{thm:hastings_actual_truncated_basis_polynomial_growth}
     \lean{TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le}
     \leanok
     Let the positive on-site dimension and the Hamiltonian data satisfy
-    Theorem~\ref{thm:hastings_full_hamiltonian_uniform_basis}, with terms
+    Lemma~\ref{thm:hastings_full_hamiltonian_uniform_basis}, with terms
     indexed by sites and $i\in X_i$. Choose retained sets $s_i$ and regions
     $K_i$ such that $X_i\subseteq K_i$ and $X_j\subseteq K_i$ for every
     $j\in s_i$. Assume that the $K_i$ have diameter at most $R_{\rm obs}$
@@ -71,7 +71,7 @@ explained in \cite{gap:hastings05_two_dim_ground_basis}.
     This constant is independent of the numbers of terms and sites when
     $n$, the generator parameters, the gap, the polynomial-growth constants
     and the localization support bounds are fixed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The actual filters are Hermitian, satisfy $\|M_i\|\le\|h_i\|$, and
     remain supported on $K_i$, since each integrand acts there.

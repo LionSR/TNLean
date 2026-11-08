@@ -1,7 +1,7 @@
 \section{Gaussian truncation with a bounded local neighbourhood}
 \label{sec:hastings05_metric_filter}
 
-Theorem~\ref{thm:hastings05_metric_filter} constructs the local Gaussian
+Lemma~\ref{thm:hastings05_metric_filter} constructs the local Gaussian
 filters of~\cite[eq.~(mid), lines 285--349]{Hastings2006Solving} on a finite
 metric space. A bound on the number of sites in a ball of the interaction
 range suffices. Polynomial growth of larger spheres is unnecessary
@@ -69,7 +69,7 @@ range suffices. Polynomial growth of larger spheres is unnecessary
     exponentially decaying weights.
 \end{proof}
 
-\begin{theorem}[The actual metric-ball Gaussian filters]
+\begin{lemma}[The actual metric-ball Gaussian filters]
     \label{thm:hastings05_metric_filter}
     \lean{TNLean.Lattice.metricRangeGraph,TNLean.Lattice.metricRangeBall,
         TNLean.Lattice.exists_metric_truncated_filter_budget,
@@ -107,7 +107,7 @@ range suffices. Polynomial growth of larger spheres is unnecessary
     If the ground space is a line spanned by a unit vector $\Omega$, this
     gives $\|(M_i-\langle\Omega,M_i\Omega\rangle)\Omega\|
     \le JC e^{-\eta\ell}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Join two sites when their metric distance is at most $R$. This graph
     has degree at most $S$, and each interaction has graph diameter at

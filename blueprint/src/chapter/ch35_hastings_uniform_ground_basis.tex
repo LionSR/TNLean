@@ -59,7 +59,7 @@ and the companion correction \cite{gap:hastings05_basis_refinement}.
     turn its rate $\gamma$ into $\gamma/2^n$.
 \end{proof}
 
-\begin{theorem}[Uniform full-Hamiltonian basis bound]
+\begin{lemma}[Uniform full-Hamiltonian basis bound]
     \label{thm:hastings_full_hamiltonian_uniform_basis}
     \lean{TNLean.Lattice.sum_weight_list_graphDecayKernel_le,
     TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le_uniform}
@@ -72,7 +72,7 @@ and the companion correction \cite{gap:hastings05_basis_refinement}.
     Assume sphere growth at most $K_g(r+1)^{k_g}$, a nonzero ground
     eigenspace of dimension $n$, and a positive gap $\Delta E$.
     Let $\gamma>0$ and $C$ be the explicit local commutator constants of
-    Theorem~\ref{thm:hastings05_blecm_exp}, with the support-separation
+    Lemma~\ref{thm:hastings05_blecm_exp}, with the support-separation
     factor $e^{\gamma(2R+1)}$ included in $C$. There is an orthonormal
     ground-space basis in which
     \[
@@ -84,7 +84,7 @@ and the companion correction \cite{gap:hastings05_basis_refinement}.
     Hamiltonian, with any nonnegative filter parameter. The bound is
     independent of the numbers of terms and sites when $n$ and the
     displayed local, gap and growth parameters are fixed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Restrict the actual compressions to the ground eigenspace and use
     their proved pairwise commutator bound. Apply the weighted recursive
@@ -96,6 +96,6 @@ and the companion correction \cite{gap:hastings05_basis_refinement}.
 
 The source's operators filtered under locally truncated generators require
 the additional physical estimate of
-Theorem~\ref{thm:hastings_actual_truncated_basis_polynomial_growth}. They are
+Lemma~\ref{thm:hastings_actual_truncated_basis_polynomial_growth}. They are
 not identified with the full-Hamiltonian filtered operators in this theorem. The separate mathematical counterexample is given in
 \cite{gap:hastings05_tree_basis_counterexample}.

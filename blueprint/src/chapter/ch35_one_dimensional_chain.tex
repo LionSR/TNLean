@@ -41,7 +41,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \section{The marginal tail bound at a cut}
 
-\begin{theorem}[The operator Schmidt rank of a polynomial]
+\begin{lemma}[The operator Schmidt rank of a polynomial]
     \label{thm:chain_two_window_polynomial_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_le_pow,
         TNLean.MPS.AreaLaw.frequency_bin_eq_weighted_slice}
@@ -80,7 +80,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     This is an explicit rank bound for that proposition.
     Matrix product operator representations and its algorithmic conclusions
     are separate assertions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_two_window_factors,thm:chain_fixed_frequency_uniform_bound,
         thm:chain_two_window_count_sum,thm:chain_two_window_count_power}
@@ -114,11 +114,11 @@ Theorem~B a second way, by a sequential preparation protocol.
          & \le R_{r,i,j}.
         \label{eq:chain_two_window_weighted_slice_rank}
     \end{align}
-    Indeed, Theorem~\ref{thm:chain_two_window_factors} gives the same two
+    Indeed, Lemma~\ref{thm:chain_two_window_factors} gives the same two
     crossing factors for their tensor identities and their bounds $q^2$.
     Apply the weighted frequency-sum bound across the middle cut in
     \cite{QICLean2026Blueprint}, followed by
-    Theorem~\ref{thm:chain_fixed_frequency_uniform_bound}.
+    Lemma~\ref{thm:chain_fixed_frequency_uniform_bound}.
     Changing from $E_{p,s}$ to $J_\delta$ costs at most
     $q^{2|E_{p,s}\triangle J_\delta|}$, by expanding the matrix units on
     the sites that change sides. The endpoint estimate gives
@@ -155,10 +155,10 @@ Theorem~B a second way, by a sequential preparation protocol.
     \end{align}
     Here all degrees $0,\ldots,k$ are included, and multiplying a power
     by its coefficient in $P$ introduces no further rank factor.
-    Theorem~\ref{thm:chain_two_window_count_sum} bounds the right-hand
+    Lemma~\ref{thm:chain_two_window_count_sum} bounds the right-hand
     side by the product in~(\ref{eq:chain_two_window_count_factor}), with
     $d=q$ and $b=B_k$. Since $B_k\le k$, $q\ge2$, $\ell\ge1$ and $k\ge1$,
-    Theorem~\ref{thm:chain_two_window_count_power} bounds that product by
+    Lemma~\ref{thm:chain_two_window_count_power} bounds that product by
     $(qk)^{17(\ell+B_k)}$, proving
     (\ref{eq:chain_two_window_polynomial_rank}).
 \end{proof}

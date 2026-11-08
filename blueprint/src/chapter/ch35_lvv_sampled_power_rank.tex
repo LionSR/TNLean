@@ -9,7 +9,7 @@ Let $C_a(w)$ be the number of occurrences of the letter $a$ in $w$.
 Denote operator Schmidt rank across the cut after $k$ sites by
 $\operatorname{SR}_k$.
 
-\begin{theorem}[The unique crossing letter]
+\begin{lemma}[The unique crossing letter]
     \label{thm:lvv_padded_nn_word_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_padded_nn_word_le}
     \leanok
@@ -21,7 +21,7 @@ $\operatorname{SR}_k$.
     \end{align}
     This is the ordered-word estimate of~\cite[Section~2.3.1]{Landau2015Polynomial}, with the paired-index correction
     recorded in~\cite{gap:lvv13_paired_matrix_decomposition}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A letter away from the crossing pair acts on one side and contributes
     rank at most one. The crossing pair meets either side in one site,
@@ -30,7 +30,7 @@ $\operatorname{SR}_k$.
     multiplicity of the crossing letter. No commutation is required.
 \end{proof}
 
-\begin{theorem}[One sample family, all spatial cuts]
+\begin{lemma}[One sample family, all spatial cuts]
     \label{thm:lvv_padded_nn_sample_rank}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_padded_nn_word_le_of_counts,
         TNLean.MPS.AreaLaw.operatorSchmidtRank_padded_nn_sample_sum_le,
@@ -49,7 +49,7 @@ $\operatorname{SR}_k$.
     \end{align}
     The same bound holds after scalar normalization, and applies in
     particular to the complements $P_i=1-h_i$ of adjacent-pair terms.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_padded_nn_word_rank}
     At an interior cut, apply~(\ref{eq:lvv_padded_nn_word_rank}) to each word.
@@ -59,7 +59,7 @@ $\operatorname{SR}_k$.
     and $h_i$ are supported on the same pair, hence so is $1-h_i$.
 \end{proof}
 
-\begin{theorem}[The normalized power sample with spatial rank control]
+\begin{lemma}[The normalized power sample with spatial rank control]
     \label{thm:lvv_sampled_nn_power_rank}
     \lean{TNLean.MPS.AreaLaw.exists_sampled_nn_power_approximation_with_rank}
     \leanok
@@ -96,7 +96,7 @@ $\operatorname{SR}_k$.
     \end{align}
     The ground-energy dependence agrees with the published sampling
     argument~\cite[Methods, Proposition~1, p.~6]{Landau2015Published}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_padded_nn_sample_rank}
     The finite uniform sampling theorem gives the first three conclusions
@@ -104,7 +104,7 @@ $\operatorname{SR}_k$.
     the expansion of $[C(1-H/n)]^m$ and uses the norm bound $\|P_w\|\le1$.
     The displayed choices make the matrix failure probability strictly
     below $1/2$ and the frequency failure probability at most $1/2$.
-    Apply Theorem~\ref{thm:lvv_padded_nn_sample_rank} to this same family,
+    Apply Lemma~\ref{thm:lvv_padded_nn_sample_rank} to this same family,
     with coefficients $C^m/\ell$.
 \end{proof}
 
@@ -114,13 +114,13 @@ printed in the first preprint version. The distinction between that
 version and the published theorem is explained in the note on ground-energy
 normalization accompanying this development.
 
-\begin{theorem}[Sampled left factors for a specified ground energy]
+\begin{lemma}[Sampled left factors for a specified ground energy]
     \label{thm:lvv_sampled_left_error_reduction}
     \lean{TNLean.MPS.AreaLaw.exists_sampled_nn_errorReduction}
     \leanok
     \uses{thm:lvv_sampled_nn_power_rank,thm:lvv_simultaneous_cut_decomposition,
         thm:lvv_projection_error_reduction,thm:lvv_operator_bond_growth}
-    Under the physical hypotheses of Theorem~\ref{thm:lvv_sampled_nn_power_rank},
+    Under the physical hypotheses of Lemma~\ref{thm:lvv_sampled_nn_power_rank},
     let $0<\delta\le1$ and $p\ge1$ satisfy $2q^L<4^p$.
     In~(\ref{eq:lvv_sampled_nn_power_parameters}), choose
     $Q=8/\delta$, $\eta=\delta/8$, and put $r=\ell q^{2u}$.
@@ -145,13 +145,13 @@ normalization accompanying this development.
     \end{align}
     is $(i,as,r\max(1,b),\delta)$-viable.
     In particular, $|S'|\le as\le rs$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_sampled_nn_power_rank,thm:lvv_simultaneous_cut_decomposition,
         thm:lvv_projection_error_reduction,thm:lvv_operator_bond_growth}
     The chosen parameters give
     $\eta+Q^{-1}=\delta/4<1/2$.
-    Theorem~\ref{thm:lvv_sampled_nn_power_rank} supplies a single actual
+    Lemma~\ref{thm:lvv_sampled_nn_power_rank} supplies a single actual
     sampled family with this projection error and rank at most $r$ at
     all cuts. Theorem~\ref{thm:lvv_simultaneous_cut_decomposition}
     constructs~(\ref{eq:lvv_sampled_left_factor_decomposition}), with
@@ -172,13 +172,13 @@ sample count. Choosing the word length and relative-error budget without
 an exact energy input remains separate; an unknown overall scalar is
 immaterial after output normalization.
 
-\begin{theorem}[One sampled family for every unit ground vector]
+\begin{lemma}[One sampled family for every unit ground vector]
     \label{thm:lvv_sampled_ground_line_error_reduction}
     \lean{TNLean.MPS.AreaLaw.exists_sampled_nn_errorReduction_forall_ground_vectors}
     \leanok
     \uses{thm:lvv_sampled_left_error_reduction}
     Retain the interaction, gap, accuracy and sampling parameters of
-    Theorem~\ref{thm:lvv_sampled_left_error_reduction}, with the actual energy
+    Lemma~\ref{thm:lvv_sampled_left_error_reduction}, with the actual energy
     $E_0$ specified before sampling. Suppose that there exists a unit vector
     $\Omega_0$ satisfying
     $H\Omega_0=E_0\Omega_0$ and
@@ -186,12 +186,12 @@ immaterial after output normalization.
 
     One sample family, its operator $K$, and one family of cut factors at
     each cut may be chosen so that all conclusions of
-    Theorem~\ref{thm:lvv_sampled_left_error_reduction} hold simultaneously
+    Lemma~\ref{thm:lvv_sampled_left_error_reduction} hold simultaneously
     for every normalized vector $\Omega$ with $H\Omega=E_0\Omega$.
     Thus neither the sample nor its factors depend on the choice of a unit
     representative of the ground line. The factors also precede the choice
     of every half-viable input family.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_sampled_left_error_reduction}
     Choose $\Omega_0$ internally and apply the preceding construction once.
@@ -219,7 +219,7 @@ The simultaneous conclusion for all unit ground vectors does not select
 the word length or relative-error sample budget without that energy input.
 An overall nonzero scalar is immaterial after normalizing the output vectors.
 
-\begin{theorem}[Sampling without scalar normalization from a known energy interval]
+\begin{lemma}[Sampling without scalar normalization from a known energy interval]
     \label{thm:lvv_interval_power_sampling}
     \lean{TNLean.MPS.AreaLaw.exists_interval_sampled_nn_power}
     \leanok
@@ -268,7 +268,7 @@ An overall nonzero scalar is immaterial after normalizing the output vectors.
     If $\eta+Q^{-1}<1/2$, these same left factors send every
     $(i,s,b,1/2)$-viable family to an
     $(i,ts,r\max(1,b),4(\eta+Q^{-1}))$-viable family.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:lvv_padded_nn_sample_rank,thm:lvv_simultaneous_cut_decomposition,
         thm:lvv_scaled_projection_error_reduction}
@@ -279,7 +279,7 @@ An overall nonzero scalar is immaterial after normalizing the output vectors.
     and frequency threshold make the sum of the failure bounds less
     than one. This constructs a single family satisfying the first two
     conclusions in~(\ref{eq:lvv_interval_mean_counts_rank}).
-    Theorem~\ref{thm:lvv_padded_nn_sample_rank} gives its simultaneous
+    Lemma~\ref{thm:lvv_padded_nn_sample_rank} gives its simultaneous
     spatial ranks; Theorem~\ref{thm:lvv_simultaneous_cut_decomposition}
     constructs the cut factors before any ground data.
 
@@ -291,7 +291,7 @@ An overall nonzero scalar is immaterial after normalizing the output vectors.
     $\|(1-H/n)^m-\beta\Pi\|\le\beta/Q$.
     Combining this with the actual sample-mean error proves
     (\ref{eq:lvv_interval_relative_projection}).
-    Finally, Theorem~\ref{thm:lvv_scaled_projection_error_reduction}
+    Finally, Lemma~\ref{thm:lvv_scaled_projection_error_reduction}
     divides the perturbation error by the positive amplitude $\beta$,
     giving the asserted error, cardinality and MPS bond bounds.
 \end{proof}
