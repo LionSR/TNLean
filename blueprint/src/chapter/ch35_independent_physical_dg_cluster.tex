@@ -1,0 +1,39 @@
+\begin{lemma}[A physical low cluster with independent approximation scales]
+    \label{thm:independent_physical_dg_cluster_parameters}
+    \lean{TNLean.MPS.AreaLaw.exists_independent_physical_dg_cluster_parameters}
+    \leanok
+    There is a universal constant $C\ge21$ with the following property.
+    For every $0<g\le1$ and $0<\tau\le1$, put
+    $u=1+\log(1/g)+\log(1/\tau)$ and $t=Cu$.
+    There is an integer $\ell\ge1$, chosen before the chain and its local
+    terms, such that
+    \begin{align}
+        \ell & \le\frac{8}{4g/5}
+        +(7C)^{1/4}(4g/5)^{-1/4}u^{3/4},
+        \label{eq:independent_physical_window}
+    \end{align}
+    and $u\le\ell^2\sqrt{(4g/5)/R}$ for every $0<R\le3t+4\ell$.
+    Let $q\ge1$, $a+2\ell\le b+1$ and $b+2\ell\le N$.
+    Suppose $H$ is an original positive unit nearest-neighbour Hamiltonian
+    with $\mu\in\operatorname{spec}(H)$ and
+    $\operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+g,\infty)$.
+    Use the five cuts $(0,a+1,a+2\ell,b+1,b+2\ell,N)$.
+    Then all the conclusions of
+    Lemma~\ref{thm:five_region_scaled_low_cluster} hold with these $t,\ell$
+    and $\xi=\tau g/10^6$.
+    In particular, the actual clipped low cluster has the dimension of the
+    full original ground space and is mutually $\tau/200$-close to it.
+    The clipped Hamiltonian has norm at most $3t+4\ell$ and spectral
+    separation $4g/5$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:independent_truncation_threshold_constant,
+        thm:quarter_power_truncation_filter_scale,
+        thm:five_region_scaled_low_cluster}
+    Take the universal threshold constant and apply the quarter-power
+    selection with gap $4g/5$ and accuracy variable $u$.
+    The threshold estimate gives
+    $288e^{11/8}e^{-(t-g)/8}\le\tau g/10^6$.
+    Apply the physical scaled low-cluster theorem with this residual bound.
+\end{proof}

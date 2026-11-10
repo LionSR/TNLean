@@ -4,41 +4,58 @@
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \input{command}
 \setlength{\emergencystretch}{2em}
-\title{The Decay Length of Lemma~1 in Hastings' Area Law}
+\title{An Admissible Decay Length in Hastings' Area Law}
 \author{}
 \date{October 28, 2026}
 \begin{document}
 \maketitle
 \gapnote{local-correction}{resolved}
 
-\section{The source statement}
+\section{The source and the length convention}
 
-The main theorem of~\cite{Hastings2007AreaLaw} and its Lemma~1 use the
-lengths
-\begin{align}
+Hastings' main theorem and Lemma~1 use
+\begin{align*}
     \xi=\max(2v/\Delta E,\xi_C),\qquad\xi'=6\xi,
-    \label{eq:hastings07_lemma1_decay_length_source}
-\end{align}
-where $\Delta E$ is the gap and $v$, $\xi_C$ are a velocity and a length
-scale of a Lieb--Robinson bound.\footnote{\path{References/0705.2024/law16.tex},
-    lines~139--142.} That bound is printed as
-\begin{align}
-    \|[A(t),B]\|\le c\,|X|\,\|A\|\,\|B\|\,e^{-\xi_C\operatorname{dist}(X,Y)}
-    \quad\text{for }|t|\le l/v,
-    \label{eq:hastings07_lemma1_decay_length_lrb}
-\end{align}
-for operators $A$, $B$ supported on sets $X$, $Y$; the source says only that
-such $v$ and $\xi_C$ exist, with $v$ of order $J$ and $\xi_C$ of order
-one.\footnote{\path{References/0705.2024/law16.tex}, lines~96--112.}
+\end{align*}
+where $v$ and $\xi_C$ come from a Lieb--Robinson bound
+\cite[lines 96--112, 139--142]{Hastings2007AreaLaw}.
+The printed bound is
+\begin{align*}
+    \|[A(t),B]\|\le c|X|\|A\|\|B\|
+       e^{-\xi_C\operatorname{dist}(X,Y)},\qquad |t|\le l/v.
+\end{align*}
+The length $l$ is undefined there, and multiplying distance by $\xi_C$
+is inconsistent with the subsequent use of $\xi_C$ as a length.
+The formalization adopts the intended convention
+$e^{-\operatorname{dist}(X,Y)/\xi_C}$ for
+$v|t|\le\operatorname{dist}(X,Y)$.
+The source chooses the pair existentially, with $v$ of order $J$ and
+$\xi_C$ of order one; it does not prescribe a minimal pair.
 
-\section{The reading}
+\section{The constructed pair}
 
-As printed, (\ref{eq:hastings07_lemma1_decay_length_lrb}) multiplies the
-distance by $\xi_C$ and bounds the time by $l/v$, a length not defined at
-that point. The reading consistent with the name ``length scale'' and with
-the use of $2v/\Delta E$ as a competing length is that the commutator decays
-as $e^{-\operatorname{dist}(X,Y)/\xi_C}$ for $|t|\le\operatorname{dist}(X,Y)/v$.
-Any pair $(v,\xi_C)$ for which this holds may be used.
+For range $R$, write
+$c_R=2(R+1)2^{2R+1}e^{2R}$.
+The graph Lieb--Robinson estimate on the path gives
+\begin{align*}
+    \|[A(t),B]\|\le4|X|\|A\|\|B\|e^{2c_RJ|t|-d}
+\end{align*}
+whenever $d$ is an integer lower bound for the distance between the
+arbitrary finite supports $X,Y$.
+The prefactor is numerical, and there is no factor $|Y|$.
+Set
+\begin{align*}
+    V=40c_RJ,\qquad \Xi=\max(2V/\Delta E,80).
+\end{align*}
+If $V|t|\le d$, the exponent is at most $-19d/20\le-d/80$.
+Thus $(V,80)$ is an admissible pair for $J>0$; $V$ is independent of the
+gap, chain length and local dimension. For $J=0$ the multiplication-cone
+statement remains valid without dividing by a zero velocity.
+These are actual commutator estimates, not merely scalar comparisons
+with a prospective pair.\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_numeric}
+    and \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_cone}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/LiebRobinson} and
+    \doclink{TNLean/MPS/AreaLaw/Hastings/SourceLength}.}
 
 \section{The numerical chain estimate}
 

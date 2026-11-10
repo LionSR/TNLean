@@ -163,6 +163,7 @@ import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan
 import TNLean.MPS.AreaLaw.OperatorMPOFromCutRank
+import TNLean.MPS.AreaLaw.OriginalLowEnergyFamily
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
@@ -187,6 +188,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGInterleavedTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
+import TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGTreeApproximation

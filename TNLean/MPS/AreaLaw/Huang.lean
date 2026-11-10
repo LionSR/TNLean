@@ -20,9 +20,11 @@ import TNLean.MPS.AreaLaw.Huang.GridHamiltonian
 import TNLean.MPS.AreaLaw.Huang.GridLocalization
 import TNLean.MPS.AreaLaw.Huang.GridParameters
 import TNLean.MPS.AreaLaw.Huang.GridPropagation
+import TNLean.MPS.AreaLaw.Huang.OperatorRightContraction
 import TNLean.MPS.AreaLaw.Huang.PhysicalFilterFamily
 import TNLean.MPS.AreaLaw.Huang.PhysicalGaussian
 import TNLean.MPS.AreaLaw.Huang.PhysicalPropagation
 import TNLean.MPS.AreaLaw.Huang.PositiveChainHamiltonian
+import TNLean.MPS.AreaLaw.Huang.RegionalRightContraction
 import TNLean.MPS.AreaLaw.Huang.UnitaryQuadrature
 import TNLean.MPS.AreaLaw.Huang.ViableFilter

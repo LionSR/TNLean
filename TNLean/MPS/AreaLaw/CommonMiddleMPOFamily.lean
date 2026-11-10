@@ -458,11 +458,7 @@ private theorem IsOpenMPS.uniform_middle_degree_bound {N q B t k : ℕ}
     {ψ : (Fin N → Fin q) → ℂ}
     (hψ : IsOpenMPS N q (max 1 ((B ^ t) ^ 2)) ψ) (ht : t ≤ k) :
     IsOpenMPS N q ((max 1 B) ^ (2 * k)) ψ := by
-  let Φ : EuclideanSpace ℂ (Fin N → Fin q) := WithLp.toLp 2 ψ
-  have hΦ : IsOpenMPS N q (max 1 ((B ^ t) ^ 2)) (fun x ↦ Φ x) := hψ
-  apply isOpenMPS_of_internal_cutMatrix_rank_le Φ
-  intro c hc0 hcN
-  exact (hΦ.rank_cutMatrix_le hc0 hcN).trans (max_one_degree_square_le_uniform ht)
+  exact hψ.mono (max_one_degree_square_le_uniform ht)
 
 /-- The finite union of the actual fixed-middle families is common to all
 supported exterior Hamiltonians and all polynomial coefficient arrays. Its
