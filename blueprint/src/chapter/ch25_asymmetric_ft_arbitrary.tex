@@ -1,0 +1,203 @@
+\section{The Fundamental Theorem for arbitrary tensors}%
+\label{sec:asym_arbitrary}
+
+The preceding sections compare an arbitrary tensor with a sum of normal
+tensors. This section drops the normal side: two tensors $B$ and $B'$ of
+arbitrary bond dimensions $D_B$ and $D_{B'}$, neither in canonical form, are
+compared directly. Call a tensor \emph{admissible} when it is irreducible
+(Definition~\ref{def:irreducible_action}) and has a nonzero letter. A
+\emph{reduction} of $B$ onto a finite family $(C_s)_{s\in S}$ is a
+compression in the sense of Section~\ref{sec:asym_uniqueness}: an invertible
+$G$ with every $GB^iG^{-1}$ block upper triangular, the diagonal blocks being
+the $C_s^i$ together with $z$ one-dimensional zero blocks. A composition
+series $0=M_0\subset M_1\subset\cdots\subset M_r=\C^{D_B}$ of the word-algebra
+module of $B$ (Definition~\ref{def:asym_word_module}) is an \emph{invariant
+    flag} of $B$, and a step $M_k/M_{k-1}$ is \emph{nonzero} when some letter
+acts on it as a nonzero map. Written in a basis, the action of the letters on
+a step is a tensor, the \emph{tensor of the step}. The general statements of
+this section are not in a published source; their special cases for tensors
+in canonical form are \cite[Theorem~2.10]{Cirac2016MPDO_arXiv} and the
+block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
+
+\begin{theorem}[The Fundamental Theorem for arbitrary tensors]
+    \label{thm:asym_arbitrary_ft}
+    \lean{MPSTensor.sameMPV₂Pos_iff_exists_multiBlockCompression}
+    \leanok
+    \uses{def:same_mpv2_pos, def:irreducible_action, thm:asym_multiblock,
+        prop:asym_compression_trace}
+    Two tensors $B$ and $B'$ satisfy
+    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(B')}$ for every $N\geq1$ if and only if
+    there is a finite family of admissible tensors onto which both $B$ and
+    $B'$ have reductions.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_multiblock, prop:asym_compression_trace}
+    If the vectors agree, decompose $B'$ into irreducible blocks with a
+    nonzero letter; $B$ and $B'$ then both have the periodic traces of the
+    direct sum of these blocks, and each has a reduction onto them.
+    Conversely, by Lemma~\ref{prop:asym_compression_trace} each of $B$ and
+    $B'$ has the periodic traces of the direct sum of the family.
+\end{proof}
+
+\begin{lemma}[The family is determined by the states]
+    \label{thm:asym_arbitrary_family_unique}
+    \lean{MPSTensor.MultiBlockCompression.z_sub_z_eq_and_exists_equiv_isGaugeRelated_of_sameMPV₂Pos}
+    \leanok
+    \uses{thm:asym_arbitrary_ft, cor:asym_uniq_trace_independence,
+        def:asym_gauge_related}
+    Let $B$ have a reduction onto an admissible family $(C_s)_{s\in S}$ with
+    $z$ zero blocks and $B'$ a reduction onto an admissible family
+    $(C'_t)_{t\in S'}$ with $z'$ zero blocks. If $B$ and $B'$ have the same
+    periodic vectors at every positive length, then $z-z'=D_B-D_{B'}$ and a
+    bijection $S\to S'$ pairs gauge related blocks.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{cor:asym_uniq_trace_independence}
+    The two families have equal sums of word traces on every nonempty word.
+    Group the members of both families into gauge classes; the traces of
+    pairwise non-gauge-related admissible tensors are linearly independent
+    (Lemma~\ref{cor:asym_uniq_trace_independence}), so each class has
+    the same multiplicity in both families. Gauge related blocks have equal
+    bond dimension, and the dimension count of
+    Theorem~\ref{thm:asym_multiblock}(vii) gives $z-z'=D_B-D_{B'}$.
+\end{proof}
+
+\begin{lemma}[Invariant flags]
+    \label{thm:asym_arbitrary_flags}
+    \lean{MPSTensor.exists_compositionSeries_wordModule,
+        MPSTensor.finrank_subquot_eq_one_of_forall_smul_eq_zero,
+        MPSTensor.stepTensor,
+        MPSTensor.nonempty_linearEquiv_wordModule_stepTensor,
+        MPSTensor.isIrreducibleAction_stepTensor,
+        MPSTensor.exists_stepTensor_apply_ne_zero,
+        MPSTensor.isGaugeRelated_stepTensor,
+        MPSTensor.tfae_sameMPV₂Pos_compositionSeries,
+        MPSTensor.SameMPV₂Pos.exists_equiv_isGaugeRelated_stepTensor}
+    \leanok
+    \uses{def:asym_word_module, thm:asym_arbitrary_ft,
+        def:asym_gauge_related}
+    Every tensor has an invariant flag. A step of an invariant flag on which
+    every letter vanishes is one-dimensional; the tensor of a step is
+    irreducible, it has a nonzero letter when the step is nonzero, the step
+    is isomorphic to its word-algebra module, and two bases of one step give
+    gauge related tensors. For tensors $B$ and $B'$ the following are
+    equivalent.
+    \begin{enumerate}
+        \item[(i)] $\ket{V^{(N)}(B)}=\ket{V^{(N)}(B')}$ for every $N\geq1$.
+        \item[(ii)] For every invariant flag of $B$ and every invariant flag
+              of $B'$ there is a bijection between their nonzero steps under
+              which paired steps are isomorphic modules.
+        \item[(iii)] The same holds for some pair of invariant flags.
+    \end{enumerate}
+    Under these conditions the tensors of paired steps, in any bases, are
+    gauge related.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_uniq_density}
+    The word-algebra module is finite dimensional, so it has a composition
+    series, and its steps are simple. A simple module on which every letter
+    vanishes is a line. The word trace of a nonzero word on the whole module
+    is the sum of its traces on the steps, which vanish on the zero steps.
+    Hence (iii) implies (i); conversely, equal traces force equal
+    multiplicities of the simple nonzero factors by the independence of
+    the traces of non-isomorphic simple modules, which gives (ii), and (ii)
+    implies (iii) because invariant flags exist.
+\end{proof}
+
+\begin{lemma}[Every invariant flag is the flag of a reduction]
+    \label{thm:asym_arbitrary_flag_reduction}
+    \lean{MPSTensor.exists_multiBlockCompression_mem_iff_and_flag_eq_and_ord_eq}
+    \leanok
+    \uses{thm:asym_arbitrary_flags, def:asym_flag_data}
+    Let $0=M_0\subset\cdots\subset M_r$ be an invariant flag of $B$ and $S$
+    the set of its nonzero steps. Then $B$ has a reduction onto the tensors of
+    the steps in $S$ with $r-|S|$ zero blocks, whose invariant flag is the
+    given one, with the block of a step $k\in S$ at position $k$ and the zero
+    blocks at the zero steps.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:asym_flag_data}
+    Choose a basis of each step and lift it to the bond space; the lifted
+    bases, in the order of the flag, form the columns of $G^{-1}$, and the
+    flag is invariant, so every $GB^iG^{-1}$ is block upper triangular with
+    the tensors of the steps on the diagonal.
+\end{proof}
+
+\begin{lemma}[A common block diagonal limit]
+    \label{thm:asym_arbitrary_limit}
+    \lean{MPSTensor.MultiBlockCompression.exists_isUnit_and_tendsto_mul_zeroPad_mul_inv,
+        MPSTensor.sameMPV₂Pos_of_tendsto_mul_zeroPad_mul_inv}
+    \leanok
+    \uses{thm:asym_arbitrary_ft, def:varying_bond_obc_zero_pad}
+    Let $n=\max(D_B,D_{B'})$ and let $\widehat B$ and $\widehat B'$ be $B$
+    and $B'$ padded by zero blocks to bond dimension $n$. If $B$ and $B'$
+    have reductions onto one family $(C_s)_{s\in S}$, then for the block
+    diagonal tensor $L=\bigoplus_sC_s\oplus0$ of bond dimension $n$, read in
+    any order of its coordinates, there are matrices $G(t)$ and $G'(t)$,
+    invertible for $t>0$, with
+    $G(t)\widehat B^iG(t)^{-1}\to L^i$ and
+    $G'(t)\widehat B'^iG'(t)^{-1}\to L^i$ as $t\to0^+$ for every letter $i$.
+    Conversely, if $\widehat B$ and $\widehat B'$ have a common limit $L$ in
+    this sense, then $B$ and $B'$ have the same periodic vectors at every
+    positive length.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Conjugating a block upper triangular tensor by
+    $\operatorname{diag}(t^{-\kappa_1},\ldots,t^{-\kappa_r})$ with
+    increasing exponents scales the block $(j,k)$ by $t^{\kappa_k-\kappa_j}$,
+    which tends to zero above the diagonal. Conversely, the trace of a word
+    is continuous and invariant under conjugation, so a common limit gives
+    equal word traces, and zero padding does not change them.
+\end{proof}
+
+\begin{corollary}[Weighted states]
+    \label{thm:asym_arbitrary_weighted}
+    \lean{MPSTensor.tfae_weightedStates,
+        MPSTensor.forall_trace_pow_mul_mpv_eq_iff_exists_equiv_isGaugeRelated,
+        MPSTensor.eventually_mpv_eq_pow_mul_iff_exists_equiv_isGaugeRelated_smul,
+        MPSTensor.tfae_statesDependent}
+    \leanok
+    \uses{thm:asym_arbitrary_ft, thm:asym_arbitrary_family_unique}
+    Let $V$ and $U$ be square matrices of any sizes. The identity
+    $\tr(V^N)\ket{V^{(N)}(A)}=\tr(U^N)\ket{V^{(N)}(B)}$ holds for all
+    large $N$ if and only if it holds for every $N\geq1$, if and only if
+    $A\otimes V$ and $B\otimes U$ have reductions onto one admissible family.
+    Given reductions of $A$ onto an admissible family $(C_s)_{s\in S}$ and of
+    $B$ onto an admissible family $(C'_t)_{t\in T}$, it holds exactly when
+    there is a bijection between the pairs $(s,\mu)$ and $(t,\nu)$, with
+    $\mu$ and $\nu$ running over the nonzero eigenvalues of $V$ and $U$
+    counted with algebraic multiplicity, under which $\mu C_s$ is gauge
+    related to $\nu C'_t$. In particular, for $\lambda\neq0$,
+    $\ket{V^{(N)}(A)}=\lambda^N\ket{V^{(N)}(B)}$ for all large $N$ exactly
+    when a bijection $S\to T$ makes each $C_s$ gauge related to
+    $\lambda C'_t$; and linear dependence of $\ket{V^{(N)}(A)}$ and
+    $\ket{V^{(N)}(B)}$ at all large $N$, at every $N\geq1$, and equality of
+    the periodic vectors of $A\otimes\mathbb E_{B,B}$ and
+    $B\otimes\mathbb E_{B,A}$ are equivalent, where $\mathbb E_{B,A}$ is
+    the mixed transfer matrix.
+\end{corollary}
+
+\begin{proof}
+    \leanok
+    \uses{thm:asym_arbitrary_ft, thm:asym_arbitrary_family_unique}
+    The periodic trace of a word on $A\otimes V$ is $\tr(V^{|w|})\tr(A^w)$,
+    so the weighted identity is equality of the periodic vectors of
+    $A\otimes V$ and $B\otimes U$, and equality for all large lengths
+    propagates to every positive length.
+    Theorem~\ref{thm:asym_arbitrary_ft} gives the reductions. Expanding
+    $\tr(V^N)=\sum_\mu\mu^N$ writes both sides as sums of periodic vectors of
+    the admissible tensors $\mu C_s$ and $\nu C'_t$, and
+    Lemma~\ref{thm:asym_arbitrary_family_unique} matches them. The
+    dependence statement is the case $V=\mathbb E_{B,B}$,
+    $U=\mathbb E_{B,A}$.
+\end{proof}
