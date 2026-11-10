@@ -79,6 +79,30 @@ def coeff (A : OBCChainTensor d D N) (σ : Fin N → Fin d) : ℂ :=
   ∑ α : (k : Fin (N + 1)) → Fin (A.bondDim k),
     ∏ k : Fin N, A.tensor k (σ k) (α k.castSucc) (α k.succ)
 
+/-- Append a product-state site to an open-boundary chain.  Both the old right endpoint
+and the new right endpoint are one-dimensional. -/
+def snoc (A : OBCChainTensor d D N) (f : Fin d → ℂ) : OBCChainTensor d D (N + 1) where
+  bondDim := Fin.snoc A.bondDim 1
+  bondDim_le k := by
+    refine Fin.lastCases ?_ (fun p ↦ ?_) k
+    · simpa using (A.left_dim ▸ A.bondDim_le 0)
+    · simpa using A.bondDim_le p
+  left_dim := by simpa using A.left_dim
+  right_dim := by simp
+  tensor k s := by
+    refine Fin.lastCases ?_ (fun p ↦ ?_) k
+    · exact Matrix.reindex
+        (finCongr (by simp [A.right_dim]))
+        (finCongr (by simp))
+        (fun _ _ ↦ f s : Matrix (Fin 1) (Fin 1) ℂ)
+    · exact Matrix.reindex
+        (finCongr (by simp))
+        (finCongr (by
+          have hp : p.castSucc.succ = p.succ.castSucc := by ext; rfl
+          rw [hp]
+          exact (@Fin.snoc_castSucc (N + 1) (fun _ ↦ Nat) 1 A.bondDim p.succ).symm))
+        (A.tensor p s)
+
 /-- Cyclic translation of the physical configuration. The bond-dimension
 vector and the distinguished open cut are unchanged. -/
 def cyclicTranslateConfig (s : Fin N) (σ : Fin N → Fin d) : Fin N → Fin d :=
@@ -218,6 +242,55 @@ private theorem coeff_eq_sum_init (A : OBCChainTensor d D N)
   apply Finset.sum_congr rfl
   intro g _
   congr 2
+
+set_option linter.flexible false in
+/-- Appending a product-state site multiplies the old coefficient by its one-site
+coefficient. -/
+theorem coeff_snoc (A : OBCChainTensor d D N) (f : Fin d → ℂ)
+    (σ : Fin (N + 1) → Fin d) :
+    (A.snoc f).coeff σ = A.coeff (Fin.init σ) * f (σ (Fin.last N)) := by
+  rw [coeff_eq_sum_init, coeff_eq_sum_init]
+  let : Unique (Fin (A.bondDim (Fin.last N))) :=
+    Equiv.unique (Fin.castOrderIso A.right_dim).toEquiv
+  rw [Finset.sum_mul]
+  let e₁ : ((k : Fin (N + 1)) → Fin ((A.snoc f).bondDim k.castSucc)) ≃
+      ((k : Fin (N + 1)) → Fin (A.bondDim k)) :=
+    Equiv.piCongrRight fun k ↦ finCongr (by simp [snoc])
+  let e₂ : ((k : Fin (N + 1)) → Fin (A.bondDim k)) ≃
+      ((k : Fin N) → Fin (A.bondDim k.castSucc)) :=
+    (Fin.snocEquiv fun k : Fin (N + 1) ↦ Fin (A.bondDim k)).symm.trans
+      (Equiv.uniqueProd _ _)
+  have hpath (g : (k : Fin (N + 1)) → Fin ((A.snoc f).bondDim k.castSucc)) :
+      e₁ g = Fin.snoc ((e₁.trans e₂) g) (rightIndex A) := by
+    funext j
+    refine Fin.lastCases ?_ (fun p ↦ ?_) j
+    · exact Subsingleton.elim _ _
+    · simp [e₂]
+      rfl
+  refine Fintype.sum_equiv (e₁.trans e₂) _ _ fun g ↦ ?_
+  rw [Fin.prod_univ_castSucc]
+  simp [e₁, e₂, snoc, rightIndex, Matrix.reindex_apply]
+  congr 1
+  · apply Finset.prod_congr rfl
+    intro k _
+    congr 1
+    · apply Fin.ext
+      calc
+        _ = ((e₁ g) k.castSucc).val := by
+          simp [e₁, Fin.snoc]
+          rfl
+        _ = (Fin.snoc (α := fun j ↦ Fin (A.bondDim j))
+            ((e₁.trans e₂) g) (rightIndex A) k.castSucc).val :=
+          congrArg Fin.val (congrFun (hpath g) k.castSucc)
+        _ = _ := by
+          simp [Fin.snoc]
+          rfl
+    · apply Fin.ext
+      calc
+        _ = ((e₁ g) k.succ).val := by
+          simp [e₁, Fin.snoc]
+          rfl
+        _ = _ := congrArg Fin.val (congrFun (hpath g) k.succ)
 
 /-- For positive length, entrywise square padding preserves every state
 coefficient. Zero intermediate bond dimensions are allowed: then the dependent

@@ -49,6 +49,7 @@ import TNLean.Algebra.CoveringMatching
 import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
+import TNLean.Algebra.DependentSequence
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EuclideanExtendByZero
 import TNLean.Algebra.EuclideanFiberwiseMap

@@ -40,6 +40,14 @@ rev = "603fc408b9f4c2a50f2475e1e44843fdc0a9c0ac"
 [[lean_lib]]
 name = "TNLean"
 
+[[lean_lib]]
+name = "AreaLawComparator"
+srcDir = "verification/area-law"
+# The comparator checks these independent environments, whose declarations share names.
+# Keep both buildable without importing them together in library-wide declaration checks.
+roots = []
+globs = ["Challenge", "Solution"]
+
 # Text-based style linter driver for `Mathlib.Linter.TextBased.lintModules`.
 # Run with `lake exe lint_style` (or `--fix` to auto-correct, `--github` for CI annotations).
 [[lean_exe]]

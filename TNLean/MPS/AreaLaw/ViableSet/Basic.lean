@@ -58,6 +58,9 @@ initialization `i = 0` (line 372); later bond dimensions are positive polynomial
 * `TNLean.MPS.AreaLaw.isViable_iff_forall_mem_span_singleton`: for a unit vector `Γ` and
   `δ < 1`, viability as closeness of `Span(S) ⊗ H_R` to `span {Γ}`.
 * `TNLean.MPS.AreaLaw.IsViable.extend`, `TNLean.MPS.AreaLaw.IsViableMPS.extend`: Claim `c:ext`.
+* `TNLean.MPS.AreaLaw.exists_size_trimmed_family_localDimension_one`,
+  `TNLean.MPS.AreaLaw.exists_size_trimmed_family_chainLength_zero`: exact singleton size
+  trimming in the two degenerate cases excluded from the boundary-contraction proof.
 
 ## References
 
@@ -122,6 +125,16 @@ noncomputable def spanProjection {k : ℕ} (S : Set (LeftBlockVector L q k)) :
 theorem toEuclideanLin_spanProjection {k : ℕ} (S : Set (LeftBlockVector L q k)) :
     toEuclideanLin (spanProjection S) = (Submodule.span ℂ S).starProjection.toLinearMap :=
   LinearEquiv.apply_symm_apply _ _
+
+/-- The projection onto the span of a finite family has rank at most the size of the family. -/
+theorem rank_spanProjection_le_card {k : ℕ} (S : Finset (LeftBlockVector L q k)) :
+    (spanProjection (S : Set (LeftBlockVector L q k))).rank ≤ S.card := by
+  classical
+  rw [Matrix.rank_eq_finrank_range_toLin _
+      (EuclideanSpace.basisFun _ ℂ).toBasis (EuclideanSpace.basisFun _ ℂ).toBasis,
+    ← Matrix.toEuclideanLin_eq_toLin_orthonormal, toEuclideanLin_spanProjection,
+    Submodule.range_starProjection]
+  exact finrank_span_finset_le_card S
 
 /-- The projection onto `Span(S)` is an orthogonal projection. -/
 theorem isStarProjection_spanProjection {k : ℕ} (S : Set (LeftBlockVector L q k)) :
@@ -250,6 +263,148 @@ theorem IsViable.le_norm_starProjection {Γ : EuclideanSpace ℂ (Fin L → Fin 
   obtain ⟨φ, h1, hδ, hφ⟩ := h
   exact hδ.trans (norm_inner_le_norm_starProjection hφ h1 Γ)
 
+/-- For a one-state local space, every viable family is exactly viable.
+
+This is the degenerate local-dimension case excluded from the size-trimming argument in
+LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 493--527. The chain Hilbert space is
+one-dimensional, so its unit ground vector is a scalar multiple of any unit viable witness. -/
+theorem IsViable.exact_of_localDimension_one
+    {Γ : EuclideanSpace ℂ (Fin L → Fin 1)} (hΓ : ‖Γ‖ = 1) {δ : ℝ} {i : ℕ}
+    {S : Set (LeftBlockVector L 1 i)} (h : IsViable Γ δ S) :
+    IsViable Γ 0 S := by
+  obtain ⟨φ, hφ, -, hφS⟩ := h
+  have hfinrank : Module.finrank ℂ (EuclideanSpace ℂ (Fin L → Fin 1)) = 1 := by
+    simp
+  have hφ0 : φ ≠ 0 := by
+    intro hzero
+    rw [hzero, norm_zero] at hφ
+    norm_num at hφ
+  obtain ⟨c, hc⟩ := exists_smul_eq_of_finrank_eq_one hfinrank hφ0 Γ
+  refine ⟨Γ, hΓ, ?_, hc ▸ (leftSupportSubmodule S).smul_mem c hφS⟩
+  simp [inner_self_eq_norm_sq_to_K, hΓ]
+
+/-- For a one-state local space, a viable family contains a singleton subfamily that is
+exactly viable.
+
+This is the finite reduction needed for the degenerate local-dimension case of LVV13,
+arXiv:1307.5143v1, `algo53.tex`, Claim `c:2`, lines 520--527. -/
+theorem IsViable.exists_singleton_exact_of_localDimension_one
+    {Γ : EuclideanSpace ℂ (Fin L → Fin 1)} (hΓ : ‖Γ‖ = 1) {δ : ℝ} {i : ℕ}
+    {S : Set (LeftBlockVector L 1 i)} (h : IsViable Γ δ S) :
+    ∃ v ∈ S, v ≠ 0 ∧ IsViable Γ 0 ({v} : Set (LeftBlockVector L 1 i)) := by
+  classical
+  obtain ⟨φ, hφ, hoverlap, hφS⟩ := h
+  let b : (x : {x : Fin L // x ∉ leftBlock L i}) → Fin 1 := fun _ ↦ 0
+  have hcolumn : cutColumn φ i b ≠ 0 := by
+    intro hzero
+    have hφzero : φ = 0 := by
+      ext z
+      let p := Entropy.cutEquiv (fun _ : Fin L ↦ 1) (leftBlock L i) z
+      have hb : p.2 = b := Subsingleton.elim _ _
+      have hz := congrArg (fun w ↦ w p.1) hzero
+      rw [cutColumn_apply, cutMatrix_apply] at hz
+      have hp : (Entropy.cutEquiv (fun _ : Fin L ↦ 1) (leftBlock L i)).symm (p.1, b) = z := by
+        rw [← hb]
+        exact (Entropy.cutEquiv (fun _ : Fin L ↦ 1) (leftBlock L i)).symm_apply_apply z
+      simpa [hp] using hz
+    rw [hφzero, norm_zero] at hφ
+    norm_num at hφ
+  have hne : ∃ v ∈ S, v ≠ 0 := by
+    by_contra hn
+    have hall : ∀ v ∈ S, v = 0 := by
+      intro v hv
+      by_contra hv0
+      exact hn ⟨v, hv, hv0⟩
+    have hmem := hφS b
+    rw [Submodule.span_eq_bot.mpr hall, Submodule.mem_bot] at hmem
+    exact hcolumn hmem
+  obtain ⟨v, hvS, hv0⟩ := hne
+  have hfinrank : Module.finrank ℂ (LeftBlockVector L 1 i) = 1 := by
+    simp
+  have hspan : Submodule.span ℂ ({v} : Set (LeftBlockVector L 1 i)) = ⊤ := by
+    rw [eq_top_iff]
+    intro x _
+    obtain ⟨c, hc⟩ := exists_smul_eq_of_finrank_eq_one hfinrank hv0 x
+    rw [← hc]
+    exact Submodule.smul_mem _ c (Submodule.subset_span (Set.mem_singleton v))
+  have hsingle : IsViable Γ δ ({v} : Set (LeftBlockVector L 1 i)) := by
+    refine ⟨φ, hφ, hoverlap, ?_⟩
+    intro b'
+    rw [hspan]
+    exact Submodule.mem_top
+  exact ⟨v, hvS, hv0, hsingle.exact_of_localDimension_one hΓ⟩
+
+/-- On the empty chain, every viable family is exactly viable.
+
+This is the empty-chain case of LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 493--527.
+It is stated without the quantities divided by the chain length that occur in the
+nonempty-chain size-trimming argument. -/
+theorem IsViable.exact_of_chainLength_zero
+    {Γ : EuclideanSpace ℂ (Fin 0 → Fin q)} (hΓ : ‖Γ‖ = 1) {δ : ℝ} {i : ℕ}
+    {S : Set (LeftBlockVector 0 q i)} (h : IsViable Γ δ S) :
+    IsViable Γ 0 S := by
+  obtain ⟨φ, hφ, -, hφS⟩ := h
+  have hfinrank : Module.finrank ℂ (EuclideanSpace ℂ (Fin 0 → Fin q)) = 1 := by
+    simp
+  have hφ0 : φ ≠ 0 := by
+    intro hzero
+    rw [hzero, norm_zero] at hφ
+    norm_num at hφ
+  obtain ⟨c, hc⟩ := exists_smul_eq_of_finrank_eq_one hfinrank hφ0 Γ
+  refine ⟨Γ, hΓ, ?_, hc ▸ (leftSupportSubmodule S).smul_mem c hφS⟩
+  simp [inner_self_eq_norm_sq_to_K, hΓ]
+
+/-- On the empty chain, a viable family contains a singleton subfamily that is exactly
+viable. This is the finite reduction for LVV13, arXiv:1307.5143v1, `algo53.tex`,
+Claim `c:2`, lines 520--527. -/
+theorem IsViable.exists_singleton_exact_of_chainLength_zero
+    {Γ : EuclideanSpace ℂ (Fin 0 → Fin q)} (hΓ : ‖Γ‖ = 1) {δ : ℝ} {i : ℕ}
+    {S : Set (LeftBlockVector 0 q i)} (h : IsViable Γ δ S) :
+    ∃ v ∈ S, v ≠ 0 ∧ IsViable Γ 0 ({v} : Set (LeftBlockVector 0 q i)) := by
+  classical
+  obtain ⟨φ, hφ, hoverlap, hφS⟩ := h
+  let b : (x : {x : Fin 0 // x ∉ leftBlock 0 i}) → Fin q := fun x ↦ x.1.elim0
+  have hcolumn : cutColumn φ i b ≠ 0 := by
+    intro hzero
+    have hφzero : φ = 0 := by
+      ext z
+      let p := Entropy.cutEquiv (fun _ : Fin 0 ↦ q) (leftBlock 0 i) z
+      have hb : p.2 = b := by
+        funext x
+        exact x.1.elim0
+      have hz := congrArg (fun w ↦ w p.1) hzero
+      rw [cutColumn_apply, cutMatrix_apply] at hz
+      have hp : (Entropy.cutEquiv (fun _ : Fin 0 ↦ q) (leftBlock 0 i)).symm (p.1, b) = z := by
+        rw [← hb]
+        exact (Entropy.cutEquiv (fun _ : Fin 0 ↦ q) (leftBlock 0 i)).symm_apply_apply z
+      simpa [hp] using hz
+    rw [hφzero, norm_zero] at hφ
+    norm_num at hφ
+  have hne : ∃ v ∈ S, v ≠ 0 := by
+    by_contra hn
+    have hall : ∀ v ∈ S, v = 0 := by
+      intro v hv
+      by_contra hv0
+      exact hn ⟨v, hv, hv0⟩
+    have hmem := hφS b
+    rw [Submodule.span_eq_bot.mpr hall, Submodule.mem_bot] at hmem
+    exact hcolumn hmem
+  obtain ⟨v, hvS, hv0⟩ := hne
+  have hfinrank : Module.finrank ℂ (LeftBlockVector 0 q i) = 1 := by
+    simp [LeftBlockVector]
+  have hspan : Submodule.span ℂ ({v} : Set (LeftBlockVector 0 q i)) = ⊤ := by
+    rw [eq_top_iff]
+    intro x _
+    obtain ⟨c, hc⟩ := exists_smul_eq_of_finrank_eq_one hfinrank hv0 x
+    rw [← hc]
+    exact Submodule.smul_mem _ c (Submodule.subset_span (Set.mem_singleton v))
+  have hsingle : IsViable Γ δ ({v} : Set (LeftBlockVector 0 q i)) := by
+    refine ⟨φ, hφ, hoverlap, ?_⟩
+    intro b'
+    rw [hspan]
+    exact Submodule.mem_top
+  exact ⟨v, hvS, hv0, hsingle.exact_of_chainLength_zero hΓ⟩
+
 /-- **Viability as a projection bound.** For `δ < 1`, `S` is `(i, δ)`-viable for `Γ` exactly
 when `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`; the normalized projection is then a witness.
 
@@ -330,12 +485,66 @@ dimension at most `max 1 b`; see the module docstring for `b = 0`. -/
 def IsLeftOpenMPS (b : ℕ) {k : ℕ} (v : LeftBlockVector L q k) : Prop :=
   IsOpenMPS k q (max 1 b) fun x ↦ v (leftConfigOfFin x)
 
+/-- Explicit open-boundary tensor data for a retained left-block vector.  Unlike the
+propositional predicate `IsLeftOpenMPS`, a value of this type carries the tensor and scalar
+cap needed by an algorithm. -/
+abbrev LeftOpenMPSRepresentation (b : ℕ) {k : ℕ} (v : LeftBlockVector L q k) :=
+  OpenMPSRepresentation k q (max 1 b) fun x ↦ v (leftConfigOfFin x)
+
+/-- `IsLeftOpenMPS` holds exactly when its tensor data can be packaged explicitly. -/
+theorem isLeftOpenMPS_iff_nonempty_representation (b : ℕ) {k : ℕ}
+    (v : LeftBlockVector L q k) :
+    IsLeftOpenMPS b v ↔ Nonempty (LeftOpenMPSRepresentation b v) :=
+  isOpenMPS_iff_nonempty_representation _ _ _ _
+
+/-- Forgetting explicit left-block tensor data recovers `IsLeftOpenMPS`. -/
+theorem LeftOpenMPSRepresentation.isLeftOpenMPS {b k : ℕ}
+    {v : LeftBlockVector L q k} (R : LeftOpenMPSRepresentation b v) :
+    IsLeftOpenMPS b v :=
+  R.isOpenMPS
+
 /-- **`(i, s, b, δ)`-viable sets** (Landau, Vazirani, Vidick, arXiv:1307.5143v1, algo53.tex,
 Definition `def:viable`, lines 240–244). `S` has at most `s` members, each a matrix product
 state of bond dimension at most `b`, and is `(i, δ)`-viable for `Γ`. -/
 def IsViableMPS (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (s b : ℕ) (δ : ℝ) {i : ℕ}
     (S : Finset (LeftBlockVector L q i)) : Prop :=
   S.card ≤ s ∧ (∀ v ∈ S, IsLeftOpenMPS b v) ∧ IsViable Γ δ (S : Set (LeftBlockVector L q i))
+
+/-- A viable family together with explicit open-boundary tensor data for each retained
+vector.  This is the data-bearing invariant needed by an executable LVV construction; its
+mathematical content is still `IsViableMPS`. -/
+structure ViableMPSData (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (s b : ℕ) (δ : ℝ)
+    {i : ℕ} (S : Finset (LeftBlockVector L q i)) where
+  /-- The retained family obeys the cardinality budget. -/
+  card_le : S.card ≤ s
+  /-- Explicit tensor data for every member of the retained family. -/
+  representation : ∀ v : S, LeftOpenMPSRepresentation b v.1
+  /-- The retained span is viable for the target state. -/
+  viable : IsViable Γ δ (S : Set (LeftBlockVector L q i))
+
+/-- Forgetting the explicit tensors in `ViableMPSData` recovers `IsViableMPS`. -/
+theorem ViableMPSData.isViableMPS {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
+    {s b : ℕ} {δ : ℝ} {i : ℕ} {S : Finset (LeftBlockVector L q i)}
+    (D : ViableMPSData Γ s b δ S) : IsViableMPS Γ s b δ S :=
+  ⟨D.card_le, fun v hv ↦
+    (D.representation ⟨v, hv⟩).isLeftOpenMPS, D.viable⟩
+
+/-- Propositionally, `IsViableMPS` is equivalent to the nonemptiness of its data-bearing
+form.  The forward implication chooses tensor witnesses and is therefore not itself an
+effective extraction procedure. -/
+theorem isViableMPS_iff_nonempty_data
+    (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (s b : ℕ) (δ : ℝ) {i : ℕ}
+    (S : Finset (LeftBlockVector L q i)) :
+    IsViableMPS Γ s b δ S ↔ Nonempty (ViableMPSData Γ s b δ S) := by
+  classical
+  constructor
+  · rintro ⟨hcard, hrep, hviable⟩
+    let R : ∀ v : S, LeftOpenMPSRepresentation b v.1 := fun v ↦
+      Classical.choice ((isLeftOpenMPS_iff_nonempty_representation b v.1).mp
+        (hrep v.1 v.2))
+    exact ⟨⟨hcard, R, hviable⟩⟩
+  · rintro ⟨D⟩
+    exact D.isViableMPS
 
 /-! ### Claim `c:ext` -/
 
@@ -386,6 +595,22 @@ theorem extendSite_apply {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) (k : Fin q)
       have h2 : ¬ s.1.val < i - 1 := fun h ↦ hs2 (mem_leftBlock.mpr h)
       exact Subtype.ext (Fin.ext (by simp only [lastLeftSite]; omega))
     rw [this, h]
+
+/-- Append a computational-basis site to explicit left-block MPS data. -/
+noncomputable def LeftOpenMPSRepresentation.extendSite {i b : ℕ}
+    (hi0 : 0 < i) (hiL : i ≤ L) {v : LeftBlockVector L q (i - 1)}
+    (R : LeftOpenMPSRepresentation b v) (k : Fin q) :
+    LeftOpenMPSRepresentation b (AreaLaw.extendSite i k v) := by
+  cases i with
+  | zero => omega
+  | succ n =>
+      simp only [Nat.succ_sub_one] at v R ⊢
+      let R' := R.snoc (lt_of_lt_of_le Nat.one_pos (le_max_left 1 b))
+        (fun y ↦ if y = k then 1 else 0)
+      convert R' using 1
+      funext x
+      rw [extendSite_apply hi0 hiL, mul_ite, mul_one, mul_zero]
+      rfl
 
 /-- The extended set `S ⊗ {|1⟩, …, |q⟩} = {v ⊗ |k⟩ : v ∈ S, k}` on the first `i` sites
 (arXiv:1307.5143v1, algo53.tex, line 386). -/
@@ -497,5 +722,93 @@ theorem IsViableMPS.extend {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b : �
   unfold AreaLaw.extend at hw
   obtain ⟨v, hvS, k, -, rfl⟩ := Finset.mem_image₂.mp hw
   exact (hmps v hvS).extendSite hi0 hiL k
+
+/-- The one-site LVV extension lifted to the data-bearing viable-family invariant.
+
+For each member of the image set, a finite preimage pair is selected; its tensor data are then
+obtained by the explicit one-site append operation.  Thus no matrix-product representation is
+reconstructed from the propositional predicate. -/
+noncomputable def ViableMPSData.extend
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b : ℕ} {δ : ℝ} {i : ℕ}
+    {S : Finset (LeftBlockVector L q (i - 1))}
+    (D : ViableMPSData Γ s b δ S) (hi0 : 0 < i) (hiL : i ≤ L) :
+    ViableMPSData Γ (q * s) b δ (AreaLaw.extend i S) where
+  card_le := (card_extend_le i S).trans (Nat.mul_le_mul_left q D.card_le)
+  representation w := by
+    classical
+    have hp : ∃ p : S × Fin q, AreaLaw.extendSite i p.2 p.1.1 = w.1 := by
+      unfold AreaLaw.extend at w
+      obtain ⟨v, hv, k, -, hvk⟩ := Finset.mem_image₂.mp w.2
+      exact ⟨⟨⟨v, hv⟩, k⟩, hvk⟩
+    let p := Classical.choose hp
+    have hp_eq := Classical.choose_spec hp
+    rw [← hp_eq]
+    exact (D.representation p.1).extendSite hi0 hiL p.2
+  viable := D.viable.extend hi0 hiL
+
+/-- Forgetting tensor data after `ViableMPSData.extend` gives the ordinary one-site
+extension theorem. -/
+theorem ViableMPSData.extend_isViableMPS
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b : ℕ} {δ : ℝ} {i : ℕ}
+    {S : Finset (LeftBlockVector L q (i - 1))}
+    (D : ViableMPSData Γ s b δ S) (hi0 : 0 < i) (hiL : i ≤ L) :
+    IsViableMPS Γ (q * s) b δ (AreaLaw.extend i S) :=
+  (D.extend hi0 hiL).isViableMPS
+
+/-- In local dimension one, size trimming reduces every viable finite family to one
+nonzero member, with no loss of viability or increase of bond dimension.
+
+This is the degenerate case of LVV13, arXiv:1307.5143v1, `algo53.tex`, Claim `c:2`,
+lines 520--527, separated from the boundary-contraction argument used when `2 ≤ q`. -/
+theorem exists_size_trimmed_family_localDimension_one {L k b : ℕ}
+    (S : Finset (LeftBlockVector L 1 k))
+    (hS : ∀ v ∈ S, IsLeftOpenMPS b v)
+    (Γ : EuclideanSpace ℂ (Fin L → Fin 1)) (hΓ : ‖Γ‖ = 1) {δ : ℝ}
+    (hviable : IsViable Γ δ (S : Set (LeftBlockVector L 1 k))) :
+    ∃ T : Finset (LeftBlockVector L 1 k),
+      T.card ≤ 1 ∧
+      (T : Set (LeftBlockVector L 1 k)) ⊆
+        Submodule.span ℂ (S : Set (LeftBlockVector L 1 k)) ∧
+      (∀ v ∈ T, IsLeftOpenMPS b v) ∧
+      IsViable Γ 0 (T : Set (LeftBlockVector L 1 k)) := by
+  classical
+  obtain ⟨v, hvS, -, hv⟩ := hviable.exists_singleton_exact_of_localDimension_one hΓ
+  refine ⟨{v}, by simp, ?_, ?_, ?_⟩
+  · intro w hw
+    simp only [Finset.coe_singleton, Set.mem_singleton_iff] at hw
+    subst w
+    exact Submodule.subset_span hvS
+  · intro w hw
+    rw [Finset.mem_singleton.mp hw]
+    exact hS v hvS
+  · simpa only [Finset.coe_singleton] using hv
+
+/-- On the empty chain, size trimming reduces every viable finite family to one nonzero
+member, with exact viability and without increasing the bond bound.
+
+This is the empty-chain case of LVV13, arXiv:1307.5143v1, `algo53.tex`, Claim `c:2`,
+lines 520--527, formulated without division by the chain length. -/
+theorem exists_size_trimmed_family_chainLength_zero {q k b : ℕ}
+    (S : Finset (LeftBlockVector 0 q k))
+    (hS : ∀ v ∈ S, IsLeftOpenMPS b v)
+    (Γ : EuclideanSpace ℂ (Fin 0 → Fin q)) (hΓ : ‖Γ‖ = 1) {δ : ℝ}
+    (hviable : IsViable Γ δ (S : Set (LeftBlockVector 0 q k))) :
+    ∃ T : Finset (LeftBlockVector 0 q k),
+      T.card ≤ 1 ∧
+      (T : Set (LeftBlockVector 0 q k)) ⊆
+        Submodule.span ℂ (S : Set (LeftBlockVector 0 q k)) ∧
+      (∀ v ∈ T, IsLeftOpenMPS b v) ∧
+      IsViable Γ 0 (T : Set (LeftBlockVector 0 q k)) := by
+  classical
+  obtain ⟨v, hvS, -, hv⟩ := hviable.exists_singleton_exact_of_chainLength_zero hΓ
+  refine ⟨{v}, by simp, ?_, ?_, ?_⟩
+  · intro w hw
+    simp only [Finset.coe_singleton, Set.mem_singleton_iff] at hw
+    subst w
+    exact Submodule.subset_span hvS
+  · intro w hw
+    rw [Finset.mem_singleton.mp hw]
+    exact hS v hvS
+  · simpa only [Finset.coe_singleton] using hv
 
 end TNLean.MPS.AreaLaw

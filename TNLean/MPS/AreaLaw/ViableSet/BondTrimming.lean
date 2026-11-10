@@ -270,11 +270,13 @@ theorem norm_inner_sub_leftColumnwiseSchmidtTrim_rightApply_le [DecidableEq β]
   exact herr.trans (mul_le_mul_of_nonneg_right
     (mul_le_mul_of_nonneg_left hnv (by positivity)) (Real.sqrt_nonneg _))
 
-/-- Independent bond trimming preserves `1 / 2`-viability when the input contains the columns
-of the size-trimming witness. The reference is a unit matrix product state of overlap at
+/-- The independently trimmed size-trimming witness has norm at least `37 / 48`, and its
+normalization has overlap at least `7 / 12` with the ground vector.
+The reference is a unit matrix product state of overlap at
 least `47 / 48` with the ground vector, as supplied by LVV13, Lemma `l:mpsapprox`.
+The sharper overlap inequality leaves an additional `1 / 12` reserve for approximation.
 Source: `algo53.tex`, Claim `c:trim`, lines 549–559, with the quadratic radius correction. -/
-theorem isViableMPS_bondTrimSet_of_columns [DecidableEq β] (hi : i ≤ L)
+theorem bondTrimSet_witness_with_reserve [DecidableEq β] (hi : i ≤ L)
     (S : Finset (LeftBlockVector L q i))
     (u : EuclideanSpace ℂ
       (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
@@ -286,8 +288,12 @@ theorem isViableMPS_bondTrimSet_of_columns [DecidableEq β] (hi : i ≤ L)
     (v : EuclideanSpace ℂ (Fin L → Fin q)) (hv : ‖v‖ = 1)
     (hΓv : 1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖) (D : ℕ)
     (hvrank : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
-    IsViableMPS Γ S.card (bondTrimmingRadius L D) (1 / 2)
-      (bondTrimSet hi (bondTrimmingRadius L D) S) := by
+    let w := (blockSplit L q i).symm
+      (rightApply W (leftColumnwiseSchmidtTrim hi (bondTrimmingRadius L D) u))
+    let z := ((‖w‖⁻¹ : ℝ) : ℂ) • w
+    37 / 48 ≤ ‖w‖ ∧ ‖w‖ ≤ 1 ∧ ‖z‖ = 1 ∧ 7 / 12 ≤ ‖⟪Γ, z⟫_ℂ‖ ∧
+      z ∈ leftSupportSubmodule
+        (bondTrimSet hi (bondTrimmingRadius L D) S : Set (LeftBlockVector L q i)) := by
   let m := bondTrimmingRadius L D
   let P := blockSplit L q i
   let φ := P.symm (rightApply W u)
@@ -323,14 +329,78 @@ theorem isViableMPS_bondTrimSet_of_columns [DecidableEq β] (hi : i ≤ L)
       Real.norm_eq_abs, abs_inv, abs_of_pos hw0, inv_mul_eq_div,
       norm_inner_symm v w, le_div_iff₀ hw0]
     nlinarith
-  have hΓz : 1 - 2 * (1 / 48 + 11 / 48) ≤ ‖⟪Γ, z⟫_ℂ‖ :=
-    one_sub_two_mul_add_le_norm_inner hΓ hz hv
-      (by norm_num) (by norm_num) (by norm_num) (by norm_num) hΓv hzv
-  refine ⟨card_bondTrimSet_le hi m S,
-    fun t ht ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m S ht, z, hz, ?_, ?_⟩
-  · rw [norm_inner_symm]
+  have hΓz : 7 / 12 ≤ ‖⟪Γ, z⟫_ℂ‖ := by
+    have ha1 : ‖⟪Γ, v⟫_ℂ‖ ≤ 1 := by
+      simpa only [hΓ, hv, mul_one] using norm_inner_le_norm (𝕜 := ℂ) Γ v
+    have hb1 : ‖⟪z, v⟫_ℂ‖ ≤ 1 := by
+      simpa only [hz, hv, mul_one] using norm_inner_le_norm (𝕜 := ℂ) z v
+    have ha : 1 - ‖⟪Γ, v⟫_ℂ‖ ^ 2 ≤ 1 / 24 := by
+      nlinarith [sq_nonneg (‖⟪Γ, v⟫_ℂ‖ - 47 / 48)]
+    have hb : 1 - ‖⟪z, v⟫_ℂ‖ ^ 2 ≤ 2 / 3 := by
+      nlinarith [sq_nonneg (‖⟪z, v⟫_ℂ‖ - 37 / 48)]
+    have hb0 : 0 ≤ 1 - ‖⟪z, v⟫_ℂ‖ ^ 2 := by
+      nlinarith [norm_nonneg ⟪z, v⟫_ℂ]
+    have hsqrt : √((1 - ‖⟪Γ, v⟫_ℂ‖ ^ 2) *
+        (1 - ‖⟪z, v⟫_ℂ‖ ^ 2)) ≤ 1 / 6 := by
+      apply (Real.sqrt_le_left (by norm_num)).mpr
+      exact (mul_le_mul ha hb hb0 (by norm_num)).trans (by norm_num)
+    have hprod : (47 / 48 : ℝ) * (37 / 48) ≤ ‖⟪Γ, v⟫_ℂ‖ * ‖⟪z, v⟫_ℂ‖ :=
+      mul_le_mul (by linarith only [hΓv]) (by linarith only [hzv])
+        (by norm_num) (norm_nonneg _)
+    have hoverlap := norm_inner_ge_mul_sub_sqrt (𝕜 := ℂ) hΓ hz hv
+    linarith
+  refine ⟨?_, hw, hz, hΓz, ?_⟩
+  · have hcs := norm_inner_le_norm (𝕜 := ℂ) w v
+    rw [hv, mul_one] at hcs
     linarith
   · exact (leftSupportSubmodule _).smul_mem _
       (leftColumnwiseSchmidtTrim_mem_leftSupportSubmodule hi m S u W hcols)
+
+/-- Independent bond trimming gives `5 / 12`-viability, leaving an additional `1 / 12`
+reserve for approximation. Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559,
+with the quadratic radius correction. -/
+theorem isViableMPS_bondTrimSet_of_columns_with_reserve [DecidableEq β] (hi : i ≤ L)
+    (S : Finset (LeftBlockVector L q i))
+    (u : EuclideanSpace ℂ
+      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+    (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
+    (hW : Wᴴ * W = 1) (hu : ‖u‖ = 1)
+    (hcols : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S)
+    (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
+    (hΓu : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖)
+    (v : EuclideanSpace ℂ (Fin L → Fin q)) (hv : ‖v‖ = 1)
+    (hΓv : 1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖) (D : ℕ)
+    (hvrank : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
+    IsViableMPS Γ S.card (bondTrimmingRadius L D) (5 / 12)
+      (bondTrimSet hi (bondTrimmingRadius L D) S) := by
+  obtain ⟨_, _, hz, hoverlap, hsupport⟩ :=
+    bondTrimSet_witness_with_reserve hi S u W hW hu hcols Γ hΓ hΓu v hv hΓv D hvrank
+  refine ⟨card_bondTrimSet_le hi _ S,
+    fun t ht ↦ isLeftOpenMPS_of_mem_bondTrimSet hi _ S ht, _, hz, ?_, hsupport⟩
+  rw [norm_inner_symm]
+  linarith
+
+/-- Independent bond trimming preserves `1 / 2`-viability when the input contains the columns
+of the size-trimming witness. The reference is a unit matrix product state of overlap at
+least `47 / 48` with the ground vector, as supplied by LVV13, Lemma `l:mpsapprox`.
+Source: `algo53.tex`, Claim `c:trim`, lines 549–559, with the quadratic radius correction. -/
+theorem isViableMPS_bondTrimSet_of_columns [DecidableEq β] (hi : i ≤ L)
+    (S : Finset (LeftBlockVector L q i))
+    (u : EuclideanSpace ℂ
+      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+    (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
+    (hW : Wᴴ * W = 1) (hu : ‖u‖ = 1)
+    (hcols : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S)
+    (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
+    (hΓu : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖)
+    (v : EuclideanSpace ℂ (Fin L → Fin q)) (hv : ‖v‖ = 1)
+    (hΓv : 1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖) (D : ℕ)
+    (hvrank : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
+    IsViableMPS Γ S.card (bondTrimmingRadius L D) (1 / 2)
+      (bondTrimSet hi (bondTrimmingRadius L D) S) := by
+  obtain ⟨hcard, hbond, z, hz, hoverlap, hsupport⟩ :=
+    isViableMPS_bondTrimSet_of_columns_with_reserve hi S u W hW hu hcols Γ hΓ
+      hΓu v hv hΓv D hvrank
+  exact ⟨hcard, hbond, z, hz, by linarith, hsupport⟩
 
 end TNLean.MPS.AreaLaw

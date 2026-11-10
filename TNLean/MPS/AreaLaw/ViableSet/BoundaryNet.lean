@@ -29,6 +29,39 @@ namespace TNLean.MPS.AreaLaw
 
 variable {L q k m D : ℕ}
 
+/-- The Hermitian part of a square complex matrix, on an arbitrary finite coordinate type. -/
+noncomputable def matrixHermitianPart {n : Type*} [Fintype n] (A : Matrix n n ℂ) :
+    Matrix n n ℂ :=
+  (1 / 2 : ℂ) • (A + Aᴴ)
+
+/-- The Hermitian part is Hermitian. -/
+theorem matrixHermitianPart_isHermitian {n : Type*} [Fintype n]
+    (A : Matrix n n ℂ) : (matrixHermitianPart A).IsHermitian := by
+  classical
+  simp [matrixHermitianPart, Matrix.IsHermitian, Matrix.conjTranspose_add,
+    Matrix.conjTranspose_smul, add_comm]
+
+/-- Taking the Hermitian part does not increase the rectangular trace norm. -/
+theorem rectangularTraceNorm_matrixHermitianPart_le {n : Type*} [Fintype n]
+    [DecidableEq n] (A : Matrix n n ℂ) :
+    rectangularTraceNorm (matrixHermitianPart A) ≤ rectangularTraceNorm A := by
+  rw [matrixHermitianPart, rectangularTraceNorm_smul]
+  have htri := rectangularTraceNorm_add_le A Aᴴ
+  rw [rectangularTraceNorm_conjTranspose] at htri
+  norm_num
+  linarith only [htri]
+
+/-- Relative to a Hermitian target, replacing an arbitrary matrix by its Hermitian part
+does not increase trace-norm distance. -/
+theorem rectangularTraceNorm_sub_matrixHermitianPart_le {n : Type*} [Fintype n]
+    [DecidableEq n] (Y X : Matrix n n ℂ) (hY : Y.IsHermitian) :
+    rectangularTraceNorm (Y - matrixHermitianPart X) ≤ rectangularTraceNorm (Y - X) := by
+  have heq : Y - matrixHermitianPart X = matrixHermitianPart (Y - X) := by
+    simp only [matrixHermitianPart, Matrix.conjTranspose_sub, hY.eq]
+    module
+  rw [heq]
+  exact rectangularTraceNorm_matrixHermitianPart_le (Y - X)
+
 /-- A trace-norm `η`-net on the unit ball of the `n × n` complex matrices, chosen once for
 every positive radius, and empty otherwise. QICLean's net theorem supplies the choice.
 Source: LVV13, arXiv:1307.5143v1, Lemma 2.4, `algo53.tex`, lines 451–460. -/
@@ -88,5 +121,29 @@ theorem exists_finset_boundary_rectangularTraceNorm_net (hq : 1 ≤ q) {η : ℝ
   exact ⟨rectangularTraceNormNet (CutSite L q k × Fin m) η,
     card_boundary_rectangularTraceNormNet_le hq hη hm,
     fun Y hY ↦ exists_mem_rectangularTraceNormNet hη Y hY⟩
+
+/-- The boundary net may be chosen with Hermitian centers, without increasing its
+cardinality.  This places the LVV boundary constraint in a real Hermitian matrix space,
+the natural domain for its semidefinite-program formulation. -/
+theorem exists_finset_hermitian_boundary_rectangularTraceNorm_net (hq : 1 ≤ q) {η : ℝ}
+    (hη : 0 < η) (hm : m ≤ D) :
+    ∃ N : Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ),
+      N.card ≤ (2 * ⌈((q * D : ℕ) : ℝ) ^ 2 / η⌉₊ + 1) ^ (2 * (q * D) ^ 2) ∧
+      (∀ X ∈ N, X.IsHermitian) ∧
+      ∀ Y : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ,
+        Y.IsHermitian → rectangularTraceNorm Y ≤ 1 →
+          ∃ X ∈ N, rectangularTraceNorm (Y - X) ≤ η := by
+  classical
+  obtain ⟨N, hcard, hcover⟩ :=
+    exists_finset_boundary_rectangularTraceNorm_net (L := L) (k := k) hq hη hm
+  let N' := N.image matrixHermitianPart
+  refine ⟨N', Finset.card_image_le.trans hcard, ?_, ?_⟩
+  · intro X hX
+    obtain ⟨A, _hA, rfl⟩ := Finset.mem_image.mp hX
+    exact matrixHermitianPart_isHermitian A
+  · intro Y hY hYnorm
+    obtain ⟨X, hXN, hYX⟩ := hcover Y hYnorm
+    refine ⟨matrixHermitianPart X, Finset.mem_image.mpr ⟨X, hXN, rfl⟩, ?_⟩
+    exact (rectangularTraceNorm_sub_matrixHermitianPart_le Y X hY).trans hYX
 
 end TNLean.MPS.AreaLaw

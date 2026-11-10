@@ -71,7 +71,8 @@ does not appeal to a separate ground-state approximation theorem.
 
 \begin{theorem}[Polynomial final bond at prescribed accuracy]
     \label{thm:lvv_sampled_ground_state}
-    \lean{TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial_explicit_energy_degree,
+        TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial}
     \leanok
     For fixed $q\ge2$, $\Delta>0$, $\eta>0$, an integer $a\ge1$, and $B$, there are natural
     constants $C\ge1,p$ such that every positive nearest-neighbour
@@ -79,6 +80,8 @@ does not appeal to a separate ground-state approximation theorem.
     $\Gamma$ and $\varepsilon_0/\Delta\le B$, admits a normalized matrix
     product state $\psi$ of bond at most $CL^p$ with
     $|\langle\psi,\Gamma\rangle|\ge1-\eta/L^a$.
+    The exponent may be chosen as $p=2p_{\rm total}+p_0$, where $p_0$ is
+    independent of the ground-energy bound $B$.
     The construction is the successive sampled construction
     of~\cite{Landau2015Polynomial}. The bound $B$ is absent from the printed
     statement; see~\cite{gap:lvv13_runtime_ground_energy}.

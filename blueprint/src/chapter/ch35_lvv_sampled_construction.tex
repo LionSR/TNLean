@@ -53,10 +53,57 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     of Lemma~\ref{thm:lvv_mps_error_reduction}.
 \end{proof}
 
+\begin{lemma}[Rational output of sampled error reduction]
+    \label{thm:lvv_rational_sampled_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.exists_rational_sampled_errorReduction}
+    \leanok
+    \uses{thm:lvv_sampled_error_reduction,thm:lvv_rational_orthonormal_family}
+    Under the assumptions of Lemma~\ref{thm:lvv_sampled_error_reduction},
+    use sampling precision $\eta=\delta/16$ and the corresponding
+    $m,\ell,D$. There is a sample within $\delta/8$ of the ground
+    projection, with the same simultaneous cut decompositions and internal
+    rank bounds as before. At every positive cut $i\le L$, each
+    $(i,s,b,1/2)$-viable input family has a rational replacement $T$ of
+    the exact error-reduced family $V$, with
+    \[
+        |T|\le |V|\le\ell Ds,\qquad
+        D(T)\le(\ell Ds)\max\{1,D\max\{1,b\}\}.
+    \]
+    The family $T$ is $\delta$-viable. More precisely, put
+    \[
+        b'=|V|\max\{1,D\max\{1,b\}\},\quad
+        \theta=\frac{\delta}{4(|V|+1)},\quad
+        K=q^i\max\{1,b'\}^{i+1}(i+1)2^i,\quad
+        t=\left\lceil\log_2\max\{1,\lceil K/\theta\rceil\}\right\rceil.
+    \]
+    Every member of $T$ has Gaussian-rational tensor parameters of
+    common height at most $2^{2t+5}$.
+\end{lemma}
+\begin{proof}\leanok
+    Apply sampled error reduction at target $\delta/2$, retaining the
+    sample and every cut decomposition. The exact output $V$ is
+    $\delta/2$-viable and has bond bound $D\max\{1,b\}$.
+    Apply Lemma~\ref{thm:lvv_rational_orthonormal_family} with
+    permitted loss $\delta/2$. Its cardinality and finite-span bond bounds
+    give the displayed estimates, and the two viability losses add to
+    $\delta$.
+\end{proof}
+
 \begin{lemma}[Uniform polynomial sampling bounds]
     \label{thm:lvv_sampled_polynomial_bounds}
-    \lean{TNLean.MPS.AreaLaw.exists_sampledProjectorWordCount_polynomial,
+    \lean{TNLean.MPS.AreaLaw.sampledProjectorWordDegree,
+        TNLean.MPS.AreaLaw.exists_sampledProjectorWordCount_polynomial_explicit_degree,
+        TNLean.MPS.AreaLaw.exists_sampledProjectorWordCount_polynomial,
+        TNLean.MPS.AreaLaw.sampledProjectorLetterSlope,
+        TNLean.MPS.AreaLaw.exists_sampledProjectorLetterBound_logarithmic_explicit_slope,
         TNLean.MPS.AreaLaw.exists_sampledProjectorLetterBound_logarithmic,
+        TNLean.MPS.AreaLaw.sampledProjectorRankDegree,
+        TNLean.MPS.AreaLaw.sampledProjectorTotalDegree,
+        TNLean.MPS.AreaLaw.sampledProjectorEnergyDegreeSlope,
+        TNLean.MPS.AreaLaw.sampledProjectorEnergyDegreeIntercept,
+        TNLean.MPS.AreaLaw.sampledProjectorTotalDegree_le_affine,
+        TNLean.MPS.AreaLaw.sampledGroundStateDegree_le_affine,
+        TNLean.MPS.AreaLaw.exists_sampledProjector_uniform_polynomial_explicit_degree,
         TNLean.MPS.AreaLaw.exists_sampledProjector_uniform_polynomial}
     \leanok
     Fix $q\ge1$, $\Delta>0$, $0<c\le1$, a natural number $s$ and a real bound $B$.
@@ -64,7 +111,25 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     and $\varepsilon_0$, such that whenever $L\ge1$,
     $0\le\varepsilon_0\le L-1$ and $\varepsilon_0/\Delta\le B$, sampling
     at precision $c/L^s$ gives $\ell D\le CL^p$ and $D\le CL^p$.
-    The count $\ell$ has a polynomial bound and $\kappa$ a logarithmic bound.
+    More precisely, with $r=\lceil B\rceil$, the count $\ell$ has degree
+    \begin{align*}
+        p_{\rm word}   & =2(sr+1)+(2s+1)=2sr+2s+3,                      \\
+        a_{\rm letter} & =\frac{2s}{\Delta}+2(p_{\rm word}+4),          \\
+        p_{\rm rank}   & =\left\lceil2a_{\rm letter}\log q\right\rceil,
+        \qquad p_{\rm total}=p_{\rm word}+p_{\rm rank}.
+    \end{align*}
+    The count satisfies $\ell\le C_1L^{p_{\rm word}}$, every letter occurs
+    at most $a_{\rm letter}\log L+b$ times, and both $\ell D$ and $D$ are
+    bounded by $C_2L^{p_{\rm total}}$.
+    Quantitatively,
+    \begin{align*}
+        p_{\rm slope} & =2s+\left\lceil8s\log q\right\rceil, \\
+        p_{\rm int}   & =2s+3+
+        \left\lceil\left(\frac{4s}{\Delta}+8s+28\right)\log q\right\rceil,
+    \end{align*}
+    and $p_{\rm total}\le p_{\rm int}+p_{\rm slope}\lceil B\rceil$.
+    Consequently a final-MPS degree $2p_{\rm total}+p_0$ is at most
+    $(2p_{\rm int}+p_0)+2p_{\rm slope}\lceil B\rceil$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -88,7 +153,8 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 
 \begin{lemma}[A complete step with fixed polynomial bounds]
     \label{thm:lvv_sampled_successor}
-    \lean{TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial_explicit_energy_degree,
+        TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial}
     \leanok
     \uses{def:lvv_successive_precision, def:lvv_successive_step,
         def:lvv_size_trimming_selection}
@@ -104,6 +170,9 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     size-trimming selection of $S\otimes\{|1\rangle,\ldots,|q\rangle\}$ is
     $(i,CL^p,DL^r,\alpha/L^a)$-viable.
     The bounds are independent of the size and bond bound of the input family.
+    More precisely, there are offsets $p_0,r_0$, independent of $B$, for
+    which one may take $p=p_{\rm total}+p_0$ and
+    $r=p_{\rm total}+r_0$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -122,17 +191,26 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 
 \begin{lemma}[Successive viable families]
     \label{thm:lvv_sampled_successive_families}
-    \lean{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree,
+        TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_total_cardinality,
+        TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}
     \leanok
     \uses{def:lvv_successive_step, def:lvv_size_trimming_selection}
     Under the hypotheses of Lemma~\ref{thm:lvv_sampled_successor}, there
     are families $S_i$ at all cuts $0\le i\le L$, beginning with the scalar
-    singleton, such that each is $(i,CL^p,DL^r,\alpha/L^a)$-viable, and
-    each $S_{i+1}$ is the step of Definition~\ref{def:lvv_successive_step}
-    applied, with the left factors of a sampled projector within
-    $\alpha/(4L^a)$ of $|\Gamma\rangle\langle\Gamma|$ and the corrected
-    radius, to the size-trimming selection of
-    $S_i\otimes\{|1\rangle,\ldots,|q\rangle\}$.
+    singleton, such that each is $(i,CL^p,DL^r,\alpha/L^a)$-viable, with
+    $p=p_{\rm total}+p_0$ and $r=p_{\rm total}+r_0$ for offsets independent
+    of $B$.  The families may be chosen so that the total number of retained
+    candidate vectors throughout the sweep obeys
+    \begin{align*}
+        \sum_{i=0}^{L}|S_i|\le CL^{p+1}.
+    \end{align*}
+    This counts all retained candidates; it does not include the arithmetic
+    cost of the convex minimizations or spectral computations.
+    Moreover, each successor is the step of
+    Definition~\ref{def:lvv_successive_step}, applied to the size-trimming
+    selection of the extended preceding family, with a sampled projector
+    within $\alpha/(4L^a)$ of $|\Gamma\rangle\langle\Gamma|$ and the corrected radius.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -142,4 +220,105 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     Lemma~\ref{thm:lvv_sampled_successor}, and apply this choice
     inductively at the successive cuts. The same size and bond bounds
     apply at each step.
+    Summing the $L+1$ cardinality bounds and using $L+1\le2L$ gives the total count.
+\end{proof}
+
+\begin{lemma}[A rational sampled step with uniform parameter height]
+    \label{lem:lvv_rational_sampled_successor}
+    \lean{TNLean.MPS.AreaLaw.exists_rational_sampled_viable_successor_polynomial}
+    \leanok
+    \uses{def:lvv_successive_precision,def:lvv_successive_step,
+        def:lvv_size_trimming_selection}
+    Fix $q\ge2$, $\Delta>0$, $\eta>0$, a natural number $a\ge1$ and
+    $B\in\mathbb R$. Put $\alpha=\min\{1,\eta,(\Delta/169)^2\}$.
+    There are natural constants $C,D\ge1$ and $p,r,E$, chosen before
+    the chain length and Hamiltonian, with the following property.
+    Let $L\ge1$ and let $H=\sum_{j=0}^{L-2}H_j$, where each $H_j$ is
+    supported on sites $j,j+1$ and $0\le H_j\le1$. Suppose that
+    $\Gamma$ is a normalized ground vector of energy $\varepsilon_0$,
+    the spectral gap is at least $\Delta$, and
+    $\varepsilon_0/\Delta\le B$. Set $\delta=\alpha/L^a$.
+
+    At any cut $1\le i\le L$, let $S$ be a finite
+    $(i-1,\delta)$-viable family. There is a sampled projector $K$ such
+    that $\|K-|\Gamma\rangle\langle\Gamma|\|<\delta/8$, with a
+    decomposition $K=\sum_{j=0}^{N-1}A_j\otimes B_j$ across this cut.
+    Let $U$ be the size-trimming selection of the one-site extension of
+    $S$. Independently trim the members of $U$ at the corrected radius
+    $b_L=(48L)^2r_{\rm ref}(L)$, where $r_{\rm ref}$ is the reference
+    bond bound of Lemma~\ref{lem:lvv_bond_trimming_reference}, and put
+    \begin{align*}
+        V & =\{A_j\operatorname{trim}_{b_L}(v):0\le j<N,\ v\in U\}.
+    \end{align*}
+    There is a finite family $T$ of left-block vectors such that
+    \begin{align*}
+        |T| & \le |V|, & |T| & \le CL^p, & D(T) & \le DL^r.
+    \end{align*}
+    Every member of $T$ has open-chain tensor data whose scalar cap and
+    local entries are Gaussian-rational of common height at most
+    $2^{E(L+1)^2}$. The family $T$ is $(i,\delta)$-viable.
+    The approximation has the following additional property: for every
+    normalized target $\Omega$ and every real $\epsilon$, if $V$ is
+    $(i,\epsilon)$-viable for $\Omega$, then $T$ is
+    $(i,\epsilon+\delta/2)$-viable for $\Omega$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_sampled_error_reduction,thm:lvv_sampled_polynomial_bounds,
+        thm:lvv_size_trimmed_family_bond_trim_set,
+        lem:lvv_bond_trimming_radius_polynomial,
+        thm:lvv_rational_orthonormal_family,lem:lvv_uniform_tensor_precision}
+    The extension is $(\Delta/169)^2/L$-viable, so its size selection
+    followed by bond trimming is half-viable. Choose the sampled
+    projector at precision $\delta/16$ and apply error reduction with
+    target $\delta/2$. This gives the displayed family $V$ with that
+    viability error. Apply Lemma~\ref{thm:lvv_rational_orthonormal_family}
+    with permitted loss $\delta/2$. Its conclusion for every normalized
+    target gives the asserted additional property.
+
+    Suppose the sampled factor count and rank are bounded by $PL^t$,
+    the size selection has cardinality at most $FL^k$, and the trimming
+    radius is at most $ML^u$. After enlarging positive coefficients to
+    absorb maxima with one, the cardinality and bond bounds have degrees
+    $p=t+k$ and $r=2t+k+u$, respectively. The rounding mesh is
+    $\delta/(4(|V|+1))$.
+    Lemma~\ref{lem:lvv_uniform_tensor_precision}, with accuracy coefficient
+    $\alpha/2$, bounds the height exponent by $E(L+1)^2$ for a constant
+    chosen before $L$.
+\end{proof}
+
+\begin{lemma}[Successive rational viable families]
+    \label{lem:lvv_rational_sampled_induction}
+    \lean{TNLean.MPS.AreaLaw.exists_rational_sampled_successive_viable_sets_polynomial}
+    \leanok
+    Under the hypotheses of Lemma~\ref{lem:lvv_rational_sampled_successor},
+    the constants $C,D\ge1$ and $p,r,E$ can be chosen before $L$ and
+    $H$ so that there are finite families $S_i$ at every cut
+    $0\le i\le L$ with $S_0$ the scalar singleton and
+    \begin{align*}
+        |S_i| & \le CL^p, & D(S_i) & \le DL^r.
+    \end{align*}
+    Each $S_i$ is $(i,\alpha/L^a)$-viable for $\Gamma$. Every retained
+    vector has Gaussian-rational scalar cap and local tensor entries
+    of common height at most $2^{E(L+1)^2}$.
+
+    For each $i<L$, choose a sampled projector and its cut decomposition
+    as in Lemma~\ref{lem:lvv_rational_sampled_successor}, and let $V_{i+1}$
+    be the exact step obtained from $S_i$ by extension, size selection,
+    independent bond trimming and the sampled left factors.
+    The successor satisfies $|S_{i+1}|\le|V_{i+1}|$. For every normalized
+    target $\Omega$ and real $\epsilon$, $\epsilon$-viability of
+    $V_{i+1}$ for $\Omega$ implies
+    $(\epsilon+\alpha/(2L^a))$-viability of $S_{i+1}$ for $\Omega$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:lvv_rational_sampled_successor,lem:lvv_initial_scalar_family}
+    The scalar singleton has exact rational tensor data of height one.
+    Enlarge its height and bond bounds to the common bounds above.
+    At each positive cut, apply
+    Lemma~\ref{lem:lvv_rational_sampled_successor} to the preceding
+    rational family, retaining its sampled decomposition and approximation
+    property. The same constants apply at every cut. Induction gives
+    all the families, their viable witnesses and their rational tensor data.
 \end{proof}

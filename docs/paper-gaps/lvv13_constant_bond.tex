@@ -142,6 +142,110 @@ arXiv:1301.1162~\cite{Arad2013AreaLaw}, which gives the Schmidt rank in
 (\ref{eq:lvv13_constant_bond_source}), by the argument of the previous
 sections.
 
+The later AKLV development now proves the sharper physical per-cut estimate
+\leanid{TNLean.MPS.AreaLaw.exists\_aklv\_sharp\_physical\_per\_cut\_approximation}.
+With $u=1+\log d+\log(1/\varepsilon)$ and the accuracy scale $z=z(\delta)$,
+it supplies a normalized vector of cut rank $D$ satisfying
+\begin{align}
+ \log D\le C\left(
+   \frac{u^3}{\varepsilon}
+   +\left(\frac{z^3}{\varepsilon}\right)^{1/4}
+      \bigl(u+\log(z+1)\bigr)\right)
+\end{align}
+at every cut.  Thus the remaining work is no longer the physical AKLV
+construction or the passage to overlap: the same theorem proves
+$|\langle y,\Omega\rangle|\ge1-\rho/2$ from squared norm error at most
+$\rho$.  Moreover,
+\leanid{TNLean.MPS.AreaLaw.aklvAccuracyRankBound\_log\_le\_lvv}
+absorbs the fourth-root term and proves
+\begin{align}
+  \log D\le 11C\,\frac{u^3}{\varepsilon}
+     \log\frac{128}{\rho}.
+\end{align}
+Thus the logarithmic accuracy dependence quoted by LVV is formalized.  What
+remains is the comparison of $u^3=(1+\log d+\log(1/\varepsilon))^3$ with the
+particular $\log^3d$ dependence printed by LVV.  This is a genuine remaining
+gap, rather than a matter of suppressed notation: AKLV Theorem~4.3 states
+$O(\log^3 d/\varepsilon)$, and its proof chooses
+$s=O(\log^2 d/\varepsilon)$ before deriving
+$\log D=O(\log^3 d/\varepsilon)$.  Immediately before that conclusion, however,
+the displayed estimate is
+\begin{align*}
+  \log D=O\bigl(s(\log d+\log(s^2+s))\bigr).
+\end{align*}
+Substitution of the stated value of $s$ retains a term proportional to
+$(\log^2d/\varepsilon)\log(1/\varepsilon)$ unless the gap is regarded as
+fixed.  Thus the printed calculation does not itself provide the missing
+uniform comparison.  Closing the gap requires a sharper rank estimate or
+parameter choice that removes the additional $\log(1/\varepsilon)$ terms from
+$u$, or an explicit restriction of the claimed asymptotic regime.
+
+This distinction is formalized by
+\leanid{TNLean.MPS.AreaLaw.aklv\_gap\_logarithm\_not\_uniformly\_absorbable}.
+For every proposed universal coefficient $K\ge0$, it constructs
+$0<g\le1$ such that
+\begin{align*}
+  K\log^3 2<\bigl(1+\log2+\log(1/g)\bigr)^3.
+\end{align*}
+Thus the currently proved $u^3/g$ coefficient cannot be converted to the
+printed $\log^3d/g$ coefficient by enlarging its universal constant.  This
+does not refute the existence of a sharper rank argument; it proves that such
+an argument must remove the gap logarithm before the final comparison.
+
+For a gap bounded away from zero, the printed cubic dependence on the local
+dimension does follow from the present estimate.  More precisely,
+\leanid{TNLean.MPS.AreaLaw.aklv\_cubic\_cost\_of\_fixed\_gap}
+proves that for every fixed $0<g_0\le1$, all $g_0\le g\le1$ and $d\ge2$ satisfy
+\begin{align*}
+ \frac{(1+\log d+\log(1/g))^3}{g}
+ \le \left(1+\frac1{\log2}\right)^3
+      (1+\log(1/g_0))^3\frac{\log^3d}{g}.
+\end{align*}
+Thus the physical theorem already has the source's $\log^3d$ dependence
+uniformly on every fixed-gap interval.  This consequence, including the
+normalized same-cut approximants and their overlap, is stated directly as
+\leanid{TNLean.MPS.AreaLaw.exists\_aklv\_fixed\_gap\_physical\_per\_cut\_approximation}.
+The corresponding actual sequentially truncated matrix product state, with
+the same cubic local-dimension coefficient and final norm accuracy, is
+\leanid{TNLean.MPS.AreaLaw.exists\_aklv\_fixed\_gap\_physical\_sequential\_mps\_approximation}.
+The remaining gap is precisely
+uniformity as the lower gap bound tends to zero.
+
+There is a sharper scalar rank calculation.  If
+$v=1+\log d$, $w=\log(1/g)$, and one selects
+$s_0=\lceil Av^2/g\rceil$, then
+\leanid{TNLean.MPS.AreaLaw.aklvAccuracyRankBound\_log\_le\_lvv\_separated}
+proves
+\begin{align*}
+  \log B\le 11C(A)\frac{v^3+v^2w}{g}\log\frac{128}{\rho}.
+\end{align*}
+This removes two of the three powers of the gap logarithm from the preceding
+formal bound, but it is not yet a physical approximation theorem.  Indeed,
+the favorable-filter construction requires the product of the rank budget
+and the shrinking coefficient to be uniformly small.  At this smaller width,
+the logarithm of the rank budget contains a contribution of order
+$s_0\log(1/g)$, whereas the available lower bound for the Chebyshev decay
+exponent is only of order $s_0v$.  For fixed $d$ and $g\downarrow0$, the
+former therefore dominates the latter.  Consequently the present polynomial
+filter argument cannot establish the favorable tradeoff at this smaller
+width with a universal $A$.  A physical proof of the source coefficient needs
+either a rank count without the $s_0\log(1/g)$ contribution or a different
+filter whose decay compensates for it.
+
+The same estimate now passes to the actual sequentially truncated matrix
+product state in
+\leanid{TNLean.MPS.AreaLaw.exists\_aklv\_sharp\_physical\_sequential\_mps\_approximation}.
+For final norm error $\epsilon$, the auxiliary accuracy is
+$\rho=\epsilon^2/(16(L+1))$, and
+\leanid{TNLean.MPS.AreaLaw.aklvAccuracyLog\_sequential} identifies its
+logarithmic scale exactly as
+\begin{align*}
+  z=\log\frac{2048(L+1)}{\epsilon^2}.
+\end{align*}
+Consequently the normalized output MPS itself satisfies
+$\log D\le11C(u^3/\varepsilon)z$; this is not merely a collection of
+independent cutwise approximants.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 
