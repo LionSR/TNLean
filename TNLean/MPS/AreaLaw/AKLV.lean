@@ -14,6 +14,7 @@ import TNLean.MPS.AreaLaw.AKLV.CenteredWindow
 import TNLean.MPS.AreaLaw.AKLV.ChangingTargetStep
 import TNLean.MPS.AreaLaw.AKLV.ChangingTargets
 import TNLean.MPS.AreaLaw.AKLV.ChebyshevFilter
+import TNLean.MPS.AreaLaw.AKLV.ChebyshevProjector
 import TNLean.MPS.AreaLaw.AKLV.ClippedFilter
 import TNLean.MPS.AreaLaw.AKLV.ClippedHamiltonian
 import TNLean.MPS.AreaLaw.AKLV.CodimensionOneGap
@@ -57,6 +58,7 @@ import TNLean.MPS.AreaLaw.AKLV.SequentialApproximation
 import TNLean.MPS.AreaLaw.AKLV.SharpMPSApproximation
 import TNLean.MPS.AreaLaw.AKLV.SharpPerCutApproximation
 import TNLean.MPS.AreaLaw.AKLV.ShortWindow
+import TNLean.MPS.AreaLaw.AKLV.SingleWindowPolynomialRank
 import TNLean.MPS.AreaLaw.AKLV.SpectralCluster
 import TNLean.MPS.AreaLaw.AKLV.SpectralTail
 import TNLean.MPS.AreaLaw.AKLV.Truncation
