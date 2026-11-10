@@ -57,8 +57,6 @@ are stated under their displayed hypotheses.
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace Nat Topology
 
-open ApproximateDiagonalization
-
 namespace TNLean.Lattice
 
 section ShellSums

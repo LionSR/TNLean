@@ -47,7 +47,6 @@ import TNLean.MPS.AreaLaw.ViableSet.RationalSampledSuccessiveConstruction
 import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledFactors
-import TNLean.MPS.AreaLaw.ViableSet.SampledGroundLine
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjector
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjectorPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction

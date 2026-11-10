@@ -1,56 +1,60 @@
 \documentclass{article}
+
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
 \input{command}
-\title{Uniform Ground-Space Basis Bounds and Geometric Growth}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\nolinkurl{#1}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{A Basis of a Degenerate Ground Space in Hastings' Local Solution
+  of Gapped Hamiltonians}
 \author{}
 \date{2026-10-28}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
-Hastings, \emph{Solving gapped Hamiltonians locally},
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
 \href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
-source \path{proj3new.tex}, lines 1678--1708, chooses a ground-space basis
-and asserts a size-independent sum of off-diagonal compression norms.
-The finite-dimensional basis is now constructed without supplied separation
-labels, inverse spectral gap, or uniform condition number. The cross-term
-correction belongs to the companion library:
-\url{https://sirui-lu.com/QICLean/paper-gaps/hastings05_basis_refinement.pdf}.
+source \path{proj3new.tex}, lines 1678--1705, treats a degenerate ground space
+by choosing a basis in which the compressions of the filtered terms are nearly
+diagonal. The filtered terms $M_i$, the projection $P$ onto the ground space
+and the low-energy commutators $[PM_iP,PM_jP]$ are those of the note
+\path{hastings05_filtered_term_approximation.tex} on the filtered terms.
 
-\section{The physical theorem proved here}
-Let $h_i$ be Hermitian local terms with supports $X_i$ of bounded diameter
-and cardinality. Choose $a_i\in X_i$, and assume
-$\sum_{i:x\in X_i}\|h_i\|\le b_0$. For a finite graph $G$ assume explicitly
-\[
- \#\{y:d_G(x,y)=r\}\le K_g(r+1)^{k_g}
-\]
-with constants independent of system size. Suppose $H=\sum_i h_i$ has a
-nonzero ground eigenspace of dimension $n$ and a positive gap.
-The actual commutator estimate gives a rate $\gamma>0$ and constant $C$
-depending on the displayed local, gap and geometric parameters. There is
-an actual orthonormal ground-space basis with
-\[
- \sum_i\|\operatorname{offdiag}(Ph_iP)\|
- \le (n-1)^2 A_n(C)|b_0||K_g|S(\gamma/2^n,k_g),
-\]
-where $A_n(C)=\sqrt{n^3C(1+2n^3)^n}$ and $S$ is the stated exponential
-shell-sum bound. The same bound holds for terms filtered under $H$, since
-their ground-space compressions are exactly $Ph_iP$.
+\section{The source passage and what is proved}
 
-The constant is uniform in the numbers of sites and terms when $n$ and
-the local, gap and growth parameters are fixed. It is not uniform in $n$.
-The earlier estimate containing an inverse quotient commutator-map norm is
-a different, system-dependent statement; no bound on it is used here.
+For a ground space of dimension $n=2$ the source chooses a basis that
+diagonalizes $A=PM_jP$, with eigenvalues $r\ne s$ and
+$\delta\lambda_j=|r-s|$ (lines~1678--1688). For an orthonormal eigenbasis
+$v,w$ and any $B$, $\langle v,[A,B]w\rangle=(r-s)\langle v,Bw\rangle$, so
+both off-diagonal elements of $B$ are at most $\lVert[A,B]\rVert/|r-s|$. The
+off-diagonal part
+$\langle v,Bw\rangle\lvert v\rangle\langle w\rvert
++\langle w,Bv\rangle\lvert w\rangle\langle v\rvert$ maps the two
+coordinates of a vector to orthogonal directions, so its norm is at most the
+larger element, and
+\begin{align}
+  o(i)\le\frac{\lVert[PM_iP,PM_jP]\rVert}{\delta\lambda_j}
+  \label{eq:hastings05_two_dim_ground_basis_oi}
+\end{align}
+(lines~1688--1690). Since $PM_iv$ lies in the span of $v,w$ and
+$\langle v,PM_iv\rangle=\langle v,M_iv\rangle$,
+\begin{align}
+  \lVert M_iv-\langle v,M_iv\rangle v\rVert
+  \le\lVert(1-P)M_iv\rVert+o(i),
+  \label{eq:hastings05_two_dim_ground_basis_low}
+\end{align}
+which is eq.~\texttt{low} up to $o(i)$ (lines~476--491); eq.~\texttt{facld}
+bounds the first term.
 
-\section{Scope of the source comparison}
-The source metric and finite-range assumptions at lines 169--190 do not
-imply polynomial sphere growth. The theorem above is thus a restriction,
-not the unrestricted printed equation \texttt{oibu}. See
-\path{hastings05_geometric_growth_scope.tex}.
-Choosing $K_g$ separately as the number of sites does not prove uniformity.
+\section{Status}
 
 Under a polynomial sphere-growth bound with constants independent of system
 size, and for every fixed finite ground-space dimension, an orthonormal basis is

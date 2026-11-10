@@ -101,7 +101,7 @@ theorem exists_independent_physical_dg_cluster_parameters :
   obtain ⟨ht, htail⟩ := hthreshold g tau hg hg1 htau htau1
   refine ⟨ell, hell, hbound, hfilter, ?_⟩
   intro L q a b hq hab hbL h hs h0 h1 mu H hH G hmu hgap k A J Y
-  exact exists_five_region_physical_scaled_low_cluster L q a b ell t hq hell ht hab hbL
+  exact exists_five_region_independent_scaled_low_cluster L q a b ell t hq hell ht hab hbL
     h hs h0 h1 mu g (tau * g / 1000000) tau hg hg1 htau htau1 htail le_rfl hmu hgap
 
 end TNLean.MPS.AreaLaw
