@@ -51,7 +51,7 @@ theorem isSupportedOn_regionalParityProduct
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) (a b p : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
-      ((T).symm (physicalParityProduct (intervalBondRestriction h a b) p)) (interval L a b) := by
+      ((T).symm (physicalParityProduct (intervalBondRestriction a b h) p)) (interval L a b) := by
   classical
   apply isSupportedOn_physicalParityProduct
   intro i _

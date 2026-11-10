@@ -44,7 +44,6 @@ import TNLean.Lattice.GaussianVariationalLowerBound
 import TNLean.Lattice.GaussianZeroRange
 import TNLean.Lattice.GraphDegreeGrowth
 import TNLean.Lattice.GraphDegreeTail
-import TNLean.Lattice.GroundSpaceCompression
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.IntegerLatticeBallCount
 import TNLean.Lattice.LocalHamiltonian
@@ -66,7 +65,6 @@ import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.LowEnergyDecayKernel
 import TNLean.Lattice.LowEnergyMetricCommutator
 import TNLean.Lattice.LowEnergyObservableDecay
-import TNLean.Lattice.LowEnergyWeightedRowSum
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.MetricInteractionGraph
 import TNLean.Lattice.NegativeFrequencyGroundCorrelation

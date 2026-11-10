@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDetectability
 import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
+import TNLean.MPS.AreaLaw.RegionalBondRestriction
 import QICLean.Algebra.MatrixAux
 import QICLean.Analysis.ProjectionResidual
 
@@ -24,14 +25,6 @@ namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
-/-- Restrict a physical bond family to the bonds contained in the site interval
-`[a,b)`. This is the internal family in ALVV, arXiv:1602.08828v2,
-`def:FF-tH`, lines 1467–1487. -/
-noncomputable def intervalBondRestriction
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b : ℕ)
-    (i : Fin (L - 1)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  if a ≤ i.val ∧ i.val + 1 < b then h i else 0
-
 /-- The actual regional Hamiltonian obtained by replacing the two internal
 parity layers by their complementary products. ALVV, arXiv:1602.08828v2,
 `def:FF-tH`, lines 1467–1487. -/
@@ -40,30 +33,16 @@ noncomputable def physicalFrustrationFreeTruncation
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   (∑ i, if a ≤ i.val ∧ i.val + 1 < b then 0 else h i) +
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-      (1 - physicalParityProduct (intervalBondRestriction h a b) 0) +
+      (1 - physicalParityProduct (intervalBondRestriction a b h) 0) +
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-      (1 - physicalParityProduct (intervalBondRestriction h a b) 1)
+      (1 - physicalParityProduct (intervalBondRestriction a b h) 1)
 
 private theorem intervalBondRestriction_isStarProjection
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i)) (a b : ℕ) (i : Fin (L - 1)) :
-    IsStarProjection (intervalBondRestriction h a b i) := by
+    IsStarProjection (intervalBondRestriction a b h i) := by
   unfold intervalBondRestriction
   split_ifs <;> first | exact hp i | exact IsStarProjection.zero _
-
-/-- Restricting a bond family to the internal bonds of a site interval
-preserves each designated nearest-neighbour support. ALVV,
-arXiv:1602.08828v2, `def:FF-tH`, lines 1467--1487. -/
-theorem intervalBondRestriction_supported
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
-      (h i) (interval L i.val (i.val + 2))) (a b : ℕ) (i : Fin (L - 1)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
-      (intervalBondRestriction h a b i) (interval L i.val (i.val + 2)) := by
-  unfold intervalBondRestriction
-  split_ifs <;> first
-    | exact hs i
-    | exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
 
 private theorem regionalParityComplement_isStarProjection
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -72,10 +51,10 @@ private theorem regionalParityComplement_isStarProjection
       (h i) (interval L i.val (i.val + 2))) (a b p : ℕ) :
     IsStarProjection
       ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-        (1 - physicalParityProduct (intervalBondRestriction h a b) p)) := by
+        (1 - physicalParityProduct (intervalBondRestriction a b h) p)) := by
   exact (physicalParityProduct_isStarProjection _
     (intervalBondRestriction_isStarProjection h hp a b)
-    (intervalBondRestriction_supported h hs a b) p).one_sub.map
+    (intervalBondRestriction_supported a b h hs) p).one_sub.map
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm.toStarAlgHom
 
 /-- The actual regional frustration-free truncation is positive semidefinite.
@@ -102,7 +81,7 @@ private noncomputable def regionalTruncationTerm
       (EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q))
   | .inl i => if a ≤ i.val ∧ i.val + 1 < b then 0 else
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (h i)
-  | .inr p => 1 - physicalParityProduct (intervalBondRestriction h a b) p.val
+  | .inr p => 1 - physicalParityProduct (intervalBondRestriction a b h) p.val
 
 private theorem sum_regionalTruncationTerm
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b : ℕ) :
@@ -128,7 +107,7 @@ private theorem regionalTruncationTerm_isStarProjection
   case inr p =>
     exact (physicalParityProduct_isStarProjection _
       (intervalBondRestriction_isStarProjection h hp a b)
-      (intervalBondRestriction_supported h hs a b) p.val).one_sub
+      (intervalBondRestriction_supported a b h hs) p.val).one_sub
 
 /-- The actual regional truncation preserves the full kernel of the original
 Hamiltonian. This does not require a ground vector, uniqueness, or a gap.
@@ -152,7 +131,7 @@ theorem physicalFrustrationFreeTruncation_kernel_iff
         (fun j ↦ ContinuousLinearMap.IsStarProjection.isSymmetricProjection
           (regionalTruncationTerm_isStarProjection h hp hs a b j)) hsum i
     have hfix (p : Fin 2) :
-        physicalParityProduct (intervalBondRestriction h a b) p.val x = x := by
+        physicalParityProduct (intervalBondRestriction a b h) p.val x = x := by
       exact (sub_eq_zero.mp (hterm (.inr p))).symm
     have hzero (i : Fin (L - 1)) :
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (h i) x = 0 := by
@@ -174,11 +153,11 @@ theorem physicalFrustrationFreeTruncation_kernel_iff
         (by simpa only [map_sum, _root_.sum_apply, LinearMap.sum_apply,
           ContinuousLinearMap.coe_coe] using hx) i
     have hmask : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-        (∑ i, intervalBondRestriction h a b i) x = 0 := by
+        (∑ i, intervalBondRestriction a b h i) x = 0 := by
       simp only [map_sum, _root_.sum_apply, intervalBondRestriction, apply_ite,
         map_zero, DFunLike.ite_apply, _root_.zero_apply, hzero, ite_self, Finset.sum_const_zero]
     have hfix (p : Fin 2) :
-        physicalParityProduct (intervalBondRestriction h a b) p.val x = x :=
+        physicalParityProduct (intervalBondRestriction a b h) p.val x = x :=
       physicalParityProduct_fixes_kernel _
         (intervalBondRestriction_isStarProjection h hp a b) hmask p.val
     suffices hterm : ∀ i, regionalTruncationTerm h a b i x = 0 by
@@ -194,9 +173,9 @@ theorem norm_physicalFrustrationFreeTruncation_region_le_two
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ) :
     ‖(Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-        (1 - physicalParityProduct (intervalBondRestriction h a b) 0) +
+        (1 - physicalParityProduct (intervalBondRestriction a b h) 0) +
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-        (1 - physicalParityProduct (intervalBondRestriction h a b) 1)‖ ≤ 2 := by
+        (1 - physicalParityProduct (intervalBondRestriction a b h) 1)‖ ≤ 2 := by
   simpa only [one_add_one_eq_two] using (norm_add_le _ _).trans
     (add_le_add
       (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection h hp hs a b 0))
@@ -226,31 +205,31 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
       | exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
       | exact hs i
   have hP (p : ℕ) : IsStarProjection
-      (physicalParityProduct (intervalBondRestriction h a b) p) :=
+      (physicalParityProduct (intervalBondRestriction a b h) p) :=
     physicalParityProduct_isStarProjection _
       (intervalBondRestriction_isStarProjection h hp a b)
-      (intervalBondRestriction_supported h hs a b) p
+      (intervalBondRestriction_supported a b h hs) p
   have hsplit (p : ℕ) : physicalParityProduct h p =
-      physicalParityProduct (intervalBondRestriction h a b) p * physicalParityProduct g p := by
+      physicalParityProduct (intervalBondRestriction a b h) p * physicalParityProduct g p := by
     exact physicalParityProduct_partition h hs
       (fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p
   have hmass (p : ℕ) : ‖x - physicalParityProduct h p x‖ ^ 2 ≤
-      ‖x - physicalParityProduct (intervalBondRestriction h a b) p x‖ ^ 2 +
+      ‖x - physicalParityProduct (intervalBondRestriction a b h) p x‖ ^ 2 +
         ‖x - physicalParityProduct g p x‖ ^ 2 := by
     rw [hsplit p]
     exact ContinuousLinearMap.IsStarProjection.norm_sub_apply_sq_le (hP p) x
       (physicalParityProduct g p x)
   have hout := sum_norm_sq_sub_physicalParityProduct_le g hgp hgs x
   have hnorm (p : ℕ) :
-      (⟪x, (1 - physicalParityProduct (intervalBondRestriction h a b) p) x⟫_ℂ).re =
-        ‖x - physicalParityProduct (intervalBondRestriction h a b) p x‖ ^ 2 :=
+      (⟪x, (1 - physicalParityProduct (intervalBondRestriction a b h) p) x⟫_ℂ).re =
+        ‖x - physicalParityProduct (intervalBondRestriction a b h) p x‖ ^ 2 :=
     ContinuousLinearMap.IsStarProjection.re_inner_apply_self (hP p).one_sub x
   have henergy :
       (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
         (physicalFrustrationFreeTruncation h a b) x⟫_ℂ).re =
       (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, g i) x⟫_ℂ).re +
-        ‖x - physicalParityProduct (intervalBondRestriction h a b) 0 x‖ ^ 2 +
-          ‖x - physicalParityProduct (intervalBondRestriction h a b) 1 x‖ ^ 2 := by
+        ‖x - physicalParityProduct (intervalBondRestriction a b h) 0 x‖ ^ 2 +
+          ‖x - physicalParityProduct (intervalBondRestriction a b h) 1 x‖ ^ 2 := by
     simp only [physicalFrustrationFreeTruncation, map_add, StarAlgEquiv.apply_symm_apply,
       _root_.add_apply, inner_add_right, Complex.add_re, hnorm, g]
   linarith only [hmass 0, hmass 1, hout, henergy]

@@ -124,7 +124,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
   let HL := outsidePiece h a b (fun i ↦ i.val + 1 < k)
   let HR := outsidePiece h a b (fun i ↦ k ≤ i.val)
   let HC := outsidePiece h a b (fun i ↦ i.val + 1 = k)
-  let Q := fun p ↦ (T).symm (physicalParityProduct (intervalBondRestriction h a b) p)
+  let Q := fun p ↦ (T).symm (physicalParityProduct (intervalBondRestriction a b h) p)
   let U := QuantumCircuit.supportedOperators q (leftBlock L k : Set (Fin L))
   let V := QuantumCircuit.supportedOperators q (((leftBlock L k)ᶜ : Finset (Fin L)) : Set (Fin L))
   have hHL : HL ∈ U :=
@@ -196,7 +196,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       (Nat.add_le_add_right (operatorSchmidtRank_add_le (cut X) (cut Y)) _)
     omega
   · have hQ := sum_operatorSchmidtRank_physicalParityProduct_le hq
-      (intervalBondRestriction h a b) (intervalBondRestriction_supported h hs a b) k
+      (intervalBondRestriction a b h) (intervalBondRestriction_supported a b h hs) k
     change operatorSchmidtRank (cut (Q 0)) + operatorSchmidtRank (cut (Q 1)) ≤ q ^ 2 + 1 at hQ
     let X := HL + 1 + 1
     have hX : X ∈ U := U.add_mem (U.add_mem hHL hU1) hU1
