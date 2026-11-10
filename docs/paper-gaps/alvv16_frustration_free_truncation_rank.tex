@@ -148,9 +148,22 @@ usual $d^2+2$ bound still holds.
 The correction changes an additive constant in the rank estimate; it
 does not invalidate the ground-space or spectral-gap conclusions of the
 frustration-free truncation theorem. The physical detectability and
-range-projection reductions are separately proved. The regional truncated
-Hamiltonian and its corrected rank estimate remain to be formalized under
-\href{https://github.com/LionSR/TNLean/issues/9833}{the ALVV programme}.
+range-projection reductions are separately proved. The actual regional
+truncated Hamiltonian and its corrected all-cut
+rank estimate are now proved in
+\path{TNLean/MPS/AreaLaw/PhysicalFrustrationFreeRank.lean}. The final
+rank statement assumes only the original nearest-neighbour supports; it
+requires no supplied decomposition, rank, projection or positivity premise.
+It includes zero local dimension, the empty chain, empty intervals and
+endpoint cuts. The actual parity products have total rank at most $d^2+1$
+in positive local dimension, derived by following their actual ordered
+factors through the unique possible crossing bond. The exterior sum is
+split into its actual left, right and possible crossing terms. Both
+regional complements are absorbed into one side when the crossing term
+is exterior. These constructions establish $d^2+3$ without appealing to
+any independent approximation theorem. Other parts of
+\href{https://github.com/LionSR/TNLean/issues/9833}{the ALVV programme}
+remain separate.
 No source-labelled formalization of the printed rank assertion is claimed.
 
 \bibliographystyle{unsrt}

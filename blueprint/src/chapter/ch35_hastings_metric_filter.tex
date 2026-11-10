@@ -1,0 +1,141 @@
+\section{Gaussian truncation with a bounded local neighbourhood}
+\label{sec:hastings05_metric_filter}
+
+Lemma~\ref{thm:hastings05_metric_filter} constructs the local Gaussian
+filters of~\cite[eq.~(mid), lines 285--349]{Hastings2006Solving} on a finite
+metric space. A bound on the number of sites in a ball of the interaction
+range suffices. Polynomial growth of larger spheres is unnecessary
+\cite{gap:hastings05_geometric_growth_scope}.
+
+\begin{lemma}[An exponentially weighted graph tail]
+    \label{lem:hastings05_degree_tail}
+    \lean{TNLean.Lattice.graphClosedBall,
+        TNLean.Lattice.card_graphClosedBall_le,
+        TNLean.Lattice.sum_exp_neg_edist_le_degree,
+        TNLean.Lattice.sum_weight_exp_neg_edist_tail_le_degree}
+    \leanok
+    Let $G$ be a finite graph of maximum degree at most $D$. Write
+    $d_G(x,y)=\infty$ for vertices in different components, and interpret
+    $e^{-\mu\infty}$ as zero. If $\mu>\log(D+1)$, then
+    \begin{align}
+        \sum_y e^{-\mu d_G(x,y)}
+        &\le \frac{1}{1-e^{-(\mu-\log(D+1))}}.
+        \label{eq:hastings05_degree_sum}
+    \end{align}
+    If each vertex $y$ carries nonnegative weights with total at most $B$,
+    the weighted sum over anchors at distance at least $a$ is at most
+    $B e^{-\gamma a}/(1-e^{-\gamma})$, where
+    $\gamma=(\mu-\log(D+1))/2$.
+\end{lemma}
+\begin{proof}\leanok
+    A graph ball of integer radius $k$ has at most $(D+1)^k$ vertices.
+    Sum over distance spheres. For the tail, split the excess decay
+    $\mu-\log(D+1)$ equally between the distance threshold and the
+    remaining geometric series.
+\end{proof}
+
+\begin{lemma}[A termwise truncation estimate]
+    \label{lem:hastings05_weighted_truncation}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_of_commutator_bounds,
+        TNLean.Lattice.norm_commutator_heisenbergEvolution_le_anchor_kernel,
+        TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_anchor_sum,
+        TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_degree_tail}
+    \leanok
+    \uses{lem:hastings05_degree_tail}
+    Let $h_k=h_k^\dagger$, let $H=\sum_k h_k$ and
+    $H_A=\sum_{k\in A}h_k$, and let $W$ be an
+    operator. Suppose $T\ge0$ and
+    $\|[h_k,e^{itH_A}We^{-itH_A}]\|\le C_k$ for $k\notin A$ and
+    $|t|\le T$. For the normalized Gaussian filter $\mathcal F_{q,\Delta}$,
+    with $q\ge0$ and the usual totalized convention at $q=0$,
+    \begin{align}
+        \|\mathcal F_{q,\Delta}^{H}(W)
+            -\mathcal F_{q,\Delta}^{H_A}(W)\|
+        &\le T\sum_{k\notin A}C_k
+            +2\|W\|e^{-(T\Delta)^2/(2q)}.
+        \label{eq:hastings05_weighted_truncation}
+    \end{align}
+    For local interactions on a bounded-degree graph, the omitted sum is
+    bounded by Lemma~\ref{lem:hastings05_degree_tail} and the
+    Lieb--Robinson estimate at a freely chosen rate
+    $\mu>\log(D+1)$.
+\end{lemma}
+\begin{proof}\leanok
+    Apply the Duhamel comparison to the two evolutions, retaining the
+    individual omitted commutators before taking their sum. Split the
+    Gaussian integral at $|t|=T$. The integral outside this interval is
+    bounded by its Gaussian tail. For the graph estimate, use the finite
+    support propagation bound at each omitted anchor and sum its
+    exponentially decaying weights.
+\end{proof}
+
+\begin{lemma}[The actual metric-ball Gaussian filters]
+    \label{thm:hastings05_metric_filter}
+    \lean{TNLean.Lattice.metricRangeGraph,TNLean.Lattice.metricRangeBall,
+        TNLean.Lattice.exists_metric_truncated_filter_budget,
+        TNLean.Lattice.metric_truncated_filter_properties,
+        TNLean.Lattice.exists_metric_truncated_filter_localization,
+        TNLean.Lattice.exists_metric_truncated_filter_sum_bound}
+    \leanok
+    \uses{lem:hastings05_weighted_truncation}
+    Fix $R>0$, $J\ge0$, $\Delta>0$, and an integer $S$. There are
+    $c_1,\eta>0$ and $C\ge0$, depending only on these parameters, with
+    the following property. Let $\Lambda$ be a finite metric space, let
+    $H=\sum_i h_i$, and suppose $h_i=h_i^\dagger$ is supported in
+    $B_R(i)$, $\|h_i\|\le J$, and $|B_R(i)|\le S$. For $\ell\ge R$, set
+    \begin{align}
+        q&=c_1\ell\Delta,&
+        H_i^{\mathrm{loc}}&=\sum_{j:\,d(i,j)\le\ell-R}h_j,&
+        M_i&=\mathcal F_{q,\Delta}^{H_i^{\mathrm{loc}}}(h_i).
+        \label{eq:hastings05_metric_filter}
+    \end{align}
+    Then $M_i=M_i^\dagger$ is supported in $B_\ell(i)$,
+    $\|M_i\|\le J$, and
+    \begin{align}
+        \|h_i\|e^{-q/2}
+          +\|\mathcal F_{q,\Delta}^{H}(h_i)-M_i\|
+        &\le \|h_i\|C e^{-\eta\ell},
+        \label{eq:hastings05_metric_budget}\\
+        \Big\|\sum_i M_i-H\Big\|
+        &\le |\Lambda|JC e^{-\eta\ell}.
+        \label{eq:hastings05_metric_sum}
+    \end{align}
+    If the spectrum of $H$ is contained in
+    $\{E_0\}\cup[E_0+\Delta,\infty)$, the component of $M_i\psi$
+    outside the full ground space is at most
+    $JC e^{-\eta\ell}\|\psi\|$ for every ground vector $\psi$.
+    If the ground space is a line spanned by a unit vector $\Omega$, this
+    gives $\|(M_i-\langle\Omega,M_i\Omega\rangle)\Omega\|
+    \le JC e^{-\eta\ell}$.
+\end{lemma}
+\begin{proof}\leanok
+    Join two sites when their metric distance is at most $R$. This graph
+    has degree at most $S$, and each interaction has graph diameter at
+    most two. Choose $\mu=\log(S+1)+1$ in
+    Lemma~\ref{lem:hastings05_weighted_truncation}. Choose $T=c_1\ell$
+    with $c_1>0$ sufficiently small that the spatial decay dominates the
+    time growth. The Gaussian tail is $e^{-q/2}$ because $q=T\Delta$.
+    A fixed fraction of the remaining exponential decay absorbs the
+    factor $\ell$. Local support follows from the triangle inequality.
+    The full filters sum exactly to $H$, which proves
+    (\ref{eq:hastings05_metric_sum}). The ground-space conclusions
+    follow from the spectral suppression of the full Gaussian filter.
+\end{proof}
+
+\begin{lemma}[Zero interaction range]
+    \label{lem:hastings05_zero_range}
+    \lean{TNLean.Lattice.gaussianFilteredTerm_eq_of_commute,
+        TNLean.Lattice.commute_of_singleton_support,
+        TNLean.Lattice.gaussianFilteredTerm_full_and_sum_eq_of_zero_range,
+        TNLean.Lattice.starProjection_term_eq_of_zero_range,
+        TNLean.Lattice.sub_starProjection_gaussianFilteredTerm_sum_eq_zero_of_zero_range}
+    \leanok
+    When $R=0$ on a metric space, the interactions have single-site
+    support and commute. Every full or truncated Gaussian filter of
+    $h_i$ equals $h_i$. Each term preserves the full ground eigenspace.
+\end{lemma}
+\begin{proof}\leanok
+    Operators supported at different single sites commute. Conjugating
+    $h_i$ by any sum of these operators leaves it unchanged. Commutation
+    with $H$ also preserves its eigenspaces.
+\end{proof}

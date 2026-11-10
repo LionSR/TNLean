@@ -216,6 +216,7 @@ import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationCloseness
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResidual
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResiduals
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationReverse
+import TNLean.MPS.AreaLaw.PhysicalSoftTruncationCloseness
 import TNLean.MPS.AreaLaw.PhysicalSoftTruncationMPOApproximation
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityApproximation

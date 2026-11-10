@@ -20,12 +20,15 @@ import TNLean.MPS.AreaLaw.LocalSolution.GappedPeriodicHierarchy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyApproximation
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyBlockCoordinates
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyClosingCoordinates
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyConstruction
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyEdgePartition
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyEdges
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyNesting
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyRadius
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyTensorCoordinates
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicChainApproximation
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalHierarchy

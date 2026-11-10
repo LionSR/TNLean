@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.DetectabilityLemma
 import QICLean.Analysis.ComplementProdKernel
+import QICLean.Analysis.ComplementProdPartition
 import QICLean.Analysis.ProjectionGeometry
 import TNLean.Algebra.GappedGroundState
 import TNLean.Circuit.EntropySupport
@@ -241,6 +242,34 @@ private theorem sum_orderedTerm
   rw [hfirst, hsecond]
   exact sum_parityTerm h
 
+/-- A physical parity product splits over any selection of its bonds.
+Commutativity follows from the original nearest-neighbour supports; no
+projection hypothesis is needed for this algebraic identity. ALVV,
+arXiv:1602.08828v2, `def:FF-tH` and `thm:FF-tH`, lines 1467–1487 and 1543–1550. -/
+theorem physicalParityProduct_partition
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (s : Fin (L - 1) → Prop) [DecidablePred s] (p : ℕ) :
+    physicalParityProduct h p =
+      physicalParityProduct (fun i ↦ if s i then h i else 0) p *
+        physicalParityProduct (fun i ↦ if s i then 0 else h i) p := by
+  classical
+  let t (k : ℕ) : Prop := if hk : k < L - 1 then s ⟨k, hk⟩ else False
+  have heq := ContinuousLinearMap.complementProd_partition (parityTerm_commute h hs p)
+    t (L - 1)
+  have hu : (fun k ↦ if t k then parityTerm h p k else 0) =
+      parityTerm (fun i ↦ if s i then h i else 0) p := by
+    funext k
+    unfold parityTerm
+    split_ifs <;> simp_all [t]
+  have hv : (fun k ↦ if t k then 0 else parityTerm h p k) =
+      parityTerm (fun i ↦ if s i then 0 else h i) p := by
+    funext k
+    unfold parityTerm
+    split_ifs <;> simp_all [t]
+  simpa only [physicalParityProduct, hu, hv] using heq
+
 /-- The actual product on one parity is an orthogonal projection. Its
 commutation is derived from physical support. ALVV, arXiv:1602.08828v2,
 `def:DLO` and `def:HLeven-odd`, lines 1475–1501. -/
@@ -273,6 +302,36 @@ theorem physicalParityProduct_apply_eq_self_iff
     by_cases hkp : k % 2 = p
     · simpa only [parityTerm, dite_eq_left hk, ite_eq_left hkp] using hx ⟨k, hk⟩ hkp
     · simp only [parityTerm, dite_eq_left hk, ite_eq_right hkp, _root_.zero_apply]
+
+/-- The two complementary parity masses are bounded by the actual physical
+energy. The vector need not be normalized. ALVV, arXiv:1602.08828v2,
+`lem:dl-converse` and `thm:FF-tH`, lines 1528–1550. -/
+theorem sum_norm_sq_sub_physicalParityProduct_le
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hp : ∀ i, IsStarProjection (h i))
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (x : EuclideanSpace ℂ (Fin L → Fin q)) :
+    ‖x - physicalParityProduct h 0 x‖ ^ 2 +
+      ‖x - physicalParityProduct h 1 x‖ ^ 2 ≤
+        (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+          (∑ i, h i) x⟫_ℂ).re := by
+  have h0 := ContinuousLinearMap.norm_sq_sub_norm_sq_complementProd_le
+    (parityTerm_isStarProjection h hp 0) (parityTerm_commute h hs 0) x (L - 1)
+  have h1 := ContinuousLinearMap.norm_sq_sub_norm_sq_complementProd_le
+    (parityTerm_isStarProjection h hp 1) (parityTerm_commute h hs 1) x (L - 1)
+  have hpy (p : ℕ) := ContinuousLinearMap.IsStarProjection.norm_sq_eq
+    (physicalParityProduct_isStarProjection h hp hs p) x
+  have hsum :
+      (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm h 0 k) x⟫_ℂ).re +
+        (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm h 1 k) x⟫_ℂ).re =
+          (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+            (∑ i, h i) x⟫_ℂ).re := by
+    simpa only [_root_.add_apply, inner_add_right, Complex.add_re] using
+      congrArg (fun A : EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ]
+        EuclideanSpace ℂ (Fin L → Fin q) ↦ (⟪x, A x⟫_ℂ).re) (sum_parityTerm h)
+  simp only [physicalParityProduct, RCLike.re_to_complex] at h0 h1 hpy ⊢
+  linarith only [h0, h1, hpy 0, hpy 1, hsum]
 
 /-- The converse estimate for the actual physical even/odd product, for
 every unit vector. The constant three strengthens the stated constant four.
