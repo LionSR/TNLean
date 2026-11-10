@@ -105,11 +105,13 @@ import TNLean.MPS.AreaLaw.IndependentIntervalProbability
 import TNLean.MPS.AreaLaw.IndependentIntervalSections
 import TNLean.MPS.AreaLaw.IndependentIntervalTree
 import TNLean.MPS.AreaLaw.IndependentLowDensityBufferedTargets
+import TNLean.MPS.AreaLaw.IndependentPhysicalDGCluster
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGViability
 import TNLean.MPS.AreaLaw.IndependentTruncationParameters
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
+import TNLean.MPS.AreaLaw.InteriorLowEnergyFamily
 import TNLean.MPS.AreaLaw.InterleavedFilterParameters
 import TNLean.MPS.AreaLaw.InterleavedFilterSuppression
 import TNLean.MPS.AreaLaw.InterleavedTruncationCalibration
