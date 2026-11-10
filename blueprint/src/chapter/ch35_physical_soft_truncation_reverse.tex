@@ -45,9 +45,11 @@
     \cite{gap:alvv16_soft_truncation_energy_estimate}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:interval_physical_soft_truncation_residual,
-        thm:nearest_neighbour_weighted_low_restriction}
-    Write $\widetilde H-S\Id=X_s+Y$, where $Y$ contains the actual
+    \uses{thm:interval_physical_scaled_soft_residuals}
+    This is the soft-window estimate of
+    Lemma~\ref{thm:interval_physical_scaled_soft_residuals} at the
+    scale $t=m$ equal to the order. For the reader, the underlying argument
+    at this scale is as follows. Write $\widetilde H-S\Id=X_s+Y$, where $Y$ contains the actual
     crossing bonds. There are at most two such bonds. The shifted soft/hard
     comparison of \cite{QICLean2026Blueprint} gives
     \begin{align*}

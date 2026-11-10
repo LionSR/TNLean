@@ -19,7 +19,7 @@
     $\operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+g,\infty)$.
     Use the five cuts $(0,a+1,a+2\ell,b+1,b+2\ell,N)$.
     Then all the conclusions of
-    Lemma~\ref{thm:five_region_scaled_low_cluster} hold with these $t,\ell$
+    Lemma~\ref{lem:five_region_independent_scaled_cluster} hold with these $t,\ell$
     and $\xi=\tau g/10^6$.
     In particular, the actual clipped low cluster has the dimension of the
     full original ground space and is mutually $\tau/200$-close to it.
@@ -30,10 +30,11 @@
     \leanok
     \uses{thm:independent_truncation_threshold_constant,
         thm:quarter_power_truncation_filter_scale,
-        thm:five_region_scaled_low_cluster}
+        lem:five_region_independent_scaled_cluster}
     Take the universal threshold constant and apply the quarter-power
     selection with gap $4g/5$ and accuracy variable $u$.
     The threshold estimate gives
     $288e^{11/8}e^{-(t-g)/8}\le\tau g/10^6$.
-    Apply the physical scaled low-cluster theorem with this residual bound.
+    Apply the low-cluster lemma at the independent clipping threshold $t$
+    with this residual bound.
 \end{proof}

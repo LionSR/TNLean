@@ -2015,5 +2015,7 @@ printed `d² + 2`, and records the corrected bound `d² + 3`.
 [`lvv13_sampling_ground_energy.tex`](lvv13_sampling_ground_energy.tex)
 (false source claim, open) records that the sampling count of
 arXiv:1307.5143v1, Corollary 2.14, depends on the ground energy through the
-normalizing power, as the published Methods retain, and that the sampled
-operator approximation is not yet formalized.
+normalizing power, as the published Methods retain. The energy-dependent
+normalization, Corollary 2.14 and the cut-wise error reduction are formalized;
+the joint power-and-ground-projection sample, its all-cut operator Schmidt
+rank and the ground-line cut factors are not yet.

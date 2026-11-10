@@ -212,18 +212,26 @@ spatial-rank arguments.
 
 \section{The checked finite construction}
 
-The normalization estimate in~(\ref{eq:lvv_sampling_energy_dependence})
-and the resulting sampled operator approximation, for positive-contraction
-interactions, a unit ground vector and a positive lower gap, are not yet
-formalized. The intended construction produces one word family whose
-normalized sum approximates both the power and the ground projection,
-with simultaneously bounded letter counts, and whose normalized sum has
-operator Schmidt rank at most $\ell q^{2u}$ across every chain cut when
-every letter count is strictly below $u$. The explicit positive sample
-count retains the factor $n^2Q^{2\varepsilon_0/\varepsilon}$. The word
-length and count still specify the energy in advance. The counterexample
-above has not been formalized. These sampled results would not supply an
-energy-independent polynomial count.
+The energy-dependent normalization and Corollary~2.14 are formalized in
+\path{TNLean/MPS/AreaLaw/ViableSet/SampledProjector.lean}: at the
+logarithmic power, $C^m\le n(1/\eta)^{\varepsilon_0/\Delta}$, and the
+sampled operator approximates the power with simultaneously bounded letter
+counts, for an explicit sample count. The deterministic error reduction in
+\path{TNLean/MPS/AreaLaw/ViableSet/SampledErrorReduction.lean} then supplies,
+at each cut, one family of at most $\ell q^{2\kappa}$ left factors, each of
+operator Schmidt rank at most $q^{2\kappa}$ at every internal left cut, chosen
+before the input viable family. The counts depend explicitly on the specified
+ground energy.
+
+Three extensions are not yet formalized: a single word family for
+positive-contraction interactions whose normalized sum approximates both the
+power and the ground projection, with explicit positive sample count retaining
+the factor $n^2Q^{2\varepsilon_0/\varepsilon}$; the operator Schmidt rank
+bound $\ell q^{2u}$ for that sum across every chain cut when every letter count
+is strictly below $u$; and cut factors before every normalized vector in the
+unique ground line. The word length and count still specify the energy in
+advance, and the counterexample above has not been formalized. None of these
+results supplies an energy-independent polynomial count.
 
 The separate Gaussian energy-mesh construction supplies successive
 polynomial viable families at fixed dimension, gap and the stated conservative

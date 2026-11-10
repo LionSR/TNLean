@@ -36,8 +36,11 @@
     in \cite{gap:alvv16_soft_truncation_energy_estimate}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:interval_regional_exponential_moment}
-    Write $U=A_J-\varepsilon'_J\Id\ge0$ and
+    \uses{thm:interval_physical_scaled_soft_residuals}
+    This is the original-window estimate of
+    Lemma~\ref{thm:interval_physical_scaled_soft_residuals} at the
+    scale $t=m$ equal to the order. For the reader, the underlying argument
+    at this scale is as follows. Write $U=A_J-\varepsilon'_J\Id\ge0$ and
     $d_m(x)=x-h_{m,m}(x)$. The scalar weighted remainder bound of
     \cite{QICLean2026Blueprint} gives
     $0\le d_m(x)e^{-x/8}\le16e^{-m/16}$ for $x\ge0$.
