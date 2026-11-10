@@ -11680,6 +11680,32 @@ removed after the dependency audit exposed it.
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
 
+### Injectivity of explicit rational complex coordinates — candidate (2026-11-04)
+
+- **Pattern:** Apply real and imaginary coordinate projections to an equality
+  of complex values, then use injectivity of the rational-to-real cast.
+- **Seen:** `RationalMatrixCode.decode_injective` in
+  `ViableSet/BoundarySDP/RationalMatrixCodes.lean` and
+  `RationalComplexCode.decode_injective` in
+  `ViableSet/BoundarySDP/RationalCodeHeights.lean`.
+- **Reuse:** The scalar lemma is already used by the height theorem for
+  computed rational coordinates. No further copy is needed in this argument.
+- **Decision:** Two instances are recorded. If another matrix-decoding proof
+  needs this argument, move the scalar injectivity lemma to the lower-level
+  coordinate module and use it in the matrix proof as well.
+
+### Six-matrix rounded-certificate transport — candidate (2026-11-04)
+
+- **Pattern:** after replacing each of the six rounded certificate matrices by
+  its defining equality, discharge the corresponding entrywise closeness
+  hypothesis.  The three primary and three Gram coordinates produce the same
+  eight-line proof fragment.
+- **Occurrences:** three simultaneous rounding theorems in
+  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
+- **Candidate abstraction:** a small product-membership transport lemma should
+  package the six rewrites together.  Promote when the surrounding certificate
+  statements have stabilized; the present repetition is confined to one file.
+
 ### Centered clipping and elementary transports — promoted (2026-11-02)
 
 - **Seen:** two filter constructions in `MPS/AreaLaw/PhysicalDGViability.lean`

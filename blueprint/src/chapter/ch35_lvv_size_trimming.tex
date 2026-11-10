@@ -1411,6 +1411,48 @@ a function of the Hamiltonian, the gap parameter and the input set.
     $T\subseteq\operatorname{Span}(S)$ and $|T|\le m|F|\le m|N|$.
 \end{proof}
 
+
+\begin{lemma}[Size trimming for a one-state local space]
+    \label{thm:lvv_size_trimmed_family_dimension_one}
+    \lean{TNLean.MPS.AreaLaw.exists_size_trimmed_family_localDimension_one}
+    \leanok
+    \uses{def:lvv_viable_set,def:lvv_viable_mps}
+    Suppose the local Hilbert space has dimension one.  If a finite family
+    $S$ is $(k,\delta)$-viable for a normalized chain vector and every member
+    of $S$ has matrix product state bond dimension at most $b$, then some
+    singleton $T\subseteq S$ is $(k,0)$-viable and its member has bond
+    dimension at most $b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The chain Hilbert space and the left Hilbert space at every cut are both
+    one-dimensional.  A unit viable witness is therefore a scalar multiple
+    of the normalized chain vector.  Its support condition implies that
+    $S$ contains a nonzero vector, and any such vector spans the left Hilbert
+    space.  Taking this vector as the sole member of $T$ gives exact
+    viability.
+\end{proof}
+
+\begin{lemma}[Size trimming for the empty chain]
+    \label{thm:lvv_size_trimmed_family_empty_chain}
+    \lean{TNLean.MPS.AreaLaw.exists_size_trimmed_family_chainLength_zero}
+    \leanok
+    \uses{def:lvv_viable_set,def:lvv_viable_mps}
+    Suppose the chain has no sites.  If a finite family $S$ is viable for a
+    normalized chain vector and every member of $S$ has matrix product state
+    bond dimension at most $b$, then some singleton $T\subseteq S$ is exactly
+    viable and its member has bond dimension at most $b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The configuration space of the empty chain, and that of every left block
+    in it, consists of one point.  Hence the corresponding Hilbert spaces are
+    one-dimensional.  Viability supplies a nonzero member of
+    $\operatorname{Span}(S)$, so $S$ contains a nonzero vector.  Its singleton
+    spans the left Hilbert space and is exactly viable.  This formulation
+    avoids the quotients by the chain length used for nonempty chains.
+\end{proof}
+
 \begin{definition}[Solutions of the convex program and admissible solvers]
     \label{def:lvv_boundary_program_solution}
     \lean{TNLean.MPS.AreaLaw.IsBoundaryProgramSolution,
