@@ -1992,3 +1992,28 @@ estimate give a corrected route. For a supplied viable root, the literal
 filter-and-trim iterate, its Ritz space and a polynomial bond bound are
 constructed (`docs/audits/2026-11-03_same_root_polynomial_refinement.md`);
 the comparison with the source's printed quantitative choices remains open.
+
+### Physical periodic pair operators after Hastings
+
+[`hastings05_physical_periodic_pairs.tex`](hastings05_physical_periodic_pairs.tex)
+(scope restriction, open) records that the neighbouring-supersite operators of
+Hastings, *Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3,
+lines 285–320 and 609–639), are constructed on a regular nonempty periodic
+chain of `N` blocks of `2ℓ` sites with a unique gapped ground vector. The
+degenerate case and the hierarchical tensor construction are not claimed.
+
+### Operator Schmidt rank of the ALVV frustration-free truncation
+
+[`alvv16_frustration_free_truncation_rank.tex`](alvv16_frustration_free_truncation_rank.tex)
+(false source claim, open) gives an eight-qubit chain on which the
+frustration-free truncated Hamiltonian of arXiv:1602.08828v2, Theorem
+`thm:FF-tH`, item 2, has operator Schmidt rank seven across a cut, above the
+printed `d² + 2`, and records the corrected bound `d² + 3`.
+
+### Ground-energy dependence of the LVV sampled projection
+
+[`lvv13_sampling_ground_energy.tex`](lvv13_sampling_ground_energy.tex)
+(false source claim, open) records that the sampling count of
+arXiv:1307.5143v1, Corollary 2.14, depends on the ground energy through the
+normalizing power, as the published Methods retain, and that the sampled
+operator approximation is not yet formalized.
