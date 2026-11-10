@@ -8,6 +8,7 @@ import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.ViableSubspaceBootstrap
 import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.ViableSubspaceDimension
+import QICLean.Analysis.ViableSubspaceOrder
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
@@ -131,11 +132,18 @@ private theorem exists_long_middle_actual_dg_family :
   let Delta : ℝ := (2 * Real.exp
     (-2 * (ell : ℝ) ^ 2 * Real.sqrt ((eta1 - eta0) / (upper - eta0)))) ^ 2
   let T := Submodule.spectralSpanLE v lam eta0
-  have hB : B.IsHermitian :=
-    Matrix.isHermitian_sum_centered_partial_energyTruncation Areg
-      (fun _ ↦ (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian)
-      K e (fun j ↦ e j + (ell : ℝ)) _
-      (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
+  have hB : B.IsHermitian := by
+    have hterm (j : Fin 5) : IsSelfAdjoint
+        ((if j ∈ K then
+          cfc (fun x : ℝ ↦ min x (e j + (ell : ℝ))) (Areg j) else Areg j) -
+            (e j : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) := by
+      apply IsSelfAdjoint.sub
+      · split_ifs
+        · exact IsSelfAdjoint.cfc
+        · exact IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)
+      · exact IsSelfAdjoint.smul (by simp [IsSelfAdjoint]) (by simp [IsSelfAdjoint])
+    exact ((isSelfAdjoint_sum Finset.univ fun j _ ↦ hterm j).add
+      (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i))).isHermitian
   have hdegree : 1 ≤ ell ^ 2 := by
     rw [pow_two]
     simpa only [Nat.one_mul] using Nat.mul_le_mul hell1 hell1
@@ -149,12 +157,14 @@ private theorem exists_long_middle_actual_dg_family :
   have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
-      simpa only [hdiff,
-        Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
+      simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
     exact hN'.trans (collar_card_le_square_at_square_degree
       q ell (Jtarget \ J0).card (D0 ^ 2) hq hell1 hcollar le_rfl)
   have hcheb := Matrix.chebyshev_viability_of_actual_cluster_polynomial_family
-    B hB v lam heigen W Tm (fun Q hQ ↦ (hdecomp Q hQ).imp fun _ hM ↦ hM.2)
+    B hB v lam heigen W Tm (by
+      intro Q hQ
+      obtain ⟨M, _hmatrix, hconj⟩ := hdecomp Q hQ
+      exact ⟨M, hconj⟩)
     (D ^ 2) hN eta0 eta1 upper hsep hendpoint hclosed hnorm
   let CW := fun i : Fin N ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
     (n := Jtarget → Fin q) (W i)
@@ -260,9 +270,12 @@ theorem exists_physical_dg_viable_family :
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hg : 0 < g := lt_min hgamma (by norm_num)
   have hg1 : g ≤ 1 := min_le_right gamma 1
-  have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z :=
-    fun z hz ↦ (hgap z hz).imp_right
-      ((add_le_add le_rfl (min_le_left gamma 1)).trans ·)
+  have hggamma : g ≤ gamma := min_le_left gamma 1
+  have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z := by
+    intro z hz
+    rcases hgap z hz with hzmu | hzlower
+    · exact Or.inl hzmu
+    · exact Or.inr (by linarith only [hggamma, hzlower])
   obtain ⟨hell, _hD, hlogD, hlong⟩ := hall q g hq hg hg1
   refine ⟨hlogD, ?_⟩
   by_cases hshort : r - p ≤ 4 * ell
@@ -271,11 +284,8 @@ theorem exists_physical_dg_viable_family :
     obtain ⟨W, Delta, hDelta, hbudget, himprove⟩ :=
       exists_short_actual_region_improving_family (F := EE) L q ell J hq
         (Nat.le_trans (by decide : 1 ≤ 21) hell) hJ
-    have hGG : Submodule.IsCloseTo (1 / 200 : ℝ) G G := by
-      apply Submodule.isCloseTo_iff.mpr
-      intro x hx
-      rw [G.starProjection_eq_self_iff.mpr hx]
-      nlinarith [sq_nonneg ‖x‖]
+    have hGG : Submodule.IsCloseTo (1 / 200 : ℝ) G G :=
+      Submodule.isCloseTo_of_le (by norm_num) le_rfl
     refine ⟨W, G, Delta, hGG, hGG, hDelta, hbudget, ?_⟩
     intro S delta hS hdelta
     exact himprove (G.map (Tm.toLinearEquiv :
@@ -503,12 +513,9 @@ private theorem exists_accuracy_long_middle_actual_dg_family :
     rw [div_mul_eq_mul_div, one_mul, div_div, mul_comm (m : ℝ) 1000000]
   obtain ⟨e, E0, _hground, _horigin, hE0, hE4, hnorm,
     v, lam, heigen, hclosed, _hband, hdim, hTG, hGT, _hnewgap⟩ :=
-    exists_five_region_physical_scaled_low_cluster L q a b ell (ell : ℝ)
-      (by omega) hell1 (by exact_mod_cast hell)
+    exists_five_region_physical_scaled_low_cluster L q a b ell (by omega) hell
       (hab.trans (Nat.le_succ b)) (hb.trans (Nat.sub_le L 1))
       h hs h0 h1 mu g xi scale hg hg1 hscale0 hscale1 htail hxi.le hmu hgap
-  have hnorm' : 3 * (ell : ℝ) + 4 * (ell : ℝ) = 7 * (ell : ℝ) := by ring
-  rw [hnorm'] at hnorm
   have herror : scale / 200 = 1 / (200 * (m : ℝ)) := by
     dsimp only [scale]
     rw [div_div, mul_comm (m : ℝ) 200]
@@ -543,11 +550,18 @@ private theorem exists_accuracy_long_middle_actual_dg_family :
   have hsmall : (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 := by
     rw [hDelta]
     simpa only [neg_mul] using htrade (upper - eta0) hR0 hR8
-  have hB : B.IsHermitian :=
-    Matrix.isHermitian_sum_centered_partial_energyTruncation Areg
-      (fun _ ↦ (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian)
-      K e (fun j ↦ e j + (ell : ℝ)) _
-      (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
+  have hB : B.IsHermitian := by
+    have hterm (j : Fin 5) : IsSelfAdjoint
+        ((if j ∈ K then
+          cfc (fun x : ℝ ↦ min x (e j + (ell : ℝ))) (Areg j) else Areg j) -
+            (e j : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) := by
+      apply IsSelfAdjoint.sub
+      · split_ifs
+        · exact IsSelfAdjoint.cfc
+        · exact IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)
+      · exact IsSelfAdjoint.smul (by simp [IsSelfAdjoint]) (by simp [IsSelfAdjoint])
+    exact ((isSelfAdjoint_sum Finset.univ fun j _ ↦ hterm j).add
+      (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i))).isHermitian
   have hdegree : 1 ≤ ell ^ 2 := by
     rw [pow_two]
     simpa only [Nat.one_mul] using Nat.mul_le_mul hell1 hell1
@@ -561,12 +575,14 @@ private theorem exists_accuracy_long_middle_actual_dg_family :
   have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
-      simpa only [hdiff,
-        Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
+      simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
     exact hN'.trans (collar_card_le_square_of_larger_count_base
       q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell1 hcollar le_rfl)
   have hcheb := Matrix.chebyshev_viability_of_actual_cluster_polynomial_family
-    B hB v lam heigen W Tm (fun Q hQ ↦ (hdecomp Q hQ).imp fun _ hM ↦ hM.2)
+    B hB v lam heigen W Tm (by
+      intro Q hQ
+      obtain ⟨M, _hmatrix, hconj⟩ := hdecomp Q hQ
+      exact ⟨M, hconj⟩)
     (D ^ 2) hN eta0 eta1 upper hsep hendpoint hclosed hnorm
   let CW := fun i : Fin N ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
     (n := Jtarget → Fin q) (W i)
@@ -664,9 +680,12 @@ private theorem exists_accuracy_physical_dg_viable_family :
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hg : 0 < g := lt_min hgamma (by norm_num)
   have hg1 : g ≤ 1 := min_le_right gamma 1
-  have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z :=
-    fun z hz ↦ (hgap z hz).imp_right
-      ((add_le_add le_rfl (min_le_left gamma 1)).trans ·)
+  have hggamma : g ≤ gamma := min_le_left gamma 1
+  have hgapg : ∀ z ∈ spectrum ℝ H, z = mu ∨ mu + g ≤ z := by
+    intro z hz
+    rcases hgap z hz with hzmu | hzlower
+    · exact Or.inl hzmu
+    · exact Or.inr (by linarith only [hggamma, hzlower])
   obtain ⟨hell, hmD, hD, hlogD, hlong⟩ := hall m q g hq hqm hg hg1
   refine ⟨hell, hmD, hD, hlogD, ?_⟩
   by_cases hshort : r - p ≤ 4 * ell
@@ -675,13 +694,8 @@ private theorem exists_accuracy_physical_dg_viable_family :
     obtain ⟨W, Delta, hDelta, hbudget, himprove⟩ :=
       exists_short_actual_region_improving_family_of_count_base (F := EE)
         L q m ell J hq hqm (Nat.le_trans (by decide : 1 ≤ 21) hell) hJ
-    have hmR : (0 : ℝ) < (m : ℝ) := by exact_mod_cast (by omega : 0 < m)
-    have hGG : Submodule.IsCloseTo (1 / (200 * (m : ℝ)) : ℝ) G G := by
-      apply Submodule.isCloseTo_iff.mpr
-      intro x hx
-      rw [G.starProjection_eq_self_iff.mpr hx]
-      have herr : 0 ≤ (1 / (200 * (m : ℝ)) : ℝ) := by positivity
-      nlinarith [sq_nonneg ‖x‖]
+    have hGG : Submodule.IsCloseTo (1 / (200 * (m : ℝ)) : ℝ) G G :=
+      Submodule.isCloseTo_of_le (by positivity) le_rfl
     refine ⟨W, G, Delta, hGG, hGG, rfl, hDelta, hbudget, ?_⟩
     intro S delta hS hdelta
     exact himprove (G.map (Tm.toLinearEquiv :

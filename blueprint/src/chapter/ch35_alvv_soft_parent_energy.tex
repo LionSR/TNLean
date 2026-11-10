@@ -1,0 +1,150 @@
+\section{Energy of the central soft regional operator}
+
+The following lemmas construct the central soft replacement, its regional
+coordinates and a bound on its energy in the original ground space.
+They are auxiliaries to the generation and energy-estimation steps of
+\cite[Figures \texttt{fig:generate} and \texttt{fig:algo1}]{Arad2016RigorousRG}.
+The harmonic cap retains the correction in
+\cite{gap:alvv16_soft_truncation_log_bound}. The one-sided center and
+scalar-centering distinctions are recorded in
+\cite{gap:alvv16_soft_regional_energy_centering}.
+
+\begin{definition}[Interactions restricted to an interval]
+    \label{def:interval_bond_restriction}
+    \lean{TNLean.MPS.AreaLaw.intervalBondRestriction}
+    \leanok
+    For a chain with $L$ sites, define $h_i^{[l,r)}=h_i$ if
+    $l\le i$ and $i+1<r$, and $h_i^{[l,r)}=0$ otherwise.
+\end{definition}
+\begin{lemma}[The actual internal interaction sum]
+    \label{lem:interval_bond_restriction}
+    \lean{TNLean.MPS.AreaLaw.intervalBondRestriction_supported,
+        TNLean.MPS.AreaLaw.intervalBondRestriction_bounds,
+        TNLean.MPS.AreaLaw.sum_intervalBondRestriction,
+        TNLean.MPS.AreaLaw.sum_internal_intervalBondRestriction_eq,
+        TNLean.MPS.AreaLaw.sum_exterior_intervalBondRestriction}
+    \leanok
+    \uses{def:interval_bond_restriction}
+    The restricted interactions retain their designated two-site supports
+    and the bounds $0\le h_i^{[l,r)}\le I$. Their full sum is the original
+    internal sum on $[l,r)$. Every subinterval of $[l,r)$ has the original
+    internal sum; the exterior intervals $[0,l)$ and $[r,L)$ have zero sum.
+\end{lemma}
+\begin{proof}\leanok
+    A retained bond is unchanged and every other bond is zero. The stated
+    identities follow by separating the finite sums into these two cases.
+\end{proof}
+
+\begin{lemma}[The minimum and norm of the central replacement]
+    \label{lem:soft_parent_structure}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_soft_parent_structure}
+    \leanok
+    \uses{lem:interval_bond_restriction,lem:alvv_five_soft_residuals}
+    Suppose $0\le h_i\le I$, each $h_i$ is supported on sites $i,i+1$,
+    and the local dimension is positive. Fix $l\le u\le v\le r\le L$
+    with $u-l,r-v\le2\ell$. Let $P,M$ be the original sums internal
+    to $[l,r),[u,v)$, respectively, and write $e_P,e_M$ for their minima.
+    These attained minima are chosen before $p,t,m$.
+    For $e_M-10\le p\le e_M$, $t>0$ and $m\ge2$, define
+    \begin{align}
+        R   & =P-M+pI+h_{m,t}(M-pI),
+        \label{eq:soft_parent_operator} \\
+        B_* & =t(1+\log m)+4\ell+14.
+        \label{eq:soft_parent_budget}
+    \end{align}
+    The actual attained minimum $e_{\mathrm s}$ satisfies
+    $R-e_{\mathrm s}I\ge0$ and $\|R-e_{\mathrm s}I\|\le B_*$.
+    It is chosen before every $T$. If $t,T\ge48$, then
+    \begin{align}
+        0\le e_P-e_{\mathrm s} & \le\rho_{m,t}(T), &
+        \rho_{m,t}(T)          & =32e^{-(T-48)/8}
+        +\frac{t}{m}\left(\frac{T}{t}\right)^m.
+        \label{eq:soft_parent_minimum}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Restrict the interactions to the parent interval and divide the
+    chain at $0,l,u,v,r,L$. The exterior sums vanish. Choose attained
+    minima of the five disjoint regional sums. Their sum differs from
+    the parent minimum by a number in $[0,4]$. Apply the simultaneous
+    regional soft residual estimate with only the middle region selected.
+    Its center defect is at most ten and its crossing set has at most
+    four elements. The reverse residual at its attained soft ground
+    vector gives (\ref{eq:soft_parent_minimum}). The two collars contribute
+    at most $4\ell I$, the central soft term contributes at most
+    $t(1+\log m)I$, and the crossing terms contribute at most $4I$.
+    The centered soft minimum is at least $-10$, giving
+    (\ref{eq:soft_parent_budget}).
+\end{proof}
+
+\begin{lemma}[Regional coordinates and original-ground energy]
+    \label{lem:native_soft_parent_energy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_parent_energy_bound}
+    \leanok
+    \uses{lem:soft_parent_structure,lem:regional_ground_energy_bound}
+    Under the hypotheses of Lemma~\ref{lem:soft_parent_structure}, there
+    is an actual positive matrix $K$ on the Hilbert space of $[l,r)$
+    such that $R=K\otimes I+e_{\mathrm s}I$ and $\|K\|\le B_*$.
+    These data are chosen before $T$ and every candidate space. For
+    $t,T\ge48$ and every vector $g$ in the full ground space of the
+    original $H=\sum_i h_i$,
+    \begin{align}
+        \langle g,(K\otimes I)g\rangle
+        \le(2+\rho_{m,t}(T))\|g\|^2.
+    \end{align}
+    No gap or uniqueness hypothesis is imposed; empty intervals and
+    chain endpoints are included.
+\end{lemma}
+\begin{proof}\leanok
+    The centered replacement is positive and supported on $[l,r)$.
+    Restriction to a fixed complementary configuration gives a positive
+    regional matrix with the same upper norm bound. The downward soft
+    order and (\ref{eq:soft_parent_minimum}) give
+    $R-e_{\mathrm s}I\le P-e_PI+\rho_{m,t}(T)I$.
+    On the original ground space the centered regional energy is at
+    most two. Adding the scalar term proves the assertion.
+\end{proof}
+
+The energy bound concerns the original ground space. Applying it to the
+separate untrimmed energy candidate in the generation procedure requires
+an additional quantitative transfer to the same generated soft target.
+
+\begin{lemma}[A middle center from a parent estimate]
+    \label{lem:regional_central_energy_estimate}
+    \lean{TNLean.MPS.AreaLaw.exists_regional_central_energy_estimate}
+    \leanok
+    \uses{lem:adjacent_interval_energy_merge}
+    Let $0\le h_i\le I$ have their designated nearest-neighbour supports
+    on a chain of positive local dimension, and fix
+    $l\le u\le v\le r\le L$. The actual internal Hamiltonians on
+    $[l,u)$, $[u,v)$, $[v,r)$ and $[l,r)$ have attained minima
+    $e_{\mathrm L},e_{\mathrm M},e_{\mathrm R},e_{\mathrm P}$, respectively,
+    with normalized attaining vectors and positive centered matrices.
+    These data are chosen before every parent estimate, and satisfy
+    \begin{align}
+        e_{\mathrm L}+e_{\mathrm M}+e_{\mathrm R}
+        \le e_{\mathrm P}
+        \le e_{\mathrm L}+e_{\mathrm M}+e_{\mathrm R}+2.
+    \end{align}
+    If $e_{\mathrm P}-8\le p_{\mathrm P}\le e_{\mathrm P}$, then
+    $p_{\mathrm M}=p_{\mathrm P}-e_{\mathrm L}-e_{\mathrm R}-2$
+    satisfies $e_{\mathrm M}-10\le p_{\mathrm M}\le e_{\mathrm M}$.
+    Empty intervals and endpoint cuts are included.
+\end{lemma}
+\begin{proof}\leanok
+    Join $[l,u)$ to $[u,r)$, and then join $[u,v)$ to $[v,r)$.
+    Each joining raises the sum of the two minima by a number in $[0,1]$.
+    The two constructions of the minimum on $[u,r)$ agree, since both
+    are attained positive-semidefinite lower bounds for the same matrix.
+    Adding the two comparisons proves the bound with two. Substitution
+    of the stated parent-estimate interval gives the middle-estimate
+    interval.
+\end{proof}
+
+The middle-center conversion does not require a collar-length bound.
+When the two collars have length at most $2\ell$, their original internal
+matrices act on those short regional Hilbert spaces; their minima are
+exactly those used here. No running-time conclusion for computing these
+minima is asserted. This gives a corrected one-sided route to the soft
+center, without identifying it with the source's broader absolute-error
+input.

@@ -8,6 +8,14 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ALVV
 
+import TNLean.MPS.AreaLaw.ALVV.BalancedRegionalEnergy
+import TNLean.MPS.AreaLaw.ALVV.CalibratedRootEnergy
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftClusters
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftNorm
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftRepresentation
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftStructure
+import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFree
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
@@ -16,4 +24,31 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
 import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
+import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
+import TNLean.MPS.AreaLaw.ALVV.NativeLongIntervalSoftFamily
+import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
+import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment
+import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates
+import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftIntervalHistory
+import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftMiddleCluster
+import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftResampling
+import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftSamplingData
+import TNLean.MPS.AreaLaw.ALVV.RegionalChildEnergyCenter
 import TNLean.MPS.AreaLaw.ALVV.RegionalSlices
+import TNLean.MPS.AreaLaw.ALVV.SelectedSoftTerminalNodeEnergy
+import TNLean.MPS.AreaLaw.ALVV.SoftClusterPrecision
+import TNLean.MPS.AreaLaw.ALVV.SoftFamilyResiduals
+import TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation
+import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
+import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
+import TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyCalibration
+import TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyEstimate
+import TNLean.MPS.AreaLaw.ALVV.SoftTerminalNodeEnergy
+import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
+import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
+import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate
+import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
+import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftCalibration
+import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftFilterFamily
+import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftImprovingFamily
+import TNLean.MPS.AreaLaw.ALVV.UniformSoftMiddleMPO

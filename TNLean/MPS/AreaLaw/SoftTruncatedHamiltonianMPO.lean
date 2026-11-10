@@ -14,11 +14,12 @@ sum and scalar are represented exactly, and added to the directly constructed he
 Supporting a corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268.
 
 **Local fix (cutoff and parameter choice):** this is the corrected interaction-label construction
-at scale three times the order, with the original local terms and the scalar shift kept separate.
-It asserts no computational running time; see `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+at scale at least three times the order, with the original local terms and scalar shift kept
+separate. It asserts no computational running time; see
+`docs/paper-gaps/alvv16_cluster_approximation.tex`.
 
-**Scope restriction (scale three times the order):** ALVV `lem:exp-approx-eff`, lines
-1262–1268, allows any scale with `t′ < (ln 2/2) t`; this module takes `t = 3m`, a sub-case of
+**Scope restriction (scale at least three times the order):** ALVV `lem:exp-approx-eff`, lines
+1262–1268, allows any scale with `t′ < (ln 2/2) t`; this module takes `t ≥ 3m`, a sub-case of
 that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
@@ -37,16 +38,16 @@ theorem exists_softTruncatedHamiltonian_mpo_of_accuracy {N q m : ℕ}
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
-    (I : Finset (Fin N)) (eps xi : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i ∈ I, h i)
-    (hxi : 0 < xi) :
-    let W := 3 * (m : ℝ) * (2 : ℝ) ^ (m + 1)
+    (I : Finset (Fin N)) (eps t xi : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i ∈ I, h i)
+    (hscale : 3 * (m : ℝ) ≤ t) (hxi : 0 < xi) :
+    let W := t * (2 : ℝ) ^ (m + 1)
     let b := 2 * (Real.exp (1 / 3 : ℝ) - 1)
     let r := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -
       Real.log (Real.log (1 + xi / W))) / (-Real.log b)⌉₊
     ∃ A : Fin (N + 1) → MPOTensor q
         ((1 + N * q ^ 2) + (r ^ 2 * q ^ r) * (m + 1)),
       ‖((∑ i, h i) - (∑ i ∈ I, h i) + (eps : ℂ) • 1 +
-          cfc (Real.softTruncation (3 * (m : ℝ)) m)
+          cfc (Real.softTruncation t m)
             ((∑ i ∈ I, h i) - (eps : ℂ) • 1)) -
         MPOTensor.traceChainOperator A 1‖ ≤ xi := by
   classical
@@ -62,8 +63,8 @@ theorem exists_softTruncatedHamiltonian_mpo_of_accuracy {N q m : ℕ}
   have hgn (i : Fin N) : ‖g i‖ ≤ 1 := by
     by_cases hi : i ∈ I <;> simp [g, hi, hnorm i]
   have hgsum : (∑ i, g i) = ∑ i ∈ I, h i := by simp [g]
-  obtain ⟨A, hA⟩ := exists_softTruncation_mpo_of_accuracy hq hm g hgs hgh hgn eps xi
-    (by simpa only [hgsum] using hlo) hxi
+  obtain ⟨A, hA⟩ := exists_softTruncation_mpo_of_accuracy hq hm g hgs hgh hgn eps t xi
+    (by simpa only [hgsum] using hlo) hscale hxi
   rw [hgsum] at hA
   let f : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
     fun i ↦ if i ∈ Iᶜ then h i else 0

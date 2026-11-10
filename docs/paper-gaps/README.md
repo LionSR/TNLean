@@ -1754,6 +1754,15 @@ the source's order-`J` dependence directly. The fixed-length Gaussian and positi
 separately. The reciprocal-length reading of the printed time-cone formula is
 an explicit local correction.
 
+## ALVV: regional energy centers and scalar shifts
+
+[`alvv16_soft_regional_energy_centering.tex`](alvv16_soft_regional_energy_centering.tex)
+records the difference between the source's absolute-error input and its
+one-sided soft center, and the scalar shift required for a bounded regional
+norm. It states the actual central replacement, its positive regional matrix,
+attained minimum and energy bound on the original ground space. Transfer to
+the generated soft target and the recursive energy invariant remain separate.
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
@@ -1961,3 +1970,25 @@ For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
   `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
   `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
   hypotheses; for accuracy `n^{-c}` it is of order `log^{2/3} n · log log n`.
+
+## Independent scales and the ground-space recursive witness
+
+[`alvv16_approximation_parameters.tex`](alvv16_approximation_parameters.tex)
+records the nonuniform parameter prescription in the proof of ALVV Theorem 4.9
+and the correction using independent clipping and polynomial scales. The explicit
+rank bound uses the capped gap, preserves one factor of the original ground-space
+dimension and supplies a common reference space for interval trimming. The note
+separates the actual recursive witness and its native root MPS bound from adaptive
+probability, the final filter-and-trim iteration, Ritz extraction and running time.
+The source algorithm remains open while those further steps are unproved.
+
+### Final error reduction for ALVV
+
+[`alvv16_final_filter_gain.tex`](alvv16_final_filter_gain.tex) records an
+exact two-qubit failure of the intermediate multiplicative fidelity gain
+in the proof of Theorem t:alg1. Normalized error contraction, a quantitative
+reference-space trimming budget and the projected trial-space energy
+estimate give a corrected route. For a supplied viable root, the literal
+filter-and-trim iterate, its Ritz space and a polynomial bond bound are
+constructed (`docs/audits/2026-11-03_same_root_polynomial_refinement.md`);
+the comparison with the source's printed quantitative choices remains open.

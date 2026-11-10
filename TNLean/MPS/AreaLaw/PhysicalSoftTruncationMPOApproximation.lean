@@ -119,8 +119,8 @@ theorem exists_interval_physical_soft_closeness_and_mpo
         (Fin (N + 1) → Fin q) ℂ) ≤ (e 1 : ℂ) • 1 := by
       simpa only [Complex.coe_smul] using hlower
     exact hlowerC.trans hmin
-  obtain ⟨T, hT⟩ := exists_softTruncatedHamiltonian_mpo_of_accuracy hq hm h hs' hh hn I eps xi
-    (by simpa only [hI] using heps) hxi
+  obtain ⟨T, hT⟩ := exists_softTruncatedHamiltonian_mpo_of_accuracy hq hm h hs' hh hn I eps
+    (3 * (m : ℝ)) xi (by simpa only [hI] using heps) le_rfl hxi
   refine ⟨T, ?_⟩
   simpa only [hI] using hT
 
