@@ -1,0 +1,100 @@
+\section{Regional normalization and filtered vectors}
+
+The original nearest-neighbour chain admits the scalar normalization used in
+\cite[Section~6.1]{Arad2013AreaLaw}. Separately, supplied approximate projectors
+improve normalized low-rank seeds with explicit phase and error estimates.
+These results do not assert existence of a favorable approximate projector.
+
+\begin{lemma}[Disjoint regional ground-energy shifts]
+    \label{lem:aklv_disjoint_ground_shifts}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_common_ground_shifts_of_disjoint_support,
+        TNLean.MPS.AreaLaw.AKLV.exists_three_disjoint_ground_shifts}
+    \leanok
+    Two Hermitian operators on disjoint site regions admit scalar shifts making
+    both positive, with a common normalized vector attaining both shifted zero
+    energies. Three pairwise disjoint regions admit positive shifts and a
+    normalized zero-energy test for their sum. Each shift is nonnegative if
+    its original operator is positive.
+\end{lemma}
+\begin{proof}\leanok
+    In cut coordinates the two operators are $M\otimes I$ and $I\otimes N$.
+    Tensor minimum-energy eigenvectors and transport back to the original
+    sites. For three regions, first normalize two and then their sum against
+    the third. Attained lower energies add. Positivity of an original operator
+    makes its attained minimum nonnegative.
+\end{proof}
+
+\begin{lemma}[Normalization of the original chain]
+    \label{lem:aklv_original_chain_normalization}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_chain_normalization,
+        TNLean.MPS.AreaLaw.AKLV.middleCutBlock_le_window}
+    \leanok
+    Let $0\le h_i\le I$ be nearest-neighbour interactions with a unit ground
+    vector and nonnegative projector-gap lower bound. Removing two distinct
+    bonds gives three regions. There are nonnegative scalar shifts making
+    their three blocks positive, preserving the original ground vector and
+    gap after the total scalar shift, and giving ground energy $0\le e\le2$.
+    The shifted middle block is bounded above by the distance between the
+    two removed bonds times the identity.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_disjoint_ground_shifts}
+    The three bond sums have disjoint supports, and their shifted sum has a
+    normalized zero-energy test. Restoring two positive contractions adds at
+    most two to its energy. The variational principle gives the stated ground
+    energy bound. A nonnegative middle shift cannot increase its original sum,
+    which is bounded by its number of unit-bounded bonds.
+\end{proof}
+
+\begin{lemma}[Normalized orthogonal decomposition]
+    \label{lem:aklv_phase_normalization}
+    \lean{TNLean.MPS.AreaLaw.AKLV.inner_sub_inner_smul_unit_eq_zero,
+        TNLean.MPS.AreaLaw.AKLV.exists_phase_normalized_of_decomposition,
+        TNLean.MPS.AreaLaw.AKLV.schmidtRank_phase_normalized_eq}
+    \leanok
+    If $\chi=a\phi+v$, $\|\phi\|=1$, $a\ne0$ and $v\perp\phi$, then $\chi\ne0$
+    and some unit phase makes its normalization have squared distance at most
+    $2\|v\|^2/|a|^2$ from $\phi$. The normalization and phase preserve Schmidt rank.
+    In particular, subtracting $\langle\phi,\psi\rangle\phi$ from a vector
+    leaves a vector orthogonal to the unit vector $\phi$.
+\end{lemma}
+\begin{proof}\leanok
+    Pythagoras gives $\|\chi\|^2=|a|^2+\|v\|^2$ and a nonzero denominator.
+    The normalized orthogonal mass is at most $\|v\|^2/|a|^2$. Minimizing
+    over phase bounds squared distance by twice this mass. Both scalar factors
+    are nonzero, so they preserve the coefficient matrix rank.
+\end{proof}
+
+\begin{lemma}[Normalized filtering near a fixed target]
+    \label{lem:aklv_nearby_filtered_vector}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_normalized_approximation_step}
+    \leanok
+    Let $K$ fix a unit vector $\phi$, preserve its orthogonal complement, and
+    have squared shrinking $\delta\ge0$. If a unit vector $\psi$ satisfies
+    $\|\phi-\psi\|^2\le r\le1/2$, then $K\psi\ne0$ and a phase-corrected
+    normalization has squared distance at most $4\delta r$ from $\phi$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_phase_normalization}
+    The squared target component is at least $1/2$ and the input orthogonal
+    mass is at most $r$. Filtering reduces that mass by $\delta$; normalize.
+\end{proof}
+
+\begin{lemma}[Filtering a seed with nonzero overlap]
+    \label{lem:aklv_filtered_seed}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_filtered_approximation_of_overlap,
+        TNLean.MPS.AreaLaw.AKLV.exists_filtered_approximation_of_seven_eighths}
+    \leanok
+    Suppose $K$ fixes a unit target, preserves its orthogonal complement with
+    squared shrinking $\delta\ge0$, and has operator Schmidt rank at most $D$.
+    If a unit seed has Schmidt rank at most $R$ and overlap at least $\mu>0$,
+    its filtered output is nonzero and admits a phase-corrected normalization
+    with squared error at most $2\delta/\mu^2$ and Schmidt rank at most $DR$.
+    For $\mu=7/8$ and $\delta\le(49/128)e^{-2x}$ its norm error is at most $e^{-x}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_phase_normalization}
+    The seed's orthogonal squared norm is at most one. Filtering reduces it by
+    $\delta$ while preserving squared target component at least $\mu^2$.
+    Normalize and apply the operator-to-vector Schmidt-rank bound.
+\end{proof}
