@@ -110,7 +110,7 @@
     the same clipped Hamiltonian.
 \end{proof}
 
-\begin{lemma}[A low-energy improving family on every interval]
+\begin{theorem}[A low-energy improving family on every interval]
     \label{thm:physical_low_energy_interval_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_low_energy_interval_family}
     \leanok
@@ -166,7 +166,7 @@
     \label{cor:physical_original_low_energy_interval_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_original_low_energy_interval_family}
     \leanok
-    All choices in Lemma~\ref{thm:physical_low_energy_interval_family}
+    All choices in Theorem~\ref{thm:physical_low_energy_interval_family}
     can be retained simultaneously with the following additional conclusion.
     If $S$ is $\delta$-viable for the original upper window,
     $\delta\ge0$ and $2(\delta+1/200)<1$, then $\sum_jF_jS$ is viable
@@ -182,37 +182,4 @@
     \uses{thm:physical_low_energy_interval_family}
     Apply closeness composition before and after the improvement, using
     the same fixed family and the two physical comparisons.
-\end{proof}
-
-\begin{lemma}[Choosing a count base before the filter]
-    \label{thm:low_energy_interval_count_base}
-    \lean{Real.exists_low_energy_joint_scalar_parameters_above,
-      TNLean.MPS.AreaLaw.exists_short_actual_region_spanning_family_of_count_base,
-      TNLean.MPS.AreaLaw.exists_physical_low_energy_interval_family_of_count_base}
-    \leanok
-    The scalar constant in Lemma~\ref{thm:low_energy_joint_scalar_parameters}
-    can be required to exceed any prescribed real number. In particular,
-    choose $A\ge100$. In
-    Lemma~\ref{thm:physical_low_energy_interval_family}, choose an integer
-    $m\ge q$ before the degree, and replace only the numerical definitions by
-    \begin{align*}
-        u&=1+\log m+\log(1/g),&
-        \ell&=\lceil Au^2/g\rceil,&
-        D&=(m\ell^2)^{22\ell}.
-    \end{align*}
-    All conclusions of that theorem hold with this same $D$, and its count
-    estimate holds with $m$ in place of $q$. The physical local dimension
-    remains $q$, and the family acts on the original regional Hilbert space.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:low_energy_joint_scalar_parameters,
-      thm:short_region_spanning_family,thm:physical_low_energy_interval_family}
-    Choose the scalar degree and suppression estimate at $m$.
-    The physical polynomial family is still constructed on the original
-    chain; monotonicity in the numerical base bounds its count by $D^2$.
-    On short intervals, extend the actual configuration matrix units by
-    zero to this same count and choose their positive error after $D$.
-    In both cases, the inequality $D^{12}\Delta<10^{-5}$ concerns the
-    chosen $D$ and the degree used to construct the family.
 \end{proof}

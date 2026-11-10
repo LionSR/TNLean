@@ -7,6 +7,7 @@ coefficients are complex. Products retain the displayed order.
 \begin{lemma}[Partition of an ordered product]
     \label{thm:trace_core_product_partition}
     \lean{TNLean.MPS.AreaLaw.orderedProduct_partition_interval}
+    \leanok
     Let $l$ be a finite list in a monoid, and let $a,r$ be nonnegative
     integers. Write $l_{<a}$ for its prefix of length at most $a$,
     $l_{[a,a+r)}$ for the next at most $r$ entries, and $l_{\ge a+r}$ for
@@ -26,6 +27,7 @@ coefficients are complex. Products retain the displayed order.
 \begin{lemma}[An open representation of a trace-closed chain]
     \label{thm:trace_core_open_square}
     \lean{TNLean.MPS.AreaLaw.isOpenMPS_trace_closed_chain}
+    \leanok
     Let $L,q,D$ be nonnegative integers, let $C$ be a $D\times D$ matrix,
     and let $A_v(i)$ be a $D\times D$ matrix for each site $0\le v<L$
     and physical letter $0\le i<q$. The coefficient function
@@ -55,6 +57,7 @@ coefficients are complex. Products retain the displayed order.
 \begin{definition}[Interior matrix slices]
     \label{def:trace_core_matrix_slice}
     \lean{MPOTensor.interiorMatrixSlice}
+    \leanok
     Let $A_v(i,j)$ be the supplied $B\times B$ site matrices of an operator
     chain of length $L$ and physical dimension $q$. For virtual indices
     $a,b$, its exposed interior slice is the operator $N_{ab}$ with entries
@@ -68,6 +71,7 @@ coefficients are complex. Products retain the displayed order.
 \begin{definition}[A joint closing matrix for scalar word coefficients]
     \label{def:trace_core_word_closing}
     \lean{MPOTensor.stackClosingMatrix}
+    \leanok
     Let $B,p$ be nonnegative integers. Encode a word
     $u\in\{0,\ldots,B-1\}^p$ by
     $\iota_p(u)=\sum_{r=0}^{p-1}B^{p-1-r}u_r$, so its last letter is the
@@ -86,6 +90,7 @@ coefficients are complex. Products retain the displayed order.
 \begin{lemma}[Ordered slice words as a common stacked contraction]
     \label{thm:trace_core_slice_words}
     \lean{MPOTensor.sum_word_slices_eq_trace_stackedTensor}
+    \leanok
     \uses{def:trace_core_matrix_slice,def:trace_core_word_closing}
     For the supplied site matrices $A_v$, let $A_v^{[p]}$ be their
     $p$-fold sitewise stack: the zero-fold stack is the identity tensor,

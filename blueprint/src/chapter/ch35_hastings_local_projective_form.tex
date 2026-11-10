@@ -260,8 +260,8 @@ stated explicitly.
 
 \begin{lemma}[Off-diagonal elements from a commutator]
     \label{thm:hastings05_offdiagonal_commutator}
-    \lean{ApproximateDiagonalization.abs_sub_mul_norm_inner_le_norm_commutator,
-        ApproximateDiagonalization.norm_inner_le_norm_commutator_div}
+    \lean{TNLean.Lattice.abs_sub_mul_norm_inner_le_norm_commutator,
+        TNLean.Lattice.norm_inner_le_norm_commutator_div}
     \leanok
     If $A=A^\dagger$, $Av=rv$, and $Aw=sw$ with $r\ne s\in\mathbb R$, then for
     every $B$,
@@ -277,11 +277,11 @@ stated explicitly.
 
 \begin{lemma}[A basis of a two-dimensional ground space]
     \label{thm:hastings05_two_dim_basis}
-    \lean{ApproximateDiagonalization.offDiagonalPart,
-        ApproximateDiagonalization.offDiagonalPart_apply,
-        ApproximateDiagonalization.norm_offDiagonalPart_le,
-        ApproximateDiagonalization.norm_offDiagonalPart_le_norm_commutator_div,
-        ApproximateDiagonalization.sum_norm_offDiagonalPart_le}
+    \lean{TNLean.Lattice.offDiagonalPart,
+        TNLean.Lattice.offDiagonalPart_apply,
+        TNLean.Lattice.norm_offDiagonalPart_le,
+        TNLean.Lattice.norm_offDiagonalPart_le_norm_commutator_div,
+        TNLean.Lattice.sum_norm_offDiagonalPart_le}
     \leanok
     \uses{thm:hastings05_offdiagonal_commutator}
     For orthonormal $v,w$ and
@@ -308,7 +308,7 @@ stated explicitly.
 
 \begin{lemma}[Ground states as approximate eigenvectors up to the off-diagonal part]
     \label{thm:hastings05_low_up_to_offdiagonal}
-    \lean{ApproximateDiagonalization.norm_apply_sub_inner_smul_le_add_offDiagonalPart}
+    \lean{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPart}
     \leanok
     \uses{thm:hastings05_two_dim_basis}
     For orthonormal $v,w$, $P=\lvert v\rangle\langle v\rvert+\lvert w\rangle\langle w\rvert$,
@@ -330,13 +330,13 @@ and then the iterative splitting of repeated eigenvalues
 
 \begin{lemma}[The off-diagonal part for a compression with simple spectrum]
     \label{thm:hastings05_simple_spectrum_basis}
-    \lean{ApproximateDiagonalization.shiftPart,
-        ApproximateDiagonalization.shiftPart_apply,
-        ApproximateDiagonalization.norm_shiftPart_le,
-        ApproximateDiagonalization.offDiagonalPartFamily,
-        ApproximateDiagonalization.norm_offDiagonalPartFamily_le,
-        ApproximateDiagonalization.norm_offDiagonalPartFamily_le_norm_commutator_div,
-        ApproximateDiagonalization.sum_norm_offDiagonalPartFamily_le}
+    \lean{TNLean.Lattice.shiftPart,
+        TNLean.Lattice.shiftPart_apply,
+        TNLean.Lattice.norm_shiftPart_le,
+        TNLean.Lattice.offDiagonalPartFamily,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_norm_commutator_div,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le}
     \leanok
     \uses{thm:hastings05_offdiagonal_commutator}
     Let $v_0,\dots,v_{n-1}$ be orthonormal and
@@ -363,8 +363,8 @@ and then the iterative splitting of repeated eigenvalues
 
 \begin{lemma}[Ground states as approximate eigenvectors, any dimension]
     \label{thm:hastings05_low_up_to_offdiagonal_family}
-    \lean{ApproximateDiagonalization.offDiagonalPartFamily_apply_self,
-        ApproximateDiagonalization.norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily}
+    \lean{TNLean.Lattice.offDiagonalPartFamily_apply_self,
+        TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily}
     \leanok
     \uses{thm:hastings05_simple_spectrum_basis}
     For an orthonormal basis $v_0,\dots,v_{n-1}$ of $\operatorname{ran}P$, any
@@ -1175,11 +1175,3 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     Apply Lemma~\ref{thm:hastings05_basis_perturbation} to the actual truncated
     terms and these first filters under the full Hamiltonian.
 \end{proof}
-
-The last theorem is conditional on the chosen basis and refinement. The
-existence of that refinement, its termination, and terminal classes on
-which every remaining compression is scalar are not established here.
-Such classes require no further separation because their off-diagonal
-matrix elements vanish. These construction steps remain necessary for
-the unrestricted basis assertion of~\cite[lines 1678--1708]{Hastings2006Solving};
-see~\cite{gap:hastings05_two_dim_ground_basis}.
