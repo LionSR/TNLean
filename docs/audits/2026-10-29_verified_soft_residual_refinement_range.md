@@ -120,3 +120,41 @@ work includes arbitrary-accuracy LVV construction, the coherent AKLV
 approximation arguments, soft spectral-subspace comparisons, the corrected
 spatial cluster/MPO estimate, and sampled low-energy and binary-tree
 constructions.
+
+## Subsequent reverse-residual, projection-kernel and cluster contributions
+
+The next coordinated mathematical revisions are TNLean
+`8ace1dccea363b9ea3ee1611083fa3d73292f8a7` and QICLean
+`34cb0c3a24a9cfb8073e1fe7bb1087bc409fb951`.
+They add the actual soft-window reverse residual, the fixed-space
+characterization of complementary projection products and physical parity
+products, the arbitrary-factor tensor-sum lower-gap estimate, and the
+mandatory-label cluster identity. The exponential restriction and soft
+remainder estimates now reside in QICLean; their mathematical statements
+and proof bodies were preserved during the move.
+
+QICLean passed its 10,360-job build in 56.721 seconds, strict checks of eight
+changed sources and four existing regressions, imported foundation audits
+of 23 public declarations, source synchronization, compiled blueprint
+checks, prose and integrity checks, and the changed-module timing check.
+TNLean passed its 15,119-job build in 139.153 seconds, strict checks of seven
+changed sources and five existing regressions, imported foundation audits
+of 15 public declarations, source synchronization, compiled blueprint
+checks, prose and integrity checks, the changed-module timing check,
+the paper-gap registry check, and the tactic-pattern scan. Both foundation
+audits found only `propext`, `Classical.choice` and `Quot.sound`.
+
+The exact phase records and logs are
+`/tmp/qiclean-reverse-kernel-padding-gates.json` and
+`/tmp/tnlean-reverse-kernel-cluster-gates.json`. The five dependency-pin
+entries and the private package checkout were advanced together under the
+repository lock; `/tmp/tnlean-reverse-kernel-padding-pin.json` records the
+unchanged Mathlib artifact hash. Neither build compiled Mathlib from source,
+and no artifacts were copied from a modified worktree. No changed module
+reached the 25-second build warning threshold in this batch.
+
+The LVV arbitrary-accuracy construction, directed comparison of the two
+actual spectral windows, the spatial cluster tail and MPO construction,
+and the regional frustration-free truncation with corrected rank bound
+remain subsequent work. The proved tensor-gap and cluster identities are
+ingredients in those constructions and do not assert their completion.
