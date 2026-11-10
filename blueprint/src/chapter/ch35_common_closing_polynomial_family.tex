@@ -1,0 +1,78 @@
+\section{A common family before a polynomial closing parameter}
+\label{sec:common_closing_polynomial_family}
+
+Retain the two windows, the native middle core, the interval $J$, and
+$D=(qk)^{18\ell+2\lfloor k/\ell\rfloor}$ of
+Lemma~\ref{thm:physical_polynomial_tensor_family}.
+Fix $m\geq0$ and closing matrices $C_0,\ldots,C_m\in\C^{B\times B}$.
+The site tensors are fixed; only their closing matrix varies:
+\begin{align}
+    C(z) & =\sum_{a=0}^m z^a C_a,\notag \\
+    Z(z)_{\sigma,\tau}
+         & =\operatorname{tr}\left(C(z)
+    \prod_{u=0}^{|K|-1}A_u(\sigma_u,\tau_u)\right).
+    \label{eq:polynomial_closing_matrix}
+\end{align}
+Let $P_M(z)$ be the identity extension of $Z(z)$ to the original chain.
+
+\begin{lemma}[One family for all closing parameters]
+    \label{thm:common_closing_polynomial_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_closing_family_fin}
+    \leanok
+    Under the geometric and support hypotheses
+    (\ref{eq:physical_tensor_hypotheses}), there are a nonnegative integer
+    $N$ and matrices $W_0,\ldots,W_{N-1}$ on the retained interval such that
+    \begin{align}
+        N & \leq(mk+1)D^2.
+        \label{eq:common_closing_family_count}
+    \end{align}
+    Each $W_i$, in the paired physical alphabet and increasing site order,
+    has an open-boundary matrix product representation with all bonds at
+    most $(\max\{1,B\})^{2k}$.
+
+    This one family is chosen before $z\in\C$, before the supported
+    exterior operators $P_L,P_R$, and before the polynomial $P$ of degree
+    at most $k$. For
+    \begin{align}
+        H_z=P_L+P_M(z)+P_R+
+        \sum_{r=0}^{2\ell-1}(W^L_r+W^R_r),
+        \label{eq:common_closing_hamiltonian}
+    \end{align}
+    there are complementary matrices $M_i$ such that
+    \begin{align}
+        P(H_z) & =\left(\sum_{i=0}^{N-1}M_i\otimes W_i\right)^{\mathrm{phys}},
+        \label{eq:common_closing_matrix_decomposition}                         \\
+        \mathcal U P(H_z)\mathcal U^*
+               & =\sum_{i=0}^{N-1}W_i\otimes M_i.
+        \label{eq:common_closing_conjugation}
+    \end{align}
+    The same canonical coordinate isometry $\mathcal U$ is used for every
+    parameter and every polynomial. No Hermiticity assumption is imposed
+    on the closing matrices or on the interpolation nodes.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_aeval_fin_middle_family,thm:physical_polynomial_tensor_family}
+    For each of the $mk+1$ fixed integer nodes, apply the common physical
+    family construction to the corresponding closing matrix. Take the
+    disjoint union of these families. The count adds, whereas each member
+    retains its original matrix product representation.
+
+    Hold $P_L,P_R$ fixed. Linearity in the closing matrix makes every
+    entry of $H_z$ a polynomial in $z$ of degree at most $m$, independently
+    of the number of sites. Every entry of $P(H_z)$ therefore has degree
+    at most $mk$, even though the coefficient matrices need not commute.
+    Lagrange interpolation expresses $P(H_z)$ as a scalar linear
+    combination of its values at the fixed nodes. Absorb these scalar
+    weights into the complementary factors $M_i$. This gives
+    (\ref{eq:common_closing_matrix_decomposition}) with the unchanged
+    middle family. The canonical tensor-coordinate identity gives
+    (\ref{eq:common_closing_conjugation}).
+\end{proof}
+
+The exterior operators are held fixed during the interpolation. They may
+subsequently be chosen as arbitrary functions of the requested physical
+parameter; in particular, a separate scalar energy shift can remain in
+$P_L$. The result is an algebraic ingredient for
+\cite[Proposition~5.7]{Arad2016RigorousRG}, not a spectral or running-time
+estimate.

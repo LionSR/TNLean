@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.UnitNormalizationDistance
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.OpenMPSRank
-import TNLean.MPS.AreaLaw.SequentialTruncation
+import TNLean.MPS.AreaLaw.NormalizedSequentialApproximation
 
 /-!
 # Polynomial matrix product state approximation on a chain
@@ -38,11 +38,6 @@ open Matrix
 namespace TNLean.MPS.AreaLaw
 
 variable {q R : ℕ} {J Δ : ℝ}
-
-/-- The left block of `k` sites is the interval `[0, k)`. -/
-theorem leftBlock_eq_interval (L k : ℕ) : leftBlock L k = interval L 0 k := by
-  ext i
-  simp
 
 open scoped ComplexOrder Matrix.Norms.L2Operator in
 /-- A finite interaction family's actual marginal tail is controlled by any upper

@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.PolynomialFilterLogCount
+import QICLean.Analysis.LogPowerAbsorption
 import Mathlib.Analysis.Asymptotics.Lemmas
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Tactic.Linarith
@@ -53,57 +55,9 @@ of the square root, beyond any prescribed lower bound. This is a scalar
 estimate supporting ALVV, arXiv:1602.08828v2, lines 1010–1024. -/
 private theorem exists_log_sqrt_absorption (a b c M : ℝ) (hb : 0 ≤ b) (hc : 0 < c) :
     ∃ A : ℝ, 1 ≤ A ∧ M ≤ A ∧ a + b * log (A + 1) ≤ c * sqrt A := by
-  have hlog : log =o[atTop] sqrt := by
-    change log =o[atTop] (fun x : ℝ ↦ sqrt x)
-    simpa only [sqrt_eq_rpow] using
-      (isLittleO_log_rpow_atTop (show 0 < (1 / (2 : ℝ)) by norm_num))
-  have hconst : (fun _ : ℝ ↦ a + b * log 2) =o[atTop] sqrt := by
-    simpa only [Function.comp_def, id_eq] using
-      (Asymptotics.isLittleO_const_id_atTop (a + b * log 2)).comp_tendsto
-        tendsto_sqrt_atTop
-  have hsmall : (fun x : ℝ ↦ a + b * log 2 + b * log x) =o[atTop] sqrt :=
-    hconst.add (hlog.const_mul_left b)
-  obtain ⟨A, hA, hbound⟩ :=
-    ((eventually_ge_atTop (max 1 M)).and (hsmall.def hc)).exists
-  have hA1 : 1 ≤ A := (le_max_left 1 M).trans hA
-  have hAM : M ≤ A := (le_max_right 1 M).trans hA
-  have hlogA : log (A + 1) ≤ log 2 + log A := by
-    calc
-      log (A + 1) ≤ log (2 * A) := log_le_log (by linarith) (by linarith)
-      _ = log 2 + log A := log_mul (by norm_num) (by linarith)
-  refine ⟨A, hA1, hAM, ?_⟩
-  calc
-    a + b * log (A + 1) ≤ a + b * (log 2 + log A) :=
-      add_le_add_right (mul_le_mul_of_nonneg_left hlogA hb) a
-    _ = a + b * log 2 + b * log A := by ring
-    _ ≤ ‖a + b * log 2 + b * log A‖ := le_abs_self _
-    _ ≤ c * ‖sqrt A‖ := hbound
-    _ = c * sqrt A := by rw [Real.norm_eq_abs, abs_of_nonneg (sqrt_nonneg A)]
-
-/-- The ceiling of A v²/g is bounded above by (A+1)v²/g and below by A.
-Auxiliary to ALVV, arXiv:1602.08828v2, Theorem `t:ais`, lines 1010–1024. -/
-private theorem ceil_scale_bounds (A v g : ℝ) (hA : 1 ≤ A) (hv : 1 ≤ v)
-    (hg : 0 < g) (hg1 : g ≤ 1) :
-    A * v ^ 2 / g ≤ (⌈A * v ^ 2 / g⌉₊ : ℝ) ∧
-      (⌈A * v ^ 2 / g⌉₊ : ℝ) ≤ (A + 1) * v ^ 2 / g ∧
-      A ≤ (⌈A * v ^ 2 / g⌉₊ : ℝ) := by
-  have hA0 : 0 ≤ A := zero_le_one.trans hA
-  have hv2 : 1 ≤ v ^ 2 := by nlinarith
-  have hratio : 1 ≤ v ^ 2 / g := (le_div_iff₀ hg).2 (by linarith)
-  have hnonneg : 0 ≤ A * v ^ 2 / g :=
-    div_nonneg (mul_nonneg hA0 (sq_nonneg v)) hg.le
-  have hscale : A ≤ A * v ^ 2 / g := by
-    calc
-      A = A * 1 := (mul_one A).symm
-      _ ≤ A * (v ^ 2 / g) := mul_le_mul_of_nonneg_left hratio hA0
-      _ = A * v ^ 2 / g := by ring
-  have hlower : A * v ^ 2 / g ≤ (⌈A * v ^ 2 / g⌉₊ : ℝ) := Nat.le_ceil _
-  refine ⟨hlower, ?_, hscale.trans hlower⟩
-  calc
-    (⌈A * v ^ 2 / g⌉₊ : ℝ) ≤ A * v ^ 2 / g + 1 :=
-      (Nat.ceil_lt_add_one hnonneg).le
-    _ ≤ A * v ^ 2 / g + v ^ 2 / g := add_le_add le_rfl hratio
-    _ = (A + 1) * v ^ 2 / g := by ring
+  obtain ⟨A, hA, hM, hbound⟩ :=
+    exists_log_rpow_absorption a b c M (1 / 2) hb hc (by norm_num)
+  exact ⟨A, hA, hM, by simpa only [sqrt_eq_rpow] using hbound⟩
 
 /-- Joint choice of the logarithmic absorption constant and a prescribed
 lower threshold. Scalar auxiliary for ALVV, t:ais, lines 1010--1024. -/
@@ -127,44 +81,6 @@ private theorem joint_absorption_constant (C_H M : ℝ) (hC : 0 < C_H) :
         rw [show 2 * A / (5 * C_H) = (2 / (5 * C_H)) * A by ring,
           sqrt_mul (show 0 ≤ 2 / (5 * C_H) by positivity)]
         ring
-
-/-- The logarithm of the actual count base is linear in the logarithmic
-scale. Scalar auxiliary for ALVV, t:ais, lines 1010--1024. -/
-private theorem log_base_bound (A d g u e : ℝ) (hA : 1 ≤ A)
-    (hd : 2 ≤ d) (hg : 0 < g) (hg1 : g ≤ 1)
-    (hu : u = 1 + log d + log (1 / g))
-    (he : 1 ≤ e) (heup : e ≤ (A + 1) * u ^ 2 / g) :
-    log (d * e ^ 2) ≤ (6 + 2 * log (A + 1)) * u := by
-  have hd0 : 0 < d := by linarith
-  have hb : 0 ≤ log (1 / g) := log_nonneg ((one_le_div hg).2 hg1)
-  have hld : 0 ≤ log d := log_nonneg (by linarith)
-  have hu1 : 1 ≤ u := by rw [hu]; linarith
-  have hu0 : 0 < u := by linarith
-  have he0 : 0 < e := by linarith
-  have hAp : 0 < A + 1 := by linarith
-  have hla : 0 ≤ log (A + 1) := log_nonneg (by linarith)
-  have hle : log e ≤ log (A + 1) + 2 * log u + log (1 / g) := by
-    calc
-      log e ≤ log ((A + 1) * u ^ 2 / g) := log_le_log he0 heup
-      _ = log (A + 1) + 2 * log u + log (1 / g) := by
-        rw [log_div (mul_ne_zero hAp.ne' (pow_ne_zero 2 hu0.ne')) hg.ne',
-          log_mul hAp.ne' (pow_ne_zero 2 hu0.ne'), log_pow,
-          one_div, log_inv]
-        ring
-  have hlu : log u ≤ u := log_le_self hu0.le
-  have hldg : log d + 2 * log (1 / g) ≤ 2 * u := by rw [hu]; linarith
-  have hlaMul : log (A + 1) ≤ log (A + 1) * u := by
-    simpa only [mul_one] using mul_le_mul_of_nonneg_left hu1 hla
-  calc
-    log (d * e ^ 2) = log d + 2 * log e := by
-      rw [log_mul hd0.ne' (pow_ne_zero 2 he0.ne'), log_pow]
-      norm_num
-    _ ≤ log d + 2 * (log (A + 1) + 2 * log u + log (1 / g)) := by
-      linarith only [hle]
-    _ ≤ 2 * log (A + 1) + 6 * u := by
-      linarith only [hlu, hldg]
-    _ ≤ (6 + 2 * log (A + 1)) * u := by
-      nlinarith only [hlaMul]
 
 /-- The width bound and the ceiling lower bound give the required decay
 exponent. This is scalar algebra, not a physical spectral-width estimate. -/
@@ -259,38 +175,15 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
   obtain ⟨A, hA, hA21, hAM, hAlog, habsorb⟩ := joint_absorption_constant C_H M hC
   refine ⟨A, hA, hA21, hAM, hAlog, ?_⟩
   intro d g hd hg hg1 u ell D cA
-  have hdR : (2 : ℝ) ≤ (d : ℝ) := by exact_mod_cast hd
-  have hd0 : 0 < (d : ℝ) := by linarith
-  have hld : 0 ≤ log (d : ℝ) := log_nonneg (by linarith)
+  have hld : 0 ≤ log (d : ℝ) :=
+    log_nonneg (by exact_mod_cast (le_trans (by decide : 1 ≤ 2) hd))
   have hb : 0 ≤ log (1 / g) := log_nonneg ((one_le_div hg).2 hg1)
   have hu1 : 1 ≤ u := by dsimp only [u]; linarith
   have hu0 : 0 ≤ u := by linarith
-  obtain ⟨hellLower, hellUpper, hellA⟩ := ceil_scale_bounds A u g hA hu1 hg hg1
-  have hell1 : 1 ≤ (ell : ℝ) := hA.trans hellA
-  have hell0 : 0 ≤ (ell : ℝ) := by linarith
-  have hA0 : 0 ≤ A := by linarith
-  have hcA0 : 0 ≤ cA := by
-    dsimp only [cA]
-    have := log_nonneg (show 1 ≤ A + 1 by linarith)
-    linarith
-  have hbase : log ((d : ℝ) * (ell : ℝ) ^ 2) ≤ cA * u :=
-    log_base_bound A d g u ell hA hdR hg hg1 rfl hell1 hellUpper
-  have hDcast : (D : ℝ) = ((d : ℝ) * (ell : ℝ) ^ 2) ^ (22 * ell) := by
-    simp only [D, Nat.cast_pow, Nat.cast_mul]
-  have hDpos : 0 < (D : ℝ) := by rw [hDcast]; positivity
-  have hlogD : log (D : ℝ) ≤ 22 * (ell : ℝ) * cA * u := by
-    rw [hDcast, log_pow]
-    have hmul := mul_le_mul_of_nonneg_left hbase
-      (show 0 ≤ 22 * (ell : ℝ) by positivity)
-    push_cast
-    nlinarith only [hmul]
-  have hlogDup : log (D : ℝ) ≤ 22 * (A + 1) * cA / g * u ^ 3 := by
-    have hmul := mul_le_mul_of_nonneg_right hellUpper
-      (show 0 ≤ 22 * cA * u by positivity)
-    calc
-      log (D : ℝ) ≤ 22 * (ell : ℝ) * cA * u := hlogD
-      _ ≤ 22 * ((A + 1) * u ^ 2 / g) * cA * u := by nlinarith only [hmul]
-      _ = 22 * (A + 1) * cA / g * u ^ 3 := by ring
+  obtain ⟨hellLower, hellUpper, hellA, hDpos, hlogD, hlogDup⟩ :=
+    polynomial_filter_count_bounds A d g hA hd hg hg1
+  have hell0 : 0 ≤ (ell : ℝ) := Nat.cast_nonneg _
+  have hA0 : 0 ≤ A := zero_le_one.trans hA
   have hscale : A * u ^ 2 ≤ g * (ell : ℝ) := by
     have h := (div_le_iff₀ hg).mp hellLower
     nlinarith only [h]

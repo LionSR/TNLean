@@ -55,7 +55,8 @@ preparation of matrix product states.
 \begin{lemma}[Matrix entries of a supported operator]
     \label{thm:area_law_supported_identity}
     \lean{QuantumCircuit.isSupportedOn_of_mem_supportedOperators,
-        QuantumCircuit.mem_supportedOperators_of_isSupportedOn}
+        QuantumCircuit.mem_supportedOperators_of_isSupportedOn,
+        QuantumCircuit.localLift_eq_embedOp}
     \leanok
     \uses{def:qc_local_circuit}
     Let $I$ be a finite set, $q\in\mathbb N$, $S\subseteq I$, and $\mathcal C=\{0,\ldots,q-1\}^I$. A matrix $A\in\C^{\mathcal C\times\mathcal C}$ belongs to $\mathcal A_S=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin S\}$ if and only if:
@@ -64,6 +65,9 @@ preparation of matrix product states.
         \item $\sigma|_S=\sigma'|_S,\,\tau|_S=\tau'|_S,\,\sigma|_{S^c}=\tau|_{S^c},\,\sigma'|_{S^c}=\tau'|_{S^c}\implies A_{\sigma\tau}=A_{\sigma'\tau'}$.
     \end{enumerate}
     This characterizes the support condition of~\cite[Lemma~3.1]{OpenAI2026AreaLaw}, \texttt{02-initial.tex}, line~39.
+    For a matrix $K$ on $S$, placement along the inclusion $S\hookrightarrow I$
+    is the local lift $K\otimes\mathbb 1_{S^c}$ in the corresponding tensor
+    coordinates. This identity includes empty regions and zero local dimension.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -234,6 +238,23 @@ preparation of matrix product states.
 \begin{proof}
     \leanok
     The composition rule follows from $x|_{(f\circ e)(J)^c}=y|_{(f\circ e)(J)^c}\iff x|_{f(I)^c}=y|_{f(I)^c}$ and $(x\circ f)|_{e(J)^c}=(y\circ f)|_{e(J)^c}$. Disjoint ranges give commuting supports, and induction on $K$ collapses the intermediate matrix-product sum to the unique configuration matching the output on the new range and the input elsewhere.
+\end{proof}
+
+\begin{lemma}[Norm under placement on additional sites]
+    \label{lem:qc_placement_norm}
+    \lean{QuantumCircuit.norm_embedOp_le}
+    \leanok
+    Let $e:J\hookrightarrow I$ be an injection of finite site sets, and
+    let $X$ be a matrix on $(\C^q)^{\otimes J}$. Placing $X$ on these
+    sites and acting as the identity elsewhere gives a matrix $\iota_e(X)$
+    satisfying $\|\iota_e(X)\|\leq\|X\|$ in the Hilbert-space operator norm.
+    Empty configuration spaces are included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:qc_placed_operators}
+    Placement preserves multiplication, addition, complex scalars and
+    adjoints. It is therefore a nonunital star-algebra homomorphism
+    between complex C-star algebras, and is contractive.
 \end{proof}
 
 \begin{lemma}[Operators supported on a set of sites]

@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Kraus.NormalCommutant
+import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
 
 /-!
 # Two multi-block reductions with the same flag
 
 Let `(σ, g)` and `(σ, g_tilde)` be two multi-block reductions of a tensor `B` onto the same family
-of normal blocks `C s`, `s ∈ S`, with the same slots and order `σ` and the same flag,
+of nonzero irreducible blocks `C s`, `s ∈ S`, with the same slots and order `σ` and the same flag,
 `g_tilde⁻¹ E_k = g⁻¹ E_k` for every leading coordinate subspace `E_k`. The coordinate change
 `h = g_tilde g⁻¹` maps every `E_k` onto itself, so it is block upper triangular for the order `σ`,
 and its diagonal block `h_{bb}` intertwines the diagonal block of the slot `b` with itself, so it is
@@ -25,7 +25,7 @@ such matrices acts freely and transitively by `g ↦ h g` on the reductions with
 `MPSTensor.MultiBlockCompression.bijOn_conjTriangular` records the torsor.
 
 This is *Two compressions with the same flag* (blueprint `thm:asym_uniq_same_flag`). The blocks are
-assumed normal, as in the existence theorem, and of positive bond dimension; the proof uses only
+assumed nonzero irreducible; the proof uses only
 Schur's lemma, which holds for irreducible blocks.
 
 **Formulation of "the same slots, order and flag".** A multi-block compression carries its number of
@@ -383,12 +383,12 @@ noncomputable def coordChangeScalar (b : BlockIndex S P.z) : ℂ :=
 /-- **The diagonal blocks of the coordinate change are scalars** (blueprint
 `thm:asym_uniq_same_flag`, *Two compressions with the same flag*): `h_{bb} = λ_b 1`, by Schur's
 lemma on a block slot and because a zero slot is one-dimensional. -/
-theorem blockDiag'_coordChange_eq_smul (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+theorem blockDiag'_coordChange_eq_smul (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
     (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k) (b : BlockIndex S P.z) :
     (coordChange P.gauge g).blockDiag' b = P.coordChangeScalar g b • 1 := by
   refine Matrix.eq_trace_smul_one_of_exists_eq_smul_one ?_
   rcases b with s | t
-  · exact Kraus.IsNormal.eq_smul_one_of_commute (hC s.1 s.2) fun i =>
+  · exact exists_eq_smul_one_of_intertwines (hirr s.1 s.2) fun i =>
       blockDiag'_coordChange_intertwines hflag i (Sum.inl s)
   · refine ⟨(coordChange P.gauge g).blockDiag' (Sum.inr t) 0 0, ?_⟩
     ext i j
@@ -407,29 +407,30 @@ theorem blockDiag'_coordChange_symm_mul
 
 /-- **The scalar of a slot is nonzero** (blueprint `thm:asym_uniq_same_flag`, *Two compressions with
 the same flag*), because the coordinate change is invertible and block upper triangular. -/
-theorem coordChangeScalar_ne_zero (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-    (hD : ∀ s ∈ S, 0 < D s) (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k)
+theorem coordChangeScalar_ne_zero (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0) (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k)
     (b : BlockIndex S P.z) : P.coordChangeScalar g b ≠ 0 := by
   intro h0
   have h := blockDiag'_coordChange_symm_mul hflag b
-  rw [blockDiag'_coordChange_eq_smul hC hflag, h0, zero_smul, Matrix.mul_zero] at h
-  have : Nonempty (Fin (slotSize D b)) := ⟨⟨0, slotSize_pos hD b⟩⟩
+  rw [blockDiag'_coordChange_eq_smul hirr hflag, h0, zero_smul, Matrix.mul_zero] at h
+  have : Nonempty (Fin (slotSize D b)) := ⟨⟨0, slotSize_pos
+    (fun s hs => dim_pos_of_exists_ne_zero (hlet s hs)) b⟩⟩
   exact zero_ne_one h
 
 /-- The diagonal block of the inverse coordinate change at a slot is `λ_b⁻¹ 1`. -/
-theorem blockDiag'_coordChange_symm_eq_smul (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-    (hD : ∀ s ∈ S, 0 < D s) (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k)
+theorem blockDiag'_coordChange_symm_eq_smul (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0) (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k)
     (b : BlockIndex S P.z) :
     (coordChange g P.gauge).blockDiag' b = (P.coordChangeScalar g b)⁻¹ • 1 := by
   have h := blockDiag'_coordChange_symm_mul hflag b
-  rw [blockDiag'_coordChange_eq_smul hC hflag, Matrix.mul_smul, Matrix.mul_one] at h
-  rw [← h, smul_smul, inv_mul_cancel₀ (coordChangeScalar_ne_zero hC hD hflag b), one_smul]
+  rw [blockDiag'_coordChange_eq_smul hirr hflag, Matrix.mul_smul, Matrix.mul_one] at h
+  rw [← h, smul_smul, inv_mul_cancel₀ (coordChangeScalar_ne_zero hirr hlet hflag b), one_smul]
 
 /-- **Two compressions with the same flag, the reading maps** (blueprint `thm:asym_uniq_same_flag`,
 *Two compressions with the same flag*, displayed formulas): for two reductions with the same slots,
 order and flag, $\widetilde W_b = \lambda_b W_b + \sum_{c \text{ after } b} h_{bc} W_c$, the sum
 over all slots `c`, zero slots included. -/
-theorem leftRow_withGauge (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+theorem leftRow_withGauge (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
     (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k) (b : BlockIndex S P.z) :
     (P.withGauge g htri hdiag).leftRow b = P.coordChangeScalar g b • P.leftRow b +
       ∑ c with P.ord b < P.ord c,
@@ -447,7 +448,7 @@ theorem leftRow_withGauge (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
   congr 1
   rw [Finset.sum_eq_single_of_mem b (by simp)]
   · rw [show (coordChange P.gauge g).submatrix (Sigma.mk b) (Sigma.mk b) =
-        (coordChange P.gauge g).blockDiag' b from rfl, blockDiag'_coordChange_eq_smul hC hflag,
+        (coordChange P.gauge g).blockDiag' b from rfl, blockDiag'_coordChange_eq_smul hirr hflag,
       Matrix.smul_mul, Matrix.one_mul]
   · intro c hc hcb
     have hlt : P.ord c < P.ord b :=
@@ -462,7 +463,8 @@ theorem leftRow_withGauge (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
 order and flag,
 $\widetilde V_b = \lambda_b^{-1} V_b + \sum_{c \text{ before } b} V_c (h^{-1})_{cb}$, the sum over
 all slots `c`, zero slots included. -/
-theorem rightCol_withGauge (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+theorem rightCol_withGauge (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S,
+    ∃ i, C s i ≠ 0)
     (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k) (b : BlockIndex S P.z) :
     (P.withGauge g htri hdiag).rightCol b = (P.coordChangeScalar g b)⁻¹ • P.rightCol b +
       ∑ c with P.ord c < P.ord b,
@@ -482,7 +484,7 @@ theorem rightCol_withGauge (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s 
   rw [Finset.sum_eq_single_of_mem b (by simp)]
   · rw [show (coordChange g P.gauge).submatrix (Sigma.mk b) (Sigma.mk b) =
         (coordChange g P.gauge).blockDiag' b from rfl,
-      blockDiag'_coordChange_symm_eq_smul hC hD hflag, Matrix.mul_smul, Matrix.mul_one]
+      blockDiag'_coordChange_symm_eq_smul hirr hlet hflag, Matrix.mul_smul, Matrix.mul_one]
   · intro c hc hcb
     have hlt : P.ord b < P.ord c :=
       lt_of_le_of_ne (not_lt.1 (Finset.mem_filter.1 hc).2) fun h => hcb (P.ord.injective h).symm
@@ -634,10 +636,11 @@ variable {P} {g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ)}
 compressions with the same flag*): a second reduction with the same slots, order and flag as `P` is
 `(σ, h g)` for its coordinate change `h = g_tilde g⁻¹`, which is block upper triangular with nonzero
 scalar diagonal blocks `λ_b 1`. -/
-theorem withGauge_eq_conjTriangular (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+theorem withGauge_eq_conjTriangular (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k) :
     P.withGauge g htri hdiag = P.conjTriangular (blockTriangular_coordChange_of_flag_eq hflag)
-      (coordChangeScalar_ne_zero hC hD hflag) (blockDiag'_coordChange_eq_smul hC hflag) := by
+      (coordChangeScalar_ne_zero hirr hlet hflag) (blockDiag'_coordChange_eq_smul hirr hflag) := by
   refine P.withGauge_congr (LinearEquiv.ext fun v => ?_)
   rw [conjTriangularGauge_apply, coordChange_mulVec, LinearEquiv.symm_apply_apply]
 
@@ -669,22 +672,24 @@ theorem eq_of_conjTriangular_eq {h h' : Matrix (BlockSpace D S P.z) (BlockSpace 
 omit [DecidableEq ι] in
 /-- The scalars of the diagonal blocks of a matrix are determined by the matrix when every slot
 has positive size. -/
-theorem eq_of_blockDiag'_eq_smul (hD : ∀ s ∈ S, 0 < D s)
+theorem eq_of_blockDiag'_eq_smul (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     {h : Matrix (BlockSpace D S z) (BlockSpace D S z) ℂ} {μ μ' : BlockIndex S z → ℂ}
     (hdiag : ∀ b, h.blockDiag' b = μ b • 1) (hdiag' : ∀ b, h.blockDiag' b = μ' b • 1) :
     μ = μ' := by
   funext b
-  have e := congrFun (congrFun ((hdiag b).symm.trans (hdiag' b)) ⟨0, slotSize_pos hD b⟩)
-    ⟨0, slotSize_pos hD b⟩
+  have e := congrFun (congrFun ((hdiag b).symm.trans (hdiag' b)) ⟨0, slotSize_pos
+    (fun s hs => dim_pos_of_exists_ne_zero (hlet s hs)) b⟩)
+    ⟨0, slotSize_pos (fun s hs => dim_pos_of_exists_ne_zero (hlet s hs)) b⟩
   simpa using e
 
 /-- **The torsor of the same-flag theorem** (blueprint `thm:asym_uniq_same_flag`, *Two compressions
-with the same flag*): for a reduction `(σ, g)` onto normal blocks of positive bond dimension,
-`(h, μ) ↦ (σ, h g)` is a bijection from the group `T_σ` of block upper triangular matrices with
-diagonal blocks `μ_b 1`, `μ_b ≠ 0`, onto the reductions with the order and the flag of `(σ, g)`. The
-scalars `μ` are recorded with `h`; they are determined by `h` because every slot has positive size.
--/
-theorem bijOn_conjTriangular (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) :
+with the same flag*): for a reduction `(σ, g)` onto nonzero irreducible blocks,
+`(h, μ) ↦ (σ, h g)` is a bijection from the group `T_σ` of block upper triangular
+matrices with diagonal blocks `μ_b 1`, `μ_b ≠ 0`, onto the reductions with the order and the flag of
+`(σ, g)`. The scalars `μ` are recorded with `h`; they are determined by `h` because every slot has
+positive size. -/
+theorem bijOn_conjTriangular (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S,
+    ∃ i, C s i ≠ 0) :
     Set.BijOn
       (fun p : {p : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ × (BlockIndex S P.z → ℂ) //
           p.1.BlockTriangular (fun x => P.ord x.1) ∧ (∀ b, p.2 b ≠ 0) ∧
@@ -698,15 +703,15 @@ theorem bijOn_conjTriangular (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ 
   · obtain ⟨⟨h, μ⟩, ht, hμ, hdiag⟩ := p
     obtain ⟨⟨h', μ'⟩, ht', hμ', hdiag'⟩ := q
     obtain rfl : h = h' := P.eq_of_conjTriangular_eq hpq
-    obtain rfl : μ = μ' := eq_of_blockDiag'_eq_smul hD hdiag hdiag'
+    obtain rfl : μ = μ' := eq_of_blockDiag'_eq_smul hlet hdiag hdiag'
     rfl
   · obtain ⟨hz, hord, hflag⟩ := hQ
     obtain ⟨g, htri, hdiag, rfl⟩ := P.exists_eq_withGauge hz hord
     have hflag' : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k := fun k => hflag k
     exact ⟨⟨(coordChange P.gauge g, P.coordChangeScalar g),
-      blockTriangular_coordChange_of_flag_eq hflag', coordChangeScalar_ne_zero hC hD hflag',
-      blockDiag'_coordChange_eq_smul hC hflag'⟩, trivial,
-    (withGauge_eq_conjTriangular hC hD hflag').symm⟩
+      blockTriangular_coordChange_of_flag_eq hflag', coordChangeScalar_ne_zero hirr hlet hflag',
+      blockDiag'_coordChange_eq_smul hirr hflag'⟩, trivial,
+    (withGauge_eq_conjTriangular hirr hlet hflag').symm⟩
 
 end TorsorBijection
 
