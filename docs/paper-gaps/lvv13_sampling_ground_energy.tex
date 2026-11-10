@@ -213,24 +213,17 @@ spatial-rank arguments.
 \section{The checked finite construction}
 
 The normalization estimate in~(\ref{eq:lvv_sampling_energy_dependence})
-and the resulting sampled operator approximation are now formalized in
-QICLean. For positive-contraction interactions, a unit ground vector and
-a positive lower gap, the construction produces one actual word family
-whose normalized sum approximates both the power and the ground
-projection, and whose letter counts are simultaneously bounded. The
-explicit positive sample count retains the factor
-$n^2Q^{2\varepsilon_0/\varepsilon}$. The corresponding source is QICLean's
-module \path{QICLean/Probability/PhysicalPowerSampling.lean}.
-
-TNLean's module \path{TNLean/MPS/AreaLaw/ViableSet/SampledPowerRank.lean}
-adds the spatial estimate for the same word family: across every chain
-cut, its normalized sum has operator Schmidt rank at most
-$\ell q^{2u}$, where every letter count is strictly below $u$.
-The same sampled operator now also supplies cut factors before every
-normalized vector in the unique ground line and every half-viable input
-family. The word length and count still specify the energy in advance.
-The counterexample above has not been formalized. These sampled results do
-not supply an energy-independent polynomial count.
+and the resulting sampled operator approximation, for positive-contraction
+interactions, a unit ground vector and a positive lower gap, are not yet
+formalized. The intended construction produces one word family whose
+normalized sum approximates both the power and the ground projection,
+with simultaneously bounded letter counts, and whose normalized sum has
+operator Schmidt rank at most $\ell q^{2u}$ across every chain cut when
+every letter count is strictly below $u$. The explicit positive sample
+count retains the factor $n^2Q^{2\varepsilon_0/\varepsilon}$. The word
+length and count still specify the energy in advance. The counterexample
+above has not been formalized. These sampled results would not supply an
+energy-independent polynomial count.
 
 The separate Gaussian energy-mesh construction supplies successive
 polynomial viable families at fixed dimension, gap and the stated conservative

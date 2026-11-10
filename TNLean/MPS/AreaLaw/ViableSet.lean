@@ -30,7 +30,6 @@ import TNLean.MPS.AreaLaw.ViableSet.Gluing
 import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
-import TNLean.MPS.AreaLaw.ViableSet.IntervalPowerSampling
 import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.LeadingResidual
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
@@ -49,7 +48,6 @@ import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledFactors
 import TNLean.MPS.AreaLaw.ViableSet.SampledGroundLine
-import TNLean.MPS.AreaLaw.ViableSet.SampledPowerRank
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjector
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjectorPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction

@@ -48,11 +48,13 @@ import TNLean.Lattice.GroundSpaceCompression
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.IntegerLatticeBallCount
 import TNLean.Lattice.LocalHamiltonian
+import TNLean.Lattice.LowEnergyBasis
 import TNLean.Lattice.LowEnergyBasisConstruction
 import TNLean.Lattice.LowEnergyBasisIteration
 import TNLean.Lattice.LowEnergyBasisPerturbation
 import TNLean.Lattice.LowEnergyBasisRecursive
 import TNLean.Lattice.LowEnergyBasisRefinement
+import TNLean.Lattice.LowEnergyBasisSimpleSpectrum
 import TNLean.Lattice.LowEnergyBasisSpectralSplit
 import TNLean.Lattice.LowEnergyBasisTruncatedUniform
 import TNLean.Lattice.LowEnergyBasisTwoDimensional
