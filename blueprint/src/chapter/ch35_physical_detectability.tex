@@ -1,0 +1,199 @@
+\section{Detectability for a physical projection chain}
+
+\begin{definition}[The physical even and odd products]
+    \label{def:physical_detectability}
+    \lean{TNLean.MPS.AreaLaw.physicalParityProduct}
+    \lean{TNLean.MPS.AreaLaw.physicalDetectability}
+    \leanok
+    Let $h_i$ be orthogonal projections supported on the nearest-neighbour
+    bonds of a finite open chain, numbered from one, and put $H=\sum_i h_i$.
+    Define
+    \begin{align*}
+        P_{\mathrm{odd}}&=\prod_{i\text{ odd}}(\Id-h_i),&
+        P_{\mathrm{even}}&=\prod_{i\text{ even}}(\Id-h_i),&
+        \operatorname{DL}(H)&=P_{\mathrm{even}}P_{\mathrm{odd}}.
+    \end{align*}
+    The terms in each product commute, and empty products are the identity.
+    This is the operator in \cite[the definition of the one-dimensional
+    detectability operator]{Arad2016RigorousRG}, after the source's reduction
+    to projection terms.
+\end{definition}
+
+\begin{lemma}[The parity products are projections]
+    \label{thm:physical_parity_projection}
+    \lean{TNLean.MPS.AreaLaw.physicalParityProduct_isStarProjection}
+    \leanok
+    Both $P_{\mathrm{odd}}$ and $P_{\mathrm{even}}$ are orthogonal projections.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:physical_detectability}
+    Distinct bonds of the same parity are disjoint. Operators supported on
+    disjoint sites commute, so each product is a product of commuting
+    orthogonal projections.
+\end{proof}
+
+\begin{lemma}[The physical detectability energy estimate]
+    \label{thm:physical_detectability_energy}
+    \lean{TNLean.MPS.AreaLaw.re_inner_physicalDetectability_le}
+    \leanok
+    For every vector $\psi$, put $\phi=\operatorname{DL}(H)\psi$. Then
+    \begin{align*}
+        \langle\phi,H\phi\rangle
+        \le 4\bigl(\|\psi\|^2-\|\phi\|^2\bigr).
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:physical_detectability}
+    Enumerate the actual odd terms followed by the actual even terms.
+    A term can fail to commute only with its two adjacent bonds.
+    The detectability lemma of \cite{Arad2016RigorousRG}, in the general
+    Hilbert-space form proved in \cite{QICLean2026Blueprint}, therefore
+    applies with noncommutation count two. The sum and product in this
+    ordering are exactly $H$ and $\operatorname{DL}(H)$.
+\end{proof}
+
+\begin{lemma}[The physical converse estimate]
+    \label{thm:physical_detectability_converse}
+    \lean{TNLean.MPS.AreaLaw.one_sub_three_mul_le_norm_sq_physicalDetectability}
+    \leanok
+    Every unit vector $\psi$ satisfies
+    $\|\operatorname{DL}(H)\psi\|^2\ge1-3\langle\psi,H\psi\rangle$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_parity_projection}
+    Apply the converse estimate for two commuting projection families
+    from \cite{QICLean2026Blueprint} to the actual even and odd terms.
+    Their sums add to $H$. This strengthens the constant four and the
+    eigenvector restriction in the stated converse of
+    \cite{Arad2016RigorousRG}.
+\end{proof}
+
+\begin{lemma}[The full ground kernel and its orthogonal complement]
+    \label{thm:physical_detectability_kernel}
+    \lean{TNLean.MPS.AreaLaw.physicalParityProduct_fixes_kernel}
+    \lean{TNLean.MPS.AreaLaw.physicalDetectability_fixes_kernel}
+    \lean{TNLean.MPS.AreaLaw.inner_physicalDetectability_eq}
+    \leanok
+    Both parity products and $\operatorname{DL}(H)$ fix every vector
+    $z\in\ker H$. For every such $z$ and every $\psi$,
+    $\langle z,\operatorname{DL}(H)\psi\rangle=\langle z,\psi\rangle$.
+    In particular $\operatorname{DL}(H)$ preserves $(\ker H)^\perp$.
+    No assumption on the dimension of $\ker H$ is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_parity_projection}
+    The identity $\langle z,Hz\rangle=\sum_i\|h_i z\|^2$ implies
+    $h_i z=0$ for each bond. Thus every complementary factor fixes $z$.
+    Self-adjointness of each parity product gives the inner-product identity.
+\end{proof}
+
+\begin{lemma}[Contraction above a unique frustration-free ground state]
+    \label{thm:physical_detectability_gap}
+    \lean{TNLean.MPS.AreaLaw.norm_sq_physicalDetectability_le_of_gappedGroundState}
+    \leanok
+    Let $\Gamma$ be a unit vector with $H\Gamma=0$, and suppose
+    $H\ge\gamma(\Id-|\Gamma\rangle\langle\Gamma|)$ for $\gamma>0$.
+    Every unit vector $\psi\perp\Gamma$ satisfies
+    $\|\operatorname{DL}(H)\psi\|^2\le4/(4+\gamma)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_detectability_energy,thm:physical_detectability_kernel}
+    Set $\phi=\operatorname{DL}(H)\psi$. The kernel identity gives
+    $\phi\perp\Gamma$. Combining the actual gap inequality with the
+    energy estimate yields
+    $\gamma\|\phi\|^2\le\langle\phi,H\phi\rangle
+      \le4(1-\|\phi\|^2)$.
+    Rearranging gives the claimed squared-norm bound, without any upper
+    bound on $\gamma$.
+\end{proof}
+
+\begin{lemma}[Contraction above the full zero-energy kernel]
+    \label{thm:physical_detectability_spectral_gap}
+    \lean{TNLean.MPS.AreaLaw.norm_sq_physicalDetectability_le_of_spectral_gap}
+    \leanok
+    Suppose $\gamma>0$ and
+    $\operatorname{spec}(H)\subseteq\{0\}\cup[\gamma,\infty)$.
+    Every $\psi\perp\ker H$ satisfies
+    \begin{align}
+        \|\operatorname{DL}(H)\psi\|^2
+          \leq\frac4{4+\gamma}\|\psi\|^2.
+        \label{eq:physical_detectability_spectral_gap}
+    \end{align}
+    The kernel may have arbitrary dimension, and no upper bound on
+    $\gamma$ is imposed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_detectability_energy,thm:physical_detectability_kernel}
+    Put $\phi=\operatorname{DL}(H)\psi$. Kernel invariance gives
+    $\phi\perp\ker H$. The spectral decomposition and the energy estimate give
+    \begin{align}
+        \gamma\|\phi\|^2\leq\langle\phi,H\phi\rangle
+          \leq4(\|\psi\|^2-\|\phi\|^2).
+    \end{align}
+    Rearranging proves~(\ref{eq:physical_detectability_spectral_gap}).
+\end{proof}
+
+\begin{lemma}[Support of a range projection]
+    \label{thm:physical_range_projection_support}
+    \lean{QuantumCircuit.supportProj_mem_supportedOperators}
+    \leanok
+    Let the local dimension be positive. If a Hermitian operator $A$ acts on
+    a set $K$ of sites, its range projection $P_A$ acts on $K$ as well.
+\end{lemma}
+\begin{proof}\leanok
+    Every operator acting outside $K$ commutes with $A$ and hence with every
+    real function of $A$. The commutant characterization of support applies
+    to $P_A=\mathbf1_{\mathbb R\setminus\{0\}}(A)$.
+\end{proof}
+
+\begin{lemma}[Detectability for positive contraction chains]
+    \label{thm:physical_range_detectability}
+    \lean{TNLean.MPS.AreaLaw.norm_sq_physicalDetectability_supportProj_le}
+    \leanok
+    Let $H=\sum_i h_i$ be a nearest-neighbour chain of positive contractions
+    in positive local dimension. Suppose every nonzero eigenvalue of $H$ is
+    at least $\gamma>0$. Set $P_i=P_{h_i}$. Then every
+    $x\perp\ker H$ satisfies
+    \[
+      \|\operatorname{DL}(P)x\|^2
+          \le\frac4{4+\gamma}\|x\|^2.
+    \]
+    No condition on the dimension of $\ker H$ is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_range_projection_support,thm:physical_detectability_kernel,
+      thm:physical_detectability_energy}
+    The range projections have the original bond supports. Their sum dominates
+    $H$ and has exactly the same kernel. The even/odd product preserves the
+    orthogonal complement of this kernel. For $y=\operatorname{DL}(P)x$,
+    \[
+      \gamma\|y\|^2\le\langle y,Hy\rangle
+        \le\Big\langle y,\sum_iP_i y\Big\rangle
+        \le4\bigl(\|x\|^2-\|y\|^2\bigr).
+    \]
+    Rearranging gives the claim. This implements the range-projection step
+    preceding the detectability argument of
+    \cite[Section 6.1]{Arad2016RigorousRG}.
+\end{proof}
+
+The regional truncation in \cite{Arad2016RigorousRG} also requires a rank
+correction: its printed bound $d^2+2$ fails on an eight-qubit chain with
+unique ground state and gap one. The corrected bound is $d^2+3$, as
+shown in \cite{gap:alvv16_frustration_free_truncation_rank}. The regional
+rank theorem is separate from the detectability results above.
+
+\begin{lemma}[Fixed vectors of the physical parity product]
+    \label{thm:physical_parity_product_fixed_space}
+    \lean{TNLean.MPS.AreaLaw.physicalParityProduct_apply_eq_self_iff}
+    \leanok
+    Let the bond operators $h_i$ be orthogonal projections. Fix $p\in\mathbb N$
+    and select the indices for which $i\bmod2=p$. The actual parity product
+    fixes $x$ if and only if $h_ix=0$ for every selected bond.
+    This equivalence needs neither commutativity nor locality.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:physical_detectability}
+    Extend the selected bond sequence by zero terms and apply the
+    common-kernel characterization of complementary projection products
+    from \cite{QICLean2026Blueprint}. All padding terms vanish.
+\end{proof}

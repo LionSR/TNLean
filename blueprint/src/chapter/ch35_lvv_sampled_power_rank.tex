@@ -218,3 +218,86 @@ The sample count retains its dependence on the specified energy $E_0$.
 The simultaneous conclusion for all unit ground vectors does not select
 the word length or relative-error sample budget without that energy input.
 An overall nonzero scalar is immaterial after normalizing the output vectors.
+
+\begin{lemma}[Sampling without scalar normalization from a known energy interval]
+    \label{thm:lvv_interval_power_sampling}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_sampled_nn_power}
+    \leanok
+    \uses{thm:lvv_padded_nn_sample_rank,thm:lvv_simultaneous_cut_decomposition,
+        thm:lvv_scaled_projection_error_reduction}
+    Let $H=\sum_{i\in I}h_i$ be the sum of positive contractions on the
+    adjacent pairs of a chain of $L\ge0$ sites of dimension $q\ge1$.
+    Put $n=|I|+1$, and fix $0\le a\le n-1$, $\Delta>0$, $Q\ge1$, $\eta>0$,
+    and an integer $p\ge1$ such that $2q^L<4^p$.
+    Define
+    \begin{align}
+        E_{\max}&=\min(a+1,n-1), & C_{\max}&=(1-E_{\max}/n)^{-1},\\
+        m&=\left\lceil\frac{n-a}{\Delta}\log Q\right\rceil,
+        & S&=n^2Q^{4(a+1)/\Delta},\\
+        \ell&=\left\lceil\frac{16p^2S}{\eta^2}\right\rceil+1,
+        & u&=\left\lceil\frac{m/n+\log(2n\ell)}{\log2}\right\rceil,\\
+        r&=\ell q^{2u}.
+        \label{eq:lvv_interval_sampling_parameters}
+    \end{align}
+    There is a family $\sigma$ of $\ell>0$ words of length $m$ such that
+    its unscaled sample
+    \begin{align}
+        T=\frac1\ell\sum_bP_{\sigma(b)}
+        \label{eq:lvv_interval_unscaled_sample}
+    \end{align}
+    satisfies
+    \begin{align}
+        \|T-(1-H/n)^m\|&<\frac{\eta}{C_{\max}^m},\\
+        C_c(\sigma(b))&<u\quad\text{for every }b,c,\\
+        \operatorname{SR}_k(T)&\le r\quad\text{at every cut }k.
+        \label{eq:lvv_interval_mean_counts_rank}
+    \end{align}
+
+    This one family works for every later choice of $E_0\in[a,a+1]$ and
+    unit vector $\Omega$ satisfying
+    $H\Omega=E_0\Omega$ and $H-E_0\,1\ge\Delta(1-\Pi)$, where
+    $\Pi=|\Omega\rangle\langle\Omega|$.
+    More precisely, with $\beta=(1-E_0/n)^m$ one has
+    \begin{align}
+        \beta>0,\qquad \|T-\beta\Pi\|<\beta(\eta+Q^{-1}).
+        \label{eq:lvv_interval_relative_projection}
+    \end{align}
+    At each cut $i\le L$, one may choose a decomposition
+    $T=\sum_{j=1}^{t}A_j\otimes B_j$ with $t\le r$ and all internal
+    cut ranks of $A_j$ at most $r$, before choosing those ground data.
+    If $\eta+Q^{-1}<1/2$, these same left factors send every
+    $(i,s,b,1/2)$-viable family to an
+    $(i,ts,r\max(1,b),4(\eta+Q^{-1}))$-viable family.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:lvv_padded_nn_sample_rank,thm:lvv_simultaneous_cut_decomposition,
+        thm:lvv_scaled_projection_error_reduction}
+    The interval estimate gives
+    $C_{\max}^{2m}\le n^2Q^{4(a+1)/\Delta}=S$.
+    Apply the proved joint finite sampling bound to the actual unscaled
+    complement words, at tolerance $\eta/C_{\max}^m$. The chosen count
+    and frequency threshold make the sum of the failure bounds less
+    than one. This constructs a single family satisfying the first two
+    conclusions in~(\ref{eq:lvv_interval_mean_counts_rank}).
+    Lemma~\ref{thm:lvv_padded_nn_sample_rank} gives its simultaneous
+    spatial ranks; Theorem~\ref{thm:lvv_simultaneous_cut_decomposition}
+    constructs the cut factors before any ground data.
+
+    A later unit ground eigenvector gives $E_0\le n-1$ by evaluating
+    the original contraction sum. Hence $E_0\le E_{\max}$ and
+    $C_{\max}^{-m}\le\beta$. The bracket also gives
+    $m\ge(n-E_0)\log Q/\Delta$.
+    The existing lower-gap power estimate, rescaled by $\beta$, yields
+    $\|(1-H/n)^m-\beta\Pi\|\le\beta/Q$.
+    Combining this with the actual sample-mean error proves
+    (\ref{eq:lvv_interval_relative_projection}).
+    Finally, Lemma~\ref{thm:lvv_scaled_projection_error_reduction}
+    divides the perturbation error by the positive amplitude $\beta$,
+    giving the asserted error, cardinality and MPS bond bounds.
+\end{proof}
+
+The interval $[a,a+1]$ is supplied in advance. This theorem proves the
+existence of a finite sample with the stated properties. It neither
+selects the interval nor instantiates the source's high success probability
+or a complete trial-energy algorithm. The budget retains its dependence
+on $a+1$.

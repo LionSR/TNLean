@@ -1,0 +1,55 @@
+\section{The physical soft residual on the original spectral window}
+
+\begin{lemma}[A soft-truncation residual from the actual regional moment]
+    \label{thm:interval_physical_soft_truncation_residual}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_truncation_residual}
+    \leanok
+    Let $H=\sum_i h_i$ be a finite open chain with local dimension $q\ge1$
+    and supported positive unit nearest-neighbour terms. Fix any interval
+    $J=[p,r)\subseteq[0,L)$, and let $A_J$ be its actual internal sum.
+    The attained regional minima, the common regional minimizing vector,
+    and the centered original ground data can be chosen as in
+    Lemma~\ref{thm:interval_regional_exponential_moment}, before every
+    approximate regional energy, window width and truncation order.
+
+    Let $e_J-10\le\varepsilon'_J\le e_J$, $\eta\ge0$, and let $m\ge1$ be
+    an integer. Set the scale equal to the order and define the actual
+    soft-truncated Hamiltonian by
+    \begin{align*}
+        \widetilde H_{m,m}
+          =H-A_J+\varepsilon'_J\Id
+            +h_{m,m}(A_J-\varepsilon'_J\Id).
+    \end{align*}
+    It is Hermitian and satisfies $\widetilde H_{m,m}\le H$.
+    With $H_c=H-S\Id$ and attained ground energy $E_0\in[0,2]$, the actual
+    original spectral window
+    $G_\eta=\mathbf1_{(-\infty,E_0+\eta]}(H_c)\mathcal H$ satisfies
+    \begin{align}
+        \left\|(H-\widetilde H_{m,m})|_{G_\eta}\right\|
+          \le80\exp\left(\frac{17+\eta}{8}-\frac m{16}\right).
+        \label{eq:physical_soft_original_residual}
+    \end{align}
+    No spectral gap or ground-space dimension is assumed. Empty and endpoint
+    intervals are included. This equal-order-and-scale estimate is an
+    auxiliary to the physical soft truncation of \cite{Arad2016RigorousRG};
+    it does not assert the first printed uniform energy estimate discussed
+    in \cite{gap:alvv16_soft_truncation_energy_estimate}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_regional_exponential_moment}
+    Write $U=A_J-\varepsilon'_J\Id\ge0$ and
+    $d_m(x)=x-h_{m,m}(x)$. The scalar weighted remainder bound of
+    \cite{QICLean2026Blueprint} gives
+    $0\le d_m(x)e^{-x/8}\le16e^{-m/16}$ for $x\ge0$.
+    Thus the functional calculus of this same positive regional matrix gives
+    \begin{align*}
+        d_m(U)&=B_me^{U/8},&
+        B_m&=d_m(U)e^{-U/8},& \|B_m\|&\le16e^{-m/16}.
+    \end{align*}
+    The physical moment theorem supplies
+    $\|e^{U/8}|_{G_\eta}\|\le5e^{(17+\eta)/8}$.
+    Since $H-\widetilde H_{m,m}=d_m(U)$, multiplication yields
+    (\ref{eq:physical_soft_original_residual}).
+    The scalar order $h_{m,m}(x)\le x$ also gives
+    $\widetilde H_{m,m}\le H$ and Hermiticity.
+\end{proof}
