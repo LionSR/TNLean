@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDetectability
+import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
 import QICLean.Algebra.MatrixAux
+import QICLean.Analysis.ProjectionResidual
 
 /-!
 # The actual regional frustration-free truncation
@@ -16,7 +18,7 @@ actual projection products. The construction is ALVV, arXiv:1602.08828v2,
 without a uniqueness or gap hypothesis.
 -/
 
-open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
+open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw
 
@@ -49,7 +51,10 @@ private theorem intervalBondRestriction_isStarProjection
   unfold intervalBondRestriction
   split_ifs <;> first | exact hp i | exact IsStarProjection.zero _
 
-private theorem intervalBondRestriction_supported
+/-- Restricting a bond family to the internal bonds of a site interval
+preserves each designated nearest-neighbour support. ALVV,
+arXiv:1602.08828v2, `def:FF-tH`, lines 1467--1487. -/
+theorem intervalBondRestriction_supported
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ) (i : Fin (L - 1)) :
@@ -196,5 +201,145 @@ theorem norm_physicalFrustrationFreeTruncation_region_le_two
     (add_le_add
       (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection h hp hs a b 0))
       (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection h hp hs a b 1)))
+
+/-- The complementary masses of the original parity products are bounded
+by the actual regional truncated energy. ALVV, arXiv:1602.08828v2,
+`thm:FF-tH`, lines 1543–1550. No vector normalization or gap is required. -/
+theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hp : ∀ i, IsStarProjection (h i))
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
+    (x : EuclideanSpace ℂ (Fin L → Fin q)) :
+    ‖x - physicalParityProduct h 0 x‖ ^ 2 +
+      ‖x - physicalParityProduct h 1 x‖ ^ 2 ≤
+        (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+          (physicalFrustrationFreeTruncation h a b) x⟫_ℂ).re := by
+  let g (i : Fin (L - 1)) := if a ≤ i.val ∧ i.val + 1 < b then 0 else h i
+  have hgp (i : Fin (L - 1)) : IsStarProjection (g i) := by
+    dsimp only [g]
+    split_ifs <;> first | exact IsStarProjection.zero _ | exact hp i
+  have hgs (i : Fin (L - 1)) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (g i) (interval L i.val (i.val + 2)) := by
+    dsimp only [g]
+    split_ifs <;> first
+      | exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+      | exact hs i
+  have hP (p : ℕ) : IsStarProjection
+      (physicalParityProduct (intervalBondRestriction h a b) p) :=
+    physicalParityProduct_isStarProjection _
+      (intervalBondRestriction_isStarProjection h hp a b)
+      (intervalBondRestriction_supported h hs a b) p
+  have hsplit (p : ℕ) : physicalParityProduct h p =
+      physicalParityProduct (intervalBondRestriction h a b) p * physicalParityProduct g p := by
+    exact physicalParityProduct_partition h hs
+      (fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p
+  have hmass (p : ℕ) : ‖x - physicalParityProduct h p x‖ ^ 2 ≤
+      ‖x - physicalParityProduct (intervalBondRestriction h a b) p x‖ ^ 2 +
+        ‖x - physicalParityProduct g p x‖ ^ 2 := by
+    rw [hsplit p]
+    exact ContinuousLinearMap.IsStarProjection.norm_sub_apply_sq_le (hP p) x
+      (physicalParityProduct g p x)
+  have hout := sum_norm_sq_sub_physicalParityProduct_le g hgp hgs x
+  have hnorm (p : ℕ) :
+      (⟪x, (1 - physicalParityProduct (intervalBondRestriction h a b) p) x⟫_ℂ).re =
+        ‖x - physicalParityProduct (intervalBondRestriction h a b) p x‖ ^ 2 :=
+    ContinuousLinearMap.IsStarProjection.re_inner_apply_self (hP p).one_sub x
+  have henergy :
+      (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+        (physicalFrustrationFreeTruncation h a b) x⟫_ℂ).re =
+      (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, g i) x⟫_ℂ).re +
+        ‖x - physicalParityProduct (intervalBondRestriction h a b) 0 x‖ ^ 2 +
+          ‖x - physicalParityProduct (intervalBondRestriction h a b) 1 x‖ ^ 2 := by
+    simp only [physicalFrustrationFreeTruncation, map_add, StarAlgEquiv.apply_symm_apply,
+      _root_.add_apply, inner_add_right, Complex.add_re, hnorm, g]
+  linarith only [hmass 0, hmass 1, hout, henergy]
+
+/-- The converse detectability estimate with the actual regional truncated
+energy and the original physical detectability operator. ALVV,
+arXiv:1602.08828v2, `thm:FF-tH`, lines 1543–1568. The constant three
+strengthens the source's converse constant four. -/
+theorem one_sub_three_mul_truncated_energy_le_norm_sq_physicalDetectability
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hp : ∀ i, IsStarProjection (h i))
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
+    {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1) :
+    1 - 3 * (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+      (physicalFrustrationFreeTruncation h a b) x⟫_ℂ).re ≤
+        ‖physicalDetectability h x‖ ^ 2 := by
+  have hconv :=
+    ContinuousLinearMap.IsStarProjection.one_sub_three_mul_le_norm_sq_apply_apply
+      (physicalParityProduct_isStarProjection h hp hs 1)
+      (physicalParityProduct_isStarProjection h hp hs 0) hx
+  have hmass := sum_norm_sq_sub_physicalParityProduct_le_truncation h hp hs a b x
+  change _ ≤ ‖physicalDetectability h x‖ ^ 2 at hconv
+  linarith only [hmass, hconv]
+
+/-- A unit vector orthogonal to the full truncated kernel has a uniform
+positive truncated energy, derived from the original nonzero spectral gap.
+ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1562–1568. The bound applies
+to arbitrary kernel dimension and does not require an upper bound on the gap. -/
+theorem physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hp : ∀ i, IsStarProjection (h i))
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
+    {gamma : ℝ} (hgamma : 0 < gamma)
+    (hgap : ∀ e ∈ spectrum ℝ (∑ i, h i), e = 0 ∨ gamma ≤ e)
+    {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
+    (horth : ∀ z : EuclideanSpace ℂ (Fin L → Fin q),
+      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+        (physicalFrustrationFreeTruncation h a b) z = 0 → ⟪z, x⟫_ℂ = 0) :
+    gamma / (3 * (4 + gamma)) ≤
+      (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+        (physicalFrustrationFreeTruncation h a b) x⟫_ℂ).re := by
+  have hden : 0 < 4 + gamma := by linarith only [hgamma]
+  have hconv := one_sub_three_mul_truncated_energy_le_norm_sq_physicalDetectability
+    h hp hs a b hx
+  have hD := norm_sq_physicalDetectability_le_of_spectral_gap h hp hs hgamma hgap
+    (fun z hz ↦ horth z ((physicalFrustrationFreeTruncation_kernel_iff h hp hs a b z).mpr hz))
+  have hDunit : ‖physicalDetectability h x‖ ^ 2 ≤ 4 / (4 + gamma) := by
+    simpa only [hx, one_pow, mul_one] using hD
+  have hmul := (le_div_iff₀ hden).mp (hconv.trans hDunit)
+  apply (div_le_iff₀ (mul_pos (by norm_num : (0 : ℝ) < 3) hden)).mpr
+  nlinarith only [hmul]
+
+/-- The actual regional frustration-free truncation retains a nonzero spectral
+gap of at least `gamma / (3 * (4 + gamma))`. This proves the spectral
+conclusion of ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1562–1568,
+for the full kernel, without a dimension-one assumption. -/
+theorem physicalFrustrationFreeTruncation_spectral_gap
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hp : ∀ i, IsStarProjection (h i))
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
+    {gamma : ℝ} (hgamma : 0 < gamma)
+    (hgap : ∀ e ∈ spectrum ℝ (∑ i, h i), e = 0 ∨ gamma ≤ e) :
+    ∀ e ∈ spectrum ℝ (physicalFrustrationFreeTruncation h a b),
+      e = 0 ∨ gamma / (3 * (4 + gamma)) ≤ e := by
+  have hH := (physicalFrustrationFreeTruncation_posSemidef h hp hs a b).isHermitian
+  rintro e he
+  obtain ⟨i, rfl⟩ := hH.spectrum_real_eq_range_eigenvalues ▸ he
+  by_cases hzero : hH.eigenvalues i = 0
+  · exact Or.inl hzero
+  · refine Or.inr ?_
+    have horth : ∀ z : EuclideanSpace ℂ (Fin L → Fin q),
+        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+          (physicalFrustrationFreeTruncation h a b) z = 0 →
+        ⟪z, hH.eigenvectorBasis i⟫_ℂ = 0 := by
+      intro z hz
+      have hi := Matrix.isSymmetric_toEuclideanLin_iff.mpr hH z (hH.eigenvectorBasis i)
+      change ⟪Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+          (physicalFrustrationFreeTruncation h a b) z, hH.eigenvectorBasis i⟫_ℂ =
+        ⟪z, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+          (physicalFrustrationFreeTruncation h a b) (hH.eigenvectorBasis i)⟫_ℂ at hi
+      rw [hz, inner_zero_left, hH.toEuclideanCLM_eigenvectorBasis, inner_smul_right] at hi
+      exact (mul_eq_zero.mp hi.symm).resolve_left (Complex.ofReal_ne_zero.mpr hzero)
+    have henergy := physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap
+      h hp hs a b hgamma hgap (hH.eigenvectorBasis.norm_eq_one i) horth
+    rw [hH.toEuclideanCLM_eigenvectorBasis, inner_smul_right,
+      inner_self_eq_norm_sq_to_K, hH.eigenvectorBasis.norm_eq_one i] at henergy
+    simpa using henergy
 
 end TNLean.MPS.AreaLaw

@@ -199,7 +199,11 @@ import TNLean.MPS.AreaLaw.PhysicalDGTreeParameters
 import TNLean.MPS.AreaLaw.PhysicalDGTreePolynomialBond
 import TNLean.MPS.AreaLaw.PhysicalDGTreeWitness
 import TNLean.MPS.AreaLaw.PhysicalDGViability
+import TNLean.MPS.AreaLaw.PhysicalDetectability
+import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
 import TNLean.MPS.AreaLaw.PhysicalFlatGroundRitz
+import TNLean.MPS.AreaLaw.PhysicalFrustrationFreeRank
+import TNLean.MPS.AreaLaw.PhysicalFrustrationFreeTruncation
 import TNLean.MPS.AreaLaw.PhysicalGroundReference
 import TNLean.MPS.AreaLaw.PhysicalGroundReferencePolynomial
 import TNLean.MPS.AreaLaw.PhysicalGroundReferenceTrimming
@@ -209,8 +213,11 @@ import TNLean.MPS.AreaLaw.PhysicalLowDensityGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyFamily
+import TNLean.MPS.AreaLaw.PhysicalParityProductRank
+import TNLean.MPS.AreaLaw.PhysicalParityProductSupport
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
+import TNLean.MPS.AreaLaw.PhysicalRangeDetectability
 import TNLean.MPS.AreaLaw.PhysicalSameRootPolynomialRefinement
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationCloseness
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResidual
@@ -218,6 +225,9 @@ import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResiduals
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationReverse
 import TNLean.MPS.AreaLaw.PhysicalSoftTruncationCloseness
 import TNLean.MPS.AreaLaw.PhysicalSoftTruncationMPOApproximation
+import TNLean.MPS.AreaLaw.PhysicalSoftTruncationResidual
+import TNLean.MPS.AreaLaw.PhysicalSoftTruncationResiduals
+import TNLean.MPS.AreaLaw.PhysicalSoftTruncationReverse
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityApproximation
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityEntropy

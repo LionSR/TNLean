@@ -30,6 +30,7 @@ import TNLean.MPS.AreaLaw.ViableSet.Gluing
 import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
+import TNLean.MPS.AreaLaw.ViableSet.IntervalPowerSampling
 import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.LeadingResidual
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
