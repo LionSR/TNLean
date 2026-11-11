@@ -9,13 +9,13 @@
     bonds of a finite open chain, numbered from one, and put $H=\sum_i h_i$.
     Define
     \begin{align*}
-        P_{\mathrm{odd}}&=\prod_{i\text{ odd}}(\Id-h_i),&
-        P_{\mathrm{even}}&=\prod_{i\text{ even}}(\Id-h_i),&
-        \operatorname{DL}(H)&=P_{\mathrm{even}}P_{\mathrm{odd}}.
+        P_{\mathrm{odd}}     & =\prod_{i\text{ odd}}(\Id-h_i),     &
+        P_{\mathrm{even}}    & =\prod_{i\text{ even}}(\Id-h_i),    &
+        \operatorname{DL}(H) & =P_{\mathrm{even}}P_{\mathrm{odd}}.
     \end{align*}
     The terms in each product commute, and empty products are the identity.
     This is the operator in \cite[the definition of the one-dimensional
-    detectability operator]{Arad2016RigorousRG}, after the source's reduction
+        detectability operator]{Arad2016RigorousRG}, after the source's reduction
     to projection terms.
 \end{definition}
 
@@ -102,7 +102,7 @@
     $\phi\perp\Gamma$. Combining the actual gap inequality with the
     energy estimate yields
     $\gamma\|\phi\|^2\le\langle\phi,H\phi\rangle
-      \le4(1-\|\phi\|^2)$.
+        \le4(1-\|\phi\|^2)$.
     Rearranging gives the claimed squared-norm bound, without any upper
     bound on $\gamma$.
 \end{proof}
@@ -116,7 +116,7 @@
     Every $\psi\perp\ker H$ satisfies
     \begin{align}
         \|\operatorname{DL}(H)\psi\|^2
-          \leq\frac4{4+\gamma}\|\psi\|^2.
+        \leq\frac4{4+\gamma}\|\psi\|^2.
         \label{eq:physical_detectability_spectral_gap}
     \end{align}
     The kernel may have arbitrary dimension, and no upper bound on
@@ -128,7 +128,7 @@
     $\phi\perp\ker H$. The spectral decomposition and the energy estimate give
     \begin{align}
         \gamma\|\phi\|^2\leq\langle\phi,H\phi\rangle
-          \leq4(\|\psi\|^2-\|\phi\|^2).
+        \leq4(\|\psi\|^2-\|\phi\|^2).
     \end{align}
     Rearranging proves~(\ref{eq:physical_detectability_spectral_gap}).
 \end{proof}
@@ -155,19 +155,19 @@
     at least $\gamma>0$. Set $P_i=P_{h_i}$. Then every
     $x\perp\ker H$ satisfies
     \[
-      \|\operatorname{DL}(P)x\|^2
-          \le\frac4{4+\gamma}\|x\|^2.
+        \|\operatorname{DL}(P)x\|^2
+        \le\frac4{4+\gamma}\|x\|^2.
     \]
     No condition on the dimension of $\ker H$ is required.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_range_projection_support,thm:physical_detectability_kernel,
-      thm:physical_detectability_energy}
+        thm:physical_detectability_energy}
     The range projections have the original bond supports. Their sum dominates
     $H$ and has exactly the same kernel. The even/odd product preserves the
     orthogonal complement of this kernel. For $y=\operatorname{DL}(P)x$,
     \[
-      \gamma\|y\|^2\le\langle y,Hy\rangle
+        \gamma\|y\|^2\le\langle y,Hy\rangle
         \le\Big\langle y,\sum_iP_i y\Big\rangle
         \le4\bigl(\|x\|^2-\|y\|^2\bigr).
     \]
