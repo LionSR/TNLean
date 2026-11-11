@@ -1,78 +1,6 @@
 \section{Physical neighbouring-block operators on a periodic chain}
 \label{sec:hastings05_physical_periodic_pairs}
 
-\begin{lemma}[Grouping a finite family]
-    \label{lem:hastings05_grouping_finite_family}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.edgePartition,
-        TNLean.MPS.AreaLaw.LocalSolution.sum_edgePartition,
-        TNLean.MPS.AreaLaw.LocalSolution.norm_edgePartition_le,
-        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_edgePartition,
-        TNLean.MPS.AreaLaw.LocalSolution.centered_edgePartition,
-        TNLean.MPS.AreaLaw.LocalSolution.residual_edgePartition_le,
-        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_edgePartition_le,
-        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_edgePartition_le_two_mul,
-        TNLean.MPS.AreaLaw.LocalSolution.edgePartition_mem_supportedOperators,
-        TNLean.MPS.AreaLaw.LocalSolution.norm_edgePartition_le_of_fibre_card}
-    \leanok
-    Let $I$ and $E$ be finite sets, let $p\colon I\to E$, and let
-    $A_i$ be matrices indexed by $i\in I$. Set
-    $A'_j=\sum_{p(i)=j}A_i$ and $n_j=|\{i:p(i)=j\}|$. Then
-    $\sum_jA'_j=\sum_iA_i$. If $\|A_i\|\le J$ with $J\ge0$, then
-    $\|A'_j\|\le n_jJ$. Hermiticity and a common support pass to each
-    sum. Centring at the expectation in a fixed vector commutes with the
-    sum, so centred-norm and vector-residual bounds also add over its
-    actual fibre. In particular, for a unit vector and $\|A_i\|\le J$,
-    the centred norm is at most $2n_jJ$.
-\end{lemma}
-\begin{proof}\leanok
-    Each summand occurs exactly once. The triangle inequality gives the
-    norm and residual bounds, and both the expectation and application
-    to a vector are linear in the operator. The absolute expectation in
-    a unit vector is at most the operator norm.
-\end{proof}
-
-\begin{lemma}[The regular periodic assignment]
-    \label{lem:hastings05_regular_periodic_assignment}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge,
-        TNLean.MPS.AreaLaw.LocalSolution.card_periodicCoarseEdge_fibre,
-        TNLean.MPS.AreaLaw.LocalSolution.finRotate_val_eq_succ_or_zero,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalCoordinate,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalDistance,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalCoordinate_lt,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_internal_centre,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_support,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_zero_support,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_support_all,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseOperator,
-        TNLean.MPS.AreaLaw.LocalSolution.sum_periodicCoarseOperator,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseOperator_mem_supportedOperators,
-        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_periodicCoarseOperator,
-        TNLean.MPS.AreaLaw.LocalSolution.residual_periodicCoarseOperator_le,
-        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_periodicCoarseOperator_le}
-    \leanok
-    \uses{lem:hastings05_grouping_finite_family}
-    On a ring of $N\ge1$ blocks of $2\ell$ sites, with $\ell\ge1$,
-    assign a site in the first half of its block to the preceding edge
-    and a site in the second half to the following edge. Each edge
-    receives exactly $2\ell$ sites. The closed cyclic ball of radius
-    $\ell$ about each site is contained in the two blocks meeting its
-    assigned edge, including the closing edge.
-
-    Consequently, grouping operators supported in these balls gives a
-    neighbouring-block family with the same total sum. Uniform local
-    norm, centred-norm and residual bounds are multiplied by at most
-    $2\ell$, independently of $N$. In particular a local norm bound $J$
-    gives pair norm $2\ell J$ and centred pair norm $4\ell J$ in a unit
-    vector. This is the periodic grouping of~\cite[lines 609--639]{Hastings2006Solving}.
-\end{lemma}
-\begin{proof}\leanok
-    Each fibre has one site at every position within a block: positions
-    in the first half come from its right block and the others from its
-    left block. A cyclic ball of radius $\ell$ cannot pass either outer
-    endpoint of that pair of blocks. Apply
-    Lemma~\ref{lem:hastings05_grouping_finite_family} to the actual fibres.
-\end{proof}
-
 \begin{lemma}[Periodic pair operators constructed from the Hamiltonian]
     \label{thm:hastings05_physical_periodic_pairs}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalGraph,
@@ -83,7 +11,7 @@
         TNLean.MPS.AreaLaw.LocalSolution.periodicFilterError,
         TNLean.MPS.AreaLaw.LocalSolution.periodicFilteredPair_properties}
     \leanok
-    \uses{lem:hastings05_regular_periodic_assignment,
+    \uses{thm:hastings_regular_periodic_grouping,
         thm:hastings_truncated_approximation_time,thm:hastings05_facld,
         thm:hastings_truncated_sum}
     Partition a periodic chain into $N\ge1$ blocks of $2\ell$ sites each,

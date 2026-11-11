@@ -26,10 +26,7 @@ $e^{-d/\xi_C}$ in the cone $v|t|\le d$, as explained in
 
 \begin{lemma}[Numerical Lieb--Robinson estimate]
     \label{lem:hastings_source_lieb_robinson}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_numeric,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_cone,
-        TNLean.MPS.AreaLaw.chainLRVelocity_sub_one_pos}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_cone}
     \leanok
     \uses{def:chain_model,def:hastings_source_length}
     Let $A$ and $B$ be supported on arbitrary finite sets $X$ and $Y$ of the
@@ -60,8 +57,7 @@ $e^{-d/\xi_C}$ in the cone $v|t|\le d$, as explained in
 
 \begin{lemma}[Positive factorization at the admissible length]
     \label{thm:hastings_source_length_factorization}
-    \lean{TNLean.MPS.AreaLaw.two_mul_lemmaOneEndpointLength_le_sourceLength,
-        TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_sourceLength}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_sourceLength}
     \leanok
     \uses{def:hastings_source_length,thm:hastings_lemma1_endpoint,
         def:hastings_factorization_at}
@@ -90,8 +86,7 @@ $e^{-d/\xi_C}$ in the cone $v|t|\le d$, as explained in
 
 \begin{lemma}[The printed entropy-bound shape at the constructed length]
     \label{thm:hastings_source_length_entropy}
-    \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_printed,
-        TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_sourceLength}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_sourceLength}
     \leanok
     \uses{def:hastings_source_length,thm:hastings_area_law}
     There is $c_0>0$, depending only on $R$, such that every prefix of
