@@ -1474,3 +1474,37 @@ recursive root remains a separate step.
 
 \input{chapter/ch35_interval_original_target_histories}
 \input{chapter/ch35_fixed_interval_raw_probability}
+
+\begin{lemma}[Collective trimming through a common reference space]
+    \label{thm:physical_dg_collective_trimming}
+    \lean{TNLean.MPS.AreaLaw.isCloseTo_leftSupportSubmodule_chainTrimSubspace_of_reference,
+        TNLean.MPS.AreaLaw.exists_physical_dg_collective_trimming_bound}
+    \leanok
+    Let $U$ be $\varepsilon$-close to the ground space $G$ in both
+    directions and consist of matrix product vectors of bond dimension at
+    most $D$. If $S$ is $\delta$-viable for $G$ at cut $i$, then collective
+    trimming of an orthonormal basis of $S$ with parameter $\xi>0$ gives a
+    space that is viable for $G$ with error
+    $4\delta+6\varepsilon+4\xi\sqrt{(i-1)D}$.
+    For a positive unit nearest-neighbour chain with a spectral gap
+    $\gamma>0$ above the ground energy, one constant $K$ and, for each
+    $0<\varepsilon\le1$, one integer $B$ with
+    $\log B\le K(u^3/g+g^{-1/4}b^{3/4}u)(1+\log b)$ can be chosen before
+    the cut, the block and the viable space, where $g=\min\{\gamma,1\}$,
+    $u=1+\log q+\log(1/g)$ and
+    $b=16+\log(1/g)+\log(32r(L+1)/\varepsilon)$ with $r=\dim G$; the
+    bound above then holds with $D=r^2B$.
+    This makes explicit the reference-space trimming step of
+    \cite{Arad2016RigorousRG} in the proof of its algorithmic theorem, with the corrected
+    collective trimming constant; it does not construct the sampled viable
+    spaces of the merge tree. The rate uses $\min\{\gamma,1\}$, see
+    \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_mps_reference_subspace,thm:alvv_collective_trim}
+    Transfer the viable space to the reference space, trim collectively
+    using the cut ranks of its matrix product vectors, and transfer back.
+    The physical reference space of
+    Lemma~\ref{thm:physical_dg_mps_reference_subspace} supplies $U$ and
+    $B$.
+\end{proof}

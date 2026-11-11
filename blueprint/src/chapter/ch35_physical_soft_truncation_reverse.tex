@@ -80,3 +80,55 @@
     $\alpha$ corrects the order comparison; the residual itself is the
     actual difference $H-\widetilde H$.
 \end{proof}
+
+\begin{lemma}[Both residuals with common regional and ground energies]
+    \label{thm:interval_physical_soft_common_residuals}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_residuals}
+    \leanok
+    In the setting of Lemmas~\ref{thm:interval_physical_soft_truncation_residual}
+    and~\ref{thm:interval_physical_soft_reverse_residual}, the attained
+    regional minima, the common regional minimizing vector and the
+    original ground energy $E_0$ can be chosen once for both estimates.
+    For every $\varepsilon'_J$ and order $m$ as in the second lemma, the
+    same soft Hamiltonian then satisfies both residual bounds, and its
+    attained ground energy $E_s$ is the least eigenvalue of its centered
+    matrix, with $-\alpha\le E_s\le E_0$. The reverse estimate retains its
+    explicit scale condition; see
+    \cite{gap:alvv16_soft_truncation_energy_estimate}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_physical_soft_truncation_residual,
+        thm:interval_physical_soft_reverse_residual}
+    The two constructions have normalized regional ground witnesses with
+    the same attained regional minima, so their centered original ground
+    energies agree. Both estimates therefore apply to one literal soft
+    Hamiltonian with its own eigenbasis and ground energy.
+\end{proof}
+
+\begin{lemma}[Directed soft spectral comparisons at prescribed accuracy]
+    \label{thm:interval_physical_soft_low_energy_closeness}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_low_energy_closeness}
+    \leanok
+    Let $\eta,w,\delta>0$ and
+    $\rho=\min\{1,w/2,\delta w^2/(2(\eta+2))\}$. The order
+    $m=\lceil35+2\eta+16\log(80/\rho)\rceil$ is chosen before the chain,
+    the interval and the Hamiltonian. For every positive unit
+    nearest-neighbour chain and interval, with regional minima and original
+    ground energy $E_0\in[0,2]$ constructed as above, and every admissible
+    $\varepsilon'_J$, the soft Hamiltonian at scale and order $m$ satisfies
+    $\widetilde H\le H$ and $0\le E_0-E_s\le\rho$. The soft spectral space
+    below $E_s+\eta+w$ is $\delta$-close to the original spectral space
+    below $E_0+\eta$, and the original spectral space below $E_0+\eta+w$
+    is $\delta$-close to the soft spectral space below $E_s+\eta$.
+    This is an equal-order-and-scale auxiliary to the soft truncation of
+    \cite{Arad2016RigorousRG}; the printed first uniform energy estimate
+    and its gap prescription are not asserted, see
+    \cite{gap:alvv16_soft_truncation_energy_estimate}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_physical_soft_common_residuals}
+    At this order both residuals are at most $\rho$. They bound the
+    displacement of the ground energies, and the residual on each spectral
+    window, together with the separation $w$, gives each directed
+    closeness.
+\end{proof}

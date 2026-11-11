@@ -183,3 +183,18 @@
     Apply closeness composition before and after the improvement, using
     the same fixed family and the two physical comparisons.
 \end{proof}
+
+\begin{lemma}[The joint scalar constant above a prescribed threshold]
+    \label{lem:low_energy_joint_scalar_parameters_above}
+    \lean{Real.exists_low_energy_joint_scalar_parameters_above}
+    \leanok
+    The constant $A$ of Lemma~\ref{lem:low_energy_joint_scalar_parameters}
+    can in addition be required to satisfy $A\ge M$ for any prescribed real
+    number $M$, with all of its count and contraction estimates unchanged.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_polynomial_filter_parameters}
+    Choose the scalar filter constant above $M$; the remaining estimates
+    are those of Lemma~\ref{lem:low_energy_joint_scalar_parameters}, whose
+    constant is the case $M=0$.
+\end{proof}
