@@ -52,6 +52,8 @@ import TNLean.Circuit.SitePermutationSupport
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.SpectatorOscillationSupport
 import TNLean.Circuit.SpectatorSiteExpectation
+import TNLean.Circuit.SupportProjection
+import TNLean.Circuit.SupportedComplementProduct
 import TNLean.Circuit.SupportedFunctionalCalculus
 import TNLean.Circuit.SupportedGaussianIntegral
 import TNLean.Circuit.SupportedGroundSpace

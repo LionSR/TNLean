@@ -77,3 +77,31 @@
     to this family and the same clipped Hamiltonian, whose norm is at
     most $3t+4\ell$.
 \end{proof}
+
+\begin{lemma}[Improvement between original spectral windows]
+    \label{cor:original_low_energy_filter_family}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_original_low_energy_filter_family}
+    \leanok
+    Under the hypotheses of Lemma~\ref{lem:physical_low_energy_filter_family},
+    the same family, polynomial and tensor factors may be chosen before
+    every subspace $S$ and parameter $\delta$. If $\delta\ge0$,
+    $2(\delta+\varepsilon)<1$, and $S$ is $\delta$-viable for the original
+    spectral space below $E_0+\eta$, its enlargement $S'=\sum_jW_jS$ has
+    dimension at most $N\dim S$ and is $\delta_{\mathrm{out}}$-viable for
+    the original spectral space below $E_0+\eta-3w$, where
+    \begin{align*}
+        \delta_{\mathrm{out}}=
+        2\left(\frac{\Delta}{[1-2(\delta+\varepsilon)]^2}
+        +\varepsilon\right).
+    \end{align*}
+    This conclusion retains both losses from the physical spectral
+    comparisons. It does not assert that its final error is the error
+    between the clipped targets.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_low_energy_filter_family}
+    Closeness composition first makes $S$ $2(\delta+\varepsilon)$-viable
+    for $T_+$. Apply the same fixed family to improve viability for $T_-$.
+    A second closeness composition transfers to the original lower
+    spectral window and gives the displayed error.
+\end{proof}

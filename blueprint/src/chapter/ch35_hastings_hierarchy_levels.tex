@@ -202,3 +202,22 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 \begin{proof}\leanok
     By the triangle inequality.
 \end{proof}
+
+\begin{definition}[Finite regions of the binary hierarchy]
+    \label{def:hastings05_hierarchy_block}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyBlock,
+        TNLean.MPS.AreaLaw.LocalSolution.mem_hierarchyBlock,
+        TNLean.MPS.AreaLaw.LocalSolution.coe_hierarchyBlock,
+        TNLean.MPS.AreaLaw.LocalSolution.disjoint_hierarchyBlock_children,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyBlock_eq_univ}
+    \leanok
+    \uses{def:hastings05_level_block,thm:hastings05_level_block_halves}
+    The finite region of block $k$ at level $0$ consists of the physical
+    sites of supersite $k$; at level $m+1$ it is the union of the regions
+    of blocks $2k$ and $2k+1$ at level $m$. It coincides with the level
+    block of Definition~\ref{def:hastings05_level_block}, including empty
+    blocks beyond the chain. The two child regions are disjoint, and when
+    every supersite index is below $2^h$ the block $0$ at level $h$ is the
+    whole chain. These are the regions of the retained-basis expansion in
+    \cite[Section~III]{Hastings2006Solving}.
+\end{definition}

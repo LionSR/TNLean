@@ -42,9 +42,7 @@ theorem isLeftOpenMPS_of_mem_span {L q k b : ℕ} (S : Finset (LeftBlockVector L
     exact hS u hu
   have hB := isOpenMPS_of_mem_span (S.image f) hS' hv'
   change IsOpenMPS k q (max 1 (S.card * max 1 b)) (f v)
-  apply (isOpenMPS_iff_internal_cutMatrix_rank_le (WithLp.toLp 2 (f v))).mpr
-  intro j hj0 hjk
-  exact (hB.rank_cutMatrix_le (ψ := WithLp.toLp 2 (f v)) hj0 hjk).trans
+  exact hB.mono
     ((Nat.mul_le_mul_right (max 1 b) (Finset.card_image_le (f := f) (s := S))).trans
       (le_max_right 1 (S.card * max 1 b)))
 

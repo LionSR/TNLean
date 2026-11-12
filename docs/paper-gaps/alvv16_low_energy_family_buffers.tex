@@ -200,6 +200,25 @@ identity $g=w$ when $w>1$. The same family also gives the original-window
 error in (\ref{eq:ld_original_window_error}) with $\varepsilon=1/200$;
 that error is distinct from the improving-family parameter $\Delta$.
 
+\section{One common count and suppression scale}
+
+For the dyadic dimension argument, the numerical count base may be chosen
+larger than the physical local dimension before choosing the degree.
+For an integer $m\ge q$, set
+\begin{align*}
+ u&=1+\log m+\log(1/g),&
+ \ell&=\lceil Au^2/g\rceil,& D&=(m\ell^2)^{22\ell}.
+\end{align*}
+The scalar constant may additionally satisfy $A\ge100$.
+The physical filter is constructed at this degree on the original
+$q$-dimensional chain. Its actual count is at most $D^2$, and the scalar
+suppression estimate at $m$ proves $D^{12}\Delta<10^{-5}$ for that same
+filter. For a short region the actual matrix units are extended to the
+same count, and their error is chosen afterwards. In particular, the
+stronger product estimate is not inferred by increasing a count in a
+previously established product estimate. This calibration does not change
+the Hamiltonian or either spectral target.
+
 \section{Remaining qualifications}
 
 The finite theorem uses the positive-log convention $L\ge2$ and
