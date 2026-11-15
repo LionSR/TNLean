@@ -1,0 +1,35 @@
+\begin{definition}[An observed ring and a native flux crossing it]
+    \label{def:peps_annular_flux_observation}
+    \lean{TNLean.PEPS.torusAnnularObservationWalk,
+        TNLean.PEPS.torusAnnularObservationRegion,
+        TNLean.PEPS.torusAnnularFluxPath}\leanok
+    On the seven-by-seven torus let $R$ be the twelve physical sites on
+    the perimeter of the square with coordinates from zero to three.
+    Let $w$ traverse this perimeter counterclockwise from $(0,0)$.
+    Let $p$ be the four eastward native dual steps from $(1,1)$ to $(5,1)$.
+    The former endpoint is inside the unobserved hole and the latter is
+    outside the square.
+\end{definition}
+
+\begin{lemma}[An endpoint-free annular observation detects native flux]
+    \label{lem:peps_annular_flux_density_obstruction}
+    \lean{TNLean.PEPS.torusAnnularFluxPath_endpoint_corners_outside,
+        TNLean.PEPS.IsGIsometric.torusAnnularFlux_normalized_density_ne_vacuum}\leanok
+    Every physical corner of both endpoint plaquettes of $p$ lies outside
+    $R$. For every finite group, nonidentity insertion $g$, and native
+    regular group-isometric torus tensor, the actual cut of this flux path
+    and the vacuum cut on $R$ are nonzero and have different normalized
+    observed reduced densities.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_annular_flux_observation,lem:peps_wilson_density_obstruction}
+    The support of the perimeter walk induces a connected observed graph.
+    The string has zero horizontal crossing counts and crosses exactly the
+    four downward bonds based at $(2,1),(3,1),(4,1),(5,1)$.
+    Only the second of these bonds belongs to the observed perimeter,
+    where the upward transport is $g^{-1}$. Thus the actual observed loop
+    holonomy is $g^{-1}$, while the vacuum holonomy is one.
+    Their conjugacy classes differ because $g\ne1$. The physical closed-walk
+    obstruction gives unequal normalized densities and both nonzero cuts.
+    Direct inspection of the eight endpoint corners gives the stated exclusion.
+\end{proof}

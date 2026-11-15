@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{An Explicit Endpoint-Free Native Annular Flux Observation}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+compares local physics away from flux endpoints with the vacuum. This
+cannot hold for arbitrary endpoint-free annular observations.
+
+The theorem
+\leanid{TNLean.PEPS.IsGIsometric.torusAnnularFlux_normalized_density_ne_vacuum}
+constructs an explicit obstruction in the seven-by-seven torus. The
+observation consists of the twelve physical perimeter sites of the square
+from zero to three in both coordinates. Its four interior sites are
+unobserved. The actual native dual path consists of four east steps from
+plaquette $(1,1)$ to plaquette $(5,1)$. Every physical corner of both
+endpoint plaquettes is outside the observed ring, as proved by
+\leanid{TNLean.PEPS.torusAnnularFluxPath_endpoint_corners_outside}.
+
+For any finite group and any nonidentity insertion element, the actual
+perimeter holonomy is the inverse insertion element. This is computed
+from the native path's signed crossings and the actual ordered-edge
+transport; no nontrivial holonomy is assumed. The observed perimeter
+graph is derived connected. The complete physical closed-walk measurement
+then distinguishes this state from vacuum for every native regular
+group-isometric tensor. Both coefficient cuts are proved nonzero and their
+trace-normalized observed row Grams are unequal. No density inequality,
+measurement operator or nonzero witness is supplied.
+
+This is an explicit counterexample to endpoint-only vacuum-density wording,
+not a classification of all annular observations. It leaves unchanged the
+two simple connectedness hypotheses and endpoint exclusions in the positive
+native theorem, and the envelope hypotheses in its subregion extension.
+It is also distinct from the nonabelian test-group obstruction to restricted
+homotopy. The broader admissible geometry remains open under
+\ghissue{8703}; \ghissue{8947} is unchanged.
+\end{document}
