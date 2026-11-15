@@ -27,7 +27,7 @@ namespace Matrix
 private theorem posSemidef_of_hermitian_idempotent {D : ℕ}
     {P : Matrix (Fin D) (Fin D) ℂ} (hP : P.IsHermitian) (hIdem : P * P = P) :
     P.PosSemidef := by
-  simpa only [hP.eq, Matrix.one_mul, hIdem] using
+  simpa only [hP.eq, Matrix.mul_one, hIdem] using
     (Matrix.PosSemidef.one.conjTranspose_mul_mul_same P)
 
 private theorem rank_le_rank_map_of_unital_tracePreserving_fin {D : ℕ}
@@ -94,6 +94,7 @@ theorem rank_le_rank_map_of_unital_tracePreserving
     hSPos hSTP hSOne (hX.submatrix e.symm)
   have hSX : S (E X) = E (T X) := by
     simp [S, E, reindexEndomorphism_apply, Matrix.reindex_apply]
+  change (E X).rank ≤ (S (E X)).rank at hRank
   rw [hSX] at hRank
   change (Matrix.reindex e e X).rank ≤ (Matrix.reindex e e (T X)).rank at hRank
   simpa only [Matrix.rank_reindex] using hRank
@@ -105,7 +106,7 @@ namespace Channel
 private theorem tensorMapIdLM_one {D : ℕ}
     {F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)} (hOne : F 1 = 1) :
     Matrix.tensorMapIdLM (δ := Fin D) F 1 = 1 := by
-  simpa only [Matrix.one_kronecker_one, hOne] using
+  simpa only [Matrix.tensorMapIdLM_apply, Matrix.one_kronecker_one, hOne] using
     Matrix.tensorMapId_kronecker F (1 : Matrix (Fin D) (Fin D) ℂ)
       (1 : Matrix (Fin D) (Fin D) ℂ)
 
