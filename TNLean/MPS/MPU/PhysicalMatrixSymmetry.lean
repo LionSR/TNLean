@@ -62,8 +62,8 @@ private theorem operatorId_map_star {N : ℕ}
       (tensorPhysicalIdOperator X x).map (starRingEnd ℂ) := by
   ext σ τ
   by_cases h : (fun n ↦ (σ n).modNat) = (fun n ↦ (τ n).modNat)
-  <;> simp [tensorPhysicalIdOperator, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, h]
+  <;> simp [tensorPhysicalIdOperator, Matrix.reindex_apply,
+    Matrix.kroneckerMap_apply, h]
 
 private theorem operatorId_sitewisePhysicalMatrix
     (Q : Matrix (Fin d) (Fin d) ℂ) (x N : ℕ) :

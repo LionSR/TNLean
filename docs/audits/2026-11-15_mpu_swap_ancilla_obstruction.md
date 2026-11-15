@@ -152,8 +152,8 @@ using exact arithmetic. The source/coordinates and the private permutation
 sandwich formula were reviewed against pinned Mathlib's `PEquiv` matrix lemmas.
 All nine additional Lean declarations passed package-option compilation and
 focused warnings-as-errors checks at `fa979bdb`; no axiom audit has run. The
-18 transport declarations passed the same checks at `b59d8045`. The five
-distinguished-matrix declarations in `PhysicalMatrixSymmetry.lean` remain
-candidates after two conditional-reduction errors; the source repairs need
-a new hosted check. No original source completion or global phase counterexample
+18 transport declarations passed the same checks at `b59d8045`. All five
+distinguished-matrix declarations in `PhysicalMatrixSymmetry.lean` compiled at
+`67bdbc2e`; its strict check found only one unused-simp warning. Removing that
+argument needs a final clean hosted check. No original source completion or global phase counterexample
 is claimed. The complete root build and compiled-reference checks are outstanding.

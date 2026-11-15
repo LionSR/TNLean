@@ -1,9 +1,11 @@
 # Swap comparison with a common identity ancilla
 
-Status: the 18 transport declarations passed focused strict Lean checks at
-`b59d8045`; the nine obstruction declarations passed at `fa979bdb`. The five
-distinguished-matrix declarations remain candidates. The original source entry
-is unfinished. Initial source checkout: `cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
+Status: all 32 declarations compiled at `67bdbc2e`. The three transport and
+obstruction modules also passed focused strict checks at that head. The
+five-declaration physical-matrix module has one unused-simp warning, repaired
+without changing statements; its clean strict check and full CI remain pending.
+The original source entry is unfinished. Initial source checkout:
+`cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
 
 ## Ownership and existing work
 
@@ -364,3 +366,23 @@ candidate until its complete build and strict check pass.
 
 Module policies and inline diagram semantics passed. The complete root build,
 compiled-reference checks, axiom audit, and final-head checks remain outstanding.
+
+
+## Exact-head check at 67bdbc2e
+
+Run `43756212698`, build job `132941709416`, compiled all four new modules and
+both generated aggregators. Package build times were 4.3 seconds for the physical
+ancilla helper, 4.5 seconds for the physical-matrix module, 5.4 seconds for the
+obstruction module, and 3.6 seconds for swap stabilization. Both aggregators and
+the three helper, transport, and obstruction sources passed focused strict
+checks. The physical-matrix module failed warnings-as-errors only on an unused
+`Matrix.one_apply` argument at line 66. No unsolved goal or other diagnostic
+remains in the four new modules.
+
+Thus all 32 public declarations have compiled proofs, including full generic
+ancilla compatibility and its reuse in the swap constructors. Their auxiliary
+Blueprint entries reflect compilation. The final cleanup removes only that
+unused argument and still requires a clean exact-head run. The original source
+entry remains unfinished; the general equivalence definitions and pins are
+unchanged. The complete root build, compiled-reference checks, and axiom audit
+are still outstanding.
