@@ -6,15 +6,14 @@ Authors: TNLean contributors
 import Mathlib.Topology.Compactness.Compact
 import Mathlib.Analysis.Normed.Group.Basic
 import Mathlib.Basic.Real.Basic
-import Mathlib.Data.Finset.Lattice.Fold
 
 /-!
 # Uniform bounds from local bounds on a compact set
 
 A neighborhood bound at each parameter can be made uniform on a compact
 parameter set when it persists after decreasing its positive real constant
-and increasing its natural-number threshold. The finite subcover provides
-finitely many local bounds; their minimum and maximum give the uniform ones.
+and increasing its natural-number threshold. The interiors of the sets where
+each bound holds form a directed open cover, so one of them covers the compact set.
 
 This is the compactness step in the gap argument of arXiv:1010.3732,
 Appendix A. No spectral assertion is built into this lemma.
@@ -34,37 +33,18 @@ theorem exists_uniform_pos_nat_bounds {X : Type*} [TopologicalSpace X]
     (hlocal : ∀ x ∈ S, ∃ δ : ℝ, 0 < δ ∧
       ∃ N : ℕ, ∀ᶠ y in 𝓝 x, P δ N y) :
     ∃ δ : ℝ, 0 < δ ∧ ∃ N : ℕ, ∀ x ∈ S, P δ N x := by
-  classical
-  have hlocal' : ∀ x : S, ∃ b : ℝ × ℕ,
-      0 < b.1 ∧ ∀ᶠ y in 𝓝 (x : X), P b.1 b.2 y := by
-    intro x
-    obtain ⟨δ, hδpos, N, hnear⟩ := hlocal x x.property
-    exact ⟨(δ, N), hδpos, hnear⟩
-  choose b hb using hlocal'
-  let U : ∀ x ∈ S, Set X := fun x hx ↦
-    {y | P (b ⟨x, hx⟩).1 (b ⟨x, hx⟩).2 y}
-  obtain ⟨t, hcover⟩ := hS.elim_nhds_subcover' U (by
+  let U : {δ : ℝ // 0 < δ} × ℕ → Set X :=
+    fun b ↦ interior {x | P b.1 b.2 x}
+  letI : Nonempty ({δ : ℝ // 0 < δ} × ℕ) := ⟨(⟨1, zero_lt_one⟩, 0)⟩
+  obtain ⟨⟨δ, N⟩, hcover⟩ := hS.elim_directed_cover U (fun _ ↦ isOpen_interior) (by
     intro x hx
-    exact (hb ⟨x, hx⟩).2)
-  by_cases ht : t.Nonempty
-  · let δ : ℝ := t.inf' ht (fun x ↦ (b x).1)
-    let N : ℕ := t.sup (fun x ↦ (b x).2)
-    have hδpos : 0 < δ := (Finset.lt_inf'_iff _).2 (by
-      intro x _
-      exact (hb x).1)
-    refine ⟨δ, hδpos, N, ?_⟩
-    intro x hx
-    have hxcover := hcover hx
-    simp only [Set.mem_iUnion] at hxcover
-    obtain ⟨j, hj, hxj⟩ := hxcover
-    have hδj : δ ≤ (b j).1 := Finset.inf'_le _ hj
-    have hNj : (b j).2 ≤ N := Finset.le_sup (f := fun x ↦ (b x).2) hj
-    exact hN hNj (hδ hδj hxj)
-  · have ht0 : t = ∅ := Finset.not_nonempty_iff_eq_empty.mp ht
-    refine ⟨1, zero_lt_one, 0, ?_⟩
-    intro x hx
-    have hfalse : False := by simpa [ht0] using (hcover hx)
-    exact hfalse.elim
+    obtain ⟨δ, hδpos, N, hnear⟩ := hlocal x hx
+    exact Set.mem_iUnion.mpr ⟨(⟨δ, hδpos⟩, N), mem_interior_iff_mem_nhds.mpr hnear⟩) (by
+    rintro ⟨δ₁, N₁⟩ ⟨δ₂, N₂⟩
+    refine ⟨(⟨min δ₁.1 δ₂.1, lt_min δ₁.property δ₂.property⟩, max N₁ N₂), ?_, ?_⟩
+    · exact interior_mono fun x hx ↦ hN (le_max_left N₁ N₂) (hδ (min_le_left _ _) hx)
+    · exact interior_mono fun x hx ↦ hN (le_max_right N₁ N₂) (hδ (min_le_right _ _) hx))
+  exact ⟨δ, δ.property, N, fun x hx ↦ interior_subset (hcover hx)⟩
 
 /-- Locally uniform norm lower bounds on a tail have one positive constant
 and one threshold over a compact parameter set. This specializes the compactness
