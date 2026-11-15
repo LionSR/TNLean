@@ -9,7 +9,7 @@
 
 \title{The Root-Channel Kraus-Rank Step in Theorem 4.1}
 \author{}
-\date{2026-04-30; revised 2026-09-26}
+\date{2026-04-30; revised 2026-11-15}
 
 \begin{document}
 \maketitle
@@ -467,6 +467,45 @@ The singular-target problem must therefore control complete positivity
 while choosing the zero-eigenspace action; algebraic spectral truncation
 alone does not do so.
 
+\section{Explicit bounded roots from a commuting projected semigroup}
+
+A further class of singular nonunital channels admits bounded roots in
+arbitrary dimension. Assume the target has the supplied representation
+\begin{equation}
+  \mathcal E=e^{t\mathcal L}\circ\mathcal P,\qquad t\ge0,
+\end{equation}
+where $e^{u\mathcal L}$ is a channel for every $u\ge0$, and $\mathcal P$ is
+an idempotent channel commuting with $\mathcal L$. These are explicit extra
+hypotheses relative to general channel divisibility. No representation
+result for arbitrary divisible channels is claimed.
+
+For every positive integer $p$, set
+$\mathcal F=e^{(t/p)\mathcal L}\circ\mathcal P$. Commutation, the semigroup
+law, and $\mathcal P^p=\mathcal P$ show that $\mathcal F$ is a channel and
+$\mathcal F^p=\mathcal E$. Put
+$\mathcal R=e^{(t-t/p)\mathcal L}$. Since $t-t/p\ge0$, this is completely
+positive; as a linear exponential, it is injective, with linear inverse
+$e^{-(t-t/p)\mathcal L}$. The inverse is used only for injectivity.
+The identity $\mathcal E=\mathcal R\circ\mathcal F$ and the injective
+composition inequality give
+\begin{equation}
+  \operatorname{rank}C_{\mathcal F}\le\operatorname{rank}C_{\mathcal E}.
+\end{equation}
+Consequently a tensor with this transfer-map representation is refinable
+for every positive exponent on its original physical alphabet. Neither
+unitality nor irreducibility is needed, and the projection may make the
+target singular. The representation is not deduced from the hypotheses of
+the general converse.
+
+The results
+\leanid{Channel.choiRank_comp_expSemigroup_mono},
+\leanid{Channel.exists_root_choiRank_le_of_projected_semigroup}, and
+\leanid{MPSTensor.isPRefinable_of_projected_semigroup_transfer} in
+\texttt{TNLean/MPS/Periodic/Symmetry/RefinementFromProjectedSemigroup.lean}
+prove the rank comparison, bounded-root construction, and refinement for
+this class. The first result applies more generally to any fixed completely
+positive $\mathcal P$ and any two times $0\le s\le t$.
+
 \section{Conclusion}
 
 The formal reverse theorem has an additional hypothesis relative to
@@ -479,8 +518,10 @@ absent from the source definition of $p$-divisibility and is not proved in the
 cited converse paragraph.
 
 For invertible target channels, the preceding rank argument supplies the
-required bound for every root. For singular target channels it remains open
-whether, under the irreducible-form hypotheses, a channel root can always
+required bound for every root. The supplied commuting projection-semigroup representation also gives
+bounded roots for the singular targets just described. For general singular
+target channels it remains open whether, under the irreducible-form
+hypotheses, a channel root can always
 be chosen with Kraus rank at most $d$. The formal development
 therefore proves the reverse implication from a selected bounded-rank
 root, and under the inverse canonicalization hypothesis
