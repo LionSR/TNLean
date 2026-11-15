@@ -199,7 +199,7 @@ The source's choice $m=4$ is covered whenever $t\geq12$.
 This is an existence result with explicit dimensions; a computational
 running-time claim and the multi-region spectral argument are not included.
 
-\begin{theorem}[The soft Hamiltonian on the source's scale range]
+\begin{lemma}[The soft Hamiltonian on the source's scale range]
     \label{thm:soft_hamiltonian_mpo_source_range}
     \lean{TNLean.MPS.AreaLaw.exp_log_two_div_two,
         TNLean.MPS.AreaLaw.softHeat_sourceRange_base_bounds,
@@ -231,7 +231,7 @@ running-time claim and the multi-region spectral argument are not included.
         D\leq1+Nq^2+(m+1)\Bigl(1+\frac{\log E}{c}\Bigr)^2qE^{\log q/c}.
         \label{eq:soft_interval_source_range_bond}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
         lem:trace_chain_linear_combination}
