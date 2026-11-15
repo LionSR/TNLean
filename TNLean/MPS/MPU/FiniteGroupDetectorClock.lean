@@ -55,7 +55,7 @@ noncomputable def detectorClockPhase {ζ : ℂ} (hζ : IsPrimitiveRoot ζ m) :
 private theorem weylShift_clock_conj {ζ : ℂ} (hζ : IsPrimitiveRoot ζ m) (hm : 1 < m) :
     (weylShift : Matrix (ZMod m) (ZMod m) ℂ) * weylClock ζ * weylShiftᴴ =
       ζ • weylClock ζ := by
-  letI : Fact (1 < m) := ⟨hm⟩
+  let : Fact (1 < m) := ⟨hm⟩
   have h := weylShift_pow_conj_diagonal (1 : ZMod m) (fun i ↦ ζ ^ i.val)
   simp only [ZMod.val_one, pow_one] at h
   rw [weylClock, h]

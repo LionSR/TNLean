@@ -199,4 +199,22 @@ theorem star_dotProduct_detectorCircuitWord_clock_even {k : ℕ} [NeZero (2 * k)
       (2 * k) N *ᵥ ψ) = -1 := by
   rw [detectorCircuitWord_clock_even hζ hN, neg_mulVec, one_mulVec, dotProduct_neg, hψ]
 
+/-- Every positive even cyclic order admits the claimed concrete circuit,
+without a primitive root supplied as an additional hypothesis. The root is
+constructed as the complex exponential, and all interval operators come from
+this one depth-two circuit. Source context: the explicit obstruction family
+in the endpoint audit of arXiv:2405.00439, `detectG`, lines 2108–2117. -/
+theorem exists_detectorCircuitWord_even (k : ℕ) [NeZero (2 * k)]
+    (hN : 2 * (2 * k) + 2 < N) :
+    ∃ u w : unitary (Matrix (Fin (2 * k)) (Fin (2 * k)) ℂ),
+      u ^ (2 * k) = 1 ∧
+      (dressedPairCircuit (cellSuccessor N) u w Finset.univ).length = 2 ∧
+      QuantumCircuit.circuitOp (dressedPairCircuit (cellSuccessor N) u w Finset.univ) =
+        rectKronecker (fun _ : Fin N × Bool ↦ (u : Matrix (Fin (2 * k)) (Fin (2 * k)) ℂ)) ∧
+      detectorCircuitWord u w (2 * k) N = -1 := by
+  let hζ := Complex.isPrimitiveRoot_exp (2 * k) (NeZero.ne (2 * k))
+  exact ⟨detectorShiftFin (2 * k), detectorClockFin hζ, detectorShiftFin_pow_order (2 * k),
+    dressedPairCircuit_length _ _ _ _, circuitOp_dressedPairCircuit_univ _ _ _,
+    detectorCircuitWord_clock_even hζ hN⟩
+
 end MPOTensor.FiniteGroupDetector

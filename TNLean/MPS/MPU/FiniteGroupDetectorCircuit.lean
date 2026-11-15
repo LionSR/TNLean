@@ -143,9 +143,20 @@ theorem pairCircuitLayer_op (σ : Bool → Bool → Equiv.Perm κ) (color : Bool
     ext p
     simp only [Finset.mem_image, List.mem_toFinset, List.mem_map, Finset.mem_toList]
   let L := pairCircuitLayer σ color A hA S
+  have hcomm := L.gate_commute L.bonds subset_rfl
+  change (↑(S.image fun k ↦ (k, color)) : Set (κ × Bool)).Pairwise
+    (Function.onFun Commute fun p ↦ pairedGate (σ color) A p.1) at hcomm
+  have hcomm' : (↑(S.toList.map fun k ↦ (k, color)).toFinset : Set (κ × Bool)).Pairwise
+      (Function.onFun Commute fun p ↦ pairedGate (σ color) A p.1) := by
+    simpa only [hset] using hcomm
   change (S.image fun k ↦ (k, color)).noncommProd
-    (fun p ↦ pairedGate (σ color) A p.1) (L.gate_commute L.bonds subset_rfl) = _
-  rw [hset, Finset.noncommProd_toFinset _ _ _ hn]
+    (fun p ↦ pairedGate (σ color) A p.1) hcomm = _
+  have hprod : (S.image fun k ↦ (k, color)).noncommProd
+      (fun p ↦ pairedGate (σ color) A p.1) hcomm =
+      ((S.toList.map fun k ↦ (k, color)).map fun p ↦ pairedGate (σ color) A p.1).prod := by
+    simpa only [hset] using Finset.noncommProd_toFinset
+      (S.toList.map fun k ↦ (k, color)) (fun p ↦ pairedGate (σ color) A p.1) hcomm' hn
+  rw [hprod]
   simp only [List.map_map, Function.comp_apply]
   simpa using pairedGate_list_prod (σ color) A S.toList S.nodup_toList
 
