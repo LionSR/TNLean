@@ -100,8 +100,9 @@ theorem scalarCocycleValue₃_injective :
 theorem scalarCocycleValue₃_toCocycles
     (ω : {ω : ScalarThreeCochain G // ScalarThreeCochain.IsCocycle ω}) :
     scalarCocycleValue₃ (ScalarThreeCochain.toCocycles ω) = ω.1 := by
-  funext a b c
-  simp [scalarCocycleValue₃, scalarCochainValue₃,
-    ScalarThreeCochain.iCocycles_toCocycles, ScalarThreeCochain.toInhomogeneousCochain]
+  change ScalarThreeCochain.ofInhomogeneousCochain
+    (iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 (ScalarThreeCochain.toCocycles ω)) = ω.1
+  rw [ScalarThreeCochain.iCocycles_toCocycles,
+    ScalarThreeCochain.ofInhomogeneousCochain_toInhomogeneousCochain]
 
 end groupCohomology

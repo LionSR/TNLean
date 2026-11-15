@@ -94,6 +94,7 @@ section InhomogeneousDifferentials
 variable {G : Type} {X : Type v} {M : Type w}
   [Group G] [MulAction G X] [CommGroup M]
 
+set_option backward.isDefEq.respectTransparency false in
 /-- The second inhomogeneous differential in tuple coordinates, with coefficients
 in a permutation representation of any universe. -/
 theorem inhomogeneous_d₂_apply (f : G × G → representation G X M) (p : Fin 3 → G) :
@@ -101,7 +102,9 @@ theorem inhomogeneous_d₂_apply (f : G × G → representation G X M) (p : Fin 
       (representation G X M).ρ (p 0) (f (p 1, p 2)) - f (p 0 * p 1, p 2) +
         f (p 0, p 1 * p 2) - f (p 0, p 1) := by
   rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three]
-  simp [Fin.contractNth, sub_eq_add_neg, add_assoc, one_smul]
+  simp only [Fin.contractNth, sub_eq_add_neg, add_assoc, Fin.val_zero, Fin.val_one,
+    Fin.val_two, Nat.reduceAdd, pow_succ', pow_zero, mul_neg_one, neg_neg, mul_one,
+    neg_smul, one_smul]
 
 /-- The differential of a block two-cochain in inhomogeneous coordinates.
 Unlike the degree-three quotient, this formula permits arbitrary universes of

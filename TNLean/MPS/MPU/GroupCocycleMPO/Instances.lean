@@ -158,7 +158,7 @@ theorem mpo_tensor_cyclic_apply (m j : ℕ) (g : Multiplicative (ZMod (m + 1)))
   rw [mpo_tensor_apply]
   congr 1
   refine Finset.prod_congr rfl fun i _ ↦ ?_
-  rw [cyclicCocycle_val, toAdd_mul, toAdd_inv, neg_add_eq_sub]
+  rw [scalarCochainValue₃_iCocycles, cyclicCocycle_val, toAdd_mul, toAdd_inv, neg_add_eq_sub]
   rfl
 
 /-- The four operator laws for `ℤ_n` with the cocycle `ω_j`, for every `n = m + 1` and `j`.
@@ -202,8 +202,8 @@ theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ}
       else 0 := by
   rw [mpo_tensor_apply]
   congr 1
-  simp only [kleinCocycle_apply, Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one, toAdd_mul,
-    toAdd_inv, Prod.snd_add, Prod.snd_neg]
+  simp only [scalarCochainValue₃_iCocycles, kleinCocycle_apply, Units.val_pow_eq_pow_val,
+    Units.val_neg, Units.val_one, toAdd_mul, toAdd_inv, Prod.snd_add, Prod.snd_neg]
   refine Finset.prod_congr rfl fun i _ ↦ ?_
   congr 3
   exact neg_add_eq_sub _ _
