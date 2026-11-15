@@ -9,7 +9,7 @@
 
 \title{The Root-Channel Kraus-Rank Step in Theorem 4.1}
 \author{}
-\date{2026-04-30; revised 2026-09-26}
+\date{2026-04-30; revised 2026-11-15}
 
 \begin{document}
 \maketitle
@@ -363,18 +363,25 @@ exact family of roots and reaching a smaller Choi support remain unproved.
 
 \section{Trace preservation at an irreducible target}
 
-The following reductions are mathematical arguments; they are not yet
-asserted as Lean theorems. Let $\mathcal E$ be an irreducible CPTP map on
+Root trace preservation and trace annihilation of the linearized root
+equation are formalized in
+\path{TNLean/Algebra/IrreduciblePositiveRoot.lean}. The declarations
+\leanid{IsPositiveMap.isTracePreservingMap_of_irreducible_pow} and
+\leanid{IsPositiveMap.trace_eq_zero_of_power_linearization_eq_zero}
+require only positivity of the root, not complete positivity or
+invertibility. They do not prove the Choi-support dimension count or the
+existence of exact rank-reducing deformations.
+Let $\mathcal E$ be an irreducible positive trace-preserving map on
 $M_D(\mathbb C)$, where $D>0$, and let $p>0$. Its adjoint fixed space is
 $\operatorname{Fix}(\mathcal E^*)=\mathbb C I$.
 
-First, every completely positive root $\mathcal F^p=\mathcal E$ is
+First, every positive root $\mathcal F^p=\mathcal E$ is
 trace preserving. Indeed, $\mathcal F$ commutes with $\mathcal E$, so
 $\mathcal F^*(I)$ is fixed by $\mathcal E^*$. Thus
 $\mathcal F^*(I)=cI$ for some $c\ge0$. Taking the $p$th power gives
 $c^p=1$, hence $c=1$.
 
-Second, suppose that a Hermiticity-preserving perturbation $H$ belongs to
+Second, suppose that a complex-linear perturbation $H$ belongs to
 the kernel of the differential in
 (\ref{eq:dccsp17_power_differential}). Put $T=\mathcal F^*$ and
 $h=H^*(I)$. Since $T(I)=I$, the adjoint differential equation evaluated
@@ -404,6 +411,15 @@ minimization and compactness alone do not supply one. These reductions
 apply to a single irreducible target. A target with several irreducible
 blocks can have a larger adjoint fixed space, so the same proof does not
 establish trace preservation in that setting.
+The restriction is necessary: on $M_2(\mathbb C)$, take
+$K=\left(\begin{smallmatrix}0&2\\1/2&0\end{smallmatrix}\right)$ and
+$\mathcal F(X)=KXK^\dagger$. Then $K^2=I$ and
+$\mathcal F^2=\mathrm{id}$, but
+$\operatorname{tr}\mathcal F(E_{00})=1/4$.
+The identity channel is a two-block irreducible form with unit weights,
+so the single-block normalization reduction cannot be extended merely by
+replacing irreducibility with irreducible form. This does not obstruct
+bounded-root selection: the identity channel itself is a one-Kraus root.
 
 \section{The zero eigenspace cannot simply be discarded}
 

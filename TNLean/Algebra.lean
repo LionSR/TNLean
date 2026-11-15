@@ -94,6 +94,7 @@ import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IntegerHasseGraph
+import TNLean.Algebra.IrreduciblePositiveRoot
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
