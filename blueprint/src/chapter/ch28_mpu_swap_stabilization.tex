@@ -1,5 +1,3 @@
-% All 32 declarations compiled at 67bdbc2e; one unused simp argument was removed.
-% The original source comparison remains unfinished.
 \begin{definition}[Physical output matrix with an identity ancilla]
     \label{def:mpu_physical_identity_matrix}
     \lean{MPOTensor.physicalIdMatrix,
@@ -206,13 +204,24 @@
 \begin{proof}\leanok
     Work at chain length one and choose distinct states $a,b$. Apply
     compatibility from dimension $d$ with ancilla dimension $d$ to the
-    projection $P=\lvert a\rangle\langle a\rvert$. The embedded output
-    of any dimension-$d$ action has equal diagonal entries over
-    $(a,a)$ and $(a,b)$, whereas the swapped input $I_d\otimes P$
-    has entries one and zero. Permutation multiplication proves the
-    swap contraction directly, and the contradiction applies to both
-    adjunction and transposition because the input projection is real
-    symmetric.
+    projection $P=\lvert a\rangle\langle a\rvert$. Writing
+    $\iota_d(X)=X\otimes I_d$, coherence and either proposed action give
+    \[
+        \iota_d(F_d(P))=F_{d^2}(\iota_d(P))
+        =\mathbb S(P\otimes I_d)\mathbb S=I_d\otimes P.
+    \]
+    For every $Y$, the two selected diagonal entries satisfy
+    \[
+        (Y\otimes I_d)_{(a,a),(a,a)}=Y_{a,a}
+        =(Y\otimes I_d)_{(a,b),(a,b)},
+        \qquad
+        (I_d\otimes P)_{(a,a),(a,a)}=1,
+        \quad
+        (I_d\otimes P)_{(a,b),(a,b)}=0.
+    \]
+    This contradicts the displayed coherence identity. The same
+    calculation applies to adjunction and transposition because $P$
+    is real symmetric.
 \end{proof}
 
 \begin{lemma}[Flattened swaps at two enlarged dimensions are incompatible]

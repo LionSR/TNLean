@@ -106,7 +106,9 @@ theorem equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff
     FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_block _ hk,
     physicalIdMatrix_one, MPSTensor.blockKron_one,
     FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_one]
-  exact strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff U V x k
+  simpa only [ancillaSwapDaggerSymmetry, ancillaSwapMatrix,
+    FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix_eq] using
+    strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff U V x k
 
 /-- The labelled-spin stabilized swap/transposition comparison is equivalent
 to ordinary transposition of the swap-transformed tensors.
@@ -123,7 +125,9 @@ theorem equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff
     FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_block _ hk,
     physicalIdMatrix_one, MPSTensor.blockKron_one,
     FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_one]
-  exact strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff U V x k
+  simpa only [ancillaSwapTransposeSymmetry, ancillaSwapMatrix,
+    FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix_eq] using
+    strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff U V x k
 
 /-- Swap multiplication preserves the labelled-spin stabilized conjugation
 comparison. This concerns the same full conjugation action on each enlarged

@@ -63,6 +63,53 @@ private theorem reindex_mul {α β : Type*} [Fintype α] [Fintype β]
 
 namespace FiniteChainOperatorSymmetry
 
+/-- The canonically blocked adjunction action tested on every positive blocked
+chain length. At blocking length zero, the positive-chain convention is retained
+rather than taking the inverse image of the original applicable lengths.
+Source: arXiv:1703.09188, `SSymmetries-dagger` and `def:equivalent-symmetry`. -/
+noncomputable def blockedDaggerWithPhysicalMatrix
+    (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
+    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim d k) :=
+  { (daggerWithPhysicalMatrix Q).block k with applicable := {N | 0 < N} }
+
+/-- The canonically blocked transposition action, with the same positive-chain
+convention at blocking length zero as the explicit blocked local matrix.
+Source: arXiv:1703.09188, `SSymmetries-transpose` and `def:equivalent-symmetry`. -/
+noncomputable def blockedTransposeWithPhysicalMatrix
+    (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
+    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim d k) :=
+  { (transposeWithPhysicalMatrix Q).block k with applicable := {N | 0 < N} }
+
+/-- The positive-chain blocked action is exactly the sandwich action of the
+blocked local matrix, including blocking length zero. -/
+theorem blockedDaggerWithPhysicalMatrix_eq
+    (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
+    blockedDaggerWithPhysicalMatrix Q k =
+      daggerWithPhysicalMatrix (MPSTensor.blockKron k Q) := by
+  apply symmetry_eq
+  · rfl
+  · intro N X
+    simp only [blockedDaggerWithPhysicalMatrix, block, daggerWithPhysicalMatrix,
+      reindex_mul, sitewisePhysicalMatrix_blockKron_reindex,
+      Matrix.conjTranspose_reindex]
+    congr 2
+    ext σ τ
+    simp [Matrix.reindex_apply]
+
+/-- The transposition analogue of the full blocked-matrix action identity. -/
+theorem blockedTransposeWithPhysicalMatrix_eq
+    (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
+    blockedTransposeWithPhysicalMatrix Q k =
+      transposeWithPhysicalMatrix (MPSTensor.blockKron k Q) := by
+  apply symmetry_eq
+  · rfl
+  · intro N X
+    simp only [blockedTransposeWithPhysicalMatrix, block, transposeWithPhysicalMatrix,
+      reindex_mul, sitewisePhysicalMatrix_blockKron_reindex]
+    congr 2
+    ext σ τ
+    simp [Matrix.reindex_apply, Matrix.transpose_apply]
+
 /-- Canonical positive blocking of the physical-matrix adjunction action
 is the action of its blocked local matrix, on the entire operator algebra.
 Source: arXiv:1703.09188, `def:equivalent-symmetry`, line 1366. -/
@@ -70,16 +117,15 @@ theorem daggerWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
     {k : ℕ} (hk : 0 < k) :
     (daggerWithPhysicalMatrix Q).block k =
       daggerWithPhysicalMatrix (MPSTensor.blockKron k Q) := by
-  apply symmetry_eq
-  · ext N
-    change (0 < N * k) ↔ 0 < N
-    exact Nat.mul_pos_iff_of_pos_right hk
-  · intro N X
-    simp only [block, daggerWithPhysicalMatrix, reindex_mul,
-      sitewisePhysicalMatrix_blockKron_reindex, Matrix.conjTranspose_reindex]
-    congr 2
-    ext σ τ
-    simp [Matrix.reindex_apply]
+  calc
+    _ = blockedDaggerWithPhysicalMatrix Q k := by
+      apply symmetry_eq
+      · ext N
+        change (0 < N * k) ↔ 0 < N
+        exact Nat.mul_pos_iff_of_pos_right hk
+      · intro N X
+        rfl
+    _ = _ := blockedDaggerWithPhysicalMatrix_eq Q k
 
 /-- Canonical positive blocking of the physical-matrix transposition
 action is the action of its blocked local matrix.
@@ -88,16 +134,15 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
     {k : ℕ} (hk : 0 < k) :
     (transposeWithPhysicalMatrix Q).block k =
       transposeWithPhysicalMatrix (MPSTensor.blockKron k Q) := by
-  apply symmetry_eq
-  · ext N
-    change (0 < N * k) ↔ 0 < N
-    exact Nat.mul_pos_iff_of_pos_right hk
-  · intro N X
-    simp only [block, transposeWithPhysicalMatrix, reindex_mul,
-      sitewisePhysicalMatrix_blockKron_reindex]
-    congr 2
-    ext σ τ
-    simp [Matrix.reindex_apply, Matrix.transpose_apply]
+  calc
+    _ = blockedTransposeWithPhysicalMatrix Q k := by
+      apply symmetry_eq
+      · ext N
+        change (0 < N * k) ↔ 0 < N
+        exact Nat.mul_pos_iff_of_pos_right hk
+      · intro N X
+        rfl
+    _ = _ := blockedTransposeWithPhysicalMatrix_eq Q k
 
 /-- The identity physical matrix gives ordinary adjunction. -/
 @[simp] theorem daggerWithPhysicalMatrix_one (d : ℕ) :
