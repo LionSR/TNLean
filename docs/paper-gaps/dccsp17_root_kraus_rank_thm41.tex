@@ -775,9 +775,15 @@ loop allow a path through zero to be padded to any sufficiently large
 length. The corresponding homogeneous word spans therefore contain
 every matrix unit for all sufficiently large lengths. This extension
 covers primitive nonunital targets with arbitrary allowed coherences;
-it is not a proof for unrestricted primitive channels. The tensor-space
-and whole-channel assertions in this subsection remain paper arguments,
-not Lean theorems.
+it is not a proof for unrestricted primitive channels. The connected
+word-space comparison is separately formalized by
+\leanid{Matrix.finrank_span_le_wordSpace_add_one} and
+\leanid{Matrix.finrank_span_le_wordSpace_of_diagonal} in
+\texttt{TNLean/Algebra/ConnectedWordSpan.lean}. Their hypotheses supply a
+connected graph, a linear functional nonzero on every coefficient, and
+the specified oriented outer products in the word space. They do not
+construct that data from a channel. The whole-channel assertions in this
+subsection remain paper arguments, not Lean theorems.
 
 \section{Explicit bounded roots from a commuting projected semigroup}
 

@@ -7,7 +7,6 @@ Authors: TNLean contributors
 -- Do not edit it directly; run the generator instead.
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
-
 import TNLean.Algebra.AnnihilatingPowerPerturbation
 import TNLean.Algebra.AnticommutingEvenDimension
 import TNLean.Algebra.BinaryCharacterSum
@@ -41,6 +40,7 @@ import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConjClassesConjugation
 import TNLean.Algebra.ConjugateProjectiveRepresentation
 import TNLean.Algebra.ConjugateRegularRepresentation
+import TNLean.Algebra.ConnectedWordSpan
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
