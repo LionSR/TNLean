@@ -30,6 +30,36 @@ namespace MPSPreparation
 
 variable {d D M N : ℕ} {ℓ : Fin M → ℕ}
 
+/-- A coherent sum of locally orthonormal, site-dependent pair products is a unit vector
+when its amplitudes have squared moduli summing to one and there is at least one window.
+Source: arXiv:2307.01696, eq. (19) and its concluding inhomogeneous remark. -/
+theorem norm_sum_pairFamilyVector [NeZero M] {b : ℕ}
+    (ω : Fin b → Fin M → Fin D × Fin D → ℂ)
+    (hω : ∀ k j j', ∑ p, star (ω j k p) * ω j' k p = if j = j' then 1 else 0)
+    (α : Fin b → ℂ) (hα : ∑ j, star (α j) * α j = 1) :
+    ‖∑ j, α j • pairFamilyVector (ω j)‖ = 1 := by
+  classical
+  have hinner : ∀ i j, ⟪pairFamilyVector (ω i), pairFamilyVector (ω j)⟫_ℂ =
+      if i = j then 1 else 0 := by
+    intro i j
+    calc
+      _ = ∑ c : Fin M → Fin D × Fin D,
+          star (pairFamilyState (ω i) c) * pairFamilyState (ω j) c := by
+        rw [PiLp.inner_apply]
+        exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm)
+          _ _ fun τ => by simp only [RCLike.inner_apply, pairFamilyVector_apply]; ring
+      _ = ∏ k, ∑ p, star (ω i k p) * ω j k p := pairFamilyState_inner _ _
+      _ = _ := by
+        simp_rw [hω]
+        split_ifs <;> simp [Fin.prod_const, NeZero.ne M]
+  have hself : ⟪∑ j, α j • pairFamilyVector (ω j),
+      ∑ j, α j • pairFamilyVector (ω j)⟫_ℂ = 1 := by
+    simp only [sum_inner, inner_sum, inner_smul_left, inner_smul_right, hinner]
+    simpa [Finset.mul_sum, mul_ite] using hα
+  rw [inner_self_eq_norm_sq_to_K] at hself
+  have hsq : ‖∑ j, α j • pairFamilyVector (ω j)‖ ^ 2 = 1 := by exact_mod_cast hself
+  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 hsq
+
 /-- Isometric extensions preserve the normalized overlap for every input vector, including
 coherent sums of site-dependent pair products. Source: arXiv:2307.01696, eqs. (18), (19),
 and the concluding inhomogeneous remark in "Long-range MPS using measurements". -/
@@ -56,7 +86,7 @@ private theorem blockMatVector_sum_smul {κ : Type*} [Fintype κ]
 
 section Encodings
 
-variable [NeZero d] [NeZero M] [NeZero N] {r₁ : ℕ}
+variable [NeZero d] {r₁ : ℕ}
 
 private theorem pairLayerOp_mulVec_registerCfg_eq_family
     (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
@@ -173,6 +203,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_inhomogeneousLongRang
           ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
           IsPreparedWithMeasurementsAndCircuitInDepth (C * L)
             (fun s => blockMatVector X hN (∑ j, α j • pairFamilyVector (ω j)) s) ∧
+          ‖blockMatVector X hN (∑ j, α j • pairFamilyVector (ω j))‖ = 1 ∧
           ⟪blockMatVector X hN (∑ j, α j • pairFamilyVector (ω j)),
               (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ =
             ⟪∑ j, α j • pairFamilyVector (ω j),
@@ -190,7 +221,8 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_inhomogeneousLongRang
     (by dsimp [r₁]; omega) dig.injective dig₀.injective hD
   refine ⟨C, 3 * r₁, fun {M} _ ℓ N _ hN A L hℓ hL => ?_⟩
   obtain ⟨X, hX, hXE, hprep⟩ := hC ℓ hN A L hℓ hL
-  exact ⟨X, hX, hXE, fun ω hω α hα => ⟨hprep ω hω α hα,
+  refine ⟨X, hX, hXE, fun ω hω α hα => ⟨hprep ω hω α hα, ?_,
     inner_blockMatVector_normalizedChainState A hN hX hXE _⟩⟩
+  rw [norm_blockMatVector hN hX, norm_sum_pairFamilyVector ω hω α hα]
 
 end MPSPreparation

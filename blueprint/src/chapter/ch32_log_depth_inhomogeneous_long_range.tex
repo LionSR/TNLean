@@ -64,12 +64,27 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
     inner products, giving (\ref{eq:ldp_inhomogeneous_long_range_overlap}).
 \end{proof}
 
+\begin{lemma}[Norm of a coherent sum of inhomogeneous pair products]
+    \label{lem:ldp_inhomogeneous_long_range_norm}
+    \lean{MPSPreparation.norm_sum_pairFamilyVector}
+    \notready
+    \uses{def:ldp_chain_pos_state}
+    For $M\ge1$, the vector $\Omega'$ of
+    (\ref{eq:ldp_inhomogeneous_long_range_pairs}) has norm one.
+\end{lemma}
+\begin{proof}
+    Regrouping the bond indices gives
+    $\langle\bigotimes_k\omega_i^k,\bigotimes_k\omega_j^k\rangle
+        =\prod_k\langle\omega_i^k,\omega_j^k\rangle=\delta_{ij}$.
+    Therefore $\|\Omega'\|^2=\sum_j|\alpha_j|^2=1$.
+\end{proof}
+
 \begin{lemma}[Preparation from coherent products of inhomogeneous pairs]
     \label{lem:ldp_inhomogeneous_long_range_preparation}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_inhomogeneousLongRange}
     \notready
     \uses{lem:ldp_isometric_extension_encoding, thm:ldp_window_ghz_measurement,
-        lem:ldp_inhomogeneous_long_range_overlap}
+        lem:ldp_inhomogeneous_long_range_overlap, lem:ldp_inhomogeneous_long_range_norm}
     Fix $d\ge2$, $D\ge1$ and $b\ge0$. There are $C$ and $L_0$ depending
     only on $d,D,b$ with the following property. Cut a ring of $N\ge1$ sites
     into $M\ge1$ consecutive blocks with $L_0\le\ell_k\le L$, and let $A$
@@ -77,7 +92,7 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
     satisfying $X_k\Pi_k=V_k$, chosen independently of the pairs and the
     amplitudes, such that every input
     (\ref{eq:ldp_inhomogeneous_long_range_pairs}) gives the state
-    $\ket\psi=(\bigotimes_kX_k)\ket{\Omega'}$ prepared with measurements
+    unit vector $\ket\psi=(\bigotimes_kX_k)\ket{\Omega'}$ prepared with measurements
     followed by a circuit in depth at most $CL$. Its overlap with the
     normalized chain state is
     (\ref{eq:ldp_inhomogeneous_long_range_overlap}) with $\Omega=\Omega'$.
