@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.SparsePositiveCoupling
+import Mathlib.Basic.Complex.BigOperators
 import QICLean.Algebra.MatrixSpectralDecomp
 import QICLean.Analysis.MatrixSqrt
 
@@ -68,7 +69,7 @@ private theorem trace_re_eq_sum_weights {n ι : Type*} [Fintype n]
   have hTrace : A.trace = ∑ i, (w i : ℂ) := by
     rw [hA, Matrix.trace_sum]
     simp only [Matrix.trace_smul, hUnit, smul_eq_mul, mul_one]
-  simpa only [Complex.sum_re, Complex.ofReal_re] using congrArg Complex.re hTrace
+  simpa only [Complex.re_sum, Complex.ofReal_re] using congrArg Complex.re hTrace
 
 private theorem rankOne_gram_sums {m n : Type*} [Fintype m] [Fintype n]
     (u : n → ℂ) (v : m → ℂ) (hu : star u ⬝ᵥ u = 1) (hv : star v ⬝ᵥ v = 1)
@@ -76,13 +77,12 @@ private theorem rankOne_gram_sums {m n : Type*} [Fintype m] [Fintype n]
     let K := (Real.sqrt w : ℂ) • vecMulVec u (star v)
     K * Kᴴ = (w : ℂ) • vecMulVec u (star u) ∧
       Kᴴ * K = (w : ℂ) • vecMulVec v (star v) := by
-  have hc : (Real.sqrt w : ℂ) * star (Real.sqrt w : ℂ) = (w : ℂ) := by
-    simpa only [star_ofReal, ← pow_two, Complex.ofReal_pow] using
-      congrArg (fun x : ℝ => (x : ℂ)) (Real.sq_sqrt hw)
+  have hSquare : Real.sqrt w * Real.sqrt w = w := by
+    simpa only [pow_two] using Real.sq_sqrt hw
   constructor <;>
     simp [Matrix.conjTranspose_smul, Matrix.conjTranspose_vecMulVec,
       Matrix.smul_mul, Matrix.mul_smul, Matrix.vecMulVec_mul_vecMulVec,
-      hu, hv, smul_smul, hc, mul_comm (star (Real.sqrt w : ℂ))]
+      hu, hv, smul_smul, hSquare]
 
 private theorem collect_weights {ι κ : Type*} [Fintype ι] [Fintype κ]
     [DecidableEq κ] {n : Type*} (row : ι → κ) (w : ι → ℝ) (a : κ → ℝ)
@@ -90,7 +90,8 @@ private theorem collect_weights {ι κ : Type*} [Fintype ι] [Fintype κ]
     (hRow : ∀ i, (∑ k, if row k = i then w k else 0) = a i) :
     ∑ k, (w k : ℂ) • P (row k) = ∑ i, (a i : ℂ) • P i := by
   have hCast (i : κ) : (∑ k, if row k = i then (w k : ℂ) else 0) = (a i : ℂ) := by
-    exact_mod_cast hRow i
+    have h := congrArg Complex.ofReal (hRow i)
+    simpa only [Complex.ofReal_sum, apply_ite, Complex.ofReal_zero] using h
   calc
     _ = ∑ i, ∑ k, (if row k = i then (w k : ℂ) else 0) • P i := by
       rw [Finset.sum_comm]
@@ -119,17 +120,17 @@ theorem exists_kraus_coupling_of_trace_eq {m n : Type*}
   have hSumB := trace_re_eq_sum_weights b v hv hDecompB
   have hNEA : Nonempty (Fin A.rank) := by
     by_contra h
-    haveI : IsEmpty (Fin A.rank) := not_nonempty_iff.mp h
+    have : IsEmpty (Fin A.rank) := not_nonempty_iff.mp h
     have hZero : ∑ i, a i = 0 := by simp
     linarith
   have hNEB : Nonempty (Fin B.rank) := by
     by_contra h
-    haveI : IsEmpty (Fin B.rank) := not_nonempty_iff.mp h
+    have : IsEmpty (Fin B.rank) := not_nonempty_iff.mp h
     have hZero : ∑ i, b i = 0 := by simp
     have h := congrArg Complex.re hTrace
     linarith
-  letI := hNEA
-  letI := hNEB
+  let _ : Nonempty (Fin A.rank) := hNEA
+  let _ : Nonempty (Fin B.rank) := hNEB
   have hMass : ∑ i, a i = ∑ j, b j := by rw [← hSumA, ← hSumB, hTrace]
   have hTotal : 0 < ∑ i, a i := by rwa [← hSumA]
   obtain ⟨r, row, col, w, hCard, hw, hRow, hCol⟩ :=
@@ -175,8 +176,8 @@ theorem exists_kraus_state_effect_coupling {m n : Type*}
   have hTS : T * S = 1 := by
     simpa only [hρ.supportProj_eq_one] using hρ.posSemidef.supportInvSqrt_mul_cfc_sqrt
   have hTρT : T * ρ * T = 1 := by
-    simpa only [hρ.supportProj_eq_one] using
-      hρ.posSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt
+    exact hρ.posSemidef.supportInvSqrt_mul_self_mul_supportInvSqrt.trans
+      hρ.supportProj_eq_one
   let D := S * B * S
   have hD : D.PosSemidef := by
     simpa only [hS.eq] using hB.conjTranspose_mul_mul_same S

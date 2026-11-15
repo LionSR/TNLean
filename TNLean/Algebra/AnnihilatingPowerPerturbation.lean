@@ -26,7 +26,7 @@ theorem add_pow_eq_of_annihilating_square_zero {A : Type*} [Semiring A]
     induction n with
     | zero =>
       simp only [Nat.zero_add, pow_two, add_mul, mul_add, hFH, hHF, hHH,
-        add_zero, zero_add]
+        add_zero]
     | succ n ih =>
       have hZero : F ^ (n + 2) * H = 0 := by
         rw [pow_succ, mul_assoc, hFH, mul_zero]
