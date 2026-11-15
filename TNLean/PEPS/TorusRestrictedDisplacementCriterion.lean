@@ -92,6 +92,12 @@ theorem TorusDualHomotopy.seamWordAt_eq_of_not_mem
     · simp only [torusDualEastNorth, torusDualNorthEast, torusDualSeamWordAt,
         basedSeamStep, hx, ite_false, one_mul, mul_one]
 
+/-- Every labelled dual square has zero lifted integer displacement, at all periods. -/
+@[simp]
+theorem torusDualSquareLoop_displacement_zero (x : ZMod width) (y : ZMod height) :
+    torusDualPathDisplacement (torusDualSquareLoop x y) = (0, 0) := by
+  ext <;> simp [torusDualSquareLoop, TorusDualStep.displacement]
+
 /-- The square surrounding any excluded primal support vertex cannot be
 contracted by supported square and backtrack moves. The noncommuting test
 permutations are constructed internally, with no physical-group hypothesis. -/
@@ -128,7 +134,7 @@ theorem torusDualHomotopy_displacement_complete_iff_support_univ (R : Set X) :
     have hd : torusDualPathDisplacement (torusDualSquareLoop (c.1 - 1) (c.2 - 1)) =
         torusDualPathDisplacement (.nil : TorusDualPath (c.1 - 1, c.2 - 1)
           (c.1 - 1, c.2 - 1)) := by
-      ext <;> simp [torusDualSquareLoop, TorusDualStep.displacement]
+      simp
     exact torusDualSquareLoop_not_homotopic_of_support_excludes R c hc (h _ _ hd)
   · intro h a b p q hd
     rw [h]
