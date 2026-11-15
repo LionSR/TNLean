@@ -225,4 +225,3 @@ theorem quantumDoubleKLatticePlaquetteHolonomy_spins (c : E → G) (v : X) :
     quantumDoubleKSpins, torusDownEdge, torusLeftEdge, mul_assoc]
 
 end TNLean.PEPS
-
