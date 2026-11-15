@@ -67,7 +67,8 @@ private theorem connected_span_le_image_sup {𝕜 n ι : Type*} [Field 𝕜]
       (show W.map (skewContract f) ≤ M from le_sup_left) hDelta
     have hSub := M.sub_mem (M.smul_mem (f (v j)) hi) hDeltaM
     have hScaled : f (v i) • v j ∈ M := by
-      convert hSub using 1 <;> abel
+      convert hSub using 1
+      abel
     exact (Submodule.smul_mem_iff M (hf i)).mp hScaled
   have hReach (i j : ι) (hij : G.Reachable i j) : v i ∈ M → v j ∈ M := by
     obtain ⟨p⟩ := hij
@@ -171,7 +172,7 @@ theorem finrank_span_le_wordSpace_add_one_of_nonzero {𝕜 n ι : Type*}
     (hEdge : ∀ i j, G.Adj i j →
       vecMulVec (v i) (v j) ∈ W ∨ vecMulVec (v j) (v i) ∈ W) :
     finrank 𝕜 (Submodule.span 𝕜 (Set.range v)) ≤ finrank 𝕜 W + 1 := by
-  obtain ⟨f, hf⟩ := Module.exists_dual_forall_apply_ne_zero v hv
+  obtain ⟨f, hf⟩ := Module.exists_dual_forall_apply_ne_zero (K := 𝕜) v hv
   exact finrank_span_le_wordSpace_add_one G hG v i₀ f hf W hEdge
 
 /-- Over an infinite field, a finite connected coefficient graph with a
@@ -186,7 +187,7 @@ theorem finrank_span_le_wordSpace_of_diagonal_of_nonzero {𝕜 n ι : Type*}
       vecMulVec (v i) (v j) ∈ W ∨ vecMulVec (v j) (v i) ∈ W)
     (hLoop : vecMulVec (v i₀) (v i₀) ∈ W) :
     finrank 𝕜 (Submodule.span 𝕜 (Set.range v)) ≤ finrank 𝕜 W := by
-  obtain ⟨f, hf⟩ := Module.exists_dual_forall_apply_ne_zero v hv
+  obtain ⟨f, hf⟩ := Module.exists_dual_forall_apply_ne_zero (K := 𝕜) v hv
   exact finrank_span_le_wordSpace_of_diagonal G hG v i₀ f hf W hEdge hLoop
 
 end Matrix

@@ -848,6 +848,23 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     $F^kH=0$ for every $k>0$. All mixed terms vanish.
 \end{proof}
 
+\begin{lemma}[Exact powers from a preserved square]
+    \label{thm:periodic_square_preserving_power_perturbation}
+    \lean{add_pow_eq_of_sq_eq_of_sq_mul_eq_zero,
+        add_pow_eq_of_anticommuting_square_zero}
+    \leanok
+    Let $F,H$ lie in a semiring. If $(F+H)^2=F^2$ and $F^2H=0$, then
+    $(F+H)^p=F^p$ for every $p\ge2$. In particular, this holds when
+    $FH+HF=0$, $H^2=0$, and $F^2H=0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For every $k\ge2$, the identity $F^kH=0$ follows by factoring out
+    $F^2H$. Induction now multiplies the preserved power by $F+H$.
+    The special case follows by expanding the square.
+\end{proof}
+
 \begin{lemma}[Sparse coupling of finite positive masses]
     \label{thm:periodic_sparse_positive_coupling}
     \lean{SparseCoupling.exists_probability_coupling,
