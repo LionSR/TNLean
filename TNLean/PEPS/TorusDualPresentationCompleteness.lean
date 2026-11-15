@@ -116,18 +116,17 @@ private theorem lift_root_route (F : TorusDualFlatTransport R Y) (v : X) :
   rw [← rootEquiv_apply]
   exact (rootEquiv F v).symm_apply_apply z
 
-private theorem lift_face (F : TorusDualFlatTransport R Y) (v : X) (hv : v ∈ R) :
+private theorem lift_face (F : TorusDualFlatTransport R Y) (v : X)
+    (hv : (v.1 + 1, v.2 + 1) ∈ R) :
     FreeGroup.lift (transportGenerators F) (torusDualFaceWord v) = 1 := by
-  have hs : ((v.1 - 1) + 1, (v.2 - 1) + 1) ∈ R := by
-    simpa only [sub_add_cancel] using hv
   have h : FreeGroup.lift (transportGenerators F)
-      (torusDualPathWord (torusDualEastNorth (v.1 - 1) (v.2 - 1))) =
+      (torusDualPathWord (torusDualEastNorth v.1 v.2)) =
       FreeGroup.lift (transportGenerators F)
-        (torusDualPathWord (torusDualNorthEast (v.1 - 1) (v.2 - 1))) := by
+        (torusDualPathWord (torusDualNorthEast v.1 v.2)) := by
     ext z
     rw [lift_word_apply, lift_word_apply]
     congr 1
-    exact (TorusDualHomotopy.square (v.1 - 1) (v.2 - 1) hs).flatTransport_eval_eq F _
+    exact (TorusDualHomotopy.square v.1 v.2 hv).flatTransport_eval_eq F _
   simp only [torusDualFaceWord, map_mul, map_inv, h, mul_inv_cancel]
 
 private theorem lift_relators (S : Finset X) (F : TorusDualFlatTransport (S : Set X) Y) :
@@ -141,7 +140,7 @@ private theorem lift_relators (S : Finset X) (F : TorusDualFlatTransport (S : Se
   · obtain ⟨v, _, rfl⟩ := Finset.mem_image.mp hr
     exact lift_root_route F v
   · obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hr
-    exact lift_face F v hv
+    exact lift_face F v (Finset.mem_filter.mp hv).2
 
 /-- Exact classification of finite native parallel paths by one explicit
 finite presentation. Its generators are the two native positive steps at

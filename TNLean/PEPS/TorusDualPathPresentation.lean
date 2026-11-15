@@ -58,7 +58,9 @@ private theorem pathWord_reverse {a b : X} (p : TorusDualPath a b) :
   | nil => simp only [Quiver.Path.reverse, torusDualPathWord, inv_one]
   | cons p e ih =>
     simp only [Quiver.Path.reverse, pathWord_comp, Quiver.Hom.toPath,
-      torusDualPathWord, ih, stepWord_reverse, mul_inv_rev, mul_one]
+      torusDualPathWord, ih, mul_inv_rev, mul_one]
+    change (torusDualPathWord p)⁻¹ * torusDualStepWord e.reverse = _
+    rw [stepWord_reverse]
 
 variable [NeZero width] [NeZero height]
 
@@ -76,18 +78,19 @@ theorem torusDualRootRoute_zero :
     torusDualRootRoute ((0, 0) : X) = .nil := by
   simp [torusDualRootRoute]
 
-/-- The local face relator at a primal support vertex compares its two
-positive east-north and north-east native dual paths. -/
+/-- The local face relator at its lower-left dual vertex compares the two
+positive east-north and north-east paths. Its primal support is one step
+east and north from this native base vertex. -/
 def torusDualFaceWord (v : X) : FreeGroup (X ⊕ X) :=
-  torusDualPathWord (torusDualEastNorth (v.1 - 1) (v.2 - 1)) *
-    (torusDualPathWord (torusDualNorthEast (v.1 - 1) (v.2 - 1)))⁻¹
+  torusDualPathWord (torusDualEastNorth v.1 v.2) *
+    (torusDualPathWord (torusDualNorthEast v.1 v.2))⁻¹
 
 /-- The finite defining relators: all fixed root-route words and the local
 face words at exactly the allowed primal square-move supports. -/
 def torusDualPresentationRelators (R : Finset X) : Finset (FreeGroup (X ⊕ X)) := by
   classical
   exact (Finset.univ.image fun v : X => torusDualPathWord (torusDualRootRoute v)) ∪
-    R.image torusDualFaceWord
+    (Finset.univ.filter fun v : X => (v.1 + 1, v.2 + 1) ∈ R).image torusDualFaceWord
 
 /-- The presentation has at most twice as many defining relators as native
 vertices. The generator type likewise consists of two copies of the vertices. -/
@@ -97,16 +100,16 @@ theorem card_torusDualPresentationRelators_le (R : Finset X) :
   unfold torusDualPresentationRelators
   calc
     _ ≤ (Finset.univ.image fun v : X => torusDualPathWord (torusDualRootRoute v)).card +
-        (R.image torusDualFaceWord).card := Finset.card_union_le _ _
-    _ ≤ Fintype.card X + R.card := by
+        ((Finset.univ.filter fun v : X => (v.1 + 1, v.2 + 1) ∈ R).image
+          torusDualFaceWord).card := Finset.card_union_le _ _
+    _ ≤ Fintype.card X + Fintype.card X := by
       exact Nat.add_le_add (by simpa only [Finset.card_univ] using
         (Finset.card_image_le (s := Finset.univ)
           (f := fun v : X => torusDualPathWord (torusDualRootRoute v))))
-        Finset.card_image_le
-    _ ≤ 2 * Fintype.card X := by
-      have h := Finset.card_le_card (Finset.subset_univ R)
-      simp only [Finset.card_univ] at h
-      omega
+        (Finset.card_image_le.trans (by simpa only [Finset.card_univ] using
+          (Finset.card_le_card (Finset.filter_subset
+            (fun v : X => (v.1 + 1, v.2 + 1) ∈ R) Finset.univ))))
+    _ = 2 * Fintype.card X := by omega
 
 /-- Every generated supported homotopy preserves the image of the actual
 native word in the finite presentation defined by the allowed squares.
@@ -124,15 +127,16 @@ theorem TorusDualHomotopy.presentation_word_eq {R : Finset X} {a b : X}
   | comp h k ih ik => simp only [pathWord_comp, map_mul, ih, ik]
   | reverse h ih => simp only [pathWord_reverse, map_inv, ih]
   | backtrack e =>
-    simp only [torusDualPathWord, stepWord_reverse, map_mul, map_inv, map_one,
+    simp only [torusDualPathWord, stepWord_reverse, map_one,
       mul_one, inv_mul_cancel]
   | square x y hxy =>
     apply PresentedGroup.mk_eq_mk_of_mul_inv_mem
     change _ ∈ torusDualPresentationRelators R
-    have hm : torusDualFaceWord (x + 1, y + 1) ∈ torusDualPresentationRelators R := by
+    have hm : torusDualFaceWord (x, y) ∈ torusDualPresentationRelators R := by
       classical
       unfold torusDualPresentationRelators
-      exact Finset.mem_union_right _ (Finset.mem_image.mpr ⟨(x + 1, y + 1), hxy, rfl⟩)
-    simpa only [torusDualFaceWord, add_sub_cancel] using hm
+      exact Finset.mem_union_right _ (Finset.mem_image.mpr
+        ⟨(x, y), Finset.mem_filter.mpr ⟨Finset.mem_univ _, hxy⟩, rfl⟩)
+    exact hm
 
 end TNLean.PEPS
