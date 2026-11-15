@@ -172,6 +172,50 @@ private theorem forbidden_vertical (R : Finset X) (q a : ℤ × ℤ)
 
 variable {G : Type*} [Group G]
 
+private theorem incident_ofAdj (R : Finset X) {a b : X} (h : (Γₜ).Adj a b) :
+    IsRegionIncidentEdge R (Edge.ofAdj h) ↔ a ∈ R ∨ b ∈ R := by
+  rcases Edge.ofAdj_endpoints h with h | h
+  · simp only [IsRegionIncidentEdge, h.1, h.2]
+  · simp only [IsRegionIncidentEdge, h.1, h.2, or_comm]
+
+/-- An actually avoiding native path has identity ordered-edge insertion on
+every physical bond incident to the observation region. This uses only the
+computed forbidden plaquettes and actual crossing counts. Source: SCP10,
+Definition 6.13 and Lemma 6.14. -/
+theorem torusDualFlux_graphLabels_eq_one_on_incident_of_avoids
+    (R : Finset X) {s t : X} (p : TorusDualPath s t)
+    (hp : ∀ v ∈ (torusDualPathGraphWalk p).support, v ∉ torusIncidentDualPlaquettes R)
+    (g : G) :
+    ∀ f : Edge (Γₜ), IsRegionIncidentEdge R f →
+      torusGraphRegularLabels (torusDualFluxLabels g p).1 (torusDualFluxLabels g p).2 f = 1 := by
+  have hh (v : X) (hv : v ∈ R ∨ (v.1 + 1, v.2) ∈ R) :
+      (torusDualFluxLabels g p).1 v = 1 := by
+    have hB : v ∈ torusIncidentDualPlaquettes R := by
+      simp only [torusIncidentDualPlaquettes, Finset.mem_filter, Finset.mem_univ, true_and]
+      exact hv.elim Or.inl (fun h => Or.inr (Or.inl h))
+    have hz := (path_zero R p hp v).1 (Or.inl hB)
+    simp only [torusDualFluxLabels, torusFluxPowerLabels, hz, zpow_zero]
+  have hv (v : X) (hv : v ∈ R ∨ (v.1, v.2 + 1) ∈ R) :
+      (torusDualFluxLabels g p).2 v = 1 := by
+    have hB : v ∈ torusIncidentDualPlaquettes R := by
+      simp only [torusIncidentDualPlaquettes, Finset.mem_filter, Finset.mem_univ, true_and]
+      exact hv.elim Or.inl (fun h => Or.inr (Or.inr (Or.inl h)))
+    have hz := (path_zero R p hp v).2 (Or.inl hB)
+    simp only [torusDualFluxLabels, torusFluxPowerLabels, hz, zpow_zero]
+  intro f hf
+  obtain ⟨z, rfl⟩ := torusEdgeEquiv.surjective f
+  rcases z with v | v
+  · have hi := (incident_ofAdj R (torusGraph_adj_right v.1 v.2)).mp hf
+    unfold torusGraphRegularLabels
+    rw [show torusEdgeEquiv.symm (torusRightEdge v) = Sum.inl v from
+      torusEdgeEquiv.symm_apply_apply (Sum.inl v)]
+    simp only [hh v hi, inv_one, ite_self]
+  · have hi := (incident_ofAdj R (torusGraph_adj_up v.1 v.2)).mp hf
+    unfold torusGraphRegularLabels
+    rw [show torusEdgeEquiv.symm (torusUpEdge v) = Sum.inr v from
+      torusEdgeEquiv.symm_apply_apply (Sum.inr v)]
+    simp only [hv v hi, inv_one, ite_self]
+
 private theorem right_transport (R : Finset X) (A : Finset (ℤ × ℤ))
     (hA : ∀ a ∈ A, intVertex a ∈ R) {s t : X} (p : TorusDualPath s t)
     (hp : ∀ v ∈ (torusDualPathGraphWalk p).support, v ∉ torusIncidentDualPlaquettes R)

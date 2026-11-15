@@ -1,3 +1,17 @@
+\begin{lemma}[An avoiding flux path is untwisted on observed incident bonds]
+    \label{lem:peps_flux_avoiding_incident_identity}
+    \lean{TNLean.PEPS.torusDualFlux_graphLabels_eq_one_on_incident_of_avoids}\leanok
+    A native dual path avoiding every plaquette with an observed corner
+    has identity ordered-edge insertion on every physical bond incident
+    to the observation region. The group element may be noncentral.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_physical_forbidden_dual_plaquettes}
+    Each incident bond has an adjacent forbidden plaquette. No avoiding
+    dual step crosses it, so its total signed count is zero. Native powers
+    and the inverse used for the ordered-edge orientation are both identity.
+\end{proof}
+
 \begin{lemma}[An avoiding flux path is untwisted on the safe collar]
     \label{lem:peps_flux_safe_collar_untwisted}
     \lean{TNLean.PEPS.torusDualFlux_transport_eq_one_on_integerExteriorCollar}\leanok
