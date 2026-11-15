@@ -90,10 +90,10 @@
     },
     {
       "id": "docs/paper-gaps/aklv13_two_block_robustness.tex",
-      "kind": "narrower",
-      "status": "open",
+      "kind": "local-correction",
+      "status": "resolved-pending",
       "paper": "aklv",
-      "result": "Theorem 6.1, windows of at least three terms",
+      "result": "Theorem 6.1",
       "issue": 9837,
       "stage": "fr:1",
       "prs": {
@@ -102,13 +102,13 @@
           10404
         ]
       },
-      "title": "Robustness for windows of at least three terms",
-      "summary": "Nothing is wrong with the paper; the robustness theorem is proved for windows of at least three terms, which covers everything the area law uses, and windows of one or two terms remain to be stated separately.",
+      "title": "Robustness for windows of every width",
+      "summary": "Nothing is wrong with the paper; the robustness theorem is proved for every window. Windows of one or two terms clip the two exterior blocks themselves rather than the enlarged blocks used for longer windows.",
       "context": "The window around the cut has <i>s</i> nearest-neighbour terms. Six of them play special roles in the normalization and the truncation: the three nearest each exterior block. The area-law argument chooses <i>s</i> of order log<sup>2</sup> <i>d</i>/ε with a large constant.",
       "claims": "Theorem 6.1 (lines 949–963 of the source) states, for <i>t</i> of order (1/ε)(ε<sub>0</sub>/ε + 1), that the truncated Hamiltonian keeps a gap of order ε and has a ground state within 2<sup>−Ω(<i>t</i>)</sup> of Γ. It names no lower bound on <i>s</i>.",
-      "found": "The proof needs the two enlarged exterior blocks to have disjoint supports, so <i>s</i> ≥ 3; for <i>s</i> ≤ 5 the middle reference block is empty and the special terms coincide in part, leaving at most six of them. With <i>s</i> ≥ 3 the theorem is proved with explicit constants: for <i>t</i> ≥ (1024/ε)(ε<sub>0</sub>/ε + 1), and also for the smaller threshold <i>t</i> ≥ 1024 + 16 log(1/ε), the gap is at least 9ε/10 and the squared distance at most e<sup>−<i>t</i>/16</sup>/100. The note also records that the source's left block includes the site next to the window, that the initial product overlap at line 1023 is printed with ≤ for ≥, and that the Schmidt ranks in the sequence of Lemma 6.3 multiply rather than add.",
-      "impact": "None for the area law and the matrix product state approximation, whose windows have at least 21 terms. The area-law bounds keep a logarithm of 1/ε and assume that ε is the distance to the next eigenvalue.",
-      "plan": "State and prove the theorem for windows of one or two terms, where the two exterior blocks share a site or a term and the two truncations no longer act on disjoint supports."
+      "found": "For <i>s</i> ≥ 3 the proof clips the two exterior blocks enlarged by one window term each, which have disjoint supports; for <i>s</i> ≤ 2 they overlap. Clipping instead the two exterior blocks themselves, whose ground energies are the ones subtracted, keeps all <i>s</i> window terms and leaves two clipped blocks with disjoint supports for every <i>s</i> ≥ 1, and the same proof applies. For every window the theorem is proved with explicit constants: for <i>t</i> ≥ (1024/ε)(ε<sub>0</sub>/ε + 1), and also for the smaller threshold <i>t</i> ≥ 1024 + 16 log(1/ε), the gap is at least 9ε/10 and the squared distance at most e<sup>−<i>t</i>/16</sup>/100. The note also records that the source's left block includes the site next to the window, that the initial product overlap at line 1023 is printed with ≤ for ≥, and that the Schmidt ranks in the sequence of Lemma 6.3 multiply rather than add.",
+      "impact": "None. The area law and the matrix product state approximation use windows of at least 21 terms. The area-law bounds keep a logarithm of 1/ε and assume that ε is the distance to the next eigenvalue.",
+      "plan": "Done: windows of one or two terms use the unenlarged exterior blocks, with the same conclusions as for longer windows."
     },
     {
       "id": "docs/paper-gaps/aklv13_frustration_free_mps_rate.tex",
