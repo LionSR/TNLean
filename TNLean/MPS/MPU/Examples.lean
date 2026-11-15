@@ -27,6 +27,8 @@ import TNLean.MPS.MPU.Examples.ShiftSwap
 import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
 import TNLean.MPS.MPU.Examples.ShiftSymmetryPaths
 import TNLean.MPS.MPU.Examples.ShiftTilde
+import TNLean.MPS.MPU.Examples.SwapAncillaCompatibility
 import TNLean.MPS.MPU.Examples.SwapBlockedSymmetryTransport
 import TNLean.MPS.MPU.Examples.SwapPath
+import TNLean.MPS.MPU.Examples.SwapSymmetryStabilization
 import TNLean.MPS.MPU.Examples.SwapSymmetryTransport
