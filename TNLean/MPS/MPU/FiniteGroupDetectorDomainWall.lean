@@ -69,7 +69,11 @@ theorem detectorTransportWord_mulVec_eq_inv_cyclicInvariant_of_phased_states
   have hprod : ((List.range m).map fun r ↦ B g (g ^ r • g • x) (g ^ r • x)).prod =
       (((ScalarThreeCochain.cyclicInvariant fd.omega g m)⁻¹ : ℂˣ) : ℂ) := by
     rw [← List.prod_toFinset _ (List.nodup_range : (List.range m).Nodup)]
-    simpa using hB.prod_eq_inv_cyclicInvariant fd hF hA hD hperm hg x
+    have hrange : (List.range m).toFinset = Finset.range m := by
+      ext k
+      simp
+    rw [hrange]
+    exact hB.prod_eq_inv_cyclicInvariant fd hF hA hD hperm hg x
   rw [FiniteGroupDetector.detectorTransportWord_mulVec_of_phased_intermediate_states
     T U v w _ q m ψ hstart hforward hjoin hundo hfinish, hprod]
 
