@@ -76,7 +76,15 @@ theorem chainPairMatrix_append_eq_joinMatrix_mul
   rw [eval_append, Matrix.mul_apply]
   simp only [Matrix.mul_apply, IsometryTree.joinMatrix_apply, Fin.append_left,
     Fin.append_right, chainPairMerge]
-  rw [sum_decodeBlock_two]
+  let f (u v : Fin (D * D)) : ℂ := X σ₁ u * Y σ₂ v *
+    ∑ γ : Fin D,
+      P u ((virtualPairEquiv D).symm ((virtualPairEquiv D x).1, γ)) *
+      Q v ((virtualPairEquiv D).symm (γ, (virtualPairEquiv D x).2))
+  change (∑ γ : Fin D,
+      eval A σ₁ (virtualPairEquiv D x).1 γ * eval B σ₂ γ (virtualPairEquiv D x).2) =
+    ∑ e, f (decodeBlock (D * D) 2 e 0) (decodeBlock (D * D) 2 e 1)
+  rw [sum_decodeBlock_two f]
+  dsimp only [f]
   simp_rw [hleft, hright, Finset.sum_mul_sum, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun u _ => ?_
