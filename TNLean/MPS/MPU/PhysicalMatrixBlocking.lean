@@ -50,7 +50,7 @@ private theorem symmetry_eq {n : ℕ} (S T : FiniteChainOperatorSymmetry n)
   rcases T with ⟨B, g⟩
   change A = B at happlicable
   subst B
-  have hfg : f = g := by
+  have hfg : @f = @g := by
     funext N X
     exact haction N X
   cases hfg
@@ -72,7 +72,8 @@ theorem daggerWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
       daggerWithPhysicalMatrix (MPSTensor.blockKron k Q) := by
   apply symmetry_eq
   · ext N
-    simp [block, daggerWithPhysicalMatrix, Nat.mul_pos_iff, hk]
+    change (0 < N * k) ↔ 0 < N
+    exact Nat.mul_pos_iff_of_pos_right hk
   · intro N X
     simp only [block, daggerWithPhysicalMatrix, reindex_mul,
       sitewisePhysicalMatrix_blockKron_reindex, Matrix.conjTranspose_reindex]
@@ -89,7 +90,8 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
       transposeWithPhysicalMatrix (MPSTensor.blockKron k Q) := by
   apply symmetry_eq
   · ext N
-    simp [block, transposeWithPhysicalMatrix, Nat.mul_pos_iff, hk]
+    change (0 < N * k) ↔ 0 < N
+    exact Nat.mul_pos_iff_of_pos_right hk
   · intro N X
     simp only [block, transposeWithPhysicalMatrix, reindex_mul,
       sitewisePhysicalMatrix_blockKron_reindex]
@@ -100,14 +102,16 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
 /-- The identity physical matrix gives ordinary adjunction. -/
 @[simp] theorem daggerWithPhysicalMatrix_one (d : ℕ) :
     daggerWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ) = daggerSymmetry d := by
-  apply symmetry_eq _ _ rfl
+  apply symmetry_eq (daggerWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ))
+    (daggerSymmetry d) rfl
   intro N X
   simp [daggerWithPhysicalMatrix, daggerSymmetry, sitewisePhysicalMatrix_one]
 
 /-- The identity physical matrix gives ordinary transposition. -/
 @[simp] theorem transposeWithPhysicalMatrix_one (d : ℕ) :
     transposeWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ) = transposeSymmetry d := by
-  apply symmetry_eq _ _ rfl
+  apply symmetry_eq (transposeWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ))
+    (transposeSymmetry d) rfl
   intro N X
   simp [transposeWithPhysicalMatrix, transposeSymmetry, sitewisePhysicalMatrix_one]
 
@@ -120,7 +124,8 @@ theorem conjugationSymmetry_block {k : ℕ} (hk : 0 < k) :
       conjugationSymmetry (MPSTensor.blockPhysDim d k) := by
   apply symmetry_eq
   · ext N
-    simp [FiniteChainOperatorSymmetry.block, conjugationSymmetry, Nat.mul_pos_iff, hk]
+    change (0 < N * k) ↔ 0 < N
+    exact Nat.mul_pos_iff_of_pos_right hk
   · intro N X
     ext σ τ
     simp [FiniteChainOperatorSymmetry.block, conjugationSymmetry,
