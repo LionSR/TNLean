@@ -74,8 +74,8 @@ theorem chainPairMatrix_append_eq_joinMatrix_mul
   change eval (Fin.append A B) (Fin.append σ₁ σ₂)
       (virtualPairEquiv D x).1 (virtualPairEquiv D x).2 = _
   rw [eval_append, Matrix.mul_apply]
-  simp only [Matrix.mul_apply, IsometryTree.joinMatrix_apply, Fin.append_left,
-    Fin.append_right, chainPairMerge]
+  simp only [Matrix.mul_apply, IsometryTree.joinMatrix_apply, Fin.appendEquiv_apply,
+    Fin.append_left, Fin.append_right, chainPairMerge]
   let f (u v : Fin (D * D)) : ℂ := X σ₁ u * Y σ₂ v *
     ∑ γ : Fin D,
       P u ((virtualPairEquiv D).symm ((virtualPairEquiv D x).1, γ)) *
@@ -130,7 +130,7 @@ theorem exists_isometryTree_mul_polarPos_eq {R h n : ℕ} (hD : 0 < D)
       U.matrix * polarPos (chainPairMatrix A) = chainPairMatrix A by
     obtain ⟨U, hU⟩ := hex
     exact ⟨U, hU, Matrix.mul_polarSupport_eq_polarIso_of_mul_polarPos_eq hU⟩
-  induction T generalizing A with
+  induction T with
   | leaf V hV hn hR =>
     obtain ⟨X, hX, hXP⟩ := Matrix.exists_isometry_mul_polarPos_eq (chainPairMatrix A)
       (Matrix.IsIsometry.card_le V hV)
@@ -166,10 +166,10 @@ theorem IsometryTree.nonempty_of_leaf_dimension (d χ s : ℕ) (hs : 0 < s)
   obtain ⟨W, hW, _⟩ := Matrix.exists_isometry_mul_polarPos_eq
     (0 : Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ) hmerge
   induction h with
-  | zero => exact ⟨(.leaf V hV hs le_rfl).cast (by simp)⟩
+  | zero => exact ⟨(IsometryTree.leaf V hV hs le_rfl).cast (by simp)⟩
   | succ h ih =>
     obtain ⟨T⟩ := ih
-    exact ⟨(.fork T T W hW).cast (by rw [pow_succ]; ring)⟩
+    exact ⟨(IsometryTree.fork T T W hW).cast (by rw [pow_succ]; ring)⟩
 
 /-- Every site-dependent chain on `s 2^h` sites has an exact polar tree of height `h`
 with leaves of at most `s` sites, provided `d^s ≥ D²`. This is an algebraic factorization;
