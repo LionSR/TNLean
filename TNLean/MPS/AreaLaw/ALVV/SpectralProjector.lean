@@ -71,14 +71,7 @@ with `p(η₀) = 1` such that `K = p(H)`
 * has operator Schmidt rank at most `(q k) ^ (17 (ℓ + ⌊k / (2ℓ)⌋))` across the middle region
   `[a + ℓ + δ, b + ℓ + 1)` for `δ ∈ {0, 1}` (the rank `D` at the two cuts);
 * has operator Schmidt rank at most `(B + 2) ^ (k + 1)` at any cut inside one bulk region at which
-  that bulk operator has rank at most `B` (item 4).
-
-**Local fix (closed spectral conditions, positivity, slope, bulk constant, word count):** see the
-module docstring and the companion notes
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf,
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_filter_positivity.pdf,
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_near_ground_slope.pdf and
-https://sirui-lu.com/QICLean/paper-gaps/aklv13_interpolation_and_word_count.pdf. -/
+  that bulk operator has rank at most `B` (item 4). -/
 theorem exists_two_window_chebyshev_spectral_projector
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
