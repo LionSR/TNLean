@@ -36,6 +36,8 @@ import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupAction
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
+import TNLean.MPS.Symmetry.MPOSymmetry.IntegerFusion
+import TNLean.MPS.Symmetry.MPOSymmetry.IntegerNIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedIntersection
