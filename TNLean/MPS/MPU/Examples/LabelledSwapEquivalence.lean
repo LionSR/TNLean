@@ -142,25 +142,28 @@ theorem equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff
 /-- Virtual dimensions of the three source examples, indexed in their
 printed order. Source: arXiv:1703.09188, equation `threeMPU`, lines 2011--2022. -/
 def shiftExampleFamilyBondDim (d : ℕ) (i : Fin 3) : ℕ :=
-  if i = 0 then 1 else d * d
+  Fin.cases 1 (fun _ => d * d) i
 
 /-- The three actual source tensors as one finite dependent family.
 Source: arXiv:1703.09188, equation `threeMPU`, lines 2011--2022. -/
 noncomputable def shiftExampleFamily (d : ℕ) (i : Fin 3) :
-    MPOTensor (d * d) (shiftExampleFamilyBondDim d i) := by
-  fin_cases i
-  · exact shiftExampleU₁ d
-  · exact shiftExampleU₂ d
-  · exact shiftExampleU₃ d
+    MPOTensor (d * d) (shiftExampleFamilyBondDim d i) :=
+  Fin.cases (motive := fun j : Fin 3 => MPOTensor (d * d) (shiftExampleFamilyBondDim d j))
+    (shiftExampleU₁ d)
+    (fun j => Fin.cases (shiftExampleU₂ d) (fun _ => shiftExampleU₃ d) j) i
 
 /-- The three actual swap-transformed source tensors in the same order.
 Source: arXiv:1703.09188, equation `threeMPU2`, lines 2053--2063. -/
 noncomputable def shiftExampleTildeFamily (d : ℕ) (i : Fin 3) :
-    MPOTensor (d * d) (shiftExampleFamilyBondDim d i) := by
-  fin_cases i
-  · exact shiftExampleTildeU₁ d
-  · exact shiftExampleTildeU₂ d
-  · exact shiftExampleTildeU₃ d
+    MPOTensor (d * d) (shiftExampleFamilyBondDim d i) :=
+  Fin.cases (motive := fun j : Fin 3 => MPOTensor (d * d) (shiftExampleFamilyBondDim d j))
+    (shiftExampleTildeU₁ d)
+    (fun j => Fin.cases (shiftExampleTildeU₂ d) (fun _ => shiftExampleTildeU₃ d) j) i
+
+private theorem shiftExampleTildeFamily_eq (d : ℕ) (i : Fin 3) :
+    shiftExampleTildeFamily d i =
+      (shiftExampleFamily d i).ketLeftMul (shiftPhysicalSwap d) := by
+  fin_cases i <;> rfl
 
 /-- For every pair of the actual three examples, labelled-spin equivalence
 under swap-combined adjunction is ordinary adjunction equivalence of the
@@ -171,8 +174,9 @@ theorem labelledShiftExamples_swap_dagger_iff (d : ℕ) (i j : Fin 3) :
       (shiftExampleFamily d i) (shiftExampleFamily d j) ↔
       EquivalentUnderPhysicalMatrixSymmetry .dagger 1
         (shiftExampleTildeFamily d i) (shiftExampleTildeFamily d j) := by
-  fin_cases i <;> fin_cases j <;>
-    exact equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff _ _
+  simpa only [shiftExampleTildeFamily_eq] using
+    equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff
+      (shiftExampleFamily d i) (shiftExampleFamily d j)
 
 /-- The labelled-spin transposition comparison for every pair of the actual
 three source examples and their printed transformed examples.
@@ -182,8 +186,9 @@ theorem labelledShiftExamples_swap_transpose_iff (d : ℕ) (i j : Fin 3) :
       (shiftExampleFamily d i) (shiftExampleFamily d j) ↔
       EquivalentUnderPhysicalMatrixSymmetry .transpose 1
         (shiftExampleTildeFamily d i) (shiftExampleTildeFamily d j) := by
-  fin_cases i <;> fin_cases j <;>
-    exact equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff _ _
+  simpa only [shiftExampleTildeFamily_eq] using
+    equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff
+      (shiftExampleFamily d i) (shiftExampleFamily d j)
 
 /-- The labelled-spin conjugation comparison for every pair of the actual
 three source examples and their printed transformed examples.
@@ -193,7 +198,8 @@ theorem labelledShiftExamples_swap_conjugation_iff (d : ℕ) (i j : Fin 3) :
       (shiftExampleFamily d i) (shiftExampleFamily d j) ↔
       EquivalentUnderPhysicalMatrixSymmetry .conjugation 1
         (shiftExampleTildeFamily d i) (shiftExampleTildeFamily d j) := by
-  fin_cases i <;> fin_cases j <;>
-    exact equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff _ _
+  simpa only [shiftExampleTildeFamily_eq] using
+    equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff
+      (shiftExampleFamily d i) (shiftExampleFamily d j)
 
 end MPOTensor
