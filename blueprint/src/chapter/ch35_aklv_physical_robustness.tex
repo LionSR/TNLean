@@ -94,7 +94,37 @@
     $t\ge1024/g\ge T(g)$, so the conclusion follows.
 \end{proof}
 
+\begin{lemma}[Robustness of the reference arrangement for every window]
+    \label{thm:aklv_reference_robustness}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_reference_logarithmic_robustness,
+        TNLean.MPS.AreaLaw.exists_aklv_reference_physical_robustness}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation,
+        def:aklv_logarithmic_threshold}
+    Let $s\ge1$ and keep the remaining hypotheses of
+    Lemma~\ref{thm:aklv_logarithmic_robustness}. Form the actual
+    truncation $B$ at the cuts $a+1,a+s$, which clips the two reference sums
+    $A_0$ and $A_2$ and retains all $s$ window interactions. Then $q\ge2$ and
+    $g\le1$, the minima satisfy $E_0+\sum_je_j=\mu$ and $0\le E_0\le6$, and for
+    every $t\ge T(g)$, and in particular for every $t$ satisfying
+    (\ref{eq:aklv_physical_polynomial_threshold}), $B$ has a phase-aligned
+    unit ground vector $\phi$ with gap at least $9g/10$ and
+    (\ref{eq:aklv_physical_robustness_error}).
+    For $s\in\{1,2\}$ the enlarged exteriors of
+    Lemma~\ref{thm:aklv_logarithmic_robustness} overlap; this arrangement
+    gives the same conclusions for those windows. The choice is recorded in
+    \cite{gap:aklv13_two_block_robustness}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_reference_scaled_low_cluster,
+        thm:chain_positive_nearest_neighbor_gap_upper}
+    Repeat the proofs of Lemmas~\ref{thm:aklv_logarithmic_robustness}
+    and~\ref{thm:aklv_physical_robustness}, replacing the spectral
+    comparison by Lemma~\ref{thm:aklv_reference_scaled_low_cluster}.
+\end{proof}
+
 % The original nearest-neighbour/norm-one context is retained from source
 % lines879--925. Theorem6.1 does not explicitly quantify over arbitrary independent
-% exterior matrices. The present statement keeps s>=6 explicit; smaller windows
-% remain separate, as documented by the cited source note.
+% exterior matrices. The enlarged arrangement keeps s>=3 explicit; the reference
+% arrangement covers every s>=1, as documented by the cited source note.

@@ -64,14 +64,15 @@ private theorem aklv_two_block_threshold_bounds {g tau t : ℝ}
   exact ⟨ht0, (mul_le_mul_of_nonneg_left hexp hC.le).trans hcancel.le⟩
 
 open Classical in
-/-- The two exterior truncations have one low spectral line, separated by a
+/-- The two exterior truncations at any two cuts `l ≤ r` whose regional sums dominate
+the genuine reference minima have one low spectral line, separated by a
 uniform interval, and approximating the original ground line. The actual
 canonical ground eigenvector has gap at least `9*g/10` and squared phase error
 at most `tau/100`. All physical operators and both restricted residuals are
 constructed internally. Auxiliary
 to AKLV, arXiv:1301.1162v1, Theorem 6.1 and its proof in Section 6.3. -/
-theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
-    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
+theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L) (hlr : l ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -81,14 +82,16 @@ theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
     (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
     (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) :
+    (hg : 0 < g)
+    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s h j -
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r h j) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
         (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
         ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t
+        let B := aklvTwoBlockHamiltonian l r h e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           let v := (hB Finset.univ).eigenvectorBasis
           let lam := (hB Finset.univ).eigenvalues
@@ -104,7 +107,7 @@ theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
               (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
               ∃ θ : ℝ, ‖v j0 - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ tau / 100 := by
   obtain ⟨e, x, z, E0, hx, hxe, he, _he0, hz, hzE, hE, hE0, hE6, hres⟩ :=
-    exists_aklv_normalized_two_block_residual hq hs ha h hsupp h0 h1
+    exists_aklv_normalized_cut_residual hq hs ha hlr hrL h hsupp h0 h1 hcut
   let S : ℝ := ∑ j, e j
   let H := (∑ i, h i) - (S : ℂ) • 1
   have hΩunit : star (WithLp.ofLp Ω) ⬝ᵥ WithLp.ofLp Ω = 1 := by
@@ -259,5 +262,93 @@ theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
       exact hj (hlowunique j hnot)
     linarith
   · linarith
+
+open Classical in
+/-- The two exterior truncations have one low spectral line, separated by a
+uniform interval, and approximating the original ground line. The actual
+canonical ground eigenvector has gap at least `9*g/10` and squared phase error
+at most `tau/100`. All physical operators and both restricted residuals are
+constructed internally. Auxiliary
+to AKLV, arXiv:1301.1162v1, Theorem 6.1 and its proof in Section 6.3. -/
+theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+    (hΩ : ‖Ω‖ = 1)
+    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+      (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
+    (hg : 0 < g) :
+    ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
+      (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
+        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+      E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
+      ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t
+        ∃ hB : ∀ T, (B T).IsHermitian,
+          let v := (hB Finset.univ).eigenvectorBasis
+          let lam := (hB Finset.univ).eigenvalues
+          let U := Submodule.spectralSpanLE v lam (E0 + g / 20)
+          U = Submodule.spectralSpanLE v lam (E0 + 19 * g / 20) ∧
+            Module.finrank ℂ U = 1 ∧
+            Submodule.IsCloseTo (tau / 200) U (Submodule.span ℂ {Ω}) ∧
+            Submodule.IsCloseTo (tau / 200) (Submodule.span ℂ {Ω}) U ∧
+            (∀ w : ℝ, E0 + g / 20 ≤ w → w ≤ E0 + 19 * g / 20 →
+              Submodule.spectralSpanLE v lam w = U) ∧
+            (∀ j, lam j ≤ E0 + g / 10 ∨ E0 + 9 * g / 10 ≤ lam j) ∧
+            ∃ j0, lam j0 ≤ E0 + g / 20 ∧
+              (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
+              ∃ θ : ℝ, ‖v j0 - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ tau / 100 :=
+  exists_aklv_cut_scaled_low_cluster hq (by omega) ha (by omega) (by omega) h hsupp h0 h1
+    mu g Ω hΩ hground hgap hg
+    (fun e he ↦ aklv_normalization_le_two_block_regions hs h h0 e he)
+
+open Classical in
+/-- The reference arrangement, clipping the two reference sums at the cuts `a+1`
+and `a+s`, has one low spectral line, separated by a uniform interval, and
+approximating the original ground line, for every window of at least one
+interaction. The actual canonical ground eigenvector has gap at least `9*g/10`
+and squared phase error at most `tau/100`. Windows of one or two interactions,
+whose enlarged exteriors overlap, are included. Auxiliary to AKLV,
+arXiv:1301.1162v1, Theorem 6.1 and its proof in Section 6.3. -/
+theorem exists_aklv_reference_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+    (hΩ : ‖Ω‖ = 1)
+    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+      (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
+    (hg : 0 < g) :
+    ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
+      (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
+        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+      E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
+      ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t
+        ∃ hB : ∀ T, (B T).IsHermitian,
+          let v := (hB Finset.univ).eigenvectorBasis
+          let lam := (hB Finset.univ).eigenvalues
+          let U := Submodule.spectralSpanLE v lam (E0 + g / 20)
+          U = Submodule.spectralSpanLE v lam (E0 + 19 * g / 20) ∧
+            Module.finrank ℂ U = 1 ∧
+            Submodule.IsCloseTo (tau / 200) U (Submodule.span ℂ {Ω}) ∧
+            Submodule.IsCloseTo (tau / 200) (Submodule.span ℂ {Ω}) U ∧
+            (∀ w : ℝ, E0 + g / 20 ≤ w → w ≤ E0 + 19 * g / 20 →
+              Submodule.spectralSpanLE v lam w = U) ∧
+            (∀ j, lam j ≤ E0 + g / 10 ∨ E0 + 9 * g / 10 ≤ lam j) ∧
+            ∃ j0, lam j0 ≤ E0 + g / 20 ∧
+              (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
+              ∃ θ : ℝ, ‖v j0 - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ tau / 100 :=
+  exists_aklv_cut_scaled_low_cluster hq hs ha (by omega) (by omega) h hsupp h0 h1
+    mu g Ω hΩ hground hgap hg (fun e he ↦ aklv_normalization_le_reference_regions h h0 e he)
 
 end TNLean.MPS.AreaLaw
