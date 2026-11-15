@@ -156,3 +156,52 @@ dependence on the gap, and no running-time estimate is asserted.
     target and terminal-image conclusions are those of the same selected
     physical families.
 \end{proof}
+
+\begin{theorem}[Energy induction on a successful resampling tree]
+    \label{thm:successful_tree_energy_induction}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_successful_tree_energy_induction}\leanok
+    \uses{lem:root_energy_node_relation_assignment,
+        lem:selected_soft_terminal_node_energy,
+        def:canonical_interval_resampling_good}
+    Retain the interaction, numerical and coordinate assumptions of
+    Lemma~\ref{lem:selected_soft_terminal_node_energy}, with $G$ the full
+    ground space of $H$ at its least spectral value $\mu$. Fix the families,
+    thresholds and finite sequences of an actual balanced resampling tree on
+    $[0,L)$. Suppose that every valid long interval $J=[l,r)$ has a middle
+    window $[u_J,v_J)$ with $u_J-l,\,r-v_J\le2\ell$ and an attained minimum,
+    and a target $T_J$ with $\dim T_J=\dim G$ within directed squared error
+    $3\tau/200$ of $G$, such that for every $0.04$-viable initial candidate
+    the terminal untrimmed image on its literal original-target history is
+    $\Delta/(91/100)^2$-viable for $T_J$.
+
+    Then for every seed sequence in the joint success event
+    $\mathcal G_{0,L}$ there is one assignment $(l,r)\mapsto p_{l,r}$ such
+    that the root and every listed internal interval carry one-sided
+    estimates of width $49/16$ of their original regional minima, exact for
+    short children. At every listed interval $J$ with children
+    $[l,k)$ and $[k,r)$,
+    \begin{align*}
+        p_{l,r}=\lambda_J-3,
+    \end{align*}
+    where $\lambda_J$ is the least eigenvalue of the compression of the
+    soft regional operator $R_c=P-M+cI+h_{m,t}(M-cI)$, centred at
+    $c=p_{l,k}+p_{k,r}-e_{\mathrm L}-e_{\mathrm R}-2$ with the attained
+    collar minima, to the actual terminal image of $J$ for the actual
+    merged child candidate and the actual seed. No second family, target
+    or image is selected. This is the energy induction in the proof
+    of~\cite[Theorem~\texttt{t:alg1}, lines 1779--1818]{Arad2016RigorousRG},
+    with the corrected one-sided width of
+    \cite{gap:alvv16_soft_regional_energy_centering}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:root_energy_node_relation_assignment,
+        lem:selected_soft_terminal_node_energy}
+    On the success event every listed interval is $3/200$-viable and
+    carries its literal history; short children are the full local space.
+    The children of a listed interval are short or listed, so their merge
+    is $0.04$-viable and the seed lies in that parent's history. Hence the
+    terminal image is viable for $T_J$. Lemma~\ref{lem:selected_soft_terminal_node_energy}
+    then gives, for all child estimates of width $49/16$, a parent estimate
+    $\lambda_J-3$ of the same width. Lemma~\ref{lem:root_energy_node_relation_assignment}
+    assigns all estimates simultaneously with these node relations.
+\end{proof}

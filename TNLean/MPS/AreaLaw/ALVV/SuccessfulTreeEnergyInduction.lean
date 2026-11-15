@@ -59,6 +59,8 @@ private theorem child_mem_balancedIntervalMergeList (width : ℕ) (hwidth : 1 �
   · exact Or.inl (Or.inl (self_mem_balancedIntervalMergeList width hwidth _ _ hlong))
   · exact Or.inl (Or.inr (self_mem_balancedIntervalMergeList width hwidth _ _ hlong))
 
+set_option maxHeartbeats 400000 in
+-- Matching the terminal image with the family-support form unfolds the half-sampling iterate.
 open Classical in
 /-- **Energy induction on a successful resampling tree.** Let the actual interval families
 of the balanced resampling tree carry, on every long interval, a middle window with an
