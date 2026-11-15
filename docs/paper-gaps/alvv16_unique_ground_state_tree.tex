@@ -36,14 +36,14 @@ physical resampling tree of the degenerate-gap case and its refinement
 therefore apply. On an event of failure probability at most $(L+1)^{-2}$,
 the refinement of the actual root and its Ritz extraction give a line,
 mutually $\eta/2$-close to $\mathbb C\Gamma$, of matrix product states whose
-bond dimension is polynomial in $L$ and $1/\eta$
-(\texttt{TNLean.MPS.AreaLaw.ALVV.exists\_unique\_ground\_state\_refined\_ritz\_approximation}).
+bond dimension is polynomial in $L$ and $1/\eta$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}.}
 
 \paragraph{Deviation.}
 The per-node families are the corrected soft families of the degenerate-gap
 tree, not the frustration-free family of Theorem~t:aisff. Consequently:
 \begin{enumerate}
-    \item the dimension of the viable space at every node is bounded by
+    \item the dimension of the viable space at every node of the underlying
+          tree is bounded by
           $\max\bigl(q^{\mathrm{width}},D^2K\cdot2\,(L+2)^2\bigr)$, which grows
           with $L$ through the corrected sample threshold of
           \url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf},
@@ -57,10 +57,10 @@ The conclusion is mathematically correct as stated, and narrower than the
 source only in the size of the intermediate spaces.
 
 \paragraph{Elimination plan.}
-Feed the frustration-free family of Theorem~t:aisff, which is proved
-(\texttt{TNLean.MPS.AreaLaw.ALVV.exists\_frustrationFree\_improving\_family}),
-into the generic tree selection
-\texttt{TNLean.MPS.AreaLaw.exists\_canonical\_interval\_resampling\_tree\_with\_certificate}.
+Feed the frustration-free family of Theorem~t:aisff, which is
+proved,\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family}.}
+into the generic selection of interval families on the
+tree.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_canonical_interval_resampling_tree_with_certificate}.}
 Two inputs are missing: a transport of the family from the sheet-split
 coordinates in which it is stated to the region coordinates of the tree, and a
 reference space for collective trimming whose Schmidt ranks are bounded

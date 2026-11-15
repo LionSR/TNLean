@@ -278,14 +278,15 @@ source; see~\cite{gap:alvv16_unique_ground_state_tree}.
     \label{thm:unique_ground_state_refined_ritz}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}\leanok
     \uses{thm:physical_soft_tree_refined_ritz,lem:unique_ground_state_spectral_span}
-    Let $H=\sum_ih_i$ be a nearest-neighbour chain with $0\le h_i\le\Id$,
-    frustration free with a unique ground state $\Gamma$ and spectral gap
-    $\gamma>0$. There are constants, chosen before the chain, such that the
-    physical soft families on the actual resampling tree have a success event
-    of probability at least $1-(L+1)^{-2}$, every node space has dimension at
-    most $\mathrm{count}\le C_{\rm count}(2(L+1))^2$, and for every $\eta>0$
-    the refinement of the actual root on that event, with its Ritz extraction,
-    gives a line mutually $\eta/2$-close to $\mathbb C\Gamma$ consisting of
+    Fix $q\ge2$ and $\gamma>0$. Let $H=\sum_ih_i$ be a nearest-neighbour
+    chain of local dimension $q$ with $0\le h_i\le\Id$, frustration free with
+    a unique ground state $\Gamma$ and spectral gap $\gamma$. There are
+    constants, chosen before the chain, such that the physical soft families on
+    the actual resampling tree have a success event of probability at least
+    $1-(L+1)^{-2}$, with $\mathrm{count}\le C_{\rm count}(2(L+1))^2$, and for
+    every $\eta>0$ the refinement of the actual root on that event has
+    dimension at most $\mathrm{count}$ and, with its Ritz extraction, gives a
+    line mutually $\eta/2$-close to $\mathbb C\Gamma$ consisting of
     matrix product states of bond dimension
     $B_{\rm scale}\,\mathrm{count}^2$, where
     $B_{\rm scale}\le C\bigl(2(L+1)(1+1/\eta)\bigr)^k$. This is the existence
