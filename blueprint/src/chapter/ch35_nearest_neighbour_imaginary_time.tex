@@ -74,13 +74,14 @@
 \begin{lemma}[Conjugation with an arbitrary factorial growth rate]
     \label{lem:factorial_growth_rate_conjugation}
     \lean{Matrix.norm_exp_conjugation_le_two_of_growth}
+    \leanok
     Let $H,O$ be finite complex square matrices and let $a\ge0$. If
     $\lVert\operatorname{ad}_H^m(O)\rVert\le a^m m!\lVert O\rVert$
     for every $m\in\N$, then
     $\lVert e^{tH}Oe^{-tH}\rVert\le2\lVert O\rVert$
     for $t\ge0$ with $at\le1/2$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The Hadamard series has the geometric majorant
     $\sum_{m\ge0}(at)^m\lVert O\rVert\le2\lVert O\rVert$.
     The argument also applies when $a=0$ and does not divide by $a$.
@@ -89,6 +90,7 @@
 \begin{lemma}[Conjugation from a finite-site interaction budget]
     \label{lem:finite_site_interaction_budget_conjugation}
     \lean{TNLean.Lattice.norm_iterated_commutator_le_ascFactorial,TNLean.Lattice.norm_iterated_commutator_le_factorial,TNLean.Lattice.norm_exp_conjugation_interactionBudget_shift_le_two}
+    \leanok
     Let $\Lambda$ and $I$ be finite sets, $q,k\in\N$, and $g\ge0$.
     On $\bigotimes_{x\in\Lambda}\C^q$, let $h_i$ act on $X_i\subseteq\Lambda$,
     where $|X_i|\le k$, and suppose that
@@ -112,7 +114,7 @@
     and Section 3, Lemma 3.1]{Arad2014Connecting}: no positivity is assumed,
     and the estimate retains the general commutator factor $2$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:factorial_growth_rate_conjugation}
     More generally, for $O$ acting on $S$ with $|S|\le kr$, prove
     \begin{align}
@@ -142,13 +144,14 @@
 \begin{lemma}[Finite-range chain interaction budget]
     \label{lem:chain_interaction_budget_conjugation}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_exp_conjugation_shift_le_two}
+    \leanok
     \uses{def:chain_model,lem:finite_site_interaction_budget_conjugation}
     For a finite-range chain Hamiltonian with range $R$ and term bound $J$,
     put $b=2^{2R+1}\max(J,0)$ and $k=R+1$. An observable acting on at most
     $k$ sites satisfies the preceding conjugation estimate whenever
     $t\ge0$ and $2bkt\le1/2$, also on the empty chain.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Each interaction has at most $R+1$ sites, and the chain support count
     bounds its per-site interaction budget by $2^{2R+1}J\le b$.
     Apply Lemma~\ref{lem:finite_site_interaction_budget_conjugation}.
