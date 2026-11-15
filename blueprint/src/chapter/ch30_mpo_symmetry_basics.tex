@@ -733,6 +733,89 @@ relation between word traces has nonnegative integer coefficients.
     The identity matrix has entries $\delta_{xy}$.
 \end{proof}
 
+\begin{lemma}[Multiplicative evaluation of integer combinations]%
+    \label{thm:mposym_integer_fusion_eval}
+    \lean{MPOTensor.integerFusionEval_mul}
+    \uses{def:mposym_integer_fusion}
+    If $f_a$ are elements of a unital ring with
+    $f_af_b=\sum_cN_{ab}^cf_c$, then integer evaluation satisfies
+    $\operatorname{ev}_f(uv)=\operatorname{ev}_f(u)\operatorname{ev}_f(v)$.
+    The target ring need not be commutative.
+\end{lemma}
+\begin{proof}
+    Finite distributivity and the centrality of integer scalars give
+    \[
+        \sum_c\sum_{a,b}u_av_bN_{ab}^cf_c
+        =\sum_{a,b}u_av_b\Bigl(\sum_cN_{ab}^cf_c\Bigr)
+        =\Bigl(\sum_a u_af_a\Bigr)\Bigl(\sum_bv_bf_b\Bigr).
+    \]
+\end{proof}
+
+\begin{definition}[The ring of integer fusion combinations]%
+    \label{def:mposym_integer_based_ring}
+    \lean{MPOTensor.FusionRing,
+        MPOTensor.FusionRing.Carrier,
+        MPOTensor.FusionRing.basis,
+        MPOTensor.FusionRing.basis_unit,
+        MPOTensor.FusionRing.mul_apply,
+        MPOTensor.IsFusionRing.integerFusionRing}
+    \uses{def:mposym_integer_fusion}
+    Finite fusion data consist of natural structure constants, a unit $e$
+    and an involutive duality, with associative fusion, two-sided unit,
+    $N_{ab}^e=\delta_{b,a^*}$ and $N_{b^*a^*}^{c^*}=N_{ab}^c$.
+    The associated integer ring has underlying additive group $\Z^{(I)}$,
+    the convolution product and unit $[e]$.
+\end{definition}
+
+\begin{lemma}[Faithful regular action and the ring laws]%
+    \label{thm:mposym_integer_based_ring_regular}
+    \lean{MPOTensor.IsFusionRing.isNIMRep,
+        MPOTensor.IsFusionRing.integerNIMRepEval_unit_column,
+        MPOTensor.IsFusionRing.integerNIMRepEval_injective,
+        MPOTensor.IsFusionRing.integerFusionMul_assoc,
+        MPOTensor.IsFusionRing.integerFusionMul_one_left,
+        MPOTensor.IsFusionRing.integerFusionMul_one_right}
+    \uses{def:mposym_integer_based_ring, thm:mposym_integer_fusion_eval,
+        thm:mposym_integer_nimrep}
+    The regular action has matrices $L_a(c,b)=N_{ab}^c$.
+    Its integer extension $L_u$ satisfies $L_u(c,e)=u_c$ and is therefore
+    injective. Convolution is associative and $[e]$ is its two-sided unit.
+\end{lemma}
+\begin{proof}
+    Associativity of the structure constants gives
+    $L_aL_b=\sum_cN_{ab}^cL_c$. Multiplicative evaluation gives
+    $L_{uv}=L_uL_v$. Also
+    $L_u(c,e)=\sum_a u_aN_{ae}^c=u_c$ and $L_e=1$.
+    Injectivity transports matrix associativity and both unit laws to
+    integer combinations.
+\end{proof}
+
+\begin{theorem}[Extension of fusion representations]%
+    \label{thm:mposym_integer_based_ring_lift}
+    \lean{MPOTensor.FusionRing.lift,
+        MPOTensor.FusionRing.lift_basis,
+        MPOTensor.FusionRing.nimRepHom,
+        MPOTensor.FusionRing.nimRepHom_basis,
+        MPOTensor.FusionRing.nimRepHom_basis_nonneg,
+        MPOTensor.FusionRing.characterHom,
+        MPOTensor.FusionRing.characterHom_basis}
+    \uses{thm:mposym_integer_based_ring_regular,
+        thm:mposym_integer_fusion_eval, thm:mposym_integer_nimrep}
+    A family $f_a$ in a unital ring $R$ with $f_e=1$ and
+    $f_af_b=\sum_cN_{ab}^cf_c$ extends to a unital ring homomorphism
+    $\Z^{(I)}\to R$ by $u\mapsto\sum_au_af_a$.
+    In particular a nonnegative integer representation with
+    $M_{e,x}^y=\delta_{xy}$ extends to integer matrices by
+    $[a]\mapsto\rho_a$, with nonnegative entries on basis images.
+    Ring-valued fusion characters also extend, preserving their basis values.
+\end{theorem}
+\begin{proof}
+    Additivity follows from the finite sum formula, multiplication from
+    multiplicative evaluation, and preservation of the unit from $f_e=1$.
+    For multiplicity matrices use $\rho_a(y,x)=M_{a,x}^y$ and the explicit
+    unit condition. For a character use its defining product and unit identities.
+\end{proof}
+
 \begin{lemma}[Word-trace relations against a normal tensor are integral]%
     \label{thm:asymex_fib_anomaly_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
