@@ -152,6 +152,31 @@
     would place this same matrix in the embedding image.
 \end{proof}
 
+\begin{lemma}[A coherent dimension family cannot contain the species swap]
+    \label{lem:mpu_swap_coherent_family_obstruction}
+    \lean{MPOTensor.symmetryFamily_at_ne_shiftSwapDagger,
+        MPOTensor.symmetryFamily_at_ne_shiftSwapTranspose}
+    \notready
+    \uses{def:mpu_coherent_symmetry_family, def:mpu_swap_comparison_symmetries}
+    Let a family of operator actions commute with every identity-ancilla
+    embedding. If the species space $\mathbb C^d$ has two distinct basis
+    states, then its component at dimension $d^2$ is neither the
+    canonical swap-combined adjunction nor the canonical swap-combined
+    transposition action.
+\end{lemma}
+
+\begin{proof}
+    Work at chain length one and choose distinct states $a,b$. Apply
+    compatibility from dimension $d$ with ancilla dimension $d$ to the
+    projection $P=\lvert a\rangle\langle a\rvert$. The embedded output
+    of any dimension-$d$ action has equal diagonal entries over
+    $(a,a)$ and $(a,b)$, whereas the swapped input $I_d\otimes P$
+    has entries one and zero. Permutation multiplication proves the
+    swap contraction directly, and the contradiction applies to both
+    adjunction and transposition because the input projection is real
+    symmetric.
+\end{proof}
+
 \begin{lemma}[Flattened swaps at two enlarged dimensions are incompatible]
     \label{lem:mpu_flattened_swap_ancilla_obstruction}
     \lean{MPOTensor.physicalIdMatrix_shiftSwap_sandwich_ne,

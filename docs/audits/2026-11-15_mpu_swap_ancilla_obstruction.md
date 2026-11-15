@@ -49,14 +49,17 @@ discontinuous, can satisfy the equation. Since $P\otimes I_2$ is symmetric,
 the identical argument applies to swap-combined transposition.
 
 The candidate states the nonmembership in the embedding image and both
-impossible `Function.Semiconj` statements for arbitrary $f$. After identifying
-the single-site configuration space with its physical alphabet, this is the
-necessary compatibility equation for any
-`FiniteChainOperatorSymmetryFamily` with the proposed dimension-four component.
-The explicit Lean bridge through that one-site equivalence remains to be
-written; the matrix-level obstruction itself is fully stated in the candidate.
-This explains why a family indexed by dimensions alone and compatible with all
-factorizations is too restrictive for the distinguished-species swap.
+impossible `Function.Semiconj` statements for arbitrary $f$. It also gives
+the actual `FiniteChainOperatorSymmetryFamily` obstruction directly, in a more
+general form: for any distinct $a,b\in\mathrm{Fin}(d)$, no coherent family's
+component at $d^2$ equals the canonical swap-combined adjunction or transposition.
+Its source proof applies the actual family field at $d,d,N=1$, computes the
+sitewise swap as a permutation of configurations, and compares the diagonal
+entries over the constant configurations $(a,a)$ and $(a,b)$. Thus no separate
+single-site-equivalence bridge is left unstated in the Lean signatures, though
+these new declarations still need compiler verification. This explains why a
+dimension-only family compatible with all factorizations is too restrictive
+for a distinguished-species swap whenever $d\geq2$.
 
 ## Canonical swaps at two square dimensions also fail compatibility
 
@@ -90,9 +93,8 @@ factorization, and it says nothing against the ordinary dagger, transpose or
 conjugation families.
 
 The source-written Lean candidate also gives this exact matrix inequality and the two
-failed `Function.Semiconj` statements. It does not yet state the corresponding
-`FiniteChainOperatorSymmetryFamily` no-go theorem with the one-site
-configuration equivalence; that final bridge remains a formalization step.
+failed `Function.Semiconj` statements, in addition to the stronger direct
+coherent-family obstruction just described.
 
 ## Agreement on the embedding image cannot select the full action
 

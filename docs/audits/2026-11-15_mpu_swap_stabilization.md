@@ -257,7 +257,7 @@ unused-simp diagnostics. The repair uses Mathlib's reindex multiplication result
 as an explicit calculation, unfolds the final ket action, and removes the unused
 arguments. The mathematical signatures are unchanged; the repair still needs
 hosted validation. Source-interpretation obstructions are documented separately
-in `2026-11-15_mpu_swap_ancilla_obstruction.md`, with seven additional unverified
+in `2026-11-15_mpu_swap_ancilla_obstruction.md`, with nine additional unverified
 public declarations in `Examples/SwapAncillaCompatibility.lean`.
 
 No source completion tag, general equivalence-definition change, assignment,

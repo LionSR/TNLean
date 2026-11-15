@@ -39,6 +39,86 @@ private theorem shiftSwap_sandwich_apply (d : ℕ)
     PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv,
     Matrix.submatrix_apply, bondPairSwapEquiv_symm, bondPairSwapEquiv_apply, id_eq]
 
+private theorem chainShiftSwap_sandwich_apply (d N : ℕ)
+    (X : Matrix (Fin N → Fin (d * d)) (Fin N → Fin (d * d)) ℂ)
+    (σ τ : Fin N → Fin (d * d)) :
+    (sitewisePhysicalMatrix (shiftPhysicalSwap d) N * X *
+      sitewisePhysicalMatrix (shiftPhysicalSwap d) N) σ τ =
+        X (fun n => bondPairSwap (σ n)) (fun n => bondPairSwap (τ n)) := by
+  classical
+  let e : Equiv.Perm (Fin N → Fin (d * d)) :=
+    Equiv.piCongrRight (fun _ => bondPairSwapEquiv d)
+  have hC : sitewisePhysicalMatrix (shiftPhysicalSwap d) N =
+      Equiv.Perm.permMatrix ℂ e := by
+    ext s t
+    simp only [sitewisePhysicalMatrix, shiftPhysicalSwap, Equiv.Perm.permMatrix,
+      PEquiv.toMatrix_apply]
+    rw [Fintype.prod_boole]
+    simp [e, funext_iff]
+  rw [hC]
+  change (e.toPEquiv.toMatrix * X * e.toPEquiv.toMatrix) σ τ = _
+  rw [PEquiv.mul_toMatrix_toPEquiv, PEquiv.toMatrix_toPEquiv_mul]
+  rfl
+
+/-- A globally coherent family cannot have swap-combined adjunction at
+physical dimension \(d^2\) when the original species has two distinct basis
+states. Compatibility from dimension \(d\) would require a swapped ancillary
+projection to stay in the identity-ancilla image.
+Source context: arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem symmetryFamily_at_ne_shiftSwapDagger
+    (S : FiniteChainOperatorSymmetryFamily) {d : ℕ} (a b : Fin d) (hab : a ≠ b) :
+    S.at (d * d) ≠ shiftSwapDaggerSymmetry d := by
+  intro hS
+  let P : Matrix (Fin 1 → Fin d) (Fin 1 → Fin d) ℂ :=
+    fun σ τ => if σ 0 = a ∧ τ 0 = a then 1 else 0
+  let Y : Matrix (Fin 1 → Fin d) (Fin 1 → Fin d) ℂ := S.action P
+  have hcompat := S.tensorPhysicalId_semiconj d d 1 P
+  change tensorPhysicalIdOperator Y d =
+    (S.at (d * d)).action (tensorPhysicalIdOperator P d) at hcompat
+  rw [hS] at hcompat
+  change tensorPhysicalIdOperator Y d =
+    sitewisePhysicalMatrix (shiftPhysicalSwap d) 1 * (tensorPhysicalIdOperator P d)ᴴ *
+      sitewisePhysicalMatrix (shiftPhysicalSwap d) 1 at hcompat
+  have hzero := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, a)))
+    (fun _ => finProdFinEquiv (a, a))
+  have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))
+    (fun _ => finProdFinEquiv (a, b))
+  simp only [chainShiftSwap_sandwich_apply, Matrix.conjTranspose_apply] at hzero hone
+  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, P, finTupleProdEquiv, Equiv.arrowCongr, Function.comp_def,
+    bondPairSwap, Ne.symm hab] at hzero hone
+  have hbad : (1 : ℂ) = 0 := hzero.symm.trans hone
+  norm_num at hbad
+
+/-- A globally coherent family cannot have swap-combined transposition at
+physical dimension \(d^2\) for a species with two distinct basis states,
+already at chain length one.
+Source context: arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem symmetryFamily_at_ne_shiftSwapTranspose
+    (S : FiniteChainOperatorSymmetryFamily) {d : ℕ} (a b : Fin d) (hab : a ≠ b) :
+    S.at (d * d) ≠ shiftSwapTransposeSymmetry d := by
+  intro hS
+  let P : Matrix (Fin 1 → Fin d) (Fin 1 → Fin d) ℂ :=
+    fun σ τ => if σ 0 = a ∧ τ 0 = a then 1 else 0
+  let Y : Matrix (Fin 1 → Fin d) (Fin 1 → Fin d) ℂ := S.action P
+  have hcompat := S.tensorPhysicalId_semiconj d d 1 P
+  change tensorPhysicalIdOperator Y d =
+    (S.at (d * d)).action (tensorPhysicalIdOperator P d) at hcompat
+  rw [hS] at hcompat
+  change tensorPhysicalIdOperator Y d =
+    sitewisePhysicalMatrix (shiftPhysicalSwap d) 1 * (tensorPhysicalIdOperator P d)ᵀ *
+      sitewisePhysicalMatrix (shiftPhysicalSwap d) 1 at hcompat
+  have hzero := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, a)))
+    (fun _ => finProdFinEquiv (a, a))
+  have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))
+    (fun _ => finProdFinEquiv (a, b))
+  simp only [chainShiftSwap_sandwich_apply, Matrix.transpose_apply] at hzero hone
+  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, P, finTupleProdEquiv, Equiv.arrowCongr, Function.comp_def,
+    bondPairSwap, Ne.symm hab] at hzero hone
+  have hbad : (1 : ℂ) = 0 := hzero.symm.trans hone
+  norm_num at hbad
+
 /-- The flattened swap takes a two-dimensional matrix tensored with an
 identity outside that embedding image. The two diagonal entries over the
 same original coordinate become one and zero.
