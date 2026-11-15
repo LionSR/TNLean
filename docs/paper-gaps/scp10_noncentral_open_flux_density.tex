@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Native Noncentral Open Flux Pairs under Explicit Collar Geometry}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Theorem 6.9 and Lemma 6.14, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2199--2214,
+compare the local physics of a flux string with the vacuum away from its
+ends. Arbitrary endpoint-free annular observations cannot satisfy such a
+vacuum-density claim: a Wilson loop can detect an enclosed endpoint.
+Restricted homotopy also retains nonabelian information beyond winding.
+
+The theorem
+\leanid{TNLean.PEPS.IsGIsometric.torusAvoidingFlux_normalized_density_eq_vacuum}
+derives the actual vacuum normalized density for an avoiding native flux
+path from regular group-isometry, connectedness of the physical observation
+graph and simple connectedness of its actual closed-cell realization.
+The group is finite and its insertion element is arbitrary. Avoidance
+means that every visited dual plaquette has all four physical corners
+outside the observation region. This supplies incident identity, while
+the actual exterior collar supplies an untwisted complementary component
+containing every boundary endpoint. The noncentral contraction theorem
+then applies, and the original native and ordered-edge coefficient formulas
+agree entry by entry. Both actual cuts are proved nonzero.
+
+The main construction
+\leanid{TNLean.PEPS.IsGIsometric.torusFlux_normalized_density_eq_vacuum_of_isSimplyConnected}
+starts from any actual finite native dual path. It additionally assumes
+simple connectedness of the closed-cell realization of the computed
+four-corner forbidden dual set and exclusion of both endpoints from that
+set. These assumptions construct an avoiding detour with the same lifted
+displacement. Full-support generated homotopy and virtual invariance give
+equality of the actual coefficient cuts, so the detour's normalized density
+and nonvanishing conclusions transfer to the original path. No avoiding
+path, homotopy, component, root, gauge, factorization, Gram identity,
+desired density equality or nonzero-cut witness is supplied.
+
+The simple connectedness assumptions on the physical region and on its
+computed forbidden dual set are separate and explicit. Neither is inferred
+from endpoint exclusion, and no endpoint-only classification of restricted
+homotopy is asserted. Both periods are at least three; arbitrary winding,
+nonabelian finite groups and noncentral insertions are covered under these
+conditions. Equality concerns normalized observed density; noncentral
+insertions can change the unnormalized scalar. The theorem does not equate
+global winding states with vacuum or cover arbitrary endpoint-free annuli.
+The broader source wording remains under \ghissue{8703}, and the
+full-lattice Hamiltonian scope of \ghissue{8947} is unchanged.
+\end{document}
