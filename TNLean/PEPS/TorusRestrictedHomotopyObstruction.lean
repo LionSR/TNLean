@@ -61,7 +61,10 @@ private theorem seamWord_reverse (u v : G) {a b : X} (p : TorusDualPath a b) :
   | nil => simp only [Quiver.Path.reverse, torusDualSeamWord, inv_one]
   | cons p e ih =>
     simp only [Quiver.Path.reverse, seamWord_comp, Quiver.Hom.toPath,
-      torusDualSeamWord, seamStep_reverse, ih, mul_inv_rev, one_mul]
+      torusDualSeamWord, ih, mul_inv_rev, one_mul]
+    change seamStep u v e.reverse * (torusDualSeamWord u v p)⁻¹ =
+      (seamStep u v e)⁻¹ * (torusDualSeamWord u v p)⁻¹
+    rw [seamStep_reverse]
 
 /-- A generated homotopy whose allowed square supports exclude the origin
 preserves every nonabelian seam word. No equality of transports is assumed.
@@ -81,7 +84,8 @@ theorem TorusDualHomotopy.seamWord_eq_of_origin_not_mem
   | square x y hxy =>
     by_cases hx : x + 1 = 0
     · by_cases hy : y + 1 = 0
-      · exact (hR (show (0, 0) ∈ R from (Prod.ext hx hy) ▸ hxy)).elim
+      · have h0 : (0, 0) ∈ R := by simpa only [hx, hy] using hxy
+        exact (hR h0).elim
       · simp only [torusDualEastNorth, torusDualNorthEast, torusDualSeamWord,
           seamStep, hx, hy, ite_true, ite_false, one_mul, mul_one]
     · simp only [torusDualEastNorth, torusDualNorthEast, torusDualSeamWord,
@@ -106,7 +110,7 @@ theorem torusDualSquareLoop_obstructs_restricted_completeness
         neg_add_cancel, ite_true, one_mul] using hs
     apply huv
     calc
-      u * v = (u * v * u⁻¹ * v⁻¹) * (v * u) := by group
+      u * v = (u * v * u⁻¹ * v⁻¹) * (v * u) := by simp [mul_assoc]
       _ = v * u := by rw [hc, one_mul]
 
 end TNLean.PEPS
