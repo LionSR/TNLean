@@ -22,7 +22,7 @@ noncomputable section
 
 namespace MPOTensor
 
-variable {ι κ : Type*} [Fintype ι] [Fintype κ]
+variable {ι κ : Type*}
 
 /-- Integer action matrix, with output block as row and input block as column.
 Source: arXiv:2203.12563, lines 564–565, in ordinary matrix convention. -/
@@ -31,7 +31,8 @@ def integerNIMRepMatrix (M : ι → κ → κ → ℕ) (a : ι) : Matrix κ κ �
 
 /-- The old NIM-rep equation gives multiplication in the ordinary matrix order
 after transposing the source's input/output indices. -/
-theorem IsNIMRep.integerNIMRepMatrix_mul {N : ι → ι → ι → ℕ}
+theorem IsNIMRep.integerNIMRepMatrix_mul [Fintype ι] [Fintype κ]
+    {N : ι → ι → ι → ℕ}
     {M : ι → κ → κ → ℕ} (h : IsNIMRep N M) (a b : ι) :
     integerNIMRepMatrix M a * integerNIMRepMatrix M b =
       ∑ c, (N a b c : ℤ) • integerNIMRepMatrix M c := by
@@ -40,7 +41,8 @@ theorem IsNIMRep.integerNIMRepMatrix_mul {N : ι → ι → ι → ℕ}
       (∑ c, (N a b c : ℤ) * (M c x y : ℤ)) =
         ∑ z, (M b x z : ℤ) * (M a z y : ℤ) := by
     exact_mod_cast h a b x y
-  simpa [integerNIMRepMatrix, Matrix.mul_apply, mul_comm] using hxy.symm
+  simpa only [Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply,
+    integerNIMRepMatrix, zsmul_eq_mul, mul_comm] using hxy.symm
 
 /-- A unit-preserving action has identity matrix at the unit label.
 The hypothesis is deliberately separate from `IsNIMRep`. -/
@@ -51,14 +53,15 @@ theorem integerNIMRepMatrix_unit [DecidableEq κ] {M : ι → κ → κ → ℕ}
   simp [integerNIMRepMatrix, hunit, Matrix.one_apply, eq_comm]
 
 /-- The additive extension of the transposed integer matrices. -/
-def integerNIMRepEval (M : ι → κ → κ → ℕ) :
+def integerNIMRepEval [Fintype ι] (M : ι → κ → κ → ℕ) :
     (ι →₀ ℤ) →+ Matrix κ κ ℤ :=
   integerFusionEval (integerNIMRepMatrix M)
 
 /-- A ring homomorphism with the specified basis multiplication and transposed
 natural basis images restricts to the old NIM-rep predicate.
 Project result: this is the restriction direction of the proposed bridge. -/
-theorem isNIMRep_of_ringHom [DecidableEq κ] {R : Type*} [Ring R]
+theorem isNIMRep_of_ringHom [Fintype ι] [Fintype κ] [DecidableEq κ]
+    {R : Type*} [Ring R]
     (N : ι → ι → ι → ℕ) (basis : ι → R)
     (hmul : ∀ a b, basis a * basis b = ∑ c, (N a b c : ℤ) • basis c)
     (ρ : R →+* Matrix κ κ ℤ) (M : ι → κ → κ → ℕ)
@@ -70,12 +73,13 @@ theorem isNIMRep_of_ringHom [DecidableEq κ] {R : Type*} [Ring R]
   have hxy := congrArg (fun A : Matrix κ κ ℤ ↦ A y x) hmat
   have hcast : (∑ c, (N a b c : ℤ) * (M c x y : ℤ)) =
       ∑ z, (M b x z : ℤ) * (M a z y : ℤ) := by
-    simpa [integerNIMRepMatrix, Matrix.mul_apply, mul_comm] using hxy.symm
+    simpa only [Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply,
+      integerNIMRepMatrix, zsmul_eq_mul, mul_comm] using hxy.symm
   exact_mod_cast hcast
 
 /-- Restriction of a unital ring homomorphism also supplies the missing unit
 condition, provided the distinguished basis element is the source unit. -/
-theorem nimRep_unit_of_ringHom [DecidableEq κ] {R : Type*} [Ring R]
+theorem nimRep_unit_of_ringHom [Fintype κ] [DecidableEq κ] {R : Type*} [Ring R]
     (basis : ι → R) (e : ι) (he : basis e = 1)
     (ρ : R →+* Matrix κ κ ℤ) (M : ι → κ → κ → ℕ)
     (himage : ∀ a, ρ (basis a) = integerNIMRepMatrix M a) :
