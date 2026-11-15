@@ -55,7 +55,7 @@
     spin, as in \cite[lines~1356--1366 and 2210--2234]{Cirac2017MPU}.
 \end{definition}
 
-\begin{theorem}[Labelled-spin swap comparison with arbitrary common stabilization]
+\begin{lemma}[Labelled-spin swap comparison with arbitrary common stabilization]
     \label{thm:mpu_labelled_swap_equivalence}
     \lean{MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff,
@@ -72,7 +72,7 @@
     $\mathcal U\sim_{\mathsf K}\mathcal V$ if and only if
     $\widetilde{\mathcal U}\sim_{\mathsf K}\widetilde{\mathcal V}$.
     The same positive ancilla and blocking witnesses work in both directions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpu_physical_matrix_canonical_blocking,
@@ -100,7 +100,7 @@
     Their virtual dimensions are $1,d^2,d^2$, respectively.
 \end{definition}
 
-\begin{theorem}[Swap comparison for all pairs of the three labelled examples]
+\begin{lemma}[Swap comparison for all pairs of the three labelled examples]
     \label{thm:mpu_three_labelled_source_swap_comparison}
     \lean{MPOTensor.labelledShiftExamples_swap_dagger_iff,
         MPOTensor.labelledShiftExamples_swap_transpose_iff,
@@ -109,12 +109,12 @@
     \uses{def:mpu_three_labelled_source_families,
         thm:mpu_labelled_swap_equivalence}
     For every $i,j\in\{1,2,3\}$, the three comparisons of
-    Theorem~\ref{thm:mpu_labelled_swap_equivalence} hold for the actual source
+    Lemma~\ref{thm:mpu_labelled_swap_equivalence} hold for the actual source
     tensors $\mathcal U_i,\mathcal U_j$ and their actual transformed tensors
     $\widetilde{\mathcal U}_i,\widetilde{\mathcal U}_j$.
     This uses the labelled physical-space convention of
     Definition~\ref{def:mpu_labelled_physical_matrix_equivalence}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_labelled_swap_equivalence}
