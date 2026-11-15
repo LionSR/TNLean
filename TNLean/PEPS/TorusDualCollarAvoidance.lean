@@ -287,16 +287,18 @@ theorem torusDualFlux_transport_eq_one_on_integerExteriorCollar
       exact right_transport R A hA p hp g q a ha hq.1 hr.1 hnq hnr hΓ
     · subst q
       have ht := right_transport R A hA p hp g r a ha hr.1 hq.1 hnr hnq hΓ.symm
-      simpa only [ht, inv_one] using regularDirectedTransport_symm
+      apply (regularDirectedTransport_symm
         (torusGraphRegularLabels (torusDualFluxLabels g p).1
-          (torusDualFluxLabels g p).2) hΓ.symm
+          (torusDualFluxLabels g p).2) hΓ.symm).trans
+      simpa only [inv_one] using congrArg (fun z : G => z⁻¹) ht
   · rcases he with he | he
     · subst r
       exact up_transport R A hA p hp g q a ha hq.1 hr.1 hnq hnr hΓ
     · subst q
       have ht := up_transport R A hA p hp g r a ha hr.1 hq.1 hnr hnq hΓ.symm
-      simpa only [ht, inv_one] using regularDirectedTransport_symm
+      apply (regularDirectedTransport_symm
         (torusGraphRegularLabels (torusDualFluxLabels g p).1
-          (torusDualFluxLabels g p).2) hΓ.symm
+          (torusDualFluxLabels g p).2) hΓ.symm).trans
+      simpa only [inv_one] using congrArg (fun z : G => z⁻¹) ht
 
 end TNLean.PEPS
