@@ -132,8 +132,8 @@ namespace MPSPreparation
 variable {d D : ℕ}
 
 /-- **The unitary of a block implementing an isometric extension of the partial isometry.** Let
-`D ≥ 1` and `dig` encode the bond indices injectively in `D` sites. There is `C` such that for
-every chain `A₀, …, A_{q-1}` of tensors of bond dimension `D`, `q ≥ 3D`, there are a unitary `U`
+`D ≥ 1` and `dig` encode the bond indices injectively in `r₁ ≥ 1` sites. There is `C` such that
+for every chain `A₀, …, A_{q-1}` of tensors of bond dimension `D`, `q ≥ 3r₁`, there is a unitary `U`
 on the `q` sites, a product of at most `C q` gates on neighbouring sites, and an isometry
 `W : ℂ^{D²} → ℂ^{d^q}` with `W Π = V` for the polar decomposition `B = V P`, `V†V = Π`, of the
 blocked tensor, such that `U |l, 0 ⋯ 0, r⟩ = W |l, r⟩`. No injectivity is assumed.
@@ -141,9 +141,10 @@ blocked tensor, such that `U |l, 0 ⋯ 0, r⟩ = W |l, r⟩`. No injectivity is 
 arXiv:2307.01696, paragraph "The sequential-RG circuit" and its footnote: the derivation of the
 staircase "remains valid also for non-injective tensors `B`", with `P⁻¹` the pseudo-inverse; and
 Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors", `V†V = Π`. -/
-theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg d D}
+theorem exists_blockUnitary_isometricExtension_of_encoding (hd : 0 < d)
+    {r₁ : ℕ} (hr₁ : 1 ≤ r₁) {dig : Fin D → Cfg d r₁}
     (hdig : Function.Injective dig) (hD : 0 < D) :
-    ∃ C : ℕ, ∀ q, 3 * D ≤ q → ∀ A : MPSChainTensor d D q,
+    ∃ C : ℕ, ∀ q, 3 * r₁ ≤ q → ∀ A : MPSChainTensor d D q,
       ∃ (U : Matrix (Cfg d q) (Cfg d q) ℂ)
         (W : Matrix (Fin (blockPhysDim d q)) (Fin (D * D)) ℂ),
         IsPairProduct d q (C * q) U ∧ W.IsIsometry ∧
@@ -152,7 +153,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
         ∀ (l r : Fin D) τ, U τ (blockInputCfg hd q dig l r) =
           W ((decodeBlockEquiv d q).symm τ) (finProdFinEquiv (l, r)) := by
   classical
-  obtain ⟨C, hC⟩ := exists_blockUnitary_of_equiv_mul hd (r₁ := D) hD hdig hD (virtualPairEquiv D)
+  obtain ⟨C, hC⟩ := exists_blockUnitary_of_equiv_mul hd hr₁ hdig hD (virtualPairEquiv D)
   refine ⟨C, fun q hq A => ?_⟩
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
   set B := MPSChainTensor.blockTensor A with hBdef
@@ -208,5 +209,19 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
     rw [hWZ, Matrix.mul_assoc, hTE, ← Matrix.mul_assoc, hZΛ, Matrix.mul_assoc,
       Unitary.mul_star_self_of_mem hT, Matrix.mul_one]
   · simp only [W, of_apply, Equiv.apply_symm_apply, virtualPairEquiv, Equiv.symm_apply_apply]
+
+/-- Isometric extension with each bond index encoded in `D` sites. This is the register size
+used in the sequential construction of arXiv:2307.01696, "The sequential-RG circuit". -/
+theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg d D}
+    (hdig : Function.Injective dig) (hD : 0 < D) :
+    ∃ C : ℕ, ∀ q, 3 * D ≤ q → ∀ A : MPSChainTensor d D q,
+      ∃ (U : Matrix (Cfg d q) (Cfg d q) ℂ)
+        (W : Matrix (Fin (blockPhysDim d q)) (Fin (D * D)) ℂ),
+        IsPairProduct d q (C * q) U ∧ W.IsIsometry ∧
+        W * polarSupportMatrix (MPSChainTensor.blockTensor A) =
+          polarIsoMatrix (MPSChainTensor.blockTensor A) ∧
+        ∀ (l r : Fin D) τ, U τ (blockInputCfg hd q dig l r) =
+          W ((decodeBlockEquiv d q).symm τ) (finProdFinEquiv (l, r)) :=
+  exists_blockUnitary_isometricExtension_of_encoding hd hD hdig hD
 
 end MPSPreparation

@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Inhomogeneous Long-Range Preparation: Coherent Pair Products}
+\author{}
+\date{2026-11-15}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source remark}
+The concluding sentence of ``Long-range MPS using measurements'' in
+arXiv:2307.01696v2, page~5, immediately after equation~(19), states:
+``Our construction generalizes to inhomogeneous long-range correlated MPS
+exactly as in the short-range case.'' The issue cites
+\texttt{References/2307.01696/main.tex:913}; that source directory is absent
+from the repository snapshot, so the sentence and its context were checked
+against the published arXiv PDF and HTML.
+
+The preceding short-range paragraph defines a sequence by approximation of
+the blocked positive-part state by site-dependent nearest-neighbour pair
+products at a logarithmic blocking scale, with error tending to zero. The
+long-range paragraph supplies a coherent sum of pair products in (19),
+with orthonormal label states at each pair window. Its final sentence does
+not separately specify an inhomogeneous long-range class, a sector
+decomposition for it, or an error rate uniform over the sequence.
+
+\section{The explicit conditional construction}
+The new result in
+\doclink{TNLean/MPS/Preparation/InhomogeneousLongRange} assumes
+\begin{align*}
+    \Omega'=\sum_{j=1}^b\alpha_j\bigotimes_{k=1}^M\omega_j^k,
+    \qquad \sum_j|\alpha_j|^2=1,
+    \qquad \langle\omega_i^k,\omega_j^k\rangle=\delta_{ij}.
+\end{align*}
+For physical dimension $d\ge2$, common bond dimension $D\ge1$, and blocks
+of lengths $3(b+D+2)\le\ell_k\le L$, the written construction chooses
+isometric extensions $X_k\Pi_k=V_k$ of the blocked polar factors before
+choosing the pairs or the amplitudes. It prepares
+$\psi=(\bigotimes_kX_k)\Omega'$ with measurements followed by a circuit
+in depth $CL$, with $C$ uniform in the ring length, number of blocks,
+tensors, pairs and amplitudes. No injectivity is required. The overlap
+with the normalized target is exactly the overlap of $\Omega'$ with the
+normalized positive-part state. Both tensors and pairs may vary along
+the ring, and the circuit accounts for every physical site.
+
+This is a construction with specified input assumptions, rather than a
+formal definition of all inhomogeneous long-range correlated MPS. Its
+blueprint statement has its own label and does not certify the unrestricted
+source remark. The initial submission leaves its proof-status tags pending
+until the written Lean is accepted by the pinned compiler.
+
+\section{Remaining obligations}
+To obtain a sequence-level theorem with a prescribed error $\varepsilon$,
+one must specify a class of sequences and show that its normalized
+positive-part states admit these coherent pair approximations on blocks
+with $L=O(\log(N/\varepsilon))$, uniformly in $N$. Qualitative convergence
+alone does not yield this accuracy-dependent scale. The common label
+space and its uniform size must also be specified or derived. The
+double-logarithmic measurement-round bound additionally needs the
+corresponding inhomogeneous tree implementation; the present theorem uses
+sequential block circuits. These obligations are distinct from the
+short-range rate work and from the construction proved
+under explicit pair hypotheses here. Issue~\#10573 remains open.
+
+\begin{thebibliography}{9}
+\bibitem{Malz2024Preparation}
+D.~Malz, G.~Styliaris, Z.-Y.~Wei and J.~I.~Cirac,
+\emph{Preparation of matrix product states with log-depth quantum circuits},
+Phys. Rev. Lett. \textbf{132}, 040404 (2024),
+\url{https://arxiv.org/abs/2307.01696}.
+\end{thebibliography}
+\end{document}

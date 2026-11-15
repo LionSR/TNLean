@@ -64,6 +64,7 @@ import TNLean.MPS.Preparation.InhomogeneousChoiResidual
 import TNLean.MPS.Preparation.InhomogeneousDoeblin
 import TNLean.MPS.Preparation.InhomogeneousDoeblinPreparation
 import TNLean.MPS.Preparation.InhomogeneousExactPreparation
+import TNLean.MPS.Preparation.InhomogeneousLongRange
 import TNLean.MPS.Preparation.InhomogeneousMixingPreparation
 import TNLean.MPS.Preparation.InhomogeneousOverlap
 import TNLean.MPS.Preparation.InhomogeneousPositivePartRate
