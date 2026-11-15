@@ -229,7 +229,7 @@ private theorem right_transport (R : Finset X) (A : Finset (ℤ × ℤ))
     (g : G) (q a : ℤ × ℤ) (ha : a ∈ A) (hq : q ∉ A) (hr : q + (1, 0) ∉ A)
     (hnq : IsIntegerCellNear q a) (hnr : IsIntegerCellNear (q + (1, 0)) a)
     (hΓ : (Γₜ).Adj (intVertex q) (intVertex (q + (1, 0)))) :
-    regularDirectedTransport
+    regularDirectedTransport (v := intVertex q) (w := intVertex (q + (1, 0)))
       (torusGraphRegularLabels (torusDualFluxLabels g p).1
         (torusDualFluxLabels g p).2) hΓ = 1 := by
   obtain ⟨hx, hy⟩ := near_horizontal q a hnq hnr (fun h => hq (h ▸ ha))
@@ -248,7 +248,7 @@ private theorem up_transport (R : Finset X) (A : Finset (ℤ × ℤ))
     (g : G) (q a : ℤ × ℤ) (ha : a ∈ A) (hq : q ∉ A) (hr : q + (0, 1) ∉ A)
     (hnq : IsIntegerCellNear q a) (hnr : IsIntegerCellNear (q + (0, 1)) a)
     (hΓ : (Γₜ).Adj (intVertex q) (intVertex (q + (0, 1)))) :
-    regularDirectedTransport
+    regularDirectedTransport (v := intVertex q) (w := intVertex (q + (0, 1)))
       (torusGraphRegularLabels (torusDualFluxLabels g p).1
         (torusDualFluxLabels g p).2) hΓ = 1 := by
   obtain ⟨hx, hy⟩ := near_vertical q a hnq hnr (fun h => hq (h ▸ ha))
@@ -274,6 +274,8 @@ theorem torusDualFlux_transport_eq_one_on_integerExteriorCollar
     (hΓ : (Γₜ).Adj ((q.1.1 : ZMod width), (q.1.2 : ZMod height))
       ((r.1.1 : ZMod width), (r.1.2 : ZMod height))) :
     regularDirectedTransport
+      (v := ((q.1.1 : ZMod width), (q.1.2 : ZMod height)))
+      (w := ((r.1.1 : ZMod width), (r.1.2 : ZMod height)))
       (torusGraphRegularLabels (torusDualFluxLabels g p).1
         (torusDualFluxLabels g p).2) hΓ = 1 := by
   rcases q with ⟨q, hq⟩
@@ -287,7 +289,8 @@ theorem torusDualFlux_transport_eq_one_on_integerExteriorCollar
       exact right_transport R A hA p hp g q a ha hq.1 hr.1 hnq hnr hΓ
     · subst q
       have ht := right_transport R A hA p hp g r a ha hr.1 hq.1 hnr hnq hΓ.symm
-      apply (regularDirectedTransport_symm
+      apply (regularDirectedTransport_symm (v := intVertex r)
+        (w := intVertex (r + (1, 0)))
         (torusGraphRegularLabels (torusDualFluxLabels g p).1
           (torusDualFluxLabels g p).2) hΓ.symm).trans
       simpa only [inv_one] using congrArg (fun z : G => z⁻¹) ht
@@ -296,7 +299,8 @@ theorem torusDualFlux_transport_eq_one_on_integerExteriorCollar
       exact up_transport R A hA p hp g q a ha hq.1 hr.1 hnq hnr hΓ
     · subst q
       have ht := up_transport R A hA p hp g r a ha hr.1 hq.1 hnr hnq hΓ.symm
-      apply (regularDirectedTransport_symm
+      apply (regularDirectedTransport_symm (v := intVertex r)
+        (w := intVertex (r + (0, 1)))
         (torusGraphRegularLabels (torusDualFluxLabels g p).1
           (torusDualFluxLabels g p).2) hΓ.symm).trans
       simpa only [inv_one] using congrArg (fun z : G => z⁻¹) ht

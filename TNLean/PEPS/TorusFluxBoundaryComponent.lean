@@ -98,7 +98,7 @@ theorem exists_torusFlux_untwisted_boundary_component {G : Type*} [Group G]
     ∃ (U : SimpleGraph {v : X // v ∈ Finset.univ \ R})
       (hU : U ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
       (o : {v : X // v ∈ Finset.univ \ R}),
-      (∀ {v w} (h : U.Adj v w), regularDirectedTransport
+      (∀ {v w} (h : U.Adj v w), regularDirectedTransport (v := v.1) (w := w.1)
         (torusGraphRegularLabels (torusDualFluxLabels g p).1
           (torusDualFluxLabels g p).2) (hU h) = 1) ∧
       ∀ v : {v : X // v ∈ Finset.univ \ R},
