@@ -1186,6 +1186,49 @@ Chapter~\ref{ch:local_quantum_circuits}.
     identifies the output with~(\ref{eq:ldp_block_isometry_state}).
 \end{proof}
 
+\begin{center}
+    % Construction: the two layers of the preparation in the proof above,
+    % drawn on a window of the ring around blocks k and k+1 (indices of
+    % blocks modulo M; the dots continue the ring).  The first layer sends
+    % |0...0> to (x)_k |omega>_{R_k L_{k+1}} |0>_{C_k} in constant depth; the
+    % second applies U_k with U_k|l,0,r> = V_{l_k}|l,r> on every block in
+    % parallel, in depth O(l_k) <= O(L).
+    % Source: MSWC24 (arXiv:2307.01696), eqs. eq:phi_tilde and
+    % eq:normal_fp_local (cited above as eqs. (10)--(12)), and the paragraph
+    % "The sequential-RG circuit".
+    % Ink-to-symbol map: each slashed wire is a register of several sites;
+    % L_k and R_k are the first and last D sites of block k, C_k its
+    % remaining l_k - 2D sites, all starting in |0>.  A box marked
+    % |0> -> |omega> is a unitary on R_k L_{k+1} sending |0> to |omega>; a
+    % box U_k acts on the whole block L_k C_k R_k, and U_{k-1}, U_{k+2} are
+    % cut by the window.  The dashed frames are the two layers with their
+    % depths.
+    \begin{quantikz}[row sep={0.7cm,between origins}, column sep=0.35cm]
+        \setwiretype{n} & \lstick{$\vdots$} & &
+        \gate[2]{U_{k-1}}
+        \gategroup[10,steps=1,style={dashed,rounded corners,inner xsep=1pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm,
+                    align=center}]{depth\\$O(L)$}
+        & \\
+        \lstick{$\ket{0}_{R_{k-1}}$} & \qwbundle{}
+        & \gate[2]{\ket{0}\mapsto\ket{\omega}}
+        \gategroup[9,steps=1,style={dashed,rounded corners,inner xsep=1pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm,
+                    align=center}]{depth\\$O(1)$}
+        & & \\
+        \lstick{$\ket{0}_{L_k}$} & \qwbundle{} & & \gate[3]{U_k} & \\
+        \lstick{$\ket{0}_{C_k}$} & \qwbundle{} & & & \\
+        \lstick{$\ket{0}_{R_k}$} & \qwbundle{}
+        & \gate[2]{\ket{0}\mapsto\ket{\omega}} & & \\
+        \lstick{$\ket{0}_{L_{k+1}}$} & \qwbundle{} & & \gate[3]{U_{k+1}} & \\
+        \lstick{$\ket{0}_{C_{k+1}}$} & \qwbundle{} & & & \\
+        \lstick{$\ket{0}_{R_{k+1}}$} & \qwbundle{}
+        & \gate[2]{\ket{0}\mapsto\ket{\omega}} & & \\
+        \lstick{$\ket{0}_{L_{k+2}}$} & \qwbundle{} & & \gate[2]{U_{k+2}} & \\
+        \setwiretype{n} & \lstick{$\vdots$} & & &
+    \end{quantikz}
+\end{center}
+
 \input{chapter/ch32_log_depth_zero_subleading_spectrum}
 
 \begin{lemma}[Exact preparation on short chains]

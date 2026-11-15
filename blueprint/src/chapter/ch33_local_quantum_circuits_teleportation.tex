@@ -112,6 +112,34 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     On $\ket v$ with $\ket0_e\ket0_f$, $G_{1,h}$ prepares $d^{-1/2}\sum_{j\in\mathbb Z_d}\ket j_e\ket j_f$. Applying $G_{2,h}$ and $\Pi_{c,z_c}\Pi_{e,z_e}$ gives amplitude $d^{-1/2}F_{z_c,\,x_f-z_e}=d^{-1}\zeta^{z_c(x_f-z_e)}$ for the input value $x_f-z_e$ transferred from $c$ to $f$ when $(x_c,x_e)=(z_c,z_e)$, and $0$ otherwise, matching the right-hand side.
 \end{proof}
 
+\begin{center}
+    % Construction: the hop h = (c,e,f) of the lemma above, followed by the
+    % outcome projections Pi_{c,z_c} Pi_{e,z_e}.  The result is
+    % d^{-1} (s_{z_c})_c (s_{z_e})_e (X^{z_e} Z^{z_c})_f P_{(c f)} |v>: the
+    % value of c arrives at f up to a generalized Pauli matrix.
+    % Source: arXiv:2103.13367 (Piroli, Styliaris, Cirac), paragraph "State
+    % transformations with QC and LOCC" and Example 2; MSWC24
+    % (arXiv:2307.01696), paragraph "Tree-RG circuit with measurements".
+    % Ink-to-symbol map: wires are the sites c, e, f, with e and f in |0>.
+    % F is the Fourier matrix; a dot joined to a box + is
+    % |a>|b> -> |a>|b+a> with the dot on the site carrying a, and a box -
+    % is |a>|b> -> |a>|b-a>.  The dashed frames are G_{1,h} (F on e, then
+    % the addition from e to f) and G_{2,h} (the subtraction from c to e,
+    % then F on c).  The meters are the measurements of c and e, which
+    % leave |z_c> and |z_e>.
+    \begin{quantikz}[row sep={0.8cm,between origins}, column sep=0.45cm]
+        \lstick{$c$} & & & \ctrl{1}
+        \gategroup[2,steps=2,style={dashed,rounded corners,inner xsep=2pt},
+            label style={label position=above,anchor=south,yshift=-0.25cm}]{$G_{2,h}$}
+        & \gate{F} & \meter{} & \rstick{$\ket{z_c}$} \\
+        \lstick{$\ket{0}_e$} & \gate{F}
+        \gategroup[2,steps=2,style={dashed,rounded corners,inner xsep=2pt},
+            label style={label position=below,anchor=north,yshift=-0.1cm}]{$G_{1,h}$}
+        & \ctrl{1} & \gate{-} & & \meter{} & \rstick{$\ket{z_e}$} \\
+        \lstick{$\ket{0}_f$} & & \gate{+} & & & &
+    \end{quantikz}
+\end{center}
+
 \begin{lemma}[Teleportation along chains of hops in one round]
     \label{thm:qc_teleportation_round}
     \lean{QuantumCircuit.TeleportHop.sites,
@@ -252,6 +280,38 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \leanok
     By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, the concatenated forward chains $\mathcal T=\bigsqcup_r\mathcal F_{a_r,L_r}$ and backward chains $\mathcal B=\bigsqcup_r\mathcal B_{a_r,L_r}$ are valid with $P_{\mathcal B}=P_{\mathcal T}^{-1}$, and $P_{\mathcal T}\ket v$ has $\ket0$ on $\bigcup_r\{a_r,\dots,a_r+2L_r-1\}$, which is preserved by the nearest-neighbour layer $G=\prod_r(u_r)_{\{a_r+2L_r,a_r+2L_r+1\}}$. By Lemma~\ref{lem:qc_teleportation_chains}(1) and Lemma~\ref{lem:qc_site_permutations}(2), the two rounds implement $P_{\mathcal T}^{-1}GP_{\mathcal T}=\prod_r(u_r)_{\{a_r,a_r+2L_r+1\}}$ in depth $2+3=5$.
 \end{proof}
+
+\begin{center}
+    % Construction: the two measurement rounds of the theorem above for one
+    % distant gate u on {a, a+3} (L = 1), applied to a vector with |0> on
+    % the interior {a+1, a+2}.  The first round teleports a to a+2 along
+    % the forward chain F_{a,1} = (h), h = (a, a+1, a+2); the second applies
+    % G = u on {a+2, a+3} and teleports back along B_{a,1} = (h'),
+    % h' = (a+2, a+1, a).  Together they implement u on {a, a+3} in depth
+    % 2 + 3 = 5 and return the interior to |0>.
+    % Source: MSWC24 (arXiv:2307.01696), paragraph "Tree-RG circuit with
+    % measurements"; arXiv:2103.13367, Example 2.
+    % Ink-to-symbol map: wires are the sites a, ..., a+3.  G_{1,h} and
+    % G_{2,h} are the gates of the hop h on {e,f} and {c,e}; the meters
+    % measure c and e of each hop; V_m and V_{m'} are the
+    % outcome-dependent products of single-site unitaries that undo the
+    % Pauli frame.  The dashed frames are the two rounds with the depths
+    % of their circuits.
+    \begin{quantikz}[row sep={0.8cm,between origins}, column sep=0.22cm]
+        \lstick{$a$} &
+        \gategroup[4,steps=4,style={dashed,rounded corners,inner xsep=1pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm}]{depth $2$}
+        & \gate[2]{G_{2,h}} & \meter{} & \gate[3]{V_m}
+        & \gategroup[4,steps=5,style={dashed,rounded corners,inner xsep=1pt},
+            label style={label position=below,anchor=north,yshift=-0.2cm}]{depth $3$}
+        & \gate[2]{G_{1,h'}} & & & \gate[3]{V_{m'}} & \\
+        \lstick{$\ket{0}_{a+1}$} & \gate[2]{G_{1,h}} & & \meter{} & & &
+        & \gate[2]{G_{2,h'}} & \meter{} & & \rstick{$\ket{0}$} \\
+        \lstick{$\ket{0}_{a+2}$} & & & & & \gate[2]{u} & & & \meter{} & &
+        \rstick{$\ket{0}$} \\
+        \lstick{$a+3$} & & & & & & & & & &
+    \end{quantikz}
+\end{center}
 
 \begin{definition}[Register gates]
     \label{def:qc_register_gate}

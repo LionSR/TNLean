@@ -21,6 +21,7 @@ from pathlib import Path
 from playwright.sync_api import Page, Route, sync_playwright
 
 from blueprint_tex_tree import read_tex_tree
+from test_tenkz_quantikz_web import check_site as check_circuit_site
 
 
 EXPECTED_PICTURE_COUNTS = [2] * 9 + [2, 3, 2, 4] + [3, 2, 5, 1] + [2] * 18
@@ -658,6 +659,9 @@ def main() -> int:
         and 'class="tenkz-pic ' in path.read_text(encoding="utf-8")
     )
     _assert_generated_blocks(root, chapters)
+    # Every quantikz circuit of the sources appears once on the pages, wherever
+    # it lives; the layout audit below then covers its picture like any other.
+    check_circuit_site(root)
 
     mathjax_url, mathjax_bundle, mathjax_content_type = _mathjax_bundle(root)
     # MathJax lazily loads extensions (e.g. boldsymbol) from the same CDN tree

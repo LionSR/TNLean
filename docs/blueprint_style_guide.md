@@ -372,6 +372,14 @@ native picture bodies beside the mathematics they depict; there is no
 central figure catalogue. The generic web bridge captures those same bodies
 verbatim and compiles them against the pinned package.
 
+Quantum circuit diagrams are drawn with quantikz (the TikZ library
+`quantikz2`, loaded in `blueprint/src/macros/diagrams.tex`): write a
+`quantikz` environment in a `center` environment beside the construction,
+with a comment naming the construction, its source passage and the
+ink-to-symbol map. The web bridge captures it like a tenkz picture, and
+`scripts/test_tenkz_quantikz_web.py` checks that every circuit compiles and
+appears on the web pages.
+
 Every diagram source must include adjacent comments stating the represented
 formula or source passage, the ink-to-index correspondence, the contracted and
 open legs, and the resulting boundary signature. Prefer exact mathematics to
