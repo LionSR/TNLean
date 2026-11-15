@@ -26,8 +26,8 @@
     Its expectation in a normalized $\psi$ is $\prod_{r=0}^{m-1}c_r$.
     The comparisons in (\ref{eq:mpug_detector_intermediate_comparisons})
     are explicit additional assumptions. Deriving them for a specified
-    class of truncations, and identifying their coefficients with the
-    domain-wall phases in \cite[Section~V]{GarreRubioSchuch2024DomainWall},
+    class of truncations, and identifying their forward actions with the
+    domain-wall actions in \cite[Section~V]{GarreRubioSchuch2024DomainWall},
     are separate requirements for a corrected detection theorem
     \cite{gap:gs24_truncation_detector_endpoint_dependence}.
     More generally, if the undo comparisons are
@@ -43,6 +43,68 @@
     line of (\ref{eq:mpug_detector_intermediate_comparisons}) returns the
     vector to $\psi$. The normalized expectation follows by taking its
     inner product with $\psi$.
+\end{proof}
+
+\begin{lemma}[Conditional detection of the inverse cyclic invariant]
+    \label{lem:mpug_detector_domain_wall_transport}
+    \lean{MPOTensor.GroupFamily.BlockActionData.detectorTransportWord_mulVec_eq_inv_cyclicInvariant_of_phased_states,
+        MPOTensor.GroupFamily.BlockActionData.detectorTransportWord_mulVec_eq_inv_cyclicInvariant_of_intermediate_states,
+        MPOTensor.GroupFamily.BlockActionData.star_dotProduct_detectorTransportWord_eq_inv_cyclicInvariant}
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_interchange},
+    suppose $g^m=1$ and the forward comparisons of
+    (\ref{eq:mpug_detector_intermediate_comparisons}) have coefficients
+    $c_r=B^g_{g^r(gx),g^rx}$. Retain its starting, joining, and finishing
+    comparisons, and suppose instead that the undo intervals are unitary
+    and $D_rw_{r+1}=w_r$ for every $0\leq r\leq m$. Then
+    \begin{align}
+        D_m^{\dagger}\cdots D_0^{\dagger}F_m\cdots F_0\psi
+         & =\left(\prod_{r=0}^{m-1}\omega(g,g^r,g)\right)^{-1}\psi.
+        \label{eq:mpug_detector_inverse_invariant}
+    \end{align}
+    The expectation is this scalar times $\langle\psi|\psi\rangle$.
+    If the adjoint undo actions instead have coefficients $e_r$, the
+    scalar in (\ref{eq:mpug_detector_inverse_invariant}) is multiplied by
+    $\prod_{r=0}^m e_r$. These individual comparisons are additional
+    assumptions on the truncations
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpug_detector_conditional_transport,
+        thm:mpug_domain_wall_interchange}
+    Unitarity gives $D_r^{\dagger}w_r=w_{r+1}$ from
+    $D_rw_{r+1}=w_r$. Lemma~\ref{lem:mpug_detector_conditional_transport}
+    gives the product of the forward coefficients, retaining the undo
+    coefficients when present. Lemma~\ref{thm:mpug_domain_wall_interchange}
+    identifies that forward product with the inverse cyclic invariant.
+\end{proof}
+
+\begin{lemma}[The first crossed truncation comparison]
+    \label{lem:mpug_detector_first_canonical_crossing}
+    \lean{MPOTensor.GroupFamily.BlockActionData.interval_mul_interval_mulVec_mpv_cross_of_canonical_comparisons}
+    Let the blocks have left inverses with separated supports and a
+    nonzero domain-wall family with the local group action of
+    Definition~\ref{def:mpug_group_domain_wall_string}.
+    Write $S_0=O_g^{[j,r_2]}$ and $S_1=O_g^{[i,r_1]}$ for its canonical
+    strings, where $j<i<r_2<r_1$. Suppose the two regions adjacent to
+    $r_2$ between these endpoints exceed the local-action buffer. Let
+    $\Phi$ be the periodic state with walls $e_{x,gx}$, $e_{gx,g^2x}$,
+    $e_{g^2x,gx}$, $e_{gx,x}$ at these four sites in increasing order,
+    and blocks $A_x,A_{gx},A_{g^2x},A_{gx},A_x$ between them.
+    For $\psi_x=\psi_{A_x}$, assume
+    $T_0\psi_x=S_0\psi_x$ and $T_1S_0\psi_x=S_1S_0\psi_x$.
+    Then $T_1T_0\psi_x=B^g_{gx,x}\Phi$.
+    In particular, the second comparison concerns the excitation
+    $S_0\psi_x$, not only a ground state
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpug_group_domain_wall_exchange}
+    Substitution gives $T_1T_0\psi_x=S_1S_0\psi_x$.
+    The crossed-string contraction in
+    Lemma~\ref{lem:mpug_group_domain_wall_exchange} gives
+    $S_1S_0\psi_x=B^g_{gx,x}\Phi$.
 \end{proof}
 
 \begin{lemma}[The complete retained-circuit detector at even order]

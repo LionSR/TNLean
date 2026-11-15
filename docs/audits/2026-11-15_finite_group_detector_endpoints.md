@@ -338,15 +338,46 @@ unphased undo sequence is a separate specialization. No whole-detector phase
 is an input hypothesis, and no reference excitation is defined to be an
 unknown whole-detector output.
 
-This conditional implication does not construct canonical reference
-excitations or prove that a given source truncation meets the comparisons.
-It also does not identify the resulting coefficients with the source's
-cocycle invariant. The existing
-`ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant` identifies a pure
-cochain product with the inverse cyclic invariant; it does not identify the
-actual truncation actions or their B-coefficients. Both comparisons, including
-the undo phase normalization, remain necessary for a corrected physical
-anomaly-detection result. The published endpoint-dependence gap note applies:
+The actual B-product identity is already available in
+`IsDomainWallFamily.prod_eq_inv_cyclicInvariant`, not just the pure-cochain
+identity `ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant`.
+It assumes a nonzero domain-wall family with the blocked local action,
+a normal MPU representation, normal state tensors of positive bond dimension,
+and covariance of their periodic vectors. For any `g ^ m = 1`, it identifies
+the product of the actual coefficients
+`B g (g ^ r • g • x) (g ^ r • x)` with the **inverse** cyclic invariant.
+No arbitrary truncation action is an input or a consequence of that identity.
+
+The new separate module `FiniteGroupDetectorDomainWall.lean` composes that
+actual-family theorem with the intermediate-state transport theorem. Under
+explicit forward B-coefficient comparisons, its phased version retains all
+undo coefficients. A second version derives phase-free adjoint undo steps
+from unitarity and the individual forward comparisons
+`U r *ᵥ w (r + 1) = w r`. Its expectation version retains the initial
+state's squared norm, so normalization is not silently assumed.
+
+The same module derives the first crossed coefficient `B g (g • x) x` from
+`groupWallString_cross_mulVec_mpv_apply`. The required additional comparisons
+are that the first truncation agrees with the canonical string on the ground
+state and that the second agrees on the first canonical excitation. The
+canonical string contraction supplies the coefficient and the actual
+four-wall vector; neither is an assumed full-detector output. The existing
+canonical string creation theorem identifies that first excitation with its
+two-wall periodic vector. Its nonzero-wall and separating-left-inverse
+assumptions are retained.
+
+**Validation status of this continuation:** these new declarations have been
+written but await hosted Lean checks. The earlier eight-module fixed-circuit
+result is fully green on exact head
+`d0b5cd14f118c5abb47d0eff6541e284dfafdc65` (run `43762978260`).
+
+The remaining physical task is to derive all forward comparisons and the
+phase-free undo comparisons for a specified class of actual circuit
+truncations, on a common chain space and for the full sequence of canonical
+multiwall excitations. The first crossed comparison is conditional on
+truncation/string agreement, not a proof of that agreement. In particular,
+ground-state agreement alone does not justify agreement on later excitations.
+The published endpoint-dependence gap note applies:
 https://sirui-lu.com/TNLean/paper-gaps/gs24_truncation_detector_endpoint_dependence.pdf.
 
 The original finite-group detection claim is not presented as formalized.
