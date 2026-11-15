@@ -27,10 +27,15 @@ connectedness of the actual region.
 
 The declaration is
 \leanid{TNLean.PEPS.exists_complementWalk_same_winding_of_isSimplyConnected}.
-This gives arbitrary-shape simply connected region avoidance for torus
-site-graph walks. It does not yet identify these walks with the four-labelled
-native dual paths, impose the physical crossed-bond incidence condition, or
-prove vacuum reduced-density equality for open flux pairs. Those steps remain
+The definition \leanid{TNLean.PEPS.torusDualPathGraphWalk} encodes the four
+native direction labels as graph edges. The theorem
+\leanid{TNLean.PEPS.exists_torusDualPath_avoiding_of_isSimplyConnected}
+replaces any native dual path by one whose visited plaquettes avoid $R$ and
+whose lifted displacement is unchanged. Decoding the complementary graph walk
+and the seam-coordinate formula establish this without supplying a path or a
+homotopy. This gives arbitrary-shape simply connected forbidden-plaquette
+avoidance. It does not yet impose the physical crossed-bond incidence
+condition or prove vacuum reduced-density equality for open flux pairs. Those steps remain
 under \ghissue{8703}. Arbitrary forbidden regions need not admit such a detour:
 they may disconnect the endpoints or obstruct the requested winding class.
 The full-lattice Hamiltonian work under \ghissue{8947} is unchanged.

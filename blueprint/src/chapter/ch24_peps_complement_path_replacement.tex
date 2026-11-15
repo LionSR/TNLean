@@ -83,3 +83,29 @@
     concatenate. Additivity of winding gives
     (\ref{eq:peps_walk_avoidance_winding}).
 \end{proof}
+
+
+\begin{definition}[Native dual path as a graph walk]
+    \label{def:peps_dual_path_graph_walk}
+    \lean{TNLean.PEPS.torusDualPathGraphWalk}\leanok
+    Replace each labelled east, west, north, or south dual step by its
+    corresponding native graph edge and concatenate in path order.
+\end{definition}
+
+\begin{lemma}[Native dual avoidance with fixed displacement]
+    \label{lem:peps_simply_connected_dual_avoidance}
+    \lean{TNLean.PEPS.exists_torusDualPath_avoiding_of_isSimplyConnected}\leanok
+    Under the preceding hypotheses on the forbidden plaquette set $R$,
+    every four-labelled dual path $p:a\to b$ with $a,b\notin R$ admits
+    a dual path $q:a\to b$ with the same lifted integer displacement,
+    all of whose visited plaquettes lie outside $R$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_simply_connected_walk_avoidance,
+        def:peps_dual_path_graph_walk}
+    Encode $p$ as a graph walk and use the complementary detour. Every
+    native graph edge has a corresponding direction label, so decode
+    the detour as $q$. Its displacement equals the endpoint coordinate
+    difference plus the period times each seam crossing number.
+    Equal seam crossing numbers therefore give equal displacements.
+\end{proof}
