@@ -90,3 +90,85 @@ operator on each side plus the bulk operator.
     Lemma~\ref{thm:alvv_bulk_cut_polynomial_rank} gives
     (\ref{eq:alvv_two_window_interior_cut_rank}).
 \end{proof}
+
+\section{The Chebyshev projector of a two-window Hamiltonian}
+
+The spectral properties of the Chebyshev filter hold for every self-adjoint
+operator, and the rank estimates hold for every polynomial of bounded degree
+in a two-window family. Applied to one and the same polynomial of the actual
+two-window Hamiltonian, they give the four items of Theorem~4.2
+of~\cite{Arad2016RigorousRG}.
+
+\begin{lemma}[The Chebyshev projector at two cuts]
+    \label{thm:alvv_two_window_chebyshev_projector}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_two_window_chebyshev_spectral_projector}
+    \leanok
+    \uses{thm:chain_two_window_polynomial_rank,
+        thm:alvv_two_window_interior_cut_rank}
+    Let $L,q,\ell,a,b$ be natural numbers with $\ell\ge1$, $a+2\ell\le b$ and
+    $b+2\ell\le L-1$, and let $F_\alpha$ be the two-window family of
+    Lemma~\ref{thm:chain_two_window_polynomial_rank}. Suppose that
+    $H=\sum_\alpha F_\alpha$ is Hermitian and that all its eigenvalues are at
+    most $u$. Let $\eta_0<\eta_1\le u$, put $\gamma=\eta_1-\eta_0$, let
+    $k\ge1$, and put
+    \begin{align}
+        \Delta & =4\exp\Bigl(-4k\sqrt{\gamma/(u-\eta_0)}\Bigr).
+        \label{eq:alvv_two_window_chebyshev_delta}
+    \end{align}
+    There is a real polynomial $p$ of degree $k$ with $p(\eta_0)=1$ such that
+    $K=p(H)$ has the following properties.
+    \begin{enumerate}
+        \item With respect to an orthonormal eigenbasis $(v_j)$ of $H$,
+              $Hv_j=\lambda_jv_j$ and $Kv_j=p(\lambda_j)v_j$; moreover
+              $p(\lambda_j)\ge1$ if $\lambda_j\le\eta_0$ and
+              $p(\lambda_j)^2\le\Delta$ if $\lambda_j\ge\eta_1$.
+        \item For every eigenvalue $\lambda_j\le\eta_1$,
+              \begin{align}
+                  p(\lambda_j) & \ge1-\frac{k\,|\lambda_j-\eta_0|}
+                  {\sqrt{\gamma(u-\eta_0)}}.
+                  \label{eq:alvv_two_window_chebyshev_slope}
+              \end{align}
+        \item For $\delta\in\{0,1\}$ and $J=[a+\ell+\delta,b+\ell+1)$,
+              \begin{align}
+                  \operatorname{OSR}_{J\mid J^c}(K)
+                   & \le(qk)^{17(\ell+\lfloor k/(2\ell)\rfloor)}.
+                  \label{eq:alvv_two_window_chebyshev_rank}
+              \end{align}
+        \item At a cut $[0,c)\mid[c,L)$ inside one of the three bulk regions,
+              in the sense of
+              Lemma~\ref{thm:alvv_two_window_interior_cut_rank}, at which
+              the bulk operator of that region has operator Schmidt rank at
+              most $B$, the operator Schmidt rank of $K$ is at most
+              $(B+2)^{k+1}$.
+    \end{enumerate}
+    This is Theorem~4.2 of~\cite{Arad2016RigorousRG} with $u$ in place of
+    $\|H\|$, which is one admissible choice. Following
+    \cite{gap:alvv16_spectral_projector_boundary}, the spectral conditions
+    are closed at $\eta_0$ and $\eta_1$; positivity of $K$ is not asserted,
+    since the unsquared filter need not be positive
+    \cite{gap:alvv16_chebyshev_filter_positivity}; the printed decrease
+    $O(k|\lambda-\eta_0|\sqrt\Delta/(\gamma\|H\|))$ near $\eta_0$ fails for
+    large $k$ and is replaced by (\ref{eq:alvv_two_window_chebyshev_slope}),
+    valid on the whole range $\lambda\le\eta_1$
+    \cite{gap:alvv16_chebyshev_near_ground_slope}; and the count in
+    (\ref{eq:alvv_two_window_chebyshev_rank}) retains the additional ordered-gap
+    term of \cite{gap:aklv13_interpolation_and_word_count}. The bond dimensions
+    of a matrix-product-operator representation of $K$ and the cost of
+    computing it are separate assertions.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_two_window_polynomial_rank,
+        thm:alvv_two_window_interior_cut_rank}
+    Let $p$ be the normalized Chebyshev polynomial of degree $k$ for the
+    interval $[\eta_0,\eta_1]$ and the upper bound $u$ given by
+    \cite[``The Chebyshev filter near the normalization point'']
+    {QICLean2026Blueprint}. Matrices and operators on Euclidean space
+    correspond by a star-algebra isomorphism, which commutes with polynomial
+    evaluation, so $p(H)$ is the operator of that statement. Its parameter
+    is $(2e^{-2k\sqrt{\gamma/(u-\eta_0)}})^2$, which equals
+    (\ref{eq:alvv_two_window_chebyshev_delta}); this gives the first two
+    items. The complexified polynomial still has degree $k$, so
+    Lemma~\ref{thm:chain_two_window_polynomial_rank} gives
+    (\ref{eq:alvv_two_window_chebyshev_rank}), and
+    Lemma~\ref{thm:alvv_two_window_interior_cut_rank} gives the last item.
+\end{proof}

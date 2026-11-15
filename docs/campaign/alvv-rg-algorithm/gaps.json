@@ -145,6 +145,28 @@
       "plan": "The unsquared filter is proved to fix the ground space of any dimension, to be at least one below the ground energy, and to approximate the ground-space projection within 2 exp(−2<i>n</i>√((<i>b</i> − <i>a</i>)/(<i>u</i> − <i>a</i>)))."
     },
     {
+      "id": "docs/paper-gaps/alvv16_chebyshev_near_ground_slope.tex",
+      "repo": "QICLean",
+      "kind": "error",
+      "status": "resolved",
+      "paper": "alvv",
+      "result": "Theorem 4.2, the filter near the ground energy",
+      "issue": 9845,
+      "stage": "al:2",
+      "prs": {
+        "QICLean": [
+          1030
+        ]
+      },
+      "title": "The slope of the Chebyshev filter near the ground energy",
+      "summary": "The printed lower bound for the filter just above the ground energy fails for large degree; a bound with the correct slope holds on the whole window below the excited cutoff and is proved, and is joined with the rank estimates at the two cuts for the actual two-window Hamiltonian.",
+      "context": "Item 2 of Theorem 4.2 says that the normalized Chebyshev filter of degree <i>k</i> stays close to one on eigenvalues slightly above η<sub>0</sub>, so that a viable subspace for a slightly larger window is not damaged.",
+      "claims": "Theorem 4.2 (lines 822–824 of the source) asserts <i>P</i><sub><i>k</i></sub>(λ) ≥ 1 − <i>O</i>(<i>k</i>|λ − η<sub>0</sub>|√Δ/(γ‖<i>H</i>‖)) for λ ≤ η<sub>0</sub> + γ/<i>k</i>.",
+      "found": "The proof omits the exponential growth of the derivative of <i>T</i><sub><i>k</i></sub> outside [−1, 1]. At λ = η<sub>0</sub> + γ/<i>k</i> the filter is at most 2 exp(−√(γ/(‖<i>H</i>‖ − η<sub>0</sub>))), independent of <i>k</i>; for η<sub>0</sub> = 0, η<sub>1</sub> = 1 and ‖<i>H</i>‖ = 2 this is below 0.99, while the printed bound tends to one.",
+      "impact": "None for the paper's later uses, which only need the filter to be at least one on the target window and small above η<sub>1</sub>.",
+      "plan": "The bound <i>P</i><sub><i>k</i></sub>(λ) ≥ 1 − <i>k</i>|λ − η<sub>0</sub>|/√(γ(<i>u</i> − η<sub>0</sub>)) is proved for every eigenvalue λ ≤ η<sub>1</sub>. TNLean states all four items of Theorem 4.2 for one polynomial of the actual two-window Hamiltonian, with this slope and with the rank estimates at the two cuts and inside the bulk regions."
+    },
+    {
       "id": "docs/paper-gaps/alvv16_low_energy_family_buffers.tex",
       "kind": "narrower",
       "status": "open",
