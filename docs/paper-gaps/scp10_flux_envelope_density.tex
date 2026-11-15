@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Flux Vacuum Density inside an Admissible Physical Envelope}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Theorem 6.9 and Lemma 6.14, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2199--2214,
+compare the local physics away from flux endpoints with the vacuum.
+An endpoint-free annulus can detect an enclosed endpoint, so absence of
+endpoints from the observed sites alone is insufficient.
+
+The theorem
+\leanid{TNLean.PEPS.IsGIsometric.torusFlux_normalized_density_eq_vacuum_of_subset_isSimplyConnected}
+extends the explicit native density theorem to every observation $R$
+contained in an admissible physical envelope $S$. Only $S$ is required
+to have connected induced graph and simply connected closed-cell realization.
+Its computed four-corner forbidden dual set must separately have simply
+connected realization, and both path endpoints must lie outside that set.
+Both periods are at least three and the tensor is regular group-isometric
+for a finite group. Noncentral insertion elements and arbitrary winding
+are allowed. Every hypothesis of the native envelope theorem is preserved.
+
+The smaller region $R$ can be disconnected, have holes or be empty.
+Its normalized density is obtained by the actual partial trace of the
+derived density on $S$. Trace preservation gives the same normalization
+scalar, and nonvanishing of the coefficient vector proves both cuts on $R$
+nonzero. No marginal equality or nonzero-cut witness is supplied.
+The generic matrix statement is
+\leanid{TNLean.PEPS.regionPhysicalCutMatrix_normalized_reduced_eq_of_subset}.
+
+This sufficient condition does not classify all admissible observations.
+For an annulus surrounding an endpoint, filling its hole into an envelope
+can include that endpoint in the forbidden dual set. The envelope hypotheses
+then fail, consistently with the Wilson-loop obstruction. No theorem here
+asserts that endpoint exclusion alone gives an admissible envelope or
+classifies restricted homotopy. Unnormalized reduced matrices and global
+winding states are not equated with vacuum. The broader source wording
+remains open under \ghissue{8703}; \ghissue{8947} is unchanged.
+\end{document}
