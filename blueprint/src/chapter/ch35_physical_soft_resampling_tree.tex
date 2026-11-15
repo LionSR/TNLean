@@ -172,7 +172,8 @@ dependence on the gap, and no running-time estimate is asserted.
 
 \begin{lemma}[Energy induction on a successful resampling tree]
     \label{thm:successful_tree_energy_induction}
-    \lean{TNLean.MPS.AreaLaw.ALVV.exists_successful_tree_energy_induction}\leanok
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_successful_tree_energy_induction,
+        TNLean.MPS.AreaLaw.ALVV.IsTerminalRitzEnergyAssignment}\leanok
     \uses{lem:root_energy_node_relation_assignment,
         lem:selected_soft_terminal_node_energy,
         def:canonical_interval_resampling_good}
@@ -208,7 +209,8 @@ dependence on the gap, and no running-time estimate is asserted.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:root_energy_node_relation_assignment,
-        lem:selected_soft_terminal_node_energy}
+        lem:selected_soft_terminal_node_energy,
+        lem:adjacent_interval_energy_merge,thm:actual_adjacent_interval_merge}
     On the success event every listed interval is $3/200$-viable and
     carries its literal history; short children are the full local space.
     The children of a listed interval are short or listed, so their merge
@@ -239,7 +241,8 @@ dependence on the gap, and no running-time estimate is asserted.
     running time is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement}
+    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement,
+        lem:full_interval_viability}
     On the success event the root is $3/200$-viable on the whole chain, which
     is $3/200$-closeness of the same space in chain coordinates, and its
     dimension is at most $\mathrm{count}$ for every seed. Apply the same-root
