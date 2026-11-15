@@ -437,7 +437,8 @@ noncomputable def dagger : FusionData F where
 /-- The scalars $\zeta_{g,h}$ of `eq:defzeta` compare the daggered choice of fusion
 tensors with the original one. -/
 theorem daggerZeta_eq_relativeScalar :
-    fd.daggerZeta hF hc = fun p ↦ ((fd.dagger hF hc).relativeScalar fd p).toMul :=
+    fd.daggerZeta hF hc = fun p ↦ ((TNLean.Algebra.scalarRepresentationEquiv G).symm
+      ((fd.dagger hF hc).relativeScalar fd p)).toMul :=
   rfl
 
 /-- Fusion tensors of equal pairs of group elements agree after the bond

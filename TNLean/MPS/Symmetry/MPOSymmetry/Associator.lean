@@ -494,15 +494,16 @@ Source: the scalar gauge freedom of the fusion tensors, arXiv:2502.20257,
 `F^> ↦ β F^>` and `F^< ↦ β⁻¹ F^<`. -/
 noncomputable def relativeScalar (fd fd' : FusionData F) :
     G × G → Rep.ofMulDistribMulAction G ℂˣ := fun p ↦
-  Additive.ofMul (MPSTensor.dressedScalar
-    (mulTensor (F.tensor p.1) (F.tensor p.2)).toMPSTensor (fd.V p.1 p.2) (fd'.V p.1 p.2))
+  scalarRepresentationEquiv G (Additive.ofMul (MPSTensor.dressedScalar
+    (mulTensor (F.tensor p.1) (F.tensor p.2)).toMPSTensor (fd.V p.1 p.2) (fd'.V p.1 p.2)))
 
 /-- Two choices of fusion tensors differ, against long words, by the scalar
 `relativeScalar`. -/
 theorem isDressedProportional_relativeScalar (hF : F.IsNormalRepresentation)
     (fd fd' : FusionData F) (g h : G) :
     MPSTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-      (fd.V g h) (fd'.V g h) ((fd.relativeScalar fd' (g, h)).toMul) := by
+      (fd.V g h) (fd'.V g h) (((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g,
+        h))).toMul) := by
   have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (fd.V g h) (fd'.V g h) z :=
     (fd.isReduction g h).exists_isDressedProportional (fd'.isReduction g h)
@@ -514,7 +515,8 @@ theorem isDressedProportional_relativeScalar (hF : F.IsNormalRepresentation)
 fusion tensors, then `ω'(g,h,k) = β(g,hk) β(h,k) / (β(g,h) β(gh,k)) ω(g,h,k)`. -/
 theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionData F) :
     fd'.associatorScalar =
-      ScalarThreeCochain.fusionGauge (fun p ↦ (fd.relativeScalar fd' p).toMul)
+      ScalarThreeCochain.fusionGauge (fun p ↦ ((scalarRepresentationEquiv G).symm
+        (fd.relativeScalar fd' p)).toMul)
         fd.associatorScalar := by
   funext g h k
   have hβ := isDressedProportional_relativeScalar hF fd fd'
@@ -523,22 +525,25 @@ theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionDat
     fun N hN a b ↦ hF.operator_mul a b N hN
   have hleft : MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
       (fd.leftV g h k) (fd'.leftV g h k)
-      ((fd.relativeScalar fd' (g, h)).toMul * (fd.relativeScalar fd' (g * h, k)).toMul) :=
+      (((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g, h))).toMul *
+        ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g * h, k))).toMul) :=
     (((hβ g h).mulTensor_kronId (F.tensor k)).mul_left (fd.V (g * h) k)).trans
       ((hβ (g * h) k).pullback ((fd'.isReduction g h).mulTensor_kronId (F.tensor k))
         (sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
           simp only [mpo_mulTensor, ← hS N hN]))
   have hright : MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
       (fd.rightV g h k) (fd'.rightV g h k)
-      ((fd.relativeScalar fd' (h, k)).toMul * (fd.relativeScalar fd' (g, h * k)).toMul) :=
+      (((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (h, k))).toMul *
+        ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g, h * k))).toMul) :=
     ((((hβ h k).mulTensor_idKron (F.tensor g)).mul_left (fd.V g (h * k))).trans
       ((hβ g (h * k)).pullback ((fd'.isReduction h k).mulTensor_idKron (F.tensor g))
         (sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
           simp only [mpo_mulTensor, ← hS N hN]))).of_intertwine
       (mulTensorAssocMatrix_mul_invMatrix _ _ _) (mulTensorAssocInvMatrix_mul_matrix _ _ _)
       (fun i ↦ mulTensor_mul_assocMatrix _ _ _ i.divNat i.modNat) |>.mul_left _
-  have hne : (((fd.relativeScalar fd' (h, k)).toMul *
-      (fd.relativeScalar fd' (g, h * k)).toMul : ℂˣ) : ℂ) ≠ 0 :=
+  have hne : ((((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (h, k))).toMul *
+      ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g, h * k))).toMul : ℂˣ) : ℂ) ≠
+        0 :=
     Units.ne_zero _
   have key := eq_omega_of_isAssociator (fd := fd) hF
     ((hleft.trans (isAssociator_omega (fd := fd') hF g h k)).trans (hright.symm (by
@@ -552,14 +557,15 @@ theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionDat
 associators (arXiv:2502.20257, `eq:omegagauge`, lines 1541--1545). -/
 theorem d₂₃_relativeScalar (hF : F.IsNormalRepresentation) (fd fd' : FusionData F) :
     groupCohomology.d₂₃ (Rep.ofMulDistribMulAction G ℂˣ) (fd.relativeScalar fd') =
-      fun p ↦ Additive.ofMul
-        (fd'.associatorScalar p.1 p.2.1 p.2.2 / fd.associatorScalar p.1 p.2.1 p.2.2) := by
+      fun p ↦ scalarRepresentationEquiv G (Additive.ofMul
+        (fd'.associatorScalar p.1 p.2.1 p.2.2 / fd.associatorScalar p.1 p.2.1 p.2.2)) := by
   funext ⟨g, h, k⟩
+  apply (scalarRepresentationEquiv G).symm.injective
   apply Additive.toMul.injective
-  change (fd.relativeScalar fd' (h, k)).toMul /
-      (fd.relativeScalar fd' (g * h, k)).toMul *
-      (fd.relativeScalar fd' (g, h * k)).toMul /
-      (fd.relativeScalar fd' (g, h)).toMul = _
+  change ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (h, k))).toMul /
+      ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g * h, k))).toMul *
+      ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g, h * k))).toMul /
+      ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' (g, h))).toMul = _
   rw [omega_eq_fusionGauge hF fd fd']
   simp [ScalarThreeCochain.fusionGauge, ScalarThreeCochain.coboundary,
     div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
@@ -569,7 +575,8 @@ theorem d₂₃_relativeScalar (hF : F.IsNormalRepresentation) (fd fd' : FusionD
 lines 1541--1546). -/
 theorem omega_cohomologousTo (hF : F.IsNormalRepresentation) (fd fd' : FusionData F) :
     ScalarThreeCochain.CohomologousTo fd'.associatorScalar fd.associatorScalar :=
-  ⟨fun p ↦ (fd.relativeScalar fd' p).toMul, (omega_eq_fusionGauge hF fd fd').symm⟩
+  ⟨fun p ↦ ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd' p)).toMul,
+    (omega_eq_fusionGauge hF fd fd').symm⟩
 
 /-- For an exact representation by simple injective tensors, `ω` is a
 three-cocycle (arXiv:2502.20257, `eq:3-cocycle`). -/

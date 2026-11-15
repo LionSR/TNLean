@@ -93,8 +93,11 @@ theorem isDressedProportional_rescale (fd : FusionData F) (β : ScalarCocycle G)
 
 /-- Rescaling the fusion tensors by `β` is compared to the original choice by `β`. -/
 theorem relativeScalar_rescale (hF : F.IsNormalRepresentation) (fd : FusionData F)
-    (β : ScalarCocycle G) : fd.relativeScalar (fd.rescale β) = fun p ↦ Additive.ofMul (β p) := by
+    (β : ScalarCocycle G) :
+    fd.relativeScalar (fd.rescale β) = fun p ↦ scalarRepresentationEquiv G (Additive.ofMul (β
+      p)) := by
   funext ⟨g, h⟩
+  apply (scalarRepresentationEquiv G).symm.injective
   apply Additive.toMul.injective
   apply Units.ext
   exact (isDressedProportional_relativeScalar hF fd (fd.rescale β) g h).eq_of_forall_exists_ne_zero
@@ -174,7 +177,8 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (fd fd' : FusionData F) (ad ad' : BlockActionData F A) :
     ad'.lSymbol fd' =
-      LSymbol.gauge (fun p ↦ (fd.relativeScalar fd' p).toMul) (ad.relativeScalar ad')
+      LSymbol.gauge (fun p ↦ ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd'
+        p)).toMul) (ad.relativeScalar ad')
         (ad.lSymbol fd) := by
   funext x g h
   have hγ := isDressedProportional_relativeScalar hA hperm ad ad'
@@ -197,7 +201,8 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
   -- the tree fusing `g` with `h` and then acting
   have hfuse : MPSTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
-      (ad.fuseV fd g h x) (ad'.fuseV fd' g h x) ((fd.relativeScalar fd' (g, h)).toMul *
+      (ad.fuseV fd g h x) (ad'.fuseV fd' g h x) (((scalarRepresentationEquiv G).symm
+        (fd.relativeScalar fd' (g, h))).toMul *
         ad.relativeScalar ad' (g * h) x) := by
     have hSameB : MPSTensor.SameMPV₂Pos
         (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
