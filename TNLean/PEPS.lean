@@ -368,6 +368,7 @@ import TNLean.PEPS.TorusAbsorbedCovariance
 import TNLean.PEPS.TorusActualHorizontalFluxMove
 import TNLean.PEPS.TorusActualPlaquetteVacancy
 import TNLean.PEPS.TorusActualRouteFluxMove
+import TNLean.PEPS.TorusAnnularFluxObstruction
 import TNLean.PEPS.TorusArcWindowFundamentalTheorem
 import TNLean.PEPS.TorusArcWindowGaugeExistence
 import TNLean.PEPS.TorusAveragingGInjectiveSite
