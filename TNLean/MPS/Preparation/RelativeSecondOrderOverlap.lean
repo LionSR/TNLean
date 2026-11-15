@@ -21,6 +21,11 @@ the limiting mixed transfer is zero. Its `M`-th power has norm of order `δ^M`, 
 quadratic for `M ≥ 2`; the smallness condition already supplies the needed contraction.
 No quadratic absolute-trace estimate for `M = 1` is asserted.
 
+`exists_norm_relative_row_overlap_sub_ite_le_exp_sq` combines this estimate with the
+relative positive-part rate. For each pair of blocks, its constants and block-length
+threshold precede the arbitrary nonzero complex copy weights, including weights of
+different moduli and repeated blocks.
+
 This is a project refinement of arXiv:2307.01696, Supplemental Material, Lemma 1′(ii),
 eq. `eq:fid_err_gen_non_normal`. It does not assert a quadratic norm estimate for the
 positive polar factor itself.
@@ -244,5 +249,72 @@ theorem exists_norm_relative_row_overlap_sub_ite_le_sq
     have hG := hrow j j'
     rw [relativeRowLimit_of_ne hι hdisj μ q σ hjj, sub_zero] at hG
     simpa only [ite_eq_right hjj, sub_zero] using hgen _ δ M hG hM hsmall
+
+/-- **Spectral rate of the relative-row overlaps.** For normal left-canonical blocks
+with normalized positive definite fixed points and a common strict spectral bound for
+the diagonal and mixed transfer maps, the relative-row overlap differs from its limit
+by at most `C y exp(C y)`, where `y = M exp(-2γ q/ξ)`, once `q ≥ q₀`, `q ≠ 0`,
+`M ≥ 2` and `C y < 1`. Both `C` and `q₀` are independent of the nonzero complex copy
+weights; no lower bound on their moduli or their power sums is imposed.
+
+This is an intermediate estimate for the corrected multiplicity state and corrected
+mixed-transfer rate of arXiv:2307.01696, Supplemental Material, Lemma 1′(ii),
+eq. `eq:fid_err_gen_non_normal`. It does not assert a normalized-state error bound or
+an estimate for `M = 1`. The strict exponential-base hypothesis excludes the degenerate
+convention `correlationLength 0 = 0`. -/
+theorem exists_norm_relative_row_overlap_sub_ite_le_exp_sq
+    (hι : ∀ j k, Function.Injective (ι j k))
+    (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' →
+      ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
+    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
+    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ}
+    (hσ : ∀ j, (σ j).PosDef) (htr : ∀ j, (σ j).trace = 1)
+    (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
+    {lam₂ : ℂ} (hl : ‖lam₂‖ < 1)
+    (hlam : ∀ j μ', Module.End.HasEigenvalue (Kraus.transferMap (Aj j)) μ' →
+      μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
+    (hmix : ∀ j j', j ≠ j' → ∀ μ',
+      Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' → ‖μ'‖ ≤ ‖lam₂‖)
+    {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1)
+    (hx1 : Real.exp (-γ / correlationLength lam₂) < 1) (j j' : Fin b) :
+    ∃ C : ℝ, 0 < C ∧ ∃ q₀ : ℕ, ∀ (μ : CopyWeights b m) (q : ℕ),
+      q₀ ≤ q → q ≠ 0 → ∀ M : ℕ, 2 ≤ M →
+      let y := (M : ℝ) * Real.exp (-(2 * γ) * q / correlationLength lam₂)
+      C * y < 1 →
+      ‖mpvOverlap (ofPhysicalMatrixLM
+          (relativeRow (repeatedBlockSum Aj ι μ) ι μ q j j'))
+          (fixedPointTensor (σ j)) M - (if j = j' then 1 else 0)‖ ≤
+        C * y * Real.exp (C * y) := by
+  classical
+  obtain ⟨K, hK, q₀, hrow⟩ := exists_norm_relativeRow_sub_le hι hdisj hN hA hσ htr hfix
+    hl hlam hmix hγ0 hγ hx1
+  obtain ⟨C₀, hC₀, hgen⟩ := exists_norm_relative_row_overlap_sub_ite_le_sq hι hdisj σ
+    (fun k => (hσ k).posSemidef) htr hfix j j'
+  refine ⟨C₀ * K ^ 2 + 1, by positivity, q₀, fun μ q hq hq0 M hM => ?_⟩
+  dsimp only
+  intro hsmall
+  let δ := K * Real.exp (-γ / correlationLength lam₂) ^ q
+  let y := (M : ℝ) * Real.exp (-(2 * γ) * q / correlationLength lam₂)
+  have hy0 : 0 ≤ y := by positivity
+  have hC : C₀ * K ^ 2 ≤ C₀ * K ^ 2 + 1 := by linarith
+  have hy : (M : ℝ) * δ ^ 2 = K ^ 2 * y := by
+    dsimp only [δ, y]
+    rw [Real.exp_neg_mul_div_eq_pow, exp_neg_two_mul_div_correlationLength,
+      mul_pow, ← pow_mul, ← pow_mul, mul_comm q 2]
+    ring
+  have hsmall' : C₀ * (M * δ ^ 2) < 1 := by
+    rw [hy]
+    calc
+      _ = (C₀ * K ^ 2) * y := by ring
+      _ ≤ (C₀ * K ^ 2 + 1) * y := mul_le_mul_of_nonneg_right hC hy0
+      _ < 1 := hsmall
+  have h := hgen μ q hq0 δ M hM (hrow μ q hq hq0).2 hsmall'
+  rw [hy] at h
+  refine h.trans ?_
+  calc
+    _ = (C₀ * K ^ 2) * y * Real.exp ((C₀ * K ^ 2) * y) := by ring_nf
+    _ ≤ (C₀ * K ^ 2 + 1) * y * Real.exp ((C₀ * K ^ 2 + 1) * y) := by
+      have h0 : 0 ≤ C₀ * K ^ 2 := by positivity
+      gcongr
 
 end MPSTensor

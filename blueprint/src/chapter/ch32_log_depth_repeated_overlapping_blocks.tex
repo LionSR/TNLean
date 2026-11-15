@@ -278,6 +278,33 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     smallness condition.
 \end{proof}
 
+% Draft: the new spectral-rate declaration still requires Lean elaboration.
+% This intermediate result does not settle thm:ldp_approximation_error_general.
+\begin{lemma}[Spectral rate of the relative-row overlaps]
+    \label{lem:ldp_relative_overlap_spectral_second_order}
+    \lean{MPSTensor.exists_norm_relative_row_overlap_sub_ite_le_exp_sq}
+    \uses{lem:ldp_relative_positive_part, lem:ldp_relative_overlaps_second_order}
+    Under the hypotheses of Lemma~\ref{lem:ldp_relative_positive_part}(3), suppose
+    $e^{-\gamma/\xi}<1$. For each pair $j,j'$ there are $C_*>0$ and $q_0$ such that,
+    for every choice of nonzero complex copy weights, every $q\geq\max(q_0,1)$,
+    and every $M\geq2$ with $C_*y<1$, where $y=Me^{-2\gamma q/\xi}$,
+    \begin{align*}
+        \left|\braket{\phi_M(F_j)}{\phi_M(H_{jj'})}-\delta_{jj'}\right|
+            \leq C_*y\,e^{C_*y}.
+    \end{align*}
+    Here $H_{jj'}=L_j^\dagger PC^{-1}L_{j'}$ and $F_j$ is the fixed-point tensor
+    of $\rho_j$. The constants do not depend on the copy weights.
+\end{lemma}
+\begin{proof}
+    \uses{lem:ldp_relative_positive_part, lem:ldp_relative_overlaps_second_order}
+    Lemma~\ref{lem:ldp_relative_positive_part}(3) bounds every relative block by
+    $\delta=Ke^{-\gamma q/\xi}$, uniformly in the weights beyond a threshold $q_0$.
+    If $C_0$ is the constant in Lemma~\ref{lem:ldp_relative_overlaps_second_order},
+    choose $C_*=C_0K^2+1$. Then $M\delta^2=K^2y$ and
+    $C_0M\delta^2\leq C_*y<1$. Applying that lemma and increasing the coefficient
+    from $C_0K^2$ to $C_*$ gives the asserted estimate.
+\end{proof}
+
 \begin{lemma}[Approximation error for repeated overlapping blocks]
     \label{thm:ldp_approximation_error_repeated_overlapping}
     \lean{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum,

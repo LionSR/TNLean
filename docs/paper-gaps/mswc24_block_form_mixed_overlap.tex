@@ -517,10 +517,35 @@ $\lvert\mu_j\rvert^N$ for multiplicity one; with these coefficients the bounds a
 (S7) and weights of any phase \cite{gap:mswc24_repeated_block_corrected_state}. For multiplicity
 one and weight one the rate is also formalized at second order,
 (\ref{eq:mswc24_mixed_second_order}), which is sharp up to $\gamma<1$. The second-order rate for
-weights of different moduli and for blocks with multiplicity is not formalized: the second-order
-argument above uses the Lipschitz bound of the square root and the unit vectors $\iota(P)$, and
-for blocks of smaller weight the Gram matrices converge to a limit that is not bounded below on
-those blocks.
+weights of different moduli and for blocks with multiplicity is not yet formalized for the
+normalized approximating state. The relative positive-part and column-normalization estimates
+already remove the small-weight obstruction for the individual relative-row overlaps. Namely,
+write $H_{jj'}=L_j^\dagger PC^{-1}L_{j'}$ and let $F_j$ be the fixed-point tensor of $\sigma_j$.
+The existing second-order overlap estimate gives
+$\lvert\braket{\phi_M(F_j)}{\phi_M(H_{jj'})}-\delta_{jj'}\rvert
+    \leq C_0M\delta^2e^{C_0M\delta^2}$ for $M\geq2$ and $C_0M\delta^2<1$ whenever all relative
+blocks are within $\delta$ of their limits.\footnote{Formal declarations:
+    \leanid{MPSTensor.exists_norm_relativeRow_sub_le} in
+    \doclink{TNLean/MPS/Preparation/RelativePositivePart};
+    \leanid{MPSTensor.relative_diagonal_geometry} in
+    \doclink{TNLean/MPS/Preparation/RelativePolarCompression};
+    \leanid{MPSTensor.exists_norm_relative_row_overlap_sub_ite_le_sq} in
+    \doclink{TNLean/MPS/Preparation/RelativeSecondOrderOverlap}.}
+Substituting $\delta=Ke^{-\gamma q/\xi}$ gives the second-order spectral rate
+$C_*y e^{C_*y}$, $y=Me^{-2\gamma q/\xi}$, for each relative-row overlap beyond a threshold
+$q_0$, with $C_*=C_0K^2+1$ and both constants independent of the nonzero complex copy weights.
+This substitution is written as
+\leanid{MPSTensor.exists_norm_relative_row_overlap_sub_ite_le_exp_sq} in
+\doclink{TNLean/MPS/Preparation/RelativeSecondOrderOverlap}; its Lean elaboration remains
+to be checked. It assumes $e^{-\gamma/\xi}<1$, so it does not treat the convention
+$\xi=0$ at $\lambda_2=0$.
+
+To settle the normalized-state bound, the remaining steps are to combine these estimates
+with $z_j=\sum_{j'}\beta_{j'}w_{jj'}$ and a target-norm estimate relative to
+$\sum_j\lvert\beta_j\rvert^2$, allowing cancellations in the power sums, and to prove a
+separate quadratic projection estimate for $M=1$. The absolute-trace estimate for the
+relative-row overlaps is only quadratic for $M\geq2$; it must not be extended to $M=1$
+without an additional argument. The unrestricted source entry and issue~\#10571 remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
