@@ -126,8 +126,8 @@ theorem detectorTensorWord_eq_smul (u w c : unitary (Matrix α α ℂ)) (ζ : �
         (if 0 < k.val ∧ k.val ≤ m then ζ ^ (k.val - 1) else 1) • 1
       rw [spatialEndpointWord_eq u w c hc hconj]
       by_cases hk : 0 < k.val ∧ k.val ≤ m
-      · simp [f, hk, SubmonoidClass.coe_pow, hscalar, smul_pow]
-      · simp [f, hk]
+      · simp [hk, SubmonoidClass.coe_pow, hscalar, smul_pow]
+      · simp [hk]
     · have h := spatialEndpointWord_eq u 1 1 (Commute.one_left u) (by simp) m k.val
       simp [h, f]
   rw [detectorTensorWord_eq_rectKronecker]
@@ -136,8 +136,7 @@ theorem detectorTensorWord_eq_smul (u w c : unitary (Matrix α α ℂ)) (ζ : �
   congr 1
   change (∏ s : Fin N × Bool, f s) = _
   rw [Fintype.prod_prod_type]
-  simp only [f, Fintype.prod_bool, Bool.false_eq_true, ite_false, ite_true, mul_one]
-  exact prod_cut_phase ζ m N (by omega)
+  simpa [f, Fintype.prod_bool] using prod_cut_phase ζ m N (by omega)
 
 /-- The complete finite tensor detector equals minus the identity at every
 positive even cyclic order, for the existing QICLean clock and shift matrices.
