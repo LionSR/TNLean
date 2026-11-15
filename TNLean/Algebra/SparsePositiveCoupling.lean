@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Convex.Caratheodory
+import Mathlib.Basic.Real.Basic
 import Mathlib.LinearAlgebra.Dimension.Finrank
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
@@ -25,7 +26,7 @@ open scoped BigOperators
 
 namespace SparseCoupling
 
-variable {α β : Type*} [Fintype α] [Fintype β]
+variable {α β : Type*} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
 
 private def rowTotal : ((α → ℝ) × (β → ℝ)) →ₗ[ℝ] ℝ where
   toFun x := ∑ i, x.1 i
@@ -37,13 +38,13 @@ private def colTotal : ((α → ℝ) × (β → ℝ)) →ₗ[ℝ] ℝ where
   map_add' x y := by simp [Finset.sum_add_distrib]
   map_smul' c x := by simp [Finset.mul_sum]
 
-private def atom [DecidableEq α] [DecidableEq β] (ij : α × β) :
+private def atom (ij : α × β) :
     (α → ℝ) × (β → ℝ) := (Pi.single ij.1 1, Pi.single ij.2 1)
 
-private theorem atom_rowTotal [DecidableEq α] [DecidableEq β] (ij : α × β) :
+private theorem atom_rowTotal (ij : α × β) :
     rowTotal (atom ij) = 1 := by simp [rowTotal, atom, Pi.single_apply]
 
-private theorem atom_colTotal [DecidableEq α] [DecidableEq β] (ij : α × β) :
+private theorem atom_colTotal (ij : α × β) :
     colTotal (atom ij) = 1 := by simp [colTotal, atom, Pi.single_apply]
 
 /-- Finite probability lists admit a nonnegative coupling on at most
