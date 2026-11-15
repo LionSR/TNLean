@@ -483,6 +483,7 @@ import TNLean.PEPS.TorusRegionLiftRealization
 import TNLean.PEPS.TorusRegionPeriodicLift
 import TNLean.PEPS.TorusRegionRealization
 import TNLean.PEPS.TorusRegionWalkWinding
+import TNLean.PEPS.TorusRestrictedHomotopyObstruction
 import TNLean.PEPS.TorusRowColumnReductionObstruction
 import TNLean.PEPS.TorusSecondStringPhysicalCrossing
 import TNLean.PEPS.TorusSemiRegularEquivalence

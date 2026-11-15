@@ -1,0 +1,39 @@
+\begin{definition}[A nonabelian dual seam word]
+    \label{def:peps_dual_nonabelian_seam_word}
+    \lean{TNLean.PEPS.torusDualSeamWord}\leanok
+    Choose elements $u,v$ in any test group. Traverse a labelled dual path
+    in order, multiplying by $u$ on eastward horizontal seam crossings,
+    by $v$ on northward vertical seam crossings, and by their inverses
+    on the reverse crossings. This is a homotopy detector, independent
+    of the physical flux insertion assigned to the path.
+\end{definition}
+
+\begin{lemma}[Restricted moves preserve the nonabelian seam word]
+    \label{lem:peps_dual_restricted_seam_word}
+    \lean{TNLean.PEPS.TorusDualHomotopy.seamWord_eq_of_origin_not_mem}\leanok
+    If the allowed swept vertex set excludes the origin, every generated
+    homotopy preserves the seam word for every test group and every
+    choice of its two generators.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_dual_nonabelian_seam_word,def:peps_dual_flux_homotopy}
+    Concatenation multiplies the words, reversal inverts them, and
+    backtracks cancel. A square move interchanges two seam factors only
+    when both are present. That square surrounds the origin and is
+    excluded by hypothesis; every other square has at most one factor.
+\end{proof}
+
+\begin{lemma}[Zero displacement does not classify restricted homotopy]
+    \label{lem:peps_dual_restricted_displacement_obstruction}
+    \lean{TNLean.PEPS.torusDualSquareLoop_obstructs_restricted_completeness}\leanok
+    If a test group has noncommuting elements $u,v$, the dual square loop
+    surrounding the origin has zero lifted displacement, but it cannot
+    be contracted using square moves supported away from that origin.
+    This holds without restrictions on the two torus periods.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_restricted_seam_word,def:peps_dual_flux_displacement}
+    The four displacements sum to zero, while the seam word is
+    $uvu^{-1}v^{-1}\ne1$. The constant path has word $1$, so the preceding
+    invariant rules out the asserted contraction.
+\end{proof}
