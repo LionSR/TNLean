@@ -40,7 +40,7 @@ five attained regional minima, and, for every admissible center triple, a repres
 close to the ground space for which the terminal untrimmed image on the literal history of every
 `0.04`-viable candidate is viable. Supporting ALVV, arXiv:1602.08828v2, `t:alg1`,
 lines 1777--1818. -/
-def PhysicalTerminalCertificate {L q width : ℕ} (ell : ℕ)
+def IsPhysicalTerminalCertificate {L q width : ℕ} (ell : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (t : ℝ) (m D threshold rounds : ℕ) (xiInit g precision Msoft tau Delta mu : ℝ)
     (G : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (rho : ℕ)
@@ -48,63 +48,63 @@ def PhysicalTerminalCertificate {L q width : ℕ} (ell : ℕ)
     (Aops : Fin n → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q)) : Prop :=
   let p := J.val.1
-let r := J.val.2
-let midConfig := interval L p r → Fin q
-let HM := EuclideanSpace ℂ midConfig
-let coords := Entropy.regionTensorCoordinates q (interval L p r)
-∃ a b : ℕ, a + 2 * ell ≤ b ∧ b + 2 * ell ≤ L - 1 ∧
-  p ≤ a + ell ∧ b + ell + 1 ≤ r ∧
-  (interval L p r \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell ∧
-  a + 2 * ell - p ≤ 2 * ell ∧ r - (b + 1) ≤ 2 * ell ∧
-let Sbulk : Finset (Fin 5) := {0, 2, 4}
-let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
-let A := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
-  (fun i : Fin (L - 1) ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
-let Y := ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈
-  ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
-∃ (e : Fin 5 → ℝ) (x : (Fin L → Fin q) → ℂ) (E : ℝ),
-  star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
-  (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ 4 ∧
-∃ W : Fin n → Matrix midConfig midConfig ℂ,
-  Aops = (fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := midConfig) (W i)) ∧
-  let image := canonicalHalfSampledIntervalImage L q p r D threshold rounds Aops xiInit
-  let good := fun S ↦ canonicalHalfSampledIntervalHistory
-    L q p r D threshold rounds (Aops) xiInit S G
-  ∀ (pc : Fin 5 → ℝ)
-    (_hp0 : ∀ j : Fin 5, j ∈ Sbulk → e j - 10 ≤ pc j)
-    (_hp1 : ∀ j : Fin 5, j ∈ Sbulk → pc j ≤ e j),
-    let Fraw := fun j : Fin 5 ↦ (pc j : ℂ) • 1 +
-      cfc (Real.softTruncation t m) (A j - (pc j : ℂ) • 1)
-    let Gsoft := (∑ j, ((if j ∈ Sbulk then Fraw j else A j) - (e j : ℂ) • 1)) + Y
-    ∃ (Ghat : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hGhat : Ghat.IsHermitian),
-      ‖Gsoft - Ghat‖ ≤ precision ∧ ‖Ghat‖ ≤ Msoft + precision ∧
-      let target := Submodule.spectralSpanLE hGhat.eigenvectorBasis hGhat.eigenvalues
-        (E + g / 4)
-      let Tc := target.map coords.toLinearEquiv.toLinearMap
-      E + ∑ j, e j = mu ∧
-      target = Submodule.spectralSpanLE hGhat.eigenvectorBasis hGhat.eigenvalues
-        (E + 3 * g / 4) ∧
-      Module.finrank ℂ target = rho ∧
-      Submodule.IsCloseTo (3 * tau / 200) target G ∧
-      Submodule.IsCloseTo (3 * tau / 200) G target ∧
-      ∀ S : Submodule ℂ HM,
-        Submodule.IsViable 0.04 S (G.map coords.toLinearEquiv.toLinearMap) →
-        ∀ U ∈ good S, Submodule.IsViable (Delta / (91 / 100 : ℝ) ^ 2)
-          (image S U) Tc
+  let r := J.val.2
+  let midConfig := interval L p r → Fin q
+  let HM := EuclideanSpace ℂ midConfig
+  let coords := Entropy.regionTensorCoordinates q (interval L p r)
+  ∃ a b : ℕ, a + 2 * ell ≤ b ∧ b + 2 * ell ≤ L - 1 ∧
+    p ≤ a + ell ∧ b + ell + 1 ≤ r ∧
+    (interval L p r \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell ∧
+    a + 2 * ell - p ≤ 2 * ell ∧ r - (b + 1) ≤ 2 * ell ∧
+  let Sbulk : Finset (Fin 5) := {0, 2, 4}
+  let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
+  let A := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
+    (fun i : Fin (L - 1) ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
+  let Y := ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈
+    ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
+  ∃ (e : Fin 5 → ℝ) (x : (Fin L → Fin q) → ℂ) (E : ℝ),
+    star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
+    (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ 4 ∧
+  ∃ W : Fin n → Matrix midConfig midConfig ℂ,
+    Aops = (fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := midConfig) (W i)) ∧
+    let image := canonicalHalfSampledIntervalImage L q p r D threshold rounds Aops xiInit
+    let good := fun S ↦ canonicalHalfSampledIntervalHistory
+      L q p r D threshold rounds (Aops) xiInit S G
+    ∀ (pc : Fin 5 → ℝ)
+      (_hp0 : ∀ j : Fin 5, j ∈ Sbulk → e j - 10 ≤ pc j)
+      (_hp1 : ∀ j : Fin 5, j ∈ Sbulk → pc j ≤ e j),
+      let Fraw := fun j : Fin 5 ↦ (pc j : ℂ) • 1 +
+        cfc (Real.softTruncation t m) (A j - (pc j : ℂ) • 1)
+      let Gsoft := (∑ j, ((if j ∈ Sbulk then Fraw j else A j) - (e j : ℂ) • 1)) + Y
+      ∃ (Ghat : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (hGhat : Ghat.IsHermitian),
+        ‖Gsoft - Ghat‖ ≤ precision ∧ ‖Ghat‖ ≤ Msoft + precision ∧
+        let target := Submodule.spectralSpanLE hGhat.eigenvectorBasis hGhat.eigenvalues
+          (E + g / 4)
+        let Tc := target.map coords.toLinearEquiv.toLinearMap
+        E + ∑ j, e j = mu ∧
+        target = Submodule.spectralSpanLE hGhat.eigenvectorBasis hGhat.eigenvalues
+          (E + 3 * g / 4) ∧
+        Module.finrank ℂ target = rho ∧
+        Submodule.IsCloseTo (3 * tau / 200) target G ∧
+        Submodule.IsCloseTo (3 * tau / 200) G target ∧
+        ∀ S : Submodule ℂ HM,
+          Submodule.IsViable 0.04 S (G.map coords.toLinearEquiv.toLinearMap) →
+          ∀ U ∈ good S, Submodule.IsViable (Delta / (91 / 100 : ℝ) ^ 2)
+            (image S U) Tc
 
 open Classical in
 /-- The terminal-image certificate of one physical soft family supplies the per-interval
 hypothesis of the energy induction: the middle region with its attained minimum and the exact
 center target. Supporting ALVV, arXiv:1602.08828v2, `t:alg1`, lines 1777--1818. -/
-private theorem terminalCertificate_of_physicalCertificate {L q width ell : ℕ}
+private theorem terminalCertificate_of_isPhysicalTerminalCertificate {L q width ell : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (t : ℝ) (m D threshold rounds : ℕ) (xiInit g precision Msoft tau Delta mu : ℝ)
     (G : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (rho : ℕ) (hrho : Module.finrank ℂ G = rho)
     (J : LongIntervalIndex L width) (n : ℕ)
     (Aops : Fin n → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q)) :
-    PhysicalTerminalCertificate ell h t m D threshold rounds xiInit g precision Msoft tau Delta
+    IsPhysicalTerminalCertificate ell h t m D threshold rounds xiInit g precision Msoft tau Delta
       mu G rho J n Aops →
     let l := J.val.1
     let r := J.val.2
@@ -180,7 +180,7 @@ theorem exists_physical_soft_resampling_tree
     let count := max (q ^ width) (D ^ 2 * threshold)
     ∃ xiInit : ℝ, 0 < xiInit ∧ xiInit ≤ 1 ∧ (xiInit⁻¹) ^ 2 ≤ Cxi * Z ^ Pxi ∧
     ∃ hwidth : 1 ≤ width,
-    let Certificate := PhysicalTerminalCertificate (width := width) ell h t m D threshold
+    let Certificate := IsPhysicalTerminalCertificate (width := width) ell h t m D threshold
       rounds xiInit g precision Msoft tau Delta mu G rho
     ∃ (N : LongIntervalIndex L width → ℕ)
       (F : ∀ J : LongIntervalIndex L width,
@@ -304,7 +304,7 @@ theorem exists_physical_soft_resampling_tree
     (hgap z hz).elim (fun h ↦ h.ge) (fun h ↦ by linarith)
   refine exists_successful_tree_energy_induction (ell := ell) hq0 hwidth h hs h0 h1 g hg t T m D
     hm2 hD htfloor hTfloor Delta (by positivity) mu rounds _ N F xiInit hmu hlow hDelta hR ?_ U hU
-  exact fun J ↦ terminalCertificate_of_physicalCertificate h t m D threshold rounds xiInit g
-    precision Msoft tau Delta mu G rho rfl J (N J) (F J) (hFamilies J).1
+  exact fun J ↦ terminalCertificate_of_isPhysicalTerminalCertificate h t m D threshold rounds
+    xiInit g precision Msoft tau Delta mu G rho rfl J (N J) (F J) (hFamilies J).1
 
 end TNLean.MPS.AreaLaw.ALVV
