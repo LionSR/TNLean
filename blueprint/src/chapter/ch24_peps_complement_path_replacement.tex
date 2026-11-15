@@ -109,3 +109,42 @@
     difference plus the period times each seam crossing number.
     Equal seam crossing numbers therefore give equal displacements.
 \end{proof}
+
+\begin{definition}[Dual plaquettes incident to a physical region]
+    \label{def:peps_physical_forbidden_dual_plaquettes}
+    \lean{TNLean.PEPS.torusIncidentDualPlaquettes}\leanok
+    For a physical observation region $R$, let $B(R)$ consist of dual
+    plaquettes with at least one of their four physical corners in $R$.
+\end{definition}
+
+\begin{lemma}[A detour with no incident physical bond crossings]
+    \label{lem:peps_physical_dual_avoidance}
+    \lean{TNLean.PEPS.exists_torusDualPath_zero_crossings_on_incident}\leanok
+    Let both torus periods be at least three. Suppose the closed-cell
+    realization of $B(R)$ is simply connected and the endpoints of a
+    native dual path $p$ lie outside $B(R)$. There exists a native dual
+    path $q$ with those endpoints and the same lifted displacement, whose
+    signed crossing counts vanish on every physical bond incident to $R$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_simply_connected_dual_avoidance,
+        def:peps_physical_forbidden_dual_plaquettes}
+    Apply the native detour lemma to the computed forbidden plaquettes.
+    All four physical corners of every visited plaquette lie outside $R$.
+    Each step crosses a bond between two corners of one of its endpoint
+    plaquettes. Its contribution to every incident bond count therefore
+    vanishes, and addition of the step counts proves the claim.
+\end{proof}
+
+\begin{lemma}[Identity insertions on incident physical bonds]
+    \label{lem:peps_physical_dual_identity_insertions}
+    \lean{TNLean.PEPS.exists_torusDualPath_trivial_on_incident}\leanok
+    Under the preceding geometric hypotheses, for any group $G$ and
+    $g\in G$ the constructed detour has identity native group insertions
+    on every physical bond incident to $R$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_physical_dual_avoidance}
+    Native insertions are powers of $g$ with the signed crossing counts
+    as exponents. The preceding lemma makes every relevant exponent zero.
+\end{proof}

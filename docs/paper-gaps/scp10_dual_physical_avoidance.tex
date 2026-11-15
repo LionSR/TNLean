@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Native Dual Detours and Physical Bond Avoidance}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Definition 6.13 and Lemma 6.14, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 2180--2214, specify a native
+bond insertion by a dual string and deform it away from an observation.
+
+For a physical vertex set $R$, compute its forbidden dual plaquettes as
+\begin{align}
+    B(R)=\{(x,y):\{(x,y),(x+1,y),(x,y+1),(x+1,y+1)\}\cap R\ne\varnothing\}.
+    \label{eq:physical_avoidance_forbidden}
+\end{align}
+The definition is \leanid{TNLean.PEPS.torusIncidentDualPlaquettes}.
+Assume both torus periods are at least three, the actual closed-cell
+realization of $B(R)$ is simply connected, and the endpoints of a given
+four-labelled dual path $p$ are outside $B(R)$. The theorem
+\leanid{TNLean.PEPS.exists_torusDualPath_zero_crossings_on_incident}
+constructs a path $q$ with the same endpoints and lifted displacement such
+that its signed crossing count is zero on every horizontal or downward
+vertical physical bond with at least one endpoint in $R$.
+
+The detour is derived from the exterior-collar theorem for $B(R)$.
+Its visited plaquettes have all four corners outside $R$. Each native dual
+step crosses a bond between two corners of one of its endpoint plaquettes,
+so it crosses no incident physical bond. Summing these step counts proves
+the assertion, including repeated or negatively oriented crossings.
+Consequently \leanid{TNLean.PEPS.exists_torusDualPath_trivial_on_incident}
+constructs such a path whose actual group insertions are identity on every
+incident physical bond, for any group and insertion element. The group
+need not be abelian; all insertion powers have the same base.
+
+The simple connectedness hypothesis is on the explicitly computed dual
+corner collar $B(R)$. It is not inferred merely from endpoint exclusion
+or from simple connectedness of $R$. In particular no annular observation
+with an enclosed endpoint is covered. The annular Wilson-loop obstruction
+in \path{docs/paper-gaps/scp10_closed_flux_density.tex} continues to rule out
+unrestricted endpoint-free vacuum-density assertions.
+
+This closes the physical-incidence step under the stated collar geometry.
+It does not prove homotopy completeness with forbidden square moves or the
+open-pair vacuum-density equality. The latter still requires a complementary
+physical contraction calculation; identity insertions on the observed side
+alone do not supply it. These obligations remain under \ghissue{8703}.
+The full-lattice Hamiltonian scope of \ghissue{8947} is unchanged.
+\end{document}
