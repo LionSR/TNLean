@@ -107,11 +107,13 @@ private theorem exists_rectLift {a b : X} (p : TorusDualPath a b) :
   induction p with
   | nil =>
     intro x y W H i j ha _ _ _ _
+    letI : Quiver (ℕ × ℕ) := rectDualQuiver W H
     refine ⟨(i, j), by simp, ha, .nil, ?_⟩
     cases ha
     rfl
   | @cons b c p e ih =>
     intro x y W H i j ha hi hiW hj hjH
+    letI : Quiver (ℕ × ℕ) := rectDualQuiver W H
     simp only [Quiver.Path.length_cons] at hi hiW hj hjH
     obtain ⟨z, hz, hb, r, hr⟩ := ih x y W H i j ha
       (by omega) (by omega) (by omega) (by omega)
