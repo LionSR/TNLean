@@ -33,20 +33,17 @@ noncomputable def alternativeRoot : MPSTensor 7 7 :=
     Matrix.single 5 3 1, Matrix.single 5 4 1,
     Matrix.single 6 5 1, Matrix.single 0 6 1]
 
-private theorem alternativeRoot_map (X : Matrix (Fin 7) (Fin 7) ℂ) :
-    Kraus.transferMap alternativeRoot X =
-      Matrix.single 0 0 (X 6 6) +
-      Matrix.single 1 1 ((2 : ℂ)⁻¹ * X 0 0) +
-      Matrix.single 2 2 ((2 : ℂ)⁻¹ * X 0 0) +
-      Matrix.single 3 3 (X 1 1) + Matrix.single 3 4 (X 1 2) +
-      Matrix.single 4 3 (X 2 1) + Matrix.single 4 4 (X 2 2) +
-      Matrix.single 5 5 (X 3 3 + X 4 4) + Matrix.single 6 6 (X 5 5) := by
-  ext a b
+private theorem alternativeRoot_map_apply (X : Matrix (Fin 7) (Fin 7) ℂ)
+    (a b : Fin 7) :
+    (Kraus.transferMap alternativeRoot X) a b =
+      if a = b then
+        ![X 6 6, (2 : ℂ)⁻¹ * X 0 0, (2 : ℂ)⁻¹ * X 0 0,
+          X 1 1, X 2 2, X 3 3 + X 4 4, X 5 5] a
+      else if a = 3 ∧ b = 4 then X 1 2
+      else if a = 4 ∧ b = 3 then X 2 1 else 0 := by
   fin_cases a <;> fin_cases b <;>
-    simp [Kraus.transferMap_apply, alternativeRoot, Fin.sum_univ_succ,
-      Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.single_apply,
-      Complex.invSqrtTwo_mul_self] <;>
-    ring_nf <;> simp [Complex.invSqrtTwo_sq]
+    simp [alternativeRoot, Fin.sum_univ_succ, Matrix.mul_apply, Matrix.single_apply] <;>
+    ring_nf <;> simp [Complex.invSqrtTwo_sq] <;> ring
 
 /-- The seven-letter alternative root is trace preserving. -/
 theorem alternativeRoot_isTP : Kraus.IsTP alternativeRoot := by
@@ -85,12 +82,16 @@ theorem transferMap_square_eq_alternativeRoot_pow :
   rw [pow_two]
   change Kraus.transferMap square X =
     Kraus.transferMap alternativeRoot (Kraus.transferMap alternativeRoot X)
-  simp only [alternativeRoot_map]
   ext a b
-  rw [square_map_apply]
-  fin_cases a <;> fin_cases b <;>
-    norm_num [sector, outputWeight, Fin.sum_univ_succ, Matrix.single_apply,
-      Complex.invSqrtTwo_mul_self] <;> ring
+  rw [square_map_apply, alternativeRoot_map_apply]
+  by_cases hab : a = b
+  · subst b
+    simp only [↓reduceIte]
+    simp_rw [alternativeRoot_map_apply X]
+    fin_cases a <;>
+      norm_num [sector, outputWeight, Fin.sum_univ_succ,
+        Complex.invSqrtTwo_mul_self] <;> ring
+  · simp [hab, alternativeRoot_map_apply]
 
 /-- The nine-letter cyclic-reset square is two-refinable, despite having
 a supplied channel root of Kraus rank ten. A different root of Kraus rank
