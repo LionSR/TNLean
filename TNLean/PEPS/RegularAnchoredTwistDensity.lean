@@ -40,14 +40,14 @@ private theorem normalized_reduced_of_scaled_state
   change ((z : ℂ) • M) * ((z : ℂ) • M).conjTranspose = ρ at h
   simp only [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul] at h
   have hzC : (z : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hz
-  have hk : (z : ℂ) * star (z : ℂ) ≠ 0 := mul_ne_zero hzC (star_ne_zero.mpr hzC)
-  have hraw : M * M.conjTranspose = ((z : ℂ) * star (z : ℂ))⁻¹ • ρ := by
+  have hk : star (z : ℂ) * (z : ℂ) ≠ 0 := mul_ne_zero (star_ne_zero.mpr hzC) hzC
+  have hraw : M * M.conjTranspose = (star (z : ℂ) * (z : ℂ))⁻¹ • ρ := by
     rw [← h, smul_smul, inv_mul_cancel₀ hk, one_smul]
   exact (normalized_reducedMatrix_eq_of_scalar M ρ hρ _ hraw hne).2
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ Δ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
-variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
+variable {G : Type*} [Group G] [Fintype G]
 
 private theorem normalized_reduced_eq_of_common_untwisted
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
@@ -86,7 +86,7 @@ private theorem normalized_reduced_eq_of_common_untwisted
       (M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose) = ρ := by
     have hs : regularTwistedPhysicalCutSuperposition a uB (Pi.single b 1) R =
         regularPhysicalCutState (regularTwistedSite a (uB b)) R := by
-      simp [regularTwistedPhysicalCutSuperposition]
+      cases b <;> simp [regularTwistedPhysicalCutSuperposition, Pi.single_apply]
     have hsne : regularTwistedPhysicalCutSuperposition a uB (Pi.single b 1) R ≠ 0 := by
       rw [hs]
       intro hz
@@ -96,9 +96,7 @@ private theorem normalized_reduced_eq_of_common_untwisted
     obtain ⟨z, hz, hresult⟩ := hnormalize (Pi.single b 1) hsne
     rw [hs] at hresult
     exact normalized_reduced_of_scaled_state _ ρ hρ z hz hb hresult.1
-  have hone : regularTwistedSite a (fun _ => (1 : G)) = a := by
-    ext v η s
-    simp [regularTwistedSite, regularTwistedLabels]
+  have hone := regularTwistedSite_one a
   have htrue := hd true (by simpa only [uB, ↓reduceIte] using hne)
   have hfalse := hd false (by simpa only [uB, Bool.false_eq_true, ↓reduceIte, hone] using hne₀)
   simpa only [uB, Bool.false_eq_true, ↓reduceIte, hone] using htrue.trans hfalse.symm
@@ -151,7 +149,9 @@ theorem regularPhysicalCutMatrix_normalized_reduced_eq_of_untwisted_boundary_com
     obtain ⟨v, w, hadj, hv, hw⟩ := (SimpleGraph.map_adj f T _ _).mp he
     have ht : e.1.1 ∈ S := hv ▸ v.2
     have hh : e.1.2 ∈ S := hw ▸ w.2
-    exact hremove ⟨e, ht, hh⟩ (by simpa only [← hv, ← hw] using hadj)
+    have hv' : (⟨e.1.1, ht⟩ : {v : V // v ∈ S}) = v := Subtype.ext hv.symm
+    have hw' : (⟨e.1.2, hh⟩ : {v : V // v ∈ S}) = w := Subtype.ext hw.symm
+    exact hremove ⟨e, ht, hh⟩ (by rw [hv', hw']; exact hadj)
   have hcut : regularPhysicalCutMatrix (regularTwistedSite a u) R =
       regularPhysicalCutMatrix (regularTwistedSite a (regularVertexGaugeOperators k u)) R := by
     ext σ τ
