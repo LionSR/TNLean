@@ -60,9 +60,16 @@ private theorem flat_cut_eq_closure
   have h := torusBondNetwork_torusBondGauge (leftRegularMatrix G) (fun _ ↦ A)
     (fun _ ↦ hA) (assembleRegionσ R σ τ) k t
   rw [hk] at h
-  dsimp only [torusBondRegularPhysicalCutMatrix, torusGClosure,
-    torusHorizontalClosure, torusVerticalClosure]
-  simpa only [torusBondClosureLabels, apply_ite, map_one] using h.symm
+  have hh : (fun w : X ↦ leftRegularMatrix G ((torusBondClosureLabels u v).1 w)) =
+      torusHorizontalClosure (leftRegularMatrix G) v := by
+    funext w
+    simp [torusBondClosureLabels, torusHorizontalClosure]
+  have hv : (fun w : X ↦ leftRegularMatrix G ((torusBondClosureLabels u v).2 w)) =
+      torusVerticalClosure (leftRegularMatrix G) u := by
+    funext w
+    simp [torusBondClosureLabels, torusVerticalClosure]
+  rw [hh, hv] at h
+  exact h.symm
 
 variable [Fact (2 < width)] [Fact (2 < height)]
 local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
@@ -105,7 +112,9 @@ theorem IsGIsometric.torusClosedFlux_normalized_density_eq_vacuum
     have hd := hρ pairs (fun _ ↦ huv) μ hne
     simpa only [hM] using hd.2.1
   have hvac := hloop 1 (.nil : TorusDualPath a a)
-  exact (hloop g p).trans (by
-    simpa [torusDualFluxLabels, torusFluxPowerLabels] using hvac.symm)
+  have hnil : torusDualFluxLabels (1 : G) (.nil : TorusDualPath a a) = 1 := by
+    ext v <;> simp [torusDualFluxLabels, torusFluxPowerLabels]
+  rw [hnil] at hvac
+  exact (hloop g p).trans hvac.symm
 
 end TNLean.PEPS
