@@ -803,7 +803,9 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \begin{lemma}[Connected coefficient graphs and word spaces]
     \label{thm:periodic_connected_word_span}
     \lean{Matrix.finrank_span_le_wordSpace_add_one,
-        Matrix.finrank_span_le_wordSpace_of_diagonal}
+        Matrix.finrank_span_le_wordSpace_of_diagonal,
+        Matrix.finrank_span_le_wordSpace_add_one_of_nonzero,
+        Matrix.finrank_span_le_wordSpace_of_diagonal_of_nonzero}
     \leanok
     Let $G$ be a connected graph on an index set $I$, let $x_i\in K^n$
     be vectors over a field $K$, and let $f:K^n\to K$ be linear with
@@ -815,6 +817,8 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \end{equation*}
     If $W$ also contains $x_{i_0}x_{i_0}^{\mathsf T}$ for some vertex
     $i_0$, the stronger bound without the final $1$ holds.
+    When $K$ is infinite and $I$ is finite, it suffices to assume that all
+    $x_i$ are nonzero: a suitable $f$ then exists.
 \end{lemma}
 
 \begin{proof}
@@ -826,6 +830,8 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     $\dim\delta_f(W)+1$. Rank-nullity gives the first bound.
     The nonzero diagonal outer product belongs to the kernel of the
     restricted contraction, which gives the stronger bound.
+    Over an infinite field, choose the functional outside the finitely
+    many proper hyperplanes annihilating a coefficient.
 \end{proof}
 
 \begin{lemma}[Exact powers under an annihilating perturbation]

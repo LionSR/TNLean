@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
+import Mathlib.Algebra.Module.Submodule.Union
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 
@@ -43,7 +44,7 @@ private theorem skewContract_vecMulVec {𝕜 n : Type*} [Field 𝕜]
   have hCol : (fun j => x j * y i) = y i • x := by ext j; simp [mul_comm]
   rw [hCol]
   change f (x i • y) - f (y i • x) = _
-  simp only [map_smul, RingHom.id_apply, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
+  simp only [map_smul, Pi.sub_apply, Pi.smul_apply, smul_eq_mul]
   ring
 
 private theorem connected_span_le_image_sup {𝕜 n ι : Type*} [Field 𝕜]
@@ -62,7 +63,9 @@ private theorem connected_span_le_image_sup {𝕜 n ι : Type*} [Field 𝕜]
       · have h' : f (v i) • v j - f (v j) • v i ∈ W.map (skewContract f) :=
           ⟨vecMulVec (v j) (v i), h, skewContract_vecMulVec f _ _⟩
         simpa only [neg_sub] using (W.map (skewContract f)).neg_mem h'
-    have hSub := M.sub_mem (M.smul_mem (f (v j)) hi) (le_sup_left hDelta)
+    have hDeltaM : f (v j) • v i - f (v i) • v j ∈ M :=
+      (show W.map (skewContract f) ≤ M from le_sup_left) hDelta
+    have hSub := M.sub_mem (M.smul_mem (f (v j)) hi) hDeltaM
     have hScaled : f (v i) • v j ∈ M := by
       convert hSub using 1 <;> abel
     exact (Submodule.smul_mem_iff M (hf i)).mp hScaled
@@ -73,10 +76,13 @@ private theorem connected_span_le_image_sup {𝕜 n ι : Type*} [Field 𝕜]
     | @cons i j k hij p ih => exact fun hi => ih (hStep i j hij hi)
   refine Submodule.span_le.mpr ?_
   rintro _ ⟨i, rfl⟩
-  exact hReach i₀ i (hG i₀ i) (le_sup_right (Submodule.subset_span (by simp)))
+  have hBase : v i₀ ∈ M :=
+    (show Submodule.span 𝕜 {v i₀} ≤ M from le_sup_right)
+      (Submodule.subset_span (by simp))
+  exact hReach i₀ i (hG i₀ i) hBase
 
 private theorem connected_span_finrank_le_image_add_one {𝕜 n ι : Type*}
-    [Field 𝕜] [Fintype n]
+    [Field 𝕜] [Finite n]
     (G : SimpleGraph ι) (hG : G.Preconnected) (v : ι → n → 𝕜)
     (i₀ : ι) (f : (n → 𝕜) →ₗ[𝕜] 𝕜) (hf : ∀ i, f (v i) ≠ 0)
     (W : Submodule 𝕜 (Matrix n n 𝕜))
@@ -105,7 +111,7 @@ private theorem range_restrict_skewContract {𝕜 n : Type*} [Field 𝕜]
 of their span by the dimension of its oriented outer-product space plus
 one. The functional is explicitly assumed nonzero on every coefficient;
 this is the path-space ingredient for arXiv:1708.00029, Theorem 4.1. -/
-theorem finrank_span_le_wordSpace_add_one {𝕜 n ι : Type*} [Field 𝕜] [Fintype n]
+theorem finrank_span_le_wordSpace_add_one {𝕜 n ι : Type*} [Field 𝕜] [Finite n]
     (G : SimpleGraph ι) (hG : G.Preconnected) (v : ι → n → 𝕜)
     (i₀ : ι) (f : (n → 𝕜) →ₗ[𝕜] 𝕜) (hf : ∀ i, f (v i) ≠ 0)
     (W : Submodule 𝕜 (Matrix n n 𝕜))
@@ -122,7 +128,7 @@ extra dimension in the word-space bound. This is the scalar-loop rank
 comparison used in the paper argument for arXiv:1708.00029, Theorem 4.1;
 the whole-channel root selector is a separate assertion. -/
 theorem finrank_span_le_wordSpace_of_diagonal {𝕜 n ι : Type*}
-    [Field 𝕜] [Fintype n]
+    [Field 𝕜] [Finite n]
     (G : SimpleGraph ι) (hG : G.Preconnected) (v : ι → n → 𝕜)
     (i₀ : ι) (f : (n → 𝕜) →ₗ[𝕜] 𝕜) (hf : ∀ i, f (v i) ≠ 0)
     (W : Submodule 𝕜 (Matrix n n 𝕜))
@@ -153,5 +159,34 @@ theorem finrank_span_le_wordSpace_of_diagonal {𝕜 n ι : Type*}
   have hRank := r.finrank_range_add_finrank_ker
   rw [range_restrict_skewContract] at hRank
   omega
+
+/-- Over an infinite field, nonzero coefficients on a finite connected
+graph admit the word-space bound without supplying a functional. This is
+the finite coefficient case of the path comparison used for
+arXiv:1708.00029, Theorem 4.1. -/
+theorem finrank_span_le_wordSpace_add_one_of_nonzero {𝕜 n ι : Type*}
+    [Field 𝕜] [Infinite 𝕜] [Finite n] [Finite ι]
+    (G : SimpleGraph ι) (hG : G.Preconnected) (v : ι → n → 𝕜)
+    (i₀ : ι) (hv : ∀ i, v i ≠ 0) (W : Submodule 𝕜 (Matrix n n 𝕜))
+    (hEdge : ∀ i j, G.Adj i j →
+      vecMulVec (v i) (v j) ∈ W ∨ vecMulVec (v j) (v i) ∈ W) :
+    finrank 𝕜 (Submodule.span 𝕜 (Set.range v)) ≤ finrank 𝕜 W + 1 := by
+  obtain ⟨f, hf⟩ := Module.exists_dual_forall_apply_ne_zero v hv
+  exact finrank_span_le_wordSpace_add_one G hG v i₀ f hf W hEdge
+
+/-- Over an infinite field, a finite connected coefficient graph with a
+diagonal outer product gives the word-space bound without a functional
+hypothesis. This is the scalar-loop comparison in the paper argument for
+arXiv:1708.00029, Theorem 4.1; it is not a whole-channel selector. -/
+theorem finrank_span_le_wordSpace_of_diagonal_of_nonzero {𝕜 n ι : Type*}
+    [Field 𝕜] [Infinite 𝕜] [Finite n] [Finite ι]
+    (G : SimpleGraph ι) (hG : G.Preconnected) (v : ι → n → 𝕜)
+    (i₀ : ι) (hv : ∀ i, v i ≠ 0) (W : Submodule 𝕜 (Matrix n n 𝕜))
+    (hEdge : ∀ i j, G.Adj i j →
+      vecMulVec (v i) (v j) ∈ W ∨ vecMulVec (v j) (v i) ∈ W)
+    (hLoop : vecMulVec (v i₀) (v i₀) ∈ W) :
+    finrank 𝕜 (Submodule.span 𝕜 (Set.range v)) ≤ finrank 𝕜 W := by
+  obtain ⟨f, hf⟩ := Module.exists_dual_forall_apply_ne_zero v hv
+  exact finrank_span_le_wordSpace_of_diagonal G hG v i₀ f hf W hEdge hLoop
 
 end Matrix

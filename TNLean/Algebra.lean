@@ -7,6 +7,7 @@ Authors: TNLean contributors
 -- Do not edit it directly; run the generator instead.
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Algebra
+
 import TNLean.Algebra.AnnihilatingPowerPerturbation
 import TNLean.Algebra.AnticommutingEvenDimension
 import TNLean.Algebra.BinaryCharacterSum

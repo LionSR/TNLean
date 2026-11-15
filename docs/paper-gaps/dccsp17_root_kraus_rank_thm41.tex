@@ -782,7 +782,11 @@ word-space comparison is separately formalized by
 \texttt{TNLean/Algebra/ConnectedWordSpan.lean}. Their hypotheses supply a
 connected graph, a linear functional nonzero on every coefficient, and
 the specified oriented outer products in the word space. They do not
-construct that data from a channel. The whole-channel assertions in this
+construct that data from a channel. Their finite-graph specializations
+\leanid{Matrix.finrank_span_le_wordSpace_add_one_of_nonzero} and
+\leanid{Matrix.finrank_span_le_wordSpace_of_diagonal_of_nonzero} derive the
+functional over an infinite field from nonzero coefficients.
+The whole-channel assertions in this
 subsection remain paper arguments, not Lean theorems.
 
 \section{Explicit bounded roots from a commuting projected semigroup}
