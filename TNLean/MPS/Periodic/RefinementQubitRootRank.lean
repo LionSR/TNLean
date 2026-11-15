@@ -81,6 +81,7 @@ theorem finrank_le_two_of_forall_det_eq_zero_fin_two
   have hDim := Submodule.finrank_mono hLe
   have hTotal : Module.finrank ℂ QubitMatrix = 4 := by simp [Module.finrank_matrix]
   rw [LinearMap.BilinForm.finrank_orthogonal hNondeg, hTotal] at hDim
+  change Module.finrank ℂ S ≤ 4 - Module.finrank ℂ S at hDim
   omega
 
 end Matrix
