@@ -87,6 +87,18 @@ inductive TorusDualHomotopy (R : Set X) :
   | square (x : ZMod width) (y : ZMod height) (h : (x + 1, y + 1) ∈ R) :
       TorusDualHomotopy R (torusDualEastNorth x y) (torusDualNorthEast x y)
 
+/-- A generated homotopy remains valid when its allowed square-move support is enlarged. -/
+theorem TorusDualHomotopy.mono {R S : Set X} {a b : X} {p q : TorusDualPath a b}
+    (h : TorusDualHomotopy R p q) (hRS : R ⊆ S) : TorusDualHomotopy S p q := by
+  induction h with
+  | refl p => exact .refl p
+  | symm h ih => exact ih.symm
+  | trans h k ih ik => exact ih.trans ik
+  | comp h k ih ik => exact ih.comp ik
+  | reverse h ih => exact ih.reverse
+  | backtrack e => exact .backtrack e
+  | square x y hxy => exact .square x y (hRS hxy)
+
 /-- Every generated deformation has an explicitly derived integer potential,
 zero outside the swept vertices. In particular this is a consequence of the
 moves, not a hypothesis defining path equivalence. -/
