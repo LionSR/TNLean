@@ -3,9 +3,11 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import Mathlib.Algebra.Ring.MinimalAxioms
-import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
-import TNLean.MPS.Symmetry.MPOSymmetry.IntegerNIMRep
+module
+
+public import Mathlib.Algebra.Ring.MinimalAxioms
+public import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
+public import TNLean.MPS.Symmetry.MPOSymmetry.IntegerNIMRep
 
 /-!
 # Fusion rings on integer combinations
@@ -18,6 +20,8 @@ integer convolution as an associative product and supplies its Ring instance.
 The carrier depends on the fusion data, so distinct products on the same
 label type do not compete as global Ring instances on raw `Finsupp`.
 -/
+
+@[expose] public section
 
 noncomputable section
 
