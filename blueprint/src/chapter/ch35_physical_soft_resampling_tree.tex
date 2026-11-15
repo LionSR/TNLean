@@ -64,7 +64,8 @@ dependence on the gap, and no running-time estimate is asserted.
 
 \begin{theorem}[A physical corrected soft resampling tree]
     \label{thm:physical_soft_resampling_tree}
-    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_resampling_tree}\leanok
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_resampling_tree,
+        TNLean.MPS.AreaLaw.ALVV.PhysicalTerminalCertificate}\leanok
     Fix $q\ge2$ and $\gamma>0$, and put $g=\min\{\gamma,1\}$.
     There are natural numbers $u\ge2$, $K,C_{\rm count}\ge1$, a positive
     real $C_\xi$ and a natural $P_\xi$, before every chain length and
@@ -130,10 +131,19 @@ dependence on the gap, and no running-time estimate is asserted.
     at every internal cut. The statement includes empty whole chains
     and flat spectra and assumes neither a reference space nor an
     initial matrix product representation.
+
+    Finally, for every seed in $\mathcal G_{0,L}$ the energy induction of
+    Theorem~\ref{thm:successful_tree_energy_induction} holds for these same
+    families: one assignment of one-sided estimates of width $49/16$ at the
+    root and every listed interval, each listed value three below the least
+    eigenvalue of the child-centred soft regional operator compressed to the
+    actual terminal image, with middle window
+    $[a_J+2\ell,b_J+1)$ of the selected geometry.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:physical_soft_sampling_data,lem:physical_soft_interval_history,
-        lem:canonical_interval_resampling_selection}
+        lem:canonical_interval_resampling_selection,
+        thm:successful_tree_energy_induction}
     Choose the uniform numerical data and the independent original-ground
     reference once. Its common radius supplies every interval's exact
     weighted trimming budget. Apply the physical interval-history
@@ -154,7 +164,10 @@ dependence on the gap, and no running-time estimate is asserted.
     profiles. The reference inverse-square estimate and common-count
     estimate give (\ref{eq:physical_soft_tree_size}). All center-dependent
     target and terminal-image conclusions are those of the same selected
-    physical families.
+    physical families. For the energy induction, evaluate each family's
+    certificate at the exact center triple $e$: its middle minimum and
+    target satisfy the hypotheses of
+    Theorem~\ref{thm:successful_tree_energy_induction}.
 \end{proof}
 
 \begin{theorem}[Energy induction on a successful resampling tree]

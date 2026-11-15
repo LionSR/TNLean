@@ -59,6 +59,60 @@ private theorem child_mem_balancedIntervalMergeList (width : ℕ) (hwidth : 1 �
   · exact Or.inl (Or.inl (self_mem_balancedIntervalMergeList width hwidth _ _ hlong))
   · exact Or.inl (Or.inr (self_mem_balancedIntervalMergeList width hwidth _ _ hlong))
 
+/-- The conclusion of the energy induction on a seed `U` of the actual resampling tree: one
+assignment of one-sided regional energy estimates of width `49/16` at the root and every listed
+interval, each listed value three below the least eigenvalue of the compression of the
+child-centred soft regional operator to that interval's actual terminal untrimmed image.
+Supporting ALVV, arXiv:1602.08828v2, Theorem `t:alg1` and its proof, lines 1779--1818. -/
+def IsTerminalRitzEnergyAssignment {L q width : ℕ} (hq : 0 < q) (hwidth : 1 ≤ width)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (ell : ℕ) (t : ℝ) (m D rounds : ℕ)
+    (threshold N : LongIntervalIndex L width → ℕ)
+    (F : ∀ J : LongIntervalIndex L width,
+      Fin (N J) → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
+        EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q))
+    (xi : ℝ) (U : IntervalResamplingChoices L q rounds) : Prop :=
+  let regional := fun (a b : ℕ) ↦ ∑ i ∈ Finset.univ.filter
+    (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), h i
+  let S := fun (a b : ℕ) (U : IntervalResamplingChoices L q rounds) ↦
+    balancedIntervalSpace (canonicalIntervalResamplingOperation
+      D rounds threshold N F xi U) width hwidth a b
+  ∃ (u v : LongIntervalIndex L width → ℕ) (estimate : ℕ → ℕ → ℝ),
+    IsRegionalLowerEnergyEstimate h 0 L (49 / 16) (estimate 0 L) ∧
+    (L - 0 ≤ width → IsRegionalLowerEnergyEstimate h 0 L 0 (estimate 0 L)) ∧
+    ∀ J : LongIntervalIndex L width,
+      J.val ∈ balancedIntervalMergeList width hwidth 0 L →
+      let l := J.val.1
+      let r := J.val.2
+      let k := l + (r - l) / 2
+      let J' := interval L l r
+      let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
+      let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J') sigma0).2
+      let native := fun x : J' → Fin q ↦
+        (Entropy.cutEquiv (fun _ : Fin L ↦ q) J').symm (x, y0)
+      IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r) ∧
+      (k - l ≤ width → IsRegionalLowerEnergyEstimate h l k 0 (estimate l k)) ∧
+      (r - k ≤ width → IsRegionalLowerEnergyEstimate h k r 0 (estimate k r)) ∧
+      l ≤ u J ∧ u J ≤ v J ∧ v J ≤ r ∧ u J - l ≤ 2 * ell ∧ r - v J ≤ 2 * ell ∧
+      ∃ eLeft eRight : ℝ,
+        IsRegionalLowerEnergyEstimate h l (u J) 0 eLeft ∧
+        IsRegionalLowerEnergyEstimate h (v J) r 0 eRight ∧
+        let center := estimate l k + estimate k r - eLeft - eRight - 2
+        IsRegionalLowerEnergyEstimate h (u J) (v J) 10 center ∧
+        let R := regional l r - regional (u J) (v J) + (center : ℂ) • 1 +
+          cfc (Real.softTruncation t m) (regional (u J) (v J) - (center : ℂ) • 1)
+        let Rnat := R.submatrix native native
+        let W := adjacentIntervalMerge L q l k r (Nat.le_add_right l _)
+          (by have := J.property.1; omega) (S l k U) (S k r U)
+        let Y := canonicalHalfSampledIntervalImage L q l r D (threshold J) rounds (F J) xi W
+          (U (LongIntervalIndex.coordinate J))
+        ∃ (n : ℕ) (b : OrthonormalBasis (Fin (n + 1)) ℂ Y) (energy : Fin (n + 1) → ℝ),
+          Module.finrank ℂ Y = n + 1 ∧
+          (∀ j, Y.orthogonalCompression
+            (toEuclideanCLM (𝕜 := ℂ) (n := J' → Fin q) Rnat).toLinearMap
+              (b j) = (energy j : ℂ) • b j) ∧
+          Antitone energy ∧ estimate l r = energy (Fin.last n) - 3
+
 set_option maxHeartbeats 400000 in
 -- Matching the terminal image with the family-support form unfolds the half-sampling iterate.
 open Classical in
@@ -99,9 +153,6 @@ theorem exists_successful_tree_energy_induction
     let loss := Delta / (91 / 100 : ℝ) ^ 2
     let regional := fun (a b : ℕ) ↦ ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), h i
-    let S := fun (a b : ℕ) (U : IntervalResamplingChoices L q rounds) ↦
-      balancedIntervalSpace (canonicalIntervalResamplingOperation
-        D rounds threshold N F xi U) width hwidth a b
     mu ∈ spectrum ℝ H →
     (∀ z ∈ spectrum ℝ H, mu ≤ z) →
     Delta ≤ 1 / ((D : ℝ) ^ 12 * Msoft ^ 10) →
@@ -124,43 +175,12 @@ theorem exists_successful_tree_energy_induction
                 (canonicalHalfSampledIntervalImage L q l r D (threshold J) rounds (F J) xi W V)
                 (T.map coords.toLinearEquiv.toLinearMap)) →
     ∀ U ∈ canonicalIntervalResamplingGood D rounds hwidth threshold N F xi G 0 L,
-    ∃ (u v : LongIntervalIndex L width → ℕ) (estimate : ℕ → ℕ → ℝ),
-      IsRegionalLowerEnergyEstimate h 0 L (49 / 16) (estimate 0 L) ∧
-      (L - 0 ≤ width → IsRegionalLowerEnergyEstimate h 0 L 0 (estimate 0 L)) ∧
-      ∀ J : LongIntervalIndex L width,
-        J.val ∈ balancedIntervalMergeList width hwidth 0 L →
-        let l := J.val.1
-        let r := J.val.2
-        let k := l + (r - l) / 2
-        let J' := interval L l r
-        let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-        let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J') sigma0).2
-        let native := fun x : J' → Fin q ↦
-          (Entropy.cutEquiv (fun _ : Fin L ↦ q) J').symm (x, y0)
-        IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r) ∧
-        (k - l ≤ width → IsRegionalLowerEnergyEstimate h l k 0 (estimate l k)) ∧
-        (r - k ≤ width → IsRegionalLowerEnergyEstimate h k r 0 (estimate k r)) ∧
-        l ≤ u J ∧ u J ≤ v J ∧ v J ≤ r ∧ u J - l ≤ 2 * ell ∧ r - v J ≤ 2 * ell ∧
-        ∃ eLeft eRight : ℝ,
-          IsRegionalLowerEnergyEstimate h l (u J) 0 eLeft ∧
-          IsRegionalLowerEnergyEstimate h (v J) r 0 eRight ∧
-          let center := estimate l k + estimate k r - eLeft - eRight - 2
-          IsRegionalLowerEnergyEstimate h (u J) (v J) 10 center ∧
-          let R := regional l r - regional (u J) (v J) + (center : ℂ) • 1 +
-            cfc (Real.softTruncation t m) (regional (u J) (v J) - (center : ℂ) • 1)
-          let Rnat := R.submatrix native native
-          let W := adjacentIntervalMerge L q l k r (Nat.le_add_right l _)
-            (by have := J.property.1; omega) (S l k U) (S k r U)
-          let Y := canonicalHalfSampledIntervalImage L q l r D (threshold J) rounds (F J) xi W
-            (U (LongIntervalIndex.coordinate J))
-          ∃ (n : ℕ) (b : OrthonormalBasis (Fin (n + 1)) ℂ Y) (energy : Fin (n + 1) → ℝ),
-            Module.finrank ℂ Y = n + 1 ∧
-            (∀ j, Y.orthogonalCompression
-              (toEuclideanCLM (𝕜 := ℂ) (n := J' → Fin q) Rnat).toLinearMap
-                (b j) = (energy j : ℂ) • b j) ∧
-            Antitone energy ∧ estimate l r = energy (Fin.last n) - 3 := by
+    IsTerminalRitzEnergyAssignment hq hwidth h ell t m D rounds threshold N F xi U := by
   classical
-  intro config H hH G Msoft tau loss regional S hmu hlow hDelta htail hcert U hU
+  intro config H hH G Msoft tau loss regional hmu hlow hDelta htail hcert U hU
+  let S := fun (a b : ℕ) (U : IntervalResamplingChoices L q rounds) ↦
+    balancedIntervalSpace (canonicalIntervalResamplingOperation
+      D rounds threshold N F xi U) width hwidth a b
   choose u v hlu huv hvr hleft hright hmid T hTdim hTclose hTview using hcert
   -- The viable children of a listed interval and its literal history.
   have hchild : ∀ J : LongIntervalIndex L width,
