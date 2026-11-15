@@ -626,18 +626,27 @@ Let $A=R(\rho)$ and let $B\in M_m$ represent the output trace functional
 of $R$, so that $\operatorname{tr}R(X)=\operatorname{tr}(BX)$.
 Write $a=\operatorname{rank}A$ and $b=\operatorname{rank}B$.
 If $R\ne0$, then $a,b\ge1$: faithfulness of $\rho$ is used here.
-Among all completely positive maps with the same $A,B$, choose an extreme
-point $R'$. This is possible because the positive Choi matrices have
-fixed trace $\operatorname{tr}B$, making the feasible set compact.
-The supported-Hermitian-direction argument gives
+Construct a completely positive $R'$ with these same two constraints and
+at most $a+b-1$ rank-one Kraus operators as follows. Set
+$D=\rho^{1/2}B\rho^{1/2}$, whose rank is $b$ and whose trace equals
+$\operatorname{tr}A$. Write spectral decompositions
 \begin{equation}
-  s^2\le a^2+b^2,\qquad s=\operatorname{rank}C_{R'}.
+  A=\sum_{i=1}^a\alpha_i|e_i\rangle\!\langle e_i|,\qquad
+  D=\sum_{j=1}^b\beta_j|f_j\rangle\!\langle f_j|,
 \end{equation}
-Indeed, the two positive constraint maps carry the support face of a
-feasible Choi matrix into the faces supported on $A$ and $B$.
-Their real Hermitian spans have dimensions $a^2$ and $b^2$. A larger
-rank-$s$ support would supply a nonzero direction in the joint kernel,
-contradicting extremality. Hence $s\le a+b-1$ when $R\ne0$.
+with positive coefficients. The two lists have the same total mass.
+A nonnegative coupling $(c_{ij})$ with these row and column sums can be
+chosen with at most $a+b-1$ nonzero entries: successively assign the smaller
+remaining row or column mass to its cell and remove the exhausted row or
+column. Each step exhausts at least one, and the last step exhausts both.
+For each nonzero entry use the Kraus matrix
+\begin{equation}
+  L_{ij}=\sqrt{c_{ij}}\,|e_i\rangle\!\langle f_j|\rho^{-1/2}.
+\end{equation}
+Then $\sum_{ij}L_{ij}\rho L_{ij}^*=A$ and
+$\sum_{ij}L_{ij}^*L_{ij}=B$. Thus the resulting map $R'$ has the same
+prepared-state output and trace functional as $R$, with Choi rank
+$s\le a+b-1$. This construction avoids an extremality argument.
 
 The comparison with the target rank uses the two-step coefficient
 vectors, with tensor factors ordered by the first and second step.
