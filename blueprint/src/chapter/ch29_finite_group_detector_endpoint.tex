@@ -1,5 +1,38 @@
 \subsection{Endpoint dependence of the finite-group detector}
 
+\begin{lemma}[Conjugation phases of local endpoint words]
+    \label{lem:mpug_detector_endpoint_phase}
+    \lean{MPOTensor.FiniteGroupDetector.conjugation_word_eq_zpow,
+        MPOTensor.FiniteGroupDetector.endpointConjugationWord,
+        MPOTensor.FiniteGroupDetector.endpointConjugationWord_eq_pow,
+        MPOTensor.FiniteGroupDetector.prod_endpointConjugationWord_eq_pow,
+        MPOTensor.FiniteGroupDetector.prod_endpointConjugationWord_even}
+    Let $u,w,c$ belong to a group, with $cu=uc$ and $w^{-1}uw=cu$.
+    For integers $a,b,d$,
+    \begin{align}
+        u^aw^{-1}u^bwu^d&=c^bu^{a+b+d}.
+        \label{eq:mpug_endpoint_conjugation}
+    \end{align}
+    In particular, for $E_r=u^{-r-2}w^{-1}u^rwu^2$ and $m\geq0$,
+    \begin{align}
+        E_0E_1\cdots E_{m-1}&=c^{\binom m2}.
+        \label{eq:mpug_endpoint_phase_product}
+    \end{align}
+    If $m=2k$ and $c^{2k}=1$, the product is $c^k$.
+\end{lemma}
+
+\begin{proof}
+    Conjugation preserves integer powers, so
+    $w^{-1}u^bw=(cu)^b=c^bu^b$. Commuting $c^b$ past $u^a$ proves
+    (\ref{eq:mpug_endpoint_conjugation}). Substituting $a=-r-2$, $b=r$ and
+    $d=2$ gives $E_r=c^r$. Induction on $m$, using
+    $\binom{m+1}2=\binom m2+m$, proves
+    (\ref{eq:mpug_endpoint_phase_product}).
+    Finally $\binom{2k}2+k=2k^2$, so
+    $c^{\binom{2k}2}c^k=1=(c^k)^2$; canceling the common factor gives
+    $c^{\binom{2k}2}=c^k$.
+\end{proof}
+
 \begin{lemma}[An order-two finite-group detector with nontrivial endpoint phase]
     \label{lem:mpug_finite_group_detector_endpoint}
     \lean{Matrix.leftDressedOnSiteInterval,

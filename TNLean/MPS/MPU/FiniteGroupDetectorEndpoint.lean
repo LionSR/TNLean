@@ -83,7 +83,7 @@ theorem cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX
   simp only [Fin.lt_def] at h₀ h₁ h₂ h₃ h₄
   split_ifs <;> first
     | omega
-    | (ext i j <;> fin_cases i <;> fin_cases j <;>
+    | (ext i j; fin_cases i <;> fin_cases j <;>
         simp [Matrix.mul_apply, Fin.sum_univ_two])
 
 /-- The six-factor finite-group detector of the explicit dressed interval family

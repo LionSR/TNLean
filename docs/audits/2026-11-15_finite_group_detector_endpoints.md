@@ -13,8 +13,10 @@ The construction extends to every even cyclic order. It uses coherent
 endpoint choices for all intervals. Merely
 requiring a single circuit, unitarity, correct interior action, arbitrarily
 separated cuts, and injective symmetry-broken ground states does not repair
-the claim. The calculations below are ordinary exact matrix proofs with an
-executable check; they have **not** been formalized or checked in Lean.
+the claim. A separate Lean module now contains a candidate proof of the
+six-factor order-two matrix identity for the printed cut order, pending hosted
+CI. The circuit identification and general even-order calculation below
+remain ordinary exact proofs with executable checks, without Lean proofs.
 
 ## Source and ordering conventions
 
@@ -300,14 +302,32 @@ local basis label for orders 2 through 20, using modular integer exponents
 of \(\zeta\). All arithmetic uses integers, with no numerical tolerance
 or floating-point evaluation of roots of unity.
 
-The pinned project toolchain is Lean `v4.36.0-rc1` with the existing manifest
-unchanged. This checkout has no Lean/Lake executable or `.lake` cache; the
-environment's disabled outbound network prevented fetching the missing
-toolchain and prebuilt dependencies. Therefore this audit adds **no Lean
-declaration, no axiom or placeholder, and no `leanok` claim**. The script is
-supporting evidence for the displayed mathematical calculation, not a
-substitute for a kernel-checked proof. Before presenting item 2 as formalized,
-prove the six-factor matrix obstruction and the circuit identification in Lean
-and register a source-gap entry for `detectG` with the ordering convention
-stated explicitly. No source-labelled theorem should silently acquire the
-extra intermediate-state hypotheses.
+The project retains Lean and Mathlib `v4.36.0-rc1`; this change does not edit
+the toolchain or dependency manifest. This checkout has no Lean/Lake executable
+or `.lake` cache, and the environment's disabled outbound network prevented
+fetching them. Hosted validation is requested through draft
+[PR #10641](https://github.com/LionSR/TNLean/pull/10641).
+
+`TNLean/MPS/MPU/FiniteGroupDetectorEndpoint.lean` contains candidate proofs of
+unitarity for the dressed family, the six-factor matrix identity at order two
+for arbitrary printed-order cuts, and its normalized expectation value. Its
+blueprint entry has no checked-proof marker while CI is pending. There are no
+axioms or proof placeholders. The exact Python calculation remains supporting
+evidence, not a substitute for kernel verification.
+
+`TNLean/MPS/MPU/FiniteGroupDetectorPhase.lean` separately gives candidate
+proofs of the exact group identities
+\(u^aw^{-1}u^bwu^d=c^bu^{a+b+d}\) and
+\(\prod_{r=0}^{m-1}u^{-r-2}w^{-1}u^rwu^2=c^{\binom m2}\), assuming
+\(cu=uc\) and \(w^{-1}uw=cu\). These statements isolate the local
+algebra at every order without assuming a whole-detector phase as a
+hypothesis. It also derives that the product at order \(2k\) is \(c^k\)
+whenever \(c^{2k}=1\). Constructing the clock/shift instance and identifying the full
+spatial word with this ordered product remain separate tasks.
+
+The circuit-to-interval identification and the all-even-order clock/shift
+extension are **not formalized** by that module. The finite-group detection
+claim for a corrected class of truncations also remains open. Before presenting
+item 2 as formalized, settle these comparisons and register a source-gap entry
+for `detectG` with the ordering convention stated explicitly. No source-labelled
+theorem should silently acquire the extra intermediate-state hypotheses.
