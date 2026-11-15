@@ -268,7 +268,7 @@ theorem cyclicInvariant_cocycleFusionData (fd : family.FusionData) :
   have hinv : cyclicInvariant cocycleFusionData.associatorScalar z3Gen 3 =
       (cyclicInvariant ((scalarCocycleValue₃ (cyclicCocycle 3 1))) z3Gen 3)⁻¹ := by
     rw [cocycleFusionData, GroupCocycle.fusionData_omega]
-    simp [cyclicInvariant, Finset.prod_inv_distrib]
+    simp [cyclicInvariant, Finset.prod_inv_distrib, scalarCocycleValue₃]
   rw [hinv]
   refine (eq_inv_of_mul_eq_one_left (Units.ext ?_)).symm
   simpa using cyclicInvariant_omega_z3_mul_cyclicCocycle_one fd

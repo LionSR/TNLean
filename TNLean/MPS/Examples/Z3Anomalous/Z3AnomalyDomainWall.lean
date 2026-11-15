@@ -134,6 +134,7 @@ theorem anomalyClass_family_eq_cyclicCocycle_two :
     (G := Multiplicative (ZMod 3))).apply_symm_apply (ScalarThreeCochain.cyclicCocycle 3 2)
   change ScalarThreeCochain.toCocycles
     (ScalarThreeCochain.ofCocycles (ScalarThreeCochain.cyclicCocycle 3 2)) = _ at hc
-  simpa only [ScalarThreeCochain.anomalyClass, hc] using h
+  simpa only [ScalarThreeCochain.anomalyClass,
+    MPOTensor.GroupFamily.FusionData.omega, hc] using h
 
 end Z3Anomalous

@@ -253,7 +253,13 @@ theorem mpo_clockTensor_eq_cocycle (g : Multiplicative (ZMod 3)) (f : Fin 3 → 
   ext s t
   rw [Matrix.mul_diagonal, Matrix.monomial_apply, Matrix.monomial_apply]
   split_ifs
-  · simp [GroupCocycle.phase, cyclicCocycle_zero_val]
+  · simp only [GroupCocycle.phase, Units.coe_prod]
+    change clockPhase f t =
+      (∏ i, (scalarCocycleValue₃ (cyclicCocycle 3 0) g
+        ((GroupCocycle.residueEquiv 2).symm (t (i + 1)))
+        (((GroupCocycle.residueEquiv 2).symm (t (i + 1)))⁻¹ *
+          (GroupCocycle.residueEquiv 2).symm (t i)) : ℂ)) * clockPhase f t
+    simp only [cyclicCocycle_zero_val, Finset.prod_const_one, one_mul]
   · simp
 
 /-! ### The clock tensors `U` and `V` -/
