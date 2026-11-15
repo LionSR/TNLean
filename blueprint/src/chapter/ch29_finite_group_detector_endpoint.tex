@@ -12,15 +12,15 @@
     $D_0^{\dagger},\ldots,D_m^{\dagger}$ be the undo operators in
     chronological order. Suppose reference vectors and coefficients satisfy
     \begin{align}
-        F_0\psi&=v_0,&F_{r+1}v_r&=c_rv_{r+1}&& (0\leq r<m),\notag\\
-        w_0&=v_m,&D_r^{\dagger}w_r&=w_{r+1}&& (0\leq r\leq m),\notag\\
-        w_{m+1}&=\psi.&&&&
+        F_0\psi & =v_0,  & F_{r+1}v_r       & =c_rv_{r+1} &  & (0\leq r<m),\notag     \\
+        w_0     & =v_m,  & D_r^{\dagger}w_r & =w_{r+1}    &  & (0\leq r\leq m),\notag \\
+        w_{m+1} & =\psi. &                  &             &  &
         \label{eq:mpug_detector_intermediate_comparisons}
     \end{align}
     Then
     \begin{align}
         D_m^{\dagger}\cdots D_0^{\dagger}F_m\cdots F_0\psi
-        &=\left(\prod_{r=0}^{m-1}c_r\right)\psi.
+         & =\left(\prod_{r=0}^{m-1}c_r\right)\psi.
         \label{eq:mpug_detector_conditional_transport}
     \end{align}
     Its expectation in a normalized $\psi$ is $\prod_{r=0}^{m-1}c_r$.
@@ -58,6 +58,7 @@
         MPOTensor.FiniteGroupDetector.detectorCircuitWord_clock_even,
         MPOTensor.FiniteGroupDetector.star_dotProduct_detectorCircuitWord_clock_even,
         MPOTensor.FiniteGroupDetector.exists_detectorCircuitWord_even}
+    \leanok
     Let $m=2j>0$, choose a primitive $m$th root of unity, and take the
     clock and shift matrices on $\mathbb C^m$. On a periodic chain of
     $N>2m+2$ even--odd cells, fix the two-layer circuit of
@@ -69,7 +70,7 @@
     the on-site cyclic symmetry, whose one-site operator satisfies $u^m=1$.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpug_detector_endpoint_circuit,
         lem:mpug_detector_clock_tensor}
     Every indicated interval has a single entry boundary, including the
@@ -105,7 +106,7 @@
     The complete chronological tensor word of
     (\ref{eq:mpug_detector_spatial_word}) is
     \begin{align}
-        D_m&=\zeta^{\binom m2}\mathbf 1=-\mathbf 1.
+        D_m & =\zeta^{\binom m2}\mathbf 1=-\mathbf 1.
         \label{eq:mpug_detector_clock_tensor}
     \end{align}
     Every site of the finite chain is included in this operator identity.
@@ -149,7 +150,7 @@
     meaning that the predecessor of $k\in S$ is in $S$ exactly when $k\ne a$,
     the retained circuit is
     \begin{align}
-        T(S)&=w_{(a,\mathrm{even})}\prod_{s\in S\times\{\mathrm{even},\mathrm{odd}\}}u_s.
+        T(S) & =w_{(a,\mathrm{even})}\prod_{s\in S\times\{\mathrm{even},\mathrm{odd}\}}u_s.
         \label{eq:mpug_endpoint_circuit_interval}
     \end{align}
     A nonwrapping interval of cells with positive left endpoint has this
@@ -176,15 +177,15 @@
     Put $T(a,b;k)=w^{[k=a]}u^{[a\leq k\leq b]}$ and define the local
     factor of the complete interval word by
     \begin{align}
-        D_m(k)&=T(0,2m+1;k)^{-1}
-        \left(\prod_{s=1}^m T(s,2m+1-s;k)^{-1}\right)\notag\\
-        &\qquad\cdot\left(\prod_{s=1}^m T(s,m+1+s;k)\right)T(0,m+1;k),
+        D_m(k) & =T(0,2m+1;k)^{-1}
+        \left(\prod_{s=1}^m T(s,2m+1-s;k)^{-1}\right)\notag                    \\
+               & \qquad\cdot\left(\prod_{s=1}^m T(s,m+1+s;k)\right)T(0,m+1;k),
         \label{eq:mpug_detector_spatial_word}
     \end{align}
     with both products written in increasing $s$. Then
     \begin{align}
-        D_m(k)&=\begin{cases}c^{k-1}&1\leq k\leq m,\\1&\text{otherwise},\end{cases}
-        &\prod_{k=1}^m D_m(k)&=c^{\binom m2}.
+        D_m(k) & =\begin{cases}c^{k-1}&1\leq k\leq m,\\1&\text{otherwise},\end{cases}
+               & \prod_{k=1}^m D_m(k)                                                 & =c^{\binom m2}.
         \label{eq:mpug_detector_spatial_factors}
     \end{align}
     If $m=2j$ and $c^{2j}=1$, the last product is $c^j$.
@@ -214,12 +215,12 @@
     Let $u,w,c$ belong to a group, with $cu=uc$ and $w^{-1}uw=cu$.
     For integers $a,b,d$,
     \begin{align}
-        u^aw^{-1}u^bwu^d&=c^bu^{a+b+d}.
+        u^aw^{-1}u^bwu^d & =c^bu^{a+b+d}.
         \label{eq:mpug_endpoint_conjugation}
     \end{align}
     In particular, for $E_r=u^{-r-2}w^{-1}u^rwu^2$ and $m\geq0$,
     \begin{align}
-        E_0E_1\cdots E_{m-1}&=c^{\binom m2}.
+        E_0E_1\cdots E_{m-1} & =c^{\binom m2}.
         \label{eq:mpug_endpoint_phase_product}
     \end{align}
     If $m=2k$ and $c^{2k}=1$, the product is $c^k$.
@@ -251,7 +252,7 @@
     unitary, and
     \begin{align}
         T_{01}^{\dagger}T_{22}^{\dagger}T_{10}^{\dagger}
-        T_{22}T_{11}T_{00} &=-\mathbf 1.
+        T_{22}T_{11}T_{00} & =-\mathbf 1.
         \label{eq:mpug_finite_detector_sign}
     \end{align}
     Thus its expectation on every normalized state is $-1$. This is the

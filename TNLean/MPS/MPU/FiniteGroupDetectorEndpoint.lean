@@ -19,14 +19,14 @@ written product is `T₂₂ T₁₁ T₀₀`, and the undo product is
 For the printed cut order `a₀ < a₂ < a₁ < b₀ < b₂ < b₁`, the left-dressed on-site
 truncations `T(a,b) = Zₐ X^[a,b]` give the detector `-1`, although the on-site
 symmetry has trivial anomaly. The calculation is for arbitrary chain length and
-arbitrarily separated cuts. The identification with the retained gates of a fixed
-depth-two circuit is described, but not formalized, in
-`docs/audits/2026-11-15_finite_group_detector_endpoints.md`.
+arbitrarily separated cuts. `FiniteGroupDetectorConstruction` separately proves
+a fixed-circuit realization of dressed intervals on paired sites, including the
+extension to every positive even cyclic order. See
+`docs/audits/2026-11-15_finite_group_detector_endpoints.md` for the scope comparison.
 
 **Scope:** the matrix identity below is a counterexample for an explicit interval
-operator family. It does not formalize the source's circuit-to-interval
-identification, the all-even-order clock/shift calculation, or the comparison of
-truncations with domain-wall strings. In particular it does not assert `detectG`.
+operator family. It does not identify arbitrary source truncations with
+canonical domain-wall strings. In particular it does not assert `detectG`.
 -/
 
 open scoped Matrix

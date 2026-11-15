@@ -296,9 +296,9 @@ This checkout has no Lean/Lake executable or cache, and the HTTP proxy blocks
 fetching the toolchain even with network permission. Hosted validation uses
 [draft PR #10641](https://github.com/LionSR/TNLean/pull/10641).
 
-On head `3bd63ff6ddf0f3b2fdb808139615e5e8b7d42998`, all seven modules below
+On head `8d2c81ad0f13ea1baf8b9445b192fd277cfa0ecf`, all eight modules below
 passed their direct strict Lean checks in
-[job 132942082543](https://github.com/LionSR/TNLean/actions/runs/43756593126/job/132942082543):
+[job 132953985017](https://github.com/LionSR/TNLean/actions/runs/43760420642/job/132953985017):
 
 - `FiniteGroupDetectorEndpoint`: arbitrary printed-order cuts, exact order-two
   matrix identity, dressed-family unitarity, and normalized expectation.
@@ -314,19 +314,19 @@ passed their direct strict Lean checks in
   odd legs and right endpoints, equals minus the identity at positive even order.
 - `FiniteGroupDetectorTransport`: the conditional state transport and normalized
   expectation described below.
+- `FiniteGroupDetectorConstruction`: the actual retained-circuit-to-tensor
+  composition, full even-order detector and normalized expectation, and an
+  existence theorem choosing the complex-exponential primitive root.
 
-The initial builds in that job took 3.7 seconds for the circuit module,
-13 seconds for the full tensor module, and 1.9 seconds for the conditional
-transport module. There are no source proof placeholders or added axioms.
-
-`FiniteGroupDetectorConstruction.lean` composes the actual retained circuit,
-interval tensors, and complete spatial operator, including an existence theorem
-choosing the complex-exponential root. Its first check reached three remaining
-interface failures: coercion of conditional unitary values, explicit matrix
-arguments to reindexing, and unfolding the finite-label wrappers. The next
-revision fixes these conversions without changing any statement. This module
-is **pending hosted verification** and its blueprint entry has no checked marker.
-No complete CI pass or merge is claimed.
+The initial builds in that job took 2.8 seconds for the circuit module,
+8.8 seconds for the full tensor module, 1.4 seconds for the conditional
+transport module, and 1.6 seconds for the complete composition. The full Lean
+project build, affected-file strict checks, compilation-time checks, text-style
+linter, blueprint declaration checks, and paper-gap declaration checks also
+passed on that head. There are no source proof placeholders or added axioms.
+These proof-status claims refer to that exact code revision; the final
+documentation revision may differ. The overall blueprint web/PDF status is
+recorded by the PR's CI checks rather than inferred from successful Lean builds.
 
 ## Conditional general detection and the remaining physical comparisons
 
