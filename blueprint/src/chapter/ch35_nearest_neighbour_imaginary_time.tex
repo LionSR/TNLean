@@ -69,3 +69,86 @@
         =2\lVert O\rVert.
     \end{align}
 \end{proof}
+
+
+\begin{theorem}[Conjugation with an arbitrary factorial growth rate]
+    \label{thm:factorial_growth_rate_conjugation}
+    \lean{Matrix.norm_exp_conjugation_le_two_of_growth}
+    Let $H,O$ be finite complex square matrices and let $a\ge0$. If
+    $\lVert\operatorname{ad}_H^m(O)\rVert\le a^m m!\lVert O\rVert$
+    for every $m\in\N$, then
+    $\lVert e^{tH}Oe^{-tH}\rVert\le2\lVert O\rVert$
+    for $t\ge0$ with $at\le1/2$.
+\end{theorem}
+\begin{proof}
+    The Hadamard series has the geometric majorant
+    $\sum_{m\ge0}(at)^m\lVert O\rVert\le2\lVert O\rVert$.
+    The argument also applies when $a=0$ and does not divide by $a$.
+\end{proof}
+
+\begin{theorem}[Conjugation from a finite-site interaction budget]
+    \label{thm:finite_site_interaction_budget_conjugation}
+    \lean{TNLean.Lattice.norm_iterated_commutator_le_ascFactorial,TNLean.Lattice.norm_iterated_commutator_le_factorial,TNLean.Lattice.norm_exp_conjugation_interactionBudget_shift_le_two}
+    Let $\Lambda$ and $I$ be finite sets, $q,k\in\N$, and $g\ge0$.
+    On $\bigotimes_{x\in\Lambda}\C^q$, let $h_i$ act on $X_i\subseteq\Lambda$,
+    where $|X_i|\le k$, and suppose that
+    \begin{align}
+        \sum_{i:x\in X_i}\lVert h_i\rVert\le g
+        \qquad(x\in\Lambda).
+    \end{align}
+    Set $H=\sum_{i\in I}h_i$. If $O$ acts on a set of at most $k$ sites, then
+    \begin{align}
+        \lVert\operatorname{ad}_H^m(O)\rVert
+        &\le(2gk)^m m!\lVert O\rVert
+        \qquad(m\in\N).
+    \end{align}
+    For every $z\in\C$ and $t\ge0$ with $(2gk)t\le1/2$,
+    \begin{align}
+        \bigl\lVert e^{t(H-z\Id)}Oe^{-t(H-z\Id)}\bigr\rVert
+        &\le2\lVert O\rVert.
+    \end{align}
+    Empty supports, $q=0$, $k=0$ and $g=0$ are permitted.
+    This is a conservative auxiliary to~\cite[Section 2.1, equations (1)--(4),
+    and Section 3, Lemma 3.1]{Arad2014Connecting}: no positivity is assumed,
+    and the estimate retains the general commutator factor $2$.
+\end{theorem}
+\begin{proof}
+    More generally, for $O$ acting on $S$ with $|S|\le kr$, prove
+    \begin{align}
+        \lVert\operatorname{ad}_H^m(O)\rVert
+        \le (2gk)^m r^{\overline m}\lVert O\rVert,
+        \qquad
+        r^{\overline m}=\prod_{j=0}^{m-1}(r+j).
+    \end{align}
+    The case $m=0$ is immediate. For the induction step, expand the first
+    commutator as $[H,O]=\sum_{i:X_i\cap S\ne\varnothing}[h_i,O]$.
+    Each summand acts on its own union $X_i\cup S$, of size at most $k(r+1)$.
+    Apply the induction hypothesis separately to these summands. Since
+    \begin{align}
+        \sum_{i:X_i\cap S\ne\varnothing}\lVert h_i\rVert
+        &\le\sum_{x\in S}\sum_{i:x\in X_i}\lVert h_i\rVert
+        \le |S|g\le krg,
+    \end{align}
+    the triangle inequality and $\lVert[h_i,O]\rVert\le2\lVert h_i\rVert\lVert O\rVert$
+    give $(2gk)^{m+1}r(r+1)^{\overline m}\lVert O\rVert$.
+    This proves the induction, including $r=0$ and $gk=0$, without division.
+    Taking $r=1$ gives $1^{\overline m}=m!$.
+    Scalar shifts leave every commutator unchanged. The Hadamard series is
+    bounded term by term by $((2gk)t)^m\lVert O\rVert$, whose sum is at most
+    $2\lVert O\rVert$. No restriction on $t$ is needed when $gk=0$.
+\end{proof}
+
+\begin{corollary}[Finite-range chain interaction budget]
+    \label{cor:chain_interaction_budget_conjugation}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_exp_conjugation_shift_le_two}
+    \uses{def:chain_model,thm:finite_site_interaction_budget_conjugation}
+    For a finite-range chain Hamiltonian with range $R$ and term bound $J$,
+    put $b=2^{2R+1}\max(J,0)$ and $k=R+1$. An observable acting on at most
+    $k$ sites satisfies the preceding conjugation estimate whenever
+    $t\ge0$ and $2bkt\le1/2$, also on the empty chain.
+\end{corollary}
+\begin{proof}
+    Each interaction has at most $R+1$ sites, and the chain support count
+    bounds its per-site interaction budget by $2^{2R+1}J\le b$.
+    Apply Theorem~\ref{thm:finite_site_interaction_budget_conjugation}.
+\end{proof}
