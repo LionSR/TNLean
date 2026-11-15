@@ -8,6 +8,10 @@ in isolated run `43763059114`, job `132961943698`: only `propext`,
 merge `0b00ff5002eba6f2a9d9e259d0f517dd5b5859a3`, verified its two parents,
 and generated `#print axioms` commands in a runner-temporary file deleted after
 execution. No persistent Lean fixture or production workflow is introduced.
+The tested merge retains Lean/Mathlib `v4.36.0-rc1` and uses main's QICLean pin
+`603fc408b9f4c2a50f2475e1e44843fdc0a9c0ac`. The feature branch's older snapshot
+has QICLean `c4576824`; neither pin is changed by this continuation. All hosted
+validation and axiom claims here refer to the effective tested-merge inputs.
 
 ## Precise source interpretation
 
@@ -64,9 +68,14 @@ an instance of the general labelled-spin result; no phase classification is adde
 
 ## Validation boundary
 
-The additional 18 public declarations are source-written candidates pending Lean
-build, strict checking, compiled-reference checks, and a follow-up transitive axiom
-audit. Their auxiliary Blueprint entries remain notready. The previous 32 checked
-results and their successful axiom audit must not be inferred to verify this
-continuation. The production draft stays unmerged. No toolchain or dependency pin,
+The additional 18 public declarations passed package builds and strict checks
+at isolated candidate `d241aa5c88963b4f9848c0e8d28b8b92aaaa131f`, run
+`43765894182`, job `132970772343`. The canonical-blocking and source-comparison
+modules built in 3.8 and 2.9 seconds. There were no source errors or warnings.
+A transitive `#print axioms` audit passed for all 50 declarations at that same
+commit: only `propext`, `Classical.choice`, and `Quot.sound` occur. The generated
+Lean audit file was deleted by the job. Generated imports also passed against
+the effective merged source tree. Their auxiliary Blueprint entries now reflect
+compiled proofs. Production-head integration, compiled-reference checks for the
+new entries, and full Blueprint validation remain to run after publication. The production draft stays unmerged. No toolchain or dependency pin,
 general equivalence definition, or other worker's proof module is changed.

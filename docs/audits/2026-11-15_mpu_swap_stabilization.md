@@ -7,6 +7,12 @@ without changing statements; its clean strict check and full CI remain pending.
 The original source entry is unfinished. Initial source checkout:
 `cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
 
+
+Hosted checks and the transitive axiom audit at `99005136` used the tested
+merge with main, whose QICLean pin is `603fc408`. The older feature snapshot
+retains `c4576824`; this PR does not change dependency inputs. The local-pin
+statements below record the initial workspace, not the effective merged CI inputs.
+
 ## Ownership and existing work
 
 On 2026-11-15, [#7574](https://github.com/LionSR/TNLean/issues/7574) was open

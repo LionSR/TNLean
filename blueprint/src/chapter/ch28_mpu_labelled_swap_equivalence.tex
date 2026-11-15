@@ -6,7 +6,7 @@
         MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_one,
         MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_one,
         MPOTensor.conjugationSymmetry_block}
-    \notready
+    \leanok
     \uses{def:mpu_distinguished_physical_matrix_actions,
         def:mpu_finite_chain_operator_symmetry}
     Let $Q$ be a local physical matrix and $k>0$. Canonical blocking of
@@ -16,7 +16,7 @@
     adjunction and transposition.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Regrouping the factors in $Q^{\otimes Nk}$ gives
     $(Q^{\otimes k})^{\otimes N}$. Reindexing by the real configuration
     permutation preserves matrix multiplication, adjunction, transposition,
@@ -27,7 +27,7 @@
     \label{def:mpu_physical_matrix_symmetry_operations}
     \lean{MPOTensor.PhysicalSymmetryKind,
         MPOTensor.PhysicalSymmetryKind.withMatrix}
-    \notready
+    \leanok
     \uses{def:mpu_distinguished_physical_matrix_actions}
     Retain the three operations $\sharp\in\{\dagger,\mathsf T,\mathsf K\}$.
     A local matrix $Q$ specifies the full adjunction and transposition
@@ -39,7 +39,7 @@
 \begin{definition}[Equivalence on a labelled physical space]
     \label{def:mpu_labelled_physical_matrix_equivalence}
     \lean{MPOTensor.EquivalentUnderPhysicalMatrixSymmetry}
-    \notready
+    \leanok
     \uses{def:mpu_physical_matrix_symmetry_operations,
         def:mpu_physical_identity_matrix, def:strictly-equivalent-symmetry}
     Let $\mathcal U,\mathcal V$ be MPUs on the same labelled physical
@@ -60,7 +60,7 @@
     \lean{MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff}
-    \notready
+    \leanok
     \uses{def:mpu_labelled_physical_matrix_equivalence, threeMPU2}
     Let $\mathcal U,\mathcal V$ have physical space
     $\mathbb C^d\otimes\mathbb C^d$ and arbitrary virtual dimensions.
@@ -74,7 +74,7 @@
     The same positive ancilla and blocking witnesses work in both directions.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_physical_matrix_canonical_blocking,
         lem:mpu_fixed_ancilla_swap_comparison}
     Canonical blocking agrees with the explicit blocked physical matrix
@@ -90,7 +90,7 @@
     \lean{MPOTensor.shiftExampleFamilyBondDim,
         MPOTensor.shiftExampleFamily,
         MPOTensor.shiftExampleTildeFamily}
-    \notready
+    \leanok
     \uses{threeMPU, threeMPU2}
     Enumerate the actual three tensors as
     $(\mathcal U_1,\mathcal U_2,\mathcal U_3)$ and their actual transformed
@@ -105,7 +105,7 @@
     \lean{MPOTensor.labelledShiftExamples_swap_dagger_iff,
         MPOTensor.labelledShiftExamples_swap_transpose_iff,
         MPOTensor.labelledShiftExamples_swap_conjugation_iff}
-    \notready
+    \leanok
     \uses{def:mpu_three_labelled_source_families,
         thm:mpu_labelled_swap_equivalence}
     For every $i,j\in\{1,2,3\}$, the three comparisons of
@@ -116,7 +116,7 @@
     Definition~\ref{def:mpu_labelled_physical_matrix_equivalence}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpu_labelled_swap_equivalence}
     Specialize the three general comparisons to each of the nine ordered
     pairs of source tensors. The transformed tensors are the one-sided
