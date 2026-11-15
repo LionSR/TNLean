@@ -49,7 +49,8 @@ private theorem span_finrank_split {𝕜 E α β : Type*} [RCLike 𝕜]
     · refine Submodule.span_le.mpr ?_
       rintro _ ⟨i | j, rfl⟩
       · exact (show W ≤ W ⊔ R from le_sup_left) (Submodule.subset_span ⟨i, rfl⟩)
-      · rw [hSum j]
+      · change v j ∈ W ⊔ R
+        rw [hSum j]
         exact (W ⊔ R).add_mem ((show W ≤ W ⊔ R from le_sup_left) (h₀ j))
           ((show R ≤ W ⊔ R from le_sup_right) (Submodule.subset_span ⟨j, rfl⟩))
     · exact sup_le hWT hRT
@@ -59,7 +60,7 @@ private theorem span_finrank_split {𝕜 E α β : Type*} [RCLike 𝕜]
     exact h₁ j
   have hDisjoint : Disjoint W R := W.isCompl_orthogonal.disjoint.mono_right hRorth
   have hDim := Submodule.finrank_sup_add_finrank_inf_eq W R
-  rw [hDisjoint.eq_bot, Submodule.finrank_bot, add_zero] at hDim
+  simp only [hDisjoint.eq_bot, finrank_bot, add_zero] at hDim
   change finrank 𝕜 T = finrank 𝕜 W + finrank 𝕜 R
   rw [hSpan]
   exact hDim
