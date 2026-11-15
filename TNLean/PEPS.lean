@@ -410,6 +410,8 @@ import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
 import TNLean.PEPS.TorusDualOpenDeformation
 import TNLean.PEPS.TorusDualPath
+import TNLean.PEPS.TorusDualPathPresentation
+import TNLean.PEPS.TorusDualPresentationCompleteness
 import TNLean.PEPS.TorusDualRectangle
 import TNLean.PEPS.TorusDualRectangleFlux
 import TNLean.PEPS.TorusDualWinding

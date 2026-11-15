@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{An Explicit Finite Presentation for Restricted Native Dual Homotopy}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+For the generated supported-homotopy reading of Schuch, Cirac, and
+P\'erez-Garc\'ia, \href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+one can replace quantification over every flat fibre transport by equality
+in one explicit finitely presented group.
+
+The native positive east and north steps give two generators at each
+actual torus vertex. The reverse steps use inverse letters and path words
+are reverse-ordered. The relators are exactly the actual square words at
+the allowed primal supports and the actual words of fixed native comb
+routes from the origin to each vertex. There are at most twice as many
+relators as vertices. Neither the generators nor these local geometric
+relations refer to the path pair to be compared or to its homotopy class.
+The finite relation set is
+\leanid{TNLean.PEPS.torusDualPresentationRelators}.
+
+The theorem
+\leanid{TNLean.PEPS.torusDualHomotopy_iff_presentation_word_eq}
+proves that two same-endpoint native paths are supported-homotopic exactly
+when their actual words have equal image in this presentation. The converse
+normalizes an arbitrary locally flat transport by the fixed root routes.
+Its normalized step permutations satisfy every relator, so the presentation
+acts on the root fibre. Equal group words give equal original transport
+actions, and the earlier semantic completeness theorem gives homotopy.
+No homotopy witness or equality of the desired path classes is supplied.
+
+Both periods are positive, making the native vertex and generator sets
+finite. Periods one and two are included with all native direction labels
+retained. The earlier semantic classification at period zero is unchanged.
+This is a finite-presentation classification, not a terminating word
+algorithm: equality in the presented group remains the algebraic criterion.
+A finite geometric normal form, complexity bounds, and a finite-group test
+family are not proved here. Displacement alone still loses the nonabelian
+obstruction whenever a primal square support is missing.
+
+This homotopy result is distinct from physical vacuum-density admissibility
+and from the annular physical Wilson-loop obstruction. The broader geometry
+and algorithmic classification remain open under \ghissue{8703}; no
+\ghissue{8947} Hamiltonian files or claims are changed.
+\end{document}
