@@ -4082,3 +4082,14 @@ additional hypotheses of the final entropy or MPS approximation theorems.
 The construction uses an actual first excitation gap. The final entropy
 estimate retains its inverse-gap logarithms. Regional support and normalization
 corrections are documented in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
+
+### Integer fusion universal property
+
+`MPOTensor.FusionRing.regularHom` is the faithful regular RingHom.
+`basis_mul` and `sum_smul_basis` identify the structure constants and integer
+basis expansion. `hom_ext` and `lift_unique` determine extensions by their
+basis values. `characterEquiv` identifies RingHoms with the existing
+ring-valued `IsFusionCharacter` predicate, allowing noncommutative ring targets.
+`nimRepHom_unique` retains the explicit unit condition and output-row/input-column
+matrix convention. These declarations live in `BasedRingUniversal.lean`; their
+initial candidate proofs await hosted Lean validation.
