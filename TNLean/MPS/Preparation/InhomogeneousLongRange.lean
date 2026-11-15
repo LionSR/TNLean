@@ -48,8 +48,7 @@ theorem norm_sum_pairFamilyVector [NeZero M] {b : ℕ}
         rw [PiLp.inner_apply]
         exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm)
           _ _ fun τ => by
-            simp only [RCLike.inner_apply, pairFamilyVector_apply, starRingEnd_apply,
-              Equiv.piCongrRight_apply, Pi.map_apply]
+            simp only [RCLike.inner_apply, pairFamilyVector_apply, starRingEnd_apply]
             exact mul_comm _ _
       _ = ∏ k, ∑ p, star (ω i k p) * ω j k p := pairFamilyState_inner _ _
       _ = _ := by

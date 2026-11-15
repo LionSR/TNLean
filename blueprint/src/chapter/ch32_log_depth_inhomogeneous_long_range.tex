@@ -22,7 +22,7 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
 \begin{lemma}[Isometric extensions with a chosen register size]
     \label{lem:ldp_isometric_extension_encoding}
     \lean{MPSPreparation.exists_blockUnitary_isometricExtension_of_encoding}
-    \notready
+    \leanok
     \uses{thm:ldp_sequential_factorization_general}
     Let $D\ge1$, $r\ge1$ and $d\ge1$, and encode the $D$ bond indices
     injectively in $r$ sites of dimension $d$. There is $C$, depending only on
@@ -34,6 +34,7 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
     a product of at most $Cq$ gates on neighbouring sites.
 \end{lemma}
 \begin{proof}
+    \leanok
     Diagonalize $\Pi=T\Lambda T^\dagger$, factor the first $\operatorname{rank}\Pi$
     columns of $VT$ sequentially, and apply $T^\dagger$ on the input registers.
     The unused columns of the resulting unitary complete $V$ to an isometry.
@@ -42,7 +43,7 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
 \begin{lemma}[Overlap under the isometric extensions]
     \label{lem:ldp_inhomogeneous_long_range_overlap}
     \lean{MPSPreparation.inner_blockMatVector_normalizedChainState}
-    \notready
+    \leanok
     \uses{thm:ldp_chain_state_eq_pos, thm:ldp_chain_block_iso_inner}
     Let $\ket\phi$ be the state of an inhomogeneous chain cut into blocks,
     with blocked polar decompositions $B_k=V_kP_k$, initial projections
@@ -59,6 +60,7 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
     Division by the norm of the zero vector is read as the zero vector.
 \end{lemma}
 \begin{proof}
+    \leanok
     Since $\Pi_kP_k=P_k$, one has $X_kP_k=V_kP_k=B_k$ and hence
     $\phi=(\bigotimes_kX_k)\phi_{\rm pos}$. Isometries preserve norms and
     inner products, giving (\ref{eq:ldp_inhomogeneous_long_range_overlap}).
@@ -67,12 +69,13 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
 \begin{lemma}[Norm of a coherent sum of inhomogeneous pair products]
     \label{lem:ldp_inhomogeneous_long_range_norm}
     \lean{MPSPreparation.norm_sum_pairFamilyVector}
-    \notready
+    \leanok
     \uses{def:ldp_chain_pos_state}
     For $M\ge1$, the vector $\Omega'$ of
     (\ref{eq:ldp_inhomogeneous_long_range_pairs}) has norm one.
 \end{lemma}
 \begin{proof}
+    \leanok
     Regrouping the bond indices gives
     $\langle\bigotimes_k\omega_i^k,\bigotimes_k\omega_j^k\rangle
         =\prod_k\langle\omega_i^k,\omega_j^k\rangle=\delta_{ij}$.
@@ -82,7 +85,7 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
 \begin{lemma}[Preparation from coherent products of inhomogeneous pairs]
     \label{lem:ldp_inhomogeneous_long_range_preparation}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_inhomogeneousLongRange}
-    \notready
+    \leanok
     \uses{lem:ldp_isometric_extension_encoding, thm:ldp_window_ghz_measurement,
         lem:ldp_inhomogeneous_long_range_overlap, lem:ldp_inhomogeneous_long_range_norm}
     Fix $d\ge2$, $D\ge1$ and $b\ge0$. There are $C$ and $L_0$ depending
@@ -99,6 +102,7 @@ in~\cite{gap:mswc24_inhomogeneous_long_range}.
     No blocked tensor is assumed injective.
 \end{lemma}
 \begin{proof}
+    \leanok
     Use registers of $r=b+D+2$ sites and $L_0=3r$. Prepare the coherent label
     state $\sum_j\alpha_j\ket j^{\otimes M}$ on the registers. On window $k$,
     orthonormality allows a unitary sending the encoded label $j$ to
