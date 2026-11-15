@@ -180,24 +180,19 @@ of bonds incident to $s=(x+1,y+1)$.
 
 \begin{lemma}[Classification of full-support deformations]
     \label{lem:peps_dual_full_support_classification}
-    \lean{TNLean.PEPS.torusDualHomotopy_univ_iff_displacement_eq,
-        TNLean.PEPS.torusDualFluxState_eq_of_displacement_eq}
+    \lean{TNLean.PEPS.torusDualHomotopy_univ_iff_displacement_eq}
     \leanok
-    \uses{def:peps_dual_flux_homotopy,def:peps_dual_flux_displacement,
-        def:peps_dual_flux_matrices}
+    \uses{def:peps_dual_flux_homotopy,def:peps_dual_flux_displacement}
     For finite labelled dual paths $p,q:a\to b$, the generated relation with
     every primal vertex allowed satisfies
     \begin{align}
         p\sim_Xq\quad\Longleftrightarrow\quad d(p)=d(q).
         \label{eq:peps_full_support_classification}
     \end{align}
-    If every site tensor is virtually $G$-invariant, then $d(p)=d(q)$ also
-    implies equality of the two actual flux-string states. Distinct winding
-    sectors remain distinct.
+    Distinct winding sectors remain distinct.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dual_flux_displacement,thm:peps_dual_rectangle,
-        thm:peps_dual_flux_deformation}
+    \uses{thm:peps_dual_flux_displacement,thm:peps_dual_rectangle}
     The forward implication of (\ref{eq:peps_full_support_classification}) is
     Lemma~\ref{thm:peps_dual_flux_displacement}. For the converse, set
     $N=|p|+|q|$ and translate the lifted origin by $(-N,-N)$ from $a$.
@@ -207,8 +202,7 @@ of bonds incident to $s=(x+1,y+1)$.
     The lifted final vertices are $(N,N)+d(p)$ and $(N,N)+d(q)$, hence agree.
     Lemma~\ref{thm:peps_dual_rectangle} normalizes both projected paths by
     squares and backtracks. Allowing their swept vertices in $X$ gives
-    $p\sim_Xq$. Theorem~\ref{thm:peps_dual_flux_deformation} then gives equality
-    of the actual states.
+    $p\sim_Xq$.
 \end{proof}
 
 \begin{definition}[Native flux matrices and unchanged exterior data]%

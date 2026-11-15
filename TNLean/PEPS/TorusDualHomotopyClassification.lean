@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusDualRectangle
 import TNLean.PEPS.TorusDualWinding
-import TNLean.PEPS.TorusDualFluxString
 
 /-!
 # Classification of full-support dual-path homotopies
@@ -177,24 +176,5 @@ theorem torusDualHomotopy_univ_iff_displacement_eq {a b : X}
     apply Prod.ext <;> omega
   subst d
   exact homotopy_of_heq ha hb hp hq (homotopy_univ (rectDualPath_homotopy x y p' q'))
-
-variable [NeZero width] [NeZero height]
-variable {G V : Type*} [Group G] [Fintype V] [DecidableEq V]
-variable {Phys : X → Type*}
-
-/-- Equal lifted displacements suffice for equality of the actual flux-string
-states when all site tensors are virtually invariant. The homotopy is derived
-from the two paths. Different winding sectors are not identified.
-Source: SCP10, arXiv:1001.3807v3, Lemma 6.14. -/
-theorem torusDualFluxState_eq_of_displacement_eq {a b : X}
-    (p q : TorusDualPath a b)
-    (h : torusDualPathDisplacement p = torusDualPathDisplacement q)
-    (U : G →* Matrix V V ℂ) (A : ∀ v, V → V → V → V → Phys v → ℂ)
-    (hA : ∀ v g, siteMap (A v) ∘ₗ torusLegRep U g = siteMap (A v)) (g : G) :
-    torusDualFluxState U A g q = torusDualFluxState U A g p := by
-  have hpq := (torusDualHomotopy_univ_iff_displacement_eq p q).mpr h
-  apply hpq.torusDualFluxState_eq U A _ g
-  intro v _ k
-  exact hA v k
 
 end TNLean.PEPS
