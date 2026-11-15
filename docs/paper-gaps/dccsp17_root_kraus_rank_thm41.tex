@@ -530,6 +530,169 @@ singular roots, and it does not assert the same conclusion when the Kraus
 span is a proper subspace of $S$. The positivity-at-the-endpoint argument
 and the cyclic-corner construction remain to be formalized.
 
+\subsection{The full cyclic family with dimensions $(1,m,n,1,1)$}
+
+There is a stronger paper argument, also not yet formalized, for every
+$m,n\ge1$. Assume the Kraus span of $\mathcal F$ is the full cyclic space
+$S=\bigoplus_i\operatorname{Hom}(V_i,V_{i+1})$ for sector dimensions
+$(1,m,n,1,1)$. Its Choi rank is $mn+m+n+2$, while the Choi rank of its
+square is $d_2=2m+2n+1$. One can select a channel of Choi rank at most
+$d_2$ with all powers of order at least two unchanged. For $m=n=2$,
+the argument below in fact gives the stronger bound eight.
+
+Partition the positive definite Choi matrix on $S$ by separating the
+middle summand $\operatorname{Hom}(V_1,V_2)$ from all other summands:
+\begin{equation}
+  C_{\mathcal F}=\begin{pmatrix}X&C\\ C^*&Z\end{pmatrix},\qquad
+  Y=Z-C^*X^{-1}C\ge0.
+\end{equation}
+The size of $X$ is $a=m+n+2$, and $X$ is positive definite. Leave $X$ and
+$C$ fixed and vary only the residual positive matrix $Y$ on the middle
+summand. Such a change alters only the map from $M_m$ in sector one to
+$M_n$ in sector two. Let $\rho\in M_m$ be the density matrix prepared by
+the preceding map from the one-dimensional sector zero.
+
+Impose two linear constraints on the residual completely positive map:
+its output trace functional and its value at $\rho$ remain fixed. These
+are at most $m^2+n^2$ real scalar constraints. The feasible positive
+matrices form a nonempty compact convex set: the trace functional
+constraint fixes their trace. At an extreme point of this set the rank
+$k$ satisfies $k^2\le m^2+n^2$. Indeed, Hermitian matrices supported on a
+rank-$k$ support have real dimension $k^2$. If that dimension exceeded the
+number of constraints, a nonzero Hermitian direction would preserve the
+constraints and allow positive perturbations of both signs, contradicting
+extremality. Since $m,n>0$, this gives $k\le m+n-1$.
+
+Replace $Y$ by such an extreme point. The new whole Choi matrix is
+positive, and the Schur-complement congruence shows that its rank is
+$a+k\le2m+2n+1=d_2$. Let $\widetilde{\mathcal F}$ be its map and put
+$\mathcal H=\widetilde{\mathcal F}-\mathcal F$. The trace constraint makes
+$\widetilde{\mathcal F}$ trace preserving and gives
+$\mathcal F\mathcal H=0$, because the next sector map is the trace to a
+one-dimensional sector. The state constraint gives
+$\mathcal H\mathcal F=0$, because the preceding map prepares $\rho$.
+The changed input and output sectors are distinct, so $\mathcal H^2=0$.
+Thus all powers of order at least two are exactly unchanged.
+
+The full rectangular word spans have dimensions $m^2+n^2+3$,
+$mn+m+n+2$, and $2m+2n+1$ for residues zero, plus or minus one, and
+plus or minus two modulo five, respectively. Each is at least $d_2$:
+the differences are $(m-1)^2+(n-1)^2$, $(m-1)(n-1)$, and zero.
+Consequently the selected root has Choi rank at most that of every power
+of order at least two. This is a selection result for the stated full
+cyclic Kraus spaces, including arbitrary coherences and nonunital targets;
+it does not prove selection for general singular channels or proper
+subspaces of these cyclic spaces.
+
+\subsection{Cyclic roots with one nontrivial sector-to-sector map}
+
+The selection argument extends further at the paper level; this extension
+is not yet formalized either. Suppose a channel $\mathcal F$ is supported
+on cyclic sectors $(1,m,n,1,\ldots,1)$, with $\ell\ge4$ sectors and
+$m,n\ge1$. Its Kraus span need not fill the rectangular summands.
+Assume its map from sector zero to sector one prepares a positive
+definite density matrix $\rho\in M_m$. Then there is a channel
+$\widetilde{\mathcal F}$ such that
+\begin{equation}
+  \widetilde{\mathcal F}^{\,p}=\mathcal F^p\quad(p\ge2),\qquad
+  \operatorname{rank}C_{\widetilde{\mathcal F}}
+  \le\operatorname{rank}C_{\mathcal F^2}.
+\end{equation}
+This bounds a selected square root by the actual target rank. It does not
+bound the selected root by every higher power's rank. The preparation is
+faithful, in particular, when $\mathcal F$ is irreducible: a faithful
+stationary state restricts on sector one to a positive scalar multiple
+of $\rho$.
+
+Choose a minimal noise Hilbert space $K$ for a Kraus representation of
+$\mathcal F$. Denote the coefficient vectors of its rectangular blocks by
+\begin{equation}
+  (u_i)_{i=1}^m,\quad (a_{ji})_{j=1,i=1}^{n,m},\quad
+  (v_j)_{j=1}^n,\quad w_1,\ldots,w_k,\qquad k=\ell-3\ge1.
+\end{equation}
+The $u_i$ are linearly independent because their Gram matrix is $\rho$,
+the $v_j$ are orthonormal because the next map is the trace, and each
+$w_j$ is a unit vector. Put
+\begin{equation}
+  U=\operatorname{span}\{u_i\},\quad V=\operatorname{span}\{v_j\},\quad
+  K_0=U+V+\sum_{j=1}^k\mathbb Cw_j,\quad r_0=\dim K_0.
+\end{equation}
+Project every $a_{ji}$ onto $K_0$ and its orthogonal complement. The
+residual vectors define a completely positive map $R:M_m\to M_n$.
+All coefficient vectors outside this middle map are unchanged, and the
+rank of the whole root is $r_0+\operatorname{rank}C_R$.
+
+Let $A=R(\rho)$ and let $B\in M_m$ represent the output trace functional
+of $R$, so that $\operatorname{tr}R(X)=\operatorname{tr}(BX)$.
+Write $a=\operatorname{rank}A$ and $b=\operatorname{rank}B$.
+If $R\ne0$, then $a,b\ge1$: faithfulness of $\rho$ is used here.
+Among all completely positive maps with the same $A,B$, choose an extreme
+point $R'$. This is possible because the positive Choi matrices have
+fixed trace $\operatorname{tr}B$, making the feasible set compact.
+The supported-Hermitian-direction argument gives
+\begin{equation}
+  s^2\le a^2+b^2,\qquad s=\operatorname{rank}C_{R'}.
+\end{equation}
+Indeed, the two positive constraint maps carry the support face of a
+feasible Choi matrix into the faces supported on $A$ and $B$.
+Their real Hermitian spans have dimensions $a^2$ and $b^2$. A larger
+rank-$s$ support would supply a nonzero direction in the joint kernel,
+contradicting extremality. Hence $s\le a+b-1$ when $R\ne0$.
+
+The comparison with the target rank uses the two-step coefficient
+vectors, with tensor factors ordered by the first and second step.
+The blocks outside the middle map form the path space
+\begin{equation}
+  W=(V\otimes\mathbb Cw_1)
+      +\sum_{j=1}^{k-1}\mathbb C(w_j\otimes w_{j+1})
+      +(\mathbb Cw_k\otimes U),\qquad q=\dim W.
+\end{equation}
+The elementary path-space inequality is $r_0\le q+1$; equality forces
+$V,\mathbb Cw_1,\ldots,\mathbb Cw_k,U$ to form a direct sum.
+To verify it, start with $V\otimes w_1$, of dimension $n$.
+Adjoining the next vertex subspace $E$ adds an edge $w_j\otimes E$.
+The old edge space has its right factors in the old vertex span, so the
+edge dimension increases by at least the increase of the vertex-span
+dimension. Thus a deficit of one cannot reappear once it disappears.
+While the deficit is one, the existing vertex spaces are independent,
+and the last vertex is absent from the old left-factor span. The new
+edge then meets the old edge space trivially, so the deficit persists
+only if the new vertex space is independent of the preceding ones.
+This proves both assertions by induction along the path.
+
+Project the other two blocks of two-step coefficient vectors onto
+$K_0^\perp\otimes K_0$ and $K_0\otimes K_0^\perp$.
+Their Gram matrices have ranks $b$ and $a$, respectively. These spaces
+are orthogonal to each other and to $W$. Since the full word span
+contains $W$, projection onto their sum proves
+\begin{equation}
+  d=\operatorname{rank}C_{\mathcal F^2}\ge q+a+b.
+\end{equation}
+For $R\ne0$, replace its residual coefficient vectors by those of $R'$
+in a fresh noise space orthogonal to $K_0$. The new whole root has rank
+\begin{equation}
+  r_0+s\le(q+1)+(a+b-1)\le d.
+\end{equation}
+The difference changes only the middle sector map, has zero output trace,
+and kills $\rho$. It is annihilated by $\mathcal F$ on both sides and
+has square zero. Trace preservation and every power of order at least
+two are therefore unchanged.
+
+If $R=0$ and $r_0\le q$, the original root already has rank at most $d$.
+In the exceptional case $r_0=q+1$, the path-space equality implies
+$V\cap(U+\sum_j\mathbb Cw_j)=0$.
+The coefficient vectors of the two-step trace map from sector one to
+sector three lie in $K_0\otimes V$, whereas $W$ lies in
+$K_0\otimes(U+\sum_j\mathbb Cw_j)$. They cannot all vanish because
+that map is trace preserving. Thus they add at least one dimension to
+$W$, giving $d\ge q+1=r_0$. This completes the argument.
+
+This result still assumes the specified cyclic support and faithful
+preparation. The general singular nonunital case, including other cyclic
+sector patterns, primitive channels without this support, general
+exponents, and multi-block form II, remains open. None of the arguments
+in this subsection is currently a Lean theorem.
+
 \section{Explicit bounded roots from a commuting projected semigroup}
 
 A further class of singular nonunital channels admits bounded roots in
