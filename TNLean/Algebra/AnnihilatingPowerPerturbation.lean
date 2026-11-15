@@ -75,5 +75,6 @@ theorem add_pow_eq_of_anticommuting_square_zero {A : Type*} [Semiring A]
   apply add_pow_eq_of_sq_eq_of_sq_mul_eq_zero ?_ hSqH hp
   calc
     (F + H) ^ 2 = F * F + (F * H + H * F) + H * H := by
-      simp only [pow_two, add_mul, mul_add, add_assoc]
+      simp only [pow_two, add_mul, mul_add]
+      ac_rfl
     _ = F ^ 2 := by simp only [hMixed, hHH, add_zero, pow_two]

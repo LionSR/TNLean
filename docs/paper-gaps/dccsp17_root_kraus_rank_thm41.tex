@@ -805,6 +805,10 @@ the rectangular summands of the one-step and two-step word spaces.
 For odd $\ell$, the square is irreducible of period $\ell$.
 Arbitrary coherences among the specified Kraus blocks are allowed.
 This selection assertion is not yet a Lean theorem.
+When $\ell=5$, the word-space dimensions for positive exponents congruent
+to $0,1,2,3,4$ modulo five are $14,13,12,12,13$, respectively.
+Thus the same selected root is bounded by the Choi rank of every power
+of order at least two in this five-sector case.
 
 Write $\rho_1$ for the prepared density matrix on sector one,
 $P:M_2\to M_2$ and $Q:M_2\to M_2$ for the next two sector maps,
@@ -866,6 +870,19 @@ positive boundary argument, or the whole selection assertion.
 This treats full Kraus spaces with three consecutive two-dimensional
 sectors. Proper subspaces of that support, other sector dimensions, and
 the unrestricted singular nonunital problem remain open.
+
+The same paper argument also treats full cyclic spaces on
+$(1,m,2,r,1,\ldots,1)$ with $m,r\ge2$ and $\ell\ge5$.
+The root and square ranks are
+$R=3(m+r)+\ell-4$ and $d=mr+m+r+\ell-1$, so
+$R-d=1-(m-2)(r-2)\le1$. If $R\le d$, the original root suffices.
+Otherwise, the non-replacement case uses the same map $H$ on the
+two-dimensional middle sector and lowers the rank at a boundary point.
+In the replacement case, the Schur residual of $P:M_m\to M_2$ has
+rank $2m$ and is replaced by at most $m+1$ Kraus operators, decreasing
+the total rank by at least $m-1\ge1$. The same power identities apply.
+This extension, too, remains a paper argument with the stated full-span
+and sector-dimension assumptions.
 
 \section{Explicit bounded roots from a commuting projected semigroup}
 
