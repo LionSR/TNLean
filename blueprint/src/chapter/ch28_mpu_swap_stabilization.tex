@@ -128,3 +128,47 @@
     Apply Lemma~\ref{lem:mpu_fixed_ancilla_swap_comparison} for each fixed
     positive $x,k$, then quantify over those same two integers.
 \end{proof}
+
+\begin{lemma}[Flattened swaps do not define an ancilla-compatible family]
+    \label{lem:mpu_flattened_swap_ancilla_obstruction}
+    \lean{MPOTensor.physicalIdMatrix_shiftSwap_sandwich_ne,
+        MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapDagger,
+        MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapTranspose}
+    \notready
+    \uses{def:mpu_physical_identity_matrix, threeMPU2}
+    Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^4$, and write
+    $S_m$ for the standard flattened swap on
+    $\mathbb C^m\otimes\mathbb C^m$. The identity-ancilla embedding
+    $\iota_4(X)=X\otimes I_4$, in product coordinates, satisfies
+    \begin{align}
+        \iota_4(S_2PS_2)&=P\otimes I_4, \\
+        S_4\iota_4(P)S_4&=I_4\otimes P.
+    \end{align}
+    These matrices are unequal. Therefore neither swap-combined
+    adjunction nor swap-combined transposition, with the canonical
+    flattened swap chosen separately at dimensions four and sixteen,
+    commutes with this identity-ancilla embedding.
+\end{lemma}
+
+\begin{proof}
+    Multiplication by a permutation matrix reindexes the appropriate
+    matrix coordinate. At the product coordinate $(0,1)$ the two
+    diagonal entries are respectively one and zero. Both $P$ and
+    $\iota_4(P)$ are self-adjoint and symmetric, so the same inequality
+    applies to the adjunction and transposition comparisons.
+\end{proof}
+
+\begin{lemma}[Balanced coprime ancillas at equal dimension]
+    \label{lem:mpu_balanced_coprime_ancilla}
+    \lean{MPOTensor.balanced_coprime_ancilla_eq_one}
+    \notready
+    If $d>0$, $p_ad=p_bd$, and $\gcd(p_a,p_b)=1$, then $p_a=p_b=1$.
+    In particular the minimal coprime convention of
+    \cite[lines~706--724]{Cirac2017MPU} alone does not admit the later
+    common-ancilla construction of
+    \cite[lines~2210--2215]{Cirac2017MPU} for equal physical dimensions.
+\end{lemma}
+
+\begin{proof}
+    Cancellation gives $p_a=p_b=p$. Then $\gcd(p,p)=p=1$.
+\end{proof}

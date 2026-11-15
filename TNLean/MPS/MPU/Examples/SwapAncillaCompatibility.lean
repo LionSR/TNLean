@@ -1,0 +1,106 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.MPU.Examples.SwapSymmetryTransport
+import TNLean.MPS.MPU.PhysicalAncillaLeftMul
+
+/-!
+# Obstructions to dimension-only swap stabilization
+
+The flattened swaps at physical dimensions four and sixteen do not commute
+with the canonical identity-ancilla embedding from four to sixteen. Thus
+one cannot choose the ordinary flattened swap at every square dimension
+and also require identity-ancilla semiconjugacy. The witness is the
+projection onto the first coordinate, so the obstruction is independent
+of any canonical-form or path construction.
+
+For equal positive physical dimensions, balanced coprime ancillas are both
+one. This explains separately why the current coprime-ancilla predicate
+cannot express arbitrary common ancillary factors.
+
+These are obstructions to two proposed interpretations, not refutations
+of the source's symmetry-comparison lemma. Source: arXiv:1703.09188,
+`def:equivalent-symmetry`, lines 1356--1366, and `lemma:sym-trafo-swap`,
+lines 2065--2085; see `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
+-/
+
+open scoped Matrix
+
+namespace MPOTensor
+
+private theorem shiftSwap_sandwich_apply (d : ℕ)
+    (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) (i j : Fin (d * d)) :
+    (shiftPhysicalSwap d * X * shiftPhysicalSwap d) i j =
+      X (bondPairSwap i) (bondPairSwap j) := by
+  simp only [shiftPhysicalSwap, Equiv.Perm.permMatrix,
+    PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv,
+    Matrix.submatrix_apply, bondPairSwapEquiv_symm, bondPairSwapEquiv_apply, id_eq]
+
+/-- Enlarging a four-dimensional site by a four-dimensional identity does
+not intertwine conjugation by the original flattened swap with conjugation
+by the flattened swap at dimension sixteen. At coordinate one the two
+diagonal entries are respectively one and zero.
+This is an obstruction to a dimension-only interpretation of the swap in
+arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem physicalIdMatrix_shiftSwap_sandwich_ne :
+    let P : Matrix (Fin 4) (Fin 4) ℂ := Matrix.single 0 0 1
+    physicalIdMatrix (shiftPhysicalSwap 2 * P * shiftPhysicalSwap 2) 4 ≠
+      shiftPhysicalSwap 4 * physicalIdMatrix P 4 * shiftPhysicalSwap 4 := by
+  dsimp only
+  intro h
+  have hentry := congrFun (congrFun h (1 : Fin 16)) (1 : Fin 16)
+  norm_num [physicalIdMatrix, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, shiftSwap_sandwich_apply, Matrix.single, bondPairSwap,
+    finProdFinEquiv] at hentry
+
+/-- Canonical flattened-swap adjunction at dimensions four and sixteen
+fails the identity-ancilla semiconjugacy required of a coherent family.
+Source context: arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem not_semiconj_physicalIdMatrix_shiftSwapDagger :
+    ¬Function.Semiconj
+      (fun X : Matrix (Fin 4) (Fin 4) ℂ => physicalIdMatrix X 4)
+      (fun X => shiftPhysicalSwap 2 * Xᴴ * shiftPhysicalSwap 2)
+      (fun X => shiftPhysicalSwap 4 * Xᴴ * shiftPhysicalSwap 4) := by
+  intro h
+  let P : Matrix (Fin 4) (Fin 4) ℂ := Matrix.single 0 0 1
+  have hP : Pᴴ = P := by simp [P, Matrix.conjTranspose_single]
+  have hPx : (physicalIdMatrix P 4)ᴴ = physicalIdMatrix P 4 := by
+    rw [physicalIdMatrix_conjTranspose, hP]
+  have hcompat := h P
+  rw [hP, hPx] at hcompat
+  exact physicalIdMatrix_shiftSwap_sandwich_ne hcompat
+
+/-- Canonical flattened-swap transposition at dimensions four and sixteen
+fails the identity-ancilla semiconjugacy required of a coherent family.
+Source context: arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem not_semiconj_physicalIdMatrix_shiftSwapTranspose :
+    ¬Function.Semiconj
+      (fun X : Matrix (Fin 4) (Fin 4) ℂ => physicalIdMatrix X 4)
+      (fun X => shiftPhysicalSwap 2 * Xᵀ * shiftPhysicalSwap 2)
+      (fun X => shiftPhysicalSwap 4 * Xᵀ * shiftPhysicalSwap 4) := by
+  intro h
+  let P : Matrix (Fin 4) (Fin 4) ℂ := Matrix.single 0 0 1
+  have hP : Pᵀ = P := by
+    ext i j
+    simp [P, Matrix.transpose_apply, Matrix.single, and_comm]
+  have hPx : (physicalIdMatrix P 4)ᵀ = physicalIdMatrix P 4 := by
+    rw [physicalIdMatrix_transpose, hP]
+  have hcompat := h P
+  rw [hP, hPx] at hcompat
+  exact physicalIdMatrix_shiftSwap_sandwich_ne hcompat
+
+/-- Equal positive physical dimensions force balanced coprime ancillary
+sizes to be one. The later common-ancilla construction in the source is
+therefore outside a definition restricted to the minimal coprime pair.
+Source: arXiv:1703.09188, lines 706--724 and 2210--2215. -/
+theorem balanced_coprime_ancilla_eq_one {d pa pb : ℕ} (hd : 0 < d)
+    (hbalance : pa * d = pb * d) (hcoprime : Nat.Coprime pa pb) :
+    pa = 1 ∧ pb = 1 := by
+  have hab : pa = pb := mul_right_cancel₀ hd.ne' hbalance
+  subst pb
+  have hpa : pa = 1 := by simpa using hcoprime
+  exact ⟨hpa, hpa⟩
+
+end MPOTensor

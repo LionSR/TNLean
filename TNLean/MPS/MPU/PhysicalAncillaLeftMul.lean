@@ -41,20 +41,23 @@ noncomputable def physicalIdMatrix (Q : Matrix (Fin d) (Fin d) ℂ) (x : ℕ) :
 /-- Identity-ancilla extension preserves the identity physical matrix. -/
 @[simp] theorem physicalIdMatrix_one (d x : ℕ) :
     physicalIdMatrix (1 : Matrix (Fin d) (Fin d) ℂ) x = 1 := by
-  simp [physicalIdMatrix, Matrix.one_kronecker_one]
+  simp [physicalIdMatrix]
 
 /-- Identity-ancilla extension preserves physical matrix multiplication. -/
 theorem physicalIdMatrix_mul (P Q : Matrix (Fin d) (Fin d) ℂ) (x : ℕ) :
     physicalIdMatrix P x * physicalIdMatrix Q x = physicalIdMatrix (P * Q) x := by
   unfold physicalIdMatrix
-  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ finProdFinEquiv finProdFinEquiv
-    finProdFinEquiv]
-  rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
+  calc
+    _ = Matrix.reindex finProdFinEquiv finProdFinEquiv
+        ((P ⊗ₖ (1 : Matrix (Fin x) (Fin x) ℂ)) * (Q ⊗ₖ 1)) :=
+      Matrix.reindexLinearEquiv_mul ℂ ℂ finProdFinEquiv finProdFinEquiv
+        finProdFinEquiv _ _
+    _ = _ := by rw [← Matrix.mul_kronecker_mul, Matrix.one_mul]
 
 /-- Identity-ancilla extension commutes with adjunction. -/
 theorem physicalIdMatrix_conjTranspose (Q : Matrix (Fin d) (Fin d) ℂ) (x : ℕ) :
     (physicalIdMatrix Q x)ᴴ = physicalIdMatrix Qᴴ x := by
-  simp [physicalIdMatrix, Matrix.conjTranspose_reindex, Matrix.conjTranspose_kronecker]
+  simp [physicalIdMatrix, Matrix.conjTranspose_kronecker]
 
 /-- Identity-ancilla extension commutes with transposition. -/
 theorem physicalIdMatrix_transpose (Q : Matrix (Fin d) (Fin d) ℂ) (x : ℕ) :
@@ -73,7 +76,7 @@ theorem physicalIdMatrix_map_star (Q : Matrix (Fin d) (Fin d) ℂ) (x : ℕ)
   · simpa [physicalIdMatrix, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
       Matrix.one_apply, hab] using h
   · simp [physicalIdMatrix, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-      Matrix.one_apply, hab]
+      hab]
 
 /-- A physical unitary tensored with an identity ancilla is unitary. -/
 theorem physicalIdMatrix_mem_unitaryGroup (Q : Matrix (Fin d) (Fin d) ℂ) (x : ℕ)
@@ -93,7 +96,7 @@ theorem ketLeftMul_tensorPhysicalId (U : MPOTensor d D)
   simp only [ketLeftMul]
   rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
   by_cases hab : i.modNat = j.modNat
-  · simp [physicalIdMatrix, tensorPhysicalId, Matrix.reindex_apply,
+  · simp [physicalIdMatrix, tensorPhysicalId, ketLeftMul, Matrix.reindex_apply,
       Matrix.kroneckerMap_apply, Matrix.one_apply, hab]
   · simp [physicalIdMatrix, tensorPhysicalId, Matrix.reindex_apply,
       Matrix.kroneckerMap_apply, Matrix.one_apply, hab]

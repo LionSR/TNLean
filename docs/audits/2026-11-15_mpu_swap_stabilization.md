@@ -204,7 +204,7 @@ an unspecified dimension-only symmetry-family component is asserted. Endpoint
 MPU guards on the original tensors are not included in these explicit strict
 comparison signatures; the unitary involution preserves such guards if needed.
 
-There are 18 new public declarations, all covered by auxiliary Blueprint entries
+The two transport modules have 18 public declarations, covered by auxiliary Blueprint entries
 in `ch28_mpu_swap_stabilization.tex`. Every new entry stays `notready`; the
 source-labelled `lemma:sym-trafo-swap` is unchanged. The two generated import
 aggregators are updated with the repository's generator.
@@ -251,5 +251,14 @@ returned HTTP 403 under the environment's disabled network policy. No package
 installation, cache mutation, Lean build, axiom audit, or compiled-declaration
 check ran. Hosted validation is being sought through a draft candidate PR;
 its eventual status must be recorded separately from these local checks.
-No source completion tag, general equivalence-definition change, issue comment,
-assignment, or merge was made.
+The first hosted run at `3d82a4bd` reached the new helper module and failed on a
+reindex-multiplication rewrite and a residual endpoint expansion, with three
+unused-simp diagnostics. The repair uses Mathlib's reindex multiplication result
+as an explicit calculation, unfolds the final ket action, and removes the unused
+arguments. The mathematical signatures are unchanged; the repair still needs
+hosted validation. Source-interpretation obstructions are documented separately
+in `2026-11-15_mpu_swap_ancilla_obstruction.md`, with four additional unverified
+public declarations in `Examples/SwapAncillaCompatibility.lean`.
+
+No source completion tag, general equivalence-definition change, assignment,
+or merge was made.
