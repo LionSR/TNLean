@@ -74,8 +74,10 @@ private theorem flat_cut_eq_closure
   exact h.symm
 
 variable [Fact (2 < width)] [Fact (2 < height)]
-local instance closedFluxWidthOne : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
-local instance closedFluxHeightOne : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
+local instance closedFluxWidthOne : Fact (1 < width) :=
+  ⟨by have := Fact.out (p := 2 < width); omega⟩
+local instance closedFluxHeightOne : Fact (1 < height) :=
+  ⟨by have := Fact.out (p := 2 < height); omega⟩
 local notation "Γₜ" => torusGraph width height
 
 /-- Every closed flux string has the vacuum normalized reduced density on a
