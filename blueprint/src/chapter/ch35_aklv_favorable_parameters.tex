@@ -97,3 +97,49 @@
     scale and logarithmic-rank bounds to obtain
     (\ref{eq:aklv_ff_scalar_cost}).
 \end{proof}
+
+\begin{lemma}[A necessary square-degree window size]
+    \label{lem:aklv_square_degree_constraint}
+    \lean{Real.aklv_square_degree_log_sq_le}
+    \notready
+    Let $q,s$ be positive integers, $\gamma\ge0$, and $R\ge s$. Put
+    \begin{align*}
+        D &=\bigl(q(s^2+1)\bigr)^{32(2s+1)}, &
+        \Delta &=4\exp\left(-4s^2\sqrt{\gamma/R}\right).
+    \end{align*}
+    If $D\Delta\le1$, then $1024(\log s)^2\le\gamma s$.
+    This is a necessary condition on these numerical estimates for the
+    square-degree choice in \cite[Section~4]{Arad2013AreaLaw}.
+\end{lemma}
+\begin{proof}
+    \notready
+    Since $q(s^2+1)\ge s^2$ and $32(2s+1)\ge64s$,
+    $\log D\ge128s\log s$. Taking logarithms of $D\Delta\le1$
+    and dropping the nonnegative $\log4$ gives
+    \begin{align*}
+        128s\log s &\le4s^2\sqrt{\gamma/R}, &
+        32\log s &\le s\sqrt{\gamma/R}.
+    \end{align*}
+    Both sides of the second inequality are nonnegative. Squaring and
+    using $R\ge s$ gives
+    $1024(\log s)^2\le s^2\gamma/R\le\gamma s$.
+\end{proof}
+
+\begin{lemma}[The necessary window size at the preserved half-gap]
+    \label{lem:aklv_ff_square_degree_constraint}
+    \lean{Real.aklv_frustrationFree_square_degree_log_sq_le}
+    \notready
+    \uses{lem:aklv_square_degree_constraint}
+    Let $q,s$ be positive integers, $g\ge0$, and $R\ge s$. If
+    \begin{align*}
+        \bigl(q(s^2+1)\bigr)^{32(2s+1)}
+        \cdot4\exp\left(-4s^2\sqrt{\frac{g}{2R}}\right)\le1,
+    \end{align*}
+    then $2048(\log s)^2\le gs$.
+\end{lemma}
+\begin{proof}
+    \notready
+    \uses{lem:aklv_square_degree_constraint}
+    Apply Lemma~\ref{lem:aklv_square_degree_constraint} at $\gamma=g/2$
+    and multiply its conclusion by two.
+\end{proof}
