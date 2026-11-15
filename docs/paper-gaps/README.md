@@ -2019,3 +2019,14 @@ normalizing power, as the published Methods retain. The energy-dependent
 normalization, Corollary 2.14 and the cut-wise error reduction are formalized;
 the joint power-and-ground-projection sample, its all-cut operator Schmidt
 rank and the ground-line cut factors are not yet.
+
+### The ALVV merge tree for a unique frustration-free ground state
+
+[`alvv16_unique_ground_state_tree.tex`](alvv16_unique_ground_state_tree.tex)
+(narrower, open) records that the existence content of arXiv:1602.08828v2,
+Theorem t:unique, lines 1829–1855, is proved with the source's hypotheses by
+specializing the degenerate-gap resampling tree and its refinement to ground
+energy zero and multiplicity one. The per-node families are not the
+frustration-free family of Theorem t:aisff, so the intermediate dimension grows
+with the chain length instead of the source's constant `D s²`; no running time
+is asserted.

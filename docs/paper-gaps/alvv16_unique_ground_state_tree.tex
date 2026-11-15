@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{The ALVV Merge Tree for a Unique Frustration-Free Ground State}
+\author{}
+\date{November 15, 2026}
+\begin{document}
+\maketitle
+\gapnote{narrower}{open}
+
+\paragraph{Source.}
+Arad, Landau, Vazirani and Vidick,
+\cite[Theorem~t:unique, lines 1829--1855]{Arad2016RigorousRG}, consider a
+nearest-neighbour chain $H=\sum_ih_i$ with $0\le h_i\le\Id$ that is
+frustration free, has a unique ground state $\Gamma$ and a spectral gap
+$\gamma$. The theorem asserts that the merge-tree algorithm, run with the
+frustration-free improving family of
+\cite[Theorem~t:aisff, lines 1580--1609]{Arad2016RigorousRG}, outputs a
+matrix product state approximating $\Gamma$, in a running time close to that
+of matrix multiplication. Its improvement over
+\cite[Theorem~t:alg1, lines 1777--1818]{Arad2016RigorousRG} lies in the
+running time: the frustration-free family has bond dimension independent of
+the chain length, and no energy estimates are carried along the tree.
+
+\paragraph{What is formalized.}
+TNLean has no model of computation, so only the existence content is
+formalized. The hypotheses of the source are imposed exactly: positive
+contractive nearest-neighbour terms, a nonzero vector $\Gamma$ with
+$H\Gamma=0$, every vector of the kernel a multiple of $\Gamma$, and every
+other spectral value at least $\gamma$. Such a chain satisfies
+Assumption~(DG) with ground energy $0$ and ground-space dimension $1$; the
+closed spectral span at energy $0$ is the line $\mathbb C\Gamma$. The
+physical resampling tree of the degenerate-gap case and its refinement
+therefore apply. On an event of failure probability at most $(L+1)^{-2}$,
+the refinement of the actual root and its Ritz extraction give a line,
+mutually $\eta/2$-close to $\mathbb C\Gamma$, of matrix product states whose
+bond dimension is polynomial in $L$ and $1/\eta$
+(\texttt{TNLean.MPS.AreaLaw.ALVV.exists\_unique\_ground\_state\_refined\_ritz\_approximation}).
+
+\paragraph{Deviation.}
+The per-node families are the corrected soft families of the degenerate-gap
+tree, not the frustration-free family of Theorem~t:aisff. Consequently:
+\begin{enumerate}
+  \item the dimension of the viable space at every node is bounded by
+        $\max\bigl(q^{\mathrm{width}},D^2K\cdot2\,(L+2)^2\bigr)$, which grows
+        with $L$ through the corrected sample threshold of
+        \url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf},
+        rather than the constant $\mathcal D s^2$ of the source;
+  \item the constants depend on $\gamma$ through the degenerate-gap
+        parameters, not through the sharper frustration-free parameters
+        $\mathcal D=(d\ell^2)^{22\ell}$;
+  \item no running time is asserted.
+\end{enumerate}
+The conclusion is mathematically correct as stated, and narrower than the
+source only in the size of the intermediate spaces.
+
+\paragraph{Elimination plan.}
+Feed the frustration-free family of Theorem~t:aisff, which is proved
+(\texttt{TNLean.MPS.AreaLaw.ALVV.exists\_frustrationFree\_improving\_family}),
+into the generic tree selection
+\texttt{TNLean.MPS.AreaLaw.exists\_canonical\_interval\_resampling\_tree\_with\_certificate}.
+Two inputs are missing: a transport of the family from the sheet-split
+coordinates in which it is stated to the region coordinates of the tree, and a
+reference space for collective trimming whose Schmidt ranks are bounded
+independently of $L$. The constant per-node bound $\mathcal D s^2$ additionally
+requires the source's sample threshold, which is not established.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

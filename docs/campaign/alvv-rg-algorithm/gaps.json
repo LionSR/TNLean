@@ -472,6 +472,26 @@
       "found": "For qubits with <i>h</i><sub><i>i</i></sub> = 1 − |00⟩⟨00| on neighbouring sites (commuting projections, unique ground state, gap one), |1⋯1⟩ is an eigenvector of the replaced chain with eigenvalue 4ℓ + 6. The argument gives bond dimension (<i>d</i><sup>2</sup> + <i>O</i>(1))<sup><i>k</i>+<i>O</i>(1)</sup>, not <i>O</i>(<i>d</i><sup><i>k</i></sup>).",
       "impact": "None on the statement: ℓ = Θ̃(γ<sup>−1</sup> log<sup>2</sup> <i>d</i>) is the choice that works with norm Θ(ℓ), and (<i>d</i><sup>2</sup> + 4)<sup>ℓ<sup>2</sup>+1</sup> still has the stated form 2<sup>Õ(γ<sup>−2</sup> log<sup>5</sup> <i>d</i>)</sup>.",
       "plan": "Proved in review: the existence part of Theorem 5.15 with norm at most 4ℓ + 6, gap at least γ/15, D = (<i>d</i>ℓ<sup>2</sup>)<sup>22ℓ</sup> and bond dimension at most (<i>d</i><sup>2</sup> + 4)<sup>ℓ<sup>2</sup>+1</sup> at every interior cut. The running time is not formalized."
+    },
+    {
+      "id": "docs/paper-gaps/alvv16_unique_ground_state_tree.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "alvv",
+      "result": "Theorem 6.2, the frustration-free unique ground state",
+      "issue": 9848,
+      "stage": "alg:3",
+      "prs": {
+        "TNLean": []
+      },
+      "title": "The merge tree for a unique frustration-free ground state",
+      "summary": "The existence content of the frustration-free theorem is proved with the source's hypotheses through the degenerate-gap tree, whose intermediate spaces grow with the chain length instead of staying of constant dimension.",
+      "context": "For a frustration-free chain with a unique ground state Γ and gap γ, the source runs the merge tree with the frustration-free improving family, whose bond dimension does not depend on the chain length, and obtains a faster algorithm.",
+      "claims": "Theorem t:unique (lines 1829–1855 of the source) asserts that the algorithm outputs a matrix product state approximating Γ, in time close to that of matrix multiplication.",
+      "found": "Such a chain is the case of Assumption (DG) with ground energy 0 and ground-space dimension 1, and the low-energy span at energy 0 is the line ℂΓ. The degenerate-gap tree and its refinement therefore give, on an event of failure probability at most 1/(<i>L</i> + 1)<sup>2</sup>, a line of matrix product states of polynomial bond dimension mutually η/2-close to ℂΓ. Its node spaces have dimension polynomial in <i>L</i> rather than the constant <i>D s</i><sup>2</sup>.",
+      "impact": "None for the mathematical output; the constant intermediate dimension, which drives the source's running time, is not established.",
+      "plan": "Feed the proved frustration-free improving family into the generic tree selection, after transporting it to region coordinates and supplying a trimming reference of length-independent Schmidt rank."
     }
   ]
 }
