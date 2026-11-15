@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.NormalFundamentalTheorem
+import TNLean.PEPS.RegionBlock.Recovery
 import QICLean.Channel.FiniteProduct
 
 /-!
@@ -42,7 +42,8 @@ theorem regionPhysicalCutMatrix_ne_zero_iff (ψ : (V → Fin d) → ℂ) (R : Fi
   constructor
   · intro h hψ
     apply h
-    simp [regionPhysicalCutMatrix, hψ]
+    subst ψ
+    rfl
   · intro h hM
     apply h
     funext σ
@@ -79,7 +80,7 @@ private theorem reduction_eq_of_subset
   have hU : R ∪ (S \ R) = S := Finset.union_sdiff_of_subset hRS
   have h' : FiniteProduct.reducedMatrix (fun _ : V => Fin d) ρ (R ∪ (S \ R)) =
       FiniteProduct.reducedMatrix (fun _ : V => Fin d) κ (R ∪ (S \ R)) := by
-    simpa only [hU] using h
+    exact hU.symm ▸ h
   let e := (FiniteProduct.unionEquiv (fun _ : V => Fin d) R (S \ R) hdis).symm
   have hm := congrArg (fun M => Matrix.partialTraceRight (M.submatrix e e)) h'
   simpa only [e, FiniteProduct.partialTraceRight_reducedMatrix_union] using hm
