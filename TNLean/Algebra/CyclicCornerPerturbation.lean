@@ -70,6 +70,7 @@ theorem exists_annihilating_corner_perturbation {D m n : ℕ}
     intro hZero
     apply hLne
     ext Y : 1
+    change L Y = 0
     have hEval : W * L Y * Wᴴ = 0 := by
       have h := congrArg
         (fun T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) => T (V * Y * Vᴴ)) hZero
