@@ -8,16 +8,17 @@ import TNLean.MPS.AreaLaw.SoftTruncatedHamiltonianMPO
 /-!
 # The soft-truncation MPO on the full scale range of the source
 
-ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268, allows every order and scale
-with `t′ < (ln 2 / 2) t`. On that range every heat time of the soft series is below `ln 2 / 2`,
-so one base `b = 2 (√2 - 1) < 1` controls the corrected cluster estimate uniformly. The bond
-dimension of the constructed tensors is bounded explicitly by a power of
-`E = 2 max{1, N²} t 2^{m+1} / ξ`, a polynomial in `t 2^{m} N / ξ` for fixed local dimension.
+ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268, allows every order and scale with
+`t′ < (ln 2 / 2) t`. On that range every heat time of the soft series is below `ln 2 / 2`, so one
+base `b = 2 (√2 - 1) < 1` controls the corrected cluster estimate uniformly. The bond dimension of
+the constructed tensors is bounded explicitly by `1 + N q²` plus `m + 1` times a power of `E = 2
+max{1, N²} t 2^{m+1} / ξ` and of `log E`; for fixed local dimension this is polynomial in `m`, `N`
+and `t 2^{m} N / ξ`.
 
 **Local fix (cluster estimate and bond):** the proof uses the corrected interaction-label cluster
-estimate in place of the false printed one, and the bond is polynomial in `t 2^{t′} n / ξ`
-rather than in `t′ 2^{t′} n / ξ`; no computational running time is asserted. See
-`docs/paper-gaps/alvv16_cluster_approximation.tex`.
+estimate in place of the false printed one, and the bond also grows polynomially with the scale `t`,
+which the printed bound `poly(t′ 2^{t′} n / ξ)` omits; no computational running time is asserted.
+See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
 open Matrix

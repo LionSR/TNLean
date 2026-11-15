@@ -250,9 +250,13 @@ running-time claim and the multi-region spectral argument are not included.
     gives~(\ref{eq:soft_interval_source_range_bond}).
 \end{proof}
 
-For fixed $q$, the bound~(\ref{eq:soft_interval_source_range_bond}) is a
-polynomial in $t2^mN/\xi$, of degree depending only on $q$, since
-$c=-\log(2(\sqrt2-1))>0$ is an absolute constant. This is the bond of
+For fixed $q$, the bound~(\ref{eq:soft_interval_source_range_bond}) is
+$1+Nq^2$ plus $m+1$ times a polynomial in $E$ and $\log E$, of degree
+depending only on $q$, since $c=-\log(2(\sqrt2-1))>0$ is an absolute
+constant. The factor $m+1$ is kept: with $q=2$, $N=1$ and $\xi=W$, the
+quantity $E$ is constant while the bound grows with $m$. Since $\log E\leq E$,
+the bond is polynomial in $m$, $N$ and $t2^mN/\xi$, hence in
+$t2^mN/\xi$ and $t'2^{t'}$ together. This is the bond of
 \cite[Lemma on efficient soft truncation, lines 1262--1268]{Arad2016RigorousRG}
 on the whole scale range of that lemma, except that the bond grows
 polynomially with the scale $t$ as well as with $t'2^{t'}n/\xi$: the heat

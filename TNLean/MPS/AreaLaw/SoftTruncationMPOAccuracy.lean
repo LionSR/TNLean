@@ -9,17 +9,20 @@ import QICLean.Analysis.ExponentialGeometricTailOrder
 /-!
 # A logarithmic cluster order for the actual soft-truncation MPO
 
-Taking scale at least three times the positive order puts every required heat time in the strict
-small-time regime. A logarithmic ceiling chooses the actual cluster order from the error
-budget. Supporting a corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268.
+A logarithmic ceiling chooses the actual cluster order from the error budget, for any base
+dominating every heat-time base. Taking scale at least three times the positive order puts every
+required heat time in the strict small-time regime. Supporting a corrected ALVV, arXiv:1602.08828v2,
+`lem:exp-approx-eff`, lines 1262–1268.
 
-**Local fix (cutoff, normalization and parameters):** this is the corrected interaction-label
-construction at scale at least three times the order, not the printed physical-support estimate
-or a computational runtime result; see `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+**Local fix (cutoff and normalization):** this is the corrected interaction-label construction, not
+the printed physical-support estimate or a computational runtime result; see
+`docs/paper-gaps/alvv16_cluster_approximation.tex`.
 
 **Scope restriction (scale at least three times the order):** ALVV `lem:exp-approx-eff`, lines
-1262–1268, allows any scale with `t′ < (ln 2/2) t`; this module takes `t ≥ 3m`, a sub-case of
-that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+1262–1268, allows any scale with `t′ < (ln 2/2) t`; `softHeat_base_bounds` and
+`exists_softTruncation_mpo_of_accuracy` take `t ≥ 3m`, a sub-case of that range, while
+`exists_softTruncation_mpo_of_accuracy_of_base` carries no such restriction. See
+`docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
 open Matrix
@@ -63,8 +66,8 @@ theorem exists_softTruncation_mpo_of_accuracy_of_base {N q m : ℕ} (hq : 1 ≤ 
   have hbudget := Real.exponential_geometric_tail_order (N : ℝ) W b xi
     (by dsimp only [W]; positivity) hb0 hb1 hxi
   change 0 < r ∧ W * (Real.exp ((N : ℝ) ^ 2 * b ^ r) - 1) ≤ xi at hbudget
-  obtain ⟨A, hA⟩ := exists_softTruncation_mpo_of_cluster_order (m := m) hq hbudget.1 h hs hh hnorm
-    eps t hlo ht (hbase.trans hb1.le)
+  obtain ⟨A, hA⟩ := exists_softTruncation_mpo_of_cluster_order (m := m) hq hbudget.1 h hs hh
+    hnorm eps t hlo ht (hbase.trans hb1.le)
   refine ⟨A, hA.trans ?_⟩
   calc
     (t * (2 : ℝ) ^ (m + 1)) *
