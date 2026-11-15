@@ -157,8 +157,11 @@ theorem pairCircuitLayer_op (σ : Bool → Bool → Equiv.Perm κ) (color : Bool
     simpa only [hset] using Finset.noncommProd_toFinset
       (S.toList.map fun k ↦ (k, color)) (fun p ↦ pairedGate (σ color) A p.1) hcomm' hn
   rw [hprod]
-  simp only [List.map_map, Function.comp_apply]
-  simpa using pairedGate_list_prod (σ color) A S.toList S.nodup_toList
+  trans (S.toList.map (pairedGate (σ color) A)).prod
+  · apply congrArg List.prod
+    rw [List.map_map]
+    exact List.map_congr_left fun _ _ ↦ rfl
+  · simpa using pairedGate_list_prod (σ color) A S.toList S.nodup_toList
 
 /-- Unshifted first-layer pairs, then shifted second-layer pairs.
 Source context: arXiv:2405.00439, Section V, lines 2081–2087. -/

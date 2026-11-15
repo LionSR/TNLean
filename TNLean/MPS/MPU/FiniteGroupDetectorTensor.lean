@@ -134,7 +134,6 @@ theorem detectorTensorWord_eq_smul (u w c : unitary (Matrix α α ℂ)) (ζ : �
   simp_rw [hsite]
   rw [rectKronecker_scalar]
   congr 1
-  change (∏ s : Fin N × Bool, f s) = _
   rw [Fintype.prod_prod_type]
   simpa [f, Fintype.prod_bool] using prod_cut_phase ζ m N (by omega)
 

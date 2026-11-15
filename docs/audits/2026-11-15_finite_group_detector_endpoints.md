@@ -378,3 +378,25 @@ checked blueprint marker is attached to any of these four modules. The
 existing order-two matrix, abstract phase, and complete spatial identities
 are the verified results; finite Python checks remain separate evidence.
 The source's corrected anomaly-detection theorem remains open.
+
+## Continued verification and conditional detection
+
+On head `f62e1336c900446f250605d07667d326f63d6afc`, the clock/shift
+module passed its direct strict Lean check in 1.3 seconds in
+[job 132938428031](https://github.com/LionSR/TNLean/actions/runs/43755295343/job/132938428031).
+The full tensor module also kernel-built in 11 seconds; its only strict failure
+was a redundant `change` tactic, removed in the next revision. The circuit
+module reached a remaining list-map function-composition equality, also fixed
+in that revision. The complete circuit composition still awaits checking.
+
+`FiniteGroupDetectorTransport.lean` adds a separate conditional general result.
+It states every forward and undo intermediate-state comparison explicitly,
+then derives the full word's action and normalized expectation. Its more
+general version retains scalar factors on the undo steps as well: the final
+scalar is the product of both forward and undo factors. The unphased undo
+hypothesis is a separate specialization. These new proofs are submitted for
+hosted verification, not yet claimed as checked declarations. They do not
+prove that the source truncations meet the comparison hypotheses, nor do they
+identify the resulting coefficients with the source anomaly invariant.
+The published endpoint-dependence gap note remains relevant:
+https://sirui-lu.com/TNLean/paper-gaps/gs24_truncation_detector_endpoint_dependence.pdf.

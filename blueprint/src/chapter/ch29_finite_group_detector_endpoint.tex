@@ -1,5 +1,49 @@
 \subsection{Endpoint dependence of the finite-group detector}
 
+\begin{lemma}[Conditional detection from comparisons at every intermediate state]
+    \label{lem:mpug_detector_conditional_transport}
+    \lean{MPOTensor.FiniteGroupDetector.reverse_prod_mulVec_eq_smul_of_steps,
+        MPOTensor.FiniteGroupDetector.detectorTransportWord,
+        MPOTensor.FiniteGroupDetector.detectorTransportWord_mulVec_of_phased_intermediate_states,
+        MPOTensor.FiniteGroupDetector.detectorTransportWord_mulVec_of_intermediate_states,
+        MPOTensor.FiniteGroupDetector.star_dotProduct_detectorTransportWord_of_intermediate_states}
+    Let $F_0,\ldots,F_m$ be forward interval operators, and let
+    $D_0^{\dagger},\ldots,D_m^{\dagger}$ be the undo operators in
+    chronological order. Suppose reference vectors and coefficients satisfy
+    \begin{align}
+        F_0\psi&=v_0,&F_{r+1}v_r&=c_rv_{r+1}&& (0\leq r<m),\notag\\
+        w_0&=v_m,&D_r^{\dagger}w_r&=w_{r+1}&& (0\leq r\leq m),\notag\\
+        w_{m+1}&=\psi.&&&&
+        \label{eq:mpug_detector_intermediate_comparisons}
+    \end{align}
+    Then
+    \begin{align}
+        D_m^{\dagger}\cdots D_0^{\dagger}F_m\cdots F_0\psi
+        &=\left(\prod_{r=0}^{m-1}c_r\right)\psi.
+        \label{eq:mpug_detector_conditional_transport}
+    \end{align}
+    Its expectation in a normalized $\psi$ is $\prod_{r=0}^{m-1}c_r$.
+    The comparisons in (\ref{eq:mpug_detector_intermediate_comparisons})
+    are explicit additional assumptions. Deriving them for a specified
+    class of truncations, and identifying their coefficients with the
+    domain-wall phases in \cite[Section~V]{GarreRubioSchuch2024DomainWall},
+    are separate requirements for a corrected detection theorem
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+    More generally, if the undo comparisons are
+    $D_r^{\dagger}w_r=e_rw_{r+1}$, the final scalar also contains
+    $\prod_{r=0}^m e_r$. These undo factors cannot be discarded without
+    an additional comparison or normalization argument.
+\end{lemma}
+
+\begin{proof}
+    Induction on the chronological forward steps gives
+    $F_m\cdots F_0\psi=(\prod_{r=0}^{m-1}c_r)v_m$.
+    Linearity carries the scalar through every undo step, and the second
+    line of (\ref{eq:mpug_detector_intermediate_comparisons}) returns the
+    vector to $\psi$. The normalized expectation follows by taking its
+    inner product with $\psi$.
+\end{proof}
+
 \begin{lemma}[The complete retained-circuit detector at even order]
     \label{lem:mpug_detector_complete_circuit}
     \lean{MPOTensor.FiniteGroupDetector.detectorRoot_triangular_even,
