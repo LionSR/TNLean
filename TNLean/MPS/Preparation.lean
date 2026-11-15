@@ -12,6 +12,7 @@ import TNLean.MPS.Preparation.AllLengthPolynomialAccuracy
 import TNLean.MPS.Preparation.AllLengthPrescribedSlope
 import TNLean.MPS.Preparation.ApproximatingState
 import TNLean.MPS.Preparation.ApproximationError
+import TNLean.MPS.Preparation.ArbitraryBlockedPreparation
 import TNLean.MPS.Preparation.BinaryMERA
 import TNLean.MPS.Preparation.BlockApproximationError
 import TNLean.MPS.Preparation.BlockGateUnitary

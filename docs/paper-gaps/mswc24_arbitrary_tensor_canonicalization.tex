@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Arbitrary Translation-Invariant Tensors and Preparation after Blocking}
+\author{}
+\date{2026-11-15}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source claim}
+For a fixed translation-invariant tensor of constant bond dimension,
+the paragraph ``Long-range MPS using measurements'' of
+\cite{Malz2024Preparation} asserts preparation on the physical chain in
+depth $O(\log(N/\varepsilon))$ when measurements prepare only the
+GHZ-type state, and $O(\log\log(N/\varepsilon))$ when they also assist
+the tree circuit. Normalization presupposes a nonzero periodic vector.
+The starting tensor need not already be a direct sum of normal blocks.
+
+\section{The algebraic reduction}
+For every tensor $A$ there exist $p\ge1$ and normal, left-canonical,
+pairwise gauge-phase-inequivalent tensors $C_j$ such that, for every
+positive blocked length $M$,
+\begin{align*}
+    V^{(M)}(A^{[p]})
+     &=\sum_j\beta_j(M)V^{(M)}(C_j), &
+    \beta_j(M)&=\sum_{k=1}^{m_j}\nu_{j,k}^{M}.
+\end{align*}
+Every multiplicity is positive and every copy weight is nonzero.
+The family may be empty, in which case every vector on the left vanishes.
+Distinct representatives are eventually linearly independent.
+This combines the canonical representative after blocking, the
+trace-preserving gauge, and grouping by gauge phases from
+\cite[Section~2.3 and Appendix~A]{Cirac2016MPDO_arXiv}.
+The declaration is
+\leanid{MPSTensor.exists_normal_leftCanonical_sectors_after_blocking}
+in \doclink{TNLean/MPS/CanonicalForm/BNTSectorsAfterBlocking}.
+
+Each $C_j$ has a positive-definite trace-one fixed point $\sigma_j$.
+Normality and inequivalence give a strict mixed-transfer spectral gap.
+Consequently there is $c$, fixed before $M$ and $\varepsilon$, such that
+every $M\ge2$ with $V^{(M)}(A^{[p]})\ne0$ and every
+$0<\varepsilon\le1$ have a unit vector $\psi$ prepared in measurement
+rounds of depth $T$ on the chain of $d^p$-dimensional sites, with
+\begin{align*}
+    T&\le c\log\bigl(1+\log(M/\varepsilon)\bigr), &
+    1-\left|\left\langle\psi,
+    \frac{V^{(M)}(A^{[p]})}{\|V^{(M)}(A^{[p]})\|}\right\rangle\right|
+    &\le\varepsilon.
+\end{align*}
+The declaration is
+\leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockTensor_le_log_log}
+in \doclink{TNLean/MPS/Preparation/ArbitraryBlockedPreparation}.
+The coefficients may cancel separately at particular lengths; only the
+total target vector is assumed nonzero.
+
+\section{Remaining conclusions}
+The algebraic equality above applies to physical lengths divisible by
+$p$. It does not assert that the same normal family represents all
+other lengths. Moreover, a circuit on $d^p$-dimensional sites is not yet
+a circuit on the original $d$-dimensional sites under the formal depth
+predicate. The remaining steps are:
+\begin{enumerate}
+    \item Replace each blocked nearest-neighbour gate, onsite
+          instrument, and conditional correction by an explicit
+          protocol on the original sites, with resources bounded in
+          terms of the fixed $p$ and $d$. Establish equality of branch
+          operations, including normalization and feedforward.
+    \item Treat every residue class of physical lengths modulo $p$.
+          Retain the residual boundary contraction or use an unequal
+          blocking theorem that preserves its coefficient identity.
+          A periodic tensor may produce nonzero states at some
+          residues and zero states at others, so nonvanishing must be
+          imposed on the actual target at its actual length.
+    \item For the single-GHZ-measurement conclusion, preserve that
+          measurement placement when compiling the later circuit.
+          The measurement-round conclusion alone does not prove that
+          stronger restriction on the protocol.
+\end{enumerate}
+These are scope restrictions of the stated partial result, rather than
+counterexamples to the source's asymptotic claim. The corrected unweighted
+polar construction and the multiplicity correction remain as documented in
+\cite{gap:mswc24_measurement_preparation_scope,gap:mswc24_multiplicity_fixed_point}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

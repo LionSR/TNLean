@@ -425,6 +425,34 @@ depth $O(q)$.
     Lemma~\ref{lem:ldp_depth_log_window}.
 \end{proof}
 
+\begin{lemma}[Normal sectors of an arbitrary tensor after blocking]
+    \label{thm:ldp_arbitrary_blocked_sectors}
+    \lean{MPSTensor.exists_normal_leftCanonical_sectors_after_blocking}
+    \leanok
+    \uses{thm:cpsv_canonical_form_representative_after_blocking,
+        thm:cpsv_cf_to_cfii_gauge, thm:cpsv_representative_sector_decomposition}
+    For every tensor $A$ there exist $p\ge1$ and a finite family of
+    pairwise gauge-phase-inequivalent normal left-canonical tensors $C_j$
+    with positive multiplicities $m_j$ and nonzero complex weights
+    $\nu_{j,k}$ such that, for every $M\ge1$,
+    \begin{align*}
+        V^{(M)}(A^{[p]})
+         &=\sum_j\left(\sum_{k=1}^{m_j}\nu_{j,k}^{M}\right)V^{(M)}(C_j).
+    \end{align*}
+    The vectors $V^{(M)}(C_j)$ are linearly independent for all sufficiently
+    large $M$. The family may be empty, in which case the vector on the
+    left vanishes at every positive blocked length.
+\end{lemma}
+\begin{proof}\leanok
+    Choose a CPSV canonical representative of $A^{[p]}$ and put its blocks
+    in canonical form II by an invertible gauge. Group the blocks by
+    gauge-phase equivalence. Each representative remains left-canonical,
+    and the phase of each copy multiplies its original scalar weight.
+    Gauge invariance and cyclicity of trace give the displayed equality;
+    the basis-of-normal-tensors characterization gives inequivalence and
+    eventual linear independence.
+\end{proof}
+
 \begin{theorem}[All translation-invariant MPS with measurements]
     \label{thm:ldp_all_ti_measurement_source}
     \uses{thm:ldp_long_range_measurement_depth, thm:ldp_overlapping_measurement_depth}
@@ -447,5 +475,13 @@ depth $O(q)$.
     the depth $O(\log\log(N/\varepsilon))$ when the tree-RG circuit is also
     assisted by measurements; for normal tensors and the chain lengths
     divisible by $s2^{k+1}$ for some $k$ with $a\log(N/\varepsilon)+b\le s2^{k+1}\le2(a\log(N/\varepsilon)+b)$ this is Lemma~\ref{thm:ldp_loglog_depth}, and for
-    tensors that are not normal it is not formalized.
+    tensors already in the repeated-block canonical form this is
+    Lemma~\ref{thm:ldp_nonnormal_loglog}. For an arbitrary tensor,
+    Lemma~\ref{thm:ldp_arbitrary_blocked_sectors} gives the exact normal
+    sector decomposition after a fixed positive blocking, and
+    Lemma~\ref{thm:ldp_arbitrary_blocked_loglog} gives the corresponding
+    preparation on the blocked chain. Simulation on the original physical
+    sites and the treatment of lengths outside the blocking period remain
+    separate conclusions
+    \cite{gap:mswc24_arbitrary_tensor_canonicalization}.
 \end{theorem}

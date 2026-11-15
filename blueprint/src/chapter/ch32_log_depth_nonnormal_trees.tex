@@ -179,6 +179,38 @@ already proves the all-length statement in this form.
     identity gives precisely the power sums above.
 \end{proof}
 
+\begin{lemma}[Arbitrary tensors on a fixed blocked chain]
+    \label{thm:ldp_arbitrary_blocked_loglog}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockTensor_le_log_log}
+    \leanok
+    \uses{thm:ldp_arbitrary_blocked_sectors, thm:ldp_nonnormal_loglog,
+        thm:ldp_inequivalent_mixed_gap}
+    For every tensor $A$ of physical dimension $d$ there exist $p\ge1$ and
+    $c\in\mathbb R$ such that every $M\ge2$ with
+    $V^{(M)}(A^{[p]})\ne0$ and every $0<\varepsilon\le1$ have a unit
+    vector $\psi$ prepared by measurement rounds on $M$ sites of dimension
+    $d^p$, of quantum depth $T$, satisfying
+    \begin{align*}
+        T&\le c\log\bigl(1+\log(M/\varepsilon)\bigr),
+        &1-\left|\left\langle\psi,
+        \frac{V^{(M)}(A^{[p]})}{\|V^{(M)}(A^{[p]})\|}\right\rangle\right|
+        &\le\varepsilon.
+    \end{align*}
+    Quantum depth here refers to the blocked chain
+    \cite{gap:mswc24_arbitrary_tensor_canonicalization}.
+\end{lemma}
+\begin{proof}\leanok
+    Lemma~\ref{thm:ldp_arbitrary_blocked_sectors} gives normal
+    left-canonical representatives and their exact sector power sums.
+    Irreducibility and trace preservation give a faithful trace-one fixed
+    point for each representative. Pairwise inequivalence gives the strict
+    mixed eigenvalue bounds by Lemma~\ref{thm:ldp_inequivalent_mixed_gap}.
+    Apply the coefficient-identity form of
+    Lemma~\ref{thm:ldp_nonnormal_loglog} to $A^{[p]}$. If the family is
+    empty, the periodic target vanishes and no length satisfies the
+    nonvanishing hypothesis.
+\end{proof}
+
 Only nearest-neighbour unitary layers contribute to $T$. Measurements,
 classical communication and on-site corrections are free, the number of
 rounds may grow with the tree height, and no outcome is postselected.
