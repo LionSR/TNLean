@@ -8,7 +8,12 @@ as errors, at head `582d7c3a642cd48b07a0b17c6331afecfe787afb` in
 [CI run 21230](https://github.com/LionSR/TNLean/actions/runs/43751459767),
 build job `132926426879`. Its source blob is
 `31000da9f089187646f7a8fcdf83bd1d48c18d1f` and is unchanged in the next candidate.
-The bridge and Ring construction still await validation.
+`IntegerNIMRep.lean` also passed the strict check at head
+`dc044e0bd4e50230acfe950bd6c0e9456f247336` in
+[CI run 21257](https://github.com/LionSR/TNLean/actions/runs/43754993708),
+build job `132937129109`. Its source blob is
+`aa4ed662ed503b73c64ba242af66d33187fed512`.
+The Ring construction and forward lifts still await whole-file validation.
 
 ## Candidate implementation
 
@@ -26,9 +31,10 @@ Draft PR: [#10636](https://github.com/LionSR/TNLean/pull/10636).
   proofs, the data-dependent integer Ring carrier, and lifts of arbitrary
   compatible ring-valued families, NIM-reps and ring-valued characters.
 
-The convolution and evaluation lemmas in `IntegerFusion.lean` are checked.
-The remaining files are candidate scripts without placeholders. Lean validation
-of the Ring instance and forward extensions remains pending. The first attempt
+The convolution and evaluation lemmas in `IntegerFusion.lean` and all the
+restriction and matrix results in `IntegerNIMRep.lean` are checked.
+`BasedRing.lean` remains a candidate without placeholders. Lean validation
+of its Ring instance and forward extensions remains pending. The first attempt
 to check the bridge hit the new module system's prohibition on importing the
 legacy `Defs.lean` from a new-style module. The two adapter files now retain
 legacy import format; the standalone integer foundation remains a public module.
@@ -152,5 +158,6 @@ access. Follow the Linux cache-first instructions in `AGENTS.md`: fetch the
 prebuilt Mathlib cache, verify `Mathlib.olean`, then build only the new modules
 with package lint options. Validate blueprint declarations after successful
 Lean builds. Hosted PR CI is checking the remaining candidate. Only the
-checked integer-convolution and evaluation entries carry `leanok` markers;
-the bridge and Ring entries remain unmarked until their source checks pass.
+checked convolution, evaluation and restriction-bridge entries carry `leanok`
+markers; the Ring and forward-lift entries remain unmarked until their source
+checks pass.
