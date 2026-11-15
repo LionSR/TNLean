@@ -649,3 +649,38 @@ trace illustrates this failure.
     $c\sqrt k$ is nonzero, so Lemma~\ref{thm:w_state_prime_bound} applies
     to the compressed tensor.
 \end{proof}
+
+\begin{lemma}[W-state bounds for divisors and squarefree lengths]
+    \label{lem:w_state_squarefree_bound}
+    \lean{MPSTensor.divisor_lt_of_mpv_eq_smul_wIndicator_of_no_small_divisor,
+        MPSTensor.lt_gcd_factorial_mul_of_mpv_eq_smul_wIndicator_of_squarefree,
+        MPSTensor.lt_factorial_mul_of_mpv_eq_smul_wIndicator_of_squarefree}
+    \notready
+    \discussion{2947}
+    \uses{lem:w_state_prime_divisor_bound, thm:w_state_no_small_divisor_bound}
+    Suppose $N>0$ and a qubit tensor of bond dimension $D$ has periodic
+    vector $cW_N$ with $c\ne0$. Set
+    \begin{align}
+        B_D & =2\max\bigl\{(D^2+1)^2,
+        3(D-1)((D^2+1)^2+1)\bigr\}.
+        \label{eq:w_state_divisor_threshold}
+    \end{align}
+    Every divisor $m\ge2$ of $N$ having no divisor between $2$ and $D$
+    satisfies $m<B_D$. If $N$ is squarefree, then
+    \begin{align}
+        N & <\gcd(N,D!)B_D\le D!B_D.
+        \label{eq:w_state_squarefree_bound}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lem:w_state_prime_divisor_bound, thm:w_state_no_small_divisor_bound}
+    Write $N=mk$. Lemma~\ref{lem:w_state_prime_divisor_bound} gives a
+    tensor of the same bond dimension with periodic vector
+    $c\sqrt k\,W_m$, whose coefficient is nonzero. Apply
+    Lemma~\ref{thm:w_state_no_small_divisor_bound} to obtain $m<B_D$.
+    If $N$ is squarefree, set $g=\gcd(N,D!)$ and $m=N/g$. Squarefreeness
+    gives $\gcd(m,D!)=1$. Every integer between $2$ and $D$ divides $D!$,
+    so none divides $m$. For $m\ge2$ use the divisor bound; for $m=1$
+    use $B_D>1$. Multiplication by $g>0$ gives
+    (\ref{eq:w_state_squarefree_bound}), since $g\le D!$.
+\end{proof}
