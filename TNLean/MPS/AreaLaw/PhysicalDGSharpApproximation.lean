@@ -19,8 +19,9 @@ of ALVV, arXiv:1602.08828v2, Theorem 4.9, source lines 1048–1085.
 nonuniform prescription; see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 
 **Scope restriction (gap dependence):** The bound uses `min gamma 1`.
-Comparison with the printed quantitative dependence is established for
-`0 < gamma ≤ 1`; the larger-gap comparison remains as recorded in
+For `0 < gamma ≤ 1` this is the printed quantitative dependence; for larger
+gaps it costs the factor `max gamma 1 ≤ 1 + log r / log q` in the exponent,
+as proved in `TNLean.MPS.AreaLaw.ALVV.LargeGapComparison` and recorded in
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 
 The distinct spectral values express Assumption (DG) of the source,

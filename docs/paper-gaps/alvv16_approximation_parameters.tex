@@ -48,10 +48,11 @@ ALVV states the local normalization at source lines 267 and 806; no
 global assumption $\gamma\le1$ is stated there or in Assumption (DG).
 
 The bounds below use $g=\min\{\gamma,1\}$. Decreasing a supplied gap
-lower bound to $g$ is always legitimate. Comparing the resulting bound
-with the printed inverse powers of the original $\gamma>1$ requires an
-additional uniform spectral bound or a separate large-gap argument.
-That comparison remains open here.
+lower bound to $g$ is always legitimate. The local normalization does bound
+the gap in terms of the ground-space dimension $r$: Section~\ref{sec:large_gap}
+proves $q^m\le r$ for every natural $m<\gamma$, hence
+$\gamma\le1+\log r/\log q$, and $\gamma\le1$ whenever $r<q$. That section
+compares the capped bounds with the printed inverse powers of $\gamma>1$.
 
 \section{The printed choice is not uniform in the gap}
 
@@ -84,9 +85,9 @@ The obstruction concerns the prescription; it does not disprove
 \section{A choice retaining the two scales}
 
 The corrected prescription of this section is formalized, so the failure of
-the printed choice is resolved. What remains open is the comparison with the
-printed bound for gaps larger than one, where the formal bound uses
-$g=\min\{\gamma,1\}$.
+the printed choice is resolved. The comparison with the printed bound for
+gaps larger than one, where the formal bound uses $g=\min\{\gamma,1\}$, is
+made in Section~\ref{sec:large_gap}.
 
 Normalize the gap to $0<g\le1$. For a target scale $0<\tau\le1$, put
 $u=1+\log(1/g)+\log(1/\tau)$. There is a universal constant $C\ge21$
@@ -151,16 +152,71 @@ interval gives the source's fixed cut.
 The gap in (\ref{eq:alvv_approximation_explicit_rank}) is explicitly
 $g=\min(\gamma,1)$. For $0<\gamma\le1$, the estimate has the source's
 quarter-power gap and three-quarter-power accuracy dependence, with the
-logarithmic correction displayed. For larger supplied gaps it uses $g=1$;
-it does not assert an improvement proportional to $\gamma^{-1}$ or
-$\gamma^{-1/4}$ in that regime. Comparing the capped estimate with the
-unrestricted printed quantitative expression requires a universal upper
-bound on a nontrivial nearest-neighbour ground-space gap, or a separate
-large-gap argument. That comparison is not proved here.
+logarithmic correction displayed. For larger supplied gaps it uses $g=1$.
+Section~\ref{sec:large_gap} shows that this costs at most the factor
+$\max\{\gamma,1\}\le1+\log r/\log q$ in the exponent relative to the
+printed uncapped expression, and nothing when $r<q$.
 The closed spectral cutoff retaining the entire original ground space is
 as documented in the companion
 \href{https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf}
 {spectral-projector note}.
+
+
+\section{Gaps above one}
+\label{sec:large_gap}
+
+Let $H=\sum_{i=1}^{L-1}h_i$ be a nearest-neighbour chain of $L$ qudits of
+dimension $q$, with $0\le h_i\le\Id$, least spectral value $\mu$, a second
+spectral value, gap $\gamma$ in the sense of Assumption (DG), and ground
+space $G$ of dimension $r$.
+
+\paragraph{The gap bound.} For every natural $m<\gamma$ one has $m<L$ and
+$q^m\le r$. Indeed, for $m\le L$ split the chain into its first $L-m$ sites
+and its last $m$ sites, and write $H=A\otimes\Id+N$, where $A$ collects the
+terms supported on the first $L-m$ sites and $N$ the at most $m$ terms that
+meet the last $m$ sites, so $0\le N\le m$. For a unit ground vector
+$\psi=\sum_y\psi_y\otimes\ket y$, positivity of $N$ gives
+$\sum_y\langle\psi_y,A\psi_y\rangle\le\mu\sum_y\|\psi_y\|^2$, so some slice
+$\varphi=\psi_y\ne0$ has $\langle\varphi,A\varphi\rangle\le\mu\|\varphi\|^2$.
+Every product $\varphi\otimes\chi$ then has energy at most $\mu+m$. These
+products form a space of dimension $q^m$. If $q^m>r$, it contains a nonzero
+vector orthogonal to $G$, whose energy is at least $\mu+\gamma>\mu+m$, a
+contradiction. Applied at $m=L$, the same argument contradicts $r<q^L$, so
+$m<L$. Taking $m=\lceil\gamma\rceil-1$ gives
+\[
+  \gamma\le1+\frac{\log r}{\log q},
+\]
+and $r<q$ forces $\gamma\le1$. The three-qubit example above, with $r=4$,
+$q=2$ and $\gamma=2$, shows that gaps above one occur once $r\ge q$.
+The formal statements are
+\leanid{TNLean.MPS.AreaLaw.ALVV.pow_le_finrank_ground_of_lt_gap},
+\leanid{TNLean.MPS.AreaLaw.ALVV.gap_le_one_of_finrank_lt} and
+\leanid{TNLean.MPS.AreaLaw.ALVV.gap_le_one_add_log_div_log}.
+
+\paragraph{The comparison.} Since $1/g=\max\{\gamma,1\}/\gamma$ and
+$\gamma(1/\gamma)^{1/4}\ge1$ for $\gamma\ge1$,
+\[
+  \frac{u^3}{g}+g^{-1/4}a^{3/4}u
+  \le\max\{\gamma,1\}\Bigl(\frac{u^3}{\gamma}
+     +\gamma^{-1/4}a^{3/4}u\Bigr).
+\]
+Hence (\ref{eq:alvv_approximation_explicit_rank}) and
+(\ref{eq:alvv_approximation_global_bond}) hold with the uncapped printed
+exponent multiplied by $\max\{\gamma,1\}\le1+\log r/\log q$; the logarithms
+$u$ and $a$ keep $\log(1/g)=\max\{0,\log(1/\gamma)\}$. The formal statements
+are
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_interval_normalized_approximation_uncapped}
+and
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_normalized_isOpenMPS_approximation_uncapped}.
+
+When $r<q$, in particular for a unique ground state, the factor is one and
+the capped estimates are the printed ones. When $r\ge q$ and $\gamma>1$, the
+remaining factor is at most $1+\log r/\log q$, which is $O(\log n)$ under the
+source's standing assumption $r=\mathrm{poly}(n)$. The printed bound with a
+single factor $r$ and the uncapped gap is not proved in this regime: it would
+need either an improvement of the polynomial-filter construction for gaps
+above one, or a better gap bound. Whether a nontrivial nearest-neighbour gap
+is bounded by a universal constant is not settled here.
 
 \section{One global matrix product state}
 
@@ -184,8 +240,8 @@ at most $\delta/8$. Its normalization gives $\Phi$ and preserves every
 bond bound. Choosing $B=\lceil e^E\rceil$ for the common logarithmic rank
 budget costs at most one in $\log B$ and retains the single factor $r$.
 
-The remaining quantitative comparison concerns the cap $g=\min(\gamma,1)$
-for larger supplied gaps, as discussed above. The low-energy extension and
+The cap $g=\min(\gamma,1)$ for larger supplied gaps is compared with the
+printed expression in Section~\ref{sec:large_gap}. The low-energy extension and
 the binary-tree algorithm are separate results and are not asserted here.
 
 
