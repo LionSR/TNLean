@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{A Physical Wilson-Loop Obstruction to Equal Local Density}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14 and Theorem 6.15, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 2199--2267,
+describe flux-string deformations and physical flux measurements.
+Endpoint exclusion alone cannot imply vacuum density on an arbitrary
+annular observation: an observed loop can detect an enclosed flux.
+
+The theorem
+\leanid{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_ne_of_closedWalk_holonomy}
+proves an actual density inequality whenever an observed closed walk has
+different holonomy conjugacy classes for two inserted regular-bond states.
+The physical observation graph is connected, but the complement can be
+disconnected and the observation can have holes. The local tensors are
+regular group-isometric for a finite group. The complete physical
+closed-walk measurement is constructed from that isometry and its action
+on the closed coefficient cut is derived from all open boundary columns.
+Both cuts are proved nonzero from regular injectivity. A projection retaining
+one cut and annihilating the other separates their normalized row Grams.
+
+The native version is
+\leanid{TNLean.PEPS.IsGIsometric.torusBond_normalized_density_ne_of_closedWalk_holonomy}.
+Its inputs are the actual two native bond assignments and an actual closed
+walk in the observed induced graph; the hypothesis compares their computed
+holonomy conjugacy classes. Both periods are at least three. Taking one
+assignment to be vacuum gives a sufficient Wilson-loop criterion for
+failure of vacuum normalized density. No density inequality, projective
+measurement or nonzero witness is supplied as a premise.
+
+This is a sufficient obstruction, not a classification of all annular
+observations or a converse density theorem. In particular, deriving a
+nontrivial observed loop holonomy for each proposed endpoint placement
+is a separate geometric obligation. The earlier finite annular calculation
+is not promoted to a general geometric theorem. The physical obstruction
+is distinct from the nonabelian seam-word obstruction to restricted
+homotopy, whose test group need not be the physical flux group.
+The broader source wording remains open under \ghissue{8703}; no
+full-lattice Hamiltonian identification from \ghissue{8947} is used.
+\end{document}

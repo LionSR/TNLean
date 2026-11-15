@@ -1,0 +1,26 @@
+\begin{lemma}[Observed closed-walk holonomy separates normalized densities]
+    \label{lem:peps_wilson_density_obstruction}
+    \lean{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_ne_of_closedWalk_holonomy,
+        TNLean.PEPS.IsGIsometric.torusBond_normalized_density_ne_of_closedWalk_holonomy}\leanok
+    Let a finite graph carry regular group-isometric tensors for a finite
+    group, and let $R$ have connected induced graph. Fix a closed walk in
+    that induced graph. If two actual bond insertions have different
+    conjugacy classes of holonomy along this walk, their physical cuts
+    $M,N$ on $R$ are nonzero and their trace-normalized row Gram matrices
+    differ. The same conclusion holds for the actual native inserted-matrix
+    torus cuts when both periods are at least three.
+    The complement may be disconnected and no simple connectedness is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_closed_walk_class_physical_measurement,
+        thm:peps_physical_cut_column_action,
+        thm:peps_regular_twisted_state_nonzero}
+    The complete observed closed-walk measurement has a projection $Q$
+    selecting the first conjugacy class. Its uniform action on every actual
+    open boundary column gives $QM=M$ and $QN=0$ after complementary contraction.
+    Regular injectivity makes both coefficient vectors, and therefore both
+    cuts, nonzero. If the normalized row Grams were equal, multiplying
+    by $Q$ would give
+    $\operatorname{tr}(MM^\dagger)^{-1}MM^\dagger=0$, contradicting $M\ne0$.
+    The native coefficient cuts agree with the ordered-edge cuts entry by entry.
+\end{proof}

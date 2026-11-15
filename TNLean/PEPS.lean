@@ -342,6 +342,7 @@ import TNLean.PEPS.RegularWeightedBondContraction
 import TNLean.PEPS.RegularWeightedChargeContraction
 import TNLean.PEPS.RegularWeightedGaugeTransport
 import TNLean.PEPS.RegularWeightedOpenContraction
+import TNLean.PEPS.RegularWilsonDensityObstruction
 import TNLean.PEPS.SemiRegularBondDimension
 import TNLean.PEPS.SemiRegularBondIsometry
 import TNLean.PEPS.SemiRegularBondIsometryExtension
