@@ -17,7 +17,7 @@ be contracted without sweeping the origin.
 
 This is a mathematical limitation of a restricted-support interpretation of
 SCP10, arXiv:1001.3807v3, Lemma 6.14, source lines 2199–2214. Seam words here
-are homotopy invariants valued in an arbitrary test group, not physical flux
+are homotopy invariants valued in an arbitrary coefficient group, not physical flux
 insertions or an assertion about physical reduced density. In particular,
 lifted displacement alone cannot classify these restricted homotopies.
 See `docs/paper-gaps/scp10_restricted_homotopy_obstruction.tex`.
@@ -27,7 +27,7 @@ namespace TNLean.PEPS
 
 variable {width height : ℕ} {G : Type*} [Group G]
 local notation "X" => TorusVertex width height
-local instance restrictedWordQuiver : Quiver X := torusDualQuiver width height
+local instance : Quiver X := torusDualQuiver width height
 
 private def seamStep (u v : G) {a b : X} : TorusDualStep a b → G
   | .east x _ => if x + 1 = 0 then u else 1
@@ -39,7 +39,7 @@ private theorem seamStep_reverse (u v : G) {a b : X} (e : TorusDualStep a b) :
     seamStep u v e.reverse = (seamStep u v e)⁻¹ := by
   cases e <;> simp [TorusDualStep.reverse, seamStep]
 
-/-- Ordered seam transport in an arbitrary test group. East and north seam
+/-- Ordered seam transport in an arbitrary coefficient group. East and north seam
 crossings contribute the two generators, west and south their inverses.
 This retains nonabelian information beyond lifted displacement.
 Mathematical obstruction for the restricted reading of SCP10, Lemma 6.14. -/
@@ -94,7 +94,7 @@ theorem TorusDualHomotopy.seamWord_eq_of_origin_not_mem
 
 /-- A square surrounding a forbidden origin has zero displacement but cannot
 be contracted by square moves supported away from that origin. A noncommuting
-pair in any test group supplies the nonabelian obstruction. No torus period
+pair in any coefficient group supplies the nonabelian obstruction. No torus period
 size assumption is required. Mathematical limitation of the restricted
 interpretation of SCP10, Lemma 6.14. -/
 theorem torusDualSquareLoop_obstructs_restricted_completeness
