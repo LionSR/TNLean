@@ -10,9 +10,9 @@
 \gapnote{scope-restriction}{open}
 
 Schuch, Cirac, and P\'erez-Garc\'ia,
-\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3}~\cite{Schuch2010PEPS},
 Definition 6.13 and Lemma 6.14, source
-\path{Papers/1001.3807/paper_v3.tex}, lines 2180--2214, specify a native
+\path{Papers/1001.3807/paper_v3.tex}, lines 2174--2214, specify a native
 bond insertion by a dual string and deform it away from an observation.
 
 For a physical vertex set $R$, compute its forbidden dual plaquettes as
@@ -42,11 +42,25 @@ need not be abelian; all insertion powers have the same base.
 The simple connectedness hypothesis is on the explicitly computed dual
 corner collar $B(R)$. It is not inferred merely from endpoint exclusion
 or from simple connectedness of $R$. In particular no annular observation
-with an enclosed endpoint is covered. The annular Wilson-loop obstruction
-documented in the
-\href{https://github.com/LionSR/TNLean/pull/10624}{closed-flux density draft}
-continues to rule out
-unrestricted endpoint-free vacuum-density assertions.
+with an enclosed endpoint is covered. This restriction is necessary already
+for a binary regular tensor. With virtual bits $t,r,b,l$ and physical triple $s$,
+take $A(t,r,b,l;s)=[s=(r+t,b+t,l+t)]$, with addition modulo two.
+On the $7\times7$ torus, observe the perimeter of $[0,3]^2$ and use the
+eastward dual path from $(1,1)$ to $(5,1)$. Both endpoint plaquettes have
+all their corners outside the observation. The four insertions flip the
+downward bonds anchored at $(2,1),(3,1),(4,1),(5,1)$.
+At each observed vertex its physical triple determines the relative bit
+between the incoming and outgoing perimeter incidences. Multiplying their
+diagonal signs defines an observed Wilson operator $W_R$. Each summed bond
+bit occurs twice, whereas precisely one flipped bond lies on the perimeter.
+For the nonzero vacuum and inserted vectors, respectively,
+\begin{align}
+    W_R|\Psi_0\rangle=|\Psi_0\rangle,\qquad
+    W_R|\Psi_p\rangle=-|\Psi_p\rangle.
+    \label{eq:scp10_physical_avoidance_annular_sign}
+\end{align}
+Their normalized observed densities therefore differ. This calculation
+does not use a citation to an unmerged sibling branch.
 
 This closes the physical-incidence step under the stated collar geometry.
 It does not prove homotopy completeness with forbidden square moves or the
@@ -54,4 +68,6 @@ open-pair vacuum-density equality. The latter still requires a complementary
 physical contraction calculation; identity insertions on the observed side
 alone do not supply it. These obligations remain under \ghissue{8703}.
 The full-lattice Hamiltonian scope of \ghissue{8947} is unchanged.
+\bibliographystyle{alpha}
+\bibliography{references}
 \end{document}

@@ -347,15 +347,25 @@ torus.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regular_twisted_gram_expansion}
-    At a local site, centrality makes the two twisted configurations
-    differ by a simultaneous translation precisely when the original
-    configurations do. The regular-isometric Gram kernel is therefore
-    unchanged. Substitute these local identities into the actual
-    open-region cross Gram expansion.
+    Write $\theta_v^u,\eta_v^u$ for the configurations after the local edge twists.
+    Centrality gives
+    \begin{align}
+        \eta_v^u=g\cdot\theta_v^u\quad\Longleftrightarrow\quad
+        \eta_v=g\cdot\theta_v.
+        \label{eq:peps_central_twist_translation}
+    \end{align}
+    The regular-isometric site kernel therefore satisfies
+    \begin{align}
+        \sum_s\overline{a_v(\eta_v^u)_s}a_v(\theta_v^u)_s
+        =\sum_s\overline{a_v(\eta_v)_s}a_v(\theta_v)_s.
+        \label{eq:peps_central_twist_site_gram}
+    \end{align}
+    Substitute these identities into the open-region cross Gram expansion.
 \end{proof}
 
 \begin{lemma}[Vacuum reduced matrix for central complementary insertions]
-    \label{lem:peps_central_twist_reduced_matrix}
+    \label{lem:peps_central_twist_reduced_matrix,thm:peps_dual_flux_nonzero,
+        thm:peps_dual_flux_deformation}
     \lean{TNLean.PEPS.regularPhysicalCutMatrix_reduced_eq_of_central,
         TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_eq_of_central}\leanok
     Under the preceding regular-isometry and centrality assumptions,
@@ -371,7 +381,8 @@ torus.
     inverse normalization is interpreted as inverse scalar multiplication.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:peps_central_twist_open_gram}
+    \uses{lem:peps_central_twist_open_gram,
+        thm:peps_regular_twisted_cut_entropy,thm:peps_regular_open_region_projector}
     The observed open-region matrix is unchanged because every incident
     insertion is identity. The complementary open-region Gram matrix is
     unchanged by the preceding lemma. Substitute both identities into
@@ -402,10 +413,15 @@ torus.
         lem:peps_central_twist_reduced_matrix}
     Derive the native detour with identity insertions on all incident
     physical bonds. Its lifted displacement agrees with that of $p$,
-    so full-support homotopy completeness and virtual invariance give
-    equality of their actual coefficient vectors. Convert the detour
+    so $d(q)=d(p)$ and full-support completeness give $q\sim_Xp$.
+    Virtual invariance gives $M_q=M_p$. Convert the detour
     to ordered-edge graph coordinates; centrality is preserved by
     integer powers and inverses. The preceding complementary-insertion
-    lemma identifies its reduced matrix with the vacuum one. Regular
+    lemma gives
+    \begin{align}
+        M_pM_p^\dagger=M_qM_q^\dagger=M_0M_0^\dagger.
+        \label{eq:peps_native_central_detour_gram}
+    \end{align}
+    Taking traces and dividing gives the claimed normalized equality. Regular
     injectivity gives nonvanishing of both actual cuts.
 \end{proof}
