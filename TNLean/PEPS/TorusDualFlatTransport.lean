@@ -132,8 +132,9 @@ private theorem classTransport_eval (R : Set X) {a b c : X}
 
 /-- Positive restricted-support completeness: equality under every reversible
 transport flat on the allowed squares is equivalent to generated homotopy.
-The quantification includes arbitrary vertex fibres and is not a finite test
-family, a displacement criterion, or an assumed homotopy witness. No period
+The quantified fibres live in the base universe `Type`, whereas the transport
+structure and its homotopy-invariance theorem are universe-polymorphic. This is
+not a finite family, a displacement criterion, or an assumed homotopy witness. No period
 size assumptions are needed. Semantic refinement of SCP10, Lemma 6.14. -/
 theorem torusDualHomotopy_iff_flatTransport {R : Set X} {a b : X}
     (p q : TorusDualPath a b) :
