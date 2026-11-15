@@ -60,10 +60,9 @@ private theorem span_finrank_split {𝕜 E α β : Type*} [RCLike 𝕜]
     exact h₁ j
   have hDisjoint : Disjoint W R := W.isCompl_orthogonal.disjoint.mono_right hRorth
   have hDim := Submodule.finrank_sup_add_finrank_inf_eq W R
-  simp only [hDisjoint.eq_bot, finrank_bot, add_zero] at hDim
   change finrank 𝕜 T = finrank 𝕜 W + finrank 𝕜 R
   rw [hSpan]
-  exact hDim
+  simpa only [hDisjoint.eq_bot, finrank_bot, add_zero] using hDim
 
 /-- Projecting middle-block coefficient vectors onto the outside noise
 span preserves the outside cross correlations and separates an
