@@ -146,7 +146,12 @@ theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate
           have : 0 ≤ (2 * Cb : ℝ) * c * (1 + Real.log ((N : ℝ) / ε)) := by positivity
           nlinarith
     · exact isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth hprep
-        (by intro hz; simp [hz] at hunit)
+        (by
+          intro hz
+          have hz' : (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N) = 0 := by
+            ext s
+            exact congrFun hz s
+          simp [hz'] at hunit)
     · rw [inner_self_eq_norm_sq_to_K, hunit]
       simpa using hε.le
 

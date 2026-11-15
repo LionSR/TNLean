@@ -24,7 +24,8 @@ open Filter
 namespace MPSPreparation
 
 /-- An error decreasing with the blocking length and vanishing at whole-ring blocking. -/
-def delayedBlockingError (N q : ℕ) : ℝ := if q < N then 1 / ((N : ℝ) + 1) else 0
+noncomputable def delayedBlockingError (N q : ℕ) : ℝ :=
+  if q < N then 1 / ((N : ℝ) + 1) else 0
 
 /-- The delayed blocking error lies between zero and `1/(N+1)`. -/
 theorem delayedBlockingError_bounds (N q : ℕ) :
@@ -40,7 +41,7 @@ theorem antitone_delayedBlockingError (N : ℕ) : Antitone (delayedBlockingError
 
 /-- Whole-ring blocking has zero error. -/
 theorem delayedBlockingError_eq_zero {N q : ℕ} (h : N ≤ q) :
-    delayedBlockingError N q = 0 := if_neg (by omega)
+    delayedBlockingError N q = 0 := ite_eq_right (by omega)
 
 /-- Errors tend to zero along every schedule, hence in particular along any logarithmic one. -/
 theorem tendsto_delayedBlockingError (q : ℕ → ℕ) :
@@ -92,7 +93,7 @@ theorem exists_delayedBlockingError_gt_of_log_bound (C : ℝ) (hC : 0 ≤ C) (N�
     have := mul_le_mul_of_nonneg_left hlog hC
     nlinarith
   have hqN' : q < N := by exact_mod_cast hqN
-  rw [delayedBlockingError, if_pos hqN']
+  rw [delayedBlockingError, ite_eq_left hqN']
   dsimp [ε]
   rw [div_lt_div_iff₀ (by positivity) (by positivity)]
   nlinarith

@@ -26,16 +26,17 @@ open Matrix
 namespace MPSTensor
 
 /-- A nontrivial rational unitary on the two-dimensional virtual space. -/
-def flagRotation : Matrix (Fin 2) (Fin 2) ℂ := !![3 / 5, -4 / 5; 4 / 5, 3 / 5]
+noncomputable def flagRotation : Matrix (Fin 2) (Fin 2) ℂ := !![3 / 5, -4 / 5; 4 / 5, 3 / 5]
 
 /-- The rational virtual rotation preserves inner products. -/
 theorem conjTranspose_flagRotation_mul : flagRotationᴴ * flagRotation = 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    norm_num [flagRotation, Matrix.mul_apply, Fin.sum_univ_two, conjTranspose_apply]
+    norm_num [flagRotation, Matrix.mul_apply, Fin.sum_univ_two, conjTranspose_apply,
+      map_ofNat]
 
 /-- The two GHZ flags after rotating their left virtual leg. -/
-def rotatedGHZFlag : MPSTensor 2 2 := fun i => flagRotation * ghzTensor i
+noncomputable def rotatedGHZFlag : MPSTensor 2 2 := fun i => flagRotation * ghzTensor i
 
 /-- The physical matrix has two orthonormal rows, so neither physical dimension is lost. -/
 theorem physicalMatrix_rotatedGHZFlag_mul_conjTranspose :
@@ -43,7 +44,7 @@ theorem physicalMatrix_rotatedGHZFlag_mul_conjTranspose :
   ext i j
   fin_cases i <;> fin_cases j <;>
     norm_num [physicalMatrix, rotatedGHZFlag, flagRotation, ghzTensor, Matrix.mul_apply,
-      Fin.sum_univ_two, Fintype.sum_prod_type, conjTranspose_apply]
+      Fin.sum_univ_two, Fintype.sum_prod_type, conjTranspose_apply, map_ofNat]
 
 private def flagConstraint : Matrix (Fin 2) (Fin 2) ℂ →ₗ[ℂ] ℂ :=
   (3 : ℂ) • Matrix.entryLinearMap ℂ ℂ 1 0 -

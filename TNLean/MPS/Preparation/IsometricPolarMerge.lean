@@ -23,13 +23,14 @@ position-dependent tree into measurement rounds.
 -/
 
 open Matrix
+open scoped ComplexOrder
 
 namespace Matrix
 
 /-- A rectangular matrix admits a full-domain isometric polar factor when the output
 dimension is at least the input dimension. No injectivity is assumed. -/
 theorem exists_isometry_mul_polarPos_eq {m n : Type*} [Fintype m] [Fintype n]
-    [DecidableEq m] [DecidableEq n] (B : Matrix m n ℂ)
+    [DecidableEq n] (B : Matrix m n ℂ)
     (hdim : Fintype.card n ≤ Fintype.card m) :
     ∃ X : Matrix m n ℂ, X.IsIsometry ∧ X * polarPos B = B := by
   classical
@@ -49,6 +50,7 @@ theorem exists_isometry_mul_polarPos_eq {m n : Type*} [Fintype m] [Fintype n]
       _ = Bᴴ * B := by rw [hJ, Matrix.mul_one, polarPos_mul_polarPos]
   obtain ⟨U, hU⟩ := exists_unitary_mul_eq_of_conjTranspose_mul_eq B (J * polarPos B) hGram
   have hUi : (U : Matrix m m ℂ).IsIsometry := by
+    change (U : Matrix m m ℂ)ᴴ * (U : Matrix m m ℂ) = 1
     simpa only [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff'.mp U.property
   refine ⟨(U : Matrix m m ℂ) * J, Matrix.IsIsometry.mul _ _ hUi hJ, ?_⟩
   rw [Matrix.mul_assoc]
@@ -58,11 +60,12 @@ theorem exists_isometry_mul_polarPos_eq {m n : Type*} [Fintype m] [Fintype n]
 chosen as `J W`, where `W` is an isometry on the smaller output space. -/
 theorem exists_isometry_polarMerge_of_range {m n p : Type*}
     [Fintype m] [Fintype n] [Fintype p]
-    [DecidableEq m] [DecidableEq n] [DecidableEq p]
+    [DecidableEq n] [DecidableEq p]
     (J : Matrix m n ℂ) (hJ : J.IsIsometry) (B : Matrix m p ℂ)
     (hsupport : J * Jᴴ * B = B) (hdim : Fintype.card p ≤ Fintype.card n) :
     ∃ W : Matrix n p ℂ, W.IsIsometry ∧ (J * W).IsIsometry ∧
       (J * W) * polarPos B = B := by
+  classical
   have hGram : (Jᴴ * B)ᴴ * (Jᴴ * B) = Bᴴ * B := by
     calc (Jᴴ * B)ᴴ * (Jᴴ * B) = Bᴴ * (J * Jᴴ * B) := by
           simp only [conjTranspose_mul, conjTranspose_conjTranspose, Matrix.mul_assoc]
@@ -94,8 +97,8 @@ theorem exists_isometry_binaryPolarMerge {d χ n₁ n₂ : ℕ} (hχ : 0 < χ)
     calc J * Jᴴ * (J * C) = J * (Jᴴ * J) * C := by simp only [Matrix.mul_assoc]
       _ = J * C := by rw [hJ, Matrix.mul_one]
   have hdim : Fintype.card (Fin χ) ≤ Fintype.card (Fin (MPSTensor.blockPhysDim χ 2)) := by
-    simpa only [Fintype.card_fin, MPSTensor.blockPhysDim, pow_two] using
-      Nat.le_mul_of_pos_right χ hχ
+    change χ ≤ χ ^ 2
+    simpa only [pow_two] using Nat.le_mul_of_pos_right χ hχ
   obtain ⟨W, hW, _, hWP⟩ := Matrix.exists_isometry_polarMerge_of_range J hJ (J * C) hsupp hdim
   exact ⟨W, hW, hWP⟩
 
