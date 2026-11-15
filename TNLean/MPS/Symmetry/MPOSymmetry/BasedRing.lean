@@ -41,7 +41,7 @@ theorem IsFusionRing.integerNIMRepEval_unit_column
     fun a c ↦ (hN.isFusionUnit a c).2
   change (∑ a, u a • integerNIMRepMatrix N a) c e = u c
   simp only [Matrix.sum_apply, Matrix.smul_apply, integerNIMRepMatrix]
-  simp [hright, zsmul_eq_mul, mul_ite]
+  simp [hright, mul_ite]
 
 /-- The regular action on integer combinations is faithful. -/
 theorem IsFusionRing.integerNIMRepEval_injective
@@ -87,6 +87,7 @@ theorem IsFusionRing.integerFusionMul_one_right
 
 /-- Ring structure on integer combinations for specified fusion data.
 This is a constructor, not a global instance on raw finitely supported functions. -/
+@[instance_reducible]
 def IsFusionRing.integerFusionRing {N : ι → ι → ι → ℕ} {e : ι} {dual : ι → ι}
     (hN : IsFusionRing N e dual) : Ring (ι →₀ ℤ) := by
   letI : Mul (ι →₀ ℤ) := ⟨integerFusionMul N⟩
@@ -117,7 +118,7 @@ instance (F : FusionRing ι) : Ring F.Carrier :=
   F.laws.integerFusionRing
 
 instance (F : FusionRing ι) : CoeFun F.Carrier (fun _ ↦ ι → ℤ) :=
-  ⟨fun u ↦ (u : ι →₀ ℤ)⟩
+  ⟨fun u ↦ (u : ι →₀ ℤ).toFun⟩
 
 /-- A distinguished basis element of the integer fusion ring. -/
 def basis (F : FusionRing ι) (a : ι) : F.Carrier := Finsupp.single a 1
