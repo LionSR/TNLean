@@ -56,18 +56,24 @@ private theorem cyclicTwoValue_isCocycle (p : Fin 2) : IsCocycle (cyclicTwoValue
 /-- The bit three-cocycle, certified in Mathlib's inhomogeneous cochain complex. -/
 def cyclicTwoCocycle (p : Fin 2) :
     cocycles (Rep.ofMulDistribMulAction (Multiplicative (ZMod 2)) ℂˣ) 3 :=
-  toCocycles ⟨cyclicTwoValue p, cyclicTwoValue_isCocycle p⟩
+  cocyclesMk (toInhomogeneousCochain (cyclicTwoValue p))
+    ((isCocycle_iff_d_eq_zero _).1 (cyclicTwoValue_isCocycle p))
 
 /-- Only the generator triple can have a value other than one. -/
 theorem cyclicTwoCocycle_apply (p : Fin 2) (a b c : Multiplicative (ZMod 2)) :
     scalarCocycleValue₃ (cyclicTwoCocycle p) a b c =
       if a = s₂ ∧ b = s₂ ∧ c = s₂ then (-1) ^ p.val else 1 := by
-  simp [cyclicTwoCocycle, cyclicTwoValue]
+  rw [cyclicTwoCocycle, scalarCocycleValue₃_mk]
+  change ofInhomogeneousCochain (toInhomogeneousCochain (cyclicTwoValue p)) a b c = _
+  simp only [ofInhomogeneousCochain_toInhomogeneousCochain, cyclicTwoValue]
 
 /-- The multiplicative values of the certified bit cocycle satisfy the cocycle equation. -/
 theorem cyclicTwoCocycle_isCocycle (p : Fin 2) :
     IsCocycle (scalarCocycleValue₃ (cyclicTwoCocycle p)) := by
-  simpa only [cyclicTwoCocycle, scalarCocycleValue₃_toCocycles] using cyclicTwoValue_isCocycle p
+  rw [cyclicTwoCocycle, scalarCocycleValue₃_mk]
+  change IsCocycle (ofInhomogeneousCochain (toInhomogeneousCochain (cyclicTwoValue p)))
+  rw [ofInhomogeneousCochain_toInhomogeneousCochain]
+  exact cyclicTwoValue_isCocycle p
 
 /-- The value of ωₚ on the generator triple is (-1)^p. -/
 @[simp]

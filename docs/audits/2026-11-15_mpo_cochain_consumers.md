@@ -77,6 +77,12 @@ native cocycles directly. The old `cyclicCocycleSubtype` declaration is removed;
 `cyclicCocycle_inv` is replaced by `cyclicCocycle_neg`, equality in the additive
 group of native cocycles. All production uses and blueprint tags are updated.
 
+The public computation rule `scalarCocycleValue₃_mk` takes a native
+inhomogeneous cochain and a proof of its zero differential. The intermediate
+adapter-specific `scalarCocycleValue₃_toCocycles` declaration is removed.
+Cyclic constructors now call Mathlib's `cocyclesMk` directly. Their private
+scalar formulas supply the explicit values and existing closure proofs.
+
 The generic permuted-block L-symbol now also takes values in the permutation
 representation. The coefficient action and coordinate equivalences allow
 arbitrary universes of block labels and coefficients. Its differential theorem

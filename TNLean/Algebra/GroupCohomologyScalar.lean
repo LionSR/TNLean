@@ -97,12 +97,12 @@ theorem scalarCocycleValue₃_injective :
     congrFun (congrFun (congrFun h (p 0)) (p 1)) (p 2)
 
 @[simp]
-theorem scalarCocycleValue₃_toCocycles
-    (ω : {ω : ScalarThreeCochain G // ScalarThreeCochain.IsCocycle ω}) :
-    scalarCocycleValue₃ (ScalarThreeCochain.toCocycles ω) = ω.1 := by
-  change ScalarThreeCochain.ofInhomogeneousCochain
-    (iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 (ScalarThreeCochain.toCocycles ω)) = ω.1
-  rw [ScalarThreeCochain.iCocycles_toCocycles,
-    ScalarThreeCochain.ofInhomogeneousCochain_toInhomogeneousCochain]
+theorem scalarCocycleValue₃_mk
+    (f : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ)
+    (hf : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 f = 0) :
+    scalarCocycleValue₃ (cocyclesMk f hf) = scalarCochainValue₃ f := by
+  change scalarCochainValue₃
+    (iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 (cocyclesMk f hf)) = scalarCochainValue₃ f
+  rw [iCocycles_mk]
 
 end groupCohomology

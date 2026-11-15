@@ -131,7 +131,8 @@ private theorem cyclicValue_isCocycle (n j : ℕ) [NeZero n] : IsCocycle (cyclic
 Mathlib's inhomogeneous cochain complex. -/
 def cyclicCocycle (n j : ℕ) [NeZero n] :
     cocycles (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3 :=
-  toCocycles ⟨cyclicValue n j, cyclicValue_isCocycle n j⟩
+  cocyclesMk (toInhomogeneousCochain (cyclicValue n j))
+    ((isCocycle_iff_d_eq_zero _).1 (cyclicValue_isCocycle n j))
 
 /-- The exponential formula of arXiv:2405.00439, line 2040, for the cyclic cocycle. -/
 theorem cyclicCocycle_apply (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n)) :
@@ -141,19 +142,27 @@ theorem cyclicCocycle_apply (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod
           ((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val -
             (Multiplicative.toAdd b + Multiplicative.toAdd c).val : ℕ) / (n : ℂ) ^ 2))
         (Complex.exp_ne_zero _) := by
-  simp [cyclicCocycle, cyclicValue]
+  rw [cyclicCocycle, scalarCocycleValue₃_mk]
+  change ofInhomogeneousCochain (toInhomogeneousCochain (cyclicValue n j)) a b c = _
+  simp only [ofInhomogeneousCochain_toInhomogeneousCochain, cyclicValue]
 
 /-- The value of the cyclic cocycle is the carry power of `exp(2πi/n)`. -/
 theorem cyclicCocycle_val (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n)) :
     (scalarCocycleValue₃ (cyclicCocycle n j) a b c : ℂ) =
       rootOfUnity n ^ (j * (Multiplicative.toAdd a).val *
         (((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val) / n)) := by
-  simpa only [cyclicCocycle, scalarCocycleValue₃_toCocycles] using cyclicValue_val n j a b c
+  rw [cyclicCocycle, scalarCocycleValue₃_mk]
+  change (ofInhomogeneousCochain (toInhomogeneousCochain (cyclicValue n j)) a b c : ℂ) = _
+  rw [ofInhomogeneousCochain_toInhomogeneousCochain]
+  exact cyclicValue_val n j a b c
 
 /-- The multiplicative values of the certified cyclic cocycle satisfy the cocycle equation. -/
 theorem cyclicCocycle_isCocycle (n j : ℕ) [NeZero n] :
     IsCocycle (scalarCocycleValue₃ (cyclicCocycle n j)) := by
-  simpa only [cyclicCocycle, scalarCocycleValue₃_toCocycles] using cyclicValue_isCocycle n j
+  rw [cyclicCocycle, scalarCocycleValue₃_mk]
+  change IsCocycle (ofInhomogeneousCochain (toInhomogeneousCochain (cyclicValue n j)))
+  rw [ofInhomogeneousCochain_toInhomogeneousCochain]
+  exact cyclicValue_isCocycle n j
 
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040.
 **`ω_j` is normalized**: it equals one whenever an argument is the identity. -/
@@ -221,18 +230,24 @@ private theorem kleinValue_isCocycle : IsCocycle kleinValue := by
 /-- The type-II Klein three-cocycle, certified in Mathlib's cochain complex. -/
 def kleinCocycle :
     cocycles (Rep.ofMulDistribMulAction (Multiplicative (ZMod 2 × ZMod 2)) ℂˣ) 3 :=
-  toCocycles ⟨kleinValue, kleinValue_isCocycle⟩
+  cocyclesMk (toInhomogeneousCochain kleinValue)
+    ((isCocycle_iff_d_eq_zero _).1 kleinValue_isCocycle)
 
 /-- The scalar formula for the type-II Klein cocycle. -/
 theorem kleinCocycle_apply (a b c : Multiplicative (ZMod 2 × ZMod 2)) :
     scalarCocycleValue₃ kleinCocycle a b c =
       (-1) ^ ((Multiplicative.toAdd a).1 * (Multiplicative.toAdd b).2 *
         (Multiplicative.toAdd c).2).val := by
-  simp [kleinCocycle, kleinValue]
+  rw [kleinCocycle, scalarCocycleValue₃_mk]
+  change ofInhomogeneousCochain (toInhomogeneousCochain kleinValue) a b c = _
+  simp only [ofInhomogeneousCochain_toInhomogeneousCochain, kleinValue]
 
 /-- The multiplicative values of the certified Klein cocycle satisfy the cocycle equation. -/
 theorem kleinCocycle_isCocycle : IsCocycle (scalarCocycleValue₃ kleinCocycle) := by
-  simpa only [kleinCocycle, scalarCocycleValue₃_toCocycles] using kleinValue_isCocycle
+  rw [kleinCocycle, scalarCocycleValue₃_mk]
+  change IsCocycle (ofInhomogeneousCochain (toInhomogeneousCochain kleinValue))
+  rw [ofInhomogeneousCochain_toInhomogeneousCochain]
+  exact kleinValue_isCocycle
 
 /-- Project result: `(−1)^{a₁ b₂ c₂}` is normalized. -/
 theorem kleinCocycle_isNormalized : IsNormalized (scalarCocycleValue₃ (kleinCocycle)) := by
