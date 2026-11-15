@@ -35,7 +35,9 @@ namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 local notation "X" => TorusVertex width height
+local instance : Quiver X := torusDualQuiver width height
 
+omit [NeZero width] [NeZero height] [Fintype G] [DecidableEq G] in
 private theorem loop_labels_flat (g : G) {a : X} (p : TorusDualPath a a) :
     IsTorusBondFlat (torusDualFluxLabels g p) := by
   intro v
@@ -58,8 +60,9 @@ private theorem flat_cut_eq_closure
   have h := torusBondNetwork_torusBondGauge (leftRegularMatrix G) (fun _ ↦ A)
     (fun _ ↦ hA) (assembleRegionσ R σ τ) k t
   rw [hk] at h
-  simpa only [torusBondRegularPhysicalCutMatrix, torusBondClosureLabels,
-    torusGClosure, torusHorizontalClosure, torusVerticalClosure, apply_ite, map_one] using h.symm
+  dsimp only [torusBondRegularPhysicalCutMatrix, torusGClosure,
+    torusHorizontalClosure, torusVerticalClosure]
+  simpa only [torusBondClosureLabels, apply_ite, map_one] using h.symm
 
 variable [Fact (2 < width)] [Fact (2 < height)]
 local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
@@ -98,6 +101,7 @@ theorem IsGIsometric.torusClosedFlux_normalized_density_eq_vacuum
       intro hz
       apply hA.torusDualFlux_cutMatrix_ne_zero s q R
       rw [← hM, hz]
+      rfl
     have hd := hρ pairs (fun _ ↦ huv) μ hne
     simpa only [hM] using hd.2.1
   have hvac := hloop 1 (.nil : TorusDualPath a a)

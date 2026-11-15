@@ -46,4 +46,34 @@ alone does not exclude an annular region that detects an enclosed flux.
 Neither arbitrary-region path avoidance nor the general open-pair vacuum
 reduced-density assertion is claimed; these remain under \ghissue{8703}.
 The full-lattice Hamiltonian obligations of \ghissue{8947} are unchanged.
+
+\section{An endpoint-free annular obstruction}
+The necessity of an observation-topology restriction can be seen over
+$G=\mathbb Z_2$. With virtual bits $t,r,b,l$ and physical triple $s$, use
+\begin{align}
+    A(t,r,b,l;s)=[s=(r+t,b+t,l+t)].
+    \label{eq:closed_flux_binary_site}
+\end{align}
+This tensor is invariant under simultaneous bit flip and is isometric on
+the invariant subspace up to the positive factor $2$.
+
+On a $7\times7$ torus, take the four-step eastward dual path from $(1,1)$
+to $(5,1)$. Its insertions flip the downward bonds anchored at
+$(2,1),(3,1),(4,1),(5,1)$. Observe only the vertices on the perimeter of
+the square $[0,3]^2$. This observation contains no vertex of either endpoint
+plaquette. At each observed vertex, the two incidences followed by the
+perimeter have a relative bit determined by the physical triple in
+(\ref{eq:closed_flux_binary_site}). The product of their diagonal signs is
+an observable $W_R$ supported on the annulus. Every summed bond label
+occurs twice, while exactly one flipped bond crosses the perimeter.
+Consequently the two nonzero physical states satisfy
+\begin{align}
+    W_R\lvert\Psi_0\rangle & =\lvert\Psi_0\rangle, \\
+    W_R\lvert\Psi_p\rangle & =-\lvert\Psi_p\rangle.
+    \label{eq:closed_flux_annular_sign}
+\end{align}
+Their normalized reduced densities on $R$ differ. Thus endpoint avoidance
+alone cannot replace the observation-topology hypotheses. The closed-loop
+density theorem is formalized; this annular calculation is an explicit
+mathematical obstruction, not a claimed additional Lean theorem.
 \end{document}
