@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.RepresentationTheory.Homological.GroupCohomology.LowDegree
+module
+
+public import Mathlib.RepresentationTheory.Homological.GroupCohomology.LowDegree
 
 /-!
 # Cochains with permutation coefficients
@@ -21,6 +23,8 @@ of coordinates and the corresponding one-cochain change.
 No finiteness or transitivity assumption on the action is needed. The coefficient group
 is arbitrary and commutative; complex units and the circle are special cases.
 -/
+
+@[expose] public section
 
 namespace TNLean.Algebra.PermutationCochains
 
