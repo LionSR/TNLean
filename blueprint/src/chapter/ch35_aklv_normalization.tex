@@ -5,7 +5,7 @@
     \lean{TNLean.MPS.AreaLaw.aklvNormalizationEndpoints,
         TNLean.MPS.AreaLaw.aklvNormalizationHamiltonians}
     \leanok
-    Let $q\ge1$, $s\ge6$ and $a+s+1\le L$. Let $0\le h_i\le\Id$ be
+    Let $q\ge1$, $s\ge3$ and $a+s+1\le L$. Let $0\le h_i\le\Id$ be
     supported on $\{i,i+1\}$, and put
     \begin{align}
         R_0 & ={\lbrack 0,a+1)},                 & R_1 & ={\lbrack a+3,a+s-2)}, & R_2 & ={\lbrack a+s,L)},
@@ -14,7 +14,8 @@
         \label{eq:aklv_reference_sums}
     \end{align}
     The remaining interaction starts are
-    $a,a+1,a+2,a+s-3,a+s-2,a+s-1$.
+    $a,a+1,a+2,a+s-3,a+s-2,a+s-1$. For $s\le5$ the region $R_1$ is
+    empty and these starts are the $s$ numbers $a,\ldots,a+s-1$.
     These are the three reference sums normalized in
     \cite[Section~6.1, before (5)]{Arad2013AreaLaw}.
 \end{definition}
@@ -36,7 +37,7 @@
     The three regions in (\ref{eq:aklv_reference_regions}) are pairwise disjoint.
     Take the genuine lowest energy of each supported $A_j$ and form a common
     unit ground vector on the disjoint factors. Set
-    $X=\sum_j(A_j-e_j\Id)$ and let $Y$ be the sum of the remaining six bonds.
+    $X=\sum_j(A_j-e_j\Id)$ and let $Y$ be the sum of the remaining at most six bonds.
     Then $X\ge0$, $Xx=0$, $0\le Y\le6\Id$, and $H=X+Y$.
     The variational principle gives $0\le E_0\le\langle x,Hx\rangle\le6$.
 \end{proof}

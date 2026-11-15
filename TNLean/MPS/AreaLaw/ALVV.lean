@@ -33,6 +33,7 @@ import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftIntervalHistory
 import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftMiddleCluster
 import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftResampling
 import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftSamplingData
+import TNLean.MPS.AreaLaw.ALVV.PhysicalSoftTreeRefinement
 import TNLean.MPS.AreaLaw.ALVV.RegionalChildEnergyCenter
 import TNLean.MPS.AreaLaw.ALVV.RegionalSlices
 import TNLean.MPS.AreaLaw.ALVV.SelectedSoftTerminalNodeEnergy
@@ -48,6 +49,7 @@ import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate
 import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
+import TNLean.MPS.AreaLaw.ALVV.SuccessfulTreeEnergyInduction
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftCalibration
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftFilterFamily
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftImprovingFamily
