@@ -16,7 +16,8 @@ Arad, Landau, Vazirani and Vidick, arXiv:1602.08828v2, Theorem `thm:Cheby-AGSP`
 things about the resulting operator `K`: it has the eigenvectors of `H` (item 1), it keeps the
 eigenvalues near `η₀` close to `1` and shrinks those above `η₁` to at most `√Δ` with
 `Δ = 4 exp (-4 k √(γ / (‖H‖ - η₀)))` (items 2–3), its operator Schmidt rank across the two
-cuts is `(dk)^{O(ℓ + k/ℓ)}`, and at a cut inside a bulk region it is `B̃^{O(k)}` (item 4).
+cuts is `(dk)^{O(ℓ + k/ℓ)}`, and at a cut inside a bulk region it is `B^{O(k)}`, where `B` bounds
+the rank of that bulk operator (item 4).
 
 This file joins the existing spectral statement for an abstract self-adjoint operator
 (`Submodule.exists_isSpectralProjector_chebyshev_one_sub_le`) and the rank estimates for every
