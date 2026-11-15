@@ -274,7 +274,7 @@ source; see~\cite{gap:alvv16_unique_ground_state_tree}.
     least $\gamma$, the span would be zero, and $\Gamma$ would vanish.
 \end{proof}
 
-\begin{theorem}[The refined output for a unique frustration-free ground state]
+\begin{lemma}[The refined output for a unique frustration-free ground state]
     \label{thm:unique_ground_state_refined_ritz}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}\leanok
     \uses{thm:physical_soft_tree_refined_ritz,lem:unique_ground_state_spectral_span}
@@ -293,11 +293,11 @@ source; see~\cite{gap:alvv16_unique_ground_state_tree}.
     1829--1855]{Arad2016RigorousRG}, restricted to the degenerate-gap tree:
     the intermediate dimension grows with $L$ instead of being the constant
     $\mathcal D s^2$ of the source, and no running time is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_soft_tree_refined_ritz,lem:unique_ground_state_spectral_span}
     By Lemma~\ref{lem:unique_ground_state_spectral_span}, the hypotheses of
-    Theorem~\ref{thm:physical_soft_tree_refined_ritz} hold at ground energy
+    Lemma~\ref{thm:physical_soft_tree_refined_ritz} hold at ground energy
     $0$, and its ground space is $\mathbb C\Gamma$, of dimension $1$.
 \end{proof}
 
