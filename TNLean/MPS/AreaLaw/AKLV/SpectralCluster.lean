@@ -71,7 +71,7 @@ at most `tau/100`. All physical operators and both restricted residuals are
 constructed internally. Auxiliary
 to AKLV, arXiv:1301.1162v1, Theorem 6.1 and its proof in Section 6.3. -/
 theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))

@@ -19,7 +19,7 @@
     \leanok
     \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation,
         def:aklv_logarithmic_threshold}
-    Let $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$ act on
+    Let $s\ge3$, $a+s+1\le L$, and let $0\le h_i\le\Id$ act on
     $\{i,i+1\}$. Suppose the unit ground vector $\Omega$ of
     $H'=\sum_i h_i$ has energy $\mu$, actual first excited energy
     $\mu+g$, and
@@ -56,12 +56,12 @@
     preserves the norm and eigenvalue and gives the asserted vector.
 \end{proof}
 
-\begin{lemma}[Robustness for a window with at least six interactions]
+\begin{lemma}[Robustness for a window with at least three interactions]
     \label{thm:aklv_physical_robustness}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_robustness}
     \leanok
     \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
-    Let $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$ be supported on
+    Let $s\ge3$, $a+s+1\le L$, and let $0\le h_i\le\Id$ be supported on
     $\{i,i+1\}$. Suppose $\Omega$ is a unit ground vector of
     $H'=\sum_i h_i$ with energy $\mu$ and actual first excited energy
     $\mu+g$, where $g>0$, and suppose

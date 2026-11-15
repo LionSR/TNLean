@@ -13,7 +13,9 @@ The three reference sums are the original left exterior, the middle bulk after
 removing its three boundary bonds on each side, and the original right exterior.
 Their supports are pairwise disjoint. Their actual lowest energies and a common
 unit ground vector are constructed, giving ground energy at most six for the
-centered full Hamiltonian.
+centered full Hamiltonian. The window has at least three interactions. When it
+has fewer than six, the middle reference sum is empty and the boundary bonds
+coincide in part; at most six of them remain.
 
 Source: AKLV, arXiv:1301.1162v1, Section 6.1, the normalization before equation (5).
 The two operators subsequently clipped are the enlarged exterior sums containing
@@ -47,7 +49,7 @@ def aklvNormalizationHamiltonians {L q : ℕ} (a s : ℕ)
     (fun i : Fin (L - 1) ↦ (p j).1 ≤ i.val ∧ i.val + 1 < (p j).2), h i
 
 private theorem aklv_normalization_bond_data {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) :
@@ -101,7 +103,7 @@ centered full Hamiltonian are constructed from the physical interactions. The
 relative ground energy lies in `[0,6]`, as in AKLV, arXiv:1301.1162v1, Section 6.1,
 before equation (5). No regional minimum, common vector, or energy budget is supplied. -/
 theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -156,7 +158,7 @@ reference sums plus their adjacent boundary bonds. Their centered supports are
 `[0,a+2)` and `[a+s-1,L)`. AKLV, arXiv:1301.1162v1, Section 6.1, the definition
 of `H^(t)` after equation (5). -/
 theorem aklv_two_block_exterior_data {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) :
@@ -221,7 +223,7 @@ theorem aklv_two_block_exterior_data {L q a s : ℕ}
 regions, by positivity of the added bonds. AKLV, arXiv:1301.1162v1, Section 6.1,
 normalization at lines 901–925 and the two exterior truncations after equation (5). -/
 theorem aklv_normalization_le_two_block_regions {L q a s : ℕ}
-    (hs : 6 ≤ s)
+    (hs : 3 ≤ s)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, 0 ≤ h i) (e : Fin 3 → ℝ)
     (he : ∀ j, (aklvNormalizationHamiltonians a s h j -
@@ -246,7 +248,7 @@ nearest-neighbour interactions. AKLV, arXiv:1301.1162v1, Section 6.1, normalizat
 and the two exterior truncations after equation (5). No spectral-gap conclusion
 is asserted here. -/
 theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))

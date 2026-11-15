@@ -21,8 +21,9 @@ unit ground vector with exponentially small squared error.
 Source: AKLV, arXiv:1301.1162v1, `1dfrustrated34.tex`, lines 879--963,
 Theorem `thm:Ht`.
 
-**Scope restriction (window width):** Windows have at least six interactions;
-smaller windows remain separate. See `docs/paper-gaps/aklv13_two_block_robustness.tex`.
+**Scope restriction (window width):** Windows have at least three interactions,
+so that the two enlarged exterior sums have disjoint supports; windows of one or
+two interactions remain separate. See `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 
 **Local fixes (support and energy shift):** The left support follows the actual
 bounded-term sum in source line 907, including its boundary site, rather than
@@ -98,7 +99,7 @@ The regional minima are chosen before `t`. This strengthens the sufficient
 threshold in AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963,
 using the exponential residual of its original nearest-neighbour construction. -/
 theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -175,7 +176,7 @@ ground vector with squared error at most `exp(-t/16)/100` once
 ground energy in `[0,6]`. The gap is the actual first excited energy difference.
 AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963. -/
 theorem exists_aklv_physical_robustness {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
