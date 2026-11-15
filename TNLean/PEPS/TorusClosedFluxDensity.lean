@@ -35,7 +35,7 @@ namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 local notation "X" => TorusVertex width height
-local instance : Quiver X := torusDualQuiver width height
+local instance closedFluxQuiver : Quiver X := torusDualQuiver width height
 
 omit [NeZero width] [NeZero height] [Fintype G] [DecidableEq G] in
 private theorem loop_labels_flat (g : G) {a : X} (p : TorusDualPath a a) :
@@ -74,8 +74,8 @@ private theorem flat_cut_eq_closure
   exact h.symm
 
 variable [Fact (2 < width)] [Fact (2 < height)]
-local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
-local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
+local instance closedFluxWidthOne : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
+local instance closedFluxHeightOne : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
 local notation "Γₜ" => torusGraph width height
 
 /-- Every closed flux string has the vacuum normalized reduced density on a
