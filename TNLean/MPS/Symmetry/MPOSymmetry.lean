@@ -19,6 +19,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorOrderTwo
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
+import TNLean.MPS.Symmetry.MPOSymmetry.BasedRing
 import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
 import TNLean.MPS.Symmetry.MPOSymmetry.Character
 import TNLean.MPS.Symmetry.MPOSymmetry.ClosedFusion
