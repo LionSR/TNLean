@@ -120,15 +120,29 @@ $s\ge1$ and $d^s\ge D^2$, arbitrary site-dependent chains of length
 $s2^h$ have exact polar trees of height $h$ and leaves of at most $s$
 sites. No injectivity or common coordinate support is imposed.
 
-This is an algebraic factorization. It does not provide the
-position-dependent coherent measurement implementation. That construction
-must preserve a common branch scalar across all coherent sectors.
+This is an algebraic factorization. The generalized theorem in
+\doclink{TNLean/MPS/Preparation/IsometryTreePreparation} implements
+arbitrary position-dependent unitary node and leaf gates in depth
+$C(h+1)$ on disjoint tree layouts. Its outcome-history scalar is
+independent of the input on the zero-scratch subspace, hence common
+across coherent sectors. The existing theorem for maps depending only
+on interval lengths is retained as a specialization.
+
+An end-to-end preparation theorem must still choose unitary extensions
+of the actual interval isometries and identify their entire placed gate
+product on encoded inputs with the algebraic tree map. This includes
+all physical scratch sites and the correspondence between the binary
+geometry and the disjoint register layouts. The generic gate compiler
+does not by itself prove that coefficient identity.
 
 \section{What a sharp uniform rate would require}
 The source's analytic bounds (23) and (S11)--(S16) concern a fixed
 translation-invariant tensor and its normal-sector decomposition.
 They give admissible exponents $0<\gamma<1/2$, not an optimality theorem
-for the approximation exponent. The inhomogeneous random-MPS discussion
+for the approximation exponent. For general non-normal TI tensors, (S16)
+also contains an inter-sector term exponential in $N$; (S12) absorbs it
+under $q=o(N)$. These length scales and constants belong to a fixed tensor,
+not to an arbitrary inhomogeneous sequence. The inhomogeneous random-MPS discussion
 in Supplemental Material~3 reports exponential decay per block in
 1000 samples, with fitted rates varying between samples, in (S42).
 It does not prove one positive rate and one prefactor uniform in length
@@ -153,8 +167,8 @@ For an unrestricted reading of the source remark, a class of sequences
 must still be specified and a uniform rate proved for that class, with a
 uniform label count. The conditional theorem establishes how such a rate
 gives a logarithmic scale; it does not establish the rate itself. The
-doubly-logarithmic claim additionally requires the coherent measurement
-implementation just described. These obligations are
+doubly-logarithmic claim additionally requires the end-to-end coefficient
+identity just described. These obligations are
 distinct from the short-range rate work. Issue~\#10573 remains open.
 
 \begin{thebibliography}{9}

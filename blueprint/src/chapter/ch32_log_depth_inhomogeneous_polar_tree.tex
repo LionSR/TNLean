@@ -146,7 +146,28 @@ a uniform sharp rate for the unspecified long-range sequence class.
     Lemma~\ref{lem:ldp_inhomogeneous_exact_polar_tree}.
 \end{proof}
 
-The exact factorization does not assert a measurement protocol or an
-approximation rate. A depth bound still requires a construction of
-measurement rounds for the interval-dependent maps, with one branch
-scalar shared by every coherent sector.
+\begin{lemma}[Coherent measurement rounds for position-dependent tree gates]
+    \label{lem:ldp_interval_tree_measurement_rounds}
+    \lean{MPSPreparation.exists_rounds_blockLayerOp_treeUnitaryOp}
+    \notready
+    Fix a physical dimension, a register width and a bound on the physical
+    leaf lengths. Arbitrary unitary node and leaf gates on disjoint binary
+    layouts have a measurement implementation of depth at most $C(h+1)$,
+    where $C$ is independent of the number of blocks, their lengths and
+    their gates. Each gate may depend on its block and vertex.
+    On inputs with zero scratch registers, every outcome history acts as
+    one scalar times the full tree gate product; that scalar is independent
+    of the input and hence shared by all coherent sectors.
+\end{lemma}
+\begin{proof}
+    Implement the register levels by the coherent teleportation rounds
+    and the bounded leaves by one local circuit. Compose the rounds.
+    Their unitary target product makes each outcome history a scalar
+    multiple of the same linear map on the zero-scratch subspace.
+\end{proof}
+
+The exact factorization and the gate implementation remain distinct.
+To combine them, choose the extensions of each interval isometry and
+identify the entire placed gate product on encoded inputs with the
+algebraic tree map, including every scratch site. An approximation rate
+for a specified sequence class is a separate requirement.
