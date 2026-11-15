@@ -77,7 +77,7 @@ theorem TorusDualHomotopy.flatTransport_eval_eq {R : Set X} {a b : X}
     {p q : TorusDualPath a b} (h : TorusDualHomotopy R p q)
     {Y : X → Type*} (F : TorusDualFlatTransport R Y) (z : Y a) :
     F.eval p z = F.eval q z := by
-  induction h generalizing z with
+  induction h with
   | refl p => rfl
   | symm h ih => exact (ih z).symm
   | trans h k ih ik => exact (ih z).trans (ik z)
