@@ -1,9 +1,12 @@
 /-
+Copyright (c) 2023 Amelia Livingston. All rights reserved.
 Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: TNLean contributors
+Authors: Amelia Livingston, Joël Riou, TNLean contributors
 -/
-import Mathlib.RepresentationTheory.Homological.GroupCohomology.LowDegree
+module
+
+public import Mathlib.RepresentationTheory.Homological.GroupCohomology.LowDegree
 
 /-!
 # Degree-three group cohomology
@@ -29,8 +32,9 @@ Coefficients may have a nontrivial action; no normalization is imposed.
 ## References
 
 * Mathlib, `Mathlib.RepresentationTheory.Homological.GroupCohomology.LowDegree`.
-* TNLean issue #8319, the degree-three foundation for the Mathlib migration.
 -/
+
+@[expose] public section
 
 noncomputable section
 
@@ -78,7 +82,7 @@ theorem comp_d₃₄_eq :
   rw [Fin.sum_univ_four]
   simp only [sub_eq_add_neg, add_assoc, Fin.val_zero, Fin.val_one, Fin.val_two,
     show (3 : Fin 4).val = 3 from rfl, Nat.reduceAdd, pow_succ', pow_zero,
-    mul_neg_one, neg_neg, mul_one, one_mul, neg_smul, one_smul]
+    mul_neg_one, neg_neg, mul_one, neg_smul, one_smul]
   rcongr i <;> fin_cases i <;> rfl
 
 @[reassoc, elementwise]
