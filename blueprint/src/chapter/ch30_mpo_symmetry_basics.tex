@@ -829,6 +829,40 @@ relation between word traces has nonnegative integer coefficients.
     unit condition. For a character use its defining product and unit identities.
 \end{proof}
 
+\begin{lemma}[Universal property of the integer fusion ring]%
+    \label{thm:mposym_integer_based_ring_universal}
+    \lean{MPOTensor.FusionRing.regularHom,
+        MPOTensor.FusionRing.regularHom_basis,
+        MPOTensor.FusionRing.regularHom_injective,
+        MPOTensor.FusionRing.basis_mul,
+        MPOTensor.FusionRing.sum_smul_basis,
+        MPOTensor.FusionRing.hom_ext,
+        MPOTensor.FusionRing.lift_unique,
+        MPOTensor.FusionRing.isFusionCharacter_basis,
+        MPOTensor.FusionRing.characterEquiv,
+        MPOTensor.FusionRing.nimRepHom_unique}
+    \uses{thm:mposym_integer_based_ring_regular,
+        thm:mposym_integer_based_ring_lift, def:fusion_character_nimrep}
+    Project result. The regular representation is a faithful unital ring
+    homomorphism, and every integer combination has its basis expansion
+    $u=\sum_au_a[a]$. The product of basis elements is
+    $[a][b]=\sum_cN_{ab}^c[c]$. Ring homomorphisms to any unital ring $R$
+    are determined uniquely by their values on this basis. Restriction to
+    the basis and extension give mutually inverse correspondences between
+    ring homomorphisms to $R$ and $R$-valued fusion characters.
+    A nonnegative integer representation satisfying
+    $M_{e,x}^y=\delta_{xy}$ has a unique ring homomorphism with basis images
+    $\rho_a(y,x)=M_{a,x}^y$.
+\end{lemma}
+\begin{proof}
+    Apply the faithful regular representation to obtain the product and
+    basis expansion identities. Ring homomorphisms preserve finite sums
+    and integer multiples, so equality on the basis gives equality on
+    every element. Restriction preserves the unit and the basis product
+    identities; extension recovers the prescribed basis values. These
+    facts show that restriction and extension are inverse.
+\end{proof}
+
 \begin{lemma}[Word-trace relations against a normal tensor are integral]%
     \label{thm:asymex_fib_anomaly_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
