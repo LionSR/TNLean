@@ -28,7 +28,8 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V] {d : ℕ}
 
 /-- The actual coefficient matrix of an arbitrary finite physical vector
-across a region and its complement. This cut describes regional observations in the setting of SCP10,
+across a region and its complement. This cut describes regional observations in
+SCP10,
 Lemma 6.14, without any tensor-network assumption. -/
 def regionPhysicalCutMatrix (ψ : (V → Fin d) → ℂ) (R : Finset V) :
     Matrix (RegionPhysicalConfig (d := d) R)
