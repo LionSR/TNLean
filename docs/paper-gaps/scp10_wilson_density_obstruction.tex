@@ -7,44 +7,70 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{open-gap}{open}
 
 Schuch, Cirac, and P\'erez-Garc\'ia,
-\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
-Lemma 6.14 and Theorem 6.15, source
-\path{Papers/1001.3807/paper_v3.tex}, lines 2199--2267,
-describe flux-string deformations and physical flux measurements.
-Endpoint exclusion alone cannot imply vacuum density on an arbitrary
-annular observation: an observed loop can detect an enclosed flux.
+\cite[Lemma~6.14 and Theorem~6.15]{Schuch2010PEPS},
+source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2267,
+describe flux-string deformation and detection of a single fluxon's type.
+Theorem 6.15 measures a conjugate $xgx^{-1}$ on the supporting plaquette,
+so it determines the conjugacy class $[g]$. The assertion below is a
+consequence of regular isometry for general observed closed walks; it is
+not a literal special case of the source's particular plaquette measurement.
 
-The theorem
-\leanid{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_ne_of_closedWalk_holonomy}
-proves an actual density inequality whenever an observed closed walk has
-different holonomy conjugacy classes for two inserted regular-bond states.
-The physical observation graph is connected, but the complement can be
-disconnected and the observation can have holes. The local tensors are
-regular group-isometric for a finite group. The complete physical
-closed-walk measurement is constructed from that isometry and its action
-on the closed coefficient cut is derived from all open boundary columns.
-Both cuts are proved nonzero from regular injectivity. A projection retaining
-one cut and annihilating the other separates their normalized row Grams.
+Let $\Gamma$ be a finite graph, $G$ a finite group and $a$ a family of regular
+$G$-isometric physical sites. Let $R$ be an observation region whose induced
+graph is connected, and let $\gamma:o\to o$ be a finite closed walk entirely
+in that induced graph. For an assignment $u$ of oriented bond insertions,
+let $H_u(\gamma)$ be its ordered transport around $\gamma$, with inverse
+transport on reversed edges. Write $[H_u(\gamma)]$ for its conjugacy class.
+Let $M_u(\sigma,\tau)$ be the actual physical coefficient matrix across
+$R$ and $R^c$, with the insertion $u$ on the original bond contraction.
+For two assignments $u,v$, the proved assertion is
+\begin{align}
+    [H_u(\gamma)]\ne[H_v(\gamma)]
+    \ \Longrightarrow\
+    M_u\ne0,\quad M_v\ne0,\quad
+    \frac{M_uM_u^\dagger}{\operatorname{tr}(M_uM_u^\dagger)}
+    \ne
+    \frac{M_vM_v^\dagger}{\operatorname{tr}(M_vM_v^\dagger)}.
+    \label{eq:scp10_wilson_density_separation}
+\end{align}
+There is no connectedness assumption on $R^c$ and no simple-connectedness
+assumption on $R$. The walk and the two computed holonomy classes are explicit
+inputs; no physical measurement or density inequality is supplied.
+\footnote{\leanid{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_ne_of_closedWalk_holonomy}.}
 
-The native version is
-\leanid{TNLean.PEPS.IsGIsometric.torusBond_normalized_density_ne_of_closedWalk_holonomy}.
-Its inputs are the actual two native bond assignments and an actual closed
-walk in the observed induced graph; the hypothesis compares their computed
-holonomy conjugacy classes. Both periods are at least three. Taking one
-assignment to be vacuum gives a sufficient Wilson-loop criterion for
-failure of vacuum normalized density. No density inequality, projective
-measurement or nonzero witness is supplied as a premise.
+The complete closed-walk measurement is constructed from local regular
+isometry. Its projector $Q$ onto the class $[H_u(\gamma)]$ acts on every
+open boundary column, hence on the actual cuts:
+\begin{align}
+    QM_u=M_u,\qquad QM_v=0.
+    \label{eq:scp10_wilson_density_projector}
+\end{align}
+Local physical inverses prove both cuts nonzero. Put
+$\rho_u=M_uM_u^\dagger/\operatorname{tr}(M_uM_u^\dagger)$ and define
+$\rho_v$ similarly. Equation~(\ref{eq:scp10_wilson_density_projector}) gives
+$Q\rho_u=\rho_u$ and $Q\rho_v=0$. Thus $\rho_u=\rho_v$ would force
+$\rho_u=0$, contradicting $\operatorname{tr}\rho_u=1$.
 
-This is a sufficient obstruction, not a classification of all annular
-observations or a converse density theorem. In particular, deriving a
-nontrivial observed loop holonomy for each proposed endpoint placement
-is a separate geometric obligation. The earlier finite annular calculation
-is not promoted to a general geometric theorem. The physical obstruction
-is distinct from the nonabelian seam-word obstruction to restricted
-homotopy, whose test group need not be the physical flux group.
-The broader source wording remains open under \ghissue{8703}; no
-full-lattice Hamiltonian identification from \ghissue{8947} is used.
+On a native torus with both periods at least three, the native bond labels
+are converted to directed graph transport and the native physical cut
+equals the graph cut above. The same implication therefore holds for
+actual native bond insertions.
+\footnote{\leanid{TNLean.PEPS.IsGIsometric.torusBond_normalized_density_ne_of_closedWalk_holonomy}.}
+Taking $v=1$ supplies a sufficient criterion for failure of vacuum density.
+
+This is a sufficient obstruction, not a classification of annular
+observations or a converse density theorem. Deriving a suitable observed
+walk with nontrivial holonomy from a proposed endpoint placement remains
+a geometric obligation. In particular, endpoint exclusion alone supplies
+no vanishing-holonomy premise. This physical obstruction is distinct from
+the nonabelian seam-word obstruction to restricted homotopy, whose
+coefficient group need not be the physical insertion group.
+The broader source interpretation remains open under \ghissue{8703};
+no Hamiltonian common-kernel result from \ghissue{8947} is used.
+
+\bibliographystyle{alpha}
+\bibliography{references}
 \end{document}
