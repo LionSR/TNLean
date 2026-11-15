@@ -100,8 +100,9 @@ theorem detectorRetainedInterval_eq_intervalTensor
   congr 1
   funext s
   rcases s with ⟨k, leg⟩
-  cases leg <;> simp [intervalSiteFactor, a', b', Finset.mem_Icc, Fin.le_def,
-    Fin.ext_iff, apply_ite, Submonoid.coe_mul]
+  cases leg <;> by_cases hk : a ≤ k.val ∧ k.val ≤ b <;>
+    by_cases hka : k.val = a <;>
+    simp [intervalSiteFactor, a', b', Finset.mem_Icc, Fin.le_def, Fin.ext_iff, hk, hka]
 
 /-- The complete detector word formed from intervals of the same fixed
 circuit. Source: arXiv:2405.00439, `detectG`, lines 2108–2117, with the
