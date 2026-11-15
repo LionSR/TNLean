@@ -108,7 +108,9 @@ theorem integerFusionEval_mul {R : Type*} [Ring R]
     _ = ∑ a, ∑ b, (u a * v b) • (f a * f b) := by
       simp_rw [hf, Finset.smul_sum, smul_smul]
     _ = (∑ a, u a • f a) * (∑ b, v b • f b) := by
-      simp only [Finset.sum_mul, Finset.mul_sum, smul_mul_assoc, mul_smul_comm,
-        smul_smul]
+      rw [Finset.sum_mul]
+      simp_rw [Finset.mul_sum]
+      refine Finset.sum_congr rfl fun a _ ↦ Finset.sum_congr rfl fun b _ ↦ ?_
+      rw [smul_mul_assoc, mul_smul_comm, smul_smul]
 
 end MPOTensor
