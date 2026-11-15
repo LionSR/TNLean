@@ -124,4 +124,121 @@ theorem aklv_initial_width_bounds {A g : ℝ} (hA : 1 ≤ A) (hg : 0 < g) (hg1 :
       gcongr
       norm_num
 
+/-- If the initial width is chosen using only `1 + log q`, its logarithmic
+rank cost then separates into the printed cubic local-dimension term and one
+additional gap logarithm. This is a scalar rank estimate suggested by the
+display preceding AKLV, arXiv:1301.1162v1, Theorem 4.3. It does not assert
+that this smaller width satisfies the AGSP shrinking--rank tradeoff. -/
+theorem aklv_initial_width_separated_bounds {A g : ℝ}
+    (hA : 1 ≤ A) (hg : 0 < g) (hg1 : g ≤ 1) (q : ℕ) (hq : 1 ≤ q) :
+    let v := 1 + log (q : ℝ)
+    let w := log (1 / g)
+    let s0 : ℕ := ⌈A * v ^ 2 / g⌉₊
+    1 ≤ v ∧ 0 ≤ w ∧ 1 ≤ s0 ∧ 1 / g ≤ (s0 : ℝ) ∧
+      aklvLogarithmicThreshold g ≤ 1040 * (s0 : ℝ) ∧
+      (s0 : ℝ) ≤ (A + 1) * v ^ 2 / g ∧
+      log (((q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) : ℕ) : ℝ) ≤
+        aklvInitialRankLogCoefficient A / g * (v ^ 3 + v ^ 2 * w) := by
+  intro v w s0
+  have hqpos : 0 < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
+  have hqlog : 0 ≤ log (q : ℝ) := log_nonneg (by exact_mod_cast hq)
+  have hv : 1 ≤ v := by dsimp only [v]; linarith
+  have hvpos : 0 < v := by linarith
+  have hw : 0 ≤ w := by
+    dsimp only [w]
+    exact log_nonneg ((one_le_div hg).mpr hg1)
+  have hAv : 1 ≤ A * v ^ 2 := by
+    have h := mul_le_mul hA (one_le_pow₀ hv : 1 ≤ v ^ 2) zero_le_one (by linarith : 0 ≤ A)
+    simpa only [one_mul] using h
+  have hlower : A * v ^ 2 / g ≤ (s0 : ℝ) := Nat.le_ceil _
+  have hgap : 1 / g ≤ (s0 : ℝ) :=
+    (div_le_div_of_nonneg_right hAv hg.le).trans hlower
+  have hs01R : (1 : ℝ) ≤ s0 := ((one_le_div hg).mpr hg1).trans hgap
+  have hs01 : 1 ≤ s0 := by exact_mod_cast hs01R
+  have hs0pos : 0 < (s0 : ℝ) := by linarith
+  have hT : aklvLogarithmicThreshold g ≤ 1040 * (s0 : ℝ) := by
+    have ht := aklvLogarithmicThreshold_le_div hg hg1
+    calc
+      _ ≤ 1024 / g := ht
+      _ = 1024 * (1 / g) := by ring
+      _ ≤ 1024 * (s0 : ℝ) :=
+        mul_le_mul_of_nonneg_left hgap (by norm_num)
+      _ ≤ 1040 * (s0 : ℝ) := by nlinarith
+  have hvs : 1 ≤ v ^ 2 / g := (le_div_iff₀ hg).mpr
+    (by nlinarith only [hg1, (one_le_pow₀ hv : 1 ≤ v ^ 2)])
+  have hupper : (s0 : ℝ) ≤ (A + 1) * v ^ 2 / g := by
+    have hceil := Nat.ceil_lt_add_one (show 0 ≤ A * v ^ 2 / g by positivity)
+    change (s0 : ℝ) < A * v ^ 2 / g + 1 at hceil
+    calc
+      (s0 : ℝ) ≤ A * v ^ 2 / g + 1 := hceil.le
+      _ ≤ A * v ^ 2 / g + v ^ 2 / g := by linarith only [hvs]
+      _ = (A + 1) * v ^ 2 / g := by ring
+  refine ⟨hv, hw, hs01, hgap, hT, hupper, ?_⟩
+  have hAlog : 0 ≤ log (A + 1) := log_nonneg (by linarith)
+  have hlogS : log (s0 : ℝ) ≤ log (A + 1) + 2 * v + w := by
+    have h := log_le_log hs0pos hupper
+    rw [log_div (by positivity) (ne_of_gt hg),
+      log_mul (by positivity) (by positivity), log_pow] at h
+    have hlogv : log v ≤ v := (log_le_sub_one_of_pos hvpos).trans (by linarith)
+    have hwEq : w = -log g := by dsimp only [w]; rw [one_div, log_inv]
+    norm_num only [Nat.cast_ofNat] at h
+    rw [sub_eq_add_neg, ← hwEq] at h
+    linarith
+  let b := (q : ℝ) * ((s0 : ℝ) ^ 2 + 1)
+  have hb : 0 < b := by dsimp only [b]; positivity
+  have hbase : log b ≤ (8 + 2 * log (A + 1)) * v + 2 * w := by
+    have hbup : b ≤ (q : ℝ) * (2 * (s0 : ℝ) ^ 2) := by
+      dsimp only [b]
+      nlinarith only [mul_nonneg hqpos.le (show 0 ≤ (s0 : ℝ) ^ 2 - 1 by nlinarith)]
+    have h := log_le_log hb hbup
+    have hright : log ((q : ℝ) * (2 * (s0 : ℝ) ^ 2)) =
+        log (q : ℝ) + log 2 + 2 * log (s0 : ℝ) := by
+      rw [log_mul (ne_of_gt hqpos) (by positivity),
+        log_mul (by norm_num : (2 : ℝ) ≠ 0) (by positivity), log_pow]
+      norm_num
+      ring
+    rw [hright] at h
+    have hlogq : log (q : ℝ) ≤ v := by dsimp only [v]; linarith
+    have hlog2 : log (2 : ℝ) ≤ 1 := by
+      have hh := log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)
+      norm_num at hh
+      exact hh
+    nlinarith
+  have hbase0 : 0 ≤ log b := by
+    apply log_nonneg
+    dsimp only [b]
+    have hsquare : 1 ≤ (s0 : ℝ) ^ 2 + 1 := by nlinarith only [sq_nonneg (s0 : ℝ)]
+    nlinarith only [mul_le_mul_of_nonneg_left hsquare hqpos.le,
+      (show 1 ≤ (q : ℝ) by exact_mod_cast hq)]
+  rw [Nat.cast_pow, log_pow]
+  push_cast
+  change (32 * (2 * (s0 : ℝ) + 1)) * log b ≤ _
+  calc
+    _ ≤ 96 * (s0 : ℝ) * log b := by
+      nlinarith [mul_nonneg (sub_nonneg.mpr hs01R) hbase0]
+    _ ≤ 96 * (s0 : ℝ) * ((8 + 2 * log (A + 1)) * v + 2 * w) :=
+      mul_le_mul_of_nonneg_left hbase (by positivity)
+    _ ≤ 96 * ((A + 1) * v ^ 2 / g) *
+        ((8 + 2 * log (A + 1)) * v + 2 * w) :=
+      mul_le_mul_of_nonneg_right
+        (mul_le_mul_of_nonneg_left hupper (by norm_num : (0 : ℝ) ≤ 96))
+        (by positivity)
+    _ ≤ aklvInitialRankLogCoefficient A / g * (v ^ 3 + v ^ 2 * w) := by
+      unfold aklvInitialRankLogCoefficient
+      have hcoef : 2 ≤ 8 + 2 * log (A + 1) := by linarith
+      have hv2 : 0 ≤ v ^ 2 := sq_nonneg v
+      have hv3 : 0 ≤ v ^ 3 := by positivity
+      have hvw : 0 ≤ v ^ 2 * w := mul_nonneg hv2 hw
+      have hleft : 0 ≤ (A + 1) / g := by positivity
+      rw [show 96 * ((A + 1) * v ^ 2 / g) *
+          ((8 + 2 * log (A + 1)) * v + 2 * w) =
+          (A + 1) / g *
+            (96 * v ^ 2 * ((8 + 2 * log (A + 1)) * v + 2 * w)) by ring,
+        show 100 * (A + 1) * (8 + 2 * log (A + 1)) / g *
+          (v ^ 3 + v ^ 2 * w) =
+          (A + 1) / g *
+            (100 * (8 + 2 * log (A + 1)) * (v ^ 3 + v ^ 2 * w)) by ring]
+      apply mul_le_mul_of_nonneg_left _ hleft
+      nlinarith [mul_nonneg hAlog hv3, mul_nonneg hAlog hvw]
+
 end TNLean.MPS.AreaLaw

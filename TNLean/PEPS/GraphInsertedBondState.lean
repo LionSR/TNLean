@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.GraphAveragingBondState
 import TNLean.PEPS.RegularTwistedRegion
 import TNLean.Algebra.MonoidHomCommutingWeight
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Closed contractions with inserted oriented bond matrices
@@ -108,10 +109,7 @@ theorem graphInsertedBondNetwork_dressedAveragingSite
   simp only [Fintype.sum_prod_type,
     Matrix.mul_apply (M := U (q e.1.2) * W) (N := K e * (W * U (q e.1.1)⁻¹)),
     Matrix.mul_apply (M := K e) (N := W * U (q e.1.1)⁻¹), Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro j _
-  apply Finset.sum_congr rfl
-  intro k _
+  refine Finset.sum_congr₂ fun j _ k _ ↦ ?_
   ring
 
 /-- Group insertions and commuting weights give weighted relative group matrices.

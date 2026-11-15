@@ -637,6 +637,13 @@ theorem left_splitRed (A Ainv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ainv = 1)
   ext b c
   exact kronMat_tauM_row A _ _ _
 
+theorem isIrreducibleAction_blocks :
+    ∀ s ∈ labels, Matrix.IsIrreducibleAction (blocks s) := fun s hs =>
+  isIrreducibleAction_of_isNormal _ (isNormal_blocks s hs) (dims_pos s hs)
+
+theorem exists_ne_zero_blocks : ∀ s ∈ labels, ∃ i, blocks s i ≠ 0 := fun s hs =>
+  exists_ne_zero_of_isNormal_of_pos (isNormal_blocks s hs) (dims_pos s hs)
+
 /-- **Two split reductions with different flags** (*The asymmetric fundamental theorem of matrix
 product states*, Example 6.13), for any two split reductions `g = A ⊗ 1₂`, `g_tilde = Ã ⊗ 1₂` (every
 split reduction, by `exists_left_eq_kronRow_of_remainder_eq_zero`) with `ℂ u₁ ≠ ℂ u_tilde₁` (`u_j`,
@@ -649,7 +656,8 @@ theorem matching_left_splitRed_of_span_ne (A Ainv At AtInv : Matrix (Fin 2) (Fin
     (hne : Submodule.span ℂ {fun a => Ainv a 0} ≠ Submodule.span ℂ {fun a => AtInv a 0}) :
     let P := splitRed A Ainv h1 h2
     let Q := splitRed At AtInv h1' h2'
-    let π := P.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
+    let π := P.matching Q isIrreducibleAction_blocks exists_ne_zero_blocks
+      isIrreducibleAction_blocks exists_ne_zero_blocks
     let k := P.ord (Sum.inl slot0)
     let u₁ : Fin 2 → ℂ := fun a => Ainv a 0
     let u_tilde₁ : Fin 2 → ℂ := fun a => AtInv a 0
@@ -771,7 +779,8 @@ matching pairs position `1` of `g` with position `2` of `g_tilde`; `U = ℂ u₁
 `W_tilde₂ (u₁ ⊗ v) = λ v`; and `u_tilde₂ - λ⁻¹ u₁ = (-1, 1)ᵀ ∈ ℂ u_tilde₁`. The matching, `U`, `N`
 and `W_tilde₂` are read off `matching_left_splitRed_of_span_ne`. -/
 theorem matching_left_redOne_redAt :
-    let π := redOne.matching redAt isNormal_blocks dims_pos isNormal_blocks dims_pos
+    let π := redOne.matching redAt isIrreducibleAction_blocks exists_ne_zero_blocks
+      isIrreducibleAction_blocks exists_ne_zero_blocks
     let k := redOne.ord (Sum.inl slot0)
     π k = redAt.ord (Sum.inl slot1) ∧ k.val = 0 ∧ (redAt.ord (Sum.inl slot1)).val = 1 ∧
     ((redOne.flag k.succ ⊓ redAt.flag (π k).succ).restrictScalars ℂ).map

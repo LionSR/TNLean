@@ -86,6 +86,16 @@ lemma conjTranspose_mpo_mul_mpo {U : MPOTensor d D} (hU : IsMPU U) {N : ℕ} (hN
   rw [Matrix.mem_unitaryGroup_iff'] at hmem
   simpa [Matrix.star_eq_conjTranspose] using hmem
 
+/-- A bijective relabelling of physical coordinates preserves every
+actual periodic unitary. Source: CPSV17, proof of IndexTh(ii),
+lines 824–847; the same physical change of basis is made at every site. -/
+theorem reindexPhysical {d' : ℕ} {U : MPOTensor d D}
+    (hU : IsMPU U) (e : Fin d' ≃ Fin d) : IsMPU (MPOTensor.reindexPhysical e U) := by
+  intro N hN
+  rw [mpo_reindexPhysical]
+  exact Matrix.reindex_mem_unitaryGroup (reindexPhysicalConfigEquiv N e).symm _
+    (hU.mpo_mem_unitaryGroup hN)
+
 /-- Concatenating two matrix product unitary tensors in the order `U * V`
 again gives a matrix product unitary tensor.
 

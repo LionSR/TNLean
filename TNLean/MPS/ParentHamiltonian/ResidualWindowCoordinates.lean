@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.PeriodicResidualGroundSpace
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 import Mathlib.LinearAlgebra.Matrix.Bilinear
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Three-window coordinates for correlated residual boundaries
@@ -175,10 +176,7 @@ theorem inner_residualWindowRightMapES_leftMapES
   apply Finset.sum_congr rfl
   intro u _
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro τ _
-  apply Finset.sum_congr rfl
-  intro v _
+  refine Finset.sum_congr₂ fun τ _ v _ ↦ ?_
   change ⟪Matrix.trace ((Kraus.evalWord B (List.ofFn v) * Vᴴ *
     Kraus.evalWord A (List.ofFn τ)) * rectangularBoundaryFamilyFiberₗ u x),
     Matrix.trace ((Kraus.evalWord B (List.ofFn u) * Kraus.evalWord B (List.ofFn v)) *

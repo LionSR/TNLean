@@ -155,32 +155,33 @@ private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
     obtain ⟨K, hK⟩ := hW.exists_localLift σ₀
     let X : Matrix (Fin 1 → Fin q) (Fin 1 → Fin q) ℂ :=
       fun x y ↦ K (fun _ ↦ x 0) (fun _ ↦ y 0)
-    have hX : W = embedOp e X := by
-      rw [hK]
+    have hembed : Entropy.localLift (n := fun _ ↦ q) S K =
+        embedOp (Subtype.val : ↥S → E) K := by
       ext σ τ
       rw [Entropy.localLift_apply, embedOp_apply]
-      have hagree : AgreeOff e σ τ ↔ ∀ v ∉ S, σ v = τ v := by
-        constructor
-        · intro h v hv
-          apply h v
-          intro j
-          have hv' : v ≠ e₀ := by simpa only [S, Finset.mem_singleton] using hv
-          exact Ne.symm hv'
-        · intro h v hv
-          apply h v
-          have hv' : e₀ ≠ v := hv 0
-          simpa only [S, Finset.mem_singleton] using Ne.symm hv'
-      change (if ∀ v ∉ S, σ v = τ v then
-        K (fun v ↦ σ v.val) (fun v ↦ τ v.val) else 0) =
-        if AgreeOff e σ τ then X (σ ∘ e) (τ ∘ e) else 0
-      simp only [hagree]
-      split_ifs
-      · change K (fun v ↦ σ v.val) (fun v ↦ τ v.val) =
+      congr 1
+      simp only [AgreeOff, eq_iff_iff]
+      constructor
+      · intro h v hv
+        exact h v fun hvS ↦ hv ⟨v, hvS⟩ rfl
+      · intro h v hv
+        exact h v fun w hw ↦ hv (hw ▸ w.2)
+    have hX : W = embedOp e X := by
+      rw [hK, hembed]
+      ext σ τ
+      rw [embedOp_apply, embedOp_apply]
+      have hagree : AgreeOff (Subtype.val : S → E) σ τ ↔ AgreeOff e σ τ := by
+        simp [AgreeOff, S, e]
+      by_cases ha : AgreeOff e σ τ
+      · have hb := hagree.mpr ha
+        rw [ite_eq_left hb, ite_eq_left ha]
+        change K (fun v ↦ σ v.val) (fun v ↦ τ v.val) =
           K (fun _ ↦ σ e₀) (fun _ ↦ τ e₀)
         congr 1
         · exact funext fun v ↦ congrArg σ (Finset.mem_singleton.mp v.property)
         · exact funext fun v ↦ congrArg τ (Finset.mem_singleton.mp v.property)
-      · rfl
+      · have hb : ¬AgreeOff (Subtype.val : S → E) σ τ := fun h ↦ ha (hagree.mp h)
+        rw [ite_eq_right hb, ite_eq_right ha]
     let Φ : Matrix (Fin 1 → Fin q) (Fin 1 → Fin q) ℂ →ₗ[ℂ]
         Matrix (E → Fin q) (E → Fin q) ℂ :=
       { toFun := embedOp e

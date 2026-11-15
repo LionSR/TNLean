@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.GaussianFilteredTerm
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Negative frequencies and actual ground-state correlations
@@ -100,10 +101,7 @@ private theorem inner_ground_negativeFrequencyPart_apply
   unfold negativeFrequencyPart
   dsimp only
   simp only [_root_.sum_apply, inner_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  refine Finset.sum_congr₂ fun i _ j _ ↦ ?_
   by_cases hij : hH.eigenvalues i < hH.eigenvalues j
   · simp only [ite_eq_left hij, _root_.smul_apply,
       InnerProductSpace.rankOne_apply, inner_smul_right]

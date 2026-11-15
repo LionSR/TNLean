@@ -367,6 +367,7 @@ truncation instead.
     The information condition for the death is evaluated in its
     after-death assignment $o$. In particular, every fixed $p>0$ gives
     the birth and death estimates of \cite[Part~II]{TNLean2026OneDimensional}.
+    \input{figures/chain_qc_birth}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -375,6 +376,7 @@ truncation instead.
     $L$ sites, with the real parameter $L\ge0$ and the exponent $p$. The
     environment of a sheet is exactly $E$. The reversed construction uses
     the information environment after the death.
+    \input{figures/chain_qc_death}
 \end{proof}
 
 \begin{lemma}[Exchange of two plain sheets]
@@ -404,6 +406,7 @@ truncation instead.
     reordering. The two copies remain distinct even when their owner
     assignments agree. For $p>0$, this includes the interval exchange of
     \cite[Part~II]{TNLean2026OneDimensional}.
+    \input{figures/chain_qc_exchange}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1476,6 +1479,7 @@ Definition~\ref{def:chain_open_mps}.
     edge, retaining parallel links and allowing empty alphabets.
     The column selection is that of
     \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS}.
+    \input{figures/chain_column}
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_dependent,thm:compression_operator_column_cut_rank}
@@ -1568,6 +1572,7 @@ Definition~\ref{def:chain_open_mps}.
     member's condition $\epsilon_i<1$, the useful column and all cuts.
     This is the conditional compression and column step of
     \cite[Theorem~5.2, Remark~5.3 and Lemma~8.1]{OpenAI2026PolynomialPEPS}.
+    \input{figures/chain_source_sampling}
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_separate_arity_compression,
@@ -2054,6 +2059,10 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     they are proved in Theorem~\ref{thm:chain_protocol_mps_approximation}.
     It is the block-to-site passage in
     \cite[Part~II, end of the proof of Theorem~B]{TNLean2026OneDimensional}.
+    In the schematic below, $C_1L^r$ denotes the single-link bond bound $A_L$
+    of~\cite{TNLean2026OneDimensional} and $t=20w$ is the nominal block width,
+    so $q^{2t}(C_1L^r)^\chi=q^{40w}A_L^\chi=B$:
+    \input{figures/chain_block_to_sites}
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_site_ranks_of_party_prefixes,thm:chain_mps_of_cut_rank,

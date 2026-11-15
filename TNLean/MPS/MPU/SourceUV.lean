@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.SourceFactors
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Paper source gates
@@ -190,10 +191,7 @@ theorem trace_mul_eq_sourceV_mul_sourceU_swap
       exact Finset.sum_comm
     _ = ∑ l, ∑ α, ∑ β, ∑ r, f α β l r := Finset.sum_comm
     _ = ∑ l, ∑ α, ∑ r, ∑ β, f α β l r := by
-      apply Finset.sum_congr rfl
-      intro l _
-      apply Finset.sum_congr rfl
-      intro α _
+      refine Finset.sum_congr₂ fun l _ α _ ↦ ?_
       exact Finset.sum_comm
     _ = ∑ l, ∑ r, ∑ α, ∑ β, f α β l r := by
       apply Finset.sum_congr rfl

@@ -2488,6 +2488,118 @@ in `MPS/Preparation/` uses it.
   the polynomial; it is not a statement about a single chain length, and it is
   not the half-trace-norm convention.
 
+### `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound`
+
+- **Declaration:**
+  `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound (L q p r count : ℕ) (xi : ℝ) (S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))) : Prop`.
+- **Defined in:** `TNLean/MPS/AreaLaw/IntervalGenerators.lean`.
+- **Meaning:** there are `n ≤ count` vectors `u i` on the interval `[p, r]`
+  whose span is exactly `S`, and every internal cut `j < r - p - 1` of every
+  `u i` has Schmidt rank `R` with `xi² R ≤ count`.
+- **Source:** Arad–Landau–Vazirani–Vidick, arXiv:1602.08828v2, collective
+  trimming, lines 646–697 (the count and per-vector rank bounds retained by
+  `lem:trimming`), used in the degenerate-ground-space construction,
+  lines 1777–1817.
+- **Sanctioned bridges:**
+  `IsIntervalSpanWithRankBound.finrank_le` (the recorded count bounds
+  `finrank S`); `isIntervalSpanWithRankBound_intervalTrimSubspace` (the
+  collective trim of an orthonormal basis of size `n ≤ count` satisfies the
+  predicate).
+- **Caveat:** the cutwise rank bound is a property of an existentially chosen
+  spanning family, not of every vector in `S`. A linear combination of the
+  generators can have Schmidt rank up to the sum of their ranks, so no uniform
+  rank bound on the whole span follows.
+
+## Ground-state algorithm oracles
+
+These predicates record what a solver of the one-dimensional ground-state
+algorithm of Landau–Vazirani–Vidick (LVV13, arXiv:1307.5143v1, `algo53.tex`) must
+return for the correctness and cost theorems to apply. Each is satisfied by the
+chosen honest construction, so the honest-oracle statements are instances. They
+lift, for correctness, the honest-oracle restriction recorded in
+`docs/paper-gaps/lvv13_cost_model.tex`.
+
+### `TNLean.MPS.AreaLaw.IsBoundaryProgramSolution`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/FiniteBoundarySelection.lean`.
+- **Meaning:** `σ` is a feasible density of the size-trimming convex program at the
+  boundary point `X` (positive semidefinite, trace one, supported on `span S ⊗ ℂᵐ`,
+  with partial trace within trace-norm distance `η` of `X`) of least left energy
+  among all feasible densities, and `u` is a unit eigenvector of `σ` for its
+  largest eigenvalue `μ > 0`, fixed by the span projection.
+- **Source:** LVV13, `algo53.tex`, equation `eq:conv` and lines 477–478.
+- **Sanctioned bridges:** `isAdmissibleLeadingVector_boundaryLeadingVector` (the
+  chosen minimizer and its leading vector solve the program).
+- **Caveat:** optimality is exact; an approximate solver of the convex program is
+  not covered.
+
+### `TNLean.MPS.AreaLaw.IsAdmissibleLeadingVector`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/FiniteBoundarySelection.lean`.
+- **Meaning:** at every boundary point with a nonempty feasible set, the assignment
+  returns the leading vector of some `IsBoundaryProgramSolution`.
+- **Source:** LVV13, `algo53.tex`, lines 219 and 484–487 (any solver of the convex
+  programs).
+- **Sanctioned bridges:** `isAdmissibleLeadingVector_boundaryLeadingVector`; it is
+  the `leadingVector` field of `LinearAlgebraQuery.IsValidOracle`.
+- **Caveat:** nothing is asserted at infeasible boundary points.
+
+### `TNLean.MPS.AreaLaw.ChainHamiltonian.IsAdmissibleNet` and `IsAdmissibleSolver`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/SizeTrimming.lean`.
+- **Meaning:** `IsAdmissibleNet` says that for every bond dimension `m` up to the
+  uniform cut bound, the net covers the trace-norm unit ball of boundary densities
+  within `c / (2L)`, `c = (Δ / 169)²`. `IsAdmissibleSolver` says that at every bond
+  dimension the solver is an `IsAdmissibleLeadingVector` for the left part of the
+  Hamiltonian at tolerance `c / (2L)`.
+- **Source:** LVV13, `algo53.tex`, equation `eq:conv`, lines 472–478, and Claim
+  `c:2`, lines 520–527.
+- **Sanctioned bridges:** `ChainHamiltonian.sizeTrimmingSelectionWith_subset_span`
+  (the selection of an admissible solver lies in the span of the input family);
+  `isAdmissibleNet_oracleNets` and `isAdmissibleSolver_oracleSolver` (a valid
+  oracle supplies both).
+- **Caveat:** `IsAdmissibleNet` bounds no cardinality; the point count used by the
+  cost bound is the separate `boundaryNet_card` field of `IsValidOracle`.
+
+### `TNLean.MPS.AreaLaw.IsAdmissibleFilterFactors`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/Huang/ViableFilter.lean`.
+- **Meaning:** a finite family `F` of left factors at cut `i` contains, for every
+  Gaussian filter approximant, the left factors of some cut decomposition
+  `∑ₜ Aₜ ⊗ Bₜ` of that approximant.
+- **Source:** LVV13, `algo53.tex`, error reduction, with the Gaussian filter of the
+  Huang route.
+- **Sanctioned bridges:** `isAdmissibleFilterFactors_gaussianFilterFactors` (the
+  chosen factors are admissible);
+  `isViable_errorReductionSet_of_isAdmissibleFilterFactors` (error reduction with
+  admissible factors is viable).
+- **Caveat:** the predicate bounds neither the number of factors nor their Schmidt
+  ranks; those bounds are the `gaussianFilterFactors_card` and
+  `gaussianFilterFactors_rank` fields of `IsValidOracle`.
+
+### `TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean`.
+- **Meaning:** an oracle for the linear-algebra queries of the ground-state program
+  that answers the deterministic queries (site extension, Schmidt trimming,
+  applying a factor, feasibility) exactly, returns trace-norm nets with the
+  standard cover and point bound, admissible leading vectors, admissible filter
+  and sampled factors with the standard count and rank bounds, and a unit vector
+  of least energy for the final program.
+- **Source:** LVV13, `algo53.tex`, lines 219 and 484–487, and the proof of
+  Theorem 1, lines 652–678.
+- **Sanctioned bridges:** `LinearAlgebraQuery.isValidOracle_honestOracle`;
+  correctness `groundStateProgram_spec_of_valid`, `sweepProgram_spec_of_valid` and
+  the sampled variants `sampledGroundStateProgram_spec_of_valid`,
+  `measureReal_sampledGroundStateProgram_success_of_valid`; cost
+  `cost_groundStateProgram_le_of_valid`,
+  `exists_groundStateProgram_cost_polynomial_of_valid`, and on the sampled route
+  `cost_sampledGroundStateProgram_le_of_valid` and
+  `exists_sampledGroundStateProgram_success_cost_polynomial_of_valid`; Theorem 1
+  with explicit accuracy `exists_theorem_one_of_valid`.
+- **Caveat:** feasibility answers must equal the honest ones, and optimal convex
+  solutions are exact; numerical tolerance in the solver is not modelled.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`
@@ -3072,10 +3184,17 @@ involve no boundary.
   cohomology equivalence when the fixed-space and injectivity assumptions hold
   at every parameter; preconnectedness extends the local conclusion.
 - **Caveat:** the relation contains no virtual representation, factor system,
-  or continuous canonical bond data. Its general converse remains open:
-  continuous balanced canonical data and the surviving invariant bond subspace
-  must be derived from the physical gap when minimal bond dimensions change.
-  The obstruction to using raw tensor continuity alone is documented in
+  or continuous canonical bond data. Its converse, the cohomology obstruction
+  `MPSTensor.IsSameExactMPSGappedPhase.cohomologousTo`, is proved through
+  changes of minimal bond dimension. Every clause matches the source's phase
+  relation for paths with unique MPS ground states except the continuous
+  ambient tensor family of `MPSTensor.ExactMPSGroundPath`: arXiv:1010.3732
+  derives that family from the gap (Section II.F.2, lines 938–991) instead
+  of assuming it. The one-site injective endpoint domain of the
+  classification theorems is the source's standard-form convention. The
+  decision and the plan for a pointwise converse are recorded in
+  `docs/paper-gaps/spc11_spt_classification_continuous_realization.tex`;
+  the obstruction to using raw tensor continuity alone is documented in
   `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 
 ## Exact circuits with initialized auxiliaries

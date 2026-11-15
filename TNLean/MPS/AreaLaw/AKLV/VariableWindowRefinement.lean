@@ -29,7 +29,10 @@ open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matri
 
 namespace TNLean.MPS.AreaLaw
 
-private theorem normalized_cut_schmidtRank_le {L q k : ℕ}
+/-- A nonzero rescaling of a filtered image `Kx` has Schmidt rank at the cut `k` at most
+the operator Schmidt rank of `K` at that cut times the Schmidt rank of `x`. AKLV,
+arXiv:1301.1162v1, Definition 2.1 (`def:AGSP`), lines 296–314. -/
+theorem normalized_cut_schmidtRank_le {L q k : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (x : EuclideanSpace ℂ (Fin L → Fin q)) (c : ℂ) (hc : c ≠ 0)
     (hKx : toEuclideanLin K x ≠ 0) :

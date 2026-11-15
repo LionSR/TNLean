@@ -7,6 +7,7 @@ import QICLean.Analysis.MatrixFamilySupport
 import TNLean.MPS.MPDO.BNTLayerOrthogonality
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Supports of active physical-sector factors
@@ -245,10 +246,7 @@ theorem leftTensor_conjTranspose_mem_span_of_isActiveSector
         (z⁻¹ * ∑ ν, c (μ, ν) * F.rightTensor k ν v u) *
           F.leftTensor k μ x y := by
       simp_rw [Finset.mul_sum, Finset.sum_mul]
-      apply Finset.sum_congr rfl
-      intro μ _
-      apply Finset.sum_congr rfl
-      intro ν _
+      refine Finset.sum_congr₂ fun μ _ ν _ ↦ ?_
       ring
 
 /-- In an active sector, the right factor family is closed under conjugate
@@ -300,10 +298,7 @@ theorem rightTensor_conjTranspose_mem_span_of_isActiveSector
         (z⁻¹ * ∑ μ, c (μ, ν) * F.leftTensor k μ v u) *
           F.rightTensor k ν x y := by
       simp_rw [Finset.mul_sum, Finset.sum_mul]
-      apply Finset.sum_congr rfl
-      intro ν _
-      apply Finset.sum_congr rfl
-      intro μ _
+      refine Finset.sum_congr₂ fun ν _ μ _ ↦ ?_
       ring
 
 /-- The joint column support of the left factor family in a sector. -/

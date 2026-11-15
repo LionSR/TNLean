@@ -9,7 +9,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 # Unipotent changes of two reductions, and the set of all reductions
 
 Let `P = (σ, g)` and `Q = (σ_tilde, g_tilde)` be two reductions of the same tensor `B` onto two
-families of normal blocks of positive bond dimension, with the factorization
+families of nonzero irreducible blocks, with the factorization
 `g_tilde g⁻¹ = 𝔄_tilde P_X 𝔄⁻¹` of *A basis adapted to both flags*
 (`MPSTensor.MultiBlockCompression.gaugeMatrix_mul_gaugeMatrixInv_eq`). Replacing them by unipotent
 changes `(σ, u g)` and `(σ_tilde, u_tilde g_tilde)`, with `u` and `u_tilde` block upper triangular
@@ -116,9 +116,9 @@ theorem leftRow_conjTriangular_mulVec_of_mem (P : MultiBlockCompression B S C)
 theorem coveringChain_conjTriangular (P : MultiBlockCompression B S C)
     {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
     (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
-    (hdiag : ∀ b, h.blockDiag' b = μ b • 1) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-    (hD : ∀ s ∈ S, 0 < D s) :
-    (P.conjTriangular ht hμ hdiag).coveringChain hC hD = P.coveringChain hC hD := by
+    (hdiag : ∀ b, h.blockDiag' b = μ b • 1) (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0) :
+    (P.conjTriangular ht hμ hdiag).coveringChain hirr hlet = P.coveringChain hirr hlet := by
   have hflag : (P.conjTriangular ht hμ hdiag).flag = P.flag :=
     funext (P.conjTriangular_flag ht hμ hdiag)
   unfold coveringChain
@@ -127,8 +127,8 @@ theorem coveringChain_conjTriangular (P : MultiBlockCompression B S C)
 variable {κ : Type*} [DecidableEq κ] {D' : κ → ℕ} {S' : Finset κ}
   {C' : ∀ t, MPSTensor d (D' t)}
   (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
-  (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
-  (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
+  (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
+  (hirr' : ∀ t ∈ S', Matrix.IsIrreducibleAction (C' t)) (hlet' : ∀ t ∈ S', ∃ i, C' t i ≠ 0)
   {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
   (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
   (hdiag : ∀ b, h.blockDiag' b = μ b • 1)
@@ -144,56 +144,62 @@ variable {κ : Type*} [DecidableEq κ] {D' : κ → ℕ} {S' : Finset κ}
 product states*, Theorem 6.5, last sentence): `(σ, h g)` and `(σ_tilde, h_tilde g_tilde)` have the
 matching of `(σ, g)` and `(σ_tilde, g_tilde)`. -/
 theorem matching_conjTriangular :
-    (P.conjTriangular ht hμ hdiag).matching (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' =
-      P.matching Q hC hD hC' hD' := by
+    (P.conjTriangular ht hμ hdiag).matching
+    (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' =
+      P.matching Q hirr hlet hirr' hlet' := by
   unfold matching
   rw [coveringChain_conjTriangular, coveringChain_conjTriangular]
   rfl
 
 theorem matching_conjTriangular_apply (k : Fin (S.card + P.z)) :
-    (P.conjTriangular ht hμ hdiag).matching (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' k =
-      P.matching Q hC hD hC' hD' k :=
+    (P.conjTriangular ht hμ hdiag).matching
+    (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' k =
+      P.matching Q hirr hlet hirr' hlet' k :=
   congrArg (fun e : Fin (S.card + P.z) ≃ Fin (S'.card + Q.z) => e k)
-    (P.matching_conjTriangular Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag')
+    (P.matching_conjTriangular Q hirr hlet hirr' hlet' ht hμ hdiag ht' hμ' hdiag')
 
 theorem matchedInter_conjTriangular (k : Fin (S.card + P.z)) :
-    (P.conjTriangular ht hμ hdiag).matchedInter (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' k =
-      P.matchedInter Q hC hD hC' hD' k := by
+    (P.conjTriangular ht hμ hdiag).matchedInter
+    (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' k =
+      P.matchedInter Q hirr hlet hirr' hlet' k := by
   unfold matchedInter
   congr 1
   · exact P.conjTriangular_flag ht hμ hdiag _
   · exact (Q.conjTriangular_flag ht' hμ' hdiag' _).trans (congrArg (fun j : Fin (S'.card + Q.z) =>
-      Q.flag j.succ) (P.matching_conjTriangular_apply Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k))
+      Q.flag j.succ)
+      (P.matching_conjTriangular_apply Q hirr hlet hirr' hlet' ht hμ hdiag ht' hμ' hdiag' k))
 
 theorem matchedKer_conjTriangular (k : Fin (S.card + P.z)) :
-    (P.conjTriangular ht hμ hdiag).matchedKer (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' k =
-      P.matchedKer Q hC hD hC' hD' k := by
+    (P.conjTriangular ht hμ hdiag).matchedKer
+    (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' k =
+      P.matchedKer Q hirr hlet hirr' hlet' k := by
   unfold matchedKer
   congr 1
   · exact P.conjTriangular_flag ht hμ hdiag _
   · exact (Q.conjTriangular_flag ht' hμ' hdiag' _).trans (congrArg (fun j : Fin (S'.card + Q.z) =>
-      Q.flag j.succ) (P.matching_conjTriangular_apply Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k))
+      Q.flag j.succ)
+      (P.matching_conjTriangular_apply Q hirr hlet hirr' hlet' ht hμ hdiag ht' hμ' hdiag' k))
 
 /-- A supplied complement family remains a complement family after triangular changes
 of the reductions: the matched kernels and intersections are unchanged. The spaces
 are retained literally, with no new choice (Theorem 6.5, last sentence, of *The
 asymmetric fundamental theorem of matrix product states*). -/
-def matchedComplements_conjTriangular (L : P.MatchedComplements Q hC hD hC' hD')
+def matchedComplements_conjTriangular (L : P.MatchedComplements Q hirr hlet hirr' hlet')
     (ht₀ : h.BlockTriangular fun x => P.ord x.1) (hμ₀ : ∀ b, μ b ≠ 0)
     (hdiag₀ : ∀ b, h.blockDiag' b = μ b • 1)
     (ht₀' : h'.BlockTriangular fun x => Q.ord x.1) (hμ₀' : ∀ b, μ' b ≠ 0)
     (hdiag₀' : ∀ b, h'.blockDiag' b = μ' b • 1) :
     (P.conjTriangular ht₀ hμ₀ hdiag₀).MatchedComplements
-      (Q.conjTriangular ht₀' hμ₀' hdiag₀') hC hD hC' hD' where
+      (Q.conjTriangular ht₀' hμ₀' hdiag₀') hirr hlet hirr' hlet' where
   space := L.space
   disjoint k := by
     change Fin (S.card + P.z) at k
-    rw [P.matchedKer_conjTriangular Q hC hD hC' hD' ht₀ hμ₀ hdiag₀ ht₀' hμ₀' hdiag₀']
+    rw [P.matchedKer_conjTriangular Q hirr hlet hirr' hlet' ht₀ hμ₀ hdiag₀ ht₀' hμ₀' hdiag₀']
     exact L.disjoint k
   sup_eq k := by
     change Fin (S.card + P.z) at k
-    rw [P.matchedKer_conjTriangular Q hC hD hC' hD' ht₀ hμ₀ hdiag₀ ht₀' hμ₀' hdiag₀',
-      P.matchedInter_conjTriangular Q hC hD hC' hD' ht₀ hμ₀ hdiag₀ ht₀' hμ₀' hdiag₀']
+    rw [P.matchedKer_conjTriangular Q hirr hlet hirr' hlet' ht₀ hμ₀ hdiag₀ ht₀' hμ₀' hdiag₀',
+      P.matchedInter_conjTriangular Q hirr hlet hirr' hlet' ht₀ hμ₀ hdiag₀ ht₀' hμ₀' hdiag₀']
     exact L.sup_eq k
 
 /-- **The same complements** (*The asymmetric fundamental theorem of matrix product states*, Theorem
@@ -201,13 +207,14 @@ def matchedComplements_conjTriangular (L : P.MatchedComplements Q hC hD hC' hD')
 `(σ, g)` and `(σ_tilde, g_tilde)`, since these depend only on the two flags (`matchedCompl_congr`).
 -/
 theorem matchedCompl_conjTriangular (k : Fin (S.card + P.z)) :
-    (P.conjTriangular ht hμ hdiag).matchedCompl (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' k =
-      P.matchedCompl Q hC hD hC' hD' k :=
-  matchedCompl_congr hC hD hC' hD'
-    (P.matchedKer_conjTriangular Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k)
-    (P.matchedInter_conjTriangular Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k)
+    (P.conjTriangular ht hμ hdiag).matchedCompl
+    (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' k =
+      P.matchedCompl Q hirr hlet hirr' hlet' k :=
+  matchedCompl_congr hirr hlet hirr' hlet'
+    (P.matchedKer_conjTriangular Q hirr hlet hirr' hlet' ht hμ hdiag ht' hμ' hdiag' k)
+    (P.matchedInter_conjTriangular Q hirr hlet hirr' hlet' ht hμ hdiag ht' hμ' hdiag' k)
 
-variable (L : P.MatchedComplements Q hC hD hC' hD' := default)
+variable (L : P.MatchedComplements Q hirr hlet hirr' hlet' := default)
 
 /-- **The same `Γ`** (*The asymmetric fundamental theorem of matrix product states*, proof of the
 last sentence of Theorem 6.5): for `u` unipotent in the order of `P`, the reading of `u g` on
@@ -215,28 +222,33 @@ last sentence of Theorem 6.5): for `u` unipotent in the order of `P`, the readin
 `Γ` of `(σ, g)` and `(σ_tilde, g_tilde)`. -/
 theorem commonCoord_conjTriangular :
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonCoord
-        (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' (L := P.matchedComplements_conjTriangular Q
-          hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') =
-      P.commonCoord Q hC hD hC' hD' (L := L) := by
+        (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' (L
+        := P.matchedComplements_conjTriangular Q
+          hirr hlet hirr' hlet' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') =
+      P.commonCoord Q hirr hlet hirr' hlet' (L := L) := by
   refine LinearEquiv.ext fun x => ?_
   have hx : x ∈ ⨆ j, L.space j := by
-    rw [P.iSup_matchedCompl Q hC hD hC' hD' (L := L)]
+    rw [P.iSup_matchedCompl Q hirr hlet hirr' hlet' (L := L)]
     exact Submodule.mem_top
   refine Submodule.iSup_induction (L.space)
     (motive := fun x =>
       (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonCoord
-        (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' (L := P.matchedComplements_conjTriangular Q
-          hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') x = P.commonCoord Q hC hD
-          hC' hD' (L := L) x) hx
+        (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' (L
+        := P.matchedComplements_conjTriangular Q
+          hirr hlet hirr' hlet' L hu
+          (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') x = P.commonCoord Q hirr hlet
+          hirr' hlet' (L := L) x) hx
     (fun j y hy => ?_) ?_ (fun y y' hy hy' => ?_)
   · obtain ⟨b, rfl⟩ := P.ord.surjective j
-    have hy₂ : y ∈ (P.matchedComplements_conjTriangular Q hC hD hC' hD' L hu (fun _ => one_ne_zero)
+    have hy₂ : y ∈ (P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L hu
+    (fun _ => one_ne_zero)
       hu1 ht' hμ' hdiag').space (P.ord b) := hy
-    have hyU : y ∈ P.matchedInter Q hC hD hC' hD' (P.ord b) :=
-      P.matchedComplements_le Q hC hD hC' hD' (L := L) _ hy
-    have e1 := commonCoord_of_mem _ _ _ _ _ _ (L := P.matchedComplements_conjTriangular Q hC hD hC'
-      hD' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') hy₂
-    have e2 := P.commonCoord_of_mem Q hC hD hC' hD' (L := L) hy
+    have hyU : y ∈ P.matchedInter Q hirr hlet hirr' hlet' (P.ord b) :=
+      P.matchedComplements_le Q hirr hlet hirr' hlet' (L := L) _ hy
+    have e1 := commonCoord_of_mem _ _ _ _ _ _ (L
+    := P.matchedComplements_conjTriangular Q hirr hlet hirr'
+      hlet' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') hy₂
+    have e2 := P.commonCoord_of_mem Q hirr hlet hirr' hlet' (L := L) hy
     have e3 := P.leftRow_conjTriangular_mulVec_of_mem hu (fun _ => one_ne_zero) hu1
       (Submodule.mem_inf.1 hyU).1
     simp only [one_smul] at e3
@@ -246,52 +258,59 @@ theorem commonCoord_conjTriangular :
 
 /-- The coordinates `P_X Γ` of a vector of `L_j` read by the slot at the matched position. -/
 theorem commonCoord'_of_mem_of_matching_eq {j : Fin (S.card + P.z)} {b' : BlockIndex S' Q.z}
-    (hj : P.matching Q hC hD hC' hD' j = Q.ord b') {x : B.WordModule}
+    (hj : P.matching Q hirr hlet hirr' hlet' j = Q.ord b') {x : B.WordModule}
     (hx : x ∈ L.space j) :
-    P.commonCoord' Q hC hD hC' hD' (L := L) x =
+    P.commonCoord' Q hirr hlet hirr' hlet' (L := L) x =
       Matrix.blockEmbed (slotSize D') b' *ᵥ (Q.leftRow b' *ᵥ WordModule.toVec B x) := by
-  have h : (P.matching Q hC hD hC' hD').symm (Q.ord b') = j := by
+  have h : (P.matching Q hirr hlet hirr' hlet').symm (Q.ord b') = j := by
     rw [← hj, Equiv.symm_apply_apply]
   rw [← h] at hx
-  exact P.commonCoord'_of_mem Q hC hD hC' hD' (L := L) hx
+  exact P.commonCoord'_of_mem Q hirr hlet hirr' hlet' (L := L) hx
 
 /-- **The same `P_X Γ`** (*The asymmetric fundamental theorem of matrix product states*, proof of
 the last sentence of Theorem 6.5): for `u_tilde` unipotent in the order of `Q`, the reading of
 `u_tilde g_tilde` on `L_j ⊆ M_tilde_{π(j)}` is that of `g_tilde`. -/
 theorem commonCoord'_conjTriangular :
     (P.conjTriangular ht hμ hdiag).commonCoord'
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-          P.matchedComplements_conjTriangular Q hC hD hC' hD' L ht hμ hdiag hu'
+        (Q.conjTriangular hu' (μ := fun _ => 1)
+        (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+          P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L ht hμ hdiag hu'
           (fun _ => one_ne_zero) hu1') =
-      P.commonCoord' Q hC hD hC' hD' (L := L) := by
+      P.commonCoord' Q hirr hlet hirr' hlet' (L := L) := by
   refine LinearEquiv.ext fun x => ?_
   have hx : x ∈ ⨆ j, L.space j := by
-    rw [P.iSup_matchedCompl Q hC hD hC' hD' (L := L)]
+    rw [P.iSup_matchedCompl Q hirr hlet hirr' hlet' (L := L)]
     exact Submodule.mem_top
   refine Submodule.iSup_induction (L.space)
     (motive := fun x => (P.conjTriangular ht hμ hdiag).commonCoord'
-      (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-        P.matchedComplements_conjTriangular Q hC hD hC' hD' L ht hμ hdiag hu' (fun _ => one_ne_zero)
+      (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet'
+      (L :=
+        P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L ht hμ hdiag hu'
+        (fun _ => one_ne_zero)
         hu1') x =
-        P.commonCoord' Q hC hD hC' hD' (L := L) x) hx
+        P.commonCoord' Q hirr hlet hirr' hlet' (L := L) x) hx
     (fun j y hy => ?_) ?_ (fun y y' hy hy' => ?_)
-  · obtain ⟨b', hb'⟩ := Q.ord.surjective (P.matching Q hC hD hC' hD' j)
-    have hy₂ : y ∈ (P.matchedComplements_conjTriangular Q hC hD hC' hD' L ht hμ hdiag hu'
+  · obtain ⟨b', hb'⟩ := Q.ord.surjective (P.matching Q hirr hlet hirr' hlet' j)
+    have hy₂ : y ∈ (P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L ht hμ hdiag hu'
       (fun _ => one_ne_zero) hu1').space j := hy
     have hj₂ : (P.conjTriangular ht hμ hdiag).matching
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' j =
+        (Q.conjTriangular hu' (μ := fun _ => 1)
+        (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' j =
           Q.ord b' :=
-      (P.matching_conjTriangular_apply Q hC hD hC' hD' ht hμ hdiag hu' (fun _ => one_ne_zero) hu1'
+      (P.matching_conjTriangular_apply Q hirr hlet hirr' hlet' ht hμ hdiag hu'
+      (fun _ => one_ne_zero) hu1'
         j).trans hb'.symm
-    have hyU : y ∈ P.matchedInter Q hC hD hC' hD' j := P.matchedComplements_le Q hC hD hC' hD'
+    have hyU : y ∈ P.matchedInter Q hirr hlet hirr' hlet' j
+    := P.matchedComplements_le Q hirr hlet hirr' hlet'
       (L := L) _ hy
     have hyQ : y ∈ Q.flag (Q.ord b').succ := by
       rw [hb']
       exact (Submodule.mem_inf.1 hyU).2
     have e1 := commonCoord'_of_mem_of_matching_eq _ _ _ _ _ _ (L :=
-      P.matchedComplements_conjTriangular Q hC hD hC' hD' L ht hμ hdiag hu' (fun _ => one_ne_zero)
+      P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L ht hμ hdiag hu'
+      (fun _ => one_ne_zero)
       hu1') hj₂ hy₂
-    have e2 := P.commonCoord'_of_mem_of_matching_eq Q hC hD hC' hD' (L := L) hb'.symm hy
+    have e2 := P.commonCoord'_of_mem_of_matching_eq Q hirr hlet hirr' hlet' (L := L) hb'.symm hy
     have e3 := Q.leftRow_conjTriangular_mulVec_of_mem hu' (fun _ => one_ne_zero) hu1' hyQ
     simp only [one_smul] at e3
     exact e1.trans ((congrArg (Matrix.blockEmbed (slotSize D') b' *ᵥ ·) e3).trans e2.symm)
@@ -300,78 +319,86 @@ theorem commonCoord'_conjTriangular :
 
 theorem commonGauge_conjTriangular :
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonGauge
-        (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' (L := P.matchedComplements_conjTriangular Q
-          hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') =
-      P.commonGauge Q hC hD hC' hD' (L := L) :=
+        (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' (L
+        := P.matchedComplements_conjTriangular Q
+          hirr hlet hirr' hlet' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') =
+      P.commonGauge Q hirr hlet hirr' hlet' (L := L) :=
   congrArg (fun Γ : B.WordModule ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) =>
     (WordModule.toVec B).symm.trans Γ)
-    (P.commonCoord_conjTriangular Q hC hD hC' hD' (L := L) ht' hμ' hdiag' hu hu1)
+    (P.commonCoord_conjTriangular Q hirr hlet hirr' hlet' (L := L) ht' hμ' hdiag' hu hu1)
 
 theorem commonGauge'_conjTriangular :
     (P.conjTriangular ht hμ hdiag).commonGauge'
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-          P.matchedComplements_conjTriangular Q hC hD hC' hD' L ht hμ hdiag hu'
+        (Q.conjTriangular hu' (μ := fun _ => 1)
+        (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+          P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L ht hμ hdiag hu'
           (fun _ => one_ne_zero) hu1') =
-      P.commonGauge' Q hC hD hC' hD' (L := L) :=
+      P.commonGauge' Q hirr hlet hirr' hlet' (L := L) :=
   congrArg (fun Γ : B.WordModule ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) =>
     (WordModule.toVec B).symm.trans Γ)
-    (P.commonCoord'_conjTriangular Q hC hD hC' hD' (L := L) ht hμ hdiag hu' hu1')
+    (P.commonCoord'_conjTriangular Q hirr hlet hirr' hlet' (L := L) ht hμ hdiag hu' hu1')
 
 /-- **The first unipotent factor of `(σ, u g)`** (*The asymmetric fundamental theorem of matrix
 product states*, Theorem 6.5, last sentence): `u 𝔄`, since `u g = (u 𝔄) Γ` with the same `Γ`. -/
 theorem unipotentFactor_conjTriangular :
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
-        (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' (L := P.matchedComplements_conjTriangular Q
-          hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') =
-      u * P.unipotentFactor Q hC hD hC' hD' (L := L) := by
+        (Q.conjTriangular ht' hμ' hdiag') hirr hlet hirr' hlet' (L
+        := P.matchedComplements_conjTriangular Q
+          hirr hlet hirr' hlet' L hu (fun _ => one_ne_zero) hu1 ht' hμ' hdiag') =
+      u * P.unipotentFactor Q hirr hlet hirr' hlet' (L := L) := by
   have key : gaugeMatrix (P.conjTriangularGauge hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1) *
-      gaugeMatrixInv (P.commonGauge Q hC hD hC' hD' (L := L)) = u * P.unipotentFactor Q hC hD hC'
-        hD' (L := L) := by
+      gaugeMatrixInv (P.commonGauge Q hirr hlet hirr' hlet' (L
+      := L)) = u * P.unipotentFactor Q hirr hlet hirr'
+        hlet' (L := L) := by
     rw [gaugeMatrix_conjTriangularGauge, Matrix.mul_assoc]
     rfl
   exact (congrArg (fun Γ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) =>
     gaugeMatrix (P.conjTriangularGauge hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1) *
       gaugeMatrixInv Γ)
-    (P.commonGauge_conjTriangular Q hC hD hC' hD' (L := L) ht' hμ' hdiag' hu hu1)).trans key
+    (P.commonGauge_conjTriangular Q hirr hlet hirr' hlet' (L := L) ht' hμ' hdiag' hu hu1)).trans key
 
 /-- **The second unipotent factor of `(σ_tilde, u_tilde g_tilde)`** (*The asymmetric fundamental
 theorem of matrix product states*, Theorem 6.5, last sentence): `u_tilde 𝔄_tilde`, since
 `u_tilde g_tilde = (u_tilde 𝔄_tilde) P_X Γ` with the same `P_X Γ`. -/
 theorem unipotentFactor'_conjTriangular :
     (P.conjTriangular ht hμ hdiag).unipotentFactor'
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-          P.matchedComplements_conjTriangular Q hC hD hC' hD' L ht hμ hdiag hu'
+        (Q.conjTriangular hu' (μ := fun _ => 1)
+        (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+          P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L ht hμ hdiag hu'
           (fun _ => one_ne_zero) hu1') =
-      u' * P.unipotentFactor' Q hC hD hC' hD' (L := L) := by
+      u' * P.unipotentFactor' Q hirr hlet hirr' hlet' (L := L) := by
   have key : gaugeMatrix (Q.conjTriangularGauge hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') *
-      gaugeMatrixInv (P.commonGauge' Q hC hD hC' hD' (L := L)) =
-        u' * P.unipotentFactor' Q hC hD hC' hD' (L := L) := by
+      gaugeMatrixInv (P.commonGauge' Q hirr hlet hirr' hlet' (L := L)) =
+        u' * P.unipotentFactor' Q hirr hlet hirr' hlet' (L := L) := by
     rw [gaugeMatrix_conjTriangularGauge, Matrix.mul_assoc]
     rfl
   exact (congrArg (fun Γ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) =>
     gaugeMatrix (Q.conjTriangularGauge hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') *
       gaugeMatrixInv Γ)
-    (P.commonGauge'_conjTriangular Q hC hD hC' hD' (L := L) ht hμ hdiag hu' hu1')).trans key
+    (P.commonGauge'_conjTriangular Q hirr hlet hirr' hlet' (L := L) ht hμ hdiag hu' hu1')).trans key
 
 /-- **The same block permutation matrix** (*The asymmetric fundamental theorem of matrix product
 states*, Theorem 6.5, last sentence): `(σ, u g)` and `(σ_tilde, u_tilde g_tilde)` have the `P_X` of
 `(σ, g)` and `(σ_tilde, g_tilde)`. -/
 theorem matchingPermMatrix_conjTriangular :
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
-      P.matchingPermMatrix Q hC hD hC' hD' := by
-  let L : P.MatchedComplements Q hC hD hC' hD' := default
+        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' =
+      P.matchingPermMatrix Q hirr hlet hirr' hlet' := by
+  let L : P.MatchedComplements Q hirr hlet hirr' hlet' := default
   exact ((P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero)
     hu1).matchingPermMatrix_eq_mul
-    (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-      P.matchedComplements_conjTriangular Q hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 hu'
+    (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+      P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L hu
+      (fun _ => one_ne_zero) hu1 hu'
       (fun _ => one_ne_zero) hu1')).trans
     ((congrArg₂ (fun (Γ₁ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
         (Γ₂ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ)) => gaugeMatrix Γ₂ * gaugeMatrixInv Γ₁)
-      (P.commonGauge_conjTriangular Q hC hD hC' hD' (L := L) hu' (fun _ => one_ne_zero) hu1' hu hu1)
-      (P.commonGauge'_conjTriangular Q hC hD hC' hD' (L := L) hu (fun _ => one_ne_zero) hu1 hu'
+      (P.commonGauge_conjTriangular Q hirr hlet hirr' hlet' (L := L) hu'
+      (fun _ => one_ne_zero) hu1' hu hu1)
+      (P.commonGauge'_conjTriangular Q hirr hlet hirr' hlet' (L := L) hu
+      (fun _ => one_ne_zero) hu1 hu'
         hu1')).trans
-      (P.matchingPermMatrix_eq_mul Q hC hD hC' hD' (L := L)).symm)
+      (P.matchingPermMatrix_eq_mul Q hirr hlet hirr' hlet' (L := L)).symm)
 
 /-- **Unipotent changes** (*The asymmetric fundamental theorem of matrix product states*, Theorem
 6.5, last sentence, first part): for `u` unipotent in the order of `P` and `u_tilde` unipotent in
@@ -384,22 +411,26 @@ theorem flag_conjTriangular_and_unipotentFactor_conjTriangular :
     (∀ k', (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' =
       Q.flag k') ∧
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-          P.matchedComplements_conjTriangular Q hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 hu'
+        (Q.conjTriangular hu' (μ := fun _ => 1)
+        (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+          P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L hu
+          (fun _ => one_ne_zero) hu1 hu'
           (fun _ => one_ne_zero) hu1') =
-      u * P.unipotentFactor Q hC hD hC' hD' (L := L) ∧
+      u * P.unipotentFactor Q hirr hlet hirr' hlet' (L := L) ∧
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-          P.matchedComplements_conjTriangular Q hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 hu'
+        (Q.conjTriangular hu' (μ := fun _ => 1)
+        (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+          P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L hu
+          (fun _ => one_ne_zero) hu1 hu'
           (fun _ => one_ne_zero) hu1') =
-      u' * P.unipotentFactor' Q hC hD hC' hD' (L := L) ∧
+      u' * P.unipotentFactor' Q hirr hlet hirr' hlet' (L := L) ∧
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
-        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
-      P.matchingPermMatrix Q hC hD hC' hD' :=
+        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' =
+      P.matchingPermMatrix Q hirr hlet hirr' hlet' :=
   ⟨P.conjTriangular_flag _ _ _, Q.conjTriangular_flag _ _ _,
-    P.unipotentFactor_conjTriangular Q hC hD hC' hD' (L := L) _ _ _ hu hu1,
-    P.unipotentFactor'_conjTriangular Q hC hD hC' hD' (L := L) _ _ _ hu' hu1',
-    P.matchingPermMatrix_conjTriangular Q hC hD hC' hD' hu hu1 hu' hu1'⟩
+    P.unipotentFactor_conjTriangular Q hirr hlet hirr' hlet' (L := L) _ _ _ hu hu1,
+    P.unipotentFactor'_conjTriangular Q hirr hlet hirr' hlet' (L := L) _ _ _ hu' hu1',
+    P.matchingPermMatrix_conjTriangular Q hirr hlet hirr' hlet' hu hu1 hu' hu1'⟩
 
 /-- The inverse of a matrix unipotent in the order of `P` is unipotent in that order. -/
 theorem blockTriangular_inv_and_blockDiag'_inv_of_unipotent
@@ -432,40 +463,48 @@ theorem exists_conjTriangular_unipotentFactor_eq
       (∀ k', (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' =
         Q.flag k') ∧
       (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
-          (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-            P.matchedComplements_conjTriangular Q hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 hu'
+          (Q.conjTriangular hu' (μ := fun _ => 1)
+          (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+            P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L hu
+            (fun _ => one_ne_zero) hu1 hu'
             (fun _ => one_ne_zero) hu1') = A₁ ∧
       (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
-          (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' (L :=
-            P.matchedComplements_conjTriangular Q hC hD hC' hD' L hu (fun _ => one_ne_zero) hu1 hu'
+          (Q.conjTriangular hu' (μ := fun _ => 1)
+          (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' (L :=
+            P.matchedComplements_conjTriangular Q hirr hlet hirr' hlet' L hu
+            (fun _ => one_ne_zero) hu1 hu'
             (fun _ => one_ne_zero) hu1') = A₂ ∧
       (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
-          (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
-        P.matchingPermMatrix Q hC hD hC' hD' := by
+          (Q.conjTriangular hu' (μ := fun _ => 1)
+          (fun _ => one_ne_zero) hu1') hirr hlet hirr' hlet' =
+        P.matchingPermMatrix Q hirr hlet hirr' hlet' := by
   obtain ⟨hi, hi1, hinv⟩ := P.blockTriangular_inv_and_blockDiag'_inv_of_unipotent
-    (P.blockTriangular_unipotentFactor Q hC hD hC' hD' (L := L))
-    (P.blockDiag'_unipotentFactor Q hC hD hC' hD' (L := L))
+    (P.blockTriangular_unipotentFactor Q hirr hlet hirr' hlet' (L := L))
+    (P.blockDiag'_unipotentFactor Q hirr hlet hirr' hlet' (L := L))
   obtain ⟨hi', hi1', hinv'⟩ := Q.blockTriangular_inv_and_blockDiag'_inv_of_unipotent
-    (P.blockTriangular_unipotentFactor' Q hC hD hC' hD' (L := L))
-    (P.blockDiag'_unipotentFactor' Q hC hD hC' hD' (L := L))
+    (P.blockTriangular_unipotentFactor' Q hirr hlet hirr' hlet' (L := L))
+    (P.blockDiag'_unipotentFactor' Q hirr hlet hirr' hlet' (L := L))
   have hu :
-      (A₁ * (P.unipotentFactor Q hC hD hC' hD' (L := L))⁻¹).BlockTriangular fun x => P.ord x.1 :=
+      (A₁ * (P.unipotentFactor Q hirr hlet hirr' hlet' (L
+      := L))⁻¹).BlockTriangular fun x => P.ord x.1 :=
     hA₁.mul hi
   have hu1 : ∀ b,
-      (A₁ * (P.unipotentFactor Q hC hD hC' hD' (L := L))⁻¹).blockDiag' b = (1 : ℂ) • 1 :=
+      (A₁ * (P.unipotentFactor Q hirr hlet hirr' hlet' (L := L))⁻¹).blockDiag' b = (1 : ℂ) • 1 :=
     fun b => by
       rw [Matrix.blockDiag'_mul_of_blockTriangular P.ord.injective hA₁ hi, hA₁', hi1,
         Matrix.one_mul, one_smul]
-  have hu' : (A₂ * (P.unipotentFactor' Q hC hD hC' hD' (L := L))⁻¹).BlockTriangular fun x => Q.ord
+  have hu' : (A₂ * (P.unipotentFactor' Q hirr hlet hirr' hlet' (L
+    := L))⁻¹).BlockTriangular fun x => Q.ord
     x.1 :=
     hA₂.mul hi'
   have hu1' : ∀ b,
-      (A₂ * (P.unipotentFactor' Q hC hD hC' hD' (L := L))⁻¹).blockDiag' b = (1 : ℂ) • 1 :=
+      (A₂ * (P.unipotentFactor' Q hirr hlet hirr' hlet' (L := L))⁻¹).blockDiag' b = (1 : ℂ) • 1 :=
     fun b => by
       rw [Matrix.blockDiag'_mul_of_blockTriangular Q.ord.injective hA₂ hi', hA₂', hi1',
         Matrix.one_mul, one_smul]
   obtain ⟨hf, hf', h1, h2, h3⟩ :=
-    P.flag_conjTriangular_and_unipotentFactor_conjTriangular Q hC hD hC' hD' (L := L) hu hu1 hu'
+    P.flag_conjTriangular_and_unipotentFactor_conjTriangular Q hirr hlet hirr' hlet' (L
+    := L) hu hu1 hu'
       hu1'
   refine ⟨_, hu, hu1, _, hu', hu1', hf, hf', ?_, ?_, h3⟩
   · rw [h1, Matrix.mul_assoc, hinv, Matrix.mul_one]
@@ -484,8 +523,9 @@ reduction `(σ, g)` with the slots and order of `P` has the flag of `P` exactly 
 some `h ∈ T_σ`, a block upper triangular matrix with nonzero scalar diagonal blocks. So the
 reductions with a given labelled flag form one `T_σ`-orbit, on which `T_σ` acts freely
 (`MPSTensor.MultiBlockCompression.coordChange_conjTriangularGauge`). -/
-theorem flag_withGauge_eq_iff_exists_eq_conjTriangularGauge (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-    (hD : ∀ s ∈ S, 0 < D s)
+theorem flag_withGauge_eq_iff_exists_eq_conjTriangularGauge (hirr : ∀ s ∈ S,
+    Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
     (htri : ∀ i, (conjMatrix g (B i)).BlockTriangular fun x => P.ord x.1)
     (hdiag : ∀ i b, (conjMatrix g (B i)).blockDiag' b = blockOf D C i b) :
@@ -497,7 +537,7 @@ theorem flag_withGauge_eq_iff_exists_eq_conjTriangularGauge (hC : ∀ s ∈ S, K
   constructor
   · intro hflag
     exact ⟨_, blockTriangular_coordChange_of_flag_eq hflag, _,
-      coordChangeScalar_ne_zero hC hD hflag, blockDiag'_coordChange_eq_smul hC hflag,
+      coordChangeScalar_ne_zero hirr hlet hflag, blockDiag'_coordChange_eq_smul hirr hflag,
       LinearEquiv.ext fun v => by
         rw [conjTriangularGauge_apply, coordChange_mulVec, LinearEquiv.symm_apply_apply]⟩
   · rintro ⟨h, ht, μ, hμ, hh, rfl⟩ k
@@ -530,8 +570,8 @@ theorem heq_of_heq_coe_symm {z z' : ℕ} (hz : z = z') {e : BlockIndex S z ≃ F
 `thm:asym_uniq_same_flag`, *Two compressions with the same flag*; blueprint `thm:asym_uniq_all`,
 *The set of all compressions*): if `R` and `P` have the same labelled flag, then `P = (σ_R, h g_R)`
 for some `h ∈ T_{σ_R}`. -/
-theorem exists_eq_conjTriangular_of_toFlagData_eq (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-    (hD : ∀ s ∈ S, 0 < D s) {P R : MultiBlockCompression B S C}
+theorem exists_eq_conjTriangular_of_toFlagData_eq (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0) {P R : MultiBlockCompression B S C}
     (h : R.toFlagData = P.toFlagData) :
     ∃ (h' : Matrix (BlockSpace D S R.z) (BlockSpace D S R.z) ℂ)
       (ht : h'.BlockTriangular fun x => R.ord x.1) (μ : BlockIndex S R.z → ℂ)
@@ -543,13 +583,14 @@ theorem exists_eq_conjTriangular_of_toFlagData_eq (hC : ∀ s ∈ S, Kraus.IsNor
   have hH' : HEq (R.withGauge g htri hdiag).toFlagData.H R.toFlagData.H := by rw [h]
   have hH := eq_of_heq hH'
   have hflag : ∀ k, (R.withGauge g htri hdiag).flag k = R.flag k := fun k => congrFun hH k
-  exact ⟨_, _, _, _, _, withGauge_eq_conjTriangular hC hD hflag⟩
+  exact ⟨_, _, _, _, _, withGauge_eq_conjTriangular hirr hlet hflag⟩
 
 /-- **The set of all reductions** (blueprint `thm:asym_uniq_all`, *The set of all compressions*):
 choose for each labelled invariant flag `F` one reduction `rep F` with labelled flag `F`. Every
-reduction onto normal blocks of positive bond dimension is `(σ_F, h g_F)` for exactly one pair
-`(F, h)` with `h ∈ T_{σ_F}`, and `F` is then its labelled flag. -/
-theorem existsUnique_conjTriangular (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+reduction onto nonzero irreducible blocks is `(σ_F, h g_F)` for exactly
+one pair `(F, h)` with `h ∈ T_{σ_F}`, and `F` is then its labelled flag. -/
+theorem existsUnique_conjTriangular (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+    (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
     (rep : FlagData B.WordModule S C → MultiBlockCompression B S C)
     (hrep : ∀ F, (rep F).toFlagData = F) (P : MultiBlockCompression B S C) :
     (∃! p : (F : FlagData B.WordModule S C) ×
@@ -573,7 +614,7 @@ theorem existsUnique_conjTriangular (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD
     rw [toFlagData_conjTriangular, hrep]
   refine ⟨?_, hfst⟩
   obtain ⟨h', ht, μ, hμ, hh, hP⟩ :=
-    exists_eq_conjTriangular_of_toFlagData_eq hC hD (hrep P.toFlagData)
+    exists_eq_conjTriangular_of_toFlagData_eq hirr hlet (hrep P.toFlagData)
   refine ⟨⟨P.toFlagData, h'⟩, ⟨ht, μ, hμ, hh, hP⟩, fun p hp => ?_⟩
   have h1 := hfst p hp
   obtain ⟨F, h''⟩ := p

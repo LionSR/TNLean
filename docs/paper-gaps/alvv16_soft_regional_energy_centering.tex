@@ -1,0 +1,267 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{Energy centers and the central soft regional operator}
+\author{}
+\date{2026-11-03}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source interfaces}
+
+Definition \texttt{def:soft-trunc} of
+\href{https://arxiv.org/abs/1602.08828v2}{Arad--Landau--Vazirani--Vidick},
+source lines 1178--1185, assumes a one-sided estimate
+$e_J-10\le p_J\le e_J$ for the minimum $e_J$ of $H_J$, and defines
+$p_JI+h_{m,t}(H_J-p_JI)$. The efficient-generation theorem
+\texttt{t:aisefficient}, lines 1360--1369, instead permits an input
+$|p_M-e_M|\le10$. The two interfaces are different: the latter condition
+alone does not make $H_M-p_MI$ positive. An application of the one-sided
+functional-calculus bounds must first derive a suitable one-sided center.
+
+The regions in \texttt{eq:defjgapped}, lines 1380--1384, omit collars of
+width $\ell$ at the boundaries of the parent region. Thus a rough
+estimate for the parent minimum is not, without further argument, a
+width-ten estimate for the middle minimum. A corrected route
+now constructs the actual minima $c_L,c_R$ of the two collars, the
+middle minimum and the parent minimum directly from the original bonds.
+Two adjacent-interval comparisons give
+$e_{\mathrm{mid}}+c_L+c_R\le e_M\le e_{\mathrm{mid}}+c_L+c_R+2$.
+Hence every parent estimate $p_M\in[e_M-8,e_M]$ gives
+$p_M-c_L-c_R-2\in[e_{\mathrm{mid}}-10,e_{\mathrm{mid}}]$.
+The actual attained minima are chosen before $p_M$; no minimum or
+energy witness is supplied. Empty collars and endpoint cuts are included.
+The formal statement is
+\leanid{TNLean.MPS.AreaLaw.exists_regional_central_energy_estimate}.
+The collar-length bound is not needed for this comparison. When each
+collar has at most $2\ell$ sites, its internal operator has exactly that
+short support. No running-time statement about obtaining its minimum
+is a conclusion of this auxiliary result. The width-eight one-sided
+parent estimate is derived for the corrected recursive hard-clipped
+construction below; it is not inferred from the broader absolute-error input.
+
+The raw soft replacement retains $p_JI$. Its norm can therefore contain
+an extensive scalar energy. The uniform norm conclusion in
+\texttt{t:aisefficient} and the norm assertion following
+\texttt{eq:defjgapped} require an explicit scalar-centering convention;
+they are not established here for the literal uncentered operator.
+The correction to the harmonic cap, from $t\log m$ to $t(1+\log m)$,
+is documented in the
+\href{https://sirui-lu.com/QICLean/paper-gaps/alvv16_soft_truncation_log_bound.pdf}{QICLean soft-truncation note}.
+
+\section{An actual centered operator and its energy}
+
+Let $0\le h_i\le I$ be nearest-neighbour interactions on a finite chain
+of positive local dimension. Fix $l\le u\le v\le r$ and let $P$ and $M$
+be the sums internal to $[l,r)$ and $[u,v)$, respectively. Assume that
+both collars have at most $2\ell$ sites. The formalization constructs
+attained minima $e_P,e_M$ before every $p,t,m$. For
+$e_M-10\le p\le e_M$, $t>0$ and $m\ge2$, it uses the literal operator
+\begin{align}
+ R=P-M+pI+h_{m,t}(M-pI).
+\end{align}
+It constructs an attained minimum $e_{\mathrm s}$ and an actual positive
+matrix $K$ on the Hilbert space of $[l,r)$ such that
+\begin{align}
+ R&=K\otimes I+e_{\mathrm s}I,&
+ \|K\|&\le t(1+\log m)+4\ell+14.
+\end{align}
+The identity extension is understood through the standard regional
+coordinate identification. The operator $R$ is defined before
+$e_{\mathrm s}$: its construction does not require knowing its true
+minimum. If $T,t\ge48$, put
+\begin{align}
+ \rho=32e^{-(T-48)/8}+\frac{t}{m}\left(\frac{T}{t}\right)^m.
+\end{align}
+Then $e_{\mathrm s}\le e_P\le e_{\mathrm s}+\rho$. For every vector $g$
+in the full ground space of the original chain,
+\begin{align}
+ \langle g,(K\otimes I)g\rangle\le(2+\rho)\|g\|^2.
+\end{align}
+No gap or uniqueness assumption is used. The matrices, their minima and
+$K$ are chosen before the auxiliary cutoff $T$ and before any candidate
+subspace. The formal statement is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_parent_energy_bound};
+the physical construction and minimum comparison are also exposed in
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_soft_parent_structure}.
+
+The norm statement concerns $R-e_{\mathrm s}I$, not $R$. A known rough
+parent energy could instead be subtracted when constructing an operator;
+the scalar offset is then bounded by the corresponding energy errors.
+An unknown scalar normalization is not by itself an obstruction to a
+normalized viable-space construction.
+
+\section{The remaining energy-estimation argument}
+
+At source line 1631, Figure \texttt{fig:algo1} uses the separate
+untrimmed powered family image of the two child spaces as the energy
+candidate, rather than the retained, trimmed output of the tree.
+Lines 1793--1807 combine its viability for a generated soft target with
+a norm estimate for the same generated operator. The original-ground estimate above alone does not bound this candidate.
+A further conditional theorem now performs the quantitative energy
+transfer for a specified calibrated target and its own actual word
+family. The same-family node update is substituted into the actual
+interleaved tree, and a simultaneous recursive one-sided assignment is
+proved in the last section. The source running-time bound remains separate.
+
+\section{Raw compression on the specified family's child image}
+
+A further corrected auxiliary uses order $m=12$, soft scale $t=768$ and
+tail cutoff $T=384$. Its actual residual is
+$\rho=32e^{-42}+1/64<1/16$. The centered regional norm is bounded by
+$A=768(1+\log12)+4\ell+14$. For the calibrated count
+$D\ge50\ell^2$, $\ell\ge21$, one has $A+1\le D$.
+
+The target and family in this auxiliary are specified together with
+their proved closeness and word bounds: the target has the original
+ground-space dimension, its comparison loss is
+$\tau=a^2/2^{20}$ with $a=3/(32D^{12}s^5)$, and the same family has
+one-word loss $\Delta/(3/4)^2$, where $\Delta=1/(200000D^{12})$.
+The scalar bounds give
+$\tau\le1/[1024(D+1)]$ and
+$\Delta/(3/4)^2\le1/[100(D+1)]$. These hypotheses are explicit properties of those given operators;
+no candidate energy bound, actual minimum or successful projection
+is supplied.
+
+For every allowed middle center $p$, the literal raw $R$ is formed and
+its native matrix $K_{\rm raw}$ is defined by one fixed-complement
+principal slice, before its unknown true minimum $e_{\rm s}$ is chosen.
+For any two $3/200$-viable children, form their actual tensor merge $W$
+and the untrimmed one-word image $V=\sum_iF_iW$ using the \emph{same}
+family as in the merge construction. The positive-energy comparison first
+bounds energy on that nearby target and then on its actual projection
+into $V\otimes\mathcal H_{J^c}$. It gives a nonzero trial of centered
+energy at most three. Tensor slicing bounds the actual raw compressed
+minimum $\lambda_V$, and positivity gives
+\begin{align}
+ e_{\rm s}\le\lambda_V\le e_{\rm s}+3,\qquad
+ e_P-3-\rho\le\lambda_V-3\le e_P.
+\end{align}
+The actual ordered orthonormal eigenbasis of the compression is
+constructed as a conclusion, not supplied as spectral data. The formal
+statement is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_native_soft_word_compressed_energy_estimate}.
+
+The corrected one-sided estimate is $p_V=\lambda_V-3$. It depends only
+on the raw regional matrix and the actual candidate; the unknown
+$e_{\rm s}$ is used only in its proof. The downward bias by three is a
+local correction to the interface: source line 1631 records the raw
+compressed minimum itself, whereas Definition \texttt{def:soft-trunc}
+requires a center below the true minimum.
+
+The given target and family bounds here belong to the existing
+hard-truncation construction. This theorem does not identify it with the
+literal soft Generate family or its printed word count. The node theorem
+applies it to the returned actual tree family, and the last section
+constructs a simultaneous recursive energy assignment. Two errors of size $3+\rho\le49/16$ and one
+connecting positive contraction give a parent error at most $57/8<8$;
+the collar conversion above then fits the one-sided width ten. The
+same-tree node theorem proves this correction for admissible child
+estimates; the recursion below assigns such estimates simultaneously.
+No efficient collar minimum calculation, matrix product implementation of
+the energy routine,
+adaptive sampling law or running time is asserted.
+
+The false printed soft-energy and cluster estimates retain their
+counterexamples and separate corrections; see
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_soft_regional_residuals.pdf}{the regional-residual note}
+and
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_cluster_approximation.pdf}{the cluster-approximation note}.
+No printed approximation estimate is assumed in the construction above.
+
+
+
+\section{Node updates on the same actual tree}
+
+The corrected node estimate retains width $49/16$, rather than replacing
+it by the coarser width four. The original positive connecting bond gives
+\begin{align}
+ e_{[l,k)}+e_{[k,r)}\le e_{[l,r)}
+ \le e_{[l,k)}+e_{[k,r)}+1.
+\end{align}
+Thus two child estimates of width $49/16$ have sum within $57/8<8$
+below the parent minimum. The proved collar conversion supplies a middle
+center in the full required interval $[e_M-10,e_M]$. The actual compressed
+minimum on the same family's one-word child image, minus three, again
+has width $49/16$ since $\rho<1/16$.
+
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_energy_updates}
+selects the original calibrated tree once, retaining its literal targets,
+operator families, child spaces and interleaved merge identities. The
+energy update is attached to those objects without selecting a second
+family. This node assertion holds for all admissible child scalar estimates
+and supplies the simultaneous recursion below. The hard-clipped family
+is still not identified with the source's literal soft Generate, and no
+running-time claim follows.
+
+
+\section{Simultaneous recursive scalar estimates}
+
+The theorem
+\leanid{TNLean.MPS.AreaLaw.exists_physical_dg_interleaved_tree_with_recursive_energy}
+now assigns one scalar $p_{l,r}$ to every valid interval of that same
+physical tree. At a short leaf it is an actual attained minimum of the
+original regional Hamiltonian. At a long node, the interval is divided at
+its balanced midpoint. The already-assigned child estimates determine the
+middle center through the actual collar minima, and the parent value is
+the actual least raw compressed eigenvalue on the same family's one-word
+child image, minus three. Every assigned value satisfies
+\begin{align}
+ e_{[l,r)}-\frac{49}{16}\le p_{l,r}\le e_{[l,r)}.
+\end{align}
+The defining recursion proves that each node uses exactly its assigned
+child values, rather than separately chosen witnesses. The full original
+space, rank, word and sampled-merge conclusions are retained for the same
+chosen targets, families and retained spaces.
+
+This establishes a corrected one-sided energy invariant for the existing
+hard-clipped construction. It does not identify that construction with
+literal soft Generate or the source's printed energy-power count. The
+exact collar minima and compressed eigenspaces are mathematical existence
+constructions; no efficient computation or running-time conclusion is
+asserted. The false printed soft-energy and cluster estimates, with their
+counterexamples and separate corrected theorems, are unchanged.
+
+
+\section{Energy estimates on a jointly successful sampled root}
+
+The all-valid-interval theorem above selects an operation satisfying the
+interval conditions at all valid pairs, including overlaps. Its global
+conclusion is not inferred from joint success on only one random root.
+For that random realization the actual root subtree is the relevant domain.
+
+The theorem
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_canonical_interval_root_energy_assignment}
+uses the literal canonical sampled operation with the same fixed targets
+and families. Its hypothesis is original-ground viability at error $3/200$
+for the actual root and the intervals in its actual root merge list.
+There is no viability assumption for other overlapping intervals and no
+supplied node-energy or callback hypothesis. Every used node update is
+derived from the existing physical word-energy theorem.
+
+A long child of a listed interval is also in the root list; a short child
+is the full local space. Hence the actual joint-success event supplies
+both child viability statements at every used long node. One scalar
+function then has original-regional lower error at most $49/16$ at the
+root and each listed internal node. It uses true attained minima at actual
+short leaves and the actual raw compressed minimum minus three at used
+long nodes, with the already-assigned child values and the exact collar
+conversion. On other valid intervals the scalar function is extended by original
+attained minima. This extension is a mathematical device, not an additional
+algorithmic computation or a claim about raw updates outside the used tree.
+
+The same shared scalar recursion proves both the earlier all-interval
+existence result and this root-restricted result. There is no second tree
+or operator-family construction, and no additional union over all possible
+subintervals is required. The theorem is conditional on the stated actual
+joint event; its probability is a separate assertion. Identification with
+literal soft Generate, the printed energy-power count and the source
+running-time statement remain unproved by this scalar construction.
+
+\end{document}

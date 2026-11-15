@@ -80,14 +80,14 @@ condition C1 in each block (lines 1314–1323), as used in the proof of the W-st
 C1 at length \(L_0\) in each block and pairwise distinct blocks, the tuples of block words of
 any length \(n\ge\max(L_0,3(b-1)(L_0+1))\) span the product of the block matrix algebras.
 
-**Stricter hypothesis.** The source assumes, without loss of generality, only that the block
-states \(|\phi_{A^j}\rangle\) are pairwise different (lines 1329–1330). The hypothesis
-`BlocksNotGaugePhaseEquiv` used here, the one the direct-sum lemma is formalized with, is
-stronger: two equal blocks with different weights, or two blocks related by a gauge and a
-phase \(\omega\) with \(\omega^N\ne1\), give different states but violate it. At prime
-length it is discharged: `lt_of_mpv_eq_smul_wIndicator_of_prime` groups the blocks by
-`mpvPhaseClassData`, whose representatives satisfy it. It remains a hypothesis of the
-conditional bounds; see `docs/paper-gaps/rmp_w_state_ti_bound.tex`. The length \(L_0\) in the
+**Local fix (projective distinctness of the blocks):** the source assumes, without loss of
+generality, that the block states \(|\phi_{A^j}\rangle\) are pairwise different
+(lines 1329–1330), meaning pairwise nonproportional; the hypothesis
+`BlocksNotGaugePhaseEquiv` is that condition in length-independent form. Documented in
+`docs/paper-gaps/pgvwc07_direct_sum_input.tex`. Merging blocks with proportional states, the
+source's reduction, is formalized at prime length: `lt_of_mpv_eq_smul_wIndicator_of_prime`
+groups the blocks by `mpvPhaseClassData`, whose representatives satisfy it. The length
+\(L_0\) in the
 threshold covers a single block, where the direct-sum lemma is vacuous and the source length
 \(3(b-1)(L_0+1)\) is zero. -/
 theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ}
@@ -118,7 +118,7 @@ variable {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
 /-- Source: arXiv:quant-ph/0608197, direct-sum lemma (lines 1346–1349) together with
 condition C1 in each block (lines 1314–1323), for the blocks of a canonical form; the
 specialization of `wordTupleSpanTop_of_ge_of_isNBlkInjective`, whose docstring records the
-stricter distinctness hypothesis. -/
+reading of the distinctness hypothesis. -/
 theorem wordTupleSpanTop_of_ge {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)
     (hDistinct : BlocksNotGaugePhaseEquiv (d := d) h.blocks)

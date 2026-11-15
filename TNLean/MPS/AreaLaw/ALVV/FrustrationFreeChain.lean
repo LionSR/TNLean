@@ -138,47 +138,46 @@ private theorem regionalProjection_congr_on {h h' : ℕ → E →L[𝕜] E}
     rw [ih (fun i hi hs ↦ heq i (by omega) hs)]
     by_cases hm : m ∈ s <;> simp [restrictedTerm, hm, heq m (by omega)]
 
-private theorem regionalProjection_colorTerm (h : ℕ → E →L[𝕜] E) (a b m : ℕ) :
-    regionalProjection (colorTerm h 0) (evenBonds a b) m =
-        regionalProjection h (evenBonds a b) m ∧
-    regionalProjection (colorTerm h 1) (oddBonds a b) m =
-        regionalProjection h (oddBonds a b) m := by
+private theorem regionalProjection_colorTerm (h : ℕ → E →L[𝕜] E) {s t : Finset ℕ}
+    (hs : ∀ i ∈ s, i % 2 = 0) (ht : ∀ i ∈ t, i % 2 = 1) (m : ℕ) :
+    regionalProjection (colorTerm h 0) s m = regionalProjection h s m ∧
+    regionalProjection (colorTerm h 1) t m = regionalProjection h t m := by
   classical
   constructor
   · apply regionalProjection_congr_on
     intro i _ hi
-    simp [colorTerm, (Finset.mem_filter.mp hi).2]
+    simp [colorTerm, hs i hi]
   · apply regionalProjection_congr_on
     intro i _ hi
-    have hpar := (Finset.mem_filter.mp hi).2
-    have : i % 2 = 1 := by omega
-    simp [colorTerm, this]
+    simp [colorTerm, ht i hi]
 
-private theorem collapsed_colorTerm_sum (h : ℕ → E →L[𝕜] E) (a b m : ℕ) :
+private theorem collapsed_colorTerm_sum (h : ℕ → E →L[𝕜] E) {s t : Finset ℕ}
+    (hs : ∀ i ∈ s, i % 2 = 0) (ht : ∀ i ∈ t, i % 2 = 1) (m : ℕ) :
     (∑ i ∈ Finset.range m,
-      restrictedTerm (colorTerm h 0) (Finset.range m \ evenBonds a b) i) +
-      (1 - regionalProjection (colorTerm h 0) (evenBonds a b) m) +
+      restrictedTerm (colorTerm h 0) (Finset.range m \ s) i) +
+      (1 - regionalProjection (colorTerm h 0) s m) +
       ((∑ i ∈ Finset.range m,
-        restrictedTerm (colorTerm h 1) (Finset.range m \ oddBonds a b) i) +
-        (1 - regionalProjection (colorTerm h 1) (oddBonds a b) m)) =
-      regionalReplacement h (evenBonds a b) (oddBonds a b) m := by
+        restrictedTerm (colorTerm h 1) (Finset.range m \ t) i) +
+        (1 - regionalProjection (colorTerm h 1) t m)) =
+      regionalReplacement h s t m := by
   classical
-  obtain ⟨he, ho⟩ := regionalProjection_colorTerm h a b m
+  obtain ⟨he, ho⟩ := regionalProjection_colorTerm h hs ht m
   rw [he, ho]
   have hsum : (∑ i ∈ Finset.range m,
-      restrictedTerm (colorTerm h 0) (Finset.range m \ evenBonds a b) i) +
+      restrictedTerm (colorTerm h 0) (Finset.range m \ s) i) +
       (∑ i ∈ Finset.range m,
-        restrictedTerm (colorTerm h 1) (Finset.range m \ oddBonds a b) i) =
-      ∑ i ∈ Finset.range m,
-        restrictedTerm h (Finset.range m \ (evenBonds a b ∪ oddBonds a b)) i := by
+        restrictedTerm (colorTerm h 1) (Finset.range m \ t) i) =
+      ∑ i ∈ Finset.range m, restrictedTerm h (Finset.range m \ (s ∪ t)) i := by
     rw [← Finset.sum_add_distrib]
     apply Finset.sum_congr rfl
     intro i hi
     have him := Finset.mem_range.mp hi
     by_cases hpar : i % 2 = 0
-    · simp [restrictedTerm, colorTerm, evenBonds, oddBonds, him, hpar]
+    · have hit : i ∉ t := fun hit ↦ by have := ht i hit; omega
+      by_cases his : i ∈ s <;> simp [restrictedTerm, colorTerm, him, hpar, his, hit]
     · have hpar' : i % 2 = 1 := by omega
-      simp [restrictedTerm, colorTerm, evenBonds, oddBonds, him, hpar']
+      have his : i ∉ s := fun his ↦ by have := hs i his; omega
+      by_cases hit : i ∈ t <;> simp [restrictedTerm, colorTerm, him, hpar', his, hit]
   unfold regionalReplacement
   rw [← hsum]
   abel
@@ -215,7 +214,8 @@ theorem toEuclideanCLM_chainReplacementMatrix
       chainReplacement h a b :=
   toEuclideanCLM_regionalReplacementMatrix _ _ _ _
 
-private theorem chainTerm_projection
+/-- Each extended chain term is an orthogonal projection when the supplied terms are. -/
+theorem isStarProjection_chainTerm
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i)) (i : ℕ) : IsStarProjection (chainTerm h i) := by
   classical
@@ -276,12 +276,15 @@ private theorem chain_parity_commute
     have hj := (Finset.mem_filter.mp hj).2
     apply chainTerm_commute_of_not_adjacent hq hsupp <;> omega
 
-private theorem chainOperator_apply_eq_zero_iff
+/-- A vector is a zero-energy vector of the chain exactly when every term annihilates it.
+ALVV, Theorem 5.14(1). -/
+theorem chainOperator_apply_eq_zero_iff
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i)) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     chainOperator h x = 0 ↔ ∀ i < m, chainTerm h i x = 0 := by
   have hp (i : Fin m) : (chainTerm h i).toLinearMap.IsPositive :=
-    (ContinuousLinearMap.IsPositive.of_isStarProjection (chainTerm_projection hh i)).toLinearMap
+    (ContinuousLinearMap.IsPositive.of_isStarProjection
+      (isStarProjection_chainTerm hh i)).toLinearMap
   have ht := WeightedPositiveKernel.apply_sum_eq_zero_iff hp x
   simp only [LinearMap.sum_apply, ContinuousLinearMap.coe_coe, Fin.forall_iff] at ht
   rw [show (∑ i : Fin m, chainTerm h i x) = ∑ i ∈ Finset.range m, chainTerm h i x from
@@ -298,7 +301,7 @@ theorem ker_chainReplacement
     LinearMap.ker (chainReplacement h a b).toLinearMap =
       LinearMap.ker (chainOperator h).toLinearMap := by
   obtain ⟨he, ho⟩ := chain_parity_commute hq hsupp a b
-  exact ker_regionalReplacement (chainTerm_projection hh) _ _ he ho m
+  exact ker_regionalReplacement (isStarProjection_chainTerm hh) _ _ he ho m
 
 private theorem ker_ordered_chainTerm
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
@@ -309,8 +312,8 @@ private theorem ker_ordered_chainTerm
           (colorTerm (chainTerm h) 1) m i).toLinearMap := by
   let T := parityOrderedTerm (colorTerm (chainTerm h) 0) (colorTerm (chainTerm h) 1) m
   have hproj := isStarProjection_parityOrderedTerm
-    (colorTerm_projection (chainTerm_projection hh) 0)
-    (colorTerm_projection (chainTerm_projection hh) 1) m
+    (colorTerm_projection (isStarProjection_chainTerm hh) 0)
+    (colorTerm_projection (isStarProjection_chainTerm hh) 1) m
   have hp (i : Fin (m + m)) : (T i).toLinearMap.IsPositive :=
     (ContinuousLinearMap.IsPositive.of_isStarProjection (hproj i)).toLinearMap
   have hk := WeightedPositiveKernel.ker_sum_eq_iInf hp
@@ -325,21 +328,25 @@ private theorem ker_ordered_chainTerm
     rfl
   rwa [hsum] at hk
 
-/-- Explicit gap for the regional chain replacement. The only gap premise concerns
-the original chain; locality supplies degree two and every collapsed-family identity.
-ALVV, Theorem 5.14(3), with squared norms and the constant-three converse. -/
-theorem chainReplacement_gap
+/-- Explicit gap for a parity-layer replacement collapsing any set `s` of even bonds and any
+set `t` of odd bonds. The only gap premise concerns the original chain; locality supplies
+degree two and every collapsed-family identity. ALVV, arXiv:1602.08828v2, Theorem 5.14(3),
+lines 1541–1570, with squared norms and the constant-three converse. The source collapses one
+region; collapsing a union of disjoint regions of each parity, as in the proof of
+Theorem `t:aisff`, lines 1597–1599, is the same argument. -/
+theorem parityReplacement_gap
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
+      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) {s t : Finset ℕ}
+    (hs : ∀ i ∈ s, i % 2 = 0) (ht : ∀ i ∈ t, i % 2 = 1)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
     (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
-    γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ := by
+    γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, regionalReplacement (chainTerm h) s t m x⟫_ℂ := by
   have hc := chainTerm_commute_of_not_adjacent hq hsupp
-  have hproj := chainTerm_projection hh
+  have hproj := isStarProjection_chainTerm hh
   have hk := ker_ordered_chainTerm hh
   have hgap' : ∀ y ∈ (⨅ i : Fin (m + m), LinearMap.ker
       (parityOrderedTerm (colorTerm (chainTerm h) 0)
@@ -354,11 +361,26 @@ theorem chainReplacement_gap
         (colorTerm (chainTerm h) 1) m i).toLinearMap)ᗮ := by rwa [← hk]
   have hg := collapsedLayer_gap (colorTerm_projection hproj 0) (colorTerm_commute hc 0)
     (colorTerm_projection hproj 1) (colorTerm_commute hc 1)
-    (evenBonds a b) (oddBonds a b) m hγ
-    (commutationDegree_parityOrderedTerm_le_two hc m) hgap' hx hxperp'
-  rw [collapsed_colorTerm_sum] at hg
+    s t m hγ (commutationDegree_parityOrderedTerm_le_two hc m) hgap' hx hxperp'
+  rw [collapsed_colorTerm_sum _ hs ht] at hg
   norm_num only [Nat.cast_ofNat, show (2 : ℝ) ^ 2 = 4 by norm_num] at hg
   exact hg
+
+/-- Explicit gap for the regional chain replacement. The only gap premise concerns
+the original chain; locality supplies degree two and every collapsed-family identity.
+ALVV, Theorem 5.14(3), with squared norms and the constant-three converse. -/
+theorem chainReplacement_gap
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    (hh : ∀ i, IsStarProjection (h i))
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
+    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
+      γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
+    {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
+    (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
+    γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ :=
+  parityReplacement_gap hq hh hsupp hγ hgap (fun _ hi ↦ (Finset.mem_filter.mp hi).2)
+    (fun i hi ↦ by have := (Finset.mem_filter.mp hi).2; omega) hx hxperp
 
 /-- Every original zero-energy vector satisfies all replacement constraints separately.
 The global zero-energy premise is equivalent to termwise frustration freeness because
@@ -373,7 +395,7 @@ theorem chainReplacement_frustrationFree
     (1 - regionalProjection (chainTerm h) (oddBonds a b) m) Ω = 0 ∧
     ∀ i < m, i ∉ evenBonds a b ∪ oddBonds a b → chainTerm h i Ω = 0 := by
   obtain ⟨he, ho⟩ := chain_parity_commute hq hsupp a b
-  exact regionalReplacement_frustrationFree (chainTerm_projection hh) _ _ he ho m
+  exact regionalReplacement_frustrationFree (isStarProjection_chainTerm hh) _ _ he ho m
     ((chainOperator_apply_eq_zero_iff hh Ω).mp hΩ)
 
 /-- A concrete chain gap parameter at most one yields the uniform lower bound `γ/15`
@@ -429,7 +451,7 @@ theorem frustrationFree_regionalReplacement_chain
     (∀ x ∈ (LinearMap.ker (chainReplacement h a b).toLinearMap)ᗮ, ‖x‖ = 1 →
       γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ) := by
   obtain ⟨he, ho⟩ := chain_parity_commute hq hsupp a b
-  have hproj := chainTerm_projection hh
+  have hproj := isStarProjection_chainTerm hh
   have hk := ker_chainReplacement hq hh hsupp a b
   have hΩ' : chainReplacement h a b Ω = 0 := by
     change Ω ∈ LinearMap.ker (chainReplacement h a b).toLinearMap

@@ -9,6 +9,7 @@ import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.PEPS.RegularTorusGramExpansion
 
 import TNLean.Algebra.PermutationMatrixCommutation
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Two local averages commute with the shared charge projector
@@ -59,10 +60,7 @@ private theorem twoSite_projector_average :
   simp only [Finset.sum_mul, Finset.mul_sum]
   simp only [pow_two, mul_assoc]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro x _
-  apply Finset.sum_congr rfl
-  intro y _
+  refine Finset.sum_congr₂ fun x _ y _ ↦ ?_
   split_ifs <;> simp_all
 
 /-- The actual shared charge detector commutes with both local regular averages.

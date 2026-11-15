@@ -7,6 +7,7 @@ import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.RFP.BeigiLoopBNTIdentification
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The literal CPSV canonical form of `R.toMPSTensor`
@@ -182,10 +183,7 @@ private lemma vecMulVec_conj (n : Type*) [Fintype n]
     Matrix.smul_apply, smul_eq_mul, Matrix.mulVec, dotProduct, Pi.star_apply,
     Finset.mul_sum, Finset.sum_mul, star_mul']
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro k _
-  apply Finset.sum_congr rfl
-  intro x _
+  refine Finset.sum_congr₂ fun k _ x _ ↦ ?_
   ring
 
 /-- The fixed diagonal matrix spanning the rank-one image of `transferMap R.toMPSTensor`

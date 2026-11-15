@@ -1,0 +1,91 @@
+\section{One joint event for retained spaces and literal histories}
+
+The following lemmas control retained-space properties and the actual local
+histories by one failure union over the same balanced merge list. They are
+conditional auxiliaries to repeated sampling in
+\cite[lines 749--755 and 1777--1817]{Arad2016RigorousRG}.
+A literal sampling history is stronger information than final retained-space
+viability; its conclusion for the last untrimmed image is not inferred from
+that final viability alone.
+
+\begin{lemma}[One union for retained properties and listed histories]
+    \label{lem:balanced_interval_joint_history_ancestry}
+    \lean{TNLean.MPS.AreaLaw.joint_history_failure_subset_iUnion}\leanok
+    Fix an operation, a positive leaf width $w$, and a valid root $[p,r)$.
+    Let $S_\omega(a,b)$ be its actual balanced retained spaces and
+    $\mathcal I_w(p,r)$ its internal merge list. Let $P(a,b,S)$ be an
+    interval property, true on every valid full short leaf, and let
+    $H_J\subseteq\Omega$ be prescribed history events.
+    Write $P_J(\omega)$ for $P(J,S_\omega(J))$ and let $J^-,J^+$ be
+    the actual midpoint children. Suppose that for every listed $J$ and
+    every $\omega$,
+    \begin{align}
+        P_{J^-}(\omega)\land P_{J^+}(\omega)\land\omega\in H_J
+        \quad\Longrightarrow\quad P_J(\omega).
+        \label{eq:interval_history_local_implication}
+    \end{align}
+    Define
+    \begin{align}
+        E_J & =\{\omega:P_{J^-}(\omega)\land P_{J^+}(\omega)
+        \land\omega\notin H_J\},\notag                       \\
+        F   & =\{\omega:\neg(P_{[p,r)}(\omega)\land
+        \forall J\in\mathcal I_w(p,r),\,
+        P_J(\omega)\land\omega\in H_J)\}.
+        \label{eq:interval_history_failure_events}
+    \end{align}
+    Then $F\subseteq\bigcup_{J\in\mathcal I_w(p,r)}E_J$.
+    No measurability or probability assumption is required, and
+    (\ref{eq:interval_history_local_implication}) is needed only at the
+    root's listed intervals.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_joint_failure_ancestry,
+        thm:balanced_interval_merge_bounds}
+    Fix $\omega$ outside the union. Strengthen the interval property to
+    \begin{align*}
+        Q(a,b,S)=P(a,b,S)\land(b-a>w\Longrightarrow\omega\in H_{(a,b)}).
+    \end{align*}
+    It holds at every short full leaf. Apply joint failure ancestry to
+    $Q$. A guarded $Q$-failure has two $P$-good actual children, so
+    nonmembership in $E_J$ gives $\omega\in H_J$.
+    By (\ref{eq:interval_history_local_implication}) the parent also has
+    property $P$, contradicting its $Q$-failure. Thus $Q$ holds at the
+    root and all listed nodes. Every listed node is long, so it also
+    satisfies its history event. This excludes $\omega\in F$.
+\end{proof}
+
+\begin{lemma}[One product-law bound for the strong joint event]
+    \label{lem:balanced_interval_joint_history_probability}
+    \lean{TNLean.MPS.AreaLaw.pi_balancedIntervalSpace_joint_history_failure_le}\leanok
+    Retain the assumptions and events of
+    Lemma~\ref{lem:balanced_interval_joint_history_ancestry}.
+    Let $A$ be a finite coordinate set,
+    $\Omega=\prod_{i\in A}\Omega_i$, and let
+    $\mu=\bigotimes_{i\in A}\mu_i$ be a product of probability laws.
+    For each listed interval $J$, prescribe a coordinate $c(J)\in A$.
+    Suppose $\beta\in[0,\infty]$, every listed $E_J$ is measurable and,
+    for every baseline $\omega$,
+    \begin{align}
+        \mu_{c(J)}\{u:\omega[c(J)\leftarrow u]\in E_J\}\le\beta.
+        \label{eq:interval_history_section_bound}
+    \end{align}
+    Then the strong joint failure event in
+    (\ref{eq:interval_history_failure_events}) satisfies
+    \begin{align}
+        \mu^*(F)\le\max\{r-p-1,0\}\beta.
+        \label{eq:interval_history_joint_probability}
+    \end{align}
+    No second union for the histories or union over all overlapping
+    intervals is needed. The coordinate spaces may themselves contain
+    whole finite sequences. Measurability and the section estimate are
+    explicit analytic assumptions here.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_joint_history_ancestry,
+        lem:balanced_interval_merge_count}
+    Integrate each actual update-section bound and sum over the root's
+    merge list. This bounds the measure of the guarded union by
+    $|\mathcal I_w(p,r)|\beta\le\max\{r-p-1,0\}\beta$.
+    The deterministic inclusion bounds the outer measure of $F$ by that
+    same union measure.
+\end{proof}

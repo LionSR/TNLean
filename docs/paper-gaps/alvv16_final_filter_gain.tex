@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{Normalized error reduction in the final ALVV iteration}
+\author{}
+\date{November 2, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{open}
+
+\paragraph{Source.}
+The final stage in Arad, Landau, Vazirani and Vidick,
+\cite[Figure~fig:algo1, lines 1634--1640]{Arad2016RigorousRG}, alternates
+$K=I-H/\lVert H\rVert$ with collective trimming, then selects the $r$
+smallest eigenvectors of the compression to the last retained space.
+The displayed estimate in the proof of Theorem~t:alg1, line 1813,
+asserts, in particular,
+\begin{equation}\label{eq:printed-gain}
+ \frac{f}{1-\gamma(1-f)/B}
+ \ge f\left(1+\frac{\gamma}{2B}\right),
+ \qquad f=\alpha^2,\quad B=\lVert H\rVert.
+\end{equation}
+This inequality fails within the stated range $\alpha\ge0.9$.
+
+\paragraph{An exact nondegenerate example.}
+On two qubits take
+\[
+ H=\operatorname{diag}(0,1,1,1),\qquad
+ \psi=\lvert00\rangle,\qquad
+ v=\sqrt{99/100}\,\lvert00\rangle+\tfrac1{10}\lvert01\rangle.
+\]
+The vector $v$ is normalized, $H$ is a positive nearest-neighbour
+interaction bounded by the identity, and its ground space is the line
+spanned by $\psi$. Its gap and norm are both one. The candidate line
+spanned by $v$ is $1/100$-close to this ground space, hence meets the
+$3/200$ root-error condition. For requested error $\eta=1/1000$,
+\[
+ 0.9<\sqrt{99/100}<1-\eta,\qquad 99/100<1-\eta.
+\]
+Thus the example lies before either the amplitude or squared-overlap
+accuracy threshold. Since $K=I-H$ sends $v$ to the ground line, the new
+normalized squared overlap is one. But the two sides of
+\eqref{eq:printed-gain} are, respectively,
+\[
+ 1\qquad\hbox{and}\qquad \frac{99}{100}\frac32=\frac{297}{200}>1.
+\]
+All vectors and both coefficients in the displayed example are nonzero.
+The example concerns the intermediate gain estimate. The conclusion of
+Theorem~t:alg1 remains a separate claim requiring a corrected argument.
+
+\paragraph{Normalized error contraction.}
+Let a filter preserve a target space and its orthogonal complement,
+expand norms on the target, and contract squared norms on the complement
+by $\Delta\ge0$.
+If a candidate is $\delta$-close to the target with $0\le\delta<1$, its
+image is at most
+\[
+ \delta' = \frac{\Delta\delta}{1-\delta+\Delta\delta}
+\]
+away from the target. When $\Delta<1$, this contracts the ratio of error
+to success: $\delta'/(1-\delta')=\Delta\delta/(1-\delta)$.
+The estimate follows by choosing a projection preimage of squared norm
+at most $1/(1-\delta)$ and applying Cauchy--Schwarz to its actual filtered
+image. It is compatible with fidelities tending to one.
+
+\paragraph{Trimming and extraction.}
+Write $\Delta=1-c$, with $0<c\le1$, and fix $0<\eta\le1$.
+For $0\le\delta\le1/2$, weighted
+comparison with a Schmidt-rank reference and the corrected collective
+trimming constant give the sufficient budgets
+\[
+ \varepsilon_{\rm ref}\le c^2\eta/1024,\qquad
+ \xi\sqrt{mb}\le c\eta/48,
+\]
+and the stable upper recurrence
+\[
+ \delta_{j+1}\le(1-c/4)\delta_j+c\eta/8.
+\]
+Here $m$ is the number of actual cuts and $b$ is the rank bound for every
+vector in the reference space. These explicit budgets describe one
+corrected argument; comparison with every printed quantitative choice
+remains required. The normalized estimates alone do not establish the
+printed value of the round count.
+
+For the final spectral extraction, closeness of the candidate to the
+ground space must also give a trial space of dimension $r$ with the
+required energy bound. If $0\le\rho<1$ and $P_W$ projects onto a $\rho$-close candidate,
+$G$ is the ground space, and $A=\lVert H-E_0I\rVert$, the actual space
+$P_WG$ has dimension $r$ and energy excess at most $A\rho/(1-\rho)$.
+This provides the variational comparison for the $r$ smallest compressed
+eigenvectors. The actual repeated trims, their parameter choices and
+this spectral extraction must be combined before the final source
+algorithm can be marked complete.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

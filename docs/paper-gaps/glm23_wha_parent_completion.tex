@@ -9,7 +9,7 @@
 \date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source and the distinction}
 Garre-Rubio, Lootens and Moln\'ar define the canonical local parent term
@@ -41,9 +41,10 @@ The nonzeroness of this complement additionally needs $P\ne I$.
 \section{An elementary fusion-compatible test}
 The following example is a mathematical derivation, independently checked
 at the level of the displayed formulas. Its representation data, the
-integral normalization and the average at every length are formalized as
+integral normalization, the evaluation of the average, and the
+compatibility and injectivity of its state tensor are formalized as
 recorded in the final section; the weak-unit, weak-counit and antipode
-identities and the two-site evaluation of the average are not.
+identities are not, since no argument below uses them.
 Fix $r\ge2$, put $K=\mathbb C^r$, $V=K\otimes K$ and
 $\mathcal A=\operatorname{End}(V)$. For matrix units
 $e_{ij,kl}=|i,j\rangle\langle k,l|$, define
@@ -230,9 +231,18 @@ Appendix B. Its average is
 $E_n(B)=r^{-2}\sum_{p,q}\rho_n(e_{pq})B\rho_n(e_{qp})$ at every length, with
 $p,q$ ranging over pairs of indices.\footnote{
     \doclink{TNLean/MPS/Examples/BellPairWeakHopf}.}
-The two-site evaluation $E(X)=r^{-2}\operatorname{Tr}(QX)Q$ and the
-compatibility of the Bell-pair state tensor with its operator tensor are not
-formalized.
+Since $\rho_{n+1}(e_{pq})=r^{-n}|u_p\rangle\langle u_q|$, where
+$u_{(i,j)}=\sqrt r^{\,n}W_{n+1}|i,j\rangle$ has entries
+$(E_{\sigma_1}\cdots E_{\sigma_{n+1}})_{ij}$, the evaluation
+$E_n(X)=r^{-2}\operatorname{Tr}(Q_nX)Q_n$ holds at every length $n>0$, and
+at two sites it is the displayed $E(X)=r^{-2}\operatorname{Tr}(QX)Q$. The
+state tensor $A^{ij}=E_{ij}/\sqrt r$ is injective at one site and
+compatible with the operator tensor, with one output boundary for all
+positive lengths:
+$\rho_n(e_{(i,j),(k,l)})\psi^n_{A,Y}=\psi^n_{A,Y_{lk}E_{ji}}$. The range of
+$Q_n$ lies in the support and $Q_n$ is self-adjoint, so $P_n=Q_n$, and
+$E_n(P_n)=P_n$, $E_n(I-P_n)=0$, while $I-P_n\ne0$ for $r\ge2$ and
+$n\ge2$.\footnote{\doclink{TNLean/MPS/Examples/BellPairWeakHopf}.}
 
 Unit support does not need $Q_L=I$ at the injectivity length $L$, which
 can fail when $\Delta(1)\ne1\otimes1$; it follows from the module

@@ -2,7 +2,7 @@
   "slug": "one-dimensional-area-law-mps",
   "pageTitle": "One-Dimensional Area Law · TNLean",
   "heading": "Area law and matrix product state approximation for gapped one-dimensional ground states",
-  "lede": "For a chain of quantum spins whose Hamiltonian has a spectral gap above a unique ground state, the entanglement entropy of every region is at most a constant times the number of its boundary edges, and the ground state is close to a matrix product state whose bond dimension grows only polynomially with the length of the chain. Both theorems are proved directly on the chain by a short one-dimensional argument, written up in a note in the TNLean repository. This page tracks their Lean 4 formalization.",
+  "lede": "For a chain of quantum spins whose Hamiltonian has a spectral gap above a unique ground state, the entanglement entropy of every region is at most a constant times the number of its boundary edges, and the ground state is close to a matrix product state whose bond dimension grows only polynomially with the length of the chain. Both theorems are proved directly on the chain by a short one-dimensional argument, written up in a companion note in gapped-2d-notes. This page tracks their Lean 4 formalization.",
   "description": "Progress of the Lean 4 formalization of the one-dimensional area law and matrix product state approximation for gapped chains.",
   "tabs": [
     {
@@ -20,6 +20,14 @@
     {
       "slug": "lvv-ground-state-algorithm",
       "label": "Ground states in polynomial time"
+    },
+    {
+      "slug": "aklv-area-law",
+      "label": "Sharper area law"
+    },
+    {
+      "slug": "alvv-rg-algorithm",
+      "label": "Rigorous renormalization group"
     }
   ],
   "label": "openai-math",
@@ -62,8 +70,8 @@
       "stream": 9547
     }
   },
-  "sources": "https://github.com/LionSR/TNLean/tree/main/docs/notes/one_dimensional_note",
-  "citationPattern": "tnlean_one_dimensional|one_dimensional_note|TNLean2026OneDimensional",
+  "sources": "https://github.com/LionSR/gapped-2d-notes/tree/main/one_dimensional_area_law_and_mps",
+  "citationPattern": "tnlean_one_dimensional|one_dimensional_note|one_dimensional_area_law_and_mps|TNLean2026OneDimensional",
   "leanDirs": [
     "TNLean/MPS/AreaLaw"
   ],
@@ -161,7 +169,7 @@
           "issues": [
             9552
           ],
-          "physics": "Replace the chain by a strip of <i>L</i> columns and <i>w</i> rows with an interaction of range <i>R</i>. A cut between two columns is crossed by at most a constant times <i>w</i> interaction terms, so the three steps of the area law, applied to consecutive-column regions with the original interaction supports, bound the entropy of any set of consecutive columns by <i>C</i>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)<i>w</i><sup>2</sup>. The dimensions of the original finite-range interaction supports are bounded in terms of <i>q</i> and <i>R</i>, independently of <i>w</i>; their number at a column cut grows linearly with <i>w</i>. The quadratic scaling can therefore be pursued with the coarse energy estimate on those supports. Ordering the sites column by column and truncating along that ordering then gives a matrix product state. The work remains on hold.",
+          "physics": "Replace the chain by a strip of <i>L</i> columns and <i>w</i> rows with an interaction of range <i>R</i>. A cut between two columns is crossed by at most a constant times <i>w</i> interaction terms, so the three steps of the area law, applied to consecutive-column regions with the original interaction supports, bound the entropy of any set of consecutive columns by <i>C</i>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)<i>w</i><sup>2</sup>. The dimensions of the original finite-range interaction supports are bounded in terms of <i>q</i> and <i>R</i>, independently of <i>w</i>; their number at a column cut grows linearly with <i>w</i>. The quadratic scaling can therefore be pursued with the coarse energy estimate on those supports. Ordering the sites column by column and truncating along that ordering then gives a matrix product state. Both bounds are proved, on the original lattice interaction, for every strip of width <i>w</i>; the support of an interaction term has dimension at most <i>q</i><sup>1+2<i>R</i>(<i>R</i>+1)</sup>, not <i>q</i><sup><i>R</i>+1</sup> as first stated.",
           "delivers": "For a strip of width <i>w</i>: the entropy of a block of columns is at most <i>C</i>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ)<i>w</i><sup>2</sup>, and a matrix product state within 1/<i>L</i> of Ω has bond dimension at most exp(<i>C</i>(1 + <i>J</i>/Δ)<i>w</i><sup>2</sup>) · <i>L</i><sup><i>c</i>√(1 + <i>J</i>/Δ) <i>w</i></sup>."
         },
         {
@@ -186,7 +194,7 @@
           "issues": [
             9553
           ],
-          "physics": "Order the sites of an <i>L</i> × <i>L</i> square grid row by row, reversing direction on alternate rows, so that consecutive sites are always neighbours. Every cut of this ordering into an initial and a final segment is crossed by at most <i>L</i> + 1 lattice edges, so the two-dimensional area law bounds the entropy of every initial segment by a constant times <i>L</i>, and the number of interaction terms crossing the cut is also of order <i>L</i>. Sequential truncation along the ordering then gives a matrix product state. Every ordering of the grid has a cut crossed by about <i>L</i> edges, so this argument cannot give a bond dimension polynomial in <i>L</i>; that requires the PEPS construction of the other tab. The two-dimensional area law is now formalized, so the statement no longer rests on an unproved input; the work itself is on hold.",
+          "physics": "Order the sites of an <i>L</i> × <i>L</i> square grid row by row, reversing direction on alternate rows, so that consecutive sites are always neighbours. Every cut of this ordering into an initial and a final segment is crossed by at most <i>L</i> + 1 lattice edges, so the two-dimensional area law bounds the entropy of every initial segment by a constant times <i>L</i>, and the number of interaction terms crossing the cut is also of order <i>L</i>. Sequential truncation along the ordering then gives a matrix product state. Every ordering of the grid has a cut crossed by about <i>L</i> edges, so this argument cannot give a bond dimension polynomial in <i>L</i>; that requires the PEPS construction of the other tab. The statement is proved: on every <i>L</i> × <i>L</i> square with <i>L</i> ≥ 2, a normalized matrix product state along the snake ordering is within 1/<i>L</i> of the ground state, with the constant <i>C</i>′ chosen before the square, the Hamiltonian and the ground state.",
           "delivers": "From the two-dimensional area law, a matrix product state along the snake ordering within 1/<i>L</i> of the ground state, with bond dimension at most exp(<i>C</i>′<i>L</i>) for a constant <i>C</i>′ depending on <i>q</i>, <i>R</i>, <i>J</i> and Δ."
         }
       ]

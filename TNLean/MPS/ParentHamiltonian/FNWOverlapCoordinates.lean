@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.FNWLowerBoundary
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # FNW overlap coordinates
@@ -359,10 +360,7 @@ theorem sum_inner_overlapFibers_eq_inner_aggregates
   rw [fnwLeftOverlapAggregate, fnwRightOverlapAggregate, sum_inner]
   simp_rw [inner_sum]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro μr _
-  apply Finset.sum_congr rfl
-  intro μℓ _
+  refine Finset.sum_congr₂ fun μr _ μℓ _ ↦ ?_
   exact inner_conjTranspose_mul_mul_conjTranspose_eq_aggregateSummands
     ρ hρ
     (Kraus.evalWord (fun μ => (A μ)ᴴ) (List.ofFn μℓ))

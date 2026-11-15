@@ -70,4 +70,35 @@ theorem exists_supported_projected_relative_evolution (q : ℕ) [NeZero q]
     (fun _ ↦ commute_of_mem_supportedOperators disjoint_compl_left hB
       (siteExpectation_mem_supportedOperators K _)) t).symm
 
+/-- **The projected relative evolution**, chosen as the unique solution of the projected
+interaction-picture equation with initial value `1`; the existence theorem above supplies
+the choice. Source: Polynomial-PEPS, Section 2, lines 513–536. -/
+noncomputable def projectedRelativeEvolution (q : ℕ) [NeZero q] (K : Finset ι)
+    {H' H : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hH' : H'.IsHermitian) (hH : H.IsHermitian) :
+    ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  Classical.choose (exists_supported_projected_relative_evolution q K hH' hH)
+
+/-- The chosen projected relative evolution starts at `1`, solves the projected equation,
+is unitary and supported on the projection region, is the unique such solution, and
+satisfies the comparison estimate. -/
+theorem projectedRelativeEvolution_spec (q : ℕ) [NeZero q] (K : Finset ι)
+    {H' H : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hH' : H'.IsHermitian) (hH : H.IsHermitian) :
+    let U := projectedRelativeEvolution q K hH' hH
+    U 0 = 1 ∧
+      (∀ t, HasDerivAt U
+        ((Complex.I • siteExpectation q K (heisenbergEvolution H' t (H' - H))) * U t) t) ∧
+      (∀ t, U t ∈ Matrix.unitaryGroup (ι → Fin q) ℂ) ∧
+      (∀ t, U t ∈ supportedOperators q (K : Set ι)) ∧
+      (∀ W : ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ, W 0 = 1 →
+        (∀ t, HasDerivAt W
+          ((Complex.I • siteExpectation q K (heisenbergEvolution H' t (H' - H))) * W t) t) →
+        W = U) ∧
+      ∀ t ε : ℝ,
+        (∀ s ∈ Set.uIcc 0 t,
+          ‖heisenbergEvolution H' s (H' - H) -
+            siteExpectation q K (heisenbergEvolution H' s (H' - H))‖ ≤ ε) →
+        ‖Matrix.hermitianUnitaryPath H' t * Matrix.hermitianUnitaryPath H (-t) - U t‖ ≤
+          ε * |t| :=
+  Classical.choose_spec (exists_supported_projected_relative_evolution q K hH' hH)
+
 end QuantumCircuit

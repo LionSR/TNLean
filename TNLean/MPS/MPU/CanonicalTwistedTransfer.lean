@@ -7,7 +7,7 @@ import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.TimeReversalTwistedTransfer
-import TNLean.Algebra.StabilizedWeightedTrace
+import QICLean.Algebra.StabilizedWeightedTrace
 import TNLean.Algebra.UnitaryKronecker
 import Mathlib.Algebra.Star.UnitaryStarAlgAut
 

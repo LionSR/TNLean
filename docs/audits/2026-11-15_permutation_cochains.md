@@ -1,7 +1,10 @@
 # Permutation-coefficient foundation for #8320
 
 This is an independent first part of [#8320](https://github.com/LionSR/TNLean/issues/8320),
-based on `cbf482955f46f36c71c95ab1547b3cc86b6d58c2`. It does not close the issue.
+initially based on `cbf482955f46f36c71c95ab1547b3cc86b6d58c2` and reconciled with
+`eb588dc15332a3798431015e6c27ecbaf329b2d1`. It does not close the issue.
+The blueprint additions follow the current split into `ch29_mpu_cocycles_permuted_blocks.tex`.
+The Mathlib revision is identical at both commits.
 No scalar three-cochain work (#8319), legacy-definition deletion, or consumer migration
 (#8321) is included.
 
