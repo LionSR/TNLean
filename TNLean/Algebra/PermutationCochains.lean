@@ -31,8 +31,8 @@ set_option warn.classDefReducibility false in
 It is scoped because function spaces also carry pointwise actions. -/
 scoped instance permutationMulDistribMulAction : MulDistribMulAction G (X → M) where
   smul g f x := f (g⁻¹ • x)
-  one_smul f := by ext x; simp
-  mul_smul g h f := by ext x; simp [mul_smul]
+  one_smul f := funext fun x ↦ congrArg f (by simp)
+  mul_smul g h f := funext fun x ↦ congrArg f (by simp [mul_smul])
   smul_one _ := rfl
   smul_mul _ _ _ := rfl
 
@@ -50,16 +50,32 @@ The block-coordinate convention is arXiv:2502.20257, lines 5914--5917. -/
 def oneCochainEquiv : (G → X → M) ≃ (G → representation G X M) where
   toFun γ g := Additive.ofMul (fun x ↦ γ g (g⁻¹ • x))
   invFun f g x := (f g).toMul (g • x)
-  left_inv γ := by funext g x; simp
-  right_inv f := by funext g; apply Additive.toMul.injective; funext x; simp
+  left_inv γ := by
+    funext g x
+    change γ g (g⁻¹ • (g • x)) = γ g x
+    rw [inv_smul_smul]
+  right_inv f := by
+    funext g
+    apply Additive.toMul.injective
+    funext x
+    change (f g).toMul (g • (g⁻¹ • x)) = (f g).toMul x
+    rw [smul_inv_smul]
 
 /-- Block two-cochains in left-module coordinates:
 `F(g,h)(x) = L^{(gh)⁻¹ • x}_{g,h}` (arXiv:2502.20257, `eq:omega_and_Ls`). -/
 def twoCochainEquiv : (X → G → G → M) ≃ (G × G → representation G X M) where
   toFun L p := Additive.ofMul (fun x ↦ L ((p.1 * p.2)⁻¹ • x) p.1 p.2)
   invFun f x g h := (f (g, h)).toMul ((g * h) • x)
-  left_inv L := by funext x g h; simp
-  right_inv f := by funext p; apply Additive.toMul.injective; funext x; simp
+  left_inv L := by
+    funext x g h
+    change L ((g * h)⁻¹ • ((g * h) • x)) g h = L x g h
+    rw [inv_smul_smul]
+  right_inv f := by
+    funext p
+    apply Additive.toMul.injective
+    funext x
+    change (f p).toMul ((p.1 * p.2) • ((p.1 * p.2)⁻¹ • x)) = (f p).toMul x
+    rw [smul_inv_smul]
 
 /-- The one-to-two differential in block coordinates is the coboundary of
 arXiv:2502.20257, lines 5914--5917. -/
@@ -98,7 +114,7 @@ theorem d₂₃_eq_const_iff (L : X → G → G → M) (ω : G → G → G → M
     have he := congrArg (fun f ↦ (f (g, h, k)).toMul ((g * h * k) • x)) hω
     rw [d₂₃_twoCochainEquiv_apply] at he
     change _ = ω g h k at he
-    simpa [mul_assoc] using (div_eq_iff.mp he)
+    simpa [mul_assoc] using (div_eq_iff_eq_mul.mp he)
   · intro hω
     funext p
     rcases p with ⟨g, h, k⟩
@@ -107,6 +123,6 @@ theorem d₂₃_eq_const_iff (L : X → G → G → M) (ω : G → G → G → M
     have he := d₂₃_twoCochainEquiv_apply L g h k ((g * h * k)⁻¹ • y)
     simp only [smul_inv_smul] at he
     rw [he]
-    exact div_eq_iff.mpr (by simpa [mul_assoc] using hω ((g * h * k)⁻¹ • y) g h k)
+    exact div_eq_iff_eq_mul.mpr (by simpa [mul_assoc] using hω ((g * h * k)⁻¹ • y) g h k)
 
 end TNLean.Algebra.PermutationCochains
