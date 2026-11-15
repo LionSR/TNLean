@@ -2,8 +2,13 @@
 
 Issue: #8322. Inspected revision: `cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
 
-This is an implementation handoff, not a completed formalization. The candidate
-proof scripts described below have not yet passed a Lean build.
+This is an implementation handoff, not a completed formalization.
+`IntegerFusion.lean` passed the hosted strict source check, including warnings
+as errors, at head `582d7c3a642cd48b07a0b17c6331afecfe787afb` in
+[CI run 21230](https://github.com/LionSR/TNLean/actions/runs/43751459767),
+build job `132926426879`. Its source blob is
+`31000da9f089187646f7a8fcdf83bd1d48c18d1f` and is unchanged in the next candidate.
+The bridge and Ring construction still await validation.
 
 ## Candidate implementation
 
@@ -21,8 +26,12 @@ Draft PR: [#10636](https://github.com/LionSR/TNLean/pull/10636).
   proofs, the data-dependent integer Ring carrier, and lifts of arbitrary
   compatible ring-valued families, NIM-reps and ring-valued characters.
 
-These are candidate Lean scripts without placeholders, not validated results.
-Lean validation of the Ring instance and forward extensions remains pending.
+The convolution and evaluation lemmas in `IntegerFusion.lean` are checked.
+The remaining files are candidate scripts without placeholders. Lean validation
+of the Ring instance and forward extensions remains pending. The first attempt
+to check the bridge hit the new module system's prohibition on importing the
+legacy `Defs.lean` from a new-style module. The two adapter files now retain
+legacy import format; the standalone integer foundation remains a public module.
 Uniqueness of extension, a duality anti-involution on the integer ring, the
 group-algebra identification, and consumer migration remain open.
 Exact-integer checks of 100 signed coefficient triples each for S3 and Fibonacci
