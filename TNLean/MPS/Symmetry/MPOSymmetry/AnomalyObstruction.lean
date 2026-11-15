@@ -175,7 +175,7 @@ such scalar exists, which does not happen for a normal invariant state.
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913; arXiv:2203.12563,
 `sec:PBC`, line 1091. -/
 noncomputable def lSymbol : G × G → PermutationCochains.representation G Unit ℂˣ :=
-  PermutationCochains.twoCochainEquiv fun _ g h ↦
+  PermutationCochains.twoCochainEquiv (M := ℂˣ) fun _ g h ↦
     MPSTensor.dressedScalar (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h)
       (ad.fuseV fd g h)
 
@@ -191,7 +191,7 @@ theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     (hinv : ∀ g, FixesMPV (F.tensor g) A) (x : Unit) (g h : G) :
     MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
       (ad.actV g h) (ad.fuseV fd g h)
-      (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd) x g h) := by
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd) x g h) := by
   have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h) (ad.fuseV fd g h) z := by
     obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h
@@ -276,7 +276,7 @@ trees differ by one L-symbol or by `ω` against long words, and comparing the tw
 nonvanishing word gives the identity. -/
 theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNormal A)
     (hD : 0 < D) (hinv : ∀ g, FixesMPV (F.tensor g) A) :
-    LSymbol.IsCompatible (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd))
+    LSymbol.IsCompatible ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd))
       fd.associatorScalar := by
   intro x g h k
   have hfix : ∀ a, FixesMPV (F.tensor a) A := hinv
@@ -330,7 +330,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) D))
       (ad.actV g (h * k) * kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) D)
-      (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd) x h k) := by
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd) x h k) := by
     rw [actV_mul_reduce_k, ← fuseV_inner_eq]
     simpa only [Matrix.mul_assoc] using H1'
   rw [fuseV_mul_reduce_k] at H3
@@ -360,7 +360,7 @@ theorem d₂₃_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNormal A)
       fun p ↦ Additive.ofMul (fun _ : Unit ↦ fd.associatorScalar p.1 p.2.1 p.2.2) := by
   simpa only [Equiv.apply_symm_apply] using
     (PermutationCochains.d₂₃_eq_const_iff
-      (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd)) fd.associatorScalar).2
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) fd.associatorScalar).2
       (isCompatible_lSymbol hF hA hD hinv)
 
 /-- **An invariant normal state forces a trivial anomaly.** If a group of matrix product
