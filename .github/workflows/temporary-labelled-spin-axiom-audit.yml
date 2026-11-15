@@ -17,7 +17,7 @@ jobs:
         run: |
           git merge-base --is-ancestor eb588dc15332a3798431015e6c27ecbaf329b2d1 HEAD
           git merge-base --is-ancestor 990051363e264c7ad45460e271fbc765ae3dda76 HEAD
-          git diff --exit-code 990051363e264c7ad45460e271fbc765ae3dda76 -- lean-toolchain lakefile.toml lake-manifest.json
+          git diff --exit-code 0b00ff5002eba6f2a9d9e259d0f517dd5b5859a3 -- lean-toolchain lakefile.toml lake-manifest.json
       - uses: actions/cache/restore@v6
         with:
           path: |
