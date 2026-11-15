@@ -13,9 +13,9 @@ The construction extends to every even cyclic order. It uses coherent
 endpoint choices for all intervals. Merely
 requiring a single circuit, unitarity, correct interior action, arbitrarily
 separated cuts, and injective symmetry-broken ground states does not repair
-the claim. A separate Lean module now contains a candidate proof of the
-six-factor order-two matrix identity for the printed cut order, pending hosted
-CI. The circuit identification and general even-order calculation below
+the claim. A separate Lean module now proves the six-factor order-two matrix
+identity for the printed cut order, checked by hosted Lean with strict linter
+options. The circuit identification and general even-order calculation below
 remain ordinary exact proofs with executable checks, without Lean proofs.
 
 ## Source and ordering conventions
@@ -308,12 +308,15 @@ or `.lake` cache, and the environment's disabled outbound network prevented
 fetching them. Hosted validation is requested through draft
 [PR #10641](https://github.com/LionSR/TNLean/pull/10641).
 
-`TNLean/MPS/MPU/FiniteGroupDetectorEndpoint.lean` contains candidate proofs of
+`TNLean/MPS/MPU/FiniteGroupDetectorEndpoint.lean` proves
 unitarity for the dressed family, the six-factor matrix identity at order two
-for arbitrary printed-order cuts, and its normalized expectation value. Its
-blueprint entry has no checked-proof marker while CI is pending. There are no
-axioms or proof placeholders. The exact Python calculation remains supporting
-evidence, not a substitute for kernel verification.
+for arbitrary printed-order cuts, and its normalized expectation value. It
+passed the direct strict Lean check on PR head `2c4976385aabafe8fdf44d0d20b5fe52a5b49973`
+in [job 132915070941](https://github.com/LionSR/TNLean/actions/runs/43747633939/job/132915070941),
+building in 6.4 seconds. That overall job failed separately because the first
+revision of the general group module used a nonexistent tactic import. There
+are no axioms or proof placeholders. The exact Python calculation remains
+supporting evidence, not a substitute for kernel verification.
 
 `TNLean/MPS/MPU/FiniteGroupDetectorPhase.lean` separately gives candidate
 proofs of the exact group identities

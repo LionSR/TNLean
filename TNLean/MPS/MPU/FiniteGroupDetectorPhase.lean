@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Lean.Elab.Tactic.Omega
 import Mathlib.Algebra.BigOperators.Group.List.Basic
 import Mathlib.Algebra.Group.Commute.Basic
 import Mathlib.Algebra.Group.Conj
 import Mathlib.Data.Nat.Choose.Basic
-import Mathlib.Tactic.Omega
 
 /-!
 # Exact conjugation phases in cyclic endpoint words

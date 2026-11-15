@@ -40,6 +40,7 @@
         Matrix.leftDressedOnSiteInterval_conjTranspose_mul_self,
         Matrix.cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX,
         Matrix.star_dotProduct_cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX}
+    \leanok
     Let $X,Z$ be the Pauli matrices on a chain, and choose cuts
     $a_0<a_2<a_1<b_0<b_2<b_1$. Put
     $T_{rs}=Z_{a_r}\prod_{a_r\leq k\leq b_s}X_k$. Every $T_{rs}$ is
@@ -56,7 +57,7 @@
     The identity concerns the explicitly defined interval operators.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:mpug_onsite_truncation_commutator,
         thm:mpug_truncation_detector_endpoint_dependence}
     Multiply the six tensor products site by site. At $a_1$, the local
