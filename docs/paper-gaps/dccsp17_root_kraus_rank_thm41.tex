@@ -708,6 +708,18 @@ and kills $\rho$. It is annihilated by $\mathcal F$ on both sides and
 has square zero. Trace preservation and every power of order at least
 two are therefore unchanged.
 
+The isolated-corner lift is separately formalized by
+\leanid{Matrix.exists_annihilating_corner_perturbation} in
+\texttt{TNLean/Algebra/CyclicCornerPerturbation.lean}. It takes supplied
+orthogonal corner isometries, the exact incoming preparation and outgoing
+trace identities, and a nonzero Hermitian-preserving rectangular map
+with zero trace functional that kills the prepared matrix. It constructs
+the full matrix-algebra perturbation, proves it nonzero and trace zero,
+and proves both annihilation identities, its square-zero identity and
+preservation of every power from the square onward. It does not derive
+the branch identities from arbitrary channels, construct the rectangular
+direction, or prove complete positivity of the perturbed map.
+
 If $R=0$ and $r_0\le q$, the original root already has rank at most $d$.
 In the exceptional case $r_0=q+1$, the path-space equality implies
 $V\cap(U+\sum_j\mathbb Cw_j)=0$.

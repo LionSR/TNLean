@@ -848,6 +848,38 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     $F^kH=0$ for every $k>0$. All mixed terms vanish.
 \end{proof}
 
+\begin{lemma}[An annihilating direction in an isolated matrix corner]
+    \label{thm:periodic_annihilating_corner_lift}
+    \lean{Matrix.exists_annihilating_corner_perturbation}
+    \leanok
+    Let $V\in M_{D,m}(\C)$ and $W\in M_{D,n}(\C)$ satisfy
+    $V^\dagger V=I_m$, $W^\dagger W=I_n$, and $V^\dagger W=0$.
+    Let $F:M_D\to M_D$ and $L:M_m\to M_n$ be complex linear.
+    Suppose $L$ is nonzero and Hermitian preserving, with
+    $\operatorname{tr}L(Y)=0$ for all $Y$ and $L(\rho)=0$ for a fixed
+    matrix $\rho$. Assume there are a linear functional $\phi$ and a
+    matrix $\sigma$ such that
+    \begin{equation*}
+        V^\dagger F(X)V=\phi(X)\rho,\qquad
+        F(WYW^\dagger)=\operatorname{tr}(Y)\sigma.
+    \end{equation*}
+    The map $K(X)=WL(V^\dagger XV)W^\dagger$ is nonzero, Hermitian
+    preserving, and has zero output trace. Moreover,
+    $FK=KF=K^2=0$, so $(F+K)^p=F^p$ for every $p\ge2$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_annihilating_power_perturbation}
+    Extracting the input corner of the output corner gives zero by
+    $V^\dagger W=0$. The two branch identities and the two constraints
+    on $L$ give $FK=KF=0$; the corner orthogonality gives $K^2=0$.
+    The isometric left inverses show that $K$ cannot vanish unless $L$
+    vanishes. Cyclicity of trace and Hermitian congruence give the
+    remaining properties. Apply
+    Lemma~\ref{thm:periodic_annihilating_power_perturbation}.
+\end{proof}
+
 \begin{lemma}[Exact powers from a preserved square]
     \label{thm:periodic_square_preserving_power_perturbation}
     \lean{add_pow_eq_of_sq_eq_of_sq_mul_eq_zero,
