@@ -3,9 +3,12 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import Mathlib.Data.Finsupp.Basic
-import Mathlib.Algebra.Module.Basic
-import Mathlib.Algebra.Module.NatInt
+module
+
+public import Mathlib.Data.Finsupp.Basic
+public import Mathlib.Algebra.Module.Basic
+public import Mathlib.Algebra.Module.NatInt
+public import Mathlib.Algebra.Module.BigOperators
 
 /-!
 # Integer combinations of fusion labels
@@ -16,11 +19,13 @@ preserves this product whenever the images satisfy the basis multiplication
 identities. The Ring instance is constructed in `BasedRing.lean`.
 -/
 
+@[expose] public section
+
 noncomputable section
 
 namespace MPOTensor
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {ι : Type*} [Fintype ι]
 
 /-- Convolution of integer combinations with natural structure constants.
 Project construction for the based-ring formulation of fusion rules. -/
@@ -66,6 +71,7 @@ theorem integerFusionMul_single_apply (N : ι → ι → ι → ℕ)
     (a b c : ι) (m n : ℤ) :
     integerFusionMul N (Finsupp.single a m) (Finsupp.single b n) c =
       m * n * (N a b c : ℤ) := by
+  classical
   simp [Finsupp.single_apply, ite_mul, mul_ite]
 
 /-- Evaluate an integer combination in an additive commutative group.
@@ -80,6 +86,7 @@ def integerFusionEval {A : Type*} [AddCommGroup A] (f : ι → A) : (ι →₀ �
 theorem integerFusionEval_single {A : Type*} [AddCommGroup A]
     (f : ι → A) (a : ι) (m : ℤ) :
     integerFusionEval f (Finsupp.single a m) = m • f a := by
+  classical
   simp [integerFusionEval, Finsupp.single_apply, ite_smul]
 
 /-- Evaluation preserves convolution when the label images satisfy the fusion
