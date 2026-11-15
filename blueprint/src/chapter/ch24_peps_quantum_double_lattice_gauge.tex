@@ -1,0 +1,144 @@
+% SCP10, paper_v3.tex:2904--2923; placement and covariance only.
+% Lean elaboration and current-head hosted acceptance remain pending.
+\paragraph{Coherent color changes on the periodic lattice.}
+Let $V=(\mathbb Z/W\mathbb Z)\times(\mathbb Z/H\mathbb Z)$ with $W,H\geq3$, and let $E$ be the edges of its nearest-neighbor simple graph.
+Write $N_v,E_v,S_v,W_v$ for the north, east, south and west edges incident to $v$; in particular, $S_v=N_{v-(0,1)}$ and $W_v=E_{v-(1,0)}$.
+The four physical spins at each vertex have the clockwise order of Definition~\ref{def:peps_quantum_double_k_tensor}.
+All coordinate additions below are periodic, including at either seam.
+
+\begin{definition}[Bond color action]
+    \label{def:peps_qd_lattice_gauge}
+    \lean{TNLean.PEPS.QuantumDoubleKLatticeConfig,
+        TNLean.PEPS.quantumDoubleKLatticeGauge,
+        TNLean.PEPS.quantumDoubleKLatticeGaugePermutation,
+        TNLean.PEPS.quantumDoubleKLatticeBondPermutation}
+    \uses{def:peps_quantum_double_k_tensor}
+    On the full physical configuration space $\mathcal X=(G^4)^V$, let $u\in G^E$ act by
+    \begin{align}
+        (\Gamma_u x)_v
+        & =\bigl(u_{N_v}a_vu_{E_v}^{-1},\,
+        u_{E_v}b_vu_{S_v}^{-1},\,
+        u_{S_v}c_vu_{W_v}^{-1},\,
+        u_{W_v}d_vu_{N_v}^{-1}\bigr),
+        \label{eq:qd_lattice_gauge}
+    \end{align}
+    where $x_v=(a_v,b_v,c_v,d_v)$.
+    For $e\in E$ and $s\in G$, set $V_e(s)=\Gamma_{\delta_e(s)}$, where $\delta_e(s)$ equals $s$ at $e$ and $1$ elsewhere.
+    This is the coherent bond action of \cite{Schuch2010PEPS}, source lines 2918--2923, with every physical register retained.
+\end{definition}
+
+\begin{lemma}[Composition and distinct-bond commutation]
+    \label{lem:peps_qd_lattice_gauge_action}
+    \lean{TNLean.PEPS.quantumDoubleKLatticeGauge_one,
+        TNLean.PEPS.quantumDoubleKLatticeGauge_mul,
+        TNLean.PEPS.quantumDoubleKLatticeBondPermutation_commute}
+    \uses{def:peps_qd_lattice_gauge}
+    The maps in (\ref{eq:qd_lattice_gauge}) satisfy $\Gamma_1=\mathrm{id}$ and $\Gamma_{uw}=\Gamma_u\circ\Gamma_w$.
+    Each $\Gamma_u$ is a permutation with inverse $\Gamma_{u^{-1}}$.
+    If $e\ne f$, then $V_e(s)V_f(t)=V_f(t)V_e(s)$ for every $s,t\in G$, without any flatness assumption on $x$.
+\end{lemma}
+\begin{proof}
+    Every corner is of the form $x\mapsto u_ixu_j^{-1}$, so its successive transforms are $u_i(w_ixw_j^{-1})u_j^{-1}=(u_iw_i)x(u_jw_j)^{-1}$.
+    Distinct coordinates commute in the direct product $G^E$: $\delta_e(s)\delta_f(t)=\delta_f(t)\delta_e(s)$ for $e\ne f$.
+    Applying the permutation representation gives the asserted commutation.
+\end{proof}
+
+\begin{lemma}[Physical support and the four incident actions]
+    \label{lem:peps_qd_lattice_bond_support}
+    \lean{TNLean.PEPS.quantumDoubleKLatticeBondPermutation_right_at_left,
+        TNLean.PEPS.quantumDoubleKLatticeBondPermutation_right_at_right,
+        TNLean.PEPS.quantumDoubleKLatticeBondPermutation_up_at_bottom,
+        TNLean.PEPS.quantumDoubleKLatticeBondPermutation_up_at_top,
+        TNLean.PEPS.quantumDoubleKLatticeBondPermutation_spectator}
+    \uses{def:peps_qd_lattice_gauge,def:peps_quantum_double_bond_average}
+    On the edge from $v$ to $v+(1,0)$, $V_{E_v}(s)$ acts on the left and right blocks by
+    \begin{align}
+        (a,b,c,d)&\longmapsto(as^{-1},sb,c,d),
+        & (a',b',c',d')&\longmapsto(a',b',c's^{-1},sd').
+        \label{eq:qd_lattice_horizontal}
+    \end{align}
+    On the edge from $v$ to $v+(0,1)$, $V_{N_v}(s)$ acts on the lower and upper blocks by
+    \begin{align}
+        (a,b,c,d)&\longmapsto(sa,b,c,ds^{-1}),
+        & (a',b',c',d')&\longmapsto(a',b's^{-1},sc',d').
+        \label{eq:qd_lattice_vertical}
+    \end{align}
+    Every block with none of $N_v,E_v,S_v,W_v$ equal to the acted-on edge is unchanged.
+\end{lemma}
+\begin{proof}
+    In a simple torus with periods at least three, right edges are indexed injectively by their left endpoints, up edges by their lower endpoints, and no right edge equals an up edge.
+    Substituting $u=\delta_e(s)$ into (\ref{eq:qd_lattice_gauge}) therefore leaves exactly the four factors shown in (\ref{eq:qd_lattice_horizontal}) and (\ref{eq:qd_lattice_vertical}).
+    At any other block all four factors equal $1$.
+\end{proof}
+
+\begin{definition}[The periodic hole holonomy]
+    \label{def:peps_qd_lattice_hole}
+    \lean{TNLean.PEPS.quantumDoubleKLatticePlaquetteHolonomy,
+        TNLean.PEPS.quantumDoubleKLatticePlaquetteHolonomy_eq}
+    \uses{def:peps_quantum_double_hole_projector,def:peps_qd_lattice_gauge}
+    For a hole with lower-left block $v$, set
+    \begin{align}
+        B_v(x)&=b_{v+(0,1)}a_vd_{v+(1,0)}c_{v+(1,1)}.
+        \label{eq:qd_lattice_hole}
+    \end{align}
+    This is exactly the ordered product $NW.b\,SW.a\,SE.d\,NE.c$ of Definition~\ref{def:peps_quantum_double_hole_projector} on the four indicated blocks.
+\end{definition}
+
+\begin{lemma}[Covariance of local and hole holonomies]
+    \label{lem:peps_qd_lattice_holonomy_covariance}
+    \lean{TNLean.PEPS.quantumDoubleKHolonomy_latticeGauge,
+        TNLean.PEPS.quantumDoubleKLatticePlaquetteHolonomy_gauge,
+        TNLean.PEPS.quantumDoubleKHolonomy_latticeGauge_eq_one_iff,
+        TNLean.PEPS.quantumDoubleKLatticePlaquetteHolonomy_gauge_eq_one_iff}
+    \uses{def:peps_qd_lattice_gauge,def:peps_qd_lattice_hole,
+        def:peps_quantum_double_local_projector}
+    Write $A_v(x)=a_vb_vc_vd_v$.
+    For every $u\in G^E$ and every configuration $x$, one has
+    \begin{align}
+        A_v(\Gamma_u x)&=u_{N_v}A_v(x)u_{N_v}^{-1},
+        & B_v(\Gamma_u x)&=u_{E_{v+(0,1)}}B_v(x)u_{E_{v+(0,1)}}^{-1}.
+        \label{eq:qd_lattice_covariance}
+    \end{align}
+    Consequently $A_v(\Gamma_u x)=1$ if and only if $A_v(x)=1$, and $B_v(\Gamma_u x)=1$ if and only if $B_v(x)=1$.
+\end{lemma}
+\begin{proof}
+    In the local product, the three adjacent pairs $u_{E_v}^{-1}u_{E_v}$, $u_{S_v}^{-1}u_{S_v}$ and $u_{W_v}^{-1}u_{W_v}$ cancel.
+    For the hole product, the four successive gauge labels are $E_{v+(0,1)},N_v,E_v,N_{v+(1,0)}$ and again the initial label.
+    The three intervening inverse pairs cancel, yielding (\ref{eq:qd_lattice_covariance}).
+    For any $g,h\in G$, $ghg^{-1}=1$ if and only if $h=1$.
+\end{proof}
+
+\begin{definition}[Physical spins of a periodic bond coloring]
+    \label{def:peps_qd_lattice_spins}
+    \lean{TNLean.PEPS.quantumDoubleKLatticeSpins}
+    \uses{def:peps_quantum_double_k_tensor,def:peps_qd_lattice_gauge}
+    A coloring $q\in G^E$ defines the physical configuration
+    \begin{align}
+        F(q)_v&=\bigl(q_{N_v}q_{E_v}^{-1},\,
+        q_{E_v}q_{S_v}^{-1},\,
+        q_{S_v}q_{W_v}^{-1},\,
+        q_{W_v}q_{N_v}^{-1}\bigr).
+        \label{eq:qd_lattice_spins}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Color multiplication and flatness]
+    \label{lem:peps_qd_lattice_spins_flat}
+    \lean{TNLean.PEPS.quantumDoubleKLatticeSpins_mul,
+        TNLean.PEPS.quantumDoubleKHolonomy_latticeSpins,
+        TNLean.PEPS.quantumDoubleKLatticePlaquetteHolonomy_spins}
+    \uses{def:peps_qd_lattice_spins,def:peps_qd_lattice_hole,
+        def:peps_qd_lattice_gauge}
+    For every $u,q\in G^E$, one has $F(uq)=\Gamma_u F(q)$.
+    Every coloring satisfies $A_v(F(q))=B_v(F(q))=1$ at every vertex and hole.
+\end{lemma}
+\begin{proof}
+    Each corner satisfies $(u_iq_i)(u_jq_j)^{-1}=u_i(q_iq_j^{-1})u_j^{-1}$.
+    The local product cancels cyclically.
+    Substituting (\ref{eq:qd_lattice_spins}) into (\ref{eq:qd_lattice_hole}) gives the hole factors
+    $q_{E_{v+(0,1)}}q_{N_v}^{-1}$, $q_{N_v}q_{E_v}^{-1}$, $q_{E_v}q_{N_{v+(1,0)}}^{-1}$ and $q_{N_{v+(1,0)}}q_{E_{v+(0,1)}}^{-1}$, whose ordered product is $1$.
+\end{proof}
+
+% These are placement and covariance statements, not a classification of
+% flat configurations or of the quantum-double ground space. In particular,
+% no surjectivity of F onto all flat periodic configurations is asserted.

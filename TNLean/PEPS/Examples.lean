@@ -27,6 +27,7 @@ import TNLean.PEPS.Examples.GHZ
 import TNLean.PEPS.Examples.QuantumDouble
 import TNLean.PEPS.Examples.QuantumDoubleBondAverage
 import TNLean.PEPS.Examples.QuantumDoubleBondParent
+import TNLean.PEPS.Examples.QuantumDoubleLatticeGauge
 import TNLean.PEPS.Examples.QuantumDoubleLocalConstraint
 import TNLean.PEPS.Examples.QuantumDoublePlaquetteConstraint
 import TNLean.PEPS.Examples.QuantumDoubleRenormalization
