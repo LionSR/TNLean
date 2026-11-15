@@ -35,7 +35,7 @@ theorem exists_uniform_pos_nat_bounds {X : Type*} [TopologicalSpace X]
     ∃ δ : ℝ, 0 < δ ∧ ∃ N : ℕ, ∀ x ∈ S, P δ N x := by
   let U : {δ : ℝ // 0 < δ} × ℕ → Set X :=
     fun b ↦ interior {x | P b.1 b.2 x}
-  letI : Nonempty ({δ : ℝ // 0 < δ} × ℕ) := ⟨(⟨1, zero_lt_one⟩, 0)⟩
+  let : Nonempty ({δ : ℝ // 0 < δ} × ℕ) := ⟨(⟨1, zero_lt_one⟩, 0)⟩
   obtain ⟨⟨δ, N⟩, hcover⟩ := hS.elim_directed_cover U (fun _ ↦ isOpen_interior) (by
     intro x hx
     obtain ⟨δ, hδpos, N, hnear⟩ := hlocal x hx
