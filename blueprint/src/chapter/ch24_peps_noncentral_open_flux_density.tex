@@ -1,7 +1,7 @@
 \begin{lemma}[Native avoiding noncentral flux has the vacuum local density]
     \label{lem:peps_native_avoiding_flux_density}
     \lean{TNLean.PEPS.IsGIsometric.torusAvoidingFlux_normalized_density_eq_vacuum}\leanok
-    Let the native torus tensor be regular group-isometric for a finite
+    Let both torus periods be at least three. Let the native torus tensor be regular group-isometric for a finite
     group. Suppose the physical observation graph is connected and its
     actual closed-cell realization is simply connected. A native flux
     path avoiding every plaquette with an observed corner has the vacuum
@@ -11,20 +11,30 @@
 \begin{proof}\leanok
     \uses{lem:peps_flux_untwisted_boundary_component,
         lem:peps_flux_avoiding_incident_identity,
-        lem:peps_anchored_twist_density}
+        lem:peps_anchored_twist_density,
+        thm:peps_torus_simply_connected_complement,def:peps_dual_flux_cut}
     The exterior collar supplies an untwisted component joining all
     complementary boundary endpoints, and avoidance supplies identity
     on the observed incident bonds for the same path. Simple connectedness
     supplies connected complement and nonempty boundary. Apply the
     noncentral contraction theorem and convert its actual ordered-edge
-    coefficient cuts to the native torus cuts, including the vacuum cut.
+    coefficient cuts to the native torus cuts:
+    \begin{align}
+        M_{g,p}^{\rm native}
+        =M^{\rm graph}\bigl(a,u^{g,p}\bigr),\qquad
+        M_0^{\rm native}=M^{\rm graph}(a,1).
+        \label{eq:peps_avoiding_native_cut_conversion}
+    \end{align}
+    Here $a$ is the incident-edge form of the original tensor and
+    $u^{g,p}$ its ordered-edge insertion assignment.
 \end{proof}
 
 \begin{lemma}[Native noncentral open-pair vacuum density under collar geometry]
     \label{lem:peps_native_noncentral_flux_density}
     \lean{TNLean.PEPS.IsGIsometric.torusFlux_normalized_density_eq_vacuum_of_isSimplyConnected}
     \leanok
-    In addition to the preceding physical region conditions, suppose the
+    Let both torus periods be at least three. In addition to the preceding
+    physical region conditions, suppose the
     computed forbidden dual plaquettes have simply connected closed-cell
     realization and both native path endpoints lie outside that set.
     Every actual open or closed native flux string then has the vacuum
@@ -33,13 +43,16 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_native_avoiding_flux_density,
-        lem:peps_dual_full_support_classification}
+        lem:peps_dual_full_support_classification,
+        lem:peps_simply_connected_dual_avoidance,thm:peps_dual_flux_deformation}
     Construct a dual detour avoiding the computed forbidden plaquettes
     with the same lifted displacement as the original path. Full-support
-    homotopy completeness and virtual invariance identify their actual
-    native coefficient vectors. The preceding result gives the detour's
+    homotopy completeness gives $q\sim_Xp$. Virtual invariance gives
+    \begin{align}
+        M_{g,q}^{\rm native}=M_{g,p}^{\rm native}.
+        \label{eq:peps_native_noncentral_detour_cut}
+    \end{align}
+    The preceding result gives the detour's
     normalized density and both nonzero cuts; substitute the actual
     coefficient equality to obtain the conclusion for the original path.
 \end{proof}
-
-\input{chapter/ch24_peps_flux_envelope_density}

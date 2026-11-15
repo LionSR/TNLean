@@ -16,7 +16,7 @@ subregion, including disconnected and empty subregions. Nonvanishing of a
 coefficient cut is likewise independent of the chosen region.
 
 This supplies the marginal argument for SCP10, arXiv:1001.3807v3,
-Theorem 6.9 and Lemma 6.14, under the explicit envelope conditions of the
+Lemma 6.14, under the explicit envelope conditions of the
 native flux-density theorem. The partial-trace identities are those of
 the pinned finite-product matrix library.
 -/
@@ -28,8 +28,8 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V] {d : ℕ}
 
 /-- The actual coefficient matrix of an arbitrary finite physical vector
-across a region and its complement. This is the cut used in SCP10,
-Theorem 6.9, without any tensor-network assumption. -/
+across a region and its complement. This cut describes regional observations in the setting of SCP10,
+Lemma 6.14, without any tensor-network assumption. -/
 def regionPhysicalCutMatrix (ψ : (V → Fin d) → ℂ) (R : Finset V) :
     Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) (Finset.univ \ R)) ℂ :=

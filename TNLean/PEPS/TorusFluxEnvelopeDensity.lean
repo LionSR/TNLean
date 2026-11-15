@@ -15,8 +15,8 @@ have holes or be empty; all geometric hypotheses remain on the envelope.
 The proof is the actual finite-product partial trace of the already derived
 native density, and both smaller coefficient cuts are proved nonzero.
 
-Source: SCP10, arXiv:1001.3807v3, Theorem 6.9 and Lemma 6.14,
-lines 1935–1990 and 2199–2214, under explicit envelope conditions.
+Source: SCP10, arXiv:1001.3807v3, Lemma 6.14,
+lines 2199–2214, under explicit envelope conditions.
 This does not cover an annulus surrounding an endpoint merely because its
 own sites avoid that endpoint. See
 `docs/paper-gaps/scp10_flux_envelope_density.tex`.
@@ -42,7 +42,7 @@ variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 native vacuum normalized flux density. The subregion has no connectedness or
 topology hypothesis; the envelope retains both explicit simple connectedness
 conditions and endpoint exclusions. Both cuts are derived nonzero.
-Source: SCP10, Theorem 6.9 and Lemma 6.14, under these envelope conditions. -/
+Source: SCP10, Lemma 6.14, under these envelope conditions. -/
 theorem IsGIsometric.torusFlux_normalized_density_eq_vacuum_of_subset_isSimplyConnected
     {A : G → G → G → G → Fin d → ℂ}
     (hA : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap A))
