@@ -69,3 +69,95 @@
         =2\lVert O\rVert.
     \end{align}
 \end{proof}
+
+\begin{lemma}[Conjugation from factorial growth with any rate]
+    \label{thm:factorial_commutator_conjugation_rate}
+    \lean{Matrix.norm_exp_conjugation_le_two_of_growth}
+    \leanok
+    \uses{thm:factorial_commutator_conjugation}
+    Let $H,O$ be complex square matrices on a finite index set and let
+    $\kappa>0$. Suppose that
+    $\lVert\operatorname{ad}_H^m(O)\rVert\le\kappa^m m!\lVert O\rVert$ for
+    every $m\in\N$. For $0\le s$ with $2\kappa s\le1$,
+    \begin{align}
+        \bigl\lVert e^{sH}Oe^{-sH}\bigr\rVert\le2\lVert O\rVert.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:factorial_commutator_conjugation}
+    Put $H'=(4/\kappa)H$ and $s'=s\kappa/4\le1/8$. Then
+    $\operatorname{ad}_{H'}^m=(4/\kappa)^m\operatorname{ad}_H^m$, so
+    $\lVert\operatorname{ad}_{H'}^m(O)\rVert\le4^m m!\lVert O\rVert$, and
+    $s'H'=sH$. Apply Theorem~\ref{thm:factorial_commutator_conjugation}.
+\end{proof}
+
+\begin{lemma}[Commutators with positive contractions]
+    \label{lem:positive_contraction_commutator}
+    \lean{Matrix.norm_commutator_le_of_nonneg_le_one,
+        QuantumCircuit.norm_commutator_sum_le_active_card}
+    \leanok
+    If $0\le h\le\Id$, then $\lVert hX-Xh\rVert\le\lVert X\rVert$ for every
+    square matrix $X$. Consequently, if each $h_i$ with $i\in s$ is supported
+    on $D_i$ and satisfies $0\le h_i\le\Id$, and $X$ is supported on $S$, then
+    \begin{align}
+        \Bigl\lVert\Bigl[\sum_{i\in s}h_i,X\Bigr]\Bigr\rVert
+        \le\bigl|\{i\in s:D_i\cap S\ne\emptyset\}\bigr|\,\lVert X\rVert.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The operator $h-\Id/2$ is self-adjoint with norm at most $1/2$, and
+    $[h,X]=[h-\Id/2,X]$. Terms supported away from $S$ commute with $X$.
+\end{proof}
+
+\begin{lemma}[Factorial commutator growth for bounded support and degree]
+    \label{thm:bounded_degree_commutator_growth}
+    \lean{TNLean.Lattice.card_filter_not_disjoint_le,
+        TNLean.Lattice.exists_commutator_iterate_decomposition,
+        TNLean.Lattice.norm_commutator_iterate_le}
+    \leanok
+    \uses{lem:positive_contraction_commutator}
+    Let $V$ be a finite set of sites with local dimension $q$, and let
+    $k,g\in\N$. For $i$ in a finite set $s$, let $h_i$ be supported on
+    $D_i\subseteq V$ with $0\le h_i\le\Id$ and $|D_i|\le k$, and suppose that
+    every site lies in at most $g$ of the sets $D_i$. Put
+    $H=\sum_{i\in s}h_i$. If $O$ is supported on $S$, then
+    $\operatorname{ad}_H^m(O)$ is a sum of at most
+    $\prod_{j<m}g(|S|+jk)$ terms, each supported on at most $|S|+mk$ sites and
+    of norm at most $\lVert O\rVert$. In particular, if $|S|\le k$,
+    \begin{align}
+        \bigl\lVert\operatorname{ad}_H^m(O)\bigr\rVert\le(gk)^m m!\lVert O\rVert.
+    \end{align}
+    This is the counting estimate of~\cite[lines 795--880]{Arad2014Connecting}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:positive_contraction_commutator}
+    At most $g|T|$ terms meet a set $T$. Induct on $m$: commuting a term
+    supported on $T$ with $H$ leaves only the at most $g|T|$ terms $h_i$
+    meeting $T$, each giving a term supported on $T\cup D_i$ of norm at most
+    that of the original term by Lemma~\ref{lem:positive_contraction_commutator}.
+    If $|S|\le k$ then $g(|S|+jk)\le gk(j+1)$, and
+    $\prod_{j<m}gk(j+1)=(gk)^m m!$.
+\end{proof}
+
+\begin{lemma}[Short imaginary-time conjugation for bounded support and degree]
+    \label{thm:bounded_degree_imaginary_time}
+    \lean{TNLean.Lattice.norm_exp_conjugation_shift_le_two,
+        TNLean.Lattice.norm_exp_conjugation_shift_sum_le}
+    \leanok
+    \uses{thm:bounded_degree_commutator_growth,thm:factorial_commutator_conjugation_rate}
+    In the setting of Lemma~\ref{thm:bounded_degree_commutator_growth}, let
+    $k,g\ge1$, let $O$ be supported on at most $k$ sites, and let $z\in\C$.
+    For $0\le t$ with $2gkt\le1$,
+    \begin{align}
+        \bigl\lVert e^{t(H-z\Id)}Oe^{-t(H-z\Id)}\bigr\rVert\le2\lVert O\rVert.
+    \end{align}
+    If $Y=\sum_{j\in J}h_j$ with $0\le h_j\le\Id$ and each $h_j$ supported on
+    at most $k$ sites, then the same conjugation of $Y$ has norm at most
+    $2|J|$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:bounded_degree_commutator_growth,thm:factorial_commutator_conjugation_rate}
+    The scalar shift does not change commutators. Apply
+    Lemma~\ref{thm:factorial_commutator_conjugation_rate} with $\kappa=gk$,
+    and sum over $j\in J$ using $\lVert h_j\rVert\le1$.
+\end{proof}

@@ -10,13 +10,16 @@ import Mathlib.Analysis.Normed.Operator.Mul
 import Mathlib.Analysis.Normed.Algebra.Exponential
 import Mathlib.Analysis.Normed.Operator.Bilinear
 import Mathlib.Topology.Algebra.InfiniteSum.Module
-import Mathlib.Data.FunLike.IsApply
+import Mathlib.Algebra.Group.IsApply
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Normed.Group.InfiniteSum
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Abel
+import Mathlib.Analysis.Matrix.Order
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 
 /-!
 # Conjugation by a matrix exponential
@@ -28,8 +31,10 @@ Hermiticity assumption is imposed on the matrices.
 
 This is the conditional exponential-series estimate used in Arad, Kuwahara
 and Landau, arXiv:1406.3898, Lemma `lem:Hadamard-bound`, `low70.tex`,
-lines 795–837. The factorial bound must be established separately in a
-nearest-neighbour application.
+lines 795–837. The factorial bound must be established separately from
+locality. A version with an arbitrary growth constant `κ`, valid for
+`0 ≤ s ≤ 1 / (2κ)`, serves interactions of bounded support and degree.
+A positive contraction has commutator norm at most the norm of the other factor.
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -229,5 +234,104 @@ theorem norm_exp_conjugation_le_two {n : Type*} [Fintype n] [DecidableEq n]
     ContinuousLinearMap.smul_mul_sub_flip H (s : ℂ)
   rw [had, exp_commutator_apply] at hbound
   exact hbound
+
+
+open scoped ComplexOrder MatrixOrder
+
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
+/-- A positive contraction has commutator norm at most the norm of the other
+factor. Auxiliary to AKL14, arXiv:1406.3898, low70.tex, lines 831–837.
+The other factor need not be Hermitian, and the index type may be empty. -/
+theorem norm_commutator_le_of_nonneg_le_one (h O : Matrix n n ℂ)
+    (h0 : 0 ≤ h) (h1 : h ≤ 1) : ‖h * O - O * h‖ ≤ ‖O‖ := by
+  let c : Matrix n n ℂ := (1 / 2 : ℝ) • 1
+  have hsplit : (1 : Matrix n n ℂ) = c + c := by
+    dsimp [c]
+    rw [← add_smul]
+    norm_num
+  have hlo : -c ≤ h - c := by
+    simpa only [zero_sub] using sub_le_sub_right h0 c
+  have hhi : h - c ≤ c := by
+    apply (sub_le_iff_le_add).2
+    rw [← hsplit]
+    exact h1
+  have hcself : IsSelfAdjoint c :=
+    IsSelfAdjoint.smul (IsSelfAdjoint.all (1 / 2 : ℝ)) (IsSelfAdjoint.one (Matrix n n ℂ))
+  have hcenterself : IsSelfAdjoint (h - c) := (IsSelfAdjoint.of_nonneg h0).sub hcself
+  have hnorm1 : ‖(1 : Matrix n n ℂ)‖ ≤ 1 :=
+    IsStarProjection.norm_le _ (IsStarProjection.one (Matrix n n ℂ))
+  have hcnorm : ‖c‖ ≤ (1 / 2 : ℝ) := by
+    calc
+      ‖c‖ = (1 / 2 : ℝ) * ‖(1 : Matrix n n ℂ)‖ := by
+        dsimp [c]
+        rw [norm_smul]
+        norm_num
+      _ ≤ (1 / 2 : ℝ) * 1 := mul_le_mul_of_nonneg_left hnorm1 (by norm_num)
+      _ = 1 / 2 := by ring
+  have hcenternorm0 : ‖h - c‖ ≤ ‖c‖ := by
+    simpa only [norm_neg, max_self] using
+      (IsSelfAdjoint.norm_le_max_of_le_of_le hlo hhi hcenterself)
+  have hcenternorm : ‖h - c‖ ≤ (1 / 2 : ℝ) := hcenternorm0.trans hcnorm
+  have hcomm : h * O - O * h = (h - c) * O - O * (h - c) := by
+    dsimp [c]
+    simp only [sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, one_mul, mul_one]
+    abel
+  calc
+    ‖h * O - O * h‖ = ‖(h - c) * O - O * (h - c)‖ := congrArg (‖·‖) hcomm
+    _ ≤ ‖(h - c) * O‖ + ‖O * (h - c)‖ := norm_sub_le _ _
+    _ ≤ ‖h - c‖ * ‖O‖ + ‖O‖ * ‖h - c‖ :=
+      add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
+    _ ≤ (1 / 2 : ℝ) * ‖O‖ + ‖O‖ * (1 / 2 : ℝ) :=
+      add_le_add (mul_le_mul_of_nonneg_right hcenternorm (norm_nonneg O))
+        (mul_le_mul_of_nonneg_left hcenternorm (norm_nonneg O))
+    _ = ‖O‖ := by ring
+
+
+omit [DecidableEq n] in
+/-- Rescaling the generator rescales every commutator iterate by the same power.
+Auxiliary to AKL14, arXiv:1406.3898, low70.tex, lines 795–837. -/
+private theorem commutator_iterate_smul (H O : Matrix n n ℂ) (c : ℂ) (m : ℕ) :
+    (fun X : Matrix n n ℂ ↦ (c • H) * X - X * (c • H))^[m] O =
+      c ^ m • (fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O := by
+  induction m with
+  | zero => simp
+  | succ m ih =>
+    rw [Function.iterate_succ_apply', Function.iterate_succ_apply', ih, pow_succ]
+    simp only [smul_mul_assoc, mul_smul_comm, smul_sub, smul_smul]
+    ring_nf
+
+/-- A factorial bound with growth constant `κ` for the actual commutator
+iterates implies the short-time conjugation bound for `0 ≤ s ≤ 1 / (2κ)`.
+This is the conditional estimate of AKL14, arXiv:1406.3898, low70.tex,
+lines 795–837, with the constant left free; the factorial hypothesis is
+proved from locality in its application. -/
+theorem norm_exp_conjugation_le_two_of_growth (H O : Matrix n n ℂ) (κ s : ℝ)
+    (hκ : 0 < κ) (hs0 : 0 ≤ s) (hs : 2 * κ * s ≤ 1)
+    (hgrowth : ∀ m : ℕ,
+      ‖((fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O)‖ ≤
+        κ ^ m * (m.factorial : ℝ) * ‖O‖) :
+    ‖NormedSpace.exp ((s : ℂ) • H) * O *
+      NormedSpace.exp (-((s : ℂ) • H))‖ ≤ 2 * ‖O‖ := by
+  let c : ℝ := 4 / κ
+  have hc : 0 < c := by positivity
+  have hscale : ((s * κ / 4 : ℝ) : ℂ) • ((c : ℂ) • H) = (s : ℂ) • H := by
+    have hk : (s * κ / 4) * c = s := by
+      simp only [c]
+      field_simp
+    rw [smul_smul, ← Complex.ofReal_mul, hk]
+  have h := norm_exp_conjugation_le_two ((c : ℂ) • H) O (s * κ / 4) (by positivity)
+    (by linarith) (by
+      intro m
+      rw [commutator_iterate_smul, norm_smul, norm_pow, Complex.norm_real,
+        Real.norm_of_nonneg hc.le]
+      calc
+        c ^ m * ‖(fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O‖ ≤
+            c ^ m * (κ ^ m * (m.factorial : ℝ) * ‖O‖) :=
+          mul_le_mul_of_nonneg_left (hgrowth m) (by positivity)
+        _ = (c * κ) ^ m * (m.factorial : ℝ) * ‖O‖ := by ring
+        _ = (4 : ℝ) ^ m * (m.factorial : ℝ) * ‖O‖ := by
+          rw [show c * κ = 4 by simp only [c]; field_simp])
+  rwa [hscale] at h
 
 end Matrix
