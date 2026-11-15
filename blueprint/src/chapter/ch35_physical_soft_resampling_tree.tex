@@ -218,3 +218,30 @@ dependence on the gap, and no running-time estimate is asserted.
     $\lambda_J-3$ of the same width. Lemma~\ref{lem:root_energy_node_relation_assignment}
     assigns all estimates simultaneously with these node relations.
 \end{proof}
+
+\begin{theorem}[The refined Ritz output of the successful physical root]
+    \label{thm:physical_soft_tree_refined_ritz}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_tree_refined_ritz_approximation}\leanok
+    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement}
+    Retain the primitive gapped chain and the physical soft families of
+    Theorem~\ref{thm:physical_soft_resampling_tree}, with
+    $\mathrm{count}\le C_{\rm count}((L+1)(r+1))^2$. There are $C>0$ and $k$,
+    before every chain, such that for every $\eta>0$ refinement data, chosen
+    before every seed, satisfy the following with
+    $B_{\rm scale}\le C\bigl((L+1)(r+1)(1+1/\eta)\bigr)^k$. On the joint success
+    event, of probability at least $1-(L+1)^{-2}$, the literal filter-and-trim
+    refinement of the same actual root has dimension at most $\mathrm{count}$,
+    and its Ritz subspace $R$ has dimension $r=\dim G$, is mutually
+    $\eta/2$-close to $G$, and consists of matrix product states of bond
+    dimension $B_{\rm scale}\,\mathrm{count}^2$. This is the qualitative
+    output assertion of~\cite[Theorem~\texttt{t:alg1}, lines
+    1777--1818]{Arad2016RigorousRG} for this corrected construction; no
+    running time is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement}
+    On the success event the root is $3/200$-viable on the whole chain, which
+    is $3/200$-closeness of the same space in chain coordinates, and its
+    dimension is at most $\mathrm{count}$ for every seed. Apply the same-root
+    polynomial refinement to that root.
+\end{proof}
