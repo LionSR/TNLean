@@ -1,0 +1,53 @@
+\section{The inverse-gap logarithm in the certificate route}
+
+The entropy bounds above retain the factor $\log(1/g)$. The two lemmas of this
+section show that no choice of degree, window, clipping height or gap parameter
+removes it while the bound is derived from the shrinking estimate of the
+Chebyshev polynomial and the rank estimate of the polynomial. They concern
+these two upper bounds only: they bound neither the actual operator Schmidt
+rank nor the entropy from below. The printed rate $O(\log^3d/\varepsilon)$ of
+\cite[Theorem~4.3]{Arad2013AreaLaw} drops the factor $\log(s^2+s)$, as
+recorded in \cite{gap:aklv13_entropy_inverse_gap_logarithm}.
+
+\begin{lemma}[Favorable certificates force the inverse-gap logarithm]
+    \label{thm:aklv_certificate_log_rank_lower_bound}
+    \lean{TNLean.MPS.AreaLaw.aklv_certificate_log_rank_gt}
+    \leanok
+    Let $q\ge2$, $c\ge4$ and $s\ge1$ be integers, let $\ell\ge0$ be an
+    integer, and let $0\le\gamma\le g$ and $w\ge s$ be real with $g>0$. Put
+    \begin{align*}
+        D      & =\bigl(q(\ell+1)\bigr)^{c(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}, &
+        \Delta & =4\exp\bigl(-4\ell\sqrt{\gamma/w}\bigr).
+    \end{align*}
+    If $D\Delta\le1$, then
+    \begin{align*}
+        \log D>\frac{c^3}{16g}\Bigl(\log q+2\log\frac1g\Bigr)^3.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $N=\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1$,
+    $\Lambda=\log(q(\ell+1))$ and $X=4\ell\sqrt{\gamma/w}$. The case $\ell=0$
+    gives $D\Delta\ge4$, so $\ell\ge1$ and $\Lambda>1$. The hypothesis gives
+    $cN\Lambda=\log D<X$, while $X^2\le16\ell^2g/s$, $\ell<sN$ and $\ell<N^2$.
+    Hence $c^2N\Lambda^2<16g\ell$ and then $c^2\Lambda^2<16gN$, so
+    $\log D>c^3\Lambda^3/(16g)$. The two inequalities also give
+    $\ell>(c\Lambda)^4/(256g^2)\ge1/g^2$, whence
+    $\Lambda\ge\log q+2\log(1/g)$.
+\end{proof}
+
+\begin{lemma}[The certificate route does not give the printed rate]
+    \label{thm:aklv_certificate_not_uniform_log_cube}
+    \lean{TNLean.MPS.AreaLaw.aklv_certificate_not_uniform_log_cube}
+    \leanok
+    \uses{thm:aklv_certificate_log_rank_lower_bound}
+    Let $q\ge2$ and $C\in\mathbb R$. There is $0<g\le1$ such that every
+    $D$ and $\Delta$ as in
+    Lemma~\ref{thm:aklv_certificate_log_rank_lower_bound} at this $g$ with
+    $D\Delta\le1$ satisfy $\log D>C\log^3q/g$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Put $x=|C|\log^3q+1$ and $g=e^{-x}$. Then $\log(1/g)=x\ge1$ and
+    $c^3(\log q+2x)^3/16\ge4(2x)^3\ge x\ge C\log^3q$.
+\end{proof}

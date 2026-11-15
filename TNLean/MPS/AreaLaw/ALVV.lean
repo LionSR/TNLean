@@ -22,8 +22,10 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeImprovingFamily
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
+import TNLean.MPS.AreaLaw.ALVV.GroundGapUpperBound
 import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
+import TNLean.MPS.AreaLaw.ALVV.LargeGapComparison
 import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
 import TNLean.MPS.AreaLaw.ALVV.NativeLongIntervalSoftFamily
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
@@ -49,8 +51,10 @@ import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate
 import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
+import TNLean.MPS.AreaLaw.ALVV.SpectralProjector
 import TNLean.MPS.AreaLaw.ALVV.SuccessfulTreeEnergyInduction
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftCalibration
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftFilterFamily
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftImprovingFamily
 import TNLean.MPS.AreaLaw.ALVV.UniformSoftMiddleMPO
+import TNLean.MPS.AreaLaw.ALVV.UniqueGroundStateTree

@@ -296,6 +296,7 @@ import TNLean.MPS.AreaLaw.SnakeGridParameters
 import TNLean.MPS.AreaLaw.SoftTruncatedHamiltonianMPO
 import TNLean.MPS.AreaLaw.SoftTruncationMPO
 import TNLean.MPS.AreaLaw.SoftTruncationMPOAccuracy
+import TNLean.MPS.AreaLaw.SoftTruncationMPOSourceRange
 import TNLean.MPS.AreaLaw.StripApproximation
 import TNLean.MPS.AreaLaw.StripBufferDiscount
 import TNLean.MPS.AreaLaw.StripGeometry

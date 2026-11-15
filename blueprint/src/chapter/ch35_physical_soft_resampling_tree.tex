@@ -172,7 +172,8 @@ dependence on the gap, and no running-time estimate is asserted.
 
 \begin{lemma}[Energy induction on a successful resampling tree]
     \label{thm:successful_tree_energy_induction}
-    \lean{TNLean.MPS.AreaLaw.ALVV.exists_successful_tree_energy_induction}\leanok
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_successful_tree_energy_induction,
+        TNLean.MPS.AreaLaw.ALVV.IsTerminalRitzEnergyAssignment}\leanok
     \uses{lem:root_energy_node_relation_assignment,
         lem:selected_soft_terminal_node_energy,
         def:canonical_interval_resampling_good}
@@ -208,7 +209,8 @@ dependence on the gap, and no running-time estimate is asserted.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:root_energy_node_relation_assignment,
-        lem:selected_soft_terminal_node_energy}
+        lem:selected_soft_terminal_node_energy,
+        lem:adjacent_interval_energy_merge,thm:actual_adjacent_interval_merge}
     On the success event every listed interval is $3/200$-viable and
     carries its literal history; short children are the full local space.
     The children of a listed interval are short or listed, so their merge
@@ -239,9 +241,72 @@ dependence on the gap, and no running-time estimate is asserted.
     running time is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement}
+    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement,
+        lem:full_interval_viability}
     On the success event the root is $3/200$-viable on the whole chain, which
     is $3/200$-closeness of the same space in chain coordinates, and its
     dimension is at most $\mathrm{count}$ for every seed. Apply the same-root
     polynomial refinement to that root.
 \end{proof}
+
+\subsection{A unique frustration-free ground state}
+
+A frustration-free chain with a unique ground state $\Gamma$ and spectral
+gap $\gamma$ is the case of Assumption~(DG) with ground energy $0$ and
+ground-space dimension $1$. The source treats it in
+\cite[Theorem~\texttt{t:unique}, lines 1829--1855]{Arad2016RigorousRG},
+where the improvement is a running time. The degenerate-gap tree gives its
+existence content, with intermediate spaces larger than those of the
+source; see~\cite{gap:alvv16_unique_ground_state_tree}.
+
+\begin{lemma}[The ground line of a unique frustration-free ground state]
+    \label{lem:unique_ground_state_spectral_span}
+    \lean{TNLean.MPS.AreaLaw.ALVV.spectralSpanLE_zero_eq_span_singleton,
+        TNLean.MPS.AreaLaw.ALVV.zero_mem_spectrum_of_mulVec_eq_zero}\leanok
+    Let $H$ be a Hermitian matrix and $\Gamma\ne0$ with $H\Gamma=0$, such
+    that every vector of the kernel of $H$ is a multiple of $\Gamma$ and every
+    spectral value of $H$ is either $0$ or at least some $\gamma>0$. Then $0$
+    is a spectral value of $H$, and the span of the eigenvectors with
+    eigenvalue at most $0$ is the line $\mathbb C\Gamma$.
+\end{lemma}
+\begin{proof}\leanok
+    All spectral values are nonnegative, so an eigenvector with eigenvalue at
+    most $0$ lies in the kernel, and the span lies in $\mathbb C\Gamma$.
+    Conversely $\Gamma$ is an eigenvector with eigenvalue $0$, hence lies in
+    the span. If $0$ were not a spectral value, every eigenvalue would be at
+    least $\gamma$, the span would be zero, and $\Gamma$ would vanish.
+\end{proof}
+
+\begin{lemma}[The refined output for a unique frustration-free ground state]
+    \label{thm:unique_ground_state_refined_ritz}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}\leanok
+    \uses{thm:physical_soft_tree_refined_ritz,lem:unique_ground_state_spectral_span}
+    Fix $q\ge2$ and $\gamma>0$. Let $H=\sum_ih_i$ be a nearest-neighbour
+    chain of local dimension $q$ with $0\le h_i\le\Id$, frustration free with
+    a unique ground state $\Gamma$ and spectral gap $\gamma$. There are
+    constants, chosen before the chain, such that the physical soft families on
+    the actual resampling tree have a success event of probability at least
+    $1-(L+1)^{-2}$, with $\mathrm{count}\le C_{\rm count}(2(L+1))^2$, and for
+    every $\eta>0$ the refinement of the actual root on that event has
+    dimension at most $\mathrm{count}$ and, with its Ritz extraction, gives a
+    line mutually $\eta/2$-close to $\mathbb C\Gamma$ consisting of
+    matrix product states of bond dimension
+    $B_{\rm scale}\,\mathrm{count}^2$, where
+    $B_{\rm scale}\le C\bigl(2(L+1)(1+1/\eta)\bigr)^k$. This is the existence
+    content of~\cite[Theorem~\texttt{t:unique}, lines
+        1829--1855]{Arad2016RigorousRG}, restricted to the degenerate-gap tree:
+    the intermediate dimension grows with $L$ instead of being the constant
+    $\mathcal D s^2$ of the source, and no running time is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_soft_tree_refined_ritz,lem:unique_ground_state_spectral_span}
+    By Lemma~\ref{lem:unique_ground_state_spectral_span}, the hypotheses of
+    Lemma~\ref{thm:physical_soft_tree_refined_ritz} hold at ground energy
+    $0$, and its ground space is $\mathbb C\Gamma$, of dimension $1$.
+\end{proof}
+
+The low-density case of~\cite[Theorem~\texttt{t:alg2}, lines
+    1869--1878]{Arad2016RigorousRG} has no tree counterpart yet. Its area law and
+matrix product state approximations, and an orthonormal matrix product state
+basis close to the low-energy band, are proved separately; the merge tree run
+with low-density improving families remains open.

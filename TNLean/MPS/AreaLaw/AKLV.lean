@@ -12,6 +12,7 @@ import TNLean.MPS.AreaLaw.AKLV.AccuracyWindow
 import TNLean.MPS.AreaLaw.AKLV.ApproximateGroundVector
 import TNLean.MPS.AreaLaw.AKLV.ApproximationStep
 import TNLean.MPS.AreaLaw.AKLV.CenteredWindow
+import TNLean.MPS.AreaLaw.AKLV.CertificateRateLowerBound
 import TNLean.MPS.AreaLaw.AKLV.ChainNormalization
 import TNLean.MPS.AreaLaw.AKLV.ChangingTargetStep
 import TNLean.MPS.AreaLaw.AKLV.ChangingTargets
