@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.MPU.Examples.CZXNormalizationAudit
 import TNLean.MPS.MPU.Examples.ControlledZ
+import TNLean.MPS.MPU.Examples.LabelledSwapEquivalence
 import TNLean.MPS.MPU.Examples.OddRing
 import TNLean.MPS.MPU.Examples.Shift
 import TNLean.MPS.MPU.Examples.ShiftBlockedIndex
