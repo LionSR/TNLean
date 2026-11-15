@@ -72,11 +72,13 @@ matrix product operator, periodic boundary conditions, group cohomology, project
 
 noncomputable section
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 open scoped BigOperators Matrix Kronecker
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
+open TNLean.Algebra groupCohomology
 
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
@@ -116,18 +118,20 @@ variable {e}
 /-- Multiplication by the right fusion tensor selects the compatible outgoing pair.
 
 Source: the compatible pairs in arXiv:2203.12563v3, lines 2264–2286. -/
-theorem mul_fusionW_apply {m : ℕ} (ω : ScalarThreeCochain G) (g h : G)
+theorem mul_fusionW_apply {m : ℕ} (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g h : G)
     (M : Matrix (Fin m) (Fin (n * n)) ℂ) (q : Fin m) (r : Fin n) :
-    (M * fusionW e ω g h) q r = M q (pairLabel e h r) * (ω g h (e.symm r) : ℂ) := by
+    (M * fusionW e ω g h) q r =
+      M q (pairLabel e h r) * (scalarCochainValue₃ ω g h (e.symm r) : ℂ) := by
   simp [fusionW, Matrix.mul_apply, mul_ite, mul_zero, Finset.sum_ite_eq']
 
 /-- Multiplication on the other side of the right fusion tensor vanishes outside its support.
 
 Source: the compatible pairs in arXiv:2203.12563v3, lines 2264–2286. -/
-theorem fusionW_mul_apply {m : ℕ} (ω : ScalarThreeCochain G) (g h : G)
+theorem fusionW_mul_apply {m : ℕ} (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g h : G)
     (M : Matrix (Fin n) (Fin m) ℂ) (p : Fin n × Fin n) (q : Fin m) :
     (fusionW e ω g h * M) (finProdFinEquiv p) q =
-      if p.1 = siteShift e h p.2 then (ω g h (e.symm p.2) : ℂ) * M p.2 q else 0 := by
+      if p.1 = siteShift e h p.2 then
+        (scalarCochainValue₃ ω g h (e.symm p.2) : ℂ) * M p.2 q else 0 := by
   obtain ⟨a, b⟩ := p
   simp only [Matrix.mul_apply, fusionW, Matrix.of_apply, ite_mul, zero_mul, pairLabel,
     EmbeddingLike.apply_eq_iff_eq, Prod.mk.injEq]
@@ -143,7 +147,7 @@ variable (e) in
 /-- The projector is the reverse product of the two fusion tensors of equation `ftexam`.
 
 Source: arXiv:2203.12563v3, lines 2243–2287. -/
-theorem fusionW_mul_fusionV (ω : ScalarThreeCochain G) (g h : G) :
+theorem fusionW_mul_fusionV (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g h : G) :
     fusionW e ω g h * fusionV e ω g h = fusionProjector e h := by
   ext p q
   obtain ⟨p, rfl⟩ := finProdFinEquiv.surjective p
@@ -170,14 +174,15 @@ variable (e) in
 /-- The stacked letter has outgoing bond pair `(hj,j)`; its incoming bond is unrestricted.
 This is the component contraction of the two periodic tensors at
 arXiv:2203.12563v3, lines 2245–2259. -/
-theorem mulTensor_tensor_apply (ω : ScalarThreeCochain G) (g h : G) (i j : Fin n)
-    (p q : Fin n × Fin n) :
+theorem mulTensor_tensor_apply (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ)
+    (g h : G) (i j : Fin n) (p q : Fin n × Fin n) :
     mulTensor (tensor e ω g) (tensor e ω h) i j
         (finProdFinEquiv p) (finProdFinEquiv q) =
       (if i = siteShift e g (siteShift e h j) ∧ q.1 = siteShift e h j then
-        (ω g (e.symm (siteShift e h j))
+        (scalarCochainValue₃ ω g (e.symm (siteShift e h j))
           ((e.symm (siteShift e h j))⁻¹ * e.symm p.1) : ℂ) else 0) *
-      (if q.2 = j then (ω h (e.symm j) ((e.symm j)⁻¹ * e.symm p.2) : ℂ) else 0) := by
+      (if q.2 = j then
+        (scalarCochainValue₃ ω h (e.symm j) ((e.symm j)⁻¹ * e.symm p.2) : ℂ) else 0) := by
   simp only [mulTensor_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply,
     Matrix.sum_apply, Matrix.kroneckerMap_apply]
   rw [Finset.sum_eq_single (siteShift e h j)
@@ -191,7 +196,8 @@ variable (e) in
 `B P = B` holds, whereas generally `P B ≠ B`.
 
 Source: the periodic support statement at arXiv:2203.12563v3, line 2287. -/
-theorem mulTensor_mul_fusionProjector (ω : ScalarThreeCochain G) (g h : G) (i j : Fin n) :
+theorem mulTensor_mul_fusionProjector (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ)
+    (g h : G) (i j : Fin n) :
     mulTensor (tensor e ω g) (tensor e ω h) i j * fusionProjector e h =
       mulTensor (tensor e ω g) (tensor e ω h) i j := by
   ext p q
@@ -210,8 +216,9 @@ theorem mulTensor_mul_fusionProjector (ω : ScalarThreeCochain G) (g h : G) (i j
 bond: `P_{g,h} (T̂_g T̂_h)^{ij} = F^>_{g,h} T̂_{gh}^{ij} F^<_{g,h}`.
 
 Source: arXiv:2203.12563v3, lines 2243–2263. -/
-theorem fusionProjector_mul_mulTensor {ω : ScalarThreeCochain G}
-    (hω : ScalarThreeCochain.IsCocycle ω) (g h : G) (i j : Fin n) :
+theorem fusionProjector_mul_mulTensor {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hω : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
+    (g h : G) (i j : Fin n) :
     fusionProjector e h * mulTensor (tensor e ω g) (tensor e ω h) i j =
       fusionW e ω g h * tensor e ω (g * h) i j * fusionV e ω g h := by
   rw [← fusionW_mul_fusionV e ω g h, Matrix.mul_assoc,
@@ -220,8 +227,9 @@ theorem fusionProjector_mul_mulTensor {ω : ScalarThreeCochain G}
 /-- The right zipper after projection onto the compatible incoming bond pairs.
 
 Source: arXiv:2203.12563v3, lines 2243–2263, followed by contraction with `F^>`. -/
-theorem fusionProjector_mul_mulTensor_mul_fusionW {ω : ScalarThreeCochain G}
-    (hω : ScalarThreeCochain.IsCocycle ω) (g h : G) (i j : Fin n) :
+theorem fusionProjector_mul_mulTensor_mul_fusionW {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hω : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
+    (g h : G) (i j : Fin n) :
     fusionProjector e h * mulTensor (tensor e ω g) (tensor e ω h) i j * fusionW e ω g h =
       fusionW e ω g h * tensor e ω (g * h) i j := by
   rw [fusionProjector_mul_mulTensor hω, Matrix.mul_assoc, fusionV_mul_fusionW, Matrix.mul_one]
@@ -229,8 +237,9 @@ theorem fusionProjector_mul_mulTensor_mul_fusionW {ω : ScalarThreeCochain G}
 /-- The exact factorization extends to every word, with the empty word giving `P = F^>F^<`.
 
 Source: consequence of the projected identity at arXiv:2203.12563v3, lines 2243–2263. -/
-theorem fusionProjector_mul_evalWord {ω : ScalarThreeCochain G}
-    (hω : ScalarThreeCochain.IsCocycle ω) (g h : G) (w : List (Fin (n * n))) :
+theorem fusionProjector_mul_evalWord {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hω : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
+    (g h : G) (w : List (Fin (n * n))) :
     fusionProjector e h *
         Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w =
       fusionW e ω g h * Kraus.evalWord (tensor e ω (g * h)).toMPSTensor w * fusionV e ω g h := by
@@ -242,7 +251,7 @@ theorem fusionProjector_mul_evalWord {ω : ScalarThreeCochain G}
 /-- The outgoing support restriction persists along every nonempty chain.
 
 Source: arXiv:2203.12563v3, line 2287. -/
-theorem evalWord_mul_fusionProjector (ω : ScalarThreeCochain G) (g h : G)
+theorem evalWord_mul_fusionProjector (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g h : G)
     (w : List (Fin (n * n))) (hw : w ≠ []) :
     Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w *
         fusionProjector e h =
@@ -259,7 +268,8 @@ theorem evalWord_mul_fusionProjector (ω : ScalarThreeCochain G) (g h : G)
 cut leaves every periodic coefficient unchanged.
 
 Source: arXiv:2203.12563v3, line 2287. -/
-theorem trace_fusionProjector_mul_evalWord (ω : ScalarThreeCochain G) (g h : G)
+theorem trace_fusionProjector_mul_evalWord
+    (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g h : G)
     (w : List (Fin (n * n))) (hw : w ≠ []) :
     Matrix.trace (fusionProjector e h *
         Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w) =
@@ -270,8 +280,8 @@ theorem trace_fusionProjector_mul_evalWord (ω : ScalarThreeCochain G) (g h : G)
 fusion law without a normality assumption.
 
 Source: arXiv:2203.12563v3, lines 2243–2287. -/
-theorem trace_evalWord_mulTensor_eq {ω : ScalarThreeCochain G}
-    (hω : ScalarThreeCochain.IsCocycle ω) (g h : G)
+theorem trace_evalWord_mulTensor_eq {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hω : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0) (g h : G)
     (w : List (Fin (n * n))) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w) =
       Matrix.trace (Kraus.evalWord (tensor e ω (g * h)).toMPSTensor w) := by
@@ -283,8 +293,8 @@ An incoming pair `(ha,b)` with `a ≠ b` gives a nonzero component of `B F^>` an
 component of `F^> T̂_{gh}`.
 
 Source: arXiv:2203.12563v3, line 2243 (failure of the right zipper). -/
-theorem exists_mulTensor_mul_fusionW_ne [Nontrivial G] (ω : ScalarThreeCochain G)
-    (g h : G) :
+theorem exists_mulTensor_mul_fusionW_ne [Nontrivial G]
+    (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g h : G) :
     ∃ i j, mulTensor (tensor e ω g) (tensor e ω h) i j * fusionW e ω g h ≠
       fusionW e ω g h * tensor e ω (g * h) i j := by
   obtain ⟨a, b, hab⟩ := exists_pair_ne G
@@ -304,7 +314,7 @@ theorem exists_mulTensor_mul_fusionW_ne [Nontrivial G] (ω : ScalarThreeCochain 
 
 Source: arXiv:2203.12563v3, line 2243 (failure of equation `fusiontensorG`). -/
 theorem exists_mulTensor_ne_fusionW_mul_tensor_mul_fusionV [Nontrivial G]
-    (ω : ScalarThreeCochain G) (g h : G) :
+    (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g h : G) :
     ∃ i j, mulTensor (tensor e ω g) (tensor e ω h) i j ≠
       fusionW e ω g h * tensor e ω (g * h) i j * fusionV e ω g h := by
   obtain ⟨i, j, hij⟩ := exists_mulTensor_mul_fusionW_ne (e := e) ω g h

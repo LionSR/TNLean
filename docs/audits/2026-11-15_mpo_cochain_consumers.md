@@ -143,4 +143,12 @@ changed Z₃ consumers. Its only strict failure was an unused trailing `rfl` in
 the CZX block-action proof, which is removed in the follow-up. Full downstream
 and latest-head validation remain pending.
 
+The follow-up run at `e927bef` passed all directly changed strict checks and
+the early module build, as well as both blueprint PDF volumes. Its full-library
+build found an unmigrated periodic support-projector consumer. That module now
+uses native inhomogeneous cochains and their multiplicative values; its fusion
+identities use the zero differential, while support identities remain valid
+for arbitrary cochains. No normality, normalization, or nonempty-word condition
+was changed. The full downstream rerun remains required.
+
 Prepared with OpenAI Codex (GPT-6); maintainer review is required.
