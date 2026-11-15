@@ -105,9 +105,14 @@
         def:peps_dual_path_graph_walk}
     Encode $p$ as a graph walk and use the complementary detour. Every
     native graph edge has a corresponding direction label, so decode
-    the detour as $q$. Its displacement equals the endpoint coordinate
-    difference plus the period times each seam crossing number.
-    Equal seam crossing numbers therefore give equal displacements.
+    the detour as $q$. For either path $r:a\to b$,
+    \begin{align}
+        d(r)=\bigl(\bar b_1-\bar a_1+w\,\operatorname{wind}_1(r),
+                    \bar b_2-\bar a_2+h\,\operatorname{wind}_2(r)\bigr),
+        \label{eq:peps_dual_avoidance_displacement}
+    \end{align}
+    where $\bar a_i,\bar b_i$ are the representatives in $[0,w)$ or $[0,h)$.
+    Equal seam crossing numbers therefore give $d(q)=d(p)$.
 \end{proof}
 
 \begin{definition}[Dual plaquettes incident to a physical region]
@@ -123,8 +128,9 @@
     Let both torus periods be at least three. Suppose the closed-cell
     realization of $B(R)$ is simply connected and the endpoints of a
     native dual path $p$ lie outside $B(R)$. There exists a native dual
-    path $q$ with those endpoints and the same lifted displacement, whose
-    signed crossing counts vanish on every physical bond incident to $R$.
+    path $q$ with those endpoints and the same lifted displacement, such that
+    $n_h(q)(v)=0$ if $v\in R$ or $v+(1,0)\in R$, and
+    $n_v(q)(v)=0$ if $v\in R$ or $v+(0,1)\in R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_simply_connected_dual_avoidance,
@@ -140,13 +146,12 @@
     \label{lem:peps_physical_dual_identity_insertions}
     \lean{TNLean.PEPS.exists_torusDualPath_trivial_on_incident}\leanok
     Under the preceding geometric hypotheses, for any group $G$ and
-    $g\in G$ the constructed detour has identity native group insertions
-    on every physical bond incident to $R$.
+    $g\in G$ there exists a detour $q$ with $d(q)=d(p)$ and identity
+    native group insertions on every physical bond incident to $R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_physical_dual_avoidance}
-    Native insertions are powers of $g$ with the signed crossing counts
-    as exponents. The preceding lemma makes every relevant exponent zero.
+    The preceding lemma supplies $d(q)=d(p)$ and the incident crossing identities.
+    Thus $u_h^q(v)=g^{n_h(q)(v)}=g^0=1$ on incident horizontal bonds, and
+    $u_v^q(v)=g^{n_v(q)(v)}=g^0=1$ on incident vertical bonds.
 \end{proof}
-
-\input{chapter/ch24_peps_untwisted_flux_boundary}
