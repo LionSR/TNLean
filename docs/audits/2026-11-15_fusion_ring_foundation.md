@@ -11,15 +11,23 @@ Branch: `feat/8322-integer-fusion-foundation`.
 Draft PR: [#10636](https://github.com/LionSR/TNLean/pull/10636).
 
 - `IntegerFusion.lean`: integer convolution, its coefficient formula,
-  additivity and zero laws, singleton multiplication, and additive evaluation.
+  additivity and zero laws, singleton multiplication, additive evaluation,
+  and its multiplicativity for families satisfying the fusion identities.
 - `IntegerNIMRep.lean`: transposed integer matrices, multiplication and explicit
   unit compatibility, additive matrix evaluation, and restriction of a RingHom
   with prescribed basis products and images to the legacy multiplication and
   unit conditions.
+- `BasedRing.lean`: a faithful regular action, candidate associativity and unit
+  proofs, the data-dependent integer Ring carrier, and lifts of arbitrary
+  compatible ring-valued families, NIM-reps and ring-valued characters.
 
 These are candidate Lean scripts without placeholders, not validated results.
-The source Ring instance, associativity/duality, the extension to RingHom,
-the group-algebra identification, and consumer migration remain open.
+Lean validation of the Ring instance and forward extensions remains pending.
+Uniqueness of extension, a duality anti-involution on the integer ring, the
+group-algebra identification, and consumer migration remain open.
+Exact-integer checks of 100 signed coefficient triples each for S3 and Fibonacci
+passed associativity, both unit laws, matrix multiplicativity and recovery from
+the regular action's unit column. These checks do not establish Lean validity.
 
 ## Prerequisites and coordination
 
@@ -89,7 +97,7 @@ to integer-valued characters. This restriction must be explicit in a bridge.
 The existing `IsFusionRing` in `FusionRing.lean` records natural-valued
 structure constants, associativity, a two-sided unit, an involutive duality,
 the coefficient of the unit, and reversal of products under duality.
-Preserve these mathematical conditions in the new data structure.
+The candidate `FusionRing` data structure retains these conditions unchanged.
 
 On integer finitely supported combinations define
 
