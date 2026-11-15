@@ -642,6 +642,60 @@ Definition~\ref{def:mpug_group_representation}.
     cocycle conditions agree.
 \end{proof}
 
+\begin{definition}[Third cohomology with a coefficient action]
+    \label{def:mpug_h3_coefficient_action}
+    \lean{groupCohomology.cochainsIso₄,
+        groupCohomology.d₃₄,
+        groupCohomology.comp_d₃₄_eq,
+        groupCohomology.d₂₃_comp_d₃₄,
+        groupCohomology.shortComplexH3,
+        groupCohomology.cocycles₃,
+        groupCohomology.coboundaries₃,
+        groupCohomology.IsMulCocycle₃,
+        groupCohomology.IsMulCoboundary₃,
+        groupCohomology.cocyclesOfIsMulCocycle₃,
+        groupCohomology.coboundariesOfIsMulCoboundary₃,
+        groupCohomology.d₂₃_toMul,
+        groupCohomology.isoShortComplexH3,
+        groupCohomology.isoCocycles₃,
+        groupCohomology.H3,
+        groupCohomology.H3π}
+    Let $A$ be a module over a commutative ring, with a linear action $\rho$
+    of $G$. On cochains $f\colon G^3\to A$, set
+    \begin{align*}
+        (d^3f)(a,b,c,d)
+          & =\rho(a)f(b,c,d)-f(ab,c,d)+f(a,bc,d)\\
+          &\quad -f(a,b,cd)+f(a,b,c).
+    \end{align*}
+    Write $Z^3=\ker d^3$ and $B^3=\operatorname{im}d^2$.
+    Since $d^3d^2=0$, the quotient $H^3(G,A)=Z^3/B^3$ is defined,
+    with projection $\pi_3\colon Z^3\to H^3(G,A)$.
+    For multiplicative abelian coefficients $M$, the same definitions on
+    the underlying additive group give
+    \begin{align*}
+        f(ab,c,d)f(a,b,cd)
+          & =(a\cdot f(b,c,d))f(a,bc,d)f(a,b,c),\\
+        (d^2\beta)(a,b,c)
+          & =\frac{(a\cdot\beta(b,c))\beta(a,bc)}{\beta(ab,c)\beta(a,b)}.
+    \end{align*}
+    Neither the cochains nor the coboundaries are required to be normalized.
+\end{definition}
+
+\begin{theorem}[Equality of third cohomology classes]
+    \label{thm:mpug_h3_coefficient_action_eq}
+    \lean{groupCohomology.H3π_eq_zero_iff,
+        groupCohomology.H3π_eq_iff,
+        groupCohomology.H3_induction_on}
+    \uses{def:mpug_h3_coefficient_action}
+    For $x,y\in Z^3$, one has $\pi_3(x)=\pi_3(y)$ if and only if
+    $x-y\in B^3$. In particular, $\pi_3(x)=0$ if and only if $x\in B^3$.
+    Every third cohomology class has a representative in $Z^3$.
+\end{theorem}
+
+\begin{proof}
+    The projection onto a quotient is surjective, and its kernel is $B^3$.
+\end{proof}
+
 \begin{definition}[Scalar three-cocycles in degree-three group cohomology]
     \label{def:mpug_h3_group_cohomology}
     \lean{TNLean.Algebra.scalarRepresentationEquiv,
