@@ -320,8 +320,9 @@ capped estimates with the uncapped exponent printed in
         TNLean.MPS.AreaLaw.ALVV.gap_le_one_add_log_div_log}
     \leanok
     \uses{lem:physical_dg_quadratic_window}
-    Let $H=\sum_{i=1}^{L-1}h_i$ be a nearest-neighbour chain of $L$ qudits of
-    dimension $q$ with $0\le h_i\le\Id$, least spectral value $\mu$, a second
+    Let $H=\sum_{i=0}^{L-2}h_i$ be a nearest-neighbour chain of $L$ qudits of
+    dimension $q$, sites $0,\dots,L-1$, each $h_i$ supported on sites $i,i+1$
+    with $0\le h_i\le\Id$, least spectral value $\mu$, a second
     spectral value, every spectral value other than $\mu$ at least
     $\mu+\gamma$, and ground space $G$ of dimension $r$. For every natural
     $m<\gamma$ one has $m<L$ and $q^m\le r$. Consequently
