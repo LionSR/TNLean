@@ -184,7 +184,7 @@ vector orthogonal to $G$, whose energy is at least $\mu+\gamma>\mu+m$, a
 contradiction. Applied at $m=L$, the same argument contradicts $r<q^L$, so
 $m<L$. Taking $m=\lceil\gamma\rceil-1$ gives
 \[
-  \gamma\le1+\frac{\log r}{\log q},
+    \gamma\le1+\frac{\log r}{\log q},
 \]
 and $r<q$ forces $\gamma\le1$. The three-qubit example above, with $r=4$,
 $q=2$ and $\gamma=2$, shows that gaps above one occur once $r\ge q$.
@@ -196,9 +196,9 @@ The formal statements are
 \paragraph{The comparison.} Since $1/g=\max\{\gamma,1\}/\gamma$ and
 $\gamma(1/\gamma)^{1/4}\ge1$ for $\gamma\ge1$,
 \[
-  \frac{u^3}{g}+g^{-1/4}a^{3/4}u
-  \le\max\{\gamma,1\}\Bigl(\frac{u^3}{\gamma}
-     +\gamma^{-1/4}a^{3/4}u\Bigr).
+    \frac{u^3}{g}+g^{-1/4}a^{3/4}u
+    \le\max\{\gamma,1\}\Bigl(\frac{u^3}{\gamma}
+    +\gamma^{-1/4}a^{3/4}u\Bigr).
 \]
 Hence (\ref{eq:alvv_approximation_explicit_rank}) and
 (\ref{eq:alvv_approximation_global_bond}) hold with the uncapped printed
@@ -254,10 +254,10 @@ before the sampling size and the child spaces. Its literal ordered words
 act on the actual Haar coordinate sample, followed by one collective trim.
 Writing $D_{\rm ref}=r^2B$, take
 \[
-  A=1+\log r+\log D+\log(1/\beta),\qquad
-  s=\lceil4096rA\rceil,\qquad
-  M=D^6s^3,\qquad
-  \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
+    A=1+\log r+\log D+\log(1/\beta),\qquad
+    s=\lceil4096rA\rceil,\qquad
+    M=D^6s^3,\qquad
+    \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
 \]
 The corrected fixed-input failure bound
 (\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
@@ -289,12 +289,12 @@ The numerical tail and filter conditions in the bounded witness above can
 be derived uniformly from the physical input. Choose a universal $C\ge1$
 from the scalar parameter theorem, before the chain and Hamiltonian, and put
 \[
-  m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
-  \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+    m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
+    \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
 \]
 Then $\ell\ge21$ and
 \[
-  \log D\le22(C+1)(6+2\log(C+1))v^3/g.
+    \log D\le22(C+1)(6+2\log(C+1))v^3/g.
 \]
 Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
 estimate holds uniformly up to $8\ell$, hence throughout the required
@@ -320,7 +320,7 @@ chain coordinates. Its regional internal cuts are the native chain cuts.
 If its at most $M$ recorded generators have ranks at most
 $R=10^6D_{\rm ref}^2(n+1)M$, the finite-span estimate gives bond at most
 \[
-  MR=10^6D_{\rm ref}^2(n+1)M^2
+    MR=10^6D_{\rm ref}^2(n+1)M^2
 \]
 for every vector in this actual root space. The extra factor $M$ is
 retained: the per-generator bound is not assigned unchanged to the whole
@@ -341,7 +341,7 @@ the same recursively constructed root. Let $P_S$ be its orthogonal
 projection. For every unit $\Gamma\in G$, this gives
 $\|P_S\Gamma\|^2\ge197/200$. The actual normalized projection
 \[
-  \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
+    \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
 \]
 has squared overlap at least $197/200$ and squared distance at most
 $3/100$, with $\langle\phi,\Gamma\rangle=\|P_S\Gamma\|$ real and
@@ -360,25 +360,25 @@ Let $\mu$ be the original ground energy, $\gamma$ the gap, and $r$ the
 actual ground-space dimension. The same physical improving families can
 be selected before every requested accuracy $\eta>0$. Put
 \[
-  A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
-  \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
-  \varepsilon=\frac{c^2\rho}{32768}.
+    A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
+    \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
+    \varepsilon=\frac{c^2\rho}{32768}.
 \]
 Choose the physical reference space at accuracy $\varepsilon$, with
 all-span MPS bond bound $b$, and let $b_0$ be the reference bound used in
 the tree. With $D$ the common filter count parameter, choose
 \[
-  b_* =\max\{b_0,b\},\qquad
-  N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
-  \xi=\frac1{1000b_*N\sqrt{n+1}}.
+    b_* =\max\{b_0,b\},\qquad
+    N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
+    \xi=\frac1{1000b_*N\sqrt{n+1}}.
 \]
 This threshold satisfies both the tree bound and the final refinement
 budgets, including the strict inequality
 $\sqrt{nrb}\,\xi<\eta/(10000D^{12})$.
 Fix $0<\beta<1$, and put
 \[
-  s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
-  \qquad M=D^6s^3.
+    s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
+    \qquad M=D^6s^3.
 \]
 Construct the actual balanced tree using this same $\xi$ at every long
 parent. Write $S_0$ for its root; $M$ bounds the number of its recorded
@@ -387,7 +387,7 @@ generators.
 Starting from this actual root, apply the literal raw filter
 $K=I-H/\|H\|$ followed by collective trimming at $\xi$, for
 \[
-   j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
+    j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
 \]
 steps. The retained space $W$ is $\rho$-close to the original full ground
 space, and its dimension is at most $M$. Let $R$ be the actual lowest
@@ -396,7 +396,7 @@ $W$. Then $R\subseteq W$, $\dim R=r$, and its two projection errors
 relative to the original ground space are at most $\eta/2$.
 Indeed the projected trial space has excess energy at most
 \[
-   \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
+    \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
 \]
 and the original gap and the variational principle give the Ritz bounds.
 Every vector in $R$ has native MPS bond at most
@@ -451,8 +451,8 @@ positive number of repetitions returns the same subspace. The subsequent
 analysis, which compounds the error reduction and the dimension growth
 across rounds, requires the intended recursive assignment
 \[
-  V_0=W',\qquad
-  V_{j+1}=\operatorname{Trim}_{\xi}
+    V_0=W',\qquad
+    V_{j+1}=\operatorname{Trim}_{\xi}
     \bigl(\operatorname{span}\{A_iV_j:i\}\bigr).
 \]
 This is a local correction of the assignment, not an identification of a
@@ -489,8 +489,8 @@ unitary for the actual recursive children.
 
 Here the calibrated window is
 \[
- \ell=\left\lceil C\left(v^6/g+\sqrt w\,v^3/\sqrt g\right)\right\rceil,
- \qquad w=1+\log r+2\log(L+1),
+    \ell=\left\lceil C\left(v^6/g+\sqrt w\,v^3/\sqrt g\right)\right\rceil,
+    \qquad w=1+\log r+2\log(L+1),
 \]
 with $v=1+\log m+\log(1/g)+\log(1+w)$ and
 $D=(m\ell^2)^{22\ell}$. Thus $D$ is honest but length- and rank-dependent.
@@ -506,7 +506,7 @@ all physical inputs and give the bound $CZ^k$, where
 $Z=(L+1)(r+1)(1+\eta^{-1})$. Moreover, there is a universal
 $C_{\rm deg}$ such that
 \[
- k\le C_{\rm deg}\frac{(1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
+    k\le C_{\rm deg}\frac{(1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
 \]
 The prefactor can be controlled at the same scale: there is one
 universal $C_0>0$, chosen before $q,\gamma$, with
