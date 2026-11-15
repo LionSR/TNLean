@@ -115,14 +115,14 @@ theorem exists_torusFlux_untwisted_boundary_component {G : Type*} [Group G]
     intro v w hvw
     obtain ⟨_, q, r, hqr, rfl, rfl⟩ := hvw
     exact integer_adj hqr.1
-  let F : C →g U where
+  let F : C →g U := {
     toFun := f
     map_rel' := by
       intro q r h
       have hne : f q ≠ f r := by
         intro he
         exact (integer_adj h.1).ne (congrArg Subtype.val he)
-      exact SimpleGraph.map_adj_apply' h hne
+      exact SimpleGraph.map_adj_apply' h hne }
   obtain ⟨q₀⟩ := hC.nonempty
   have hOcc : ∀ a ∈ A, ((a.1 : ZMod width), (a.2 : ZMod height)) ∈ R := by
     intro a ha
