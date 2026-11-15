@@ -96,11 +96,7 @@ dimension `Bscale · count²`, with `count ≤ Ccount (2(L+1))²` and
 `Bscale ≤ C (2(L+1)(1+1/η))^k`.
 
 Existence form of ALVV, arXiv:1602.08828v2, Theorem `t:unique`, lines 1829–1855; the running
-time is not formalized.
-
-**Scope restriction (degenerate-gap tree):** the tree is that of Theorem `t:alg1` with ground
-energy `0` and multiplicity `1`; the per-node dimension is not the source's constant `D s²`.
-See `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`. -/
+time is not formalized. -/
 theorem exists_unique_ground_state_refined_ritz_approximation
     (q : ℕ) (hq : 2 ≤ q) (gamma : ℝ) (hgamma : 0 < gamma) :
     ∃ u Ccount : ℕ, 2 ≤ u ∧ 1 ≤ Ccount ∧ ∃ K : ℕ, 1 ≤ K ∧ ∃ C : ℝ, 0 < C ∧ ∃ kexp : ℕ,
