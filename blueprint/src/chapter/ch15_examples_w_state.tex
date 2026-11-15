@@ -655,7 +655,7 @@ trace illustrates this failure.
     \lean{MPSTensor.divisor_lt_of_mpv_eq_smul_wIndicator_of_no_small_divisor,
         MPSTensor.lt_gcd_factorial_mul_of_mpv_eq_smul_wIndicator_of_squarefree,
         MPSTensor.lt_factorial_mul_of_mpv_eq_smul_wIndicator_of_squarefree}
-    \notready
+    \leanok
     \discussion{2947}
     \uses{lem:w_state_prime_divisor_bound, thm:w_state_no_small_divisor_bound}
     Suppose $N>0$ and a qubit tensor of bond dimension $D$ has periodic
@@ -673,6 +673,7 @@ trace illustrates this failure.
     \end{align}
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lem:w_state_prime_divisor_bound, thm:w_state_no_small_divisor_bound}
     Write $N=mk$. Lemma~\ref{lem:w_state_prime_divisor_bound} gives a
     tensor of the same bond dimension with periodic vector
