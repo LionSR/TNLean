@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.RFP.Defs
 import TNLean.PiAlgebra.CanonicalFormSepAux
-import TNLean.Spectral.QuantitativeGap
 
 /-!
 # Structural form of RFP tensors
@@ -150,8 +150,8 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
 left-canonical RFP tensor, the transfer map equals the rank-one fixed-point projection
 `X ↦ (tr X / tr ρ) • ρ`.
 
-The proof combines exponential convergence (`E^n → P`) with idempotence (`E^n = E`
-for `n ≥ 1`). Since `E` is both the limit and is equal to every iterate, `E = P`. -/
+Idempotence makes every output a fixed point. Subtracting its normalized multiple of `ρ`
+gives a traceless fixed point, which is zero by injectivity and trace preservation. -/
 theorem transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective [NeZero D]
     (A : MPSTensor d D)
     (hInj : Kraus.IsInjective A) (hRFP : IsTransferIdempotent A)
@@ -159,35 +159,18 @@ theorem transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective [NeZero 
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
     (hρ_fix : Kraus.transferMap A ρ = ρ) :
     Kraus.transferMap A = fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) := by
-  obtain ⟨C, δ, hC, hδ, hδ1, hbound⟩ :=
-    exponential_convergence_of_primitive A hLeft hInj ρ hρ_pd hρ_fix
-  have hIdem : IsIdempotentElem (Kraus.transferMap (d := d) (D := D) A) := hRFP
-  set E := Kraus.transferMap (d := d) (D := D) A
-  set P := fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos)
   apply LinearMap.ext; intro X
-  -- For all n: E^[n+1] X = E X (idempotence), so ‖E X - P X‖ ≤ C(1-δ)^{n+1} ‖X‖
-  have h_bound_const : ∀ n : ℕ, ‖E X - P X‖ ≤
-      C * (1 - δ) ^ (n + 1) * ‖X‖ := by
-    intro n
-    have h_iter : E^[n + 1] X = E X := by
-      rw [← Module.End.pow_apply]; congr 1; exact hIdem.pow_succ_eq n
-    rw [← h_iter]; exact hbound (n + 1) X
-  -- C(1-δ)^{n+1} ‖X‖ → 0
-  have h_rate : Filter.Tendsto (fun n => C * (1 - δ) ^ (n + 1) * ‖X‖)
-      Filter.atTop (nhds 0) := by
-    have h_base := tendsto_pow_atTop_nhds_zero_of_lt_one
-      (show (0 : ℝ) ≤ 1 - δ by linarith) (show 1 - δ < 1 by linarith)
-    -- (1-δ)^(n+1) = (1-δ) * (1-δ)^n → (1-δ) * 0 = 0
-    have h_shift : Filter.Tendsto (fun n => (1 - δ) ^ (n + 1)) Filter.atTop (nhds 0) := by
-      have := h_base.const_mul (1 - δ)
-      simp only [mul_zero] at this
-      exact this.congr fun n => by ring
-    have h_mul := h_shift.const_mul (C * ‖X‖)
-    simp only [mul_zero] at h_mul
-    exact h_mul.congr fun n => by ring
-  -- Constant sequence E X - P X → 0 by squeeze, so E X - P X = 0
-  have h_tend : Filter.Tendsto (fun _ : ℕ => E X - P X) Filter.atTop (nhds 0) :=
-    squeeze_zero_norm h_bound_const h_rate
-  exact eq_of_sub_eq_zero (tendsto_nhds_unique tendsto_const_nhds h_tend)
+  apply sub_eq_zero.mp
+  apply Kraus.mapLM_fixedPoint_eq_zero_of_trace_eq_zero A hInj hLeft
+  · change Kraus.transferMap A
+      (Kraus.transferMap A X - (Matrix.trace X / Matrix.trace ρ) • ρ) =
+        Kraus.transferMap A X - (Matrix.trace X / Matrix.trace ρ) • ρ
+    rw [map_sub, map_smul, hρ_fix]
+    congr 1
+    exact congrArg (fun f : Mat →ₗ[ℂ] Mat => f X) hRFP
+  · change Matrix.trace (Kraus.transferMap A X - (Matrix.trace X / Matrix.trace ρ) • ρ) = 0
+    rw [Matrix.trace_sub, Matrix.trace_smul, smul_eq_mul,
+      Kraus.isTracePreservingMap_mapLM_of_isTP A hLeft X,
+      div_mul_cancel₀ _ (ne_of_gt hρ_pd.trace_pos), sub_self]
 
 end MPSTensor
