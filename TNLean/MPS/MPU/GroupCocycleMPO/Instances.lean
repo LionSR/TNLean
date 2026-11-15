@@ -202,9 +202,12 @@ theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ}
       else 0 := by
   rw [mpo_tensor_apply]
   congr 1
-  simp only [scalarCochainValue₃_iCocycles, kleinCocycle_apply, Units.val_pow_eq_pow_val,
-    Units.val_neg, Units.val_one, toAdd_mul, toAdd_inv, Prod.snd_add, Prod.snd_neg]
   refine Finset.prod_congr rfl fun i _ ↦ ?_
+  change (scalarCocycleValue₃ kleinCocycle g (kleinEquiv.symm (t (i + 1)))
+    ((kleinEquiv.symm (t (i + 1)))⁻¹ * kleinEquiv.symm (t i)) : ℂ) = _
+  rw [kleinCocycle_apply]
+  simp only [Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one, toAdd_mul,
+    toAdd_inv, Prod.snd_add, Prod.snd_neg]
   congr 3
   exact neg_add_eq_sub _ _
 

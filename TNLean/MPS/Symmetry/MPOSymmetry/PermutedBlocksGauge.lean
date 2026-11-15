@@ -110,6 +110,7 @@ theorem omega_rescale (hF : F.IsNormalRepresentation) (fd : FusionData F)
     (β : ScalarCocycle G) :
     (fd.rescale β).associatorScalar = ScalarThreeCochain.fusionGauge β fd.associatorScalar := by
   rw [omega_eq_fusionGauge hF fd (fd.rescale β), relativeScalar_rescale hF]
+  simp only [AddEquiv.symm_apply_apply, toMul_ofMul]
 
 end FusionData
 
@@ -240,6 +241,7 @@ theorem lSymbol_rescale (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNor
       (ad.lSymbol fd))) := by
   rw [lSymbol_eq_gauge hF hA hD hperm fd (fd.rescale β) ad (ad.rescale γ),
     FusionData.relativeScalar_rescale hF, relativeScalar_rescale hA hD hperm]
+  simp only [AddEquiv.symm_apply_apply, toMul_ofMul]
 
 /-! ### A single block -/
 
