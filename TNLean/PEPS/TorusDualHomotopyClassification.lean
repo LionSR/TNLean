@@ -132,17 +132,6 @@ private theorem exists_rectLift {a b : X} (p : TorusDualPath a b) :
       cases hc
       exact heq_of_eq (congrArg₂ (fun r s ↦ r.cons s) (eq_of_heq hr) (eq_of_heq hs))
 
-private theorem homotopy_univ {R : Set X} {a b : X} {p q : TorusDualPath a b}
-    (h : TorusDualHomotopy R p q) : TorusDualHomotopy Set.univ p q := by
-  induction h with
-  | refl p => exact .refl p
-  | symm h ih => exact ih.symm
-  | trans h k ih ik => exact ih.trans ik
-  | comp h k ih ik => exact ih.comp ik
-  | reverse h ih => exact ih.reverse
-  | backtrack e => exact .backtrack e
-  | square x y h => exact .square x y (Set.mem_univ _)
-
 private theorem homotopy_of_heq {R : Set X} {a b a' b' : X}
     {p q : TorusDualPath a b} {p' q' : TorusDualPath a' b'}
     (ha : a' = a) (hb : b' = b) (hp : HEq p' p) (hq : HEq q' q)
@@ -175,6 +164,6 @@ theorem torusDualHomotopy_univ_iff_displacement_eq {a b : X}
     have hy := congrArg Prod.snd h
     apply Prod.ext <;> omega
   subst d
-  exact homotopy_of_heq ha hb hp hq (homotopy_univ (rectDualPath_homotopy x y p' q'))
+  exact homotopy_of_heq ha hb hp hq ((rectDualPath_homotopy x y p' q').mono (Set.subset_univ _))
 
 end TNLean.PEPS
