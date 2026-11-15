@@ -1017,6 +1017,82 @@ proposition should be proved by the same argument, and its path hypothesis may
 be weakened to a pointwise one. The unrestricted proposition no longer depends
 on either scoped counterpart.
 
+\section{Continuous reduced support and local unitary coordinates}
+
+The local support-coordinate construction for \ghissue{6024} and
+\ghissue{6140} starts from a continuous orthogonal projection $T(t)$.
+Idempotence makes its rank locally constant. For an isometric base frame
+$J_0$ of $T(t_0)$, the polar isometry of $T(t)J_0$ gives a continuous full
+frame $J(t)$ on a neighborhood of $t_0$, with $J(t_0)=J_0$.
+Applying the same construction to $I-T(t)$ gives frames $K(t)$ and a unitary
+$U(t)=J(t)J_0^\dagger+K(t)K_0^\dagger$ satisfying
+$U(t_0)=I$ and $U(t)T(t_0)U(t)^\dagger=T(t)$.
+On overlapping coordinate neighborhoods the transition is the continuous
+unitary $g(t)=J(t)^\dagger K(t)$, and the compressed tensors satisfy
+$K(t)^\dagger\mathcal W(t)^{ij}K(t)
+=g(t)^\dagger[J(t)^\dagger\mathcal W(t)^{ij}J(t)]g(t)$.
+These assertions have proof bodies in
+\leanid{Matrix.exists_local_continuous_support_frame},
+\leanid{Matrix.exists_local_continuous_support_unitary}, and
+\leanid{MPOTensor.supportCoordinates_eq_unitary_conj}.
+% Pinned-toolchain elaboration of the new auxiliary modules is pending.
+
+When $T(t)$ is the actual reduced projection of $P(t),Q(t)$ and
+$\mathcal W(t)^{ij}P(t)=\mathcal W(t)^{ij}=Q(t)\mathcal W(t)^{ij}$,
+the local tensor $J(t)^\dagger\mathcal W(t)^{ij}J(t)$ is continuous and has
+the same periodic operators at every positive length. The proof uses the
+existing support-absorption argument; equality at length zero is not claimed.
+Continuity of the actual reduced projection is a hypothesis of
+\leanid{MPOTensor.exists_local_continuous_reduced_support}.
+This does not identify the raw ambient source cuts with the reduced cuts.
+
+There are two distinct continuity obstructions. First, a continuous positive
+semidefinite matrix need not have continuous support: for
+$L(t)=\operatorname{diag}(1,t)$ on $[0,1]$, its support has rank one at zero
+and rank two at every positive parameter. Continuity of $L,R$, or constancy
+of the physical source ranks in Proposition~IV.5, is therefore not a proof
+of continuity of their individual support projections or their reduced
+projection.
+
+Second, constant rank does not imply a continuous singular-value
+decomposition or diagonalizing basis, even locally. For $0<t\leq1$, put
+\begin{align}
+ A(t)&=I_2+\frac t2
+ \begin{pmatrix}
+ \cos(1/t)&\sin(1/t)\\
+ \sin(1/t)&-\cos(1/t)
+ \end{pmatrix}, & A(0)&=I_2.\notag
+\end{align}
+This is a continuous positive definite rank-two family. Its eigenvalues at
+positive $t$ are $1+t/2$ and $1-t/2$. The projection onto the first
+eigenspace is one half of the sum of $I_2$ and the displayed trigonometric
+matrix, and has no limit at zero. On the connected positive interval, a
+continuous diagonalization must assign its first column to one of these two
+distinct eigenvalues consistently; either eigenspace projection fails to
+converge. Since $A(t)$ is positive, the same obstruction applies to its
+singular vectors. This example is a general matrix obstruction; it is not
+asserted to be an MPU counterexample. The positive square root and polar
+normalization avoid selecting these spectral bases.
+
+The local unitary $U(t)$ above acts on a bond support. It is not the pair
+of local physical unitaries in the orbit argument of
+Corollary~IV.7 \cite[lines~939--950]{Cirac2017MPU}. The remaining work is to
+derive the appropriate continuous support data from the source path
+hypotheses or bypass changing supports, construct and lift the actual
+tensor-product gate orbit, join the local lifts along the interval with
+the required endpoint data, and transport the constructions through
+blocking, ancillas, and the symmetry comparisons. No continuous CFII
+diagonalization or compact SVD is supplied as an unannounced hypothesis.
+Consequently neither unrestricted Corollary~IV.7 nor its admissible
+counterpart is discharged by these auxiliary statements.
+
+For \ghissue{7016}, this leaves the forward standard-form path extraction
+and its prescribed endpoints open; a local bond-support lift alone does
+not give that path. For \ghissue{9880}, the intrinsic periodic-trace
+expression already gives continuity without a continuous choice of gates.
+Its remaining pointwise standard-form availability and local
+time-reversal certificates are distinct from the support-lifting step.
+
 \section{Verdict}
 
 \textbf{Verdict: scope restriction.} The normal-tensor proposition,

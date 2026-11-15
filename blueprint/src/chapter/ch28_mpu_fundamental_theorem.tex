@@ -3993,6 +3993,144 @@
     % Source lines: paper_v2.tex 867--910.
 \end{corollary}
 
+\subsection{Local coordinates on continuous reduced supports}
+
+% Auxiliary statements for #6024/#6140. Proof bodies are written, but the
+% pinned-toolchain elaboration is pending; retain \notready on these entries.
+% Neither coruvSF nor its admissible counterpart is discharged here.
+
+\begin{lemma}[Local orthonormal frames of continuous supports]
+    \label{lem:mpu_local_continuous_support_frame}
+    \lean{Matrix.exists_local_continuous_support_frame}
+    \notready
+    Let $t\mapsto P(t)\in M_D(\mathbb C)$ be a continuous family of orthogonal
+    projections on a topological space, and fix $t_0$ and
+    $J_0:\mathbb C^r\to\mathbb C^D$ with $J_0^\dagger J_0=I_r$ and
+    $J_0J_0^\dagger=P(t_0)$. On an open neighborhood of $t_0$, the polar
+    isometry $J(t)$ of $P(t)J_0$ is continuous and satisfies
+    $J(t_0)=J_0$, $J(t)^\dagger J(t)=I_r$, and $J(t)J(t)^\dagger=P(t)$.
+\end{lemma}
+
+\begin{proof}
+    The trace of a complex idempotent equals its rank, so the rank of $P(t)$
+    is locally constant. The Gram matrix of $P(t)J_0$ is invertible near
+    $t_0$. Its positive square root and inverse are continuous there, and
+    $J(t)=P(t)J_0[(P(t)J_0)^\dagger P(t)J_0]^{-1/2}$. Equality of ranks
+    makes this isometric frame exhaust the range of $P(t)$.
+\end{proof}
+
+\begin{lemma}[Local unitary lift of a support projection]
+    \label{lem:mpu_local_continuous_support_unitary}
+    \lean{Matrix.exists_local_continuous_support_unitary}
+    \notready
+    \uses{lem:mpu_local_continuous_support_frame}
+    For a continuous family of orthogonal projections $P(t)$ and a fixed
+    $t_0$, there are an open neighborhood $S$ of $t_0$ and a continuous
+    $U:S\to U(D)$ with $U(t_0)=I_D$ and
+    $U(t)P(t_0)U(t)^\dagger=P(t)$.
+\end{lemma}
+
+\begin{proof}
+    Choose full orthonormal frames $J_0,K_0$ for $P(t_0),I_D-P(t_0)$ and
+    extend them locally by Lemma~\ref{lem:mpu_local_continuous_support_frame}
+    to $J(t),K(t)$. Then $U(t)=J(t)J_0^\dagger+K(t)K_0^\dagger$ is unitary:
+    the mixed terms vanish and $U(t)U(t)^\dagger=P(t)+(I_D-P(t))=I_D$.
+    Moreover, $U(t)J_0=J(t)$ and $U(t_0)=I_D$.
+\end{proof}
+
+\begin{lemma}[Changes of support coordinates]
+    \label{lem:mpu_continuous_support_transitions}
+    \lean{Matrix.support_frame_transition,
+        Matrix.continuous_support_frame_transition,
+        MPOTensor.supportCoordinates_eq_unitary_conj}
+    \notready
+    Let $J,K:\mathbb C^r\to\mathbb C^D$ be isometries with
+    $JJ^\dagger=KK^\dagger$. Then $g=J^\dagger K$ is unitary, $Jg=K$, and
+    $K^\dagger W^{ij}K=g^\dagger(J^\dagger W^{ij}J)g$.
+    When $J$ and $K$ vary continuously on an overlap, so does $g$.
+\end{lemma}
+
+\begin{proof}
+    The range identity gives $gg^\dagger=I_r$ and $Jg=K$.
+    Substituting $K=Jg$ gives the tensor identity. Multiplication and
+    adjunction of finite matrices are continuous.
+\end{proof}
+
+\begin{lemma}[Continuity of rectangular compression]
+    \label{lem:mpu_continuous_rectangular_compression}
+    \lean{MPOTensor.continuous_rectangularSandwich}
+    \notready
+    If $A(t)$, $\mathcal W(t)$ and $B(t)$ are continuous families of
+    compatible rectangular matrices and tensors, then
+    $A(t)\mathcal W(t)^{ij}B(t)$ is a continuous tensor family.
+\end{lemma}
+
+\begin{proof}
+    Each entry is a finite sum of products of continuous complex functions.
+\end{proof}
+
+\begin{lemma}[Continuous local reduced tensors]
+    \label{lem:mpu_continuous_local_reduced_support}
+    \lean{MPOTensor.mpo_supportCoordinates_reducedProjection,
+        MPOTensor.exists_local_continuous_reduced_support}
+    \notready
+    \uses{lem:mpu_local_continuous_support_frame,
+        lem:mpu_continuous_rectangular_compression}
+    Let $\mathcal W(t)$ be continuous, let $P(t)$ be orthogonal projections,
+    and let $Q(t)$ satisfy $\mathcal W(t)^{ij}P(t)=\mathcal W(t)^{ij}$ and
+    $Q(t)\mathcal W(t)^{ij}=\mathcal W(t)^{ij}$. Suppose that their reduced
+    projection $T(t)$ is continuous. Near any fixed parameter there are
+    continuous full isometric frames $J(t)$ of $T(t)$ and continuous reduced
+    tensors $\mathcal B(t)^{ij}=J(t)^\dagger\mathcal W(t)^{ij}J(t)$.
+    For every positive $N$, $B^{(N)}(t)=W^{(N)}(t)$.
+    In particular, if every $\mathcal W(t)$ generates an MPU, so does every
+    $\mathcal B(t)$. Pointwise equality of the positive-length operators
+    requires only a full frame of $T$, without any continuity assumptions.
+\end{lemma}
+
+\begin{proof}
+    The support absorptions make $T\mathcal WT$ have the periodic operators
+    of $\mathcal W$. Since $JJ^\dagger=T$, its restriction to the range of
+    $T$ has the same positive-length word traces. Local frames come from
+    Lemma~\ref{lem:mpu_local_continuous_support_frame}; compression is
+    continuous by Lemma~\ref{lem:mpu_continuous_rectangular_compression}.
+\end{proof}
+
+\begin{lemma}[Positive matrices on continuous reduced supports]
+    \label{lem:mpu_continuous_reduced_fixed_pair}
+    \lean{MPOTensor.continuous_reduced_fixed_pair}
+    \notready
+    Let $L(t),R(t)$ be continuous positive semidefinite matrices and let
+    $J(t)$ be continuous isometries whose ranges are the reduced ranges of
+    the support projections of $L(t),R(t)$. Then
+    $J(t)^\dagger L(t)J(t)$ and $J(t)^\dagger R(t)J(t)$ are continuous and
+    positive definite. No choice of diagonalizing bases is asserted.
+\end{lemma}
+
+\begin{proof}
+    Matrix multiplication and adjunction preserve continuity. The reduced
+    range is contained in the support of $L(t)$ and meets the kernel of
+    $R(t)$ trivially, so the two compressions are positive definite.
+\end{proof}
+
+\begin{lemma}[Simplicity in reduced support coordinates]
+    \label{lem:mpu_simple_reduced_support_coordinates}
+    \lean{MPOTensor.IsMPUSimple.supportCoordinates_reducedProjection}
+    \notready
+    Suppose that $\mathcal W$ is simple with positive physical dimension,
+    $P$ is an orthogonal projection,
+    $\mathcal W^{ij}P=\mathcal W^{ij}=Q\mathcal W^{ij}$, and its normalized
+    double-layer diagonal is $|\rho)(\Phi|$. If $J^\dagger J=I$ and
+    $JJ^\dagger$ is the reduced projection of $P,Q$, then
+    $J^\dagger\mathcal W^{ij}J$ is simple.
+\end{lemma}
+
+\begin{proof}
+    The support absorptions and the rank-one identity give simplicity of
+    $T\mathcal WT$. Restriction by the split inclusion $J$ and its left
+    inverse $J^\dagger$ preserves the two simplicity identities.
+\end{proof}
+
 \subsection{Simple reduced representatives at the original scale}
 
 \begin{lemma}[Doubled rectangular bond maps]
