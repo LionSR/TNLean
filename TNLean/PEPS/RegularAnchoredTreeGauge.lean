@@ -23,13 +23,14 @@ endpoint exclusion here. See `docs/paper-gaps/scp10_anchored_tree_gauge.tex`.
 namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
-variable {G : Type*} [Group G] [Fintype G]
+variable {G : Type*} [Group G]
 
 /-- Construct a root-normalized tree gauge that fixes the whole root component
 of an untwisted subgraph and removes every internal tree operator. The tree,
 forest and gauge are derived internally; no commutativity is required.
 Auxiliary noncentral contraction step for SCP10, Lemma 6.14 and Theorem 6.9. -/
 theorem exists_regularRegionTreeGauge_fixed_on_untwisted_component
+    [Finite G]
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected)
     (U : SimpleGraph {v : V // v ∈ R}) (hU : U ≤ Γ.induce (R : Set V))
     (o : {v : V // v ∈ R}) (u : Edge Γ → G)
@@ -42,16 +43,17 @@ theorem exists_regularRegionTreeGauge_fixed_on_untwisted_component
           T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩ →
             regularRegionGaugeResidual R k u e = 1 := by
   classical
+  letI : Fintype G := Fintype.ofFinite G
   obtain ⟨F, hFU, hFacyclic, hFreach⟩ := U.exists_isAcyclic_reachable_eq_le
   obtain ⟨T, hFT, hT, htree⟩ :=
     hR.exists_isTree_le_of_le_of_isAcyclic (hFU.trans hU) hFacyclic
   let k := (regularRegionTreeGauge R T hT htree o u).1
   have hedge {v w : {v : V // v ∈ R}} (h : F.Adj v w) : k w = k v := by
-    have hg := regularRegionTreeGauge_directedTransport R T hT htree o u
+    have hg := regularRegionTreeGauge_directedTransport R T hT htree o u (v := v) (w := w)
       (hFT h) (hU (hFU h))
-    rw [hu (hFU h)] at hg
-    change 1 = k w * (k v)⁻¹ at hg
-    have hm := congrArg (fun z : G => z * k v) hg
+    have hz := hu (v := v) (w := w) (hFU h)
+    have hg' : 1 = k w * (k v)⁻¹ := hz.symm.trans hg
+    have hm := congrArg (fun z : G => z * k v) hg'
     simpa only [one_mul, mul_assoc, inv_mul_cancel, mul_one] using hm.symm
   have hwalk {v w : {v : V // v ∈ R}} (p : F.Walk v w) : k w = k v := by
     induction p with
@@ -65,7 +67,7 @@ theorem exists_regularRegionTreeGauge_fixed_on_untwisted_component
   · intro e he
     exact regularRegionGaugeResidual_eq_one_of_tree R T hT htree o u e he
 
-variable [Fintype V] [DecidableRel Γ.Adj] {d : ℕ}
+variable [Fintype G] [Fintype V] [DecidableRel Γ.Adj] {d : ℕ}
 
 /-- If every complementary boundary endpoint belongs to the root's untwisted
 component, construct a global gauge fixing the observation region and all its
@@ -105,7 +107,7 @@ theorem exists_regularComplementGauge_fixed_on_incident
     · exact hkR v hvR
     · have hvS : v ∈ S := by simp [S, hvR]
       have hh := hfixed ⟨v, hvS⟩ (hboundary ⟨v, hvS⟩ hv)
-      simpa only [k, dif_pos hvS] using hh
+      simpa only [k, dite_eq_left hvS] using hh
   refine ⟨T, k, hT, htree, hkR, ?_, ?_, sameState_regularVertexGauge a ha k u⟩
   · intro e he
     have ht : k e.1.1 = 1 := by
@@ -119,7 +121,11 @@ theorem exists_regularComplementGauge_fixed_on_incident
     simp only [regularVertexGaugeOperators, ht, hh, hincident e he, inv_one, one_mul]
   · intro e he
     have h := hremove e he
-    simpa only [regularVertexGaugeOperators, regularRegionGaugeResidual, k,
-      dif_pos e.2.1, dif_pos e.2.2] using h
+    have ht : e.1.1.1 ∈ S := e.2.1
+    have hh : e.1.1.2 ∈ S := e.2.2
+    change (k e.1.1.2)⁻¹ * u e.1 * k e.1.1.1 = 1
+    dsimp only [k]
+    rw [dite_eq_left hh, dite_eq_left ht]
+    exact h
 
 end TNLean.PEPS
