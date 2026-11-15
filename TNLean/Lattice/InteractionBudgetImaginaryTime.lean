@@ -71,7 +71,7 @@ theorem norm_iterated_commutator_le_ascFactorial
     have hexpand : (ad : _ → _)^[m + 1] O =
         ∑ i ∈ active, (ad : _ → _)^[m] (h i * O - O * h i) := by
       rw [Function.iterate_succ_apply, hfirst]
-      simpa only [ContinuousLinearMap.pow_apply_eq_iterate] using
+      simpa only [pow_apply_eq_iterate] using
         map_sum (ad ^ m) (fun i ↦ h i * O - O * h i) active
     have hlocal (i : κ) : h i * O - O * h i ∈
         supportedOperators q ((X i ∪ S : Finset ι) : Set ι) := by
