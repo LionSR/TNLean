@@ -859,6 +859,36 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     positivity and rank, giving the face statement.
 \end{proof}
 
+\begin{lemma}[Channel rank reduction inside a supported Choi face]
+    \label{thm:periodic_supported_choi_root_reduction}
+    \lean{Channel.exists_channel_choiRank_lt_of_supported_annihilating_direction}
+    \leanok
+    Let $D>0$ and let $F:M_D(\C)\to M_D(\C)$ be a channel.
+    Let $K$ be complex linear, with $\tr K(X)=0$ for every $X$ and
+    $FK=KF=K^2=0$. Suppose there are matrices $V,G,J$ satisfying
+    \begin{align}
+        C_F&=VGV^\dagger,& C_K&=VJV^\dagger,& V^\dagger V&=I_r,
+        \label{eq:periodic_supported_choi_coordinates}
+    \end{align}
+    where $G\in M_r(\C)$ is positive definite and $J\in M_r(\C)$ is
+    nonzero Hermitian. There is a nonzero real $t$ such that $F+tK$
+    is a channel with strictly smaller Choi rank than $F$, and
+    $(F+tK)^p=F^p$ for every integer $p\ge2$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_positive_pencil_boundary,
+        thm:periodic_annihilating_power_perturbation}
+    Every $F+tK$ preserves trace. The normalized Choi matrices of $F$
+    and $F+K$ both have trace one, so $\tr J=\tr C_K=0$ by
+    (\ref{eq:periodic_supported_choi_coordinates}). Apply the positive
+    matrix boundary argument to $G+tJ$. Its isometric congruence is
+    $C_{F+tK}$, hence yields complete positivity and the strict Choi-rank
+    decrease. The annihilation identities persist after scalar
+    multiplication and give every claimed power identity.
+\end{proof}
+
 \begin{lemma}[Exact powers under an annihilating perturbation]
     \label{thm:periodic_annihilating_power_perturbation}
     \lean{add_pow_eq_of_annihilating_square_zero}

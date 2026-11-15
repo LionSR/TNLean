@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.HermitianMatrixCone
-import QICLean.Channel.Basic
+import QICLean.Channel.ChoiJamiolkowski
+import QICLean.Channel.KrausRank
+import TNLean.Algebra.AnnihilatingPowerPerturbation
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Topology.Order.Compact
 
@@ -14,9 +16,11 @@ import Mathlib.Topology.Order.Compact
 A nonzero Hermitian trace-zero direction through a positive-definite
 matrix reaches a singular positive-semidefinite matrix. Isometric
 compression gives the same conclusion on a singular Choi face.
-This supplies the boundary argument in the written cyclic root-selection
-proofs associated with arXiv:1708.00029, Theorem 4.1; the construction of a
-root-preserving direction remains a separate obligation.
+A supported annihilating direction therefore produces a channel of
+smaller Choi rank with all powers from the square onward preserved.
+This supplies the positivity step in the written cyclic root-selection
+proofs associated with arXiv:1708.00029, Theorem 4.1. The direction and
+its Choi-face coordinates remain explicit hypotheses.
 -/
 
 open scoped Matrix ComplexOrder Matrix.Norms.Frobenius Topology
@@ -115,8 +119,8 @@ theorem exists_posSemidef_rank_lt_on_trace_zero_line {D : ℕ}
   change (F t).rank < A.rank
   omega
 
-private theorem rank_isometric_congruence {D r : ℕ}
-    (V : Matrix (Fin D) (Fin r) ℂ) (hV : Vᴴ * V = 1)
+private theorem rank_isometric_congruence {α : Type*} [Fintype α] [DecidableEq α]
+    {r : ℕ} (V : Matrix α (Fin r) ℂ) (hV : Vᴴ * V = 1)
     (B : Matrix (Fin r) (Fin r) ℂ) : (V * B * Vᴴ).rank = B.rank := by
   have hRecover : Vᴴ * (V * B * Vᴴ) * V = B := by
     calc
@@ -158,3 +162,62 @@ theorem exists_posSemidef_rank_lt_on_isometric_face {D r : ℕ}
       _ = (V * G * Vᴴ).rank := (rank_isometric_congruence V hV G).symm
 
 end Matrix
+
+namespace Channel
+
+/-- An annihilating direction supported inside a channel's Choi face gives
+a channel with strictly smaller Choi rank and the same powers from the
+square onward. The direction has zero output trace, and its face
+coordinates are a nonzero Hermitian matrix. The isometry and both Choi
+identities are explicit hypotheses. This proves the complete-positivity
+step for such a direction in the root-selection argument associated with
+arXiv:1708.00029, Theorem 4.1, without asserting that every root admits one. -/
+theorem exists_channel_choiRank_lt_of_supported_annihilating_direction
+    {D r : ℕ} [NeZero D]
+    (F K : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) (hF : IsChannel F)
+    (hTrace : ∀ X, (K X).trace = 0)
+    (hFK : F * K = 0) (hKF : K * F = 0) (hKK : K * K = 0)
+    (V : Matrix (Fin D × Fin D) (Fin r) ℂ) (hV : Vᴴ * V = 1)
+    (G J : Matrix (Fin r) (Fin r) ℂ) (hG : G.PosDef)
+    (hJ : J.IsHermitian) (hJne : J ≠ 0)
+    (hChoiF : ChoiJamiolkowski.choiMatrix F = V * G * Vᴴ)
+    (hChoiK : ChoiJamiolkowski.choiMatrix K = V * J * Vᴴ) :
+    ∃ t : ℝ, t ≠ 0 ∧ IsChannel (F + (t : ℂ) • K) ∧
+      choiRank (F + (t : ℂ) • K) < choiRank F ∧
+      (∀ p : ℕ, 2 ≤ p → (F + (t : ℂ) • K) ^ p = F ^ p) := by
+  have hTP (c : ℂ) : IsTracePreservingMap (F + c • K) := by
+    intro X
+    simp only [LinearMap.add_apply, LinearMap.smul_apply, Matrix.trace_add,
+      Matrix.trace_smul, hF.tp X, hTrace X, smul_zero, add_zero]
+  have hTraceJ : J.trace = 0 := by
+    have h := ChoiJamiolkowski.trace_choiMatrix_of_tp (NeZero.pos D)
+      (F + (1 : ℂ) • K) (hTP 1)
+    rw [one_smul, ChoiJamiolkowski.choiMatrix_add, Matrix.trace_add,
+      ChoiJamiolkowski.trace_choiMatrix_of_tp (NeZero.pos D) F hF.tp,
+      hChoiK, Matrix.trace_mul_cycle, hV, Matrix.one_mul] at h
+    exact add_left_cancel (h.trans (add_zero (1 : ℂ)).symm)
+  obtain ⟨t, ht, hPSD, hRank⟩ :=
+    Matrix.exists_posSemidef_rank_lt_on_trace_zero_line hG hJ hJne hTraceJ
+  have hChoi : ChoiJamiolkowski.choiMatrix (F + (t : ℂ) • K) =
+      V * (G + t • J) * Vᴴ := by
+    rw [ChoiJamiolkowski.choiMatrix_add, ChoiJamiolkowski.choiMatrix_smul,
+      hChoiF, hChoiK]
+    simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_smul, Matrix.smul_mul,
+      Complex.coe_smul]
+  have hChannel : IsChannel (F + (t : ℂ) • K) := by
+    refine ⟨(ChoiJamiolkowski.cp_iff_choi_posSemidef _).mpr ?_, hTP _⟩
+    rw [hChoi]
+    exact hPSD.mul_mul_conjTranspose_same V
+  refine ⟨t, ht, hChannel, ?_, ?_⟩
+  · change (ChoiJamiolkowski.choiMatrix (F + (t : ℂ) • K)).rank <
+      (ChoiJamiolkowski.choiMatrix F).rank
+    rw [hChoi, hChoiF, Matrix.rank_isometric_congruence V hV,
+      Matrix.rank_isometric_congruence V hV]
+    exact hRank
+  · intro p hp
+    apply add_pow_eq_of_annihilating_square_zero (F := F) (H := (t : ℂ) • K) ?_ ?_ ?_ hp
+    · rw [mul_smul, hFK, smul_zero]
+    · rw [smul_mul_assoc, hKF, smul_zero]
+    · rw [smul_mul_assoc, mul_smul, hKK, smul_zero, smul_zero]
+
+end Channel

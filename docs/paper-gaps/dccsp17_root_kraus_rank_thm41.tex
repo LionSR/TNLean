@@ -478,9 +478,10 @@ The following paper argument goes beyond the diagonal cyclic-reset example.
 It has not yet been formalized in Lean. Let
 $V=\bigoplus_{i\in\mathbb Z/5\mathbb Z}V_i$, with sector dimensions
 $(1,2,2,1,1)$, and put
-\begin{equation}
+\begin{align}
   S=\bigoplus_i\operatorname{Hom}(V_i,V_{i+1})\subset M_7(\mathbb C).
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_five_sector_kraus_span}
+\end{align}
 Suppose a supplied channel $\mathcal F$ has Kraus span exactly $S$.
 Its Choi rank is $\dim S=10$. There is a channel $\widetilde{\mathcal F}$
 of Choi rank at most nine satisfying
@@ -503,9 +504,10 @@ setting $\mathcal H(x^*)=H_0(x)^*$ for $x\in C_0$, and setting it to
 zero on every other matrix corner. Its outputs are off-diagonal, so it is trace
 annihilating. The preceding two identities and the cyclic corner support
 give
-\begin{equation}
+\begin{align}
   \mathcal F\mathcal H=\mathcal H\mathcal F=\mathcal H^2=0.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_perturbation_annihilation}
+\end{align}
 It follows by expanding products that
 $(\mathcal F+a\mathcal H)^p=\mathcal F^p$ for every real $a$ and $p\ge2$.
 This is an exact affine family, rather than only a first-order variation.
@@ -553,10 +555,11 @@ the argument below in fact gives the stronger bound eight.
 
 Partition the positive definite Choi matrix on $S$ by separating the
 middle summand $\operatorname{Hom}(V_1,V_2)$ from all other summands:
-\begin{equation}
+\begin{align}
   C_{\mathcal F}=\begin{pmatrix}X&C\\ C^*&Z\end{pmatrix},\qquad
   Y=Z-C^*X^{-1}C\ge0.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_schur_complement_partition}
+\end{align}
 The size of $X$ is $a=m+n+2$, and $X$ is positive definite. Leave $X$ and
 $C$ fixed and vary only the residual positive matrix $Y$ on the middle
 summand. Such a change alters only the map from $M_m$ in sector one to
@@ -604,11 +607,12 @@ $m,n\ge1$. Its Kraus span need not fill the rectangular summands.
 Assume its map from sector zero to sector one prepares a positive
 definite density matrix $\rho\in M_m$. Then there is a channel
 $\widetilde{\mathcal F}$ such that
-\begin{equation}
+\begin{align}
   \widetilde{\mathcal F}^{\,p}=\mathcal F^p\quad(p\ge2),\qquad
   \operatorname{rank}C_{\widetilde{\mathcal F}}
   \le\operatorname{rank}C_{\mathcal F^2}.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_selected_cyclic_square_root}
+\end{align}
 This bounds a selected square root by the actual target rank. It does not
 bound the selected root by every higher power's rank. The preparation is
 faithful, in particular, when $\mathcal F$ is irreducible: a faithful
@@ -617,17 +621,19 @@ of $\rho$.
 
 Choose a minimal noise Hilbert space $K$ for a Kraus representation of
 $\mathcal F$. Denote the coefficient vectors of its rectangular blocks by
-\begin{equation}
+\begin{align}
   (u_i)_{i=1}^m,\quad (a_{ji})_{j=1,i=1}^{n,m},\quad
   (v_j)_{j=1}^n,\quad w_1,\ldots,w_k,\qquad k=\ell-3\ge1.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_cyclic_noise_coefficients}
+\end{align}
 The $u_i$ are linearly independent because their Gram matrix is $\rho$,
 the $v_j$ are orthonormal because the next map is the trace, and each
 $w_j$ is a unit vector. Put
-\begin{equation}
+\begin{align}
   U=\operatorname{span}\{u_i\},\quad V=\operatorname{span}\{v_j\},\quad
   K_0=U+V+\sum_{j=1}^k\mathbb Cw_j,\quad r_0=\dim K_0.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_outside_noise_space}
+\end{align}
 Project every $a_{ji}$ onto $K_0$ and its orthogonal complement. The
 residual vectors define a completely positive map $R:M_m\to M_n$.
 All coefficient vectors outside this middle map are unchanged, and the
@@ -641,19 +647,21 @@ Construct a completely positive $R'$ with these same two constraints and
 at most $a+b-1$ rank-one Kraus operators as follows. Set
 $D=\rho^{1/2}B\rho^{1/2}$, whose rank is $b$ and whose trace equals
 $\operatorname{tr}A$. Write spectral decompositions
-\begin{equation}
+\begin{align}
   A=\sum_{i=1}^a\alpha_i|e_i\rangle\!\langle e_i|,\qquad
   D=\sum_{j=1}^b\beta_j|f_j\rangle\!\langle f_j|,
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_residual_spectral_decompositions}
+\end{align}
 with positive coefficients. The two lists have the same total mass.
 A nonnegative coupling $(c_{ij})$ with these row and column sums can be
 chosen with at most $a+b-1$ nonzero entries: successively assign the smaller
 remaining row or column mass to its cell and remove the exhausted row or
 column. Each step exhausts at least one, and the last step exhausts both.
 For each nonzero entry use the Kraus matrix
-\begin{equation}
+\begin{align}
   L_{ij}=\sqrt{c_{ij}}\,|e_i\rangle\!\langle f_j|\rho^{-1/2}.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_residual_coupling_kraus}
+\end{align}
 Then $\sum_{ij}L_{ij}\rho L_{ij}^*=A$ and
 $\sum_{ij}L_{ij}^*L_{ij}=B$. Thus the resulting map $R'$ has the same
 prepared-state output and trace functional as $R$, with Choi rank
@@ -674,11 +682,12 @@ selection argument in this subsection is still not a Lean theorem.
 The comparison with the target rank uses the two-step coefficient
 vectors, with tensor factors ordered by the first and second step.
 The blocks outside the middle map form the path space
-\begin{equation}
+\begin{align}
   W=(V\otimes\mathbb Cw_1)
       +\sum_{j=1}^{k-1}\mathbb C(w_j\otimes w_{j+1})
       +(\mathbb Cw_k\otimes U),\qquad q=\dim W.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_outside_path_word_space}
+\end{align}
 The elementary path-space inequality is $r_0\le q+1$; equality forces
 $V,\mathbb Cw_1,\ldots,\mathbb Cw_k,U$ to form a direct sum.
 To verify it, start with $V\otimes w_1$, of dimension $n$.
@@ -697,14 +706,16 @@ $K_0^\perp\otimes K_0$ and $K_0\otimes K_0^\perp$.
 Their Gram matrices have ranks $b$ and $a$, respectively. These spaces
 are orthogonal to each other and to $W$. Since the full word span
 contains $W$, projection onto their sum proves
-\begin{equation}
+\begin{align}
   d=\operatorname{rank}C_{\mathcal F^2}\ge q+a+b.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_target_word_rank_bound}
+\end{align}
 For $R\ne0$, replace its residual coefficient vectors by those of $R'$
 in a fresh noise space orthogonal to $K_0$. The new whole root has rank
-\begin{equation}
+\begin{align}
   r_0+s\le(q+1)+(a+b-1)\le d.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_selected_cyclic_rank_bound}
+\end{align}
 The difference changes only the middle sector map, has zero output trace,
 and kills $\rho$. It is annihilated by $\mathcal F$ on both sides and
 has square zero. Trace preservation and every power of order at least
@@ -740,9 +751,10 @@ zero trace functional and zero value at $\rho$ is annihilated by the
 root on both sides and has square zero. The target-rank comparison also
 has the same two residual summands of ranks $a,b$. Only the outside word
 space changes: in addition to the path space $W$ it contains
-\begin{equation}
+\begin{align}
   h\otimes h,\qquad h\otimes U,\qquad w_k\otimes h.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_scalar_loop_words}
+\end{align}
 These correspond to distinct two-step matrix corners, so they occur as
 individual word coefficient vectors. Let $W'$ denote their span together
 with $W$, let $K'_0=K_0+\mathbb Ch$, and put $q'=\dim W'$ and
@@ -753,12 +765,15 @@ $K'_0$ nonzero on all the nonzero coefficient generators
 $u_i,v_j,w_1,\ldots,w_k,h$. Such a functional exists because a finite
 union of proper hyperplanes cannot fill the dual of a finite-dimensional
 complex vector space. Define
-\begin{equation}
+\begin{align}
   \delta_f(x\otimes y)=f(y)x-f(x)y.
-\end{equation}
-The graph on these generators whose edges supply the displayed tensor
-spaces is connected. After dividing each generator $x$ by $f(x)$,
-$\delta_f(W')$ contains all differences along this graph. Those
+  \label{eq:dccsp17_root_kraus_rank_thm41_delta_f_def}
+\end{align}
+The graph on these generators whose edges supply the tensor spaces in
+(\ref{eq:dccsp17_root_kraus_rank_thm41_scalar_loop_words}) and $W$ is connected. After dividing each generator $x$ by $f(x)$,
+the image $\delta_f(W')$ under
+(\ref{eq:dccsp17_root_kraus_rank_thm41_delta_f_def}) contains all differences
+along this graph. Those
 differences span $\ker f$, of dimension $r'_0-1$. On the other hand,
 $h\otimes h$ is a nonzero element of $W'\cap\ker\delta_f$.
 Rank-nullity therefore gives $q'\ge r'_0$.
@@ -797,11 +812,12 @@ A further paper argument treats a different sector pattern. Let
 $\ell\ge5$ and suppose the Kraus span of a channel $\mathcal F$ is the
 full cyclic space on sectors $(1,2,2,2,1,\ldots,1)$.
 Then there is a channel $\widetilde{\mathcal F}$ such that
-\begin{equation}
+\begin{align}
   \widetilde{\mathcal F}^{\,p}=\mathcal F^p\quad(p\ge2),\qquad
   \operatorname{rank}C_{\widetilde{\mathcal F}}
   \le\ell+7=\operatorname{rank}C_{\mathcal F^2}.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_selected_root}
+\end{align}
 The original root has rank $\ell+8$. These ranks follow by counting
 the rectangular summands of the one-step and two-step word spaces.
 For odd $\ell$, the square is irreducible of period $\ell$.
@@ -824,20 +840,23 @@ that $\operatorname{tr}(\phi\rho_2)=\operatorname{tr}(\phi u)=0$:
 these are at most two real linear constraints in the four-dimensional
 Hermitian space. The Hermitian-preserving complex linear map
 $H(X)=u\operatorname{tr}(\phi X)$ satisfies
-\begin{equation}
+\begin{align}
   \operatorname{tr}H(X)=0,\quad H(\rho_2)=0,\quad H^2=0,\quad QH\ne0.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_direction}
+\end{align}
 For a real parameter $t$, change the two diagonal sector maps to
-\begin{equation}
+\begin{align}
   P_t=(I+tH)P,\qquad Q_t=Q(I-tH),
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_gauge}
+\end{align}
 and leave all other diagonal and off-diagonal corner maps unchanged.
 The whole perturbation is $\mathcal F_t=\mathcal F+tK$, with $K$ nonzero.
 It is Hermitian preserving and has zero output trace. Direct corner
 composition gives
-\begin{equation}
+\begin{align}
   \mathcal F K+K\mathcal F=0,\qquad K^2=0,\qquad \mathcal F^2K=0.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_annihilation}
+\end{align}
 At the first adjacent pair, cancellation is $QHP-QHP=0$.
 At the incoming preparation, it is $H(\rho_2)=0$; at the outgoing
 trace, it is $\operatorname{tr}H=0$. Two further steps kill the two
@@ -904,17 +923,28 @@ $G$ positive definite and $J$ nonzero Hermitian of trace zero.
 It produces the same rank decrease in the ambient matrix space, where
 $A$ may already be singular. Both results are in
 \texttt{TNLean/Algebra/PositivePencilBoundary.lean}.
-They do not construct a Choi-supported root-preserving perturbation,
-its isometric coordinates, or the channel application. Those remain
-separate obligations in the selection arguments above.
+The channel application is proved by
+\leanid{Channel.exists_channel_choiRank_lt_of_supported_annihilating_direction}
+in the same module. For a channel $F$ and a complex-linear map $K$, it
+assumes zero output trace, $FK=KF=K^2=0$, and supplied simultaneous face
+coordinates $C_F=VGV^\dagger$, $C_K=VJV^\dagger$, with $V^\dagger V=I$,
+$G$ positive definite and $J$ nonzero Hermitian. The trace-zero condition
+on $J$ follows from the output-trace condition on $K$; it is not an extra
+hypothesis. The theorem constructs a channel $F+tK$ of strictly smaller
+Choi rank with every power of order at least two unchanged.
+Existence of a suitable direction and its simultaneous Choi-face
+coordinates remain separate obligations. No theorem here asserts them
+for arbitrary singular roots, so the unrestricted selection gap remains
+open.
 
 \section{Explicit bounded roots from a commuting projected semigroup}
 
 A further class of singular nonunital channels admits bounded roots in
 arbitrary dimension. Assume the target has the supplied representation
-\begin{equation}
+\begin{align}
   \mathcal E=e^{t\mathcal L}\circ\mathcal P,\qquad t\ge0,
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_projected_semigroup_representation}
+\end{align}
 where $e^{u\mathcal L}$ is a channel for every $u\ge0$, and $\mathcal P$ is
 an idempotent channel commuting with $\mathcal L$. These are explicit extra
 hypotheses relative to general channel divisibility. No representation
@@ -929,9 +959,10 @@ positive; as a linear exponential, it is injective, with linear inverse
 $e^{-(t-t/p)\mathcal L}$. The inverse is used only for injectivity.
 The identity $\mathcal E=\mathcal R\circ\mathcal F$ and the injective
 composition inequality give
-\begin{equation}
+\begin{align}
   \operatorname{rank}C_{\mathcal F}\le\operatorname{rank}C_{\mathcal E}.
-\end{equation}
+  \label{eq:dccsp17_root_kraus_rank_thm41_projected_semigroup_root_rank}
+\end{align}
 Consequently a tensor with this transfer-map representation is refinable
 for every positive exponent on its original physical alphabet. Neither
 unitality nor irreducibility is needed, and the projection may make the
