@@ -51,7 +51,9 @@ private theorem expSemigroup_pow {D : ℕ}
     (L : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) (t : ℝ) (n : ℕ) :
     expSemigroup L t ^ n = expSemigroup L ((n : ℝ) * t) := by
   induction n with
-  | zero => simp [expSemigroup_zero]
+  | zero =>
+    simp only [pow_zero, Nat.cast_zero, zero_mul, expSemigroup_zero]
+    rfl
   | succ n ih =>
     rw [pow_succ, ih]
     change (expSemigroup L ((n : ℝ) * t)).comp (expSemigroup L t) = _
@@ -77,6 +79,7 @@ theorem choiRank_comp_expSemigroup_mono {D : ℕ}
     change (expSemigroup L (t - s)).comp (expSemigroup L s) * P = _
     rw [← expSemigroup_comp, sub_add_cancel]
   have hRank := choiRank_le_comp_of_injective
+    (F := expSemigroup L (t - s)) (G := expSemigroup L s * P)
     (hL (t - s) (sub_nonneg.mpr hst)).cp
     ((hL s hs).cp.comp hP) (expSemigroup_injective L (t - s))
   rwa [hComp] at hRank
@@ -102,13 +105,16 @@ theorem exists_root_choiRank_le_of_projected_semigroup {D : ℕ}
   let F := expSemigroup L (t / p) * P
   have hF : IsChannel F :=
     ⟨(hL (t / p) hs).cp.comp hP.cp, (hL (t / p) hs).tp.comp hP.tp⟩
-  have hPowP : P ^ p = P := by
-    obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hp.ne'
+  have hPowPall (n : ℕ) : P ^ (n + 1) = P := by
     induction n with
     | zero => simp
     | succ n ih => rw [pow_succ, ih, hIdem]
+  have hPowP : P ^ p = P := by
+    obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hp.ne'
+    exact hPowPall n
   have hPow : F ^ p = expSemigroup L t * P := by
-    rw [F, (commute_expSemigroup hComm (t / p)).symm.mul_pow,
+    change (expSemigroup L (t / p) * P) ^ p = _
+    rw [(commute_expSemigroup hComm (t / p)).symm.mul_pow,
       expSemigroup_pow, hPowP]
     have hTime : (p : ℝ) * (t / p) = t := by field_simp [ne_of_gt hpReal]
     rw [hTime]

@@ -467,6 +467,69 @@ The singular-target problem must therefore control complete positivity
 while choosing the zero-eigenspace action; algebraic spectral truncation
 alone does not do so.
 
+\section{A five-sector perturbation argument, not yet formalized}
+
+The following paper argument goes beyond the diagonal cyclic-reset example.
+It has not yet been formalized in Lean. Let
+$V=\bigoplus_{i\in\mathbb Z/5\mathbb Z}V_i$, with sector dimensions
+$(1,2,2,1,1)$, and put
+\begin{equation}
+  S=\bigoplus_i\operatorname{Hom}(V_i,V_{i+1})\subset M_7(\mathbb C).
+\end{equation}
+Suppose a supplied channel $\mathcal F$ has Kraus span exactly $S$.
+Its Choi rank is $\dim S=10$. There is a channel $\widetilde{\mathcal F}$
+of Choi rank at most nine satisfying
+$\widetilde{\mathcal F}^{\,p}=\mathcal F^p$ for every integer $p\ge2$.
+In particular, it is a bounded square root of $\mathcal F^2$, whose Choi
+rank is nine. No unitality or absence of coherences is required.
+
+Here is the construction. Define the off-diagonal matrix corners
+$C_i=\operatorname{Hom}(V_{i+1},V_i)$, of dimensions $(2,4,2,1,1)$.
+The cyclic Kraus support implies
+$\mathcal F(C_i)\subset C_{i+1}$; write $A_i:C_i\to C_{i+1}$ for the
+restrictions. Since $\dim C_1=4>2=\dim C_2$, choose a nonzero
+$u\in\ker A_1$. Since $\dim C_4=1<2=\dim C_0$, choose a nonzero complex
+linear functional $\varphi$ on $C_0$ annihilating $\operatorname{ran}A_4$.
+The rank-one map $H_0:C_0\to C_1$, $H_0(x)=\varphi(x)u$, is nonzero and
+satisfies $A_1H_0=H_0A_4=0$.
+
+Extend $H_0$ to a Hermiticity-preserving map $\mathcal H$ on $M_7$ by
+setting $\mathcal H(x^*)=H_0(x)^*$ for $x\in C_0$, and setting it to
+zero on every other matrix corner. Its outputs are off-diagonal, so it is trace
+annihilating. The preceding two identities and the cyclic corner support
+give
+\begin{equation}
+  \mathcal F\mathcal H=\mathcal H\mathcal F=\mathcal H^2=0.
+\end{equation}
+It follows by expanding products that
+$(\mathcal F+a\mathcal H)^p=\mathcal F^p$ for every real $a$ and $p\ge2$.
+This is an exact affine family, rather than only a first-order variation.
+
+The Choi matrix of $\mathcal H$ is supported on the vectorization of $S$:
+its only nonzero Choi blocks join the first two summands of $S$, together
+with their conjugate-transposed blocks. Since $\mathcal F$ has Kraus span
+exactly $S$, its Choi matrix is positive definite on this ten-dimensional
+support. Thus $\mathcal F+a\mathcal H$ is completely positive for all
+sufficiently small real $a$. Trace preservation holds for every $a$.
+The set of admissible $a\ge0$ is closed and bounded: its positive Choi
+matrices have constant trace seven, while $\mathcal H\ne0$. At its maximum,
+the Choi matrix cannot remain positive definite on $S$, since otherwise
+positivity would persist for a slightly larger parameter. Its rank is
+therefore at most nine, proving the assertion.
+
+Finally, multiplication of the full rectangular summands gives
+$S^p=\bigoplus_i\operatorname{Hom}(V_i,V_{i+p})$ for every $p\ge1$.
+Their dimensions are respectively $11,10,9,9,10$ for residues
+$p=0,1,2,3,4$ modulo five. The Kraus-span/Choi-rank identity therefore
+shows that this same selected channel has Choi rank no greater than
+$\mathcal F^p$ for every $p\ge2$.
+
+This proves a restricted paper-level selection result for supplied roots
+with the stated full cyclic Kraus span. It does not classify arbitrary
+singular roots, and it does not assert the same conclusion when the Kraus
+span is a proper subspace of $S$. The positivity-at-the-endpoint argument
+and the cyclic-corner construction remain to be formalized.
+
 \section{Explicit bounded roots from a commuting projected semigroup}
 
 A further class of singular nonunital channels admits bounded roots in
