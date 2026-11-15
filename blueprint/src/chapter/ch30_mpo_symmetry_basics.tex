@@ -665,6 +665,74 @@ relation between word traces has nonnegative integer coefficients.
     %   multiplicities); the fusion character is not used by the source.
 \end{definition}
 
+\begin{definition}[Integer combinations and convolution]%
+    \label{def:mposym_integer_fusion}
+    \lean{MPOTensor.integerFusionMul,
+        MPOTensor.integerFusionMul_apply,
+        MPOTensor.integerFusionEval,
+        MPOTensor.integerFusionEval_single}
+    \uses{def:fusion_character_nimrep}
+    For a finite label set $I$, integer combinations form the additive
+    group $\Z^{(I)}$. Natural structure constants define the product
+    \[
+        (uv)_c=\sum_{a,b\in I}u_av_bN_{ab}^c.
+    \]
+    For an additive commutative group $A$ and a family $f_a\in A$, its
+    additive evaluation is $u\mapsto\sum_a u_af_a$; the singleton with
+    coefficient $m$ at $a$ evaluates to $mf_a$.
+    % Project construction for #8322; completion markers await Lean validation.
+\end{definition}
+
+\begin{lemma}[Additivity of integer convolution]%
+    \label{thm:mposym_integer_fusion_add}
+    \lean{MPOTensor.integerFusionMul_add_left,
+        MPOTensor.integerFusionMul_add_right,
+        MPOTensor.integerFusionMul_zero_left,
+        MPOTensor.integerFusionMul_zero_right,
+        MPOTensor.integerFusionMul_single_apply}
+    \uses{def:mposym_integer_fusion}
+    Integer convolution is additive in each argument, vanishes when either
+    argument is zero, and satisfies
+    $((m[a])(n[b]))_c=mnN_{ab}^c$.
+\end{lemma}
+\begin{proof}
+    Distribute integer multiplication through each finite sum. For singleton
+    inputs only the summand indexed by $(a,b)$ can be nonzero.
+\end{proof}
+
+\begin{definition}[Integer action matrices]%
+    \label{def:mposym_integer_nimrep}
+    \lean{MPOTensor.integerNIMRepMatrix, MPOTensor.integerNIMRepEval}
+    \uses{def:fusion_character_nimrep, def:mposym_integer_fusion}
+    The integer action matrix associated to multiplicities is
+    $\rho_a(y,x)=M_{a,x}^y$, with the output block as row and the input
+    block as column. Its additive extension sends $u$ to $\sum_a u_a\rho_a$.
+\end{definition}
+
+\begin{lemma}[Matrix order and the unit]%
+    \label{thm:mposym_integer_nimrep}
+    \lean{MPOTensor.IsNIMRep.integerNIMRepMatrix_mul,
+        MPOTensor.integerNIMRepMatrix_unit,
+        MPOTensor.isNIMRep_of_ringHom,
+        MPOTensor.nimRep_unit_of_ringHom}
+    \uses{def:mposym_integer_nimrep}
+    A nonnegative integer representation satisfies
+    $\rho_a\rho_b=\sum_c N_{ab}^c\rho_c$.
+    If also $M_{e,x}^y=\delta_{xy}$, then $\rho_e=1$.
+    Conversely, suppose a unital ring $R$ has elements $b_a$ with
+    $b_ab_b=\sum_cN_{ab}^cb_c$, and a ring homomorphism
+    $\phi:R\to\operatorname{Mat}_K(\Z)$ satisfies $\phi(b_a)=\rho_a$.
+    Then the multiplicities satisfy~\eqref{eq:mpo_nimrep}; if $b_e=1$,
+    they also satisfy $M_{e,x}^y=\delta_{xy}$.
+\end{lemma}
+\begin{proof}
+    The $(y,x)$ entry of $\rho_a\rho_b$ is
+    $\sum_zM_{a,z}^yM_{b,x}^z$, which equals the right side
+    of~\eqref{eq:mpo_nimrep}. For the converse apply the homomorphism
+    to $b_ab_b=\sum_cN_{ab}^cb_c$ and compare the same entries.
+    The identity matrix has entries $\delta_{xy}$.
+\end{proof}
+
 \begin{lemma}[Word-trace relations against a normal tensor are integral]%
     \label{thm:asymex_fib_anomaly_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
