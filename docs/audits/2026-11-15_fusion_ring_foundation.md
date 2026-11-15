@@ -151,5 +151,6 @@ Resume in an environment with the pinned toolchain and permitted dependency
 access. Follow the Linux cache-first instructions in `AGENTS.md`: fetch the
 prebuilt Mathlib cache, verify `Mathlib.olean`, then build only the new modules
 with package lint options. Validate blueprint declarations after successful
-Lean builds. Hosted PR CI is queued for the candidate. The new blueprint
-entries have no `leanok` completion markers until validation succeeds.
+Lean builds. Hosted PR CI is checking the remaining candidate. Only the
+checked integer-convolution and evaluation entries carry `leanok` markers;
+the bridge and Ring entries remain unmarked until their source checks pass.
