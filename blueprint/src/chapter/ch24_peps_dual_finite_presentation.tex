@@ -1,0 +1,56 @@
+\begin{definition}[Native dual-path words]
+    \label{def:peps_dual_path_word}
+    \lean{TNLean.PEPS.torusDualStepWord,TNLean.PEPS.torusDualPathWord}\leanok
+    Let $X$ be the finite native vertex set of a torus with positive periods.
+    The free group on $X\sqcup X$ has one east and one north generator at
+    each actual native base vertex. West and south steps use their inverses.
+    Write $W(p)$ for the reverse-ordered word of a labelled path, so
+    $W(pq)=W(q)W(p)$ and $W(p^{-1})=W(p)^{-1}$.
+\end{definition}
+
+\begin{definition}[Fixed native root routes]
+    \label{def:peps_dual_root_routes}
+    \lean{TNLean.PEPS.torusDualRootRoute,TNLean.PEPS.torusDualRootRoute_zero}\leanok
+    Fix the origin $o=(0,0)$. Assign to each vertex $v$ the actual native
+    comb route $r_v:o\to v$, using its least nonnegative integer coordinates.
+    Assign $r_o$ to be the constant path.
+\end{definition}
+
+\begin{definition}[Finite presentation for allowed dual-square supports]
+    \label{def:peps_dual_finite_presentation}
+    \lean{TNLean.PEPS.torusDualFaceWord,TNLean.PEPS.torusDualPresentationRelators,
+        TNLean.PEPS.card_torusDualPresentationRelators_le}\leanok
+    For allowed primal supports $U\subseteq X$, use the relator $W(r_v)$
+    at each vertex and the relator $W(\mathrm{EN})W(\mathrm{NE})^{-1}$ for
+    the square enclosing each $c\in U$. Let $P_U$ be the quotient of the
+    free group by the normal closure of these relators, and let $\pi_U$
+    be its quotient map. There are two generators per native vertex and
+    at most $2|X|$ defining relators. Labels remain distinct at periods one and two.
+\end{definition}
+
+\begin{lemma}[Classification by the finite native presentation]
+    \label{lem:peps_dual_finite_presentation_classification}
+    \lean{TNLean.PEPS.TorusDualHomotopy.presentation_word_eq,
+        TNLean.PEPS.torusDualHomotopy_iff_presentation_word_eq}\leanok
+    For any two finite native paths $p,q$ with the same endpoints,
+    generated homotopy supported on $U$ is equivalent to
+    $\pi_U(W(p))=\pi_U(W(q))$ in $P_U$.
+    This is equality in one explicit finitely presented group; no terminating
+    word-normalization algorithm or finite-group test family is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_dual_path_word,def:peps_dual_root_routes,
+        def:peps_dual_finite_presentation,lem:peps_dual_flat_transport_completeness}
+    Backtracks cancel and the allowed square words are defining relators,
+    so every generated homotopy preserves the quotient word.
+    Conversely, take any reversible fibre transport flat on the allowed
+    squares. Its root routes give bijections $T_v:Y_o\to Y_v$.
+    Normalize each step $E_e:Y_a\to Y_b$ to the root-fibre permutation
+    $T_b^{-1}E_eT_a$. An actual path then has normalized action
+    $T_b^{-1}E_pT_a$. Each fixed root-route word acts as identity, and
+    local flatness makes every allowed square relator act as identity.
+    Thus these permutations define a homomorphism from $P_U$.
+    Equal quotient words give equal normalized path actions; undoing the
+    root-route bijections gives equal actions of every locally flat transport.
+    The flat-transport classification yields the required supported homotopy.
+\end{proof}
