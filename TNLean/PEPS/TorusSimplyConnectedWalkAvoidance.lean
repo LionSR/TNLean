@@ -120,21 +120,33 @@ private theorem step_displacement {a b : X} (e : TorusDualStep a b) :
         (b.2.val : ℤ) - a.2.val + (height : ℤ) * (torusWalkWinding (dualStepWalk e)).2) := by
   cases e with
   | east x y =>
-    have hx := val_step x
-    ext <;> simp [dualStepWalk, torusWalkWinding, torusDirectedWinding_right,
-      TorusDualStep.displacement] at * <;> linarith
+    simp only [dualStepWalk, torusWalkWinding, zero_add]
+    rw [torusDirectedWinding_right (x, y)]
+    exact Prod.ext (val_step x).symm (by simp)
   | west x y =>
-    have hx := val_step x
-    ext <;> simp [dualStepWalk, torusWalkWinding, torusDirectedWinding_symm,
-      torusDirectedWinding_right, TorusDualStep.displacement, mul_neg] at * <;> linarith
+    simp only [dualStepWalk, torusWalkWinding, zero_add]
+    rw [torusDirectedWinding_symm (torusGraph_adj_right x y),
+      torusDirectedWinding_right (x, y)]
+    apply Prod.ext
+    · change -1 = (x.val : ℤ) - (x + 1).val +
+        (width : ℤ) * -(if x + 1 = 0 then 1 else 0)
+      rw [mul_neg]
+      linarith [val_step x]
+    · simp [TorusDualStep.displacement]
   | north x y =>
-    have hy := val_step y
-    ext <;> simp [dualStepWalk, torusWalkWinding, torusDirectedWinding_up,
-      TorusDualStep.displacement] at * <;> linarith
+    simp only [dualStepWalk, torusWalkWinding, zero_add]
+    rw [torusDirectedWinding_up (x, y)]
+    exact Prod.ext (by simp) (val_step y).symm
   | south x y =>
-    have hy := val_step y
-    ext <;> simp [dualStepWalk, torusWalkWinding, torusDirectedWinding_symm,
-      torusDirectedWinding_up, TorusDualStep.displacement, mul_neg] at * <;> linarith
+    simp only [dualStepWalk, torusWalkWinding, zero_add]
+    rw [torusDirectedWinding_symm (torusGraph_adj_up x y),
+      torusDirectedWinding_up (x, y)]
+    apply Prod.ext
+    · simp [TorusDualStep.displacement]
+    · change -1 = (y.val : ℤ) - (y + 1).val +
+        (height : ℤ) * -(if y + 1 = 0 then 1 else 0)
+      rw [mul_neg]
+      linarith [val_step y]
 
 private theorem path_displacement {a b : X} (p : TorusDualPath a b) :
     torusDualPathDisplacement p =
@@ -142,7 +154,7 @@ private theorem path_displacement {a b : X} (p : TorusDualPath a b) :
         (b.2.val : ℤ) - a.2.val +
           (height : ℤ) * (torusWalkWinding (torusDualPathGraphWalk p)).2) := by
   induction p with
-  | nil => simp [torusDualPathGraphWalk, torusWalkWinding]
+  | nil => ext <;> simp [torusDualPathGraphWalk, torusWalkWinding]
   | cons p e ih =>
     simp only [torusDualPathDisplacement_cons, torusDualPathGraphWalk,
       torusWalkWinding_append, ih, step_displacement e]
@@ -164,7 +176,8 @@ private theorem split_first_exit {u v : X} (p : (Γₜ).Walk u v)
     intro hu hv
     by_cases hz : z ∈ R
     · obtain ⟨r, w, hw, hr, pR, pS, hp⟩ := ih hz hv
-      refine ⟨r, w, hw, hr, .cons (show ((Γₜ).induce (R : Set X)).Adj ⟨u, hu⟩ ⟨z, hz⟩ from h) pR, pS, ?_⟩
+      refine ⟨r, w, hw, hr,
+        .cons (show ((Γₜ).induce (R : Set X)).Adj ⟨u, hu⟩ ⟨z, hz⟩ from h) pR, pS, ?_⟩
       simpa only [SimpleGraph.Walk.map_cons, SimpleGraph.Walk.cons_append] using
         congrArg (SimpleGraph.Walk.cons h) hp
     · exact ⟨⟨u, hu⟩, z, hz, h, .nil, p, rfl⟩
@@ -252,6 +265,7 @@ theorem exists_torusDualPath_avoiding_of_isSimplyConnected
   obtain ⟨q, hq⟩ := exists_dualPath (r.map ⟨Subtype.val, fun {_ _} h ↦ h⟩)
   refine ⟨q, ?_, ?_⟩
   · rw [path_displacement q, path_displacement p, hq, hr]
+    rfl
   · intro v hv
     rw [hq, SimpleGraph.Walk.support_map] at hv
     obtain ⟨w, _, rfl⟩ := List.mem_map.mp hv
