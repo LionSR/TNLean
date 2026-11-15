@@ -90,7 +90,7 @@ theorem transferMap_square_eq_alternativeRoot_pow :
     simp_rw [alternativeRoot_map_apply X]
     fin_cases a <;>
       norm_num [sector, outputWeight, Fin.sum_univ_succ,
-        Complex.invSqrtTwo_mul_self] <;> ring
+        Complex.invSqrtTwo_mul_self]
   · simp [hab, alternativeRoot_map_apply]
 
 /-- The nine-letter cyclic-reset square is two-refinable, despite having
