@@ -800,6 +800,84 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{remark}
 
+\begin{lemma}[Exact powers under an annihilating perturbation]
+    \label{thm:periodic_annihilating_power_perturbation}
+    \lean{add_pow_eq_of_annihilating_square_zero}
+    \leanok
+    Let $F,H$ belong to a semiring and suppose $FH=HF=H^2=0$.
+    Then $(F+H)^p=F^p$ for every integer $p\ge2$.
+    In particular this applies to endomorphisms of a matrix algebra.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expand the square. Inductively, multiply by $F+H$ and use
+    $F^kH=0$ for every $k>0$. All mixed terms vanish.
+\end{proof}
+
+\begin{lemma}[Sparse coupling of finite positive masses]
+    \label{thm:periodic_sparse_positive_coupling}
+    \lean{SparseCoupling.exists_probability_coupling,
+        SparseCoupling.exists_positive_mass_coupling}
+    \leanok
+    Let $(a_i)_{i=1}^m$ and $(b_j)_{j=1}^n$ be nonnegative real lists
+    with the same positive total mass, where $m,n>0$. There exist
+    $r\le m+n-1$ weighted pairs $(i_k,j_k,w_k)$, with $w_k\ge0$, such
+    that $a_i=\sum_{k:i_k=i}w_k$ and $b_j=\sum_{k:j_k=j}w_k$.
+    This includes probability lists as the case of total mass one.
+\end{lemma}
+
+\begin{proof}\leanok
+    Normalize the common mass to one. The pair of marginal vectors belongs
+    to the convex hull of pairs of standard basis vectors.
+    Carath\'eodory's theorem supplies an affinely independent subfamily.
+    Since the first marginal of each point has total one, that family is
+    also linearly independent. It lies in the codimension-one subspace
+    where the two marginal totals agree, so its cardinality is at most
+    $m+n-1$. Undo normalization to obtain the weighted pairs.
+\end{proof}
+
+\begin{lemma}[Sparse Kraus coupling of positive marginals]
+    \label{thm:periodic_sparse_kraus_marginals}
+    \lean{Matrix.exists_kraus_coupling_of_trace_eq}
+    \leanok
+    Let $A\in M_n(\C)$ and $B\in M_m(\C)$ be positive semidefinite
+    matrices of the same positive trace. There exist rectangular matrices
+    $K_1,\ldots,K_r\in M_{n,m}(\C)$ with
+    $r\le\operatorname{rank}A+\operatorname{rank}B-1$ such that
+    $\sum_iK_iK_i^\dagger=A$ and $\sum_iK_i^\dagger K_i=B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_sparse_positive_coupling}
+    Diagonalize the two marginals and discard their zero eigenvalues.
+    Apply Lemma~\ref{thm:periodic_sparse_positive_coupling} to their
+    positive eigenvalue lists. For each weighted pair use
+    $K_k=\sqrt{w_k}|u_{i_k}\rangle\!\langle v_{j_k}|$, where $u_i,v_j$
+    are unit eigenvectors. The two marginal identities follow by summing
+    the row and column masses.
+\end{proof}
+
+\begin{lemma}[Sparse Kraus coupling of a faithful input and trace effect]
+    \label{thm:periodic_sparse_kraus_state_effect}
+    \lean{Matrix.exists_kraus_state_effect_coupling}
+    \leanok
+    Let $\rho\in M_m(\C)$ be positive definite, and let
+    $A\in M_n(\C)$ and $B\in M_m(\C)$ be positive semidefinite with
+    $\tr A=\tr(B\rho)>0$.
+    There exist $r\le\operatorname{rank}A+\operatorname{rank}B-1$
+    matrices $K_i\in M_{n,m}(\C)$ satisfying
+    $\sum_iK_i\rho K_i^\dagger=A$ and $\sum_iK_i^\dagger K_i=B$.
+    Trace one is not required of $\rho$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_sparse_kraus_marginals}
+    Apply Lemma~\ref{thm:periodic_sparse_kraus_marginals} to $A$ and
+    $D=\rho^{1/2}B\rho^{1/2}$. They have the same positive trace, and
+    $D$ has the rank of $B$. If $L_i$ are the resulting matrices, take
+    $K_i=L_i\rho^{-1/2}$ and use the two inverse-square-root identities.
+\end{proof}
+
 \begin{lemma}[Choi rank along a channel semigroup]
     \label{thm:periodic_projected_semigroup_rank}
     \lean{Channel.choiRank_comp_expSemigroup_mono}
