@@ -105,7 +105,12 @@
         def:peps_dual_path_graph_walk}
     Encode $p$ as a graph walk and use the complementary detour. Every
     native graph edge has a corresponding direction label, so decode
-    the detour as $q$. Its displacement equals the endpoint coordinate
-    difference plus the period times each seam crossing number.
-    Equal seam crossing numbers therefore give equal displacements.
+    the detour as $q$. For either path $r:a\to b$,
+    \begin{align}
+        d(r)=\bigl(\bar b_1-\bar a_1+w\,\operatorname{wind}_1(r),
+                    \bar b_2-\bar a_2+h\,\operatorname{wind}_2(r)\bigr),
+        \label{eq:peps_dual_avoidance_displacement}
+    \end{align}
+    where $\bar a_i,\bar b_i$ are the representatives in $[0,w)$ or $[0,h)$.
+    Equal seam crossing numbers therefore give $d(q)=d(p)$.
 \end{proof}

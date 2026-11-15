@@ -162,6 +162,8 @@ private theorem path_displacement {a b : X} (p : TorusDualPath a b) :
       torusWalkWinding_append, ih, step_displacement e]
     ext <;> simp only [Prod.fst_add, Prod.snd_add] <;> ring
 
+/-- Split a walk from an interior vertex to an exterior endpoint at its first exit:
+the prefix ends at the last interior vertex, and the suffix starts outside the region. -/
 private theorem split_first_exit {u v : X} (p : (Γₜ).Walk u v)
     (R : Finset X) (hu : u ∈ R) (hv : v ∉ R) :
     ∃ (r : {v : X // v ∈ R}) (w : X) (_hw : w ∉ R)
@@ -184,6 +186,8 @@ private theorem split_first_exit {u v : X} (p : (Γₜ).Walk u v)
         congrArg (SimpleGraph.Walk.cons h) hp
     · exact ⟨⟨u, hu⟩, z, hz, h, .nil, p, rfl⟩
 
+/-- Replace one interior crossing-to-crossing segment by an exterior collar walk
+with the same winding, using simple connectedness of the forbidden region. -/
 private theorem replace_region_segment
     (R : Finset X) (hSC : IsSimplyConnected (torusRegionRealization R))
     {v₀ v : {v : X // v ∈ R}} (p : ((Γₜ).induce (R : Set X)).Walk v₀ v)
