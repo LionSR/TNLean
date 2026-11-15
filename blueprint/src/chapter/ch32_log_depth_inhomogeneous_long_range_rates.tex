@@ -3,7 +3,7 @@
 \begin{definition}[Coherent pair approximation on a partition]
     \label{def:ldp_coherent_pair_approximable}
     \lean{MPSPreparation.IsCoherentPairApproximable}
-    \notready
+    \leanok
     \uses{def:ldp_chain_pos_state}
     A nonzero inhomogeneous chain state $\phi_N$ is approximable on a given
     partition by coherent pair products with $b$ labels and error $\delta$ if
@@ -18,7 +18,7 @@
 \begin{lemma}[Physical preparation under coherent pair approximation]
     \label{lem:ldp_coherent_pair_approximation_preparation}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable}
-    \notready
+    \leanok
     \uses{def:ldp_coherent_pair_approximable,
         lem:ldp_inhomogeneous_long_range_preparation}
     Fix $d\ge2$, $D\ge1$ and $b$. There are $C,L_0$ such that a coherent
@@ -27,7 +27,7 @@
     followed by a circuit in depth $CL$ and error at most $\delta$ against
     the normalized chain state.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Apply Lemma~\ref{lem:ldp_inhomogeneous_long_range_preparation} to the pairs
     and amplitudes in the approximation. Its exact overlap identity transfers
     the assumed error unchanged.
@@ -36,7 +36,7 @@
 \begin{lemma}[Uniform exponential coherent-pair rate gives a logarithmic scale]
     \label{lem:ldp_coherent_pair_uniform_rate}
     \lean{MPSPreparation.exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate}
-    \notready
+    \leanok
     \uses{lem:ldp_coherent_pair_approximation_preparation}
     Fix $d\ge2$, $D\ge1$, $b$, $K,r>0$ and an integer $k\ge0$. Let $A_N$
     be a family of inhomogeneous chains with bond dimension $D$. Suppose
@@ -48,7 +48,7 @@
     $\varepsilon$ is prepared with measurements followed by a circuit in
     depth at most $C(1+\log(N/\varepsilon))$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Let $C_b,L_0$ be the constants of
     Lemma~\ref{lem:ldp_coherent_pair_approximation_preparation}. Set
     $a=\max(k,1)/r$, $B=\max(\log K,0)/r+L_0+1$ and
@@ -67,7 +67,7 @@
 \begin{definition}[Delayed blocking error]
     \label{def:ldp_delayed_blocking_error}
     \lean{MPSPreparation.delayedBlockingError}
-    \notready
+    \leanok
     For integers $N,q\ge0$, define $\delta(N,q)=1/(N+1)$ if $q<N$ and
     $\delta(N,q)=0$ if $q\ge N$.
 \end{definition}
@@ -78,13 +78,13 @@
         MPSPreparation.antitone_delayedBlockingError,
         MPSPreparation.delayedBlockingError_eq_zero,
         MPSPreparation.tendsto_delayedBlockingError}
-    \notready
+    \leanok
     \uses{def:ldp_delayed_blocking_error}
     The error $\delta(N,q)$ is nonincreasing in $q$, belongs to
     $[0,1/(N+1)]$ and vanishes for $q\ge N$. For every schedule $q_N$,
     including any logarithmic schedule, $\delta(N,q_N)\to0$ as $N\to\infty$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The assertions follow from the two cases in the definition and the
     bound $0\le\delta(N,q_N)\le1/(N+1)$.
 \end{proof}
@@ -93,7 +93,7 @@
     \label{lem:ldp_delayed_blocking_no_uniform_scale}
     \lean{MPSPreparation.exists_delayedBlockingError_gt_of_log_bound,
         MPSPreparation.not_exists_uniform_log_blocking_for_delayedBlockingError}
-    \notready
+    \leanok
     \uses{lem:ldp_delayed_blocking_convergence}
     For every $C\ge0$ there are arbitrarily large $N\ge2$ and an accuracy
     $0<\varepsilon\le1$ such that every integer
@@ -101,7 +101,7 @@
     Consequently there is no uniform logarithmic accuracy-dependent blocking
     coefficient for these error functions.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Choose $\varepsilon=1/(2(N+1))$. Since
     $\log(N/\varepsilon)\le3\log(N+1)$ and
     $3C\log(N+1)\le(N+1)/2<N$ for all sufficiently large $N$,
@@ -120,7 +120,7 @@ about that class.
 \begin{definition}[Rotated GHZ flags]
     \label{def:ldp_rotated_ghz_flags}
     \lean{MPSTensor.flagRotation, MPSTensor.rotatedGHZFlag}
-    \notready
+    \leanok
     Let $R=\left(\begin{smallmatrix}3/5&-4/5\\4/5&3/5\end{smallmatrix}\right)$
     and $B^j=R\ket j\bra j$ for $j=0,1$.
 \end{definition}
@@ -129,24 +129,24 @@ about that class.
     \label{lem:ldp_rotated_ghz_coisometry}
     \lean{MPSTensor.conjTranspose_flagRotation_mul,
         MPSTensor.physicalMatrix_rotatedGHZFlag_mul_conjTranspose}
-    \notready
+    \leanok
     \uses{def:ldp_rotated_ghz_flags}
     The matrix $R$ satisfies $R^\dagger R=I$. The physical matrix
     $F_{j,(a,b)}=(B^j)_{ab}$ satisfies $FF^\dagger=I_2$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Multiply the displayed rational matrices.
 \end{proof}
 
 \begin{lemma}[The rotated flags have no injective coordinate support]
     \label{lem:ldp_rotated_ghz_no_coordinate_support}
     \lean{MPSTensor.not_exists_isInjectiveOn_rotatedGHZFlag}
-    \notready
+    \leanok
     \uses{lem:ldp_rotated_ghz_coisometry}
     There is no set $S$ of virtual coordinate pairs such that the matrices
     $B^j$ vanish outside $S$ and span all matrix units indexed by $S$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Since $(B^0)_{00}=3/5\ne0$, such a set would contain $(0,0)$, so its
     matrix span would contain $E_{00}$. Every matrix in that span satisfies
     $3X_{10}-4X_{00}=0$, whereas $E_{00}$ does not.
@@ -163,12 +163,12 @@ general trees.
 \begin{lemma}[Full-domain isometric polar completion]
     \label{lem:ldp_isometric_polar_completion}
     \lean{Matrix.exists_isometry_mul_polarPos_eq}
-    \notready
+    \leanok
     Let $B\colon\C^p\to\C^m$ with $p\le m$, and let
     $P=(B^\dagger B)^{1/2}$. There is an isometry $X$ with $XP=B$,
     without an injectivity assumption on $B$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Choose an isometric inclusion $E\colon\C^p\to\C^m$.
     The matrices $B$ and $EP$ have the same Gram matrix $P^2$, so a unitary
     $U$ on the output space satisfies $B=UEP$. Then $X=UE$ suffices.
@@ -178,7 +178,7 @@ general trees.
     \label{lem:ldp_isometric_polar_merge}
     \lean{Matrix.exists_isometry_polarMerge_of_range,
         MPSPreparation.exists_isometry_binaryPolarMerge}
-    \notready
+    \leanok
     \uses{lem:ldp_isometric_polar_completion}
     Let $J\colon\C^n\to\C^m$ be an isometry, let
     $B\colon\C^p\to\C^m$ satisfy $JJ^\dagger B=B$, and assume $p\le n$.
@@ -190,7 +190,7 @@ general trees.
     $J=L\otimes R$ and every compressed parent matrix
     $B=JC$, $C\colon\C^\chi\to\C^{\chi^2}$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Put $C=J^\dagger B$. The range assumption gives
     $C^\dagger C=B^\dagger B$. Complete the polar factor of $C$ by
     Lemma~\ref{lem:ldp_isometric_polar_completion}; the equality of the
