@@ -4,15 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Finsupp.Basic
-import Mathlib.Algebra.Module.Defs
+import Mathlib.Algebra.Module.Basic
+import Mathlib.Algebra.Module.NatInt
 
 /-!
 # Integer combinations of fusion labels
 
-Project construction for issue #8322: the additive group of integer combinations
-and the bilinear product specified by natural structure constants. No Ring
-instance is installed here. Associativity, duality and the universal extension
-to ring homomorphisms are separate obligations.
+Project construction of the additive group of integer combinations
+and the bilinear product specified by natural structure constants. Evaluation
+preserves this product whenever the images satisfy the basis multiplication
+identities. The Ring instance is constructed in `BasedRing.lean`.
 -/
 
 noncomputable section
@@ -80,5 +81,27 @@ theorem integerFusionEval_single {A : Type*} [AddCommGroup A]
     (f : ι → A) (a : ι) (m : ℤ) :
     integerFusionEval f (Finsupp.single a m) = m • f a := by
   simp [integerFusionEval, Finsupp.single_apply, ite_smul]
+
+/-- Evaluation preserves convolution when the label images satisfy the fusion
+product identities. The target ring may be noncommutative. Project result. -/
+theorem integerFusionEval_mul {R : Type*} [Ring R]
+    (N : ι → ι → ι → ℕ) (f : ι → R)
+    (hf : ∀ a b, f a * f b = ∑ c, (N a b c : ℤ) • f c)
+    (u v : ι →₀ ℤ) :
+    integerFusionEval f (integerFusionMul N u v) =
+      integerFusionEval f u * integerFusionEval f v := by
+  change (∑ c, integerFusionMul N u v c • f c) =
+    (∑ a, u a • f a) * (∑ b, v b • f b)
+  simp_rw [integerFusionMul_apply, Finset.sum_smul]
+  calc
+    (∑ c, ∑ a, ∑ b, (u a * v b * (N a b c : ℤ)) • f c) =
+        ∑ a, ∑ b, ∑ c, (u a * v b * (N a b c : ℤ)) • f c := by
+      rw [Finset.sum_comm]
+      exact Finset.sum_congr rfl fun _ _ ↦ Finset.sum_comm
+    _ = ∑ a, ∑ b, (u a * v b) • (f a * f b) := by
+      simp_rw [hf, Finset.smul_sum, smul_smul]
+    _ = (∑ a, u a • f a) * (∑ b, v b • f b) := by
+      simp only [Finset.sum_mul, Finset.mul_sum, smul_mul_assoc, mul_smul_comm,
+        smul_smul]
 
 end MPOTensor
