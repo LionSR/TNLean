@@ -115,23 +115,9 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
   have hB_inj : Kraus.IsInjective B := by
     rw [hB_eq_gauge]
     exact Kraus.isInjective_conjugate (d := d) A hInjA X hX_det
-  obtain ⟨V₀, hV₀_iso, hV₀_prod⟩ := (isTransferIdempotent_iff_kraus_isometry A).1 hRFP
-  have hB_prod : ∀ i₁ i₂ : Fin d,
-      B i₁ * B i₂ = ∑ j : Fin d, V₀ (i₁, i₂) j • B j := by
-    intro i₁ i₂
-    calc
-      B i₁ * B i₂ = Xᴴ * A i₁ * X * (Xᴴ * A i₂ * X) := by
-        rfl
-      _ = Xᴴ * A i₁ * (X * Xᴴ) * A i₂ * X := by
-        simp [Matrix.mul_assoc]
-      _ = Xᴴ * (A i₁ * A i₂) * X := by
-        simp [Matrix.mul_assoc, hXXh]
-      _ = Xᴴ * (∑ j : Fin d, V₀ (i₁, i₂) j • A j) * X := by
-        rw [hV₀_prod i₁ i₂]
-      _ = ∑ j : Fin d, V₀ (i₁, i₂) j • B j := by
-        simp [B, Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
-  have hB_rfp : IsTransferIdempotent B :=
-    (isTransferIdempotent_iff_kraus_isometry B).2 ⟨V₀, hV₀_iso, hB_prod⟩
+  have hGauge : GaugeEquiv A B :=
+    ⟨⟨Xᴴ, X, hXhX, hXXh⟩, fun _ => rfl⟩
+  have hB_rfp : IsTransferIdempotent B := hGauge.isTransferIdempotent_iff.mp hRFP
   have htr : Matrix.trace ρ ≠ 0 := ne_of_gt hρ_pd.trace_pos
   have hB_proj : Kraus.transferMap B = fixedPointProj ρ htr := by
     simpa [htr] using
@@ -181,37 +167,12 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
       ∑ p : Fin D × Fin D, E p * Y * (E p)ᴴ =
         (Matrix.trace Y / (D : ℂ)) • (1 : Mat) := by
     intro Y
-    calc
-      ∑ p : Fin D × Fin D, E p * Y * (E p)ᴴ
-        = ∑ p : Fin D × Fin D,
-            (c * star c) •
-              (Matrix.single p.1 p.2 (1 : ℂ) * Y *
-                (Matrix.single p.1 p.2 (1 : ℂ))ᴴ) := by
-            refine Finset.sum_congr rfl ?_
-            intro p _
-            let F : Mat := Matrix.single p.1 p.2 (1 : ℂ)
-            have hsingle : Matrix.single p.1 p.2 c = c • F := by
-              simp [F, Matrix.smul_single]
-            calc
-              E p * Y * (E p)ᴴ = Matrix.single p.1 p.2 c * Y * (Matrix.single p.1 p.2 c)ᴴ := by
-                rw [hsingle]
-              _ = (c • F) * Y * ((c • F)ᴴ) := by rw [hsingle]
-              _ = (c * star c) • (F * Y * Fᴴ) := by
-                simp [mul_comm, Matrix.conjTranspose_smul, Matrix.mul_assoc, smul_smul]
-              _ = (c * star c) •
-                    (Matrix.single p.1 p.2 (1 : ℂ) * Y *
-                      (Matrix.single p.1 p.2 (1 : ℂ))ᴴ) := by
-                simp [F]
-      _ = (c * star c) •
-            (∑ p : Fin D × Fin D,
-              Matrix.single p.1 p.2 (1 : ℂ) * Y *
-                (Matrix.single p.1 p.2 (1 : ℂ))ᴴ) := by
-            simp_rw [Finset.smul_sum]
-      _ = (c * star c) • (Matrix.trace Y • (1 : Mat)) := by
-            rw [matrixUnits_map (D := D) Y]
-      _ = (Matrix.trace Y / (D : ℂ)) • (1 : Mat) := by
-            rw [hc_norm]
-            simp [smul_smul, div_eq_mul_inv, mul_comm]
+    simp only [E, Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
+      ← Finset.smul_sum]
+    rw [matrixUnits_map, smul_smul]
+    congr 1
+    calc _ = (c * star c) * Matrix.trace Y := by ring
+         _ = Matrix.trace Y / (D : ℂ) := by rw [hc_norm]; ring
   have hL_herm : Lᴴ = L := by
     simp [L, Matrix.diagonal_conjTranspose]
   have hL_sq : L * L = ((D : ℂ) / Matrix.trace ρ) • ρ := by
