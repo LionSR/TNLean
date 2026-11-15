@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Noncentral Tree Gauges with a Fixed Untwisted Component}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14 and the exterior-block argument of Theorem 6.9, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2199--2214,
+motivate removing complementary tree operators while keeping the boundary
+coordinates fixed. Centrality cannot be discarded from the local Gram
+argument: for noncentral insertions a different contraction argument is
+required.
+
+The theorem
+\leanid{TNLean.PEPS.exists_regularRegionTreeGauge_fixed_on_untwisted_component}
+constructs a spanning tree and a root-normalized gauge from a connected
+region and a supplied untwisted subgraph. It first takes a spanning forest
+of the untwisted subgraph and then extends the forest to a tree of the
+region. The resulting gauge fixes every vertex in the root's untwisted
+component and removes every internal tree operator. No commutativity,
+tree, forest, gauge, factorization or density equality is supplied as a
+hypothesis.
+
+This establishes a noncentral algebraic step. To apply it to an actual open
+flux pair, the physical exterior collar must still be shown to project to
+one untwisted component containing every complementary boundary endpoint.
+The induced gauge must then be extended to the full graph and composed
+with the actual contraction identities. This theorem does not assume or
+assert those geometric and density conclusions, and it does not identify
+arbitrary endpoint-free annular observations with the vacuum. The remaining
+source-level conclusions stay under \ghissue{8703}. The full-lattice
+Hamiltonian work of \ghissue{8947} is unaffected.
+\end{document}

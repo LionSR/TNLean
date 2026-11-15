@@ -209,6 +209,7 @@ import TNLean.PEPS.RegularActualCycleBidirectionalPermutation
 import TNLean.PEPS.RegularActualCyclePhysicalPermutation
 import TNLean.PEPS.RegularActualCycleTransport
 import TNLean.PEPS.RegularActualTwoChordTransport
+import TNLean.PEPS.RegularAnchoredTreeGauge
 import TNLean.PEPS.RegularBondCounting
 import TNLean.PEPS.RegularBoundary
 import TNLean.PEPS.RegularBoundaryChargeContraction

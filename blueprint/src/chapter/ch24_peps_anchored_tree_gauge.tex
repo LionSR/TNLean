@@ -1,0 +1,17 @@
+\begin{lemma}[A tree gauge fixed on an untwisted component]
+    \label{lem:peps_anchored_tree_gauge}
+    \lean{TNLean.PEPS.exists_regularRegionTreeGauge_fixed_on_untwisted_component}\leanok
+    In a connected finite region, let a subgraph have identity directed
+    bond transport and fix a root. There is a spanning tree and a vertex
+    gauge equal to the identity throughout the root component of that
+    subgraph. The transformed operator on every internal tree edge is
+    the identity. The group may be nonabelian.
+\end{lemma}
+\begin{proof}\leanok
+    Take a spanning forest of the untwisted subgraph, preserving all its
+    reachable pairs, and extend this forest to a spanning tree of the
+    full region graph. Normalize the tree gauge at the root. On a forest
+    edge its endpoint gradient is the identity operator, so the endpoint
+    gauges coincide. Propagation along forest walks fixes the entire
+    root component. The defining tree gradient removes all tree operators.
+\end{proof}
