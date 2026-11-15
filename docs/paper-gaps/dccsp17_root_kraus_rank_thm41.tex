@@ -421,6 +421,51 @@ so the single-block normalization reduction cannot be extended merely by
 replacing irreducibility with irreducible form. This does not obstruct
 bounded-root selection: the identity channel itself is a one-Kraus root.
 
+\section{Extreme roots cannot have larger Kraus rank}
+
+The following consequence is a mathematical argument. The trace-annihilation
+step is formalized above; the face-dimension and extremality argument here
+has not been formalized.
+
+Let $\mathcal F$ be a channel, let $p>0$, and suppose that
+$\mathcal E=\mathcal F^p$ is irreducible. If $\mathcal F$ is an extreme
+point of the convex set of channels, then
+\begin{align}
+ \operatorname{rank}C_{\mathcal F}
+ &\le \operatorname{rank}C_{\mathcal E}.
+ \label{eq:dccsp17_extreme_root_rank}
+\end{align}
+
+To prove this, put $r=\operatorname{rank}C_{\mathcal F}$ and
+$s=\operatorname{rank}C_{\mathcal E}$. Let $V$ be the real vector space
+of Hermiticity-preserving maps whose Choi matrices are supported on
+$\operatorname{ran}C_{\mathcal F}$, and define $W$ using
+$\operatorname{ran}C_{\mathcal E}$ instead. Their real dimensions are
+$r^2$ and $s^2$. The linearization $L$ in
+(\ref{eq:dccsp17_power_differential}) carries $V$ into $W$.
+Indeed, if a completely positive map $G$ satisfies
+$0\le_{\rm CP}G\le_{\rm CP}c\mathcal F$, then for each $k<p$,
+$0\le_{\rm CP}\mathcal F^kG\mathcal F^{p-1-k}
+\le_{\rm CP}c\mathcal E$. Such positive $G$ span $V$ over the reals,
+so this order bound proves the claimed containment.
+
+If $r>s$, there is a nonzero $H\in V$ with $L(H)=0$. The preceding
+trace-annihilation result gives $\operatorname{tr}H(X)=0$ for every $X$.
+Since $C_{\mathcal F}$ is positive definite on its range and $C_H$ is
+Hermitian and supported there, there is an $\varepsilon>0$ for which
+$C_{\mathcal F}\pm\varepsilon C_H\ge0$. Thus
+$\mathcal F+\varepsilon H$ and $\mathcal F-\varepsilon H$ are distinct
+channels with midpoint $\mathcal F$, contradicting extremality.
+This proves (\ref{eq:dccsp17_extreme_root_rank}).
+
+Consequently a divisible irreducible target with a $d$-operator Kraus
+representation admits a suitable bounded root whenever it admits an
+extreme channel root. This is a sufficient condition, not an existence
+argument: the set of roots of a fixed power is generally not convex, so
+minimizing Kraus rank within that set does not establish extremality in
+the full convex set of channels. The general selection problem remains
+open.
+
 \section{The zero eigenspace cannot simply be discarded}
 
 A root commutes with its power and therefore preserves the decomposition

@@ -48,7 +48,7 @@ theorem IsPositiveMap.isTracePreservingMap_of_irreducible_pow
   · subst D
     intro X
     simp [Matrix.trace]
-  letI : NeZero D := ⟨hD⟩
+  let : NeZero D := ⟨hD⟩
   let G : End := Matrix.traceAdjointMap F
   have hG : IsPositiveMap G := hF.traceAdjointMap
   have hOne : (G ^ p) 1 = 1 := by
@@ -67,7 +67,7 @@ theorem IsPositiveMap.isTracePreservingMap_of_irreducible_pow
     simpa only [hc, Matrix.smul_apply, Matrix.one_apply, ↓reduceIte,
       smul_eq_mul, mul_one] using hdiag
   obtain ⟨hr, hi⟩ := Complex.nonneg_iff.mp hcNonneg
-  have hcReal : (c.re : ℂ) = c := Complex.ext (by simp) (by simpa using hi.symm)
+  have hcReal : (c.re : ℂ) = c := Complex.ext (by simp) (by simpa using hi)
   have hScalar : G 1 = (c.re : ℂ) • (1 : Mat) := by rw [hcReal]; exact hc
   have hIter (n : ℕ) : (G ^ n) 1 = (c.re : ℂ) ^ n • (1 : Mat) := by
     induction n with
@@ -100,7 +100,7 @@ theorem IsPositiveMap.trace_eq_zero_of_power_linearization_eq_zero
   · subst D
     intro X
     simp [Matrix.trace]
-  letI : NeZero D := ⟨hD⟩
+  let : NeZero D := ⟨hD⟩
   have hFtp := hF.isTracePreservingMap_of_irreducible_pow hp hTP hIrr
   let T : End := Matrix.traceAdjointMap F
   let u : Mat := Matrix.traceAdjointMap H 1
