@@ -46,6 +46,8 @@ noncomputable section
 
 open CategoryTheory groupCohomology
 
+open groupCohomology
+
 namespace TNLean.Algebra.ScalarThreeCochain
 
 open scoped TNLean.Algebra.ScalarCohomology
@@ -56,14 +58,10 @@ variable {n : ℕ} [NeZero n]
 theorem isPrimitiveRoot_rootOfUnity : IsPrimitiveRoot (rootOfUnity n) n :=
   Complex.isPrimitiveRoot_exp n (NeZero.ne n)
 
-/-- The cocycle `ω_j` of `ℤ_n` as an element of the subtype of three-cocycles. -/
-abbrev cyclicCocycleSubtype (n j : ℕ) [NeZero n] :
-    {ω : ScalarThreeCochain (Multiplicative (ZMod n)) // IsCocycle ω} :=
-  ⟨cyclicCocycle n j, cyclicCocycle_isCocycle n j⟩
-
 /-- `ω_j` depends on `j` only modulo `n`. -/
 theorem cyclicCocycle_eq_of_modEq {j j' : ℕ} (h : j ≡ j' [MOD n]) :
     cyclicCocycle n j = cyclicCocycle n j' := by
+  apply scalarCocycleValue₃_injective
   funext a b c
   apply Units.ext
   rw [cyclicCocycle_val, cyclicCocycle_val, pow_eq_pow_mod _ (rootOfUnity_pow n),
@@ -71,15 +69,17 @@ theorem cyclicCocycle_eq_of_modEq {j j' : ℕ} (h : j ≡ j' [MOD n]) :
   exact congrArg _ ((h.mul_right _).mul_right _)
 
 /-- `ω_0` is the constant cochain one. -/
-theorem cyclicCocycle_zero : cyclicCocycle n 0 = fun _ _ _ ↦ 1 := by
+theorem cyclicCocycle_zero : cyclicCocycle n 0 = 0 := by
+  apply scalarCocycleValue₃_injective
   funext a b c
+  rw [scalarCocycleValue₃_zero]
   apply Units.ext
   rw [cyclicCocycle_val, zero_mul, zero_mul, pow_zero, Units.val_one]
 
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: `ω_j` has trivial
 class exactly when `n ∣ j`; `j = 0` is the trivial cocycle. -/
 theorem isTrivialGaugeClass_cyclicCocycle_iff (hn : 1 < n) (j : ℕ) :
-    IsTrivialGaugeClass (cyclicCocycle n j) ↔ n ∣ j := by
+    IsTrivialGaugeClass ((scalarCocycleValue₃ (cyclicCocycle n j))) ↔ n ∣ j := by
   constructor
   · intro h
     by_contra hj
@@ -93,25 +93,36 @@ theorem isTrivialGaugeClass_cyclicCocycle_iff (hn : 1 < n) (j : ℕ) :
     exact hj h1
   · intro h
     rw [IsTrivialGaugeClass, cyclicCocycle_eq_of_modEq (j' := 0) (Nat.modEq_zero_iff_dvd.2 h),
-      cyclicCocycle_zero]
+      cyclicCocycle_zero, scalarCocycleValue₃_zero]
     exact CohomologousTo.refl _
+
+omit [NeZero n] in
+private theorem anomalyClass_ofCocycles_eq
+    (x : cocycles (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3) :
+    anomalyClass (ofCocycles x) = π _ 3 x := by
+  change π _ 3 (toCocycles (ofCocycles x)) = π _ 3 x
+  exact congrArg (π _ 3) ((cocyclesEquiv (G := Multiplicative (ZMod n))).apply_symm_apply x)
 
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: the class of `ω_j`
 in `H³(ℤ_n, ℂˣ)` vanishes exactly when `n ∣ j`. -/
 theorem anomalyClass_cyclicCocycle_eq_zero_iff (hn : 1 < n) (j : ℕ) :
-    anomalyClass (cyclicCocycleSubtype n j) = 0 ↔ n ∣ j := by
-  rw [← isTrivialGaugeClass_iff_anomalyClass_eq_zero, isTrivialGaugeClass_cyclicCocycle_iff hn]
+    π _ 3 (cyclicCocycle n j) = 0 ↔ n ∣ j := by
+  rw [← anomalyClass_ofCocycles_eq, ← isTrivialGaugeClass_iff_anomalyClass_eq_zero]
+  change IsTrivialGaugeClass (scalarCocycleValue₃ (cyclicCocycle n j)) ↔ n ∣ j
+  exact isTrivialGaugeClass_cyclicCocycle_iff hn j
 
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: the classes of `ω_j`
 and `ω_{j'}` in `H³(ℤ_n, ℂˣ)` agree exactly when `j ≡ j' mod n`. -/
 theorem anomalyClass_cyclicCocycle_eq_iff (hn : 1 < n) (j j' : ℕ) :
-    anomalyClass (cyclicCocycleSubtype n j) = anomalyClass (cyclicCocycleSubtype n j') ↔
+    π _ 3 (cyclicCocycle n j) = π _ 3 (cyclicCocycle n j') ↔
       j ≡ j' [MOD n] := by
-  rw [← cohomologousTo_iff_anomalyClass_eq]
+  rw [← anomalyClass_ofCocycles_eq, ← anomalyClass_ofCocycles_eq,
+    ← cohomologousTo_iff_anomalyClass_eq]
   refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · by_contra hj
     exact not_cohomologousTo_cyclicCocycle hn hj h
-  · change CohomologousTo (cyclicCocycle n j) (cyclicCocycle n j')
+  · change CohomologousTo ((scalarCocycleValue₃ (cyclicCocycle n j))) ((scalarCocycleValue₃
+    (cyclicCocycle n j')))
     rw [cyclicCocycle_eq_of_modEq h]
     exact CohomologousTo.refl _
 
@@ -195,11 +206,11 @@ theorem nat_card_groupCohomology_three_cyclic :
 **`H³(ℤ_n, ℂˣ) = {[ω_0], …, [ω_{n−1}]}`**; every class is the class of some `ω_j`, `j < n`. -/
 theorem exists_anomalyClass_cyclicCocycle_eq (hn : 1 < n)
     (c : groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3) :
-    ∃ j < n, anomalyClass (cyclicCocycleSubtype n j) = c := by
+    ∃ j < n, π _ 3 (cyclicCocycle n j) = c := by
   have hcard := nat_card_groupCohomology_three_cyclic (n := n)
   have : Finite (groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3) :=
     Nat.finite_of_card_ne_zero (by rw [hcard]; exact NeZero.ne n)
-  have hinj : Function.Injective fun j : Fin n ↦ anomalyClass (cyclicCocycleSubtype n j) :=
+  have hinj : Function.Injective fun j : Fin n ↦ π _ 3 (cyclicCocycle n j) :=
     fun j j' h ↦ Fin.ext (((anomalyClass_cyclicCocycle_eq_iff hn j j').1 h).eq_of_lt_of_lt j.2 j'.2)
   obtain ⟨j, hj⟩ := (hinj.bijective_of_nat_card_le (by rw [hcard, Nat.card_eq_fintype_card,
     Fintype.card_fin])).2 c
@@ -209,9 +220,10 @@ theorem exists_anomalyClass_cyclicCocycle_eq (hn : 1 < n)
 of `ℤ_n` is cohomologous to some `ω_j`**, `j < n`. -/
 theorem exists_cohomologousTo_cyclicCocycle (hn : 1 < n)
     {ω : ScalarThreeCochain (Multiplicative (ZMod n))} (hω : IsCocycle ω) :
-    ∃ j < n, CohomologousTo ω (cyclicCocycle n j) := by
+    ∃ j < n, CohomologousTo ω ((scalarCocycleValue₃ (cyclicCocycle n j))) := by
   obtain ⟨j, hj, h⟩ := exists_anomalyClass_cyclicCocycle_eq hn (anomalyClass ⟨ω, hω⟩)
-  exact ⟨j, hj, (cohomologousTo_iff_anomalyClass_eq ⟨ω, hω⟩ (cyclicCocycleSubtype n j)).2 h.symm⟩
+  exact ⟨j, hj, (cohomologousTo_iff_anomalyClass_eq ⟨ω, hω⟩ (ofCocycles (cyclicCocycle n j))).2
+    (by simpa only [anomalyClass_ofCocycles_eq] using h.symm)⟩
 
 omit [NeZero n] in
 /-- The generator `1` of `ℤ_n` satisfies `1^n = 1`. -/

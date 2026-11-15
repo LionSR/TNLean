@@ -35,11 +35,13 @@ identity is a project result; the source does not consider the sum.
 
 noncomputable section
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 open scoped BigOperators Matrix
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
+open groupCohomology TNLean.Algebra
 
 variable {G : Type} [Group G] [Fintype G] [DecidableEq G] {n : ℕ} (e : G ≃ Fin n)
 
@@ -48,7 +50,8 @@ constants `N_{gh}^k = δ_{k, gh}` of the group, for every three-cocycle `ω`.
 
 Source: arXiv:2203.12563, lines 2204–2205 (`U_g U_h = U_{gh}`), read as an instance of the
 fusion rules of lines 361–362. -/
-theorem isMPOFusionAlgebra {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω) :
+theorem isMPOFusionAlgebra {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω :
+  inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0) :
     IsMPOFusionAlgebra (tensor e ω) fun g h k ↦ if k = g * h then 1 else 0 := by
   intro g h L hL
   have : NeZero L := ⟨by omega⟩
@@ -60,7 +63,8 @@ omit [DecidableEq G] in
 /-- Project result: **the condensation defect of an exact group representation has constant
 structure constants**: the sum `A = ∑_g U_g` of the periodic group operators satisfies
 `A² = |G| A` on every nonempty chain, for every three-cocycle `ω`. -/
-theorem sum_mpo_mul_sum_mpo {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
+theorem sum_mpo_mul_sum_mpo {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω :
+  inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
     (N : ℕ) [NeZero N] :
     (∑ g, mpo (tensor e ω g) N) * (∑ g, mpo (tensor e ω g) N) =
       (Fintype.card G : ℂ) • ∑ g, mpo (tensor e ω g) N := by

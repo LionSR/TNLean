@@ -130,8 +130,9 @@ theorem printedFamily_comap_diagonal : printedFamily.comap diagonalHom = czxFami
 /-- The printed symmetry has cyclic anomaly invariant `-1` at `ab`,
 as in arXiv:2203.12563, line 1884. -/
 theorem cyclicInvariant_omega_printedFamily (fd : printedFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 1)) 2 = -1 := by
-  change ScalarThreeCochain.cyclicInvariant fd.omega (diagonalHom czxGen) 2 = -1
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (1, 1)) 2 = -1
+      := by
+  change ScalarThreeCochain.cyclicInvariant fd.associatorScalar (diagonalHom czxGen) 2 = -1
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd diagonalHom
     printedFamily_isNormalRepresentation printedFamily_comap_diagonal czxFusionData
     czxGen_pow_two]
@@ -139,7 +140,7 @@ theorem cyclicInvariant_omega_printedFamily (fd : printedFamily.FusionData) :
 
 /-- The printed symmetry has a nontrivial anomaly (arXiv:2203.12563, line 1884). -/
 theorem not_isTrivialGaugeClass_omega_printedFamily (fd : printedFamily.FusionData) :
-    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   apply ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one
     (g := Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) (n := 2) (by decide)
   rw [cyclicInvariant_omega_printedFamily]
@@ -152,7 +153,7 @@ theorem not_isTrivialGaugeClass_omega_printedFamily (fd : printedFamily.FusionDa
 theorem exists_normalized_omega_printedFamily (fd : printedFamily.FusionData) :
     ∃ ν : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2)),
       ScalarThreeCochain.IsCocycle ν ∧ ScalarThreeCochain.IsNormalized ν ∧
-      ScalarThreeCochain.CohomologousTo ν fd.omega ∧
+      ScalarThreeCochain.CohomologousTo ν fd.associatorScalar ∧
       ν (Multiplicative.ofAdd (1, 1)) (Multiplicative.ofAdd (1, 1))
         (Multiplicative.ofAdd (1, 1)) = -1 := by
   obtain ⟨ν, hv, hn, he⟩ := ScalarThreeCochain.exists_isNormalized_cohomologousTo
@@ -167,7 +168,7 @@ theorem exists_normalized_omega_printedFamily (fd : printedFamily.FusionData) :
 for every choice of fusion tensors (arXiv:2203.12563, line 1884). -/
 theorem anomalyClass_omega_printedFamily_ne_zero (fd : printedFamily.FusionData) :
     ScalarThreeCochain.anomalyClass
-      ⟨fd.omega, fd.isCocycle_omega printedFamily_isNormalRepresentation⟩ ≠ 0 := fun h ↦
+      ⟨fd.associatorScalar, fd.isCocycle_omega printedFamily_isNormalRepresentation⟩ ≠ 0 := fun h ↦
   not_isTrivialGaugeClass_omega_printedFamily fd
     ((ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero _).2 h)
 
@@ -340,8 +341,8 @@ theorem printedFamily_comap_bHom :
 /-- The printed symmetry has cyclic anomaly invariant `+1` at `a`,
 as in arXiv:2203.12563, lines 1865 and 1884. -/
 theorem cyclicInvariant_omega_printedFamily_a (fd : printedFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
-  change ScalarThreeCochain.cyclicInvariant fd.omega (aHom GroupFamily.orderTwoGen) 2 = 1
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
+  change ScalarThreeCochain.cyclicInvariant fd.associatorScalar (aHom GroupFamily.orderTwoGen) 2 = 1
   apply Units.ext
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
     printedFamily_isNormalRepresentation aHom printedFamily_comap_aHom aFusionData_isAssociator]
@@ -350,10 +351,10 @@ theorem cyclicInvariant_omega_printedFamily_a (fd : printedFamily.FusionData) :
 /-- The printed symmetry has cyclic anomaly invariant `+1` at `b`,
 as in arXiv:2203.12563, lines 1865 and 1884. -/
 theorem cyclicInvariant_omega_printedFamily_b (fd : printedFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (0, 1)) 2 = 1 := by
-  have h1 : bFusionData.omega = 1 := GroupFamily.FusionData.omega_ofBondOne
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (0, 1)) 2 = 1 := by
+  have h1 : bFusionData.associatorScalar = 1 := GroupFamily.FusionData.omega_ofBondOne
     (printedFamily_comap_bHom ▸ printedFamily_isNormalRepresentation.comap bHom)
-  change ScalarThreeCochain.cyclicInvariant fd.omega (bHom GroupFamily.orderTwoGen) 2 = 1
+  change ScalarThreeCochain.cyclicInvariant fd.associatorScalar (bHom GroupFamily.orderTwoGen) 2 = 1
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd bHom
     printedFamily_isNormalRepresentation printedFamily_comap_bHom bFusionData
     GroupFamily.orderTwoGen_pow_two, h1]
@@ -366,7 +367,7 @@ for every choice of fusion tensors, `ω` is cohomologous to
 Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1845--1872 (the classes
 and the table) and line 1884 (the printed realization). -/
 theorem omega_printedFamily_cohomologousTo (fd : printedFamily.FusionData) :
-    ScalarThreeCochain.CohomologousTo fd.omega
+    ScalarThreeCochain.CohomologousTo fd.associatorScalar
       (ScalarThreeCochain.kleinCocycleFamily 0 0 1) := by
   refine (ScalarThreeCochain.cohomologousTo_iff_klein_three_cyclicInvariants
     (fd.isCocycle_omega printedFamily_isNormalRepresentation)
@@ -390,7 +391,8 @@ nontrivial value is at `(ab,ab,ab)` is not a cocycle.
 Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1852, 1865 and 1884. -/
 theorem diagonal_of_cohomologousTo_omega_printedFamily (fd : printedFamily.FusionData)
     {ν : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2))}
-    (hn : ScalarThreeCochain.IsNormalized ν) (he : ScalarThreeCochain.CohomologousTo ν fd.omega) :
+    (hn : ScalarThreeCochain.IsNormalized ν) (he : ScalarThreeCochain.CohomologousTo ν
+      fd.associatorScalar) :
     ν (Multiplicative.ofAdd (1, 0)) (Multiplicative.ofAdd (1, 0)) (Multiplicative.ofAdd (1, 0)) =
         1 ∧
       ν (Multiplicative.ofAdd (0, 1)) (Multiplicative.ofAdd (0, 1))
@@ -410,7 +412,8 @@ the parameter triple `(0,0,1)` under the isomorphism `H³(ℤ₂ × ℤ₂, ℂ�
 choice of fusion tensors (arXiv:2203.12563, lines 1845--1872 and 1884). -/
 theorem kleinH3Equiv_anomalyClass_omega_printedFamily (fd : printedFamily.FusionData) :
     ScalarThreeCochain.kleinH3Equiv (ScalarThreeCochain.anomalyClass
-      ⟨fd.omega, fd.isCocycle_omega printedFamily_isNormalRepresentation⟩) = (0, 0, 1) := by
+      ⟨fd.associatorScalar, fd.isCocycle_omega printedFamily_isNormalRepresentation⟩) = (0, 0,
+        1) := by
   rw [ScalarThreeCochain.kleinH3Equiv, AddEquiv.symm_apply_eq]
   exact (ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq _
     ⟨_, ScalarThreeCochain.kleinCocycleFamily_isCocycle 0 0 1⟩).1
@@ -425,7 +428,8 @@ Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` line 1886, with t
 compatibility relation of arXiv:2502.20257, `eq:omega_and_Ls`. -/
 theorem lSymbol_signs_printedFamily (fd : printedFamily.FusionData)
     {ν : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2))}
-    (hn : ScalarThreeCochain.IsNormalized ν) (he : ScalarThreeCochain.CohomologousTo ν fd.omega)
+    (hn : ScalarThreeCochain.IsNormalized ν) (he : ScalarThreeCochain.CohomologousTo ν
+      fd.associatorScalar)
     {X : Type*} [MulAction (Multiplicative (ZMod 2 × ZMod 2)) X]
     {L : LSymbol (Multiplicative (ZMod 2 × ZMod 2)) X} (hL : LSymbol.IsCompatible L ν)
     (hLn : LSymbol.IsNormalized L) (x : X) :

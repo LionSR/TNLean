@@ -65,6 +65,8 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
+open groupCohomology
+
 namespace Z2Z2Condensation
 
 open MPOTensor MPOTensor.GroupCocycle TNLean.Algebra.ScalarThreeCochain
@@ -108,7 +110,7 @@ periodic chain, the periodic operator of `M'_g` is the operator `U_g^{ω}` of th
 Source: arXiv:2203.12563, lines 2204--2222 (the operators `U_g` of the construction), for the
 type-II cocycle `ω(a,b,c) = (−1)^{a₁ b₂ c₂}` of `ℤ₂ × ℤ₂` (line 1848). -/
 theorem mpo_kleinTensor (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ} [NeZero N] :
-    mpo (kleinTensor g) N = mpo (tensor kleinEquiv kleinCocycle g) N := by
+    mpo (kleinTensor g) N = mpo (tensor kleinEquiv (iCocycles _ 3 kleinCocycle) g) N := by
   rw [kleinTensor, mpo_mulDiagonal, diagonal_prod_secondZSign, mpo_symTensor_eq_groupCocycle,
     Matrix.mul_assoc, secondZDressing_mul_self, Matrix.mul_one]
 

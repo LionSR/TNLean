@@ -59,6 +59,8 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
+open groupCohomology
+
 namespace CZXCompression
 
 open MPSTensor
@@ -215,7 +217,7 @@ Source: arXiv:2203.12563, line 2224. -/
 theorem mpo_czxDecoratedTensor_eq_groupCocycle :
     MPOTensor.mpo czxDecoratedTensor N =
       MPOTensor.mpo (MPOTensor.GroupCocycle.tensor MPOTensor.GroupCocycle.bitEquiv
-        (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle 1)
+        (iCocycles _ 3 (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle 1))
         (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2))) N := by
   rw [MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo, mpo_czxDecoratedTensor]
   rfl
@@ -227,7 +229,7 @@ two) and lines 1128–1136 (the CZX symmetry is a `ℤ_2` symmetry). -/
 theorem mpo_czxDecoratedTensor_mul_self :
     MPOTensor.mpo czxDecoratedTensor N * MPOTensor.mpo czxDecoratedTensor N = 1 := by
   rw [mpo_czxDecoratedTensor_eq_groupCocycle, MPOTensor.GroupCocycle.mpo_tensor_mul _
-    (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isCocycle 1),
+    (d_iCocycles₃ (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle 1)),
     show (Multiplicative.ofAdd 1 * Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) = 1 by
       decide,
     MPOTensor.GroupCocycle.mpo_tensor_one _

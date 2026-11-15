@@ -123,7 +123,9 @@ variable {ad : BlockActionData F A} {e : (y z : X) → Fin d → Matrix (Fin (D 
 theorem mul_eq (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g h : G) (y z : X) :
     B g (h • y) (h • z) * B h y z =
-      ((ad.lSymbol fd y g h / ad.lSymbol fd z g h : ℂˣ) : ℂ) * B (g * h) y z :=
+      ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h /
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) z g h : ℂˣ) : ℂ)
+        * B (g * h) y z :=
   IsDomainWallAction.mul_eq (fd := fd) hA hperm (hB h y z) (hB g (h • y) (h • z))
     ((hB (g * h) y z).congr_target (mul_smul g h y) (mul_smul g h z))
 
@@ -137,10 +139,14 @@ theorem prod_eq_prod_lSymbol (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus
     (x : X) :
     ∏ k ∈ Finset.range n, B g (g ^ k • g • x) (g ^ k • x) =
       ∏ k ∈ Finset.range n,
-        ((ad.lSymbol fd (g • x) g (g ^ k) / ad.lSymbol fd x g (g ^ k) : ℂˣ) : ℂ) := by
+        ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) g (g ^
+          k) / ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g (g ^
+          k) : ℂˣ) : ℂ) := by
   set β : ℕ → ℂ := fun k ↦ B (g ^ k) (g • x) x
   have hstep : ∀ k, B g (g ^ k • g • x) (g ^ k • x) * β k =
-      ((ad.lSymbol fd (g • x) g (g ^ k) / ad.lSymbol fd x g (g ^ k) : ℂˣ) : ℂ) * β (k + 1) := by
+      ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) g (g ^ k)
+        / ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g (g ^ k) :
+        ℂˣ) : ℂ) * β (k + 1) := by
     intro k
     simp only [β, pow_succ']
     exact hB.mul_eq fd hA hperm g (g ^ k) (g • x) x
@@ -165,7 +171,7 @@ theorem prod_eq_inv_cyclicInvariant (hB : ad.IsDomainWallFamily e B)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {g : G} {n : ℕ} (hg : g ^ n = 1)
     (x : X) :
     ∏ k ∈ Finset.range n, B g (g ^ k • g • x) (g ^ k • x) =
-      (((ScalarThreeCochain.cyclicInvariant fd.omega g n)⁻¹ : ℂˣ) : ℂ) := by
+      (((ScalarThreeCochain.cyclicInvariant fd.associatorScalar g n)⁻¹ : ℂˣ) : ℂ) := by
   rw [hB.prod_eq_prod_lSymbol fd hA hperm hg x, ← LSymbol.prod_div_eq_inv_cyclicInvariant
     (isCompatible_lSymbol (fd := fd) (ad := ad) hF hA hD hperm) x hg, Units.coe_prod]
 
@@ -177,7 +183,7 @@ theorem prod_eq_domainWallPhase (hB : ad.IsDomainWallFamily e B)
     (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g : G) (x : X) :
     ∏ k ∈ Finset.range (orderOf g), B g (g ^ k • g • x) (g ^ k • x) =
-      (ScalarThreeCochain.domainWallPhase fd.omega g : ℂ) := by
+      (ScalarThreeCochain.domainWallPhase fd.associatorScalar g : ℂ) := by
   rw [hB.prod_eq_inv_cyclicInvariant fd hF hA hD hperm (pow_orderOf_eq_one g) x,
     ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant]
 
@@ -191,7 +197,8 @@ theorem mul_eq_of_fixed (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNo
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {y z : X}
     (a b : fixingSubgroup G ({y, z} : Set X)) :
     B a y z * B b y z =
-      (LSymbol.ratioCocycle (ad.lSymbol fd) y z (a, b) : ℂ) * B (a * b : G) y z := by
+      (LSymbol.ratioCocycle (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol
+        fd))) y z (a, b) : ℂ) * B (a * b : G) y z := by
   have h := hB.mul_eq fd hA hperm a b y z
   rw [((mem_fixingSubgroup_iff G).mp b.2) y (by simp),
     ((mem_fixingSubgroup_iff G).mp b.2) z (by simp)] at h

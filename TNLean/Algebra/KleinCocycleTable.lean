@@ -44,6 +44,8 @@ orbit to have four elements.
   operator symmetries using matrix product states*, arXiv:2203.12563, Section 6.
 -/
 
+open groupCohomology
+
 namespace TNLean.Algebra.ScalarThreeCochain
 
 open Multiplicative
@@ -144,9 +146,10 @@ theorem kleinCocycleFamily_one_subgroup_iff
 
 /-- The type-II row agrees with the existing representative of
 arXiv:2203.12563, line 1848. -/
-theorem kleinCocycleFamily_zero_zero_one : kleinCocycleFamily 0 0 1 = kleinCocycle := by
+theorem kleinCocycleFamily_zero_zero_one : kleinCocycleFamily 0 0 1 = (scalarCocycleValue₃
+  (kleinCocycle)) := by
   funext a b c
-  simp [kleinCocycleFamily, kleinCocycle]
+  simp [kleinCocycleFamily, kleinCocycle_apply]
 
 /-- The three signs are invariant under arbitrary fusion gauges, as asserted in
 arXiv:2203.12563, lines 1850–1852. -/

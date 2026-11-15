@@ -147,9 +147,9 @@ anomaly three-cochain**: `ω_H(a,b,c) = ω(f a, f b, f c)`.
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535, for
 the triples of the image. -/
 theorem omega_comap (hF : F.IsNormalRepresentation) :
-    (fd.comap f).omega = ScalarThreeCochain.comap f fd.omega := by
+    (fd.comap f).associatorScalar = ScalarThreeCochain.comap f fd.associatorScalar := by
   funext a b c
-  have h : (fd.comap f).IsAssociator a b c (fd.omega (f a) (f b) (f c)) := by
+  have h : (fd.comap f).IsAssociator a b c (fd.associatorScalar (f a) (f b) (f c)) := by
     unfold IsAssociator
     rw [comap_leftV, comap_rightV]
     exact (isAssociator_omega hF (f a) (f b) (f c)).mul_left _
@@ -163,8 +163,8 @@ Source: arXiv:2502.20257, `eq:omegagauge` and the sentence following it, `main.t
 lines 1541--1546 (independence of the class from the fusion tensors). -/
 theorem cyclicInvariant_omega_map (hF : F.IsNormalRepresentation)
     (fdH : (F.comap f).FusionData) {a : H} {n : ℕ} (ha : a ^ n = 1) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (f a) n =
-      ScalarThreeCochain.cyclicInvariant fdH.omega a n := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (f a) n =
+      ScalarThreeCochain.cyclicInvariant fdH.associatorScalar a n := by
   rw [(omega_cohomologousTo (hF.comap f) (fd.comap f) fdH).cyclicInvariant_eq ha,
     omega_comap fd f hF]
   simp only [ScalarThreeCochain.cyclicInvariant, ScalarThreeCochain.comap_apply, map_pow]
@@ -174,8 +174,8 @@ instance a family indexed by `H` whose tensors are written out explicitly. -/
 theorem cyclicInvariant_omega_map_of_comap_eq (hF : F.IsNormalRepresentation)
     {F' : GroupFamily H d} (hF' : F.comap f = F') (fd' : F'.FusionData) {a : H} {n : ℕ}
     (ha : a ^ n = 1) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (f a) n =
-      ScalarThreeCochain.cyclicInvariant fd'.omega a n := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (f a) n =
+      ScalarThreeCochain.cyclicInvariant fd'.associatorScalar a n := by
   subst hF'
   exact cyclicInvariant_omega_map fd f hF fd' ha
 

@@ -86,6 +86,8 @@ noncomputable section
 open scoped Matrix Kronecker
 open TNLean.Algebra MPOTensor MPSTensor MPOTensor.GroupCocycle
 
+open groupCohomology
+
 namespace Z2Z2Condensation
 
 /-! ### The dressed tensors as integer tensors -/
@@ -438,8 +440,8 @@ theorem comap_yHom :
 
 /-- The cyclic invariant `ω(x,e,x) ω(x,x,x)` at `x = (1,0)` is `+1`. -/
 theorem cyclicInvariant_omega_kleinFamily_x (fd : kleinFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
-  change ScalarThreeCochain.cyclicInvariant fd.omega (xHom GroupFamily.orderTwoGen) 2 = 1
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
+  change ScalarThreeCochain.cyclicInvariant fd.associatorScalar (xHom GroupFamily.orderTwoGen) 2 = 1
   apply Units.ext
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
     kleinFamily_isNormalRepresentation xHom comap_xHom xFusionData_isAssociator_gen_gen_gen]
@@ -447,8 +449,10 @@ theorem cyclicInvariant_omega_kleinFamily_x (fd : kleinFamily.FusionData) :
 
 /-- The cyclic invariant `ω(xy,e,xy) ω(xy,xy,xy)` at `xy = (1,1)` is `−1`. -/
 theorem cyclicInvariant_omega_kleinFamily_xy (fd : kleinFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 1)) 2 = -1 := by
-  change ScalarThreeCochain.cyclicInvariant fd.omega (xyHom GroupFamily.orderTwoGen) 2 = -1
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (1, 1)) 2 = -1
+      := by
+  change ScalarThreeCochain.cyclicInvariant fd.associatorScalar (xyHom GroupFamily.orderTwoGen)
+    2 = -1
   apply Units.ext
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
     kleinFamily_isNormalRepresentation xyHom comap_xyHom xyFusionData_isAssociator_gen_gen_gen]
@@ -457,9 +461,9 @@ theorem cyclicInvariant_omega_kleinFamily_xy (fd : kleinFamily.FusionData) :
 /-- The cyclic invariants on the restriction to `{e, y}` are one. -/
 private theorem cyclicInvariant_omega_kleinFamily_yHom (fd : kleinFamily.FusionData)
     (a : Multiplicative (ZMod 2)) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (yHom a) 2 = 1 := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (yHom a) 2 = 1 := by
   have ha : a ^ 2 = 1 := by revert a; decide
-  have h1 : yFusionData.omega = 1 := GroupFamily.FusionData.omega_ofBondOne
+  have h1 : yFusionData.associatorScalar = 1 := GroupFamily.FusionData.omega_ofBondOne
     (comap_yHom ▸ kleinFamily_isNormalRepresentation.comap yHom)
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd yHom
       kleinFamily_isNormalRepresentation comap_yHom yFusionData ha, h1]
@@ -467,7 +471,7 @@ private theorem cyclicInvariant_omega_kleinFamily_yHom (fd : kleinFamily.FusionD
 
 /-- The cyclic invariant `ω(y,e,y) ω(y,y,y)` at `y = (0,1)` is `+1`. -/
 theorem cyclicInvariant_omega_kleinFamily_y (fd : kleinFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (0, 1)) 2 = 1 :=
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (0, 1)) 2 = 1 :=
   cyclicInvariant_omega_kleinFamily_yHom fd GroupFamily.orderTwoGen
 
 /-- The cyclic invariant `ω(g,e,g) ω(g,g,g)` of `(−1)^{a₁ b₂ c₂}` is `(−1)^{g₁ g₂}`: `+1` at
@@ -476,10 +480,10 @@ theorem cyclicInvariant_omega_kleinFamily_y (fd : kleinFamily.FusionData) :
 Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1848 and 1856--1872
 (row `(0,0,1)`). -/
 theorem cyclicInvariant_kleinCocycle (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    ScalarThreeCochain.cyclicInvariant ScalarThreeCochain.kleinCocycle g 2 =
+    ScalarThreeCochain.cyclicInvariant (scalarCocycleValue₃ (ScalarThreeCochain.kleinCocycle)) g 2 =
       (-1) ^ ((Multiplicative.toAdd g).1 * (Multiplicative.toAdd g).2).val := by
   simp only [ScalarThreeCochain.cyclicInvariant, Finset.prod_range_succ, Finset.prod_range_zero,
-    one_mul, pow_zero, pow_one, ScalarThreeCochain.kleinCocycle, toAdd_one, Prod.snd_zero,
+    one_mul, pow_zero, pow_one, ScalarThreeCochain.kleinCocycle_apply, toAdd_one, Prod.snd_zero,
     mul_zero, zero_mul, ZMod.val_zero]
   congr 2
   generalize Multiplicative.toAdd g = p
@@ -497,8 +501,9 @@ that of arXiv:2502.20257, display preceding `eq:3-cocycle`, and the invariance i
 `eq:omegagauge`. -/
 theorem cyclicInvariant_omega_kleinFamily (fd : kleinFamily.FusionData)
     (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    ScalarThreeCochain.cyclicInvariant fd.omega g 2 =
-      ScalarThreeCochain.cyclicInvariant ScalarThreeCochain.kleinCocycle g 2 := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar g 2 =
+      ScalarThreeCochain.cyclicInvariant (scalarCocycleValue₃ (ScalarThreeCochain.kleinCocycle)) g 2
+        := by
   rw [cyclicInvariant_kleinCocycle]
   revert g
   refine Multiplicative.forall_zmod_two_prod ?_ ?_ ?_ ?_
@@ -512,7 +517,8 @@ theorem cyclicInvariant_omega_kleinFamily (fd : kleinFamily.FusionData)
 of fusion tensors. Source: arXiv:2203.12563, lines 1845–1872. The family distinction is
 specified in the module docstring. -/
 theorem omega_cohomologousTo_kleinCocycle (fd : kleinFamily.FusionData) :
-    ScalarThreeCochain.CohomologousTo fd.omega ScalarThreeCochain.kleinCocycle :=
+    ScalarThreeCochain.CohomologousTo fd.associatorScalar (scalarCocycleValue₃
+      (ScalarThreeCochain.kleinCocycle)) :=
   (ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq
     (fd.isCocycle_omega kleinFamily_isNormalRepresentation)
     ScalarThreeCochain.kleinCocycle_isCocycle).2 (cyclicInvariant_omega_kleinFamily fd)
@@ -524,7 +530,7 @@ Source: arXiv:2502.20257, `eq:omegagauge` and the sentence following it. The det
 `−1` at `xy` is that of the type-II class of arXiv:2203.12563,
 `Papers/2203.12563/REsubmission.tex` lines 1845--1872. -/
 theorem not_isTrivialGaugeClass_omega_kleinFamily (fd : kleinFamily.FusionData) :
-    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   refine ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one
     (g := Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) (n := 2) (by decide) ?_
   rw [cyclicInvariant_omega_kleinFamily_xy]
@@ -536,7 +542,7 @@ theorem not_isTrivialGaugeClass_omega_kleinFamily (fd : kleinFamily.FusionData) 
 every choice of fusion tensors (arXiv:2203.12563, lines 1845–1872). -/
 theorem anomalyClass_omega_kleinFamily_ne_zero (fd : kleinFamily.FusionData) :
     ScalarThreeCochain.anomalyClass
-      ⟨fd.omega, fd.isCocycle_omega kleinFamily_isNormalRepresentation⟩ ≠ 0 := fun h ↦
+      ⟨fd.associatorScalar, fd.isCocycle_omega kleinFamily_isNormalRepresentation⟩ ≠ 0 := fun h ↦
   not_isTrivialGaugeClass_omega_kleinFamily fd
     ((ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero _).2 h)
 

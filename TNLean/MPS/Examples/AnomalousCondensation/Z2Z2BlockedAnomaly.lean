@@ -42,6 +42,8 @@ noncomputable section
 open scoped Matrix Kronecker
 open MPOTensor MPSTensor TNLean.Algebra
 
+open groupCohomology
+
 namespace Z2Z2Condensation
 
 /-- Two original physical sites per blocked site, with the original bond dimension. -/
@@ -297,8 +299,8 @@ theorem blockedFamily_comap_yHom : blockedFamily.comap yHom = blockedYFamily :=
 
 /-- The `x` detector for every fusion choice of the original blocked family is `+1`. -/
 theorem cyclicInvariant_omega_blockedFamily_x (fd : blockedFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
-  change ScalarThreeCochain.cyclicInvariant fd.omega (xHom GroupFamily.orderTwoGen) 2 = 1
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (1, 0)) 2 = 1 := by
+  change ScalarThreeCochain.cyclicInvariant fd.associatorScalar (xHom GroupFamily.orderTwoGen) 2 = 1
   apply Units.ext
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
     blockedFamily_isNormalRepresentation xHom blockedFamily_comap_xHom
@@ -307,8 +309,10 @@ theorem cyclicInvariant_omega_blockedFamily_x (fd : blockedFamily.FusionData) :
 
 /-- The `xy` detector for every fusion choice of the original blocked family is `−1`. -/
 theorem cyclicInvariant_omega_blockedFamily_xy (fd : blockedFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (1, 1)) 2 = -1 := by
-  change ScalarThreeCochain.cyclicInvariant fd.omega (xyHom GroupFamily.orderTwoGen) 2 = -1
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (1, 1)) 2 = -1
+      := by
+  change ScalarThreeCochain.cyclicInvariant fd.associatorScalar (xyHom GroupFamily.orderTwoGen)
+    2 = -1
   apply Units.ext
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
     blockedFamily_isNormalRepresentation xyHom blockedFamily_comap_xyHom
@@ -317,26 +321,27 @@ theorem cyclicInvariant_omega_blockedFamily_xy (fd : blockedFamily.FusionData) :
 
 private theorem cyclicInvariant_blocked_yHom (fd : blockedFamily.FusionData)
     (a : Multiplicative (ZMod 2)) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (yHom a) 2 = 1 := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (yHom a) 2 = 1 := by
   have ha : a ^ 2 = 1 := by revert a; decide
   have hy : blockedYFamily.IsNormalRepresentation :=
     blockedFamily_comap_yHom ▸ blockedFamily_isNormalRepresentation.comap yHom
-  have h1 : blockedYFusionData.omega = 1 := GroupFamily.FusionData.omega_ofBondOne hy
+  have h1 : blockedYFusionData.associatorScalar = 1 := GroupFamily.FusionData.omega_ofBondOne hy
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd yHom
     blockedFamily_isNormalRepresentation blockedFamily_comap_yHom blockedYFusionData ha, h1]
   simp [ScalarThreeCochain.cyclicInvariant]
 
 /-- The `y` detector for every fusion choice of the original blocked family is `+1`. -/
 theorem cyclicInvariant_omega_blockedFamily_y (fd : blockedFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd (0, 1)) 2 = 1 :=
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd (0, 1)) 2 = 1 :=
   cyclicInvariant_blocked_yHom fd GroupFamily.orderTwoGen
 
 /-- Every cyclic detector of the blocked family agrees with the type-II cocycle.
 The values are computed from the blocked fusion witnesses above. -/
 theorem cyclicInvariant_omega_blockedFamily (fd : blockedFamily.FusionData)
     (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    ScalarThreeCochain.cyclicInvariant fd.omega g 2 =
-      ScalarThreeCochain.cyclicInvariant ScalarThreeCochain.kleinCocycle g 2 := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar g 2 =
+      ScalarThreeCochain.cyclicInvariant (scalarCocycleValue₃ (ScalarThreeCochain.kleinCocycle)) g 2
+        := by
   rw [cyclicInvariant_kleinCocycle]
   revert g
   refine Multiplicative.forall_zmod_two_prod ?_ ?_ ?_ ?_
@@ -349,14 +354,15 @@ theorem cyclicInvariant_omega_blockedFamily (fd : blockedFamily.FusionData)
 /-- The original two-site-blocked family has the mixed type-II class for every
 choice of fusion tensors. Source: arXiv:2203.12563, lines 1845–1886. -/
 theorem omega_blockedFamily_cohomologousTo_kleinCocycle (fd : blockedFamily.FusionData) :
-    ScalarThreeCochain.CohomologousTo fd.omega ScalarThreeCochain.kleinCocycle :=
+    ScalarThreeCochain.CohomologousTo fd.associatorScalar (scalarCocycleValue₃
+      (ScalarThreeCochain.kleinCocycle)) :=
   (ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq
     (fd.isCocycle_omega blockedFamily_isNormalRepresentation)
     ScalarThreeCochain.kleinCocycle_isCocycle).2 (cyclicInvariant_omega_blockedFamily fd)
 
 /-- The anomaly of the original blocked family is nontrivial for every fusion choice. -/
 theorem not_isTrivialGaugeClass_omega_blockedFamily (fd : blockedFamily.FusionData) :
-    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   refine ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one
     (g := Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) (n := 2) (by decide) ?_
   rw [cyclicInvariant_omega_blockedFamily_xy]

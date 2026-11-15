@@ -86,8 +86,7 @@ theorem czx_carriesMPV (g x : Multiplicative (Fin 2)) :
        have hflip : ∀ c : Fin 2, spinFlip N (fun _ ↦ c) = fun _ ↦ c.rev := fun c ↦ rfl
        simp only [hflip, czExponent, spinParity, Finset.sum_const, Finset.card_univ,
          Fintype.card_fin, smul_eq_mul]
-       norm_num
-       try rfl)
+       norm_num)
 
 /-! ### Action tensors -/
 
@@ -182,9 +181,12 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1246--1339; the r
 `eq:omega_and_Ls` of arXiv:2502.20257 at `(g, g, g)`, as at its line 5121. -/
 theorem czx_omega_eq_lSymbol_ratio (fd : czxFamily.FusionData)
     (ad : BlockActionData czxFamily czxBlock) (x : Multiplicative (Fin 2)) :
-    fd.omega czxGen czxGen czxGen =
-      ad.lSymbol fd x czxGen czxGen * ad.lSymbol fd x czxGen 1 /
-        (ad.lSymbol fd (czxGen • x) czxGen czxGen * ad.lSymbol fd x 1 czxGen) :=
+    fd.associatorScalar czxGen czxGen czxGen =
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x czxGen czxGen *
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x czxGen 1 /
+        (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (czxGen • x)
+          czxGen czxGen * ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd))
+          x 1 czxGen) :=
   LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one
     (ad.isCompatible_lSymbol czxFamily_isNormalRepresentation czxBlock_isNormal
       (fun _ ↦ Nat.one_pos) czx_carriesMPV)
@@ -197,10 +199,14 @@ arXiv:2405.00439, line 1335, in gauge-invariant form.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1246--1339. -/
 theorem czx_lSymbol_ratio_eq_neg_one (ad : BlockActionData czxFamily czxBlock) :
-    ad.lSymbol czxFusionData (Multiplicative.ofAdd 0) czxGen czxGen *
-        ad.lSymbol czxFusionData (Multiplicative.ofAdd 0) czxGen 1 /
-      (ad.lSymbol czxFusionData (Multiplicative.ofAdd 1) czxGen czxGen *
-        ad.lSymbol czxFusionData (Multiplicative.ofAdd 0) 1 czxGen) = -1 := by
+    ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol czxFusionData))
+      (Multiplicative.ofAdd 0) czxGen czxGen *
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol czxFusionData))
+          (Multiplicative.ofAdd 0) czxGen 1 /
+      (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol czxFusionData))
+        (Multiplicative.ofAdd 1) czxGen czxGen *
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol czxFusionData))
+          (Multiplicative.ofAdd 0) 1 czxGen) = -1 := by
   rw [← czxFusionData_omega_gen_gen_gen,
     czx_omega_eq_lSymbol_ratio czxFusionData ad (Multiplicative.ofAdd 0)]
   rfl

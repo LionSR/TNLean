@@ -217,16 +217,18 @@ scalar exists.
 
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913; arXiv:2203.12563,
 `sec:PBC`, line 1091. -/
-noncomputable def lSymbol : LSymbol G X := fun x g h ↦
-  MPSTensor.dressedScalar (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
-    (ad.actV g h x) (ad.fuseV fd g h x)
+noncomputable def lSymbol : G × G → PermutationCochains.representation G X ℂˣ :=
+  PermutationCochains.twoCochainEquiv (M := ℂˣ) fun x g h ↦
+    MPSTensor.dressedScalar (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
+      (ad.actV g h x) (ad.fuseV fd g h x)
 
 variable {fd ad}
 
 theorem isDressedProportional_lSymbol (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (x : X) (g h : G) :
     MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
-      (ad.actV g h x) (ad.fuseV fd g h x) (ad.lSymbol fd x g h) := by
+      (ad.actV g h x) (ad.fuseV fd g h x) (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+        (ad.lSymbol fd)) x g h) := by
   have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (ad.actV g h x)
         (ad.fuseV fd g h x) z := by
@@ -235,7 +237,8 @@ theorem isDressedProportional_lSymbol (hA : ∀ x, Kraus.IsNormal (A x))
     exact hW.exists_isDressedProportional hW' (hA _)
       (((hperm g (h • x)).mulTensor (hperm h x)).sameMPV₂Pos_actTensor
         (MPSTensor.SameMPV₂Pos.refl (A x)))
-  exact MPSTensor.isDressedProportional_dressedScalar hex
+  simpa only [lSymbol, Equiv.symm_apply_apply] using
+    MPSTensor.isDressedProportional_dressedScalar hex
 
 /-- **Uniqueness of the L-symbols**: a scalar `z` with `actV g h x ~ z · fuseV g h x` against
 long words is the L-symbol `Lˣ_{g,h}`. This is how an L-symbol is read off from explicit fusion
@@ -247,7 +250,7 @@ theorem eq_lSymbol_of_isDressedProportional (hA : ∀ x, Kraus.IsNormal (A x))
     {x : X} {g h : G} {z : ℂ}
     (hz : MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
       (ad.actV g h x) (ad.fuseV fd g h x) z) :
-    z = ad.lSymbol fd x g h := by
+    z = ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h := by
   obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h x
   exact hz.eq_of_forall_exists_ne_zero (isDressedProportional_lSymbol hA hperm x g h)
     (hW.exists_mul_evalWord_ne_zero (hA _) (hD _))
@@ -346,7 +349,8 @@ set_option maxHeartbeats 800000 in
 `Lˣ_{g,hk} Lˣ_{h,k} = ω(g,h,k) L^{k • x}_{g,h} Lˣ_{gh,k}`. -/
 theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) :
-    LSymbol.IsCompatible (ad.lSymbol fd) fd.omega := by
+    LSymbol.IsCompatible (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol
+      fd))) fd.associatorScalar := by
   intro x g h k
   set B3 := actTensor (F.tripleTensor g h k) (A x)
   have hcar3 : CarriesMPV (F.tripleTensor g h k) (A x) (A (g • h • k • x)) :=
@@ -408,7 +412,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
       (castIndex D (congrArg (g • ·) (mul_smul h k x)) *
         (ad.actV g (h * k) x * kronId (idKron (F.bondDim g) (fd.V h k) *
           mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) (D x)))
-      (ad.lSymbol fd x h k) := by
+      (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x h k) := by
     rw [actV_mul_reduce_k, ← fuseV_inner_eq]
     simpa only [Matrix.mul_assoc] using H1'
   rw [fuseV_mul_right, castIndex_mul_castIndex_assoc] at H2
@@ -427,6 +431,19 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.
   simp only [Units.val_mul]
   linear_combination heq
 
+/-- The differential of the permutation-coefficient L-symbol is the constant-function
+image of the associator, with no restriction on the universe of block labels
+(arXiv:2502.20257, `eq:omega_and_Ls`). -/
+theorem d_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x))
+    (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) :
+    inhomogeneousCochains.d (PermutationCochains.representation G X ℂˣ) 2
+        (fun p ↦ ad.lSymbol fd (p 0, p 1)) =
+      (fun p ↦ Additive.ofMul (fun _ : X ↦ fd.associatorScalar (p 0) (p 1) (p 2))) := by
+  have h := (PermutationCochains.d_eq_const_iff
+    ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd))
+    fd.associatorScalar).2 (ad.isCompatible_lSymbol hF hA hD hperm)
+  simpa only [Equiv.apply_symm_apply] using h
+
 end BlockActionData
 
 /-- **A subgroup fixing a block trivializes the anomaly.** For normal blocks of positive bond
@@ -441,7 +458,7 @@ theorem IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed
     (hF : F.IsNormalRepresentation) (fd : FusionData F) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     {H : Type} [Group H] (f : H →* G) (x : X) (hfix : ∀ a, f a • x = x) :
-    ScalarThreeCochain.IsTrivialGaugeClass (ScalarThreeCochain.comap f fd.omega) := by
+    ScalarThreeCochain.IsTrivialGaugeClass (ScalarThreeCochain.comap f fd.associatorScalar) := by
   obtain ⟨ad⟩ := nonempty_blockActionData (F := F) hA hD hperm
   exact LSymbol.isTrivialGaugeClass_comap_of_isCompatible
     (ad.isCompatible_lSymbol hF hA hD hperm) x f hfix

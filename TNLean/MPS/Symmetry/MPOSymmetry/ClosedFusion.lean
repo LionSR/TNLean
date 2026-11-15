@@ -350,7 +350,7 @@ theorem FusionData.isTrivialGaugeClass_omega_of_closed_fusion
     (hmul : ∀ g h N, 0 < N →
       mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N)
     {fd : FusionData F} (hfd : fd.IsClosed) :
-    ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   have hχ := bondDim_eq_one_of_closed_fusion hinj hone hfd
   have hF : F.IsNormalRepresentation := ⟨fun g ↦ (hinj g).isNormal, hmul⟩
   have hc : ∀ g, (F.bondDim g : ℂ) = 1 := fun g ↦ by rw [hχ]; norm_num
@@ -364,7 +364,8 @@ theorem FusionData.isTrivialGaugeClass_omega_of_closed_fusion
     have : entrySum (fd.V g h) = 0 := h0
     rw [this, zero_mul] at key
     exact one_ne_zero key
-  have hω : ∀ g h k, (fd.omega g h k : ℂ) = v (g * h) k * v g h / (v g (h * k) * v h k) := by
+  have hω : ∀ g h k, (fd.associatorScalar g h k : ℂ) = v (g * h) k * v g h / (v g (h * k) * v h
+    k) := by
     intro g h k
     have := sub (F.bondDim (g * h * k)) (hχ _)
     have := sub (F.bondDim g * F.bondDim h * F.bondDim k) (by rw [hχ, hχ, hχ])

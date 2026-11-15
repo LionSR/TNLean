@@ -48,6 +48,8 @@ modulo `n` lie in distinct classes, as line 2040 asserts. Residues are represent
 
 noncomputable section
 
+open groupCohomology
+
 namespace TNLean.Algebra.ScalarThreeCochain
 
 /-! ### The domain-wall phase of a three-cochain -/
@@ -116,7 +118,7 @@ theorem sum_carry (A m : ℕ) :
 /-- Project result: **the cyclic invariant of `ω_j`**,
 `∏_{k < m} ω_j(a, a^k, a) = ζ^{j a ⌊m a / n⌋}`, for every `m`. -/
 theorem cyclicInvariant_cyclicCocycle (j : ℕ) (a : Multiplicative (ZMod n)) (m : ℕ) :
-    (cyclicInvariant (cyclicCocycle n j) a m : ℂ) =
+    (cyclicInvariant ((scalarCocycleValue₃ (cyclicCocycle n j))) a m : ℂ) =
       rootOfUnity n ^ (j * (Multiplicative.toAdd a).val *
         (m * (Multiplicative.toAdd a).val / n)) := by
   rw [cyclicInvariant, Units.coe_prod]
@@ -148,7 +150,7 @@ theorem orderOf_mul_val (a : Multiplicative (ZMod n)) :
 `∏_{k=1}^{o(a)} ω_j⁻¹(a, a^k, a) = exp{−(2πi j/n²) a ∑_{k=0}^{o(a)−1} (ka + a − [ka + a])}`,
 with `ka` the residue of `k a`. -/
 theorem domainWallPhase_cyclicCocycle_eq_exp_sum (j : ℕ) (a : Multiplicative (ZMod n)) :
-    (domainWallPhase (cyclicCocycle n j) a : ℂ) =
+    (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle n j))) a : ℂ) =
       Complex.exp (-(2 * Real.pi * Complex.I * j / (n : ℂ) ^ 2) *
         (Multiplicative.toAdd a).val *
         ∑ k ∈ Finset.range (orderOf a),
@@ -157,7 +159,7 @@ theorem domainWallPhase_cyclicCocycle_eq_exp_sum (j : ℕ) (a : Multiplicative (
   rw [domainWallPhase_eq_inv_cyclicInvariant, cyclicInvariant, ← Finset.prod_inv_distrib,
     Units.coe_prod, Finset.mul_sum, Complex.exp_sum]
   refine Finset.prod_congr rfl fun k _ ↦ ?_
-  rw [Units.val_inv_eq_inv_val, cyclicCocycle, Units.val_mk0, ← Complex.exp_neg]
+  rw [Units.val_inv_eq_inv_val, cyclicCocycle_apply, Units.val_mk0, ← Complex.exp_neg]
   congr 1
   ring
 
@@ -183,7 +185,7 @@ theorem sum_carry_orderOf (a : Multiplicative (ZMod n)) :
 `∏_{k=1}^{o(a)} ω_j⁻¹(a, a^k, a) = ζ^{−j a (a / gcd(n, a))} = exp(−2πi j a² / (n gcd(n, a)))`,
 with `ζ = exp(2πi/n)`. -/
 theorem domainWallPhase_cyclicCocycle (j : ℕ) (a : Multiplicative (ZMod n)) :
-    (domainWallPhase (cyclicCocycle n j) a : ℂ) =
+    (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle n j))) a : ℂ) =
       (rootOfUnity n ^ (j * (Multiplicative.toAdd a).val *
         ((Multiplicative.toAdd a).val / n.gcd (Multiplicative.toAdd a).val)))⁻¹ := by
   rw [domainWallPhase_eq_inv_cyclicInvariant, Units.val_inv_eq_inv_val,
@@ -192,7 +194,7 @@ theorem domainWallPhase_cyclicCocycle (j : ℕ) (a : Multiplicative (ZMod n)) :
 /-- Project result: **the closed form as an exponential**,
 `∏_{k=1}^{o(a)} ω_j⁻¹(a, a^k, a) = exp(−2πi j a² / (n gcd(n, a)))`. -/
 theorem domainWallPhase_cyclicCocycle_eq_exp (j : ℕ) (a : Multiplicative (ZMod n)) :
-    (domainWallPhase (cyclicCocycle n j) a : ℂ) =
+    (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle n j))) a : ℂ) =
       Complex.exp (-(2 * Real.pi * Complex.I * j * ((Multiplicative.toAdd a).val : ℂ) ^ 2 /
         ((n : ℂ) * (n.gcd (Multiplicative.toAdd a).val : ℕ)))) := by
   have hn : (n : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne n)
@@ -228,13 +230,13 @@ private theorem exp_two_pi_div_three :
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2046–2054: **the printed
 `n = 3` table**, with rows `j = 1, 2` and columns `a = 1, 2`. -/
 theorem domainWallPhase_cyclicCocycle_three :
-    (domainWallPhase (cyclicCocycle 3 1) (Multiplicative.ofAdd 1) : ℂ) =
+    (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 3 1))) (Multiplicative.ofAdd 1) : ℂ) =
         Complex.exp (-(2 * Real.pi / 3) * Complex.I) ∧
-      (domainWallPhase (cyclicCocycle 3 1) (Multiplicative.ofAdd 2) : ℂ) =
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 3 1))) (Multiplicative.ofAdd 2) : ℂ) =
         Complex.exp (-(2 * Real.pi / 3) * Complex.I) ∧
-      (domainWallPhase (cyclicCocycle 3 2) (Multiplicative.ofAdd 1) : ℂ) =
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 3 2))) (Multiplicative.ofAdd 1) : ℂ) =
         Complex.exp ((2 * Real.pi / 3) * Complex.I) ∧
-      (domainWallPhase (cyclicCocycle 3 2) (Multiplicative.ofAdd 2) : ℂ) =
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 3 2))) (Multiplicative.ofAdd 2) : ℂ) =
         Complex.exp ((2 * Real.pi / 3) * Complex.I) := by
   have v1 : (1 : ZMod 3).val = 1 := rfl
   have v2 : (2 : ZMod 3).val = 2 := rfl
@@ -251,15 +253,24 @@ private theorem rootOfUnity_four : rootOfUnity 4 = Complex.I := by
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2056–2066: **the printed
 `n = 4` table**, with rows `j = 1, 2, 3` and columns `a = 1, 2, 3`. -/
 theorem domainWallPhase_cyclicCocycle_four :
-    (domainWallPhase (cyclicCocycle 4 1) (Multiplicative.ofAdd 1) : ℂ) = -Complex.I ∧
-      (domainWallPhase (cyclicCocycle 4 1) (Multiplicative.ofAdd 2) : ℂ) = -1 ∧
-      (domainWallPhase (cyclicCocycle 4 1) (Multiplicative.ofAdd 3) : ℂ) = -Complex.I ∧
-      (domainWallPhase (cyclicCocycle 4 2) (Multiplicative.ofAdd 1) : ℂ) = -1 ∧
-      (domainWallPhase (cyclicCocycle 4 2) (Multiplicative.ofAdd 2) : ℂ) = 1 ∧
-      (domainWallPhase (cyclicCocycle 4 2) (Multiplicative.ofAdd 3) : ℂ) = -1 ∧
-      (domainWallPhase (cyclicCocycle 4 3) (Multiplicative.ofAdd 1) : ℂ) = Complex.I ∧
-      (domainWallPhase (cyclicCocycle 4 3) (Multiplicative.ofAdd 2) : ℂ) = -1 ∧
-      (domainWallPhase (cyclicCocycle 4 3) (Multiplicative.ofAdd 3) : ℂ) = Complex.I := by
+    (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 1))) (Multiplicative.ofAdd 1) : ℂ) =
+      -Complex.I ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 1))) (Multiplicative.ofAdd 2) : ℂ) =
+        -1 ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 1))) (Multiplicative.ofAdd 3) : ℂ) =
+        -Complex.I ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 2))) (Multiplicative.ofAdd 1) : ℂ) =
+        -1 ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 2))) (Multiplicative.ofAdd 2) : ℂ) = 1
+        ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 2))) (Multiplicative.ofAdd 3) : ℂ) =
+        -1 ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 3))) (Multiplicative.ofAdd 1) : ℂ) =
+        Complex.I ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 3))) (Multiplicative.ofAdd 2) : ℂ) =
+        -1 ∧
+      (domainWallPhase ((scalarCocycleValue₃ (cyclicCocycle 4 3))) (Multiplicative.ofAdd 3) : ℂ) =
+        Complex.I := by
   have v1 : (1 : ZMod 4).val = 1 := rfl
   have v2 : (2 : ZMod 4).val = 2 := rfl
   have v3 : (3 : ZMod 4).val = 3 := rfl
@@ -272,7 +283,7 @@ theorem domainWallPhase_cyclicCocycle_four :
 /-- Project result: the cyclic invariant of `ω_j` at the generator `1` of `ℤ_n`, with
 `m = n`, is `ζ^j`. -/
 theorem cyclicInvariant_cyclicCocycle_one (hn : 1 < n) (j : ℕ) :
-    (cyclicInvariant (cyclicCocycle n j) (Multiplicative.ofAdd 1) n : ℂ) =
+    (cyclicInvariant ((scalarCocycleValue₃ (cyclicCocycle n j))) (Multiplicative.ofAdd 1) n : ℂ) =
       rootOfUnity n ^ j := by
   have h1 : (1 : ZMod n).val = 1 := by
     have : Fact (1 < n) := ⟨hn⟩
@@ -283,7 +294,8 @@ theorem cyclicInvariant_cyclicCocycle_one (hn : 1 < n) (j : ℕ) :
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: **the cocycles `ω_j`
 lie in distinct classes**: `ω_j` and `ω_{j'}` are cohomologous only if `j ≡ j' mod n`. -/
 theorem not_cohomologousTo_cyclicCocycle (hn : 1 < n) {j j' : ℕ} (h : ¬ j ≡ j' [MOD n]) :
-    ¬ CohomologousTo (cyclicCocycle n j) (cyclicCocycle n j') := by
+    ¬ CohomologousTo ((scalarCocycleValue₃ (cyclicCocycle n j))) ((scalarCocycleValue₃
+      (cyclicCocycle n j'))) := by
   intro hc
   have heq := congrArg Units.val
     (hc.cyclicInvariant_eq (g := Multiplicative.ofAdd (1 : ZMod n)) (n := n) (by

@@ -13,7 +13,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 # Tools for computing anomaly three-cochains of explicit representations
 
 General facts used when the anomaly three-cochain of
-`MPOTensor.GroupFamily.FusionData.omega` is computed for an explicit group of
+`MPOTensor.GroupFamily.FusionData.associatorScalar` is computed for an explicit group of
 matrix product operators, such as the decorated CZX representation of `ℤ₂` or
 the phase-decorated shift representation of `ℤ₃`.
 
@@ -357,7 +357,7 @@ variable {G : Type} [Group G] {d : ℕ}
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
 theorem FusionData.omega_eq_one_of_leftV_eq_rightV {F : GroupFamily G d} {fd : F.FusionData}
     (hF : F.IsNormalRepresentation) {g h k : G} (hLR : fd.leftV g h k = fd.rightV g h k) :
-    fd.omega g h k = 1 := by
+    fd.associatorScalar g h k = 1 := by
   have h1 : fd.IsAssociator g h k 1 := by
     unfold FusionData.IsAssociator
     rw [hLR]
@@ -371,7 +371,7 @@ Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 150
 theorem FusionData.omega_ofBondOne {T : G → MPOTensor d 1}
     {hT : ∀ g h, (mulTensor (T g) (T h)).toMPSTensor = (T (g * h)).toMPSTensor}
     (hF : (GroupFamily.ofBondOne T).IsNormalRepresentation) :
-    (FusionData.ofBondOne T hT).omega = 1 := by
+    (FusionData.ofBondOne T hT).associatorScalar = 1 := by
   funext g h k
   refine omega_eq_one_of_leftV_eq_rightV hF ?_
   have hc : (GroupFamily.ofBondOne T).castMat (mul_assoc g h k).symm =

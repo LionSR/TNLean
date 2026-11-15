@@ -70,6 +70,8 @@ noncomputable section
 
 open scoped Matrix
 
+open groupCohomology
+
 namespace Z3Anomalous
 
 open MPOTensor TNLean.Algebra
@@ -213,7 +215,8 @@ inverse cocycle `ω_1⁻¹ = ω_2` (arXiv:2203.12563, line 2044; `cocycleFusionD
 
 Source: arXiv:2203.12563, lines 2204–2222; arXiv:2405.00439, line 2040. -/
 abbrev cocycleFamily : GroupFamily (Multiplicative (ZMod 3)) 3 :=
-  GroupCocycle.family (GroupCocycle.residueEquiv 2) (ScalarThreeCochain.cyclicCocycle 3 1)
+  GroupCocycle.family (GroupCocycle.residueEquiv 2) (groupCohomology.iCocycles _ 3
+    (ScalarThreeCochain.cyclicCocycle 3 1))
 
 /-- The operator laws for the cocycle construction with `ω_1` on `ℤ₃`.
 

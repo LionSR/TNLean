@@ -623,10 +623,11 @@ and concludes `ω = ω^* β_{g,h} β_{gh,k} / (β_{h,k} β_{g,hk})`. -/
 theorem omega_cohomologousTo_star_of_timeReversal (hF : F.IsNormalRepresentation)
     (fd : FusionData F) (hv : v ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hT : F.CommutesWithTimeReversal v) :
-    ScalarThreeCochain.CohomologousTo fd.omega (star fd.omega) := by
+    ScalarThreeCochain.CohomologousTo fd.associatorScalar (star fd.associatorScalar) := by
   obtain ⟨q⟩ := nonempty_bondGauge_timeReversal hF hv hT
   have hv' : star v * v = 1 := Matrix.mem_unitaryGroup_iff'.mp hv
-  have hω : ((fd.timeReversal hv').gaugeTransport q).omega = star fd.omega := by
+  have hω : ((fd.timeReversal hv').gaugeTransport q).associatorScalar = star fd.associatorScalar
+    := by
     funext g h k
     apply Units.ext
     simp only [Pi.star_apply, Units.coe_star]
@@ -646,7 +647,7 @@ theorem exists_real_cohomologousTo_omega_of_timeReversal (hF : F.IsNormalReprese
     (fd : FusionData F) (hv : v ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hT : F.CommutesWithTimeReversal v) :
     ∃ ω' : ScalarThreeCochain G,
-      ScalarThreeCochain.CohomologousTo ω' fd.omega ∧ star ω' = ω' :=
+      ScalarThreeCochain.CohomologousTo ω' fd.associatorScalar ∧ star ω' = ω' :=
   ScalarThreeCochain.exists_cohomologousTo_star_eq_self
     (omega_cohomologousTo_star_of_timeReversal hF fd hv hT)
 

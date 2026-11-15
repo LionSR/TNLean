@@ -44,8 +44,7 @@ namespace FusionData
 /-- The degree-three class of the anomaly three-cocycle does not depend on the
 fusion tensors (arXiv:2502.20257, `eq:omegagauge`). -/
 theorem anomalyClass_omega_eq (hF : F.IsNormalRepresentation) (fd fd' : FusionData F) :
-    ScalarThreeCochain.anomalyClass ⟨fd'.omega, isCocycle_omega hF⟩ =
-      ScalarThreeCochain.anomalyClass ⟨fd.omega, isCocycle_omega hF⟩ :=
+    groupCohomology.π _ 3 (fd'.omega hF) = groupCohomology.π _ 3 (fd.omega hF) :=
   (ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq _ _).1
     (omega_cohomologousTo hF fd fd')
 
@@ -57,9 +56,8 @@ namespace IsNormalRepresentation
 normal doubled-index tensors: the class of the three-cocycle `ω` of
 arXiv:2502.20257, `eq:3-cocycle`, for any choice of fusion tensors. -/
 noncomputable def anomalyClass (hF : F.IsNormalRepresentation) :
-    groupCohomology (Rep.ofMulDistribMulAction G ℂˣ) 3 :=
-  ScalarThreeCochain.anomalyClass
-    ⟨hF.nonempty_fusionData.some.omega, FusionData.isCocycle_omega hF⟩
+    groupCohomology.H3 (Rep.ofMulDistribMulAction G ℂˣ) :=
+  groupCohomology.π _ 3 (hF.nonempty_fusionData.some.omega hF)
 
 end IsNormalRepresentation
 
@@ -67,16 +65,16 @@ namespace FusionData
 
 /-- Every choice of fusion tensors represents the anomaly class. -/
 theorem anomalyClass_omega (hF : F.IsNormalRepresentation) (fd : FusionData F) :
-    ScalarThreeCochain.anomalyClass ⟨fd.omega, isCocycle_omega hF⟩ = hF.anomalyClass :=
+    groupCohomology.π _ 3 (fd.omega hF) = hF.anomalyClass :=
   anomalyClass_omega_eq hF hF.nonempty_fusionData.some fd
 
 /-- The anomaly class vanishes exactly when the anomaly three-cocycle of some,
 equivalently every, choice of fusion tensors has trivial gauge class. -/
 theorem isTrivialGaugeClass_omega_iff (hF : F.IsNormalRepresentation) (fd : FusionData F) :
-    ScalarThreeCochain.IsTrivialGaugeClass fd.omega ↔ hF.anomalyClass = 0 := by
+    ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar ↔ hF.anomalyClass = 0 := by
   rw [← anomalyClass_omega hF fd]
   exact ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero
-    ⟨fd.omega, isCocycle_omega hF⟩
+    ⟨fd.associatorScalar, isCocycle_omega hF⟩
 
 end FusionData
 

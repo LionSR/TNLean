@@ -170,7 +170,7 @@ theorem orderTwo_rightV_gen_gen_gen :
 /-- `ω(g,1,g) = 1` for the fusion tensors of `FusionData.orderTwo`, which are trivial whenever
 a factor is the identity: both fusion trees are `V`. -/
 theorem orderTwo_omega_gen_one_gen (hF : (orderTwoFamily E A).IsNormalRepresentation) :
-    (orderTwo E A V W hEE hEA hAE hAA).omega orderTwoGen 1 orderTwoGen = 1 := by
+    (orderTwo E A V W hEE hEA hAE hAA).associatorScalar orderTwoGen 1 orderTwoGen = 1 := by
   refine GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV hF ?_
   rw [GroupFamily.FusionData.rightV, castMat_gen_one_gen]
   change V * kronId (1 : Matrix (Fin 2) (Fin 2) ℂ) 2 = (1 : Matrix (Fin 1) (Fin 1) ℂ) *
@@ -180,9 +180,10 @@ theorem orderTwo_omega_gen_one_gen (hF : (orderTwoFamily E A).IsNormalRepresenta
 
 /-- The cyclic invariant of `FusionData.orderTwo` at the generator is `ω(g,g,g)`. -/
 theorem cyclicInvariant_orderTwo (hF : (orderTwoFamily E A).IsNormalRepresentation) :
-    TNLean.Algebra.ScalarThreeCochain.cyclicInvariant (orderTwo E A V W hEE hEA hAE hAA).omega
+    TNLean.Algebra.ScalarThreeCochain.cyclicInvariant (orderTwo E A V W hEE hEA hAE
+      hAA).associatorScalar
         orderTwoGen 2 =
-      (orderTwo E A V W hEE hEA hAE hAA).omega orderTwoGen orderTwoGen orderTwoGen := by
+      (orderTwo E A V W hEE hEA hAE hAA).associatorScalar orderTwoGen orderTwoGen orderTwoGen := by
   simp only [TNLean.Algebra.ScalarThreeCochain.cyclicInvariant, Finset.prod_range_succ,
     Finset.prod_range_zero, one_mul, pow_zero, pow_one, orderTwo_omega_gen_one_gen hF]
 
@@ -193,7 +194,7 @@ theorem cyclicInvariant_orderTwo_of_isAssociator
     (h : (orderTwo E A V W hEE hEA hAE hAA).IsAssociator orderTwoGen orderTwoGen orderTwoGen
       z) :
     ((TNLean.Algebra.ScalarThreeCochain.cyclicInvariant
-      (orderTwo E A V W hEE hEA hAE hAA).omega orderTwoGen 2 : ℂˣ) : ℂ) = z := by
+      (orderTwo E A V W hEE hEA hAE hAA).associatorScalar orderTwoGen 2 : ℂˣ) : ℂ) = z := by
   rw [cyclicInvariant_orderTwo hF]
   exact (GroupFamily.FusionData.eq_omega_of_isAssociator hF h).symm
 
@@ -209,7 +210,8 @@ theorem cyclicInvariant_omega_map_of_comap_eq_orderTwo {G : Type} [Group G]
     (f : Multiplicative (ZMod 2) →* G) (hc : F.comap f = orderTwoFamily E A) {z : ℂ}
     (h : (orderTwo E A V W hEE hEA hAE hAA).IsAssociator orderTwoGen orderTwoGen orderTwoGen
       z) :
-    ((TNLean.Algebra.ScalarThreeCochain.cyclicInvariant fd.omega (f orderTwoGen) 2 : ℂˣ) :
+    ((TNLean.Algebra.ScalarThreeCochain.cyclicInvariant fd.associatorScalar (f orderTwoGen) 2 :
+      ℂˣ) :
       ℂ) = z := by
   rw [GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq fd f hF hc
     (orderTwo E A V W hEE hEA hAE hAA) orderTwoGen_pow_two]
