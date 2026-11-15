@@ -39,8 +39,8 @@ theorem IsFusionRing.integerNIMRepEval_unit_column
     integerNIMRepEval N u c e = u c := by
   have hright : ∀ a c, N a e c = if c = a then 1 else 0 :=
     fun a c ↦ (hN.isFusionUnit a c).2
-  simp [integerNIMRepEval, integerFusionEval, integerNIMRepMatrix, hright,
-    zsmul_eq_mul, mul_ite]
+  simp [integerNIMRepEval, integerFusionEval, Matrix.sum_apply, Matrix.smul_apply,
+    integerNIMRepMatrix, hright, zsmul_eq_mul, mul_ite]
 
 /-- The regular action on integer combinations is faithful. -/
 theorem IsFusionRing.integerNIMRepEval_injective
