@@ -1,5 +1,5 @@
-% Transport entries passed focused strict checks at 82f750c8.
-% Compatibility obstructions remain notready; the source label is unchanged.
+% Transport entries passed focused strict checks at b59d8045.
+% Obstructions passed at fa979bdb; distinguished-matrix compatibility is pending.
 \begin{definition}[Physical output matrix with an identity ancilla]
     \label{def:mpu_physical_identity_matrix}
     \lean{MPOTensor.physicalIdMatrix,
@@ -172,7 +172,7 @@
     \lean{MPOTensor.shiftSwap_sandwich_not_mem_range_physicalIdMatrix,
         MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapDagger,
         MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapTranspose}
-    \notready
+    \leanok
     \uses{def:mpu_physical_identity_matrix, threeMPU2}
     Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^2$. Then
     $S_2(P\otimes I_2)S_2=I_2\otimes P$ is not of the form
@@ -182,7 +182,7 @@
     $X\mapsto S_2X^{\mathsf T}S_2$ on four-dimensional matrices.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Every $Y\otimes I_2$ has equal diagonal entries at the product
     coordinates $(0,0)$ and $(0,1)$. The corresponding entries of
     $I_2\otimes P$ are one and zero. Since $P\otimes I_2$ is
@@ -194,7 +194,7 @@
     \label{lem:mpu_swap_coherent_family_obstruction}
     \lean{MPOTensor.symmetryFamily_at_ne_shiftSwapDagger,
         MPOTensor.symmetryFamily_at_ne_shiftSwapTranspose}
-    \notready
+    \leanok
     \uses{def:mpu_coherent_symmetry_family, def:mpu_swap_comparison_symmetries}
     Let a family of operator actions commute with every identity-ancilla
     embedding. If the species space $\mathbb C^d$ has two distinct basis
@@ -203,7 +203,7 @@
     transposition action.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Work at chain length one and choose distinct states $a,b$. Apply
     compatibility from dimension $d$ with ancilla dimension $d$ to the
     projection $P=\lvert a\rangle\langle a\rvert$. The embedded output
@@ -220,7 +220,7 @@
     \lean{MPOTensor.physicalIdMatrix_shiftSwap_sandwich_ne,
         MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapDagger,
         MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapTranspose}
-    \notready
+    \leanok
     \uses{def:mpu_physical_identity_matrix, threeMPU2}
     Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^4$, and write
     $S_m$ for the standard flattened swap on
@@ -236,7 +236,7 @@
     commutes with this identity-ancilla embedding.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Multiplication by a permutation matrix reindexes the appropriate
     matrix coordinate. At the product coordinate $(0,1)$ the two
     diagonal entries are respectively one and zero. Both $P$ and
@@ -247,7 +247,7 @@
 \begin{lemma}[Balanced coprime ancillas at equal dimension]
     \label{lem:mpu_balanced_coprime_ancilla}
     \lean{MPOTensor.balanced_coprime_ancilla_eq_one}
-    \notready
+    \leanok
     If $d>0$, $p_ad=p_bd$, and $\gcd(p_a,p_b)=1$, then $p_a=p_b=1$.
     In particular the minimal coprime convention of
     \cite[lines~706--724]{Cirac2017MPU} alone does not admit the later
@@ -255,6 +255,6 @@
     \cite[lines~2210--2215]{Cirac2017MPU} for equal physical dimensions.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Cancellation gives $p_a=p_b=p$. Then $\gcd(p,p)=p=1$.
 \end{proof}

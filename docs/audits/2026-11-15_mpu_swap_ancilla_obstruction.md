@@ -2,9 +2,9 @@
 
 This continuation distinguishes source interpretation from mathematical
 obstruction. It does not claim that CPSV17's swap lemma is false. The local Lean
-candidate in `SwapAncillaCompatibility.lean` is uncompiled. It is an additive
-continuation of #10640 after the first run at `3d82a4bd` diagnosed the transport
-helper's source errors.
+module `SwapAncillaCompatibility.lean` passed its package build and focused
+strict check at `fa979bdb` in run `43755230423`, job `132938012552`. It is an
+additive continuation of #10640 and leaves the general definitions unchanged.
 
 ## Source reading and ownership
 
@@ -57,7 +57,7 @@ Its source proof applies the actual family field at $d,d,N=1$, computes the
 sitewise swap as a permutation of configurations, and compares the diagonal
 entries over the constant configurations $(a,a)$ and $(a,b)$. Thus no separate
 single-site-equivalence bridge is left unstated in the Lean signatures, though
-these new declarations still need compiler verification. This explains why a
+these declarations have now passed compiler and focused strict checks. This explains why a
 dimension-only family compatible with all factorizations is too restrictive
 for a distinguished-species swap whenever $d\geq2$.
 
@@ -150,9 +150,10 @@ The two-to-four image witness, the four-to-sixteen compatibility witness, and
 the two full actions on four original levels with a qubit ancilla were checked
 using exact arithmetic. The source/coordinates and the private permutation
 sandwich formula were reviewed against pinned Mathlib's `PEquiv` matrix lemmas.
-The additional Lean candidate has no placeholders, but no Lean elaboration or
-axiom check has run. No new source completion or global phase counterexample is
-claimed. The initial #10640 build failed after reaching the new transport helper;
-its reported errors are repaired in the same continuation. No passing Lean check
-is inferred from those repairs. The next hosted run must check all three modules
-and their complete current signatures.
+All nine additional Lean declarations passed package-option compilation and
+focused warnings-as-errors checks at `fa979bdb`; no axiom audit has run. The
+18 transport declarations passed the same checks at `b59d8045`. The five
+distinguished-matrix declarations in `PhysicalMatrixSymmetry.lean` remain
+candidates after two conditional-reduction errors; the source repairs need
+a new hosted check. No original source completion or global phase counterexample
+is claimed. The complete root build and compiled-reference checks are outstanding.

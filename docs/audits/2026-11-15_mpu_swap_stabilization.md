@@ -1,8 +1,9 @@
 # Swap comparison with a common identity ancilla
 
-Status: a mathematical reduction and source-written Lean candidate. The new
-declarations are unverified; no Blueprint completion is claimed. Source checkout:
-`cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
+Status: the 18 transport declarations passed focused strict Lean checks at
+`b59d8045`; the nine obstruction declarations passed at `fa979bdb`. The five
+distinguished-matrix declarations remain candidates. The original source entry
+is unfinished. Initial source checkout: `cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
 
 ## Ownership and existing work
 
@@ -175,9 +176,9 @@ with an arbitrary common identity ancilla and common positive blocking.
 If MPU conditions on the original endpoints are also included, they are
 preserved by the unitary involution $F_1$.
 
-This is a mathematical proof for the specified full actions. It does not
-formalize the unrestricted source lemma or choose the semantics of its
-unstated ancilla action. For equal positive starting physical dimensions,
+This proves the comparison for the natural labelled-spin full actions. It does
+not identify the result with the current general equivalence predicate or
+select an arbitrary abstract enlarged action from its restriction alone. For equal positive starting physical dimensions,
 balanced positive ancilla sizes are necessarily equal, so a common ancilla
 covers that balancing condition for the shift examples.
 
@@ -219,7 +220,7 @@ explicit existential over common $x,k>0$. No second generic path predicate is
 needed. The source-labelled `lemma:sym-trafo-swap` must remain unfinished until
 the intended stabilization convention is settled and the result is checked.
 
-## Validation and limits
+## Initial local validation and limits
 
 The proof was checked against the current signatures and the source equations.
 The live `main` version of `Equivalence.lean` was also read through the GitHub
@@ -341,3 +342,25 @@ errors or warnings. The repair finishes that equality by definitional reduction
 from `Equiv.piCongrRight` and the explicit involutive swap equivalence. Until the
 whole module passes, its nine declarations remain unverified candidates.
 Module policies and inline diagram semantics passed at that head.
+
+
+## Exact-head check at fa979bdb
+
+Run `43755230423`, build job `132938012552`, built
+`SwapAncillaCompatibility.lean` in 5.4 seconds and reported its focused strict
+check as `ok`. All nine obstruction declarations are therefore checked at this
+exact head. Their four auxiliary Blueprint entries now reflect this result.
+These are statements about the present global-family and coprime-ancilla
+conventions, not counterexamples to the intended labelled-spin source lemma.
+
+The five-declaration distinguished-matrix module had two errors: a conjugation
+conditional did not distribute automatically, and a product of ancillary
+Kronecker deltas reduced to equal conditionals with different decidability
+expressions. The repair splits the common ancillary-coordinate condition
+explicitly in each proof. No definitions, hypotheses, or statements change.
+The remaining three private matrix identities and both full sandwich
+semiconjugacy proofs produced no diagnostics, but the whole module remains a
+candidate until its complete build and strict check pass.
+
+Module policies and inline diagram semantics passed. The complete root build,
+compiled-reference checks, axiom audit, and final-head checks remain outstanding.

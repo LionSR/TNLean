@@ -61,8 +61,9 @@ private theorem operatorId_map_star {N : ℕ}
     tensorPhysicalIdOperator (X.map (starRingEnd ℂ)) x =
       (tensorPhysicalIdOperator X x).map (starRingEnd ℂ) := by
   ext σ τ
-  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply]
+  by_cases h : (fun n ↦ (σ n).modNat) = (fun n ↦ (τ n).modNat)
+  <;> simp [tensorPhysicalIdOperator, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, h]
 
 private theorem operatorId_sitewisePhysicalMatrix
     (Q : Matrix (Fin d) (Fin d) ℂ) (x N : ℕ) :
@@ -75,7 +76,8 @@ private theorem operatorId_sitewisePhysicalMatrix
     ∏ n, Q (σ n).divNat (τ n).divNat *
       if (σ n).modNat = (τ n).modNat then 1 else 0
   rw [Finset.prod_mul_distrib, Fintype.prod_boole]
-  simp only [funext_iff]
+  by_cases h : ∀ n, (σ n).modNat = (τ n).modNat
+  <;> simp [funext_iff, h]
 
 namespace FiniteChainOperatorSymmetry
 
