@@ -56,8 +56,9 @@ private theorem chainShiftSwap_sandwich_apply (d N : ℕ)
     rw [Fintype.prod_boole]
     simp [e, funext_iff]
   rw [hC]
-  simpa only [Equiv.Perm.permMatrix, PEquiv.mul_toMatrix_toPEquiv,
+  simp only [Equiv.Perm.permMatrix, PEquiv.mul_toMatrix_toPEquiv,
     PEquiv.toMatrix_toPEquiv_mul, Matrix.submatrix_apply]
+  rfl
 
 /-- A globally coherent family cannot have swap-combined adjunction at
 physical dimension \(d^2\) when the original species has two distinct basis

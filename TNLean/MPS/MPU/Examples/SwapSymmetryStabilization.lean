@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Examples.SwapSymmetryTransport
-import TNLean.MPS.MPU.PhysicalAncillaLeftMul
+import TNLean.MPS.MPU.PhysicalMatrixSymmetry
 
 /-!
 # Swap comparisons with an identity ancilla
@@ -18,10 +18,11 @@ comparisons allow intermediate tensors outside the identity-ancilla image.
 **Scope restriction (specified ancilla action):** the comparisons use the
 explicit extension that fixes the ancilla and exchanges the two original
 physical species. They are explicit existential statements about common
-positive ancillas and blocking, not `EquivalentUnderSymmetry`. The source
-does not determine an enlarged action from its original-dimension action.
-Its unrestricted comparison and the general equivalence convention remain
-open; see `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
+positive ancillas and blocking, not `EquivalentUnderSymmetry`. This is the
+natural labelled-spin reading of the source's later ancilla construction.
+An abstract original-dimension action without the distinguished physical
+data does not determine its enlarged action. The general equivalence
+convention remains open; see `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
 
 **Local fix (one-sided swap):** the transformation is the output action in
 `threeMPU2`, not the two-sided expression in the printed proof paragraph.
@@ -114,21 +115,15 @@ private theorem chainBlockedAncillaSwap_map_star (d x k N : ℕ) :
 after blocking. Source: arXiv:1703.09188, `SSymmetries-dagger`, with the
 specified extension \(Q_x=\mathbb S\otimes I_x\). -/
 noncomputable def ancillaSwapDaggerSymmetry (d x k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim (d * d * x) k) where
-  applicable := {N | 0 < N}
-  action := fun {N} X ↦
-    sitewisePhysicalMatrix (blockedAncillaSwap d x k) N * Xᴴ *
-      sitewisePhysicalMatrix (blockedAncillaSwap d x k) N
+    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim (d * d * x) k) :=
+  .daggerWithPhysicalMatrix (blockedAncillaSwap d x k)
 
 /-- Swap-combined transposition on the full ancilla-enlarged operator space
 after blocking. Source: arXiv:1703.09188, `SSymmetries-transpose`, with the
 specified extension \(Q_x=\mathbb S\otimes I_x\). -/
 noncomputable def ancillaSwapTransposeSymmetry (d x k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim (d * d * x) k) where
-  applicable := {N | 0 < N}
-  action := fun {N} X ↦
-    sitewisePhysicalMatrix (blockedAncillaSwap d x k) N * Xᵀ *
-      sitewisePhysicalMatrix (blockedAncillaSwap d x k) N
+    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim (d * d * x) k) :=
+  .transposeWithPhysicalMatrix (blockedAncillaSwap d x k)
 
 private theorem ancillaSwapDagger_invariance_iff (d x k : ℕ) {E : ℕ}
     (W : MPOTensor (MPSTensor.blockPhysDim (d * d * x) k) E) :

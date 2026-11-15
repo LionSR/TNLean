@@ -296,3 +296,48 @@ The next repair uses Mathlib's permutation multiplication directly, keeps the
 final scalar contradictions inside terminal simplifications, and evaluates the
 finite literal witness. Those changes remain candidates until checked. The full
 root build, compiled-reference checks, and axiom audit are still outstanding.
+
+## Distinguished-matrix API candidate
+
+The additive `PhysicalMatrixSymmetry.lean` retains the local matrix as physical
+data. Its two full actions are $X\mapsto Q_NX^\dagger Q_N$ and
+$X\mapsto Q_NX^{\mathsf T}Q_N$, where $Q_N=Q^{\otimes N}$. The construction
+uses no dimension-only choice of a new swap. Adjoining an identity ancilla
+replaces $Q$ by $Q\otimes I_x$; compatibility with the actual sitewise operator
+embedding is derived for every operator, ancilla size, and chain length.
+Ordinary conjugation has the corresponding direct compatibility theorem.
+The algebraic identities hold for every complex square $Q$; the source's real
+symmetric unitary involutions are a subclass. No involution property for
+arbitrary $Q$ is asserted.
+
+This is a five-declaration extension of the existing finite-chain action type,
+not a replacement for the general equivalence predicates. The swap constructors
+use it at the same explicitly blocked physical matrix as before, so their full
+actions and all theorem statements remain definitionally unchanged. It avoids
+the requirement that the original swap descend along every smaller physical
+factorization. The source-labelled comparison, the arbitrary balanced-ancilla
+convention, and any general equivalence revision remain open.
+
+The five new declarations and their two Blueprint entries remain candidates
+until hosted Lean checks pass. Generated import and reader-facing prose checks,
+100-column and forbidden-token source scans, and whitespace checks pass locally.
+The chapter tags all 32 public declarations exactly once. Those static checks
+are separate from the 18 transport declarations checked at `82f750c8`.
+
+Supplemental exact rational-complex checks of arbitrary local matrices passed
+27 physical-size, ancilla-size, and chain-length cases, including zero sizes and
+length zero (323 enlarged operator entries). They verify the sitewise regrouping
+and all three embedding identities independently of the special swap. The script
+`/tmp/check_7574_physical_matrix.py` is temporary and is not a formal proof.
+
+## Exact-head check at b59d8045
+
+Run `43754146822`, build job `132934861605`, again passed the focused strict
+checks for both transport modules. Their package builds took 6.6 and 4.1 seconds.
+The obstruction module now has only one diagnostic: after permutation matrix
+multiplication, the pointwise configuration permutation must be unfolded. The
+scalar contradictions and literal four-to-sixteen witness no longer produce
+errors or warnings. The repair finishes that equality by definitional reduction
+from `Equiv.piCongrRight` and the explicit involutive swap equivalence. Until the
+whole module passes, its nine declarations remain unverified candidates.
+Module policies and inline diagram semantics passed at that head.

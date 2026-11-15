@@ -45,6 +45,44 @@
     which proves~(\ref{eq:mpu_ancilla_output_action}).
 \end{proof}
 
+\begin{definition}[Operator actions with a distinguished local matrix]
+    \label{def:mpu_distinguished_physical_matrix_actions}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix,
+        MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix}
+    \notready
+    \uses{def:mpu_finite_chain_operator_symmetry}
+    For a complex square matrix $Q$ and $N>0$, put $Q_N=Q^{\otimes N}$.
+    Retaining $Q$ as part of the physical data defines the full actions
+    $X\mapsto Q_NX^\dagger Q_N$ and $X\mapsto Q_NX^{\mathsf T}Q_N$.
+    The source symmetry class takes $Q$ real, symmetric, and unitary;
+    the actions themselves are defined for every $Q$.
+    See \cite[lines~1301--1322]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Compatibility of distinguished physical actions with ancillas]
+    \label{lem:mpu_distinguished_physical_matrix_ancilla}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_tensorPhysicalId_semiconj,
+        MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_tensorPhysicalId_semiconj,
+        MPOTensor.conjugationSymmetry_tensorPhysicalId_semiconj}
+    \notready
+    \uses{def:mpu_distinguished_physical_matrix_actions,
+        def:mpu_physical_identity_matrix, def:mpu_finite_chain_operator_symmetry}
+    Let $J_x(X)=X\otimes I_{x^N}$ in sitewise product coordinates.
+    For every $Q,x,N$, $J_x$ intertwines each of the two actions with
+    its enlarged action specified by $Q\otimes I_x$. It also intertwines
+    ordinary entrywise conjugation with itself. These identities hold on
+    the entire original operator algebra, including at chain length zero.
+\end{lemma}
+
+\begin{proof}
+    In product coordinates,
+    $J_x(Q_N)=(Q\otimes I_x)^{\otimes N}$.
+    The map $J_x$ preserves products, adjunction, transposition, and
+    entrywise conjugation. Applying these identities to the sandwich
+    products proves the two intertwining assertions; applying the last
+    identity directly proves the conjugation assertion.
+\end{proof}
+
 \begin{definition}[Swap actions fixing a distinguished ancilla]
     \label{def:mpu_ancilla_swap_actions}
     \lean{MPOTensor.ancillaSwapMatrix,
