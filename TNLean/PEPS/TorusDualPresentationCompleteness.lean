@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusDualPathPresentation
 import TNLean.PEPS.TorusDualFlatTransport
+import Mathlib.Algebra.Group.End
 
 /-!
 # Completeness of the finite native dual-path presentation
@@ -28,12 +29,13 @@ noncomputable section
 namespace TNLean.PEPS
 
 universe u
-variable {width height : ℕ} [NeZero width] [NeZero height]
+variable {width height : ℕ}
 local notation "X" => TorusVertex width height
+local notation "FT" => TorusDualFlatTransport (width := width) (height := height)
 local instance presentationCompleteQuiver : Quiver X := torusDualQuiver width height
-variable {R : Set X} {Y : X → Type u}
+variable {R : Set (TorusVertex width height)} {Y : TorusVertex width height → Type u}
 
-private def stepEquiv (F : TorusDualFlatTransport R Y) {a b : X}
+private def stepEquiv (F : FT R Y) {a b : X}
     (e : TorusDualStep a b) : Y a ≃ Y b where
   toFun := F.step e
   invFun := F.step e.reverse
@@ -42,12 +44,12 @@ private def stepEquiv (F : TorusDualFlatTransport R Y) {a b : X}
     intro z
     simpa only [TorusDualStep.reverse_reverse] using F.reverse_step e.reverse z
 
-private def pathEquiv (F : TorusDualFlatTransport R Y) {a : X} :
+private def pathEquiv (F : FT R Y) {a : X} :
     {b : X} → TorusDualPath a b → Y a ≃ Y b
   | _, .nil => Equiv.refl _
   | _, .cons p e => (pathEquiv F p).trans (stepEquiv F e)
 
-private theorem pathEquiv_apply (F : TorusDualFlatTransport R Y)
+private theorem pathEquiv_apply (F : FT R Y)
     {a b : X} (p : TorusDualPath a b) (z : Y a) : pathEquiv F p z = F.eval p z := by
   induction p with
   | nil => rfl
@@ -55,35 +57,37 @@ private theorem pathEquiv_apply (F : TorusDualFlatTransport R Y)
     change F.step e (pathEquiv F p z) = F.step e (F.eval p z)
     rw [ih]
 
-private def rootEquiv (F : TorusDualFlatTransport R Y) (v : X) : Y (0, 0) ≃ Y v :=
+variable [NeZero width] [NeZero height]
+
+private def rootEquiv (F : FT R Y) (v : X) : Y (0, 0) ≃ Y v :=
   pathEquiv F (torusDualRootRoute v)
 
-private theorem rootEquiv_apply (F : TorusDualFlatTransport R Y) (v : X) (z : Y (0, 0)) :
+private theorem rootEquiv_apply (F : FT R Y) (v : X) (z : Y (0, 0)) :
     rootEquiv F v z = F.eval (torusDualRootRoute v) z := pathEquiv_apply F _ z
 
-private theorem rootEquiv_zero (F : TorusDualFlatTransport R Y) :
+private theorem rootEquiv_zero (F : FT R Y) :
     rootEquiv F ((0, 0) : X) = Equiv.refl _ := by
   simp only [rootEquiv, torusDualRootRoute_zero, pathEquiv]
 
-private def normalizedStep (F : TorusDualFlatTransport R Y) {a b : X}
+private def normalizedStep (F : FT R Y) {a b : X}
     (e : TorusDualStep a b) : Equiv.Perm (Y (0, 0)) :=
   ((rootEquiv F a).trans (stepEquiv F e)).trans (rootEquiv F b).symm
 
-private theorem normalizedStep_apply (F : TorusDualFlatTransport R Y) {a b : X}
+private theorem normalizedStep_apply (F : FT R Y) {a b : X}
     (e : TorusDualStep a b) (z : Y (0, 0)) :
     normalizedStep F e z = (rootEquiv F b).symm (F.step e (rootEquiv F a z)) := rfl
 
-private theorem normalizedStep_reverse (F : TorusDualFlatTransport R Y) {a b : X}
+private theorem normalizedStep_reverse (F : FT R Y) {a b : X}
     (e : TorusDualStep a b) : normalizedStep F e.reverse = (normalizedStep F e)⁻¹ := by
   ext z
   rfl
 
-private def transportGenerators (F : TorusDualFlatTransport R Y) :
+private def transportGenerators (F : FT R Y) :
     X ⊕ X → Equiv.Perm (Y (0, 0))
   | .inl (x, y) => normalizedStep F (.east x y)
   | .inr (x, y) => normalizedStep F (.north x y)
 
-private theorem lift_step (F : TorusDualFlatTransport R Y) {a b : X}
+private theorem lift_step (F : FT R Y) {a b : X}
     (e : TorusDualStep a b) :
     FreeGroup.lift (transportGenerators F) (torusDualStepWord e) = normalizedStep F e := by
   cases e with
@@ -96,7 +100,7 @@ private theorem lift_step (F : TorusDualFlatTransport R Y) {a b : X}
     simpa only [torusDualStepWord, map_inv, FreeGroup.lift_apply_of, transportGenerators,
       TorusDualStep.reverse] using (normalizedStep_reverse F (.north x y)).symm
 
-private theorem lift_word_apply (F : TorusDualFlatTransport R Y) {a b : X}
+private theorem lift_word_apply (F : FT R Y) {a b : X}
     (p : TorusDualPath a b) (z : Y (0, 0)) :
     FreeGroup.lift (transportGenerators F) (torusDualPathWord p) z =
       (rootEquiv F b).symm (F.eval p (rootEquiv F a z)) := by
@@ -108,7 +112,7 @@ private theorem lift_word_apply (F : TorusDualFlatTransport R Y) {a b : X}
     simp only [torusDualPathWord, map_mul, Equiv.Perm.mul_apply, lift_step,
       normalizedStep_apply, ih, Equiv.apply_symm_apply, TorusDualFlatTransport.eval]
 
-private theorem lift_root_route (F : TorusDualFlatTransport R Y) (v : X) :
+private theorem lift_root_route (F : FT R Y) (v : X) :
     FreeGroup.lift (transportGenerators F) (torusDualPathWord (torusDualRootRoute v)) = 1 := by
   ext z
   rw [lift_word_apply, rootEquiv_zero]
@@ -116,7 +120,7 @@ private theorem lift_root_route (F : TorusDualFlatTransport R Y) (v : X) :
   rw [← rootEquiv_apply]
   exact (rootEquiv F v).symm_apply_apply z
 
-private theorem lift_face (F : TorusDualFlatTransport R Y) (v : X)
+private theorem lift_face (F : FT R Y) (v : X)
     (hv : (v.1 + 1, v.2 + 1) ∈ R) :
     FreeGroup.lift (transportGenerators F) (torusDualFaceWord v) = 1 := by
   have h : FreeGroup.lift (transportGenerators F)
@@ -129,7 +133,7 @@ private theorem lift_face (F : TorusDualFlatTransport R Y) (v : X)
     exact (TorusDualHomotopy.square v.1 v.2 hv).flatTransport_eval_eq F _
   simp only [torusDualFaceWord, map_mul, map_inv, h, mul_inv_cancel]
 
-private theorem lift_relators (S : Finset X) (F : TorusDualFlatTransport (S : Set X) Y) :
+private theorem lift_relators (S : Finset X) (F : FT (S : Set X) Y) :
     ∀ r ∈ (torusDualPresentationRelators S : Set (FreeGroup (X ⊕ X))),
       FreeGroup.lift (transportGenerators F) r = 1 := by
   classical
