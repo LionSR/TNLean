@@ -20,6 +20,97 @@ open scoped Matrix
 
 namespace Matrix
 
+private theorem exists_hermitian_functional_killing {m : ℕ}
+    (hm : 2 ≤ m) (ρ : Matrix (Fin m) (Fin m) ℂ) (hρ : ρ.IsHermitian) :
+    ∃ φ : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ,
+      φ ≠ 0 ∧ φ ρ = 0 ∧
+      (∀ X, X.IsHermitian → IsSelfAdjoint (φ X)) := by
+  let i : Fin m := ⟨0, by omega⟩
+  let j : Fin m := ⟨1, by omega⟩
+  have hij : i ≠ j := by
+    intro h
+    have h' := congrArg Fin.val h
+    simp only [i, j] at h'
+    omega
+  let e (k : Fin m) : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ :=
+    { toFun := fun X => X k k
+      map_add' := by intros; rfl
+      map_smul' := by intros; rfl }
+  by_cases hZero : ρ i i = 0
+  · refine ⟨e i, ?_, hZero, ?_⟩
+    · intro h
+      have h' := congrArg (fun φ : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ =>
+        φ (Matrix.single i i 1)) h
+      simpa [e] using h'
+    · intro X hX
+      change star (X i i) = X i i
+      exact hX.apply i i
+  · let φ := ρ j j • e i - ρ i i • e j
+    refine ⟨φ, ?_, ?_, ?_⟩
+    · intro h
+      have h' := congrArg (fun ψ : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ =>
+        ψ (Matrix.single j j 1)) h
+      have hNeg : -(ρ i i) = 0 := by
+        simpa [φ, e, hij, hij.symm] using h'
+      exact hZero (neg_eq_zero.mp hNeg)
+    · change ρ j j * ρ i i - ρ i i * ρ j j = 0
+      ring
+    · intro X hX
+      change star (ρ j j * X i i - ρ i i * X j j) =
+        ρ j j * X i i - ρ i i * X j j
+      rw [star_sub, star_mul, star_mul, hρ.apply j j, hρ.apply i i,
+        hX.apply i i, hX.apply j j]
+      ring
+
+/-- Between matrix algebras of dimensions at least two, every Hermitian
+prepared matrix is killed by a nonzero Hermitian-preserving complex-linear
+map of zero output trace. No positivity or faithfulness assumption on the
+prepared matrix is required. This supplies the algebraic direction in the
+isolated-corner argument associated with arXiv:1708.00029, Theorem 4.1;
+support in a prescribed Choi face is a separate condition. -/
+theorem exists_nonzero_trace_zero_map_killing_hermitian {m n : ℕ}
+    (hm : 2 ≤ m) (hn : 2 ≤ n)
+    (ρ : Matrix (Fin m) (Fin m) ℂ) (hρ : ρ.IsHermitian) :
+    ∃ L : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ,
+      L ≠ 0 ∧ (∀ Y, (L Y).trace = 0) ∧ L ρ = 0 ∧
+      (∀ Y, Y.IsHermitian → (L Y).IsHermitian) := by
+  obtain ⟨φ, hφne, hφkill, hφherm⟩ := exists_hermitian_functional_killing hm ρ hρ
+  let u : Fin n := ⟨0, by omega⟩
+  let v : Fin n := ⟨1, by omega⟩
+  have huv : u ≠ v := by
+    intro h
+    have h' := congrArg Fin.val h
+    simp only [u, v] at h'
+    omega
+  let A : Matrix (Fin n) (Fin n) ℂ := Matrix.single u u 1 - Matrix.single v v 1
+  have hAne : A ≠ 0 := by
+    intro h
+    have h' := congrArg (fun B : Matrix (Fin n) (Fin n) ℂ => B u u) h
+    simpa [A, huv, huv.symm] using h'
+  have hAtrace : A.trace = 0 := by
+    simp [A, Matrix.trace_sub, Matrix.trace, Matrix.diag, Matrix.single_apply]
+  have hAherm : A.IsHermitian := by
+    change Aᴴ = A
+    ext i j
+    simp [A, Matrix.conjTranspose_apply, Matrix.single_apply, and_comm]
+  let L := φ.smulRight A
+  refine ⟨L, ?_, ?_, ?_, ?_⟩
+  · intro h
+    apply hφne
+    ext X : 1
+    change φ X = 0
+    have h' := congrArg
+      (fun T : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] Matrix (Fin n) (Fin n) ℂ => T X) h
+    have hSmul : φ X • A = 0 := by simpa [L] using h'
+    exact (smul_eq_zero.mp hSmul).resolve_right hAne
+  · intro Y
+    change (φ Y • A).trace = 0
+    rw [Matrix.trace_smul, hAtrace, smul_zero]
+  · change φ ρ • A = 0
+    rw [hφkill, zero_smul]
+  · intro Y hY
+    exact hAherm.smul (hφherm Y hY)
+
 private theorem recover_isometric_corner {D r : ℕ}
     (V : Matrix (Fin D) (Fin r) ℂ) (hV : Vᴴ * V = 1)
     (Y : Matrix (Fin r) (Fin r) ℂ) : Vᴴ * (V * Y * Vᴴ) * V = Y := by
@@ -103,5 +194,33 @@ theorem exists_annihilating_corner_perturbation {D m n : ℕ}
   refine ⟨K, hKne, hK, hFK, hKF, hKK, hKtrace, hKherm, ?_⟩
   intro p hp
   exact add_pow_eq_of_annihilating_square_zero hFK hKF hKK hp
+
+/-- The isolated-corner branch identities give a nonzero annihilating
+direction whenever both corner dimensions are at least two and the
+incoming prepared matrix is Hermitian. This removes the supplied
+rectangular direction from the isolated-corner construction for
+arXiv:1708.00029, Theorem 4.1. Complete positivity and compatibility with
+the original Choi support remain separate obligations. -/
+theorem exists_annihilating_corner_perturbation_of_two_le {D m n : ℕ}
+    (hm : 2 ≤ m) (hn : 2 ≤ n)
+    (V : Matrix (Fin D) (Fin m) ℂ) (W : Matrix (Fin D) (Fin n) ℂ)
+    (hV : Vᴴ * V = 1) (hW : Wᴴ * W = 1) (hOrth : Vᴴ * W = 0)
+    (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
+    (ρ : Matrix (Fin m) (Fin m) ℂ) (hρ : ρ.IsHermitian)
+    (σ : Matrix (Fin D) (Fin D) ℂ)
+    (φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
+    (hIn : ∀ X, Vᴴ * F X * V = φ X • ρ)
+    (hOut : ∀ Y, F (W * Y * Wᴴ) = Y.trace • σ) :
+    ∃ K : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ),
+      K ≠ 0 ∧ F * K = 0 ∧ K * F = 0 ∧ K * K = 0 ∧
+      (∀ X, (K X).trace = 0) ∧
+      (∀ X, X.IsHermitian → (K X).IsHermitian) ∧
+      (∀ p : ℕ, 2 ≤ p → (F + K) ^ p = F ^ p) := by
+  obtain ⟨L, hLne, hTrace, hKill, hHerm⟩ :=
+    exists_nonzero_trace_zero_map_killing_hermitian hm hn ρ hρ
+  obtain ⟨K, hKne, _, hFK, hKF, hKK, hKT, hKH, hPow⟩ :=
+    exists_annihilating_corner_perturbation V W hV hW hOrth F L hLne
+      ρ σ φ hIn hOut hTrace hKill hHerm
+  exact ⟨K, hKne, hFK, hKF, hKK, hKT, hKH, hPow⟩
 
 end Matrix

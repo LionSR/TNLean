@@ -880,6 +880,33 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Lemma~\ref{thm:periodic_annihilating_power_perturbation}.
 \end{proof}
 
+\begin{lemma}[Existence of an isolated-corner direction]
+    \label{thm:periodic_corner_direction_exists}
+    \lean{Matrix.exists_nonzero_trace_zero_map_killing_hermitian,
+        Matrix.exists_annihilating_corner_perturbation_of_two_le}
+    \leanok
+    Let $m,n\ge2$ and let $\rho\in M_m(\C)$ be Hermitian.
+    There is a nonzero Hermitian-preserving complex-linear map
+    $L:M_m(\C)\to M_n(\C)$ with $L(\rho)=0$ and
+    $\tr L(Y)=0$ for every $Y$. Consequently, the branch identities
+    and isometries of Lemma~\ref{thm:periodic_annihilating_corner_lift}
+    give a nonzero Hermitian-preserving $K$ of zero output trace
+    satisfying $FK=KF=K^2=0$ and $(F+K)^p=F^p$ for every $p\ge2$,
+    without a supplied map $L$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_annihilating_corner_lift}
+    Choose distinct input coordinates $i,j$. If $\rho_{ii}=0$, use
+    $\psi(Y)=Y_{ii}$; otherwise use
+    $\psi(Y)=\rho_{jj}Y_{ii}-\rho_{ii}Y_{jj}$.
+    This is a nonzero complex-linear functional, real on Hermitian
+    inputs, with $\psi(\rho)=0$. For distinct output coordinates $u,v$,
+    set $L(Y)=\psi(Y)(E_{uu}-E_{vv})$. This has all claimed properties.
+    Apply Lemma~\ref{thm:periodic_annihilating_corner_lift}.
+\end{proof}
+
 \begin{lemma}[Exact powers from a preserved square]
     \label{thm:periodic_square_preserving_power_perturbation}
     \lean{add_pow_eq_of_sq_eq_of_sq_mul_eq_zero,
@@ -946,7 +973,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \leanok
     Let $\rho\in M_m(\C)$ be positive definite, and let
     $A\in M_n(\C)$ and $B\in M_m(\C)$ be positive semidefinite with
-    $\operatorname{tr}A=\operatorname{tr}(B\rho)>0$.
+    $\tr A=\tr(B\rho)>0$.
     There exist $r\le\operatorname{rank}A+\operatorname{rank}B-1$
     matrices $K_i\in M_{n,m}(\C)$ satisfying
     $\sum_iK_i\rho K_i^\dagger=A$ and $\sum_iK_i^\dagger K_i=B$.
