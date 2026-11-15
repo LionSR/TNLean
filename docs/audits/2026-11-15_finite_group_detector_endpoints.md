@@ -366,6 +366,16 @@ canonical string creation theorem identifies that first excitation with its
 two-wall periodic vector. Its nonzero-wall and separating-left-inverse
 assumptions are retained.
 
+`FiniteGroupDetectorLocalComparison.lean` additionally contracts a canonical
+string crossing **any** wall `e y z`, with arbitrary rectangular exterior
+chains. It produces the actual coefficient `B g y z` and the transformed
+wall `e (g • y) (g • z)`, together with the two new endpoint walls. The
+exterior functions can contain spectator walls, so this local comparison is
+not limited to the first two-wall state. It applies in particular to
+`y = g ^ r • g • x`, `z = g ^ r • x`. Its proof uses the native endpoint
+identities and the family's blocked local action inside a trace. It still
+does not prove truncation/string agreement on those multiwall states.
+
 **Validation status of this continuation:** these new declarations have been
 written but await hosted Lean checks. The earlier eight-module fixed-circuit
 result is fully green on exact head

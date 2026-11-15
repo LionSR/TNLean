@@ -79,6 +79,42 @@
     identifies that forward product with the inverse cyclic invariant.
 \end{proof}
 
+\begin{lemma}[A canonical string crossing a wall with arbitrary exterior chains]
+    \label{lem:mpug_detector_local_wall_comparison}
+    \lean{MPOTensor.GroupFamily.BlockActionData.groupWallString_mulVec_trace_wall}
+    In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
+    fix blocks $y,z$ and write
+    $C_{yz}(\sigma,i,\tau)=A_y^{\sigma}e_{yz}^iA_z^{\tau}$ for the
+    one-wall chain. Let $P(p)$ and $Q(q)$ be arbitrary rectangular
+    matrix-valued functions of the configurations outside an interval,
+    with dimensions making the following trace defined. Suppose a vector
+    has coefficients
+    $\psi(p,a,\mu,b,q)=\operatorname{tr}(P(p)A_y^aC_{yz}(\mu)A_z^bQ(q))$.
+    There is a buffer depending on $g,y,z$ such that, whenever the two
+    regions in $\mu$ adjacent to its wall exceed that buffer, the
+    canonical string on the interval with endpoint sites $a,b$ satisfies
+    \begin{align}
+        (O_g\psi)(p,a,\mu,b,q)
+         & =B^g_{y,z}\operatorname{tr}\bigl(P(p)e_{y,gy}^a
+        C_{gy,gz}(\mu)e_{gz,z}^bQ(q)\bigr).
+        \label{eq:mpug_detector_local_wall_comparison}
+    \end{align}
+    The exterior functions may contain other walls. This is a comparison
+    for the canonical string; agreement with an actual circuit truncation
+    is a separate assumption
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpug_group_domain_wall_string_creation,
+        thm:mpug_domain_wall_pair}
+    The endpoint contractions give $e_{y,gy}^aV_{g,y}$ and
+    $W_{g,z}e_{gz,z}^b$. The blocked local action on the interior wall is
+    $V_{g,y}(O_g\cdot C_{yz})(\mu)W_{g,z}=B^g_{y,z}C_{gy,gz}(\mu)$.
+    Substituting this identity inside the exterior trace gives
+    (\ref{eq:mpug_detector_local_wall_comparison}).
+\end{proof}
+
 \begin{lemma}[The first crossed truncation comparison]
     \label{lem:mpug_detector_first_canonical_crossing}
     \lean{MPOTensor.GroupFamily.BlockActionData.interval_mul_interval_mulVec_mpv_cross_of_canonical_comparisons}
