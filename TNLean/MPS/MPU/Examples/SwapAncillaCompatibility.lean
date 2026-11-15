@@ -9,12 +9,13 @@ import TNLean.MPS.MPU.PhysicalAncillaLeftMul
 /-!
 # Obstructions to dimension-only swap stabilization
 
-The flattened swaps at physical dimensions four and sixteen do not commute
-with the canonical identity-ancilla embedding from four to sixteen. Thus
-one cannot choose the ordinary flattened swap at every square dimension
-and also require identity-ancilla semiconjugacy. The witness is the
-projection onto the first coordinate, so the obstruction is independent
-of any canonical-form or path construction.
+The flattened swap at physical dimension four does not preserve the image
+of the identity-ancilla embedding from dimension two. Thus no action at
+dimension two can be semiconjugate to this swap-combined action through
+that embedding. Separately, the canonical flattened swaps at dimensions
+four and sixteen do not intertwine the embedding from four to sixteen.
+The witnesses are first-coordinate projections, independently of any
+canonical-form or path construction.
 
 For equal positive physical dimensions, balanced coprime ancillas are both
 one. This explains separately why the current coprime-ancilla predicate
@@ -37,6 +38,62 @@ private theorem shiftSwap_sandwich_apply (d : ℕ)
   simp only [shiftPhysicalSwap, Equiv.Perm.permMatrix,
     PEquiv.toMatrix_toPEquiv_mul, PEquiv.mul_toMatrix_toPEquiv,
     Matrix.submatrix_apply, bondPairSwapEquiv_symm, bondPairSwapEquiv_apply, id_eq]
+
+/-- The flattened swap takes a two-dimensional matrix tensored with an
+identity outside that embedding image. The two diagonal entries over the
+same original coordinate become one and zero.
+This obstructs realizing the swap-combined source symmetry as a component
+of a family compatible with every identity-ancilla embedding. Source
+context: arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem shiftSwap_sandwich_not_mem_range_physicalIdMatrix :
+    let P : Matrix (Fin 2) (Fin 2) ℂ := Matrix.single 0 0 1
+    shiftPhysicalSwap 2 * physicalIdMatrix P 2 * shiftPhysicalSwap 2 ∉
+      Set.range (fun Y : Matrix (Fin 2) (Fin 2) ℂ => physicalIdMatrix Y 2) := by
+  dsimp only
+  rintro ⟨Y, h⟩
+  have hzero := congrFun (congrFun h (0 : Fin 4)) (0 : Fin 4)
+  have hone := congrFun (congrFun h (1 : Fin 4)) (1 : Fin 4)
+  norm_num [physicalIdMatrix, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, shiftSwap_sandwich_apply, Matrix.single, bondPairSwap,
+    finProdFinEquiv] at hzero hone
+  have hbad : (1 : ℂ) = 0 := hzero.symm.trans hone
+  norm_num at hbad
+
+/-- No action at physical dimension two can be semiconjugate through an
+identity ancilla to canonical swap-combined adjunction at dimension four.
+This is a necessary-condition obstruction for the dimension-only family,
+not a counterexample to the labelled-spin source interpretation.
+Source context: arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem not_semiconj_physicalIdMatrix_to_shiftSwapDagger
+    (f : Matrix (Fin 2) (Fin 2) ℂ → Matrix (Fin 2) (Fin 2) ℂ) :
+    ¬Function.Semiconj (fun X : Matrix (Fin 2) (Fin 2) ℂ => physicalIdMatrix X 2)
+      f (fun X => shiftPhysicalSwap 2 * Xᴴ * shiftPhysicalSwap 2) := by
+  intro h
+  let P : Matrix (Fin 2) (Fin 2) ℂ := Matrix.single 0 0 1
+  have hP : Pᴴ = P := by simp [P, Matrix.conjTranspose_single]
+  have hPx : (physicalIdMatrix P 2)ᴴ = physicalIdMatrix P 2 := by
+    rw [physicalIdMatrix_conjTranspose, hP]
+  have hcompat := h P
+  rw [hPx] at hcompat
+  exact shiftSwap_sandwich_not_mem_range_physicalIdMatrix ⟨f P, hcompat⟩
+
+/-- No action at dimension two can be semiconjugate through an identity
+ancilla to canonical swap-combined transposition at dimension four.
+Source context: arXiv:1703.09188, `def:equivalent-symmetry`, lines 1356--1366. -/
+theorem not_semiconj_physicalIdMatrix_to_shiftSwapTranspose
+    (f : Matrix (Fin 2) (Fin 2) ℂ → Matrix (Fin 2) (Fin 2) ℂ) :
+    ¬Function.Semiconj (fun X : Matrix (Fin 2) (Fin 2) ℂ => physicalIdMatrix X 2)
+      f (fun X => shiftPhysicalSwap 2 * Xᵀ * shiftPhysicalSwap 2) := by
+  intro h
+  let P : Matrix (Fin 2) (Fin 2) ℂ := Matrix.single 0 0 1
+  have hP : Pᵀ = P := by
+    ext i j
+    simp [P, Matrix.transpose_apply, Matrix.single, and_comm]
+  have hPx : (physicalIdMatrix P 2)ᵀ = physicalIdMatrix P 2 := by
+    rw [physicalIdMatrix_transpose, hP]
+  have hcompat := h P
+  rw [hPx] at hcompat
+  exact shiftSwap_sandwich_not_mem_range_physicalIdMatrix ⟨f P, hcompat⟩
 
 /-- Enlarging a four-dimensional site by a four-dimensional identity does
 not intertwine conjugation by the original flattened swap with conjugation

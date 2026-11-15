@@ -129,7 +129,30 @@
     positive $x,k$, then quantify over those same two integers.
 \end{proof}
 
-\begin{lemma}[Flattened swaps do not define an ancilla-compatible family]
+\begin{lemma}[A flattened swap does not preserve the ancilla image]
+    \label{lem:mpu_swap_ancilla_image_obstruction}
+    \lean{MPOTensor.shiftSwap_sandwich_not_mem_range_physicalIdMatrix,
+        MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapDagger,
+        MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapTranspose}
+    \notready
+    \uses{def:mpu_physical_identity_matrix, threeMPU2}
+    Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^2$. Then
+    $S_2(P\otimes I_2)S_2=I_2\otimes P$ is not of the form
+    $Y\otimes I_2$ for any two-dimensional matrix $Y$. Consequently no
+    map on two-dimensional matrices can intertwine the identity-ancilla
+    embedding with either $X\mapsto S_2X^\dagger S_2$ or
+    $X\mapsto S_2X^{\mathsf T}S_2$ on four-dimensional matrices.
+\end{lemma}
+
+\begin{proof}
+    Every $Y\otimes I_2$ has equal diagonal entries at the product
+    coordinates $(0,0)$ and $(0,1)$. The corresponding entries of
+    $I_2\otimes P$ are one and zero. Since $P\otimes I_2$ is
+    self-adjoint and symmetric, either proposed intertwining equation
+    would place this same matrix in the embedding image.
+\end{proof}
+
+\begin{lemma}[Flattened swaps at two enlarged dimensions are incompatible]
     \label{lem:mpu_flattened_swap_ancilla_obstruction}
     \lean{MPOTensor.physicalIdMatrix_shiftSwap_sandwich_ne,
         MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapDagger,
