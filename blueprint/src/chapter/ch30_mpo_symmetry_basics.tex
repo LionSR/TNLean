@@ -706,6 +706,7 @@ relation between word traces has nonnegative integer coefficients.
 \begin{definition}[Integer action matrices]%
     \label{def:mposym_integer_nimrep}
     \lean{MPOTensor.integerNIMRepMatrix, MPOTensor.integerNIMRepEval}
+    \leanok
     \uses{def:fusion_character_nimrep, def:mposym_integer_fusion}
     The integer action matrix associated to multiplicities is
     $\rho_a(y,x)=M_{a,x}^y$, with the output block as row and the input
@@ -718,6 +719,7 @@ relation between word traces has nonnegative integer coefficients.
         MPOTensor.integerNIMRepMatrix_unit,
         MPOTensor.isNIMRep_of_ringHom,
         MPOTensor.nimRep_unit_of_ringHom}
+    \leanok
     \uses{def:mposym_integer_nimrep}
     A nonnegative integer representation satisfies
     $\rho_a\rho_b=\sum_c N_{ab}^c\rho_c$.
@@ -729,6 +731,7 @@ relation between word traces has nonnegative integer coefficients.
     they also satisfy $M_{e,x}^y=\delta_{xy}$.
 \end{lemma}
 \begin{proof}
+    \leanok
     The $(y,x)$ entry of $\rho_a\rho_b$ is
     $\sum_zM_{a,z}^yM_{b,x}^z$, which equals the right side
     of~\eqref{eq:mpo_nimrep}. For the converse apply the homomorphism
