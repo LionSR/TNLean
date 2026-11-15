@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Convex.Caratheodory
+import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Basic.Real.Basic
 import Mathlib.LinearAlgebra.Dimension.Finrank
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
@@ -41,9 +42,11 @@ private def colTotal : ((α → ℝ) × (β → ℝ)) →ₗ[ℝ] ℝ where
 private def atom (ij : α × β) :
     (α → ℝ) × (β → ℝ) := (Pi.single ij.1 1, Pi.single ij.2 1)
 
+omit [Fintype β] in
 private theorem atom_rowTotal (ij : α × β) :
     rowTotal (atom ij) = 1 := by simp [rowTotal, atom, Pi.single_apply]
 
+omit [Fintype α] in
 private theorem atom_colTotal (ij : α × β) :
     colTotal (atom ij) = 1 := by simp [colTotal, atom, Pi.single_apply]
 
@@ -64,9 +67,13 @@ theorem exists_probability_coupling [Nonempty α] [Nonempty β]
   have hWeights : ∑ ij : α × β, a ij.1 * b ij.2 = 1 := by
     simp [Fintype.sum_prod_type, ← Finset.mul_sum, haSum, hbSum]
   have hVector : ∑ ij : α × β, (a ij.1 * b ij.2) • atom ij = (a, b) := by
-    ext i <;>
-      simp [atom, Fintype.sum_prod_type, Pi.single_apply, mul_ite, ite_mul,
-        ← Finset.mul_sum, ← Finset.sum_mul, haSum, hbSum]
+    apply Prod.ext
+    · ext i
+      simp [atom, Fintype.sum_prod_type, Prod.fst_sum, Finset.sum_apply,
+        Pi.single_apply, mul_ite, ← Finset.mul_sum, hbSum]
+    · ext j
+      simp [atom, Fintype.sum_prod_type, Prod.snd_sum, Finset.sum_apply,
+        Pi.single_apply, mul_ite, ← Finset.sum_mul, haSum]
   have hx : (a, b) ∈ convexHull ℝ (Set.range (atom (α := α) (β := β))) :=
     mem_convexHull_of_exists_fintype (fun ij : α × β => a ij.1 * b ij.2) atom
       (fun ij => mul_nonneg (ha ij.1) (hb ij.2)) hWeights
@@ -120,7 +127,8 @@ theorem exists_probability_coupling [Nonempty α] [Nonempty β]
   choose ij hij using hAtom
   let e : Fin (Fintype.card t) ≃ t := (Fintype.equivFin t).symm
   have hV : ∑ x : t, w x • (x : E) = (a, b) := by
-    simpa only [Finset.univ_eq_attach, Finset.sum_attach] using hwVector
+    simpa only [Finset.univ_eq_attach] using
+      (t.sum_attach (fun x : E => w x • x)).trans hwVector
   have hVE : ∑ k : Fin (Fintype.card t), w (e k) • atom (ij (e k)) = (a, b) := by
     calc
       _ = ∑ x : t, w x • (x : E) :=
@@ -130,10 +138,10 @@ theorem exists_probability_coupling [Nonempty α] [Nonempty β]
     fun k => w (e k), hBound, fun k => hw _ (e k).property, ?_, ?_⟩
   · intro i
     have h := congrArg (fun x : E => x.1 i) hVE
-    simpa [atom, Pi.single_apply, mul_ite, eq_comm] using h
+    simpa [atom, Prod.fst_sum, Finset.sum_apply, Pi.single_apply, mul_ite, eq_comm] using h
   · intro j
     have h := congrArg (fun x : E => x.2 j) hVE
-    simpa [atom, Pi.single_apply, mul_ite, eq_comm] using h
+    simpa [atom, Prod.snd_sum, Finset.sum_apply, Pi.single_apply, mul_ite, eq_comm] using h
 
 /-- Two finite nonnegative mass lists of the same positive total admit a
 coupling on at most the sum of their lengths minus one weighted pairs.

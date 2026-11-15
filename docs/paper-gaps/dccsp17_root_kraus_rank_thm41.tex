@@ -469,6 +469,11 @@ alone does not do so.
 
 \section{A five-sector perturbation argument, not yet formalized}
 
+For the paper calculations in the following subsections, $C_{\mathcal F}$
+denotes the unnormalized Choi matrix $\sum_i|A_i\rangle\!\langle A_i|$.
+Its rank agrees with the normalized Choi rank used by the Lean declarations.
+
+
 The following paper argument goes beyond the diagonal cyclic-reset example.
 It has not yet been formalized in Lean. Let
 $V=\bigoplus_{i\in\mathbb Z/5\mathbb Z}V_i$, with sector dimensions
@@ -504,6 +509,10 @@ give
 It follows by expanding products that
 $(\mathcal F+a\mathcal H)^p=\mathcal F^p$ for every real $a$ and $p\ge2$.
 This is an exact affine family, rather than only a first-order variation.
+The exact power identity is separately formalized by
+\leanid{add_pow_eq_of_annihilating_square_zero} in
+\texttt{TNLean/Algebra/AnnihilatingPowerPerturbation.lean}; the channel
+support conditions that produce the direction are still paper arguments.
 
 The Choi matrix of $\mathcal H$ is supported on the vectorization of $S$:
 its only nonzero Choi blocks join the first two summands of $S$, together
@@ -653,8 +662,12 @@ The finite coupling ingredient is separately formalized by
 specialization \leanid{SparseCoupling.exists_probability_coupling} in
 \texttt{TNLean/Algebra/SparsePositiveCoupling.lean}. These results supply
 at most $a+b-1$ nonnegative weighted pairs with the prescribed marginals.
-The spectral Kraus construction and the channel selection argument in
-this subsection are still not Lean theorems.
+The spectral Kraus construction is separately proved by
+\leanid{Matrix.exists_kraus_coupling_of_trace_eq} and its faithful-input
+version \leanid{Matrix.exists_kraus_state_effect_coupling} in
+\texttt{TNLean/Algebra/KrausMarginalCoupling.lean}. They construct the
+replacement map with the asserted rank bound. The whole-channel cyclic
+selection argument in this subsection is still not a Lean theorem.
 
 The comparison with the target rank uses the two-step coefficient
 vectors, with tensor factors ordered by the first and second step.
@@ -709,6 +722,62 @@ preparation. The general singular nonunital case, including other cyclic
 sector patterns, primitive channels without this support, general
 exponents, and multi-block form II, remains open. None of the arguments
 in this subsection is currently a Lean theorem.
+
+\subsection{Adding a scalar loop: primitive nonunital examples}
+
+The preceding paper proof extends beyond the cyclic support hypothesis.
+Keep the sectors $(1,m,n,1,\ldots,1)$ and their forward edges, but permit
+one additional Kraus block from sector zero to itself. Assume its noise
+coefficient vector $h$ is nonzero, and that preparation into sector one
+is faithful. Its positive input $\rho$ is now subnormalized rather than
+necessarily a density matrix. No argument below requires trace one.
+The same selected-square-root conclusion holds, still not yet formalized.
+
+The residual middle-map replacement is unchanged. A perturbation with
+zero trace functional and zero value at $\rho$ is annihilated by the
+root on both sides and has square zero. The target-rank comparison also
+has the same two residual summands of ranks $a,b$. Only the outside word
+space changes: in addition to the path space $W$ it contains
+\begin{equation}
+  h\otimes h,\qquad h\otimes U,\qquad w_k\otimes h.
+\end{equation}
+These correspond to distinct two-step matrix corners, so they occur as
+individual word coefficient vectors. Let $W'$ denote their span together
+with $W$, let $K'_0=K_0+\mathbb Ch$, and put $q'=\dim W'$ and
+$r'_0=\dim K'_0$. Then $q'\ge r'_0$.
+
+To verify this inequality, choose a complex linear functional $f$ on
+$K'_0$ nonzero on all the nonzero coefficient generators
+$u_i,v_j,w_1,\ldots,w_k,h$. Such a functional exists because a finite
+union of proper hyperplanes cannot fill the dual of a finite-dimensional
+complex vector space. Define
+\begin{equation}
+  \delta_f(x\otimes y)=f(y)x-f(x)y.
+\end{equation}
+The graph on these generators whose edges supply the displayed tensor
+spaces is connected. After dividing each generator $x$ by $f(x)$,
+$\delta_f(W')$ contains all differences along this graph. Those
+differences span $\ker f$, of dimension $r'_0-1$. On the other hand,
+$h\otimes h$ is a nonzero element of $W'\cap\ker\delta_f$.
+Rank-nullity therefore gives $q'\ge r'_0$.
+
+If the residual map $R$ is nonzero, its sparse replacement has rank at
+most $a+b-1$, while the target rank is at least $q'+a+b$. Thus the new
+whole root has rank at most $r'_0+a+b-1$, strictly smaller than the target
+rank. If $R=0$, the original root has rank $r'_0\le q'$ and already
+satisfies the desired bound. Every power of order at least two is preserved
+in both cases.
+
+When the Kraus span fills all the specified rectangular edge spaces and
+the scalar loop, the root and its square are primitive. Indeed, the
+cycle connects every sector to sector zero, and powers of the scalar
+loop allow a path through zero to be padded to any sufficiently large
+length. The corresponding homogeneous word spans therefore contain
+every matrix unit for all sufficiently large lengths. This extension
+covers primitive nonunital targets with arbitrary allowed coherences;
+it is not a proof for unrestricted primitive channels. The tensor-space
+and whole-channel assertions in this subsection remain paper arguments,
+not Lean theorems.
 
 \section{Explicit bounded roots from a commuting projected semigroup}
 
