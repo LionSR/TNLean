@@ -57,6 +57,7 @@ import TNLean.MPS.AreaLaw.AKLV.SharpPerCutApproximation
 import TNLean.MPS.AreaLaw.AKLV.ShortWindow
 import TNLean.MPS.AreaLaw.AKLV.SpectralCluster
 import TNLean.MPS.AreaLaw.AKLV.SpectralTail
+import TNLean.MPS.AreaLaw.AKLV.SquareDegreeConstraint
 import TNLean.MPS.AreaLaw.AKLV.Truncation
 import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation
 import TNLean.MPS.AreaLaw.AKLV.VariableWindowRefinement
