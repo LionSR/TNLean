@@ -326,8 +326,12 @@ algebra at every order without assuming a whole-detector phase as a
 hypothesis. It also derives that the product at order \(2k\) is \(c^k\)
 whenever \(c^{2k}=1\). Constructing the clock/shift instance and identifying the full
 spatial word with this ordered product remain separate tasks.
-Hosted Lean built this module in 2.4 seconds on head `577e4ae`; the strict
-check found an unused `simp` argument, which the next revision removes.
+Hosted Lean built this module in 2.4 seconds on head `577e4ae`. After removing
+one unused `simp` argument, both modules passed the direct strict Lean checks on
+head `950a29c771c45fab029e2c190bcfb1f8a3a21029` in
+[job 132924002746](https://github.com/LionSR/TNLean/actions/runs/43750469572/job/132924002746)
+at 19:21 UTC. The complete root build and blueprint checks were still running
+when the circuit and spatial constructions were submitted.
 
 For the clock and shift matrices above, the conjugation phase is
 \(c=\zeta^{-1}1\). The abstract local-word product then has phase
@@ -343,3 +347,15 @@ claim for a corrected class of truncations also remains open. Before presenting
 item 2 as formalized, settle these comparisons and register a source-gap entry
 for `detectG` with the ordering convention stated explicitly. No source-labelled
 theorem should silently acquire the extra intermediate-state hypotheses.
+
+## Circuit and spatial constructions submitted for Lean checking
+
+`FiniteGroupDetectorCircuit.lean` constructs the two actual `BondLayer`s,
+proves that retained bonds are exactly the original nominal pairs inside the
+region, and derives the full and single-entry-region operators from their
+finite gate products. `FiniteGroupDetectorSpatial.lean` evaluates the complete
+chronological interval word at every spatial position and multiplies its
+nontrivial phases, including the even-order reduction. These new modules are
+**pending hosted Lean verification** and carry no checked blueprint markers.
+The concrete all-even-order clock/shift matrix instance and the tensor-level
+comparison between these two modules are still separate unfinished steps.
