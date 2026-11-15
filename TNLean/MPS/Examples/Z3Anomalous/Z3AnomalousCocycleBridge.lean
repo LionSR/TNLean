@@ -248,8 +248,9 @@ Source: arXiv:2203.12563, line 2044 (the fusion tensors of `ftexam` satisfy `3co
 the inverse cocycle) and lines 2224–2225; `GroupCocycle.fusionData_omega` for `ℤ₃`. -/
 theorem cocycleFusionData_omega : cocycleFusionData.associatorScalar = (scalarCocycleValue₃
   (cyclicCocycle 3 2)) := by
-  rw [cocycleFusionData, GroupCocycle.fusionData_omega, ← scalarCocycleValue₃_neg,
-    cyclicCocycle_neg]
+  rw [cocycleFusionData, GroupCocycle.fusionData_omega]
+  change (scalarCocycleValue₃ (cyclicCocycle 3 1))⁻¹ = _
+  rw [← scalarCocycleValue₃_neg, cyclicCocycle_neg]
 
 /-- **The two representations have the same cyclic invariant**: for every choice of fusion
 tensors of `{1, U, U†}`, the cyclic invariant `ω(g,1,g) ω(g,g,g) ω(g,g²,g)` at the generator

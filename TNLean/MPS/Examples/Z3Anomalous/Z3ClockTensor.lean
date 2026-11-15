@@ -237,7 +237,7 @@ theorem clockTensor_apply_eq_cocycle (g : Multiplicative (ZMod 3))
         r *
         phaseChar (f l j) := by
   rw [clockTensor_apply, GroupCocycle.tensor_apply, siteShift_residueEquiv,
-    cyclicCocycle_zero_val]
+    scalarCochainValue₃_iCocycles, cyclicCocycle_zero_val]
   split_ifs <;> simp
 
 /-- Bridge: **a clock operator is the trivial-cocycle group operator times a diagonal

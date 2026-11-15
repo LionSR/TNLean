@@ -243,7 +243,7 @@ the structure constants of `A = 1 + U + V` depend on the length. -/
 theorem cocycleDefect_mul_self {L : ℕ} (hL : 0 < L) :
     cocycleDefect L * cocycleDefect L = (3 : ℂ) • cocycleDefect L := by
   have : NeZero L := ⟨by omega⟩
-  rw [cocycleDefect, GroupCocycle.sum_mpo_mul_sum_mpo _ (cyclicCocycle_isCocycle 3 0)]
+  rw [cocycleDefect, GroupCocycle.sum_mpo_mul_sum_mpo _ (d_iCocycles₃ (cyclicCocycle 3 0))]
   congr 1
 
 end Z3Clock

@@ -229,7 +229,7 @@ two) and lines 1128–1136 (the CZX symmetry is a `ℤ_2` symmetry). -/
 theorem mpo_czxDecoratedTensor_mul_self :
     MPOTensor.mpo czxDecoratedTensor N * MPOTensor.mpo czxDecoratedTensor N = 1 := by
   rw [mpo_czxDecoratedTensor_eq_groupCocycle, MPOTensor.GroupCocycle.mpo_tensor_mul _
-    (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isCocycle 1),
+    (d_iCocycles₃ (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle 1)),
     show (Multiplicative.ofAdd 1 * Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) = 1 by
       decide,
     MPOTensor.GroupCocycle.mpo_tensor_one _
