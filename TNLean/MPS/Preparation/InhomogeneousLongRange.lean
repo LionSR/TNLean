@@ -84,39 +84,6 @@ private theorem blockMatVector_sum_smul {κ : Type*} [Fintype κ]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun τ _ => by ring
 
-section Encodings
-
-variable [NeZero d] {r₁ : ℕ}
-
-private theorem pairLayerOp_mulVec_registerCfg_eq_family
-    (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
-    (dig : Fin D → Cfg d r₁) (u₀ : Cfg d r₁)
-    (ω : Fin M → Fin D × Fin D → ℂ)
-    {W W₀ : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
-    (hW : ∀ k u, W k u (windowInput u₀) =
-      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u)
-    (hW₀ : ∀ k u, W₀ k u (fun _ => ⟨0, NeZero.pos d⟩) =
-      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u) :
-    pairLayerOp hN hr W *ᵥ Pi.single (registerCfg hN hr u₀) 1 =
-      pairLayerOp hN hr W₀ *ᵥ
-        productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1 := by
-  classical
-  have h0 : (⟨0, NeZero.pos d⟩ : Fin d) = 0 := Fin.ext (by simp)
-  funext y
-  rw [pairLayerOp_mulVec_apply (NeZero.pos d) hN hr W₀ y]
-  simp only [mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-  rw [pairLayerOp_apply]
-  simp only [registerCfg_comp_pairSite, hW, h0]
-  refine if_congr ⟨fun h i hi => (h i hi).trans
-    (registerCfg_of_forall_pairSite_ne hN hr _ hi),
-    fun h i hi => (h i hi).trans
-      (registerCfg_of_forall_pairSite_ne hN hr _ hi).symm⟩ ?_ rfl
-  refine Finset.prod_congr rfl fun k _ => ?_
-  rw [← h0, hW₀]
-
-end Encodings
-
 private theorem exists_inhomogeneousLongRange_of_encoding [NeZero d] {b r₁ : ℕ}
     (hr₁ : 2 ≤ r₁) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r₁} (hdig₀ : Function.Injective dig₀) (hD : 0 < D) :
@@ -159,7 +126,7 @@ private theorem exists_inhomogeneousLongRange_of_encoding [NeZero d] {b r₁ : �
     funext s
     rw [blockMatVector_pairFamilyVector_eq_mulVec (NeZero.pos d) hN hr hdig X (ω j)
       (fun c _ k τ => hUX k _ _ τ) hW₀ s, ← mulVec_mulVec, ← mulVec_mulVec,
-      pairLayerOp_mulVec_registerCfg_eq_family hN hr dig (dig₀ j) (ω j)
+      pairLayerOp_mulVec_registerCfg_eq hN hr dig (dig₀ j) (ω j)
         (fun k u => hW k u j) hW₀]
   let α' : Cfg d r₁ → ℂ := Function.extend dig₀ α 0
   have hα' : ∑ u, star (α' u) * α' u = 1 := by
@@ -170,16 +137,10 @@ private theorem exists_inhomogeneousLongRange_of_encoding [NeZero d] {b r₁ : �
     hCg ℓ hN hr L hℓ hL α' hα', hcirc.isBondCircuitOfDepth, ?_⟩
   change (fun s => blockMatVector X hN (∑ j, α j • pairFamilyVector (ω j)) s) = _
   rw [blockMatVector_sum_smul]
-  dsimp only [α']
-  rw [windowGHZState_extend hN hr hdig₀ α]
-  have hsum : (fun x => ∑ j, α j * if x = registerCfg hN hr (dig₀ j) then (1 : ℂ) else 0) =
-      ∑ j, α j • Pi.single (registerCfg hN hr (dig₀ j)) (1 : ℂ) := by
-    funext x
-    simp [Finset.sum_apply, Pi.single_apply]
-  rw [hsum, mulVec_sum]
   funext s
-  simp only [mulVec_smul, hj, WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply,
-    Pi.smul_apply, smul_eq_mul]
+  have h := congrFun (mulVec_windowGHZState_of_registerCfg hdig₀ hj α) s
+  simpa only [WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply,
+    Pi.smul_apply, smul_eq_mul] using h.symm
 
 /-- Preparation of a coherent sum of site-dependent pair products followed by the blocked
 isometries of an arbitrary inhomogeneous chain. For `d ≥ 2`, `D ≥ 1` and `b` labels, the
