@@ -56,9 +56,12 @@ def torusAnnularObservationRegion : Finset X := torusAnnularObservationWalk.supp
 
 /-- An actual native open dual string from inside the observed ring to the
 exterior: four labelled east steps from (1,1) to (5,1). -/
-def torusAnnularFluxPath : TorusDualPath (1, 1) (5, 1) :=
-  (((Quiver.Path.nil.cons (TorusDualStep.east 1 1)).cons
-    (TorusDualStep.east 2 1)).cons (TorusDualStep.east 3 1)).cons (TorusDualStep.east 4 1)
+def torusAnnularFluxPath : TorusDualPath ((1, 1) : X) (5, 1) := by
+  have h5 : (1 : ZMod 7) + 1 + 1 + 1 + 1 = 5 := by norm_num
+  simpa only [h5] using
+    (((Quiver.Path.nil.cons (TorusDualStep.east (1 : ZMod 7) (1 : ZMod 7))).cons
+      (TorusDualStep.east (1 + 1) 1)).cons
+        (TorusDualStep.east (1 + 1 + 1) 1)).cons (TorusDualStep.east (1 + 1 + 1 + 1) 1)
 
 /-- All four physical corners of each endpoint plaquette of the explicit
 annular string lie outside the observed ring. -/
@@ -82,29 +85,50 @@ private theorem annular_connected :
 private def annularRoot : {v : X // v ∈ torusAnnularObservationRegion} :=
   ⟨(0, 0), List.mem_toFinset.mpr torusAnnularObservationWalk.start_mem_support⟩
 
+private theorem annular_support : ∀ x ∈ torusAnnularObservationWalk.support,
+    x ∈ (torusAnnularObservationRegion : Set X) :=
+  fun _ h => List.mem_toFinset.mpr h
+
 private def annularInducedWalk :
     ((Γ₇).induce (torusAnnularObservationRegion : Set X)).Walk annularRoot annularRoot :=
-  torusAnnularObservationWalk.induce (torusAnnularObservationRegion : Set X)
-    fun _ h => List.mem_toFinset.mpr h
+  torusAnnularObservationWalk.induce (torusAnnularObservationRegion : Set X) annular_support
 
-variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
+variable {G : Type*} [Group G]
 
-private theorem directed_right (u v : X → G) (x y : ZMod 7) :
+private theorem directed_right (u v : X → G) (x y : ZMod 7)
+    (h : (Γ₇).Adj (x, y) (x + 1, y)) :
     regularDirectedTransport (v := (x, y)) (w := (x + 1, y))
-      (torusGraphRegularLabels u v) (torusGraph_adj_right x y) = u (x, y) :=
+      (torusGraphRegularLabels u v) h = u (x, y) :=
   torusNativeRightTransport_torusGraphRegularLabels u v (x, y)
 
-private theorem directed_up (u v : X → G) (x y : ZMod 7) :
+private theorem directed_up (u v : X → G) (x y : ZMod 7)
+    (h : (Γ₇).Adj (x, y) (x, y + 1)) :
     regularDirectedTransport (v := (x, y)) (w := (x, y + 1))
-      (torusGraphRegularLabels u v) (torusGraph_adj_up x y) = (v (x, y))⁻¹ :=
+      (torusGraphRegularLabels u v) h = (v (x, y))⁻¹ :=
   torusNativeUpTransport_torusGraphRegularLabels u v (x, y)
+
+private theorem directed_left (u v : X → G) (x y : ZMod 7)
+    (h : (Γ₇).Adj (x + 1, y) (x, y)) :
+    regularDirectedTransport (v := (x + 1, y)) (w := (x, y))
+      (torusGraphRegularLabels u v) h = (u (x, y))⁻¹ := by
+  simpa only [directed_right] using
+    regularDirectedTransport_symm (v := (x, y)) (w := (x + 1, y))
+      (torusGraphRegularLabels u v) h.symm
+
+private theorem directed_down (u v : X → G) (x y : ZMod 7)
+    (h : (Γ₇).Adj (x, y + 1) (x, y)) :
+    regularDirectedTransport (v := (x, y + 1)) (w := (x, y))
+      (torusGraphRegularLabels u v) h = v (x, y) := by
+  simpa only [directed_up, inv_inv] using
+    regularDirectedTransport_symm (v := (x, y)) (w := (x, y + 1))
+      (torusGraphRegularLabels u v) h.symm
 
 private theorem annular_holonomy (g : G) :
     regularWalkHolonomy
       (torusGraphRegularLabels (torusDualFluxLabels g torusAnnularFluxPath).1
         (torusDualFluxLabels g torusAnnularFluxPath).2) torusAnnularObservationWalk = g⁻¹ := by
   simp only [torusAnnularObservationWalk, regularWalkHolonomy_cons,
-    regularWalkHolonomy_nil, regularDirectedTransport_symm, directed_right, directed_up]
+    regularWalkHolonomy_nil, directed_right, directed_up, directed_left, directed_down]
   norm_num [torusDualFluxLabels, torusFluxPowerLabels, torusAnnularFluxPath,
     torusDualPathCrossings, TorusDualStep.crossings, torusPointMass]
 
@@ -112,7 +136,7 @@ private theorem annular_vacuum_holonomy :
     regularWalkHolonomy (torusGraphRegularLabels (1 : X → G) 1)
       torusAnnularObservationWalk = 1 := by
   simp only [torusAnnularObservationWalk, regularWalkHolonomy_cons,
-    regularWalkHolonomy_nil, regularDirectedTransport_symm, directed_right, directed_up,
+    regularWalkHolonomy_nil, directed_right, directed_up, directed_left, directed_down,
     Pi.one_apply, inv_one, one_mul]
 
 private theorem induced_holonomy (u : Edge (Γ₇) → G) :
@@ -121,6 +145,8 @@ private theorem induced_holonomy (u : Edge (Γ₇) → G) :
   unfold annularInducedWalk
   rw [regularWalkHolonomy_inducedWalk, SimpleGraph.Walk.map_induce]
   rfl
+
+variable [Fintype G] [DecidableEq G]
 
 /-- An explicit endpoint-free observed ring distinguishes the normalized
 density of an actual native open flux string from vacuum. Both cuts are
