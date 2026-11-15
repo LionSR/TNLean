@@ -68,6 +68,7 @@ import TNLean.MPS.Preparation.InhomogeneousMixingPreparation
 import TNLean.MPS.Preparation.InhomogeneousOverlap
 import TNLean.MPS.Preparation.InhomogeneousPositivePartRate
 import TNLean.MPS.Preparation.InhomogeneousPreparation
+import TNLean.MPS.Preparation.InhomogeneousRateObstruction
 import TNLean.MPS.Preparation.InhomogeneousSequence
 import TNLean.MPS.Preparation.InhomogeneousUniformRate
 import TNLean.MPS.Preparation.InjectivityCutoff
