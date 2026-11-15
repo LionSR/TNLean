@@ -43,7 +43,7 @@ theorem exists_regularRegionTreeGauge_fixed_on_untwisted_component
           T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩ →
             regularRegionGaugeResidual R k u e = 1 := by
   classical
-  letI : Fintype G := Fintype.ofFinite G
+  let : Fintype G := Fintype.ofFinite G
   obtain ⟨F, hFU, hFacyclic, hFreach⟩ := U.exists_isAcyclic_reachable_eq_le
   obtain ⟨T, hFT, hT, htree⟩ :=
     hR.exists_isTree_le_of_le_of_isAcyclic (hFU.trans hU) hFacyclic
