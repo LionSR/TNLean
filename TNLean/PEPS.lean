@@ -376,6 +376,7 @@ import TNLean.PEPS.TorusBondCoordinateTransport
 import TNLean.PEPS.TorusBondFlatConnection
 import TNLean.PEPS.TorusChargeFluxCrossing
 import TNLean.PEPS.TorusChargeStringDeformation
+import TNLean.PEPS.TorusClosedFluxDensity
 import TNLean.PEPS.TorusClosureSeams
 import TNLean.PEPS.TorusCommonTensor
 import TNLean.PEPS.TorusCommonTensorCoordinates

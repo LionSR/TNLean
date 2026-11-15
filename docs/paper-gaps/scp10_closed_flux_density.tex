@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Vacuum Reduced Densities of Closed Flux Strings}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+asserts local unobservability of a flux string away from its endpoints.
+Theorem 6.7, lines 1995--2025, identifies local physical densities of
+commuting torus closure states on a simply connected block.
+
+On a native torus with both periods at least three, let the physical tensor
+be regular $G$-isometric for a finite group $G$. Let $R$ have connected
+induced occupied graph and simply connected closed-cell realization.
+For every finite closed dual path $p:a\to a$ and every $g\in G$, let $M_p$
+be its actual inserted physical cut matrix and let $M_0$ use identity
+insertions. Then
+\begin{align}
+    \frac{M_pM_p^\dagger}{\operatorname{tr}(M_pM_p^\dagger)}
+    =\frac{M_0M_0^\dagger}{\operatorname{tr}(M_0M_0^\dagger)}.
+    \label{eq:closed_flux_vacuum_density}
+\end{align}
+Both cuts are proved nonzero. Identity plaquette holonomy is derived from
+the coincidence of the dual endpoints, then flat-connection classification
+and virtual invariance identify the actual state with a commuting seam
+closure. The common physical density of those closures gives
+(\ref{eq:closed_flux_vacuum_density}). The path may have arbitrary winding;
+its global state is not asserted equal to the vacuum.
+
+The declaration is
+\leanid{TNLean.PEPS.IsGIsometric.torusClosedFlux_normalized_density_eq_vacuum}.
+No factorization, equality of reduced matrices, local parent common-kernel
+identification, or nonzero-cut premise is supplied to this theorem.
+
+This proves the closed-string subcase of the density question under the
+stated observation geometry. General open flux pairs observed away from
+their endpoints still require a separate argument. Endpoint avoidance
+alone does not exclude an annular region that detects an enclosed flux.
+Neither arbitrary-region path avoidance nor the general open-pair vacuum
+reduced-density assertion is claimed; these remain under \ghissue{8703}.
+The full-lattice Hamiltonian obligations of \ghissue{8947} are unchanged.
+\end{document}
