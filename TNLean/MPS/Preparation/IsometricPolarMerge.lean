@@ -97,8 +97,8 @@ theorem exists_isometry_binaryPolarMerge {d χ n₁ n₂ : ℕ} (hχ : 0 < χ)
     calc J * Jᴴ * (J * C) = J * (Jᴴ * J) * C := by simp only [Matrix.mul_assoc]
       _ = J * C := by rw [hJ, Matrix.mul_one]
   have hdim : Fintype.card (Fin χ) ≤ Fintype.card (Fin (MPSTensor.blockPhysDim χ 2)) := by
-    change χ ≤ χ ^ 2
-    simpa only [pow_two] using Nat.le_mul_of_pos_right χ hχ
+    simpa only [Fintype.card_fin, MPSTensor.blockPhysDim_eq_pow, pow_two] using
+      Nat.le_mul_of_pos_right χ hχ
   obtain ⟨W, hW, _, hWP⟩ := Matrix.exists_isometry_polarMerge_of_range J hJ (J * C) hsupp hdim
   exact ⟨W, hW, hWP⟩
 
