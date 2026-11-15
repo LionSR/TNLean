@@ -180,54 +180,8 @@ theorem exists_physical_soft_resampling_tree
     let count := max (q ^ width) (D ^ 2 * threshold)
     ∃ xiInit : ℝ, 0 < xiInit ∧ xiInit ≤ 1 ∧ (xiInit⁻¹) ^ 2 ≤ Cxi * Z ^ Pxi ∧
     ∃ hwidth : 1 ≤ width,
-    let Certificate := fun (J : LongIntervalIndex L width) (n : ℕ)
-      (Aops : Fin n → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
-        EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q)) ↦
-      let p := J.val.1
-      let r := J.val.2
-      let midConfig := interval L p r → Fin q
-      let HM := EuclideanSpace ℂ midConfig
-      let coords := Entropy.regionTensorCoordinates q (interval L p r)
-      ∃ a b : ℕ, a + 2 * ell ≤ b ∧ b + 2 * ell ≤ L - 1 ∧
-        p ≤ a + ell ∧ b + ell + 1 ≤ r ∧
-        (interval L p r \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell ∧
-        a + 2 * ell - p ≤ 2 * ell ∧ r - (b + 1) ≤ 2 * ell ∧
-      let Sbulk : Finset (Fin 5) := {0, 2, 4}
-      let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
-      let A := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
-      let Y := ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈
-        ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
-      ∃ (e : Fin 5 → ℝ) (x : (Fin L → Fin q) → ℂ) (E : ℝ),
-        star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
-        (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ 4 ∧
-      ∃ W : Fin n → Matrix midConfig midConfig ℂ,
-        Aops = (fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := midConfig) (W i)) ∧
-        let image := canonicalHalfSampledIntervalImage L q p r D threshold rounds Aops xiInit
-        let good := fun S ↦ canonicalHalfSampledIntervalHistory
-          L q p r D threshold rounds (Aops) xiInit S G
-        ∀ (pc : Fin 5 → ℝ)
-          (_hp0 : ∀ j : Fin 5, j ∈ Sbulk → e j - 10 ≤ pc j)
-          (_hp1 : ∀ j : Fin 5, j ∈ Sbulk → pc j ≤ e j),
-          let Fraw := fun j : Fin 5 ↦ (pc j : ℂ) • 1 +
-            cfc (Real.softTruncation t m) (A j - (pc j : ℂ) • 1)
-          let Gsoft := (∑ j, ((if j ∈ Sbulk then Fraw j else A j) - (e j : ℂ) • 1)) + Y
-          ∃ (Ghat : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-            (hGhat : Ghat.IsHermitian),
-            ‖Gsoft - Ghat‖ ≤ precision ∧ ‖Ghat‖ ≤ Msoft + precision ∧
-            let target := Submodule.spectralSpanLE hGhat.eigenvectorBasis hGhat.eigenvalues
-              (E + g / 4)
-            let Tc := target.map coords.toLinearEquiv.toLinearMap
-            E + ∑ j, e j = mu ∧
-            target = Submodule.spectralSpanLE hGhat.eigenvectorBasis hGhat.eigenvalues
-              (E + 3 * g / 4) ∧
-            Module.finrank ℂ target = rho ∧
-            Submodule.IsCloseTo (3 * tau / 200) target G ∧
-            Submodule.IsCloseTo (3 * tau / 200) G target ∧
-            ∀ S : Submodule ℂ HM,
-              Submodule.IsViable 0.04 S (G.map coords.toLinearEquiv.toLinearMap) →
-              ∀ U ∈ good S, Submodule.IsViable (Delta / (91 / 100 : ℝ) ^ 2)
-                (image S U) Tc
+    let Certificate := PhysicalTerminalCertificate (width := width) ell h t m D threshold
+      rounds xiInit g precision Msoft tau Delta mu G rho
     ∃ (N : LongIntervalIndex L width → ℕ)
       (F : ∀ J : LongIntervalIndex L width,
         Fin (N J) → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
