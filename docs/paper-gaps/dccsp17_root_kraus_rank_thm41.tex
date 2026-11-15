@@ -9,7 +9,7 @@
 
 \title{The Root-Channel Kraus-Rank Step in Theorem 4.1}
 \author{}
-\date{2026-04-30; revised 2026-09-26}
+\date{2026-04-30; revised 2026-11-15}
 
 \begin{document}
 \maketitle
@@ -467,6 +467,59 @@ The singular-target problem must therefore control complete positivity
 while choosing the zero-eigenspace action; algebraic spectral truncation
 alone does not do so.
 
+\section{Irreducible unital targets in arbitrary dimension}
+
+An additional dimension-independent case is formalized in
+\path{TNLean/Algebra/UnitalChannelRank.lean} and
+\path{TNLean/MPS/Periodic/Symmetry/RefinementFromUnitalTransfer.lean}.
+If a channel $\mathcal F$ has an irreducible unital power
+$\mathcal E=\mathcal F^p$ with $p>0$, then
+\begin{align}
+ \mathcal F(I)&=I,
+ &\operatorname{rank}C_{\mathcal F}&\le\operatorname{rank}C_{\mathcal E}.
+ \label{eq:dccsp17_unital_root_rank}
+\end{align}
+The target may be singular. Unitality is an additional target hypothesis;
+irreducible form~II alone does not assert it.
+
+First, a positive identity- and trace-preserving endomorphism $T$ cannot
+lower the rank of a positive matrix $X$. Let $P$ and $Q$ be the support
+projections of $X$ and $T(X)$. Since $P$ belongs to the support face of $X$,
+positivity gives $QT(P)Q=T(P)$. Also $0\le T(P)\le I$. Compressing
+$I-T(P)$ by $Q$ proves $T(P)\le Q$. Trace preservation now gives
+\begin{align}
+ \operatorname{rank}X&=\operatorname{tr}P=\operatorname{tr}T(P)
+ \le\operatorname{tr}Q=\operatorname{rank}T(X).
+ \label{eq:dccsp17_unital_positive_rank}
+\end{align}
+This proves
+\leanid{Matrix.rank_le_rank_map_of_unital_tracePreserving}, without
+injectivity. Amplifying a unital channel by the identity preserves these
+three properties. Applying (\ref{eq:dccsp17_unital_positive_rank}) to a
+Choi matrix proves
+\leanid{Channel.choiRank_le_comp_of_unital}; iteration proves
+\leanid{Channel.choiRank_le_pow_of_unital}.
+
+Second, every channel root of an irreducible unital target is unital.
+The root commutes with its power, so $\mathcal F(I)$ is fixed by
+$\mathcal E$. Perron uniqueness gives $\mathcal F(I)=cI$, and trace
+preservation gives $cD=D$, hence $c=1$ for $D>0$. Dimension zero is trivial.
+The declaration
+\leanid{IsChannel.map_one_eq_one_of_irreducible_pow} proves this reduction,
+and \leanid{Channel.choiRank_le_pow_of_irreducible_unital} proves
+(\ref{eq:dccsp17_unital_root_rank}).
+
+Consequently
+\leanid{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_irreducible_unital}
+proves the reverse implication for every irreducible unital target tensor
+in arbitrary bond dimension. It assumes only $p>0$, irreducibility,
+unitality and channel divisibility, with no extra root-rank hypothesis.
+The rank comparison itself needs no irreducibility; irreducibility is used
+to force unitality of the root. A general reducible unital target need not
+force each supplied root to be unital, and the argument does not assert a
+unital-root selector in that setting. In particular, the general singular
+nonunital case remains unresolved.
+
 \section{Conclusion}
 
 The formal reverse theorem has an additional hypothesis relative to
@@ -479,7 +532,9 @@ absent from the source definition of $p$-divisibility and is not proved in the
 cited converse paragraph.
 
 For invertible target channels, the preceding rank argument supplies the
-required bound for every root. For singular target channels it remains open
+required bound for every root. It also supplies the bound for irreducible
+unital targets, including singular ones in arbitrary dimension.
+Outside these proved cases it remains open
 whether, under the irreducible-form hypotheses, a channel root can always
 be chosen with Kraus rank at most $d$. The formal development
 therefore proves the reverse implication from a selected bounded-rank

@@ -847,6 +847,83 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Lemma~\ref{thm:periodic_refinement_from_bounded_root} applies.
 \end{proof}
 
+\begin{lemma}[Rank under an identity- and trace-preserving positive map]
+    \label{lem:periodic_unital_positive_rank}
+    \lean{Matrix.rank_le_rank_map_of_unital_tracePreserving}
+    \leanok
+    Let $T$ be a positive endomorphism of a finite complex matrix algebra
+    satisfying $T(I)=I$ and $\operatorname{tr}T(X)=\operatorname{tr}X$.
+    For every $X\ge0$, one has $\operatorname{rank}X\le\operatorname{rank}T(X)$.
+    The map need not be injective.
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $P$ and $Q$ be the support projections of $X$ and $T(X)$.
+    Positivity carries the support face of $X$ into that of $T(X)$,
+    so $QT(P)Q=T(P)$. Since $0\le P\le I$, unital positivity gives
+    $0\le T(P)\le I$. Compressing $I-T(P)$ by $Q$ gives
+    $Q-T(P)\ge0$. Taking traces yields
+    $\operatorname{rank}X=\operatorname{tr}P=\operatorname{tr}T(P)
+    \le\operatorname{tr}Q=\operatorname{rank}T(X)$.
+\end{proof}
+
+\begin{lemma}[Choi rank under composition by a unital channel]
+    \label{lem:periodic_unital_composition_choi_rank}
+    \lean{Channel.choiRank_le_comp_of_unital, Channel.choiRank_le_pow_of_unital}
+    \leanok
+    If $\mathcal F$ is a unital channel and $\mathcal G$ is completely
+    positive, then $\operatorname{rank}C_{\mathcal G}\le
+    \operatorname{rank}C_{\mathcal F\circ\mathcal G}$.
+    Consequently, for every $p>0$,
+    $\operatorname{rank}C_{\mathcal F}\le\operatorname{rank}C_{\mathcal F^p}$.
+    The maps may be singular.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_unital_positive_rank}
+    The amplification $\mathcal F\otimes\mathrm{id}$ preserves positivity,
+    identity and trace, and carries $C_{\mathcal G}$ to
+    $C_{\mathcal F\circ\mathcal G}$. Apply the preceding lemma and iterate.
+\end{proof}
+
+\begin{lemma}[Roots of irreducible unital channels]
+    \label{lem:periodic_irreducible_unital_root_rank}
+    \lean{IsChannel.map_one_eq_one_of_irreducible_pow,
+        Channel.choiRank_le_pow_of_irreducible_unital}
+    \leanok
+    Let $\mathcal F$ be a channel and suppose that $\mathcal F^p$ is
+    irreducible and unital. Then $\mathcal F(I)=I$. If $p>0$, then
+    $\operatorname{rank}C_{\mathcal F}\le\operatorname{rank}C_{\mathcal F^p}$.
+    The bond dimension is arbitrary and the power may be singular.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_unital_composition_choi_rank}
+    Commutation makes $\mathcal F(I)$ fixed by $\mathcal F^p$.
+    Perron uniqueness gives $\mathcal F(I)=cI$, and trace preservation
+    gives $c=1$ in positive dimension. Dimension zero is immediate.
+    The unital-channel rank inequality then applies.
+\end{proof}
+
+\begin{lemma}[Refinement for an irreducible unital transfer map]
+    \label{lem:periodic_refinement_irreducible_unital_transfer}
+    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_irreducible_unital}
+    \leanok
+    \uses{def:p_refinable}
+    Let $B$ have physical dimension $d$, let $p>0$, and suppose that
+    $\mathcal E_B$ is irreducible and unital. If $\mathcal E_B$ is
+    $p$-divisible as a channel, then $B$ is $p$-refinable, even when
+    $\mathcal E_B$ is singular. Unitality is an explicit restriction
+    relative to the general converse of Theorem~4.1.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_irreducible_unital_root_rank, thm:periodic_refinement_from_bounded_root}
+    Every channel root has Choi rank at most
+    $\operatorname{rank}C_{\mathcal E_B}\le d$.
+    The bounded-root refinement theorem supplies the refinement tensor.
+\end{proof}
+
 \begin{remark}[Continuum-limit application]\notready
     \label{rem:thm_4_1_continuum_limit}
     Refinability along arbitrarily large $p$ corresponds to infinite
