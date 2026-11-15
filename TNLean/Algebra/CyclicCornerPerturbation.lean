@@ -97,7 +97,8 @@ theorem exists_annihilating_corner_perturbation {D m n : ℕ}
   have hKherm (X : Matrix (Fin D) (Fin D) ℂ) (hX : X.IsHermitian) :
       (K X).IsHermitian := by
     rw [hK]
-    exact (hHerm _ (hX.conjTranspose_mul_mul_same V)).mul_mul_conjTranspose_same W
+    exact Matrix.isHermitian_mul_mul_conjTranspose W
+      (hHerm _ (Matrix.isHermitian_conjTranspose_mul_mul V hX))
   refine ⟨K, hKne, hK, hFK, hKF, hKK, hKtrace, hKherm, ?_⟩
   intro p hp
   exact add_pow_eq_of_annihilating_square_zero hFK hKF hKK hp
