@@ -99,7 +99,7 @@ in a two-window family. Applied to one and the same polynomial of the actual
 two-window Hamiltonian, they give the four items of Theorem~4.2
 of~\cite{Arad2016RigorousRG}.
 
-\begin{theorem}[The Chebyshev projector at two cuts]
+\begin{lemma}[The Chebyshev projector at two cuts]
     \label{thm:alvv_two_window_chebyshev_projector}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_two_window_chebyshev_spectral_projector}
     \leanok
@@ -155,7 +155,7 @@ of~\cite{Arad2016RigorousRG}.
     term of \cite{gap:aklv13_interpolation_and_word_count}. The bond dimensions
     of a matrix-product-operator representation of $K$ and the cost of
     computing it are separate assertions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_two_window_polynomial_rank,
         thm:alvv_two_window_interior_cut_rank}
