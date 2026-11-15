@@ -19,7 +19,7 @@ converse. The singular nonunital case remains open; see
 `docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix ComplexOrder BigOperators
 
 /-- Every channel whose power is irreducible and unital is itself unital.
 The root fixes the identity because its image of the identity belongs to
