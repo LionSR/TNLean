@@ -46,15 +46,15 @@ def torusDualZeroCrossingGraph {a b : X} (p : TorusDualPath a b) : SimpleGraph X
       (v = (w.1 + 1, w.2) ∧ (torusDualPathCrossings p).1 w = 0) ∨
       (w = (v.1, v.2 + 1) ∧ (torusDualPathCrossings p).2 v = 0) ∨
       (v = (w.1, w.2 + 1) ∧ (torusDualPathCrossings p).2 w = 0))
-  symm := by
+  symm := ⟨by
     intro v w h
     refine ⟨h.1.symm, ?_⟩
     rcases h.2 with h | h | h | h
     · exact Or.inr (Or.inl h)
     · exact Or.inl h
     · exact Or.inr (Or.inr (Or.inr h))
-    · exact Or.inr (Or.inr (Or.inl h))
-  loopless := fun v h => (Γₜ).loopless v h.1
+    · exact Or.inr (Or.inr (Or.inl h))⟩
+  loopless := ⟨fun _ h => (SimpleGraph.ne_of_adj _ h.1) rfl⟩
 
 variable {G : Type*} [Group G]
 
@@ -134,13 +134,13 @@ private theorem incident_labels_one (R : Finset X) {a b : X} (p : TorusDualPath 
       torusEdgeEquiv.symm_apply_apply (Sum.inr v)]
     simp only [torusDualFluxLabels, torusFluxPowerLabels, he, zpow_zero, inv_one, ite_self]
 
-variable [Fintype G] [DecidableEq G] {d : ℕ}
-
 private theorem graph_labels_one :
     torusGraphRegularLabels (1 : X → G) 1 = fun _ => 1 := by
   funext f
   unfold torusGraphRegularLabels
   cases he : torusEdgeEquiv.symm f <;> simp
+
+variable [Fintype G] [DecidableEq G] {d : ℕ}
 
 /-- A finite, group-independent graph criterion for actual native vacuum
 normalized density. The observed graph and complement are connected, the
