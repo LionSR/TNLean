@@ -32,6 +32,8 @@ MPV families into a virtual gauge.
 
 * `MPSTensor.twistedTensor_one` : twisting by the identity is trivial
 * `MPSTensor.twistedTensor_mul` : twisting is functorial (composition law)
+* `MPSTensor.twistedTensor_gaugeEquiv` : physical twisting commutes with virtual conjugation
+* `MPSTensor.gauge_product_intertwines` : the chosen product `X(h) * X(g)` implements `g*h`
 * `MPSTensor.gaugeEquiv_twistedTensor_of_injective` :
   injective symmetric tensors have gauge-equivalent twists
 * `MPSTensor.twistedTensor_blockTensor_comm` : twisting by `blockKronAction`
@@ -106,6 +108,44 @@ lemma twistedTensor_mul (A : MPSTensor d D)
     _ = ∑ j : Fin d, ∑ k : Fin d, (U g i j * U h j k) • A k := Finset.sum_comm
     _ = twistedTensor (twistedTensor A U h) U g i := by
           simp [twistedTensor, Finset.smul_sum, smul_smul]
+
+/-- Twisting commutes with virtual conjugation. -/
+lemma twistedTensor_gaugeEquiv
+    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (Y : GL (Fin D) ℂ) (g : G) :
+    twistedTensor (fun j =>
+      (Y : Matrix (Fin D) (Fin D) ℂ) * A j *
+        ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) U g =
+      fun i => (Y : Matrix (Fin D) (Fin D) ℂ) * twistedTensor A U g i *
+        ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+  funext i
+  simp only [twistedTensor]
+  rw [Finset.mul_sum, Finset.sum_mul]
+  congr 1
+  ext j
+  simp [Matrix.mul_assoc]
+
+/-- The product `X(h) * X(g)` intertwines `A` with `twist(g * h)`.
+The supplied gauge matrices are retained, with this order of multiplication. -/
+lemma gauge_product_intertwines
+    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (X : G → GL (Fin D) ℂ)
+    (hX : ∀ g i, twistedTensor A U g i =
+      (X g : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+    (g h : G) (i : Fin d) :
+    twistedTensor A U (g * h) i =
+      ((X h * X g : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((X h * X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+  rw [twistedTensor_mul]
+  conv_lhs =>
+    rw [show twistedTensor A U h = fun j =>
+      (X h : Matrix (Fin D) (Fin D) ℂ) * A j *
+        (((X h)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) from funext (hX h)]
+  rw [twistedTensor_gaugeEquiv A U (X h) g]
+  simp only
+  rw [hX g i]
+  simp only [Matrix.GeneralLinearGroup.coe_mul, mul_inv_rev, Matrix.mul_assoc]
 
 /-- If `A` is injective and on-site symmetric under `U`, then each twisted tensor is
 gauge equivalent to `A`.
