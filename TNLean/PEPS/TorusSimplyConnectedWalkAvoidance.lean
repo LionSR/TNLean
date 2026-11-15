@@ -32,11 +32,11 @@ namespace TNLean.PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
-local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
-local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
+local instance dualAvoidanceWidthOne : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
+local instance dualAvoidanceHeightOne : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
 local notation "X" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
-local instance : Quiver X := torusDualQuiver width height
+local instance dualAvoidanceQuiver : Quiver X := torusDualQuiver width height
 
 private def dualStepWalk {a b : X} : TorusDualStep a b → (Γₜ).Walk a b
   | .east x y => .cons (torusGraph_adj_right x y) .nil
