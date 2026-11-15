@@ -376,9 +376,21 @@ not limited to the first two-wall state. It applies in particular to
 identities and the family's blocked local action inside a trace. It still
 does not prove truncation/string agreement on those multiwall states.
 
-**Validation status of this continuation:** these new declarations have been
-written but await hosted Lean checks. The earlier eight-module fixed-circuit
-result is fully green on exact head
+**Validation status of this continuation:** on exact head
+`4dcea2f8565c3c0d43a1a4b3179c9b739aa0b5f9`, all ten modules passed their
+direct strict Lean checks and the full project build in
+[job 132989739236](https://github.com/LionSR/TNLean/actions/runs/43771965742/job/132989739236).
+The affected-file strict, compilation-time, text-style, blueprint-declaration,
+and paper-gap declaration checks also passed. The two new modules initially
+built in 6.7 and 4.9 seconds. Both blueprint PDF volumes passed in
+[job 132989739248](https://github.com/LionSR/TNLean/actions/runs/43771965742/job/132989739248).
+The web job is tracked separately by the PR's current checks; these Lean and
+PDF results do not imply that job succeeded.
+Local import, forbidden-token, blueprint-role, reader-prose, whitespace, and
+standalone LaTeX-fragment checks passed. Local source synchronization finds
+all five new declarations; absent external QICLean sources prevent a complete
+local synchronization check. No proof placeholders or new axioms are added.
+The earlier eight-module fixed-circuit result was fully green on exact head
 `d0b5cd14f118c5abb47d0eff6541e284dfafdc65` (run `43762978260`).
 
 The remaining physical task is to derive all forward comparisons and the

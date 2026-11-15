@@ -50,6 +50,7 @@
     \lean{MPOTensor.GroupFamily.BlockActionData.detectorTransportWord_mulVec_eq_inv_cyclicInvariant_of_phased_states,
         MPOTensor.GroupFamily.BlockActionData.detectorTransportWord_mulVec_eq_inv_cyclicInvariant_of_intermediate_states,
         MPOTensor.GroupFamily.BlockActionData.star_dotProduct_detectorTransportWord_eq_inv_cyclicInvariant}
+    \leanok
     In the setting of Lemma~\ref{thm:mpug_domain_wall_interchange},
     suppose $g^m=1$ and the forward comparisons of
     (\ref{eq:mpug_detector_intermediate_comparisons}) have coefficients
@@ -69,7 +70,7 @@
     \cite{gap:gs24_truncation_detector_endpoint_dependence}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpug_detector_conditional_transport,
         thm:mpug_domain_wall_interchange}
     Unitarity gives $D_r^{\dagger}w_r=w_{r+1}$ from
@@ -82,6 +83,7 @@
 \begin{lemma}[A canonical string crossing a wall with arbitrary exterior chains]
     \label{lem:mpug_detector_local_wall_comparison}
     \lean{MPOTensor.GroupFamily.BlockActionData.groupWallString_mulVec_trace_wall}
+    \leanok
     In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
     fix blocks $y,z$ and write
     $C_{yz}(\sigma,i,\tau)=A_y^{\sigma}e_{yz}^iA_z^{\tau}$ for the
@@ -105,7 +107,7 @@
     \cite{gap:gs24_truncation_detector_endpoint_dependence}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpug_group_domain_wall_string_creation,
         thm:mpug_domain_wall_pair}
     The endpoint contractions give $e_{y,gy}^aV_{g,y}$ and
@@ -118,6 +120,7 @@
 \begin{lemma}[The first crossed truncation comparison]
     \label{lem:mpug_detector_first_canonical_crossing}
     \lean{MPOTensor.GroupFamily.BlockActionData.interval_mul_interval_mulVec_mpv_cross_of_canonical_comparisons}
+    \leanok
     Let the blocks have left inverses with separated supports and a
     nonzero domain-wall family with the local group action of
     Definition~\ref{def:mpug_group_domain_wall_string}.
@@ -135,7 +138,7 @@
     \cite{gap:gs24_truncation_detector_endpoint_dependence}.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpug_group_domain_wall_exchange}
     Substitution gives $T_1T_0\psi_x=S_1S_0\psi_x$.
     The crossed-string contraction in
