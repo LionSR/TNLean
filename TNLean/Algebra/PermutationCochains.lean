@@ -28,7 +28,12 @@ is arbitrary and commutative; complex units and the circle are special cases.
 
 namespace TNLean.Algebra.PermutationCochains
 
-variable {G X M : Type} [Group G] [MulAction G X] [CommGroup M]
+universe u v w
+
+section Cochains
+
+variable {G : Type u} {X : Type v} {M : Type w}
+  [Group G] [MulAction G X] [CommGroup M]
 
 set_option warn.classDefReducibility false in
 /-- The permutation action on functions, `(g • f)(x) = f(g⁻¹ • x)`.
@@ -41,7 +46,8 @@ scoped instance permutationMulDistribMulAction : MulDistribMulAction G (X → M)
   smul_mul _ _ _ := rfl
 
 /-- The integral representation on the additive form of the permutation coefficient group. -/
-abbrev representation (G X M : Type) [Group G] [MulAction G X] [CommGroup M] : Rep ℤ G :=
+abbrev representation (G : Type u) (X : Type v) (M : Type w)
+    [Group G] [MulAction G X] [CommGroup M] : Rep.{max v w} ℤ G :=
   Rep.ofMulDistribMulAction G (X → M)
 
 /-- Evaluation of the permutation representation. -/
@@ -80,6 +86,75 @@ def twoCochainEquiv : (X → G → G → M) ≃ (G × G → representation G X M
     funext x
     change (f p).toMul ((p.1 * p.2) • ((p.1 * p.2)⁻¹ • x)) = (f p).toMul x
     rw [smul_inv_smul]
+
+end Cochains
+
+section InhomogeneousDifferentials
+
+variable {G : Type} {X : Type v} {M : Type w}
+  [Group G] [MulAction G X] [CommGroup M]
+
+/-- The second inhomogeneous differential in tuple coordinates, with coefficients
+in a permutation representation of any universe. -/
+theorem inhomogeneous_d₂_apply (f : G × G → representation G X M) (p : Fin 3 → G) :
+    inhomogeneousCochains.d (representation G X M) 2 (fun q ↦ f (q 0, q 1)) p =
+      (representation G X M).ρ (p 0) (f (p 1, p 2)) - f (p 0 * p 1, p 2) +
+        f (p 0, p 1 * p 2) - f (p 0, p 1) := by
+  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three]
+  simp [Fin.contractNth, sub_eq_add_neg, add_assoc]
+
+/-- The differential of a block two-cochain in inhomogeneous coordinates.
+Unlike the degree-three quotient, this formula permits arbitrary universes of
+block labels and coefficients (arXiv:2502.20257, lines 5918--5921). -/
+theorem d_twoCochainEquiv_apply (L : X → G → G → M) (g h k : G) (x : X) :
+    ((Rep.toAdditive (M := G) (G := X → M))
+      (inhomogeneousCochains.d (representation G X M) 2
+        (fun p ↦ twoCochainEquiv L (p 0, p 1)) ![g, h, k])).toMul
+        ((g * h * k) • x) =
+      (L x g (h * k) * L x h k) / (L (k • x) g h * L x (g * h) k) := by
+  rw [inhomogeneous_d₂_apply]
+  change L ((h * k)⁻¹ • (g⁻¹ • ((g * h * k) • x))) h k /
+      L (((g * h) * k)⁻¹ • ((g * h * k) • x)) (g * h) k *
+      L ((g * (h * k))⁻¹ • ((g * h * k) • x)) g (h * k) /
+      L ((g * h)⁻¹ • ((g * h * k) • x)) g h = _
+  simp [mul_smul, div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
+
+/-- The L-symbol equation is a differential identity for arbitrary universes of
+block labels (arXiv:2502.20257, `eq:omega_and_Ls`). -/
+theorem d_eq_const_iff (L : X → G → G → M) (ω : G → G → G → M) :
+    inhomogeneousCochains.d (representation G X M) 2
+        (fun p ↦ twoCochainEquiv L (p 0, p 1)) =
+      (fun p ↦ Additive.ofMul (fun _ : X ↦ ω (p 0) (p 1) (p 2))) ↔
+      ∀ x g h k, L x g (h * k) * L x h k =
+        ω g h k * L (k • x) g h * L x (g * h) k := by
+  constructor
+  · intro hω x g h k
+    have he := congrArg (fun f ↦ ((Rep.toAdditive (M := G) (G := X → M))
+      (f ![g, h, k])).toMul ((g * h * k) • x)) hω
+    rw [d_twoCochainEquiv_apply] at he
+    change _ = ω g h k at he
+    simpa [mul_assoc] using (div_eq_iff_eq_mul.mp he)
+  · intro hω
+    funext p
+    apply (Rep.toAdditive (M := G) (G := X → M)).injective
+    apply Additive.toMul.injective
+    funext y
+    have he := d_twoCochainEquiv_apply L (p 0) (p 1) (p 2)
+      ((p 0 * p 1 * p 2)⁻¹ • y)
+    have hp : ![p 0, p 1, p 2] = p := by
+      funext i
+      fin_cases i <;> rfl
+    simp only [hp, smul_inv_smul] at he
+    rw [he]
+    change _ = ω (p 0) (p 1) (p 2)
+    exact div_eq_iff_eq_mul.mpr (by
+      simpa [mul_assoc] using hω ((p 0 * p 1 * p 2)⁻¹ • y) (p 0) (p 1) (p 2))
+
+end InhomogeneousDifferentials
+
+section Differentials
+
+variable {G X M : Type} [Group G] [MulAction G X] [CommGroup M]
 
 /-- The one-to-two differential in block coordinates is the coboundary of
 arXiv:2502.20257, lines 5914--5917. -/
@@ -129,5 +204,7 @@ theorem d₂₃_eq_const_iff (L : X → G → G → M) (ω : G → G → G → M
     rw [he]
     change _ = ω g h k
     exact div_eq_iff_eq_mul.mpr (by simpa [mul_assoc] using hω ((g * h * k)⁻¹ • y) g h k)
+
+end Differentials
 
 end TNLean.Algebra.PermutationCochains

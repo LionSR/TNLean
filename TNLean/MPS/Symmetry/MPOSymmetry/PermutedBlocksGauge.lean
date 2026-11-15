@@ -176,10 +176,10 @@ All three scalars are boundary-dressed, as recorded in the module docstring. -/
 theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (fd fd' : FusionData F) (ad ad' : BlockActionData F A) :
-    ad'.lSymbol fd' =
+    ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad'.lSymbol fd')) =
       LSymbol.gauge (fun p ↦ ((scalarRepresentationEquiv G).symm (fd.relativeScalar fd'
         p)).toMul) (ad.relativeScalar ad')
-        (ad.lSymbol fd) := by
+        (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd))) := by
   funext x g h
   have hγ := isDressedProportional_relativeScalar hA hperm ad ad'
   have hSame : ∀ (a : G) {n : ℕ} (C : MPSTensor d n) (y : X),
@@ -235,7 +235,9 @@ theorem lSymbol_rescale (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNor
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (fd : FusionData F) (ad : BlockActionData F A) (β : ScalarCocycle G)
     (γ : ActionTensorGauge G X) :
-    (ad.rescale γ).lSymbol (fd.rescale β) = LSymbol.gauge β γ (ad.lSymbol fd) := by
+    ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm ((ad.rescale γ).lSymbol (fd.rescale
+      β))) = LSymbol.gauge β γ (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+      (ad.lSymbol fd))) := by
   rw [lSymbol_eq_gauge hF hA hD hperm fd (fd.rescale β) ad (ad.rescale γ),
     FusionData.relativeScalar_rescale hF, relativeScalar_rescale hA hD hperm]
 
@@ -253,15 +255,20 @@ theorem exists_rescale_omega_eq_one_lSymbol_eq_one [Unique X] (hF : F.IsNormalRe
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (fd : FusionData F)
     (ad : BlockActionData F A) :
     ∃ (β : ScalarCocycle G) (γ : ActionTensorGauge G X),
-      (fd.rescale β).associatorScalar = 1 ∧ (ad.rescale γ).lSymbol (fd.rescale β) = 1 := by
-  refine ⟨fun p ↦ (ad.lSymbol fd default p.1 p.2)⁻¹, 1, ?_⟩
-  have hL : (ad.rescale 1).lSymbol (fd.rescale fun p ↦ (ad.lSymbol fd default p.1 p.2)⁻¹) = 1 := by
+      (fd.rescale β).associatorScalar = 1 ∧ ((PermutationCochains.twoCochainEquiv (M :=
+        ℂˣ)).symm ((ad.rescale γ).lSymbol (fd.rescale β))) = 1 := by
+  refine ⟨fun p ↦ (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd))
+    default p.1 p.2)⁻¹, 1, ?_⟩
+  have hL : ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm ((ad.rescale 1).lSymbol
+    (fd.rescale fun p ↦ (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd))
+    default p.1 p.2)⁻¹))) = 1 := by
     rw [lSymbol_rescale hF hA hD hperm]
     funext x g h
     rw [Subsingleton.elim x default]
     simp [LSymbol.gauge]
   refine ⟨?_, hL⟩
-  have hc := isCompatible_lSymbol (fd := fd.rescale fun p ↦ (ad.lSymbol fd default p.1 p.2)⁻¹)
+  have hc := isCompatible_lSymbol (fd := fd.rescale fun p ↦
+    (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) default p.1 p.2)⁻¹)
     (ad := ad.rescale 1) hF hA hD hperm
   rw [hL] at hc
   funext g h k
@@ -289,20 +296,23 @@ theorem exists_rescale_lSymbol_eq_inducedLSymbol (hF : F.IsNormalRepresentation)
     ∃ (β : ScalarCocycle G) (γ : ActionTensorGauge G X),
       (fd.rescale β).associatorScalar = 1 ∧
         ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), groupCohomology.IsMulCocycle₂ ψ ∧
-          (ad.rescale γ).lSymbol (fd.rescale β) = K.inducedLSymbol ψ := by
+          ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm ((ad.rescale γ).lSymbol
+            (fd.rescale β))) = K.inducedLSymbol ψ := by
   obtain ⟨β, hβ⟩ := ((FusionData.isTrivialGaugeClass_omega_iff hF fd).2 hω).symm
   have hω₁ : (fd.rescale β).associatorScalar = 1 := by
     rw [FusionData.omega_rescale hF, hβ]
     rfl
-  have hR : LSymbol.IsCompatible (LSymbol.gauge β (fun _ _ ↦ 1) (ad.lSymbol fd))
+  have hR : LSymbol.IsCompatible (LSymbol.gauge β (fun _ _ ↦ 1)
+    (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd))))
       (fun _ _ _ ↦ 1) := by
     simpa only [hβ] using (isCompatible_lSymbol (fd := fd) (ad := ad) hF hA hD hperm).gauge β
       (fun _ _ ↦ 1)
   obtain ⟨γ, hγ⟩ := K.exists_actionGauge_eq_inducedLSymbol hR
   refine ⟨β, γ⁻¹, hω₁, _, hR.isCocycle_restrict x₀, ?_⟩
   rw [lSymbol_rescale hF hA hD hperm]
-  calc LSymbol.gauge β γ⁻¹ (ad.lSymbol fd)
-      = LSymbol.gauge (fun _ ↦ 1) γ⁻¹ (LSymbol.gauge β (fun _ _ ↦ 1) (ad.lSymbol fd)) := by
+  calc LSymbol.gauge β γ⁻¹ (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)))
+      = LSymbol.gauge (fun _ ↦ 1) γ⁻¹ (LSymbol.gauge β (fun _ _ ↦ 1)
+        (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)))) := by
         rw [LSymbol.gauge_comp]
         congr 1
         exacts [(mul_one β).symm, (one_mul γ⁻¹).symm]
@@ -329,7 +339,8 @@ theorem exists_rescale_lSymbol_eq_inducedLSymbol_of_finite [Finite G]
       (fd.rescale β).associatorScalar = 1 ∧
         ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), groupCohomology.IsMulCocycle₂ ψ ∧
           (∀ p, ‖(ψ p : ℂ)‖ = 1) ∧
-          (ad.rescale γ).lSymbol (fd.rescale β) = K.inducedLSymbol ψ := by
+          ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm ((ad.rescale γ).lSymbol
+            (fd.rescale β))) = K.inducedLSymbol ψ := by
   obtain ⟨β, γ, hω₁, ψ, hψ, hL⟩ :=
     exists_rescale_lSymbol_eq_inducedLSymbol hF hA hD hperm hω K fd ad
   have hψ₁ := ScalarCocycle.circlePhaseInclusion_isMulCocycle₂ hψ
@@ -339,8 +350,10 @@ theorem exists_rescale_lSymbol_eq_inducedLSymbol_of_finite [Finite G]
   refine ⟨β, γ * γ'⁻¹, hω₁, _, hψ₁, fun p ↦ by
     simp [ScalarCocycle.circlePhaseInclusion], ?_⟩
   rw [lSymbol_rescale hF hA hD hperm] at hL ⊢
-  calc LSymbol.gauge β (γ * γ'⁻¹) (ad.lSymbol fd)
-      = LSymbol.gauge (fun _ ↦ 1) γ'⁻¹ (LSymbol.gauge β γ (ad.lSymbol fd)) := by
+  calc LSymbol.gauge β (γ * γ'⁻¹) (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+    (ad.lSymbol fd)))
+      = LSymbol.gauge (fun _ ↦ 1) γ'⁻¹ (LSymbol.gauge β γ (((PermutationCochains.twoCochainEquiv
+        (M := ℂˣ)).symm (ad.lSymbol fd)))) := by
         rw [LSymbol.gauge_comp]
         congr 1
         exact (mul_one β).symm
@@ -365,8 +378,10 @@ theorem isBlockIndependent_lSymbol_iff (hF : F.IsNormalRepresentation)
     (K : StabilizerRepresentatives G X x₀) (fd : FusionData F) (ad : BlockActionData F A)
     {β : ScalarCocycle G} {γ : ActionTensorGauge G X}
     {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : groupCohomology.IsMulCocycle₂ ψ)
-    (hL : (ad.rescale γ).lSymbol (fd.rescale β) = K.inducedLSymbol ψ) :
-    LSymbol.IsBlockIndependent (ad.lSymbol fd) ↔
+    (hL : ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm ((ad.rescale γ).lSymbol
+      (fd.rescale β))) = K.inducedLSymbol ψ) :
+    LSymbol.IsBlockIndependent (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+      (ad.lSymbol fd))) ↔
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hψ) ∈
         Set.range (groupCohomology.map (MulAction.stabilizer G x₀).subtype
           (scalarRepresentationRes (MulAction.stabilizer G x₀).subtype) 2) := by
@@ -391,8 +406,10 @@ theorem isBlockIndependent_lSymbol_iff_circle [Finite G] (hF : F.IsNormalReprese
     (K : StabilizerRepresentatives G X x₀) (fd : FusionData F) (ad : BlockActionData F A)
     {β : ScalarCocycle G} {γ : ActionTensorGauge G X}
     {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : groupCohomology.IsMulCocycle₂ ψ)
-    (hL : (ad.rescale γ).lSymbol (fd.rescale β) = K.inducedLSymbol ψ) :
-    LSymbol.IsBlockIndependent (ad.lSymbol fd) ↔
+    (hL : ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm ((ad.rescale γ).lSymbol
+      (fd.rescale β))) = K.inducedLSymbol ψ) :
+    LSymbol.IsBlockIndependent (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+      (ad.lSymbol fd))) ↔
       groupCohomology.H2π _
           (ScalarCocycle.circlePhaseMathlibCocycle
             (groupCohomology.cocyclesOfIsMulCocycle₂ hψ)) ∈

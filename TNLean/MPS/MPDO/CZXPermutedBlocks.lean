@@ -640,7 +640,8 @@ theorem isDressedProportional_actV_fuseV_gen_gen (x : Fin 2) :
 /-- The L-symbols at the identity element are one: the bras of the trivial action and of the
 trivial fusion agree. -/
 theorem lSymbol_one_one (x : Multiplicative (ZMod 2)) :
-    blockActionData.lSymbol fusionData x 1 1 = 1 := by
+    ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (blockActionData.lSymbol fusionData))
+      x 1 1 = 1 := by
   have h : ((finCongr (one_mul 1)).symm.toPEquiv.toMatrix : Matrix (Fin 1) (Fin (1 * 1)) ℂ) *
       idKron 1 ((finCongr (one_mul 1)).symm.toPEquiv.toMatrix : Matrix (Fin 1) (Fin (1 * 1)) ℂ) *
       mulTensorAssocInvMatrix 1 1 1 =
@@ -663,7 +664,8 @@ its anomaly.
 
 Source: arXiv:2502.20257, `eq:omega_and_Ls`, `main.tex` lines 1920--1923. -/
 theorem blockActionData_isCompatible :
-    LSymbol.IsCompatible (blockActionData.lSymbol fusionData) fusionData.associatorScalar :=
+    LSymbol.IsCompatible (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+      (blockActionData.lSymbol fusionData))) fusionData.associatorScalar :=
   blockActionData.isCompatible_lSymbol family_isNormalRepresentation block_isNormal
     (fun _ ↦ one_pos) carriesMPV
 
@@ -674,24 +676,29 @@ orientation of the caps of the module docstring.
 
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913, and lines 4671--4699. -/
 theorem blockActionData_lSymbol (x g h : Multiplicative (ZMod 2)) :
-    (blockActionData.lSymbol fusionData x g h : ℂ) =
+    (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (blockActionData.lSymbol fusionData))
+      x g h : ℂ) =
       if g = orderTwoGen ∧ h = orderTwoGen then (-1) ^ (Multiplicative.toAdd x).val else 1 := by
   have hc := blockActionData_isCompatible
   have hω : ∀ a b c : Multiplicative (ZMod 2), ¬ (a = orderTwoGen ∧ b = orderTwoGen ∧
       c = orderTwoGen) → fusionData.associatorScalar a b c = 1 := fun a b c habc ↦ by
     rw [fusionData_omega, ite_eq_right_iff.mpr fun h ↦ absurd h habc]
-  have hee : ∀ y, blockActionData.lSymbol fusionData y 1 1 = 1 := lSymbol_one_one
+  have hee : ∀ y, ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (blockActionData.lSymbol
+    fusionData)) y 1 1 = 1 := lSymbol_one_one
   -- The compatibility relation at `(e, e, g)` and at `(g, e, e)` reduces the remaining
   -- L-symbols at the identity to `L^y_{e,e} = 1`.
-  have heg : ∀ y, blockActionData.lSymbol fusionData y 1 orderTwoGen = 1 := fun y ↦ by
+  have heg : ∀ y, ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (blockActionData.lSymbol
+    fusionData)) y 1 orderTwoGen = 1 := fun y ↦ by
     have h := hc y 1 1 orderTwoGen
     simp only [one_mul, hee, hω 1 1 orderTwoGen (by decide)] at h
     simpa using h
-  have hge : ∀ y, blockActionData.lSymbol fusionData y orderTwoGen 1 = 1 := fun y ↦ by
+  have hge : ∀ y, ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (blockActionData.lSymbol
+    fusionData)) y orderTwoGen 1 = 1 := fun y ↦ by
     have h := hc y orderTwoGen 1 1
     simp only [mul_one, one_mul, one_smul, hee, hω orderTwoGen 1 1 (by decide)] at h
     simpa using h
-  have hgg : ∀ y : ZMod 2, (blockActionData.lSymbol fusionData (Multiplicative.ofAdd y)
+  have hgg : ∀ y : ZMod 2, (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+    (blockActionData.lSymbol fusionData)) (Multiplicative.ofAdd y)
       orderTwoGen orderTwoGen : ℂ) = if y = 0 then 1 else -1 := fun y ↦
     (BlockActionData.eq_lSymbol_of_isDressedProportional block_isNormal (fun _ ↦ one_pos)
       carriesMPV (isDressedProportional_actV_fuseV_gen_gen y)).symm
@@ -723,9 +730,12 @@ in line 5121. -/
 theorem omega_eq_lSymbol_ratio (fd : family.FusionData) (ad : BlockActionData family block)
     (x : Multiplicative (ZMod 2)) :
     fd.associatorScalar orderTwoGen orderTwoGen orderTwoGen =
-      ad.lSymbol fd x orderTwoGen orderTwoGen * ad.lSymbol fd x orderTwoGen 1 /
-        (ad.lSymbol fd (orderTwoGen • x) orderTwoGen orderTwoGen *
-          ad.lSymbol fd x 1 orderTwoGen) :=
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x orderTwoGen
+        orderTwoGen * ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x
+        orderTwoGen 1 /
+        (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (orderTwoGen •
+          x) orderTwoGen orderTwoGen *
+          ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x 1 orderTwoGen) :=
   LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one
     (ad.isCompatible_lSymbol family_isNormalRepresentation block_isNormal (fun _ ↦ one_pos)
       carriesMPV)
@@ -740,8 +750,12 @@ identity, this is `L⁰_{g,g} / L¹_{g,g} = -1`; no gauge transformation makes b
 Source: arXiv:2502.20257, `main.tex` lines 4695--4699 and 5121. -/
 theorem lSymbol_ratio_mul_omega_eq_neg_one (fd : family.FusionData)
     (ad : BlockActionData family block) :
-    ad.lSymbol fd 1 orderTwoGen orderTwoGen * ad.lSymbol fd 1 orderTwoGen 1 /
-        (ad.lSymbol fd orderTwoGen orderTwoGen orderTwoGen * ad.lSymbol fd 1 1 orderTwoGen) *
+    ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) 1 orderTwoGen
+      orderTwoGen * ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) 1
+      orderTwoGen 1 /
+        (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) orderTwoGen
+          orderTwoGen orderTwoGen * ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm
+          (ad.lSymbol fd)) 1 1 orderTwoGen) *
       fd.associatorScalar orderTwoGen 1 orderTwoGen = -1 := by
   have hr := omega_eq_lSymbol_ratio fd ad 1
   rw [smul_eq_mul, mul_one] at hr

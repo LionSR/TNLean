@@ -457,7 +457,8 @@ for all words `u`, `v` longer than a fixed buffer. The target blocks are identif
 
 The source draws this identity with one site on each side of the wall (lines 774--832), in the
 setting of the renormalization fixed point (lines 1351 and 1358); the buffer here plays the
-role of the blocked sites of line 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and `B^g_{x,y}` of
+role of the blocked sites of line 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂`
+  and `B^g_{x,y}` of
 `eq:localcdefG` for a general group. Both walls and the phase are nonzero, the convention of
 the module docstring. -/
 structure IsDomainWallAction (g : G) {x y x' y' : X} (hx : g • x = x') (hy : g • y = y')
@@ -633,7 +634,7 @@ theorem exists_evalWord_mul_actW_eq (hA : ∀ x, Kraus.IsNormal (A x))
     ∃ N : ℕ, ∀ w : List (Fin d), N ≤ w.length →
       Kraus.evalWord (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) w *
           ad.actW g h x =
-        ((ad.lSymbol fd x g h)⁻¹ : ℂˣ) •
+        ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h)⁻¹ : ℂˣ) •
           (Kraus.evalWord (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) w *
             ad.fuseW fd g h x) := by
   have hSame : MPSTensor.SameMPV₂Pos (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
@@ -647,7 +648,8 @@ theorem exists_evalWord_mul_actW_eq (hA : ∀ x, Kraus.IsNormal (A x))
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (ad.actV g h x)
         (ad.fuseV fd g h x) z :=
     ⟨N, fun w hw ↦ (hN w hw).1⟩
-  have hzL : ((ad.lSymbol fd x g h : ℂˣ) : ℂ) = z :=
+  have hzL : ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h :
+    ℂˣ) : ℂ) = z :=
     MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero
       (isDressedProportional_lSymbol hA hperm x g h) hleft
       ((ad.isReduction_actV g h x).exists_mul_evalWord_ne_zero (hA _) hD)
@@ -679,7 +681,9 @@ theorem mul (hA : ∀ x, Kraus.IsNormal (A x))
     (h₁ : ad.IsDomainWallAction h hx₂ hy₂ e₁ e₂ b₁)
     (h₂ : ad.IsDomainWallAction g hx₃ hy₃ e₂ e₃ b₂) :
     ad.IsDomainWallAction (g * h) hx₃' hy₃' e₁ e₃
-      (((ad.lSymbol fd y g h / ad.lSymbol fd x g h : ℂˣ) : ℂ) * b₂ * b₁) := by
+      (((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h /
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h : ℂˣ) : ℂ)
+        * b₂ * b₁) := by
   subst hx₂ hy₂ hx₃ hy₃
   have hDy : 0 < D (g • h • y) := by
     obtain ⟨i, hi⟩ := Function.ne_iff.mp h₂.target_ne_zero
@@ -741,7 +745,8 @@ theorem mul (hA : ∀ x, Kraus.IsNormal (A x))
     rw [← hσ, ← hσ']
     exact physAct_wallChain _ _ _ _ σ i σ'
   have key : ad.actV g h x * P * ad.actW g h y =
-      (((ad.lSymbol fd x g h / ad.lSymbol fd y g h : ℂˣ) : ℂ)) •
+      (((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h /
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h : ℂˣ) : ℂ)) •
         (ad.fuseV fd g h x * P * ad.fuseW fd g h y) := by
     rw [hP]
     calc _ = ad.actV g h x * Kraus.evalWord
@@ -760,15 +765,23 @@ theorem mul (hA : ∀ x, Kraus.IsNormal (A x))
     exact wallChain_append _ _ _ σ i σ'
   rw [← hfused]
   rw [hdouble, hW] at key
-  have hinv : ((ad.lSymbol fd y g h / ad.lSymbol fd x g h : ℂˣ) : ℂ) *
-      ((ad.lSymbol fd x g h / ad.lSymbol fd y g h : ℂˣ) : ℂ) = 1 := by
+  have hinv : ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h /
+    ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h : ℂˣ) : ℂ) *
+      ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h /
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h : ℂˣ) : ℂ)
+        = 1 := by
     rw [← Units.val_mul]
     simp
   calc ad.fuseV fd g h x * P * ad.fuseW fd g h y
-      = (((ad.lSymbol fd y g h / ad.lSymbol fd x g h : ℂˣ) : ℂ) *
-          ((ad.lSymbol fd x g h / ad.lSymbol fd y g h : ℂˣ) : ℂ)) •
+      = (((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h /
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h : ℂˣ) : ℂ) *
+          ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h /
+            ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h : ℂˣ) :
+            ℂ)) •
           (ad.fuseV fd g h x * P * ad.fuseW fd g h y) := by rw [hinv, one_smul]
-    _ = ((ad.lSymbol fd y g h / ad.lSymbol fd x g h : ℂˣ) : ℂ) • ((b₁ * b₂) •
+    _ = ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h /
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h : ℂˣ) : ℂ) •
+      ((b₁ * b₂) •
           (Kraus.evalWord (A (g • h • x)) u * e₃ i * Kraus.evalWord (A (g • h • y)) v)) := by
         rw [← smul_smul, ← key]
     _ = _ := (smul_smul _ _ _).trans (by congr 1; ring)
@@ -788,11 +801,13 @@ theorem mul_eq (hA : ∀ x, Kraus.IsNormal (A x))
     (h₁ : ad.IsDomainWallAction h hx₂ hy₂ e₁ e₂ b₁)
     (h₂ : ad.IsDomainWallAction g hx₃ hy₃ e₂ e₃ b₂)
     (h₃ : ad.IsDomainWallAction (g * h) hx₃' hy₃' e₁ e₃ b₃) :
-    b₂ * b₁ = ((ad.lSymbol fd x g h / ad.lSymbol fd y g h : ℂˣ) : ℂ) * b₃ := by
+    b₂ * b₁ = ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h /
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h : ℂˣ) : ℂ) *
+      b₃ := by
   have hc := (mul (fd := fd) hA hperm hx₃' hy₃' h₁ h₂).phase_eq hA h₃
   rw [← hc]
-  have hLx := (ad.lSymbol fd x g h).ne_zero
-  have hLy := (ad.lSymbol fd y g h).ne_zero
+  have hLx := (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g h).ne_zero
+  have hLy := (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h).ne_zero
   simp only [Units.val_div_eq_div_val]
   field_simp
 
@@ -821,23 +836,35 @@ theorem mul_eq_lSymbol_of_mul_self_eq_one (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (hg : g * g = 1)
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
     (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
-    cAB * cBA = ((ad.lSymbol fd x g g * ad.lSymbol fd x 1 1 /
-      (ad.lSymbol fd y g g * ad.lSymbol fd y 1 1) : ℂˣ) : ℂ) := by
+    cAB * cBA = ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g g *
+      ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x 1 1 /
+      (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g g *
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y 1 1) : ℂˣ) : ℂ)
+        := by
   subst hxy
-  set b := ((ad.lSymbol fd (g • x) g g / ad.lSymbol fd x g g : ℂˣ) : ℂ) * cBA * cAB
+  set b := ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) g g
+    / ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g g : ℂˣ) : ℂ) *
+    cBA * cAB
   have h1 : ad.IsDomainWallAction 1 (one_smul G x) (one_smul G (g • x)) eAB eAB b :=
     (mul (fd := fd) hA hperm (by rw [hg, one_smul]) (by rw [hg, one_smul]) hAB hBA).congr_elem
       hg _ _
   have hb : b ≠ 0 := h1.phase_ne_zero
-  have h11 : b * b = ((ad.lSymbol fd x 1 1 / ad.lSymbol fd (g • x) 1 1 : ℂˣ) : ℂ) * b :=
+  have h11 : b * b = ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x
+    1 1 / ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) 1 1 :
+    ℂˣ) : ℂ) * b :=
     mul_eq (fd := fd) hA hperm h1 h1 (h1.congr_elem (one_mul 1).symm (by rw [one_mul, one_smul])
       (by rw [one_mul, one_smul]))
-  have hb' : b = ((ad.lSymbol fd x 1 1 / ad.lSymbol fd (g • x) 1 1 : ℂˣ) : ℂ) :=
+  have hb' : b = ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x 1 1
+    / ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) 1 1 : ℂˣ) :
+    ℂ) :=
     mul_right_cancel₀ hb h11
-  have hLx := (ad.lSymbol fd x g g).ne_zero
-  have hLy := (ad.lSymbol fd (g • x) g g).ne_zero
-  have hLx1 := (ad.lSymbol fd x 1 1).ne_zero
-  have hLy1 := (ad.lSymbol fd (g • x) 1 1).ne_zero
+  have hLx := (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g g).ne_zero
+  have hLy := (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) g
+    g).ne_zero
+  have hLx1 := (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x 1
+    1).ne_zero
+  have hLy1 := (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) 1
+    1).ne_zero
   simp only [b, Units.val_div_eq_div_val, Units.val_mul] at hb' ⊢
   field_simp at hb' ⊢
   linear_combination hb'

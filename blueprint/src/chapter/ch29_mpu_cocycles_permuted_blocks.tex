@@ -49,7 +49,10 @@
     \label{lem:mpug_permutation_differentials}
     \lean{TNLean.Algebra.PermutationCochains.d₁₂_oneCochainEquiv_apply,
         TNLean.Algebra.PermutationCochains.d₂₃_twoCochainEquiv_apply,
-        TNLean.Algebra.PermutationCochains.d₂₃_eq_const_iff}
+        TNLean.Algebra.PermutationCochains.d₂₃_eq_const_iff,
+        TNLean.Algebra.PermutationCochains.inhomogeneous_d₂_apply,
+        TNLean.Algebra.PermutationCochains.d_twoCochainEquiv_apply,
+        TNLean.Algebra.PermutationCochains.d_eq_const_iff}
     \leanok
     \uses{def:mpug_permutation_coefficients}
     For every $x\in\mathsf X$ and $g,h,k\in G$, the inhomogeneous
@@ -641,6 +644,7 @@ $N\geq1$.
 \begin{lemma}[Compatibility for permuted blocks]
     \label{thm:mpug_permuted_block_l_compatibility}
     \lean{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol,
+        MPOTensor.GroupFamily.BlockActionData.d_lSymbol,
         MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
     \leanok
     \uses{def:mpug_permuted_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,

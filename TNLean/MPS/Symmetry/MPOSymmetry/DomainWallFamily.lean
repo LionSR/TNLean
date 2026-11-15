@@ -123,7 +123,9 @@ variable {ad : BlockActionData F A} {e : (y z : X) → Fin d → Matrix (Fin (D 
 theorem mul_eq (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g h : G) (y z : X) :
     B g (h • y) (h • z) * B h y z =
-      ((ad.lSymbol fd y g h / ad.lSymbol fd z g h : ℂˣ) : ℂ) * B (g * h) y z :=
+      ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) y g h /
+        ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) z g h : ℂˣ) : ℂ)
+        * B (g * h) y z :=
   IsDomainWallAction.mul_eq (fd := fd) hA hperm (hB h y z) (hB g (h • y) (h • z))
     ((hB (g * h) y z).congr_target (mul_smul g h y) (mul_smul g h z))
 
@@ -137,10 +139,14 @@ theorem prod_eq_prod_lSymbol (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus
     (x : X) :
     ∏ k ∈ Finset.range n, B g (g ^ k • g • x) (g ^ k • x) =
       ∏ k ∈ Finset.range n,
-        ((ad.lSymbol fd (g • x) g (g ^ k) / ad.lSymbol fd x g (g ^ k) : ℂˣ) : ℂ) := by
+        ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) g (g ^
+          k) / ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g (g ^
+          k) : ℂˣ) : ℂ) := by
   set β : ℕ → ℂ := fun k ↦ B (g ^ k) (g • x) x
   have hstep : ∀ k, B g (g ^ k • g • x) (g ^ k • x) * β k =
-      ((ad.lSymbol fd (g • x) g (g ^ k) / ad.lSymbol fd x g (g ^ k) : ℂˣ) : ℂ) * β (k + 1) := by
+      ((((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) (g • x) g (g ^ k)
+        / ((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol fd)) x g (g ^ k) :
+        ℂˣ) : ℂ) * β (k + 1) := by
     intro k
     simp only [β, pow_succ']
     exact hB.mul_eq fd hA hperm g (g ^ k) (g • x) x
@@ -191,7 +197,8 @@ theorem mul_eq_of_fixed (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNo
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {y z : X}
     (a b : fixingSubgroup G ({y, z} : Set X)) :
     B a y z * B b y z =
-      (LSymbol.ratioCocycle (ad.lSymbol fd) y z (a, b) : ℂ) * B (a * b : G) y z := by
+      (LSymbol.ratioCocycle (((PermutationCochains.twoCochainEquiv (M := ℂˣ)).symm (ad.lSymbol
+        fd))) y z (a, b) : ℂ) * B (a * b : G) y z := by
   have h := hB.mul_eq fd hA hperm a b y z
   rw [((mem_fixingSubgroup_iff G).mp b.2) y (by simp),
     ((mem_fixingSubgroup_iff G).mp b.2) z (by simp)] at h

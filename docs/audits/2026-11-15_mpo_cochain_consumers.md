@@ -1,4 +1,4 @@
-# MPO cochain consumers: first migration for #8321
+# MPO cochain consumers: migration for #8321
 
 This candidate is an incomplete first part of
 [#8321](https://github.com/LionSR/TNLean/issues/8321). It must stay draft and
@@ -67,12 +67,14 @@ example constructors still use the scalar cochain functions. The common scalar
 cohomology predicates have not been deleted; their retirement belongs to the
 remaining work in #8319 and #8320.
 
-There is also a universe mismatch for the generic permuted-block consumer.
-`BlockActionData.lSymbol` currently allows `X : Type v`, whereas #10615 fixes
-`G X M : Type` and its coefficient representation in the lowest universe.
-Replacing the generic consumer by that representation would narrow its
-statement. This candidate leaves that API unchanged. A universe-compatible
-cochain interface is needed before migrating it without loss of generality.
+The generic permuted-block L-symbol now also takes values in the permutation
+representation. The coefficient action and coordinate equivalences allow
+arbitrary universes of block labels and coefficients. Its differential theorem
+uses Mathlib's inhomogeneous differential, which permits this generality,
+without imposing the smaller universe required by the cohomology quotient.
+All block gauge, domain-wall, and CZX scalar computations evaluate the native
+two-cochain through the inverse coordinate change. No block-label universe
+was narrowed. Hosted validation of this extension is pending.
 
 ## Verification
 
@@ -98,9 +100,12 @@ compiled both foundations together, `Associator`, `AssociatorCohomology`, the
 dagger-fusion modules, and several Klein and cyclic anomaly examples. It found
 an inference error in the single-block L-symbol evaluation: the coefficient
 group was inferred as complex numbers instead of complex units. The explicit
-complex-unit parameter was pushed in `0e4f591`; its rerun was queued at the last
-inspection. This is partial compilation evidence, not a successful complete
-consumer check. The subsequent prerequisite-formatting correction changes no
-Lean source.
+complex-unit parameter fixed that module: the hosted build at `99805c4`
+compiled `AnomalyObstruction` as well as the associator and its cohomology
+projection. Its strict checks later failed in `DomainWall` and
+`CZXPermutedBlocks`. The complete log could not be retrieved through the
+connector (transport closed); those downstream diagnostics and full CI remain
+unresolved. The generic block extension changes these consumers and requires
+another actual combined-source build.
 
 Prepared with OpenAI Codex (GPT-6); maintainer review is required.
