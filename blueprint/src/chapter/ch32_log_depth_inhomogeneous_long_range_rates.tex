@@ -1,0 +1,161 @@
+\subsection{An explicit approximation class and a uniform scale}
+
+\begin{definition}[Coherent pair approximation on a partition]
+    \label{def:ldp_coherent_pair_approximable}
+    \lean{MPSPreparation.IsCoherentPairApproximable}
+    \notready
+    \uses{def:ldp_chain_pos_state}
+    A nonzero inhomogeneous chain state $\phi_N$ is approximable on a given
+    partition by coherent pair products with $b$ labels and error $\delta$ if
+    there are pairs and amplitudes as in
+    (\ref{eq:ldp_inhomogeneous_long_range_pairs}) such that
+    $1-|\langle\Omega',\phi_{\rm pos}/\|\phi_{\rm pos}\|\rangle|\le\delta$.
+    This specifies a class of approximation hypotheses for the remark
+    after (19) in~\cite{Malz2024Preparation}; that remark does not give a
+    separate definition of the inhomogeneous long-range class.
+\end{definition}
+
+\begin{lemma}[Physical preparation under coherent pair approximation]
+    \label{lem:ldp_coherent_pair_approximation_preparation}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable}
+    \notready
+    \uses{def:ldp_coherent_pair_approximable,
+        lem:ldp_inhomogeneous_long_range_preparation}
+    Fix $d\ge2$, $D\ge1$ and $b$. There are $C,L_0$ such that a coherent
+    pair approximation with error $\delta$ on blocks of lengths
+    $L_0\le\ell_k\le L$ gives a unit physical state prepared with measurements
+    followed by a circuit in depth $CL$ and error at most $\delta$ against
+    the normalized chain state.
+\end{lemma}
+\begin{proof}
+    Apply Lemma~\ref{lem:ldp_inhomogeneous_long_range_preparation} to the pairs
+    and amplitudes in the approximation. Its exact overlap identity transfers
+    the assumed error unchanged.
+\end{proof}
+
+\begin{lemma}[Uniform exponential coherent-pair rate gives a logarithmic scale]
+    \label{lem:ldp_coherent_pair_uniform_rate}
+    \lean{MPSPreparation.exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate}
+    \notready
+    \uses{lem:ldp_coherent_pair_approximation_preparation}
+    Fix $d\ge2$, $D\ge1$, $b$, $K,r>0$ and an integer $k\ge0$. Let $A_N$
+    be a family of inhomogeneous chains with bond dimension $D$. Suppose
+    that for every $N\ge1$ and $1\le q\le N$ there is a partition into blocks
+    with $q\le\ell_j\le2q$ on which the chain has a coherent pair
+    approximation with $b$ labels and error at most $KN^k e^{-rq}$.
+    There is $C\ge0$, independent of $N$ and $\varepsilon$, such that for
+    every $N\ge1$ and $0<\varepsilon\le1$ a unit state of error at most
+    $\varepsilon$ is prepared with measurements followed by a circuit in
+    depth at most $C(1+\log(N/\varepsilon))$.
+\end{lemma}
+\begin{proof}
+    Let $C_b,L_0$ be the constants of
+    Lemma~\ref{lem:ldp_coherent_pair_approximation_preparation}. Set
+    $a=\max(k,1)/r$, $B=\max(\log K,0)/r+L_0+1$ and
+    $q=\lceil a\log(N/\varepsilon)+B\rceil$. Then $q\ge L_0$,
+    $KN^ke^{-rq}\le\varepsilon$ and
+    $q\le(a+B+1)(1+\log(N/\varepsilon))$. For $q\le N$, apply the
+    approximation hypothesis and the preceding lemma. For $q>N$, exact
+    preparation of the entire inhomogeneous chain has depth at most $C_eN$,
+    which is bounded by $C_eq$. Thus
+    $C=(2C_b+C_e)(a+B+1)$ suffices in both cases. The additive one includes
+    a one-site ring at accuracy one.
+\end{proof}
+
+\subsection{What qualitative convergence does not imply}
+
+\begin{definition}[Delayed blocking error]
+    \label{def:ldp_delayed_blocking_error}
+    \lean{MPSPreparation.delayedBlockingError}
+    \notready
+    For integers $N,q\ge0$, define $\delta(N,q)=1/(N+1)$ if $q<N$ and
+    $\delta(N,q)=0$ if $q\ge N$.
+\end{definition}
+
+\begin{lemma}[Qualitative convergence with exact whole-ring blocking]
+    \label{lem:ldp_delayed_blocking_convergence}
+    \lean{MPSPreparation.delayedBlockingError_bounds,
+        MPSPreparation.antitone_delayedBlockingError,
+        MPSPreparation.delayedBlockingError_eq_zero,
+        MPSPreparation.tendsto_delayedBlockingError}
+    \notready
+    \uses{def:ldp_delayed_blocking_error}
+    The error $\delta(N,q)$ is nonincreasing in $q$, belongs to
+    $[0,1/(N+1)]$ and vanishes for $q\ge N$. For every schedule $q_N$,
+    including any logarithmic schedule, $\delta(N,q_N)\to0$ as $N\to\infty$.
+\end{lemma}
+\begin{proof}
+    The assertions follow from the two cases in the definition and the
+    bound $0\le\delta(N,q_N)\le1/(N+1)$.
+\end{proof}
+
+\begin{lemma}[No uniform logarithmic accuracy scale from these errors]
+    \label{lem:ldp_delayed_blocking_no_uniform_scale}
+    \lean{MPSPreparation.exists_delayedBlockingError_gt_of_log_bound,
+        MPSPreparation.not_exists_uniform_log_blocking_for_delayedBlockingError}
+    \notready
+    \uses{lem:ldp_delayed_blocking_convergence}
+    For every $C\ge0$ there are arbitrarily large $N\ge2$ and an accuracy
+    $0<\varepsilon\le1$ such that every integer
+    $q\le C\log(N/\varepsilon)$ satisfies $\delta(N,q)>\varepsilon$.
+    Consequently there is no uniform logarithmic accuracy-dependent blocking
+    coefficient for these error functions.
+\end{lemma}
+\begin{proof}
+    Choose $\varepsilon=1/(2(N+1))$. Since
+    $\log(N/\varepsilon)\le3\log(N+1)$ and
+    $3C\log(N+1)\le(N+1)/2<N$ for all sufficiently large $N$,
+    every permitted $q$ is less than $N$. Its error is then
+    $1/(N+1)>\varepsilon$.
+\end{proof}
+
+This example concerns numerical error information alone. It does not
+construct matrix product states whose optimal errors are $\delta(N,q)$,
+and it gives no circuit-depth lower bound. A theorem deriving a uniform
+scale for a class of matrix product states must use additional information
+about that class.
+
+\subsection{Coordinate support in the tree construction}
+
+\begin{definition}[Rotated GHZ flags]
+    \label{def:ldp_rotated_ghz_flags}
+    \lean{MPSTensor.flagRotation, MPSTensor.rotatedGHZFlag}
+    \notready
+    Let $R=\left(\begin{smallmatrix}3/5&-4/5\\4/5&3/5\end{smallmatrix}\right)$
+    and $B^j=R\ket j\bra j$ for $j=0,1$.
+\end{definition}
+
+\begin{lemma}[The rotation and its physical range are isometric]
+    \label{lem:ldp_rotated_ghz_coisometry}
+    \lean{MPSTensor.conjTranspose_flagRotation_mul,
+        MPSTensor.physicalMatrix_rotatedGHZFlag_mul_conjTranspose}
+    \notready
+    \uses{def:ldp_rotated_ghz_flags}
+    The matrix $R$ satisfies $R^\dagger R=I$. The physical matrix
+    $F_{j,(a,b)}=(B^j)_{ab}$ satisfies $FF^\dagger=I_2$.
+\end{lemma}
+\begin{proof}
+    Multiply the displayed rational matrices.
+\end{proof}
+
+\begin{lemma}[The rotated flags have no injective coordinate support]
+    \label{lem:ldp_rotated_ghz_no_coordinate_support}
+    \lean{MPSTensor.not_exists_isInjectiveOn_rotatedGHZFlag}
+    \notready
+    \uses{lem:ldp_rotated_ghz_coisometry}
+    There is no set $S$ of virtual coordinate pairs such that the matrices
+    $B^j$ vanish outside $S$ and span all matrix units indexed by $S$.
+\end{lemma}
+\begin{proof}
+    Since $(B^0)_{00}=3/5\ne0$, such a set would contain $(0,0)$, so its
+    matrix span would contain $E_{00}$. Every matrix in that span satisfies
+    $3X_{10}-4X_{00}=0$, whereas $E_{00}$ does not.
+\end{proof}
+
+Thus bounded rank and an isometric physical range do not imply the
+coordinate-support hypothesis of
+Lemma~\ref{thm:ldp_coherent_supported_blocks}. A general inhomogeneous
+tree argument requires virtual subspaces and vertex maps depending on their
+positions, or a proved gauge reduction to the supported setting. This
+obstruction to that hypothesis is not an impossibility result for such
+general trees.

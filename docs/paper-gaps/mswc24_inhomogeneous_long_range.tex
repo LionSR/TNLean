@@ -52,6 +52,54 @@ blueprint statement has its own label and does not certify the unrestricted
 source remark.
 
 \section{Remaining obligations}
+An explicit one-partition condition is now written as
+\leanid{MPSPreparation.IsCoherentPairApproximable} in
+\doclink{TNLean/MPS/Preparation/InhomogeneousLongRangeRate}. It requires a
+nonzero target, a fixed label count $b$, orthonormal pairs at each window,
+unit amplitudes, and the stated error against the normalized positive-part
+state. This specifies hypotheses for a conditional theorem; it is not
+claimed to be the unique class intended by the source's remark.
+
+Under the additional uniform rate $KN^ke^{-rq}$ on partitions with
+$q\le\ell_j\le2q$ at every $1\le q\le N$, the written theorem constructs
+$q=\lceil a\log(N/\varepsilon)+B\rceil$, where
+$a=\max(k,1)/r$ and $B=\max(\log K,0)/r+L_0+1$. It obtains depth
+$C(1+\log(N/\varepsilon))$ with error at most $\varepsilon$, using exact
+whole-chain preparation when $q>N$. The uniform rate remains a hypothesis.
+
+The numerical obstruction in
+\doclink{TNLean/MPS/Preparation/QualitativeBlockingObstruction} makes the
+missing implication precise. Errors $\delta(N,q)=1/(N+1)$ for $q<N$ and
+zero for $q\ge N$ decrease with $q$, vanish at whole-ring blocking, and
+converge to zero along every schedule. For every fixed $C$, accuracy
+$\varepsilon=1/(2(N+1))$ nevertheless requires $q>N-1$ for all sufficiently
+large $N$, while $C\log(N/\varepsilon)<N$. These are numerical error
+functions, not a realization as optimal MPS errors or a circuit lower bound.
+
+The existing supported-tree theorem assumes a single tensor and a fixed
+coordinate virtual support. Neither condition is part of the coherent-pair
+approximation condition. In
+\doclink{TNLean/MPS/Preparation/NonCoordinateSupport}, the rational virtual
+rotation $R=\left(\begin{smallmatrix}3/5&-4/5\\4/5&3/5\end{smallmatrix}\right)$
+of the GHZ flags $B^j=R|j\rangle\langle j|$ has $FF^\dagger=I_2$ for its
+physical matrix $F$, but admits no injective coordinate support $S$.
+Every matrix in its span satisfies $3X_{10}-4X_{00}=0$, which excludes the
+matrix unit $E_{00}$ forced by any such $S$. This rules out inferring that
+particular support hypothesis from rank bounds alone, not the existence
+of a more general tree.
+
+Two precise mathematical steps remain for a general doubly-logarithmic
+inhomogeneous theorem. For each interval $I$ one needs a frame for the
+range of its physical matrix, with dimension at most $D^2$, and a coherent
+factorization through the tensor product of the frames of its two children.
+The frames and merge maps must depend on the interval, rather than just its
+length, and the resulting measurement implementation must have one branch
+scalar for every coherent sector. The generic circuit geometry already
+allows position-dependent gates; identifying their contraction with the
+actual inhomogeneous polar factors is not supplied by the current
+homogeneous supported-tree theorem. This is a missing derivation, not a
+proved depth obstruction.
+
 To obtain a sequence-level theorem with a prescribed error $\varepsilon$,
 one must specify a class of sequences and show that its normalized
 positive-part states admit these coherent pair approximations on blocks
