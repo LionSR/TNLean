@@ -101,7 +101,7 @@ theorem detectorRetainedInterval_eq_intervalTensor
   funext s
   rcases s with ⟨k, leg⟩
   cases leg <;> simp [intervalSiteFactor, a', b', Finset.mem_Icc, Fin.le_def,
-    Fin.ext_iff, Submonoid.coe_mul]
+    Fin.ext_iff, apply_ite, Submonoid.coe_mul]
 
 /-- The complete detector word formed from intervals of the same fixed
 circuit. Source: arXiv:2405.00439, `detectG`, lines 2108–2117, with the
@@ -141,7 +141,8 @@ private noncomputable def detectorFinReindex (m : ℕ) [NeZero m] :
     Matrix.reindex_mem_unitaryGroup (ZMod.finEquiv m).toEquiv.symm _ u.property⟩
   map_one' := Subtype.ext (map_one (Matrix.reindexAlgEquiv ℂ ℂ (ZMod.finEquiv m).toEquiv.symm))
   map_mul' u v := Subtype.ext
-    (map_mul (Matrix.reindexAlgEquiv ℂ ℂ (ZMod.finEquiv m).toEquiv.symm) u v)
+    (map_mul (Matrix.reindexAlgEquiv ℂ ℂ (ZMod.finEquiv m).toEquiv.symm)
+      (u : Matrix (ZMod m) (ZMod m) ℂ) (v : Matrix (ZMod m) (ZMod m) ℂ))
 
 /-- The existing cyclic shift reindexed by the standard finite labels used by
 the circuit library. Source context: the endpoint audit of
@@ -179,6 +180,8 @@ theorem detectorCircuitWord_clock_even {k : ℕ} [NeZero (2 * k)] {ζ : ℂ}
     (detectorClockPhase_commute hζ hm).map f
   have hconj : (detectorClockFin hζ)⁻¹ * detectorShiftFin (2 * k) * detectorClockFin hζ =
       c * detectorShiftFin (2 * k) := by
+    change (f (detectorClock hζ))⁻¹ * f (detectorShift (2 * k)) * f (detectorClock hζ) =
+      f (detectorClockPhase hζ) * f (detectorShift (2 * k))
     simpa only [map_mul, map_inv] using congrArg f (detectorClock_conjugation hζ)
   have hscalar : (c : Matrix (Fin (2 * k)) (Fin (2 * k)) ℂ) = ζ • 1 := by
     change Matrix.reindexAlgEquiv ℂ ℂ (ZMod.finEquiv (2 * k)).toEquiv.symm

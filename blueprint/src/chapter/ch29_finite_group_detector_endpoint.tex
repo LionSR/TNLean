@@ -7,6 +7,7 @@
         MPOTensor.FiniteGroupDetector.detectorTransportWord_mulVec_of_phased_intermediate_states,
         MPOTensor.FiniteGroupDetector.detectorTransportWord_mulVec_of_intermediate_states,
         MPOTensor.FiniteGroupDetector.star_dotProduct_detectorTransportWord_of_intermediate_states}
+    \leanok
     Let $F_0,\ldots,F_m$ be forward interval operators, and let
     $D_0^{\dagger},\ldots,D_m^{\dagger}$ be the undo operators in
     chronological order. Suppose reference vectors and coefficients satisfy
@@ -35,7 +36,7 @@
     an additional comparison or normalization argument.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Induction on the chronological forward steps gives
     $F_m\cdots F_0\psi=(\prod_{r=0}^{m-1}c_r)v_m$.
     Linearity carries the scalar through every undo step, and the second
@@ -95,6 +96,7 @@
         MPOTensor.FiniteGroupDetector.detectorTensorWord_eq_rectKronecker,
         MPOTensor.FiniteGroupDetector.detectorTensorWord_eq_smul,
         MPOTensor.FiniteGroupDetector.detectorTensorWord_clock_even}
+    \leanok
     Let $m=2j>0$, let $\zeta$ be a primitive $m$th root of unity, and let
     $u,w$ be the cyclic shift and clock matrices on $\mathbb C^m$.
     Choose the shift convention $w^{-1}uw=\zeta u$.
@@ -109,7 +111,7 @@
     Every site of the finite chain is included in this operator identity.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Clock phases are periodic modulo $m$, and direct conjugation gives
     $w^{-1}uw=\zeta u$. At each odd site the dressing is the identity, so
     the local interval word cancels. At an even site $1\leq r\leq m$,
@@ -137,6 +139,7 @@
         MPOTensor.FiniteGroupDetector.circuitOp_dressedPairCircuit_single_entry,
         MPOTensor.FiniteGroupDetector.cellSuccessor,
         MPOTensor.FiniteGroupDetector.cellSuccessor_Icc_single_entry}
+    \leanok
     Let $u,w$ be one-site unitaries. On a periodic chain partitioned into
     even--odd cells, apply $(wu)\otimes u$ on each cell, followed by
     $\mathbf 1\otimes w^{\dagger}$ on each pair consisting of a cell's odd
@@ -153,7 +156,7 @@
     entry-boundary property.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     The two matchings partition the sites, so gates in each layer have
     disjoint nominal pairs. Multiplication of their one-site factors gives
     $w^{\dagger}wu=u$ on every even site and $u$ on every odd site.

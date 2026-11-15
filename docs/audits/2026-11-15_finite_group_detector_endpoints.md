@@ -282,121 +282,74 @@ construction tasks.
 
 ## Reproduction and formalization status
 
-Run:
+Run `python3 scripts/audit_finite_group_detector_endpoints.py`. The exact script
+passes 2,016 local tensor cases, 131,072 complete-basis fourteen-site circuit
+detector evaluations, and 24,206 cyclic local-basis cases at orders 2 through
+20. It includes both printed/prose geometries, both product conventions,
+left/right dressings, commuting controls, and separation parameters
+1, 2, 5, 20, and 100. A separate exact check of the precise Lean cell geometry
+and QIC shift convention passed 425,410 cases. These integer and modular-exponent
+checks are supporting symbolic evidence, not Lean kernel verification.
 
-```sh
-python3 scripts/audit_finite_group_detector_endpoints.py
-```
+Lean and Mathlib remain pinned to `v4.36.0-rc1`; no dependency pin is changed.
+This checkout has no Lean/Lake executable or cache, and the HTTP proxy blocks
+fetching the toolchain even with network permission. Hosted validation uses
+[draft PR #10641](https://github.com/LionSR/TNLean/pull/10641).
 
-The script checks all 84 choices of six ordered positions among nine sites,
-both geometries, both forward product conventions, both endpoint sides, and
-three endpoint matrices \(1,X,Z\): 2,016 local tensor calculations. It
-also applies the actual retained two-site circuit gates and their reversed
-adjoints to every computational basis vector of a fourteen-site chain for
-all eight geometry/order/side combinations: 131,072 detector evaluations.
-It checks the full periodic circuit against \(X^{\otimes14}\), the exact
-location of the residual sign for separation parameters 1, 2, 5, 20, and
-100, and commuting endpoint choices as positive controls. It additionally
-checks the two general cyclic local-word formulas at every site and every
-local basis label for orders 2 through 20, using modular integer exponents
-of \(\zeta\). All arithmetic uses integers, with no numerical tolerance
-or floating-point evaluation of roots of unity.
+On head `3bd63ff6ddf0f3b2fdb808139615e5e8b7d42998`, all seven modules below
+passed their direct strict Lean checks in
+[job 132942082543](https://github.com/LionSR/TNLean/actions/runs/43756593126/job/132942082543):
 
-The project retains Lean and Mathlib `v4.36.0-rc1`; this change does not edit
-the toolchain or dependency manifest. This checkout has no Lean/Lake executable
-or `.lake` cache, and the environment's disabled outbound network prevented
-fetching them. Hosted validation is requested through draft
-[PR #10641](https://github.com/LionSR/TNLean/pull/10641).
+- `FiniteGroupDetectorEndpoint`: arbitrary printed-order cuts, exact order-two
+  matrix identity, dressed-family unitarity, and normalized expectation.
+- `FiniteGroupDetectorPhase`: exact conjugation and triangular group phase,
+  with the even-order reduction.
+- `FiniteGroupDetectorSpatial`: the complete interval word at every spatial
+  position, followed by the total spatial phase.
+- `FiniteGroupDetectorCircuit`: two actual circuit layers, exact nominal-pair
+  deletion, and their full and single-entry-region operators.
+- `FiniteGroupDetectorClock`: the existing QICLean clock and shift matrices,
+  their actual conjugation scalar and periods, and the all-even-order phase.
+- `FiniteGroupDetectorTensor`: the whole-chain tensor operator, including all
+  odd legs and right endpoints, equals minus the identity at positive even order.
+- `FiniteGroupDetectorTransport`: the conditional state transport and normalized
+  expectation described below.
 
-`TNLean/MPS/MPU/FiniteGroupDetectorEndpoint.lean` proves
-unitarity for the dressed family, the six-factor matrix identity at order two
-for arbitrary printed-order cuts, and its normalized expectation value. It
-passed the direct strict Lean check on PR head `2c4976385aabafe8fdf44d0d20b5fe52a5b49973`
-in [job 132915070941](https://github.com/LionSR/TNLean/actions/runs/43747633939/job/132915070941),
-building in 6.4 seconds. That overall job failed separately because the first
-revision of the general group module used a nonexistent tactic import. There
-are no axioms or proof placeholders. The exact Python calculation remains
-supporting evidence, not a substitute for kernel verification.
+The initial builds in that job took 3.7 seconds for the circuit module,
+13 seconds for the full tensor module, and 1.9 seconds for the conditional
+transport module. There are no source proof placeholders or added axioms.
 
-`TNLean/MPS/MPU/FiniteGroupDetectorPhase.lean` separately proves the exact group identities
-\(u^aw^{-1}u^bwu^d=c^bu^{a+b+d}\) and
-\(\prod_{r=0}^{m-1}u^{-r-2}w^{-1}u^rwu^2=c^{\binom m2}\), assuming
-\(cu=uc\) and \(w^{-1}uw=cu\). These statements isolate the local
-algebra at every order without assuming a whole-detector phase as a
-hypothesis. It also derives that the product at order \(2k\) is \(c^k\)
-whenever \(c^{2k}=1\). Constructing the clock/shift instance and identifying the full
-spatial word with this ordered product remain separate tasks.
-Hosted Lean built this module in 2.4 seconds on head `577e4ae`. After removing
-one unused `simp` argument, both modules passed the direct strict Lean checks on
-head `950a29c771c45fab029e2c190bcfb1f8a3a21029` in
-[job 132924002746](https://github.com/LionSR/TNLean/actions/runs/43750469572/job/132924002746)
-at 19:21 UTC. The complete root build and blueprint checks were still running
-when the circuit and spatial constructions were submitted.
+`FiniteGroupDetectorConstruction.lean` composes the actual retained circuit,
+interval tensors, and complete spatial operator, including an existence theorem
+choosing the complex-exponential root. Its first check reached three remaining
+interface failures: coercion of conditional unitary values, explicit matrix
+arguments to reindexing, and unfolding the finite-label wrappers. The next
+revision fixes these conversions without changing any statement. This module
+is **pending hosted verification** and its blueprint entry has no checked marker.
+No complete CI pass or merge is claimed.
 
-For the clock and shift matrices above, the conjugation phase is
-\(c=\zeta^{-1}1\). The abstract local-word product then has phase
-\(\zeta^{-\binom m2}\), which agrees with the spatial calculation's
-\(\zeta^{\binom m2}\) because \(2\binom m2=m(m-1)\). At even order
-\(m=2k\), its half-period value is \(\zeta^{-k}=-1\). These identifications
-explain the relation between the two calculations; the matrix instance and
-spatial identification are still not additional checked declarations.
+## Conditional general detection and the remaining physical comparisons
 
-The circuit-to-interval identification and the all-even-order clock/shift
-extension are **not formalized** by that module. The finite-group detection
-claim for a corrected class of truncations also remains open. Before presenting
-item 2 as formalized, settle these comparisons and register a source-gap entry
-for `detectG` with the ordering convention stated explicitly. No source-labelled
-theorem should silently acquire the extra intermediate-state hypotheses.
+`FiniteGroupDetectorTransport.lean` states every forward and undo
+intermediate-state comparison explicitly and derives the detector's action and
+normalized expectation. The general version includes undo scalar factors as
+well, so the output is the product of both forward and undo factors. The
+unphased undo sequence is a separate specialization. No whole-detector phase
+is an input hypothesis, and no reference excitation is defined to be an
+unknown whole-detector output.
 
-## Extended constructions and exact verification status
-
-`FiniteGroupDetectorSpatial.lean` evaluates the complete chronological interval
-word at every spatial position and multiplies its nontrivial phases, including
-the even-order reduction. This module passed the direct strict Lean check on
-head `dcc2e1de70fdd56124e387e46d63fc3920853d3a` at 19:39:20 UTC in
-[job 132931209740](https://github.com/LionSR/TNLean/actions/runs/43753061931/job/132931209740),
-building in 1.8 seconds. Its result is an exact group calculation on actual
-interval factors; it does not assume an endpoint-word identity.
-
-`FiniteGroupDetectorCircuit.lean` constructs two actual `BondLayer`s and
-identifies nominal-gate deletion and the full/single-entry operators.
-`FiniteGroupDetectorClock.lean` instantiates the spatial word with QICLean's
-existing clock and shift matrices; their permutation convention uses the
-inverse of the shift in the Python calculation, so the conjugation scalar is
-now ζ rather than ζ⁻¹. The total even-order sign is unchanged.
-`FiniteGroupDetectorTensor.lean` lifts to the actual whole-chain matrix word.
-`FiniteGroupDetectorConstruction.lean` composes the circuit-to-interval and
-interval-to-tensor identities, reindexes the clock/shift into the circuit
-library's standard labels, and states the complete retained-circuit operator
-and normalized expectation at every positive even order.
-
-These latter four modules are **pending hosted Lean verification**. The first
-circuit and clock revisions failed on a missing explicit commutation witness
-and matrix type inference; the new revision fixes those concrete failures.
-The complete composition is submitted for checking with those fixes. No
-checked blueprint marker is attached to any of these four modules. The
-existing order-two matrix, abstract phase, and complete spatial identities
-are the verified results; finite Python checks remain separate evidence.
-The source's corrected anomaly-detection theorem remains open.
-
-## Continued verification and conditional detection
-
-On head `f62e1336c900446f250605d07667d326f63d6afc`, the clock/shift
-module passed its direct strict Lean check in 1.3 seconds in
-[job 132938428031](https://github.com/LionSR/TNLean/actions/runs/43755295343/job/132938428031).
-The full tensor module also kernel-built in 11 seconds; its only strict failure
-was a redundant `change` tactic, removed in the next revision. The circuit
-module reached a remaining list-map function-composition equality, also fixed
-in that revision. The complete circuit composition still awaits checking.
-
-`FiniteGroupDetectorTransport.lean` adds a separate conditional general result.
-It states every forward and undo intermediate-state comparison explicitly,
-then derives the full word's action and normalized expectation. Its more
-general version retains scalar factors on the undo steps as well: the final
-scalar is the product of both forward and undo factors. The unphased undo
-hypothesis is a separate specialization. These new proofs are submitted for
-hosted verification, not yet claimed as checked declarations. They do not
-prove that the source truncations meet the comparison hypotheses, nor do they
-identify the resulting coefficients with the source anomaly invariant.
-The published endpoint-dependence gap note remains relevant:
+This conditional implication does not construct canonical reference
+excitations or prove that a given source truncation meets the comparisons.
+It also does not identify the resulting coefficients with the source's
+cocycle invariant. The existing
+`ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant` identifies a pure
+cochain product with the inverse cyclic invariant; it does not identify the
+actual truncation actions or their B-coefficients. Both comparisons, including
+the undo phase normalization, remain necessary for a corrected physical
+anomaly-detection result. The published endpoint-dependence gap note applies:
 https://sirui-lu.com/TNLean/paper-gaps/gs24_truncation_detector_endpoint_dependence.pdf.
+
+The original finite-group detection claim is not presented as formalized.
+No GroupCocycleMPO or active wall/boundary module has been changed, and no
+extra intermediate-state hypothesis has been silently attached to a source
+labelled theorem.
