@@ -63,29 +63,30 @@ private theorem weylShift_clock_conj {ζ : ℂ} (hζ : IsPrimitiveRoot ζ m) (hm
   by_cases hij : i = j
   · subst j
     simp [root_pow_val_add_one hζ.pow_eq_one]
-  · simp [diagonal_apply, hij]
+  · simp [hij]
 
 /-- The clock commutator is the primitive scalar phase, proved from the
 existing clock and shift matrices. Source context: the cyclic instance of
 the endpoint audit of arXiv:2405.00439, `detectG`, lines 2108–2117. -/
 theorem detectorClockPhase_coe {ζ : ℂ} (hζ : IsPrimitiveRoot ζ m) (hm : 1 < m) :
     (detectorClockPhase hζ : Matrix (ZMod m) (ZMod m) ℂ) = ζ • 1 := by
-  have hZ := Unitary.star_mul_self_of_mem (weylClock_mem_unitary hζ)
+  have hZ : (weylClock ζ : Matrix (ZMod m) (ZMod m) ℂ)ᴴ * weylClock ζ = 1 :=
+    Unitary.star_mul_self_of_mem (weylClock_mem_unitary hζ)
   change (weylClock ζ)ᴴ * weylShift * weylClock ζ * weylShiftᴴ = ζ • 1
   calc
     (weylClock ζ)ᴴ * weylShift * weylClock ζ * weylShiftᴴ =
         (weylClock ζ)ᴴ * (weylShift * weylClock ζ * weylShiftᴴ) := by
       simp only [mul_assoc]
     _ = (weylClock ζ)ᴴ * (ζ • weylClock ζ) := by rw [weylShift_clock_conj hζ hm]
-    _ = ζ • 1 := by rw [Matrix.mul_smul, hZ]
+    _ = ζ • (1 : Matrix (ZMod m) (ZMod m) ℂ) := by rw [Matrix.mul_smul, hZ]
 
 /-- The scalar clock phase commutes with the bulk shift.
 Source context: the endpoint audit of arXiv:2405.00439, `detectG`. -/
 theorem detectorClockPhase_commute {ζ : ℂ} (hζ : IsPrimitiveRoot ζ m) (hm : 1 < m) :
     Commute (detectorClockPhase hζ) (detectorShift m) := by
   apply Subtype.ext
-  change (detectorClockPhase hζ : Matrix _ _ ℂ) * _ =
-    _ * (detectorClockPhase hζ : Matrix _ _ ℂ)
+  change (detectorClockPhase hζ : Matrix (ZMod m) (ZMod m) ℂ) * _ =
+    _ * (detectorClockPhase hζ : Matrix (ZMod m) (ZMod m) ℂ)
   rw [detectorClockPhase_coe hζ hm, Matrix.smul_mul, Matrix.mul_smul,
     Matrix.one_mul, Matrix.mul_one]
 
@@ -110,7 +111,7 @@ Source context: the endpoint audit of arXiv:2405.00439, `detectG`. -/
 theorem detectorClockPhase_pow_order {ζ : ℂ} (hζ : IsPrimitiveRoot ζ m) (hm : 1 < m) :
     detectorClockPhase hζ ^ m = 1 := by
   apply Subtype.ext
-  change (detectorClockPhase hζ : Matrix _ _ ℂ) ^ m = 1
+  change (detectorClockPhase hζ : Matrix (ZMod m) (ZMod m) ℂ) ^ m = 1
   rw [detectorClockPhase_coe hζ hm, smul_pow, one_pow, hζ.pow_eq_one, one_smul]
 
 /-- For every positive even cyclic order, the complete spatial interval word
@@ -135,7 +136,25 @@ theorem prod_spatialEndpointWord_clock_even {k : ℕ} [NeZero (2 * k)] {ζ : ℂ
     have hdiv : 2 * k / k = 2 := Nat.mul_div_cancel 2 (Nat.pos_of_ne_zero hk)
     rw [hdiv] at h
     exact h.eq_neg_one_of_two_right
-  change (detectorClockPhase hζ : Matrix _ _ ℂ) ^ k = -1
+  change (detectorClockPhase hζ : Matrix (ZMod (2 * k)) (ZMod (2 * k)) ℂ) ^ k = -1
   rw [detectorClockPhase_coe hζ hm, smul_pow, one_pow, hhalf, neg_one_smul]
+
+/-- The triangular power of a primitive root at positive even order is minus
+one. This scalar consequence of the explicit clock calculation is used when
+changing the one-site basis labels. Source context: the endpoint audit of
+arXiv:2405.00439, `detectG`, lines 2108–2117. -/
+theorem detectorRoot_triangular_even {k : ℕ} [NeZero (2 * k)] {ζ : ℂ}
+    (hζ : IsPrimitiveRoot ζ (2 * k)) : ζ ^ ((2 * k).choose 2) = -1 := by
+  have hk : k ≠ 0 := by
+    intro h
+    exact NeZero.ne (2 * k) (by simp [h])
+  have hm : 1 < 2 * k := by omega
+  have h := prod_spatialEndpointWord_clock_even hζ
+  rw [prod_spatialEndpointWord_eq_pow _ _ (detectorClockPhase hζ)
+    (detectorClockPhase_commute hζ hm) (detectorClock_conjugation hζ)] at h
+  change (detectorClockPhase hζ : Matrix (ZMod (2 * k)) (ZMod (2 * k)) ℂ) ^
+    ((2 * k).choose 2) = -1 at h
+  rw [detectorClockPhase_coe hζ hm, smul_pow, one_pow] at h
+  simpa using congrArg (fun A : Matrix (ZMod (2 * k)) (ZMod (2 * k)) ℂ ↦ A 0 0) h
 
 end MPOTensor.FiniteGroupDetector

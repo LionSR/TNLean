@@ -74,6 +74,7 @@ import TNLean.MPS.MPU.FiniteChainAdjoint
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.FiniteGroupDetectorCircuit
 import TNLean.MPS.MPU.FiniteGroupDetectorClock
+import TNLean.MPS.MPU.FiniteGroupDetectorConstruction
 import TNLean.MPS.MPU.FiniteGroupDetectorEndpoint
 import TNLean.MPS.MPU.FiniteGroupDetectorPhase
 import TNLean.MPS.MPU.FiniteGroupDetectorSpatial

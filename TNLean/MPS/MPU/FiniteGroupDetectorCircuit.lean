@@ -142,8 +142,9 @@ theorem pairCircuitLayer_op (σ : Bool → Bool → Equiv.Perm κ) (color : Bool
   have hset : S.image (fun k ↦ (k, color)) = (S.toList.map fun k ↦ (k, color)).toFinset := by
     ext p
     simp only [Finset.mem_image, List.mem_toFinset, List.mem_map, Finset.mem_toList]
+  let L := pairCircuitLayer σ color A hA S
   change (S.image fun k ↦ (k, color)).noncommProd
-    (fun p ↦ pairedGate (σ color) A p.1) _ = _
+    (fun p ↦ pairedGate (σ color) A p.1) (L.gate_commute L.bonds subset_rfl) = _
   rw [hset, Finset.noncommProd_toFinset _ _ _ hn]
   simp only [List.map_map, Function.comp_apply]
   simpa using pairedGate_list_prod (σ color) A S.toList S.nodup_toList
@@ -283,7 +284,7 @@ def cellSuccessor (M : ℕ) [NeZero M] : Equiv.Perm (Fin M) :=
 boundary for the fixed shifted matching. Source context: arXiv:2405.00439,
 Section V, lines 2081–2087. -/
 theorem cellSuccessor_Icc_single_entry {M : ℕ} [NeZero M] (a b : Fin M)
-    (ha : 0 < a.val) (hab : a ≤ b) :
+    (ha : 0 < a.val) :
     ∀ k ∈ Finset.Icc a b, (cellSuccessor M).symm k ∈ Finset.Icc a b ↔ k ≠ a := by
   intro k hk
   have hk0 : k ≠ 0 := by
@@ -295,7 +296,7 @@ theorem cellSuccessor_Icc_single_entry {M : ℕ} [NeZero M] (a b : Fin M)
   change k - 1 ∈ Finset.Icc a b ↔ k ≠ a
   simp only [Finset.mem_Icc, Fin.le_def,
     Fin.val_sub_one_of_ne_zero hk0]
-  simp only [Finset.mem_Icc, Fin.le_def] at hk hab
+  simp only [Finset.mem_Icc, Fin.le_def] at hk
   omega
 
 end MPOTensor.FiniteGroupDetector

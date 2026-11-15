@@ -149,11 +149,7 @@ theorem detectorTensorWord_clock_even {k : ℕ} [NeZero (2 * k)] {ζ : ℂ}
   have hm : 1 < 2 * k := by omega
   rw [detectorTensorWord_eq_smul _ _ (detectorClockPhase hζ) ζ
     (detectorClockPhase_commute hζ hm) (detectorClock_conjugation hζ)
-    (detectorClockPhase_coe hζ hm) (2 * k) N hN]
-  have h := prod_spatialEndpointWord_clock_even hζ
-  rw [prod_spatialEndpointWord_eq_pow _ _ (detectorClockPhase hζ)
-    (detectorClockPhase_commute hζ hm) (detectorClock_conjugation hζ)] at h
-  change (detectorClockPhase hζ : Matrix _ _ ℂ) ^ ((2 * k).choose 2) = -1 at h
-  simpa only [detectorClockPhase_coe hζ hm, smul_pow, one_pow] using h
+    (detectorClockPhase_coe hζ hm) (2 * k) N hN,
+    detectorRoot_triangular_even hζ, neg_one_smul]
 
 end MPOTensor.FiniteGroupDetector

@@ -348,14 +348,33 @@ item 2 as formalized, settle these comparisons and register a source-gap entry
 for `detectG` with the ordering convention stated explicitly. No source-labelled
 theorem should silently acquire the extra intermediate-state hypotheses.
 
-## Circuit and spatial constructions submitted for Lean checking
+## Extended constructions and exact verification status
 
-`FiniteGroupDetectorCircuit.lean` constructs the two actual `BondLayer`s,
-proves that retained bonds are exactly the original nominal pairs inside the
-region, and derives the full and single-entry-region operators from their
-finite gate products. `FiniteGroupDetectorSpatial.lean` evaluates the complete
-chronological interval word at every spatial position and multiplies its
-nontrivial phases, including the even-order reduction. These new modules are
-**pending hosted Lean verification** and carry no checked blueprint markers.
-The concrete all-even-order clock/shift matrix instance and the tensor-level
-comparison between these two modules are still separate unfinished steps.
+`FiniteGroupDetectorSpatial.lean` evaluates the complete chronological interval
+word at every spatial position and multiplies its nontrivial phases, including
+the even-order reduction. This module passed the direct strict Lean check on
+head `dcc2e1de70fdd56124e387e46d63fc3920853d3a` at 19:39:20 UTC in
+[job 132931209740](https://github.com/LionSR/TNLean/actions/runs/43753061931/job/132931209740),
+building in 1.8 seconds. Its result is an exact group calculation on actual
+interval factors; it does not assume an endpoint-word identity.
+
+`FiniteGroupDetectorCircuit.lean` constructs two actual `BondLayer`s and
+identifies nominal-gate deletion and the full/single-entry operators.
+`FiniteGroupDetectorClock.lean` instantiates the spatial word with QICLean's
+existing clock and shift matrices; their permutation convention uses the
+inverse of the shift in the Python calculation, so the conjugation scalar is
+now ζ rather than ζ⁻¹. The total even-order sign is unchanged.
+`FiniteGroupDetectorTensor.lean` lifts to the actual whole-chain matrix word.
+`FiniteGroupDetectorConstruction.lean` composes the circuit-to-interval and
+interval-to-tensor identities, reindexes the clock/shift into the circuit
+library's standard labels, and states the complete retained-circuit operator
+and normalized expectation at every positive even order.
+
+These latter four modules are **pending hosted Lean verification**. The first
+circuit and clock revisions failed on a missing explicit commutation witness
+and matrix type inference; the new revision fixes those concrete failures.
+The complete composition is submitted for checking with those fixes. No
+checked blueprint marker is attached to any of these four modules. The
+existing order-two matrix, abstract phase, and complete spatial identities
+are the verified results; finite Python checks remain separate evidence.
+The source's corrected anomaly-detection theorem remains open.
