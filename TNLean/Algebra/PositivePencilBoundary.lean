@@ -119,7 +119,7 @@ theorem exists_posSemidef_rank_lt_on_trace_zero_line {D : ℕ}
   change (F t).rank < A.rank
   omega
 
-private theorem rank_isometric_congruence {α : Type*} [Fintype α] [DecidableEq α]
+private theorem rank_isometric_congruence {α : Type*} [Fintype α]
     {r : ℕ} (V : Matrix α (Fin r) ℂ) (hV : Vᴴ * V = 1)
     (B : Matrix (Fin r) (Fin r) ℂ) : (V * B * Vᴴ).rank = B.rank := by
   have hRecover : Vᴴ * (V * B * Vᴴ) * V = B := by
