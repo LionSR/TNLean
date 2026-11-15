@@ -216,8 +216,8 @@ theorem exists_channel_choiRank_lt_of_supported_annihilating_direction
     exact hRank
   · intro p hp
     apply add_pow_eq_of_annihilating_square_zero (F := F) (H := (t : ℂ) • K) ?_ ?_ ?_ hp
-    · rw [mul_smul, hFK, smul_zero]
+    · rw [Algebra.mul_smul_comm, hFK, smul_zero]
     · rw [smul_mul_assoc, hKF, smul_zero]
-    · rw [smul_mul_assoc, mul_smul, hKK, smul_zero, smul_zero]
+    · rw [smul_mul_assoc, Algebra.mul_smul_comm, hKK, smul_zero, smul_zero]
 
 end Channel
