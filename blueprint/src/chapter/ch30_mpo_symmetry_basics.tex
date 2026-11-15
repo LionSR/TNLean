@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 21355)
-Total output lines: 1694
-
 %% =========================================================
 %% Chapter: Matrix Product Operator Symmetries and Non-Invertible
 %% Symmetries.
@@ -772,7 +769,131 @@ relation between word traces has nonnegative integer coefficients.
     and an involutive duality, with associative fusion, two-sided unit,
     $N_{ab}^e=\delta_{b,a^*}$ and $N_{b^*a^*}^{c^*}=N_{ab}^c$.
     The associated integer ring has underlying additive group $\Z^{(I)}$,
-    the convolution product and u…1355 tokens truncated…or every $L\geq1$. Then $n=1$ and
+    the convolution product and unit $[e]$.
+\end{definition}
+
+\begin{lemma}[Faithful regular action and the ring laws]%
+    \label{thm:mposym_integer_based_ring_regular}
+    \lean{MPOTensor.IsFusionRing.isNIMRep,
+        MPOTensor.IsFusionRing.integerNIMRepEval_unit_column,
+        MPOTensor.IsFusionRing.integerNIMRepEval_injective,
+        MPOTensor.IsFusionRing.integerFusionMul_assoc,
+        MPOTensor.IsFusionRing.integerFusionMul_one_left,
+        MPOTensor.IsFusionRing.integerFusionMul_one_right}
+    \uses{def:mposym_integer_based_ring, thm:mposym_integer_fusion_eval,
+        thm:mposym_integer_nimrep}
+    The regular action has matrices $L_a(c,b)=N_{ab}^c$.
+    Its integer extension $L_u$ satisfies $L_u(c,e)=u_c$ and is therefore
+    injective. Convolution is associative and $[e]$ is its two-sided unit.
+\end{lemma}
+\begin{proof}
+    Associativity of the structure constants gives
+    $L_aL_b=\sum_cN_{ab}^cL_c$. Multiplicative evaluation gives
+    $L_{uv}=L_uL_v$. Also
+    $L_u(c,e)=\sum_a u_aN_{ae}^c=u_c$ and $L_e=1$.
+    Injectivity transports matrix associativity and both unit laws to
+    integer combinations.
+\end{proof}
+
+\begin{lemma}[Extension of fusion representations]%
+    \label{thm:mposym_integer_based_ring_lift}
+    \lean{MPOTensor.FusionRing.lift,
+        MPOTensor.FusionRing.lift_basis,
+        MPOTensor.FusionRing.nimRepHom,
+        MPOTensor.FusionRing.nimRepHom_basis,
+        MPOTensor.FusionRing.nimRepHom_basis_nonneg,
+        MPOTensor.FusionRing.characterHom,
+        MPOTensor.FusionRing.characterHom_basis}
+    \uses{thm:mposym_integer_based_ring_regular,
+        thm:mposym_integer_fusion_eval, thm:mposym_integer_nimrep}
+    A family $f_a$ in a unital ring $R$ with $f_e=1$ and
+    $f_af_b=\sum_cN_{ab}^cf_c$ extends to a unital ring homomorphism
+    $\Z^{(I)}\to R$ by $u\mapsto\sum_au_af_a$.
+    In particular a nonnegative integer representation with
+    $M_{e,x}^y=\delta_{xy}$ extends to integer matrices by
+    $[a]\mapsto\rho_a$, with nonnegative entries on basis images.
+    Ring-valued fusion characters also extend, preserving their basis values.
+\end{lemma}
+\begin{proof}
+    Additivity follows from the finite sum formula, multiplication from
+    multiplicative evaluation, and preservation of the unit from $f_e=1$.
+    For multiplicity matrices use $\rho_a(y,x)=M_{a,x}^y$ and the explicit
+    unit condition. For a character use its defining product and unit identities.
+\end{proof}
+
+\begin{lemma}[Word-trace relations against a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_trace_integral}
+    \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
+    \leanok
+    \uses{def:normal}
+    Let $B$ be a matrix product state tensor and $A$ a word-normal tensor
+    of positive bond dimension, over the same alphabet. If a scalar
+    $c\in\C$ satisfies $\tr(B^w)=c\,\tr(A^w)$ for every nonempty word
+    $w$, then $c$ is a nonnegative integer.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Normality expresses a diagonal matrix unit as
+    $E_{jj}=\sum_ux_uA^u$, where all words $u$ have the same positive
+    length $\ell$. Define $Q=\sum_ux_uB^u$. Expanding powers and applying
+    the trace hypothesis to the concatenated words gives, for every
+    $k\geq1$,
+    \begin{align}
+        \tr(Q^k)
+         & =c\,\tr\left(\left(\sum_ux_uA^u\right)^k\right)
+        =c\,\tr(E_{jj}^k)=c.
+    \end{align}
+    A constant trace of all positive powers of a fixed finite-dimensional
+    matrix is a nonnegative integer. Indeed, the power sums of its
+    nonzero eigenvalues, counted with algebraic multiplicity, are
+    constant only when every nonzero eigenvalue is one. The constant
+    is their total multiplicity.
+\end{proof}
+
+\begin{lemma}[Rank-one actions on a normal tensor are integral]%
+    \label{thm:asymex_fib_anomaly_integral_action}
+    \lean{MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul}
+    \leanok
+    \uses{thm:asymex_fib_anomaly_trace_integral, cor:asym_action_tensors}
+    Let $T$ be a matrix product operator tensor and $A$ a word-normal
+    matrix product state tensor of positive bond dimension, with the
+    same physical alphabet. Suppose there is a single scalar $c\in\C$
+    such that, for every $N\geq1$,
+    \begin{align}
+        O_N(T)\ket{V^{(N)}(A)}
+         & =c\ket{V^{(N)}(A)}.
+        \label{eq:asymex_fib_anomaly_scalar_action}
+    \end{align}
+    Then $c$ is a nonnegative integer.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Corollary~\ref{cor:asym_action_tensors} identifies the periodic
+    vector of $T\cdot A$ with $O_N(T)\ket{V^{(N)}(A)}$.
+    Taking components in~(\ref{eq:asymex_fib_anomaly_scalar_action}) gives,
+    for every nonempty word $w$,
+    \begin{align}
+        \tr((T\cdot A)^w) & =c\,\tr(A^w),
+        \notag
+    \end{align}
+    so Lemma~\ref{thm:asymex_fib_anomaly_trace_integral} shows that $c$ is
+    a nonnegative integer.
+\end{proof}
+
+Garre-Rubio and Schuch~\cite[Section~II.B]{GarreRubioSchuch2024DomainWall}
+normalize the action of a matrix product unitary on an injective ground
+state by absorbing a phase into the image tensor. A footnote justifies this:
+a length-dependent phase of modulus one relating the two states is the
+$N$-th power of one phase.
+
+\begin{lemma}[Power sums of modulus one]%
+    \label{thm:mpoalg_unimodular_power_sum}
+    \lean{Complex.exists_norm_eq_one_sum_pow_eq_pow}
+    \leanok
+    Let $\mu_1,\ldots,\mu_n$ be nonzero complex numbers with
+    $\left|\sum_k\mu_k^L\right|=1$ for every $L\geq1$. Then $n=1$ and
     $|\mu_1|=1$.
 \end{lemma}
 
