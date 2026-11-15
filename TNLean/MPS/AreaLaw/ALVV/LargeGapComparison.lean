@@ -60,10 +60,7 @@ vector has a normalized approximant whose Schmidt rank at the interval cut
 satisfies the printed bound with the uncapped gap, up to the factor
 `max γ 1` in the exponent, and `max γ 1 ≤ 1 + log r / log q`. The universal
 constant precedes every physical input. ALVV, arXiv:1602.08828v2,
-Theorem 4.9, fixed-cut conclusion, source lines 1048–1085.
-
-**Scope restriction (gap dependence):** see the module docstring and
-`docs/paper-gaps/alvv16_approximation_parameters.tex`. -/
+Theorem 4.9, fixed-cut conclusion, source lines 1048–1085. -/
 theorem exists_physical_dg_interval_normalized_approximation_uncapped :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
@@ -145,10 +142,7 @@ unit ground vector has a normalized open-boundary matrix product approximant
 of bond dimension `r B`, where `log B` satisfies the printed bound with the
 uncapped gap up to the factor `max γ 1 ≤ 1 + log r / log q` in the exponent.
 ALVV, arXiv:1602.08828v2, Theorem 4.9, global conclusion, source lines
-1080–1086.
-
-**Scope restriction (gap dependence):** see the module docstring and
-`docs/paper-gaps/alvv16_approximation_parameters.tex`. -/
+1080–1086. -/
 theorem exists_physical_dg_normalized_isOpenMPS_approximation_uncapped :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ),
