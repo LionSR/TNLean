@@ -70,7 +70,7 @@ theorem IsFusionRing.integerFusionMul_one_left
   apply hN.integerNIMRepEval_injective
   simp only [integerNIMRepEval, integerFusionEval_mul N _
     hN.isNIMRep.integerNIMRepMatrix_mul, integerFusionEval_single, one_smul]
-  rw [integerNIMRepMatrix_unit (fun x y ↦ by
+  rw [integerNIMRepMatrix_unit (M := N) (e := e) (fun x y ↦ by
     simpa only [eq_comm] using (hN.isFusionUnit x y).1), one_mul]
 
 /-- The distinguished singleton is a right unit for integer convolution. -/
@@ -81,7 +81,7 @@ theorem IsFusionRing.integerFusionMul_one_right
   apply hN.integerNIMRepEval_injective
   simp only [integerNIMRepEval, integerFusionEval_mul N _
     hN.isNIMRep.integerNIMRepMatrix_mul, integerFusionEval_single, one_smul]
-  rw [integerNIMRepMatrix_unit (fun x y ↦ by
+  rw [integerNIMRepMatrix_unit (M := N) (e := e) (fun x y ↦ by
     simpa only [eq_comm] using (hN.isFusionUnit x y).1), mul_one]
 
 /-- Ring structure on integer combinations for specified fusion data.
@@ -159,7 +159,8 @@ def nimRepHom (F : FusionRing ι) {κ : Type*} [Fintype κ] [DecidableEq κ]
     (M : ι → κ → κ → ℕ) (hM : IsNIMRep F.constants M)
     (hunit : ∀ x y, M F.unit x y = if x = y then 1 else 0) :
     F.Carrier →+* Matrix κ κ ℤ :=
-  F.lift (integerNIMRepMatrix M) (integerNIMRepMatrix_unit hunit)
+  F.lift (integerNIMRepMatrix M)
+    (integerNIMRepMatrix_unit (M := M) (e := F.unit) hunit)
     hM.integerNIMRepMatrix_mul
 
 /-- A NIM-representation's extension has exactly the prescribed nonnegative
