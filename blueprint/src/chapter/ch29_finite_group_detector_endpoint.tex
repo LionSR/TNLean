@@ -1,0 +1,36 @@
+\subsection{Endpoint dependence of the finite-group detector}
+
+\begin{lemma}[An order-two finite-group detector with nontrivial endpoint phase]
+    \label{lem:mpug_finite_group_detector_endpoint}
+    \lean{Matrix.leftDressedOnSiteInterval,
+        Matrix.cyclicTwoTruncationDetector,
+        Matrix.leftDressedOnSiteInterval_conjTranspose_mul_self,
+        Matrix.cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX,
+        Matrix.star_dotProduct_cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX}
+    Let $X,Z$ be the Pauli matrices on a chain, and choose cuts
+    $a_0<a_2<a_1<b_0<b_2<b_1$. Put
+    $T_{rs}=Z_{a_r}\prod_{a_r\leq k\leq b_s}X_k$. Every $T_{rs}$ is
+    unitary, and
+    \begin{align}
+        T_{01}^{\dagger}T_{22}^{\dagger}T_{10}^{\dagger}
+        T_{22}T_{11}T_{00} &=-\mathbf 1.
+        \label{eq:mpug_finite_detector_sign}
+    \end{align}
+    Thus its expectation on every normalized state is $-1$. This is the
+    six-factor order-two word of the finite-group detector in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall}, with the truncations
+    applied in increasing index order and the cut order printed there.
+    The identity concerns the explicitly defined interval operators.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:mpug_onsite_truncation_commutator,
+        thm:mpug_truncation_detector_endpoint_dependence}
+    Multiply the six tensor products site by site. At $a_1$, the local
+    product is $XX(ZX)^{\dagger}X(ZX)X=-\mathbf 1$.
+    At $a_0$ it is $(ZX)^{\dagger}(ZX)=\mathbf 1$, and at $a_2$ it is
+    $X(ZX)^{\dagger}(ZX)X=\mathbf 1$. Elsewhere the factors are powers of
+    $X$, and the forward and backward interval coverage multiplicities agree.
+    Consequently every other factor is the identity, proving
+    (\ref{eq:mpug_finite_detector_sign}).
+\end{proof}
