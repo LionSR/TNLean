@@ -3,10 +3,8 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-module
-
-public import TNLean.MPS.Symmetry.MPOSymmetry.Defs
-public import TNLean.MPS.Symmetry.MPOSymmetry.IntegerFusion
+import TNLean.MPS.Symmetry.MPOSymmetry.Defs
+import TNLean.MPS.Symmetry.MPOSymmetry.IntegerFusion
 
 /-!
 # Integer matrix form of a NIM-representation
@@ -19,8 +17,6 @@ The unit condition below is additional to the current `IsNIMRep` predicate.
 The zero action satisfies that predicate and need not preserve the unit.
 This module does not construct a Ring instance on integer combinations.
 -/
-
-@[expose] public section
 
 noncomputable section
 
