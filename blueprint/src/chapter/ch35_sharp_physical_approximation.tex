@@ -272,3 +272,106 @@
     Finally $\log B\le E+1$; the extra one is absorbed into the universal
     constant in (\ref{eq:physical_global_bond}).
 \end{proof}
+
+\subsection{Gaps above one}
+\label{sec:physical_dg_large_gap}
+
+The estimates above use the capped gap $g=\min(\gamma,1)$. The local
+normalization $0\le h_i\le\Id$ does not force $\gamma\le1$, but it bounds
+the gap by the logarithm of the ground-space dimension. This compares the
+capped estimates with the uncapped exponent printed in
+\cite[Theorem~4.9]{Arad2016RigorousRG}; see
+\cite{gap:alvv16_approximation_parameters}.
+
+\begin{lemma}[A product subspace below a gap]
+    \label{lem:physical_dg_quadratic_window}
+    \lean{TNLean.MPS.AreaLaw.ALVV.finrank_le_finrank_of_quadratic_window,
+        TNLean.MPS.AreaLaw.ALVV.mul_norm_sq_le_re_inner_of_mem_orthogonal_ground,
+        TNLean.MPS.AreaLaw.ALVV.exists_slice_product_energy_le}
+    \leanok
+    Let $T$ be an operator on a finite-dimensional Hilbert space, and let
+    $G,V$ be subspaces with $\langle w,Tw\rangle\ge(\mu+\gamma)\|w\|^2$ on
+    $G^\perp$ and $\langle v,Tv\rangle\le(\mu+c)\|v\|^2$ on $V$, where
+    $c<\gamma$. Then $\dim V\le\dim G$. If $H$ is Hermitian with least
+    spectral value $\mu$ and every other spectral value at least $\mu+\gamma$,
+    the first condition holds for $T=H$ and the closed spectral span $G$
+    at $\mu$. Finally, if $M\otimes\Id+N$ acts on a product with
+    $0\le N\le c$ and a nonzero vector $\Psi$ has energy at most $\mu$, then
+    some nonzero slice $\varphi$ of $\Psi$ along a basis vector of the second
+    factor makes every product $\varphi\otimes\chi$ have energy at most
+    $\mu+c$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A nonzero vector of $V\cap G^\perp$ would satisfy
+    $(\mu+\gamma)\|w\|^2\le(\mu+c)\|w\|^2$, so $V\cap G^\perp=0$ and
+    $\dim V+\dim G^\perp$ is at most the total dimension. The gap condition
+    holds coordinatewise in an eigenbasis. For the slices, positivity of $N$
+    gives $\sum_y\langle\Psi_y,M\Psi_y\rangle\le\mu\sum_y\|\Psi_y\|^2$, so
+    some nonzero slice satisfies the inequality; for a product the energy of
+    $M\otimes\Id$ is $\langle\varphi,M\varphi\rangle\|\chi\|^2$ and that of
+    $N$ is at most $c\|\varphi\otimes\chi\|^2$.
+\end{proof}
+
+\begin{lemma}[The gap above a degenerate ground space]
+    \label{thm:physical_dg_gap_upper_bound}
+    \lean{TNLean.MPS.AreaLaw.ALVV.pow_le_finrank_ground_of_lt_gap,
+        TNLean.MPS.AreaLaw.ALVV.gap_le_one_of_finrank_lt,
+        TNLean.MPS.AreaLaw.ALVV.gap_le_one_add_log_div_log}
+    \leanok
+    \uses{lem:physical_dg_quadratic_window}
+    Let $H=\sum_{i=0}^{L-2}h_i$ be a nearest-neighbour chain of $L$ qudits of
+    dimension $q$, sites $0,\dots,L-1$, each $h_i$ supported on sites $i,i+1$
+    with $0\le h_i\le\Id$, least spectral value $\mu$, a second
+    spectral value, every spectral value other than $\mu$ at least
+    $\mu+\gamma$, and ground space $G$ of dimension $r$. For every natural
+    $m<\gamma$ one has $m<L$ and $q^m\le r$. Consequently
+    $\gamma\le1+\log r/\log q$, and $\gamma\le1$ whenever $r<q$, in
+    particular for a unique ground state.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:physical_dg_quadratic_window}
+    For $m\le L$, split the chain into its first $L-m$ and last $m$ sites.
+    The terms supported on the first part act as $M\otimes\Id$, and the at
+    most $m$ remaining terms form $N$ with $0\le N\le m$. A ground vector has
+    energy $\mu$, so Lemma~\ref{lem:physical_dg_quadratic_window} gives a
+    slice $\varphi$ whose products $\varphi\otimes\chi$ form a space of
+    dimension $q^m$ with energy at most $\mu+m<\mu+\gamma$. Hence $q^m\le r$.
+    Applied with $m=L$ this contradicts $r<q^L$, which holds because an
+    eigenvector at the second spectral value lies outside $G$; so $m<L$.
+    Taking $m=\lceil\gamma\rceil-1$ gives the logarithmic bound.
+\end{proof}
+
+\begin{lemma}[The capped estimates with the uncapped gap]
+    \label{thm:physical_dg_uncapped_approximation}
+    \lean{TNLean.MPS.AreaLaw.ALVV.capped_exponent_le_max_mul,
+        TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_interval_normalized_approximation_uncapped,
+        TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_normalized_isOpenMPS_approximation_uncapped}
+    \leanok
+    \uses{thm:physical_dg_gap_upper_bound,
+        thm:physical_dg_interval_normalized_approximation,
+        thm:physical_dg_normalized_mps_approximation}
+    In the setting of Lemma~\ref{thm:physical_dg_interval_normalized_approximation}
+    and Theorem~\ref{thm:physical_dg_normalized_mps_approximation}, the bounds hold
+    with $u^3/g+g^{-1/4}a^{3/4}u$ replaced by
+    \[
+        \max\{\gamma,1\}\bigl(u^3/\gamma+\gamma^{-1/4}a^{3/4}u\bigr),
+        \qquad \max\{\gamma,1\}\le1+\frac{\log r}{\log q},
+    \]
+    and likewise with $b$ in place of $a$ for the global bond. When $r<q$ the
+    factor is one and the exponent is the printed one. When $r\ge q$ and
+    $\gamma>1$ the printed bound with the single factor $r$ is reached only
+    up to this factor in the exponent; that restriction is recorded in
+    \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_dg_gap_upper_bound,
+        thm:physical_dg_interval_normalized_approximation,
+        thm:physical_dg_normalized_mps_approximation}
+    Since $1/g=\max\{\gamma,1\}/\gamma$ and $\gamma(1/\gamma)^{1/4}\ge1$ for
+    $\gamma\ge1$, the capped exponent is at most $\max\{\gamma,1\}$ times the
+    uncapped one. The factor is bounded by
+    Lemma~\ref{thm:physical_dg_gap_upper_bound}.
+\end{proof}
