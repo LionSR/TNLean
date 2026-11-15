@@ -75,6 +75,7 @@ import TNLean.MPS.Preparation.InhomogeneousUniformRate
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.IsometricExtension
+import TNLean.MPS.Preparation.IsometricPolarMerge
 import TNLean.MPS.Preparation.IsometryTree
 import TNLean.MPS.Preparation.IsometryTreePreparation
 import TNLean.MPS.Preparation.LogDepthPreparation

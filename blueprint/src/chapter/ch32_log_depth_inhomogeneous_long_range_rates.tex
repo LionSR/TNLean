@@ -159,3 +159,41 @@ tree argument requires virtual subspaces and vertex maps depending on their
 positions, or a proved gauge reduction to the supported setting. This
 obstruction to that hypothesis is not an impossibility result for such
 general trees.
+
+\begin{lemma}[Full-domain isometric polar completion]
+    \label{lem:ldp_isometric_polar_completion}
+    \lean{Matrix.exists_isometry_mul_polarPos_eq}
+    \notready
+    Let $B\colon\C^p\to\C^m$ with $p\le m$, and let
+    $P=(B^\dagger B)^{1/2}$. There is an isometry $X$ with $XP=B$,
+    without an injectivity assumption on $B$.
+\end{lemma}
+\begin{proof}
+    Choose an isometric inclusion $E\colon\C^p\to\C^m$.
+    The matrices $B$ and $EP$ have the same Gram matrix $P^2$, so a unitary
+    $U$ on the output space satisfies $B=UEP$. Then $X=UE$ suffices.
+\end{proof}
+
+\begin{lemma}[Isometric completion inside the children of a binary node]
+    \label{lem:ldp_isometric_polar_merge}
+    \lean{Matrix.exists_isometry_polarMerge_of_range,
+        MPSPreparation.exists_isometry_binaryPolarMerge}
+    \notready
+    \uses{lem:ldp_isometric_polar_completion}
+    Let $J\colon\C^n\to\C^m$ be an isometry, let
+    $B\colon\C^p\to\C^m$ satisfy $JJ^\dagger B=B$, and assume $p\le n$.
+    There is an isometry $W\colon\C^p\to\C^n$ such that $JW$ is an
+    isometry and $(JW)(B^\dagger B)^{1/2}=B$.
+    In particular, for two child isometries
+    $L\colon\C^\chi\to\mathcal H_1$ and
+    $R\colon\C^\chi\to\mathcal H_2$ with $\chi\ge1$, this applies to
+    $J=L\otimes R$ and every compressed parent matrix
+    $B=JC$, $C\colon\C^\chi\to\C^{\chi^2}$.
+\end{lemma}
+\begin{proof}
+    Put $C=J^\dagger B$. The range assumption gives
+    $C^\dagger C=B^\dagger B$. Complete the polar factor of $C$ by
+    Lemma~\ref{lem:ldp_isometric_polar_completion}; the equality of the
+    positive factors and $JC=B$ give the claim. The tensor product of the
+    child maps is an isometry and $\chi\le\chi^2$.
+\end{proof}

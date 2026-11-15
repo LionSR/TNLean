@@ -100,17 +100,26 @@ actual inhomogeneous polar factors is not supplied by the current
 homogeneous supported-tree theorem. This is a missing derivation, not a
 proved depth obstruction.
 
-To obtain a sequence-level theorem with a prescribed error $\varepsilon$,
-one must specify a class of sequences and show that its normalized
-positive-part states admit these coherent pair approximations on blocks
-with $L=O(\log(N/\varepsilon))$, uniformly in $N$. Qualitative convergence
-alone does not yield this accuracy-dependent scale. The common label
-space and its uniform size must also be specified or derived. The
-double-logarithmic measurement-round bound additionally needs the
-corresponding inhomogeneous tree implementation; the present theorem uses
-sequential block circuits. These obligations are distinct from the
-short-range rate work and from the construction proved
-under explicit pair hypotheses here. Issue~\#10573 remains open.
+A positive local completion step is written in
+\doclink{TNLean/MPS/Preparation/IsometricPolarMerge}, using the pinned
+QICLean Gram-equality unitary-extension theorem. Every rectangular matrix
+$B$ with input dimension at most its output dimension admits $B=XP$ with
+$X$ an isometry and $P=(B^\dagger B)^{1/2}$, without injectivity. If $B$
+lies in the range of an isometry $J$, the completion can be chosen inside
+that range: $B=(JW)P$ with both $W$ and $JW$ isometric. Thus two unrelated
+child isometries and an arbitrary compressed parent matrix admit a full
+binary isometric merge. This removes the need for a common coordinate
+support at that local step. A recursive identification with the actual
+inhomogeneous chain intervals and a position-dependent coherent
+measurement implementation remain to be established.
+
+For an unrestricted reading of the source remark, a class of sequences
+must still be specified and a uniform rate proved for that class, with a
+uniform label count. The conditional theorem establishes how such a rate
+gives a logarithmic scale; it does not establish the rate itself. The
+doubly-logarithmic claim additionally requires the interval-tree
+identification and implementation just described. These obligations are
+distinct from the short-range rate work. Issue~\#10573 remains open.
 
 \begin{thebibliography}{9}
 \bibitem{Malz2024Preparation}
