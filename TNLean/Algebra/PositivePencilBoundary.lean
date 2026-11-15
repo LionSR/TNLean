@@ -76,7 +76,8 @@ theorem exists_posSemidef_rank_lt_on_trace_zero_line {D : ℕ}
         HermitianMatrix.toMatrix_ofMatrix]
       ext i j
       change A i j + (s : ℂ) * H i j = A i j + s • H i j
-      rw [RCLike.real_smul_eq_coe_mul (K := ℂ)]
+      exact congrArg (fun z : ℂ => A i j + z)
+        (RCLike.real_smul_eq_coe_mul (K := ℂ) s (H i j)).symm
     have hPD' : (HermitianMatrix.toMatrix (Fin D) (f t)).PosDef := by
       rwa [hCompat]
     have hInterior :=
