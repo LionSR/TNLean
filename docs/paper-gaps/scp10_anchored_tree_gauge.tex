@@ -28,11 +28,20 @@ component and removes every internal tree operator. No commutativity,
 tree, forest, gauge, factorization or density equality is supplied as a
 hypothesis.
 
-This establishes a noncentral algebraic step. To apply it to an actual open
+The theorem
+\leanid{TNLean.PEPS.exists_regularComplementGauge_fixed_on_incident}
+then assumes that every complementary boundary endpoint is in the root's
+untwisted component, together with identity on every original incident
+bond. It extends the derived complementary gauge by the identity on the
+observation region, proves preservation of identity on every incident
+bond and removal of all complementary tree operators, and derives equality
+of the actual closed PEPS vectors from local regular invariance.
+
+These establish noncentral algebraic steps. To apply them to an actual open
 flux pair, the physical exterior collar must still be shown to project to
 one untwisted component containing every complementary boundary endpoint.
-The induced gauge must then be extended to the full graph and composed
-with the actual contraction identities. This theorem does not assume or
+The induced gauge must then be composed with the actual contraction
+identities. These theorems do not assume or
 assert those geometric and density conclusions, and it does not identify
 arbitrary endpoint-free annular observations with the vacuum. The remaining
 source-level conclusions stay under \ghissue{8703}. The full-lattice

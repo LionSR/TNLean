@@ -15,3 +15,24 @@
     gauges coincide. Propagation along forest walks fixes the entire
     root component. The defining tree gradient removes all tree operators.
 \end{proof}
+
+\begin{lemma}[A complementary gauge fixing incident operators]
+    \label{lem:peps_anchored_complement_gauge}
+    \lean{TNLean.PEPS.exists_regularComplementGauge_fixed_on_incident}\leanok
+    Suppose the complement is connected, the original operators on all
+    bonds incident to the observation region are the identity, and every
+    complementary boundary endpoint belongs to one rooted untwisted
+    component. Then a global vertex gauge fixes the observation region,
+    preserves identity on every incident bond, and removes all operators
+    on a complementary spanning tree. Local regular invariance makes
+    the actual closed physical vector unchanged by this gauge.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_anchored_tree_gauge}
+    Apply the preceding construction in the complement and extend its
+    gauge by the identity over the observation region. The boundary
+    component condition fixes both endpoints of every crossing bond.
+    The native tree residual gives the complementary assertion, and
+    local invariance with a bijective change of bond labels preserves
+    the closed contraction.
+\end{proof}

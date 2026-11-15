@@ -65,4 +65,61 @@ theorem exists_regularRegionTreeGauge_fixed_on_untwisted_component
   · intro e he
     exact regularRegionGaugeResidual_eq_one_of_tree R T hT htree o u e he
 
+variable [Fintype V] [DecidableRel Γ.Adj] {d : ℕ}
+
+/-- If every complementary boundary endpoint belongs to the root's untwisted
+component, construct a global gauge fixing the observation region and all its
+incident operators while removing a complementary spanning tree. The actual
+closed PEPS vector is preserved by local regular invariance. No centrality or
+desired density identity is assumed. Auxiliary step for SCP10, Lemma 6.14. -/
+theorem exists_regularComplementGauge_fixed_on_incident
+    (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
+    (ha : ∀ g v η s, a v (fun e => g * η e) s = a v η s)
+    (R : Finset V) (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
+    (U : SimpleGraph {v : V // v ∈ Finset.univ \ R})
+    (hU : U ≤ Γ.induce ((Finset.univ \ R : Finset V) : Set V))
+    (o : {v : V // v ∈ Finset.univ \ R}) (u : Edge Γ → G)
+    (hu : ∀ {v w : {v : V // v ∈ Finset.univ \ R}} (h : U.Adj v w),
+      regularDirectedTransport u (hU h) = 1)
+    (hboundary : ∀ v : {v : V // v ∈ Finset.univ \ R},
+      (∃ w ∈ R, Γ.Adj v.1 w) → U.Reachable o v)
+    (hincident : ∀ e : Edge Γ, IsRegionIncidentEdge R e → u e = 1) :
+    ∃ (T : SimpleGraph {v : V // v ∈ Finset.univ \ R}) (k : V → G),
+      T ≤ Γ.induce ((Finset.univ \ R : Finset V) : Set V) ∧ T.IsTree ∧
+        (∀ v ∈ R, k v = 1) ∧
+        (∀ e : Edge Γ, IsRegionIncidentEdge R e →
+          regularVertexGaugeOperators k u e = 1) ∧
+        (∀ e : {e : Edge Γ // e.1.1 ∈ Finset.univ \ R ∧ e.1.2 ∈ Finset.univ \ R},
+          T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩ →
+            regularVertexGaugeOperators k u e.1 = 1) ∧
+        SameState (groupBondTensor (regularTwistedSite a u))
+          (groupBondTensor (regularTwistedSite a (regularVertexGaugeOperators k u))) := by
+  classical
+  let S := Finset.univ \ R
+  obtain ⟨T, kS, hT, htree, _, hfixed, hremove⟩ :=
+    exists_regularRegionTreeGauge_fixed_on_untwisted_component S hS U hU o u hu
+  let k : V → G := fun v => if hv : v ∈ S then kS ⟨v, hv⟩ else 1
+  have hkR (v : V) (hv : v ∈ R) : k v = 1 := by simp [k, S, hv]
+  have hkB (v : V) (hv : ∃ w ∈ R, Γ.Adj v w) : k v = 1 := by
+    by_cases hvR : v ∈ R
+    · exact hkR v hvR
+    · have hvS : v ∈ S := by simp [S, hvR]
+      have hh := hfixed ⟨v, hvS⟩ (hboundary ⟨v, hvS⟩ hv)
+      simpa only [k, dif_pos hvS] using hh
+  refine ⟨T, k, hT, htree, hkR, ?_, ?_, sameState_regularVertexGauge a ha k u⟩
+  · intro e he
+    have ht : k e.1.1 = 1 := by
+      rcases he with ht | hh
+      · exact hkR _ ht
+      · exact hkB _ ⟨e.1.2, hh, e.2.2⟩
+    have hh : k e.1.2 = 1 := by
+      rcases he with ht | hh
+      · exact hkB _ ⟨e.1.1, ht, e.2.2.symm⟩
+      · exact hkR _ hh
+    simp only [regularVertexGaugeOperators, ht, hh, hincident e he, inv_one, one_mul]
+  · intro e he
+    have h := hremove e he
+    simpa only [regularVertexGaugeOperators, regularRegionGaugeResidual, k,
+      dif_pos e.2.1, dif_pos e.2.2] using h
+
 end TNLean.PEPS
