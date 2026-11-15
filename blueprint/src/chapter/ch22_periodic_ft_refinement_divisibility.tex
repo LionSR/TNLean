@@ -834,6 +834,31 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     many proper hyperplanes annihilating a coefficient.
 \end{proof}
 
+\begin{lemma}[Orthogonal decomposition of coefficient noise]
+    \label{thm:periodic_orthogonal_noise_decomposition}
+    \lean{KrausNoise.exists_orthogonal_noise_decomposition}
+    \leanok
+    Let $E$ be a finite-dimensional real or complex inner product space,
+    and let $(u_i)$ and $(v_j)$ be two families of vectors. Write
+    $W=\operatorname{span}\{u_i\}$. There exist $v_{0,j}\in W$ and
+    $v_{1,j}\in W^\perp$ with $v_j=v_{0,j}+v_{1,j}$ such that
+    \begin{align*}
+        \langle u_i,v_j\rangle & =\langle u_i,v_{0,j}\rangle,                \\
+        \langle v_i,v_j\rangle & =\langle v_{0,i},v_{0,j}\rangle
+        +\langle v_{1,i},v_{1,j}\rangle,                                     \\
+        \dim\operatorname{span}\{u_i,v_j\}
+                               & =\dim W+\dim\operatorname{span}\{v_{1,j}\}.
+    \end{align*}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Take $v_{0,j}$ to be the orthogonal projection of $v_j$ onto $W$,
+    and let $v_{1,j}=v_j-v_{0,j}$. Orthogonality gives the inner product
+    identities. The full coefficient span is the orthogonal sum of $W$
+    and the residual span, so the dimensions add.
+\end{proof}
+
 \begin{lemma}[Exact powers under an annihilating perturbation]
     \label{thm:periodic_annihilating_power_perturbation}
     \lean{add_pow_eq_of_annihilating_square_zero}
