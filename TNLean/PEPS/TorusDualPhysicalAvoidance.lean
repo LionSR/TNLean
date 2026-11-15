@@ -18,7 +18,7 @@ displacement class. Its native group insertions are identity on every incident
 physical bond.
 
 Source: SCP10, arXiv:1001.3807v3, Definition 6.13 and Lemma 6.14,
-local source lines 2180–2214.
+local source lines 2174–2214.
 
 **Scope restriction (simply connected dual corner collar):** Both periods are
 at least three. Simple connectedness is required of the computed forbidden

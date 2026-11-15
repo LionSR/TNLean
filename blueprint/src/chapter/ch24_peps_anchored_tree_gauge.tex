@@ -1,24 +1,28 @@
 \begin{lemma}[A tree gauge fixed on an untwisted component]
     \label{lem:peps_anchored_tree_gauge}
     \lean{TNLean.PEPS.exists_regularRegionTreeGauge_fixed_on_untwisted_component}\leanok
-    In a connected finite region, let a subgraph have identity directed
+    Let $G$ be finite. In a connected finite region, let a subgraph have identity directed
     bond transport and fix a root. There is a spanning tree and a vertex
     gauge equal to the identity throughout the root component of that
     subgraph. The transformed operator on every internal tree edge is
     the identity. The group may be nonabelian.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{thm:peps_regular_region_tree_gauge,thm:peps_tree_gauge_transport}
     Take a spanning forest of the untwisted subgraph, preserving all its
     reachable pairs, and extend this forest to a spanning tree of the
     full region graph. Normalize the tree gauge at the root. On a forest
-    edge its endpoint gradient is the identity operator, so the endpoint
-    gauges coincide. Propagation along forest walks fixes the entire
+    edge $(v,w)$, the tree-gradient identity gives
+    $u_{vw}=k_wk_v^{-1}=1$, hence $k_v=k_w$. Propagation along forest walks fixes the entire
     root component. The defining tree gradient removes all tree operators.
 \end{proof}
 
 \begin{lemma}[A complementary gauge fixing incident operators]
     \label{lem:peps_anchored_complement_gauge}
     \lean{TNLean.PEPS.exists_regularComplementGauge_fixed_on_incident}\leanok
+    \uses{def:peps_regular_twisted_region}
+    Let $G$ be finite and suppose the site coefficients $a_v$ are invariant
+    under simultaneous left translation of their incident group labels.
     Suppose the complement is connected, the original operators on all
     bonds incident to the observation region are the identity, and every
     complementary boundary endpoint belongs to one rooted untwisted
@@ -28,13 +32,16 @@
     the actual closed physical vector unchanged by this gauge.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:peps_anchored_tree_gauge}
+    \uses{lem:peps_anchored_tree_gauge,thm:peps_regular_closed_gauge}
     Apply the preceding construction in the complement and extend its
     gauge by the identity over the observation region. The boundary
     component condition fixes both endpoints of every crossing bond.
     The native tree residual gives the complementary assertion, and
-    local invariance with a bijective change of bond labels preserves
-    the closed contraction.
+    local invariance with the bijective change of labels gives
+    \begin{align}
+        u'_e=k_{t(e)}^{-1}u_ek_{s(e)},\qquad
+        \Psi(a,u')=\Psi(a,u).
+        \label{eq:peps_anchored_complement_closed_gauge}
+    \end{align}
+    Both endpoint gauges are identity on incident edges, so $u'_e=u_e=1$ there.
 \end{proof}
-
-\input{chapter/ch24_peps_anchored_twist_density}
