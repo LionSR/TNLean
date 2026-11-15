@@ -568,6 +568,7 @@ import TNLean.PEPS.TorusWitnessCapstone
 import TNLean.PEPS.TorusWitnessIsoTransport
 import TNLean.PEPS.TorusWitnessTranslate
 import TNLean.PEPS.TorusWitnessTransport
+import TNLean.PEPS.TorusZeroCrossingDensity
 import TNLean.PEPS.TranslatedTwoPlaquetteGeometry
 import TNLean.PEPS.TwoByTwoTensorIsometry
 import TNLean.PEPS.TwoInjectiveComparison

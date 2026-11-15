@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{A Finite Zero-Crossing Criterion for Native Flux Vacuum Density}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+For the local-density comparison in Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3}, Theorem 6.9
+and Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines
+1935--1990 and 2199--2214, one can use conditions on the actual finite
+crossing graph in place of a simply connected envelope.
+
+The graph \leanid{TNLean.PEPS.torusDualZeroCrossingGraph} retains exactly
+the native physical bonds with zero signed crossing count for the supplied
+actual path. Both edge orientations are included and the periodic seams
+are treated in the native coordinates. The graph is independent of the
+insertion group and element. Its edges have identity actual flux transport.
+
+The theorem
+\leanid{TNLean.PEPS.IsGIsometric.torusFlux_normalized_density_eq_vacuum_of_zero_crossing_connectivity}
+assumes connected observation and complementary induced graphs, nonempty
+boundary, zero signed counts on observed incident bonds, and one component
+of this computed zero-crossing graph in the complement containing all
+complementary boundary endpoints. It derives both actual cuts nonzero and
+normalized observed density equal to vacuum for every insertion element
+of a finite group and every native regular group-isometric tensor.
+Both periods are at least three. No simple connectedness, envelope,
+supplied untwisted subgraph, gauge, factorization, Gram identity, density
+equality or nonzero witness is assumed.
+
+These are finite graph and integer-count conditions on the actual path.
+They are sufficient, not necessary for density equality, and no terminating
+classification algorithm for all observations is asserted. In particular,
+the observed and complementary graphs must still be connected; an annulus
+with disconnected complement fails that hypothesis. The positive native
+simple-connectedness theorem and its envelope extension remain unchanged.
+The explicit annular obstruction prevents an endpoint-only generalization.
+The broader classification remains open under \ghissue{8703}; no
+\ghissue{8947} Hamiltonian files or claims are changed.
+\end{document}
