@@ -1,0 +1,48 @@
+\begin{definition}[Seam word based at an excluded support vertex]
+    \label{def:peps_based_dual_seam_word}
+    \lean{TNLean.PEPS.torusDualSeamWordAt}\leanok
+    \uses{def:peps_dual_flux_path}
+    Fix a primal support vertex $c=(c_x,c_y)$ and two elements $u,v$ of an
+    arbitrary coefficient group. The ordered word of a labelled dual path records
+    $u$ at an east crossing of the seam $x+1=c_x$ and $v$ at a north crossing
+    of $y+1=c_y$, with inverse factors for reverse crossings.
+\end{definition}
+
+\begin{lemma}[A missing support vertex obstructs displacement completeness]
+    \label{lem:peps_missing_support_obstruction}
+    \lean{TNLean.PEPS.TorusDualHomotopy.seamWordAt_eq_of_not_mem,
+        TNLean.PEPS.torusDualSquareLoop_not_homotopic_of_support_excludes,
+        TNLean.PEPS.torusDualSquareLoop_displacement_zero}\leanok
+    \uses{def:peps_based_dual_seam_word,def:peps_dual_flux_displacement,
+        def:peps_dual_flux_homotopy}
+    If $c$ is excluded from the allowed primal square-move support, every
+    generated supported homotopy preserves the seam word based at $c$.
+    The labelled square surrounding $c$ has zero lifted displacement but
+    cannot be contracted by such a homotopy. This holds for all torus periods.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_based_dual_seam_word}
+    Words multiply under concatenation and invert under reversal.
+    Backtracks cancel. At an allowed square, the east-north and north-east
+    words agree unless both seams meet at its support vertex $c$, which is
+    excluded. The surrounding square has word $uvu^{-1}v^{-1}$.
+    Choose $u=(01)$ and $v=(12)$ in the permutation group on three elements;
+    their commutator is nontrivial, whereas the constant path has word one.
+\end{proof}
+
+\begin{lemma}[Uniform displacement completeness requires full support]
+    \label{lem:peps_uniform_displacement_support}
+    \lean{TNLean.PEPS.torusDualHomotopy_displacement_complete_iff_support_univ}\leanok
+    \uses{def:peps_dual_flux_homotopy,def:peps_dual_flux_displacement}
+    Let $R\subseteq X$ be the allowed primal square-move support. Every pair of finite
+    labelled dual paths with the same endpoints and lifted displacement is
+    related by a generated $R$-supported homotopy if and only if $R$ is the
+    entire torus vertex set. This is a uniform assertion over all paths.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_missing_support_obstruction,
+        lem:peps_dual_full_support_classification}
+    Any missing support vertex gives a square loop and constant path with
+    equal displacement which are not related. For full support, the lifted
+    rectangle classification gives a homotopy for every equal-displacement pair.
+\end{proof}
