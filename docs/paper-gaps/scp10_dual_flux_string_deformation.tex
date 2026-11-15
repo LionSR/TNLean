@@ -214,4 +214,31 @@ two-by-two regression has an empty boundary and a zero open coefficient. The unr
 source gap, arbitrary-region avoidance, cross-winding equality and vacuum
 reduced-density conclusions remain open.
 
+\section{Supported open-boundary continuation}
+Let $R,S\subseteq X$, with $R$ the open region and $S$ the swept support.
+Assume every labelled bond incident to $S$ has both endpoints in $R$.
+For every generated homotopy $p\sim_S q$, the derived gauge is identity
+at both endpoints of every bond not internal to $R$. Delta completion
+therefore gives equality of the actual open coefficients for every fixed
+crossing boundary assignment, and equality after contraction with every
+joint boundary tensor. The region may be disconnected or nonrectangular;
+both the region and the virtual alphabet may be empty.
+
+The declarations are
+\leanid{TNLean.PEPS.TorusDualHomotopy.exists_internalFluxGauge},
+\leanid{TNLean.PEPS.TorusDualHomotopy.openCoefficient_eq}, and
+\leanid{TNLean.PEPS.TorusDualHomotopy.correlatedBoundary_eq}.
+The collared rectangular results are their specializations, since their
+geometric collar contains every swept vertex star. No condition is added
+to the statements of those existing specializations.
+
+This removes rectangularity from the open contraction argument, not from
+the construction of a homotopy between given paths. The internal-star
+condition is retained explicitly: crossing bonds with a swept endpoint
+are not covered. Completeness of generated homotopies, the existence of
+deformations avoiding arbitrary regions, and the vacuum reduced-density
+conclusion remain open under \ghissue{8703}. No equality across winding
+classes or full-lattice Hamiltonian common-kernel conclusion is claimed;
+the latter belongs to \ghissue{8947}.
+
 \end{document}
