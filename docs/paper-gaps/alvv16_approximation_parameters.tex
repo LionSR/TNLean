@@ -184,9 +184,10 @@ products form a space of dimension $q^m$. If $q^m>r$, it contains a nonzero
 vector orthogonal to $G$, whose energy is at least $\mu+\gamma>\mu+m$, a
 contradiction. Applied at $m=L$, the same argument contradicts $r<q^L$, so
 $m<L$. Taking $m=\lceil\gamma\rceil-1$ gives
-\[
+\begin{align}
     \gamma\le1+\frac{\log r}{\log q},
-\]
+    \label{eq:alvv_approximation_gap_log_bound}
+\end{align}
 and $r<q$ forces $\gamma\le1$. The three-qubit example above, with $r=4$,
 $q=2$ and $\gamma=2$, shows that gaps above one occur once $r\ge q$.
 The formal statements are
@@ -196,14 +197,17 @@ The formal statements are
 
 \paragraph{The comparison.} Since $1/g=\max\{\gamma,1\}/\gamma$ and
 $\gamma(1/\gamma)^{1/4}\ge1$ for $\gamma\ge1$,
-\[
+\begin{align}
     \frac{u^3}{g}+g^{-1/4}a^{3/4}u
     \le\max\{\gamma,1\}\Bigl(\frac{u^3}{\gamma}
     +\gamma^{-1/4}a^{3/4}u\Bigr).
-\]
-Hence (\ref{eq:alvv_approximation_explicit_rank}) and
+    \label{eq:alvv_approximation_capped_comparison}
+\end{align}
+By (\ref{eq:alvv_approximation_capped_comparison}),
+(\ref{eq:alvv_approximation_explicit_rank}) and
 (\ref{eq:alvv_approximation_global_bond}) hold with the uncapped printed
-exponent multiplied by $\max\{\gamma,1\}\le1+\log r/\log q$; the logarithms
+exponent multiplied by $\max\{\gamma,1\}$, which is at most the right side
+of (\ref{eq:alvv_approximation_gap_log_bound}); the logarithms
 $u$ and $a$ keep $\log(1/g)=\max\{0,\log(1/\gamma)\}$. The formal statements
 are
 \leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_interval_normalized_approximation_uncapped}
