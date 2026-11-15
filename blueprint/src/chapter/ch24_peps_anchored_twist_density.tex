@@ -1,0 +1,22 @@
+\begin{lemma}[Noncentral vacuum density from an untwisted boundary component]
+    \label{lem:peps_anchored_twist_density}
+    \lean{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_eq_of_untwisted_boundary_component}
+    \leanok
+    Let the physical sites be regular group-isometric. Suppose the observed
+    and complementary induced graphs are connected, the boundary is
+    nonempty, and every insertion on an observed incident bond is the
+    identity. If one untwisted complementary component contains every
+    complementary boundary endpoint, the nonzero actual twisted cut and
+    the nonzero vacuum cut have equal normalized observed reduced
+    densities. No centrality of the group insertions is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_anchored_complement_gauge}
+    Construct the complementary tree gauge, extend it by the identity on
+    the observation region, and preserve the actual physical vector.
+    The resulting complementary tree is a common connected untwisted
+    subgraph for the transformed insertion and the vacuum. The projected
+    mixed Gram calculation from the local isometries gives a common
+    invariant-boundary density. Normalize each nonzero actual cut by its
+    trace; their scalar complementary factors cancel.
+\end{proof}

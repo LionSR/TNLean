@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Noncentral Reduced Density from an Untwisted Boundary Component}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14 and Theorem 6.9, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2199--2214,
+motivate comparing an open flux pair with the vacuum away from its ends.
+For noncentral insertions, identity on the observed incident bonds alone
+is insufficient on arbitrary graphs. The complementary boundary endpoints
+must also be connected by an appropriate untwisted component.
+
+The theorem
+\leanid{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_eq_of_untwisted_boundary_component}
+proves the actual normalized reduced-density equality under the following
+explicit structural assumptions: a finite graph and finite group, regular
+group-isometric physical sites, connected observed and complementary
+induced graphs, nonempty boundary, identity insertions on every observed
+incident bond, and an untwisted complementary component containing every
+complementary boundary endpoint. The two actual cuts are required nonzero.
+There is no centrality, supplied spanning tree, global gauge, contraction
+factorization, Gram identity, or density equality hypothesis.
+
+The anchored tree construction supplies a global gauge fixing the observed
+region and all its incident operators while preserving the actual closed
+vector. Its complementary tree then supplies the connected common
+untwisted graph needed in the projected mixed Gram calculation. Applying
+that calculation to the transformed insertion and the vacuum gives a common
+normalized physical density. Positive scalar normalizations are converted
+to trace normalization of the actual coefficient matrices. Unnormalized
+reduced matrices are not asserted equal; noncentral insertions may change
+their scalar factors.
+
+This is a conditional noncentral contraction theorem. For a native torus
+open flux pair, the complementary boundary component must still be derived
+from the actual exterior collar and the chosen dual detour. The native
+regular-isometric nonvanishing results can then discharge the explicit
+nonzero-cut assumptions. The theorem does not infer the component from
+endpoint exclusion or equate arbitrary endpoint-free annular observations
+with vacuum. These remaining geometric source obligations stay under
+\ghissue{8703}; the full-lattice Hamiltonian scope of \ghissue{8947} is
+unchanged.
+\end{document}
