@@ -2,7 +2,16 @@
 
 Issue: #8322. Inspected revision: `cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
 
-This is an implementation handoff, not a completed formalization.
+This implements the integer Ring and representation-lift foundation, not the
+complete consumer migration in #8322. All changed Lean sources, including
+`BasedRing.lean`, passed strict source checks and the early module build at
+head `0fd3c0fccd875cf44ac7ab35a945ee485e64b5b0` in
+[CI run 21266](https://github.com/LionSR/TNLean/actions/runs/43755696874),
+build job `132939410595`. The checked `BasedRing.lean` source blob is
+`aee79766ed83c57abcc85c89a947e0ee35b8a444`.
+The full project and blueprint pipeline must also pass before merge.
+
+Earlier independent file checks:
 `IntegerFusion.lean` passed the hosted strict source check, including warnings
 as errors, at head `582d7c3a642cd48b07a0b17c6331afecfe787afb` in
 [CI run 21230](https://github.com/LionSR/TNLean/actions/runs/43751459767),
@@ -13,9 +22,9 @@ build job `132926426879`. Its source blob is
 [CI run 21257](https://github.com/LionSR/TNLean/actions/runs/43754993708),
 build job `132937129109`. Its source blob is
 `aa4ed662ed503b73c64ba242af66d33187fed512`.
-The Ring construction and forward lifts still await whole-file validation.
+The later whole-file check above validates the Ring and forward lifts as well.
 
-## Candidate implementation
+## Implementation
 
 Branch: `feat/8322-integer-fusion-foundation`.
 Draft PR: [#10636](https://github.com/LionSR/TNLean/pull/10636).
@@ -27,14 +36,14 @@ Draft PR: [#10636](https://github.com/LionSR/TNLean/pull/10636).
   unit compatibility, additive matrix evaluation, and restriction of a RingHom
   with prescribed basis products and images to the legacy multiplication and
   unit conditions.
-- `BasedRing.lean`: a faithful regular action, candidate associativity and unit
+- `BasedRing.lean`: a faithful regular action, associativity and unit
   proofs, the data-dependent integer Ring carrier, and lifts of arbitrary
   compatible ring-valued families, NIM-reps and ring-valued characters.
 
 The convolution and evaluation lemmas in `IntegerFusion.lean` and all the
 restriction and matrix results in `IntegerNIMRep.lean` are checked.
-`BasedRing.lean` remains a candidate without placeholders. Lean validation
-of its Ring instance and forward extensions remains pending. The first attempt
+`BasedRing.lean` and its Ring instance and forward extensions are also checked.
+No placeholders or weakened statements were introduced. The first attempt
 to check the bridge hit the new module system's prohibition on importing the
 legacy `Defs.lean` from a new-style module. The two adapter files now retain
 legacy import format; the standalone integer foundation remains a public module.
@@ -107,7 +116,7 @@ arbitrary semiring targets, so a universal replacement by a RingHom with that
 same target is not available; natural-valued characters can instead be cast
 to integer-valued characters. This restriction must be explicit in a bridge.
 
-## Proposed implementation and proof obligations
+## Construction and remaining obligations
 
 The existing `IsFusionRing` in `FusionRing.lean` records natural-valued
 structure constants, associativity, a two-sided unit, an involutive duality,
@@ -121,20 +130,18 @@ On integer finitely supported combinations define
  \qquad 1 = [e].
 \]
 
-The basic coefficient theorem, multiplication of two singleton terms,
-distributivity, associativity, and both unit laws must be proved before
-installing the Ring instance. The associativity calculation reduces to the
-existing `IsFusionRing.assoc` after casting natural sums to integers.
-The carrier must distinguish the chosen fusion data so that different
-multiplications on the same label type do not compete as global instances.
+The coefficient formula, singleton multiplication and distributivity are proved
+in `IntegerFusion.lean`. Associativity and unit laws are transported through
+the faithful regular matrix action in `BasedRing.lean`, before constructing
+the Ring instance with Mathlib's minimal constructor. The carrier is indexed by
+the chosen fusion data; no global Ring instance is installed on raw Finsupp.
 
-Next prove the universal extension property: a family `f a : R` in a ring R
-with `f e = 1` and `f a * f b = sum_c (N a b c : R) * f c` extends uniquely by
+The extension construction takes a family `f a : R` in a ring R
+with `f e = 1` and `f a * f b = sum_c (N a b c : R) * f c` to a RingHom by
 `u |-> sum_a (u a : R) * f a`. Integer casts are central, so this works for
 noncommutative ring targets, including integer matrix rings.
-Apply this to the transposed NIM-rep matrices, with the explicit unit law,
-and separately to characters. State and prove the restriction/extension
-identities in both directions.
+The NIM-rep and character specializations and their basis values are proved.
+Uniqueness and a packaged restriction/extension equivalence remain open.
 
 For group fusion use Mathlib `MonoidAlgebra Int G` directly. The general
 construction should have an explicit ring equivalence to that existing type;
@@ -143,7 +150,7 @@ Pinned Mathlib scouting confirmed `Finsupp.equivFunOnFinite`, `onFinset`,
 singleton and finite-sum APIs are available. The issue's existing scouting
 comment also identifies `MonoidAlgebra.single_mul_single` and the lift API.
 
-## Validation blocker
+## Local execution limit
 
 The checkout pins Lean/Mathlib `v4.36.0-rc1`, has no `.lake` directory, and no
 `lean`, `lake`, or `elan` executable was found. Requests for the elan installer,
@@ -157,7 +164,6 @@ Resume in an environment with the pinned toolchain and permitted dependency
 access. Follow the Linux cache-first instructions in `AGENTS.md`: fetch the
 prebuilt Mathlib cache, verify `Mathlib.olean`, then build only the new modules
 with package lint options. Validate blueprint declarations after successful
-Lean builds. Hosted PR CI is checking the remaining candidate. Only the
-checked convolution, evaluation and restriction-bridge entries carry `leanok`
-markers; the Ring and forward-lift entries remain unmarked until their source
-checks pass.
+Lean builds. Hosted PR CI supplies the checked source results recorded above.
+The new blueprint entries carry completion markers for these checked results;
+the full project build and complete blueprint pipeline remain separate gates.
