@@ -1,5 +1,5 @@
-Warning: truncated output (original token count: 21339)
-Total output lines: 1689
+Warning: truncated output (original token count: 21355)
+Total output lines: 1694
 
 %% =========================================================
 %% Chapter: Matrix Product Operator Symmetries and Non-Invertible
@@ -674,6 +674,7 @@ relation between word traces has nonnegative integer coefficients.
         MPOTensor.integerFusionMul_apply,
         MPOTensor.integerFusionEval,
         MPOTensor.integerFusionEval_single}
+    \leanok
     \uses{def:fusion_character_nimrep}
     For a finite label set $I$, integer combinations form the additive
     group $\Z^{(I)}$. Natural structure constants define the product
@@ -683,7 +684,7 @@ relation between word traces has nonnegative integer coefficients.
     For an additive commutative group $A$ and a family $f_a\in A$, its
     additive evaluation is $u\mapsto\sum_a u_af_a$; the singleton with
     coefficient $m$ at $a$ evaluates to $mf_a$.
-    % Project construction for #8322; completion markers await Lean validation.
+    % Project construction; integer convolution and evaluation are Lean-checked.
 \end{definition}
 
 \begin{lemma}[Additivity of integer convolution]%
@@ -693,12 +694,14 @@ relation between word traces has nonnegative integer coefficients.
         MPOTensor.integerFusionMul_zero_left,
         MPOTensor.integerFusionMul_zero_right,
         MPOTensor.integerFusionMul_single_apply}
+    \leanok
     \uses{def:mposym_integer_fusion}
     Integer convolution is additive in each argument, vanishes when either
     argument is zero, and satisfies
     $((m[a])(n[b]))_c=mnN_{ab}^c$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Distribute integer multiplication through each finite sum. For singleton
     inputs only the summand indexed by $(a,b)$ can be nonzero.
 \end{proof}
@@ -739,6 +742,7 @@ relation between word traces has nonnegative integer coefficients.
 \begin{lemma}[Multiplicative evaluation of integer combinations]%
     \label{thm:mposym_integer_fusion_eval}
     \lean{MPOTensor.integerFusionEval_mul}
+    \leanok
     \uses{def:mposym_integer_fusion}
     If $f_a$ are elements of a unital ring with
     $f_af_b=\sum_cN_{ab}^cf_c$, then integer evaluation satisfies
@@ -746,6 +750,7 @@ relation between word traces has nonnegative integer coefficients.
     The target ring need not be commutative.
 \end{lemma}
 \begin{proof}
+    \leanok
     Finite distributivity and the centrality of integer scalars give
     \[
         \sum_c\sum_{a,b}u_av_bN_{ab}^cf_c
@@ -767,10 +772,7 @@ relation between word traces has nonnegative integer coefficients.
     and an involutive duality, with associative fusion, two-sided unit,
     $N_{ab}^e=\delta_{b,a^*}$ and $N_{b^*a^*}^{c^*}=N_{ab}^c$.
     The associated integer ring has underlying additive group $\Z^{(I)}$,
-    the convolution product and unit $[e]$.
-\end{definition}
-
-\begin{lemma}[Faithful regular a…1339 tokens truncated…or every $L\geq1$. Then $n=1$ and
+    the convolution product and u…1355 tokens truncated…or every $L\geq1$. Then $n=1$ and
     $|\mu_1|=1$.
 \end{lemma}
 
