@@ -205,8 +205,9 @@ MPU guards on the original tensors are not included in these explicit strict
 comparison signatures; the unitary involution preserves such guards if needed.
 
 The two transport modules have 18 public declarations, covered by auxiliary Blueprint entries
-in `ch28_mpu_swap_stabilization.tex`. Every new entry stays `notready`; the
-source-labelled `lemma:sym-trafo-swap` is unchanged. The two generated import
+in `ch28_mpu_swap_stabilization.tex`. Their entries are marked checked following
+the exact-head strict result at `82f750c8` below; obstruction entries remain
+`notready`. The source-labelled `lemma:sym-trafo-swap` is unchanged. The two generated import
 aggregators are updated with the repository's generator.
 
 The existing `EquivalentUnderSymmetry` cannot express this conclusion directly:
@@ -279,3 +280,19 @@ PDF compilation. The web job failed on three latexindent alignment differences;
 the repair applies the exact reported formatting. The example-module repairs and
 the complete new head remain unverified until the next hosted check. No passing
 root build or new-declaration axiom audit is inferred from the helper's success.
+
+## Exact-head check at 82f750c8
+
+Run `43752814750`, build job `132930528266`, built
+`SwapSymmetryStabilization.lean` in 3.5 seconds and reported focused strict checks
+for both transport modules as `ok`. Thus all 18 transport declarations have
+passed package-option build and warnings-as-errors checking at this exact head.
+The five scoped transport Blueprint entries now reflect that result; the
+unrestricted source entry does not change.
+
+The obstruction module still failed on the scalar type of a permutation product,
+nonterminal simplification warnings, and the literal four-to-sixteen witness.
+The next repair uses Mathlib's permutation multiplication directly, keeps the
+final scalar contradictions inside terminal simplifications, and evaluates the
+finite literal witness. Those changes remain candidates until checked. The full
+root build, compiled-reference checks, and axiom audit are still outstanding.

@@ -1,10 +1,10 @@
-% Candidate declarations are source-written but not yet checked by Lean.
-% All entries stay notready; the unrestricted source label is unchanged.
+% Transport entries passed focused strict checks at 82f750c8.
+% Compatibility obstructions remain notready; the source label is unchanged.
 \begin{definition}[Physical output matrix with an identity ancilla]
     \label{def:mpu_physical_identity_matrix}
     \lean{MPOTensor.physicalIdMatrix,
         MPOTensor.physicalIdMatrix_apply}
-    \notready
+    \leanok
     For $Q\in\MN{d}$ and $x\geq0$, let $Q\otimes I_x$ act on
     $\mathbb C^d\otimes\mathbb C^x$ in the product basis. Its matrix entry
     at $((i,a),(j,b))$ is $Q_{i,j}\delta_{a,b}$, with pairs encoded in the
@@ -21,7 +21,7 @@
         MPOTensor.physicalIdMatrix_map_star,
         MPOTensor.physicalIdMatrix_mem_unitaryGroup,
         MPOTensor.ketLeftMul_tensorPhysicalId}
-    \notready
+    \leanok
     \uses{def:mpu_physical_identity_matrix}
     Identity-ancilla extension of physical matrices preserves the identity,
     multiplication, adjunction, and transposition. A real matrix remains
@@ -34,7 +34,7 @@
     \end{align}
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     The matrix assertions follow from Kronecker multiplication and
     reindexing by the product-basis permutation. For the tensor assertion,
     the coefficient at output $(i,a)$ and input $(j,b)$ is
@@ -50,7 +50,7 @@
     \lean{MPOTensor.ancillaSwapMatrix,
         MPOTensor.ancillaSwapDaggerSymmetry,
         MPOTensor.ancillaSwapTransposeSymmetry}
-    \notready
+    \leanok
     \uses{def:mpu_physical_identity_matrix,
         def:mpu_finite_chain_operator_symmetry, threeMPU2}
     On $H\otimes\mathbb C^x$, where
@@ -74,7 +74,7 @@
     \lean{MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff}
-    \notready
+    \leanok
     \uses{def:mpu_ancilla_swap_actions, def:strictly-equivalent-symmetry}
     Let $\mathcal U,\mathcal V$ have physical space
     $\mathbb C^d\otimes\mathbb C^d$ and arbitrary virtual dimensions.
@@ -89,7 +89,7 @@
     ordinary adjunction, transposition, or conjugation, respectively.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_ancilla_output_action,
         thm:mpu_symmetry_path_transport, thm:mpu_physical_left_action_blocking,
         thm:mpu_pointwise_symmetry_invariance_comparison,
@@ -114,7 +114,7 @@
     \lean{MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff,
         MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff,
         MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff}
-    \notready
+    \leanok
     \uses{def:mpu_ancilla_swap_actions, def:strictly-equivalent-symmetry}
     For each of the three comparisons of
     Lemma~\ref{lem:mpu_fixed_ancilla_swap_comparison}, a common ancilla
@@ -123,7 +123,7 @@
     strict comparison exist. The same $x,k$ work in both directions.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:mpu_fixed_ancilla_swap_comparison}
     Apply Lemma~\ref{lem:mpu_fixed_ancilla_swap_comparison} for each fixed
     positive $x,k$, then quantify over those same two integers.

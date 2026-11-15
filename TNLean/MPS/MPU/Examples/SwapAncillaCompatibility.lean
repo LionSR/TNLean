@@ -56,10 +56,8 @@ private theorem chainShiftSwap_sandwich_apply (d N : ℕ)
     rw [Fintype.prod_boole]
     simp [e, funext_iff]
   rw [hC]
-  change ((e.toPEquiv.toMatrix : Matrix (Fin N → Fin (d * d))
-    (Fin N → Fin (d * d)) ℂ) * X * e.toPEquiv.toMatrix) σ τ = _
-  rw [PEquiv.mul_toMatrix_toPEquiv, PEquiv.toMatrix_toPEquiv_mul]
-  rfl
+  simpa only [Equiv.Perm.permMatrix, PEquiv.mul_toMatrix_toPEquiv,
+    PEquiv.toMatrix_toPEquiv_mul, Matrix.submatrix_apply]
 
 /-- A globally coherent family cannot have swap-combined adjunction at
 physical dimension \(d^2\) when the original species has two distinct basis
@@ -85,10 +83,10 @@ theorem symmetryFamily_at_ne_shiftSwapDagger
   have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))
     (fun _ => finProdFinEquiv (a, b))
   simp only [chainShiftSwap_sandwich_apply, Matrix.conjTranspose_apply] at hzero hone
-  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, finTupleProdEquiv,
-    Equiv.arrowCongr, Function.comp_def, bondPairSwap] at hzero hone
-  simp [Matrix.kroneckerMap_apply, Matrix.one_apply, P, Ne.symm hab] at hzero hone
-  have hbad : (1 : ℂ) = 0 := hzero.symm.trans hone
+  have hbad : (1 : ℂ) = 0 := by
+    simp [tensorPhysicalIdOperator, Matrix.reindex_apply, finTupleProdEquiv,
+      Equiv.arrowCongr, Function.comp_def, bondPairSwap] at hzero hone
+    simpa [P, Ne.symm hab] using hzero.symm.trans hone
   norm_num at hbad
 
 /-- A globally coherent family cannot have swap-combined transposition at
@@ -114,10 +112,10 @@ theorem symmetryFamily_at_ne_shiftSwapTranspose
   have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))
     (fun _ => finProdFinEquiv (a, b))
   simp only [chainShiftSwap_sandwich_apply, Matrix.transpose_apply] at hzero hone
-  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, finTupleProdEquiv,
-    Equiv.arrowCongr, Function.comp_def, bondPairSwap] at hzero hone
-  simp [Matrix.kroneckerMap_apply, Matrix.one_apply, P, Ne.symm hab] at hzero hone
-  have hbad : (1 : ℂ) = 0 := hzero.symm.trans hone
+  have hbad : (1 : ℂ) = 0 := by
+    simp [tensorPhysicalIdOperator, Matrix.reindex_apply, finTupleProdEquiv,
+      Equiv.arrowCongr, Function.comp_def, bondPairSwap] at hzero hone
+    simpa [P, Ne.symm hab] using hzero.symm.trans hone
   norm_num at hbad
 
 /-- The flattened swap takes a two-dimensional matrix tensored with an
@@ -191,11 +189,11 @@ theorem physicalIdMatrix_shiftSwap_sandwich_ne :
   dsimp only
   intro h
   have hentry := congrFun (congrFun h (1 : Fin 16)) (1 : Fin 16)
-  norm_num [physicalIdMatrix, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, shiftSwap_sandwich_apply, Matrix.single, bondPairSwap,
-    finProdFinEquiv] at hentry
-  norm_num [shiftSwap_sandwich_apply, Matrix.single, bondPairSwap,
-    finProdFinEquiv, Fin.divNat, Fin.modNat] at hentry
+  norm_num [physicalIdMatrix, Matrix.mul_apply, Fin.sum_univ_succ,
+    shiftPhysicalSwap, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply,
+    Matrix.reindex_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
+    Matrix.single, bondPairSwapEquiv, bondPairSwap, finProdFinEquiv,
+    Fin.divNat, Fin.modNat] at hentry
 
 /-- Canonical flattened-swap adjunction at dimensions four and sixteen
 fails the identity-ancilla semiconjugacy required of a coherent family.
