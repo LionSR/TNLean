@@ -630,6 +630,13 @@ Project every $a_{ji}$ onto $K_0$ and its orthogonal complement. The
 residual vectors define a completely positive map $R:M_m\to M_n$.
 All coefficient vectors outside this middle map are unchanged, and the
 rank of the whole root is $r_0+\operatorname{rank}C_R$.
+The coefficient-space decomposition is separately formalized by
+\leanid{KrausNoise.exists_orthogonal_noise_decomposition} in
+\texttt{TNLean/Algebra/OrthogonalNoiseDecomposition.lean}. It constructs
+the projection and residual, preserves all outside cross correlations,
+splits the middle Gram matrix, and proves the sum of span dimensions.
+The construction of the residual channel and its Choi-rank interpretation
+in this block setting remain separate obligations.
 
 Let $A=R(\rho)$ and let $B\in M_m$ represent the output trace functional
 of $R$, so that $\operatorname{tr}R(X)=\operatorname{tr}(BX)$.
