@@ -35,6 +35,7 @@ local instance collarAvoidanceHeightOne : Fact (1 < height) :=
 
 private def intVertex (a : ℤ × ℤ) : X := ((a.1 : ZMod width), (a.2 : ZMod height))
 
+omit [Fact (2 < width)] [Fact (2 < height)] in
 private theorem step_zero (R : Finset X) {a b : X} (e : TorusDualStep a b)
     (ha : a ∉ torusIncidentDualPlaquettes R) (hb : b ∉ torusIncidentDualPlaquettes R)
     (v : X) :
@@ -144,11 +145,12 @@ private theorem near_vertical (q a : ℤ × ℤ)
   have := abs_le.mp hy'
   constructor <;> omega
 
+omit [Fact (2 < width)] [Fact (2 < height)] in
 private theorem forbidden_horizontal (R : Finset X) (q a : ℤ × ℤ)
     (ha : intVertex a ∈ R)
     (hx : a.1 = q.1 ∨ a.1 = q.1 + 1) (hy : a.2 = q.2 - 1 ∨ a.2 = q.2 + 1) :
     intVertex q ∈ torusIncidentDualPlaquettes R ∨
-      ((intVertex q).1, (intVertex q).2 - 1) ∈ torusIncidentDualPlaquettes R := by
+      ((intVertex q : X).1, (intVertex q : X).2 - 1) ∈ torusIncidentDualPlaquettes R := by
   rcases hx with hx | hx <;> rcases hy with hy | hy
   all_goals
     have hm := ha
@@ -157,11 +159,12 @@ private theorem forbidden_horizontal (R : Finset X) (q a : ℤ × ℤ)
       Finset.mem_univ, true_and, sub_add_cancel]
     tauto
 
+omit [Fact (2 < width)] [Fact (2 < height)] in
 private theorem forbidden_vertical (R : Finset X) (q a : ℤ × ℤ)
     (ha : intVertex a ∈ R)
     (hx : a.1 = q.1 - 1 ∨ a.1 = q.1 + 1) (hy : a.2 = q.2 ∨ a.2 = q.2 + 1) :
     intVertex q ∈ torusIncidentDualPlaquettes R ∨
-      ((intVertex q).1 - 1, (intVertex q).2) ∈ torusIncidentDualPlaquettes R := by
+      ((intVertex q : X).1 - 1, (intVertex q : X).2) ∈ torusIncidentDualPlaquettes R := by
   rcases hx with hx | hx <;> rcases hy with hy | hy
   all_goals
     have hm := ha
@@ -205,12 +208,16 @@ theorem torusDualFlux_graphLabels_eq_one_on_incident_of_avoids
   intro f hf
   obtain ⟨z, rfl⟩ := torusEdgeEquiv.surjective f
   rcases z with v | v
-  · have hi := (incident_ofAdj R (torusGraph_adj_right v.1 v.2)).mp hf
+  · change torusGraphRegularLabels (torusDualFluxLabels g p).1
+      (torusDualFluxLabels g p).2 (torusRightEdge v) = 1
+    have hi := (incident_ofAdj R (torusGraph_adj_right v.1 v.2)).mp hf
     unfold torusGraphRegularLabels
     rw [show torusEdgeEquiv.symm (torusRightEdge v) = Sum.inl v from
       torusEdgeEquiv.symm_apply_apply (Sum.inl v)]
     simp only [hh v hi, inv_one, ite_self]
-  · have hi := (incident_ofAdj R (torusGraph_adj_up v.1 v.2)).mp hf
+  · change torusGraphRegularLabels (torusDualFluxLabels g p).1
+      (torusDualFluxLabels g p).2 (torusUpEdge v) = 1
+    have hi := (incident_ofAdj R (torusGraph_adj_up v.1 v.2)).mp hf
     unfold torusGraphRegularLabels
     rw [show torusEdgeEquiv.symm (torusUpEdge v) = Sum.inr v from
       torusEdgeEquiv.symm_apply_apply (Sum.inr v)]
@@ -231,7 +238,7 @@ private theorem right_transport (R : Finset X) (A : Finset (ℤ × ℤ))
   have hu : (torusDualFluxLabels g p).1 (intVertex q) = 1 := by
     simp only [torusDualFluxLabels, torusFluxPowerLabels, hz, zpow_zero]
   simp only [intVertex, Prod.fst_add, Prod.snd_add, Int.cast_add, Int.cast_one,
-    Int.cast_zero, add_zero] at hΓ ⊢
+    add_zero] at hΓ ⊢
   change torusNativeRightTransport _ (intVertex q) = 1
   rw [torusNativeRightTransport_torusGraphRegularLabels, hu]
 
@@ -250,7 +257,7 @@ private theorem up_transport (R : Finset X) (A : Finset (ℤ × ℤ))
   have hu : (torusDualFluxLabels g p).2 (intVertex q) = 1 := by
     simp only [torusDualFluxLabels, torusFluxPowerLabels, hz, zpow_zero]
   simp only [intVertex, Prod.fst_add, Prod.snd_add, Int.cast_add, Int.cast_one,
-    Int.cast_zero, add_zero] at hΓ ⊢
+    add_zero] at hΓ ⊢
   change torusNativeUpTransport _ (intVertex q) = 1
   rw [torusNativeUpTransport_torusGraphRegularLabels, hu, inv_one]
 
