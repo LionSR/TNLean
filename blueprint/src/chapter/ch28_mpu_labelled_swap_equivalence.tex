@@ -139,6 +139,41 @@
     spin, as in \cite[lines~1356--1366 and 2210--2234]{Cirac2017MPU}.
 \end{definition}
 
+\begin{lemma}[Stabilized transport for a retained physical involution]
+    \label{lem:mpu_general_physical_matrix_equivalence_transport}
+    \lean{MPOTensor.equivalentUnderPhysicalMatrixSymmetry_dagger_iff,
+        MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff,
+        MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff}
+    \notready
+    \uses{def:mpu_labelled_physical_matrix_equivalence,
+        lem:mpu_blocked_physical_involution_paths}
+    Let $Q$ be a unitary involution on a fixed labelled physical space.
+    For tensors $U,V$ with arbitrary virtual dimensions, output
+    multiplication identifies the stabilized comparisons
+    \[
+        U\simeq_{\dagger,Q}V\quad\Longleftrightarrow\quad
+        QU\simeq_{\dagger,I}QV\quad\text{if }Q^\dagger=Q,
+    \]
+    \[
+        U\simeq_{{\mathsf T},Q}V\quad\Longleftrightarrow\quad
+        QU\simeq_{{\mathsf T},I}QV\quad\text{if }Q^{\mathsf T}=Q,
+    \]
+    \[
+        U\simeq_{*,Q}V\quad\Longleftrightarrow\quad
+        QU\simeq_{*,I}QV\quad\text{if }\overline Q=Q.
+    \]
+    The same common positive identity ancilla and positive blocking
+    length witness each direction.
+\end{lemma}
+
+\begin{proof}\notready
+    The original MPU conditions are preserved in both directions
+    because $Q$ is unitary and $Q^2=I$. After attaching an identity
+    ancilla, the matrix $Q\otimes I_x$ has the same required properties.
+    Apply the full blocked-path comparison at each $x,k>0$ and quantify
+    over those unchanged witnesses.
+\end{proof}
+
 \begin{lemma}[Labelled-spin swap comparison with arbitrary common stabilization]
     \label{thm:mpu_labelled_swap_equivalence}
     \lean{MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff,
@@ -159,14 +194,11 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_physical_matrix_canonical_blocking,
-        lem:mpu_fixed_ancilla_swap_comparison}
-    Canonical blocking agrees with the explicit blocked physical matrix
-    by Lemma~\ref{lem:mpu_physical_matrix_canonical_blocking}.
-    Apply Lemma~\ref{lem:mpu_fixed_ancilla_swap_comparison} for each common
-    $x,k>0$, then quantify over those same witnesses. Left multiplication
-    by the unitary involution $\mathbb S$ preserves the original MPU
-    conditions in both directions.
+    \uses{lem:mpu_general_physical_matrix_equivalence_transport}
+    Apply Lemma~\ref{lem:mpu_general_physical_matrix_equivalence_transport}
+    with $Q=\mathbb S$. The species swap is a real symmetric unitary
+    involution, so all three matrix hypotheses hold. The transformed
+    tensors are exactly the displayed output products.
 \end{proof}
 
 \begin{definition}[Finite families of the three source examples]

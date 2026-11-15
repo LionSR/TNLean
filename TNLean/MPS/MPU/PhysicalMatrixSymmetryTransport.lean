@@ -146,7 +146,7 @@ theorem strictlyEquivalentUnderSymmetry_blockedTransposeWithPhysicalMatrix_iff
 
 /-- A real unitary involution preserves the conjugation path comparison
 through every natural blocking length and arbitrary endpoint virtual dimensions.
-Source: arXiv:1703.09188, `SSymmetries-conjugation` and `lemma:sym-trafo-swap`. -/
+Source: arXiv:1703.09188, `SSymmetries` and `lemma:sym-trafo-swap`. -/
 theorem strictlyEquivalentUnderSymmetry_blockedConjugationWithPhysicalMatrix_iff
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hQQ : Q * Q = 1) (hR : Q.map (starRingEnd ℂ) = Q)

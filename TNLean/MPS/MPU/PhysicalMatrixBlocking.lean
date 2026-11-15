@@ -61,6 +61,14 @@ private theorem reindex_mul {α β : Type*} [Fintype α] [Fintype β]
     Matrix.reindex e e (X * Y) = Matrix.reindex e e X * Matrix.reindex e e Y :=
   (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e X Y).symm
 
+private theorem block_applicable_pos (S : FiniteChainOperatorSymmetry d)
+    (hS : S.applicable = {N | 0 < N}) {k : ℕ} (hk : 0 < k) :
+    (S.block k).applicable = {N | 0 < N} := by
+  ext N
+  change (N * k ∈ S.applicable) ↔ 0 < N
+  rw [hS]
+  exact Nat.mul_pos_iff_of_pos_right hk
+
 namespace FiniteChainOperatorSymmetry
 
 /-- The canonically blocked adjunction action tested on every positive blocked
@@ -81,7 +89,8 @@ noncomputable def blockedTransposeWithPhysicalMatrix
   { (transposeWithPhysicalMatrix Q).block k with applicable := {N | 0 < N} }
 
 /-- The positive-chain blocked action is exactly the sandwich action of the
-blocked local matrix, including blocking length zero. -/
+blocked local matrix, including blocking length zero.
+Source: arXiv:1703.09188, blocking at lines 297--305. -/
 theorem blockedDaggerWithPhysicalMatrix_eq
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
     blockedDaggerWithPhysicalMatrix Q k =
@@ -96,7 +105,8 @@ theorem blockedDaggerWithPhysicalMatrix_eq
     ext σ τ
     simp [Matrix.reindex_apply]
 
-/-- The transposition analogue of the full blocked-matrix action identity. -/
+/-- The transposition analogue of the full blocked-matrix action identity.
+Source: arXiv:1703.09188, blocking at lines 297--305. -/
 theorem blockedTransposeWithPhysicalMatrix_eq
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
     blockedTransposeWithPhysicalMatrix Q k =
@@ -120,9 +130,7 @@ theorem daggerWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
   calc
     _ = blockedDaggerWithPhysicalMatrix Q k := by
       apply symmetry_eq
-      · ext N
-        change (0 < N * k) ↔ 0 < N
-        exact Nat.mul_pos_iff_of_pos_right hk
+      · exact block_applicable_pos _ rfl hk
       · intro N X
         rfl
     _ = _ := blockedDaggerWithPhysicalMatrix_eq Q k
@@ -137,9 +145,7 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
   calc
     _ = blockedTransposeWithPhysicalMatrix Q k := by
       apply symmetry_eq
-      · ext N
-        change (0 < N * k) ↔ 0 < N
-        exact Nat.mul_pos_iff_of_pos_right hk
+      · exact block_applicable_pos _ rfl hk
       · intro N X
         rfl
     _ = _ := blockedTransposeWithPhysicalMatrix_eq Q k
@@ -168,9 +174,7 @@ theorem conjugationSymmetry_block {k : ℕ} (hk : 0 < k) :
     (conjugationSymmetry d).block k =
       conjugationSymmetry (MPSTensor.blockPhysDim d k) := by
   apply symmetry_eq
-  · ext N
-    change (0 < N * k) ↔ 0 < N
-    exact Nat.mul_pos_iff_of_pos_right hk
+  · exact block_applicable_pos _ rfl hk
   · intro N X
     ext σ τ
     simp [FiniteChainOperatorSymmetry.block, conjugationSymmetry,
