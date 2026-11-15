@@ -19,8 +19,8 @@ proofs associated with arXiv:1708.00029, Theorem 4.1; the construction of a
 root-preserving direction remains a separate obligation.
 -/
 
-open scoped Matrix ComplexOrder Matrix.Norms.Frobenius
-open SemidefiniteProgram
+open scoped Matrix ComplexOrder Matrix.Norms.Frobenius Topology
+open SemidefiniteProgram Topology
 
 namespace Matrix
 
@@ -60,7 +60,9 @@ theorem exists_posSemidef_rank_lt_on_trace_zero_line {D : ℕ}
       rw [hTraceF]
       simp
     rwa [hEq] at h
-  have hZero : 0 ∈ S := by simpa only [S, F, zero_smul, add_zero] using hA.posSemidef
+  have hZero : 0 ∈ S := by
+    change (A + (0 : ℝ) • H).PosSemidef
+    simpa only [zero_smul, add_zero] using hA.posSemidef
   obtain ⟨t, ht⟩ := hCompact.exists_isGreatest ⟨0, hZero⟩
   have hPSD : (F t).PosSemidef := ht.1
   have hBoundary : ¬ (F t).PosDef := by
@@ -71,7 +73,10 @@ theorem exists_posSemidef_rank_lt_on_trace_zero_line {D : ℕ}
     have hf : Continuous f := continuous_const.add (continuous_id.smul continuous_const)
     have hCompat (s : ℝ) : HermitianMatrix.toMatrix (Fin D) (f s) = F s := by
       simp only [f, F, HermitianMatrix.toMatrix_add, HermitianMatrix.toMatrix_smul,
-        HermitianMatrix.toMatrix_ofMatrix, ← RCLike.real_smul_eq_coe_smul (K := ℂ)]
+        HermitianMatrix.toMatrix_ofMatrix]
+      ext i j
+      change A i j + (s : ℂ) * H i j = A i j + s • H i j
+      rw [RCLike.real_smul_eq_coe_mul (K := ℂ)]
     have hPD' : (HermitianMatrix.toMatrix (Fin D) (f t)).PosDef := by
       rwa [hCompat]
     have hInterior :=
@@ -119,9 +124,11 @@ private theorem rank_isometric_congruence {D r : ℕ}
       _ = B := by rw [hV, Matrix.one_mul, Matrix.mul_one]
   apply le_antisymm
   · exact (Matrix.rank_mul_le_left (V * B) Vᴴ).trans (Matrix.rank_mul_le_right V B)
-  · rw [← hRecover]
-    exact (Matrix.rank_mul_le_left (Vᴴ * (V * B * Vᴴ)) V).trans
-      (Matrix.rank_mul_le_right Vᴴ (V * B * Vᴴ))
+  · calc
+      B.rank = (Vᴴ * (V * B * Vᴴ) * V).rank := congrArg Matrix.rank hRecover.symm
+      _ ≤ (V * B * Vᴴ).rank :=
+        (Matrix.rank_mul_le_left (Vᴴ * (V * B * Vᴴ)) V).trans
+          (Matrix.rank_mul_le_right Vᴴ (V * B * Vᴴ))
 
 /-- A trace-zero Hermitian direction inside an isometrically represented
 positive face reaches a matrix of smaller rank. The ambient matrix may
@@ -142,7 +149,11 @@ theorem exists_posSemidef_rank_lt_on_isometric_face {D r : ℕ}
   refine ⟨t, ht, ?_, ?_⟩
   · rw [← hExpand]
     exact hPSD.mul_mul_conjTranspose_same V
-  · rw [← hExpand, rank_isometric_congruence V hV, rank_isometric_congruence V hV]
-    exact hRank
+  · calc
+      (V * G * Vᴴ + t • (V * J * Vᴴ)).rank = (G + t • J).rank := by
+        rw [← hExpand]
+        exact rank_isometric_congruence V hV _
+      _ < G.rank := hRank
+      _ = (V * G * Vᴴ).rank := (rank_isometric_congruence V hV G).symm
 
 end Matrix
