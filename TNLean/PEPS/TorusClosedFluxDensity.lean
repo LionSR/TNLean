@@ -16,7 +16,7 @@ of those closures therefore identifies its normalized regional density with
 the vacuum density on every connected, simply connected observation region.
 Nonvanishing of the actual cut is derived from regular G-isometry.
 
-Source: SCP10, arXiv:1001.3807v3, Lemma 6.14 and Theorem 6.7,
+Source: SCP10, arXiv:1001.3807v3, Theorem 6.7 and Lemma 6.14,
 local source lines 1995–2025 and 2199–2214.
 
 **Scope restriction (closed strings and simply connected regions):** Both
