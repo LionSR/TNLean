@@ -427,7 +427,7 @@ The following consequence is a mathematical argument. The trace-annihilation
 step is formalized above; the face-dimension and extremality argument here
 has not been formalized.
 
-Let $\mathcal F$ be a channel, let $p>0$, and suppose that
+Let $\mathcal F$ be a channel on $M_D(\mathbb C)$ with $D>0$, let $p>0$, and suppose that
 $\mathcal E=\mathcal F^p$ is irreducible. If $\mathcal F$ is an extreme
 point of the convex set of channels, then
 \begin{align}
@@ -443,10 +443,12 @@ $\operatorname{ran}C_{\mathcal F}$, and define $W$ using
 $\operatorname{ran}C_{\mathcal E}$ instead. Their real dimensions are
 $r^2$ and $s^2$. The linearization $L$ in
 (\ref{eq:dccsp17_power_differential}) carries $V$ into $W$.
-Indeed, if a completely positive map $G$ satisfies
-$0\le_{\rm CP}G\le_{\rm CP}c\mathcal F$, then for each $k<p$,
-$0\le_{\rm CP}\mathcal F^kG\mathcal F^{p-1-k}
-\le_{\rm CP}c\mathcal E$. Such positive $G$ span $V$ over the reals,
+Indeed, if a completely positive map $G$ satisfies, for some $c>0$,
+$0\le_{\mathrm{CP}}G\le_{\mathrm{CP}}c\mathcal F$, where
+$A\le_{\mathrm{CP}}B$ means that $B-A$ is completely positive, then
+for each $k<p$,
+$0\le_{\mathrm{CP}}\mathcal F^kG\mathcal F^{p-1-k}
+\le_{\mathrm{CP}}c\mathcal E$. Such positive $G$ span $V$ over the reals,
 so this order bound proves the claimed containment.
 
 If $r>s$, there is a nonzero $H\in V$ with $L(H)=0$. The preceding
@@ -465,6 +467,23 @@ argument: the set of roots of a fixed power is generally not convex, so
 minimizing Kraus rank within that set does not establish extremality in
 the full convex set of channels. The general selection problem remains
 open.
+
+In fact, an extreme root need not exist even for a divisible singular
+irreducible target. On $M_2(\mathbb C)$, take the completely depolarizing
+channel $\mathcal E(X)=\operatorname{tr}(X)I/2$. It is idempotent and
+irreducible, and hence has a channel $p$th root for every $p>0$.
+If $\mathcal F^p=\mathcal E$, then $\mathcal F$ commutes with
+$\mathcal E$. Trace preservation gives
+$\mathcal F(I)=\mathcal F\mathcal E(I)=\mathcal E\mathcal F(I)=I$,
+so $\mathcal F$ is unital. Every unital qubit channel is a convex
+combination of unitary conjugations.\footnote{See
+\href{https://arxiv.org/html/math-ph/0611057v3}{Wolf--Cirac,
+\emph{Dividing Quantum Channels}}, proof of Theorem~23.}
+No such root can be unitary, since a power of a unitary conjugation is
+invertible whereas $\mathcal E$ is singular. The convex combination
+therefore has at least two distinct terms, and $\mathcal F$ is not an
+extreme channel. This rules out universal extreme-root selection, not
+bounded-rank selection: $\mathcal E$ itself is a root of Choi rank four.
 
 \section{The zero eigenspace cannot simply be discarded}
 
