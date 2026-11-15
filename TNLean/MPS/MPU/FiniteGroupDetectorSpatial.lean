@@ -77,6 +77,16 @@ chosen explicitly and is not an assumption implicit in the printed claim. -/
 def intervalSiteFactor (u w : Γ) (a b k : ℕ) : Γ :=
   (if k = a then w else 1) * (if a ≤ k ∧ k ≤ b then u else 1)
 
+private theorem intervalSiteFactor_of_le_right (u w : Γ) (a b k : ℕ) (hkb : k ≤ b) :
+    intervalSiteFactor u w a b k = if a = k then w * u else if a < k then u else 1 := by
+  by_cases hak : a = k
+  · subst a
+    simp [intervalSiteFactor, hkb]
+  · by_cases hlt : a < k
+    · simp [intervalSiteFactor, Ne.symm hak, hkb, hak, hlt, Nat.le_of_lt hlt]
+    · have hnle : ¬ a ≤ k := by omega
+      simp [intervalSiteFactor, Ne.symm hak, hnle, hak, hlt]
+
 /-- The factor at spatial position `k` of the complete chronological detector
 word on the printed uniformly spaced cuts. Source: arXiv:2405.00439,
 `detectG`, lines 2108–2117, with the forward product ordering stated explicitly
@@ -96,8 +106,7 @@ private theorem spatialEndpointWord_left (u w : Γ) {m k : ℕ}
       if r + 1 = k then w * u else if r + 1 < k then u else 1).prod
     · refine congrArg List.prod (List.map_congr_left fun r hr ↦ ?_)
       have hrm := List.mem_range.mp hr
-      simp only [intervalSiteFactor]
-      split_ifs <;> first | omega | simp_all
+      exact intervalSiteFactor_of_le_right u w _ _ _ (by omega)
     · simpa [Nat.ne_of_gt hk0, hkm] using prod_range_spike u (w * u) m k
   have hb : ((List.range m).map fun r ↦
       (intervalSiteFactor u w (r + 1) (2 * m - r) k)⁻¹).prod =
@@ -106,25 +115,22 @@ private theorem spatialEndpointWord_left (u w : Γ) {m k : ℕ}
       if r + 1 = k then (w * u)⁻¹ else if r + 1 < k then u⁻¹ else 1).prod
     · refine congrArg List.prod (List.map_congr_left fun r hr ↦ ?_)
       have hrm := List.mem_range.mp hr
-      simp only [intervalSiteFactor]
-      split_ifs <;> first | omega | simp_all
+      rw [intervalSiteFactor_of_le_right u w _ _ _ (by omega)]
+      split_ifs <;> simp
     · simpa [Nat.ne_of_gt hk0, hkm] using prod_range_spike u⁻¹ (w * u)⁻¹ m k
   have hfirst : intervalSiteFactor u w 0 (2 * m + 1) k = u := by
     simp [intervalSiteFactor, Nat.ne_of_gt hk0, show k ≤ 2 * m + 1 by omega]
   have hlast : intervalSiteFactor u w 0 (m + 1) k = u := by
     simp [intervalSiteFactor, Nat.ne_of_gt hk0, show k ≤ m + 1 by omega]
   rw [spatialEndpointWord, hf, hb, hfirst, hlast, endpointConjugationWord]
+  have hu2 : u ^ (2 : ℤ) = u * u := by
+    rw [show (2 : ℤ) = 1 + 1 from rfl, zpow_add, zpow_one]
+  rw [hu2]
   group
 
 private theorem spatialEndpointWord_zero (u w : Γ) (m : ℕ) :
     spatialEndpointWord u w m 0 = 1 := by
-  have hf : ((List.range m).map fun r ↦
-      intervalSiteFactor u w (r + 1) (m + 2 + r) 0).prod = 1 := by
-    simp [intervalSiteFactor]
-  have hb : ((List.range m).map fun r ↦
-      (intervalSiteFactor u w (r + 1) (2 * m - r) 0)⁻¹).prod = 1 := by
-    simp [intervalSiteFactor]
-  simp [spatialEndpointWord, hf, hb, intervalSiteFactor]
+  simp [spatialEndpointWord, intervalSiteFactor]
 
 private theorem spatialEndpointWord_right (u w : Γ) {m k : ℕ} (hkm : m < k) :
     spatialEndpointWord u w m k = 1 := by
@@ -147,9 +153,10 @@ private theorem spatialEndpointWord_right (u w : Γ) {m k : ℕ} (hkm : m < k) :
   rw [spatialEndpointWord, hf, hb]
   simp only [intervalSiteFactor, hk0, ite_false, one_mul, Nat.zero_le, true_and]
   by_cases hk1 : k ≤ m + 1
-  · have hk : k = m + 1 := by omega
-    subst k
-    simp
+  · have hfirst : k ≤ 2 * m + 1 := by omega
+    have hmin : min m (2 * m + 1 - k) = m := by omega
+    have hexp : m - (k - (m + 2)) = m := by omega
+    simp only [hfirst, hk1, ite_true, hmin, hexp]
     group
   by_cases hk2 : k ≤ 2 * m + 1
   · have hmin : min m (2 * m + 1 - k) = 2 * m + 1 - k := by omega

@@ -73,9 +73,11 @@ import TNLean.MPS.MPU.FiniteAlphabetRows
 import TNLean.MPS.MPU.FiniteChainAdjoint
 import TNLean.MPS.MPU.FiniteChainConjugation
 import TNLean.MPS.MPU.FiniteGroupDetectorCircuit
+import TNLean.MPS.MPU.FiniteGroupDetectorClock
 import TNLean.MPS.MPU.FiniteGroupDetectorEndpoint
 import TNLean.MPS.MPU.FiniteGroupDetectorPhase
 import TNLean.MPS.MPU.FiniteGroupDetectorSpatial
+import TNLean.MPS.MPU.FiniteGroupDetectorTensor
 import TNLean.MPS.MPU.FiniteGroupSourceRanks
 import TNLean.MPS.MPU.FiniteWindowSupport
 import TNLean.MPS.MPU.FundamentalTheorem

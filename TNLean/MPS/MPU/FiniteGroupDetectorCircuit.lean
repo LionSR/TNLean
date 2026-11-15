@@ -56,6 +56,7 @@ noncomputable def pairedGate (σ : Bool → Equiv.Perm κ)
     Matrix (κ × Bool → Fin d) (κ × Bool → Fin d) ℂ :=
   rectKronecker fun s ↦ if σ s.2 k = s.1 then A s.2 else 1
 
+omit [Fintype κ] [DecidableEq κ] in
 private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hkl : k ≠ l) :
     Disjoint (pairedBond σ k) (pairedBond σ l) := by
   rw [Set.disjoint_left]
@@ -139,7 +140,8 @@ theorem pairCircuitLayer_op (σ : Bool → Bool → Equiv.Perm κ) (color : Bool
     fun _ _ h ↦ congrArg Prod.fst h
   have hn := S.nodup_toList.map hinj
   have hset : S.image (fun k ↦ (k, color)) = (S.toList.map fun k ↦ (k, color)).toFinset := by
-    simp
+    ext p
+    simp only [Finset.mem_image, List.mem_toFinset, List.mem_map, Finset.mem_toList]
   change (S.image fun k ↦ (k, color)).noncommProd
     (fun p ↦ pairedGate (σ color) A p.1) _ = _
   rw [hset, Finset.noncommProd_toFinset _ _ _ hn]
@@ -151,6 +153,7 @@ Source context: arXiv:2405.00439, Section V, lines 2081–2087. -/
 def dressedCircuitMatchings (τ : Equiv.Perm κ) (color leg : Bool) : Equiv.Perm κ :=
   if color then if leg then Equiv.refl κ else τ else Equiv.refl κ
 
+omit [Fintype κ] [DecidableEq κ] in
 private theorem pairedBond_subset_cells (σ : Bool → Equiv.Perm κ) (S : Finset κ)
     (k : κ) : pairedBond σ k ⊆ {s : κ × Bool | s.1 ∈ S} ↔
       σ false k ∈ S ∧ σ true k ∈ S := by
@@ -265,11 +268,11 @@ theorem circuitOp_dressedPairCircuit_single_entry (τ : Equiv.Perm κ)
     · have hpred := hentry k hk
       by_cases hka : k = a
       · subst k
-        simp [dressedCircuitMatchings, firstPairFactors, secondPairFactors, ha, hpred]
+        simp [dressedCircuitMatchings, firstPairFactors, ha, hpred]
       · simp [dressedCircuitMatchings, firstPairFactors, secondPairFactors, hk, hpred,
           hka, ← Matrix.mul_assoc, Unitary.star_mul_self_of_mem w.property]
     · have hka : k ≠ a := by intro h; subst k; exact hk ha
-      simp [dressedCircuitMatchings, firstPairFactors, secondPairFactors, hk, hka]
+      simp [dressedCircuitMatchings, hk, hka]
   · simp [dressedCircuitMatchings, firstPairFactors, secondPairFactors]
 
 /-- The successor permutation of the cells in their cyclic order. -/
@@ -285,13 +288,12 @@ theorem cellSuccessor_Icc_single_entry {M : ℕ} [NeZero M] (a b : Fin M)
   intro k hk
   have hk0 : k ≠ 0 := by
     intro heq
-    have hak := (Finset.mem_Icc.mp hk).1
-    simp only [Fin.le_def] at hak
-    subst k
-    simp at hak
+    have hak : a.val ≤ k.val := (Finset.mem_Icc.mp hk).1
+    have hval := congrArg Fin.val heq
+    simp only [Fin.val_zero] at hval
     omega
   change k - 1 ∈ Finset.Icc a b ↔ k ≠ a
-  simp only [Finset.mem_Icc, Fin.le_def, Fin.ext_iff,
+  simp only [Finset.mem_Icc, Fin.le_def,
     Fin.val_sub_one_of_ne_zero hk0]
   simp only [Finset.mem_Icc, Fin.le_def] at hk hab
   omega

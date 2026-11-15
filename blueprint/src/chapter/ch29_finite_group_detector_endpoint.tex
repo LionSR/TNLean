@@ -1,5 +1,47 @@
 \subsection{Endpoint dependence of the finite-group detector}
 
+\begin{lemma}[The even cyclic clock and shift obstruction]
+    \label{lem:mpug_detector_clock_tensor}
+    \lean{MPOTensor.FiniteGroupDetector.detectorShift,
+        MPOTensor.FiniteGroupDetector.detectorClock,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase_coe,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase_commute,
+        MPOTensor.FiniteGroupDetector.detectorClock_conjugation,
+        MPOTensor.FiniteGroupDetector.detectorShift_pow_order,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase_pow_order,
+        MPOTensor.FiniteGroupDetector.prod_spatialEndpointWord_clock_even,
+        MPOTensor.FiniteGroupDetector.detectorIntervalTensor,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord_eq_rectKronecker,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord_eq_smul,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord_clock_even}
+    Let $m=2j>0$, let $\zeta$ be a primitive $m$th root of unity, and let
+    $u,w$ be the cyclic shift and clock matrices on $\mathbb C^m$.
+    Choose the shift convention $w^{-1}uw=\zeta u$.
+    On a chain of $N>2m+2$ even--odd cells, use intervals
+    $T(a,b)=w_{(a,\mathrm{even})}\prod_{s\in[a,b]\times\{\mathrm{even},\mathrm{odd}\}}u_s$.
+    The complete chronological tensor word of
+    (\ref{eq:mpug_detector_spatial_word}) is
+    \begin{align}
+        D_m&=\zeta^{\binom m2}\mathbf 1=-\mathbf 1.
+        \label{eq:mpug_detector_clock_tensor}
+    \end{align}
+    Every site of the finite chain is included in this operator identity.
+\end{lemma}
+
+\begin{proof}
+    Clock phases are periodic modulo $m$, and direct conjugation gives
+    $w^{-1}uw=\zeta u$. At each odd site the dressing is the identity, so
+    the local interval word cancels. At an even site $1\leq r\leq m$,
+    (\ref{eq:mpug_detector_spatial_factors}) gives the scalar
+    $\zeta^{r-1}$; every other factor is the identity.
+    Multiplicativity of tensor products therefore gives
+    $D_m=\zeta^{\binom m2}\mathbf 1$.
+    Since $\zeta^m=1$ and $\zeta^j=-1$, the even-order reduction gives
+    (\ref{eq:mpug_detector_clock_tensor}).
+\end{proof}
+
 \begin{lemma}[The circuit realizing the dressed interval family]
     \label{lem:mpug_detector_endpoint_circuit}
     \lean{MPOTensor.FiniteGroupDetector.pairedBond,
