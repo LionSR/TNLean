@@ -82,6 +82,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
+
+- **Pattern:** From `0 < g ≤ 1`, `0 ≤ E0` and `(1024/g)*(E0/g+1) ≤ t`, derive
+  `aklvLogarithmicThreshold g ≤ t` by `aklvLogarithmicThreshold_le_div` and
+  `nlinarith` with the positivity of `E0/g` and `1024/g`.
+- **Helper:** `aklvLogarithmicThreshold_le_of_polynomial` in
+  `MPS/AreaLaw/AKLV/PhysicalRobustness.lean`.
+- **Occurrences:** Three polynomial-threshold corollaries, two in
+  `AKLV/PhysicalRobustness.lean` and one in `AKLV/ClippedFilter.lean`, now use
+  the helper.
+- **Decision:** The common content is a scalar inequality, so a lemma replaces
+  the repeated four-line argument.
+
 ### Reduced coordinate heights from a common denominator — promoted (2026-11-04)
 
 - **Pattern:** Convert a common Gaussian-integer denominator and a norm bound

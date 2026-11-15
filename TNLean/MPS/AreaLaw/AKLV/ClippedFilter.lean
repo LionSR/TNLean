@@ -270,10 +270,6 @@ theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
       mu g Ω hΩ hground hgap hg hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht
-  apply hsharp t
-  apply (aklvLogarithmicThreshold_le_div hg hg1).trans
-  have hnorm : 0 ≤ E0 / g := div_nonneg hE0 hg.le
-  have hcoef : 0 < 1024 / g := div_pos (by norm_num) hg
-  nlinarith
+  exact hsharp t (aklvLogarithmicThreshold_le_of_polynomial hg hg1 hE0 ht)
 
 end TNLean.MPS.AreaLaw

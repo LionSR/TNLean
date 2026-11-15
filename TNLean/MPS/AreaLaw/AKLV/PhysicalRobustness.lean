@@ -59,6 +59,17 @@ theorem aklvLogarithmicThreshold_le_div {g : ℝ} (hg : 0 < g) (hg1 : g ≤ 1) :
   simp only [div_eq_mul_inv, one_mul] at *
   linarith
 
+/-- The polynomial threshold `(1024/g)*(E0/g+1)` of AKLV, arXiv:1301.1162v1,
+Theorem `thm:Ht`, line 955, lies above the logarithmic threshold when `0 < g ≤ 1`
+and `0 ≤ E0`. -/
+theorem aklvLogarithmicThreshold_le_of_polynomial {g E0 t : ℝ} (hg : 0 < g) (hg1 : g ≤ 1)
+    (hE0 : 0 ≤ E0) (ht : (1024 / g) * (E0 / g + 1) ≤ t) :
+    aklvLogarithmicThreshold g ≤ t := by
+  apply (aklvLogarithmicThreshold_le_div hg hg1).trans
+  have hnorm : 0 ≤ E0 / g := div_nonneg hE0 hg.le
+  have hcoef : 0 < 1024 / g := div_pos (by norm_num) hg
+  nlinarith
+
 private theorem logarithmic_robustness_scalar_threshold {g t : ℝ}
     (hg : 0 < g) (hg1 : g ≤ 1) (ht : aklvLogarithmicThreshold g ≤ t) :
     0 < Real.exp (-t / 16) ∧ Real.exp (-t / 16) ≤ 1 ∧
@@ -291,11 +302,7 @@ theorem exists_aklv_physical_robustness {L q a s : ℕ}
     exists_aklv_logarithmic_robustness hs ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht
-  apply hsharp t
-  apply (aklvLogarithmicThreshold_le_div hg hg1).trans
-  have hnorm : 0 ≤ E0 / g := div_nonneg hE0 hg.le
-  have hcoef : 0 < 1024 / g := div_pos (by norm_num) hg
-  nlinarith
+  exact hsharp t (aklvLogarithmicThreshold_le_of_polynomial hg hg1 hE0 ht)
 
 open Classical in
 /-- The reference arrangement, clipping the two reference sums at the cuts `a+1` and
@@ -337,10 +344,6 @@ theorem exists_aklv_reference_physical_robustness {L q a s : ℕ}
       hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht
-  apply hsharp t
-  apply (aklvLogarithmicThreshold_le_div hg hg1).trans
-  have hnorm : 0 ≤ E0 / g := div_nonneg hE0 hg.le
-  have hcoef : 0 < 1024 / g := div_pos (by norm_num) hg
-  nlinarith
+  exact hsharp t (aklvLogarithmicThreshold_le_of_polynomial hg hg1 hE0 ht)
 
 end TNLean.MPS.AreaLaw

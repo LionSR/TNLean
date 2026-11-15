@@ -50,7 +50,7 @@
         TNLean.MPS.AreaLaw.aklv_normalization_le_two_block_regions}
     \leanok
     \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
-    In Definition~\ref{def:aklv_two_block_truncation}, take
+    Let $s\ge3$. In Definition~\ref{def:aklv_two_block_truncation}, take
     $l=a+2$ and $r=a+s-1$, and denote its three regional sums by $C_j$.
     Then $C_0=A_0+h_a$ and $C_2=h_{a+s-1}+A_2$.
     For arbitrary real $u,v$, the operators $C_0-u\Id$ and $C_2-v\Id$
@@ -74,8 +74,9 @@
     \lean{TNLean.MPS.AreaLaw.exists_aklv_normalized_two_block_residual}
     \leanok
     \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
-    The minima, vectors and energy of Lemma~\ref{thm:aklv_energy_normalization}
-    may be chosen before the real parameters $\eta,t$.
+    Let $s\ge3$. The minima, vectors and energy of
+    Lemma~\ref{thm:aklv_energy_normalization} may be chosen before the real
+    parameters $\eta,t$.
     For every $\eta\ge0$ and $t\ge\eta+11$, form the two-block family $B_T$
     with cuts $a+2,a+s-1$ and the same shifts $e_j$.
     Then $B_\varnothing=H$. For every partial exterior clipping $T$, let
