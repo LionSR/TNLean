@@ -165,7 +165,7 @@ theorem prod_eq_inv_cyclicInvariant (hB : ad.IsDomainWallFamily e B)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {g : G} {n : ℕ} (hg : g ^ n = 1)
     (x : X) :
     ∏ k ∈ Finset.range n, B g (g ^ k • g • x) (g ^ k • x) =
-      (((ScalarThreeCochain.cyclicInvariant fd.omega g n)⁻¹ : ℂˣ) : ℂ) := by
+      (((ScalarThreeCochain.cyclicInvariant fd.associatorScalar g n)⁻¹ : ℂˣ) : ℂ) := by
   rw [hB.prod_eq_prod_lSymbol fd hA hperm hg x, ← LSymbol.prod_div_eq_inv_cyclicInvariant
     (isCompatible_lSymbol (fd := fd) (ad := ad) hF hA hD hperm) x hg, Units.coe_prod]
 
@@ -177,7 +177,7 @@ theorem prod_eq_domainWallPhase (hB : ad.IsDomainWallFamily e B)
     (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g : G) (x : X) :
     ∏ k ∈ Finset.range (orderOf g), B g (g ^ k • g • x) (g ^ k • x) =
-      (ScalarThreeCochain.domainWallPhase fd.omega g : ℂ) := by
+      (ScalarThreeCochain.domainWallPhase fd.associatorScalar g : ℂ) := by
   rw [hB.prod_eq_inv_cyclicInvariant fd hF hA hD hperm (pow_orderOf_eq_one g) x,
     ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant]
 

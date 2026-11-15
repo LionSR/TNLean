@@ -130,7 +130,7 @@ theorem star_dotProduct_groupCommutator_mulVec_mpv_eq_omega {fd : FusionData F}
             (fun σ ↦ MPSTensor.mpv (A x) σ) →
       star (fun σ ↦ MPSTensor.mpv (A x) σ) ⬝ᵥ
           (Matrix.groupCommutator U₁ U₂ *ᵥ (fun σ ↦ MPSTensor.mpv (A x) σ)) =
-        ((fd.omega g g g * fd.omega g 1 g : ℂˣ) : ℂ) *
+        ((fd.associatorScalar g g g * fd.associatorScalar g 1 g : ℂˣ) : ℂ) *
           (star (fun σ : Fin L → Fin d ↦ MPSTensor.mpv (A x) σ) ⬝ᵥ
             (fun σ : Fin L → Fin d ↦ MPSTensor.mpv (A x) σ)) := by
   rw [← IsDomainWallAction.mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB hBA]

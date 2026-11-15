@@ -93,8 +93,9 @@ theorem isDressedProportional_rescale (fd : FusionData F) (β : ScalarCocycle G)
 
 /-- Rescaling the fusion tensors by `β` is compared to the original choice by `β`. -/
 theorem relativeScalar_rescale (hF : F.IsNormalRepresentation) (fd : FusionData F)
-    (β : ScalarCocycle G) : fd.relativeScalar (fd.rescale β) = β := by
+    (β : ScalarCocycle G) : fd.relativeScalar (fd.rescale β) = fun p ↦ Additive.ofMul (β p) := by
   funext ⟨g, h⟩
+  apply Additive.toMul.injective
   apply Units.ext
   exact (isDressedProportional_relativeScalar hF fd (fd.rescale β) g h).eq_of_forall_exists_ne_zero
     (isDressedProportional_rescale fd β g h)
@@ -104,7 +105,7 @@ theorem relativeScalar_rescale (hF : F.IsNormalRepresentation) (fd : FusionData 
 (arXiv:2502.20257, `eq:omegagauge`, `main.tex` lines 1541--1545). -/
 theorem omega_rescale (hF : F.IsNormalRepresentation) (fd : FusionData F)
     (β : ScalarCocycle G) :
-    (fd.rescale β).omega = ScalarThreeCochain.fusionGauge β fd.omega := by
+    (fd.rescale β).associatorScalar = ScalarThreeCochain.fusionGauge β fd.associatorScalar := by
   rw [omega_eq_fusionGauge hF fd (fd.rescale β), relativeScalar_rescale hF]
 
 end FusionData
@@ -173,7 +174,8 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     (fd fd' : FusionData F) (ad ad' : BlockActionData F A) :
     ad'.lSymbol fd' =
-      LSymbol.gauge (fd.relativeScalar fd') (ad.relativeScalar ad') (ad.lSymbol fd) := by
+      LSymbol.gauge (fun p ↦ (fd.relativeScalar fd' p).toMul) (ad.relativeScalar ad')
+        (ad.lSymbol fd) := by
   funext x g h
   have hγ := isDressedProportional_relativeScalar hA hperm ad ad'
   have hSame : ∀ (a : G) {n : ℕ} (C : MPSTensor d n) (y : X),
@@ -195,7 +197,7 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
   -- the tree fusing `g` with `h` and then acting
   have hfuse : MPSTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
-      (ad.fuseV fd g h x) (ad'.fuseV fd' g h x) (fd.relativeScalar fd' (g, h) *
+      (ad.fuseV fd g h x) (ad'.fuseV fd' g h x) ((fd.relativeScalar fd' (g, h)).toMul *
         ad.relativeScalar ad' (g * h) x) := by
     have hSameB : MPSTensor.SameMPV₂Pos
         (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
@@ -246,7 +248,7 @@ theorem exists_rescale_omega_eq_one_lSymbol_eq_one [Unique X] (hF : F.IsNormalRe
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (fd : FusionData F)
     (ad : BlockActionData F A) :
     ∃ (β : ScalarCocycle G) (γ : ActionTensorGauge G X),
-      (fd.rescale β).omega = 1 ∧ (ad.rescale γ).lSymbol (fd.rescale β) = 1 := by
+      (fd.rescale β).associatorScalar = 1 ∧ (ad.rescale γ).lSymbol (fd.rescale β) = 1 := by
   refine ⟨fun p ↦ (ad.lSymbol fd default p.1 p.2)⁻¹, 1, ?_⟩
   have hL : (ad.rescale 1).lSymbol (fd.rescale fun p ↦ (ad.lSymbol fd default p.1 p.2)⁻¹) = 1 := by
     rw [lSymbol_rescale hF hA hD hperm]
@@ -280,11 +282,11 @@ theorem exists_rescale_lSymbol_eq_inducedLSymbol (hF : F.IsNormalRepresentation)
     (hω : hF.anomalyClass = 0) (K : StabilizerRepresentatives G X x₀) (fd : FusionData F)
     (ad : BlockActionData F A) :
     ∃ (β : ScalarCocycle G) (γ : ActionTensorGauge G X),
-      (fd.rescale β).omega = 1 ∧
+      (fd.rescale β).associatorScalar = 1 ∧
         ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), groupCohomology.IsMulCocycle₂ ψ ∧
           (ad.rescale γ).lSymbol (fd.rescale β) = K.inducedLSymbol ψ := by
   obtain ⟨β, hβ⟩ := ((FusionData.isTrivialGaugeClass_omega_iff hF fd).2 hω).symm
-  have hω₁ : (fd.rescale β).omega = 1 := by
+  have hω₁ : (fd.rescale β).associatorScalar = 1 := by
     rw [FusionData.omega_rescale hF, hβ]
     rfl
   have hR : LSymbol.IsCompatible (LSymbol.gauge β (fun _ _ ↦ 1) (ad.lSymbol fd))
@@ -319,7 +321,7 @@ theorem exists_rescale_lSymbol_eq_inducedLSymbol_of_finite [Finite G]
     (hω : hF.anomalyClass = 0) (K : StabilizerRepresentatives G X x₀) (fd : FusionData F)
     (ad : BlockActionData F A) :
     ∃ (β : ScalarCocycle G) (γ : ActionTensorGauge G X),
-      (fd.rescale β).omega = 1 ∧
+      (fd.rescale β).associatorScalar = 1 ∧
         ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), groupCohomology.IsMulCocycle₂ ψ ∧
           (∀ p, ‖(ψ p : ℂ)‖ = 1) ∧
           (ad.rescale γ).lSymbol (fd.rescale β) = K.inducedLSymbol ψ := by

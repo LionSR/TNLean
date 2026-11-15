@@ -47,7 +47,7 @@ This file proves exactly these two steps.
   (`MPOTensor.GroupFamily.FusionData.daggerZeta_defzeta`), the second with
   $\zeta_{g,h}^{-1}$.
 
-As in `MPOTensor.GroupFamily.FusionData.omega`, the comparisons are
+As in `MPOTensor.GroupFamily.FusionData.associatorScalar`, the comparisons are
 boundary-dressed: they hold after multiplication by every sufficiently long
 word of $\mathcal U_g\mathcal U_h$, and the bare rectangular matrices are not
 asserted to be proportional (arXiv:1706.07329v2, Theorem 22).  The bond spaces

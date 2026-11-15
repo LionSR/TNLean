@@ -182,7 +182,7 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1246--1339; the r
 `eq:omega_and_Ls` of arXiv:2502.20257 at `(g, g, g)`, as at its line 5121. -/
 theorem czx_omega_eq_lSymbol_ratio (fd : czxFamily.FusionData)
     (ad : BlockActionData czxFamily czxBlock) (x : Multiplicative (Fin 2)) :
-    fd.omega czxGen czxGen czxGen =
+    fd.associatorScalar czxGen czxGen czxGen =
       ad.lSymbol fd x czxGen czxGen * ad.lSymbol fd x czxGen 1 /
         (ad.lSymbol fd (czxGen • x) czxGen czxGen * ad.lSymbol fd x 1 czxGen) :=
   LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PermutationCochains
 import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.MPDO.ActionTensorReduction
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
@@ -34,7 +35,9 @@ class is trivial.
 ## Main results
 
 * `MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol`: the compatibility relation
-  `eq:omega_and_Ls` with the anomaly three-cochain of lane `FusionData.omega`.
+  `eq:omega_and_Ls` with the associator of the fusion tensors.
+* `MPOTensor.GroupFamily.ActionData.d₂₃_lSymbol`: its cochain differential is the
+  constant-function image of the associator.
 * `MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant`:
   **Theorem.** An invariant normal state forces the anomaly to be trivial.
 * `MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass`:
@@ -171,9 +174,10 @@ such scalar exists, which does not happen for a normal invariant state.
 
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913; arXiv:2203.12563,
 `sec:PBC`, line 1091. -/
-noncomputable def lSymbol : LSymbol G Unit := fun _ g h ↦
-  MPSTensor.dressedScalar (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h)
-    (ad.fuseV fd g h)
+noncomputable def lSymbol : G × G → PermutationCochains.representation G Unit ℂˣ :=
+  PermutationCochains.twoCochainEquiv fun _ g h ↦
+    MPSTensor.dressedScalar (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h)
+      (ad.fuseV fd g h)
 
 variable {fd ad}
 
@@ -186,7 +190,8 @@ Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913. -/
 theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     (hinv : ∀ g, FixesMPV (F.tensor g) A) (x : Unit) (g h : G) :
     MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
-      (ad.actV g h) (ad.fuseV fd g h) (ad.lSymbol fd x g h) := by
+      (ad.actV g h) (ad.fuseV fd g h)
+      (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd) x g h) := by
   have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h) (ad.fuseV fd g h) z := by
     obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h
@@ -271,7 +276,8 @@ trees differ by one L-symbol or by `ω` against long words, and comparing the tw
 nonvanishing word gives the identity. -/
 theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNormal A)
     (hD : 0 < D) (hinv : ∀ g, FixesMPV (F.tensor g) A) :
-    LSymbol.IsCompatible (ad.lSymbol fd) fd.omega := by
+    LSymbol.IsCompatible (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd))
+      fd.associatorScalar := by
   intro x g h k
   have hfix : ∀ a, FixesMPV (F.tensor a) A := hinv
   set B3 := actTensor (F.tripleTensor g h k) A
@@ -324,7 +330,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) D))
       (ad.actV g (h * k) * kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) D)
-      (ad.lSymbol fd x h k) := by
+      (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd) x h k) := by
     rw [actV_mul_reduce_k, ← fuseV_inner_eq]
     simpa only [Matrix.mul_assoc] using H1'
   rw [fuseV_mul_reduce_k] at H3
@@ -346,6 +352,17 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
   rw [hk]
   linear_combination heq
 
+/-- The L-symbol cochain has differential equal to the constant-function image of
+the associator (arXiv:2502.20257, `eq:omega_and_Ls`, lines 1920--1923). -/
+theorem d₂₃_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNormal A)
+    (hD : 0 < D) (hinv : ∀ g, FixesMPV (F.tensor g) A) :
+    groupCohomology.d₂₃ (PermutationCochains.representation G Unit ℂˣ) (ad.lSymbol fd) =
+      fun p ↦ Additive.ofMul (fun _ : Unit ↦ fd.associatorScalar p.1 p.2.1 p.2.2) := by
+  simpa only [Equiv.apply_symm_apply] using
+    (PermutationCochains.d₂₃_eq_const_iff
+      (PermutationCochains.twoCochainEquiv.symm (ad.lSymbol fd)) fd.associatorScalar).2
+      (isCompatible_lSymbol hF hA hD hinv)
+
 /-- **An invariant normal state forces a trivial anomaly.** If a group of matrix product
 operators with normal tensors fixes the periodic vector of a normal matrix product state of
 positive bond dimension at every positive length, then the anomaly three-cocycle of every
@@ -356,7 +373,7 @@ Source: arXiv:2502.20257, `main.tex` line 1545 and lines 1920--1925; arXiv:2203.
 theorem _root_.MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant
     (hF : F.IsNormalRepresentation) (fd : FusionData F) (hA : Kraus.IsNormal A) (hD : 0 < D)
     (hinv : ∀ g, FixesMPV (F.tensor g) A) :
-    ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   obtain ⟨ad⟩ := nonempty_actionData (F := F) hA hD hinv
   exact LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq
     (ad.isCompatible_lSymbol hF hA hD hinv) () fun _ ↦ rfl
@@ -372,7 +389,7 @@ Source: arXiv:2502.20257, `main.tex` line 1545; arXiv:2203.12563, `REsubmission.
 line 738. -/
 theorem IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass
     (hF : F.IsNormalRepresentation) (fd : FusionData F)
-    (hω : ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega) :
+    (hω : ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar) :
     ¬ ∃ (D : ℕ) (A : MPSTensor d D), 0 < D ∧ Kraus.IsNormal A ∧
       ∀ g, FixesMPV (F.tensor g) A :=
   fun ⟨_, _, hD, hA, hinv⟩ ↦ hω (hF.isTrivialGaugeClass_omega_of_invariant fd hA hD hinv)

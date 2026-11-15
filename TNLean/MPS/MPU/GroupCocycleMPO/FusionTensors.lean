@@ -280,7 +280,7 @@ Source: arXiv:2203.12563, line 2044 ("these fusion tensors satisfy Eq. (3cocygro
 with the same fusion tensors). The cochain is that of arXiv:2502.20257, display preceding
 `eq:3-cocycle`, whose orientation agrees with `3cocygroup` (lines 664–679). -/
 theorem fusionData_omega {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω) :
-    (fusionData e hω).omega = ω⁻¹ := by
+    (fusionData e hω).associatorScalar = ω⁻¹ := by
   funext g h k
   have hz := fusionData_isAssociator e hω g h k
   have hex : ∃ z : ℂ, z ≠ 0 ∧ (fusionData e hω).IsAssociator g h k z :=

@@ -851,7 +851,7 @@ theorem mul_eq_omega_of_mul_self_eq_one (hF : F.IsNormalRepresentation)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (hg : g * g = 1)
     (hAB : ad.IsDomainWallAction g hxy hyx eAB eBA cAB)
     (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
-    cAB * cBA = ((fd.omega g g g * fd.omega g 1 g : ℂˣ) : ℂ) := by
+    cAB * cBA = ((fd.associatorScalar g g g * fd.associatorScalar g 1 g : ℂˣ) : ℂ) := by
   rw [mul_eq_lSymbol_of_mul_self_eq_one (fd := fd) hA hperm hg hAB hBA]
   subst hxy
   rw [LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one
@@ -867,7 +867,8 @@ theorem mpo_mulVec_twoWallMPV_eq_omega (hF : F.IsNormalRepresentation)
     (hBA : ad.IsDomainWallAction g hyx hxy eBA eAB cBA) :
     ∃ N : ℕ, ∀ k l n : ℕ, N ≤ k → N ≤ l →
       mpo (F.tensor g) (k + 1 + l + 1 + n) *ᵥ twoWallMPV (A x) eAB (A y) eBA =
-        ((fd.omega g g g * fd.omega g 1 g : ℂˣ) : ℂ) • twoWallMPV (A y) eBA (A x) eAB := by
+        ((fd.associatorScalar g g g * fd.associatorScalar g 1 g : ℂˣ) : ℂ) • twoWallMPV (A y)
+          eBA (A x) eAB := by
   obtain ⟨N, hN⟩ := mpo_mulVec_twoWallMPV hperm hAB hBA
   refine ⟨N, fun k l n hk hl ↦ ?_⟩
   rw [hN k l n hk hl, mul_eq_omega_of_mul_self_eq_one (fd := fd) hF hA hD hperm hg hAB hBA]

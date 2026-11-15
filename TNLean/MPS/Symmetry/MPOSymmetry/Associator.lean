@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.GroupCohomologyDegreeThree
+import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
 import TNLean.MPS.Core.ReductionComposition
 import TNLean.MPS.Core.ReductionResidualComposition
 import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
@@ -36,7 +37,8 @@ arXiv:2502.20257, `main.tex` lines 1506--1535, with `F^> = W` and `F^< = V`.
 * `MPOTensor.GroupFamily.FusionData`: a choice of fusion tensors.
 * `MPOTensor.GroupFamily.FusionData.IsAssociator`: the left-dressed
   characterization of the value `ω(g,h,k)`.
-* `MPOTensor.GroupFamily.FusionData.omega`: the anomaly three-cochain.
+* `MPOTensor.GroupFamily.FusionData.associatorScalar`: the anomaly three-cochain.
+* `MPOTensor.GroupFamily.FusionData.omega`: its cocycle in the inhomogeneous complex.
 
 ## Main results
 
@@ -55,6 +57,8 @@ The three-cochain is not normalized here.
 
 open scoped Matrix Kronecker
 open TNLean.Algebra
+
+open scoped TNLean.Algebra.ScalarCohomology
 
 namespace MPOTensor
 
@@ -336,7 +340,7 @@ happen for a normal representation.
 
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
-noncomputable def omega : ScalarThreeCochain G := fun g h k ↦
+noncomputable def associatorScalar (g h k : G) : ℂˣ :=
   MPSTensor.dressedScalar (F.tripleTensor g h k).toMPSTensor (fd.leftV g h k) (fd.rightV g h k)
 
 variable {fd}
@@ -346,7 +350,7 @@ variable {fd}
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
 theorem isAssociator_omega (hF : F.IsNormalRepresentation) (g h k : G) :
-    fd.IsAssociator g h k (fd.omega g h k) := by
+    fd.IsAssociator g h k (fd.associatorScalar g h k) := by
   have hex : ∃ z : ℂ, z ≠ 0 ∧ fd.IsAssociator g h k z :=
     (fd.isReduction_left g h k).exists_isDressedProportional (fd.isReduction_right g h k)
       (hF.isNormal _) (hF.sameMPV₂Pos_tripleTensor g h k)
@@ -355,7 +359,7 @@ theorem isAssociator_omega (hF : F.IsNormalRepresentation) (g h k : G) :
 /-- **Uniqueness of `ω(g,h,k)`**: any scalar satisfying the characterizing dressed
 identity is `ω(g,h,k)`. -/
 theorem eq_omega_of_isAssociator (hF : F.IsNormalRepresentation) {g h k : G} {z : ℂ}
-    (hz : fd.IsAssociator g h k z) : z = fd.omega g h k :=
+    (hz : fd.IsAssociator g h k z) : z = fd.associatorScalar g h k :=
   MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero hz
     (isAssociator_omega hF g h k) (exists_leftV_mul_evalWord_ne_zero hF g h k)
 
@@ -368,7 +372,7 @@ The five fusion trees of the fourfold product are reductions onto the tensor of
 comparing the two paths around the pentagon on a nonvanishing word gives the
 identity. -/
 theorem isCocycle_omega (hF : F.IsNormalRepresentation) :
-    ScalarThreeCochain.IsCocycle fd.omega := by
+    ScalarThreeCochain.IsCocycle fd.associatorScalar := by
   intro g h k l
   have hS : ∀ N, 0 < N → ∀ a b : G,
       mpo (F.tensor a) N * mpo (F.tensor b) N = mpo (F.tensor (a * b)) N :=
@@ -488,16 +492,17 @@ representation.
 Source: the scalar gauge freedom of the fusion tensors, arXiv:2502.20257,
 `eq:scalar_fus_ten`, `main.tex` lines 1500--1504, under which
 `F^> ↦ β F^>` and `F^< ↦ β⁻¹ F^<`. -/
-noncomputable def relativeScalar (fd fd' : FusionData F) : ScalarCocycle G := fun p ↦
-  MPSTensor.dressedScalar (mulTensor (F.tensor p.1) (F.tensor p.2)).toMPSTensor (fd.V p.1 p.2)
-    (fd'.V p.1 p.2)
+noncomputable def relativeScalar (fd fd' : FusionData F) :
+    G × G → Rep.ofMulDistribMulAction G ℂˣ := fun p ↦
+  Additive.ofMul (MPSTensor.dressedScalar
+    (mulTensor (F.tensor p.1) (F.tensor p.2)).toMPSTensor (fd.V p.1 p.2) (fd'.V p.1 p.2))
 
 /-- Two choices of fusion tensors differ, against long words, by the scalar
 `relativeScalar`. -/
 theorem isDressedProportional_relativeScalar (hF : F.IsNormalRepresentation)
     (fd fd' : FusionData F) (g h : G) :
     MPSTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-      (fd.V g h) (fd'.V g h) (fd.relativeScalar fd' (g, h)) := by
+      (fd.V g h) (fd'.V g h) ((fd.relativeScalar fd' (g, h)).toMul) := by
   have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (fd.V g h) (fd'.V g h) z :=
     (fd.isReduction g h).exists_isDressedProportional (fd'.isReduction g h)
@@ -508,7 +513,9 @@ theorem isDressedProportional_relativeScalar (hF : F.IsNormalRepresentation)
 `eq:omegagauge`, `main.tex` lines 1541--1545): if `β` compares two choices of
 fusion tensors, then `ω'(g,h,k) = β(g,hk) β(h,k) / (β(g,h) β(gh,k)) ω(g,h,k)`. -/
 theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionData F) :
-    fd'.omega = ScalarThreeCochain.fusionGauge (fd.relativeScalar fd') fd.omega := by
+    fd'.associatorScalar =
+      ScalarThreeCochain.fusionGauge (fun p ↦ (fd.relativeScalar fd' p).toMul)
+        fd.associatorScalar := by
   funext g h k
   have hβ := isDressedProportional_relativeScalar hF fd fd'
   have hS : ∀ N, 0 < N → ∀ a b : G,
@@ -516,21 +523,22 @@ theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionDat
     fun N hN a b ↦ hF.operator_mul a b N hN
   have hleft : MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
       (fd.leftV g h k) (fd'.leftV g h k)
-      (fd.relativeScalar fd' (g, h) * fd.relativeScalar fd' (g * h, k)) :=
+      ((fd.relativeScalar fd' (g, h)).toMul * (fd.relativeScalar fd' (g * h, k)).toMul) :=
     (((hβ g h).mulTensor_kronId (F.tensor k)).mul_left (fd.V (g * h) k)).trans
       ((hβ (g * h) k).pullback ((fd'.isReduction g h).mulTensor_kronId (F.tensor k))
         (sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
           simp only [mpo_mulTensor, ← hS N hN]))
   have hright : MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
       (fd.rightV g h k) (fd'.rightV g h k)
-      (fd.relativeScalar fd' (h, k) * fd.relativeScalar fd' (g, h * k)) :=
+      ((fd.relativeScalar fd' (h, k)).toMul * (fd.relativeScalar fd' (g, h * k)).toMul) :=
     ((((hβ h k).mulTensor_idKron (F.tensor g)).mul_left (fd.V g (h * k))).trans
       ((hβ g (h * k)).pullback ((fd'.isReduction h k).mulTensor_idKron (F.tensor g))
         (sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
           simp only [mpo_mulTensor, ← hS N hN]))).of_intertwine
       (mulTensorAssocMatrix_mul_invMatrix _ _ _) (mulTensorAssocInvMatrix_mul_matrix _ _ _)
       (fun i ↦ mulTensor_mul_assocMatrix _ _ _ i.divNat i.modNat) |>.mul_left _
-  have hne : ((fd.relativeScalar fd' (h, k) * fd.relativeScalar fd' (g, h * k) : ℂˣ) : ℂ) ≠ 0 :=
+  have hne : (((fd.relativeScalar fd' (h, k)).toMul *
+      (fd.relativeScalar fd' (g, h * k)).toMul : ℂˣ) : ℂ) ≠ 0 :=
     Units.ne_zero _
   have key := eq_omega_of_isAssociator (fd := fd) hF
     ((hleft.trans (isAssociator_omega (fd := fd') hF g h k)).trans (hright.symm (by
@@ -540,18 +548,41 @@ theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionDat
     Units.val_div_eq_div_val, ← key]
   field_simp
 
+/-- The differential of the relative fusion cochain is the ratio of the
+associators (arXiv:2502.20257, `eq:omegagauge`, lines 1541--1545). -/
+theorem d₂₃_relativeScalar (hF : F.IsNormalRepresentation) (fd fd' : FusionData F) :
+    groupCohomology.d₂₃ (Rep.ofMulDistribMulAction G ℂˣ) (fd.relativeScalar fd') =
+      fun p ↦ Additive.ofMul
+        (fd'.associatorScalar p.1 p.2.1 p.2.2 / fd.associatorScalar p.1 p.2.1 p.2.2) := by
+  funext ⟨g, h, k⟩
+  apply Additive.toMul.injective
+  change (fd.relativeScalar fd' (h, k)).toMul /
+      (fd.relativeScalar fd' (g * h, k)).toMul *
+      (fd.relativeScalar fd' (g, h * k)).toMul /
+      (fd.relativeScalar fd' (g, h)).toMul = _
+  rw [omega_eq_fusionGauge hF fd fd']
+  simp [ScalarThreeCochain.fusionGauge, ScalarThreeCochain.coboundary,
+    div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc]
+
 /-- **The cohomology class of `ω` does not depend on the fusion tensors**
 (arXiv:2502.20257, `eq:omegagauge` and the sentence following it, `main.tex`
 lines 1541--1546). -/
 theorem omega_cohomologousTo (hF : F.IsNormalRepresentation) (fd fd' : FusionData F) :
-    ScalarThreeCochain.CohomologousTo fd'.omega fd.omega :=
-  ⟨fd.relativeScalar fd', (omega_eq_fusionGauge hF fd fd').symm⟩
+    ScalarThreeCochain.CohomologousTo fd'.associatorScalar fd.associatorScalar :=
+  ⟨fun p ↦ (fd.relativeScalar fd' p).toMul, (omega_eq_fusionGauge hF fd fd').symm⟩
 
 /-- For an exact representation by simple injective tensors, `ω` is a
 three-cocycle (arXiv:2502.20257, `eq:3-cocycle`). -/
 theorem isCocycle_omega_of_isRepresentation (hF : F.IsRepresentation) :
-    ScalarThreeCochain.IsCocycle fd.omega :=
+    ScalarThreeCochain.IsCocycle fd.associatorScalar :=
   isCocycle_omega hF.isNormalRepresentation
+
+/-- The associator of normal MPO tensors as a cocycle in Mathlib's inhomogeneous
+complex, with trivial action on complex units (arXiv:2502.20257, `eq:3-cocycle`).
+Its scalar values compare the two fusion trees on long words. -/
+noncomputable def omega (fd : FusionData F) (hF : F.IsNormalRepresentation) :
+    groupCohomology.cocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 :=
+  ScalarThreeCochain.toCocycles ⟨fd.associatorScalar, isCocycle_omega hF⟩
 
 end FusionData
 

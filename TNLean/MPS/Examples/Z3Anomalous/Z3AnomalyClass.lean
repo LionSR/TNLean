@@ -269,7 +269,7 @@ theorem z3FusionData_isAssociator_gen_sq_gen :
 
 /-- For the fusion tensors of `z3FusionData`, `ω(g,1,g) = 1`: both trees are the
 recorded fusion tensor of `U ⊗ U`. -/
-theorem z3FusionData_omega_gen_one_gen : z3FusionData.omega z3Gen 1 z3Gen = 1 := by
+theorem z3FusionData_omega_gen_one_gen : z3FusionData.associatorScalar z3Gen 1 z3Gen = 1 := by
   have hL : z3FusionData.leftV z3Gen 1 z3Gen = uu_compression.left oneSlotMem := by
     change uu_compression.left oneSlotMem * kronId (1 : Matrix (Fin 2) (Fin 2) ℂ) 2 = _
     rw [kronId_one, Matrix.mul_one]
@@ -292,14 +292,14 @@ theorem z3FusionData_omega_gen_one_gen : z3FusionData.omega z3Gen 1 z3Gen = 1 :=
 
 /-- `ω(g,g,g) = ω₃²` for the fusion tensors of `z3FusionData`. -/
 theorem z3FusionData_omega_gen_gen_gen :
-    (z3FusionData.omega z3Gen z3Gen z3Gen : ℂ) = eisensteinOmega ^ 2 := by
+    (z3FusionData.associatorScalar z3Gen z3Gen z3Gen : ℂ) = eisensteinOmega ^ 2 := by
   rw [← GroupFamily.FusionData.eq_omega_of_isAssociator family_isNormalRepresentation
     z3FusionData_isAssociator_gen_gen_gen, eisensteinToComplex_apply]
   linear_combination -eisensteinOmega_quadratic
 
 /-- `ω(g,g²,g) = 1` for the fusion tensors of `z3FusionData`. -/
 theorem z3FusionData_omega_gen_sq_gen :
-    z3FusionData.omega z3Gen (z3Gen * z3Gen) z3Gen = 1 := by
+    z3FusionData.associatorScalar z3Gen (z3Gen * z3Gen) z3Gen = 1 := by
   apply Units.ext
   rw [← GroupFamily.FusionData.eq_omega_of_isAssociator family_isNormalRepresentation
     z3FusionData_isAssociator_gen_sq_gen]
@@ -308,7 +308,7 @@ theorem z3FusionData_omega_gen_sq_gen :
 /-! ### The anomaly class -/
 
 theorem cyclicInvariant_z3FusionData :
-    (ScalarThreeCochain.cyclicInvariant z3FusionData.omega z3Gen 3 : ℂ) =
+    (ScalarThreeCochain.cyclicInvariant z3FusionData.associatorScalar z3Gen 3 : ℂ) =
       eisensteinOmega ^ 2 := by
   have h2 : z3Gen ^ 2 = z3Gen * z3Gen := sq z3Gen
   simp only [ScalarThreeCochain.cyclicInvariant, Finset.prod_range_succ, Finset.prod_range_zero,
@@ -322,7 +322,7 @@ product `ω(g,1,g) ω(g,g,g) ω(g,g²,g)` is the primitive cube root of unity `�
 Source: arXiv:2502.20257, `eq:omegagauge`; arXiv:2405.00439,
 `Papers/2405.00439/MPU-DW.tex` line 2040 (the classes `ω_j` of `ℤ_n`). -/
 theorem cyclicInvariant_omega_z3 (fd : family.FusionData) :
-    (ScalarThreeCochain.cyclicInvariant fd.omega z3Gen 3 : ℂ) = eisensteinOmega ^ 2 := by
+    (ScalarThreeCochain.cyclicInvariant fd.associatorScalar z3Gen 3 : ℂ) = eisensteinOmega ^ 2 := by
   rw [(GroupFamily.FusionData.omega_cohomologousTo family_isNormalRepresentation
     z3FusionData fd).cyclicInvariant_eq z3Gen_pow_three, cyclicInvariant_z3FusionData]
 
@@ -338,7 +338,7 @@ fusion tensors, the anomaly three-cocycle is not cohomologous to the trivial one
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040; arXiv:2502.20257,
 `eq:omegagauge` and the sentence following it. -/
 theorem not_isTrivialGaugeClass_omega_z3 (fd : family.FusionData) :
-    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   refine ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one z3Gen_pow_three ?_
   intro h
   have := cyclicInvariant_omega_z3 fd

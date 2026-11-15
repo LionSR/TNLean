@@ -282,7 +282,8 @@ theorem czxFusionData_isAssociator_gen_gen_gen :
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 481--499 and
 1128--1136. -/
-theorem czxFusionData_omega_gen_gen_gen : czxFusionData.omega czxGen czxGen czxGen = -1 := by
+theorem czxFusionData_omega_gen_gen_gen : czxFusionData.associatorScalar czxGen czxGen czxGen =
+  -1 := by
   apply Units.ext
   rw [← GroupFamily.FusionData.eq_omega_of_isAssociator czxFamily_isNormalRepresentation
     czxFusionData_isAssociator_gen_gen_gen]
@@ -290,7 +291,7 @@ theorem czxFusionData_omega_gen_gen_gen : czxFusionData.omega czxGen czxGen czxG
 
 /-- `ω(g,1,g) = 1` for the fusion tensors of `czxFusionData`, which are trivial
 whenever a factor is the identity: both fusion trees are `V̂`. -/
-theorem czxFusionData_omega_gen_one_gen : czxFusionData.omega czxGen 1 czxGen = 1 := by
+theorem czxFusionData_omega_gen_one_gen : czxFusionData.associatorScalar czxGen 1 czxGen = 1 := by
   have hL : czxFusionData.leftV czxGen 1 czxGen = czxFusionVHat := by
     change czxFusionVHat * kronId (1 : Matrix (Fin 2) (Fin 2) ℂ) 2 = czxFusionVHat
     rw [kronId_one, Matrix.mul_one]
@@ -312,7 +313,7 @@ theorem czxFusionData_omega_gen_one_gen : czxFusionData.omega czxGen 1 czxGen = 
 /-- The gauge-invariant product `ω(g,1,g) ω(g,g,g)` of the fusion tensors of
 `czxFusionData` is `-1`. -/
 theorem cyclicInvariant_czxFusionData :
-    ScalarThreeCochain.cyclicInvariant czxFusionData.omega czxGen 2 = -1 := by
+    ScalarThreeCochain.cyclicInvariant czxFusionData.associatorScalar czxGen 2 = -1 := by
   simp only [ScalarThreeCochain.cyclicInvariant, Finset.prod_range_succ, Finset.prod_range_zero,
     one_mul, pow_zero, pow_one, czxFusionData_omega_gen_one_gen, czxFusionData_omega_gen_gen_gen]
 
@@ -322,7 +323,7 @@ gauge-invariant product `ω(g,1,g) ω(g,g,g)` is `-1`.
 Source: arXiv:2502.20257, `eq:omegagauge`; arXiv:2405.00439,
 `Papers/2405.00439/MPU-DW.tex` lines 1128--1136. -/
 theorem cyclicInvariant_omega_czx (fd : czxFamily.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega czxGen 2 = -1 := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar czxGen 2 = -1 := by
   rw [(GroupFamily.FusionData.omega_cohomologousTo czxFamily_isNormalRepresentation
     czxFusionData fd).cyclicInvariant_eq czxGen_pow_two, cyclicInvariant_czxFusionData]
 
@@ -333,7 +334,7 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1128--1136 ("the 
 symmetry ..., which has an anomaly, i.e., `ω = -1`"); arXiv:2502.20257,
 `eq:omegagauge` and the sentence following it. -/
 theorem not_isTrivialGaugeClass_omega_czx (fd : czxFamily.FusionData) :
-    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   refine ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one czxGen_pow_two ?_
   rw [cyclicInvariant_omega_czx]
   intro h

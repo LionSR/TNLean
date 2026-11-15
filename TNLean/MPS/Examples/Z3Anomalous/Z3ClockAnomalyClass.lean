@@ -386,7 +386,8 @@ fusion tensors of the rescaled clock family, the anomaly three-cocycle has trivi
 Source: arXiv:2502.20257, `main.tex` line 1545 (an invariant normal state forces a trivial
 anomaly); arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040 (the class `ω_0`). -/
 theorem isTrivialGaugeClass_omega_clockFamily (hα : α ^ 3 = omega)
-    (fd : (clockFamily α).FusionData) : ScalarThreeCochain.IsTrivialGaugeClass fd.omega :=
+    (fd : (clockFamily α).FusionData) : ScalarThreeCochain.IsTrivialGaugeClass
+      fd.associatorScalar :=
   (clockFamily_isNormalRepresentation hα).isTrivialGaugeClass_omega_of_invariant fd
     (clockState_isNormal hα) (by norm_num) (fixesMPV_clockState hα)
 
@@ -408,7 +409,7 @@ the anomalous representation `{1, U, U†}`.
 Source: arXiv:2502.20257, `eq:omegagauge`; arXiv:2405.00439, line 2040. -/
 theorem cyclicInvariant_omega_clockFamily (hα : α ^ 3 = omega)
     (fd : (clockFamily α).FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega (Multiplicative.ofAdd 1) 3 = 1 :=
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar (Multiplicative.ofAdd 1) 3 = 1 :=
   ScalarThreeCochain.cyclicInvariant_eq_one_of_isTrivialGaugeClass
     (isTrivialGaugeClass_omega_clockFamily hα fd) (by decide)
 

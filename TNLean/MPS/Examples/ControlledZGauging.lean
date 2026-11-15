@@ -259,7 +259,7 @@ theorem fixesMPV_zeroState : ∀ g, GroupFamily.FixesMPV (czFamily.tensor g) zer
 `{1, U}` the anomaly three-cocycle has trivial gauge class (arXiv:2502.20257, line 3873;
 the invariant product state and line 1545). -/
 theorem isTrivialGaugeClass_omega_czFamily (fd : czFamily.FusionData) :
-    ScalarThreeCochain.IsTrivialGaugeClass fd.omega :=
+    ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar :=
   czFamily_isNormalRepresentation.isTrivialGaugeClass_omega_of_invariant fd zeroState_isNormal
     one_pos fixesMPV_zeroState
 

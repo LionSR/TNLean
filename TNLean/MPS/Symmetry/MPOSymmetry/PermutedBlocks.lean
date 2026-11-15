@@ -346,7 +346,7 @@ set_option maxHeartbeats 800000 in
 `Lˣ_{g,hk} Lˣ_{h,k} = ω(g,h,k) L^{k • x}_{g,h} Lˣ_{gh,k}`. -/
 theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) :
-    LSymbol.IsCompatible (ad.lSymbol fd) fd.omega := by
+    LSymbol.IsCompatible (ad.lSymbol fd) fd.associatorScalar := by
   intro x g h k
   set B3 := actTensor (F.tripleTensor g h k) (A x)
   have hcar3 : CarriesMPV (F.tripleTensor g h k) (A x) (A (g • h • k • x)) :=
@@ -441,7 +441,7 @@ theorem IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed
     (hF : F.IsNormalRepresentation) (fd : FusionData F) (hA : ∀ x, Kraus.IsNormal (A x))
     (hD : ∀ x, 0 < D x) (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x)))
     {H : Type} [Group H] (f : H →* G) (x : X) (hfix : ∀ a, f a • x = x) :
-    ScalarThreeCochain.IsTrivialGaugeClass (ScalarThreeCochain.comap f fd.omega) := by
+    ScalarThreeCochain.IsTrivialGaugeClass (ScalarThreeCochain.comap f fd.associatorScalar) := by
   obtain ⟨ad⟩ := nonempty_blockActionData (F := F) hA hD hperm
   exact LSymbol.isTrivialGaugeClass_comap_of_isCompatible
     (ad.isCompatible_lSymbol hF hA hD hperm) x f hfix

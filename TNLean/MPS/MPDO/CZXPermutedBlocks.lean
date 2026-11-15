@@ -253,7 +253,7 @@ theorem fusionData_isAssociator :
 
 Source: arXiv:2502.20257, `main.tex` lines 4695--4698. -/
 theorem fusionData_omega_gen_gen_gen :
-    fusionData.omega orderTwoGen orderTwoGen orderTwoGen = -1 := by
+    fusionData.associatorScalar orderTwoGen orderTwoGen orderTwoGen = -1 := by
   apply Units.ext
   rw [← GroupFamily.FusionData.eq_omega_of_isAssociator family_isNormalRepresentation
     fusionData_isAssociator]
@@ -261,7 +261,7 @@ theorem fusionData_omega_gen_gen_gen :
 
 private theorem omega_eq_one_aux {h₁ h₂ h₃ : Multiplicative (ZMod 2)}
     (h : fusionData.leftV h₁ h₂ h₃ = fusionData.rightV h₁ h₂ h₃) :
-    fusionData.omega h₁ h₂ h₃ = 1 :=
+    fusionData.associatorScalar h₁ h₂ h₃ = 1 :=
   GroupFamily.FusionData.omega_eq_one_of_leftV_eq_rightV family_isNormalRepresentation h
 
 theorem kronId_fusionV_one : kronId fusionV 1 = fusionV := by
@@ -283,7 +283,7 @@ private theorem fusionV_mul_idKron_one :
 
 Source: arXiv:2502.20257, `main.tex` lines 4695--4698. -/
 theorem fusionData_omega (h₁ h₂ h₃ : Multiplicative (ZMod 2)) :
-    fusionData.omega h₁ h₂ h₃ =
+    fusionData.associatorScalar h₁ h₂ h₃ =
       if h₁ = orderTwoGen ∧ h₂ = orderTwoGen ∧ h₃ = orderTwoGen then -1 else 1 := by
   revert h₁ h₂ h₃
   refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two
@@ -380,7 +380,7 @@ product `ω(g,e,g) ω(g,g,g)` is `-1`.
 Source: arXiv:2502.20257, `eq:omegagauge`, `main.tex` lines 1541--1546, and lines
 4695--4698. -/
 theorem cyclicInvariant_omega (fd : family.FusionData) :
-    ScalarThreeCochain.cyclicInvariant fd.omega orderTwoGen 2 = -1 := by
+    ScalarThreeCochain.cyclicInvariant fd.associatorScalar orderTwoGen 2 = -1 := by
   apply Units.ext
   have h := GroupFamily.FusionData.cyclicInvariant_omega_map_of_comap_eq_orderTwo fd
     family_isNormalRepresentation (MonoidHom.id _) rfl fusionData_isAssociator
@@ -391,7 +391,7 @@ three-cocycle is not cohomologous to the trivial one.
 
 Source: arXiv:2502.20257, `main.tex` lines 4695--4699 and `eq:omegagauge`. -/
 theorem not_isTrivialGaugeClass_omega (fd : family.FusionData) :
-    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.omega := by
+    ¬ ScalarThreeCochain.IsTrivialGaugeClass fd.associatorScalar := by
   refine ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one
     orderTwoGen_pow_two ?_
   rw [cyclicInvariant_omega]
@@ -663,7 +663,7 @@ its anomaly.
 
 Source: arXiv:2502.20257, `eq:omega_and_Ls`, `main.tex` lines 1920--1923. -/
 theorem blockActionData_isCompatible :
-    LSymbol.IsCompatible (blockActionData.lSymbol fusionData) fusionData.omega :=
+    LSymbol.IsCompatible (blockActionData.lSymbol fusionData) fusionData.associatorScalar :=
   blockActionData.isCompatible_lSymbol family_isNormalRepresentation block_isNormal
     (fun _ ↦ one_pos) carriesMPV
 
@@ -678,7 +678,7 @@ theorem blockActionData_lSymbol (x g h : Multiplicative (ZMod 2)) :
       if g = orderTwoGen ∧ h = orderTwoGen then (-1) ^ (Multiplicative.toAdd x).val else 1 := by
   have hc := blockActionData_isCompatible
   have hω : ∀ a b c : Multiplicative (ZMod 2), ¬ (a = orderTwoGen ∧ b = orderTwoGen ∧
-      c = orderTwoGen) → fusionData.omega a b c = 1 := fun a b c habc ↦ by
+      c = orderTwoGen) → fusionData.associatorScalar a b c = 1 := fun a b c habc ↦ by
     rw [fusionData_omega, ite_eq_right_iff.mpr fun h ↦ absurd h habc]
   have hee : ∀ y, blockActionData.lSymbol fusionData y 1 1 = 1 := lSymbol_one_one
   -- The compatibility relation at `(e, e, g)` and at `(g, e, e)` reduces the remaining
@@ -722,7 +722,7 @@ Source: arXiv:2502.20257, `eq:omega_and_Ls`, `main.tex` lines 1920--1923, at `(g
 in line 5121. -/
 theorem omega_eq_lSymbol_ratio (fd : family.FusionData) (ad : BlockActionData family block)
     (x : Multiplicative (ZMod 2)) :
-    fd.omega orderTwoGen orderTwoGen orderTwoGen =
+    fd.associatorScalar orderTwoGen orderTwoGen orderTwoGen =
       ad.lSymbol fd x orderTwoGen orderTwoGen * ad.lSymbol fd x orderTwoGen 1 /
         (ad.lSymbol fd (orderTwoGen • x) orderTwoGen orderTwoGen *
           ad.lSymbol fd x 1 orderTwoGen) :=
@@ -742,7 +742,7 @@ theorem lSymbol_ratio_mul_omega_eq_neg_one (fd : family.FusionData)
     (ad : BlockActionData family block) :
     ad.lSymbol fd 1 orderTwoGen orderTwoGen * ad.lSymbol fd 1 orderTwoGen 1 /
         (ad.lSymbol fd orderTwoGen orderTwoGen orderTwoGen * ad.lSymbol fd 1 1 orderTwoGen) *
-      fd.omega orderTwoGen 1 orderTwoGen = -1 := by
+      fd.associatorScalar orderTwoGen 1 orderTwoGen = -1 := by
   have hr := omega_eq_lSymbol_ratio fd ad 1
   rw [smul_eq_mul, mul_one] at hr
   rw [← hr, mul_comm]

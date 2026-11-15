@@ -563,7 +563,8 @@ is the gauge-change half of the proof of `eq:inv_omega`
 $\widetilde\omega(g,h,k)$ with $\overline{\omega(k^{-1},h^{-1},g^{-1})}^{\,-1}$, by
 taking the dagger of the two fusion trees, is not proved here. -/
 theorem omega_eq_fusionGauge_daggerZeta :
-    fd.omega = ScalarThreeCochain.fusionGauge (fd.daggerZeta hF hc) (fd.dagger hF hc).omega :=
+    fd.associatorScalar = ScalarThreeCochain.fusionGauge (fd.daggerZeta hF hc) (fd.dagger hF
+      hc).associatorScalar :=
   omega_eq_fusionGauge hF.isNormalRepresentation (fd.dagger hF hc) fd
 
 end MPOTensor.GroupFamily.FusionData

@@ -220,7 +220,7 @@ theorem cyclicInvariant_cyclicCocycle_one :
 fusion tensors of `family`, the cyclic invariant of its anomaly three-cochain is the inverse
 of the cyclic invariant of `ω_1`, `ω₃² = ω₃⁻¹`. -/
 theorem cyclicInvariant_omega_z3_mul_cyclicCocycle_one (fd : family.FusionData) :
-    (cyclicInvariant fd.omega z3Gen 3 : ℂ) *
+    (cyclicInvariant fd.associatorScalar z3Gen 3 : ℂ) *
       (cyclicInvariant (cyclicCocycle 3 1) z3Gen 3 : ℂ) = 1 := by
   rw [cyclicInvariant_omega_z3, cyclicInvariant_cyclicCocycle_one, ← pow_succ]
   have h := eisensteinOmega_quadratic
@@ -242,7 +242,7 @@ anomaly three-cochain of the representation built from `ω_1` is `ω_1⁻¹`, wh
 
 Source: arXiv:2203.12563, line 2044 (the fusion tensors of `ftexam` satisfy `3cocygroup` with
 the inverse cocycle) and lines 2224–2225; `GroupCocycle.fusionData_omega` for `ℤ₃`. -/
-theorem cocycleFusionData_omega : cocycleFusionData.omega = cyclicCocycle 3 2 := by
+theorem cocycleFusionData_omega : cocycleFusionData.associatorScalar = cyclicCocycle 3 2 := by
   rw [cocycleFusionData, GroupCocycle.fusionData_omega, cyclicCocycle_inv]
 
 /-- **The two representations have the same cyclic invariant**: for every choice of fusion
@@ -256,8 +256,9 @@ pair. The invariance itself is not formalized.
 Project result: `cocycleFusionData_omega` and `cyclicInvariant_omega_z3_mul_cyclicCocycle_one`,
 with source lines as there. -/
 theorem cyclicInvariant_cocycleFusionData (fd : family.FusionData) :
-    cyclicInvariant cocycleFusionData.omega z3Gen 3 = cyclicInvariant fd.omega z3Gen 3 := by
-  have hinv : cyclicInvariant cocycleFusionData.omega z3Gen 3 =
+    cyclicInvariant cocycleFusionData.associatorScalar z3Gen 3 = cyclicInvariant
+      fd.associatorScalar z3Gen 3 := by
+  have hinv : cyclicInvariant cocycleFusionData.associatorScalar z3Gen 3 =
       (cyclicInvariant (cyclicCocycle 3 1) z3Gen 3)⁻¹ := by
     rw [cocycleFusionData, GroupCocycle.fusionData_omega]
     simp [cyclicInvariant, Finset.prod_inv_distrib]
@@ -270,7 +271,7 @@ theorem cyclicInvariant_cocycleFusionData (fd : family.FusionData) :
 `j = 2`, `a = 1` entry of the printed `n = 3` table, with the fusion tensors of arXiv:2203.12563,
 `ftexam`. It is the phase of `{1, U, U†}` for every choice of its fusion tensors. -/
 theorem domainWallPhase_cocycleFusionData :
-    (domainWallPhase cocycleFusionData.omega z3Gen : ℂ) =
+    (domainWallPhase cocycleFusionData.associatorScalar z3Gen : ℂ) =
       Complex.exp ((2 * Real.pi / 3) * Complex.I) := by
   rw [cocycleFusionData_omega]
   exact domainWallPhase_cyclicCocycle_three.2.2.1

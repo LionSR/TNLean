@@ -470,7 +470,8 @@
 
 \begin{lemma}[Compatibility of the L-symbol with the anomaly]
     \label{thm:mpug_single_block_l_compatibility}
-    \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol}
+    \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol,
+        MPOTensor.GroupFamily.ActionData.d₂₃_lSymbol}
     \leanok
     \uses{def:mpug_single_block_l_symbol, thm:mpug_single_block_l_symbol_spec,
         def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
@@ -481,6 +482,8 @@
         L_{g,hk}L_{h,k}
          & =\omega(g,h,k)\,L_{g,h}L_{gh,k}.
     \end{align}
+    Equivalently, the two-cochain $c_L(g,h)(x)=L_{g,h}$ with one-point
+    permutation coefficients satisfies $dc_L(g,h,k)(x)=\omega(g,h,k)$.
 \end{lemma}
 
 \begin{proof}\leanok
