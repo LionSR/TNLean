@@ -71,21 +71,26 @@ The proof of Theorem~4.3 takes $\ell=s^2/2$ and $s=O(\log^2d/\varepsilon)$.
 With $t$ of order $1/\varepsilon$ and $s\ge1/\varepsilon$, one has
 $w=O(s)$ and $-\log\Delta$ is of order $s^{3/2}\varepsilon^{1/2}$. The rank
 bound~(\ref{eq:aklv13_igl_rank}) at $\ell$ of order $s^2$ gives
-\begin{align*}
+\begin{align}
     \log D=O\bigl(s(\log d+\log s)\bigr).
-\end{align*}
-Lines~840--841 display the factor $\log(s^2+s)$, and lines~842--843 drop it
-when $s$ is chosen; lines~831--836 quote $\Delta$ and $D$ from a commented
-earlier form of Lemma~4.2 (lines~700--707), with the same logarithm. Since
-$s\ge1/\varepsilon$, the dropped term $\log s$ is at least
+    \label{eq:aklv13_igl_square_degree_rank}
+\end{align}
+The source keeps this logarithm: lines~840--841 display the factor
+$\log(s^2+s)$, and lines~842--843 drop it when $s$ is chosen;
+lines~831--836 quote $\Delta$ and $D$ from a commented earlier form of
+Lemma~4.2 (lines~700--707), with the same logarithm. Since
+$s\ge1/\varepsilon$, the dropped term $\log s$
+of~(\ref{eq:aklv13_igl_square_degree_rank}) is at least
 $\log(1/\varepsilon)$. The condition $D\Delta\le1/2$ then requires
 $\sqrt{s\varepsilon}\ge C(\log d+\log s)$, so $s$ must be of order
 $(\log d+\log(1/\varepsilon))^2/\varepsilon$ rather than
 $\log^2d/\varepsilon$. With this choice,
-\begin{align*}
+\begin{align}
     \log D=O\Bigl(\frac{(\log d+\log(1/\varepsilon))^3}{\varepsilon}\Bigr).
-\end{align*}
-This is the rate proved in the repository; see Section~\ref{sec:igl_formal}.
+    \label{eq:aklv13_igl_source_rate}
+\end{align}
+The rate~(\ref{eq:aklv13_igl_source_rate}) is the rate proved in the
+repository; see Section~\ref{sec:igl_formal}.
 
 \section{No parameter choice avoids it}
 
@@ -152,15 +157,16 @@ non-uniformity in $g$ is
 
 The entropy bounds proved from the source's construction are, with
 $u=1+\log q+\log(1/g)$,
-\begin{align*}
+\begin{align}
     S_k(\Omega)\le\frac Cg u^3
-\end{align*}
+    \label{eq:aklv13_igl_formal_entropy}
+\end{align}
 at every cut, with a universal constant $C$: for frustration-free chains in
 \leanid{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_physical_entropy_bound}
 (\doclink{TNLean/MPS/AreaLaw/AKLV/FrustrationFreeEntropy}), and for frustrated
 chains in \leanid{TNLean.MPS.AreaLaw.exists_aklv_physical_entropy_bound}
 (\doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalEntropy}). Since $\log q\ge\log2$,
-$u\le(1+1/\log2)(\log q+\log(1/g))$, so these bounds match
+$u\le(1+1/\log2)(\log q+\log(1/g))$, so the bounds~(\ref{eq:aklv13_igl_formal_entropy}) match
 (\ref{eq:aklv13_igl_lower}) up to the universal constant. The lemma
 \leanid{TNLean.MPS.AreaLaw.aklv_gap_logarithm_not_uniformly_absorbable}
 records that $u^3$ is not a bounded multiple of $\log^32$, and

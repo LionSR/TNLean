@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.ExponentialBounds
-import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Analysis.Real.Sqrt
 
 /-!
 # The inverse-gap logarithm is forced by the AKLV certificates

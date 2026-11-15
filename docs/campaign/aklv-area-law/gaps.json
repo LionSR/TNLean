@@ -141,6 +141,11 @@
       "result": "Theorem 4.3 and Lemma 6.3, the entropy rate",
       "issue": 9838,
       "stage": "ff:4",
+      "prs": {
+        "TNLean": [
+          10630
+        ]
+      },
       "title": "The entropy bound keeps a logarithm of the inverse gap",
       "summary": "The printed entropy rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε) drops a logarithm that the paper's rank lemma keeps; no parameter choice in the paper's certificates removes it, and the rate with (log <i>d</i> + log(1/ε))<sup>3</sup>/ε is proved.",
       "context": "The entropy across a cut is bounded by a constant times log <i>D</i>, where <i>D</i> is the operator Schmidt rank of a Chebyshev polynomial <i>K</i> of degree ℓ of the clipped Hamiltonian, whose squared shrinking factor Δ satisfies <i>D</i>Δ ≤ 1/2. The window has <i>s</i> terms and the clipped norm is at most <i>s</i> + 2<i>t</i> with <i>t</i> of order 1/ε.",
