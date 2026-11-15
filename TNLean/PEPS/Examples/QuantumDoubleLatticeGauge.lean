@@ -16,8 +16,7 @@ its adjacent physical spins. The local and hole holonomies transform by
 conjugation. Distinct bond actions commute even for a nonabelian group.
 The native simple torus has both periods at least three.
 
-This is the placement and covariance part of issue #8947. The normalized
-Hamiltonian, full common-kernel classification, comparison with the PEPS
+The normalized Hamiltonian, full common-kernel classification, comparison with the PEPS
 parent and global elementary-to-K renormalization remain separate obligations;
 see `docs/paper-gaps/scp10_quantum_double_local_hamiltonian.tex`.
 
