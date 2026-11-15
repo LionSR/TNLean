@@ -36,7 +36,7 @@ theorem exists_mem_unitaryGroup_apply_embedding_eq {ι κ : Type*} [Fintype ι] 
     [DecidableEq κ] {V : Matrix ι κ ℂ} (hV : V.IsIsometry) (e : κ ↪ ι) :
     ∃ U ∈ Matrix.unitaryGroup ι ℂ, ∀ i k, U i (e k) = V i k := by
   classical
-  letI : Finite κ := Finite.of_injective e e.injective
+  let : Finite κ := Finite.of_injective e e.injective
   let J : Matrix ι κ ℂ := (1 : Matrix ι ι ℂ).submatrix id e
   have hJ : Jᴴ * J = 1 := by
     rw [show Jᴴ = (1 : Matrix ι ι ℂ).submatrix e id by simp [J]]
