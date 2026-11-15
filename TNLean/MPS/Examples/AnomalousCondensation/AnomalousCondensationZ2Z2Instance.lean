@@ -61,6 +61,8 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
+open groupCohomology
+
 namespace Z2Z2Condensation
 
 open MPOTensor MPOTensor.GroupCocycle TNLean.Algebra.ScalarThreeCochain
@@ -105,7 +107,7 @@ Bridge: arXiv:2203.12563, lines 2204–2222 (the operators `U_g` of the construc
 type-II cocycle `ω(a,b,c) = (−1)^{a₁ b₂ c₂}` of `ℤ₂ × ℤ₂` (line 1848). -/
 theorem mpo_symTensor_eq_groupCocycle (g : Multiplicative (ZMod 2 × ZMod 2)) :
     mpo (symTensor (kleinEquiv g)) N =
-      mpo (tensor kleinEquiv kleinCocycle g) N * secondZDressing g N := by
+      mpo (tensor kleinEquiv (iCocycles _ 3 kleinCocycle) g) N * secondZDressing g N := by
   ext s t
   rw [secondZDressing, Matrix.mul_diagonal, mpo_symTensor_apply, mpo_tensor_klein_apply]
   have hshift : physicalShift (kleinEquiv g) N t = shift kleinEquiv g N t := by

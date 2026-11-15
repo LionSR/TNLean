@@ -42,6 +42,8 @@ noncomputable section
 open scoped Matrix Kronecker
 open MPOTensor MPSTensor TNLean.Algebra
 
+open groupCohomology
+
 namespace Z2Z2Condensation
 
 /-- Two original physical sites per blocked site, with the original bond dimension. -/
@@ -338,7 +340,8 @@ The values are computed from the blocked fusion witnesses above. -/
 theorem cyclicInvariant_omega_blockedFamily (fd : blockedFamily.FusionData)
     (g : Multiplicative (ZMod 2 × ZMod 2)) :
     ScalarThreeCochain.cyclicInvariant fd.associatorScalar g 2 =
-      ScalarThreeCochain.cyclicInvariant ScalarThreeCochain.kleinCocycle g 2 := by
+      ScalarThreeCochain.cyclicInvariant (scalarCocycleValue₃ (ScalarThreeCochain.kleinCocycle)) g 2
+        := by
   rw [cyclicInvariant_kleinCocycle]
   revert g
   refine Multiplicative.forall_zmod_two_prod ?_ ?_ ?_ ?_
@@ -351,7 +354,8 @@ theorem cyclicInvariant_omega_blockedFamily (fd : blockedFamily.FusionData)
 /-- The original two-site-blocked family has the mixed type-II class for every
 choice of fusion tensors. Source: arXiv:2203.12563, lines 1845–1886. -/
 theorem omega_blockedFamily_cohomologousTo_kleinCocycle (fd : blockedFamily.FusionData) :
-    ScalarThreeCochain.CohomologousTo fd.associatorScalar ScalarThreeCochain.kleinCocycle :=
+    ScalarThreeCochain.CohomologousTo fd.associatorScalar (scalarCocycleValue₃
+      (ScalarThreeCochain.kleinCocycle)) :=
   (ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq
     (fd.isCocycle_omega blockedFamily_isNormalRepresentation)
     ScalarThreeCochain.kleinCocycle_isCocycle).2 (cyclicInvariant_omega_blockedFamily fd)

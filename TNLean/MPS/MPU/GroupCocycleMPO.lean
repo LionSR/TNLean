@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MonomialMatrix
-import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.GroupCohomologyScalar
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.GroupRepresentation
 
@@ -76,6 +76,8 @@ requires injectivity, is not claimed; the four operator laws are stated directly
 
 noncomputable section
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 open scoped BigOperators Matrix
 
 namespace MPOTensor.GroupCocycle
@@ -125,7 +127,7 @@ end MPOTensor.GroupCocycle
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
+open groupCohomology TNLean.Algebra
 
 variable {G : Type} [Group G] {n : ℕ}
 
@@ -134,14 +136,15 @@ variable {G : Type} [Group G] {n : ℕ}
 /-- The diagonal two-site gate `W_g |k,l⟩ = ω(g,l,l⁻¹k) |k,l⟩`.
 
 Source: arXiv:2203.12563, lines 2060–2068. -/
-def wGate [DecidableEq G] (ω : ScalarThreeCochain G) (g : G) : Matrix (G × G) (G × G) ℂ :=
-  Matrix.diagonal fun kl ↦ (ω g kl.2 (kl.2⁻¹ * kl.1) : ℂ)
+def wGate [DecidableEq G] (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) : Matrix (G ×
+  G) (G × G) ℂ :=
+  Matrix.diagonal fun kl ↦ (scalarCochainValue₃ ω g kl.2 (kl.2⁻¹ * kl.1) : ℂ)
 
 /-- For a normalized three-cocycle the gate of the identity is the identity.
 
 Source: arXiv:2203.12563, line 2068 ("`W_e = id` for normalized 3-cocycles"). -/
-theorem wGate_one [DecidableEq G] {ω : ScalarThreeCochain G}
-    (hω : ScalarThreeCochain.IsNormalized ω) :
+theorem wGate_one [DecidableEq G] {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hω : ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω)) :
     wGate ω 1 = 1 := by
   simp [wGate, hω.1]
 
@@ -155,19 +158,21 @@ contributes the gate entry `ω(g, j, j⁻¹ l)`. The first physical index is the
 the second the input column.
 
 Source: arXiv:2203.12563, lines 2204–2222 (the tensor `T̂_g`). -/
-def tensor (ω : ScalarThreeCochain G) (g : G) : MPOTensor n n :=
+def tensor (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) : MPOTensor n n :=
   fun i j ↦ Matrix.of fun l r ↦
-    if i = siteShift e g j ∧ r = j then (ω g (e.symm j) ((e.symm j)⁻¹ * e.symm l) : ℂ)
+    if i = siteShift e g j ∧ r = j then (scalarCochainValue₃ ω g (e.symm j) ((e.symm j)⁻¹ * e.symm
+      l) : ℂ)
     else 0
 
-theorem tensor_apply (ω : ScalarThreeCochain G) (g : G) (i j l r : Fin n) :
+theorem tensor_apply (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) (i j l r : Fin n) :
     tensor e ω g i j l r =
-      if i = siteShift e g j ∧ r = j then (ω g (e.symm j) ((e.symm j)⁻¹ * e.symm l) : ℂ)
+      if i = siteShift e g j ∧ r = j then (scalarCochainValue₃ ω g (e.symm j) ((e.symm j)⁻¹ * e.symm
+        l) : ℂ)
       else 0 := rfl
 
 /-- Bridge: the tensors `T̂_g` of arXiv:2203.12563, lines 2206–2222, packaged as a
 `MPOTensor.GroupFamily` with bond dimension `|G|`. -/
-def family (ω : ScalarThreeCochain G) : GroupFamily G n where
+def family (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) : GroupFamily G n where
   bondDim _ := n
   bondDim_pos _ := (e 1).pos
   tensor := tensor e ω
@@ -180,8 +185,8 @@ variable {N : ℕ} [NeZero N]
 of the diagonal gates `W_g^{i,i+1}` around the periodic chain.
 
 Source: arXiv:2203.12563, lines 2068 and 2205. -/
-def phase (ω : ScalarThreeCochain G) (g : G) (t : Fin N → Fin n) : ℂˣ :=
-  ∏ i, ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i))
+def phase (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) (t : Fin N → Fin n) : ℂˣ :=
+  ∏ i, scalarCochainValue₃ ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i))
 
 /-- **The periodic operator of `T̂_g` entrywise**: the entry at `(s, t)` vanishes unless `s`
 is the left shift of `t` by `g`, and then equals the phase of `t`.
@@ -190,10 +195,12 @@ Source: arXiv:2203.12563, lines 2204–2222 (the operator `U_g` and its tensor `
 source does not print this kernel: it is the closed-chain contraction of `T̂_g` along the
 unique surviving bond configuration `b_i = t_{i-1}`, with the site pairing read from the
 diagram at lines 2208–2215. -/
-theorem mpo_tensor_apply (ω : ScalarThreeCochain G) (g : G) (s t : Fin N → Fin n) :
+theorem mpo_tensor_apply (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) (s t : Fin N →
+  Fin n) :
     mpo (tensor e ω g) N s t =
       if s = shift e g N t then
-        ∏ i, (ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i)) : ℂ)
+        ∏ i, (scalarCochainValue₃ ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i)) :
+          ℂ)
       else 0 := by
   rw [mpo_apply_of_forced_right_bond (tensor_apply e ω g)]
   rfl
@@ -202,7 +209,7 @@ theorem mpo_tensor_apply (ω : ScalarThreeCochain G) (g : G) (s t : Fin N → Fi
 phase of the input configuration.
 
 Source: arXiv:2203.12563, lines 2204–2222. -/
-theorem mpo_tensor (ω : ScalarThreeCochain G) (g : G) :
+theorem mpo_tensor (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) :
     mpo (tensor e ω g) N = Matrix.monomial (shift e g N) fun t ↦ (phase e ω g t : ℂ) := by
   ext s t
   rw [mpo_tensor_apply, Matrix.monomial_apply, phase, Units.coe_prod]
@@ -212,7 +219,8 @@ gates are diagonal, the entry at `(s, t)` is the product of the shift entries `(
 times the product of the gate entries at the neighboring pairs `(t_i, t_{i+1})`.
 
 Bridge: arXiv:2203.12563, line 2205, with one `L_g` per site (see the module docstring). -/
-theorem mpo_tensor_apply_eq_leftShift_wGate [DecidableEq G] (ω : ScalarThreeCochain G) (g : G)
+theorem mpo_tensor_apply_eq_leftShift_wGate [DecidableEq G] (ω : (Fin 3 → G) →
+  Rep.ofMulDistribMulAction G ℂˣ) (g : G)
     (s t : Fin N → Fin n) :
     mpo (tensor e ω g) N s t =
       (∏ i, leftShift g (e.symm (s i)) (e.symm (t i))) *
@@ -226,30 +234,34 @@ theorem mpo_tensor_apply_eq_leftShift_wGate [DecidableEq G] (ω : ScalarThreeCoc
 /-- The sitewise cocycle identity behind the multiplication law: after the shift by `h`, the
 phases of `g` and `h` multiply to the phase of `gh` times a ratio that telescopes around the
 chain. -/
-theorem phase_site {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
+theorem phase_site {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω : inhomogeneousCochains.d
+  (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
     (g h a x : G) :
-    ω g (h * a) ((h * a)⁻¹ * (h * x)) * ω h a (a⁻¹ * x) =
-      ω (g * h) a (a⁻¹ * x) * (ω g h x * (ω g h a)⁻¹) := by
-  have hc := hω g h a (a⁻¹ * x)
+    scalarCochainValue₃ ω g (h * a) ((h * a)⁻¹ * (h * x)) * scalarCochainValue₃ ω h a (a⁻¹ * x) =
+      scalarCochainValue₃ ω (g * h) a (a⁻¹ * x) * (scalarCochainValue₃ ω g h x *
+        (scalarCochainValue₃ ω g h a)⁻¹) := by
+  have hc := scalarCochainValue₃_cocycle hω g h a (a⁻¹ * x)
   rw [mul_inv_cancel_left] at hc
   have hx : (h * a)⁻¹ * (h * x) = a⁻¹ * x := by group
   rw [hx, ← mul_assoc, hc, eq_mul_inv_iff_mul_eq]
   simp only [mul_comm, mul_left_comm]
 
-theorem phase_mul {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
+theorem phase_mul {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω : inhomogeneousCochains.d
+  (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
     (g h : G) (t : Fin N → Fin n) :
     phase e ω g (shift e h N t) * phase e ω h t = phase e ω (g * h) t := by
   simp only [phase, shift_apply, Equiv.symm_apply_apply, ← Finset.prod_mul_distrib,
     phase_site hω]
   rw [Finset.prod_mul_distrib, Finset.prod_mul_distrib, Finset.prod_inv_distrib,
-    Fintype.prod_equiv (Equiv.addRight 1) (fun i ↦ ω g h (e.symm (t (i + 1))))
-      (fun i ↦ ω g h (e.symm (t i))) (fun i ↦ rfl), mul_inv_cancel, mul_one]
+    Fintype.prod_equiv (Equiv.addRight 1) (fun i ↦ scalarCochainValue₃ ω g h (e.symm (t (i + 1))))
+      (fun i ↦ scalarCochainValue₃ ω g h (e.symm (t i))) (fun i ↦ rfl), mul_inv_cancel, mul_one]
 
 /-- **Multiplication law** `U_g U_h = U_{gh}` on every nonempty periodic chain.
 
 Source: arXiv:2203.12563, lines 2204–2205 ("The final MPOs are a representation of the
 group `G`"). -/
-theorem mpo_tensor_mul {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
+theorem mpo_tensor_mul {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω :
+  inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
     (g h : G) :
     mpo (tensor e ω g) N * mpo (tensor e ω h) N = mpo (tensor e ω (g * h)) N := by
   rw [mpo_tensor, mpo_tensor, mpo_tensor, Matrix.monomial_mul_monomial, shift_mul]
@@ -260,7 +272,8 @@ theorem mpo_tensor_mul {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsC
 /-- **Identity law** `U_e = 1` on every nonempty periodic chain.
 
 Source: arXiv:2203.12563, line 2204 ("`U_e = id^{⊗ n}`"). -/
-theorem mpo_tensor_one {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsNormalized ω) :
+theorem mpo_tensor_one {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω :
+  ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω)) :
     mpo (tensor e ω 1) N = 1 := by
   rw [mpo_tensor, shift_one, ← Matrix.monomial_one]
   congr 1
@@ -268,7 +281,8 @@ theorem mpo_tensor_one {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsN
   simp [phase, hω.1]
 
 /-- The phase has unit modulus when every value of `ω` does. -/
-theorem star_phase_mul_phase {ω : ScalarThreeCochain G} (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1)
+theorem star_phase_mul_phase {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω : ∀ a b c,
+  ‖(scalarCochainValue₃ ω a b c : ℂ)‖ = 1)
     (g : G) (t : Fin N → Fin n) :
     star (phase e ω g t : ℂ) * (phase e ω g t : ℂ) = 1 := by
   rw [Complex.star_def, Complex.conj_mul', phase, Units.coe_prod, norm_prod]
@@ -278,8 +292,8 @@ theorem star_phase_mul_phase {ω : ScalarThreeCochain G} (hω : ∀ a b c, ‖(�
 unit-modulus values. The sources call the operators of arXiv:2203.12563, lines 2204–2205, a
 representation of `G` but do not state unitarity; it follows here because `U_g` is a
 permutation times a unit-modulus phase. -/
-theorem mpo_tensor_mem_unitaryGroup {ω : ScalarThreeCochain G}
-    (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) (g : G) :
+theorem mpo_tensor_mem_unitaryGroup {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hω : ∀ a b c, ‖(scalarCochainValue₃ ω a b c : ℂ)‖ = 1) (g : G) :
     mpo (tensor e ω g) N ∈ Matrix.unitaryGroup (Fin N → Fin n) ℂ := by
   rw [mpo_tensor]
   exact Matrix.monomial_mem_unitaryGroup _ _ (star_phase_mul_phase e hω g)
@@ -290,9 +304,10 @@ three-cocycle with unit-modulus values.
 Source: arXiv:2203.12563, line 2096, where `O_g† = O_{g⁻¹}` is stated for the
 arbitrary-boundary operators; the periodic passage (lines 2204–2205) does not restate it.
 Here it is carried over to `U_g` as a consequence of unitarity and the group laws. -/
-theorem mpo_tensor_conjTranspose {ω : ScalarThreeCochain G}
-    (hc : ScalarThreeCochain.IsCocycle ω) (hn : ScalarThreeCochain.IsNormalized ω)
-    (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) (g : G) :
+theorem mpo_tensor_conjTranspose {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hc : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0) (hn :
+      ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω))
+    (hω : ∀ a b c, ‖(scalarCochainValue₃ ω a b c : ℂ)‖ = 1) (g : G) :
     (mpo (tensor e ω g) N)ᴴ = mpo (tensor e ω g⁻¹) N := by
   have hu := mpo_tensor_mem_unitaryGroup e hω g (N := N)
   rw [Matrix.mem_unitaryGroup_iff', Matrix.star_eq_conjTranspose] at hu
@@ -305,13 +320,14 @@ end MPOTensor.GroupCocycle
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
+open groupCohomology TNLean.Algebra
 
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- Project result: **`T̂_g` is a matrix product unitary** on every nonempty periodic chain
 when `ω` takes unit-modulus values (see `mpo_tensor_mem_unitaryGroup`). -/
-theorem isMPUPos {ω : ScalarThreeCochain G} (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) (g : G) :
+theorem isMPUPos {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω : ∀ a b c,
+  ‖(scalarCochainValue₃ ω a b c : ℂ)‖ = 1) (g : G) :
     IsMPUPos (tensor e ω g) := by
   intro N hN
   have : NeZero N := ⟨by omega⟩
@@ -325,9 +341,10 @@ Source: arXiv:2203.12563, lines 2204–2205 for `U_e = 1` and `U_g U_h = U_{gh}`
 Project result: unitarity and `U_g† = U_{g⁻¹}` for unit-modulus `ω`, which the periodic
 passage does not state (`O_g† = O_{g⁻¹}` is printed at line 2096 only for the
 arbitrary-boundary operators). -/
-theorem family_operator_laws {ω : ScalarThreeCochain G}
-    (hc : ScalarThreeCochain.IsCocycle ω) (hn : ScalarThreeCochain.IsNormalized ω)
-    (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) :
+theorem family_operator_laws {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hc : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0) (hn :
+      ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω))
+    (hω : ∀ a b c, ‖(scalarCochainValue₃ ω a b c : ℂ)‖ = 1) :
     (∀ g, IsMPUPos ((family e ω).tensor g)) ∧
       (∀ N, 0 < N → mpo ((family e ω).tensor 1) N = 1) ∧
       (∀ g h N, 0 < N →

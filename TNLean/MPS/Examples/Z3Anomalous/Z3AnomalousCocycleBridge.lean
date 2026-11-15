@@ -88,6 +88,8 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
+open groupCohomology
+
 namespace Z3Anomalous
 
 open MPOTensor MPOTensor.GroupCocycle TNLean.Algebra.ScalarThreeCochain
@@ -134,7 +136,8 @@ Project result: the construction is arXiv:2203.12563, lines 2204–2222, with th
 of arXiv:2405.00439, line 2040. -/
 theorem mpo_uTensor_mul_cocycleGauge :
     mpo uTensor L * cocycleGauge L =
-      cocycleGauge L * mpo (tensor (residueEquiv 2) (cyclicCocycle (2 + 1) 1) z3Gen) L := by
+      cocycleGauge L * mpo (tensor (residueEquiv 2) (iCocycles _ 3 (cyclicCocycle (2 + 1) 1)) z3Gen)
+        L := by
   ext s t
   rw [cocycleGauge, Matrix.mul_diagonal, Matrix.diagonal_mul, mpo_uTensor_apply,
     mpo_tensor_cyclic_apply]
@@ -206,7 +209,8 @@ theorem mpo_family_eq_cocycleGauge_conj (g : Multiplicative (ZMod 3)) :
 factor `ω_1(g, g², g) = ζ` of `ω_1(g,1,g) ω_1(g,g,g) ω_1(g,g²,g)` is nontrivial
 (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040), and `ζ = exp(2πi/3) = ω₃`. -/
 theorem cyclicInvariant_cyclicCocycle_one :
-    (cyclicInvariant (cyclicCocycle 3 1) z3Gen 3 : ℂ) = eisensteinOmega := by
+    (cyclicInvariant ((scalarCocycleValue₃ (cyclicCocycle 3 1))) z3Gen 3 : ℂ) = eisensteinOmega :=
+      by
   simp only [cyclicInvariant, Finset.prod_range_succ, Finset.prod_range_zero, one_mul,
     Units.val_mul, cyclicCocycle_val]
   have h0 : (Multiplicative.toAdd (z3Gen ^ 0)).val = 0 := by decide
@@ -221,7 +225,7 @@ fusion tensors of `family`, the cyclic invariant of its anomaly three-cochain is
 of the cyclic invariant of `ω_1`, `ω₃² = ω₃⁻¹`. -/
 theorem cyclicInvariant_omega_z3_mul_cyclicCocycle_one (fd : family.FusionData) :
     (cyclicInvariant fd.associatorScalar z3Gen 3 : ℂ) *
-      (cyclicInvariant (cyclicCocycle 3 1) z3Gen 3 : ℂ) = 1 := by
+      (cyclicInvariant ((scalarCocycleValue₃ (cyclicCocycle 3 1))) z3Gen 3 : ℂ) = 1 := by
   rw [cyclicInvariant_omega_z3, cyclicInvariant_cyclicCocycle_one, ← pow_succ]
   have h := eisensteinOmega_quadratic
   linear_combination (eisensteinOmega - 1) * h
@@ -234,7 +238,7 @@ arXiv:2203.12563, read on the periodic tensors `T̂_g`.
 Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 2025–2043 and
 2224–2225. -/
 def cocycleFusionData : cocycleFamily.FusionData :=
-  GroupCocycle.fusionData (GroupCocycle.residueEquiv 2) (cyclicCocycle_isCocycle 3 1)
+  GroupCocycle.fusionData (GroupCocycle.residueEquiv 2) (d_iCocycles₃ (cyclicCocycle 3 1))
 
 /-- **The construction for `ω_1` carries `ω_2`**: with the fusion tensors of `ftexam`, the
 anomaly three-cochain of the representation built from `ω_1` is `ω_1⁻¹`, which is the cocycle
@@ -242,8 +246,10 @@ anomaly three-cochain of the representation built from `ω_1` is `ω_1⁻¹`, wh
 
 Source: arXiv:2203.12563, line 2044 (the fusion tensors of `ftexam` satisfy `3cocygroup` with
 the inverse cocycle) and lines 2224–2225; `GroupCocycle.fusionData_omega` for `ℤ₃`. -/
-theorem cocycleFusionData_omega : cocycleFusionData.associatorScalar = cyclicCocycle 3 2 := by
-  rw [cocycleFusionData, GroupCocycle.fusionData_omega, cyclicCocycle_inv]
+theorem cocycleFusionData_omega : cocycleFusionData.associatorScalar = (scalarCocycleValue₃
+  (cyclicCocycle 3 2)) := by
+  rw [cocycleFusionData, GroupCocycle.fusionData_omega, ← scalarCocycleValue₃_neg,
+    cyclicCocycle_neg]
 
 /-- **The two representations have the same cyclic invariant**: for every choice of fusion
 tensors of `{1, U, U†}`, the cyclic invariant `ω(g,1,g) ω(g,g,g) ω(g,g²,g)` at the generator
@@ -259,7 +265,7 @@ theorem cyclicInvariant_cocycleFusionData (fd : family.FusionData) :
     cyclicInvariant cocycleFusionData.associatorScalar z3Gen 3 = cyclicInvariant
       fd.associatorScalar z3Gen 3 := by
   have hinv : cyclicInvariant cocycleFusionData.associatorScalar z3Gen 3 =
-      (cyclicInvariant (cyclicCocycle 3 1) z3Gen 3)⁻¹ := by
+      (cyclicInvariant ((scalarCocycleValue₃ (cyclicCocycle 3 1))) z3Gen 3)⁻¹ := by
     rw [cocycleFusionData, GroupCocycle.fusionData_omega]
     simp [cyclicInvariant, Finset.prod_inv_distrib]
   rw [hinv]

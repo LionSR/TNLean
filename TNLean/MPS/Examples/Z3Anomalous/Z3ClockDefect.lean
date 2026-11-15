@@ -76,6 +76,8 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
+open groupCohomology
+
 namespace Z3Clock
 
 open MPOTensor TNLean.Algebra TNLean.Algebra.ScalarThreeCochain
@@ -230,7 +232,8 @@ theorem not_isMPOFusionAlgebra (Nc : Fin 3 → Fin 3 → Fin 3 → ℕ) :
 2204–2222, for the trivial cocycle `ω_0` of `ℤ₃` (arXiv:2405.00439, line 2040), whose group
 operators are the plain shifts. -/
 def cocycleDefect (L : ℕ) : Matrix (Fin L → Fin 3) (Fin L → Fin 3) ℂ :=
-  ∑ g, mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (cyclicCocycle 3 0) g) L
+  ∑ g, mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (iCocycles _ 3 (cyclicCocycle 3 0)) g)
+    L
 
 /-- **The defect of the trivial-cocycle representation has constant structure constants**:
 `A₀² = 3A₀` at every length `L ≥ 1`, an instance of `GroupCocycle.sum_mpo_mul_sum_mpo`. The

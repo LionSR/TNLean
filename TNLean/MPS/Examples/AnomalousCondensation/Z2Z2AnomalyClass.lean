@@ -86,6 +86,8 @@ noncomputable section
 open scoped Matrix Kronecker
 open TNLean.Algebra MPOTensor MPSTensor MPOTensor.GroupCocycle
 
+open groupCohomology
+
 namespace Z2Z2Condensation
 
 /-! ### The dressed tensors as integer tensors -/
@@ -478,10 +480,10 @@ theorem cyclicInvariant_omega_kleinFamily_y (fd : kleinFamily.FusionData) :
 Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` lines 1848 and 1856--1872
 (row `(0,0,1)`). -/
 theorem cyclicInvariant_kleinCocycle (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    ScalarThreeCochain.cyclicInvariant ScalarThreeCochain.kleinCocycle g 2 =
+    ScalarThreeCochain.cyclicInvariant (scalarCocycleValue₃ (ScalarThreeCochain.kleinCocycle)) g 2 =
       (-1) ^ ((Multiplicative.toAdd g).1 * (Multiplicative.toAdd g).2).val := by
   simp only [ScalarThreeCochain.cyclicInvariant, Finset.prod_range_succ, Finset.prod_range_zero,
-    one_mul, pow_zero, pow_one, ScalarThreeCochain.kleinCocycle, toAdd_one, Prod.snd_zero,
+    one_mul, pow_zero, pow_one, ScalarThreeCochain.kleinCocycle_apply, toAdd_one, Prod.snd_zero,
     mul_zero, zero_mul, ZMod.val_zero]
   congr 2
   generalize Multiplicative.toAdd g = p
@@ -500,7 +502,8 @@ that of arXiv:2502.20257, display preceding `eq:3-cocycle`, and the invariance i
 theorem cyclicInvariant_omega_kleinFamily (fd : kleinFamily.FusionData)
     (g : Multiplicative (ZMod 2 × ZMod 2)) :
     ScalarThreeCochain.cyclicInvariant fd.associatorScalar g 2 =
-      ScalarThreeCochain.cyclicInvariant ScalarThreeCochain.kleinCocycle g 2 := by
+      ScalarThreeCochain.cyclicInvariant (scalarCocycleValue₃ (ScalarThreeCochain.kleinCocycle)) g 2
+        := by
   rw [cyclicInvariant_kleinCocycle]
   revert g
   refine Multiplicative.forall_zmod_two_prod ?_ ?_ ?_ ?_
@@ -514,7 +517,8 @@ theorem cyclicInvariant_omega_kleinFamily (fd : kleinFamily.FusionData)
 of fusion tensors. Source: arXiv:2203.12563, lines 1845–1872. The family distinction is
 specified in the module docstring. -/
 theorem omega_cohomologousTo_kleinCocycle (fd : kleinFamily.FusionData) :
-    ScalarThreeCochain.CohomologousTo fd.associatorScalar ScalarThreeCochain.kleinCocycle :=
+    ScalarThreeCochain.CohomologousTo fd.associatorScalar (scalarCocycleValue₃
+      (ScalarThreeCochain.kleinCocycle)) :=
   (ScalarThreeCochain.cohomologousTo_iff_klein_cyclicInvariant_eq
     (fd.isCocycle_omega kleinFamily_isNormalRepresentation)
     ScalarThreeCochain.kleinCocycle_isCocycle).2 (cyclicInvariant_omega_kleinFamily fd)

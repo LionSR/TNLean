@@ -77,6 +77,8 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
+open groupCohomology
+
 namespace Z3Clock
 
 open MPOTensor TNLean.Algebra TNLean.Algebra.ScalarThreeCochain
@@ -222,7 +224,7 @@ theorem shift_residueEquiv (g : Multiplicative (ZMod 3)) (N : ℕ) :
 
 /-- The values of the trivial cocycle `ω_0` are one. -/
 theorem cyclicCocycle_zero_val (a b c : Multiplicative (ZMod 3)) :
-    (cyclicCocycle 3 0 a b c : ℂ) = 1 := by
+    ((scalarCocycleValue₃ (cyclicCocycle 3 0)) a b c : ℂ) = 1 := by
   simp [cyclicCocycle_val]
 
 /-- Bridge: **a clock tensor is the tensor of the trivial-cocycle construction times the bond
@@ -231,7 +233,8 @@ arXiv:2405.00439, line 2040, multiplied entrywise by `ω^{f(l, j)}`. -/
 theorem clockTensor_apply_eq_cocycle (g : Multiplicative (ZMod 3))
     (f : Fin 3 → Fin 3 → Fin 3) (i j l r : Fin 3) :
     clockTensor (GroupCocycle.residueEquiv 2 g) f i j l r =
-      GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (cyclicCocycle 3 0) g i j l r *
+      GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (iCocycles _ 3 (cyclicCocycle 3 0)) g i j l
+        r *
         phaseChar (f l j) := by
   rw [clockTensor_apply, GroupCocycle.tensor_apply, siteShift_residueEquiv,
     cyclicCocycle_zero_val]
@@ -243,7 +246,8 @@ periodic operator of arXiv:2203.12563, lines 2204–2222, for the cocycle `ω_0 
 arXiv:2405.00439, line 2040, namely the plain shift by `g`. -/
 theorem mpo_clockTensor_eq_cocycle (g : Multiplicative (ZMod 3)) (f : Fin 3 → Fin 3 → Fin 3) :
     mpo (clockTensor (GroupCocycle.residueEquiv 2 g) f) N =
-      mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (cyclicCocycle 3 0) g) N *
+      mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (iCocycles _ 3 (cyclicCocycle 3 0)) g)
+        N *
         Matrix.diagonal (clockPhase f) := by
   rw [mpo_clockTensor, GroupCocycle.mpo_tensor, shift_residueEquiv]
   ext s t
@@ -286,7 +290,7 @@ theorem mpo_vTensor_apply (s t : Fin N → Fin 3) :
 /-- Bridge: **`U` is the generator of the trivial-cocycle construction dressed by `∏ CZ`**. -/
 theorem mpo_uTensor_eq_cocycle :
     mpo uTensor N =
-      mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (cyclicCocycle 3 0)
+      mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (iCocycles _ 3 (cyclicCocycle 3 0))
           (Multiplicative.ofAdd 1)) N * Matrix.diagonal (clockPhase uWeight) :=
   mpo_clockTensor_eq_cocycle (Multiplicative.ofAdd 1) uWeight
 
@@ -294,7 +298,7 @@ theorem mpo_uTensor_eq_cocycle :
 `∏ CZ² Z²`**. -/
 theorem mpo_vTensor_eq_cocycle :
     mpo vTensor N =
-      mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (cyclicCocycle 3 0)
+      mpo (GroupCocycle.tensor (GroupCocycle.residueEquiv 2) (iCocycles _ 3 (cyclicCocycle 3 0))
           (Multiplicative.ofAdd 2)) N * Matrix.diagonal (clockPhase vWeight) :=
   mpo_clockTensor_eq_cocycle (Multiplicative.ofAdd 2) vWeight
 

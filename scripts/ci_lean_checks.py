@@ -337,8 +337,13 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
 
     def pump(stream, log) -> None:
         for line in stream:
-            sys.stdout.write(line)
             log.write(line)
+            # Dependency caches replay this notice for every import, making
+            # hosted logs too large to retrieve. Keep the complete build log;
+            # the separate strict Lean invocation still reports every warning.
+            if "which is designed for use with the module system; consider adding `module`" in line:
+                continue
+            sys.stdout.write(line)
 
     with open(log_path or os.devnull, "a") as log:
         reader = threading.Thread(target=pump, args=(proc.stdout, log), daemon=True)

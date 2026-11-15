@@ -101,7 +101,7 @@ theorem inhomogeneous_d₂_apply (f : G × G → representation G X M) (p : Fin 
       (representation G X M).ρ (p 0) (f (p 1, p 2)) - f (p 0 * p 1, p 2) +
         f (p 0, p 1 * p 2) - f (p 0, p 1) := by
   rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three]
-  simp [Fin.contractNth, sub_eq_add_neg, add_assoc]
+  simp [Fin.contractNth, sub_eq_add_neg, add_assoc, one_smul]
 
 /-- The differential of a block two-cochain in inhomogeneous coordinates.
 Unlike the degree-three quotient, this formula permits arbitrary universes of

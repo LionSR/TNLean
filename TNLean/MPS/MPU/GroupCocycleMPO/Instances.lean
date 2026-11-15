@@ -59,6 +59,8 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
+open groupCohomology
+
 namespace MPOTensor.GroupCocycle
 
 open TNLean.Algebra TNLean.Algebra.ScalarThreeCochain
@@ -74,9 +76,10 @@ def bitEquiv : Multiplicative (ZMod 2) ≃ Fin 2 := Multiplicative.toAdd
 /-- The gate value of the generator on the bit pair `(k,l)` is the sign of `CZ (1 ⊗ Z)`,
 `(−1)^{kl + l}`. -/
 private theorem cyclicTwo_site (k l : Fin 2) :
-    (cyclicTwoCocycle 1 s₂ (bitEquiv.symm l) ((bitEquiv.symm l)⁻¹ * bitEquiv.symm k) : ℂ) =
+    ((scalarCocycleValue₃ (cyclicTwoCocycle 1)) s₂ (bitEquiv.symm l) ((bitEquiv.symm l)⁻¹ *
+      bitEquiv.symm k) : ℂ) =
       (-1) ^ (k.val * l.val) * (-1) ^ l.val := by
-  unfold cyclicTwoCocycle
+  rw [cyclicTwoCocycle_apply]
   fin_cases k <;> fin_cases l <;> split_ifs with h <;>
     first | (exfalso; revert h; decide) | simp
 
@@ -84,7 +87,7 @@ private theorem cyclicTwo_site (k l : Fin 2) :
 
 Source: arXiv:2203.12563, line 2070. -/
 theorem wGate_cyclicTwo :
-    wGate (cyclicTwoCocycle 1) s₂ =
+    wGate (iCocycles _ 3 (cyclicTwoCocycle 1)) s₂ =
       Matrix.diagonal fun kl : Multiplicative (ZMod 2) × Multiplicative (ZMod 2) ↦
         (-1 : ℂ) ^ ((bitEquiv kl.1).val * (bitEquiv kl.2).val) * (-1) ^ (bitEquiv kl.2).val := by
   rw [wGate]
@@ -120,7 +123,7 @@ nonempty periodic chain.
 
 Source: arXiv:2203.12563, line 2224. -/
 theorem mpo_tensor_cyclicTwo (N : ℕ) [NeZero N] :
-    mpo (tensor bitEquiv (cyclicTwoCocycle 1) s₂) N = czxDecorated N := by
+    mpo (tensor bitEquiv (iCocycles _ 3 (cyclicTwoCocycle 1)) s₂) N = czxDecorated N := by
   ext s t
   have hshift : shift bitEquiv s₂ N t = CZXCompression.spinFlip N t := by
     funext i
@@ -147,7 +150,7 @@ Source: arXiv:2203.12563, lines 2204–2222; arXiv:2405.00439, line 2040. The ke
 derived from `mpo_tensor_apply`; the sources do not print it. -/
 theorem mpo_tensor_cyclic_apply (m j : ℕ) (g : Multiplicative (ZMod (m + 1)))
     {N : ℕ} [NeZero N] (s t : Fin N → Fin (m + 1)) :
-    mpo (tensor (residueEquiv m) (cyclicCocycle (m + 1) j) g) N s t =
+    mpo (tensor (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1) j)) g) N s t =
       if s = fun i ↦ residueEquiv m g + t i then
         ∏ i, rootOfUnity (m + 1) ^ (j * (residueEquiv m g).val *
           (((t (i + 1)).val + (t i - t (i + 1)).val) / (m + 1)))
@@ -164,15 +167,18 @@ Source: arXiv:2203.12563, lines 2204–2205 (`U_g U_h = U_{gh}`, `U_e = 1`), wit
 arXiv:2405.00439, line 2040. Project result: unitarity and `U_g† = U_{g⁻¹}` (see
 `MPOTensor.GroupCocycle.family_operator_laws`). -/
 theorem cyclic_operator_laws (m j : ℕ) :
-    (∀ g, IsMPUPos ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g)) ∧
-      (∀ N, 0 < N → mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor 1) N = 1) ∧
+    (∀ g, IsMPUPos ((family (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1) j))).tensor g)) ∧
+      (∀ N, 0 < N → mpo ((family (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1) j))).tensor
+        1) N = 1) ∧
       (∀ g h N, 0 < N →
-        mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g) N *
-            mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor h) N =
-          mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor (g * h)) N) ∧
-      (∀ g N, 0 < N → (mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g) N)ᴴ =
-          mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g⁻¹) N) :=
-  family_operator_laws (residueEquiv m) (cyclicCocycle_isCocycle (m + 1) j)
+        mpo ((family (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1) j))).tensor g) N *
+            mpo ((family (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1) j))).tensor h) N =
+          mpo ((family (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1) j))).tensor (g * h))
+            N) ∧
+      (∀ g N, 0 < N → (mpo ((family (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1)
+        j))).tensor g) N)ᴴ =
+          mpo ((family (residueEquiv m) (iCocycles _ 3 (cyclicCocycle (m + 1) j))).tensor g⁻¹) N) :=
+  family_operator_laws (residueEquiv m) (d_iCocycles₃ (cyclicCocycle (m + 1) j))
     (cyclicCocycle_isNormalized (m + 1) j) (cyclicCocycle_norm (m + 1) j)
 
 
@@ -187,7 +193,7 @@ arXiv:2203.12563, lines 2204–2222, applied to the type-II cocycle of line 1848
 is derived from `mpo_tensor_apply`. -/
 theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ} [NeZero N]
     (s t : Fin N → Fin 4) :
-    mpo (tensor kleinEquiv kleinCocycle g) N s t =
+    mpo (tensor kleinEquiv (iCocycles _ 3 kleinCocycle) g) N s t =
       if s = shift kleinEquiv g N t then
         ∏ i, (-1 : ℂ) ^ ((Multiplicative.toAdd g).1 *
           (Multiplicative.toAdd (kleinEquiv.symm (t (i + 1)))).2 *
@@ -196,7 +202,7 @@ theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ}
       else 0 := by
   rw [mpo_tensor_apply]
   congr 1
-  simp only [kleinCocycle, Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one, toAdd_mul,
+  simp only [kleinCocycle_apply, Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one, toAdd_mul,
     toAdd_inv, Prod.snd_add, Prod.snd_neg]
   refine Finset.prod_congr rfl fun i _ ↦ ?_
   congr 3
@@ -204,15 +210,15 @@ theorem mpo_tensor_klein_apply (g : Multiplicative (ZMod 2 × ZMod 2)) {N : ℕ}
 
 /-- Project result: the four operator laws for the `ℤ₂ × ℤ₂` instance. -/
 theorem klein_operator_laws :
-    (∀ g, IsMPUPos ((family kleinEquiv kleinCocycle).tensor g)) ∧
-      (∀ N, 0 < N → mpo ((family kleinEquiv kleinCocycle).tensor 1) N = 1) ∧
+    (∀ g, IsMPUPos ((family kleinEquiv (iCocycles _ 3 kleinCocycle)).tensor g)) ∧
+      (∀ N, 0 < N → mpo ((family kleinEquiv (iCocycles _ 3 kleinCocycle)).tensor 1) N = 1) ∧
       (∀ g h N, 0 < N →
-        mpo ((family kleinEquiv kleinCocycle).tensor g) N *
-            mpo ((family kleinEquiv kleinCocycle).tensor h) N =
-          mpo ((family kleinEquiv kleinCocycle).tensor (g * h)) N) ∧
-      (∀ g N, 0 < N → (mpo ((family kleinEquiv kleinCocycle).tensor g) N)ᴴ =
-          mpo ((family kleinEquiv kleinCocycle).tensor g⁻¹) N) :=
-  family_operator_laws kleinEquiv kleinCocycle_isCocycle kleinCocycle_isNormalized
+        mpo ((family kleinEquiv (iCocycles _ 3 kleinCocycle)).tensor g) N *
+            mpo ((family kleinEquiv (iCocycles _ 3 kleinCocycle)).tensor h) N =
+          mpo ((family kleinEquiv (iCocycles _ 3 kleinCocycle)).tensor (g * h)) N) ∧
+      (∀ g N, 0 < N → (mpo ((family kleinEquiv (iCocycles _ 3 kleinCocycle)).tensor g) N)ᴴ =
+          mpo ((family kleinEquiv (iCocycles _ 3 kleinCocycle)).tensor g⁻¹) N) :=
+  family_operator_laws kleinEquiv (d_iCocycles₃ kleinCocycle) kleinCocycle_isNormalized
     kleinCocycle_norm
 
 end MPOTensor.GroupCocycle

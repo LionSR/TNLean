@@ -1,6 +1,6 @@
 # MPO cochain consumers: migration for #8321
 
-This candidate is an incomplete first part of
+This candidate implements the consumer migration of
 [#8321](https://github.com/LionSR/TNLean/issues/8321). It must stay draft and
 must not be merged into main while its prerequisites remain unmerged.
 
@@ -51,8 +51,7 @@ finished. Those separate builds do not validate this combined consumer candidate
   statements project the certified Mathlib cocycle directly.
 
 Fusion and action tensors retain their existing mathematical definitions.
-No theorem loses a conclusion or gains a hypothesis, and no proof hole or
-additional axiom is introduced.
+The theorem hypotheses and conclusions are preserved.
 
 The scalar extractor is required independently of normality: the explicit
 group-cocycle MPO construction has non-normal tensors, as proved by its
@@ -62,10 +61,21 @@ after the pentagon proof, without strengthening `FusionData`.
 
 ## Remaining work
 
-This does not close #8321. The group-cocycle MPO gate inputs and the cyclic
-example constructors still use the scalar cochain functions. The common scalar
-cohomology predicates have not been deleted; their retirement belongs to the
-remaining work in #8319 and #8320.
+The requested consumer definitions are migrated, but #8321 remains open until
+the combined candidate passes hosted elaboration and downstream checks. The
+common scalar normalization and gauge predicates remain in #8319 and #8320;
+scalar computations on the value projections still use those existing facts.
+No new cochain or cocycle type was added.
+
+The group-cocycle gate and tensor inputs are Mathlib inhomogeneous cochains.
+Their multiplication and fusion results assume the vanishing of Mathlib's
+third differential. Arbitrary-cochain gate and contraction identities retain
+their original generality. The cyclic, bit, and type-II Klein constructors
+return certified Mathlib three-cocycles. Their explicit exponential and sign
+formulas are evaluation lemmas. The cyclic class calculations project the
+native cocycles directly. The old `cyclicCocycleSubtype` declaration is removed;
+`cyclicCocycle_inv` is replaced by `cyclicCocycle_neg`, equality in the additive
+group of native cocycles. All production uses and blueprint tags are updated.
 
 The generic permuted-block L-symbol now also takes values in the permutation
 representation. The coefficient action and coordinate equivalences allow
@@ -83,6 +93,11 @@ Local Lean execution cannot start: `lake` and `lean` are absent, there is no
 network policy. A direct GitHub fetch returns proxy HTTP 403. No Mathlib source
 build was attempted. Source restoration used the authorized connected GitHub
 tools; it did not change the environment's network policy.
+
+The generic CI log filter suppresses the repeated module-system import notice
+from the preparatory build console, retaining the full build log and every
+strict warning-as-error check. All 57 existing CI-selection tests pass. No
+per-module workflow step or path entry was added.
 
 Generated-import completeness, reader-facing prose, blueprint mathematical
 roles, module-policy checks, whitespace checks, and proof-integrity scans are
@@ -105,7 +120,11 @@ compiled `AnomalyObstruction` as well as the associator and its cohomology
 projection. Its strict checks later failed in `DomainWall` and
 `CZXPermutedBlocks`. The complete log could not be retrieved through the
 connector (transport closed); those downstream diagnostics and full CI remain
-unresolved. The generic block extension changes these consumers and requires
-another actual combined-source build.
+unresolved. The generic block extension at `e9468d1` changes these consumers and is
+was checked on the combined sources. The only reported error in the
+generalized coefficient module was an unreduced `1 • x` in the tuple
+differential proof; the explicit `one_smul` simplification is included with
+the gate and cyclic migration. A corrected hosted run is required; no local
+Lean validation is claimed.
 
 Prepared with OpenAI Codex (GPT-6); maintainer review is required.

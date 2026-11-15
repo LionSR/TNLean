@@ -53,11 +53,13 @@ particular on the range of `O_e`), `O_g† = O_{g⁻¹}` for unit-modulus `ω`, 
 
 noncomputable section
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 open scoped BigOperators Matrix
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
+open groupCohomology TNLean.Algebra
 
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
@@ -69,17 +71,19 @@ its two half sites, encoded in `Fin (n * n)`; the entry at the bond labels `k`, 
 The first physical index is the output row, the second the input column.
 
 Source: arXiv:2203.12563, lines 2005–2024. -/
-def boundaryTensor (ω : ScalarThreeCochain G) (g : G) : MPOTensor (n * n) n :=
+def boundaryTensor (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) : MPOTensor (n * n) n
+  :=
   fun i j ↦ Matrix.of fun k l ↦
     if j = finProdFinEquiv (k, l) ∧ i = finProdFinEquiv (siteShift e g k, siteShift e g l) then
-      (ω g (e.symm l) ((e.symm l)⁻¹ * e.symm k) : ℂ)
+      (scalarCochainValue₃ ω g (e.symm l) ((e.symm l)⁻¹ * e.symm k) : ℂ)
     else 0
 
-theorem boundaryTensor_apply (ω : ScalarThreeCochain G) (g : G) (i j : Fin (n * n))
+theorem boundaryTensor_apply (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) (i j : Fin
+  (n * n))
     (k l : Fin n) :
     boundaryTensor e ω g i j k l =
       if j = finProdFinEquiv (k, l) ∧ i = finProdFinEquiv (siteShift e g k, siteShift e g l) then
-        (ω g (e.symm l) ((e.symm l)⁻¹ * e.symm k) : ℂ)
+        (scalarCochainValue₃ ω g (e.symm l) ((e.symm l)⁻¹ * e.symm k) : ℂ)
       else 0 := rfl
 
 /-! ### The embedding of periodic configurations into pairs of half sites -/
@@ -157,13 +161,14 @@ Source: arXiv:2203.12563, lines 2094 (`O_g` as a product of local gates and the 
 `𝒫^{[i]_r,[i+1]_l}`) and 2200–2203 (the passage from `O_g` to `U_g` by `Γ`). The closed bond
 configuration of `T_g` is forced by the input: the bond to the left of site `i` is the left half
 of its input, which equals the right half of the input of site `i - 1`. -/
-theorem mpo_boundaryTensor (ω : ScalarThreeCochain G) (g : G) :
+theorem mpo_boundaryTensor (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) :
     mpo (boundaryTensor e ω g) N =
       halfSiteEmbedding n N * mpo (tensor e ω g) N * (halfSiteEmbedding n N)ᴴ := by
   have key : ∀ (s t : Fin N → Fin (n * n)) (b : Fin N → Fin n),
       ∏ i, boundaryTensor e ω g (s i) (t i) (b i) (b (i + 1)) =
         if t = halfSiteConfig b ∧ s = halfSiteConfig (shift e g N b) then
-          ∏ i, (ω g (e.symm (b (i + 1))) ((e.symm (b (i + 1)))⁻¹ * e.symm (b i)) : ℂ)
+          ∏ i, (scalarCochainValue₃ ω g (e.symm (b (i + 1))) ((e.symm (b (i + 1)))⁻¹ * e.symm (b i))
+            : ℂ)
         else 0 := fun s t b ↦ by
     by_cases h : t = halfSiteConfig b ∧ s = halfSiteConfig (shift e g N b)
     · rw [ite_eq_left h]
@@ -193,8 +198,8 @@ diagonal projector onto the configurations of half sites in which the right half
 agrees with the left half of the next.
 
 Source: arXiv:2203.12563, lines 2073–2092. -/
-theorem mpo_boundaryTensor_one_apply {ω : ScalarThreeCochain G}
-    (hn : ScalarThreeCochain.IsNormalized ω) (s t : Fin N → Fin (n * n)) :
+theorem mpo_boundaryTensor_one_apply {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hn : ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω)) (s t : Fin N → Fin (n * n)) :
     mpo (boundaryTensor e ω 1) N s t =
       if s = t ∧ ∀ i, (finProdFinEquiv.symm (t i)).2 = (finProdFinEquiv.symm (t (i + 1))).1 then
         1
@@ -204,15 +209,15 @@ theorem mpo_boundaryTensor_one_apply {ω : ScalarThreeCochain G}
   simp only [exists_eq_halfSiteConfig_iff]
 
 /-- `O_e = Γ† Γ` for a normalized cocycle. -/
-theorem mpo_boundaryTensor_one {ω : ScalarThreeCochain G}
-    (hn : ScalarThreeCochain.IsNormalized ω) :
+theorem mpo_boundaryTensor_one {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hn : ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω)) :
     mpo (boundaryTensor e ω 1) N = halfSiteEmbedding n N * (halfSiteEmbedding n N)ᴴ := by
   rw [mpo_boundaryTensor, mpo_tensor_one e hn, Matrix.mul_one]
 
 /-- **`O_e` is a projector** (arXiv:2203.12563, line 2073: "the PBC MPO corresponding to the
 trivial element `e` is a projector"). -/
-theorem mpo_boundaryTensor_one_mul_self {ω : ScalarThreeCochain G}
-    (hn : ScalarThreeCochain.IsNormalized ω) :
+theorem mpo_boundaryTensor_one_mul_self {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hn : ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω)) :
     mpo (boundaryTensor e ω 1) N * mpo (boundaryTensor e ω 1) N =
       mpo (boundaryTensor e ω 1) N := by
   rw [mpo_boundaryTensor_one e hn, Matrix.mul_assoc, ← Matrix.mul_assoc (halfSiteEmbedding n N)ᴴ,
@@ -220,8 +225,8 @@ theorem mpo_boundaryTensor_one_mul_self {ω : ScalarThreeCochain G}
 
 /-- **`O_e` is an orthogonal projector**: it is Hermitian (arXiv:2203.12563, lines 2073–2092,
 where `𝒫 = ∑_g |g,g⟩⟨g,g|`). -/
-theorem isHermitian_mpo_boundaryTensor_one {ω : ScalarThreeCochain G}
-    (hn : ScalarThreeCochain.IsNormalized ω) :
+theorem isHermitian_mpo_boundaryTensor_one {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hn : ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω)) :
     (mpo (boundaryTensor e ω 1) N).IsHermitian := by
   rw [mpo_boundaryTensor_one e hn, Matrix.IsHermitian, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose]
@@ -230,7 +235,8 @@ theorem isHermitian_mpo_boundaryTensor_one {ω : ScalarThreeCochain G}
 whole space, so in particular on the range of `O_e`, where the source states it.
 
 Source: arXiv:2203.12563, line 2096. -/
-theorem mpo_boundaryTensor_mul {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
+theorem mpo_boundaryTensor_mul {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω :
+  inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)
     (g h : G) :
     mpo (boundaryTensor e ω g) N * mpo (boundaryTensor e ω h) N =
       mpo (boundaryTensor e ω (g * h)) N := by
@@ -242,9 +248,10 @@ theorem mpo_boundaryTensor_mul {ω : ScalarThreeCochain G} (hω : ScalarThreeCoc
 three-cocycle with unit-modulus values.
 
 Source: arXiv:2203.12563, line 2096. -/
-theorem mpo_boundaryTensor_conjTranspose {ω : ScalarThreeCochain G}
-    (hc : ScalarThreeCochain.IsCocycle ω) (hn : ScalarThreeCochain.IsNormalized ω)
-    (hω : ∀ a b c, ‖(ω a b c : ℂ)‖ = 1) (g : G) :
+theorem mpo_boundaryTensor_conjTranspose {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ}
+    (hc : inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0) (hn :
+      ScalarThreeCochain.IsNormalized (scalarCochainValue₃ ω))
+    (hω : ∀ a b c, ‖(scalarCochainValue₃ ω a b c : ℂ)‖ = 1) (g : G) :
     (mpo (boundaryTensor e ω g) N)ᴴ = mpo (boundaryTensor e ω g⁻¹) N := by
   rw [mpo_boundaryTensor, mpo_boundaryTensor, Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, mpo_tensor_conjTranspose e hc hn hω, Matrix.mul_assoc]
@@ -255,7 +262,7 @@ arbitrary-boundary operators restricted to the range of `O_e` and carried back b
 
 Source: arXiv:2203.12563, lines 2200–2205, with one shift `L_g` per site as in
 `docs/paper-gaps/glm23_pbc_group_mpo_single_shift.tex`. -/
-theorem mpo_tensor_eq_halfSiteEmbedding (ω : ScalarThreeCochain G) (g : G) :
+theorem mpo_tensor_eq_halfSiteEmbedding (ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) (g : G) :
     mpo (tensor e ω g) N =
       (halfSiteEmbedding n N)ᴴ * mpo (boundaryTensor e ω g) N * halfSiteEmbedding n N := by
   rw [mpo_boundaryTensor, ← Matrix.mul_assoc, ← Matrix.mul_assoc,

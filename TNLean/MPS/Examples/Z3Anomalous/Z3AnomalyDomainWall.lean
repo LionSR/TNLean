@@ -43,6 +43,8 @@ noncomputable section
 
 open TNLean.Algebra
 
+open groupCohomology
+
 namespace Z3Anomalous
 
 /-- Bridge: the primitive cube root `ω₃ = (−1 + i√3)/2` of the Eisenstein ring is
@@ -66,7 +68,8 @@ theorem orderOf_z3Gen : orderOf z3Gen = 3 :=
 has the cyclic invariant of `ω₂`** at the generator. -/
 theorem cyclicInvariant_omega_z3_eq_cyclicCocycle_two (fd : family.FusionData) :
     ScalarThreeCochain.cyclicInvariant fd.associatorScalar z3Gen 3 =
-      ScalarThreeCochain.cyclicInvariant (ScalarThreeCochain.cyclicCocycle 3 2) z3Gen 3 := by
+      ScalarThreeCochain.cyclicInvariant ((scalarCocycleValue₃ (ScalarThreeCochain.cyclicCocycle 3
+        2))) z3Gen 3 := by
   apply Units.ext
   rw [cyclicInvariant_omega_z3, z3Gen,
     ScalarThreeCochain.cyclicInvariant_cyclicCocycle_one (by norm_num),
@@ -76,8 +79,9 @@ theorem cyclicInvariant_omega_z3_eq_cyclicCocycle_two (fd : family.FusionData) :
 not cohomologous to `ω_j` unless `j ≡ 2 mod 3`. -/
 theorem not_cohomologousTo_cyclicCocycle_omega_z3 (fd : family.FusionData) {j : ℕ}
     (hj : ¬ j ≡ 2 [MOD 3]) :
-    ¬ ScalarThreeCochain.CohomologousTo fd.associatorScalar (ScalarThreeCochain.cyclicCocycle 3
-      j) := by
+    ¬ ScalarThreeCochain.CohomologousTo fd.associatorScalar ((scalarCocycleValue₃
+      (ScalarThreeCochain.cyclicCocycle 3
+      j))) := by
   intro h
   have hj' := h.cyclicInvariant_eq z3Gen_pow_three
   rw [cyclicInvariant_omega_z3_eq_cyclicCocycle_two] at hj'
@@ -107,7 +111,8 @@ theorem domainWallPhase_omega_z3 (fd : family.FusionData) :
 `Papers/2405.00439/MPU-DW.tex` line 2040. It follows from the equality of cyclic invariants and
 the classification of the three-cocycles of `ℤ₃` stated there. -/
 theorem cohomologousTo_cyclicCocycle_two_omega_z3 (fd : family.FusionData) :
-    ScalarThreeCochain.CohomologousTo fd.associatorScalar (ScalarThreeCochain.cyclicCocycle 3 2) :=
+    ScalarThreeCochain.CohomologousTo fd.associatorScalar ((scalarCocycleValue₃
+      (ScalarThreeCochain.cyclicCocycle 3 2))) :=
   ScalarThreeCochain.cohomologousTo_of_cyclicInvariant_eq (by norm_num)
     (MPOTensor.GroupFamily.FusionData.isCocycle_omega family_isNormalRepresentation)
     (ScalarThreeCochain.cyclicCocycle_isCocycle 3 2)
@@ -117,10 +122,18 @@ theorem cohomologousTo_cyclicCocycle_two_omega_z3 (fd : family.FusionData) :
 the cocycle of arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040. -/
 theorem anomalyClass_family_eq_cyclicCocycle_two :
     family_isNormalRepresentation.anomalyClass =
-      ScalarThreeCochain.anomalyClass (ScalarThreeCochain.cyclicCocycleSubtype 3 2) := by
+      π _ 3 (ScalarThreeCochain.cyclicCocycle 3 2) := by
   rw [← MPOTensor.GroupFamily.FusionData.anomalyClass_omega family_isNormalRepresentation
     z3FusionData]
-  exact (ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq _ _).1
-    (cohomologousTo_cyclicCocycle_two_omega_z3 z3FusionData)
+  have h := (ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq
+    ⟨z3FusionData.associatorScalar,
+      MPOTensor.GroupFamily.FusionData.isCocycle_omega family_isNormalRepresentation⟩
+    (ScalarThreeCochain.ofCocycles (ScalarThreeCochain.cyclicCocycle 3 2))).1
+      (cohomologousTo_cyclicCocycle_two_omega_z3 z3FusionData)
+  have hc := (ScalarThreeCochain.cocyclesEquiv
+    (G := Multiplicative (ZMod 3))).apply_symm_apply (ScalarThreeCochain.cyclicCocycle 3 2)
+  change ScalarThreeCochain.toCocycles
+    (ScalarThreeCochain.ofCocycles (ScalarThreeCochain.cyclicCocycle 3 2)) = _ at hc
+  simpa only [ScalarThreeCochain.anomalyClass, hc] using h
 
 end Z3Anomalous

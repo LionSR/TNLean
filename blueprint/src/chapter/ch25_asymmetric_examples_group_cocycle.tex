@@ -29,6 +29,44 @@ $\Z_2$ example carry a single left shift per site, and the periodic
 operator~\cite{gap:glm23_pbc_group_mpo_single_shift} below follows the local
 tensor by applying one left shift per site.
 
+\begin{definition}[Multiplicative values of three-cochains]
+    \label{def:asymex_group_cocycle_values}
+    \lean{groupCohomology.scalarCochainValue₃,
+        groupCohomology.scalarCocycleValue₃,
+        groupCohomology.scalarCochainValue₃_iCocycles,
+        groupCohomology.scalarCocycleValue₃_toCocycles}
+    \leanok
+    \uses{def:mpug_scalar_cochains}
+    Let $A$ be the trivial integral representation on the additive form
+    of $\C^\times$. For an inhomogeneous cochain $f\colon G^3\to A$,
+    let $\omega_f(a,b,c)$ denote its multiplicative value at $(a,b,c)$.
+    For a three-cocycle, use the values of its underlying cochain.
+\end{definition}
+
+\begin{lemma}[Values determine a scalar cocycle]
+    \label{lem:asymex_group_cocycle_values}
+    \lean{groupCohomology.d_iCocycles₃,
+        groupCohomology.scalarCochainValue₃_zero,
+        groupCohomology.scalarCocycleValue₃_zero,
+        groupCohomology.scalarCocycleValue₃_neg,
+        groupCohomology.scalarCocycleValue₃_injective,
+        groupCohomology.scalarCochainValue₃_cocycle}
+    \leanok
+    \uses{def:asymex_group_cocycle_values, def:mpug_three_cocycle}
+    A three-cocycle has zero differential and satisfies the multiplicative
+    three-cocycle equation. Its values determine it uniquely. The zero
+    cochain has constant value one, and negating a cocycle inverts every
+    multiplicative value.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The identification of the additive coefficient group with
+    $\C^\times$ is injective. Under this identification, addition becomes
+    multiplication and the alternating differential becomes the
+    multiplicative cocycle equation.
+\end{proof}
+
 \begin{definition}[The tensor of a three-cochain]
     \label{def:asymex_group_cocycle_tensor}
     \lean{MPOTensor.GroupCocycle.wGate,
@@ -605,7 +643,8 @@ labelling the cohomology classes.
 
 \begin{lemma}[The cyclic instances]
     \label{thm:asymex_group_cocycle_cyclic}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_val,
+    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_apply,
+        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_val,
         TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_isCocycle,
         TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_isNormalized,
         TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_norm,
@@ -745,8 +784,7 @@ class of $\omega$.
 
 \begin{lemma}[The classes of the cyclic cocycles]
     \label{thm:asymex_group_cocycle_cyclic_classes}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycleSubtype,
-        TNLean.Algebra.ScalarThreeCochain.isPrimitiveRoot_rootOfUnity,
+    \lean{TNLean.Algebra.ScalarThreeCochain.isPrimitiveRoot_rootOfUnity,
         TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_eq_of_modEq,
         TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_zero,
         TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_cyclicCocycle_iff,
@@ -813,6 +851,7 @@ $b=(0,1)$. That source does not apply the periodic construction to it.
 \begin{definition}[The mixed cocycle of type II]
     \label{def:asymex_group_cocycle_klein}
     \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycle,
+        TNLean.Algebra.ScalarThreeCochain.kleinCocycle_apply,
         MPOTensor.GroupCocycle.kleinEquiv}
     \leanok
     \uses{def:mpug_scalar_cochains}

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.RingTheory.RootsOfUnity.Complex
 import TNLean.Algebra.BinaryCharacterSum
-import TNLean.Algebra.ScalarThreeCocycle
+import TNLean.Algebra.GroupCohomologyScalar
 
 /-!
 # Explicit scalar three-cocycles on `ℤ_n` and on `ℤ₂ × ℤ₂`
@@ -33,7 +33,7 @@ convention, and the groups are written multiplicatively.
   `TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_isNormalized`,
   `TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_norm`: `ω_j` is a normalized
   unit-modulus cocycle.
-* `TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_inv`: `ω_j⁻¹ = ω_{(n−1) j}`.
+* `TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_neg`: `ω_j⁻¹ = ω_{(n−1) j}`.
 * `TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isCocycle`,
   `TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isNormalized`,
   `TNLean.Algebra.ScalarThreeCochain.kleinCocycle_norm`: the same for `(−1)^{a₁ b₂ c₂}`.
@@ -45,6 +45,9 @@ convention, and the groups are written multiplicatively.
 
 noncomputable section
 
+open groupCohomology
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace TNLean.Algebra.ScalarThreeCochain
 
 /-! ### The cyclic groups `ℤ_n` -/
@@ -52,7 +55,8 @@ namespace TNLean.Algebra.ScalarThreeCochain
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040.
 The three-cocycle `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` of `ℤ_n`, with
 residues represented in `{0, …, n − 1}`. -/
-def cyclicCocycle (n j : ℕ) [NeZero n] : ScalarThreeCochain (Multiplicative (ZMod n)) :=
+private def cyclicValue (n j : ℕ) [NeZero n] : Multiplicative (ZMod n) → Multiplicative (ZMod n) →
+  Multiplicative (ZMod n) → ℂˣ :=
   fun a b c ↦ Units.mk0
     (Complex.exp (2 * Real.pi * Complex.I * j * (Multiplicative.toAdd a).val *
       ((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val -
@@ -72,8 +76,8 @@ theorem pow_eq_pow_of_modEq {n A B : ℕ} {ζ : ℂ} (h : ζ ^ n = 1)
 
 /-- Project result: **the value of `ω_j`**, `ω_j(a,b,c) = ζ^{j a ⌊(b + c)/n⌋}` with
 `ζ = exp(2πi/n)`, since `b + c − [b + c] = n ⌊(b + c)/n⌋`. -/
-theorem cyclicCocycle_val (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n)) :
-    (cyclicCocycle n j a b c : ℂ) =
+private theorem cyclicValue_val (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n)) :
+    (cyclicValue n j a b c : ℂ) =
       rootOfUnity n ^ (j * (Multiplicative.toAdd a).val *
         (((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val) / n)) := by
   have hn : (n : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne n)
@@ -83,7 +87,7 @@ theorem cyclicCocycle_val (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n
     rw [ZMod.val_add]
     have := Nat.mod_add_div ((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val) n
     omega
-  rw [cyclicCocycle, Units.val_mk0, hsub, rootOfUnity, ← Complex.exp_nat_mul]
+  rw [cyclicValue, Units.val_mk0, hsub, rootOfUnity, ← Complex.exp_nat_mul]
   congr 1
   push_cast
   field_simp
@@ -104,10 +108,10 @@ private theorem carry_add (n h k l : ℕ) (hn : 0 < n) :
 
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040.
 **`ω_j` is a three-cocycle** of `ℤ_n` for every `n` and `j`. -/
-theorem cyclicCocycle_isCocycle (n j : ℕ) [NeZero n] : IsCocycle (cyclicCocycle n j) := by
+private theorem cyclicValue_isCocycle (n j : ℕ) [NeZero n] : IsCocycle (cyclicValue n j) := by
   intro g h k l
   apply Units.ext
-  simp only [Units.val_mul, cyclicCocycle_val, ← pow_add, toAdd_mul, ZMod.val_add]
+  simp only [Units.val_mul, cyclicValue_val, ← pow_add, toAdd_mul, ZMod.val_add]
   apply pow_eq_pow_of_modEq (rootOfUnity_pow n)
   set G := (Multiplicative.toAdd g).val
   set H := (Multiplicative.toAdd h).val
@@ -123,9 +127,38 @@ theorem cyclicCocycle_isCocycle (n j : ℕ) [NeZero n] : IsCocycle (cyclicCocycl
     _ = j * G * ((H + K) / n) + j * G * (((H + K) % n + L) / n) + j * H * ((K + L) / n) := by
       rw [← mul_add, ← mul_add, hc]
 
+/-- The cyclic three-cocycle of arXiv:2405.00439, line 2040, certified in
+Mathlib's inhomogeneous cochain complex. -/
+def cyclicCocycle (n j : ℕ) [NeZero n] :
+    cocycles (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3 :=
+  toCocycles ⟨cyclicValue n j, cyclicValue_isCocycle n j⟩
+
+/-- The exponential formula of arXiv:2405.00439, line 2040, for the cyclic cocycle. -/
+theorem cyclicCocycle_apply (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n)) :
+    scalarCocycleValue₃ (cyclicCocycle n j) a b c =
+      Units.mk0
+        (Complex.exp (2 * Real.pi * Complex.I * j * (Multiplicative.toAdd a).val *
+          ((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val -
+            (Multiplicative.toAdd b + Multiplicative.toAdd c).val : ℕ) / (n : ℂ) ^ 2))
+        (Complex.exp_ne_zero _) := by
+  simp [cyclicCocycle, cyclicValue]
+
+/-- The value of the cyclic cocycle is the carry power of `exp(2πi/n)`. -/
+theorem cyclicCocycle_val (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n)) :
+    (scalarCocycleValue₃ (cyclicCocycle n j) a b c : ℂ) =
+      rootOfUnity n ^ (j * (Multiplicative.toAdd a).val *
+        (((Multiplicative.toAdd b).val + (Multiplicative.toAdd c).val) / n)) := by
+  simpa only [cyclicCocycle, scalarCocycleValue₃_toCocycles] using cyclicValue_val n j a b c
+
+/-- The multiplicative values of the certified cyclic cocycle satisfy the cocycle equation. -/
+theorem cyclicCocycle_isCocycle (n j : ℕ) [NeZero n] :
+    IsCocycle (scalarCocycleValue₃ (cyclicCocycle n j)) := by
+  simpa only [cyclicCocycle, scalarCocycleValue₃_toCocycles] using cyclicValue_isCocycle n j
+
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040.
 **`ω_j` is normalized**: it equals one whenever an argument is the identity. -/
-theorem cyclicCocycle_isNormalized (n j : ℕ) [NeZero n] : IsNormalized (cyclicCocycle n j) := by
+theorem cyclicCocycle_isNormalized (n j : ℕ) [NeZero n] : IsNormalized ((scalarCocycleValue₃
+  (cyclicCocycle n j))) := by
   have hlt : ∀ x : ZMod n, x.val < n := fun x ↦ ZMod.val_lt x
   refine ⟨fun h k ↦ ?_, fun g k ↦ ?_, fun g h ↦ ?_⟩ <;> apply Units.ext <;>
     simp only [cyclicCocycle_val, Units.val_one, toAdd_one, ZMod.val_zero, mul_zero,
@@ -136,18 +169,20 @@ theorem cyclicCocycle_isNormalized (n j : ℕ) [NeZero n] : IsNormalized (cyclic
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040.
 The values of `ω_j` are phases. -/
 theorem cyclicCocycle_norm (n j : ℕ) [NeZero n] (a b c : Multiplicative (ZMod n)) :
-    ‖(cyclicCocycle n j a b c : ℂ)‖ = 1 := by
+    ‖((scalarCocycleValue₃ (cyclicCocycle n j)) a b c : ℂ)‖ = 1 := by
   rw [cyclicCocycle_val, norm_pow,
     Complex.norm_eq_one_of_pow_eq_one (rootOfUnity_pow n) (NeZero.ne n), one_pow]
 
 /-- Project result: **the inverse of `ω_j` is `ω_{(n−1) j}`**, pointwise: `ω_j(a,b,c)` is the
 power `ζ^{j a ⌊(b + c)/n⌋}` of `ζ = exp(2πi/n)`, and `ζ^n = 1`. The cocycles are those of
 arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040. -/
-theorem cyclicCocycle_inv (n j : ℕ) [NeZero n] :
-    (cyclicCocycle n j)⁻¹ = cyclicCocycle n ((n - 1) * j) := by
+theorem cyclicCocycle_neg (n j : ℕ) [NeZero n] :
+    -cyclicCocycle n j = cyclicCocycle n ((n - 1) * j) := by
+  apply scalarCocycleValue₃_injective
   funext a b c
+  simp only [scalarCocycleValue₃_neg, Pi.inv_apply]
   apply Units.ext
-  rw [Pi.inv_apply, Pi.inv_apply, Pi.inv_apply, Units.val_inv_eq_inv_val, cyclicCocycle_val,
+  rw [Units.val_inv_eq_inv_val, cyclicCocycle_val,
     cyclicCocycle_val, eq_comm]
   refine eq_inv_of_mul_eq_one_left ?_
   rw [← pow_add]
@@ -170,26 +205,42 @@ theorem cyclicCocycle_inv (n j : ℕ) [NeZero n] :
 Source: arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex` line 1848: the type-II component
 `ω_II(a b^i, a^j b, a^k b) = −1`, all other values `+1`, which is this formula in the coordinates
 `a = (1,0)`, `b = (0,1)`; its class is `(0,0,1)` in the table of lines 1856–1872. -/
-def kleinCocycle : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2)) :=
+private def kleinValue : ScalarThreeCochain (Multiplicative (ZMod 2 × ZMod 2)) :=
   fun a b c ↦
     (-1) ^ ((Multiplicative.toAdd a).1 * (Multiplicative.toAdd b).2 *
       (Multiplicative.toAdd c).2).val
 
 /-- Project result: **`(−1)^{a₁ b₂ c₂}` is a three-cocycle**: its exponent is an additive
 three-cocycle with values in `ℤ₂`. -/
-theorem kleinCocycle_isCocycle : IsCocycle kleinCocycle := by
+private theorem kleinValue_isCocycle : IsCocycle kleinValue := by
   intro g h k l
-  simp only [kleinCocycle, ← ZMod.neg_one_pow_val_add, toAdd_mul, Prod.fst_add, Prod.snd_add]
+  simp only [kleinValue, ← ZMod.neg_one_pow_val_add, toAdd_mul, Prod.fst_add, Prod.snd_add]
   congr 2
   ring
 
+/-- The type-II Klein three-cocycle, certified in Mathlib's cochain complex. -/
+def kleinCocycle :
+    cocycles (Rep.ofMulDistribMulAction (Multiplicative (ZMod 2 × ZMod 2)) ℂˣ) 3 :=
+  toCocycles ⟨kleinValue, kleinValue_isCocycle⟩
+
+/-- The scalar formula for the type-II Klein cocycle. -/
+theorem kleinCocycle_apply (a b c : Multiplicative (ZMod 2 × ZMod 2)) :
+    scalarCocycleValue₃ kleinCocycle a b c =
+      (-1) ^ ((Multiplicative.toAdd a).1 * (Multiplicative.toAdd b).2 *
+        (Multiplicative.toAdd c).2).val := by
+  simp [kleinCocycle, kleinValue]
+
+/-- The multiplicative values of the certified Klein cocycle satisfy the cocycle equation. -/
+theorem kleinCocycle_isCocycle : IsCocycle (scalarCocycleValue₃ kleinCocycle) := by
+  simpa only [kleinCocycle, scalarCocycleValue₃_toCocycles] using kleinValue_isCocycle
+
 /-- Project result: `(−1)^{a₁ b₂ c₂}` is normalized. -/
-theorem kleinCocycle_isNormalized : IsNormalized kleinCocycle := by
-  refine ⟨fun _ _ ↦ ?_, fun _ _ ↦ ?_, fun _ _ ↦ ?_⟩ <;> simp [kleinCocycle]
+theorem kleinCocycle_isNormalized : IsNormalized (scalarCocycleValue₃ (kleinCocycle)) := by
+  refine ⟨fun _ _ ↦ ?_, fun _ _ ↦ ?_, fun _ _ ↦ ?_⟩ <;> simp [kleinCocycle_apply]
 
 /-- Project result: the values of `(−1)^{a₁ b₂ c₂}` are signs. -/
 theorem kleinCocycle_norm (a b c : Multiplicative (ZMod 2 × ZMod 2)) :
-    ‖(kleinCocycle a b c : ℂ)‖ = 1 := by
-  simp [kleinCocycle]
+    ‖((scalarCocycleValue₃ (kleinCocycle)) a b c : ℂ)‖ = 1 := by
+  simp [kleinCocycle_apply]
 
 end TNLean.Algebra.ScalarThreeCochain
