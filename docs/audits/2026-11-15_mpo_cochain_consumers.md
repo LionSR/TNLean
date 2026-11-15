@@ -137,4 +137,10 @@ proof corrections are included in the follow-up. Full latest-head validation
 remains required. Run results are kept current in the draft PR description;
 the compilation records here describe the revisions named above.
 
+The combined-source run at `ed95ce2` passed strict checking of the native
+constructors, gates, generic block differential, gauge calculations, and all
+changed Z₃ consumers. Its only strict failure was an unused trailing `rfl` in
+the CZX block-action proof, which is removed in the follow-up. Full downstream
+and latest-head validation remain pending.
+
 Prepared with OpenAI Codex (GPT-6); maintainer review is required.

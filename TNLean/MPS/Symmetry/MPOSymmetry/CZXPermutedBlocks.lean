@@ -86,8 +86,7 @@ theorem czx_carriesMPV (g x : Multiplicative (Fin 2)) :
        have hflip : ∀ c : Fin 2, spinFlip N (fun _ ↦ c) = fun _ ↦ c.rev := fun c ↦ rfl
        simp only [hflip, czExponent, spinParity, Finset.sum_const, Finset.card_univ,
          Fintype.card_fin, smul_eq_mul]
-       norm_num
-       try rfl)
+       norm_num)
 
 /-! ### Action tensors -/
 
