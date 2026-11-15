@@ -88,16 +88,11 @@ matrix unit $E_{00}$ forced by any such $S$. This rules out inferring that
 particular support hypothesis from rank bounds alone, not the existence
 of a more general tree.
 
-Two precise mathematical steps remain for a general doubly-logarithmic
-inhomogeneous theorem. For each interval $I$ one needs a frame for the
-range of its physical matrix, with dimension at most $D^2$, and a coherent
-factorization through the tensor product of the frames of its two children.
-The frames and merge maps must depend on the interval, rather than just its
-length, and the resulting measurement implementation must have one branch
-scalar for every coherent sector. The generic circuit geometry already
-allows position-dependent gates; identifying their contraction with the
-actual inhomogeneous polar factors is not supplied by the current
-homogeneous supported-tree theorem. This is a missing derivation, not a
+An inhomogeneous tree requires frames and merge maps depending on their
+intervals, rather than just their lengths. The generic circuit geometry
+already allows position-dependent gates, but the existing homogeneous
+supported-tree theorem does not identify its contraction with arbitrary
+inhomogeneous polar factors. This is a limitation of that theorem, not a
 proved depth obstruction.
 
 A positive local completion step is written in
@@ -109,16 +104,57 @@ lies in the range of an isometry $J$, the completion can be chosen inside
 that range: $B=(JW)P$ with both $W$ and $JW$ isometric. Thus two unrelated
 child isometries and an arbitrary compressed parent matrix admit a full
 binary isometric merge. This removes the need for a common coordinate
-support at that local step. A recursive identification with the actual
-inhomogeneous chain intervals and a position-dependent coherent
-measurement implementation remain to be established.
+support at that local step.
+
+\section{Algebraic tree continuation}
+The interval-dependent construction is written in
+\doclink{TNLean/MPS/Preparation/InhomogeneousPolarTree}. If the child
+physical matrices factor as $F_A=XP$ and $F_B=YQ$, the actual concatenated
+matrix is $(X\otimes Y)C$, where
+$C_{(u,v),(a,b)}=\sum_cP_{u,(a,c)}Q_{v,(c,b)}$.
+Thus the parent range inclusion follows from the matrix-product
+contraction; it is not an extra range hypothesis. Recursive completion
+inside that range yields an isometric polar tree on any feasible binary
+geometry, with $XP=F$ and $X\Pi=V$ at its root. In particular, if
+$s\ge1$ and $d^s\ge D^2$, arbitrary site-dependent chains of length
+$s2^h$ have exact polar trees of height $h$ and leaves of at most $s$
+sites. No injectivity or common coordinate support is imposed.
+
+This is an algebraic factorization. It does not provide the
+position-dependent coherent measurement implementation. That construction
+must preserve a common branch scalar across all coherent sectors.
+
+\section{What a sharp uniform rate would require}
+The source's analytic bounds (23) and (S11)--(S16) concern a fixed
+translation-invariant tensor and its normal-sector decomposition.
+They give admissible exponents $0<\gamma<1/2$, not an optimality theorem
+for the approximation exponent. The inhomogeneous random-MPS discussion
+in Supplemental Material~3 reports exponential decay per block in
+1000 samples, with fitted rates varying between samples, in (S42).
+It does not prove one positive rate and one prefactor uniform in length
+and in an entire specified inhomogeneous class. Its numerical observations
+cannot by themselves select or justify a sharp uniform exponent for the
+long-range sequence class left unspecified by the remark.
+
+\doclink{TNLean/MPS/Preparation/ExponentialBlockingThreshold} instead
+isolates the exact numerical consequence of a supplied certificate:
+$KN^ke^{-rq}\le\varepsilon$ holds precisely when
+$q\ge(\log K+k\log N-\log\varepsilon)/r$.
+The nonnegative ceiling is the least integral scale satisfying that
+certificate. Retaining the source's number-of-blocks factor gives the
+exact criterion
+$K(N/q)e^{-rq}\le\varepsilon$ if and only if
+$rq+\log q\ge\log K+\log N-\log\varepsilon$ for $q>0$.
+These exact thresholds are not lower bounds on actual MPS approximation
+errors or on preparation depth, and they do not establish a rate for an
+unspecified sequence class.
 
 For an unrestricted reading of the source remark, a class of sequences
 must still be specified and a uniform rate proved for that class, with a
 uniform label count. The conditional theorem establishes how such a rate
 gives a logarithmic scale; it does not establish the rate itself. The
-doubly-logarithmic claim additionally requires the interval-tree
-identification and implementation just described. These obligations are
+doubly-logarithmic claim additionally requires the coherent measurement
+implementation just described. These obligations are
 distinct from the short-range rate work. Issue~\#10573 remains open.
 
 \begin{thebibliography}{9}

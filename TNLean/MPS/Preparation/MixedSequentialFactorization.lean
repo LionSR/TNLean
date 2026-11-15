@@ -36,7 +36,7 @@ open scoped BigOperators Matrix Kronecker
 
 namespace MPSPreparation
 
-open MPSChainTensor (eval)
+open MPSChainTensor (eval eval_append)
 open MPSTensor (virtualPairEquiv)
 
 variable {d D n : ℕ}
@@ -259,15 +259,6 @@ theorem mixedConfigurationEquiv_apply {l r : ℕ}
     mixedConfigurationEquiv d l r σ =
       Fin.append σ.1 (Fin.cons σ.2.1 (fun p => σ.2.2 (Fin.rev p))) :=
   rfl
-
-private theorem eval_append {l r : ℕ} (L : MPSChainTensor d D l)
-    (R : MPSChainTensor d D r) (σ : Fin l → Fin d) (τ : Fin r → Fin d) :
-    eval (Fin.append L R) (Fin.append σ τ) = eval L σ * eval R τ := by
-  have h : (fun k => Fin.append L R k (Fin.append σ τ k)) =
-      Fin.append (fun k => L k (σ k)) (fun k => R k (τ k)) := by
-    funext k
-    refine Fin.addCases (fun i => ?_) (fun i => ?_) k <;> simp
-  simp only [MPSChainTensor.eval_eq_prod_ofFn, h, List.ofFn_fin_append, List.prod_append]
 
 /-- Evaluation of the split chain is the product of its left, central and right factors. -/
 theorem eval_mixedChain {l r : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d D)
