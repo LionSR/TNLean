@@ -1,0 +1,62 @@
+\begin{definition}[Reduced native edge words]
+    \label{def:peps_dual_reduced_edge_word}
+    \lean{TNLean.PEPS.torusDualStepLetter,TNLean.PEPS.torusDualPathLetters,
+        TNLean.PEPS.torusDualReducedWord,TNLean.PEPS.torusDualEmptyHomotopyDecision}\leanok
+    \uses{def:peps_dual_flux_path}
+    For a native torus with arbitrary periods, assign one signed letter
+    to each labelled step, retaining its positive edge's base vertex and
+    whether the axis is east or north. Reverse steps use inverse letters.
+    Let $L(p)$ list these letters in reverse traversal order. Cancel adjacent
+    inverse letters to obtain $\operatorname{red}(p)$. Define the Boolean value
+    \begin{align}
+        D(p,q)=[\,\operatorname{red}(p)=\operatorname{red}(q)\,].
+        \label{eq:peps_dual_reduced_word_decision}
+    \end{align}
+    Both lists are finite, including when a torus period is zero.
+\end{definition}
+
+\begin{lemma}[Equal reduced words give a supported homotopy]
+    \label{lem:peps_dual_reduced_word_sufficient}
+    \lean{TNLean.PEPS.torusDualHomotopy_of_reducedWord_eq}\leanok
+    \uses{def:peps_dual_reduced_edge_word,def:peps_dual_flux_homotopy}
+    Let both periods be positive and let $R$ be any allowed square support.
+    For finite paths $p,q:a\to b$, equality of their reduced native edge words
+    implies $p\sim_Rq$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_finite_presentation_classification,def:peps_dual_path_word}
+    Reduced-word equality gives $W(p)=W(q)$ in the free group, hence
+    $\pi_R(W(p))=\pi_R(W(q))$. The finite-presentation classification gives
+    $p\sim_Rq$.
+\end{proof}
+
+\begin{lemma}[A finite decision for empty square support]
+    \label{lem:peps_dual_empty_support_normal_form}
+    \lean{TNLean.PEPS.torusDualHomotopy_empty_iff_reducedWord_eq,
+        TNLean.PEPS.torusDualEmptyHomotopyDecision_eq_true}\leanok
+    \uses{def:peps_dual_reduced_edge_word,def:peps_dual_flux_homotopy}
+    Let both torus periods be positive. For finite paths $p,q:a\to b$,
+    \begin{align}
+        p\sim_{\varnothing}q
+        \quad\Longleftrightarrow\quad
+        \operatorname{red}(p)=\operatorname{red}(q)
+        \quad\Longleftrightarrow\quad D(p,q)=\mathrm{true}.
+        \label{eq:peps_dual_empty_support_classification}
+    \end{align}
+    The finite-list reduction therefore decides this generated homotopy.
+    Separate direction labels remain present at periods one and two.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_dual_path_word,lem:peps_dual_flat_transport_invariance,
+        lem:peps_dual_reduced_word_sufficient}
+    In the forward direction, use the constant free-group fibre with step
+    map $F_e(z)=W(e)z$. Reverse steps are inverse maps, and no square-flatness
+    condition remains when the support is empty. Its path action is
+    \begin{align}
+        F_p(1)=W(p).
+        \label{eq:peps_dual_empty_support_free_transport}
+    \end{align}
+    Homotopy invariance gives $W(p)=W(q)$, hence equality of their reduced words.
+    The preceding lemma gives the converse, and the definition of $D$ gives
+    the Boolean equivalence.
+\end{proof}
