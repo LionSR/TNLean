@@ -63,11 +63,13 @@ private theorem flat_cut_eq_closure
   have hh : (fun w : X ↦ leftRegularMatrix G ((torusBondClosureLabels u v).1 w)) =
       torusHorizontalClosure (leftRegularMatrix G) v := by
     funext w
-    simp [torusBondClosureLabels, torusHorizontalClosure]
+    simp only [torusBondClosureLabels, torusHorizontalClosure]
+    split_ifs <;> simp
   have hv : (fun w : X ↦ leftRegularMatrix G ((torusBondClosureLabels u v).2 w)) =
       torusVerticalClosure (leftRegularMatrix G) u := by
     funext w
-    simp [torusBondClosureLabels, torusVerticalClosure]
+    simp only [torusBondClosureLabels, torusVerticalClosure]
+    split_ifs <;> simp
   rw [hh, hv] at h
   exact h.symm
 
