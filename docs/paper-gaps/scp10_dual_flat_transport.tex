@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Locally Flat Transports and Restricted Dual Homotopy}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+deforms flux strings using virtual invariance. When the swept support is
+restricted, equal lifted displacement alone does not imply the generated
+homotopy: a missing square can retain a nonabelian loop obstruction.
+
+The definition \leanid{TNLean.PEPS.TorusDualFlatTransport} instead specifies
+independent local data: a set at each dual vertex, mutually inverse maps
+on opposite labelled steps, and equal compositions on the two sides of
+every allowed square. These conditions make no reference to a pair of
+paths or a homotopy witness. The definition
+\leanid{TNLean.PEPS.TorusDualFlatTransport.eval} composes the step maps.
+The theorem \leanid{TNLean.PEPS.TorusDualHomotopy.flatTransport_eval_eq}
+derives transport equality from every generated supported homotopy.
+
+The converse, \leanid{TNLean.PEPS.torusDualHomotopy_iff_flatTransport},
+proves positive semantic completeness under all such locally flat
+transports. Its separating transport is constructed from the classes of
+actual paths from the common initial vertex, with the existing generated
+homotopy as equivalence relation. Appending a step is reversible by an
+elementary backtrack and locally flat by an allowed square. Evaluating at
+the constant path class recovers a homotopy of the compared paths.
+This construction uses no torus size assumption, including for the
+separately labelled parallel steps of periods one and two.
+
+The universal family includes arbitrary vertex sets, rather than only
+finite groups, a finite collection of seam words, or physical flux
+insertions. Thus this theorem supplies an exact transport criterion, not
+a finite decision procedure or a claim that winding is complete under
+restricted support. It does not derive a prescribed geometric homotopy
+from endpoint exclusion alone and does not prove noncentral open-pair
+vacuum density. Those source-level obligations remain under
+\ghissue{8703}; the full-lattice Hamiltonian scope of \ghissue{8947} is
+unchanged.
+\end{document}
