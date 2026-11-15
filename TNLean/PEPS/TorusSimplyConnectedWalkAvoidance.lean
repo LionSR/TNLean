@@ -124,7 +124,7 @@ private theorem step_displacement {a b : X} (e : TorusDualStep a b) :
   | east x y =>
     simp only [dualStepWalk, torusWalkWinding, zero_add]
     rw [torusDirectedWinding_right (x, y)]
-    exact Prod.ext (val_step x).symm (by simp)
+    exact Prod.ext (val_step x).symm (by simp [TorusDualStep.displacement])
   | west x y =>
     simp only [dualStepWalk, torusWalkWinding, zero_add]
     rw [torusDirectedWinding_symm (torusGraph_adj_right x y),
@@ -138,7 +138,7 @@ private theorem step_displacement {a b : X} (e : TorusDualStep a b) :
   | north x y =>
     simp only [dualStepWalk, torusWalkWinding, zero_add]
     rw [torusDirectedWinding_up (x, y)]
-    exact Prod.ext (by simp) (val_step y).symm
+    exact Prod.ext (by simp [TorusDualStep.displacement]) (val_step y).symm
   | south x y =>
     simp only [dualStepWalk, torusWalkWinding, zero_add]
     rw [torusDirectedWinding_symm (torusGraph_adj_up x y),
