@@ -123,6 +123,7 @@ theorem d₂₃_eq_const_iff (L : X → G → G → M) (ω : G → G → G → M
     have he := d₂₃_twoCochainEquiv_apply L g h k ((g * h * k)⁻¹ • y)
     simp only [smul_inv_smul] at he
     rw [he]
+    change _ = ω g h k
     exact div_eq_iff_eq_mul.mpr (by simpa [mul_assoc] using hω ((g * h * k)⁻¹ • y) g h k)
 
 end TNLean.Algebra.PermutationCochains
