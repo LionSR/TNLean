@@ -45,7 +45,7 @@ private theorem cellSuccessor_Icc_single_entry_proper (a b : Fin N) (hb : b.val 
       rw [hval, Fin.val_zero] at h'
       omega
     have hpred : ((0 : Fin N) - 1).val = N - 1 := by
-      rw [zero_sub, Fin.val_neg, if_neg hne, hval]
+      rw [zero_sub, Fin.val_neg, ite_eq_right hne, hval]
     change (0 : Fin N) - 1 ∈ Finset.Icc 0 b ↔ (0 : Fin N) ≠ 0
     constructor
     · intro h
