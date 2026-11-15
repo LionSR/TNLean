@@ -50,6 +50,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 
+omit [DecidableEq G] in
 private theorem cut_ne_zero
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
@@ -63,6 +64,7 @@ private theorem cut_ne_zero
   simpa only [regularPhysicalCutMatrix, assembleRegionσ_restrict,
     Matrix.zero_apply, Pi.zero_apply] using h
 
+omit [DecidableEq G] in
 /-- Different conjugacy classes of holonomy on an actual observed closed
 walk force different normalized observed densities of the actual regular
 PEPS cuts. Both cuts are derived nonzero. The region need only be connected;
@@ -93,7 +95,7 @@ theorem regularPhysicalCutMatrix_normalized_reduced_ne_of_closedWalk_holonomy
   have hv : Q C * regularPhysicalCutMatrix (regularTwistedSite a v) R = 0 := by
     have h := mul_regularPhysicalCutMatrix_eq_ite_of_openRegion_eigen
       (regularTwistedSite a v) R (Q C) _ (fun θ => hQ v θ C)
-    simpa only [C, Option.some.injEq, if_neg hc] using h
+    simpa only [C, Option.some.injEq, ite_eq_right hc] using h
   exact ⟨cut_ne_zero a ha R u, cut_ne_zero a ha R v,
     normalized_gram_ne_of_left_action _ _ (Q C) (cut_ne_zero a ha R u) hu hv⟩
 
