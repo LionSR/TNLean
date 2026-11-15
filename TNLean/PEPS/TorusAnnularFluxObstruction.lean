@@ -129,8 +129,17 @@ private theorem annular_holonomy (g : G) :
         (torusDualFluxLabels g torusAnnularFluxPath).2) torusAnnularObservationWalk = g⁻¹ := by
   simp only [torusAnnularObservationWalk, regularWalkHolonomy_cons,
     regularWalkHolonomy_nil, directed_right, directed_up, directed_left, directed_down]
+  have h02 : (0 : ZMod 7) ≠ 2 := by decide
+  have h03 : (0 : ZMod 7) ≠ 3 := by decide
+  have h04 : (0 : ZMod 7) ≠ 4 := by decide
+  have h05 : (0 : ZMod 7) ≠ 5 := by decide
+  have h21 : (2 : ZMod 7) ≠ 1 := by decide
+  have h32 : (3 : ZMod 7) ≠ 2 := by decide
+  have h34 : (3 : ZMod 7) ≠ 4 := by decide
+  have h35 : (3 : ZMod 7) ≠ 5 := by decide
   norm_num [torusDualFluxLabels, torusFluxPowerLabels, torusAnnularFluxPath,
-    torusDualPathCrossings, TorusDualStep.crossings, torusPointMass]
+    torusDualPathCrossings, TorusDualStep.crossings, torusPointMass,
+    h02, h03, h04, h05, h21, h32, h34, h35]
 
 private theorem annular_vacuum_holonomy :
     regularWalkHolonomy (torusGraphRegularLabels (1 : X → G) 1)
@@ -142,7 +151,7 @@ private theorem annular_vacuum_holonomy :
 private theorem induced_holonomy (u : Edge (Γ₇) → G) :
     regularWalkHolonomy (regularRegionInternalOperators torusAnnularObservationRegion u)
       annularInducedWalk = regularWalkHolonomy u torusAnnularObservationWalk := by
-  unfold annularInducedWalk
+  unfold annularInducedWalk annularRoot
   rw [regularWalkHolonomy_inducedWalk, SimpleGraph.Walk.map_induce]
   rfl
 
@@ -167,7 +176,10 @@ theorem IsGIsometric.torusAnnularFlux_normalized_density_ne_vacuum {d : ℕ}
   apply hA.torusBond_normalized_density_ne_of_closedWalk_holonomy
     torusAnnularObservationRegion annular_connected annularRoot annularInducedWalk
     (torusDualFluxLabels g torusAnnularFluxPath) 1
-  rw [induced_holonomy, induced_holonomy, annular_holonomy, annular_vacuum_holonomy]
+  rw [induced_holonomy, induced_holonomy, annular_holonomy]
+  change ConjClasses.mk g⁻¹ ≠ ConjClasses.mk
+    (regularWalkHolonomy (torusGraphRegularLabels (1 : X → G) 1) torusAnnularObservationWalk)
+  rw [annular_vacuum_holonomy]
   intro hc
   have hi : g⁻¹ = 1 := by
     simpa only [ConjClasses.mk_eq_mk_iff_isConj, isConj_one_left] using hc
