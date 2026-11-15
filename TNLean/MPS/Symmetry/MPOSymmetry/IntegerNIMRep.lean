@@ -41,8 +41,8 @@ theorem IsNIMRep.integerNIMRepMatrix_mul [Fintype ι] [Fintype κ]
       (∑ c, (N a b c : ℤ) * (M c x y : ℤ)) =
         ∑ z, (M b x z : ℤ) * (M a z y : ℤ) := by
     exact_mod_cast h a b x y
-  simpa only [Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply,
-    integerNIMRepMatrix, zsmul_eq_mul, mul_comm] using hxy.symm
+  simp only [Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply, integerNIMRepMatrix]
+  simpa only [zsmul_eq_mul, Int.cast_id, mul_comm] using hxy.symm
 
 /-- A unit-preserving action has identity matrix at the unit label.
 The hypothesis is deliberately separate from `IsNIMRep`. -/
@@ -71,10 +71,11 @@ theorem isNIMRep_of_ringHom [Fintype ι] [Fintype κ] [DecidableEq κ]
       ∑ c, (N a b c : ℤ) • integerNIMRepMatrix M c := by
     simpa only [map_mul, map_sum, map_zsmul, himage] using congrArg ρ (hmul a b)
   have hxy := congrArg (fun A : Matrix κ κ ℤ ↦ A y x) hmat
+  simp only [Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply,
+    integerNIMRepMatrix] at hxy
   have hcast : (∑ c, (N a b c : ℤ) * (M c x y : ℤ)) =
       ∑ z, (M b x z : ℤ) * (M a z y : ℤ) := by
-    simpa only [Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply,
-      integerNIMRepMatrix, zsmul_eq_mul, mul_comm] using hxy.symm
+    simpa only [zsmul_eq_mul, Int.cast_id, mul_comm] using hxy.symm
   exact_mod_cast hcast
 
 /-- Restriction of a unital ring homomorphism also supplies the missing unit
