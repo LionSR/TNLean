@@ -318,8 +318,7 @@ revision of the general group module used a nonexistent tactic import. There
 are no axioms or proof placeholders. The exact Python calculation remains
 supporting evidence, not a substitute for kernel verification.
 
-`TNLean/MPS/MPU/FiniteGroupDetectorPhase.lean` separately gives candidate
-proofs of the exact group identities
+`TNLean/MPS/MPU/FiniteGroupDetectorPhase.lean` separately proves the exact group identities
 \(u^aw^{-1}u^bwu^d=c^bu^{a+b+d}\) and
 \(\prod_{r=0}^{m-1}u^{-r-2}w^{-1}u^rwu^2=c^{\binom m2}\), assuming
 \(cu=uc\) and \(w^{-1}uw=cu\). These statements isolate the local
@@ -327,6 +326,16 @@ algebra at every order without assuming a whole-detector phase as a
 hypothesis. It also derives that the product at order \(2k\) is \(c^k\)
 whenever \(c^{2k}=1\). Constructing the clock/shift instance and identifying the full
 spatial word with this ordered product remain separate tasks.
+Hosted Lean built this module in 2.4 seconds on head `577e4ae`; the strict
+check found an unused `simp` argument, which the next revision removes.
+
+For the clock and shift matrices above, the conjugation phase is
+\(c=\zeta^{-1}1\). The abstract local-word product then has phase
+\(\zeta^{-\binom m2}\), which agrees with the spatial calculation's
+\(\zeta^{\binom m2}\) because \(2\binom m2=m(m-1)\). At even order
+\(m=2k\), its half-period value is \(\zeta^{-k}=-1\). These identifications
+explain the relation between the two calculations; the matrix instance and
+spatial identification are still not additional checked declarations.
 
 The circuit-to-interval identification and the all-even-order clock/shift
 extension are **not formalized** by that module. The finite-group detection

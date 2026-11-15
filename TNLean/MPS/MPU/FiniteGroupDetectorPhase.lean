@@ -65,8 +65,7 @@ theorem endpointConjugationWord_eq_pow (u w c : Γ) (hc : Commute c u)
     (hconj : w⁻¹ * u * w = c * u) (r : ℕ) :
     endpointConjugationWord u w r = c ^ r := by
   rw [endpointConjugationWord, conjugation_word_eq_zpow u w c hc hconj]
-  have hexp : -((r : ℤ) + 2) + r + 2 = 0 := by omega
-  simp [hexp]
+  simp
 
 /-- The ordered product of `m` local endpoint words is the triangular power of
 their conjugation phase. This is an exact group identity, with no finite-group
