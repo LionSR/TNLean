@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularAnchoredTreeGauge
 import TNLean.PEPS.RegularTwistedRegionEntropy
+import TNLean.PEPS.RegularTwistedStateNonzero
 import TNLean.PEPS.FixedBoundaryFactorDensity
 
 /-!
@@ -48,6 +49,19 @@ private theorem normalized_reduced_of_scaled_state
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ Δ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
 variable {G : Type*} [Group G] [Fintype G]
+
+private theorem actual_cut_ne_zero
+    (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
+    (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v)) (regularSiteMap (a v)))
+    (u : Edge Γ → G) (R : Finset V) :
+    regularPhysicalCutMatrix (regularTwistedSite a u) R ≠ 0 := by
+  intro hz
+  apply stateCoeff_regularTwistedSite_ne_zero_of_isGInjective a
+    (fun v => (ha v).toIsGInjective) u
+  funext σ
+  have h := congrFun (congrFun hz (fun v => σ v.1)) (fun v => σ v.1)
+  simpa only [regularPhysicalCutMatrix, assembleRegionσ_restrict,
+    Matrix.zero_apply, Pi.zero_apply] using h
 
 private theorem normalized_reduced_eq_of_common_untwisted
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
@@ -105,8 +119,8 @@ private theorem normalized_reduced_eq_of_common_untwisted
 component. The tree and global gauge are derived, and every Gram identity is
 obtained from actual regular G-isometric sites. Connectedness of the observed
 and complementary graphs and a nonempty boundary are explicit. Nonvanishing
-of the two actual cuts is required here; the native flux theorem supplies it
-separately. Conditional contraction step for SCP10, Lemma 6.14. -/
+of both actual cuts is derived from regular G-isometry. Conditional
+contraction step for SCP10, Lemma 6.14. -/
 theorem regularPhysicalCutMatrix_normalized_reduced_eq_of_untwisted_boundary_component
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v)) (regularSiteMap (a v)))
@@ -120,14 +134,17 @@ theorem regularPhysicalCutMatrix_normalized_reduced_eq_of_untwisted_boundary_com
       regularDirectedTransport u (hU h) = 1)
     (hboundary : ∀ v : {v : V // v ∈ Finset.univ \ R},
       (∃ w ∈ R, Γ.Adj v.1 w) → U.Reachable o v)
-    (hincident : ∀ e : Edge Γ, IsRegionIncidentEdge R e → u e = 1)
-    (hne : regularPhysicalCutMatrix (regularTwistedSite a u) R ≠ 0)
-    (hne₀ : regularPhysicalCutMatrix a R ≠ 0) :
+    (hincident : ∀ e : Edge Γ, IsRegionIncidentEdge R e → u e = 1) :
     let M := regularPhysicalCutMatrix (regularTwistedSite a u) R
     let M₀ := regularPhysicalCutMatrix a R
-    (M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose) =
-      (M₀ * M₀.conjTranspose).trace⁻¹ • (M₀ * M₀.conjTranspose) := by
+    M ≠ 0 ∧ M₀ ≠ 0 ∧
+      (M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose) =
+        (M₀ * M₀.conjTranspose).trace⁻¹ • (M₀ * M₀.conjTranspose) := by
   classical
+  have hne := actual_cut_ne_zero a ha u R
+  have hne₀ : regularPhysicalCutMatrix a R ≠ 0 := by
+    simpa only [regularTwistedSite_one] using actual_cut_ne_zero a ha (fun _ => 1) R
+  refine ⟨hne, hne₀, ?_⟩
   have hinv : ∀ g v η s, a v (fun f => g * η f) s = a v η s := by
     intro g v η s
     exact (ha v).toIsGInjective.regularSiteMap_translation g η s
