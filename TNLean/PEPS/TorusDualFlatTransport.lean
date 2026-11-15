@@ -68,7 +68,7 @@ private theorem eval_reverse_apply {R : Set X} {Y : X → Type*}
 private theorem eval_apply_reverse {R : Set X} {Y : X → Type*}
     (F : TorusDualFlatTransport R Y) {a b : X}
     (p : TorusDualPath a b) (z : Y b) : F.eval p (F.eval p.reverse z) = z := by
-  simpa only [Quiver.Path.reverse_reverse] using F.eval_reverse_apply p.reverse z
+  simpa only [Quiver.Path.reverse_reverse] using eval_reverse_apply F p.reverse z
 
 /-- Every generated supported homotopy preserves every locally flat transport.
 The transport is constrained only by reversal and allowed elementary squares.
@@ -85,18 +85,18 @@ theorem TorusDualHomotopy.flatTransport_eval_eq {R : Set X} {a b : X}
   | @reverse a b p q h ih =>
     have hinj : Function.Injective (F.eval q) :=
       (show Function.LeftInverse (F.eval q.reverse) (F.eval q) from
-        fun w => F.eval_reverse_apply q w).injective
+        fun w => eval_reverse_apply F q w).injective
     apply hinj
     calc
       F.eval q (F.eval p.reverse z) = F.eval p (F.eval p.reverse z) := (ih _).symm
-      _ = z := F.eval_apply_reverse p z
-      _ = F.eval q (F.eval q.reverse z) := (F.eval_apply_reverse q z).symm
+      _ = z := eval_apply_reverse F p z
+      _ = F.eval q (F.eval q.reverse z) := (eval_apply_reverse F q z).symm
   | backtrack e => exact F.reverse_step e z
   | square x y hxy => exact F.square x y hxy z
 
 private def pathClassSetoid (R : Set X) (a b : X) : Setoid (TorusDualPath a b) where
   r := TorusDualHomotopy R
-  iseqv := ⟨.refl, .symm, .trans⟩
+  iseqv := ⟨fun p => .refl p, fun h => .symm h, fun h k => .trans h k⟩
 
 private abbrev PathClass (R : Set X) (a b : X) := Quotient (pathClassSetoid R a b)
 
