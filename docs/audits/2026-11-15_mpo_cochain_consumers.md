@@ -22,6 +22,12 @@ tree hashes `3710b3e1076f93f0819d65273b78742e523ccef2` and
 The integration commit has both prerequisite heads as parents. No main branch
 or prerequisite branch was modified.
 
+After integration, #10616 advanced to
+`3ba155b6ea409bfde12e4ee915c0ab702642b455`. Its only change is LaTeX
+formatting in the fusion-gauge chapter; its Lean source is identical to the
+pinned head. This candidate carries that formatting correction while retaining
+the immutable integration base. #10615 remains at the selected head above.
+
 At inspection, both exact heads passed their hosted Lean build jobs, including
 the full library build, strict checks, compilation-time checks, style lint, and
 compiled blueprint declaration checks. Their web/PDF checks were not all
@@ -86,5 +92,15 @@ declaration checking.
 Hosted consumer compilation and downstream checking remain required. The
 candidate must not be described as validated until those checks pass on its
 actual combined source tree.
+
+The [hosted build at `5197337`](https://github.com/LionSR/TNLean/actions/runs/43745039062/job/132907421071)
+compiled both foundations together, `Associator`, `AssociatorCohomology`, the
+dagger-fusion modules, and several Klein and cyclic anomaly examples. It found
+an inference error in the single-block L-symbol evaluation: the coefficient
+group was inferred as complex numbers instead of complex units. The explicit
+complex-unit parameter was pushed in `0e4f591`; its rerun was queued at the last
+inspection. This is partial compilation evidence, not a successful complete
+consumer check. The subsequent prerequisite-formatting correction changes no
+Lean source.
 
 Prepared with OpenAI Codex (GPT-6); maintainer review is required.
