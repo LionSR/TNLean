@@ -800,6 +800,28 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{remark}
 
+\begin{lemma}[Sparse coupling of finite positive masses]
+    \label{thm:periodic_sparse_positive_coupling}
+    \lean{SparseCoupling.exists_probability_coupling,
+        SparseCoupling.exists_positive_mass_coupling}
+    \leanok
+    Let $(a_i)_{i=1}^m$ and $(b_j)_{j=1}^n$ be nonnegative real lists
+    with the same positive total mass, where $m,n>0$. There exist
+    $r\le m+n-1$ weighted pairs $(i_k,j_k,w_k)$, with $w_k\ge0$, such
+    that $a_i=\sum_{k:i_k=i}w_k$ and $b_j=\sum_{k:j_k=j}w_k$.
+    This includes probability lists as the case of total mass one.
+\end{lemma}
+
+\begin{proof}\leanok
+    Normalize the common mass to one. The pair of marginal vectors belongs
+    to the convex hull of pairs of standard basis vectors.
+    Carath\'eodory's theorem supplies an affinely independent subfamily.
+    Since the first marginal of each point has total one, that family is
+    also linearly independent. It lies in the codimension-one subspace
+    where the two marginal totals agree, so its cardinality is at most
+    $m+n-1$. Undo normalization to obtain the weighted pairs.
+\end{proof}
+
 \begin{lemma}[Choi rank along a channel semigroup]
     \label{thm:periodic_projected_semigroup_rank}
     \lean{Channel.choiRank_comp_expSemigroup_mono}

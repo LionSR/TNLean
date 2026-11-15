@@ -648,6 +648,14 @@ $\sum_{ij}L_{ij}^*L_{ij}=B$. Thus the resulting map $R'$ has the same
 prepared-state output and trace functional as $R$, with Choi rank
 $s\le a+b-1$. This construction avoids an extremality argument.
 
+The finite coupling ingredient is separately formalized by
+\leanid{SparseCoupling.exists_positive_mass_coupling} and its probability
+specialization \leanid{SparseCoupling.exists_probability_coupling} in
+\texttt{TNLean/Algebra/SparsePositiveCoupling.lean}. These results supply
+at most $a+b-1$ nonnegative weighted pairs with the prescribed marginals.
+The spectral Kraus construction and the channel selection argument in
+this subsection are still not Lean theorems.
+
 The comparison with the target rank uses the two-step coefficient
 vectors, with tensor factors ordered by the first and second step.
 The blocks outside the middle map form the path space
