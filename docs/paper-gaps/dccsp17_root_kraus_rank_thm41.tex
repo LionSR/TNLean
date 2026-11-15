@@ -9,7 +9,7 @@
 
 \title{The Root-Channel Kraus-Rank Step in Theorem 4.1}
 \author{}
-\date{2026-04-30; revised 2026-09-26}
+\date{2026-04-30; revised 2026-11-15}
 
 \begin{document}
 \maketitle
@@ -344,9 +344,57 @@ power inequalities. The resulting refinement theorem is
 \path{TNLean/MPS/Periodic/Symmetry/RefinementFromInjectiveTransfer.lean}.
 It requires no canonical-form assumption.
 
-Consequently any obstruction to bounded-root selection must have a
-singular target channel. For this remaining case, a first-order argument
-alone is insufficient. If the root has Kraus span $S$ of dimension $r$
+\section{Irreducible qubit targets, including singular ones}
+
+There is also a complete dimension-two result, formalized in
+\path{TNLean/MPS/Periodic/RefinementQubitRootRank.lean}.
+If $\mathcal F$ is a channel on $M_2(\mathbb C)$, $p>0$, and
+$\mathcal F^p$ is irreducible, then
+\begin{align}
+ \operatorname{rank}C_{\mathcal F}
+ &\le \operatorname{rank}C_{\mathcal F^p}.
+ \label{eq:dccsp17_qubit_root_rank}
+\end{align}
+No invertibility assumption is made on the power. The theorem
+\leanid{Channel.choiRank_le_pow_of_irreducible_fin_two} bounds every
+supplied channel root, so no further root selection is needed in this case.
+
+The key fact is that a trace-preserving irreducible qubit Kraus family
+has an invertible matrix in its linear span $S$. Suppose otherwise.
+For $A,B\in S$, all three determinants of $A$, $B$, and $A+B$ vanish.
+The polarized determinant identity then gives
+\begin{align}
+ AB+BA&=\operatorname{tr}(A)B+\operatorname{tr}(B)A.
+ \label{eq:dccsp17_qubit_singular_polarization}
+\end{align}
+If $N\in S$ has trace zero, this identity shows that $\ker N$ is invariant
+under every Kraus matrix. Since $N$ is singular, irreducibility forces
+$\ker N=\mathbb C^2$, and hence $N=0$. Trace is therefore injective on $S$.
+Trace preservation supplies a nonzero Kraus matrix $A$; its trace is
+nonzero. For every $B\in S$, the traceless matrix
+$\operatorname{tr}(A)B-\operatorname{tr}(B)A$ vanishes, so $S=\mathbb C A$.
+A nonzero kernel vector of $A$ would then be killed by every Kraus matrix,
+contradicting $\sum_i A_i^\dagger A_i=I$.
+This proves
+\leanid{Kraus.exists_isUnit_mem_wordSpan_one_fin_two}.
+
+Every Kraus representation of a channel root is irreducible when its
+power is irreducible. The invertible-span fact and the preceding word-span
+dimension argument give (\ref{eq:dccsp17_qubit_root_rank}). Consequently
+\leanid{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_irreducible_fin_two}
+proves the reverse implication for every tensor of bond dimension two
+whose transfer map is irreducible, including singular targets. It assumes
+only $p>0$, irreducibility, and channel divisibility, with no extra
+root-rank hypothesis. This result concerns a single irreducible target;
+it does not replace the full multi-block irreducible-form hypotheses by
+irreducibility or settle the higher-dimensional singular case.
+
+\section{First-order variations at singular targets}
+
+Any obstruction to bounded-root selection must have a singular target
+channel; an irreducible obstruction must also have bond dimension greater
+than two. In the remaining cases, a first-order argument alone is
+insufficient. If the root has Kraus span $S$ of dimension $r$
 and the target has Kraus span $S^p$ of dimension $s$, the differential
 of the power map is
 \begin{align}
@@ -479,9 +527,11 @@ absent from the source definition of $p$-divisibility and is not proved in the
 cited converse paragraph.
 
 For invertible target channels, the preceding rank argument supplies the
-required bound for every root. For singular target channels it remains open
-whether, under the irreducible-form hypotheses, a channel root can always
-be chosen with Kraus rank at most $d$. The formal development
+required bound for every root. The same conclusion holds for irreducible
+qubit targets, including singular ones. In the remaining singular cases it
+remains open whether, under the irreducible-form hypotheses, a channel root
+can always be chosen with Kraus rank at most $d$. Outside the proved cases,
+the formal development
 therefore proves the reverse implication from a selected bounded-rank
 root, and under the inverse canonicalization hypothesis
 (\ref{eq:dccsp17_root_kraus_rank_thm41_inverse_canonicalization}). Until a paper-level

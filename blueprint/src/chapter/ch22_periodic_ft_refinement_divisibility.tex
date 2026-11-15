@@ -847,6 +847,69 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Lemma~\ref{thm:periodic_refinement_from_bounded_root} applies.
 \end{proof}
 
+\begin{lemma}[An invertible matrix in an irreducible qubit Kraus span]
+    \label{lem:periodic_qubit_invertible_kraus_span}
+    \lean{Kraus.exists_isUnit_mem_wordSpan_one_fin_two}
+    \leanok
+    Let $A^i\in M_2(\C)$ be a trace-preserving irreducible Kraus family.
+    Its linear span contains an invertible matrix.
+\end{lemma}
+
+\begin{proof}\leanok
+    Suppose that every matrix in the span $S$ is singular. Polarizing the
+    $2\times2$ determinant identity gives, for $M,N\in S$,
+    \begin{align}
+        MN+NM=\operatorname{tr}(M)N+\operatorname{tr}(N)M.
+        \notag
+    \end{align}
+    If $\operatorname{tr}(N)=0$, this identity makes $\ker N$ invariant
+    under every $A^i$. Singularity and irreducibility force $N=0$.
+    Hence trace is injective on $S$. Choose a nonzero $A^i$; it exists
+    by trace preservation. Every member of $S$ is proportional to $A^i$,
+    so a nonzero kernel vector of $A^i$ is killed by every Kraus matrix.
+    This contradicts $\sum_i(A^i)^\dagger A^i=I$.
+\end{proof}
+
+\begin{lemma}[Root rank for irreducible qubit channels]
+    \label{lem:periodic_qubit_root_rank}
+    \lean{Channel.choiRank_le_pow_of_irreducible_fin_two}
+    \leanok
+    Let $\mathcal F$ be a channel on $M_2(\C)$, let $p>0$, and suppose
+    that $\mathcal F^p$ is irreducible. Then
+    $\operatorname{rank}_{\mathrm{Choi}}\mathcal F\le
+    \operatorname{rank}_{\mathrm{Choi}}\mathcal F^p$.
+    The power may be singular as a linear map.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_irreducible_root_constraints, lem:periodic_qubit_invertible_kraus_span,
+        thm:periodic_root_word_span_dimension, thm:periodic_choi_rank_kraus_span}
+    A normalized Kraus representation of $\mathcal F$ is irreducible,
+    since its blocked transfer map is irreducible. Its one-letter span
+    therefore contains an invertible matrix. The word-span dimension
+    inequality and the Choi-rank identity give the claimed bound.
+\end{proof}
+
+\begin{lemma}[Refinement for irreducible bond-dimension-two transfer maps]
+    \label{lem:periodic_qubit_refinement}
+    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_irreducible_fin_two}
+    \leanok
+    \uses{def:p_refinable}
+    Let $B$ have physical dimension $d$ and bond dimension two, with
+    irreducible transfer map $\mathcal E_B$. For every $p>0$,
+    $p$-divisibility of $\mathcal E_B$ implies that $B$ is $p$-refinable.
+    This includes singular transfer maps and assumes no separate
+    bounded-root or invertible-root-span condition.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_qubit_root_rank, thm:periodic_refinement_from_bounded_root}
+    Every channel root has Choi rank at most that of $\mathcal E_B$,
+    which is at most $d$. Choose a minimal Kraus representation of the
+    root, pad it to $d$ letters, and apply the bounded-root refinement
+    theorem.
+\end{proof}
+
 \begin{remark}[Continuum-limit application]\notready
     \label{rem:thm_4_1_continuum_limit}
     Refinability along arbitrarily large $p$ corresponds to infinite
