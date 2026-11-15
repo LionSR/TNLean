@@ -131,33 +131,16 @@ theorem norm_gaussianFilteredTerm_sub_le {q ΔE : ℝ} (hq : 0 ≤ q) {H H' : Ma
   have heq : gaussianFilteredTerm q ΔE H W - gaussianFilteredTerm q ΔE H' W = ∫ t, g t ∂μ := by
     simp only [gaussianFilteredTerm, gaussianIntertwiner]
     rw [integral_sub hI hI']
-  have hbound : ∀ t, ‖g t‖ ≤ Set.indicator (Set.Icc (-T) T) (fun _ => ε) t +
-      Set.indicator (Set.Icc (-T) T)ᶜ (fun _ => 2 * ‖W‖) t := by
-    intro t
-    by_cases ht : t ∈ Set.Icc (-T) T
-    · simp only [Set.indicator_of_mem ht, Set.indicator_of_notMem (Set.notMem_compl_iff.mpr ht),
-        add_zero]
-      exact hloc t ht
-    · simp only [Set.indicator_of_notMem ht, Set.indicator_of_mem (Set.mem_compl ht), zero_add]
-      refine (norm_sub_le _ _).trans_eq ?_
-      rw [norm_intertwinerIntegrand hH hH W t, norm_intertwinerIntegrand hH' hH' W t]
-      ring
-  have hi1 : Integrable (Set.indicator (Set.Icc (-T) T) (fun _ : ℝ => ε)) μ :=
-    (integrable_const ε).indicator measurableSet_Icc
-  have hi2 : Integrable (Set.indicator (Set.Icc (-T) T)ᶜ (fun _ : ℝ => 2 * ‖W‖)) μ :=
-    (integrable_const _).indicator measurableSet_Icc.compl
-  rw [heq]
-  calc ‖∫ t, g t ∂μ‖ ≤ ∫ t, (Set.indicator (Set.Icc (-T) T) (fun _ => ε) t +
-        Set.indicator (Set.Icc (-T) T)ᶜ (fun _ => 2 * ‖W‖) t) ∂μ :=
-      norm_integral_le_of_norm_le (hi1.add hi2) (Filter.Eventually.of_forall hbound)
-    _ = ε * μ.real (Set.Icc (-T) T) + 2 * ‖W‖ * μ.real (Set.Icc (-T) T)ᶜ := by
-      rw [integral_add hi1 hi2, integral_indicator_const _ measurableSet_Icc,
-        integral_indicator_const _ measurableSet_Icc.compl, smul_eq_mul, smul_eq_mul,
-        mul_comm, mul_comm (μ.real _)]
-    _ ≤ ε + 2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-      gcongr
-      · exact mul_le_of_le_one_right hε measureReal_le_one
-      · exact gaussianFilter_tail_le hq hT
+  have hglob (t : ℝ) : ‖g t‖ ≤ 2 * ‖W‖ := by
+    refine (norm_sub_le _ _).trans_eq ?_
+    rw [norm_intertwinerIntegrand hH hH W t, norm_intertwinerIntegrand hH' hH' W t]
+    ring
+  rw [heq, ← integral_add_compl measurableSet_Icc (hI.sub hI')]
+  refine (norm_add_le _ _).trans ?_
+  refine (add_le_add (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) hloc)
+    (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) (fun t _ => hglob t))).trans ?_
+  exact add_le_add (mul_le_of_le_one_right hε measureReal_le_one)
+    (mul_le_mul_of_nonneg_left (gaussianFilter_tail_le hq hT) (by positivity))
 
 end Abstract
 
