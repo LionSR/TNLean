@@ -649,13 +649,17 @@ $N\geq1$.
     \leanok
     \uses{def:mpug_permuted_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
         thm:mpug_permuted_block_l_symbol_spec,
+        def:mpug_permutation_coefficients,
         thm:mpug_dressed_proportionality, thm:mpug_fixed_block_trivializes}
     For all $x\in\mathsf X$ and $g,h,k\in G$,
     \begin{align}
         L^x_{g,hk}L^x_{h,k}
          & =\omega(g,h,k)\,L^{kx}_{g,h}L^x_{gh,k},
     \end{align}
-    which is (\ref{eq:mpug_l_compatibility}). Consequently, as in
+    which is (\ref{eq:mpug_l_compatibility}). Equivalently, the two-cochain
+    $c_L$ of Definition~\ref{def:mpug_permutation_coefficients} satisfies
+    $dc_L(g,h,k)(x)=\omega(g,h,k)$ for every $x\in\mathsf X$ and $g,h,k\in G$.
+    Consequently, as in
     \cite[lines~740--745]{GarreRubio2023MPOSym}, the restriction of
     $\omega$ to any subgroup fixing one block has trivial gauge class.
 \end{lemma}
@@ -663,6 +667,7 @@ $N\geq1$.
 \begin{proof}\leanok
     \uses{thm:mpug_permuted_block_l_symbol_spec,
         thm:mpug_anomaly_three_cochain_spec,
+        lem:mpug_permutation_differentials,
         thm:mpug_fixed_block_trivializes}
     Write
     \begin{align}
@@ -717,7 +722,9 @@ $N\geq1$.
     \end{align}
     The boundary $V_{ghk,x}(V^R\otimes\mathbf 1)$ belongs to a reduction onto
     the normal tensor $A_{(ghk)x}$, so it is nonzero against arbitrarily long
-    words, and the two scalars agree. The second statement is
+    words, and the two scalars agree. Lemma~\ref{lem:mpug_permutation_differentials}
+    then gives $dc_L(g,h,k)(x)=\omega(g,h,k)$.
+    The restriction to a subgroup fixing one block follows from
     Lemma~\ref{thm:mpug_fixed_block_trivializes}.
 \end{proof}
 
