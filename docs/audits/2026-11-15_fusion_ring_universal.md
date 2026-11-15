@@ -18,7 +18,13 @@ statement is weakened.
 
 The candidate has no local Lean validation: this environment has no installed
 pinned toolchain or cached dependencies, and runtime network access is disabled.
-Hosted CI will be the Lean validation source. The new blueprint entry has no
+Hosted CI is blocked: automatic approval review rejected creating the second
+draft PR from `feat/8322-integer-fusion-universal` to
+`feat/8322-integer-fusion-foundation`, because it found no explicit user
+authorization for a new external repository PR. The branch is published, but
+no follow-up PR exists and no Lean CI ran for it. The trusted user history
+check found no new authorization, so the action was stopped without an
+alternative CI route. The new blueprint entry has no
 `\leanok` pending that check. Text and generated import checks are separate
 from Lean elaboration.
 
