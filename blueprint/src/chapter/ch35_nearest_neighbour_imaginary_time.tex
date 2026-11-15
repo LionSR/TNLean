@@ -70,25 +70,21 @@
     \end{align}
 \end{proof}
 
-\begin{lemma}[Conjugation from factorial growth with any rate]
-    \label{thm:factorial_commutator_conjugation_rate}
+
+\begin{lemma}[Conjugation with an arbitrary factorial growth rate]
+    \label{lem:factorial_growth_rate_conjugation}
     \lean{Matrix.norm_exp_conjugation_le_two_of_growth}
     \leanok
-    \uses{thm:factorial_commutator_conjugation}
-    Let $H,O$ be complex square matrices on a finite index set and let
-    $\kappa>0$. Suppose that
-    $\lVert\operatorname{ad}_H^m(O)\rVert\le\kappa^m m!\lVert O\rVert$ for
-    every $m\in\N$. For $0\le s$ with $2\kappa s\le1$,
-    \begin{align}
-        \bigl\lVert e^{sH}Oe^{-sH}\bigr\rVert\le2\lVert O\rVert.
-    \end{align}
+    Let $H,O$ be finite complex square matrices and let $a\ge0$. If
+    $\lVert\operatorname{ad}_H^m(O)\rVert\le a^m m!\lVert O\rVert$
+    for every $m\in\N$, then
+    $\lVert e^{tH}Oe^{-tH}\rVert\le2\lVert O\rVert$
+    for $t\ge0$ with $at\le1/2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:factorial_commutator_conjugation}
-    Put $H'=(4/\kappa)H$ and $s'=s\kappa/4\le1/8$. Then
-    $\operatorname{ad}_{H'}^m=(4/\kappa)^m\operatorname{ad}_H^m$, so
-    $\lVert\operatorname{ad}_{H'}^m(O)\rVert\le4^m m!\lVert O\rVert$, and
-    $s'H'=sH$. Apply Theorem~\ref{thm:factorial_commutator_conjugation}.
+    The Hadamard series has the geometric majorant
+    $\sum_{m\ge0}(at)^m\lVert O\rVert\le2\lVert O\rVert$.
+    The argument also applies when $a=0$ and does not divide by $a$.
 \end{proof}
 
 \begin{lemma}[Commutators with positive contractions]
@@ -127,7 +123,9 @@
     \begin{align}
         \bigl\lVert\operatorname{ad}_H^m(O)\bigr\rVert\le(gk)^m m!\lVert O\rVert.
     \end{align}
-    This is the counting estimate of~\cite[lines 795--880]{Arad2014Connecting}.
+    This is the counting estimate of~\cite[lines 795--880]{Arad2014Connecting}
+    for positive terms; replacing positivity by a norm budget costs a factor
+    two in the rate.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:positive_contraction_commutator}
@@ -144,7 +142,7 @@
     \lean{TNLean.Lattice.norm_exp_conjugation_shift_le_two,
         TNLean.Lattice.norm_exp_conjugation_shift_sum_le}
     \leanok
-    \uses{thm:bounded_degree_commutator_growth,thm:factorial_commutator_conjugation_rate}
+    \uses{thm:bounded_degree_commutator_growth,lem:factorial_growth_rate_conjugation}
     In the setting of Lemma~\ref{thm:bounded_degree_commutator_growth}, let
     $k,g\ge1$, let $O$ be supported on at most $k$ sites, and let $z\in\C$.
     For $0\le t$ with $2gkt\le1$,
@@ -156,8 +154,8 @@
     $2|J|$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:bounded_degree_commutator_growth,thm:factorial_commutator_conjugation_rate}
+    \uses{thm:bounded_degree_commutator_growth,lem:factorial_growth_rate_conjugation}
     The scalar shift does not change commutators. Apply
-    Lemma~\ref{thm:factorial_commutator_conjugation_rate} with $\kappa=gk$,
+    Lemma~\ref{lem:factorial_growth_rate_conjugation} with $a=gk$,
     and sum over $j\in J$ using $\lVert h_j\rVert\le1$.
 \end{proof}

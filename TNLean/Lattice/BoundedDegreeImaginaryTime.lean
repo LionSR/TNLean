@@ -23,6 +23,10 @@ along one sequence of interaction terms. A piece after `j` commutators is
 supported on at most `|S| + j k` sites, so at most `g (|S| + j k)` terms fail to
 commute with it, and each such commutator costs at most the norm of the piece.
 
+The route uses positivity of the terms through `‖[h, X]‖ ≤ ‖X‖`. The
+interaction-budget estimate of the same lemma, with norm budgets in place of
+positivity, is the positivity-free variant with an extra factor two.
+
 Source: Arad, Kuwahara and Landau, arXiv:1406.3898, Lemma `lem:Hadamard-bound`,
 `low70.tex`, lines 795–880, for `k`-local interactions in which every site meets
 at most `g` terms. The constant `g k` comes from this counting and need not
@@ -247,7 +251,7 @@ theorem norm_exp_conjugation_shift_le_two {s : Finset I}
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖O‖ := by
   intro H
   have hκ : (0 : ℝ) < ((g * k : ℕ) : ℝ) := by exact_mod_cast Nat.mul_pos hg0 hk0
-  apply Matrix.norm_exp_conjugation_le_two_of_growth (H - z • 1) O _ t hκ ht0 ht
+  apply Matrix.norm_exp_conjugation_le_two_of_growth (H - z • 1) O _ t hκ.le ht0 (by linarith)
   intro m
   have had :
       (fun X : Matrix (ι → Fin q) (ι → Fin q) ℂ ↦ (H - z • 1) * X - X * (H - z • 1)) =

@@ -31,10 +31,8 @@ Hermiticity assumption is imposed on the matrices.
 
 This is the conditional exponential-series estimate used in Arad, Kuwahara
 and Landau, arXiv:1406.3898, Lemma `lem:Hadamard-bound`, `low70.tex`,
-lines 795–837. The factorial bound must be established separately from
-locality. A version with an arbitrary growth constant `κ`, valid for
-`0 ≤ s ≤ 1 / (2κ)`, serves interactions of bounded support and degree.
-A positive contraction has commutator norm at most the norm of the other factor.
+lines 795–837. The factorial bound must be established separately from locality. The variable-rate
+version permits a zero growth rate and an unrestricted nonnegative time in that case.
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -158,11 +156,11 @@ low70.tex, lines 795–810. The growth bound is supplied independently;
 no algebra, locality or positive-dimension premise is imposed here. -/
 private theorem summable_factorial_smul_and_norm_tsum_le_two
     {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] [CompleteSpace E]
-    (v : ℕ → E) (C s : ℝ) (hC : 0 ≤ C) (hs0 : 0 ≤ s) (hs : s ≤ 1 / 8)
-    (hv : ∀ m, ‖v m‖ ≤ (4 : ℝ) ^ m * (m.factorial : ℝ) * C) :
+    (v : ℕ → E) (C a s : ℝ) (hC : 0 ≤ C) (ha : 0 ≤ a)
+    (hs0 : 0 ≤ s) (hs : a * s ≤ 1 / 2)
+    (hv : ∀ m, ‖v m‖ ≤ a ^ m * (m.factorial : ℝ) * C) :
     Summable (fun m : ℕ ↦ ((s : ℂ) ^ m / (m.factorial : ℂ)) • v m) ∧
       ‖∑' m : ℕ, ((s : ℂ) ^ m / (m.factorial : ℂ)) • v m‖ ≤ 2 * C := by
-  have hscale : 4 * s ≤ (1 / 2 : ℝ) := by linarith
   have hbound (m : ℕ) :
       ‖((s : ℂ) ^ m / (m.factorial : ℂ)) • v m‖ ≤ (1 / 2 : ℝ) ^ m * C := by
     have hfac : 0 < (m.factorial : ℝ) := Nat.cast_pos.mpr (Nat.factorial_pos m)
@@ -172,16 +170,16 @@ private theorem summable_factorial_smul_and_norm_tsum_le_two
         rw [norm_smul, norm_div, norm_pow, Complex.norm_of_nonneg hs0,
           Complex.norm_natCast]
       _ ≤ (s ^ m / (m.factorial : ℝ)) *
-          ((4 : ℝ) ^ m * (m.factorial : ℝ) * C) :=
+          (a ^ m * (m.factorial : ℝ) * C) :=
         mul_le_mul_of_nonneg_left (hv m) (div_nonneg (pow_nonneg hs0 _) hfac.le)
       _ = ((s ^ m / (m.factorial : ℝ)) * (m.factorial : ℝ)) *
-          ((4 : ℝ) ^ m * C) := by ring
-      _ = (4 * s) ^ m * C := by
+          (a ^ m * C) := by ring
+      _ = (a * s) ^ m * C := by
         rw [div_mul_cancel₀ _ hfac.ne', mul_pow]
         ring
       _ ≤ (1 / 2 : ℝ) ^ m * C :=
         mul_le_mul_of_nonneg_right
-          (pow_le_pow_left₀ (mul_nonneg (by norm_num) hs0) hscale m) hC
+          (pow_le_pow_left₀ (mul_nonneg ha hs0) hs m) hC
   have hgeom : HasSum (fun m : ℕ ↦ (1 / 2 : ℝ) ^ m * C) (2 * C) :=
     hasSum_geometric_two.mul_right C
   exact ⟨hgeom.summable.of_norm_bounded hbound, tsum_of_norm_bounded hgeom hbound⟩
@@ -211,12 +209,14 @@ open scoped Matrix.Norms.L2Operator
 /-- A factorial bound for the actual commutator iterates implies the
 short-time conjugation bound. This is an auxiliary conditional estimate
 supporting AKL14, arXiv:1406.3898, low70.tex, lines 804–837.
-The factorial hypothesis is to be proved from locality in its application. -/
-theorem norm_exp_conjugation_le_two {n : Type*} [Fintype n] [DecidableEq n]
-    (H O : Matrix n n ℂ) (s : ℝ) (hs0 : 0 ≤ s) (hs : s ≤ 1 / 8)
+The nonnegative growth rate may vanish. The factorial hypothesis is to be proved
+from locality in its application. -/
+theorem norm_exp_conjugation_le_two_of_growth {n : Type*} [Fintype n] [DecidableEq n]
+    (H O : Matrix n n ℂ) (a s : ℝ) (ha : 0 ≤ a)
+    (hs0 : 0 ≤ s) (hs : a * s ≤ 1 / 2)
     (hgrowth : ∀ m : ℕ,
       ‖((fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O)‖ ≤
-        (4 : ℝ) ^ m * (m.factorial : ℝ) * ‖O‖) :
+        a ^ m * (m.factorial : ℝ) * ‖O‖) :
     ‖NormedSpace.exp ((s : ℂ) • H) * O *
       NormedSpace.exp (-((s : ℂ) • H))‖ ≤ 2 * ‖O‖ := by
   let ad : Matrix n n ℂ →L[ℂ] Matrix n n ℂ :=
@@ -226,7 +226,7 @@ theorem norm_exp_conjugation_le_two {n : Type*} [Fintype n] [DecidableEq n]
   obtain ⟨_hsummable, hbound⟩ :=
     NormedSpace.summable_factorial_smul_and_norm_tsum_le_two
       (fun m : ℕ ↦ ((ad : Matrix n n ℂ → Matrix n n ℂ)^[m] O))
-      ‖O‖ s (norm_nonneg O) hs0 hs (by exact hgrowth)
+      ‖O‖ a s (norm_nonneg O) ha hs0 hs (by exact hgrowth)
   rw [hsum.tsum_eq] at hbound
   have had : (s : ℂ) • ad =
       ContinuousLinearMap.mul ℂ (Matrix n n ℂ) ((s : ℂ) • H) -
@@ -235,6 +235,19 @@ theorem norm_exp_conjugation_le_two {n : Type*} [Fintype n] [DecidableEq n]
   rw [had, exp_commutator_apply] at hbound
   exact hbound
 
+/-- A factorial bound for the actual commutator iterates implies the
+short-time conjugation bound. This is an auxiliary conditional estimate
+supporting AKL14, arXiv:1406.3898, low70.tex, lines 804–837.
+The factorial hypothesis is to be proved from locality in its application. -/
+theorem norm_exp_conjugation_le_two {n : Type*} [Fintype n] [DecidableEq n]
+    (H O : Matrix n n ℂ) (s : ℝ) (hs0 : 0 ≤ s) (hs : s ≤ 1 / 8)
+    (hgrowth : ∀ m : ℕ,
+      ‖((fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O)‖ ≤
+        (4 : ℝ) ^ m * (m.factorial : ℝ) * ‖O‖) :
+    ‖NormedSpace.exp ((s : ℂ) • H) * O *
+      NormedSpace.exp (-((s : ℂ) • H))‖ ≤ 2 * ‖O‖ := by
+  exact norm_exp_conjugation_le_two_of_growth H O 4 s (by norm_num) hs0
+    (by linarith) hgrowth
 
 open scoped ComplexOrder MatrixOrder
 
@@ -286,52 +299,5 @@ theorem norm_commutator_le_of_nonneg_le_one (h O : Matrix n n ℂ)
       add_le_add (mul_le_mul_of_nonneg_right hcenternorm (norm_nonneg O))
         (mul_le_mul_of_nonneg_left hcenternorm (norm_nonneg O))
     _ = ‖O‖ := by ring
-
-
-omit [DecidableEq n] in
-/-- Rescaling the generator rescales every commutator iterate by the same power.
-Auxiliary to AKL14, arXiv:1406.3898, low70.tex, lines 795–837. -/
-private theorem commutator_iterate_smul (H O : Matrix n n ℂ) (c : ℂ) (m : ℕ) :
-    (fun X : Matrix n n ℂ ↦ (c • H) * X - X * (c • H))^[m] O =
-      c ^ m • (fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O := by
-  induction m with
-  | zero => simp
-  | succ m ih =>
-    rw [Function.iterate_succ_apply', Function.iterate_succ_apply', ih, pow_succ]
-    simp only [smul_mul_assoc, mul_smul_comm, smul_sub, smul_smul]
-    ring_nf
-
-/-- A factorial bound with growth constant `κ` for the actual commutator
-iterates implies the short-time conjugation bound for `0 ≤ s ≤ 1 / (2κ)`.
-This is the conditional estimate of AKL14, arXiv:1406.3898, low70.tex,
-lines 795–837, with the constant left free; the factorial hypothesis is
-proved from locality in its application. -/
-theorem norm_exp_conjugation_le_two_of_growth (H O : Matrix n n ℂ) (κ s : ℝ)
-    (hκ : 0 < κ) (hs0 : 0 ≤ s) (hs : 2 * κ * s ≤ 1)
-    (hgrowth : ∀ m : ℕ,
-      ‖((fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O)‖ ≤
-        κ ^ m * (m.factorial : ℝ) * ‖O‖) :
-    ‖NormedSpace.exp ((s : ℂ) • H) * O *
-      NormedSpace.exp (-((s : ℂ) • H))‖ ≤ 2 * ‖O‖ := by
-  let c : ℝ := 4 / κ
-  have hc : 0 < c := by positivity
-  have hscale : ((s * κ / 4 : ℝ) : ℂ) • ((c : ℂ) • H) = (s : ℂ) • H := by
-    have hk : (s * κ / 4) * c = s := by
-      simp only [c]
-      field_simp
-    rw [smul_smul, ← Complex.ofReal_mul, hk]
-  have h := norm_exp_conjugation_le_two ((c : ℂ) • H) O (s * κ / 4) (by positivity)
-    (by linarith) (by
-      intro m
-      rw [commutator_iterate_smul, norm_smul, norm_pow, Complex.norm_real,
-        Real.norm_of_nonneg hc.le]
-      calc
-        c ^ m * ‖(fun X : Matrix n n ℂ ↦ H * X - X * H)^[m] O‖ ≤
-            c ^ m * (κ ^ m * (m.factorial : ℝ) * ‖O‖) :=
-          mul_le_mul_of_nonneg_left (hgrowth m) (by positivity)
-        _ = (c * κ) ^ m * (m.factorial : ℝ) * ‖O‖ := by ring
-        _ = (4 : ℝ) ^ m * (m.factorial : ℝ) * ‖O‖ := by
-          rw [show c * κ = 4 by simp only [c]; field_simp])
-  rwa [hscale] at h
 
 end Matrix

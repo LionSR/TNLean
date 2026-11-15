@@ -68,9 +68,11 @@ the line ranges above are the ones recorded in the issue thread.
   `‖e^{t(H−z)} O e^{−t(H−z)}‖ ≤ 2‖O‖` for `2gkt ≤ 1`
   (AKL `lem:Hadamard-bound`, lines 795–880).
 - `TNLean/Algebra/ExpConjugation.lean`: the conjugation estimate with an
-  arbitrary growth constant, derived from the existing rate-4 estimate by
-  rescaling; the positive-contraction commutator bound moved here from the
-  chain file.
+  arbitrary nonnegative growth rate `a` (valid for `a s ≤ 1/2`), in the form
+  shared with the interaction-budget work of #10621 so the two changes agree;
+  the positive-contraction commutator bound moved here from the chain file.
+  The interaction-budget estimate there is the positivity-free variant of the
+  bounded-degree count, with an extra factor two in the rate.
 - `TNLean/Algebra/WeightedLowRestriction.lean`: the weighted Sylvester
   restriction and the clipping-excess tail, stated from a conjugation bound on
   the boundary operator only. The chain theorems
