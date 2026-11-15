@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Uniform Displacement Completeness and Missing Square Supports}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+uses endpoint-preserving string deformations. The full-support generated
+homotopies of labelled torus paths are classified by lifted displacement.
+The same uniform classification cannot be retained after excluding any
+primal square-move support vertex.
+
+The theorem
+\leanid{TNLean.PEPS.torusDualHomotopy_displacement_complete_iff_support_univ}
+proves that displacement classifies every same-endpoint pair of paths under
+supported homotopy exactly when the allowed support set is the whole torus.
+For each missing vertex $c$, a nonabelian seam word is based at $c$.
+Allowed square moves preserve it, but the square surrounding $c$ has the
+nontrivial commutator of two explicitly constructed transpositions on three
+elements. Its displacement is zero, as is the constant path's displacement.
+The two paths therefore cannot be related by the allowed moves.
+The obstruction theorem is
+\leanid{TNLean.PEPS.torusDualSquareLoop_not_homotopic_of_support_excludes}.
+
+This statement concerns a uniform classification over all finite labelled
+paths, including at torus periods zero, one and two. It does not claim that
+individual equal-displacement paths fail to be homotopic, or give a finite
+decision procedure for restricted homotopy. The excluded vertices are primal
+supports of square moves; they are not a separately imposed restriction on
+the visited dual vertices. The seam-word test group is independent of any
+physical flux insertion group.
+
+This nonabelian homotopy obstruction is distinct from an annular physical
+Wilson-loop measurement. It proves no density inequality by itself and
+does not equate physical states in different winding classes. The positive
+restricted classification by all locally flat transports remains a separate
+result; reducing it to a finite geometric normal form remains open.
+The broader source interpretation stays under \ghissue{8703}, and
+\ghissue{8947} is unchanged.
+\end{document}
