@@ -132,11 +132,18 @@
     $N=qM$ and $\ket{\Omega_j}$ formed from the unembedded pair. The
     orthogonality is asserted after \cite[eq.~(S7)]{Malz2024Preparation},
     where the reason given is that the blocks form a basis of normal tensors;
-    here it follows from the placement of the pairs alone. As recorded in
-    \cite{gap:mswc24_ghz_form_local_orthogonality}, identifying
-    these pairs with the fixed points of the positive parts of the blocked
-    tensor is not proved here and can fail when a block has multiplicity
-    greater than one.
+    here it follows from the placement of the pairs alone. For the actual
+    stationary matrices of left-canonical normal blocks, this orthogonality
+    is proved in Lemma~\ref{thm:ldp_canonical_block_pair_isometry}, and the
+    corrected one-copy GHZ state is treated in
+    Lemma~\ref{thm:ldp_corrected_canonical_ghz}. As recorded in
+    \cite{gap:mswc24_ghz_form_local_orthogonality,gap:mswc24_block_form_mixed_overlap},
+    the finite positive part of the combined blocked tensor need not be
+    block diagonal even when every multiplicity is one: distinct blocks
+    can have nonzero mixed Gram matrices at every finite blocking length.
+    The limiting positive part and the corrected coefficients must be
+    distinguished from the finite block form and the coefficients printed
+    in (S7).
 \end{lemma}
 
 \begin{proof}

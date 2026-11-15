@@ -3,9 +3,9 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{GHZ Form of the Fixed-Point State: Local Orthogonality as a Hypothesis}
+\title{GHZ Form of the Fixed-Point State: Canonical Pairs and the Finite-Block Obstruction}
 \author{}
-\date{2026-09-26}
+\date{2026-11-15}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -34,63 +34,125 @@ $\ket{\chi_M}=\sum_j\alpha_j\ket{j}^{\otimes M}$. In the source,
 (\ref{eq:mswc24_local_orthogonality}) is a property of these particular pairs,
 not a hypothesis.
 
-\section{The restriction adopted}
-The formal statements are made for an arbitrary family
-$\omega_1,\dots,\omega_b\in\C^D\otimes\C^D$ and arbitrary coefficients
-$\alpha$.\footnote{Formal declarations:
+\section{What is already formalized}
+For an arbitrary pair family the identity
+$\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ is algebraic. The isometry of $W$
+and unit norm of the state require orthonormal pairs, and normalization also
+requires $M\geq1$ and a nonzero coefficient vector.\footnote{Formal declarations:
     \leanid{MPSTensor.isIsometry_pairIsometry},
-    \leanid{MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState}
-    and \leanid{MPSTensor.nonNormalFixedPointState_norm_sq} in
+    \leanid{MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState}, and
+    \leanid{MPSTensor.nonNormalFixedPointState_norm_sq} in
     \doclink{TNLean/MPS/Preparation/NonNormalFixedPoint}.}
-The identity $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$ holds for every such
-family, since
-$W^{\otimes M}\ket{j}^{\otimes M}=\bigotimes_k\ket{\omega_j}$. The isometry of
-$W$ and the normalization $\braket{\Omega'}{\Omega'}=1$ take
-(\ref{eq:mswc24_local_orthogonality}) as a hypothesis. For the pairs of the
-source they are therefore proved only once
-(\ref{eq:mswc24_local_orthogonality}) is supplied.
 
-One half of the hypothesis is available: if the components $\omega_{(a,c)}$ vanish
-for $a\notin S$ and the components $\omega'_{(a,c)}$ vanish for $a\notin S'$,
-where $S$ and $S'$ are disjoint sets of virtual indices, then $\braket{\omega}{\omega'}=0$.\footnote{Formal declaration:
-    \leanid{MPSTensor.inner_pair_eq_zero_of_disjoint} in the same module.}
-The embedded pairs of distinct blocks are supported in this way.
+For a left-canonical basis of normal tensors these pair hypotheses have
+already been discharged using the actual stationary matrices of the blocks.
+Each block has a unique density matrix $\sigma_j$ with
+$\mathcal E_{A_j}(\sigma_j)=\sigma_j$, and irreducibility gives $\sigma_j>0$.
+Place $\operatorname{vec}(\sqrt{\sigma_j})$ on both virtual coordinates of one
+chosen copy $k_j$ of block $j$. Its squared norm is
+$\operatorname{Tr}\sigma_j=1$, and distinct blocks occupy disjoint virtual
+coordinates. Thus these actual canonical pairs are orthonormal and $W$ is an
+isometry, with no supplied fixed-point or pair-normalization
+hypothesis.\footnote{Formal declarations:
+    \leanid{MPSTensor.IsBNTCanonicalForm.basisFixedPoint_spec},
+    \leanid{MPSTensor.IsBNTCanonicalForm.inner_basisFixedPointPair}, and
+    \leanid{MPSTensor.IsBNTCanonicalForm.isIsometry_pairIsometry_basisFixedPointPair}
+    in \doclink{TNLean/MPS/Preparation/CanonicalFixedPoint}.}
+This does not require a block form for a finite positive part.
 
-\section{A discharged instance}
-The hypothesis is discharged for one identification of the pairs, which the
-source does not make.\footnote{Formal declarations:
-    \leanid{MPSTensor.SectorDecomposition.inner_embeddedFixedPointPair},
-    \leanid{MPSTensor.SectorDecomposition.isIsometry_pairIsometry_embeddedFixedPointPair},
-    \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_tensorPower_mulVec_ghzState}
-    and \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq} in
-    \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
-The canonical form is taken as a sector decomposition, whose bond space is
-$\C^D$ with $D=\sum_jm_jD_j$ and whose blocks carry no normality or gauge
-condition. The pair of block $j$ is the fixed-point pair of a positive
-semidefinite, unit-trace matrix $\sigma_j$ on $\C^{D_j}$, a free parameter,
-placed on both legs on the bond coordinates of one chosen copy $k_j$ of that
-block. The coordinates of distinct blocks are distinct, so the right legs of
-the pairs of distinct blocks have disjoint supports and the pairs are
-orthogonal by the disjoint-support lemma; the coordinates of one copy are
-distinct, so $\braket{\omega_j}{\omega_j}=\operatorname{Tr}\sigma_j=1$. For
-these pairs (\ref{eq:mswc24_local_orthogonality}) holds, and the isometry of
-$W$, the GHZ form and the normalization hold without the hypothesis.
+The corrected one-copy state at $N=qM$ uses
+\begin{align*}
+    c_j&=\left(\sum_k|\mu_{j,k}|^{2q}\right)^{1/2},&
+    \beta'_j&=\left(\sum_k\mu_{j,k}^{qM}\right)
+        \left(\frac{c_j}{\mu_{j,k_j}^{q}}\right)^M,&
+    \alpha'_j&=\frac{\beta'_j}{(\sum_l|\beta'_l|^2)^{1/2}}.
+\end{align*}
+Its GHZ identity is formalized, and its unit norm is proved for $M\geq1$
+when $(\sum_k\mu_{j,k}^{qM})_j\neq0$. For $q\geq1$ its image under the
+polar factor of the actual blocked canonical tensor equals the corrected
+copy-isometry construction before normalization, and the normalized
+physical overlaps agree.\footnote{Formal declarations:
+    \leanid{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_eq_tensorPower_mulVec_ghzState},
+    \leanid{MPSTensor.IsBNTCanonicalForm.oneCopyFixedPointState_norm_sq},
+    \leanid{MPSTensor.IsBNTCanonicalForm.nonNormalApproxVector_oneCopyFixedPoint}, and
+    \leanid{MPSTensor.IsBNTCanonicalForm.nonNormalApproxOverlap_oneCopyFixedPoint}
+    in \doclink{TNLean/MPS/Preparation/CanonicalOneCopyState}.}
+For multiplicity one, $\beta'_j=|\mu_j|^N$. Replacing these coefficients by
+those printed in (S7) would be a different statement and is refuted by the
+phase and multiplicity examples in
+\cite{gap:mswc24_block_form_mixed_overlap,gap:mswc24_repeated_block_corrected_state}.
 
-This orthogonality follows from the placement alone. It uses neither the
-normality of the blocks nor the basis-of-normal-tensors property, which is the
-reason the source gives. The source's pairs are the fixed points of the
-positive parts $P_j$ of the blocked tensor, and the block form of the positive
-part that would identify them with the pairs above is not formalized. When some
-block has multiplicity $m_j\ge2$ that block form fails and no product of pairs
-carrying the weights $\beta_j$ gives the approximating state
-\cite{gap:mswc24_multiplicity_fixed_point}.
+\section{Why a finite positive-part block form cannot discharge the gap}
+Even for multiplicity one and unit weights, the combined blocked map has
+$B_q=\sum_j B_{j,q}K_j^\dagger$, with $K_j$ the mutually orthogonal pair
+embeddings. Consequently
+\begin{align*}
+    K_j^\dagger B_q^\dagger B_q K_{j'}&=B_{j,q}^\dagger B_{j',q}.
+\end{align*}
+If $P_q=(B_q^\dagger B_q)^{1/2}$ were block diagonal along these embeddings,
+then $P_q^2$ would be too, forcing every mixed Gram matrix on the right to
+vanish for $j\neq j'$. Conversely, vanishing mixed Gram matrices gives
+$P_q=\sum_jK_j(B_{j,q}^\dagger B_{j,q})^{1/2}K_j^\dagger$ by uniqueness of
+the positive square root. The sufficient direction is formalized for
+orthogonal summands; orthogonality is an additional hypothesis, not a
+consequence of normality.\footnote{Formal declaration:
+    \leanid{Matrix.polarIso_sum_of_orthogonal} in
+    \doclink{TNLean/MPS/Preparation/OrthogonalSumPolar}.}
 
-\section{Elimination}
-Formalize the block form of the positive part of the blocked tensor for
-$m_j=1$, identify its fixed-point pairs with the embedded pairs above, and
-derive (\ref{eq:mswc24_local_orthogonality}) for them; the case $m_j\ge2$ is
-governed by the false-source record
-\cite{gap:mswc24_multiplicity_fixed_point}.
+For $A_1=(1,0)$ and $A_2=(3/5,4/5)$, both of multiplicity one and weight one,
+the active Gram matrix is
+\[
+    G_q=\begin{pmatrix}1&s_q\\s_q&1\end{pmatrix},
+    \qquad s_q=(3/5)^q>0.
+\]
+Thus the finite block form fails at every $q\geq1$, while the canonical
+pairs $e_{00},e_{11}$ are exactly orthonormal. The existing formal
+counterexample also gives
+$\|P_q-JJ^\dagger\|\geq(3/5)^q/2>0$, where $J\ket j=\ket{j,j}$;
+see \cite{gap:mswc24_block_form_mixed_overlap}.\footnote{Formal declarations:
+    \leanid{MPSTensor.diagGram_overlappingBlockDiag} and
+    \leanid{MPSTensor.overlappingBlockOverlap_div_two_le_norm_polarPos_sub_limit}
+    in \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.}
+This is a nondegenerate obstruction to the proposed finite block form,
+not a counterexample to local orthogonality of the limiting canonical pairs.
+
+\section{Corrected limiting scope and remaining identification}
+For multiplicity one and unit weights, let
+\[
+    P_\infty=\sum_jK_j\bigl((\sqrt{\sigma_j})^T\otimes I\bigr)K_j^\dagger.
+\]
+For normal left-canonical blocks with faithful trace-one fixed points, choose
+$0<|\lambda_2|<1$ bounding the nontrivial eigenvalues of each diagonal transfer
+map and all eigenvalues of each mixed transfer map. For $0<\gamma<1$ the
+formalized estimate is
+\[
+    \|P_q-P_\infty\|\leq K e^{-\gamma q/\xi},\qquad q\geq1,
+\]
+where $\xi$ is the correlation length of $\lambda_2$ and $K$ is independent
+of $q$.\footnote{Formal declarations:
+    \leanid{MPSTensor.blockSumPosLimit} and
+    \leanid{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le} in
+    \doclink{TNLean/MPS/Preparation/OverlappingBlockGram}.}
+This estimate concerns matrices. It does not assert equality at finite $q$
+or convergence of states uniformly over an increasing number of sites.
+
+A separate explicit identification remains to be formalized: read
+$P_\infty$ as a tensor with physical index in $\mathbb C^D\otimes\mathbb C^D$
+and show that its unnormalized periodic vector on $M\geq1$ sites is
+$\sum_j\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$, with the same pair
+embeddings and cyclic regrouping. Its normalized GHZ coefficients in the
+unit-weight case would be $b^{-1/2}$ for $b\geq1$. This is an identification
+of the limiting positive-part tensor; the already proved canonical-pair
+GHZ identity does not itself establish it. Weighted or repeated blocks
+require their weight-dependent construction and the corrected coefficients
+above, rather than this unit-weight limit.
+
+Issue \#10575 therefore remains open for reconciliation of the source and
+this corrected limiting statement. Its proposed finite positive-part block
+form must not be an acceptance criterion. Local orthogonality of the actual
+canonical pairs and the corrected one-copy GHZ identity are already proved;
+neither the false finite block form nor the uncorrected coefficients of
+(S7) are established by those results.
 
 \bibliographystyle{alpha}
 \bibliography{references}
