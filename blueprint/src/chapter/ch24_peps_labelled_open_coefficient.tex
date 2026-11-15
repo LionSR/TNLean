@@ -137,12 +137,12 @@
     \leanok
     \uses{def:peps_labelled_open_coefficient,def:peps_dual_flux_homotopy,
         def:peps_dual_flux_matrices}
-    Let $R,S\subseteq X$ on a labelled torus of positive periods, and
-    suppose that every bond incident to $S$ has both endpoints in $R$.
-    Let $p\sim_S q$ be a generated homotopy of dual paths, and let the
-    site tensors be virtually $G$-invariant on $S$. No rectangularity or
-    connectedness is required of $R$. For the inserted matrices $O^p,O^q$
-    and any physical configuration on $R$, the open coefficients satisfy
+    Let $R,Y\subseteq X$ on a labelled torus of positive periods, and
+    suppose that every bond incident to $R$ has both endpoints in $Y$.
+    Let $p\sim_R q$ be a generated homotopy of dual paths, and let the
+    site tensors be virtually $G$-invariant on $R$. No rectangularity or
+    connectedness is required of $Y$. For the inserted matrices $O^p,O^q$
+    and any physical configuration on $Y$, the open coefficients satisfy
     $c_q(\theta)=c_p(\theta)$ for every boundary assignment $\theta$.
     For every joint boundary tensor $B$,
     \begin{align}
@@ -155,14 +155,20 @@
 \begin{proof}\leanok
     \uses{thm:peps_dual_flux_deformation,thm:peps_dual_flux_gauge_absorption,
         thm:peps_dual_collar_geometry,thm:peps_torus_operator_string_deformation}
-    The homotopy derives $k:X\to G$ with $k=1$ outside $S$ and
+    The homotopy derives $k:X\to G$ with $k=1$ outside $R$ and
     $O^q_e=U_{k(h(e))}O^p_eU_{k(t(e))^{-1}}$. Every noninternal bond has
-    both endpoints outside $S$, so its two endpoint gauges are identity.
+    both endpoints outside $R$, so its two endpoint gauges are identity.
     Consequently the same equation holds for $O^{q,\rm int},O^{p,\rm int}$.
     If the virtual alphabet is nonempty, choose a label $v_0$ and apply
     delta completion. At every vertex with $k(v)\ne1$, the internal-star
-    hypothesis gives $v\in R$, and the completed tensor is the original
-    invariant tensor. Gauge absorption therefore gives
+    hypothesis gives $v\in Y$, so
+    \begin{align}
+        \Delta^{\rm nat}_v(\cdot)=A_v(\cdot)(\sigma_v).
+        \label{eq:peps_supported_open_completed_tensor}
+    \end{align}
+    This tensor is $k(v)$-invariant by
+    Lemma~\ref{thm:peps_torus_operator_string_deformation}.
+    Gauge absorption therefore gives
     \begin{align}
         c_q(\theta)
         =\Psi(\Delta^{\rm nat},O^{q,\rm int})
