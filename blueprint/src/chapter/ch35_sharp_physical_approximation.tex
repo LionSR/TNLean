@@ -313,7 +313,7 @@ capped estimates with the uncapped exponent printed in
     $N$ is at most $c\|\varphi\otimes\chi\|^2$.
 \end{proof}
 
-\begin{theorem}[The gap above a degenerate ground space]
+\begin{lemma}[The gap above a degenerate ground space]
     \label{thm:physical_dg_gap_upper_bound}
     \lean{TNLean.MPS.AreaLaw.ALVV.pow_le_finrank_ground_of_lt_gap,
         TNLean.MPS.AreaLaw.ALVV.gap_le_one_of_finrank_lt,
@@ -327,7 +327,7 @@ capped estimates with the uncapped exponent printed in
     $m<\gamma$ one has $m<L$ and $q^m\le r$. Consequently
     $\gamma\le1+\log r/\log q$, and $\gamma\le1$ whenever $r<q$, in
     particular for a unique ground state.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:physical_dg_quadratic_window}
@@ -342,7 +342,7 @@ capped estimates with the uncapped exponent printed in
     Taking $m=\lceil\gamma\rceil-1$ gives the logarithmic bound.
 \end{proof}
 
-\begin{theorem}[The capped estimates with the uncapped gap]
+\begin{lemma}[The capped estimates with the uncapped gap]
     \label{thm:physical_dg_uncapped_approximation}
     \lean{TNLean.MPS.AreaLaw.ALVV.capped_exponent_le_max_mul,
         TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_interval_normalized_approximation_uncapped,
@@ -351,8 +351,8 @@ capped estimates with the uncapped exponent printed in
     \uses{thm:physical_dg_gap_upper_bound,
         thm:physical_dg_interval_normalized_approximation,
         thm:physical_dg_normalized_mps_approximation}
-    In the setting of Theorems~\ref{thm:physical_dg_interval_normalized_approximation}
-    and~\ref{thm:physical_dg_normalized_mps_approximation}, the bounds hold
+    In the setting of Lemma~\ref{thm:physical_dg_interval_normalized_approximation}
+    and Theorem~\ref{thm:physical_dg_normalized_mps_approximation}, the bounds hold
     with $u^3/g+g^{-1/4}a^{3/4}u$ replaced by
     \[
       \max\{\gamma,1\}\bigl(u^3/\gamma+\gamma^{-1/4}a^{3/4}u\bigr),
@@ -363,7 +363,7 @@ capped estimates with the uncapped exponent printed in
     $\gamma>1$ the printed bound with the single factor $r$ is reached only
     up to this factor in the exponent; that restriction is recorded in
     \cite{gap:alvv16_approximation_parameters}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_dg_gap_upper_bound,
@@ -372,5 +372,5 @@ capped estimates with the uncapped exponent printed in
     Since $1/g=\max\{\gamma,1\}/\gamma$ and $\gamma(1/\gamma)^{1/4}\ge1$ for
     $\gamma\ge1$, the capped exponent is at most $\max\{\gamma,1\}$ times the
     uncapped one. The factor is bounded by
-    Theorem~\ref{thm:physical_dg_gap_upper_bound}.
+    Lemma~\ref{thm:physical_dg_gap_upper_bound}.
 \end{proof}
