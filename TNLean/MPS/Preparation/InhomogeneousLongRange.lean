@@ -47,18 +47,25 @@ theorem norm_sum_pairFamilyVector [NeZero M] {b : ℕ}
           star (pairFamilyState (ω i) c) * pairFamilyState (ω j) c := by
         rw [PiLp.inner_apply]
         exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm)
-          _ _ fun τ => by simp only [RCLike.inner_apply, pairFamilyVector_apply]; ring
+          _ _ fun τ => by
+            simp only [RCLike.inner_apply, pairFamilyVector_apply, starRingEnd_apply,
+              Equiv.piCongrRight_apply, Pi.map_apply]
+            exact mul_comm _ _
       _ = ∏ k, ∑ p, star (ω i k p) * ω j k p := pairFamilyState_inner _ _
       _ = _ := by
         simp_rw [hω]
-        split_ifs <;> simp [Fin.prod_const, NeZero.ne M]
+        split_ifs <;> simp [NeZero.ne M]
   have hself : ⟪∑ j, α j • pairFamilyVector (ω j),
       ∑ j, α j • pairFamilyVector (ω j)⟫_ℂ = 1 := by
-    simp only [sum_inner, inner_sum, inner_smul_left, inner_smul_right, hinner]
-    simpa [Finset.mul_sum, mul_ite] using hα
+    simp only [sum_inner, inner_sum, inner_smul_left, inner_smul_right, hinner,
+      mul_ite, mul_one, mul_zero]
+    rw [← hα]
+    exact Finset.sum_congr rfl fun j _ => by rw [Finset.mul_sum]; simp [mul_comm]
   rw [inner_self_eq_norm_sq_to_K] at hself
-  have hsq : ‖∑ j, α j • pairFamilyVector (ω j)‖ ^ 2 = 1 := by exact_mod_cast hself
-  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 hsq
+  have hsq : ((‖∑ j, α j • pairFamilyVector (ω j)‖ ^ 2 : ℝ) : ℂ) = 1 := by
+    push_cast
+    exact hself
+  exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 (Complex.ofReal_eq_one.1 hsq)
 
 /-- Isometric extensions preserve the normalized overlap for every input vector, including
 coherent sums of site-dependent pair products. Source: arXiv:2307.01696, eqs. (18), (19),
