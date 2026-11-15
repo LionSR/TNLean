@@ -767,6 +767,7 @@ relation between word traces has nonnegative integer coefficients.
         MPOTensor.FusionRing.basis_unit,
         MPOTensor.FusionRing.mul_apply,
         MPOTensor.IsFusionRing.integerFusionRing}
+    \leanok
     \uses{def:mposym_integer_fusion}
     Finite fusion data consist of natural structure constants, a unit $e$
     and an involutive duality, with associative fusion, two-sided unit,
@@ -783,6 +784,7 @@ relation between word traces has nonnegative integer coefficients.
         MPOTensor.IsFusionRing.integerFusionMul_assoc,
         MPOTensor.IsFusionRing.integerFusionMul_one_left,
         MPOTensor.IsFusionRing.integerFusionMul_one_right}
+    \leanok
     \uses{def:mposym_integer_based_ring, thm:mposym_integer_fusion_eval,
         thm:mposym_integer_nimrep}
     The regular action has matrices $L_a(c,b)=N_{ab}^c$.
@@ -790,6 +792,7 @@ relation between word traces has nonnegative integer coefficients.
     injective. Convolution is associative and $[e]$ is its two-sided unit.
 \end{lemma}
 \begin{proof}
+    \leanok
     Associativity of the structure constants gives
     $L_aL_b=\sum_cN_{ab}^cL_c$. Multiplicative evaluation gives
     $L_{uv}=L_uL_v$. Also
@@ -807,6 +810,7 @@ relation between word traces has nonnegative integer coefficients.
         MPOTensor.FusionRing.nimRepHom_basis_nonneg,
         MPOTensor.FusionRing.characterHom,
         MPOTensor.FusionRing.characterHom_basis}
+    \leanok
     \uses{thm:mposym_integer_based_ring_regular,
         thm:mposym_integer_fusion_eval, thm:mposym_integer_nimrep}
     A family $f_a$ in a unital ring $R$ with $f_e=1$ and
@@ -818,6 +822,7 @@ relation between word traces has nonnegative integer coefficients.
     Ring-valued fusion characters also extend, preserving their basis values.
 \end{lemma}
 \begin{proof}
+    \leanok
     Additivity follows from the finite sum formula, multiplication from
     multiplicative evaluation, and preservation of the unit from $f_e=1$.
     For multiplicity matrices use $\rho_a(y,x)=M_{a,x}^y$ and the explicit
