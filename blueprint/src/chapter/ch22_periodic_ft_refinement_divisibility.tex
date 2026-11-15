@@ -847,59 +847,56 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Lemma~\ref{thm:periodic_refinement_from_bounded_root} applies.
 \end{proof}
 
-\begin{lemma}[An invertible matrix in an irreducible qubit Kraus span]
-    \label{lem:periodic_qubit_invertible_kraus_span}
-    \lean{Kraus.exists_isUnit_mem_wordSpan_one_fin_two}
+\begin{lemma}[Dimension of an all-singular qubit matrix space]
+    \label{lem:periodic_qubit_singular_span_dimension}
+    \lean{Matrix.finrank_le_two_of_forall_det_eq_zero_fin_two}
     \leanok
-    Let $A^i\in M_2(\C)$ be a trace-preserving irreducible Kraus family.
-    Its linear span contains an invertible matrix.
+    A complex linear subspace $S\subseteq M_2(\C)$ consisting entirely
+    of singular matrices has dimension at most two.
 \end{lemma}
 
 \begin{proof}\leanok
-    Suppose that every matrix in the span $S$ is singular. Polarizing the
-    $2\times2$ determinant identity gives, for $M,N\in S$,
+    Polarizing determinant gives the nondegenerate bilinear form
     \begin{align}
-        MN+NM=\operatorname{tr}(M)N+\operatorname{tr}(N)M.
+        b(A,B)&=\det(A+B)-\det A-\det B\notag\\
+        &=A_{00}B_{11}+A_{11}B_{00}-A_{01}B_{10}-A_{10}B_{01}.
         \notag
     \end{align}
-    If $\operatorname{tr}(N)=0$, this identity makes $\ker N$ invariant
-    under every $A^i$. Singularity and irreducibility force $N=0$.
-    Hence trace is injective on $S$. Choose a nonzero $A^i$; it exists
-    by trace preservation. Every member of $S$ is proportional to $A^i$,
-    so a nonzero kernel vector of $A^i$ is killed by every Kraus matrix.
-    This contradicts $\sum_i(A^i)^\dagger A^i=I$.
+    The hypothesis gives $S\subseteq S^{\perp_b}$. Nondegeneracy implies
+    $\dim S^{\perp_b}=4-\dim S$, hence $\dim S\le2$.
 \end{proof}
 
-\begin{lemma}[Root rank for irreducible qubit channels]
+\begin{lemma}[Root rank for all qubit channels]
     \label{lem:periodic_qubit_root_rank}
-    \lean{Channel.choiRank_le_pow_of_irreducible_fin_two}
+    \lean{Channel.choiRank_le_pow_fin_two}
     \leanok
-    Let $\mathcal F$ be a channel on $M_2(\C)$, let $p>0$, and suppose
-    that $\mathcal F^p$ is irreducible. Then
+    Let $\mathcal F$ be a channel on $M_2(\C)$ and let $p>0$. Then
     $\operatorname{rank}_{\mathrm{Choi}}\mathcal F\le
     \operatorname{rank}_{\mathrm{Choi}}\mathcal F^p$.
-    The power may be singular as a linear map.
+    The power may be singular or reducible.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_irreducible_root_constraints, lem:periodic_qubit_invertible_kraus_span,
-        thm:periodic_root_word_span_dimension, thm:periodic_choi_rank_kraus_span}
-    A normalized Kraus representation of $\mathcal F$ is irreducible,
-    since its blocked transfer map is irreducible. Its one-letter span
-    therefore contains an invertible matrix. The word-span dimension
-    inequality and the Choi-rank identity give the claimed bound.
+    \uses{lem:periodic_qubit_singular_span_dimension, thm:periodic_root_word_span_dimension,
+        thm:periodic_choi_rank_kraus_span, thm:periodic_injective_composition_choi_rank}
+    Put $r=\operatorname{rank}_{\mathrm{Choi}}\mathcal F$ and
+    $s=\operatorname{rank}_{\mathrm{Choi}}\mathcal F^p$.
+    If $s\le1$, the power has one normalized Kraus matrix and is
+    invertible. Thus $\mathcal F$ is injective and the injective positive
+    rank inequality applies. Otherwise $s\ge2$, so $r\le2$ suffices.
+    If $r>2$, the preceding lemma supplies an invertible member of the
+    root's Kraus span. The word-span inequality then gives $r\le s$.
 \end{proof}
 
-\begin{lemma}[Refinement for irreducible bond-dimension-two transfer maps]
+\begin{lemma}[Refinement for every bond-dimension-two tensor]
     \label{lem:periodic_qubit_refinement}
-    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_irreducible_fin_two}
+    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_fin_two}
     \leanok
     \uses{def:p_refinable}
-    Let $B$ have physical dimension $d$ and bond dimension two, with
-    irreducible transfer map $\mathcal E_B$. For every $p>0$,
+    Let $B$ have physical dimension $d$ and bond dimension two. For every $p>0$,
     $p$-divisibility of $\mathcal E_B$ implies that $B$ is $p$-refinable.
-    This includes singular transfer maps and assumes no separate
-    bounded-root or invertible-root-span condition.
+    This includes singular and reducible transfer maps and assumes no
+    canonical form, bounded root, or invertible root span.
 \end{lemma}
 
 \begin{proof}\leanok
