@@ -96,6 +96,7 @@ theorem isTrivialGaugeClass_cyclicCocycle_iff (hn : 1 < n) (j : ℕ) :
       cyclicCocycle_zero, scalarCocycleValue₃_zero]
     exact CohomologousTo.refl _
 
+omit [NeZero n] in
 private theorem anomalyClass_ofCocycles_eq
     (x : cocycles (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3) :
     anomalyClass (ofCocycles x) = π _ 3 x := by
@@ -106,8 +107,9 @@ private theorem anomalyClass_ofCocycles_eq
 in `H³(ℤ_n, ℂˣ)` vanishes exactly when `n ∣ j`. -/
 theorem anomalyClass_cyclicCocycle_eq_zero_iff (hn : 1 < n) (j : ℕ) :
     π _ 3 (cyclicCocycle n j) = 0 ↔ n ∣ j := by
-  rw [← anomalyClass_ofCocycles_eq, ← isTrivialGaugeClass_iff_anomalyClass_eq_zero,
-    isTrivialGaugeClass_cyclicCocycle_iff hn]
+  rw [← anomalyClass_ofCocycles_eq, ← isTrivialGaugeClass_iff_anomalyClass_eq_zero]
+  change IsTrivialGaugeClass (scalarCocycleValue₃ (cyclicCocycle n j)) ↔ n ∣ j
+  exact isTrivialGaugeClass_cyclicCocycle_iff hn j
 
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040: the classes of `ω_j`
 and `ω_{j'}` in `H³(ℤ_n, ℂˣ)` agree exactly when `j ≡ j' mod n`. -/

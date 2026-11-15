@@ -105,6 +105,7 @@ theorem inhomogeneous_d₂_apply (f : G × G → representation G X M) (p : Fin 
   simp only [Fin.contractNth, sub_eq_add_neg, add_assoc, Fin.val_zero, Fin.val_one,
     Fin.val_two, Nat.reduceAdd, pow_succ', pow_zero, mul_neg_one, neg_neg, mul_one,
     neg_smul, one_smul]
+  rfl
 
 /-- The differential of a block two-cochain in inhomogeneous coordinates.
 Unlike the degree-three quotient, this formula permits arbitrary universes of

@@ -244,7 +244,7 @@ theorem phase_site {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (h
   rw [mul_inv_cancel_left] at hc
   have hx : (h * a)⁻¹ * (h * x) = a⁻¹ * x := by group
   rw [hx, ← mul_assoc, hc, eq_mul_inv_iff_mul_eq]
-  simp only [mul_comm, mul_left_comm]
+  ac_rfl
 
 theorem phase_mul {ω : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ} (hω : inhomogeneousCochains.d
   (Rep.ofMulDistribMulAction G ℂˣ) 3 ω = 0)

@@ -118,13 +118,17 @@ group was inferred as complex numbers instead of complex units. The explicit
 complex-unit parameter fixed that module: the hosted build at `99805c4`
 compiled `AnomalyObstruction` as well as the associator and its cohomology
 projection. Its strict checks later failed in `DomainWall` and
-`CZXPermutedBlocks`. The complete log could not be retrieved through the
-connector (transport closed); those downstream diagnostics and full CI remain
-unresolved. The generic block extension at `e9468d1` changes these consumers and is
-was checked on the combined sources. The only reported error in the
-generalized coefficient module was an unreduced `1 • x` in the tuple
-differential proof; the explicit `one_smul` simplification is included with
-the gate and cyclic migration. A corrected hosted run is required; no local
-Lean validation is claimed.
+`CZXPermutedBlocks`. That earlier complete log could not be retrieved through
+the connector (transport closed). Subsequent runs use the console filter
+above, and their complete diagnostics are readable.
+
+The combined-source run at `159c93d` compiled the new scalar-evaluation
+module, the native cyclic, bit, and Klein constructors, and the cyclic
+domain-wall calculations. It found three remaining proof reductions: tuple
+indices in the generic differential, the value projection in the cyclic class
+criterion, and associativity in the gate phase calculation. Their explicit
+proof corrections are included in the follow-up. Full latest-head validation
+remains required. Run results are kept current in the draft PR description;
+the compilation records here describe the revisions named above.
 
 Prepared with OpenAI Codex (GPT-6); maintainer review is required.
