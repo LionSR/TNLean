@@ -221,6 +221,7 @@ import TNLean.PEPS.RegularBoundaryState
 import TNLean.PEPS.RegularBoundarySupportedGram
 import TNLean.PEPS.RegularBoundaryTransporter
 import TNLean.PEPS.RegularBoundaryUntwisting
+import TNLean.PEPS.RegularCentralTwistDensity
 import TNLean.PEPS.RegularChargeBondContraction
 import TNLean.PEPS.RegularChargeCompleteMeasurement
 import TNLean.PEPS.RegularChargeCoordinates
@@ -374,6 +375,7 @@ import TNLean.PEPS.TorusBlockMultiplicityState
 import TNLean.PEPS.TorusBondClosureSeamMovement
 import TNLean.PEPS.TorusBondCoordinateTransport
 import TNLean.PEPS.TorusBondFlatConnection
+import TNLean.PEPS.TorusCentralFluxDensity
 import TNLean.PEPS.TorusChargeFluxCrossing
 import TNLean.PEPS.TorusChargeStringDeformation
 import TNLean.PEPS.TorusClosureSeams
@@ -407,6 +409,7 @@ import TNLean.PEPS.TorusDualCollar
 import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
+import TNLean.PEPS.TorusDualHomotopyClassification
 import TNLean.PEPS.TorusDualOpenDeformation
 import TNLean.PEPS.TorusDualPath
 import TNLean.PEPS.TorusDualPhysicalAvoidance
