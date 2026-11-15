@@ -31,14 +31,13 @@ namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
-variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
+variable {G : Type*} [Group G] [Fintype G]
 
-omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
+omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] in
 private theorem twisted_translation_iff
     (u : Edge Γ → G) (hu : ∀ f g, Commute (u f) g) (v : V)
     (η θ : IncidentEdge Γ v → G) (g : G) :
-    regularTwistedLabels u v η = (fun f ↦ g * regularTwistedLabels u v θ f) ↔
-      η = (fun f ↦ g * θ f) := by
+    regularTwistedLabels u v η = g • regularTwistedLabels u v θ ↔ η = g • θ := by
   have hf (f : IncidentEdge Γ v) :
       regularTwistedLabels u v η f = g * regularTwistedLabels u v θ f ↔
         η f = g * θ f := by
@@ -46,7 +45,7 @@ private theorem twisted_translation_iff
     · simp only [regularTwistedLabels, hv, ite_true]
       rw [← mul_assoc, ← (hu f.1 g).eq, mul_assoc, mul_left_cancel_iff]
     · simp only [regularTwistedLabels, hv, ite_false]
-  simp only [funext_iff, hf]
+  simp only [funext_iff, Pi.smul_apply, smul_eq_mul, hf]
 
 private theorem site_gram_eq
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
@@ -55,6 +54,7 @@ private theorem site_gram_eq
     (v : V) (η θ : IncidentEdge Γ v → G) :
     (∑ s : Fin d, star (regularTwistedSite a u v η s) * regularTwistedSite a u v θ s) =
       ∑ s : Fin d, star (a v η s) * a v θ s := by
+  classical
   obtain ⟨c, _, h⟩ := (ha v).exists_regularSiteGram
   simp only [regularTwistedSite, h, twisted_translation_iff u hu]
 
@@ -99,6 +99,8 @@ theorem regularPhysicalCutMatrix_reduced_eq_of_central
   let e := Fintype.equivFin {f : Edge Γ // IsRegionBoundaryEdge R f}
   let ec := (regionBoundaryEdgeComplEquiv (G := Γ) R).symm.trans e
   have hM := regularTwistedOpenRegionMatrix_eq_of_trivial_on_incident a u R hR e
+  change regularOpenRegionMatrix (regularTwistedSite a u) R e =
+    regularOpenRegionMatrix a R e at hM
   have hN := regularTwistedOpenRegionMatrix_gram_eq_of_central a ha u hu
     (Finset.univ \ R) ec
   have hNt :
