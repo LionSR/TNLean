@@ -67,6 +67,32 @@ gauge transformations form a projective representation on the bond space.
     the summation order yields the identity.
 \end{proof}
 
+\begin{lemma}[Twisting and virtual conjugation]\label{lem:twisted_tensor_gauge_conjugation}
+    \lean{MPSTensor.twistedTensor_gaugeEquiv}\leanok
+    \uses{def:twisted_tensor}
+    Let $G$ be a monoid, let $d,D$ be nonnegative integers, and let
+    $U:G\to\operatorname{Mat}_d(\C)$ be a monoid homomorphism, and let
+    $A=(A^i)_{i=0}^{d-1}$ be a family of $D\times D$ matrices. For every
+    $Y\in\GL_D(\C)$ and $g\in G$,
+    $\widetilde{(YAY^{-1})}_g^i=Y\widetilde A_g^iY^{-1}$ for every $i$.
+\end{lemma}
+\begin{proof}\leanok
+    Distribute left and right multiplication by $Y$ and $Y^{-1}$ through the
+    finite sum defining the twist.
+\end{proof}
+
+\begin{lemma}[Products of chosen virtual gauges]\label{lem:symmetry_gauge_product_intertwines}
+    \lean{MPSTensor.gauge_product_intertwines}\leanok
+    \uses{lem:twisted_tensor_mul,lem:twisted_tensor_gauge_conjugation}
+    With $G,U,A$ as above, let $X:G\to\GL_D(\C)$ satisfy
+    $\widetilde A_g^i=X(g)A^iX(g)^{-1}$ for every $g$ and $i$. Then
+    $\widetilde A_{gh}^i=(X(h)X(g))A^i(X(h)X(g))^{-1}$ for every $g,h,i$.
+\end{lemma}
+\begin{proof}\leanok
+    Apply twist composition and the preceding conjugation identity, then use
+    the supplied gauge equation and associativity of matrix multiplication.
+\end{proof}
+
 \begin{lemma}[Identity twist]\label{lem:twisted_tensor_one}
     \lean{MPSTensor.twistedTensor_one}
     \leanok
