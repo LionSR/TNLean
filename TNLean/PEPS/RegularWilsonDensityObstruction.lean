@@ -28,7 +28,7 @@ See `docs/paper-gaps/scp10_wilson_density_obstruction.tex`.
 -/
 
 noncomputable section
-open scoped Matrix
+open scoped Matrix ComplexOrder
 namespace TNLean.PEPS
 
 private theorem normalized_gram_ne_of_left_action
