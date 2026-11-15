@@ -114,7 +114,7 @@ structure FusionRing (ι : Type*) [Fintype ι] [DecidableEq ι] where
 namespace FusionRing
 
 /-- Integer combinations with multiplication determined by the chosen fusion data. -/
-def Carrier (F : FusionRing ι) := ι →₀ ℤ
+def Carrier (_F : FusionRing ι) := ι →₀ ℤ
 
 instance (F : FusionRing ι) : Ring F.Carrier :=
   F.laws.integerFusionRing
