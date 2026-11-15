@@ -71,23 +71,23 @@
 \end{proof}
 
 
-\begin{theorem}[Conjugation with an arbitrary factorial growth rate]
-    \label{thm:factorial_growth_rate_conjugation}
+\begin{lemma}[Conjugation with an arbitrary factorial growth rate]
+    \label{lem:factorial_growth_rate_conjugation}
     \lean{Matrix.norm_exp_conjugation_le_two_of_growth}
     Let $H,O$ be finite complex square matrices and let $a\ge0$. If
     $\lVert\operatorname{ad}_H^m(O)\rVert\le a^m m!\lVert O\rVert$
     for every $m\in\N$, then
     $\lVert e^{tH}Oe^{-tH}\rVert\le2\lVert O\rVert$
     for $t\ge0$ with $at\le1/2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The Hadamard series has the geometric majorant
     $\sum_{m\ge0}(at)^m\lVert O\rVert\le2\lVert O\rVert$.
     The argument also applies when $a=0$ and does not divide by $a$.
 \end{proof}
 
-\begin{theorem}[Conjugation from a finite-site interaction budget]
-    \label{thm:finite_site_interaction_budget_conjugation}
+\begin{lemma}[Conjugation from a finite-site interaction budget]
+    \label{lem:finite_site_interaction_budget_conjugation}
     \lean{TNLean.Lattice.norm_iterated_commutator_le_ascFactorial,TNLean.Lattice.norm_iterated_commutator_le_factorial,TNLean.Lattice.norm_exp_conjugation_interactionBudget_shift_le_two}
     Let $\Lambda$ and $I$ be finite sets, $q,k\in\N$, and $g\ge0$.
     On $\bigotimes_{x\in\Lambda}\C^q$, let $h_i$ act on $X_i\subseteq\Lambda$,
@@ -111,8 +111,9 @@
     This is a conservative auxiliary to~\cite[Section 2.1, equations (1)--(4),
     and Section 3, Lemma 3.1]{Arad2014Connecting}: no positivity is assumed,
     and the estimate retains the general commutator factor $2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
+    \uses{lem:factorial_growth_rate_conjugation}
     More generally, for $O$ acting on $S$ with $|S|\le kr$, prove
     \begin{align}
         \lVert\operatorname{ad}_H^m(O)\rVert
@@ -138,17 +139,17 @@
     $2\lVert O\rVert$. No restriction on $t$ is needed when $gk=0$.
 \end{proof}
 
-\begin{corollary}[Finite-range chain interaction budget]
-    \label{cor:chain_interaction_budget_conjugation}
+\begin{lemma}[Finite-range chain interaction budget]
+    \label{lem:chain_interaction_budget_conjugation}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_exp_conjugation_shift_le_two}
-    \uses{def:chain_model,thm:finite_site_interaction_budget_conjugation}
+    \uses{def:chain_model,lem:finite_site_interaction_budget_conjugation}
     For a finite-range chain Hamiltonian with range $R$ and term bound $J$,
     put $b=2^{2R+1}\max(J,0)$ and $k=R+1$. An observable acting on at most
     $k$ sites satisfies the preceding conjugation estimate whenever
     $t\ge0$ and $2bkt\le1/2$, also on the empty chain.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     Each interaction has at most $R+1$ sites, and the chain support count
     bounds its per-site interaction budget by $2^{2R+1}J\le b$.
-    Apply Theorem~\ref{thm:finite_site_interaction_budget_conjugation}.
+    Apply Lemma~\ref{lem:finite_site_interaction_budget_conjugation}.
 \end{proof}
