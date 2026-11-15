@@ -834,6 +834,31 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     many proper hyperplanes annihilating a coefficient.
 \end{proof}
 
+\begin{lemma}[Rank reduction on a positive matrix face]
+    \label{thm:periodic_positive_pencil_boundary}
+    \lean{Matrix.exists_posSemidef_rank_lt_on_trace_zero_line,
+        Matrix.exists_posSemidef_rank_lt_on_isometric_face}
+    \leanok
+    Let $A\in M_D(\C)$ be positive definite and let $H$ be a nonzero
+    Hermitian matrix with trace zero. There is a nonzero real $t$ such
+    that $A+tH$ is positive semidefinite and has smaller rank than $A$.
+    More generally, if $V^\dagger V=I_r$, $G\in M_r(\C)$ is positive
+    definite, and $J\in M_r(\C)$ is nonzero Hermitian with trace zero,
+    then $VGV^\dagger+tVJV^\dagger$ is positive semidefinite and has
+    smaller rank than $VGV^\dagger$ for some nonzero real $t$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The positive semidefinite matrices of fixed trace form a compact set.
+    The nonconstant affine line has compact inverse image, so its
+    admissible parameters have a maximum. At that parameter the matrix
+    cannot be positive definite, since positive definiteness is the
+    interior of the positive semidefinite cone in the Hermitian space.
+    Its rank is therefore smaller. Isometric congruence preserves
+    positivity and rank, giving the face statement.
+\end{proof}
+
 \begin{lemma}[Exact powers under an annihilating perturbation]
     \label{thm:periodic_annihilating_power_perturbation}
     \lean{add_pow_eq_of_annihilating_square_zero}
