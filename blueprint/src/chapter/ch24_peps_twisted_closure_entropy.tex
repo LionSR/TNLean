@@ -333,3 +333,48 @@ torus.
     the positive normalization, and the same region map and constant apply
     to every choice of coefficients.
 \end{proof}
+
+\begin{lemma}[Open-region Gram equality for central insertions]
+    \label{lem:peps_central_twist_open_gram}
+    \lean{TNLean.PEPS.regularTwistedOpenRegionMatrix_gram_eq_of_central}\leanok
+    Let every original site be regular $G$-isometric and every inserted
+    edge label $u_e$ be central in $G$. For every finite region $R$ and
+    every numbering of its crossing bonds,
+    \begin{align}
+        (T_R^u)^\dagger T_R^u=T_R^\dagger T_R.
+    \end{align}
+    No connectivity or spanning-tree hypothesis is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_gram_expansion}
+    At a local site, centrality makes the two twisted configurations
+    differ by a simultaneous translation precisely when the original
+    configurations do. The regular-isometric Gram kernel is therefore
+    unchanged. Substitute these local identities into the actual
+    open-region cross Gram expansion.
+\end{proof}
+
+\begin{lemma}[Vacuum reduced matrix for central complementary insertions]
+    \label{lem:peps_central_twist_reduced_matrix}
+    \lean{TNLean.PEPS.regularPhysicalCutMatrix_reduced_eq_of_central,
+        TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_eq_of_central}\leanok
+    Under the preceding regular-isometry and centrality assumptions,
+    suppose $u_e=1$ on every bond incident to an observation region $R$.
+    Let $M_u$ and $M_0$ be the actual physical cuts with those insertions
+    and with identity insertions. Then
+    \begin{align}
+        M_uM_u^\dagger&=M_0M_0^\dagger, \\
+        \frac{M_uM_u^\dagger}{\operatorname{tr}(M_uM_u^\dagger)}
+        &=\frac{M_0M_0^\dagger}{\operatorname{tr}(M_0M_0^\dagger)}.
+    \end{align}
+    The unnormalized identity holds without a nonzero-cut assumption;
+    inverse normalization is interpreted as inverse scalar multiplication.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_central_twist_open_gram}
+    The observed open-region matrix is unchanged because every incident
+    insertion is identity. The complementary open-region Gram matrix is
+    unchanged by the preceding lemma. Substitute both identities into
+    the actual two-region factorization $M=T_R T_{R^c}^{\mathsf T}$.
+    Equality of traces then gives the normalized formula.
+\end{proof}
