@@ -7,6 +7,12 @@ without changing statements; its clean strict check and full CI remain pending.
 The original source entry is unfinished. Initial source checkout:
 `cbf482955f46f36c71c95ab1547b3cc86b6d58c2`.
 
+
+Hosted checks and the transitive axiom audit at `99005136` used the tested
+merge with main, whose QICLean pin is `603fc408`. The older feature snapshot
+retains `c4576824`; this PR does not change dependency inputs. The local-pin
+statements below record the initial workspace, not the effective merged CI inputs.
+
 ## Ownership and existing work
 
 On 2026-11-15, [#7574](https://github.com/LionSR/TNLean/issues/7574) was open
@@ -386,3 +392,21 @@ unused argument and still requires a clean exact-head run. The original source
 entry remains unfinished; the general equivalence definitions and pins are
 unchanged. The complete root build, compiled-reference checks, and axiom audit
 are still outstanding.
+
+## Checked labelled-spin source continuation
+
+All required CI jobs at `99005136` passed in run `43757303978`, including the
+full Blueprint web job. A separate temporary audit checked the transitive
+axioms of all 32 declarations on that tested merge and found only `propext`,
+`Classical.choice`, and `Quot.sound`.
+
+The labelled-spin continuation now has 18 further checked declarations in
+`PhysicalMatrixBlocking.lean` and `Examples/LabelledSwapEquivalence.lean`.
+At isolated source commit `d241aa5c`, run `43765894182`, both modules compiled
+and passed strict checks; all 50 public declarations passed the same transitive
+standard-axiom audit. They give a named fixed-labelled-space stabilization
+convention using the actual canonical blocking operation, all three general
+comparisons, and all ordered pairs of the actual three source examples.
+The added Blueprint sources passed the pinned formatter in run `43766912022`.
+See `2026-11-15_mpu_labelled_swap_equivalence.md` for the definition audit and
+precise separation from the unchanged general equivalence convention.
