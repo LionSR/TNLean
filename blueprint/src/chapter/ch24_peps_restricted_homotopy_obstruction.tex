@@ -25,11 +25,14 @@
 
 \begin{lemma}[Zero displacement does not classify restricted homotopy]
     \label{lem:peps_dual_restricted_displacement_obstruction}
-    \lean{TNLean.PEPS.torusDualSquareLoop_obstructs_restricted_completeness}\leanok
+    \lean{TNLean.PEPS.torusDualSquareLoop_obstructs_restricted_completeness,
+        TNLean.PEPS.torusDualSquareLoop_not_homotopic_avoiding_origin}\leanok
     If a test group has noncommuting elements $u,v$, the dual square loop
     surrounding the origin has zero lifted displacement, but it cannot
     be contracted using square moves supported away from that origin.
-    This holds without restrictions on the two torus periods.
+    The unconditional version constructs two noncommuting transpositions
+    on three elements internally. This holds without restrictions on the
+    two torus periods or on a physical flux group.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_dual_restricted_seam_word,def:peps_dual_flux_displacement}

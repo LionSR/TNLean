@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusDualWinding
+import Mathlib.GroupTheory.Perm.Basic
 
 /-!
 # A nonabelian obstruction to restricted dual homotopy
@@ -112,5 +113,16 @@ theorem torusDualSquareLoop_obstructs_restricted_completeness
     calc
       u * v = (u * v * u⁻¹ * v⁻¹) * (v * u) := by simp [mul_assoc]
       _ = v * u := by rw [hc, one_mul]
+
+/-- The restricted contraction is impossible on every labelled torus. The
+noncommuting test pair is constructed internally from two transpositions on
+three elements, rather than supplied as a hypothesis. This is a geometric
+obstruction, independent of any physical flux group. -/
+theorem torusDualSquareLoop_not_homotopic_avoiding_origin :
+    ¬ TorusDualHomotopy {w : X | w ≠ (0, 0)}
+      (torusDualSquareLoop (-1 : ZMod width) (-1 : ZMod height)) .nil := by
+  have h : Equiv.swap (0 : Fin 3) 1 * Equiv.swap 1 2 ≠
+      Equiv.swap 1 2 * Equiv.swap (0 : Fin 3) 1 := by decide
+  exact (torusDualSquareLoop_obstructs_restricted_completeness _ _ h).2
 
 end TNLean.PEPS
