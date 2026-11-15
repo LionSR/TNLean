@@ -135,7 +135,8 @@ private theorem ancillaSwapDagger_invariance_iff (d x k : ℕ) {E : ℕ}
     IsInvariantUnderSymmetry (ancillaSwapDaggerSymmetry d x k) W ↔
       IsInvariantUnderSymmetry (daggerSymmetry _)
         (W.ketLeftMul (blockedAncillaSwap d x k)) := by
-  apply isInvariantUnderSymmetry_iff_of_pointwise _ _ _ _ rfl
+  apply isInvariantUnderSymmetry_iff_of_pointwise
+    (ancillaSwapDaggerSymmetry d x k) (daggerSymmetry _) _ _ rfl
   intro N
   change _ ↔ (mpo (W.ketLeftMul (blockedAncillaSwap d x k)) N)ᴴ = _
   rw [mpo_ketLeftMul]
@@ -149,7 +150,8 @@ private theorem ancillaSwapTranspose_invariance_iff (d x k : ℕ) {E : ℕ}
     IsInvariantUnderSymmetry (ancillaSwapTransposeSymmetry d x k) W ↔
       IsInvariantUnderSymmetry (transposeSymmetry _)
         (W.ketLeftMul (blockedAncillaSwap d x k)) := by
-  apply isInvariantUnderSymmetry_iff_of_pointwise _ _ _ _ rfl
+  apply isInvariantUnderSymmetry_iff_of_pointwise
+    (ancillaSwapTransposeSymmetry d x k) (transposeSymmetry _) _ _ rfl
   intro N
   change _ ↔ (mpo (W.ketLeftMul (blockedAncillaSwap d x k)) N)ᵀ = _
   rw [mpo_ketLeftMul]

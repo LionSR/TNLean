@@ -262,3 +262,20 @@ public declarations in `Examples/SwapAncillaCompatibility.lean`.
 
 No source completion tag, general equivalence-definition change, assignment,
 or merge was made.
+
+## Exact-head check at b08bb624
+
+Hosted run `43749029318`, build job `132918788035`, built
+`PhysicalAncillaLeftMul.lean` in 4.5 seconds and reported its focused strict
+check as `ok`. These nine helper declarations are checked at that exact head.
+The two example modules failed: the pointwise comparison needed explicit source
+and target actions, the configuration permutation matrix needed a scalar type,
+and several operator-coordinate proofs needed a separate Kronecker evaluation
+or an explicitly typed semiconjugacy equality. The source repair addresses those
+diagnostics without changing theorem signatures.
+
+The same run passed module policies, inline diagram semantics, and Blueprint
+PDF compilation. The web job failed on three latexindent alignment differences;
+the repair applies the exact reported formatting. The example-module repairs and
+the complete new head remain unverified until the next hosted check. No passing
+root build or new-declaration axiom audit is inferred from the helper's success.

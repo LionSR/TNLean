@@ -56,7 +56,8 @@ private theorem chainShiftSwap_sandwich_apply (d N : ℕ)
     rw [Fintype.prod_boole]
     simp [e, funext_iff]
   rw [hC]
-  change (e.toPEquiv.toMatrix * X * e.toPEquiv.toMatrix) σ τ = _
+  change ((e.toPEquiv.toMatrix : Matrix (Fin N → Fin (d * d))
+    (Fin N → Fin (d * d)) ℂ) * X * e.toPEquiv.toMatrix) σ τ = _
   rw [PEquiv.mul_toMatrix_toPEquiv, PEquiv.toMatrix_toPEquiv_mul]
   rfl
 
@@ -84,9 +85,9 @@ theorem symmetryFamily_at_ne_shiftSwapDagger
   have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))
     (fun _ => finProdFinEquiv (a, b))
   simp only [chainShiftSwap_sandwich_apply, Matrix.conjTranspose_apply] at hzero hone
-  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, P, finTupleProdEquiv, Equiv.arrowCongr, Function.comp_def,
-    bondPairSwap, Ne.symm hab] at hzero hone
+  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, finTupleProdEquiv,
+    Equiv.arrowCongr, Function.comp_def, bondPairSwap] at hzero hone
+  simp [Matrix.kroneckerMap_apply, Matrix.one_apply, P, Ne.symm hab] at hzero hone
   have hbad : (1 : ℂ) = 0 := hzero.symm.trans hone
   norm_num at hbad
 
@@ -113,9 +114,9 @@ theorem symmetryFamily_at_ne_shiftSwapTranspose
   have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))
     (fun _ => finProdFinEquiv (a, b))
   simp only [chainShiftSwap_sandwich_apply, Matrix.transpose_apply] at hzero hone
-  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, P, finTupleProdEquiv, Equiv.arrowCongr, Function.comp_def,
-    bondPairSwap, Ne.symm hab] at hzero hone
+  simp [tensorPhysicalIdOperator, Matrix.reindex_apply, finTupleProdEquiv,
+    Equiv.arrowCongr, Function.comp_def, bondPairSwap] at hzero hone
+  simp [Matrix.kroneckerMap_apply, Matrix.one_apply, P, Ne.symm hab] at hzero hone
   have hbad : (1 : ℂ) = 0 := hzero.symm.trans hone
   norm_num at hbad
 
@@ -153,7 +154,8 @@ theorem not_semiconj_physicalIdMatrix_to_shiftSwapDagger
   have hP : Pᴴ = P := by simp [P, Matrix.conjTranspose_single]
   have hPx : (physicalIdMatrix P 2)ᴴ = physicalIdMatrix P 2 := by
     rw [physicalIdMatrix_conjTranspose, hP]
-  have hcompat := h P
+  have hcompat : physicalIdMatrix (f P) 2 =
+      shiftPhysicalSwap 2 * (physicalIdMatrix P 2)ᴴ * shiftPhysicalSwap 2 := h P
   rw [hPx] at hcompat
   exact shiftSwap_sandwich_not_mem_range_physicalIdMatrix ⟨f P, hcompat⟩
 
@@ -171,7 +173,8 @@ theorem not_semiconj_physicalIdMatrix_to_shiftSwapTranspose
     simp [P, Matrix.transpose_apply, Matrix.single, and_comm]
   have hPx : (physicalIdMatrix P 2)ᵀ = physicalIdMatrix P 2 := by
     rw [physicalIdMatrix_transpose, hP]
-  have hcompat := h P
+  have hcompat : physicalIdMatrix (f P) 2 =
+      shiftPhysicalSwap 2 * (physicalIdMatrix P 2)ᵀ * shiftPhysicalSwap 2 := h P
   rw [hPx] at hcompat
   exact shiftSwap_sandwich_not_mem_range_physicalIdMatrix ⟨f P, hcompat⟩
 
@@ -191,6 +194,8 @@ theorem physicalIdMatrix_shiftSwap_sandwich_ne :
   norm_num [physicalIdMatrix, Matrix.reindex_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, shiftSwap_sandwich_apply, Matrix.single, bondPairSwap,
     finProdFinEquiv] at hentry
+  norm_num [shiftSwap_sandwich_apply, Matrix.single, bondPairSwap,
+    finProdFinEquiv, Fin.divNat, Fin.modNat] at hentry
 
 /-- Canonical flattened-swap adjunction at dimensions four and sixteen
 fails the identity-ancilla semiconjugacy required of a coherent family.
@@ -205,7 +210,8 @@ theorem not_semiconj_physicalIdMatrix_shiftSwapDagger :
   have hP : Pᴴ = P := by simp [P, Matrix.conjTranspose_single]
   have hPx : (physicalIdMatrix P 4)ᴴ = physicalIdMatrix P 4 := by
     rw [physicalIdMatrix_conjTranspose, hP]
-  have hcompat := h P
+  have hcompat : physicalIdMatrix (shiftPhysicalSwap 2 * Pᴴ * shiftPhysicalSwap 2) 4 =
+      shiftPhysicalSwap 4 * (physicalIdMatrix P 4)ᴴ * shiftPhysicalSwap 4 := h P
   rw [hP, hPx] at hcompat
   exact physicalIdMatrix_shiftSwap_sandwich_ne hcompat
 
@@ -224,7 +230,8 @@ theorem not_semiconj_physicalIdMatrix_shiftSwapTranspose :
     simp [P, Matrix.transpose_apply, Matrix.single, and_comm]
   have hPx : (physicalIdMatrix P 4)ᵀ = physicalIdMatrix P 4 := by
     rw [physicalIdMatrix_transpose, hP]
-  have hcompat := h P
+  have hcompat : physicalIdMatrix (shiftPhysicalSwap 2 * Pᵀ * shiftPhysicalSwap 2) 4 =
+      shiftPhysicalSwap 4 * (physicalIdMatrix P 4)ᵀ * shiftPhysicalSwap 4 := h P
   rw [hP, hPx] at hcompat
   exact physicalIdMatrix_shiftSwap_sandwich_ne hcompat
 
