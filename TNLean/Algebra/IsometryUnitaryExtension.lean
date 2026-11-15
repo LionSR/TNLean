@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.InnerProductSpace.PiL2
-import Mathlib.LinearAlgebra.UnitaryGroup
+import QICLean.Algebra.MatrixGramUnitary
 import QICLean.Algebra.MatrixUnitaryBetween
 
 /-!
@@ -37,36 +36,18 @@ theorem exists_mem_unitaryGroup_apply_embedding_eq {ι κ : Type*} [Fintype ι] 
     [DecidableEq κ] {V : Matrix ι κ ℂ} (hV : V.IsIsometry) (e : κ ↪ ι) :
     ∃ U ∈ Matrix.unitaryGroup ι ℂ, ∀ i k, U i (e k) = V i k := by
   classical
-  let E := EuclideanSpace ℂ ι
-  let col : κ → E := fun k => WithLp.toLp 2 (fun i => V i k)
-  let v : ι → E := Function.extend e col 0
-  have hv_e : ∀ k, v (e k) = col k := fun k => e.injective.extend_apply col 0 k
-  have key : ∀ k k', inner ℂ (col k) (col k') = if k = k' then 1 else 0 := fun k k' => by
-    have h := congrFun (congrFun hV k) k'
-    rw [Matrix.mul_apply, Matrix.one_apply] at h
-    rw [← h, PiLp.inner_apply]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    simp [col, RCLike.inner_apply, Matrix.conjTranspose_apply, mul_comm]
-  have hv : Orthonormal ℂ ((Set.range e).domRestrict v) := by
-    rw [orthonormal_iff_ite]
-    rintro ⟨x, hx⟩ ⟨y, hy⟩
-    obtain ⟨k, rfl⟩ := hx
-    obtain ⟨k', rfl⟩ := hy
-    simp only [Set.domRestrict_apply, hv_e, key]
-    simp [Subtype.ext_iff]
-  obtain ⟨bb, hbb⟩ := hv.exists_orthonormalBasis_extension_of_card_eq
-    (by simp [E, finrank_euclideanSpace])
-  refine ⟨Matrix.of fun x y => (bb y : E) x, ?_, ?_⟩
-  · rw [Matrix.mem_unitaryGroup_iff']
-    ext y z
-    have h := (orthonormal_iff_ite.mp bb.orthonormal) y z
-    rw [PiLp.inner_apply] at h
-    simp only [Matrix.mul_apply, Matrix.star_apply, Matrix.of_apply, Matrix.one_apply]
-    rw [← h]
-    refine Finset.sum_congr rfl fun x _ => ?_
-    simp [RCLike.inner_apply, mul_comm]
-  · intro i k
-    have := hbb (e k) ⟨k, rfl⟩
-    simp [this, hv_e, col]
+  letI : Finite κ := Finite.of_injective e e.injective
+  let J : Matrix ι κ ℂ := (1 : Matrix ι ι ℂ).submatrix id e
+  have hJ : Jᴴ * J = 1 := by
+    rw [show Jᴴ = (1 : Matrix ι ι ℂ).submatrix e id by simp [J]]
+    change (1 : Matrix ι ι ℂ).submatrix e (Equiv.refl ι) *
+      (1 : Matrix ι ι ℂ).submatrix (Equiv.refl ι) e = 1
+    rw [Matrix.submatrix_mul_equiv, Matrix.one_mul]
+    exact Matrix.submatrix_one e e.injective
+  obtain ⟨U, hU⟩ := Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq V J
+    ((show Vᴴ * V = 1 from hV).trans hJ.symm)
+  refine ⟨U, U.property, fun i k => ?_⟩
+  have h := congrArg (fun M : Matrix ι κ ℂ => M i k) hU
+  simpa [J, Matrix.mul_apply, Matrix.one_apply] using h.symm
 
 end Matrix
