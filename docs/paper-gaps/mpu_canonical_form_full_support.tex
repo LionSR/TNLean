@@ -524,6 +524,29 @@ comparison results
 \texttt{prop:mpu\_admissible\_mps\_conjugation\_class} and
 \texttt{prop:mpu\_admissible\_mps\_time\_reversal\_class}.
 
+The intrinsic sign does not require source factors in the original ambient
+space. For any positive-dimensional MPU with adjoint symmetry at all even
+lengths, choose a reduced canonical representative with the same
+positive-length periodic family. Its twisted transfer is a signed unitary
+conjugate of the normalized transfer. The conjugated bond exchange $B$ is
+an involution commuting with the stabilized rank-one projector $P$.
+Consequently $(BP)^2=P$ and
+$\tr(BP)^2=\tr((BP)^2)=\tr(P)=1$. The intrinsic normalized exchange trace
+is therefore a product of two signs. Equality of the length-two periodic
+operators transfers this quantization to the original tensor.
+The intrinsic trace varies continuously with that tensor, so it is constant
+on every continuous adjoint-symmetric MPU path. This argument requires no
+continuous or pointwise choice of standard-form gates along the path.
+The formulas are recorded in
+\leanid{MPOTensor.IsMPU.intrinsicTimeReversalSign_sq_eq_one} and
+\leanid{MPOTensor.intrinsicTimeReversalSign_eq_on_timeReversal_path}.
+% These new declarations await kernel verification; the gap stays open.
+The identity with the normalized gate trace applies to any supplied square
+standard form. It does not construct the unitary in the literal four-spin
+local equation, nor establish that equation for arbitrary ambient
+presentations. Those local-characterization and source-factor obligations
+remain separate.
+
 The source example and swap labels
 \texttt{ex:all-phases-under-conjugation}, \texttt{example:czx},
 \texttt{ex:dagger-all-but-czx}, \texttt{lemma:sym-trafo-swap},

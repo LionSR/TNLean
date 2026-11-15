@@ -2344,9 +2344,9 @@
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
     % Source lines: paper_v2.tex 1613--1631.
-    % The intrinsic auxiliary results below need pointwise supplied standard
-    % forms and the local certificate; no continuous gate choices are needed.
-    % Deducing that certificate from global symmetry remains separate.
+    % Intrinsic quantization below removes the pointwise local-certificate
+    % premise from deformation invariance. The new proof awaits compilation.
+    % The literal local gate characterization remains separate.
 \end{lemma}
 
 \begin{lemma}[Extraction of the sign from a supplied local equation]
@@ -2427,6 +2427,62 @@
     so $s(W(t))$ is continuous. At each point the local equation and
     intrinsic identity give $s(W(t))\in\{1,-1\}$. A continuous function
     from the connected interval to this two-point set is constant.
+\end{proof}
+
+\begin{lemma}[Intrinsic sign quantization for arbitrary MPU presentations]
+    \label{lem:mpu_intrinsic_sign_quantization}
+    \lean{MPOTensor.IsMPU.intrinsicTimeReversalSign_sq_eq_one,
+        MPOTensor.TwoSiteStandardFormData.timeReversalSign_sq_eq_one_of_even_mpo_eq_adjoint}
+    \notready
+    \uses{lem:mpu_canonical_intrinsic_blocking_phase_formula,
+        thm:mpu_reduced_cfii_representative,
+        lem:mpu_source_time_reversal_sign_independent}
+    Let $q,D>0$ and let $W$ be an MPU tensor whose periodic operators obey
+    $U_W^{(N)}=U_W^{(N)\dagger}$ for every even $N>1$.
+    Then $s(W)=q^{-1}\tr[P U_W^{(2)}]\in\{1,-1\}$.
+    No canonical presentation or standard form is required.
+    If $q=d^2$ and $W$ has a supplied square standard form
+    with gates $u,v$, then its normalized gate trace $s(u,v)$ is also in
+    $\{1,-1\}$.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_canonical_intrinsic_blocking_phase_formula,
+        thm:mpu_reduced_cfii_representative,
+        lem:mpu_source_time_reversal_sign_independent}
+    Choose a reduced canonical representative $V$ with
+    $U_V^{(N)}=U_W^{(N)}$ for every $N>0$. It inherits even-chain adjoint
+    symmetry and has $s(V)=\eta C$ with $\eta^2=C^2=1$.
+    Equality at length two gives $s(W)=s(V)$, hence $s(W)^2=1$.
+    For supplied square standard forms, $s(u,v)=s(W)$.
+\end{proof}
+
+\begin{lemma}[Intrinsic sign constancy under arbitrary MPU deformations]
+    \label{lem:mpu_intrinsic_time_reversal_deformation}
+    \lean{MPOTensor.intrinsicTimeReversalSign_eq_on_timeReversal_path,
+        MPOTensor.timeReversalSign_eq_of_timeReversal_path}
+    \notready
+    \uses{lem:mpu_intrinsic_sign_quantization,
+        lem:mpu_supplied_time_reversal_sign_constant,
+        lem:mpu_source_time_reversal_sign_independent}
+    Let $W(t)$ be a continuous path of MPU tensors of fixed positive physical
+    and bond dimensions, with $U_{W(t)}^{(N)}=U_{W(t)}^{(N)\dagger}$ for all
+    $t\in[0,1]$ and all even $N>1$. Then $s(W(t))=s(W(0))$.
+    When the physical dimension is $d^2$, supplied square standard forms
+    at $t$ and $0$ have equal normalized gate traces. No standard forms,
+    canonical representatives or local certificates are required along
+    the path.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_intrinsic_sign_quantization,
+        lem:mpu_supplied_time_reversal_sign_constant,
+        lem:mpu_source_time_reversal_sign_independent}
+    The normalized trace is continuous in the tensor entries.
+    Intrinsic quantization puts its value in $\{1,-1\}$ at every path point,
+    so connectedness of $[0,1]$ gives constancy.
+    The gate-to-intrinsic identity identifies the traces at the two supplied
+    standard forms.
 \end{proof}
 
 \begin{lemma}[Admissible well-definedness of the time-reversal sign]

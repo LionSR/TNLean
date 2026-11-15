@@ -1597,15 +1597,15 @@
     stated product order; no exchange of bond factors is inserted.
 \end{lemma}
 
-\begin{lemma}[Derived intrinsic phase formula]
+\begin{lemma}[Derived intrinsic sign formula]
     \label{lem:mpu_canonical_intrinsic_blocking_phase_formula}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula}
-    \leanok
+    \notready
     \uses{lem:mpu_canonical_twisted_transfer_comparison,
         lem:mpu_stabilized_commuting_weighted_trace,
         lem:mpu_intrinsic_blocked_twisted_trace}
     Under the same canonical and even-chain adjoint-symmetry assumptions,
-    there are $\eta\in\{1,-1\}$ and $C\in\mathbb C$ such that
+    there are $\eta,C\in\{1,-1\}$ such that
     \begin{align}
         \sigma_{\mathrm{int}}(U)   & =\eta C,              \\
         \sigma_{\mathrm{int}}(U_k) & =\eta^k C\qquad(k>0).
@@ -1615,8 +1615,12 @@
     through the preceding comparison gives a weight commuting with this
     actual transfer. Its nilpotent transient therefore has zero weighted
     trace at every positive power. Neither the comparison nor stabilization
-    is an additional premise. The constant $C$ is retained, and $\eta$ is not
-    identified with the first intrinsic value.
+    is an additional premise. To determine $C$, write $P=E_U^J$ for the
+    stabilized rank-one projector and $B$ for the conjugated exchange.
+    Then $B^2=\Id$, $BP=PB$, and $(BP)^2=P$. Since $BP$ has rank at most one,
+    $\tr(BP)^2=\tr((BP)^2)=\tr(P)=1$. Thus $C=\tr(BP)\in\{1,-1\}$.
+    The two signs are retained separately; $\eta$ is not identified with
+    the first intrinsic value.
 \end{lemma}
 
 \begin{lemma}[Odd and even intrinsic blocking parity for canonical MPUs]

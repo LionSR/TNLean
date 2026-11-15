@@ -141,8 +141,10 @@ private theorem trace_signed_unitary_comparison
     (T E F : Matrix ι ι ℂ) (G : Matrix.unitaryGroup ι ℂ) (η : ℂ)
     (hη : η = 1 ∨ η = -1)
     (hT : T = η • ((G : Matrix ι ι ℂ)ᴴ * E * (G : Matrix ι ι ℂ)))
-    (hFT : Commute F T) {bound : ℕ} (data : Matrix.StabilizedRankOneData E bound) :
-    ∃ C : ℂ, ∀ k : ℕ, 0 < k → Matrix.trace (F * T ^ k) = η ^ k * C := by
+    (hFT : Commute F T) (hFF : F * F = 1)
+    {bound : ℕ} (data : Matrix.StabilizedRankOneData E bound) :
+    ∃ C : ℂ, (C = 1 ∨ C = -1) ∧
+      ∀ k : ℕ, 0 < k → Matrix.trace (F * T ^ k) = η ^ k * C := by
   let A := (Unitary.conjStarAlgAut ℂ (Matrix ι ι ℂ) G).symm
   let B := A.symm F
   have hTA : T = η • A E := by
@@ -159,7 +161,28 @@ private theorem trace_signed_unitary_comparison
   have htrace (M : Matrix ι ι ℂ) : Matrix.trace (A M) = Matrix.trace M := by
     simp only [A, Unitary.conjStarAlgAut_symm_apply, Matrix.star_eq_conjTranspose]
     rw [Matrix.trace_mul_cycle, hG.2, Matrix.one_mul]
-  refine ⟨Matrix.trace (B * E ^ data.exponent), ?_⟩
+  have hBB : B * B = 1 := by
+    change A.symm F * A.symm F = 1
+    rw [← map_mul, hFF, map_one]
+  have hBP : (B * E ^ data.exponent) * (B * E ^ data.exponent) = E ^ data.exponent := by
+    calc
+      _ = B * (E ^ data.exponent * B) * E ^ data.exponent := by
+        simp only [Matrix.mul_assoc]
+      _ = B * (B * E ^ data.exponent) * E ^ data.exponent := by
+        rw [← (hBE.pow_right data.exponent).eq]
+      _ = (B * B) * (E ^ data.exponent * E ^ data.exponent) := by
+        simp only [Matrix.mul_assoc]
+      _ = E ^ data.exponent := by
+        rw [hBB, data.projector_idempotent, Matrix.one_mul]
+  have hCsq : Matrix.trace (B * E ^ data.exponent) ^ 2 = 1 := by
+    calc
+      _ = Matrix.trace ((B * E ^ data.exponent) * (B * E ^ data.exponent)) := by
+        simp only [data.power_eq, Matrix.mul_vecMulVec,
+          Matrix.vecMulVec_mul_vecMulVec, Matrix.vecMulVec_smul,
+          Matrix.trace_smul, Matrix.trace_vecMulVec, smul_eq_mul, pow_two, dotProduct_comm]
+      _ = 1 := by
+        rw [hBP, data.power_eq, Matrix.trace_vecMulVec, data.pairing_eq_one]
+  refine ⟨Matrix.trace (B * E ^ data.exponent), sq_eq_one_iff.mp hCsq, ?_⟩
   intro k hk
   have hpow : T ^ k = η ^ k • A (E ^ k) := by
     rw [hTA, smul_pow, ← map_pow]
@@ -172,8 +195,9 @@ private theorem trace_signed_unitary_comparison
     _ = _ := by rw [data.trace_mul_pow_eq_of_commute B hBE k hk]
 
 /-- Actual even-chain adjoint symmetry yields the intrinsic blocked-trace
-formula `τₖ = η^k C`, with both constants derived. The constant `C` is retained;
-the virtual sign is not identified with the first intrinsic trace.
+formula \(\tau_k = \eta^k C\), with both constants derived as signs. Bond exchange
+is an involution; its conjugate acts on the stabilized rank-one range by
+the sign `C`. The virtual sign is not identified with the first intrinsic trace.
 Stabilization is obtained internally from the actual normalized MPU transfer.
 
 Source: arXiv:1703.09188, `PropChiral`, lines 1209--1252, and
@@ -181,7 +205,7 @@ Source: arXiv:1703.09188, `PropChiral`, lines 1209--1252, and
 theorem IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
-    ∃ η C : ℂ, (η = 1 ∨ η = -1) ∧
+    ∃ η C : ℂ, (η = 1 ∨ η = -1) ∧ (C = 1 ∨ C = -1) ∧
       intrinsicTimeReversalSign U = η * C ∧
       ∀ k : ℕ, 0 < k →
         intrinsicTimeReversalSign (MPOTensor.blockTensor U k) = η ^ k * C := by
@@ -207,11 +231,12 @@ theorem IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula
     · have hDpos : 0 < D := NeZero.pos D
       exact ⟨D * D - 1, ⟨hU.isMPU.normalizedTransferStabilization (by omega)⟩⟩
   obtain ⟨_, ⟨data⟩⟩ := hdata
-  obtain ⟨C, hC⟩ := trace_signed_unitary_comparison (timeReversalTwistedTransfer U) E
-    (Matrix.swapMatrix D) G η hη hT (swapMatrix_commute_timeReversalTwistedTransfer U) data
+  obtain ⟨C, hCsign, hC⟩ := trace_signed_unitary_comparison (timeReversalTwistedTransfer U) E
+    (Matrix.swapMatrix D) G η hη hT (swapMatrix_commute_timeReversalTwistedTransfer U)
+    (by rw [Matrix.swapMatrix_mul_self]) data
   have hfirst := hC 1 (by omega)
   rw [pow_one, pow_one, ← intrinsic_trace_eq_trace_twistedTransfer] at hfirst
-  refine ⟨η, C, hη, hfirst, ?_⟩
+  refine ⟨η, C, hη, hCsign, hfirst, ?_⟩
   intro k hk
   rw [intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace]
   exact hC k hk
@@ -227,7 +252,7 @@ theorem IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_odd
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ)
     (k : ℕ) (hk : 0 < k) (hodd : Odd k) :
     intrinsicTimeReversalSign (MPOTensor.blockTensor U k) = intrinsicTimeReversalSign U := by
-  obtain ⟨η, C, hη, hfirst, hform⟩ := hU.exists_intrinsic_blocking_phase_formula hTR
+  obtain ⟨η, C, hη, _, hfirst, hform⟩ := hU.exists_intrinsic_blocking_phase_formula hTR
   have hηsq : η ^ 2 = 1 := sq_eq_one_iff.mpr hη
   obtain ⟨m, hm⟩ := hodd
   have hkm : k = 2 * m + 1 := by omega
@@ -247,7 +272,7 @@ theorem IsMPUCanonicalFormII.intrinsic_blocking_trace_eq_of_even
     (k : ℕ) (hk : 0 < k) (heven : Even k) :
     intrinsicTimeReversalSign (MPOTensor.blockTensor U k) =
       intrinsicTimeReversalSign (MPOTensor.blockTensor U 2) := by
-  obtain ⟨η, C, hη, _, hform⟩ := hU.exists_intrinsic_blocking_phase_formula hTR
+  obtain ⟨η, C, hη, _, _, hform⟩ := hU.exists_intrinsic_blocking_phase_formula hTR
   have hηsq : η ^ 2 = 1 := sq_eq_one_iff.mpr hη
   obtain ⟨m, hm⟩ := heven
   have hkm : k = 2 * m := by omega

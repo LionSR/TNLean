@@ -238,6 +238,7 @@ import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormInsertion
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.ThreeLeggedDecomposition
+import TNLean.MPS.MPU.TimeReversalDeformation
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalSign
