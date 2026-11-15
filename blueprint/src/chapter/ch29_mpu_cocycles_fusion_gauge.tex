@@ -695,8 +695,8 @@ Definition~\ref{def:mpug_group_representation}.
     Neither the cochains nor the coboundaries are required to be normalized.
 \end{definition}
 
-\begin{theorem}[Equality of third cohomology classes]
-    \label{thm:mpug_h3_coefficient_action_eq}
+\begin{lemma}[Equality of third cohomology classes]
+    \label{lem:mpug_h3_coefficient_action_eq}
     \lean{groupCohomology.H3π_eq_zero_iff,
         groupCohomology.H3π_eq_iff,
         groupCohomology.H3_induction_on}
@@ -705,7 +705,7 @@ Definition~\ref{def:mpug_group_representation}.
     For $x,y\in Z^3$, one has $\pi_3(x)=\pi_3(y)$ if and only if
     $x-y\in B^3$. In particular, $\pi_3(x)=0$ if and only if $x\in B^3$.
     Every third cohomology class has a representative in $Z^3$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The projection onto a quotient is surjective, and its kernel is $B^3$.
