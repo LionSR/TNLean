@@ -32,7 +32,7 @@ private theorem anticommutator_of_det_eq_zero_fin_two
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp only [Matrix.add_apply, Matrix.mul_apply, Fin.sum_univ_two,
-      Matrix.trace_fin_two, Matrix.smul_apply, smul_eq_mul]
+      Matrix.trace_fin_two, Matrix.smul_apply, smul_eq_mul, Fin.zero_eta, Fin.mk_one]
   · linear_combination -hAB + hA + hB
   · ring
   · ring
@@ -52,6 +52,7 @@ theorem exists_isUnit_mem_wordSpan_one_fin_two
   by_contra! hNoUnit
   let S := wordSpan A 1
   have hLetter (i : Fin d) : A i ∈ S := by
+    change A i ∈ wordSpan A 1
     rw [wordSpan_one]
     exact Submodule.subset_span ⟨i, rfl⟩
   have hDet (X : Matrix (Fin 2) (Fin 2) ℂ) (hX : X ∈ S) : X.det = 0 := by
@@ -75,13 +76,13 @@ theorem exists_isUnit_mem_wordSpan_one_fin_two
     · obtain ⟨v, hv, hNv⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr (hDet N hN)
       have hvW : v ∈ W := hNv
       rw [hBot] at hvW
-      exact False.elim (hv (Submodule.mem_bot.mp hvW))
+      exact False.elim (hv (by simpa using hvW))
     · have hLin : Matrix.toLin' N = 0 := LinearMap.ker_eq_top.mp hTop
       have h := congrArg LinearMap.toMatrix' hLin
       simpa using h
   obtain ⟨i, hi⟩ : ∃ i, A i ≠ 0 := by
     by_contra! hZero
-    simpa [IsTP, hZero] using hTP
+    simp [IsTP, hZero] at hTP
   have hTr : (A i).trace ≠ 0 := by
     intro h
     exact hi (hTrace (A i) (hLetter i) h)
