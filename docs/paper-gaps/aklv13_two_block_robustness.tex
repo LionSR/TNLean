@@ -146,10 +146,11 @@ attained. The middle regional sum on $[a+1,a+s)$ contains $A_1$, since
 $[a+3,a+s-2)\subseteq[a+1,a+s)$, and positivity of the remaining bonds
 gives $e_1\Id\le C_1$. The two crossing bonds are $h_a$ and $h_{a+s-1}$,
 equal when $s=1$. So the truncation
-\begin{align*}
- B=\min(A_0,(e_0+t)\Id)+\sum_{i=a}^{a+s-1}h_i+\min(A_2,(e_2+t)\Id)
+\begin{align}
+ B&=\min(A_0,(e_0+t)\Id)+\sum_{i=a}^{a+s-1}h_i+\min(A_2,(e_2+t)\Id)
    -\Bigl(\sum_je_j\Bigr)\Id
-\end{align*}
+ \label{eq:aklv13_two_block_robustness_reference_truncation}
+\end{align}
 clips two operators with disjoint supports and retains all $s$ window
 interactions. The exponential residual comparison, the spectral cluster and
 the robustness theorem then apply verbatim, with the same genuine minima,
