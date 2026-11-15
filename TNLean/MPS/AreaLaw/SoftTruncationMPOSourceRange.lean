@@ -171,9 +171,7 @@ theorem exists_softTruncatedHamiltonian_mpo_of_lt_log_two {N q m : ℕ}
   have hmR : 0 < (m : ℝ) := Nat.cast_pos.mpr hm
   have ht : 0 < t := by
     have hl : 0 < Real.log 2 / 2 := by positivity
-    by_contra hnt
-    push_neg at hnt
-    nlinarith
+    exact pos_of_mul_pos_right (hmR.trans hscale) hl.le
   have hb := softHeat_sourceRange_base_bounds
   refine ⟨exists_softTruncatedHamiltonian_mpo_of_accuracy_of_base hq h hs hh hnorm I eps t xi hlo
     b ht hxi hb.1 hb.2 (softHeat_base_le_of_lt_log_two ht hscale), fun hxiW ↦ ?_⟩
@@ -181,6 +179,9 @@ theorem exists_softTruncatedHamiltonian_mpo_of_lt_log_two {N q m : ℕ}
   change ((r ^ 2 * q ^ r : ℕ) : ℝ) ≤ _ at hbond
   dsimp only [D]
   push_cast at hbond ⊢
-  nlinarith [hbond]
+  have hm1 : (0 : ℝ) ≤ (m : ℝ) + 1 := by positivity
+  have := mul_le_mul_of_nonneg_left hbond hm1
+  dsimp only [E, c, b] at this ⊢
+  linarith
 
 end TNLean.MPS.AreaLaw
