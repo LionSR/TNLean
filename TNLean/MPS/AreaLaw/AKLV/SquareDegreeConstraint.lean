@@ -91,7 +91,7 @@ theorem aklv_frustrationFree_square_degree_log_sq_le {q s : ℕ} {g R : ℝ}
     (htrade : (((q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1)) : ℕ) : ℝ) *
       (4 * exp (-(4 * (s : ℝ) ^ 2 * sqrt ((g / 2) / R)))) ≤ 1) :
     2048 * log (s : ℝ) ^ 2 ≤ g * s := by
-  have h := aklv_square_degree_log_sq_le hq hs (half_nonneg hg) hR htrade
+  have h := aklv_square_degree_log_sq_le hq hs (div_nonneg hg (by norm_num)) hR htrade
   linarith
 
 end Real
