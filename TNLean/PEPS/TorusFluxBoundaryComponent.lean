@@ -30,6 +30,10 @@ variable [Fact (2 < width)] [Fact (2 < height)]
 local notation "X" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
 local instance fluxBoundaryQuiver : Quiver X := torusDualQuiver width height
+local instance fluxBoundaryWidthOne : Fact (1 < width) :=
+  ⟨by have := Fact.out (p := 2 < width); omega⟩
+local instance fluxBoundaryHeightOne : Fact (1 < height) :=
+  ⟨by have := Fact.out (p := 2 < height); omega⟩
 
 private def intVertex (a : ℤ × ℤ) : X := ((a.1 : ZMod width), (a.2 : ZMod height))
 
