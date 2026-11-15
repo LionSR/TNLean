@@ -56,3 +56,30 @@
     theorem, so the preceding replacement construction applies to the
     chosen two-tree routes.
 \end{proof}
+
+\begin{lemma}[Avoiding a simply connected region with prescribed winding]
+    \label{lem:peps_simply_connected_walk_avoidance}
+    \lean{TNLean.PEPS.exists_complementWalk_same_winding_of_isSimplyConnected}
+    \leanok
+    Let both torus periods be at least three, let $R$ have simply connected
+    closed-cell realization, and let $a,b\notin R$. Every finite torus
+    graph walk $p:a\to b$ has a walk $q:a\to b$ wholly in the induced
+    complement, with the same integer seam crossing numbers:
+    \begin{align}
+        \operatorname{wind}(q)=\operatorname{wind}(p).
+        \label{eq:peps_walk_avoidance_winding}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_torus_complement_path_replacement,
+        thm:peps_integer_boundary_contour_connected,
+        thm:peps_torus_integer_cell_lift}
+    Induct on the length of $p$. An exterior first edge is retained and
+    the remaining walk is treated inductively. If the first edge enters
+    $R$, split at the first subsequent exit. The finite interior segment
+    has a complementary detour with the same winding, by the integer-cell
+    lift, connected exterior collar, and exterior replacement lemma.
+    Apply the induction hypothesis to the shorter remaining walk and
+    concatenate. Additivity of winding gives
+    (\ref{eq:peps_walk_avoidance_winding}).
+\end{proof}

@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Simply Connected Forbidden Regions and Torus Walk Detours}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+deforms a fixed-endpoint flux string. The exterior-collar argument in the
+proof of Theorem 6.9, lines 1935--1990, gives geometric detours with
+prescribed seam crossing numbers.
+
+On a native torus with both periods at least three, let $R$ have simply
+connected closed-cell realization. For every finite graph walk $p:a\to b$
+with $a,b\notin R$, there exists a walk $q:a\to b$ in the induced complement
+whose two integer seam crossing numbers agree with those of $p$. No exterior
+walk or winding identity is supplied. The proof replaces each maximal
+interior segment by a genuine collar detour and inducts on the remaining
+length. The covering lift and collar connectivity are derived from simple
+connectedness of the actual region.
+
+The declaration is
+\leanid{TNLean.PEPS.exists_complementWalk_same_winding_of_isSimplyConnected}.
+This gives arbitrary-shape simply connected region avoidance for torus
+site-graph walks. It does not yet identify these walks with the four-labelled
+native dual paths, impose the physical crossed-bond incidence condition, or
+prove vacuum reduced-density equality for open flux pairs. Those steps remain
+under \ghissue{8703}. Arbitrary forbidden regions need not admit such a detour:
+they may disconnect the endpoints or obstruct the requested winding class.
+The full-lattice Hamiltonian work under \ghissue{8947} is unchanged.
+\end{document}
