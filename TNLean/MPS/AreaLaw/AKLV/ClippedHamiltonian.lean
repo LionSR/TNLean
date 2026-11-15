@@ -19,7 +19,8 @@ Source: AKLV, arXiv:1301.1162v1, Section 6.1, equation (5) and the subsequent
 definition of the two exterior truncations; Section 4, Lemma 4.2.
 
 **Scope restriction (window width):** The window contains at least three
-interactions, so that the two clipped exterior sums have disjoint supports. The support convention and the aggregate middle energy shift
+interactions, so that the two clipped exterior sums have disjoint supports. The support convention
+and the aggregate middle energy shift
 are those recorded in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
 
