@@ -138,7 +138,7 @@
             9838
           ],
           "physics": "For a frustration-free chain, ε<sub>0</sub> = 0 and Γ is annihilated by every term. Truncating the left and right sums at height <i>t</i> keeps Γ as the ground state and, for <i>t</i> of order 1/ε, keeps a gap of the same order, while the truncated Hamiltonian has norm at most <i>s</i> + 2<i>t</i>. The Chebyshev polynomial of degree of order <i>s</i><sup>2</sup> of the truncated Hamiltonian is then an approximate projector with <i>D</i>Δ ≤ 1/2 once <i>s</i> is of order log<sup>2</sup> <i>d</i>/ε, and log <i>D</i> = <i>O</i>(log<sup>3</sup> <i>d</i>/ε). The formal proof constructs that polynomial for the original ground vector, with the window chosen uniformly in the chain, and bounds the entropy at every cut, including cuts too close to the ends for the window to fit. Its parameter choice keeps logarithms of 1/ε that the printed rate omits.",
-          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustration-free chain, for 0 < ε ≤ 1, with one universal constant <i>C</i>. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε), without the logarithm of 1/ε, is open."
+          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustration-free chain, for 0 < ε ≤ 1, with one universal constant <i>C</i>. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε), without the logarithm of 1/ε, does not follow from the paper's certificates: every favorable pair of the Chebyshev and rank bounds has log <i>D</i> > <i>c</i><sup>3</sup>(log <i>d</i> + 2 log(1/ε))<sup>3</sup>/(16ε), which is proved."
         }
       ]
     },
@@ -163,7 +163,7 @@
             9839
           ],
           "physics": "Choose heights <i>t<sub>i</sub></i> growing linearly in <i>i</i>, so that the ground state of <i>H</i><sup>(<i>t<sub>i</sub></i>)</sup> has squared distance at most 2<sup>−(<i>i</i>+4)</sup> from Γ. Start from a product state with good overlap with the first truncated ground state and apply, at step <i>i</i>, a Chebyshev projector of <i>H</i><sup>(<i>t<sub>i</sub></i>)</sup> of degree ℓ<sub><i>i</i></sub> of order √((<i>t<sub>i</sub></i> + <i>s</i>)/ε). Each step multiplies the Schmidt rank by a factor whose logarithm is of order ℓ<sub><i>i</i></sub> log <i>d</i>, and brings the state within squared distance 2<sup>−(<i>i</i>+4)</sup> of the current target. The printed summary adds these logarithms to the rank itself; the ranks multiply. Summing 2<sup>−<i>i</i></sup> times the logarithm of the rank over <i>i</i> bounds the entropy of Γ.",
-          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustrated chain whose gap ε is the distance from ε<sub>0</sub> to the next eigenvalue. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε) is open, as in the frustration-free case."
+          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustrated chain whose gap ε is the distance from ε<sub>0</sub> to the next eigenvalue. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε) does not follow from the paper's certificates, as in the frustration-free case."
         },
         {
           "title": "Sub-polynomial matrix product states",

@@ -1,0 +1,182 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\doclink}[1]{\path{#1}}
+
+\title{The Inverse-Gap Logarithm in the Area Law of Arad, Kitaev, Landau and Vazirani}
+\author{}
+\date{2026-11-15}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+Arad, Kitaev, Landau and Vazirani~\cite{Arad2013AreaLaw},
+arXiv:1301.1162v1, \path{1dfrustrated34.tex}, state the following.
+\begin{itemize}
+    \item Theorem~4.3 (label \texttt{t:ent}, lines~820--846): for a
+          frustration-free nearest-neighbour chain of local dimension $d$ with
+          terms $0\le H_i\le1$, a unique ground state $\Gamma$ and gap
+          $\varepsilon$, the entanglement entropy of $\Gamma$ across every cut
+          is $O(\log^3d/\varepsilon)$.
+    \item The general theorem of Section~6 (lines~995--1000): the same bound
+          $O(\log^3d/\varepsilon)$ for frustrated chains with gap
+          $\varepsilon\le1$.
+    \item Lemma~6.3 (label \texttt{l:5}, lines~1003--1052): a sequence of
+          states $\psi_i$ with Schmidt ranks $R_i$, where
+          $\log R_0=O(\log^3d/\varepsilon)$.
+\end{itemize}
+The abstract (line~162) and both theorems state $O(\log^3d/\varepsilon)$; the
+introduction (line~214) states $\tilde O(\log^3d/\varepsilon)$.
+
+All three statements rest on one approximate ground-state projector. Clip the
+two exterior blocks of the Hamiltonian at height $t=O(1/\varepsilon)$, so that
+the clipped Hamiltonian, with $s$ terms in the window around the cut, has norm
+at most $w=s+2t$ and gap $\gamma$ of order $\varepsilon$. Let $K$ be the
+Chebyshev polynomial of degree $\ell$ of the clipped Hamiltonian, normalized at
+the ground energy. Lemma~4.1 (lines~530--583) gives the squared shrinking
+factor
+\begin{align}
+    \Delta\le4\exp\bigl(-4\ell\sqrt{\gamma/w}\bigr),
+    \label{eq:aklv13_igl_shrink}
+\end{align}
+and Lemma~4.2 (line~590) bounds the operator Schmidt rank of $K$ across the
+cut by
+\begin{align}
+    D\le\bigl(d(\ell+1)\bigr)^{c(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)},
+    \label{eq:aklv13_igl_rank}
+\end{align}
+with an absolute constant $c$; the count with $\ell+1$ is the corrected one of the QICLean note
+\url{https://sirui-lu.com/QICLean/paper-gaps/aklv13_interpolation_and_word_count.pdf},
+and the proved constant is
+$c=16$, or $c=32$ at the shifted cut of the frustration-free filter. The
+entropy is bounded through Corollary~2.4 of Ref.~\cite{Arad2013AreaLaw}:
+if $D\Delta\le1/2$ then $S\le O(\log D)$. The frustrated argument starts its
+sequence from such a pair, with $R_0=D$.
+
+\section{Where the inverse-gap logarithm enters}
+
+The proof of Theorem~4.3 takes $\ell=s^2/2$ and $s=O(\log^2d/\varepsilon)$.
+With $t$ of order $1/\varepsilon$ and $s\ge1/\varepsilon$, one has
+$w=O(s)$ and $-\log\Delta$ is of order $s^{3/2}\varepsilon^{1/2}$. The rank
+bound~(\ref{eq:aklv13_igl_rank}) at $\ell$ of order $s^2$ gives
+\begin{align*}
+    \log D=O\bigl(s(\log d+\log s)\bigr).
+\end{align*}
+Lines~840--841 display the factor $\log(s^2+s)$, and lines~842--843 drop it
+when $s$ is chosen; lines~831--836 quote $\Delta$ and $D$ from a commented
+earlier form of Lemma~4.2 (lines~700--707), with the same logarithm. Since
+$s\ge1/\varepsilon$, the dropped term $\log s$ is at least
+$\log(1/\varepsilon)$. The condition $D\Delta\le1/2$ then requires
+$\sqrt{s\varepsilon}\ge C(\log d+\log s)$, so $s$ must be of order
+$(\log d+\log(1/\varepsilon))^2/\varepsilon$ rather than
+$\log^2d/\varepsilon$. With this choice,
+\begin{align*}
+    \log D=O\Bigl(\frac{(\log d+\log(1/\varepsilon))^3}{\varepsilon}\Bigr).
+\end{align*}
+This is the rate proved in the repository; see Section~\ref{sec:igl_formal}.
+
+\section{No parameter choice avoids it}
+
+The inverse-gap logarithm is not an artefact of the particular choice
+$\ell=s^2/2$. Fix $c\ge4$, $q=d\ge2$, natural numbers $\ell$ and $s\ge1$,
+and reals $0\le\gamma\le g$ and $w\ge s$. Write $D$ and $\Delta$ for the right
+sides of (\ref{eq:aklv13_igl_rank}) and~(\ref{eq:aklv13_igl_shrink}).
+\begin{quote}
+    If $D\Delta\le1$, then
+    \begin{align}
+        \log D>\frac{c^3}{16g}\Bigl(\log q+2\log\frac1g\Bigr)^3.
+        \label{eq:aklv13_igl_lower}
+    \end{align}
+\end{quote}
+\emph{Proof.} Put $N=\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1$,
+$\Lambda=\log(q(\ell+1))$ and $X=4\ell\sqrt{\gamma/w}$. If $\ell=0$ then
+$D\Delta=4D\ge4$, so $\ell\ge1$ and $\Lambda\ge\log4>1$. The hypothesis gives
+$cN\Lambda=\log D<X$, and $X^2\le16\ell^2g/s$. The floors give $\ell<sN$ and
+$\ell<N^2$. Squaring and using $\ell<sN$ gives
+$c^2N\Lambda^2<16g\ell$; using $\ell<N^2$ then gives
+$c^2\Lambda^2<16gN$. Hence $\log D=cN\Lambda>c^3\Lambda^3/(16g)$. Combining
+the two inequalities gives $\ell>(c\Lambda)^4/(256g^2)\ge1/g^2$, so
+$\Lambda=\log q+\log(\ell+1)\ge\log q+2\log(1/g)$, and the cube is monotone.
+\qed
+
+The condition $\gamma\le g$ is the form in which the gap enters every
+application: in the frustration-free case the clipped Hamiltonian $K'$
+satisfies $0\le K'\le H$ with the same ground vector, so its gap is at most
+$g$ by the min-max principle; elsewhere the source uses a gap of order
+$\varepsilon$, and a bound $\gamma\le\kappa g$ reduces to the statement at gap
+$\kappa g$, changing only the constant. The condition $w\ge s$ holds for the
+ceiling $w=s+2t$ of the source.
+
+The same conclusion holds for the commented form $(d\ell)^{O(\ell/s+s)}$ of the
+rank estimate: the term $\ell/s$ forces $s\ge c'\Lambda^2/g$, so
+$\log D\ge c''s\Lambda\ge c'''\Lambda^3/g$, and $\ell\ge c''''/g^2$ again.
+
+Consequently, for fixed $q$ the forced cost is of order
+$\log^3(1/g)/g$, which is not bounded by any multiple of $\log^3q/g$: for every
+$C$ there is $0<g\le1$ such that every favorable pair at gap $g$ has
+$\log D>C\log^3q/g$. Since the source bounds the entropy by a multiple of
+$\log D$ for such a pair, its argument cannot give $O(\log^3d/\varepsilon)$
+with an absolute constant. The two certificates are close to optimal for the
+method. The Chebyshev polynomial is the minimax polynomial normalized at the
+ground energy, so (\ref{eq:aklv13_igl_shrink}) can be improved only in the
+constant of the exponent. The binomial count behind (\ref{eq:aklv13_igl_rank})
+is at least $s^s$ at $\ell=s^2$, as recorded in
+\path{docs/paper-gaps/aklv13_frustration_free_mps_rate.tex}.
+Removing the inverse-gap logarithm would therefore need a different rank
+mechanism, not a different choice of parameters.
+
+These are statements about the two upper-bound certificates. They give no
+lower bound on the actual operator Schmidt rank of $K$ and do not refute the
+printed entropy bound, which may hold by another argument.
+
+\section{What is formalized}
+\label{sec:igl_formal}
+
+The inequality~(\ref{eq:aklv13_igl_lower}) is
+\leanid{TNLean.MPS.AreaLaw.aklv_certificate_log_rank_gt}, and the
+non-uniformity in $g$ is
+\leanid{TNLean.MPS.AreaLaw.aklv_certificate_not_uniform_log_cube}, both in
+\doclink{TNLean/MPS/AreaLaw/AKLV/CertificateRateLowerBound}.
+
+The entropy bounds proved from the source's construction are, with
+$u=1+\log q+\log(1/g)$,
+\begin{align*}
+    S_k(\Omega)\le\frac Cg u^3
+\end{align*}
+at every cut, with a universal constant $C$: for frustration-free chains in
+\leanid{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_physical_entropy_bound}
+(\doclink{TNLean/MPS/AreaLaw/AKLV/FrustrationFreeEntropy}), and for frustrated
+chains in \leanid{TNLean.MPS.AreaLaw.exists_aklv_physical_entropy_bound}
+(\doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalEntropy}). Since $\log q\ge\log2$,
+$u\le(1+1/\log2)(\log q+\log(1/g))$, so these bounds match
+(\ref{eq:aklv13_igl_lower}) up to the universal constant. The lemma
+\leanid{TNLean.MPS.AreaLaw.aklv_gap_logarithm_not_uniformly_absorbable}
+records that $u^3$ is not a bounded multiple of $\log^32$, and
+\leanid{TNLean.MPS.AreaLaw.aklv_cubic_cost_of_fixed_gap} gives the printed rate
+with a constant depending on a lower bound $g_0\le g$.
+
+\section{Verdict}
+
+A local correction, resolved. Within the source's argument the entropy bound is
+$O((\log d+\log(1/\varepsilon))^3/\varepsilon)$, and this is formalized. The
+printed $O(\log^3d/\varepsilon)$ of Theorem~4.3, of the general theorem of
+Section~6 and of Lemma~6.3 is not formalized: it drops the factor $\log(s^2+s)$
+at lines~840--843, and no parameter choice in the source's certificates
+recovers it. The tilde in the introduction (line~214) covers the factor.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

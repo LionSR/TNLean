@@ -131,6 +131,23 @@
       "found": "The exponent of ε at line 867 is +1/2, as at line 835; the minus sign is a misprint. Lemma 4.2 (line 590) gives rank (<i>d</i>ℓ)<sup><i>O</i>(ℓ/<i>s</i>)</sup>, which is exp(<i>O</i>(<i>s</i>(log <i>d</i> + log <i>s</i>))) at ℓ = <i>s</i><sup>2</sup>, and the count is sharp for the method. Line 868 drops the log <i>s</i>, which is of order log log <i>n</i>. The starting rank exp(<i>O</i>(log<sup>3</sup> <i>d</i>/ε)) is also omitted.",
       "impact": "The bond dimension is still sub-polynomial and strictly smaller than the general exp(Õ(log<sup>3/4</sup> <i>n</i>/ε<sup>1/4</sup>)), but the printed rate is not derived.",
       "plan": "Proved with log <i>B</i> ≤ <i>C</i>[<i>u</i><sup>3</sup>/ε + (<i>z</i><sup>2</sup>/ε)<sup>1/3</sup>(<i>u</i> + log(<i>z</i> + 1))], where <i>u</i> = 1 + log <i>d</i> + log(1/ε) and <i>z</i> = log(2048(<i>n</i> + 1)/δ<sup>2</sup>)."
+    },
+    {
+      "id": "docs/paper-gaps/aklv13_entropy_inverse_gap_logarithm.tex",
+      "repo": "TNLean",
+      "kind": "local-correction",
+      "status": "resolved",
+      "paper": "aklv",
+      "result": "Theorem 4.3 and Lemma 6.3, the entropy rate",
+      "issue": 9838,
+      "stage": "ff:4",
+      "title": "The entropy bound keeps a logarithm of the inverse gap",
+      "summary": "The printed entropy rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε) drops a logarithm that the paper's rank lemma keeps; no parameter choice in the paper's certificates removes it, and the rate with (log <i>d</i> + log(1/ε))<sup>3</sup>/ε is proved.",
+      "context": "The entropy across a cut is bounded by a constant times log <i>D</i>, where <i>D</i> is the operator Schmidt rank of a Chebyshev polynomial <i>K</i> of degree ℓ of the clipped Hamiltonian, whose squared shrinking factor Δ satisfies <i>D</i>Δ ≤ 1/2. The window has <i>s</i> terms and the clipped norm is at most <i>s</i> + 2<i>t</i> with <i>t</i> of order 1/ε.",
+      "claims": "Theorem 4.3 (lines 820–846), the general theorem (lines 995–1000) and Lemma 6.3 (lines 1003–1052) state <i>O</i>(log<sup>3</sup> <i>d</i>/ε), choosing ℓ = <i>s</i><sup>2</sup>/2 and <i>s</i> = <i>O</i>(log<sup>2</sup> <i>d</i>/ε).",
+      "found": "Lemma 4.2 gives log <i>D</i> = <i>O</i>(<i>s</i>(log <i>d</i> + log <i>s</i>)) at ℓ of order <i>s</i><sup>2</sup>, and lines 840–843 drop the log(<i>s</i><sup>2</sup> + <i>s</i>). Since <i>s</i> ≥ 1/ε, this term is at least log(1/ε). For every degree, window, ceiling <i>w</i> ≥ <i>s</i> and gap γ ≤ ε, the rank bound (<i>d</i>(ℓ+1))<sup><i>c</i>(⌊ℓ/<i>s</i>⌋+⌊√ℓ⌋+1)</sup> times the shrinking bound 4exp(−4ℓ√(γ/<i>w</i>)) is at most 1 only if log <i>D</i> > <i>c</i><sup>3</sup>(log <i>d</i> + 2 log(1/ε))<sup>3</sup>/(16ε).",
+      "impact": "The paper's argument gives <i>O</i>((log <i>d</i> + log(1/ε))<sup>3</sup>/ε), the Õ rate of the introduction, not the printed rate with an absolute constant. The statement concerns the certificates only; it does not refute the printed entropy bound.",
+      "plan": "The rate <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε is proved for frustration-free and frustrated chains, and the certificate lower bound and its non-uniformity in ε are proved. Removing the logarithm would need a different rank mechanism."
     }
   ]
 }
