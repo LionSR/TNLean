@@ -192,7 +192,9 @@ def variable_names(blocks: list[str]) -> set[str]:
                 close = matching_close(block, index)
                 if close is None:
                     break
-                names.update(binder_names(block[index + 1 : close]) or [])
+                group = block[index + 1 : close]
+                if block[index] != "[" or top_level_find(group, ":") is not None:
+                    names.update(binder_names(group) or [])
                 index = close + 1
             else:
                 index += 1

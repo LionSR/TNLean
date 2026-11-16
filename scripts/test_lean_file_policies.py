@@ -607,6 +607,14 @@ class PassThroughPolicyTests(unittest.TestCase):
         self.assertEqual(
             self.found("theorem foo (d : ℕ) [NeZero : C d] : P d := NeZero.foo d\n"), []
         )
+        # The same holds for an anonymous instance bound by a ``variable`` command.
+        self.assertEqual(
+            self.found(
+                "variable {β : Type*} [Fintype β]\n"
+                "noncomputable def card (α : Type*) [Fintype α] : ℕ := Fintype.card α\n"
+            ),
+            ["card"],
+        )
         # Implicit and instance binders are not arguments; explicit ones may be split.
         self.assertEqual(
             self.found(
