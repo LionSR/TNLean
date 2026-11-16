@@ -198,11 +198,16 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_general_physical_matrix_equivalence_transport}
-    Apply Lemma~\ref{lem:mpu_general_physical_matrix_equivalence_transport}
-    with $Q=\mathbb S$. The species swap is a real symmetric unitary
-    involution, so all three matrix hypotheses hold. The transformed
-    tensors are exactly the displayed output products.
+    \uses{lem:mpu_common_ancilla_swap_comparison}
+    Apply Lemma~\ref{lem:mpu_common_ancilla_swap_comparison} to the
+    common positive ancilla and blocking witnesses. Since
+    $\mathbb S$ is unitary and $\mathbb S^2=I$,
+    \[
+        \mathcal U\text{ is an MPU}\quad\Longleftrightarrow\quad
+        \widetilde{\mathcal U}\text{ is an MPU},
+    \]
+    and the same holds for $\mathcal V$. These are precisely the remaining
+    endpoint conditions in the labelled equivalence relation.
 \end{proof}
 
 \begin{definition}[Finite families of the three source examples]
