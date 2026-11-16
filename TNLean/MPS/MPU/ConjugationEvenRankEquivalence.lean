@@ -212,9 +212,11 @@ theorem exists_reindex_sourceSkewForm_kronecker_one {m : ℕ} (n : ℕ) (hm : Ev
   refine ⟨_, reindex_eq_sourceSkewForm h _ (skewLeftPairing n hm) ?_⟩
   rintro ⟨q, b⟩ ⟨q', b'⟩
   obtain ⟨⟨p, c⟩, rfl⟩ : ∃ x, (finCongr (half_mul_left n hm)).symm (finProdFinEquiv x) = q :=
-    ⟨finProdFinEquiv.symm (finCongr (half_mul_left n hm) q), by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
+    ⟨finProdFinEquiv.symm (finCongr (half_mul_left n hm) q),
+      by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
   obtain ⟨⟨p', c'⟩, rfl⟩ : ∃ x, (finCongr (half_mul_left n hm)).symm (finProdFinEquiv x) = q' :=
-    ⟨finProdFinEquiv.symm (finCongr (half_mul_left n hm) q'), by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
+    ⟨finProdFinEquiv.symm (finCongr (half_mul_left n hm) q'),
+      by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
   rw [skewLeftPairing_apply, skewLeftPairing_apply]
   simp [Matrix.sourceSkewForm, Matrix.kroneckerMap_apply, Matrix.one_apply, Prod.ext_iff]
   split_ifs <;> simp_all
@@ -228,9 +230,11 @@ theorem exists_reindex_one_kronecker_sourceSkewForm (m : ℕ) {n : ℕ} (hn : Ev
   refine ⟨_, reindex_eq_sourceSkewForm h _ (skewRightPairing m hn) ?_⟩
   rintro ⟨q, b⟩ ⟨q', b'⟩
   obtain ⟨⟨c, p⟩, rfl⟩ : ∃ x, (finCongr (half_mul_right m hn)).symm (finProdFinEquiv x) = q :=
-    ⟨finProdFinEquiv.symm (finCongr (half_mul_right m hn) q), by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
+    ⟨finProdFinEquiv.symm (finCongr (half_mul_right m hn) q),
+      by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
   obtain ⟨⟨c', p'⟩, rfl⟩ : ∃ x, (finCongr (half_mul_right m hn)).symm (finProdFinEquiv x) = q' :=
-    ⟨finProdFinEquiv.symm (finCongr (half_mul_right m hn) q'), by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
+    ⟨finProdFinEquiv.symm (finCongr (half_mul_right m hn) q'),
+      by simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]⟩
   rw [skewRightPairing_apply, skewRightPairing_apply]
   simp [Matrix.sourceSkewForm, Matrix.kroneckerMap_apply, Matrix.one_apply, Prod.ext_iff]
   split_ifs <;> simp_all
@@ -315,7 +319,7 @@ private theorem kronecker_reindex {m n m' n' : Type*} (σ : m ≃ m') (τ : n �
   ext ⟨i, j⟩ ⟨i', j'⟩
   simp [Matrix.reindex_apply, Matrix.kroneckerMap_apply]
 
-private theorem det_reindexRanks_u {P : Type*} [Fintype P] [DecidableEq P] {ℓ' r' : ℕ}
+private theorem det_reindexRanks_u {P : Type*} {ℓ' r' : ℕ}
     (σ : Fin ℓ' ≃ Fin ℓ') (τ : Fin r' ≃ Fin r') (u : Matrix (Fin ℓ' × Fin r') P ℂ)
     (e : Fin ℓ' × Fin r' ≃ P) :
     ((Matrix.reindex (Equiv.prodCongr σ τ) (Equiv.refl _) u).submatrix id
