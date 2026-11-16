@@ -212,12 +212,15 @@
         MPOTensor.shiftExampleTildeFamily}
     \leanok
     \uses{threeMPU, threeMPU2}
-    Enumerate the actual three tensors as
-    $(\mathcal U_1,\mathcal U_2,\mathcal U_3)$ and their actual transformed
-    tensors as
-    $(\widetilde{\mathcal U}_1,\widetilde{\mathcal U}_2,
-        \widetilde{\mathcal U}_3)$.
-    Their virtual dimensions are $1,d^2,d^2$, respectively.
+    Index the source tensors in their printed order by
+    $i\in\{0,1,2\}$, writing
+    \[
+        \mathcal A_i=\mathcal U_{i+1},\qquad
+        \widetilde{\mathcal A}_i=\widetilde{\mathcal U}_{i+1}.
+    \]
+    Thus the zero-based family index preserves the paper's names
+    $\mathcal U_1,\mathcal U_2,\mathcal U_3$. The virtual dimensions of
+    $\mathcal A_0,\mathcal A_1,\mathcal A_2$ are $1,d^2,d^2$, respectively.
 \end{definition}
 
 \begin{lemma}[Swap comparison for all pairs of the three labelled examples]
@@ -228,10 +231,10 @@
     \leanok
     \uses{def:mpu_three_labelled_source_families,
         thm:mpu_labelled_swap_equivalence}
-    For every $i,j\in\{1,2,3\}$, the three comparisons of
-    Lemma~\ref{thm:mpu_labelled_swap_equivalence} hold for the actual source
-    tensors $\mathcal U_i,\mathcal U_j$ and their actual transformed tensors
-    $\widetilde{\mathcal U}_i,\widetilde{\mathcal U}_j$.
+    For every $i,j\in\{0,1,2\}$, the three comparisons of
+    Lemma~\ref{thm:mpu_labelled_swap_equivalence} hold for the source
+    tensors $\mathcal A_i,\mathcal A_j$ and their transformed tensors
+    $\widetilde{\mathcal A}_i,\widetilde{\mathcal A}_j$.
     This uses the labelled physical-space convention of
     Definition~\ref{def:mpu_labelled_physical_matrix_equivalence}.
 \end{lemma}

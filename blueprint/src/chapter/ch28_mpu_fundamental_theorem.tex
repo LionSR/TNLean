@@ -2468,6 +2468,40 @@
     physical reindexing gives the normalized flattening of the enlarged MPO.
 \end{proof}
 
+\begin{lemma}[Canonical form after ancillas and blocking]
+    \label{thm:mpu_canonical_form_ancilla_blocking}
+    \lean{MPSTensor.IsNormalTensor.isMPUCanonicalForm,
+        MPOTensor.isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening,
+        MPOTensor.IsMPU.isMPUCanonicalForm_tensorPhysicalId,
+        MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor,
+        MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId}
+    \leanok
+    \uses{def:mpu_canonical_form, def:normal,
+        thm:mpu_normalized_full_support_normal,
+        thm:mpu_identity_ancilla_reduced_cfii}
+    A normal tensor is in canonical form, with one block of weight one
+    filling the bond space. Consequently, if an MPU tensor $\mathcal U$ of
+    physical dimension $d$ is in canonical form, then so are $\mathcal U_k$,
+    $\mathcal U^{(p)}$ and $(\mathcal U^{(p)})_k$ for all positive integers
+    $p$ and $k$.
+    % Source lines: paper_v2.tex 259--267, 344--354, 706--724.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_full_support_normal,
+        thm:mpu_identity_ancilla_reduced_cfii}
+    By Lemma~\ref{thm:mpu_normalized_full_support_normal}, the normalized
+    tensor $d^{-1/2}\mathcal U$ is normal. Attaching the identity ancilla
+    replaces it by a physical reindexing of its normalized diagonal lift,
+    which is normal: the transfer map is unchanged, and an invariant
+    projection for the lift is invariant for the original letters. Blocking
+    $k>0$ sites and reindexing the physical legs preserve normality. Hence
+    the normalized tensor of $(\mathcal U^{(p)})_k$ is normal and in
+    canonical form with one block, and multiplying its weight by the square
+    root of the physical dimension gives canonical form of
+    $(\mathcal U^{(p)})_k$ itself.
+\end{proof}
+
 \begin{definition}[Equivalence after blocking and ancillas]
     \label{def:equivalent-tensors}
     \lean{MPOTensor.Equivalent}

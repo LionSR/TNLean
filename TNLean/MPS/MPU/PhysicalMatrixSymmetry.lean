@@ -12,7 +12,7 @@ import TNLean.MPS.MPU.PhysicalAncillaLeftMul
 The local matrix \(Q\) is retained as physical data. Adjoining an identity
 ancilla replaces it by \(Q\otimes I_x\), rather than selecting a new
 matrix from the enlarged dimension alone. The two sandwich actions are
-defined on every enlarged operator, and compatibility with the actual
+defined on every enlarged operator, and compatibility with the
 identity-ancilla embedding is derived from matrix multiplication.
 
 This construction yields a finite-chain action at each specified physical
@@ -99,7 +99,7 @@ noncomputable def transposeWithPhysicalMatrix (Q : Matrix (Fin d) (Fin d) ℂ) :
   action := fun {N} X ↦ sitewisePhysicalMatrix Q N * Xᵀ * sitewisePhysicalMatrix Q N
 
 /-- The full adjunction action with \(Q\otimes I_x\) is compatible with
-adjoining the actual identity ancilla to every original operator.
+adjoining the identity ancilla to every original operator.
 Source: arXiv:1703.09188, `SSymmetries-dagger` and `def:equivalent-symmetry`. -/
 theorem daggerWithPhysicalMatrix_tensorPhysicalId_semiconj
     (Q : Matrix (Fin d) (Fin d) ℂ) (x N : ℕ) :
@@ -114,7 +114,7 @@ theorem daggerWithPhysicalMatrix_tensorPhysicalId_semiconj
     operatorId_sitewisePhysicalMatrix]
 
 /-- The full transposition action with \(Q\otimes I_x\) is compatible with
-adjoining the actual identity ancilla to every original operator.
+adjoining the identity ancilla to every original operator.
 Source: arXiv:1703.09188, `SSymmetries-transpose` and `def:equivalent-symmetry`. -/
 theorem transposeWithPhysicalMatrix_tensorPhysicalId_semiconj
     (Q : Matrix (Fin d) (Fin d) ℂ) (x N : ℕ) :
