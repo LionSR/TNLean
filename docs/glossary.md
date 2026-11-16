@@ -98,7 +98,7 @@ is deliberately source-faithful.
   `MPOTensor.labelledShiftExamples_swap_dagger_iff`,
   `MPOTensor.labelledShiftExamples_swap_transpose_iff`, and
   `MPOTensor.labelledShiftExamples_swap_conjugation_iff` cover every ordered pair of
-  the three actual source examples and their source-defined output transforms.
+  the three source examples and their source-defined output transforms.
   The one-sided transformation follows the documented correction in
   `docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`.
 - **Caveat:** this is not interchangeable with `EquivalentUnderSymmetry`.
