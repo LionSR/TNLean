@@ -8,6 +8,7 @@ import TNLean.MPS.MPU.CanonicalFormAncillaBlocking
 import TNLean.MPS.MPU.CanonicalFormGauge
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormFromGates
+import TNLean.MPS.MPU.CompositionIndex
 
 /-!
 # Tensors with the same index are equivalent
@@ -256,6 +257,15 @@ theorem IsMPU.equivalent_of_index_eq {da db Da Db : ℕ}
 positive physical and bond dimensions, have the same index if and only if they
 are equivalent.
 
+The canonical-form hypotheses `hUcf` and `hVcf` are not added hypotheses. They
+are the source's standing convention for Section III onwards ("unless we
+specify the contrary, wlog we can assume that the tensor \(\mathcal U\) is in
+CF", arXiv:1703.09188, lines 325--326). Strict equivalence is also stated for
+tensors in canonical form (Definition `def:strictly-equivalent-tensors`,
+lines 708--714). The standard form used in the proof is that of a simple tensor
+in canonical form II, the reading recorded in
+`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
+
 Source: arXiv:1703.09188, Theorem `IndexTh` (iv), lines 830--831 and
 852--865. -/
 theorem IsMPU.equivalent_iff_index_eq {da db Da Db : ℕ}
@@ -265,5 +275,41 @@ theorem IsMPU.equivalent_iff_index_eq {da db Da Db : ℕ}
     (hVcf : MPSTensor.IsMPUCanonicalForm V.toMPSTensor) :
     Equivalent U V ↔ hU.index = hV.index :=
   ⟨fun h' ↦ h'.index_eq hU hV, hU.equivalent_of_index_eq hV hUcf hVcf⟩
+
+/-- **The Index Theorem.** For MPU tensors of positive physical and bond
+dimensions, the index
+
+1. does not change under positive blocking;
+2. is additive under tensor products and composition;
+3. is constant along continuous paths of MPU tensors, not necessarily in
+   canonical form;
+4. agrees for two tensors in canonical form exactly when they are equivalent.
+
+Clauses (i)--(iii) hold for every positive-dimensional MPU tensor. In clause
+(iv), canonical form is the source's standing convention (arXiv:1703.09188,
+lines 325--326); see `IsMPU.equivalent_iff_index_eq`.
+
+Source: arXiv:1703.09188, Theorem `IndexTh`, lines 824--865. -/
+theorem IsMPU.indexTheorem :
+    (∀ {d D : ℕ} [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
+      (p : ℕ) (hp : 0 < p), (hU.blockTensor p hp).index = hU.index) ∧
+    (∀ {d D e E : ℕ} [NeZero d] [NeZero D] [NeZero e] [NeZero E]
+      {U : MPOTensor d D} {V : MPOTensor e E} (hU : IsMPU U) (hV : IsMPU V),
+      (hU.tensorProduct hV).index = hU.index + hV.index) ∧
+    (∀ {d D₁ D₂ : ℕ} [NeZero d] [NeZero D₁] [NeZero D₂]
+      {U : MPOTensor d D₁} {V : MPOTensor d D₂} (hU : IsMPU U) (hV : IsMPU V),
+      (hU.mulTensor hV).index = hU.index + hV.index) ∧
+    (∀ {d D : ℕ} [NeZero d] [NeZero D] {W : unitInterval → MPOTensor d D}
+      (_ : Continuous W) (hMPU : ∀ x, IsMPU (W x)) (x y : unitInterval),
+      (hMPU x).index = (hMPU y).index) ∧
+    (∀ {da db Da Db : ℕ} [NeZero da] [NeZero db] [NeZero Da] [NeZero Db]
+      {U : MPOTensor da Da} {V : MPOTensor db Db} (hU : IsMPU U) (hV : IsMPU V),
+      MPSTensor.IsMPUCanonicalForm U.toMPSTensor →
+      MPSTensor.IsMPUCanonicalForm V.toMPSTensor →
+      (Equivalent U V ↔ hU.index = hV.index)) :=
+  ⟨fun hU p hp ↦ hU.index_blockTensor p hp, fun hU hV ↦ hU.index_tensorProduct hV,
+    fun hU hV ↦ IsMPU.index_mulTensor hU hV,
+    fun hW hMPU x y ↦ IsMPU.index_const_of_continuous hW hMPU x y,
+    fun hU hV hUcf hVcf ↦ hU.equivalent_iff_index_eq hV hUcf hVcf⟩
 
 end MPOTensor

@@ -4032,7 +4032,8 @@
 \begin{lemma}[Tensors with the same index are equivalent]
     \label{thm:mpu_equivalent_of_index_eq}
     \lean{MPOTensor.IsMPU.strictlyEquivalent_blockTensor_of_index_eq,
-        MPOTensor.IsMPU.equivalent_of_index_eq}
+        MPOTensor.IsMPU.equivalent_of_index_eq,
+        MPOTensor.IsMPU.equivalent_iff_index_eq}
     \leanok
     \uses{thm:mpu_blocked_tensor_joined_to_gates, lem:mpu_tensor_from_gates_path,
         thm:mpu_canonical_form_ancilla_blocking, thm:mpu_physical_ancilla_index,
@@ -4068,7 +4069,7 @@
 
 \begin{theorem}[Index Theorem]
     \label{IndexTh}
-    \lean{MPOTensor.IsMPU.equivalent_iff_index_eq}
+    \lean{MPOTensor.IsMPU.indexTheorem}
     \leanok
     \discussion{6023}
     \uses{def:index, def:mpu_reduced_representative_index,
@@ -4090,7 +4091,8 @@
     index is the one of Definition~\ref{def:mpu_reduced_representative_index},
     which agrees with the index of Definition~\ref{def:index} for tensors in
     canonical form; clauses (i)--(iii) hold for every MPU tensor of positive
-    physical and bond dimensions.
+    physical and bond dimensions. In clause (iv) the tensors are in canonical
+    form, the standing convention of \cite[lines~325--326]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--865.
 \end{theorem}
 
