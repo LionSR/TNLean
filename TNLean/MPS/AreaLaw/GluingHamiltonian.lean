@@ -47,14 +47,14 @@ theorem ChainHamiltonian.cutLeftPart_add_cutBoundaryPart (h : ChainHamiltonian L
 /-- The left part is supported on the first `k` sites. -/
 theorem ChainHamiltonian.cutLeftPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
-  Entropy.isSupportedOn_sum _ fun X hX ↦
+  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
     (h.supported X).mono (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
 theorem ChainHamiltonian.cutBoundaryPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
-  refine Entropy.isSupportedOn_sum _ fun X hX ↦ (h.supported X).mono ?_
+  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦ (h.supported X).mono ?_
   have hX' := (Finset.mem_filter.mp hX).2
   obtain ⟨y, hy, hyA⟩ := Finset.not_subset.mp hX'
   have hyk : k ≤ y.val := by simpa [mem_interval, not_lt] using hyA

@@ -1,15 +1,18 @@
-# QICLean pin d7e183e3: gate modules and supported-operator lemmas
+# QICLean pin e9cc1cc6: gate modules and supported-operator lemmas
 
 Date: 2026-11-16.
 
 This audit records the declarations deleted from TNLean when its QICLean pin
 moved from `603fc408b9f4c2a50f2475e1e44843fdc0a9c0ac` to
-`d7e183e3aef2954ae9659381dfa264477ad7d057`. The range holds LionSR/QICLean#1055,
-which ported the index-generic gate modules to `QICLean/Circuit/Gate`, and
-LionSR/QICLean#1054, which added the closure lemmas of `Entropy.IsSupportedOn`.
-Both ports keep the declaration names and statements, so between the two
-merges and this pin move the declarations existed in both repositories. The
-pin move and the deletions are one pull request: no commit of `main` has a
+`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19`. The range holds LionSR/QICLean#1055,
+which ported the index-generic gate modules to `QICLean/Circuit/Gate` under
+their names and statements, LionSR/QICLean#1054, which added the closure
+lemmas of `Entropy.IsSupportedOn`, and LionSR/QICLean#1058 and #1059, the Sites
+layer `QICLean/ManyBody/Sites`. The Sites layer replaces those closure lemmas
+by membership in the unital `*`-subalgebra `ManyBody.supportedOperators`, and
+keeps `Entropy.SiteConfig`, `RegionConfig`, `IsSupportedOn`, `localLift` and
+`supportedOperators` as temporary abbreviations of the Sites names. The pin
+move and the deletions are one pull request: no commit of `main` has a
 declaration twice or not at all. Tracker: #10718; the rule is the section
 "No dual systems" of `docs/many_body_circuit_architecture.md`.
 
@@ -109,18 +112,27 @@ have yet.
 
 ## Deleted supported-operator lemmas
 
-| Deleted TNLean declaration | TNLean module | QICLean declaration |
-|---|---|---|
-| `Entropy.IsSupportedOn.add`, `Entropy.IsSupportedOn.neg`, `Entropy.IsSupportedOn.sub` | `MPS/AreaLaw/Hastings/PartCommutators.lean` | same names, `QICLean/Entropy/SupportedOperatorAlgebra.lean` |
-| `Entropy.IsSupportedOn.smul` | `MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean` | same name, same module |
-| `Entropy.IsSupportedOn.conjTranspose` | `MPS/AreaLaw/Hastings/PositiveFactorization.lean` | same name, same module |
-| `TNLean.Lattice.isSupportedOn_sum` | `Lattice/ZeroEntropy.lean` | `Entropy.isSupportedOn_sum`, same module |
+| Deleted TNLean declaration | TNLean module |
+|---|---|
+| `Entropy.IsSupportedOn.add`, `Entropy.IsSupportedOn.neg`, `Entropy.IsSupportedOn.sub` | `MPS/AreaLaw/Hastings/PartCommutators.lean` |
+| `Entropy.IsSupportedOn.smul` | `MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean` |
+| `Entropy.IsSupportedOn.conjTranspose` | `MPS/AreaLaw/Hastings/PositiveFactorization.lean` |
+| `TNLean.Lattice.isSupportedOn_sum` | `Lattice/ZeroEntropy.lean` |
 
-The first five have the names of the QICLean declarations, so the old copies
-would fail as redeclarations under the new pin. The last has the statement of
-the QICLean declaration under another namespace; its seventeen uses in
-`Lattice/ZeroEntropy` and `MPS/AreaLaw` now name `Entropy.isSupportedOn_sum`,
-and the blueprint entry `lem:zero_entropy_cut` cites that name.
+Each is closure of `ManyBody.supportedOperators (fun v ↦ Fin (n v)) D`
+(`QICLean/ManyBody/Sites/Support.lean`) under one operation, and
+`Entropy.IsSupportedOn X D` is membership in that subalgebra by definition. The
+calls now apply the subalgebra's own lemmas, with the system written out:
+`add_mem`, `neg_mem`, `sub_mem`, `smul_mem`, `sum_mem`, and `mul_mem` with
+`star_mem` for `OBᴴ * OB`. There are 17 such calls of `isSupportedOn_sum` (in
+`Lattice/ZeroEntropy` and ten modules of `MPS/AreaLaw`) and 16 calls through
+dot notation in `ALVV/FrustrationFreeRank`, `ALVV/FrustrationFreeThreeRegion`,
+`ViableSet/PowerProjector`, `Hastings/PartCommutators`,
+`Hastings/ProjectorFactorizationScaling` and `Hastings/PositiveFactorization`.
+Where a result feeds an `Entropy.IsSupportedOn` lemma by dot notation, it is
+ascribed that type. The blueprint entries `thm:hastings_supported_conj_transpose`,
+`thm:hastings_projector_factorization_scaled` and `lem:zero_entropy_cut` cite
+`ManyBody.supportedOperators` in place of the deleted names.
 
 ## Importers
 
@@ -128,21 +140,27 @@ Importers of a deleted module import the QICLean module of the same row.
 `Circuit/Gates/TwoSiteUniversality` imported `Circuit/Gates/Givens`, which
 imported `Circuit/Gates/ControlledProducts`; since the QICLean module has no
 such import, `TwoSiteUniversality` now imports both. The four modules that lost
-a supported-operator lemma import `QICLean.Entropy.SupportedOperatorAlgebra`.
+a supported-operator lemma import `QICLean.Entropy.SupportedOperatorAlgebra`,
+which brings the Sites layer.
 The import aggregators `TNLean/Algebra.lean`, `TNLean/Circuit.lean` and
 `TNLean/Circuit/Gates.lean` are regenerated.
 
 ## Other changes of the QICLean range
 
-The range has 44 commits. Besides the two ports above, they add about 200
-declarations to QICLean and remove two private ones
-(`Matrix.rpow_mul_one_sub`, `QICLean.ComplexGaussian.sqrt_two_complex_sq`),
-neither used in TNLean. Three declarations moved from
-`QICLean/Entropy/FilterStationarity.lean` to
+Apart from the four pull requests above, the range adds about 200 declarations
+to QICLean and removes two private ones (`Matrix.rpow_mul_one_sub`,
+`QICLean.ComplexGaussian.sqrt_two_complex_sq`), neither used in TNLean. Three
+declarations moved from `QICLean/Entropy/FilterStationarity.lean` to
 `QICLean/Entropy/SupportedOperatorAlgebra.lean`, which the former imports. The
 statements of `Real.exists_softTruncation_order_of_residual_budget` and
 `Real.exists_softTruncation_scaled_order_of_residual_budget` are unchanged.
-No TNLean proof needed a change for these commits.
+
+`Entropy.IsSupportedOn` and `Entropy.localLift` are now abbreviations of
+`ManyBody.IsSupportedOn` and `ManyBody.place`, so `simp` stops at the Sites
+definitions. Six calls add the Sites name to the simp set:
+`ManyBody.IsSupportedOn` in `MPS/AreaLaw/SoftTruncatedHamiltonianMPO` (two),
+and `ManyBody.place` in `MPS/AreaLaw/SequentialTruncation` (two) and
+`MPS/AreaLaw/Hastings/IntervalMutualInformation` (two).
 
 A comparison of fully qualified names found no other TNLean declaration
 duplicated by a declaration added in the range. The following are left as
@@ -150,14 +168,15 @@ they are:
 
 - `Entropy.IsSupportedOn.commutator` (`Hastings/PartCommutators`) and the
   other statements that take a reference configuration `σ₀` in order to use
-  `Entropy.IsSupportedOn.mul`. The new `Entropy.IsSupportedOn.mul_mem` needs
-  no reference configuration; removing these arguments changes statements
-  and call sites and is left to the Sites steps of the plan.
+  `Entropy.IsSupportedOn.mul`, now a forwarding lemma to `mul_mem` that
+  ignores `σ₀`. Removing these arguments changes statements and call sites and
+  belongs to the switch of TNLean onto the Sites layer.
 - `QuantumCircuit.supportedOperators` and its lemmas
-  (`TNLean/Circuit/SupportedOperators.lean`) beside the new
-  `Entropy.supportedOperators`. These are two definitions of one notion, on
-  `Set` and `Finset` regions; their unification is the Sites layer of the
-  plan.
+  (`TNLean/Circuit/SupportedOperators.lean`) beside
+  `ManyBody.supportedOperators`. These are two definitions of one notion, on
+  `Set` and `Finset` regions; their unification is the same switch.
+- Every other use of the temporary `Entropy` abbreviations and forwarding
+  lemmas, which is deleted in step 4.0 of the plan.
 - `MPSTensor.conj_invSqrtTwo` (`MPS/Examples/AKLTReview.lean`), which has the
   statement of `Complex.conj_invSqrtTwo`. The pair existed inside TNLean before
   this range.

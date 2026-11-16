@@ -114,7 +114,7 @@ noncomputable def ChainHamiltonian.ofBonds
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) : ChainHamiltonian L q 1 1 where
   term X := ∑ i, if bondSupport i = X then h i else 0
-  supported X := Entropy.isSupportedOn_sum _ fun i _ ↦ by
+  supported X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun i _ ↦ by
     split_ifs with hX
     · rw [← hX]
       exact hs i
@@ -372,7 +372,7 @@ private theorem isSupportedOn_bondComplement
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondComplement h i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
-    exact (Entropy.isSupportedOn_one _).sub (hs ⟨i, hi⟩)
+    exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sub_mem (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
     exact Entropy.isSupportedOn_one _
 

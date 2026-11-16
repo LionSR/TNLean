@@ -90,7 +90,7 @@ private theorem actual_clipped_two_window_alphabet
   intro k A J Y WL WR C S PL Pmid PR F K B
   let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
   have hA (j : Fin 5) : Entropy.IsSupportedOn (A j) (R j) := by
-    apply Entropy.isSupportedOn_sum
+    apply (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem
     intro i hi
     exact (hs i).mono (internal_bond_support_subset hi)
   have hC (j : Fin 5) : C j ∈ supportedOperators q (R j : Set (Fin L)) :=

@@ -29,9 +29,8 @@ restrictions of `exists_projectorFactorization` are unchanged. Documented in
 
 ## Main results
 
-* `Entropy.IsSupportedOn.smul`, `Matrix.IsGappedGroundState.smul`,
-  `ChainHamiltonian.smul`: rescaling a supported operator by any scalar, and a gapped ground
-  state and a chain Hamiltonian by a nonnegative real number.
+* `Matrix.IsGappedGroundState.smul`, `ChainHamiltonian.smul`: rescaling a gapped ground state
+  and a chain Hamiltonian by a nonnegative real number.
 * `lemmaOneLength_div`: `lemmaOneLength R (J/ΔE) 1 = 16 (1 + (v₀ − 1)/ΔE)`.
 * `exists_projectorFactorization_div`: Lemma 1 with the length `lemmaOneLength R (J/ΔE) 1`.
 -/
@@ -67,7 +66,7 @@ Hamiltonian of the same range with term norms at most `c J`. -/
 noncomputable def smul (h : ChainHamiltonian L q R J) (c : ℝ) (hc : 0 ≤ c) :
     ChainHamiltonian L q R (c * J) where
   term X := (c : ℂ) • h.term X
-  supported X := (h.supported X).smul _
+  supported X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).smul_mem (h.supported X) _
   hermitian X := (h.hermitian X).smul (by simp [IsSelfAdjoint, Complex.conj_ofReal])
   norm_le X := by
     rw [norm_smul, Complex.norm_real, Real.norm_of_nonneg hc]

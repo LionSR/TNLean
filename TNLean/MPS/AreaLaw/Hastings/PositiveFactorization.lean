@@ -110,10 +110,9 @@ theorem IsFactorizationAt.conjTranspose_mul_self {Ω : EuclideanSpace ℂ (Fin L
     posSemidef_conjTranspose_mul_self_mul_mul_sub_le hB1 hP hL hR hLR hBLR
   have hε0 : 0 ≤ ε := (norm_nonneg _).trans hBLR
   have hsupp : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (OBᴴ * OB)
-      (interval L (c - l) (c + l)) := by
-    rcases isEmpty_or_nonempty (Fin L → Fin q) with hE | hne
-    · exact ⟨fun σ ↦ (hE.false σ).elim, fun σ ↦ (hE.false σ).elim⟩
-    · exact hBs.conjTranspose.mul hBs hne.some
+      (interval L (c - l) (c + l)) :=
+    (mul_mem (star_mem hBs) hBs : star OB * OB ∈
+      ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) (interval L (c - l) (c + l)))
   refine ⟨hpos, hL, hR, hLR, hnorm, hsupp, hLs, hRs, ?_⟩
   rcases le_or_gt ε 1 with h1 | h1
   · exact herr.trans (sqrt_one_sub_sq_add_le hε0 h1)
