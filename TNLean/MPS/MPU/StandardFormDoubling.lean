@@ -97,7 +97,8 @@ theorem doubledU_apply (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (i₁ i₁' i₂ i₂' : Fin d) :
     doubledU u v (finProdFinEquiv (t, a), finProdFinEquiv (b, s))
         (finProdFinEquiv (i₁, i₁'), finProdFinEquiv (i₂, i₂')) =
-      ∑ s₁ : Fin r, ∑ t₂ : Fin ℓ, v (a, b) (s₁, t₂) * (u (t, s₁) (i₁, i₁') * u (t₂, s) (i₂, i₂')) := by
+      ∑ s₁ : Fin r, ∑ t₂ : Fin ℓ,
+        v (a, b) (s₁, t₂) * (u (t, s₁) (i₁, i₁') * u (t₂, s) (i₂, i₂')) := by
   simp only [doubledU, Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.mul_apply,
     Fintype.sum_prod_type, Matrix.kroneckerMap_apply, Matrix.one_apply]
   simp [doubledOutEquiv, doubledInEquiv, doubledMidEquiv, Finset.sum_ite_eq]
@@ -191,8 +192,9 @@ theorem det_doubledU_submatrix (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) �
       ((u.submatrix id e) ⊗ₖ (u.submatrix id e)).submatrix K K := by
     ext x y
     simp [N, K, Matrix.reindex_apply, Matrix.kroneckerMap_apply]
-  rw [h₀, Matrix.det_submatrix_equiv_self, ← Matrix.submatrix_mul_equiv M₁ N id H, Matrix.det_mul, h₁, h₂,
-    Matrix.det_submatrix_equiv_self, Matrix.det_kronecker, Matrix.det_kronecker, Matrix.det_kronecker]
+  rw [h₀, Matrix.det_submatrix_equiv_self, ← Matrix.submatrix_mul_equiv M₁ N id H,
+    Matrix.det_mul, h₁, h₂, Matrix.det_submatrix_equiv_self, Matrix.det_kronecker,
+    Matrix.det_kronecker, Matrix.det_kronecker]
   simp only [Matrix.det_one, one_pow, mul_one, one_mul, Fintype.card_prod, Fintype.card_fin]
   rw [← pow_mul, ← pow_add]
   ring_nf
@@ -234,8 +236,8 @@ theorem doubledV_map_star (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) :
 
 /-- Changing the identification of the coordinate spaces multiplies the
 determinant by the sign of the change, which does not depend on the matrix. -/
-theorem det_submatrix_eq_sign_mul {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
-    [DecidableEq n] (A : Matrix m n ℂ) (g g' : m ≃ n) :
+theorem det_submatrix_eq_sign_mul {m n : Type*} [Fintype m] [DecidableEq m]
+    (A : Matrix m n ℂ) (g g' : m ≃ n) :
     (A.submatrix id g).det = (Equiv.Perm.sign (g.trans g'.symm) : ℂ) * (A.submatrix id g').det := by
   rw [← Matrix.det_permute']
   congr 1
