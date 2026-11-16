@@ -1,0 +1,83 @@
+\begin{lemma}[Finite face elimination for every proper support]
+    \label{lem:peps_dual_finite_face_elimination}
+    \lean{TNLean.PEPS.exists_torusDualFaceEliminationSequence}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    Let both periods be positive and let $R\subsetneq X$ be the allowed
+    primal square support. There exists a finite list of tagged native faces
+    whose substitution composition $\Sigma$ has the following properties:
+    its length is at most $|X|$, every listed face has its primal support in $R$,
+    and
+    \begin{align}
+        \Sigma(r_v)=1\qquad\text{whenever }v+(1,1)\in R.
+        \label{eq:peps_dual_finite_face_elimination}
+    \end{align}
+    The list is constructed from $R$, independently of any compared paths.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_face_elimination_locality}
+    Choose an excluded primal support $c$ and put $o=c-(1,1)$. Rank the
+    actual face bases by
+    \begin{align}
+        \kappa(v)=\overline{v_1-o_1}+\overline{v_2-o_2},
+        \label{eq:peps_dual_face_elimination_rank}
+    \end{align}
+    where bars are least nonnegative coordinate representatives.
+    An allowed face has positive rank. If its first shifted coordinate is
+    positive, choose west substitution; otherwise choose south substitution.
+    The corresponding west or south predecessor has strictly smaller rank.
+    A positive shifted coordinate also makes the required period exceed one.
+    Choose an allowed face $v$ of least rank and recurse on the remaining
+    allowed faces. Its substitution $\sigma_v$ fixes every remaining face
+    relation, since the only other incident face has smaller rank and
+    hence is not among those remaining. Thus
+    \begin{align}
+        \Sigma=\Sigma_{\rm tail}\circ\sigma_v,\qquad
+        \Sigma(r_v)=1,\qquad
+        \Sigma(r_w)=\Sigma_{\rm tail}(r_w)=1
+        \quad(w\text{ remaining}).
+        \label{eq:peps_dual_face_elimination_induction}
+    \end{align}
+    The induction adds exactly one list entry for each allowed face base,
+    giving the stated finite bound.
+\end{proof}
+
+\begin{lemma}[A reduced-word normal form for every proper square support]
+    \label{lem:peps_dual_proper_support_normal_form}
+    \lean{TNLean.PEPS.exists_torusDualProperSupportNormalForm}\leanok
+    \uses{def:peps_dual_path_word,def:peps_dual_flux_homotopy,
+        lem:peps_dual_finite_face_elimination}
+    Let both periods be positive and $R\subsetneq X$. One list as above,
+    of length at most $|X|$ and using only allowed faces, satisfies for every
+    pair of finite labelled paths $p,q:a\to b$,
+    \begin{align}
+        p\sim_Rq
+        \quad\Longleftrightarrow\quad
+        \operatorname{red}(\Sigma(W(p)))
+        =\operatorname{red}(\Sigma(W(q))).
+        \label{eq:peps_dual_proper_support_normal_form}
+    \end{align}
+    This is existence of a finite geometric reduced-word classification.
+    No extracted executable general decision procedure or complexity bound
+    is asserted. Full support has its separate displacement classification.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_finite_face_elimination,
+        lem:peps_dual_flat_transport_invariance,
+        lem:peps_dual_face_elimination_sequence,
+        lem:peps_dual_finite_presentation_classification,
+        def:peps_dual_finite_presentation}
+    The composition kills every allowed face word. Therefore
+    $F_e(z)=\Sigma(W(e))z$ is reversible and flat on every allowed square.
+    Its path action satisfies $F_p(1)=\Sigma(W(p))$, so homotopy invariance
+    gives the forward implication. Conversely let $\pi_R$ be the finite
+    presentation quotient. Each selected original face is a defining relator,
+    hence finite substitution preservation gives
+    \begin{align}
+        \pi_R\circ\Sigma=\pi_R.
+        \label{eq:peps_dual_proper_support_quotient}
+    \end{align}
+    Equal reduced free-group words imply equal group elements, then equal
+    images under $\pi_R$. The identity above gives
+    $\pi_R(W(p))=\pi_R(W(q))$, and finite-presentation completeness gives
+    $p\sim_Rq$.
+\end{proof}

@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Finite Native Normal Forms for Proper Square Supports}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia, \cite[Lemma~6.14]{Schuch2010PEPS},
+source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+deform a fixed-endpoint flux string by virtual invariance.
+Here the allowed primal supports of the generated square moves are explicit.
+This is a classification of that generated relation, not a statement that
+all paths with common endpoints or displacement are equivalent.
+
+Let $X=\mathbb Z_w\times\mathbb Z_h$ with $w,h>0$, and let $R\subsetneq X$
+be the allowed primal supports. Write $p\sim_Rq$ for square moves supported
+in $R$, backtracks, concatenation and reversal. The reverse-ordered native
+word $W(p)$ lies in the free group on the positive east and north edges,
+with each actual base vertex retained. The face with lower-left base $v$
+has primal support $v+(1,1)$ and word $r_v=BAC^{-1}D^{-1}$, where $A,B,C,D$
+are its bottom, right, left and top positive generators.
+Its two substitutions are $C\mapsto D^{-1}BA$ and $A\mapsto B^{-1}DC$,
+fixing every other generator.
+
+There exists a finite list of those tagged substitutions, of length at most
+$|X|$, using only faces supported in $R$, whose composition $\Sigma$ satisfies
+\begin{align}
+    \Sigma(r_v)=1\quad\text{if }v+(1,1)\in R.
+    \label{eq:scp10_proper_support_face_elimination}
+\end{align}
+To construct it, choose $c\notin R$, put $o=c-(1,1)$, and rank each face base by
+$\kappa(v)=\overline{v_1-o_1}+\overline{v_2-o_2}$, using standard coordinate
+representatives. Repeatedly select a least-rank remaining allowed face.
+A positive first coordinate selects west substitution; otherwise the second
+coordinate is positive and selects south substitution. Its predecessor has
+smaller rank, so the selected generator appears in no other remaining allowed
+face. The required transverse period exceeds one because that shifted
+coordinate is positive. Finite induction therefore kills each selected
+relation without changing the others. This includes periods one and two.
+\footnote{\leanid{TNLean.PEPS.exists_torusDualFaceEliminationSequence}.}
+
+The same single list, constructed independently of the compared paths,
+gives for all finite parallel native paths
+\begin{align}
+    p\sim_Rq
+    \quad\Longleftrightarrow\quad
+    \operatorname{red}(\Sigma(W(p)))
+    =\operatorname{red}(\Sigma(W(q))).
+    \label{eq:scp10_proper_support_normal_form}
+\end{align}
+Here $\operatorname{red}$ is the unique reduced signed word in the free group.
+For necessity, left multiplication by each $\Sigma(W(e))$ gives a reversible
+transport flat on every allowed face, so generated homotopies preserve
+$\Sigma(W(p))$. For sufficiency, let $\pi_R$ be the explicit finite native
+presentation quotient. Every selected face is an original defining relator.
+Preservation of flat representations under finite substitutions gives
+\begin{align}
+    \pi_R\circ\Sigma=\pi_R.
+    \label{eq:scp10_proper_support_quotient}
+\end{align}
+Reduced-word equality then implies equality of the original words in the
+finite presentation, whose completeness supplies $p\sim_Rq$.
+\footnote{\leanid{TNLean.PEPS.exists_torusDualProperSupportNormalForm}.}
+
+This proves existence of a finite geometric normal form for every proper
+support in the positive-period native model. It does not extract an executable
+general Boolean decision procedure or give a complexity bound. Full support
+retains the separate lifted-displacement classification; zero periods retain
+the separate semantic theorem. An arbitrary missing face can still carry a
+nontrivial nonabelian loop word, so no endpoint-only or displacement-only
+classification follows. Physical density conclusions and annular Wilson-loop
+measurements remain separate from this homotopy classification.
+The broader source interpretation stays open under \ghissue{8703};
+the Hamiltonian work under \ghissue{8947} is unchanged.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
