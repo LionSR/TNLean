@@ -79,7 +79,12 @@ The reverse direction is
 \leanid{MPOTensor.strictlyEquivalentUnderSymmetry_blockTensor_of_gate_path},
 with the case $k=1$
 \leanid{MPOTensor.strictlyEquivalentUnderSymmetry_blockTwo_of_gate_path}.
-Lemma~\texttt{lem:equivalent-symmetry} itself remains unformalized.
+The blocked forward direction is
+\leanid{MPOTensor.exists_gate_path_of_strictlyEquivalentUnderSymmetry}, which
+feeds Corollary \texttt{coruvSF} into
+\leanid{MPOTensor.gatePath_of_symmetricPath}; its gates act on blocks of some
+positive number $k$ of sites, and their generated MPUs are invariant under
+the symmetry blocked $2k$ sites. Lemma~\texttt{lem:equivalent-symmetry} itself remains unformalized.
 
 \bibliographystyle{alpha}
 \bibliography{references}
