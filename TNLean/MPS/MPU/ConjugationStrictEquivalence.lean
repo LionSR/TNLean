@@ -24,10 +24,20 @@ it is invariant under the gauge `u ↦ (x ⊗ y) u`, `v ↦ v (y† ⊗ x†)` o
 standard form, as computed at line 1416 of the source
 (`det_gauge_mul_swap`).
 
+The "only if" directions rest on the forward direction of Lemma
+`lem:equivalent-symmetry`, which is available only after blocking, where the
+determinant invariants are trivial; they remain open, see
+`docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex`.
+
 ## Main results
 
+* `Matrix.det_gauge_mul_swap`: gauge invariance of `det(u v)`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_gate_path`: gate paths
+  satisfying the local conjugation equations give strict equivalence.
 * `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq`: the "if"
   direction of Theorem `conjphs`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even`: the "if"
+  direction of Theorem `prop:conjsym-strict-equiv`.
 -/
 
 open scoped Matrix Kronecker
@@ -289,6 +299,56 @@ theorem IsUnitaryBetween.joinedIn_symplectic_of_det_eq (hℓ : Even ℓ) (hr : E
     simp only [submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id]
     rfl
 
+/-- The transpose of a matrix unitary between two coordinate spaces is unitary
+between them. -/
+private theorem isUnitaryBetween_transpose {m n : Type*} [Fintype m] [DecidableEq m]
+    [Fintype n] [DecidableEq n] {A : Matrix m n ℂ} (hA : A.IsUnitaryBetween) :
+    Aᵀ.IsUnitaryBetween := by
+  have h := hA.conjTranspose.map_star
+  rwa [conjTranspose, Matrix.map_map, show (starRingEnd ℂ ∘ star) = id from
+    funext fun z ↦ by simp, Matrix.map_id] at h
+
+private theorem transpose_sourceSkewForm_kronecker {p q : ℕ} (hp : Even p) (hq : Even q) :
+    (sourceSkewForm hp ⊗ₖ sourceSkewForm hq)ᵀ = sourceSkewForm hp ⊗ₖ sourceSkewForm hq := by
+  ext ⟨i, i'⟩ ⟨j, j'⟩
+  have h₁ := congrFun (congrFun (transpose_sourceSkewForm hp) j) i
+  have h₂ := congrFun (congrFun (transpose_sourceSkewForm hq) j') i'
+  simp only [transpose_apply, neg_apply] at h₁ h₂
+  simp only [transpose_apply, kroneckerMap_apply, h₁, h₂, neg_mul_neg]
+
+/-- **Symplectic right gates with the same determinant are joined.** The
+form of `IsUnitaryBetween.joinedIn_symplectic_of_det_eq` for gates `v` with
+`conj(v) = v (Σ_r ⊗ Σ_ℓ)`, obtained by transposition. Source:
+arXiv:1703.09188, proof of Theorem `prop:conjsym-strict-equiv`, "if" direction,
+Case II, lines 1540--1546. -/
+theorem IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq (hℓ : Even ℓ) (hr : Even r)
+    (f : P ≃ Fin r × Fin ℓ) {A B : Matrix P (Fin r × Fin ℓ) ℂ}
+    (hA : A.IsUnitaryBetween) (hB : B.IsUnitaryBetween)
+    (hAc : A.map (starRingEnd ℂ) = A * (sourceSkewForm hr ⊗ₖ sourceSkewForm hℓ))
+    (hBc : B.map (starRingEnd ℂ) = B * (sourceSkewForm hr ⊗ₖ sourceSkewForm hℓ))
+    (hdet : (A.submatrix id f).det = (B.submatrix id f).det) :
+    JoinedIn {X : Matrix P (Fin r × Fin ℓ) ℂ | X.IsUnitaryBetween ∧
+      X.map (starRingEnd ℂ) = X * (sourceSkewForm hr ⊗ₖ sourceSkewForm hℓ)} A B := by
+  set K := sourceSkewForm hr ⊗ₖ sourceSkewForm hℓ
+  have hKT : Kᵀ = K := transpose_sourceSkewForm_kronecker hr hℓ
+  have htc : ∀ {X : Matrix P (Fin r × Fin ℓ) ℂ}, X.map (starRingEnd ℂ) = X * K →
+      Xᵀ.map (starRingEnd ℂ) = K * Xᵀ := fun hX ↦ by
+    rw [transpose_map, hX, transpose_mul, hKT]
+  have hdetT : ∀ X : Matrix P (Fin r × Fin ℓ) ℂ,
+      (Xᵀ.submatrix id f.symm).det = (X.submatrix id f).det := fun X ↦ by
+    rw [← det_transpose (X.submatrix id f), ← det_submatrix_equiv_self f.symm]
+    congr 1
+    ext i j
+    simp
+  obtain ⟨γ, hγ⟩ := IsUnitaryBetween.joinedIn_symplectic_of_det_eq hr hℓ f.symm
+    (isUnitaryBetween_transpose hA) (isUnitaryBetween_transpose hB) (htc hAc) (htc hBc)
+    (by rw [hdetT, hdetT, hdet])
+  refine ⟨(γ.map continuous_id.matrix_transpose).cast (transpose_transpose A).symm
+    (transpose_transpose B).symm, fun t ↦ ⟨?_, ?_⟩⟩
+  · exact isUnitaryBetween_transpose (hγ t).1
+  · change (γ t)ᵀ.map (starRingEnd ℂ) = (γ t)ᵀ * K
+    rw [transpose_map, (hγ t).2, transpose_mul, hKT]
+
 end Matrix
 
 /-- Two factorizations `a b = a' b'` of one number into signs `a, a'` and
@@ -500,5 +560,70 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq
     γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
     (by rw [γu.source, γv.source]; exact T₁) (by rw [γu.target, γv.target]; exact T₂')
     (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
+
+/-- **Strict conjugation equivalence for even source ranks, "if" direction.**
+Let `𝒰₁, 𝒰₂` be tensors in canonical form II whose two-site blocks have
+standard-form gates `u_i, v_i` of the same even ranks `ℓ, r`, both real
+(eq. `ortuv`) or both in the symplectic form `conj(u) = (Σ_ℓ ⊗ Σ_r) u`,
+`conj(v) = v (Σ_r ⊗ Σ_ℓ)` (eq. `sympuv`). If `det u₁ = det u₂` and
+`det v₁ = det v₂`, read through one identification `e` of `ℂ^ℓ ⊗ ℂ^r` with
+`ℂ^d ⊗ ℂ^d`, then the two MPUs are strictly equivalent under conjugation. The
+standard-form chain is the chain of two-site blocks, as in
+`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
+
+Source: arXiv:1703.09188, Theorem `prop:conjsym-strict-equiv`, lines 1480--1491,
+"if" direction, proof at lines 1540--1546. -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even
+    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
+    (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
+    {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
+    (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
+    (hℓ : Even ℓ) (hr : Even r)
+    (hcase : (u₁.map (starRingEnd ℂ) = u₁ ∧ v₁.map (starRingEnd ℂ) = v₁ ∧
+        u₂.map (starRingEnd ℂ) = u₂ ∧ v₂.map (starRingEnd ℂ) = v₂) ∨
+      (u₁.map (starRingEnd ℂ) = (Matrix.sourceSkewForm hℓ ⊗ₖ Matrix.sourceSkewForm hr) * u₁ ∧
+        v₁.map (starRingEnd ℂ) = v₁ * (Matrix.sourceSkewForm hr ⊗ₖ Matrix.sourceSkewForm hℓ) ∧
+        u₂.map (starRingEnd ℂ) = (Matrix.sourceSkewForm hℓ ⊗ₖ Matrix.sourceSkewForm hr) * u₂ ∧
+        v₂.map (starRingEnd ℂ) = v₂ * (Matrix.sourceSkewForm hr ⊗ₖ Matrix.sourceSkewForm hℓ)))
+    (e : Fin ℓ × Fin r ≃ Fin d × Fin d)
+    (hu : (u₁.submatrix id e).det = (u₂.submatrix id e).det)
+    (hv : (v₁.submatrix id (e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r)))).det =
+      (v₂.submatrix id (e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r)))).det) :
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 2))
+      (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
+  set f := e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r))
+  rcases hcase with ⟨hu₁, hv₁, hu₂, hv₂⟩ | ⟨hu₁, hv₁, hu₂, hv₂⟩
+  · -- Case I: real gates.
+    obtain ⟨γu, hγu⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq e S₁.u_unitary
+      S₂.u_unitary hu₁ hu₂ hu
+    obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq f S₁.v_unitary
+      S₂.v_unitary hv₁ hv₂ hv
+    exact strictlyEquivalentUnderSymmetry_conjugation_of_gate_path h₁ h₂ γu γv γu.continuous
+      γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
+      (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
+      (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
+  · -- Case II: symplectic gates.
+    obtain ⟨γu, hγu⟩ := Matrix.IsUnitaryBetween.joinedIn_symplectic_of_det_eq hℓ hr e
+      S₁.u_unitary S₂.u_unitary hu₁ hu₂ hu
+    obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq hℓ hr f
+      S₁.v_unitary S₂.v_unitary hv₁ hv₂ hv
+    have hstar : ∀ {n : ℕ} (h : Even n), star (Matrix.sourceSkewForm h) = -Matrix.sourceSkewForm h :=
+      fun h ↦ by
+        rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose, Matrix.transpose_map]
+        exact (congrArg Matrix.transpose (Matrix.map_star_sourceSkewForm h)).trans
+          (Matrix.transpose_sourceSkewForm h)
+    let x : Matrix.unitaryGroup (Fin ℓ) ℂ := ⟨_, Matrix.sourceSkewForm_mem_unitaryGroup hℓ⟩
+    let y : Matrix.unitaryGroup (Fin r) ℂ := ⟨_, Matrix.sourceSkewForm_mem_unitaryGroup hr⟩
+    have hyx : star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ) =
+        Matrix.sourceSkewForm hr ⊗ₖ Matrix.sourceSkewForm hℓ := by
+      simp only [x, y, hstar]
+      ext i j
+      simp [Matrix.kroneckerMap_apply]
+    exact strictlyEquivalentUnderSymmetry_conjugation_of_gate_path h₁ h₂ γu γv γu.continuous
+      γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
+      (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
+      (fun p ↦ ⟨x, y, (hγu p).2, by rw [hyx]; exact (hγv p).2⟩)
 
 end MPOTensor
