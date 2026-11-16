@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPU.ConjugationMPSClass
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TwoSiteStandardFormSourceCuts
@@ -53,18 +54,6 @@ open scoped Matrix Kronecker
 namespace MPOTensor
 
 variable {d D : ℕ}
-
-/-- Entrywise conjugation of a scalar multiple. -/
-theorem map_star_smul' {m n : Type*} (c : ℂ) (M : Matrix m n ℂ) :
-    (c • M).map (starRingEnd ℂ) = starRingEnd ℂ c • M.map (starRingEnd ℂ) := by
-  ext i j
-  simp
-
-/-- Entrywise conjugation of an adjoint is the transpose. -/
-theorem conjTranspose_map_star' {m n : Type*} (M : Matrix m n ℂ) :
-    Mᴴ.map (starRingEnd ℂ) = Mᵀ := by
-  ext i j
-  simp [Matrix.conjTranspose_apply]
 
 /-- The rank-one projector `|ρ)(1|` on the doubled bond, in the encoding of
 `normalizedDiagonal`. -/
@@ -274,7 +263,7 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
     have h := congrArg (·.map (starRingEnd ℂ)) (hgauge a b)
     have hmap : ((W₂ b a).map (starRingEnd ℂ)).map (starRingEnd ℂ) = W₂ b a := by
       ext i j; simp
-    simp only [hmap, map_star_smul', Matrix.map_mul, conjTranspose_map_star'] at h
+    simp only [hmap, map_star_smul, Matrix.map_mul, conjTranspose_map_star] at h
     exact h
   -- Applying the symmetry twice: `G conj(G) = ±1`.
   have hconjT : (Gm.map (starRingEnd ℂ))ᴴ = Gmᵀ := by ext i j; simp
