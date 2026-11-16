@@ -52,7 +52,7 @@ theorem exists_primitive_blocks_of_mpv_eq_smul_wIndicator {D N : ℕ}
     exists_primitive_blocks_at_gcd_factorial A hN
   have hMp : M * p = N := Nat.div_mul_cancel hpN
   have hWflat : ∀ σ : Cfg 2 (M * p), mpv A σ = c * wIndicator (M * p) σ := by
-    simpa only [hMp] using hW
+    exact hMp.symm ▸ hW
   refine ⟨hp, hpN, hpD, r, dim, B, coef, hdim, hsum, hper, hC1, hcoef, ?_⟩
   intro σ
   rw [← hdecomp σ, mpv, coeff, evalWord_blockTensor, ← ofFn_blockedConfigEquiv]
