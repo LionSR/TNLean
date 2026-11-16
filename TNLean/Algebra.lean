@@ -40,6 +40,7 @@ import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConjClassesConjugation
 import TNLean.Algebra.ConjugateProjectiveRepresentation
 import TNLean.Algebra.ConjugateRegularRepresentation
+import TNLean.Algebra.ConjugationGateGauge
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
