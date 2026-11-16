@@ -65,6 +65,7 @@ theorem TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges
         star (y : Matrix (Fin r) (Fin r) ℂ)) :
     W' = virtualSandwich (z : Matrix (Fin D) (Fin D) ℂ) W
       (star (z : Matrix (Fin D) (Fin D) ℂ)) := by
+  subst hu
   funext i j
   ext α γ
   set p := finProdFinEquiv.symm i
@@ -78,25 +79,26 @@ theorem TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges
     intro t
     simp only [a, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
       Matrix.one_apply, mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
-      Finset.sum_ite_eq, Finset.mem_univ, if_true]
+      Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
   have hb : ∀ s, b s = ∑ δ : Fin D, star Z δ γ * S.X₁ (p.2, δ) s := by
     intro s
     simp only [b, Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
       Matrix.one_apply, Matrix.transpose_apply, ite_mul, one_mul, zero_mul,
-      Finset.sum_ite_eq, Finset.mem_univ, if_true]
+      Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq, Finset.mem_univ,
+      ↓reduceIte]
   calc W' i j α γ
       = ∑ t, ∑ s, (a ᵥ* star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ)) t *
           (((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u) (t, s) q *
             (b ᵥ* star (y : Matrix (Fin r) (Fin r) ℂ)) s := by
-        rw [S'.W_apply, hu, hX₂, hX₁]
+        rw [S'.W_apply, hX₂, hX₁]
         rfl
     _ = ∑ t, ∑ s, a t * u (t, s) q * b s :=
         Matrix.sum_sum_vecMul_star_mul_kronecker_mul a b u x y q
-    _ = ∑ t, ∑ s, ∑ β, ∑ δ, Z α β * S.X₂ (β, p.1) t * u (t, s) q *
+    _ = ∑ t, ∑ s, ∑ δ, ∑ β, Z α β * S.X₂ (β, p.1) t * u (t, s) q *
           (star Z δ γ * S.X₁ (p.2, δ) s) := by
         simp only [ha, hb, Finset.sum_mul, Finset.mul_sum]
     _ = ∑ δ, ∑ β, Z α β * W i j β δ * star Z δ γ := by
-        rw [Fintype.sum_last_two_first_four, Finset.sum_comm]
+        rw [Fintype.sum_last_two_first_four]
         refine Finset.sum_congr rfl fun δ _ ↦ Finset.sum_congr rfl fun β _ ↦ ?_
         rw [S.W_apply, Finset.mul_sum, Finset.sum_mul]
         refine Finset.sum_congr rfl fun t _ ↦ ?_
@@ -179,10 +181,13 @@ theorem IsMPUCanonicalFormII.exists_half_factor_gauges_of_mpo_eq
   obtain ⟨z, rfl⟩ := hU.eq_virtualSandwich_of_mpo_eq hV hEq
   obtain ⟨W₁, W₂, hX₁, hY₁, hX₂, hY₂⟩ :=
     hU.exists_selected_source_factor_unitary_gauges_sourceFactorsOf hSU z hV hSV S₁ S₂ T₁ T₂
-  refine ⟨rfl, z, _, _, star W₂, star W₁, ?_, ?_, ?_⟩
+  refine ⟨rfl, z, (finCongr (source_rank_virtual_unitary_sandwich U z).1).symm,
+    (finCongr (source_rank_virtual_unitary_sandwich U z).2).symm, star W₂, star W₁, ?_, ?_, ?_⟩
   · simpa only [Unitary.coe_star] using
       SourceFactors.sourceU_eq_of_factor_gauges _ _ z _ _ _ _ hY₁ hY₂
-  · simpa only [Unitary.coe_star, star_star, finCongr_refl, Equiv.prodCongr_refl_refl] using hX₂
-  · simpa only [Unitary.coe_star, star_star, finCongr_refl, Equiv.prodCongr_refl_refl] using hX₁
+  · simp only [Unitary.coe_star, star_star, finCongr_refl]
+    exact hX₂
+  · simp only [Unitary.coe_star, star_star, finCongr_refl]
+    exact hX₁
 
 end MPOTensor
