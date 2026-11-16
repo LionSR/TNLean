@@ -199,6 +199,16 @@ For the MPU index of arXiv:1703.09188:
   standard form is the two-site block of a simple canonical tensor, so the
   time-reversal and transposition criteria and the sign results apply to every
   such standard form without a further hypothesis.
+- `mpu_canonical_form_full_support.tex` (scope restriction, partly superseded)
+  records that the reduced canonical-form-II representative must be
+  constructed rather than inferred from bare canonical form, and the
+  reduced full-support data assumed by the admissible Chapter 28 entries.
+  Entries whose source-labelled counterparts are proved under the canonical
+  convention above (the Index Theorem, source-rank constancy, the local
+  time-reversal and transposition criteria, and the time-reversal sign
+  results) are superseded and deleted; the conjugation, blocking-parity,
+  equivalence-necessity, MPS-class, continuous-standard-form, and example
+  entries remain restricted.
 - `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
   to the unblocked all-length converse printed in the Fundamental Theorem of
   MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
@@ -206,6 +216,11 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_index_classification_tensor_to_gates.tex` (clarification, resolved)
+  records the step omitted in the "if" half of clause (iv) of the Index
+  Theorem: a blocked tensor is joined through MPU tensors to the tensor built
+  from its own standard-form gates, by a path of virtual gauges to canonical
+  form II and an interpolation of half factors that keeps the gates fixed.
 - `mpu_conjugation_symplectic_uniqueness_transpose.tex` (local correction,
   resolved) records that the Case II uniqueness clause of Proposition
   `corconj` prints `v'' = v' (S_rᵀ ⊗ S_ℓᵀ)`, while the Fundamental Theorem gives

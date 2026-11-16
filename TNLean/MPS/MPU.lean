@@ -92,6 +92,7 @@ import TNLean.MPS.MPU.GroupIndex
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
 import TNLean.MPS.MPU.Index
+import TNLean.MPS.MPU.IndexClassification
 import TNLean.MPS.MPU.IndexContinuity
 import TNLean.MPS.MPU.IndexOfCanonicalForm
 import TNLean.MPS.MPU.InitializedEncodingCoordinates
@@ -226,6 +227,7 @@ import TNLean.MPS.MPU.SpinOneSchmidtObstruction
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormConjugation
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
@@ -253,6 +255,7 @@ import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
+import TNLean.MPS.MPU.TimeReversalSignInvariance
 import TNLean.MPS.MPU.TimeReversalTraceGauge
 import TNLean.MPS.MPU.TimeReversalTwistedTransfer
 import TNLean.MPS.MPU.TransferMatrix

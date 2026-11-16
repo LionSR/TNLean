@@ -1,5 +1,18 @@
 # Actual source factors and local conjugation equations for #7017
 
+> **Superseded status (2026-11-16).** The reduced-presentation scope recorded
+> below no longer limits `prop1conj` or `corconj`. Under
+> `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`, a tensor in
+> standard form is the two-site block of a simple tensor in canonical form II,
+> and its lengths are those of the two-spin chain.
+> `IsMPUCanonicalFormII.standardForm_conjugation_iff` proves `prop1conj` in
+> that reading: the forward direction uses only even original lengths, through
+> `exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even`, whose sign
+> cancels in both gates. The theorems of `ConjugationStandardForms.lean` prove
+> `corconj` on the same hypotheses, with the Case II adjoint correction of
+> `docs/paper-gaps/mpu_conjugation_symplectic_uniqueness_transpose.tex`. The
+> all-length forward theorem described here is retained as an auxiliary result.
+
 Base: origin/main at `3af48c184`, including merged #8808. Source:
 `Papers/1703.09188/paper_v2.tex`, Proposition `prop1conj`, lines 1006–1039,
 equations `uconjugation` and `vconjugation`.

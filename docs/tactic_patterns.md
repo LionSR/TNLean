@@ -114,6 +114,7 @@ abstracted — record why, so it is not re-proposed).
   U N).symm`, now used at all four sites.
 - **Decision:** a term-mode composition of an existing lemma is the weakest mechanism; no new
   lemma or tactic.
+- **Net line delta:** −8 Lean lines (four 5-line blocks → 3-line terms; #10700).
 
 ### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
 
@@ -7428,23 +7429,21 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ---
 
-### scalar multiple preserves block injectivity — candidate
-- **Pattern:** rewrite `Kraus.IsNBlkInjective` as `wordSpan = ⊤`, run
-  `Submodule.span_induction` on a matrix of the original span, and absorb the
-  scalar `z ^ N` of `Kraus.evalWord_smul` with `inv_smul_smul₀`.
-- **Seen:** 2 occurrences across 2 files: the private
-  `isNBlkInjective_smul_of_ne` in
-  `TNLean/MPS/Periodic/Overlap/SectorMatch/Basic.lean` and
-  `MPSTensor.isNBlkInjective_smul` in
-  `TNLean/MPS/CanonicalForm/TranslationInvariantUniqueness.lean`
-  (recorded 2026-09-05).
-- **Abstraction:** one public theorem next to
-  `MPSTensor.isNBlkInjective_of_gaugeEquiv` in `TNLean/MPS/Defs.lean`, with
-  `isNormal_smul` as its normality corollary; both call sites then drop their
-  local copies.
-- **Notes:** below the rule of three. The promotion was deferred because a
-  change to `TNLean/MPS/Defs.lean` rebuilds the whole library; do it in a
-  dedicated cleanup.
+### scalar multiple preserves block injectivity — partial migration (2026-11-15)
+- **Pattern:** nonzero scalar multiplication preserves fixed-length block
+  injectivity and algebraic normality.
+- **Abstraction:** the existing `MPSTensor.isNBlkInjective_smul_iff` and
+  `MPSTensor.isNormal_smul_iff` in `MPS/Core/ScaledNormality.lean`.
+- **Refactored occurrences:** the private `isNBlkInjective_smul_of_ne` and
+  `isNormal_smul_of_ne` in `MPS/Periodic/Overlap/SectorMatch/Basic.lean`
+  are removed; the normality consumer applies the existing equivalence.
+  `TranslationInvariantUniqueness.isNBlkInjective_smul` remains in
+  `MPS/CanonicalForm/TranslationInvariantUniqueness.lean` with three local
+  consumers; their migration is still a candidate.
+- **Notes:** this reuses existing mathematical lemmas and adds no abstraction
+  below the promotion threshold. Net Lean delta: -40 lines, including the
+  explicit import. Source-head PR CI passed on `cf8e9cf3`; the combined branch
+  requires fresh validation. See `docs/audits/2026-11-15_comprehensive_simplification_audit.md`.
 
 ### rectangular reduction from local compression data — candidate
 - **Pattern:** prove `MPSTensor.IsReduction B A V W` by
