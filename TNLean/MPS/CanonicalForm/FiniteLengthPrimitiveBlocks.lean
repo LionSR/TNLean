@@ -83,7 +83,7 @@ theorem exists_primitive_blocks_at_gcd_factorial {d D N : ℕ}
   have hperB (k : Fin S.card) (a : Fin (n k)) : IsPeriodic 1 (B k a) := by
     have hperiod : period (ι k) / (period (ι k)).gcd p = 1 := by
       rw [Nat.gcd_eq_left_iff_dvd.mpr (hperiodp k),
-        Nat.div_self (hper (ι k)).period_pos.ne']
+        Nat.div_self ((hper (ι k)).period_pos)]
     exact hperiod ▸ hperRaw k a
   let f := (finSigmaFinEquiv (n := n)).symm
   have hselected : (∑ k, dim (ι k)) ≤ D := by
@@ -97,7 +97,7 @@ theorem exists_primitive_blocks_at_gcd_factorial {d D N : ℕ}
     calc
       (∑ j, sd (f j).1 (f j).2) = ∑ k, dim (ι k) := by
         rw [Equiv.sum_comp f (fun ka => sd ka.1 ka.2), Fintype.sum_sigma]
-        simp only [htotal]
+        exact Finset.sum_congr rfl (fun k _ => htotal k)
       _ ≤ D := hselected
   have hC1 (j : Fin (∑ k, n k)) :
       Kraus.IsNBlkInjective (B (f j).1 (f j).2) ((D ^ 2 + 1) ^ 2) := by

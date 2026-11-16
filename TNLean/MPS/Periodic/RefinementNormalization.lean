@@ -109,7 +109,7 @@ theorem weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos (μ : Fin r → ℂ) (h�
     exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) (Nat.ne_of_gt hp)).mp hh
   · have hdimSum : (∑ j, sd (e j).1 (e j).2) = ∑ k, dim k := by
       rw [Equiv.sum_comp e (fun ka ↦ sd ka.1 ka.2), Fintype.sum_sigma]
-      simp only [hdimB]
+      exact Finset.sum_congr rfl (fun k _ => hdimB k)
     exact hdimSum.symm.trans hdimFlat
 
 end Blocked
