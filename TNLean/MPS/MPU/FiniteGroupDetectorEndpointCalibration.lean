@@ -102,7 +102,7 @@ interval once its two endpoint actions are calibrated. Exterior spectator
 chains are arbitrary. Project corrected local step for GS24 `detectG`,
 lines 2108–2117; no whole-vector truncation comparison is assumed. -/
 theorem physicalTruncatedInterval_mulVec_trace_wall_of_endpoint_calibration
-    [Fintype X] (Â : (x : X) → Fin d → Matrix (Fin (D x)) (Fin (D x)) ℂ)
+    [Finite X] (Â : (x : X) → Fin d → Matrix (Fin (D x)) (Fin (D x)) ℂ)
     (hÂ : IsSeparatingLeftInverseFamily Â A) {B : G → X → X → ℂ}
     (hB : ad.IsDomainWallFamily e B)
     (el : Fin ℓ[F.tensor g] ≃ Fin d) (er : Fin r[F.tensor g] ≃ Fin d)
@@ -124,6 +124,7 @@ theorem physicalTruncatedInterval_mulVec_trace_wall_of_endpoint_calibration
         B g y z *
           (P p * e y (g • y) a * wallChain (A (g • y)) (e (g • y) (g • z))
             (A (g • z)) μ * e (g • z) z b * Q q).trace := by
+  have : Fintype X := Fintype.ofFinite X
   obtain ⟨N, hN⟩ := ad.groupWallString_mulVec_trace_wall g Â hÂ hB y z
   refine ⟨N, fun k v w n L h hv hw t P Q ψ hψ hleft hright p a μ b q ↦ ?_⟩
   rw [ad.physicalTruncatedInterval_mulVec_eq_groupWallString_of_endpoint_calibration
