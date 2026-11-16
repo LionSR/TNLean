@@ -130,9 +130,10 @@ dot notation in `ALVV/FrustrationFreeRank`, `ALVV/FrustrationFreeThreeRegion`,
 `ViableSet/PowerProjector`, `Hastings/PartCommutators`,
 `Hastings/ProjectorFactorizationScaling` and `Hastings/PositiveFactorization`.
 Where a result feeds an `Entropy.IsSupportedOn` lemma by dot notation, it is
-ascribed that type. The blueprint entries `thm:hastings_supported_conj_transpose`,
-`thm:hastings_projector_factorization_scaled` and `lem:zero_entropy_cut` cite
-`ManyBody.supportedOperators` in place of the deleted names.
+ascribed that type. In the blueprint, `thm:hastings_supported_conj_transpose`
+cites `ManyBody.supportedOperators` in place of the deleted name, and
+`thm:hastings_projector_factorization_scaled` and `lem:zero_entropy_cut` drop
+the deleted names: a declaration is tagged in one entry only.
 
 ## Importers
 
