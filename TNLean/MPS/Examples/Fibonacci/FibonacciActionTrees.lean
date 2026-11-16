@@ -62,6 +62,15 @@ def fibBlockGolden : (a : Fin 2) → Fin 2 → Fin 2 →
 `M_{a,x}^y` of the regular module, as a function of three labels. -/
 def fibMult (a b c : Fin 2) : ℕ := fibNim a b c
 
+/-- Every Fibonacci multiplicity is zero or one, so each multiplicity space has at most one
+element and the trees below need one map per admissible triple. -/
+theorem fibMult_le_one (a b c : Fin 2) : fibMult a b c ≤ 1 := by
+  revert a b c
+  decide
+
+instance (a b c : Fin 2) : Subsingleton (Fin (fibMult a b c)) :=
+  Fin.subsingleton_iff_le_one.mpr (fibMult_le_one a b c)
+
 theorem fibBlock_eq_complexOfGolden (a : Fin 2) :
     fibBlock a = fun i j ↦ complexOfGolden (fibBlockGolden a i j) := by
   fin_cases a <;> rfl
@@ -204,7 +213,8 @@ def fibFusionAnalysisGolden : (a b c : Fin 2) →
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨1, 0, -1, 0⟩]
   | _, _, _ => 0
 
-/-- The complex analysis maps of the fusion trees. -/
+/-- The complex analysis maps of the fusion trees. The multiplicity index is not used: each
+multiplicity space has at most one element (`fibMult_le_one`). -/
 def fibFusionAnalysis (a b c : Fin 2) (_ : Fin (fibMult a b c)) :
     Matrix (Fin (fibBlockDim c)) (Fin (fibBlockDim a * fibBlockDim b)) ℂ :=
   complexOfGolden (fibFusionAnalysisGolden a b c)
@@ -214,7 +224,8 @@ def fibFusionSynthesis (a b c : Fin 2) (_ : Fin (fibMult a b c)) :
     Matrix (Fin (fibBlockDim a * fibBlockDim b)) (Fin (fibBlockDim c)) ℂ :=
   complexOfGolden (fibFusionSynthesisGolden a b c)
 
-/-- The complex analysis maps of the action trees. -/
+/-- The complex analysis maps of the action trees. The multiplicity index is not used: each
+multiplicity space has at most one element (`fibMult_le_one`). -/
 def fibActAnalysis (a x y : Fin 2) (_ : Fin (fibMult a x y)) :
     Matrix (Fin (fibNimDim y)) (Fin (fibBlockDim a * fibNimDim x)) ℂ :=
   complexOfGolden (fibActAnalysisGolden a x y)

@@ -7,7 +7,7 @@ import TNLean.MPS.Examples.Fibonacci.FibonacciActionTrees
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
 
 /-!
-# The L-symbol of the Fibonacci regular module equals its F-symbol
+# The L-symbol of the Fibonacci regular module equals its F-symbol up to gauge
 
 **Source.** Garre-Rubio, Lootens and Molnár 2023 (arXiv:2203.12563),
 `Papers/2203.12563/REsubmission.tex`:
@@ -19,7 +19,7 @@ import TNLean.MPS.MPDO.BoundaryActionLMatrix
   multiplicity spaces, under which `L` becomes
   `X_{az}^y X_{bx}^z X̂_{cx}^y Ŷ_{ab}^c L`, and in the regular module, with one state block
   `x_a` for every operator block `a` and action `a · x_b = ∑_c N_{ab}^c x_c`, "the L-symbols
-  are equal to the F-symbols";
+  are equal to the F-symbols", which is read up to this gauge freedom;
 * lines 1991–1993: for the Fibonacci algebra this regular module, with
   `τ · x_1 = x_τ` and `τ · x_τ = x_1 + x_τ`, is the only realization.
 

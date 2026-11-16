@@ -84,21 +84,21 @@ def mulTensorAssocInvMatrixR (D₁ D₂ D₃ : ℕ) :
     Matrix (Fin (D₁ * (D₂ * D₃))) (Fin (D₁ * D₂ * D₃)) R :=
   (MPOTensor.mulTensorAssocEquiv D₁ D₂ D₃).symm.toPEquiv.toMatrix
 
-theorem complexOfRing_kronIdR {m n : ℕ} (X : Matrix (Fin m) (Fin n) R) (D : ℕ) :
+@[simp] theorem complexOfRing_kronIdR {m n : ℕ} (X : Matrix (Fin m) (Fin n) R) (D : ℕ) :
     complexOfRing f (kronIdR X D) = MPOTensor.kronId (complexOfRing f X) D := by
   ext i j
   simp only [complexOfRing_apply, kronIdR, MPOTensor.kronId, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply, map_mul]
   split_ifs <;> simp
 
-theorem complexOfRing_idKronR {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) R) :
+@[simp] theorem complexOfRing_idKronR {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) R) :
     complexOfRing f (idKronR D X) = MPOTensor.idKron D (complexOfRing f X) := by
   ext i j
   simp only [complexOfRing_apply, idKronR, MPOTensor.idKron, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply, map_mul]
   split_ifs <;> simp
 
-theorem complexOfRing_mulTensorAssocInvMatrixR (D₁ D₂ D₃ : ℕ) :
+@[simp] theorem complexOfRing_mulTensorAssocInvMatrixR (D₁ D₂ D₃ : ℕ) :
     complexOfRing f (mulTensorAssocInvMatrixR D₁ D₂ D₃) =
       MPOTensor.mulTensorAssocInvMatrix D₁ D₂ D₃ := by
   ext i j
@@ -107,7 +107,7 @@ theorem complexOfRing_mulTensorAssocInvMatrixR (D₁ D₂ D₃ : ℕ) :
   split_ifs <;> simp
 
 /-- The trace of the complex image is the image of the trace. -/
-theorem trace_complexOfRing {n : Type*} [Fintype n] (X : Matrix n n R) :
+@[simp] theorem trace_complexOfRing {n : Type*} [Fintype n] (X : Matrix n n R) :
     (complexOfRing f X).trace = f X.trace := by
   simp [Matrix.trace, map_sum]
 
