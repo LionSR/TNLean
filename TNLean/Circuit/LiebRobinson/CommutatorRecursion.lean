@@ -17,6 +17,7 @@ import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Circuit.SupportedOperators
+import QICLean.Analysis.HermitianUnitaryPath
 
 /-!
 # Local commutator recursion for finite-volume Hamiltonians
@@ -41,6 +42,8 @@ The interaction-picture argument gives the finite-volume estimate directly.
 
 ## Main results
 
+* `QuantumCircuit.heisenbergEvolution_eq_hermitianUnitaryPath`: the evolution is conjugation
+  by the unitary path `e^{itH}` of the spectral-filter library.
 * `QuantumCircuit.heisenbergCommutatorNorm_le_integral`: the local commutator
   recursion.
 -/
@@ -384,6 +387,13 @@ theorem heisenbergEvolution_def (H : Matrix (ι → Fin q) (ι → Fin q) ℂ) (
     (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     heisenbergEvolution H t A =
       exp (t • (Complex.I • H)) * A * exp ((-t) • (Complex.I • H)) :=
+  rfl
+
+/-- The Heisenberg evolution is conjugation by the unitary path `e^{itH}`. -/
+theorem heisenbergEvolution_eq_hermitianUnitaryPath (H : Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (t : ℝ) (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+    heisenbergEvolution H t A =
+      Matrix.hermitianUnitaryPath H t * A * Matrix.hermitianUnitaryPath H (-t) :=
   rfl
 
 /-- The norm of the Heisenberg commutator map `A ↦ [τ_t(A), B]`, with
