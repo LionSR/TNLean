@@ -313,7 +313,8 @@ theorem partitionIso_cons_cons_false_false_tmul (f : P → Bool) (r t : Reg P)
 end Layout
 
 /-- Identifying equal layouts conjugates the operator by their canonical isometries. -/
-theorem Circuit.eval_castLayouts {κ : LocalCondition P} {G : Layout P → Layout P → Type 1}
+theorem Circuit.eval_castLayouts {P : Type} {κ : LocalCondition P}
+    {G : Layout P → Layout P → Type 1}
     [GateFamily G] {ℓ ℓ' a b : Layout P} (w : Circuit κ G ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
     (w.castLayouts h h').eval =
       isoL (Layout.memCongr h') ∘L w.eval ∘L isoL (Layout.memCongr h).symm := by
