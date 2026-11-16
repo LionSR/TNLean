@@ -47,6 +47,7 @@ import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationMPSClass
+import TNLean.MPS.MPU.ConjugationOddRankEquivalence
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationStandardForms
 import TNLean.MPS.MPU.ConjugationStrictEquivalence
@@ -233,6 +234,7 @@ import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.StandardFormConjugation
+import TNLean.MPS.MPU.StandardFormDoubling
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample

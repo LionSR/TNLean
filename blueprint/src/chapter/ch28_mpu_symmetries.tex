@@ -2194,12 +2194,45 @@
 
 \begin{corollary}[Equivalence of conjugation-symmetric MPUs after blocking]
     \label{cor:all-equivalent-under-conjugation}
-    \notready
-    \uses{conjphs, def:equivalent-symmetry, lem:mpu_blocking}
-    If either $r$ or $\ell$ is odd, all conjugation-invariant MPUs with these
-    source ranks are equivalent under conjugation symmetry.
+    \lean{MPOTensor.equivalentUnderSymmetry_conjugation_of_odd,
+        MPOTensor.equivalentUnderSymmetry_conjugation_of_blockTensor_blockTwo,
+        MPOTensor.conjugationSymmetryFamily,
+        MPOTensor.TwoSiteStandardFormData.doubled,
+        MPOTensor.det_doubledU_submatrix,
+        MPOTensor.det_doubledV_submatrix}
+    \leanok
+    \discussion{5713}
+    \uses{thm:mpu_conjugation_odd_rank_if, thm:mpu_conjugation_even_rank_if,
+        corconj, def:equivalent-symmetry}
+    Let $\mathcal U_1$ and $\mathcal U_2$ be conjugation-invariant tensors in
+    canonical form II on the same physical dimension $d$, whose standard forms
+    have the same ranks $r$ and $\ell$. If either $r$ or $\ell$ is odd, then
+    $\mathcal U_1$ and $\mathcal U_2$ are equivalent under conjugation
+    symmetry. Since $r\ell=d^2$ for both, the ancillas in the definition of
+    equivalence are trivial.
     % Source lines: paper_v2.tex 1450--1460.
 \end{corollary}
+
+\begin{proof}
+    \leanok
+    Since one rank is odd, a gauge makes both standard forms real
+    (Lemma~\ref{corconj}). The two-site block has the standard form
+    \begin{align}
+        u^{(2)}_{11',22'} & =v_{1'2}u_{11'}u_{22'},
+                          & v^{(2)}_{11',22'}       & =v_{1'2},
+    \end{align}
+    with ranks $\ell d$ and $dr$. Through fixed identifications of the
+    coordinate spaces, $\det u^{(2)}=(\det v)^{r\ell}(\det u)^{2r\ell}$ and
+    $\det v^{(2)}=c(\det v)^{d^2}$, where the sign $c$ depends only on the
+    identifications. As $\det u,\det v=\pm1$ and $r\ell=d^2$, the product
+    $\det(u^{(2)}v^{(2)})$ equals $c$ for both tensors. If $d$ is odd, one of
+    $\ell d$ and $dr$ is odd and
+    Lemma~\ref{thm:mpu_conjugation_odd_rank_if} applies to the two-site
+    blocks. If $d$ is even, both new ranks are even, $\det u^{(2)}=1$ and
+    $\det v^{(2)}=c$ for both tensors, and
+    Lemma~\ref{thm:mpu_conjugation_even_rank_if} applies in Case I. Either way
+    the blocks of four sites are strictly equivalent under conjugation.
+\end{proof}
 
 \begin{corollary}[Admissible equivalence of conjugation-symmetric MPUs after blocking]
     \label{cor:mpu_admissible_all_conjugation_equivalent}
