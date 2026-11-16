@@ -22,7 +22,6 @@ Lemma 6.14, lines 2199–2214. See
 docs/paper-gaps/scp10_dual_face_generator_elimination.tex.
 -/
 
-noncomputable section
 namespace TNLean.PEPS
 
 variable {width height : ℕ}

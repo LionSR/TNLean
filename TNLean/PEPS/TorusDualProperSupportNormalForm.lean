@@ -68,7 +68,10 @@ private theorem presentation_face_one (R : Finset X) (v : X)
   exact Finset.mem_union_right _ (Finset.mem_image.mpr
     ⟨v, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hv⟩, rfl⟩)
 
-private theorem homotopy_iff_eliminated_word_eq (R : Finset X) (l : List (X × Bool))
+/-- Any finite sequence of allowed native face substitutions killing all allowed
+face relators classifies parallel paths by their transformed free-group words.
+The hypotheses are local finite certificate conditions, independent of the paths. -/
+theorem torusDualHomotopy_iff_faceElimination_word_eq (R : Finset X) (l : List (X × Bool))
     (hm : ∀ d ∈ l, (d.1.1 + 1, d.1.2 + 1) ∈ R)
     (hf : ∀ v : X, (v.1 + 1, v.2 + 1) ∈ R →
       torusDualFaceEliminationSequence l (torusDualFaceWord v) = 1)
@@ -109,6 +112,6 @@ theorem exists_torusDualProperSupportNormalForm (R : Finset X)
   obtain ⟨l, hlen, hm, hf⟩ := exists_torusDualFaceEliminationSequence R hR
   refine ⟨l, hlen, hm, ?_⟩
   intro a b p q
-  exact (homotopy_iff_eliminated_word_eq R l hm hf p q).trans FreeGroup.toWord_inj.symm
+  exact (torusDualHomotopy_iff_faceElimination_word_eq R l hm hf p q).trans FreeGroup.toWord_inj.symm
 
 end TNLean.PEPS

@@ -41,6 +41,32 @@
     giving the stated finite bound.
 \end{proof}
 
+\begin{lemma}[A finite face certificate classifies parallel paths]
+    \label{lem:peps_dual_face_certificate_classification}
+    \lean{TNLean.PEPS.torusDualHomotopy_iff_faceElimination_word_eq}\leanok
+    \uses{def:peps_dual_path_word,def:peps_dual_flux_homotopy,
+        def:peps_dual_face_generator_elimination}
+    Let both periods be positive and let $R$ be any allowed primal support.
+    Suppose a finite list uses only allowed faces and its substitution
+    composition $\Sigma$ kills every allowed face relator. For parallel paths,
+    \begin{align}
+        p\sim_Rq\quad\Longleftrightarrow\quad\Sigma(W(p))=\Sigma(W(q)).
+        \label{eq:peps_dual_face_certificate_classification}
+    \end{align}
+    The finite certificate conditions are independent of the compared paths.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_flat_transport_invariance,
+        lem:peps_dual_face_elimination_sequence,
+        lem:peps_dual_finite_presentation_classification,
+        def:peps_dual_finite_presentation}
+    The maps $F_e(z)=\Sigma(W(e))z$ form a reversible transport flat on the
+    allowed squares, proving necessity. For sufficiency the native quotient
+    $\pi_R$ is flat on each selected face, so
+    $\pi_R\circ\Sigma=\pi_R$. Equal transformed words therefore have equal
+    original quotient words, and finite-presentation completeness applies.
+\end{proof}
+
 \begin{lemma}[A reduced-word normal form for every proper square support]
     \label{lem:peps_dual_proper_support_normal_form}
     \lean{TNLean.PEPS.exists_torusDualProperSupportNormalForm}\leanok
