@@ -8,6 +8,7 @@ import QICLean.Channel.FixedPoint.DirectSumBlockRetraction
 import QICLean.Channel.LocalizedKrausCPTP
 import QICLean.Channel.KrausRank
 import QICLean.Channel.Semigroup.CPClosure
+import TNLean.Algebra.MatrixRankReindex
 
 /-!
 # Rank under identity- and trace-preserving positive maps
@@ -82,22 +83,13 @@ theorem rank_le_rank_map_of_unital_tracePreserving
     {X : Matrix α α ℂ} (hX : X.PosSemidef) : X.rank ≤ (T X).rank := by
   classical
   let e : α ≃ Fin (Fintype.card α) := Fintype.equivFin α
-  let E : Matrix α α ℂ ≃ₗ[ℂ]
-      Matrix (Fin (Fintype.card α)) (Fin (Fintype.card α)) ℂ :=
-    Matrix.reindexLinearEquiv ℂ ℂ e e
-  let S := reindexEndomorphism e T
-  have hSPos : IsPositiveMap S := Matrix.IsPositiveMap.reindexEndomorphism hT e
-  have hSTP : IsTracePreservingMap S := Matrix.IsTracePreservingMap.reindexEndomorphism hTP e
-  have hSOne : S 1 = 1 := by
-    simp [S, reindexEndomorphism_apply, Matrix.reindex_apply, hOne]
-  have hRank := rank_le_rank_map_of_unital_tracePreserving_fin
-    hSPos hSTP hSOne (hX.submatrix e.symm)
-  have hSX : S (E X) = E (T X) := by
-    simp [S, E, reindexEndomorphism_apply, Matrix.reindex_apply]
-  change (E X).rank ≤ (S (E X)).rank at hRank
-  rw [hSX] at hRank
-  change (Matrix.reindex e e X).rank ≤ (Matrix.reindex e e (T X)).rank at hRank
-  simpa only [Matrix.rank_reindex] using hRank
+  apply rank_le_rank_map_of_reindexEndomorphism e T ?_ hX
+  intro Y hY
+  have hSOne : reindexEndomorphism e T 1 = 1 := by
+    simp [reindexEndomorphism_apply, Matrix.reindex_apply, hOne]
+  exact rank_le_rank_map_of_unital_tracePreserving_fin
+    (Matrix.IsPositiveMap.reindexEndomorphism hT e)
+    (Matrix.IsTracePreservingMap.reindexEndomorphism hTP e) hSOne hY
 
 end Matrix
 

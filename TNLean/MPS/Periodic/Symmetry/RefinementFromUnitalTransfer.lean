@@ -66,8 +66,13 @@ namespace MPSTensor
 
 /-- Channel divisibility gives a refinement when the target transfer map
 is irreducible and unital, in any bond dimension and including singular
-targets. These two explicit target hypotheses restrict the converse of
-arXiv:1708.00029, Theorem 4.1; no bounded-root assumption is made. -/
+targets.
+
+**Scope restriction (single-block unital target):** Whole-map irreducibility
+and unitality restrict the converse of arXiv:1708.00029, Theorem 4.1,
+lines 812--818. General irreducible form II can have several blocks.
+No bounded-root assumption is made; see
+`docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex`. -/
 theorem isPRefinable_of_isPDivisibleChannel_of_irreducible_unital
     {d D p : ℕ} (B : MPSTensor d D) (hp : 0 < p)
     (hIrr : IsIrreducibleMap (Kraus.transferMap B))

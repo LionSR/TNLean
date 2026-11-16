@@ -9,6 +9,7 @@ import QICLean.Channel.KrausRank
 import QICLean.Channel.LocalizedKrausCPTP
 import QICLean.Channel.FixedPoint.DirectSumBlockRetraction
 import QICLean.Channel.Semigroup.CPClosure
+import TNLean.Algebra.MatrixRankReindex
 
 /-!
 # Rank under injective positive maps
@@ -68,24 +69,14 @@ theorem rank_le_rank_map_of_injective_positive_fintype
     {P : Matrix α α ℂ} (hP : P.PosSemidef) :
     P.rank ≤ (T P).rank := by
   let e : α ≃ Fin (Fintype.card α) := Fintype.equivFin α
-  let E : Matrix α α ℂ ≃ₗ[ℂ]
-      Matrix (Fin (Fintype.card α)) (Fin (Fintype.card α)) ℂ :=
-    Matrix.reindexLinearEquiv ℂ ℂ e e
-  let S := reindexEndomorphism e T
-  have hSpos : IsPositiveMap S := Matrix.IsPositiveMap.reindexEndomorphism hT e
-  have hSinj : Function.Injective S := by
-    intro X Y hXY
-    apply E.symm.injective
-    apply hInjective
-    apply E.injective
-    exact hXY
-  have hEP : (E P).PosSemidef := hP.submatrix e.symm
-  have hRank := rank_le_rank_map_of_injective_positive hSpos hSinj hEP
-  have hSP : S (E P) = E (T P) := by
-    simp [S, E, reindexEndomorphism_apply, Matrix.reindex_apply]
-  rw [hSP] at hRank
-  change (Matrix.reindex e e P).rank ≤ (Matrix.reindex e e (T P)).rank at hRank
-  simpa only [Matrix.rank_reindex] using hRank
+  apply rank_le_rank_map_of_reindexEndomorphism e T ?_ hP
+  intro Y hY
+  let E := Matrix.reindexLinearEquiv ℂ ℂ e e
+  have hSinj : Function.Injective (reindexEndomorphism e T) := by
+    change Function.Injective (E ∘ T ∘ E.symm)
+    exact E.injective.comp (hInjective.comp E.symm.injective)
+  exact rank_le_rank_map_of_injective_positive
+    (Matrix.IsPositiveMap.reindexEndomorphism hT e) hSinj hY
 
 end Matrix
 
