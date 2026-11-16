@@ -255,6 +255,7 @@ import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.ThreeLeggedDecomposition
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
+import TNLean.MPS.MPU.TimeReversalMPSClass
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalSignInvariance

@@ -2749,31 +2749,87 @@
     % Source lines: paper_v2.tex 1791--1805.
 \end{lemma}
 
-\begin{lemma}[Time-reversal class and the MPS sign]
-    \label{prop:dagger-mps-class-and-mpu-class-equal}
-    \notready
-    \discussion{5714}
-    \uses{PropChiral, prop:sigma1-and-sigma2-equal}
-    For a time-reversal-invariant MPU in standard form, the MPS sign
-    $G\overline G=\pm\Id$ equals the sign $\sigma^{(2)}$ obtained after
-    blocking two sites.
-    % Source lines: paper_v2.tex 1807--1829.
+\begin{lemma}[The double layer of a simple MPU squares to its fixed pair]
+    \label{lem:mpu_double_layer_square_fixed_pair}
+    \lean{MPOTensor.IsMPUCanonicalFormII.normalizedDiagonal_sq_eq_fixedPairProjector,
+        MPOTensor.normalizedDiagonal_doubleLayerTensor_blockTwo}
+    \leanok
+    \uses{def:mpu_simple}
+    Let $\mathcal U$ be a simple tensor in canonical form II with right fixed
+    point $\rho$, and let $\mathbb E$ be its normalized double-layer transfer
+    matrix. Then $\mathbb E^2=|\rho)(\Id|$. The normalized double-layer
+    transfer matrix of the two-site block is $\mathbb E^2$.
+    % Source lines: paper_v2.tex 269--281, 356--374, 397--405.
 \end{lemma}
 
-\begin{lemma}[Admissible time-reversal class and the MPS sign]
-    \label{prop:mpu_admissible_mps_time_reversal_class}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (one-, two-, and four-site source data):** the tensors
-    % used to define both $\sigma^{(1)}$ and $\sigma^{(2)}$ carry their own data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{PropChiral, prop:mpu_admissible_sigma_blocking_parity, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let an MPU in the standard form determined by its given source datum
-    be invariant under time reversal.
-    Suppose $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$, together with the
-    physical-adjoint comparison tensors $\mathcal U_2^\sharp$ and
-    $\mathcal U_4^\sharp$, are simple and each carries its own reduced
-    full-support source datum. Then the MPS sign $G\overline G=\pm\Id$ equals
-    the sign $\sigma^{(2)}$.
-    % Source lines: paper_v2.tex 1807--1829.
+\begin{proof}
+    \leanok
+    Summing the second simplicity identity over the diagonal letters gives
+    $\mathbb E^2=\mathbb E|\rho)(\Id|\mathbb E$. Since $\rho$ is a fixed point,
+    $\mathbb E|\rho)(\Id|=|\rho)(\Id|$, and since $\mathbb E$ commutes with
+    its stabilized power $|\rho)(\Id|$, also $|\rho)(\Id|\mathbb E=|\rho)(\Id|$.
+\end{proof}
+
+\begin{lemma}[The twisted trace of a rank-one double layer]
+    \label{lem:mpu_twisted_trace_rank_one}
+    \lean{MPOTensor.sum_trace_mul_map_star_mul_eq}
+    \leanok
+    Let $\mathcal W$ have $d$ physical values and normalized double-layer
+    transfer matrix $|\rho)(\Id|$. Then for all matrices $M,M'$,
+    \begin{align}
+        \sum_{a,b}\tr\bigl(M\,\overline{\mathcal W^{ab}}\,M'\,\mathcal W^{ab}\bigr)
+         & =d\,\tr\bigl(M^TM'\rho\bigr).
+    \end{align}
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    The entries of the double layer give
+    $\sum_{a,b}\overline{\mathcal W^{ab}_{pq}}\mathcal W^{ab}_{\beta\alpha}
+        =d\,\rho_{\beta p}\delta_{\alpha q}$; expanding the trace and summing
+    gives the identity.
+\end{proof}
+
+\begin{lemma}[Time-reversal class and the MPS sign]
+    \label{prop:dagger-mps-class-and-mpu-class-equal}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mps_timeReversal_sign_eq,
+        MPOTensor.IsMPUCanonicalFormII.mps_timeReversal_sign_eq_of_gauge}
+    \leanok
+    \discussion{5714}
+    \uses{PropChiral, eq:sigma-from-trace, prop:sigma-well-defined,
+        lem:mpu_double_layer_square_fixed_pair, lem:mpu_twisted_trace_rank_one}
+    For a time-reversal-invariant MPU in standard form, the MPS sign
+    $G\overline G=\pm\Id$ equals the sign $\sigma^{(2)}$ obtained after
+    blocking two sites: if $G$ is a unitary with
+    $\overline{\mathcal U^{ba}}=\zeta G^\dagger\mathcal U^{ab}G$ for all
+    physical indices, then $G\overline G=\sigma^{(2)}\Id$. Here, as in
+    Lemma~\ref{PropChiral}, the standard form is that of the two-site block of
+    a simple tensor in canonical form II
+    \cite{gap:mpu_standard_form_canonical_convention}, invariance is required
+    at even lengths of the two-spin chain
+    \cite{gap:mpu_standard_form_parity_gap}, $\sigma^{(2)}$ is read from the
+    trace formula of Lemma~\ref{eq:sigma-from-trace} for the two-site block of
+    the standard form, and $G$ may be a gauge of the standard-form tensor or of
+    its two-site block. This is \cite[Proposition~VI.13]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1808--1829.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpu_double_layer_square_fixed_pair, lem:mpu_twisted_trace_rank_one}
+    Write $\mathcal W_2$ for the two-site block of the standard form; its
+    double layer is $|\rho)(\Id|$ by
+    Lemma~\ref{lem:mpu_double_layer_square_fixed_pair}. The gauge relation
+    gives $\mathcal W_2^{ba}=\overline\zeta\,G^T\overline{\mathcal W_2^{ab}}\,\overline G$,
+    so by Lemma~\ref{lem:mpu_twisted_trace_rank_one}
+    \begin{align}
+        \tr(\mathbb S\,U^{(2)}(\mathcal W_2))
+         & =\overline\zeta\sum_{a,b}\tr\bigl(G^T\overline{\mathcal W_2^{ab}}\,\overline G\,\mathcal W_2^{ab}\bigr)
+        =\overline\zeta\,d\,\tr(G\overline G\rho).
+    \end{align}
+    Invariance at length two forces $\zeta=1$. Applying the gauge relation
+    twice and using normality gives $G\overline G=\pm\Id$, and $\tr\rho=1$, so
+    $\sigma^{(2)}=d^{-1}\tr(\mathbb S\,U^{(2)}(\mathcal W_2))$ is the MPS sign.
+    Unlike the source, the argument does not contract the four gates of the
+    blocked standard form.
+\end{proof}
