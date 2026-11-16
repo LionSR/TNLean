@@ -23,6 +23,71 @@
     for some $m_k\ge1$.
 \end{proof}
 
+\begin{lemma}[Primitive sectors at a fixed chain length]
+    \label{lem:finite_length_primitive_blocks}
+    \lean{MPSTensor.exists_primitive_blocks_at_gcd_factorial}
+    \notready
+    \discussion{2947}
+    \uses{thm:periodic_positive_decomposition, thm:periodic_period_le_bondDim,
+        lem:periodic_family_blocking, thm:wielandt_general}
+    Let $A$ have physical dimension $d$ and bond dimension $D$, and let
+    $N>0$. Put $p=\gcd(N,D!)$ and $M=N/p$. Then $p>0$, $p\mid N$,
+    $p\le D!$, and there are period-one left-canonical tensors $B_j$ of
+    positive bond dimensions $D_j$ and coefficients $c_j\ne0$ such that
+    \begin{align}
+        \sum_jD_j & \le D,
+        \notag \\
+        V^{(M)}(A^{[p]}) & =\sum_j c_jV^{(M)}(B_j).
+        \label{eq:finite_length_primitive_blocks}
+    \end{align}
+    Every $B_j$ is injective after $(D^2+1)^2$ blocked sites. The equality
+    is asserted at the specified length $M$.
+\end{lemma}
+\begin{proof}
+    \uses{thm:periodic_positive_decomposition, thm:periodic_period_le_bondDim,
+        thm:pgvwc07_normalized_periodic_state_vector_decomposition,
+        lem:periodic_family_blocking, thm:periodic_weighted_block_refinement,
+        thm:wielandt_general}
+    Write $V^{(N)}(A)=\sum_k\mu_k^NV^{(N)}(A_k)$ with
+    $\sum_kD_k\le D$ using Lemma~\ref{thm:periodic_positive_decomposition}.
+    If the period $m_k$ does not divide $N$, the $k$th vector vanishes by
+    Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}.
+    For each remaining block, $m_k\le D_k\le D$, so $m_k\mid D!$ and
+    $m_k\mid p$. Lemma~\ref{lem:periodic_family_blocking} splits
+    $A_k^{[p]}$ into sectors of period $m_k/\gcd(m_k,p)=1$ whose
+    dimensions sum to $D_k$. Collect these sectors using
+    Lemma~\ref{thm:periodic_weighted_block_refinement}. Their coefficients
+    are $(\mu_k^p)^M\ne0$. Their total dimension is at most $D$, and
+    Theorem~\ref{thm:wielandt_general} gives the common injectivity length.
+\end{proof}
+
+\begin{lemma}[Primitive expansion of a blocked W vector at arbitrary length]
+    \label{lem:w_state_finite_length_primitive_blocks}
+    \lean{MPSTensor.exists_primitive_blocks_of_mpv_eq_smul_wIndicator}
+    \notready
+    \discussion{2947}
+    \uses{lem:finite_length_primitive_blocks, lem:eval_word_block}
+    Suppose the periodic vector of a qubit tensor $A$ on $N>0$ sites is
+    $cW_N$, for any $c\in\C$. Put $p=\gcd(N,D!)$ and $M=N/p$.
+    There are blocks and coefficients with all the properties of
+    Lemma~\ref{lem:finite_length_primitive_blocks} such that, for every
+    blocked configuration $\sigma$, with flattened configuration
+    $\widetilde\sigma$,
+    \begin{align}
+        \sum_j c_j V^{(M)}(B_j)_\sigma
+        & =cW_{Mp}(\widetilde\sigma).
+        \label{eq:w_state_finite_length_primitive_blocks}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \uses{lem:finite_length_primitive_blocks, lem:eval_word_block}
+    Apply Lemma~\ref{lem:finite_length_primitive_blocks}. By
+    Lemma~\ref{lem:eval_word_block}, the blocked coefficient is the
+    original coefficient on $Mp=N$ flattened sites. Substitution of the
+    original W-vector equality gives
+    (\ref{eq:w_state_finite_length_primitive_blocks}).
+\end{proof}
+
 \begin{definition}[$p$-divisible CP map]
     \label{def:p_divisible_channel}
     \lean{MPSTensor.IsPDivisibleChannel}
@@ -145,6 +210,30 @@
     Compress to the ranges of these projections. Their dimensions sum to $D$,
     and the commuting projection resolution preserves both left canonicality
     and traces of every word. The empty-word trace gives the same dimension sum.
+\end{proof}
+
+\begin{lemma}[Prescribed blocking of a finite periodic family]
+    \label{lem:periodic_family_blocking}
+    \lean{MPSTensor.exists_periodic_family_blockDecomposition}
+    \notready
+    \uses{thm:periodic_prescribed_blocking_compression}
+    Let $A_k$ be a finite family of period-$m_k$ tensors of bond
+    dimensions $D_k$, and let $p>0$. Set $n_k=\gcd(m_k,p)$.
+    For every $k$, there are $n_k$ period-$(m_k/n_k)$ tensors $B_{k,a}$ of
+    positive dimensions $D_{k,a}$ satisfying
+    \begin{align}
+        \sum_{a=0}^{n_k-1}D_{k,a} & =D_k,
+        \notag \\
+        V^{(L)}(A_k^{[p]}) & =\sum_{a=0}^{n_k-1}V^{(L)}(B_{k,a})
+        \label{eq:periodic_family_blocking}
+    \end{align}
+    at every length $L\ge0$.
+\end{lemma}
+\begin{proof}
+    \uses{thm:periodic_prescribed_blocking_compression}
+    Apply Lemma~\ref{thm:periodic_prescribed_blocking_compression} to each
+    $A_k$ at the prescribed length $p$, retaining the sector dimensions
+    and the unit-weight comparison of periodic vectors.
 \end{proof}
 
 \begin{lemma}[Step-orbit compression of a periodic tensor]

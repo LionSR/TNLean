@@ -20,7 +20,8 @@ similarity. The explicit orbit isometries remain available from
 needed for the corrected forward theorem is a separate construction.
 
 **Scope restriction (length, representation, and normalization):** the
-presentations here are values of `IsIrreducibleForm`, a normalized MPV-level
+presentation supplied to `IsIrreducibleForm.block` is a value of
+`IsIrreducibleForm`, a normalized MPV-level
 representation of the source irreducible form that also imposes empty-word
 equality. Documented in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 -/
@@ -30,6 +31,25 @@ open scoped BigOperators Matrix
 namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ}
+
+/-- Prescribed positive blocking of a finite periodic family, retaining the sector dimensions
+and the unit-weight MPV comparison for each original block.
+Source: arXiv:1708.00029, `lem:blocking-arbitrary`, lines 432–456. -/
+theorem exists_periodic_family_blockDecomposition
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (A k))
+    {p : ℕ} (hp : 0 < p) :
+    let n := fun k => (period k).gcd p
+    ∃ (sd : (k : Fin r) → Fin (n k) → ℕ)
+      (B : (k : Fin r) → (a : Fin (n k)) → MPSTensor (blockPhysDim d p) (sd k a)),
+      (∀ k a, 0 < sd k a) ∧ (∀ k, (∑ a, sd k a) = dim k) ∧
+      (∀ k a, IsPeriodic (period k / n k) (B k a)) ∧
+      ∀ k, SameMPV₂ (blockTensor (A k) p) (toTensorFromBlocks (fun _ => 1) (B k)) := by
+  classical
+  have hex (k : Fin r) := (hper k).exists_stepOrbit_blockDecomposition p
+  choose P sd B V hproj hsum hne hshift hdim htotal hcan hSame hiso hV hcomp hperiod
+    using hex
+  exact ⟨sd, B, hdim, htotal, (fun k => hperiod k hp), hSame⟩
 
 /-- Refining each summand by a unit-weight block presentation commutes with taking
 a weighted block sum. Each refined block inherits its original summand's weight.
@@ -64,15 +84,8 @@ noncomputable def IsIrreducibleForm.block {D : ℕ} {A : MPSTensor d D}
     IsIrreducibleForm (blockTensor A p) := by
   classical
   let n : Fin h.r → ℕ := fun k ↦ (h.period k).gcd p
-  have hex (k : Fin h.r) :
-      ∃ (sd : Fin (n k) → ℕ)
-        (B : (a : Fin (n k)) → MPSTensor (blockPhysDim d p) (sd a)),
-        (∀ a, IsPeriodic (h.period k / n k) (B a)) ∧
-        SameMPV₂ (blockTensor (h.blocks k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
-    obtain ⟨_, sd, B, _, _, _, _, _, _, _, _, hSame, _, _, _, hper⟩ :=
-      (h.periodic k).exists_stepOrbit_blockDecomposition p
-    exact ⟨sd, B, hper hp, hSame⟩
-  choose sd B hper hSame using hex
+  obtain ⟨sd, B, _, _, hper, hSame⟩ :=
+    exists_periodic_family_blockDecomposition h.blocks h.period h.periodic hp
   let e := (finSigmaFinEquiv (n := n)).symm
   refine {
     r := ∑ k, n k

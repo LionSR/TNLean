@@ -7601,17 +7601,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the periodic application uses the inverse unitary orientation.
   Below the three-occurrence promotion threshold; no custom tactic introduced.
 
-### Selecting and flattening prescribed orbit blocks — candidate
+### Selecting and flattening prescribed orbit blocks — promoted (2026-11-15)
 - **Pattern:** choose the prescribed periodic decomposition separately for each
   original block, flatten `(original block, orbit)` with `finSigmaFinEquiv`,
   and transport the weighted MPV identity through that enumeration.
-- **Seen:** two occurrences in `IsIrreducibleForm.block` in
+- **Seen:** `IsIrreducibleForm.block` in
   `TNLean/MPS/Periodic/IrreducibleFormBlocking.lean` and
   `weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos` in
-  `TNLean/MPS/Periodic/RefinementNormalization.lean` (2026-09-30).
-- **Abstraction (proposed):** a family-level decomposition lemma returning
-  the chosen blocks and dimension identities if a third consumer appears.
-  The shared weighted-sum refinement is already a separate theorem.
+  `TNLean/MPS/Periodic/RefinementNormalization.lean`, followed by
+  `exists_primitive_blocks_at_gcd_factorial` in
+  `TNLean/MPS/CanonicalForm/FiniteLengthPrimitiveBlocks.lean`.
+- **Abstraction:** `exists_periodic_family_blockDecomposition` returns the
+  chosen sector families, positive dimensions, dimension sums, periods and
+  unit-weight MPV comparisons. All three consumers use it. The weighted-sum
+  flattening continues to use `sameMPV₂_toTensorFromBlocks_refinement`.
 
 ### measurement-assisted GHZ protocol on two site layouts — candidate
 - **Pattern:** the Example 1 protocol of arXiv:2103.13367 written twice: the

@@ -81,16 +81,8 @@ theorem weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos (μ : Fin r → ℂ) (h�
     (∀ k, ‖μ k‖ = 1) ∧ (∑ k, dim k) = Q.totalDim := by
   classical
   let n : Fin r → ℕ := fun k ↦ (period k).gcd p
-  have hex (k : Fin r) :
-      ∃ (sd : Fin (n k) → ℕ)
-        (B : (a : Fin (n k)) → MPSTensor (blockPhysDim d p) (sd a)),
-        (∑ a, sd a) = dim k ∧
-        (∀ a, IsPeriodic (period k / n k) (B a)) ∧
-        SameMPV₂ (blockTensor (A k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
-    obtain ⟨_, sd, B, _, _, _, _, _, _, hd, _, hSame, _, _, _, hperB⟩ :=
-      (hper k).exists_stepOrbit_blockDecomposition p
-    exact ⟨sd, B, hd, hperB hp, hSame⟩
-  choose sd B hdimB hperB hSameB using hex
+  obtain ⟨sd, B, _, hdimB, hperB, hSameB⟩ :=
+    exists_periodic_family_blockDecomposition A period hper hp
   let e := (finSigmaFinEquiv (n := n)).symm
   have hflat := sameMPV₂_toTensorFromBlocks_refinement (fun k ↦ μ k ^ p)
     (fun k ↦ blockTensor (A k) p) n sd B hSameB

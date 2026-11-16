@@ -24,6 +24,7 @@ import TNLean.MPS.CanonicalForm.CyclicSectors
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.Existence
 import TNLean.MPS.CanonicalForm.FaithfulStationaryClosure
+import TNLean.MPS.CanonicalForm.FiniteLengthPrimitiveBlocks
 import TNLean.MPS.CanonicalForm.FixedLengthIntertwiner
 import TNLean.MPS.CanonicalForm.InjectivePeriodicCuts
 import TNLean.MPS.CanonicalForm.NormalReduction
