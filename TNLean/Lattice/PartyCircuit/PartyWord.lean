@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.TensorProductRegrouping
-import TNLean.Lattice.PartyCircuit.PairEffectElimination
+import TNLean.Lattice.PartyCircuit.CircuitSyntax
 
 /-!
 # Registers of parties and source-only words
@@ -31,7 +30,7 @@ positions, so no permutation of pair registers is needed (`stackIso_insWord`).
 
 * `PartyCircuit.Reg`, `PartyCircuit.Layout`, `PartyCircuit.Mem` : registers with owners, layouts and
   their memory spaces.
-* `PartyCircuit.Word` : source-only words, with `Word.eval` and `Word.IsAllowed`.
+* `PartyCircuit.Word` : source-only words, with `Circuit.eval` and `Circuit.IsAllowed`.
 * `PartyCircuit.IsSourceOnly` : an operator between memories that is the operator of an
   allowed source-only word.
 * `PartyCircuit.pairRegs`, `PartyCircuit.stackIso` : stacks of pair registers.
@@ -58,41 +57,57 @@ namespace TNLean.Lattice.PartyCircuit
 
 open EuclideanSpace CyclicInsertion ContinuousLinearMap
 
-/-! ### Registers, layouts and memory spaces -/
-
-/-- A register: an owner party and a Hilbert space.
-
-Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 23–25: a party is
-a label for a collection of registers, and the memory is the tensor product of the parties'
-spaces. -/
-structure Reg (P : Type) : Type 1 where
-  /-- The party owning the register. -/
-  owner : P
-  /-- The Hilbert space of the register. -/
-  space : HSpace
-
-/-- A layout: a list of registers.  The order only fixes the order of the tensor factors. -/
-abbrev Layout (P : Type) : Type 1 := List (Reg P)
-
 variable {P : Type}
-
-/-- The memory space of a layout: the tensor product of its registers. -/
-@[reducible] def Mem : Layout P → HSpace
-  | [] => HSpace.of ℂ
-  | r :: ℓ => HSpace.of (r.space ⊗[ℂ] Mem ℓ)
-
-/-- The Euclidean space `ℂ^α` as a register space. -/
-abbrev euc (α : Type) [Fintype α] : HSpace := HSpace.of (EuclideanSpace ℂ α)
-
-/-- The memory of a concatenation is the tensor product of the memories. -/
-def appendIso : (ℓ₁ ℓ : Layout P) → Mem (ℓ₁ ++ ℓ) ≃ₗᵢ[ℂ] Mem ℓ₁ ⊗[ℂ] Mem ℓ
-  | [], ℓ => (TensorProduct.lidIsometry ℂ (Mem ℓ)).symm
-  | r :: ℓ₁, ℓ => ((appendIso ℓ₁ ℓ).lTensor r.space).trans
-      (TensorProduct.assocIsometry ℂ r.space (Mem ℓ₁) (Mem ℓ)).symm
 
 /-! ### Source-only words -/
 
-/-- A source-only word from the layout `ℓ` to the layout `ℓ'`.
+/-- A pair source: preparation of the pair vector `η ∈ U ⊗ V` on a fresh register `U` of `p`
+and a fresh register `V` of `q ≠ p`, in front of the layout `ℓ`.
+
+Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 32–35. -/
+inductive SourceGate : Layout P → Layout P → Type 1
+  | mk {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V) (ℓ : Layout P) :
+      SourceGate ℓ (⟨p, U⟩ :: ⟨q, V⟩ :: ℓ)
+
+namespace SourceGate
+
+/-- The operator of a pair source: the pair vector is prepared in front of the memory. -/
+@[simp] def eval : {a b : Layout P} → SourceGate a b → (Mem a →L[ℂ] Mem b)
+  | _, _, .mk _ U V η ℓ => assocL U V (Mem ℓ) ∘L appendLeft η
+
+/-- A pair source is allowed when its vector is normalized. -/
+@[simp] def IsAllowed : {a b : Layout P} → SourceGate a b → Prop
+  | _, _, .mk _ _ _ η _ => ‖η‖ = 1
+
+open Classical in
+/-- The two parties joined by a pair source. -/
+@[simp] def participants : {a b : Layout P} → SourceGate a b → Finset P
+  | _, _, @SourceGate.mk _ p q _ _ _ _ _ => {p, q}
+
+end SourceGate
+
+/-- Pair sources as a gate family. -/
+instance : GateFamily (SourceGate (P := P)) where
+  eval := SourceGate.eval
+  IsAllowed := SourceGate.IsAllowed
+  norm_eval_le_one
+    | .mk _ _ _ _ _, h => norm_comp_le_one norm_assocL_le ((norm_appendLeft_le _).trans h.le)
+  participants := SourceGate.participants
+
+@[simp] theorem SourceGate.gateFamily_eval {a b : Layout P} (g : SourceGate a b) :
+    GateFamily.eval g = g.eval :=
+  rfl
+
+@[simp] theorem SourceGate.gateFamily_isAllowed {a b : Layout P} (g : SourceGate a b) :
+    GateFamily.IsAllowed g ↔ g.IsAllowed :=
+  Iff.rfl
+
+@[simp] theorem SourceGate.gateFamily_participants {a b : Layout P} (g : SourceGate a b) :
+    GateFamily.participants g = g.participants :=
+  rfl
+
+/-- A source-only word from the layout `ℓ` to the layout `ℓ'`: a circuit whose gates are pair
+sources, with arbitrary local maps.
 
 * `id`, `comp` : the empty word and composition.
 * `localMap p h₁ h₂ U ℓ` : a local map `U` from registers `ℓ₁` of the party `p` to registers
@@ -107,73 +122,79 @@ the parties' spaces, in which the order of factors carries no information.
 
 Polynomial-PEPS manuscript (September 24, 2026), allowed monomials without pair effects,
 `04-compression.tex`, lines 32–35 and 65–66. -/
-inductive Word : Layout P → Layout P → Type 1
-  | id (ℓ : Layout P) : Word ℓ ℓ
-  | comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : Word ℓ₁ ℓ₂) (w' : Word ℓ₂ ℓ₃) : Word ℓ₁ ℓ₃
-  | localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
-      (h₂ : ∀ r ∈ ℓ₂, r.owner = p) (U : Mem ℓ₁ →L[ℂ] Mem ℓ₂) (ℓ : Layout P) :
-      Word (ℓ₁ ++ ℓ) (ℓ₂ ++ ℓ)
-  | source {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V) (ℓ : Layout P) :
-      Word ℓ (⟨p, U⟩ :: ⟨q, V⟩ :: ℓ)
-  | swap (r r' : Reg P) (ℓ : Layout P) : Word (r :: r' :: ℓ) (r' :: r :: ℓ)
-  | frame (r : Reg P) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') : Word (r :: ℓ) (r :: ℓ')
+abbrev Word : Layout P → Layout P → Type 1 := Circuit LocalCondition.any SourceGate
 
 namespace Word
 
-/-- The operator of a source-only word. -/
-def eval : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → (Mem ℓ →L[ℂ] Mem ℓ')
-  | _, _, id _ => ContinuousLinearMap.id ℂ _
-  | _, _, comp w w' => w'.eval ∘L w.eval
-  | _, _, @localMap _ _ ℓ₁ ℓ₂ _ _ U ℓ =>
-      isoL (appendIso ℓ₂ ℓ).symm ∘L U.rTensor (Mem ℓ) ∘L isoL (appendIso ℓ₁ ℓ)
-  | _, _, source _ U V η ℓ => assocL U V (Mem ℓ) ∘L appendLeft η
-  | _, _, swap r r' ℓ => leftCommL r.space r'.space (Mem ℓ)
-  | _, _, frame r w => w.eval.lTensor r.space
+/-- The empty circuit. -/
+@[match_pattern] abbrev id (ℓ : Layout P) : Word ℓ ℓ := Circuit.id ℓ
 
-/-- A source-only word is allowed when its local maps are contractions and its pair vectors are
-normalized.
+/-- Composition, in chronological order. -/
+@[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : Word ℓ₁ ℓ₂) (w' : Word ℓ₂ ℓ₃) :
+    Word ℓ₁ ℓ₃ :=
+  Circuit.comp w w'
 
-Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 32–35. -/
-def IsAllowed : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → Prop
-  | _, _, id _ => True
-  | _, _, comp w w' => w.IsAllowed ∧ w'.IsAllowed
-  | _, _, localMap _ _ _ U _ => ‖U‖ ≤ 1
-  | _, _, source _ _ _ η _ => ‖η‖ = 1
-  | _, _, swap .. => True
-  | _, _, frame _ w => w.IsAllowed
+/-- A local map on registers of one party, next to untouched registers. -/
+@[match_pattern] abbrev localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
+    (h₂ : ∀ r ∈ ℓ₂, r.owner = p) (U : Mem ℓ₁ →L[ℂ] Mem ℓ₂) (ℓ : Layout P) :
+    Word (ℓ₁ ++ ℓ) (ℓ₂ ++ ℓ) :=
+  Circuit.localMap p h₁ h₂ U ℓ True.intro
 
-theorem norm_eval_le_one : {ℓ ℓ' : Layout P} → (w : Word ℓ ℓ') → w.IsAllowed → ‖w.eval‖ ≤ 1
-  | _, _, id _, _ => ContinuousLinearMap.norm_id_le
-  | _, _, comp w w', h => norm_comp_le_one (norm_eval_le_one w' h.2) (norm_eval_le_one w h.1)
-  | _, _, localMap _ _ _ _ _, h => norm_comp_le_one (LinearIsometry.norm_toContinuousLinearMap_le _)
-      (norm_comp_le_one ((norm_rTensor_le _ _).trans h)
-        (LinearIsometry.norm_toContinuousLinearMap_le _))
-  | _, _, source _ _ _ _ _, h => norm_comp_le_one norm_assocL_le
-      ((norm_appendLeft_le _).trans h.le)
-  | _, _, swap .., _ => norm_leftCommL_le
-  | _, _, frame _ w, h => (norm_lTensor_le _ _).trans (norm_eval_le_one w h)
+/-- Exchange of two adjacent tensor factors. -/
+@[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : Word (r :: r' :: ℓ) (r' :: r :: ℓ) :=
+  Circuit.swap r r' ℓ
 
-@[simp] theorem eval_comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : Word ℓ₁ ℓ₂) (w' : Word ℓ₂ ℓ₃) :
-    (comp w w').eval = w'.eval ∘L w.eval :=
-  rfl
+/-- A circuit next to an untouched register. -/
+@[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
+    Word (r :: ℓ) (r :: ℓ') :=
+  Circuit.frame r w
 
-theorem eval_frame (r : Reg P) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
-    (frame r w).eval = w.eval.lTensor r.space :=
-  rfl
+/-- The pair source as a word. -/
+@[match_pattern] abbrev source {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V)
+    (ℓ : Layout P) : Word ℓ (⟨p, U⟩ :: ⟨q, V⟩ :: ℓ) :=
+  Circuit.gate (SourceGate.mk hpq U V η ℓ)
+
+/-- A circuit framed by a list of untouched registers. -/
+abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : Word ℓ ℓ') :
+    Word (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
+  Circuit.frameList ℓ₀ w
+
+/-- Identify equal input and output layouts without adding an operation. -/
+abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
+    Word a b :=
+  Circuit.castLayouts w h h'
+
+/-- Induction on the constructors of `Word`. -/
+@[induction_eliminator, elab_as_elim]
+theorem induction {motive : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → Prop}
+    (id : ∀ ℓ : Layout P, motive (Word.id ℓ))
+    (comp : ∀ {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : Word ℓ₁ ℓ₂) (w' : Word ℓ₂ ℓ₃),
+      motive w → motive w' → motive (Word.comp w w'))
+    (localMap : ∀ (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
+      (h₂ : ∀ r ∈ ℓ₂, r.owner = p) (U : Mem ℓ₁ →L[ℂ] Mem ℓ₂) (ℓ : Layout P),
+      motive (Word.localMap p h₁ h₂ U ℓ))
+    (source : ∀ {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V) (ℓ : Layout P),
+      motive (Word.source hpq U V η ℓ))
+    (swap : ∀ (r r' : Reg P) (ℓ : Layout P), motive (Word.swap r r' ℓ))
+    (frame : ∀ (r : Reg P) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ'),
+      motive w → motive (Word.frame r w))
+    {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') : motive w := by
+  induction w with
+  | id ℓ₀ => exact id ℓ₀
+  | comp w w' ih ih' => exact comp w w' ih ih'
+  | localMap p h₁ h₂ U ℓ => exact localMap p h₁ h₂ U ℓ
+  | gate g => cases g with | mk hpq U V η => exact source hpq U V η _
+  | swap r r' ℓ => exact swap r r' ℓ
+  | frame r w ih => exact frame r w ih
 
 theorem eval_source {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V) (ℓ : Layout P) :
     (source hpq U V η ℓ).eval = assocL U V (Mem ℓ) ∘L appendLeft η :=
   rfl
 
-/-- A word framed by a list of untouched registers. -/
-def frameList {ℓ ℓ' : Layout P} : (ℓ₀ : Layout P) → Word ℓ ℓ' → Word (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ')
-  | [], w => w
-  | r :: ℓ₀, w => frame r (frameList ℓ₀ w)
-
-theorem isAllowed_frameList {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (hw : w.IsAllowed) :
-    (ℓ₀ : Layout P) → (frameList ℓ₀ w).IsAllowed
-  | [] => hw
-  | _ :: ℓ₀ => isAllowed_frameList w hw ℓ₀
+/-- A pair source is allowed exactly when its vector is normalized. -/
+theorem isAllowed_source {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V) (ℓ : Layout P) :
+    (source hpq U V η ℓ).IsAllowed ↔ ‖η‖ = 1 :=
+  Iff.rfl
 
 end Word
 
@@ -251,7 +272,7 @@ theorem pairHeadIso_frame {ℓ ℓ' : Layout P} (W : Word ℓ ℓ')
       W.eval.lTensor _ (pairHeadIso ℓ z) := by
   induction z using tmul₃_induction with
   | tmul x y t =>
-      simp only [Word.eval_frame, lTensor_tmul]
+      simp only [Circuit.eval_frame, lTensor_tmul]
       rw [pairHeadIso_tmul, pairHeadIso_tmul, lTensor_tmul]
   | add a b ha hb => simp only [map_add, ha, hb]
 
@@ -350,7 +371,7 @@ Polynomial-PEPS manuscript (September 24, 2026), `04-compression.tex`, lines 75�
 def prepWord : (n : ℕ) → (ℓ : Layout P) → Word ℓ (pairsOn p q α β n ℓ)
   | 0, ℓ => .id ℓ
   | n + 1, ℓ => .comp (prepWord n ℓ)
-      (.source hpq (euc α) (euc β) (pairVec η) (pairsOn p q α β n ℓ))
+      (Word.source hpq (euc α) (euc β) (pairVec η) (pairsOn p q α β n ℓ))
 
 theorem isAllowed_prepWord (hη : ‖η‖ = 1) : (n : ℕ) → (ℓ : Layout P) →
     (prepWord hpq η n ℓ).IsAllowed
@@ -365,7 +386,7 @@ theorem stackIso_prepWord : (n : ℕ) → (ℓ : Layout P) → (x : Mem ℓ) →
       rfl
   | n + 1, ℓ, x => by
       rw [stackIso_succ]
-      simp only [prepWord, Word.eval_comp, comp_apply]
+      simp only [prepWord, Circuit.eval_comp, comp_apply]
       rw [pairHeadIso_source, lTensor_tmul]
       simp only [isoL_apply]
       rw [stackIso_prepWord n ℓ x, consRearr_tmul, ← tensorPower_succ]
@@ -379,7 +400,7 @@ permutation of the pair registers. -/
 def insWord {ℓ : Layout P} : (m : ℕ) → Fin m →
     Word (⟨p, euc α⟩ :: ⟨q, euc β⟩ :: ℓ) (pairsOn p q α β m ℓ)
   | n + 1, ⟨0, _⟩ => .frame _ (.frame _ (prepWord hpq η n ℓ))
-  | n + 1, ⟨k + 1, hk⟩ => .comp (.source hpq (euc α) (euc β) (pairVec η) _)
+  | n + 1, ⟨k + 1, hk⟩ => .comp (Word.source hpq (euc α) (euc β) (pairVec η) _)
       (.frame _ (.frame _ (insWord n ⟨k, Nat.lt_of_succ_lt_succ hk⟩)))
 
 theorem isAllowed_insWord (hη : ‖η‖ = 1) {ℓ : Layout P} : (m : ℕ) → (k : Fin m) →
@@ -408,7 +429,7 @@ theorem stackIso_insWord {ℓ : Layout P} : (m : ℕ) → (k : Fin m) →
   | n + 1, ⟨k + 1, hk⟩, u => by
       induction u using tmul₃_induction with
       | tmul x y s =>
-          simp only [insWord, Word.eval_comp, comp_apply]
+          simp only [insWord, Circuit.eval_comp, comp_apply]
           rw [stackIso_succ, pairHeadIso_frame, pairHeadIso_source, lTensor_tmul, lTensor_tmul]
           simp only [isoL_apply]
           rw [stackIso_insWord n ⟨k, Nat.lt_of_succ_lt_succ hk⟩, pairHeadIso_tmul,

@@ -256,9 +256,9 @@ theorem eval_blockRenameWord (o₁ i₁ o₂ i₂ : Layout Party) (own₁ own₂
     siteVec_congr _ _ fun x hx => by simp [c₁', (mem_listT mem_sites x).mp hx]
   have hN₂ : siteVec own₂ (listR (sites ι) Y) c₂ = siteVec own₂ (listR (sites ι) Y) c₂' :=
     siteVec_congr _ _ fun x hx => by simp [c₂', (mem_listR mem_sites x).mp hx]
-  simp only [blockRenameWord, Word.eval_comp, ContinuousLinearMap.comp_apply]
-  simp only [Word.eval_frameList_appendIso_symm, eval_partWordApp, hY₁, hN₁]
-  simp only [Word.eval_frameList_appendIso_symm, eval_partWord, hY₂, hN₂, Word.eval_swapPairs,
+  simp only [blockRenameWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply]
+  simp only [Circuit.eval_frameList_appendIso_symm, eval_partWordApp, hY₁, hN₁]
+  simp only [Circuit.eval_frameList_appendIso_symm, eval_partWord, hY₂, hN₂, Word.eval_swapPairs,
     eval_relabelSitesApp, eval_relabelSites, eval_unpartWord, eval_unpartWordApp]
 
 /-- The renaming is a reordering: an allowed word using no party and no pair source. -/

@@ -66,7 +66,7 @@ theorem SwapsMeet.mono {f g : P → Bool} (hfg : ∀ p, f p = true → g p = tru
   | frame _ _ ih => exact ih hw
 
 theorem swapsMeet_frameList (f : P → Bool) {ℓ ℓ' : Layout P} {w : Word ℓ ℓ'}
-    (hw : w.SwapsMeet f) : (ℓ₀ : Layout P) → (frameList ℓ₀ w).SwapsMeet f
+    (hw : w.SwapsMeet f) : (ℓ₀ : Layout P) → Word.SwapsMeet f (frameList ℓ₀ w)
   | [] => hw
   | _ :: ℓ₀ => swapsMeet_frameList f hw ℓ₀
 

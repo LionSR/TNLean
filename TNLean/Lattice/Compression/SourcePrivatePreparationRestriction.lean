@@ -49,6 +49,7 @@ private theorem restrict_framed_privatePreparation_none_eval_heq_id {a : Layout 
     (by simp [Word.sources_mapOwner, ψ.sources_prepare])
   exact hframe.trans hprepare
 
+set_option maxHeartbeats 400000 in -- comparing party layouts unfolds the shared circuit syntax
 /-- Preparing the recorded private product input, framed by the actual source
 registers, acts as the identity at the exterior owner.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,

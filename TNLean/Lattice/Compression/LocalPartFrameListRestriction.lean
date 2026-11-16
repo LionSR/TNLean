@@ -30,7 +30,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
 351–381, 409–434 and 565–588. -/
 theorem restrict_localPart_frameList_eval_heq (f : P → Bool) (tail : Layout P)
     {a b : Layout P} (w : Word a b) (hs : Layout.restrict f w.sources.layout = []) :
-    HEq ((frameList tail w).localPart.restrict f (frameList tail w).sources_localPart).eval
+    HEq ((Word.localPart (frameList tail w)).restrict f (Word.sources_localPart
+        (frameList tail w))).eval
       (frameList (Layout.restrict f tail) (w.localPart.restrict f w.sources_localPart)).eval := by
   induction tail with
   | nil => rfl

@@ -115,6 +115,7 @@ private theorem restrict_embedded_branch_spectators_eval_heq_id_of_eq
     (restrict_embedded_branch_spectators_eval_heq_id
     (P := P) (C := C) (a := a) (b := b) owner u tail p howner)
 
+set_option maxHeartbeats 400000 in -- comparing party layouts unfolds the shared circuit syntax
 /-- An original party outside a gate's participants retains only its mapped
 spectator registers in the actual all-party branch. The restriction of the
 remaining operations is the identity on those spectators. No label is chosen
@@ -164,7 +165,7 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
     refine (Word.restrict_localPart_eval_heq_of_sources_nil f _ hs).trans ?_
     unfold Word.groupedBlockMap
     rw [Word.restrict_castLayouts f _ _ _ rfl]
-    exact (Word.eval_castLayouts_heq _ _ _).trans
+    exact (Circuit.eval_castLayouts_heq _ _ _).trans
       (Word.restrict_localMap_false_eval_heq f none _ _ _ _
         (by simp [f, q, partySelector]))
 

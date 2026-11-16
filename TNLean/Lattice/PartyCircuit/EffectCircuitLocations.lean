@@ -46,7 +46,6 @@ theorem participants_castLocationsEquiv {a b a' b' : Layout P} (w : SourceCircui
   cases h
   cases h'
   rfl
-
 /-- Retaining preceding registers creates no nonprivate gate occurrence.
 Source: polynomial-PEPS 04-compression.tex, lines 210–229. -/
 def frameListLocationsEquiv {a b : Layout P} (w : SourceCircuit a b) :
