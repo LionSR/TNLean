@@ -372,7 +372,8 @@ private theorem isSupportedOn_bondComplement
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondComplement h i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
-    exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sub_mem (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
+    exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sub_mem
+      (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
     exact Entropy.isSupportedOn_one _
 

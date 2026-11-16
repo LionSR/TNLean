@@ -411,7 +411,7 @@ theorem ChainHamiltonian.isSupportedOn_commutator_bufferPart (h : ChainHamiltoni
       (h.operator * h.bufferPart j m - h.bufferPart j m * h.operator)
       (interval L (j - m - 2 * R) (j - m + R) ∪ interval L (j + m - R) (j + m + 2 * R)) := by
   rw [h.commutator_bufferPart_eq]
-  exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).neg_mem ((ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).add_mem
+  exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).neg_mem (add_mem
     ((h.isSupportedOn_commutator_leftPart j m).mono Finset.subset_union_left)
     ((h.isSupportedOn_commutator_rightPart j m).mono Finset.subset_union_right))
 

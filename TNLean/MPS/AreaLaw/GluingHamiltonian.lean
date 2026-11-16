@@ -54,7 +54,8 @@ theorem ChainHamiltonian.cutLeftPart_isSupportedOn (h : ChainHamiltonian L q 1 1
 theorem ChainHamiltonian.cutBoundaryPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
-  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦ (h.supported X).mono ?_
+  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+    (h.supported X).mono ?_
   have hX' := (Finset.mem_filter.mp hX).2
   obtain ⟨y, hy, hyA⟩ := Finset.not_subset.mp hX'
   have hyk : k ≤ y.val := by simpa [mem_interval, not_lt] using hyA
