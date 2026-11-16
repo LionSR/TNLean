@@ -52,7 +52,7 @@ theorem rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one {d m D : ℕ}
       rotatePhysical E A := by
   ext i a b
   simp only [rotatePhysical, Matrix.sum_apply, Matrix.smul_apply,
-    Matrix.submatrix_apply, smul_eq_mul, blockTensor, Kraus.blockTensor_one_apply]
+    Matrix.submatrix_apply, smul_eq_mul, Kraus.blockTensor_one_apply, id]
   exact
     (Equiv.sum_comp (singleBlockEquiv d) (fun j => E i j * A j a b))
 
