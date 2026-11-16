@@ -207,6 +207,11 @@ For the MPU index of arXiv:1703.09188:
   direct local cross-section of the local-unitary action on the gates, built
   from the nearest Kronecker product and the polar factor; the continuity of
   the second gate is read off the circuits on two and three blocks.
+- `mpu_time_reversal_blocking_parity_route.tex` (local correction, resolved)
+  records that the blocking parity of the time-reversal sign is proved, for
+  arbitrary standard forms of the blocked tensors, through the intrinsic trace
+  of the blocked periodic operators instead of the source's unwinding of its
+  explicit blocked gates.
 - `mpu_canonical_form_full_support.tex` (scope restriction, partly superseded)
   records that the reduced canonical-form-II representative must be
   constructed rather than inferred from bare canonical form, and the
@@ -841,6 +846,12 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   equal-L-matrix hypothesis satisfied for which the canonical parent does not
   commute, and formalizes commutation along the closed interval under adjoint
   closure of the two-site boundary range.
+- `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
+  that the block-injective interpolation of Section 5 uses no commutation of
+  the path Hamiltonians, so its exact action and fusion are formalized without
+  adjoint closure, while any commutation statement inherits the one-block
+  counterexample; the injectivity of the common operators and the claimed
+  ground space of the path Hamiltonians remain open.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer

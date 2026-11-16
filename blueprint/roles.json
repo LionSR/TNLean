@@ -398,8 +398,7 @@
       "corollaries": [
         "cor:all-equivalent-under-conjugation",
         "cor:mpu_admissible_all_conjugation_equivalent",
-        "cor:sigma-equivalence-necessary",
-        "cor:mpu_admissible_sigma_equivalence_necessary"
+        "cor:sigma-equivalence-necessary"
       ],
       "notes": {
         "conjphs": "Classification under conjugation when one source rank is odd (Cirac et al. 2017, Section V)",

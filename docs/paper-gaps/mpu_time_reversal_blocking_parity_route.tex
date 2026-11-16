@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Blocking Parity of the Time-Reversal Sign Without the Unwinding}
+\author{}
+\date{2026-11-16}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement and proof}
+
+Proposition~\texttt{prop:sigma1-and-sigma2-equal} of Ref.~\cite{Cirac2017MPU}
+(source \path{Papers/1703.09188/paper_v2.tex}, lines 1643--1655) states: ``Let
+$\mathcal U$ be a time reversal invariant MPU $\mathcal U$ in SF described by
+$u$, $v$, and let the blocked MPU $\mathcal U_k$ be described by $u^{(k)}$,
+$v^{(k)}$. Denote by $\sigma^{(k)}$ the phase obtained from $u^{(k)}$ and
+$v^{(k)}$ in Eq.~(UUdaggertrick-2). Then $\sigma^{(k)}=\sigma^{(1)}$ if $k$ is
+odd and $\sigma^{(k)}=\sigma^{(2)}$ if $k$ is even.''
+
+The proof (lines 1657--1732) begins: ``Because of
+Prop.~\texttt{prop:sigma-well-defined}, we can choose the representations
+$u^{(k)}$, $v^{(k)}$ at will.'' It then chooses
+\begin{align}
+    u^{(k)} & =(\Id\otimes v^{\otimes(k-1)}\otimes\Id)u^{\otimes k}, &
+    v^{(k)} & =\Id^{\otimes(k-1)}\otimes v\otimes\Id^{\otimes(k-1)},
+\end{align}
+derives the relation
+$\zeta[(\Id\otimes v\otimes\Id)(u\otimes x)]^\dagger
+    =(\Id\otimes v\otimes\Id)(x^\dagger\otimes u)$ with
+$\zeta=\sigma^{(1)}\sigma^{(2)}$, and unwinds it across the block to obtain
+$\sigma^{(k)}=\sigma^{(1)}\zeta^{k-1}$.
+
+\section{The formal route}
+
+The statement is formalized with the source's hypotheses and conclusion, for
+arbitrary supplied standard forms of the blocked tensors, as the statement
+allows. Only the proof differs.
+\begin{enumerate}
+    \item The sign of any standard form with gates $u,v$ of a two-site tensor
+          $W$ equals an intrinsic quantity of its periodic operators: the
+          normalized trace of the exchange of the two sites against $W^{(2)}$
+          (\leanid{MPOTensor.TwoSiteStandardFormData.timeReversalSign_eq_intrinsic}).
+          This is the content of Proposition~\texttt{prop:sigma-well-defined}
+          used at line 1657.
+    \item The intrinsic trace is unchanged by a sitewise relabelling of the
+          physical index. Hence $\sigma^{(k)}$ is the intrinsic trace of the
+          direct blocking of $\mathcal U$ by $2k$ sites.
+    \item The intrinsic trace of the $k$-fold blocking of an MPU whose
+          operators are self-adjoint on every ring of even length is constant on
+          odd $k$ and constant on even $k$
+          (\leanid{MPOTensor.IsMPU.intrinsic_blocking_trace_parity}). It is
+          applied to the two-site block $\mathcal U_2$, whose rings of even
+          length are the rings on which time reversal is imposed (lines
+          1201--1252, read in two-site blocks as in
+          \path{docs/paper-gaps/mpu_standard_form_parity_gap.tex}).
+\end{enumerate}
+The unwinding relation and the explicit gates above are not constructed. The
+result is \leanid{MPOTensor.TwoSiteStandardFormData.timeReversalSign_blocking_parity}.
+It does not assert $\sigma^{(1)}=\sigma^{(2)}$.
+
+\section{Status}
+
+Resolved. The proposition is formalized with the source's hypotheses; the
+deviation concerns only the proof route. The explicit blocked gates of the
+source proof for general $k$ remain unconstructed; they are a choice within
+the source proof and are not needed for the statement.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
