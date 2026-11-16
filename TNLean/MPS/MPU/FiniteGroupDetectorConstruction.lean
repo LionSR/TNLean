@@ -75,8 +75,8 @@ private theorem cellSuccessor_Icc_single_entry_proper (a b : Fin N) (hb : b.val 
 one fixed depth-two circuit. Source context: arXiv:2405.00439, Section V,
 lines 2081–2087. -/
 noncomputable def detectorRetainedInterval (u w : unitary (Matrix (Fin d) (Fin d) ℂ))
-    (N : ℕ) [NeZero N] (a b : ℕ) : Matrix (Fin N × Bool → Fin d) (Fin N × Bool → Fin d) ℂ :=
-  QuantumCircuit.circuitOp (dressedPairCircuit (cellSuccessor N) u w
+    (M : ℕ) [NeZero M] (a b : ℕ) : Matrix (Fin M × Bool → Fin d) (Fin M × Bool → Fin d) ℂ :=
+  QuantumCircuit.circuitOp (dressedPairCircuit (cellSuccessor M) u w
     (Finset.univ.filter fun k ↦ a ≤ k.val ∧ k.val ≤ b))
 
 /-- Gate deletion gives the specified dressed tensor interval, with the
@@ -108,11 +108,11 @@ theorem detectorRetainedInterval_eq_intervalTensor
 circuit. Source: arXiv:2405.00439, `detectG`, lines 2108–2117, with the
 chronological forward convention of the endpoint audit. -/
 noncomputable def detectorCircuitWord (u w : unitary (Matrix (Fin d) (Fin d) ℂ))
-    (m N : ℕ) [NeZero N] : Matrix (Fin N × Bool → Fin d) (Fin N × Bool → Fin d) ℂ :=
-  (detectorRetainedInterval u w N 0 (2 * m + 1))ᴴ *
-    ((List.range m).map fun r ↦ (detectorRetainedInterval u w N (r + 1) (2 * m - r))ᴴ).prod *
-    ((List.range m).map fun r ↦ detectorRetainedInterval u w N (r + 1) (m + 2 + r)).prod *
-    detectorRetainedInterval u w N 0 (m + 1)
+    (m M : ℕ) [NeZero M] : Matrix (Fin M × Bool → Fin d) (Fin M × Bool → Fin d) ℂ :=
+  (detectorRetainedInterval u w M 0 (2 * m + 1))ᴴ *
+    ((List.range m).map fun r ↦ (detectorRetainedInterval u w M (r + 1) (2 * m - r))ᴴ).prod *
+    ((List.range m).map fun r ↦ detectorRetainedInterval u w M (r + 1) (m + 2 + r)).prod *
+    detectorRetainedInterval u w M 0 (m + 1)
 
 /-- The complete word of actual retained circuit operators equals the tensor
 word evaluated in the spatial construction. No circuit-to-interval identity

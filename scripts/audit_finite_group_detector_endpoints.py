@@ -25,9 +25,11 @@ def require(condition: bool, message: str) -> None:
 
 
 def mul(a: Matrix, b: Matrix) -> Matrix:
-    return tuple(  # type: ignore[return-value]
-        tuple(sum(a[i][k] * b[k][j] for k in range(2)) for j in range(2))
-        for i in range(2)
+    return (
+        (a[0][0] * b[0][0] + a[0][1] * b[1][0],
+         a[0][0] * b[0][1] + a[0][1] * b[1][1]),
+        (a[1][0] * b[0][0] + a[1][1] * b[1][0],
+         a[1][0] * b[0][1] + a[1][1] * b[1][1]),
     )
 
 
@@ -110,6 +112,9 @@ def circuit_action(
     The left circuit has layers (ZX) tensor X on even-odd pairs, then
     I tensor Z on odd-even pairs. The right circuit has X tensor (ZX),
     then Z tensor I. A gate is retained iff both its sites lie in the interval.
+    The chain is periodic, while a supplied interval is a non-wrapping numeric
+    interval with a <= b. A periodic-wrap bond is retained only when both of
+    its sites belong to that numeric interval; no cyclic interval is inferred.
     """
     def contained(p: int, q: int) -> bool:
         return interval is None or (interval[0] <= p <= interval[1]
