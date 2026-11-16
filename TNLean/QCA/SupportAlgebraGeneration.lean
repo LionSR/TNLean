@@ -274,8 +274,8 @@ theorem commute_of_forall_commute_image_evenPair [NeZero d]
     (NonUnitalStarAlgHom.isometry ω.toStarAlgHom ω.injective).continuous
   have ha : a ∈ C := by
     simpa only [StarAlgEquiv.apply_symm_apply] using
-      (denseRange_algebraicToQuasiLocal d).induction_on
-        (p := fun x => ω x ∈ C) (ω.symm a) (hclosedC.preimage hcont) hlocal
+      isClosed_property (denseRange_algebraicToQuasiLocal d)
+        (p := fun x => ω x ∈ C) (hclosedC.preimage hcont) hlocal (ω.symm a)
   exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp ha z rfl).1
 
 /-! ### The quasi-local join of the site-indexed support algebras -/
@@ -435,10 +435,11 @@ theorem supportAlgebraJoin_topologicalClosure_eq_top
   rw [StarSubalgebra.topologicalClosure_coe, StarSubalgebra.coe_top]
   refine Set.eq_univ_of_univ_subset fun z _ ↦ ?_
   simpa only [StarAlgEquiv.apply_symm_apply] using
-    (denseRange_algebraicToQuasiLocal d).induction_on
+    isClosed_property (denseRange_algebraicToQuasiLocal d)
       (p := fun x => ω x ∈ closure (supportAlgebraJoin hω : Set (QuasiLocalAlgebra d)))
-      (ω.symm z) hclosed
+      hclosed
       (fun A => subset_closure (algebraicToQuasiLocal_mem_supportAlgebraJoin hω A))
+      (ω.symm z)
 
 /-- Commutant corollary: an observable commuting with every site-indexed support algebra commutes
 with the whole quasi-local algebra.
