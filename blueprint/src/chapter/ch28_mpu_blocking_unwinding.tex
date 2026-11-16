@@ -114,10 +114,10 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     For a matrix $A$ on two spins, write $A_{p,p+1}$ for its action on
     consecutive spins $p,p+1$, with identity on all exterior spins.
     On a chain of $2k$ spins, put
-    \[
-        C_{a,m}(A)=\prod_{j=0}^{m-1}A_{2(a+j)+1,2(a+j)+2},\qquad
-        L_{a,m}(A)=\prod_{j=0}^{m-1}A_{2(a+j)+2,2(a+j)+3}.
-    \]
+    \begin{align*}
+        C_{a,m}(A) & =\prod_{j=0}^{m-1}A_{2(a+j)+1,2(a+j)+2}, \\
+        L_{a,m}(A) & =\prod_{j=0}^{m-1}A_{2(a+j)+2,2(a+j)+3}.
+    \end{align*}
     The products are ordered by increasing $j$. Require $a+m\leq k$
     for $C_{a,m}$ and $a+m+1\leq k$ for $L_{a,m}$.
 \end{definition}
@@ -166,9 +166,10 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \leanok
     \uses{def:mpu_printed_layers}
     For $k>0$, define matrices on $2k$ original spins by
-    \[
-        U_k=L_{0,k-1}(v)C_{0,k}(u),\qquad V_k=v_{k,k+1}.
-    \]
+    \begin{align*}
+        U_k & =L_{0,k-1}(v)C_{0,k}(u), \\
+        V_k & =v_{k,k+1}.
+    \end{align*}
     These are the circuits displayed in the blocking argument of
     \cite{Cirac2017MPU}, with identity spectators retained.
 \end{definition}
@@ -181,9 +182,9 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     If $u,v$ are unitary, then $U_k,V_k$ are unitary for every $k>0$.
     Writing $\iota$ for placement on the first $2k$ spins of a chain of
     $2k+2$ spins, one has, for arbitrary $u,v$,
-    \[
-        U_{k+1}=v_{2k,2k+1}\,\iota(U_k)\,u_{2k+1,2k+2}.
-    \]
+    \begin{align*}
+        U_{k+1} & =v_{2k,2k+1}\,\iota(U_k)\,u_{2k+1,2k+2}.
+    \end{align*}
 \end{lemma}
 \begin{proof}\leanok
     Products and placements preserve unitarity. For the extension
@@ -201,11 +202,10 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     Suppose square two-spin matrices $u,v,x$ and $\zeta\in\mathbb C$
     satisfy (\ref{eq:mpu_unwind_local}). On any consecutive four-spin
     interval $p,p+1,p+2,p+3$ inside any longer chain,
-    \[
+    \begin{align*}
         v_{p+1,p+2}x_{p,p+1}^\dagger u_{p+2,p+3}
-        =\zeta u_{p,p+1}^\dagger x_{p+2,p+3}^\dagger
-        v_{p+1,p+2}^\dagger.
-    \]
+         & =\zeta u_{p,p+1}^\dagger x_{p+2,p+3}^\dagger v_{p+1,p+2}^\dagger.
+    \end{align*}
 \end{lemma}
 \begin{proof}\leanok
     Relabel four consecutive spins as two ordered pairs. Expanding the
@@ -236,25 +236,32 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     Under (\ref{eq:mpu_unwind_local}), $Y_s=Y_{s+1}$ whenever $s+1<k$,
     and $Y_0=Y_s$ for every $s<k$. The endpoints, for arbitrary matrices,
     are
-    \[
-        Y_0=\sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u),\qquad
-        Y_{k-1}=\sigma\zeta^{k-1}X^\dagger.
-    \]
+    \begin{align*}
+        Y_0     & =\sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u), \\
+        Y_{k-1} & =\sigma\zeta^{k-1}X^\dagger.
+    \end{align*}
 \end{lemma}
 \begin{proof}\leanok
     Fix $s+1<k$ and put $m=k-2-s$. Split the first shifted gate and
     the first forward cell, writing
     \begin{align*}
-        L & =v_{2s+2,2s+3},         & V & =L_{s+1,m}(v),          & P & =C_{0,s}(u^\dagger), \\
-        Z & =x_{2s+1,2s+2}^\dagger, & U & =u_{2s+3,2s+4},         & R & =C_{s+2,m}(u),       \\
-        T & =L_{0,s}(v)^\dagger,    & A & =u_{2s+1,2s+2}^\dagger, &
+        L & =v_{2s+2,2s+3},         \\
+        V & =L_{s+1,m}(v),          \\
+        P & =C_{0,s}(u^\dagger),    \\
+        Z & =x_{2s+1,2s+2}^\dagger, \\
+        U & =u_{2s+3,2s+4},         \\
+        R & =C_{s+2,m}(u),          \\
+        T & =L_{0,s}(v)^\dagger,    \\
+        A & =u_{2s+1,2s+2}^\dagger, \\
         B & =x_{2s+3,2s+4}^\dagger.
     \end{align*}
     Disjoint supports and Lemma~\ref{lem:mpu_printed_window_unwind} give
-    \[
-        LV=VL,\qquad LP=PL,\qquad L^\dagger R=RL^\dagger,
-        \qquad LZU=\zeta ABL^\dagger.
-    \]
+    \begin{align*}
+        LV          & =VL,                \\
+        LP          & =PL,                \\
+        L^\dagger R & =RL^\dagger,        \\
+        LZU         & =\zeta ABL^\dagger.
+    \end{align*}
     Consequently,
     \begin{align*}
         (LV)PZ(UR)T
@@ -278,10 +285,10 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \leanok
     \uses{lem:mpu_printed_sequence_steps, lem:mpu_printed_layer_identities}
     For every $k>0$, (\ref{eq:mpu_unwind_local}) implies
-    \[
+    \begin{align*}
         \sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u)
-        =\sigma\zeta^{k-1}X^\dagger.
-    \]
+         & =\sigma\zeta^{k-1}X^\dagger.
+    \end{align*}
     If $u,v,x$ are unitary, so is $X$.
 \end{lemma}
 \begin{proof}\leanok
@@ -331,15 +338,13 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     Let $W$ have supplied square standard-form data $u,v,X_1,X_2$.
     For ordered physical pair words $i,j$ of positive length $k$, define
     the matrix with virtual endpoints $\alpha,\gamma$ by
-    \[
+    \begin{align*}
         G(i,j)_{\alpha\gamma}
-        =\sum_{h_1,\ldots,h_k}
-        (X_2)_{(\alpha,i_{1,1}),h_{1,1}}
-        \left[\prod_{p=1}^{k-1}
-            v_{(i_{p,2},i_{p+1,1}),(h_{p,2},h_{p+1,1})}\right]
-        \left[\prod_{p=1}^{k}u_{h_p,j_p}\right]
+         & =\sum_{h_1,\ldots,h_k}(X_2)_{(\alpha,i_{1,1}),h_{1,1}}
+        \left[\prod_{p=1}^{k-1}v_{(i_{p,2},i_{p+1,1}),(h_{p,2},h_{p+1,1})}\right] \\
+         & \quad\cdot\left[\prod_{p=1}^{k}u_{h_p,j_p}\right]
         (X_1)_{(i_{k,2},\gamma),h_{k,2}},
-    \]
+    \end{align*}
     where each $h_p$ is an ordered pair of original-spin indices.
 \end{definition}
 
@@ -352,11 +357,11 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     In particular this gives the actual length-$k$ blocked tensor after
     decoding its physical words. If $\bar i,\bar j$ are the flattened
     words on $2k$ original spins, the same entry is
-    \[
-        \sum_{a,b}(X_2)_{(\alpha,\bar i_1),a}
+    \begin{align*}
+         & \sum_{a,b}(X_2)_{(\alpha,\bar i_1),a}
         (U_k)_{\bar i[1\mapsto a,\,2k\mapsto b],\,\bar j}
         (X_1)_{(\bar i_{2k},\gamma),b}.
-    \]
+    \end{align*}
     These are identities with both virtual endpoints free.
 \end{lemma}
 \begin{proof}\leanok
@@ -460,12 +465,12 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     $\tau_k=\sigma(\widehat U_k,\widehat V_k)$ equals the intrinsic trace
     of the actual length-$k$ block. If $W^{(N)}=W^{(N)\dagger}$ on every
     even ring with $N>1$, then
-    \[
-        \tau_k=\begin{cases}
-            \sigma(u,v),             & k\text{ odd},  \\
-            \sigma(u^{(2)},v^{(2)}), & k\text{ even}.
-        \end{cases}
-    \]
+    \begin{align*}
+        \tau_k & =\begin{cases}
+                      \sigma(u,v),             & k\text{ odd},  \\
+                      \sigma(u^{(2)},v^{(2)}), & k\text{ even}.
+                  \end{cases}
+    \end{align*}
     No canonical ambient presentation is required for these identities.
     The square supplied-gate hypothesis is explicit. Its reduction from
     a general rectangular presentation remains separate, as explained in
@@ -475,10 +480,10 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     The gate-trace identity applies to the actual constructed standard
     form. For a tensor $Z$ with nonempty finite physical alphabet
     $\mathcal I$, its intrinsic trace is
-    \[
-        \mathfrak t(Z)=\frac{1}{|\mathcal I|}
+    \begin{align*}
+        \mathfrak t(Z) & =\frac{1}{|\mathcal I|}
         \sum_{c,d\in\mathcal I}Z^{(2)}_{(d,c),(c,d)}.
-    \]
+    \end{align*}
     Let $e:\mathcal J\to\mathcal I$ be a bijection and write $Z_e$
     for $Z$ after applying this relabelling to both physical indices.
     Then $|\mathcal J|=|\mathcal I|$ and
@@ -496,9 +501,9 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     $e=e_k$ to obtain $\tau_k=\mathfrak t(W_k)$. Intrinsic blocking
     parity applies to the MPU supplied by the original standard form.
     The original and printed two-block standard forms give, respectively,
-    \[
-        \mathfrak t(W)=\sigma(u,v),\qquad
-        \mathfrak t(W_2)=\sigma(u^{(2)},v^{(2)}),
-    \]
+    \begin{align*}
+        \mathfrak t(W)   & =\sigma(u,v),             \\
+        \mathfrak t(W_2) & =\sigma(u^{(2)},v^{(2)}),
+    \end{align*}
     which identify the odd and even values.
 \end{proof}
