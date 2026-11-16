@@ -2,7 +2,7 @@
   "slug": "mpu",
   "pageTitle": "Matrix Product Unitaries · TNLean",
   "heading": "Matrix product unitaries: structure, index and symmetry phases, after Cirac, Pérez-García, Schuch and Verstraete",
-  "lede": "A matrix product unitary is a translation-invariant tensor network whose periodic contraction is a unitary operator on every ring. In 2017 Cirac, Pérez-García, Schuch and Verstraete showed that, after blocking finitely many sites, every such operator is a two-layer circuit of local unitaries followed by a shift, that two tensors give the same unitaries exactly when their local gates differ by unitaries on the internal legs, and that an index, half the base-two logarithm of the ratio of two ranks, measures the flow of information along the chain and classifies these operators up to continuous deformation and the addition of trivial ancillas. They then classified matrix product unitaries invariant under complex conjugation, time reversal and transposition. In Lean the structure theorem, the standard form, the fundamental theorem (in the form that compares tensors on rings of even length, since the printed all-length converse fails), the index with its blocking, product and continuity properties, and the local characterizations of the symmetries for canonical standard forms are proved. The complete index theorem, the continuous choice of standard forms and the symmetry phase classifications remain open.",
+  "lede": "A matrix product unitary is a translation-invariant tensor network whose periodic contraction is a unitary operator on every ring. In 2017 Cirac, Pérez-García, Schuch and Verstraete showed that, after blocking finitely many sites, every such operator is a two-layer circuit of local unitary gates whose internal legs have dimensions <i>r</i> and <i>ℓ</i>, that two tensors give the same unitaries on rings of even length exactly when their gates differ by unitaries on the internal legs, and that an index, half the base-two logarithm of the ratio of two ranks, measures the flow of information along the chain and classifies these operators up to continuous deformation and the addition of trivial ancillas. They then classified matrix product unitaries invariant under complex conjugation, time reversal and transposition. In Lean the structure theorem, the standard form, the fundamental theorem (in the form that compares tensors on rings of even length, since the printed all-length converse fails), the index with its blocking, product and continuity properties, and the local characterizations of the symmetries for canonical standard forms are proved. The complete index theorem, the continuous choice of standard forms and the symmetry phase classifications remain open.",
   "description": "Progress of the Lean 4 formalization of matrix product unitaries after Cirac, Pérez-García, Schuch and Verstraete, arXiv:1703.09188.",
   "tabs": [
     {
@@ -91,7 +91,7 @@
       "paper": "cpsv17",
       "eyebrow": "Sections II–III",
       "heading": "Structure, standard form and the fundamental theorem",
-      "intro": "A tensor with two physical legs and two virtual legs of dimension <i>D</i> generates, on a ring of <i>N</i> sites, an operator <i>U<sub>N</sub></i> on (ℂ<sup><i>d</i></sup>)<sup>⊗<i>N</i></sup>. The tensor is a matrix product unitary when every <i>U<sub>N</sub></i> is unitary. After blocking, the tensor can be taken <i>simple</i>: its two-site contraction factors through two isometries of ranks <i>r</i> and <i>ℓ</i>, with <i>rℓ</i> = <i>d</i><sup>2</sup>. All results of this part are proved.",
+      "intro": "A tensor with two physical legs and two virtual legs of dimension <i>D</i> generates, on a ring of <i>N</i> sites, an operator <i>U<sub>N</sub></i> on (ℂ<sup><i>d</i></sup>)<sup>⊗<i>N</i></sup>. The tensor is a matrix product unitary when every <i>U<sub>N</sub></i> is unitary. After blocking boundedly many sites, the tensor becomes <i>simple</i>: in the double layer of the tensor and its adjoint, two consecutive sites factor through one pair of vectors on the middle bond. A simple tensor's two-site contraction then factors through two isometries of ranks <i>r</i> and <i>ℓ</i>, with <i>rℓ</i> = <i>d</i><sup>2</sup>. All results of this part are proved.",
       "stages": [
         {
           "title": "Unitarity, normality and simple tensors",
@@ -100,7 +100,7 @@
             5706,
             5707
           ],
-          "physics": "The transfer operator of a matrix product unitary has a single nonzero eigenvalue, equal to one, so a tensor in canonical form is normal; after blocking a bounded number of sites, the double layer of the tensor and its adjoint collapses to a rank-one contraction, which is the paper's simplicity condition.",
+          "physics": "The transfer operator of a matrix product unitary has a single nonzero eigenvalue, equal to one, so a tensor in canonical form is normal; after blocking a bounded number of sites, the double layer of the tensor and its adjoint on two consecutive sites factors through one pair of vectors on the middle bond, which is the paper's simplicity condition.",
           "delivers": "Normality of every matrix product unitary in canonical form (the paper assumes canonical form throughout; a tensor with unused bond directions is first reduced to its canonical representative) and the bounded blocking theorem for simplicity."
         },
         {
@@ -164,7 +164,7 @@
             7018,
             7019
           ],
-          "physics": "Conjugation invariance holds exactly when the gates satisfy <i>ū</i> = (<i>x</i> ⊗ <i>y</i>)<i>u</i> and <i>v̄</i> = <i>v</i>(<i>y</i><sup>†</sup> ⊗ <i>x</i><sup>†</sup>) for unitaries <i>x</i>, <i>y</i> that are both symmetric or both skew-symmetric. Normal forms of such matrices reduce the gates to orthogonal or symplectic ones, and the determinant and the symmetric or skew type give the phases.",
+          "physics": "Conjugation invariance holds exactly when the gates satisfy <i>ū</i> = (<i>x</i> ⊗ <i>y</i>)<i>u</i> and <i>v̄</i> = <i>v</i>(<i>y</i><sup>†</sup> ⊗ <i>x</i><sup>†</sup>) for unitaries <i>x</i>, <i>y</i> that are both symmetric or both skew-symmetric. In the symmetric case the gates can be chosen real orthogonal, in the skew case they satisfy a symplectic relation (possible only when <i>r</i> and <i>ℓ</i> are even), in each case unique up to local orthogonal or symplectic transformations; when <i>r</i> or <i>ℓ</i> is odd, the determinant det(<i>uv</i>) decides whether two such operators are strictly equivalent under the symmetry.",
           "delivers": "The local characterization, the orthogonal and symplectic normal forms of the gates, and the classification of conjugation-symmetric phases."
         },
         {
@@ -207,7 +207,7 @@
     ],
     [
       "Simple tensor",
-      "A tensor whose two-site double-layer contraction with its adjoint is rank one, reached from any matrix product unitary after blocking boundedly many sites."
+      "A tensor whose double layer with its adjoint, on two consecutive sites, factors through one pair of vectors on the middle bond; every matrix product unitary becomes simple after blocking at most <i>D</i><sup>4</sup> sites."
     ],
     [
       "Standard form",
