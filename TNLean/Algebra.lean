@@ -13,7 +13,6 @@ import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BinaryProjectionFamily
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
-import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CStarSqrtHolder
 import TNLean.Algebra.CStarSqrtLipschitz
 import TNLean.Algebra.CeilScaling
