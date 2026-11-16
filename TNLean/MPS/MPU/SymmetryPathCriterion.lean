@@ -7,6 +7,10 @@ import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.IndexClassification
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
+import TNLean.MPS.MPU.SourceFactorChoiceGates
+import TNLean.MPS.MPU.TimeReversalSignInvariance
+import TNLean.MPS.MPU.Index
+import TNLean.MPS.MPU.FundamentalTheoremGatesSupplied
 
 /-!
 # The symmetry-preserving standard-form path criterion
@@ -330,5 +334,61 @@ theorem strictlyEquivalentUnderSymmetry_blockTwo_of_gate_path
     StrictlyEquivalentUnderSymmetry (S.block 2) (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl :=
   strictlyEquivalentUnderSymmetry_blockTensor_of_gate_path hpos h₁ h₂ one_pos u v hu hv hu' hv'
     S₁ S₂ hinv
+
+/-- **Endpoint gates of the right ranks are standard-form gates of the block.**
+Let `𝒰` be a simple tensor in canonical form II and `k ≥ 1`. If gates `u, v`
+present the two-site block of some tensor `V` with the periodic operators of
+the `k`-site block of `𝒰`, and the right rank of `u` matches the index of `𝒰`,
+then `u, v` are also standard-form gates of the two-site block of the
+`k`-site block of `𝒰` itself.
+
+Source: arXiv:1703.09188, Theorem `FundamentalMPU` (lines 640--652) and the
+index formula after `def:index` (lines 686--688). -/
+theorem IsMPUCanonicalFormII.nonempty_twoSiteStandardFormData_blockTensor_of_index
+    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hs : IsMPUSimple U) {k : ℕ} (hk : 0 < k)
+    {E : ℕ} {V : MPOTensor (MPSTensor.blockPhysDim d k) E}
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (hV : ∀ N : ℕ, 0 < N → mpo V N = mpo (MPOTensor.blockTensor U k) N)
+    (T : TwoSiteStandardFormData (MPOTensor.blockTwo V) u v)
+    (hidx : hU.index = Real.logb 2 ((r : ℝ) / (d ^ k : ℕ))) :
+    Nonempty (TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v) := by
+  have hK := hU.blockTensor k hk
+  have hKs : IsMPUSimple (MPOTensor.blockTensor U k) := hs.blockTensor k hk
+  let TK := hK.twoSiteStandardFormData hKs
+  have : NeZero d := hU.neZero_phys
+  have hdk : (0 : ℝ) < ((d ^ k : ℕ) : ℝ) := by
+    exact_mod_cast pow_pos (NeZero.pos d) k
+  have hr : r = r[MPOTensor.blockTensor U k] := by
+    have h := hidx.symm.trans (hU.index_eq_logb_rightRank_div hk hKs)
+    have h' := Real.logb_injOn_pos (b := 2) (by norm_num)
+      (div_pos (by exact_mod_cast T.right_pos) hdk)
+      (div_pos (by exact_mod_cast TK.right_pos) hdk) h
+    have : (r : ℝ) = r[MPOTensor.blockTensor U k] := by
+      field_simp at h'
+      exact h'
+    exact_mod_cast this
+  have hcard : ∀ {a b : ℕ} (w : Matrix (Fin a × Fin b)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ),
+      w.IsUnitaryBetween → a * b =
+        MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k := by
+    intro a b w hw
+    have h1 := Matrix.IsIsometry.card_le w hw.1
+    have h2 := Matrix.IsCoisometry.card_le w hw.2
+    simp only [Fintype.card_prod, Fintype.card_fin] at h1 h2
+    omega
+  have hℓ : ℓ = ℓ[MPOTensor.blockTensor U k] := by
+    have h1 := hcard u T.u_unitary
+    have h2 := hcard _ TK.u_unitary
+    rw [hr] at h1
+    exact Nat.eq_of_mul_eq_mul_right TK.right_pos (h1.trans h2.symm)
+  subst hr
+  subst hℓ
+  obtain ⟨x, y, hu, hv⟩ := TK.exists_gate_gauges_of_mpo_eq T (fun N hN ↦
+    (mpo_blockTwo_eq_of_mpo_eq hV N (by omega)).symm)
+  rw [hu, hv]
+  exact ⟨TK.ofGateGauges x y⟩
 
 end MPOTensor
