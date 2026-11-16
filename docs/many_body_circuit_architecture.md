@@ -144,9 +144,12 @@ the pin and deletes what was replaced, with no copy and no alias left behind.
 
 `scripts/check_import_layers.py` assigns the modules of `TNLean/Algebra`,
 `TNLean/Circuit` and `TNLean/Lattice` to these layers and rejects an import
-that points upward or sideways. It runs in the module-policy job of
+that points upward or sideways. Imports are read with comments removed, and an
+imported aggregator counts as everything it re-exports. It runs in the module-policy job of
 `pr-ci.yml`. The violations present when the check was introduced, 17 imports,
-are listed in its `DEBT` set, which may only shrink:
+are listed in its `DEBT` set, which may only shrink; CI compares the set with
+its value at the base revision, so a new violation cannot be admitted by
+recording it:
 
 - nine site and dynamics modules import `Circuit/LocalCircuit`, because the
   definition of `supportedOperators` sits in that file above `BondLayer`;
