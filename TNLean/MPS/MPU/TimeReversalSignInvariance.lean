@@ -17,8 +17,8 @@ standard-form representative. For every simple MPU whose standard form is
 time-reversal invariant, the sign is `±1`: the local relation, and hence the
 sign, comes from Proposition `PropChiral` applied to the simple canonical
 representative. The trace depends continuously on the tensor, so along any
-continuous path of simple MPUs that stay time-reversal invariant the sign is
-constant. No standard forms, gates or local relations are required along the
+continuous path of MPUs that stay in standard form and time-reversal invariant
+the sign is constant. No standard forms, gates or local relations are required along the
 path; they are constructed at each point. Time-reversal invariance is required
 at even lengths of the two-spin standard-form chain, that is, at original
 lengths divisible by four; see `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
@@ -32,7 +32,8 @@ from the standard form of the canonical representative, as in Corollary
 
 * `MPOTensor.IsMPUSimple.intrinsicTimeReversalSign_blockTwo_eq_standardForm_sign`:
   every standard form of the canonical representative has the same sign.
-* `MPOTensor.IsMPUSimple.intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one`:
+* `MPOTensor.intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one_of_representative`
+  and `MPOTensor.IsMPUSimple.intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one`:
   the sign is `±1`.
 * `MPOTensor.intrinsicTimeReversalSign_blockTwo_eq_on_path`: constancy under
   continuous deformations preserving time-reversal symmetry.
@@ -64,6 +65,32 @@ theorem mpo_blockTwo_eq_of_mpo_eq {D' : ℕ} {U : MPOTensor d D} {V : MPOTensor 
     mpo (blockTwo V) N = mpo (blockTwo U) N := by
   rw [mpo_blockTwo_eq_reindex_blockTensor, mpo_blockTwo_eq_reindex_blockTensor,
     mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex, hsame (N * 2) (by omega)]
+
+/-- The time-reversal sign of an MPU in standard form is `±1`: the MPU has a
+simple canonical representative `V` with the same periodic operators at every
+positive length, and the standard form is that of `V₂`. The ambient tensor
+itself need not be simple or canonical.
+
+Source: arXiv:1703.09188, Proposition `prop:sigma-well-defined`, lines
+1616--1622, and `UUdaggertrick-2`, lines 1585--1593. -/
+theorem intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one_of_representative
+    {E : ℕ} {U : MPOTensor d D} {V : MPOTensor d E} (hV : IsMPUCanonicalFormII V)
+    (hsV : IsMPUSimple V) (hsame : ∀ N : ℕ, 0 < N → mpo V N = mpo U N)
+    (hTR : ∀ N : ℕ, 1 < N → Even N →
+      mpo (blockTwo U) N = (mpo (blockTwo U) N)ᴴ) :
+    intrinsicTimeReversalSign (blockTwo U) = 1 ∨
+      intrinsicTimeReversalSign (blockTwo U) = -1 := by
+  have hblock := mpo_blockTwo_eq_of_mpo_eq hsame
+  have hTRV : ∀ N : ℕ, 1 < N → Even N →
+      mpo (blockTwo V) N = (mpo (blockTwo V) N)ᴴ := by
+    intro N hN heven
+    rw [hblock N (by omega)]
+    exact hTR N hN heven
+  let S := hV.twoSiteStandardFormData hsV
+  obtain ⟨hr, hl, -, hsign, -⟩ := hV.standardForm_timeReversalSign S hTRV
+  rw [← intrinsicTimeReversalSign_eq_of_mpo_two_eq (hblock 2 (by norm_num)),
+    ← (S.reindexRanks (finCongr hl) (finCongr hr)).timeReversalSign_eq_intrinsic]
+  exact hsign
 
 namespace IsMPUSimple
 
@@ -125,33 +152,31 @@ theorem intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one
       mpo (blockTwo U) N = (mpo (blockTwo U) N)ᴴ) :
     intrinsicTimeReversalSign (blockTwo U) = 1 ∨
       intrinsicTimeReversalSign (blockTwo U) = -1 := by
-  obtain ⟨E, _hE, V, hV, _hsV, _hdim, hsame, ⟨S⟩⟩ := hU.exists_reduced_twoSiteStandardFormData
-  have hblock := mpo_blockTwo_eq_of_mpo_eq hsame
-  have hTRV : ∀ N : ℕ, 1 < N → Even N →
-      mpo (blockTwo V) N = (mpo (blockTwo V) N)ᴴ := by
-    intro N hN heven
-    rw [hblock N (by omega)]
-    exact hTR N hN heven
-  obtain ⟨hr, hl, -, hsign, -⟩ := hV.standardForm_timeReversalSign S hTRV
-  rw [← intrinsicTimeReversalSign_eq_of_mpo_two_eq (hblock 2 (by norm_num)),
-    ← (S.reindexRanks (finCongr hl) (finCongr hr)).timeReversalSign_eq_intrinsic]
-  exact hsign
+  obtain ⟨E, _hE, V, hV, hsV, _hdim, hsame⟩ := hU.exists_reduced_cfii_representative
+  exact intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one_of_representative hV hsV hsame hTR
 
 end IsMPUSimple
 
-/-- **Constancy of the time-reversal sign.** Along a continuous path of simple
-MPU tensors whose standard forms stay time-reversal invariant at every even
-length, the time-reversal sign is constant. Standard forms and local relations
-are constructed at each point; none is assumed to vary continuously.
-Simplicity along the path is the source's requirement that the deformed MPU
-stay in SF: Definition `SF` applies only to simple tensors (lines 619--622),
-and the sign depends on the blocking level (lines 1633--1641).
+/-- **Constancy of the time-reversal sign.** Along a continuous path of MPU
+tensors that stay in standard form and time-reversal invariant at every even
+standard-form length, the time-reversal sign is constant. Staying in standard
+form means that each point has a simple canonical representative with the same
+periodic operators at every positive length; the path tensors themselves need
+not be simple or canonical, as the source allows (lines 733--736 and 1349).
+This is the source's requirement that the deformed MPU stay in SF: Definition
+`SF` applies only to simple tensors (lines 619--622), and the sign depends on
+the blocking level (lines 1633--1641). Representatives, standard forms and
+local relations are chosen at each point; none is assumed to vary continuously.
+A path of simple tensors qualifies, by
+`MPOTensor.IsMPUSimple.exists_reduced_cfii_representative`.
 
 Source: arXiv:1703.09188, Proposition `prop:sigma-well-defined`, lines
 1616--1622, with proof at lines 1624--1631. -/
-theorem intrinsicTimeReversalSign_blockTwo_eq_on_path [NeZero d] [NeZero D]
+theorem intrinsicTimeReversalSign_blockTwo_eq_on_path
     (U : ℝ → MPOTensor d D) (hU : ContinuousOn U (Set.Icc (0 : ℝ) 1))
-    (hsimple : ∀ t ∈ Set.Icc (0 : ℝ) 1, IsMPUSimple (U t))
+    (hSF : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∃ (E : ℕ) (V : MPOTensor d E),
+      Nonempty (IsMPUCanonicalFormII V) ∧ IsMPUSimple V ∧
+        ∀ N : ℕ, 0 < N → mpo V N = mpo (U t) N)
     (hTR : ∀ t ∈ Set.Icc (0 : ℝ) 1, ∀ N : ℕ, 1 < N → Even N →
       mpo (blockTwo (U t)) N = (mpo (blockTwo (U t)) N)ᴴ) :
     ∀ t ∈ Set.Icc (0 : ℝ) 1,
@@ -163,8 +188,10 @@ theorem intrinsicTimeReversalSign_blockTwo_eq_on_path [NeZero d] [NeZero D]
   have hsq : Set.EqOn ((fun t ↦ intrinsicTimeReversalSign (blockTwo (U t))) ^ 2) 1
       (Set.Icc (0 : ℝ) 1) := by
     intro t ht
+    obtain ⟨E, V, ⟨hV⟩, hsV, hsame⟩ := hSF t ht
     simpa only [Pi.pow_apply, Pi.one_apply] using sq_eq_one_iff.mpr
-      ((hsimple t ht).intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one (hTR t ht))
+      (intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one_of_representative
+        hV hsV hsame (hTR t ht))
   have h0 : (0 : ℝ) ∈ Set.Icc (0 : ℝ) 1 := by norm_num
   rcases isPreconnected_Icc.eq_one_or_eq_neg_one_of_sq_eq hcont hsq with h | h
   · exact fun t ht ↦ (h ht).trans (h h0).symm
