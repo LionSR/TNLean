@@ -167,8 +167,12 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    The original MPU conditions are preserved in both directions
-    because $Q$ is unitary and $Q^2=I$. After attaching an identity
+    Since $Q$ is unitary and $Q^2=I$, output multiplication gives
+    \[
+        U\text{ is an MPU}\quad\Longleftrightarrow\quad
+        QU\text{ is an MPU},
+    \]
+    and the same equivalence holds for $V$. After attaching an identity
     ancilla, the matrix $Q\otimes I_x$ has the same required properties.
     Apply the full blocked-path comparison at each $x,k>0$ and quantify
     over those unchanged witnesses.

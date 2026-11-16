@@ -15,12 +15,18 @@ blocking uses the canonical finite-chain operation from `Equivalence`.
 The original tensors must be MPUs, and the existing strict predicate
 provides canonical endpoints and a path in a common virtual dimension.
 
-This is the labelled-spin reading of arXiv:1703.09188,
-`def:equivalent-symmetry`, lines 1356--1366. It compares tensors on the same
-labelled physical space and does not replace the general commensurate-
-dimension predicate `EquivalentUnderSymmetry`. No global dimension family
-is assumed. The swap comparison below is derived from the actual full
-operator actions; no invariance-transport certificate is a public hypothesis.
+**Scope restriction (fixed labelled physical space):** this is the
+labelled-spin reading of arXiv:1703.09188, `def:equivalent-symmetry`,
+lines 1356--1366. It does not replace the general commensurate-dimension
+predicate `EquivalentUnderSymmetry` or assume a global dimension family.
+See `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex` for the remaining
+source-equivalence gap. The comparisons use actual full operator actions;
+no invariance-transport certificate is a public hypothesis.
+
+**Local fix (one-sided swap):** the output multiplication follows the
+source-defined `threeMPU2`, rather than the two-sided expression in the
+printed proof. See `docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`.
+
 -/
 
 open scoped Matrix
