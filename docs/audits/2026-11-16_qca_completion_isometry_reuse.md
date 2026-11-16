@@ -3,7 +3,7 @@
 Audited base: `18ef7315513d2d1f235af1ade0664605f33ef716`.
 Submission base: `73007e10337424b3556fb198507b2157f99f19a3`; the selected
 source files and dependency pins are unchanged between these revisions.
-Selected batch: **13 proofs across nine QCA modules, net −58 Lean lines**.
+Selected batch: **13 proofs across nine QCA modules, net −56 Lean lines**.
 This is independent of the consolidation stack #10676 → #10677 → #10678.
 
 ## Mathematical contracts
@@ -38,7 +38,7 @@ All declaration names below have the `SpinChain.` prefix.
 | BlockingTranslation | `quasiLocalBlocking_translation` | 269 → 264 |
 | CompatibleLocalAutomorphism | `algebraicEquiv_isometry`, `translationCovariant_quasiLocalEquiv` | 300 → 292 |
 | CompatibleLocalState | `quasiLocalFunctional_unique` | 181 → 180 |
-| SupportAlgebraGeneration | `quasiLocalStarAlgHom_ext_evenPair`, `commute_of_forall_commute_image_evenPair`, `PropagatesWithin.supportAlgebraJoin_topologicalClosure_eq_top` | 496 → 478 |
+| SupportAlgebraGeneration | `quasiLocalStarAlgHom_ext_evenPair`, `commute_of_forall_commute_image_evenPair`, `PropagatesWithin.supportAlgebraJoin_topologicalClosure_eq_top` | 496 → 480 |
 
 For example, local inclusion formerly expanded the distance of two images,
 rewrote subtraction through several homomorphism projections, and invoked norm
@@ -129,3 +129,11 @@ endpoint goals in all three Gaussian split rewrites. Commit
 interval explicitly and retains every statement and the net line count.
 Focused source builds had succeeded; fresh strict/full final-head acceptance
 is pending. The independent QCA changes are not included in that repair.
+
+CI at `ed0caa3119ecc1e72abf4594a32bcb19ff2054bc` passed strict checks
+for the other eight changed modules. The support-generation module required
+explicit predicates for both dense-range inductions: membership in the closed
+centralizer preimage and in the preimage of the closed support-algebra join.
+Without these arguments, elaboration selected a constant predicate from the
+final goal. The repair preserves the closed-set argument and every public
+header; final-head strict and full validation remain required.
