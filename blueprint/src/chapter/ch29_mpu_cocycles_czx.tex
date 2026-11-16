@@ -637,8 +637,9 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     behind the remark of \cite[line~3970]{FrancoRubio2025MPUGauging} that the
     state lies in the nontrivial symmetry-protected phase of the combined
     $\Z_2\times\Z_2$ symmetry. That this class labels the phase of a state
-    protected by a symmetry that is not onsite is the classification of
-    \cite{Stephen2024SIMPS}, which is not proved here; see
+    protected by a symmetry that is not onsite requires a physical phase
+    argument. The circuit obstruction of \cite{Stephen2024SIMPS} and the
+    gapped-path statement are not proved here; see
     \cite{gap:fbc25_controlled_z_split_index_class_scope}.
 \end{lemma}
 
@@ -729,10 +730,14 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
               \prod_{k=0}^{N-1}\chi_g(t_k,t_{k+1})\right)_{t},
         \qquad t_N=t_0.
     \]
+    Here $\chi_g(a,b)=(-1)^{pa+qab}$ is the two-leg phase, while
+    $c_g(a)=(-1)^{pa}$ is the on-site character. At $N=1$ the periodic
+    convention gives the controlled-$Z$ factor $(-1)^{t_0^2}$.
     Both $\ket{\psi_N(A)}$ and $\ket{0\cdots0}$ are invariant. Each state
     admits action reductions for this same family, and the family's anomaly
-    class vanishes. The relative class of their action $L$-symbols and its
-    identification with a physical phase remain to be proved; see
+    class vanishes. Their relative action class is computed in
+    Lemma~\ref{lem:mpug_controlled_z_relative_l_class}. Its identification
+    with a physical gapped-path phase remains to be proved; see
     \cite{gap:fbc25_controlled_z_split_index_class_scope}.
 \end{lemma}
 
@@ -747,6 +752,8 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     Normality and invariance give action reductions, and the invariant
     normal product state forces the anomaly class to vanish.
 \end{proof}
+
+\input{chapter/ch29_controlled_z_relative_l}
 
 \section{The gauge-invariant subspace of the CZX circuit tuple}
 \label{sec:mpug_czx_gauge_invariant}

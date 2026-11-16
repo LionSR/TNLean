@@ -3,7 +3,8 @@
 ## Claimed scope and baseline
 
 Owner: the separate campaign delegated from thread `6af54194-8060-8191-9800-f45dd86d90e6`.
-Branch: `feat/10521-controlled-z-combined-symmetry`. Issue: #10521, partial construction only.
+Branch: `feat/10521-controlled-z-combined-symmetry`. Issue: #10521, combined family and
+relative action class; the physical phase theorem remains open.
 Claim comment: https://github.com/LionSR/TNLean/issues/10521#issuecomment-6903716068.
 
 Provisioned TNLean was clean at `eb588dc15332a3798431015e6c27ecbaf329b2d1`.
@@ -50,10 +51,10 @@ Skipped auto-fix workflows do not clear that gate.
 3. Identify its operator with the product of the existing split-leg phases on the ring;
    derive invariance of the controlled-Z state and reference product state at every positive
    length, including length one. Obtain actual action/fusion data through existing results.
-4. Remaining: compute and compare the two actual L-symbol classes; prove physical path
-   invariance or a source-faithful SIMPS classification before identifying the phase.
+4. Compute and compare the two actual L-symbol classes (completed in the continuation).
+   Remaining: physical path invariance or a source-faithful physical classification.
 
-## Results and validation
+## First-head results and validation
 
 Both new proof modules pass the package build and direct strict Lean elaboration, including
 `autoImplicit=false`, `relaxedAutoImplicit=false`, the package's synthesis-depth bound,
@@ -113,10 +114,94 @@ importing those non-`module` dependencies from a `module` file.
 
 ## Candidates and blockers
 
-- Relative L-symbol extraction needs actual reduction matrices; a split-index bond
-  projective representation alone does not compute the MPO action L-symbol.
+- The initial relative L-symbol candidate is completed by the continuation below.
 - The full SIMPS physical phase theorem is absent, and the paper-gap note stays open.
 - Final-head focused strict elaboration, full library/Blueprint CI, required proof and
   Blueprint review, and dependency-order integration are required before any normal merge.
 - Preserve the shared tactic ledger owned by #10677. Record any abstraction decision here.
   The diagonal construction reuses existing mathematical lemmas rather than adding a tactic.
+
+## Continuation: actual relative L-symbol class
+
+PR: https://github.com/LionSR/TNLean/pull/10686. The first proof head is
+`0d04e49205be890d7e735f2899b7500c29ae56ee`; subsequent final heads are recorded in the PR.
+Its independent source/Blueprint review found no blockers at that first head
+(https://github.com/LionSR/TNLean/pull/10686#issuecomment-6903972219 is the request;
+the review is the later claude[bot] reply). That review is historical evidence for the
+first head, not approval of the extended result. The current PR CI run is
+https://github.com/LionSR/TNLean/actions/runs/43780545166; its build job started after
+the runner queue. No completed full-CI pass or required formal approval is inferred.
+
+The continuation proves the missing relative calculation, including independence of all
+reduction choices:
+
+1. `ReductionCertificates` maps Kronecker and local compression identities from a coefficient
+   ring into complex matrices. Existing all-word reduction theory supplies the conclusion.
+2. `ControlledZCombinedReductions` supplies explicit rational action caps for the bond-three
+   state and reference product state, plus common fusion caps. Kernel reduction checks the
+   finite cap, letter, and projection-insertion identities; the actual reductions hold on
+   every word. The action caps for controlled-Z require transient directions; a bare
+   one-letter square gauge is not assumed.
+3. `LSymbolComputation` uses the sufficient one-letter relation between the two action
+   trees. Multiplication by the rest of the word gives dressed proportionality directly;
+   no redundant two-letter intertwiner assumptions are needed. Normality and the actual
+   reduction give nonvanishing and uniqueness of the selected L-symbol.
+4. The actual scalar values are `L_A((p,q),(r,s)) = (-1)^(p*s) * 4^(q*s)` and `L_0 = 1`.
+   Their ratio is a native Mathlib two-cocycle and differs from the existing cluster
+   cocycle `(-1)^(q*r)` by the coboundary of `phi(p,q) = (-1)^(p*q) * 2^q`.
+5. `SingleBlockLSymbolGauge` specializes the existing permuted-block gauge law to one block.
+   In the relative factor the common fusion gauge cancels; changing either state's action
+   caps contributes only a coboundary. No duplicate cochain type is introduced.
+6. `combinedRelativeLSymbol_H2π_eq_cluster` and `combinedRelativeLSymbol_H2π_ne_zero` apply
+   to **every** actual action and common fusion choice for the two fixed states. This is
+   stronger than merely calculating a chosen table or its commutator.
+
+The complete seven-module proof batch passes the combined package build (19,077 jobs
+in its focused closure) and strict direct checks with all package options and warnings as
+errors. All 69 public declarations have foundational dependencies contained in the three
+standard logical principles. The two computational modules built in 21 and 19 seconds,
+below the compilation-time failure threshold. Full source synchronization, reverse
+coverage, Blueprint roles, repository-wide text style, generated imports, prose and
+integrity checks are recorded separately from hosted full-library/compiled-Blueprint
+acceptance. The temporary foundational audit command file was removed.
+
+Upstream main advanced to `2e0e6387c156ff7449a4f1df51775a5a5d2144cf` during the work.
+The intervening changes are lattice/area-law work and two additional promoted-pattern
+entries in `CLAUDE.md`, which were read. No intervening changed source is in the new
+capstone's 268-module transitive TNLean import closure. This actual main is integrated
+before publishing the extended head, preserving the exact checked proof sources and pins.
+
+The refreshed inventory contains 75 open PRs. The 17 newly observed PR file lists have
+no overlap with the selected new proof or Blueprint files; one is this campaign's own
+PR. Fibonacci now has its owner's draft #10689, so that scope remains occupied.
+
+### Physical source audit and remaining dependency
+
+Primary source: https://arxiv.org/html/2404.15883v2, Sections 3.4, 3.4.4 and 6.3.
+Stephen proves a symmetric finite-depth circuit obstruction and a fingerprint theorem
+for a circuit-defined phase. The general SIMPS interpretation of the L-symbol
+classification is posed as a question in Section 6.3. Thus the issue's gapped-path
+target still needs a physical path theorem or a proved connection to that circuit notion.
+The existing gap note is corrected to preserve this distinction, without changing the
+requested gapped-path target.
+
+Remaining: derive invariance of the actual relative class along the source's allowed
+physical paths, or formalize the source circuit obstruction and the required connection
+to that path notion. The family, explicit reductions and reduction-independent relative
+class are no longer missing. A supplied virtual/projective path is not a replacement for
+the physical path construction.
+
+### Coordination and abstraction decisions
+
+- Notified #10626's owner on its PR before constructing the new reductions; no occupied
+  source was edited. The new single-block gauge adapter reuses `PermutedBlocksGauge`.
+  These new consumers must be included in the eventual cochain-migration integration audit.
+- The new one-letter dressed-proportionality lemma could simplify the existing toolkit's
+  stronger local lemma. Leave that occupied source to #10626's owner, rather than making
+  a competing refactor. No custom tactic is added, and the shared tactic ledger stays intact.
+- All rational calculations are candidates until their Lean certificates are checked;
+  the published results use the checked certificates and actual tensor equalities.
+- Addressed both non-blocking observations in the first-head independent review: the
+  Blueprint explicitly distinguishes the two-leg phase from the one-leg character, and
+  the Blueprint/gap note state the repeated-bit convention at ring length one. Fresh
+  review is still required for the extended head.

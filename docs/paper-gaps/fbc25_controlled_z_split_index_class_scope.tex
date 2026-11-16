@@ -59,32 +59,53 @@ dimension one for $q=0$ and two for $q=1$. The actual operators are unitary,
 and both $\ket{\psi_N(A)}$ and the reference product state
 $\ket{0\cdots0}$ are invariant at every positive length. Consequently,
 action reductions exist for each of these two states under the same family.
+At length one the periodic tensor convention evaluates the controlled-$Z$
+factor at the repeated bit, giving $(-1)^{t_0^2}$; this case is included.
 The family's anomaly class vanishes
 \leanid{ControlledZGauging.combinedFamily_anomalyClass_eq_zero}; this
 three-cocycle statement does not compare the two states' action
 two-cocycle classes.
 
+That relative comparison is now proved separately. Explicit rational
+matrices give actual action reductions for the two states and common fusion
+reductions for the combined family. For $g=(p,q)$ and $h=(r,s)$ their
+L-symbols are
+\[
+    L_A(g,h)=(-1)^{ps}4^{qs},\qquad L_0(g,h)=1.
+\]
+The relative factor is cohomologous to the split-index cluster factor
+$\omega(g,h)=(-1)^{qr}$, with one-cochain
+$\phi(p,q)=(-1)^{pq}2^q$. The common fusion gauge cancels in the relative
+factor, and changes of the two action reductions give a two-coboundary.
+Thus for every choice of actual action and common fusion reductions the
+relative L-symbol class equals the nonzero split-index class
+\leanid{ControlledZGauging.combinedRelativeLSymbol_H2π_eq_cluster}
+\leanid{ControlledZGauging.combinedRelativeLSymbol_H2π_ne_zero}.
+
 What is not formalized is the identification of this projective class with
 the phase: that two states with split-index presentations whose bond
 implementations of the combined symmetry carry different classes cannot be
-joined by a symmetric gapped path. This is the content of
-Ref.~\cite{Stephen2024SIMPS}, which classifies phases protected by symmetries
-that act on split-index tensors as on-site symmetries. The formal statement is
-therefore the invariant that labels the phase, not the phase statement
-itself.
+joined by a symmetric gapped path. The relative action invariant is proved;
+its physical path-invariance theorem is not.
+
+There is a distinction between the two source routes.
+Ref.~\cite[Sections~3.4 and~3.4.4]{Stephen2024SIMPS} proves a symmetric
+finite-depth circuit obstruction and a universal fingerprint theorem for
+its circuit-defined phase. Section~6.3 leaves the general SIMPS
+interpretation of the L-symbol classification as a question. This does not
+by itself supply the gapped-path theorem required here.
 
 \section{Elimination plan}
 
-The phase statement would follow from a formal version of the classification
-of Ref.~\cite{Stephen2024SIMPS} for split-index states, or from the
-classification of phases protected by matrix product unitary symmetries
-through the action tensors and their L-symbols, applied to the combined
-$\mathbb{Z}_2\times\mathbb{Z}_2$ family. The exact normal combined family and
-its action reductions for both states are constructed. What remains is a
-computation of the class of its L-symbols relative to the invariant product
-state $\ket{0\cdots0}$, followed by physical path invariance with the source's
-exact hypotheses. The split-index bond calculation alone does not supply
-that comparison or the physical path argument.
+The exact normal combined family, its explicit reduction data, and the
+reduction-independent relative action class are constructed. The remaining
+step is physical path invariance with the source's exact hypotheses, for
+example through the matrix product operator phase theorem of
+Ref.~\cite{GarreRubio2023MPOSym}. Alternatively, the circuit obstruction
+of Ref.~\cite{Stephen2024SIMPS} can be formalized, together with a precise
+connection between that circuit notion and the intended gapped-path notion.
+The gapped-path requirement must not be replaced by a stronger supplied
+virtual-path premise or a redefinition of the physical phase.
 
 \bibliographystyle{alpha}
 \bibliography{references}

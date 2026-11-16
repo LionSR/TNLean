@@ -18,10 +18,10 @@ split-leg phases around the ring. Both the controlled-Z state and the reference 
 state are invariant at every positive length.
 
 **Scope restriction (split-index phase):** these results construct the combined normal family
-and its invariant states. They do not compare the two action L-symbol classes or prove
-the SIMPS physical phase classification. The projective split-index invariant remains the
-one in `ControlledZGauging.simpsTensor_isNontrivialClass`; the remaining phase statement is
-documented in `docs/paper-gaps/fbc25_controlled_z_split_index_class_scope.tex`.
+and its invariant states. The relative action L-symbol class is computed in
+`TNLean.MPS.Examples.ControlledZCombinedLSymbol` and equals the nontrivial split-index class.
+The physical gapped-path classification remains unproved, as documented in
+`docs/paper-gaps/fbc25_controlled_z_split_index_class_scope.tex`.
 -/
 
 noncomputable section

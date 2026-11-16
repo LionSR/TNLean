@@ -62,6 +62,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSupport
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSwap
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
+import TNLean.MPS.Symmetry.MPOSymmetry.LSymbolComputation
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveBoundaryTransport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveConfigEquiv
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveEdgeNormalization
@@ -115,6 +116,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.RepS3SU24NIMRepClassification
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointRightComparison
 import TNLean.MPS.Symmetry.MPOSymmetry.Similarity
+import TNLean.MPS.Symmetry.MPOSymmetry.SingleBlockLSymbolGauge
 import TNLean.MPS.Symmetry.MPOSymmetry.SymmetricBoundary
 import TNLean.MPS.Symmetry.MPOSymmetry.TimeReversalAnomaly
 import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness

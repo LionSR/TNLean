@@ -1,0 +1,190 @@
+\subsection{The relative action class of the controlled-$Z$ state}
+
+\begin{lemma}[Coefficient maps and local reduction identities]
+    \label{lem:mpug_reduction_coefficient_map}
+    \lean{MPSTensor.complexOfRing_kronecker,
+        MPSTensor.isReduction_complexOfRing_of_local_compression}
+    \leanok
+    Let $f:R\to\C$ be a homomorphism from a commutative ring. It preserves
+    matrix Kronecker products. Suppose matrices over $R$ satisfy
+    \[
+        VW=I,\qquad VB^iW=A^i,\qquad B^iWVB^j=B^iB^j.
+    \]
+    Their entrywise images under $f$ are a reduction from $f(B)$ onto
+    $f(A)$ on every word, including the empty word.
+\end{lemma}
+\begin{proof}\leanok
+    The homomorphism preserves products, sums and identity matrices.
+    Transport the displayed identities and induct on the length of a word,
+    inserting $WV$ between its first two letters.
+\end{proof}
+
+\begin{lemma}[Local determination of an action scalar]
+    \label{lem:mpug_action_scalar_local}
+    \lean{MPOTensor.GroupFamily.ActionData.eq_lSymbol_of_isDressedProportional,
+        MPSTensor.IsDressedProportional.of_forall_mul,
+        MPSTensor.isDressedProportional_complexOfRing_of_forall_mul}
+    \leanok
+    If two boundaries satisfy $LB^i=zRB^i$ for every letter, then
+    $LB^w=zRB^w$ for every nonempty word. The same conclusion follows from
+    such identities over a coefficient ring mapped to $\C$.
+    If $L,R$ are the two action trees of a normal invariant state of positive
+    bond dimension, their scalar is the state's selected $L$-symbol.
+\end{lemma}
+\begin{proof}\leanok
+    Multiply the one-letter identity by the remaining letters. The left
+    action tree is a reduction onto the normal state, so it is nonzero
+    against arbitrarily long words. This gives uniqueness of the scalar.
+\end{proof}
+
+\begin{lemma}[Independence of the relative class from the reduction data]
+    \label{lem:mpug_relative_l_gauge}
+    \lean{MPOTensor.GroupFamily.ActionData.toBlockActionData,
+        MPOTensor.GroupFamily.ActionData.toBlockActionData_lSymbol,
+        MPOTensor.GroupFamily.ActionData.lSymbol_eq_blockGauge,
+        MPOTensor.GroupFamily.ActionData.relative_lSymbol_isMulCoboundary₂_div}
+    \leanok
+    Let an exact normal group family fix two normal states of positive bond
+    dimensions. For each state choose action reductions, and choose common
+    fusion reductions for the group family. The single-state $L$-symbol
+    agrees with the one-block $L$-symbol. If the reduction data are changed,
+    with common fusion gauge $\beta$ and action gauges $\gamma_A,\gamma_B$,
+    then
+    \[
+        L_A'(g,h)=\frac{\gamma_A(gh)\beta(g,h)}
+            {\gamma_A(g)\gamma_A(h)}L_A(g,h).
+    \]
+    The analogous equation holds for $B$. Thus, writing $Q=L_A/L_B$,
+    \[
+        Q'(g,h)=\frac{\phi(g)\phi(h)}{\phi(gh)}Q(g,h),
+        \qquad \phi(g)=\frac{\gamma_B(g)}{\gamma_A(g)}.
+    \]
+    In particular $Q'/Q$ is a two-coboundary.
+\end{lemma}
+\begin{proof}\leanok
+    Apply the gauge law for permuted blocks to the one-point block set.
+    Its bond identification is the identity. Divide the two gauge equations;
+    the common factor $\beta(g,h)$ cancels.
+\end{proof}
+
+\begin{definition}[Rational reduction matrices for the combined family]
+    \label{def:mpug_controlled_z_rational_reductions}
+    \lean{ControlledZGauging.combinedLabelRational,
+        ControlledZGauging.combinedRationalTensor,
+        ControlledZGauging.stateRational, ControlledZGauging.zeroRational,
+        ControlledZGauging.combinedRationalAction,
+        ControlledZGauging.combinedRationalProduct,
+        ControlledZGauging.combinedStateV, ControlledZGauging.combinedStateW,
+        ControlledZGauging.combinedZeroV, ControlledZGauging.combinedZeroW,
+        ControlledZGauging.combinedFusionV, ControlledZGauging.combinedFusionW}
+    \leanok
+    Write $g=(p,q)$, with $p,q\in\{0,1\}$. Over $\Q$, the tensor is
+    \[
+        T_{p,0}^{ij}=\delta_{ij}(-1)^{pj},\qquad
+        (T_{p,1}^{ij})_{lr}=\delta_{ij}\delta_{rj}(-1)^{pj+lj}.
+    \]
+    The state matrices are the rational forms of $A^i$ and
+    $A_0^i=\delta_{i0}$. Their action and stacked product use the same
+    Kronecker contractions as the complex tensors. Set
+    \[
+        V_{p,0}=W_{p,0}=\operatorname{diag}(1,(-1)^p,(-1)^p).
+    \]
+    For $s=(-1)^p$, set
+    \[
+        V_{p,1}=\begin{pmatrix}
+            0&2s&2s&0&0&0\\1&0&0&-1&0&0\\1&0&0&1&0&0
+        \end{pmatrix},\qquad
+        W_{p,1}=\frac12\begin{pmatrix}
+            0&1&1\\s&0&0\\0&0&0\\0&-1&1\\-s&0&0\\0&0&0
+        \end{pmatrix}.
+    \]
+    For the product state the caps are $V_{0}=W_{0}=1$ and
+    $V_{1}=(1\;0)$, $W_{1}=(1\;1)^T$. Fusion caps are the identity unless
+    both controlled-$Z$ bits are one; in that case they are
+    $F^<=(1\;0\;0\;0)$ and $F^>=(1\;1\;1\;1)^T$.
+\end{definition}
+
+\begin{lemma}[The displayed matrices are actual action and fusion reductions]
+    \label{lem:mpug_controlled_z_explicit_reductions}
+    \lean{ControlledZGauging.complexOfRing_combinedRationalTensor,
+        ControlledZGauging.complexOfRing_stateRational,
+        ControlledZGauging.complexOfRing_zeroRational,
+        ControlledZGauging.complexOfRing_combinedRationalAction,
+        ControlledZGauging.complexOfRing_combinedRationalProduct,
+        ControlledZGauging.combinedStateActionData,
+        ControlledZGauging.combinedZeroActionData,
+        ControlledZGauging.combinedFusionData}
+    \leanok
+    \uses{def:mpug_controlled_z_rational_reductions, lem:mpug_reduction_coefficient_map}
+    The rational tensors map entrywise to the actual combined complex
+    tensors and their contractions. The displayed caps give action
+    reductions for both states and common fusion reductions for the family.
+    Every reduction equation holds on all words.
+\end{lemma}
+\begin{proof}\leanok
+    Check the cap, single-letter and projection-insertion identities over
+    $\Q$ for all labels and letters. Apply
+    Lemma~\ref{lem:mpug_reduction_coefficient_map}.
+\end{proof}
+
+\begin{definition}[The two action trees and their relative factor]
+    \label{def:mpug_controlled_z_relative_factor}
+    \lean{ControlledZGauging.combinedRationalActTree,
+        ControlledZGauging.combinedRationalFuseTree,
+        ControlledZGauging.combinedRationalDoubleAction,
+        ControlledZGauging.combinedStateLValue,
+        ControlledZGauging.combinedRelativeCocycle,
+        ControlledZGauging.combinedLClassGauge,
+        ControlledZGauging.combinedRelativeLSymbol}
+    \leanok
+    The rational action tree is $V_g(I\otimes V_h)\alpha^{-1}$ and the
+    fusion tree is $V_{gh}(F^<_{g,h}\otimes I)$, with $\alpha$ the canonical
+    bond reassociation. They act on $(T_gT_h)\cdot A$.
+    For $g=(p,q)$ and $h=(r,s)$ define
+    \[
+        \lambda(g,h)=(-1)^{ps}4^{qs},\qquad
+        \phi(g)=(-1)^{pq}2^q.
+    \]
+    For arbitrary actual action and common fusion reductions define the
+    relative factor $Q(g,h)=L_A(g,h)/L_0(g,h)$.
+\end{definition}
+
+\begin{lemma}[The reduction-independent relative action class]
+    \label{lem:mpug_controlled_z_relative_l_class}
+    \lean{ControlledZGauging.combinedStateActionData_lSymbol,
+        ControlledZGauging.combinedZeroActionData_lSymbol,
+        ControlledZGauging.combinedRelativeCocycle_eq_lSymbol_div,
+        ControlledZGauging.combinedRelativeCocycle_div_cluster_isMulCoboundary,
+        ControlledZGauging.combinedRelativeCocycle_isCocycle,
+        ControlledZGauging.combinedRelativeCocycle_H2π_eq_cluster,
+        ControlledZGauging.combinedRelativeCocycle_H2π_ne_zero,
+        ControlledZGauging.combinedRelativeLSymbol_div_computed_isMulCoboundary,
+        ControlledZGauging.combinedRelativeLSymbol_isCocycle,
+        ControlledZGauging.combinedRelativeLSymbol_H2π_eq_cluster,
+        ControlledZGauging.combinedRelativeLSymbol_H2π_ne_zero}
+    \leanok
+    \uses{lem:mpug_controlled_z_explicit_reductions, lem:mpug_action_scalar_local,
+        lem:mpug_relative_l_gauge, def:mpug_controlled_z_relative_factor}
+    The explicit reductions give $L_A(g,h)=\lambda(g,h)$ and $L_0(g,h)=1$.
+    For the cluster factor system $\omega(g,h)=(-1)^{qr}$,
+    \[
+        \lambda(g,h)=\frac{\phi(g)\phi(h)}{\phi(gh)}\omega(g,h).
+    \]
+    Consequently every choice of actual reduction data gives a genuine
+    relative two-cocycle $Q$, with
+    \[
+        [Q]=[\lambda]=[\omega]\ne0
+        \quad\hbox{in }H^2(\Z_2\times\Z_2,\C^\times).
+    \]
+    This identifies the action class with the split-index class. Physical
+    gapped-path invariance remains separate; see
+    \cite{gap:fbc25_controlled_z_split_index_class_scope}.
+\end{lemma}
+\begin{proof}\leanok
+    Each one-letter comparison of the two action trees has scalar
+    $\lambda(g,h)$ for $A$ and scalar one for the product state. Apply
+    Lemma~\ref{lem:mpug_action_scalar_local}. The displayed coboundary
+    equation is checked on the four group elements. The cluster class is
+    nonzero. Lemma~\ref{lem:mpug_relative_l_gauge} then removes all dependence
+    on the chosen action and common fusion reductions.
+\end{proof}
