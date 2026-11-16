@@ -517,8 +517,8 @@ $\lvert\mu_j\rvert^N$ for multiplicity one; with these coefficients the bounds a
 (S7) and weights of any phase \cite{gap:mswc24_repeated_block_corrected_state}. For multiplicity
 one and weight one the rate is also formalized at second order,
 (\ref{eq:mswc24_mixed_second_order}), which is sharp up to $\gamma<1$. The second-order rate for
-weights of different moduli and for blocks with multiplicity is not yet formalized for the
-normalized approximating state. The relative positive-part and column-normalization estimates
+weights of different moduli and for blocks with multiplicity is formalized for the
+normalized approximating state when $M\geq2$. The one-block case remains unformalized. The relative positive-part and column-normalization estimates
 already remove the small-weight obstruction for the individual relative-row overlaps. Namely,
 write $H_{jj'}=L_j^\dagger PC^{-1}L_{j'}$ and let $F_j$ be the fixed-point tensor of $\sigma_j$.
 The existing second-order overlap estimate gives
@@ -549,8 +549,7 @@ $O(e^{-2\gamma q/\xi})$ for $M\geq2$.
 This argument and its linear-in-$y$ consequence are written as
 \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_sq_of_two_le} and
 \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_sq_of_two_le} in
-\doclink{TNLean/MPS/Preparation/RepeatedSecondOrderBlockError}; their elaboration remains to
-be checked. A separate quadratic projection estimate for $M=1$ remains to be formalized.
+\doclink{TNLean/MPS/Preparation/RepeatedSecondOrderBlockError}. A separate quadratic projection estimate for $M=1$ remains to be formalized.
 The absolute-trace estimate for the relative-row overlaps is only quadratic for $M\geq2$;
 it must not be extended to $M=1$ without an additional argument.
 The unrestricted source entry and issue~\#10571 remain open.

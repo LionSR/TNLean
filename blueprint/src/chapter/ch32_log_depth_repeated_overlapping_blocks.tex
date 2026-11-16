@@ -306,12 +306,12 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     from $C_0K^2$ to $C_*$ gives the asserted estimate.
 \end{proof}
 
-% Draft: the normalized second-order result still requires Lean elaboration.
 % The source entry remains open, in particular its one-block case.
 \begin{lemma}[Second-order approximation for repeated overlapping blocks]
     \label{lem:ldp_repeated_approximation_second_order}
     \lean{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_sq_of_two_le,
         MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_sq_of_two_le}
+    \leanok
     \uses{lem:ldp_relative_overlap_spectral_second_order,
         lem:ldp_repeated_overlapping_overlaps, lem:ldp_overlapping_overlaps,
         def:ldp_repeated_block_state}
@@ -329,6 +329,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     $B=\sum_j\lvert\beta_j\rvert^2>0$; the power sums may cancel arbitrarily closely.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lem:ldp_relative_overlap_spectral_second_order,
         lem:ldp_repeated_overlapping_overlaps, lem:ldp_overlapping_overlaps,
         lem:ldp_shared_overlap_estimates}
