@@ -36,7 +36,7 @@ private theorem treeUnitaryOp_mem_unitary {d h s n : ℕ} [NeZero s] {w : ℕ �
     (U : ∀ p : Fin (2 ^ (h + 1)),
       Matrix (Cfg d (leafLen h n w p)) (Cfg d (leafLen h n w p)) ℂ)
     (hX : ∀ j p, X j p ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ))
-    (hU : ∀ p, U p ∈ unitary (Matrix (Cfg d (leafLen h n w p))
+    (hU : ∀ p : Fin (2 ^ (h + 1)), U p ∈ unitary (Matrix (Cfg d (leafLen h n w p))
       (Cfg d (leafLen h n w p)) ℂ)) :
     treeLeafOp hT U * treeLevelsOp hT X 0 (h + 1) ∈
       unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
@@ -81,7 +81,7 @@ theorem exists_rounds_blockLayerOp_treeUnitaryOp (d s c : ℕ) [NeZero d] [NeZer
           Matrix (Cfg d (leafLen h (ℓ b) (w b) p))
             (Cfg d (leafLen h (ℓ b) (w b) p)) ℂ),
       (∀ b j p, X b j p ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ)) →
-      (∀ b p, U b p ∈ unitary (Matrix (Cfg d (leafLen h (ℓ b) (w b) p))
+      (∀ b (p : Fin (2 ^ (h + 1))), U b p ∈ unitary (Matrix (Cfg d (leafLen h (ℓ b) (w b) p))
         (Cfg d (leafLen h (ℓ b) (w b) p)) ℂ)) →
       ∃ Rs : List (MeasurementRound d N),
         (Rs.map MeasurementRound.depth).sum ≤ C * (h + 1) ∧
