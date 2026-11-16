@@ -143,6 +143,9 @@ end IsMPUSimple
 MPU tensors whose standard forms stay time-reversal invariant at every even
 length, the time-reversal sign is constant. Standard forms and local relations
 are constructed at each point; none is assumed to vary continuously.
+Simplicity along the path is the source's requirement that the deformed MPU
+stay in SF: Definition `SF` applies only to simple tensors (lines 619--622),
+and the sign depends on the blocking level (lines 1633--1641).
 
 Source: arXiv:1703.09188, Proposition `prop:sigma-well-defined`, lines
 1616--1622, with proof at lines 1624--1631. -/
