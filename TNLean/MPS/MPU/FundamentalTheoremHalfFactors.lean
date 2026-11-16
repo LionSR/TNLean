@@ -111,9 +111,8 @@ theorem TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges
 and half factors are related by `SFuu` and `SFvv` generate the same periodic operators on every
 ring of two-site blocks.
 
-**Scope restriction (two-site blocks):** for `W = 𝒰₂` and `W' = 𝒱₂` this is
-`U^{(2N)} = V^{(2N)}`; the relations do not determine the original operators at odd lengths,
-see `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
+For `W = 𝒰₂` and `W' = 𝒱₂` this is `U^{(2N)} = V^{(2N)}`, under the module's scope
+restriction to two-site blocks.
 
 Source: arXiv:1703.09188, Theorem `FundamentalMPU`, "if" direction, lines 624--648. -/
 theorem TwoSiteStandardFormData.mpo_eq_of_half_factor_gauges
