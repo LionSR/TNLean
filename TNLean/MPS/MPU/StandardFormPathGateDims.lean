@@ -62,18 +62,18 @@ Index Theorem implies that `u(p)` and `v(p)` map between tensor product spaces o
 fixed dimensions, independent of `p`"). -/
 theorem IsMPU.exists_standardForm_fixed_gateDims_of_path [NeZero d]
     {U : unitInterval → MPOTensor d D} (hU : Continuous U) (hMPU : ∀ p, IsMPU (U p)) :
-    ∃ ℓ r : ℕ, ∀ p, ∃ (D' : ℕ) (V : MPOTensor (MPSTensor.blockPhysDim d (D ^ 4)) D')
+    ∃ ℓ r : ℕ, ∀ p, ∃ (D' : ℕ) (V : MPOTensor (Kraus.blockPhysDim d (D ^ 4)) D')
       (u : Matrix (Fin ℓ × Fin r)
-        (Fin (MPSTensor.blockPhysDim d (D ^ 4)) × Fin (MPSTensor.blockPhysDim d (D ^ 4))) ℂ)
-      (v : Matrix (Fin (MPSTensor.blockPhysDim d (D ^ 4)) ×
-        Fin (MPSTensor.blockPhysDim d (D ^ 4))) (Fin r × Fin ℓ) ℂ),
+        (Fin (Kraus.blockPhysDim d (D ^ 4)) × Fin (Kraus.blockPhysDim d (D ^ 4))) ℂ)
+      (v : Matrix (Fin (Kraus.blockPhysDim d (D ^ 4)) ×
+        Fin (Kraus.blockPhysDim d (D ^ 4))) (Fin r × Fin ℓ) ℂ),
       (∀ N : ℕ, 0 < N → mpo V N = mpo (MPOTensor.blockTensor (U p) (D ^ 4)) N) ∧
         Nonempty (TwoSiteStandardFormData (blockTwo V) u v) := by
   have : NeZero D := (hMPU 0).neZero_bond
   have hk : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
-  set d' := MPSTensor.blockPhysDim d (D ^ 4)
+  set d' := Kraus.blockPhysDim d (D ^ 4)
   have : NeZero d' := ⟨by
-    simp only [d', MPSTensor.blockPhysDim_eq_pow]
+    simp only [d', Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ (NeZero.ne d)⟩
   set I := (hMPU 0).index
   -- At each point, a standard form whose right rank is fixed by the index.
