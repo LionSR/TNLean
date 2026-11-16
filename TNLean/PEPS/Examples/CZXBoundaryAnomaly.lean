@@ -102,25 +102,24 @@ theorem pairTwist_czxPhaseGate_blockTwo_reviewCZXTensor :
   ext l r
   simp only [pairTwist, czxPhaseGate, Matrix.map_apply, Matrix.diagonal_apply, ite_smul,
     zero_smul, Finset.sum_ite_eq, Finset.mem_univ, ite_true, Matrix.smul_apply, Pi.neg_apply,
-    Matrix.neg_apply, CZX.tensor, blockTwo, CZXCompression.reviewCZXTensor_eq_transpose]
+    Matrix.neg_apply, CZX.tensor, blockTwo]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
-    simp [CZX.decoratedSiteTensor, CZXCompression.czxTensor_apply, Matrix.mul_apply,
-      Fin.sum_univ_two, Fin.rev, Complex.conj_I, finProdFinEquiv]
+    simp [Matrix.sum_apply, Fin.sum_univ_four, Matrix.mul_apply, Fin.sum_univ_two,
+      CZXCompression.reviewCZXTensor_apply, CZX.decoratedSiteTensor, Fin.rev, finProdFinEquiv,
+      Fin.divNat, Fin.modNat, Complex.conj_I]
 
 /-- The sign character `x ↦ (-1)^x` of `ℤ₂`. -/
-def czxSign (x : Multiplicative (ZMod 2)) : ℂ := (-1) ^ (Multiplicative.toAdd x).val
+def czxSign (x : Multiplicative (ZMod 2)) : ℂ := if Multiplicative.toAdd x = 0 then 1 else -1
 
 theorem czxSign_mul (x y : Multiplicative (ZMod 2)) : czxSign x * czxSign y = czxSign (x * y) := by
   revert x y
   refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
-    (Multiplicative.forall_zmod_two ?_ ?_) <;> norm_num [czxSign, ← ofAdd_add]
+    (Multiplicative.forall_zmod_two ?_ ?_) <;>
+    simp [czxSign, ← ofAdd_add, show (1 : ZMod 2) + 1 = 0 from rfl]
 
-theorem czxSign_ne_zero (x : Multiplicative (ZMod 2)) : czxSign x ≠ 0 :=
-  pow_ne_zero _ (neg_ne_zero.2 one_ne_zero)
-
-theorem czxSign_mul_self (x : Multiplicative (ZMod 2)) : czxSign x * czxSign x = 1 := by
-  revert x
-  refine Multiplicative.forall_zmod_two ?_ ?_ <;> norm_num [czxSign]
+theorem czxSign_ne_zero (x : Multiplicative (ZMod 2)) : czxSign x ≠ 0 := by
+  unfold czxSign
+  split_ifs <;> norm_num
 
 /-- The boundary family after the change of basis by `S ⊗ S`. -/
 private def twistedFamily : GroupFamily (Multiplicative (ZMod 2)) 4 :=
@@ -144,22 +143,36 @@ private theorem family_tensor_eq (g : Multiplicative (ZMod 2)) :
 
 private theorem twistedFamily_tensor_eq (g : Multiplicative (ZMod 2)) :
     twistedFamily.tensor g = czxSign g • CZX.family.tensor g := by
-  rw [family_tensor_eq, smul_smul, czxSign_mul_self, one_smul]
+  revert g
+  refine Multiplicative.forall_zmod_two ?_ ?_
+  · change pairTwist czxPhaseGate (czxPhaseGate.map (starRingEnd ℂ)) (idTensor 4) =
+      czxSign 1 • idTensor 4
+    rw [pairTwist_idTensor czxPhaseGate_unitary]
+    simp [czxSign]
+  · change pairTwist czxPhaseGate (czxPhaseGate.map (starRingEnd ℂ))
+        (blockTwo CZXCompression.reviewCZXTensor) = czxSign (Multiplicative.ofAdd 1) • CZX.tensor
+    rw [pairTwist_czxPhaseGate_blockTwo_reviewCZXTensor]
+    simp [czxSign]
 
-private theorem twistedFamily_isNormalRepresentation : twistedFamily.IsNormalRepresentation :=
-  CZX.family_isNormalRepresentation.withTensor_smul czxSign_mul czxSign_ne_zero
-    (T := twistedFamily.tensor) twistedFamily_tensor_eq
+private theorem twistedFamily_isNormalRepresentation :
+    twistedFamily.IsNormalRepresentation := by
+  have h := IsNormalRepresentation.withTensor_smul (F := CZX.family)
+    (T := twistedFamily.tensor) CZX.family_isNormalRepresentation czxSign_mul czxSign_ne_zero
+    twistedFamily_tensor_eq
+  exact h
 
 /-- **The CZX boundary family is a normal representation of `ℤ₂`**: both tensors are normal
 and the blocked operators satisfy `O_g O_h = O_{gh}` on every nonempty chain.
 
 Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 1464 (the representation
 law) and lines 2593--2601 (`O(A)^2 = (-1)^N I`, the identity at even length). -/
-theorem czxBoundaryFamily_isNormalRepresentation : czxBoundaryFamily.IsNormalRepresentation :=
-  twistedFamily_isNormalRepresentation.withTensor_pairTwist
-    (u := star czxPhaseGate) (T := czxBoundaryFamily.tensor)
+theorem czxBoundaryFamily_isNormalRepresentation :
+    czxBoundaryFamily.IsNormalRepresentation := by
+  have h := IsNormalRepresentation.withTensor_pairTwist (F := twistedFamily)
+    twistedFamily_isNormalRepresentation (u := star czxPhaseGate) (T := czxBoundaryFamily.tensor)
     (by rw [star_star]; exact mul_eq_one_comm.1 czxPhaseGate_unitary)
-    fun g ↦ (pairTwist_star_pairTwist czxPhaseGate_unitary _).symm
+    fun g ↦ (pairTwist_star_pairTwist czxPhaseGate_unitary (czxBoundaryFamily.tensor g)).symm
+  exact h
 
 /-- **The CZX boundary symmetry is anomalous**: for every choice of fusion tensors of the
 blocked boundary family, the anomaly three-cocycle is not cohomologous to the trivial one.
@@ -205,7 +218,9 @@ theorem mpo_reviewCZXTensor_eq_reindex (n m : ℕ) (hm : n * 2 = m) :
   change _ = Matrix.reindex _ _ (mpo (blockTwo CZXCompression.reviewCZXTensor) n)
   rw [mpo_blockTwo_eq_reindex_blockTensor, mpo_blockTensor_eq_reindex]
   ext σ τ
-  simp [czxBoundaryPairing, Matrix.reindex_apply]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, czxBoundaryPairing,
+    Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.apply_symm_apply]
+  rfl
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]

@@ -57,8 +57,8 @@ theorem wordSpan_le_of_forall_mem_span {A : MPSTensor d D} {B : MPSTensor d' D}
   induction N with
   | zero => simp
   | succ N ih =>
-      rw [Kraus.wordSpan_succ, Kraus.wordSpan_succ]
-      refine Submodule.mul_le_mul ih ?_
+      rw [Kraus.wordSpan_succ A, Kraus.wordSpan_succ B]
+      refine mul_le_mul' ih ?_
       rw [Kraus.wordSpan_one, Kraus.wordSpan_one]
       exact Submodule.span_le.2 (Set.range_subset_iff.2 h)
 
@@ -94,16 +94,18 @@ variable {d D D₁ D₂ : ℕ}
 theorem pairTwist_pairTwist (a b u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) :
     pairTwist a b (pairTwist u v M) = pairTwist (a * u) (b * v) M := by
   funext i j
-  simp only [pairTwist, Matrix.mul_apply, Finset.smul_sum, smul_smul, Finset.sum_smul]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun k _ ↦ ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun k' _ ↦ ?_
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun l _ ↦ ?_
-  refine Finset.sum_congr rfl fun l' _ ↦ ?_
-  congr 1
-  ring
+  ext r c
+  simp only [pairTwist, Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
+    Finset.mul_sum, Finset.sum_mul]
+  conv_lhs =>
+    enter [2, k]; rw [Finset.sum_comm]
+    enter [2, k']; rw [Finset.sum_comm]
+  conv_lhs => rw [Finset.sum_comm]
+  conv_lhs =>
+    enter [2, k']; rw [Finset.sum_comm]
+    enter [2, l']; rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun _ _ ↦ Finset.sum_congr rfl fun _ _ ↦
+    Finset.sum_congr rfl fun _ _ ↦ Finset.sum_congr rfl fun _ _ ↦ by ring
 
 /-- The trivial physical twist is the identity. -/
 @[simp] theorem pairTwist_one_one (M : MPOTensor d D) : pairTwist 1 1 M = M := by
@@ -263,7 +265,7 @@ theorem IsNormalRepresentation.withTensor_smul (hF : F.IsNormalRepresentation)
   operator_mul g h N hN := by
     change mpo (T g) N * mpo (T h) N = mpo (T (g * h)) N
     simp only [hT, mpo_smul, Matrix.smul_mul, Matrix.mul_smul, smul_smul]
-    rw [hF.operator_mul g h N hN, ← mul_pow, hχ]
+    rw [hF.operator_mul g h N hN, ← mul_pow, mul_comm (χ h), hχ]
 
 namespace FusionData
 
