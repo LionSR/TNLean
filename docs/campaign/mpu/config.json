@@ -100,8 +100,8 @@
             5706,
             5707
           ],
-          "physics": "The transfer operator of a matrix product unitary has a unique eigenvalue of modulus one, so the tensor is normal; after blocking a bounded number of sites, the double layer of the tensor and its adjoint collapses to a rank-one contraction, which is the paper's simplicity condition.",
-          "delivers": "Normality of every matrix product unitary and the bounded blocking theorem for simplicity."
+          "physics": "The transfer operator of a matrix product unitary has a single nonzero eigenvalue, equal to one, so a tensor in canonical form is normal; after blocking a bounded number of sites, the double layer of the tensor and its adjoint collapses to a rank-one contraction, which is the paper's simplicity condition.",
+          "delivers": "Normality of every matrix product unitary in canonical form (the paper assumes canonical form throughout; a tensor with unused bond directions is first reduced to its canonical representative) and the bounded blocking theorem for simplicity."
         },
         {
           "title": "Two ranks and the two-layer circuit",

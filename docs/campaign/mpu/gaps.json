@@ -285,11 +285,11 @@
       "paper": "cpsv17",
       "result": "Proposition prop:normal-tensor, the transfer operator has a single nonzero eigenvalue",
       "title": "Trace powers from length two on determine the transfer spectrum",
-      "summary": "The paper cites a lemma that uses every trace power of the transfer operator, including the first, which unitarity does not supply; an argument using only the powers from two on gives the same conclusion and is proved.",
+      "summary": "The paper cites a lemma that uses every trace power of the transfer operator, including the first, which unitarity does not directly supply; an argument using only the powers from two on gives the same conclusion and is proved.",
       "context": "The transfer operator <i>E</i> of a matrix product unitary acts on <i>D</i> × <i>D</i> matrices by averaging conjugation with the local tensor over both physical indices, with the normalization 1/<i>d</i>. Its spectrum decides whether the tensor is normal, the starting point of the whole structure theory.",
       "claims": "Proposition prop:normal-tensor (lines 344–355 of the source) states that <i>E</i> has just one nonzero eigenvalue, equal to one. The proof derives tr(<i>E</i><sup><i>N</i></sup>) = 1 for every <i>N</i> > 1 from unitarity and then cites a lemma on matrices all of whose trace powers equal one.",
-      "found": "Unitarity gives the trace identity only for <i>N</i> > 1; tr(<i>E</i>) need not equal one, so the cited lemma does not apply as stated. Applying it to <i>E</i><sup>2</sup>, whose trace powers are all one, shows that 1 is the only nonzero eigenvalue of <i>E</i>; the factorization <i>E</i><sup>2</sup> − 1 = (<i>E</i> + 1)(<i>E</i> − 1) then shows its multiplicity is one.",
-      "impact": "None: the printed conclusion holds, with the characteristic polynomial <i>X</i><sup><i>D</i><sup>2</sup>−1</sup>(<i>X</i> − 1).",
+      "found": "Unitarity gives the trace identity only for <i>N</i> > 1, so the cited lemma does not apply to <i>E</i> as stated. Applying it to <i>E</i><sup>2</sup> and to <i>E</i><sup>3</sup>, whose trace powers are all one, shows that each has the single nonzero eigenvalue 1 with multiplicity one; the first excludes nonzero eigenvalues of <i>E</i> other than ±1, the second excludes −1. The factorization <i>E</i><sup>2</sup> − 1 = (<i>E</i> + 1)(<i>E</i> − 1) then shows that the eigenvalue 1 of <i>E</i> has multiplicity one.",
+      "impact": "None: the printed conclusion holds, with the characteristic polynomial <i>X</i><sup><i>D</i><sup>2</sup>−1</sup>(<i>X</i> − 1); in particular tr(<i>E</i>) = 1 follows a posteriori.",
       "plan": "Proved: the exact characteristic polynomial of the transfer matrix of every matrix product unitary, from the trace powers of order at least two alone."
     }
   ]
