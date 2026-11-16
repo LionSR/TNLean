@@ -739,9 +739,12 @@
 
 \begin{lemma}[Local characterization of time reversal]
     \label{PropChiral}
-    \notready
+    \lean{MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff,
+        MPOTensor.IsMPUCanonicalFormII.index_eq_zero_of_standardForm_even_mpo_eq_adjoint,
+        MPOTensor.IsMPUCanonicalFormII.index_eq_zero_of_rightRank_eq_phys}
+    \leanok
     \discussion{5714}
-    \uses{FundamentalMPU, SF, def:index}
+    \uses{SF, def:index, lem:mpu_supplied_standard_form_source_cuts}
     Let an MPU be in standard form, with one-site physical space
     $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Time-reversal symmetry forces
     $\operatorname{ind}(\mathcal U)=0$. The MPU satisfies
@@ -755,9 +758,17 @@
     % Source lines: paper_v2.tex 1201--1252.
 \end{lemma}
 
-\begin{proof}
-    \uses{FundamentalMPU, index-well-defined, def:index,
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_forward_local_time_reversal,
+        lem:mpu_supplied_standard_form_source_cuts, def:index,
         thm:mpu_physical_adjoint_source_ranks}
+    The standard form is that of the two-site block $\mathcal U_2$ of a
+    simple tensor $\mathcal U$ in canonical form II, and $\mathcal U_2$ is
+    again in canonical form II. Hence the criterion for an arbitrary choice of
+    standard-form gates in a canonical tensor,
+    Lemma~\ref{lem:mpu_supplied_forward_local_time_reversal}, applies to
+    $\mathcal U_2$; it also derives $r=\ell=d_0$.
+
     Under time reversal, the two-site block $\mathcal U_2$ and its
     physical-adjoint comparison tensor $\mathcal U_2^\sharp$ generate the
     same MPU. The fundamental theorem identifies their source spaces,
@@ -1520,9 +1531,11 @@
 
 \begin{lemma}[Local characterization of transposition]
     \label{prop:local-char-transposition}
-    \notready
+    \lean{MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff,
+        MPOTensor.IsMPUCanonicalFormII.index_eq_zero_of_standardForm_even_mpo_eq_transpose}
+    \leanok
     \discussion{5714}
-    \uses{FundamentalMPU, SF, def:index}
+    \uses{SF, def:index, lem:mpu_supplied_standard_form_source_cuts}
     Let an MPU be in standard form, with one-site physical space
     $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Transposition symmetry forces
     $\operatorname{ind}(\mathcal U)=0$. The MPU satisfies
@@ -1536,10 +1549,21 @@
     % Source lines: paper_v2.tex 1257--1288.
 \end{lemma}
 
-\begin{proof}
-    \uses{FundamentalMPU, index-well-defined, def:index,
+\begin{proof}\leanok
+    \uses{lem:mpu_supplied_even_transposition_criterion,
+        lem:mpu_transposition_phase_deformation,
+        lem:mpu_supplied_standard_form_source_cuts, def:index,
         def:mpu_source_matrix_one, def:mpu_source_matrix_two,
         def:mpu_right_rank, def:mpu_left_rank}
+    As for Lemma~\ref{PropChiral}, the two-site block $\mathcal U_2$ is in
+    canonical form II, so
+    Lemma~\ref{lem:mpu_supplied_even_transposition_criterion} applies to any
+    choice of its standard-form gates. A unit complex number is $e^{i\phi}$
+    for a real $\phi$. By
+    Lemma~\ref{lem:mpu_transposition_phase_deformation}, the phase can be
+    removed continuously while preserving transposition symmetry, so it is not
+    an invariant of the phase.
+
     Under transposition, the two-site block $\mathcal U_2$ and its transposed
     comparison tensor $\mathcal U_2^{\mathsf T}$ generate the same MPU. The
     fundamental theorem identifies their source spaces, so their corresponding
