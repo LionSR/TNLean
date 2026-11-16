@@ -44,12 +44,16 @@ The common operators are then described as follows:
 Throughout, the blocks of both endpoints are labelled by one finite set
 $x,y,z\in X$, which records the correspondence $x_0\leftrightarrow x_1$,
 and the action multiplicities $M_{a,xy}$ are common to both endpoints,
-which records the correspondence of the degeneracies. As in the injective
-case, the local space of the endpoint $p\in\{0,1\}$ is restricted to the
-span of its tensor, $\mathcal H_p=\bigoplus_xE^p_x\otimes E^p_x$ with
-$E^p_x=\C^{D^p_x}$, and the block $A^p_x$ has physical space
+which records the correspondence of the degeneracies. The endpoint blocks
+are assumed to occupy separated physical sectors: the local space of the
+endpoint $p\in\{0,1\}$ is $\mathcal H_p=\bigoplus_xE^p_x\otimes E^p_x$
+with $E^p_x=\C^{D^p_x}$, and the block $A^p_x$ has physical space
 $E^p_x\otimes E^p_x$; it is extended by zero on the other summands of
-$\mathcal H_p$. Put $F_x=E^0_x\oplus E^1_x$ and
+$\mathcal H_p$. This is a restriction beyond the source: line 1584
+restricts the local space only to the span of the whole tensor $A_p$, and
+for several blocks the separation of that span into block sectors is not
+derived here \cite{gap:glm23_block_injective_mixed_path}. Every statement
+of this section is made under this restriction. Put $F_x=E^0_x\oplus E^1_x$ and
 $\mathcal H=\bigoplus_xF_x\otimes F_x$. The endpoint operators
 $T_{p,a}$ act on $\mathcal H_p$ and have bond spaces
 $K_{p,a}=\C^{\chi_{p,a}}$; write $T^{yx}_{p,a}$ for the part of $T_{p,a}$
@@ -74,7 +78,9 @@ map is assumed to be an adjoint.
         MPSTensor.MPOSymmetry.blockMixedTensor}
     \leanok
     \uses{def:mpo_mixed_endpoint_tensor}
-    For each block $x$, let $A_x(\gamma)$ be the mixed interpolation of
+    Assume the endpoint blocks occupy separated physical sectors, as
+    stated above. For each block $x$, let $A_x(\gamma)$ be the mixed
+    interpolation of
     $A^0_x$ and $A^1_x$ of
     Definition~\ref{def:mpo_mixed_endpoint_tensor}, with physical space
     $F_x\otimes F_x$ and bond space $F_x$, extended by zero on the other
