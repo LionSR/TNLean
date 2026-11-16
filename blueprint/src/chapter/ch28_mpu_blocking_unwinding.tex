@@ -99,3 +99,189 @@ from these particular representatives.
     Each resulting scalar equals its normalized four-spin trace.
     Lemma~\ref{lem:mpu_unwind_supplied} gives the conclusion.
 \end{proof}
+
+\subsection{Finite circuits at arbitrary blocking length}
+
+All spin labels in this subsection refer to the original spins, ordered
+from left to right. The identities below concern finite matrices. The
+identification of these matrices with the standard form of the actual
+arbitrarily blocked tensor remains a separate assertion.
+
+\begin{definition}[Placed pair gates and consecutive layers]
+    \label{def:mpu_printed_layers}
+    \lean{MPOTensor.printedPairGate, MPOTensor.printedCellLayer, MPOTensor.printedLinkLayer}
+    \leanok
+    For a matrix $A$ on two spins, write $A_{p,p+1}$ for its action on
+    consecutive spins $p,p+1$, with identity on all exterior spins.
+    On a chain of $2k$ spins, put
+    \[
+        C_{a,m}(A)=\prod_{j=0}^{m-1}A_{2(a+j)+1,2(a+j)+2},\qquad
+        L_{a,m}(A)=\prod_{j=0}^{m-1}A_{2(a+j)+2,2(a+j)+3}.
+    \]
+    The products are ordered by increasing $j$. Require $a+m\leq k$
+    for $C_{a,m}$ and $a+m+1\leq k$ for $L_{a,m}$.
+\end{definition}
+
+\begin{lemma}[Placement and support]
+    \label{lem:mpu_printed_placement}
+    \lean{MPOTensor.printedPairGate_apply, MPOTensor.printedPairGate_embed, MPOTensor.printedPairGate_commute, MPOTensor.printedPairGate_mem_unitaryGroup, MPOTensor.printedPairGate_conjTranspose}
+    \leanok
+    \uses{def:mpu_printed_layers}
+    The entry of $A_{p,p+1}$ is the corresponding entry of $A$ if all
+    exterior row and column spins agree, and is zero otherwise.
+    Consecutive placement inside a consecutive interval adds the two
+    offsets. Gates on disjoint pairs commute, placement preserves
+    unitarity, and $(A_{p,p+1})^\dagger=(A^\dagger)_{p,p+1}$.
+\end{lemma}
+\begin{proof}\leanok
+    Split a spin configuration into its selected pair and its complement.
+    Matrix multiplication sums only over the selected pair; the
+    complementary entries are Kronecker deltas. For disjoint pairs the
+    two independent sums commute.
+\end{proof}
+
+\begin{lemma}[Layer identities]
+    \label{lem:mpu_printed_layer_identities}
+    \lean{MPOTensor.printedCellLayer_zero, MPOTensor.printedLinkLayer_zero, MPOTensor.printedCellLayer_succ, MPOTensor.printedLinkLayer_succ, MPOTensor.printedCellLayer_succ_last, MPOTensor.printedLinkLayer_succ_last, MPOTensor.printedCellLayer_embed, MPOTensor.printedLinkLayer_embed, MPOTensor.printedPairGate_commute_cellLayer, MPOTensor.printedPairGate_commute_linkLayer, MPOTensor.printedCellLayer_conjTranspose, MPOTensor.printedLinkLayer_conjTranspose, MPOTensor.printedCellLayer_mem_unitaryGroup, MPOTensor.printedLinkLayer_mem_unitaryGroup}
+    \leanok
+    \uses{lem:mpu_printed_placement}
+    Empty layers are the identity. A nonempty layer splits into its first
+    gate followed by the remaining layer, or its initial layer followed
+    by the last gate. Consecutive placement by $2b$ spins replaces $a$
+    by $a+b$. A pair gate commutes with a layer lying wholly to its left
+    or wholly to its right. Taking the adjoint of a layer replaces each
+    gate by its adjoint, and a layer of unitary gates is unitary.
+\end{lemma}
+\begin{proof}\leanok
+    Split the finite products at the first or last factor. Placement
+    preserves products. The factors within each layer have disjoint
+    supports, so they commute; this also permits reversal of their order
+    after taking adjoints.
+\end{proof}
+
+\begin{definition}[The printed finite circuits]
+    \label{def:mpu_printed_circuits}
+    \lean{MPOTensor.printedInputCircuit, MPOTensor.printedOutputCircuit}
+    \leanok
+    \uses{def:mpu_printed_layers}
+    For $k>0$, define matrices on $2k$ original spins by
+    \[
+        U_k=L_{0,k-1}(v)C_{0,k}(u),\qquad V_k=v_{k,k+1}.
+    \]
+    These are the circuits displayed in the blocking argument of
+    \cite{Cirac2017MPU}, with identity spectators retained.
+\end{definition}
+
+\begin{lemma}[Unitarity and extension of the printed circuits]
+    \label{lem:mpu_printed_circuit_extension}
+    \lean{MPOTensor.printedBlockingCircuits_mem_unitaryGroup, MPOTensor.printedInputCircuit_succ}
+    \leanok
+    \uses{def:mpu_printed_circuits, lem:mpu_printed_layer_identities}
+    If $u,v$ are unitary, then $U_k,V_k$ are unitary for every $k>0$.
+    Writing $\iota$ for placement on the first $2k$ spins of a chain of
+    $2k+2$ spins, one has, for arbitrary $u,v$,
+    \[
+        U_{k+1}=v_{2k,2k+1}\,\iota(U_k)\,u_{2k+1,2k+2}.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Products and placements preserve unitarity. For the extension
+    identity, split off the last gate of each layer. The new shifted gate
+    commutes with all preceding shifted gates; move it to the left.
+\end{proof}
+
+\subsection{Every step of the sequential unwinding}
+
+\begin{lemma}[Local unwinding with exterior spins]
+    \label{lem:mpu_printed_window_unwind}
+    \lean{MPOTensor.printedPairGate_unwind}
+    \leanok
+    \uses{lem:mpu_printed_placement, lem:mpu_unwind_local}
+    Suppose square two-spin matrices $u,v,x$ and $\zeta\in\mathbb C$
+    satisfy (\ref{eq:mpu_unwind_local}). On any consecutive four-spin
+    interval $p,p+1,p+2,p+3$ inside any longer chain,
+    \[
+        v_{p+1,p+2}x_{p,p+1}^\dagger u_{p+2,p+3}
+        =\zeta u_{p,p+1}^\dagger x_{p+2,p+3}^\dagger
+          v_{p+1,p+2}^\dagger.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Relabel four consecutive spins as two ordered pairs. Expanding the
+    adjoint in (\ref{eq:mpu_unwind_local}) gives the stated identity.
+    Placement inside the longer chain preserves products, adjoints and
+    scalar multiplication.
+\end{proof}
+
+\begin{definition}[The source's sequential matrices and left factor]
+    \label{def:mpu_printed_unwinding_sequence}
+    \lean{MPOTensor.printedUnwindingSequence, MPOTensor.printedUnwindingFactor}
+    \leanok
+    \uses{def:mpu_printed_layers}
+    For $0\leq s<k$, put
+    \begin{align*}
+        Y_s={}&\sigma\zeta^s L_{s,k-1-s}(v)C_{0,s}(u^\dagger)
+          x_{2s+1,2s+2}^\dagger C_{s+1,k-1-s}(u)L_{0,s}(v)^\dagger,\\
+        X={}&L_{0,k-1}(v)C_{0,k-1}(u)x_{2k-1,2k}.
+    \end{align*}
+    All matrices act on the same chain of $2k$ original spins.
+\end{definition}
+
+\begin{lemma}[Consecutive steps and endpoints]
+    \label{lem:mpu_printed_sequence_steps}
+    \lean{MPOTensor.printedUnwindingSequence_step, MPOTensor.printedUnwindingSequence_eq_zero, MPOTensor.printedUnwindingSequence_zero, MPOTensor.printedUnwindingSequence_last}
+    \leanok
+    \uses{def:mpu_printed_unwinding_sequence, lem:mpu_printed_window_unwind, lem:mpu_printed_layer_identities}
+    Under (\ref{eq:mpu_unwind_local}), $Y_s=Y_{s+1}$ whenever $s+1<k$,
+    and $Y_0=Y_s$ for every $s<k$. The endpoints, for arbitrary matrices,
+    are
+    \[
+        Y_0=\sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u),\qquad
+        Y_{k-1}=\sigma\zeta^{k-1}X^\dagger.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    For one step, split the first gate from the remaining shifted layer
+    and the first forward cell from the remaining cell layer. Move the
+    selected shifted gate past the preceding adjoint cells and use
+    Lemma~\ref{lem:mpu_printed_window_unwind} on its four spins. Move the
+    resulting adjoint shifted gate past the remaining forward cells.
+    This appends one adjoint cell and one adjoint link to the initial
+    layers and moves $x^\dagger$ one cell to the right, multiplying the
+    scalar by $\zeta$. Induction gives $Y_0=Y_s$. Empty layers give the
+    initial endpoint. At the last endpoint, expand $X^\dagger$ and commute
+    its final pair past the disjoint adjoint cell layer.
+\end{proof}
+
+\begin{lemma}[Full finite-spin sequential unwinding]
+    \label{lem:mpu_printed_sequential_unwinding}
+    \lean{MPOTensor.printed_sequential_unwinding, MPOTensor.printedUnwindingFactor_mem_unitaryGroup}
+    \leanok
+    \uses{lem:mpu_printed_sequence_steps, lem:mpu_printed_layer_identities}
+    For every $k>0$, (\ref{eq:mpu_unwind_local}) implies
+    \[
+        \sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u)
+        =\sigma\zeta^{k-1}X^\dagger.
+    \]
+    If $u,v,x$ are unitary, so is $X$.
+\end{lemma}
+\begin{proof}\leanok
+    Use $Y_0=Y_{k-1}$ and substitute both endpoint formulas.
+    The matrix $X$ is a product of placed unitary gates.
+\end{proof}
+
+\begin{lemma}[Canonical supplied forms unwind at every positive length]
+    \label{lem:mpu_canonical_printed_sequential_unwinding}
+    \lean{MPOTensor.TwoSiteStandardFormData.exists_printed_sequential_unwinding}
+    \leanok
+    \uses{lem:mpu_unwind_canonical, lem:mpu_printed_sequential_unwinding}
+    Under the hypotheses of Lemma~\ref{lem:mpu_unwind_canonical}, there
+    is a single unitary $x$ for which the finite-spin sequential identity
+    holds for every $k>0$, with $\sigma=\sigma(u,v)$ and
+    $\zeta=\sigma(u,v)\sigma(u^{(2)},v^{(2)})$.
+    % The actual arbitrary-blocked standard-form identification remains open.
+\end{lemma}
+\begin{proof}\leanok
+    Choose $x$ from Lemma~\ref{lem:mpu_unwind_canonical} once, and apply
+    Lemma~\ref{lem:mpu_printed_sequential_unwinding} at each length.
+\end{proof}

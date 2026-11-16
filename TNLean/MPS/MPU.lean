@@ -165,6 +165,7 @@ import TNLean.MPS.MPU.PolynomialOverheadBounds
 import TNLean.MPS.MPU.PositiveCanonicalGauge
 import TNLean.MPS.MPU.PrefixGramNormalizer
 import TNLean.MPS.MPU.PrefixGramReindex
+import TNLean.MPS.MPU.PrintedBlockingGates
 import TNLean.MPS.MPU.ProductBasisFactorization
 import TNLean.MPS.MPU.ProjectionPhaseIsometries
 import TNLean.MPS.MPU.QCAIndexComparison
@@ -183,6 +184,7 @@ import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.SchmidtSpanCuts
 import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
+import TNLean.MPS.MPU.SequentialBlockingUnwinding
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleCanonicalRepresentative
