@@ -29,66 +29,146 @@ open ContinuousLinearMap
 namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-/-- A chronological composition with source-prepared nonprivate gates.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36,
-133–151 and 233–267. -/
-inductive SourceCircuit : Layout P → Layout P → Type 1
-  | id (a : Layout P) : SourceCircuit a a
-  | comp {a b d : Layout P} (w : SourceCircuit a b) (v : SourceCircuit b d) :
-      SourceCircuit a d
-  | localMap (p : P) {a b : Layout P}
-      (ha : ∀ r ∈ a, r.owner = p) (hb : ∀ r ∈ b, r.owner = p)
-      (A : Mem a →L[ℂ] Mem b) (tail : Layout P) :
-      SourceCircuit (a ++ tail) (b ++ tail)
-  | gate {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P)
+/-- A source-prepared nonprivate gate on the registers of the participating parties `C`,
+embedded among all parties by `owner`, next to the untouched registers `tail`.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 133–151 and 233–267. -/
+inductive PreparedGate : Layout P → Layout P → Type 1
+  | mk {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P)
       {a b : Layout C} {c : ι → ℂ} (G : PreparedSourceGate c a b) (tail : Layout P) :
-      SourceCircuit (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail)
-  | swap (r s : Reg P) (tail : Layout P) : SourceCircuit (r :: s :: tail) (s :: r :: tail)
-  | frame (r : Reg P) {a b : Layout P} (w : SourceCircuit a b) :
-      SourceCircuit (r :: a) (r :: b)
+      PreparedGate (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail)
 
-namespace SourceCircuit
+namespace PreparedGate
 
-/-- The complete memory operator in chronological order, with each gate's
-aggregate contraction and every spectator identity retained.
+/-- The complete memory operator of a source-prepared gate, with its aggregate contraction
+and every spectator identity retained.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36 and 233–267. -/
-def eval : {a b : Layout P} → SourceCircuit a b → Mem a →L[ℂ] Mem b
-  | _, _, .id _ => .id ℂ _
-  | _, _, .comp w v => v.eval ∘L w.eval
-  | _, _, .localMap p ha hb A tail => (Word.localMap p ha hb A tail).eval
-  | _, _, @SourceCircuit.gate _ C _ι _ _ owner a b _c G tail =>
+@[simp] def eval : {a b : Layout P} → PreparedGate a b → (Mem a →L[ℂ] Mem b)
+  | _, _, @PreparedGate.mk _ _ _ _ _ owner a b _ G tail =>
       isoL (appendIso (Layout.mapOwner owner b) tail).symm ∘L
         (G.evalAtOwners owner).rTensor (Mem tail) ∘L
           isoL (appendIso (Layout.mapOwner owner a) tail)
-  | _, _, .swap r s tail => (Word.swap r s tail).eval
-  | _, _, .frame r w => w.eval.lTensor r.space
 
-/-- Every private operation is a contraction. The prepared nonprivate gates
-already carry their aggregate contraction bounds.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 133–151. -/
-def IsAllowed : {a b : Layout P} → SourceCircuit a b → Prop
-  | _, _, .id _ => True
-  | _, _, .comp w v => w.IsAllowed ∧ v.IsAllowed
-  | _, _, .localMap _ _ _ A _ => ‖A‖ ≤ 1
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ _ _ _ => True
-  | _, _, .swap .. => True
-  | _, _, .frame _ w => w.IsAllowed
+/-- The actual participating parties of a source-prepared gate.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 356–364. -/
+@[simp] def participants : {a b : Layout P} → PreparedGate a b → Finset P
+  | _, _, @PreparedGate.mk _ _ _ _ _ owner _ _ _ _ _ => Finset.univ.map owner
 
-/-- A chronological composition of allowed operations is a contraction.
+/-- A source-prepared gate is a contraction.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 133–151 and 215–226. -/
-theorem norm_eval_le_one {a b : Layout P} (w : SourceCircuit a b)
-    (hw : w.IsAllowed) : ‖w.eval‖ ≤ 1 := by
-  induction w with
-  | id => exact norm_id_le
-  | comp w v ihw ihv => exact norm_comp_le_one (ihv hw.2) (ihw hw.1)
-  | localMap p ha hb A tail =>
-      exact Word.norm_eval_le_one (.localMap p ha hb A tail) (show ‖A‖ ≤ 1 from hw)
-  | @gate C ι _ _ owner a b c G tail =>
-      exact norm_comp_le_one (LinearIsometry.norm_toContinuousLinearMap_le _)
-        (norm_comp_le_one ((norm_rTensor_le (Mem tail) _).trans (G.norm_evalAtOwners_le_one owner))
+theorem norm_eval_le_one : {a b : Layout P} → (g : PreparedGate a b) → ‖g.eval‖ ≤ 1
+  | _, _, @PreparedGate.mk _ _ _ _ _ owner _ _ _ G tail =>
+      norm_comp_le_one (LinearIsometry.norm_toContinuousLinearMap_le _)
+        (norm_comp_le_one
+          ((norm_rTensor_le (Mem tail) _).trans (G.norm_evalAtOwners_le_one owner))
           (LinearIsometry.norm_toContinuousLinearMap_le _))
-  | swap r s tail => exact Word.norm_eval_le_one (.swap r s tail) trivial
-  | frame r w ih => exact (norm_lTensor_le r.space _).trans (ih hw)
+
+end PreparedGate
+
+/-- Source-prepared gates as a gate family. The prepared gates already carry their aggregate
+contraction bounds, so every one of them is allowed.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 133–151. -/
+instance : GateFamily (PreparedGate (P := P)) where
+  eval := PreparedGate.eval
+  IsAllowed _ := True
+  norm_eval_le_one g _ := g.norm_eval_le_one
+  participants := PreparedGate.participants
+
+@[simp] theorem PreparedGate.gateFamily_eval {a b : Layout P} (g : PreparedGate a b) :
+    GateFamily.eval g = g.eval :=
+  rfl
+
+@[simp] theorem PreparedGate.gateFamily_isAllowed {a b : Layout P} (g : PreparedGate a b) :
+    GateFamily.IsAllowed g :=
+  trivial
+
+@[simp] theorem PreparedGate.gateFamily_participants {a b : Layout P} (g : PreparedGate a b) :
+    GateFamily.participants g = g.participants :=
+  rfl
+
+/-- A chronological composition with source-prepared nonprivate gates: a circuit whose gates
+are source-prepared gates, with arbitrary local maps.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36,
+133–151 and 233–267. -/
+abbrev SourceCircuit : Layout P → Layout P → Type 1 := Circuit LocalCondition.any PreparedGate
+
+namespace SourceCircuit
+
+/-- The empty circuit. -/
+@[match_pattern] abbrev id (ℓ : Layout P) : SourceCircuit ℓ ℓ :=
+  Circuit.id (κ := LocalCondition.any) (G := PreparedGate) ℓ
+
+/-- Composition, in chronological order. -/
+@[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : SourceCircuit ℓ₁ ℓ₂) (w'
+    : SourceCircuit ℓ₂ ℓ₃) :
+    SourceCircuit ℓ₁ ℓ₃ :=
+  Circuit.comp (κ := LocalCondition.any) (G := PreparedGate) w w'
+
+/-- A local map on registers of one party, next to untouched registers. -/
+@[match_pattern] abbrev localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
+    (h₂ : ∀ r ∈ ℓ₂, r.owner = p) (U : Mem ℓ₁ →L[ℂ] Mem ℓ₂) (ℓ : Layout P) :
+    SourceCircuit (ℓ₁ ++ ℓ) (ℓ₂ ++ ℓ) :=
+  Circuit.localMap p h₁ h₂ U ℓ True.intro
+
+/-- Exchange of two adjacent tensor factors. -/
+@[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : SourceCircuit (r :: r' :: ℓ)
+    (r' :: r :: ℓ) :=
+  Circuit.swap (κ := LocalCondition.any) (G := PreparedGate) r r' ℓ
+
+/-- A circuit next to an untouched register. -/
+@[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : SourceCircuit ℓ ℓ') :
+    SourceCircuit (r :: ℓ) (r :: ℓ') :=
+  Circuit.frame (κ := LocalCondition.any) (G := PreparedGate) r w
+
+/-- A source-prepared gate as a circuit. -/
+@[match_pattern] abbrev gate {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P)
+    {a b : Layout C} {c : ι → ℂ} (G : PreparedSourceGate c a b) (tail : Layout P) :
+    SourceCircuit (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail) :=
+  Circuit.gate (PreparedGate.mk owner G tail)
+
+/-- A circuit framed by a list of untouched registers. -/
+abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : SourceCircuit ℓ ℓ') :
+    SourceCircuit (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
+  Circuit.frameList (κ := LocalCondition.any) (G := PreparedGate) ℓ₀ w
+
+/-- Identify equal input and output layouts without adding an operation. -/
+abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : SourceCircuit ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
+    SourceCircuit a b :=
+  Circuit.castLayouts (κ := LocalCondition.any) (G := PreparedGate) w h h'
+
+/-- Induction on the constructors of `SourceCircuit`. -/
+@[induction_eliminator, elab_as_elim]
+theorem induction {motive : {ℓ ℓ' : Layout P} → SourceCircuit ℓ ℓ' → Prop}
+    (id : ∀ ℓ : Layout P, motive (SourceCircuit.id ℓ))
+    (comp : ∀ {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : SourceCircuit ℓ₁ ℓ₂) (w' : SourceCircuit ℓ₂ ℓ₃),
+      motive w → motive w' → motive (SourceCircuit.comp w w'))
+    (localMap : ∀ (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
+      (h₂ : ∀ r ∈ ℓ₂, r.owner = p) (U : Mem ℓ₁ →L[ℂ] Mem ℓ₂) (ℓ : Layout P),
+      motive (SourceCircuit.localMap p h₁ h₂ U ℓ))
+    (gate : ∀ {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P) {a b : Layout C}
+      {c : ι → ℂ} (G : PreparedSourceGate c a b) (tail : Layout P),
+      motive (SourceCircuit.gate owner G tail))
+    (swap : ∀ (r r' : Reg P) (ℓ : Layout P), motive (SourceCircuit.swap r r' ℓ))
+    (frame : ∀ (r : Reg P) {ℓ ℓ' : Layout P} (w : SourceCircuit ℓ ℓ'),
+      motive w → motive (SourceCircuit.frame r w))
+    {ℓ ℓ' : Layout P} (w : SourceCircuit ℓ ℓ') : motive w := by
+  induction w with
+  | id ℓ₀ => exact id ℓ₀
+  | comp w w' ih ih' => exact comp w w' ih ih'
+  | localMap p h₁ h₂ U ℓ => exact localMap p h₁ h₂ U ℓ
+  | gate g => cases g with | mk owner G tail => exact gate owner G tail
+  | swap r r' ℓ => exact swap r r' ℓ
+  | frame r w ih => exact frame r w ih
+
+/-- The complete memory operator of a source-prepared gate, with its aggregate contraction
+and every spectator identity retained.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36 and 233–267. -/
+theorem eval_gate {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P)
+    {a b : Layout C} {c : ι → ℂ} (G : PreparedSourceGate c a b) (tail : Layout P) :
+    (gate owner G tail).eval =
+      isoL (appendIso (Layout.mapOwner owner b) tail).symm ∘L
+        (G.evalAtOwners owner).rTensor (Mem tail) ∘L
+          isoL (appendIso (Layout.mapOwner owner a) tail) :=
+  rfl
 
 /-- Monomial choices occur exactly at gates touching the affected parties.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381. -/
@@ -96,7 +176,7 @@ def Choices (A : P → Bool) : {a b : Layout P} → SourceCircuit a b → Type
   | _, _, .id _ => Unit
   | _, _, .comp w v => Choices A w × Choices A v
   | _, _, .localMap .. => Unit
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner _ _ _ _ _ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner _ _ _ _ _) => by
       classical
       exact if ∃ p : C, A (owner p) = true then ι else Unit
   | _, _, .swap .. => Unit
@@ -112,7 +192,7 @@ instance choicesFintype (A : P → Bool) : {a b : Layout P} →
       letI := choicesFintype A v
       exact inferInstanceAs (Fintype (Choices A w × Choices A v))
   | _, _, .localMap .. => inferInstanceAs (Fintype Unit)
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner _ _ _ _ _ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner _ _ _ _ _) => by
       classical
       dsimp only [Choices]
       split <;> infer_instance
@@ -129,7 +209,7 @@ def partialWord (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a b) 
   | _, _, .comp w v, ξ => .comp (partialWord A w ξ.1) (partialWord A v ξ.2)
   | _, _, .localMap p ha hb T tail, _ =>
       (Word.localMap p ha hb T tail).mapOwner (affectedOwner A)
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner a b c G tail, ξ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner a b c G tail), ξ => by
       classical
       by_cases h : ∃ p : C, A (owner p) = true
       · have i : ι := by simpa only [Choices, ite_eq_left h] using ξ
@@ -149,7 +229,7 @@ def coefficient (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a b) 
   | _, _, .id _, _ => 1
   | _, _, .comp w v, ξ => coefficient A w ξ.1 * coefficient A v ξ.2
   | _, _, .localMap .., _ => 1
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner _ _ c _ _, ξ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner _ _ c _ _), ξ => by
       classical
       by_cases h : ∃ p : C, A (owner p) = true
       · have i : ι := by simpa only [Choices, ite_eq_left h] using ξ

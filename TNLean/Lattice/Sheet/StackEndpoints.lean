@@ -114,7 +114,7 @@ theorem exists_reordering_stackVec {Fs Fs' : List κ} (h : Fs.Perm Fs') (ℓ : L
       obtain ⟨w, hw, he⟩ := ih
       exact ⟨Word.frameList (regs F) w, hw.frameList _, fun ξ => by
         change (Word.frameList (regs F) w).eval ((appendIso _ _).symm (ref F ⊗ₜ _)) = _
-        rw [Word.eval_frameList_appendIso_symm, he]
+        rw [Circuit.eval_frameList_appendIso_symm, he]
         rfl⟩
   | swap F G Fs =>
       exact ⟨Word.exchangeBlocks (regs G) (regs F) (stackRegs regs Fs ℓ),
@@ -124,7 +124,7 @@ theorem exists_reordering_stackVec {Fs Fs' : List κ} (h : Fs.Perm Fs') (ℓ : L
       obtain ⟨w, hw, he⟩ := ih
       obtain ⟨w', hw', he'⟩ := ih'
       exact ⟨.comp w w', hw.comp hw', fun ξ => by
-        rw [Word.eval_comp, comp_apply, he, he']⟩
+        rw [Circuit.eval_comp, comp_apply, he, he']⟩
 
 /-- **Reordering the sheets, as an original circuit.** The reordering of
 `exists_reordering_stackVec` has no nonprivate gate, so every participant condition holds
@@ -197,7 +197,7 @@ def splitCircuit (blk : Party → List κ) (hblk : ∀ p, ∀ r ∈ stackRegs re
         (stackRegs regs (ps.flatMap blk) [])
   | [] => .id []
   | p :: ps =>
-      .comp (.privateMap p (a := [⟨p, framesSpace regs (blk p)⟩]) (by simp) (hblk p)
+      .comp (OriginalCircuit.privateMap p (a := [⟨p, framesSpace regs (blk p)⟩]) (by simp) (hblk p)
           (splitMap regs (blk p) p) (norm_splitMap_le regs _ _)
           (ps.map fun p => (⟨p, framesSpace regs (blk p)⟩ : Reg Party)))
         ((OriginalCircuit.frameList (stackRegs regs (blk p) [])
@@ -209,8 +209,8 @@ theorem nonprivateCount_splitCircuit (blk : Party → List κ)
     (ps : List Party) → (splitCircuit regs blk hblk ps).nonprivateCount = 0
   | [] => rfl
   | _ :: ps => by
-      simp only [splitCircuit, OriginalCircuit.nonprivateCount,
-        OriginalCircuit.nonprivateCount_castLayouts, OriginalCircuit.nonprivateCount_frameList,
+      simp only [splitCircuit, OriginalCircuit.nonprivateCount, Circuit.gateCount,
+        Circuit.gateCount_castLayouts, Circuit.gateCount_frameList,
         nonprivateCount_splitCircuit blk hblk ps]
 
 theorem isExpansionBounded_splitCircuit (blk : Party → List κ)
@@ -256,11 +256,11 @@ theorem eval_splitCircuit (blk : Party → List κ)
   | [] => rfl
   | p :: ps => by
       have ih := eval_splitCircuit blk hblk hx ps
-      simp only [splitCircuit, OriginalCircuit.eval, OriginalCircuit.eval_castLayouts,
+      simp only [splitCircuit, Circuit.eval, Circuit.eval_castLayouts,
         comp_apply, isoL_apply, ProductInput.ofParties, ProductInput.vector]
       erw [appendIso_one_tmul]
       rw [rTensor_tmul, splitMap_tmul_one, memCongr_self_symm_apply]
-      rw [OriginalCircuit.eval_frameList_appendIso_symm, ih]
+      rw [Circuit.eval_frameList_appendIso_symm, ih]
       apply eq_of_heq
       refine (Layout.memCongr_apply_heq _ _).trans ?_
       refine HEq.trans ?_ (heq_of_eq (stackVec_append ref (blk p) (ps.flatMap blk) (ℓ := [])

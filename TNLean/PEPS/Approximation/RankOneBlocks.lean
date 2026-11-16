@@ -165,7 +165,7 @@ def ketWord (pA pB : P) (v : EuclideanSpace ℂ (α × β)) (ℓ : Layout P) :
   if h : pA = pB then
     Word.localMap pA (ℓ₁ := []) (ℓ₂ := [⟨pA, euc α⟩, ⟨pB, euc β⟩]) owner_of_mem_nil
       (owner_of_mem_pair h) (ketLocal pA pB v) ℓ
-  else .source h (euc α) (euc β) (pairVec v) ℓ
+  else Word.source h (euc α) (euc β) (pairVec v) ℓ
 
 /-- **A rank-one map with a change of owners.** The bra `⟨w|` on registers of `p_A` and `p_B`,
 followed by the ket `|v⟩` on fresh registers of `p_A'` and `p_B'`. -/
@@ -186,7 +186,7 @@ theorem eval_braChain (pA pB : P) (w : EuclideanSpace ℂ (α × β)) (ℓ : Lay
     change (Word.localMap pA _ _ (braLocal pA pB w) ℓ).eval _ = _
     rw [hz, eval_localMap, appendIso_nil_symm_tmul]
     simp [braLocal]
-  · simp only [EffectChain.eval, Word.eval,
+  · simp only [EffectChain.eval, Circuit.eval,
       ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply, isoL_apply,
       LinearIsometryEquiv.apply_symm_apply, effectMap_tmul]
 

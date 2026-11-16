@@ -116,10 +116,10 @@ theorem appendIso_eval_partitionWord (f : P → Bool) :
       | add a b ha hb => simp only [map_add, ha, hb]
       | tmul u v =>
           by_cases h : f r.owner = true
-          · simp only [partitionWord, dite_eq_left h, Word.eval_castLayouts, comp_apply,
+          · simp only [partitionWord, dite_eq_left h, Circuit.eval_castLayouts, comp_apply,
               isoL_apply]
             erw [memCongr_rfl_symm_apply]
-            rw [Word.eval_frame, lTensor_tmul]
+            rw [Circuit.eval_frame, lTensor_tmul]
             apply eq_of_heq
             refine (appendIso_memCongr_heq (X' := r :: restrict f ℓ)
               (Y' := restrict (fun p ↦ !f p) ℓ) (by simp [restrict_cons, h])
@@ -129,10 +129,10 @@ theorem appendIso_eval_partitionWord (f : P → Bool) :
               (u ⊗ₜ appendIso _ _ ((partitionWord f ℓ).eval v))) _
             rw [appendIso_eval_partitionWord f ℓ v]
           · have h' : f r.owner = false := Bool.eq_false_iff.mpr h
-            simp only [partitionWord, dite_eq_right h, Word.eval_castLayouts, comp_apply,
+            simp only [partitionWord, dite_eq_right h, Circuit.eval_castLayouts, comp_apply,
               isoL_apply]
             erw [memCongr_rfl_symm_apply]
-            rw [Word.eval_comp, comp_apply, Word.eval_frame, lTensor_tmul]
+            rw [Circuit.eval_comp, comp_apply, Circuit.eval_frame, lTensor_tmul]
             obtain ⟨z, rfl⟩ := (partitionIso f ℓ).symm.surjective v
             have hv : (partitionWord f ℓ).eval ((partitionIso f ℓ).symm z) =
                 (appendIso _ _).symm z := by
@@ -169,7 +169,7 @@ theorem eval_unpartitionWord_appendIso_symm (f : P → Bool) :
       | tmul u v =>
           obtain ⟨y, rfl⟩ := (partitionIso f ℓ).symm.surjective v
           by_cases h : f r.owner = true
-          · simp only [unpartitionWord, dite_eq_left h, Word.eval_castLayouts, comp_apply,
+          · simp only [unpartitionWord, dite_eq_left h, Circuit.eval_castLayouts, comp_apply,
               isoL_apply]
             erw [memCongr_rfl_apply']
             have hc : (memCongr (by simp [restrict_cons, h] :
@@ -191,12 +191,12 @@ theorem eval_unpartitionWord_appendIso_symm (f : P → Bool) :
                   simp only [TensorProduct.tmul_add, map_add]
                   exact add_heq rfl ha hb
               | tmul s t => rfl
-            rw [hc, Word.eval_frame, lTensor_tmul, eval_unpartitionWord_appendIso_symm f ℓ y]
+            rw [hc, Circuit.eval_frame, lTensor_tmul, eval_unpartitionWord_appendIso_symm f ℓ y]
           · have h' : f r.owner = false := Bool.eq_false_iff.mpr h
-            simp only [unpartitionWord, dite_eq_right h, Word.eval_castLayouts, comp_apply,
+            simp only [unpartitionWord, dite_eq_right h, Circuit.eval_castLayouts, comp_apply,
               isoL_apply]
             erw [memCongr_rfl_apply']
-            rw [Word.eval_comp, comp_apply, Word.eval_frame]
+            rw [Circuit.eval_comp, comp_apply, Circuit.eval_frame]
             induction y using TensorProduct.inductionOn with
             | add a b ha hb => simp only [map_add, TensorProduct.tmul_add, ha, hb]
             | tmul s t =>

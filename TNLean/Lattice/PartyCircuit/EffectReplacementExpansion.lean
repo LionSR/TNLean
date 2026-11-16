@@ -34,7 +34,7 @@ def IsExpansionBounded (K : ℕ) (S : ℝ) : {a b : Layout P} → SourceCircuit 
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsExpansionBounded K S ∧ v.IsExpansionBounded K S
   | _, _, .localMap .. => True
-  | _, _, @SourceCircuit.gate _ _ ι _ _ _ _ _ c _ _ =>
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ ι _ _ _ _ _ c _ _) =>
       Fintype.card ι ≤ K ∧ (∑ ξ, ‖c ξ‖) ≤ S
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsExpansionBounded K S
@@ -43,16 +43,15 @@ def IsExpansionBounded (K : ℕ) (S : ℝ) : {a b : Layout P} → SourceCircuit 
 Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
 theorem isExpansionBounded_castLayouts {a b a' b' : Layout P}
     (w : SourceCircuit a b) (h : a = a') (h' : b = b') (K : ℕ) (S : ℝ) :
-    (w.castLayouts h h').IsExpansionBounded K S ↔ w.IsExpansionBounded K S := by
+    SourceCircuit.IsExpansionBounded K S (w.castLayouts h h') ↔ w.IsExpansionBounded K S := by
   cases h
   cases h'
   rfl
-
 /-- Retained spectators do not change gate expansion bounds.
 Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
 theorem isExpansionBounded_frameList {K : ℕ} {S : ℝ} {a b : Layout P}
     (w : SourceCircuit a b) (hw : w.IsExpansionBounded K S) (rs : Layout P) :
-    (frameList rs w).IsExpansionBounded K S := by
+    SourceCircuit.IsExpansionBounded K S (frameList rs w) := by
   induction rs with
   | nil => exact hw
   | cons r rest ih => exact ih
@@ -85,8 +84,8 @@ Source: polynomial-PEPS 04-compression.tex, lines 199–208. -/
 def IsMonomialBounded (K : ℕ) : {a b : Layout P} → OriginalCircuit a b → Prop
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsMonomialBounded K ∧ v.IsMonomialBounded K
-  | _, _, .privateMap .. => True
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ L _ _ _ => L.length ≤ K
+  | _, _, OriginalCircuit.privateMap .. => True
+  | _, _, Circuit.gate (@OriginalGate.mk _ _ _ _ _ _ _ L _ _ _) => L.length ≤ K
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsMonomialBounded K
 

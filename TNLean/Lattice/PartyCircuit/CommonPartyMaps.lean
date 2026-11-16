@@ -66,7 +66,6 @@ private theorem eval_cast_middle {a b c b' : Layout P} (u : Word a b) (v : Word 
     (v.castLayouts h rfl).eval ∘L (u.castLayouts rfl h).eval = v.eval ∘L u.eval := by
   cases h
   rfl
-
 /-- A recovery from the source inventory also acts on its vector-independent layout.
 Source: polynomial-PEPS manuscript, `04-compression.tex`, lines 260–267. -/
 theorem SourceInventory.exists_prepareSlots_recovery (R S : SourceInventory P)
@@ -77,7 +76,7 @@ theorem SourceInventory.exists_prepareSlots_recovery (R S : SourceInventory P)
         d.eval ∘L (SourceInventory.prepareSlots R U V η ℓ).eval = (S.prepare ℓ).eval := by
   obtain ⟨d, hd, hds, he⟩ := hE ℓ
   let h := congrArg (· ++ ℓ) (SourceInventory.layout_ofSlots_eq R U V η (fun _ ↦ 0))
-  refine ⟨d.castLayouts h rfl, (Word.isAllowed_castLayouts _ _ _).mpr hd,
+  refine ⟨d.castLayouts h rfl, (Circuit.isAllowed_castLayouts _ _ _).mpr hd,
     (Word.sources_castLayouts _ _ _).trans hds, ?_⟩
   exact (eval_cast_middle _ _ h).trans he
 
@@ -106,7 +105,7 @@ theorem SourceInventory.exists_prepareSlots_expands (R : SourceInventory P)
   obtain ⟨d, hd, hds, he⟩ := hE ℓ
   refine ⟨d.castLayouts (congrArg (· ++ ℓ) (SourceInventory.layout_ofSlots_eq R U V η _))
       (congrArg (· ++ ℓ) (SourceInventory.layout_ofSlots_eq R U' V' η' (fun _ ↦ 0))),
-    (Word.isAllowed_castLayouts _ _ _).mpr hd, (Word.sources_castLayouts _ _ _).trans hds, ?_⟩
+    (Circuit.isAllowed_castLayouts _ _ _).mpr hd, (Word.sources_castLayouts _ _ _).trans hds, ?_⟩
   exact eval_cast_recovery _ _ _ _ _ he
 
 /-- Prepare every monomial's sources in fixed private spaces, followed by allowed
@@ -136,7 +135,7 @@ theorem Word.exists_common_source_preparation [Finite P] {ℓ ℓ' : Layout P}
   · intro ξ
     simp only [Word.sources, hds, hvs, List.nil_append]
   · intro ξ
-    rw [Word.eval_comp, comp_assoc, hde, he]
+    rw [Circuit.eval_comp, comp_assoc, hde, he]
 
 /-- Every monomial of a finite gate expansion admits local contractions on the same
 private source spaces, with normalized vectors on every pair of distinct gate parties.

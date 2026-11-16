@@ -53,7 +53,7 @@ theorem Word.eval_mapPair_tmul (p q : P) {U V U' V' : HSpace}
     (A : U →L[ℂ] U') (B : V →L[ℂ] V') (ℓ : Layout P)
     (u : U) (v : V) (x : Mem ℓ) :
     (Word.mapPair p q A B ℓ).eval (u ⊗ₜ (v ⊗ₜ x)) = A u ⊗ₜ (B v ⊗ₜ x) := by
-  simp [Word.mapPair, Word.eval, appendIso, LinearIsometryEquiv.symm_lTensor]
+  simp [Word.mapPair, Circuit.eval, appendIso, LinearIsometryEquiv.symm_lTensor]
 
 /-- Applying the endpoint maps after preparation transforms exactly the source vector.
 Source: polynomial-PEPS manuscript, `04-compression.tex`, lines 253–267. -/

@@ -78,11 +78,10 @@ private theorem participationCount_sequence_le_indicators
 Source: Part II, prop:sweep, lines 353–355. -/
 private theorem participationCount_castLayouts {a b a' b' : Layout P}
     (c : OriginalCircuit a b) (ha : a = a') (hb : b = b') (p : P) :
-    (c.castLayouts ha hb).participationCount p = c.participationCount p := by
+    OriginalCircuit.participationCount (c.castLayouts ha hb) p = c.participationCount p := by
   cases ha
   cases hb
   rfl
-
 /-- Equality transport retains an actual identity circuit.
 Source: the scalar and register-list identifications in Part II, con:sweep. -/
 private theorem castLayouts_id_heq {a b a' b' : Layout P}
@@ -201,7 +200,6 @@ private theorem castFrames_error {F G F' G' : List (Sheet (Fin L) (Party L w))}
   cases hF
   cases hG
   rfl
-
 variable (Ω : EuclideanSpace ℂ (Fin L → Fin q))
 
 /- Exactly the conclusion of the existing conditional local-stage theorem,
@@ -321,7 +319,7 @@ primitive slots. Source: Part II, prop:sweep, lines 353–355. -/
 theorem sweepMiddleCircuit_nonprivateCount_le :
     (sweepMiddleCircuit c).nonprivateCount ≤ sweepOperationCount L w := by
   unfold sweepMiddleCircuit
-  rw [OriginalCircuit.nonprivateCount_castLayouts, OriginalCircuit.nonprivateCount_sequence]
+  simp only [Circuit.gateCount_castLayouts, OriginalCircuit.nonprivateCount_sequence]
   calc
     _ ≤ ∑ _n ∈ Finset.range (sweepOperationCount L w), 1 :=
       Finset.sum_le_sum fun n _ ↦ (middleStep_bounded c Ω hc n).nonprivateCount_le

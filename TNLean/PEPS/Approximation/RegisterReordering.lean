@@ -149,7 +149,7 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
     obtain ⟨e₂, he₂, w₂, a₂, hw₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
     refine ⟨e₁.trans e₂, fun t => (he₂ _).trans (he₁ t), .comp w₁ w₂, a₁.comp a₂,
       fun τ z => ?_⟩
-    rw [Word.eval_comp, ContinuousLinearMap.comp_apply, hw₁, hw₂]
+    rw [Circuit.eval_comp, ContinuousLinearMap.comp_apply, hw₁, hw₂]
     rfl
 
 end TagSplit

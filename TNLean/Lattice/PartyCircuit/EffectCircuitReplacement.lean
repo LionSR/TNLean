@@ -34,20 +34,15 @@ def auxiliary (m : ℕ) : {a b : Layout P} → EffectCircuit a b → Layout P
   | _, _, .id _ => []
   | _, _, .comp w v => w.auxiliary m ++ v.auxiliary m
   | _, _, .localMap .. => []
-  | _, _, @EffectCircuit.gate _ _ _ owner _ _ L _ =>
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ owner _ _ L _) =>
       Layout.mapOwner owner (prepGate m L).sources.layout
   | _, _, .swap .. => []
   | _, _, .frame _ w => w.auxiliary m
 
 /-- Count the original expanded gate occurrences before replacing their effects.
 Source: polynomial-PEPS 04-compression.tex, lines 199–217. -/
-def expandedGateCount : {a b : Layout P} → EffectCircuit a b → ℕ
-  | _, _, .id _ => 0
-  | _, _, .comp w v => w.expandedGateCount + v.expandedGateCount
-  | _, _, .localMap .. => 0
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ _ _ => 1
-  | _, _, .swap .. => 0
-  | _, _, .frame _ w => w.expandedGateCount
+abbrev expandedGateCount {a b : Layout P} (w : EffectCircuit a b) : ℕ :=
+  w.gateCount
 
 /-- Bounds on the original monomial expansions, before the insertion averages
 are expanded. No restriction is imposed on private memory dimensions.
@@ -56,7 +51,7 @@ def IsExpansionBounded (r : ℕ) (S : ℝ) : {a b : Layout P} → EffectCircuit 
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsExpansionBounded r S ∧ v.IsExpansionBounded r S
   | _, _, .localMap .. => True
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ =>
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ L _) =>
       (∀ q ∈ L, q.2.toEffectChain.effectCount ≤ r) ∧ (L.map fun q => ‖q.1‖).sum ≤ S
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsExpansionBounded r S
@@ -116,11 +111,11 @@ def replacement {r : ℕ} {S δ : ℝ} (hδ : 0 < δ) :
       SourceCircuit a (w.auxiliary (stackLength r S δ) ++ b)
   | _, _, .id a, _, _ => .id a
   | _, _, .comp w v, hw, hb =>
-      (SourceCircuit.comp (w.replacement hδ hw.1 hb.1)
-        ((v.replacement hδ hw.2 hb.2).frameList (w.auxiliary (stackLength r S δ)))).castLayouts
+      Circuit.castLayouts (SourceCircuit.comp (w.replacement hδ hw.1 hb.1)
+        ((v.replacement hδ hw.2 hb.2).frameList (w.auxiliary (stackLength r S δ))))
           rfl (List.append_assoc _ _ _).symm
   | _, _, .localMap p ha hb A tail, _, _ => .localMap p ha hb A tail
-  | _, _, @EffectCircuit.gate _ C _ owner a b L tail, hw, hb => by
+  | _, _, Circuit.gate (@EffectGate.mk _ C _ owner a b L tail), hw, hb => by
       let G := Classical.choose (exists_prepared_effectReplacement_uniform hδ L
         (fun q hq => ⟨hw.1 q hq, hb.1 q hq⟩) hw.2 hb.2)
       exact (SourceCircuit.gate owner G tail).castLayouts rfl (by
@@ -150,11 +145,11 @@ theorem isAllowed_replacement {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
   induction w with
   | id => trivial
   | comp w v ihw ihv =>
-      exact (SourceCircuit.isAllowed_castLayouts _ _ _).mpr
-        ⟨ihw hw.1 hb.1, SourceCircuit.isAllowed_frameList _ (ihv hw.2 hb.2) _⟩
+      exact (Circuit.isAllowed_castLayouts _ _ _).mpr
+        ⟨ihw hw.1 hb.1, Circuit.isAllowed_frameList _ (ihv hw.2 hb.2) _⟩
   | localMap => exact hw
   | @gate C _ owner a b L tail =>
-      simp only [replacement, SourceCircuit.isAllowed_castLayouts]
+      simp only [replacement, Circuit.isAllowed_castLayouts]
       trivial
   | swap => trivial
   | frame t w ih =>
@@ -168,7 +163,7 @@ def auxiliaryVector (m : ℕ) : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, .comp w v => (appendIso (w.auxiliary m) (v.auxiliary m)).symm
       (w.auxiliaryVector m ⊗ₜ[ℂ] v.auxiliaryVector m)
   | _, _, .localMap .. => (1 : ℂ)
-  | _, _, @EffectCircuit.gate _ _ _ owner _ _ L _ =>
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ owner _ _ L _) =>
       Layout.mapOwnerIso owner (prepGate m L).sources.layout (prepGate m L).sources.vector
   | _, _, .swap .. => (1 : ℂ)
   | _, _, .frame _ w => w.auxiliaryVector m
@@ -212,7 +207,9 @@ theorem SourceCircuit.eval_frameList {a b : Layout P} (w : SourceCircuit a b)
       retainMap rs w.eval ∘L isoL (appendIso rs a).symm := by
     ext z
     induction z using TensorProduct.inductionOn with
-    | tmul x y => exact (w.eval_frameList_tmul rs x y).trans (retainMap_tmul rs w.eval x y).symm
+    | tmul x y =>
+        exact (Circuit.eval_frameList_appendIso_symm w rs x y).trans
+          (retainMap_tmul rs w.eval x y).symm
     | add x y hx hy => simp only [map_add, hx, hy]
   ext z
   simpa only [comp_apply, isoL_apply, LinearIsometryEquiv.symm_apply_apply] using

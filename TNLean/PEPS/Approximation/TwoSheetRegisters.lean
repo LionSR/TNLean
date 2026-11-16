@@ -245,11 +245,11 @@ theorem eval_renameWord (τ₁ : TagSpace (X.out₁ ++ X.in₁)) (c₁ : ι → 
             ((tagAppendEquiv X.out₂ X.in₁).symm
               ((tagAppendEquiv X.out₂ X.in₂ τ₂).1, (tagAppendEquiv X.out₁ X.in₁ τ₁).2))
             (fun x => if x ∈ X.region then c₁ x else c₂ x)) := by
-  simp only [renameWord, layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
+  simp only [renameWord, layoutVec, Circuit.eval_comp, ContinuousLinearMap.comp_apply,
     Word.eval_assocWord_appendIso_symm, eval_tagSplit]
-  rw [Word.eval_frameList_appendIso_symm, Word.eval_frameList_appendIso_symm,
-    Word.eval_frameList_appendIso_symm, eval_tagSplit, eval_blockRenameWord]
-  simp only [Word.eval_frameList_appendIso_symm, eval_tagMerge,
+  rw [Circuit.eval_frameList_appendIso_symm, Circuit.eval_frameList_appendIso_symm,
+    Circuit.eval_frameList_appendIso_symm, eval_tagSplit, eval_blockRenameWord]
+  simp only [Circuit.eval_frameList_appendIso_symm, eval_tagMerge,
     Word.eval_unassocWord_appendIso_symm]
 
 /-- **The renaming in canonical coordinates** is the renaming `ℛ` of `TwoSheetExchange.rename`. -/

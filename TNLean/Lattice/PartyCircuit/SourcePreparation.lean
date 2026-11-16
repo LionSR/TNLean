@@ -65,7 +65,7 @@ def IsNormalized (S : SourceInventory P) : Prop := ∀ s ∈ S, ‖s.vector‖ =
 def prepare : (S : SourceInventory P) → (ℓ : Layout P) → Word ℓ (S.layout ++ ℓ)
   | [], ℓ => .id ℓ
   | s :: S, ℓ => .comp (prepare S ℓ)
-      (.source s.distinct s.leftSpace s.rightSpace s.vector (layout S ++ ℓ))
+      (Word.source s.distinct s.leftSpace s.rightSpace s.vector (layout S ++ ℓ))
 
 @[simp] theorem layout_nil : layout ([] : SourceInventory P) = [] := rfl
 
@@ -125,9 +125,11 @@ theorem eval_prepare_append (S T : SourceInventory P) (ℓ : Layout P) (x : Mem 
 theorem isAllowed_prepare_iff (S : SourceInventory P) (ℓ : Layout P) :
     (prepare S ℓ).IsAllowed ↔ S.IsNormalized := by
   induction S with
-  | nil => simp [prepare, Word.IsAllowed, IsNormalized]
+  | nil => simp [prepare, Circuit.IsAllowed, IsNormalized]
   | cons s S ih =>
-      simp only [prepare, Word.IsAllowed, ih, IsNormalized, List.mem_cons,
+      simp only [prepare, Circuit.IsAllowed, GateFamily.IsAllowed, SourceGate.IsAllowed, ih,
+        IsNormalized,
+        List.mem_cons,
         forall_eq_or_imp, and_comm]
 
 /-- The tensor product of the actual source vectors, with one terminal scalar factor.
@@ -182,7 +184,7 @@ def sources : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → SourceInventory P
   | _, _, id _ => []
   | _, _, comp w w' => w'.sources ++ w.sources
   | _, _, localMap .. => []
-  | _, _, @source _ p q hpq U V η _ => [⟨p, q, hpq, U, V, η⟩]
+  | _, _, Circuit.gate (@SourceGate.mk _ p q hpq U V η _) => [⟨p, q, hpq, U, V, η⟩]
   | _, _, swap .. => []
   | _, _, frame _ w => w.sources
 
@@ -194,20 +196,17 @@ def castInput {ℓ ℓ' ℓ₁ : Layout P} (w : Word ℓ ℓ') (h : ℓ = ℓ₁
     (w.castInput h).sources = w.sources := by
   cases h
   rfl
-
 @[simp] theorem isAllowed_castInput {ℓ ℓ' ℓ₁ : Layout P} (w : Word ℓ ℓ') (h : ℓ = ℓ₁) :
     (w.castInput h).IsAllowed ↔ w.IsAllowed := by
   cases h
   rfl
-
 theorem eval_castInput_of_heq {ℓ ℓ' ℓ₁ : Layout P} (w : Word ℓ ℓ') (h : ℓ = ℓ₁)
     {x : Mem ℓ} {y : Mem ℓ₁} (hxy : HEq y x) : (w.castInput h).eval y = w.eval x := by
   cases h
   cases hxy
   rfl
-
 @[simp] theorem sources_frameList {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (ℓ₀ : Layout P) :
-    (frameList ℓ₀ w).sources = w.sources := by
+    Word.sources (frameList ℓ₀ w) = w.sources := by
   induction ℓ₀ with
   | nil => rfl
   | cons r ℓ₀ ih => exact ih
@@ -227,7 +226,9 @@ theorem isNormalized_sources {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (hw : w.I
       simp only [sources, SourceInventory.IsNormalized, List.mem_append, or_imp, forall_and]
       exact ⟨ih' hw.2, ih hw.1⟩
   | localMap => simp [sources, SourceInventory.IsNormalized]
-  | source hpq U V η ℓ => simpa [sources, SourceInventory.IsNormalized, IsAllowed] using hw
+  | source hpq U V η ℓ =>
+      simpa [sources, SourceInventory.IsNormalized, IsAllowed, GateFamily.IsAllowed,
+        SourceGate.IsAllowed] using hw
   | swap => simp [sources, SourceInventory.IsNormalized]
   | frame r w ih => exact ih hw
 
@@ -254,8 +255,8 @@ def localPart : {ℓ ℓ' : Layout P} → (w : Word ℓ ℓ') → Word (w.source
   | _, _, localMap p h₁ h₂ U ℓ => .localMap p h₁ h₂ U ℓ
   | _, _, source hpq U V η ℓ => .id _
   | _, _, swap r r' ℓ => .swap r r' ℓ
-  | _, _, @frame _ r ℓ _ w =>
-      .comp (moveHead r w.sources.layout ℓ) (.frame r w.localPart)
+  | _, _, @Circuit.frame _ _ _ r ℓ _ w =>
+      .comp (moveHead r (sources w).layout ℓ) (.frame r (localPart w))
 
 /-- The residual word contains no pair sources. -/
 @[simp] theorem sources_localPart {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :

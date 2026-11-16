@@ -197,9 +197,9 @@ theorem exists_tagReorderWord [NeZero q] {l₁ l₁' l₂ l₂' : List (Hole pos
         (layoutRegs q l₂ own₂)).comp (Word.frameList (layoutRegs q l₁' own₁) w₂))),
     by simp [a₁, a₂], ?_⟩
   · refine twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ fun τ₁ c₁ τ₂ c₂ => ?_
-    simp only [layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
+    simp only [layoutVec, Circuit.eval_comp, ContinuousLinearMap.comp_apply,
       Word.eval_assocWord_appendIso_symm, hw₁, Word.eval_unassocWord_appendIso_symm,
-      Word.eval_frameList_appendIso_symm, hw₂]
+      Circuit.eval_frameList_appendIso_symm, hw₂]
     rw [← layoutVec, ← layoutVec, twoLayoutIso_basis, TwoSheetExchange.tagReorder,
       act_toMatrix_symm_single]
     rfl
@@ -261,7 +261,7 @@ theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (h�
         (correctionMatrix σ (X.aSet P)))).eval z) =
       act (X.exchangeOp P σ) (twoLayoutIso _ _ X.owner₁ X.owner₂ z) := by
     intro z
-    rw [Word.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
+    rw [Circuit.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
       twoLayoutIso_renameWord, ← act_mul, exchangeOp,
       sheetBufferCorrection_mul_sheetSwapOp_eq h σ (X.aSet_subset_compl P)]
   have r := X.isReordering_renameWord

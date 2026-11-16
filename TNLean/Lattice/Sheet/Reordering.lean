@@ -96,14 +96,9 @@ theorem eval_unassocWord_appendIso_symm : (a b c : Layout P) → (x : Mem a) →
   | _ :: ℓ₀ => isAllowed_frameList_iff w ℓ₀
 
 @[simp] theorem usesOnly_frameList_iff {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (S : Set P) :
-    (ℓ₀ : Layout P) → (frameList ℓ₀ w).UsesOnly S ↔ w.UsesOnly S
+    (ℓ₀ : Layout P) → Word.UsesOnly S (frameList ℓ₀ w) ↔ w.UsesOnly S
   | [] => Iff.rfl
   | _ :: ℓ₀ => usesOnly_frameList_iff w S ℓ₀
-
-@[simp] theorem sourceCount_frameList {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
-    (ℓ₀ : Layout P) → (frameList ℓ₀ w).sourceCount = w.sourceCount
-  | [] => rfl
-  | _ :: ℓ₀ => sourceCount_frameList w ℓ₀
 
 /-- Exchange the pairs of blocks `a₁ b₁` and `a₂ b₂` around the blocks `m₁ m₂`, the order within
 every block kept. -/

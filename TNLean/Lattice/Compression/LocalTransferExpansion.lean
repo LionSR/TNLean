@@ -49,7 +49,7 @@ theorem isAllowed_localDiscard (r : Reg P) (x : r.space) (hx : ‖x‖ = 1)
 /-- The local bra contracts precisely its own register. -/
 theorem eval_localDiscard_tmul (r : Reg P) (x y : r.space) (a : Layout P) (z : Mem a) :
     (localDiscard r x a).eval (y ⊗ₜ[ℂ] z) = ⟪x, y⟫_ℂ • z := by
-  simp [localDiscard, Word.eval, appendIso, isoL_apply]
+  simp [localDiscard, Circuit.eval, appendIso, isoL_apply]
 
 /-- One basis summand of a message: a bra at the sender, then a ket at the receiver. -/
 def transferTerm (sender receiver : P) (H : HSpace) {ι : Type} [Fintype ι]
