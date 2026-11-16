@@ -1,5 +1,26 @@
 # Tactic Pattern Ledger
 
+### Disjoint summands of `Fin (m + n)` — promoted (2026-11-16)
+
+- **Seen:** `MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean`,
+  `MixedEndpointEmbedding.lean`, `MixedEndpointSwap.lean`,
+  `MPS/MPU/SingleSiteCircuit.lean` and `Circuit/ZeroRegisterConjunction.lean`
+  (five copies, found by `scripts/tactic_pattern_scan.py` over the MPO-symmetry modules).
+- **Pattern:**
+  ```lean
+  intro h
+  have hval := congrArg Fin.val h
+  simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
+  omega
+  ```
+  proving `Fin.castAdd n a ≠ Fin.natAdd m b`.
+- **Abstraction:** `Fin.castAdd_ne_natAdd` and `Fin.natAdd_ne_castAdd` in
+  `Algebra/FinCastAddNatAdd.lean`; all five call sites use them.
+- **Notes:** Net line delta +18 across the seven Lean files: the call sites lose
+  23 lines and the new module with its imports adds 41. The gain is one statement
+  of the fact instead of five proofs of it.
+- **Decision:** A lemma removes the duplication; no tactic is needed.
+
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
 - **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,

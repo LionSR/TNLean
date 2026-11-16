@@ -60,6 +60,7 @@ import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Algebra.ExpectationOverlap
 import TNLean.Algebra.ExplicitThresholds
 import TNLean.Algebra.ExponentialSumWindow
+import TNLean.Algebra.FinCastAddNatAdd
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct
@@ -262,6 +263,7 @@ import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.Algebra.UnitaryRepresentationAlgebra
 import TNLean.Algebra.UnitaryRepresentationBlocks
 import TNLean.Algebra.UnitaryVectorSwap
+import TNLean.Algebra.WeightedLowRestriction
 import TNLean.Algebra.WordAlgebra
 import TNLean.Algebra.WordAlgebraNilpotent
 import TNLean.Algebra.ZModSmallDifference
