@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{The Actual Exterior Collar Gives an Untwisted Boundary Component}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Theorem 6.9 and Lemma 6.14, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2199--2214,
+use an exterior block and virtual invariance to compare flux strings away
+from their endpoints. For a noncentral insertion, identity on the observed
+incident bonds alone does not supply the complementary contraction. A
+common untwisted component connecting all complementary boundary endpoints
+is an independent geometric requirement.
+
+The theorem
+\leanid{TNLean.PEPS.torusDualFlux_transport_eq_one_on_integerExteriorCollar}
+derives identity transport on every projected safe exterior collar edge
+from actual dual-path avoidance. A safe edge has two unoccupied integer
+endpoints near a common occupied center. That center is a corner of one
+of the two adjacent dual plaquettes. A dual path avoiding all plaquettes
+with observed corners cannot cross the edge, so its signed crossing count
+is zero. This proves the group-valued identity without centrality.
+
+The theorem
+\leanid{TNLean.PEPS.torusDualFlux_graphLabels_eq_one_on_incident_of_avoids}
+also derives identity on every ordered physical edge incident to the
+observation region from actual avoidance. It supplies the original incident
+operator condition for the same chosen path, without choosing a second detour.
+
+The theorem
+\leanid{TNLean.PEPS.exists_torusFlux_untwisted_boundary_component}
+assumes simple connectedness of the observation region's actual closed-cell
+realization and avoidance of the computed four-corner forbidden plaquettes
+by the given native path. It derives a simultaneous planar integer lift,
+its connected safe exterior collar, a projected untwisted complementary
+subgraph and a root. Every complementary boundary endpoint lifts into
+this same collar, and projected collar walks prove the required reachability.
+No component, root, gauge, transport identity, Gram identity or density
+equality is supplied as a hypothesis. Both torus periods are at least three;
+the group and its insertion element need not be central or finite.
+
+This proves the boundary-component geometry for an actually avoiding path.
+Constructing that path from the original native flux string still requires
+the explicit computed-forbidden-set hypotheses of the detour theorem and
+its lifted displacement class. Neither endpoint exclusion alone nor equal
+winding is asserted to classify restricted homotopies. The annular
+Wilson-loop obstruction to arbitrary endpoint-free vacuum density is
+retained. Composition with noncentral contraction and native coefficient
+conversion remains separate under \ghissue{8703}; no full-lattice
+Hamiltonian conclusion under \ghissue{8947} is asserted.
+\end{document}

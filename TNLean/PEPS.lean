@@ -404,6 +404,7 @@ import TNLean.PEPS.TorusCutProjectorExpansion
 import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusDirectedBondUpdate
 import TNLean.PEPS.TorusDualCollar
+import TNLean.PEPS.TorusDualCollarAvoidance
 import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
@@ -421,6 +422,7 @@ import TNLean.PEPS.TorusEdgeGaugeCovariance
 import TNLean.PEPS.TorusEdgePhysicalChargeMeasurement
 import TNLean.PEPS.TorusExteriorPathApproximation
 import TNLean.PEPS.TorusFlatConnectionGauge
+import TNLean.PEPS.TorusFluxBoundaryComponent
 import TNLean.PEPS.TorusFourLegTransformation
 import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGClosure

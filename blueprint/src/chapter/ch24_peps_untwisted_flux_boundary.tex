@@ -1,0 +1,63 @@
+\begin{lemma}[An avoiding flux path is untwisted on observed incident bonds]
+    \label{lem:peps_flux_avoiding_incident_identity}
+    \lean{TNLean.PEPS.torusDualFlux_graphLabels_eq_one_on_incident_of_avoids}\leanok
+    Let both torus periods be at least three. A native dual path avoiding every plaquette with an observed corner
+    has identity ordered-edge insertion on every physical bond incident
+    to the observation region. The group element may be noncentral.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_physical_forbidden_dual_plaquettes}
+    Each incident bond has an adjacent forbidden plaquette. No avoiding
+    dual step crosses it. Its signed count $n(e)=0$, so
+    \begin{align}
+        g^{n(e)}=g^0=1,\qquad (g^{n(e)})^{-1}=1.
+        \label{eq:peps_avoiding_incident_power}
+    \end{align}
+\end{proof}
+
+\begin{lemma}[An avoiding flux path is untwisted on the safe collar]
+    \label{lem:peps_flux_safe_collar_untwisted}
+    \lean{TNLean.PEPS.torusDualFlux_transport_eq_one_on_integerExteriorCollar}\leanok
+    Let both torus periods be at least three. Let occupied integer centers project into the physical observation
+    region. A native dual path avoiding every plaquette with an observed
+    corner has identity group transport on every projected edge of their
+    safe exterior collar. The group element may be noncentral.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_physical_forbidden_dual_plaquettes,
+        def:peps_integer_exterior_collar_graph}
+    Both unoccupied endpoints of a safe collar edge are near one common
+    occupied center. This center is a corner of one of the two dual
+    plaquettes adjacent to the crossed physical bond. At least one such
+    plaquette is therefore forbidden. An avoiding dual step cannot cross
+    that bond in either direction. Therefore its total signed count $n(e)$
+    is zero and, with the sign chosen by the edge orientation,
+    \begin{align}
+        \operatorname{transport}_{g,p}(e)=g^{\pm n(e)}=g^0=1.
+        \label{eq:peps_safe_collar_transport}
+    \end{align}
+\end{proof}
+
+\begin{lemma}[The exterior collar supplies an untwisted boundary component]
+    \label{lem:peps_flux_untwisted_boundary_component}
+    \lean{TNLean.PEPS.exists_torusFlux_untwisted_boundary_component}\leanok
+    Let both torus periods be at least three. Suppose the actual closed-cell realization of the observation region
+    is simply connected. For every native dual path avoiding plaquettes
+    with an observed corner, there is an untwisted subgraph of the physical
+    complement and a root connected in this subgraph to every complementary
+    boundary endpoint. The root, graph and untwisted edge identities are
+    derived from the actual exterior collar.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_flux_safe_collar_untwisted,
+        thm:peps_torus_integer_cell_lift,
+        thm:peps_integer_boundary_contour_connected,
+        thm:peps_torus_region_boundary_lift}
+    Choose one planar integer-cell lift with simply connected occupied
+    union whose exterior collar projects outside the physical region.
+    Its safe exterior graph is connected. Project that graph into the
+    physical complement and choose any projected root. Each complementary
+    boundary endpoint has an integer exterior lift in the same collar,
+    so projected collar walks connect it to the root. The preceding lemma
+    proves identity transport on every projected edge.
+\end{proof}
