@@ -26,6 +26,9 @@ with one block filling the bond space.
 
 * `MPSTensor.IsNormalTensor.isMPUCanonicalForm`: a normal tensor is in MPU
   canonical form with a single block.
+* `MPOTensor.IsMPU.isMPUCanonicalForm_tensorPhysicalId`: attaching a
+  positive-dimensional identity ancilla preserves canonical form of an MPU
+  tensor.
 * `MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId`: attaching
   a positive-dimensional identity ancilla and then blocking a positive number of
   sites preserves canonical form of an MPU tensor.
@@ -108,6 +111,22 @@ theorem isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening [NeZero d]
     simp only [normalizedFlattening, smul_smul, mul_inv_cancel₀ hc, one_smul]
   rw [← hU']
   exact ⟨(Classical.choice hU.isMPUCanonicalForm).smul _ hc⟩
+
+/-- **Canonical form survives attaching an identity ancilla.** If an MPU tensor
+\(\mathcal U\) is in canonical form, then so is \(\mathcal U^{(p)}\) for every
+\(p>0\).
+
+Source: arXiv:1703.09188, Definition `def:equivalent-tensors`, lines 706--724,
+with Proposition `prop:normal-tensor`, lines 344--354. -/
+theorem IsMPU.isMPUCanonicalForm_tensorPhysicalId [NeZero d] [NeZero D]
+    {U : MPOTensor d D} (hU : IsMPU U)
+    (hcf : MPSTensor.IsMPUCanonicalForm U.toMPSTensor) {p : ℕ} (hp : 0 < p) :
+    MPSTensor.IsMPUCanonicalForm (MPOTensor.tensorPhysicalId U p).toMPSTensor := by
+  have : NeZero p := ⟨hp.ne'⟩
+  apply isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening
+  rw [normalizedFlattening_tensorPhysicalId U p hp]
+  exact (isNormalTensor_normalizedDiagonalLift
+    (hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf) p hp).reindexPhysical _
 
 /-- **Canonical form survives attaching an identity ancilla and blocking.** If an
 MPU tensor \(\mathcal U\) is in canonical form, then so is
