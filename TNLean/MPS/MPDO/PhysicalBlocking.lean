@@ -88,7 +88,7 @@ of its one-letter physical alphabet. Source: arXiv:1703.09188, definition
 theorem blockTensor_one_eq_reindexPhysical (M : MPOTensor d D) :
     blockTensor M 1 = reindexPhysical (Kraus.singleBlockEquiv d) M := by
   ext i j
-  simp [blockTensor, reindexPhysical, Kraus.wordOfBlock, Kraus.wordOfBlock_one]
+  simp [blockTensor, reindexPhysical]
 
 /-- Physical blocking commutes with the physical adjoint. The equality is
 literal: both operations preserve the order of the virtual word.

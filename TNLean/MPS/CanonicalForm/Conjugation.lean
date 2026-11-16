@@ -29,6 +29,7 @@ and the transfer-map fixed-point equations used in canonical forms.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kraus
+open Kraus (isNBlkInjective_iff_blockTensor_isInjective)
 
 variable {d D : ℕ}
 
