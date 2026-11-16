@@ -49,6 +49,7 @@ import TNLean.Algebra.CoveringMatching
 import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
+import TNLean.Algebra.DependentSequence
 import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EuclideanExtendByZero
 import TNLean.Algebra.EuclideanFiberwiseMap
@@ -79,6 +80,7 @@ import TNLean.Algebra.FlagBlockTriangular
 import TNLean.Algebra.FlatDensityEntropy
 import TNLean.Algebra.FlatDensityRenyiEntropy
 import TNLean.Algebra.FrequencyCounts
+import TNLean.Algebra.FunctionalWordComparison
 import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
@@ -141,6 +143,7 @@ import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
+import TNLean.Algebra.NatPolynomialBound
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
@@ -203,7 +206,6 @@ import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
 import TNLean.Algebra.SkewUnitaryNormalForm
-import TNLean.Algebra.StabilizedWeightedTrace
 import TNLean.Algebra.StabilizerBlockIndependence
 import TNLean.Algebra.StabilizerBlockIndependenceCircle
 import TNLean.Algebra.StabilizerCocycleExtension
@@ -259,4 +261,5 @@ import TNLean.Algebra.UnitaryRepresentationAlgebra
 import TNLean.Algebra.UnitaryRepresentationBlocks
 import TNLean.Algebra.UnitaryVectorSwap
 import TNLean.Algebra.WordAlgebra
+import TNLean.Algebra.WordAlgebraNilpotent
 import TNLean.Algebra.ZModSmallDifference

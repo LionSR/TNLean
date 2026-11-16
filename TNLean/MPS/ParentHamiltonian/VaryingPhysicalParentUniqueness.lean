@@ -15,11 +15,12 @@ configuration space: this follows from its actual parent equation and the
 proved physical-support theorem. Its coefficient pullback therefore has unit
 norm and spans the kernel of the actual dependent-physical-space parent.
 
-**Scope restriction (adjacent open chains):** the chain has at least two sites,
-with singleton endpoint bonds, sitewise C1 and canonical row identities. The
-physical dimensions may vary arbitrarily; no common alphabet, embedded-state
-membership or ground-state supplier is assumed. The length domain and scalar
-phase freedom are recorded in
+**Local fix (chains with an adjacent pair):** the chain has at least two sites,
+the source's setup of a Hamiltonian summed over adjacent pairs; a one-site chain
+has no interaction term. The endpoint bonds are singletons, with sitewise C1 and
+canonical row identities. The physical dimensions may vary arbitrarily; no
+common alphabet, embedded-state membership or ground-state supplier is assumed.
+Uniqueness is uniqueness of the ground-state line. Documented in
 `docs/paper-gaps/pgvwc07_open_parent_domain.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 9 and equation unique-OBC,

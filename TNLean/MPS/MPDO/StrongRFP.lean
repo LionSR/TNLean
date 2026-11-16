@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalClosure
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The unnormalized structural Strong-RFP relation
@@ -99,10 +100,7 @@ theorem strongRFP_tensor_relation_iff_physClose
       Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply,
       physClose1_apply]
     rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro a _
-    apply Finset.sum_congr rfl
-    intro b _
+    refine Finset.sum_congr₂ fun a _ b _ ↦ ?_
     ring
   · intro h i j
     apply sub_eq_zero.mp

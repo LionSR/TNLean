@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Basic
 import Mathlib.Data.Matrix.Block
 import Mathlib.Logic.Equiv.Fin.Basic
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Virtual rescaling for two-block uncle Hamiltonians
@@ -35,10 +36,7 @@ theorem trace_twoBlockVirtualScale_mul {a b : ℕ} (z : ℂ)
     Matrix.trace (twoBlockVirtualScale (a := a) z M * X) =
       Matrix.trace (M * twoBlockVirtualScale (a := a) z X) := by
   simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  refine Finset.sum_congr₂ fun i _ j _ ↦ ?_
   simp only [twoBlockVirtualScale]
   by_cases h : i.val < a ↔ j.val < a
   · rw [ite_eq_left h, ite_eq_left h.symm]

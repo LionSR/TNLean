@@ -26,3 +26,4 @@ import TNLean.MPS.Chain.TranslationInvariance
 import TNLean.MPS.Chain.VaryingBondChain
 import TNLean.MPS.Chain.VaryingBondOBC
 import TNLean.MPS.Chain.VirtualInsertion
+import TNLean.MPS.Chain.WeightedOverlap

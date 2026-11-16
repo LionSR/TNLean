@@ -11,10 +11,10 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 # The matching and the comparison of two compressions in matrices
 
 Let `(σ, g)` and `(σ_tilde, g_tilde)` be reductions of the same tensor `B` onto two families of
-normal blocks of positive bond dimension, with flags `M_k` and `M_tilde_{k'}`. Write `G_{≤k}` for
-the matrix of the columns of `g⁻¹` at the slots of the positions before `k`, so that its column span
-is `M_k`, and likewise `G_tilde_{≤k'}`. Then (*The asymmetric fundamental theorem of matrix product
-states*, Remark 5.3 and Corollary 6.4):
+nonzero irreducible blocks, with flags `M_k` and `M_tilde_{k'}`. Write
+`G_{≤k}` for the matrix of the columns of `g⁻¹` at the slots of the positions before `k`, so that
+its column span is `M_k`, and likewise `G_tilde_{≤k'}`. Then (*The asymmetric fundamental theorem of
+matrix product states*, Remark 5.3 and Corollary 6.4):
 
 * `rank (G_{≤k} G_tilde_{≤k'}) = dim (M_k + M_tilde_{k'})`;
 * the position `π(k)` matched with `k` is the least `k'` at which the column block of the position
@@ -178,10 +178,10 @@ theorem coe_map_inf_eq_leadingCols (k : Fin (S.card + P.z + 1))
   · rintro ⟨a, a', rfl, h⟩
     exact Submodule.mem_inf.2 ⟨hP.1 ⟨a, rfl⟩, hQ.1 ⟨a', h.symm⟩⟩
 
-variable (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
-  (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
+variable (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s)) (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
+  (hirr' : ∀ t ∈ S', Matrix.IsIrreducibleAction (C' t)) (hlet' : ∀ t ∈ S', ∃ i, C' t i ≠ 0)
 
-include hC hD in
+include hirr hlet in
 /-- Adding the column block of the position `k` to `(G_{≤k-1} G_tilde_{≤j})` keeps the rank exactly
 when `M_k ∩ M_tilde_j ⊄ M_{k-1}` (*The asymmetric fundamental theorem of matrix product states*,
 Remark 5.3): equal ranks mean `M_k ⊆ M_{k-1} + M_tilde_j`, which by the modular law and the covering
@@ -194,7 +194,7 @@ theorem rank_fromCols_leadingCols_eq_iff (k : Fin (S.card + P.z))
   rw [rank_fromCols_leadingCols, rank_fromCols_leadingCols]
   have hle : P.flag k.castSucc ⊔ Q.flag j ≤ P.flag k.succ ⊔ Q.flag j :=
     sup_le_sup_right (P.flag_mono (Fin.castSucc_le_succ k)) _
-  have hcov := P.flag_covBy hC hD k
+  have hcov := P.flag_covBy hirr hlet k
   constructor
   · intro hrank hinf
     have heq : P.flag k.castSucc ⊔ Q.flag j = P.flag k.succ ⊔ Q.flag j :=
@@ -225,16 +225,16 @@ theorem isLeast_rank_fromCols_leadingCols_eq (k : Fin (S.card + P.z)) :
     IsLeast {j : Fin (S'.card + Q.z + 1) |
         (Matrix.fromCols (P.leadingCols k.castSucc) (Q.leadingCols j)).rank =
           (Matrix.fromCols (P.leadingCols k.succ) (Q.leadingCols j)).rank}
-      (P.matching Q hC hD hC' hD' k).succ := by
-  refine ⟨(P.rank_fromCols_leadingCols_eq_iff Q hC hD k _).2 ?_, fun j hj => ?_⟩
-  · exact CoveringMatching.CoveringChain.not_inf_jump_succ_le (P.coveringChain hC hD)
-      (Q.coveringChain hC' hD') k
-  · have hinf := (P.rank_fromCols_leadingCols_eq_iff Q hC hD k j).1 hj
+      (P.matching Q hirr hlet hirr' hlet' k).succ := by
+  refine ⟨(P.rank_fromCols_leadingCols_eq_iff Q hirr hlet k _).2 ?_, fun j hj => ?_⟩
+  · exact CoveringMatching.CoveringChain.not_inf_jump_succ_le (P.coveringChain hirr hlet)
+      (Q.coveringChain hirr' hlet') k
+  · have hinf := (P.rank_fromCols_leadingCols_eq_iff Q hirr hlet k j).1 hj
     by_contra hlt
     rw [not_le, ← Fin.le_castSucc_iff] at hlt
     exact hinf ((inf_le_inf_left _ (Q.flag_mono hlt)).trans
-      (CoveringMatching.CoveringChain.inf_jump_castSucc_le (P.coveringChain hC hD)
-        (Q.coveringChain hC' hD') k))
+      (CoveringMatching.CoveringChain.inf_jump_castSucc_le (P.coveringChain hirr hlet)
+        (Q.coveringChain hirr' hlet') k))
 
 /-- **Two compressions with different flags in matrices, the reading maps** (*The asymmetric
 fundamental theorem of matrix product states*, Corollary 6.4): if `X` relates the reading maps on
@@ -243,11 +243,11 @@ fundamental theorem of matrix product states*, Corollary 6.4): if `X` relates th
 `W_tilde_{b'} Y_U = X W_b Y_U` for every matrix `Y_U` whose columns lie in `U`. -/
 theorem leftRow_mul_eq_mul_leftRow_mul (k : Fin (S.card + P.z)) {b : BlockIndex S P.z}
     {b' : BlockIndex S' Q.z} {X : Matrix (Fin (slotSize D' b')) (Fin (slotSize D b)) ℂ}
-    (hread : ∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ,
+    (hread : ∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' k).succ,
       Q.leftRow b' *ᵥ WordModule.toVec B x = X *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x))
     {n : ℕ} (YU : Matrix (Fin DB) (Fin n) ℂ)
     (hYU : ∀ j, (WordModule.toVec B).symm (fun i => YU i j) ∈
-      P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ) :
+      P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' k).succ) :
     Q.leftRow b' * YU = X * P.leftRow b * YU := by
   ext i j
   have h := congrFun (hread _ (hYU j)) i
@@ -264,19 +264,19 @@ every column of the left side lies in `M_{k-1} + M_tilde_{π(k)-1}`, the column 
 `(G_{≤k-1} G_tilde_{≤π(k)-1})`. -/
 theorem exists_rightCol_sub_mul_eq_fromCols_mul (k : Fin (S.card + P.z))
     {b : BlockIndex S P.z} (hb : P.ord b = k) {b' : BlockIndex S' Q.z}
-    (hb' : Q.ord b' = P.matching Q hC hD hC' hD' k)
+    (hb' : Q.ord b' = P.matching Q hirr hlet hirr' hlet' k)
     {X : Matrix (Fin (slotSize D' b')) (Fin (slotSize D b)) ℂ}
     {Y : Matrix (Fin (slotSize D b)) (Fin (slotSize D' b')) ℂ} (hYX : Y * X = 1)
-    (hread : ∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ,
+    (hread : ∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hirr hlet hirr' hlet' k).succ,
       Q.leftRow b' *ᵥ WordModule.toVec B x = X *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x)) :
     ∃ R, Q.rightCol b' - P.rightCol b * Y =
       Matrix.fromCols (P.leadingCols k.castSucc)
-        (Q.leadingCols (P.matching Q hC hD hC' hD' k).castSucc) * R := by
+        (Q.leadingCols (P.matching Q hirr hlet hirr' hlet' k).castSucc) * R := by
   obtain ⟨X₀, Y₀, hXY₀, -, -, hX₀, hV⟩ :=
-    P.exists_intertwiner_of_matching Q hC hD hC' hD' k hb hb'
+    P.exists_intertwiner_of_matching Q hirr hlet hirr' hlet' k hb hb'
   have hXX₀ : X = X₀ := by
     subst hb
-    have hs := P.leftRow_surjOn_of_sup_eq (P.flag_sup_inf_eq Q hC hD hC' hD' (P.ord b))
+    have hs := P.leftRow_surjOn_of_sup_eq (P.flag_sup_inf_eq Q hirr hlet hirr' hlet' (P.ord b))
     refine Matrix.ext_iff_mulVec.2 fun v => ?_
     obtain ⟨x, hx, rfl⟩ := hs (Set.mem_univ v)
     rw [← hread x hx, hX₀ x hx]
@@ -284,12 +284,12 @@ theorem exists_rightCol_sub_mul_eq_fromCols_mul (k : Fin (S.card + P.z))
     rw [← Matrix.mul_one Y, ← hXY₀, ← Matrix.mul_assoc, ← hXX₀, hYX, Matrix.one_mul]
   subst hYY₀
   have hcol : ∀ c, ∃ r, Matrix.fromCols (P.leadingCols k.castSucc)
-      (Q.leadingCols (P.matching Q hC hD hC' hD' k).castSucc) *ᵥ r =
+      (Q.leadingCols (P.matching Q hirr hlet hirr' hlet' k).castSucc) *ᵥ r =
         (Q.rightCol b' - P.rightCol b * Y) *ᵥ Pi.single c 1 := by
     intro c
     have hmem : (Q.rightCol b' - P.rightCol b * Y) *ᵥ Pi.single c 1 ∈
         LinearMap.range (Matrix.fromCols (P.leadingCols k.castSucc)
-          (Q.leadingCols (P.matching Q hC hD hC' hD' k).castSucc)).mulVecLin := by
+          (Q.leadingCols (P.matching Q hirr hlet hirr' hlet' k).castSucc)).mulVecLin := by
       rw [range_fromCols_leadingCols, Submodule.mem_map_equiv, Matrix.sub_mulVec,
         ← Matrix.mulVec_mulVec]
       exact hV _

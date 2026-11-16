@@ -13,7 +13,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{Source statement}
 
@@ -284,24 +284,89 @@ exact-length simultaneous span.\footnote{%
     \leanid{MPSTensor.hasBlockSelectorWords_of_pairBlockSeparatingWords}
     in \path{TNLean/MPS/MPDO/BiCFDerivation/Selectors.lean}.}
 
-These results assume that distinct equal-dimensional blocks are not equivalent
-up to gauge and phase. PGVWC07 instead assumes only that the corresponding
-finite-ring component vectors are pairwise unequal. This inequality cannot
-imply gauge-phase separation. Gauge-phase equivalent blocks produce
-proportional finite-ring vectors, and distinct nonzero block weights can make
-them unequal while preserving proportionality. Thus the present formal results
-have a genuine scope restriction.
+\section{The distinctness hypothesis}
 
-Eliminating the extra premise requires identifying, or proving from the source
-argument, the projective distinctness or nonproportionality condition actually
-needed by the interpolation step, and then deriving the formal pair-separation
-input from that condition. If the source hypothesis is read literally as mere
-inequality, the gauge-phase or nonproportionality premise must remain explicit.
-The current gap is not closed.
+The formal results above assume that no two distinct blocks are related by a
+gauge and a phase: there are no indices $j\ne k$ with equal block dimensions,
+invertible matrix $X$ and scalar $\zeta\ne0$ such that
+\begin{align}
+    A^k_i
+     & =\zeta XA^j_iX^{-1}
+    \quad\text{for every }i.
+    \label{eq:direct-sum_gauge_phase_relation}
+\end{align}
+The source states its hypothesis on the block states
+\begin{align}
+    \ket{\phi_{A^j}}
+     & =\lambda_j^N\sum_{i_1,\ldots,i_N}
+    \tr(A^j_{i_1}\cdots A^j_{i_N})\ket{i_1\cdots i_N}
+    \label{eq:direct-sum_block_state}
+\end{align}
+of the $N$-site ring: without loss of generality, these states are pairwise
+different (lines~1326--1330 of Ref.~\cite{PerezGarcia2007MPSReps}).
+
+The intended meaning of ``different'' is ``not proportional'', that is,
+different rays. Three passages of the source fix this reading.
+\begin{enumerate}
+    \item The source writes equality of states for equality up to a scalar.
+          The uniqueness proof for periodic chains ends with
+          $X=\lambda I$ ``and $\ket\phi=\ket\psi$'' (line~1289), and the
+          open-boundary proof fixes the remaining scalar by normalization
+          (lines~1233--1236).
+    \item The base case of the direct-sum lemma ends by observing that both
+          $\ket{\phi_{A^1}}$ and $\ket{\phi_{A^2}}$ would be the only ground
+          state of one parent Hamiltonian, ``which is the desired
+          contradiction'' (lines~1373--1377). That uniqueness theorem determines
+          a ground state only up to a scalar, so this is a contradiction exactly
+          when the two block states are not proportional.
+    \item The phrase ``without loss of generality'' refers to merging blocks
+          whose states are proportional. Two such terms add to a multiple of
+          one block state, which is again of the form
+          (\ref{eq:direct-sum_block_state}) after rescaling and rephasing the
+          block; when the two terms cancel, both are dropped. Merging only
+          equal vectors would leave the proportional pairs for which the
+          contradiction above fails.
+\end{enumerate}
+The source attaches no separate qualifier to block states at comparable
+statements. Where it relates matrices up to a phase it says so
+(lines~1013--1014), and the proof of the corollary on the W state counts
+``the number of different blocks'' in the same sense (line~2189).
+
+At the lengths of the source the two hypotheses coincide. If
+(\ref{eq:direct-sum_gauge_phase_relation}) holds, cyclicity of the trace gives,
+for every length $N$,
+\begin{align}
+    \ket{\phi_{A^k}}
+     & =\left(\frac{\lambda_k\zeta}{\lambda_j}\right)^N\ket{\phi_{A^j}},
+    \label{eq:direct-sum_gauge_phase_proportional}
+\end{align}
+so pairwise nonproportional block states exclude
+(\ref{eq:direct-sum_gauge_phase_relation}). Conversely, under gauge-phase
+inequivalence, condition $C1$ in each block and
+$N\ge\max\{L_0,3(b-1)(L_0+1)\}$, the block vectors at length $N$ are linearly
+independent, hence pairwise nonproportional.\footnote{%
+    \leanid{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge} and
+    \leanid{MPSTensor.linearIndependent_mpvState_of_wordTupleSpanTop}.}
+Gauge-phase inequivalence is therefore the length-independent form of the
+source's distinctness hypothesis.
+
+\textbf{Local fix (projective distinctness of the blocks).} The library reads
+``pairwise different block states'' as pairwise nonproportional block states
+and states it as gauge-phase inequivalence of distinct blocks. It is an
+explicit premise of the theorems that use it, not a field of the canonical-form
+data. This placement follows the source. Theorem~4 of
+Ref.~\cite{PerezGarcia2007MPSReps} (lines~742--763) imposes no distinctness,
+and nothing in its proof merges blocks related by a gauge and a phase. The
+distinctness enters only through the standing hypotheses of the degeneracy
+section, lines~1321--1330, and the formal theorems carry it exactly where the
+source does: at the direct-sum lemma and at the degeneracy theorems that use
+it. The literal reading, in which two block states may be unequal but
+proportional, is not one the authors intend and receives no separate formal
+statement.
 
 \section{Conclusion}
 
-Under gauge-phase separation, the arbitrary-$L_0$ direct-sum interpolation
+Under the distinctness hypothesis, the arbitrary-$L_0$ direct-sum interpolation
 needed for the BNT specialization is formalized at the exact source length
 \begin{align}
     3(b-1)(L_0+1).
@@ -329,8 +394,8 @@ $b\leq D$. The formal theorem consequently gives
     \label{eq:direct-sum_total_dimension_length_bound}
 \end{align}
 This proves the sharp block-separation input cited by the 2016 MPDO source
-under the additional gauge-phase separation premise. It does not close the
-input at the source's literal pairwise-inequality hypothesis.\footnote{%
+with the source's distinctness hypothesis in the form of gauge-phase
+inequivalence.\footnote{%
     \leanid{MPSTensor.SectorDecomposition.basisCount_le_totalDim};
     \leanid{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}.}
 
@@ -341,7 +406,7 @@ separate from the direct-sum input proved here.
 
 \section{Arbitrary positive interactions}
 
-The same separation restriction enters Theorem~11 of
+The same distinctness hypothesis enters Theorem~11 of
 Ref.~\cite{PerezGarcia2007MPSReps}, lines~1407--1422, which concerns an arbitrary
 positive local interaction, rather than the canonical parent projection.
 Let $h$ act on $L$ consecutive sites, and let $H=\sum_i\tau^i(h)$ on the
@@ -361,26 +426,21 @@ family extends to the whole product algebra; a boundary supported in a single
 block isolates that block's local annihilation equation. Summing the local
 equations gives (\ref{eq:direct_sum_arbitrary_interaction_blocks}).
 
-Canonical data, common injectivity at $L_0>0$, and gauge-phase separation derive
-the complementary span when $b\ge2$ and
-$N\ge3(b-1)(L_0+1)+L$. The resulting arbitrary-interaction theorem thus retains
-the exact volume bound, while keeping the separation premise visible. It does
-not resolve the source's weaker literal distinctness assumption.
-The source-written declarations remain pending hosted verification.\footnote{%
+Canonical data, common injectivity at $L_0>0$, and gauge-phase inequivalence
+derive the complementary span when $b\ge2$ and $N\ge3(b-1)(L_0+1)+L$. The
+resulting theorem has the hypotheses of Theorem~11, with the distinctness of the
+block states read as above, and its exact volume bound.\footnote{%
     \leanid{MPSTensor.periodicInteractionHamiltonianES_mpvState_eq_zero_of_wordTupleSpanTop};
     \leanid{MPSTensor.PGVWC07CanonicalFormData.periodicInteractionHamiltonianES_blocks_eq_zero}.}
 
 \section{Verdict}
 
-\textbf{Verdict: scope restriction.} The exact source length and direct-sum
-span are proved under gauge-phase separation, while PGVWC07 states only
-pairwise inequality of the finite-ring component vectors. That literal
-condition cannot imply the formal premise because unequal component vectors
-may still be proportional. Elimination requires identifying or proving the
-projective, nonproportional source condition used by the interpolation argument
-and deriving the formal pair-separation input from it. If the source is read as
-assuming only inequality, the additional separation premise must be retained.
-The sharp source input remains open at its printed hypothesis set.
+\textbf{Verdict: local correction, resolved.} The source's pairwise different
+block states are pairwise nonproportional vectors, as its own proof of the
+direct-sum lemma requires. At the source lengths this is equivalent to
+gauge-phase inequivalence of distinct blocks, the explicit premise of the formal
+direct-sum span and of the degeneracy theorem for arbitrary positive
+interactions. The exact source length is proved under this hypothesis.
 
 \bibliographystyle{alpha}
 \bibliography{references}

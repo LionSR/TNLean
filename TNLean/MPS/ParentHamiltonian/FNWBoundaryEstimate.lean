@@ -8,6 +8,7 @@ import QICLean.Kraus.TracePairing
 import TNLean.Algebra.ListOfFn
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # FNW boundary scalar-product identities
@@ -360,10 +361,7 @@ theorem fnwBoundaryMapCLM_norm_sq_succ
   simp_rw [PiLp.norm_sq_eq_of_L2]
   rw [← Equiv.sum_comp (Fin.snocEquiv (fun _ : Fin (N + 1) => Fin d))]
   rw [Fintype.sum_prod_type]
-  apply Finset.sum_congr rfl
-  intro μ _
-  apply Finset.sum_congr rfl
-  intro σ _
+  refine Finset.sum_congr₂ fun μ _ σ _ ↦ ?_
   change ‖fnwBoundaryMap (fun ν => (A ν)ᴴ) (N + 1) B
       (Fin.snoc σ μ)‖ ^ 2 =
     ‖fnwBoundaryMap (fun ν => (A ν)ᴴ) N (B * A μ) σ‖ ^ 2

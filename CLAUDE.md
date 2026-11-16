@@ -70,6 +70,10 @@ python3 scripts/add_blueprint_search.py --web-root blueprint/web
 - **Mathlib**: v4.36.0-rc1
 - **checkdecls**: Blueprint declaration checker (PatrickMassot/checkdecls)
 - **Gametheory**: Custom Brouwer fixed-point theorem library (LionSR/Brouwer)
+- **CSLib**: query-complexity framework for the running-time statements of the
+  ground-state algorithm (leanprover/cslib, pinned at its last Lean v4.36.0-rc1
+  commit; only `Cslib/Algorithms/Lean/Query/` is imported; move the pin with the
+  next toolchain bump)
 
 ### Lean Options (lakefile.toml)
 

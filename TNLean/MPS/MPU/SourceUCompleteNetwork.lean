@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.SourceVIsometry
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The complete network for the paper source gate u
@@ -93,31 +94,19 @@ theorem sourceU_gram_eq_staggered_four_u
         star (sourceYTensor U S (r, l) ((α, p₂), (p₁, α))) *
           sourceYTensor U S (r, l) ((α', q₂), (q₁, α')) := by
       rw [Fintype.sum_last_first_four]
-      apply Finset.sum_congr rfl
-      intro α _
-      apply Finset.sum_congr rfl
-      intro α' _
-      apply Finset.sum_congr rfl
-      intro l _
-      apply Finset.sum_congr rfl
-      intro r _
+      refine Finset.sum_congr₂ fun α _ α' _ ↦ ?_
+      refine Finset.sum_congr₂ fun l _ r _ ↦ ?_
       simp only [f]
       ring
     _ = ∑ α, ∑ α', ∑ r, ∑ l,
         star (sourceYTensor U S (r, l) ((α, p₂), (p₁, α))) *
           sourceYTensor U S (r, l) ((α', q₂), (q₁, α')) := by
-      apply Finset.sum_congr rfl
-      intro α _
-      apply Finset.sum_congr rfl
-      intro α' _
+      refine Finset.sum_congr₂ fun α _ α' _ ↦ ?_
       rw [Finset.sum_comm]
     _ = ∑ α, ∑ α', ∑ β, ∑ β', ∑ γ, ∑ j₁, ∑ j₂,
         star (U j₁ p₂ α β) * ρ β β' * U j₁ q₂ α' β' *
           (star (U j₂ p₁ γ α) * U j₂ q₁ γ α') := by
-      apply Finset.sum_congr rfl
-      intro α _
-      apply Finset.sum_congr rfl
-      intro α' _
+      refine Finset.sum_congr₂ fun α _ α' _ ↦ ?_
       rw [← sourceYTensor_gram_eq_four_u_weighted U S
         (p₂, p₁) (q₂, q₁) (α, α) (α', α'),
         Fintype.sum_prod_type]
@@ -173,24 +162,12 @@ theorem sourceU_gram_eq_transpose_fixed_pair_trace
             (star (U j₂ p₁ γ a) * U j₂ q₁ γ b) := by
     unfold Matrix.trace
     rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-    apply Finset.sum_congr rfl
-    intro a _
-    apply Finset.sum_congr rfl
-    intro b _
+    refine Finset.sum_congr₂ fun a _ b _ ↦ ?_
     exact hentry a b
   rw [sourceU_gram_eq_staggered_four_u, htrace]
-  apply Finset.sum_congr rfl
-  intro a _
-  apply Finset.sum_congr rfl
-  intro b _
-  apply Finset.sum_congr rfl
-  intro β _
-  apply Finset.sum_congr rfl
-  intro β' _
-  apply Finset.sum_congr rfl
-  intro γ _
-  apply Finset.sum_congr rfl
-  intro j₁ _
+  refine Finset.sum_congr₂ fun a _ b _ ↦ ?_
+  refine Finset.sum_congr₂ fun β _ β' _ ↦ ?_
+  refine Finset.sum_congr₂ fun γ _ j₁ _ ↦ ?_
   apply Finset.sum_congr rfl
   intro j₂ _
   ring

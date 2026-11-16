@@ -23,11 +23,28 @@ the inverse gap is asserted.
     $|E_0|=\|H\Gamma\|\le\|H\|\le L$.
 \end{proof}
 
+\begin{definition}[The Gaussian approximants over the energy mesh]
+    \label{def:huang_filter_approximant}
+    \lean{TNLean.MPS.AreaLaw.huangFilterApproximant,
+        TNLean.MPS.AreaLaw.huangFilterApproximant_spec,
+        TNLean.MPS.AreaLaw.exists_huangFilterApproximant_near_ground}
+    \leanok
+    \uses{def:huang_physical_gaussian, def:huang_filter_parameters}
+    For each point $e$ of the energy mesh, the Gaussian approximant $Q_e$ is
+    the finite physical Gaussian approximant of
+    Definition~\ref{def:huang_physical_gaussian} with variance $h$, energy
+    $e$, time window $T$ and accuracies $\eta,\eta$ of
+    Section~\ref{sec:huang_filter_parameters}. It has operator-Schmidt rank
+    at most $R$ at every cut and is within $3\eta$ of
+    $\exp(-\tfrac h2(H-eI)^2)$; for every gapped ground pair, some $Q_e$ is
+    within $4\eta$ of $a|\Gamma\rangle\langle\Gamma|$ with $a\in[1/2,1]$.
+\end{definition}
+
 \begin{lemma}[The finite family of Gaussian approximants]
     \label{thm:huang_positive_chain_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_filter_family}
     \leanok
-    \uses{thm:huang_physical_gaussian}
+    \uses{thm:huang_physical_gaussian, def:huang_filter_approximant}
     Let $q\ge1$, let $h_j$ additionally be supported on sites $j,j+1$, and fix
     $c,\Delta>0$. Let $\eta,h,T$ and the energy mesh width be the
     parameters of Section~\ref{sec:huang_filter_parameters}.
@@ -52,7 +69,7 @@ the inverse gap is asserted.
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_ground_filter_family}
     \leanok
     \uses{lem:huang_positive_chain_energy_window,
-        thm:huang_positive_chain_filter_family}
+        thm:huang_positive_chain_filter_family, def:huang_filter_approximant}
     The family can be chosen before $E_0$ and $\Gamma$ so that the following
     holds for every unit vector $\Gamma$ with $H\Gamma=E_0\Gamma$ and
     \begin{align*}
@@ -72,11 +89,26 @@ the inverse gap is asserted.
     Since $\exp(-1/2)\ge1/2$, the triangle inequality gives the claim.
 \end{proof}
 
+\begin{definition}[The left factors of a finite family of operators]
+    \label{def:huang_left_filter_factors}
+    \lean{TNLean.MPS.AreaLaw.leftFilterFactors,
+        TNLean.MPS.AreaLaw.cutLeftFactor_mem_leftFilterFactors,
+        TNLean.MPS.AreaLaw.card_leftFilterFactors_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_of_mem_leftFilterFactors}
+    \leanok
+    \uses{def:lvv_cut_left_factors}
+    For $M$ chain operators and a cut after $i$ sites, the set $F$ of their
+    chosen left factors (Definition~\ref{def:lvv_cut_left_factors}). It has
+    at most $MR$ members when every operator has rank at most $R$ at that
+    cut, and each member has operator-Schmidt rank at most $R$ at every
+    internal left cut when the operators have rank at most $R$ at every cut.
+\end{definition}
+
 \begin{lemma}[One finite collection of left factors]
     \label{lem:huang_finite_left_filter_factors}
     \lean{TNLean.MPS.AreaLaw.exists_finite_left_filter_factors}
     \leanok
-    \uses{thm:lvv_cut_decomposition}
+    \uses{thm:lvv_cut_decomposition, def:huang_left_filter_factors}
     Suppose that $M$ chain operators have operator-Schmidt rank at most
     $R$ at every cut. At the cut after $i\le L$ sites, their left factors
     can be drawn from one set $F$ of cardinality at most $MR$. Each member
@@ -89,13 +121,60 @@ the inverse gap is asserted.
     $M$ resulting sets of left factors.
 \end{proof}
 
+\begin{definition}[The Gaussian filter factors]
+    \label{def:huang_gaussian_filter_factors}
+    \lean{TNLean.MPS.AreaLaw.gaussianFilterFactors,
+        TNLean.MPS.AreaLaw.card_gaussianFilterFactors_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_of_mem_gaussianFilterFactors}
+    \leanok
+    \uses{def:huang_left_filter_factors, def:huang_filter_approximant}
+    At the cut after $i$ sites, the Gaussian filter factors are the left
+    factors (Definition~\ref{def:huang_left_filter_factors}) of the Gaussian
+    approximants $Q_e$ over the energy mesh
+    (Definition~\ref{def:huang_filter_approximant}). They depend only on the
+    interaction, the precision $c$, the gap $\Delta$ and the cut; there are at
+    most $MR$ of them, each of operator-Schmidt rank at most $R$ at every
+    internal left cut.
+\end{definition}
+
+\begin{lemma}[The left filter factors of the Gaussian error reduction]
+    \label{thm:huang_positive_chain_error_reduction_factors}
+    \lean{TNLean.MPS.AreaLaw.isViable_errorReductionSet_gaussianFilterFactors,
+        TNLean.MPS.AreaLaw.exists_positive_chain_error_reduction_factors,
+        TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_errorReductionSet}
+    \leanok
+    \uses{def:huang_gaussian_filter_factors,
+        thm:huang_positive_chain_ground_filter_family,
+        thm:lvv_scaled_projection_error_reduction, def:lvv_error_reduction_family}
+    Let $L\ge1$ and $i\le L$. Under the physical assumptions of
+    Lemma~\ref{thm:huang_positive_chain_ground_filter_family}, let $F$ be
+    the Gaussian filter factors of
+    Definition~\ref{def:huang_gaussian_filter_factors} at the cut after $i$
+    sites, a set chosen from the interaction, the gap, the precision and the
+    cut before every ground pair and before every input family, with
+    $|F|\le MR$ and every member of operator-Schmidt rank at most $R$ at
+    every internal left cut, where $M$ is the energy-mesh cardinality and $R$
+    is the uniform filter rank bound. For every finite set $S$ of left vectors that is half-viable for
+    a unit ground vector satisfying the gap assumption, the set
+    $\{Au : A\in F,\ u\in S\}$ is $(i,c/L)$-viable for that vector. The
+    set has at most $|F||S|$ members, and its members have bond bound
+    $R\max\{1,b\}$ when the members of $S$ have bond bound $b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Given a ground pair, one Gaussian approximant is within $4\eta$ of
+    $a|\Gamma\rangle\langle\Gamma|$ with $a\ge1/2$, and its chosen left
+    factors lie in $F$. The deterministic error-reduction step applied to that
+    member gives a viable witness supported on the span of its factors
+    applied to $S$, which is contained in the span of the larger set. The
+    cardinality and bond bounds are those of the error-reduced set.
+\end{proof}
+
 \begin{lemma}[Error reduction chosen before the ground pair]
     \label{thm:huang_positive_chain_viable_filter}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_error_reduced_set}
     \leanok
-    \uses{lem:huang_finite_left_filter_factors,
-        thm:huang_positive_chain_ground_filter_family,
-        thm:lvv_scaled_projection_error_reduction}
+    \uses{thm:huang_positive_chain_error_reduction_factors}
     Let $L\ge1$, $i\le L$, and let $S$ be a finite set of left vectors,
     with $|S|\le s$ and individual MPS bond bound $b$. Under the physical
     assumptions of Lemma~\ref{thm:huang_positive_chain_ground_filter_family},
@@ -107,13 +186,12 @@ the inverse gap is asserted.
     where $M$ is the energy-mesh cardinality and $R$ is the uniform filter
     rank bound. Whenever $S$ is half-viable for a unit ground vector
     satisfying the gap assumption, $T$ is $(i,c/L)$-viable for that vector.
+    This is the existence form of
+    Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}, with the
+    set $\{Au : A\in F,\ u\in S\}$ left unnamed.
 \end{lemma}
 \begin{proof}
     \leanok
-    Form $T=\{Av:A\in F,\ v\in S\}$ from the common collection of left
-    factors. This gives both the cardinality and individual bond bounds.
-    One Gaussian approximant is within $4\eta$ of $a|\Gamma\rangle\langle\Gamma|$
-    with $a\ge1/2$. Applying its left factors to $S$ gives a subset of $T$ with viability
-    error at most $16\eta/a\le32\eta\le c/L$. The same witness is therefore
-    supported on the span of $T$.
+    Take $T=\{Au : A\in F,\ u\in S\}$ for the factors $F$ of
+    Lemma~\ref{thm:huang_positive_chain_error_reduction_factors}.
 \end{proof}

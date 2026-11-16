@@ -63,7 +63,8 @@ theorem lvvSuccessiveError_pos {Delta : ℝ} (hDelta : 0 < Delta) :
     0 < lvvSuccessiveError Delta := sq_pos_of_pos (div_pos hDelta (by norm_num))
 
 /-- One natural-coefficient polynomial bounds the successive family size, individual
-bond budget and final-span bond budget, with constants chosen before length.
+bond budget and final-span bond budget, with constants chosen before length, together
+with the filter-factor budget `E_L R_L` and the filter rank budget `R_L` of one step.
 LVV13, `algo53.tex`, final induction, lines 652--678, in the stated quantitative scope. -/
 theorem exists_lvvSuccessive_uniform_polynomial {q : ℕ} (hq : 1 ≤ q) {Delta : ℝ}
     (hDelta : 0 < Delta) :
@@ -71,13 +72,18 @@ theorem exists_lvvSuccessive_uniform_polynomial {q : ℕ} (hq : 1 ≤ q) {Delta 
       max 1 (lvvSuccessiveCardBound q Delta L) ≤ P * (L + 1) ^ d ∧
       max 1 (lvvSuccessiveBondBound q Delta L) ≤ P * (L + 1) ^ d ∧
       lvvSuccessiveCardBound q Delta L * max 1 (lvvSuccessiveBondBound q Delta L) ≤
-        P * (L + 1) ^ d := by
+        P * (L + 1) ^ d ∧
+      huangEnergyCount (lvvSuccessiveError Delta) Delta L *
+        huangFilterRankBound q (lvvSuccessiveError Delta) Delta L ≤ P * (L + 1) ^ d ∧
+      huangFilterRankBound q (lvvSuccessiveError Delta) Delta L ≤ P * (L + 1) ^ d := by
   obtain ⟨C, d, hC, hfilter⟩ :=
     exists_huangFilter_uniform_nat_polynomial hq (lvvSuccessiveError_pos hDelta) hDelta
   obtain ⟨M, p, hM, hradius⟩ := exists_bondTrimmingRadius_lvvReferenceBond_polynomial q Delta
-  let A := max 1 (lvvSizeTrimmingCoefficient q Delta * C)
+  let A := C * max 1 (lvvSizeTrimmingCoefficient q Delta)
   let B := C * max 1 ⌈M⌉₊
-  have hA : 1 ≤ A := le_max_left _ _
+  have hA : 1 ≤ A := by
+    dsimp only [A]
+    simpa only [one_mul] using Nat.mul_le_mul hC (le_max_left 1 _)
   have hB : 1 ≤ B := by
     dsimp only [B]
     simpa only [one_mul] using Nat.mul_le_mul hC (le_max_left 1 ⌈M⌉₊)
@@ -95,6 +101,20 @@ theorem exists_lvvSuccessive_uniform_polynomial {q : ℕ} (hq : 1 ≤ q) {Delta 
       · simpa only [one_mul] using Nat.mul_le_mul (le_max_left 1 ⌈M⌉₊) (one_le_pow₀ hL1)
       · exact hradiusNat.trans (Nat.mul_le_mul (le_max_right 1 ⌈M⌉₊)
           (Nat.pow_le_pow_left (Nat.le_succ L) p))
+    have hfilterLift : ∀ x : ℕ, x ≤ C * (L + 1) ^ d →
+        x ≤ A * (L + 1) ^ (lvvSizeTrimmingDegree q Delta + d) := by
+      intro x hx
+      calc
+        x ≤ C * (L + 1) ^ d := hx
+        _ ≤ (C * max 1 (lvvSizeTrimmingCoefficient q Delta)) *
+            ((L + 1) ^ lvvSizeTrimmingDegree q Delta * (L + 1) ^ d) := by
+          apply Nat.mul_le_mul
+          · simpa only [mul_one] using Nat.mul_le_mul_left C (le_max_left 1 _)
+          · simpa only [one_mul] using Nat.mul_le_mul_right ((L + 1) ^ d)
+              (one_le_pow₀ (n := lvvSizeTrimmingDegree q Delta) hL1)
+        _ = _ := by rw [pow_add]
+    have hfactors := hfilterLift _ (hfilter L).2.2.2
+    have hrank := hfilterLift _ (hfilter L).2.2.1
     have hcard : max 1 (lvvSuccessiveCardBound q Delta L) ≤
         A * (L + 1) ^ (lvvSizeTrimmingDegree q Delta + d) := by
       apply max_le
@@ -109,9 +129,9 @@ theorem exists_lvvSuccessive_uniform_polynomial {q : ℕ} (hq : 1 ≤ q) {Delta 
               (C * (L + 1) ^ d) := Nat.mul_le_mul
                 (Nat.mul_le_mul_left _ (Nat.pow_le_pow_left (Nat.le_succ L) _))
                 (hfilter L).2.2.2
-          _ = (lvvSizeTrimmingCoefficient q Delta * C) *
+          _ = (C * lvvSizeTrimmingCoefficient q Delta) *
               (L + 1) ^ (lvvSizeTrimmingDegree q Delta + d) := by rw [pow_add]; ring
-          _ ≤ _ := Nat.mul_le_mul_right _ (le_max_right _ _)
+          _ ≤ _ := Nat.mul_le_mul_right _ (Nat.mul_le_mul_left C (le_max_right 1 _))
     have hbond : max 1 (lvvSuccessiveBondBound q Delta L) ≤ B * (L + 1) ^ (d + p) := by
       apply max_le
       · simpa only [one_mul] using Nat.mul_le_mul hB (one_le_pow₀ hL1)
@@ -129,7 +149,17 @@ theorem exists_lvvSuccessive_uniform_polynomial {q : ℕ} (hq : 1 ≤ q) {Delta 
         max 1 (lvvSuccessiveCardBound q Delta L) * max 1 (lvvSuccessiveBondBound q Delta L) := by
       simpa only [one_mul] using Nat.mul_le_mul_right
         (max 1 (lvvSuccessiveBondBound q Delta L)) (le_max_left 1 _)
+    have hlift : ∀ x : ℕ, x ≤ A * (L + 1) ^ (lvvSizeTrimmingDegree q Delta + d) →
+        x ≤ A * B * (L + 1) ^ ((lvvSizeTrimmingDegree q Delta + d) + (d + p)) := by
+      intro x hx
+      calc
+        x ≤ A * (L + 1) ^ (lvvSizeTrimmingDegree q Delta + d) * (B * (L + 1) ^ (d + p)) := by
+          simpa only [mul_one] using Nat.mul_le_mul hx
+            (show 1 ≤ B * (L + 1) ^ (d + p) by
+              simpa only [one_mul] using Nat.mul_le_mul hB (one_le_pow₀ hL1))
+        _ = _ := by rw [pow_add]; ring
     exact ⟨hleft.trans hproduct, hright.trans hproduct,
-      (Nat.mul_le_mul_right _ (le_max_right 1 _)).trans hproduct⟩
+      (Nat.mul_le_mul_right _ (le_max_right 1 _)).trans hproduct, hlift _ hfactors,
+      hlift _ hrank⟩
 
 end TNLean.MPS.AreaLaw

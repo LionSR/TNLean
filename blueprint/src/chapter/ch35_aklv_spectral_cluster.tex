@@ -1,8 +1,8 @@
 \section{A physical gap and ground-vector comparison}
 
-The inclusive middle range has $s-6$ interactions. Distributing its lowest
-energy $d$ equally therefore subtracts $d/(s-6)$ per term when the range
-is nonempty; see \cite{gap:aklv13_two_block_robustness}.
+For $s\ge6$ the inclusive middle range has $s-6$ interactions, and it is
+empty for $1\le s\le6$. Distributing its lowest energy $d$ equally
+therefore subtracts $d/(s-6)$ per term when the range is nonempty; see \cite{gap:aklv13_two_block_robustness}.
 
 \begin{definition}[A two-block truncation threshold]
     \label{def:aklv_two_block_threshold}
@@ -22,7 +22,7 @@ is nonempty; see \cite{gap:aklv13_two_block_robustness}.
     \leanok
     \uses{def:aklv_two_block_threshold,def:aklv_normalization_regions,
         def:aklv_two_block_truncation}
-    Let $q\ge1$, $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$
+    Let $q\ge1$, $s\ge3$, $a+s+1\le L$, and let $0\le h_i\le\Id$
     be supported on $\{i,i+1\}$. Suppose $\Omega$ is a unit eigenvector of
     $H'=\sum_i h_i$ with energy $\mu$, and suppose $g>0$ satisfies
     \begin{align}
@@ -82,6 +82,30 @@ is nonempty; see \cite{gap:aklv13_two_block_robustness}.
     $|\langle\Omega,v_{j_0}\rangle|^2\ge1-\tau/200$.
     Choosing a minimizing relative phase yields
     (\ref{eq:aklv_truncated_vector_error}).
+\end{proof}
+
+\begin{lemma}[Gap preservation for the reference arrangement]
+    \label{thm:aklv_reference_scaled_low_cluster}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_cut_scaled_low_cluster,
+        TNLean.MPS.AreaLaw.exists_aklv_reference_scaled_low_cluster}
+    \leanok
+    \uses{def:aklv_two_block_threshold,def:aklv_normalization_regions,
+        def:aklv_two_block_truncation}
+    Let $s\ge1$ and keep the remaining hypotheses of
+    Lemma~\ref{thm:aklv_two_block_scaled_low_cluster}. Form the actual
+    two-exterior family with cuts $a+1,a+s$, which clips the two reference
+    sums themselves. All conclusions of
+    Lemma~\ref{thm:aklv_two_block_scaled_low_cluster} hold for it, with the
+    same minima, energy, gap $9g/10$ and squared phase error $\tau/100$.
+    In particular windows of one or two interactions are admitted.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_normalized_reference_residual,def:aklv_two_block_threshold}
+    The proof of Lemma~\ref{thm:aklv_two_block_scaled_low_cluster} uses the
+    cuts only through the normalized residual bound. Lemma
+    \ref{thm:aklv_normalized_reference_residual} supplies the same bound
+    for the cuts $a+1,a+s$.
 \end{proof}
 
 % This is a quantitative physical consequence towards AKLV Theorem 6.1.

@@ -33,7 +33,7 @@ Range zero, dimension one, clipped intervals, and partial columns are covered.
 
 These are strip extensions proposed by issue #9552, not statements reproduced
 verbatim from the source note. The proof follows
-`docs/notes/one_dimensional_note/part1_arealaw.tex`, counting at lines 29–53,
+`gapped-2d-notes/one_dimensional_area_law_and_mps/part1_arealaw.tex`, counting at lines 29–53,
 tails at lines 152–166, Lemma `lem:buffer` at lines 405ff, the closure at
 lines 648–679, and Remark `rem:sharper` at lines 702–748.
 

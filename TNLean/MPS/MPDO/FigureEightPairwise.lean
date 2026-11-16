@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.ReflectedMarkedChain
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Pairwise Gram comparison for vertical corners
@@ -90,10 +91,7 @@ theorem markedChainCoefficient_bondMul
     Matrix.trace_sum]
   simp_rw [Finset.sum_mul, Matrix.trace_sum, Matrix.smul_mul,
     Matrix.trace_smul, smul_eq_mul]
-  apply Finset.sum_congr rfl
-  intro p _
-  apply Finset.sum_congr rfl
-  intro q _
+  refine Finset.sum_congr₂ fun p _ q _ ↦ ?_
   ring
 
 /-- A pointwise equality of marked chains is preserved by common

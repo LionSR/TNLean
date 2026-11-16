@@ -1,0 +1,125 @@
+\section{Entropy in an original low-energy band}
+
+The accurate interval families give tails of one actual regional reduced
+state. Summing these tails bounds entropy with coefficient one on the
+logarithm of the original full-band dimension. The constants below are
+chosen before the chain at each fixed positive bandwidth, as in
+Assumption (LD) of~\cite{Arad2016RigorousRG}.
+
+Let $H=\sum_{j=0}^{L-2}h_j$, with $0\le h_j\le I$ supported on
+sites $j,j+1$, and let $q\ge2$. Write $\lambda_0=\min\sigma(H)$ and
+$G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$. For an interval
+$J=[p,r)$, viability is taken in the actual physical tensor coordinates
+$\mathcal H_J\otimes\mathcal H_{J^c}$.
+
+\begin{lemma}[Dyadic refinement of an original spectral band]
+    \label{lem:ld_original_dyadic_refinement}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_dyadic_refinement}
+    \leanok
+    Fix $\eta>0$. One constant $C\ge\max\{100,19+\eta\}$ works
+    before the physical data. Given $m\ge q$, $w>0$ and $i\ge0$, put
+    \begin{align*}
+        m_i    & =m2^i,                  & g   & =\min\{w,1\},              &
+        u_i    & =1+\log m_i+\log(1/g),                                       \\
+        \ell_i & =\lceil Cu_i^2/g\rceil, & D_i & =(m_i\ell_i^2)^{22\ell_i}.
+    \end{align*}
+    Then $\ell_i\ge21$ and the cubic logarithmic bound on $D_i$ holds.
+    On every prescribed interval $J$, there are exactly $D_i^2$ operators
+    $A_j$ chosen before the cutoff and source space. For each
+    $6w\le\eta_1\le\eta$ and each $3/200$-viable source $S$ for
+    $G(\eta_1)$, the actual image $V_i=\sum_j A_jS$ satisfies
+    $\dim V_i\le D_i^2\dim S$ and is $2^{-i-1}$-viable for
+    $G(\eta_1-3w)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_interval_low_energy_family}
+    The original-to-clipped comparison loss is
+    $\nu_i=1/(200\,2^{4i})$. Composing it with the initial viability
+    gives error at most $1/25$ on the clipped upper target. The actual
+    polynomial family then gives error $\Delta_i/(1-1/25)^2$ on the
+    clipped lower target. Since $2^i\le D_i$ and
+    $D_i^{12}\Delta_i\le10^{-5}$, this is at most $1/(8\,2^i)$.
+    Composing with the lower comparison gives
+    $2(1/(8\,2^i)+\nu_i)\le2^{-i-1}$ on the original lower target.
+    Both comparisons use the original raw Hamiltonian; no invariance of
+    its spectral bands under the clipped polynomial is required.
+\end{proof}
+
+\begin{lemma}[Entropy with explicit capped-width costs]
+    \label{lem:ld_entropy_capped_costs}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped}
+    \leanok
+    For every fixed $\eta>0$, there are $K_b>0$ and $C_f\ge100$
+    before the physical chain, interval and positive deficit $v$.
+    Set $b=\min\{v,\eta/2\}$, $g=\min\{b/6,1\}$,
+    $m=q\lceil e^{100}\rceil$ and $u=1+\log m+\log(1/g)$.
+    Every unit vector $\psi\in G(\eta-v)$ satisfies
+    \begin{align}
+        S(\psi_J) & \le\log\dim G(\eta)
+        +\frac{K_b}{b/2}
+        \bigl(1+\log q+\log(1+1/(b/2))\bigr)^3\notag                  \\
+                  & \quad+\frac{14872(C_f+1)(6+2\log(C_f+1))}{g}\,u^3
+        +54\log2.
+        \label{eq:ld_entropy_capped}
+    \end{align}
+    Empty intervals, short intervals and intervals meeting either chain
+    endpoint are included. No spectral gap is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:ld_original_dyadic_refinement,
+        cor:physical_low_density_log_dimension,thm:dg_logarithmic_rank_tail_entropy}
+    Choose one $3/200$-viable space $W_0$ for $G(\eta-b/2)$ by the
+    logarithmic dimension estimate. For every accuracy index $i$, apply
+    Lemma~\ref{lem:ld_original_dyadic_refinement} at $w=b/6$ and
+    $\eta_1=\eta-b/2$. Its lower original target is $G(\eta-b)$,
+    which contains $G(\eta-v)$. The actual image has dimension at most
+    $\dim W_0D_i^2$ and error $2^{-i-1}$.
+    For the fixed vector $\psi$, these spaces bound tails of one fixed
+    eigenvalue distribution of the actual regional state. Enlarge the
+    ranks to $\dim W_0D_0^{24}D_i^2$ and use
+    $\log D_i\le K_f(1+\log(m2^i)+\log(1/g))^3$, where
+    $K_f=22(C_f+1)(6+2\log(C_f+1))/g$.
+    Lemma~\ref{thm:dg_logarithmic_rank_tail_entropy} gives
+    $S(\psi_J)\le\log\dim W_0+676K_fu^3+54\log2$.
+    The logarithmic dimension bound for this same $W_0$ gives
+    (\ref{eq:ld_entropy_capped}). In particular, the two independently
+    chosen constants for the initial space and the filters need not agree.
+\end{proof}
+
+
+\begin{theorem}[Entropy in an original buffered low-energy band]
+    \label{thm:physical_low_density_entropy}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_entropy_bound}
+    \leanok
+    For every fixed $\eta>0$ there is $K_\eta>0$, chosen before the
+    chain length, local dimension $q\ge2$, positive-contraction
+    nearest-neighbour interactions, interval $J$ and deficit $v>0$,
+    such that every unit vector $\psi\in G(\eta-v)$ satisfies
+    \begin{align}
+        S(\psi_J)\le\log\dim G(\eta)+
+        \frac{K_\eta}{v}
+        \bigl(1+\log q+\log(1+1/v)\bigr)^3.
+        \label{eq:ld_original_entropy}
+    \end{align}
+    The coefficient on $\log\dim G(\eta)$ is exactly one.
+    Every interval, including empty intervals and intervals meeting
+    the chain endpoints, is included. No spectral gap is assumed.
+    At $v=\mu/\log L$, $L\ge2$, the remainder is the explicit
+    regularized form of the entropy scale in
+    \cite[Section~4.5]{Arad2016RigorousRG}.
+    The fixed-bandwidth convention and the local-dimension restriction
+    are recorded in~\cite{gap:alvv16_low_energy_family_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:ld_entropy_capped_costs}
+    For $0<v\le\eta$, put $B=\max\{12,\eta\}$ and $F=102+\log B$.
+    The capped width has $b\ge v/2$, so $1/(b/2)\le4/v$ and
+    $1+\log q+\log(1+1/(b/2))\le3U$, where
+    $U=1+\log q+\log(1+1/v)$. Also $1/g\le B/v$ and
+    $1+\log m+\log(1/g)\le FU$.
+    Thus (\ref{eq:ld_entropy_capped}) implies
+    (\ref{eq:ld_original_entropy}) with
+    $K_\eta=108K_b+14872(C_f+1)(6+2\log(C_f+1))BF^3+54\eta$.
+    For $v>\eta$, the cutoff is below the smallest eigenvalue;
+    the target is zero and contains no unit vector.
+\end{proof}

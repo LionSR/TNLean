@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.QCA.MargolusUnitaryGates
 import TNLean.QCA.TranslationCovariance
 import Mathlib.Data.Matrix.Basis
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The actual alternating rule on every even-pair observable
@@ -100,10 +101,7 @@ theorem margolusAlternatingPairRule_eq
   unfold margolusAlternatingPairRule
   conv_lhs => rw [Matrix.matrix_eq_sum_single K]
   simp only [map_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  refine Finset.sum_congr₂ fun i _ j _ ↦ ?_
   rw [single_prod_eq_smul_kronecker, map_smul, map_smul, map_smul,
     margolus_alternating_kronecker]
 

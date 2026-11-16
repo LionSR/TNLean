@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointBoundaryColumns
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary
 import Mathlib.LinearAlgebra.Matrix.Kronecker
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Full joint boundary-frame support of the actual endpoint
@@ -85,10 +86,7 @@ theorem blockInsertedGroundSpaceMap_jointMixed_eq_boundaryColumns
     Matrix.mulVec_single_one, Pi.smul_apply, smul_eq_mul,
     jointMixedTwoSiteBoundaryColumns, Matrix.col_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, finTwoArrowEquiv_apply, id_eq]
-  apply Finset.sum_congr rfl
-  intro x _
-  apply Finset.sum_congr rfl
-  intro a _
+  refine Finset.sum_congr₂ fun x _ a _ ↦ ?_
   apply Finset.sum_congr rfl
   intro e _
   rw [show σ 0 :: ([] ++ [σ 1]) =

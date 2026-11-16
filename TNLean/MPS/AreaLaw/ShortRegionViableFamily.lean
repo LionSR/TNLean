@@ -82,8 +82,8 @@ one and the target is nonzero. The family is chosen before these viability
 data. Auxiliary to ALVV, arXiv:1602.08828v2, `t:ais`, lines 1010–1024.
 The boundary `δ < 1` is documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
-No coordinate transport or nonzero-subspace premise is supplied. -/
-private theorem exists_fixed_short_actual_region_clm_family
+No coordinate transport or premise that the source subspace is nonzero is supplied. -/
+theorem exists_short_actual_region_spanning_family
     (L q ell : ℕ) (J : Finset (Fin L))
     (hq : 2 ≤ q) (hell : 1 ≤ ell) (hJ : J.card ≤ 4 * ell)
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
@@ -150,7 +150,7 @@ theorem exists_short_actual_region_improving_family
             (⨆ j, S.map (A j : E →ₗ[ℂ] E)) T := by
   intro E D
   obtain ⟨A, hA⟩ :=
-    exists_fixed_short_actual_region_clm_family (F := F) L q ell J hq hell hJ
+    exists_short_actual_region_spanning_family (F := F) L q ell J hq hell hJ
   have hDpos : 0 < D := by
     dsimp only [D]
     exact pow_pos (Nat.mul_pos (by omega : 0 < q)
@@ -214,7 +214,7 @@ theorem exists_short_actual_region_improving_family_of_count_base
   classical
   intro E D
   obtain ⟨A0, hA⟩ :=
-    exists_fixed_short_actual_region_clm_family (F := F) L q ell J hq hell hJ
+    exists_short_actual_region_spanning_family (F := F) L q ell J hq hell hJ
   have hcount : Fintype.card (Fin (((q * ell ^ 2) ^ (22 * ell)) ^ 2)) ≤ D ^ 2 := by
     simpa only [Fintype.card_fin] using
       (Nat.pow_le_pow_left

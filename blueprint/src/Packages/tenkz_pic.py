@@ -1,8 +1,9 @@
 r"""plasTeX renderers for tenkz tensor-network pictures (spec §1.5, §5.1).
 
 The ``tenkz`` picture environment (the kernel surface, bound at package
-load since the S4 surface swap) and the plain ``tikzcd`` environment that
-carries the blueprint's commutative diagrams are registered here as
+load since the S4 surface swap), the plain ``tikzcd`` environment that
+carries the blueprint's commutative diagrams, and the ``quantikz`` circuit
+environment are registered here as
 **verbatim-captured units**: plasTeX never tokenizes a picture body.  Each
 captured unit is compiled **standalone** against the pinned tenkz package
    (``scripts/fetch_tenkz.py``, then ``TEXINPUTS=<tenkz>/tex/tenkz//``)
@@ -112,6 +113,7 @@ def _render_source_files() -> tuple[Path, ...]:
 _ENVIRONMENT_LANGS = {
     "tenkz": "kernel",
     "tikzcd": "cd",
+    "quantikz": "circuit",
 }
 
 # Ink canary for the route probe: a pure \draw, no text.  Any <path> in its
@@ -527,3 +529,6 @@ else:
 
     class tikzcd(_TenkzVerbatimEnvironment):
         pass
+
+    class quantikz(_TenkzVerbatimEnvironment):
+        """Quantum circuit diagrams (the quantikz2 TikZ library)."""

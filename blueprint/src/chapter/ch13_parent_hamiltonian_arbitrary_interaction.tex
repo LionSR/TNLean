@@ -133,11 +133,13 @@ We follow the cyclic-cut argument of
         lem:pgvwc07_block_tuple_span,
         lem:arbitrary_positive_block_ground_states,
         lem:periodic_block_linear_independence}
-    Let $A$ have $b\ge2$ canonical blocks $A_j$ in the sense of
+    This is \cite[Theorem~11]{PerezGarcia2007Matrix}. Let $A$ have $b\ge2$
+    canonical blocks $A_j$ in the sense of
     \cite[Theorem~4]{PerezGarcia2007Matrix}, with positive block weights.
-    Suppose no two distinct blocks are equivalent under a gauge and a phase,
-    and suppose their words of a common length $L_0>0$ span their respective
-    matrix algebras. For any positive operator $h$ on $L$ sites, put
+    Suppose the block states are pairwise different, that is, no two distinct
+    blocks are equivalent under a gauge and a phase, and suppose their words of
+    a common length $L_0>0$ span their respective matrix algebras. For any
+    positive operator $h$ on $L$ sites, put
     $H=\sum_i\tau^i(h)$ on an $N$-site ring. If
     \begin{align}
         N & \ge3(b-1)(L_0+1)+L,
@@ -150,11 +152,12 @@ We follow the cyclic-cut argument of
                       & \dim\ker H            & \ge b.
         \label{eq:canonical_arbitrary_interaction_degeneracy}
     \end{align}
-    \textbf{Scope restriction (separated canonical blocks):}
-    the gauge-phase separation premise is stronger than the pairwise
-    inequality of finite-ring component vectors in the standing assumptions
-    of \cite[Theorem~11]{PerezGarcia2007Matrix}; see
-    \cite{gap:pgvwc07_direct_sum_input}.
+    \textbf{Local fix (projective distinctness of the blocks):}
+    the source assumes the block states pairwise different and its proof
+    needs them pairwise nonproportional. Blocks related by a gauge and a
+    phase give proportional states at every length, and inequivalent blocks
+    give linearly independent states at this length, so the two conditions
+    agree; see \cite{gap:pgvwc07_direct_sum_input}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:pgvwc07_block_tuple_span,

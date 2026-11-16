@@ -1,5 +1,17 @@
 # Tactic Pattern Ledger
 
+### Regional lift and inclusion of sites — promoted (2026-11-03)
+
+- **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
+  and the native middle approximation in `MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean`.
+- **Pattern:** Compare the entries of a regional local lift with placement
+  along the inclusion of the same sites, then identify the exterior matching
+  condition with agreement away from the inclusion.
+- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/EntropySupport.lean`.
+- **Decision:** The existing coordinate identity is stated once and reused;
+  the support characterization and selected singleton calculation retain their
+  mathematical statements.
+
 ### Matrix positivity on the Euclidean operator space — promoted (2026-10-29)
 
 - **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
@@ -20,6 +32,31 @@
   `SpectralTail.lean`; a future ownership cleanup can move these general
   matrix results to QICLean together with the adjacent weighted-projection API.
 - **Decision:** Mathematical lemmas suffice; no new tactic is needed.
+
+### Overlap and residual of a vector near a unit target — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/VariableWindowRefinement.lean`,
+  `Initialization.lean` and `FrustrationFreeMPSApproximation.lean`.
+- **Pattern:** From `‖x‖ = ‖φ‖ = 1` and `‖x - φ‖ ^ 2 ≤ c`, expand `norm_sub_sq`,
+  compare the real part with `Complex.re_le_norm`, and conclude
+  `1 / 2 ≤ ‖⟪φ, x⟫_ℂ‖`; bound `‖x - ⟪φ, x⟫_ℂ • φ‖` by the norm of the projection
+  onto `(span {φ})ᗮ`.
+- **Abstraction:** A proposed lemma giving both the overlap lower bound
+  `1 - ‖x - φ‖ ^ 2 / 2 ≤ ‖⟪φ, x⟫_ℂ‖` and the residual bound, for use with
+  `Matrix.exists_phase_normalized_filter_output`.
+- **Notes:** Two occurrences of each half; promote at the third.
+
+### Dimension and gap bounds from an actual excitation — candidate (2026-11-04)
+
+- **Seen:** `MPS/AreaLaw/AKLV/SharpPerCutApproximation.lean`
+  (`aklv_chain_dimension_and_gap_bounds`) and
+  `FrustrationFreeMPSApproximation.lean`
+  (`aklv_frustrationFree_dimension_and_gap_bounds`, ground energy zero).
+- **Pattern:** Two spectral values give `2 ≤ q` and a nonempty chain; the
+  gapped-ground-state predicate then gives `g ≤ 1`.
+- **Abstraction:** Derive the frustration-free statement from the general one at
+  `μ = 0`, or move the general one beside `gap_le_one_of_positive_nearest_neighbor_terms`.
+- **Notes:** Kept separate while the general file was being edited elsewhere.
 
 Living registry of repeated proof patterns, maintained under the process in
 [`docs/tactic_development.md`](tactic_development.md). Agents and contributors:
@@ -44,6 +81,107 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Promoted
+
+### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
+
+- **Pattern:** From `0 < g ≤ 1`, `0 ≤ E0` and `(1024/g)*(E0/g+1) ≤ t`, derive
+  `aklvLogarithmicThreshold g ≤ t` by `aklvLogarithmicThreshold_le_div` and
+  `nlinarith` with the positivity of `E0/g` and `1024/g`.
+- **Helper:** `aklvLogarithmicThreshold_le_of_polynomial` in
+  `MPS/AreaLaw/AKLV/PhysicalRobustness.lean`.
+- **Occurrences:** Three polynomial-threshold corollaries, two in
+  `AKLV/PhysicalRobustness.lean` and one in `AKLV/ClippedFilter.lean`, now use
+  the helper.
+- **Decision:** The common content is a scalar inequality, so a lemma replaces
+  the repeated four-line argument.
+
+### Reduced coordinate heights from a common denominator — promoted (2026-11-04)
+
+- **Pattern:** Convert a common Gaussian-integer denominator and a norm bound
+  into a decoded height bound, then use `decode_height_iff` to obtain heights
+  of the two rational fractions actually stored in the code.
+- **Helper:** `RationalComplexCode.coordinate_heights_of_common_denominator`
+  in `MPS/AreaLaw/ViableSet/BoundarySDP/RationalCodeHeights.lean`.
+- **Occurrences:** Eight conversions in
+  `BoundarySDP/WeightedTransferAccumulationBounds.lean`,
+  `ContractionIntermediateBounds.lean`, `WeightedTransferBounds.lean`,
+  `RationalAccumulationBounds.lean`, `WeightedOverlapBounds.lean`, and
+  `RationalLocalEnergyBounds.lean` now use the helper.
+- **Decision:** The conversion is a mathematical consequence of denominator
+  and norm control, so a lemma replaces the repeated two-step argument.
+
+### Left compressed Hamiltonian norm bound — promoted (2026-11-04)
+
+- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
+  derive `‖HL‖ ≤ 4L` and pass the bound through restriction to the left cut,
+  tensoring with the bond identity, and isometric compression.
+- **Helper:** `ChainHamiltonian.leftObjective_norm_bounds` in
+  `MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean` returns the
+  full-chain and cut-and-bond objective bounds. Existing
+  `l2_opNorm_isometricCompression_le` gives the compressed bound.
+- **Occurrences:** Seven repeated arguments in the split modules
+  `SizeTrimming/CompressedSolutions.lean`, `ApproximateCertificates.lean`,
+  `RationalSearch.lean`, and `LeadingVectorPrecision.lean` now use the helper.
+- **Decision:** The common content is a norm estimate, so a mathematical lemma
+  removes the duplication without introducing a tactic.
+
+### Spectral tolerances from cone-order bounds — promoted (2026-11-04)
+
+- **Pattern:** Convert tolerances of size
+  `Δ / (129792 * L * nMax)` into the realized inequalities
+  `2 * n * ε ≤ Δ / (64896 * L)`, using `n ≤ nMax`, and similarly for the
+  auxiliary cone order.
+- **Helper:** `fullyApproxSDP_scaled_errors_of_order_bounds` in
+  `MPS/AreaLaw/ViableSet/BoundarySDP/ErrorBudgets.lean`.
+- **Occurrences:** The general LVV margin theorem and the physical uniform-certificate
+  theorem in `SizeTrimming.lean`; the helper treats both cone orders simultaneously.
+- **Decision:** The scaling is a mathematical lemma.  It replaces repeated denominator
+  positivity and nonlinear-arithmetic arguments; no tactic is introduced.
+
+### Full short-interval size bounds — promoted (2026-11-03)
+
+- **Pattern:** Bound the full interval dimension by `q ^ width`, then use
+  its orthonormal basis to obtain the recorded weighted-rank bound. The
+  physical leaf count also compares `q ^ (4 * ell)` with `D ^ 6 * s ^ 3`.
+- **Helpers:** `interval_top_dimension_and_rank_bounds` in
+  `MPS/AreaLaw/IntervalFullSpaceProfile.lean` and the Mathlib-only
+  `Nat.viable_tree_leaf_count_le` in QICLean's `Analysis/ViableNodeLeafCount.lean`.
+- **Refactored occurrences:** `IntervalSamplingTree.lean`,
+  `PhysicalDGIntervalTree.lean` and `PhysicalDGInterleavedTree.lean` use the
+  corresponding helper without changing public signatures. The actual
+  canonical sampled-tree invariant and its physical data construction
+  reuse these same lemmas.
+- **Decision:** Physical-coordinate dimension and recorded-rank reasoning
+  stays in TNLean; pure natural-number arithmetic belongs to QICLean.
+  Neither helper assumes viability, and no new tactic is needed.
+
+
+### Retaining the same calibrated physical parameters — existing construction (2026-11-03)
+
+- **Seen:** `PhysicalDGInterleavedFamily.lean`, `PhysicalDGInterleavedIteration.lean`,
+  `PhysicalDGInterleavedNode.lean` and `PhysicalDGInterleavedTree.lean`.
+- **Pattern:** Unpack the shared scalar and reference data, retain their bounds,
+  and introduce the local names for the reference estimate. The scanner matches
+  the type exposure and tuple introduction in the earlier three consumers.
+- **Reuse:** `exists_physical_dg_interleaved_filter_family` constructs the analytic
+  parameters once. The iteration, sampled node and tree retain those same data;
+  none repeats the tail, suppression or reference proof.
+- **Decision:** This is forwarding through different mathematical conclusions,
+  not repeated analytic reasoning. No tactic is introduced. The tree omits
+  unnecessary type-exposure steps for the count and sampling size. The stronger
+  constructions also retain the ordered-word bounds of their same family;
+  the former public conclusions are projections of those shared proofs.
+
+### Lower bound for the interleaved logarithmic scale — promoted (2026-11-03)
+
+- **Pattern:** Derive `1 ≤ 1 + log m + log (1/g) + log (1+w)` from
+  `m ≥ 2`, `0 < g ≤ 1`, and `w ≥ 1` by logarithm monotonicity.
+- **Helper:** `Real.one_le_interleaved_log_scale` in
+  `MPS/AreaLaw/InterleavedFilterParameters.lean`, previously private.
+- **Occurrences:** the count and width estimates in that module and the
+  actual cutoff estimate in `InterleavedFilterSuppression.lean`.
+- **Decision:** Expose the existing mathematical lemma with its unchanged
+  statement and proof; the new consumer reuses it directly.
 
 ### Nonempty bond from a trace-one matrix — promoted (2026-10-31)
 
@@ -2772,6 +2910,13 @@ three-plaquette output measurement, and the routed reunion measurement.
   commutation-first pattern still uses `Finset.sum_comm`; this lemma only
   replaces two adjacent congruence descents after any permutation.
 
+- **2026-11-04 sweep:** the scanner still found the literal four-line
+  descent `apply Finset.sum_congr rfl` / `intro i _` / `apply Finset.sum_congr
+  rfl` / `intro j _` at 93 sites in 65 files, counting each adjacent pair of a
+  three-binder descent once. Every one is now
+  `refine Finset.sum_congr₂ fun i _ j _ ↦ ?_`; a third binder keeps its single
+  descent. 62 files gained the import. Net Lean change: 190 lines
+  removed. Statements are unchanged.
 ### three-block configuration extensionality — promoted
 - **Pattern:** prove equality of vectors indexed by a concatenated three-block
   configuration by splitting an arbitrary configuration through the canonical
@@ -5106,6 +5251,88 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Transporting three decoded Gram-factor bounds — candidate (2026-11-04)
+
+- **Pattern:** After identifying decoded rational matrices with the rounded
+  density and two auxiliary Gram factors, rewrite the three identities and
+  discharge their entrywise approximation bounds componentwise.
+- **Seen:** Three occurrences in
+  `MPS/AreaLaw/ViableSet/BoundarySDP/ApproximateCertificates.lean` near the explicit,
+  uniform, and accepted-certificate constructions (scanner output,
+  2026-11-04).
+- **Abstraction:** A mathematical helper packaging the three transported
+  entrywise bounds is preferable if the pattern appears in a second file.
+- **Notes:** All current occurrences are local to one module, so this remains
+  below the project promotion threshold.
+
+### Entrywise proof that a matrix is diagonal — candidate (2026-11-04)
+
+- **Pattern:** `ext x y`, `by_cases hxy : x = y`, `· subst y`, then a diagonal
+  computation and an off-diagonal vanishing argument.
+- **Seen:** 18 sites in 11 files by the 2026-11-04 scan, as `x y` with `hxy`
+  (`Circuit/InitializedRegisterProjection.lean`, `Circuit/ProductBasisPenalty.lean`,
+  `Circuit/SelectedZeroRegisterReflection.lean`, `Circuit/SelectedZeroRegisterSupport.lean`,
+  `MPS/MPDO/CPSVExample412FourCycleEntropy.lean` four times,
+  `MPS/MPDO/PhysicalSupportProductTransport.lean`,
+  `MPS/MPU/Examples/ShiftSourceFactors.lean`) and as `σ τ` with `hστ`
+  (`MPS/MPDO/CPSVExample412Literal.lean` twice,
+  `MPS/MPDO/CaseIIAbsorptionCounterexample.lean`, `MPS/MPDO/FirstSite.lean`,
+  `MPS/MPDO/KatoDeformedRFPObstruction.lean`,
+  `MPS/MPDO/ThermodynamicLimitCounterexample.lean`,
+  `MPS/MPDO/TopologicalGibbsHamiltonian.lean` twice).
+- **Abstraction:** most goals have the form `M = Matrix.diagonal f` or compare
+  two matrices that are both diagonal. A lemma
+  `Matrix.eq_diagonal_of_apply (hd : ∀ x, M x x = f x)
+  (ho : ∀ x y, x ≠ y → M x y = 0) : M = diagonal f` would replace the three
+  lines and the two bullets by two named obligations. Mathlib has
+  `Matrix.diagonal_eq_diagonal_iff` for two diagonal matrices but no
+  entrywise characterization of equality with a diagonal matrix.
+- **Notes:** the diagonal and off-diagonal computations differ at every site,
+  so only the case split is shared. Promotion needs the lemma and a rewrite of
+  the 18 sites; it is below the weight of the sum-congruence sweep above.
+
+### Equality of indicator propositions through `propext` — candidate (2026-11-04)
+
+- **Pattern:** `congr 1`, `apply propext`, `constructor`, then two
+  implications proved by hand.
+- **Seen:** 8 sites in 6 files (`Circuit/Channel/PortMatching.lean`,
+  `MPS/AreaLaw/ViableSet/Basic.lean`, `PEPS/Approximation/RankOneBlocks.lean`,
+  `PEPS/EdgeMiddlePhysical/KernelDescent.lean` twice,
+  `PEPS/RegionBlock/KernelDescent.lean` twice,
+  `PEPS/RegularBoundaryLocalAlgebra.lean`).
+- **Abstraction:** the goals are `(if P then a else b) = (if Q then a else b)`
+  or a set-builder equality, where `P` and `Q` differ by a transported
+  coordinate. `if_congr`, `Set.ext` or `congr 1; exact propext ⟨_, _⟩` state the
+  same thing in one line; no new tactic is proposed.
+- **Notes:** the two implications carry the mathematical content and are not
+  shared between sites.
+
+### Identity bond cast of a trivial fusion datum — rejected (2026-11-04)
+
+- **Pattern:** `rw [GroupFamily.castMat_eq_finCongr]`,
+  `exact finCongr_toMatrix_eq_one _`, then
+  `rw [GroupFamily.FusionData.rightV, hc]`.
+- **Seen:** 8 sites in 2 files (`MPS/Examples/Z3Anomalous/Z3AnomalyClass.lean`
+  twice, `MPS/MPDO/CZXPermutedBlocks.lean` six times), each proving
+  `family.castMat e = 1` for an equation `e` between group elements whose bond
+  dimensions reduce to the same numeral.
+- **Reason:** a lemma `castMat e = 1` cannot be stated without the cast, since
+  the matrix has type `Matrix (Fin (bondDim b)) (Fin (bondDim a)) ℂ` and `1`
+  needs `a` and `b` to have definitionally equal bond dimensions. The two
+  rewrites are the minimal spelling of that definitional check.
+
+### Generic closing sequences — rejected (2026-11-04)
+
+- **Pattern:** `congr 1` / `push_cast` / `ring` (14 sites), `cases h` /
+  `cases h'` / `rfl` and `cases ha` / `cases hb` / `rfl` for cast lemmas
+  (19 sites in `Lattice/PartyCircuit/`), and `ext x` / `constructor` /
+  `· intro hx` for set extensionality (10 sites).
+- **Reason:** each is a sequence of standard tactics with no shared
+  mathematical content and no shorter spelling (`subst h h'; rfl` saves one
+  line per cast lemma and is left to the owners of those files). Recorded so
+  the scanner's top entries are not re-proposed; `apply Units.ext` /
+  `push_cast` / `field_simp` is already in the rejected section.
 ### Supplied standard-form source-cut contraction — candidate (2026-10-29)
 
 - **Pattern:** Preserve the external physical coordinates by Kronecker deltas,
@@ -9802,7 +10029,7 @@ there is no need for a new tactic.
 
 ### Cardinality of a finite union with a uniform bound — reused Mathlib (2026-10-26)
 
-- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `exists_size_trimmed_family`.
+- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `card_sizeTrimmingSelection_le`.
 - **Pattern:** A finite family of sets has at most the number of indices times a uniform
   cardinality bound; here the indices are all actual bond dimensions `m : Fin (D + 1)`.
 - **Reuse:** `Finset.card_biUnion_le_card_mul` gives the union bound directly after
@@ -10096,6 +10323,18 @@ there is no need for a new tactic.
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
 
+### Transport finite buffering before comparing completed actions — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/SuppliedWindowCoordinates.lean` and
+  `MPS/MPU/SuppliedQuasiLocalAction.lean`.
+- **Pattern:** Prove that a sitewise physical bijection commutes with finite
+  prefix/window/suffix concatenation and identity buffering; then reindex
+  the actual periodic matrix equality before applying the named finite
+  evaluation theorem.
+- **Reuse:** Existing finite unitary reindexing and the canonical interval
+  inclusion theorem supply the algebraic steps. The complete window head
+  coordinate bijections are promoted at their existing owner and reused.
+- **Notes:** No second quasi-local relabelling or action structure is added.
 ### Cyclic local interaction in its defining coordinates — promoted
 - **Pattern:** expose a translated arbitrary interaction by applying the
   active-block isometry, then cancel the inverse isometry.
@@ -10701,10 +10940,9 @@ removed after the dependency audit exposed it.
   `‖‖v‖⁻¹ • v - v‖ = |1 - ‖v‖|`.
 - **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
   `MPS/AreaLaw/SnakeGridApproximation.lean`.
-- **Abstraction:** The former has the public lemma
-  `norm_inv_norm_smul_sub_le_two_mul`. Move that lemma to a shared algebra
-  module if a third caller needs it, so square-grid proofs can reuse it
-  without importing the chain area-law theorem.
+- **Abstraction:** The lemma `norm_inv_norm_smul_sub_le_two_mul` now lives in
+  `QICLean/Analysis/UnitNormalizationDistance.lean`. Square-grid proofs can
+  therefore import it without importing the chain area-law theorem.
 - **Notes:** Two occurrences; the square proof currently keeps this short
   calculation inside its normalization step and imports only the truncation core.
 
@@ -11371,17 +11609,22 @@ removed after the dependency audit exposed it.
   the additional hand-written squared-difference nonnegativity argument is
   removed from the initialization proof. No new generic theorem is needed.
 
-### Coherent dependent sequences of normalized images — candidate (2026-10-29)
+### Coherent dependent sequences of normalized images — promoted (2026-11-04)
 
 - **Pattern:** A successor theorem returns a normalized image of its actual
   input together with invariants whose bounds depend on the sequence index.
-- **Reuse:** In `AKLV/ChangingTargets.lean`, `State i` is the subtype carrying
-  the unit, error and product-rank invariant. The existence of a successor
-  is proved for each actual state, and `Nat.rec` iterates its chosen value.
-  The choice specification records the polynomial-image relation on each edge.
-- **Scope:** This is the first such moving-target sequence in this argument.
-  The existing LVV recursion retains its own mathematical invariant; no
-  generic recursion framework or tactic is introduced.
+- **Seen:** `AKLV/ChangingTargets.lean`,
+  `ViableSet/SampledSuccessiveConstruction.lean`, and
+  `ViableSet/RationalSampledSuccessiveConstruction.lean`.
+- **Abstraction:** `Nat.exists_dependent_sequence` in
+  `TNLean/Algebra/DependentSequence.lean` chooses a sequence in indexed types,
+  starting at a prescribed initial value and satisfying every supplied
+  successor relation.
+- **Refactored occurrences:** All three final recurrence constructions use
+  this theorem. Their indexed subtype invariants and actual transition
+  relations remain in their respective mathematical proofs.
+- **Decision:** A theorem expresses the common dependent-choice argument;
+  no new tactic is needed.
 
 ### Reciprocal square-root factors in selected polynomial degrees — candidate (2026-10-29)
 
@@ -11506,3 +11749,753 @@ removed after the dependency audit exposed it.
 - **Decision:** These two sites remain below the rule of three. The entropy
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
+
+### Injectivity of explicit rational complex coordinates — candidate (2026-11-04)
+
+- **Pattern:** Apply real and imaginary coordinate projections to an equality
+  of complex values, then use injectivity of the rational-to-real cast.
+- **Seen:** `RationalMatrixCode.decode_injective` in
+  `ViableSet/BoundarySDP/RationalMatrixCodes.lean` and
+  `RationalComplexCode.decode_injective` in
+  `ViableSet/BoundarySDP/RationalCodeHeights.lean`.
+- **Reuse:** The scalar lemma is already used by the height theorem for
+  computed rational coordinates. No further copy is needed in this argument.
+- **Decision:** Two instances are recorded. If another matrix-decoding proof
+  needs this argument, move the scalar injectivity lemma to the lower-level
+  coordinate module and use it in the matrix proof as well.
+
+### Six-matrix rounded-certificate transport — candidate (2026-11-04)
+
+- **Pattern:** after replacing each of the six rounded certificate matrices by
+  its defining equality, discharge the corresponding entrywise closeness
+  hypothesis.  The three primary and three Gram coordinates produce the same
+  eight-line proof fragment.
+- **Occurrences:** three simultaneous rounding theorems in
+  `MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean`.
+- **Candidate abstraction:** a small product-membership transport lemma should
+  package the six rewrites together.  Promote when the surrounding certificate
+  statements have stabilized; the present repetition is confined to one file.
+
+### Centered clipping and elementary transports — promoted (2026-11-02)
+
+### Fixed-bandwidth residual scale — existing scalar theorem (2026-11-02)
+
+- **Consumer:** `MPS/AreaLaw/LowDensityFilterParameters.lean` chooses a
+  fixed-bandwidth prefactor and error budget, then applies the existing
+  generic tail field of `Real.exists_dg_scalar_parameters`.
+- **Reuse:** The actual natural ceiling is shared by the physical residual
+  comparison and the polynomial suppression estimate. The bandwidth
+  exponential is absorbed in the scalar prefactor before the degree is
+  selected. No logarithmic absorption or ceiling proof is repeated.
+- **Scope:** The coefficient retains its fixed-bandwidth dependence and
+  precedes every count base and width. No new tactic is needed.
+
+
+### Original spectral coordinates after regional clipping — existing shared theorem (2026-11-02)
+
+- **Seen:** the former two coupled physical cluster proofs and the
+  independent-cutoff cluster proof in `MPS/AreaLaw/`.
+- **Promotion:** `exists_five_region_independent_scaled_low_cluster` is the
+  shared physical construction. The existing coupled scaled-cluster theorem
+  specializes it at `t = ell`, preserving its complete public statement.
+- **Effect:** The duplicate full cluster proof is removed. The remaining
+  unscaled construction and independent scaled construction contain only
+  two copies of the short original spectral-coordinate identification;
+  they do not meet the three-occurrence threshold. No tactic is introduced.
+
+### Actual low-energy filters — reuse the two target contraction (2026-11-02)
+
+- **Seen:** Low-energy filtering needs distinct lower and upper targets,
+  with no spectral gap in the intervening band.
+- **Reuse:** The physical construction uses the shared independent-cutoff
+  residual, the existing eigenvector-to-continuous-operator identity and
+  the companion nested Chebyshev composition. A single local estimate
+  bounds the ceiling budget at both shifted cutoffs. Its constants use
+  the five-region ground-energy bound between zero and four.
+- **Decision:** The physical family supplies its actual polynomial
+  decomposition. No new approximate-projector predicate or copied
+  canonical-eigenvector calculation is introduced. The same degree and
+  numerical count base are retained in the suppression estimate.
+
+### Canonical original targets — reuse the companion shift identity (2026-11-02)
+
+- **Seen:** The physical centered matrix is presented as a regional sum,
+  whereas the canonical scalar-shift statement uses the raw matrix minus
+  a scalar identity.
+- **Reuse:** Apply the companion centered-presentation identity, retaining
+  the actual normalized ground vector and positive-semidefinite lower
+  bound from the physical construction. This gives one minimum identity
+  and all real cutoff identifications together.
+- **Decision:** No second eigenbasis calculation or original-target
+  definition is added. The actual polynomial and middle family from the
+  physical construction remain unchanged.
+
+### One regional low-energy construction — share the exact collar count (2026-11-02)
+
+- **Seen:** The native and prescribed-interval low-energy families use the
+  same physical clipping, polynomial degree and scalar suppression estimate.
+- **Reuse:** A single regional theorem derives the exact decomposition on
+  any target differing from the native region by at most two window lengths.
+  The native statement specializes it at zero collar cost. Inward cuts
+  derive the collar bound for long prescribed intervals.
+- **Promotion:** Inclusion/self-closeness and error monotonicity belong to
+  the companion order module. The two existing gapped short-interval proofs
+  and the low-energy short branch use these shared projection facts.
+- **Decision:** No duplicated matrix-eigenbasis argument, viable-subspace
+  predicate or supplied partition is introduced. Configuration matrix units
+  handle short regions; zero extension preserves each actual image span.
+
+### Halving a dyadic width — candidate (2026-11-02)
+
+- **Seen:** The companion dyadic minimum argument and the physical
+  low-density minimum theorem both use `pow_succ` and the field identity
+  to rewrite `v / (6 * 2^(j+1))` as `(v / (6 * 2^j)) / 2`.
+- **Reuse:** Keep the ordinary power and division lemmas; a new tactic
+  is unnecessary. If a third independent consumer needs a named width
+  identity, promote the weakest shared scalar lemma in the companion
+  library and replace these two local calculations.
+- **Related promotion:** The spectral cutoff-order proof is already
+  shared as `Submodule.spectralSpanLE_mono_cutoff`; the physical proof
+  imports the thin companion order module instead of copying that proof.
+
+### Accurate interval families — separate numerical estimates from physical data (2026-11-02)
+
+- **Seen:** The dyadic original/clipped comparison budget depends only on the
+  count base, width and index. Introducing the Hamiltonian and its dependent
+  configuration types first made elaboration unnecessarily expensive.
+- **Reuse:** Prove the two numerical residual inequalities before introducing
+  physical data, then apply the single arbitrary-error buffered-target theorem.
+  The companion dyadic ceiling/residual estimate supplies the accuracy decay.
+- **Decision:** The three index-zero statements specialize the three accurate
+  family results. Rewrite the two exact scalar identities at the hypothesis;
+  do not simplify the full dependent matrix statement by expanding its local
+  definitions. No new tactic or parallel family predicate is introduced.
+
+### Original-band entropy — reuse actual images and the finite entropy estimate (2026-11-02)
+
+- **Seen:** The gapped and buffered-band entropy arguments both require tails
+  of one physical marginal, followed by the same finite-probability estimate.
+- **Reuse:** The buffered-band proof fixes its constant-viable outer-band space,
+  uses the actual dyadic image families and restricts the lower target by
+  spectral cutoff inclusion. It applies the existing logarithmic-rank entropy
+  estimate at the actual initial rank, including its harmless initial-count
+  factor. The separate logarithmic dimension bound then contributes exactly
+  one copy of the full-band logarithmic dimension.
+- **Decision:** No entropy summation, marginal-coordinate proof or minimum
+  construction is duplicated. The existing private inverse-scale improving
+  error is exposed unchanged in the companion library and reused. Explicitly
+  rewriting the scalar identity lambda+eta-3w=lambda+(eta-3w) before transferring
+  spectral closeness avoids expanding dependent matrix coordinates during
+  unification; no heartbeat limit is increased.
+
+### Sharp low-density scales — reuse the squared-buffer threshold (2026-11-03)
+
+- **Seen:** Low-energy window comparison needs residual proportional to the
+  square of its buffer, while the existing independent-threshold lemma gives
+  a residual linear in its numerical buffer.
+- **Reuse:** Apply the existing lemma at g squared and accuracy delta/(6+eta).
+  Adding the fixed bandwidth and rescaling the logarithmic coefficient gives
+  the needed physical threshold. Reuse the existing fourth-root scale and
+  squared Chebyshev accuracy calculation unchanged.
+- **Decision:** No second exponential-threshold or quarter-power proof is
+  introduced. The actual buffered comparison is generalized once to independent
+  t and ell; both existing t=ell statements specialize it with unchanged
+  signatures and share the one ceiling-budget proof.
+
+### Dependent polynomial witnesses — retain the exact canonical identity (2026-11-03)
+
+- **Seen:** Rebuilding a long polynomial/tensor witness proposition after
+  changing centered band notation to canonical raw notation repeatedly unfolds
+  concrete functional-calculus matrices and physical tensor coordinates.
+- **Reuse:** Assemble the nested polynomial tuple while its matrix and isometry
+  are abstract, recording the scalar cutoff difference first. Keep the actual
+  centered family unchanged and return the proved canonical minimum and
+  all-cutoff spectral identity before the cutoff and source-space choices.
+- **Decision:** Consumers transport only the two short viability or closeness
+  propositions with an explicitly typed congrArg. The polynomial witnesses are
+  not unpacked and rebuilt merely to change band notation. The default heartbeat
+  budget suffices; experimental diagnostics and transparency options are removed.
+
+
+### Nonzero projection into a close candidate — promoted (2026-11-03)
+
+- **Helper:** `Submodule.IsCloseTo.starProjection_ne_zero` in the companion module `QICLean/Analysis/ViableProjectionNonzero.lean`.
+- **Uses:** The common projected trial-space injectivity proof and the actual unit ground-vector projection in `MPS/AreaLaw/RegionalGroundEnergy.lean` now call the helper. The untrimmed energy-candidate argument uses the same nonzero-projection implication.
+- **Decision:** State the geometric implication once, with loss below one and a nonzero target vector. No separate norm calculation or nonnegative-loss hypothesis is repeated at a call site.
+
+
+### Ground data from the empty clipping subset — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/RegionalGroundEnergy.lean` and `MPS/AreaLaw/RegionalEnergyMerge.lean`.
+- **Pattern:** The common regional minimum and centered minimum for an original positive Hamiltonian are the clipping construction at the empty subset; the residual conclusions are discarded.
+- **Decision:** Reuse the existing construction. If a third independent consumer needs only the original ground data, expose that prefix as a common theorem rather than duplicating disjoint-support or minimum-energy arguments.
+
+
+### Internal bond sums under subdivision — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/FiveRegionHamiltonian.lean` and `MPS/AreaLaw/RegionalEnergyMergePhysical.lean`.
+- **Pattern:** Partition an internal bond set into consecutive internal subregions and the intervening crossing bonds; inject the crossing set into the prescribed cuts to bound its cardinality.
+- **Decision:** Reuse Mathlib's finite-sum and cardinality lemmas. The two-child identity currently remains local to the energy estimate; expose it if another consumer needs that exact subdivision.
+
+### Sharp original-band MPS — share normalization and sequential projections (2026-11-03)
+
+- **Promotion:** The normalization-distance inequality previously lived in
+  MPSApproximation and was used by four different approximation arguments.
+  Its unchanged proof now belongs to the companion UnitNormalizationDistance
+  module. The actual regional overlap-to-mass and normalized sequential
+  projection proofs are shared in NormalizedSequentialApproximation; the
+  gapped and buffered-band global theorems both use them.
+- **Reuse:** The interval identity for a prefix is moved unchanged to that thin
+  sequential module. The two logarithmic rounding proofs also move unchanged
+  to the companion LogRankRounding module. No compatibility alias or second
+  normalization/projection proof is retained.
+- **Candidate:** SharpRankCount and the new low-energy logarithmic estimate
+  both bound the polynomial-count contribution by the sum of a cubic initial
+  term and a fourth-root accuracy term. These two count calculations currently
+  use ordinary monotonicity and ring identities. A third use should promote
+  their scalar combination, rather than copying another calculation.
+- **Decision:** Apply the existing canonical-band identities only to the two
+  closeness assertions. The actual refined space is the image of the same
+  initially chosen viable space. The final MPS is the one normalized sequential
+  projection product, rather than independent choices at different cuts.
+
+### Positive local dimension — separate the scalar state once (2026-11-03)
+
+- **Reuse:** The physical low-energy entropy and approximation constructions
+  remain unchanged in local dimension at least two. Their positive-dimension
+  consequences split off the scalar local space using ordinary cardinality,
+  cut-rank and regional entropy bounds. No second spectral, polynomial-family
+  or sampling argument is introduced.
+- **Decision:** Strict overlap is obtained by requesting half the accuracy
+  from the existing construction and retaining the resulting exact accuracy
+  logarithm. This avoids a separate constant-absorption calculation.
+- **Boundary:** A zero local dimension gives no nonzero vector only on a
+  positive-length chain; the empty-chain configuration space is a singleton.
+  The positive-dimension statements avoid conflating these two cases.
+
+### Distinct cut budgets — generalize the actual sequential product (2026-11-03)
+
+- **Promotion:** The normalized sequential argument now accepts a rank for
+  every cut and the sum of their actual missing marginal masses. The existing
+  public uniform theorem specializes this same construction at constant rank;
+  its signature is unchanged and its separate normalization proof is removed.
+- **Reuse:** The lower arbitrary-projection rank and squared-error estimates
+  are reused. The physical designated-cut theorem converts actual fixed-cut
+  approximants to marginal masses, then applies the one normalized product.
+  It does not identify independently selected approximation vectors.
+- **Decision:** The designated cut receives constant-fraction accuracy and
+  the other cuts share a length-dependent accuracy. The two natural rank
+  factors are ordered by the same proved monotone profile before the cut and
+  vector are specified. Boundary ranks use the existing exact rank-one bounds.
+
+### Real scalar shifts of quadratic energy — promoted (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/RegionalEnergyEstimate.lean`,
+  `MPS/AreaLaw/ALVV/SoftParentEnergy.lean`, and
+  `MPS/AreaLaw/ALVV/SoftWordEnergyEstimate.lean`.
+- **Pattern:** Remove a real multiple of the identity from a regional matrix
+  energy by expanding the Euclidean operator and inner product, then identify
+  the diagonal inner product with the squared norm.
+- **Abstraction:** `QICLean/Analysis/QuadraticScalarShift.lean` owns the general
+  real-or-complex operator/matrix identities and the concrete complex form
+  `Matrix.re_inner_toEuclideanCLM_sub_ofReal_smul_one`. The three consumers
+  use that complex form; real-to-complex normalization is proved once there.
+- **Decision:** No new tactic is needed. Positivity transport and the separate
+  order-difference argument continue to use the existing promoted
+  `Matrix.PosSemidef.isPositive_toEuclideanCLM` and Mathlib's positive-form
+  lemma. No functional-calculus or spectral calculation is duplicated.
+
+
+### Actual approximate-band bases — share the finite image and squared-error estimates (2026-11-03)
+
+- **Promotion:** An indexed-family corollary of the finite MPS-span theorem
+  handles its finite image and cardinality once. The existing full-interval
+  span consumer and the physical low-energy basis proof both use it. Existing
+  public signatures stay unchanged and no compatibility alias is introduced.
+- **Reuse:** Construct the actual map on the target orthonormal basis. The
+  companion summed-squared-error estimate proves injectivity and two-sided
+  subspace closeness; no Gram conditioning premise is supplied. The native
+  Euclidean-to-function linear equivalence transports the same coefficient
+  span, avoiding a second hand-built linear map for reading coefficients.
+- **Decision:** Choose common approximation accuracy before the basis and
+  vectors, with the harmless factor n+1 to include the zero inner band.
+  Every vector in the actual image has the finite-span MPS bound, so taking
+  its standard orthonormal basis does not need another approximation oracle.
+
+
+### Candidate: midpoint induction on an interval length (2026-11-03)
+
+- **Seen:** `BalancedIntervalTree.lean` and `BalancedIntervalMergeList.lean`.
+- **Pattern:** Strong induction on the length supplies both shorter midpoint children; natural-number arithmetic proves their strict decrease.
+- **Decision:** Two mathematical uses retain their different invariants. Reuse the existing recursive definition when counting its internal intervals; no new tactic or second tree structure is introduced.
+
+## Candidate: geometry of an actual recursive interval list (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/BalancedIntervalMergeBounds.lean`.
+- **Pattern:** Prove bounds by the same length induction that defines the
+  existing midpoint merge list; split membership between both child lists
+  and the root singleton.
+- **Reuse:** `List.mem_append`, `List.mem_singleton`, and `omega` finish the
+  interval arithmetic without an independent tree representation.
+- **Decision:** Preserve the existing list and its midpoint subdivision.
+
+## Candidate: sum failures only over actual recursive descendants (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/BalancedIntervalFailureProbability.lean`.
+- **Pattern:** Derive endpoint coordinates from actual list membership,
+  apply the shared finite-list section estimate, and use deterministic
+  ancestry only after the guarded-union estimate is established.
+- **Reuse:** `bounds_of_mem_balancedIntervalMergeList`,
+  `Measure.pi_biUnion_list_le_of_update_sections`, the existing merge count,
+  and the existing failure-ancestry inclusion.
+- **Decision:** Prove the guarded-union bound once. The root estimate is an
+  active corollary, and failure at other nodes may use the same union bound.
+
+## Candidate: guarded sections with fixed actual children (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/CanonicalIntervalGuardedProbability.lean`.
+- **Pattern:** Use actual coordinate freshness to identify the children
+  after an update, then split on their baseline property. A bad child
+  makes the guarded section empty; good children reduce it to the same
+  fixed-child parent failure event.
+- **Reuse:** Existing `canonicalIntervalSamplingTree_update_of_length_lt`
+  and `canonicalIntervalSamplingTree_update_parent`; only the guarded
+  event is unfolded at the boundary.
+- **Decision:** Retain the true event and fixed whole seed. No chosen
+  comparison hull or basis-law equality enters the reduction.
+
+## Candidate: joint success from actual fixed-child estimates (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/CanonicalIntervalJointProbability.lean`.
+- **Pattern:** Derive listed guarded measurability and true sections for
+  the canonical tree, then combine the shared guarded-union measure bound
+  with deterministic joint ancestry.
+- **Reuse:** The true guarded-section lemma, the actual guarded Borel
+  lemma, `Submodule.isViable_top`, and the existing union and joint-ancestry
+  theorems supply the complete argument.
+- **Decision:** No copied probability summation or assumed freshness/Borel
+  invariant is added. The analytic fixed-child callback remains explicit.
+
+## Candidate: literal successful roots and candidate-independent refinement (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/PhysicalDGCanonicalApproximation.lean`.
+- **Pattern:** Choose one physical family, select the accuracy-dependent
+  common threshold before seeds, and pass each actual successful root to
+  the existing arbitrary-candidate refinement theorem.
+- **Reuse:** `exists_physical_dg_automatic_same_candidate_refinement`,
+  the QIC uniform polynomial-cost theorem, and native trimming-rank bounds.
+- **Decision:** No second root or operation is selected. Existing Mathlib
+  `norm_sum_le_of_le` and the positive-contraction norm criterion supply the
+  spectral-width estimate; no repeated specialized norm-sum proof is added.
+  The tree-radius comparison reuses the ceiling inequality directly.
+
+
+### Same-family terminal energy attachment (2026-11-03)
+
+A pointwise certificate on a selected family should be attached to its
+retained witnesses before taking vector-wise terminal conclusions. The
+canonical energy/Ritz composition reuses the existing root energy theorem
+and the frozen terminal theorem directly. It transports only the ground
+target and true-event membership along the equality of the prescribed
+ground energy with the minimum; it does not rewrite through the nested
+family tuple. This is the existing targeted dependent-transport pattern,
+with no new tactic or parallel construction.
+
+The final composition also exhibits the distinction between a local numerical
+alias and the fully substituted type of an imported theorem. Only the
+numerical aliases in the terminal goal are unfolded before applying the
+unchanged terminal proof; the chosen targets and operator families remain
+fixed. The calibrated spectral-minimum and word argument is proved separately in
+`ALVV/CalibratedRootEnergy.lean`, without an arbitrary terminal proposition.
+The corollary retains the resulting energy function together with the
+unchanged refinement and Ritz conclusions. This separates two independent
+mathematical arguments and avoids compiling both in the long corollary.
+
+## Candidate: restricted norms under spectral-space identities (2026-11-03)
+
+- **Seen:** The original and reverse directions in
+  `MPS/AreaLaw/ALVV/FiveRegionSoftClusters.lean`.
+- **Pattern:** Transport a restricted operator norm across an eigenbasis
+  identity or an exact energy-cutoff equality before using operator linearity.
+- **Reuse:** Existing `Submodule.spectralSpanLE_eq_of_eigenbases` and scalar
+  shift lemmas supply the space identities. Explicitly rewrite the target
+  restriction domain before simplifying with `map_sub`.
+- **Decision:** These are two occurrences in one file. No tactic or new
+  general transport theorem is introduced; ordinary equality rewriting suffices.
+
+
+## Candidate: a supported approximation in native interval coordinates (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean`.
+- **Pattern:** Restrict one actual global operator-tensor family at a fixed
+  exterior configuration, retaining its closing product. Reconstruct the
+  supported target by placement and bound the error first by principal
+  compression, then by placement contractivity.
+- **Reuse:** The actual retained-interval trace identity, the shared
+  supported-operator characterization, `Matrix.l2_opNorm_principal_submatrix_le`
+  and `QuantumCircuit.norm_embedOp_le` give the argument without a second
+  coordinate calculation. Nested placements use `embedOp_embedOp`.
+- **Decision:** The shared coordinate identity and principal-compression
+  inequality were placed in their natural owners in separate contributions.
+  The interval argument remains a private helper because it currently has
+  one mathematical consumer.
+
+
+### A soft Hamiltonian between two scalar bounds — existing C-star order theorem (2026-11-03)
+
+- **Pattern:** Center three softened regional terms by their original minima,
+  retain two bounded windows and crossing bonds, then convert the derived
+  lower and upper order bounds into one operator-norm ceiling.
+- **Reuse:** `IsSelfAdjoint.norm_le_max_of_le_of_le` gives the norm bound directly.
+  The finite selected-family theorem supplies the common positive correction;
+  `PosSemidef.nonneg_of_normalized_eigenvector` derives the signs of the SAME
+  supplied regional energies. No new spectral norm proof is needed.
+- **Decision:** Keep the matrices named in intermediate types, and rewrite only
+  the numerical correction and scalar endpoint. The existing upper-cap proof
+  uses direct five-case simplification. Import only the original region data,
+  commuting soft-family bounds and actual soft operator cap; residual estimates
+  and their spectral comparisons are not dependencies of this norm bound.
+
+### Scalar ceilings before physical spectral-window comparisons (2026-11-03)
+
+- **Seen:** `ALVV/SoftClusterPrecision.lean` and
+  `ALVV/FiveRegionSoftUniformClusters.lean`.
+- **Pattern:** Bound the actual residual threshold by one prescribed ceiling,
+  then apply a numerical finite-window precision estimate at both actual
+  cutoffs. Retain the selected physical data rather than reconstructing it.
+- **Reuse:** QICLean's `Real.finite_window_loss_le_envelope` and
+  `Real.soft_cluster_window_precision_parameters`; the existing physical
+  cluster and three-bulk norm theorems; `Submodule.IsCloseTo.of_le`.
+- **Decision:** The common scalar calculations are lemmas. The two closeness
+  estimates use ordinary arithmetic with their respective window bounds;
+  no tactic or parallel family of spectral definitions is introduced.
+
+
+## Promoted: closing coefficients before weighted operator chains (2026-11-03)
+
+- **Pattern:** Combine the same actual site tensors with changing scalar weights.
+- **Reuse:** `MPOTensor.exists_traceChainOperator_common_linearCombination_varying`
+  keeps fixed arbitrary input caps and coefficient matrices before all weights.
+  The existing weighted-sum theorems specialize at identity caps and absorb the
+  resulting cap only on a nonempty chain. `traceChainOperator_sum_smul_closing`
+  records the existing trace linearity for subsequent polynomial composition.
+- **Consumers:** The existing soft-truncation sum, its Hermitian construction,
+  and the new uniform native soft middle use the same shared block algebra.
+- **Decision:** A mathematical strengthening of the existing proof suffices;
+  no new tactic or parallel tensor representation is introduced.
+
+## Candidate: fixed-center heat atoms for every lower estimate (2026-11-03)
+
+- **Pattern:** Choose actual heat approximants at one regional lower energy,
+  then vary an estimated energy only through geometric scalar weights.
+- **Use:** `ALVV/UniformSoftMiddleMPO.lean` reuses the exact finite heat
+  expansion and its existing absolute coefficient bound. Hermitianization
+  and native restriction are performed once per atom, before the estimate.
+- **Decision:** The native-slice proof is shared unchanged in
+  `NativeIntervalMPOApproximation.lean`; no coordinate proof is copied.
+
+
+### Retaining a native approximation in a spectral comparison — candidate (2026-11-03)
+
+- **Seen:** `ALVV/SoftGeneratedMiddleApproximation.lean` and
+  `ALVV/PhysicalSoftMiddleCluster.lean`.
+- **Pattern:** Retain the actual native tensors and their placement, use
+  `Ghat = G-F2+Zphys`, and transfer the middle error to that same matrix.
+- **Reuse:** The existing native constructor, elementary additive identities,
+  and Mathlib's `norm_le_norm_add_norm_sub`.
+- **Decision:** The exact represented-matrix identity is retained. Distinct
+  approximants are not identified merely from a common norm-error bound;
+  no additional tactic is needed for the two present occurrences.
+
+
+## Candidate: a finite union of common operator families (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/CommonClosingPolynomialFamily.lean`.
+- **Pattern:** Choose an actual physical family at each fixed interpolation
+  node, flatten their dependent disjoint union, and absorb scalar node
+  weights into the exterior Kronecker factors only.
+- **Reuse:** Mathlib's `Fintype.sum_equiv`, `Fintype.sum_sigma`,
+  `Matrix.smul_kronecker`, and finite-sum monotonicity give the enumeration,
+  exact representation and count. Existing common physical families supply
+  each member's unchanged open bond; no representation is reconstructed.
+- **Decision:** The matrix-only degree and parameter interpolation arguments
+  live in QICLean. The finite enumeration remains a private helper for this
+  one actual physical construction. Placement reuses its existing linear
+  maps and the shared closing-linearity theorem, rather than another
+  matrix-entry calculation.
+
+### Fixed physical matrix family and fixed-center spectral argument — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/ALVV/UniformPhysicalSoftImprovingFamily.lean`,
+  with the generic actual-cluster construction in QICLean.
+- **Pattern:** Separate the once-chosen physical polynomial matrix family
+  from the closed-cluster Chebyshev and ordered-word argument. Keep the
+  matrix Kronecker equality, and use the existing canonical conjugation
+  theorem rather than rewriting a long expression of isometries.
+- **Decision:** Two private mathematical lemmas keep the same witnesses and
+  default proof limits; no new predicate, structure or resource setting.
+
+### Independent coordinate laws for the same interval failure bound (2026-11-03)
+
+- **Pattern:** Sum actual guarded failure sections over the listed internal
+  intervals, then use deterministic root or joint failure ancestry.
+- **Reuse:** The generic pi_guardedIntervalFailure_union_le uses the existing
+  finite-list product-measure estimate. List.mem_attach and Set.iUnion_subtype
+  identify the listed union directly, so no separate containment argument is
+  copied. Root and joint ancestry give two consequences.
+- **Consumers:** The existing Haar union/root bounds and canonical joint
+  bound become active special cases, retaining their signatures and actual
+  operations. Finite products of repeated samples use the same generic result.
+- **Decision:** No second tree, probability law or success predicate is defined.
+
+
+
+### One collar family before exterior coefficients (2026-11-03)
+
+- **Pattern:** Number a common physical operator family after moving the retained interval, preserving every member's bond bound and the same whole-operator decomposition.
+- **Reuse:** `exists_common_collar_mpo_tensor_family` reuses `changingRegionalMiddleFamily_mpo_and_global_decomposition` and one `Fintype.equivFin` enumeration. The existing middle-first Kronecker coordinate theorem supplies the final continuous tensor identity.
+- **Decision:** The original family determines the enlarged family before the whole matrix and exterior coefficients. No pointwise selection in an energy center, duplicate matrix-unit construction or new decomposition predicate is introduced. The count estimate is a separate natural-number lemma for the same calibrated parameter.
+
+### Generalize a complete physical certificate before numerical specialization — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/ALVV/UniformPhysicalSoftCalibration.lean`.
+- **Pattern:** A long unchanged spectral and word certificate is expensive
+  to reconstruct after specializing scale parameters. Name its complete
+  conclusion once as a local proposition-valued function, prove the
+  existing physical result at abstract scales, then instantiate the
+  numerical choices. Retain the original member cap and its polynomial
+  inequality together.
+- **Decision:** The local function introduces no global predicate or
+  additional hypothesis, and keeps all original witnesses unchanged.
+
+
+### Independent parent maps in the same interval recursion (2026-11-03)
+
+- **Pattern:** Prove Borel retained projections and dependence only on no longer
+  coordinates, then identify actual own-coordinate failure sections.
+- **Reuse:** The existing strong induction is generalized once to arbitrary
+  coordinate spaces and parent maps. The canonical Haar statements actively
+  specialize it, preserving their public statements. The same generic joint
+  estimate admits a finite sequence of samples at each interval coordinate.
+- **Decision:** No second balanced tree or success predicate is introduced.
+  Supplying the coordinate type family explicitly, and unfolding only the
+  concrete operation, avoids a default-limit definitional-equality timeout.
+  The parent measurability and fixed-child failure estimates remain explicit
+  analytic hypotheses until the concrete physical caller discharges them.
+
+### Exact full-space matrix product bounds — candidate (2026-11-03)
+
+- **Seen:** the finite-length argument in `ProtocolMPSApproximation.lean` and
+  the flat-spectrum branch in `PhysicalGroundReference.lean`.
+- **Pattern:** Bound the cut-matrix rank by its row dimension, compare the
+  number of left configurations with `q^L`, then apply the exact cut-rank
+  characterization.
+- **Decision:** Two occurrences. The flat-spectrum proof additionally identifies
+  the whole ground-space dimension with `q^L`; no new automation is introduced.
+  The reference loss and rank profiles reuse the existing scalar logarithmic
+  profile and uniform-radius lemmas.
+
+### An interval for a compressed minimum — promoted (2026-11-03)
+
+- **Pattern:** Use a nonzero tensor trial for the compressed minimum upper bound,
+  and the positive scalar shift for its lower bound.
+- **Helper:** `Matrix.IsHermitian.exists_compression_min_between_of_tensor_energy`
+  in QICLean `Analysis/CompressionEnergyInterval.lean`.
+- **Occurrences:** `MPS/AreaLaw/RegionalEnergyEstimate.lean`,
+  `MPS/AreaLaw/ALVV/SoftWordEnergyEstimate.lean`, and the terminal
+  soft-energy argument under construction.
+- **Decision:** The common variational statement replaces the repeated pair
+  of lower and upper eigenvalue arguments. The existing public physical
+  statements remain unchanged.
+
+### Child estimates and actual collar centers — candidate (2026-11-03)
+
+- **Pattern:** Identify specified attained parent and middle minima with the
+  three-piece regional minima; use adjacent-child spectral bounds to obtain
+  a parent-sum estimate, then subtract the actual collar minima and two.
+- **Seen:** `ALVV/SoftWordNodeEnergy.lean` and
+  `ALVV/RegionalChildEnergyCenter.lean`.
+- **Notes:** The new independent theorem retains the exact sum width `57/8`
+  and does not select a filter or image. Both proofs reuse the existing
+  minimum-uniqueness, adjacent-merge and central-energy theorems. If a third
+  physical energy construction needs this argument, use the new theorem
+  and refactor the old word-energy construction to share it.
+
+
+### The same terminal image before a uniform interval profile (2026-11-03)
+
+- **Pattern:** Bound the stopped terminal range, identify its actual native
+  family image, then trim the standard basis of that exact image.
+- **Reuse:** The QICLean stopping theorem, shared family-range identity and
+  basis-independent native trim theorem supply the count. The existing
+  interval trim profile and balanced induction transfer it to every seed.
+- **Decision:** No product of one-round bond bounds is accumulated. An explicit
+  change of the current range, followed by rewriting the subspace equality
+  before its finite dimension, avoids dependent-instance rewriting. The
+  actual native trim is named before substituting its basis-independent
+  identity. Candidate reindexing reuses Mathlib's Continuous.matrix_reindex.
+
+### Changing retained intervals without reducing their coordinate formulas
+
+`CommonCollarFilterFamily` transports the equality of the Euclidean matrix
+action by a typed `congrArg` on one composition of continuous linear maps.
+This avoids reducing the entire canonical coordinate isometry to prove the
+same operator equality. The four operator bounds use the shared QIC theorem
+`invariant_subspace_bounds_conj`; the word estimate uses
+`word_power_of_tensor_decomposition`. No new proof automation is introduced.
+
+### Listed history failures on the existing interval tree — reuse (2026-11-03)
+
+- **Pattern:** Simultaneous retained properties and local histories are reduced
+  to one guarded failure union, then bounded by the existing merge-list count.
+- **Reuse:** `joint_failure_subset_iUnion_guardedIntervalFailure` is applied to
+  a proof-local conjunction with a history implication at long intervals.
+  `Measure.pi_biUnion_list_le_of_update_sections` controls the same union.
+- **Decision:** No second recursion, global predicate family or success event is
+  introduced. The attached-list specialization of the product-section estimate
+  also occurs in `BalancedIntervalFailureProbability.lean`; these are its two
+  current interval consumers, so no additional abstraction is introduced.
+
+### Joint stopped-history events at an interval coordinate — existing composition (2026-11-03)
+
+- **Seen:** `CanonicalIntervalRawHistory.lean`.
+- **Pattern:** Reindex the actual projection, name its product input map, and
+  pull back the existing joint event. The actual tree uses measurable child
+  merge projections and the evaluation of its own coordinate.
+- **Reuse:** QICLean's joint original-target history theorem and
+  `independentIntervalTree_update_of_length_lt` supply the analytic and
+  dependence arguments. No recursive proof or basis-selection argument is
+  repeated.
+- **Decision:** Compose the existing mathematical results; no new tactic is needed.
+
+### Flat spectra and full-space matrix product bounds — candidate (2026-11-03)
+
+- **Seen:** `MPS/AreaLaw/PhysicalGroundReference.lean` and
+  `MPS/AreaLaw/PhysicalFlatGroundRitz.lean`.
+- **Pattern:** The gap alternative and absence of an excited value imply
+  that every eigenvalue equals the ground energy; the full low spectral
+  space is then top. Bound arbitrary cut ranks by the number of rows,
+  then by the full configuration dimension.
+- **Notes:** Both proofs use the existing spectral-coordinate membership
+  criterion, Mathlib rank/cardinality bounds and the native cut-rank MPS
+  characterization. A third use should extract a general flat spectral
+  lemma in QICLean and a universal configuration-dimension MPS bound in
+  TNLean, then refactor these known occurrences.
+
+### Fixed-candidate histories on the actual resampling tree — reuse (2026-11-03)
+
+- **Seen:** `CanonicalIntervalRawTreeProbability.lean`.
+- **Pattern:** Viable children imply a viable fixed candidate; its actual
+  original-target history gives the same retained parent's viability.
+  Guarded history sections are empty for nonviable baseline children and
+  otherwise lie in the same fixed-input history complement.
+- **Reuse:** The existing adjacent-merge error addition, coordinate-dependence
+  theorem, exact history section, and one-union joint-history theorem carry
+  the argument. Named set equalities avoid unfolding stopped iterations
+  when proving measurability of intersections.
+- **Decision:** This is the actual-construction application of the existing
+  product-measure result; no second induction or probability estimate is copied.
+
+### Local coordinate definitions inside matrix-action instances
+
+A finite regional matrix action may contain local region definitions inside
+its `Fintype` and `DecidableEq` arguments. In the new natural soft-filter
+corollary, a bounded comparison confirms definitional equality after
+substituting those local definitions. Core `unfold` on the named local
+coordinate definitions performs that substitution before converting the
+matrix-action equality or an orthogonal-complement bound. This avoids
+unfolding the full Euclidean matrix-action equivalence. Ordinary numerical
+bounds should likewise use their specific monotonicity lemmas after a large
+operator certificate is in context, rather than a general arithmetic scan.
+No custom tactic or resource option is introduced.
+
+### Exact initial range and full-exterior sampling coordinates — reuse (2026-11-03)
+
+- **Pattern:** Express an actual candidate projection in finite coordinates,
+  identify its transported range, and convert global target/reference data to
+  the same regional tensor split.
+- **Reuse:** `Matrix.map_range_toEuclideanLin_submatrix` followed by
+  `Submodule.range_starProjection` gives the initial range exactly.
+  `Entropy.isCloseTo_prodExt_region_iff_isViable` and
+  `Submodule.isCloseTo_map_iff` perform all subsequent conversions.
+- **Decision:** These existing mathematical identities already remove the
+  coordinate calculation; no new projection-coordinate theorem, alternative
+  candidate, sampled process or measurable-basis assumption is introduced.
+
+### Energy relations restricted to one root subdivision — promoted (2026-11-03)
+
+- **Pattern:** Extend a specified local energy relation by attained original
+  minima outside the actual root subdivision, then use the existing scalar
+  recursion and restrict its result to the listed parents.
+- **Helper:** `TNLean.MPS.AreaLaw.ALVV.exists_root_energy_with_node_relation`
+  in `MPS/AreaLaw/ALVV/BalancedRegionalEnergy.lean`.
+- **Application:** The existing word-family root assignment now invokes this
+  lemma with its actual node relation and unchanged public statement.
+- **Decision:** The same lemma accepts the corrected terminal-image energy
+  relation and variable collars. No second recursion or realization predicate
+  is needed, and no relation is required on unlisted overlapping intervals.
+
+### Polynomial refinement of an arbitrary actual root — reuse (2026-11-03)
+
+- **Seen:** `PhysicalSameRootPolynomialRefinement.lean`.
+- **Pattern:** Retain the actual candidate in the existing automatic
+  refinement theorem, and bound the coefficient of its squared count
+  before choosing that candidate.
+- **Reuse:** The existing scalar refinement-cost theorem is evaluated at
+  numerical comparison values `Btree=1`, `s=1`, and zero first-profile
+  coefficient. Its bound contains the extra factor `Dfilter^12>=1`,
+  which may be discarded. No old tree or independent approximation
+  subspace is used. The flat branch calls the exact same-root Ritz lemma.
+- **Decision:** Existing scalar/reference/refinement results supply all
+  analytic estimates. `norm_sum_le_of_le` and the positive-contraction
+  norm criterion supply the spectral-width ceiling, as in the existing
+  candidate-independent refinement entry. No new tactic is needed.
+
+### Uniform soft data and an independent original reference — reuse (2026-11-03)
+
+- **Seen:** `ALVV/PhysicalSoftSamplingData.lean`.
+- **Pattern:** Choose uniform numerical constants before the volume, then keep
+  one original-ground reference and a scalar sampling schedule together.
+- **Reuse:** The existing soft calibration, original-ground reference profile
+  and interval sampling schedule provide the three independent existence
+  results. Their full conclusions are retained rather than reproved; only the
+  elementary upper bound on the common radius and interval configuration count
+  are added.
+- **Decision:** Compose the existing theorems. No new tactic, reference
+  construction, sampled tree or candidate-dimension factor is introduced.
+
+### Identical coordinate maps and a retained filter packet
+
+`NativeLongIntervalSoftFamily` uses the existing regional coordinate equality
+on a single local proposition containing the tensor decomposition and four
+operator bounds. Typed `congrArg` followed by `Eq.mp` preserves the actual
+whole-chain filter and coefficients. The literal one-step image estimate
+then calls `IsViable.map_of_tensor_decomposition` directly; no conversion of
+length-one word indices is needed.
+
+### One original-target history for many represented targets — candidate (2026-11-03)
+
+- **Seen:** `CanonicalIntervalRawProbability.lean` and
+  `ALVV/PhysicalSoftIntervalHistory.lean`.
+- **Pattern:** Apply the fixed-input history theorem to a single improving
+  target. Its literal original-ground event does not depend on that target,
+  so the same event supports the pointwise conclusions for all centers.
+- **Decision:** Reuse the existing probability theorem and its exact event;
+  no measurable intersection over the center family is introduced. Typed local
+  target comparisons avoid unfolding the represented matrix during application.
+
+### Physical interval selection and one joint history event — reuse (2026-11-03)
+
+- **Seen:** `CanonicalIntervalResamplingSelection.lean` and
+  `ALVV/PhysicalSoftResampling.lean`.
+- **Pattern:** Select one proven family per long interval, preserve its
+  associated minimum and spectral data, and apply the existing joint-history
+  and unconditional profile theorems to those same choices.
+- **Reuse:** The physical interval-history construction and the canonical
+  complete-parent event provide all analytic estimates. The new generic
+  selection lemma preserves an arbitrary additional assertion; the primitive
+  chain theorem discharges it by the actual physical construction. The same
+  terminal image uses its shared existing definition.
+- **Decision:** Separate the numerical/physical argument from the common
+  interval selection argument. No second recursion, target approximation or
+  repeated matrix-coordinate proof is introduced.

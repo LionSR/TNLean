@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.DualRepresentationAdjointBoundary
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Weak-Hopf representations realized by boundary operators
@@ -129,10 +130,7 @@ private theorem mul'_map_mul_eq_sum {ι κ : Type*} [Fintype ι] [Fintype κ]
     | tmul a' b' =>
       simp only [Algebra.TensorProduct.tmul_mul_tmul, TensorProduct.map_tmul,
         LinearMap.mul'_apply, hF, hG, Finset.sum_mul_sum]
-      apply Finset.sum_congr rfl
-      intro u _
-      apply Finset.sum_congr rfl
-      intro υ _
+      refine Finset.sum_congr₂ fun u _ υ _ ↦ ?_
       ring
 
 /-- The represented coproduct is multiplicative at every positive length.
@@ -321,6 +319,17 @@ theorem rep_mul {N : ℕ} (hN : 0 < N) (x y : H) : W.rep N (x * y) = W.rep N x *
 
 /-- At one site the represented unit is the identity. -/
 theorem rep_one_length_one : W.rep 1 1 = 1 := weakHopfRep_one_one W.phys
+
+/-- The represented coproduct preserves the involution at every length,
+\(\rho_N(x^*)=\rho_N(x)^*\), by the star compatibility of the comultiplication
+and of the physical representation (arXiv:2204.05940v1, Section 4). -/
+theorem rep_star (N : ℕ) (x : H) : W.rep N (star x) = (W.rep N x)ᴴ := by
+  ext σ τ
+  change (weakHopfCoeff W.phys.toLinearMap σ τ).ofConv (star x) =
+    star ((weakHopfCoeff W.phys.toLinearMap τ σ).ofConv x)
+  rw [weakHopfCoeff, weakHopfCoeff,
+    ← star_dualCoefficient_prod W.comul_star W.phys.toLinearMap W.phys_star σ τ]
+  exact (star_star _).symm
 
 /-- The arbitrary-boundary range is closed under adjoints, with one adjoint
 boundary for all lengths. This is the boundary adjoint closure needed in

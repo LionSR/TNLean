@@ -325,6 +325,25 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     most one, and $0\le K\le I$.
 \end{proof}
 
+\begin{definition}[The left and boundary parts at a cut]
+    \label{def:chain_gluing_hamiltonian_parts}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.cutLeftPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.cutBoundaryPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.cutLeftPart_add_cutBoundaryPart,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.cutLeftPart_isSupportedOn,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.cutBoundaryPart_isSupportedOn,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_cutBoundaryPart_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
+    $\lVert h_X\rVert\le1$, and let $k$ be a natural number. Put
+    $A=\lbrack0,k)$, clipped to the chain. The left part of $H$ at the cut is
+    $H_L=\sum_{X\subseteq A}h_X$ and its boundary part is
+    $B=\sum_{X\nsubseteq A}h_X$. Then $H=H_L+B$, $H_L$ is supported on $A$,
+    $B$ is supported on $\lbrack0,\max\{k-1,0\})^{\mathsf c}$, and
+    $\lVert B\rVert\le2L$.
+\end{definition}
+
 \begin{lemma}[Decomposition for boundary gluing]
     \label{thm:chain_gluing_hamiltonian_decomposition}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_gluing_decomposition_of_range_one}
@@ -341,10 +360,11 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     where $H_L$ is supported on $A$ and $B$ on $D$.
     This supplies the decomposition $H=H_L+(H_R+H_i)$ used
     in~\cite[lines 409--410]{Landau2015Polynomial} for the range-one model
-    of Definition~\ref{def:chain_model}, which also allows Hermitian one-site terms.
+    of Definition~\ref{def:chain_model}, which also allows Hermitian one-site terms;
+    the parts of Definition~\ref{def:chain_gluing_hamiltonian_parts} are one such pair.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_range_one_support_count}
+    \uses{thm:chain_range_one_support_count,def:chain_gluing_hamiltonian_parts}
     Put $H_L=\sum_{X\subseteq A}h_X$ and
     $B=\sum_{X\nsubseteq A}h_X$. Then $H=H_L+B$, and $H_L$ is
     supported on $A$. Every support in the second sum contains a site

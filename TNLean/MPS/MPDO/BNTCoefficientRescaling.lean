@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BNTCoefficients
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Representative rescaling of BNT coefficients
@@ -103,10 +104,7 @@ theorem rescale_coefficient_sum [Fintype Λ]
       (∑ α, ∑ β, c.coeff 1 α β γ * (m.traceScalar α * m.traceScalar β)) / s γ := by
   simp only [BNTLabelCoefficientFamily.rescale_coeff, rescale_traceScalar, pow_one,
     Finset.sum_div]
-  apply Finset.sum_congr rfl
-  intro α _
-  apply Finset.sum_congr rfl
-  intro β _
+  refine Finset.sum_congr₂ fun α _ β _ ↦ ?_
   field_simp [hs α, hs β, hs γ]
 
 /-- For nonzero scales, the length-one idempotent coefficient equation is equivalent

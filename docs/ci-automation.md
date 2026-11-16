@@ -102,7 +102,8 @@ When you push to a PR branch, several things happen in parallel:
   │  │  PR CI — blueprint job                                       │
   │  │  Runs `texra-blueprint web` to check blueprint compilation.  │
   │  │  PR CI — blueprint-pdf job, when blueprint TeX changed:      │
-  │  │  runs `leanblueprint pdf` on the print volume, seeded from   │
+  │  │  runs one XeTeX pass over the print volume                   │
+  │  │  (`scripts/check_blueprint_pdf_compiles.sh`), seeded from    │
   │  │  the auxiliary files of the last main build, and the FT-MPS  │
   │  │  volume build.                                               │
   │  │                                                              │
@@ -313,12 +314,12 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the blueprint linter fails on a PR, this workflow reads the error logs and asks Claude to fix the LaTeX.
 
-**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`texra-blueprint web`, a wrapper of `leanblueprint web` that also fails on unrecognized renderer commands) or the `blueprint-pdf` job (`leanblueprint pdf` and `./scripts/build_blueprint_ch01_12.sh`, XeLaTeX). Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`texra-blueprint web`, a wrapper of `leanblueprint web` that also fails on unrecognized renderer commands) or the `blueprint-pdf` job (`scripts/check_blueprint_pdf_compiles.sh`, one XeTeX pass over the print volume, and `./scripts/build_blueprint_ch01_12.sh`). Runs on any PR from the same repository (not forks).
 
 **What Claude does**:
 - Reads the blueprint compilation error logs and identifies which of the two jobs failed
 - Fixes common issues: unresolved `\ref`/`\label` references, duplicate labels, mismatched `\begin`/`\end` environments, invalid `\lean{DeclName}` references, malformed LaTeX, plasTeX parse errors
-- Validates the fix with the command matching the failed job: `texra-blueprint web` for the `blueprint` job; `leanblueprint pdf` for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
+- Validates the fix with the command matching the failed job: `texra-blueprint web` for the `blueprint` job; `scripts/check_blueprint_pdf_compiles.sh` (or the full `leanblueprint pdf`) for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
 - Pushes a commit with the `[claude-auto-fix]` prefix
 - Posts a summary comment on the PR
 

@@ -1,0 +1,139 @@
+\section{Uniform numerical budgets for the three soft bulks}
+
+In the natural five-region decomposition, only regions $0,2,4$ are
+softened. The following numerical bounds remove the unknown soft ground
+energy and the actual spectral-window counts from the hypotheses of the
+cluster comparison. They are auxiliaries to
+\cite[lines 1373--1420]{Arad2016RigorousRG}; the corrected residual and
+norm-stability estimates are recorded in
+\cite{gap:alvv16_soft_regional_residuals,gap:alvv16_cluster_approximation}.
+
+\begin{lemma}[Uniform residual budgets]
+    \label{lem:alvv_soft_scalar_residual_budgets}
+    \lean{TNLean.MPS.AreaLaw.ALVV.soft_cluster_scalar_residual_budgets}
+    \leanok
+    Let $C,E,\mu,g,T_0,T_1,t,\tau$ be real, with $t>0$, and let $m\ge2$ be a natural number.
+    Suppose $C\le4$, $E\le C$, $\mu\ge-30$, $g>0$, and
+    \[
+        T_0\ge g/40+24,\qquad t,T_1\ge156+2g.
+    \]
+    Suppose also that
+    \begin{align}
+        3\left(32e^{-(T_0-g/40-24)/8}
+        +\frac{t}{m}(T_0/t)^m\right) & \le\tau g/10^6, \\
+        3\left(32e^{-(T_1-156-2g)/8}
+        +\frac{t}{m}(T_1/t)^m\right) & \le\tau g/10^6.
+    \end{align}
+    Put $U=2(E-\mu+19g/20+30+3C+2)$. Then
+    $T_0\ge g/40+3C+12$, $U\le t,T_1$, and
+    \begin{align}
+        3\left(8Ce^{-(T_0-g/40-3C-12)/8}
+        +\frac{t}{m}(T_0/t)^m\right) & \le\tau g/10^6, \\
+        3\left(8Ce^{-(T_1-U)/8}
+        +\frac{t}{m}(T_1/t)^m\right) & \le\tau g/10^6.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The assumptions give $U\le156+2g$ and $3C+12\le24$.
+    Monotonicity of the exponential and $8C\le32$ compare the two
+    actual residuals with their prescribed upper bounds.
+\end{proof}
+
+\begin{lemma}[Uniform precision for the two actual windows]
+    \label{lem:alvv_soft_actual_window_losses}
+    \lean{TNLean.MPS.AreaLaw.ALVV.soft_cluster_actual_window_losses}
+    \leanok
+    Let $0\le A\le M$, $0\le E\le4$, $g>0$ and $\tau>0$. Set
+    \[
+        \xi=\min\left\{1,\frac{\tau g^2}{20000(M+g+8)}\right\},
+        \qquad V=A+\xi,
+    \]
+    and
+    \begin{align}
+        n_- & =\left\lceil\frac{E+g/20-\min\{E+g/20-1,-V\}}{2\xi}\right\rceil, \\
+        n_+ & =\left\lceil\frac{E+3g/4-\min\{E+3g/4-1,-V\}}{2\xi}\right\rceil.
+    \end{align}
+    Both ceilings are nonnegative, so these are also their natural
+    ceilings. Then $0<\xi\le1$ and
+    \[
+        \frac{n_-(2\xi)^2}{(g/5+\xi)^2}\le\tau/400,
+        \qquad
+        \frac{n_+(2\xi)^2}{(g/5+\xi)^2}\le\tau/400.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    Both cutoffs belong to $[0,4+g]$. The uniform finite-window bound,
+    with norm ceiling $M$, cutoff ceiling $4+g$ and buffer $g/5$,
+    bounds each loss by
+    \[
+        \left\lceil\frac{4+g+M+\xi+1}{2\xi}\right\rceil
+        \frac{(2\xi)^2}{(g/5+\xi)^2}\le\tau/400.
+    \]
+    The chosen precision is positive since $M\ge0$ and $g,\tau>0$.
+\end{proof}
+
+\begin{lemma}[The physical soft cluster at uniform precision]
+    \label{lem:alvv_five_soft_uniform_clusters}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_five_region_soft_uniform_clusters}
+    \leanok
+    Consider a positive nearest-neighbour chain with $0\le h_i\le I$,
+    local dimension $q>0$, and four ordered cuts
+    $0\le k_1\le k_2\le k_3\le k_4\le L$.
+    Suppose $k_2-k_1,k_4-k_3\le2\ell$. Let $A_j$ be the five
+    internal regional Hamiltonians and $Y$ the crossing terms.
+    Their actual number $C$ is at most four. One can choose the regional
+    minima $e_j$, a common normalized minimizing vector $x$, and
+    $0\le E\le C$ before every following choice. Thus
+    $A_jx=e_jx$ and $A_j-e_jI\ge0$ for every $j$.
+
+    Soften exactly the regions $S=\{0,2,4\}$. For centers
+    $e_j-10\le p_j\le e_j$ on $S$, scale $t>0$ and order $m\ge2$, put
+    \begin{align}
+        F_j & =p_jI+h_{m,t}(A_j-p_jI),         \\
+        G   & =\sum_{j=0}^4
+        \bigl((\mathbf1_{j\in S}F_j+
+        \mathbf1_{j\notin S}A_j)-e_jI\bigr)+Y, \\
+        M   & =3t(1+\log m)+4\ell+34.
+    \end{align}
+    Then $G$ is Hermitian and $\|G\|\le M$.
+
+    Suppose the original Hamiltonian $H_0=\sum_i h_i$ has a spectral
+    value $\mu_0$ such that every spectral value $z$ satisfies
+    $z=\mu_0$ or $z\ge\mu_0+g$, where $g>0$.
+    Let $0<\tau\le1$, with
+    $T_0\ge g/40+24$ and $t,T_1\ge156+2g$, and suppose both coarse
+    residual inequalities of Lemma~\ref{lem:alvv_soft_scalar_residual_budgets}
+    hold.
+    With
+    \[
+        \xi=\min\left\{1,\frac{\tau g^2}{20000(M+g+8)}\right\},
+    \]
+    one has $0<\xi\le1$ and $\mu_0=E+\sum_j e_j$.
+    Every Hermitian $\widehat G$ with $\|G-\widehat G\|\le\xi$ has
+    its own invariant cluster
+    \[
+        \widehat T=E_{\widehat G}(E+g/4)
+        =E_{\widehat G}(E+3g/4).
+    \]
+    Its dimension equals that of the full original ground space
+    $G_0=E_{H_0}(\mu_0)$, and $\widehat T,G_0$ are mutually
+    $3\tau/200$-close. Neither a gap nor a target comparison for $G$
+    or $\widehat G$ is a hypothesis. The scalar residual conditions
+    remain hypotheses; no parameter rate or adaptive algorithm is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:five_region_soft_and_hermitian_clusters,
+        lem:alvv_five_soft_norm,lem:alvv_soft_scalar_residual_budgets,
+        lem:alvv_soft_actual_window_losses}
+    Retain the regional minima and centered ground data from the single
+    physical residual construction. Apply the three-bulk norm bound to
+    these same minima. Its soft ground energy is at least $-30$, so
+    the coarse residual hypotheses imply the two actual residual budgets.
+    The physical cluster comparison therefore applies.
+
+    The uniform precision lemma gives $\delta_-,\delta_+\le\tau/400<1$
+    for its literal two window counts. Consequently its two directed
+    errors satisfy
+    $2(\delta_\pm+\tau/200)\le3\tau/200$.
+    Monotonicity in the closeness parameter proves the result.
+\end{proof}

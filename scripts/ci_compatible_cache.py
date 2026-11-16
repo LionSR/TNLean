@@ -22,7 +22,7 @@ from lean_import_syntax import pure_import_modules, strip_lean_comments
 
 INPUTS = ("lean-toolchain", "lake-manifest.json", "lakefile.toml")
 PATHS = (".lake/build", *(f".lake/packages/{p}/.lake/build" for p in
-                         ("Gametheory", "checkdecls", "qiclean")))
+                         ("Gametheory", "checkdecls", "qiclean", "cslib")))
 KEY = "tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}"
 QIC_URL = "https://github.com/LionSR/QICLean.git"
 SHA = re.compile(r"[0-9a-f]{40}")

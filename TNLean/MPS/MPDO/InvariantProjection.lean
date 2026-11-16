@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # One-sided invariant matrices for matrix product density operators
@@ -120,10 +121,7 @@ theorem insertedTensor_ketLeftBraRightAction_toMPSTensor
     MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
   simp_rw [Finset.smul_sum, smul_smul]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro j _
-  apply Finset.sum_congr rfl
-  intro k _
+  refine Finset.sum_congr₂ fun j _ k _ ↦ ?_
   congr 1
   ring
 

@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Amplification.ChannelWordOmission
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelEventError
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Amplification.GraphOmittedAnchorTail
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Spatial omission bounds for physical channel words
@@ -202,10 +203,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
           (Finset.sum_le_sum fun z _ => hdbound t z) (by dsimp [w]; positivity)
       _ = _ := by
         simp only [w, Finset.mul_sum, neg_mul]
-        apply Finset.sum_congr rfl
-        intro l _
-        apply Finset.sum_congr rfl
-        intro z _
+        refine Finset.sum_congr₂ fun l _ z _ ↦ ?_
         ring
   have hspatial : (∑ i ∈ E, ∑ l ∈ Finset.range (N + 1),
       Real.exp (-(c / 2) * (l : ℝ) ^ α) * ∑ z ∈ graphBall G (a i) l, p z) ≤

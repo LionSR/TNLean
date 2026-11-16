@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.MatrixGramUnitary
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.MPDO.VerticalCF
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Normalized maps for grouped vertical sectors
@@ -276,10 +277,7 @@ theorem exists_normalized_grouped_sector_maps_of_gram
       (mu ((C).enum p.1 p.2) * zeta p.1 p.2) (omega p.1 p.2) h
   · intro v
     rw [hReconstruct v]
-    apply Finset.sum_congr rfl
-    intro j _
-    apply Finset.sum_congr rfl
-    intro q _
+    refine Finset.sum_congr₂ fun j _ q _ ↦ ?_
     have h := normalizedGroupedSectorMap_corner (hdim j q)
       (blocks ((C).repr j) v) (V ((C).enum j q)) (X j q)
       (mu ((C).enum j q) * zeta j q) (omega j q)

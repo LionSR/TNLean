@@ -8,6 +8,7 @@ import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.TracePairing
 import Mathlib.LinearAlgebra.Matrix.Kronecker
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The mixed-bond cross matrix in the MPS reduction proof
@@ -302,10 +303,7 @@ theorem reductionOpenBoundaryMatrixContraction_eq_cross_sum
   apply Finset.sum_congr rfl
   intro x _
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro y _
-  apply Finset.sum_congr rfl
-  intro σ _
+  refine Finset.sum_congr₂ fun y _ σ _ ↦ ?_
   ring
 
 /-- Exact target evaluation with an arbitrary lower tail matrix.

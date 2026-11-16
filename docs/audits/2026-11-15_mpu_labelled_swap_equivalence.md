@@ -88,3 +88,38 @@ continuation indent, repaired exactly. The production publication contains no
 audit workflow. The temporary workflow is removed from the validation branch
 once these completed checks are recorded. The source-labelled shared chapter
 and all general definitions remain unchanged.
+
+## Generic transport and modularity continuation
+
+Candidate `b614107f932b7f84fe3851733b79b740040155c9` passed run
+`43776775888`, audit job `133004716927`, with all 60 public declarations
+compiled and audited. The five edited proof modules passed strict checks.
+The blocking, generic path transport, generic stabilized equivalence, and
+source-example modules built in 3.6, 3.3, 3.5, and 3.2 seconds. Every
+transitive axiom set is contained in `{propext, Classical.choice, Quot.sound}`.
+The temporary generated audit file was deleted after execution.
+
+`PhysicalMatrixSymmetryTransport` now supplies the three blocked strict-path
+comparisons for arbitrary suitable unitary involutions. The swap module no
+longer defines `blockedAncillaSwap` or its bespoke blocked/chain helper proofs.
+Its two actions specialize canonical blocking through the generic constructors
+from `PhysicalMatrixBlocking`. These retain applicable lengths `N > 0`,
+including `k = 0`. Two full structure equalities prove that their actions and
+applicability agree with the previous explicit blocked-matrix constructors for
+every natural `k`. The positive-blocking bridge statements remain unchanged.
+
+`PhysicalMatrixEquivalence` owns the unchanged operation kind, matrix action,
+and fixed-labelled-space equivalence predicate. Three new stabilized transport
+theorems apply to any unitary involution with the appropriate adjunction,
+transposition, or reality property. The swap comparison theorems are their
+specializations. All 16 existing public theorem statements in the edited
+modules remain byte-for-byte unchanged, and the three promoted declarations
+retain their exact definitions and public names. No path or general dimension-
+family definition is weakened. The general commensurate-dimension integration
+remains open.
+
+The two minor Blueprint findings are also addressed: build-status comments were
+removed, and the coherent-family obstruction now displays both the compatibility
+equation and the diagonal-entry contradiction. Public declaration coverage is
+60 unique names. The current production CI and review outcomes are recorded in
+the pull request; this dated note records the isolated candidate verification.

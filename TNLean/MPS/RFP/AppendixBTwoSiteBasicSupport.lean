@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.RFP.AppendixBVirtualBondSupport
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Appendix B two-site physical and basic support
@@ -202,10 +203,7 @@ theorem AppendixBStructuralData.physicalIsometryTensorPower_adjoint_inner
         v p * (star (ψ σ) * ∏ t : Fin N,
           hStruct.U (σ t) (p t).1 (p t).2) := by
       rw [Finset.sum_comm]
-      apply Finset.sum_congr rfl
-      intro p _
-      apply Finset.sum_congr rfl
-      intro σ _
+      refine Finset.sum_congr₂ fun p _ σ _ ↦ ?_
       ring
     _ = _ := by
       apply Finset.sum_congr rfl
@@ -371,10 +369,7 @@ theorem AppendixBStructuralData.twoSiteBasicEmbedding_comp_weightedTwoSiteBounda
       apply Finset.sum_congr rfl
       intro a _
       rw [Finset.sum_comm]
-      apply Finset.sum_congr rfl
-      intro c _
-      apply Finset.sum_congr rfl
-      intro b _
+      refine Finset.sum_congr₂ fun c _ b _ ↦ ?_
       ring
 
 /-- The two-site bond-insertion image is exactly the Appendix B basic support:

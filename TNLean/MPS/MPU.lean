@@ -161,7 +161,9 @@ import TNLean.MPS.MPU.PhysicalAncilla
 import TNLean.MPS.MPU.PhysicalAncillaLeftMul
 import TNLean.MPS.MPU.PhysicalCutConfigurations
 import TNLean.MPS.MPU.PhysicalMatrixBlocking
+import TNLean.MPS.MPU.PhysicalMatrixEquivalence
 import TNLean.MPS.MPU.PhysicalMatrixSymmetry
+import TNLean.MPS.MPU.PhysicalMatrixSymmetryTransport
 import TNLean.MPS.MPU.PhysicalTransposeSourceFactors
 import TNLean.MPS.MPU.PolynomialOverheadBounds
 import TNLean.MPS.MPU.PositiveCanonicalGauge
@@ -227,9 +229,11 @@ import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
 import TNLean.MPS.MPU.SuppliedHalfFactorMinimality
+import TNLean.MPS.MPU.SuppliedQuasiLocalAction
 import TNLean.MPS.MPU.SuppliedTimeReversalCriterion
 import TNLean.MPS.MPU.SuppliedTranspositionCriterion
 import TNLean.MPS.MPU.SuppliedTwoBlockStandardForm
+import TNLean.MPS.MPU.SuppliedWindowCoordinates
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
 import TNLean.MPS.MPU.SymmetryPathTransport
