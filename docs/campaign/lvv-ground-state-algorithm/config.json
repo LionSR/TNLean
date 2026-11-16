@@ -28,6 +28,10 @@
     {
       "slug": "alvv-rg-algorithm",
       "label": "Rigorous renormalization group"
+    },
+    {
+      "slug": "mpo-symmetry",
+      "label": "MPO symmetries"
     }
   ],
   "label": "1307.5143",

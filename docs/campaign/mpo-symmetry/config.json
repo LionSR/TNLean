@@ -1,0 +1,213 @@
+{
+  "slug": "mpo-symmetry",
+  "pageTitle": "MPO Symmetries · TNLean",
+  "heading": "Phases protected by matrix product operator symmetries, after Garre-Rubio, Lootens and Molnár",
+  "lede": "A matrix product operator symmetry generalizes an on-site group action: the symmetry operators are matrix product operators that need not factorize over sites and need not be invertible, and their products are fixed by fusion rules. In 2022 Garre-Rubio, Lootens and Molnár showed that a matrix product state invariant under such an algebra carries fusion and action tensors, that these define F- and L-symbols satisfying a coupled pentagon equation, and that the gauge classes of the L-symbols classify the gapped phases with the symmetry. In Lean the fusion and action tensors, the F- and L-symbols with multiplicity, the coupled pentagon, their gauge freedom, the single-block obstruction, the group case with its anomaly and two-cocycle, and most of the printed examples are proved. The time-reversal constraint, the explicit Fibonacci L-symbol, the coset construction for groups and the phase classification itself remain open.",
+  "description": "Progress of the Lean 4 formalization of matrix product states symmetric under matrix product operator algebras, arXiv:2203.12563.",
+  "tabs": [
+    {
+      "slug": "openai-area-law-peps-proof",
+      "label": "Two-dimensional area law and PEPS"
+    },
+    {
+      "slug": "one-dimensional-area-law-mps",
+      "label": "One-dimensional area law and MPS"
+    },
+    {
+      "slug": "hastings-area-law",
+      "label": "One-dimensional area law after Hastings"
+    },
+    {
+      "slug": "lvv-ground-state-algorithm",
+      "label": "Ground states in polynomial time"
+    },
+    {
+      "slug": "aklv-area-law",
+      "label": "Sharper area law"
+    },
+    {
+      "slug": "alvv-rg-algorithm",
+      "label": "Rigorous renormalization group"
+    },
+    {
+      "slug": "mpo-symmetry",
+      "label": "MPO symmetries"
+    }
+  ],
+  "label": "2203.12563",
+  "since": "2026-09-25",
+  "scope": "tracker",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
+    }
+  ],
+  "tracker": 8012,
+  "streams": [
+    8012
+  ],
+  "streamNames": {
+    "8012": "MPO symmetries"
+  },
+  "papers": {
+    "glm23": {
+      "name": "Garre-Rubio, Lootens and Molnár 2023",
+      "stream": 8012
+    }
+  },
+  "sources": "https://arxiv.org/abs/2203.12563v3",
+  "citationPattern": "glm23|2203\\.12563|GarreRubio2023|\\bGLM23\\b",
+  "leanDirs": [
+    "TNLean/MPS/Symmetry/MPOSymmetry",
+    "TNLean/MPS/Examples/Fibonacci"
+  ],
+  "routes": [
+    {
+      "id": "alg",
+      "paper": "glm23",
+      "eyebrow": "Part I · Sections 2 and 3",
+      "heading": "Fusion and action tensors, F- and L-symbols",
+      "intro": "A family of matrix product operators closes under multiplication when the product of any two is a non-negative integer combination of the others, for every chain length and every choice of boundary. The matrix product states invariant under such an algebra are described by local data: fusion tensors that reduce a product of two operators to the operators in its decomposition, and action tensors that reduce an operator applied to a state to the states in its decomposition. Comparing two ways of reducing a triple product gives the F-symbols; comparing two ways of reducing two operators applied to a state gives the L-symbols. The two satisfy a coupled pentagon equation, and both are fixed only up to a change of basis of the fusion and action tensors.",
+      "stages": [
+        {
+          "title": "Arbitrary-boundary closedness and the fusion and action tensors",
+          "issues": [
+            7968,
+            8142,
+            8143
+          ],
+          "physics": "Closedness with arbitrary boundary conditions, rather than only periodic ones, forces the product of two operators to be block-reducible with an explicit nilpotent remainder; the fusion tensors are the reducing maps and their left inverses. The Perron–Frobenius eigenvector of the fusion matrices gives the quantum dimensions of the labels.",
+          "delivers": "Fusion and action tensors with multiplicity, their uniqueness up to gauge, and the Perron–Frobenius fusion dimensions."
+        },
+        {
+          "title": "L-symbols with multiplicity and the coupled pentagon",
+          "issues": [
+            8045,
+            7966
+          ],
+          "physics": "Reducing an operator pair acting on a state in two orders defines the L-symbols, matrices indexed by multiplicity labels. The pentagon equation of the F-symbols has a coupled analogue mixing F and L, and simultaneous changes of basis act on both by an explicit gauge law.",
+          "delivers": "The L-symbols with multiplicity, the corrected coupled pentagon, and the joint gauge law."
+        },
+        {
+          "title": "No injective state is invariant under a non-trivial algebra",
+          "issues": [
+            7968,
+            8049
+          ],
+          "physics": "An injective state has a single block, and the integer action matrices must then be a one-dimensional representation of the fusion ring. A non-trivial algebra has no such representation, so its symmetric states must have several blocks; a positive common eigenvector of the action matrices instead gives a symmetric boundary state.",
+          "delivers": "The cohomological single-block obstruction and the symmetric boundary state."
+        }
+      ]
+    },
+    {
+      "id": "grp",
+      "paper": "glm23",
+      "eyebrow": "Part II · Section 4",
+      "heading": "Algebras built from a group",
+      "intro": "When the labels form a group <i>G</i> and the fusion is group multiplication, the F-symbols reduce to a three-cocycle ω and the symmetric states are permuted by <i>G</i>. The stabilizer of one block carries a two-cocycle that trivializes ω there, and the L-symbols of all blocks are reconstructed from it.",
+      "stages": [
+        {
+          "title": "Reconstruction from the stabilizer and its two-cocycle",
+          "issues": [
+            8046,
+            8047
+          ],
+          "physics": "The L-symbols of a group-like algebra are determined by a subgroup <i>H</i> and a two-cochain on <i>H</i> whose coboundary is ω restricted to <i>H</i>; two such cochains give the same phase exactly when they differ by a two-cocycle, so the solutions form a torsor under the second cohomology of <i>H</i>. Closedness with arbitrary boundary conditions forces an on-site representation with trivial anomaly.",
+          "delivers": "The reconstruction formula for arbitrary three-cocycles and the torsor of its solutions."
+        },
+        {
+          "title": "Time reversal",
+          "issues": [
+            8048
+          ],
+          "physics": "If the state and every operator commute with an anti-unitary time reversal, complex conjugation maps the fusion and action data to gauge-equivalent data. The anomaly ω is then cohomologous to a real cocycle. The printed relation for the modulus of the L-symbols fails; the corrected relation states that the ratio of the conjugate L-symbol to the L-symbol is a coboundary.",
+          "delivers": "The real anomaly is proved; the tensor-level derivation of the corrected L-symbol relation is open."
+        },
+        {
+          "title": "Arbitrary-boundary group operators",
+          "issues": [
+            8054,
+            9184,
+            10457,
+            10458
+          ],
+          "physics": "For a group with a three-cocycle, the paper builds matrix product operators with arbitrary boundary conditions from a coset construction, and shows that one of the two zipper conditions fails. A weak Hopf algebra average realizes the parent projector of the symmetric boundary.",
+          "delivers": "The operators, their product and adjoint laws, the zippers and the weak Hopf average are proved; the coset states with the printed action tensors remain."
+        }
+      ]
+    },
+    {
+      "id": "cls",
+      "paper": "glm23",
+      "eyebrow": "Part III · Sections 5 and 6",
+      "heading": "Classification of phases and examples",
+      "intro": "Two symmetric states lie in the same phase when a gapped path of symmetric Hamiltonians connects their parent Hamiltonians. The paper shows that the gauge class of the L-symbols is invariant along such a path, and conversely builds a path between any two states with the same class by interpolating their tensors through a mixed tensor.",
+      "stages": [
+        {
+          "title": "Different L-symbols, different phases; equal L-symbols, one phase",
+          "issues": [
+            8050,
+            8948
+          ],
+          "physics": "Along a differentiable gapped path the action tensors can be chosen continuously, so the L-symbols, which take values in a discrete set of gauge classes, stay constant. Conversely, two states with the same L-symbols are joined by an interpolation through a mixed tensor whose parent Hamiltonian stays gapped and symmetric.",
+          "delivers": "The mixed tensor, its interpolation, the uniform gap and the convergence of the ground-space projections are proved for injective endpoints; the commuting symmetric path Hamiltonian, degenerate endpoints and the classification theorem itself remain."
+        },
+        {
+          "title": "Printed examples",
+          "issues": [
+            8051,
+            8052,
+            8348,
+            8053
+          ],
+          "physics": "Section 6 solves the coupled pentagon for small fusion categories: groups such as ℤ<sub>2</sub>×ℤ<sub>2</sub> with a controlled-Z realization, Rep(<i>S</i><sub>3</sub>), su(2)<sub>4</sub>, and the Fibonacci category, whose only module is the regular one with L equal to F.",
+          "delivers": "The ℤ<sub>2</sub>×ℤ<sub>2</sub> table, the Rep(<i>S</i><sub>3</sub>) and su(2)<sub>4</sub> module lists, and the uniqueness of the Fibonacci realization are proved; the explicit Fibonacci L-symbol remains."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Matrix product operator",
+      "An operator on a chain written as a contraction of one four-legged tensor per site, two physical and two virtual legs."
+    ],
+    [
+      "Fusion rule",
+      "The decomposition of a product of two symmetry operators as a non-negative integer combination of the operators of the algebra."
+    ],
+    [
+      "Fusion tensor",
+      "A map on the virtual legs that reduces the product of two operators to one operator of its decomposition."
+    ],
+    [
+      "Action tensor",
+      "A map on the virtual legs that reduces an operator applied to a symmetric state to one block of the state."
+    ],
+    [
+      "F-symbol",
+      "The change of basis between the two orders of reducing a product of three operators."
+    ],
+    [
+      "L-symbol",
+      "The change of basis between the two orders of reducing two operators applied to a state."
+    ],
+    [
+      "Three-cocycle",
+      "A function ω of three group elements satisfying the pentagon identity; for a group-like algebra it is the anomaly of the symmetry."
+    ]
+  ]
+}

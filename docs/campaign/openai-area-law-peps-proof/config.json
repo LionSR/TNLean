@@ -10,7 +10,8 @@
     {"slug": "hastings-area-law", "label": "One-dimensional area law after Hastings"},
     {"slug": "lvv-ground-state-algorithm", "label": "Ground states in polynomial time"},
     {"slug": "aklv-area-law", "label": "Sharper area law"},
-    {"slug": "alvv-rg-algorithm", "label": "Rigorous renormalization group"}
+    {"slug": "alvv-rg-algorithm", "label": "Rigorous renormalization group"},
+    {"slug": "mpo-symmetry", "label": "MPO symmetries"}
   ],
   "label": "openai-math",
   "since": "2026-10-06",
