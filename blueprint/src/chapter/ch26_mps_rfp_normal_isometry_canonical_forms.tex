@@ -126,14 +126,25 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $\E_A(Y)=Y$ and $\tr(Y)=0$, then $Y=0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:injective_irreducible,thm:psd_fp_exists,thm:psd_fp_unique_irred}
-    Injectivity makes $\E_A$ irreducible. Choose a nonzero positive
-    fixed point $\rho$. A Hermitian fixed point has a decomposition
-    $H=H_+-H_-$ into positive fixed points; irreducibility gives
-    $H_\pm=c_\pm\rho$. Thus
+    \uses{thm:injective_irreducible}
+    Injectivity makes $\E_A$ irreducible, and the left-canonical
+    normalization makes it a channel. Apply the
+    \href{https://github.com/LionSR/QICLean/blob/603fc408b9f4c2a50f2475e1e44843fdc0a9c0ac/QICLean/Channel/Peripheral/IrreducibleChannel.lean#L100}{%
+        traceless fixed-point theorem for irreducible channels}.
+    Its argument uses the Cesàro fixed-point theorem
+    \cite[Cesàro fixed-point theorem]{QICLean2026Blueprint} to choose
+    $\rho\geq0$, $\rho\neq0$, with $\E_A(\rho)=\rho$.
+    The positive fixed-point decomposition
+    \cite[Positive fixed-point decomposition]{QICLean2026Blueprint}
+    gives $H=H_+-H_-$ with $H_\pm\geq0$ and $\E_A(H_\pm)=H_\pm$
+    for every traceless Hermitian fixed point $H$.
+    Positive-eigenvector uniqueness at eigenvalue $1$
+    \cite[PSD eigenvector uniqueness for irreducible CP maps]{QICLean2026Blueprint}
+    gives $H_\pm=c_\pm\rho$. Since $\tr(\rho)>0$,
     $0=\tr(H)=(c_+-c_-)\tr(\rho)$ implies $H=0$.
     For arbitrary $Y$, the Hermitian matrices $Y+Y^\dagger$ and
-    $i(Y-Y^\dagger)$ are fixed and traceless, so both vanish and $Y=0$.
+    $i(Y-Y^\dagger)$ are fixed and traceless. Both vanish, hence
+    $Y+Y^\dagger=Y-Y^\dagger=0$ and $2Y=0$.
 \end{proof}
 
 \begin{lemma}[Rank-one classification for RFP transfer maps]%
