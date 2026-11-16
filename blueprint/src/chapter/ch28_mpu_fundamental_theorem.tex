@@ -4089,11 +4089,47 @@
     Lemma~\ref{thm:mpu_equivalent_of_index_eq}.
 \end{proof}
 
+\begin{lemma}[Realignment of a bipartite matrix]
+    \label{lem:matrix_realignment_kronecker}
+    \lean{Matrix.realign, Matrix.realign_kronecker, Matrix.realign_kronecker_mul,
+        Matrix.rank_realign_eq_one_iff}
+    \leanok
+    For a matrix $M$ from $\mathbb C^{m'}\otimes\mathbb C^{n'}$ to
+    $\mathbb C^{m}\otimes\mathbb C^{n}$, its realignment $R(M)$ is the matrix
+    with rows indexed by pairs $(i,i')$, columns indexed by pairs $(k,k')$,
+    and entries
+    \begin{align}
+        R(M)_{(i,i'),(k,k')} & =M_{(i,k),(i',k')}.
+        \notag
+    \end{align}
+    Then $R(A\otimes B)=\operatorname{vec}A\,(\operatorname{vec}B)^{\mathsf T}$,
+    and for matrices $h$ and $k$ acting on the first and second tensor
+    factors,
+    \begin{align}
+        R\bigl((h\otimes k)M\bigr) & =(h\otimes\mathbb 1)\,R(M)\,
+        (k\otimes\mathbb 1)^{\mathsf T}.
+        \notag
+    \end{align}
+    Moreover, $R(M)$ has rank one if and only if $M=A\otimes B$ with
+    $A\neq0$ and $B\neq0$. This is the first step of the direct construction
+    of a local unitary gauge that replaces the slice theorem in the proof of
+    \cite[Corollary~IV.7]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 942--947.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first two identities are entrywise computations. If $R(M)$ has rank
+    one, it is an outer product $wv^{\mathsf T}$ of nonzero vectors, and
+    reading $w$ and $v$ as matrices $A$ and $B$ gives $M=A\otimes B$.
+    Conversely, $R(A\otimes B)$ is the outer product of the nonzero vectors
+    $\operatorname{vec}A$ and $\operatorname{vec}B$, which has rank one.
+\end{proof}
+
 \begin{corollary}[Continuous choice of standard form]
     \label{coruvSF}
     \notready
     \discussion{6024}
-    \uses{prop:continuity-index, IndexTh, SF}
+    \uses{prop:continuity-index, IndexTh, SF, lem:matrix_realignment_kronecker}
     For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
     necessarily in canonical form, there are an integer $k_0\leq D^4$ and
     continuous paths of unitaries $u(p)$ and $v(p)$ such that
