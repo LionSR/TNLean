@@ -28,9 +28,8 @@ theorem isNormal_oneStepAugment_of_mem_wordSpan_one (A : MPSTensor d D)
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ Kraus.wordSpan A 1)
     (hN : Kraus.IsNormal A) :
     Kraus.IsNormal (Kraus.oneStepAugment A X) := by
-  obtain ⟨N, hNpos, hNtop⟩ := (hasEventuallyFullKrausRank_iff_isNormal A).2 hN
-  exact (hasEventuallyFullKrausRank_iff_isNormal (Kraus.oneStepAugment A X)).1
-    ⟨N, hNpos, by simpa [Kraus.wordSpan_oneStepAugment_eq A hX N] using hNtop⟩
+  obtain ⟨N, hNpos, hNtop⟩ := hN
+  exact ⟨N, hNpos, (Kraus.wordSpan_oneStepAugment_eq A hX N).trans hNtop⟩
 
 /-- The Kraus rank is unchanged after adding a redundant one-step generator. -/
 theorem krausRank_oneStepAugment (A : MPSTensor d D)
@@ -42,7 +41,7 @@ theorem krausRank_oneStepAugment (A : MPSTensor d D)
 private theorem hasEventuallyFullWordSpan_of_isNormal_of_isUnit
     (A : MPSTensor d D) (i₀ : Fin d) (hU : IsUnit (A i₀))
     (hN : Kraus.IsNormal A) : Kraus.HasEventuallyFullWordSpan A := by
-  obtain ⟨N, _hNpos, hNtop⟩ := (hasEventuallyFullKrausRank_iff_isNormal A).2 hN
+  obtain ⟨N, _hNpos, hNtop⟩ := hN
   exact Filter.eventually_atTop.mpr
     ⟨N, fun m hm => Kraus.wordSpan_eq_top_of_ge_of_isUnit A i₀ hU hNtop hm⟩
 

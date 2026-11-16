@@ -23,8 +23,8 @@ this file only relates them to the tensor indices.
 
 * `MPSTensor.iIndex_stochasticFamily`: the full-word index is the classical index.
 * `MPSTensor.qIndex_stochasticFamily`: the vector-spreading index is the classical index.
-* `MPSTensor.isPrimitivePaper_stochasticFamily`: a strictly positive positive-length power
-  gives paper primitivity of the embedding.
+* `MPSTensor.exists_vectorSpreadSpan_stochasticFamily_eq_top`: a strictly positive
+  positive-length power gives vector-spreading primitivity of the embedding.
 * `MPSTensor.stochasticFamily_primitive_and_indices`: the primitive stochastic case.
 -/
 
@@ -62,14 +62,16 @@ theorem qIndex_stochasticFamily (a : Matrix (Fin D) (Fin D) ℝ)
   | succ n =>
       exact and_congr_right fun _ ↦ Kraus.stochasticFamily_vectorSpreadSpan_succ_iff a ha n
 
-/-- Classical primitivity gives the paper's vector-spreading primitivity of
-the actual stochastic Kraus family. Source: arXiv:0909.5347, Proposition 2,
+/-- Classical primitivity gives the paper's vector-spreading primitivity
+(arXiv:0909.5347, property (a), lines 403–411) of the actual stochastic Kraus
+family, written out. Source: arXiv:0909.5347, Proposition 2,
 lines 478–494. Classical primitivity is expressed by a strictly positive
 positive-length matrix power. -/
-theorem isPrimitivePaper_stochasticFamily (a : Matrix (Fin D) (Fin D) ℝ)
+theorem exists_vectorSpreadSpan_stochasticFamily_eq_top (a : Matrix (Fin D) (Fin D) ℝ)
     (ha : ∀ i j, 0 ≤ a i j)
     (hp : ∃ n : ℕ, 0 < n ∧ ∀ i j : Fin D, 0 < (a ^ n) i j) :
-    IsPrimitivePaper (Kraus.stochasticFamily a) := by
+    ∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
+      Kraus.vectorSpreadSpan (Kraus.stochasticFamily a) φ q = ⊤ := by
   obtain ⟨n, hn, hp⟩ := hp
   refine ⟨n, hn, ?_⟩
   cases n with
@@ -78,15 +80,17 @@ theorem isPrimitivePaper_stochasticFamily (a : Matrix (Fin D) (Fin D) ℝ)
 
 /-- A primitive column-stochastic matrix has a primitive quantum embedding
 and `q(E) = p(a) = i(K)`, as stated in arXiv:0909.5347, Proposition 2,
-source lines 478–494. No word-span or vector-spreading condition is supplied. -/
+source lines 478–494. Primitivity of the embedding is the source's property (a),
+written out. No word-span or vector-spreading condition is supplied. -/
 theorem stochasticFamily_primitive_and_indices (a : Matrix (Fin D) (Fin D) ℝ)
     (ha : a ∈ Matrix.colStochastic ℝ (Fin D))
     (hp : ∃ n : ℕ, 0 < n ∧ ∀ i j : Fin D, 0 < (a ^ n) i j) :
-    IsPrimitivePaper (Kraus.stochasticFamily a) ∧
+    (∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
+        Kraus.vectorSpreadSpan (Kraus.stochasticFamily a) φ q = ⊤) ∧
       qIndex (Kraus.stochasticFamily a) = Matrix.positivePowerIndex a ∧
       Matrix.positivePowerIndex a = iIndex (Kraus.stochasticFamily a) := by
   have hnonneg : ∀ i j, 0 ≤ a i j := fun _ _ ↦ Matrix.nonneg_of_mem_colStochastic ha
-  exact ⟨isPrimitivePaper_stochasticFamily a hnonneg hp,
+  exact ⟨exists_vectorSpreadSpan_stochasticFamily_eq_top a hnonneg hp,
     qIndex_stochasticFamily a hnonneg, (iIndex_stochasticFamily a hnonneg).symm⟩
 
 end MPSTensor
