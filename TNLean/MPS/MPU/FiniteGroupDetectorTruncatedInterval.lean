@@ -90,7 +90,7 @@ theorem physicalTruncatedInterval_apply_wallConfig (U : MPOTensor d D)
   classical
   by_cases hp : p = p' <;> by_cases hq : q = q' <;>
     simp [physicalTruncatedInterval, intervalWindowEquiv, Matrix.reindex_apply,
-      Matrix.kroneckerMap_apply, Matrix.one_apply, hp, hq]
+      Matrix.kroneckerMap_apply, hp, hq]
 
 /-- The physical placement is exactly a string whose endpoint tensors are
 the actual source triangles. This identity holds on all multiwall vectors

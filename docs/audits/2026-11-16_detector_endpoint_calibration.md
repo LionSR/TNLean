@@ -76,7 +76,15 @@ all-even fixed-circuit obstruction and #8532's Z2 counterexample remain valid.
 
 ## Validation
 
-The new source is pending hosted Lean validation. There is no local Lean/Lake
+The first hosted strict run `43786088294` at `34dc5eac` failed. The native
+placement proofs elaborated, but an unused simplifier argument prevented
+their strict pass. The source-choice output-gauge proof additionally left
+the bulk identity's Kronecker delta unsummed. The repair removes that unused
+argument and explicitly simplifies the zero branch before summing the delta;
+the source-choice and calibration modules still need a successful strict run.
+No new theorem is kernel-verified by this failed run alone.
+
+The revised source is pending hosted Lean validation. There is no local Lean/Lake
 executable or dependency cache, and toolchain downloads are proxy-blocked.
 No new theorem is marked checked in the blueprint before a strict Lean pass.
 Finite symbolic evidence is not substituted for Lean verification.

@@ -83,12 +83,13 @@
     In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
     take $C=A_y$ and $C'=A_z$. The interval of
     Lemma~\ref{lem:mpug_detector_native_interval} agrees with the canonical
-    group string on every such state if its source endpoints satisfy
+    group string on every such state if its source endpoints satisfy,
+    for all physical and virtual indices,
     \begin{align}
-        \operatorname{leftAct}(E,A_y)^a
-         & =e_{y,gy}^aV_{g,y}, &
-        \operatorname{rightAct}(F,A_z)^b
-         & =W_{g,z}e_{gz,z}^b.
+        \sum_{\sigma}E^{a\sigma}_{0\alpha}(A_y^{\sigma})_{\mu\nu}
+         & =(e_{y,gy}^aV_{g,y})_{\mu,(\alpha,\nu)},\notag \\
+        \sum_{\sigma}F^{b\sigma}_{\beta0}(A_z^{\sigma})_{\mu\nu}
+         & =(W_{g,z}e_{gz,z}^b)_{(\beta,\mu),\nu}.
         \label{eq:mpug_detector_endpoint_calibration}
     \end{align}
     All spectator walls may be included in $P,M,Q$. The local endpoint

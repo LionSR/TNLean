@@ -42,8 +42,8 @@ private theorem truncatedSymmetryOfEndpoints_mul_outputs (U : MPOTensor d D)
   ext ⟨l, p, r⟩ ⟨a, q, b⟩
   simp only [truncatedSymmetryOfEndpoints, Matrix.mul_apply, Fintype.sum_prod_type,
     Matrix.kroneckerMap_apply, Matrix.one_apply, mul_ite, ite_mul,
-    mul_zero, zero_mul, mul_one, one_mul, Finset.sum_ite_irrel,
-    Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+    mul_zero, zero_mul, one_mul, Finset.sum_ite_irrel, Finset.sum_const_zero,
+    Finset.sum_ite_eq, Finset.mem_univ, ite_true]
   simp_rw [Finset.sum_mul, Finset.mul_sum]
   rw [Fintype.sum_last_two_first_four]
   exact Finset.sum_congr₂ fun s _ t _ ↦ Finset.sum_congr₂ fun α _ β _ ↦ by ring
