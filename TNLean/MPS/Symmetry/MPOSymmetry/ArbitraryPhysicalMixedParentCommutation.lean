@@ -62,10 +62,7 @@ variable (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
 
 /-- On the open interval, the enlarged mixed interaction commutes with every
 two-site boundary operator of the common MPO, given adjoint closure of that
-boundary range. Source: arXiv:2203.12563, Section 5, lines 1687–1692.
-
-**Scope restriction (adjoint closure):** see the module docstring and
-`docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`. -/
+boundary range. Source: arXiv:2203.12563, Section 5, lines 1687–1692. -/
 theorem arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo
     (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)
       (fun _ : Fin m => A₀) V₀ W₀)
@@ -86,10 +83,7 @@ theorem arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo
 canonical parent of the mixed tensor, the enlarged mixed interaction commutes
 with every two-site boundary operator of the common MPO, given adjoint
 closure of that boundary range. The endpoints follow by continuity.
-Source: arXiv:2203.12563, Section 5, lines 1687–1692.
-
-**Scope restriction (adjoint closure):** see the module docstring and
-`docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`. -/
+Source: arXiv:2203.12563, Section 5, lines 1687–1692. -/
 theorem arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
@@ -121,10 +115,7 @@ the closed interval, the enlarged mixed path Hamiltonian commutes with every
 periodic boundary operator of the common MPO whose boundary commutes with
 the MPO letters, given adjoint closure of the two-site boundary range.
 Source: arXiv:2203.12563, Section 5, lines 1582 and 1687–1692, with
-`defphase`, lines 1253–1259.
-
-**Scope restriction (adjoint closure):** see the module docstring and
-`docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`. -/
+`defphase`, lines 1253–1259. -/
 theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
@@ -151,10 +142,7 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWith
 the closed interval, the enlarged mixed path Hamiltonian commutes with the
 periodic common MPO, given adjoint closure of its two-site boundary range.
 Source: arXiv:2203.12563, Section 5, lines 1582 and 1687–1692, with
-`defphase`, lines 1253–1259.
-
-**Scope restriction (adjoint closure):** see the module docstring and
-`docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`. -/
+`defphase`, lines 1253–1259. -/
 theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
