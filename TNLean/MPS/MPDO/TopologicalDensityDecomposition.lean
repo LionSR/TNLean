@@ -638,6 +638,8 @@ end MPOTensor.BNTFusionTensorClause
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- **Line-999 density decomposition for an RFP MPDO.**
 
 An MPDO in normalized BNT-refined horizontal form satisfying the source

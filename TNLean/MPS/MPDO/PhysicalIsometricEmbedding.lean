@@ -224,7 +224,7 @@ No isometry hypothesis is required: every periodic density operator is
 conjugated by the corresponding sitewise physical matrix.  This is a
 project-derived coordinate fact used in the setting of arXiv:1606.00608,
 lines 1628--1665 and 1740--1782; the paper does not state it. -/
-protected theorem IsMPDO.changePhysicalBasis
+protected theorem IsMPDO.changePhysicalBasis {K : MPOTensor d D}
     (hK : IsMPDO K) (V : Matrix (Fin e) (Fin d) ℂ) :
     IsMPDO (changePhysicalBasis V K) := by
   intro N hN
@@ -253,7 +253,7 @@ The source tensor's positivity, positive-length trace normalization, and the
 equalities of neighboring mutual informations are retained.  This is a
 project-derived coordinate fact used in the setting of arXiv:1606.00608,
 lines 1628--1665 and 1740--1782; the paper does not state it. -/
-protected theorem IsSAL.changePhysicalBasis_of_isometry
+protected theorem IsSAL.changePhysicalBasis_of_isometry {K : MPOTensor d D}
     (hK : IsSAL K) (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) :
     IsSAL (changePhysicalBasis V K) := by
   obtain ⟨hMpdo, hTrace, hStep⟩ := hK
