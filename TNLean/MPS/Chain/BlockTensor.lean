@@ -70,7 +70,6 @@ theorem blockTensor_const (A : MPSTensor d D) :
   funext t
   obtain ⟨σ, rfl⟩ := (Kraus.decodeBlockEquiv d n).symm.surjective t
   rw [blockTensor_decodeBlockEquiv_symm, eval_const]
-  simp only [Kraus.blockTensor, Kraus.decodeBlockEquiv, Kraus.blockTensor,
-    Kraus.wordOfBlock, Kraus.decodeBlock_decodeBlockEquiv_symm]
+  simp only [Kraus.blockTensor, Kraus.wordOfBlock, Kraus.decodeBlock_decodeBlockEquiv_symm]
 
 end MPSChainTensor
