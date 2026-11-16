@@ -103,6 +103,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Even-family adjoint equality from time-reversal invariance — promoted (2026-11-16)
+
+- **Seen:** four five-line `have hEq` blocks deriving `mpo U N = mpo (physicalAdjointTensor U) N`
+  on even lengths from `hTR : ∀ N, 1 < N → Even N → mpo U N = (mpo U N)ᴴ`, in
+  `MPS/MPU/CanonicalTwistedTransfer.lean`, `SuppliedFourSpinSourceComparison.lean`,
+  `TimeReversalLocalNecessity.lean` and `TwoSiteStandardFormSourceCuts.lean`.
+- **Abstraction:** none needed; the existing `mpo_physicalAdjointTensor_eq_conjTranspose` gives
+  the term `fun N hN heven ↦ (hTR N hN heven).trans (mpo_physicalAdjointTensor_eq_conjTranspose
+  U N).symm`, now used at all four sites.
+- **Decision:** a term-mode composition of an existing lemma is the weakest mechanism; no new
+  lemma or tactic.
+
 ### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
 
 - **Pattern:** From `0 < g ≤ 1`, `0 ≤ E0` and `(1024/g)*(E0/g+1) ≤ t`, derive

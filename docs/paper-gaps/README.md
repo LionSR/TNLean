@@ -206,6 +206,11 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_conjugation_symplectic_uniqueness_transpose.tex` (local correction,
+  resolved) records that the Case II uniqueness clause of Proposition
+  `corconj` prints `v'' = v' (S_rᵀ ⊗ S_ℓᵀ)`, while the Fundamental Theorem gives
+  `v'' = v' (S_r† ⊗ S_ℓ†)`; a unitary symplectic `S` need not be real, and
+  `S_ℓ = diag(i, -i)` separates the two. The Case I clause is unaffected.
 - `mpu_shift_supplied_standard_forms.tex` records that the shift-family gates
   of Section VII are formalized as explicit two-site decompositions with
   supplied gates and normalized half factors. Only the blocked
