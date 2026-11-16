@@ -4219,12 +4219,57 @@
     gives the statement for $x\otimes y$.
 \end{proof}
 
+\begin{lemma}[A local section for local unitaries]
+    \label{lem:kronecker_local_section}
+    \lean{Matrix.unitaryPart, Matrix.continuousOn_unitaryPart,
+        Matrix.unitaryPart_mem_unitaryGroup, Matrix.unitaryPart_unitary_mul,
+        Matrix.unitaryPart_kronecker, Matrix.localSection,
+        Matrix.localSectionDomain, Matrix.isOpen_localSectionDomain,
+        Matrix.continuousOn_localSection, Matrix.localSection_kronecker_mul,
+        Matrix.exists_localSection_eq_kronecker_mul,
+        Matrix.kronecker_mul_mem_localSectionDomain,
+        Matrix.localSection_kronecker_mul_self}
+    \leanok
+    \uses{lem:nearest_kronecker_product}
+    For an invertible matrix $X$ let $Q(X)=X(X^\dagger X)^{-1/2}$. Then $Q$ is
+    continuous on the invertible matrices and unitary-valued, $Q(gX)=gQ(X)$ for
+    unitary $g$, and $Q(A\otimes B)=Q(A)\otimes Q(B)$ for invertible $A$, $B$.
+    Let $0<a<b<\ell r$, let $N$ and the gap set be as in the previous lemma, and
+    fix a unitary $u_0$. Put $g(u)=Q(N(uu_0^\dagger))$ and
+    $\sigma(u)=g(u)^\dagger u$ on the set $W$ of those $u$ for which $uu_0^\dagger$
+    lies in the gap set and $N(uu_0^\dagger)$ is invertible. Then $W$ is open,
+    invariant under left multiplication by $x\otimes y$ for unitaries $x$, $y$,
+    and contains every $(x\otimes y)u_0$; the map $\sigma$ is continuous on
+    $W$, satisfies $\sigma((x\otimes y)u)=\sigma(u)$, sends each $u\in W$ to
+    $(x\otimes y)u$ for some unitaries $x$, $y$, and fixes $u_0$ on its orbit:
+    $\sigma((x\otimes y)u_0)=u_0$. This is the third step of the direct
+    construction that replaces the slice theorem in the proof of
+    \cite[Corollary~IV.7]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 942--947.
+\end{lemma}
+
+\begin{proof}\leanok
+    The factor $(X^\dagger X)^{-1/2}$ is a continuous function of the positive
+    definite matrix $X^\dagger X$, and $Q(X)^\dagger Q(X)=1$. Since
+    $(gX)^\dagger(gX)=X^\dagger X$, $Q$ commutes with unitaries on the left. For
+    a Kronecker product,
+    $(A\otimes B)^\dagger(A\otimes B)=A^\dagger A\otimes B^\dagger B$, and the
+    inverse square root of a Kronecker
+    product of positive definite matrices is the Kronecker product of the inverse
+    square roots, by uniqueness of positive square roots. On $W$ the previous
+    lemma writes $N(uu_0^\dagger)=A\otimes B$ with $A$, $B$ invertible, so
+    $g(u)=Q(A)\otimes Q(B)$ is a product of local unitaries. Equivariance of $N$
+    and of $Q$ gives $g((x\otimes y)u)=(x\otimes y)g(u)$, hence the invariance
+    of $\sigma$. Finally $N(\mathbb 1)=\mathbb 1$ and $Q(\mathbb 1)=\mathbb 1$
+    give $\sigma(u_0)=u_0$.
+\end{proof}
+
 \begin{corollary}[Continuous choice of standard form]
     \label{coruvSF}
     \notready
     \discussion{6024}
     \uses{prop:continuity-index, IndexTh, SF, lem:matrix_realignment_kronecker,
-        lem:nearest_kronecker_product}
+        lem:nearest_kronecker_product, lem:kronecker_local_section}
     For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
     necessarily in canonical form, there are an integer $k_0\leq D^4$ and
     continuous paths of unitaries $u(p)$ and $v(p)$ such that
