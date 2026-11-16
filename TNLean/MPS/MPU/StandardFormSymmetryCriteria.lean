@@ -22,9 +22,16 @@ below are therefore the source propositions, for any choice of the factors in
 the standard form of `𝒱₂`; the construction of such a standard form for every
 simple MPU is `MPOTensor.IsMPUSimple.exists_reduced_twoSiteStandardFormData`.
 
-The symmetry hypotheses concern the even lengths `N` of the standard-form
-chain, exactly as in the source propositions. Both symmetries force the source
-ranks of `𝒱` to equal the physical dimension, so the index vanishes.
+**Length convention.** From line 1209 on, the source places two spins on each
+site of the standard-form chain. The symmetry hypotheses are therefore stated
+for `mpo (blockTwo V) N` at even `N`, that is, at original chain lengths
+divisible by four, exactly as in the source propositions. They say nothing
+about original lengths `2 mod 4`. For example, the one-site tensor `e^{iπ/4}·1`
+has gates `u = i·1`, `v = 1` satisfying `UUdaggertrick` with `σ = -1`, while its
+original length-two operator `i·1` is not self-adjoint. For the reading of
+standard-form lengths see `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
+Both symmetries force the source ranks of `𝒱` to equal the physical dimension,
+so the index vanishes.
 
 ## Main results
 
