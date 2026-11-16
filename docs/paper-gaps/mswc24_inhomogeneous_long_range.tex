@@ -135,6 +135,20 @@ all physical scratch sites and the correspondence between the binary
 geometry and the disjoint register layouts. The generic gate compiler
 does not by itself prove that coefficient identity.
 
+\section{Uniformity in the coherent label count}
+At a nonempty pair window the orthogonal label states lie in a space of
+dimension $D^2$, so their number is at most $D^2$. This bound follows
+from the approximation hypothesis itself. Taking preparation constants
+over this finite range gives constants independent of the chosen label
+count, even if the count varies with the chain length and partition.
+The uniform exponential-rate consequence therefore does not need an
+independent fixed-label-count hypothesis.
+
+This removes a uniformity obligation, not the approximation hypothesis.
+The explicit predicate is attached to a chain of tensors and a partition;
+no invariance under arbitrary gauges or redundant presentations of the
+same physical state is asserted.
+
 \section{What a sharp uniform rate would require}
 The source's analytic bounds (23) and (S11)--(S16) concern a fixed
 translation-invariant tensor and its normal-sector decomposition.
@@ -164,8 +178,8 @@ errors or on preparation depth, and they do not establish a rate for an
 unspecified sequence class.
 
 For an unrestricted reading of the source remark, a class of sequences
-must still be specified and a uniform rate proved for that class, with a
-uniform label count. The conditional theorem establishes how such a rate
+must still be specified and a uniform rate proved for that class. The local orthogonality already
+bounds the label count uniformly by $D^2$ on nonempty partitions. The conditional theorem establishes how such a rate
 gives a logarithmic scale; it does not establish the rate itself. The
 doubly-logarithmic claim additionally requires the end-to-end coefficient
 identity just described. These obligations are

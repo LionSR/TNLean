@@ -62,6 +62,41 @@
     a one-site ring at accuracy one.
 \end{proof}
 
+\begin{lemma}[The label count is bounded by the pair dimension]
+    \label{lem:ldp_coherent_pair_label_bound}
+    \lean{MPSPreparation.IsCoherentPairApproximable.label_le}
+    \notready
+    \uses{def:ldp_coherent_pair_approximable}
+    On a nonempty partition, every coherent pair approximation with
+    bond dimension $D$ has at most $D^2$ labels.
+\end{lemma}
+\begin{proof}
+    At one window the label vectors are orthonormal in a space of
+    dimension $D^2$. The corresponding matrix is an isometry, so its
+    number of columns does not exceed its number of rows.
+\end{proof}
+
+\begin{lemma}[Uniform constants with varying label counts]
+    \label{lem:ldp_coherent_pair_varying_labels}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable_uniform_labels,
+        MPSPreparation.exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate_varying_labels}
+    \notready
+    \uses{lem:ldp_coherent_pair_label_bound,
+        lem:ldp_coherent_pair_approximation_preparation}
+    For fixed $d\ge2$ and $D\ge1$, the constants $C,L_0$ for coherent
+    pair preparation can be chosen independently of the number of
+    labels. In the uniform exponential-rate hypothesis, the number
+    of labels may depend on the length and the chosen partition.
+    The resulting depth bound remains $C'(1+\log(N/\varepsilon))$,
+    with constants independent of all these label counts.
+\end{lemma}
+\begin{proof}
+    Choose preparation constants for each of the finitely many label
+    counts from $0$ through $D^2$. Their sums bound all choices at once.
+    Use these uniform constants in the blocking argument of
+    Lemma~\ref{lem:ldp_coherent_pair_uniform_rate}.
+\end{proof}
+
 \subsection{What qualitative convergence does not imply}
 
 \begin{definition}[Delayed blocking error]

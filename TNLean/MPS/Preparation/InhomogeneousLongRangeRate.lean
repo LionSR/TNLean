@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.Preparation.InhomogeneousLongRange
 import TNLean.MPS.Preparation.InhomogeneousExactPreparation
 import TNLean.MPS.Preparation.InjectivityCutoff
@@ -12,7 +13,8 @@ import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 # Uniform accuracy scales for coherent inhomogeneous pair approximations
 
 The explicit class used here consists of positive-part states approximable by coherent sums
-of locally orthonormal pair products with a fixed number of labels. A uniform bound
+of locally orthonormal pair products. Local orthogonality bounds the number of labels by D²,
+so constants can be uniform even when that number varies with the length and partition. A uniform bound
 `K N^k exp(-r q)` yields blocking and preparation depth `O(1 + log(N/ε))`.
 
 **Scope restriction (specified class and uniform rate):** these are quantitative hypotheses,
@@ -39,6 +41,21 @@ def IsCoherentPairApproximable {d D N M : ℕ} (b : ℕ) (A : MPSChainTensor d D
       1 - ‖⟪∑ j, α j • pairFamilyVector (ω j),
         (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ‖ ≤ δ
 
+/-- Local orthogonality bounds the label count by the dimension of one pair window.
+The partition must be nonempty; no lower bound on individual amplitudes is needed. -/
+theorem IsCoherentPairApproximable.label_le {d D N M b : ℕ} [NeZero M]
+    {A : MPSChainTensor d D N} {ℓ : Fin M → ℕ} {hN : ∑ j, ℓ j = N} {δ : ℝ}
+    (h : IsCoherentPairApproximable b A hN δ) : b ≤ D * D := by
+  classical
+  obtain ⟨_, ω, hω, _⟩ := h
+  let X : Matrix (Fin D × Fin D) (Fin b) ℂ := fun p j => ω j 0 p
+  have hX : X.IsIsometry := by
+    change Xᴴ * X = 1
+    ext i j
+    simpa only [X, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using
+      hω 0 i j
+  simpa only [Fintype.card_prod, Fintype.card_fin] using Matrix.IsIsometry.card_le X hX
+
 /-- The explicit coherent-pair approximation condition transfers to a unit physical output,
 with the same error, in depth linear in the largest block length. -/
 theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable
@@ -56,18 +73,45 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairAppr
   obtain ⟨hprep, hunit, hinner⟩ := hX ω hω α hα
   exact ⟨_, hunit, hprep, by rwa [hinner]⟩
 
+/-- Preparation constants can be chosen independently of the coherent label count.
+Local orthogonality supplies the finite bound on that count. -/
+theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable_uniform_labels
+    (d D : ℕ) (hd : 2 ≤ d) (hD : 0 < D) :
+    ∃ C L₀ : ℕ, ∀ (b : ℕ) {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N]
+      (hN : ∑ k, ℓ k = N) (A : MPSChainTensor d D N) (L : ℕ) (δ : ℝ),
+      (∀ k, L₀ ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsCoherentPairApproximable b A hN δ →
+      ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧
+        IsPreparedWithMeasurementsAndCircuitInDepth (C * L) (fun t => ψ t) ∧
+        1 - ‖⟪ψ, (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ‖ ≤ δ := by
+  classical
+  have hex (i : Fin (D * D + 1)) :=
+    exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable d D i hd hD
+  choose C L₀ hC using hex
+  refine ⟨∑ i, C i, ∑ i, L₀ i, ?_⟩
+  intro b M _ ℓ N _ hN A L δ hℓ hL happ
+  let i : Fin (D * D + 1) := ⟨b, Nat.lt_succ_iff.mpr happ.label_le⟩
+  have hCi : C i ≤ ∑ j, C j :=
+    Finset.single_le_sum (fun j _ => Nat.zero_le (C j)) (Finset.mem_univ i)
+  have hLi : L₀ i ≤ ∑ j, L₀ j :=
+    Finset.single_le_sum (fun j _ => Nat.zero_le (L₀ j)) (Finset.mem_univ i)
+  obtain ⟨ψ, hψ, hprep, herr⟩ := hC i ℓ hN A L δ (fun k => hLi.trans (hℓ k)) hL happ
+  obtain ⟨T₁, T₂, φ, U, hT, hmeas, hcir, heq⟩ := hprep
+  exact ⟨ψ, hψ, ⟨T₁, T₂, φ, U, hT.trans (Nat.mul_le_mul_right L hCi), hmeas, hcir, heq⟩, herr⟩
+
 /-- A uniform polynomial-exponential coherent-pair approximation rate gives one
 accuracy-dependent logarithmic preparation bound for the whole inhomogeneous family.
+The label count may vary with the length and partition. Local orthogonality bounds it by
+D², so all constants are independent of that choice.
 The additive one also covers a one-site ring at accuracy one. All constants are independent
 of the ring length and accuracy. Source: the conditional interpretation of arXiv:2307.01696,
 eq. (19) and its concluding inhomogeneous remark. -/
-theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate
-    (d D b : ℕ) (hd : 2 ≤ d) (hD : 0 < D) (A : ∀ N, MPSChainTensor d D N)
+theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate_varying_labels
+    (d D : ℕ) (hd : 2 ≤ d) (hD : 0 < D) (A : ∀ N, MPSChainTensor d D N)
     (K r : ℝ) (k : ℕ) (hK : 0 < K) (hr : 0 < r)
     (hrate : ∀ (N : ℕ) [NeZero N] (q : ℕ), 0 < q → q ≤ N →
       ∃ (M : ℕ) (_ : 0 < M) (ℓ : Fin M → ℕ) (hN : ∑ j, ℓ j = N),
         (∀ j, q ≤ ℓ j) ∧ (∀ j, ℓ j ≤ 2 * q) ∧
-        IsCoherentPairApproximable b (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
+        ∃ b : ℕ, IsCoherentPairApproximable b (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ (N : ℕ) [NeZero N] (ε : ℝ), 0 < ε → ε ≤ 1 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ C * (1 + Real.log (N / ε)) ∧
@@ -75,7 +119,7 @@ theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Cb, L₀, hCb⟩ :=
-    exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable d D b hd hD
+    exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable_uniform_labels d D hd hD
   obtain ⟨Ce, hCe⟩ := exists_isPreparedInDepth_normalizedChainState d D (by omega)
   let a : ℝ := max (k : ℝ) 1 / r
   let B : ℝ := max (Real.log K) 0 / r + L₀ + 1
@@ -105,13 +149,13 @@ theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate
       nlinarith
     exact hqQ.le.trans this
   have hA : chainState (A N) ≠ 0 := by
-    obtain ⟨M, _, ℓ, hsum, _, _, h⟩ := hrate N N hN0 le_rfl
+    obtain ⟨M, _, ℓ, hsum, _, _, _, h⟩ := hrate N N hN0 le_rfl
     exact h.1
   have hunit : ‖(‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)‖ = 1 := by
     rw [norm_smul, norm_inv, Complex.norm_real, Real.norm_eq_abs, abs_norm,
       inv_mul_cancel₀ (norm_ne_zero_iff.mpr hA)]
   by_cases hqN : q ≤ N
-  · obtain ⟨M, hM, ℓ, hsum, hℓq, hℓ2q, happ⟩ := hrate N q hq0 hqN
+  · obtain ⟨M, hM, ℓ, hsum, hℓq, hℓ2q, b, happ⟩ := hrate N q hq0 hqN
     let : NeZero M := ⟨hM.ne'⟩
     have hLq : L₀ ≤ q := by
       have hBL : (L₀ : ℝ) ≤ B := by
@@ -120,7 +164,7 @@ theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate
         linarith
       have : (L₀ : ℝ) ≤ q := by dsimp [Q] at hQq; nlinarith
       exact_mod_cast this
-    obtain ⟨ψ, hψ, hprep, herr⟩ := hCb ℓ hsum (A N) (2 * q) _
+    obtain ⟨ψ, hψ, hprep, herr⟩ := hCb b ℓ hsum (A N) (2 * q) _
       (fun j => hLq.trans (hℓq j)) hℓ2q happ
     refine ⟨ψ, Cb * (2 * q), hψ, ?_, hprep, herr.trans ?_⟩
     · push_cast
@@ -154,5 +198,24 @@ theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate
           simp [hz'] at hunit)
     · rw [inner_self_eq_norm_sq_to_K, hunit]
       simpa using hε.le
+
+/-- The fixed-label specialization of the uniform rate theorem. -/
+theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate
+    (d D b : ℕ) (hd : 2 ≤ d) (hD : 0 < D) (A : ∀ N, MPSChainTensor d D N)
+    (K r : ℝ) (k : ℕ) (hK : 0 < K) (hr : 0 < r)
+    (hrate : ∀ (N : ℕ) [NeZero N] (q : ℕ), 0 < q → q ≤ N →
+      ∃ (M : ℕ) (_ : 0 < M) (ℓ : Fin M → ℕ) (hN : ∑ j, ℓ j = N),
+        (∀ j, q ≤ ℓ j) ∧ (∀ j, ℓ j ≤ 2 * q) ∧
+        IsCoherentPairApproximable b (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ (N : ℕ) [NeZero N] (ε : ℝ), 0 < ε → ε ≤ 1 →
+      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
+        (T : ℝ) ≤ C * (1 + Real.log (N / ε)) ∧
+        IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
+        1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
+  apply exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate_varying_labels
+    d D hd hD A K r k hK hr
+  intro N _ q hq hqN
+  obtain ⟨M, hM, ℓ, hN, hlo, hhi, happ⟩ := hrate N q hq hqN
+  exact ⟨M, hM, ℓ, hN, hlo, hhi, b, happ⟩
 
 end MPSPreparation
