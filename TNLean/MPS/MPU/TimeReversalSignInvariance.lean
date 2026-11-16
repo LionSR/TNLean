@@ -22,6 +22,11 @@ constant. No standard forms, gates or local relations are required along the
 path; they are constructed at each point. Time-reversal invariance is required
 at even lengths of the two-spin standard-form chain, that is, at original
 lengths divisible by four; see `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
+The path need not be in canonical form, as in Definition
+`def:strictly-equivalent-symmetry` (line 1349); at each point the sign is read
+from the standard form of the canonical representative, as in Corollary
+`coruvSF` (lines 870--884). See
+`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
 
 ## Main results
 
