@@ -2473,6 +2473,7 @@
     \lean{MPSTensor.IsNormalTensor.isMPUCanonicalForm,
         MPOTensor.isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening,
         MPOTensor.IsMPU.isMPUCanonicalForm_tensorPhysicalId,
+        MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor,
         MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId}
     \leanok
     \uses{def:mpu_canonical_form, def:normal,
@@ -2480,7 +2481,7 @@
         thm:mpu_identity_ancilla_reduced_cfii}
     A normal tensor is in canonical form, with one block of weight one
     filling the bond space. Consequently, if an MPU tensor $\mathcal U$ of
-    physical dimension $d$ is in canonical form, then so are
+    physical dimension $d$ is in canonical form, then so are $\mathcal U_k$,
     $\mathcal U^{(p)}$ and $(\mathcal U^{(p)})_k$ for all positive integers
     $p$ and $k$.
     % Source lines: paper_v2.tex 259--267, 344--354, 706--724.

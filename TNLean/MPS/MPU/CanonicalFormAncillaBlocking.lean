@@ -29,6 +29,8 @@ with one block filling the bond space.
 * `MPOTensor.IsMPU.isMPUCanonicalForm_tensorPhysicalId`: attaching a
   positive-dimensional identity ancilla preserves canonical form of an MPU
   tensor.
+* `MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor`: blocking a positive number
+  of sites preserves canonical form of an MPU tensor.
 * `MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId`: attaching
   a positive-dimensional identity ancilla and then blocking a positive number of
   sites preserves canonical form of an MPU tensor.
@@ -128,6 +130,23 @@ theorem IsMPU.isMPUCanonicalForm_tensorPhysicalId [NeZero d] [NeZero D]
   exact (isNormalTensor_normalizedDiagonalLift
     (hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf) p hp).reindexPhysical _
 
+/-- **Canonical form survives blocking.** If an MPU tensor \(\mathcal U\) is in
+canonical form, then so is \(\mathcal U_k\) for every \(k>0\).
+
+Source: arXiv:1703.09188, blocking, lines 297--305, with Proposition
+`prop:normal-tensor`, lines 344--354. -/
+theorem IsMPU.isMPUCanonicalForm_blockTensor [NeZero d] [NeZero D]
+    {U : MPOTensor d D} (hU : IsMPU U)
+    (hcf : MPSTensor.IsMPUCanonicalForm U.toMPSTensor) {k : ℕ} (hk : 0 < k) :
+    MPSTensor.IsMPUCanonicalForm (MPOTensor.blockTensor U k).toMPSTensor := by
+  have : NeZero (MPSTensor.blockPhysDim d k) := ⟨by
+    rw [MPSTensor.blockPhysDim_eq_pow]
+    exact pow_ne_zero k (NeZero.ne d)⟩
+  apply isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening
+  rw [normalizedFlattening_blockTensor]
+  exact ((hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf).blockTensor k
+    hk).reindexPhysical _
+
 /-- **Canonical form survives attaching an identity ancilla and blocking.** If an
 MPU tensor \(\mathcal U\) is in canonical form, then so is
 \((\mathcal U^{(p)})_k\) for every \(p>0\) and \(k>0\).
@@ -142,15 +161,7 @@ theorem IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId [NeZero d] [NeZero
     MPSTensor.IsMPUCanonicalForm
       (MPOTensor.blockTensor (MPOTensor.tensorPhysicalId U p) k).toMPSTensor := by
   have : NeZero p := ⟨hp.ne'⟩
-  have : NeZero (MPSTensor.blockPhysDim (d * p) k) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
-    exact pow_ne_zero k (NeZero.ne (d * p))⟩
-  apply isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening
-  have hnU := hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf
-  have hnUp : MPSTensor.IsNormalTensor (MPOTensor.tensorPhysicalId U p).normalizedFlattening := by
-    rw [normalizedFlattening_tensorPhysicalId U p hp]
-    exact (isNormalTensor_normalizedDiagonalLift hnU p hp).reindexPhysical _
-  rw [normalizedFlattening_blockTensor]
-  exact (hnUp.blockTensor k hk).reindexPhysical _
+  exact (hU.tensorPhysicalId p hp).isMPUCanonicalForm_blockTensor
+    (hU.isMPUCanonicalForm_tensorPhysicalId hcf hp) hk
 
 end MPOTensor
