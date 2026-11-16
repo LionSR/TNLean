@@ -80,8 +80,6 @@ theorem IsViableMPS.exists_openMPS {L q s b : ℕ}
   obtain ⟨ψ, hnorm, hoverlap, hMPS⟩ :=
     h.2.2.exists_openMPS_of_forall_isLeftOpenMPS h.2.1
   refine ⟨ψ, hnorm, hoverlap, ?_⟩
-  apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
-  intro k hk0 hkL
-  exact (hMPS.rank_cutMatrix_le hk0 hkL).trans (Nat.mul_le_mul_right (max 1 b) h.1)
+  exact hMPS.mono (Nat.mul_le_mul_right (max 1 b) h.1)
 
 end TNLean.MPS.AreaLaw

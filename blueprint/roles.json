@@ -381,8 +381,7 @@
         "IndexTh"
       ],
       "corollaries": [
-        "coruvSF",
-        "cor:mpu_admissible_continuous_standard_form"
+        "coruvSF"
       ],
       "notes": {
         "ThmFund1": "Simple-tensor equivalence theorem (Cirac et al. 2017, Theorem III.8)",
@@ -992,7 +991,8 @@
       "theorems": [
         "thm:glm_boundary_reverse",
         "thm:glm_mixed_gauge_joint",
-        "thm:glm_single_block_obstruction"
+        "thm:glm_single_block_obstruction",
+        "thm:glm_l_path_invariance"
       ],
       "corollaries": [
         "cor:glm_group_specialization",
@@ -1001,7 +1001,8 @@
       "notes": {
         "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening",
         "thm:glm_mixed_gauge_joint": "The L- and F-symbols are determined by the blocks up to the source's gauge equivalence",
-        "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening"
+        "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening",
+        "thm:glm_l_path_invariance": "The gauge class of the L-symbols is constant along a differentiable symmetric path (Garre-Rubio et al., Section 5), named in the opening; its first-order part is proved"
       }
     },
     "ch:peps_anyons": {

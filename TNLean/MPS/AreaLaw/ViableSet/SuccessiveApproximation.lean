@@ -89,13 +89,7 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
       · exact (le_max_right 1 _).trans hbondBudget
     refine ⟨hcard.trans hsize, ?_, hviable⟩
     intro v hv
-    apply isOpenMPS_of_internal_cutMatrix_rank_le
-      (WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x))
-    intro k hk0 hki
-    have hvMPS : IsOpenMPS i q
-        (max 1 (if i = 0 then 1 else lvvSuccessiveBondBound q Delta L))
-        (fun x ↦ v (leftConfigOfFin x)) := hMPS v hv
-    exact (hvMPS.rank_cutMatrix_le hk0 hki).trans (max_le_max le_rfl hbond)
+    exact (hMPS v hv).mono (max_le_max le_rfl hbond)
   · intro E₀ Γ hgs
     obtain ⟨hcard, hMPS, hviable⟩ := hS L le_rfl
     have hLne : L ≠ 0 := by omega
@@ -109,10 +103,7 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
     · simpa only [ψ, LinearIsometryEquiv.norm_map] using hvnorm
     · rwa [hinner]
     · have hspan := isOpenMPS_leftChain_of_mem_span _ hMPS hvspan
-      apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
-      intro k hk0 hkL
-      exact (hspan.rank_cutMatrix_le hk0 hkL).trans
-        ((Nat.mul_le_mul_right _ hcard).trans hspanBudget)
+      exact hspan.mono ((Nat.mul_le_mul_right _ hcard).trans hspanBudget)
     · rwa [hψimage]
 
 end TNLean.MPS.AreaLaw

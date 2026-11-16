@@ -51,6 +51,7 @@ import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationStandardForms
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
+import TNLean.MPS.MPU.ContinuousStandardFormPath
 import TNLean.MPS.MPU.CyclicConjugation
 import TNLean.MPS.MPU.CyclicFinitePropagation
 import TNLean.MPS.MPU.DaggerFusionCompatibility
@@ -234,6 +235,7 @@ import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.StandardFormPathContinuity
+import TNLean.MPS.MPU.StandardFormPathGateDims
 import TNLean.MPS.MPU.StandardFormSymmetryCriteria
 import TNLean.MPS.MPU.StandardFormTimeReversalSign
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
@@ -247,6 +249,7 @@ import TNLean.MPS.MPU.SuppliedTwoBlockStandardForm
 import TNLean.MPS.MPU.SuppliedWindowCoordinates
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
+import TNLean.MPS.MPU.SymmetryPathCriterion
 import TNLean.MPS.MPU.SymmetryPathTransport
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm

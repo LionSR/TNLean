@@ -1095,6 +1095,24 @@ and its error extend to blocks of any lengths.
     after increasing the constant.
 \end{proof}
 
+\begin{lemma}[A positive rate for unequal-block preparations]
+    \label{lem:ldp_positive_block_preparation_rate}
+    \lean{MPSTensor.exists_blockApproximationError_le_exp}\leanok
+    \uses{thm:ldp_block_approximation_error,def:ldp_block_isometry_state}
+    Let $A$ be normal and left canonical, and let $\sigma>0$ have trace one
+    and be fixed by its transfer map. Suppose $0<t<1$ bounds the modulus of
+    every transfer eigenvalue other than one. There are $C,r>0$, depending
+    only on $A,\sigma,t$, with $r=-\log t$, such that every partition of $N$
+    into $M\ge1$ blocks of lengths $\ell_j\ge q$ with injective blocked
+    tensors satisfies $\varepsilon(\psi_{\ell,\omega},\phi_N)\le CMe^{-rq}$.
+    Here $\omega$ is the fixed-point pair associated with $\sigma$ and
+    $\phi_N$ is the normalized target.
+\end{lemma}
+\begin{proof}\leanok
+    Take $\gamma=1/2$ in the preceding estimate and use $1/\xi=-\log t$.
+    Positivity of $r$ follows from $0<t<1$.
+\end{proof}
+
 \section{Depth of the preparation}
 
 Local circuits, their light cones, and the decomposition of unitaries on a

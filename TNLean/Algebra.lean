@@ -109,6 +109,7 @@ import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Algebra.KroneckerLocalSection
+import TNLean.Algebra.KroneckerPathLifting
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolActionMatrix
 import TNLean.Algebra.LSymbolBlockIndependence
@@ -121,6 +122,7 @@ import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixEntrywiseDeriv
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
@@ -158,6 +160,7 @@ import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
 import TNLean.Algebra.OrthogonalComplexStructure
 import TNLean.Algebra.OrthogonalComplexStructureBasis
+import TNLean.Algebra.OrthogonalGroupJoined
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSkewNormalForm
@@ -252,6 +255,7 @@ import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitPhaseScalar
 import TNLean.Algebra.UnitaryAdjointKronecker
+import TNLean.Algebra.UnitaryBetweenCompact
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryConjugationTransposeSign
