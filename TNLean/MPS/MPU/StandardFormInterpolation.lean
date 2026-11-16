@@ -28,6 +28,9 @@ lines 857--865, which passes from the gates to the tensors without comment.
 
 * `MPOTensor.IsMPU.joinedIn_bondReindex`: a permutation of the bond coordinates
   is joined to the identity through MPU tensors.
+* `MPOTensor.TwoSiteStandardFormData.joinedIn_sameMPOSet_padBond`: two standard-form
+  presentations with the same gates are joined through tensors with the same
+  periodic operators.
 * `MPOTensor.TwoSiteStandardFormData.joinedIn_padBond`: two standard-form
   presentations with the same gates are joined through MPU tensors after
   adjoining unused bond directions.
@@ -261,21 +264,79 @@ theorem continuous_tensorOfHalves {X₁ : T → Matrix (Fin d × Fin D) (Fin r) 
 
 end Path
 
-/-- **Two standard-form presentations with the same gates are joined through
-MPU tensors.** If \(W_1\) and \(W_2\), of bond dimensions \(D_1\) and \(D_2\),
-are presented in standard form with the same unitary gates, then after
-adjoining unused bond directions up to \(D_1+D_2\) they are joined by a path of
-tensors each generating an MPU.
+/-- The tensors of bond dimension `D` with the periodic operators of `W` at
+every positive length. -/
+def SameMPOSet (W : MPOTensor d D) : Set (MPOTensor d D) :=
+  {X | ∀ N : ℕ, 0 < N → mpo X N = mpo W N}
 
-Source: arXiv:1703.09188, equation `StandardForm`, lines 603--617; this is the
-step from the gates to the tensors in the proof of Theorem `IndexTh` (iv),
-lines 857--865. -/
-theorem TwoSiteStandardFormData.joinedIn_padBond {W₁ : MPOTensor (d * d) D₁}
+/-- A virtual gauge is joined to the tensor through tensors with the same
+periodic operators. Source: the gauge freedom of arXiv:1703.09188, lines 294
+and 356. -/
+theorem joinedIn_sameMPOSet_virtualSandwich (W : MPOTensor d D)
+    {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) :
+    JoinedIn (SameMPOSet W) W (MPOTensor.virtualSandwich X W X⁻¹) := by
+  obtain ⟨γ, hγ⟩ := Matrix.joinedIn_isUnit_det_one hX
+  have hdet : ∀ t, (γ t).det ≠ 0 := fun t ↦ (hγ t).ne_zero
+  have hinv : Continuous fun t ↦ (γ t)⁻¹ := by
+    simp_rw [Matrix.inv_def, Ring.inverse_eq_inv']
+    exact ((γ.continuous.matrix_det).inv₀ hdet).smul γ.continuous.matrix_adjugate
+  have hcont : Continuous fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹ := by
+    refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
+    simp only [virtualSandwich_apply]
+    exact (γ.continuous.matrix_mul continuous_const).matrix_mul hinv
+  refine ⟨⟨⟨fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹, hcont⟩, ?_, ?_⟩, fun t ↦ ?_⟩
+  · funext i j
+    simp
+  · simp
+  · intro N _
+    exact mpo_virtualSandwich _ W _ (Matrix.nonsing_inv_mul _ (hγ t)) N
+
+/-- A bond relabelling is joined to the tensor through tensors with the same
+periodic operators. -/
+theorem joinedIn_sameMPOSet_bondReindex (W : MPOTensor d D) (σ : Fin D ≃ Fin D) :
+    JoinedIn (SameMPOSet W) W (bondReindex σ W) := by
+  set P : Matrix (Fin D) (Fin D) ℂ := σ.toPEquiv.toMatrix
+  set Q : Matrix (Fin D) (Fin D) ℂ := σ.symm.toPEquiv.toMatrix
+  have hQP : Q * P = 1 := by
+    ext a b
+    simp [Q, P, PEquiv.mul_toMatrix_toPEquiv, Matrix.one_apply, PEquiv.toMatrix_apply]
+  have hPQ : P * Q = 1 := mul_eq_one_comm.mp hQP
+  have hdet : IsUnit P.det :=
+    (Matrix.isUnit_iff_isUnit_det P).mp ⟨⟨P, Q, hPQ, hQP⟩, rfl⟩
+  have hinv : P⁻¹ = Q := Matrix.inv_eq_right_inv hPQ
+  have hEq : bondReindex σ W = MPOTensor.virtualSandwich P W P⁻¹ := by
+    funext i j
+    rw [hinv, virtualSandwich_apply, PEquiv.toMatrix_toPEquiv_mul,
+      PEquiv.mul_toMatrix_toPEquiv]
+    simp [bondReindex]
+  rw [hEq]
+  exact joinedIn_sameMPOSet_virtualSandwich W hdet
+
+/-- Two standard forms with the same gates have the same periodic operators at
+every positive length. Source: arXiv:1703.09188, equation `StandardForm`,
+lines 603--617. -/
+theorem TwoSiteStandardFormData.mpo_eq_of_same_gates {W₁ : MPOTensor (d * d) D₁}
+    {W₂ : MPOTensor (d * d) D₂}
+    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S₁ : TwoSiteStandardFormData W₁ u v) (S₂ : TwoSiteStandardFormData W₂ u v)
+    (N : ℕ) (hN : 0 < N) : mpo W₁ N = mpo W₂ N := by
+  have : NeZero N := ⟨hN.ne'⟩
+  have h₁ := TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted (N := N) W₁ u v S₁
+  have h₂ := TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted (N := N) W₂ u v S₂
+  exact (Matrix.reindex _ _).injective (h₁.trans h₂.symm)
+
+/-- **Two standard forms with the same gates are joined through tensors with
+the same periodic operators**, after adjoining unused bond directions: the
+path interpolates the half factors of the two presentations. Source:
+arXiv:1703.09188, equation `StandardForm`, lines 603--617, and the proof of
+Theorem `IndexTh` (iv), lines 857--865. -/
+theorem TwoSiteStandardFormData.joinedIn_sameMPOSet_padBond {W₁ : MPOTensor (d * d) D₁}
     {W₂ : MPOTensor (d * d) D₂}
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S₁ : TwoSiteStandardFormData W₁ u v) (S₂ : TwoSiteStandardFormData W₂ u v) :
-    JoinedIn {X : MPOTensor (d * d) (D₁ + D₂) | IsMPU X}
+    JoinedIn (SameMPOSet (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _)))
       (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _))
       (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) := by
   let c : unitInterval → ℂ := fun t ↦ Complex.cos ((Real.pi / 2 * t : ℝ) : ℂ)
@@ -293,13 +354,48 @@ theorem TwoSiteStandardFormData.joinedIn_padBond {W₁ : MPOTensor (d * d) D₁}
   have h1 : F 1 = bondReindex (stackFlip D₁ D₂) (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) := by
     rw [← S₁.tensorOfHalves_stack_zero_one S₂]
     simp [F, c, s]
-  have hpath : JoinedIn {X : MPOTensor (d * d) (D₁ + D₂) | IsMPU X}
+  have hSt : ∀ t, TwoSiteStandardFormData (F t) u v := fun t ↦
+    S₁.stack S₂ (c t) (s t) (Complex.cos_sq_add_sin_sq _)
+  have hpath : JoinedIn (SameMPOSet (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _)))
       (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _))
-      (bondReindex (stackFlip D₁ D₂) (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _))) :=
-    ⟨⟨⟨F, hF⟩, h0, h1⟩, fun t ↦ TwoSiteStandardFormData.isMPU _ u v
-      (S₁.stack S₂ (c t) (s t) (Complex.cos_sq_add_sin_sq _))⟩
-  have hW₂ : IsMPU (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) :=
-    (TwoSiteStandardFormData.isMPU W₂ u v S₂).padBond _ _
-  exact hpath.trans (hW₂.joinedIn_bondReindex _).symm
+      (bondReindex (stackFlip D₁ D₂) (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _))) := by
+    refine ⟨⟨⟨F, hF⟩, h0, h1⟩, fun t N hN ↦ ?_⟩
+    change mpo (F t) N = _
+    have h := (hSt t).mpo_eq_of_same_gates (hSt 0) N hN
+    rwa [h0] at h
+  have hW₂ : padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _) ∈
+      SameMPOSet (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _)) := by
+    intro N hN
+    have : NeZero N := ⟨hN.ne'⟩
+    rw [mpo_padBond, mpo_padBond]
+    exact S₂.mpo_eq_of_same_gates S₁ N hN
+  have hflip := (joinedIn_sameMPOSet_bondReindex
+    (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) (stackFlip D₁ D₂)).symm
+  refine hpath.trans (hflip.mono fun X hX N hN ↦ ?_)
+  rw [hX N hN]
+  exact hW₂ N hN
+
+/-- **Two standard-form presentations with the same gates are joined through
+MPU tensors.** If \(W_1\) and \(W_2\), of bond dimensions \(D_1\) and \(D_2\),
+are presented in standard form with the same unitary gates, then after
+adjoining unused bond directions up to \(D_1+D_2\) they are joined by a path of
+tensors each generating an MPU.
+
+Source: arXiv:1703.09188, equation `StandardForm`, lines 603--617; this is the
+step from the gates to the tensors in the proof of Theorem `IndexTh` (iv),
+lines 857--865. -/
+theorem TwoSiteStandardFormData.joinedIn_padBond {W₁ : MPOTensor (d * d) D₁}
+    {W₂ : MPOTensor (d * d) D₂}
+    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S₁ : TwoSiteStandardFormData W₁ u v) (S₂ : TwoSiteStandardFormData W₂ u v) :
+    JoinedIn {X : MPOTensor (d * d) (D₁ + D₂) | IsMPU X}
+      (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _))
+      (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) := by
+  have hW₁ : IsMPU (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _)) :=
+    (TwoSiteStandardFormData.isMPU W₁ u v S₁).padBond _ _
+  refine (S₁.joinedIn_sameMPOSet_padBond S₂).mono fun X hX N hN ↦ ?_
+  rw [hX N (by omega)]
+  exact hW₁ N hN
 
 end MPOTensor
