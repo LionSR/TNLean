@@ -2573,17 +2573,49 @@
 
 \begin{lemma}[Well-definedness of the time-reversal sign]
     \label{prop:sigma-well-defined}
-    \notready
+    \lean{MPOTensor.IsMPUSimple.intrinsicTimeReversalSign_blockTwo_eq_standardForm_sign,
+        MPOTensor.IsMPUSimple.intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one,
+        MPOTensor.intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one_of_representative,
+        MPOTensor.intrinsicTimeReversalSign_blockTwo_eq_on_path,
+        MPOTensor.continuous_blockTwo, MPOTensor.mpo_blockTwo_eq_of_mpo_eq}
+    \leanok
     \discussion{5714}
     \uses{eq:sigma-from-trace, lem:mpu_sigma_gauge_invariant}
     For a time-reversal-invariant MPU in standard form, the sign
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
     % Source lines: paper_v2.tex 1613--1631.
-    % The intrinsic auxiliary results below need pointwise supplied standard
-    % forms and the local certificate; no continuous gate choices are needed.
-    % Deducing that certificate from global symmetry remains separate.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{eq:sigma-from-trace, lem:mpu_sigma_gauge_invariant,
+        lem:mpu_source_time_reversal_sign_independent, SF}
+    Let $P$ exchange the two physical blocks. By
+    Lemma~\ref{lem:mpu_source_time_reversal_sign_independent}, the trace
+    expression of any standard form of a tensor $\mathcal W$ equals
+    $s(\mathcal W)=d^{-2}\tr[PW^{(2)}]$, which depends only on the MPU. It is
+    therefore unchanged by the gauge of Lemma~\ref{lem:mpu_sigma_gauge_invariant}
+    and by the choice of standard form. Let $\mathcal U$ be an MPU in standard
+    form, that is, with a simple canonical representative $\mathcal V$
+    generating the same operators; $\mathcal U$ itself need be neither simple
+    nor canonical. If its standard form is time-reversal invariant, apply
+    Lemma~\ref{eq:sigma-from-trace} to the standard form of $\mathcal V_2$; since
+    $\mathcal U_2$ and $\mathcal V_2$ generate the same MPU, this gives
+    $s(\mathcal U_2)=\sigma\in\{1,-1\}$.
+
+    Let $t\mapsto\mathcal U_t$, $t\in[0,1]$, be a continuous path of tensors,
+    not necessarily canonical, that stay in standard form and whose standard
+    forms remain time-reversal invariant. Blocking and
+    the periodic contraction are polynomial in the entries, so
+    $t\mapsto s(\mathcal U_{t,2})$ is continuous. It takes values in $\{1,-1\}$
+    on the connected interval, hence is constant. No continuous choice of
+    representatives or standard forms along the path is needed. Staying in
+    standard form is the source's requirement on the deformation: the standard
+    form is defined only through a simple tensor
+    \cite[lines~619--622]{Cirac2017MPU},
+    and the sign depends on the blocking level
+    \cite[lines~1633--1641]{Cirac2017MPU}.
+\end{proof}
 
 \begin{lemma}[Extraction of the sign from a supplied local equation]
     \label{lem:mpu_supplied_time_reversal_sign}
