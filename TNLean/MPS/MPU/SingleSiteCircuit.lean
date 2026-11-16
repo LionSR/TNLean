@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
 import TNLean.Circuit.CleanImplementationPlacement
+import TNLean.Algebra.FinCastAddNatAdd
 
 /-!
 # A single-site unitary with one clean padding qudit
@@ -86,11 +87,8 @@ theorem singleSitePaddedOperator_isCleanImplementation
       ∀ j : Fin 1, z (Fin.natAdd 1 j) = 0 := by
     constructor
     · intro h j
-      have hj : ∀ i : Fin 1, Fin.castAdd 1 i ≠ Fin.natAdd 1 j := by
-        intro i hi
-        have := congrArg Fin.val hi
-        simp only [Fin.val_castAdd, Fin.val_natAdd] at this
-        omega
+      have hj : ∀ i : Fin 1, Fin.castAdd 1 i ≠ Fin.natAdd 1 j := fun i ↦
+        Fin.castAdd_ne_natAdd i j
       simpa only [Fin.append_right, Pi.zero_apply] using h (Fin.natAdd 1 j) hj
     · intro h j
       refine Fin.addCases (fun i hi ↦ ?_) (fun i _ ↦ ?_) j

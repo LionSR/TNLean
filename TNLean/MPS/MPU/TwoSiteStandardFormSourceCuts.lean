@@ -468,10 +468,8 @@ theorem IsMPUCanonicalFormII.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adj
     r[U] = d ∧ ℓ[U] = d := by
   let W := MPOTensor.blockTwo U
   have hEq : ∀ N : ℕ, 1 < N → Even N →
-      mpo W N = mpo (MPOTensor.physicalAdjointTensor W) N := by
-    intro N hN heven
-    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
-    exact hTR N hN heven
+      mpo W N = mpo (MPOTensor.physicalAdjointTensor W) N :=
+    fun N hN heven ↦ (hTR N hN heven).trans (mpo_physicalAdjointTensor_eq_conjTranspose W N).symm
   have hsame := hU.blockTwo.source_ranks_eq_of_mpo_eq_even
     hU.blockTwo.physicalAdjointTensor hEq
   have hbalanced : ℓ[W] = r[W] := by

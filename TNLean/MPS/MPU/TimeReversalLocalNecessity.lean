@@ -236,10 +236,8 @@ theorem IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate
   classical
   let T := SourceFactors.physicalAdjoint hU hsimple S hr hl
   have hEq : ∀ N : ℕ, 1 < N → Even N →
-      mpo U N = mpo (MPOTensor.physicalAdjointTensor U) N := by
-    intro N hN heven
-    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
-    exact hTR N hN heven
+      mpo U N = mpo (MPOTensor.physicalAdjointTensor U) N :=
+    fun N hN heven ↦ (hTR N hN heven).trans (mpo_physicalAdjointTensor_eq_conjTranspose U N).symm
   have huS := hU.sourceFactors_sourceU_isUnitaryBetween hsimple S
   have huT := hU.physicalAdjointTensor.sourceFactors_sourceU_isUnitaryBetween
     (hU.isMPUSimple_physicalAdjointTensor hsimple) T
