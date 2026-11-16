@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.FundamentalTheoremGates
 import TNLean.Algebra.UnitaryKronecker
+import TNLean.Algebra.UnitaryGroupJoined
 
 /-!
 # Constructing a standard-form MPU from its two gates
@@ -90,6 +91,41 @@ theorem isMPU_standardFormTensorOfGates [NeZero d] [NeZero ℓ] [NeZero r]
     (standardFormTensorOfGates u v).IsMPU :=
   TwoSiteStandardFormData.isMPU (standardFormTensorOfGates u v) u v
     (standardFormTensorOfGatesData u v hu hv)
+
+/-- The tensor built from two gates depends continuously on the gates.
+Source: CPSV17, StandardForm, lines 603--622, and the interpolation in the
+proof of Theorem `IndexTh` (iv), lines 857--865. -/
+theorem continuous_standardFormTensorOfGates {X : Type*} [TopologicalSpace X]
+    {u : X → Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v : X → Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (hu : Continuous u) (hv : Continuous v) :
+    Continuous fun x ↦ standardFormTensorOfGates (u x) (v x) := by
+  unfold standardFormTensorOfGates gateHalfLeft gateHalfRight
+  fun_prop
+
+/-- **Standard-form tensors with gates of equal dimensions are joined through
+matrix product unitaries.** For two pairs of unitary gates with the same input
+and output dimensions, the tensors built from them are joined by a continuous
+path of tensors of the same bond dimension, each built from a pair of unitary
+gates and hence generating an MPU.
+
+Source: arXiv:1703.09188, proof of Theorem `IndexTh` (iv), "if", lines
+857--865: "the corresponding \(u\) and \(v\) … have the same input and output
+dimensions, so that they can be smoothly connected to each other"; the
+standard form is equation `StandardForm`, lines 603--622. -/
+theorem joinedIn_standardFormTensorOfGates [NeZero d] [NeZero ℓ] [NeZero r]
+    {u₀ u₁ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v₀ v₁ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (hu₀ : u₀.IsUnitaryBetween) (hu₁ : u₁.IsUnitaryBetween)
+    (hv₀ : v₀.IsUnitaryBetween) (hv₁ : v₁.IsUnitaryBetween) :
+    JoinedIn {W : MPOTensor (d * d) (d * r) | W.IsMPU}
+      (standardFormTensorOfGates u₀ v₀) (standardFormTensorOfGates u₁ v₁) := by
+  obtain ⟨γu, hγu⟩ := hu₀.joinedIn hu₁
+  obtain ⟨γv, hγv⟩ := hv₀.joinedIn hv₁
+  refine ⟨⟨⟨fun t ↦ standardFormTensorOfGates (γu t) (γv t),
+    continuous_standardFormTensorOfGates γu.continuous γv.continuous⟩,
+    by simp, by simp⟩, fun t ↦ ?_⟩
+  exact isMPU_standardFormTensorOfGates _ _ (hγu t) (hγv t)
 
 /-- At every positive length, the constructed tensor is exactly the
 unshifted \(u\) layer followed by the shifted \(v\) layer, in the original
