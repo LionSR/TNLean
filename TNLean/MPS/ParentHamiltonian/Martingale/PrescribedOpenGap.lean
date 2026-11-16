@@ -154,7 +154,7 @@ theorem eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub
       nlinarith
     nlinarith [mul_nonneg (sub_nonneg.mpr hκone) hε.le]
   obtain ⟨L₀, _, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨L₁, hDefect⟩ := Filter.eventually_atTop.1
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct hε)

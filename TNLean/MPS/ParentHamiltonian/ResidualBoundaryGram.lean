@@ -278,6 +278,7 @@ theorem residualBoundaryGramLimit_apply_of_cyclic_support
   simpa only [hV, sum_word_conjTranspose_cyclic_projection_mul_word A P hTP hShift] using
     residualBoundaryGramLimit_frobeniusEquivEuclidean_apply A V ρ htr r Y
 
+set_option linter.style.longLine false in
 /-- Primitive prefix convergence bounds the residual Gram error
 geometrically, uniformly over every original tail length. The cyclic corner
 and contraction are derived from the original trace-preserving tensor.

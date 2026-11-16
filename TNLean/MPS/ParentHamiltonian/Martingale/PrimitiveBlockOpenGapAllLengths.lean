@@ -94,6 +94,7 @@ private theorem exists_pos_finite_open_gap (A : MPSTensor d D) (R M : ℕ) :
   · exact fun N hMN hNM ↦ False.elim (by omega)
 
 variable {r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
+set_option linter.style.longLine false in
 /-- Inequivalent normalized primitive blocks admit an open parent interaction
 with a positive gap uniform over every chain length. Its range can be chosen
 above any prescribed lower bound. At lengths below the interaction range,
@@ -115,7 +116,7 @@ theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasCompl
         δ * ‖v‖ ≤ ‖openParentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N v‖ := by
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨L₁, hDefect⟩ := Filter.eventually_atTop.1
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct

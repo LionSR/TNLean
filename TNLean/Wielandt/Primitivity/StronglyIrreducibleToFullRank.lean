@@ -78,7 +78,8 @@ theorem exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPri
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A))
     (hPrim : IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
+      Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
   have hIrrT : Kraus.IsIrreducibleFamily A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrr
   obtain ⟨ρ, hP⟩ :=

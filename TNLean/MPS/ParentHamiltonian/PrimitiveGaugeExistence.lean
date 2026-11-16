@@ -135,7 +135,8 @@ theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal [NeZero D] {A : M
   have hgauge : GaugeEquiv (ζ • A) B := hBgauge
   have hNormalScaled : Kraus.IsNormal (ζ • A) := (isNormal_smul_iff hζ A).2 hA
   have hNormalB : Kraus.IsNormal B := isNormal_of_gaugeEquiv hNormalScaled hgauge
-  obtain ⟨ρ, hPrim, hρ⟩ := exists_hasComplementaryFixedPointGap_posDef_of_isNormal B hBnorm hNormalB
+  obtain ⟨ρ, hPrim, hρ⟩ :=
+    exists_hasComplementaryFixedPointGap_posDef_of_isNormal B hBnorm hNormalB
   have hGS : ∀ L : ℕ, groundSpace A L = groundSpace B L := by
     intro L
     rw [← groundSpace_smul_eq A ζ hζ L]

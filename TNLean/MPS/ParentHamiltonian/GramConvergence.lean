@@ -115,6 +115,7 @@ theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   rw [← tendsto_sub_nhds_zero_iff, tendsto_zero_iff_norm_tendsto_zero]
   exact hnorm
 
+set_option linter.style.longLine false in
 /-- A primitive MPS tensor satisfies the quantitative geometric bound for convergence of
 its ground-space Gram operators to the reshuffled fixed-point projection. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
@@ -131,6 +132,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_sub_fixedPoin
     A ρ _ (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed
     hP.complementary_transfer_map_gap
 
+set_option linter.style.longLine false in
 /-- The ground-space Gram operators of a primitive MPS tensor converge to the reshuffled
 fixed-point projection. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj

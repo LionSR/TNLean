@@ -55,7 +55,7 @@ theorem exists_openInteractionHamiltonianES_gap_of_eventual_kernel
         γ * ‖v‖ ≤ ‖openInteractionHamiltonianES h N v‖ := by
   obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hker
   obtain ⟨L₀, hL₀, hCanonicalKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hpBound, hp, δ, hδ, hCanonicalGap⟩ :=
     exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap

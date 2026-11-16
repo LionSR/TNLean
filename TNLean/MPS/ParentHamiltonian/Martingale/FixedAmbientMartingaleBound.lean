@@ -265,6 +265,7 @@ theorem fixedAmbient_martingaleDifference_norm_le_of_openChain
     exact (norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
       (r := r) hInj hl.le (by omega)).trans (hOpen K (by omega))
 
+set_option linter.style.longLine false in
 /-- A primitive MPS satisfies Nachtergaele's C3 bound on every active index of
 the fixed final-volume filtration.  The same overlap length and coefficient as
 in the physical open-chain estimate are used. -/

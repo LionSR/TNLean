@@ -177,6 +177,7 @@ theorem norm_residualWindowRightMapES_projection_comp_leftMapES_projection_le
       norm_inner_residualWindowRightMapES_leftMapES_le_of_prefix_bound A B B' V hε hAngle hx hy)
   simpa only [Submodule.starProjection_bot, sub_zero] using h
 
+set_option linter.style.longLine false in
 /-- Inequivalent primitive middle tensors with faithful invariant matrices have uniformly small
 cross-sector window projections once the middle interval is sufficiently long. The bound
 holds simultaneously for every outer blocked-prefix length and original-tail length. Source:
@@ -186,7 +187,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_residualWindo
     (A : MPSTensor d D) {B : MPSTensor (blockPhysDim d L) E}
     {B' : MPSTensor (blockPhysDim d L) F} (V : Matrix (Fin D) (Fin E) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} {σ : Matrix (Fin F) (Fin F) ℂ}
-    (hB : Kraus.HasComplementaryFixedPointGap B ρ) (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
+    (hB : Kraus.HasComplementaryFixedPointGap B ρ)
+    (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ B') B)
     {ε : ℝ} (hε : 0 < ε) :
@@ -199,6 +201,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_residualWindo
     norm_residualWindowRightMapES_projection_comp_leftMapES_projection_le
       A B B' V (K := K) (r := r) hε.le hM
 
+set_option linter.style.longLine false in
 /-- Cross-sector window projection products tend to zero along any diverging middle interval,
 while both outer lengths may vary arbitrarily. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Lemma disjoint, lines 1744--1820. -/
@@ -207,7 +210,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_cross_projecti
     (A : MPSTensor d D) {B : MPSTensor (blockPhysDim d L) E}
     {B' : MPSTensor (blockPhysDim d L) F} (V : Matrix (Fin D) (Fin E) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} {σ : Matrix (Fin F) (Fin F) ℂ}
-    (hB : Kraus.HasComplementaryFixedPointGap B ρ) (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
+    (hB : Kraus.HasComplementaryFixedPointGap B ρ)
+    (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ B') B)
     {κ : Type*} {f : Filter κ} {K M r : κ → ℕ}

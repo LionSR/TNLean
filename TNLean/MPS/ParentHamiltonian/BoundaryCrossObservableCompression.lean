@@ -186,6 +186,7 @@ theorem norm_groundSpaceES_bulkObservable_cross_compression_le
         ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ * 1 := by gcongr
     _ = _ := by simp only [one_mul, mul_one]
 
+set_option linter.style.longLine false in
 /-- The products of the ground projections of inequivalent normalized primitive
 tensors tend to zero in operator norm. Source: Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma disjoint, equations C1C2 and limP12. -/
@@ -210,6 +211,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceES_starProjection_
     simp only [Submodule.starProjection_bot, sub_zero] at h
     exact h.trans_lt (half_lt_self hε)
 
+set_option linter.style.longLine false in
 /-- Cross compression of a fixed nonempty local observable between inequivalent
 primitive sectors tends to zero as the left free interval expands. The right
 free interval may vary arbitrarily. This follows by prefix locality from the

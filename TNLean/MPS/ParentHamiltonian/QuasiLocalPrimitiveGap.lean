@@ -33,6 +33,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+set_option linter.style.longLine false in
 /-- Every positive parent interaction at range at least \(D^4+1\) has a
 positive commutator bound in the constructed primitive quasi-local state.
 The constant is independent of the interval, its position, and the observable.

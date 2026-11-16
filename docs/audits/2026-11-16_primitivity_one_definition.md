@@ -187,10 +187,10 @@ All in the namespace `MPSTensor`.
 | `exists_isPrimitiveMPS_of_isPeriodic_one` | `exists_hasComplementaryFixedPointGap_of_isPeriodic_one` |
 | `exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive` | `exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive` |
 | `exists_isPrimitiveMPS_posDef_of_isNormal` | `exists_hasComplementaryFixedPointGap_posDef_of_isNormal` |
-| `exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS` | `exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap` |
+| `exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS` | `exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES` |
 | `exists_nonzero_evalWord_of_isPrimitiveMPS` | `exists_nonzero_evalWord_of_hasComplementaryFixedPointGap` |
 | `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS` | `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap` |
-| `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS_of_threeBlock_bound` | `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap_of_threeBlock_bound` |
+| `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS_of_threeBlock_bound` | `exists_parentHamiltonianES_toTensorFromBlocks_gap_of_threeBlock_bound` |
 | `exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isPrimitiveMPS` | `exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_hasComplementaryFixedPointGap` |
 | `exists_positive_parent_interaction_groundStateFace_of_isPrimitiveMPS` | `exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFixedPointGap` |
 | `exists_positive_parent_interaction_of_isPrimitiveMPS` | `exists_positive_parent_interaction_of_hasComplementaryFixedPointGap` |
@@ -200,6 +200,25 @@ All in the namespace `MPSTensor`.
 | `isPure_groundSpace_supported_iff_sector_of_isPrimitiveMPS` | `isPure_groundSpace_supported_iff_sector_of_hasComplementaryFixedPointGap` |
 | `markovTensor_isPrimitiveMPS` | `markovTensor_hasComplementaryFixedPointGap` |
 | `transferMap_pow_ne_zero_of_isPrimitiveMPS` | `transferMap_pow_ne_zero_of_hasComplementaryFixedPointGap` |
+
+Two of the renamed theorems would have had names longer than the line limit
+of 100 characters, so they drop the hypothesis suffix instead:
+`exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES` and
+`exists_parentHamiltonianES_toTensorFromBlocks_gap_of_threeBlock_bound`. The
+complementary-gap hypothesis remains in their statements.
+
+### Line length
+
+The prefix `Kraus.HasComplementaryFixedPointGap.` is 36 characters long, against
+15 for `IsPrimitiveMPS.` inside the namespace `MPSTensor`. For 35 of the moved
+lemmas, and for
+`exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap`,
+the line `theorem <name>` alone exceeds 100 characters. Each of these declarations
+is preceded by `set_option linter.style.longLine false in`. The alternative is
+to declare the lemmas inside `namespace Kraus.HasComplementaryFixedPointGap`.
+That would mean closing `namespace MPSTensor` around them and repeating the
+section variables and local notations of 36 modules. It is left for a later
+change, which could also give the lemmas shorter names.
 
 ### Removed theorem
 

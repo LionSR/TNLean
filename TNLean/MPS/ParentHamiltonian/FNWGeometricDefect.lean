@@ -45,7 +45,7 @@ This correction is documented in `docs/paper-gaps/cpgsv21_martingale_overlap.tex
 ## Main results
 
 * `MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_geometric`
-* `Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric`
+* `HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric`
 * `Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric`
 -/
 
@@ -99,6 +99,7 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
         ρ hρ htr A hA hρfix hInj hL hLm r ℓ hℓ
     _ ≤ c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by gcongr
 
+set_option linter.style.longLine false in
 /-- A primitive matrix-product state satisfies display (6.1) of Nachtergaele,
 arXiv:cond-mat/9410110, lines 2401--2412, with a rate strictly below one and a positive
 prefactor: there is a positive interaction length beyond which the whole-increment ground
@@ -152,6 +153,7 @@ theorem openChain_groundProjection_defect_eq_wholeIncrement
   simp only [openChainTailGroundProjectionES, openChainLeftGroundProjectionES,
     reassocTailBoundaryMapES_one, range_tailBoundaryMapES, range_leftBoundaryMapES_one]
 
+set_option linter.style.longLine false in
 /-- The open-chain form of display (6.1) of Nachtergaele, arXiv:cond-mat/9410110,
 lines 1180--1194: any prefix length and an overlap length beyond the interaction
 length give the projector defect

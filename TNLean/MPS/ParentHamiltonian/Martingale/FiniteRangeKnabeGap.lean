@@ -130,6 +130,7 @@ theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
         (γ := γ) (δ := δ) rfl hnum hWindowGap x
       rwa [sum_zmodLocalTermES_eq_parentHamiltonianES] at hx) v hv
 
+set_option linter.style.longLine false in
 /-- A primitive MPS has a positive finite-range Knabe gap for its canonical
 range-\(l + 1\) parent Hamiltonian on every periodic chain with \(N \geq 2m\).
 

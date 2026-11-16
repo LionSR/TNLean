@@ -208,6 +208,7 @@ private theorem transferReshuffleLinear_apply
   ext p q
   simp [Matrix.gramReshuffleMatrix]
 
+set_option linter.style.longLine false in
 /-- The virtual Gram compression of a fixed interior observable converges to
 its scalar expectation times the limiting boundary Gram operator. Both free
 intervals may expand along any common filter. Source: Nachtergaele,

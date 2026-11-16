@@ -155,6 +155,7 @@ theorem norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound {D₂ : ℕ}
   exact fun τ => hAngle _ (residualPrefixFiber_mem_groundSpaceES A B V hx τ)
     _ (residualPrefixFiber_mem_groundSpaceES C B' W hy τ)
 
+set_option linter.style.longLine false in
 /-- Inequivalent normalized primitive prefixes have asymptotically
 orthogonal correlated residual ranges, uniformly over every original tail
 length. The original tensors supplying the tail need no normalization.
@@ -166,7 +167,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_blocked
     {B : MPSTensor (blockPhysDim d L) E} {B' : MPSTensor (blockPhysDim d L) F}
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} {σ : Matrix (Fin F) (Fin F) ℂ}
-    (hB : Kraus.HasComplementaryFixedPointGap B ρ) (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
+    (hB : Kraus.HasComplementaryFixedPointGap B ρ)
+    (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ B') B)
     {ε : ℝ} (hε : 0 < ε) :

@@ -121,6 +121,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openIn
     H ψ hγ (Eventually.of_forall fun n => openInteractionHamiltonianES_isPositive hh (N n))
     hGap hKernel hGround hUnit hEnergy
 
+set_option linter.style.longLine false in
 /-- Every positive parent interaction at range at least \(D^4+1\) has one
 positive local commutator bound throughout the normalized primitive sector.
 All finite-volume and limiting estimates are derived internally.

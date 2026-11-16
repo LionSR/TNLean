@@ -55,7 +55,7 @@ theorem exists_positive_parent_interaction_of_hasComplementaryFixedPointGap
         LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
   obtain ⟨R, hR, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   let T := toTensorFromBlocks (d := d) (μ := μ) A
   let h := canonicalParentInteractionMatrix T R

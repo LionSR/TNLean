@@ -27,7 +27,7 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
 space as the open-chain kernel for a direct sum of inequivalent primitive
 blocks. The threshold is independent of the chain length. This is the
 open-segment conclusion of PGVWC07, Theorem 12, lines 1430--1454. -/
-theorem exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+theorem exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)

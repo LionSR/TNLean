@@ -49,7 +49,8 @@ are unchanged. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), lines 1394--1435. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.reindexPhysical {d₁ d₂ : ℕ} {A : MPSTensor d₂ D}
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
-    (e : Fin d₁ ≃ Fin d₂) : Kraus.HasComplementaryFixedPointGap (Kraus.reindexPhysical e A) ρ := by
+    (e : Fin d₁ ≃ Fin d₂) :
+    Kraus.HasComplementaryFixedPointGap (Kraus.reindexPhysical e A) ρ := by
   have hMap : Kraus.mapLM (Kraus.reindexPhysical e A) = Kraus.mapLM A :=
     transferMap_reindexPhysical_equiv e A
   refine ⟨(leftCanonical_reindexPhysical_equiv e A).mpr hP.norm,

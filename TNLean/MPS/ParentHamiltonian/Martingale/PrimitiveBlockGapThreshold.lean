@@ -104,7 +104,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_hasComple
         γ * ‖v‖ ≤ ‖parentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨R₀, hR₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   exact ⟨R₀, hR₀, fun R hR ↦
     exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamiltonianES_eq

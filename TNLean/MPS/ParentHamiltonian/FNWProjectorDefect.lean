@@ -482,6 +482,7 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_factored [NeZero D]
   exact wholeIncrement_groundProjection_defect_le_fnw
     ρ hρ htr A hA hρfix hInj hL hLm r ℓ hℓ
 
+set_option linter.style.longLine false in
 /-- A primitive MPS admits a positive interaction length after which the
 fixed-length FNW Lemma 6.2 estimate holds for every prefix length and every
 positive spectator length. -/

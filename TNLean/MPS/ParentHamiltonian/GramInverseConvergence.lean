@@ -189,6 +189,7 @@ theorem geometric_smallness_at_c3_lengths {c r : ℝ} (hc : 0 < c) (hr_pos : 0 <
     (mul_le_mul_of_nonneg_left (hpow hlm) hc.le).trans_lt hsmall
   exact ⟨hsmall_of_le (by omega), hsmall_of_le (by omega), hsmall_of_le (by omega)⟩
 
+set_option linter.style.longLine false in
 /-- For every relative tolerance \(a\) strictly between zero and one, the
 finite-volume Gram operator of a primitive MPS tensor is eventually a unit.
 Its ring inverse differs from the inverse of the reshuffled fixed-point
@@ -244,6 +245,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_ringInverse_t
     simpa only [Kinf] using hP.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   exact NormedRing.inverse_tendsto_of_tendsto_of_isUnit hKinf hconv
 
+set_option linter.style.longLine false in
 /-- Eventually the Hilbert-space boundary map is injective. For any relative
 tolerance \(a\in(0,1)\), one may choose an injectivity proof so that its
 inverse-Gram operator is exactly the ring inverse of the finite-volume Gram

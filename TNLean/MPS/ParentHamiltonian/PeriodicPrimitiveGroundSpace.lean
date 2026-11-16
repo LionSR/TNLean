@@ -43,7 +43,8 @@ Perron--Frobenius step underlying the normalization in Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines 1394--1435. -/
 theorem exists_hasComplementaryFixedPointGap_of_isPeriodic_one [NeZero D] {A : MPSTensor d D}
     (hA : IsPeriodic 1 A) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
+      Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
   obtain ⟨hIrr, hTP, hPrim⟩ := (IsPeriodic.one_iff_primitive A).1 hA
   obtain ⟨ρ, hP⟩ :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim

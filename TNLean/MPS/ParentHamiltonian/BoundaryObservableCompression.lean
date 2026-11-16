@@ -33,6 +33,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+set_option linter.style.longLine false in
 /-- The compression of a fixed interior observable approaches its scalar
 expectation, in operator norm on the complete finite-chain ground space.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
@@ -92,6 +93,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_co
     (by simpa only [C, groundSpaceGram] using hnorm)
   simpa only [range_groundSpaceMapES] using h
 
+set_option linter.style.longLine false in
 /-- Centering the primitive-sector expectation makes the compressed observable
 vanish in operator norm. Source: Nachtergaele, arXiv:cond-mat/9410110,
 lines 933--947 and 2649--2675. -/
@@ -111,6 +113,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_co
     hP.bulkObservable_groundSpace_compression_tendsto_scalar hρ X hℓ hr
 
 
+set_option linter.style.longLine false in
 /-- Scalar compression controls the action on every bounded ground vector,
 uniformly in the boundary condition. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
@@ -143,6 +146,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_pr
     _ ≤ _ := mul_le_of_le_one_right (norm_nonneg _) hnorm
     _ < ε := hn
 
+set_option linter.style.longLine false in
 /-- For centered observables, the full ground-space projection norm squared
 vanishes along every eventually bounded family of boundary vectors. This is
 precisely the finite-volume subtraction term in Nachtergaele,

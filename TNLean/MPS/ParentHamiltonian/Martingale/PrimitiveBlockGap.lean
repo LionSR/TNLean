@@ -51,7 +51,7 @@ theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplemen
         γ * ‖v‖ ≤ ‖openParentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) (p * M) v‖ := by
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hp, hDefect⟩ := ((eventually_ge_atTop (max L₀ Rmin)).and
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct

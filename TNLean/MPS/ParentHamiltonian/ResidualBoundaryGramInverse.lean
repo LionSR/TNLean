@@ -501,6 +501,7 @@ theorem norm_residualBoundaryGramInverse_sub_limit_le [NeZero D] [NeZero E]
         (mul_le_mul hInvBound hError (norm_nonneg _) (by positivity)) (norm_nonneg _)
     _ = _ := by ring
 
+set_option linter.style.longLine false in
 /-- The supported inverse converges to the fixed inverse restricted to the row corner along
 every diverging prefix length, with arbitrary tail lengths. This is an intermediate estimate
 for Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/

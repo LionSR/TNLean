@@ -177,7 +177,8 @@ theorem wolf_theorem_6_15 [NeZero D] (A : MPSTensor d D)
       Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
       ∀ σ : Matrix (Fin D) (Fin D) ℂ,
         Kraus.transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
-  obtain ⟨ρ₀, hPrim, hρ₀pd⟩ := exists_hasComplementaryFixedPointGap_posDef_of_isNormal A hNorm hSpan
+  obtain ⟨ρ₀, hPrim, hρ₀pd⟩ :=
+    exists_hasComplementaryFixedPointGap_posDef_of_isNormal A hNorm hSpan
   have htr_pos : 0 < Matrix.trace ρ₀ := hρ₀pd.trace_pos
   have htr_ne : Matrix.trace ρ₀ ≠ 0 := ne_of_gt htr_pos
   set ρ := (Matrix.trace ρ₀)⁻¹ • ρ₀ with hρ_def

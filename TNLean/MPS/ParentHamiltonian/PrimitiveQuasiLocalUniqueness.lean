@@ -136,6 +136,7 @@ theorem norm_quasiLocalState_interval_sub_scalar_le_projection_compression
     CStarMatrix.ofMatrixStarAlgEquiv (EquivLike.injective _)
       (p * X * p - c • p)
 
+set_option linter.style.longLine false in
 /-- Every normalized positive state supported in all finite-interval primitive
 MPS spaces has the prescribed insertion expectations on every local interval.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3 and the boundary

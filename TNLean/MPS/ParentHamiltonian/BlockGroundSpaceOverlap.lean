@@ -35,6 +35,7 @@ theorem adjoint_groundSpaceMapES_comp_tendsto_zero_of_spectralRadius_lt_one
 
 variable [NeZero D₁] [NeZero D₂]
 
+set_option linter.style.longLine false in
 /-- The ground spaces of two primitive tensors become uniformly orthogonal
 when the mixed transfer map has spectral radius less than one. This combines
 the boundary normalization and mixed-transfer estimates in Nachtergaele,
@@ -74,6 +75,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundS
   exact h.trans (mul_le_mul_of_nonneg_right
     (mul_le_mul_of_nonneg_right hn.le (norm_nonneg x)) (norm_nonneg y))
 
+set_option linter.style.longLine false in
 /-- Distinct normalized primitive blocks have asymptotically orthogonal local
 ground spaces. This is Nachtergaele, arXiv:cond-mat/9410110, equation
 `limitepsilonm` (lines 1661--1675), in the trace-preserving tensor convention.

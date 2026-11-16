@@ -134,7 +134,7 @@ theorem eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub
     rw [hεsqrt]
     nlinarith [sq_nonneg η]
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   filter_upwards [eventually_ge_atTop (max L₀ 1),
     eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct hε]

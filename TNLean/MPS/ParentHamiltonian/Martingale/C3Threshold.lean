@@ -104,6 +104,7 @@ private theorem tendsto_fnw_coefficient
   rw [zero_mul] at h
   exact h.congr fun n ↦ by ring
 
+set_option linter.style.longLine false in
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
 uniformly in the prefix length and in every positive suffix length. -/
@@ -125,6 +126,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_wholeIncrement_gro
     with L hL hsmallL hcoef K Q hQ
   exact (hDefect L hL hsmallL K Q hQ).trans hcoef.le
 
+set_option linter.style.longLine false in
 /-- There is a positive block-injective length \(p\), measured in sites of the
 input tensor, such that the whole-increment projector defect with overlap and
 suffix lengths \(L=Q=p\) is at most \(7/16\) for every prefix length \(K\),
@@ -150,6 +152,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_uniform_wholeIncrement
   exact ⟨p, by omega, isNBlkInjective_of_le hLpos hLinj (by omega),
     fun K ↦ hDefect K p (by omega)⟩
 
+set_option linter.style.longLine false in
 /-- At the length \(p\) chosen uniformly above, taking the prefix length
 \(K=p\) gives three consecutive blocks of \(p\) original sites and projector
 defect at most \(7/16\). -/
@@ -165,6 +168,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrem
     hP.exists_uniform_wholeIncrement_defect_le_seven_sixteenths hρ
   exact ⟨p, hp, hInj, hDefect p⟩
 
+set_option linter.style.longLine false in
 /-- At every sufficiently large overlap length, the uniform open-chain
 projector defect times \(\sqrt{l+1}\) is below any prescribed positive
 number. This retains the decay used in Nachtergaele,
@@ -207,6 +211,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_openChain_groundPr
   intro K
   exact hDefect l hLle hl_small K
 
+set_option linter.style.longLine false in
 /-- A primitive MPS with faithful fixed point has a block-injective overlap length
 at which the uniform open-chain ground-projector defect satisfies Nachtergaele's
 condition C3, arXiv:cond-mat/9410110, eq. (2.4).
@@ -230,6 +235,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjec
   exact ⟨l, ε, hl, hInj, hε,
     (lt_div_iff₀ (Real.sqrt_pos.2 (by positivity))).2 hsmall, hDefect⟩
 
+set_option linter.style.longLine false in
 /-- A primitive MPS with faithful fixed point satisfies Nachtergaele's condition C3
 in its literal martingale-difference form
 \[
@@ -255,6 +261,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_martingaleDi
   rw [openChainTailGroundProjection_comp_martingaleDifference hInj hl.le hK]
   exact hDefect K
 
+set_option linter.style.longLine false in
 /-- The C3 threshold yields the uniform open-chain anticommutator estimate for
 the complementary excitation projections. Nachtergaele's identity following condition
 C3 identifies the projector defect, arXiv:cond-mat/9410110, eq. (2.4); the
