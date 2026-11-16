@@ -1173,6 +1173,64 @@ with the corresponding composite embeddings.
     is that of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}.
 \end{proof}
 
+\begin{lemma}[Complete fusion from a cosemisimple pre-bialgebra]%
+    \label{lem:mpoalg_fusion_from_cosemisimple}
+    \lean{MPOTensor.isBoundaryClosed_ofDualRepresentation,
+        MPOTensor.DualRepresentationFusion.totalRepresentation,
+        MPOTensor.DualRepresentationFusion.totalRepresentation_injective,
+        MPOTensor.DualRepresentationFusion.tensor,
+        MPOTensor.DualRepresentationFusion.wordTupleSpanTop_tensor,
+        MPOTensor.DualRepresentationFusion.totalRepresentation_tensor,
+        MPOTensor.DualRepresentationFusion.family,
+        MPOTensor.DualRepresentationFusion.family_tensor,
+        MPOTensor.DualRepresentationFusion.toPreBialgebra,
+        MPOTensor.exists_completeZipperFusionFamily_of_cosemisimple}
+    \leanok
+    \uses{def:mpoalg_pre_bialgebra,def:mpdo_complete_zipper_fusion_family,
+        lem:mpoalg_fusion_counit_unital_representation}
+    Let $\mathcal A$ be a finite-dimensional complex pre-bialgebra whose
+    convolution dual $\mathcal A^*$ is semisimple, and let
+    $\phi\colon\mathcal A\to\MN{d}$ be an injective unital algebra
+    representation. There are finitely many positive integers $D_c$, an
+    algebra isomorphism $\psi\colon\mathcal A^*\to\bigoplus_c\MN{D_c}$,
+    and a complete zipper fusion family with letters
+    $T_c^{ik}=\psi(\phi_{ik})_c$, where $\phi_{ik}(x)=\phi(x)_{ik}$.
+    In particular, for each pair $a,b$, there are nonnegative integers
+    $N_{ab}^c$ and biorthogonal maps $V_{ab}^{c\mu},W_{ab}^{c\mu}$ with
+    \begin{align}
+        \sum_j T_a^{ij}\otimes T_b^{jk}
+         & =\sum_{c,\mu}V_{ab}^{c\mu}T_c^{ik}W_{ab}^{c\mu},
+         & W_{ab}^{c\mu}V_{ab}^{e\nu}
+         & =\delta_{ce}\delta_{\mu\nu}\Id.
+        \label{eq:mpoalg_cosemisimple_fusion}
+    \end{align}
+    Both zipper identities and a simultaneous one-letter inverse hold
+    without physical blocking. The boundary algebra has the fusion
+    pre-bialgebra structure with counit $\psi(f)\mapsto f(\Id)$.
+    This is the cosemisimple construction of
+    \cite[Section~4.2]{Molnar2022MPOAlgebrasI}.
+    % Source anchor: mpo.tex lines 1640--1658; cosemisimplicity at 1642.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_incoming_blocks,def:glm_boundary_zipper_family,
+        lem:mpoalg_fusion_counit_unital_representation}
+    Wedderburn--Artin gives $\psi$. Injectivity of $\phi$ means that its
+    matrix coefficients separate points, so they span $\mathcal A^*$.
+    Their images therefore span all blocks simultaneously and give the
+    one-letter inverse. The direct sum representation of $\mathcal A^*$
+    is faithful. Its arbitrary-boundary operators are exactly the
+    represented elements $\rho_n(x)$ with one element $x$ for all lengths.
+    Since $\rho_n(xy)=\rho_n(x)\rho_n(y)$ for $n>0$, these operators are
+    closed under products with one boundary for all positive lengths.
+    Lemma~\ref{thm:glm_boundary_incoming_blocks} gives the exact
+    biorthogonal decompositions of each incoming pair. Their synthesis
+    and analysis matrices and the simultaneous inverse give the complete
+    family by Definition~\ref{def:glm_boundary_zipper_family}. Finally
+    Lemma~\ref{lem:mpoalg_fusion_counit_unital_representation} supplies
+    the counit from $\phi(\Id)=\Id$.
+\end{proof}
+
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%
     \label{rem:mpoalg_kramers_wannier}
     The Kramers--Wannier operator of Section~\ref{sec:asymex_kw} does not

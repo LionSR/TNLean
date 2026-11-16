@@ -203,6 +203,7 @@ import TNLean.MPS.MPDO.DiagonalDressing
 import TNLean.MPS.MPDO.DiagonalFiniteChain
 import TNLean.MPS.MPDO.DirectSum
 import TNLean.MPS.MPDO.DualRepresentationAdjointBoundary
+import TNLean.MPS.MPDO.DualRepresentationFusion
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
 import TNLean.MPS.MPDO.EmbedLocalOperatorTwoSite
 import TNLean.MPS.MPDO.EtaPreparation
