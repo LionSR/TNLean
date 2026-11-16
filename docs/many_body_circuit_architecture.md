@@ -167,7 +167,34 @@ introduced were repaired by step K0′, and the set is empty:
   site notions that were kept among the Hamiltonian modules and are now
   modules of `TNLean/Circuit`.
 
-The same check is added to QICLean when the layers arrive there, where
+Three further ratchets of the same kind cover every module of TNLean, not only
+the layers above. Each records what the tree has now in a set that may only
+shrink, compared with the base revision in the same way: a new entry fails,
+and an entry that no longer holds must be removed in the change that repairs
+it.
+
+- `MUTUAL_DIRECTORIES`, in the same script, lists the pairs of directories
+  that import each other, with directories taken at depth two below
+  `TNLean/MPS` and `TNLean/PEPS` and at depth one elsewhere. It recorded 59
+  pairs when introduced, such as `MPS/MPDO` and `MPS/ParentHamiltonian`. A
+  new import that makes two directories depend on each other fails, so the
+  directories that are layers today stay layers.
+- `EXAMPLES_IMPORTS`, in the same script, lists the imports of a module inside
+  an `Examples` directory by a module outside every such directory. It
+  recorded 17 when introduced. A worked example is not a prerequisite of the
+  theory it illustrates: the declaration the library needs moves out of the
+  example.
+- `PASS_THROUGH`, in `scripts/check_pass_through_declarations.py`, lists the
+  declarations whose whole body applies the declaration of the same name in
+  another namespace to their own explicit arguments in order, as in
+  `lemma blockPhysDim_eq_pow (d L : ℕ) : … := Kraus.blockPhysDim_eq_pow d L`.
+  It recorded 25 when introduced. The rule is lexical and narrow, and is
+  stated in full at the head of that script; a forwarding declaration of
+  another shape is not detected and is removed by review.
+
+Both scripts run in the same step of the module-policy job.
+
+The layer check is added to QICLean when the layers arrive there, where
 directories are not layers today: every pair among `Algebra`, `Analysis`,
 `Channel`, `Entropy` and `Representation` that is related at all is related in
 both directions, and `Analysis` holds 530 modules at its top level.
@@ -485,7 +512,9 @@ C1 is validated by C2–C4: if porting a model needs a change to `Layer` or
 - A new declaration goes where "Where a declaration goes" puts it. A module
   that mentions no layer, gate or depth is not added to `TNLean/Circuit`; until
   step K4 it goes in QICLean beside `Entropy.IsSupportedOn`.
-- No entry is added to `DEBT` in `scripts/check_import_layers.py`.
+- No entry is added to `DEBT`, `MUTUAL_DIRECTORIES` or `EXAMPLES_IMPORTS` in
+  `scripts/check_import_layers.py`, nor to `PASS_THROUGH` in
+  `scripts/check_pass_through_declarations.py`.
 - A new lemma is not stated for `Fin N`, the ring, `ℤ × ℤ` or one local
   dimension unless its proof uses that structure.
 - No new circuit predicate. A new model is a restriction of an existing one
