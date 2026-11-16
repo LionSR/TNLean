@@ -2676,37 +2676,76 @@
     % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
 
+\begin{lemma}[Local comparison of the conjugation signs]
+    \label{lem:mpu_conjugation_mps_sign_local}
+    \lean{MPOTensor.TwoSiteStandardFormData.sign_eq_of_conjugation_gauge}
+    \leanok
+    \uses{SF}
+    Let $\mathcal W=AuB$ be a tensor in standard form, the open contraction of
+    the unshifted gate $u$ with the two half factors $A$ and $B$, and let
+    $x,y$ be unitaries with $\overline u=(x\otimes y)u$. Let $G$ be a unitary
+    with $\overline{\mathcal W^{ij}}=\zeta G^\dagger\mathcal W^{ij}G$ for all
+    physical indices. If $x^T=sx$ and $G\overline G=s'\Id$ with
+    $s,s'\in\{1,-1\}$, then $s=s'$.
+    % Source lines: paper_v2.tex 1791--1797.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $u$ is unitary, contracting with $\overline u$ strips the gate:
+    $\overline A x\otimes y^T\overline B=G^\dagger A\otimes\zeta BG$ as tensor
+    products. Both factors are nonzero because the shifted gate $v=BA$ is
+    unitary, so $\overline Ax=cG^\dagger A$ for a nonzero scalar $c$.
+    Conjugating once more gives
+    \begin{align}
+        A & =|c|^2\,(G^TG^\dagger)\,A\,(x^\dagger x^T)=|c|^2ss'\,A,
+    \end{align}
+    using $G^T=s'G$ and $x^T=sx$. Since $A\neq0$, $|c|^2ss'=1$, hence $s=s'$.
+\end{proof}
+
+\begin{lemma}[The MPS sign and the conjugation case]
+    \label{lem:mpu_mps_sign_conjugation_case}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff,
+        MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge}
+    \leanok
+    \discussion{5714}
+    \uses{prop1conj, corconj, lem:mpu_conjugation_mps_sign_local}
+    For a conjugation-invariant MPU, the MPS sign
+    $G\overline G=\pm\Id$ corresponds to Case I and Case II, respectively, of
+    Lemma~\ref{corconj}: if $x,y$ are as in Lemma~\ref{prop1conj} and $G$ is a
+    unitary with $\overline{\mathcal U^{ij}}=\zeta G^\dagger\mathcal U^{ij}G$
+    for all physical indices, then $G\overline G=\Id$ if and only if $x=x^T$,
+    and $G\overline G=-\Id$ if and only if $x=-x^T$. Here the MPU is generated
+    by a simple tensor in canonical form II, its standard form is that of the
+    two-site block, as in \cite{gap:mpu_standard_form_canonical_convention},
+    and $G$ may be a gauge of either tensor. This is the first half of
+    \cite[Proposition~VI.12]{Cirac2017MPU}; it does not identify the two cases
+    with the phases under equivalence.
+    % Source lines: paper_v2.tex 1791--1797.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{prop1conj, lem:mpu_conjugation_mps_sign_local}
+    Lemma~\ref{prop1conj} gives $x=\pm x^T$. The tensor is normal, so the MPS
+    sign is $G\overline G=\pm\Id$. Lemma~\ref{lem:mpu_conjugation_mps_sign_local}
+    applied to the two-site block shows that the two signs agree. A gauge of
+    the one-site tensor is a gauge of its two-site block with phase
+    $\zeta^2$.
+\end{proof}
+
 \begin{lemma}[Conjugation class and the MPS sign]
     \label{prop:mps-class-eq-mpu-class-for-conjugation}
     \notready
     \discussion{5714}
-    \uses{corconj, cor:equiv-under-conjugation}
+    \uses{lem:mpu_mps_sign_conjugation_case, cor:equiv-under-conjugation}
     For a conjugation-invariant MPU, the MPS sign
     $G\overline G=\pm\Id$ agrees with Case I and Case II, respectively, of
-    Lemma~\ref{corconj}.
-    % Source lines: paper_v2.tex 1791--1805.
-\end{lemma}
-
-\begin{lemma}[Admissible conjugation class and the MPS sign]
-    \label{prop:mpu_admissible_mps_conjugation_class}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (admissible conjugation class):** the standard forms,
-    % blockings, and comparison paths carry the required source data. Documented
-    % in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{corconj, cor:mpu_admissible_equiv_under_conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let $\mathcal U$ be conjugation invariant. Suppose $\mathcal U$ and its
-    conjugate comparison tensor are simple and carry their own reduced
-    full-support source data. Let $p\mapsto\mathcal W(p)$ be the explicit
-    standard-form interpolation from $\mathcal U$ to its Case I or Case II
-    representative. Suppose this interpolation carries an admissible
-    conjugation-symmetry path datum of blocking length one: the path
-    $\mathcal W(p)$ and its fixed conjugate, physical-adjoint, transposed, and
-    conjugation-image comparison paths are simple and carry continuously varying
-    source data. Then the sign
-    $G\overline G=\pm\Id$ in the MPS classification agrees with Case I and
-    Case II, respectively, of
-    Lemma~\ref{corconj}.
+    Lemma~\ref{corconj}, that is, with the two possible phases under
+    equivalence. The correspondence of the sign with the two cases is
+    Lemma~\ref{lem:mpu_mps_sign_conjugation_case}; the identification of the
+    two cases with the two phases is Lemma~\ref{cor:equiv-under-conjugation}.
+    This is \cite[Proposition~VI.12]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1791--1805.
 \end{lemma}
 
