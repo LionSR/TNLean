@@ -40,7 +40,7 @@ variable [NeZero width] [NeZero height]
 
 private theorem val_pred {n : ℕ} [NeZero n] (z : ZMod n) (hz : 0 < z.val) :
     (z - 1).val = z.val - 1 := by
-  letI : Fact (1 < n) := ⟨by have := ZMod.val_lt z; omega⟩
+  let : Fact (1 < n) := ⟨by have := ZMod.val_lt z; omega⟩
   rw [ZMod.val_sub (a := z) (b := 1) (by rw [ZMod.val_one n]; omega),
     ZMod.val_one n]
 
@@ -89,7 +89,7 @@ private theorem exists_elimination_list (o : X) (S : Finset X) (ho : o ∉ S) :
       · have hy : 0 < (v.2 - o.2).val := by
           dsimp [faceRank] at hpos
           omega
-        letI : Fact (1 < height) := ⟨by have := ZMod.val_lt (v.2 - o.2); omega⟩
+        let : Fact (1 < height) := ⟨by have := ZMod.val_lt (v.2 - o.2); omega⟩
         refine ⟨(v, false) :: l, hlength false, hmembers false, ?_⟩
         intro w hw
         change torusDualFaceEliminationSequence l
@@ -99,10 +99,10 @@ private theorem exists_elimination_list (o : X) (S : Finset X) (ho : o ∉ S) :
           rw [torusDualSouthFaceElimination_face, map_one]
         · have hwu : (w.1, w.2 + 1) ≠ v := by
             intro he
-            have hp : w = (v.1, v.2 - 1) := by
-              apply Prod.ext
-              · exact congrArg Prod.fst he
-              · exact eq_sub_iff_add_eq.mpr (congrArg Prod.snd he)
+            have hfst := congrArg Prod.fst he
+            have hsnd := congrArg Prod.snd he
+            have hp : w = (v.1, v.2 - 1) :=
+              Prod.ext hfst (eq_sub_iff_add_eq.mpr hsnd)
             have hr := rank_south o v hy
             have hm := hmin w hw
             rw [← hp] at hr
@@ -110,7 +110,7 @@ private theorem exists_elimination_list (o : X) (S : Finset X) (ho : o ∉ S) :
           rw [torusDualSouthFaceElimination_face_eq v w hwv hwu]
           exact hkill w (Finset.mem_erase.mpr ⟨hwv, hw⟩)
       · have hx' : 0 < (v.1 - o.1).val := Nat.pos_of_ne_zero hx
-        letI : Fact (1 < width) := ⟨by have := ZMod.val_lt (v.1 - o.1); omega⟩
+        let : Fact (1 < width) := ⟨by have := ZMod.val_lt (v.1 - o.1); omega⟩
         refine ⟨(v, true) :: l, hlength true, hmembers true, ?_⟩
         intro w hw
         change torusDualFaceEliminationSequence l
@@ -120,10 +120,10 @@ private theorem exists_elimination_list (o : X) (S : Finset X) (ho : o ∉ S) :
           rw [torusDualWestFaceElimination_face, map_one]
         · have hwr : (w.1 + 1, w.2) ≠ v := by
             intro he
-            have hp : w = (v.1 - 1, v.2) := by
-              apply Prod.ext
-              · exact eq_sub_iff_add_eq.mpr (congrArg Prod.fst he)
-              · exact congrArg Prod.snd he
+            have hfst := congrArg Prod.fst he
+            have hsnd := congrArg Prod.snd he
+            have hp : w = (v.1 - 1, v.2) :=
+              Prod.ext (eq_sub_iff_add_eq.mpr hfst) hsnd
             have hr := rank_west o v hx'
             have hm := hmin w hw
             rw [← hp] at hr

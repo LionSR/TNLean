@@ -56,6 +56,10 @@ def torusDualFaceEliminationSequence : List (X × Bool) → (FG →* FG)
 
 variable [NeZero width] [NeZero height]
 
+-- Retain the established positive-period theorem signatures explicitly.
+include [NeZero width] [NeZero height]
+
+omit [NeZero width] [NeZero height] in
 private theorem faceWord_eq (v : X) :
     torusDualFaceWord v =
       northLetter (v.1 + 1, v.2) * eastLetter v *
