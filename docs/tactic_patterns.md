@@ -1,5 +1,24 @@
 # Tactic Pattern Ledger
 
+### Sitewise tensor powers of a one-site matrix — promoted (2026-11-16)
+
+- **Seen:** five local definitions of the configuration-indexed product
+  `∏ n, V (s n) (t n)`: `MPOTensor.sitewisePhysicalMatrix` (MPDO, MPU, Symmetry and
+  RFP, 36 files), `MPOTensor.sitewiseMatrixFamily` (site-dependent factors), and the
+  MPU copies `chainPower`, `siteProduct` and `rectangularProduct`, each with its own
+  multiplication, identity, adjoint and isometry lemmas.
+- **Abstraction:** `Matrix.tensorPower` (`Algebra/MatrixTensorPower.lean`) for one
+  factor at every site and `Matrix.rectKronecker` (`Algebra/FinKronecker.lean`) for
+  site-dependent factors, with `Matrix.tensorPower_apply`,
+  `Matrix.IsUnitaryBetween.tensorPower` and `Matrix.tensorPower_mem_unitaryGroup`
+  added. The local definitions and their duplicated lemmas are deleted; the lemmas
+  that remain are renamed onto `tensorPower`.
+- **Notes:** The products of identity entries in the deleted proofs close with
+  `simp [Finset.prod_boole, funext_iff]`, the idiom of the PEPS and circuit files.
+  The shared layer still has three parallel definitions, `tensorPower`,
+  `rectKronecker` and `finKronecker`, which agree definitionally; merging them is a
+  separate candidate.
+
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
 - **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
@@ -4608,7 +4627,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   product theorem holds for every commutative monoid. Isolating these declarations from
   `ParentHamiltonian/Defs.lean` avoids invalidating its broad downstream import cone.
 - **Result:** the exact call sites are the shared public lemma
-  `MPOTensor.reindex_sitewisePhysicalMatrix_windowComplement` in
+  `MPOTensor.reindex_tensorPower_windowComplement` in
   `PhysicalSectorProductTransport.lean`, used from both that file and
   `PhysicalSupportProductTransport.lean`, and
   `embed_twoSiteSectorProjection_eq_finKronecker` in

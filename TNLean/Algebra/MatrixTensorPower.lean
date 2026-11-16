@@ -73,7 +73,7 @@ theorem IsIsometry.tensorPower {ι κ : Type*} [Fintype ι] [DecidableEq κ] (M 
   have hWe : ∀ a c, ∑ i, star (W i a) * W i c = if a = c then 1 else 0 := fun a c => by
     have := congrFun (congrFun hW a) c
     simpa [Matrix.mul_apply, Matrix.one_apply] using this
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.tensorPower_apply, Matrix.of_apply,
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.tensorPower_apply,
     star_prod, ← Finset.prod_mul_distrib]
   rw [← Fintype.prod_sum (fun k i => star (W i (s k)) * W i (t k))]
   simp_rw [hWe, Matrix.one_apply]
