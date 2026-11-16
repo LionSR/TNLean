@@ -241,12 +241,13 @@
         MPOTensor.FiniteGroupDetector.circuitOp_dressedPairCircuit_single_entry,
         MPOTensor.FiniteGroupDetector.cellSuccessor,
         MPOTensor.FiniteGroupDetector.cellSuccessor_Icc_single_entry}
+    \leanok
     Let $u,w$ be one-site unitaries. On a periodic chain partitioned into
     even--odd cells, apply $(wu)\otimes u$ on each cell, followed by
     $\mathbf 1\otimes w^{\dagger}$ on each pair consisting of a cell's odd
     site and the next cell's even site. The full circuit has depth two and
-    is $u^{\otimes N}$. Retain exactly the gates whose nominal pair lies in
-    a chosen set $S$ of cells. If $a\in S$ is the unique entry boundary,
+    applies $u$ at every physical site. Retain exactly the gates whose
+    nominal pair lies in a chosen set $S$ of cells. If $a\in S$ is the unique entry boundary,
     meaning that the predecessor of $k\in S$ is in $S$ exactly when $k\ne a$,
     the retained circuit is
     \begin{align}
@@ -257,7 +258,7 @@
     property whenever $0<a$ or $b+1<N$, so that an exterior cell remains.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     The two matchings partition the sites, so gates in each layer have
     disjoint nominal pairs. Multiplication of their one-site factors gives
     $w^{\dagger}wu=u$ on every even site and $u$ on every odd site.
