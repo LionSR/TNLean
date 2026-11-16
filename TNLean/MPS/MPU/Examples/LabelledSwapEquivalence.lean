@@ -55,13 +55,19 @@ theorem equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff
   unfold EquivalentUnderPhysicalMatrixSymmetry
   refine and_congr (isMPU_ketLeftMul_swap_iff U)
     (and_congr (isMPU_ketLeftMul_swap_iff V) ?_)
-  simpa (config := { contextual := true }) only [PhysicalSymmetryKind.withMatrix,
-    ancillaSwapDaggerSymmetry, ancillaSwapMatrix,
-    FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix_eq,
-    FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_block,
-    physicalIdMatrix_one, MPSTensor.blockKron_one,
-    FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_one] using
-    exists_strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff U V
+  refine Iff.trans ?_
+    (Iff.trans (exists_strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff U V) ?_)
+  · exact exists_congr fun x => and_congr_right fun _ =>
+      exists_congr fun k => and_congr_right fun hk => by
+        simp only [PhysicalSymmetryKind.withMatrix, ancillaSwapDaggerSymmetry,
+          FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix_eq, ancillaSwapMatrix]
+        rw [FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_block _ hk]
+  · exact exists_congr fun x => and_congr_right fun _ =>
+      exists_congr fun k => and_congr_right fun hk => by
+        simp only [PhysicalSymmetryKind.withMatrix]
+        rw [FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_block _ hk,
+          physicalIdMatrix_one, MPSTensor.blockKron_one,
+          FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_one]
 
 /-- The labelled-spin stabilized swap/transposition comparison is equivalent
 to ordinary transposition of the swap-transformed tensors.
@@ -74,13 +80,19 @@ theorem equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff
   unfold EquivalentUnderPhysicalMatrixSymmetry
   refine and_congr (isMPU_ketLeftMul_swap_iff U)
     (and_congr (isMPU_ketLeftMul_swap_iff V) ?_)
-  simpa (config := { contextual := true }) only [PhysicalSymmetryKind.withMatrix,
-    ancillaSwapTransposeSymmetry, ancillaSwapMatrix,
-    FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix_eq,
-    FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_block,
-    physicalIdMatrix_one, MPSTensor.blockKron_one,
-    FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_one] using
-    exists_strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff U V
+  refine Iff.trans ?_
+    (Iff.trans (exists_strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff U V) ?_)
+  · exact exists_congr fun x => and_congr_right fun _ =>
+      exists_congr fun k => and_congr_right fun hk => by
+        simp only [PhysicalSymmetryKind.withMatrix, ancillaSwapTransposeSymmetry,
+          FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix_eq, ancillaSwapMatrix]
+        rw [FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_block _ hk]
+  · exact exists_congr fun x => and_congr_right fun _ =>
+      exists_congr fun k => and_congr_right fun hk => by
+        simp only [PhysicalSymmetryKind.withMatrix]
+        rw [FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_block _ hk,
+          physicalIdMatrix_one, MPSTensor.blockKron_one,
+          FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_one]
 
 /-- Swap multiplication preserves the labelled-spin stabilized conjugation
 comparison. This concerns the same full conjugation action on each enlarged
@@ -94,9 +106,14 @@ theorem equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff
   unfold EquivalentUnderPhysicalMatrixSymmetry
   refine and_congr (isMPU_ketLeftMul_swap_iff U)
     (and_congr (isMPU_ketLeftMul_swap_iff V) ?_)
-  simpa (config := { contextual := true }) only [PhysicalSymmetryKind.withMatrix,
-    conjugationSymmetry_block] using
-    exists_strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff U V
+  refine Iff.trans ?_
+    (Iff.trans (exists_strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff U V) ?_)
+  · exact exists_congr fun x => and_congr_right fun _ =>
+      exists_congr fun k => and_congr_right fun hk => by
+        simp only [PhysicalSymmetryKind.withMatrix, conjugationSymmetry_block hk]
+  · exact exists_congr fun x => and_congr_right fun _ =>
+      exists_congr fun k => and_congr_right fun hk => by
+        simp only [PhysicalSymmetryKind.withMatrix, conjugationSymmetry_block hk]
 
 /-- Virtual dimensions of the three source examples, indexed in their
 printed order. Source: arXiv:1703.09188, equation `threeMPU`, lines 2011--2022. -/
