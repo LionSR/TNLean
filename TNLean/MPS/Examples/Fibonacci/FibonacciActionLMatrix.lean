@@ -44,8 +44,7 @@ private theorem fusionActionAnalysis_eq (a b x : Fin 2)
   obtain ⟨⟨ab, xx⟩, rfl⟩ := finProdFinEquiv.surjective v
   obtain ⟨⟨xa, xb⟩, rfl⟩ := finProdFinEquiv.surjective ab
   rw [fusionThenActionAnalysis_apply]
-  simp [fusionActionAnalysisGolden, fusionAnalysis, fusionSynthesis,
-    actionAnalysis, actionSynthesis, map_sum, map_mul]
+  simp [fusionActionAnalysisGolden, fusionAnalysis, actionAnalysis, map_sum, map_mul]
 
 /-- The fusion-then-action synthesis contraction over the golden integers. -/
 def fusionActionSynthesisGolden (a b x : Fin 2)
@@ -67,8 +66,7 @@ private theorem fusionActionSynthesis_eq (a b x : Fin 2)
   obtain ⟨⟨ab, xx⟩, rfl⟩ := finProdFinEquiv.surjective u
   obtain ⟨⟨xa, xb⟩, rfl⟩ := finProdFinEquiv.surjective ab
   rw [fusionThenActionSynthesis_apply]
-  simp [fusionActionSynthesisGolden, fusionAnalysis, fusionSynthesis,
-    actionAnalysis, actionSynthesis, map_sum, map_mul]
+  simp [fusionActionSynthesisGolden, fusionSynthesis, actionSynthesis, map_sum, map_mul]
 
 /-- The sequential analysis contraction over the golden integers. -/
 def sequentialAnalysisGolden (a b x : Fin 2)
@@ -90,8 +88,7 @@ private theorem sequentialAnalysis_eq (a b x : Fin 2)
   obtain ⟨⟨ab, xx⟩, rfl⟩ := finProdFinEquiv.surjective v
   obtain ⟨⟨xa, xb⟩, rfl⟩ := finProdFinEquiv.surjective ab
   rw [sequentialActionAnalysis_apply]
-  simp [sequentialAnalysisGolden, fusionAnalysis, fusionSynthesis,
-    actionAnalysis, actionSynthesis, map_sum, map_mul]
+  simp [sequentialAnalysisGolden, actionAnalysis, map_sum, map_mul]
 
 /-- The sequential synthesis contraction over the golden integers. -/
 def sequentialSynthesisGolden (a b x : Fin 2)
@@ -113,8 +110,7 @@ private theorem sequentialSynthesis_eq (a b x : Fin 2)
   obtain ⟨⟨ab, xx⟩, rfl⟩ := finProdFinEquiv.surjective u
   obtain ⟨⟨xa, xb⟩, rfl⟩ := finProdFinEquiv.surjective ab
   rw [sequentialActionSynthesis_apply]
-  simp [sequentialSynthesisGolden, fusionAnalysis, fusionSynthesis,
-    actionAnalysis, actionSynthesis, map_sum, map_mul]
+  simp [sequentialSynthesisGolden, actionSynthesis, map_sum, map_mul]
 
 set_option maxRecDepth 8000 in
 private theorem action_crossGolden : ∀ (a b x y : Fin 2)
@@ -124,7 +120,8 @@ private theorem action_crossGolden : ∀ (a b x y : Fin 2)
         fusionActionSynthesisGolden a b x (fusionActionPathEquiv a b x ⟨y, q⟩) =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
-  decide +kernel
+  intro a b x y
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem action_inverseCrossGolden : ∀ (a b x y : Fin 2)
@@ -134,7 +131,8 @@ private theorem action_inverseCrossGolden : ∀ (a b x y : Fin 2)
         sequentialSynthesisGolden a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
-  decide +kernel
+  intro a b x y
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
 
 private theorem inv_dim_trace {D : ℕ} (hD : 0 < D) (z : ℂ) :
     (D : ℂ)⁻¹ * Matrix.trace (z • (1 : Matrix (Fin D) (Fin D) ℂ)) = z := by
@@ -199,7 +197,8 @@ set_option maxRecDepth 8000 in
 private theorem printedL_inverseGolden : ∀ a b x y : Fin 2,
     printedLGolden a b x y * printedInverseLGolden a b x y = 1 ∧
       printedInverseLGolden a b x y * printedLGolden a b x y = 1 := by
-  decide +kernel
+  intro a b x y
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
 
 /-- The actual double-action comparison matrices are inverse in every sector,
 including the empty multiplicity spaces. Source: GLM23, `1Fsymbol`. -/
@@ -247,7 +246,8 @@ private theorem fusion_crossGolden : ∀ (a b x y : Fin 2)
     fusionLeftAnalysisGolden a b x y q * fusionRightSynthesisGolden a b x y p =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibBlockDim y)) (Fin (fibBlockDim y)) GoldenInt) := by
-  decide +kernel
+  intro a b x y
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
 
 /-- The same fusion gauge gives the printed Fibonacci F symbols, using
 `fusionFMatrix`'s left-analysis/right-synthesis orientation. -/

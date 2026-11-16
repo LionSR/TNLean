@@ -28,4 +28,3 @@ import TNLean.MPS.Examples.Fibonacci.FibonacciStringNetUnit
 import TNLean.MPS.Examples.Fibonacci.FibonacciSymmetricFamilyDecomposition
 import TNLean.MPS.Examples.Fibonacci.FibonacciUnit
 import TNLean.MPS.Examples.Fibonacci.FibonacciVacuum
-

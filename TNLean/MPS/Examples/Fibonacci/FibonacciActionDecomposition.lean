@@ -114,25 +114,29 @@ set_option maxRecDepth 8000 in
 private theorem fusion_retractGolden : ∀ (a b : Fin 2)
     (q : (c : Fin 2) × Fin (fibNim a b c)),
     fusionAnalysisGolden a b q.1 q.2 * fusionSynthesisGolden a b q.1 q.2 = 1 := by
-  decide +kernel
+  intro a b
+  fin_cases a <;> fin_cases b <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem fusion_orthogonalGolden : ∀ (a b : Fin 2)
     (q t : (c : Fin 2) × Fin (fibNim a b c)), q ≠ t →
     fusionAnalysisGolden a b q.1 q.2 * fusionSynthesisGolden a b t.1 t.2 = 0 := by
-  decide +kernel
+  intro a b
+  fin_cases a <;> fin_cases b <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem action_retractGolden : ∀ (a x : Fin 2)
     (q : (y : Fin 2) × Fin (fibNim a x y)),
     actionAnalysisGolden a x q.1 q.2 * actionSynthesisGolden a x q.1 q.2 = 1 := by
-  decide +kernel
+  intro a x
+  fin_cases a <;> fin_cases x <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem action_orthogonalGolden : ∀ (a x : Fin 2)
     (q t : (y : Fin 2) × Fin (fibNim a x y)), q ≠ t →
     actionAnalysisGolden a x q.1 q.2 * actionSynthesisGolden a x t.1 t.2 = 0 := by
-  decide +kernel
+  intro a x
+  fin_cases a <;> fin_cases x <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem fusion_letterGolden : ∀ (a b i k : Fin 2),
@@ -170,8 +174,8 @@ theorem fusion_isBiorthogonal (a b : Fin 2) :
     rfl
   rw [hB, hA]
   exact isBiorthogonalDecomposition_complexOfRing goldenToComplex _ _
-    (fun q ↦ fusionAnalysisGolden a b q.1 q.2)
-    (fun q ↦ fusionSynthesisGolden a b q.1 q.2)
+    (fun q : (c : Fin 2) × Fin (fibNim a b c) ↦ fusionAnalysisGolden a b q.1 q.2)
+    (fun q : (c : Fin 2) × Fin (fibNim a b c) ↦ fusionSynthesisGolden a b q.1 q.2)
     (fusion_retractGolden a b) (fusion_orthogonalGolden a b)
     (fun p ↦ fusion_letterGolden a b p.divNat p.modNat)
 
@@ -193,11 +197,11 @@ theorem action_isBiorthogonal (a x : Fin 2) :
     exact fibNimTargets_eq _ _
   rw [hB, hA]
   exact isBiorthogonalDecomposition_complexOfRing goldenToComplex _ _
-    (fun q ↦ actionAnalysisGolden a x q.1 q.2)
-    (fun q ↦ actionSynthesisGolden a x q.1 q.2)
+    (fun q : (y : Fin 2) × Fin (fibNim a x y) ↦ actionAnalysisGolden a x q.1 q.2)
+    (fun q : (y : Fin 2) × Fin (fibNim a x y) ↦ actionSynthesisGolden a x q.1 q.2)
     (action_retractGolden a x) (action_orthogonalGolden a x) (action_letterGolden a x)
 
-/-- Both displayed state blocks are normal, with positive bond dimensions. -/
+/-- Both displayed state blocks are normal. -/
 theorem states_isNormal (x : Fin 2) : Kraus.IsNormal (fibNimTargets x) := by
   fin_cases x
   · exact fibAllTau_isNormal
