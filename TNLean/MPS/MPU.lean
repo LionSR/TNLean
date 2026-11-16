@@ -49,6 +49,7 @@ import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationMPSClass
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationStandardForms
+import TNLean.MPS.MPU.ConjugationStrictEquivalence
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
 import TNLean.MPS.MPU.ContinuousStandardFormPath
