@@ -212,9 +212,9 @@ For the MPU index of arXiv:1703.09188:
   Entries whose source-labelled counterparts are proved under the canonical
   convention above (the Index Theorem, source-rank constancy, the local
   time-reversal and transposition criteria, and the time-reversal sign
-  results) are superseded and deleted; the conjugation, blocking-parity,
-  equivalence-necessity, MPS-class, continuous-standard-form, and example
-  entries remain restricted.
+  results) are superseded and deleted, as is the continuous-standard-form entry,
+  superseded by Corollary `coruvSF`; the conjugation, blocking-parity,
+  equivalence-necessity, MPS-class, and example entries remain restricted.
 - `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
   to the unblocked all-length converse printed in the Fundamental Theorem of
   MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
@@ -227,6 +227,13 @@ For the MPU index of arXiv:1703.09188:
   Theorem: a blocked tensor is joined through MPU tensors to the tensor built
   from its own standard-form gates, by a path of virtual gauges to canonical
   form II and an interpolation of half factors that keeps the gates fixed.
+- `mpu_symmetry_path_criterion_blocking.tex` (scope restriction, open)
+  records that Lemma `lem:equivalent-symmetry` uses the same `U^(N)` in both
+  directions, while its proof through Corollary `coruvSF` yields gates only
+  after blocking `2k₀` sites. The reverse direction is formalized for every
+  blocking length, including the standard-form chain; the forward direction
+  is formalized after the extra blocking, and the unblocked forward claim is
+  open.
 - `mpu_conjugation_symplectic_uniqueness_transpose.tex` (local correction,
   resolved) records that the Case II uniqueness clause of Proposition
   `corconj` prints `v'' = v' (S_rᵀ ⊗ S_ℓᵀ)`, while the Fundamental Theorem gives

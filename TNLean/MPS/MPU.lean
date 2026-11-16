@@ -249,6 +249,7 @@ import TNLean.MPS.MPU.SuppliedTwoBlockStandardForm
 import TNLean.MPS.MPU.SuppliedWindowCoordinates
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
+import TNLean.MPS.MPU.SymmetryPathCriterion
 import TNLean.MPS.MPU.SymmetryPathTransport
 import TNLean.MPS.MPU.TensorProduct
 import TNLean.MPS.MPU.TensorProductCanonicalForm

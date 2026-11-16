@@ -83,6 +83,7 @@ import TNLean.MPS.MPDO.BoundaryActionCrossFusionEntries
 import TNLean.MPS.MPDO.BoundaryActionCrossTransport
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
 import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
+import TNLean.MPS.MPDO.BoundaryActionLMatrixPath
 import TNLean.MPS.MPDO.BoundaryActionTreeEntries
 import TNLean.MPS.MPDO.BoundaryActionTrees
 import TNLean.MPS.MPDO.BoundaryAdjointClosed
