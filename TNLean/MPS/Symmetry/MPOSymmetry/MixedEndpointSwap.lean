@@ -90,7 +90,8 @@ theorem mixedEndpointBase_swap
   obtain ⟨j, rfl⟩ := finSumFinEquiv.surjective j
   cases a <;> cases b <;> cases i <;> cases j <;>
     simp [mixedEndpointBase, mixedEndpointLetter, mixedEndpointPhysicalSwap,
-      mixedEndpointBondSwap, Matrix.fromBlocks, Matrix.single_apply, Fin.castAdd_ne_natAdd, Fin.natAdd_ne_castAdd]
+      mixedEndpointBondSwap, Matrix.fromBlocks, Matrix.single_apply, Fin.castAdd_ne_natAdd,
+      Fin.natAdd_ne_castAdd]
 
 /-- Exchanging the virtual summands reflects the interpolation parameter.
 This holds for every real parameter, including either endpoint.
