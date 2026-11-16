@@ -1310,6 +1310,53 @@
     carried through the standard-form data.
 \end{proof}
 
+\begin{lemma}[Fundamental theorem for supplied standard forms]
+    \label{thm:mpu_fundamental_gates_supplied}
+    \lean{MPOTensor.exists_gate_gauges_of_twoSiteCircuit_eq,
+        MPOTensor.TwoSiteStandardFormData.exists_gate_gauges_of_mpo_eq,
+        MPOTensor.TwoSiteStandardFormData.mpo_eq_iff_exists_gate_gauges}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form,
+        thm:mpu_supplied_two_site_periodic_circuit,
+        thm:mpu_fundamental_gates_sufficiency}
+    Let $W$ and $W'$ be two-site tensors, of arbitrary bond dimensions, in
+    supplied standard form with unitary gates $(u,v)$ and $(u',v')$ of the
+    same shape. Then $W$ and $W'$ generate the same operators on every ring of
+    $N\geq2$ two-site blocks if and only if there are unitaries $x$ and $y$
+    with
+    \begin{align}
+        u' & =(x\otimes y)u, & v' & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    Equality on the rings of two and of three blocks already suffices; on a
+    ring of two blocks alone the gate pairs $(u,v)$ and $(u,-v)$ agree. No
+    canonical form or simplicity is assumed. This is the gate part of
+    \cite[Theorem~\textup{FundamentalMPU}]{Cirac2017MPU} for any two
+    standard forms, with lengths counted in two-site blocks as in
+    \cite{gap:mpu_standard_form_parity_gap}.
+    % Source lines: paper_v2.tex 640--652.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        thm:mpu_fundamental_gates_sufficiency}
+    Both operators are two-layer circuits. Put $M=uu'^\dagger$, a unitary on
+    $\mathbb C^\ell\otimes\mathbb C^r$. On a ring of two blocks the circuit
+    identity gives
+    \begin{align}
+        M_{(a,b),(a',b')}M_{(c,e),(c',e')}
+         & =K_{(b,c),(b',c')}K_{(e,a),(e',a')},
+    \end{align}
+    with $K=v^\dagger v'$. Fixing an index with $M_{(c,e),(c',e')}\neq0$
+    shows $M=X\otimes Y$, and unitarity of $M$ rescales $X^\dagger$ and
+    $Y^\dagger$ to unitaries $x$ and $y$ with $x\otimes y=M^\dagger$, so
+    $u'=(x\otimes y)u$. The circuit identity on a ring of $N$ blocks then
+    gives the same shifted layer for $v'$ and for $w=v(y^\dagger\otimes
+        x^\dagger)$. Evaluated at constant configurations this gives
+    $v'_{pq}{}^N=w_{pq}{}^N$ for $N=2,3$, hence $v'_{pq}=w_{pq}$ for an
+    entry with $w_{pq}\neq0$, and the ring of two blocks at mixed
+    configurations then gives $v'=w$. The converse is
+    Lemma~\ref{thm:mpu_fundamental_gates_sufficiency}.
+\end{proof}
+
 \begin{lemma}[The gate statements hold for every decomposition]
     \label{thm:mpu_gate_statements_any_svd}
     \lean{MPOTensor.TwoSiteStandardFormData.ofGateGauges,

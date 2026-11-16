@@ -311,20 +311,36 @@ private theorem remove_source_rank_reindex_right
       er.symm er.symm el.symm el.symm yᴴ xᴴ).symm
   rw [hv, hk]
 
-/-- Global conjugation invariance produces the literal local equations for
-the actual supplied source factors of a canonical-form-II tensor. The gates
-are not chosen anew, and no local gauge-existence premise is used.
-Source: arXiv:1703.09188, `prop1conj`, lines 1030–1033.
+/-- The conjugated supplied gate is unitary whenever the supplied gate is.
+Source: arXiv:1703.09188, `prop1conj`, lines 1030–1033. -/
+theorem SourceFactors.sourceU_mapStar_isUnitaryBetween
+    {U : MPOTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
+    (huS : (SourceFactors.sourceU U S).IsUnitaryBetween) :
+    (SourceFactors.sourceU (MPOTensor.mapStar U) S.mapStar).IsUnitaryBetween := by
+  rw [S.sourceU_mapStar]
+  exact huS.map_star.reindex _ (Equiv.prodCongr (finCongr (source_ranks_mapStar U).2.symm)
+    (finCongr (source_ranks_mapStar U).1.symm)) (Equiv.refl _)
 
-**Scope restriction (reduced canonical presentation):** This theorem and
-`exists_local_conjugation_gauges_common_transpose_case` concern the supplied
-reduced canonical presentation, not an arbitrary nonminimal ambient tensor;
-see `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
-    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
-    (huS : (SourceFactors.sourceU U S).IsUnitaryBetween)
-    (hconj : ∀ N : ℕ, 1 < N → mpo U N = (mpo U N).map (starRingEnd ℂ)) :
+/-- Unitary gate gauges between the supplied source factors of `U` and their
+entrywise conjugates, in the form given by the Fundamental Theorem, are the
+literal local conjugation equations of `prop1conj` after the canonical rank
+identifications. Source: arXiv:1703.09188, `prop1conj`, lines 1030–1033. -/
+theorem SourceFactors.exists_local_conjugation_gauges_of_gate_gauges
+    {U : MPOTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
+    (hr : r[MPOTensor.mapStar U] = r[U]) (hl : ℓ[MPOTensor.mapStar U] = ℓ[U])
+    (x : Matrix.unitaryGroup (Fin ℓ[MPOTensor.mapStar U]) ℂ)
+    (y : Matrix.unitaryGroup (Fin r[MPOTensor.mapStar U]) ℂ)
+    (hu : SourceFactors.sourceU (MPOTensor.mapStar U) S.mapStar =
+      ((x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ) ⊗ₖ
+        (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)) *
+        Matrix.reindex (Equiv.prodCongr (finCongr hl.symm) (finCongr hr.symm))
+          (Equiv.refl _) (SourceFactors.sourceU U S))
+    (hv : SourceFactors.sourceV (MPOTensor.mapStar U) S.mapStar =
+      Matrix.reindex (Equiv.refl _)
+          (Equiv.prodCongr (finCongr hr.symm) (finCongr hl.symm))
+          (SourceFactors.sourceV U S) *
+        (star (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ) ⊗ₖ
+          star (x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ))) :
     ∃ (x : Matrix.unitaryGroup (Fin ℓ[U]) ℂ) (y : Matrix.unitaryGroup (Fin r[U]) ℂ),
       (SourceFactors.sourceU U S).map (starRingEnd ℂ) =
         ((x : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ) ⊗ₖ (y : Matrix (Fin r[U]) (Fin r[U]) ℂ)) *
@@ -336,12 +352,6 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
   classical
   let er := finCongr (source_ranks_mapStar U).1.symm
   let el := finCongr (source_ranks_mapStar U).2.symm
-  have huT : (SourceFactors.sourceU (MPOTensor.mapStar U) S.mapStar).IsUnitaryBetween := by
-    rw [S.sourceU_mapStar]
-    exact huS.map_star.reindex _ (Equiv.prodCongr el er) (Equiv.refl _)
-  obtain ⟨hr, hl, x, y, hu, hv⟩ :=
-    hU.exists_supplied_source_gate_unitary_gauges_of_mpo_eq hU.mapStar S S.mapStar huS huT
-      (by intro N hN; rw [mpo_map_star]; exact hconj N hN)
   let x' : Matrix.unitaryGroup (Fin ℓ[U]) ℂ :=
     ⟨Matrix.reindex el.symm el.symm x, Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
   let y' : Matrix.unitaryGroup (Fin r[U]) ℂ :=
@@ -396,6 +406,34 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
       exact E.symm_apply_apply _
     rw [hcancel] at h
     simpa only [x', y', Matrix.star_eq_conjTranspose] using h
+
+/-- Global conjugation invariance produces the literal local equations for
+the actual supplied source factors of a canonical-form-II tensor. The gates
+are not chosen anew, and no local gauge-existence premise is used.
+Source: arXiv:1703.09188, `prop1conj`, lines 1030–1033.
+
+**Scope restriction (reduced canonical presentation):** This theorem and
+`exists_local_conjugation_gauges_common_transpose_case` concern the supplied
+reduced canonical presentation, not an arbitrary nonminimal ambient tensor;
+see `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
+theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
+    {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
+    (huS : (SourceFactors.sourceU U S).IsUnitaryBetween)
+    (hconj : ∀ N : ℕ, 1 < N → mpo U N = (mpo U N).map (starRingEnd ℂ)) :
+    ∃ (x : Matrix.unitaryGroup (Fin ℓ[U]) ℂ) (y : Matrix.unitaryGroup (Fin r[U]) ℂ),
+      (SourceFactors.sourceU U S).map (starRingEnd ℂ) =
+        ((x : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ) ⊗ₖ (y : Matrix (Fin r[U]) (Fin r[U]) ℂ)) *
+          SourceFactors.sourceU U S ∧
+      (SourceFactors.sourceV U S).map (starRingEnd ℂ) =
+        SourceFactors.sourceV U S *
+          (star (y : Matrix (Fin r[U]) (Fin r[U]) ℂ) ⊗ₖ
+            star (x : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ)) := by
+  obtain ⟨hr, hl, x, y, hu, hv⟩ :=
+    hU.exists_supplied_source_gate_unitary_gauges_of_mpo_eq hU.mapStar S S.mapStar huS
+      (S.sourceU_mapStar_isUnitaryBetween huS)
+      (by intro N hN; rw [mpo_map_star]; exact hconj N hN)
+  exact S.exists_local_conjugation_gauges_of_gate_gauges hr hl x y hu hv
 
 /-- The forward local conjugation equations have one common symmetric or
 skew-symmetric case for the actual supplied source gates. This completes
