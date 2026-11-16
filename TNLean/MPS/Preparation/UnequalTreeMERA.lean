@@ -30,6 +30,7 @@ Supplemental Material, proof of Theorem 1, with its possibly larger last block.
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

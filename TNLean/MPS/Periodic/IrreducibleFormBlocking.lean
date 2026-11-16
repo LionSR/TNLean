@@ -26,6 +26,7 @@ equality. Documented in `docs/paper-gaps/dccsp17_periodic_overlap_route_alignmen
 -/
 
 open scoped BigOperators Matrix
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

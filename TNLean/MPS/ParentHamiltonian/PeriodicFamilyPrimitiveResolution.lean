@@ -28,6 +28,7 @@ lines 2442--2531, and Section 6, lines 2649--2675.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D : ℕ}
 

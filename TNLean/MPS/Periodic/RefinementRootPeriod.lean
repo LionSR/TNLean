@@ -17,6 +17,7 @@ assert existence of a root with a prescribed number of Kraus operators.
 -/
 
 open scoped Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

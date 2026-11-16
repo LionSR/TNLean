@@ -129,7 +129,7 @@ theorem IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor
       (MPOTensor.blockTensor U k)
       (MPOTensor.blockTensor V k)
       (MPOTensor.blockTensor (MPOTensor.blockTensor R k) 4)
-      (MPSTensor.blockPhysDim d k ^ 2)
+      (Kraus.blockPhysDim d k ^ 2)
       (pow_pos (NeZero.pos _) _) hu.1 hu.2 hv.1 hv.2 hr.1 hr.2 hRanks.1 hRanks.2
   simpa only [
     (hR.blockTensor k hcommon.1).sourceIndexValue_eq_index

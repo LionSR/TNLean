@@ -34,6 +34,7 @@ theorem. Recorded, with the plan for a pointwise converse, in
 -/
 
 open scoped Matrix
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

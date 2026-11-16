@@ -21,6 +21,7 @@ arXiv:1708.00029, Theorem 4.1, lines 717--731.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

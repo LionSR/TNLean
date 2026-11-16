@@ -87,8 +87,8 @@ theorem mpo_conjugation_mem_supportedOperators_singleton
     {d D ℓ r N : ℕ} [NeZero N] {U : MPOTensor d D} (hU : U.IsMPU)
     (k : ℕ) (hk : 0 < k) (hN : 3 * (2 * k) ≤ N)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (x : Fin N) {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}

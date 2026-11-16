@@ -43,6 +43,7 @@ is in `AKLTPhysicalStringOrder`.
 
 open scoped Matrix BigOperators
 open Matrix Finset MPSTensor
+open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 noncomputable section
 

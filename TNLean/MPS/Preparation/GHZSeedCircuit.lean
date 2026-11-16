@@ -25,6 +25,7 @@ unreported ancillary state or trace-out.
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 variable {d : ℕ} [NeZero d]

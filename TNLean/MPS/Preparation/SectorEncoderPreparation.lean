@@ -22,6 +22,7 @@ seed is only an intermediate isometry; no product-state preparation cost is assi
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

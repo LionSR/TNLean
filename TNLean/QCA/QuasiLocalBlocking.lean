@@ -42,7 +42,7 @@ original quasi-local observable algebras.
 This is the quasi-local completion of the site grouping used in
 Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 noncomputable def quasiLocalBlocking (d L : ℕ) [NeZero d] [NeZero L] :
-    QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) ≃⋆ₐ[ℂ] QuasiLocalAlgebra d :=
+    QuasiLocalAlgebra (Kraus.blockPhysDim d L) ≃⋆ₐ[ℂ] QuasiLocalAlgebra d :=
   UniformSpace.Completion.mapStarAlgEquiv
     (algebraicLocalBlocking d L)
     (algebraicLocalBlocking_isometry d L).continuous
@@ -50,7 +50,7 @@ noncomputable def quasiLocalBlocking (d L : ℕ) [NeZero d] [NeZero L] :
 
 /-- Quasi-local blocking acts by the completion map of algebraic-local blocking. -/
 lemma quasiLocalBlocking_apply (d L : ℕ) [NeZero d] [NeZero L]
-    (A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : QuasiLocalAlgebra (Kraus.blockPhysDim d L)) :
     quasiLocalBlocking d L A =
       UniformSpace.Completion.map (algebraicLocalBlocking d L) A :=
   rfl
@@ -58,7 +58,7 @@ lemma quasiLocalBlocking_apply (d L : ℕ) [NeZero d] [NeZero L]
 /-- Quasi-local blocking agrees with algebraic-local blocking on the dense algebraic subalgebra. -/
 @[simp]
 lemma quasiLocalBlocking_algebraicToQuasiLocal (d L : ℕ) [NeZero d] [NeZero L]
-    (A : AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : AlgebraicLocalAlgebra (Kraus.blockPhysDim d L)) :
     quasiLocalBlocking d L (algebraicToQuasiLocal _ A) =
       algebraicToQuasiLocal d (algebraicLocalBlocking d L A) :=
   UniformSpace.Completion.mapStarAlgEquiv_coe _ _ _ A
@@ -78,7 +78,7 @@ lemma quasiLocalBlocking_symm_algebraicToQuasiLocal (d L : ℕ) [NeZero d] [NeZe
 /-- Quasi-local blocking sends a finite blocked representative to its finite blocking on the
 expanded original region. -/
 lemma quasiLocalBlocking_quasiLocalObservable (d L : ℕ) [NeZero d] [NeZero L]
-    (Λ : Finset ℤ) (A : LocalAlgebra (MPSTensor.blockPhysDim d L) Λ) :
+    (Λ : Finset ℤ) (A : LocalAlgebra (Kraus.blockPhysDim d L) Λ) :
     quasiLocalBlocking d L (quasiLocalObservable _ Λ A) =
       quasiLocalObservable d (expandedRegion L Λ) (localBlocking d L Λ A) := by
   simp only [quasiLocalObservable, StarAlgHom.comp_apply,
@@ -110,7 +110,7 @@ lemma quasiLocalBlocking_symm_quasiLocalObservable_expandedRegion
 /-- Quasi-local blocking preserves the operator norm. -/
 @[simp]
 lemma norm_quasiLocalBlocking (d L : ℕ) [NeZero d] [NeZero L]
-    (A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : QuasiLocalAlgebra (Kraus.blockPhysDim d L)) :
     ‖quasiLocalBlocking d L A‖ = ‖A‖ :=
   StarAlgEquiv.norm_map (quasiLocalBlocking d L) A
 
@@ -123,7 +123,7 @@ lemma quasiLocalBlocking_isometry (d L : ℕ) [NeZero d] [NeZero L] :
 original region. -/
 lemma quasiLocalBlocking_supportedIn
     (d L : ℕ) [NeZero d] [NeZero L]
-    {A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L)} {Λ : Finset ℤ}
+    {A : QuasiLocalAlgebra (Kraus.blockPhysDim d L)} {Λ : Finset ℤ}
     (hA : QuasiLocalSupportedIn A Λ) :
     QuasiLocalSupportedIn (quasiLocalBlocking d L A) (expandedRegion L Λ) := by
   obtain ⟨a, rfl⟩ := hA
@@ -142,7 +142,7 @@ lemma quasiLocalBlocking_symm_supportedIn
 the expanded original region. -/
 lemma quasiLocalBlocking_supportedIn_expandedRegion_iff
     (d L : ℕ) [NeZero d] [NeZero L]
-    {A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L)} {Λ : Finset ℤ} :
+    {A : QuasiLocalAlgebra (Kraus.blockPhysDim d L)} {Λ : Finset ℤ} :
     QuasiLocalSupportedIn (quasiLocalBlocking d L A) (expandedRegion L Λ) ↔
       QuasiLocalSupportedIn A Λ := by
   constructor

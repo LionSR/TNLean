@@ -140,8 +140,8 @@ theorem IsMPU.isMPUCanonicalForm_blockTensor [NeZero d] [NeZero D]
     {U : MPOTensor d D} (hU : IsMPU U)
     (hcf : MPSTensor.IsMPUCanonicalForm U.toMPSTensor) {k : ℕ} (hk : 0 < k) :
     MPSTensor.IsMPUCanonicalForm (MPOTensor.blockTensor U k).toMPSTensor := by
-  have : NeZero (MPSTensor.blockPhysDim d k) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim d k) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero k (NeZero.ne d)⟩
   apply isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening
   rw [normalizedFlattening_blockTensor]

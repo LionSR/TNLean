@@ -27,6 +27,7 @@ blocking; normality alone is not identified with one-site injectivity.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Topology
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

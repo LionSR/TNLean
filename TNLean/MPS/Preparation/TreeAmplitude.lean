@@ -31,6 +31,8 @@ layers grouped into pairs in their turn. The amplitudes of a layer of placed mat
 
 open Matrix MPSTensor
 open scoped BigOperators
+open Kraus (blockPhysDim decodeBlock decodeBlockEquiv decodeBlockEquiv_apply
+  decodeBlock_decodeBlockEquiv_symm)
 
 namespace MPSTensor
 

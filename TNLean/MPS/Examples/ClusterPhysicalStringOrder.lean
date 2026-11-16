@@ -28,6 +28,7 @@ This restriction is recorded in
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock)
 
 noncomputable section
 

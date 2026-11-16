@@ -82,6 +82,7 @@ the approximating state of eq. (S7) even when every multiplicity is one. Documen
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

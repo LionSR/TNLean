@@ -19,6 +19,8 @@ Source context: arXiv:1010.3732, Appendix C, lines 2653–2717, and
 arXiv:1606.00608, lines 318–344.
 -/
 
+open Kraus (blockPhysDim blockTensor)
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

@@ -34,6 +34,7 @@ recorded in docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 namespace MPSTensor
 variable {d D E L : ℕ}
 

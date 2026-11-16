@@ -100,6 +100,7 @@ positive-length word with nonzero trace within that range.
 
 open scoped Matrix ComplexOrder BigOperators
 open Matrix MPSTensor
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

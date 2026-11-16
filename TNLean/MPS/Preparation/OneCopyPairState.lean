@@ -78,6 +78,7 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

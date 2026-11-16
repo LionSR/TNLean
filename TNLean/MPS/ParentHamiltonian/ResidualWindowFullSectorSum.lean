@@ -29,6 +29,7 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D L : ℕ}
 

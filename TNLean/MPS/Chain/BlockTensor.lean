@@ -12,7 +12,7 @@ import TNLean.MPS.Core.Blocking
 A chain of `n` site-dependent tensors `A₀, …, A_{n-1}` with a common bond dimension `D` blocks
 into one tensor of physical dimension `d^n`: its matrix at the word `σ` is the ordered product
 `A₀^{σ₀} ⋯ A_{n-1}^{σ_{n-1}}`. For a constant chain this is the blocked tensor
-`MPSTensor.blockTensor A n`.
+`Kraus.blockTensor A n`.
 
 The inhomogeneous matrix product states of arXiv:2307.01696, paragraph "Inhomogeneous
 short-range correlated MPS", have "bond dimension at most `D`" varying along the ring; padding
@@ -22,7 +22,7 @@ with the common bond dimension `D` and the same state, to which the blocking her
 ## Main declarations
 
 * `MPSChainTensor.blockTensor` — the blocked tensor of a site-dependent chain.
-* `MPSChainTensor.blockTensor_const` — for a constant chain it is `MPSTensor.blockTensor`.
+* `MPSChainTensor.blockTensor_const` — for a constant chain it is `Kraus.blockTensor`.
 * `MPSChainTensor.eval_eq_prod_ofFn` — the ordered product along a chain as a list product.
 
 ## References
@@ -56,21 +56,21 @@ theorem eval_const (A : MPSTensor d D) (σ : Fin n → Fin d) :
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": the tensor obtained
 "after blocking `q`" sites of a matrix product state that is not translation invariant. -/
 noncomputable def blockTensor (A : MPSChainTensor d D n) :
-    MPSTensor (MPSTensor.blockPhysDim d n) D :=
-  fun t => eval A (MPSTensor.decodeBlockEquiv d n t)
+    MPSTensor (Kraus.blockPhysDim d n) D :=
+  fun t => eval A (Kraus.decodeBlockEquiv d n t)
 
 @[simp] theorem blockTensor_decodeBlockEquiv_symm (A : MPSChainTensor d D n)
     (σ : Fin n → Fin d) :
-    blockTensor A ((MPSTensor.decodeBlockEquiv d n).symm σ) = eval A σ := by
+    blockTensor A ((Kraus.decodeBlockEquiv d n).symm σ) = eval A σ := by
   simp [blockTensor]
 
 /-- The blocked tensor of a constant chain is the blocked tensor of its tensor. -/
 theorem blockTensor_const (A : MPSTensor d D) :
-    blockTensor (fun _ : Fin n => A) = MPSTensor.blockTensor A n := by
+    blockTensor (fun _ : Fin n => A) = Kraus.blockTensor A n := by
   funext t
-  obtain ⟨σ, rfl⟩ := (MPSTensor.decodeBlockEquiv d n).symm.surjective t
+  obtain ⟨σ, rfl⟩ := (Kraus.decodeBlockEquiv d n).symm.surjective t
   rw [blockTensor_decodeBlockEquiv_symm, eval_const]
-  simp only [MPSTensor.blockTensor, MPSTensor.decodeBlockEquiv, Kraus.blockTensor,
+  simp only [Kraus.blockTensor, Kraus.decodeBlockEquiv, Kraus.blockTensor,
     Kraus.wordOfBlock, Kraus.decodeBlock_decodeBlockEquiv_symm]
 
 end MPSChainTensor

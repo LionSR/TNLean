@@ -30,6 +30,7 @@ case with trivial scalar character, as recorded in
 -/
 
 open scoped Matrix TNLean.Algebra.ScalarCohomology
+open Kraus (singleBlockEquiv decodeBlock blockTensor)
 
 namespace MPSTensor
 

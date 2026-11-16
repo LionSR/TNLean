@@ -32,6 +32,7 @@ for matrix product states "with bond dimension at most `D`".
 -/
 
 open scoped BigOperators Matrix
+open Kraus (blockTensor)
 
 /-- A periodic chain of tensors on a ring of `N` sites with **bond dimensions at most `D`**: the
 bond `k`, to the left of site `k`, has dimension `D_k ≤ D`, and site `k` carries the rectangular
@@ -137,7 +138,7 @@ theorem eval_eq_zero_of_support {n : ℕ} (C : MPSChainTensor d D (n + 1)) (b : 
 theorem blockTensor_eq_zero_of_support {q : ℕ} (C : MPSChainTensor d D q) (hq : 0 < q)
     (b : Fin (q + 1) → ℕ)
     (hC : ∀ j i (α β : Fin D), ¬(α.val < b j.castSucc ∧ β.val < b j.succ) → C j i α β = 0)
-    (t : Fin (MPSTensor.blockPhysDim d q)) {α β : Fin D}
+    (t : Fin (Kraus.blockPhysDim d q)) {α β : Fin D}
     (h : ¬(α.val < b 0 ∧ β.val < b (Fin.last q))) :
     blockTensor C t α β = 0 := by
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩

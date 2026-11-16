@@ -83,6 +83,7 @@ Pauli `Z`, and the vector is `|-⟩`. These are the values the trace formula giv
 
 open scoped Matrix BigOperators
 open Matrix Finset
+open Kraus (blockPhysDim blockPhysDim_eq_pow blockTensor)
 
 noncomputable section
 

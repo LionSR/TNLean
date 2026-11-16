@@ -22,6 +22,7 @@ for injective tensors (`gauge_phase_unique`) and for normal tensors
 -/
 
 open scoped Matrix
+open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 

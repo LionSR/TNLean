@@ -16,6 +16,7 @@ Theorem `thm:unclehamiltonian`, equation "eq:uncletensor-2site".
 -/
 
 open scoped Matrix
+open Kraus (blockPhysDim decodeBlock blockTensor)
 
 namespace MPSTensor
 

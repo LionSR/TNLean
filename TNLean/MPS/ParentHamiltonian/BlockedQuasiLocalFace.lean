@@ -37,6 +37,7 @@ Theorem 1.1, lines 854--926, and Section 3.
 
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open SpinChain
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D L : ℕ} [NeZero d] [NeZero L]
 

@@ -153,9 +153,9 @@ lemma sigmaDimerBasis_trace_physTransfer :
 
 /-- The ket-bra alphabet of one-site blocking identified with the original alphabet. -/
 private noncomputable def doubledSingleBlockEquiv (d : ℕ) :
-    Fin (MPSTensor.blockPhysDim d 1 * MPSTensor.blockPhysDim d 1) ≃ Fin (d * d) :=
+    Fin (Kraus.blockPhysDim d 1 * Kraus.blockPhysDim d 1) ≃ Fin (d * d) :=
   finProdFinEquiv.symm |>.trans
-    (Equiv.prodCongr (MPSTensor.singleBlockEquiv d) (MPSTensor.singleBlockEquiv d)) |>.trans
+    (Equiv.prodCongr (Kraus.singleBlockEquiv d) (Kraus.singleBlockEquiv d)) |>.trans
       finProdFinEquiv
 
 private lemma blockTensor_one_toMPSTensor {d D : ℕ} (M : MPOTensor d D) :
@@ -163,21 +163,21 @@ private lemma blockTensor_one_toMPSTensor {d D : ℕ} (M : MPOTensor d D) :
       Kraus.reindexPhysical (doubledSingleBlockEquiv d) M.toMPSTensor := by
   funext ij
   change
-    M (MPSTensor.singleBlockEquiv d ij.divNat)
-        (MPSTensor.singleBlockEquiv d ij.modNat) * 1 =
+    M (Kraus.singleBlockEquiv d ij.divNat)
+        (Kraus.singleBlockEquiv d ij.modNat) * 1 =
       M ((doubledSingleBlockEquiv d) ij).divNat ((doubledSingleBlockEquiv d) ij).modNat
   simp [doubledSingleBlockEquiv]
 
 private lemma doubledPhysTraceTransfer_reindex_singleBlock {d D : ℕ}
     (A : MPSTensor (d * d) D) :
-    doubledPhysTraceTransfer (MPSTensor.blockPhysDim d 1)
+    doubledPhysTraceTransfer (Kraus.blockPhysDim d 1)
         (Kraus.reindexPhysical (doubledSingleBlockEquiv d) A) =
       doubledPhysTraceTransfer d A := by
   rw [doubledPhysTraceTransfer, doubledPhysTraceTransfer]
-  change (∑ i : Fin (MPSTensor.blockPhysDim d 1),
+  change (∑ i : Fin (Kraus.blockPhysDim d 1),
       A (doubledSingleBlockEquiv d (finProdFinEquiv (i, i)))) =
     ∑ i : Fin d, A (finProdFinEquiv (i, i))
-  simpa [doubledSingleBlockEquiv] using (MPSTensor.singleBlockEquiv d).sum_comp
+  simpa [doubledSingleBlockEquiv] using (Kraus.singleBlockEquiv d).sum_comp
     (fun i : Fin d => A (finProdFinEquiv (i, i)))
 
 /-- The exact mixed-Bell bond factor is simple in the sense of CPSV16
@@ -190,7 +190,7 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
   let e := doubledSingleBlockEquiv 4
   let B := Kraus.reindexPhysical e sigmaDimerBasis
   let P : MPSTensor.SectorDecomposition
-      (MPSTensor.blockPhysDim 4 1 * MPSTensor.blockPhysDim 4 1) := {
+      (Kraus.blockPhysDim 4 1 * Kraus.blockPhysDim 4 1) := {
     basisCount := 1
     basisDim := fun _ => 4
     basis := fun _ => B
@@ -221,7 +221,7 @@ theorem sigmaDimer_isSimple : IsSimple sigmaDimer := by
           exact (hjk (Subsingleton.elim j k)).elim)
   · intro j hNil
     have hTransfer := doubledPhysTraceTransfer_reindex_singleBlock (d := 4) sigmaDimerBasis
-    change IsNilpotent (doubledPhysTraceTransfer (MPSTensor.blockPhysDim 4 1) B) at hNil
+    change IsNilpotent (doubledPhysTraceTransfer (Kraus.blockPhysDim 4 1) B) at hNil
     rw [hTransfer] at hNil
     have hz := (Matrix.isNilpotent_trace_of_isNilpotent hNil).eq_zero
     rw [sigmaDimerBasis_trace_physTransfer] at hz

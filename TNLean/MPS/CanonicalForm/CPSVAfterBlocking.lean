@@ -29,6 +29,7 @@ matrix product states, canonical form, blocking, normal tensor
 -/
 
 open scoped BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

@@ -15,6 +15,7 @@ sector-match branch of the periodic-overlap dichotomy.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
 open Filter Matrix Module
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

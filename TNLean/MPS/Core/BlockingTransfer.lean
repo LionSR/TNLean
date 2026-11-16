@@ -22,6 +22,7 @@ and fixed points through blocking.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
+open Kraus (blockPhysDim decodeBlockEquiv blockTensor)
 
 namespace MPSTensor
 

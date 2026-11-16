@@ -58,6 +58,8 @@ is injective and which lies in a non-trivial symmetry-protected topological
 
 open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
 open Matrix Finset MPSTensor
+open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock blockTensor
+  isNBlkInjective_iff_blockTensor_isInjective)
 
 noncomputable section
 

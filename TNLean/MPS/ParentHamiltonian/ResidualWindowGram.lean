@@ -31,6 +31,7 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E L : ℕ}
 

@@ -35,6 +35,7 @@ of the one-block theorem cannot be lowered for any `z ≥ 1`. The cases `z = 1, 
 -/
 
 open scoped Matrix
+open Kraus (evalWord_replicate)
 
 namespace MultiBlockExamples.SharpnessOneBlock
 

@@ -57,6 +57,7 @@ holds for every `N ≥ N₀`. Documented in
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

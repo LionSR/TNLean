@@ -265,23 +265,23 @@ theorem not_isMPUSimple_czTensor : ¬IsMPUSimple czTensor := by
 
 /-- A letter of the blocking of two sites is the product of the two letters of the decoded
 words. -/
-theorem blockTensor_czTensor_two_apply (I J : Fin (MPSTensor.blockPhysDim 2 2)) :
+theorem blockTensor_czTensor_two_apply (I J : Fin (Kraus.blockPhysDim 2 2)) :
     blockTensor czTensor 2 I J =
-      czTensor (MPSTensor.decodeBlock 2 2 I 0) (MPSTensor.decodeBlock 2 2 J 0) *
-        czTensor (MPSTensor.decodeBlock 2 2 I 1) (MPSTensor.decodeBlock 2 2 J 1) := by
+      czTensor (Kraus.decodeBlock 2 2 I 0) (Kraus.decodeBlock 2 2 J 0) *
+        czTensor (Kraus.decodeBlock 2 2 I 1) (Kraus.decodeBlock 2 2 J 1) := by
   simp [blockTensor_apply, Kraus.wordOfBlock, List.ofFn_succ]
 
 /-- The bond basis vector \(|i_1 i_2\rangle\) of a blocked index \(\mathbf i = (i_1, i_2)\). -/
-noncomputable def czBlockBond (I : Fin (MPSTensor.blockPhysDim 2 2)) : Fin 4 :=
-  czBond (MPSTensor.decodeBlock 2 2 I 0, MPSTensor.decodeBlock 2 2 I 1)
+noncomputable def czBlockBond (I : Fin (Kraus.blockPhysDim 2 2)) : Fin 4 :=
+  czBond (Kraus.decodeBlock 2 2 I 0, Kraus.decodeBlock 2 2 I 1)
 
 /-- The vector \(x_{\mathbf i} = f_{i_1} f_{i_2}\) of a blocked index
 \(\mathbf i = (i_1, i_2)\). -/
-noncomputable def czBlockVec (I : Fin (MPSTensor.blockPhysDim 2 2)) : Fin 4 → ℂ :=
-  czVec (MPSTensor.decodeBlock 2 2 I 0) (MPSTensor.decodeBlock 2 2 I 1)
+noncomputable def czBlockVec (I : Fin (Kraus.blockPhysDim 2 2)) : Fin 4 → ℂ :=
+  czVec (Kraus.decodeBlock 2 2 I 0) (Kraus.decodeBlock 2 2 I 1)
 
 /-- The first entry of every `czBlockVec` is one. -/
-theorem czBlockVec_apply_zero (I : Fin (MPSTensor.blockPhysDim 2 2)) :
+theorem czBlockVec_apply_zero (I : Fin (Kraus.blockPhysDim 2 2)) :
     czBlockVec I (czBond (0, 0)) = 1 := by
   simp [czBlockVec, czVec]
 
@@ -289,29 +289,29 @@ theorem czBlockVec_apply_zero (I : Fin (MPSTensor.blockPhysDim 2 2)) :
 \(\delta_{\mathbf i\mathbf j}|x_{\mathbf i}\rangle\langle y_{\mathbf i}|\) with
 \(x_{\mathbf i} = f_{i_1}f_{i_2}\) and \(y_{\mathbf i} = i_1 i_2\) (chapter Example 4.9, proof
 of (c)). -/
-theorem blockTensor_czTensor_two (I J : Fin (MPSTensor.blockPhysDim 2 2)) :
+theorem blockTensor_czTensor_two (I J : Fin (Kraus.blockPhysDim 2 2)) :
     blockTensor czTensor 2 I J =
       if I = J then vecMulVec (czBlockVec I) (Pi.single (czBlockBond I) 1) else 0 := by
   rw [blockTensor_czTensor_two_apply]
   split_ifs with h
   · subst h
     exact czTensor_mul_czTensor _ _
-  · have hw : MPSTensor.decodeBlock 2 2 I ≠ MPSTensor.decodeBlock 2 2 J := fun e ↦
-      h ((MPSTensor.decodeBlockEquiv 2 2).injective (by simpa using e))
-    by_cases h0 : MPSTensor.decodeBlock 2 2 I 0 = MPSTensor.decodeBlock 2 2 J 0
-    · have h1 : MPSTensor.decodeBlock 2 2 I 1 ≠ MPSTensor.decodeBlock 2 2 J 1 := fun h1 ↦
+  · have hw : Kraus.decodeBlock 2 2 I ≠ Kraus.decodeBlock 2 2 J := fun e ↦
+      h ((Kraus.decodeBlockEquiv 2 2).injective (by simpa using e))
+    by_cases h0 : Kraus.decodeBlock 2 2 I 0 = Kraus.decodeBlock 2 2 J 0
+    · have h1 : Kraus.decodeBlock 2 2 I 1 ≠ Kraus.decodeBlock 2 2 J 1 := fun h1 ↦
         hw (funext fun k ↦ by fin_cases k <;> assumption)
       rw [czTensor_of_ne h1, mul_zero]
     · rw [czTensor_of_ne h0, zero_mul]
 
 /-- The doubled vector \(X_{\mathbf i} = \bar x_{\mathbf i}\otimes x_{\mathbf i}\) on the doubled
 bond. -/
-noncomputable def czBlockX (I : Fin (MPSTensor.blockPhysDim 2 2)) : Fin (4 * 4) → ℂ :=
+noncomputable def czBlockX (I : Fin (Kraus.blockPhysDim 2 2)) : Fin (4 * 4) → ℂ :=
   fun p ↦ czBlockVec I (finProdFinEquiv.symm p).1 * czBlockVec I (finProdFinEquiv.symm p).2
 
 /-- The doubled covector \(Y_{\mathbf i} = \bar y_{\mathbf i}\otimes y_{\mathbf i}\) on the
 doubled bond. -/
-noncomputable def czBlockY (I : Fin (MPSTensor.blockPhysDim 2 2)) : Fin (4 * 4) → ℂ :=
+noncomputable def czBlockY (I : Fin (Kraus.blockPhysDim 2 2)) : Fin (4 * 4) → ℂ :=
   Pi.single (finProdFinEquiv (czBlockBond I, czBlockBond I)) 1
 
 /-- The vectorized identity \(\Omega = \sum_\alpha |\alpha\alpha)\) on the bond space of the
@@ -322,7 +322,7 @@ noncomputable def czOmega : Fin (4 * 4) → ℂ := fun p ↦
 /-- The double-layer letters of the blocking of two sites are
 \(W^{\mathbf i\mathbf j} = \delta_{\mathbf i\mathbf j}|X_{\mathbf i})(Y_{\mathbf i}|\)
 (chapter Example 4.9, proof of (c)). -/
-theorem doubleLayerTensor_blockTensor_czTensor_two (I J : Fin (MPSTensor.blockPhysDim 2 2)) :
+theorem doubleLayerTensor_blockTensor_czTensor_two (I J : Fin (Kraus.blockPhysDim 2 2)) :
     doubleLayerTensor (blockTensor czTensor 2) I J =
       if I = J then vecMulVec (czBlockX I) (czBlockY I) else 0 := by
   rw [doubleLayerTensor, physicalAdjointTensor_blockTensor, physicalAdjointTensor_czTensor,
@@ -340,17 +340,17 @@ theorem doubleLayerTensor_blockTensor_czTensor_two (I J : Fin (MPSTensor.blockPh
     rfl
 
 /-- Pairing with \(Y_{\mathbf i}\) reads off one coordinate. -/
-theorem czBlockY_dotProduct (I : Fin (MPSTensor.blockPhysDim 2 2)) (v : Fin (4 * 4) → ℂ) :
+theorem czBlockY_dotProduct (I : Fin (Kraus.blockPhysDim 2 2)) (v : Fin (4 * 4) → ℂ) :
     czBlockY I ⬝ᵥ v = v (finProdFinEquiv (czBlockBond I, czBlockBond I)) := by
   rw [czBlockY, single_one_dotProduct]
 
 /-- The diagonal entries of \(X_{\mathbf i}\) are one. -/
-theorem czBlockX_apply_diag (I : Fin (MPSTensor.blockPhysDim 2 2)) (x : Fin 4) :
+theorem czBlockX_apply_diag (I : Fin (Kraus.blockPhysDim 2 2)) (x : Fin 4) :
     czBlockX I (finProdFinEquiv (x, x)) = 1 := by
   rw [czBlockX, Equiv.symm_apply_apply, czBlockVec, czVec_mul_self]
 
 /-- \((\Omega|X_{\mathbf i}) = \|x_{\mathbf i}\|^2 = 4\). -/
-theorem czOmega_dotProduct_czBlockX (I : Fin (MPSTensor.blockPhysDim 2 2)) :
+theorem czOmega_dotProduct_czBlockX (I : Fin (Kraus.blockPhysDim 2 2)) :
     czOmega ⬝ᵥ czBlockX I = 4 := by
   rw [dotProduct, ← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
   simp [czOmega, czBlockX, czBlockVec, czVec_mul_self]
@@ -363,10 +363,10 @@ and \(W^{\mathbf i\mathbf j}W^{\mathbf k\mathbf l}
 The scalar inputs are \((Y_{\mathbf i}|X_{\mathbf k}) = 1\), \((\Omega|X_{\mathbf k}) = 4\) and
 \((Y_{\mathbf i}|\Omega) = 1\). `blockTensor_czTensor_two_isMPUSimple` is the existential form. -/
 theorem blockTensor_czTensor_two_simple_witnesses :
-    (∀ i j : Fin (MPSTensor.blockPhysDim 2 2),
+    (∀ i j : Fin (Kraus.blockPhysDim 2 2),
       czOmega ⬝ᵥ (doubleLayerTensor (blockTensor czTensor 2) i j *ᵥ ((1 / 4 : ℂ) • czOmega)) =
         if i = j then 1 else 0) ∧
-    (∀ i j k l : Fin (MPSTensor.blockPhysDim 2 2),
+    (∀ i j k l : Fin (Kraus.blockPhysDim 2 2),
       doubleLayerTensor (blockTensor czTensor 2) i j *
           doubleLayerTensor (blockTensor czTensor 2) k l =
         doubleLayerTensor (blockTensor czTensor 2) i j *
@@ -446,8 +446,8 @@ theorem leftRank_czTensor : ℓ[czTensor] = 4 := by
       simp [sourceCutM₂, czTensor_apply_czBond, one_apply, Prod.ext_iff]
 
 /-- There are four blocked indices of two sites. -/
-theorem card_blockPhysDim_two_two : Fintype.card (Fin (MPSTensor.blockPhysDim 2 2)) = 4 := by
-  rw [Fintype.card_fin, MPSTensor.blockPhysDim_eq_pow]
+theorem card_blockPhysDim_two_two : Fintype.card (Fin (Kraus.blockPhysDim 2 2)) = 4 := by
+  rw [Fintype.card_fin, Kraus.blockPhysDim_eq_pow]
   norm_num
 
 /-- **The right cut rank of the blocking of two sites is `4`** (chapter Example 4.9 (d), not
