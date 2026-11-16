@@ -205,3 +205,24 @@ the physical path construction.
   Blueprint explicitly distinguishes the two-leg phase from the one-leg character, and
   the Blueprint/gap note state the repeated-bit convention at ring length one. Fresh
   review is still required for the extended head.
+
+### Final integration and physical dependency checkpoint
+
+- Integrated upstream main `2e0e6387c156ff7449a4f1df51775a5a5d2144cf`. None of
+  the intervening changed Lean sources belongs to the new modules' 268-module TNLean
+  transitive import closure. The exact integrated seven-module build passes (19,077 jobs).
+- Refreshed #8050's source requirements directly from
+  `Papers/2203.12563/REsubmission.tex`, definitions `defsym` and `defphase`: importing the
+  physical classification requires arbitrary-boundary fusion closedness and an injective
+  symmetry embedding along the path. Periodic group multiplication and action/fusion
+  reductions alone do not verify those premises for the combined controlled-Z family.
+- #7332 is closed for the algebraic stabilizer/cohomology classification, according to
+  its current issue body; its title must not be read as a completed physical path theorem.
+- The parent explicitly reconfirmed that #8053 remains occupied, with recovery of the
+  disconnected owner's local artifacts pending. No implementation takeover is attempted.
+- The pinned LaTeX formatter detected whitespace in the two changed Blueprint chapters;
+  both are now formatted and pass its check. Paper-gap references resolve (308 slugs).
+  This documentation repair changes no Lean source, hypotheses, or proof terms.
+- The independent Codex review of the first extended head completed with no findings.
+  Fresh proof/Blueprint review and exact-final-head hosted CI remain merge requirements;
+  a replacement documentation head must be checked and reviewed too.
