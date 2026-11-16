@@ -18,8 +18,8 @@ Proposition `PropChiral` (line 1217), the source does not restrict to even `N`.
 
 This file proves the "if" direction for every standard form of a two-site
 block. The local equations alone imply the invariance, without a canonical
-form or symmetry type. The "only if" direction for the blocked lengths is open,
-tracked in issue #7017.
+form or symmetry type. The "only if" direction for the blocked lengths is not
+proved here.
 
 ## Main results
 
