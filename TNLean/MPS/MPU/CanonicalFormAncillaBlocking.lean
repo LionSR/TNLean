@@ -112,7 +112,8 @@ theorem isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening [NeZero d]
     funext i
     simp only [normalizedFlattening, smul_smul, mul_inv_cancel₀ hc, one_smul]
   rw [← hU']
-  exact ⟨(Classical.choice hU.isMPUCanonicalForm).smul _ hc⟩
+  obtain ⟨data⟩ := hU.isMPUCanonicalForm
+  exact ⟨data.smul _ hc⟩
 
 /-- **Canonical form survives attaching an identity ancilla.** If an MPU tensor
 \(\mathcal U\) is in canonical form, then so is \(\mathcal U^{(p)}\) for every
