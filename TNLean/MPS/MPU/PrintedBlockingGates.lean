@@ -110,6 +110,20 @@ theorem printedPairGate_mem_unitaryGroup {d : ℕ} (n p : ℕ) (h : p + 2 ≤ n)
   embedOp_mem_unitary (spinWindow n p 2 h).injective
     (Matrix.reindex_mem_unitaryGroup (finTwoArrowEquiv (Fin d)).symm _ hA)
 
+/-- Equal placement offsets give the same ordered product of pair gates.
+Source: arXiv:1703.09188, the ordered finite layers in lines 1689--1733. -/
+theorem printedPairGate_prod_congr {d n m : ℕ} {p q : Fin m → ℕ}
+    {hp : ∀ j, p j + 2 ≤ n} {hq : ∀ j, q j + 2 ≤ n}
+    (hpos : ∀ j, p j = q j)
+    (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    (List.ofFn fun j ↦ printedPairGate n (p j) (hp j) A).prod =
+      (List.ofFn fun j ↦ printedPairGate n (q j) (hq j) A).prod := by
+  apply congrArg List.prod
+  apply congrArg List.ofFn
+  funext j
+  congr 1
+  exact hpos j
+
 /-- The unshifted pair gates in cells `a,...,a+m-1` of a `2k`-spin chain.
 Source: arXiv:1703.09188, lines 1692--1694 and 1721--1725. -/
 noncomputable def printedCellLayer {d : ℕ} (k a m : ℕ) (h : a + m ≤ k)
@@ -147,10 +161,8 @@ theorem printedCellLayer_succ {d : ℕ} (k a m : ℕ) (h : a + (m + 1) ≤ k)
         printedCellLayer k (a + 1) m (by omega) A := by
   simp only [printedCellLayer, List.ofFn_succ, List.prod_cons]
   congr 1
-  apply congrArg List.prod
-  apply congrArg List.ofFn
-  funext j
-  congr 1
+  apply printedPairGate_prod_congr
+  intro j
   simp only [Fin.val_succ]
   omega
 
@@ -163,10 +175,8 @@ theorem printedLinkLayer_succ {d : ℕ} (k a m : ℕ) (h : a + (m + 1) + 1 ≤ k
         printedLinkLayer k (a + 1) m (by omega) A := by
   simp only [printedLinkLayer, List.ofFn_succ, List.prod_cons]
   congr 1
-  apply congrArg List.prod
-  apply congrArg List.ofFn
-  funext j
-  congr 1
+  apply printedPairGate_prod_congr
+  intro j
   simp only [Fin.val_succ]
   omega
 

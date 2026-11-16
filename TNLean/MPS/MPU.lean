@@ -165,7 +165,10 @@ import TNLean.MPS.MPU.PolynomialOverheadBounds
 import TNLean.MPS.MPU.PositiveCanonicalGauge
 import TNLean.MPS.MPU.PrefixGramNormalizer
 import TNLean.MPS.MPU.PrefixGramReindex
+import TNLean.MPS.MPU.PrintedBlockingContraction
 import TNLean.MPS.MPU.PrintedBlockingGates
+import TNLean.MPS.MPU.PrintedBlockingHalfFactors
+import TNLean.MPS.MPU.PrintedBlockingTrace
 import TNLean.MPS.MPU.ProductBasisFactorization
 import TNLean.MPS.MPU.ProjectionPhaseIsometries
 import TNLean.MPS.MPU.QCAIndexComparison

@@ -28,6 +28,10 @@
     {
       "slug": "alvv-rg-algorithm",
       "label": "Rigorous renormalization group"
+    },
+    {
+      "slug": "mpu",
+      "label": "Matrix product unitaries"
     }
   ],
   "label": "1602.08828",
