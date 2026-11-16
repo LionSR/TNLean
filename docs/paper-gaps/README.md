@@ -193,6 +193,12 @@ For the MPU index of arXiv:1703.09188:
   source gate's weight. In the source's diagonal canonical-form-II coordinates,
   $\rho^{\mathsf T}=\rho$ closes the retained source-$u$ contraction and proves
   $u^\dagger u=I$ for the supplied fixed pair.
+- `mpu_standard_form_canonical_convention.tex` (local correction, resolved)
+  records, from the source's standing canonical-form convention and its
+  explicit "not necessarily in CF" qualifiers elsewhere, that a tensor in
+  standard form is the two-site block of a simple canonical tensor, so the
+  time-reversal and transposition criteria and the sign results apply to every
+  such standard form without a further hypothesis.
 - `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
   to the unblocked all-length converse printed in the Fundamental Theorem of
   MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
