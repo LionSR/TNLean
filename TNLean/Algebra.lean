@@ -123,6 +123,7 @@ import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixEntrywiseDeriv
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
