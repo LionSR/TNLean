@@ -21,7 +21,9 @@ layers below, redesigned, and moved to QICLean.
    one repository or across the two.
 4. **A directory is a layer or a part of one, and its namespace says so.** A
    directory name states the objects, never a proof technique or a source.
-5. **The rules are checked by a script**, with the existing violations listed
+5. **Statements are as general as their layer** (see Generality); special
+   cases are instances.
+6. **The rules are checked by a script**, with the existing violations listed
    and only allowed to shrink.
 
 ### Layers
@@ -50,7 +52,7 @@ flowchart BT
 
 | Layer | Objects | Defining types | Now | After the move | May import |
 |---|---|---|---|---|---|
-| Sites | a finite tensor product `⊗_v ℂ^{n_v}` and its regions | `SiteConfig n`, `RegionConfig n D`; `supportedOperators n D`; the placement `K ↦ K ⊗ 1`; the partial trace onto a region; product vectors | QICLean `Entropy`, `Representation`, `Analysis` (86 modules using `SiteConfig`); 23 modules of `TNLean/Circuit`; `Lattice/RegionSplit`, `RegionalSwap*` | `QICLean/ManyBody/Sites` | matrices, channels |
+| Sites | a finite tensor product `⊗_v ℂ^{X_v}` and its regions | a system `X : V → Type` of finite basis types, its configurations and those of a region; `supportedOperators X D`; the placement `K ↦ K ⊗ 1`; the partial trace onto a region; product vectors | QICLean `Entropy`, `Representation`, `Analysis` (86 modules using `SiteConfig`); 23 modules of `TNLean/Circuit`; `Lattice/RegionSplit`, `RegionalSwap*` | `QICLean/ManyBody/Sites` | matrices, channels |
 | Dynamics | a family of Hermitian terms with supports, and the evolution it generates | Heisenberg evolution, commutator bounds on a graph | `TNLean/Circuit/LiebRobinson` | `QICLean/ManyBody/Dynamics` | Sites |
 | Hamiltonians | an interaction on a finite set of sites | one structure: bounded Hermitian terms with given supports; spectral and Gaussian filters, truncation, low-energy bases | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
 | Gates | unitaries on a finite basis, with no sites | two-level and Givens words, controlled elements, permutation matrices, dilations, amplification | parts of `TNLean/Circuit/Gates`, eight root modules of `TNLean/Circuit` | `QICLean/Circuit/Gate` | matrices |
@@ -60,6 +62,43 @@ flowchart BT
 Circuits and Hamiltonians are siblings. A circuit statement never needs an
 interaction, and a Hamiltonian statement never needs a layer; the permutation
 of sites and the site-supported projections that both use belong to Sites.
+
+### Generality
+
+Each layer fixes how general its statements are. A definition or lemma is
+stated at the generality of its layer; a chain, a ring, a square lattice, one
+local dimension, a unitary gate are *instances*, obtained by definitional
+unfolding, never separate definitions. A lemma whose proof does not use the
+special structure is not stated with it.
+
+| Axis | Required generality | What is hard-coded today |
+|---|---|---|
+| Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `Lattice.LocalHamiltonian` itself), `Finset ℤ` |
+| Local spaces | any finite basis type at each site, `X : V → Type` | one `Fin d` for all sites in TNLean; `Fin (n v)` in QICLean. Composite local spaces are then written `Fin (d * a)`, `Fin (d ^ k)`, `Fin (a + b)` and unpacked by index arithmetic: 170 declarations in `Circuit`, 226 in `MPS/Preparation`, 285 in `MPS/MPU`, 214 in `MPS/AreaLaw` |
+| Regions | any set of sites | `Set` in one support notion, `Finset` in the other |
+| Geometry | any family of cells, any graph | the ring: 130 declarations of `Circuit` and every channel, measurement and adaptive model; the open chain for gate counts |
+| Operations | finite Kraus families between two systems, so rectangular and non-unitary | square unitaries in the depth and gate-count models; isometry trees, two-site layers of matrix product unitaries and Margolus gates are defined apart for that reason |
+| Interactions | Hermitian terms indexed by any type, with any supports | terms indexed by admissible subsets of one lattice, with a range and a norm bound built into the structure |
+| Resource bounds | upper bounds | exact depth in six of the models |
+| Vectors | one representation per layer | functions `(ι → Fin d) → ℂ` in `Circuit`, `EuclideanSpace ℂ _` in the area laws and QICLean, abstract inner product spaces in `PartyCircuit` |
+
+Three things are deliberately not generalized: the scalars are `ℂ`, every
+space is finite-dimensional, and operators are matrices on basis types. The
+abstract Hilbert spaces of `Lattice/PartyCircuit` are more general than any
+use of them; its registers become finite basis types.
+
+Taking basis *types* at the sites is the change with the widest effect. A site
+with a qudit and an ancilla has basis `Fin d × Fin a`, a block of `k` sites has
+basis `Fin k → Fin d`, a site holding several wires has the configurations of
+its wires, and none of them is re-encoded as `Fin` of a product. The registers,
+ports, encodings and blockings of `Circuit/Channel` exist largely to carry
+that re-encoding. `SiteConfig n` in QICLean and `ι → Fin d` in TNLean are the
+cases `X v = Fin (n v)` and `X v = Fin d`, by definition.
+
+The specific theorems stay specific. An area law on the chain is a statement
+about `Fin L`; the lemmas it uses about supports, filters and truncations are
+stated for any sites, and are then the same lemmas the two-dimensional proof
+uses.
 
 ### Where a declaration goes
 
@@ -206,9 +245,10 @@ other directories.
 
 ## The Sites layer
 
-- Configurations are `SiteConfig n = (v : V) → Fin (n v)` with site-dependent
-  dimensions. One local dimension is the definitional special case
-  `ι → Fin d`, so no statement about a chain or lattice changes its types.
+- A system assigns a finite basis type to every site, `X : V → Type`; its
+  configurations are `(v : V) → X v`. `SiteConfig n` with site-dependent
+  dimensions is the case `X v = Fin (n v)`, and one local dimension is
+  `ι → Fin d`, both by definition, so no existing statement changes its types.
 - One support notion: the `*`-subalgebra `supportedOperators n D` of the matrix
   algebra, with membership unfolding to the matrix-entry condition. Closure
   under sums, products, adjoints, powers and functional calculus comes from the
@@ -233,18 +273,23 @@ family and depth of a circuit, composition, and subadditivity of the depth
 under composition have been type-checked against QICLean in a scratch file;
 the signatures are fixed in step C1.
 
-A *system* assigns a local dimension to each site, `n : S → ℕ`. A *geometry*
-is a family of cells `cell : β → Finset S` on which one gate may act (the
-bonds of a ring, the edges of a graph, the windows of a chain, the wires owned
-by one site). One layer acts by a finite Kraus family on each of a set of
+A *system* on the sites `S` assigns a finite basis type to each site. A
+*geometry* is a family of cells `cell : β → Finset S` on which one gate may act
+(the bonds of a ring, the edges of a graph, the windows of a chain, the wires
+owned by one site). One layer acts by a finite Kraus family on each of a set of
 pairwise disjoint cells, and by a Kraus family at every remaining site:
 
 ```lean
-structure Layer (cell : β → Finset S) (n m : S → ℕ) where
+structure System (S : Type) where
+  basis : S → Type
+  [fintype : ∀ s, Fintype (basis s)]
+  [decEq : ∀ s, DecidableEq (basis s)]
+
+structure Layer (cell : β → Finset S) (X Y : System S) where
   cells : Finset β
   pairwiseDisjoint : (cells : Set β).PairwiseDisjoint cell
-  gate : ∀ b ∈ cells, KrausFamily (RegionConfig n (cell b)) (RegionConfig m (cell b))
-  onsite : ∀ s, (∀ b ∈ cells, s ∉ cell b) → KrausFamily (Fin (n s)) (Fin (m s))
+  gate : ∀ b ∈ cells, KrausFamily (X.RegionConfig (cell b)) (Y.RegionConfig (cell b))
+  onsite : ∀ s, (∀ b ∈ cells, s ∉ cell b) → KrausFamily (X.basis s) (Y.basis s)
 ```
 
 Its Kraus operators are indexed by a choice of one Kraus index per cell and
@@ -252,9 +297,9 @@ per remaining site, and are products of the local entries. A circuit is a
 sequence of layers in which later layers may depend on earlier Kraus indices:
 
 ```lean
-inductive Circuit (cell : β → Finset S) : (S → ℕ) → (S → ℕ) → Type
-  | done (n) : Circuit cell n n
-  | step (L : Layer cell n m) (next : L.Index → Circuit cell m k) : Circuit cell n k
+inductive Circuit (cell : β → Finset S) : System S → System S → Type 1
+  | done (X) : Circuit cell X X
+  | step (L : Layer cell X Y) (next : L.Index → Circuit cell Y Z) : Circuit cell X Z
 ```
 
 A circuit is data. Its Kraus family, its map on matrices, its depth (layers
@@ -269,11 +314,11 @@ The present models are restrictions of this one definition:
 
 | Present model | In the core |
 |---|---|
-| unitary depth circuits | every Kraus family has one unitary member; `n = m` |
+| unitary depth circuits | every Kraus family has one unitary member; `X = Y` |
 | channel circuits | no branching (`next` constant) |
 | local channel protocols | no branching; onsite families change the dimension, free of cost |
-| bounded-dimension protocols | the same with a bound on every intermediate `n s` |
-| fixed-register words | the same with `n` constant in time |
+| bounded-dimension protocols | the same with a bound on the size of every intermediate basis |
+| fixed-register words | the same with the system constant in time |
 | physical ports | sites are wires; cells are the wires of one site (cost 0) and pairs of neighbouring ports (cost 1) |
 | measurement rounds, adaptive protocols | onsite families `|j⟩⟨j|`, with `next` depending on the outcome |
 | pair and window products | unitary circuits on the open-chain geometry, measured by gate count |
@@ -297,8 +342,10 @@ pointing down the list:
 | `Party` | the reusable party calculus | part of `Lattice/PartyCircuit` |
 
 Isometry trees, the rectangular two-site layers of matrix product unitaries and
-the Margolus gates of `QCA` need layers between systems on different site sets
-(blocking). They are added as a blocking map between systems after step C4.
+the Margolus gates of `QCA` are rectangular layers of this kind once sites may
+be grouped: a map `S → S'` of site sets turns a system on `S` into the system
+on `S'` whose basis at a site is the configurations of its fibre. This
+blocking map between systems is added after step C4.
 `Lattice/PartyCircuit` is treated last: its four inductive types first become
 one type parametrized by the gate constructor (step P1), then its registers,
 which are finite-dimensional in every use, are compared with the core (step
@@ -370,8 +417,9 @@ Sites and Dynamics:
   `Controlled`; `PartialIsometryDilation` and the amplification modules; the
   first section of `Channel/RegisterEncoding`, merged with
   `initializedBasisMatrix`, which is the same definition.
-- **K3** (QICLean, then TNLean). One placement and one support notion:
-  `embedOp` for site-dependent dimensions, the span-of-products description as
+- **K3** (QICLean, then TNLean). Systems of basis types, with `SiteConfig n`
+  as an instance; one placement and one support notion on them: `embedOp`
+  for any system, the span-of-products description as
   a theorem, drop `σ₀` from the remaining lemmas. In TNLean,
   `QuantumCircuit.supportedOperators` becomes the QICLean subalgebra and
   `Circuit/EntropySupport` is deleted with its uses.
@@ -406,8 +454,9 @@ Circuits:
 
 Lattice (after K4):
 
-- **L1** (TNLean). One Hamiltonian structure on a finite set of sites with
-  given supports; `ChainHamiltonian`, `DomainHamiltonian`,
+- **L1** (TNLean). One Hamiltonian structure: Hermitian terms indexed by any
+  type, with given supports in any finite set of sites; range, degree and norm
+  bounds are hypotheses on it, not fields; `ChainHamiltonian`, `DomainHamiltonian`,
   `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
   become instances of it.
 - **L2** (QICLean, then TNLean). Move the Hamiltonian part of `Lattice` (root
@@ -425,6 +474,8 @@ C1 is validated by C2–C4: if porting a model needs a change to `Layer` or
   that mentions no layer, gate or depth is not added to `TNLean/Circuit`; until
   step K4 it goes in QICLean beside `Entropy.IsSupportedOn`.
 - No entry is added to `DEBT` in `scripts/check_import_layers.py`.
+- A new lemma is not stated for `Fin N`, the ring, `ℤ × ℤ` or one local
+  dimension unless its proof uses that structure.
 - No new circuit predicate. A new model is a restriction of an existing one
   until C1 lands, and of `Circuit` afterwards.
 - No new placement of a local matrix and no new support predicate.
