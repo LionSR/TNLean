@@ -5,6 +5,8 @@
     \lean{MPSTensor.IsReduction.mul_evalWord_eq_dressedScalar_smul,
         MPSTensor.continuous_dressedScalar_of_reductions}
     \leanok
+    \uses{thm:mps_reduction_residual_dimension_bound,
+        thm:mps_reduction_boundary_dressed_uniqueness}
     Suppose $(V,W)$ and $(V',W')$ reduce a tensor $B$ of bond dimension $E$
     onto the same normal tensor $A$ of positive bond dimension. Assume
     $B$ and $A$ have equal periodic vectors at every positive length.
@@ -18,9 +20,11 @@
     Neither the right caps nor the target tensors need be continuous.
 \end{lemma}
 \begin{proof}\leanok
-    The source bond dimension bounds both residual nilpotency lengths.
-    The uniqueness theorem for reductions therefore gives
-    (\ref{eq:mpug_reduction_comparison}) after the common threshold $2E$. Uniqueness identifies its
+    Lemma~\ref{thm:mps_reduction_residual_dimension_bound} bounds both residual
+    nilpotency lengths by the source bond dimension.
+    Lemma~\ref{thm:mps_reduction_boundary_dressed_uniqueness} therefore gives
+    (\ref{eq:mpug_reduction_comparison}) after the common threshold $2E$.
+    Uniqueness identifies its
     scalar with the selected one. At any parameter choose a longer word
     and an entry of $V'B^w$ that is nonzero there. It remains nonzero on a
     neighborhood, on which $z$ is the quotient of the corresponding

@@ -368,3 +368,25 @@ blocked by the absent `dsfont.sty` package; no substitute package was used.
 The repaired head still requires its own complete hosted CI and formal review
 approval. The two change-request reviews must be superseded by reviewer
 approval; resolving repaired inline threads does not supply that approval.
+
+### Dependency-tag review follow-up
+
+Head `212cf3029f434c0762a090f2800c4ba5f6221df6` passed complete PR CI
+`43802310946`, including the full 32,401-job Lean build, strict/style/timing
+checks, complete Blueprint web checks and both PDF volumes. Code review
+`5915413557` formally approved that exact head. The dedicated Blueprint review
+`5915425777` found no equivalence or prose issue but requested one missing
+dependency tag for the reduction-scalar continuity lemma. No merge occurred.
+
+The continuation adds the requested boundary-dressed uniqueness dependency,
+and also names the residual dimension-bound lemma used directly in the same
+Lean proof. Its proof sketch cites both mathematical statements explicitly.
+No Lean source or mathematical statement changes. The new head needs its own
+complete CI and fresh proof/Blueprint approvals; the previous head's green
+checks and code approval remain historical evidence.
+
+The dependency labels each resolve uniquely to the matching chapter-25
+statement, and both are direct dependencies of the cited Lean proof.
+Pinned formatting, role/prose/token/whitespace checks pass, and the actual
+relative-class/path print remains six XeTeX pages. No Lean source changed,
+so a local Lean rebuild is not claimed for this dependency-tag-only repair.
