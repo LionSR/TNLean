@@ -7,6 +7,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointProjectorComparison
 import TNLean.MPS.ParentHamiltonian.PhysicalReindexProjection
 import TNLean.MPS.Core.PhysicalReindexTransport
 import QICLean.Algebra.TraceReindex
+import TNLean.Algebra.FinCastAddNatAdd
 
 /-!
 # Exchanging the two mixed endpoint sectors
@@ -79,13 +80,6 @@ theorem mixedEndpointBase_swap
     mixedEndpointBase A₁ A₀ (mixedEndpointPhysicalSwap D₀ D₁ p) =
       Matrix.reindexAlgEquiv ℂ ℂ (mixedEndpointBondSwap D₀ D₁)
         (mixedEndpointBase A₀ A₁ p) := by
-  have hdisjoint (a : Fin D₀) (b : Fin D₁) : Fin.castAdd D₁ a ≠ Fin.natAdd D₀ b := by
-    intro h
-    have hval := congrArg Fin.val h
-    simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
-    omega
-  have hdisjoint' (b : Fin D₁) (a : Fin D₀) : Fin.natAdd D₀ b ≠ Fin.castAdd D₁ a :=
-    (hdisjoint a b).symm
   ext i j
   obtain ⟨i, rfl⟩ := (mixedEndpointBondSwap D₀ D₁).surjective i
   obtain ⟨j, rfl⟩ := (mixedEndpointBondSwap D₀ D₁).surjective j
@@ -96,7 +90,7 @@ theorem mixedEndpointBase_swap
   obtain ⟨j, rfl⟩ := finSumFinEquiv.surjective j
   cases a <;> cases b <;> cases i <;> cases j <;>
     simp [mixedEndpointBase, mixedEndpointLetter, mixedEndpointPhysicalSwap,
-      mixedEndpointBondSwap, Matrix.fromBlocks, Matrix.single_apply, hdisjoint, hdisjoint']
+      mixedEndpointBondSwap, Matrix.fromBlocks, Matrix.single_apply, Fin.castAdd_ne_natAdd, Fin.natAdd_ne_castAdd]
 
 /-- Exchanging the virtual summands reflects the interpolation parameter.
 This holds for every real parameter, including either endpoint.
