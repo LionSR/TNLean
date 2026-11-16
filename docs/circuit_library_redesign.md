@@ -188,6 +188,43 @@ which are finite-dimensional in every use, are compared with the core (step
 P2). Whether it then becomes a restriction of `Circuit` or stays a second
 calculus with a comparison theorem is decided at P2.
 
+## `TNLean/Lattice`
+
+`TNLean/Lattice` (472 modules, about 78,000 lines) has the same shape as
+`TNLean/Circuit`: its transitive imports inside TNLean are itself, 17 modules
+of `Algebra` and 20 modules of `Circuit` (the locality modules and two gate
+modules), and nothing from `MPS` or `PEPS`. It can leave TNLean once the
+locality layer has. It holds three unrelated things:
+
+- Local Hamiltonians and their analysis on finite sets of sites (the root
+  directory and `ClusterExpansion`, 127 modules, about 25,000 lines): Gaussian
+  filtering and truncation, low-energy bases, regional entropy, the regional
+  swap and reset. Half of this theory is already in QICLean (`Analysis`,
+  `Entropy`), which `Lattice` imports about 100 times; the split between the
+  two repositories follows no mathematical line.
+- A calculus of distributed circuits and operator networks on a set of parties
+  (`PartyCircuit`, `Compression`, `Sheet`, 342 modules, about 52,000 lines).
+  This is not lattice theory, and it is the second circuit library described
+  above. `Compression` has 254 modules, 123 of them with at most two
+  declarations.
+- `TreeBasisCounterexample`.
+
+The structure `Lattice.LocalHamiltonian`, described as shared by the one- and
+two-dimensional area laws, is defined on `Λ : Finset (ℤ × ℤ)`. The chain uses
+`ChainHamiltonian` and `DomainHamiltonian` in `MPS/AreaLaw`, and the squares
+and rectangles of `PEPS` use two more structures. Namespaces vary inside the
+directory (`TNLean.Lattice`, `TNLean.Lattice.PartyCircuit`,
+`Lattice.PartyCircuit`, and bare `Word`, `EffectCircuit`).
+
+Target: the Hamiltonian part joins the locality layer in QICLean, with one
+structure for a family of bounded Hermitian terms with given supports on a
+finite set of sites; the chain, the integer domains, the plane, squares and
+rectangles are choices of the sites and supports. The party calculus follows
+the circuit plan (steps P1, P2): the reusable calculus moves with the circuit
+layer, and the modules that exist only for one proof of the PEPS approximation
+manuscript stay in TNLean, consolidated, under a name that does not say
+"lattice".
+
 ## Steps
 
 Each step is one pull request per repository, or a few. A QICLean step is
@@ -245,6 +282,18 @@ Circuits:
 - **C7**. Teleportation, long-range and register gates, the quantitative gate
   constructions.
 - **P1**, **P2**. `Lattice/PartyCircuit` as above.
+
+Lattice (after K4):
+
+- **L1** (TNLean). One Hamiltonian structure on a finite set of sites with
+  given supports; `ChainHamiltonian`, `DomainHamiltonian`,
+  `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
+  become instances of it.
+- **L2** (QICLean, then TNLean). Move the Hamiltonian part of `Lattice` (root
+  directory and `ClusterExpansion`) beside the locality layer.
+- **L3** (TNLean). Merge the single-lemma modules of `Lattice/Compression`
+  along the interfaces of its proof; separate the reusable party calculus from
+  the proof-specific modules, in step with P1.
 
 C1 is validated by C2–C4: if porting a model needs a change to `Layer` or
 `Circuit`, the change is made in the core before the next model is ported.
