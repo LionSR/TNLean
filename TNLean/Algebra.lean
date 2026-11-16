@@ -255,6 +255,7 @@ import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryGeneralLinearInverse
+import TNLean.Algebra.UnitaryGroupJoined
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.Algebra.UnitaryKroneckerComparison
 import TNLean.Algebra.UnitaryMulVecInner
