@@ -660,10 +660,10 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Set $T=\mathcal F^*$. Trace preservation gives $T^p(I)=I$.
-    Since $T$ commutes with $T^p$, the matrix $T(I)$ is fixed by
-    $\mathcal E^*$. Irreducibility gives
-    $\operatorname{Fix}(\mathcal E^*)=\C I$, hence $T(I)=cI$.
+    Set $T=\mathcal F^\dagger$. Trace preservation gives $T^p(\Id)=\Id$.
+    Since $T$ commutes with $T^p$, the matrix $T(\Id)$ is fixed by
+    $\mathcal E^\dagger$. Irreducibility gives
+    $\Fix(\mathcal E^\dagger)=\C \Id$, hence $T(\Id)=c\Id$.
     Positivity gives $c\ge0$. Iteration gives $c^p=1$, so $c=1$.
 \end{proof}
 
@@ -671,7 +671,6 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \label{lem:periodic_root_linearization_trace}
     \lean{IsPositiveMap.trace_eq_zero_of_power_linearization_eq_zero}
     \leanok
-    \uses{lem:periodic_positive_root_trace_preservation}
     Let $\mathcal F$ be positive, let $p>0$, and suppose that
     $\mathcal F^p$ is irreducible and trace preserving. Let $H$ be
     any complex-linear endomorphism of $M_D(\C)$. If
@@ -679,19 +678,20 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
         \sum_{k=0}^{p-1}\mathcal F^kH\mathcal F^{p-1-k} & =0,
         \label{eq:periodic_root_linearization_zero}
     \end{align}
-    then $\operatorname{tr}H(X)=0$ for every $X\in M_D(\C)$.
+    then $\trH(X)=0$ for every $X\in M_D(\C)$.
     No assumption of Hermiticity preservation on $H$ is required.
 \end{lemma}
 
 \begin{proof}\leanok
-    Put $T=\mathcal F^*$ and $u=H^*(I)$. The preceding lemma gives
-    $T(I)=I$. Taking the adjoint of
-    (\ref{eq:periodic_root_linearization_zero}), evaluating at $I$,
+    \uses{lem:periodic_positive_root_trace_preservation}
+    Put $T=\mathcal F^\dagger$ and $u=H^\dagger(\Id)$. The preceding lemma gives
+    $T(\Id)=\Id$. Taking the adjoint of
+    (\ref{eq:periodic_root_linearization_zero}), evaluating at $\Id$,
     and reversing the summation order gives
-    $\sum_{k=0}^{p-1}T^ku=0$. Applying $T-I$ yields $T^pu=u$.
-    Irreducibility of $\mathcal F^p$ gives $u=cI$, so $Tu=u$.
+    $\sum_{k=0}^{p-1}T^ku=0$. Applying $T-\Id$ yields $T^pu=u$.
+    Irreducibility of $\mathcal F^p$ gives $u=c\Id$, so $Tu=u$.
     The sum is therefore $pu=0$. Since $p>0$, $u=0$; trace duality
-    gives $\operatorname{tr}H(X)=\operatorname{tr}(uX)=0$.
+    gives $\trH(X)=\tr(uX)=0$.
     This is a first-order condition and does not construct an exact
     family of roots of the same power.
 \end{proof}

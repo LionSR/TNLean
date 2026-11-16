@@ -11,7 +11,7 @@ import QICLean.Channel.Schwarz.Closure
 # Trace preservation for roots of irreducible positive maps
 
 If a positive power of a positive map is irreducible and trace preserving,
-the map itself preserves trace. Moreover, the kernel of the linearization
+the map itself preserves trace. The kernel of the linearization
 of the power map consists of trace-annihilating perturbations.
 
 These are reductions for bounded-root selection in arXiv:1708.00029,
