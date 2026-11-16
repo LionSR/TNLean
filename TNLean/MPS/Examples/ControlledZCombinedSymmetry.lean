@@ -46,13 +46,15 @@ def combinedZCharacter : Multiplicative (ZMod 2 × ZMod 2) →* (Fin 2 → ℂˣ
     simp
   map_mul' g h := by
     funext a
-    have hs : (-1 : ℂˣ) ^ 2 = 1 := by norm_num
     change (-1 : ℂˣ) ^ ((g.toAdd.1 + h.toAdd.1).val * a.val) =
       (-1) ^ (g.toAdd.1.val * a.val) * (-1) ^ (h.toAdd.1.val * a.val)
-    fin_cases a
-    · simp
-    · simp only [mul_one]
-      rw [ZMod.val_add, ← pow_eq_pow_mod _ hs, pow_add]
+    have hbit (p : ZMod 2) : p = 0 ∨ p = 1 := by
+      fin_cases p
+      · exact Or.inl rfl
+      · exact Or.inr rfl
+    rcases hbit g.toAdd.1 with hg | hg <;> rcases hbit h.toAdd.1 with hh | hh <;>
+      rw [hg, hh] <;> fin_cases a <;>
+      norm_num [ZMod.val_zero, ZMod.val_one, ZMod.val_ofNat]
 
 /-- The on-site character is the first-bit factor of the existing split-leg phase. -/
 theorem combinedZCharacter_val (g : Multiplicative (ZMod 2 × ZMod 2)) (a : Fin 2) :

@@ -1,0 +1,147 @@
+\subsection{Continuity of the relative action class}
+
+\begin{lemma}[A uniform comparison and continuity of reduction scalars]
+    \label{lem:mpug_reduction_scalar_continuity}
+    \lean{MPSTensor.IsReduction.mul_evalWord_eq_dressedScalar_smul,
+        MPSTensor.continuous_dressedScalar_of_reductions}
+    \leanok
+    Suppose $(V,W)$ and $(V',W')$ reduce a tensor $B$ of bond dimension $E$
+    onto the same normal tensor $A$ of positive bond dimension. Assume
+    $B$ and $A$ have equal periodic vectors at every positive length.
+    Their selected comparison scalar $z$ satisfies
+    \[
+        VB^w=zV'B^w\qquad (|w|>2E).
+    \]
+    In a family over a topological space, if $B,V,V'$ are continuous and
+    these hypotheses hold at every parameter, then $z$ is continuous.
+    Neither the right caps nor the target tensors need be continuous.
+\end{lemma}
+\begin{proof}\leanok
+    The source bond dimension bounds both residual nilpotency lengths.
+    The uniqueness theorem for reductions therefore gives the displayed
+    comparison after the common threshold $2E$. Uniqueness identifies its
+    scalar with the selected one. At any parameter choose a longer word
+    and an entry of $V'B^w$ that is nonzero there. It remains nonzero on a
+    neighborhood, on which $z$ is the quotient of the corresponding
+    entries of $VB^w$ and $V'B^w$. Both entries are continuous.
+\end{proof}
+
+\begin{lemma}[Continuity of actual action L-symbols]
+    \label{lem:mpug_action_l_continuity}
+    \lean{MPOTensor.continuous_actTensor_family,
+        MPOTensor.GroupFamily.ActionData.continuous_actV,
+        MPOTensor.GroupFamily.ActionData.continuous_fuseV,
+        MPOTensor.GroupFamily.ActionData.continuous_lSymbol}
+    \leanok
+    \uses{lem:mpug_reduction_scalar_continuity}
+    Fix a group MPO family and fusion reductions. Let $A_x$ be a continuous
+    family of normal invariant states of fixed positive bond dimension,
+    with actual action reductions whose left caps $V_g(x)$ are continuous
+    for every $g$. Then the two action trees and their selected scalar
+    $L_x(g,h)$ are continuous in $x$, for every $g,h$.
+\end{lemma}
+\begin{proof}\leanok
+    The action tensor is a finite sum of Kronecker products. The two left
+    action trees are finite matrix products of the continuous caps, fixed
+    fusion caps and fixed bond identifications. They reduce the same
+    stacked action to $A_x$. Periodic invariance gives equality of its
+    periodic vectors with those of $A_x$, so the preceding lemma applies.
+\end{proof}
+
+\begin{lemma}[Continuous finite-group cocycle paths]
+    \label{lem:mpug_finite_cocycle_path}
+    \lean{TNLean.Algebra.isMulCoboundary₂_div_of_continuous_cocyclePath,
+        TNLean.Algebra.H2π_eq_of_continuous_cocyclePath}
+    \leanok
+    \uses{thm:mpug_generalized_cocycle_power,
+        thm:spt_virtual_path_class_invariance}
+    Let $G$ be finite and let $\omega_t:G^2\to\C^\times$ be two-cocycles
+    for $t\in[0,1]$. If $t\mapsto\omega_t(g,h)$ is continuous for every
+    $g,h$, then $\omega_1/\omega_0$ is a coboundary. In particular,
+    $[\omega_1]=[\omega_0]$ in $H^2(G,\C^\times)$. No virtual matrix path
+    is supplied as a hypothesis.
+\end{lemma}
+\begin{proof}\leanok
+    Construct the regular projective representation of each $\omega_t$.
+    Its matrices, and hence their nonzero determinants $d_t(g)$, depend
+    continuously on $t$. The determinant identity is
+    \[
+        d_t(g)d_t(h)=\omega_t(g,h)^{|G|}d_t(gh).
+    \]
+    Lift every $d_t(g)$ continuously through the $|G|$th power covering
+    of $\C^\times$. After removing the resulting coboundary, the cocycle
+    values lie among finitely many roots of unity, so are constant on
+    the interval. This gives the endpoint coboundary.
+\end{proof}
+
+\begin{lemma}[Cancellation of the common associator]
+    \label{lem:mpug_relative_l_is_cocycle}
+    \lean{MPOTensor.GroupFamily.ActionData.relative_lSymbol_isMulCocycle₂}
+    \leanok
+    Two normal positive-dimensional states invariant under the same normal
+    group MPO representation have a relative scalar two-cocycle
+    $Q(g,h)=L_A(g,h)/L_B(g,h)$, for any common fusion reductions and any
+    action reductions. The associator need not be the constant one, and
+    the reductions need not be normalized.
+\end{lemma}
+\begin{proof}\leanok
+    Divide their two compatibility equations with the common associator.
+    The associator cancels, leaving the scalar two-cocycle equation.
+\end{proof}
+
+\begin{lemma}[Relative class along continuous action reductions]
+    \label{lem:mpug_continuous_reduction_path_class}
+    \lean{MPOTensor.GroupFamily.ActionData.relative_lSymbol_endpoints_H2π_eq}
+    \leanok
+    \uses{lem:mpug_action_l_continuity, lem:mpug_finite_cocycle_path,
+        lem:mpug_relative_l_is_cocycle}
+    Fix a normal representation of a finite group by MPO tensors, with
+    fixed fusion reductions. Let $A_t,B_t$, $t\in[0,1]$, be continuous
+    normal invariant tensor families of fixed positive bond dimensions
+    $D,E$. Suppose actual action reductions have been chosen with left
+    caps continuous for every group element. Then
+    \[
+        [L_{A_1}/L_{B_1}]=[L_{A_0}/L_{B_0}]
+        \quad\hbox{in }H^2(G,\C^\times).
+    \]
+    No continuity of the right caps is required.
+\end{lemma}
+\begin{proof}\leanok
+    The actual L-symbols are continuous by
+    Lemma~\ref{lem:mpug_action_l_continuity}. Their ratio is a continuous
+    two-cocycle by Lemma~\ref{lem:mpug_relative_l_is_cocycle}, and its
+    class is constant by Lemma~\ref{lem:mpug_finite_cocycle_path}.
+\end{proof}
+
+This theorem assumes continuous left action reductions and fixed state
+bond dimensions. It does not construct them from a physical Hamiltonian
+path, nor handle changes of minimal bond dimension. Those steps remain
+part of the physical phase problem
+\cite{gap:fbc25_controlled_z_split_index_class_scope}.
+
+\begin{lemma}[Closed-fusion obstruction for the controlled-Z family]
+    \label{lem:mpug_controlled_z_no_closed_fusion}
+    \lean{ControlledZGauging.combinedFamily_not_isClosed,
+        ControlledZGauging.combinedFamily_block_not_isClosed}
+    \leanok
+    \uses{lem:mpug_controlled_z_explicit_reductions}
+    The combined controlled-$Z$ family admits no fusion reductions with
+    exact closed reconstruction on each letter. This remains true after
+    every positive physical blocking length. Thus periodic multiplication
+    and all-word reductions for this family do not supply the exact
+    arbitrary-boundary closed-fusion premise of
+    \cite[equation \texttt{fusiontensorG}]{GarreRubio2023MPOSym}.
+\end{lemma}
+\begin{proof}\leanok
+    Square the controlled-$Z$ generator. The two diagonal physical letters
+    $P_0,P_1$ of the stacked product are idempotent and distinct: their
+    upper-left entries are respectively $1$ and $0$. The corresponding
+    identity-label letters are equal. Exact closed reconstruction through
+    that label would force $P_0=P_1$, a contradiction. After blocking $L>0$
+    sites, the constant zero and constant one physical words give
+    $P_0^L=P_0$ and $P_1^L=P_1$, so the same contradiction persists.
+\end{proof}
+
+The last lemma concerns this fixed family and its blockings. It neither
+excludes a different symmetry embedding nor proves the general physical
+phase obstruction.

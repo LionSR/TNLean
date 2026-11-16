@@ -78,7 +78,7 @@
         ControlledZGauging.combinedZeroV, ControlledZGauging.combinedZeroW,
         ControlledZGauging.combinedFusionV, ControlledZGauging.combinedFusionW}
     \leanok
-    Write $g=(p,q)$, with $p,q\in\{0,1\}$. Over $\Q$, the tensor is
+    Write $g=(p,q)$, with $p,q\in\{0,1\}$. Over $\mathbb{Q}$, the tensor is
     \[
         T_{p,0}^{ij}=\delta_{ij}(-1)^{pj},\qquad
         (T_{p,1}^{ij})_{lr}=\delta_{ij}\delta_{rj}(-1)^{pj+lj}.
@@ -130,7 +130,7 @@
 \end{lemma}
 \begin{proof}\leanok
     Check the cap, single-letter and projection-insertion identities over
-    $\Q$ for all labels and letters. Apply
+    $\mathbb{Q}$ for all labels and letters. Apply
     Lemma~\ref{lem:mpug_reduction_coefficient_map}.
 \end{proof}
 
@@ -195,3 +195,5 @@
     nonzero. Lemma~\ref{lem:mpug_relative_l_gauge} then removes all dependence
     on the chosen action and common fusion reductions.
 \end{proof}
+
+\input{chapter/ch29_action_path_invariance}

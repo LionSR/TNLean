@@ -1,0 +1,225 @@
+{
+  "slug": "mpu",
+  "pageTitle": "Matrix Product Unitaries · TNLean",
+  "heading": "Matrix product unitaries: structure, index and symmetry phases, after Cirac, Pérez-García, Schuch and Verstraete",
+  "lede": "A matrix product unitary is a translation-invariant tensor network whose periodic contraction is a unitary operator on every ring. In 2017 Cirac, Pérez-García, Schuch and Verstraete showed that, after blocking finitely many sites, every such operator is, on rings of even length, a two-layer circuit of local unitary gates whose internal legs have dimensions <i>r</i> and <i>ℓ</i>, that two tensors give the same unitaries on rings of even length exactly when their gates differ by unitaries on the internal legs, and that an index, half the base-two logarithm of the ratio of two ranks, measures the flow of information along the chain and classifies these operators up to continuous deformation and the addition of trivial ancillas. They then classified matrix product unitaries invariant under complex conjugation, time reversal and transposition. In Lean the structure theorem, the standard form, the fundamental theorem (in the form that compares tensors on rings of even length, since the printed all-length converse fails), the index with its blocking, product and continuity properties, and the local characterizations of the symmetries for canonical standard forms are proved. The complete index theorem, the continuous choice of standard forms and the symmetry phase classifications remain open.",
+  "description": "Progress of the Lean 4 formalization of matrix product unitaries after Cirac, Pérez-García, Schuch and Verstraete, arXiv:1703.09188.",
+  "tabs": [
+    {
+      "slug": "openai-area-law-peps-proof",
+      "label": "Two-dimensional area law and PEPS"
+    },
+    {
+      "slug": "one-dimensional-area-law-mps",
+      "label": "One-dimensional area law and MPS"
+    },
+    {
+      "slug": "hastings-area-law",
+      "label": "One-dimensional area law after Hastings"
+    },
+    {
+      "slug": "lvv-ground-state-algorithm",
+      "label": "Ground states in polynomial time"
+    },
+    {
+      "slug": "aklv-area-law",
+      "label": "Sharper area law"
+    },
+    {
+      "slug": "alvv-rg-algorithm",
+      "label": "Rigorous renormalization group"
+    },
+    {
+      "slug": "mpu",
+      "label": "Matrix product unitaries"
+    }
+  ],
+  "label": "1703.09188",
+  "since": "2026-08-08",
+  "scope": "tracker",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
+    }
+  ],
+  "tracker": 5704,
+  "streams": [
+    5712,
+    5713,
+    5714,
+    5715,
+    6017,
+    6136
+  ],
+  "streamNames": {
+    "5712": "Index continuity and classification",
+    "5713": "Conjugation symmetry",
+    "5714": "Time reversal and transposition",
+    "5715": "CZX and topological-insulator examples",
+    "6017": "Symmetry-respecting equivalence",
+    "6136": "Canonical form II under products, transforms and paths"
+  },
+  "papers": {
+    "cpsv17": {
+      "name": "Cirac, Pérez-García, Schuch and Verstraete 2017",
+      "stream": 5704
+    }
+  },
+  "sources": "https://arxiv.org/abs/1703.09188v2",
+  "citationPattern": "1703\\.09188|Cirac2017MPU|CPSV17",
+  "excludePathPattern": "mpo-symmetry|fbc25|2502\\.20257|gs24_|gnvw12_|sw04_|rmp_|ch13_|ch29_|ch30_",
+  "leanDirs": [
+    "TNLean/MPS/MPU"
+  ],
+  "routes": [
+    {
+      "id": "core",
+      "paper": "cpsv17",
+      "eyebrow": "Sections II–III",
+      "heading": "Structure, standard form and the fundamental theorem",
+      "intro": "A tensor with two physical legs and two virtual legs of dimension <i>D</i> generates, on a ring of <i>N</i> sites, an operator <i>U<sub>N</sub></i> on (ℂ<sup><i>d</i></sup>)<sup>⊗<i>N</i></sup>. The tensor is a matrix product unitary when every <i>U<sub>N</sub></i> is unitary. After blocking boundedly many sites, the tensor becomes <i>simple</i>: in the double layer of the tensor and its adjoint, two consecutive sites factor through one pair of vectors on the middle bond. A simple tensor's two-site contraction then factors through two isometries of ranks <i>r</i> and <i>ℓ</i>, with <i>rℓ</i> = <i>d</i><sup>2</sup>. All results of this part are proved.",
+      "stages": [
+        {
+          "title": "Unitarity, normality and simple tensors",
+          "issues": [
+            5705,
+            5706,
+            5707
+          ],
+          "physics": "The transfer operator of a matrix product unitary has a single nonzero eigenvalue, equal to one, so a tensor in canonical form is normal; after blocking a bounded number of sites, the double layer of the tensor and its adjoint on two consecutive sites factors through one pair of vectors on the middle bond, which is the paper's simplicity condition.",
+          "delivers": "Normality of every matrix product unitary in canonical form (the paper assumes canonical form throughout; a tensor with unused bond directions is first reduced to its canonical representative) and the bounded blocking theorem for simplicity."
+        },
+        {
+          "title": "Two ranks and the two-layer circuit",
+          "issues": [
+            5708,
+            5709
+          ],
+          "physics": "Cutting the two-site contraction of a simple tensor in two ways gives two singular value decompositions with ranks <i>r</i> and <i>ℓ</i>. Their factors assemble into two unitary gates <i>u</i> and <i>v</i>, and on every ring of even length the operator is the circuit of <i>u</i> on even pairs followed by <i>v</i> on odd pairs: the standard form.",
+          "delivers": "The standard form, and the fundamental theorem comparing two simple tensors through their gates on rings of even length."
+        }
+      ]
+    },
+    {
+      "id": "index",
+      "paper": "cpsv17",
+      "eyebrow": "Section IV",
+      "heading": "The index",
+      "intro": "The index of a matrix product unitary is ½ log<sub>2</sub>(<i>r</i>/<i>ℓ</i>) for the two ranks of a simple blocked tensor, the net quantum information moved to the right per site; it is a real number, the logarithm of a rational one. The paper shows that it does not depend on the blocking, adds under tensor products and composition, is constant along continuous paths, and characterizes the operator up to continuous deformation and the addition of trivial sites.",
+      "stages": [
+        {
+          "title": "Blocking, products and continuity",
+          "issues": [
+            5711
+          ],
+          "physics": "The ratio of the two ranks is unchanged by blocking and multiplies under tensor products and composition; the ranks are lower semicontinuous and their product is fixed, so both are constant along a path of matrix product unitaries.",
+          "delivers": "Well-definedness, additivity and continuity of the index."
+        },
+        {
+          "title": "The index theorem and continuous standard forms",
+          "issues": [
+            6023,
+            6024,
+            6140
+          ],
+          "physics": "Two matrix product unitaries are equivalent, connected by a path after adding trivial sites, exactly when their indices agree. One direction is continuity; the other builds the path explicitly through standard forms, which requires choosing the gates continuously along a path.",
+          "delivers": "The four clauses of the index theorem and the continuous choice of standard form."
+        }
+      ]
+    },
+    {
+      "id": "sym",
+      "paper": "cpsv17",
+      "eyebrow": "Section V",
+      "heading": "Symmetries and their phases",
+      "intro": "A matrix product unitary may be invariant under complex conjugation, time reversal (the adjoint) or transposition. For each symmetry the paper characterizes invariance by local equations on the gates, extracts discrete invariants, and classifies symmetric matrix product unitaries up to symmetry-preserving deformation.",
+      "stages": [
+        {
+          "title": "Symmetry-preserving equivalence",
+          "issues": [
+            7016,
+            7032
+          ],
+          "physics": "Two symmetric matrix product unitaries are equivalent under the symmetry when a path of symmetric operators joins them after adding symmetric trivial sites; the paper reduces this to a path of standard forms respecting the local symmetry equations.",
+          "delivers": "The standard-form path criterion for symmetric equivalence."
+        },
+        {
+          "title": "Complex conjugation",
+          "issues": [
+            7017,
+            7018,
+            7019
+          ],
+          "physics": "Conjugation invariance holds exactly when the gates satisfy <i>ū</i> = (<i>x</i> ⊗ <i>y</i>)<i>u</i> and <i>v̄</i> = <i>v</i>(<i>y</i><sup>†</sup> ⊗ <i>x</i><sup>†</sup>) for unitaries <i>x</i>, <i>y</i> that are both symmetric or both skew-symmetric. In the symmetric case the gates can be chosen real orthogonal, in the skew case they satisfy a symplectic relation (possible only when <i>r</i> and <i>ℓ</i> are even), in each case unique up to local orthogonal or symplectic transformations; when <i>r</i> or <i>ℓ</i> is odd, the determinant det(<i>uv</i>) decides whether two such operators are strictly equivalent under the symmetry.",
+          "delivers": "The local characterization, the orthogonal and symplectic normal forms of the gates, and the classification of conjugation-symmetric phases."
+        },
+        {
+          "title": "Time reversal and transposition",
+          "issues": [
+            7020,
+            7108,
+            9880,
+            7111,
+            7110,
+            7023
+          ],
+          "physics": "Each site of the standard form carries two spins. Invariance under the adjoint on rings of an even number of such two-spin sites (original lengths divisible by four) holds exactly when, on four consecutive spins, (𝟙 ⊗ <i>v</i><sub>23</sub> ⊗ 𝟙)(<i>u</i><sub>12</sub> ⊗ <i>u</i><sub>34</sub>) = σ(<i>x</i><sub>12</sub> ⊗ <i>x</i><sub>34</sub><sup>†</sup>)(𝟙 ⊗ <i>v</i><sub>23</sub><sup>†</sup> ⊗ 𝟙) for a unitary <i>x</i> on two spins and a sign σ = ±1; it forces <i>r</i> = <i>ℓ</i> = <i>d</i>. The sign is read off from a trace on four spins, σ = tr[𝕊<sub>12,34</sub><i>v</i><sub>23</sub><i>u</i><sub>12</sub><i>u</i><sub>34</sub><i>v</i><sub>23</sub>]/<i>d</i><sup>2</sup> with 𝕊 the swap of the two pairs; it does not depend on the choices, is constant along symmetric paths, and behaves under blocking according to parity.",
+          "delivers": "The local characterizations, the sign σ with its trace formula, invariance and blocking parity, and its comparison with the sign of matrix product states."
+        }
+      ]
+    },
+    {
+      "id": "ex",
+      "paper": "cpsv17",
+      "eyebrow": "Section VI",
+      "heading": "Examples",
+      "intro": "The shift, the CZX operator and a model of a topological insulator illustrate the index and the symmetry phases.",
+      "stages": [
+        {
+          "title": "Shifts, CZX and topological insulators",
+          "issues": [
+            5715
+          ],
+          "physics": "The shift on sites of dimension <i>d</i> has index log<sub>2</sub> <i>d</i>; families of shifts with swaps realize distinct symmetry phases, and the CZX operator realizes a nontrivial phase of a symmetry acting on two spins per site.",
+          "delivers": "Explicit tensors, their standard forms, indices and symmetry invariants."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Matrix product unitary",
+      "A translation-invariant tensor whose periodic contraction on every ring of <i>N</i> sites is a unitary operator."
+    ],
+    [
+      "Simple tensor",
+      "A tensor whose double layer with its adjoint, on two consecutive sites, factors through one pair of vectors on the middle bond; every matrix product unitary becomes simple after blocking at most <i>D</i><sup>4</sup> sites."
+    ],
+    [
+      "Standard form",
+      "The presentation of a simple matrix product unitary as a layer of gates <i>u</i> on even pairs followed by a layer of gates <i>v</i> on odd pairs."
+    ],
+    [
+      "Index",
+      "½ log<sub>2</sub>(<i>r</i>/<i>ℓ</i>) for the two ranks of a simple tensor: the net information flow per site, a real number."
+    ],
+    [
+      "Equivalence",
+      "Two matrix product unitaries are equivalent when, after tensoring with trivial sites, a continuous path of matrix product unitaries joins them."
+    ]
+  ]
+}

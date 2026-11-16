@@ -33,6 +33,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallString
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallStringExchange
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallStringGroup
 import TNLean.MPS.Symmetry.MPOSymmetry.Examples
+import TNLean.MPS.Symmetry.MPOSymmetry.FiniteCocyclePath
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupAction
@@ -63,6 +64,8 @@ import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSupport
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSwap
 import TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule
 import TNLean.MPS.Symmetry.MPOSymmetry.LSymbolComputation
+import TNLean.MPS.Symmetry.MPOSymmetry.LSymbolContinuity
+import TNLean.MPS.Symmetry.MPOSymmetry.LSymbolPathInvariance
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveBoundaryTransport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveConfigEquiv
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveEdgeNormalization

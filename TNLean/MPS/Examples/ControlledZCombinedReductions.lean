@@ -93,21 +93,23 @@ def combinedFusionW : (q r : Fin 2) →
   | 1, 0 => (1 : Matrix (Fin 2) (Fin 2) ℚ)
   | 1, 1 => !![1; 1; 1; 1]
 
-set_option backward.isDefEq.respectTransparency false in
 /-- The rational tensor is exactly the previously constructed complex MPO tensor. -/
 theorem complexOfRing_combinedRationalTensor (g : Multiplicative (ZMod 2 × ZMod 2))
     (i j : Fin 2) :
     complexOfRing (Rat.castHom ℂ) (combinedRationalTensor g i j) =
       combinedFamily.tensor g i j := by
-  ext l r
-  change (Rat.castHom ℂ) (combinedLabelRational g.toAdd.1 g.toAdd.2 i j l r) =
-    (combinedZCharacter g j : ℂ) * czRepTensor g.toAdd.2 i j l r
-  revert g
-  refine Multiplicative.forall_zmod_two_prod ?_ ?_ ?_ ?_ <;>
-    dsimp only [toAdd_ofAdd] <;> intro l r <;>
-    fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
-    norm_num [combinedLabelRational, combinedZCharacter, czRepTensor,
-      czMPUTensor, czSign, idTensor, Matrix.one_apply, ZMod.val, czBondDim]
+  -- The pinned ZMod 2 is semireducibly Fin 2. This coefficient proof needs backward
+  -- elaboration to unfold that identification throughout its dependent matrix indices.
+  set_option backward.isDefEq.respectTransparency false in
+    ext l r
+    change (Rat.castHom ℂ) (combinedLabelRational g.toAdd.1 g.toAdd.2 i j l r) =
+      (combinedZCharacter g j : ℂ) * czRepTensor g.toAdd.2 i j l r
+    revert g
+    refine Multiplicative.forall_zmod_two_prod ?_ ?_ ?_ ?_ <;>
+      dsimp only [toAdd_ofAdd] <;> intro l r <;>
+      fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
+      norm_num [combinedLabelRational, combinedZCharacter, czRepTensor,
+        czMPUTensor, czSign, idTensor, Matrix.one_apply, ZMod.val, czBondDim]
 
 theorem complexOfRing_stateRational (i : Fin 2) :
     complexOfRing (Rat.castHom ℂ) (stateRational i) = stateTensor i := by

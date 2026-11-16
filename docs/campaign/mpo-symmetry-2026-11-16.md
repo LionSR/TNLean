@@ -226,3 +226,115 @@ the physical path construction.
 - The independent Codex review of the first extended head completed with no findings.
   Fresh proof/Blueprint review and exact-final-head hosted CI remain merge requirements;
   a replacement documentation head must be checked and reviewed too.
+
+## Continuation: actual reduction paths and the closed-fusion obstruction
+
+The next mathematical batch was developed on
+`feat/10521-mpo-action-path-invariance`, based on the frozen relative-class head
+`65a98e1361f0f03216df6e77112116c17965aba6`, while that head was reviewed. Its
+four new modules form one coherent continuation of #10686, rather than separate small
+PRs. The parent reconfirmed preservation of Fibonacci scope; no takeover occurred.
+
+### Checked mathematical results
+
+- `LSymbolContinuity` derives the common comparison threshold `|w| > 2E` from the
+  source bond dimension `E`. Continuous source tensors and left reduction caps then
+  give continuous selected dressed scalars, by a nonzero-entry quotient near each point.
+  Neither target tensors nor right caps need be continuous for this generic lemma.
+- The same module proves continuity of actual MPO action tensors, both actual action
+  trees, and their selected single-block L-symbols from continuous state tensors and
+  left action caps. It uses actual all-word reductions, normality, positive fixed state
+  bond dimension and periodic invariance; no continuous scalar is assumed.
+- `FiniteCocyclePath` proves endpoint cohomology invariance for any continuous scalar
+  two-cocycle path on a finite group. The regular matrices are constructed from the
+  cocycle and the existing determinant-root path argument is reused. A virtual
+  projective matrix path is not supplied as a premise.
+- `LSymbolPathInvariance` cancels the common associator between two actual invariant
+  states and derives their relative native two-cocycle. For continuous normal invariant
+  tensor paths of fixed positive dimensions, with continuous actual left action caps,
+  it proves equality of their endpoint relative classes. Continuous right caps are not
+  required. The continuous left caps remain a stated intermediate hypothesis.
+- `ControlledZClosedFusionObstruction` proves that no fusion caps of the fixed combined
+  family give exact letterwise closed reconstruction. This remains impossible after
+  every positive physical blocking length: the distinct zero/one diagonal letters of
+  the squared controlled-Z generator are idempotent, so their positive powers remain
+  distinct, while reconstruction through the identity label would identify them.
+  Thus neither different caps nor mere blocking repairs this particular closed-fusion
+  premise. The theorem does not exclude a different admissible symmetry embedding.
+
+These are 12 additional public declarations in four proof modules (413 Lean lines).
+The campaign now has 81 public declarations in eleven proof modules. All 12 new
+statements have Blueprint entries that state their actual restrictions. No physical
+Hamiltonian-path conclusion is claimed from supplied reduction data.
+
+### Validation and integration evidence
+
+The four-module package build passes (18,991 jobs in its focused transitive closure),
+and each source passes direct strict elaboration with automatic implicits disabled,
+synthesis depth 3, standard Mathlib linters and warnings as errors. A temporary audit
+verified the 12 public declarations have foundational dependencies contained in
+`{propext, Classical.choice, Quot.sound}`; the audit source was removed. Pinned Lean,
+QICLean and prebuilt Mathlib artifacts were reused; no Mathlib Lean source was rebuilt.
+Generated imports, text style, Blueprint source synchronization/roles, pinned formatting,
+reader-facing prose and all 308 paper-gap references pass. The generated declaration
+list was refreshed before the source synchronization check; it is not a source artifact.
+This is focused local validation, not a complete library or compiled Blueprint acceptance.
+
+At frozen head `65a98e13`, the hosted Lean job
+`https://github.com/LionSR/TNLean/actions/runs/43787527913/job/133042789832` passed the
+full 32,373-job library build, strict changed-source passes, text style and compiled
+Blueprint/paper-gap declaration checks. Both independent Codex and Claude source reviews
+found no mathematical blockers at that head. The Blueprint web/PDF jobs were still
+running when the next repairs were prepared, so complete CI is not claimed. Four
+Copilot style threads are handled by explicit Kronecker entries, bit-case character
+multiplication, a documented proof-scoped transparency setting, and separated references.
+Any expanded or repaired head requires fresh final-head checks and independent review.
+
+The local full-web command for the frozen head returned zero, but emitted a reflectbox
+Jinja-template warning and parent-node diagnostic messages. It is not counted as a
+successful complete-render validation. The hosted render remains authoritative and must
+finish successfully; no occupied diagram or cochain sources were changed to suppress it.
+
+### Remaining physical bridge and coordination
+
+#10626 was notified before work on the additional consumers. Its prerequisite order and
+workflow approval gate are preserved; its branch and occupied files remain untouched.
+The new consumers must be included in the owner's eventual coefficient-API migration.
+The tactic pattern scan found no new pattern requiring a custom tactic. The nonzero
+entry/quotient argument is proved once and reused for action symbols, rather than copied.
+The separately owned global tactic ledger was left intact.
+
+The remaining physical work is to construct suitable continuous local action reductions
+from an independent physical path, address changes of minimal state bond dimension, and
+prove the connection to the source's allowed symmetric gapped paths. A GLM23 route must
+construct and verify an alternative admissible arbitrary-boundary symmetry embedding;
+the unchanged combined family and its positive blockings cannot satisfy exact closed
+fusion. These remain mathematical blockers, not completed classification results.
+
+### Consolidation checkpoint
+
+The reviewed coefficient comparison now scopes its transparency option to its proof,
+with the pinned semireducible bit/bond identification explained. The character's
+homomorphism law uses the two bit cases, preserving its original physical formula;
+the Kronecker proof names the entry formula explicitly, and the adjacent references
+are separated. All four touched Lean sources pass direct strict elaboration.
+The continuation and review repairs are consolidated into #10686. Upstream main
+`3d3507f93fdf6fa52db553cacf30b5df4e60eaa7` is integrated; its intervening changes
+are campaign metadata/tooling, not Lean or dependency-pin changes. Earlier-head green
+checks and reviews remain historical evidence only. The resulting expanded head must
+pass its own complete checks and reviews before merge.
+
+The integrated eleven-module focused build passes (19,109 jobs). In an isolated
+review worktree the repaired seven-module closure also passes (19,077 jobs); its
+slowest changed modules take 23 seconds when built without competing strict checks.
+These are focused builds, distinct from the frozen head's hosted full-library build.
+
+Final integrated checks: all eleven sources pass direct strict elaboration and all
+81 public declarations pass the standard foundational-dependency audit. The temporary
+audit source was deleted. The frozen head's hosted PDF job failed with TeX errors.
+A focused compilation of the actual relative-class subsection reproduced undefined
+`\Q` commands at both rational-coefficient references. Both now use `\mathbb{Q}`.
+The relative-class and new reduction-path subsections compile together as five XeTeX
+pages without a TeX error. This is a focused typesetting check, not complete-volume
+acceptance. The expanded head still requires its own full hosted Lean, web and PDF
+checks, fresh independent reviews and the applicable approvals. No merge occurred.

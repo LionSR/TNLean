@@ -15,6 +15,10 @@ The reference product state has trivial L-symbol. The bond-three state's L-symbo
 from the cluster factor system by a coboundary, giving its nontrivial relative class.
 This is the action-tensor comparison needed after the split-index calculation in
 arXiv:2502.20257, line 3970. Physical path invariance is a separate assertion.
+
+The declaration-scoped transparency options below let backward elaboration unfold the
+pinned semireducible identification of `ZMod 2` with `Fin 2` in dependent bond indices
+and in the finite coboundary comparison. Kernel checking of the resulting proofs is unchanged.
 -/
 
 noncomputable section

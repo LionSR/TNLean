@@ -24,8 +24,8 @@ variable {R : Type*} [CommRing R] {d D E : ℕ}
 theorem complexOfRing_kronecker (f : R →+* ℂ) {m n p q : Type*}
     (X : Matrix m n R) (Y : Matrix p q R) :
     complexOfRing f (X ⊗ₖ Y) = complexOfRing f X ⊗ₖ complexOfRing f Y := by
-  ext i j
-  exact map_mul f _ _
+  ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
+  simp only [complexOfRing_apply, Matrix.kronecker_apply, map_mul]
 
 /-- Local reduction identities remain valid after applying a ring homomorphism to every
 entry. The conclusion includes all words, including the empty word. -/
