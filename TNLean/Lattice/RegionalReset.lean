@@ -9,7 +9,7 @@ import QICLean.Analysis.GaussianFilter.Reindex
 import QICLean.Entropy.FiniteProductSplitting
 import QICLean.Entropy.ProductMarginals
 import TNLean.Algebra.GappedGroundState
-import TNLean.Lattice.RegionalSwap
+import TNLean.Circuit.RegionalSwap
 import TNLean.Lattice.SupportedPolarUnitary
 
 /-!

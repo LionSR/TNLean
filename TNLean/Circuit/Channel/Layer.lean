@@ -92,34 +92,10 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-! ### Traces against product densities -/
 
-theorem _root_.Matrix.trace_rectKronecker (m : ι → Matrix (Fin d) (Fin d) ℂ) :
-    trace (rectKronecker m) = ∏ i, trace (m i) := by
-  simp only [trace, diag_apply, rectKronecker_apply]
-  exact (Fintype.prod_sum fun i j ↦ m i j j).symm
-
 private theorem trace_rectKronecker_eq_one {σ : ι → Matrix (Fin d) (Fin d) ℂ}
     (hσ : ∀ i, (σ i).PosSemidef ∧ trace (σ i) = 1) : trace (rectKronecker σ) = 1 := by
   rw [trace_rectKronecker]
   exact Finset.prod_eq_one fun i _ ↦ (hσ i).2
-
-/-- Product densities factorize expectations of products of operators on disjoint sets of
-sites: `tr(σ AB) tr σ = tr(σ A) tr(σ B)` for `σ = ⊗ᵢ σᵢ`. -/
-theorem trace_rectKronecker_mul_mul {S S' : Set ι} (hSS' : Disjoint S S')
-    (σ : ι → Matrix (Fin d) (Fin d) ℂ) {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S') :
-    trace (rectKronecker σ * (A * B)) * trace (rectKronecker σ) =
-      trace (rectKronecker σ * A) * trace (rectKronecker σ * B) := by
-  let φ := traceLinearMap (ι → Fin d) ℂ ℂ ∘ₗ LinearMap.mulLeft ℂ (rectKronecker σ)
-  rw [mul_comm]
-  refine eq_of_mem_supportedOperators₂ (trace (rectKronecker σ) • (LinearMap.mul ℂ _).compr₂ φ)
-    ((LinearMap.mul ℂ ℂ).compl₁₂ φ φ) (fun m m' hm hm' ↦ ?_) hA hB
-  change trace (rectKronecker σ) * trace (rectKronecker σ * (rectKronecker m * rectKronecker m')) =
-    trace (rectKronecker σ * rectKronecker m) * trace (rectKronecker σ * rectKronecker m')
-  simp only [rectKronecker_mul, trace_rectKronecker, ← Finset.prod_mul_distrib]
-  refine Finset.prod_congr rfl fun i _ ↦ ?_
-  by_cases hi : i ∈ S
-  · simp [hm' i (Set.disjoint_left.mp hSS' hi), mul_comm]
-  · simp [hm i hi]
 
 /-! ### Kraus maps on the sites -/
 

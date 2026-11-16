@@ -16,7 +16,7 @@ import Mathlib.Analysis.Normed.Operator.Mul
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import TNLean.Algebra.MatrixHermitianSum
-import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SupportedOperators
 
 /-!
 # Local commutator recursion for finite-volume Hamiltonians

@@ -49,12 +49,16 @@ SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset(
         "ExpectationBounds",
         "ProductVector",
         "ProjectedRelativeEvolution",
+        "RegionSplit",
+        "RegionalSwap",
         "SiteEmbedding",
         "SiteEmbeddingNorm",
         "SiteEmbeddingOrder",
         "SiteExpectation",
         "SiteExpectationOrder",
+        "SiteOperators",
         "SiteOscillation",
+        "SitePermutation",
         "SitePermutationSupport",
         "SitewiseTensorSupport",
         "SpectatorOscillationSupport",
@@ -66,6 +70,7 @@ SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset(
         "SupportedGroundSpace",
         "SupportedMatrixElements",
         "SupportedNormalizedGroundSpace",
+        "SupportedOperators",
     )
 )
 
@@ -98,23 +103,7 @@ ALLOWED: dict[str, frozenset[str]] = {
 # an entry: move the shared declaration down to the layer both sides may import.
 DEBT: frozenset[str] = frozenset(
     {
-        "TNLean.Circuit.ExpectationBounds -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Circuit.LiebRobinson.CommutatorRecursion -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Circuit.SiteEmbedding -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Circuit.SiteEmbeddingOrder -> TNLean.Circuit.Gates.Controlled",
         "TNLean.Circuit.SiteExpectationOrder -> TNLean.Circuit.LiebRobinson.CommutatorRecursion",
-        "TNLean.Circuit.SiteOscillation -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Circuit.SitePermutationSupport -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Circuit.SitewiseTensorSupport -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Circuit.SupportedFunctionalCalculus -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Circuit.SupportedGroundSpace -> TNLean.Circuit.Channel.Layer",
-        "TNLean.Circuit.SupportedMatrixElements -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Lattice.GaussianZeroRange -> TNLean.Circuit.LocalCircuit",
-        "TNLean.Lattice.LowEnergyCommutatorExample -> TNLean.Circuit.Gates.Controlled",
-        "TNLean.Lattice.RegionalSwapSupport -> TNLean.Circuit.Gates.Permutation",
-        "TNLean.Lattice.Sheet.Splitting -> TNLean.Lattice.RegionSplit",
-        "TNLean.Lattice.Sheet.SwapCorrection -> TNLean.Lattice.RegionalSwap",
-        "TNLean.Lattice.TreeBasisCounterexample.HardCoreNumber -> TNLean.Circuit.Gates.Controlled",
     }
 )
 

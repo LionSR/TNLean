@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SupportedFunctionalCalculus
-import TNLean.Circuit.Channel.Layer
+import TNLean.Circuit.SupportedOperators
 import QICLean.Algebra.HermitianHelpers
 import QICLean.Analysis.TraceCFC
 

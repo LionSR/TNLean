@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixKroneckerContraction
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 import TNLean.Lattice.Sheet.Operators
 import QICLean.Entropy.FiniteProduct
 import QICLean.Entropy.PurificationSplitting

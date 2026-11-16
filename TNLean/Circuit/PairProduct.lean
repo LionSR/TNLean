@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.PermutationMatrixUnitary
-import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SitePermutation
 
 /-!
 # Products of two-site gates on an open chain
@@ -181,18 +181,6 @@ theorem mem_unitary_of_embedOp_mem_unitary {e : Fin m → Fin n} (he : Function.
 
 /-! ### Moving a gate with SWAP gates -/
 
-/-- The operator permuting the sites of the chain by `τ`: `|x⟩ ↦ |x ∘ τ⁻¹⟩`. -/
-def permOp (τ : Equiv.Perm (Fin n)) : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ :=
-  of fun x y => if y = x ∘ τ then 1 else 0
-
-theorem permOp_mul_mul_conjTranspose (τ : Equiv.Perm (Fin n))
-    (X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
-    permOp τ * X * (permOp τ)ᴴ = X.submatrix (· ∘ τ) (· ∘ τ) := by
-  ext x y
-  simp only [mul_apply, permOp, of_apply, conjTranspose_apply, submatrix_apply, ite_mul,
-    one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-  simp [apply_ite star]
-
 theorem embedOp_submatrix_perm (e : Fin m → Fin n) (τ : Equiv.Perm (Fin n))
     (X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
     (embedOp e X).submatrix (· ∘ τ) (· ∘ τ) = embedOp (τ ∘ e) X := by
@@ -208,67 +196,6 @@ theorem embedOp_submatrix_perm (e : Fin m → Fin n) (τ : Equiv.Perm (Fin n))
       exact h (τ i) fun j hj => hi j (τ.injective hj)
   simp only [this]
   rfl
-
-/-- The SWAP of the two sites of a two-site chain. -/
-def swapTwo : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ := permOp (Equiv.swap 0 1)
-
-/-- Two sites `i ≠ j` as a map `Fin 2 → Fin n`. -/
-def pairSites (i j : Fin n) : Fin 2 → Fin n := ![i, j]
-
-theorem pairSites_injective {i j : Fin n} (hij : i ≠ j) : Function.Injective (pairSites i j) := by
-  intro a b h
-  fin_cases a <;> fin_cases b <;> simp_all [pairSites, eq_comm]
-
-theorem range_pairSites (i j : Fin n) : Set.range (pairSites i j) = {i, j} := by
-  ext k
-  simp only [Set.mem_range, Set.mem_insert_iff, Set.mem_singleton_iff, pairSites]
-  constructor
-  · rintro ⟨a, rfl⟩; fin_cases a <;> simp
-  · rintro (rfl | rfl)
-    · exact ⟨0, rfl⟩
-    · exact ⟨1, rfl⟩
-
-theorem permOp_swap_eq_embedOp {j j' : Fin n} (hjj' : j ≠ j') :
-    permOp (d := d) (Equiv.swap j j') = embedOp (pairSites j j') swapTwo := by
-  ext x y
-  rw [embedOp_apply]
-  simp only [permOp, swapTwo, of_apply]
-  have key : y = x ∘ Equiv.swap j j' ↔ AgreeOff (pairSites j j') x y ∧
-      y ∘ pairSites j j' = (x ∘ pairSites j j') ∘ Equiv.swap 0 1 := by
-    constructor
-    · rintro rfl
-      refine ⟨fun i hi => ?_, ?_⟩
-      · have h0 : i ≠ j := fun h => hi 0 (by simp [pairSites, h])
-        have h1 : i ≠ j' := fun h => hi 1 (by simp [pairSites, h])
-        simp [Equiv.swap_apply_of_ne_of_ne h0 h1]
-      · funext a; fin_cases a <;> simp [pairSites]
-    · rintro ⟨h, h'⟩
-      funext i
-      by_cases hi0 : i = j
-      · subst hi0; have := congrFun h' 0; simpa [pairSites] using this
-      by_cases hi1 : i = j'
-      · subst hi1; have := congrFun h' 1; simpa [pairSites] using this
-      · rw [Function.comp_apply, Equiv.swap_apply_of_ne_of_ne hi0 hi1]
-        exact (h i fun a ha => by fin_cases a <;> simp_all [pairSites, eq_comm]).symm
-  by_cases h : y = x ∘ Equiv.swap j j'
-  · obtain ⟨h1, h2⟩ := key.1 h
-    rw [ite_eq_left h, ite_eq_left h1, ite_eq_left h2]
-  · rw [ite_eq_right h]
-    split_ifs with h1 h2 <;> first | rfl | exact absurd (key.2 ⟨h1, h2⟩) h
-
-/-- The site permutation `permOp τ` is the permutation matrix of `x ↦ x ∘ τ` on
-configurations. -/
-theorem permOp_eq_permMatrix (τ : Equiv.Perm (Fin n)) :
-    permOp (d := d) τ = Equiv.Perm.permMatrix ℂ (τ.symm.arrowCongr (Equiv.refl (Fin d))) := by
-  ext x y
-  simp only [permOp, Equiv.Perm.permMatrix, Equiv.toPEquiv_apply, PEquiv.toMatrix_apply,
-    Option.mem_def, Option.some.injEq, of_apply]
-  exact if_congr eq_comm rfl rfl
-
-theorem permOp_mem_unitary (τ : Equiv.Perm (Fin n)) :
-    permOp (d := d) τ ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
-  rw [permOp_eq_permMatrix]
-  exact Equiv.Perm.permMatrix_mem_unitaryGroup _
 
 /-- The SWAP gate of two neighbouring sites. -/
 theorem isNeighbourGate_permOp_swap {j j' : Fin n} (hj : j'.val = j.val + 1) :

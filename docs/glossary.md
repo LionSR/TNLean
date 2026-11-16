@@ -1712,7 +1712,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
-- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Defined in:** `TNLean/Circuit/SupportedOperators.lean`.
 - **Meaning:** the complex span of the product operators
   `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
   `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S` of a finite type
@@ -2047,7 +2047,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsLocalPerm {ι : Type*} (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
-- **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
+- **Defined in:** `TNLean/Circuit/SitePermutation.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
   `S`.
