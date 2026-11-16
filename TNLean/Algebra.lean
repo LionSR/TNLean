@@ -84,6 +84,7 @@ import TNLean.Algebra.FunctionalWordComparison
 import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
+import TNLean.Algebra.GeneralLinearJoined
 import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
