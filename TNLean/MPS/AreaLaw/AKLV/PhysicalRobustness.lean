@@ -21,8 +21,13 @@ unit ground vector with exponentially small squared error.
 Source: AKLV, arXiv:1301.1162v1, `1dfrustrated34.tex`, lines 879--963,
 Theorem `thm:Ht`.
 
-**Scope restriction (window width):** Windows have at least six interactions;
-smaller windows remain separate. See `docs/paper-gaps/aklv13_two_block_robustness.tex`.
+**Local fix (window width):** The enlarged arrangement, whose clipped exteriors
+contain one further window bond each, needs at least three interactions so that
+its two exterior sums have disjoint supports. For windows of one or two
+interactions the reference arrangement is used instead: it clips the two
+reference sums themselves at the cuts `a+1` and `a+s`, whose supports are disjoint
+for every window of at least one interaction, and gives the same conclusions.
+See `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 
 **Local fixes (support and energy shift):** The left support follows the actual
 bounded-term sum in source line 907, including its boundary site, rather than
@@ -53,6 +58,17 @@ theorem aklvLogarithmicThreshold_le_div {g : ℝ} (hg : 0 < g) (hg1 : g ≤ 1) :
   dsimp only [aklvLogarithmicThreshold]
   simp only [div_eq_mul_inv, one_mul] at *
   linarith
+
+/-- The polynomial threshold `(1024/g)*(E0/g+1)` of AKLV, arXiv:1301.1162v1,
+Theorem `thm:Ht`, line 955, lies above the logarithmic threshold when `0 < g ≤ 1`
+and `0 ≤ E0`. -/
+theorem aklvLogarithmicThreshold_le_of_polynomial {g E0 t : ℝ} (hg : 0 < g) (hg1 : g ≤ 1)
+    (hE0 : 0 ≤ E0) (ht : (1024 / g) * (E0 / g + 1) ≤ t) :
+    aklvLogarithmicThreshold g ≤ t := by
+  apply (aklvLogarithmicThreshold_le_div hg hg1).trans
+  have hnorm : 0 ≤ E0 / g := div_nonneg hE0 hg.le
+  have hcoef : 0 < 1024 / g := div_pos (by norm_num) hg
+  nlinarith
 
 private theorem logarithmic_robustness_scalar_threshold {g t : ℝ}
     (hg : 0 < g) (hg1 : g ≤ 1) (ht : aklvLogarithmicThreshold g ≤ t) :
@@ -90,15 +106,16 @@ private theorem logarithmic_robustness_scalar_threshold {g t : ℝ}
     linarith
 
 open Classical in
-/-- The actual AKLV exterior truncations have gap at least `9*g/10` and a
+/-- The actual AKLV exterior truncations at two cuts whose regional sums dominate
+the genuine reference minima have gap at least `9*g/10` and a
 phase-aligned unit ground vector with squared error at most `exp(-t/16)/100`
 for `t ≥ 1024 + 16*log(1/g)`. The actual first excited energy and endpoint
 trial-vector argument also derive local dimension at least two and `g ≤ 1`.
 The regional minima are chosen before `t`. This strengthens the sufficient
 threshold in AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963,
 using the exponential residual of its original nearest-neighbour construction. -/
-theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L) (hlr : l ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -108,14 +125,16 @@ theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
     (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
     (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i))
+    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s h j -
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r h j) :
     2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
         (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
         ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian l r h e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -134,8 +153,8 @@ theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
   have hg1 := gap_le_one_of_positive_nearest_neighbor_terms
     (by omega : 0 < L) hq2 h hsupp h0 h1 hgs
   obtain ⟨e, E0, hregional, hEeq, hE0, hE6, hcluster⟩ :=
-    exists_aklv_two_block_scaled_low_cluster (by omega) hs ha h hsupp h0 h1
-      mu g Ω hΩ hground hgap hg
+    exists_aklv_cut_scaled_low_cluster (by omega) hs ha hlr hrL h hsupp h0 h1
+      mu g Ω hΩ hground hgap hg hcut
   refine ⟨hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht B
   obtain ⟨htau, htau1, hthreshold⟩ := logarithmic_robustness_scalar_threshold hg hg1 ht
@@ -168,6 +187,85 @@ theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
     exact hphase
 
 open Classical in
+/-- The actual AKLV exterior truncations have gap at least `9*g/10` and a
+phase-aligned unit ground vector with squared error at most `exp(-t/16)/100`
+for `t ≥ 1024 + 16*log(1/g)`. The actual first excited energy and endpoint
+trial-vector argument also derive local dimension at least two and `g ≤ 1`.
+The regional minima are chosen before `t`. This strengthens the sufficient
+threshold in AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963,
+using the exponential residual of its original nearest-neighbour construction. -/
+theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+    (hΩ : ‖Ω‖ = 1)
+    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+      (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
+      (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
+        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+      E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
+      ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+        ∃ hB : B.IsHermitian,
+          let lam := hB.eigenvalues
+          ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
+            ‖φ‖ = 1 ∧ Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) B φ =
+              (lam j0 : ℂ) • φ ∧
+            (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
+            ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 :=
+  exists_aklv_cut_logarithmic_robustness (by omega) ha (by omega) (by omega) h hsupp h0 h1
+    mu g Ω hΩ hground hgap hg hexcited
+    (fun e he ↦ aklv_normalization_le_two_block_regions hs h h0 e he)
+
+open Classical in
+/-- The reference arrangement of the AKLV exterior truncations, which clips the two
+reference sums themselves at the cuts `a+1` and `a+s` and retains all `s` window
+interactions, has gap at least `9*g/10` and a
+phase-aligned unit ground vector with squared error at most `exp(-t/16)/100`
+for `t ≥ 1024 + 16*log(1/g)`. The actual first excited energy and endpoint
+trial-vector argument also derive local dimension at least two and `g ≤ 1`.
+The regional minima are chosen before `t`. This strengthens the sufficient
+threshold in AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963,
+using the exponential residual of its original nearest-neighbour construction.
+Every window of at least one interaction is admitted; for one or two interactions
+the enlarged exterior sums overlap, while the reference sums are disjoint. -/
+theorem exists_aklv_reference_logarithmic_robustness {L q a s : ℕ}
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+    (hΩ : ‖Ω‖ = 1)
+    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+      (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
+      (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
+        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+      E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
+      ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t Finset.univ
+        ∃ hB : B.IsHermitian,
+          let lam := hB.eigenvalues
+          ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
+            ‖φ‖ = 1 ∧ Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) B φ =
+              (lam j0 : ℂ) • φ ∧
+            (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
+            ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 :=
+  exists_aklv_cut_logarithmic_robustness hs ha (by omega) (by omega) h hsupp h0 h1 mu g Ω hΩ hground
+    hgap hg hexcited (fun e he ↦ aklv_normalization_le_reference_regions h h0 e he)
+
+open Classical in
 /-- The actual two exterior truncations of the original positive-contraction
 nearest-neighbour chain have gap at least `9*g/10` and a phase-aligned unit
 ground vector with squared error at most `exp(-t/16)/100` once
@@ -175,7 +273,7 @@ ground vector with squared error at most `exp(-t/16)/100` once
 ground energy in `[0,6]`. The gap is the actual first excited energy difference.
 AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963. -/
 theorem exists_aklv_physical_robustness {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -204,10 +302,48 @@ theorem exists_aklv_physical_robustness {L q a s : ℕ}
     exists_aklv_logarithmic_robustness hs ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht
-  apply hsharp t
-  apply (aklvLogarithmicThreshold_le_div hg hg1).trans
-  have hnorm : 0 ≤ E0 / g := div_nonneg hE0 hg.le
-  have hcoef : 0 < 1024 / g := div_pos (by norm_num) hg
-  nlinarith
+  exact hsharp t (aklvLogarithmicThreshold_le_of_polynomial hg hg1 hE0 ht)
+
+open Classical in
+/-- The reference arrangement, clipping the two reference sums at the cuts `a+1` and
+`a+s`, of the original positive-contraction
+nearest-neighbour chain have gap at least `9*g/10` and a phase-aligned unit
+ground vector with squared error at most `exp(-t/16)/100` once
+`t ≥ (1024/g)*(E0/g+1)`. Here `E0` is the constructed normalized original
+ground energy in `[0,6]`. The gap is the actual first excited energy difference.
+Every window of at least one interaction is admitted, including windows of one or
+two interactions. AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963. -/
+theorem exists_aklv_reference_physical_robustness {L q a s : ℕ}
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+    (hΩ : ‖Ω‖ = 1)
+    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+      (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
+      (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
+        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+      E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
+      ∀ t : ℝ, (1024 / g) * (E0 / g + 1) ≤ t →
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t Finset.univ
+        ∃ hB : B.IsHermitian,
+          let lam := hB.eigenvalues
+          ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
+            ‖φ‖ = 1 ∧ Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) B φ =
+              (lam j0 : ℂ) • φ ∧
+            (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
+            ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 := by
+  obtain ⟨_hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, hsharp⟩ :=
+    exists_aklv_reference_logarithmic_robustness hs ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg
+      hexcited
+  refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
+  intro t ht
+  exact hsharp t (aklvLogarithmicThreshold_le_of_polynomial hg hg1 hE0 ht)
 
 end TNLean.MPS.AreaLaw

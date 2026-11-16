@@ -117,24 +117,44 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     satisfying $\E_B(\Lambda) = \Lambda$ for $B^i = U^\dagger A^i U$.
 \end{proof}
 
+\begin{lemma}[Traceless fixed points of an injective channel]
+    \label{lem:rfp_injective_traceless_fixed_point}
+    \lean{Kraus.mapLM_fixedPoint_eq_zero_of_trace_eq_zero}\leanok
+    \uses{def:injective,def:left_canonical_tensor,def:transfer_map}
+    Let $D>0$ and let $A=(A^i)_{i=0}^{d-1}$ be an injective
+    left-canonical tensor. If $Y\in\MN{D}$ satisfies
+    $\E_A(Y)=Y$ and $\tr(Y)=0$, then $Y=0$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:injective_irreducible,thm:psd_fp_exists,thm:psd_fp_unique_irred}
+    Injectivity makes $\E_A$ irreducible. Choose a nonzero positive
+    fixed point $\rho$. A Hermitian fixed point has a decomposition
+    $H=H_+-H_-$ into positive fixed points; irreducibility gives
+    $H_\pm=c_\pm\rho$. Thus
+    $0=\tr(H)=(c_+-c_-)\tr(\rho)$ implies $H=0$.
+    For arbitrary $Y$, the Hermitian matrices $Y+Y^\dagger$ and
+    $i(Y-Y^\dagger)$ are fixed and traceless, so both vanish and $Y=0$.
+\end{proof}
+
 \begin{lemma}[Rank-one classification for RFP transfer maps]%
     \label{thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:injective, thm:exponential_convergence_primitive}
+    \uses{def:mps_transfer_idempotence, def:injective, def:left_canonical_tensor}
     Let $A$ be an injective left-canonical RFP tensor with positive-definite
     fixed point $\rho$ of the transfer map $\E_A$. Then
     $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)} \rho$
     is the rank-one fixed-point projection.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:exponential_convergence_primitive}
-    Exponential convergence of primitive channels
-    (Lemma~\ref{thm:exponential_convergence_primitive}) gives
-    $\lVert \E_A^n(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$.
-    Transfer-map idempotence implies $\E_A^n = \E_A$ for all $n \ge 1$, so
-    $\lVert \E_A(X) - P_\rho(X)\rVert \le C(1-\delta)^n\lVert X\rVert$ for all
-    $n\ge 1$. Letting $n \to \infty$ yields $\E_A = P_\rho$.
+    \uses{lem:rfp_injective_traceless_fixed_point}
+    For any $X$, put $c=\tr(X)/\tr(\rho)$ and $Y=\E_A(X)-c\rho$.
+    Idempotence and $\E_A(\rho)=\rho$ give
+    $\E_A(Y)=\E_A^2(X)-c\E_A(\rho)=\E_A(X)-c\rho=Y$.
+    Trace preservation and $\tr(\rho)>0$ give
+    $\tr(Y)=\tr(X)-c\tr(\rho)=0$.
+    Lemma~\ref{lem:rfp_injective_traceless_fixed_point} yields
+    $Y=0$, hence $\E_A(X)=P_\rho(X)$.
 \end{proof}
 
 \begin{lemma}[Diagonal Kraus form for a normal fixed point]%

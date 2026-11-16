@@ -248,9 +248,29 @@ The rank calculation uses linear independence of the scaled matrix units;
 irreducibility follows by propagating an invariant subspace through the
 five sectors. Replacing the middle two-dimensional reset by a unitary
 again preserves the square and gives a root of rank $10-4+1=7$.
-This last alternative-root calculation is not part of the formal theorem.
-Thus the formal obstruction concerns compression of a supplied root,
-while the general existential selection problem remains open.
+This alternative root and the resulting refinement are now formalized in
+\path{TNLean/MPS/Periodic/Symmetry/RefinementCyclicResetAlternativeRoot.lean}.
+In coordinates $0,\ldots,6$, its Kraus family is
+\begin{align}
+ (K_0,\ldots,K_6)&=
+ \left(\frac{E_{10}}{\sqrt2},\frac{E_{20}}{\sqrt2},
+ E_{31}+E_{42},E_{53},E_{54},E_{65},E_{06}\right),
+ \label{eq:dccsp17_cyclic_alternative_root}
+\end{align}
+where $E_{ab}=|a\rangle\langle b|$. The identity
+$\sum_jK_j^\dagger K_j=I$ proves trace preservation, and the seven
+matrices are linearly independent by inspecting respectively entries
+$(1,0),(2,0),(3,1),(5,3),(5,4),(6,5),(0,6)$.
+The theorem \leanid{MPSTensor.CyclicResetCounterexample.choiRank_alternativeRoot}
+therefore gives Choi rank seven. The equality of its square with the
+nine-letter target is
+\leanid{MPSTensor.CyclicResetCounterexample.transferMap_square_eq_alternativeRoot_pow}.
+After zero-padding this root to nine letters, the bounded-root refinement
+theorem proves
+\leanid{MPSTensor.CyclicResetCounterexample.square_isPRefinable}.
+Thus this singular target satisfies the existential selection claim;
+the formal obstruction still concerns compression of a supplied root,
+and the general existential selection problem remains open.
 
 \section{A sufficient condition on the Kraus span}
 

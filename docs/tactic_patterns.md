@@ -1,5 +1,26 @@
 # Tactic Pattern Ledger
 
+### Disjoint summands of `Fin (m + n)` — promoted (2026-11-16)
+
+- **Seen:** `MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean`,
+  `MixedEndpointEmbedding.lean`, `MixedEndpointSwap.lean`,
+  `MPS/MPU/SingleSiteCircuit.lean` and `Circuit/ZeroRegisterConjunction.lean`
+  (five copies, found by `scripts/tactic_pattern_scan.py` over the MPO-symmetry modules).
+- **Pattern:**
+  ```lean
+  intro h
+  have hval := congrArg Fin.val h
+  simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
+  omega
+  ```
+  proving `Fin.castAdd n a ≠ Fin.natAdd m b`.
+- **Abstraction:** `Fin.castAdd_ne_natAdd` and `Fin.natAdd_ne_castAdd` in
+  `Algebra/FinCastAddNatAdd.lean`; all five call sites use them.
+- **Notes:** Net line delta +18 across the seven Lean files: the call sites lose
+  23 lines and the new module with its imports adds 41. The gain is one statement
+  of the fact instead of five proofs of it.
+- **Decision:** A lemma removes the duplication; no tactic is needed.
+
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
 - **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
@@ -81,6 +102,31 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Promoted
+
+### Even-family adjoint equality from time-reversal invariance — promoted (2026-11-16)
+
+- **Seen:** four five-line `have hEq` blocks deriving `mpo U N = mpo (physicalAdjointTensor U) N`
+  on even lengths from `hTR : ∀ N, 1 < N → Even N → mpo U N = (mpo U N)ᴴ`, in
+  `MPS/MPU/CanonicalTwistedTransfer.lean`, `SuppliedFourSpinSourceComparison.lean`,
+  `TimeReversalLocalNecessity.lean` and `TwoSiteStandardFormSourceCuts.lean`.
+- **Abstraction:** none needed; the existing `mpo_physicalAdjointTensor_eq_conjTranspose` gives
+  the term `fun N hN heven ↦ (hTR N hN heven).trans (mpo_physicalAdjointTensor_eq_conjTranspose
+  U N).symm`, now used at all four sites.
+- **Decision:** a term-mode composition of an existing lemma is the weakest mechanism; no new
+  lemma or tactic.
+
+### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
+
+- **Pattern:** From `0 < g ≤ 1`, `0 ≤ E0` and `(1024/g)*(E0/g+1) ≤ t`, derive
+  `aklvLogarithmicThreshold g ≤ t` by `aklvLogarithmicThreshold_le_div` and
+  `nlinarith` with the positivity of `E0/g` and `1024/g`.
+- **Helper:** `aklvLogarithmicThreshold_le_of_polynomial` in
+  `MPS/AreaLaw/AKLV/PhysicalRobustness.lean`.
+- **Occurrences:** Three polynomial-threshold corollaries, two in
+  `AKLV/PhysicalRobustness.lean` and one in `AKLV/ClippedFilter.lean`, now use
+  the helper.
+- **Decision:** The common content is a scalar inequality, so a lemma replaces
+  the repeated four-line argument.
 
 ### Reduced coordinate heights from a common denominator — promoted (2026-11-04)
 
@@ -7382,23 +7428,21 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ---
 
-### scalar multiple preserves block injectivity — candidate
-- **Pattern:** rewrite `Kraus.IsNBlkInjective` as `wordSpan = ⊤`, run
-  `Submodule.span_induction` on a matrix of the original span, and absorb the
-  scalar `z ^ N` of `Kraus.evalWord_smul` with `inv_smul_smul₀`.
-- **Seen:** 2 occurrences across 2 files: the private
-  `isNBlkInjective_smul_of_ne` in
-  `TNLean/MPS/Periodic/Overlap/SectorMatch/Basic.lean` and
-  `MPSTensor.isNBlkInjective_smul` in
-  `TNLean/MPS/CanonicalForm/TranslationInvariantUniqueness.lean`
-  (recorded 2026-09-05).
-- **Abstraction:** one public theorem next to
-  `MPSTensor.isNBlkInjective_of_gaugeEquiv` in `TNLean/MPS/Defs.lean`, with
-  `isNormal_smul` as its normality corollary; both call sites then drop their
-  local copies.
-- **Notes:** below the rule of three. The promotion was deferred because a
-  change to `TNLean/MPS/Defs.lean` rebuilds the whole library; do it in a
-  dedicated cleanup.
+### scalar multiple preserves block injectivity — partial migration (2026-11-15)
+- **Pattern:** nonzero scalar multiplication preserves fixed-length block
+  injectivity and algebraic normality.
+- **Abstraction:** the existing `MPSTensor.isNBlkInjective_smul_iff` and
+  `MPSTensor.isNormal_smul_iff` in `MPS/Core/ScaledNormality.lean`.
+- **Refactored occurrences:** the private `isNBlkInjective_smul_of_ne` and
+  `isNormal_smul_of_ne` in `MPS/Periodic/Overlap/SectorMatch/Basic.lean`
+  are removed; the normality consumer applies the existing equivalence.
+  `TranslationInvariantUniqueness.isNBlkInjective_smul` remains in
+  `MPS/CanonicalForm/TranslationInvariantUniqueness.lean` with three local
+  consumers; their migration is still a candidate.
+- **Notes:** this reuses existing mathematical lemmas and adds no abstraction
+  below the promotion threshold. Net Lean delta: -40 lines, including the
+  explicit import. Source-head PR CI passed on `cf8e9cf3`; the combined branch
+  requires fresh validation. See `docs/audits/2026-11-15_comprehensive_simplification_audit.md`.
 
 ### rectangular reduction from local compression data — candidate
 - **Pattern:** prove `MPSTensor.IsReduction B A V W` by

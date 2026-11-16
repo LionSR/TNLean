@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointBoundaryColumns
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary
 import Mathlib.LinearAlgebra.Matrix.Kronecker
+import TNLean.Algebra.FinCastAddNatAdd
 
 /-!
 # Actual joint edge coefficients with the original bulk tensor
@@ -93,13 +94,6 @@ def jointMixedLastEdgeBoundaryMap
     ext ⟨i, j⟩
     exact congrFun (map_smul (blockInsertedGroundSpaceMap _ _ 2) z X) _
 
-private theorem firstVirtual_ne_secondVirtual {m n : ℕ} (a : Fin m) (b : Fin n) :
-    Fin.castAdd n a ≠ Fin.natAdd m b := by
-  intro h
-  have hval := congrArg Fin.val h
-  simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
-  omega
-
 /-- A shared first-endpoint letter has only its first virtual rows.
 Source: arXiv:2203.12563, Section 5, lines 1695–1704. -/
 theorem jointMixedEndpointBase_firstPhysical_mul_inclusion
@@ -115,7 +109,7 @@ theorem jointMixedEndpointBase_firstPhysical_mul_inclusion
   cases a <;>
     simp [jointMixedEndpointBase, jointMixedFirstPhysicalIndex,
       jointMixedEndpointLetter, Matrix.reindex_apply, Matrix.coordinateInclusion,
-      Matrix.mul_apply, Fin.castAddEmb_apply, eq_comm, firstVirtual_ne_secondVirtual]
+      Matrix.mul_apply, Fin.castAddEmb_apply, eq_comm, Fin.castAdd_ne_natAdd]
 
 /-- The reflected first-sector boundary identity.
 Source: arXiv:2203.12563, Section 5, lines 1695–1704. -/
@@ -133,7 +127,7 @@ theorem jointMixedEndpointBase_inclusion_adjoint_mul_firstPhysical
     simp [jointMixedEndpointBase, jointMixedFirstPhysicalIndex,
       jointMixedEndpointLetter, Matrix.reindex_apply, Matrix.coordinateInclusion,
       Matrix.mul_apply, Matrix.conjTranspose_apply, Fin.castAddEmb_apply,
-      eq_comm, firstVirtual_ne_secondVirtual]
+      eq_comm, Fin.castAdd_ne_natAdd]
 
 private theorem firstEdge_trace
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
