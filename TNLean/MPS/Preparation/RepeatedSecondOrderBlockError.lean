@@ -97,7 +97,8 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum_sq_of_two_le
   choose C₀ hC₀ q₀ hgen using hz
   set Q := ∑ p : Fin b × Fin b, q₀ p.1 p.2
   have hQ : ∀ p : Fin b × Fin b, q₀ p.1 p.2 ≤ Q := fun p =>
-    Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ p)
+    Finset.single_le_sum (f := fun p : Fin b × Fin b => q₀ p.1 p.2)
+      (fun _ _ => Nat.zero_le _) (Finset.mem_univ p)
   obtain ⟨Kt, hKt, hnorm⟩ := exists_abs_sum_norm_sq_sum_mpv_sub_le hN hA hσ htr hfix hl hlam hmix
     hγ0 hγ
   set Cz : Fin b × Fin b → ℝ := fun p => C₀ p.1 p.2
