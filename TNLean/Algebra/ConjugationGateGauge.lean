@@ -338,7 +338,7 @@ theorem exists_phase_of_kronecker_mul_map_star_eq [Nonempty L] [Nonempty R]
     map_star_mem_unitaryGroup_iff.mpr ha
   have hbbar : b.map (starRingEnd ℂ) ∈ unitaryGroup R ℂ :=
     map_star_mem_unitaryGroup_iff.mpr hb
-  -- Compare the two sides as `(Λ a)† (ā Λ) ⊗ (Λ' b)† (b̄ Λ') = 1`.
+  -- Compare the two sides as `(Λ a)† (conj(a) Λ) ⊗ (Λ' b)† (conj(b) Λ') = 1`.
   have hA : Λ * a ∈ unitaryGroup L ℂ := (unitaryGroup L ℂ).mul_mem hΛ ha
   have hB : Λ' * b ∈ unitaryGroup R ℂ := (unitaryGroup R ℂ).mul_mem hΛ' hb
   have hone : ((Λ * a)ᴴ * (a.map (starRingEnd ℂ) * Λ)) ⊗ₖ
@@ -352,7 +352,7 @@ theorem exists_phase_of_kronecker_mul_map_star_eq [Nonempty L] [Nonempty R]
     exact (unitaryGroup L ℂ).mul_mem (Unitary.star_mem hA)
       ((unitaryGroup L ℂ).mul_mem habar hΛ)
   have hcnorm : ‖c‖ = 1 := norm_eq_one_of_smul_one_mem_unitaryGroup hcunit
-  -- `ā Λ = c Λ a` and `b̄ Λ' = c⁻¹ Λ' b`.
+  -- `conj(a) Λ = c Λ a` and `conj(b) Λ' = c⁻¹ Λ' b`.
   have hlA : a.map (starRingEnd ℂ) * Λ = c • (Λ * a) := by
     have h := congrArg ((Λ * a) * ·) hcA
     rwa [← Matrix.mul_assoc, ← Matrix.star_eq_conjTranspose, mem_unitaryGroup_iff.mp hA,
