@@ -95,9 +95,7 @@ rings counted in two-site blocks (`docs/paper-gaps/mpu_standard_form_parity_gap.
 concerns `V₂`, not `V`: self-adjointness at every even number of original sites is a stronger
 hypothesis, and under it all the signs `σ⁽ᵏ⁾` would agree with `σ⁽¹⁾`.
 
-**Local fix (proof route):** the source's unwinding of the printed blocked gates is replaced by
-the intrinsic blocking parity; see the module docstring and
-`docs/paper-gaps/mpu_time_reversal_blocking_parity_route.tex`.
+The proof follows the route recorded in the module docstring.
 
 Source: arXiv:1703.09188, Proposition `prop:sigma1-and-sigma2-equal`, lines 1643--1655, with
 the free choice of the blocked gates at lines 1657--1658. -/
