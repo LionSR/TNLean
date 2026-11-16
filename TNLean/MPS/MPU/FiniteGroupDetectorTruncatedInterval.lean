@@ -26,7 +26,7 @@ and the detector scope in arXiv:2405.00439, `detectG`, lines 2108–2117.
 -/
 
 open Matrix
-open scoped Matrix
+open scoped Matrix Kronecker
 
 namespace MPOTensor.FiniteGroupDetector
 
@@ -109,9 +109,12 @@ theorem physicalTruncatedInterval_eq_stringOperator (U : MPOTensor d D)
   obtain ⟨⟨p, a, μ, b, q⟩, rfl⟩ := (wallConfig h).surjective τ
   obtain ⟨⟨p', a', μ', b', q'⟩, rfl⟩ := (wallConfig h).surjective σ
   rw [physicalTruncatedInterval_apply_wallConfig]
-  simp [stringOperator, stringKernel, Matrix.submatrix_apply,
-    truncatedSymmetryOfEndpoints, sourceStringLeftEndpoint, sourceStringRightEndpoint,
+  simp only [stringOperator, stringKernel, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply, Matrix.of_apply, truncatedSymmetryOfEndpoints,
+    sourceStringLeftEndpoint, sourceStringRightEndpoint,
     Matrix.mul_apply, Finset.sum_mul, mul_assoc]
+  congr 2
+  exact Finset.sum_comm
 
 /-- Coordinate reindexing and exterior identities preserve the native
 contraction's two-sided unitarity. Source: FBC25 `eq:truncsym`. -/
@@ -127,7 +130,13 @@ theorem physicalTruncatedInterval_isUnitaryBetween (U : MPOTensor d D)
     simp [Matrix.IsUnitaryBetween, Matrix.IsIsometry, Matrix.IsCoisometry]
   have hright : (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ).IsUnitaryBetween := by
     simp [Matrix.IsUnitaryBetween, Matrix.IsIsometry, Matrix.IsCoisometry]
-  exact ((hleft.kronecker _ _ (hT.reindex _ _ _)).kronecker _ _ hright).reindex _ _ _
+  let e := Equiv.prodCongr el (Equiv.prodCongr (Equiv.refl (Fin l → Fin d)) er)
+  let A := Matrix.reindex e (Equiv.refl _) (truncatedSymmetryOfEndpoints U Y₂ Y₁ l)
+  have hA : A.IsUnitaryBetween := hT.reindex _ _ _
+  change (Matrix.reindex (intervalWindowEquiv k l n h) (intervalWindowEquiv k l n h)
+    (((1 : Matrix (Fin k → Fin d) (Fin k → Fin d) ℂ) ⊗ₖ A) ⊗ₖ
+      (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ))).IsUnitaryBetween
+  exact ((hleft.kronecker _ _ hA).kronecker _ _ hright).reindex _ _ _
 
 /-- Simple canonical-form-II source factors give actual unitary interval
 operators on the common physical chain after the supplied endpoint
