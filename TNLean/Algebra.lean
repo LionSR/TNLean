@@ -40,6 +40,7 @@ import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConjClassesConjugation
 import TNLean.Algebra.ConjugateProjectiveRepresentation
 import TNLean.Algebra.ConjugateRegularRepresentation
+import TNLean.Algebra.ConjugationGateGauge
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
@@ -60,6 +61,7 @@ import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Algebra.ExpectationOverlap
 import TNLean.Algebra.ExplicitThresholds
 import TNLean.Algebra.ExponentialSumWindow
+import TNLean.Algebra.FinCastAddNatAdd
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct
@@ -84,6 +86,7 @@ import TNLean.Algebra.FunctionalWordComparison
 import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
+import TNLean.Algebra.GeneralLinearJoined
 import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
@@ -254,12 +257,14 @@ import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryGeneralLinearInverse
+import TNLean.Algebra.UnitaryGroupJoined
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.Algebra.UnitaryKroneckerComparison
 import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.Algebra.UnitaryRepresentationAlgebra
 import TNLean.Algebra.UnitaryRepresentationBlocks
 import TNLean.Algebra.UnitaryVectorSwap
+import TNLean.Algebra.WeightedLowRestriction
 import TNLean.Algebra.WordAlgebra
 import TNLean.Algebra.WordAlgebraNilpotent
 import TNLean.Algebra.ZModSmallDifference

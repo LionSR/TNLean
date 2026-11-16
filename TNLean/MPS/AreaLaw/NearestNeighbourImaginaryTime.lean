@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ExpConjugation
+import TNLean.Lattice.BoundedDegreeImaginaryTime
 import TNLean.MPS.AreaLaw.Basic
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Finset.Disjoint
@@ -35,106 +36,6 @@ geometric series. The Hamiltonian is the original bond sum throughout.
 -/
 
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- A positive contraction has commutator norm at most the norm of the other
-factor. Auxiliary to AKL14, arXiv:1406.3898, low70.tex, lines 831–837.
-The other factor need not be Hermitian, and the index type may be empty. -/
-private theorem norm_commutator_le_of_nonneg_le_one (h O : Matrix n n ℂ)
-    (h0 : 0 ≤ h) (h1 : h ≤ 1) : ‖h * O - O * h‖ ≤ ‖O‖ := by
-  let c : Matrix n n ℂ := (1 / 2 : ℝ) • 1
-  have hsplit : (1 : Matrix n n ℂ) = c + c := by
-    dsimp [c]
-    rw [← add_smul]
-    norm_num
-  have hlo : -c ≤ h - c := by
-    simpa only [zero_sub] using sub_le_sub_right h0 c
-  have hhi : h - c ≤ c := by
-    apply (sub_le_iff_le_add).2
-    rw [← hsplit]
-    exact h1
-  have hcself : IsSelfAdjoint c :=
-    IsSelfAdjoint.smul (IsSelfAdjoint.all (1 / 2 : ℝ)) (IsSelfAdjoint.one (Matrix n n ℂ))
-  have hcenterself : IsSelfAdjoint (h - c) := (IsSelfAdjoint.of_nonneg h0).sub hcself
-  have hnorm1 : ‖(1 : Matrix n n ℂ)‖ ≤ 1 :=
-    IsStarProjection.norm_le _ (IsStarProjection.one (Matrix n n ℂ))
-  have hcnorm : ‖c‖ ≤ (1 / 2 : ℝ) := by
-    calc
-      ‖c‖ = (1 / 2 : ℝ) * ‖(1 : Matrix n n ℂ)‖ := by
-        dsimp [c]
-        rw [norm_smul]
-        norm_num
-      _ ≤ (1 / 2 : ℝ) * 1 := mul_le_mul_of_nonneg_left hnorm1 (by norm_num)
-      _ = 1 / 2 := by ring
-  have hcenternorm0 : ‖h - c‖ ≤ ‖c‖ := by
-    simpa only [norm_neg, max_self] using
-      (IsSelfAdjoint.norm_le_max_of_le_of_le hlo hhi hcenterself)
-  have hcenternorm : ‖h - c‖ ≤ (1 / 2 : ℝ) := hcenternorm0.trans hcnorm
-  have hcomm : h * O - O * h = (h - c) * O - O * (h - c) := by
-    dsimp [c]
-    simp only [sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, one_mul, mul_one]
-    abel
-  calc
-    ‖h * O - O * h‖ = ‖(h - c) * O - O * (h - c)‖ := congrArg (‖·‖) hcomm
-    _ ≤ ‖(h - c) * O‖ + ‖O * (h - c)‖ := norm_sub_le _ _
-    _ ≤ ‖h - c‖ * ‖O‖ + ‖O‖ * ‖h - c‖ :=
-      add_le_add (norm_mul_le _ _) (norm_mul_le _ _)
-    _ ≤ (1 / 2 : ℝ) * ‖O‖ + ‖O‖ * (1 / 2 : ℝ) :=
-      add_le_add (mul_le_mul_of_nonneg_right hcenternorm (norm_nonneg O))
-        (mul_le_mul_of_nonneg_left hcenternorm (norm_nonneg O))
-    _ = ‖O‖ := by ring
-
-end Matrix
-
-namespace QuantumCircuit
-
-open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-
-variable {ι I : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
-
-/-- Only terms meeting the observable's support contribute to a commutator.
-For positive contractions, each such term costs at most the observable norm.
-This is a finite-sum step supporting AKL14, arXiv:1406.3898, low70.tex,
-lines 817–837; it is not an iterated-commutator or imaginary-time theorem. -/
-private theorem norm_commutator_sum_le_active_card (s : Finset I)
-    (h : I → Matrix (ι → Fin q) (ι → Fin q) ℂ) (D : I → Finset ι)
-    (O : Matrix (ι → Fin q) (ι → Fin q) ℂ) (S : Finset ι)
-    (hsupport : ∀ i ∈ s, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i) (D i))
-    (hO : Entropy.IsSupportedOn (n := fun _ ↦ q) O S)
-    (h0 : ∀ i ∈ s, 0 ≤ h i) (h1 : ∀ i ∈ s, h i ≤ 1) :
-    ‖(∑ i ∈ s, h i) * O - O * (∑ i ∈ s, h i)‖ ≤
-      ((s.filter fun i ↦ ¬Disjoint (D i) S).card : ℝ) * ‖O‖ := by
-  classical
-  let active := s.filter fun i ↦ ¬Disjoint (D i) S
-  have hsum : (∑ i ∈ s, (h i * O - O * h i)) =
-      ∑ i ∈ active, (h i * O - O * h i) := by
-    symm
-    apply Finset.sum_subset (Finset.filter_subset _ _)
-    intro i hi hia
-    by_cases hd : Disjoint (D i) S
-    · have hc : Commute (h i) O := commute_of_mem_supportedOperators
-        (Finset.disjoint_coe.mpr hd)
-        (mem_supportedOperators_of_isSupportedOn (hsupport i hi))
-        (mem_supportedOperators_of_isSupportedOn hO)
-      exact sub_eq_zero.mpr hc.eq
-    · exact False.elim (hia (Finset.mem_filter.mpr ⟨hi, hd⟩))
-  calc
-    ‖(∑ i ∈ s, h i) * O - O * (∑ i ∈ s, h i)‖ =
-        ‖∑ i ∈ s, (h i * O - O * h i)‖ := by
-      rw [Finset.sum_mul, Finset.mul_sum, Finset.sum_sub_distrib]
-    _ = ‖∑ i ∈ active, (h i * O - O * h i)‖ := congrArg (‖·‖) hsum
-    _ ≤ ∑ i ∈ active, ‖h i * O - O * h i‖ := norm_sum_le _ _
-    _ ≤ ∑ _i ∈ active, ‖O‖ := by
-      apply Finset.sum_le_sum
-      intro i hi
-      have his : i ∈ s := (Finset.mem_filter.mp hi).1
-      exact Matrix.norm_commutator_le_of_nonneg_le_one (h i) O (h0 i his) (h1 i his)
-    _ = (active.card : ℝ) * ‖O‖ := by simp only [Finset.sum_const, nsmul_eq_mul]
-
-end QuantumCircuit
 
 namespace TNLean.MPS.AreaLaw
 

@@ -1,5 +1,26 @@
 # Tactic Pattern Ledger
 
+### Disjoint summands of `Fin (m + n)` — promoted (2026-11-16)
+
+- **Seen:** `MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean`,
+  `MixedEndpointEmbedding.lean`, `MixedEndpointSwap.lean`,
+  `MPS/MPU/SingleSiteCircuit.lean` and `Circuit/ZeroRegisterConjunction.lean`
+  (five copies, found by `scripts/tactic_pattern_scan.py` over the MPO-symmetry modules).
+- **Pattern:**
+  ```lean
+  intro h
+  have hval := congrArg Fin.val h
+  simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
+  omega
+  ```
+  proving `Fin.castAdd n a ≠ Fin.natAdd m b`.
+- **Abstraction:** `Fin.castAdd_ne_natAdd` and `Fin.natAdd_ne_castAdd` in
+  `Algebra/FinCastAddNatAdd.lean`; all five call sites use them.
+- **Notes:** Net line delta +18 across the seven Lean files: the call sites lose
+  23 lines and the new module with its imports adds 41. The gain is one statement
+  of the fact instead of five proofs of it.
+- **Decision:** A lemma removes the duplication; no tactic is needed.
+
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
 - **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
@@ -81,6 +102,31 @@ abstracted — record why, so it is not re-proposed).
 ---
 
 ## Promoted
+
+### Even-family adjoint equality from time-reversal invariance — promoted (2026-11-16)
+
+- **Seen:** four five-line `have hEq` blocks deriving `mpo U N = mpo (physicalAdjointTensor U) N`
+  on even lengths from `hTR : ∀ N, 1 < N → Even N → mpo U N = (mpo U N)ᴴ`, in
+  `MPS/MPU/CanonicalTwistedTransfer.lean`, `SuppliedFourSpinSourceComparison.lean`,
+  `TimeReversalLocalNecessity.lean` and `TwoSiteStandardFormSourceCuts.lean`.
+- **Abstraction:** none needed; the existing `mpo_physicalAdjointTensor_eq_conjTranspose` gives
+  the term `fun N hN heven ↦ (hTR N hN heven).trans (mpo_physicalAdjointTensor_eq_conjTranspose
+  U N).symm`, now used at all four sites.
+- **Decision:** a term-mode composition of an existing lemma is the weakest mechanism; no new
+  lemma or tactic.
+
+### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
+
+- **Pattern:** From `0 < g ≤ 1`, `0 ≤ E0` and `(1024/g)*(E0/g+1) ≤ t`, derive
+  `aklvLogarithmicThreshold g ≤ t` by `aklvLogarithmicThreshold_le_div` and
+  `nlinarith` with the positivity of `E0/g` and `1024/g`.
+- **Helper:** `aklvLogarithmicThreshold_le_of_polynomial` in
+  `MPS/AreaLaw/AKLV/PhysicalRobustness.lean`.
+- **Occurrences:** Three polynomial-threshold corollaries, two in
+  `AKLV/PhysicalRobustness.lean` and one in `AKLV/ClippedFilter.lean`, now use
+  the helper.
+- **Decision:** The common content is a scalar inequality, so a lemma replaces
+  the repeated four-line argument.
 
 ### Reduced coordinate heights from a common denominator — promoted (2026-11-04)
 

@@ -3502,6 +3502,57 @@ completion from compatible forward and inverse finite-local actions.
     change cancels its adjoint in the adjacent circuit layer.
 \end{proof}
 
+\begin{lemma}[Paths of unitary matrices]
+    \label{lem:unitary_matrices_joined}
+    \lean{Matrix.joined_one_unitaryGroup, Matrix.IsUnitaryBetween.joinedIn}
+    \leanok
+    Every unitary complex square matrix is joined to the identity by a
+    continuous path of unitary matrices. Consequently, any two linear maps
+    that are unitary between the same pair of finite-dimensional coordinate
+    spaces are joined by a continuous path of such maps.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Let $u$ be unitary. Its spectrum is a finite subset of the unit circle,
+    so there is $z$ on the unit circle with $-z$ not an eigenvalue of $u$.
+    The spectrum of $z^{-1}u$ then avoids $-1$, hence
+    \begin{align}
+        \|z^{-1}u-1\| & <2,
+    \end{align}
+    and $z^{-1}u$ is joined to the identity by the exponential of a
+    multiple of its self-adjoint logarithm. The scalar $z$ is joined to $1$
+    along the unit circle, and the product of the two paths joins $1$ to
+    $u$. For maps $a,b$ unitary between the same spaces, $ba^\dagger$ is
+    unitary; a path $g(t)$ from $1$ to $ba^\dagger$ gives the path $g(t)a$
+    from $a$ to $b$.
+\end{proof}
+
+\begin{lemma}[Paths of tensors constructed from unitary gates]
+    \label{lem:mpu_tensor_from_gates_path}
+    \lean{MPOTensor.continuous_standardFormTensorOfGates,
+        MPOTensor.joinedIn_standardFormTensorOfGates}
+    \leanok
+    \uses{def:mpu_tensor_from_two_gates,
+        lem:mpu_tensor_from_gates_periodic_circuit, lem:unitary_matrices_joined}
+    The tensor of Definition~\ref{def:mpu_tensor_from_two_gates} depends
+    continuously on its two gates. If $(u_0,v_0)$ and $(u_1,v_1)$ are pairs
+    of unitary gates with the same input and output dimensions, the
+    corresponding tensors are joined by a continuous path of tensors of bond
+    dimension $dr$, each of which generates a matrix product unitary. This is
+    the interpolation of gates in the proof of
+    \cite[Theorem~IV.6(iv)]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 857--865.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:unitary_matrices_joined,
+        lem:mpu_tensor_from_gates_periodic_circuit}
+    Join $u_0$ to $u_1$ and $v_0$ to $v_1$ by paths of unitary gates. The
+    tensor built from the gates at time $t$ is a polynomial in their entries,
+    hence continuous in $t$, and it generates a matrix product unitary at
+    every $t$.
+\end{proof}
+
 \begin{lemma}[Constructing the tensor from generalized Margolus gates]
     \label{lem:mpu_tensor_from_margolus_gates}
     \lean{MPOTensor.margolusShiftedGate,
@@ -3526,6 +3577,106 @@ completion from compatible forward and inverse finite-local actions.
     The explicit product-coordinate swap preserves unitarity. Use
     Definition~\ref{def:mpu_tensor_from_two_gates} with $D=dr$ and then
     Lemma~\ref{lem:mpu_tensor_from_gates_periodic_circuit}.
+\end{proof}
+
+\begin{lemma}[Paths of invertible matrices]
+    \label{lem:invertible_matrices_joined}
+    \lean{Matrix.joinedIn_isUnit_det_one}
+    \leanok
+    Every invertible complex square matrix $X$ is joined to the identity by a
+    continuous path of invertible matrices.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For $z\neq0$, the matrix $(1-z)I+zX=-z\bigl(-z^{-1}I-(X-I)\bigr)$ is
+    singular exactly when $-z^{-1}$ is an eigenvalue of $X-I$. Hence the
+    line $z\mapsto(1-z)I+zX$ is singular at only finitely many points, none of
+    them $0$ or $1$. The complement of a countable subset of $\mathbb C$ is
+    path connected, so a path from $0$ to $1$ avoiding these points gives the
+    required path of invertible matrices.
+\end{proof}
+
+\begin{lemma}[Paths of matrix product unitaries through gauges and padding]
+    \label{lem:mpu_gauge_padding_paths}
+    \lean{MPOTensor.IsMPU.joinedIn_virtualSandwich,
+        MPOTensor.IsMPU.joinedIn_bondReindex,
+        MPOTensor.continuous_padBond, MPOTensor.JoinedIn.padBond,
+        MPOTensor.JoinedIn.reindexPhysical, MPOTensor.padBond_padBond,
+        MPOTensor.padBond_apply}
+    \leanok
+    \uses{def:mpu, def:strictly-equivalent-tensors,
+        lem:invertible_matrices_joined, thm:mpu_virtual_sandwich_blocking}
+    Let $W$ be an MPU tensor of bond dimension $D$. For every invertible
+    $X\in M_D(\mathbb C)$, in particular every permutation matrix, $W$ and
+    $XWX^{-1}$ are joined by a continuous path of MPU tensors of bond
+    dimension $D$. Adjoining unused bond directions, and relabelling the
+    physical legs, carry continuous paths of MPU tensors to continuous paths
+    of MPU tensors, and adjoining unused directions in two steps is the same
+    as adjoining them at once.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:invertible_matrices_joined, thm:mpu_virtual_sandwich_blocking}
+    Let $X(t)$ be a path of invertible matrices from $I$ to $X$. Then
+    $X(t)WX(t)^{-1}$ is continuous in $t$, and every periodic operator of
+    length greater than one is unchanged along it. The other operations are
+    continuous and preserve every periodic operator of positive length, up to
+    the physical relabelling.
+\end{proof}
+
+\begin{definition}[Stacked half factors]
+    \label{def:mpu_stacked_half_factors}
+    \lean{MPOTensor.tensorOfHalves, MPOTensor.stackRight,
+        MPOTensor.stackLeft, MPOTensor.stackFlip, MPOTensor.bondReindex,
+        MPOTensor.TwoSiteStandardFormData.stack}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $W_1$ and $W_2$ be two-site tensors of bond dimensions $D_1$ and
+    $D_2$ in supplied standard form with the same gates $u$ and $v$, through
+    half factors $(X_1,X_2)$ and $(X_1',X_2')$. For $c,s\in\mathbb C$ define
+    half factors of bond dimension $D_1+D_2$ by
+    \begin{align}
+        Y_1 & =\begin{pmatrix}cX_1 & sX_1'\end{pmatrix},  &
+        Y_2 & =\begin{pmatrix}cX_2 \\ sX_2'\end{pmatrix},
+    \end{align}
+    and let $W(c,s)$ be the contraction of $Y_2$, $u$ and $Y_1$ of
+    equation StandardForm in \cite[lines~603--617]{Cirac2017MPU}. If
+    $c^2+s^2=1$, the half factors contract to
+    \begin{align}
+        c^2v+s^2v & =v,
+    \end{align}
+    so $W(c,s)$ is again in supplied standard form with gates $u$ and $v$.
+\end{definition}
+
+\begin{lemma}[Interpolating standard forms with the same gates]
+    \label{lem:mpu_standard_form_interpolation}
+    \lean{MPOTensor.TwoSiteStandardFormData.eq_tensorOfHalves,
+        MPOTensor.TwoSiteStandardFormData.tensorOfHalves_stack_one_zero,
+        MPOTensor.TwoSiteStandardFormData.tensorOfHalves_stack_zero_one,
+        MPOTensor.continuous_stackRight, MPOTensor.continuous_stackLeft,
+        MPOTensor.continuous_tensorOfHalves,
+        MPOTensor.TwoSiteStandardFormData.joinedIn_padBond}
+    \leanok
+    \uses{def:mpu_stacked_half_factors, lem:mpu_gauge_padding_paths,
+        thm:mpu_supplied_two_site_periodic_circuit}
+    In the setting of Definition~\ref{def:mpu_stacked_half_factors}, the
+    tensors $W_1$ and $W_2$, with unused bond directions adjoined up to
+    $D_1+D_2$, are joined by a continuous path of MPU tensors. This supplies
+    the passage from the gates to the tensors in the proof of
+    \cite[Theorem~IV.6(iv)]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 857--865.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:mpu_stacked_half_factors, lem:mpu_gauge_padding_paths,
+        thm:mpu_supplied_two_site_periodic_circuit}
+    Take $c=\cos\theta$ and $s=\sin\theta$ for $\theta\in[0,\pi/2]$. Every
+    $W(\cos\theta,\sin\theta)$ is in supplied standard form, hence an MPU. At
+    $\theta=0$ it is $W_1$ with unused directions adjoined; at
+    $\theta=\pi/2$ it is $W_2$ placed in the last $D_2$ bond coordinates.
+    The permutation exchanging the two groups of bond coordinates joins the
+    latter to $W_2$ with unused directions adjoined, by
+    Lemma~\ref{lem:mpu_gauge_padding_paths}.
 \end{proof}
 
 \input{chapter/ch28_mpu_actual_qca}

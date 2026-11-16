@@ -1,5 +1,40 @@
 \section{A regional clipping error on the actual low spectral space}
 
+\begin{lemma}[Restricted clipping error from a conjugation bound]
+    \label{thm:regional_truncation_low_from_conjugation}
+    \lean{Matrix.exists_weighted_low_restriction_of_conjugation_le,
+        Matrix.norm_truncation_excess_low_le_of_conjugation_le,
+        Matrix.norm_partially_clipped_truncation_low_le}
+    \leanok
+    Let $A_j$, for $j$ in a finite set, be pairwise commuting Hermitian matrices
+    with $A_j\ge e_j\Id$. For a subset $K$ and real $t$ let $F_j$ and
+    $X=\sum_j(F_j-e_j\Id)$ be as in the partial clipping, let $Y$ be any matrix,
+    and let $(b_v)$ be an orthonormal eigenbasis of $X+Y$ with eigenvalues $a_v$.
+    Put $G=\operatorname{span}\{b_v:a_v\le\varepsilon\}$. Let $s>0$,
+    $0\le u\le t$ and $C<u-\varepsilon$, and suppose that
+    \begin{align}
+        \bigl\lVert e^{s(A_j-(e_j+u)\Id)}\,Y\,e^{-s(A_j-(e_j+u)\Id)}\bigr\rVert\le C.
+    \end{align}
+    Then
+    \begin{align}
+        \bigl\|(A_j-\min(A_j,e_j+t))|_G\bigr\|
+        \le\frac{e^{-s(t-u)-1}}{s}\frac{C}{u-\varepsilon-C}.
+    \end{align}
+    This is the weighted estimate behind \cite[Theorem~2.6]{Arad2014Connecting},
+    with the locality entering only through the conjugation bound.
+\end{lemma}
+\begin{proof}\leanok
+    The centered partial-clipping inequalities give $X$ commuting with $A_j$
+    and $uQ\le X$ for $Q=\mathbf1_{\{\lambda\ge e_j+u\}}(A_j)$. Apply the
+    weighted restriction argument in
+    \cite[``Restricted weighted Sylvester equation'']{QICLean2026Blueprint}
+    with $W=e^{s(A_j-(e_j+u)\Id)}$. The perturbation and forcing norms are at
+    most $C$, using $\lVert W(\Id-Q)\rVert\le1$, while the low spectral space
+    gives the upper quadratic bound $\varepsilon$. Hence $WQ|_G$ has norm at
+    most $C/(u-\varepsilon-C)$, and the spectral tail inequality for the
+    clipping excess contributes $e^{-s(t-u)-1}/s$.
+\end{proof}
+
 \begin{lemma}[Restricted error of clipping one original regional sum]
     \label{thm:consecutive_regional_truncation_low}
     \lean{TNLean.MPS.AreaLaw.norm_consecutive_regional_truncation_low_le}
@@ -26,18 +61,12 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:consecutive_internal_sums_commute,thm:chain_local_imaginary_time}
-    Consecutive regional sums commute, and the centered partial-clipping
-    inequalities give $uQ\le X$ for
-    $Q=\mathbf1_{\{\lambda\ge e_j+u\}}(A_j)$.
-    Apply the weighted restriction argument in
-    \cite[``Restricted weighted Sylvester equation'']{QICLean2026Blueprint}
-    with $W=e^{s(A_j-(e_j+u)\Id)}$. Original-bond imaginary-time bounds give
-    the forcing and perturbation norms at most $2|J|$, while the actual
-    low spectral space gives the upper quadratic bound $\varepsilon$.
-    It follows that $WQ|_G$ has norm at most
-    $2|J|/(u-\varepsilon-2|J|)$. The spectral tail inequality for the
-    clipping excess contributes $e^{-s(t-u)-1}/s$.
+    \uses{thm:consecutive_internal_sums_commute,thm:chain_local_imaginary_time,
+        thm:regional_truncation_low_from_conjugation}
+    Consecutive regional sums commute. Original-bond imaginary-time bounds,
+    Theorem~\ref{thm:chain_local_imaginary_time}, give the conjugation bound
+    with $C=2|J|$. Apply
+    Lemma~\ref{thm:regional_truncation_low_from_conjugation}.
     These are the original-regional-operator estimates used in
     \cite[lines 909--960]{Arad2016RigorousRG}; the absolute clipping thresholds
     remain $e_j+u$ and $e_j+t$.

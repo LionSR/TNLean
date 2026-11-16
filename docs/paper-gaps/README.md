@@ -193,6 +193,12 @@ For the MPU index of arXiv:1703.09188:
   source gate's weight. In the source's diagonal canonical-form-II coordinates,
   $\rho^{\mathsf T}=\rho$ closes the retained source-$u$ contraction and proves
   $u^\dagger u=I$ for the supplied fixed pair.
+- `mpu_standard_form_canonical_convention.tex` (local correction, resolved)
+  records, from the source's standing canonical-form convention and its
+  explicit "not necessarily in CF" qualifiers elsewhere, that a tensor in
+  standard form is the two-site block of a simple canonical tensor, so the
+  time-reversal and transposition criteria and the sign results apply to every
+  such standard form without a further hypothesis.
 - `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
   to the unblocked all-length converse printed in the Fundamental Theorem of
   MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
@@ -200,6 +206,16 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_index_classification_tensor_to_gates.tex` (clarification, resolved)
+  records the step omitted in the "if" half of clause (iv) of the Index
+  Theorem: a blocked tensor is joined through MPU tensors to the tensor built
+  from its own standard-form gates, by a path of virtual gauges to canonical
+  form II and an interpolation of half factors that keeps the gates fixed.
+- `mpu_conjugation_symplectic_uniqueness_transpose.tex` (local correction,
+  resolved) records that the Case II uniqueness clause of Proposition
+  `corconj` prints `v'' = v' (S_rᵀ ⊗ S_ℓᵀ)`, while the Fundamental Theorem gives
+  `v'' = v' (S_r† ⊗ S_ℓ†)`; a unitary symplectic `S` need not be real, and
+  `S_ℓ = diag(i, -i)` separates the two. The Case I clause is unaffected.
 - `mpu_shift_supplied_standard_forms.tex` records that the shift-family gates
   of Section VII are formalized as explicit two-site decompositions with
   supplied gates and normalized half factors. Only the blocked
@@ -1970,6 +1986,14 @@ For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
   `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
   `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
   hypotheses; for accuracy `n^{-c}` it is of order `log^{2/3} n · log log n`.
+- [`aklv13_entropy_inverse_gap_logarithm.tex`](aklv13_entropy_inverse_gap_logarithm.tex)
+  (local correction, resolved) records that the printed entropy rate
+  `O(log³ d/ε)` of Theorem 4.3 (lines 820–846), of the general theorem
+  (lines 995–1000) and of Lemma 6.3 (lines 1003–1052) drops the factor
+  `log(s² + s)` at lines 840–843, and proves that no parameter choice avoids
+  it: any favorable pair of the Chebyshev shrinking and polynomial rank
+  certificates has `log D > c³(log q + 2 log(1/g))³/(16g)`. The proved rate
+  `C(1 + log q + log(1/g))³/g` is optimal for the route up to the constant.
 
 ## Independent scales and the ground-space recursive witness
 
@@ -2019,3 +2043,14 @@ normalizing power, as the published Methods retain. The energy-dependent
 normalization, Corollary 2.14 and the cut-wise error reduction are formalized;
 the joint power-and-ground-projection sample, its all-cut operator Schmidt
 rank and the ground-line cut factors are not yet.
+
+### The ALVV merge tree for a unique frustration-free ground state
+
+[`alvv16_unique_ground_state_tree.tex`](alvv16_unique_ground_state_tree.tex)
+(scope restriction, open) records that the existence content of arXiv:1602.08828v2,
+Theorem t:unique, lines 1829–1855, is proved with the source's hypotheses by
+specializing the degenerate-gap resampling tree and its refinement to ground
+energy zero and multiplicity one. The per-node families are not the
+frustration-free family of Theorem t:aisff, so the intermediate dimension grows
+with the chain length instead of the source's constant `D s²`; no running time
+is asserted.

@@ -2468,6 +2468,40 @@
     physical reindexing gives the normalized flattening of the enlarged MPO.
 \end{proof}
 
+\begin{lemma}[Canonical form after ancillas and blocking]
+    \label{thm:mpu_canonical_form_ancilla_blocking}
+    \lean{MPSTensor.IsNormalTensor.isMPUCanonicalForm,
+        MPOTensor.isMPUCanonicalForm_of_isNormalTensor_normalizedFlattening,
+        MPOTensor.IsMPU.isMPUCanonicalForm_tensorPhysicalId,
+        MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor,
+        MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId}
+    \leanok
+    \uses{def:mpu_canonical_form, def:normal,
+        thm:mpu_normalized_full_support_normal,
+        thm:mpu_identity_ancilla_reduced_cfii}
+    A normal tensor is in canonical form, with one block of weight one
+    filling the bond space. Consequently, if an MPU tensor $\mathcal U$ of
+    physical dimension $d$ is in canonical form, then so are $\mathcal U_k$,
+    $\mathcal U^{(p)}$ and $(\mathcal U^{(p)})_k$ for all positive integers
+    $p$ and $k$.
+    % Source lines: paper_v2.tex 259--267, 344--354, 706--724.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_normalized_full_support_normal,
+        thm:mpu_identity_ancilla_reduced_cfii}
+    By Lemma~\ref{thm:mpu_normalized_full_support_normal}, the normalized
+    tensor $d^{-1/2}\mathcal U$ is normal. Attaching the identity ancilla
+    replaces it by a physical reindexing of its normalized diagonal lift,
+    which is normal: the transfer map is unchanged, and an invariant
+    projection for the lift is invariant for the original letters. Blocking
+    $k>0$ sites and reindexing the physical legs preserve normality. Hence
+    the normalized tensor of $(\mathcal U^{(p)})_k$ is normal and in
+    canonical form with one block, and multiplying its weight by the square
+    root of the physical dimension gives canonical form of
+    $(\mathcal U^{(p)})_k$ itself.
+\end{proof}
+
 \begin{definition}[Equivalence after blocking and ancillas]
     \label{def:equivalent-tensors}
     \lean{MPOTensor.Equivalent}
@@ -3907,11 +3941,142 @@
     Lemma~\ref{thm:mpu_cfii_path_source_ranks}.
 \end{proof}
 
+\begin{lemma}[Equivalent tensors have equal index]
+    \label{thm:mpu_equivalence_index_eq}
+    \lean{MPOTensor.StrictlyEquivalent.index_eq,
+        MPOTensor.Equivalent.index_eq,
+        MPOTensor.not_equivalent_of_index_ne}
+    \leanok
+    \uses{def:mpu_reduced_representative_index,
+        def:strictly-equivalent-tensors, def:equivalent-tensors}
+    Let $\mathcal U$ and $\mathcal V$ be MPU tensors of positive physical and
+    bond dimensions. If $\mathcal U$ and $\mathcal V$ are strictly equivalent,
+    or more generally equivalent, then
+    \begin{align}
+        \operatorname{ind}(\mathcal U) & =\operatorname{ind}(\mathcal V).
+    \end{align}
+    Equivalently, two tensors with different indices are not equivalent.
+    This is the ``only if'' half of clause (iv) of
+    \cite[Theorem~IV.6]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 852--857.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_path_index_constant,
+        thm:mpu_representative_index_blocking_adjoint,
+        thm:mpu_physical_ancilla_index,
+        thm:mpu_reduced_representative_index_invariance}
+    Suppose first that $\mathcal U$ and $\mathcal V$ are strictly equivalent,
+    with a path $\mathcal W(p)$ of MPU tensors of bond dimension $D'$ from
+    $\mathcal U_{\uparrow D'}$ to $\mathcal V_{\uparrow D'}$. Adjoining unused
+    bond directions changes no periodic operator of positive length, hence
+    not the index. By Lemma~\ref{thm:mpu_path_index_constant},
+    \begin{align}
+        \operatorname{ind}(\mathcal U)
+         & =\operatorname{ind}(\mathcal W(0))
+        =\operatorname{ind}(\mathcal W(1))
+        =\operatorname{ind}(\mathcal V).
+    \end{align}
+    In general, $(\mathcal U^{(p_a)})_k$ and $(\mathcal V^{(p_b)})_k$ are
+    strictly equivalent. Attaching an identity ancilla and blocking do not
+    change the index, so
+    \begin{align}
+        \operatorname{ind}(\mathcal U)
+         & =\operatorname{ind}((\mathcal U^{(p_a)})_k)
+        =\operatorname{ind}((\mathcal V^{(p_b)})_k)
+        =\operatorname{ind}(\mathcal V).
+    \end{align}
+\end{proof}
+
+\begin{lemma}[A blocked tensor and the tensor of its gates]
+    \label{thm:mpu_blocked_tensor_joined_to_gates}
+    \lean{MPOTensor.IsMPU.exists_joinedIn_standardFormTensorOfGates}
+    \leanok
+    \uses{def:mpu_canonical_form, thm:mpu_canonical_form_similar_cfii,
+        def:mpu_tensor_from_two_gates, lem:mpu_gauge_padding_paths,
+        lem:mpu_standard_form_interpolation, prop:mpu_admissible_index_well_defined}
+    Let $W$ be an MPU tensor in canonical form, of physical dimension $c$ and
+    bond dimension $D$, and let $m\geq D^2$ and $n=c^m$. There are unitary
+    gates
+    \begin{align}
+        u                                 & :\mathbb C^n\otimes\mathbb C^n\longrightarrow
+        \mathbb C^\ell\otimes\mathbb C^r, &
+        v                                 & :\mathbb C^r\otimes\mathbb C^\ell\longrightarrow
+        \mathbb C^n\otimes\mathbb C^n,
+    \end{align}
+    with $r\ell=c^{2m}$ and
+    $\operatorname{ind}(W)=\tfrac12(\log_2r-\log_2\ell)$, such that $W_{2m}$
+    and the tensor built from $u$ and $v$, read as a tensor on blocks of $2m$
+    sites, are joined by a continuous path of MPU tensors after adjoining
+    unused bond directions up to $D+nr$.
+    % **Local fix (missing step):** the source passes from the gates to the
+    % tensors without comment; documented in
+    % docs/paper-gaps/mpu_index_classification_tensor_to_gates.tex.
+    % Source lines: paper_v2.tex 603--622 and 857--865.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_canonical_form_similar_cfii, lem:mpu_gauge_padding_paths,
+        lem:mpu_standard_form_interpolation,
+        prop:mpu_admissible_index_well_defined}
+    Write $W=X^{-1}YX$ with $Y$ in canonical form~II, and join $W_{2m}$ to
+    $Y_{2m}$ by a path of gauges. Since $m\geq D^2$, the block $Y_m$ is
+    simple, and $Y_{2m}$ is its two-site block, in standard form with the
+    gates $u,v$ of $Y_m$. The tensor built from $u,v$ is in standard form with
+    the same gates, and Lemma~\ref{lem:mpu_standard_form_interpolation} joins
+    the two presentations. The ranks of $Y_m$ satisfy $r\ell=c^{2m}$ and give
+    the index of $Y$, which is the index of $W$; see
+    \cite{gap:mpu_index_classification_tensor_to_gates}.
+\end{proof}
+
+\begin{lemma}[Tensors with the same index are equivalent]
+    \label{thm:mpu_equivalent_of_index_eq}
+    \lean{MPOTensor.IsMPU.strictlyEquivalent_blockTensor_of_index_eq,
+        MPOTensor.IsMPU.equivalent_of_index_eq,
+        MPOTensor.IsMPU.equivalent_iff_index_eq}
+    \leanok
+    \uses{thm:mpu_blocked_tensor_joined_to_gates, lem:mpu_tensor_from_gates_path,
+        thm:mpu_canonical_form_ancilla_blocking, thm:mpu_physical_ancilla_index,
+        def:strictly-equivalent-tensors, def:equivalent-tensors,
+        thm:mpu_equivalence_index_eq}
+    Let $\mathcal U$ and $\mathcal V$ be MPU tensors in canonical form, of
+    positive physical and bond dimensions. If they have the same physical
+    dimension and the same index, their blocks of $2m$ sites are strictly
+    equivalent for every $m$ at least the squares of both bond dimensions. In
+    general, $\mathcal U$ and $\mathcal V$ are equivalent if and only if they
+    have the same index. This is clause (iv) of
+    \cite[Theorem~IV.6]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 852--865.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_blocked_tensor_joined_to_gates, lem:mpu_tensor_from_gates_path,
+        thm:mpu_canonical_form_ancilla_blocking, thm:mpu_physical_ancilla_index,
+        thm:mpu_equivalence_index_eq}
+    Let the physical dimensions be $d_a$ and $d_b$, with greatest common divisor
+    $g$, and put $p_a=d_b/g$ and $p_b=d_a/g$. These are coprime and
+    $p_ad_a=p_bd_b$. The tensors $\mathcal U^{(p_a)}$ and $\mathcal V^{(p_b)}$
+    are in canonical form and have the indices of $\mathcal U$ and
+    $\mathcal V$. Apply Lemma~\ref{thm:mpu_blocked_tensor_joined_to_gates} to
+    both at a common $m$. The gates have rank products $r\ell=r'\ell'$ and
+    equal values of $\log_2r-\log_2\ell$, so $r=r'$ and $\ell=\ell'$. By
+    Lemma~\ref{lem:mpu_tensor_from_gates_path}, the two tensors built from the
+    gates are joined, which joins the two blocked tensors with ancilla after
+    adjoining unused bond directions up to a common bond dimension. Their
+    canonical form is Lemma~\ref{thm:mpu_canonical_form_ancilla_blocking}. The
+    converse is Lemma~\ref{thm:mpu_equivalence_index_eq}.
+\end{proof}
+
 \begin{theorem}[Index Theorem]
     \label{IndexTh}
-    \notready
+    \lean{MPOTensor.IsMPU.indexTheorem}
+    \leanok
     \discussion{6023}
-    \uses{def:index, index-well-defined, lem:mpu_index_tensor, lem:mpu_index_composition, prop:continuity-index, def:equivalent-tensors}
+    \uses{def:index, def:mpu_reduced_representative_index,
+        thm:mpu_representative_index_blocking_adjoint,
+        thm:mpu_representative_index_tensor_product,
+        thm:mpu_admissible_index_composition, thm:mpu_path_index_constant,
+        def:equivalent-tensors, thm:mpu_equivalent_of_index_eq}
     For MPU tensors under the source's standing canonical-form convention, take
     the index defined from any simple blocking. This index has the following
     properties.
@@ -3922,10 +4087,28 @@
         \item Two MPU tensors have the same index if and only if they are
               equivalent.
     \end{enumerate}
-    In \cite[Theorem~IV.6]{Cirac2017MPU}, these three clauses form the unrestricted
-    index theorem.
+    These are the four clauses of \cite[Theorem~IV.6]{Cirac2017MPU}. The
+    index is the one of Definition~\ref{def:mpu_reduced_representative_index},
+    which agrees with the index of Definition~\ref{def:index} for tensors in
+    canonical form; clauses (i)--(iii) hold for every MPU tensor of positive
+    physical and bond dimensions. In clause (iv) the compared tensors are in
+    canonical form, as in \cite[lines~708--714]{Cirac2017MPU}, while the
+    tensors along a path need not be \cite[lines~733--736]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 824--865.
 \end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_representative_index_blocking_adjoint,
+        thm:mpu_representative_index_tensor_product,
+        thm:mpu_admissible_index_composition, thm:mpu_path_index_constant,
+        thm:mpu_equivalent_of_index_eq}
+    Clauses (i)--(iii) are
+    Lemmas~\ref{thm:mpu_representative_index_blocking_adjoint},
+    \ref{thm:mpu_representative_index_tensor_product},
+    \ref{thm:mpu_admissible_index_composition}
+    and~\ref{thm:mpu_path_index_constant}. Clause (iv) is
+    Lemma~\ref{thm:mpu_equivalent_of_index_eq}.
+\end{proof}
 
 \begin{corollary}[Admissible Index Theorem]
     \label{thm:mpu_admissible_index}

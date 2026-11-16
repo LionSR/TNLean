@@ -161,7 +161,7 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
       (((fun _ : Fin 3 ↦ (0 : ℝ)) j) : ℂ) • 1).PosSemidef := by
     simp only [Complex.ofReal_zero, zero_smul, sub_zero]
     exact Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)
-  have hBnorm := (aklv_clipped_hamiltonian_posSemidef_norm_le hs ha h h0 h1
+  have hBnorm := (aklv_clipped_hamiltonian_posSemidef_norm_le (by omega) ha h h0 h1
     (fun _ ↦ 0) he le_rfl ht0).2
   have : Nonempty (Fin q) := ⟨⟨0, by omega⟩⟩
   have hupper (x : ℝ) (hx : x ∈ spectrum ℝ B) : x ≤ 2 * t + s :=
@@ -176,7 +176,7 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
   intro ell
   let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
   obtain ⟨HL, HR, hL, hR, hmiddle, hdecomp, hcenter⟩ :=
-    aklv_clipped_hamiltonian_decomposition hs ha h hsupp (fun _ ↦ 0) t
+    aklv_clipped_hamiltonian_decomposition (by omega) ha h hsupp (fun _ ↦ 0) t
   have hR' : Entropy.IsSupportedOn HR (interval L (a + 1 + (s - 2)) L) := by
     convert hR using 1
     congr 1

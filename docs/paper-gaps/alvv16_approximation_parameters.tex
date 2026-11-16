@@ -48,10 +48,11 @@ ALVV states the local normalization at source lines 267 and 806; no
 global assumption $\gamma\le1$ is stated there or in Assumption (DG).
 
 The bounds below use $g=\min\{\gamma,1\}$. Decreasing a supplied gap
-lower bound to $g$ is always legitimate. Comparing the resulting bound
-with the printed inverse powers of the original $\gamma>1$ requires an
-additional uniform spectral bound or a separate large-gap argument.
-That comparison remains open here.
+lower bound to $g$ is always legitimate. The local normalization does bound
+the gap in terms of the ground-space dimension $r$: Section~\ref{sec:large_gap}
+proves $q^m\le r$ for every natural $m<\gamma$, hence
+$\gamma\le1+\log r/\log q$, and $\gamma\le1$ whenever $r<q$. That section
+compares the capped bounds with the printed inverse powers of $\gamma>1$.
 
 \section{The printed choice is not uniform in the gap}
 
@@ -84,9 +85,9 @@ The obstruction concerns the prescription; it does not disprove
 \section{A choice retaining the two scales}
 
 The corrected prescription of this section is formalized, so the failure of
-the printed choice is resolved. What remains open is the comparison with the
-printed bound for gaps larger than one, where the formal bound uses
-$g=\min\{\gamma,1\}$.
+the printed choice is resolved. The comparison with the printed bound for
+gaps larger than one, where the formal bound uses $g=\min\{\gamma,1\}$, is
+made in Section~\ref{sec:large_gap}.
 
 Normalize the gap to $0<g\le1$. For a target scale $0<\tau\le1$, put
 $u=1+\log(1/g)+\log(1/\tau)$. There is a universal constant $C\ge21$
@@ -151,16 +152,76 @@ interval gives the source's fixed cut.
 The gap in (\ref{eq:alvv_approximation_explicit_rank}) is explicitly
 $g=\min(\gamma,1)$. For $0<\gamma\le1$, the estimate has the source's
 quarter-power gap and three-quarter-power accuracy dependence, with the
-logarithmic correction displayed. For larger supplied gaps it uses $g=1$;
-it does not assert an improvement proportional to $\gamma^{-1}$ or
-$\gamma^{-1/4}$ in that regime. Comparing the capped estimate with the
-unrestricted printed quantitative expression requires a universal upper
-bound on a nontrivial nearest-neighbour ground-space gap, or a separate
-large-gap argument. That comparison is not proved here.
+logarithmic correction displayed. For larger supplied gaps it uses $g=1$.
+Section~\ref{sec:large_gap} shows that this costs at most the factor
+$\max\{\gamma,1\}\le1+\log r/\log q$ in the exponent relative to the
+printed uncapped expression, and nothing when $r<q$.
 The closed spectral cutoff retaining the entire original ground space is
 as documented in the companion
 \href{https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf}
 {spectral-projector note}.
+
+
+\section{Gaps above one}
+\label{sec:large_gap}
+
+Let $H=\sum_{i=0}^{L-2}h_i$ be a nearest-neighbour chain of $L$ qudits of
+dimension $q$ on sites $0,\dots,L-1$, each $h_i$ supported on sites $i,i+1$
+with $0\le h_i\le\Id$, least spectral value $\mu$, a second
+spectral value, gap $\gamma$ in the sense of Assumption (DG), and ground
+space $G$ of dimension $r$.
+
+\paragraph{The gap bound.} For every natural $m<\gamma$ one has $m<L$ and
+$q^m\le r$. Indeed, for $m\le L$ split the chain into its first $L-m$ sites
+and its last $m$ sites, and write $H=A\otimes\Id+N$, where $A$ collects the
+terms supported on the first $L-m$ sites and $N$ the at most $m$ terms that
+meet the last $m$ sites, so $0\le N\le m$. For a unit ground vector
+$\psi=\sum_y\psi_y\otimes\ket y$, positivity of $N$ gives
+$\sum_y\langle\psi_y,A\psi_y\rangle\le\mu\sum_y\|\psi_y\|^2$, so some slice
+$\varphi=\psi_y\ne0$ has $\langle\varphi,A\varphi\rangle\le\mu\|\varphi\|^2$.
+Every product $\varphi\otimes\chi$ then has energy at most $\mu+m$. These
+products form a space of dimension $q^m$. If $q^m>r$, it contains a nonzero
+vector orthogonal to $G$, whose energy is at least $\mu+\gamma>\mu+m$, a
+contradiction. Applied at $m=L$, the same argument contradicts $r<q^L$, so
+$m<L$. Taking $m=\lceil\gamma\rceil-1$ gives
+\begin{align}
+    \gamma\le1+\frac{\log r}{\log q},
+    \label{eq:alvv_approximation_gap_log_bound}
+\end{align}
+and $r<q$ forces $\gamma\le1$. The three-qubit example above, with $r=4$,
+$q=2$ and $\gamma=2$, shows that gaps above one occur once $r\ge q$.
+The formal statements are
+\leanid{TNLean.MPS.AreaLaw.ALVV.pow_le_finrank_ground_of_lt_gap},
+\leanid{TNLean.MPS.AreaLaw.ALVV.gap_le_one_of_finrank_lt} and
+\leanid{TNLean.MPS.AreaLaw.ALVV.gap_le_one_add_log_div_log}.
+
+\paragraph{The comparison.} Since $1/g=\max\{\gamma,1\}/\gamma$ and
+$\gamma(1/\gamma)^{1/4}\ge1$ for $\gamma\ge1$,
+\begin{align}
+    \frac{u^3}{g}+g^{-1/4}a^{3/4}u
+    \le\max\{\gamma,1\}\Bigl(\frac{u^3}{\gamma}
+    +\gamma^{-1/4}a^{3/4}u\Bigr).
+    \label{eq:alvv_approximation_capped_comparison}
+\end{align}
+By (\ref{eq:alvv_approximation_capped_comparison}),
+(\ref{eq:alvv_approximation_explicit_rank}) and
+(\ref{eq:alvv_approximation_global_bond}) hold with the uncapped printed
+exponent multiplied by $\max\{\gamma,1\}$, which is at most the right side
+of (\ref{eq:alvv_approximation_gap_log_bound}); the logarithms
+$u$ and $a$ keep $\log(1/g)=\max\{0,\log(1/\gamma)\}$. The formal statements
+are
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_interval_normalized_approximation_uncapped}
+and
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_normalized_isOpenMPS_approximation_uncapped}.
+
+When $r<q$, in particular for a unique ground state, the factor is one and
+the capped estimates are the printed ones. When $r\ge q$ and $\gamma>1$, the
+remaining factor is at most $1+\log r/\log q$, which is $O(\log n)$ under the
+source's standing assumption $r=\mathrm{poly}(n)$. The printed bound with a
+single factor $r$ and the uncapped gap is not proved in this regime: it would
+need either an improvement of the polynomial-filter construction for gaps
+above one, or a better gap bound. Whether a nontrivial nearest-neighbour gap
+is bounded by a universal constant is not settled here.
 
 \section{One global matrix product state}
 
@@ -184,8 +245,8 @@ at most $\delta/8$. Its normalization gives $\Phi$ and preserves every
 bond bound. Choosing $B=\lceil e^E\rceil$ for the common logarithmic rank
 budget costs at most one in $\log B$ and retains the single factor $r$.
 
-The remaining quantitative comparison concerns the cap $g=\min(\gamma,1)$
-for larger supplied gaps, as discussed above. The low-energy extension and
+The cap $g=\min(\gamma,1)$ for larger supplied gaps is compared with the
+printed expression in Section~\ref{sec:large_gap}. The low-energy extension and
 the binary-tree algorithm are separate results and are not asserted here.
 
 
@@ -198,10 +259,10 @@ before the sampling size and the child spaces. Its literal ordered words
 act on the actual Haar coordinate sample, followed by one collective trim.
 Writing $D_{\rm ref}=r^2B$, take
 \[
-  A=1+\log r+\log D+\log(1/\beta),\qquad
-  s=\lceil4096rA\rceil,\qquad
-  M=D^6s^3,\qquad
-  \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
+    A=1+\log r+\log D+\log(1/\beta),\qquad
+    s=\lceil4096rA\rceil,\qquad
+    M=D^6s^3,\qquad
+    \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
 \]
 The corrected fixed-input failure bound
 (\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
@@ -233,12 +294,12 @@ The numerical tail and filter conditions in the bounded witness above can
 be derived uniformly from the physical input. Choose a universal $C\ge1$
 from the scalar parameter theorem, before the chain and Hamiltonian, and put
 \[
-  m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
-  \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+    m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
+    \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
 \]
 Then $\ell\ge21$ and
 \[
-  \log D\le22(C+1)(6+2\log(C+1))v^3/g.
+    \log D\le22(C+1)(6+2\log(C+1))v^3/g.
 \]
 Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
 estimate holds uniformly up to $8\ell$, hence throughout the required
@@ -264,7 +325,7 @@ chain coordinates. Its regional internal cuts are the native chain cuts.
 If its at most $M$ recorded generators have ranks at most
 $R=10^6D_{\rm ref}^2(n+1)M$, the finite-span estimate gives bond at most
 \[
-  MR=10^6D_{\rm ref}^2(n+1)M^2
+    MR=10^6D_{\rm ref}^2(n+1)M^2
 \]
 for every vector in this actual root space. The extra factor $M$ is
 retained: the per-generator bound is not assigned unchanged to the whole
@@ -285,7 +346,7 @@ the same recursively constructed root. Let $P_S$ be its orthogonal
 projection. For every unit $\Gamma\in G$, this gives
 $\|P_S\Gamma\|^2\ge197/200$. The actual normalized projection
 \[
-  \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
+    \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
 \]
 has squared overlap at least $197/200$ and squared distance at most
 $3/100$, with $\langle\phi,\Gamma\rangle=\|P_S\Gamma\|$ real and
@@ -304,25 +365,25 @@ Let $\mu$ be the original ground energy, $\gamma$ the gap, and $r$ the
 actual ground-space dimension. The same physical improving families can
 be selected before every requested accuracy $\eta>0$. Put
 \[
-  A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
-  \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
-  \varepsilon=\frac{c^2\rho}{32768}.
+    A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
+    \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
+    \varepsilon=\frac{c^2\rho}{32768}.
 \]
 Choose the physical reference space at accuracy $\varepsilon$, with
 all-span MPS bond bound $b$, and let $b_0$ be the reference bound used in
 the tree. With $D$ the common filter count parameter, choose
 \[
-  b_* =\max\{b_0,b\},\qquad
-  N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
-  \xi=\frac1{1000b_*N\sqrt{n+1}}.
+    b_* =\max\{b_0,b\},\qquad
+    N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
+    \xi=\frac1{1000b_*N\sqrt{n+1}}.
 \]
 This threshold satisfies both the tree bound and the final refinement
 budgets, including the strict inequality
 $\sqrt{nrb}\,\xi<\eta/(10000D^{12})$.
 Fix $0<\beta<1$, and put
 \[
-  s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
-  \qquad M=D^6s^3.
+    s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
+    \qquad M=D^6s^3.
 \]
 Construct the actual balanced tree using this same $\xi$ at every long
 parent. Write $S_0$ for its root; $M$ bounds the number of its recorded
@@ -331,7 +392,7 @@ generators.
 Starting from this actual root, apply the literal raw filter
 $K=I-H/\|H\|$ followed by collective trimming at $\xi$, for
 \[
-   j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
+    j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
 \]
 steps. The retained space $W$ is $\rho$-close to the original full ground
 space, and its dimension is at most $M$. Let $R$ be the actual lowest
@@ -340,7 +401,7 @@ $W$. Then $R\subseteq W$, $\dim R=r$, and its two projection errors
 relative to the original ground space are at most $\eta/2$.
 Indeed the projected trial space has excess energy at most
 \[
-   \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
+    \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
 \]
 and the original gap and the variational principle give the Ritz bounds.
 Every vector in $R$ has native MPS bond at most
@@ -395,8 +456,8 @@ positive number of repetitions returns the same subspace. The subsequent
 analysis, which compounds the error reduction and the dimension growth
 across rounds, requires the intended recursive assignment
 \[
-  V_0=W',\qquad
-  V_{j+1}=\operatorname{Trim}_{\xi}
+    V_0=W',\qquad
+    V_{j+1}=\operatorname{Trim}_{\xi}
     \bigl(\operatorname{span}\{A_iV_j:i\}\bigr).
 \]
 This is a local correction of the assignment, not an identification of a
@@ -433,8 +494,8 @@ unitary for the actual recursive children.
 
 Here the calibrated window is
 \[
- \ell=\left\lceil C\left(v^6/g+\sqrt w\,v^3/\sqrt g\right)\right\rceil,
- \qquad w=1+\log r+2\log(L+1),
+    \ell=\left\lceil C\left(v^6/g+\sqrt w\,v^3/\sqrt g\right)\right\rceil,
+    \qquad w=1+\log r+2\log(L+1),
 \]
 with $v=1+\log m+\log(1/g)+\log(1+w)$ and
 $D=(m\ell^2)^{22\ell}$. Thus $D$ is honest but length- and rank-dependent.
@@ -450,7 +511,7 @@ all physical inputs and give the bound $CZ^k$, where
 $Z=(L+1)(r+1)(1+\eta^{-1})$. Moreover, there is a universal
 $C_{\rm deg}$ such that
 \[
- k\le C_{\rm deg}\frac{(1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
+    k\le C_{\rm deg}\frac{(1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
 \]
 The prefactor can be controlled at the same scale: there is one
 universal $C_0>0$, chosen before $q,\gamma$, with

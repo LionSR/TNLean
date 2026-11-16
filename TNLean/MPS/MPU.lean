@@ -35,6 +35,7 @@ import TNLean.MPS.MPU.BondDilationCircuit
 import TNLean.MPS.MPU.BondPadding
 import TNLean.MPS.MPU.BondRegisterBounds
 import TNLean.MPS.MPU.CanonicalForm
+import TNLean.MPS.MPU.CanonicalFormAncillaBlocking
 import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CanonicalFormGauge
 import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
@@ -46,6 +47,7 @@ import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationSourceFactors
+import TNLean.MPS.MPU.ConjugationStandardForms
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
 import TNLean.MPS.MPU.CyclicConjugation
@@ -61,6 +63,7 @@ import TNLean.MPS.MPU.EncodedUniformMergingCircuit
 import TNLean.MPS.MPU.EndpointBondEncoding
 import TNLean.MPS.MPU.EndpointGramNormalization
 import TNLean.MPS.MPU.Equivalence
+import TNLean.MPS.MPU.EquivalenceIndex
 import TNLean.MPS.MPU.EvenFamilySourceGauges
 import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.ExactBoundedCutRankCircuit
@@ -89,6 +92,7 @@ import TNLean.MPS.MPU.GroupIndex
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
 import TNLean.MPS.MPU.Index
+import TNLean.MPS.MPU.IndexClassification
 import TNLean.MPS.MPU.IndexContinuity
 import TNLean.MPS.MPU.IndexOfCanonicalForm
 import TNLean.MPS.MPU.InitializedEncodingCoordinates
@@ -218,8 +222,12 @@ import TNLean.MPS.MPU.SpinOneSchmidtObstruction
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormConjugation
 import TNLean.MPS.MPU.StandardFormFromGates
+import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
+import TNLean.MPS.MPU.StandardFormSymmetryCriteria
+import TNLean.MPS.MPU.StandardFormTimeReversalSign
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
@@ -242,6 +250,7 @@ import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
+import TNLean.MPS.MPU.TimeReversalSignInvariance
 import TNLean.MPS.MPU.TimeReversalTraceGauge
 import TNLean.MPS.MPU.TimeReversalTwistedTransfer
 import TNLean.MPS.MPU.TransferMatrix
@@ -280,6 +289,7 @@ import TNLean.MPS.MPU.TwoSiteTranslationCovariance
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds
 import TNLean.MPS.MPU.UnitCircleRankTwo
+import TNLean.MPS.MPU.VirtualGaugePath
 import TNLean.MPS.MPU.VirtualSandwich
 import TNLean.MPS.MPU.VirtualSandwichBlocking
 import TNLean.MPS.MPU.VirtualSourceFactorTransport
