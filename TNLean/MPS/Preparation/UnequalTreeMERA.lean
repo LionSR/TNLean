@@ -116,22 +116,13 @@ theorem exists_unequalMERA_every_length {d D : ℕ} (A : MPSTensor d D)
     ext s; exact (s ⟨0, Nat.pos_of_ne_zero (NeZero.ne N)⟩).elim0
   have : NeZero D := ⟨hD.ne'⟩
   have : NeZero d := ⟨hd.ne'⟩
-  obtain ⟨B, ζ, σ, t, L, hζ, hmpv, hNB, hLC, hσ, htr, hfix, ht0, ht1, hlam, hnorm, hinj⟩ :=
+  obtain ⟨B, ζ, σ, t, L, hζ, hmpv, hNB, hLC, hσ, htr, hfix, ht0, ht1, hlam, _, hinj⟩ :=
     exists_normalGaugeData hA
   set s := L + 1 with hsdef
   have hs0 : 0 < s := by omega
   have hinjs : ∀ m, s ≤ m → Kraus.IsInjective (blockTensor B m) := fun m hm => hinj m (by omega)
-  obtain ⟨K, hK, herr⟩ := exists_blockApproximationError_le_mul B hNB hLC hσ htr hfix hlam
-    (by rw [hnorm]; exact ht1.le) (γ := 1 / 2) (by norm_num) (by norm_num)
-  set r := -Real.log t with hr
-  have hr0 : 0 < r := by
-    have := Real.log_neg ht0 ht1
-    rw [hr]; linarith
-  have hexp : ∀ q : ℕ, Real.exp (-(2 * (1 / 2)) * q / correlationLength (t : ℂ)) =
-      Real.exp (-(r * q)) := fun q => by
-    congr 1
-    rw [mul_div_right_comm, neg_div_correlationLength, hnorm, hr]
-    ring
+  obtain ⟨K, r, hK, hr0, _, herr⟩ :=
+    exists_blockApproximationError_le_exp B hNB hLC hσ htr hfix hlam ht0 ht1
   set a := 1 / r with ha
   set b : ℝ := max (Real.log K) 0 / r + s + 1 with hb
   have ha0 : 0 < a := by positivity
@@ -204,7 +195,6 @@ theorem exists_unequalMERA_every_length {d D : ℕ} (A : MPSTensor d D)
       linarith
     · rw [h𝓜, ← hphase]
       refine (herr (m + 1) ℓ hsum q hℓq hinjℓ).trans ?_
-      rw [hexp]
       have hMN : ((m + 1 : ℕ) : ℝ) ≤ N := by
         rw [← hm]; exact_mod_cast Nat.div_le_self N q
       have hNpos : (0 : ℝ) < N := by exact_mod_cast hN0
