@@ -66,74 +66,74 @@ theorem gauge_ne_zero (a b c : Fin 2) :
 
 /-- The fusion analysis after the explicit scalar gauge. -/
 def fusionAnalysisGolden (a b c : Fin 2)
-    (_μ : Fin (fibNim a b c)) :
+    (_μ : Fin (fibMult a b c)) :
     Matrix (Fin (fibBlockDim c)) (Fin (fibBlockDim a * fibBlockDim b)) GoldenInt :=
   fusionGauge a b c • fibFusionAnalysisGolden a b c
 
 /-- The complex fusion analysis maps. -/
 noncomputable def fusionAnalysis (a b c : Fin 2)
-    (μ : Fin (fibNim a b c)) :
+    (μ : Fin (fibMult a b c)) :
     Matrix (Fin (fibBlockDim c)) (Fin (fibBlockDim a * fibBlockDim b)) ℂ :=
   complexOfGolden (fusionAnalysisGolden a b c μ)
 
 /-- The fusion synthesis after the explicit scalar gauge. -/
 def fusionSynthesisGolden (a b c : Fin 2)
-    (_μ : Fin (fibNim a b c)) :
+    (_μ : Fin (fibMult a b c)) :
     Matrix (Fin (fibBlockDim a * fibBlockDim b)) (Fin (fibBlockDim c)) GoldenInt :=
   fusionGaugeInv a b c • fibFusionSynthesisGolden a b c
 
 /-- The complex fusion synthesis maps. -/
 noncomputable def fusionSynthesis (a b c : Fin 2)
-    (μ : Fin (fibNim a b c)) :
+    (μ : Fin (fibMult a b c)) :
     Matrix (Fin (fibBlockDim a * fibBlockDim b)) (Fin (fibBlockDim c)) ℂ :=
   complexOfGolden (fusionSynthesisGolden a b c μ)
 
 /-- The action analysis after the explicit scalar gauge. -/
 def actionAnalysisGolden (a x y : Fin 2)
-    (_μ : Fin (fibNim a x y)) :
+    (_μ : Fin (fibMult a x y)) :
     Matrix (Fin (fibNimDim y)) (Fin (fibBlockDim a * fibNimDim x)) GoldenInt :=
   actionGauge a x y • fibActAnalysisGolden a x y
 
 /-- The complex action analysis maps. -/
 noncomputable def actionAnalysis (a x y : Fin 2)
-    (μ : Fin (fibNim a x y)) : Matrix (Fin (fibNimDim y)) (Fin (fibBlockDim a * fibNimDim x)) ℂ :=
+    (μ : Fin (fibMult a x y)) : Matrix (Fin (fibNimDim y)) (Fin (fibBlockDim a * fibNimDim x)) ℂ :=
   complexOfGolden (actionAnalysisGolden a x y μ)
 
 /-- The action synthesis after the explicit scalar gauge. -/
 def actionSynthesisGolden (a x y : Fin 2)
-    (_μ : Fin (fibNim a x y)) :
+    (_μ : Fin (fibMult a x y)) :
     Matrix (Fin (fibBlockDim a * fibNimDim x)) (Fin (fibNimDim y)) GoldenInt :=
   actionGaugeInv a x y • fibActSynthesisGolden a x y
 
 /-- The complex action synthesis maps. -/
 noncomputable def actionSynthesis (a x y : Fin 2)
-    (μ : Fin (fibNim a x y)) : Matrix (Fin (fibBlockDim a * fibNimDim x)) (Fin (fibNimDim y)) ℂ :=
+    (μ : Fin (fibMult a x y)) : Matrix (Fin (fibBlockDim a * fibNimDim x)) (Fin (fibNimDim y)) ℂ :=
   complexOfGolden (actionSynthesisGolden a x y μ)
 
 set_option maxRecDepth 8000 in
 private theorem fusion_retractGolden : ∀ (a b : Fin 2)
-    (q : (c : Fin 2) × Fin (fibNim a b c)),
+    (q : (c : Fin 2) × Fin (fibMult a b c)),
     fusionAnalysisGolden a b q.1 q.2 * fusionSynthesisGolden a b q.1 q.2 = 1 := by
   intro a b
   fin_cases a <;> fin_cases b <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem fusion_orthogonalGolden : ∀ (a b : Fin 2)
-    (q t : (c : Fin 2) × Fin (fibNim a b c)), q ≠ t →
+    (q t : (c : Fin 2) × Fin (fibMult a b c)), q ≠ t →
     fusionAnalysisGolden a b q.1 q.2 * fusionSynthesisGolden a b t.1 t.2 = 0 := by
   intro a b
   fin_cases a <;> fin_cases b <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem action_retractGolden : ∀ (a x : Fin 2)
-    (q : (y : Fin 2) × Fin (fibNim a x y)),
+    (q : (y : Fin 2) × Fin (fibMult a x y)),
     actionAnalysisGolden a x q.1 q.2 * actionSynthesisGolden a x q.1 q.2 = 1 := by
   intro a x
   fin_cases a <;> fin_cases x <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem action_orthogonalGolden : ∀ (a x : Fin 2)
-    (q t : (y : Fin 2) × Fin (fibNim a x y)), q ≠ t →
+    (q t : (y : Fin 2) × Fin (fibMult a x y)), q ≠ t →
     actionAnalysisGolden a x q.1 q.2 * actionSynthesisGolden a x t.1 t.2 = 0 := by
   intro a x
   fin_cases a <;> fin_cases x <;> decide +kernel
@@ -141,7 +141,7 @@ private theorem action_orthogonalGolden : ∀ (a x : Fin 2)
 set_option maxRecDepth 8000 in
 private theorem fusion_letterGolden : ∀ (a b i k : Fin 2),
     mulTensorR (fibBlockGolden a) (fibBlockGolden b) i k =
-      ∑ q : (c : Fin 2) × Fin (fibNim a b c),
+      ∑ q : (c : Fin 2) × Fin (fibMult a b c),
         fusionSynthesisGolden a b q.1 q.2 * fibBlockGolden q.1 i k *
           fusionAnalysisGolden a b q.1 q.2 := by
   decide +kernel
@@ -149,7 +149,7 @@ private theorem fusion_letterGolden : ∀ (a b i k : Fin 2),
 set_option maxRecDepth 8000 in
 private theorem action_letterGolden : ∀ (a x i : Fin 2),
     actTensorR (fibBlockGolden a) (fibNimTargetsGolden x) i =
-      ∑ q : (y : Fin 2) × Fin (fibNim a x y),
+      ∑ q : (y : Fin 2) × Fin (fibMult a x y),
         actionSynthesisGolden a x q.1 q.2 * fibNimTargetsGolden q.1 i *
           actionAnalysisGolden a x q.1 q.2 := by
   decide +kernel
@@ -158,7 +158,7 @@ private theorem action_letterGolden : ∀ (a x i : Fin 2),
 Source: GLM23, `fusiontensors` and `eq:orthoW`. -/
 theorem fusion_isBiorthogonal (a b : Fin 2) :
     IsBiorthogonalDecomposition (mulTensor (fibBlock a) (fibBlock b)).toMPSTensor
-      (fun q : (c : Fin 2) × Fin (fibNim a b c) ↦ (fibBlock q.1).toMPSTensor)
+      (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ (fibBlock q.1).toMPSTensor)
       (fun q ↦ fusionAnalysis a b q.1 q.2) (fun q ↦ fusionSynthesis a b q.1 q.2) := by
   have hB : (mulTensor (fibBlock a) (fibBlock b)).toMPSTensor = fun p ↦
       complexOfGolden (mulTensorR (fibBlockGolden a) (fibBlockGolden b) p.divNat p.modNat) := by
@@ -166,16 +166,16 @@ theorem fusion_isBiorthogonal (a b : Fin 2) :
     change mulTensor (fibBlock a) (fibBlock b) p.divNat p.modNat = _
     rw [fibBlock_eq_complexOfGolden a, fibBlock_eq_complexOfGolden b]
     exact mulTensor_complexOfRing goldenToComplex _ _ _ _
-  have hA : (fun q : (c : Fin 2) × Fin (fibNim a b c) ↦ (fibBlock q.1).toMPSTensor) =
-      fun (q : (c : Fin 2) × Fin (fibNim a b c)) (p : Fin (2 * 2)) ↦
+  have hA : (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ (fibBlock q.1).toMPSTensor) =
+      fun (q : (c : Fin 2) × Fin (fibMult a b c)) (p : Fin (2 * 2)) ↦
         complexOfGolden (fibBlockGolden q.1 p.divNat p.modNat) := by
     funext q p
     rw [fibBlock_eq_complexOfGolden q.1]
     rfl
   rw [hB, hA]
   exact isBiorthogonalDecomposition_complexOfRing goldenToComplex _ _
-    (fun q : (c : Fin 2) × Fin (fibNim a b c) ↦ fusionAnalysisGolden a b q.1 q.2)
-    (fun q : (c : Fin 2) × Fin (fibNim a b c) ↦ fusionSynthesisGolden a b q.1 q.2)
+    (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ fusionAnalysisGolden a b q.1 q.2)
+    (fun q : (c : Fin 2) × Fin (fibMult a b c) ↦ fusionSynthesisGolden a b q.1 q.2)
     (fusion_retractGolden a b) (fusion_orthogonalGolden a b)
     (fun p ↦ fusion_letterGolden a b p.divNat p.modNat)
 
@@ -183,22 +183,22 @@ theorem fusion_isBiorthogonal (a b : Fin 2) :
 Source: GLM23, `fusiontensors2` and `eq:orthoV`. -/
 theorem action_isBiorthogonal (a x : Fin 2) :
     IsBiorthogonalDecomposition (actTensor (fibBlock a) (fibNimTargets x))
-      (fun q : (y : Fin 2) × Fin (fibNim a x y) ↦ fibNimTargets q.1)
+      (fun q : (y : Fin 2) × Fin (fibMult a x y) ↦ fibNimTargets q.1)
       (fun q ↦ actionAnalysis a x q.1 q.2) (fun q ↦ actionSynthesis a x q.1 q.2) := by
   have hB : actTensor (fibBlock a) (fibNimTargets x) = fun i ↦
       complexOfGolden (actTensorR (fibBlockGolden a) (fibNimTargetsGolden x) i) := by
     funext i
     rw [fibBlock_eq_complexOfGolden a, fibNimTargets_eq_complexOfGolden x]
     exact actTensor_complexOfRing goldenToComplex _ _ i
-  have hA : (fun q : (y : Fin 2) × Fin (fibNim a x y) ↦ fibNimTargets q.1) =
-      fun (q : (y : Fin 2) × Fin (fibNim a x y)) (i : Fin 2) ↦
+  have hA : (fun q : (y : Fin 2) × Fin (fibMult a x y) ↦ fibNimTargets q.1) =
+      fun (q : (y : Fin 2) × Fin (fibMult a x y)) (i : Fin 2) ↦
         complexOfGolden (fibNimTargetsGolden q.1 i) := by
     funext q i
     exact fibNimTargets_eq _ _
   rw [hB, hA]
   exact isBiorthogonalDecomposition_complexOfRing goldenToComplex _ _
-    (fun q : (y : Fin 2) × Fin (fibNim a x y) ↦ actionAnalysisGolden a x q.1 q.2)
-    (fun q : (y : Fin 2) × Fin (fibNim a x y) ↦ actionSynthesisGolden a x q.1 q.2)
+    (fun q : (y : Fin 2) × Fin (fibMult a x y) ↦ actionAnalysisGolden a x q.1 q.2)
+    (fun q : (y : Fin 2) × Fin (fibMult a x y) ↦ actionSynthesisGolden a x q.1 q.2)
     (action_retractGolden a x) (action_orthogonalGolden a x) (action_letterGolden a x)
 
 /-- Both displayed state blocks are normal. -/
@@ -212,12 +212,12 @@ letters with biorthogonal summands. Source: GLM23, `rawrels`. -/
 theorem actionTrees_isBiorthogonal (a b x : Fin 2) :
     IsBiorthogonalDecomposition
       (actTensor (mulTensor (fibBlock a) (fibBlock b)) (fibNimTargets x))
-      (fun q : FusionActionPath fibNim fibNim a b x ↦ fibNimTargets q.2.1)
+      (fun q : FusionActionPath fibMult fibMult a b x ↦ fibNimTargets q.2.1)
       (fusionThenActionAnalysis fusionAnalysis actionAnalysis a b x)
       (fusionThenActionSynthesis fusionSynthesis actionSynthesis a b x) ∧
     IsBiorthogonalDecomposition
       (actTensor (mulTensor (fibBlock a) (fibBlock b)) (fibNimTargets x))
-      (fun q : SequentialActionPath fibNim a b x ↦ fibNimTargets q.2.1)
+      (fun q : SequentialActionPath fibMult a b x ↦ fibNimTargets q.2.1)
       (sequentialActionAnalysis actionAnalysis a b x)
       (sequentialActionSynthesis actionSynthesis a b x) :=
   ⟨fusionThenAction_isBiorthogonal fusionAnalysis fusionSynthesis actionAnalysis actionSynthesis

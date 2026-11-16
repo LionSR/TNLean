@@ -26,7 +26,7 @@ namespace FibonacciCompression.Boundary
 
 /-- The fusion-then-action analysis contraction over the golden integers. -/
 def fusionActionAnalysisGolden (a b x : Fin 2)
-    (q : FusionActionPath fibNim fibNim a b x) :
+    (q : FusionActionPath fibMult fibMult a b x) :
     Matrix (Fin (fibNimDim q.2.1)) (Fin (fibBlockDim a * fibBlockDim b * fibNimDim x)) GoldenInt :=
   fun u v ↦
     let w := finProdFinEquiv.symm v
@@ -36,7 +36,7 @@ def fusionActionAnalysisGolden (a b x : Fin 2)
         fusionAnalysisGolden a b q.1.1 q.1.2 k (finProdFinEquiv t)
 
 private theorem fusionActionAnalysis_eq (a b x : Fin 2)
-    (q : FusionActionPath fibNim fibNim a b x) :
+    (q : FusionActionPath fibMult fibMult a b x) :
     fusionThenActionAnalysis fusionAnalysis actionAnalysis a b x q =
       complexOfGolden (fusionActionAnalysisGolden a b x q) := by
   rcases q with ⟨⟨c, μ⟩, y, k⟩
@@ -48,7 +48,7 @@ private theorem fusionActionAnalysis_eq (a b x : Fin 2)
 
 /-- The fusion-then-action synthesis contraction over the golden integers. -/
 def fusionActionSynthesisGolden (a b x : Fin 2)
-    (q : FusionActionPath fibNim fibNim a b x) :
+    (q : FusionActionPath fibMult fibMult a b x) :
     Matrix (Fin (fibBlockDim a * fibBlockDim b * fibNimDim x)) (Fin (fibNimDim q.2.1)) GoldenInt :=
   fun u v ↦
     let w := finProdFinEquiv.symm u
@@ -58,7 +58,7 @@ def fusionActionSynthesisGolden (a b x : Fin 2)
         actionSynthesisGolden q.1.1 x q.2.1 q.2.2 (finProdFinEquiv (k, w.2)) v
 
 private theorem fusionActionSynthesis_eq (a b x : Fin 2)
-    (q : FusionActionPath fibNim fibNim a b x) :
+    (q : FusionActionPath fibMult fibMult a b x) :
     fusionThenActionSynthesis fusionSynthesis actionSynthesis a b x q =
       complexOfGolden (fusionActionSynthesisGolden a b x q) := by
   rcases q with ⟨⟨c, μ⟩, y, k⟩
@@ -70,7 +70,7 @@ private theorem fusionActionSynthesis_eq (a b x : Fin 2)
 
 /-- The sequential analysis contraction over the golden integers. -/
 def sequentialAnalysisGolden (a b x : Fin 2)
-    (q : SequentialActionPath fibNim a b x) :
+    (q : SequentialActionPath fibMult a b x) :
     Matrix (Fin (fibNimDim q.2.1)) (Fin (fibBlockDim a * fibBlockDim b * fibNimDim x)) GoldenInt :=
   fun u v ↦
     let w := finProdFinEquiv.symm v
@@ -80,7 +80,7 @@ def sequentialAnalysisGolden (a b x : Fin 2)
         actionAnalysisGolden b x q.1.1 q.1.2 k (finProdFinEquiv (t.2, w.2))
 
 private theorem sequentialAnalysis_eq (a b x : Fin 2)
-    (q : SequentialActionPath fibNim a b x) :
+    (q : SequentialActionPath fibMult a b x) :
     sequentialActionAnalysis actionAnalysis a b x q =
       complexOfGolden (sequentialAnalysisGolden a b x q) := by
   rcases q with ⟨⟨z, j⟩, y, i⟩
@@ -92,7 +92,7 @@ private theorem sequentialAnalysis_eq (a b x : Fin 2)
 
 /-- The sequential synthesis contraction over the golden integers. -/
 def sequentialSynthesisGolden (a b x : Fin 2)
-    (q : SequentialActionPath fibNim a b x) :
+    (q : SequentialActionPath fibMult a b x) :
     Matrix (Fin (fibBlockDim a * fibBlockDim b * fibNimDim x)) (Fin (fibNimDim q.2.1)) GoldenInt :=
   fun u v ↦
     let w := finProdFinEquiv.symm u
@@ -102,7 +102,7 @@ def sequentialSynthesisGolden (a b x : Fin 2)
         actionSynthesisGolden a q.1.1 q.2.1 q.2.2 (finProdFinEquiv (t.1, k)) v
 
 private theorem sequentialSynthesis_eq (a b x : Fin 2)
-    (q : SequentialActionPath fibNim a b x) :
+    (q : SequentialActionPath fibMult a b x) :
     sequentialActionSynthesis actionSynthesis a b x q =
       complexOfGolden (sequentialSynthesisGolden a b x q) := by
   rcases q with ⟨⟨z, j⟩, y, i⟩
@@ -114,31 +114,35 @@ private theorem sequentialSynthesis_eq (a b x : Fin 2)
 
 set_option maxRecDepth 8000 in
 private theorem action_crossGolden : ∀ (a b x y : Fin 2)
-    (p : SequentialActionMultiplicity fibNim a b x y)
-    (q : FusionActionMultiplicity fibNim fibNim a b x y),
+    (p : SequentialActionMultiplicity fibMult a b x y)
+    (q : FusionActionMultiplicity fibMult fibMult a b x y),
     sequentialAnalysisGolden a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) *
         fusionActionSynthesisGolden a b x (fusionActionPathEquiv a b x ⟨y, q⟩) =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
   intro a b x y
-  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
+    intro p q
+  all_goals fin_cases p <;> fin_cases q <;> decide +kernel
 
 set_option maxRecDepth 8000 in
 private theorem action_inverseCrossGolden : ∀ (a b x y : Fin 2)
-    (q : FusionActionMultiplicity fibNim fibNim a b x y)
-    (p : SequentialActionMultiplicity fibNim a b x y),
+    (q : FusionActionMultiplicity fibMult fibMult a b x y)
+    (p : SequentialActionMultiplicity fibMult a b x y),
     fusionActionAnalysisGolden a b x (fusionActionPathEquiv a b x ⟨y, q⟩) *
         sequentialSynthesisGolden a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
   intro a b x y
-  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
+    intro q p
+  all_goals fin_cases q <;> fin_cases p <;> decide +kernel
 
 private theorem inv_dim_trace {D : ℕ} (hD : 0 < D) (z : ℂ) :
     (D : ℂ)⁻¹ * Matrix.trace (z • (1 : Matrix (Fin D) (Fin D) ℂ)) = z := by
   rw [Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin, smul_eq_mul]
   have hn : (D : ℂ) ≠ 0 := by exact_mod_cast hD.ne'
-  field_simp
+  field_simp [hn]
 
 private theorem state_dim_pos (y : Fin 2) : 0 < fibNimDim y := by
   fin_cases y <;> decide
@@ -147,50 +151,54 @@ private theorem state_dim_pos (y : Fin 2) : 0 < fibNimDim y := by
 Fibonacci F symbol, with the source's opposite multiplicity index orders.
 Source: GLM23, `1Fsymbol` and the Fibonacci example, lines 1991--1993. -/
 theorem actionLMatrix_eq_fSymbol (a b x y : Fin 2)
-    (p : SequentialActionMultiplicity fibNim a b x y)
-    (q : FusionActionMultiplicity fibNim fibNim a b x y) :
+    (p : SequentialActionMultiplicity fibMult a b x y)
+    (q : FusionActionMultiplicity fibMult fibMult a b x y) :
     actionLMatrix fusionSynthesis actionAnalysis actionSynthesis a b x y p q =
       goldenToComplex (fibFSymbolGolden a b x y q.1 p.1) := by
-  rw [actionLMatrix, sequentialAnalysis_eq, fusionActionSynthesis_eq,
-    ← complexOfGolden_mul, action_crossGolden,
-    complexOfRing_smul, complexOfGolden_one]
+  unfold actionLMatrix
+  rw [sequentialAnalysis_eq, fusionActionSynthesis_eq,
+    ← complexOfGolden_mul, action_crossGolden]
+  erw [complexOfRing_smul, complexOfGolden_one]
   exact inv_dim_trace (state_dim_pos y) _
 
 /-- The reverse action-tree comparison has the transposed standard F entries.
 Source: GLM23, `eq:F_symbol2` and `1Fsymbol`. -/
 theorem inverseActionLMatrix_eq_fSymbol (a b x y : Fin 2)
-    (q : FusionActionMultiplicity fibNim fibNim a b x y)
-    (p : SequentialActionMultiplicity fibNim a b x y) :
+    (q : FusionActionMultiplicity fibMult fibMult a b x y)
+    (p : SequentialActionMultiplicity fibMult a b x y) :
     inverseActionLMatrix fusionAnalysis actionAnalysis actionSynthesis a b x y q p =
       goldenToComplex (fibFSymbolGolden a b x y q.1 p.1) := by
-  rw [inverseActionLMatrix, fusionActionAnalysis_eq, sequentialSynthesis_eq,
-    ← complexOfGolden_mul, action_inverseCrossGolden,
-    complexOfRing_smul, complexOfGolden_one]
+  unfold inverseActionLMatrix
+  rw [fusionActionAnalysis_eq, sequentialSynthesis_eq,
+    ← complexOfGolden_mul, action_inverseCrossGolden]
+  erw [complexOfRing_smul, complexOfGolden_one]
   exact inv_dim_trace (state_dim_pos y) _
 
 /-- The only two-dimensional multiplicity sector is the standard
 `[[sigma², sigma], [sigma, -sigma²]]` Fibonacci matrix. -/
 theorem actionLMatrix_tau
-    (p : SequentialActionMultiplicity fibNim 1 1 1 1)
-    (q : FusionActionMultiplicity fibNim fibNim 1 1 1 1) :
+    (p : SequentialActionMultiplicity fibMult 1 1 1 1)
+    (q : FusionActionMultiplicity fibMult fibMult 1 1 1 1) :
     actionLMatrix fusionSynthesis actionAnalysis actionSynthesis 1 1 1 1 p q =
       goldenToComplex (fibFTauGolden p.1 q.1) := by
   rw [actionLMatrix_eq_fSymbol, fibFSymbolGolden_tau]
   have h : fibFTauGolden q.1 p.1 = fibFTauGolden p.1 q.1 := by
-    have hs : ∀ c z : Fin 2, fibFTauGolden c z = fibFTauGolden z c := by decide +kernel
+    have hs : ∀ c z : Fin 2, fibFTauGolden c z = fibFTauGolden z c := by
+      intro c z
+      fin_cases c <;> fin_cases z <;> decide +kernel
     exact hs _ _
   rw [h]
 
 /-- Printed Fibonacci coefficients with the action multiplicity index types. -/
 def printedLGolden (a b x y : Fin 2) :
-    Matrix (SequentialActionMultiplicity fibNim a b x y)
-      (FusionActionMultiplicity fibNim fibNim a b x y) GoldenInt :=
+    Matrix (SequentialActionMultiplicity fibMult a b x y)
+      (FusionActionMultiplicity fibMult fibMult a b x y) GoldenInt :=
   fun p q ↦ fibFSymbolGolden a b x y q.1 p.1
 
 /-- Printed coefficients with the reverse action multiplicity index types. -/
 def printedInverseLGolden (a b x y : Fin 2) :
-    Matrix (FusionActionMultiplicity fibNim fibNim a b x y)
-      (SequentialActionMultiplicity fibNim a b x y) GoldenInt :=
+    Matrix (FusionActionMultiplicity fibMult fibMult a b x y)
+      (SequentialActionMultiplicity fibMult a b x y) GoldenInt :=
   fun q p ↦ fibFSymbolGolden a b x y q.1 p.1
 
 set_option maxRecDepth 8000 in
@@ -198,7 +206,8 @@ private theorem printedL_inverseGolden : ∀ a b x y : Fin 2,
     printedLGolden a b x y * printedInverseLGolden a b x y = 1 ∧
       printedInverseLGolden a b x y * printedLGolden a b x y = 1 := by
   intro a b x y
-  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
+    constructor <;> ext p q <;> fin_cases p <;> fin_cases q <;> decide +kernel
 
 /-- The actual double-action comparison matrices are inverse in every sector,
 including the empty multiplicity spaces. Source: GLM23, `1Fsymbol`. -/
@@ -223,7 +232,7 @@ theorem actionLMatrix_inverse (a b x y : Fin 2) :
 
 /-- Left-associated fusion analysis over the golden integers. -/
 def fusionLeftAnalysisGolden (a b x y : Fin 2)
-    (q : FusionLeftMultiplicity fibNim a b x y) :
+    (q : FusionLeftMultiplicity fibMult a b x y) :
     Matrix (Fin (fibBlockDim y))
       ((Fin (fibBlockDim a) × Fin (fibBlockDim b)) × Fin (fibBlockDim x)) GoldenInt :=
   fun u v ↦ ∑ t : Fin (fibBlockDim q.1),
@@ -232,7 +241,7 @@ def fusionLeftAnalysisGolden (a b x y : Fin 2)
 
 /-- Right-associated fusion synthesis over the golden integers. -/
 def fusionRightSynthesisGolden (a b x y : Fin 2)
-    (p : FusionRightMultiplicity fibNim a b x y) :
+    (p : FusionRightMultiplicity fibMult a b x y) :
     Matrix ((Fin (fibBlockDim a) × Fin (fibBlockDim b)) × Fin (fibBlockDim x))
       (Fin (fibBlockDim y)) GoldenInt :=
   fun v u ↦ ∑ t : Fin (fibBlockDim p.1),
@@ -241,19 +250,21 @@ def fusionRightSynthesisGolden (a b x y : Fin 2)
 
 set_option maxRecDepth 8000 in
 private theorem fusion_crossGolden : ∀ (a b x y : Fin 2)
-    (q : FusionLeftMultiplicity fibNim a b x y)
-    (p : FusionRightMultiplicity fibNim a b x y),
+    (q : FusionLeftMultiplicity fibMult a b x y)
+    (p : FusionRightMultiplicity fibMult a b x y),
     fusionLeftAnalysisGolden a b x y q * fusionRightSynthesisGolden a b x y p =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibBlockDim y)) (Fin (fibBlockDim y)) GoldenInt) := by
   intro a b x y
-  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> decide +kernel
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
+    intro q p
+  all_goals fin_cases q <;> fin_cases p <;> decide +kernel
 
 /-- The same fusion gauge gives the printed Fibonacci F symbols, using
 `fusionFMatrix`'s left-analysis/right-synthesis orientation. -/
 theorem fusionFMatrix_eq_fSymbol (a b x y : Fin 2)
-    (q : FusionLeftMultiplicity fibNim a b x y)
-    (p : FusionRightMultiplicity fibNim a b x y) :
+    (q : FusionLeftMultiplicity fibMult a b x y)
+    (p : FusionRightMultiplicity fibMult a b x y) :
     fusionFMatrix fusionAnalysis fusionSynthesis a b x y q p =
       goldenToComplex (fibFSymbolGolden a b x y q.1 p.1) := by
   have hH : (fun (u : Fin (fibBlockDim y))
@@ -276,8 +287,8 @@ theorem fusionFMatrix_eq_fSymbol (a b x y : Fin 2)
   rcases q with ⟨c, μ, k⟩
   rcases p with ⟨z, j, i⟩
   change (fibBlockDim y : ℂ)⁻¹ * Matrix.trace (_ * _) = _
-  rw [hH, hS, ← complexOfGolden_mul, fusion_crossGolden,
-    complexOfRing_smul, complexOfGolden_one]
+  rw [hH, hS, ← complexOfGolden_mul, fusion_crossGolden]
+  erw [complexOfRing_smul, complexOfGolden_one]
   apply inv_dim_trace
   fin_cases y <;> decide
 
@@ -287,8 +298,8 @@ This is the construction for the displayed two normal blocks, not a
 classification of all module associativity structures.
 Source: GLM23, lines 605 and 1991--1993. -/
 theorem actionLMatrix_eq_fusionFMatrix (a b x y : Fin 2)
-    (p : SequentialActionMultiplicity fibNim a b x y)
-    (q : FusionActionMultiplicity fibNim fibNim a b x y) :
+    (p : SequentialActionMultiplicity fibMult a b x y)
+    (q : FusionActionMultiplicity fibMult fibMult a b x y) :
     actionLMatrix fusionSynthesis actionAnalysis actionSynthesis a b x y p q =
       fusionFMatrix fusionAnalysis fusionSynthesis a b x y
         ⟨q.1, q.2.2, q.2.1⟩ ⟨p.1, p.2.2, p.2.1⟩ := by
