@@ -17,7 +17,7 @@ import TNLean.MPS.MPDO.BoundaryActionLMatrix
   (`a b → c`, then `c · x → y`);
 * lines 593–605: the action tensors are fixed up to invertible changes of basis of the
   multiplicity spaces, under which `L` becomes
-  `X_{az}^y X_{bx}^z X̂_{cx}^y Ŷ_{ab}^c L`, and in the regular module, with one state block
+  `X_{az}^y X_{bx}^z \hat{X}_{cx}^y \hat{Y}_{ab}^c L`, and in the regular module, with one state block
   `x_a` for every operator block `a` and action `a · x_b = ∑_c N_{ab}^c x_c`, "the L-symbols
   are equal to the F-symbols", which is read up to this gauge freedom;
 * lines 1991–1993: for the Fibonacci algebra this regular module, with
@@ -37,7 +37,7 @@ state blocks `x, y`: it is `1` on the three one-dimensional blocks and
 `F^{ττx}_y`, with the sequential label `z` in the place of `f` and the fusion label `c` in the
 place of `e`. Both matrices have the gauge-invariant cross ratio `-1/φ` on the block
 `x = y = x_τ`. The multiplicity spaces of this module are one-dimensional, so the gauge
-matrices of lines 593–605 are nonzero scalars and the hatted gauge `X̂` is the inverse of `X`.
+matrices of lines 593–605 are nonzero scalars and the hatted gauge `\hat{X}` is the inverse of `X`.
 
 The comparison is made for one choice of exact trees. Independence of the choice is the joint
 gauge law `MPOTensor.exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective`, which asks
