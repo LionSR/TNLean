@@ -28,7 +28,7 @@ arXiv:1001.3807v3, Lemma 6.14, lines 2199–2214.
 noncomputable section
 namespace TNLean.PEPS
 
-variable {width height : ℕ} [NeZero width] [NeZero height]
+variable {width height : ℕ} [widthNeZero : NeZero width] [heightNeZero : NeZero height]
 local notation "X" => TorusVertex width height
 local notation "FG" => FreeGroup (X ⊕ X)
 local instance properSupportQuiver : Quiver X := torusDualQuiver width height
@@ -40,7 +40,7 @@ private def eliminatedTransport (R : Finset X) (Φ : FG →* FG)
   step e z := Φ (torusDualStepWord e) * z
   reverse_step e z := by
     cases e <;>
-      simp [TorusDualStep.reverse, torusDualStepWord, map_inv, mul_assoc]
+      simp [TorusDualStep.reverse, torusDualStepWord, map_inv]
   square x y hxy z := by
     have hr := hΦ (x, y) hxy
     rw [torusDualFaceWord, map_mul, map_inv] at hr
@@ -48,6 +48,7 @@ private def eliminatedTransport (R : Finset X) (Φ : FG →* FG)
     simpa only [torusDualEastNorth, torusDualNorthEast, torusDualPathWord,
       torusDualStepWord, map_mul, map_one, mul_one, mul_assoc] using he
 
+include widthNeZero heightNeZero in
 private theorem eliminatedTransport_eval (R : Finset X) (Φ : FG →* FG)
     (hΦ : ∀ v : X, (v.1 + 1, v.2 + 1) ∈ R → Φ (torusDualFaceWord v) = 1)
     {a b : X} (p : TorusDualPath a b) (z : FG) :
@@ -62,6 +63,7 @@ private theorem eliminatedTransport_eval (R : Finset X) (Φ : FG →* FG)
 private theorem presentation_face_one (R : Finset X) (v : X)
     (hv : (v.1 + 1, v.2 + 1) ∈ R) :
     PresentedGroup.mk (torusDualPresentationRelators R : Set FG) (torusDualFaceWord v) = 1 := by
+  classical
   apply PresentedGroup.one_of_mem
   change torusDualFaceWord v ∈ torusDualPresentationRelators R
   unfold torusDualPresentationRelators
@@ -112,6 +114,7 @@ theorem exists_torusDualProperSupportNormalForm (R : Finset X)
   obtain ⟨l, hlen, hm, hf⟩ := exists_torusDualFaceEliminationSequence R hR
   refine ⟨l, hlen, hm, ?_⟩
   intro a b p q
-  exact (torusDualHomotopy_iff_faceElimination_word_eq R l hm hf p q).trans FreeGroup.toWord_inj.symm
+  exact (torusDualHomotopy_iff_faceElimination_word_eq R l hm hf p q).trans
+    FreeGroup.toWord_inj.symm
 
 end TNLean.PEPS

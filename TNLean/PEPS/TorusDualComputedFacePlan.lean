@@ -26,7 +26,7 @@ candidate is asserted here.
 
 namespace TNLean.PEPS
 
-variable {width height : ℕ} [NeZero width] [NeZero height]
+variable {width height : ℕ} [widthNeZero : NeZero width] [heightNeZero : NeZero height]
 local notation "X" => TorusVertex width height
 local notation "A" => X × Bool
 local notation "FG" => FreeGroup (X ⊕ X)
@@ -49,6 +49,7 @@ private def computedFaceWord (v : X) : FG :=
   FreeGroup.of (Sum.inr (v.1 + 1, v.2)) * FreeGroup.of (Sum.inl v) *
     (FreeGroup.of (Sum.inr v))⁻¹ * (FreeGroup.of (Sum.inl (v.1, v.2 + 1)))⁻¹
 
+include widthNeZero heightNeZero in
 private theorem computedFaceWord_eq (v : X) : computedFaceWord v = torusDualFaceWord v := by
   simp [computedFaceWord, torusDualFaceWord, torusDualPathWord, torusDualEastNorth,
     torusDualNorthEast, torusDualStepWord, mul_assoc]
