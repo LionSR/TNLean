@@ -617,6 +617,169 @@
     Regard $O$ as a complex unitary matrix and set $U=OS$.
 \end{proof}
 
+\begin{lemma}[Orthogonal and symplectic gauges of covariant gates]
+    \label{lem:mpu_conjugation_gate_gauge}
+    \lean{Matrix.map_star_gaugeLeft_eq_of_congruence,
+        Matrix.map_star_gaugeRight_eq_of_congruence, Matrix.sourceSkewForm,
+        Matrix.exists_unitary_congruence_sourceSkewForm,
+        Matrix.exists_orthogonal_gauge_of_symmetric,
+        Matrix.exists_symplectic_gauge_of_skew,
+        Matrix.exists_phase_of_kronecker_mul_map_star_eq,
+        Matrix.exists_orthogonal_factors_of_kronecker_mul,
+        Matrix.exists_symplectic_factors_of_kronecker_mul}
+    \leanok
+    \uses{lemma:conjclass-normalform-continuous,
+        thm:mpu_skew_unitary_even_dimension,
+        thm:mpu_complex_skew_unitary_normal_form, lem:mpu_local_conjugation_sign}
+    Let $u:\mathbb C^P\to\mathbb C^\ell\otimes\mathbb C^r$ and
+    $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^P$, and let $x,y$ be
+    unitaries with
+    \begin{align}
+        \overline u & =(x\otimes y)u, & \overline v & =v(y^\dagger\otimes x^\dagger).
+    \end{align}
+    If $x=U^T\Lambda U$ and $y=V^T\Lambda'V$ with $U,V$ unitary, then
+    $u'=(U\otimes V)u$ and $v'=v(V^\dagger\otimes U^\dagger)$ satisfy
+    \begin{align}
+        \overline{u'} & =(\Lambda\otimes\Lambda')u',                 &
+        \overline{v'} & =v'(\Lambda'^\dagger\otimes\Lambda^\dagger).
+    \end{align}
+    Consequently, if $x,y$ are symmetric, then $u',v'$ can be chosen real; if
+    $x,y$ are skew-symmetric, then $\ell,r$ are even and $u',v'$ can be chosen
+    with
+    \begin{align}
+        \overline{u'} & =(\Sigma_\ell\otimes\Sigma_r)u', &
+        \overline{v'} & =v'(\Sigma_r\otimes\Sigma_\ell),
+    \end{align}
+    where $\Sigma_x=\Id_{x/2}\otimes Y$.
+
+    Conversely, let $\ell,r>0$, let $u'$ satisfy $u'u'^\dagger=\Id$ and
+    $\overline{u'}=(\Lambda\otimes\Lambda')u'$ with $\Lambda,\Lambda'$
+    unitary, and let $a,b$ be unitaries such that $(a\otimes b)u'$ satisfies
+    the same equation. Then there is a phase $w$ with
+    $\overline{wa}\,\Lambda=\Lambda\,wa$ and
+    $\overline{w^{-1}b}\,\Lambda'=\Lambda'\,w^{-1}b$. For $\Lambda=\Lambda'=\Id$
+    this gives real orthogonal $O_\ell=wa$, $O_r=w^{-1}b$ with
+    $a\otimes b=O_\ell\otimes O_r$ and
+    $b^\dagger\otimes a^\dagger=O_r^T\otimes O_\ell^T$. For
+    $\Lambda=\Sigma_\ell$, $\Lambda'=\Sigma_r$ it gives unitaries
+    $S_\ell=wa$, $S_r=w^{-1}b$ with $S_x^T\Sigma_xS_x=\Sigma_x$,
+    $a\otimes b=S_\ell\otimes S_r$ and
+    $b^\dagger\otimes a^\dagger=S_r^\dagger\otimes S_\ell^\dagger$.
+    These are the gate computations in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}; the source prints $S_r^T\otimes
+        S_\ell^T$ in the last relation, which is corrected in
+    \cite{gap:mpu_conjugation_symplectic_uniqueness_transpose}.
+    % Source lines: paper_v2.tex 1129--1163.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For a unitary $U$, $\overline UU^T=\Id$, hence
+    $\overline U\,U^T\Lambda U=\Lambda U$ and
+    $(U^T\Lambda U)^\dagger U^T=U^\dagger\Lambda^\dagger$. Conjugating $u'$
+    and $v'$ and inserting the two equations gives the first claim. Symmetric
+    unitaries are $S^TS$ with $S$ unitary, by
+    Lemma~\ref{lemma:conjclass-normalform-continuous}; skew-symmetric
+    unitaries have even dimension by
+    Lemma~\ref{thm:mpu_skew_unitary_even_dimension} and are $U^T\Sigma U$ by
+    Lemma~\ref{thm:mpu_complex_skew_unitary_normal_form}. Since
+    $\Sigma^\dagger=-\Sigma$, the two signs cancel in
+    $\Sigma_r^\dagger\otimes\Sigma_\ell^\dagger$.
+
+    For the converse, conjugating $(a\otimes b)u'$ and cancelling $u'$ on the
+    right gives
+    $\overline a\Lambda\otimes\overline b\Lambda'=\Lambda a\otimes\Lambda' b$.
+    Multiplying by the adjoint of the right side, a Kronecker product equals
+    the identity, so $\overline a\Lambda=c\Lambda a$ and
+    $\overline b\Lambda'=c^{-1}\Lambda'b$ for a scalar $c$, which has modulus
+    one since both sides are unitary. A square root $w$ of $c$ has
+    $\overline wc=w$, which gives the two intertwining relations. Finally
+    $\overline S\Sigma=\Sigma S$ and $S^T\overline S=\Id$ give
+    $S^T\Sigma S=\Sigma$.
+\end{proof}
+
+\begin{definition}[Rank change of supplied source factors]
+    \label{def:mpu_source_factor_rank_gauge}
+    \lean{MPOTensor.SourceFactors.rankGauge,
+        MPOTensor.SourceFactors.sourceU_rankGauge,
+        MPOTensor.SourceFactors.sourceV_rankGauge}
+    \leanok
+    \uses{def:mpu_weighted_source_factors, def:mpu_source_uv}
+    Let $X_i,Y_i,Z_i$ be supplied source factors of $\mathcal U$ at the weight
+    $\rho$, with gates $u,v$, and let $a,b$ be unitaries on the left and
+    right source ranks. The factors
+    \begin{align}
+        X_1b^\dagger,\ bY_1,\ Z_1b^\dagger,\qquad
+        X_2a^\dagger,\ aY_2,\ Z_2a^\dagger
+    \end{align}
+    are again source factors of $\mathcal U$ at the weight $\rho$, and their
+    gates are $(a\otimes b)u$ and $v(b^\dagger\otimes a^\dagger)$. This is the
+    change of standard form $u'=(U\otimes V)u$,
+    $v'=v(V^\dagger\otimes U^\dagger)$ in the proof of
+    \cite[Proposition~V.2]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1142--1145.
+\end{definition}
+
+\begin{lemma}[Orthogonal and symplectic standard forms of reduced canonical presentations]
+    \label{prop:mpu_reduced_conjugation_standard_forms}
+    \lean{MPOTensor.SourceFactors.exists_orthogonal_rankGauge_of_symmetric,
+        MPOTensor.SourceFactors.exists_symplectic_rankGauge_of_skew,
+        MPOTensor.IsMPUCanonicalFormII.exists_conjugation_standard_form,
+        MPOTensor.IsMPUCanonicalFormII.exists_orthogonal_gauge_of_mpo_eq,
+        MPOTensor.IsMPUCanonicalFormII.exists_symplectic_gauge_of_mpo_eq}
+    \leanok
+    % **Scope restriction (reduced canonical presentation):** the tensors are
+    % in reduced canonical form II with supplied source factors whose gate u
+    % is unitary. Documented in
+    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
+    \uses{lem:mpu_source_local_conjugation_forward,
+        lem:mpu_conjugation_gate_gauge, def:mpu_source_factor_rank_gauge}
+    Let $\mathcal U$ be in reduced canonical form II, with supplied source
+    factors whose gate $u$ is unitary, and let $U^{(N)}=\overline{U^{(N)}}$
+    at every length $N>1$. A rank change of the source factors gives gates
+    $u',v'$ in one of the following cases. In Case I, $u'$ and $v'$ are real.
+    In Case II, $\ell$ and $r$ are even and
+    \begin{align}
+        \overline{u'} & =(\Sigma_\ell\otimes\Sigma_r)u', &
+        \overline{v'} & =v'(\Sigma_r\otimes\Sigma_\ell).
+    \end{align}
+    If the gates already satisfy the local conjugation equations with
+    symmetric, respectively skew-symmetric, unitaries $x,y$, then the rank
+    change gives Case I, respectively Case II, for arbitrary supplied source
+    factors.
+
+    Let a second tensor in reduced canonical form II have the same periodic
+    operators at every length $N>1$, and supplied source factors with unitary
+    gate $u''$ and gate $v''$. If $u'$ and $u''$ are real, then
+    $u''=(O_\ell\otimes O_r)u'$ and $v''=v'(O_r^T\otimes O_\ell^T)$ with
+    $O_\ell,O_r$ real orthogonal. If $u'$ and $u''$ satisfy the Case II
+    equation, then $u''=(S_\ell\otimes S_r)u'$ and
+    $v''=v'(S_r^\dagger\otimes S_\ell^\dagger)$ with $S_\ell,S_r$ unitary and
+    $S_x^T\Sigma_xS_x=\Sigma_x$. This is
+    \cite[Proposition~V.2]{Cirac2017MPU} for a reduced canonical
+    presentation, with the full-support restriction recorded in
+    \cite{gap:mpu_canonical_form_full_support} and the adjoints of the last
+    relation corrected in
+    \cite{gap:mpu_conjugation_symplectic_uniqueness_transpose}.
+    % Source lines: paper_v2.tex 1098--1163.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpu_source_local_conjugation_forward,
+        lem:mpu_conjugation_gate_gauge, def:mpu_source_factor_rank_gauge,
+        FundamentalMPU}
+    Lemma~\ref{lem:mpu_source_local_conjugation_forward} gives unitaries $x,y$,
+    both symmetric or both skew-symmetric, with the local conjugation
+    equations. Lemma~\ref{lem:mpu_conjugation_gate_gauge} gives unitaries
+    $U,V$ putting $(U\otimes V)u$ and $v(V^\dagger\otimes U^\dagger)$ in the
+    corresponding case, and these are the gates of the rank-changed source
+    factors. For uniqueness, the Fundamental Theorem for supplied source
+    factors gives $u''=(a\otimes b)u'$ and $v''=v'(b^\dagger\otimes a^\dagger)$
+    with $a,b$ unitary, and the converse part of
+    Lemma~\ref{lem:mpu_conjugation_gate_gauge} rephases $a,b$.
+\end{proof}
+
 \begin{lemma}[Orthogonal and symplectic standard forms]
     \label{corconj}
     \notready
@@ -642,6 +805,9 @@
     satisfying $S_x^T\Sigma_xS_x=\Sigma_x$. Case II can occur only when $r$ and
     $\ell$ are even.
     % Source lines: paper_v2.tex 1094--1163.
+    % The forward conjugation step is formalized only for reduced canonical
+    % presentations; the restricted result is
+    % prop:mpu_reduced_conjugation_standard_forms.
 \end{lemma}
 
 \begin{lemma}[Admissible orthogonal and symplectic standard forms]
@@ -702,7 +868,11 @@
 
 \begin{lemma}[Reduction of the symplectic case to orthogonal unitaries]
     \label{cor:sympl-to-orthogonal}
-    \notready
+    \lean{Matrix.evenPairRegroupEquiv, Matrix.reindex_sourceSkewForm_kronecker,
+        Matrix.symplecticOrthogonalR_aux,
+        Matrix.exists_real_of_map_star_eq_sourceSkewForm_mul,
+        Matrix.exists_real_of_map_star_eq_mul_sourceSkewForm}
+    \leanok
     \discussion{5713}
     \uses{corconj, lem:mpu_symplectic_four_congruence}
     In Case II of Lemma~\ref{corconj}, one can write
@@ -714,8 +884,28 @@
     \begin{align}
         R & =\frac{1-i}{2}[\Id_4+i(Y\otimes Y)].
     \end{align}
-    % Source lines: paper_v2.tex 1165--1185.
+    The tensor factors are ordered so that the two factors $Y$ of
+    $\Sigma_\ell\otimes\Sigma_r$ act on the factor of $R$. Only the Case II
+    equations for $u',v'$ are used; the real gates $\widetilde u,\widetilde v$
+    need not generate the same matrix product unitary as $u',v'$.
+    % Source lines: paper_v2.tex 1165--1191.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:mpu_symplectic_four_congruence}
+    Regroup the coordinates so that
+    $\Sigma_\ell\otimes\Sigma_r=\Id_{r\ell/4}\otimes(Y\otimes Y)$. The matrix
+    $R$ is unitary and symmetric, and $R^T(Y\otimes Y)R=\Id_4$ gives
+    $R^T(Y\otimes Y)=R^\dagger$ and $(Y\otimes Y)R^T=R^\dagger$. Set
+    $\widetilde u=(\Id\otimes R^\dagger)u'$ and
+    $\widetilde v=v'(\Id\otimes R^\dagger)$. Then
+    \begin{align}
+        \overline{\widetilde u} & =(\Id\otimes R^T)(\Id\otimes Y\otimes Y)u'=\widetilde u, \\
+        \overline{\widetilde v} & =v'(\Id\otimes Y\otimes Y)(\Id\otimes R^T)=\widetilde v,
+    \end{align}
+    and $\widetilde u,\widetilde v$ are unitary whenever $u',v'$ are.
+\end{proof}
 
 \begin{lemma}[Admissible reduction of the symplectic case to orthogonal unitaries]
     \label{cor:mpu_admissible_symplectic_to_orthogonal}
