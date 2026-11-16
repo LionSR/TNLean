@@ -276,14 +276,14 @@ out.
   positive-definite fixed point, trace preservation, or spectral radius one.
   Those facts must be supplied separately where required.
 
-### `Kraus.HasComplementaryFixedPointGap` (`MPSTensor.IsPrimitiveMPS`)
+### `Kraus.HasComplementaryFixedPointGap`
 
 - **Declarations:**
   `Kraus.HasComplementaryFixedPointGap A ρ`, with the existential form
   `Kraus.HasPrimitiveFixedPoint A`, in
-  `QICLean/Kraus/PrimitiveFixedPoint/Basic.lean`; `MPSTensor.IsPrimitiveMPS A ρ`
-  in `TNLean/MPS/Structure/PrimitiveFixedPoint.lean` is a reducible abbreviation
-  of the former.
+  `QICLean/Kraus/PrimitiveFixedPoint/Basic.lean`. It has no second name in
+  TNLean; lemmas about it are stated in the namespace
+  `Kraus.HasComplementaryFixedPointGap`.
 - **Meaning:** left-canonical normalization, a nonzero positive-semidefinite
   fixed point `ρ`, and spectral radius less than one on the complement of the
   fixed-point projection.
@@ -293,16 +293,16 @@ out.
 - **Sanctioned bridges:**
   QICLean's `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive` and
   `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`;
-  `MPSTensor.exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive`
-  and `MPSTensor.exists_isPrimitiveMPS_posDef_of_isNormal`; in the opposite
-  direction `MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef`,
+  `MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive`
+  and `MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isNormal`; in the
+  opposite direction
+  `MPSTensor.isNormal_of_hasComplementaryFixedPointGap_with_posDef`,
   `Kraus.HasComplementaryFixedPointGap.isPrimitive` and
   `Kraus.HasComplementaryFixedPointGap.isIrreducibleMap_of_posDef`.
 - **Caveat:** every listed bridge requires `[NeZero D]`. The bridges into the
   gap require left-canonical normalization. The bridges to normality and to
   irreducibility require `ρ.PosDef`; positive semidefiniteness alone is
-  insufficient. Which of the two names of this notion survives is not yet
-  decided (issue #10724).
+  insufficient.
 
 ### Proposition 3 of arXiv:0909.5347
 

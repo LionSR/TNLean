@@ -4913,8 +4913,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   The former TNLean instance `MPSTensor.instNeZeroBlockPhysDim` was an exact
   duplicate and has been retired; `MPSTensor.blockPhysDim` is an abbreviation
   of `Kraus.blockPhysDim`, so the canonical instance applies directly.
-  `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` is now a thin
-  corollary of `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth`,
+  `Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gapped` is now a thin
+  corollary of `Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gap_eighth`,
   using `1 / 8` as the positive gap witness.
 - **Result:** The public theorem signatures and order in
   `TNLean/MPS/ParentHamiltonian/Martingale/BlockedGap.lean` are unchanged.
@@ -6546,7 +6546,7 @@ currently one occurrence, so no general declaration is warranted.
   exterior intervals.
 - **Occurrences:** the single-block numerical threshold in `C3Threshold.lean`
   and the finite-block decay argument.
-- **Status:** `IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le`
+- **Status:** `Kraus.HasComplementaryFixedPointGap.eventually_wholeIncrement_groundProjection_defect_le`
   states the uniform estimate once. Finite-family assembly distributes the
   requested tolerance among the overlap correction and the individual blocks;
   no new tactic is needed.

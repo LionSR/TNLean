@@ -121,7 +121,7 @@ theorem eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {η : ℝ} (hη : 0 < η) (hηone : η < 1) :
@@ -154,7 +154,7 @@ theorem eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub
       nlinarith
     nlinarith [mul_nonneg (sub_nonneg.mpr hκone) hε.le]
   obtain ⟨L₀, _, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨L₁, hDefect⟩ := Filter.eventually_atTop.1
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct hε)
@@ -210,7 +210,7 @@ theorem eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub_of_
         (1 - η) * ‖v‖ ≤ ‖openParentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N v‖ := by
   obtain ⟨B, ρ, hP, hρ, hGS, hDistinctB⟩ :=
-    exists_isPrimitiveMPS_family_of_isNormal A hNormal hDistinct
+    exists_hasComplementaryFixedPointGap_family_of_isNormal A hNormal hDistinct
   filter_upwards [eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub
     μ B hμ ρ hP hρ hDistinctB hη hηone] with p hp
   intro N hN v hv

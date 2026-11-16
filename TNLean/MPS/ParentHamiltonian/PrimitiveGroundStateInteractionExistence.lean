@@ -44,10 +44,10 @@ parent interaction of a derived range \(R>0\), with exact joint open kernel
 for every volume \(N\geq R\). Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.1, lines 906--917; PGVWC07,
 arXiv:quant-ph/0608197, Theorem 12, lines 1430--1454. -/
-theorem exists_positive_parent_interaction_of_isPrimitiveMPS
+theorem exists_positive_parent_interaction_of_hasComplementaryFixedPointGap
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
@@ -55,7 +55,7 @@ theorem exists_positive_parent_interaction_of_isPrimitiveMPS
         LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
   obtain ⟨R, hR, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
       μ A hμ ρ hP hρ hDistinct
   let T := toTensorFromBlocks (d := d) (μ := μ) A
   let h := canonicalParentInteractionMatrix T R
@@ -73,10 +73,10 @@ constructed primitive sector states. Its pure zero-energy states are precisely
 the sectors, with no translation-invariance assumption on the state.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1,
 lines 906--917, and the finite-family consequence, lines 919--924. -/
-theorem exists_positive_parent_interaction_groundStateFace_of_isPrimitiveMPS
+theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFixedPointGap
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
@@ -94,8 +94,8 @@ theorem exists_positive_parent_interaction_groundStateFace_of_isPrimitiveMPS
           ∃ w : Fin b → ℝ, (∀ j, 0 ≤ w j) ∧ (∑ j, w j = 1) ∧ φ = ∑ j, w j • ω j) ∧
       (∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         (φ ∈ parentGroundStateFace h ∧ IsPureQuasiLocalState d φ) ↔ ∃ j, φ = ω j) := by
-  obtain ⟨R, hR, h, hh, hKernel⟩ := exists_positive_parent_interaction_of_isPrimitiveMPS
-    μ A hμ ρ hP hρ hDistinct
+  obtain ⟨R, hR, h, hh, hKernel⟩ :=
+    exists_positive_parent_interaction_of_hasComplementaryFixedPointGap μ A hμ ρ hP hρ hDistinct
   have hEventual : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N :=

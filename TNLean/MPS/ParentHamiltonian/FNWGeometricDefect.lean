@@ -45,8 +45,8 @@ This correction is documented in `docs/paper-gaps/cpgsv21_martingale_overlap.tex
 ## Main results
 
 * `MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_geometric`
-* `MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric`
-* `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric`
+* `Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric`
+* `Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric`
 -/
 
 open scoped BigOperators ComplexOrder ENNReal Matrix NNReal
@@ -108,8 +108,8 @@ between the rho-weighted spectral radius of the transfer remainder and one; the 
 exports only that the chosen rate is positive and below one. A caller that needs a
 particular admissible rate uses the rate-parameterized mixing estimate together with the
 fixed-length geometric bound instead. -/
-theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
-    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
+    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
       0 < c ∧ 0 < lam ∧ lam < 1 ∧ 0 < L ∧ Kraus.IsNBlkInjective A L ∧
@@ -120,7 +120,7 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geom
             c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by
   set σ : Mat := (Matrix.trace ρ)⁻¹ • ρ with hσ_def
   have hσ : σ.PosDef := hρ.inv_trace_smul
-  have hPσ : IsPrimitiveMPS A σ := IsPrimitiveMPS.smul_inv_trace hP hρ
+  have hPσ : Kraus.HasComplementaryFixedPointGap A σ := hP.smul_inv_trace hρ
   have htr : Matrix.trace σ = 1 := by
     rw [hσ_def]
     exact Matrix.trace_inv_trace_smul (ne_of_gt hρ.trace_pos)
@@ -133,7 +133,7 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geom
     · exact absurd hrate (by simp)
     · exact NNReal.coe_pos.mpr (pos_iff_ne_zero.mpr hne)
   have hrate_lt : (rate : ℝ) < 1 := by exact_mod_cast ENNReal.coe_lt_one_iff.mp hrate_one
-  obtain ⟨L, hL, hInj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  obtain ⟨L, hL, hInj⟩ := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   refine ⟨c, (rate : ℝ), L, hc, hrate_pos, hrate_lt, hL, hInj,
     fun m hLm hsmall r ℓ hℓ ↦ ?_⟩
   exact wholeIncrement_groundProjection_defect_le_fnw_geometric σ hσ htr A hP.norm
@@ -158,8 +158,8 @@ length give the projector defect
 \(\lVert G_{\Lambda_n}G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}-G_{\Lambda_{n+1}}\rVert\)
 at most \(c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)\). The one-site suffix supplies
 the source's positive spectator length, so no restriction on the prefix remains. -/
-theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric
-    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric
+    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     ∃ c lam : ℝ, ∃ L : ℕ,
       0 < c ∧ 0 < lam ∧ lam < 1 ∧ 0 < L ∧ Kraus.IsNBlkInjective A L ∧

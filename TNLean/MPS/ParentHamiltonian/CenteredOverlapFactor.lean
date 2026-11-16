@@ -35,14 +35,14 @@ factorization are exact algebraic consequences of the boundary-map formulas.
 * `MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors` factors the centered
   overlapping Gram through its finite Gram error.
 * `MPSTensor.c3_centeredVirtualResidualES_norm_le` is the resulting operator-norm bound.
-* `MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric` gives the
+* `Kraus.HasComplementaryFixedPointGap.c3_centeredVirtualResidualES_norm_sq_le_geometric` gives the
   squared geometric estimate, uniformly in the prefix length.
 * `MPSTensor.wholeIncrementCenteredResidualES_eq_overlapFactors` gives the exact
   whole-increment centered factorization.
 * `MPSTensor.wholeIncrementLeftOverlapFactorES_norm_le` and
   `MPSTensor.wholeIncrementRightOverlapFactorES_norm_le` bound its two factors.
 * `MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical` and
-  `MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le` remove the
+  `Kraus.HasComplementaryFixedPointGap.wholeIncrementCenteredResidualES_norm_le` remove the
   whole-increment left prefactor under left-canonical normalization.
 -/
 
@@ -406,9 +406,9 @@ theorem wholeIncrementCenteredResidualES_norm_le_of_leftCanonical
 
 /-- Primitive MPS tensors inherit the whole-increment bound with unit
 left-virtual prefactor from their left-canonical normalization. -/
-theorem IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le
+theorem _root_.Kraus.HasComplementaryFixedPointGap.wholeIncrementCenteredResidualES_norm_le
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) (K L Q : ℕ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (K L Q : ℕ) :
     let Kinf := Matrix.gramReshuffle
       (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
     ‖wholeIncrementCenteredResidualES A K L Q ρ (ne_of_gt hρ.trace_pos)‖ ≤
@@ -487,9 +487,9 @@ theorem c3_centeredVirtualResidualES_norm_le [NeZero D]
 squared norm of the centered overlap residual decays geometrically in the
 overlap length, uniformly in the prefix length.  The prefactor retains the
 explicit dimension-cubed conversion from the Gram convergence estimate. -/
-theorem IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric
+theorem _root_.Kraus.HasComplementaryFixedPointGap.c3_centeredVirtualResidualES_norm_sq_le_geometric
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ K l : ℕ, 1 ≤ l →
       ‖c3CenteredVirtualResidualES A K l ρ hρ‖ ^ 2 ≤
         (D : ℝ) ^ 3 * (C * r ^ l) ^ 2 := by

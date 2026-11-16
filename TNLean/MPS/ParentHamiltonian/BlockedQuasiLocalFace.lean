@@ -83,7 +83,7 @@ theorem groundSpace_supported_iff_convex_combination_of_blocked_primitive_family
     (A : MPSTensor d D) (μ : Fin b → ℂ)
     (B : ∀ j, MPSTensor (blockPhysDim d L) (E j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (E j)) (Fin (E j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     (hJoint : ∀ N, groundSpaceES (blockTensor A L) N =
@@ -102,7 +102,7 @@ theorem groundSpace_supported_iff_convex_combination_of_blocked_primitive_family
         (by simpa only [ContinuousLinearEquiv.apply_symm_apply] using hφ)
   rw [groundSpace_support_blocked_representation_iff A
     (toTensorFromBlocks (μ := μ) B) hJoint φ hφ,
-    groundSpace_supported_iff_convex_combination_of_isPrimitiveMPS
+    groundSpace_supported_iff_convex_combination_of_hasComplementaryFixedPointGap
       μ B hμ ρ hP hρ hDistinct ((quasiLocalBlockingFunctional d L).symm φ) hState]
   simp only [← (quasiLocalBlockingFunctional d L).injective.eq_iff, map_sum,
     LinearMapClass.map_smul_of_tower (R := ℝ) (S := ℂ)
@@ -116,7 +116,7 @@ theorem isPure_groundSpace_supported_iff_sector_of_blocked_primitive_family
     (A : MPSTensor d D) (μ : Fin b → ℂ)
     (B : ∀ j, MPSTensor (blockPhysDim d L) (E j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (E j)) (Fin (E j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     (hJoint : ∀ N, groundSpaceES (blockTensor A L) N =
@@ -135,7 +135,7 @@ theorem isPure_groundSpace_supported_iff_sector_of_blocked_primitive_family
         ((quasiLocalBlockingFunctional d L).symm φ))
   rw [groundSpace_support_blocked_representation_iff A
     (toTensorFromBlocks (μ := μ) B) hJoint φ hφ, hPure,
-    isPure_groundSpace_supported_iff_sector_of_isPrimitiveMPS
+    isPure_groundSpace_supported_iff_sector_of_hasComplementaryFixedPointGap
       μ B hμ ρ hP hρ hDistinct ((quasiLocalBlockingFunctional d L).symm φ)]
   simp only [← (quasiLocalBlockingFunctional d L).injective.eq_iff,
     ContinuousLinearEquiv.apply_symm_apply]

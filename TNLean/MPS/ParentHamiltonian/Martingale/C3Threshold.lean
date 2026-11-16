@@ -27,17 +27,17 @@ is itself indexed by volumes strictly larger than the interaction range.
 
 ## Main results
 
-* `MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths`
+* `Kraus.HasComplementaryFixedPointGap.exists_uniform_wholeIncrement_defect_le_seven_sixteenths`
   chooses one original-site scale uniformly for every prefix length.
-* `MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths`
+* `Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths`
   specializes the uniform estimate to three equal original-site blocks.
-* `MPSTensor.IsPrimitiveMPS.eventually_openChain_groundProjection_defect_mul_sqrt_lt`
+* `Kraus.HasComplementaryFixedPointGap.eventually_openChain_groundProjection_defect_mul_sqrt_lt`
   retains every prescribed positive scaled-defect threshold at all sufficiently large lengths.
-* `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold`
+* `Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_lt_c3_threshold`
   chooses a block-injective overlap length and one uniform C3 defect coefficient.
-* `MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold`
+* `Kraus.HasComplementaryFixedPointGap.exists_openChain_martingaleDifference_norm_lt_c3_threshold`
   states the same bound as Nachtergaele's literal C3 operator norm.
-* `MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold`
+* `Kraus.HasComplementaryFixedPointGap.exists_re_inner_openChain_anticommutator_ge_c3_threshold`
   gives the corresponding open-chain excitation-projection anticommutator estimate.
 
 ## References
@@ -107,9 +107,9 @@ private theorem tendsto_fnw_coefficient
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero
 uniformly in the prefix length and in every positive suffix length. -/
-theorem IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_wholeIncrement_groundProjection_defect_le
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {ε : ℝ} (hε : 0 < ε) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ L : ℕ in atTop, ∀ K Q : ℕ, 0 < Q →
       ‖(reassocTailBoundaryMapES A K L Q).range.starProjection ∘L
             (leftBoundaryMapES A (K + L) Q).range.starProjection -
@@ -133,16 +133,16 @@ including \(K=0\).
 The coefficient decays because it is the rational function
 \(c\lambda^p(1+c\lambda^p)/(1-c\lambda^p)\) of Nachtergaele,
 arXiv:cond-mat/9410110, display (6.1) at lines 2401--2412. -/
-theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ K : ℕ,
           ‖(reassocTailBoundaryMapES A K p p).range.starProjection ∘L
                 (leftBoundaryMapES A (K + p) p).range.starProjection -
               (groundSpaceES A (K + p + p)).starProjection‖ ≤ 7 / 16 := by
-  obtain ⟨L, hLpos, hLinj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  obtain ⟨L, hLpos, hLinj⟩ := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   obtain ⟨p, hp, hDefect⟩ :=
     ((eventually_ge_atTop (max 1 L)).and
       (hP.eventually_wholeIncrement_groundProjection_defect_le hρ
@@ -153,9 +153,9 @@ theorem IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths
 /-- At the length \(p\) chosen uniformly above, taking the prefix length
 \(K=p\) gives three consecutive blocks of \(p\) original sites and projector
 defect at most \(7/16\). -/
-theorem IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ‖(reassocTailBoundaryMapES A p p p).range.starProjection ∘L
@@ -170,9 +170,9 @@ projector defect times \(\sqrt{l+1}\) is below any prescribed positive
 number. This retains the decay used in Nachtergaele,
 arXiv:cond-mat/9410110, display (6.1), rather than choosing only the C3
 threshold one. -/
-theorem IsPrimitiveMPS.eventually_openChain_groundProjection_defect_mul_sqrt_lt
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_openChain_groundProjection_defect_mul_sqrt_lt
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {η : ℝ} (hη : 0 < η) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {η : ℝ} (hη : 0 < η) :
     ∀ᶠ l : ℕ in atTop, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ ε : ℝ,
       0 ≤ ε ∧ ε * Real.sqrt ((l + 1 : ℕ) : ℝ) < η ∧
       ∀ K : ℕ,
@@ -215,9 +215,9 @@ The coefficient is the imported Fannes--Nachtergaele--Werner coefficient
 \(c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)\) of arXiv:cond-mat/9410110, lines
 1180--1194 and display (6.1) at lines 2401--2412, evaluated at the chosen overlap
 length. -/
-theorem IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧ 0 ≤ ε ∧
       ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
@@ -241,9 +241,9 @@ and \(\varepsilon_l\) are supplied by
 `exists_openChain_groundProjection_defect_lt_c3_threshold`. This is only the
 exact projector identification following condition C3 in Nachtergaele,
 arXiv:cond-mat/9410110, equation (2.4); no new decay estimate enters. -/
-theorem IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openChain_martingaleDifference_norm_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ hl : 1 < l, ∃ hInj : Kraus.IsNBlkInjective A l,
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
       ∀ (K : ℕ) (hK : 0 < K),
@@ -259,9 +259,9 @@ theorem IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshol
 the complementary excitation projections. Nachtergaele's identity following condition
 C3 identifies the projector defect, arXiv:cond-mat/9410110, eq. (2.4); the
 anticommutator estimate is the two-projection consequence proved in this development. -/
-theorem IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_re_inner_openChain_anticommutator_ge_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ,
       1 < l ∧ 0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
       ∀ (K : ℕ) (v : EuclideanSpace ℂ (Cfg d (K + l + 1))),

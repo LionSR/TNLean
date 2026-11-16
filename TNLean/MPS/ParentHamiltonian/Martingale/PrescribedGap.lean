@@ -65,9 +65,9 @@ theorem parentHamiltonianES_gap_ge_one_sub_of_open_gap
 periodic gap at least \(1-\eta\). A comparison window containing \(m\)
 interactions suffices when \(l+1\le m\) and \(2l^2\le m\eta\); the
 periodic chain then needs at least \(2m\) sites. -/
-theorem IsPrimitiveMPS.eventually_parentHamiltonianES_gap_ge_one_sub
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_parentHamiltonianES_gap_ge_one_sub
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {η : ℝ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {η : ℝ}
     (hη : 0 < η) (hηone : η < 1) :
     ∀ᶠ l : ℕ in atTop, ∀ m : ℕ, l + 1 ≤ m →
       2 * (l : ℝ) ^ 2 ≤ (m : ℝ) * η →
@@ -110,7 +110,7 @@ theorem eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {η : ℝ} (hη : 0 < η) (hηone : η < 1) :
@@ -134,7 +134,7 @@ theorem eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub
     rw [hεsqrt]
     nlinarith [sq_nonneg η]
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
       μ A hμ ρ hP hρ hDistinct
   filter_upwards [eventually_ge_atTop (max L₀ 1),
     eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct hε]
@@ -175,7 +175,7 @@ theorem eventually_parentHamiltonianES_gap_ge_one_sub_of_isNormal
       ∀ v ∈ (LinearMap.ker (parentHamiltonianES A (l + 1) N))ᗮ,
         (1 - η) * ‖v‖ ≤ ‖parentHamiltonianES A (l + 1) N v‖ := by
   obtain ⟨B, _, ρ, _, _, _, hP, hρ, hGS, _, _⟩ :=
-    exists_isPrimitiveMPS_gauge_of_isNormal hA
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   filter_upwards [hP.eventually_parentHamiltonianES_gap_ge_one_sub hρ hη hηone] with l hl
   intro m hm hmη N hN v hv
   rw [parentHamiltonianES_eq_of_groundSpace_eq (hGS (l + 1)) N] at hv ⊢
@@ -196,7 +196,7 @@ theorem eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub_of_isNo
         (1 - η) * ‖v‖ ≤ ‖parentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N v‖ := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
-    exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_isNormal
+    exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_isNormal
       μ A hμ hNormal hDistinct
   simpa only [hEq] using
     eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub

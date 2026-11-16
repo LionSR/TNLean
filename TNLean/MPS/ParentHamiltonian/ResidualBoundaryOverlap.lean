@@ -160,13 +160,13 @@ orthogonal correlated residual ranges, uniformly over every original tail
 length. The original tensors supplying the tail need no normalization.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint,
 lines 1744--1820, followed by the exact fiberwise residual bound. -/
-theorem IsPrimitiveMPS.eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent
     [NeZero E] [NeZero F] {D₂ : ℕ}
     (A : MPSTensor d D) (C : MPSTensor d D₂)
     {B : MPSTensor (blockPhysDim d L) E} {B' : MPSTensor (blockPhysDim d L) F}
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
     {ρ : Matrix (Fin E) (Fin E) ℂ} {σ : Matrix (Fin F) (Fin F) ℂ}
-    (hB : IsPrimitiveMPS B ρ) (hB' : IsPrimitiveMPS B' σ)
+    (hB : Kraus.HasComplementaryFixedPointGap B ρ) (hB' : Kraus.HasComplementaryFixedPointGap B' σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ e : F = E, ¬ GaugePhaseEquiv (e ▸ B') B)
     {ε : ℝ} (hε : 0 < ε) :
@@ -190,7 +190,7 @@ theorem tendsto_norm_residual_sector_projection_sum_sub_iSup_zero
     (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     {κ : Type*} {f : Filter κ} {N r : κ → ℕ} (hN : Filter.Tendsto N f Filter.atTop) :

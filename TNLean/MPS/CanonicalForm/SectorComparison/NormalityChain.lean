@@ -67,11 +67,11 @@ For a single block that is TP, has a primitive transfer map, and is irreducible
 
 1. `_root_.IsPrimitive (Kraus.transferMap A)` + `Kraus.IsIrreducibleFamily A` + TP
    → `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
-   → `∃ ρ, IsPrimitiveMPS A ρ`
-2. `IsPrimitiveMPS A ρ` + `Kraus.IsIrreducibleFamily A`
+   → `∃ ρ, Kraus.HasComplementaryFixedPointGap A ρ`
+2. `Kraus.HasComplementaryFixedPointGap A ρ` + `Kraus.IsIrreducibleFamily A`
    → `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily` → `ρ.PosDef`
-3. `IsPrimitiveMPS A ρ` + `ρ.PosDef`
-   → `isNormal_of_isPrimitiveMPS_with_posDef` → `Kraus.IsNormal A`
+3. `Kraus.HasComplementaryFixedPointGap A ρ` + `ρ.PosDef`
+   → `isNormal_of_hasComplementaryFixedPointGap_with_posDef` → `Kraus.IsNormal A`
 
 We state this chain as a single theorem.
 -/
@@ -85,7 +85,7 @@ projection), the tensor is normal (eventually full Kraus rank).
 The transfer-map primitivity hypothesis says that the only peripheral eigenvalue
 is `1`.  The conclusion is obtained by the following implications:
 
-* TP + peripheral primitivity + irreducibility give an `IsPrimitiveMPS` datum,
+* TP + peripheral primitivity + irreducibility give an `Kraus.HasComplementaryFixedPointGap` datum,
   including a Perron fixed point for the transfer map.
 * Irreducibility upgrades the nonzero positive semidefinite Perron fixed point
   in that datum to a positive definite, faithful fixed point.
@@ -107,7 +107,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
   have hPD : ρ.PosDef :=
     hPrimMPS.posDef_of_isIrreducibleFamily hIrr
   -- Step 4: Kraus.IsNormal from the primitive complementary gap and a faithful fixed point.
-  exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
+  exact isNormal_of_hasComplementaryFixedPointGap_with_posDef hPrimMPS hPD
 
 /-- A trace-preserving scalar tensor has a nonzero Kraus matrix. -/
 private theorem exists_nonzero_kraus_of_tp [NeZero D]

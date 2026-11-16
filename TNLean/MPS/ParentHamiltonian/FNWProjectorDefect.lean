@@ -485,8 +485,8 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_factored [NeZero D]
 /-- A primitive MPS admits a positive interaction length after which the
 fixed-length FNW Lemma 6.2 estimate holds for every prefix length and every
 positive spectator length. -/
-theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw
-    [NeZero D] {ρ : Mat} {A : MPSTensor d D} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw
+    [NeZero D] {ρ : Mat} {A : MPSTensor d D} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) :
     ∃ L : ℕ, 0 < L ∧ Kraus.IsNBlkInjective A L ∧
       ∀ m : ℕ, L ≤ m → ∀ r ℓ : ℕ, 0 < ℓ →
@@ -497,7 +497,7 @@ theorem IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw
             fnwLowerBoundaryConstant ρ hρ A m +
           fnwMixingQuantity ρ hρ A htr m ^ 2 /
             fnwLowerBoundaryConstant ρ hρ A m := by
-  obtain ⟨L, hL, hInj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  obtain ⟨L, hL, hInj⟩ := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   refine ⟨L, hL, hInj, fun m hLm r ℓ hℓ ↦ ?_⟩
   exact wholeIncrement_groundProjection_defect_le_fnw
     ρ hρ htr A hP.norm hP.fixedPoint_is_fixed hInj hL hLm r ℓ hℓ

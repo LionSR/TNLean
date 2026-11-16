@@ -18,20 +18,18 @@ The channel-generic proof is in
 `QICLean.Kraus.Wielandt.Primitivity.StronglyIrreducibleToFullWordSpan`. This file
 states its consequences for a left-canonical MPS tensor, in the three kept
 notions: `Kraus.IsNormal`, `IsPrimitive` of the transfer map, and the
-complementary fixed-point gap `IsPrimitiveMPS`.
+complementary fixed-point gap `Kraus.HasComplementaryFixedPointGap`.
 
 ## Main results
 
 * `isNormal_of_isIrreducibleMap_of_isPrimitive`: an irreducible transfer map with
   peripheral spectrum `{1}` gives normality. This is the direction (c) to (b)
   of Proposition 3 of Sanz, Pérez-García, Wolf, and Cirac, arXiv:0909.5347.
-* `exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive`: the same
+* `exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive`: the same
   hypotheses give a complementary fixed-point gap at a positive-definite fixed
   matrix.
-* `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`:
-  `IsPrimitiveMPS A ρ → ρ.PosDef → Kraus.IsIrreducibleFamily A`.
-* `isNormal_of_isPrimitiveMPS_with_posDef`: `IsPrimitiveMPS` plus a
-  positive-definite fixed point implies normality.
+* `isNormal_of_hasComplementaryFixedPointGap_with_posDef`: `Kraus.HasComplementaryFixedPointGap`
+  plus a positive-definite fixed point implies normality.
 
 ## References
 
@@ -75,34 +73,22 @@ convergence theory. The proof chains:
 3. every nonzero positive semidefinite fixed point of an irreducible transfer
    map is positive definite, via
    `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleMap`. -/
-theorem exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive [NeZero D]
+theorem exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A))
     (hPrim : IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ ∧ ρ.PosDef := by
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
   have hIrrT : Kraus.IsIrreducibleFamily A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrr
   obtain ⟨ρ, hP⟩ :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrrT hNorm hPrim
   exact ⟨ρ, hP, hP.posDef_of_isIrreducibleMap hIrr⟩
 
-/-- A primitive MPS tensor with a positive-definite fixed point is irreducible.
-
-This is the irreducibility implication in Proposition 3 of Sanz,
-Pérez-García, Wolf, and Cirac, arXiv:0909.5347. -/
-theorem isIrreducibleTensor_of_isPrimitiveMPS_of_posDef [NeZero D]
+/-- `Kraus.HasComplementaryFixedPointGap` plus a positive-definite fixed point implies normality. -/
+theorem isNormal_of_hasComplementaryFixedPointGap_with_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hPrim : IsPrimitiveMPS A ρ)
-    (hPD : ρ.PosDef) :
-    Kraus.IsIrreducibleFamily A :=
-  Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
-    (hPrim.isIrreducibleMap_of_posDef hPD)
-
-/-- `IsPrimitiveMPS` plus a positive-definite fixed point implies normality. -/
-theorem isNormal_of_isPrimitiveMPS_with_posDef [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ_pd : ρ.PosDef) :
     Kraus.IsNormal A :=
   isNormal_of_isIrreducibleMap_of_isPrimitive A hP.norm

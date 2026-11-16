@@ -47,8 +47,8 @@
 \begin{lemma}[Primitive insertion limit]
     \label{thm:primitive_insertion_transfer_limit}
     \lean{MPSTensor.fixedPointProj_physicalObservableTransfer_fixedPointProj,
-        MPSTensor.IsPrimitiveMPS.transferMap_pow_tendsto_fixedPointProj,
-        MPSTensor.IsPrimitiveMPS.physicalObservableTransfer_sandwich_tendsto}
+        Kraus.HasComplementaryFixedPointGap.transferMap_pow_tendsto_fixedPointProj,
+        Kraus.HasComplementaryFixedPointGap.physicalObservableTransfer_sandwich_tendsto}
     \leanok
     Let $A$ be a normalized primitive tensor with invariant matrix $\rho$,
     and let $P_\rho(Y)=\operatorname{tr}(Y)\rho/\operatorname{tr}\rho$.
@@ -67,7 +67,7 @@
 
 \begin{lemma}[Limiting boundary compression]
     \label{thm:primitive_insertion_gram_limit}
-    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_bulkObservable_compression_tendsto}
+    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_bulkObservable_compression_tendsto}
     \leanok
     Under the preceding hypotheses, with $K_\infty=\mathcal R(P_\rho)$,
     $\Gamma_N^*X_{\ell,r}\Gamma_N\to\eta_A(X)K_\infty$ as both
@@ -80,9 +80,9 @@
 
 \begin{lemma}[Scalar compression on the entire primitive ground space]
     \label{thm:primitive_bulk_ground_compression}
-    \lean{MPSTensor.IsPrimitiveMPS.bulkObservable_groundSpace_compression_tendsto_scalar,
-        MPSTensor.IsPrimitiveMPS.bulkObservable_groundSpace_compression_tendsto_zero,
-        MPSTensor.IsPrimitiveMPS.bulkObservable_groundSpace_projection_eventually_near_expectation}
+    \lean{Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_compression_tendsto_scalar,
+        Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_compression_tendsto_zero,
+        Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_projection_eventually_near_expectation}
     \leanok
     Suppose in addition that $\rho$ is positive definite. Let $G_N$ be the
     open-boundary MPS space and $P_N$ its orthogonal projection. Then
@@ -107,8 +107,8 @@
 
 \begin{lemma}[Centered projection decay and local expectation convergence]
     \label{thm:primitive_bulk_ground_vector_limits}
-    \lean{MPSTensor.IsPrimitiveMPS.bulkObservable_groundSpace_projection_norm_sq_tendsto_zero,
-        MPSTensor.IsPrimitiveMPS.bulkObservable_groundState_expectation_tendsto}
+    \lean{Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_projection_norm_sq_tendsto_zero,
+        Kraus.HasComplementaryFixedPointGap.bulkObservable_groundState_expectation_tendsto}
     \leanok
     With the preceding hypotheses, let $\psi_N$ be any varying family of
     vectors eventually belonging to $G_N$. If $\|\psi_N\|\leq1$ and
@@ -151,8 +151,8 @@
         MPSTensor.observableInsertionExpectation_smul,
         MPSTensor.observableInsertionExpectation_appendObservable_one,
         MPSTensor.observableInsertionExpectation_one_appendObservable,
-        MPSTensor.IsPrimitiveMPS.observableInsertionExpectation_one,
-        MPSTensor.IsPrimitiveMPS.observableInsertionExpectation_nonneg}
+        Kraus.HasComplementaryFixedPointGap.observableInsertionExpectation_one,
+        Kraus.HasComplementaryFixedPointGap.observableInsertionExpectation_nonneg}
     \leanok
     Fix $A$ and a virtual matrix $\rho$ with nonzero trace. For each
     interval length $k$, the functional $\eta_A$ is complex linear.
@@ -180,7 +180,7 @@
 
 \begin{lemma}[Limiting norm of a primitive-sector excitation]
     \label{thm:primitive_bulk_excitation_norm_limit}
-    \lean{MPSTensor.IsPrimitiveMPS.bulkObservable_groundState_norm_sq_tendsto}
+    \lean{Kraus.HasComplementaryFixedPointGap.bulkObservable_groundState_norm_sq_tendsto}
     \leanok
     Let $A$ be a normalized primitive tensor with positive-definite invariant
     matrix $\rho$. Let $X$ act on $k$ sites and let $\ell,r\to\infty$
@@ -198,7 +198,7 @@
 
 \begin{lemma}[Primitive-sector commutator gap reduction]
     \label{thm:primitive_bulk_commutator_gap_reduction}
-    \lean{MPSTensor.IsPrimitiveMPS.commutator_gap_of_bulkObservable_energy_limit}
+    \lean{Kraus.HasComplementaryFixedPointGap.commutator_gap_of_bulkObservable_energy_limit}
     \leanok
     Let $A$ be a normalized primitive tensor with positive-definite invariant
     matrix $\rho$, and let $X$ be a fixed observable with $\eta_A(X)=0$.
@@ -358,7 +358,7 @@
 
 \begin{lemma}[Primitive-sector local commutator energy limit]
     \label{thm:primitive_local_commutator_energy_limit}
-    \lean{MPSTensor.IsPrimitiveMPS.localCommutatorObservable_expectation_tendsto}
+    \lean{Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_expectation_tendsto}
     \leanok
     Let $A$ be a normalized primitive tensor with positive-definite invariant
     matrix $\rho$, let $h$ act on $R>0$ sites, and let $X$ act on $k>0$
@@ -378,7 +378,7 @@
 
 \begin{lemma}[Eventually normalized primitive boundary vectors]
     \label{thm:primitive_unit_boundary_approximants}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_eventually_unit_groundSpaceES}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_eventually_unit_groundSpaceES}
     \leanok
     Let $A$ and $\rho$ have the preceding properties. Along any filter with
     $N_i\to\infty$, there exist vectors $\psi_i$ in the open-boundary MPS
@@ -396,7 +396,7 @@
 
 \begin{lemma}[Primitive-sector local commutator inequality]
     \label{thm:primitive_local_commutator_gap}
-    \lean{MPSTensor.IsPrimitiveMPS.localCommutator_gap_of_open_gap}
+    \lean{Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_gap}
     \leanok
     Let $A$ be a normalized primitive tensor with positive-definite invariant
     matrix $\rho$, and let $X$ act on $k>0$ sites with $\eta_A(X)=0$.
@@ -427,7 +427,7 @@
 
 \begin{lemma}[A positive local commutator bound at the Wielandt range]
     \label{thm:primitive_local_commutator_wielandt}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_pos_localCommutator_gap_of_wielandt_range}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_gap_of_wielandt_range}
     \leanok
     Let $A$ be a normalized primitive tensor of bond dimension $D>0$ with
     positive-definite invariant matrix $\rho$. At each fixed range
@@ -467,7 +467,7 @@
 
 \begin{lemma}[Primitive-sector commutator bound for an open interaction]
     \label{thm:primitive_local_open_interaction_commutator_gap}
-    \lean{MPSTensor.IsPrimitiveMPS.localCommutator_gap_of_openInteraction_gap}
+    \lean{Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openInteraction_gap}
     \leanok
     Let $A$ be a normalized primitive tensor with positive-definite invariant
     matrix $\rho$, let $h\geq0$ act on $R>0$ sites, and let $X$ act on
@@ -492,7 +492,7 @@
 
 \begin{lemma}[Positive parent interactions satisfy a primitive-sector local gap]
     \label{thm:primitive_local_positive_parent_commutator_gap}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_pos_localCommutator_gap_of_isParentInteraction}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_gap_of_isParentInteraction}
     \leanok
     Let $A$ be a normalized primitive tensor of bond dimension $D>0$ with
     positive-definite invariant matrix $\rho$. Let $h\geq0$ act on
@@ -709,7 +709,7 @@
 
 \begin{lemma}[A primitive-sector quasi-local commutator gap]
     \label{thm:primitive_quasi_local_parent_commutator_gap}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_pos_quasiLocalCommutator_gap_of_isParentInteraction}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_pos_quasiLocalCommutator_gap_of_isParentInteraction}
     \leanok
     Let $d,D>0$, and let $A$ be a normalized primitive tensor with a
     positive-definite invariant matrix $\rho$. Suppose that $h\geq0$ has
@@ -783,8 +783,8 @@
 
 \begin{lemma}[Cross-sector decay by prefix locality]
     \label{thm:bulk_cross_compression_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent,
-        MPSTensor.IsPrimitiveMPS.bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalent}
+    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent,
+        Kraus.HasComplementaryFixedPointGap.bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalent}
     \leanok
     Let $A,B$ be trace-preserving primitive MPS tensors with positive
     definite invariant matrices and positive bond dimensions. Suppose that $A$ and $B$ are inequivalent under a bond
@@ -1294,8 +1294,8 @@
 
 \begin{lemma}[Uniqueness of a state with primitive MPS support]
     \label{thm:primitive_supported_quasi_local_state_unique}
-    \lean{MPSTensor.IsPrimitiveMPS.quasiLocalState_interval_eq_insertion_of_groundSpace_support,
-        MPSTensor.IsPrimitiveMPS.eq_quasiLocalExpectation_of_groundSpace_support}
+    \lean{Kraus.HasComplementaryFixedPointGap.quasiLocalState_interval_eq_insertion_of_groundSpace_support,
+        Kraus.HasComplementaryFixedPointGap.eq_quasiLocalExpectation_of_groundSpace_support}
     \leanok
     \uses{def:mps_ground_space_projection_matrix}
     Let $A$ be a trace-preserving primitive MPS tensor of positive physical
@@ -1355,7 +1355,7 @@
 
 \begin{lemma}[Purity of the primitive quasi-local MPS state]
     \label{thm:primitive_quasi_local_purity}
-    \lean{MPSTensor.IsPrimitiveMPS.isPureQuasiLocalState_quasiLocalExpectation}
+    \lean{Kraus.HasComplementaryFixedPointGap.isPureQuasiLocalState_quasiLocalExpectation}
     \leanok
     Let $d,D>0$, let $A$ be a trace-preserving primitive tensor, and let
     $\rho>0$ be its invariant virtual matrix. The completed MPS state
@@ -2312,7 +2312,7 @@
 
 \begin{lemma}[Existence of a positive interaction for a primitive family]
     \label{thm:primitive_ground_state_interaction_exists}
-    \lean{MPSTensor.exists_positive_parent_interaction_of_isPrimitiveMPS}
+    \lean{MPSTensor.exists_positive_parent_interaction_of_hasComplementaryFixedPointGap}
     \leanok
     \uses{def:open_local_interaction_sum}
     Let $T=\bigoplus_{j=0}^{b-1}\mu_jA_j$, with nonzero weights, be a finite
@@ -2339,7 +2339,7 @@
 
 \begin{lemma}[An interaction realizing the entire primitive-sector ground-state face]
     \label{thm:primitive_ground_state_face_interaction_exists}
-    \lean{MPSTensor.exists_positive_parent_interaction_groundStateFace_of_isPrimitiveMPS}
+    \lean{MPSTensor.exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFixedPointGap}
     \leanok
     For the primitive family of the preceding theorem, one can choose a
     single $R>0$ and $h\geq0$ such that the open kernels equal $G_N(T)$

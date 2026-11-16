@@ -47,7 +47,7 @@ theorem IsPeriodic.exists_residual_primitive_projection_sum
       ∃ (B : ∀ j, MPSTensor (blockPhysDim d m) (dim j))
         (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
         (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-        (∀ j, IsPrimitiveMPS (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
+        (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
         (∀ j, (V j)ᴴ * V j = 1) ∧ (∑ j, V j * (V j)ᴴ) = 1 ∧
         (∀ j i, (V j)ᴴ * blockTensor A m i = B j i * (V j)ᴴ) ∧

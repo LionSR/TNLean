@@ -136,9 +136,9 @@ range-\(l + 1\) parent Hamiltonian on every periodic chain with \(N \geq 2m\).
 The open coefficient is
 \(\gamma = (1 - \varepsilon\sqrt{l + 1})^2\), the active Knabe volume is \(m + l\), and
 \(m\) is chosen so that \(l^2 < m\gamma\). -/
-theorem IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ m : ℕ, ∃ δ : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧

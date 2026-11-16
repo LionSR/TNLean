@@ -38,8 +38,8 @@ for the `N/q` equal blocks of eq. (10).
 
 The tensor is not assumed to be in the gauge of eq. (5) of the source: a normal tensor is brought
 into it by a gauge transformation and a rescaling
-(`MPSTensor.exists_isPrimitiveMPS_gauge_of_isNormal`), which change the normalized state
-`|φ_N⟩` only by a phase.
+(`MPSTensor.exists_hasComplementaryFixedPointGap_gauge_of_isNormal`), which change the normalized
+state `|φ_N⟩` only by a phase.
 -/
 
 open Matrix MPSTensor
@@ -84,7 +84,8 @@ theorem exists_normalGaugeData {D : ℕ} [NeZero D] {A : MPSTensor d D}
       Kraus.transferMap B σ = σ ∧ 0 < t ∧ t < 1 ∧
       (∀ μ, Module.End.HasEigenvalue (Kraus.transferMap B) μ → μ ≠ 1 → ‖μ‖ ≤ ‖(t : ℂ)‖) ∧
       ‖(t : ℂ)‖ = t ∧ ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := by
-  obtain ⟨B, ζ, ρ, hζ, hGauge, hmpv, hP, hρ, -⟩ := exists_isPrimitiveMPS_gauge_of_isNormal hA
+  obtain ⟨B, ζ, ρ, hζ, hGauge, hmpv, hP, hρ, -⟩ :=
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   have hNB : Kraus.IsNormal B :=
     isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
   have hLC : IsLeftCanonical B := hP.norm

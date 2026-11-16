@@ -36,9 +36,9 @@ variable {d D : ℕ}
 /-- The compression of a fixed interior observable approaches its scalar
 expectation, in operator norm on the complete finite-chain ground space.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem IsPrimitiveMPS.bulkObservable_groundSpace_compression_tendsto_scalar
+theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_compression_tendsto_scalar
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {k : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
@@ -95,9 +95,9 @@ theorem IsPrimitiveMPS.bulkObservable_groundSpace_compression_tendsto_scalar
 /-- Centering the primitive-sector expectation makes the compressed observable
 vanish in operator norm. Source: Nachtergaele, arXiv:cond-mat/9410110,
 lines 933--947 and 2649--2675. -/
-theorem IsPrimitiveMPS.bulkObservable_groundSpace_compression_tendsto_zero
+theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_compression_tendsto_zero
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {k : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
@@ -114,9 +114,9 @@ theorem IsPrimitiveMPS.bulkObservable_groundSpace_compression_tendsto_zero
 /-- Scalar compression controls the action on every bounded ground vector,
 uniformly in the boundary condition. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem IsPrimitiveMPS.bulkObservable_groundSpace_projection_eventually_near_expectation
+theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_projection_eventually_near_expectation
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {k : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
@@ -147,9 +147,9 @@ theorem IsPrimitiveMPS.bulkObservable_groundSpace_projection_eventually_near_exp
 vanishes along every eventually bounded family of boundary vectors. This is
 precisely the finite-volume subtraction term in Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem IsPrimitiveMPS.bulkObservable_groundSpace_projection_norm_sq_tendsto_zero
+theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundSpace_projection_norm_sq_tendsto_zero
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {k : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
@@ -182,9 +182,9 @@ theorem IsPrimitiveMPS.bulkObservable_groundSpace_projection_norm_sq_tendsto_zer
 /-- Every unit open-chain ground vector has the same limiting interior
 expectation. The boundary condition may vary with the chain length.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem IsPrimitiveMPS.bulkObservable_groundState_expectation_tendsto
+theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundState_expectation_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {k : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)

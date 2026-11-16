@@ -32,7 +32,7 @@ limits in Section 6. -/
 theorem eventually_iSup_groundSpaceES_projector_defect_le_of_inequivalent
     (A : ∀ i, MPSTensor d (D i))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {η : ℝ} (hη : 0 < η) :

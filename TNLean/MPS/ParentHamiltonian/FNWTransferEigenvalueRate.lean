@@ -32,9 +32,9 @@ variable {d D : ℕ}
 /-- Every nonzero FNW remainder eigenvalue is a transfer eigenvalue.
 This is the algebraic step in the rate prescription following `boundAm`
 in Nachtergaele, Section 6, lines 2407--2412. -/
-theorem IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
+theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) {ν : ℂ} (hν0 : ν ≠ 0)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {ν : ℂ} (hν0 : ν ≠ 0)
     (hν : Module.End.HasEigenvalue
       (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero) ν) :
     Module.End.HasEigenvalue (fnwTransferMap A) ν := by
@@ -55,9 +55,9 @@ theorem IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
 /-- The transfer-eigenvalue prescription following Nachtergaele's `boundAm`
 (Section 6, lines 2407--2412) implies the weighted remainder spectral-radius
 bound. Eigenvalues are compared by modulus, and the rate is positive. -/
-theorem IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues
+theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) (rate : ℝ≥0) (hrate : 0 < rate)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (rate : ℝ≥0) (hrate : 0 < rate)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →
       ν ≠ 1 → ‖ν‖ < (rate : ℝ)) :
     fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero < (rate : ℝ≥0∞) := by
@@ -78,9 +78,9 @@ theorem IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenva
 (Section 6, lines 2407--2412) gives the FNW mixing estimate at that prescribed
 rate, with a positive rate-dependent prefactor. The dimension-only constant
 in the source projector estimate is not asserted. -/
-theorem IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (rate : ℝ≥0) (hrate : 0 < rate)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →
       ν ≠ 1 → ‖ν‖ < (rate : ℝ)) :

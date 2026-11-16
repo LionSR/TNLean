@@ -147,7 +147,7 @@ tensors.
 
 \begin{lemma}[Normalized primitive gauge of a normal tensor]
     \label{thm:normalized_primitive_gauge}
-    \lean{MPSTensor.exists_isPrimitiveMPS_gauge_of_isNormal}
+    \lean{MPSTensor.exists_hasComplementaryFixedPointGap_gauge_of_isNormal}
     \leanok
     \uses{def:normal, def:primitive_mps, def:gauge_equiv, def:mpv,
         def:ground_space_parent, def:parent_interaction,
@@ -882,7 +882,7 @@ tensors.
 \begin{lemma}[Open-chain gaps on divisible lengths for primitive block sums]
     \label{thm:primitive_block_sum_open_gap_subsequence}
     \lean{MPSTensor.%
-        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS}
+        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
     common physical dimension $d\geq1$, positive bond dimensions,
@@ -915,7 +915,7 @@ tensors.
 \begin{lemma}[Open-chain gaps at every length for primitive block sums]
     \label{thm:primitive_block_sum_open_gap_all_lengths}
     \lean{MPSTensor.%
-        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_isPrimitiveMPS}
+        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap}
     \leanok
     Under the hypotheses of
     Lemma~\ref{thm:primitive_block_sum_open_gap_subsequence}, as in the
@@ -955,8 +955,8 @@ tensors.
 
 \begin{lemma}[Uniformly gapped interaction ranges for primitive block sums]
     \label{thm:primitive_block_sum_parent_gap}
-    \lean{MPSTensor.exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS,
-        MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS}
+    \lean{MPSTensor.exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap,
+        MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
     common physical dimension $d\geq1$, positive bond dimensions,
@@ -1161,7 +1161,7 @@ tensors.
 
 \begin{lemma}[Uniform gap above an interaction threshold]
     \label{thm:primitive_block_sum_parent_gap_threshold}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isPrimitiveMPS}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_hasComplementaryFixedPointGap}
     \leanok
     Let $B=\bigoplus_j\mu_j A_j$, where the coefficients are nonzero and
     $(A_j)_j$ is a finite family of normalized primitive tensors of positive
@@ -1190,7 +1190,7 @@ tensors.
 
 \begin{lemma}[Gap at the common block-injectivity range]
     \label{thm:primitive-block-parent-gap-three-block-bound}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS_of_threeBlock_bound}
+    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap_of_threeBlock_bound}
     \leanok
     Let $B=\bigoplus_{j=0}^{r-1}\mu_j A_j$, where $r\geq2$, all coefficients
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
@@ -1242,7 +1242,7 @@ tensors.
 
 \begin{lemma}[Nonzero eigenvalues of the transfer remainder]
     \label{thm:fnw-transfer-eigenvalue-from-remainder}
-    \lean{MPSTensor.IsPrimitiveMPS.fnwTransfer_hasEigenvalue_of_remainder}
+    \lean{Kraus.HasComplementaryFixedPointGap.fnwTransfer_hasEigenvalue_of_remainder}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
     Let $A$ be primitive with nonzero bond dimension and fixed point $\rho$.
@@ -1259,8 +1259,8 @@ tensors.
 
 \begin{lemma}[FNW decay rates from transfer eigenvalues]
     \label{thm:fnw-transfer-eigenvalue-rate}
-    \lean{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
+    \lean{Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map,
         def:fnw_weighted_remainder_data, def:fnw_mixing_quantity}
@@ -1287,7 +1287,7 @@ tensors.
 
 \begin{lemma}[Prescribed FNW prefactors after an overlap threshold]
     \label{thm:fnw-eventual-prescribed-prefactor}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_fnwMixingQuantity_le_of_pos_prefactor}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_mixing_quantity}
     Let $A$ be primitive with nonzero bond dimension and a positive-definite
@@ -1309,7 +1309,7 @@ tensors.
 
 \begin{lemma}[Eventual projector bound with a prescribed prefactor]
     \label{thm:fnw-eventual-projector-prescribed-prefactor}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_projector_defect_le_of_pos_prefactor}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map,
         def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
@@ -1671,7 +1671,7 @@ tensors.
 
 \begin{lemma}[A faithful primitive fixed point]
     \label{thm:fnw-dimension-markov-primitive}
-    \lean{MPSTensor.FNWDimensionConstant.markovDensity,MPSTensor.FNWDimensionConstant.markovDensity_posDef,MPSTensor.FNWDimensionConstant.markovDensity_trace,MPSTensor.FNWDimensionConstant.markovDensity_fixed,MPSTensor.FNWDimensionConstant.markovTensor_isPrimitiveMPS,MPSTensor.FNWDimensionConstant.markovTensor_fnwTransfer_eigenvalue_eq_zero}
+    \lean{MPSTensor.FNWDimensionConstant.markovDensity,MPSTensor.FNWDimensionConstant.markovDensity_posDef,MPSTensor.FNWDimensionConstant.markovDensity_trace,MPSTensor.FNWDimensionConstant.markovDensity_fixed,MPSTensor.FNWDimensionConstant.markovTensor_hasComplementaryFixedPointGap,MPSTensor.FNWDimensionConstant.markovTensor_fnwTransfer_eigenvalue_eq_zero}
     \leanok
     For the weighted matrix-unit tensor of the Markov example, the matrix
     $\rho=I/4$ is positive definite, has trace one, and is stationary. The tensor
@@ -2817,7 +2817,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed open-chain projector defects]
     \label{thm:primitive-prescribed-projector-defect}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_openChain_groundProjection_defect_mul_sqrt_lt}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_openChain_groundProjection_defect_mul_sqrt_lt}
     \leanok
     \uses{def:primitive_mps,def:l_blk_injective,
         def:open_chain_ground_subspaces_es,def:ground_space_es}
@@ -2852,7 +2852,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed gaps for primitive tensors]
     \label{thm:primitive-parent-prescribed-gap}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_parentHamiltonianES_gap_ge_one_sub}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_parentHamiltonianES_gap_ge_one_sub}
     \leanok
     \uses{def:primitive_mps,def:parent_hamiltonian_es}
     Let $A$ be a normalized primitive tensor with positive bond dimension

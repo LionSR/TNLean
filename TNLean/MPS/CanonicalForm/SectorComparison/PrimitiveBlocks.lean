@@ -43,13 +43,14 @@ the blocked tensor `blockTensor A P` is also irreducible.
 The proof strategy avoids the "blocked period" issue entirely by working directly
 with the PSD fixed point `ρ` of the original transfer map:
 
-1. From TP + IsPrimitive + Kraus.IsIrreducibleFamily → `IsPrimitiveMPS A ρ` with `ρ.PosDef`
+1. From TP + IsPrimitive + Kraus.IsIrreducibleFamily →
+   `Kraus.HasComplementaryFixedPointGap A ρ` with `ρ.PosDef`
    (via `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible` +
     `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily`)
 2. `ρ` is also fixed by `Kraus.transferMap (blockTensor A P)` (since
    `Kraus.transferMap (blockTensor A P) = E^P` and `E ρ = ρ` implies `E^P ρ = ρ`)
 3. Uniqueness of PSD fixed points of `E^P`: if `E^P σ = σ`, set `σ' = σ - c•ρ`.
-   From the complementary transfer-map gap of `IsPrimitiveMPS A ρ`,
+   From the complementary transfer-map gap of `Kraus.HasComplementaryFixedPointGap A ρ`,
    `E^n → Pρ` exponentially.
    Since `E^{Pk} σ' = Pρ σ' + N^{Pk} σ' = N^{Pk} σ'` (as `Pρ σ' = 0`)
    and `N^{Pk} σ' = σ'` (from `E^P σ' = σ'`), but `N^n → 0`, we get `σ' = 0`.
@@ -67,7 +68,7 @@ If `A` is TP, has a primitive transfer map, and is an irreducible tensor, then
 The key insight: the PosDef fixed point `ρ` of the original transfer map is also
 a PosDef fixed point of the blocked transfer map `E^P`. Uniqueness of PSD fixed
 points for `E^P` follows from the complementary transfer-map gap of
-`IsPrimitiveMPS A ρ`: if
+`Kraus.HasComplementaryFixedPointGap A ρ`: if
 `E^P σ = σ` then `N^{Pk} σ' = σ'` (where `σ' = σ - c•ρ`, `N = E - Pρ`), but
 `N^n → 0` from the complementary gap, so `σ' = 0`. -/
 theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
@@ -77,7 +78,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     (hIrr : Kraus.IsIrreducibleFamily A)
     {P : ℕ} (hP : 0 < P) :
     Kraus.IsIrreducibleFamily (blockTensor A P) := by
-  -- Step 1: Obtain IsPrimitiveMPS A ρ with ρ.PosDef.
+  -- Step 1: Obtain Kraus.HasComplementaryFixedPointGap A ρ with ρ.PosDef.
   obtain ⟨ρ, hPrimMPS⟩ :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   have hPD : ρ.PosDef :=

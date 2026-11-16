@@ -41,10 +41,10 @@ the boundary normalization and mixed-transfer estimates in Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma `disjoint`, equations `C1C2` and `limP12`.
 The spectral-radius hypothesis is supplied separately by inequivalence of the
 normalized blocks. -/
-theorem IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_mixed_gap
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsPrimitiveMPS A ρ) (hB : IsPrimitiveMPS B σ)
+    (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hgap : Kraus.mixedMapSpectralRadius B A < 1) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ n in Filter.atTop, ∀ x ∈ groundSpaceES A n, ∀ y ∈ groundSpaceES B n,
@@ -78,10 +78,10 @@ theorem IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap
 ground spaces. This is Nachtergaele, arXiv:cond-mat/9410110, equation
 `limitepsilonm` (lines 1661--1675), in the trace-preserving tensor convention.
 Inequivalence is imposed only when the bond dimensions agree. -/
-theorem IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_inequivalent
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_inequivalent
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsPrimitiveMPS A ρ) (hB : IsPrimitiveMPS B σ)
+    (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ h : D₂ = D₁, ¬ GaugePhaseEquiv (h ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :

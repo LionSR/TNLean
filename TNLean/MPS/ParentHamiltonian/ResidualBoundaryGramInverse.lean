@@ -395,10 +395,10 @@ theorem norm_blockedResidualBoundaryMapES_sq_le_rightMetric_add_gram_error
 /-- A primitive prefix with a faithful invariant matrix supplies supported inverse equations and
 uniform bounds for all tail lengths once the prefix is sufficiently long. This is an
 intermediate estimate for Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
-theorem IsPrimitiveMPS.eventually_residualBoundaryGramInverse_properties
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_residualBoundaryGramInverse_properties
     [NeZero D] [NeZero E]
     {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
-    (hP : IsPrimitiveMPS B ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
     (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
     (Q : ℕ → Matrix (Fin D) (Fin D) ℂ) (hQ : ∀ r, IsOrthogonalProjection (Q r))
     (hGram : ∀ r, ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *
@@ -504,10 +504,10 @@ theorem norm_residualBoundaryGramInverse_sub_limit_le [NeZero D] [NeZero E]
 /-- The supported inverse converges to the fixed inverse restricted to the row corner along
 every diverging prefix length, with arbitrary tail lengths. This is an intermediate estimate
 for Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
-theorem IsPrimitiveMPS.residualBoundaryGramInverse_sub_limit_tendsto_zero
+theorem _root_.Kraus.HasComplementaryFixedPointGap.residualBoundaryGramInverse_sub_limit_tendsto_zero
     [NeZero D] [NeZero E]
     {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
-    (hP : IsPrimitiveMPS B ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
     (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
     (Q : ℕ → Matrix (Fin D) (Fin D) ℂ) (hQ : ∀ r, IsOrthogonalProjection (Q r))
     (hGram : ∀ r, ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *

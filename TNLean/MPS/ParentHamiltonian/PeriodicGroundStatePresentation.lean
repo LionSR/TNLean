@@ -52,13 +52,13 @@ theorem IsPeriodic.exists_inequivalent_primitive_groundStatePresentation_of_dvd
         let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
         ∃ (B : (a : Fin g) → MPSTensor (blockPhysDim d p) (dim a))
           (ρ : (a : Fin g) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
-          (∀ a, IsPrimitiveMPS (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
+          (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
           BlocksNotGaugePhaseEquiv B ∧
           (∀ N, groundSpaceES (blockTensor A p) N =
             groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N) := by
   classical
   obtain ⟨dim, hdim, B, ρ, _htotal, hP, hρ, hGS⟩ :=
-    hA.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd p hp hdiv
+    hA.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd p hp hdiv
   let : ∀ j, NeZero (dim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
   obtain ⟨g, sel, _hsel, hpos, hP', hρ', hDistinct, hCover, hGS'⟩ :=
     exists_primitive_sector_representatives (fun _ => 1) B (fun _ => one_ne_zero) ρ hP hρ
@@ -82,7 +82,7 @@ theorem IsPeriodic.exists_inequivalent_primitive_groundStatePresentation
         let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
         ∃ (B : (a : Fin g) → MPSTensor (blockPhysDim d m) (dim a))
           (ρ : (a : Fin g) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
-          (∀ a, IsPrimitiveMPS (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
+          (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
           BlocksNotGaugePhaseEquiv B ∧
           (∀ N, groundSpaceES (blockTensor A m) N =
             groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N) := by

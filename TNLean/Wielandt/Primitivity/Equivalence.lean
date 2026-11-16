@@ -36,7 +36,7 @@ from the literal clause).
 ## Main results
 
 * `MPSTensor.primitivity_tfae`: Proposition 3 of arXiv:0909.5347.
-* `MPSTensor.exists_isPrimitiveMPS_posDef_of_isNormal`: a normal left-canonical
+* `MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isNormal`: a normal left-canonical
   tensor has a complementary fixed-point gap at a positive-definite fixed matrix.
 * `MPSTensor.qIndex_le_iIndex_of_tracePreserving`: Proposition 1 of the source.
 * `MPSTensor.wolf_theorem_6_15`: uniqueness of the full-rank fixed point.
@@ -62,12 +62,12 @@ variable {d D : ℕ}
 positive-definite fixed matrix.
 
 Source: arXiv:0909.5347, Proposition 3, (b)⟹(c); Wolf, Chapter 6, Theorem 6.7. -/
-theorem exists_isPrimitiveMPS_posDef_of_isNormal [NeZero D]
+theorem exists_hasComplementaryFixedPointGap_posDef_of_isNormal [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : Kraus.IsNormal A) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ ∧ ρ.PosDef :=
-  exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive A hNorm
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef :=
+  exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive A hNorm
     (isIrreducibleMap_transferMap_of_isNormal A hA)
     (isPrimitive_transferMap_of_isNormal A hNorm hA)
 
@@ -111,7 +111,8 @@ theorem primitivity_tfae [NeZero D]
       simpa only using
         Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
     obtain ⟨ρ, hP, hρ⟩ :=
-      exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive A hNorm hIrr hPrim
+      exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive A hNorm hIrr
+        hPrim
     exact ⟨ρ, hρ, hP.fixedPoint_is_fixed,
       fun σ hσ ↦ ⟨Matrix.trace σ / Matrix.trace ρ, hP.fixedPoint_unique σ hσ⟩, hPrim⟩
   tfae_have 3 → 2 := by
@@ -160,7 +161,7 @@ The source proves this by passing to `T^n`, showing every `T^n(|ψ⟩⟨ψ|)` ha
 full rank from the span hypothesis, concluding no stationary density has a
 kernel, and ruling out a fixed-point space of dimension larger than one via
 Corollary 6.5. This proof instead routes through Proposition 3
-(arXiv:0909.5347): `exists_isPrimitiveMPS_posDef_of_isNormal` turns the span
+(arXiv:0909.5347): `exists_hasComplementaryFixedPointGap_posDef_of_isNormal` turns the span
 hypothesis into a positive-definite fixed point `ρ₀` with a complementary
 transfer-map gap around it, and that gap
 (`Kraus.HasComplementaryFixedPointGap.fixedPoint_unique`) forces every fixed point of `E_A` to be
@@ -176,7 +177,7 @@ theorem wolf_theorem_6_15 [NeZero D] (A : MPSTensor d D)
       Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
       ∀ σ : Matrix (Fin D) (Fin D) ℂ,
         Kraus.transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
-  obtain ⟨ρ₀, hPrim, hρ₀pd⟩ := exists_isPrimitiveMPS_posDef_of_isNormal A hNorm hSpan
+  obtain ⟨ρ₀, hPrim, hρ₀pd⟩ := exists_hasComplementaryFixedPointGap_posDef_of_isNormal A hNorm hSpan
   have htr_pos : 0 < Matrix.trace ρ₀ := hρ₀pd.trace_pos
   have htr_ne : Matrix.trace ρ₀ ≠ 0 := ne_of_gt htr_pos
   set ρ := (Matrix.trace ρ₀)⁻¹ • ρ₀ with hρ_def

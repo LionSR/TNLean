@@ -38,7 +38,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamil
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {R : ℕ} (hR : 0 < R)
@@ -52,7 +52,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamil
       γ * ‖v‖ ≤ ‖parentHamiltonianES
         (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨W, hRW, _, γ, hγ, hGap⟩ :=
-    exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+    exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
       μ A hμ ρ hP hρ hDistinct (2 * R)
   exact exists_parentHamiltonianES_gap_of_larger_range
     (toTensorFromBlocks (d := d) (μ := μ) A) hR hRW (hKernel W (by omega)) hγ hGap
@@ -65,7 +65,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_ker_openPar
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {R : ℕ} (hR : 0 < R)
@@ -90,11 +90,11 @@ periodic parent Hamiltonian for a direct sum of inequivalent normalized
 primitive blocks. The gap constant may depend on the interaction range.
 This is the fixed-interaction consequence of Nachtergaele's Theorem 2.1(ii),
 arXiv:cond-mat/9410110, with the open kernels of Section 3. -/
-theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isPrimitiveMPS
+theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_hasComplementaryFixedPointGap
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ R₀ : ℕ, 0 < R₀ ∧ ∀ R : ℕ, R₀ ≤ R → ∃ γ : ℝ, 0 < γ ∧
@@ -104,7 +104,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isPrimiti
         γ * ‖v‖ ≤ ‖parentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨R₀, hR₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_hasComplementaryFixedPointGap
       μ A hμ ρ hP hρ hDistinct
   exact ⟨R₀, hR₀, fun R hR ↦
     exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamiltonianES_eq

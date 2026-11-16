@@ -105,7 +105,7 @@ theorem eventually_norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
     (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i)) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ M in Filter.atTop, ∀ K r : ℕ,
@@ -134,7 +134,7 @@ theorem tendsto_norm_residualWindowLeft_sector_projection_sum_sub_iSup_zero
     {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
     (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     {κ : Type*} {f : Filter κ} {K M r : κ → ℕ}
