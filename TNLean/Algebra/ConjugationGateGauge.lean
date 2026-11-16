@@ -459,11 +459,7 @@ satisfies the same equation. Then `a ⊗ b = S_ℓ ⊗ S_r` and
 `b† ⊗ a† = S_r† ⊗ S_ℓ†` with `S_ℓ, S_r` unitary and
 `S_xᵀ Σ_x S_x = Σ_x`.
 Source: arXiv:1703.09188, `corconj`, Case II (lines 1113--1125) and the proof
-at lines 1151--1163.
-
-**Local fix (Case II uniqueness of `v`):** the source prints `S_rᵀ ⊗ S_ℓᵀ`;
-the correct factor from the Fundamental Theorem is `S_r† ⊗ S_ℓ†`. Documented in
-`docs/paper-gaps/mpu_conjugation_symplectic_uniqueness_transpose.tex`. -/
+at lines 1151--1163. The local fix of this module applies. -/
 theorem exists_symplectic_factors_of_kronecker_mul {ℓ r : ℕ} (hℓ : Even ℓ) (hr : Even r)
     [Nonempty (Fin ℓ)] [Nonempty (Fin r)]
     {u : Matrix (Fin ℓ × Fin r) P ℂ} (hu : u.IsCoisometry)
