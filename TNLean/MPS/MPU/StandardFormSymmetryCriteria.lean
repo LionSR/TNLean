@@ -22,6 +22,12 @@ below are therefore the source propositions, for any choice of the factors in
 the standard form of `𝒱₂`; the construction of such a standard form for every
 simple MPU is `MPOTensor.IsMPUSimple.exists_reduced_twoSiteStandardFormData`.
 
+**Local fix (standard form of the canonical representative):** a tensor in
+standard form is read as the two-site block of a simple tensor in canonical
+form II, following the source's standing convention (line 326) and its
+explicit "not necessarily in CF" qualifiers elsewhere (lines 710--747, 871,
+1349). See `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
+
 **Length convention.** From line 1209 on, the source places two spins on each
 site of the standard-form chain. The symmetry hypotheses are therefore stated
 for `mpo (blockTwo V) N` at even `N`, that is, at original chain lengths
