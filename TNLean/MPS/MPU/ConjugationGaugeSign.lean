@@ -103,8 +103,8 @@ unitary conjugation gauge of its two-site block satisfies `X conj(X) = ±1`.
 Source: arXiv:1703.09188, eq. `eq:mps-class-gauge-trafo`, lines 1761--1770. -/
 theorem IsMPUCanonicalFormII.mul_map_star_eq_one_or_neg_one_of_conjugation_gauge
     {V : MPOTensor d D} (hV : IsMPUCanonicalFormII V) (X : Matrix.unitaryGroup (Fin D) ℂ)
-    {ζ : ℂ} (hg : ∀ i j, (blockTwo V i j).map (starRingEnd ℂ) =
-      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * blockTwo V i j * X)) :
+    {ζ : ℂ} (hg : ∀ i j, (MPOTensor.blockTwo V i j).map (starRingEnd ℂ) =
+      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * MPOTensor.blockTwo V i j * X)) :
     (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
       (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
         -1 := by
