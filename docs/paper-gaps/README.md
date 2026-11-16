@@ -825,6 +825,13 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   invariance, derives integrality of the action coefficients from it, and
   formalizes the single-block obstruction only in its fusion-ring form, not
   the cohomological form of the source.
+- `glm23_mixed_path_parent_commutation.tex` (scope restriction, open) records
+  that Section 5 takes the canonical parent along the mixed path without
+  showing that it commutes with the common operators, gives an explicit
+  non-unitary involutive on-site symmetry with every action, fusion and
+  equal-L-matrix hypothesis satisfied for which the canonical parent does not
+  commute, and formalizes commutation along the closed interval under adjoint
+  closure of the two-site boundary range.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer

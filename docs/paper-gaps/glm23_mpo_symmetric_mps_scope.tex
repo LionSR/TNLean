@@ -487,9 +487,15 @@ at each endpoint.\footnote{\leanid{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedM
     \leanid{MPSTensor.MPOSymmetry.tendsto_arbitraryPhysicalMixed_groundSpace_starProjection},
     in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedMPO} and
     \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedGroundProjection}.}
-Commutation of the path Hamiltonians with the common operators and the
-block-injective construction for degenerate ground spaces
-(lines 1695 onwards) remain open.
+The canonical path Hamiltonians commute with the common operators along
+the closed interval once the two-site boundary range of the common
+operator is closed under the adjoint. Section~5 does not supply this
+closure, and an explicit non-unitary involutive symmetry satisfying all
+of its other data shows that the canonical parent need not commute; see
+\texttt{glm23\_mixed\_path\_parent\_commutation.tex}.\footnote{\leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedParentCommutation}.}
+The source-faithful symmetric path and the block-injective construction
+for degenerate ground spaces (lines 1695 onwards) remain open.
 
 \section{Elimination plan}
 
