@@ -38,6 +38,8 @@ import TNLean.Circuit.ProductVector
 import TNLean.Circuit.ProjectedRelativeEvolution
 import TNLean.Circuit.QuantitativeSitePermutation
 import TNLean.Circuit.QuantitativeUnitaryGates
+import TNLean.Circuit.RegionSplit
+import TNLean.Circuit.RegionalSwap
 import TNLean.Circuit.RingSeparation
 import TNLean.Circuit.SelectedZeroRegisterReflection
 import TNLean.Circuit.SelectedZeroRegisterReflectionPool
@@ -47,7 +49,9 @@ import TNLean.Circuit.SiteEmbeddingNorm
 import TNLean.Circuit.SiteEmbeddingOrder
 import TNLean.Circuit.SiteExpectation
 import TNLean.Circuit.SiteExpectationOrder
+import TNLean.Circuit.SiteOperators
 import TNLean.Circuit.SiteOscillation
+import TNLean.Circuit.SitePermutation
 import TNLean.Circuit.SitePermutationSupport
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.SpectatorOscillationSupport
@@ -59,6 +63,7 @@ import TNLean.Circuit.SupportedGaussianIntegral
 import TNLean.Circuit.SupportedGroundSpace
 import TNLean.Circuit.SupportedMatrixElements
 import TNLean.Circuit.SupportedNormalizedGroundSpace
+import TNLean.Circuit.SupportedOperators
 import TNLean.Circuit.Teleportation
 import TNLean.Circuit.UniformPostselection
 import TNLean.Circuit.UniformSuccessAttenuation

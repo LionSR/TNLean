@@ -153,13 +153,6 @@ theorem embedOp_mulVec_eq_comp {e₀ : Fin m₀ → Fin n} (he₀ : Function.Inj
     v
   rwa [Finset.univ_unique, Finset.noncommProd_singleton] at h
 
-/-- The permutation of sites `τ` acts on vectors by precomposing configurations with `τ`. -/
-theorem permOp_mulVec (τ : Equiv.Perm (Fin n)) (v : (Fin n → Fin d) → ℂ) :
-    permOp τ *ᵥ v = v ∘ fun x => x ∘ τ := by
-  classical
-  funext x
-  simp [permOp, mulVec, dotProduct]
-
 /-- **A gate applied to a product vector that is `|z⟩` on its sites.** If the site vectors of
 `v` at the sites of `e₀` are `|z⟩`, then `(X ⊗ 1) |v⟩` has amplitude `X(y|_e, z ⋯ z)` times the
 amplitude at `y` of the product vector with all-ones site vectors on the sites of `e₀`. -/

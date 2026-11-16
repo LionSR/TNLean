@@ -369,7 +369,7 @@ def focused_checks(
     sources: list[str], tests: list[str], graph: dict[str, set[str]],
     jobs: int, timeout: int, log_path: Path | None,
 ) -> int:
-    """Prepare each target, then use the ordinary strict runner.
+    """Prepare the targets, then use the ordinary strict runner.
 
     Preparation has no success-on-timeout shortcut: the surrounding CI step's
     timeout is the upper bound. A failed preparation blocks its strict check,
@@ -388,9 +388,19 @@ def focused_checks(
                 failed.append(f"{module}: dependency build exited {code}")
         return prepared[module]
 
-    for source in sources:
-        if prepare(module_of(source)):
-            failed += run_batch([source], jobs, timeout)
+    # One `lake build` for every changed module: each separate invocation
+    # re-traverses the whole dependency graph, which for a change touching
+    # hundreds of modules costs more than the step's timeout. A failure falls
+    # back to one build per module, so that each failure is attributed to its
+    # own source and independent sources are still checked.
+    source_modules = sorted({module_of(source) for source in sources})
+    if len(source_modules) > 1:
+        print(f"Preparing {len(source_modules)} focused targets together", flush=True)
+        if early_build(source_modules, log_path, 0) == 0:
+            prepared.update(dict.fromkeys(source_modules, True))
+    ready_sources = [source for source in sources if prepare(module_of(source))]
+    if ready_sources:
+        failed += run_batch(ready_sources, jobs, timeout)
 
     ready: list[str] = []
     for test in tests:

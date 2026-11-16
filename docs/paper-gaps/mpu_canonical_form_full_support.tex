@@ -646,6 +646,44 @@ source-labelled statements retain the hypotheses of Ref.~\cite{Cirac2017MPU};
 those not yet proved remain unformalized. No restricted statement is presented
 under a source label.
 
+\subsection*{Superseded entries}
+
+Thirteen admissible entries are superseded by the standing canonical-form
+convention of \path{docs/paper-gaps/mpu_standard_form_canonical_convention.tex}
+and have been deleted from Chapter~28. Each had a source-labelled counterpart
+that is now proved with no hypothesis beyond those of
+Ref.~\cite{Cirac2017MPU} under that convention, so the reduced full-support
+data it assumed restricted nothing that remains open.
+\begin{center}
+    \begin{tabular}{ll}
+        deleted entry                                         & source-labelled entry                            \\
+        \path{thm:mpu_admissible_index}                       & \path{IndexTh}                                   \\
+        \path{prop:mpu_admissible_continuity_index}           & \path{prop:continuity-index}                     \\
+        \path{prop:mpu_admissible_local_time_reversal}        & \path{PropChiral}                                \\
+        \path{prop:mpu_admissible_local_transposition}        & \path{prop:local-char-transposition}             \\
+        \path{lem:mpu_admissible_sigma_trace}                 & \path{eq:sigma-from-trace}                       \\
+        \path{lem:mpu_admissible_sigma_gauge_invariant}       & \path{lem:mpu_sigma_gauge_invariant}             \\
+        \path{prop:mpu_admissible_sigma_well_defined}         & \path{prop:sigma-well-defined}                   \\
+        \path{prop:mpu_admissible_conjugation_symmetry}       & \path{prop1conj}                                 \\
+        \path{prop:mpu_admissible_conjugation_standard_forms} & \path{corconj}                                   \\
+        \path{cor:mpu_admissible_symplectic_to_orthogonal}    & \path{cor:sympl-to-orthogonal}                   \\
+        \path{prop:mpu_admissible_mps_conjugation_class}      & \path{lem:mpu_mps_sign_conjugation_case}         \\
+        \path{prop:mpu_admissible_mps_time_reversal_class}    & \path{prop:dagger-mps-class-and-mpu-class-equal} \\
+        \path{cor:mpu_admissible_continuous_standard_form}    & \path{coruvSF}
+    \end{tabular}
+\end{center}
+The continuous choice of standard form is superseded directly: Corollary
+\path{coruvSF} is proved for an arbitrary continuous path of tensors generating
+matrix product unitaries, with no canonical-form or source-datum hypothesis
+(\path{MPOTensor.IsMPU.exists_continuous_standardForm_of_path}).
+The discussion of these thirteen entries above is retained as a historical
+record; where it describes them as retained or restricted, it is superseded
+by this subsection. Retained entries that cited them now cite the
+source-labelled entries. The remaining admissible entries concern the
+classification of conjugation-symmetric phases, blocking parity of the time-reversal sign, necessity of the
+symmetry invariants, and the worked examples, whose source-labelled
+counterparts are still open; they keep the restrictions recorded here.
+
 \section{Elimination plan}
 
 The native source-data scope tracker is \ghissue{6136}. The

@@ -10,14 +10,13 @@ import QICLean.Kraus.Transfer
 # MPS vocabulary for primitive fixed points
 
 This module exposes the finite-Kraus complementary fixed-point-gap certificates from
-QICLean under the established matrix-product-state vocabulary. The abbreviations are
+QICLean under the established matrix-product-state vocabulary. The abbreviation is
 reducible, so the QIC fields and generic methods remain available definitionally, without
 a separate MPS-facing forwarding declaration or conversion theorem.
 
 ## Main definitions
 
 * `IsPrimitiveMPS`: MPS-facing name for `Kraus.HasComplementaryFixedPointGap`.
-* `HasPrimitiveFixedPoint`: MPS-facing name for `Kraus.HasPrimitiveFixedPoint`.
 
 ## Main results
 
@@ -68,13 +67,6 @@ This reducible abbreviation preserves the public MPS vocabulary while exposing
 abbrev IsPrimitiveMPS {d D : ℕ} [NeZero D]
     (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
   Kraus.HasComplementaryFixedPointGap A ρ
-
-/-- An MPS tensor **has a primitive fixed point** when its finite Kraus family has one.
-
-This reducible abbreviation preserves the existential MPS vocabulary while reusing
-`Kraus.HasPrimitiveFixedPoint` directly. -/
-abbrev HasPrimitiveFixedPoint {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
-  Kraus.HasPrimitiveFixedPoint A
 
 /-- Rescaling a positive-definite primitive fixed point to unit trace preserves the
 complementary fixed-point gap. Only the ray through the fixed point enters the gap

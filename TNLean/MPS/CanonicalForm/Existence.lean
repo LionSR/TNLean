@@ -81,10 +81,11 @@ positive length.
 
 The formal statement:
 
-> `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves the implication
-> `IsStronglyIrreduciblePaper A → krausRank A = D` (equivalently,
-> `Kraus.wordSpan A 1 = ⊤`).  This proves the hardest direction
-> in the Sanz–Pérez-García–Wolf–Cirac primitivity equivalence.
+> `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves
+> `isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
+> transfer map is irreducible with peripheral spectrum `{1}` is normal.  This
+> is the hardest direction in the Sanz–Pérez-García–Wolf–Cirac primitivity
+> equivalence.
 
 ## External input — invariant subspace decomposition in the canonical-form proof
 

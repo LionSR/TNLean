@@ -9,17 +9,20 @@ import QICLean.Analysis.ExponentialGeometricTailOrder
 /-!
 # A logarithmic cluster order for the actual soft-truncation MPO
 
-Taking scale at least three times the positive order puts every required heat time in the strict
-small-time regime. A logarithmic ceiling chooses the actual cluster order from the error
-budget. Supporting a corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268.
+A logarithmic ceiling chooses the actual cluster order from the error budget, for any base
+dominating every heat-time base. Taking scale at least three times the positive order puts every
+required heat time in the strict small-time regime. Supporting a corrected ALVV, arXiv:1602.08828v2,
+`lem:exp-approx-eff`, lines 1262–1268.
 
-**Local fix (cutoff, normalization and parameters):** this is the corrected interaction-label
-construction at scale at least three times the order, not the printed physical-support estimate
-or a computational runtime result; see `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+**Local fix (cutoff and normalization):** this is the corrected interaction-label construction, not
+the printed physical-support estimate or a computational runtime result; see
+`docs/paper-gaps/alvv16_cluster_approximation.tex`.
 
 **Scope restriction (scale at least three times the order):** ALVV `lem:exp-approx-eff`, lines
-1262–1268, allows any scale with `t′ < (ln 2/2) t`; this module takes `t ≥ 3m`, a sub-case of
-that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
+1262–1268, allows any scale with `t′ < (ln 2/2) t`; `softHeat_base_bounds` and
+`exists_softTruncation_mpo_of_accuracy` take `t ≥ 3m`, a sub-case of that range, while
+`exists_softTruncation_mpo_of_accuracy_of_base` carries no such restriction. See
+`docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
 open Matrix
@@ -43,6 +46,39 @@ theorem softHeat_base_bounds :
   have h1 : 1 < Real.exp (1 / 3 : ℝ) := Real.one_lt_exp_iff.mpr (by norm_num)
   constructor <;> linarith
 
+/-- A logarithmic cluster order built from any base `b` dominating the largest heat-time base
+`2 (e^{m/t} - 1)` gives actual soft-truncation tensors at any prescribed accuracy. Supporting a
+corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268. -/
+theorem exists_softTruncation_mpo_of_accuracy_of_base {N q m : ℕ} (hq : 1 ≤ q)
+    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (h i) {i.castSucc, i.succ})
+    (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
+    (eps t xi b : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i, h i) (ht : 0 < t) (hxi : 0 < xi)
+    (hb0 : 0 < b) (hb1 : b < 1) (hbase : 2 * (Real.exp ((m : ℝ) / t) - 1) ≤ b) :
+    let W := t * (2 : ℝ) ^ (m + 1)
+    let r := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -
+      Real.log (Real.log (1 + xi / W))) / (-Real.log b)⌉₊
+    ∃ A : Fin (N + 1) → MPOTensor q ((r ^ 2 * q ^ r) * (m + 1)),
+      ‖cfc (Real.softTruncation t m) ((∑ i, h i) - (eps : ℂ) • 1) -
+        MPOTensor.traceChainOperator A 1‖ ≤ xi := by
+  intro W r
+  have hbudget := Real.exponential_geometric_tail_order (N : ℝ) W b xi
+    (by dsimp only [W]; positivity) hb0 hb1 hxi
+  change 0 < r ∧ W * (Real.exp ((N : ℝ) ^ 2 * b ^ r) - 1) ≤ xi at hbudget
+  obtain ⟨A, hA⟩ := exists_softTruncation_mpo_of_cluster_order (m := m) hq hbudget.1 h hs hh
+    hnorm eps t hlo ht (hbase.trans hb1.le)
+  refine ⟨A, hA.trans ?_⟩
+  calc
+    (t * (2 : ℝ) ^ (m + 1)) *
+        (Real.exp ((N : ℝ) ^ 2 * (2 * (Real.exp ((m : ℝ) / t) - 1)) ^ r) - 1)
+        ≤ W * (Real.exp ((N : ℝ) ^ 2 * b ^ r) - 1) := by
+          dsimp only [W]
+          gcongr
+          exact mul_nonneg (by norm_num)
+            (sub_nonneg.mpr (Real.one_le_exp (by positivity)))
+    _ ≤ xi := hbudget.2
+
 /-- A completely specified logarithmic cluster order gives actual soft-truncation tensors at
 any prescribed accuracy, using any scale at least three times the positive order. All heat
 approximants and tensors are constructed from the original local interactions.
@@ -62,28 +98,12 @@ theorem exists_softTruncation_mpo_of_accuracy {N q m : ℕ} (hq : 1 ≤ q) (hm :
     ∃ A : Fin (N + 1) → MPOTensor q ((r ^ 2 * q ^ r) * (m + 1)),
       ‖cfc (Real.softTruncation t m) ((∑ i, h i) - (eps : ℂ) • 1) -
         MPOTensor.traceChainOperator A 1‖ ≤ xi := by
-  intro W b r
   have hmR : 0 < (m : ℝ) := Nat.cast_pos.mpr hm
   have ht : 0 < t := lt_of_lt_of_le (by positivity) hscale
   have hratio : (m : ℝ) / t ≤ 1 / 3 := (div_le_iff₀ ht).mpr (by linarith only [hscale])
   have hb := softHeat_base_bounds
-  have hbudget := Real.exponential_geometric_tail_order (N : ℝ) W b xi
-    (by dsimp only [W]; positivity) hb.1 hb.2 hxi
-  change 0 < r ∧ W * (Real.exp ((N : ℝ) ^ 2 * b ^ r) - 1) ≤ xi at hbudget
-  have hbase : 2 * (Real.exp ((m : ℝ) / t) - 1) ≤ b := by
-    exact mul_le_mul_of_nonneg_left
-      (sub_le_sub_right (Real.exp_le_exp.mpr hratio) 1) (by norm_num)
-  obtain ⟨A, hA⟩ := exists_softTruncation_mpo_of_cluster_order (m := m) hq hbudget.1 h hs hh hnorm
-    eps t hlo ht (hbase.trans hb.2.le)
-  refine ⟨A, hA.trans ?_⟩
-  calc
-    (t * (2 : ℝ) ^ (m + 1)) *
-        (Real.exp ((N : ℝ) ^ 2 * (2 * (Real.exp ((m : ℝ) / t) - 1)) ^ r) - 1)
-        ≤ W * (Real.exp ((N : ℝ) ^ 2 * b ^ r) - 1) := by
-          dsimp only [W]
-          gcongr
-          exact mul_nonneg (by norm_num)
-            (sub_nonneg.mpr (Real.one_le_exp (by positivity)))
-    _ ≤ xi := hbudget.2
+  exact exists_softTruncation_mpo_of_accuracy_of_base hq h hs hh hnorm eps t xi _ hlo ht hxi
+    hb.1 hb.2 (mul_le_mul_of_nonneg_left
+      (sub_le_sub_right (Real.exp_le_exp.mpr hratio) 1) (by norm_num))
 
 end TNLean.MPS.AreaLaw

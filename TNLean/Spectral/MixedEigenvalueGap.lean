@@ -53,9 +53,9 @@ theorem mixedMap_eigenvalue_norm_lt_one_of_normal_inequivalent
     (hμ : Module.End.HasEigenvalue (Kraus.mixedMapLM A B) μ) : ‖μ‖ < 1 := by
   apply mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one A B _ hμ
   have hAi := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A
-    (isIrreducibleTensor_of_isPrimitivePaper A (isPrimitivePaper_of_isNormal A hA))
+    (isIrreducibleFamily_of_isNormal A hA)
   have hBi := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B
-    (isIrreducibleTensor_of_isPrimitivePaper B (isPrimitivePaper_of_isNormal B hB))
+    (isIrreducibleFamily_of_isNormal B hB)
   by_cases hD : D₁ = D₂
   · subst D₁
     exact Kraus.mixedMapSpectralRadius_lt_one_of_irreducible_TP A B hAi hBi hAleft hBleft

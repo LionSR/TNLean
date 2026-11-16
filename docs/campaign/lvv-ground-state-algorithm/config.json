@@ -28,6 +28,14 @@
     {
       "slug": "alvv-rg-algorithm",
       "label": "Rigorous renormalization group"
+    },
+    {
+      "slug": "mpu",
+      "label": "Matrix product unitaries"
+    },
+    {
+      "slug": "mpo-symmetry",
+      "label": "MPO symmetries"
     }
   ],
   "label": "1307.5143",

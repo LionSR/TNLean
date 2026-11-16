@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.MPU.Examples.CZXNormalizationAudit
 import TNLean.MPS.MPU.Examples.ControlledZ
+import TNLean.MPS.MPU.Examples.LabelledSwapEquivalence
 import TNLean.MPS.MPU.Examples.OddRing
 import TNLean.MPS.MPU.Examples.Shift
 import TNLean.MPS.MPU.Examples.ShiftBlockedIndex
@@ -27,6 +28,8 @@ import TNLean.MPS.MPU.Examples.ShiftSwap
 import TNLean.MPS.MPU.Examples.ShiftSwapMatrices
 import TNLean.MPS.MPU.Examples.ShiftSymmetryPaths
 import TNLean.MPS.MPU.Examples.ShiftTilde
+import TNLean.MPS.MPU.Examples.SwapAncillaCompatibility
 import TNLean.MPS.MPU.Examples.SwapBlockedSymmetryTransport
 import TNLean.MPS.MPU.Examples.SwapPath
+import TNLean.MPS.MPU.Examples.SwapSymmetryStabilization
 import TNLean.MPS.MPU.Examples.SwapSymmetryTransport

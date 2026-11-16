@@ -102,7 +102,9 @@ private theorem root_map_diag (X : Matrix (Fin 7) (Fin 7) ℂ)
       Matrix.stdBasis ℂ (Fin 7) (Fin 7) (adjacentIndex i).1) X) a b = _
   exact resetMap_apply 1 adjacentIndex X a b
 
-private theorem square_map_diag (X : Matrix (Fin 7) (Fin 7) ℂ)
+/-- The two-step reset discards off-diagonal entries and prepares the
+normalized identity in the sector two positions later. -/
+theorem square_map_apply (X : Matrix (Fin 7) (Fin 7) ℂ)
     (a b : Fin 7) :
     (Kraus.mapLM square X) a b =
       if a = b then
@@ -126,7 +128,7 @@ theorem transferMap_square_eq_pow :
   rw [pow_two]
   change (Kraus.mapLM square X) a b =
     (Kraus.mapLM root (Kraus.mapLM root X)) a b
-  rw [square_map_diag, root_map_diag]
+  rw [square_map_apply, root_map_diag]
   by_cases hab : a = b
   · subst b
     simp only [↓reduceIte]
