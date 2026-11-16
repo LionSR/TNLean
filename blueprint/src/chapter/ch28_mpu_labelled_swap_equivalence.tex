@@ -3,7 +3,7 @@
     \label{def:mpu_blocked_physical_positive_actions}
     \lean{MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix,
         MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix}
-    \notready
+    \leanok
     \uses{lem:mpu_physical_matrix_canonical_blocking}
     Fix a local matrix $Q$ and $k\geq0$. Canonically regroup the
     adjunction or transposition sandwich action through $k$ sites,
@@ -15,7 +15,7 @@
     \label{lem:mpu_blocked_physical_positive_action_identities}
     \lean{MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix_eq,
         MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix_eq}
-    \notready
+    \leanok
     \uses{def:mpu_blocked_physical_positive_actions}
     For every $k\geq0$, these actions are exactly
     \[
@@ -29,7 +29,7 @@
     the inverse image condition $Nk>0$ of unrestricted canonical blocking.
 \end{lemma}
 
-\begin{proof}\notready
+\begin{proof}\leanok
     Regroup the sitewise matrix as
     $Q^{\otimes Nk}=(Q^{\otimes k})^{\otimes N}$ in canonical blocked
     coordinates. Reindexing commutes with multiplication, adjunction
@@ -42,7 +42,7 @@
     \lean{MPOTensor.strictlyEquivalentUnderSymmetry_blockedDaggerWithPhysicalMatrix_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_blockedTransposeWithPhysicalMatrix_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_blockedConjugationWithPhysicalMatrix_iff}
-    \notready
+    \leanok
     \uses{lem:mpu_blocked_physical_positive_action_identities,
         thm:mpu_symmetry_path_transport}
     Let $Q$ be a unitary involution, let $U,V$ have the same physical
@@ -70,7 +70,7 @@
     the full physical space, and the assertions include $k=0$.
 \end{lemma}
 
-\begin{proof}\notready
+\begin{proof}\leanok
     The blocked matrix $Q^{\otimes k}$ is again a unitary involution
     with the required adjunction, transposition or reality property.
     If $A=(Q^{\otimes k})^{\otimes N}$, then $A^2=I$, and
@@ -144,7 +144,7 @@
     \lean{MPOTensor.equivalentUnderPhysicalMatrixSymmetry_dagger_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff}
-    \notready
+    \leanok
     \uses{def:mpu_labelled_physical_matrix_equivalence,
         lem:mpu_blocked_physical_involution_paths}
     Let $Q$ be a unitary involution on a fixed labelled physical space.
@@ -166,9 +166,13 @@
     length witness each direction.
 \end{lemma}
 
-\begin{proof}\notready
-    The original MPU conditions are preserved in both directions
-    because $Q$ is unitary and $Q^2=I$. After attaching an identity
+\begin{proof}\leanok
+    Since $Q$ is unitary and $Q^2=I$, output multiplication gives
+    \[
+        U\text{ is an MPU}\quad\Longleftrightarrow\quad
+        QU\text{ is an MPU},
+    \]
+    and the same equivalence holds for $V$. After attaching an identity
     ancilla, the matrix $Q\otimes I_x$ has the same required properties.
     Apply the full blocked-path comparison at each $x,k>0$ and quantify
     over those unchanged witnesses.

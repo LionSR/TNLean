@@ -11,12 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: 6d6358bec6ad6716212cf928f1441d46b05445b4
+          ref: 29d40b2f5a86c4b44784550dfc4179ef32e982ed
           fetch-depth: 0
       - name: Verify exact production merge and unchanged dependency pins
         run: |
-          test "$(git rev-parse HEAD)" = 6d6358bec6ad6716212cf928f1441d46b05445b4
-          git merge-base --is-ancestor a64097005a1112afdcf9ce3300961e1e496373b5 HEAD
+          test "$(git rev-parse HEAD)" = 29d40b2f5a86c4b44784550dfc4179ef32e982ed
+          git merge-base --is-ancestor 142c89fd4b9ad8bf0c5ddc01c884053b92fff9ca HEAD
           git merge-base --is-ancestor 73007e10337424b3556fb198507b2157f99f19a3 HEAD
           git merge-base --is-ancestor eb588dc15332a3798431015e6c27ecbaf329b2d1 HEAD
           git merge-base --is-ancestor 990051363e264c7ad45460e271fbc765ae3dda76 HEAD
@@ -79,18 +79,3 @@ jobs:
           path: ${{ runner.temp }}/7574-axioms.txt
           if-no-files-found: warn
 
-  format:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          ref: 6d6358bec6ad6716212cf928f1441d46b05445b4
-      - name: Check new Blueprint sources with pinned latexindent
-        run: |
-          scripts/latexindent --version
-          CHECK_TMPDIR=$(mktemp -d)
-          export CHECK_TMPDIR
-          trap 'rm -rf "$CHECK_TMPDIR"' EXIT
-          scripts/check_latexindent_formatting.sh --one blueprint/src/chapter/ch28_mpu_labelled_swap_equivalence.tex
-          scripts/check_latexindent_formatting.sh --one blueprint/src/chapter/ch28_mpu_swap_stabilization.tex

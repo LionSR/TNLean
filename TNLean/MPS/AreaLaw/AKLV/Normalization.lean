@@ -13,11 +13,16 @@ The three reference sums are the original left exterior, the middle bulk after
 removing its three boundary bonds on each side, and the original right exterior.
 Their supports are pairwise disjoint. Their actual lowest energies and a common
 unit ground vector are constructed, giving ground energy at most six for the
-centered full Hamiltonian.
+centered full Hamiltonian. The window has at least one interaction. When it
+has fewer than six, the middle reference sum is empty and the boundary bonds
+coincide in part; at most six of them remain, and at most `s` when `s ≤ 2`.
 
 Source: AKLV, arXiv:1301.1162v1, Section 6.1, the normalization before equation (5).
-The two operators subsequently clipped are the enlarged exterior sums containing
-one further boundary bond, not the reference sums used to choose the minima.
+For windows of at least three interactions, the two operators subsequently clipped
+are the enlarged exterior sums containing one further boundary bond, not the
+reference sums used to choose the minima. The reference arrangement clips the two
+reference sums themselves; its exterior supports are disjoint for every window, so
+it also covers windows of one or two interactions.
 
 **Local fix (middle energy shift):** The source range `4,...,s-3` contains `s-6`
 terms, whereas its printed individual subtraction uses `s-7`. This module subtracts
@@ -47,7 +52,7 @@ def aklvNormalizationHamiltonians {L q : ℕ} (a s : ℕ)
     (fun i : Fin (L - 1) ↦ (p j).1 ≤ i.val ∧ i.val + 1 < (p j).2), h i
 
 private theorem aklv_normalization_bond_data {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) :
@@ -55,7 +60,8 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
     let R := fun j ↦ interval L (p j).1 (p j).2
     let A := aklvNormalizationHamiltonians a s h
     let J := Finset.univ.filter (fun i : Fin (L - 1) ↦
-      i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
+      a ≤ i.val ∧ i.val < a + s ∧
+        i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
     Pairwise (fun i j ↦ Disjoint (R i) (R j)) ∧
       (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j)) ∧
       J.card ≤ 6 ∧ (∑ i, h i) = (∑ j, A j) + ∑ i ∈ J, h i := by
@@ -74,7 +80,7 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
   have hJ : J.card ≤ 6 := by
     have hc := Finset.card_le_card_of_injOn Fin.val
       (s := J) (t := {a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1})
-      (fun _ hi ↦ (Finset.mem_filter.mp hi).2)
+      (fun _ hi ↦ (Finset.mem_filter.mp hi).2.2.2)
       (by intro i _ j _ hij; exact Fin.ext hij)
     exact hc.trans Finset.card_le_six
   refine ⟨hR, hA, hJ, ?_⟩
@@ -87,7 +93,8 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
     (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
       a + s ≤ i.val ∧ i.val + 1 < L), h i) +
     ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-      i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ)), h i
+      a ≤ i.val ∧ i.val < a + s ∧
+        i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ)), h i
   simp only [Finset.sum_filter, Finset.mem_insert, Finset.mem_singleton,
     ← Finset.sum_add_distrib]
   apply Finset.sum_congr rfl
@@ -101,7 +108,7 @@ centered full Hamiltonian are constructed from the physical interactions. The
 relative ground energy lies in `[0,6]`, as in AKLV, arXiv:1301.1162v1, Section 6.1,
 before equation (5). No regional minimum, common vector, or energy budget is supplied. -/
 theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -121,7 +128,8 @@ theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
   let I := fun j ↦ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ (p j).1 ≤ i.val ∧ i.val + 1 < (p j).2)
   let J := Finset.univ.filter (fun i : Fin (L - 1) ↦
-    i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
+    a ≤ i.val ∧ i.val < a + s ∧
+      i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
   let Y := ∑ i ∈ J, h i
   obtain ⟨hR, hAs, hJ, hH⟩ := aklv_normalization_bond_data hs ha h hsupp
   have hA (j : Fin 3) : (A j).PosSemidef ∧
@@ -156,7 +164,7 @@ reference sums plus their adjacent boundary bonds. Their centered supports are
 `[0,a+2)` and `[a+s-1,L)`. AKLV, arXiv:1301.1162v1, Section 6.1, the definition
 of `H^(t)` after equation (5). -/
 theorem aklv_two_block_exterior_data {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) :
@@ -221,7 +229,7 @@ theorem aklv_two_block_exterior_data {L q a s : ℕ}
 regions, by positivity of the added bonds. AKLV, arXiv:1301.1162v1, Section 6.1,
 normalization at lines 901–925 and the two exterior truncations after equation (5). -/
 theorem aklv_normalization_le_two_block_regions {L q a s : ℕ}
-    (hs : 6 ≤ s)
+    (hs : 3 ≤ s)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, 0 ≤ h i) (e : Fin 3 → ℝ)
     (he : ∀ j, (aklvNormalizationHamiltonians a s h j -
@@ -238,6 +246,81 @@ theorem aklv_normalization_le_two_block_regions {L q a s : ℕ}
   · intro i _ _
     exact h0 i
 
+/-- The three reference sums are themselves the regional sums for the cuts `a+1`
+and `a+s`, except that the empty or nonempty middle reference sum lies inside the
+whole window. Their lower bounds are therefore lower bounds for this reference
+arrangement, for every window width. AKLV, arXiv:1301.1162v1, Section 6.1,
+normalization at lines 901–925. -/
+theorem aklv_normalization_le_reference_regions {L q a s : ℕ}
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (h0 : ∀ i, 0 ≤ h i) (e : Fin 3 → ℝ)
+    (he : ∀ j, (aklvNormalizationHamiltonians a s h j -
+      (e j : ℂ) • 1).PosSemidef) :
+    ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians (a + 1) (a + s) h j := by
+  intro j
+  apply (Matrix.le_iff.mpr (he j)).trans
+  apply Finset.sum_le_sum_of_subset_of_nonneg
+  · intro i hi
+    have hi' := (Finset.mem_filter.mp hi).2
+    apply Finset.mem_filter.mpr
+    refine ⟨Finset.mem_univ i, ?_⟩
+    fin_cases j <;> simp_all [aklvNormalizationEndpoints]
+    omega
+  · intro i _ _
+    exact h0 i
+
+open Classical in
+/-- The actual source normalization and an exponential residual for any two cuts
+`l ≤ r` whose regional sums dominate the genuine reference minima. AKLV,
+arXiv:1301.1162v1, Section 6.1, normalization and the two exterior truncations
+after equation (5). -/
+theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L) (hlr : l ≤ r) (hrL : r ≤ L)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s h j -
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r h j) :
+    let A := aklvNormalizationHamiltonians a s h
+    ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
+      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      star x ⬝ᵥ x = 1 ∧
+      (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
+      (∀ j, 0 ≤ e j) ∧
+      star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
+      (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
+      ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
+        let B := aklvTwoBlockHamiltonian l r h e t
+        ∃ hB : ∀ T, (B T).IsHermitian,
+          B ∅ = H ∧ ∀ T : Finset (Fin 2),
+            let G := Submodule.spectralSpanLE
+              (hB T).eigenvectorBasis (hB T).eigenvalues (E0 + η)
+            ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
+              (H - B Finset.univ)).domRestrict G)‖ ≤
+                (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) := by
+  intro A
+  obtain ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6⟩ :=
+    exists_aklv_energy_normalization hq hs ha h hsupp h0 h1
+  refine ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6, ?_⟩
+  intro η t hη ht B
+  obtain ⟨hB, hcenter, hres⟩ := norm_aklv_two_block_truncation_low_le hlr hrL
+    h hsupp h0 h1 e (E0 + η) t (by linarith) (by linarith) (hcut e he)
+  refine ⟨hB, hcenter, ?_⟩
+  intro T G
+  have hresT := hres T
+  rw [hcenter] at hresT
+  refine hresT.trans ?_
+  calc
+    64 * Real.exp (-(t - (E0 + η)) / 8) ≤
+        64 * Real.exp (3 / 4 + (-(t - η) / 8)) := by
+      gcongr
+      linarith
+    _ = (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) := by
+      rw [Real.exp_add]
+      ring
+
 open Classical in
 /-- The actual source normalization gives a common cutoff for every partial
 outer clipping and an exponential two-block residual relative to the original
@@ -246,7 +329,7 @@ nearest-neighbour interactions. AKLV, arXiv:1301.1162v1, Section 6.1, normalizat
 and the two exterior truncations after equation (5). No spectral-gap conclusion
 is asserted here. -/
 theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -268,28 +351,42 @@ theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
               (hB T).eigenvectorBasis (hB T).eigenvalues (E0 + η)
             ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
               (H - B Finset.univ)).domRestrict G)‖ ≤
-                (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) := by
-  intro A
-  obtain ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6⟩ :=
-    exists_aklv_energy_normalization hq hs ha h hsupp h0 h1
-  refine ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6, ?_⟩
-  intro η t hη ht B
-  have hhe := aklv_normalization_le_two_block_regions hs h h0 e he
-  obtain ⟨hB, hcenter, hres⟩ := norm_aklv_two_block_truncation_low_le
-    (by omega : a + 2 ≤ a + s - 1) (by omega : a + s - 1 ≤ L)
-    h hsupp h0 h1 e (E0 + η) t (by linarith) (by linarith) hhe
-  refine ⟨hB, hcenter, ?_⟩
-  intro T G
-  have hresT := hres T
-  rw [hcenter] at hresT
-  refine hresT.trans ?_
-  calc
-    64 * Real.exp (-(t - (E0 + η)) / 8) ≤
-        64 * Real.exp (3 / 4 + (-(t - η) / 8)) := by
-      gcongr
-      linarith
-    _ = (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) := by
-      rw [Real.exp_add]
-      ring
+                (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) :=
+  exists_aklv_normalized_cut_residual hq (by omega) ha (by omega) (by omega) h hsupp h0 h1
+    (fun e he ↦ aklv_normalization_le_two_block_regions hs h h0 e he)
+
+open Classical in
+/-- The same normalization and exponential residual for the reference arrangement,
+which clips the left and right reference sums themselves at the cuts `a+1` and
+`a+s` and retains all `s` window interactions. Its two exterior supports are
+disjoint for every window of at least one interaction, including windows of one or
+two interactions, where the enlarged exteriors overlap. AKLV, arXiv:1301.1162v1,
+Section 6.1, normalization and the two exterior truncations after equation (5). -/
+theorem exists_aklv_normalized_reference_residual {L q a s : ℕ} (hq : 0 < q)
+    (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (h i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    let A := aklvNormalizationHamiltonians a s h
+    ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
+      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      star x ⬝ᵥ x = 1 ∧
+      (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
+      (∀ j, 0 ≤ e j) ∧
+      star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
+      (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
+      ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t
+        ∃ hB : ∀ T, (B T).IsHermitian,
+          B ∅ = H ∧ ∀ T : Finset (Fin 2),
+            let G := Submodule.spectralSpanLE
+              (hB T).eigenvectorBasis (hB T).eigenvalues (E0 + η)
+            ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
+              (H - B Finset.univ)).domRestrict G)‖ ≤
+                (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) :=
+  exists_aklv_normalized_cut_residual hq hs ha (by omega) (by omega) h hsupp h0 h1
+    (fun e he ↦ aklv_normalization_le_reference_regions h h0 e he)
 
 end TNLean.MPS.AreaLaw

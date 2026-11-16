@@ -72,20 +72,23 @@ private theorem isMPU_ketLeftMul_iff (Q : Matrix (Fin d) (Fin d) ℂ)
     simpa only [ketLeftMul_involutive Q hQQ U] using hU.ketLeftMul hQ
 
 private theorem equivalent_of_strict_comparisons
-    (kind : PhysicalSymmetryKind) (Q R P : Matrix (Fin d) (Fin d) ℂ)
-    (hP : P ∈ Matrix.unitaryGroup (Fin d) ℂ) (hPP : P * P = 1)
+    (kind : PhysicalSymmetryKind)
+    (Q_src Q_tgt Q_transport : Matrix (Fin d) (Fin d) ℂ)
+    (h_transport : Q_transport ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (h_transport_sq : Q_transport * Q_transport = 1)
     (U : MPOTensor d Da) (V : MPOTensor d Db)
     (hstrict : ∀ x k : ℕ, 0 < k →
-      (StrictlyEquivalentUnderSymmetry ((kind.withMatrix (physicalIdMatrix Q x)).block k)
+      (StrictlyEquivalentUnderSymmetry ((kind.withMatrix (physicalIdMatrix Q_src x)).block k)
         (blockTensor (tensorPhysicalId U x) k) (blockTensor (tensorPhysicalId V x) k) rfl ↔
-      StrictlyEquivalentUnderSymmetry ((kind.withMatrix (physicalIdMatrix R x)).block k)
-        (blockTensor (tensorPhysicalId (U.ketLeftMul P) x) k)
-        (blockTensor (tensorPhysicalId (V.ketLeftMul P) x) k) rfl)) :
-    EquivalentUnderPhysicalMatrixSymmetry kind Q U V ↔
-      EquivalentUnderPhysicalMatrixSymmetry kind R (U.ketLeftMul P) (V.ketLeftMul P) := by
+      StrictlyEquivalentUnderSymmetry ((kind.withMatrix (physicalIdMatrix Q_tgt x)).block k)
+        (blockTensor (tensorPhysicalId (U.ketLeftMul Q_transport) x) k)
+        (blockTensor (tensorPhysicalId (V.ketLeftMul Q_transport) x) k) rfl)) :
+    EquivalentUnderPhysicalMatrixSymmetry kind Q_src U V ↔
+      EquivalentUnderPhysicalMatrixSymmetry kind Q_tgt
+        (U.ketLeftMul Q_transport) (V.ketLeftMul Q_transport) := by
   unfold EquivalentUnderPhysicalMatrixSymmetry
-  refine and_congr (isMPU_ketLeftMul_iff P hP hPP U)
-    (and_congr (isMPU_ketLeftMul_iff P hP hPP V) ?_)
+  refine and_congr (isMPU_ketLeftMul_iff Q_transport h_transport h_transport_sq U)
+    (and_congr (isMPU_ketLeftMul_iff Q_transport h_transport h_transport_sq V) ?_)
   exact exists_congr fun x => and_congr_right fun _ =>
     exists_congr fun k => and_congr_right fun hk => hstrict x k hk
 

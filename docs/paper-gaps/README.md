@@ -1970,6 +1970,14 @@ For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
   `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
   `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
   hypotheses; for accuracy `n^{-c}` it is of order `log^{2/3} n · log log n`.
+- [`aklv13_entropy_inverse_gap_logarithm.tex`](aklv13_entropy_inverse_gap_logarithm.tex)
+  (local correction, resolved) records that the printed entropy rate
+  `O(log³ d/ε)` of Theorem 4.3 (lines 820–846), of the general theorem
+  (lines 995–1000) and of Lemma 6.3 (lines 1003–1052) drops the factor
+  `log(s² + s)` at lines 840–843, and proves that no parameter choice avoids
+  it: any favorable pair of the Chebyshev shrinking and polynomial rank
+  certificates has `log D > c³(log q + 2 log(1/g))³/(16g)`. The proved rate
+  `C(1 + log q + log(1/g))³/g` is optimal for the route up to the constant.
 
 ## Independent scales and the ground-space recursive witness
 
@@ -2019,3 +2027,14 @@ normalizing power, as the published Methods retain. The energy-dependent
 normalization, Corollary 2.14 and the cut-wise error reduction are formalized;
 the joint power-and-ground-projection sample, its all-cut operator Schmidt
 rank and the ground-line cut factors are not yet.
+
+### The ALVV merge tree for a unique frustration-free ground state
+
+[`alvv16_unique_ground_state_tree.tex`](alvv16_unique_ground_state_tree.tex)
+(scope restriction, open) records that the existence content of arXiv:1602.08828v2,
+Theorem t:unique, lines 1829–1855, is proved with the source's hypotheses by
+specializing the degenerate-gap resampling tree and its refinement to ground
+energy zero and multiplicity one. The per-node families are not the
+frustration-free family of Theorem t:aisff, so the intermediate dimension grows
+with the chain length instead of the source's constant `D s²`; no running time
+is asserted.

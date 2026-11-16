@@ -66,6 +66,51 @@ is deliberately source-faithful.
   forward comparison given a virtual conjugation, not a converse asserting
   equality of the original periodic operators at every length.
 
+## Symmetry-preserving matrix product unitary equivalence
+
+### `MPOTensor.EquivalentUnderPhysicalMatrixSymmetry`
+
+- **Declaration:** `EquivalentUnderPhysicalMatrixSymmetry kind Q U V`, where
+  `U` and `V` have one fixed labelled physical space and independent virtual
+  dimensions, and `kind` is adjunction, transposition or conjugation.
+- **Defined in:** `TNLean/MPS/MPU/PhysicalMatrixEquivalence.lean`.
+- **Meaning:** the original tensors are MPUs, and some common positive
+  identity ancilla and common positive canonical blocking give the existing
+  strict symmetry-preserving path relation. The physical matrix is retained
+  as $Q\otimes I_x$ when an ancilla is added. Endpoint canonical form and a
+  common padded virtual dimension come from `StrictlyEquivalentUnderSymmetry`;
+  intermediate paths range over the full enlarged physical space.
+- **Source:** the fixed-labelled-space reading of arXiv:1703.09188,
+  `SSymmetries` (lines 1301--1322), `def:equivalent-symmetry` (1356--1366),
+  and the labelled ancillary-spin construction (2210--2234), in
+  `Papers/1703.09188/paper_v2.tex`.
+- **Sanctioned bridges:** for a unitary involution $Q$, the three declarations
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_dagger_iff`,
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff`, and
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff` identify the
+  retained-matrix comparison of $U,V$ with the comparison of $QU,QV$ under
+  retained matrix $I$ in the same labelled relation,
+  under $Q^\dagger=Q$, $Q^{\mathsf T}=Q$, and $\overline Q=Q$, respectively.
+  Both directions use the same ancilla and blocking witnesses. The generic
+  blocked-action identities include blocking length zero; the stabilized
+  relation itself requires positive blocking.
+- **Source-example specialization:**
+  `MPOTensor.labelledShiftExamples_swap_dagger_iff`,
+  `MPOTensor.labelledShiftExamples_swap_transpose_iff`, and
+  `MPOTensor.labelledShiftExamples_swap_conjugation_iff` cover every ordered pair of
+  the three actual source examples and their source-defined output transforms.
+  The one-sided transformation follows the documented correction in
+  `docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`.
+- **Caveat:** this is not interchangeable with `EquivalentUnderSymmetry`.
+  The latter uses a coherent dimension-indexed symmetry family and coprime
+  ancilla sizes; the labelled relation retains $Q$ and permits arbitrary
+  common positive ancillas. No equivalence theorem between those predicates
+  is asserted. The global-family obstruction concerns that API, not a
+  counterexample to the labelled-spin source statement. General commensurate-
+  dimension integration remains open under #6017 and
+  `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`; no phase classification
+  is claimed.
+
 ## Normality
 
 ### `Kraus.IsNormal`
