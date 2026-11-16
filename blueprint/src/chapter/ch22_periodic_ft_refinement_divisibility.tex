@@ -800,6 +800,40 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{remark}
 
+\begin{lemma}[Connected coefficient graphs and word spaces]
+    \label{thm:periodic_connected_word_span}
+    \lean{Matrix.finrank_span_le_wordSpace_add_one,
+        Matrix.finrank_span_le_wordSpace_of_diagonal,
+        Matrix.finrank_span_le_wordSpace_add_one_of_nonzero,
+        Matrix.finrank_span_le_wordSpace_of_diagonal_of_nonzero}
+    \leanok
+    Let $G$ be a connected graph on an index set $I$, let $x_i\in K^n$
+    be vectors over a field $K$, and let $f:K^n\to K$ be linear with
+    $f(x_i)\ne0$ for every $i$. Suppose a subspace $W\subseteq M_n(K)$
+    contains at least one of $x_ix_j^{\mathsf T}$ and
+    $x_jx_i^{\mathsf T}$ for every edge $\{i,j\}$ of $G$. Then
+    \begin{equation*}
+        \dim\operatorname{span}\{x_i:i\in I\}\le\dim W+1.
+    \end{equation*}
+    If $W$ also contains $x_{i_0}x_{i_0}^{\mathsf T}$ for some vertex
+    $i_0$, the stronger bound without the final $1$ holds.
+    When $K$ is infinite and $I$ is finite, it suffices to assume that all
+    $x_i$ are nonzero: a suitable $f$ then exists.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the linear contraction
+    $\delta_f(xy^{\mathsf T})=f(y)x-f(x)y$.
+    Along a graph path, every coefficient belongs to
+    $\delta_f(W)+Kx_{i_0}$, so the coefficient span has dimension at most
+    $\dim\delta_f(W)+1$. Rank-nullity gives the first bound.
+    The nonzero diagonal outer product belongs to the kernel of the
+    restricted contraction, which gives the stronger bound.
+    Over an infinite field, choose the functional outside the finitely
+    many proper hyperplanes annihilating a coefficient.
+\end{proof}
+
 \begin{lemma}[Exact powers under an annihilating perturbation]
     \label{thm:periodic_annihilating_power_perturbation}
     \lean{add_pow_eq_of_annihilating_square_zero}
@@ -812,6 +846,23 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \begin{proof}\leanok
     Expand the square. Inductively, multiply by $F+H$ and use
     $F^kH=0$ for every $k>0$. All mixed terms vanish.
+\end{proof}
+
+\begin{lemma}[Exact powers from a preserved square]
+    \label{thm:periodic_square_preserving_power_perturbation}
+    \lean{add_pow_eq_of_sq_eq_of_sq_mul_eq_zero,
+        add_pow_eq_of_anticommuting_square_zero}
+    \leanok
+    Let $F,H$ lie in a semiring. If $(F+H)^2=F^2$ and $F^2H=0$, then
+    $(F+H)^p=F^p$ for every $p\ge2$. In particular, this holds when
+    $FH+HF=0$, $H^2=0$, and $F^2H=0$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For every $k\ge2$, the identity $F^kH=0$ follows by factoring out
+    $F^2H$. Induction now multiplies the preserved power by $F+H$.
+    The special case follows by expanding the square.
 \end{proof}
 
 \begin{lemma}[Sparse coupling of finite positive masses]
