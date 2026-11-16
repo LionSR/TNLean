@@ -113,8 +113,8 @@ theorem same_case_of_equivalentUnderSymmetry_conjugation
     have hG := isInvariantUnderSymmetry_conjugation_reindexPhysical
       (twoSiteDirectBlockEquiv (MPSTensor.blockPhysDim d k) k').symm hp
     rw [reindexPhysical_symm_reindexPhysical] at hG
-    exact (standardFormTensorOfGatesData (u p) (v p) (hu' p) (hv' p)).isConjugationCase_of_conjugation
-      fun N hN ↦ (hG hN).symm
+    exact (standardFormTensorOfGatesData (u p) (v p) (hu' p)
+      (hv' p)).isConjugationCase_of_conjugation fun N hN ↦ (hG hN).symm
   have hconst := isConjugationCase_const_of_path hu (fun p ↦ (hu' p).2) hcase
   -- The case is the same at the endpoints as on the original tensors.
   obtain ⟨hI₁, hII₁⟩ := isConjugationCaseI_iff_of_blockTensor h₁ hc₁ S₁ k k' T₁ (hcase 0)
