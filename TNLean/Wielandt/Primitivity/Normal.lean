@@ -10,12 +10,12 @@ import TNLean.MPS.Structure.PrimitiveFixedPoint
 /-!
 # Primitivity consequences for MPS transfer maps
 
-This file states the low-level consequences of `HasPrimitiveFixedPoint` used in the
-Wielandt development.
+This file states the low-level consequences of a complementary fixed-point gap
+`IsPrimitiveMPS A ρ` used in the Wielandt development.
 
-It does **not** prove `HasPrimitiveFixedPoint → IsNormal`. The currently formalized route
-from complementary transfer-map gap primitivity to normality with an additional positive-definite
-fixed point hypothesis is assembled in
+It does **not** prove that such a gap implies `Kraus.IsNormal`. The currently
+formalized route from complementary transfer-map gap primitivity to normality
+with an additional positive-definite fixed point hypothesis is assembled in
 `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`.
 
 ## Main results

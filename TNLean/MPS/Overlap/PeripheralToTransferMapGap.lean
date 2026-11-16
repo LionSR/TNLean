@@ -52,7 +52,7 @@ theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
     (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
-  obtain ⟨_, hP⟩ : MPSTensor.HasPrimitiveFixedPoint A :=
+  obtain ⟨_, hP⟩ : Kraus.HasPrimitiveFixedPoint A :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hNorm hPrim
   simpa only using MPSTensor.IsPrimitiveMPS.overlap_tendsto_one hP
 

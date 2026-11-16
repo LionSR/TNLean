@@ -25,28 +25,6 @@ namespace QuantumCircuit
 
 variable {d N : ℕ}
 
-/-- Site permutations act multiplicatively on the full chain Hilbert space. -/
-def permOpHom : Equiv.Perm (Fin N) →* Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ where
-  toFun := permOp
-  map_one' := by
-    ext x y
-    simp only [permOp, of_apply, Equiv.Perm.coe_one, Function.comp_id, one_apply, eq_comm]
-  map_mul' σ τ := by
-    ext x y
-    simp only [permOp, of_apply, mul_apply, ite_mul, one_mul, zero_mul]
-    rw [Finset.sum_ite_eq' Finset.univ (x ∘ σ)]
-    simp only [Finset.mem_univ, ite_true, Equiv.Perm.coe_mul]
-    rfl
-
-/-- The identity site permutation induces the identity chain operator. -/
-@[simp] theorem permOp_one : permOp (d := d) (1 : Equiv.Perm (Fin N)) = 1 :=
-  (permOpHom (d := d)).map_one
-
-/-- Composition of site permutations is multiplication of their chain operators. -/
-theorem permOp_mul (σ τ : Equiv.Perm (Fin N)) :
-    permOp (d := d) (σ * τ) = permOp σ * permOp τ :=
-  (permOpHom (d := d)).map_mul σ τ
-
 /-- A SWAP of two sites of the open chain of `N` sites is a product of at most `2N` gates on
 neighbouring sites. -/
 theorem isPairProduct_permOp_swap (i j : Fin N) :
@@ -56,23 +34,6 @@ theorem isPairProduct_permOp_swap (i j : Fin N) :
     exact IsPairProduct.one _
   · rw [permOp_swap_eq_embedOp h]
     exact isPairProduct_embedOp_pairSites h (permOp_mem_unitary _)
-
-/-- The adjoint chain permutation reverses the site permutation. -/
-@[simp] theorem permOp_conjTranspose (π : Equiv.Perm (Fin N)) :
-    (permOp (d := d) π)ᴴ = permOp π.symm := by
-  ext x y
-  simp only [permOp, of_apply, conjTranspose_apply, apply_ite star, star_one, star_zero]
-  congr 1
-  apply propext
-  constructor
-  · intro h
-    funext i
-    have := congrFun h (π.symm i)
-    simpa using this.symm
-  · intro h
-    funext i
-    have := congrFun h (π i)
-    simpa using this.symm
 
 namespace PortMatching
 

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Circuit.SiteEmbedding
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.Lattice.Sheet.Operators
 

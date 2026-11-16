@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.TwoMarkerMiddleFactors
 import TNLean.MPS.AreaLaw.ThreeRegionSupport
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Logic.Equiv.Fin.Basic
 

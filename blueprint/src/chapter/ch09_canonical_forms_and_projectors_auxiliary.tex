@@ -35,7 +35,7 @@ coefficients.
     \label{thm:is_normal_tensor_of_is_normal_left_canonical}
     \lean{MPSTensor.isNormalTensor_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, def:strongly_irreducible_paper}
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, thm:normalized_normal_strongly_irreducible}
     Let $D>0$. If $A$ is algebraically normal and left-canonical, then
     \begin{align}
         A
@@ -45,11 +45,11 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, def:strongly_irreducible_paper}
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, thm:normalized_normal_strongly_irreducible}
     Algebraic normality together with
-    $\sum_i(A^i)^\dagger A^i=\Id$ makes the transfer map strongly irreducible.
-    It consequently has a positive-definite fixed point, no nontrivial
-    invariant projection, and peripheral spectrum $\{1\}$. The fixed-point
+    $\sum_i(A^i)^\dagger A^i=\Id$ gives the transfer map a positive-definite
+    fixed point, no nontrivial invariant projection, and peripheral spectrum
+    $\{1\}$ (Lemma~\ref{thm:normalized_normal_strongly_irreducible}). The fixed-point
     eigenvalue and left-canonical normalization give $r(\E_A)=1$. Thus no
     scalar rescaling remains, and the two conditions in
     Definition~\ref{def:nt_cpsv} hold for $A$ itself.

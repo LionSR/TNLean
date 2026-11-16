@@ -127,11 +127,13 @@ The formal general inequality is
 Its proof passes through eventual full Kraus rank and a blocking argument, but
 its conclusion asserts $S_n(A)=\MD$ at one fixed length. It is not merely a
 statement about an increasing sum of word spans.\footnote{The general theorem
-    is \leanid{MPSTensor.iIndex_le_general_of_isPrimitivePaper} in
-    \path{TNLean/Wielandt/Inequality/Bounds.lean:389--468}. The formal
+    is \leanid{MPSTensor.iIndex_le_general_of_isNormal} in
+    \path{TNLean/Wielandt/Inequality/Bounds.lean}, stated for a normal
+    tensor. The formal
     equivalence, under normalization, between the primitive condition of
-    Ref.~\cite{Sanz2010Quantum} and eventual full Kraus rank is in
-    \path{TNLean/Wielandt/Primitivity/Equivalence.lean:169--191}.}
+    Ref.~\cite{Sanz2010Quantum} and eventual full Kraus rank, which is
+    normality, is \leanid{MPSTensor.primitivity_tfae} in
+    \path{TNLean/Wielandt/Primitivity/Equivalence.lean}.}
 
 The improved formal estimates now use the source hypotheses on the one-step
 subspace. In the invertible case, the formal theorem assumes an invertible
@@ -151,19 +153,21 @@ nonzero eigenvalue and proves
     \label{eq:spwc10_wielandt_one_step_subspace_singular_exact_span}
 \end{align}
 These are precisely the corresponding hypotheses in Theorem~1 of
-Ref.~\cite{Sanz2010Quantum}. The older statements for a chosen Kraus operator
-remain as corollaries obtained by setting $X=A_{i_0}$.\footnote{The relevant
+Ref.~\cite{Sanz2010Quantum}. The statements for a chosen Kraus operator
+are corollaries obtained by setting $X=A_{i_0}$.\footnote{The relevant
     declarations are
-    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit}
+    \leanid{MPSTensor.wordSpan_eq_top_of_isNormal_of_mem_wordSpan_one_of_isUnit}
     and
     \leanid{MPSTensor.iIndex_le_of_mem_wordSpan_one_of_isUnit} for the
     invertible case, and
-    \leanid{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector}
+    \leanid{MPSTensor.wordSpan_eq_top_of_isNormal_of_mem_wordSpan_one_of_noninvertible_eigenvector}
     and
     \leanid{MPSTensor.iIndex_le_sq_of_mem_wordSpan_one_of_noninvertible_eigenvector}
     for the singular case, all in
     \path{TNLean/Wielandt/Inequality/Bounds.lean}. The shorter
-    chosen-generator statements in the same file are corollaries.}
+    chosen-generator statements are corollaries: the singular case is in the
+    same file, the invertible case in
+    \path{TNLean/Wielandt/SpanGrowth/InvertibleWordSpan.lean}.}
 
 \section{Resolved one-step-subspace issue}
 
@@ -289,10 +293,9 @@ positive length, the existing comparison applies. Otherwise, the equivalence
 between primitivity and eventual full Kraus rank shows that the admissible
 set for $q(\mathcal E_A)$ is empty. Thus $q(\mathcal E_A)=0\le i(A)$.
 
-The earlier declarations \leanid{MPSTensor.qIndex_le_iIndex} and
-\leanid{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper} remain useful
-specializations. Their stronger hypotheses no longer delimit the available
-source-facing statement.
+The earlier declaration \leanid{MPSTensor.qIndex_le_iIndex}, for a normal
+tensor without normalization, remains a useful specialization. Its stronger
+hypothesis no longer delimits the available source-facing statement.
 
 \section{Scope of the strong-irreducibility equivalence}
 
@@ -303,23 +306,19 @@ essential. The identity channel has peripheral spectrum $\{1\}$ and admits
 the positive-definite fixed point $I$, but its fixed space is not
 one-dimensional.
 
-The present formal predicate strengthens the source condition by also
-requiring irreducibility of the transfer map. The proved equivalence is
-therefore a strengthened version of Proposition~3, not a literal
-formalization of its third clause.\footnote{The strengthened predicate is
-    \leanid{MPSTensor.IsStronglyIrreduciblePaper}; the equivalences are
-    \leanid{MPSTensor.primitivePaper_iff_stronglyIrreducible} and
-    \leanid{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}. See
-    \path{TNLean/Wielandt/Primitivity/Definitions.lean} and
-    \path{docs/glossary.md}.}
+An earlier formal predicate strengthened the source condition by also
+requiring irreducibility of the transfer map, so that the proved equivalence
+was a strengthened version of Proposition~3. That predicate has been removed
+(\path{docs/audits/2026-11-16_primitivity_one_definition.md}).
 
-The literal source criterion is stated directly by
-\leanid{MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint} and
-\leanid{MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
-in \path{TNLean/Wielandt/Primitivity/PeripheralCriterion.lean}.
-They require a positive-definite fixed matrix, that matrix spanning the fixed
-eigenspace, and the absence of any other peripheral eigenvalue. No separate
-irreducibility premise appears in their signatures.
+Proposition~3 is now the single theorem
+\leanid{MPSTensor.primitivity_tfae}
+in \path{TNLean/Wielandt/Primitivity/Equivalence.lean}, with the literal
+source criterion as its third clause.
+That clause requires a positive-definite fixed matrix, that matrix spanning
+the fixed eigenspace, and the absence of any other peripheral eigenvalue. No
+separate irreducibility premise appears in the signature; irreducibility is
+\leanid{MPSTensor.isIrreducibleMap_transferMap_of_isNormal}.
 
 The reverse implication uses QICLean's criterion for a channel with a faithful
 fixed point and a unique positive fixed direction: every positive fixed matrix

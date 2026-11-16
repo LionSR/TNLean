@@ -125,7 +125,7 @@ theorem exists_isPrimitiveMPS_gauge_of_isNormal [NeZero D] {A : MPSTensor d D}
       (∀ L N : ℕ, chainGroundSpace A L N = chainGroundSpace B L N) := by
   classical
   have hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isPrimitivePaper A (isPrimitivePaper_of_isNormal A hA)
+    isIrreducibleFamily_of_isNormal A hA
   obtain ⟨B, r, σ, _hσ, hr, _hBdef, hBnorm, hBgauge⟩ :=
     exists_tp_data_of_irreducible A hIrr (exists_apply_ne_zero_of_isNormal hA)
   set ζ : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ) with hζ_def
@@ -135,9 +135,7 @@ theorem exists_isPrimitiveMPS_gauge_of_isNormal [NeZero D] {A : MPSTensor d D}
   have hgauge : GaugeEquiv (ζ • A) B := hBgauge
   have hNormalScaled : Kraus.IsNormal (ζ • A) := (isNormal_smul_iff hζ A).2 hA
   have hNormalB : Kraus.IsNormal B := isNormal_of_gaugeEquiv hNormalScaled hgauge
-  obtain ⟨ρ, hPrim, hρ⟩ :=
-    isPrimitiveMPS_of_isStronglyIrreduciblePaper B hBnorm
-      (isNormal_implies_stronglyIrreducible B hBnorm hNormalB)
+  obtain ⟨ρ, hPrim, hρ⟩ := exists_isPrimitiveMPS_posDef_of_isNormal B hBnorm hNormalB
   have hGS : ∀ L : ℕ, groundSpace A L = groundSpace B L := by
     intro L
     rw [← groundSpace_smul_eq A ζ hζ L]

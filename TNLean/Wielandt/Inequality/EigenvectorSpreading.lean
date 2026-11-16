@@ -23,23 +23,23 @@ variable {d D : ℕ}
 
 /-- **Lemma 2(a)**.
 
-If `A` is normalized and primitive in the spreading sense, and `φ` is a nonzero
+If `A` is normalized and normal (a primitive channel, by Proposition 3 of the
+source, `primitivity_tfae`), and `φ` is a nonzero
 eigenvector of some `A i₀` with nonzero corresponding eigenvalue `μ`, then
 `Kraus.vectorSpreadSpan A φ (D - 1) = ⊤`.
 
 This is the fixed-length conclusion `H_{D-1}(A, φ) = ℂ^D`.
 Paper: arXiv:0909.5347, Lemma 2(a); Wolf, Chapter 6. -/
-theorem vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector [NeZero D]
+theorem vectorSpreadSpan_eq_top_of_isNormal_of_eigenvector [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : IsPrimitivePaper A)
+    (hN : Kraus.IsNormal A)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0)
     (i₀ : Fin d) (μ : ℂ) (hμ : μ ≠ 0)
     (heig : A i₀ *ᵥ φ = μ • φ) :
     Kraus.vectorSpreadSpan A φ (D - 1) = ⊤ := by
   have hFull : Kraus.HasEventuallyFullWordSpan A :=
-    (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP A hNorm).2
-      (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
+    (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP A hNorm).2 hN
   exact
     Kraus.vectorSpreadSpan_eq_top_of_hasEventuallyFullWordSpan_of_eigenvector
       A hFull φ hφ i₀ μ hμ heig

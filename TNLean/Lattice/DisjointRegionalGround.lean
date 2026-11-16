@@ -13,7 +13,7 @@ import QICLean.Analysis.EnergyTruncation
 import QICLean.Analysis.GroundEnergyBounds
 import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Circuit.EntropySupport
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 
 /-!
 # Common ground vectors on disjoint regions
