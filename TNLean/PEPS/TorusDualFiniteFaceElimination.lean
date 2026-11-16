@@ -67,7 +67,7 @@ private theorem exists_elimination_list (o : X) (S : Finset X) (ho : o ∉ S) :
   classical
   revert ho
   induction S using Finset.strongInductionOn with
-  | H S ih =>
+  | _ S ih =>
     intro ho
     by_cases hS : S.Nonempty
     · obtain ⟨v, hv, hmin⟩ := Finset.exists_min_image S (faceRank o) hS

@@ -43,9 +43,9 @@
     word reduces to the empty list exactly when it equals the identity.
     Induction on the remaining search depth $n$ proves the two assertions
     \begin{align}
-        \text{success at }l&\ \Longrightarrow\ C_R(l)=\mathrm{true},\\
+        \text{success at }l & \ \Longrightarrow\ C_R(l)=\mathrm{true}, \\
         \text{failure from prefix }u
-        &\ \Longrightarrow\
+                            & \ \Longrightarrow\
         C_R(u\,s)\ne\mathrm{true}\quad(|s|\le n).
         \label{eq:peps_dual_computed_face_search}
     \end{align}
@@ -65,9 +65,9 @@
     \begin{align}
         D_R(p,q)=
         \begin{cases}
-            [\,\Delta(p)=\Delta(q)\,],&R=X,\\
+            [\,\Delta(p)=\Delta(q)\,],                  & R=X,    \\
             [\,\operatorname{red}(\Sigma_{l_R}(W(p)))
-            =\operatorname{red}(\Sigma_{l_R}(W(q)))\,],&R\ne X.
+            =\operatorname{red}(\Sigma_{l_R}(W(q)))\,], & R\ne X.
         \end{cases}
         \label{eq:peps_dual_homotopy_decision}
     \end{align}
