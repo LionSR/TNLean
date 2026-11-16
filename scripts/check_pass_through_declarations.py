@@ -156,10 +156,14 @@ def header(block: str, start: int) -> tuple[list[str], set[str], str] | None:
             close = matching_close(block, index)
             if close is None:
                 return None
-            names = binder_names(block[index + 1 : close])
+            group = block[index + 1 : close]
+            names = binder_names(group)
             if names is None:
                 if character != "[":
                     return None
+                names = []
+            elif character == "[" and top_level_find(group, ":") is None:
+                # ``[NeZero d]`` binds no name: ``NeZero`` is a class, not a binder.
                 names = []
             bound.update(names)
             if character == "(":

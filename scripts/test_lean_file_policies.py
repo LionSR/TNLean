@@ -600,6 +600,13 @@ class PassThroughPolicyTests(unittest.TestCase):
         ):
             with self.subTest(declaration=declaration):
                 self.assertEqual(self.found(declaration + "\n"), [])
+        # An anonymous instance binder binds no name, so its class may be the namespace.
+        self.assertEqual(
+            self.found("theorem foo (d : ℕ) [NeZero d] : P d := NeZero.foo d\n"), ["foo"]
+        )
+        self.assertEqual(
+            self.found("theorem foo (d : ℕ) [NeZero : C d] : P d := NeZero.foo d\n"), []
+        )
         # Implicit and instance binders are not arguments; explicit ones may be split.
         self.assertEqual(
             self.found(
