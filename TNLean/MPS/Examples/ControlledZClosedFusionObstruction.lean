@@ -28,7 +28,6 @@ namespace ControlledZGauging
 private abbrev czGenerator : Multiplicative (ZMod 2 × ZMod 2) :=
   Multiplicative.ofAdd (0, 1)
 
-set_option backward.isDefEq.respectTransparency false in
 private theorem stacked_diagonal_ne :
     mulTensor (combinedFamily.tensor czGenerator) (combinedFamily.tensor czGenerator) 0 0 ≠
       mulTensor (combinedFamily.tensor czGenerator) (combinedFamily.tensor czGenerator) 1 1 := by
@@ -69,7 +68,6 @@ private theorem blockTensor_constant_diagonal {d D : ℕ} (M : MPOTensor d D)
   | zero => simp
   | succ L ih => simp only [List.replicate_succ, MPOTensor.evalWord_cons, ih, pow_succ']
 
-set_option backward.isDefEq.respectTransparency false in
 private theorem stacked_diagonal_idempotent (i : Fin 2) :
     IsIdempotentElem
       (mulTensor (combinedFamily.tensor czGenerator) (combinedFamily.tensor czGenerator) i i) := by
@@ -78,10 +76,13 @@ private theorem stacked_diagonal_idempotent (i : Fin 2) :
   let P : Matrix (Fin 4) (Fin 4) ℚ := combinedRationalProduct czGenerator czGenerator i i
   change complexOfRing (Rat.castHom ℂ) P * complexOfRing (Rat.castHom ℂ) P =
     complexOfRing (Rat.castHom ℂ) P
-  have hP : P * P = P := by fin_cases i <;> decide +kernel
+  have hP : P * P = P := by
+    -- Finite equality synthesis must unfold the pinned semireducible `ZMod 2`/`Fin 2`
+    -- identification in the dependent bond indices of `combinedRationalProduct`.
+    set_option backward.isDefEq.respectTransparency false in
+      fin_cases i <;> decide +kernel
   rw [← complexOfRing_mul, hP]
 
-set_option backward.isDefEq.respectTransparency false in
 /-- Positive physical blocking cannot make the combined family's fusion exactly closed.
 The distinct diagonal letters used in the obstruction are idempotent, so every positive
 power retains the same discrepancy. This rules out repairing the fixed family's closed

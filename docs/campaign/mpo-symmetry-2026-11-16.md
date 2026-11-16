@@ -390,3 +390,31 @@ statement, and both are direct dependencies of the cited Lean proof.
 Pinned formatting, role/prose/token/whitespace checks pass, and the actual
 relative-class/path print remains six XeTeX pages. No Lean source changed,
 so a local Lean rebuild is not claimed for this dependency-tag-only repair.
+
+### Transparency-scope and self-containment review follow-up
+
+Head `b5bd5471e0f02bf10d9eb9b799f3ef3703d19f32` passed complete PR CI
+`43810930137`: 32,405 Lean jobs, strict/style/timing checks, full Blueprint
+web checks and both PDF volumes. Blueprint review `5916039443` approved it.
+Proof review `5916053113` found no mathematical blocker but requested an
+explanation for the closed-fusion module's three transparency settings, and
+advised defining L-symbols in the paper-gap note. No merge occurred.
+
+A diagnostic elaboration with all three settings removed isolated the need
+to finite equality synthesis for the rational idempotency check. The repair
+removes the two unnecessary settings and moves the remaining setting into
+that finite proof alone, with an explanation of the pinned semireducible
+bit identification in its dependent bond indices. The mathematical
+hypotheses, conclusions and proof strategy are unchanged. All other uses
+in the campaign modules already have explicit rationales.
+
+The repaired source passes strict direct elaboration both against its branch
+dependencies and against the main `4150a33b` preview. The eleven-module
+focused build passes 19,109 jobs, and both public closed-fusion results have
+foundational dependencies contained in `{propext, Classical.choice, Quot.sound}`.
+Temporary diagnostic/audit sources were removed. The paper-gap note now
+defines L-symbols as the nonzero complex scalar comparing the two action
+boundary contractions on sufficiently long words. Prose, forbidden-token
+and whitespace checks pass. The new head still needs complete hosted CI
+and fresh formal proof/Blueprint approvals; earlier approvals do not
+certify this repair.
