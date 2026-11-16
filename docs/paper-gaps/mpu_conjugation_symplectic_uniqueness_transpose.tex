@@ -70,8 +70,13 @@ The Case~II uniqueness theorem
 relation $b^\dagger\otimes a^\dagger=S_r^\dagger\otimes S_\ell^\dagger$, and
 the matrix product unitary statement
 \leanid{MPOTensor.IsMPUCanonicalFormII.exists_symplectic_gauge_of_mpo_eq}
-states \eqref{eq:corrected}. The hypotheses are those of the source; only the
-transposes in the conclusion are replaced by adjoints.
+states \eqref{eq:corrected}. In the gate-level theorem only the transposes in
+the conclusion are replaced by adjoints. The matrix product unitary statement
+additionally carries the reduced-presentation restriction recorded in
+the note
+\url{https://sirui-lu.com/TNLean/paper-gaps/mpu_canonical_form_full_support.pdf}: both tensors are in canonical
+form~II with supplied source factors whose gate $u$ is unitary. It is
+therefore not the unrestricted source result.
 
 \bibliographystyle{alpha}
 \bibliography{references}
