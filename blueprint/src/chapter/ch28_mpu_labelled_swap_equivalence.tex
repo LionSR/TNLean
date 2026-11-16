@@ -68,6 +68,7 @@
         MPOTensor.strictlyEquivalentUnderSymmetry_blockedTransposeWithPhysicalMatrix_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_blockedConjugationWithPhysicalMatrix_iff}
     \leanok
+    % The cited example node also contains the generic finite-chain output formula.
     \uses{lem:mpu_blocked_physical_positive_action_identities,
         thm:mpu_symmetry_path_transport,
         thm:mpu_physical_left_action_blocking,
@@ -78,21 +79,21 @@
     Let $Q$ be a unitary involution, let $U,V$ have the same physical
     dimension and arbitrary virtual dimensions, and fix $k\geq0$.
     Left multiplication by $Q^{\otimes k}$ identifies the following
-    strict path comparisons, with positive blocked chain lengths:
+    strict path comparisons, with positive blocked chain lengths.
+    Write $\mathsf K$ for entrywise conjugation. If $Q^\dagger=Q$, then
     \[
         B_k(U)\sim_{\mathcal D_{Q,k}}B_k(V)
-        \ \Longleftrightarrow\ B_k(QU)\sim_\dagger B_k(QV)
-        \quad\text{if }Q^\dagger=Q,
+        \ \Longleftrightarrow\ B_k(QU)\sim_\dagger B_k(QV).
     \]
+    If $Q^{\mathsf T}=Q$, then
     \[
         B_k(U)\sim_{\mathcal T_{Q,k}}B_k(V)
-        \ \Longleftrightarrow\ B_k(QU)\sim_{\mathsf T}B_k(QV)
-        \quad\text{if }Q^{\mathsf T}=Q,
+        \ \Longleftrightarrow\ B_k(QU)\sim_{\mathsf T}B_k(QV).
     \]
+    If $\overline Q=Q$, then
     \[
-        B_k(U)\sim_*B_k(V)
-        \ \Longleftrightarrow\ B_k(QU)\sim_*B_k(QV)
-        \quad\text{if }\overline Q=Q.
+        B_k(U)\sim_{\mathsf K}B_k(V)
+        \ \Longleftrightarrow\ B_k(QU)\sim_{\mathsf K}B_k(QV).
     \]
     Here $\mathcal D_{Q,k}$ and $\mathcal T_{Q,k}$ denote the
     two blocked sandwich actions just defined, $B_k$ denotes canonical
@@ -180,6 +181,7 @@
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff}
     \leanok
+    % The cited example node also contains MPU preservation by any physical unitary.
     \uses{def:mpu_labelled_physical_matrix_equivalence,
         lem:mpu_blocked_physical_involution_paths,
         lem:mpu_physical_matrix_canonical_blocking,
@@ -189,18 +191,21 @@
         thm:threeMPU2_chain_formulas}
     Let $Q$ be a unitary involution on a fixed labelled physical space.
     For tensors $U,V$ with arbitrary virtual dimensions, output
-    multiplication identifies the stabilized comparisons
+    multiplication identifies the following stabilized comparisons.
+    If $Q^\dagger=Q$, then
     \[
-        U\simeq_{\dagger,Q}V\quad\Longleftrightarrow\quad
-        QU\simeq_{\dagger,I}QV\quad\text{if }Q^\dagger=Q,
+        U\sim^{Q}_{\dagger}V\quad\Longleftrightarrow\quad
+        QU\sim^{I}_{\dagger}QV.
     \]
+    If $Q^{\mathsf T}=Q$, then
     \[
-        U\simeq_{{\mathsf T},Q}V\quad\Longleftrightarrow\quad
-        QU\simeq_{{\mathsf T},I}QV\quad\text{if }Q^{\mathsf T}=Q,
+        U\sim^{Q}_{\mathsf T}V\quad\Longleftrightarrow\quad
+        QU\sim^{I}_{\mathsf T}QV.
     \]
+    If $\overline Q=Q$, then
     \[
-        U\simeq_{*,Q}V\quad\Longleftrightarrow\quad
-        QU\simeq_{*,I}QV\quad\text{if }\overline Q=Q.
+        U\sim_{\mathsf K}V\quad\Longleftrightarrow\quad
+        QU\sim_{\mathsf K}QV.
     \]
     The same common positive identity ancilla and positive blocking
     length witness each direction.
