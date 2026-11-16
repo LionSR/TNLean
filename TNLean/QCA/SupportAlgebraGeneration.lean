@@ -239,11 +239,7 @@ theorem quasiLocalStarAlgHom_ext_evenPair [NeZero d]
   have hlocal (A : AlgebraicLocalAlgebra d) :
       f (algebraicToQuasiLocal d A) = g (algebraicToQuasiLocal d A) :=
     hle (by rw [iSup_range_localObservable_evenPair]; exact StarSubalgebra.mem_top)
-  apply DFunLike.ext
-  intro X
-  induction X using UniformSpace.Completion.induction_on with
-  | hp => exact isClosed_eq hf hg
-  | ih A => exact hlocal A
+  exact DFunLike.coe_injective (UniformSpace.Completion.ext hf hg hlocal)
 
 /-- Commuting with the automorphic images of every even-pair algebra
 implies commutation with the full quasi-local algebra. This is the intermediate
@@ -276,16 +272,10 @@ theorem commute_of_forall_commute_image_evenPair [NeZero d]
     exact Set.isClosed_centralizer _
   have hcont : Continuous (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) :=
     (NonUnitalStarAlgHom.isometry ω.toStarAlgHom ω.injective).continuous
-  have hsub : Set.range (algebraicToQuasiLocal d) ⊆
-      (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) ⁻¹' (C : Set (QuasiLocalAlgebra d)) := by
-    rintro _ ⟨A, rfl⟩
-    exact hlocal A
-  have huniv : (Set.univ : Set (QuasiLocalAlgebra d)) ⊆
-      (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) ⁻¹' (C : Set (QuasiLocalAlgebra d)) := by
-    rw [← (denseRange_algebraicToQuasiLocal d).closure_range]
-    exact closure_minimal hsub (hclosedC.preimage hcont)
   have ha : a ∈ C := by
-    simpa using huniv (Set.mem_univ (ω.symm a))
+    simpa only [StarAlgEquiv.apply_symm_apply] using
+      (denseRange_algebraicToQuasiLocal d).induction_on (ω.symm a)
+        (hclosedC.preimage hcont) hlocal
   exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp ha z rfl).1
 
 /-! ### The quasi-local join of the site-indexed support algebras -/
@@ -441,20 +431,12 @@ theorem supportAlgebraJoin_topologicalClosure_eq_top
       ((ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) ⁻¹'
         closure ((supportAlgebraJoin hω : Set (QuasiLocalAlgebra d)))) :=
     isClosed_closure.preimage hcont
-  have hsub : Set.range (algebraicToQuasiLocal d) ⊆
-      (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) ⁻¹'
-        closure ((supportAlgebraJoin hω : Set (QuasiLocalAlgebra d))) := by
-    rintro _ ⟨A, rfl⟩
-    exact subset_closure (algebraicToQuasiLocal_mem_supportAlgebraJoin hω A)
-  have huniv : (Set.univ : Set (QuasiLocalAlgebra d)) ⊆
-      (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) ⁻¹'
-        closure ((supportAlgebraJoin hω : Set (QuasiLocalAlgebra d))) := by
-    rw [← (denseRange_algebraicToQuasiLocal d).closure_range]
-    exact closure_minimal hsub hclosed
   refine SetLike.coe_injective ?_
   rw [StarSubalgebra.topologicalClosure_coe, StarSubalgebra.coe_top]
   refine Set.eq_univ_of_univ_subset fun z _ ↦ ?_
-  simpa using huniv (Set.mem_univ (ω.symm z))
+  simpa only [StarAlgEquiv.apply_symm_apply] using
+    (denseRange_algebraicToQuasiLocal d).induction_on (ω.symm z) hclosed
+      (fun A => subset_closure (algebraicToQuasiLocal_mem_supportAlgebraJoin hω A))
 
 /-- Commutant corollary: an observable commuting with every site-indexed support algebra commutes
 with the whole quasi-local algebra.

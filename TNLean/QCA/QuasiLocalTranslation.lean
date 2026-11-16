@@ -102,17 +102,13 @@ arXiv:1703.09188, Appendix, line 2298; they are not stated separately there. -/
 @[simp]
 lemma quasiLocalTranslation_zero (d : ℕ) [NeZero d] :
     quasiLocalTranslation d 0 = StarAlgEquiv.refl ℂ (QuasiLocalAlgebra d) := by
-  apply StarAlgEquiv.ext
+  apply DFunLike.coe_injective
+  refine UniformSpace.Completion.ext
+    (StarAlgEquiv.isometry _).continuous (StarAlgEquiv.isometry _).continuous ?_
   intro A
-  induction A using UniformSpace.Completion.induction_on with
-  | hp =>
-      change IsClosed {A : QuasiLocalAlgebra d |
-        UniformSpace.Completion.map (algebraicLocalTranslation d 0) A = A}
-      exact isClosed_eq UniformSpace.Completion.continuous_map continuous_id
-  | ih A =>
-      change quasiLocalTranslation d 0 (algebraicToQuasiLocal d A) =
-        algebraicToQuasiLocal d A
-      simp
+  change quasiLocalTranslation d 0 (algebraicToQuasiLocal d A) =
+    algebraicToQuasiLocal d A
+  simp
 
 /-- Successive quasi-local translations compose by adding their displacements.
 
@@ -121,24 +117,15 @@ arXiv:1703.09188, Appendix, line 2298; they are not stated separately there. -/
 lemma quasiLocalTranslation_add (d : ℕ) [NeZero d] (a b : ℤ) :
     (quasiLocalTranslation d a).trans (quasiLocalTranslation d b) =
       quasiLocalTranslation d (a + b) := by
-  apply StarAlgEquiv.ext
+  apply DFunLike.coe_injective
+  refine UniformSpace.Completion.ext
+    (StarAlgEquiv.isometry _).continuous (StarAlgEquiv.isometry _).continuous ?_
   intro A
-  induction A using UniformSpace.Completion.induction_on with
-  | hp =>
-      change IsClosed {A : QuasiLocalAlgebra d |
-        UniformSpace.Completion.map (algebraicLocalTranslation d b)
-            (UniformSpace.Completion.map (algebraicLocalTranslation d a) A) =
-          UniformSpace.Completion.map (algebraicLocalTranslation d (a + b)) A}
-      exact isClosed_eq
-        (UniformSpace.Completion.continuous_map.comp
-          UniformSpace.Completion.continuous_map)
-        UniformSpace.Completion.continuous_map
-  | ih A =>
-      change quasiLocalTranslation d b
-          (quasiLocalTranslation d a (algebraicToQuasiLocal d A)) =
-        quasiLocalTranslation d (a + b) (algebraicToQuasiLocal d A)
-      simp only [quasiLocalTranslation_algebraicToQuasiLocal]
-      rw [← StarAlgEquiv.trans_apply, algebraicLocalTranslation_add]
+  change quasiLocalTranslation d b
+      (quasiLocalTranslation d a (algebraicToQuasiLocal d A)) =
+    quasiLocalTranslation d (a + b) (algebraicToQuasiLocal d A)
+  simp only [quasiLocalTranslation_algebraicToQuasiLocal]
+  rw [← StarAlgEquiv.trans_apply, algebraicLocalTranslation_add]
 
 /-- The inverse of quasi-local translation by `a` is translation by `-a`.
 

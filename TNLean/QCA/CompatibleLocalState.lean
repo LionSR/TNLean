@@ -154,14 +154,13 @@ theorem quasiLocalFunctional_unique [NeZero d]
     (hω : ∀ (Λ : Finset ℤ) (X : LocalAlgebra d Λ),
       ω (quasiLocalObservable d Λ X) = f.functional Λ X) :
     ω = f.quasiLocalFunctional := by
-  apply ContinuousLinearMap.ext
-  intro X
-  refine UniformSpace.Completion.induction_on X ?_ ?_
-  · exact isClosed_eq ω.continuous f.quasiLocalFunctional.continuous
-  · intro a
-    induction a using DirectLimit.induction with
-    | _ Λ a =>
-      exact (hω Λ a).trans (f.quasiLocalFunctional_quasiLocalObservable Λ a).symm
+  apply Eq.symm
+  apply ContinuousLinearMap.fromCompletion_unique
+  intro a
+  induction a using DirectLimit.induction with
+  | _ Λ a =>
+      change f.functional Λ a = ω (quasiLocalObservable d Λ a)
+      exact (hω Λ a).symm
 
 /-- There is a unique normalized positive norm-one continuous linear extension
 of the compatible finite-region functionals.
