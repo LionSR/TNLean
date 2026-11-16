@@ -25,19 +25,12 @@ docs/paper-gaps/scp10_dual_face_generator_elimination.tex.
 noncomputable section
 namespace TNLean.PEPS
 
-variable {width height : ℕ} [NeZero width] [NeZero height]
+variable {width height : ℕ}
 local notation "X" => TorusVertex width height
 local notation "FG" => FreeGroup (X ⊕ X)
 
 private def eastLetter (v : X) : FG := FreeGroup.of (Sum.inl v)
 private def northLetter (v : X) : FG := FreeGroup.of (Sum.inr v)
-
-private theorem faceWord_eq (v : X) :
-    torusDualFaceWord v =
-      northLetter (v.1 + 1, v.2) * eastLetter v *
-        (northLetter v)⁻¹ * (eastLetter (v.1, v.2 + 1))⁻¹ := by
-  simp [torusDualFaceWord, torusDualPathWord, torusDualEastNorth,
-    torusDualNorthEast, torusDualStepWord, eastLetter, northLetter, mul_assoc]
 
 private def westReplacement (v : X) : FG :=
   (eastLetter (v.1, v.2 + 1))⁻¹ * northLetter (v.1 + 1, v.2) * eastLetter v
@@ -55,12 +48,30 @@ by the other three sides. All other native generators remain fixed. -/
 def torusDualSouthFaceElimination (v : X) : FG →* FG :=
   FreeGroup.lift fun a => if a = Sum.inl v then southReplacement v else FreeGroup.of a
 
+/-- Compose a finite list of native face substitutions. A true tag selects
+the west edge and a false tag the south edge; the tail acts after the head. -/
+def torusDualFaceEliminationSequence : List (X × Bool) → (FG →* FG)
+  | [] => MonoidHom.id _
+  | (v, b) :: l => (torusDualFaceEliminationSequence l).comp
+      (if b then torusDualWestFaceElimination v else torusDualSouthFaceElimination v)
+
+variable [NeZero width] [NeZero height]
+
+private theorem faceWord_eq (v : X) :
+    torusDualFaceWord v =
+      northLetter (v.1 + 1, v.2) * eastLetter v *
+        (northLetter v)⁻¹ * (eastLetter (v.1, v.2 + 1))⁻¹ := by
+  simp [torusDualFaceWord, torusDualPathWord, torusDualEastNorth,
+    torusDualNorthEast, torusDualStepWord, eastLetter, northLetter, mul_assoc]
+
+omit [NeZero width] [NeZero height] in
 private theorem right_ne [Fact (1 < width)] (v : X) : (v.1 + 1, v.2) ≠ v := by
   intro h
   have h1 : (1 : ZMod width) = 0 := by
     simpa only [add_eq_left] using congrArg Prod.fst h
   exact one_ne_zero h1
 
+omit [NeZero width] [NeZero height] in
 private theorem up_ne [Fact (1 < height)] (v : X) : (v.1, v.2 + 1) ≠ v := by
   intro h
   have h1 : (1 : ZMod height) = 0 := by
@@ -155,13 +166,6 @@ theorem torusDualSouthFaceElimination_preserves_flatRepresentation
     simpa only [MonoidHom.comp_apply, torusDualSouthFaceElimination,
       FreeGroup.lift_apply_of, ite_true, eastLetter] using hp
   · simp [MonoidHom.comp_apply, torusDualSouthFaceElimination, ha]
-
-/-- Compose a finite list of native face substitutions. A true tag selects
-the west edge and a false tag the south edge; the tail acts after the head. -/
-def torusDualFaceEliminationSequence : List (X × Bool) → (FG →* FG)
-  | [] => MonoidHom.id _
-  | (v, b) :: l => (torusDualFaceEliminationSequence l).comp
-      (if b then torusDualWestFaceElimination v else torusDualSouthFaceElimination v)
 
 /-- Any finite composition of selected face substitutions preserves every
 representation flat on those original native faces. No order is assumed. -/
