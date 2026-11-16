@@ -114,6 +114,7 @@ abstracted — record why, so it is not re-proposed).
   U N).symm`, now used at all four sites.
 - **Decision:** a term-mode composition of an existing lemma is the weakest mechanism; no new
   lemma or tactic.
+- **Net line delta:** −8 Lean lines (four 5-line blocks → 3-line terms; #10700).
 
 ### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
 
