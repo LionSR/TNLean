@@ -127,9 +127,7 @@
 
 \begin{proof}\leanok
     \uses{lem:mpu_ancilla_output_action,
-        thm:mpu_symmetry_path_transport, thm:mpu_physical_left_action_blocking,
-        thm:mpu_pointwise_symmetry_invariance_comparison,
-        thm:mpu_involution_combined_fixed_equation}
+        lem:mpu_blocked_physical_involution_paths}
     The matrices $B=B_{x,k}$ and $C=C_{x,k,N}$ are real, symmetric,
     self-adjoint involutions. Therefore, on every enlarged operator,
     \begin{align}
@@ -137,12 +135,12 @@
         CX^{\mathsf T}C=X & \iff(CX)^{\mathsf T}=CX, \\
         \overline X=X     & \iff\overline{CX}=CX.
     \end{align}
-    The continuous involution $\mathcal W\mapsto B\mathcal W$ thus
-    transports the full symmetry-preserving path in either direction.
-    It preserves canonical endpoints, commutes with adjoining unused
-    virtual directions, and changes the stabilized endpoints as in
-    (\ref{eq:mpu_ancilla_output_action}) and
-    Lemma~\ref{thm:mpu_physical_left_action_blocking}.
+    Apply Lemma~\ref{lem:mpu_blocked_physical_involution_paths} with
+    $Q=\mathbb S\otimes I_x$. Its continuous involution
+    $\mathcal W\mapsto B\mathcal W$ transports the full path in either
+    direction, preserves canonical endpoints and commutes with adjoining
+    unused virtual directions. Equation~\ref{eq:mpu_ancilla_output_action}
+    identifies the transformed stabilized endpoints.
 \end{proof}
 
 \begin{lemma}[Swap comparison with arbitrary common positive stabilization]
