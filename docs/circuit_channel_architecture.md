@@ -120,8 +120,9 @@ source probe is diagnostic assistance, not a substitute for individual module ch
 
 ## Migration policy
 
-`TNLean/Circuit` is being split into a locality layer and a circuit layer,
-redesigned around one circuit definition, and moved to QICLean. The plan, the
-order of the steps and the rules for new modules in the meantime are in
-[`circuit_library_redesign.md`](circuit_library_redesign.md), which replaces
-the earlier policy of keeping reviewed module paths in place.
+`TNLean/Circuit` and `TNLean/Lattice` are being split along the layers of
+[`many_body_circuit_architecture.md`](many_body_circuit_architecture.md),
+redesigned around one circuit definition, and moved to QICLean. That document
+gives the layers, the order of the steps and the rules for new modules in the
+meantime, and replaces the earlier policy of keeping reviewed module paths in
+place.

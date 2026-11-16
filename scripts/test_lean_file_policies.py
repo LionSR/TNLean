@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unit tests for Lean module naming and file-size policy checkers."""
+"""Unit tests for Lean module naming, file-size and import-layer policy checkers."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import unittest
 from collections.abc import Callable
 from pathlib import Path
 
+import check_import_layers as layers
 import check_numbered_lean_files as numbered
 import check_oversized_lean_files as oversized
 
@@ -267,6 +268,49 @@ class OversizedLeanFilePolicyTests(CapturedCheck):
         )
         self.assertEqual(status, 1)
         self.assertIn("unterminated block comment", output)
+
+
+class ImportLayerPolicyTests(unittest.TestCase):
+    def test_layers_are_assigned_from_the_bottom_up(self) -> None:
+        self.assertEqual(layers.layer_of("TNLean.Algebra.FinKronecker"), "algebra")
+        self.assertEqual(layers.layer_of("TNLean.Circuit.SiteEmbedding"), "sites")
+        self.assertEqual(layers.layer_of("TNLean.Circuit.SiteEmbeddingNorm"), "sites")
+        self.assertEqual(layers.layer_of("TNLean.Circuit.LiebRobinson.Volterra"), "dynamics")
+        self.assertEqual(layers.layer_of("TNLean.Circuit.LocalCircuit"), "circuit")
+        self.assertEqual(layers.layer_of("TNLean.Lattice.PartyCircuit.PartyWord"), "party")
+        self.assertEqual(layers.layer_of("TNLean.Lattice.LocalHamiltonian"), "hamiltonian")
+        self.assertIsNone(layers.layer_of("TNLean.MPS.Defs"))
+
+    def test_upward_and_sideways_imports_are_violations(self) -> None:
+        sources = {
+            "TNLean.Algebra.A": "import TNLean.Circuit.SiteEmbedding\ntheorem a : True := trivial\n",
+            "TNLean.Circuit.SiteEmbedding": "import TNLean.Algebra.A\ndef e := 0\n",
+            "TNLean.Circuit.LocalCircuit": (
+                "import TNLean.Circuit.SiteEmbedding\nimport TNLean.Lattice.LocalHamiltonian\n"
+                "def c := 0\n"
+            ),
+            "TNLean.Lattice.LocalHamiltonian": "import TNLean.MPS.Defs\ndef h := 0\n",
+            "TNLean.MPS.Defs": "import TNLean.Lattice.LocalHamiltonian\ndef t := 0\n",
+        }
+        self.assertEqual(
+            layers.violations(sources),
+            {
+                "TNLean.Algebra.A -> TNLean.Circuit.SiteEmbedding",
+                "TNLean.Circuit.LocalCircuit -> TNLean.Lattice.LocalHamiltonian",
+                "TNLean.Lattice.LocalHamiltonian -> TNLean.MPS.Defs",
+            },
+        )
+
+    def test_import_only_aggregators_are_exempt(self) -> None:
+        sources = {
+            "TNLean.Lattice": "/- generated -/\nimport TNLean.Lattice.PartyCircuit\n",
+            "TNLean.Lattice.PartyCircuit": "import TNLean.Lattice.PartyCircuit.PartyWord\n",
+        }
+        self.assertEqual(layers.violations(sources), set())
+
+    def test_recorded_debt_matches_the_tree(self) -> None:
+        root = Path(__file__).resolve().parent.parent
+        self.assertEqual(layers.violations(layers.tracked_sources(root)), set(layers.DEBT))
 
 
 if __name__ == "__main__":

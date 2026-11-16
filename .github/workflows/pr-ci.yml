@@ -19,6 +19,7 @@ on:
       - 'texra-blueprint.toml'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_import_layers.py'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
@@ -125,6 +126,7 @@ on:
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_import_layers.py'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
       - 'scripts/lean_import_syntax.py'
@@ -282,6 +284,7 @@ jobs:
               - 'scripts/export_coherent_tn_prerequisites.py'
               - 'scripts/test_export_coherent_tn_prerequisites.py'
             module_policy:
+              - 'scripts/check_import_layers.py'
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
               - 'scripts/lean_import_syntax.py'
@@ -831,6 +834,11 @@ jobs:
           PYTHONPATH=scripts python3 scripts/check_oversized_lean_files.py
           --root .
           --import-only-aggregator TNLean.lean
+
+      # Imports between the layers below the tensor-network directories must
+      # point downward; see docs/many_body_circuit_architecture.md.
+      - name: Check import layers
+        run: python3 scripts/check_import_layers.py --root .
 
       - name: Fetch pull-request base for the debt ratchet
         if: github.event_name == 'pull_request'
