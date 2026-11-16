@@ -212,9 +212,9 @@ For the MPU index of arXiv:1703.09188:
   Entries whose source-labelled counterparts are proved under the canonical
   convention above (the Index Theorem, source-rank constancy, the local
   time-reversal and transposition criteria, and the time-reversal sign
-  results) are superseded and deleted; the conjugation, blocking-parity,
-  equivalence-necessity, MPS-class, continuous-standard-form, and example
-  entries remain restricted.
+  results) are superseded and deleted, as is the continuous-standard-form entry,
+  superseded by Corollary `coruvSF`; the conjugation, blocking-parity,
+  equivalence-necessity, MPS-class, and example entries remain restricted.
 - `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
   to the unblocked all-length converse printed in the Fundamental Theorem of
   MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
