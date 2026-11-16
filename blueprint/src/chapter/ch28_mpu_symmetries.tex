@@ -2772,8 +2772,7 @@
 
 \begin{lemma}[The twisted trace of a rank-one double layer]
     \label{lem:mpu_twisted_trace_rank_one}
-    \lean{MPOTensor.sum_trace_mul_map_star_mul_eq,
-        MPOTensor.timeReversalPeriodicTrace_eq_sum}
+    \lean{MPOTensor.sum_trace_mul_map_star_mul_eq}
     \leanok
     Let $\mathcal W$ have $d$ physical values and normalized double-layer
     transfer matrix $|\rho)(\Id|$. Then for all matrices $M,M'$,
@@ -2781,9 +2780,6 @@
         \sum_{a,b}\tr\bigl(M\,\overline{\mathcal W^{ab}}\,M'\,\mathcal W^{ab}\bigr)
          & =d\,\tr\bigl(M^TM'\rho\bigr).
     \end{align}
-    Moreover the trace $\tr(\mathbb S\,U^{(2)})$ of the length-two MPU with
-    its two sites exchanged is
-    $\sum_{a,b}\tr(\mathcal W^{ba}\mathcal W^{ab})$.
 \end{lemma}
 
 \begin{proof}
@@ -2791,7 +2787,7 @@
     The entries of the double layer give
     $\sum_{a,b}\overline{\mathcal W^{ab}_{pq}}\mathcal W^{ab}_{\beta\alpha}
         =d\,\rho_{\beta p}\delta_{\alpha q}$; expanding the trace and summing
-    gives the first identity. The second is the definition of the exchange.
+    gives the identity.
 \end{proof}
 
 \begin{lemma}[Time-reversal class and the MPS sign]

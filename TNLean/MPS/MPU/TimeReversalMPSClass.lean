@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.ConjugationMPSClass
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
-import TNLean.MPS.MPU.TimeReversalSignIntrinsic
+import TNLean.MPS.MPU.TimeReversalTwistedTransfer
 import TNLean.MPS.MPU.TwoSiteStandardFormSourceCuts
 import TNLean.MPS.Symmetry.TimeReversalIndex
 
@@ -202,21 +202,6 @@ theorem sum_trace_mul_map_star_mul_eq [NeZero d] {K : MPOTensor d D}
         refine Finset.sum_congr rfl fun β _ => Finset.sum_congr rfl fun α _ => ?_
         ring
 
-/-- The intrinsic time-reversal trace as a sum over the two physical indices:
-`tr(𝕊 U⁽²⁾) = ∑_{a,b} tr(W^{ba} W^{ab})`. Source: arXiv:1703.09188,
-`eq:sigma-from-trace`, lines 1595--1610. -/
-theorem timeReversalPeriodicTrace_eq_sum (W : MPOTensor d D) :
-    timeReversalPeriodicTrace W =
-      ∑ a : Fin d, ∑ b : Fin d, Matrix.trace (W b a * W a b) := by
-  classical
-  simp only [timeReversalPeriodicTrace, Matrix.trace, Matrix.diag, Matrix.mul_apply,
-    Matrix.reindex_apply, Matrix.submatrix_apply, Fintype.sum_prod_type,
-    Matrix.swapMatrix_apply, ite_mul, one_mul, zero_mul, ite_and]
-  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
-  simp only [Finset.sum_ite_eq, Finset.mem_univ, ite_true]
-  simp [mpo_apply, mpoMatrixEntry, finTwoArrowEquiv, List.ofFn_succ, Matrix.trace,
-    Matrix.mul_apply]
-
 /-- **The MPS sign of a time-reversal-invariant MPU is `σ⁽²⁾`.** Let `𝒱` be a
 simple tensor in canonical form II whose standard form `𝒲 = 𝒱₂` generates an
 MPU fixed by the adjoint at every even length of the two-spin chain. Let `G` be
@@ -316,9 +301,10 @@ theorem IsMPUCanonicalFormII.mps_timeReversal_sign_eq
   -- The trace.
   have hT : intrinsicTimeReversalSign W₂ = Matrix.trace (Gm * Gm.map (starRingEnd ℂ) * hW.ρ) := by
     rw [intrinsicTimeReversalSign, timeReversalPeriodicTrace_eq_sum]
-    have hsum : ∑ a, ∑ b, Matrix.trace (W₂ b a * W₂ a b) =
+    have hsum : ∑ i, ∑ j, Matrix.trace (W₂ i j * W₂ j i) =
         ∑ a, ∑ b, Matrix.trace (Gmᵀ * (W₂ a b).map (starRingEnd ℂ) *
           Gm.map (starRingEnd ℂ) * W₂ a b) := by
+      rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
       rw [hinv a b]
       simp
