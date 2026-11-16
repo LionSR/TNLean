@@ -40,6 +40,7 @@ import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConjClassesConjugation
 import TNLean.Algebra.ConjugateProjectiveRepresentation
 import TNLean.Algebra.ConjugateRegularRepresentation
+import TNLean.Algebra.ConjugationGateGauge
 import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
@@ -60,6 +61,7 @@ import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Algebra.ExpectationOverlap
 import TNLean.Algebra.ExplicitThresholds
 import TNLean.Algebra.ExponentialSumWindow
+import TNLean.Algebra.FinCastAddNatAdd
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct
@@ -84,6 +86,7 @@ import TNLean.Algebra.FunctionalWordComparison
 import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
+import TNLean.Algebra.GeneralLinearJoined
 import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
@@ -106,6 +109,8 @@ import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.KroneckerLeastEigenvalue
+import TNLean.Algebra.KroneckerLocalSection
+import TNLean.Algebra.KroneckerPathLifting
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolActionMatrix
 import TNLean.Algebra.LSymbolBlockIndependence
@@ -118,6 +123,7 @@ import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixEntrywiseDeriv
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
@@ -128,6 +134,7 @@ import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixRankOfFactor
+import TNLean.Algebra.MatrixRealignment
 import TNLean.Algebra.MatrixReindexGap
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
@@ -145,6 +152,7 @@ import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatPolynomialBound
 import TNLean.Algebra.NatSquarePlusOne
+import TNLean.Algebra.NearestKronecker
 import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
@@ -153,6 +161,7 @@ import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
 import TNLean.Algebra.OrthogonalComplexStructure
 import TNLean.Algebra.OrthogonalComplexStructureBasis
+import TNLean.Algebra.OrthogonalGroupJoined
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSkewNormalForm
@@ -247,6 +256,7 @@ import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitPhaseScalar
 import TNLean.Algebra.UnitaryAdjointKronecker
+import TNLean.Algebra.UnitaryBetweenCompact
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryConjugationTransposeSign
@@ -254,6 +264,7 @@ import TNLean.Algebra.UnitaryContraction
 import TNLean.Algebra.UnitaryEntrywiseConjugation
 import TNLean.Algebra.UnitaryFactorizationComparison
 import TNLean.Algebra.UnitaryGeneralLinearInverse
+import TNLean.Algebra.UnitaryGroupJoined
 import TNLean.Algebra.UnitaryKronecker
 import TNLean.Algebra.UnitaryKroneckerComparison
 import TNLean.Algebra.UnitaryMulVecInner

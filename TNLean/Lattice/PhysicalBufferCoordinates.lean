@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SitewiseTensorSupport
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 import QICLean.Entropy.FiniteProductSplitting
 import QICLean.Entropy.PhysicalBufferOverlap
 

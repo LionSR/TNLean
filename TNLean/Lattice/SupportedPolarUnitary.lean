@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.PolarUnitaryCorrectionKronecker
 import QICLean.Algebra.MatrixReindexUnitary
 import TNLean.Algebra.MatrixKroneckerContraction
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 
 /-!
 # A supported unitary polar correction

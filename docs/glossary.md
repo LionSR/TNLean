@@ -66,6 +66,51 @@ is deliberately source-faithful.
   forward comparison given a virtual conjugation, not a converse asserting
   equality of the original periodic operators at every length.
 
+## Symmetry-preserving matrix product unitary equivalence
+
+### `MPOTensor.EquivalentUnderPhysicalMatrixSymmetry`
+
+- **Declaration:** `EquivalentUnderPhysicalMatrixSymmetry kind Q U V`, where
+  `U` and `V` have one fixed labelled physical space and independent virtual
+  dimensions, and `kind` is adjunction, transposition or conjugation.
+- **Defined in:** `TNLean/MPS/MPU/PhysicalMatrixEquivalence.lean`.
+- **Meaning:** the original tensors are MPUs, and some common positive
+  identity ancilla and common positive canonical blocking give the existing
+  strict symmetry-preserving path relation. The physical matrix is retained
+  as $Q\otimes I_x$ when an ancilla is added. Endpoint canonical form and a
+  common padded virtual dimension come from `StrictlyEquivalentUnderSymmetry`;
+  intermediate paths range over the full enlarged physical space.
+- **Source:** the fixed-labelled-space reading of arXiv:1703.09188,
+  `SSymmetries` (lines 1301--1322), `def:equivalent-symmetry` (1356--1366),
+  and the labelled ancillary-spin construction (2210--2234), in
+  `Papers/1703.09188/paper_v2.tex`.
+- **Sanctioned bridges:** for a unitary involution $Q$, the three declarations
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_dagger_iff`,
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff`, and
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff` identify the
+  retained-matrix comparison of $U,V$ with the comparison of $QU,QV$ under
+  retained matrix $I$ in the same labelled relation,
+  under $Q^\dagger=Q$, $Q^{\mathsf T}=Q$, and $\overline Q=Q$, respectively.
+  Both directions use the same ancilla and blocking witnesses. The generic
+  blocked-action identities include blocking length zero; the stabilized
+  relation itself requires positive blocking.
+- **Source-example specialization:**
+  `MPOTensor.labelledShiftExamples_swap_dagger_iff`,
+  `MPOTensor.labelledShiftExamples_swap_transpose_iff`, and
+  `MPOTensor.labelledShiftExamples_swap_conjugation_iff` cover every ordered pair of
+  the three source examples and their source-defined output transforms.
+  The one-sided transformation follows the documented correction in
+  `docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`.
+- **Caveat:** this is not interchangeable with `EquivalentUnderSymmetry`.
+  The latter uses a coherent dimension-indexed symmetry family and coprime
+  ancilla sizes; the labelled relation retains $Q$ and permits arbitrary
+  common positive ancillas. No equivalence theorem between those predicates
+  is asserted. The global-family obstruction concerns that API, not a
+  counterexample to the labelled-spin source statement. General commensurate-
+  dimension integration remains open under #6017 and
+  `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`; no phase classification
+  is claimed.
+
 ## Normality
 
 ### `Kraus.IsNormal`
@@ -80,9 +125,9 @@ is deliberately source-faithful.
   Cirac--Pérez-García--Schuch--Verstraete, arXiv:2011.12127,
   `Papers/2011.12127/TN-Review-main.tex:1815-1830`.
 - **Sanctioned bridges:**
-  `MPSTensor.hasEventuallyFullKrausRank_iff_isNormal`,
-  `Kraus.IsInjective.isNormal`, and
-  `MPSTensor.IsNormalTensor.isNormal`.
+  `Kraus.IsInjective.isNormal` and
+  `MPSTensor.IsNormalTensor.isNormal`. This is the "eventually full Kraus
+  rank" of arXiv:0909.5347, clause (b) of `MPSTensor.primitivity_tfae`.
 - **Caveat:** `MPSTensor.IsNormalTensor.isNormal` derives nonzero bond dimension
   from the spectral-radius-one clause; it requires no external positivity
   assumption. There is no equivalence theorem between `Kraus.IsNormal` and
@@ -201,20 +246,29 @@ is deliberately source-faithful.
 
 ## Primitivity
 
-The unqualified canonical predicate is the generic transfer-map predicate
-`_root_.IsPrimitive`. The MPS predicates below retain distinct source or proof
-normalizations.
+Three notions are in use, each with one definition: the peripheral-spectrum
+predicate `_root_.IsPrimitive`, the algebraic span condition `Kraus.IsNormal`
+(see "Normality" above), and the complementary fixed-point gap
+`Kraus.HasComplementaryFixedPointGap`. The three properties of
+arXiv:0909.5347 (primitivity, eventually full Kraus rank, strong
+irreducibility) have no predicates of their own; Proposition 3 of that paper
+is the single theorem `MPSTensor.primitivity_tfae`, with each clause written
+out.
 
 ### `_root_.IsPrimitive`
 
 - **Declaration:**
   `_root_.IsPrimitive (E : V →ₗ[ℂ] V) : Prop`.
 - **Defined in:** `QICLean/Channel/Peripheral/Spectrum.lean`.
-- **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`.
+- **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`. For an
+  MPS tensor it is applied to the transfer map, as
+  `IsPrimitive (Kraus.transferMap A)`.
 - **Source:** Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3,
   Theorem 6.7; compare arXiv:2011.12127 §IV.
 - **Sanctioned bridges:** `_root_.isPrimitive_iff` and
-  `_root_.isPrimitive_iff_period_one`.
+  `_root_.isPrimitive_iff_period_one`;
+  `MPSTensor.isPrimitive_transferMap_of_isNormal` for a normal left-canonical
+  tensor.
 - **Caveat:** `_root_.isPrimitive_iff_period_one` requires a specified nonzero
   fixed point and finiteness of `peripheralEigenvalues E`; it is not an
   unconditional period-one characterization of an arbitrary linear map. By
@@ -222,113 +276,58 @@ normalizations.
   positive-definite fixed point, trace preservation, or spectral radius one.
   Those facts must be supplied separately where required.
 
-### `MPSTensor.IsPeripherallyPrimitive`
-
-- **Declaration:**
-  `MPSTensor.IsPeripherallyPrimitive (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** a reducible MPS terminology alias for
-  `_root_.IsPrimitive (Kraus.transferMap A)`.
-- **Source:** Wolf §6.3, Theorem 6.7, and arXiv:0909.5347 Proposition 3(c).
-- **Sanctioned bridge:**
-  `MPSTensor.isPeripherallyPrimitive_of_isPrimitivePaper`.
-- **Caveat:** the last bridge requires `[NeZero D]` and the left-canonical
-  normalization `∑ i, (A i)ᴴ * A i = 1`.
-
-### `MPSTensor.IsPrimitivePaper`
-
-- **Declaration:**
-  `MPSTensor.IsPrimitivePaper (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** the uniform spreading condition from Proposition 3(a): at one
-  positive length `q`, all nonzero virtual vectors are spread by length-`q`
-  Kraus words to the whole virtual space.
-- **Source:** Sanz--Pérez-García--Wolf--Cirac, arXiv:0909.5347,
-  Proposition 3(a), `Papers/0909.5347/main.tex:403-409` and `:501-509`;
-  Wolf Chapter 6, Theorem 6.8.
-- **Sanctioned bridges:**
-  `MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank`, which is also
-  the Kraus-span form of Wolf Theorem 6.8, and
-  `MPSTensor.primitivePaper_iff_stronglyIrreducible`.
-- **Caveat:** each stated equivalence requires `[NeZero D]` and the explicit
-  left-canonical normalization `∑ i, (A i)ᴴ * A i = 1`. The unconditional
-  directions `MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank` and
-  `MPSTensor.isPrimitivePaper_of_isNormal` do not remove those hypotheses from
-  the converse direction.
-
-### `MPSTensor.HasEventuallyFullKrausRank`
-
-- **Declaration:**
-  `MPSTensor.HasEventuallyFullKrausRank (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** some positive-length Kraus-word space is the full matrix algebra.
-- **Source:** arXiv:0909.5347, definition after equation (1),
-  `Papers/0909.5347/main.tex:413-419`.
-- **Sanctioned bridge:**
-  `MPSTensor.hasEventuallyFullKrausRank_iff_isNormal` is unconditional.
-  Its Proposition 3 equivalences are the normalization-conditional declarations
-  listed under `IsPrimitivePaper`.
-- **Caveat:** despite appearing in the primitivity development, this is the same
-  algebraic eventual-span condition as `Kraus.IsNormal`, not the generic
-  peripheral-spectrum predicate `_root_.IsPrimitive`.
-
-### `MPSTensor.IsPrimitiveMPS` and `MPSTensor.HasPrimitiveFixedPoint`
+### `Kraus.HasComplementaryFixedPointGap` (`MPSTensor.IsPrimitiveMPS`)
 
 - **Declarations:**
-  `MPSTensor.IsPrimitiveMPS A ρ` and
-  `MPSTensor.HasPrimitiveFixedPoint A`.
-- **Defined in:** `TNLean/MPS/Structure/PrimitiveFixedPoint.lean` as reducible
-  abbreviations for `Kraus.HasComplementaryFixedPointGap A ρ` and
-  `Kraus.HasPrimitiveFixedPoint A`.
-- **Meaning:** `IsPrimitiveMPS A ρ` exposes the QIC finite-Kraus certificate packaging
-  left-canonical normalization, a nonzero positive-semidefinite fixed point `ρ`, and
-  spectral radius less than one on the complement of the fixed-point projection.
-  `HasPrimitiveFixedPoint A` uses the QIC existential certificate directly.
+  `Kraus.HasComplementaryFixedPointGap A ρ`, with the existential form
+  `Kraus.HasPrimitiveFixedPoint A`, in
+  `QICLean/Kraus/PrimitiveFixedPoint/Basic.lean`; `MPSTensor.IsPrimitiveMPS A ρ`
+  in `TNLean/MPS/Structure/PrimitiveFixedPoint.lean` is a reducible abbreviation
+  of the former.
+- **Meaning:** left-canonical normalization, a nonzero positive-semidefinite
+  fixed point `ρ`, and spectral radius less than one on the complement of the
+  fixed-point projection.
 - **Source:** the complementary transfer-map-gap formulation used in the MPS
   convergence route; compare Wolf §6.3, Theorem 6.7, and the convergence
   consequences of arXiv:0909.5347 Proposition 3.
 - **Sanctioned bridges:**
-  QICLean's `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive`,
-  `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`,
-  `MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper`, and
-  `MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef`.
-- **Caveat:** every listed bridge requires `[NeZero D]`. The two bridges from
-  peripheral primitivity additionally require left-canonical normalization and,
-  respectively, injectivity or irreducibility.
-  `isPrimitiveMPS_of_isStronglyIrreduciblePaper` likewise requires the explicit
-  left-canonical equation; strong irreducibility alone is insufficient. The
-  bridge in the opposite direction requires `ρ.PosDef`; PSD alone is
-  insufficient. Consequently `HasPrimitiveFixedPoint` is not an unconditional
-  synonym for any of the preceding predicates.
+  QICLean's `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive` and
+  `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`;
+  `MPSTensor.exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive`
+  and `MPSTensor.exists_isPrimitiveMPS_posDef_of_isNormal`; in the opposite
+  direction `MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef`,
+  `Kraus.HasComplementaryFixedPointGap.isPrimitive` and
+  `Kraus.HasComplementaryFixedPointGap.isIrreducibleMap_of_posDef`.
+- **Caveat:** every listed bridge requires `[NeZero D]`. The bridges into the
+  gap require left-canonical normalization. The bridges to normality and to
+  irreducibility require `ρ.PosDef`; positive semidefiniteness alone is
+  insufficient. Which of the two names of this notion survives is not yet
+  decided (issue #10724).
 
-### `MPSTensor.IsStronglyIrreduciblePaper`
+### Proposition 3 of arXiv:0909.5347
 
-- **Declaration:**
-  `MPSTensor.IsStronglyIrreduciblePaper (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** the project's strengthened interpretation of Proposition 3(c):
-  a positive-definite fixed point, peripheral primitivity, and an explicit
-  `IsIrreducibleMap` conjunct. The last conjunct formalizes the paper's phrase
-  “the corresponding eigenvector” as uniqueness of the fixed-point space, as
-  documented in the declaration's source comment.
-- **Source:** arXiv:0909.5347 Proposition 3(c),
-  `Papers/0909.5347/main.tex:420-430` and `:501-509`; Wolf Theorem 6.7(3).
-- **Sanctioned bridges:**
-  `MPSTensor.primitivePaper_iff_stronglyIrreducible` and
-  `MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible`.
-- **Caveat:** both equivalences require `[NeZero D]` and left-canonical
-  normalization. The explicit irreducibility conjunct is additional data beyond
-  the cited passage's literal positive-eigenvector and peripheral-uniqueness
-  wording; it records the interpretation above and makes this predicate
-  strictly stronger than peripheral primitivity alone.
-- **Literal source criterion:**
-  `MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint` and
-  `MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint`
-  in `TNLean/Wielandt/Primitivity/PeripheralCriterion.lean` state the source's
-  third clause directly, with a positive-definite fixed matrix spanning the
-  fixed eigenspace and no other peripheral eigenvalue. Their reverse direction
-  derives irreducibility through QICLean's channel criterion; it does not
-  assume it as additional input.
+- **Declaration:** `MPSTensor.primitivity_tfae`, in
+  `TNLean/Wielandt/Primitivity/Equivalence.lean`.
+- **Statement:** for `[NeZero D]` and a left-canonical tensor
+  (`∑ i, (A i)ᴴ * A i = 1`), the following are equivalent:
+  (a) some positive length `q` has `Kraus.vectorSpreadSpan A φ q = ⊤` for every
+  nonzero `φ`; (b) some positive length `n` has `Kraus.wordSpan A n = ⊤`;
+  (c) there is a positive-definite fixed matrix of `Kraus.transferMap A` that
+  spans the fixed eigenspace, and `IsPrimitive (Kraus.transferMap A)`.
+- **Source:** Sanz--Pérez-García--Wolf--Cirac, arXiv:0909.5347, the three
+  definitions at `Papers/0909.5347/main.tex:403-430` and Proposition 3 at
+  `:501-509`; Wolf Chapter 6, Theorems 6.7 and 6.8.
+- **Relation to the kept notions:** clause (b) is `Kraus.IsNormal A` by
+  definition. Clause (c) is the source's literal one; irreducibility of the
+  transfer map is a consequence
+  (`MPSTensor.isIrreducibleMap_transferMap_of_isNormal`), not an assumption.
+- **Caveat:** the implication from (b) to (a),
+  `MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal`, needs no
+  normalization; the other implications do. The predicates
+  `MPSTensor.IsPrimitivePaper`, `MPSTensor.HasEventuallyFullKrausRank`,
+  `MPSTensor.IsStronglyIrreduciblePaper`, `MPSTensor.IsPeripherallyPrimitive`
+  and `MPSTensor.HasPrimitiveFixedPoint` were removed; see
+  `docs/audits/2026-11-16_primitivity_one_definition.md`.
 
 ## Injectivity
 
@@ -1712,7 +1711,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
-- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Defined in:** `TNLean/Circuit/SupportedOperators.lean`.
 - **Meaning:** the complex span of the product operators
   `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
   `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S` of a finite type
@@ -2047,7 +2046,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsLocalPerm {ι : Type*} (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
-- **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
+- **Defined in:** `TNLean/Circuit/SitePermutation.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
   `S`.

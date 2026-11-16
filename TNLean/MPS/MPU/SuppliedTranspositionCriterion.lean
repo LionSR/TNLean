@@ -15,11 +15,12 @@ Its two independent comparison unitaries combine into one unitary in the
 literal four-spin equation. No normalization of the supplied half factors
 or chosen gauge witness is required.
 
-**Scope restriction (canonical ambient presentation):** Ambient canonical
-form II remains explicit; minimal cut ranks do not eliminate virtual
-padding. The finite-chain hypothesis concerns even standard-form lengths.
-This is not the unrestricted source criterion; see
-`docs/paper-gaps/mpu_canonical_form_full_support.tex` and
+Ambient canonical form II is explicit; minimal cut ranks do not eliminate
+virtual padding. This is no restriction relative to the source, whose
+standard forms are those of canonical tensors, and the source proposition is
+`MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff`; see
+`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`. The finite-chain
+hypothesis concerns even standard-form lengths; see
 `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
 
 Source: arXiv:1703.09188, `prop:local-char-transposition`, `eq:block-twosites` and

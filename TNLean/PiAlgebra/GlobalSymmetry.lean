@@ -128,44 +128,8 @@ theorem gaugeMatrix_projective_mul
   let Ygl : GL (Fin D) ℂ := Xh * Xg
   have hComp : ∀ i : Fin d,
       twistedTensor A U (g * h) i =
-        (Ygl : Matrix _ _ ℂ) * A i * ((Ygl⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-    intro i
-    -- twistedTensor A U (g*h) = twistedTensor (twistedTensor A U h) U g
-    -- by composition law, and twistedTensor A U h is gauge equiv to A via Xh
-    -- Use GaugeEquiv.sameMPV to show this equals Ygl conjugation
-    -- Direct calculation:
-    -- twistedTensor A U (g*h) i
-    -- = twistedTensor (twistedTensor A U h) U g i  [by twistedTensor_mul]
-    -- = ∑_j U(g)_ij (twistedTensor A U h j)       [def of twistedTensor]
-    -- = ∑_j U(g)_ij (Xh A_j Xh⁻¹)                [by hX h]
-    -- = Xh (∑_j U(g)_ij A_j) Xh⁻¹                 [linearity]
-    -- = Xh (twistedTensor A U g i) Xh⁻¹            [def of twistedTensor]
-    -- = Xh (Xg A_i Xg⁻¹) Xh⁻¹                    [by hX g]
-    -- = (Xh Xg) A_i (Xg⁻¹ Xh⁻¹)                  [assoc]
-    -- = Ygl A_i Ygl⁻¹                              [def of Ygl]
-    have step1 : twistedTensor A U (g * h) i =
-        twistedTensor (twistedTensor A U h) U g i :=
-      congr_fun (twistedTensor_mul A U g h) i
-    have step2 : twistedTensor (twistedTensor A U h) U g i =
-        (Xh : Matrix _ _ ℂ) * twistedTensor A U g i *
-          ((Xh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-      unfold twistedTensor
-      -- Goal: ∑ j, U g i j • (∑ k, U h j k • A k) = Xh * (∑ j, U g i j • A j) * Xh⁻¹
-      -- First replace inner sum with Xh * A j * Xh⁻¹
-      have : ∀ j, (∑ k : Fin d, U h j k • A k) =
-          (Xh : Matrix _ _ ℂ) * A j * ((Xh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-        intro j; exact hX h j
-      simp_rw [this]
-      -- Goal: ∑ j, U g i j • (Xh * A j * Xh⁻¹) = Xh * (∑ j, U g i j • A j) * Xh⁻¹
-      -- Convert smul · (a * b * c) to a * (smul · b) * c
-      have distrib : ∀ j, U g i j • ((Xh : Matrix _ _ ℂ) * A j *
-          ((Xh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ)) =
-        (Xh : Matrix _ _ ℂ) * (U g i j • A j) *
-          ((Xh⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) := by
-        intro j; simp [Matrix.mul_assoc]
-      simp_rw [distrib, ← Finset.sum_mul, ← Finset.mul_sum]
-    rw [step1, step2, hX g i]
-    simp [Xg, Xh, Ygl, Matrix.mul_assoc, mul_inv_rev]
+        (Ygl : Matrix _ _ ℂ) * A i * ((Ygl⁻¹ : GL _ ℂ) : Matrix _ _ ℂ) :=
+    gauge_product_intertwines A U X hX g h
   -- Apply scalar commutant
   obtain ⟨c, hc⟩ := gauge_ratio_isScalar hA Ygl Xgh hComp (hX (g * h))
   -- hc : Xgh⁻¹ * Ygl = scalar c

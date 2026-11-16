@@ -41,8 +41,6 @@ is a correction.
 * `QuantumCircuit.quditFourier`, `QuantumCircuit.quditPauli` — `F` and `X^x Z^z`.
 * `QuantumCircuit.IsZeroOn` — a vector with `|0⟩` at the sites of a set, for any type of
   sites.
-* `QuantumCircuit.cfgPerm` — the permutation of configurations induced by a permutation of
-  the sites, for any finite type of sites.
 * `QuantumCircuit.TeleportHop`, `QuantumCircuit.TeleportHop.pre`,
   `QuantumCircuit.TeleportHop.frame`.
 
@@ -52,8 +50,6 @@ is a correction.
   orthogonality of the powers of `ζ` and the unitarity of the diagonal factor are QICLean's
   `Matrix.sum_rootOfUnity_pow_eq` and `Matrix.weylClock_mem_unitary`, the labels `Fin d` being
   `ZMod d`.
-* `QuantumCircuit.permMatrix_cfgPerm_mul_rectKronecker` — moving single-site operators across a
-  permutation of sites, with the chain form `QuantumCircuit.permMatrix_cfgPerm_mul_finKronecker`.
 * `QuantumCircuit.TeleportHop.pre_mulVec` — one hop.
 
 ## References
@@ -252,53 +248,6 @@ end Sites
 section SitePermutation
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-
-/-- The permutation `x ↦ x ∘ π` of the configurations induced by a permutation `π` of the
-sites. -/
-def cfgPerm (π : Equiv.Perm ι) : Equiv.Perm (ι → Fin d) where
-  toFun x := x ∘ π
-  invFun x := x ∘ π.symm
-  left_inv x := by funext i; simp
-  right_inv x := by funext i; simp
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem cfgPerm_apply (π : Equiv.Perm ι) (x : ι → Fin d) : cfgPerm π x = x ∘ π := rfl
-
-theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm ι) :
-    (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ =
-      (cfgPerm (π * σ)).permMatrix ℂ := by
-  rw [← Matrix.permMatrix_mul]
-  congr 1
-
-omit [DecidableEq ι] in
-theorem permMatrix_cfgPerm_one : (cfgPerm (d := d) (1 : Equiv.Perm ι)).permMatrix ℂ = 1 := by
-  have : cfgPerm (d := d) (1 : Equiv.Perm ι) = 1 := by ext x i; rfl
-  rw [this, Matrix.permMatrix_one]
-
-/-- **Moving single-site operators across a permutation of sites.** -/
-theorem permMatrix_cfgPerm_mul_rectKronecker (π : Equiv.Perm ι)
-    (g : ι → Matrix (Fin d) (Fin d) ℂ) :
-    (cfgPerm π).permMatrix ℂ * rectKronecker g =
-      rectKronecker (fun i => g (π.symm i)) * (cfgPerm π).permMatrix ℂ := by
-  classical
-  ext x y
-  simp only [mul_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
-    Option.mem_def, Option.some.injEq, ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq, Finset.mem_univ, ite_true, rectKronecker_apply]
-  rw [Finset.sum_eq_single ((cfgPerm π).symm y)]
-  · simp only [Equiv.apply_symm_apply, ite_true]
-    refine Fintype.prod_equiv π _ _ fun i => ?_
-    simp [cfgPerm]
-  · intro z _ hz
-    rw [ite_eq_right fun h => hz (by rw [← h, Equiv.symm_apply_apply])]
-  · simp
-
-/-- The chain form of `permMatrix_cfgPerm_mul_rectKronecker`, for the sites `Fin N`. -/
-theorem permMatrix_cfgPerm_mul_finKronecker {N : ℕ} (π : Equiv.Perm (Fin N))
-    (g : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    (cfgPerm π).permMatrix ℂ * finKronecker g =
-      finKronecker (fun i => g (π.symm i)) * (cfgPerm π).permMatrix ℂ :=
-  permMatrix_cfgPerm_mul_rectKronecker π g
 
 theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Set ι} {v : (ι → Fin d) → ℂ}
     (h : IsZeroOn S v) {π : Equiv.Perm ι} (hπ : ∀ i ∈ S, π i = i) :

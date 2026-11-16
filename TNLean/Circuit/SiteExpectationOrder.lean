@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SiteExpectation
-import TNLean.Circuit.LiebRobinson.CommutatorRecursion
 import QICLean.Analysis.HermitianUnitaryPath
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
@@ -18,13 +17,8 @@ order, maps positive contractions to positive contractions, and fixes every matr
 commutes with all operators acting outside `K`. Such a matrix therefore acts on `K`. The
 absolute value of a Hermitian matrix acting on `K` again acts on `K`.
 
-The Heisenberg evolution of the circuit layer is the conjugation by the unitary path
-`e^{itH}` of the spectral-filter library.
-
 ## Main results
 
-* `QuantumCircuit.heisenbergEvolution_eq_hermitianUnitaryPath`: the two descriptions of
-  `τ_t(A) = e^{itH} A e^{-itH}` agree.
 * `QuantumCircuit.siteExpectation_conjTranspose`, `QuantumCircuit.siteExpectation_nonneg`,
   `QuantumCircuit.siteExpectation_mono`.
 * `QuantumCircuit.siteExpectation_eq_self_of_forall_commute`,
@@ -47,13 +41,6 @@ open scoped Matrix MatrixOrder ComplexOrder
 namespace QuantumCircuit
 
 variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
-
-/-- The Heisenberg evolution is conjugation by the unitary path `e^{itH}`. -/
-theorem heisenbergEvolution_eq_hermitianUnitaryPath (H : Matrix (ι → Fin q) (ι → Fin q) ℂ)
-    (t : ℝ) (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    heisenbergEvolution H t A =
-      Matrix.hermitianUnitaryPath H t * A * Matrix.hermitianUnitaryPath H (-t) :=
-  rfl
 
 /-- The expectation commutes with the adjoint. -/
 theorem siteExpectation_conjTranspose [NeZero q] (K : Finset ι)

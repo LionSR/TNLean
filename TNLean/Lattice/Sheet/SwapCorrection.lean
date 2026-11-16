@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixKroneckerContraction
-import TNLean.Lattice.RegionalSwap
+import TNLean.Circuit.RegionalSwap
 import TNLean.Lattice.Sheet.Birth
 
 /-!
@@ -26,7 +26,7 @@ unit vector it moves by at most `4 ‖𝒱 ω - s ⊗ s'‖`, since `F_{T B_T}` 
 The unitary `F_S` swapping the two raw sheets at the sites of `S`, `TNLean.Lattice.sheetSwapOp`,
 and its algebra (`TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp`: `F_A F_Y = F_T` for
 `Y = T ⊔ A`; `TNLean.Lattice.commute_sheetSwapOp_kronecker`) do not depend on the geometry of
-the sites and are stated in `TNLean.Lattice.RegionalSwap`.
+the sites and are stated in `TNLean.Circuit.RegionalSwap`.
 
 ## Main results
 

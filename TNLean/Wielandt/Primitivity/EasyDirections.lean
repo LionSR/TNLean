@@ -7,39 +7,21 @@ import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.Definitions
 
 /-!
-# Primitive equivalences — easy directions (Proposition 3)
+# Proposition 3, direction (b) to (a), and the index comparison
 
-This file proves the **easy first directions** of Proposition 3 from
-arXiv:0909.5347, which establishes equivalences between primitivity,
-eventually full Kraus rank, and strong irreducibility.
+A normal tensor spreads every nonzero vector to the whole space at one fixed
+length, and its primitivity index is at most its full-Kraus-rank index. Neither
+statement needs a normalization of the tensor.
 
-## What is proved here
+## Main results
 
-* `isPrimitivePaper_of_hasEventuallyFullKrausRank`:
-  Eventually full Kraus rank implies paper-primitivity.
-  This is direction (b)→(a) of Proposition 3 at the predicate level.
-
-* `qIndex_le_iIndex`:
-  The primitivity index `q(E_A)` is at most the full-Kraus-rank index `i(A)`,
-  provided the tensor has eventually full Kraus rank.
-
-## The full equivalence
-
-All three directions of Proposition 3 are now proved:
-
-* **(b)→(a)**: Proved here (`isPrimitivePaper_of_hasEventuallyFullKrausRank`).
-* **(a)→(c)**: Proved in `Primitivity/ImpliesStronglyIrreducible.lean`
-  (`isStronglyIrreduciblePaper_of_isPrimitivePaper`).
-* **(c)→(b)**: Proved in `Primitivity/StronglyIrreducibleToFullRank.lean`
-  (`hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`).
-
-The full circular equivalence and `Iff` statements are assembled in `Primitivity/Equivalence.lean`.
+* `MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal`: Proposition 3,
+  direction (b) to (a), of arXiv:0909.5347.
+* `MPSTensor.qIndex_le_iIndex`: `q(E_A) ≤ i(A)` for a normal tensor.
 
 ## References
 
-- [Sanz, Pérez-García, Wolf, Cirac, *A quantum version of Wielandt's inequality*,
-  arXiv:0909.5347](https://arxiv.org/abs/0909.5347), Proposition 3
-- Wolf, *Quantum Channels & Operations: Guided Tour*, Section 6.4
+- Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347, Propositions 1 and 3.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -49,47 +31,34 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ## (b)→(a): Eventually full Kraus rank implies paper-primitivity -/
+/-! ## (b)→(a): a full word span spreads every vector -/
 
-/-- **Proposition 3, direction (b)⟹(a)**:
-If `A` has eventually full Kraus rank, then `A` is primitive in the paper's sense.
+/-- **Proposition 3, direction (b)⟹(a)**: if `S_N(A) = M_D(ℂ)` for a positive
+`N`, then `H_N(A,φ) = ℂ^D` for every nonzero `φ`.
 
-This is the easy direction: if some `Kraus.wordSpan A N = ⊤`, then taking `q = N`,
-we have `Kraus.vectorSpreadSpan A φ N = ⊤` for every nonzero `φ` by
-`Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top`.
+The hypothesis is clause (b) of the proposition, which is `Kraus.IsNormal A` by
+definition; the conclusion is clause (a), written out.
 
 Paper: "(b) ⟹ (a)" in Proposition 3, arXiv:0909.5347. -/
-theorem isPrimitivePaper_of_hasEventuallyFullKrausRank
-    (A : MPSTensor d D) (hA : HasEventuallyFullKrausRank A) :
-    IsPrimitivePaper A := by
+theorem exists_vectorSpreadSpan_eq_top_of_isNormal
+    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
+    ∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → Kraus.vectorSpreadSpan A φ q = ⊤ := by
   obtain ⟨N, hNpos, hN⟩ := hA
   exact ⟨N, hNpos, fun φ hφ => Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hN φ hφ⟩
-
-/-- **Proposition 3, direction (b)⟹(a)**, stated with `Kraus.IsNormal`:
-If `A` is normal, then `A` is primitive in the paper's sense.
-
-This is the restatement of `isPrimitivePaper_of_hasEventuallyFullKrausRank`
-using the library's `Kraus.IsNormal` predicate instead of
-`HasEventuallyFullKrausRank`. -/
-theorem isPrimitivePaper_of_isNormal
-    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
-    IsPrimitivePaper A :=
-  isPrimitivePaper_of_hasEventuallyFullKrausRank A
-    ((hasEventuallyFullKrausRank_iff_isNormal A).mpr hA)
 
 /-! ## Index bound: q(E_A) ≤ i(A) -/
 
 /-- **q(E_A) ≤ i(A)**: the primitivity index is at most the full-Kraus-rank index,
-provided the tensor has eventually full Kraus rank.
+provided the tensor is normal.
 
-This is the eventually-full-Kraus-rank case of "q(E_A) ≤ i(A)" (arXiv:0909.5347,
-Proposition 1); the comparison for every channel is `qIndex_le_iIndex_of_tracePreserving`.
+This is the normal case of "q(E_A) ≤ i(A)" (arXiv:0909.5347, Proposition 1);
+the comparison for every channel is `qIndex_le_iIndex_of_tracePreserving`.
 
 The proof uses `Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top`: since
 `Kraus.wordSpan A (iIndex A) = ⊤`, we have `Kraus.vectorSpreadSpan A φ (iIndex A) = ⊤`
 for all nonzero φ, so `qIndex A ≤ iIndex A`. -/
 theorem qIndex_le_iIndex (A : MPSTensor d D)
-    (hA : HasEventuallyFullKrausRank A) :
+    (hA : Kraus.IsNormal A) :
     qIndex A ≤ iIndex A := by
   -- iIndex A lies in the positive full-span set since hA makes it nonempty.
   have hne : {n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}.Nonempty := by

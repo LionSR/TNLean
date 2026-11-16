@@ -475,17 +475,15 @@ data realizing every such solution in the simple-MPU setting.
 The existing library separates the following layers.
 
 \begin{itemize}
-    \item TNLean defines
-          \leanid{MPSTensor.IsPrimitivePaper}, the unnormalized uniform
-          vector-spreading formulation of paper primitivity, and
-          \leanid{MPSTensor.HasEventuallyFullKrausRank}.  The latter is
-          equivalent to QICLean's \leanid{Kraus.IsNormal} by
-          \leanid{MPSTensor.hasEventuallyFullKrausRank\_iff\_isNormal}.
-          The reverse bridge from \leanid{MPSTensor.IsPrimitivePaper} to the
-          word-span predicate in
-          \leanid{MPSTensor.primitivePaper\_iff\_hasEventuallyFullKrausRank}
-          assumes left-canonical normalization.  Thus an exact named formal
-          predicate for source primitivity already exists, while any passage
+    \item TNLean states source primitivity as the written-out uniform
+          vector-spreading condition, which needs no normalization, and
+          eventual full Kraus rank as QICLean's \leanid{Kraus.IsNormal}.
+          Normality gives vector spreading by
+          \leanid{MPSTensor.exists\_vectorSpreadSpan\_eq\_top\_of\_isNormal}.
+          The reverse passage, a clause of
+          \leanid{MPSTensor.primitivity\_tfae},
+          assumes left-canonical normalization.  Thus an exact formal
+          statement of source primitivity exists, while any passage
           from it to word-span normality must retain its left-canonical
           normalization hypothesis.
 

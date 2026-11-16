@@ -37,7 +37,7 @@ from generate_badges import strip_lean_comments_and_strings  # noqa: E402
 
 THEOREM_KINDS = r"Theorem|Lemma|Proposition|Corollary|Definition|Remark"
 # A result is numbered like `2.1`, or lettered like the `Theorem A` of a note.
-RESULT_NUMBER = r"\d+(?:\.\d+)*|[A-Z]\b"
+RESULT_NUMBER = r"\d+(?:\.\d+)*|[IVXLC]+\.\d+|[A-Z]\b"
 
 
 # --------------------------------------------------------------------------- tools
