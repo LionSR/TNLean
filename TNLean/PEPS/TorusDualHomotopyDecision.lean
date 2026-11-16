@@ -51,7 +51,8 @@ theorem torusDualHomotopyDecision_eq_true (R : Finset X) {a b : X}
     torusDualHomotopyDecision R p q = true ↔ TorusDualHomotopy (R : Set X) p q := by
   by_cases hR : R = Finset.univ
   · subst R
-    simp only [torusDualHomotopyDecision, ite_eq_left rfl, decide_eq_true_eq, Finset.coe_univ]
+    rw [torusDualHomotopyDecision, ite_eq_left rfl]
+    simp only [decide_eq_true_eq, Finset.coe_univ]
     exact (torusDualHomotopy_univ_iff_displacement_eq p q).symm
   · obtain ⟨_, hm, hf⟩ := torusDualComputedFacePlan_spec R hR
     simp only [torusDualHomotopyDecision, ite_eq_right hR, decide_eq_true_eq,
