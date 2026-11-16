@@ -1,0 +1,128 @@
+\subsection{Endpoint calibration on a common physical chain}
+
+\begin{lemma}[Physical placement of the endpoint contraction]
+    \label{lem:mpug_detector_native_interval}
+    \lean{MPOTensor.FiniteGroupDetector.intervalWindowEquiv,
+        MPOTensor.FiniteGroupDetector.sourceStringLeftEndpoint,
+        MPOTensor.FiniteGroupDetector.sourceStringRightEndpoint,
+        MPOTensor.FiniteGroupDetector.physicalTruncatedInterval,
+        MPOTensor.FiniteGroupDetector.physicalTruncatedInterval_apply_wallConfig,
+        MPOTensor.FiniteGroupDetector.physicalTruncatedInterval_eq_stringOperator,
+        MPOTensor.FiniteGroupDetector.physicalTruncatedInterval_isUnitaryBetween,
+        MPOTensor.FiniteGroupDetector.sourceFactors_physicalTruncatedInterval_mem_unitaryGroup}
+    Let $U$ have physical dimension $d$, source dimensions $d_l,d_r$,
+    and endpoint triangles $Y_2,Y_1$. Supply identifications of each
+    source endpoint basis with the physical one-site basis. On a chain of
+    $L=k+1+l+1+n$ sites, place the endpoint contraction of
+    Definition~\ref{def:mpug_truncated_symmetry} in the middle $l+2$
+    sites and identities outside. Its entries on split configurations are
+    \begin{align}
+        T_{(p,a,\mu,b,q),(p',a',\mu',b',q')}
+         & =\delta_{p,p'}\delta_{q,q'}
+        \sum_{\alpha,\beta}(Y_2)_{\bar a,(a',\alpha)}
+        U^{\mu,\mu'}_{\alpha\beta}(Y_1)_{\bar b,(\beta,b')}.
+        \label{eq:mpug_detector_native_interval}
+    \end{align}
+    Here $\bar a,\bar b$ are the source coordinates corresponding to
+    $a,b$. Thus $T$ is the string with endpoints
+    $E^{aa'}_{0\alpha}=(Y_2)_{\bar a,(a',\alpha)}$ and
+    $F^{bb'}_{\beta0}=(Y_1)_{\bar b,(\beta,b')}$.
+    If the endpoint contraction is unitary between its coordinate spaces,
+    then $T$ is unitary on this physical chain. In particular this holds
+    for the source factors of a simple tensor in canonical form II.
+    The individual endpoint identifications are supplied, not consequences
+    of the source-rank product
+    \cite{gap:fbc25_truncated_symmetry_endpoint_unitarity_scope}.
+\end{lemma}
+
+\begin{proof}
+    \uses{def:mpug_truncated_symmetry, thm:mpug_truncated_symmetry_unitary}
+    Reindex the two endpoint outputs by the supplied identifications and
+    tensor the contraction with the two exterior identities. Expanding
+    its entries gives (\ref{eq:mpug_detector_native_interval}) and the
+    stated string endpoints. Unitarity is preserved by the two basis
+    changes and by the exterior identity factors.
+\end{proof}
+
+\begin{lemma}[Endpoint actions determine the comparison on arbitrary interiors]
+    \label{lem:mpug_detector_endpoint_comparison}
+    \lean{MPOTensor.stringOperator_mulVec_eq_of_endpoint_actions,
+        MPOTensor.GroupFamily.BlockActionData.physicalTruncatedInterval_mulVec_eq_groupWallString_of_endpoint_calibration}
+    For two strings with the same bulk tensor, suppose their left
+    endpoint actions agree on $C$ and their right endpoint actions agree
+    on $C'$. Then their actions agree on every trace state
+    $\psi(p,a,\mu,b,q)=\operatorname{tr}(P(p)C^aM(\mu)C'^bQ(q))$,
+    for arbitrary rectangular exterior chains $P,Q$ and interior chain $M$.
+    In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
+    take $C=A_y$ and $C'=A_z$. The interval of
+    Lemma~\ref{lem:mpug_detector_native_interval} agrees with the canonical
+    group string on every such state if its source endpoints satisfy
+    \begin{align}
+        \operatorname{leftAct}(E,A_y)^a
+         & =e_{y,gy}^aV_{g,y}, &
+        \operatorname{rightAct}(F,A_z)^b
+         & =W_{g,z}e_{gz,z}^b.
+        \label{eq:mpug_detector_endpoint_calibration}
+    \end{align}
+    All spectator walls may be included in $P,M,Q$. The local endpoint
+    equalities in (\ref{eq:mpug_detector_endpoint_calibration}) are
+    additional assumptions on the actual source triangles
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpug_detector_native_interval,
+        lem:mpug_group_domain_wall_string_creation}
+    A string acts on the trace through its two endpoint actions and its
+    bulk physical action. Substitution of the two endpoint equalities
+    therefore identifies its contraction with that of the canonical
+    string, independently of the interior and exterior chains.
+\end{proof}
+
+\begin{lemma}[A calibrated native interval crossing an interior wall]
+    \label{lem:mpug_detector_native_wall_step}
+    \lean{MPOTensor.GroupFamily.BlockActionData.physicalTruncatedInterval_mulVec_trace_wall_of_endpoint_calibration}
+    In Lemma~\ref{lem:mpug_detector_endpoint_comparison}, let
+    $M=C_{yz}$ be the one-wall chain of
+    Lemma~\ref{lem:mpug_detector_local_wall_comparison}, with its two
+    adjacent regions exceeding the local-action buffer. Then the actual
+    endpoint interval has coefficients
+    $B^g_{y,z}\operatorname{tr}(P(p)e_{y,gy}^aC_{gy,gz}(\mu)e_{gz,z}^bQ(q))$.
+    This applies to every orbit wall $y=g^r(gx)$, $z=g^rx$, with
+    arbitrary spectator chains outside the interval.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpug_detector_endpoint_comparison,
+        lem:mpug_detector_local_wall_comparison}
+    The endpoint comparison identifies the actual interval action with
+    the canonical string action. The local wall comparison then gives
+    its coefficient $B^g_{y,z}$ and the displayed transformed chain.
+\end{proof}
+
+\begin{lemma}[Phase-free removal of a calibrated wall pair]
+    \label{lem:mpug_detector_native_undo}
+    \lean{MPOTensor.GroupFamily.BlockActionData.physicalTruncatedInterval_mulVec_trace_block_of_endpoint_calibration,
+        MPOTensor.GroupFamily.BlockActionData.sourceFactors_physicalTruncatedInterval_conjTranspose_mulVec_of_endpoint_calibration}
+    Suppose the interval endpoints satisfy
+    (\ref{eq:mpug_detector_endpoint_calibration}) with $z=y$.
+    Let the state $\psi$ have coefficients
+    $\operatorname{tr}(P(p)A_y^aA_y^{\mu}A_y^bQ(q))$ and let $\Phi$
+    have coefficients
+    $\operatorname{tr}(P(p)e_{y,gy}^aA_{gy}^{\mu}e_{gy,y}^bQ(q))$.
+    Then $T\psi=\Phi$. If $T$ is constructed from the actual source
+    factors of a simple tensor in canonical form II, with the supplied
+    physical endpoint identifications, then $T^{\dagger}\Phi=\psi$.
+    No scalar factor or adjoint-action comparison is assumed. Spectator
+    walls can occur in the arbitrary exterior chains. Constructing the
+    complete sequence of such windows remains a separate geometric task
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpug_detector_native_interval}
+    The endpoint calibration and the block reduction give
+    $V_{g,y}(U_g\cdot A_y^{\mu})W_{g,y}=A_{gy}^{\mu}$, hence
+    $T\psi=\Phi$ inside the exterior trace. Unitarity on the same
+    physical chain gives $T^{\dagger}\Phi=T^{\dagger}T\psi=\psi$.
+\end{proof}
