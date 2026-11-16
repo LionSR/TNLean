@@ -19,7 +19,9 @@ sign, comes from Proposition `PropChiral` applied to the simple canonical
 representative. The trace depends continuously on the tensor, so along any
 continuous path of simple MPUs that stay time-reversal invariant the sign is
 constant. No standard forms, gates or local relations are required along the
-path; they are constructed at each point.
+path; they are constructed at each point. Time-reversal invariance is required
+at even lengths of the two-spin standard-form chain, that is, at original
+lengths divisible by four; see `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
 
 ## Main results
 
