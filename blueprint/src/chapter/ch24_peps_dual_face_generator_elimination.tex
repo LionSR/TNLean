@@ -71,3 +71,26 @@
     Thus substitution preserves $\varphi$ on the selected generator as well
     as every other generator. The resulting homomorphisms agree.
 \end{proof}
+
+\begin{lemma}[Finite face substitutions preserve flat representations]
+    \label{lem:peps_dual_face_elimination_sequence}
+    \lean{TNLean.PEPS.torusDualFaceEliminationSequence,
+        TNLean.PEPS.torusDualFaceEliminationSequence_preserves_flatRepresentation}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    Choose any finite list of faces, each tagged for west or south substitution,
+    and let $\Sigma$ be their composition in the listed order.
+    If $\varphi(r_v)=1$ for every listed face, then
+    \begin{align}
+        \varphi\circ\Sigma=\varphi.
+        \label{eq:peps_dual_face_elimination_sequence}
+    \end{align}
+    Both periods are positive. No ordering, group finiteness or commutativity
+    assumption is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_face_elimination_representations}
+    Induct on the list. At each step,
+    $\varphi\circ(\Sigma_{\rm tail}\circ\sigma)
+      =(\varphi\circ\Sigma_{\rm tail})\circ\sigma
+      =\varphi\circ\sigma=\varphi$.
+\end{proof}

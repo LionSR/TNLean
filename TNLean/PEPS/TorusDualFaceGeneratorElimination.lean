@@ -156,4 +156,40 @@ theorem torusDualSouthFaceElimination_preserves_flatRepresentation
       FreeGroup.lift_apply_of, ite_true, eastLetter] using hp
   · simp [MonoidHom.comp_apply, torusDualSouthFaceElimination, ha]
 
+/-- Compose a finite list of native face substitutions. A true tag selects
+the west edge and a false tag the south edge; the tail acts after the head. -/
+def torusDualFaceEliminationSequence : List (X × Bool) → (FG →* FG)
+  | [] => MonoidHom.id _
+  | (v, b) :: l => (torusDualFaceEliminationSequence l).comp
+      (if b then torusDualWestFaceElimination v else torusDualSouthFaceElimination v)
+
+/-- Any finite composition of selected face substitutions preserves every
+representation flat on those original native faces. No order is assumed. -/
+theorem torusDualFaceEliminationSequence_preserves_flatRepresentation
+    (φ : FG →* H) (l : List (X × Bool))
+    (h : ∀ d ∈ l, φ (torusDualFaceWord d.1) = 1) :
+    φ.comp (torusDualFaceEliminationSequence l) = φ := by
+  revert h
+  induction l with
+  | nil =>
+    intro _
+    rfl
+  | cons d l ih =>
+    intro h
+    obtain ⟨v, b⟩ := d
+    have hh : φ (torusDualFaceWord v) = 1 := h (v, b) (by simp)
+    have ht := ih (fun d hd => h d (by simp only [List.mem_cons]; exact Or.inr hd))
+    have hs : φ.comp
+        (if b then torusDualWestFaceElimination v else torusDualSouthFaceElimination v) =
+          φ := by
+      cases b
+      · exact torusDualSouthFaceElimination_preserves_flatRepresentation φ v hh
+      · exact torusDualWestFaceElimination_preserves_flatRepresentation φ v hh
+    apply MonoidHom.ext
+    intro z
+    have ht' := congrArg (fun f : FG →* H => f
+      ((if b then torusDualWestFaceElimination v else torusDualSouthFaceElimination v) z)) ht
+    have hs' := congrArg (fun f : FG →* H => f z) hs
+    exact ht'.trans hs'
+
 end TNLean.PEPS

@@ -60,8 +60,19 @@ when the corresponding period equals one.
 \footnote{\leanid{TNLean.PEPS.torusDualWestFaceElimination_preserves_flatRepresentation};
 \leanid{TNLean.PEPS.torusDualSouthFaceElimination_preserves_flatRepresentation}.}
 
-This establishes one local substitution, not a sequence eliminating every
-allowed face. Constructing a finite descending face order, composing the
+A finite list of tagged west/south substitutions also preserves every
+representation flat on the original faces in that list:
+\begin{align}
+    \bigl[\forall v\text{ in the list},\ \varphi(r_v)=1\bigr]
+    \quad\Longrightarrow\quad\varphi\circ\Sigma=\varphi.
+    \label{eq:scp10_face_elimination_sequence}
+\end{align}
+This follows by induction using the preceding preservation identity.
+\footnote{\leanid{TNLean.PEPS.torusDualFaceEliminationSequence};
+\leanid{TNLean.PEPS.torusDualFaceEliminationSequence_preserves_flatRepresentation}.}
+
+These results do not construct a complete elimination sequence for an
+arbitrary allowed support. Constructing a finite descending face order, composing the
 substitutions without changing previously eliminated relations, and proving
 the resulting reduced-word classification for arbitrary proper support
 remain separate obligations. No such classification, physical density
