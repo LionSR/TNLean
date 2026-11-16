@@ -839,11 +839,11 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \lean{Matrix.exists_posSemidef_rank_lt_on_trace_zero_line,
         Matrix.exists_posSemidef_rank_lt_on_isometric_face}
     \leanok
-    Let $A\in M_D(\C)$ be positive definite and let $H$ be a nonzero
+    Let $A\in\MN{D}$ be positive definite and let $H$ be a nonzero
     Hermitian matrix with trace zero. There is a nonzero real $t$ such
     that $A+tH$ is positive semidefinite and has smaller rank than $A$.
-    More generally, if $V^\dagger V=I_r$, $G\in M_r(\C)$ is positive
-    definite, and $J\in M_r(\C)$ is nonzero Hermitian with trace zero,
+    More generally, if $V^\dagger V=\Id_r$, $G\in\MN{r}$ is positive
+    definite, and $J\in\MN{r}$ is nonzero Hermitian with trace zero,
     then $VGV^\dagger+tVJV^\dagger$ is positive semidefinite and has
     smaller rank than $VGV^\dagger$ for some nonzero real $t$.
 \end{lemma}
@@ -855,61 +855,111 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     admissible parameters have a maximum. At that parameter the matrix
     cannot be positive definite, since positive definiteness is the
     interior of the positive semidefinite cone in the Hermitian space.
-    Its rank is therefore smaller. Isometric congruence preserves
-    positivity and rank, giving the face statement.
+    Its rank is therefore smaller. If $V^\dagger V=\Id_r$, then
+    $B\succeq0$ implies $VBV^\dagger\succeq0$, and
+    \begin{align}
+        V^\dagger(VBV^\dagger)V=B.
+        \label{eq:periodic_positive_face_recovery}
+    \end{align}
+    Consequently
+    \begin{align}
+        \operatorname{rank}B\le\operatorname{rank}(VBV^\dagger)
+        \le\operatorname{rank}B,
+        \label{eq:periodic_positive_face_rank}
+    \end{align}
+    which transports the rank decrease to the ambient face.
 \end{proof}
 
 \begin{lemma}[Channel rank reduction inside a supported Choi face]
     \label{thm:periodic_supported_choi_root_reduction}
     \lean{Channel.exists_channel_choiRank_lt_of_supported_annihilating_direction}
     \leanok
-    Let $D>0$ and let $F:M_D(\C)\to M_D(\C)$ be a channel.
-    Let $K$ be complex linear, with $\tr K(X)=0$ for every $X$ and
-    $FK=KF=K^2=0$. Suppose there are matrices $V,G,J$ satisfying
-    $C_F=VGV^\dagger$, $C_K=VJV^\dagger$, and $V^\dagger V=I_r$,
-    where $G\in M_r(\C)$ is positive definite and $J\in M_r(\C)$ is
-    nonzero Hermitian. There is a nonzero real $t$ such that $F+tK$
-    is a channel with strictly smaller Choi rank than $F$, and
-    $(F+tK)^p=F^p$ for every integer $p\ge2$.
+    Let $D>0$ and let $\mathcal F:\MN{D}\to\MN{D}$ be a channel.
+    Let $\mathcal K$ be complex linear, with $\tr\mathcal K(X)=0$
+    for every $X$ and
+    $\mathcal F\mathcal K=\mathcal K\mathcal F=\mathcal K^2=0$.
+    Suppose there are matrices $V,G,J$ satisfying
+    $C_{\mathcal F}=VGV^\dagger$, $C_{\mathcal K}=VJV^\dagger$,
+    and $V^\dagger V=\Id_r$, where $G\in\MN{r}$ is positive
+    definite and $J\in\MN{r}$ is nonzero Hermitian.
+    There is a nonzero real $t$ such that $\mathcal F+t\mathcal K$
+    is a channel with strictly smaller Choi rank than $\mathcal F$, and
+    $(\mathcal F+t\mathcal K)^p=\mathcal F^p$ for every integer $p\ge2$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:periodic_positive_pencil_boundary,
         thm:periodic_annihilating_power_perturbation}
-    Every $F+tK$ preserves trace. The normalized Choi matrices of $F$
-    and $F+K$ both have trace one, so cyclicity of trace gives
-    $\tr J=\tr C_K=0$. Apply the positive
-    matrix boundary argument to $G+tJ$. Its isometric congruence is
-    $C_{F+tK}$, hence yields complete positivity and the strict Choi-rank
-    decrease. The annihilation identities persist after scalar
-    multiplication and give every claimed power identity.
+    For real $t$,
+    \begin{align}
+        \tr((\mathcal F+t\mathcal K)(X))
+        =\tr\mathcal F(X)+t\tr\mathcal K(X)=\tr X.
+        \label{eq:periodic_supported_choi_trace_preservation}
+    \end{align}
+    Thus $\tr C_{\mathcal F+\mathcal K}=\tr C_{\mathcal F}=1$, and
+    \begin{align}
+        \tr J=\tr(JV^\dagger V)=\tr(VJV^\dagger)
+        =\tr C_{\mathcal K}
+        =\tr C_{\mathcal F+\mathcal K}-\tr C_{\mathcal F}=0.
+        \label{eq:periodic_supported_choi_direction_trace}
+    \end{align}
+    Apply the positive matrix boundary argument to $G+tJ$. Since
+    \begin{align}
+        C_{\mathcal F+t\mathcal K}
+        =C_{\mathcal F}+tC_{\mathcal K}=V(G+tJ)V^\dagger,
+        \label{eq:periodic_supported_choi_endpoint}
+    \end{align}
+    the endpoint gives complete positivity and the strict Choi-rank
+    decrease. The identities
+    $\mathcal F(t\mathcal K)=(t\mathcal K)\mathcal F=(t\mathcal K)^2=0$
+    give every claimed power identity.
 \end{proof}
 
 \begin{lemma}[Channel rank reduction along a coupled direction]
     \label{thm:periodic_supported_choi_coupled_root_reduction}
     \lean{Channel.exists_channel_choiRank_lt_of_supported_anticommuting_direction}
     \leanok
-    Let $D>0$ and let $F:M_D(\C)\to M_D(\C)$ be a channel.
-    Let $K$ be complex linear, with $\tr K(X)=0$ for every $X$,
-    $FK+KF=0$, $K^2=0$ and $F^2K=0$.
-    Suppose $C_F=VGV^\dagger$, $C_K=VJV^\dagger$ and $V^\dagger V=I_r$,
-    where $G\in M_r(\C)$ is positive definite and $J\in M_r(\C)$ is
-    nonzero Hermitian. There is a nonzero real $t$ such that $F+tK$
-    is a channel of strictly smaller Choi rank than $F$, with
-    $(F+tK)^p=F^p$ for every integer $p\ge2$.
+    Let $D>0$ and let $\mathcal F:\MN{D}\to\MN{D}$ be a channel.
+    Let $\mathcal K$ be complex linear, with $\tr\mathcal K(X)=0$
+    for every $X$, $\mathcal F\mathcal K+\mathcal K\mathcal F=0$,
+    $\mathcal K^2=0$ and $\mathcal F^2\mathcal K=0$.
+    Suppose $C_{\mathcal F}=VGV^\dagger$, $C_{\mathcal K}=VJV^\dagger$
+    and $V^\dagger V=\Id_r$, where $G\in\MN{r}$ is positive definite
+    and $J\in\MN{r}$ is nonzero Hermitian.
+    There is a nonzero real $t$ such that $\mathcal F+t\mathcal K$
+    is a channel of strictly smaller Choi rank than $\mathcal F$, with
+    $(\mathcal F+t\mathcal K)^p=\mathcal F^p$ for every integer $p\ge2$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:periodic_positive_pencil_boundary,
         thm:periodic_square_preserving_power_perturbation}
-    Trace preservation gives $\tr J=0$. The positive matrix boundary
-    argument applied to $G+tJ$ gives a positive semidefinite endpoint
-    of smaller rank. Isometric congruence identifies it with $C_{F+tK}$,
-    giving complete positivity and the Choi-rank comparison.
-    The three algebraic identities persist under scalar multiplication;
-    apply Lemma~\ref{thm:periodic_square_preserving_power_perturbation}.
+    The zero-output-trace condition gives
+    $\tr C_{\mathcal F+\mathcal K}=\tr C_{\mathcal F}=1$ and
+    \begin{align}
+        \tr J=\tr(JV^\dagger V)=\tr(VJV^\dagger)
+        =\tr C_{\mathcal K}
+        =\tr C_{\mathcal F+\mathcal K}-\tr C_{\mathcal F}=0.
+        \label{eq:periodic_coupled_choi_direction_trace}
+    \end{align}
+    Apply the positive matrix boundary argument to $G+tJ$. The identity
+    \begin{align}
+        C_{\mathcal F+t\mathcal K}=V(G+tJ)V^\dagger
+        \label{eq:periodic_coupled_choi_endpoint}
+    \end{align}
+    gives complete positivity and the Choi-rank comparison, while
+    $\tr((\mathcal F+t\mathcal K)(X))=\tr X$ gives trace preservation.
+    Finally,
+    \begin{align}
+        \mathcal F(t\mathcal K)+(t\mathcal K)\mathcal F
+        =t(\mathcal F\mathcal K+\mathcal K\mathcal F)=0,\notag\\
+        (t\mathcal K)^2=t^2\mathcal K^2=0,\notag\\
+        \mathcal F^2(t\mathcal K)=t\mathcal F^2\mathcal K=0.
+        \label{eq:periodic_coupled_scaled_direction}
+    \end{align}
+    Apply Lemma~\ref{thm:periodic_square_preserving_power_perturbation}.
     The direction and its simultaneous Choi-face coordinates remain
     assumptions.
 \end{proof}
@@ -994,7 +1044,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \leanok
     Let $\rho\in M_m(\C)$ be positive definite, and let
     $A\in M_n(\C)$ and $B\in M_m(\C)$ be positive semidefinite with
-    $\operatorname{tr}A=\operatorname{tr}(B\rho)>0$.
+    $\tr A=\tr(B\rho)>0$.
     There exist $r\le\operatorname{rank}A+\operatorname{rank}B-1$
     matrices $K_i\in M_{n,m}(\C)$ satisfying
     $\sum_iK_i\rho K_i^\dagger=A$ and $\sum_iK_i^\dagger K_i=B$.

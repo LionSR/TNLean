@@ -485,7 +485,7 @@ $(1,2,2,1,1)$, and put
 Suppose a supplied channel $\mathcal F$ has Kraus span exactly $S$.
 Its Choi rank is $\dim S=10$. There is a channel $\widetilde{\mathcal F}$
 of Choi rank at most nine satisfying
-$\widetilde{\mathcal F}^{\,p}=\mathcal F^p$ for every integer $p\ge2$.
+$\widetilde{\mathcal F}^{\,p}&=\mathcal F^p$ for every integer $p\ge2$.
 In particular, it is a bounded square root of $\mathcal F^2$, whose Choi
 rank is nine. No unitality or absence of coherences is required.
 
@@ -816,9 +816,10 @@ Then there is a channel $\widetilde{\mathcal F}$ such that
   \widetilde{\mathcal F}^{\,p}=\mathcal F^p\quad(p\ge2),\qquad
   \operatorname{rank}C_{\widetilde{\mathcal F}}
   \le\ell+7=\operatorname{rank}C_{\mathcal F^2}.
-  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_selected_root}
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_square_bound}
 \end{align}
-The original root has rank $\ell+8$. These ranks follow by counting
+The original root has rank $\ell+8$. The bound in
+\eqref{eq:dccsp17_root_kraus_rank_thm41_three_sector_square_bound} follows by counting
 the rectangular summands of the one-step and two-step word spaces.
 For odd $\ell$, the square is irreducible of period $\ell$.
 Arbitrary coherences among the specified Kraus blocks are allowed.
@@ -841,21 +842,23 @@ these are at most two real linear constraints in the four-dimensional
 Hermitian space. The Hermitian-preserving complex linear map
 $H(X)=u\operatorname{tr}(\phi X)$ satisfies
 \begin{align}
-  \operatorname{tr}H(X)=0,\quad H(\rho_2)=0,\quad H^2=0,\quad QH\ne0.
-  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_direction}
+  \operatorname{tr}H(X)&=0,\quad H(\rho_2)=0,\quad H^2=0,\quad QH\ne0.
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_middle_map_properties}
 \end{align}
-For a real parameter $t$, change the two diagonal sector maps to
+Using \eqref{eq:dccsp17_root_kraus_rank_thm41_three_sector_middle_map_properties},
+for a real parameter $t$ change the two diagonal sector maps to
 \begin{align}
-  P_t=(I+tH)P,\qquad Q_t=Q(I-tH),
-  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_gauge}
+  P_t&=(I+tH)P,\qquad Q_t=Q(I-tH).
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_coupled_branches}
 \end{align}
-and leave all other diagonal and off-diagonal corner maps unchanged.
+In \eqref{eq:dccsp17_root_kraus_rank_thm41_three_sector_coupled_branches},
+all other diagonal and off-diagonal corner maps are left unchanged.
 The whole perturbation is $\mathcal F_t=\mathcal F+tK$, with $K$ nonzero.
 It is Hermitian preserving and has zero output trace. Direct corner
 composition gives
 \begin{align}
-  \mathcal F K+K\mathcal F=0,\qquad K^2=0,\qquad \mathcal F^2K=0.
-  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_annihilation}
+  \mathcal F K+K\mathcal F&=0,\qquad K^2=0,\qquad \mathcal F^2K=0.
+  \label{eq:dccsp17_root_kraus_rank_thm41_three_sector_anticommuting_zero}
 \end{align}
 At the first adjacent pair, cancellation is $QHP-QHP=0$.
 At the incoming preparation, it is $H(\rho_2)=0$; at the outgoing
@@ -883,14 +886,19 @@ is annihilated on the left by the replacement channel $Q$, on the right
 by preparation of $\rho_1$, and has square zero. All powers of order at
 least two are preserved in this case as well.
 
-The power integration used in the first case is separately proved by
+The relations \eqref{eq:dccsp17_root_kraus_rank_thm41_three_sector_anticommuting_zero}
+integrate by the separately proved identities
 \leanid{add_pow_eq_of_sq_eq_of_sq_mul_eq_zero} and
-\leanid{add_pow_eq_of_anticommuting_square_zero}. They are algebraic
-identities, not proofs of the corner construction, its completely
-positive boundary argument, or the whole selection assertion.
+\leanid{add_pow_eq_of_anticommuting_square_zero}. They establish the power identities. The conditional completely positive
+boundary step is separately formalized by
+\leanid{Channel.exists_channel_choiRank_lt_of_supported_anticommuting_direction},
+under supplied simultaneous Choi-face coordinates, as described below.
+The construction of the corner direction and those coordinates from a
+general root, and the whole selection assertion, remain separate obligations.
 This treats full Kraus spaces with three consecutive two-dimensional
-sectors. Proper subspaces of that support, other sector dimensions, and
-the unrestricted singular nonunital problem remain open.
+sectors. Proper Kraus subspaces and other dimensions are outside this
+three-sector argument; the unrestricted singular nonunital problem
+remains open.
 
 The same paper argument also treats full cyclic spaces on
 $(1,m,2,r,1,\ldots,1)$ with $m,r\ge2$ and $\ell\ge5$.
@@ -923,15 +931,35 @@ $G$ positive definite and $J$ nonzero Hermitian of trace zero.
 It produces the same rank decrease in the ambient matrix space, where
 $A$ may already be singular. Both results are in
 \texttt{TNLean/Algebra/PositivePencilBoundary.lean}.
-The channel application is proved by
+
+The annihilating-direction channel application is proved by
 \leanid{Channel.exists_channel_choiRank_lt_of_supported_annihilating_direction}
-in the same module. For a channel $F$ and a complex-linear map $K$, it
-assumes zero output trace, $FK=KF=K^2=0$, and supplied simultaneous face
-coordinates $C_F=VGV^\dagger$, $C_K=VJV^\dagger$, with $V^\dagger V=I$,
-$G$ positive definite and $J$ nonzero Hermitian. The trace-zero condition
-on $J$ follows from the output-trace condition on $K$; it is not an extra
-hypothesis. The theorem constructs a channel $F+tK$ of strictly smaller
-Choi rank with every power of order at least two unchanged.
+in the same module. For a channel $\mathcal F$ and a complex-linear
+$\mathcal K$, it assumes zero output trace,
+$\mathcal F\mathcal K=\mathcal K\mathcal F=\mathcal K^2=0$,
+and supplied simultaneous face coordinates
+$C_{\mathcal F}=VGV^\dagger$, $C_{\mathcal K}=VJV^\dagger$, with
+$V^\dagger V=I$, $G$ positive definite and $J$ nonzero Hermitian.
+The trace-zero condition on $J$ follows from the output-trace condition
+on $\mathcal K$; it is not an extra hypothesis. The theorem constructs
+a channel $\mathcal F+t\mathcal K$ of strictly smaller Choi rank with
+every power of order at least two unchanged.
+
+The coupled version is separately proved by
+\leanid{Channel.exists_channel_choiRank_lt_of_supported_anticommuting_direction}.
+It has the same zero-output-trace and supplied Choi-face hypotheses,
+and replaces two-sided annihilation by
+\begin{align}
+  \mathcal F\mathcal K+\mathcal K\mathcal F=0,\qquad
+  \mathcal K^2=0,\qquad \mathcal F^2\mathcal K=0.
+  \label{eq:dccsp17_root_kraus_rank_thm41_coupled_boundary_hypotheses}
+\end{align}
+These are the cancellation identities of
+\eqref{eq:dccsp17_root_kraus_rank_thm41_three_sector_anticommuting_zero}.
+Under the supplied face coordinates, this theorem likewise produces
+$\mathcal F+t\mathcal K$ with strictly smaller Choi rank and preserves
+every power of order at least two.
+
 Existence of a suitable direction and its simultaneous Choi-face
 coordinates remain separate obligations. No theorem here asserts them
 for arbitrary singular roots, so the unrestricted selection gap remains
@@ -990,8 +1018,8 @@ absent from the source definition of $p$-divisibility and is not proved in the
 cited converse paragraph.
 
 For invertible target channels, the preceding rank argument supplies the
-required bound for every root. The supplied commuting projection-semigroup representation also gives
-bounded roots for the singular targets just described. For general singular
+required bound for every root. The supplied commuting
+projection-semigroup representation also gives bounded roots for the singular targets just described. For general singular
 target channels it remains open whether, under the irreducible-form
 hypotheses, a channel root can always
 be chosen with Kraus rank at most $d$. The formal development
