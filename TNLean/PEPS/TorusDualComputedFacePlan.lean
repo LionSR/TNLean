@@ -108,7 +108,7 @@ private theorem search_none (R : Finset X) (fuel : ℕ) (prefix : List A)
   induction fuel generalizing prefix with
   | zero =>
     intro h suffix hlen hgood
-    have hs : suffix = [] := List.length_eq_zero.mp (Nat.eq_zero_of_le_zero hlen)
+    have hs : suffix = [] := List.length_eq_zero_iff.mp (Nat.eq_zero_of_le_zero hlen)
     subst suffix
     have hc : torusDualFacePlanCheck R prefix = true := by simpa using hgood
     rw [facePlanSearch, if_pos hc] at h
