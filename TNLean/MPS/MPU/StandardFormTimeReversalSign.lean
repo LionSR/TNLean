@@ -16,7 +16,9 @@ provides a unitary `x` and a sign `σ = ±1` with
 is a consequence of the global symmetry, not a hypothesis. As in
 `MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff`, `N` counts
 two-spin sites of the standard-form chain; see
-`docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
+`docs/paper-gaps/mpu_standard_form_parity_gap.tex`. A standard form is that of
+the two-site block of a canonical tensor, as recorded in
+`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
 
 ## Main results
 
