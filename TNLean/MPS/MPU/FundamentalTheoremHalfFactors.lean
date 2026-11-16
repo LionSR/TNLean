@@ -45,8 +45,8 @@ namespace MPOTensor
 
 /-- **Half factors determine the two-site tensor up to a bond unitary.** Two-site standard forms
 whose gates satisfy `u' = (x ⊗ y) u` and whose half factors satisfy
-`X₂' = (z ⊗ 1) X₂ x†` and `X₁' = (1 ⊗ z̄) X₁ y†` give letterwise conjugate tensors,
-`W' = z W z†`. Here `z̄ = (z†)ᵀ` acts on the virtual index of `X₁`, contracted on the right.
+`X₂' = (z ⊗ 1) X₂ x†` and `X₁' = (1 ⊗ conj z) X₁ y†` give letterwise conjugate tensors,
+`W' = z W z†`. Here `conj z = (z†)ᵀ` acts on the virtual index of `X₁`, contracted on the right.
 
 Source: arXiv:1703.09188, Theorem `FundamentalMPU`, equations `SFuu` and `SFvv`, lines 624--648,
 with the standard form `StandardForm` of lines 603--622. -/
@@ -139,7 +139,7 @@ theorem TwoSiteStandardFormData.mpo_eq_of_half_factor_gauges
 their source cuts. Then `D₁ = D₂`, and after identifying the rank spaces there are unitaries `z`
 on the bond, `x` on the left rank and `y` on the right rank with
 `u_V = (x ⊗ y) u_U` (equation `SFuu`) and the half-factor relations
-`X₂(V) = (z ⊗ 1) X₂(U) x†`, `X₁(V) = (1 ⊗ z̄) X₁(U) y†` (equation `SFvv`).
+`X₂(V) = (z ⊗ 1) X₂(U) x†`, `X₁(V) = (1 ⊗ conj z) X₁(U) y†` (equation `SFvv`).
 
 The normalizations of canonical form II, `X₁†(1 ⊗ ρ)X₁ = 1` and `X₂†X₂ = 1`, are what make the
 half factors unique up to these unitaries. For arbitrary two-site standard-form data the
