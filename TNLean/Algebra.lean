@@ -149,6 +149,7 @@ import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatPolynomialBound
 import TNLean.Algebra.NatSquarePlusOne
+import TNLean.Algebra.NearestKronecker
 import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
