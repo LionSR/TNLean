@@ -99,7 +99,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     Kraus.IsNormal A := by
   -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
   -- primitive MPS data.
-  have hMPSPrim : MPSTensor.HasPrimitiveFixedPoint A :=
+  have hMPSPrim : Kraus.HasPrimitiveFixedPoint A :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   -- Step 2: Extract the Perron fixed point.
   obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
@@ -173,7 +173,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
   have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
     simpa [L] using
-      iIndex_le_general_of_isPrimitivePaper A hTP (isPrimitivePaper_of_isNormal A hN)
+      iIndex_le_general_of_isNormal A hN
   have hKraus_pos : 1 ≤ krausRank A := by
     rw [krausRank, Nat.one_le_iff_ne_zero]
     intro hzero

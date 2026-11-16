@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Lattice.EntropyComparison
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 
 /-!
 # The entropy comparison for a unitary acting away from two regions

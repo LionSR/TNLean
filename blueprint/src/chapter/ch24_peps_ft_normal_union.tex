@@ -386,26 +386,6 @@ every finite union of injective regions.
     Lemma~\ref{lem:peps_injectiveRegion_union_pos} at the induction step.
 \end{proof}
 
-\begin{definition}[Injectivity predicate for blocked regions]%
-    \label{def:peps_regionInjectivityData}
-    \lean{TNLean.PEPS.RegionInjectivityData}
-    \lean{TNLean.PEPS.RegionInjectivityUnionClosure}
-    \leanok
-    A region-injectivity predicate $\inj$ assigns an injectivity assertion
-    $\inj(R)$ to each finite region $R\subseteq V$. It satisfies union closure
-    when $\inj(R)\wedge\inj(S)\Longrightarrow\inj(R\cup S)$ for all $R,S\subseteq V$.
-\end{definition}
-
-\begin{definition}[Concrete region-injectivity predicate of a tensor]%
-    \label{def:peps_regionInjectivityDataOf}
-    \lean{TNLean.PEPS.regionInjectivityDataOf}
-    \leanok
-    \uses{def:peps_regionInjectivityData}
-    For a PEPS tensor $A$, the concrete region-injectivity predicate $\inj_A(R)$
-    asserts that the blocked-region tensor family $\{T_{A,R}^\mu\}_\mu$ is
-    linearly independent.
-\end{definition}
-
 \begin{lemma}[Gauged blocked-region weight as a global sum]
     \label{thm:peps_regionBlockedWeight_applyGauge_eq_globalSum}
     \lean{TNLean.PEPS.regionBlockedWeight_applyGauge_eq_globalSum}

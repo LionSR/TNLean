@@ -45,6 +45,12 @@ def leftBlock (L k : ℕ) : Finset (Fin L) := Finset.univ.filter fun i ↦ i.val
 theorem mem_leftBlock {k : ℕ} {i : Fin L} : i ∈ leftBlock L k ↔ i.val < k := by
   simp [leftBlock]
 
+/-- The number of sites strictly to the left of a cut is the cut position, truncated at
+the chain length. -/
+@[simp]
+theorem card_leftBlock (L k : ℕ) : (leftBlock L k).card = min L k := by
+  exact Fin.card_filter_val_lt
+
 /-- Left blocks grow with the cut. -/
 theorem leftBlock_mono {k k' : ℕ} (h : k ≤ k') : leftBlock L k ⊆ leftBlock L k' :=
   fun _ hi ↦ mem_leftBlock.mpr (lt_of_lt_of_le (mem_leftBlock.mp hi) h)
@@ -86,6 +92,20 @@ theorem rank_cutMatrix_le_one_of_le {k : ℕ} (hk : L ≤ k)
   refine (rank_le_card_width _).trans ?_
   rw [Fintype.card_unique]
 
+/-- Explicit open-boundary tensor data representing `ψ`, with singleton endpoint spaces and
+internal bond dimensions at most `D`.  This packages the tensor and scalar cap that occur in
+the existential predicate `IsOpenMPS`, so an algorithmic construction can retain them as data.
+Source: the one-dimensional note, Part IIa, Proposition `prop:VC`, lines 39–62. -/
+structure OpenMPSRepresentation (L q D : ℕ) (ψ : (Fin L → Fin q) → ℂ) where
+  /-- The varying-bond open-boundary tensor. -/
+  tensor : OBCChainTensor q (max 1 D) L
+  /-- The scalar cap multiplying the path contraction. -/
+  scalar : ℂ
+  /-- Every internal virtual bond has dimension at most `D`. -/
+  internal_bondDim_le : ∀ k, 0 < k.val → k.val < L → tensor.bondDim k ≤ D
+  /-- The represented physical coefficients. -/
+  coeff_eq : ∀ x, ψ x = scalar * tensor.coeff x
+
 /-- An open-boundary matrix product state with singleton endpoint spaces and internal
 bond dimensions at most `D`. The scalar cap multiplies the rectangular path contraction.
 Source: the one-dimensional note, Part IIa, Proposition `prop:VC`, lines 39–62. -/
@@ -93,6 +113,66 @@ def IsOpenMPS (L q D : ℕ) (ψ : (Fin L → Fin q) → ℂ) : Prop :=
   ∃ (A : OBCChainTensor q (max 1 D) L) (c : ℂ),
     (∀ k, 0 < k.val → k.val < L → A.bondDim k ≤ D) ∧
       ∀ x, ψ x = c * A.coeff x
+
+/-- The explicit representation type packages exactly the data asserted by `IsOpenMPS`. -/
+theorem isOpenMPS_iff_nonempty_representation (L q D : ℕ)
+    (ψ : (Fin L → Fin q) → ℂ) :
+    IsOpenMPS L q D ψ ↔ Nonempty (OpenMPSRepresentation L q D ψ) := by
+  constructor
+  · rintro ⟨A, c, hA, hψ⟩
+    exact ⟨⟨A, c, hA, hψ⟩⟩
+  · rintro ⟨⟨A, c, hA, hψ⟩⟩
+    exact ⟨A, c, hA, hψ⟩
+
+namespace OpenMPSRepresentation
+
+/-- Forgetting the packaged tensor data recovers the mathematical MPS predicate. -/
+theorem isOpenMPS {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ}
+    (R : OpenMPSRepresentation L q D ψ) : IsOpenMPS L q D ψ :=
+  ⟨R.tensor, R.scalar, R.internal_bondDim_le, R.coeff_eq⟩
+
+/-- Scaling a represented state retains the same tensor and scales its scalar cap. -/
+def smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ}
+    (R : OpenMPSRepresentation L q D ψ) (c : ℂ) :
+    OpenMPSRepresentation L q D (fun x ↦ c * ψ x) where
+  tensor := R.tensor
+  scalar := c * R.scalar
+  internal_bondDim_le := R.internal_bondDim_le
+  coeff_eq x := by rw [R.coeff_eq x, mul_assoc]
+
+/-- Append a one-site factor to an explicit open-boundary representation. -/
+def snoc {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ}
+    (R : OpenMPSRepresentation L q D ψ) (hD : 0 < D) (f : Fin q → ℂ) :
+    OpenMPSRepresentation (L + 1) q D
+      (fun x ↦ ψ (Fin.init x) * f (x (Fin.last L))) where
+  tensor := R.tensor.snoc f
+  scalar := R.scalar
+  internal_bondDim_le k hk0 hkL := by
+    by_cases hk : k.val < L
+    · let k' : Fin (L + 1) := ⟨k.val, by omega⟩
+      have hk_eq : k = k'.castSucc := by
+        apply Fin.ext
+        change k.val = k.val
+        rfl
+      have hdim : (R.tensor.snoc f).bondDim k = R.tensor.bondDim k' := by
+        rw [hk_eq]
+        simp [OBCChainTensor.snoc]
+      rw [hdim]
+      exact R.internal_bondDim_le k' (by simpa [k'] using hk0) (by simpa [k'] using hk)
+    · have hkval : k.val = L := by omega
+      have hk_eq : k = (Fin.last L).castSucc := by
+        apply Fin.ext
+        simpa using hkval
+      have hdim : (R.tensor.snoc f).bondDim k = 1 := by
+        rw [hk_eq]
+        simp [OBCChainTensor.snoc, R.tensor.right_dim]
+      rw [hdim]
+      omega
+  coeff_eq x := by
+    rw [R.coeff_eq, OBCChainTensor.coeff_snoc]
+    ring
+
+end OpenMPSRepresentation
 
 /-- Scaling a matrix product state multiplies its scalar endpoint cap. -/
 theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ}

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.SemiRegularCanonicalLocalTransport
 import TNLean.PEPS.BondCoordinateTransport
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Fourier transport with arbitrary open virtual boundary data
@@ -121,10 +122,7 @@ theorem graphRegionCoordinateMatrix_open_superposition
   simp only [map_smul, Matrix.mulVecLin_apply, graphRegionCoordinateMatrix_open Q hQ U L hL,
     Finset.smul_sum, smul_smul, Finset.sum_smul]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro a _
-  apply Finset.sum_congr rfl
-  intro θ _
+  refine Finset.sum_congr₂ fun a _ θ _ ↦ ?_
   rw [mul_comm]
 
 /-- Actual regional range inclusion, derived from the open coefficient identity. -/

@@ -10,10 +10,10 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessDifferentFlags
 # Long words and the one-block theorem
 
 Let `P` and `Q` be two multi-block compressions of the same tensor `B` onto the same family of
-normal blocks `C s`, `s ∈ S`, of positive bond dimension, with flags `M_k` and `M'_{k'}`, reading
-maps `W_s`, `W'_s` and injections `V_s`, `V'_s`. Suppose the block `C_s` occurs once in the family
-up to gauge. Then the matching of the two flags pairs the position `k` of `s` in `P` with the
-position `k'` of `s` in `Q`, and *Two compressions with different flags* (blueprint
+nonzero irreducible blocks `C s`, `s ∈ S`, with flags `M_k` and
+`M'_{k'}`, reading maps `W_s`, `W'_s` and injections `V_s`, `V'_s`. Suppose the block `C_s` occurs
+once in the family up to gauge. Then the matching of the two flags pairs the position `k` of `s` in
+`P` with the position `k'` of `s` in `Q`, and *Two compressions with different flags* (blueprint
 `thm:asym_uniq_different_flags`) gives a nonzero scalar `λ` with `W'_s = λ W_s` on
 `U = M_k ∩ M'_{k'}` and `V'_s ≡ λ⁻¹ V_s` modulo `N = M_{k-1} + M'_{k'-1}`.
 
@@ -130,8 +130,8 @@ end OneCompression
 
 section SameFamily
 
-variable (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-  (hD : ∀ s ∈ S, 0 < D s)
+variable (P Q : MultiBlockCompression B S C) (hirr : ∀ s ∈ S, Matrix.IsIrreducibleAction (C s))
+  (hlet : ∀ s ∈ S, ∃ i, C s i ≠ 0)
 
 /-- **A block occurring once up to gauge is matched with itself** (proof of blueprint
 `cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block theorem*): the
@@ -139,22 +139,22 @@ matched label of `s` carries a block gauge related to `C_s` (blueprint `thm:asym
 blocks are unique*), so it is `s`. -/
 theorem labelMatching_eq_of_unique {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1) :
-    P.labelMatching Q hC hD hC hD s = s := by
-  have h := P.isGaugeRelated_slotMatching Q hC hD hC hD (Sum.inl s)
+    P.labelMatching Q hirr hlet hirr hlet s = s := by
+  have h := P.isGaugeRelated_slotMatching Q hirr hlet hirr hlet (Sum.inl s)
   rw [slotMatching_inl] at h
-  exact Subtype.ext (hs _ (P.labelMatching Q hC hD hC hD s).2 h)
+  exact Subtype.ext (hs _ (P.labelMatching Q hirr hlet hirr hlet s).2 h)
 
 /-- **The two `s`-steps are matched** (proof of blueprint `cor:asym_uniq_one_block`, *Bare
 uniqueness at the ends of the flag; the one-block theorem*): if `C_s` occurs once up to gauge, the
 matching sends the position of `s` in `P` to the position of `s` in `Q`. -/
 theorem matching_ord_inl_of_unique {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1) :
-    P.matching Q hC hD hC hD (P.ord (Sum.inl s)) = Q.ord (Sum.inl s) := by
-  have h := P.slotMatching_inl Q hC hD hC hD s
-  rw [slotMatching_apply, P.labelMatching_eq_of_unique Q hC hD hs] at h
+    P.matching Q hirr hlet hirr hlet (P.ord (Sum.inl s)) = Q.ord (Sum.inl s) := by
+  have h := P.slotMatching_inl Q hirr hlet hirr hlet s
+  rw [slotMatching_apply, P.labelMatching_eq_of_unique Q hirr hlet hs] at h
   exact Q.ord.symm_apply_eq.1 h
 
-include hC hD
+include hirr hlet
 
 /-- **Long words and an unrepeated block** (proof of blueprint `cor:asym_uniq_one_block`, *Bare
 uniqueness at the ends of the flag; the one-block theorem*). Let `C_s` occur once in the family up
@@ -172,10 +172,10 @@ theorem exists_smul_evalWord_of_unique {s : {s // s ∈ S}}
         (∀ t : {t // t ∈ S}, Q.ord (Sum.inl s) ≤ Q.ord (Sum.inl t)) →
         ∀ w : List (Fin d), P.z ≤ w.length →
           Kraus.evalWord B w * Q.right s = c⁻¹ • (Kraus.evalWord B w * P.right s)) := by
-  have hk' := (P.matching_ord_inl_of_unique Q hC hD hs).symm
-  obtain ⟨c, hc, hW, hV⟩ := P.exists_smul_of_matching_inl Q hC hD _ s rfl hk'
+  have hk' := (P.matching_ord_inl_of_unique Q hirr hlet hs).symm
+  obtain ⟨c, hc, hW, hV⟩ := P.exists_smul_of_matching_inl Q hirr hlet _ s rfl hk'
   rw [← hk'] at hW hV
-  have hz := P.z_eq Q hC hD hC hD
+  have hz := P.z_eq Q hirr hlet hirr hlet
   refine ⟨c, hc, fun hP hQ w hw => ?_, fun hP hQ w hw => ?_⟩
   · -- `B^w` maps the bond space into `U = M_k ∩ M'_{k'}`.
     refine Matrix.ext_iff_mulVec.2 fun v => ?_
@@ -206,7 +206,7 @@ theorem exists_left_mul_evalWord_eq_smul_of_last {s : {s // s ∈ S}}
     (hQ : ∀ t : {t // t ∈ S}, Q.ord (Sum.inl t) ≤ Q.ord (Sum.inl s)) :
     ∃ c : ℂ, c ≠ 0 ∧ ∀ w : List (Fin d), P.z ≤ w.length →
       Q.left s * Kraus.evalWord B w = c • (P.left s * Kraus.evalWord B w) := by
-  obtain ⟨c, hc, h, -⟩ := P.exists_smul_evalWord_of_unique Q hC hD hs
+  obtain ⟨c, hc, h, -⟩ := P.exists_smul_evalWord_of_unique Q hirr hlet hs
   exact ⟨c, hc, h hP hQ⟩
 
 /-- **Uniqueness after long words at an unrepeated first block slot** (blueprint
@@ -220,7 +220,7 @@ theorem exists_evalWord_mul_right_eq_inv_smul_of_first {s : {s // s ∈ S}}
     (hQ : ∀ t : {t // t ∈ S}, Q.ord (Sum.inl s) ≤ Q.ord (Sum.inl t)) :
     ∃ c : ℂ, c ≠ 0 ∧ ∀ w : List (Fin d), P.z ≤ w.length →
       Kraus.evalWord B w * Q.right s = c⁻¹ • (Kraus.evalWord B w * P.right s) := by
-  obtain ⟨c, hc, -, h⟩ := P.exists_smul_evalWord_of_unique Q hC hD hs
+  obtain ⟨c, hc, -, h⟩ := P.exists_smul_evalWord_of_unique Q hirr hlet hs
   exact ⟨c, hc, h hP hQ⟩
 
 /-- **The one-block theorem** (blueprint `cor:asym_uniq_one_block`, *Bare uniqueness at the ends of
@@ -232,7 +232,7 @@ theorem exists_smul_single_block {s : {s // s ∈ S}} (hS : ∀ t ∈ S, t = s.1
       Q.left s * Kraus.evalWord B w = c • (P.left s * Kraus.evalWord B w) ∧
         Kraus.evalWord B w * Q.right s = c⁻¹ • (Kraus.evalWord B w * P.right s) := by
   have heq : ∀ t : {t // t ∈ S}, t = s := fun t => Subtype.ext (hS t.1 t.2)
-  obtain ⟨c, hc, hl, hr⟩ := P.exists_smul_evalWord_of_unique Q hC hD fun t ht _ => hS t ht
+  obtain ⟨c, hc, hl, hr⟩ := P.exists_smul_evalWord_of_unique Q hirr hlet fun t ht _ => hS t ht
   refine ⟨c, hc, fun w hw => ?_⟩
   rw [← P.z_eq_of_single_block hS] at hw
   exact ⟨hl (fun t => by rw [heq t]) (fun t => by rw [heq t]) w hw,
@@ -246,8 +246,8 @@ theorem exists_left_eq_smul_of_last {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1)
     (hP : ∀ b, P.ord b ≤ P.ord (Sum.inl s)) (hQ : ∀ b, Q.ord b ≤ Q.ord (Sum.inl s)) :
     ∃ c : ℂ, c ≠ 0 ∧ Q.left s = c • P.left s := by
-  have hk' := (P.matching_ord_inl_of_unique Q hC hD hs).symm
-  obtain ⟨c, hc, hW, -⟩ := P.exists_smul_of_matching_inl Q hC hD _ s rfl hk'
+  have hk' := (P.matching_ord_inl_of_unique Q hirr hlet hs).symm
+  obtain ⟨c, hc, hW, -⟩ := P.exists_smul_of_matching_inl Q hirr hlet _ s rfl hk'
   rw [← hk', P.flag_succ_eq_top_of_forall_le hP, Q.flag_succ_eq_top_of_forall_le hQ,
     top_inf_eq] at hW
   refine ⟨c, hc, Matrix.ext_iff_mulVec.2 fun v => ?_⟩
@@ -264,8 +264,8 @@ theorem exists_right_eq_inv_smul_of_first {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1)
     (hP : ∀ b, P.ord (Sum.inl s) ≤ P.ord b) (hQ : ∀ b, Q.ord (Sum.inl s) ≤ Q.ord b) :
     ∃ c : ℂ, c ≠ 0 ∧ Q.right s = c⁻¹ • P.right s := by
-  have hk' := (P.matching_ord_inl_of_unique Q hC hD hs).symm
-  obtain ⟨c, hc, -, hV⟩ := P.exists_smul_of_matching_inl Q hC hD _ s rfl hk'
+  have hk' := (P.matching_ord_inl_of_unique Q hirr hlet hs).symm
+  obtain ⟨c, hc, -, hV⟩ := P.exists_smul_of_matching_inl Q hirr hlet _ s rfl hk'
   rw [← hk', P.flag_castSucc_eq_bot_of_forall_ge hP, Q.flag_castSucc_eq_bot_of_forall_ge hQ,
     bot_sup_eq] at hV
   refine ⟨c, hc, Matrix.ext_iff_mulVec.2 fun v => ?_⟩

@@ -104,3 +104,128 @@
     invariant subset. Indecomposability makes it all of $K$, and the
     two-block classification identifies the action with the regular one.
 \end{proof}
+
+\begin{lemma}[Exact trees of the two-block Fibonacci realization]%
+    \label{lem:mpo_symmetry_fibonacci_exact_trees}
+    \lean{MPSTensor.isBiorthogonalDecomposition_complexOfRing,
+        FibonacciCompression.isBiorthogonalDecomposition_fibFusion,
+        FibonacciCompression.isBiorthogonalDecomposition_fibAct}
+    \leanok
+    \uses{def:glm_boundary_decomposition, def:asymex_fib,
+        thm:asymex_fib_anomaly_nim_rep}
+    Let $O_1,O_\tau$ be the Fibonacci operator blocks and let
+    $A_{x_1},A_{x_\tau}$ be the two normal states of
+    Lemma~\ref{thm:asymex_fib_anomaly_nim_rep}. For every pair of labels
+    the product $O_aO_b$ is an exact biorthogonal decomposition onto the
+    blocks $O_c$ with multiplicity $N_{ab}^c$, and for every label $a$ and
+    every state block $x$ the action $O_a\cdot A_x$ is an exact biorthogonal
+    decomposition onto the blocks $A_y$ with multiplicity $N_{ax}^y$, as in
+    \cite[Section~3]{GarreRubio2023MPOSym}. The analysis and synthesis maps
+    have entries in $\mathbb{Z}[\sigma]$, $\sigma=\varphi^{-1/2}$.
+    % Source anchor: arXiv:2203.12563, lines 361--391, 459--490 and 1991--1993.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Each retraction, orthogonality and letter identity is an identity of
+    matrices over $\mathbb{Z}[\sigma]$, checked there and carried to the
+    complex matrices by the embedding of $\mathbb{Z}[\sigma]$. Every letter
+    of each product and action tensor is the sum of its blocks, so no
+    remainder occurs.
+\end{proof}
+
+\begin{lemma}[The Fibonacci L-symbol is the F-symbol up to gauge]%
+    \label{lem:mpo_symmetry_fibonacci_l_symbol}
+    \lean{FibonacciCompression.fib_actionLMatrix_eq,
+        FibonacciCompression.fib_actionLMatrix_eq_gauge_fSymbol}
+    \leanok
+    \uses{lem:mpo_symmetry_fibonacci_exact_trees,
+        def:glm_boundary_action_l_matrix, def:asymex_fib_fsymbols}
+    For the exact trees of Lemma~\ref{lem:mpo_symmetry_fibonacci_exact_trees},
+    the L-symbol $L_{\tau\tau x}^{y}$ equals $1$ on the three
+    one-dimensional blocks, and on the block $x=y=x_\tau$ it equals
+    \begin{align}
+        L_{\tau\tau x_\tau}^{x_\tau} & =
+        \begin{pmatrix}
+            \varphi^{-1} & \varphi       \\
+            \varphi^{-2} & -\varphi^{-1}
+        \end{pmatrix},
+        \label{eq:mpo_fibonacci_l_symbol}
+    \end{align}
+    with rows indexed by the intermediate block $z$ and columns by the
+    fusion channel $c$. With nonzero multiplicity gauges $X_{ax}^{y}$, the
+    hatted gauge equal to the inverse and a trivial fusion gauge,
+    \begin{align}
+        \bigl(L_{\tau\tau x}^{y}\bigr)_{c}^{z}
+         & =X_{\tau z}^{y}X_{\tau x}^{z}\bigl(X_{cx}^{y}\bigr)^{-1}
+        \bigl(F^{\tau\tau x}_{y}\bigr)_{c}^{z}
+        \label{eq:mpo_fibonacci_l_equals_f}
+    \end{align}
+    for all labels, so the L-symbol of the regular module is the gauge
+    transform of the F-symbol, which is how the equality of L- and F-symbols in
+    \cite[Section~3.1]{GarreRubio2023MPOSym} is read.
+    % Source anchor: arXiv:2203.12563, lines 517--546 and 593--605;
+    % arXiv:1511.08090, lines 1245--1257.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The normalized trace defining each entry is the image of a trace of a
+    product of matrices over $\mathbb{Z}[\sigma]$, which is computed
+    there. The gauges $X_{1x_1}^{x_1}=X_{1x_\tau}^{x_\tau}
+        =X_{\tau x_1}^{x_\tau}=\varphi^{3/2}$, with all other gauges equal
+    to $1$, then give (\ref{eq:mpo_fibonacci_l_equals_f}) entry by entry.
+    Both sides of (\ref{eq:mpo_fibonacci_l_equals_f}) on the block
+    $x=y=x_\tau$ have the gauge-invariant cross ratio $-\varphi^{-1}$.
+\end{proof}
+
+
+\begin{theorem}[A standard gauge for every Fibonacci action sector]%
+    \label{thm:mpo_symmetry_fibonacci_l_all_sectors}
+    \lean{FibonacciCompression.Boundary.gauge_mul_inv,
+        FibonacciCompression.Boundary.gauge_ne_zero,
+        FibonacciCompression.Boundary.fusion_isBiorthogonal,
+        FibonacciCompression.Boundary.action_isBiorthogonal,
+        FibonacciCompression.Boundary.states_isNormal,
+        FibonacciCompression.Boundary.actionTrees_isBiorthogonal,
+        FibonacciCompression.Boundary.actionLMatrix_eq_fSymbol,
+        FibonacciCompression.Boundary.inverseActionLMatrix_eq_fSymbol,
+        FibonacciCompression.Boundary.actionLMatrix_tau,
+        FibonacciCompression.Boundary.actionLMatrix_inverse,
+        FibonacciCompression.Boundary.fusionFMatrix_eq_fSymbol,
+        FibonacciCompression.Boundary.actionLMatrix_eq_fusionFMatrix}
+    \uses{lem:mpo_symmetry_fibonacci_exact_trees,
+        lem:mpo_symmetry_fibonacci_l_symbol}
+    For the two normal blocks and exact maps of
+    Lemma~\ref{lem:mpo_symmetry_fibonacci_exact_trees}, multiply both fusion
+    and action analysis in the $(\tau,\tau,1)$ and $(\tau,\tau,\tau)$
+    channels by $\sigma$ and $-\sigma^{-1}$, respectively, and multiply
+    synthesis by the reciprocal factors. All other channel scales are $1$.
+    The maps remain exact biorthogonal decompositions. For every choice of
+    labels $a,b,x,y$, the resulting action comparison and the fusion
+    comparison computed from the same maps satisfy
+    \[
+        (L_{abx}^{y})_{c,k\mu}^{z,ij}
+        = [F^{abx}_{y}]_{c,\mu k}^{z,ji}.
+    \]
+    Every nonempty one-dimensional sector is $1$. With intermediate
+    labels ordered as $1,\tau$, the only two-dimensional sector is
+    \[
+        L_{\tau\tau\tau}^{\tau}
+        =F^{\tau\tau\tau}_{\tau}
+        =\begin{pmatrix}\sigma^2&\sigma\\\sigma&-\sigma^2\end{pmatrix}.
+    \]
+    The reverse action comparison has the transposed coefficients.
+    The forward and reverse matrices are inverse, including on empty
+    multiplicity spaces.
+\end{theorem}
+\begin{proof}
+    The reciprocal channel factors preserve retractions and letter
+    reconstruction. In common incoming bond coordinates, each sequential
+    analysis followed by fusion-then-action synthesis is the displayed
+    coefficient times the identity of the final state bond. The normalized
+    trace gives $L$. Left fusion analysis followed by right fusion
+    synthesis gives the same coefficient, with the opposite left and right
+    multiplicity index types. The reverse contractions and multiplication
+    of the displayed coefficient matrices give both inverse identities.
+\end{proof}

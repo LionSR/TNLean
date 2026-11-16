@@ -568,9 +568,24 @@ theorem mem_flagVec_redGt_two (k : Fin (labels.card + redGt.z + 1)) (hk : k.val 
     · simpa using h2
     · simpa using h3
 
+theorem isIrreducibleAction_blocks :
+    ∀ s ∈ labels, Matrix.IsIrreducibleAction (blocks s) := fun s hs =>
+  isIrreducibleAction_of_isNormal _ (isNormal_blocks s hs) (dims_pos s hs)
+
+theorem exists_ne_zero_blocks : ∀ s ∈ labels, ∃ i, blocks s i ≠ 0 := fun s hs =>
+  exists_ne_zero_of_isNormal_of_pos (isNormal_blocks s hs) (dims_pos s hs)
+
+theorem isIrreducibleAction_blocks' :
+    ∀ s ∈ labels, Matrix.IsIrreducibleAction (blocks' s) := fun s hs =>
+  isIrreducibleAction_of_isNormal _ (isNormal_blocks' s hs) (dims_pos s hs)
+
+theorem exists_ne_zero_blocks' : ∀ s ∈ labels, ∃ i, blocks' s i ≠ 0 := fun s hs =>
+  exists_ne_zero_of_isNormal_of_pos (isNormal_blocks' s hs) (dims_pos s hs)
+
 /-- The matching of the two reductions. -/
 noncomputable abbrev positionMatching : Fin (labels.card + redG.z) ≃ Fin (labels.card + redGt.z) :=
-  redG.matching redGt isNormal_blocks dims_pos isNormal_blocks' dims_pos
+  redG.matching redGt isIrreducibleAction_blocks exists_ne_zero_blocks isIrreducibleAction_blocks'
+    exists_ne_zero_blocks'
 
 theorem positionMatching_ord_slotC1 :
     positionMatching (redG.ord (Sum.inl slotC1)) = redGt.ord (Sum.inl slotC1) := by

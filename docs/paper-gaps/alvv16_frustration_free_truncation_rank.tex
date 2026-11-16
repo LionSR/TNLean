@@ -1,0 +1,171 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Schmidt Rank of the ALVV Frustration-Free Truncation}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The rank assertion}
+
+Arad, Landau, Vazirani and Vidick~\cite{Arad2016RigorousRG},
+\href{https://arxiv.org/abs/1602.08828v2}{arXiv:1602.08828v2},
+Theorem \texttt{thm:FF-tH}, item 2, asserts that the frustration-free
+truncated Hamiltonian has operator Schmidt rank at most $d^2+2$ across
+every cut. The definition and argument are in
+\texttt{local\_alg\_arxiv\_v2.tex}, lines 1467--1493 and 1543--1568.
+This constant is false for an interval with nonempty complementary
+parts on both sides. The example below has $d=2$ and rank seven,
+with unique ground state and spectral gap exactly one both before
+and after truncation. The corrected general bound is $d^2+3$.
+
+Throughout, the terms truncated on an interval are its internal bonds,
+as in the explicit sum defining $H_J$ in Definition \texttt{def:FF-tH}.
+The subsequent parity-index notation in that definition includes an
+extra endpoint; that separate indexing typo is not used here.
+Operator Schmidt rank means the least number of products $A_j\otimes B_j$
+whose sum is the operator. This note gives an exact mathematical
+counterexample, not a formalized Lean counterexample theorem.
+
+\section{An eight-qubit chain}
+
+Number the sites $0,\ldots,7$ and let $p=|0\rangle\langle0|$.
+For bonds $i=0,\ldots,6$, set
+\[
+ h_i=I-p_i p_{i+1}\quad(i\ne3),\qquad
+ h_3=|\psi^-\rangle\langle\psi^-|,\qquad
+ |\psi^-\rangle=(|01\rangle-|10\rangle)/\sqrt2.
+\]
+Each term is a nonzero orthogonal projection of norm one, supported on
+its two assigned sites. The four even bonds are disjoint and cover
+all sites. Thus
+\[
+ H=\sum_{i=0}^6h_i\ \ge\ h_0+h_2+h_4+h_6
+       \ \ge\ I-|0^8\rangle\langle0^8|.
+\]
+All seven terms annihilate $|0^8\rangle$. The vector $|10000000\rangle$
+is an eigenvector of energy one. Hence $H$ is frustration free, its
+ground state is unique, and its spectral gap is exactly one.
+
+Take the region $J=\{1,\ldots,6\}$, with internal bonds $1,\ldots,5$.
+The source's truncated Hamiltonian is
+\[
+ \widetilde H=2I-Q_o-Q_e+h_0+h_6,
+ \qquad
+ Q_o=(I-h_1)(I-h_3)(I-h_5),\quad
+ Q_e=(I-h_2)(I-h_4).
+\]
+The terms in each product have disjoint supports.
+Furthermore, $h_0$, $I-Q_e$, and $h_6$ are projections on disjoint
+blocks covering the eight sites, with common kernel spanned by $|0^8\rangle$.
+Their sum dominates $I-|0^8\rangle\langle0^8|$.
+Since $I-Q_o\ge0$ and $|10000000\rangle$ still has energy one,
+$\widetilde H$ also has unique ground state $|0^8\rangle$ and gap one.
+
+\section{The exact Schmidt rank}
+
+Cut between sites 3 and 4. On the left and right four-qubit factors put
+\begin{align*}
+ E_L&=I\otimes p\otimes p\otimes I,&
+ E_R&=I\otimes p\otimes p\otimes I,\\
+ O_L&=I\otimes I\otimes p\otimes p,&
+ O_R&=p\otimes p\otimes I\otimes I,\\
+ B_L&=I-p\otimes p\otimes I\otimes I,&
+ B_R&=I-I\otimes I\otimes p\otimes p.
+\end{align*}
+Here the identity in an additive expression acts on all four sites.
+Let
+\[
+ X=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
+ W=\begin{pmatrix}0&1\\-1&0\end{pmatrix},\quad
+ Z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+\]
+For $\sigma\in\{I,X,W,Z\}$, define
+$E_{L,\sigma}=I\otimes p\otimes p\otimes\sigma$ and
+$E_{R,\sigma}=\sigma\otimes p\otimes p\otimes I$.
+The identity
+\[
+ I-h_3=\tfrac14(3I\otimes I+X\otimes X-W\otimes W+Z\otimes Z)
+\]
+gives
+\begin{align}
+ \widetilde H={}&-\tfrac34E_{L,I}\otimes E_{R,I}
+ -\tfrac14E_{L,X}\otimes E_{R,X}
+ +\tfrac14E_{L,W}\otimes E_{R,W}
+ -\tfrac14E_{L,Z}\otimes E_{R,Z}\notag\\
+ &-O_L\otimes O_R+(2I+B_L)\otimes I+I\otimes B_R.
+ \label{eq:ff_rank_seven}
+\end{align}
+Both ordered seven-element families in this expression are linearly
+independent over $\mathbb C$. To check this directly, number the
+four-qubit computational basis $0,\ldots,15$. In the left family select
+matrix entries
+\[
+ (0,0),(0,1),(1,0),(1,1),(4,4),(2,2),(5,5);
+\]
+in the right family select
+\[
+ (0,0),(0,8),(8,0),(8,8),(2,2),(4,4),(1,1).
+\]
+The resulting matrices, whose columns follow the order in
+\eqref{eq:ff_rank_seven}, are
+\[
+ \begin{pmatrix}
+ 1&0&0&1&1&2&1\\0&1&1&0&0&0&0\\0&1&-1&0&0&0&0\\
+ 1&0&0&-1&0&2&1\\0&0&0&0&1&3&1\\0&0&0&0&0&2&1\\0&0&0&0&0&3&1
+ \end{pmatrix},\qquad
+ \begin{pmatrix}
+ 1&0&0&1&1&1&0\\0&1&1&0&0&0&0\\0&1&-1&0&0&0&0\\
+ 1&0&0&-1&0&1&0\\0&0&0&0&1&1&1\\0&0&0&0&0&1&0\\1&0&0&1&1&1&1
+ \end{pmatrix}.
+\]
+Their determinants are $-4$ and $4$. All seven coefficients in
+\eqref{eq:ff_rank_seven} are nonzero, so the operator Schmidt rank
+is exactly seven. This exceeds the printed bound $d^2+2=6$.
+
+\section{The corrected count and the formal boundary}
+
+For a cut in the truncated region, exactly one parity product can contain
+a bond crossing the cut. Its operator Schmidt rank is at most $d^2$:
+all its other factors act entirely on one side. The other parity product
+has rank at most one. Finally,
+\[
+ 2I+H_{\overline J}= (2I+H_{\mathrm{left}})\otimes I
+                         +I\otimes H_{\mathrm{right}}
+\]
+has rank at most two. Thus $\operatorname{OSR}(\widetilde H)\le d^2+3$.
+The example saturates this count. The source's interior-cut argument
+counts the complementary Hamiltonian as one contribution, whereas it can
+have independent terms on both sides. At cuts outside the region the
+usual $d^2+2$ bound still holds.
+
+The correction changes an additive constant in the rank estimate; it
+does not invalidate the ground-space or spectral-gap conclusions of the
+frustration-free truncation theorem. The physical detectability and
+range-projection reductions are separately proved. The actual regional
+truncated Hamiltonian and its corrected all-cut
+rank estimate are now proved in
+\path{TNLean/MPS/AreaLaw/PhysicalFrustrationFreeRank.lean}. The final
+rank statement assumes only the original nearest-neighbour supports; it
+requires no supplied decomposition, rank, projection or positivity premise.
+It includes zero local dimension, the empty chain, empty intervals and
+endpoint cuts. The actual parity products have total rank at most $d^2+1$
+in positive local dimension, derived by following their actual ordered
+factors through the unique possible crossing bond. The exterior sum is
+split into its actual left, right and possible crossing terms. Both
+regional complements are absorbed into one side when the crossing term
+is exterior. These constructions establish $d^2+3$ without appealing to
+any independent approximation theorem. Other parts of
+\href{https://github.com/LionSR/TNLean/issues/9833}{the ALVV programme}
+remain separate.
+No source-labelled formalization of the printed rank assertion is claimed.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

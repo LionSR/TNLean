@@ -51,7 +51,7 @@ theorem isNormalTensor_of_isNormal_isTransferIdempotent [NeZero D]
     (hRFP : IsTransferIdempotent A) : IsNormalTensor A := by
   have hInjective : Kraus.IsInjective A := rfp_nt_structural A hNormal hRFP
   have hIrr : Kraus.IsIrreducibleFamily A :=
-    isIrreducibleTensor_of_isPrimitivePaper A (isPrimitivePaper_of_isNormal A hNormal)
+    isIrreducibleFamily_of_isNormal A hNormal
   have hApply : ∃ i, A i ≠ 0 := by
     by_contra hzero
     push Not at hzero

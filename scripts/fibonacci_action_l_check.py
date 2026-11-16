@@ -234,3 +234,39 @@ for a,b,x in product(range(2),repeat=3):
                 sequential=add(sequential,mm(mm(ss,A[y,i]),sa))
         assert double==fused==sequential
 print('Both action trees reconstruct every unblocked double-action letter exactly.')
+
+# Verify the later merged maps as well, rather than reintroducing their tables.
+import argparse
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--tree-maps',type=Path,default=root/'FibonacciActionTrees.lean')
+args=parser.parse_args()
+src=args.tree_maps.read_text()
+def main_matrix(name,a,b,c):
+    block=src.split('def '+name+' :',1)[1].split('\n/--',1)[0]
+    block=block.split(f'| {a}, {b}, {c} =>',1)[1].split('!![',1)[1].split(']',1)[0]
+    return [[sum((K.convert(int(v))*sig**i for i,v in enumerate(e.split(','))),zero) for e in re.findall(r'⟨([^⟩]+)⟩',row)] for row in block.split(';')]
+for key in V:
+    V[key]=main_matrix('fibFusionAnalysisGolden',*key)
+    W[key]=main_matrix('fibFusionSynthesisGolden',*key)
+for key in VA:
+    VA[key]=main_matrix('fibActAnalysisGolden',*key)
+    WA[key]=main_matrix('fibActSynthesisGolden',*key)
+# In the merged maps, the same triple gauge applies to action and fusion.
+for key in V:
+    V[key]=scale(beta(*key),V[key]);W[key]=scale(one/beta(*key),W[key])
+for key in VA:
+    VA[key]=scale(beta(*key),VA[key]);WA[key]=scale(one/beta(*key),WA[key])
+for a,b,x,y,c,z in product(range(2),repeat=6):
+    if N(a,b,c) and N(c,x,y) and N(b,x,z) and N(a,z,y):
+        f=target(a,b,x,y,z,c)
+        fa,fs,sa,ss=trees(a,b,x,y,c,z)
+        assert mm(sa,fs)==scale(f,eye(state_dim[y]))
+        assert mm(fa,ss)==scale(f,eye(state_dim[y]))
+print('All standard-gauge action sectors and reverse contractions verified against merged maps.')
+VA,WA,state_dim=V,W,dim
+for a,b,x,y,c,z in product(range(2),repeat=6):
+    if N(a,b,c) and N(c,x,y) and N(b,x,z) and N(a,z,y):
+        f=target(a,b,x,y,z,c)
+        fa,fs,sa,ss=trees(a,b,x,y,c,z)
+        assert mm(fa,ss)==scale(f,eye(dim[y]))
+print('All standard-gauge fusionFMatrix sectors verified against merged maps.')

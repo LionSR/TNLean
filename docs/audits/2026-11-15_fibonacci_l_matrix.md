@@ -7,11 +7,42 @@ The blueprint records the precise constructed family but carries no completion
 marks while hosted compilation is pending. The earlier exact calculation is
 preserved below. Source presence is not kernel-check evidence.
 
+## 2026-11-16 continuation: reuse the now-merged construction
+
+During the interrupted upload, PR #10689 merged at
+`ab8f74efe8de668d891465b2962af060b1b4359d`. It adds the exact fusion/action
+maps and the tau-tau L comparison in `FibonacciActionTrees.lean` and
+`FibonacciLSymbol.lean`. That work is reused rather than duplicated.
+Draft #10756 now extends it to **all** operator-label sectors, reverse
+comparisons, both inverse identities, and equality with the actual
+`fusionFMatrix` in one common standard gauge. No general independence of
+the choice of normal-block reductions is claimed.
+
+The refreshed remote branch is based on main
+`439502f015916a15cae5a8dfdce0a6a26fc0d543`. It inherits that main's
+unchanged dependency pins, including QICLean
+`603fc408b9f4c2a50f2475e1e44843fdc0a9c0ac` and the same Mathlib pin.
+The historical local baseline and calculation below are retained as evidence,
+not presented as the new branch's base or map normalization.
+
+Relative to the maps merged by #10689, use **the same analysis scale for
+fusion and action**: sigma at (tau,tau,one), minus sigma inverse at
+(tau,tau,tau), and one elsewhere. Synthesis receives the reciprocal.
+This differs from the historical action gauge below because #10689 chose
+different raw normalizations for its tau-on-chain maps. The exact verifier
+now reads #10689's maps and independently checks this refreshed gauge too.
+Run `python3 scripts/fibonacci_action_l_check.py` on the refreshed branch;
+on the older local checkout pass
+`--tree-maps /path/to/FibonacciActionTrees.lean`.
+
+The two candidate modules remain uncompiled until hosted CI provides actual
+kernel-check evidence. They are not replacements for the merged modules.
+
 ## Ownership and baseline
 
 Checked GitHub on 2026-11-15: [#8053](https://github.com/LionSR/TNLean/issues/8053)
 is open, assigned to LionSR. Its
-[latest comment](https://github.com/LionSR/TNLean/issues/8053#issuecomment-6517369490)
+[then-latest comment](https://github.com/LionSR/TNLean/issues/8053#issuecomment-6517369490)
 says tnlean-35 delivered neither a construction nor an L calculation in
 [#10446](https://github.com/LionSR/TNLean/pull/10446), leaving item 2 for a
 dedicated PR. That PR is now merged. No issue assignment or external comment

@@ -12,6 +12,7 @@ import TNLean.MPS.Examples.Fibonacci.Fibonacci
 import TNLean.MPS.Examples.Fibonacci.FibonacciAction
 import TNLean.MPS.Examples.Fibonacci.FibonacciActionDecomposition
 import TNLean.MPS.Examples.Fibonacci.FibonacciActionLMatrix
+import TNLean.MPS.Examples.Fibonacci.FibonacciActionTrees
 import TNLean.MPS.Examples.Fibonacci.FibonacciAmplitudes
 import TNLean.MPS.Examples.Fibonacci.FibonacciAnomaly
 import TNLean.MPS.Examples.Fibonacci.FibonacciBoundary
@@ -19,6 +20,7 @@ import TNLean.MPS.Examples.Fibonacci.FibonacciDimension
 import TNLean.MPS.Examples.Fibonacci.FibonacciFSymbol
 import TNLean.MPS.Examples.Fibonacci.FibonacciGSymbol
 import TNLean.MPS.Examples.Fibonacci.FibonacciGoldenChain
+import TNLean.MPS.Examples.Fibonacci.FibonacciLSymbol
 import TNLean.MPS.Examples.Fibonacci.FibonacciNIMRepClassification
 import TNLean.MPS.Examples.Fibonacci.FibonacciNIMRepDecomposition
 import TNLean.MPS.Examples.Fibonacci.FibonacciStringNetFusion
@@ -26,3 +28,4 @@ import TNLean.MPS.Examples.Fibonacci.FibonacciStringNetUnit
 import TNLean.MPS.Examples.Fibonacci.FibonacciSymmetricFamilyDecomposition
 import TNLean.MPS.Examples.Fibonacci.FibonacciUnit
 import TNLean.MPS.Examples.Fibonacci.FibonacciVacuum
+

@@ -43,7 +43,10 @@ private abbrev Tail (d n : ℕ) := Fin n → Fin (d * d)
 private abbrev InputExterior (d n : ℕ) := (Fin (d * d) × Fin (d * d)) × Tail d n
 private abbrev OutputExterior (d n : ℕ) := HalfPair d × Tail d n
 
-private def windowInputHeadEquiv (d : ℕ) :
+/-- Ordered complete coordinates of a three-cell input window, with
+its central half-pair and two exterior cells. Source: CPSV17
+StandardForm, lines 603–622. -/
+def windowInputHeadEquiv (d : ℕ) :
     ((Fin (d * d) × Fin (d * d)) × HalfPair d) ≃ (Fin 3 → Fin (d * d)) where
   toFun z := ![z.1.1, finProdFinEquiv z.2, z.1.2]
   invFun f := ((f 0, f 2), finProdFinEquiv.symm (f 1))
@@ -55,7 +58,10 @@ private def windowInputHeadEquiv (d : ℕ) :
     · exact finProdFinEquiv.apply_symm_apply (f 1)
     · rfl
 
-private def windowOutputHeadEquiv (d : ℕ) :
+/-- Ordered complete coordinates of the same three-cell output
+window, with four output half-sites and two exterior half-sites.
+Source: CPSV17 StandardForm, lines 603–622. -/
+def windowOutputHeadEquiv (d : ℕ) :
     (HalfPair d × FourHalves d) ≃ (Fin 3 → Fin (d * d)) where
   toFun z := ![finProdFinEquiv (z.1.1, z.2.1.1),
     finProdFinEquiv (z.2.1.2, z.2.2.1), finProdFinEquiv (z.2.2.2, z.1.2)]

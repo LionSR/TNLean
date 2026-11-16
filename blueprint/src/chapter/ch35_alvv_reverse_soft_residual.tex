@@ -1,0 +1,99 @@
+\section{The actual reverse soft residual on one region}
+\label{sec:alvv_reverse_soft_residual}
+
+The reverse estimate uses a quantitative high-energy floor for the same
+actual soft function. Its positive denominator follows from the actual
+soft ground energy and the actual crossing set; neither is an extra
+hypothesis. The energy centers in this result are exact regional minima.
+Uniformity over the ten-unit interval of estimated centers is proved for
+simultaneous replacements in Lemma~\ref{lem:alvv_five_soft_residuals}; see \cite{gap:alvv16_soft_regional_residuals}.
+
+\begin{lemma}[Two physical residuals for the same regional soft operator]
+    \label{lem:alvv_two_sided_soft_residuals}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_single_region_soft_truncation_residuals}
+    \leanok
+    \uses{lem:regional_barrier_hard_residual,lem:alvv_original_soft_residual,
+        lem:two_cut_crossing_card,
+        lem:three_region_sum_crossings}
+    Let $q\geq1$, $0\leq l\leq r\leq L$, and let $0\leq h_i\leq I$
+    be supported on the designated neighbouring sites of an $L$-site
+    chain. The three actual internal regional sums have attained minimum
+    energies $e_j$, with one common unit vector attaining them.
+    These data can be chosen, together with an attained original ground
+    energy $E\in[0,2]$, before the soft scale and order. Put
+    \begin{align}
+        H & =\sum_i h_i-\Bigl(\sum_j e_j\Bigr)I, & X & =A_1-e_1I.
+    \end{align}
+    For every $t>0$ and $m\geq2$, the same actual operator
+    \begin{align}
+        G=H-X+h_{m,t}(X)
+    \end{align}
+    is positive semidefinite and lies below $H$. It has an attained
+    ground energy $\mu$ satisfying $0\leq\mu\leq E\leq2$.
+    For $\eta>0$ and $T\geq\eta+7$,
+    \begin{align}
+        \|(H-G)|_{E_H(E+\eta)}\|
+        \leq32e^{-(T-\eta)/8}+\frac{t}{m}\left(\frac Tt\right)^m.
+    \end{align}
+    For $\eta\geq0$, put $U=2(\eta+8)$. If $t\geq U$ and $T\geq U$,
+    then
+    \begin{align}
+        \|(H-G)|_{E_G(\mu+\eta)}\|
+        \leq16e^{-(T-U)/8}+\frac{t}{m}\left(\frac Tt\right)^m.
+    \end{align}
+    The operator $G$ and its ground energy are chosen before $\eta,T$.
+    There is no spectral-gap or simplicity assumption.
+\end{lemma}
+\begin{proof}\leanok
+    Retain the actual regional energies and original ground data from
+    Lemma~\ref{lem:alvv_original_soft_residual}. Let $Y$ be the sum of
+    the actual crossing bonds, and write
+    \begin{align}
+        B=(A_0-e_0I)+h_{m,t}(X)+(A_2-e_2I),\qquad G=B+Y.
+    \end{align}
+    All three terms of $B$ and all crossing bonds are positive.
+    Hence $G\geq0$, while $h_{m,t}(X)\leq X$ gives $G\leq H$.
+    Construct a unit ground vector of $G$. Its positive lower bound
+    together with $G\leq H$, tested on the actual original ground
+    vector, gives $\mu\leq E\leq2$.
+
+    Disjoint regional supports imply that $B$ commutes with $A_1$.
+    For $\varepsilon_{m,t}(R)=(t/m)(R/t)^m$, the actual soft function
+    gives the projection order
+    \begin{align}
+        \bigl(R-\varepsilon_{m,t}(R)\bigr)
+        \mathbf1_{[e_1+R,\infty)}(A_1)\leq B.
+    \end{align}
+    At $R=U$, the scale and order bounds give
+    $\varepsilon_{m,t}(U)\leq U/2$. Thus the floor
+    $b=U-\varepsilon_{m,t}(U)$ is at least $\eta+8$.
+    By Lemma~\ref{lem:two_cut_crossing_card},
+    \begin{align}
+        b-(\mu+\eta)-2|J|\geq2.
+    \end{align}
+    Apply the existing weighted restriction argument at projection
+    threshold $e_1+U$ and floor $b$. The reparametrization
+    $r=e_1+U-b$, $u=b$ separates that threshold from the floor.
+    The boundary forcing comes from the original local bonds.
+    Factoring the hard excess above $e_1+T$ through this actual
+    weighted map bounds its restriction to $E_G(\mu+\eta)$ by
+    \begin{align}
+        \frac{e^{-(T-U)/8-1}}{1/8}
+        \frac{2|J|}{b-(\mu+\eta)-2|J|}
+        \leq16e^{-(T-U)/8}.
+    \end{align}
+    Finally, apply the soft--hard residual comparison to the same
+    positive matrix $X$ on this actual soft low-energy space.
+    The additional error is $\varepsilon_{m,t}(T)$.
+    The original-side assertion is the retained first-direction
+    estimate for this same $G$.
+\end{proof}
+
+The inequalities are corrected auxiliary bounds for the soft-truncation
+argument of Arad, Landau, Vazirani and Vidick~\cite[lines 1195--1255]{Arad2016RigorousRG}.
+They do not assert the printed uniform energy estimate or its printed
+spectral enlargement. Arbitrary estimated regional centers and simultaneous soft replacements
+are treated in Lemma~\ref{lem:alvv_five_soft_residuals}. The complete
+efficient-filter parameter bounds require further arguments. The false printed cluster estimate
+and its counterexamples remain recorded in
+\cite{gap:alvv16_cluster_approximation}.

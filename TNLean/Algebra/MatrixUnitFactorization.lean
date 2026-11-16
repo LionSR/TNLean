@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixIdempotentFactorization
 import Mathlib.Data.Matrix.Basis
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Exact matrix-unit factorizations
@@ -73,10 +74,7 @@ theorem sum_multiplicityBlocks_mul
     ext j
     rw [Finset.sum_comm]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  refine Finset.sum_congr₂ fun i _ j _ ↦ ?_
   apply Finset.sum_congr rfl
   intro μ _
   ring
@@ -133,10 +131,7 @@ theorem exists_multiplicativeLinearMap_blocks
   rw [hsum]
   conv_lhs => rw [matrix_eq_sum_single M]
   simp only [map_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  apply Finset.sum_congr rfl
-  intro j _
+  refine Finset.sum_congr₂ fun i _ j _ ↦ ?_
   change ρ (single i j (M i j)) = M i j • ρ (single i j 1)
   rw [← map_smul]
   congr 1

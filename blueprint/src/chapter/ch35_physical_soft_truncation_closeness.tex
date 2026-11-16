@@ -1,0 +1,102 @@
+\section{Compatible soft truncation and actual operator tensors}
+
+\begin{lemma}[Both physical residuals at independent bounded scale]
+    \label{thm:interval_physical_scaled_soft_residuals}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_scaled_soft_truncation_residual,
+        TNLean.MPS.AreaLaw.exists_interval_physical_scaled_soft_reverse_residual,
+        TNLean.MPS.AreaLaw.exists_interval_physical_scaled_soft_residuals}
+    \leanok
+    \uses{thm:interval_regional_exponential_moment,
+        thm:nearest_neighbour_weighted_low_restriction}
+    Let $H$ be a positive unit nearest-neighbour chain with one
+    prescribed interval, and let its attained original regional
+    minima be chosen before the approximate interval energy
+    $\epsilon_J-10\leq\epsilon\leq\epsilon_J$ and the parameters.
+    For $m\geq1$, $0<t\leq4m$, set $\alpha=(t/2)2^{-m}$.
+    The actual soft replacement satisfies $\widetilde H\leq H$.
+    On the original window $G_\eta$ its residual is at most
+    \begin{align*}
+        \|(H-\widetilde H)|_{G_\eta}\|
+        \leq80e^{(17+\eta)/8-t/16}.
+    \end{align*}
+    If $t/2\geq10$, the actual centered soft minimum $E_s$ can
+    be chosen before the bandwidth with $-\alpha\leq E_s\leq E_0$.
+    If $17+\eta+\alpha\leq t/2$, its own window satisfies
+    \begin{align*}
+        \|(H-\widetilde H)|_{\widetilde G_\eta}\|
+        \leq80e^{(17+\eta+\alpha)/8-t/16}.
+    \end{align*}
+    Both estimates use the same regional minima and the actual
+    original and soft ground energies.
+\end{lemma}
+\begin{proof}\leanok
+    The independent-scale weighted remainder uses the same
+    exponential moment of $U/8$ as the equal-scale argument.
+    General soft/hard coercivity gives the cutoff $t/2-10$ and
+    the correction $\alpha$. The original and soft moments give
+    the two residuals. Their normalized minimizing witnesses
+    identify all attained minima with the canonical minima.
+\end{proof}
+
+\begin{lemma}[Windows at a heat-compatible scale]
+    \label{thm:interval_physical_scaled_soft_windows}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_scaled_soft_low_energy_closeness}
+    \leanok
+    \uses{thm:interval_physical_scaled_soft_residuals}
+    Let $\eta,w,\delta>0$, and set
+    \begin{align*}
+        \rho & =\min\left\{1,\frac w2,
+        \frac{\delta w^2}{2(\eta+2)}\right\}, \\
+        m    & =\left\lceil12+\frac23\eta+
+        \frac{16}{3}\log(80/\rho)\right\rceil,
+        \qquad t=3m.
+    \end{align*}
+    This order is chosen before every physical chain and interval.
+    The actual soft replacement has $0\leq E_0-E_s\leq\rho$.
+    Its window below $E_s+\eta+w$ is $\delta$-close to the original
+    window below $E_0+\eta$, and the original window below
+    $E_0+\eta+w$ is $\delta$-close to its window below $E_s+\eta$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_physical_scaled_soft_residuals}
+    The chosen order ensures $\alpha\leq3/4$, the reverse cutoff,
+    and both residuals at most $\rho$. The existing finite-window
+    perturbation theorem applies in both directions because
+    $2(\eta+2)\rho\leq\delta w^2$ and $\rho\leq w/2$.
+\end{proof}
+
+\begin{theorem}[The same physical soft Hamiltonian has windows and tensors]
+    \label{thm:physical_soft_windows_and_mpo}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_closeness_and_mpo}
+    \leanok
+    \uses{thm:interval_physical_scaled_soft_windows,
+        thm:soft_hamiltonian_mpo_accuracy}
+    For the preceding uniformly chosen $m$ and $t=3m$, the same
+    actual physical $\widetilde H$ has both directed window
+    comparisons and, for every $\xi>0$, actual operator tensors
+    of the dimension $D$ specified in
+    Theorem~\ref{thm:soft_hamiltonian_mpo_accuracy}, with error
+    $\|\widetilde H-T\|\leq\xi$.
+    The regional minima and original ground data are constructed
+    before $\epsilon$, and the soft ground energy is its actual
+    minimum. The cluster order depends only on $N,m,\xi$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:interval_physical_scaled_soft_windows,
+        thm:soft_hamiltonian_mpo_accuracy}
+    Use the constructed window theorem and retain its literal
+    soft Hamiltonian. Its regional lower bound and
+    $\epsilon\leq\epsilon_J$ supply the lower energy for the heat
+    construction. Mask the actual internal bonds of the interval,
+    derive the original support and norm bounds, and apply the
+    full soft-Hamiltonian tensor construction.
+\end{proof}
+
+These are corrected one-interval results, using scale three times order,
+the proved exponential-moment residual and the interaction-label cluster
+estimate. The false printed uniform energy and physical-support cluster
+claims remain unmarked and their counterexamples remain in
+\cite{gap:alvv16_soft_truncation_energy_estimate,gap:alvv16_cluster_approximation}.
+Simultaneous replacements on several prescribed regions, a complete
+improving polynomial family, and the algorithmic running-time conclusion
+remain separate mathematical tasks.

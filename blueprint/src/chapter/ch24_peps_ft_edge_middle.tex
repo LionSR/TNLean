@@ -378,6 +378,26 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{definition}
 
+\begin{definition}[Injectivity predicate for blocked regions]%
+    \label{def:peps_regionInjectivityData}
+    \lean{TNLean.PEPS.RegionInjectivityData}
+    \lean{TNLean.PEPS.RegionInjectivityUnionClosure}
+    \leanok
+    A region-injectivity predicate $\inj$ assigns an injectivity assertion
+    $\inj(R)$ to each finite region $R\subseteq V$. It satisfies union closure
+    when $\inj(R)\wedge\inj(S)\Longrightarrow\inj(R\cup S)$ for all $R,S\subseteq V$.
+\end{definition}
+
+\begin{definition}[Concrete region-injectivity predicate of a tensor]%
+    \label{def:peps_regionInjectivityDataOf}
+    \lean{TNLean.PEPS.regionInjectivityDataOf}
+    \leanok
+    \uses{def:peps_regionInjectivityData}
+    For a PEPS tensor $A$, the concrete region-injectivity predicate $\inj_A(R)$
+    asserts that the blocked-region tensor family $\{T_{A,R}^\mu\}_\mu$ is
+    linearly independent.
+\end{definition}
+
 \begin{definition}[Singleton blocked region]%
     \label{def:peps_singletonRegionTensor}
     \lean{TNLean.PEPS.SingletonRegionPhysicalConfig,

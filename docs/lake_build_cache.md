@@ -174,8 +174,8 @@ QIC aggregator artifacts, modules outside its root aggregator closure, dependenc
 artifacts without tracked source, and unknown/executable outputs. Package
 checkouts must match the root-resolved immutable revisions and have no tracked
 changes. This prevents historical or removed unreachable modules from satisfying
-regression imports. Unchanged QIC proof artifacts and unchanged Gametheory and
-checkdecls modules remain reusable; no `.trace` or `.hash` is rewritten.
+regression imports. Unchanged QIC proof artifacts and unchanged Gametheory,
+checkdecls and CSLib modules remain reusable; no `.trace` or `.hash` is rewritten.
 
 The ordinary full `lake build`, linter target, and all existing checks still run
 before direct Lean regressions. The guard verifies that the default TNLean root

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Build the focused FT--MPS blueprint volume (ch01_intro through ch12_symmetry and
-# ch12_symmetry_spt_chapter) as blueprint/print/print12.pdf.
+# the three symmetry-protected topological phase chapters) as
+# blueprint/print/print12.pdf.
 #
 # Run after `texra-blueprint bbl` (which refreshes src/references.bib).
 # The blueprint sources are copied to a temporary directory and the dedicated
@@ -43,7 +44,9 @@ ch09_canonical
 ch10_bnt
 ch11_fundamental_theorem_proof
 ch12_symmetry
-ch12_symmetry_spt_chapter"
+ch12_symmetry_spt_chapter
+ch12_symmetry_spt_virtual_paths_chapter
+ch12_symmetry_spt_compact_limits_chapter"
 kept="$(grep '^[[:space:]]*\\input{chapter/' \
   "$WORK_DIR/blueprint/src/content_ft_mps.tex" \
   | sed -E 's|.*chapter/([^}]+).*|\1|')"

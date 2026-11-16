@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.MPDO.BNTTheoremData
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Multiplicity normalization in the BNT algebra-to-RFP implication
@@ -183,10 +184,7 @@ theorem sum_products_eq (γ : Λ) :
   classical
   simp only [Fintype.sum_sigma, Fintype.sum_prod_type,
     DiagonalChiFamily.tracePowerCoeff, pow_one]
-  apply Finset.sum_congr rfl
-  intro α _
-  apply Finset.sum_congr rfl
-  intro β _
+  refine Finset.sum_congr₂ fun α _ β _ ↦ ?_
   calc
     (∑ i, ∑ j, ∑ k,
         C.oneEntry α i * C.oneEntry β j * χ.entry α β γ k) =

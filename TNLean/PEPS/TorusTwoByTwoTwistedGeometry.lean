@@ -7,6 +7,7 @@ import TNLean.PEPS.TorusTwoByTwoBlocking
 import TNLean.PEPS.RegularTorusGramExpansion
 import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.RegularTorusSite
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Exact two-by-two blocking of regular torus closures
@@ -113,10 +114,7 @@ theorem torusBondNetwork_perm_eq_twoByTwoBlocked [Fintype X] [DecidableEq X]
   rw [torusBondNetwork_perm_eq_twoByTwoTiledSum]
   rw [← twoByTwoTiledBondEquiv.sum_comp, torusBondNetwork_perm]
   simp only [Fintype.sum_prod_type]
-  apply Finset.sum_congr rfl
-  intro hb _
-  apply Finset.sum_congr rfl
-  intro vb _
+  refine Finset.sum_congr₂ fun hb _ vb _ ↦ ?_
   simp_rw [← twoByTwoSiteLegs_permutation sh sv ((hb, vb), _)]
   simp only [twoByTwoTensor, twoByTwoPhysicalEquiv, Equiv.coe_fn_mk]
   rw [Fintype.prod_sum]

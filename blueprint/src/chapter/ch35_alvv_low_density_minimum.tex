@@ -1,0 +1,88 @@
+\section{Least viable dimensions for original low-energy targets}
+
+Let $H=\sum_i h_i$ be a nearest-neighbour chain of supported positive
+contractions, with local dimension $q\ge2$. Write
+$\lambda_0=\min\sigma(H)$ and
+$G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$.
+For a prescribed interval $J=[p,r)\subseteq[0,L)$, use its fixed
+configuration splitting to identify
+$\mathcal H=\mathcal H_J\otimes\mathcal H_{J^c}$.
+
+\begin{theorem}[A viable subspace at a fixed bandwidth]
+    \label{thm:physical_low_density_minimum_dimension}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_viable_subspace}
+    \leanok
+    For every $\eta_{\rm LD}>0$ there is a constant
+    $C\ge\max\{100,19+\eta_{\rm LD}\}$ with the following property.
+    Choose an integer $m\ge q$ with $\log m\ge100$, and let $v>0$.
+    Put $\bar v=\min\{v,\eta_{\rm LD}/2\}$ and define
+    \begin{align}
+        w_j    & =\frac{\bar v}{6\cdot2^j},      &
+        g_j    & =\min\{w_j,1\},                 &
+        u_j    & =1+\log m+\log(1/g_j),\nonumber       \\
+        \ell_j & =\lceil Cu_j^2/g_j\rceil,       &
+        D_j    & =(m\ell_j^2)^{22\ell_j}.        &   &
+        \label{eq:ld_minimum_parameters}
+    \end{align}
+    Every interval $J$ admits a $3/200$-viable subspace $W$ for
+    $G(\eta_{\rm LD}-v)$ satisfying
+    \begin{align}
+        \dim W\le\dim G(\eta_{\rm LD})\,D_0^3.
+        \label{eq:ld_minimum_dimension}
+    \end{align}
+    The constant $C$ precedes the chain length, local dimension,
+    interactions, interval and deficit. No spectral gap is assumed.
+    The numerical base $m$ changes only the count estimate, not the
+    Hamiltonian or the physical local dimension; one may take
+    $m=\max\{q,\lceil e^{100}\rceil\}$.
+    These fixed-bandwidth quantifiers and the restriction $q\ge2$ are
+    recorded in~\cite{gap:alvv16_low_energy_family_scope}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:interval_low_energy_family}
+    Set $\rho=\dim G(\eta_{\rm LD})$ and
+    $T_j=G(\eta_{\rm LD}-6w_j)$. An actual eigenvector at
+    $\lambda_0$ gives $\rho\ge1$. The targets increase, and
+    $\dim T_j\le\rho$.
+
+    At width $w_j$, apply Theorem~\ref{thm:interval_low_energy_family}
+    with upper cutoff $\eta_j=\eta_{\rm LD}-3w_j$.
+    Since $6w_j\le\eta_{\rm LD}/2$, its buffer
+    $6w_j\le\eta_j\le\eta_{\rm LD}$ holds. Its original upper and
+    lower targets are exactly $T_{j+1}$ and $T_j$, respectively.
+    It supplies $D_j^2$ actual regional operators and the suppression
+    estimate $D_j^{12}\Delta_j\le10^{-5}$ for this same count.
+    The upper closeness comparison also bounds the upper perturbed
+    target dimension by $\rho$.
+
+    Let $p_j$ be the least dimension of a $3/200$-viable subspace
+    for $T_j$, and choose an actual minimizing space $W_j$.
+    The whole regional space shows that these natural minima exist
+    and satisfy $p_j\le\dim\mathcal H_J$; target restriction gives
+    $p_j\le p_{j+1}$. The actual ceiling counts in
+    (\ref{eq:ld_minimum_parameters}) satisfy
+    $\log D_{j+1}\le(13/6)\log D_j$ and $\log D_j\ge100$.
+    Moreover, at the finite index
+    $j=\lceil\dim(\mathcal H_J)\bar v/(6C)\rceil$,
+    one has $D_j\ge\dim\mathcal H_J$.
+
+    Choose the first index with $p_j\le\rho D_j^3$.
+    If it is positive, write it as $k+1$. Then
+    $\rho D_k^3<p_k\le p_{k+1}\le\rho D_{k+1}^3$.
+    The calibrated sample in the actual space $W_{k+1}$ has dimension
+    $s=\lfloor p_k/(2D_k^2)\rfloor$. Its improving image is
+    $3/200$-viable for $T_k$ and has dimension at most
+    $p_k/2<p_k$, a contradiction. The strict-decrease constants are
+    explained in~\cite{gap:alvv16_low_density_sampling}.
+    Hence $\dim W_0=p_0\le\rho D_0^3$.
+    Finally $\bar v\le v$ gives
+    $G(\eta_{\rm LD}-v)\subseteq T_0$, so the same $W_0$ is
+    viable for the requested target.
+\end{proof}
+
+This gives the exact natural count bound underlying the low-density
+argument of~\cite[Proposition~prop:albootstrap-ld,
+    lines 1112--1128]{Arad2016RigorousRG}. Simplifying that bound to the
+printed logarithmic form, estimating entropy and constructing low-energy
+matrix product approximations require further arguments.

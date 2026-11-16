@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSupport
 import TNLean.Algebra.MatrixCoordinateInclusion
+import TNLean.Algebra.FinCastAddNatAdd
 
 /-!
 # The embedded first endpoint inside the extended local support
@@ -59,18 +60,13 @@ theorem coordinateInclusion_first_projection_eq_bondWeight :
     Matrix.coordinateInclusion (Fin.castAddEmb D₁ : Fin D₀ ↪ Fin (D₀ + D₁)) *
       (Matrix.coordinateInclusion (Fin.castAddEmb D₁))ᴴ =
         bondInterpolationMatrix D₀ D₁ 0 := by
-  have hdisjoint (a : Fin D₀) (b : Fin D₁) : Fin.castAdd D₁ a ≠ Fin.natAdd D₀ b := by
-    intro h
-    have hval := congrArg Fin.val h
-    simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
-    omega
   ext i j
   obtain ⟨i, rfl⟩ := finSumFinEquiv.surjective i
   obtain ⟨j, rfl⟩ := finSumFinEquiv.surjective j
   cases i <;> cases j <;>
     simp [Matrix.coordinateInclusion, Matrix.mul_apply, Matrix.conjTranspose_apply,
       Fin.castAddEmb_apply, bondInterpolationMatrix, bondInterpolationWeight,
-      Matrix.diagonal_apply, eq_comm, hdisjoint]
+      Matrix.diagonal_apply, eq_comm, Fin.castAdd_ne_natAdd]
 
 /-- Compression to the first virtual block is the actual embedded first
 endpoint tensor. Source: arXiv:2203.12563, Section 5,

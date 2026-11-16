@@ -9,6 +9,7 @@ import TNLean.MPS.Core.Blocking
 import QICLean.Algebra.HermitianHelpers
 import QICLean.Algebra.KroneckerFactorPositivity
 import Mathlib.LinearAlgebra.Multilinear.Basic
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Both physical endpoints on dimension-bounded blocks
@@ -65,10 +66,7 @@ private theorem trace_physicalObservableTransfer_adjoint (A : MPSTensor d D)
     rw [hsum]
   simp only [Function.comp_def, Fin.rev_rev]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro σ _
-  apply Finset.sum_congr rfl
-  intro τ _
+  refine Finset.sum_congr₂ fun σ _ τ _ ↦ ?_
   rw [hword σ, hword τ, Matrix.conjTranspose_conjTranspose]
   congr 1
   simpa [Matrix.mul_assoc, Function.comp_def] using Matrix.trace_mul_comm

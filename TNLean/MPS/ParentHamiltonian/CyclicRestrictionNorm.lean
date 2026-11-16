@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # The norm partition for actual cyclic restrictions
@@ -103,10 +104,7 @@ theorem sum_norm_sq_cyclicRestrictES {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
     _ = ∑ η : Cfg d L, ∑ τ : Cfg d (N - L),
         ∑ σ : Cfg d L, ‖v (e (σ, τ))‖ ^ 2 := by
       simp only [Fintype.sum_prod_type, PiLp.norm_sq_eq_of_L2]
-      apply Finset.sum_congr rfl
-      intro η _
-      apply Finset.sum_congr rfl
-      intro τ _
+      refine Finset.sum_congr₂ fun η _ τ _ ↦ ?_
       apply Finset.sum_congr rfl
       intro σ _
       change ‖v (cyclicCfg (Fin.pos i) L i σ (e (η, τ)))‖ ^ 2 = _

@@ -82,6 +82,13 @@ For the SPT fixed points of arXiv:2011.12127, Section III.A:
   families, continuous positive interactions, and the source's blocked
   isometric deformation now cover the source path, using finite-range Knabe
   windows in place of Nachtergaele's estimate.
+- `spc11_spt_classification_continuous_realization.tex` (scope restriction,
+  open) compares the exact MPS phase condition and the injective endpoint
+  domain with the classification of arXiv:1010.3732, Section II.F. Every
+  clause matches the source except the continuous tensor realization of the
+  ground lines along the path, which the source derives from the gap and the
+  phase condition assumes; the endpoint domain is the source's standard-form
+  convention. The note gives the plan for the pointwise converse.
 - `spc11_isometric_symmetry_unitary_virtual.tex` (scope restriction, resolved)
   records that preservation of an on-site symmetry along the isometric
   deformation of arXiv:1010.3732 was first derived from exact symmetry of the
@@ -186,6 +193,28 @@ For the MPU index of arXiv:1703.09188:
   source gate's weight. In the source's diagonal canonical-form-II coordinates,
   $\rho^{\mathsf T}=\rho$ closes the retained source-$u$ contraction and proves
   $u^\dagger u=I$ for the supplied fixed pair.
+- `mpu_standard_form_canonical_convention.tex` (local correction, resolved)
+  records, from the source's standing canonical-form convention and its
+  explicit "not necessarily in CF" qualifiers elsewhere, that a tensor in
+  standard form is the two-site block of a simple canonical tensor, so the
+  time-reversal and transposition criteria and the sign results apply to every
+  such standard form without a further hypothesis.
+- `mpu_standard_form_path_cross_section.tex` (clarification, resolved) records
+  that the proof of the continuous standard form along a path cites the slice
+  theorem of Montgomery and Yang, and that the formalization replaces it by a
+  direct local cross-section of the local-unitary action on the gates, built
+  from the nearest Kronecker product and the polar factor; the continuity of
+  the second gate is read off the circuits on two and three blocks.
+- `mpu_canonical_form_full_support.tex` (scope restriction, partly superseded)
+  records that the reduced canonical-form-II representative must be
+  constructed rather than inferred from bare canonical form, and the
+  reduced full-support data assumed by the admissible Chapter 28 entries.
+  Entries whose source-labelled counterparts are proved under the canonical
+  convention above (the Index Theorem, source-rank constancy, the local
+  time-reversal and transposition criteria, and the time-reversal sign
+  results) are superseded and deleted, as is the continuous-standard-form entry,
+  superseded by Corollary `coruvSF`; the conjugation, blocking-parity,
+  equivalence-necessity, MPS-class, and example entries remain restricted.
 - `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
   to the unblocked all-length converse printed in the Fundamental Theorem of
   MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
@@ -193,6 +222,16 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_index_classification_tensor_to_gates.tex` (clarification, resolved)
+  records the step omitted in the "if" half of clause (iv) of the Index
+  Theorem: a blocked tensor is joined through MPU tensors to the tensor built
+  from its own standard-form gates, by a path of virtual gauges to canonical
+  form II and an interpolation of half factors that keeps the gates fixed.
+- `mpu_conjugation_symplectic_uniqueness_transpose.tex` (local correction,
+  resolved) records that the Case II uniqueness clause of Proposition
+  `corconj` prints `v'' = v' (S_rᵀ ⊗ S_ℓᵀ)`, while the Fundamental Theorem gives
+  `v'' = v' (S_r† ⊗ S_ℓ†)`; a unitary symplectic `S` need not be real, and
+  `S_ℓ = diag(i, -i)` separates the two. The Case I clause is unaffected.
 - `mpu_shift_supplied_standard_forms.tex` records that the shift-family gates
   of Section VII are formalized as explicit two-site decompositions with
   supplied gates and normalized half factors. Only the blocked
@@ -575,18 +614,19 @@ For the non-periodic MPS Fundamental Theorem background:
 - `rmp_nonperiodic_bnt_comparison_inputs.tex` compares the current
   canonical-form/BNT/after-blocking proof boundary against the local paper
   sources.
-- `pgvwc07_direct_sum_input.tex` explains the older MPS representation
-  paper's direct-sum input behind block-injective canonical form.
+- `pgvwc07_direct_sum_input.tex` (local correction, resolved) explains the
+  older MPS representation paper's direct-sum input behind block-injective
+  canonical form, and records the convention that its pairwise different
+  block states are pairwise nonproportional, equivalently gauge-phase
+  inequivalent blocks.
 - `pgvwc07_ti_canonical_form_positive_blocks.tex` records the convention
   that every listed block of the translation-invariant canonical form has
   positive bond dimension, used once when condition C1 forces a single block.
 - [`pgvwc07_open_parent_domain.tex`](pgvwc07_open_parent_domain.tex)
-  (scope restriction, open) records the explicit length-at-least-two and
-  common-physical-alphabet domain of the actual varying-bond open-parent
-  kernel theorem. The candidate proves canonical normalization and the
-  actual ground-state line, with no local-section or kernel supplier.
-  The unrestricted printed Theorem 9 is not certified by that restricted
-  entry; hosted proof validation also remains pending.
+  (local correction, resolved) records that the length bound `N ≥ 2` of the
+  varying-bond open-parent uniqueness theorem is the source's setup of a
+  chain with an adjacent interaction term; with it, the formal result is
+  Theorem 9 for arbitrary physical and bond dimensions.
 - `pgvwc07_ti_uniqueness_scope.tex` records that the block-separation lemmas
   do not formalize the uniqueness theorem for the translation-invariant
   canonical form, states the corrected root-of-unity conclusion, and records
@@ -596,7 +636,11 @@ For the non-periodic MPS Fundamental Theorem background:
 - `pgvwc07_quadratic_reconstruction_phase.tex` records the unit-modulus phase
   symmetry of the quadratic reconstruction system, the resulting failure of
   the printed unrestricted representation and exact-conjugacy claims, and the
-  corrected same-state conclusion up to an $N$th-root phase.
+  corrected conclusion for every solution up to a unit phase. It records that
+  the nonzero state and the size condition `N > 2 L_0 + D^4` belong to the
+  source's setup, that the existence clause and the same-state case are
+  formalized, and the endpoint-invertibility argument that remains for an
+  arbitrary solution.
 - `ssvcw05_sequential_bond_upper_bound_scope.tex` records the upper bounds
   `min(D, d^k)` and `min(D_k, d^k, d^{N-k})` on the bond dimensions of the
   successive decompositions, the formalized "minimal resources" (bond dimensions
@@ -752,14 +796,19 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   pairs in the printed coupled pentagon, the missing summed primed fusion
   indices in the gauge display, and the analysis/synthesis convention. The
   general coupled pentagon and multiplicity gauge law remain proof obligations.
-- `glm23_wha_parent_completion.tex` distinguishes the weak-Hopf average
-  of the canonical support projection from averaging its complement. It
-  records the explicit adjoint-closure, positive-length unit-calibration,
-  and finite-family normalization hypotheses under which the support is
-  fixed, the weak-Hopf realization with its finite-set and Bell-pair
-  instances, and its derivation for any compatible tensor injective after
-  blocking (unit support comes from the ideal structure of the state boundary
-  space, without the identity at the injectivity length).
+- `glm23_wha_parent_completion.tex` (scope restriction, resolved)
+  distinguishes the weak-Hopf average of the canonical support projection
+  from averaging its complement. It records the explicit adjoint-closure,
+  positive-length unit-calibration, and finite-family normalization
+  hypotheses under which the support is fixed, the weak-Hopf realization with
+  its finite-set and Bell-pair instances, and its derivation for any
+  compatible tensor injective after blocking (unit support comes from the
+  ideal structure of the state boundary space, without the identity at the
+  injectivity length). For the Bell-pair state tensor, compatible with its
+  operator tensor and injective at one site, the average is
+  `E_n(X) = r⁻² tr(Q_n X) Q_n` and the support projection is `P_n = Q_n`, so
+  the uncompleted average `E_n(I − P_n)` vanishes at every positive length,
+  while `I − P_n ≠ 0` for `r ≥ 2` and `n ≥ 2`.
 
 - `glm23_reps3_z3_table.tex` records that the printed action of `ψ` in the
   `ℤ₃` phase of `Rep(S₃)` fails the representation identity, and that the
@@ -789,8 +838,12 @@ For the matrix product operator algebras of arXiv:2204.05940:
   (Definitions 3.1 and 4.1), and that the fusion coproduct of a complete
   zipper fusion family satisfies both counit laws for the functional taking
   the Kronecker delta on the letters; that functional is the source's
-  evaluation at the unit, but its existence is not forced by the fields of
-  the family and is taken as an argument.
+  evaluation at the unit.  It exists exactly when the one-site identity is a
+  one-site operator of the family, and it is constructed for every family
+  whose letters are the images of the matrix coefficients of a unital
+  representation; for an arbitrary family its existence is not forced by the
+  fields and is taken as an argument, until the construction of the family
+  from a pre-bialgebra is formalized.
 
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
@@ -932,8 +985,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
 - `mswc24_sequential_factorization_positive_block_length.tex` records that the
   sequential factorization of the isometry of the blocked tensor, eqs. (13)--(15),
   is stated for block lengths `q ≥ 1`, that the empty block `q = 0` is injective
-  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`, and that the
-  restriction could be traded for the positive bond dimension the source assumes.
+  only for `D ≤ 1`, holds trivially at `D = 1` and fails at `D = 0`; since the
+  source blocks at least one site, `q ≥ 1` is adopted as the convention.
 - `mswc24_ghz_form_local_orthogonality.tex` records that the GHZ form of the
   fixed-point state of a basis of normal tensors, eq. (19), is stated for an
   arbitrary family of pairs, that the identity `|Ω'⟩ = W^{⊗M}|χ_M⟩` needs no
@@ -1023,8 +1076,8 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   `s 2^{k+1}` sites is prepared in depth `C (k + 1)`; trees on leaves of
   unequal widths remove the former restriction to chain lengths divisible by
   `s 2^{k+1}`, giving the bound `O(log log(N/ε))` for normal tensors and every
-  chain length; open: two-site gates between distant sites only at odd
-  separation, on disjoint stretches, which the trees do not need.
+  chain length (resolved); two-site gates between distant sites are covered
+  only at odd separation, on disjoint stretches, which the trees do not need.
 - `mswc24_inhomogeneous_scope.tex` records that the preparation of
   inhomogeneous short-range correlated states (paragraph "Inhomogeneous
   short-range correlated MPS") is formalized for a ring with bond dimensions
@@ -1073,11 +1126,12 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   seed condition for the non-normal chosen-vector conversion in #8469.
   It gives a mathematical (not Lean-checked) covariance obstruction to
   replacing that condition by equality of parent groundspaces. The informal
-  paper remark is not declared unconditionally false; its general phase
-  interpretation remains open.
-- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction) records
-  that the claim that states in the same phase are related by a log-depth
-  circuit is formalized only between two normal tensors.
+  paper remark is read as conversion of whole ground spaces, which is
+  formalized; the chosen-vector condition is a further sufficient condition.
+- `mswc24_same_phase_circuit_normal_case.tex` (scope restriction, resolved)
+  records that the claim that states in the same phase are related by a
+  log-depth circuit is formalized between two normal tensors, and for
+  non-normal tensors as conversion of whole parent ground spaces.
 
 For the phase relation of arXiv:2103.13367:
 
@@ -1732,10 +1786,19 @@ the source's order-`J` dependence directly. The fixed-length Gaussian and positi
 separately. The reciprocal-length reading of the printed time-cone formula is
 an explicit local correction.
 
+## ALVV: regional energy centers and scalar shifts
+
+[`alvv16_soft_regional_energy_centering.tex`](alvv16_soft_regional_energy_centering.tex)
+records the difference between the source's absolute-error input and its
+one-sided soft center, and the scalar shift required for a bounded regional
+norm. It states the actual central replacement, its positive regional matrix,
+attained minimum and energy bound on the original ground space. Transfer to
+the generated soft target and the recursive energy invariant remain separate.
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
-(false source, open) records two nondegenerate counterexamples to Theorem
+(false source, resolved) records two nondegenerate counterexamples to Theorem
 `thm:cluster-approx` of Arad, Landau, Vazirani and Vidick,
 arXiv:1602.08828v2 (source lines 1270–1291 and 1924–1968). On two qubits a
 positive rank-one local projection disproves the printed physical-site cutoff
@@ -1744,10 +1807,24 @@ when the cutoff counts interaction labels. The complementary exponential need
 not have norm at most one under the source's explicit allowance of negative
 local terms. A corrected theorem must specify both the cutoff and the energy
 dependence. The printed theorem is not formalized; the existing normalized
-Hastings estimates are unaffected. The analytic approximation used by
-`lem:exp-approx-eff` remains to be corrected, separately from the exact matrix
-product operator construction. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
+Hastings estimates are unaffected. The note proves a corrected estimate with
+the cutoff on interaction labels and a normalization by a lower energy bound;
+the soft-truncation matrix product operator of `lem:exp-approx-eff` is
+formalized through it, at scale three times the order. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
 and [#9847](https://github.com/LionSR/TNLean/issues/9847).
+
+## ALVV: the first energy estimate of soft truncation
+
+[`alvv16_soft_truncation_energy_estimate.tex`](alvv16_soft_truncation_energy_estimate.tex)
+(false source, resolved) records a nondegenerate three-qubit family on which
+the first estimate of Lemma `lem:exp-approx` of Arad, Landau, Vazirani and
+Vidick, arXiv:1602.08828v2 (source lines 1193–1255), fails at every fixed
+truncation scale. The proof replaces a moment of the regional operator by a
+power of the shifted Hamiltonian, which operator order does not justify. The
+note proves a corrected comparison for one interval from an exponential moment
+of the regional operator, with scale at most four times the order. The gap
+prescription and the simultaneous replacement on several regions remain open.
+Tracked in [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 
@@ -1824,6 +1901,15 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
 
+- [`lvv13_cost_model.tex`](lvv13_cost_model.tex)
+  (scope restriction, open) records the cost model of the running time of
+  Theorem 1 (arXiv:1307.5143v1, lines 213–219): the algorithm is a program
+  over a type of linear-algebra queries, each charged a declared polynomial
+  cost in the dimensions of its arguments; correctness and the polynomial
+  bound hold for every valid oracle (any solver returning optimal solutions of
+  the convex programs, nets of the required radius and cut decompositions of
+  the filters); costs and exact arithmetic are declared, not derived, as in
+  the source.
 - [`lvv13_leading_net_point.tex`](lvv13_leading_net_point.tex)
   (open gap) records that the leading-vector step of Lemma
   `l:leading` (arXiv:1307.5143v1, lines 493–495) is formalized for any
@@ -1849,6 +1935,14 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
+- [`lvv13_mpsapprox_log_factor.tex`](lvv13_mpsapprox_log_factor.tex)
+  (local correction, resolved) records that Lemma `l:mpsapprox`
+  (arXiv:1307.5143v1, lines 325–328) quotes the bond dimension
+  `exp(C (ln n)^{3/4} ε^{-1/4})` of Arad, Kitaev, Landau and Vazirani without
+  the tilde of their `e^{Õ(log^{3/4} n/ε^{1/4})}` (arXiv:1301.1162v1, lines 176
+  and 1503–1517). The formalized bound is that of the cited work, with the
+  hidden factor written out as `log log n`; the algorithm uses only a
+  polynomial bound.
 - [`lvv13_power_expansion_padding.tex`](lvv13_power_expansion_padding.tex)
   (local correction, resolved) records that the expansion `eq:a-exp`
   (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
@@ -1861,7 +1955,9 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   a chain of qubits with `ε₀ = (n - 1)/2` and gap `1/4` is an example. The
   corollary is formalized with the number of sampled words explicit in `C^m`,
   and `C^m ≤ n (1/η)^{ε₀/ε}` at the logarithmic power, which is polynomial
-  when `ε₀/ε` is bounded.
+  when `ε₀/ε` is bounded. The viable-set induction holds under that bound with
+  the sampled projector, and without it with Huang's Gaussian filter
+  (arXiv:1406.6355v6, §5.4) as the error-reduction operator.
 - [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
   (local correction, resolved) records that the step from `A v` to `K v` in the
   proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
@@ -1879,7 +1975,98 @@ For ALVV, arXiv:1602.08828v2, Section 5.4:
   gap comparison. Issue #9849 remains open; the unrestricted printed theorem
   is not formalized.
 
+- [`alvv16_ff_truncated_norm.tex`](alvv16_ff_truncated_norm.tex)
+  (local correction, resolved) shows that the three-region replacement in the
+  proof of Theorem 5.15 (`t:aisff`, line 1599) has norm up to `4ℓ + 6`, not
+  `O(1)`: the windows are not truncated, and a commuting qubit chain with a
+  unique ground state and gap one attains `4ℓ + 6`. The printed choice
+  `ℓ = Θ̃(γ⁻¹ log² d)` is the one that works with this norm, so the theorem is
+  unaffected. The note also records that the argument gives bond dimension
+  `(d² + O(1))^{k+O(1)}` rather than `O(d^k)`, still of the stated form
+  `2^{Õ(γ⁻² log⁵ d)}`. The existence part of Theorem 5.15 is proved in
+  `ALVV/FrustrationFreeImprovingFamily.lean`.
+
 The corrected interval rank bound `d²+3` and the prefix/suffix bound `d²+2`
 are proved in `ALVV/FrustrationFreeRank.lean` for actual supported chain matrices.
 The note records the distinction between the source's site endpoints and its
 selected bond indices.
+
+For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
+
+- [`aklv13_frustration_free_mps_rate.tex`](aklv13_frustration_free_mps_rate.tex)
+  (local correction, resolved) records that the exponent of the gap at line 867
+  is `+1/2`, as at line 835, and that the printed frustration-free bond
+  dimension `exp(O(ε^{-1/3} log^{2/3} n))` (lines 851–870) drops the factor
+  `log ℓ` of Lemma 4.2 (line 590) together with the starting rank
+  `exp(O(log³ d/ε))`. The formalized bound is
+  `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
+  `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
+  hypotheses; for accuracy `n^{-c}` it is of order `log^{2/3} n · log log n`.
+- [`aklv13_entropy_inverse_gap_logarithm.tex`](aklv13_entropy_inverse_gap_logarithm.tex)
+  (local correction, resolved) records that the printed entropy rate
+  `O(log³ d/ε)` of Theorem 4.3 (lines 820–846), of the general theorem
+  (lines 995–1000) and of Lemma 6.3 (lines 1003–1052) drops the factor
+  `log(s² + s)` at lines 840–843, and proves that no parameter choice avoids
+  it: any favorable pair of the Chebyshev shrinking and polynomial rank
+  certificates has `log D > c³(log q + 2 log(1/g))³/(16g)`. The proved rate
+  `C(1 + log q + log(1/g))³/g` is optimal for the route up to the constant.
+
+## Independent scales and the ground-space recursive witness
+
+[`alvv16_approximation_parameters.tex`](alvv16_approximation_parameters.tex)
+records the nonuniform parameter prescription in the proof of ALVV Theorem 4.9
+and the correction using independent clipping and polynomial scales. The explicit
+rank bound uses the capped gap, preserves one factor of the original ground-space
+dimension and supplies a common reference space for interval trimming. The note
+separates the actual recursive witness and its native root MPS bound from adaptive
+probability, the final filter-and-trim iteration, Ritz extraction and running time.
+The source algorithm remains open while those further steps are unproved.
+
+### Final error reduction for ALVV
+
+[`alvv16_final_filter_gain.tex`](alvv16_final_filter_gain.tex) records an
+exact two-qubit failure of the intermediate multiplicative fidelity gain
+in the proof of Theorem t:alg1. Normalized error contraction, a quantitative
+reference-space trimming budget and the projected trial-space energy
+estimate give a corrected route. For a supplied viable root, the literal
+filter-and-trim iterate, its Ritz space and a polynomial bond bound are
+constructed (`docs/audits/2026-11-03_same_root_polynomial_refinement.md`);
+the comparison with the source's printed quantitative choices remains open.
+
+### Physical periodic pair operators after Hastings
+
+[`hastings05_physical_periodic_pairs.tex`](hastings05_physical_periodic_pairs.tex)
+(scope restriction, open) records that the neighbouring-supersite operators of
+Hastings, *Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3,
+lines 285–320 and 609–639), are constructed on a regular nonempty periodic
+chain of `N` blocks of `2ℓ` sites with a unique gapped ground vector. The
+degenerate case and the hierarchical tensor construction are not claimed.
+
+### Operator Schmidt rank of the ALVV frustration-free truncation
+
+[`alvv16_frustration_free_truncation_rank.tex`](alvv16_frustration_free_truncation_rank.tex)
+(false source claim, open) gives an eight-qubit chain on which the
+frustration-free truncated Hamiltonian of arXiv:1602.08828v2, Theorem
+`thm:FF-tH`, item 2, has operator Schmidt rank seven across a cut, above the
+printed `d² + 2`, and records the corrected bound `d² + 3`.
+
+### Ground-energy dependence of the LVV sampled projection
+
+[`lvv13_sampling_ground_energy.tex`](lvv13_sampling_ground_energy.tex)
+(false source claim, open) records that the sampling count of
+arXiv:1307.5143v1, Corollary 2.14, depends on the ground energy through the
+normalizing power, as the published Methods retain. The energy-dependent
+normalization, Corollary 2.14 and the cut-wise error reduction are formalized;
+the joint power-and-ground-projection sample, its all-cut operator Schmidt
+rank and the ground-line cut factors are not yet.
+
+### The ALVV merge tree for a unique frustration-free ground state
+
+[`alvv16_unique_ground_state_tree.tex`](alvv16_unique_ground_state_tree.tex)
+(scope restriction, open) records that the existence content of arXiv:1602.08828v2,
+Theorem t:unique, lines 1829–1855, is proved with the source's hypotheses by
+specializing the degenerate-gap resampling tree and its refinement to ground
+energy zero and multiplicity one. The per-node families are not the
+frustration-free family of Theorem t:aisff, so the intermediate dimension grows
+with the chain length instead of the source's constant `D s²`; no running time
+is asserted.

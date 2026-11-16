@@ -12,7 +12,7 @@
 \date{2026-10-03}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 After Lemma~1, \cite[p.~4]{Malz2024Preparation} states that, for any
@@ -136,15 +136,14 @@ assumes positive correlation length for its lower-bound discussion,
 but the upper-bound construction begins with a normal tensor without
 that restriction \cite[pp.~2--3]{Malz2024Preparation}.
 
-To eliminate this remaining restriction, prove that a sufficiently
-large, fixed positive blocking makes the transfer map equal to its
-fixed-point projection when the entire subleading spectrum is zero.
-The subleading part may be nilpotent, so one cannot assume this equality
-already holds at one site. Then use the resulting exact fixed-point
-preparation with a block size independent of $N$. Merely substituting
-$\xi=0$ in (\ref{eq:mswc24_polynomial_block_length}) selects $q=0$;
-the exact-state branch alone gives a sequential depth bound and does not
-establish the required logarithmic-depth conclusion.
+This endpoint is resolved in~\cite{gap:mswc24_zero_subleading_spectrum_endpoint}:
+when the entire subleading spectrum vanishes, a fixed positive blocking makes the
+transfer map equal to its fixed-point projection, and the exact fixed-point
+preparation with a block size independent of $N$ gives the state in bounded
+depth.\footnote{Formal declaration:
+    \leanid{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState_of_subleading_eigenvalues_eq_zero}.}
+Together with the theorem above for $\xi>0$, the source's polynomial-accuracy
+statement holds for every normal tensor.
 
 \bibliographystyle{alpha}
 \bibliography{references}

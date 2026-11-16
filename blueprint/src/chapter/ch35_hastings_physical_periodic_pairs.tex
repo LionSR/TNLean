@@ -1,0 +1,67 @@
+\section{Physical neighbouring-block operators on a periodic chain}
+\label{sec:hastings05_physical_periodic_pairs}
+
+\begin{lemma}[Periodic pair operators constructed from the Hamiltonian]
+    \label{thm:hastings05_physical_periodic_pairs}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalGraph,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalDistance_le_edist,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicLocalFilter,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicFilteredPair,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicTruncationShell,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicFilterError,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicFilteredPair_properties}
+    \leanok
+    \uses{thm:hastings_regular_periodic_grouping,
+        thm:hastings_truncated_approximation_time,thm:hastings05_facld,
+        thm:hastings_truncated_sum}
+    Partition a periodic chain into $N\ge1$ blocks of $2\ell$ sites each,
+    where $\ell\ge1$. Let $H=\sum_i h_i$, with Hermitian $h_i$ supported
+    within graph distance $R$ of site $i$, $\|h_i\|\le J$, and at most $S$
+    sites in each radius-$R$ ball. Suppose $H$ has a unique unit ground
+    vector $\Omega$ of energy $E_0$ and gap $\Delta>0$.
+    Fix $\theta,\mu\ge0$ and $m\in\mathbb N$ with $m+3R\le\ell$.
+    Let $M_i$ be the Gaussian filter of $h_i$, with variance
+    $\theta/\Delta^2$, under the truncated generator
+    \[
+        H_i^{\mathrm{loc}}=\sum_{k:d_G(i,k)\le\ell-R}h_k.
+    \]
+    Assign $i$ to the edge preceding its block when it is in the first
+    half of that block, and to the following edge otherwise. Let $M_j'$
+    be the sum of the assigned $M_i$. This includes the edge joining the
+    last and first blocks.
+
+    Let $A$ be the largest number of omitted radius-$R$ supports meeting
+    one radius-$\ell$ truncation ball, and put
+    \begin{align*}
+        v & =2S^2J e^{4\mu R}+1,                         \\
+        e & =2S^2(2+4SJ e^{4\mu R})J^2A\frac\theta\Delta
+        e^{v\theta/\Delta-\mu m}+2Je^{-\theta/2}.
+    \end{align*}
+    Every $M_j'$ is Hermitian, acts on the two adjacent blocks, and satisfies
+    \begin{align*}
+        \|M_j'\|                                   & \le2\ell J,                 \\
+        \|M_j'-\langle\Omega,M_j'\Omega\rangle I\| & \le4\ell J,                 \\
+        \|(M_j'-\langle\Omega,M_j'\Omega\rangle I)\Omega\|
+                                                   & \le2\ell(Je^{-\theta/2}+e).
+    \end{align*}
+    With $M=\sum_jM_j'$ and $\varepsilon=2N\ell e$, one has
+    \[
+        \|M-H\|\le\varepsilon,\qquad
+        M-(E_0-\varepsilon)I\ge\Delta(I-|\Omega\rangle\langle\Omega|).
+    \]
+    This is an auxiliary for the regular periodic blocking and unique
+    ground-vector case of~\cite[lines 285--387 and 609--639]{Hastings2006Solving};
+    it does not construct the degenerate basis, hierarchy or final tensor
+    representation~\cite{gap:hastings05_physical_periodic_pairs}.
+\end{lemma}
+\begin{proof}\leanok
+    The selected generators act in the radius-$\ell$ balls. If a term is
+    omitted, its centre is farther than $\ell-R$ from $i$; the triangle
+    inequality gives distance at least $m$ between its support and that
+    of $h_i$. The local-filter estimate and its ground-vector version
+    therefore apply with the actual omitted-shell count. Each coarse
+    edge receives exactly $2\ell$ filters, and the cyclic locality balls
+    lie in its two blocks. Summing the local bounds gives the pair
+    estimates and $\|M-H\|\le\varepsilon$. Finally
+    $M-H\ge-\varepsilon I$ adds to the original projector gap.
+\end{proof}

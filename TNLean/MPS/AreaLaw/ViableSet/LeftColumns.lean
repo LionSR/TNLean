@@ -26,6 +26,27 @@ namespace TNLean.MPS.AreaLaw
 
 variable {ι : Type*} {L q k m : ℕ}
 
+/-- Fixing one coordinate in a Euclidean vector on a finite product cannot increase its
+norm. -/
+theorem norm_euclidean_prod_slice_le
+    {α β : Type*} [Fintype α] [Fintype β]
+    (u : EuclideanSpace ℂ (α × β)) (b : β) :
+    ‖(WithLp.toLp 2 (fun a ↦ u (a, b)) : EuclideanSpace ℂ α)‖ ≤ ‖u‖ := by
+  have hsingle := Finset.single_le_sum
+    (fun b _ ↦ sq_nonneg
+      ‖(WithLp.toLp 2 (fun a ↦ u (a, b)) : EuclideanSpace ℂ α)‖)
+    (Finset.mem_univ b)
+  have hsum :
+      ∑ b : β, ‖(WithLp.toLp 2 (fun a ↦ u (a, b)) : EuclideanSpace ℂ α)‖ ^ 2 =
+        ‖u‖ ^ 2 := by
+    simp only [EuclideanSpace.norm_sq_eq]
+    change (∑ b, ∑ a, ‖u (a, b)‖ ^ 2) = ∑ p, ‖u p‖ ^ 2
+    rw [Fintype.sum_prod_type]
+    exact Finset.sum_comm
+  rw [hsum] at hsingle
+  exact (pow_le_pow_iff_left₀ (norm_nonneg _) (norm_nonneg _)
+    (by norm_num : 2 ≠ 0)).mp hsingle
+
 /-- The union of the `m` left columns of each vector indexed by `I`, as in LVV13,
 `algo53.tex`, the size-trimming step and Claim `c:2`, lines 472–477 and 520–527. -/
 noncomputable def leftColumns (I : Finset ι)

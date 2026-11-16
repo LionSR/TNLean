@@ -83,6 +83,7 @@ import TNLean.MPS.MPDO.BoundaryActionCrossFusionEntries
 import TNLean.MPS.MPDO.BoundaryActionCrossTransport
 import TNLean.MPS.MPDO.BoundaryActionLMatrix
 import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
+import TNLean.MPS.MPDO.BoundaryActionLMatrixPath
 import TNLean.MPS.MPDO.BoundaryActionTreeEntries
 import TNLean.MPS.MPDO.BoundaryActionTrees
 import TNLean.MPS.MPDO.BoundaryAdjointClosed
@@ -361,6 +362,7 @@ import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPCapstone
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFPViaTS
 import TNLean.MPS.MPDO.RescalingStableSimple
 import TNLean.MPS.MPDO.RetainedClass
+import TNLean.MPS.MPDO.RingTreeData
 import TNLean.MPS.MPDO.SALArbitraryCut
 import TNLean.MPS.MPDO.SALPhysicalSectorCyclicPositivity
 import TNLean.MPS.MPDO.SALTraceTransfer
@@ -397,6 +399,8 @@ import TNLean.MPS.MPDO.TopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral
+import TNLean.MPS.MPDO.TraceChainHermitian
+import TNLean.MPS.MPDO.TraceChainLinearCombination
 import TNLean.MPS.MPDO.TraceChainOperator
 import TNLean.MPS.MPDO.TriangularActionLIdentification
 import TNLean.MPS.MPDO.TriangularBoundaryBlocked

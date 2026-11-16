@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.TraceCoreSlices
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.EntropySupport
 import QICLean.Entropy.LocalLift
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.FilterOutputCovariance

@@ -9,6 +9,7 @@ import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorRecurrence
 import TNLean.MPS.MPDO.RecurrentSectorRephasing
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Recurrence after reparameterizing zero-weight sectors
@@ -61,10 +62,7 @@ theorem conjugated_middle_threeSiteClosure
   rw [hmiddle]
   simp only [Matrix.mul_sum, Matrix.mul_smul, Matrix.sum_mul,
     Matrix.smul_mul, Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
-  apply Finset.sum_congr rfl
-  intro i₂ _
-  apply Finset.sum_congr rfl
-  intro j₂ _
+  refine Finset.sum_congr₂ fun i₂ _ j₂ _ ↦ ?_
   rw [hρ i₁ i₂ i₃ j₁ j₂ j₃]
   ring
 
