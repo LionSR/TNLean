@@ -32,11 +32,6 @@ Source: arXiv:0909.5347, source lines 691–700. -/
 theorem isNormal (hD : 2 ≤ D) : Kraus.IsNormal (tensor D) := by
   exact ⟨D * (D - 1), Nat.mul_pos (by omega) (by omega), wordSpan_full_length hD⟩
 
-/-- The actual cyclic example is primitive in the paper's vector-spreading
-sense. Source: arXiv:0909.5347, source lines 691–700. -/
-theorem isPrimitivePaper (hD : 2 ≤ D) : MPSTensor.IsPrimitivePaper (tensor D) :=
-  isPrimitivePaper_of_isNormal (tensor D) (isNormal hD)
-
 /-- The full-Kraus-rank index of the cyclic example is exactly `D(D-1)`.
 Source: arXiv:0909.5347, source lines 691–700. -/
 theorem iIndex_eq (hD : 2 ≤ D) : MPSTensor.iIndex (tensor D) = D * (D - 1) := by

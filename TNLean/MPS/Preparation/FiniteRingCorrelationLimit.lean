@@ -52,9 +52,10 @@ theorem tendsto_mpvConnectedCorrelator_limitCorrelator [NeZero D]
   let V := Matrix (Fin D) (Fin D) ℂ
   let Φ : Module.End ℂ V ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   have hNormal : Kraus.IsNormal A := ⟨L, hL0, hL⟩
-  have hPP : IsPrimitivePaper A := isPrimitivePaper_of_hasEventuallyFullKrausRank A
-    ((hasEventuallyFullKrausRank_iff_isNormal A).2 hNormal)
-  obtain ⟨_, _, _, hPer, hIrr⟩ := (primitivePaper_iff_stronglyIrreducible A hA).1 hPP
+  have hPer : IsPrimitive (Kraus.transferMap A) :=
+    isPrimitive_transferMap_of_isNormal A hA hNormal
+  have hIrr : IsIrreducibleMap (Kraus.transferMap A) :=
+    isIrreducibleMap_transferMap_of_isNormal A hNormal
   have hChannel : IsChannel E := Kraus.isChannel_mapLM A hA
   obtain ⟨_, hgap⟩ := spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
     E hChannel hIrr hPer ρ hρ.posSemidef

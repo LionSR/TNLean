@@ -125,24 +125,21 @@ tensors.
 
 \begin{lemma}[Normality alone gives an irreducible tensor]
     \label{thm:normal_irreducible_tensor}
-    \lean{MPSTensor.isPrimitivePaper_of_isNormal,
-        MPSTensor.isIrreducibleTensor_of_isPrimitivePaper}
+    \lean{MPSTensor.isIrreducibleFamily_of_isNormal}
     \leanok
-    \uses{def:normal, def:paper_primitive, def:has_inv_proj,
+    \uses{def:normal, def:has_inv_proj,
         def:irreducible_tensor}
-    Let $A$ be a normal tensor, with no normalization imposed on $A$.  Under
-    Definition~\ref{def:paper_primitive} and
-    Definition~\ref{def:irreducible_tensor}, $A$ is primitive and has no
-    nontrivial invariant projection, so $A$ is irreducible.
+    Let $A$ be a normal tensor, with no normalization imposed on $A$.  Then
+    $A$ has no nontrivial invariant projection, so $A$ is
+    irreducible in the sense of Definition~\ref{def:irreducible_tensor}.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:eventually_full_kraus_rank, rem:wolf_6_8_pairwise}
-    Normality is eventual full Kraus rank
-    (Remark~\ref{rem:wolf_6_8_pairwise}), so $S_N(A)=\MN{D}$ for some $N>0$.
-    Applying the length-$N$ words to a nonzero $\varphi$ then spans $\C^D$,
-    which is the spreading condition.  A subspace invariant under all matrices
+    \uses{thm:paper_primitive_of_full_kraus_rank}
+    By Lemma~\ref{thm:paper_primitive_of_full_kraus_rank}, the words of one
+    positive length $N$ applied to a nonzero $\varphi$ span $\C^D$.
+    A subspace invariant under all matrices
     of $A$ and containing a nonzero vector therefore contains the span of the
     images of that vector, namely all of $\C^D$; so no invariant projection is
     nontrivial.
@@ -191,7 +188,6 @@ tensors.
     \leanok
     \uses{thm:normal_irreducible_tensor,
         thm:normalized_normal_strongly_irreducible,
-        thm:primitive_from_strongly_irred,
         thm:normality_rescaling_invariance,
         thm:local_ground_space_rescaling, thm:normal_tensor_nonzero_matrix,
         thm:tp_data_irreducible, thm:gauge_invariance_normal,
@@ -211,9 +207,7 @@ tensors.
     Lemma~\ref{thm:normality_rescaling_invariance} and gauging preserves it
     by Lemma~\ref{thm:gauge_invariance_normal}, $B$ is normal.  Since $B$
     is trace preserving,
-    Lemma~\ref{thm:normalized_normal_strongly_irreducible} makes $B$
-    strongly irreducible, and
-    Lemma~\ref{thm:primitive_from_strongly_irred} then returns a positive
+    Lemma~\ref{thm:normalized_normal_strongly_irreducible} returns a positive
     definite $\rho$ with $(B,\rho)$ primitive.  By
     Theorem~\ref{thm:gauge_invariance} and Lemma~\ref{lem:eval_word_smul},
     gauge equivalence leaves the matrix product vectors unchanged and
