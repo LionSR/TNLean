@@ -540,12 +540,77 @@ This substitution is written as
 $e^{-\gamma/\xi}<1$, so it does not treat the convention
 $\xi=0$ at $\lambda_2=0$.
 
-To settle the normalized-state bound, the remaining steps are to combine these estimates
-with $z_j=\sum_{j'}\beta_{j'}w_{jj'}$ and a target-norm estimate relative to
-$\sum_j\lvert\beta_j\rvert^2$, allowing cancellations in the power sums, and to prove a
-separate quadratic projection estimate for $M=1$. The absolute-trace estimate for the
-relative-row overlaps is only quadratic for $M\geq2$; it must not be extended to $M=1$
-without an additional argument. The unrestricted source entry and issue~\#10571 remain open.
+For $M\geq2$, these estimates combine with $z_j=\sum_{j'}\beta_{j'}w_{jj'}$ and the
+target-norm estimate relative to $B=\sum_j\lvert\beta_j\rvert^2$. Since
+$\lvert\beta_j\beta_{j'}\rvert\leq B$, the normalized numerator error is bounded by
+$\sum_{j,j'}\lvert w_{jj'}-\delta_{jj'}\rvert$, without a uniform lower bound on $B$.
+The relative target-norm error is $O(e^{-\gamma Mq/\xi})$, which is
+$O(e^{-2\gamma q/\xi})$ for $M\geq2$.
+This argument and its linear-in-$y$ consequence are written as
+\leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_sq_of_two_le} and
+\leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_sq_of_two_le} in
+\doclink{TNLean/MPS/Preparation/RepeatedSecondOrderBlockError}; their elaboration remains to
+be checked. A separate quadratic projection estimate for $M=1$ remains to be formalized.
+The absolute-trace estimate for the relative-row overlaps is only quadratic for $M\geq2$;
+it must not be extended to $M=1$ without an additional argument.
+The unrestricted source entry and issue~\#10571 remain open.
+
+\section{One block of sites with arbitrary copy weights}
+For $M=1$, the following projection argument avoids dividing by any individual copy weight
+or by a uniform lower bound on the power sums. Its matrix identities and their connection
+to the corrected approximating state have not yet been formalized.
+
+Use pair coordinates, let $e=\sum_a\ket{a,a}$ on the full bond space and
+$e_j=\sum_a\ket{a,a}$ on block $j$, and put
+$\beta_j=\sum_k\mu_{j,k}^{q}$ and $B=\sum_j\lvert\beta_j\rvert^2>0$.
+Let $C=\sum_jc_jL_jL_j^\dagger$ be the copy-scale matrix,
+$\Pi=\sum_jL_jL_j^\dagger$, and let $C^{-1}$ mean its inverse on the range of $\Pi$.
+The definition of the copy isometries gives
+\begin{align}
+    L_j^\dagger e=\frac{\beta_j}{c_j}e_j,
+    \qquad \eta:=Ce=\sum_j\beta_jL_je_j.
+    \label{eq:mswc24_one_block_trace_vector}
+\end{align}
+Since the $L_j$ have orthogonal ranges and are isometries,
+$\lVert\eta\rVert^2=\sum_j D_j\lvert\beta_j\rvert^2\leq D_*B$, where
+$D_*=\max_jD_j$ is fixed independently of the weights.
+
+Write $u=Pe$, the one-site periodic vector of the polar tensor in pair coordinates,
+and let $F_j=\sqrt{\sigma_j}^{\,\mathsf T}\otimes\Id$ be the physical matrix of its
+fixed-point tensor. Then $f_j=F_je_j$ is its one-site periodic vector. Its coefficient
+at $(a,b)$ is $(\sqrt{\sigma_j})_{ba}$, and
+$\lVert f_j\rVert=1$. The corrected seed before the partial isometry is
+$W=\sum_j\beta_jL_jf_j$, so $\lVert W\rVert^2=B$.
+The support identity $P\Pi=P$, the relation $C^{-1}C=\Pi$, and the corrected limit
+$P_\infty=\sum_jc_jL_jF_jL_j^\dagger$ give
+\begin{align}
+    u-W=(P-P_\infty)C^{-1}\eta.
+    \label{eq:mswc24_one_block_relative_difference}
+\end{align}
+Consequently the relative positive-part estimate, with $x=e^{-\gamma/\xi}<1$, gives
+$\lVert u-W\rVert^2\leq D_*BK^2x^{2q}$ beyond a threshold independent of the weights.
+The squared distance from the line through $W$ is at most this squared distance:
+\begin{align}
+    \lVert u\rVert^2-\frac{\lvert\braket Wu\rvert^2}{B}
+        \leq\lVert u-W\rVert^2
+        \leq D_*BK^2x^{2q}.
+    \label{eq:mswc24_one_block_projection}
+\end{align}
+The scalar projection inequality is already formalized as
+\leanid{MPSTensor.norm_sq_sub_norm_inner_sq_div_le} in
+\doclink{TNLean/MPS/Preparation/SecondOrderOverlap}.
+
+The polar identity gives $\lVert u\rVert=\lVert\phi_q\rVert$ and the unnormalized
+overlap after the partial isometry is $\braket Wu/\sqrt B$. That partial isometry does
+not increase the norm of $W/\sqrt B$, so normalization can only improve the overlap.
+The relative target-norm estimate ensures $\lVert u\rVert^2/B\geq1/2$ for all sufficiently
+large $q$, uniformly in the weights. Applying the elementary normalized projection
+inequality to (\ref{eq:mswc24_one_block_projection}) after division by $B$ gives
+$\varepsilon\leq2D_*K^2x^{2q}$. Short block lengths use the trivial bound
+$\varepsilon\leq1$. Thus the remaining obligation is to prove
+(\ref{eq:mswc24_one_block_trace_vector}) and (\ref{eq:mswc24_one_block_relative_difference})
+in the project's coordinate conventions and identify $W$ with the actual one-block
+corrected seed; a quadratic absolute-trace bound is unnecessary.
 
 \bibliographystyle{alpha}
 \bibliography{references}

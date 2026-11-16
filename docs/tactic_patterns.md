@@ -1,5 +1,19 @@
 # Tactic Pattern Ledger
 
+### Weight-relative overlap normalization — candidate (2026-11-15)
+
+- **Seen:** `MPS/Preparation/RepeatedOverlappingBlockWeights.lean` and
+  `MPS/Preparation/RepeatedSecondOrderBlockError.lean`.
+- **Pattern:** Expand `z_j = ∑ k, β_k w_jk`, subtract `∑ j, ‖β_j‖²`, and bound
+  the quadratic-form error divided by that positive sum by `∑ j k, ‖w_jk - δ_jk‖`.
+  The bound remains uniform when the power sums nearly cancel.
+- **Abstraction:** A norm estimate for the normalized quadratic form can replace
+  the two local `hSz` proofs if a third consumer occurs. The polar-state overlap
+  transport uses existing `sum_star_copyApproxVector_mul_mpv` and
+  `inv_mul_norm_le_norm_of_sum_norm_sq_le_one`.
+- **Decision:** Two occurrences; retain the existing first-order theorem while
+  validating the second-order specialization. No new tactic is needed.
+
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
 - **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
