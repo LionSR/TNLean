@@ -219,6 +219,7 @@ import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.StandardFormFromGates
+import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
@@ -280,6 +281,7 @@ import TNLean.MPS.MPU.TwoSiteTranslationCovariance
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds
 import TNLean.MPS.MPU.UnitCircleRankTwo
+import TNLean.MPS.MPU.VirtualGaugePath
 import TNLean.MPS.MPU.VirtualSandwich
 import TNLean.MPS.MPU.VirtualSandwichBlocking
 import TNLean.MPS.MPU.VirtualSourceFactorTransport
