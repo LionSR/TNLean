@@ -111,7 +111,7 @@ theorem norm_gaussianFilteredTerm_sub_localized_le_mass (q ΔE : ℝ)
       _ ≤ ‖f t‖ + ‖f t‖ := by gcongr; exact QuantumCircuit.norm_siteExpectation_le K (f t)
       _ ≤ 2 * c * |t| := by linarith [hf t]
   rw [hrw, hdiff, ← L.integral_comp_comm hint,
-    ← integral_add_compl measurableSet_Icc (L.integrable_comp hint)]
+    ← integral_add_compl (s := Set.Icc (-T) T) measurableSet_Icc (L.integrable_comp hint)]
   refine (norm_add_le _ _).trans ?_
   refine (add_le_add (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) hshort)
     (norm_integral_le_of_norm_le (μ := μ.restrict (Set.Icc (-T) T)ᶜ)

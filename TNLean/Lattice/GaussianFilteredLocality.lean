@@ -63,7 +63,7 @@ theorem norm_map_gaussianFilteredTerm_le_mass (q ΔE : ℝ) {H : Matrix n n ℂ}
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t)
   have hint : Integrable f μ := integrable_intertwinerIntegrand _ hH hH W
   rw [gaussianFilteredTerm, gaussianIntertwiner, ← L.integral_comp_comm hint,
-    ← integral_add_compl measurableSet_Icc (L.integrable_comp hint)]
+    ← integral_add_compl (s := Set.Icc (-T) T) measurableSet_Icc (L.integrable_comp hint)]
   refine (norm_add_le _ _).trans ?_
   refine (add_le_add (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) hloc)
     (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) (fun t _ => hglob t))).trans ?_

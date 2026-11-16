@@ -136,7 +136,7 @@ theorem norm_gaussianFilteredTerm_sub_le {q ΔE : ℝ} (hq : 0 ≤ q) {H H' : Ma
     rw [norm_intertwinerIntegrand hH hH W t, norm_intertwinerIntegrand hH' hH' W t]
     ring
   have hg : Integrable g μ := hI.sub hI'
-  rw [heq, ← integral_add_compl measurableSet_Icc hg]
+  rw [heq, ← integral_add_compl (s := Set.Icc (-T) T) measurableSet_Icc hg]
   refine (norm_add_le _ _).trans ?_
   refine (add_le_add (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) hloc)
     (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) (fun t _ => hglob t))).trans ?_
