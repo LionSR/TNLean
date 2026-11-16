@@ -84,8 +84,11 @@ noncomputable def IsIrreducibleForm.block {D : ℕ} {A : MPSTensor d D}
     IsIrreducibleForm (blockTensor A p) := by
   classical
   let n : Fin h.r → ℕ := fun k ↦ (h.period k).gcd p
-  obtain ⟨sd, B, _, _, hper, hSame⟩ :=
-    exists_periodic_family_blockDecomposition h.blocks h.period h.periodic hp
+  let decomp := exists_periodic_family_blockDecomposition h.blocks h.period h.periodic hp
+  let sd := decomp.choose
+  let B := decomp.choose_spec.choose
+  have hper := decomp.choose_spec.choose_spec.2.2.1
+  have hSame := decomp.choose_spec.choose_spec.2.2.2
   let e := (finSigmaFinEquiv (n := n)).symm
   refine {
     r := ∑ k, n k
