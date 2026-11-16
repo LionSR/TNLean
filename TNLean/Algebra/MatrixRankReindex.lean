@@ -15,6 +15,8 @@ inequality before reindexing. This is used for the finite-index versions of
 the positive-map rank comparisons.
 -/
 
+open scoped ComplexOrder
+
 namespace Matrix
 
 /-- A rank comparison on positive semidefinite inputs is invariant under
