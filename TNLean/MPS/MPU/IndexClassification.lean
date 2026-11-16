@@ -213,12 +213,7 @@ equivalent: after attaching coprime identity ancillas that equalize their
 physical dimensions and blocking, they are strictly equivalent.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (iv), "if", lines 857--865, and
-Definition `def:equivalent-tensors`, lines 716--724.
-
-**Local fix (missing step, arXiv:1703.09188, lines 857--865):** the connection of
-each blocked tensor to the tensor built from its own gates, which the source
-omits, is supplied by `IsMPU.exists_joinedIn_standardFormTensorOfGates`; see
-`docs/paper-gaps/mpu_index_classification_tensor_to_gates.tex`. -/
+Definition `def:equivalent-tensors`, lines 716--724. -/
 theorem IsMPU.equivalent_of_index_eq {da db Da Db : ℕ}
     [NeZero da] [NeZero db] [NeZero Da] [NeZero Db]
     {U : MPOTensor da Da} {V : MPOTensor db Db} (hU : IsMPU U) (hV : IsMPU V)
@@ -257,13 +252,18 @@ theorem IsMPU.equivalent_of_index_eq {da db Da Db : ℕ}
 positive physical and bond dimensions, have the same index if and only if they
 are equivalent.
 
-The canonical-form hypotheses `hUcf` and `hVcf` are not added hypotheses. They
-are the source's standing convention for Section III onwards ("unless we
-specify the contrary, wlog we can assume that the tensor \(\mathcal U\) is in
-CF", arXiv:1703.09188, lines 325--326). Strict equivalence is also stated for
-tensors in canonical form (Definition `def:strictly-equivalent-tensors`,
-lines 708--714). The standard form used in the proof is that of a simple tensor
-in canonical form II, the reading recorded in
+The canonical-form hypotheses `hUcf` and `hVcf` are the source's, not added
+hypotheses. The compared tensors are in canonical form: "Two tensors
+\(\mathcal U\) and \(\mathcal V\) in CF are strictly equivalent if … there
+exist a continuous path \(\mathcal W(p)\) of tensors, not necessarily in CF"
+(Definition `def:strictly-equivalent-tensors`, arXiv:1703.09188,
+lines 708--714). The qualifier "not necessarily in CF" attaches only to the
+path: "we do not impose that the tensors in the path are in CF"
+(lines 733--736). Equivalence (lines 716--721) is strict equivalence of the
+blocked tensors with ancilla, which are in canonical form when \(\mathcal U\)
+and \(\mathcal V\) are (`IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId`).
+This is also the standing convention of lines 325--326. The standard form used in
+the proof is that of a simple tensor in canonical form II, the reading recorded in
 `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
 
 Source: arXiv:1703.09188, Theorem `IndexTh` (iv), lines 830--831 and
