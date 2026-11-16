@@ -357,9 +357,22 @@ blocking of a different embedding is not handled by this candidate.
 
 The candidate source passed direct strict elaboration against the checked #10686
 artifacts with automatic implicits disabled, synthesis-depth bound 3, standard
-Mathlib linters and warnings as errors. It has not passed a package build, full CI,
-foundational-dependency audit, Blueprint coverage or independent review. It is not
+Mathlib linters and warnings as errors. Both declarations have foundational
+dependencies contained in `{propext, Classical.choice, Quot.sound}`; the temporary
+audit source was removed. It has not passed a package build, full CI, Blueprint
+coverage or independent review. It is not
 exported through the generated aggregators. There is no additional PR or merge claim.
+
+At baseline #10686 head `1585429a7a08e1b60fef360919b6b1624bc55f02`, the complete
+hosted Lean build passed 32,385 jobs, including strict passes, text style and compiled
+Blueprint/paper-gap declarations. Both hosted PDF volumes passed. Independent exact-head
+Codex and Claude reviews found no blockers; all four earlier inline threads are repaired
+and resolved. The complete web job has passed its renderer and diagram sweep and is
+checking layout/pages. No merge has occurred while this final gate remains pending.
+An isolated merge preview against main `c3592ac8` was conflict-free and its eleven-module
+focused build passed 19,109 jobs; no dependency pins or source-import-closure files
+changed between the PR's integrated main and that preview. This is compatibility
+evidence, not a complete current-main integration build.
 
 The next substantive dependency is local continuous action-cap selection. A possible
 implementation route remains unverified: use a continuous coefficient-dual inverse at
