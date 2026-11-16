@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Native Open Central Flux Pairs and Vacuum Reduced Density}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Definition 6.13 and Lemma 6.14, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 2180--2214,
+construct flux pairs and assert local unobservability of the connecting string.
+
+For a physical observation set $R$, let $B(R)$ be the explicitly computed
+set of dual plaquettes with at least one corner in $R$. Assume both periods
+are at least three, the actual closed-cell realization of $B(R)$ is simply
+connected, and both endpoints of a finite native dual path $p$ lie outside
+$B(R)$. Let the original tensor be regular $G$-isometric and the insertion
+element $g$ be central. The theorem
+\leanid{TNLean.PEPS.IsGIsometric.torusCentralFlux_normalized_density_eq_vacuum}
+proves that the actual flux and vacuum cut matrices are nonzero and have
+identical unnormalized reduced matrices, hence identical normalized reduced
+densities. The endpoints need not coincide and the winding is unrestricted.
+
+The proof derives an exterior detour and identity insertions on every
+incident physical bond. It then derives a full-support homotopy from
+lifted displacement equality, and virtual invariance identifies the actual
+state with that of the original path. Native-to-graph conversion preserves
+centrality and the incident identities. Central complementary insertions
+preserve every local Gram kernel, giving the actual reduced-matrix equality.
+Nonvanishing follows from regular injectivity. No detour, homotopy,
+factorization, density equality or nonzero-cut assumption is supplied.
+
+Centrality is explicit. Thus all fluxes in abelian groups are covered,
+as are central fluxes in nonabelian groups. General noncentral flux pairs
+remain under \ghissue{8703}, as does completeness for homotopies constrained
+to an arbitrary swept set. The theorem uses full-support homotopy to compare
+physical states and does not claim a homotopy avoiding the observation.
+
+Simple connectedness is required of $B(R)$ itself, not inferred from simple
+connectedness of $R$ or from endpoint exclusion. An endpoint-free annulus
+enclosing one flux is excluded, consistently with the Wilson-loop
+obstruction documented in the
+\href{https://github.com/LionSR/TNLean/pull/10624}{closed-flux density draft}.
+No full-lattice Hamiltonian conclusion under \ghissue{8947} is asserted.
+\end{document}
