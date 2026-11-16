@@ -222,6 +222,7 @@ import TNLean.MPS.MPU.SpinOneSchmidtObstruction
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormConjugation
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
