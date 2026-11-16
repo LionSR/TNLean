@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{From the Gates to the Tensors in the MPU Index Classification}
+\author{}
+\date{2026-11-16}
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{The printed argument}
+
+The ``if'' half of clause (iv) of the Index Theorem of
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete states that two matrix product
+unitary tensors in canonical form with the same index are equivalent. Its
+proof reads \cite[lines~857--865]{Cirac2017MPU}: after attaching ancillas and
+blocking, both tensors are simple and have the same physical dimension; the
+corresponding gates $u$ and $v$ then have the same input and output
+dimensions, ``so that they can be smoothly connected to each other, and thus
+so can'' the two blocked tensors.
+
+The step from a path of gates to a path of tensors is not spelled out. A
+path of gates joins the tensors constructed from the gates, but a given
+tensor is not literally the tensor constructed from its own gates: the two
+have different bond dimensions and different half factors, and only their
+periodic operators agree.
+
+\section{The supplied step}
+
+Let $W$ be an MPU tensor in canonical form of bond dimension $D$, and let
+$m\geq D^2$. The connection is made in three steps, all through tensors
+generating MPUs.
+\begin{enumerate}
+    \item $W$ is similar, $W=X^{-1}YX$, to a tensor $Y$ in canonical form~II
+          of the same bond dimension. A path $X(t)$ of invertible matrices from
+          the identity to $X$, which exists because the singular points of
+          $z\mapsto(1-z)I+zX$ are finitely many, joins $W_{2m}$ to $Y_{2m}$
+          through the tensors $X(t)W_{2m}X(t)^{-1}$.
+    \item $Y_m$ is simple, so $Y_{2m}$, the two-site block of $Y_m$, is in
+          standard form with the gates $u,v$ of $Y_m$ and some half factors
+          $(X_1,X_2)$. The tensor constructed from $u$ and $v$ is in standard
+          form with the same gates and other half factors $(X_1',X_2')$.
+    \item In the bond space of the sum of the two bond dimensions, the half
+          factors $(\cos\theta\,X_1,\ \sin\theta\,X_1')$ and
+          $(\cos\theta\,X_2,\ \sin\theta\,X_2')$ contract to
+          $\cos^2\theta\,v+\sin^2\theta\,v=v$. Every intermediate tensor is
+          therefore in standard form with gates $u,v$ and generates an MPU.
+          For $\theta\in[0,\pi/2]$ this joins the two presentations, up to a
+          permutation of bond coordinates, which is again a gauge.
+\end{enumerate}
+Equal indices and the product formula $r\ell=n^2$, with $n$ the physical
+dimension of $Y_m$, force equal intermediate dimensions, and the paths of
+unitary gates then complete the argument as printed.
+
+\section{Formal statement}
+
+The three steps are \leanid{MPOTensor.IsMPU.joinedIn\_virtualSandwich},
+\leanid{MPOTensor.TwoSiteStandardFormData.joinedIn\_padBond} and
+\leanid{MPOTensor.joinedIn\_standardFormTensorOfGates}. They are assembled in
+\leanid{MPOTensor.IsMPU.exists\_joinedIn\_standardFormTensorOfGates} and
+\leanid{MPOTensor.IsMPU.equivalent\_of\_index\_eq}. The statement has the
+source's hypotheses; the note records only the supplied argument.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

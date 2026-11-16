@@ -91,6 +91,7 @@ import TNLean.MPS.MPU.GroupIndex
 import TNLean.MPS.MPU.GroupRepresentation
 import TNLean.MPS.MPU.IdentityIndex
 import TNLean.MPS.MPU.Index
+import TNLean.MPS.MPU.IndexClassification
 import TNLean.MPS.MPU.IndexContinuity
 import TNLean.MPS.MPU.IndexOfCanonicalForm
 import TNLean.MPS.MPU.InitializedEncodingCoordinates
