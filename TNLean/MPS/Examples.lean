@@ -30,6 +30,7 @@ import TNLean.MPS.Examples.ClusterPhysicalStringOrder
 import TNLean.MPS.Examples.ClusterReview
 import TNLean.MPS.Examples.ClusterSPTFixedPoint
 import TNLean.MPS.Examples.ClusterSourceGroundState
+import TNLean.MPS.Examples.ControlledZCombinedSymmetry
 import TNLean.MPS.Examples.ControlledZGauging
 import TNLean.MPS.Examples.CyclicWielandt
 import TNLean.MPS.Examples.EvenParity

@@ -48,6 +48,22 @@ $A^i=R^iL^i$. The formalization proves the following.
 The last item is
 \leanid{ControlledZGauging.simpsTensor_isNontrivialClass}.
 
+The combined symmetry is also realized on the original qubits by an exact
+normal matrix product operator family
+\leanid{ControlledZGauging.combinedFamily_isNormalRepresentation}.
+For $g=(p,q)$ its periodic operator is
+$U^q(\prod_jZ_j)^p$, equivalently the diagonal matrix of the products of
+the split-leg phases around the ring
+\leanid{ControlledZGauging.mpo_combinedFamily}. Its tensors have bond
+dimension one for $q=0$ and two for $q=1$. The actual operators are unitary,
+and both $\ket{\psi_N(A)}$ and the reference product state
+$\ket{0\cdots0}$ are invariant at every positive length. Consequently,
+action reductions exist for each of these two states under the same family.
+The family's anomaly class vanishes
+\leanid{ControlledZGauging.combinedFamily_anomalyClass_eq_zero}; this
+three-cocycle statement does not compare the two states' action
+two-cocycle classes.
+
 What is not formalized is the identification of this projective class with
 the phase: that two states with split-index presentations whose bond
 implementations of the combined symmetry carry different classes cannot be
@@ -63,10 +79,12 @@ The phase statement would follow from a formal version of the classification
 of Ref.~\cite{Stephen2024SIMPS} for split-index states, or from the
 classification of phases protected by matrix product unitary symmetries
 through the action tensors and their L-symbols, applied to the combined
-$\mathbb{Z}_2\times\mathbb{Z}_2$ family. The latter needs the combined family as an exact
-representation of $\mathbb{Z}_2\times\mathbb{Z}_2$ by normal tensors and a computation of the
-class of its L-symbols relative to the invariant product state
-$\ket{0\cdots0}$.
+$\mathbb{Z}_2\times\mathbb{Z}_2$ family. The exact normal combined family and
+its action reductions for both states are constructed. What remains is a
+computation of the class of its L-symbols relative to the invariant product
+state $\ket{0\cdots0}$, followed by physical path invariance with the source's
+exact hypotheses. The split-index bond calculation alone does not supply
+that comparison or the physical path argument.
 
 \bibliographystyle{alpha}
 \bibliography{references}
