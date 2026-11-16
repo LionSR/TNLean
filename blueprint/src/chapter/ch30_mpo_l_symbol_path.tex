@@ -1,0 +1,154 @@
+% The L-symbols along a differentiable symmetric path.
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1352--1578
+% (MPSs with inequivalent L-symbols belong to different phases).
+\section{The multiplicity symbols along a symmetric path}
+\label{sec:glm_l_symbol_path}
+
+Garre-Rubio, Lootens and Moln\'ar show that a differentiable path of
+symmetric states cannot change the gauge class of the $L$-symbols
+\cite[Section~5]{GarreRubio2023MPOSym}. Along the path the operator blocks,
+the fusion maps and the bond dimensions are fixed. The derivative of each
+action tensor is assumed to lie in the span of the action tensors at the
+same point. Under these assumptions the first-order change of the
+coefficient matrices is an infinitesimal gauge transformation. This section
+proves that statement. The left inverses of the action tensors are not
+assumed to vary differentiably.
+
+\begin{lemma}[A first-order quotient rule]
+    \leanok
+    \label{lem:glm_l_path_quotient_rule}
+    \lean{Matrix.hasDerivAt_mul_entries,Matrix.hasDerivAt_trace_of_entries,
+        Matrix.differentiableAt_det_of_entries,
+        Matrix.differentiableAt_inv_of_entries,
+        Matrix.hasDerivAt_entries_of_eventually_eq_mul}
+    Let $R(\gamma)$, $L(\gamma)$ and $P(\gamma)$ be finite complex matrices
+    depending on a real parameter, with $P$ square. Suppose $R=LP$ on a
+    neighbourhood of $\gamma_0$ and $P(\gamma_0)=1$. Suppose also that the
+    entries of $R$ and $P$ are differentiable at $\gamma_0$ with derivatives
+    $R'$ and $P'$. Then the entries of $L$ are differentiable at $\gamma_0$,
+    with derivative $R'-L(\gamma_0)P'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The determinant of $P$ is a polynomial in its entries. It is therefore
+    differentiable at $\gamma_0$, and it is nonzero near $\gamma_0$ because
+    $\det P(\gamma_0)=1$. By Cramer's rule the entries of $P^{-1}$ are
+    differentiable at $\gamma_0$. Near $\gamma_0$ we have $L=RP^{-1}$, so
+    $L$ is differentiable there. The product rule applied to $R=LP$ gives
+    $R'=L'P(\gamma_0)+L(\gamma_0)P'=L'+L(\gamma_0)P'$.
+\end{proof}
+
+\begin{theorem}[The change of the $L$-symbols along a path is a gauge
+        transformation]
+    \leanok
+    \label{thm:glm_l_path_invariance}
+    \lean{MPOTensor.hasDerivAt_actionLMatrix}
+    \uses{def:glm_boundary_action_l_matrix}
+    Fix operator blocks $O_a$ of positive bond dimensions with exact
+    biorthogonal fusion maps. Let $A_x(\gamma)$ be state blocks of fixed
+    positive bond dimensions $D_x$. Assume that for $\gamma$ near $\gamma_0$
+    they are individually injective and pairwise inequivalent under a
+    virtual gauge and a nonzero scalar. Assume also that they carry exact
+    biorthogonal action maps $V_{ax}^{y,i}(\gamma)$ and
+    $\widehat V_{ax}^{y,i}(\gamma)$. Suppose every entry of each analysis
+    map is differentiable at $\gamma_0$, with
+    \begin{align}
+        \frac{d}{d\gamma}V_{ax}^{y,i}(\gamma)\Big|_{\gamma_0}
+         & =\sum_{i'}(X_{ax}^y)_{ii'}V_{ax}^{y,i'}(\gamma_0)
+        \label{eq:glm_l_path_span}
+    \end{align}
+    for some square matrices $X_{ax}^y$. Then every entry of the
+    coefficient matrices $L_{abx}^y(\gamma)$ is differentiable at
+    $\gamma_0$. Writing $L$ for $L_{abx}^y(\gamma_0)$, the derivative is
+    \begin{align}
+        \frac{d}{d\gamma}L_{abx}^y(\gamma)[(z,i,j),(c,k,\mu)]\Big|_{\gamma_0}
+         & =\sum_{i'}(X_{az}^y)_{ii'}L[(z,i',j),(c,k,\mu)]
+        +\sum_{j'}(X_{bx}^z)_{jj'}L[(z,i,j'),(c,k,\mu)]
+        \notag                                                   \\
+         & \quad-\sum_{k'}L[(z,i,j),(c,k',\mu)](X_{cx}^y)_{k'k}.
+        \label{eq:glm_l_path_derivative}
+    \end{align}
+    This is the invariance step of \cite[Section~5]{GarreRubio2023MPOSym},
+    whose text reads, with the pictured expansion of the action tensors
+    written as the bracketed formula:
+    \begin{quote}
+        Since one can always find a left inverse tensor such that it is
+        continuous we can find without loss of generality a basis change,
+        where $V_{a,x}^{y,i}$ is also continuous (using the fact that the
+        action tensors are linearly independent). Let us absorb this basis
+        change and assume (see below for generalization) that the action
+        tensors are differentiable:
+        [$V^{i}(\gamma+d\gamma)=V^{i}(\gamma)
+            +\sum_{i'}(X_{ax}^y)_{i'}^{i}V^{i'}(\gamma)\,d\gamma$], where we
+        have spanned the term in $d\gamma$ using the orthogonal set of action
+        tensors $\{V_{a,x}^{y,i},i=1,\cdots,M_{a,x}^y\}$ of the subspace of
+        the block $y$. [\dots] Therefore
+        \[
+            ({L'}_{abx}^y)_{c\mu k}^{zij}=\sum_{\hat i,\hat j,\hat k}
+            (L_{abx}^y)^{z\hat i\hat j}_{c\mu\hat k}\big[
+                \delta_{i,\hat i}\delta_{j,\hat j}\delta_{k,\hat k}
+                +(X_{bx}^z)_{\hat j}^{j}\delta_{i,\hat i}\delta_{k,\hat k}
+                +(X_{az}^y)_{\hat i}^{i}\delta_{j,\hat j}\delta_{k,\hat k}
+                -(X_{cx}^y)^{\hat k}_{k}\delta_{i,\hat i}\delta_{j,\hat j}\big],
+        \]
+        which means that the ${L}'$-symbol is in the same class as the
+        ${L}$-symbol since they are related by a (differentiable) gauge
+        transformation.
+    \end{quote}
+    The source's $(X_{ax}^y)_{i'}^{i}$ is the entry $(X_{ax}^y)_{ii'}$ here.
+    The hypotheses are those of the source: the symmetry operators and
+    fusion maps are the same along the path, the blocks are injective, the
+    bond dimension does not change, and (\ref{eq:glm_l_path_span}) holds.
+    The source's assertion that the new $L$-symbols are differentiable is
+    proved here, not assumed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_action_l_exists,lem:glm_l_path_quotient_rule}
+    Fix $a,b,x,y$. Let $S_q$ be the fusion-then-action synthesis maps at
+    $\gamma_0$, indexed by $q=(c,k,\mu)$. Let $H_{{\rm seq},p}(\gamma)$ and
+    $H_{{\rm fus},q}(\gamma)$ be the sequential and fusion-then-action
+    analysis maps at $\gamma$, with $p=(z,i,j)$. The defining relation
+    (\ref{eq:glm_boundary_action_l_defining}) at $\gamma$, restricted to the
+    final block $y$, reads
+    $H_{{\rm seq},p}(\gamma)=\sum_qL(\gamma)_{pq}H_{{\rm fus},q}(\gamma)$.
+    Multiplying on the right by $S_{q'}$ and taking normalized traces
+    gives $R(\gamma)=L(\gamma)P(\gamma)$, where
+    $R(\gamma)_{pq'}=D_y^{-1}\operatorname{tr}(H_{{\rm seq},p}(\gamma)S_{q'})$
+    and
+    $P(\gamma)_{qq'}=D_y^{-1}\operatorname{tr}(H_{{\rm fus},q}(\gamma)S_{q'})$.
+    Biorthogonality at $\gamma_0$ gives
+    $H_{{\rm fus},q}(\gamma_0)S_{q'}=\delta_{qq'}1$, so $P(\gamma_0)=1$.
+    The maps $H_{\rm fus}$ are linear and $H_{\rm seq}$ bilinear in the
+    action analysis maps. By (\ref{eq:glm_l_path_span}),
+    \begin{align}
+        R'_{pq'}         & =\sum_{i'}(X_{az}^y)_{ii'}L_{(z,i',j)q'}
+        +\sum_{j'}(X_{bx}^z)_{jj'}L_{(z,i,j')q'},
+        \notag                                                              \\
+        P'_{(c,k,\mu)q'} & =\sum_{k'}(X_{cx}^y)_{kk'}\delta_{(c,k',\mu)q'}.
+        \notag
+    \end{align}
+    Lemma~\ref{lem:glm_l_path_quotient_rule} gives the derivative
+    $R'-LP'$, which is (\ref{eq:glm_l_path_derivative}).
+\end{proof}
+
+\begin{corollary}[The derivative is tangent to a gauge orbit]
+    \leanok
+    \label{cor:glm_l_path_gauge_tangent}
+    \lean{MPOTensor.hasDerivAt_actionLMatrix_gaugeCurve}
+    \uses{thm:glm_l_path_invariance,lem:glm_mixed_gauge_coefficients}
+    Apply the gauge law (\ref{eq:glm_mixed_gauge_l}) to the coefficients
+    $L=L_{abx}^y(\gamma_0)$ with $X_{ax}^y(t)=1+tX_{ax}^y$, with
+    $(\widehat X_{cx}^y(t))_{kk'}=(1-tX_{cx}^y)_{k'k}$, the transposed
+    inverse to first order, and with trivial fusion gauge. The resulting
+    curve of coefficients has velocity at $t=0$ equal to the right side of
+    (\ref{eq:glm_l_path_derivative}). Thus the first-order change of the
+    $L$-symbols along the path is the infinitesimal gauge transformation
+    generated by the matrices $X_{ax}^y$, and the class of the $L$-symbols
+    is unchanged to first order.
+\end{corollary}
+\begin{proof}
+    \leanok
+    The curve is a polynomial in $t$. Its derivative at $t=0$ collects the
+    three terms linear in $t$, one for each gauge factor.
+\end{proof}
