@@ -256,6 +256,7 @@ import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitPhaseScalar
 import TNLean.Algebra.UnitaryAdjointKronecker
+import TNLean.Algebra.UnitaryBetweenCompact
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryConjugationTransposeSign

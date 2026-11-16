@@ -4358,13 +4358,13 @@
 
 \begin{lemma}[Standard-form gates along a path are continuous modulo local unitaries]
     \label{lem:mpu_standard_form_gates_continuous_mod_local}
-    \lean{MPOTensor.isCompact_setOf_isUnitaryBetween,
+    \lean{Matrix.isCompact_setOf_isUnitaryBetween,
         MPOTensor.continuous_twoSiteCircuit, MPOTensor.continuous_mpo,
         MPOTensor.eventually_exists_gate_gauge_sub_mem,
         MPOTensor.eventually_exists_gate_gauge_sub_mem_of_path}
     \leanok
     \discussion{6024}
-    \uses{SF, FundamentalMPU}
+    \uses{SF}
     Let $p\mapsto\mathcal U(p)$ be a continuous path of tensors, not
     necessarily in canonical form, and fix a blocking length $k$. At every $p$
     let $u(p),v(p)$ be the gates of a standard form of the two-site block of
@@ -4381,7 +4381,7 @@
 
 \begin{proof}
     \leanok
-    \uses{SF}
+    \uses{SF, thm:mpu_fundamental_gates_supplied}
     Unitary gates form a compact set. If gates $u(q_n)$ with $q_n\to p$
     stayed outside $(x\otimes y)u(p)+W$ for all unitaries $x,y$, a subsequence
     of $(u(q_n),v(q_n))$ would converge to a unitary pair $(u^*,v^*)$. The
