@@ -236,7 +236,7 @@ theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω�
   have heval : ∀ z, twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y)
       (((renameWord S₁ S₂ Y).comp c).eval z) =
         act (exchangeOp S₁ S₂ Y P σ) (twoRegIso q S₁ S₂ z) := fun z => by
-    rw [Word.eval_comp, ContinuousLinearMap.comp_apply, hc, twoRegIso_renameWord, ← act_mul,
+    rw [Circuit.eval_comp, ContinuousLinearMap.comp_apply, hc, twoRegIso_renameWord, ← act_mul,
       exchangeOp]
   have r := isReordering_renameWord (q := q) S₁ S₂ Y
   obtain ⟨c₁, c₂, c₃⟩ := frontCorrectionWord_props (q := q) [] [] (swapIn S₁ S₂ Y).owner

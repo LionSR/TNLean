@@ -85,7 +85,7 @@ def birthWord {P Q : Party} (hQP : Q ≠ P) (V : Matrix (BT × BE) U ℂ) (s : T
     Word (⟨P, euc T⟩ :: ⟨P, euc U⟩ :: ℓ) (⟨Q, euc T⟩ :: ⟨P, euc U⟩ :: ℓ) :=
   .comp (.comp (Word.localMap (ℓ₁ := [⟨P, euc T⟩, ⟨P, euc U⟩]) (ℓ₂ := [⟨P, euc BE⟩]) P
       owner_of_mem_two owner_of_mem_one (matLocal₂₁ P (birthKernel V s)) ℓ)
-      (.source hQP (euc T) (euc BT) (pairVec (WithLp.toLp 2 s)) (⟨P, euc BE⟩ :: ℓ)))
+      (Word.source hQP (euc T) (euc BT) (pairVec (WithLp.toLp 2 s)) (⟨P, euc BE⟩ :: ℓ)))
     (.frame ⟨Q, euc T⟩ (Word.localMap (ℓ₁ := [⟨P, euc BT⟩, ⟨P, euc BE⟩]) (ℓ₂ := [⟨P, euc U⟩])
       P owner_of_mem_two owner_of_mem_one (matLocal₂₁ P Vᴴ) ℓ))
 
@@ -222,7 +222,7 @@ theorem pairHeadIso_frame_localMap_source {P Q : Party} (hQP : Q ≠ P) (V : Mat
           (twoIso P P BT BE).symm (pairIso BT BE (b ⊗ₜ k)) ⊗ₜ w := by
         rw [twoIso_symm_pairIso]
         exact appendIso_two_tmul (⟨P, euc BT⟩ : Reg Party) ⟨P, euc BE⟩ ℓ b k w
-      rw [assocL_tmul, Word.eval_frame, lTensor_tmul,
+      rw [assocL_tmul, Circuit.eval_frame, lTensor_tmul,
         ← (appendIso [⟨P, euc BT⟩, ⟨P, euc BE⟩] ℓ).symm_apply_apply (b ⊗ₜ (k ⊗ₜ w)), hb,
         eval_localMap₂₁, pairHeadIso_tmul]
       rfl
@@ -246,7 +246,7 @@ theorem pairHeadIso_birthWord_eval {P Q : Party} (hQP : Q ≠ P) (V : Matrix (BT
       have hz : (pairHeadIso (p := P) (q := P) ℓ).symm (v ⊗ₜ w) =
           (appendIso [⟨P, euc T⟩, ⟨P, euc U⟩] ℓ).symm ((twoIso P P T U).symm v ⊗ₜ w) := by
         rw [LinearIsometryEquiv.symm_apply_eq, pairHeadIso_appendIso_symm]
-      rw [hz, birthWord, Word.eval_comp, ContinuousLinearMap.comp_apply, Word.eval_comp,
+      rw [hz, birthWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply, Circuit.eval_comp,
         ContinuousLinearMap.comp_apply, eval_localMap₂₁, pairHeadIso_frame_localMap_source,
         sourceThenAdjoint_pairVec, rTensor_tmul, act_mul]
   | add a b ha hb => simp only [map_add, ha, hb]

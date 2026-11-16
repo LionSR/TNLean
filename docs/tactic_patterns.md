@@ -8852,7 +8852,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Refactor:** Remove the three identical private copies and move the public
   proof unchanged. Every call now uses the same declaration. Source inventories,
   prepared vectors, public hypotheses, and conclusions are unchanged.
-- **Scouting:** `Word.eval_castLayouts_heq` already identifies the two maps;
+- **Scouting:** `Circuit.eval_castLayouts_heq` already identifies the two maps;
   the value statement additionally identifies their dependent input vectors.
   Its proof uses core `congrArg`, `eq_of_heq`, and `heq_of_eq`; no custom tactic
   or new generic congruence theorem is introduced.

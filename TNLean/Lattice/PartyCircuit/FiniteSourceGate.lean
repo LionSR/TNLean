@@ -63,7 +63,7 @@ theorem Word.exists_finite_source_preparation {P ι : Type} [Finite P] [Finite �
   · intro ξ
     simp only [Word.sources, hds, hvs, List.nil_append]
   · intro ξ
-    rw [Word.eval_comp, comp_assoc, hde, he]
+    rw [Circuit.eval_comp, comp_assoc, hde, he]
 
 /-- Collect the local operations at each party after preparing the monomials'
 sources in fixed finite coordinates. All party maps remain contractions.

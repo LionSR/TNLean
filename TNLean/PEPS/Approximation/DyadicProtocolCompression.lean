@@ -169,7 +169,7 @@ theorem nonprivateCount_toDistributedConstruction_circuit_le
     (D.toDistributedConstruction hL).circuit.nonprivateCount ≤ D.changes * b := by
   have hcount : (D.toDistributedConstruction hL).circuit.nonprivateCount =
       (D.chain D.changes).nonprivateCount :=
-    OriginalCircuit.nonprivateCount_castLayouts _ _ _
+    Circuit.gateCount_castLayouts _ _ _
   rw [hcount, DyadicProtocol.nonprivateCount_chain]
   simpa using Finset.sum_le_card_nsmul _ _ b fun t ht ↦
     h.nonprivateCount_le t (Finset.mem_range.mp ht)

@@ -60,7 +60,7 @@ theorem eval_prepareFreeSlots_nil_heq (R : SourceInventory P)
     (η : ∀ i, U i ⊗[ℂ] V i) :
     HEq ((prepareFreeSlots R U V free η []).eval (1 : ℂ))
       (freeSourceVector R U V free η) := by
-  exact (Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl).trans
+  exact (Word.eval_castLayouts_apply_heq _ rfl _ HEq.rfl).trans
     ((eval_prepare_nil_heq (selectedSources R U V free η)).trans
       (Layout.memCongr_apply_heq _ _).symm)
 
@@ -79,7 +79,7 @@ theorem eval_framed_sourceVector {ℓ L : Layout P} (p : Word [] ℓ)
     ((Word.frameList L p).castLayouts (List.append_nil L) rfl).eval
         (Layout.memCongr h (vector S)) =
       Layout.memCongr (congrArg (· ++ ℓ) h) ((prepare S ℓ).eval (p.eval 1)) := by
-  rw [Word.eval_castLayouts]
+  rw [Circuit.eval_castLayouts]
   change (Word.frameList L p).eval
       ((Layout.memCongr (List.append_nil L)).symm (Layout.memCongr h (vector S))) = _
   have hin := Layout.memCongr_apply_heq (List.append_nil L)
@@ -125,9 +125,9 @@ theorem eval_framed_freeSourceVectors (R : SourceInventory P)
   change Layout.memCongr hSD (vector (S ++ D)) =
     (appendIso C T).symm (freeSourceVector R U V first η ⊗ₜ[ℂ]
       freeSourceVector R U V second ζ) at hv
-  rw [← hv, Word.eval_castLayouts]
+  rw [← hv, Circuit.eval_castLayouts]
   have hf := eval_framed_sourceVector p (S ++ D) hSD
-  rw [Word.eval_castLayouts] at hf
+  rw [Circuit.eval_castLayouts] at hf
   change (Word.frameList (C ++ T) p).eval
     ((Layout.memCongr (List.append_nil (C ++ T))).symm
       (Layout.memCongr hSD (vector (S ++ D)))) = _ at hf
@@ -140,8 +140,8 @@ theorem eval_framed_freeSourceVectors (R : SourceInventory P)
   apply ((Layout.memCongr_apply_heq _ _).trans (Layout.memCongr_apply_heq _ _)).trans
   apply (eval_prepare_append S D ℓ (p.eval 1)).trans
   apply (prepare_apply_heq S (congrArg (· ++ ℓ) hD)
-    (Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl).symm).trans
-  exact (Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl).symm
+    (Word.eval_castLayouts_apply_heq _ rfl _ HEq.rfl).symm).trans
+  exact (Word.eval_castLayouts_apply_heq _ rfl _ HEq.rfl).symm
 
 /-- Concatenate the two literal source-vector blocks in their fixed order. -/
 def sourceVectorPair (R : SourceInventory P) (U V : Fin R.length → HSpace)

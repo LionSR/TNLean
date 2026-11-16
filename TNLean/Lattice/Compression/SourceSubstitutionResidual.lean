@@ -44,7 +44,7 @@ private inductive SourceVariation (f : P → Q) :
       SourceVariation f w w' → SourceVariation f (Word.frame r w) (Word.frame r w')
   | source {p q : P} (hpq : p ≠ q) (U V : HSpace) (η θ : U ⊗[ℂ] V)
       (tail : Layout P) (h : f p = f q → η = θ) :
-      SourceVariation f (.source hpq U V η tail) (.source hpq U V θ tail)
+      SourceVariation f (Word.source hpq U V η tail) (Word.source hpq U V θ tail)
 
 /-- Varying source vectors changes neither endpoint layout. -/
 private theorem SourceVariation.layouts {f : P → Q} {a b c d : Layout P}
@@ -69,7 +69,6 @@ private theorem heq_castInput {a b c : Layout P} (w : Word a b) (h : a = c) :
     HEq (w.castInput h) w := by
   cases h
   rfl
-
 /-- Equal source layouts and equal remaining words give equal framed compositions. -/
 private theorem comp_frameList_heq {a b c s s' t t' : Layout P}
     (hs : s = s') (ht : t = t') {u : Word (s ++ a) b} {u' : Word (s' ++ a) b}
@@ -146,7 +145,7 @@ private theorem SourceVariation.mapOwner (g : P → Q) (f : Q → T)
 private theorem SourceVariation.source_tail {f : P → Q} {p q : P}
     (hpq : p ≠ q) (U V : HSpace) (η θ : U ⊗[ℂ] V)
     {a b : Layout P} (hab : a = b) (h : f p = f q → η = θ) :
-    SourceVariation f (.source hpq U V η a) (.source hpq U V θ b) := by
+    SourceVariation f (Word.source hpq U V η a) (Word.source hpq U V θ b) := by
   subst b
   exact .source hpq U V η θ a h
 
@@ -197,7 +196,9 @@ private theorem variation_prepareSlots (f : P → Q) (R : SourceInventory P)
     (tail : Layout P) :
     SourceVariation f (SourceInventory.prepareSlots R U V η tail)
       (SourceInventory.prepareSlots R U V θ tail) :=
-  ((variation_ofSlots f R U V η θ h).prepare tail).castLayouts _ _ _ _
+  ((variation_ofSlots f R U V η θ h).prepare tail).castLayouts rfl
+    (congrArg (· ++ tail) (SourceInventory.layout_ofSlots_eq R U V η (fun _ ↦ 0))) rfl
+    (congrArg (· ++ tail) (SourceInventory.layout_ofSlots_eq R U V θ (fun _ ↦ 0)))
 
 end TNLean.Lattice.PartyCircuit.Word
 

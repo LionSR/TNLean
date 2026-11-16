@@ -57,7 +57,7 @@ private theorem exists_rawReordering {a b : List (RawLabel L w)} (h : a.Perm b) 
       obtain ⟨u, hu, he⟩ := ih₁
       obtain ⟨v, hv, hf⟩ := ih₂
       exact ⟨.comp u v, hu.comp hv, fun c ↦ by
-        rw [Word.eval_comp, comp_apply, he, hf]⟩
+        rw [Circuit.eval_comp, comp_apply, he, hf]⟩
 
 private def rawReordering {a b : List (RawLabel L w)} (h : a.Perm b) :
     Word (siteRegs q (rawOwner L w) a) (siteRegs q (rawOwner L w) b) :=
@@ -301,7 +301,7 @@ private theorem packMain_siteVec (ps : List (Party L w))
       erw [groupIso_siteVec (rawOwner L w) (mainRawList p) (mainBlockIndex p)
         (fun x ↦ Sum.inl x.val) (mainBlockIndex_get p) c,
         EuclideanSpace.piLpCongrLeft_single]
-      erw [appendIso_one_symm, Word.eval_frame, lTensor_tmul, ih, physicalColumns_cons]
+      erw [appendIso_one_symm, Circuit.eval_frame, lTensor_tmul, ih, physicalColumns_cons]
       exact (appendIso_symm_cons_tmul _ _ _ _ _ _).symm
 
 private theorem terminalRegrouping_siteVec (rs : List (RawLabel L w))
@@ -370,7 +370,7 @@ theorem eval_terminalRegroupingWord (rs : List (RawLabel L w)) (hn : rs.Nodup)
       (((rawReordering (q := q) (canonicalRawOrder_perm rs hn hc)).castLayouts rfl
         (mainPackedInput_eq (q := q) (physicalOrder L w)).symm).eval
           (siteVec (rawOwner L w) rs c)) = _
-    erw [Word.eval_castLayouts]
+    erw [Circuit.eval_castLayouts]
     simp only [comp_apply, isoL_apply]
     erw [(rawReordering_spec (q := q) (canonicalRawOrder_perm rs hn hc)).2 c,
       Layout.memCongr_symm (mainPackedInput_eq (q := q) (physicalOrder L w))]
