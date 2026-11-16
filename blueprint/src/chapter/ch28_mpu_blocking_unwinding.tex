@@ -1,0 +1,101 @@
+\section{The local relation for sequential blocking}
+
+The two-block representatives used in the time-reversal blocking argument
+are $u^{(2)}=v_{23}(u_{12}\otimes u_{34})$ and $v^{(2)}=v_{23}$, with the
+identity on the exterior spins understood. The following calculation
+derives the local relation used in the blocking argument of \cite{Cirac2017MPU}
+from these particular representatives.
+
+\begin{lemma}[Eight-spin factorization]\label{lem:mpu_blocking_network}
+    \lean{MPOTensor.blocking_network_eq_kronecker}
+    \leanok
+    \uses{def:mpug_staircase_middle}
+    Let $u,v,x$ be square matrices on two spins of dimension $d$, and let
+    $\sigma\in\mathbb C$. Suppose that
+    \begin{align}
+        v_{23}u_{12}u_{34}v_{23}
+        &=\sigma x_{12}x_{34}^{\dagger}.
+        \label{eq:mpu_unwind_one}
+    \end{align}
+    Then the literal eight-spin two-block network satisfies
+    \begin{align}
+        v_{45}(v_{23}u_{12}u_{34})(v_{67}u_{56}u_{78})v_{45}
+        &=\sigma\bigl[v_{23}(u_{12}\otimes x_{34})\bigr]
+          \otimes\bigl[v_{67}(x_{56}^{\dagger}\otimes u_{78})\bigr].
+        \label{eq:mpu_unwind_eight}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The three gates $v_{23},v_{45},v_{67}$ have disjoint supports and commute.
+    Move $v_{23}v_{67}$ to the left and use
+    (\ref{eq:mpu_unwind_one}) on spins $3,4,5,6$. The exterior factors
+    $u_{12},u_{78}$ give (\ref{eq:mpu_unwind_eight}).
+\end{proof}
+
+\begin{lemma}[Local unwinding from two time-reversal equations]
+    \label{lem:mpu_unwind_local}
+    \lean{MPOTensor.unwind_dagger_trick_of_local_relations}
+    \leanok
+    \uses{lem:mpu_blocking_network}
+    Suppose that $u,v,x$ are unitary, that $\sigma_1^2=1$, and that
+    (\ref{eq:mpu_unwind_one}) holds with $\sigma=\sigma_1$.
+    Suppose also that $X$ is a unitary on four spins and that the
+    left-hand side of (\ref{eq:mpu_unwind_eight}) equals
+    $\sigma_2 X_{1234}\otimes X_{5678}^{\dagger}$.
+    For $\zeta=\sigma_1\sigma_2$,
+    \begin{align}
+        \zeta\bigl[v_{23}(u_{12}\otimes x_{34})\bigr]^{\dagger}
+        &=v_{23}(x_{12}^{\dagger}\otimes u_{34}).
+        \label{eq:mpu_unwind_local}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Put $A=v_{23}(u_{12}\otimes x_{34})$ and
+    $B=v_{23}(x_{12}^{\dagger}\otimes u_{34})$.
+    Equation~(\ref{eq:mpu_unwind_eight}) gives
+    $A\otimes B=\zeta X\otimes X^{\dagger}$.
+    Contract the entries with row $(i,k)$ and column $(k,j)$ over $k$.
+    This yields $AB=\zeta XX^{\dagger}=\zeta I$.
+    Multiplication by $A^{\dagger}$ gives $B=\zeta A^{\dagger}$.
+\end{proof}
+
+\begin{lemma}[Unwinding for the printed two-block standard form]
+    \label{lem:mpu_unwind_supplied}
+    \lean{MPOTensor.TwoSiteStandardFormData.unwind_dagger_trick}
+    \leanok
+    \uses{lem:mpu_unwind_local, lem:mpu_supplied_printed_two_block_standard_form}
+    Let $W$ have a supplied square two-site standard form with gates $u,v$.
+    Suppose its one-block time-reversal equation holds with sign
+    $\sigma_1\in\{1,-1\}$ and unitary $x$, and the time-reversal equation
+    for its printed two-block gates $u^{(2)},v^{(2)}$ holds with scalar
+    $\sigma_2$ and unitary $X$. Then (\ref{eq:mpu_unwind_local}) holds
+    with $\zeta=\sigma_1\sigma_2$.
+\end{lemma}
+\begin{proof}\leanok
+    Multiply each local equation on the right by its shifted gate.
+    Unitarity cancels the adjoint factor. Relabel each ordered spin pair
+    by its product basis and apply Lemma~\ref{lem:mpu_unwind_local}.
+\end{proof}
+
+\begin{lemma}[Canonical supplied standard forms admit local unwinding]
+    \label{lem:mpu_unwind_canonical}
+    \lean{MPOTensor.TwoSiteStandardFormData.exists_unwind_dagger_trick}
+    \leanok
+    \uses{lem:mpu_unwind_supplied, lem:mpu_supplied_forward_local_time_reversal}
+    Let $W$ have a supplied square two-site standard form with gates $u,v$
+    and a reduced full-support canonical-form-II presentation. Suppose
+    $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
+    There is a unitary $x$ satisfying (\ref{eq:mpu_unwind_local}) with
+    $\zeta=\sigma(u,v)\sigma(u^{(2)},v^{(2)})$, where $\sigma$ denotes
+    the normalized four-spin time-reversal trace.
+    % Canonical ambient restriction: mpu_canonical_form_full_support.tex.
+    % This lemma does not complete prop:sigma1-and-sigma2-equal.
+\end{lemma}
+\begin{proof}\leanok
+    Positive blocking and bijective physical relabelling preserve the
+    chosen canonical presentation. The printed two-block tensor inherits
+    adjoint symmetry from the original even rings. Apply the supplied
+    local characterization to $W$ and to its printed two-block form.
+    Each resulting scalar equals its normalized four-spin trace.
+    Lemma~\ref{lem:mpu_unwind_supplied} gives the conclusion.
+\end{proof}

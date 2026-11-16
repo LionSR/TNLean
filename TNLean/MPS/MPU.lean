@@ -31,6 +31,7 @@ import TNLean.MPS.MPU.BalancedSourceConditioning
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BasisEncodingCoordinates
 import TNLean.MPS.MPU.BlockingRanks
+import TNLean.MPS.MPU.BlockingUnwinding
 import TNLean.MPS.MPU.BondDilationCircuit
 import TNLean.MPS.MPU.BondPadding
 import TNLean.MPS.MPU.BondRegisterBounds
