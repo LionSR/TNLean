@@ -138,6 +138,7 @@ before working in that area:
 | [`docs/blueprint_style_guide.md`](docs/blueprint_style_guide.md) | LaTeX conventions, `\lean{}`/`\leanok` tags, notation table, `\uses` rules, blueprint build commands |
 | [`docs/ci-automation.md`](docs/ci-automation.md) | CI workflows, auto-fix loops, iteration caps, commit message conventions |
 | [`docs/lake_build_cache.md`](docs/lake_build_cache.md) | Local Lake cache reuse and changed-module compilation-time limits |
+| [`docs/circuit_library_redesign.md`](docs/circuit_library_redesign.md) | Split of `TNLean/Circuit` into a locality layer and a circuit layer, the single circuit definition, the move to QICLean, and the rules for new circuit and support modules until it lands |
 | [`docs/tactic_development.md`](docs/tactic_development.md) | Tactic self-improvement loop: detecting repeated proof patterns, promotion criteria, design rules for custom tactics/simp sets |
 | [`docs/tactic_patterns.md`](docs/tactic_patterns.md) | Living pattern ledger: promoted tactics, candidate patterns awaiting abstraction |
 | [`docs/proof_debt.md`](docs/proof_debt.md) | Weekly proof-debt loop, ledger format, shrink rhythm; the texra-lean-skills `find-simplification` skill, with its TNLean addendum in `.claude/skills/`, is its hand-driven audit |

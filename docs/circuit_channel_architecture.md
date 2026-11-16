@@ -120,8 +120,8 @@ source probe is diagnostic assistance, not a substitute for individual module ch
 
 ## Migration policy
 
-Do not rename already-reviewed modules solely to improve the directory tree. Group new
-work by the interfaces above, and perform any later path migration as a deliberate
-compatibility change: retain import shims where useful, regenerate aggregators, update
-blueprint links, and test downstream preparation clients. Namespace/API stability and
-small dependency closures matter more than a visually tidy directory listing.
+`TNLean/Circuit` is being split into a locality layer and a circuit layer,
+redesigned around one circuit definition, and moved to QICLean. The plan, the
+order of the steps and the rules for new modules in the meantime are in
+[`circuit_library_redesign.md`](circuit_library_redesign.md), which replaces
+the earlier policy of keeping reviewed module paths in place.
