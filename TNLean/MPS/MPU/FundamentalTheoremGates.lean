@@ -38,12 +38,7 @@ theorem siteProduct_one :
     siteProduct (N := N) (1 : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ) = 1 := by
   ext a b
   simp only [siteProduct, Matrix.one_apply]
-  by_cases hab : a = b
-  · subst b
-    simp
-  · obtain ⟨x, hx⟩ := Function.ne_iff.mp hab
-    simp only [hab, ↓reduceIte]
-    exact Finset.prod_eq_zero (Finset.mem_univ x) (by simp [hx])
+  simp [Finset.prod_boole, funext_iff]
 
 /-- The unshifted layer of `G * u` is the sitewise product of `G` times the unshifted layer of
 `u`. -/

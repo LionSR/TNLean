@@ -47,12 +47,7 @@ private theorem rectangularProduct_isIsometry {N : ℕ} {α β : Type*}
   simp only [← Matrix.mul_apply, ← Matrix.conjTranspose_apply]
   rw [show Aᴴ * A = 1 from hA]
   simp only [Matrix.one_apply]
-  by_cases hab : a = b
-  · subst b
-    simp
-  · obtain ⟨x, hx⟩ := Function.ne_iff.mp hab
-    simp only [hab, ↓reduceIte]
-    exact Finset.prod_eq_zero (Finset.mem_univ x) (by simp [hx])
+  simp [Finset.prod_boole, funext_iff]
 
 private theorem rectangularProduct_conjTranspose {N : ℕ} {α β : Type*}
     [Fintype α] [Fintype β] (A : Matrix α β ℂ) :

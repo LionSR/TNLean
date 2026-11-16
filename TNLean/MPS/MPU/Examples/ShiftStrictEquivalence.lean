@@ -67,12 +67,7 @@ private theorem chainPower_one (N : ℕ) :
     chainPower N (1 : Matrix (Fin d) (Fin d) ℂ) = 1 := by
   ext a b
   simp only [chainPower, Matrix.of_apply, Matrix.one_apply]
-  by_cases hab : a = b
-  · subst b
-    simp
-  · obtain ⟨x, hx⟩ := Function.ne_iff.mp hab
-    simp only [hab, ↓reduceIte]
-    exact Finset.prod_eq_zero (Finset.mem_univ x) (by simp [hx])
+  simp [Finset.prod_boole, funext_iff]
 
 private theorem chainPower_conjTranspose (N : ℕ) (u : Matrix (Fin d) (Fin d) ℂ) :
     chainPower N uᴴ = (chainPower N u)ᴴ := by
