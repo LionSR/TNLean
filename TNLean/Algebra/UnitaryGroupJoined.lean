@@ -79,20 +79,20 @@ theorem joined_one_unitaryGroup (u : Matrix.unitaryGroup n ℂ) : Joined 1 u := 
     by_contra hns
     push Not at hns
     obtain ⟨hre, him⟩ := hns
-    set s := (z : ℂ)⁻¹ * t with hs_def
-    have hsn : ‖s‖ = 1 := by simp [hs_def, htn]
-    have hs1 : s = -1 := by
-      have habs : ‖s‖ = |s.re| := by
-        rw [← Complex.re_add_im s, him]; simp
-      rw [hsn] at habs
+    set μ := (z : ℂ)⁻¹ * t with hμ_def
+    have hμn : ‖μ‖ = 1 := by simp [hμ_def, htn]
+    have hμ1 : μ = -1 := by
+      have habs : ‖μ‖ = |μ.re| := by
+        rw [← Complex.re_add_im μ, him]; simp
+      rw [hμn] at habs
       apply Complex.ext
       · simp only [Complex.neg_re, Complex.one_re]
         rcases abs_eq (zero_le_one) |>.mp habs.symm with h | h <;> linarith
       · simp [him]
     apply hne
-    have : t = (z : ℂ) * s := by
-      rw [hs_def, ← mul_assoc, mul_inv_cancel₀ (Circle.coe_ne_zero z), one_mul]
-    rw [this, hs1, mul_neg_one]
+    have : t = (z : ℂ) * μ := by
+      rw [hμ_def, ← mul_assoc, mul_inv_cancel₀ (Circle.coe_ne_zero z), one_mul]
+    rw [this, hμ1, mul_neg_one]
   have hu : u = circleScalar z * w := by
     apply Subtype.ext
     simp [w, circleScalar, smul_smul]
