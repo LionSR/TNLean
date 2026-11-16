@@ -34,7 +34,7 @@ theorem incomingBondPerm_conj_local_apply {D N : ℕ} (hN : 1 ≤ N) (i : Fin N)
       else if incomingBondEquiv D N s j = incomingBondEquiv D N t j then 1 else 0 := by
   classical
   rw [Matrix.conjTranspose_permMatrix, Equiv.Perm.inv_def, permMatrix_conj_eq_submatrix,
-    ← MPOTensor.sitewiseMatrixFamily_mulSingle]
+    ← MPOTensor.rectKronecker_mulSingle]
   change (∏ j, (Pi.mulSingle
     (M := fun _ : Fin N => Matrix (Fin (D * D)) (Fin (D * D)) ℂ) i K) j
     (incomingBondPerm D N s j) (incomingBondPerm D N t j)) = _

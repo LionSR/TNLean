@@ -136,13 +136,13 @@ theorem bondPenaltyAt_commute_sitewise_of_unitary_fixed
     (η : Fin q → ℂ) (S : Matrix (Fin q) (Fin q) ℂ)
     (hS : S ∈ Matrix.unitaryGroup (Fin q) ℂ)
     (hη : S *ᵥ η = η) (hN : 1 ≤ N) (i : Fin N) :
-    Commute (MPOTensor.sitewiseMatrixFamily (fun _ : Fin N => S))
+    Commute (Matrix.rectKronecker (fun _ : Fin N => S))
       (bondPenaltyAt η hN i) := by
   classical
   unfold bondPenaltyAt
-  rw [← MPOTensor.sitewiseMatrixFamily_mulSingle hN i (bondPenalty η)]
+  rw [← MPOTensor.rectKronecker_mulSingle hN i (bondPenalty η)]
   apply (commute_iff_eq _ _).2
-  rw [MPOTensor.sitewiseMatrixFamily_mul, MPOTensor.sitewiseMatrixFamily_mul]
+  rw [Matrix.rectKronecker_mul, Matrix.rectKronecker_mul]
   congr 1
   funext j
   by_cases hji : j = i
@@ -157,7 +157,7 @@ theorem bondProductParentHamiltonian_commute_sitewise_of_unitary_fixed
     (η : Fin q → ℂ) (S : Matrix (Fin q) (Fin q) ℂ)
     (hS : S ∈ Matrix.unitaryGroup (Fin q) ℂ)
     (hη : S *ᵥ η = η) (hN : 1 ≤ N) :
-    Commute (MPOTensor.sitewiseMatrixFamily (fun _ : Fin N => S))
+    Commute (Matrix.rectKronecker (fun _ : Fin N => S))
       (bondProductParentHamiltonian η hN) := by
   classical
   unfold bondProductParentHamiltonian

@@ -30,11 +30,11 @@ theorem physicalBondProductParentHamiltonian_commute_of_bond_action
     (hS : S ∈ Matrix.unitaryGroup (Fin (D * D)) ℂ)
     (hη : S *ᵥ η = η) (hN : 1 ≤ N)
     (hT : (incomingBondPerm D N).permMatrix ℂ *
-      MPOTensor.sitewiseMatrixFamily (fun _ : Fin N => S) *
+      Matrix.rectKronecker (fun _ : Fin N => S) *
       ((incomingBondPerm D N).permMatrix ℂ)ᴴ = T) :
     Commute T (physicalBondProductParentHamiltonian η hN) := by
   let P := (incomingBondPerm D N).permMatrix ℂ
-  let A := MPOTensor.sitewiseMatrixFamily (fun _ : Fin N => S)
+  let A := Matrix.rectKronecker (fun _ : Fin N => S)
   let H := bondProductParentHamiltonian η hN
   have hP : Pᴴ * P = 1 :=
     (Matrix.mem_unitaryGroup_iff').mp (incomingBondPerm_mem_unitaryGroup D N)
@@ -103,7 +103,7 @@ theorem normalizedPhysicalBondInterpolation_parent_commute_onSite
   change (incomingBondPerm (D₀ + D₁) N).permMatrix ℂ *
       Matrix.finKronecker (fun _ : Fin N => S) *
       ((incomingBondPerm (D₀ + D₁) N).permMatrix ℂ)ᴴ = _
-  simpa only [S, X, Y, MPOTensor.sitewiseMatrixFamily,
+  simpa only [S, X, Y, Matrix.rectKronecker_apply,
     Matrix.finKronecker_apply] using
     incomingBondPerm_conj_sptFixedPointAction ρ g N
 

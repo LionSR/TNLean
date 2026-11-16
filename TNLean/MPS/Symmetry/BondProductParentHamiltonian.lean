@@ -126,11 +126,11 @@ def bondProductState (η : Fin q → ℂ) (N : ℕ) :
 
 private theorem sitewise_bondVectorProjection_eq_productVectorProjection
     (η : Fin q → ℂ) (N : ℕ) :
-    MPOTensor.sitewiseMatrixFamily
+    Matrix.rectKronecker
       (fun _ : Fin N => bondVectorProjection η) =
         Matrix.vecMulVec (bondProductVector η N) (star (bondProductVector η N)) := by
   ext σ τ
-  simp only [MPOTensor.sitewiseMatrixFamily, bondVectorProjection,
+  simp only [Matrix.rectKronecker_apply, bondVectorProjection,
     Matrix.vecMulVec_apply, bondProductVector, Pi.star_apply]
   rw [Finset.prod_mul_distrib]
   simp
@@ -148,7 +148,7 @@ theorem bondProductVectorProjection_eq_localProduct
         exact MPOTensor.embedLocalOperator_one_commute hN
           (bondVectorProjection η) i j) =
         Matrix.vecMulVec (bondProductVector η N) (star (bondProductVector η N)) := by
-  rw [MPOTensor.prod_embedLocalOperator_one_eq_sitewiseMatrixFamily,
+  rw [MPOTensor.prod_embedLocalOperator_one_eq_rectKronecker,
     sitewise_bondVectorProjection_eq_productVectorProjection]
 
 /-- Matrix coordinates for operators on the independent-bond Hilbert space. -/
