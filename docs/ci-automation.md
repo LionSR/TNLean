@@ -336,7 +336,7 @@ during review.
 
 ### Lean Module Policy (`pr-ci.yml`, `file-length` job)
 
-**What it does**: Enforces two blocking structural checks:
+**What it does**: Enforces these blocking structural checks:
 
 - Ordinary `.lean` files may not exceed 1000 lines. The exact path passed with
   `--import-only-aggregator` is exempt only after the checker removes nested Lean
@@ -352,6 +352,17 @@ during review.
   Exact names whose numeral
   denotes a mathematical object or source label have path-specific documented
   exceptions in `scripts/check_numbered_lean_files.py`.
+- Imports must respect the layers of
+  `docs/many_body_circuit_architecture.md`. `scripts/check_import_layers.py`
+  rejects an import that points upward between the layers below the
+  tensor-network directories, a new pair of directories that import each
+  other, and a new import of a module in an `Examples` directory by a module
+  outside one. `scripts/check_pass_through_declarations.py` rejects a new
+  declaration whose whole body applies the declaration of the same name in
+  another namespace to its own explicit arguments. The existing cases are
+  recorded in the two scripts in sets that may only shrink, compared with the
+  merge base as the numbered-module allowlist is: recording a new case fails,
+  and a case that is repaired must be removed from its set in the same change.
 
 When a proof approaches the cap, split by mathematical responsibility rather
 than chronology. Put shared definitions and setup in a family `Basic.lean`
