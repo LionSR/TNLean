@@ -82,23 +82,24 @@ abbrev OriginalCircuit : Layout P → Layout P → Type 1 :=
 namespace OriginalCircuit
 
 /-- The empty circuit. -/
-@[match_pattern] abbrev id (ℓ : Layout P) : OriginalCircuit ℓ ℓ := Circuit.id ℓ
+@[match_pattern] abbrev id (ℓ : Layout P) : OriginalCircuit ℓ ℓ :=
+  Circuit.id (κ := LocalCondition.contraction) (G := OriginalGate) ℓ
 
 /-- Composition, in chronological order. -/
 @[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : OriginalCircuit ℓ₁ ℓ₂) (w'
     : OriginalCircuit ℓ₂ ℓ₃) :
     OriginalCircuit ℓ₁ ℓ₃ :=
-  Circuit.comp w w'
+  Circuit.comp (κ := LocalCondition.contraction) (G := OriginalGate) w w'
 
 /-- Exchange of two adjacent tensor factors. -/
 @[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : OriginalCircuit (r :: r' :: ℓ)
     (r' :: r :: ℓ) :=
-  Circuit.swap r r' ℓ
+  Circuit.swap (κ := LocalCondition.contraction) (G := OriginalGate) r r' ℓ
 
 /-- A circuit next to an untouched register. -/
 @[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : OriginalCircuit ℓ ℓ') :
     OriginalCircuit (r :: ℓ) (r :: ℓ') :=
-  Circuit.frame r w
+  Circuit.frame (κ := LocalCondition.contraction) (G := OriginalGate) r w
 
 /-- An arbitrary contraction on the registers of one party. -/
 @[match_pattern] abbrev privateMap (p : P) {a b : Layout P}
@@ -117,12 +118,12 @@ namespace OriginalCircuit
 /-- A circuit framed by a list of untouched registers. -/
 abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : OriginalCircuit ℓ ℓ') :
     OriginalCircuit (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
-  Circuit.frameList ℓ₀ w
+  Circuit.frameList (κ := LocalCondition.contraction) (G := OriginalGate) ℓ₀ w
 
 /-- Identify equal input and output layouts without adding an operation. -/
 abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : OriginalCircuit ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
     OriginalCircuit a b :=
-  Circuit.castLayouts w h h'
+  Circuit.castLayouts (κ := LocalCondition.contraction) (G := OriginalGate) w h h'
 
 /-- Induction on the constructors of `OriginalCircuit`. -/
 @[induction_eliminator, elab_as_elim]

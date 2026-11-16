@@ -94,13 +94,14 @@ abbrev SourceCircuit : Layout P → Layout P → Type 1 := Circuit LocalConditio
 namespace SourceCircuit
 
 /-- The empty circuit. -/
-@[match_pattern] abbrev id (ℓ : Layout P) : SourceCircuit ℓ ℓ := Circuit.id ℓ
+@[match_pattern] abbrev id (ℓ : Layout P) : SourceCircuit ℓ ℓ :=
+  Circuit.id (κ := LocalCondition.any) (G := PreparedGate) ℓ
 
 /-- Composition, in chronological order. -/
 @[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : SourceCircuit ℓ₁ ℓ₂) (w'
     : SourceCircuit ℓ₂ ℓ₃) :
     SourceCircuit ℓ₁ ℓ₃ :=
-  Circuit.comp w w'
+  Circuit.comp (κ := LocalCondition.any) (G := PreparedGate) w w'
 
 /-- A local map on registers of one party, next to untouched registers. -/
 @[match_pattern] abbrev localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
@@ -111,12 +112,12 @@ namespace SourceCircuit
 /-- Exchange of two adjacent tensor factors. -/
 @[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : SourceCircuit (r :: r' :: ℓ)
     (r' :: r :: ℓ) :=
-  Circuit.swap r r' ℓ
+  Circuit.swap (κ := LocalCondition.any) (G := PreparedGate) r r' ℓ
 
 /-- A circuit next to an untouched register. -/
 @[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : SourceCircuit ℓ ℓ') :
     SourceCircuit (r :: ℓ) (r :: ℓ') :=
-  Circuit.frame r w
+  Circuit.frame (κ := LocalCondition.any) (G := PreparedGate) r w
 
 /-- A source-prepared gate as a circuit. -/
 @[match_pattern] abbrev gate {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P)
@@ -127,12 +128,12 @@ namespace SourceCircuit
 /-- A circuit framed by a list of untouched registers. -/
 abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : SourceCircuit ℓ ℓ') :
     SourceCircuit (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
-  Circuit.frameList ℓ₀ w
+  Circuit.frameList (κ := LocalCondition.any) (G := PreparedGate) ℓ₀ w
 
 /-- Identify equal input and output layouts without adding an operation. -/
 abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : SourceCircuit ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
     SourceCircuit a b :=
-  Circuit.castLayouts w h h'
+  Circuit.castLayouts (κ := LocalCondition.any) (G := PreparedGate) w h h'
 
 /-- Induction on the constructors of `SourceCircuit`. -/
 @[induction_eliminator, elab_as_elim]

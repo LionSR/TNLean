@@ -127,12 +127,13 @@ abbrev Word : Layout P → Layout P → Type 1 := Circuit LocalCondition.any Sou
 namespace Word
 
 /-- The empty circuit. -/
-@[match_pattern] abbrev id (ℓ : Layout P) : Word ℓ ℓ := Circuit.id ℓ
+@[match_pattern] abbrev id (ℓ : Layout P) : Word ℓ ℓ :=
+  Circuit.id (κ := LocalCondition.any) (G := SourceGate) ℓ
 
 /-- Composition, in chronological order. -/
 @[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : Word ℓ₁ ℓ₂) (w' : Word ℓ₂ ℓ₃) :
     Word ℓ₁ ℓ₃ :=
-  Circuit.comp w w'
+  Circuit.comp (κ := LocalCondition.any) (G := SourceGate) w w'
 
 /-- A local map on registers of one party, next to untouched registers. -/
 @[match_pattern] abbrev localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
@@ -142,12 +143,12 @@ namespace Word
 
 /-- Exchange of two adjacent tensor factors. -/
 @[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : Word (r :: r' :: ℓ) (r' :: r :: ℓ) :=
-  Circuit.swap r r' ℓ
+  Circuit.swap (κ := LocalCondition.any) (G := SourceGate) r r' ℓ
 
 /-- A circuit next to an untouched register. -/
 @[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
     Word (r :: ℓ) (r :: ℓ') :=
-  Circuit.frame r w
+  Circuit.frame (κ := LocalCondition.any) (G := SourceGate) r w
 
 /-- The pair source as a word. -/
 @[match_pattern] abbrev source {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V)
@@ -157,12 +158,12 @@ namespace Word
 /-- A circuit framed by a list of untouched registers. -/
 abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : Word ℓ ℓ') :
     Word (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
-  Circuit.frameList ℓ₀ w
+  Circuit.frameList (κ := LocalCondition.any) (G := SourceGate) ℓ₀ w
 
 /-- Identify equal input and output layouts without adding an operation. -/
 abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
     Word a b :=
-  Circuit.castLayouts w h h'
+  Circuit.castLayouts (κ := LocalCondition.any) (G := SourceGate) w h h'
 
 /-- Induction on the constructors of `Word`. -/
 @[induction_eliminator, elab_as_elim]

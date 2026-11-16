@@ -175,13 +175,14 @@ abbrev EffectCircuit : Layout P → Layout P → Type 1 := Circuit LocalConditio
 namespace EffectCircuit
 
 /-- The empty circuit. -/
-@[match_pattern] abbrev id (ℓ : Layout P) : EffectCircuit ℓ ℓ := Circuit.id ℓ
+@[match_pattern] abbrev id (ℓ : Layout P) : EffectCircuit ℓ ℓ :=
+  Circuit.id (κ := LocalCondition.any) (G := EffectGate) ℓ
 
 /-- Composition, in chronological order. -/
 @[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : EffectCircuit ℓ₁ ℓ₂) (w'
     : EffectCircuit ℓ₂ ℓ₃) :
     EffectCircuit ℓ₁ ℓ₃ :=
-  Circuit.comp w w'
+  Circuit.comp (κ := LocalCondition.any) (G := EffectGate) w w'
 
 /-- A local map on registers of one party, next to untouched registers. -/
 @[match_pattern] abbrev localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
@@ -192,12 +193,12 @@ namespace EffectCircuit
 /-- Exchange of two adjacent tensor factors. -/
 @[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : EffectCircuit (r :: r' :: ℓ)
     (r' :: r :: ℓ) :=
-  Circuit.swap r r' ℓ
+  Circuit.swap (κ := LocalCondition.any) (G := EffectGate) r r' ℓ
 
 /-- A circuit next to an untouched register. -/
 @[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : EffectCircuit ℓ ℓ') :
     EffectCircuit (r :: ℓ) (r :: ℓ') :=
-  Circuit.frame r w
+  Circuit.frame (κ := LocalCondition.any) (G := EffectGate) r w
 
 /-- A nonprivate gate as a circuit. -/
 @[match_pattern] abbrev gate {C : Type} [Fintype C] (owner : C ↪ P) {a b : Layout C}
@@ -208,12 +209,12 @@ namespace EffectCircuit
 /-- A circuit framed by a list of untouched registers. -/
 abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : EffectCircuit ℓ ℓ') :
     EffectCircuit (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
-  Circuit.frameList ℓ₀ w
+  Circuit.frameList (κ := LocalCondition.any) (G := EffectGate) ℓ₀ w
 
 /-- Identify equal input and output layouts without adding an operation. -/
 abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : EffectCircuit ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
     EffectCircuit a b :=
-  Circuit.castLayouts w h h'
+  Circuit.castLayouts (κ := LocalCondition.any) (G := EffectGate) w h h'
 
 /-- Induction on the constructors of `EffectCircuit`. -/
 @[induction_eliminator, elab_as_elim]

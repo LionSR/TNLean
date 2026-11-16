@@ -35,7 +35,10 @@ gates (`SourceCircuit`).  Each of the four is `Circuit κ G` for its own `κ` an
 * Each of the four types keeps its constructor names as match patterns (`Word.source`,
   `OriginalCircuit.privateMap`, `OriginalCircuit.nonprivateGate`, ...), typed `frameList` and
   `castLayouts`, and an induction eliminator whose cases are its own constructors, so that its
-  consumers pattern-match and induct as on a separate inductive type.
+  consumers pattern-match and induct as on a separate inductive type.  These constructor
+  names, `frameList` and `castLayouts` are the specializations of the shared ones to the type's
+  local condition and gate family, written with those two arguments named; every fact about
+  them is a fact about `Circuit`, obtained by unfolding.
 
 ## Main definitions
 
