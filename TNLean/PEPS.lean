@@ -404,12 +404,16 @@ import TNLean.PEPS.TorusCutProjectorExpansion
 import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusDirectedBondUpdate
 import TNLean.PEPS.TorusDualCollar
+import TNLean.PEPS.TorusDualComputedFacePlan
+import TNLean.PEPS.TorusDualEmptySupportNormalForm
 import TNLean.PEPS.TorusDualFaceGeneratorElimination
 import TNLean.PEPS.TorusDualFiniteFaceElimination
 import TNLean.PEPS.TorusDualFlatTransport
 import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
+import TNLean.PEPS.TorusDualHomotopyClassification
+import TNLean.PEPS.TorusDualHomotopyDecision
 import TNLean.PEPS.TorusDualOpenDeformation
 import TNLean.PEPS.TorusDualPath
 import TNLean.PEPS.TorusDualPathPresentation

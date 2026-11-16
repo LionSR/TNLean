@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Reduced Native Words for Empty Square Support}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia, \cite[Lemma~6.14]{Schuch2010PEPS},
+source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+deform a fixed-endpoint flux string by virtual invariance.
+The result here concerns the generated path relation in the particular case
+where no primal square support is allowed. It does not assert the source's
+unrestricted geometric deformation claim.
+
+Let $X=\mathbb Z_w\times\mathbb Z_h$ with $w,h>0$. A labelled native step
+has a positive east or north edge, based at an actual vertex of $X$, and
+a sign. West and south steps use inverse letters of those same edges.
+For a finite path $p$, let $L(p)$ be its signed edge list in reverse traversal
+order. Cancelling adjacent inverse letters gives the reduced list
+$\operatorname{red}(p)$. This retains the actual base vertices and directions,
+including the separately labelled edges of periods one and two.
+
+Write $p\sim_{\varnothing}q$ for the generated relation allowing backtracks,
+concatenation and reversal, with no square moves. For parallel paths,
+\begin{align}
+    p\sim_{\varnothing}q
+    \quad\Longleftrightarrow\quad
+    \operatorname{red}(p)=\operatorname{red}(q).
+    \label{eq:scp10_empty_support_normal_form}
+\end{align}
+The forward direction evaluates the constant free-group transport
+$F_e(z)=W(e)z$ at the identity, where $W(p)$ is the free-group word represented
+by $L(p)$. Thus $F_p(1)=W(p)$ and a generated homotopy forces equality of words.
+Conversely, reduced-word equality implies equality in the free group,
+then equality in the finite native presentation, whose completeness supplies
+the generated homotopy. In fact this converse works for every allowed
+support set; necessity of reduced-word equality here uses empty support.
+\footnote{\leanid{TNLean.PEPS.torusDualHomotopy_of_reducedWord_eq};
+\leanid{TNLean.PEPS.torusDualHomotopy_empty_iff_reducedWord_eq}.}
+
+The actual Boolean procedure reduces the two finite signed lists and compares
+the results:
+\begin{align}
+    D(p,q)=[\,\operatorname{red}(p)=\operatorname{red}(q)\,],\qquad
+    D(p,q)=\mathrm{true}\quad\Longleftrightarrow\quad p\sim_{\varnothing}q.
+    \label{eq:scp10_empty_support_decision}
+\end{align}
+Its computation uses only finite-list reduction and equality of native letters,
+with no decision oracle for a presented-group word problem.
+\footnote{\leanid{TNLean.PEPS.torusDualStepLetter};
+\leanid{TNLean.PEPS.torusDualPathLetters};
+\leanid{TNLean.PEPS.torusDualReducedWord};
+\leanid{TNLean.PEPS.torusDualEmptyHomotopyDecision};
+\leanid{TNLean.PEPS.torusDualEmptyHomotopyDecision_eq_true}.}
+
+The general proper nonempty support still requires a geometric normal form
+for the allowed face relations. The finite-presentation criterion alone
+does not supply that algorithm. This result supplies no physical density
+classification and does not identify distinct winding or endpoint sectors.
+The nonabelian restricted-homotopy and physical annular obstructions remain
+separate. The broader work stays under \ghissue{8703}; \ghissue{8947} is unchanged.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
