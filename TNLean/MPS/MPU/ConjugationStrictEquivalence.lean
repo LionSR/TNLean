@@ -216,9 +216,9 @@ theorem exists_sign_flip_gauge (hℓ : 0 < ℓ) (hr : 0 < r) (hodd : Odd ℓ ∨
 /-- **Symplectic gates with the same determinant are joined.** Let `A, B`
 be unitary between `P` and `ℂ^ℓ ⊗ ℂ^r`, with `conj(A) = (Σ_ℓ ⊗ Σ_r) A` and
 `conj(B) = (Σ_ℓ ⊗ Σ_r) B`. If their determinants agree through `e`, they are
-joined by a path of such matrices. Write them as `(1 ⊗ R) Ã` and `(1 ⊗ R) B̃`
-with `Ã, B̃` real (`exists_real_of_map_star_eq_sourceSkewForm_mul`) and join
-`Ã` to `B̃` by real unitary gates. Source: arXiv:1703.09188, proof of Theorem
+joined by a path of such matrices. Write them as `(1 ⊗ R) a` and `(1 ⊗ R) b`
+with `a, b` real (`exists_real_of_map_star_eq_sourceSkewForm_mul`) and join
+`a` to `b` by real unitary gates. Source: arXiv:1703.09188, proof of Theorem
 `prop:conjsym-strict-equiv`, "if" direction, Case II, lines 1540--1546. -/
 theorem IsUnitaryBetween.joinedIn_symplectic_of_det_eq (hℓ : Even ℓ) (hr : Even r)
     (e : Fin ℓ × Fin r ≃ P) {A B : Matrix (Fin ℓ × Fin r) P ℂ}
@@ -248,7 +248,8 @@ theorem IsUnitaryBetween.joinedIn_symplectic_of_det_eq (hℓ : Even ℓ) (hr : E
   -- The determinants of the real parts agree.
   set e' := g.symm.trans e
   have hdetR : ∀ {X : Matrix (Fin ℓ × Fin r) P ℂ} {x : Matrix _ P ℂ},
-      Matrix.reindex g (Equiv.refl P) X = M * x → (X.submatrix id e).det = M.det * (x.submatrix id e').det := by
+      Matrix.reindex g (Equiv.refl P) X = M * x →
+        (X.submatrix id e).det = M.det * (x.submatrix id e').det := by
     intro X x hX
     rw [← det_mul_submatrix, ← hX, ← det_submatrix_equiv_self g.symm]
     congr 1
@@ -274,12 +275,12 @@ theorem IsUnitaryBetween.joinedIn_symplectic_of_det_eq (hℓ : Even ℓ) (hr : E
     Matrix.reindex g.symm (Equiv.refl P) (M * x)
   have hF : Continuous F := (continuous_const.matrix_mul continuous_id).matrix_submatrix _ _
   have hFA : F a = A := by
-    show Matrix.reindex g.symm (Equiv.refl P) (M * a) = A
+    change Matrix.reindex g.symm (Equiv.refl P) (M * a) = A
     rw [← hAeq]
     ext i j
     simp [Matrix.reindex_apply, g]
   have hFB : F b = B := by
-    show Matrix.reindex g.symm (Equiv.refl P) (M * b) = B
+    change Matrix.reindex g.symm (Equiv.refl P) (M * b) = B
     rw [← hBeq]
     ext i j
     simp [Matrix.reindex_apply, g]
@@ -609,7 +610,8 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even
       S₁.u_unitary S₂.u_unitary hu₁ hu₂ hu
     obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq hℓ hr f
       S₁.v_unitary S₂.v_unitary hv₁ hv₂ hv
-    have hstar : ∀ {n : ℕ} (h : Even n), star (Matrix.sourceSkewForm h) = -Matrix.sourceSkewForm h :=
+    have hstar : ∀ {n : ℕ} (h : Even n),
+        star (Matrix.sourceSkewForm h) = -Matrix.sourceSkewForm h :=
       fun h ↦ by
         rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose, Matrix.transpose_map]
         exact (congrArg Matrix.transpose (Matrix.map_star_sourceSkewForm h)).trans
