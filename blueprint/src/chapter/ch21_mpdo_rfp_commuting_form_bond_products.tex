@@ -326,10 +326,10 @@
 % retains that scalar.  See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Scaled finite-chain cyclic neighboring-operator form]
     \label{thm:mpdo_eta_local_sigma_nk2}
-    \lean{MPOTensor.sitewisePhysicalMatrix_conjTranspose}
-    \lean{MPOTensor.reindex_sitewisePhysicalMatrix_two}
-    \lean{MPOTensor.sitewisePhysicalMatrix_one}
-    \lean{MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose}
+    \lean{Matrix.conjTranspose_tensorPower}
+    \lean{MPOTensor.reindex_tensorPower_two}
+    \lean{Matrix.tensorPower_one}
+    \lean{MPOTensor.tensorPower_mul_conjTranspose}
     \lean{MPOTensor.singleKrausMap_bondProduct_of_unitary}
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_positive_cyclic_eta_block_decomposition}

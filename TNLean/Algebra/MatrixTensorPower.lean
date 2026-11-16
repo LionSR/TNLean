@@ -46,6 +46,9 @@ configurations of `M` sites: its entry at `(p, s)` is `∏ₖ W (p k) (s k)`
 def tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ ℂ) : Matrix (Fin M → ι) (Fin M → κ) ℂ :=
   Matrix.of fun p s => ∏ k, W (p k) (s k)
 
+@[simp] theorem tensorPower_apply {ι κ : Type*} (M : ℕ) (W : Matrix ι κ ℂ) (p : Fin M → ι)
+    (s : Fin M → κ) : tensorPower M W p s = ∏ k, W (p k) (s k) := rfl
+
 /-- The tensor power of a product is the product of the tensor powers:
 `X^{⊗M} Y^{⊗M} = (X Y)^{⊗M}`. -/
 theorem tensorPower_mul {ι₁ ι₂ ι₃ : Type*} [Fintype ι₂] (M : ℕ) (X : Matrix ι₁ ι₂ ℂ)
@@ -70,7 +73,7 @@ theorem IsIsometry.tensorPower {ι κ : Type*} [Fintype ι] [DecidableEq κ] (M 
   have hWe : ∀ a c, ∑ i, star (W i a) * W i c = if a = c then 1 else 0 := fun a c => by
     have := congrFun (congrFun hW a) c
     simpa [Matrix.mul_apply, Matrix.one_apply] using this
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.tensorPower, Matrix.of_apply,
+  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.tensorPower_apply,
     star_prod, ← Finset.prod_mul_distrib]
   rw [← Fintype.prod_sum (fun k i => star (W i (s k)) * W i (t k))]
   simp_rw [hWe, Matrix.one_apply]
@@ -81,7 +84,7 @@ theorem IsIsometry.tensorPower {ι κ : Type*} [Fintype ι] [DecidableEq κ] (M 
     exact Finset.prod_eq_zero (Finset.mem_univ k) (ite_eq_right_iff.2 fun h' => absurd h' hk)
 
 /-- The tensor power of the identity is the identity. -/
-theorem tensorPower_one {κ : Type*} [DecidableEq κ] (M : ℕ) :
+@[simp] theorem tensorPower_one {κ : Type*} [DecidableEq κ] (M : ℕ) :
     tensorPower M (1 : Matrix κ κ ℂ) = 1 := by
   ext s t
   simp only [tensorPower, of_apply, one_apply]
@@ -104,6 +107,23 @@ theorem conjTranspose_tensorPower {ι κ : Type*} (M : ℕ) (W : Matrix ι κ �
     (tensorPower M W)ᴴ = tensorPower M Wᴴ := by
   ext s t
   simp [tensorPower, conjTranspose_apply, star_prod]
+
+/-- The tensor power of a matrix that is unitary between two index sets is unitary between
+the configuration spaces. -/
+theorem IsUnitaryBetween.tensorPower {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι]
+    [DecidableEq κ] (M : ℕ) {W : Matrix ι κ ℂ} (hW : W.IsUnitaryBetween) :
+    (Matrix.tensorPower M W).IsUnitaryBetween := by
+  refine ⟨hW.1.tensorPower M, ?_⟩
+  have h := (hW.2.conjTranspose W).tensorPower M
+  rw [← conjTranspose_tensorPower] at h
+  simpa using h.conjTranspose _
+
+/-- The tensor power of a unitary matrix is unitary. -/
+theorem tensorPower_mem_unitaryGroup {κ : Type*} [Fintype κ] [DecidableEq κ] (M : ℕ)
+    {u : Matrix κ κ ℂ} (hu : u ∈ unitaryGroup κ ℂ) :
+    tensorPower M u ∈ unitaryGroup (Fin M → κ) ℂ := by
+  rw [mem_unitaryGroup_iff, star_eq_conjTranspose, conjTranspose_tensorPower, tensorPower_mul,
+    ← star_eq_conjTranspose, mem_unitaryGroup_iff.mp hu, tensorPower_one]
 
 /-- `⟨W^{⊗M} ψ, W'^{⊗M} φ⟩ = ⟨ψ, (Wᴴ W')^{⊗M} φ⟩`. -/
 theorem sum_star_tensorPower_mulVec_mul {n κ κ' : Type*} [Fintype n] [Fintype κ] [Fintype κ']
