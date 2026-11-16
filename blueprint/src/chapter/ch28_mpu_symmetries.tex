@@ -975,7 +975,10 @@
     form II and $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
     Then $r=\ell=d$. Only the stated even standard-form lengths are used.
     This is the zero-index comparison of
-    \cite[lines~1201--1252]{Cirac2017MPU} in the explicit canonical ambient scope.
+    \cite[lines~1201--1252]{Cirac2017MPU}. Canonicality of $W$ is no extra
+    hypothesis there: a standard form in the sense of the source is that of a
+    canonical tensor, which is again canonical
+    \cite{gap:mpu_standard_form_canonical_convention}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1004,10 +1007,11 @@
     Conversely, these derived-rank and local-equation conditions imply
     $W^{(N)}=W^{(N)\dagger}$ at every even $N>1$.
     Thus the two conditions are equivalent. No normalization of the supplied
-    half factors is assumed. The explicit ambient canonicality and
-    even-length restrictions remain;
-    this is the corresponding restricted equivalence of
-    \cite[lines~1201--1252]{Cirac2017MPU}, not the unrestricted source criterion.
+    half factors is assumed. Every standard form in the sense of
+    \cite[Definition~III.9]{Cirac2017MPU} is of this kind, because the source
+    takes standard forms of canonical tensors
+    \cite{gap:mpu_standard_form_canonical_convention}; the source criterion
+    \cite[lines~1201--1252]{Cirac2017MPU} is Lemma~\ref{PropChiral}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1195,10 +1199,10 @@
     witness is assumed. The actual square standard-form data are supplied
     together with the certificate by relabeling the existing half factors.
     No continuity of any such choice is needed. Arbitrary supplied standard
-    forms in an explicitly canonical ambient tensor are handled separately in
-    Lemma~\ref{lem:mpu_supplied_forward_local_time_reversal}. The unrestricted
-    source proposition remains unformalized. The reduced presentation
-    restriction is recorded in \cite{gap:mpu_canonical_form_full_support}.
+    forms in a canonical ambient tensor are handled in
+    Lemma~\ref{lem:mpu_supplied_forward_local_time_reversal}, which gives the
+    source proposition, Lemma~\ref{PropChiral}; see
+    \cite{gap:mpu_standard_form_canonical_convention}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -1472,11 +1476,11 @@
     The phase can be written $c=e^{i\phi}$ with a pointwise chosen real
     $\phi$. The local equation is preserved under any common coordinate
     relabeling of the pair spaces. No normalization of the supplied half
-    factors is required. This is the explicit canonical-ambient,
-    even-standard-form-length restriction of
-    \cite[lines~1258--1288]{Cirac2017MPU}; the unrestricted source criterion
-    retains the presentation restriction in
-    \cite{gap:mpu_canonical_form_full_support}.
+    factors is required. Every standard form in the sense of
+    \cite[Definition~III.9]{Cirac2017MPU} is of this kind
+    \cite{gap:mpu_standard_form_canonical_convention}, so this gives the
+    source criterion \cite[lines~1258--1288]{Cirac2017MPU}, which is
+    Lemma~\ref{prop:local-char-transposition}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpu_supplied_four_spin_source_comparison,
