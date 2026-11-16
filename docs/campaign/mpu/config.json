@@ -2,7 +2,7 @@
   "slug": "mpu",
   "pageTitle": "Matrix Product Unitaries · TNLean",
   "heading": "Matrix product unitaries: structure, index and symmetry phases, after Cirac, Pérez-García, Schuch and Verstraete",
-  "lede": "A matrix product unitary is a translation-invariant tensor network whose periodic contraction is a unitary operator on every ring. In 2017 Cirac, Pérez-García, Schuch and Verstraete showed that, after blocking finitely many sites, every such operator is a two-layer circuit of local unitary gates whose internal legs have dimensions <i>r</i> and <i>ℓ</i>, that two tensors give the same unitaries on rings of even length exactly when their gates differ by unitaries on the internal legs, and that an index, half the base-two logarithm of the ratio of two ranks, measures the flow of information along the chain and classifies these operators up to continuous deformation and the addition of trivial ancillas. They then classified matrix product unitaries invariant under complex conjugation, time reversal and transposition. In Lean the structure theorem, the standard form, the fundamental theorem (in the form that compares tensors on rings of even length, since the printed all-length converse fails), the index with its blocking, product and continuity properties, and the local characterizations of the symmetries for canonical standard forms are proved. The complete index theorem, the continuous choice of standard forms and the symmetry phase classifications remain open.",
+  "lede": "A matrix product unitary is a translation-invariant tensor network whose periodic contraction is a unitary operator on every ring. In 2017 Cirac, Pérez-García, Schuch and Verstraete showed that, after blocking finitely many sites, every such operator is, on rings of even length, a two-layer circuit of local unitary gates whose internal legs have dimensions <i>r</i> and <i>ℓ</i>, that two tensors give the same unitaries on rings of even length exactly when their gates differ by unitaries on the internal legs, and that an index, half the base-two logarithm of the ratio of two ranks, measures the flow of information along the chain and classifies these operators up to continuous deformation and the addition of trivial ancillas. They then classified matrix product unitaries invariant under complex conjugation, time reversal and transposition. In Lean the structure theorem, the standard form, the fundamental theorem (in the form that compares tensors on rings of even length, since the printed all-length converse fails), the index with its blocking, product and continuity properties, and the local characterizations of the symmetries for canonical standard forms are proved. The complete index theorem, the continuous choice of standard forms and the symmetry phase classifications remain open.",
   "description": "Progress of the Lean 4 formalization of matrix product unitaries after Cirac, Pérez-García, Schuch and Verstraete, arXiv:1703.09188.",
   "tabs": [
     {
@@ -81,7 +81,7 @@
   },
   "sources": "https://arxiv.org/abs/1703.09188v2",
   "citationPattern": "1703\\.09188|Cirac2017MPU|CPSV17",
-  "excludePathPattern": "mpo-symmetry|fbc25|2502\\.20257|gs24_|gnvw12_|sw04_",
+  "excludePathPattern": "mpo-symmetry|fbc25|2502\\.20257|gs24_|gnvw12_|sw04_|rmp_|ch13_|ch29_|ch30_",
   "leanDirs": [
     "TNLean/MPS/MPU"
   ],
@@ -109,7 +109,7 @@
             5708,
             5709
           ],
-          "physics": "Cutting the two-site contraction of a simple tensor in two ways gives two singular value decompositions with ranks <i>r</i> and <i>ℓ</i>. Their factors assemble into two unitary gates <i>u</i> and <i>v</i>, and the operator on every ring is the circuit of <i>u</i> on even pairs followed by <i>v</i> on odd pairs: the standard form.",
+          "physics": "Cutting the two-site contraction of a simple tensor in two ways gives two singular value decompositions with ranks <i>r</i> and <i>ℓ</i>. Their factors assemble into two unitary gates <i>u</i> and <i>v</i>, and on every ring of even length the operator is the circuit of <i>u</i> on even pairs followed by <i>v</i> on odd pairs: the standard form.",
           "delivers": "The standard form, and the fundamental theorem comparing two simple tensors through their gates on rings of even length."
         }
       ]
@@ -177,7 +177,7 @@
             7110,
             7023
           ],
-          "physics": "Invariance under the adjoint on rings of even length holds exactly when, on four consecutive spins, (𝟙 ⊗ <i>v</i><sub>23</sub> ⊗ 𝟙)(<i>u</i><sub>12</sub> ⊗ <i>u</i><sub>34</sub>) = σ(<i>x</i><sub>12</sub> ⊗ <i>x</i><sub>34</sub><sup>†</sup>)(𝟙 ⊗ <i>v</i><sub>23</sub><sup>†</sup> ⊗ 𝟙) for a unitary <i>x</i> on two spins and a sign σ = ±1; it forces <i>r</i> = <i>ℓ</i> = <i>d</i>. The sign is read off from a trace of the two-site operator, does not depend on the choices, is constant along symmetric paths, and behaves under blocking according to parity.",
+          "physics": "Invariance under the adjoint on rings of even length holds exactly when, on four consecutive spins, (𝟙 ⊗ <i>v</i><sub>23</sub> ⊗ 𝟙)(<i>u</i><sub>12</sub> ⊗ <i>u</i><sub>34</sub>) = σ(<i>x</i><sub>12</sub> ⊗ <i>x</i><sub>34</sub><sup>†</sup>)(𝟙 ⊗ <i>v</i><sub>23</sub><sup>†</sup> ⊗ 𝟙) for a unitary <i>x</i> on two spins and a sign σ = ±1; it forces <i>r</i> = <i>ℓ</i> = <i>d</i>. The sign is read off from a trace on four spins, σ = tr[𝕊<sub>12,34</sub><i>v</i><sub>23</sub><i>u</i><sub>12</sub><i>u</i><sub>34</sub><i>v</i><sub>23</sub>]/<i>d</i><sup>2</sup> with 𝕊 the swap of the two pairs; it does not depend on the choices, is constant along symmetric paths, and behaves under blocking according to parity.",
           "delivers": "The local characterizations, the sign σ with its trace formula, invariance and blocking parity, and its comparison with the sign of matrix product states."
         }
       ]

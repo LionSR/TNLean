@@ -6,7 +6,7 @@
       "id": "docs/paper-gaps/mpu_standard_form_parity_gap.tex",
       "repo": "TNLean",
       "kind": "error",
-      "status": "resolved",
+      "status": "open",
       "paper": "cpsv17",
       "result": "Theorem FundamentalMPU, the fundamental theorem of MPUs",
       "title": "The local gate relations fix the operators only on even rings",
@@ -15,7 +15,7 @@
       "claims": "Lines 619–648 of the source define the standard form for the two-site block and state that the gate relations hold if and only if <i>U</i><sup>(<i>N</i>)</sup> = <i>V</i><sup>(<i>N</i>)</sup> for all <i>N</i>.",
       "found": "Take one qubit per site, bond dimension one, and the one-site tensors 𝟙 and −𝟙. Both are simple, their gates coincide, the gate relations hold with <i>x</i> = <i>y</i> = −𝟙 and <i>z</i> = 1, and their two-site blocks are equal; yet <i>V</i><sup>(<i>N</i>)</sup> = (−1)<sup><i>N</i></sup><i>U</i><sup>(<i>N</i>)</sup>, so the families differ at every odd length. The gates are built from the two-site block and see only the blocked family. The same length convention matters in the chirality criterion (Proposition PropChiral, lines 1214–1252), whose hypothesis <i>U</i><sup>(<i>N</i>)</sup> = <i>U</i><sup>(<i>N</i>)†</sup> for even <i>N</i> refers to lengths of the two-site tensor.",
       "impact": "None for the forward direction: equal operators at all lengths still give the gate relations and a unitary gauge between the tensors. The converse holds for the blocked family, which is what the surrounding discussion uses.",
-      "plan": "Proved: equal operators at every length are equivalent to conjugating every one-site matrix by one unitary on the bond; the gate relations follow from this; and the gate relations give equality on all even rings. The odd-length counterexample is proved. The printed all-length converse from the gates alone is false and stays unformalized."
+      "plan": "The printed all-length converse from the gates alone is false and stays unformalized; the source theorem therefore remains open as printed. Proved instead: equal operators at every length are equivalent to conjugating every one-site matrix by one unitary on the bond; the gate relations follow from this; and the gate relations give equality on all even rings. The odd-length counterexample is proved."
     },
     {
       "id": "docs/paper-gaps/mpu_canonical_form_full_support.tex",
