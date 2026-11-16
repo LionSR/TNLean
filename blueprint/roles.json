@@ -381,8 +381,7 @@
         "IndexTh"
       ],
       "corollaries": [
-        "coruvSF",
-        "cor:mpu_admissible_continuous_standard_form"
+        "coruvSF"
       ],
       "notes": {
         "ThmFund1": "Simple-tensor equivalence theorem (Cirac et al. 2017, Theorem III.8)",
