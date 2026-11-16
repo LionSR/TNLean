@@ -85,7 +85,7 @@ projection), the tensor is normal (eventually full Kraus rank).
 The transfer-map primitivity hypothesis says that the only peripheral eigenvalue
 is `1`.  The conclusion is obtained by the following implications:
 
-* TP + peripheral primitivity + irreducibility give an `Kraus.HasComplementaryFixedPointGap` datum,
+* TP + peripheral primitivity + irreducibility give a `Kraus.HasComplementaryFixedPointGap` datum,
   including a Perron fixed point for the transfer map.
 * Irreducibility upgrades the nonzero positive semidefinite Perron fixed point
   in that datum to a positive definite, faithful fixed point.
