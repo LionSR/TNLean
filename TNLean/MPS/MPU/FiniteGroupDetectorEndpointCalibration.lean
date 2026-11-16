@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.MPS.MPU.FiniteGroupDetectorLocalComparison
-import TNLean.MPS.MPU.FiniteGroupDetectorTruncatedInterval
+import TNLean.MPS.MPU.FiniteGroupDetectorSourceChoice
 
 /-!
 # Endpoint calibration on arbitrary multiwall chains
@@ -171,6 +171,7 @@ the forward creation contraction and native unitarity, not assumed.
 Project corrected undo comparison for GS24 `detectG`, lines 2108–2117. -/
 theorem sourceFactors_physicalTruncatedInterval_conjTranspose_mulVec_of_endpoint_calibration
     (hU : IsMPUCanonicalFormII (F.tensor g)) (hsimple : IsMPUSimple (F.tensor g))
+    (S : SourceFactors (F.tensor g) hU.ρ)
     (el : Fin ℓ[F.tensor g] ≃ Fin d) (er : Fin r[F.tensor g] ≃ Fin d)
     (y : X) (h : k + 1 + l + 1 + n = L)
     (P : (Fin k → Fin d) → Matrix (Fin t) (Fin (D y)) ℂ)
@@ -182,18 +183,17 @@ theorem sourceFactors_physicalTruncatedInterval_conjTranspose_mulVec_of_endpoint
       (P p * e y (g • y) a * Kraus.evalWord (A (g • y)) (List.ofFn μ) *
         e (g • y) y b * Q q).trace)
     (hleft : ∀ a, leftAct (FiniteGroupDetector.sourceStringLeftEndpoint (F.tensor g) el
-      (sourceFactors (F.tensor g) hU.ρ hU.ρ_posDef).Y₂) (A y) a =
+      S.Y₂) (A y) a =
         e y (g • y) a * ad.V g y)
     (hright : ∀ b, rightAct (FiniteGroupDetector.sourceStringRightEndpoint (F.tensor g) er
-      (sourceFactors (F.tensor g) hU.ρ hU.ρ_posDef).Y₁) (A y) b =
+      S.Y₁) (A y) b =
         ad.W g y * e (g • y) y b) :
     (FiniteGroupDetector.physicalTruncatedInterval (F.tensor g) el er
-      (sourceFactors (F.tensor g) hU.ρ hU.ρ_posDef).Y₂
-      (sourceFactors (F.tensor g) hU.ρ hU.ρ_posDef).Y₁ k l n h)ᴴ *ᵥ Φ = ψ := by
+      S.Y₂ S.Y₁ k l n h)ᴴ *ᵥ Φ = ψ := by
   classical
   apply Matrix.conjTranspose_mulVec_eq_of_mulVec_eq
-    (FiniteGroupDetector.sourceFactors_physicalTruncatedInterval_mem_unitaryGroup
-      hU hsimple el er k l n h)
+    (FiniteGroupDetector.sourceRecord_physicalTruncatedInterval_mem_unitaryGroup
+      hU hsimple S el er k l n L h)
   funext τ
   obtain ⟨⟨p, a, μ, b, q⟩, rfl⟩ := (wallConfig h).surjective τ
   rw [ad.physicalTruncatedInterval_mulVec_trace_block_of_endpoint_calibration g el er _ _ y h

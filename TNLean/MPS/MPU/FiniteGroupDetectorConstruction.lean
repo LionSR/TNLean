@@ -25,58 +25,12 @@ namespace MPOTensor.FiniteGroupDetector
 
 variable {d N : ℕ} [NeZero N]
 
-private theorem cellSuccessor_Icc_single_entry_proper (a b : Fin N) (hb : b.val + 1 < N) :
-    ∀ k ∈ Finset.Icc a b, (cellSuccessor N).symm k ∈ Finset.Icc a b ↔ k ≠ a := by
-  intro k hk
-  by_cases hk0 : k = 0
-  · subst k
-    have ha : a = 0 := by
-      apply Fin.ext
-      have hak : a.val ≤ (0 : Fin N).val := (Finset.mem_Icc.mp hk).1
-      simp only [Fin.val_zero] at hak ⊢
-      exact Nat.eq_zero_of_le_zero hak
-    subst a
-    have hN : 1 < N := by omega
-    have hval : (1 : Fin N).val = 1 := by
-      rw [Fin.val_one', Nat.mod_eq_of_lt hN]
-    have hne : (1 : Fin N) ≠ 0 := by
-      intro h
-      have h' := congrArg Fin.val h
-      rw [hval, Fin.val_zero] at h'
-      omega
-    have hpred : ((0 : Fin N) - 1).val = N - 1 := by
-      rw [zero_sub, Fin.val_neg, ite_eq_right hne, hval]
-    change (0 : Fin N) - 1 ∈ Finset.Icc 0 b ↔ (0 : Fin N) ≠ 0
-    constructor
-    · intro h
-      have hle : ((0 : Fin N) - 1).val ≤ b.val := (Finset.mem_Icc.mp h).2
-      rw [hpred] at hle
-      omega
-    · intro h
-      exact (h rfl).elim
-  · change k - 1 ∈ Finset.Icc a b ↔ k ≠ a
-    simp only [Finset.mem_Icc, Fin.le_def, Fin.val_sub_one_of_ne_zero hk0]
-    have hka : a.val ≤ k.val := (Finset.mem_Icc.mp hk).1
-    have hkb : k.val ≤ b.val := (Finset.mem_Icc.mp hk).2
-    constructor
-    · intro h heq
-      subst k
-      have hkval : a.val ≠ 0 := by
-        intro hval
-        apply hk0
-        apply Fin.ext
-        simpa only [Fin.val_zero] using hval
-      omega
-    · intro h
-      have hval : k.val ≠ a.val := fun heq ↦ h (Fin.ext heq)
-      omega
-
 /-- The interval obtained by deleting gates outside the indicated cells of
 one fixed depth-two circuit. Source context: arXiv:2405.00439, Section V,
 lines 2081–2087. -/
 noncomputable def detectorRetainedInterval (u w : unitary (Matrix (Fin d) (Fin d) ℂ))
-    (N : ℕ) [NeZero N] (a b : ℕ) : Matrix (Fin N × Bool → Fin d) (Fin N × Bool → Fin d) ℂ :=
-  QuantumCircuit.circuitOp (dressedPairCircuit (cellSuccessor N) u w
+    (M : ℕ) [NeZero M] (a b : ℕ) : Matrix (Fin M × Bool → Fin d) (Fin M × Bool → Fin d) ℂ :=
+  QuantumCircuit.circuitOp (dressedPairCircuit (cellSuccessor M) u w
     (Finset.univ.filter fun k ↦ a ≤ k.val ∧ k.val ≤ b))
 
 /-- Gate deletion gives the specified dressed tensor interval, with the
@@ -95,7 +49,7 @@ theorem detectorRetainedInterval_eq_intervalTensor
   rw [detectorRetainedInterval, hset,
     circuitOp_dressedPairCircuit_single_entry (cellSuccessor N) u w _ a'
       (Finset.mem_Icc.mpr ⟨le_rfl, hab'⟩)
-      (cellSuccessor_Icc_single_entry_proper a' b' hb),
+      (cellSuccessor_Icc_single_entry a' b' (Or.inr hb)),
     detectorIntervalTensor, rectKronecker_mul]
   congr 1
   funext s
@@ -108,11 +62,11 @@ theorem detectorRetainedInterval_eq_intervalTensor
 circuit. Source: arXiv:2405.00439, `detectG`, lines 2108–2117, with the
 chronological forward convention of the endpoint audit. -/
 noncomputable def detectorCircuitWord (u w : unitary (Matrix (Fin d) (Fin d) ℂ))
-    (m N : ℕ) [NeZero N] : Matrix (Fin N × Bool → Fin d) (Fin N × Bool → Fin d) ℂ :=
-  (detectorRetainedInterval u w N 0 (2 * m + 1))ᴴ *
-    ((List.range m).map fun r ↦ (detectorRetainedInterval u w N (r + 1) (2 * m - r))ᴴ).prod *
-    ((List.range m).map fun r ↦ detectorRetainedInterval u w N (r + 1) (m + 2 + r)).prod *
-    detectorRetainedInterval u w N 0 (m + 1)
+    (m M : ℕ) [NeZero M] : Matrix (Fin M × Bool → Fin d) (Fin M × Bool → Fin d) ℂ :=
+  (detectorRetainedInterval u w M 0 (2 * m + 1))ᴴ *
+    ((List.range m).map fun r ↦ (detectorRetainedInterval u w M (r + 1) (2 * m - r))ᴴ).prod *
+    ((List.range m).map fun r ↦ detectorRetainedInterval u w M (r + 1) (m + 2 + r)).prod *
+    detectorRetainedInterval u w M 0 (m + 1)
 
 /-- The complete word of actual retained circuit operators equals the tensor
 word evaluated in the spatial construction. No circuit-to-interval identity

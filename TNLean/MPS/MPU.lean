@@ -80,6 +80,7 @@ import TNLean.MPS.MPU.FiniteGroupDetectorEndpoint
 import TNLean.MPS.MPU.FiniteGroupDetectorEndpointCalibration
 import TNLean.MPS.MPU.FiniteGroupDetectorLocalComparison
 import TNLean.MPS.MPU.FiniteGroupDetectorPhase
+import TNLean.MPS.MPU.FiniteGroupDetectorSourceChoice
 import TNLean.MPS.MPU.FiniteGroupDetectorSpatial
 import TNLean.MPS.MPU.FiniteGroupDetectorTensor
 import TNLean.MPS.MPU.FiniteGroupDetectorTransport

@@ -30,6 +30,14 @@ An entrywise theorem identifies it with a string whose actual endpoints
 are the supplied source triangles. Native simple canonical-form-II
 unitarity then gives unitarity of the physical placement.
 
+`FiniteGroupDetectorSourceChoice` extends native unitarity to every supplied
+normalized source record at the canonical boundary. Existing normalized
+source-decomposition uniqueness derives two endpoint unitaries relating it
+to the compact-SVD record. They multiply the native contraction on its two
+endpoint outputs at every bulk length. This permits calibration to choose
+normalized source coordinates; the undo result is not tied to the initial
+singular-vector choice. No unitarity of the supplied record is assumed.
+
 `FiniteGroupDetectorEndpointCalibration` reduces canonical agreement to
 two finite endpoint-action identities on the adjacent block tensors:
 
