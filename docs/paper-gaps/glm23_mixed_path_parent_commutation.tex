@@ -1,0 +1,166 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{The Mixed Interpolation Path: Commutation of the Canonical Parent with the Symmetry}
+\author{}
+\date{2026-11-16}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source claim}
+Garre-Rubio, Lootens and Moln\'ar connect two injective matrix product
+states with equal $L$-symbols by an interpolating tensor $A(\gamma)$ and
+common operators $T_a$ \cite[Section~5]{GarreRubio2023MPOSym}. The
+section opens with
+\begin{quote}
+    ``We do so by explicitly constructing a continuous and symmetric
+    embedding path that connects both MPSs and therefore, their parent
+    Hamiltonians.''
+\end{quote}
+and the path Hamiltonian is fixed as the canonical parent:
+\begin{quote}
+    ``It is clear that the tensor $A(\gamma)$ defined in
+    Eq.~(defAgamma) is injective for $\gamma \in (0,1)$, so that the
+    parent Hamiltonian $H_{A(\gamma)} \equiv H(\gamma)$ is gapped and has
+    as unique ground state $|\psi_{A(\gamma)} \rangle$ within that
+    region. [\ldots] We remind that the local Hamiltonian terms are
+    defined by $h_\gamma = \mathbb 1 - \Pi_{S_\gamma}$.''
+\end{quote}
+The definition of a phase requires that ``the Hamiltonian path commutes
+with an injective MPO representation of $\mathcal C$'', and the
+definition of symmetry states that ``the unitarity of the operators is
+not required''.\footnote{Source traceability:
+    \path{Papers/2203.12563/REsubmission.tex}, line 1582 (symmetric
+    embedding path), lines 1687--1690 (the canonical parent $H(\gamma)$
+    and $h_\gamma=\mathbb 1-\Pi_{S_\gamma}$), lines 1240--1246
+    (definition \texttt{defsym} and the remark on unitarity) and
+    lines 1253--1259 (definition \texttt{defphase}).}
+Section~5 proves exact covariance of $A(\gamma)$ under $T_a$
+(\texttt{Agammasym}) and the fusion of the $T_a$, but never shows that
+$H(\gamma)$ commutes with the periodic operators $O_a$.
+
+The symmetrization of the parent Hamiltonian, lines 1290--1320, is the
+source's tool for commutation: the local term is averaged with the
+canonical left integral $\Omega$ of a $C^*$-weak Hopf algebra and its
+pulling-through tensors. Section~5 does not invoke it for the path, and
+it does not construct an integral, a coproduct, or a star structure for
+the common operators $T_a$; it constructs only their fusion tensors and
+$F$- and $L$-symbols.
+
+\section{The canonical parent need not commute}
+Let $S\subset(\mathbb C^d)^{\otimes2}$ be the two-site support of an
+injective tensor $A$, $P$ its orthogonal projection, and $h=\mathbb 1-P$.
+Covariance under a symmetry $O$ gives $O\,S\subset S$. Commutation
+$[h,O]=0$ is equivalent to invariance of both $S$ and $S^\perp$, and the
+latter is equivalent to $O^\dagger S\subset S$. For unitary or
+adjoint-closed symmetries this is automatic; covariance alone does not
+supply it.
+
+\paragraph{Explicit data.} Take $d=4$, bond dimension $2$, and the tensor
+\[
+    A^1=E_{11},\qquad A^2=E_{12},\qquad A^3=E_{21},\qquad
+    A^4=\mathbb 1_2,
+\]
+which is one-site injective since its letters span $\mathcal M_2$. Put
+\[
+    V=\begin{pmatrix}1&2\\0&-1\end{pmatrix},\qquad V^2=\mathbb 1,
+    \qquad
+    u=\begin{pmatrix}
+        1 & 2  & 0  & 0  \\
+        0 & -1 & 0  & 0  \\
+        4 & 4  & -1 & -2 \\
+        0 & 0  & 0  & 1
+    \end{pmatrix}.
+\]
+Then $\sum_l u_{kl}A^l=VA^kV^{-1}$ for every $k$; for instance
+$VE_{11}V=E_{11}+2E_{12}$ is the first row. Also $u^2=\mathbb 1$, but $u$ is
+not unitary.
+
+\paragraph{The Section~5 data are present.} Take $\mathcal C=\mathbb Z_2$
+with $O_e=\mathbb 1$ and $O_g=u^{\otimes N}$, both of bond dimension one.
+Fusion is exact, since $u^2=\mathbb 1$. The action of $O_g$ on $A$ is exact,
+with one copy and the action maps $W_g=V$ and $V_g=V^{-1}=V$, which satisfy
+$V_gW_g=\mathbb 1$. Choose $A_0=A_1=A$ and identical operator data at both
+endpoints. Then the chosen raw $L$ matrices, and hence the $L$- and
+$F$-symbols, agree. These are exactly the hypotheses under which the
+common operator of the path is formalized.
+
+\paragraph{Failure of $S^\perp$-invariance.} The support is
+$S=\{s_X : X\in\mathcal M_2\}$ with
+$(s_X)_{kl}=\operatorname{tr}(A^kA^lX)$, and
+$(u\otimes u)s_X=s_{VXV}$, so $S$ is invariant. Let $w=e_2\otimes e_1$.
+Since $A^2A^1=E_{12}E_{11}=0$, every $(s_X)_{21}=0$, so $w\in S^\perp$.
+Put $a=ue_2=(2,-1,4,0)$ and $b=ue_1=(1,0,4,0)$, the second and first
+columns of $u$, so that $(u\otimes u)w=a\otimes b$. All data are real, so
+\[
+    \langle s_{E_{11}},(u\otimes u)w\rangle
+    =\Bigl(\bigl(\textstyle\sum_ka_kA^k\bigr)
+    \bigl(\textstyle\sum_lb_lA^l\bigr)\Bigr)_{11}
+    =\left[\begin{pmatrix}2&-1\\4&0\end{pmatrix}
+        \begin{pmatrix}1&0\\4&0\end{pmatrix}\right]_{11}
+    =-2\neq0.
+\]
+Hence $(u\otimes u)S^\perp\not\subset S^\perp$, and
+$[h,u\otimes u]\neq0$. The Gram matrix of the basis
+$s_{E_{11}},s_{E_{12}},s_{E_{21}},s_{E_{22}}$ is
+\[
+    \begin{pmatrix}5&0&0&1\\0&3&0&0\\0&0&3&0\\1&0&0&2\end{pmatrix},
+\]
+so $P$ and $h$ have rational entries. The periodic Hamiltonian
+$H=\sum_ih_i$ on three sites has the rational commutator entry
+$\langle 111|[H,u^{\otimes3}]|112\rangle=2/9$, so the global
+commutation fails as well.
+
+\paragraph{Consequence for the path.} By the definition of a phase,
+$H(0)$ restricts to the endpoint Hamiltonian $H_0$ on
+$\mathcal H_0^{\otimes N}$, and $O_a=O^0_a\oplus O^1_a\oplus O^{\rm path}_a$.
+If the canonical $H(\gamma)$ commuted with $O_a$ at $\gamma=0$, the
+restriction would give $[H_0,O^0_g]=0$, where $H_0$ is the canonical
+parent of $A$ and $O^0_g=u^{\otimes N}$. This was refuted above. Thus the
+source's claim that the canonical parents form a symmetric path does not
+follow from the data that Section~5 constructs.
+
+\section{The formal boundary}
+The enlarged mixed interaction is the canonical two-site parent of the
+enlarged mixed tensor on the open interval. It is continuous through both
+endpoints. Suppose the two-site arbitrary-boundary range
+$\{O^2_{\widetilde T,X}:X\in\mathcal M_\chi\}$ of the common operator is
+closed under the adjoint. Then the interaction commutes with every
+two-site boundary operator for every $\gamma\in[0,1]$. Hence the periodic
+path Hamiltonian commutes with the periodic common operator and with each
+boundary operator whose boundary commutes with its letters, at every ring
+length $N\geq2$.\footnote{\leanid{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary}
+    and
+    \leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedParentCommutation}.}
+The fusion hypotheses and the equal $L$ matrices are not used for this
+conclusion. Adjoint closure is the only hypothesis added to those of the
+action decompositions and one-site injectivity, and the example above
+shows that it cannot be dropped. The source-labelled claim of a symmetric
+canonical path remains unformalized.
+
+\section{Elimination plan}
+\begin{enumerate}
+    \item The adjoint-closed commutation above is formalized and is the
+          scope-restricted replacement for the canonical path.
+    \item Replace the canonical parent by the symmetrized parent of
+          lines 1290--1320 once the weak-Hopf averaging route is
+          formalized and the common operators are shown to represent a
+          $C^*$-weak Hopf algebra; see the separate review of support
+          averaging versus ambient completion,
+          \texttt{glm23\_wha\_parent\_completion.tex}.
+    \item Derive adjoint closure of the common operator from physical
+          adjoint data of the endpoint families, in the manner of the
+          normal periodic adjoint duality already used for single
+          compatible tensors. For unitary on-site group symmetries this
+          closure holds automatically at each endpoint; whether it
+          survives the mixed off-diagonal blocks is not yet formalized.
+\end{enumerate}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
