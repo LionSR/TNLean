@@ -96,7 +96,7 @@
     },
     {
       "id": "docs/paper-gaps/mpu_nil_matrix_bound.tex",
-      "repo": "TNLean",
+      "repo": "QICLean",
       "kind": "local-correction",
       "status": "resolved",
       "paper": "cpsv17",
@@ -276,6 +276,21 @@
       "found": "Following configurations through the three layers, the conjugated swap shifts the two spins of each site in the directions of <i>Ũ</i><sub>3</sub> = 𝕊<sup>⊗<i>N</i></sup>(<i>T</i> ⊗ <i>T</i><sup>†</sup>) under the paper's own convention for the shift <i>T</i>, not those of <i>Ũ</i><sub>2</sub>. The two differ whenever <i>N</i> ≥ 3 and <i>d</i> ≥ 2. Swapping the first spin of site <i>n</i> + 1 with the ancilla of site <i>n</i> instead gives <i>Ũ</i><sub>2</sub>.",
       "impact": "None for the proposition once the orientation is reversed.",
       "plan": "The endpoint of the printed circuit is proved and the correction recorded. The proposition itself is not yet formalized; it also needs the action of symmetries after ancillas are attached, recorded separately."
+    },
+    {
+      "id": "docs/paper-gaps/cpsv17_transfer_trace_power.tex",
+      "repo": "TNLean",
+      "kind": "missing-step",
+      "status": "resolved",
+      "paper": "cpsv17",
+      "result": "Proposition prop:normal-tensor, the transfer operator has a single nonzero eigenvalue",
+      "title": "Trace powers from length two on determine the transfer spectrum",
+      "summary": "The paper cites a lemma that uses every trace power of the transfer operator, including the first, which unitarity does not supply; an argument using only the powers from two on gives the same conclusion and is proved.",
+      "context": "The transfer operator <i>E</i> of a matrix product unitary acts on <i>D</i> × <i>D</i> matrices by averaging conjugation with the local tensor over both physical indices, with the normalization 1/<i>d</i>. Its spectrum decides whether the tensor is normal, the starting point of the whole structure theory.",
+      "claims": "Proposition prop:normal-tensor (lines 344–355 of the source) states that <i>E</i> has just one nonzero eigenvalue, equal to one. The proof derives tr(<i>E</i><sup><i>N</i></sup>) = 1 for every <i>N</i> > 1 from unitarity and then cites a lemma on matrices all of whose trace powers equal one.",
+      "found": "Unitarity gives the trace identity only for <i>N</i> > 1; tr(<i>E</i>) need not equal one, so the cited lemma does not apply as stated. Applying it to <i>E</i><sup>2</sup>, whose trace powers are all one, shows that 1 is the only nonzero eigenvalue of <i>E</i>; the factorization <i>E</i><sup>2</sup> − 1 = (<i>E</i> + 1)(<i>E</i> − 1) then shows its multiplicity is one.",
+      "impact": "None: the printed conclusion holds, with the characteristic polynomial <i>X</i><sup><i>D</i><sup>2</sup>−1</sup>(<i>X</i> − 1).",
+      "plan": "Proved: the exact characteristic polynomial of the transfer matrix of every matrix product unitary, from the trace powers of order at least two alone."
     }
   ]
 }
