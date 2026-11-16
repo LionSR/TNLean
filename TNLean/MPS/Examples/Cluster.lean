@@ -655,9 +655,7 @@ theorem clusterBlocked_transferMap_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
       Matrix.cons_val_fin_one, Matrix.one_apply, smul_eq_mul] <;>
     norm_num [Complex.ext_iff, Complex.add_re, Complex.add_im] <;>
-    first
-      | trivial
-      | (constructor <;> ring)
+    constructor <;> ring
 
 /-- The length-`2` blocked cluster transfer map is idempotent: `E² = E`.
 
