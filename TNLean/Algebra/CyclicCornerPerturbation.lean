@@ -41,7 +41,8 @@ private theorem exists_hermitian_functional_killing {m : ℕ}
     · intro h
       have h' := congrArg (fun φ : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ =>
         φ (Matrix.single i i 1)) h
-      simpa [e] using h'
+      change (Matrix.single i i (1 : ℂ)) i i = 0 at h'
+      simp at h'
     · intro X hX
       change star (X i i) = X i i
       exact hX.apply i i
@@ -50,8 +51,10 @@ private theorem exists_hermitian_functional_killing {m : ℕ}
     · intro h
       have h' := congrArg (fun ψ : Matrix (Fin m) (Fin m) ℂ →ₗ[ℂ] ℂ =>
         ψ (Matrix.single j j 1)) h
+      change ρ j j * (Matrix.single j j (1 : ℂ)) i i -
+        ρ i i * (Matrix.single j j (1 : ℂ)) j j = 0 at h'
       have hNeg : -(ρ i i) = 0 := by
-        simpa [φ, e, hij, hij.symm] using h'
+        simpa [hij, hij.symm] using h'
       exact hZero (neg_eq_zero.mp hNeg)
     · change ρ j j * ρ i i - ρ i i * ρ j j = 0
       ring
@@ -86,9 +89,9 @@ theorem exists_nonzero_trace_zero_map_killing_hermitian {m n : ℕ}
   have hAne : A ≠ 0 := by
     intro h
     have h' := congrArg (fun B : Matrix (Fin n) (Fin n) ℂ => B u u) h
-    simpa [A, huv, huv.symm] using h'
+    simp [A, huv, huv.symm] at h'
   have hAtrace : A.trace = 0 := by
-    simp [A, Matrix.trace_sub, Matrix.trace, Matrix.diag, Matrix.single_apply]
+    simp [A, Matrix.trace, Matrix.diag, Matrix.single_apply]
   have hAherm : A.IsHermitian := by
     change Aᴴ = A
     ext i j
