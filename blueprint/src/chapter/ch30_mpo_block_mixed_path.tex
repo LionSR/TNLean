@@ -158,8 +158,7 @@ map is assumed to be an adjoint.
         MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_blockMixedInterpolation,
         MPSTensor.MPOSymmetry.mpo_mulVec_blockMixedInterpolation}
     \leanok
-    \uses{def:mpo_block_mixed_operator,thm:mpo_mixed_action_exact,
-        def:glm_boundary_decomposition}
+    \uses{def:mpo_block_mixed_operator,def:glm_boundary_decomposition}
     Assume (\ref{eq:mpo_block_action_input}). Then for every real $\gamma$,
     every label $a$ and every block $x$,
     \begin{align}
@@ -178,7 +177,7 @@ map is assumed to be an adjoint.
     Both sides vanish unless the physical letter lies in some summand
     $F_y\otimes F_y$, and there the sum over the input letters runs over
     the summand $F_x\otimes F_x$ only. On that pair of summands the
-    identity is the entrywise computation of
+    identity is the same entrywise computation as in
     Lemma~\ref{thm:mpo_mixed_action_exact}, with input block $x$ and
     output block $y$: its diagonal sectors are the parts of
     (\ref{eq:mpo_block_action_input}) from $x$ to $y$, and its cross sectors
@@ -219,7 +218,8 @@ Definition~\ref{def:glm_boundary_action_l_matrix}.
         MPSTensor.MPOSymmetry.blockCrossEndpoint_actionTree_contraction_apply,
         MPSTensor.MPOSymmetry.blockCrossEndpoint_fusion_entry}
     \leanok
-    \uses{thm:mpo_mixed_fusion_cross,def:glm_boundary_action_l_matrix}
+    \uses{thm:mpo_mixed_fusion_cross,thm:glm_boundary_action_l_exists,
+        def:glm_boundary_action_l_matrix}
     Assume that all blocks $A^p_x$ are injective with $D^p_x>0$, and
     that $L_{0,ab;xy}=L_{1,ab;xy}$ for a pair of labels $a,b$ and a pair
     of blocks $x,y$. Then the crossed contraction
@@ -244,7 +244,7 @@ Definition~\ref{def:glm_boundary_action_l_matrix}.
         MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_blockMixedMPO,
         MPSTensor.MPOSymmetry.isMPOFusionAlgebra_blockMixedMPO}
     \leanok
-    \uses{thm:mpo_block_mixed_fusion_cross,thm:mpo_mixed_fusion_exact,
+    \uses{thm:mpo_block_mixed_fusion_cross,thm:mpo_mixed_fusion_maps,
         def:mpo_mixed_fusion_maps,def:mpo_fusion_algebra}
     Assume (\ref{eq:mpo_block_action_input}),
     (\ref{eq:mpo_block_fusion_input}), that every block $A^p_x$ is
