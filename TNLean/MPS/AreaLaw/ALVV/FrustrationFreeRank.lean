@@ -249,7 +249,7 @@ private theorem leftExterior_supported
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (leftExterior h s t m k) (interval L 0 k) :=
-  TNLean.Lattice.isSupportedOn_sum _ fun i hi ↦
+  Entropy.isSupportedOn_sum _ fun i hi ↦
     (hh i).mono (edge_subset_left (Finset.mem_filter.mp hi).2)
 
 private theorem rightExterior_supported
@@ -258,7 +258,7 @@ private theorem rightExterior_supported
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (rightExterior h s t m k) (interval L 0 k)ᶜ := by
-  apply TNLean.Lattice.isSupportedOn_sum
+  apply Entropy.isSupportedOn_sum
   intro i hi
   apply (hh i).mono
   intro x hx

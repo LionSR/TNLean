@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.PositiveFactorRepair
 import QICLean.Entropy.LocalLift
+import QICLean.Entropy.SupportedOperatorAlgebra
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.OpenMPS
 
@@ -41,15 +42,6 @@ unchanged. Documented in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`
 
 open Matrix Real
 open scoped Matrix.Norms.L2Operator ComplexOrder
-
-/-- The adjoint of an operator supported on `D` is supported on `D`. -/
-theorem Entropy.IsSupportedOn.conjTranspose {V : Type*} {n : V → ℕ} {D : Finset V}
-    {X : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ}
-    (hX : Entropy.IsSupportedOn X D) : Entropy.IsSupportedOn Xᴴ D := by
-  refine ⟨fun σ τ ⟨v, hv, hne⟩ ↦ ?_, fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
-  · rw [conjTranspose_apply, hX.1 τ σ ⟨v, hv, Ne.symm hne⟩, star_zero]
-  · rw [conjTranspose_apply, conjTranspose_apply,
-      hX.2 τ σ τ' σ' h2 h1 (fun v hv ↦ (h3 v hv).symm) (fun v hv ↦ (h4 v hv).symm)]
 
 namespace TNLean.MPS.AreaLaw.Hastings
 

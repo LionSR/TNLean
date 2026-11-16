@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.ComplementaryWeylTwirl
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.Circuit.Measurement.Rounds
 import TNLean.Circuit.Gates.Permutation
 

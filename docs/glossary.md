@@ -1911,8 +1911,8 @@ in `MPS/Preparation/` uses it.
   `QuantumCircuit.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
   `QuantumCircuit.IsTwoLevelWord (K : ℕ) (X : Matrix ι ι ℂ) : Prop`, and
   `QuantumCircuit.FixesOutside (T : Finset ι) (X : Matrix ι ι ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Gates/ControlledProducts.lean`
-  (`IsSpecialTwo`) and `TNLean/Circuit/Gates/Givens.lean`.
+- **Defined in:** `QICLean/Circuit/Gate/TwoLevel.lean` (`IsSpecialTwo`) and
+  `QICLean/Circuit/Gate/Givens.lean` (QICLean dependency).
 - **Meaning:** `IsSpecialTwo g` says that `g` is a real rotation `rotTwo z` or
   a diagonal phase `diagTwo ν` with `‖z‖ = ‖ν‖ = 1`. `IsTwoLevelWord K X` says
   that `X` is a product of at most `K` two-level operators `twoLevel a b g` with

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.UnitaryGeneralLinearInverse

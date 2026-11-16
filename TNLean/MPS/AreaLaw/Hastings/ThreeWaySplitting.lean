@@ -284,7 +284,7 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–89 (finite range). -/
 theorem ChainHamiltonian.isSupportedOn_termSum (h : ChainHamiltonian L q R J)
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D :=
-  TNLean.Lattice.isSupportedOn_sum S fun X hX ↦ (h.supported X).mono (hS X hX)
+  Entropy.isSupportedOn_sum S fun X hX ↦ (h.supported X).mono (hS X hX)
 
 /-! ### The parts `H_L`, `H_B`, `H_R` -/
 

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.SpinCover.Basic
 import QICLean.Channel.Semigroup.PauliDissipation
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.Wielandt.Primitivity.Definitions
 
 /-!

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
+import QICLean.Entropy.SupportedOperatorAlgebra
 
 /-!
 # Lemma 1 of Hastings' area law in units of the gap
@@ -41,14 +42,6 @@ open scoped ComplexOrder Matrix.Norms.L2Operator
 namespace TNLean.MPS.AreaLaw
 
 open Hastings
-
-/-- A scalar multiple of an operator supported on `D` is supported on `D`. -/
-theorem _root_.Entropy.IsSupportedOn.smul {V : Type*} {n : V → ℕ} {D : Finset V}
-    {X : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ}
-    (hX : Entropy.IsSupportedOn X D) (c : ℂ) : Entropy.IsSupportedOn (c • X) D := by
-  refine ⟨fun σ τ h ↦ ?_, fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
-  · simp [hX.1 σ τ h]
-  · simp [hX.2 σ τ σ' τ' h1 h2 h3 h4]
 
 /-- **Rescaling a gapped ground state.** If `Ω` is a gapped ground state of `H` with energy
 `E₀` and gap `Δ`, then for `c ≥ 0` it is one of `c H` with energy `c E₀` and gap `c Δ`. -/

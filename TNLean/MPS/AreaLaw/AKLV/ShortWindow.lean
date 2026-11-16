@@ -49,7 +49,7 @@ theorem exists_aklv_subwindow_regrouping {L q a s b m : ℕ} (hsub : b + m ≤ s
   let HL' := ∑ t ∈ left, aklvWindowFamily H HL HR t
   let HR' := ∑ t ∈ right, aklvWindowFamily H HL HR t
   have hleft : Entropy.IsSupportedOn HL' (interval L 0 (a + b + 1)) := by
-    apply TNLean.Lattice.isSupportedOn_sum
+    apply Entropy.isSupportedOn_sum
     intro t ht
     have hp := (Finset.mem_filter.mp ht).2
     cases t with
@@ -65,7 +65,7 @@ theorem exists_aklv_subwindow_regrouping {L q a s b m : ℕ} (hsub : b + m ≤ s
       · simp only [Sum.elim_inr] at hp
         contradiction
   have hright : Entropy.IsSupportedOn HR' (interval L (a + b + m) L) := by
-    apply TNLean.Lattice.isSupportedOn_sum
+    apply Entropy.isSupportedOn_sum
     intro t ht
     have hp := (Finset.mem_filter.mp ht).2
     cases t with
