@@ -11,10 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.sha }}
+          ref: 08de7e879c5fedd267becd30bb29f03539139350
           fetch-depth: 0
-      - name: Verify candidate ancestry and unchanged dependency pins
+      - name: Verify exact production merge and unchanged dependency pins
         run: |
+          test "$(git rev-parse HEAD)" = 08de7e879c5fedd267becd30bb29f03539139350
+          git merge-base --is-ancestor 3c4ede7dd79a10367d6997cbd2094b7f568087b0 HEAD
+          git merge-base --is-ancestor 73007e10337424b3556fb198507b2157f99f19a3 HEAD
           git merge-base --is-ancestor eb588dc15332a3798431015e6c27ecbaf329b2d1 HEAD
           git merge-base --is-ancestor 990051363e264c7ad45460e271fbc765ae3dda76 HEAD
           git diff --exit-code 0b00ff5002eba6f2a9d9e259d0f517dd5b5859a3 -- lean-toolchain lakefile.toml lake-manifest.json
@@ -81,6 +84,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: 08de7e879c5fedd267becd30bb29f03539139350
       - name: Check new Blueprint sources with pinned latexindent
         run: |
           scripts/latexindent --version
