@@ -26,7 +26,6 @@ private theorem parties_castInput {a b c : Layout P} (w : Word a b) (h : a = c) 
     (w.castInput h).parties = w.parties := by
   cases h
   rfl
-
 open Classical in
 private theorem owners_subset {a : Layout P} {s : Finset P}
     (h : ∀ r ∈ a, r.owner ∈ s) : (a.map Reg.owner).toFinset ⊆ s := by
@@ -57,11 +56,11 @@ private theorem owners_sources_mem_parties {a b : Layout P} (w : Word a b) :
 
 open Classical in
 private theorem parties_frameList {a b : Layout P} (w : Word a b) (c : Layout P) :
-    (frameList c w).parties = (c.map Reg.owner).toFinset ∪ w.parties := by
+    Word.parties (frameList c w) = (c.map Reg.owner).toFinset ∪ w.parties := by
   classical
   induction c with
-  | nil => simp [frameList]
-  | cons r c ih => simp [frameList, parties, ih]
+  | nil => simp [frameList, Circuit.frameList]
+  | cons r c ih => simp [frameList, Circuit.frameList, parties, ih]
 
 open Classical in
 private theorem parties_moveHead (r : Reg P) (c a : Layout P) :
@@ -87,7 +86,9 @@ theorem parties_localPart {a b : Layout P} (w : Word a b) :
       exact (owners_subset (owners_sources_mem_parties v)).trans
         Finset.subset_union_right
   | localMap => rfl
-  | source hpq U V η tail => simp [localPart, parties, sources, PairSource.layout]
+  | source hpq U V η tail =>
+      change Word.parties (Word.id _) = _
+      simp [parties, sources, PairSource.layout]
   | swap => rfl
   | @frame r a b w ih =>
       change (moveHead r w.sources.layout a).parties ∪

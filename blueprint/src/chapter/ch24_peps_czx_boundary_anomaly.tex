@@ -1,0 +1,102 @@
+\section{The anomaly of the CZX boundary symmetry}%
+\label{sec:czx_boundary_anomaly}
+
+The review attributes the nontrivial phase of the CZX model to its boundary
+symmetry \cite[Appendix~A, ``The CZX MPU'']{Cirac2021Matrix}: ``the reason
+behind the fact that the CZX model is a non-trivial SPT phase is the existence
+of a non trivial MPU symmetry in the associated PEPS determined by a
+nontrivial 3-cocycle'', and ``the CZX model belongs to the non-trivial SPT
+sector of a global on-site $\mathbb{Z}_2$ symmetry''
+\cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix}. The three-cocycle is
+defined for matrix product operators $O_g$ that ``form a representation of the
+group $G$: $O_g.O_h=O_{gh}$'' \cite[``Symmetric PEPS'']{Cirac2021Matrix}, while the
+printed operator satisfies ``${O}(A)^2=(-1)^N I$''. On a chain of odd length
+the operators $\Id$ and $O(A)$ therefore do not represent $\mathbb Z_2$.
+Every rectangle boundary has even length $P=2w+2h$, and pairing consecutive
+boundary spins into $w+h$ blocked sites gives an operator that squares to the
+identity at every blocked length and agrees with $O(A)$ on the boundary
+\cite{gap:rmp_peps_czx_boundary_chain}.
+
+\begin{lemma}[The anomaly under a change of basis and a character]%
+    \label{lem:czx_boundary_anomaly_transport}
+    \lean{MPOTensor.mulTensor_pairTwist_map_star,
+        MPOTensor.GroupFamily.IsNormalRepresentation.withTensor_pairTwist,
+        MPOTensor.GroupFamily.FusionData.physicalTwist,
+        MPOTensor.GroupFamily.FusionData.omega_physicalTwist,
+        MPOTensor.GroupFamily.IsNormalRepresentation.withTensor_smul,
+        MPOTensor.GroupFamily.FusionData.smulTensor,
+        MPOTensor.GroupFamily.FusionData.omega_smulTensor}
+    \leanok
+    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    Let $g\mapsto T_g$ be a group of matrix product operator tensors with
+    normal tensors and $O_gO_h=O_{gh}$ on every nonempty chain, and fix
+    fusion tensors with anomaly three-cochain $\omega$. Let $u$ be a unitary
+    on the physical space and $\chi(g)$ nonzero scalars with
+    $\chi(g)\chi(h)=\chi(gh)$. Then $g\mapsto uT_gu^\dagger$ and
+    $g\mapsto\chi(g)T_g$ are again such groups, the same fusion tensors are
+    fusion tensors for them, and their anomaly three-cochain is $\omega$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_anomaly_three_cochain_spec}
+    Stacking commutes with $T\mapsto uTu^\dagger$ because $u^\dagger u=\Id$,
+    and the letters of $uTu^\dagger$ are linear combinations, with the
+    coefficients of $u\otimes\bar u$, of the letters of $T$. A reduction and a
+    dressed identity of two fusion trees persist when the letters of both
+    sides are replaced by the same linear combinations. The letters of $T$ are
+    combinations of those of $uTu^\dagger$, so normality is preserved, and the
+    operators are conjugated by $u^{\otimes N}$. For a character the stacked
+    tensors are multiplied by $\chi(g)\chi(h)=\chi(gh)$, and a reduction and a
+    dressed identity persist when every letter is multiplied by one scalar.
+    In both cases the anomaly is the unique scalar of the dressed identity.
+\end{proof}
+
+\begin{lemma}[The CZX boundary symmetry carries the nontrivial three-cocycle]%
+    \label{thm:czx_boundary_anomaly}
+    \lean{TNLean.PEPS.czxBoundaryFamily,
+        TNLean.PEPS.czxBoundaryPairing,
+        TNLean.PEPS.mpo_reviewCZXTensor_eq_reindex,
+        TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_czxBoundaryFamily,
+        TNLean.PEPS.regionPhysicalProductMatrix_czxWrappingRectangleBoundaryMatrix_czxBoundaryFamily,
+        TNLean.PEPS.czxBoundaryFamily_isNormalRepresentation,
+        TNLean.PEPS.not_isTrivialGaugeClass_omega_czxBoundaryFamily,
+        TNLean.PEPS.czxBoundaryFamily_anomalyClass_ne_zero}
+    \leanok
+    \uses{thm:czx_rectangle_review_mpo, thm:czx_wrapping_boundary,
+        def:asymex_czx_review_tensor, lem:czx_boundary_anomaly_transport,
+        thm:mpug_czx_anomaly_class, def:mpug_anomaly_class}
+    Let $R$ be a positive proper bounded or cyclic coordinate rectangle of the
+    torus, with faithful boundary map $F_R$ and physical symmetry
+    $U_R=\bigotimes_{v\in R}U_{CZX}$. Let $B$ be the printed CZX tensor $A$
+    of Definition~\ref{def:asymex_czx_review_tensor} blocked over two sites,
+    and let $\mathbb Z_2=\{e,g\}$ act by the bond-one identity tensor for $e$
+    and by $B$ for $g$. Pairing consecutive boundary spins,
+    \begin{align}
+        U_RF_R & =F_RO_{w+h}(B).
+        \label{eq:czx_boundary_anomaly}
+    \end{align}
+    The operators $\Id$ and $O_N(B)$ represent $\mathbb Z_2$ on every nonempty
+    chain with normal tensors, and for every choice of fusion tensors the
+    anomaly three-cocycle is not cohomologous to the trivial one: its class in
+    $H^3(\mathbb Z_2,\C^\times)$ is nonzero.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:czx_rectangle_review_mpo, thm:czx_wrapping_boundary,
+        lem:czx_boundary_anomaly_transport, thm:mpug_czx_anomaly_class}
+    Blocking two sites identifies $O_{2n}(A)$ with $O_n(B)$, so
+    (\ref{eq:czx_boundary_anomaly}) is $U_RF_R=F_RO_P(A)$ of
+    Lemmas~\ref{thm:czx_rectangle_review_mpo} and
+    \ref{thm:czx_wrapping_boundary}. Let $S=\operatorname{diag}(1,i)$.
+    The physical change of basis by $S$ multiplies the letter $A^{ij}$ by
+    $S_{ii}\overline{S_{jj}}=-i(-1)^i$ when $i\neq j$, and $A^{ij}=0$
+    otherwise, so the change of basis by $S\otimes S$ takes $B$ to $-C$, where
+    $C$ is the blocked tensor with the output Pauli $Z$ of
+    Lemma~\ref{thm:mpug_czx_anomaly_class}. The sign is the character
+    $x\mapsto(-1)^x$ of $\mathbb Z_2$. By
+    Lemma~\ref{lem:czx_boundary_anomaly_transport}, applied from the
+    representation of $C$, the family of $B$ is a normal representation, and
+    any fusion tensors of it are fusion tensors of $C$ with the same anomaly
+    three-cocycle, whose class is nonzero by
+    Lemma~\ref{thm:mpug_czx_anomaly_class}.
+\end{proof}

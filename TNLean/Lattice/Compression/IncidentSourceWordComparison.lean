@@ -60,13 +60,13 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 private theorem restrict_frameList_mapOwner_eval_heq {R Q : Type}
     (f : R → Bool) (lift : R → Q) (S : Layout R) {a b : Layout R}
     (u : Word a b) (hu : u.sources = []) :
-    HEq (((Word.frameList S u).restrict f
+    HEq ((Word.restrict f (Word.frameList S u)
       ((Word.sources_frameList u S).trans hu)).mapOwner lift).eval
       (Word.frameList (Layout.mapOwner lift (Layout.restrict f S))
         ((u.restrict f hu).mapOwner lift)).eval := by
   have hframe := Word.restrict_frameList_eval_heq f S u hu
   have hMap := (Word.eval_mapOwner_heq lift
-      ((Word.frameList S u).restrict f ((Word.sources_frameList u S).trans hu))).trans
+      (Word.restrict f (Word.frameList S u) ((Word.sources_frameList u S).trans hu))).trans
     (hframe.trans (Word.eval_mapOwner_heq lift
       (Word.frameList (Layout.restrict f S) (u.restrict f hu))).symm)
   exact hMap.trans (Word.eval_heq (Layout.mapOwner_append lift _ _)
@@ -93,8 +93,8 @@ private theorem preparedWordEvalComparison_frameList {Q R : Type}
     (hS : Layout.restrict sq Sq = Layout.mapOwner lift (Layout.restrict sa Sa))
     (hInner : HEq (u.restrict sq hu).eval ((v.restrict sa hv).mapOwner lift).eval) :
     preparedWordEvalComparison
-      ((Word.frameList Sq u).restrict sq ((Word.sources_frameList u Sq).trans hu))
-      (((Word.frameList Sa v).restrict sa
+      (Word.restrict sq (Word.frameList Sq u) ((Word.sources_frameList u Sq).trans hu))
+      ((Word.restrict sa (Word.frameList Sa v)
         ((Word.sources_frameList v Sa).trans hv)).mapOwner lift) := by
   have hMapped := restrict_frameList_mapOwner_eval_heq sa lift Sa v hv
   have hFramed := Word.eval_frameList_heq (u.restrict sq hu)

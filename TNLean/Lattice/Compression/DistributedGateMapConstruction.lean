@@ -73,7 +73,7 @@ def expansionGateMaps : {a b : Layout P} → (w : EffectCircuit a b) → w.GateM
   | _, _, .id _ => PUnit.unit
   | _, _, .comp w v => (expansionGateMaps w, expansionGateMaps v)
   | _, _, .localMap .. => PUnit.unit
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ => Lattice.PartyCircuit.gate (toGate L)
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ L _) => Lattice.PartyCircuit.gate (toGate L)
   | _, _, .swap .. => PUnit.unit
   | _, _, .frame _ w => expansionGateMaps w
 
@@ -83,7 +83,7 @@ def expansionGateLists : {a b : Layout P} → (w : EffectCircuit a b) → w.Gate
   | _, _, .id _ => PUnit.unit
   | _, _, .comp w v => (expansionGateLists w, expansionGateLists v)
   | _, _, .localMap .. => PUnit.unit
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ => L
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ L _) => L
   | _, _, .swap .. => PUnit.unit
   | _, _, .frame _ w => expansionGateLists w
 
@@ -113,7 +113,8 @@ theorem IsTermwiseBounded.mono {w : OriginalCircuit a b} {r : ℕ} {C C' : ℝ}
   | id => trivial
   | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
   | privateMap => trivial
-  | nonprivateGate => exact fun term hterm ↦ ⟨(h term hterm).1, (h term hterm).2.trans hC⟩
+  | nonprivateGate =>
+      exact fun term hterm ↦ ⟨(h term hterm).1, (h term hterm).2.trans hC⟩
   | swap => trivial
   | frame r w ih => exact ih h
 

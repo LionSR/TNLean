@@ -72,11 +72,11 @@ private theorem restrict_sampledEndpointInputWord_eval_heq_sampledEndpointWord
       ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict f
         (sources_sampledEndpointWord w k lam E F ξ ζ j ω)) := by
   unfold sampledEndpointInputWord
-  exact (heq_of_eq (congrArg Word.eval
+  exact (heq_of_eq (congrArg Circuit.eval
     (Word.restrict_castLayouts f (sampledEndpointWord w k lam E F ξ ζ j ω)
       (List.append_nil _).symm (List.append_nil _).symm
       (sources_sampledEndpointWord w k lam E F ξ ζ j ω)))).trans
-    (Word.eval_castLayouts_heq _ _ _)
+    (Circuit.eval_castLayouts_heq _ _ _)
 
 /-- The actual sampled endpoint operator at one original party is the word
 constructed directly from its incident ket and bra labels. Both endpoints

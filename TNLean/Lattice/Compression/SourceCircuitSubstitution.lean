@@ -57,7 +57,7 @@ def evalWithSources : {a b : Layout P} → (w : SourceCircuit a b) →
       evalWithSources v (fun e ξ ↦ η ⟨Sum.inr e.1, e.2⟩ ξ) ∘L
         evalWithSources w (fun e ξ ↦ η ⟨Sum.inl e.1, e.2⟩ ξ)
   | _, _, .localMap p ha hb T tail, _ => (Word.localMap p ha hb T tail).eval
-  | _, _, @SourceCircuit.gate _ C _ι _ _ owner a b c G tail, η =>
+  | _, _, Circuit.gate (@PreparedGate.mk _ C _ι _ _ owner a b c G tail), η =>
       ∑ ξ, c ξ • (((G.branchWithSources ξ (fun i ↦ η ⟨(), i⟩ ξ)).mapOwner
         owner).appendTail tail).eval
   | _, _, .swap r s tail, _ => (Word.swap r s tail).eval
@@ -77,7 +77,7 @@ def partialWithSources (A : P → Bool) : {a b : Layout P} → (w : SourceCircui
         (partialWithSources A v (fun e θ ↦ η ⟨Sum.inr e.1, e.2⟩ θ) ξ.2)
   | _, _, .localMap p ha hb T tail, _, _ =>
       (Word.localMap p ha hb T tail).mapOwner (affectedOwner A)
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner a b c G tail, η, ξ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner a b c G tail), η, ξ => by
       classical
       by_cases h : ∃ p : C, A (owner p) = true
       · have i : ι := by simpa only [Choices, ite_eq_left h] using ξ
@@ -193,7 +193,7 @@ theorem evalWithSources_eq_sum_partialWithSources (A : P → Bool) {a b : Layout
       change (∑ _ : Unit, (1 : ℂ) • (Word.id (Layout.mapOwner (affectedOwner A) a)).eval) ∘L
         isoL (Layout.mapOwnerIso (affectedOwner A) a) =
           isoL (Layout.mapOwnerIso (affectedOwner A) a) ∘L (Word.id a).eval
-      simp only [Fintype.sum_unique, one_smul, Word.eval, id_comp, comp_id]
+      simp only [Fintype.sum_unique, one_smul, Circuit.eval, id_comp, comp_id]
   | comp w v ihw ihv =>
       let ηw := fun (e : sourceLocations w) ξ ↦ η ⟨Sum.inl e.1, e.2⟩ ξ
       let ηv := fun (e : sourceLocations v) ξ ↦ η ⟨Sum.inr e.1, e.2⟩ ξ
@@ -227,7 +227,7 @@ theorem evalWithSources_eq_sum_partialWithSources (A : P → Bool) {a b : Layout
       apply clm_ext_tmul
       intro x y
       simp only [comp_apply, sum_apply, smul_apply, isoL_apply, partialWithSources,
-        Word.eval_frame, coefficient, evalWithSources, lTensor_tmul]
+        Circuit.eval_frame, coefficient, evalWithSources, lTensor_tmul]
       change (∑ ξ, coefficient A w ξ •
         (x ⊗ₜ[ℂ] (partialWithSources A w η ξ).eval
           (Layout.mapOwnerIso (affectedOwner A) a y))) =

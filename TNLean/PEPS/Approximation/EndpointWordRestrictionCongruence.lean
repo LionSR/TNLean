@@ -27,8 +27,8 @@ variable {P : Type}
 private theorem restrict_castLayouts_congr (f : P → Bool)
     {a b a' b' : Layout P} (u v : Word a b) (hu : u.sources = []) (hv : v.sources = [])
     (ha : a = a') (hb : b = b') (h : u.restrict f hu = v.restrict f hv) :
-    (u.castLayouts ha hb).restrict f ((Word.sources_castLayouts u ha hb).trans hu) =
-      (v.castLayouts ha hb).restrict f ((Word.sources_castLayouts v ha hb).trans hv) := by
+    Word.restrict f (u.castLayouts ha hb) ((Word.sources_castLayouts u ha hb).trans hu) =
+      Word.restrict f (v.castLayouts ha hb) ((Word.sources_castLayouts v ha hb).trans hv) := by
   rw [Word.restrict_castLayouts f u ha hb hu,
     Word.restrict_castLayouts f v ha hb hv, h]
 
@@ -90,8 +90,6 @@ private theorem restrict_endpointWord_eq_of_local_eq
             List.nil_append]
         · exact hLeft
         · apply restrict_frame_congr f
-          try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord,
-            List.nil_append]
           apply restrict_comp_congr f <;>
             try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord]
           · exact hRight
@@ -109,6 +107,6 @@ theorem restrict_endpointWord_eval_eq_of_local_eq
     (hR : ∀ i, f (R.get i).right = true → B i = B' i) :
     ((endpointWord R U V A B).restrict f (sources_endpointWord R U V A B)).eval =
       ((endpointWord R U V A' B').restrict f (sources_endpointWord R U V A' B')).eval :=
-  congrArg Word.eval (restrict_endpointWord_eq_of_local_eq f R U V A A' B B' hL hR)
+  congrArg Circuit.eval (restrict_endpointWord_eq_of_local_eq f R U V A A' B B' hL hR)
 
 end TNLean.Lattice.PartyCircuit.SourceInventory

@@ -174,6 +174,48 @@
     % Source lines: paper_v2.tex 1945--1962.
 \end{lemma}
 
+\begin{lemma}[Trace signs of the example gates]
+    \label{thm:mpu_example_time_reversal_trace_signs}
+    \lean{MPOTensor.timeReversalTrace_smul_left,
+        MPOTensor.timeReversalSign_smul_left,
+        MPOTensor.TimeReversalExamples.pauliX,
+        MPOTensor.TimeReversalExamples.controlledZ,
+        MPOTensor.TimeReversalExamples.timeReversalSign_czx,
+        MPOTensor.TimeReversalExamples.timeReversalSign_one,
+        MPOTensor.TimeReversalExamples.timeReversalSign_I_smul_one,
+        MPOTensor.TimeReversalExamples.timeReversalSign_I_smul_czx}
+    \leanok
+    \uses{eq:sigma-from-trace, lem:mpu_supplied_time_reversal_sign}
+    For gates $u,v$ on $\mathbb C^2\otimes\mathbb C^2$ let
+    \begin{align}
+        s(u,v) & =\frac14\tr\!\left[\mathbb S_{12,34}
+            v_{23}u_{12}u_{34}v_{23}\right]
+    \end{align}
+    be the trace sign of Lemma~\ref{eq:sigma-from-trace}. With
+    $CZ=\operatorname{diag}(1,1,1,-1)$ and the Pauli matrix $\sigma_x$,
+    \begin{align}
+        s\bigl(CZ(\sigma_x\otimes\sigma_x),CZ\bigr)  & =-1, &
+        s(\Id,\Id)                                   & =1,    \\
+        s(i\Id,\Id)                                  & =-1, &
+        s\bigl(iCZ(\sigma_x\otimes\sigma_x),CZ\bigr) & =1.
+    \end{align}
+    These are the first signs $\sigma^{(1)}$ printed in
+    Lemmas~\ref{example:czx} and~\ref{ex:dagger-all-but-czx}. This lemma
+    concerns the trace signs of these gate pairs only. The second signs
+    $\sigma^{(2)}$ and the classification by both signs rest on
+    Theorem~\ref{prop:sigma1-and-sigma2-equal}, and those two lemmas
+    remain open. The normalization of the printed one-site CZX tensor,
+    discussed in \cite{gap:mpu_czx_tensor_normalization}, does not enter.
+    % Source lines: paper_v2.tex 1906--1962, with eq:sigma-from-trace at 1595--1611.
+\end{lemma}
+
+\begin{proof}\leanok
+    A scalar $c$ on $u$ enters the trace as $c^2$, since $u$ occurs twice;
+    with $i^2=-1$ the last two values follow from the first two. The first
+    two traces, $-4$ and $4$, are finite sums of integers and are evaluated
+    exactly.
+\end{proof}
+
 \begin{lemma}[Admissible remaining time-reversal classes]
     \label{ex:mpu_admissible_time_reversal_classes}
     \notready

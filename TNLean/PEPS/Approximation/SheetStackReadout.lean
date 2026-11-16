@@ -86,7 +86,7 @@ theorem eval_readoutCircuit_stackVec [NeZero q] (M : Frame pos q Party)
   refine Finset.sum_congr rfl fun c _ => ?_
   rw [← TensorProduct.smul_tmul', map_smul, map_smul, map_smul]
   congr 1
-  rw [OriginalCircuit.eval_castLayouts]
+  rw [Circuit.eval_castLayouts]
   simp only [comp_apply, isoL_apply, layoutVec]
   rw [memCongr_assoc_symm, Word.eval_toOriginalCircuit, Word.eval_exchangeBlocks_appendIso_symm]
   exact eval_siteCircuit d M.owner hd _ _ _ c (e.symm c)

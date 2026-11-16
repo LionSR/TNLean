@@ -32,7 +32,7 @@ def IsTermwiseBounded (r : ℕ) (C : ℝ) : {a b : Layout P} → EffectCircuit a
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsTermwiseBounded r C ∧ v.IsTermwiseBounded r C
   | _, _, .localMap .. => True
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ G _ =>
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ G _) =>
       ∀ term ∈ G, term.2.toEffectChain.effectCount ≤ r ∧ ‖term.1‖ ≤ C
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsTermwiseBounded r C

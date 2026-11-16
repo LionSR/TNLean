@@ -71,7 +71,7 @@ private theorem eval_localMap_mergeIso (p : P) (U U' : HSpace)
     (u' : U') (z : Mem ℓ) :
     (Word.localMap p h₁ h₂ (isoL (mergeIso p U U')) ℓ).eval (u ⊗ₜ (u' ⊗ₜ z)) =
       (u ⊗ₜ[ℂ] u' : U ⊗[ℂ] U') ⊗ₜ z := by
-  simp [Word.eval, appendIso, mergeIso, TensorProduct.assoc_symm_tmul,
+  simp [Circuit.eval, appendIso, mergeIso, TensorProduct.assoc_symm_tmul,
     TensorProduct.lid_symm_apply, LinearIsometryEquiv.symm_lTensor]
 
 /-- Two pair sources on the same pair of parties, followed by merging the two registers of each
@@ -79,7 +79,7 @@ party. -/
 def combineSources {p q : P} (hpq : p ≠ q) (U V U' V' : HSpace) (η : U ⊗[ℂ] V)
     (η' : U' ⊗[ℂ] V') (ℓ : Layout P) :
     Word ℓ (⟨p, HSpace.of (U ⊗[ℂ] U')⟩ :: ⟨q, HSpace.of (V ⊗[ℂ] V')⟩ :: ℓ) :=
-  .comp (.source hpq U' V' η' ℓ) <| .comp (.source hpq U V η _) <|
+  .comp (Word.source hpq U' V' η' ℓ) <| .comp (Word.source hpq U V η _) <|
     .comp (.frame _ (.swap _ _ _)) <|
     .comp (.localMap p (ℓ₁ := [⟨p, U⟩, ⟨p, U'⟩]) (ℓ₂ := [⟨p, HSpace.of (U ⊗[ℂ] U')⟩])
       (by simp) (by simp) (isoL (mergeIso p U U')) (⟨q, V⟩ :: ⟨q, V'⟩ :: ℓ)) <|
@@ -109,7 +109,8 @@ theorem eval_combineSources {p q : P} (hpq : p ≠ q) (U V U' V' : HSpace) (η :
       ‖pairRegroup U V U' V' (η ⊗ₜ η')‖ = ‖η‖ * ‖η'‖ := by
   refine ⟨?_, by rw [LinearIsometryEquiv.norm_map, TensorProduct.norm_tmul]⟩
   ext1 x
-  simp only [combineSources, Word.eval_comp, Word.eval_frame, Word.eval_source, Word.eval.eq_5,
+  simp only [combineSources, Circuit.eval_comp, Circuit.eval_frame, Word.eval_source,
+      Circuit.eval_swap,
     comp_apply, appendLeft_apply]
   induction η using TensorProduct.inductionOn with
   | add a b ha hb => simp only [TensorProduct.add_tmul, map_add, ha, hb]

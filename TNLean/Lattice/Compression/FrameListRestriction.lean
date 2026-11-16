@@ -31,7 +31,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
 351–381, 409–434 and 565–588. -/
 theorem restrict_frameList_eval_heq (f : P → Bool) (rs : Layout P)
     {a b : Layout P} (w : Word a b) (hs : w.sources = []) :
-    HEq ((frameList rs w).restrict f ((sources_frameList w rs).trans hs)).eval
+    HEq (Word.restrict f (frameList rs w) ((sources_frameList w rs).trans hs)).eval
       (frameList (Layout.restrict f rs) (w.restrict f hs)).eval := by
   induction rs with
   | nil => rfl
@@ -40,7 +40,7 @@ theorem restrict_frameList_eval_heq (f : P → Bool) (rs : Layout P)
       · have h := (restrict_frame_true_eval_heq f r (frameList rs w)
           ((sources_frameList w rs).trans hs) hr).trans
             (eval_frame_heq r
-              ((frameList rs w).restrict f ((sources_frameList w rs).trans hs))
+              (Word.restrict f (frameList rs w) ((sources_frameList w rs).trans hs))
               (frameList (Layout.restrict f rs) (w.restrict f hs))
               (Layout.restrict_append f rs a) (Layout.restrict_append f rs b) ih)
         have hprefix : Layout.restrict f (r :: rs) = r :: Layout.restrict f rs := by
@@ -61,7 +61,7 @@ lines 233–267 and 351–381. -/
 theorem restrict_frameList_eval_heq_of_eq_nil {Q : Type} (f : Q → Bool)
     (rs : Layout Q) (hrs : Layout.restrict f rs = []) {a b : Layout Q}
     (w : Word a b) (hs : w.sources = []) :
-    HEq (((Word.frameList rs w).restrict f ((Word.sources_frameList _ _).trans hs)).eval)
+    HEq ((Word.restrict f (Word.frameList rs w) ((Word.sources_frameList _ _).trans hs)).eval)
       ((w.restrict f hs).eval) := by
   induction rs with
   | nil => rfl

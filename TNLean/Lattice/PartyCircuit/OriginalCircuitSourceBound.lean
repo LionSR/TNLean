@@ -58,8 +58,8 @@ messages in each monomial.” -/
 def IsSourceBounded (r : ℕ) : {a b : Layout P} → OriginalCircuit a b → Prop
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsSourceBounded r ∧ v.IsSourceBounded r
-  | _, _, .privateMap .. => True
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ L _ _ _ => ∀ m ∈ L, m.2.sourceCount ≤ r
+  | _, _, OriginalCircuit.privateMap .. => True
+  | _, _, Circuit.gate (@OriginalGate.mk _ _ _ _ _ _ _ L _ _ _) => ∀ m ∈ L, m.2.sourceCount ≤ r
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsSourceBounded r
 
@@ -80,7 +80,7 @@ theorem isSourceBounded_of_nonprivateCount_eq_zero {a b : Layout P} {w : Origina
   induction w with
   | id => trivial
   | comp w v ihw ihv =>
-      simp only [nonprivateCount, Nat.add_eq_zero_iff] at h0
+      simp only [nonprivateCount, Circuit.gateCount, Nat.add_eq_zero_iff] at h0
       exact ⟨ihw h0.1, ihv h0.2⟩
   | privateMap => trivial
   | nonprivateGate => exact absurd h0 one_ne_zero
@@ -89,13 +89,14 @@ theorem isSourceBounded_of_nonprivateCount_eq_zero {a b : Layout P} {w : Origina
 
 theorem isSourceBounded_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
     (ha : a = a') (hb : b = b') {r : ℕ} (hc : c.IsSourceBounded r) :
-    (c.castLayouts ha hb).IsSourceBounded r := by
+    OriginalCircuit.IsSourceBounded r (c.castLayouts ha hb) := by
   cases ha
   cases hb
   exact hc
 
 theorem isSourceBounded_frameList {a b : Layout P} (c : OriginalCircuit a b) {r : ℕ}
-    (hc : c.IsSourceBounded r) : (rs : Layout P) → (frameList rs c).IsSourceBounded r
+    (hc : c.IsSourceBounded r) : (rs : Layout P) → OriginalCircuit.IsSourceBounded r
+        (frameList rs c)
   | [] => hc
   | _ :: rs => isSourceBounded_frameList c hc rs
 

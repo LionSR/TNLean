@@ -60,7 +60,6 @@ theorem castLayouts_heq {a b a' b' : Layout P}
   cases ha
   cases hb
   rfl
-
 /-- Equal constructed words on canonically identified input and output lists
 have equal evaluations under these same identifications. This implication
 does not pass an equality of complete operators through a restriction.
@@ -81,7 +80,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
 409–434 and 565–588. -/
 theorem mapOwner_frameList_heq {Q : Type} (f : P → Q) (rs : Layout P)
     {a b : Layout P} (w : Word a b) :
-    HEq ((frameList rs w).mapOwner f)
+    HEq (Word.mapOwner f (frameList rs w))
       (frameList (Layout.mapOwner f rs) (w.mapOwner f)) := by
   induction rs with
   | nil => rfl

@@ -50,7 +50,6 @@ party and no pair source.
   `Sheet.eval_relabelSitesApp`, `Sheet.eval_partWord`,
   `Sheet.eval_unpartWord`, `Sheet.eval_relabelSites`: the operators of the words on
   basis vectors.
-* `PartyCircuit.Word.eval_frameList_appendIso_symm`: a word framed by untouched registers.
 
 ## References
 
@@ -97,7 +96,8 @@ end IsReordering
 
 @[simp] theorem isReordering_comp_iff {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : Word ℓ₁ ℓ₂)
     (w' : Word ℓ₂ ℓ₃) : (comp w w').IsReordering ↔ w.IsReordering ∧ w'.IsReordering := by
-  simp only [IsReordering, IsAllowed, UsesOnly, sourceCount, forall_and, Nat.add_eq_zero_iff]
+  simp only [IsReordering, IsAllowed, UsesOnly, sourceCount, Circuit.gateCount, forall_and,
+      Nat.add_eq_zero_iff]
   tauto
 
 theorem IsReordering.comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} {w : Word ℓ₁ ℓ₂} {w' : Word ℓ₂ ℓ₃}
@@ -109,12 +109,12 @@ theorem IsReordering.comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} {w : Word ℓ₁ ℓ
   Iff.rfl
 
 @[simp] theorem isReordering_frameList_iff {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
-    (ℓ₀ : Layout P) → (frameList ℓ₀ w).IsReordering ↔ w.IsReordering
+    (ℓ₀ : Layout P) → IsReordering (frameList ℓ₀ w) ↔ w.IsReordering
   | [] => Iff.rfl
   | _ :: ℓ₀ => isReordering_frameList_iff w ℓ₀
 
 theorem IsReordering.frameList {ℓ ℓ' : Layout P} {w : Word ℓ ℓ'} (hw : w.IsReordering)
-    (ℓ₀ : Layout P) : (Word.frameList ℓ₀ w).IsReordering :=
+    (ℓ₀ : Layout P) : IsReordering (Word.frameList ℓ₀ w) :=
   (isReordering_frameList_iff w ℓ₀).2 hw
 
 @[simp] theorem isReordering_moveHead (r : Reg P) :
@@ -127,23 +127,6 @@ theorem IsReordering.frameList {ℓ ℓ' : Layout P} {w : Word ℓ ℓ'} (hw : w
   | [], _ => isReordering_id _
   | r :: b, tail => IsReordering.comp (isReordering_moveHead r a (b ++ tail))
       (isReordering_exchangeBlocks a b tail)
-
-/-- A word framed by untouched registers acts on the second factor of the concatenation. -/
-theorem eval_frameList_appendIso_symm {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
-    (ℓ₀ : Layout P) → (a : Mem ℓ₀) → (b : Mem ℓ) →
-      (frameList ℓ₀ w).eval ((appendIso ℓ₀ ℓ).symm (a ⊗ₜ b)) =
-        (appendIso ℓ₀ ℓ').symm (a ⊗ₜ w.eval b)
-  | [], a, b => by
-      change w.eval (TensorProduct.lidIsometry ℂ (Mem ℓ) (a ⊗ₜ b)) =
-        TensorProduct.lidIsometry ℂ (Mem ℓ') (a ⊗ₜ w.eval b)
-      simp
-  | r :: ℓ₀, a, b => by
-      induction a using TensorProduct.inductionOn with
-      | tmul x s =>
-          rw [appendIso_symm_cons_tmul, appendIso_symm_cons_tmul]
-          change x ⊗ₜ (frameList ℓ₀ w).eval _ = _
-          rw [eval_frameList_appendIso_symm w ℓ₀ s b]
-      | add x y hx hy => simp only [TensorProduct.add_tmul, map_add, hx, hy]
 
 /-- The registers `ℓ` read as `ℓ ++ []`; no register moves. -/
 def appendNil : (ℓ : Layout P) → Word ℓ (ℓ ++ [])
@@ -523,7 +506,7 @@ def unpartWord (own : ι → Party) (p : ι → Bool) (S : List ι) :
 theorem eval_relabelSites (own own' : ι → Party) (c : ι → Fin q) (S : List ι)
     (h : ∀ x ∈ S, own x = own' x) :
     (relabelSites own own' S h).eval (siteVec own S c) = siteVec own' S c := by
-  simp only [relabelSites, Word.eval_comp, comp_apply, Word.eval_appendNil]
+  simp only [relabelSites, Circuit.eval_comp, comp_apply, Word.eval_appendNil]
   rw [eval_relabelSitesApp, Word.eval_dropNil]
 
 /-- **Moving the registers of the sites satisfying `p` to the front.** On a product basis
@@ -532,15 +515,15 @@ theorem eval_partWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q) 
     (partWord own p S).eval (siteVec own S c) =
       (appendIso _ _).symm
         (siteVec own (partSites p S).1 c ⊗ₜ siteVec own (partSites p S).2 c) := by
-  simp only [partWord, Word.eval_comp, comp_apply, Word.eval_appendNil]
-  rw [eval_partWordApp, Word.eval_frameList_appendIso_symm, Word.eval_dropNil]
+  simp only [partWord, Circuit.eval_comp, comp_apply, Word.eval_appendNil]
+  rw [eval_partWordApp, Circuit.eval_frameList_appendIso_symm, Word.eval_dropNil]
 
 /-- The inverse reordering on product basis vectors. -/
 theorem eval_unpartWord (own : ι → Party) (p : ι → Bool) (c : ι → Fin q) (S : List ι) :
     (unpartWord own p S).eval
         ((appendIso _ _).symm (siteVec own (partSites p S).1 c ⊗ₜ
           siteVec own (partSites p S).2 c)) = siteVec own S c := by
-  simp only [unpartWord, Word.eval_comp, comp_apply, Word.eval_frameList_appendIso_symm,
+  simp only [unpartWord, Circuit.eval_comp, comp_apply, Circuit.eval_frameList_appendIso_symm,
     Word.eval_appendNil]
   rw [eval_unpartWordApp, Word.eval_dropNil]
 

@@ -132,8 +132,10 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   contraction has a faithful effective plaquette-spin basis, intertwines the
   physical symmetry with the printed CZX operator, and has the same support
   as the actual reduced density, of rank `2^(2*w+2*h)` even after trace
-  normalization. Nonzero spectral values, entropy, isometric normalization
-  and general nonrectangular regions remain open.
+  normalization. It also records the two-site blocking under which this
+  boundary symmetry is a `ℤ₂` representation with nonzero anomaly class, since
+  the printed operator squares to `(-1)^N`. Nonzero spectral values, entropy,
+  isometric normalization and general nonrectangular regions remain open.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the

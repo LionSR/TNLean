@@ -70,18 +70,13 @@ def UsesOnly (S : Set P) : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → Prop
   | _, _, id _ => True
   | _, _, comp w w' => w.UsesOnly S ∧ w'.UsesOnly S
   | _, _, localMap p _ _ _ _ => p ∈ S
-  | _, _, source (p := p) (q := q) _ _ _ _ _ => p ∈ S ∧ q ∈ S
+  | _, _, .gate (@SourceGate.mk _ p q _ _ _ _ _) => p ∈ S ∧ q ∈ S
   | _, _, swap .. => True
   | _, _, frame _ w => w.UsesOnly S
 
-/-- The number of pair sources of a word. -/
-def sourceCount : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → ℕ
-  | _, _, id _ => 0
-  | _, _, comp w w' => w.sourceCount + w'.sourceCount
-  | _, _, localMap .. => 0
-  | _, _, source .. => 1
-  | _, _, swap .. => 0
-  | _, _, frame _ w => w.sourceCount
+/-- The number of pair sources of a word: its gate occurrences. -/
+abbrev sourceCount {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') : ℕ :=
+  w.gateCount
 
 end Word
 
@@ -248,7 +243,7 @@ theorem eval_localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ�
     (w : Mem ℓ) :
     (Word.localMap p h₁ h₂ U ℓ).eval ((appendIso ℓ₁ ℓ).symm (a ⊗ₜ w)) =
       (appendIso ℓ₂ ℓ).symm (U a ⊗ₜ w) := by
-  simp [Word.eval]
+  simp [Circuit.eval]
 
 end Euclidean
 
