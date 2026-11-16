@@ -2757,16 +2757,66 @@
     % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
 
+\begin{lemma}[Local comparison of the conjugation signs]
+    \label{lem:mpu_conjugation_mps_sign_local}
+    \lean{MPOTensor.TwoSiteStandardFormData.sign_eq_of_conjugation_gauge}
+    \leanok
+    \uses{SF}
+    Let $\mathcal W=AuB$ be a tensor in standard form, the open contraction of
+    the unshifted gate $u$ with the two half factors $A$ and $B$, and let
+    $x,y$ be unitaries with $\overline u=(x\otimes y)u$. Let $G$ be a unitary
+    with $\overline{\mathcal W^{ij}}=\zeta G^\dagger\mathcal W^{ij}G$ for all
+    physical indices. If $x^T=sx$ and $G\overline G=s'\Id$ with
+    $s,s'\in\{1,-1\}$, then $s=s'$.
+    % Source lines: paper_v2.tex 1791--1797.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $u$ is unitary, contracting with $\overline u$ strips the gate:
+    $\overline A x\otimes y^T\overline B=G^\dagger A\otimes\zeta BG$ as tensor
+    products. Both factors are nonzero because the shifted gate $v=BA$ is
+    unitary, so $\overline Ax=cG^\dagger A$ for a nonzero scalar $c$.
+    Conjugating once more gives
+    \begin{align}
+        A & =|c|^2\,(G^TG^\dagger)\,A\,(x^\dagger x^T)=|c|^2ss'\,A,
+    \end{align}
+    using $G^T=s'G$ and $x^T=sx$. Since $A\neq0$, $|c|^2ss'=1$, hence $s=s'$.
+\end{proof}
+
 \begin{lemma}[Conjugation class and the MPS sign]
     \label{prop:mps-class-eq-mpu-class-for-conjugation}
-    \notready
+    \lean{MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff,
+        MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge}
+    \leanok
     \discussion{5714}
-    \uses{corconj, cor:equiv-under-conjugation}
+    \uses{prop1conj, corconj, lem:mpu_conjugation_mps_sign_local}
     For a conjugation-invariant MPU, the MPS sign
     $G\overline G=\pm\Id$ agrees with Case I and Case II, respectively, of
-    Lemma~\ref{corconj}.
+    Lemma~\ref{corconj}: if $x,y$ are as in Lemma~\ref{prop1conj} and $G$ is a
+    unitary with $\overline{\mathcal U^{ij}}=\zeta G^\dagger\mathcal U^{ij}G$
+    for all physical indices, then $G\overline G=\Id$ if and only if $x=x^T$,
+    and $G\overline G=-\Id$ if and only if $x=-x^T$. Here the MPU is generated
+    by a simple tensor in canonical form II, its standard form is that of the
+    two-site block, as in \cite{gap:mpu_standard_form_canonical_convention},
+    and $G$ may be a gauge of either tensor. The source adds that the two cases
+    are the two possible phases under equivalence; that identification is
+    Lemma~\ref{cor:equiv-under-conjugation} and is not part of this
+    statement. This is
+    \cite[Proposition~VI.12]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1791--1805.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{prop1conj, lem:mpu_conjugation_mps_sign_local}
+    Lemma~\ref{prop1conj} gives $x=\pm x^T$. The tensor is normal, so the MPS
+    sign is $G\overline G=\pm\Id$. Lemma~\ref{lem:mpu_conjugation_mps_sign_local}
+    applied to the two-site block shows that the two signs agree. A gauge of
+    the one-site tensor is a gauge of its two-site block with phase
+    $\zeta^2$. Unlike the source, the argument does not use
+    Lemma~\ref{cor:equiv-under-conjugation}.
+\end{proof}
 
 \begin{lemma}[Admissible conjugation class and the MPS sign]
     \label{prop:mpu_admissible_mps_conjugation_class}
