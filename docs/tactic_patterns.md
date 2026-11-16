@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 172934)
-Total output lines: 11518
-
 # Tactic Pattern Ledger
 
 ### Pauli Z observables on a ring — candidate (2026-11-15)
@@ -12,7 +9,6 @@ Total output lines: 11518
   `QuantumCircuit.diagonal_comp_eval_mem_supportedOperators`.
 - **Decision:** Below the three-occurrence promotion threshold. A third use
   should extract the observable and its two properties at their circuit owner.
-
 
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
