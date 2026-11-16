@@ -20,8 +20,9 @@ actual cut has the vacuum normalized density.
 
 This is a conditional contraction step for SCP10, arXiv:1001.3807v3,
 the block decomposition preceding Theorem 6.7 (lines 1935–1990) and
-Lemma 6.14 (lines 2199–2214). Geometric construction of the untwisted boundary component for native flux detours
-is separate. See `docs/paper-gaps/scp10_anchored_twist_density.tex`.
+Lemma 6.14 (lines 2199–2214). Geometric construction of the untwisted boundary
+component for native flux detours is separate.
+See `docs/paper-gaps/scp10_anchored_twist_density.tex`.
 -/
 
 noncomputable section
