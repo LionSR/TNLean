@@ -70,8 +70,8 @@ theorem det_gauge_mul_swap (u : Matrix (Fin ℓ × Fin r) P ℂ) (v : Matrix P (
 omit [Fintype P] [DecidableEq P] in
 /-- Multiplying a gate on the left by a square matrix multiplies its
 determinant, read through any identification of the coordinate spaces. -/
-theorem det_mul_submatrix (X : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ)
-    (u : Matrix (Fin ℓ × Fin r) P ℂ) (e : Fin ℓ × Fin r ≃ P) :
+theorem det_mul_submatrix {m : Type*} [Fintype m] [DecidableEq m] (X : Matrix m m ℂ)
+    (u : Matrix m P ℂ) (e : m ≃ P) :
     ((X * u).submatrix id e).det = X.det * (u.submatrix id e).det := by
   rw [← Matrix.submatrix_mul_equiv X u id (Equiv.refl _) e, det_mul]
   simp
@@ -203,6 +203,92 @@ theorem exists_sign_flip_gauge (hℓ : 0 < ℓ) (hr : 0 < r) (hodd : Odd ℓ ∨
     · rw [det_submatrix_mul, det_kronecker]
       simp [x, star_coordinateFlip, det_coordinateFlip, hodd.neg_one_pow]
 
+/-- **Symplectic gates with the same determinant are joined.** Let `A, B`
+be unitary between `P` and `ℂ^ℓ ⊗ ℂ^r`, with `conj(A) = (Σ_ℓ ⊗ Σ_r) A` and
+`conj(B) = (Σ_ℓ ⊗ Σ_r) B`. If their determinants agree through `e`, they are
+joined by a path of such matrices. Write them as `(1 ⊗ R) Ã` and `(1 ⊗ R) B̃`
+with `Ã, B̃` real (`exists_real_of_map_star_eq_sourceSkewForm_mul`) and join
+`Ã` to `B̃` by real unitary gates. Source: arXiv:1703.09188, proof of Theorem
+`prop:conjsym-strict-equiv`, "if" direction, Case II, lines 1540--1546. -/
+theorem IsUnitaryBetween.joinedIn_symplectic_of_det_eq (hℓ : Even ℓ) (hr : Even r)
+    (e : Fin ℓ × Fin r ≃ P) {A B : Matrix (Fin ℓ × Fin r) P ℂ}
+    (hA : A.IsUnitaryBetween) (hB : B.IsUnitaryBetween)
+    (hAc : A.map (starRingEnd ℂ) = (sourceSkewForm hℓ ⊗ₖ sourceSkewForm hr) * A)
+    (hBc : B.map (starRingEnd ℂ) = (sourceSkewForm hℓ ⊗ₖ sourceSkewForm hr) * B)
+    (hdet : (A.submatrix id e).det = (B.submatrix id e).det) :
+    JoinedIn {X : Matrix (Fin ℓ × Fin r) P ℂ | X.IsUnitaryBetween ∧
+      X.map (starRingEnd ℂ) = (sourceSkewForm hℓ ⊗ₖ sourceSkewForm hr) * X} A B := by
+  set g := evenPairRegroupEquiv hℓ hr
+  set K₂ := sourceSkewForm hℓ ⊗ₖ sourceSkewForm hr
+  obtain ⟨a, har, hAeq, hAu⟩ := exists_real_of_map_star_eq_sourceSkewForm_mul hℓ hr hAc
+  obtain ⟨b, hbr, hBeq, hBu⟩ := exists_real_of_map_star_eq_sourceSkewForm_mul hℓ hr hBc
+  set M := (1 : Matrix (Fin (ℓ / 2) × Fin (r / 2)) (Fin (ℓ / 2) × Fin (r / 2)) ℂ) ⊗ₖ
+    symplecticOrthogonalR
+  have hRu : symplecticOrthogonalR ∈ unitaryGroup (Fin 2 × Fin 2) ℂ := by
+    rw [mem_unitaryGroup_iff, star_eq_conjTranspose]
+    exact symplecticOrthogonalR_aux.1
+  have hMu : M ∈ unitaryGroup _ ℂ := kronecker_mem_unitary (one_mem _) hRu
+  have hMdet : M.det ≠ 0 := by
+    intro h0
+    have := congrArg det (mem_unitaryGroup_iff.mp hMu)
+    rw [det_mul, h0, zero_mul, det_one] at this
+    exact zero_ne_one this
+  have ha := hAu hA
+  have hb := hBu hB
+  -- The determinants of the real parts agree.
+  set e' := g.symm.trans e
+  have hdetR : ∀ {X : Matrix (Fin ℓ × Fin r) P ℂ} {x : Matrix _ P ℂ},
+      Matrix.reindex g (Equiv.refl P) X = M * x → (X.submatrix id e).det = M.det * (x.submatrix id e').det := by
+    intro X x hX
+    rw [← det_mul_submatrix, ← hX, ← det_submatrix_equiv_self g.symm]
+    congr 1
+  have hdet' : (a.submatrix id e').det = (b.submatrix id e').det :=
+    mul_left_cancel₀ hMdet ((hdetR hAeq).symm.trans (hdet.trans (hdetR hBeq)))
+  obtain ⟨γ, hγ⟩ := IsUnitaryBetween.joinedIn_real_of_det_eq e' ha hb har hbr hdet'
+  -- Conjugating `M` multiplies it by the regrouped skew form.
+  have hK : Matrix.reindex g g K₂ * Matrix.reindex g (Equiv.refl P) A =
+      Matrix.reindex g (Equiv.refl P) (K₂ * A) := by
+    simp only [Matrix.reindex_apply, submatrix_mul_equiv]
+  have hM : M.map (starRingEnd ℂ) = Matrix.reindex g g K₂ * M := by
+    have h1 : M.map (starRingEnd ℂ) * a = Matrix.reindex g g K₂ * M * a := by
+      rw [Matrix.mul_assoc, ← hAeq, hK, ← hAc]
+      conv_lhs => rw [← har]
+      rw [← Matrix.map_mul, ← hAeq]
+      ext i j
+      simp [Matrix.reindex_apply, g]
+    have h2 := congrArg (· * aᴴ) h1
+    have ha2 : a * aᴴ = 1 := ha.2
+    simp only [Matrix.mul_assoc, ha2, Matrix.mul_one] at h2
+    exact h2
+  let F : Matrix _ P ℂ → Matrix (Fin ℓ × Fin r) P ℂ := fun x ↦
+    Matrix.reindex g.symm (Equiv.refl P) (M * x)
+  have hF : Continuous F := (continuous_const.matrix_mul continuous_id).matrix_submatrix _ _
+  have hFA : F a = A := by
+    show Matrix.reindex g.symm (Equiv.refl P) (M * a) = A
+    rw [← hAeq]
+    ext i j
+    simp [Matrix.reindex_apply, g]
+  have hFB : F b = B := by
+    show Matrix.reindex g.symm (Equiv.refl P) (M * b) = B
+    rw [← hBeq]
+    ext i j
+    simp [Matrix.reindex_apply, g]
+  refine ⟨(γ.map hF).cast hFA.symm hFB.symm, fun t ↦ ⟨?_, ?_⟩⟩
+  · change (F (γ t)).IsUnitaryBetween
+    exact (((isUnitaryBetween_iff_mem_unitaryGroup M).mpr hMu).mul _ _ (hγ t).1).reindex _ _ _
+  · change (F (γ t)).map (starRingEnd ℂ) = K₂ * F (γ t)
+    have hY : (M * γ t).map (starRingEnd ℂ) = Matrix.reindex g g K₂ * (M * γ t) := by
+      rw [Matrix.map_mul, hM, (hγ t).2, Matrix.mul_assoc]
+    have hmap : (F (γ t)).map (starRingEnd ℂ) =
+        Matrix.reindex g.symm (Equiv.refl P) ((M * γ t).map (starRingEnd ℂ)) := by
+      ext i j
+      rfl
+    rw [hmap, hY]
+    simp only [F, Matrix.reindex_apply, Equiv.symm_symm, Equiv.refl_symm]
+    rw [← submatrix_mul_equiv _ _ _ g]
+    simp only [submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id]
+    rfl
+
 end Matrix
 
 /-- Two factorizations `a b = a' b'` of one number into signs `a, a'` and
@@ -253,26 +339,78 @@ theorem TwoSiteStandardFormData.exists_real_gauge_of_conjugation {V : MPOTensor 
     · exact absurd hℓ (Nat.not_even_iff_odd.mpr h)
     · exact absurd hr (Nat.not_even_iff_odd.mpr h)
 
-/-- The MPU generated by real unitary gates is fixed by complex conjugation at
-every positive length, after any physical relabelling. Source:
-arXiv:1703.09188, Proposition `prop1conj`, "if" direction with `x = y = 1`
-(lines 1014--1027), as used in the proof of Theorem `conjphs`, line 1445. -/
-theorem isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates_of_real {d' : ℕ}
+/-- **Local sufficiency of `prop1conj` for gates.** If unitary gates satisfy
+`conj(u) = (x ⊗ y) u` and `conj(v) = v (y† ⊗ x†)`, the MPU they generate is
+fixed by complex conjugation at every positive length, after any physical
+relabelling. Source: arXiv:1703.09188, Proposition `prop1conj`, "if" direction
+(lines 1014--1027, proof at line 1030). -/
+theorem isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates {d' : ℕ}
     [NeZero d] [NeZero ℓ] [NeZero r] (e : Fin d' ≃ Fin (d * d))
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ} {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (hu : u.IsUnitaryBetween) (hv : v.IsUnitaryBetween)
-    (hur : u.map (starRingEnd ℂ) = u) (hvr : v.map (starRingEnd ℂ) = v) :
+    (x : Matrix.unitaryGroup (Fin ℓ) ℂ) (y : Matrix.unitaryGroup (Fin r) ℂ)
+    (hcu : u.map (starRingEnd ℂ) =
+      ((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u)
+    (hcv : v.map (starRingEnd ℂ) =
+      v * (star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ))) :
     IsInvariantUnderSymmetry (conjugationSymmetry d')
       (reindexPhysical e (standardFormTensorOfGates u v)) := by
   intro N hN
   change (mpo _ N).map (starRingEnd ℂ) = _
   let G := standardFormTensorOfGates u v
   let SG := standardFormTensorOfGatesData u v hu hv
-  have SG' : TwoSiteStandardFormData (mapStar G) u v := hur ▸ hvr ▸ SG.mapStar
-  have hG : mpo (mapStar G) N = mpo G N := SG'.mpo_eq_of_same_gates SG N hN
+  have SG' : TwoSiteStandardFormData (mapStar G) _ _ := hcu ▸ hcv ▸ SG.mapStar
+  have hG : mpo (mapStar G) N = mpo G N := SG'.mpo_eq_of_same_gates (SG.ofGateGauges x y) N hN
   rw [← mpo_map_star]
   change mpo (reindexPhysical e (mapStar G)) N = _
   rw [mpo_reindexPhysical, mpo_reindexPhysical, hG]
+
+/-- **Strict equivalence under conjugation from a conjugation-invariant gate
+path.** If continuous families of unitary gates join standard-form gates of
+the two-site blocks of `𝒰₁` and `𝒰₂`, and at every point satisfy the local
+conjugation equations of `prop1conj`, then the two-site blocks are strictly
+equivalent under conjugation. Source: arXiv:1703.09188, Lemma
+`lem:equivalent-symmetry` (lines 1369--1376, "if" direction) with Proposition
+`prop1conj` (lines 1014--1027), as combined in the proofs of Theorems
+`conjphs` (line 1445) and `prop:conjsym-strict-equiv` (lines 1540--1546). -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_of_gate_path
+    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
+    (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
+    (u : unitInterval → Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
+    (v : unitInterval → Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
+    (hu : Continuous u) (hv : Continuous v)
+    (hu' : ∀ p, (u p).IsUnitaryBetween) (hv' : ∀ p, (v p).IsUnitaryBetween)
+    (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) (u 0) (v 0))
+    (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) (u 1) (v 1))
+    (hloc : ∀ p, ∃ (x : Matrix.unitaryGroup (Fin ℓ) ℂ) (y : Matrix.unitaryGroup (Fin r) ℂ),
+      (u p).map (starRingEnd ℂ) =
+          ((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u p ∧
+        (v p).map (starRingEnd ℂ) =
+          v p * (star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ))) :
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 2))
+      (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
+  have : NeZero d := h₁.neZero_phys
+  have : NeZero ℓ := ⟨S₁.left_pos.ne'⟩
+  have : NeZero r := ⟨S₁.right_pos.ne'⟩
+  have h := strictlyEquivalentUnderSymmetry_blockTwo_of_gate_path
+    (S := conjugationSymmetry d) (fun N hN ↦ hN) h₁ h₂ u v hu hv hu' hv' S₁ S₂
+    (fun p ↦ by
+      obtain ⟨x, y, hcu, hcv⟩ := hloc p
+      rw [conjugationSymmetry_block (by norm_num)]
+      exact isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates _
+        (hu' p) (hv' p) x y hcu hcv)
+  rwa [conjugationSymmetry_block (by norm_num)] at h
+
+/-- Real gates satisfy the local conjugation equations with `x = y = 1`. -/
+private theorem exists_local_conjugation_of_real
+    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ} {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (hur : u.map (starRingEnd ℂ) = u) (hvr : v.map (starRingEnd ℂ) = v) :
+    ∃ (x : Matrix.unitaryGroup (Fin ℓ) ℂ) (y : Matrix.unitaryGroup (Fin r) ℂ),
+      u.map (starRingEnd ℂ) =
+          ((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u ∧
+        v.map (starRingEnd ℂ) =
+          v * (star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ)) :=
+  ⟨1, 1, by simpa using hur, by simpa using hvr⟩
 
 /-- **Conjugation symmetry when one source rank is odd, "if" direction.** Let
 `𝒰₁, 𝒰₂` be simple tensors in canonical form II whose standard-form MPUs are
@@ -358,14 +496,9 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq
     T₂'.u_unitary hU₁ hU₂' hdU
   obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq f T₁.v_unitary
     T₂'.v_unitary hV₁ hV₂' hdV
-  have h := strictlyEquivalentUnderSymmetry_blockTwo_of_gate_path
-    (S := conjugationSymmetry d) (fun N hN ↦ hN) h₁ h₂ γu γv γu.continuous γv.continuous
-    (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
+  exact strictlyEquivalentUnderSymmetry_conjugation_of_gate_path h₁ h₂ γu γv γu.continuous
+    γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
     (by rw [γu.source, γv.source]; exact T₁) (by rw [γu.target, γv.target]; exact T₂')
-    (fun p ↦ by
-      rw [conjugationSymmetry_block (by norm_num)]
-      exact isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates_of_real _
-        (hγu p).1 (hγv p).1 (hγu p).2 (hγv p).2)
-  rwa [conjugationSymmetry_block (by norm_num)] at h
+    (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
 
 end MPOTensor
