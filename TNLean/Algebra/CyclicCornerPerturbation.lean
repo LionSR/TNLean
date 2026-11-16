@@ -89,7 +89,7 @@ theorem exists_nonzero_trace_zero_map_killing_hermitian {m n : ℕ}
   have hAne : A ≠ 0 := by
     intro h
     have h' := congrArg (fun B : Matrix (Fin n) (Fin n) ℂ => B u u) h
-    simp [A, huv, huv.symm] at h'
+    simp [A, huv.symm] at h'
   have hAtrace : A.trace = 0 := by
     simp [A, Matrix.trace, Matrix.diag, Matrix.single_apply]
   have hAherm : A.IsHermitian := by
