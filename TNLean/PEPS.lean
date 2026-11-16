@@ -209,6 +209,8 @@ import TNLean.PEPS.RegularActualCycleBidirectionalPermutation
 import TNLean.PEPS.RegularActualCyclePhysicalPermutation
 import TNLean.PEPS.RegularActualCycleTransport
 import TNLean.PEPS.RegularActualTwoChordTransport
+import TNLean.PEPS.RegularAnchoredTreeGauge
+import TNLean.PEPS.RegularAnchoredTwistDensity
 import TNLean.PEPS.RegularBondCounting
 import TNLean.PEPS.RegularBoundary
 import TNLean.PEPS.RegularBoundaryChargeContraction
@@ -408,6 +410,7 @@ import TNLean.PEPS.TorusDualCollarAvoidance
 import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
+import TNLean.PEPS.TorusDualHomotopyClassification
 import TNLean.PEPS.TorusDualOpenDeformation
 import TNLean.PEPS.TorusDualPath
 import TNLean.PEPS.TorusDualPhysicalAvoidance
@@ -453,6 +456,7 @@ import TNLean.PEPS.TorusMultiplicityBondState
 import TNLean.PEPS.TorusNativeEdgeKernels
 import TNLean.PEPS.TorusNativeFluxHolonomy
 import TNLean.PEPS.TorusNativeOrientation
+import TNLean.PEPS.TorusNoncentralFluxDensity
 import TNLean.PEPS.TorusOperatorString
 import TNLean.PEPS.TorusOrientedIncidentGInjectivity
 import TNLean.PEPS.TorusParallelSection
