@@ -54,12 +54,6 @@ def torusDualFaceEliminationSequence : List (X × Bool) → (FG →* FG)
   | (v, b) :: l => (torusDualFaceEliminationSequence l).comp
       (if b then torusDualWestFaceElimination v else torusDualSouthFaceElimination v)
 
-variable [widthNeZero : NeZero width] [heightNeZero : NeZero height]
-
--- Retain the established positive-period theorem signatures explicitly.
-include widthNeZero heightNeZero
-
-omit [NeZero width] [NeZero height] in
 private theorem faceWord_eq (v : X) :
     torusDualFaceWord v =
       northLetter (v.1 + 1, v.2) * eastLetter v *
@@ -67,14 +61,12 @@ private theorem faceWord_eq (v : X) :
   simp [torusDualFaceWord, torusDualPathWord, torusDualEastNorth,
     torusDualNorthEast, torusDualStepWord, eastLetter, northLetter, mul_assoc]
 
-omit [NeZero width] [NeZero height] in
 private theorem right_ne [Fact (1 < width)] (v : X) : (v.1 + 1, v.2) ≠ v := by
   intro h
   have h1 : (1 : ZMod width) = 0 := by
     simpa only [add_eq_left] using congrArg Prod.fst h
   exact one_ne_zero h1
 
-omit [NeZero width] [NeZero height] in
 private theorem up_ne [Fact (1 < height)] (v : X) : (v.1, v.2 + 1) ≠ v := by
   intro h
   have h1 : (1 : ZMod height) = 0 := by
@@ -83,7 +75,9 @@ private theorem up_ne [Fact (1 < height)] (v : X) : (v.1, v.2 + 1) ≠ v := by
 
 /-- West-edge substitution kills the actual face relator when the horizontal
 period exceeds one, so its two north-edge generators are distinct. -/
-theorem torusDualWestFaceElimination_face [Fact (1 < width)] (v : X) :
+theorem torusDualWestFaceElimination_face
+    [NeZero width] [NeZero height]
+    [Fact (1 < width)] (v : X) :
     torusDualWestFaceElimination v (torusDualFaceWord v) = 1 := by
   rw [faceWord_eq]
   simp [torusDualWestFaceElimination, eastLetter, northLetter,
@@ -91,7 +85,9 @@ theorem torusDualWestFaceElimination_face [Fact (1 < width)] (v : X) :
 
 /-- South-edge substitution kills the actual face relator when the vertical
 period exceeds one, so its two east-edge generators are distinct. -/
-theorem torusDualSouthFaceElimination_face [Fact (1 < height)] (v : X) :
+theorem torusDualSouthFaceElimination_face
+    [NeZero width] [NeZero height]
+    [Fact (1 < height)] (v : X) :
     torusDualSouthFaceElimination v (torusDualFaceWord v) = 1 := by
   rw [faceWord_eq]
   simp [torusDualSouthFaceElimination, eastLetter, northLetter,
@@ -99,21 +95,27 @@ theorem torusDualSouthFaceElimination_face [Fact (1 < height)] (v : X) :
 
 /-- Every other face not using the removed west generator is fixed.
 The two excluded bases are precisely this face and its west neighbour. -/
-theorem torusDualWestFaceElimination_face_eq (v w : X)
+theorem torusDualWestFaceElimination_face_eq
+    [NeZero width] [NeZero height]
+    (v w : X)
     (hw : w ≠ v) (hwr : (w.1 + 1, w.2) ≠ v) :
     torusDualWestFaceElimination v (torusDualFaceWord w) = torusDualFaceWord w := by
   simp [faceWord_eq, torusDualWestFaceElimination, eastLetter, northLetter, hw, hwr]
 
 /-- Every other face not using the removed south generator is fixed.
 The two excluded bases are precisely this face and its south neighbour. -/
-theorem torusDualSouthFaceElimination_face_eq (v w : X)
+theorem torusDualSouthFaceElimination_face_eq
+    [NeZero width] [NeZero height]
+    (v w : X)
     (hw : w ≠ v) (hwu : (w.1, w.2 + 1) ≠ v) :
     torusDualSouthFaceElimination v (torusDualFaceWord w) = torusDualFaceWord w := by
   simp [faceWord_eq, torusDualSouthFaceElimination, eastLetter, northLetter, hw, hwu]
 
 variable {H : Type*} [Group H]
 
-private theorem flat_face_equation (φ : FG →* H) (v : X)
+private theorem flat_face_equation
+    [NeZero width] [NeZero height]
+    (φ : FG →* H) (v : X)
     (h : φ (torusDualFaceWord v) = 1) :
     φ (northLetter (v.1 + 1, v.2)) * φ (eastLetter v) =
       φ (eastLetter (v.1, v.2 + 1)) * φ (northLetter v) := by
@@ -125,6 +127,7 @@ private theorem flat_face_equation (φ : FG →* H) (v : X)
 /-- A representation flat on the selected native face is unchanged by its
 west-edge substitution. No commutativity or finite-group hypothesis is used. -/
 theorem torusDualWestFaceElimination_preserves_flatRepresentation
+    [NeZero width] [NeZero height]
     (φ : FG →* H) (v : X) (h : φ (torusDualFaceWord v) = 1) :
     φ.comp (torusDualWestFaceElimination v) = φ := by
   have he := flat_face_equation φ v h
@@ -149,6 +152,7 @@ theorem torusDualWestFaceElimination_preserves_flatRepresentation
 /-- A representation flat on the selected native face is unchanged by its
 south-edge substitution. No commutativity or finite-group hypothesis is used. -/
 theorem torusDualSouthFaceElimination_preserves_flatRepresentation
+    [NeZero width] [NeZero height]
     (φ : FG →* H) (v : X) (h : φ (torusDualFaceWord v) = 1) :
     φ.comp (torusDualSouthFaceElimination v) = φ := by
   have he := flat_face_equation φ v h
@@ -173,6 +177,7 @@ theorem torusDualSouthFaceElimination_preserves_flatRepresentation
 /-- Any finite composition of selected face substitutions preserves every
 representation flat on those original native faces. No order is assumed. -/
 theorem torusDualFaceEliminationSequence_preserves_flatRepresentation
+    [NeZero width] [NeZero height]
     (φ : FG →* H) (l : List (X × Bool))
     (h : ∀ d ∈ l, φ (torusDualFaceWord d.1) = 1) :
     φ.comp (torusDualFaceEliminationSequence l) = φ := by
