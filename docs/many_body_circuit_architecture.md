@@ -52,8 +52,8 @@ flowchart BT
 
 | Layer | Objects | Defining types | Now | After the move | May import |
 |---|---|---|---|---|---|
-| Sites | a finite tensor product `⊗_v ℂ^{X_v}` and its regions | a system `X : V → Type` of finite basis types, its configurations and those of a region; `supportedOperators X D`; the placement `K ↦ K ⊗ 1`; the partial trace onto a region; product vectors | QICLean `Entropy`, `Representation`, `Analysis` (86 modules using `SiteConfig`); 23 modules of `TNLean/Circuit`; `Lattice/RegionSplit`, `RegionalSwap*` | `QICLean/ManyBody/Sites` | matrices, channels |
-| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | Heisenberg evolution, commutator bounds on a graph | `TNLean/Circuit/LiebRobinson` | `QICLean/ManyBody/Dynamics` | Sites |
+| Sites | a finite tensor product `⊗_v ℂ^{X_v}` and its regions | a system `X : V → Type` of finite basis types, its configurations and those of a region; `supportedOperators X D`; the placement `K ↦ K ⊗ 1`; the partial trace onto a region; product vectors | QICLean `Entropy`, `Representation`, `Analysis` (86 modules using `SiteConfig`); 25 modules of `TNLean/Circuit`, among them `RegionSplit` and `RegionalSwap`; `Lattice/RegionalSwapSupport` | `QICLean/ManyBody/Sites` | matrices, channels |
+| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | Heisenberg evolution, commutator bounds on a graph | `TNLean/Circuit/LiebRobinson`; `Circuit/ProjectedRelativeEvolution`, `DisjointRelativeEvolution`, `SupportedGaussianIntegral` | `QICLean/ManyBody/Dynamics` | Sites |
 | Hamiltonians | an interaction on a finite set of sites | one structure: bounded Hermitian terms with given supports; spectral and Gaussian filters, truncation, low-energy bases | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
 | Gates | unitaries on a finite basis, with no sites | two-level and Givens words, controlled elements, permutation matrices, dilations, amplification | parts of `TNLean/Circuit/Gates`, eight root modules of `TNLean/Circuit` | `QICLean/Circuit/Gate` | matrices |
 | Circuits | a geometry of cells on a set of sites, and operations layered on it | `Layer`, `Circuit`, its Kraus family, depth and gate count | `TNLean/Circuit` (the rest) | `QICLean/Circuit` | Sites, Gates |
@@ -146,19 +146,26 @@ the pin and deletes what was replaced, with no copy and no alias left behind.
 `TNLean/Circuit` and `TNLean/Lattice` to these layers and rejects an import
 that points upward or sideways. Imports are read with comments removed, and an
 imported aggregator counts as everything it re-exports. It runs in the module-policy job of
-`pr-ci.yml`. The violations present when the check was introduced, 17 imports,
-are listed in its `DEBT` set, which may only shrink; CI compares the set with
-its value at the base revision, so a new violation cannot be admitted by
-recording it:
+`pr-ci.yml`. Its `DEBT` set lists recorded violations and may only shrink; CI
+compares the set with its value at the base revision, so a new violation
+cannot be admitted by recording it. The 17 imports recorded when the check was
+introduced were repaired by step K0′, and the set is empty:
 
-- nine site and dynamics modules import `Circuit/LocalCircuit`, because the
-  definition of `supportedOperators` sits in that file above `BondLayer`;
-- four modules of the Sites and Hamiltonian layers import gate modules for
-  `siteOp`, `ctrlProj` and local permutations, which are site notions;
-- `SupportedGroundSpace` imports `Channel/Layer` for one trace identity of
-  product operators, and `SiteExpectationOrder` imports a Lieb–Robinson module;
-- two modules of `Lattice/Sheet` import `RegionSplit` and `RegionalSwap`,
-  which are site notions kept among the Hamiltonian modules.
+- nine site and dynamics modules imported `Circuit/LocalCircuit` for
+  `supportedOperators`, now defined in `Circuit/SupportedOperators`;
+- four modules of the Sites and Hamiltonian layers imported gate modules for
+  `siteOp`, `ctrlProj` and local permutations, now in `Circuit/SiteOperators`
+  and `Circuit/SitePermutation`;
+- `SupportedGroundSpace` imported `Channel/Layer` for one trace identity of
+  product operators, now in `Circuit/SupportedOperators`;
+- `SiteExpectationOrder` imported `LiebRobinson/CommutatorRecursion` for one
+  lemma on the Heisenberg evolution, now stated beside its definition;
+  `ProjectedRelativeEvolution`, `DisjointRelativeEvolution` and
+  `SupportedGaussianIntegral`, which state results about that evolution, are
+  dynamics modules and are listed as such in the checker;
+- two modules of `Lattice/Sheet` imported `RegionSplit` and `RegionalSwap`,
+  site notions that were kept among the Hamiltonian modules and are now
+  modules of `TNLean/Circuit`.
 
 The same check is added to QICLean when the layers arrive there, where
 directories are not layers today: every pair among `Algebra`, `Analysis`,
@@ -177,8 +184,9 @@ Counts are from an audit of `main` at `3d3507f` (TNLean) and `c62f178`
 More than twenty root-level modules of `TNLean/Circuit` (`SiteEmbedding*`,
 `SiteExpectation*`, `Supported*`, `EntropySupport`, `ProductVector`,
 `ExpectationBounds`, ...) and all of `Circuit/LiebRobinson` mention no layer,
-gate or depth. They import `Circuit/LocalCircuit` only because the definition
-of `supportedOperators` sits in that file above `BondLayer`. Outside
+gate or depth. Until step K0′ they imported `Circuit/LocalCircuit`, only
+because the definition of `supportedOperators` sat in that file above
+`BondLayer`. Outside
 `TNLean/Circuit`, 356 modules mention `QuantumCircuit` and 279 open the
 namespace; nearly all of them (`Lattice`, `MPS/AreaLaw`, `PEPS`) use only
 these lemmas on supported operators. The circuit models proper are consumed by
@@ -406,7 +414,8 @@ Sites and Dynamics:
 - **K0′** (TNLean). Move the definition and algebra of `supportedOperators`,
   `expect` and product vectors out of `Circuit/LocalCircuit` into a site
   module, and `siteOp`, `ctrlProj` and local permutations out of the gate
-  modules; this clears 13 of the 17 recorded imports.
+  modules; with `RegionSplit` and `RegionalSwap` placed among the site modules
+  this clears the 17 recorded imports. Done.
 - **K1** (TNLean, with the pin). Delete the copies now in QICLean:
   `Entropy.IsSupportedOn.add`, `neg`, `sub` (`MPS/AreaLaw/Hastings/PartCommutators`),
   `smul` (`Hastings/ProjectorFactorizationScaling`), `conjTranspose`

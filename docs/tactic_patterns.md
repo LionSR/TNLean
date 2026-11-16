@@ -2633,12 +2633,11 @@ three-plaquette output measurement, and the routed reunion measurement.
   `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
-  and `expect_productVector_mul` in `TNLean/Circuit/LocalCircuit.lean`,
-  `trace_rectKronecker_mul_mul` in `TNLean/Circuit/Channel/Layer.lean`,
-  and `OnsiteChannel.dual_mul` in
+  `expect_productVector_mul` and `trace_rectKronecker_mul_mul` in
+  `TNLean/Circuit/SupportedOperators.lean`, and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean`.
 - **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
-  `TNLean/Circuit/LocalCircuit.lean`: two bilinear maps
+  `TNLean/Circuit/SupportedOperators.lean`: two bilinear maps
   `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
   generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
   maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
@@ -5980,7 +5979,7 @@ no additional helper is proposed.
   entries using the region/complement split.
 - **Seen:** `commute_sheetSwapOp_kronecker` and
   `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
-  `Lattice/RegionalSwap.lean`.
+  `Circuit/RegionalSwap.lean`.
 - **Abstraction:** the support decompositions, permutation-matrix products, and split
   coordinates are already public lemmas. These are the two distinct cases, for
   operators supported outside and inside the swapped region.
