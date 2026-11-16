@@ -84,6 +84,7 @@ import TNLean.MPS.MPU.FundamentalTheoremGates
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
 import TNLean.MPS.MPU.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.FundamentalTheoremGatesSupplied
+import TNLean.MPS.MPU.FundamentalTheoremHalfFactors
 import TNLean.MPS.MPU.FundamentalTheoremLetters
 import TNLean.MPS.MPU.GeneralIndexContinuity
 import TNLean.MPS.MPU.GroupCocycleMPO

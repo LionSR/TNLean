@@ -1204,7 +1204,7 @@
     \label{FundamentalMPU}
     \notready
     \discussion{6020}
-    \uses{SF}
+    \uses{SF, thm:mpu_fundamental_half_factors}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors written in standard
     form, with source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
     $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
@@ -1231,8 +1231,10 @@
     operators at every length is equivalent to a unitary conjugation of the
     letters, the gate relations follow from it, and the gate relations give
     equality of the operators on rings of even length only.
-    % The source's converse from the half-factor relations alone has no
-    % formal counterpart; this entry therefore keeps \notready.
+    The half-factor relations themselves, with the same $x$, $y$, $z$, and
+    their converse on rings of two-site blocks are
+    Lemma~\ref{thm:mpu_fundamental_half_factors}.
+    % The unblocked converse is false; this entry therefore keeps \notready.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
 
@@ -1355,6 +1357,52 @@
     entry with $w_{pq}\neq0$, and the ring of two blocks at mixed
     configurations then gives $v'=w$. The converse is
     Lemma~\ref{thm:mpu_fundamental_gates_sufficiency}.
+\end{proof}
+
+\begin{lemma}[Fundamental theorem of MPU, half factors]
+    \label{thm:mpu_fundamental_half_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_half_factor_gauges_of_mpo_eq,
+        MPOTensor.TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges,
+        MPOTensor.TwoSiteStandardFormData.mpo_eq_of_half_factor_gauges,
+        MPOTensor.SourceFactors.sourceU_eq_of_factor_gauges}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv,
+        def:mpu_supplied_two_site_standard_form, thm:mpu_fundamental_letters}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II,
+    of bond dimensions $D_1$ and $D_2$, with $U^{(N)}=V^{(N)}$ for every
+    $N\ge2$. Build their factors from any compact decompositions of the two
+    source cuts. Then $D_1=D_2$, and after identifying the rank spaces there
+    are unitaries $z$ on $\mathbb C^{D_1}$, $x$ on $\mathbb C^{\ell}$ and $y$
+    on $\mathbb C^{r}$ with
+    \begin{align}
+        u_{\mathcal V}  & =(x\otimes y)u_{\mathcal U},               \\
+        X_2(\mathcal V) & =(z\otimes I)X_2(\mathcal U)x^\dagger,     \\
+        X_1(\mathcal V) & =(I\otimes\bar z)X_1(\mathcal U)y^\dagger.
+    \end{align}
+    Conversely, if two two-site tensors in standard form have gates and
+    half factors related in this way, they are letterwise conjugate by $z$,
+    and hence generate the same operators on every ring of two-site blocks.
+    This is the source's theorem with its equations (SFuu) and (SFvv), with
+    the converse restricted to the two-site blocks, as recorded in
+    \cite{gap:mpu_standard_form_parity_gap}.
+    % Source: paper_v2.tex 624--648, equations SFuu and SFvv; factors 479--502.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_fundamental_letters, thm:mpu_source_factors_virtual_unitary_gauge,
+        thm:mpu_source_factors_change_of_svd}
+    By Lemma~\ref{thm:mpu_fundamental_letters}, $D_1=D_2$ and
+    $\mathcal V=z\,\mathcal U\,z^\dagger$ letterwise. The factors of the
+    conjugate differ from the transported factors of $\mathcal U$ by unitaries
+    $W_1$, $W_2$ on the two rank spaces, because the canonical-form
+    normalizations $X_1^\dagger(I\otimes\rho)X_1=I$ and $X_2^\dagger X_2=I$
+    fix them up to such unitaries. Put $x=W_2^\dagger$ and $y=W_1^\dagger$;
+    contracting the second factors gives the relation for $u$. These
+    normalizations are needed: replacing $(X_1,X_2)$ by $(cX_1,c^{-1}X_2)$
+    with $|c|\ne1$ leaves the tensor and both gates unchanged, but no unitaries
+    relate the two pairs. For the converse, substitute the relations into the
+    standard form: $x^\dagger x$ and $y^\dagger y$ cancel on the internal legs,
+    and $z$ and $z^\dagger$ remain on the two virtual legs.
 \end{proof}
 
 \begin{lemma}[The gate statements hold for every decomposition]
