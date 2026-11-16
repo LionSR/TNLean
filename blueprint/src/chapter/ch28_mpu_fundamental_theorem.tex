@@ -4232,6 +4232,42 @@
     % Source lines: paper_v2.tex 867--910.
 \end{corollary}
 
+\begin{lemma}[Standard-form gates along a path are continuous modulo local unitaries]
+    \label{lem:mpu_standard_form_gates_continuous_mod_local}
+    \lean{MPOTensor.isCompact_setOf_isUnitaryBetween,
+        MPOTensor.continuous_twoSiteCircuit, MPOTensor.continuous_mpo,
+        MPOTensor.eventually_exists_gate_gauge_sub_mem,
+        MPOTensor.eventually_exists_gate_gauge_sub_mem_of_path}
+    \leanok
+    \discussion{6024}
+    \uses{SF, FundamentalMPU}
+    Let $p\mapsto\mathcal U(p)$ be a continuous path of tensors, not
+    necessarily in canonical form, and fix a blocking length $k$. At every $p$
+    let $u(p),v(p)$ be the gates of a standard form of the two-site block of
+    some tensor with the same periodic operators as the $k$-site block of
+    $\mathcal U(p)$, chosen independently at each $p$. Then $u$ is continuous
+    modulo local unitaries: for every $p$ and every neighbourhood $W$ of $0$,
+    every $q$ close to $p$ has unitaries $x,y$ with
+    $u(q)-(x\otimes y)u(p)\in W$. More generally, this holds for any unitary
+    gate pairs whose circuits on rings of two and three blocks are continuous
+    at $p$.
+    % Source lines: paper_v2.tex 867--910; proof route of
+    % docs/paper-gaps/mpu_standard_form_path_cross_section.tex, last paragraph.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{SF}
+    Unitary gates form a compact set. If gates $u(q_n)$ with $q_n\to p$
+    stayed outside $(x\otimes y)u(p)+W$ for all unitaries $x,y$, a subsequence
+    of $(u(q_n),v(q_n))$ would converge to a unitary pair $(u^*,v^*)$. The
+    circuits on rings of two and three blocks depend continuously on the gates,
+    and those of $(u(q_n),v(q_n))$ are periodic operators of the blocked path,
+    which converge to those at $p$. So $(u^*,v^*)$ has the circuits of
+    $(u(p),v(p))$, and the Fundamental Theorem for gate pairs gives
+    $u^*=(x\otimes y)u(p)$, a contradiction for large $n$.
+\end{proof}
+
 \begin{corollary}[Admissible continuous choice of standard form]
     \label{cor:mpu_admissible_continuous_standard_form}
     \notready

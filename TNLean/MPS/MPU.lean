@@ -233,6 +233,7 @@ import TNLean.MPS.MPU.StandardFormConjugation
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
+import TNLean.MPS.MPU.StandardFormPathContinuity
 import TNLean.MPS.MPU.StandardFormSymmetryCriteria
 import TNLean.MPS.MPU.StandardFormTimeReversalSign
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
