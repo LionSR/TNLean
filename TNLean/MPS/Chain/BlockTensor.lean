@@ -43,6 +43,16 @@ theorem eval_eq_prod_ofFn (A : MPSChainTensor d D n) (σ : Fin n → Fin d) :
   | zero => simp
   | succ n ih => rw [eval_succ, ih, List.ofFn_succ, List.prod_cons]
 
+/-- Concatenating two site-dependent chains multiplies their ordered matrix products. -/
+theorem eval_append {l r : ℕ} (L : MPSChainTensor d D l)
+    (R : MPSChainTensor d D r) (σ : Fin l → Fin d) (τ : Fin r → Fin d) :
+    eval (Fin.append L R) (Fin.append σ τ) = eval L σ * eval R τ := by
+  have h : (fun k => Fin.append L R k (Fin.append σ τ k)) =
+      Fin.append (fun k => L k (σ k)) (fun k => R k (τ k)) := by
+    funext k
+    refine Fin.addCases (fun i => ?_) (fun i => ?_) k <;> simp
+  simp only [eval_eq_prod_ofFn, h, List.ofFn_fin_append, List.prod_append]
+
 /-- On a constant chain, the ordered product is the evaluation of the word. -/
 theorem eval_const (A : MPSTensor d D) (σ : Fin n → Fin d) :
     eval (fun _ => A) σ = Kraus.evalWord A (List.ofFn σ) := by

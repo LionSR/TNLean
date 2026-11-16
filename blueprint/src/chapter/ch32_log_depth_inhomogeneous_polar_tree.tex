@@ -1,0 +1,251 @@
+\subsection{Exact thresholds for a supplied error certificate}
+
+\begin{lemma}[Exact exponential blocking threshold]
+    \label{lem:ldp_exact_exponential_blocking_threshold}
+    \lean{MPSPreparation.mul_pow_mul_exp_neg_le_iff,
+        MPSPreparation.mul_pow_mul_exp_neg_nat_le_iff,
+        MPSPreparation.mul_div_mul_exp_neg_le_iff}
+    \leanok
+    Let $K,N,\varepsilon,r>0$ and $k\ge0$ be an integer. Then
+    \begin{align*}
+        KN^k e^{-rq}\le\varepsilon
+        \quad\Longleftrightarrow\quad
+        q\ge\frac{\log K+k\log N-\log\varepsilon}{r}.
+    \end{align*}
+    The least nonnegative integer satisfying this certificate is the
+    nonnegative ceiling of the displayed threshold. If the certificate
+    retains the number-of-blocks factor and $q>0$, then
+    \begin{align*}
+        K\frac Nq e^{-rq}\le\varepsilon
+        \quad\Longleftrightarrow\quad
+        rq+\log q\ge\log K+\log N-\log\varepsilon.
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    Express the left sides as exponentials, use the strict monotonicity
+    of the exponential and rearrange. For integral scales, apply the
+    defining property of the nonnegative ceiling.
+\end{proof}
+
+These equivalences are exact for the stated numerical certificates.
+They do not establish such a certificate for an inhomogeneous sequence,
+nor an optimal exponent for its actual approximation errors.
+The sampled decay in (S42) of~\cite{Malz2024Preparation} does not supply
+a uniform sharp rate for the unspecified long-range sequence class.
+
+\subsection{An exact tree for the actual inhomogeneous chain}
+
+\begin{lemma}[Concatenation of ordered chain products]
+    \label{lem:ldp_chain_eval_append}
+    \lean{MPSChainTensor.eval_append}
+    \leanok
+    For two site-dependent chains $A,B$ and physical words $\sigma,\tau$,
+    the ordered matrix product along their concatenation satisfies
+    $F_{AB}(\sigma\tau)=F_A(\sigma)F_B(\tau)$.
+\end{lemma}
+\begin{proof}\leanok
+    Concatenate the ordered lists of local matrices and multiply.
+\end{proof}
+
+\begin{definition}[Contraction of child remainders]
+    \label{def:ldp_chain_pair_merge}
+    \lean{MPSPreparation.chainPairMerge}
+    \leanok
+    Identify the virtual space with pairs $(a,b)$ of indices in
+    $\{1,\ldots,D\}$. For $D^2\times D^2$ matrices $P,Q$, set
+    \begin{align*}
+        C_{(u,v),(a,b)}
+        =\sum_{c=1}^D P_{u,(a,c)}Q_{v,(c,b)}.
+    \end{align*}
+\end{definition}
+
+\begin{lemma}[The actual parent lies in the child ranges]
+    \label{lem:ldp_chain_pair_append_factorization}
+    \lean{MPSPreparation.chainPairMatrix_append_eq_joinMatrix_mul}
+    \leanok
+    \uses{lem:ldp_chain_eval_append, def:ldp_chain_pair_merge}
+    Let $F_A,F_B$ be the physical matrices of two site-dependent chains.
+    If $F_A=XP$ and $F_B=YQ$, then the physical matrix of their
+    concatenation satisfies $F_{AB}=(X\otimes Y)C$, where $C$ is the
+    contraction of $P,Q$ from Definition~\ref{def:ldp_chain_pair_merge}.
+    The rows of the tensor product are read in physical chain order.
+\end{lemma}
+\begin{proof}\leanok
+    At the column $(a,b)$ and word $\sigma\tau$, expand
+    $(F_A(\sigma)F_B(\tau))_{ab}$ over the common bond index.
+    Substitute the two child factorizations and exchange the finite sums.
+\end{proof}
+
+\begin{lemma}[An isometric merge for actual adjacent intervals]
+    \label{lem:ldp_chain_pair_actual_merge}
+    \lean{MPSPreparation.exists_isometry_chainPairMatrix_append}
+    \leanok
+    \uses{lem:ldp_chain_pair_append_factorization,
+        lem:ldp_isometric_polar_merge}
+    Let $D\ge1$. If $X,Y$ are isometries with
+    $XP_A=F_A$ and $YP_B=F_B$, where $P_A,P_B$ are the positive polar
+    factors of the child physical matrices, there is an isometry
+    $W\colon\C^{D^2}\to\C^{D^4}$ satisfying
+    $(X\otimes Y)WP_{AB}=F_{AB}$.
+\end{lemma}
+\begin{proof}\leanok
+    The preceding lemma establishes that $F_{AB}$ lies in the range of
+    $X\otimes Y$. Complete its polar factor within that range by
+    Lemma~\ref{lem:ldp_isometric_polar_merge}.
+\end{proof}
+
+\begin{lemma}[Agreement on the polar support]
+    \label{lem:ldp_factor_agrees_on_polar_support}
+    \lean{Matrix.mul_polarSupport_eq_polarIso_of_mul_polarPos_eq}
+    \leanok
+    If $M=VP$ is the canonical polar decomposition with support $\Pi$
+    and $XP=M$, then $X\Pi=V$. No injectivity or isometry of $X$ is needed.
+\end{lemma}
+\begin{proof}\leanok
+    Choose $R$ with $PR=\Pi$. Then
+    $X\Pi=XPR=MR=VPR=V\Pi=V$.
+\end{proof}
+
+\begin{lemma}[Exact polar tree on a feasible binary geometry]
+    \label{lem:ldp_inhomogeneous_exact_polar_tree}
+    \lean{MPSPreparation.exists_isometryTree_mul_polarPos_eq}
+    \leanok
+    \uses{lem:ldp_chain_pair_actual_merge,
+        lem:ldp_factor_agrees_on_polar_support,
+        lem:ldp_isometric_polar_completion}
+    Let $D\ge1$ and suppose a binary isometric tree of height $h$,
+    virtual dimension $D^2$ and leaves of at most $R$ physical sites exists
+    on a chain of length $n$. For every site-dependent chain on those
+    $n$ sites, there is such a tree with physical map $X$ satisfying
+    $XP=F$ and $X\Pi=V$ for the physical matrix $F$ and its canonical
+    polar factors. The maps may depend on their intervals.
+\end{lemma}
+\begin{proof}\leanok
+    Induct over the supplied binary geometry. At a leaf, its feasible
+    dimension permits an isometric polar completion of the actual leaf
+    matrix. At a parent, split the actual chain into its two intervals,
+    apply the induction hypotheses and merge by
+    Lemma~\ref{lem:ldp_chain_pair_actual_merge}. Agreement on the polar
+    support follows from Lemma~\ref{lem:ldp_factor_agrees_on_polar_support}.
+\end{proof}
+
+\begin{lemma}[Balanced geometry and exact inhomogeneous polar tree]
+    \label{lem:ldp_balanced_inhomogeneous_polar_tree}
+    \lean{MPSPreparation.IsometryTree.nonempty_of_leaf_dimension,
+        MPSPreparation.exists_isometryTree_chainPairMatrix}
+    \leanok
+    \uses{lem:ldp_inhomogeneous_exact_polar_tree}
+    For $s\ge1$ and $d^s\ge D^2\ge1$, every site-dependent chain of
+    length $s2^h$ has an exact polar tree of height $h$, virtual dimension
+    $D^2$, and leaves of at most $s$ sites.
+\end{lemma}
+\begin{proof}\leanok
+    Choose an isometric inclusion into each $s$-site leaf and an
+    isometry from $\C^{D^2}$ to $\C^{D^4}$ at every parent. This supplies
+    a balanced feasible geometry. Apply
+    Lemma~\ref{lem:ldp_inhomogeneous_exact_polar_tree}.
+\end{proof}
+
+\begin{lemma}[One branch scalar on an input subspace]
+    \label{lem:ldp_history_scalar}
+    \lean{QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.exists_history_scalar}
+    \leanok
+    \uses{def:qc_measurement_rounds, def:qc_round_implementation}
+    Let measurement rounds implement a unitary $U$ on every vector of a
+    linear subspace $E$. For each fixed outcome history with Kraus map
+    $K$, there is one scalar $a$ such that $Kv=aUv$ for every $v\in E$.
+    The scalar may be zero and is independent of the input vector.
+\end{lemma}
+\begin{proof}\leanok
+    The implementation property gives $Kv\in\C Uv$ for every $v\in E$.
+    Thus $U^\dagger K$ restricts to an endomorphism of $E$ preserving
+    every line. Such an endomorphism is scalar, including when $E$ has
+    dimension zero or one.
+\end{proof}
+
+\begin{lemma}[Unitary product of position-dependent tree gates]
+    \label{lem:ldp_interval_tree_unitary_product}
+    \lean{MPSPreparation.treeLeafOp_mul_treeLevelsOp_mem_unitary}
+    \leanok
+    \uses{def:ldp_tree_layout}
+    If every node and leaf gate of a disjoint binary layout is unitary,
+    their placed product is unitary on the entire physical chain.
+\end{lemma}
+\begin{proof}\leanok
+    Embedded unitary gates are unitary. Apply closure under finite
+    products first within a level and then across the levels and leaves.
+\end{proof}
+
+\begin{definition}[Extensions of interval-dependent tree maps]
+    \label{def:ldp_interval_tree_extensions}
+    \lean{MPSPreparation.intervalTreeNodeGate,
+        MPSPreparation.intervalTreeLeafGate}
+    \leanok
+    \uses{def:ldp_tree_layout}
+    Let $W_{j,p}\colon\C^\chi\to\C^\chi\otimes\C^\chi$ be an
+    isometry at each binary vertex, and let
+    $V_p\colon\C^\chi\to\mathcal H_p$ be an isometry at each leaf.
+    Extend each map to a unitary between the encoded input and output
+    registers, with the other input sites zero. The node and leaf maps
+    may depend on their positions.
+\end{definition}
+
+\begin{lemma}[Coefficients of an interval-dependent tree]
+    \label{lem:ldp_interval_tree_coefficients}
+    \lean{MPSPreparation.intervalTreeLeafOp_apply_nodeCfg,
+        MPSPreparation.intervalTreeLevelsOp_apply_nodeCfg,
+        MPSPreparation.intervalTreeOp_apply}
+    \leanok
+    \uses{def:ldp_interval_tree_extensions}
+    For each complete output configuration $\tau$, let $F_{j,p}(\tau,x)$
+    be amplitudes satisfying
+    \begin{align*}
+        F_{h+1,p}(\tau,x) & =V_p(\tau|_p,x), \\
+        F_{j,p}(\tau,x)   & =\sum_{a,b}
+        F_{j+1,2p}(\tau,a)F_{j+1,2p+1}(\tau,b)W_{j,p}((a,b),x).
+    \end{align*}
+    The product of the extended node gates, followed by the leaf gates,
+    has coefficient $F_{0,0}(\tau,x)$ on the encoded root input $x$.
+    More generally, the remaining product below depth $j$ has coefficient
+    $\prod_pF_{j,p}(\tau,x_p)$ on the encoded inputs $x_p$ at that depth.
+    These equalities include every physical output site.
+\end{lemma}
+\begin{proof}\leanok
+    At the leaves, disjoint supports give the product of the leaf
+    coefficients. Induct upwards. At a node level, expand the unitary
+    extensions on the encoded inputs, sum over their virtual outputs,
+    and group each pair of children under its parent. Distributivity
+    gives the stated binary recursion. At the root the product has one
+    factor.
+\end{proof}
+
+\begin{lemma}[Coherent measurement rounds for position-dependent tree gates]
+    \label{lem:ldp_interval_tree_measurement_rounds}
+    \lean{MPSPreparation.exists_rounds_blockLayerOp_treeUnitaryOp}
+    \leanok
+    \uses{lem:ldp_interval_tree_unitary_product}
+    Fix a physical dimension, a register width and a bound on the physical
+    leaf lengths. Arbitrary unitary node and leaf gates on disjoint binary
+    layouts have a measurement implementation of depth at most $C(h+1)$,
+    where $C$ is independent of the number of blocks, their lengths and
+    their gates. Each gate may depend on its block and vertex.
+    On inputs with zero scratch registers, every outcome history acts as
+    one scalar times the full tree gate product; that scalar is independent
+    of the input and hence shared by all coherent sectors.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:ldp_unequal_tree_rounds, thm:qc_bounded_unitary_two_site_gates,
+        lem:ldp_history_scalar}
+    Implement the register levels by coherent teleportation rounds and
+    the bounded leaves by one local circuit. Compose the rounds.
+    Their target product is unitary by
+    Lemma~\ref{lem:ldp_interval_tree_unitary_product}. Apply
+    Lemma~\ref{lem:ldp_history_scalar} to the zero-scratch subspace.
+\end{proof}
+
+To apply these coefficient identities to the exact polar tree, fit its
+intervals to one register layout and verify the local leaf and binary
+factorizations in Lemma~\ref{lem:ldp_interval_tree_coefficients}.
+That lemma then identifies the full placed product with the algebraic
+tree on encoded inputs, including every scratch site. An approximation
+rate for a specified sequence class is a separate requirement.

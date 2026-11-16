@@ -49,6 +49,7 @@ import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
 import TNLean.MPS.Preparation.ExactFixedPointPolar
 import TNLean.MPS.Preparation.ExactSectorEncoder
 import TNLean.MPS.Preparation.ExplicitPreparationScale
+import TNLean.MPS.Preparation.ExponentialBlockingThreshold
 import TNLean.MPS.Preparation.FiniteRingCorrelationLimit
 import TNLean.MPS.Preparation.FiniteRingGaussianFilter
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
@@ -68,6 +69,7 @@ import TNLean.MPS.Preparation.InhomogeneousLongRange
 import TNLean.MPS.Preparation.InhomogeneousLongRangeRate
 import TNLean.MPS.Preparation.InhomogeneousMixingPreparation
 import TNLean.MPS.Preparation.InhomogeneousOverlap
+import TNLean.MPS.Preparation.InhomogeneousPolarTree
 import TNLean.MPS.Preparation.InhomogeneousPositivePartRate
 import TNLean.MPS.Preparation.InhomogeneousPreparation
 import TNLean.MPS.Preparation.InhomogeneousSequence

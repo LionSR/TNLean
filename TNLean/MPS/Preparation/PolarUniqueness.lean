@@ -203,6 +203,20 @@ theorem exists_polarPos_mul_eq_polarSupport (M : Matrix ι κ ℂ) :
     ∃ R : Matrix κ κ ℂ, polarPos M * R = polarSupport M :=
   exists_mul_eq_of_range_le (range_polarSupport M).le
 
+/-- Any factor reproducing the matrix through its positive polar part agrees with the
+canonical partial isometry on its support. No injectivity or isometry is assumed. -/
+theorem mul_polarSupport_eq_polarIso_of_mul_polarPos_eq {M X : Matrix ι κ ℂ}
+    (hX : X * polarPos M = M) : X * polarSupport M = polarIso M := by
+  obtain ⟨R, hR⟩ := exists_polarPos_mul_eq_polarSupport M
+  have hV : polarIso M * polarSupport M = polarIso M :=
+    mul_eq_self_of_conjTranspose_mul_self_eq (conjTranspose_polarIso_mul_polarIso M)
+      (isHermitian_polarSupport M) (polarSupport_mul_polarSupport M)
+  calc X * polarSupport M = X * (polarPos M * R) := by rw [hR]
+    _ = M * R := by rw [← Matrix.mul_assoc, hX]
+    _ = polarIso M * (polarPos M * R) := by
+      rw [← Matrix.mul_assoc, polarIso_mul_polarPos]
+    _ = polarIso M := by rw [hR, hV]
+
 /-- The partial isometry of the polar decomposition factors through the matrix: `V = M R` for
 some `R` (arXiv:2307.01696, Supplemental Material, the polar decomposition `B = V P` with
 `V†V = Π`). -/

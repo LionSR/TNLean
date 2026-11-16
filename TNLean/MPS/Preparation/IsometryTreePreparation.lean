@@ -30,6 +30,84 @@ open QuantumCircuit TeleportHop
 
 namespace MPSPreparation
 
+/-- Arbitrary position-dependent unitary node and leaf maps on disjoint binary layouts
+have a coherent measurement implementation of depth `C (h+1)`. The scalar of each outcome
+history is independent of the admissible input, hence is shared by coherent sectors.
+This implements the specified gate product; identifying it with an algebraic isometry tree
+is a separate coefficient identity.
+Source: arXiv:2307.01696, "Tree-RG circuit with measurements". -/
+theorem exists_rounds_blockLayerOp_treeUnitaryOp (d s c : ℕ) [NeZero d] [NeZero s] :
+    ∃ C : ℕ, ∀ (h : ℕ) {M N : ℕ} [NeZero N]
+      (ℓ : Fin M → ℕ) (hN : ∑ b, ℓ b = N)
+      (w : Fin M → ℕ → ℕ) (hT : ∀ b, IsTreeLayout h s (ℓ b) (w b)),
+      (∀ b (p : Fin (2 ^ (h + 1))), leafLen h (ℓ b) (w b) p ≤ c) →
+      ∀ (X : Fin M → ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ)
+        (U : ∀ b (p : Fin (2 ^ (h + 1))),
+          Matrix (Cfg d (leafLen h (ℓ b) (w b) p))
+            (Cfg d (leafLen h (ℓ b) (w b) p)) ℂ),
+      (∀ b j p, X b j p ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ)) →
+      (∀ b (p : Fin (2 ^ (h + 1))), U b p ∈ unitary (Matrix (Cfg d (leafLen h (ℓ b) (w b) p))
+        (Cfg d (leafLen h (ℓ b) (w b) p)) ℂ)) →
+      ∃ Rs : List (MeasurementRound d N),
+        (Rs.map MeasurementRound.depth).sum ≤ C * (h + 1) ∧
+        MeasurementRound.IsRoundsImplementationOn Rs
+          {v | IsZeroOn (treeCentralSites h s hN w) v}
+          (blockLayerOp hN fun b =>
+            treeLeafOp (hT b) (U b) * treeLevelsOp (hT b) (X b) 0 (h + 1)) ∧
+        ∀ m : MeasurementRound.OutcomeHistory Rs, ∃ a : ℂ,
+          ∀ v, IsZeroOn (treeCentralSites h s hN w) v →
+            MeasurementRound.historyKraus Rs m *ᵥ v =
+              a • ((blockLayerOp hN fun b =>
+                treeLeafOp (hT b) (U b) * treeLevelsOp (hT b) (X b) 0 (h + 1)) *ᵥ v) := by
+  classical
+  have hd : 0 < d := NeZero.pos d
+  have hs : 1 ≤ s := NeZero.pos s
+  obtain ⟨K, hK⟩ := exists_isPairProduct (n := s + s) hd (by omega)
+  have hleaf : ∀ n : Fin (c + 1), ∃ K' : ℕ, 2 ≤ n.val →
+      ∀ X ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ), IsPairProduct d n K' X := fun n => by
+    by_cases hn : 2 ≤ n.val
+    · obtain ⟨K', hK'⟩ := exists_isPairProduct hd hn
+      exact ⟨K', fun _ => hK'⟩
+    · exact ⟨0, fun h' => absurd h' hn⟩
+  choose Kl hKl using hleaf
+  refine ⟨4 * s + K + ∑ n, Kl n + 4,
+    fun h {M N} _ ℓ hN w hT hbound X U hnode hleafUnitary => ?_⟩
+  obtain ⟨Rs, hRs, hRsE⟩ := exists_rounds_blockLayerOp_treeLevelsOp (hN := hN) (hT := hT)
+    (X := X) (K := K) fun b j p => hK _ (hnode b j p)
+  obtain ⟨Ll, hLl, -, hLlU⟩ := isCircuitOn_blockLayerOp_treeLeafOp (hN := hN) (hT := hT) U
+    (K := ∑ n, Kl n) fun b p => by
+      have h1 := two_mul_le_leafLen (hT b) p.isLt
+      have h2 := hbound b p
+      exact (hKl ⟨_, (by omega : leafLen h (ℓ b) (w b) p < c + 1)⟩
+        (by simp only; omega) _ (hleafUnitary b p)).mono
+        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ _))
+  have hleafR : MeasurementRound.IsRoundsImplementationOn [round Ll [] valid_nil] Set.univ
+      (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
+    have := (isImplementationOn_round (d := d) Ll (valid_nil (N := N))).isRoundsImplementationOn
+    rw [chainPerm_nil, Matrix.one_mul, ← hLlU] at this
+    exact this.mono fun v _ => fun _ _ _ h => h.elim
+  have hall : MeasurementRound.IsRoundsImplementationOn (Rs ++ [round Ll [] valid_nil])
+      {v | IsZeroOn (treeCentralSites h s hN w) v}
+      (blockLayerOp hN fun b =>
+        treeLeafOp (hT b) (U b) * treeLevelsOp (hT b) (X b) 0 (h + 1)) := by
+    have := hRsE.append hleafR fun _ _ => trivial
+    simpa only [← blockLayerOp_mul] using this
+  have hunitary : (blockLayerOp hN fun b =>
+      treeLeafOp (hT b) (U b) * treeLevelsOp (hT b) (X b) 0 (h + 1)) ∈
+      unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
+    rw [blockLayerOp_eq_list_prod]
+    apply Submonoid.list_prod_mem
+    intro Z hZ
+    obtain ⟨b, -, rfl⟩ := List.mem_map.mp hZ
+    exact embedOp_mem_unitary (blockSite_injective hN b)
+      (treeLeafOp_mul_treeLevelsOp_mem_unitary (hT b) (X b) (U b) (hnode b) (hleafUnitary b))
+  refine ⟨Rs ++ [round Ll [] valid_nil], ?_, hall, ?_⟩
+  · simp only [List.map_append, List.sum_append, hRs, List.map_cons, List.map_nil,
+      List.sum_cons, List.sum_nil, depth_round, hLl]
+    nlinarith
+  · exact fun m => hall.exists_history_scalar
+      (E := zeroOnSubmodule (treeCentralSites h s hN w)) hunitary m
+
 /-- Trees on arbitrary disjoint blocks are implemented by measurement rounds in depth
 `C (h + 1)`, where `C` depends only on the physical dimension, register width and leaf bound.
 The rounds act simultaneously on all inputs having zero at the interior scratch sites.
@@ -51,53 +129,13 @@ theorem exists_rounds_blockLayerOp_treeBlockOp (d s c : ℕ) [NeZero d] [NeZero 
           ∀ v, IsZeroOn (treeCentralSites h s hN w) v →
             MeasurementRound.historyKraus Rs m *ᵥ v =
               a • ((blockLayerOp hN fun b => treeBlockOp (hT b) V W (ι₀ b) enc) *ᵥ v) := by
-  classical
-  have hd : 0 < d := NeZero.pos d
-  have hs : 1 ≤ s := NeZero.pos s
-  obtain ⟨K, hK⟩ := exists_isPairProduct (n := s + s) hd (by omega)
-  have hleaf : ∀ n : Fin (c + 1), ∃ K' : ℕ, 2 ≤ n.val →
-      ∀ X ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ), IsPairProduct d n K' X := fun n => by
-    by_cases hn : 2 ≤ n.val
-    · obtain ⟨K', hK'⟩ := exists_isPairProduct hd hn
-      exact ⟨K', fun _ => hK'⟩
-    · exact ⟨0, fun h' => absurd h' hn⟩
-  choose Kl hKl using hleaf
-  refine ⟨4 * s + K + ∑ n, Kl n + 4,
-    fun {χ} V W h {M N} _ ℓ hN w hT hbound ι₀ enc => ?_⟩
-  set X := fun b => treeNodeGate (h := h) (n := ℓ b) (w := w b) W (ι₀ b) enc
-  set U := fun b => treeLeafGate (hT b) V (ι₀ b) enc
-  obtain ⟨Rs, hRs, hRsE⟩ := exists_rounds_blockLayerOp_treeLevelsOp (hN := hN) (hT := hT)
-    (X := X) (K := K) fun b j p => hK _ (treeNodeGate_mem_unitary W (ι₀ b) enc j p)
-  obtain ⟨Ll, hLl, -, hLlU⟩ := isCircuitOn_blockLayerOp_treeLeafOp (hN := hN) (hT := hT) U
-    (K := ∑ n, Kl n) fun b p => by
-      have h1 := two_mul_le_leafLen (hT b) p.isLt
-      have h2 := hbound b p
-      exact (hKl ⟨_, (by omega : leafLen h (ℓ b) (w b) p < c + 1)⟩
-        (by simp only; omega) _ (treeLeafGate_mem_unitary (hT b) V (ι₀ b) enc p)).mono
-        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_univ _))
-  have hleafR : MeasurementRound.IsRoundsImplementationOn [round Ll [] valid_nil] Set.univ
-      (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
-    have := (isImplementationOn_round (d := d) Ll (valid_nil (N := N))).isRoundsImplementationOn
-    rw [chainPerm_nil, Matrix.one_mul, ← hLlU] at this
-    exact this.mono fun v _ => fun _ _ _ h => h.elim
-  have hall : MeasurementRound.IsRoundsImplementationOn (Rs ++ [round Ll [] valid_nil])
-      {v | IsZeroOn (treeCentralSites h s hN w) v}
-      (blockLayerOp hN fun b => treeBlockOp (hT b) V W (ι₀ b) enc) := by
-    have := hRsE.append hleafR fun _ _ => trivial
-    simpa only [← blockLayerOp_mul, treeBlockOp, X, U] using this
-  have hunitary : (blockLayerOp hN fun b => treeBlockOp (hT b) V W (ι₀ b) enc) ∈
-      unitary (Matrix (Cfg d N) (Cfg d N) ℂ) := by
-    rw [blockLayerOp_eq_list_prod]
-    apply Submonoid.list_prod_mem
-    intro Z hZ
-    obtain ⟨b, -, rfl⟩ := List.mem_map.mp hZ
-    exact embedOp_mem_unitary (blockSite_injective hN b)
-      (treeBlockOp_mem_unitary (hT b) V W (ι₀ b) enc)
-  refine ⟨Rs ++ [round Ll [] valid_nil], ?_, hall, ?_⟩
-  · simp only [List.map_append, List.sum_append, hRs, List.map_cons, List.map_nil,
-      List.sum_cons, List.sum_nil, depth_round, hLl]
-    nlinarith
-  · exact fun m => hall.exists_history_scalar
-      (E := zeroOnSubmodule (treeCentralSites h s hN w)) hunitary m
+  obtain ⟨C, hC⟩ := exists_rounds_blockLayerOp_treeUnitaryOp d s c
+  refine ⟨C, fun {χ} V W h {M N} _ ℓ hN w hT hbound ι₀ enc => ?_⟩
+  simpa only [treeBlockOp] using
+    hC h ℓ hN w hT hbound
+      (fun b => treeNodeGate (h := h) (n := ℓ b) (w := w b) W (ι₀ b) enc)
+      (fun b => treeLeafGate (hT b) V (ι₀ b) enc)
+      (fun b j p => treeNodeGate_mem_unitary W (ι₀ b) enc j p)
+      (fun b p => treeLeafGate_mem_unitary (hT b) V (ι₀ b) enc p)
 
 end MPSPreparation

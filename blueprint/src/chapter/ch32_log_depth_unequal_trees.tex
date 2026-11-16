@@ -242,7 +242,6 @@ configurations of the $n$ sites.
     \lean{QuantumCircuit.MeasurementRound.OutcomeHistory,
         QuantumCircuit.MeasurementRound.historyKraus,
         QuantumCircuit.MeasurementRound.historyKraus_mulVec_mem_outputs,
-        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.exists_history_scalar,
         QuantumCircuit.zeroOnSubmodule, QuantumCircuit.mem_zeroOnSubmodule,
         MPSPreparation.exists_rounds_blockLayerOp_treeBlockOp,
         MPSPreparation.treeBlockOp_apply_supportedCfgPolarIso,
@@ -273,21 +272,13 @@ configurations of the $n$ sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_unequal_tree_rounds, thm:qc_bounded_unitary_two_site_gates}
-    Each node unitary acts on $2s$ sites, so a fixed number $K$ of
-    nearest-neighbour gates suffices. Register teleportation applies every
-    coarse depth in depth $4s+K+2$, independently of register separation.
-    The finitely many leaf widths between $2$ and $c$ have a common exact
-    synthesis bound, and the leaf windows are disjoint.
-    Concatenating the coarse rounds and the leaf circuit gives $C(h+1)$.
-    The gates extend the same isometries on every supported input.
-
-    To verify the independence in (\ref{eq:ldp_tree_branch_scalar}), fix a
-    history and its linear Kraus map $K$. The all-input implementation says
-    $Kv\in\C Tv$ for every $v\in E$. Since $T$ is unitary,
-    $T^\dagger K$ restricts to an endomorphism of $E$ preserving every
-    one-dimensional subspace. Such an endomorphism is $aI$, including when
-    $\dim E$ is zero or one. Thus $Kv=aTv$ with one scalar throughout $E$.
+    \uses{lem:ldp_interval_tree_measurement_rounds, lem:ldp_history_scalar}
+    Apply Lemma~\ref{lem:ldp_interval_tree_measurement_rounds} to the
+    node and leaf extensions depending on interval lengths. Their
+    coefficients on supported inputs are the polar-tree coefficients
+    from Lemma~\ref{thm:ldp_unequal_tree_isometry}.
+    Lemma~\ref{lem:ldp_history_scalar} gives
+    (\ref{eq:ldp_tree_branch_scalar}) with one scalar throughout $E$.
 \end{proof}
 
 \begin{lemma}[Leaves of a block of any length]
