@@ -22,8 +22,9 @@ Theorem 4.9, source lines 1080–1086.
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 
 **Scope restriction (gap dependence):** The bound uses `min gamma 1`.
-Comparison with the printed quantitative dependence is for `0 < gamma ≤ 1`;
-the larger-gap comparison remains as recorded in
+For `0 < gamma ≤ 1` this is the printed quantitative dependence; for larger
+gaps it costs the factor `max gamma 1 ≤ 1 + log r / log q` in the exponent,
+as proved in `TNLean.MPS.AreaLaw.ALVV.LargeGapComparison` and recorded in
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 
 The distinct spectral values express Assumption (DG) of the source,

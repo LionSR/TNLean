@@ -35,6 +35,7 @@ import TNLean.MPS.MPU.BondDilationCircuit
 import TNLean.MPS.MPU.BondPadding
 import TNLean.MPS.MPU.BondRegisterBounds
 import TNLean.MPS.MPU.CanonicalForm
+import TNLean.MPS.MPU.CanonicalFormAncillaBlocking
 import TNLean.MPS.MPU.CanonicalFormBlocking
 import TNLean.MPS.MPU.CanonicalFormGauge
 import TNLean.MPS.MPU.CanonicalFormOfCanonicalFormII
@@ -219,7 +220,9 @@ import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.StandardFormFromGates
+import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
+import TNLean.MPS.MPU.StandardFormSymmetryCriteria
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
@@ -280,6 +283,7 @@ import TNLean.MPS.MPU.TwoSiteTranslationCovariance
 import TNLean.MPS.MPU.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.UniformMergingResourceBounds
 import TNLean.MPS.MPU.UnitCircleRankTwo
+import TNLean.MPS.MPU.VirtualGaugePath
 import TNLean.MPS.MPU.VirtualSandwich
 import TNLean.MPS.MPU.VirtualSandwichBlocking
 import TNLean.MPS.MPU.VirtualSourceFactorTransport

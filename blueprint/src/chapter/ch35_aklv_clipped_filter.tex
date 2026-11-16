@@ -6,7 +6,7 @@
         TNLean.MPS.AreaLaw.aklv_clipped_hamiltonian_posSemidef_norm_le}
     \leanok
     \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
-    Let $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$ act on
+    Let $s\ge3$, $a+s+1\le L$, and let $0\le h_i\le\Id$ act on
     $\{i,i+1\}$. Let $e_0,e_1,e_2$ be lower bounds for the three reference
     Hamiltonians, with $e_1\ge0$, and let $t\ge0$.
     The actual two-exterior truncation $B$ satisfies
@@ -43,7 +43,7 @@
     \leanok
     \uses{thm:aklv_physical_robustness,lem:aklv_clipped_hamiltonian_data}
     Under the physical hypotheses of
-    Lemma~\ref{thm:aklv_physical_robustness}, choose the three actual
+    Lemma~\ref{thm:aklv_physical_robustness}, assume $s\ge6$, and choose the three actual
     reference minima and the normalized original ground energy $E_0$.
     For every
     \begin{align*}
