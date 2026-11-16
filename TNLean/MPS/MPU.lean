@@ -221,6 +221,7 @@ import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormParityCounterexample
 import TNLean.MPS.MPU.StandardFormSymmetryCriteria
+import TNLean.MPS.MPU.StandardFormTimeReversalSign
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
