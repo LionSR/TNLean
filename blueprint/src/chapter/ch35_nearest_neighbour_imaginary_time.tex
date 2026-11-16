@@ -18,6 +18,7 @@
     in~\cite[lines 795--837]{Arad2014Connecting}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:factorial_growth_rate_conjugation}
     Left and right multiplication by $H$ commute. Exponentiating their
     difference gives the Hadamard expansion
     \begin{align}
@@ -136,7 +137,11 @@
     give $(2gk)^{m+1}r(r+1)^{\overline m}\lVert O\rVert$.
     This proves the induction, including $r=0$ and $gk=0$, without division.
     Taking $r=1$ gives $1^{\overline m}=m!$.
-    Scalar shifts leave every commutator unchanged. The Hadamard series is
+    For every operator $X$,
+    \begin{align}
+        [H-z\Id,X]=[H,X].
+    \end{align}
+    Thus the same growth bound holds for $H-z\Id$. The Hadamard series is
     bounded term by term by $((2gk)t)^m\lVert O\rVert$, whose sum is at most
     $2\lVert O\rVert$. No restriction on $t$ is needed when $gk=0$.
 \end{proof}
