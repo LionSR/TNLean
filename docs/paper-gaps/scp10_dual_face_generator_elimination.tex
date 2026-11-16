@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Eliminating One Native Face Generator}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{open-gap}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia, \cite[Lemma~6.14]{Schuch2010PEPS},
+source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+use virtual invariance to deform a fixed-endpoint flux string.
+A finite geometric classification for prescribed allowed square supports
+requires further work. The auxiliary result here proves the algebraic
+validity and locality of one elementary native face substitution.
+
+Let $X=\mathbb Z_w\times\mathbb Z_h$ with $w,h>0$. In the free group on two
+copies of $X$, retain one positive east generator and one positive north
+generator at each native base. For the face with lower-left vertex $v$,
+write $A,B,C,D$ for its bottom, right, left and top positive generators.
+The reverse-ordered native face word and the two substitutions are
+\begin{align}
+    r_v=BAC^{-1}D^{-1},\qquad
+    \sigma_v^{\rm W}(C)=D^{-1}BA,\qquad
+    \sigma_v^{\rm S}(A)=B^{-1}DC.
+    \label{eq:scp10_face_elimination_substitutions}
+\end{align}
+Each substitution fixes every generator except the displayed one.
+\footnote{\leanid{TNLean.PEPS.torusDualWestFaceElimination};
+\leanid{TNLean.PEPS.torusDualSouthFaceElimination}.}
+
+If $w>1$, the left and right generators are distinct, so
+$\sigma_v^{\rm W}(r_v)=1$. If $h>1$, the top and bottom generators are distinct,
+so $\sigma_v^{\rm S}(r_v)=1$. No lower bound on the other positive period
+is needed. At any positive periods, west substitution fixes the relation
+at $u$ when $u\ne v$ and $u+(1,0)\ne v$; south substitution fixes it when
+$u\ne v$ and $u+(0,1)\ne v$. These are native generator-incidence conditions.
+\footnote{\leanid{TNLean.PEPS.torusDualWestFaceElimination_face};
+\leanid{TNLean.PEPS.torusDualSouthFaceElimination_face};
+\leanid{TNLean.PEPS.torusDualWestFaceElimination_face_eq};
+\leanid{TNLean.PEPS.torusDualSouthFaceElimination_face_eq}.}
+
+For an arbitrary group $H$ and a homomorphism $\varphi$ from this free group,
+flatness on the original face implies
+\begin{align}
+    \varphi(r_v)=1
+    \ \Longrightarrow\
+    \varphi(B)\varphi(A)=\varphi(D)\varphi(C)
+    \ \Longrightarrow\
+    \varphi\circ\sigma_v^{\rm W}=\varphi
+    \quad\hbox{and}\quad
+    \varphi\circ\sigma_v^{\rm S}=\varphi.
+    \label{eq:scp10_face_elimination_representations}
+\end{align}
+The last equalities follow by solving for the selected generator.
+They need neither commutativity nor finiteness of $H$, and remain valid even
+when the corresponding period equals one.
+\footnote{\leanid{TNLean.PEPS.torusDualWestFaceElimination_preserves_flatRepresentation};
+\leanid{TNLean.PEPS.torusDualSouthFaceElimination_preserves_flatRepresentation}.}
+
+A finite list of tagged west/south substitutions also preserves every
+representation flat on the original faces in that list:
+\begin{align}
+    \bigl[\forall v\text{ in the list},\ \varphi(r_v)=1\bigr]
+    \quad\Longrightarrow\quad\varphi\circ\Sigma=\varphi.
+    \label{eq:scp10_face_elimination_sequence}
+\end{align}
+This follows by induction using the preceding preservation identity.
+\footnote{\leanid{TNLean.PEPS.torusDualFaceEliminationSequence};
+\leanid{TNLean.PEPS.torusDualFaceEliminationSequence_preserves_flatRepresentation}.}
+
+These results do not construct a complete elimination sequence for an
+arbitrary allowed support. Constructing a finite descending face order, composing the
+substitutions without changing previously eliminated relations, and proving
+the resulting reduced-word classification for arbitrary proper support
+remain separate obligations. No such classification, physical density
+criterion, or endpoint-only equivalence is asserted here.
+The remaining source interpretation stays under \ghissue{8703};
+the Hamiltonian work under \ghissue{8947} is unaffected.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -1,0 +1,96 @@
+\begin{definition}[Elementary native face substitutions]
+    \label{def:peps_dual_face_generator_elimination}
+    \lean{TNLean.PEPS.torusDualWestFaceElimination,
+        TNLean.PEPS.torusDualSouthFaceElimination}\leanok
+    \uses{def:peps_dual_path_word,def:peps_dual_finite_presentation}
+    Let both periods be positive. For a dual square with lower-left base $v$,
+    denote its bottom, right, left and top positive generators by $A,B,C,D$,
+    respectively. Its actual face relator is $r_v=BAC^{-1}D^{-1}$.
+    Define free-group endomorphisms fixing every other native generator by
+    \begin{align}
+        \sigma_v^{\rm W}(C)=D^{-1}BA,\qquad
+        \sigma_v^{\rm S}(A)=B^{-1}DC.
+        \label{eq:peps_dual_face_generator_substitution}
+    \end{align}
+\end{definition}
+
+\begin{lemma}[Removal and locality of a native face relation]
+    \label{lem:peps_dual_face_elimination_locality}
+    \lean{TNLean.PEPS.torusDualWestFaceElimination_face,
+        TNLean.PEPS.torusDualSouthFaceElimination_face,
+        TNLean.PEPS.torusDualWestFaceElimination_face_eq,
+        TNLean.PEPS.torusDualSouthFaceElimination_face_eq}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    For west substitution require the horizontal period to exceed one;
+    then $\sigma_v^{\rm W}(r_v)=1$.
+    For south substitution require the vertical period to exceed one;
+    then $\sigma_v^{\rm S}(r_v)=1$.
+    At arbitrary positive periods the west substitution fixes $r_w$ if
+    $w\ne v$ and $w+(1,0)\ne v$. The south substitution fixes $r_w$ if
+    $w\ne v$ and $w+(0,1)\ne v$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    The period condition makes the two positive generators on opposite
+    parallel sides distinct. Substitution and cancellation give
+    \begin{align}
+        BA(D^{-1}BA)^{-1}D^{-1}=1,\qquad
+        B(B^{-1}DC)C^{-1}D^{-1}=1.
+        \label{eq:peps_dual_face_elimination_cancellation}
+    \end{align}
+    Only the two faces incident to the selected native generator use it;
+    the stated inequalities exclude them from the locality assertion.
+\end{proof}
+
+\begin{lemma}[Flat representations are preserved by native face elimination]
+    \label{lem:peps_dual_face_elimination_representations}
+    \lean{TNLean.PEPS.torusDualWestFaceElimination_preserves_flatRepresentation,
+        TNLean.PEPS.torusDualSouthFaceElimination_preserves_flatRepresentation}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    For arbitrary positive periods, any group $H$, and any homomorphism
+    $\varphi$ from the native free group to $H$,
+    \begin{align}
+        \varphi(r_v)=1
+        \quad\Longrightarrow\quad
+        \varphi\circ\sigma_v^{\rm W}=\varphi
+        \quad\hbox{and}\quad
+        \varphi\circ\sigma_v^{\rm S}=\varphi.
+        \label{eq:peps_dual_face_elimination_representation}
+    \end{align}
+    Neither finiteness nor commutativity of $H$ is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    The hypothesis gives $\varphi(B)\varphi(A)=\varphi(D)\varphi(C)$.
+    Solving this identity for either selected generator gives
+    \begin{align}
+        \varphi(C)=\varphi(D)^{-1}\varphi(B)\varphi(A),\qquad
+        \varphi(A)=\varphi(B)^{-1}\varphi(D)\varphi(C).
+        \label{eq:peps_dual_face_elimination_flat_equation}
+    \end{align}
+    Thus substitution preserves $\varphi$ on the selected generator as well
+    as every other generator. The resulting homomorphisms agree.
+\end{proof}
+
+\begin{lemma}[Finite face substitutions preserve flat representations]
+    \label{lem:peps_dual_face_elimination_sequence}
+    \lean{TNLean.PEPS.torusDualFaceEliminationSequence,
+        TNLean.PEPS.torusDualFaceEliminationSequence_preserves_flatRepresentation}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    Choose any finite list of faces, each tagged for west or south substitution,
+    and let $\Sigma$ be their composition in the listed order.
+    If $\varphi(r_v)=1$ for every listed face, then
+    \begin{align}
+        \varphi\circ\Sigma=\varphi.
+        \label{eq:peps_dual_face_elimination_sequence}
+    \end{align}
+    Both periods are positive. No ordering, group finiteness or commutativity
+    assumption is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_face_elimination_representations}
+    Induct on the list. At each step,
+    $\varphi\circ(\Sigma_{\rm tail}\circ\sigma)
+        =(\varphi\circ\Sigma_{\rm tail})\circ\sigma
+        =\varphi\circ\sigma=\varphi$.
+\end{proof}
