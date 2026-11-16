@@ -54,6 +54,37 @@
     % blocked rings; no unblocked all-length converse has been established.
 \end{lemma}
 
+\begin{lemma}[Equal two-site blocks determine the tensor up to sign]
+    \label{lem:mpu_blocktwo_sign_rigidity}
+    \lean{MPSTensor.evalWord_eq_of_pair_mul_eq, MPSTensor.mul_mul_eq_of_pair_mul_eq,
+        MPSTensor.exists_sign_eq_smul_of_pair_mul_eq,
+        MPOTensor.IsMPUCanonicalFormII.exists_sign_eq_smul_of_blockTwo_eq}
+    \leanok
+    \uses{def:mpu_canonical_form_ii}
+    Let $A=(A^a)_a$ be block injective at some length $L>0$, and let $C$
+    satisfy $C^aC^b=A^aA^b$ for all letters $a,b$. Then $C=\sigma A$ with
+    $\sigma\in\{1,-1\}$. Consequently, if $\mathcal U$ is in canonical form II
+    and $\mathcal W$ has the same two-site block as $\mathcal U$, then
+    $\mathcal W=\sigma\mathcal U$ with $\sigma=\pm1$. The tensors $1$ and $-1$
+    of \cite{gap:mpu_standard_form_parity_gap} show that the sign cannot be
+    removed. This is the passage from the two-spin chain of a standard form,
+    in the reading of \cite{gap:mpu_standard_form_canonical_convention}, back
+    to the one-site tensor.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    All words of even length agree. The words of length $2L$ of $A$ span the
+    matrix algebra, so $C^aMC^b=A^aMA^b$ for every matrix $M$. Matrix units give
+    $C^a_{ip}C^b_{qj}=A^a_{ip}A^b_{qj}$ for all entries. If $A=0$, then
+    $C=0$. Otherwise fix a nonzero entry $\alpha=A^{a_0}_{i_0p_0}$ and let
+    $c=C^{a_0}_{i_0p_0}$. Then $c^2=\alpha^2$, so $\sigma=c/\alpha=\pm1$, and
+    $C^a_{ip}c=A^a_{ip}\alpha$ gives $C^a_{ip}=\sigma A^a_{ip}$. For the second
+    claim, the normalized flattening of a tensor in canonical form II is normal,
+    hence block injective at length $D^4$, and equal two-site blocks are equal
+    products of two letters of the flattenings.
+\end{proof}
+
 \begin{lemma}[Conjugation of supplied source decompositions]
     \label{lem:mpu_source_conjugation_transport}
     \lean{MPOTensor.sourceCutM₁_mapStar, MPOTensor.sourceCutM₂_mapStar, MPOTensor.source_ranks_mapStar, MPOTensor.normalizedFlattening_mapStar, MPOTensor.IsMPUCanonicalFormII.mapStar, MPOTensor.SourceCutSVD.mapStar, MPOTensor.SourceFactors.mapStar, MPOTensor.SourceFactors.sourceU_mapStar, MPOTensor.SourceFactors.sourceV_mapStar}

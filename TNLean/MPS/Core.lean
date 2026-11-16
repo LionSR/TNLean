@@ -28,6 +28,7 @@ import TNLean.MPS.Core.MultiBlock
 import TNLean.MPS.Core.MultiBlockWord
 import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.Core.ObservableTransfer
+import TNLean.MPS.Core.PairProductSignRigidity
 import TNLean.MPS.Core.PhysicalDimension
 import TNLean.MPS.Core.PhysicalEmbedding
 import TNLean.MPS.Core.PhysicalIndexMixing
