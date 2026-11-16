@@ -29,7 +29,7 @@ directory here.
 | `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>`; only the drawing functions may use browser APIs, since the render evaluates the file outside a page |
 | `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the equations displayed inside sentences |
 
-Seven campaigns are shown as tabs of one site. The first two share the label
+Eight campaigns are shown as tabs of one site. The first two share the label
 `openai-math`; the others carry the label of their source paper:
 
 | Directory | Campaign | Tracker |
@@ -41,6 +41,7 @@ Seven campaigns are shown as tabs of one site. The first two share the label
 | `aklv-area-law/` | Improved one-dimensional area law after Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162 | #9831 |
 | `alvv-rg-algorithm/` | Rigorous renormalization-group algorithm and area laws for low-energy states after Arad, Landau, Vazirani and Vidick, arXiv:1602.08828 | #9833 |
 | `mpu/` | Matrix product unitaries: standard form, fundamental theorem, index and symmetry phases after Cirac, Pérez-García, Schuch and Verstraete, arXiv:1703.09188 | #5704 |
+| `mpo-symmetry/` | Matrix product states symmetric under matrix product operator algebras after Garre-Rubio, Lootens and Molnár, arXiv:2203.12563 | #8012 |
 
 Each is served at `https://sirui-lu.com/TNLean/<slug>/`. The hourly workflow
 `.github/workflows/campaign-board.yml` collects and renders every directory here

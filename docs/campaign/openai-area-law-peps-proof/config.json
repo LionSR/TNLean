@@ -11,7 +11,8 @@
     {"slug": "lvv-ground-state-algorithm", "label": "Ground states in polynomial time"},
     {"slug": "aklv-area-law", "label": "Sharper area law"},
     {"slug": "alvv-rg-algorithm", "label": "Rigorous renormalization group"},
-    {"slug": "mpu", "label": "Matrix product unitaries"}
+    {"slug": "mpu", "label": "Matrix product unitaries"},
+    {"slug": "mpo-symmetry", "label": "MPO symmetries"}
   ],
   "label": "openai-math",
   "since": "2026-10-06",
