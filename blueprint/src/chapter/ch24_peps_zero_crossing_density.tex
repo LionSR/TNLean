@@ -1,0 +1,45 @@
+\begin{definition}[Zero-crossing physical graph]
+    \label{def:peps_zero_crossing_graph}
+    \lean{TNLean.PEPS.torusDualZeroCrossingGraph}\leanok
+    Given an actual native dual path $p$, retain a horizontal physical bond
+    based at $v$ exactly when its signed horizontal crossing count is zero,
+    and an upward physical bond based at $v$ exactly when its signed downward
+    crossing count is zero. Include both orientations of each retained bond.
+    This gives a finite physical subgraph $Z_p$, independent of the flux group.
+\end{definition}
+
+\begin{lemma}[Zero-crossing edges are untwisted]
+    \label{lem:peps_zero_crossing_transport}
+    \lean{TNLean.PEPS.torusDualFlux_transport_eq_one_of_zero_crossing_edge}\leanok
+    For any group and insertion element, the actual directed flux transport
+    on every edge of $Z_p$ is identity.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_zero_crossing_graph}
+    The native transport is the insertion element to the signed crossing
+    count, or its inverse according to orientation. A zero exponent gives
+    identity in all four orientations, including periodic seams.
+\end{proof}
+
+\begin{lemma}[Vacuum density from zero-crossing boundary connectivity]
+    \label{lem:peps_zero_crossing_density}
+    \lean{TNLean.PEPS.IsGIsometric.torusFlux_normalized_density_eq_vacuum_of_zero_crossing_connectivity}
+    \leanok
+    Let a native torus with periods at least three carry a regular
+    group-isometric tensor for a finite group. Suppose the induced graphs
+    on a physical observation $R$ and its complement are connected and the
+    boundary is nonempty. Assume the actual path has zero signed crossing
+    counts on all bonds incident to $R$, and one component of the computed
+    graph $Z_p$ in the complement contains every complementary boundary
+    endpoint. Then both native coefficient cuts are nonzero and the normalized
+    observed density equals vacuum. No simple connectedness is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_zero_crossing_transport,lem:peps_anchored_twist_density}
+    Restrict $Z_p$ to the complement. Its edge transports are identity by the
+    preceding lemma; the stated component condition places all complementary
+    boundary endpoints in one untwisted component. Zero incident counts also
+    give identity on every observed incident operator. Apply the noncentral
+    complementary-contraction result and convert its ordered-edge cuts to
+    the actual native cuts, including the vacuum cut.
+\end{proof}
