@@ -110,6 +110,7 @@ import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Algebra.KroneckerLocalSection
+import TNLean.Algebra.KroneckerPathLifting
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolActionMatrix
 import TNLean.Algebra.LSymbolBlockIndependence
@@ -159,6 +160,7 @@ import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
 import TNLean.Algebra.OrthogonalComplexStructure
 import TNLean.Algebra.OrthogonalComplexStructureBasis
+import TNLean.Algebra.OrthogonalGroupJoined
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSkewNormalForm

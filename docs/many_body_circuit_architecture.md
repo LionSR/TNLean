@@ -16,7 +16,7 @@ layers below, redesigned, and moved to QICLean.
    layer whose objects suffice to state it.
 2. **Imports point downward.** Two layers at the same height do not import each
    other; what both need moves down.
-3. **Each layer has a small set of defining types** (below). A second type for
+3. **Each object has one definition** (see No dual systems). A second type for
    the same object, with lemmas translating between the two, is a defect, in
    one repository or across the two.
 4. **A directory is a layer or a part of one, and its namespace says so.** A
@@ -25,6 +25,39 @@ layers below, redesigned, and moved to QICLean.
    cases are instances.
 6. **The rules are checked by a script**, with the existing violations listed
    and only allowed to shrink.
+
+### No dual systems
+
+This is the rule the others serve. Two systems for one object cost more than
+twice one: every lemma is proved twice, every consumer chooses, and lemmas
+translating between the two spread through the code.
+
+- **Test.** Two things are a dual system if some lemma has to be proved for
+  each of them. A named special case passes the test only if its facts follow
+  by unfolding it to the general definition.
+- **Pass-throughs are deleted.** A declaration whose whole body applies another
+  declaration to its own arguments is the same statement under a second name;
+  its callers use the target. `MPS/Core/Blocking`, where 16 of 31 declarations
+  are `MPSTensor.x := Kraus.x`, is the model case.
+- **Bridges are not repaired.** A lemma or module translating between two
+  formulations of one object disappears when the formulations become one. A
+  module named for a bridge that relates two different objects is a theorem
+  and is renamed for what it proves.
+- **No layer exists only to forward to the layer below.**
+- **One definition per notion.** A source's formulation is honoured by a
+  theorem whose statement is the source's, with exactly the source's
+  hypotheses, not by a predicate per source. A second predicate that is an
+  abbreviation of another, or equivalent to it with no hypothesis, is deleted
+  and the equivalence becomes a characterization theorem. One that is
+  equivalent only under a hypothesis becomes a clause of the source's
+  proposition, stated as an equivalence under that hypothesis. One that is not
+  equivalent is a different notion and keeps a name that says how it differs.
+- **Temporary abbreviations** made while consumers are migrated are
+  pass-throughs by design. Each is listed with the step that deletes it.
+
+`System` in the circuit layer is not a second notion of system: it wraps a
+basis family of the Sites layer so that a circuit can hide its intermediate
+systems, and no Sites lemma is restated for it.
 
 ### Layers
 
@@ -75,7 +108,7 @@ special structure is not stated with it.
 |---|---|---|
 | Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `Lattice.LocalHamiltonian` itself), `Finset ℤ` |
 | Local spaces | any finite basis type at each site, `X : V → Type` | one `Fin d` for all sites in TNLean; `Fin (n v)` in QICLean. Composite local spaces are then written `Fin (d * a)`, `Fin (d ^ k)`, `Fin (a + b)` and unpacked by index arithmetic: 170 declarations in `Circuit`, 226 in `MPS/Preparation`, 285 in `MPS/MPU`, 214 in `MPS/AreaLaw` |
-| Regions | any set of sites | `Set` in one support notion, `Finset` in the other |
+| Regions | any finite set of sites, as one type `Finset V` | `Set` in one support notion, `Finset` in the other |
 | Geometry | any family of cells, any graph | the ring: 130 declarations of `Circuit` and every channel, measurement and adaptive model; the open chain for gate counts |
 | Operations | finite Kraus families between two systems, so rectangular and non-unitary | square unitaries in the depth and gate-count models; isometry trees, two-site layers of matrix product unitaries and Margolus gates are defined apart for that reason |
 | Interactions | Hermitian terms indexed by any type, with any supports | terms indexed by admissible subsets of one lattice, with a range and a norm bound built into the structure |
@@ -134,7 +167,7 @@ the pin and deletes what was replaced, with no copy and no alias left behind.
 - Namespaces follow the layers: `ManyBody` for Sites, Dynamics and
   Hamiltonians, `QuantumCircuit` for Gates, Circuits and the Party calculus.
   The namespace `Entropy` keeps entropy; `SiteConfig`, `IsSupportedOn` and
-  `localLift` leave it when the Sites layer is assembled (step K4).
+  `localLift` leave it when the Sites layer is assembled (step 1.2).
 - A directory holds at most about forty modules at its top level; beyond that
   it is divided by object, not by proof stage.
 - A module holds one coherent interface. A module of one lemma is merged into
@@ -149,7 +182,7 @@ imported aggregator counts as everything it re-exports. It runs in the module-po
 `pr-ci.yml`. Its `DEBT` set lists recorded violations and may only shrink; CI
 compares the set with its value at the base revision, so a new violation
 cannot be admitted by recording it. The 17 imports recorded when the check was
-introduced were repaired by step K0′, and the set is empty:
+introduced were repaired by step 0.3, and the set is empty:
 
 - nine site and dynamics modules imported `Circuit/LocalCircuit` for
   `supportedOperators`, now defined in `Circuit/SupportedOperators`;
@@ -211,7 +244,7 @@ Counts are from an audit of `main` at `3d3507f` (TNLean) and `c62f178`
 More than twenty root-level modules of `TNLean/Circuit` (`SiteEmbedding*`,
 `SiteExpectation*`, `Supported*`, `EntropySupport`, `ProductVector`,
 `ExpectationBounds`, ...) and all of `Circuit/LiebRobinson` mention no layer,
-gate or depth. Until step K0′ they imported `Circuit/LocalCircuit`, only
+gate or depth. Until step 0.3 they imported `Circuit/LocalCircuit`, only
 because the definition of `supportedOperators` sat in that file above
 `BondLayer`. Outside
 `TNLean/Circuit`, 356 modules mention `QuantumCircuit` and 279 open the
@@ -300,16 +333,15 @@ other directories.
 - Lieb–Robinson bounds for a family of supported Hermitian terms on a graph,
   moved unchanged.
 
-Whether regions are `Set V` or `Finset V` is settled at step K3. The predicate
-is likely to take `Set V` (finite sets coerce, and light cones are sets) while
-placements keep `Finset V`.
+Regions are `Finset V` everywhere: supports, placements, cells and light cones
+use one type, and no statement converts between two.
 
 ## The circuit core
 
 Nothing of the core is in a library yet. The definitions below, the Kraus
 family and depth of a circuit, composition, and subadditivity of the depth
 under composition have been type-checked against QICLean in a scratch file;
-the signatures are fixed in step C1.
+the signatures are fixed in step 3C.1.
 
 A *system* on the sites `S` assigns a finite basis type to each site. A
 *geometry* is a family of cells `cell : β → Finset S` on which one gate may act
@@ -383,12 +415,17 @@ Isometry trees, the rectangular two-site layers of matrix product unitaries and
 the Margolus gates of `QCA` are rectangular layers of this kind once sites may
 be grouped: a map `S → S'` of site sets turns a system on `S` into the system
 on `S'` whose basis at a site is the configurations of its fibre. This
-blocking map between systems is added after step C4.
-`Lattice/PartyCircuit` is treated last: its four inductive types first become
-one type parametrized by the gate constructor (step P1), then its registers,
-which are finite-dimensional in every use, are compared with the core (step
-P2). Whether it then becomes a restriction of `Circuit` or stays a second
-calculus with a comparison theorem is decided at P2.
+blocking map between systems is added after step 3C.3.
+`Lattice/PartyCircuit` is treated last. Its four inductive types first become
+one type parametrized by the gate constructor. Its registers, which are
+finite-dimensional in every use, then become basis types, and party circuits
+become a restriction of `Circuit`: parties are sites, a private map is an
+onsite operation, a gate between parties is a gate on a cell, and participation
+is the count of gates meeting a site. Its gates are contractions and weighted
+sums of circuits, not trace-preserving families, so `Layer` must allow them;
+this is checked against the party calculus before the core is fixed (step
+3C.0). A second calculus with a comparison theorem is not an acceptable
+outcome.
 
 ## `TNLean/Lattice`
 
@@ -422,99 +459,180 @@ Target: the Hamiltonian part joins the Sites layer in QICLean, with one
 structure for a family of bounded Hermitian terms with given supports on a
 finite set of sites; the chain, the integer domains, the plane, squares and
 rectangles are choices of the sites and supports. The party calculus follows
-the circuit plan (steps P1, P2): the reusable calculus moves with the circuit
+the circuit plan (steps 5.1 and 5.2): the reusable calculus moves with the circuit
 layer, and the modules that exist only for one proof of the PEPS approximation
 manuscript stay in TNLean, consolidated, under a name that does not say
 "lattice".
 
+## Method
+
+The cost is not the new definitions; it is rewriting about 600 consumer modules
+in a repository that merges continuously. Each layer goes through four steps.
+
+1. **Build.** The new definitions land in QICLean. TNLean is untouched.
+2. **Switch.** One small TNLean pull request moves the QICLean pin and turns
+   each old definition into an abbreviation of the new one; the old proofs of
+   facts now in QICLean are deleted. Every consumer compiles unchanged.
+3. **Sweep.** A script kept in the repository rewrites the consumers to the
+   new names, one directory per pull request.
+4. **Delete.** When the last use is gone the abbreviation is deleted and its
+   name is retired.
+
+Rules of the method:
+
+- A consumer directory is swept once, after every layer it uses has switched.
+- The Sites layer changes once; its signatures are reviewed as a whole before
+  proofs are ported, and it is piloted on Lieb–Robinson before the switch.
+- Code with no consumer is rebuilt first: the channel stack tests the circuit
+  core without touching another directory.
+- QICLean work is batched so that the plan needs five moves of the pin.
+- Old code is not moved and then fixed. Only the redesigned form enters
+  QICLean; proofs are ported onto it.
+- A sweep renames, removes applications of translating lemmas and drops
+  reference configurations. It does not restate theorems more generally, and
+  it does not replace index arithmetic by basis types.
+- Every pull request builds, with no `sorry`.
+
 ## Steps
 
-Each step is one pull request per repository, or a few. A QICLean step is
-followed by a TNLean pull request that moves the QICLean pin and deletes what
-was replaced; TNLean keeps no copy and no compatibility alias.
+Wave 0, guard rails:
 
-Sites and Dynamics:
-
-- **K0** (QICLean). `Entropy/SupportedOperatorAlgebra`: the closure lemmas of
-  `IsSupportedOn`, products and commutation without a reference configuration,
+- **0.1** (TNLean, done). This document and `scripts/check_import_layers.py`.
+- **0.2** (QICLean, done). `Entropy/SupportedOperatorAlgebra`:
+  closure lemmas, products and commutation without a reference configuration,
   and the `*`-subalgebra `Entropy.supportedOperators`.
-- **K0′** (TNLean). Move the definition and algebra of `supportedOperators`,
-  `expect` and product vectors out of `Circuit/LocalCircuit` into a site
-  module, and `siteOp`, `ctrlProj` and local permutations out of the gate
-  modules; with `RegionSplit` and `RegionalSwap` placed among the site modules
-  this clears the 17 recorded imports. Done.
-- **K1** (TNLean, with the pin). Delete the copies now in QICLean:
-  `Entropy.IsSupportedOn.add`, `neg`, `sub` (`MPS/AreaLaw/Hastings/PartCommutators`),
-  `smul` (`Hastings/ProjectorFactorizationScaling`), `conjTranspose`
-  (`Hastings/PositiveFactorization`), `isSupportedOn_sum`
-  (`Lattice/ZeroEntropy`); replace `σ₀` arguments by the new lemmas.
-- **K2** (QICLean, then TNLean). Move the index-generic prerequisites:
-  `Algebra/FinKronecker`, `ListProduct`, `ComplexSqrt`,
-  `IsometryUnitaryExtension`, `UnitaryMulVecInner`, `MatrixHermitianSum`,
-  `FinSumPermutation`, `PureStateTraceNorm`; `Circuit/LiebRobinson/Volterra`;
-  the gate algebra `Circuit/Gates/TwoLevel`, `Givens` and the ring part of
-  `Controlled`; `PartialIsometryDilation` and the amplification modules; the
-  first section of `Channel/RegisterEncoding`, merged with
-  `initializedBasisMatrix`, which is the same definition.
-- **K3** (QICLean, then TNLean). Systems of basis types, with `SiteConfig n`
-  as an instance; one placement and one support notion on them: `embedOp`
-  for any system, the span-of-products description as
-  a theorem, drop `σ₀` from the remaining lemmas. In TNLean,
-  `QuantumCircuit.supportedOperators` becomes the QICLean subalgebra and
-  `Circuit/EntropySupport` is deleted with its uses.
-- **K4** (QICLean, then TNLean). Move the support, site-expectation and
-  Lieb–Robinson modules to `QICLean/ManyBody` under the namespace `ManyBody`; rewrite the
-  `open QuantumCircuit` lines of the modules that only use sites and supports.
-- **K5** (TNLean). Replace `Lattice.localLift`, `siteLift`, `Pinned.liftLocal`,
-  `regionLocalTerm`, `dependentRegionOperatorLift` and `embedLocalOperator` by
-  the one placement, one directory per pull request.
+- **0.3** (TNLean, done). `supportedOperators`, `expect` and product vectors
+  moved out of `Circuit/LocalCircuit`, and `siteOp`, `ctrlProj` and local
+  permutations out of the gate modules; with `RegionSplit` and `RegionalSwap`
+  placed among the site modules and the evolution modules among the dynamics
+  modules, the 17 recorded imports are cleared.
+- **0.4** (both). Extend the import check to every directory: record each pair
+  of directories that import each other and fail on a new pair. TNLean has 59
+  such pairs, QICLean 8. QICLean receives the script and the CI step.
+- **0.5** (TNLean). No library module imports `Examples`; the 17 existing
+  imports are recorded and removed.
+- **0.6** (both). Pass-through declarations as a ratchet, removed one namespace
+  per pull request, starting with the `MPSTensor` names that forward to
+  `Kraus`.
 
-Circuits:
+Wave 1, foundations in QICLean:
 
-- **C1** (QICLean). The core: `Layer`, `Circuit`, Kraus family and map, depth
-  and gate count, identity and composition, trace preservation, light cone.
-- **C2**. Unitary depth circuits as a restriction; `MPS/Preparation` switches;
-  `BondLayer`, `circuitOp`, `IsBondCircuitOfDepth`, `IsBondCircuitOn` and the
-  ring abbreviations are deleted.
-- **C3**. Channel circuits and protocols as restrictions; `BondChannelLayer`,
-  `OnsiteChannel`, `IsLocalChannelProtocol`, the bounded variant and
-  `FixedRegisterOperation` are deleted; blueprint chapter 33 moves to the
-  QICLean blueprint.
-- **C4**. Measurement rounds and adaptive protocols as branching circuits;
-  `MeasurementProtocol` and `IsAdaptiveChannelProtocol` are deleted.
-- **C5**. Physical ports as the wire geometry; the compilation theorems
-  restated between two restrictions.
-- **C6**. Gate counts (`IsPairProduct`, `IsWindowProduct`, clean
-  implementations) on the open-chain geometry; the bridge from depth to gate
-  count.
-- **C7**. Teleportation, long-range and register gates, the quantitative gate
-  constructions.
-- **P1**, **P2**. `Lattice/PartyCircuit` as above.
+- **1.1** The 22 modules of `TNLean/Algebra` that `Circuit` and `Lattice` need,
+  and the Volterra bounds, moved as they are.
+- **1.2** The Sites layer in final form, about 30 modules;
+  `Entropy.SiteConfig`, `IsSupportedOn` and `localLift` become abbreviations
+  of it.
+- **1.3** (done) `Circuit/Gate`: two-level and Givens words, controlled
+  elements, dilations, amplification.
+- **1.4** Pilot: Lieb–Robinson as the Dynamics layer on the new Sites.
 
-Lattice (after K4):
+Wave 2, switch:
 
-- **L1** (TNLean). One Hamiltonian structure: Hermitian terms indexed by any
-  type, with given supports in any finite set of sites; range, degree and norm
-  bounds are hypotheses on it, not fields; `ChainHamiltonian`, `DomainHamiltonian`,
+- **2.1** (TNLean, pin move 1). The old site definitions become abbreviations;
+  moved modules, the duplicate lemmas (`Entropy.IsSupportedOn.add`, `neg`,
+  `sub`, `smul`, `conjTranspose`, `isSupportedOn_sum`) and
+  `Circuit/EntropySupport` are deleted.
+
+Wave 3, two tracks that share no file:
+
+- **3H.1** (QICLean). `Interaction`; the Hamiltonian part of `Lattice` (127
+  modules) restated on it and moved.
+- **3H.2** (TNLean, pin move 2). `ChainHamiltonian`, `DomainHamiltonian`,
   `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
-  become instances of it.
-- **L2** (QICLean, then TNLean). Move the Hamiltonian part of `Lattice` (root
-  directory and `ClusterExpansion`) to `QICLean/ManyBody/Hamiltonian`.
-- **L3** (TNLean). Merge the single-lemma modules of `Lattice/Compression`
-  along the interfaces of its proof; separate the reusable party calculus from
-  the proof-specific modules, in step with P1.
+  become instances; `Lattice/RegionalEntropyBridge` is deleted.
+- **3A** (both). The generic modules of `TNLean/Algebra` move to QICLean,
+  merged into topical modules: 40 used by two or more directories, up to 131
+  used by one; 44 used nowhere outside the directory are reviewed for deletion;
+  19 mention a tensor network and stay.
+- **3C.0** (QICLean). Check the circuit core against the party calculus before
+  its signatures are fixed.
+- **3C.1** (QICLean). The core: `System`, `Layer`, `Circuit`, Kraus family and
+  map, depth and gate count, identity and composition, trace preservation,
+  light cone.
+- **3C.2** (QICLean). The channel stack as restrictions, with its compilation
+  theorems; it replaces about 45 modules that have no consumer.
+- **3C.3** (QICLean). Unitary depth circuits, gate counts with a clean
+  workspace, measurement rounds and adaptive protocols; then teleportation and
+  the named protocols.
+- **3C.4** (TNLean, pin move 3). The circuit names used by `MPS/Preparation`
+  and `MPS/MPU` become abbreviations; the rest of `TNLean/Circuit` is deleted;
+  blueprint chapter 33 moves to the QICLean blueprint.
 
-C1 is validated by C2–C4: if porting a model needs a change to `Layer` or
-`Circuit`, the change is made in the core before the next model is ported.
+Wave 4, sweeps:
+
+- **4.0** (QICLean). Its own 86 site modules, onto the Sites names; the
+  abbreviations of step 1.2 are deleted.
+- **4.1** (TNLean). `MPS/AreaLaw`, `PEPS/AreaLaw`, `PEPS/Approximation`, the
+  rest of `Lattice`, `QCA`, `MPS/Symmetry`; one pull request per directory.
+  `Lattice.localLift`, `siteLift`, `Pinned.liftLocal`, `regionLocalTerm`,
+  `dependentRegionOperatorLift` and `embedLocalOperator` are replaced by the
+  one placement.
+- **4.2** (TNLean). `MPS/Preparation`, `MPS/MPU`, `MPS/Examples`.
+- **4.3** (TNLean). The abbreviations are deleted and their names retired.
+
+Wave 5, parties:
+
+- **5.1** (TNLean). `Lattice/PartyCircuit`: one syntax type parametrized by
+  the gate constructor.
+- **5.2** (both, pin move 4). Registers become basis types; party circuits
+  become a restriction of `Circuit`; the reusable part moves.
+- **5.3** (TNLean). The single-lemma modules of `Lattice/Compression` are
+  merged; what stays leaves the `Lattice` directory.
+
+Tensor types:
+
+- **T.1** (both, pin move 5, after 2.1). One tensor type over a physical and a
+  bond basis type. `MPSTensor d D` is its case at `Fin d` and `Fin D`;
+  `MPOTensor d D` is its case at the product basis.
+- **T.2** (TNLean, after 4.3). The `toMPSTensor` conversion, used in 251
+  modules, and the nine definitions of `blockTensor` are swept; blocking
+  becomes a change of basis type.
+
+Follow-on projects, each started after wave 2 with its own audit:
+
+- **F1** The top level of `PEPS`, 554 modules, split by object.
+- **F2** `MPS/MPDO`, `MPS/ParentHamiltonian`, `MPS/MPU`, `MPS/AreaLaw`: split
+  by object, single-lemma modules merged, one representation of vectors, one
+  mutual information, one structure for the commuting form.
+- **F3** `QICLean/Analysis` (530 top-level modules) and the mutual imports of
+  QICLean's directories.
+- **F4** One definition per notion, one glossary section at a time, starting
+  with primitivity (done except for the name `IsPrimitiveMPS`); then the layering inside `MPS` and between `MPS`, `PEPS`
+  and `QCA`.
+
+A directory with both a sweep in wave 4 and a restructuring in a follow-on gets
+them together, so its modules are rewritten once.
+
+The circuit core is validated by 3C.2 and 3C.3: if porting a model needs a
+change to `Layer` or `Circuit`, the change is made in the core before the next
+model is ported.
+
+## Modules named for a bridge
+
+| Module | Verdict | Action |
+|---|---|---|
+| `Lattice/RegionalEntropyBridge` | two definitions of regional state and entropy | deleted in 3H.2 |
+| `MPS/MPDO/MutualInfoBridge` | `mutualInfoChain` beside QICLean's mutual information | deleted in F2 |
+| QICLean `Channel/Wigner/ProjectiveCarrierBridge` | two representations of vectors | deleted with the single representation |
+| QICLean `Channel/CompletelyPositiveBridge` | a local notion beside Mathlib's `CompletelyPositiveMap`; imported by no module | build on Mathlib's type or delete |
+| `Wielandt/Primitivity/PrimitiveBridge` | several predicates for primitivity | F4 |
+| `MPS/BNT/Bridge`, `MPS/FundamentalTheorem/SectorBNT/CanonicalFormBridge` | several predicates for a basis of normal tensors and for a canonical form | F4 |
+| `MPS/MPDO/CommutingFormBridge` | three data structures for one commuting form | F2 |
+| QICLean `Channel/Semigroup/LindbladForm/TraceBridge`, `MPS/CanonicalForm/CyclicSectors/CornerBridge`, `MPS/MPDO/PureRFPBridge`, `MPS/Examples/Z3Anomalous/Z3AnomalousCocycleBridge`, `PEPS/Approximation/AngularSeparationBridges` | theorems | renamed for what they prove |
+| `PEPS/RegionBlock/GaugeBridge`, `GaugeBridgeExpansion` | one computation in two modules | merged and renamed in F1 |
+| `MPS/Examples/ShortMomentum/ShortOverlapBridges`, `PEPS/RegionBlock/UnionInjectivityOverlapBridge` | "bridge" is the mathematical object or a proof step | none; the second is renamed with its family in F1 |
 
 ## Rules during the migration
 
 - A new declaration goes where "Where a declaration goes" puts it. A module
   that mentions no layer, gate or depth is not added to `TNLean/Circuit`; until
-  step K4 it goes in QICLean beside `Entropy.IsSupportedOn`.
+  step 1.2 it goes in QICLean beside `Entropy.IsSupportedOn`.
 - No entry is added to `DEBT`, `MUTUAL_DIRECTORIES` or `EXAMPLES_IMPORTS` in
   `scripts/check_import_layers.py`, nor to `PASS_THROUGH` in
   `scripts/check_pass_through_declarations.py`.
+- No new pass-through declaration, translating lemma between two formulations,
+  or predicate for a notion that already has one. A new predicate states which
+  existing notion it differs from and what separates them.
 - A new lemma is not stated for `Fin N`, the ring, `ℤ × ℤ` or one local
   dimension unless its proof uses that structure.
 - No new circuit predicate. A new model is a restriction of an existing one
