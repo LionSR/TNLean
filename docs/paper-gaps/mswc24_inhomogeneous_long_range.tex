@@ -128,12 +128,19 @@ independent of the input on the zero-scratch subspace, hence common
 across coherent sectors. The existing theorem for maps depending only
 on interval lengths is retained as a specialization.
 
-An end-to-end preparation theorem must still choose unitary extensions
-of the actual interval isometries and identify their entire placed gate
-product on encoded inputs with the algebraic tree map. This includes
-all physical scratch sites and the correspondence between the binary
-geometry and the disjoint register layouts. The generic gate compiler
-does not by itself prove that coefficient identity.
+The coefficient argument in
+\doclink{TNLean/MPS/Preparation/UnequalRegisterTreeState} now allows
+independent leaf maps and merge maps at every vertex. It assumes their
+local leaf and binary amplitude identities and derives the coefficient
+of the entire placed unitary product on every encoded root input,
+including every scratch site. The gate-product equality is a conclusion,
+not an assumed implementation identity.
+
+To apply this result to the exact polar tree, the actual interval tree
+must still be fitted to the disjoint register layout and its recursively
+specified amplitudes identified with the node and leaf families in the
+coefficient theorem. This geometric identification and the approximation
+rate for a specified sequence class remain separate obligations.
 
 \section{Uniformity in the coherent label count}
 At a nonempty pair window the orthogonal label states lie in a space of
@@ -181,8 +188,7 @@ For an unrestricted reading of the source remark, a class of sequences
 must still be specified and a uniform rate proved for that class. The local orthogonality already
 bounds the label count uniformly by $D^2$ on nonempty partitions. The conditional theorem establishes how such a rate
 gives a logarithmic scale; it does not establish the rate itself. The
-doubly-logarithmic claim additionally requires the end-to-end coefficient
-identity just described. These obligations are
+doubly-logarithmic claim additionally requires the geometric identification just described. These obligations are
 distinct from the short-range rate work. Issue~\#10573 remains open.
 
 \begin{thebibliography}{9}

@@ -13,8 +13,10 @@ import TNLean.MPS.Preparation.OverlappingMeasurementPreparation
 # Uniform accuracy scales for coherent inhomogeneous pair approximations
 
 The explicit class used here consists of positive-part states approximable by coherent sums
-of locally orthonormal pair products. Local orthogonality bounds the number of labels by D²,
-so constants can be uniform even when that number varies with the length and partition. A uniform bound
+of locally orthonormal pair products. Local orthogonality bounds the number of labels by
+D²,
+so constants can be uniform even when that number varies with the length and partition.
+A uniform bound
 `K N^k exp(-r q)` yields blocking and preparation depth `O(1 + log(N/ε))`.
 
 **Scope restriction (specified class and uniform rate):** these are quantitative hypotheses,
@@ -52,8 +54,8 @@ theorem IsCoherentPairApproximable.label_le {d D N M b : ℕ} [NeZero M]
   have hX : X.IsIsometry := by
     change Xᴴ * X = 1
     ext i j
-    simpa only [X, Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.one_apply] using
-      hω 0 i j
+    change (∑ p, star (ω i 0 p) * ω j 0 p) = if i = j then 1 else 0
+    exact hω 0 i j
   simpa only [Fintype.card_prod, Fintype.card_fin] using Matrix.IsIsometry.card_le X hX
 
 /-- The explicit coherent-pair approximation condition transfers to a unit physical output,
@@ -75,7 +77,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairAppr
 
 /-- Preparation constants can be chosen independently of the coherent label count.
 Local orthogonality supplies the finite bound on that count. -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable_uniform_labels
+theorem exists_coherentPairPreparation_uniform_labels
     (d D : ℕ) (hd : 2 ≤ d) (hD : 0 < D) :
     ∃ C L₀ : ℕ, ∀ (b : ℕ) {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N]
       (hN : ∑ k, ℓ k = N) (A : MPSChainTensor d D N) (L : ℕ) (δ : ℝ),
@@ -119,7 +121,7 @@ theorem exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate_varying_label
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Cb, L₀, hCb⟩ :=
-    exists_isPreparedWithMeasurementsAndCircuitInDepth_of_isCoherentPairApproximable_uniform_labels d D hd hD
+    exists_coherentPairPreparation_uniform_labels d D hd hD
   obtain ⟨Ce, hCe⟩ := exists_isPreparedInDepth_normalizedChainState d D (by omega)
   let a : ℝ := max (k : ℝ) 1 / r
   let B : ℝ := max (Real.log K) 0 / r + L₀ + 1

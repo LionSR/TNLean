@@ -169,38 +169,50 @@ theorem treeLeafGate_mem_unitary (p : Fin (2 ^ (h + 1))) :
       unitary (Matrix (Cfg d (leafLen h n w p)) (Cfg d (leafLen h n w p)) ℂ) :=
   extUnitary_mem_unitary _ _ _
 
-/-- The product of the extended node and leaf maps is unitary on the entire physical block. -/
-theorem treeBlockOp_mem_unitary : treeBlockOp hT V W ι₀ enc ∈
-    unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+/-- The placed product of arbitrary unitary node and leaf gates is unitary.
+The gates may depend on their vertices rather than only their interval lengths. -/
+theorem treeLeafOp_mul_treeLevelsOp_mem_unitary {d h s n : ℕ} [NeZero s] {w : ℕ → ℕ}
+    (hT : IsTreeLayout h s n w)
+    (X : ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ)
+    (U : ∀ p : Fin (2 ^ (h + 1)),
+      Matrix (Cfg d (leafLen h n w p)) (Cfg d (leafLen h n w p)) ℂ)
+    (hX : ∀ j p, X j p ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ))
+    (hU : ∀ p : Fin (2 ^ (h + 1)), U p ∈ unitary (Matrix (Cfg d (leafLen h n w p))
+      (Cfg d (leafLen h n w p)) ℂ)) :
+    treeLeafOp hT U * treeLevelsOp hT X 0 (h + 1) ∈
+      unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
   classical
-  have hlevel : ∀ j, j ≤ h + 1 →
-      treeLevelOp hT (treeNodeGate (h := h) (n := n) (w := w) W ι₀ enc) j ∈
-        unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+  have hlevel : ∀ j, j ≤ h + 1 → treeLevelOp hT X j ∈
+      unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
     intro j hj
     apply Submonoid.list_prod_mem
-    intro X hX
-    obtain ⟨p, -, rfl⟩ := List.mem_map.mp hX
+    intro Z hZ
+    obtain ⟨p, -, rfl⟩ := List.mem_map.mp hZ
     exact embedOp_mem_unitary
       (fun a b hab => (Prod.mk.inj (nodeWindow_injective₂ hT hj
-        (show nodeWindow hT j p a = nodeWindow hT j p b from hab))).2)
-      (treeNodeGate_mem_unitary W ι₀ enc j p)
-  have hlevels : ∀ m, m ≤ h + 1 →
-      treeLevelsOp hT (treeNodeGate (h := h) (n := n) (w := w) W ι₀ enc) 0 m ∈
-        unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+        (show nodeWindow hT j p a = nodeWindow hT j p b from hab))).2) (hX j p)
+  have hlevels : ∀ m, m ≤ h + 1 → treeLevelsOp hT X 0 m ∈
+      unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
     intro m hm
     induction m with
     | zero => exact Submonoid.one_mem _
     | succ m ih =>
       rw [treeLevelsOp, zero_add]
       exact Submonoid.mul_mem _ (hlevel m (by omega)) (ih (by omega))
-  have hleaf : treeLeafOp hT (treeLeafGate hT V ι₀ enc) ∈
-      unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+  have hleaf : treeLeafOp hT U ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
     apply Submonoid.list_prod_mem
-    intro X hX
-    obtain ⟨p, -, rfl⟩ := List.mem_map.mp hX
-    exact embedOp_mem_unitary (leafWindow_injective hT p.isLt)
-      (treeLeafGate_mem_unitary hT V ι₀ enc p)
+    intro Z hZ
+    obtain ⟨p, -, rfl⟩ := List.mem_map.mp hZ
+    exact embedOp_mem_unitary (leafWindow_injective hT p.isLt) (hU p)
   exact Submonoid.mul_mem _ hleaf (hlevels (h + 1) le_rfl)
+
+/-- The product of the extended node and leaf maps is unitary on the entire physical block. -/
+theorem treeBlockOp_mem_unitary : treeBlockOp hT V W ι₀ enc ∈
+    unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
+  exact treeLeafOp_mul_treeLevelsOp_mem_unitary hT
+    (treeNodeGate (h := h) (n := n) (w := w) W ι₀ enc) (treeLeafGate hT V ι₀ enc)
+    (fun j p => treeNodeGate_mem_unitary W ι₀ enc j p)
+    (fun p => treeLeafGate_mem_unitary hT V ι₀ enc p)
 
 /-! ### Lengths of the nodes -/
 
@@ -385,6 +397,50 @@ private theorem prod_fin_two_pow_succ {j : ℕ} (f : Fin (2 ^ (j + 1)) → ℂ) 
   rw [Fin.prod_univ_two]
   congr 1 <;> congr 1 <;> ext <;> simp [e, finProdFinEquiv, Nat.add_comm]
 
+/-- Extend the physical isometry of each leaf independently. -/
+noncomputable def intervalTreeLeafGate
+    (Vleaf : ∀ p : Fin (2 ^ (h + 1)), Matrix (Cfg d (leafLen h n w p)) (Fin χ) ℂ)
+    (ι₀ : Fin χ → Cfg d (s + s)) (enc : Fin χ → Cfg d s)
+    (p : Fin (2 ^ (h + 1))) :
+    Matrix (Cfg d (leafLen h n w p)) (Cfg d (leafLen h n w p)) ℂ :=
+  extUnitary (Vleaf p) (leafInput hT ι₀ enc p) id
+
+/-- Independent physical leaf maps give their tensor product on all encoded leaf inputs.
+Every output site of the original physical chain is included. -/
+theorem intervalTreeLeafOp_apply_nodeCfg
+    (Vleaf : ∀ p : Fin (2 ^ (h + 1)), Matrix (Cfg d (leafLen h n w p)) (Fin χ) ℂ)
+    (hV : ∀ p, (Vleaf p).IsIsometry)
+    (hι₀ : Function.Injective ι₀) (henc : Function.Injective enc)
+    (x : Fin (2 ^ (h + 1)) → Fin χ) (τ : Cfg d n) :
+    treeLeafOp hT (intervalTreeLeafGate hT Vleaf ι₀ enc) τ
+        (nodeCfg hT ι₀ enc (h + 1) x) =
+      ∏ p : Fin (2 ^ (h + 1)), Vleaf p (τ ∘ leafWindow hT p) (x p) := by
+  classical
+  have hcomm : ((List.finRange (2 ^ (h + 1))).toFinset : Set (Fin (2 ^ (h + 1)))).Pairwise
+      (Function.onFun Commute fun p : Fin (2 ^ (h + 1)) =>
+        embedOp (leafWindow hT p) (intervalTreeLeafGate hT Vleaf ι₀ enc p)) :=
+    fun p _ p' _ hne =>
+      commute_embedOp_of_disjoint (leafWindow_injective hT p.isLt)
+        (leafWindow_injective hT p'.isLt)
+        (disjoint_range_leafWindow hT p.isLt p'.isLt fun h' => hne (Fin.ext h')) _ _
+  rw [treeLeafOp, ← Finset.noncommProd_toFinset (List.finRange _) _ hcomm
+    (List.nodup_finRange _), noncommProd_embedOp_apply (fun p : Fin (2 ^ (h + 1)) =>
+      leafWindow hT p) (fun p => leafWindow_injective hT p.isLt) _ _
+      (fun p _ p' _ hne => disjoint_range_leafWindow hT p.isLt p'.isLt
+        fun h' => hne (Fin.ext h'))]
+  have hcond : ∀ i : Fin n, (∀ k ∈ (List.finRange (2 ^ (h + 1))).toFinset,
+      ∀ j : Fin (leafLen h n w k), leafWindow hT k j ≠ i) →
+        τ i = nodeCfg hT ι₀ enc (h + 1) x i := fun i hi => absurd hi (by
+      obtain ⟨p, hp, i', hi'⟩ := exists_leafWindow_eq hT i
+      simp only [List.toFinset_finRange, Finset.mem_univ, true_implies, not_forall, not_not]
+      exact ⟨⟨p, hp⟩, i', hi'⟩)
+  rw [ite_eq_left hcond]
+  simp only [List.toFinset_finRange]
+  refine Finset.prod_congr rfl fun p _ => ?_
+  rw [nodeCfg_comp_leafWindow, intervalTreeLeafGate,
+    extUnitary_apply (hV p) (leafInput_injective hT hι₀ henc p) Function.injective_id]
+  exact Function.injective_id.extend_apply _ _ _
+
 /-- The leaves applied to the inputs of depth `h + 1` give the product of the isometries of the
 leaves. -/
 theorem treeLeafOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
@@ -392,30 +448,9 @@ theorem treeLeafOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
     (x : Fin (2 ^ (h + 1)) → Fin χ) (τ : Cfg d n) :
     treeLeafOp hT (treeLeafGate hT V ι₀ enc) τ (nodeCfg hT ι₀ enc (h + 1) x) =
       ∏ p : Fin (2 ^ (h + 1)), V (leafLen h n w p) (τ ∘ leafWindow hT p) (x p) := by
-  classical
-  have hcomm : ((List.finRange (2 ^ (h + 1))).toFinset : Set (Fin (2 ^ (h + 1)))).Pairwise
-      (Function.onFun Commute fun p : Fin (2 ^ (h + 1)) =>
-        embedOp (leafWindow hT p) (treeLeafGate hT V ι₀ enc p)) := fun p _ p' _ hne =>
-    commute_embedOp_of_disjoint (leafWindow_injective hT p.isLt) (leafWindow_injective hT p'.isLt)
-      (disjoint_range_leafWindow hT p.isLt p'.isLt fun h' => hne (Fin.ext h')) _ _
-  rw [treeLeafOp, ← Finset.noncommProd_toFinset (List.finRange _) _ hcomm
-    (List.nodup_finRange _), noncommProd_embedOp_apply (fun p : Fin (2 ^ (h + 1)) =>
-      leafWindow hT p) (fun p => leafWindow_injective hT p.isLt) _ _
-      (fun p _ p' _ hne => disjoint_range_leafWindow hT p.isLt p'.isLt fun h' => hne (Fin.ext h'))]
-  have hcond : ∀ i : Fin n, (∀ k ∈ (List.finRange (2 ^ (h + 1))).toFinset,
-      ∀ j : Fin (leafLen h n w k), leafWindow hT k j ≠ i) → τ i = nodeCfg hT ι₀ enc (h + 1) x i :=
-    fun i hi => absurd hi (by
-      obtain ⟨p, hp, i', hi'⟩ := exists_leafWindow_eq hT i
-      simp only [List.toFinset_finRange, Finset.mem_univ, true_implies, not_forall, not_not]
-      exact ⟨⟨p, hp⟩, i', hi'⟩)
-  rw [ite_eq_left hcond]
-  simp only [List.toFinset_finRange]
-  refine Finset.prod_congr rfl fun p _ => ?_
-  rw [nodeCfg_comp_leafWindow, treeLeafGate,
-    extUnitary_apply (hV _ (by
-      have := two_mul_le_leafLen hT p.isLt; omega)) (leafInput_injective hT hι₀ henc p)
-      Function.injective_id]
-  exact Function.injective_id.extend_apply _ _ _
+  exact intervalTreeLeafOp_apply_nodeCfg hT (fun p => V (leafLen h n w p))
+    (fun p => hV _ (by have := two_mul_le_leafLen hT p.isLt; omega))
+    hι₀ henc x τ
 
 omit [NeZero d] [NeZero s] in
 private theorem treeMap_congr {L L' : ℕ} (hL : L = L') (τ : Cfg d L) (τ' : Cfg d L')
@@ -557,6 +592,104 @@ theorem treeBlockOp_apply (hV : ∀ m, s ≤ m → (V m).IsIsometry)
   simp only [Fin.val_cast]
   have hi : i.val < n := by have := i.isLt; omega
   simp [nodeStart, leafOffset, Nat.mod_eq_of_lt hi]
+
+/-- Extend a merge isometry that may depend on its vertex, using the same encoded inputs
+and physical registers as the corresponding homogeneous construction. -/
+noncomputable def intervalTreeNodeGate
+    (Wnode : ℕ → ℕ → Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ)
+    (ι₀ : Fin χ → Cfg d (s + s)) (enc : Fin χ → Cfg d s) (j p : ℕ) :
+    Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ :=
+  extUnitary (Wnode j p) (treeInput ι₀ enc j p) (coarseOutput enc)
+
+/-- A vertex-dependent tree contracts to its recursively specified amplitudes. The
+amplitudes are read on the entire output configuration, so interval lengths and embeddings
+do not need to be homogeneous. The hypotheses give only the local leaf and binary
+factorizations; there is no assumed equality with the final gate product.
+Source: the coefficient identity underlying arXiv:2307.01696, eq. (16). -/
+theorem intervalTreeLevelsOp_apply_nodeCfg
+    (Vleaf : ∀ p : Fin (2 ^ (h + 1)), Matrix (Cfg d (leafLen h n w p)) (Fin χ) ℂ)
+    (Wnode : ℕ → ℕ → Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ)
+    (F : ℕ → ℕ → Cfg d n → Fin χ → ℂ)
+    (hV : ∀ p, (Vleaf p).IsIsometry)
+    (hW : ∀ j, j ≤ h → ∀ p : Fin (2 ^ j), (Wnode j p).IsIsometry)
+    (hleaf : ∀ (p : Fin (2 ^ (h + 1))) τ x,
+      F (h + 1) p τ x = Vleaf p (τ ∘ leafWindow hT p) x)
+    (hsplit : ∀ j, j ≤ h → ∀ (p : Fin (2 ^ j)) τ x,
+      F j p τ x = ∑ e,
+        F (j + 1) (2 * p) τ (decodeBlock χ 2 e 0) *
+          F (j + 1) (2 * p + 1) τ (decodeBlock χ 2 e 1) * Wnode j p e x)
+    (hι₀ : Function.Injective ι₀) (henc : Function.Injective enc) :
+    ∀ k j, j + k = h + 1 → ∀ (x : Fin (2 ^ j) → Fin χ) (τ : Cfg d n),
+      (treeLeafOp hT (intervalTreeLeafGate hT Vleaf ι₀ enc) *
+          treeLevelsOp hT (intervalTreeNodeGate Wnode ι₀ enc) j k) τ
+        (nodeCfg hT ι₀ enc j x) = ∏ p : Fin (2 ^ j), F j p τ (x p)
+  | 0, j, hj, x, τ => by
+    obtain rfl : j = h + 1 := by omega
+    rw [treeLevelsOp, Matrix.mul_one, intervalTreeLeafOp_apply_nodeCfg hT Vleaf hV hι₀ henc]
+    exact Finset.prod_congr rfl fun p _ => (hleaf p τ (x p)).symm
+  | k + 1, j, hj, x, τ => by
+    classical
+    have hjh : j ≤ h := by omega
+    have ih := intervalTreeLevelsOp_apply_nodeCfg Vleaf Wnode F hV hW hleaf hsplit
+      hι₀ henc k (j + 1) (by omega)
+    rw [treeLevelsOp_succ', ← Matrix.mul_assoc, Matrix.mul_apply]
+    have hlayer : ∀ c : Cfg d n, treeLevelOp hT (intervalTreeNodeGate Wnode ι₀ enc) j c
+        (nodeCfg hT ι₀ enc j x) =
+        Function.extend (fun e : Fin (2 ^ j) → Fin (blockPhysDim χ 2) =>
+          placeCfg (fun p : Fin (2 ^ j) => nodeWindow hT j p)
+            fun p => coarseOutput enc (e p))
+          (fun e => ∏ p : Fin (2 ^ j), Wnode j p (e p) (x p)) 0 c := fun c =>
+      list_prod_embedOp_placeCfg (nodeWindow_injective₂ hT (by omega)) _
+        (fun p => treeInput ι₀ enc j p) (fun _ => coarseOutput enc)
+        (fun _ => coarseOutput_injective henc) _ (fun p c z =>
+          extUnitary_apply (hW j hjh p) (treeInput_injective hι₀ henc j p)
+            (coarseOutput_injective henc) c z) x c
+    simp_rw [hlayer]
+    have hinjo : Function.Injective fun e : Fin (2 ^ j) → Fin (blockPhysDim χ 2) =>
+        placeCfg (d := d) (fun p : Fin (2 ^ j) => nodeWindow hT j p)
+          fun p => coarseOutput enc (e p) := fun e e' he =>
+      funext fun p => coarseOutput_injective henc
+        (congrFun (placeCfg_injective (nodeWindow_injective₂ hT (by omega)) he) p)
+    rw [sum_extend_zero hinjo _ (fun c v =>
+      (treeLeafOp hT (intervalTreeLeafGate hT Vleaf ι₀ enc) *
+        treeLevelsOp hT (intervalTreeNodeGate Wnode ι₀ enc) (j + 1) k) τ c * v)
+      fun _ => mul_zero _]
+    simp_rw [placeCfg_coarseOutput_eq_nodeCfg hT ι₀ enc hjh, ih]
+    simp_rw [prod_fin_two_pow_succ, ← Finset.prod_mul_distrib, unpair_two_mul,
+      unpair_two_mul_add_one]
+    rw [← Fintype.prod_sum (fun (p : Fin (2 ^ j)) (b : Fin (blockPhysDim χ 2)) =>
+      F (j + 1) (2 * p) τ (decodeBlock χ 2 b 0) *
+        F (j + 1) (2 * p + 1) τ (decodeBlock χ 2 b 1) * Wnode j p b (x p))]
+    exact Finset.prod_congr rfl fun p _ => (hsplit j hjh p τ (x p)).symm
+
+/-- The full placed product implements the root amplitudes on every encoded input, for
+independently chosen isometric leaves and vertex maps obeying the displayed local
+factorizations. This equality specifies all physical output sites, including scratch sites.
+Source: arXiv:2307.01696, eq. (16), with position-dependent maps. -/
+theorem intervalTreeOp_apply
+    (Vleaf : ∀ p : Fin (2 ^ (h + 1)), Matrix (Cfg d (leafLen h n w p)) (Fin χ) ℂ)
+    (Wnode : ℕ → ℕ → Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ)
+    (F : ℕ → ℕ → Cfg d n → Fin χ → ℂ)
+    (hV : ∀ p, (Vleaf p).IsIsometry)
+    (hW : ∀ j, j ≤ h → ∀ p : Fin (2 ^ j), (Wnode j p).IsIsometry)
+    (hleaf : ∀ (p : Fin (2 ^ (h + 1))) τ x,
+      F (h + 1) p τ x = Vleaf p (τ ∘ leafWindow hT p) x)
+    (hsplit : ∀ j, j ≤ h → ∀ (p : Fin (2 ^ j)) τ x,
+      F j p τ x = ∑ e,
+        F (j + 1) (2 * p) τ (decodeBlock χ 2 e 0) *
+          F (j + 1) (2 * p + 1) τ (decodeBlock χ 2 e 1) * Wnode j p e x)
+    (hι₀ : Function.Injective ι₀) (henc : Function.Injective enc)
+    (x : Fin χ) (τ : Cfg d n) :
+    (treeLeafOp hT (intervalTreeLeafGate hT Vleaf ι₀ enc) *
+        treeLevelsOp hT (intervalTreeNodeGate Wnode ι₀ enc) 0 (h + 1)) τ
+      (placeCfg (fun p : Fin (2 ^ 0) => nodeWindow hT 0 p) fun _ => ι₀ x) = F 0 0 τ x := by
+  have h0 := intervalTreeLevelsOp_apply_nodeCfg hT Vleaf Wnode F hV hW hleaf hsplit
+    hι₀ henc (h + 1) 0 (by omega) (fun _ => x) τ
+  have hcfg : nodeCfg hT ι₀ enc 0 (fun _ => x) =
+      placeCfg (fun p : Fin (2 ^ 0) => nodeWindow hT 0 p) fun _ => ι₀ x := by
+    simp only [nodeCfg, treeInput, ↓reduceIte]
+  rw [← hcfg, h0, Finset.prod_eq_single (0 : Fin (2 ^ 0))
+    (fun b _ hb => absurd (Fin.ext (by have := b.isLt; simp at this; omega)) hb) (by simp)]
 
 end State
 

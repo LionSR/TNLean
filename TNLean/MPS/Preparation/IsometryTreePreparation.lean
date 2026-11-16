@@ -30,41 +30,6 @@ open QuantumCircuit TeleportHop
 
 namespace MPSPreparation
 
-private theorem treeUnitaryOp_mem_unitary {d h s n : ℕ} [NeZero s] {w : ℕ → ℕ}
-    (hT : IsTreeLayout h s n w)
-    (X : ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ)
-    (U : ∀ p : Fin (2 ^ (h + 1)),
-      Matrix (Cfg d (leafLen h n w p)) (Cfg d (leafLen h n w p)) ℂ)
-    (hX : ∀ j p, X j p ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ))
-    (hU : ∀ p : Fin (2 ^ (h + 1)), U p ∈ unitary (Matrix (Cfg d (leafLen h n w p))
-      (Cfg d (leafLen h n w p)) ℂ)) :
-    treeLeafOp hT U * treeLevelsOp hT X 0 (h + 1) ∈
-      unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
-  classical
-  have hlevel : ∀ j, j ≤ h + 1 → treeLevelOp hT X j ∈
-      unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
-    intro j hj
-    apply Submonoid.list_prod_mem
-    intro Z hZ
-    obtain ⟨p, -, rfl⟩ := List.mem_map.mp hZ
-    exact embedOp_mem_unitary
-      (fun a b hab => (Prod.mk.inj (nodeWindow_injective₂ hT hj
-        (show nodeWindow hT j p a = nodeWindow hT j p b from hab))).2) (hX j p)
-  have hlevels : ∀ m, m ≤ h + 1 → treeLevelsOp hT X 0 m ∈
-      unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
-    intro m hm
-    induction m with
-    | zero => exact Submonoid.one_mem _
-    | succ m ih =>
-      rw [treeLevelsOp, zero_add]
-      exact Submonoid.mul_mem _ (hlevel m (by omega)) (ih (by omega))
-  have hleaf : treeLeafOp hT U ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
-    apply Submonoid.list_prod_mem
-    intro Z hZ
-    obtain ⟨p, -, rfl⟩ := List.mem_map.mp hZ
-    exact embedOp_mem_unitary (leafWindow_injective hT p.isLt) (hU p)
-  exact Submonoid.mul_mem _ hleaf (hlevels (h + 1) le_rfl)
-
 /-- Arbitrary position-dependent unitary node and leaf maps on disjoint binary layouts
 have a coherent measurement implementation of depth `C (h+1)`. The scalar of each outcome
 history is independent of the admissible input, hence is shared by coherent sectors.
@@ -135,7 +100,7 @@ theorem exists_rounds_blockLayerOp_treeUnitaryOp (d s c : ℕ) [NeZero d] [NeZer
     intro Z hZ
     obtain ⟨b, -, rfl⟩ := List.mem_map.mp hZ
     exact embedOp_mem_unitary (blockSite_injective hN b)
-      (treeUnitaryOp_mem_unitary (hT b) (X b) (U b) (hnode b) (hleafUnitary b))
+      (treeLeafOp_mul_treeLevelsOp_mem_unitary (hT b) (X b) (U b) (hnode b) (hleafUnitary b))
   refine ⟨Rs ++ [round Ll [] valid_nil], ?_, hall, ?_⟩
   · simp only [List.map_append, List.sum_append, hRs, List.map_cons, List.map_nil,
       List.sum_cons, List.sum_nil, depth_round, hLl]

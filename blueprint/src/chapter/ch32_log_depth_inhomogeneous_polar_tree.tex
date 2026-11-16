@@ -7,19 +7,19 @@
         MPSPreparation.mul_div_mul_exp_neg_le_iff}
     \notready
     Let $K,N,\varepsilon,r>0$ and $k\ge0$ be an integer. Then
-    \[
+    \begin{align*}
         KN^k e^{-rq}\le\varepsilon
         \quad\Longleftrightarrow\quad
         q\ge\frac{\log K+k\log N-\log\varepsilon}{r}.
-    \]
+    \end{align*}
     The least nonnegative integer satisfying this certificate is the
     nonnegative ceiling of the displayed threshold. If the certificate
     retains the number-of-blocks factor and $q>0$, then
-    \[
+    \begin{align*}
         K\frac Nq e^{-rq}\le\varepsilon
         \quad\Longleftrightarrow\quad
         rq+\log q\ge\log K+\log N-\log\varepsilon.
-    \]
+    \end{align*}
 \end{lemma}
 \begin{proof}
     Express the left sides as exponentials, use the strict monotonicity
@@ -53,10 +53,10 @@ a uniform sharp rate for the unspecified long-range sequence class.
     \notready
     Identify the virtual space with pairs $(a,b)$ of indices in
     $\{1,\ldots,D\}$. For $D^2\times D^2$ matrices $P,Q$, set
-    \[
+    \begin{align*}
         C_{(u,v),(a,b)}
         =\sum_{c=1}^D P_{u,(a,c)}Q_{v,(c,b)}.
-    \]
+    \end{align*}
 \end{definition}
 
 \begin{lemma}[The actual parent lies in the child ranges]
@@ -146,10 +146,67 @@ a uniform sharp rate for the unspecified long-range sequence class.
     Lemma~\ref{lem:ldp_inhomogeneous_exact_polar_tree}.
 \end{proof}
 
+\begin{lemma}[Unitary product of position-dependent tree gates]
+    \label{lem:ldp_interval_tree_unitary_product}
+    \lean{MPSPreparation.treeLeafOp_mul_treeLevelsOp_mem_unitary}
+    \notready
+    \uses{def:ldp_tree_layout}
+    If every node and leaf gate of a disjoint binary layout is unitary,
+    their placed product is unitary on the entire physical chain.
+\end{lemma}
+\begin{proof}
+    Embedded unitary gates are unitary. Apply closure under finite
+    products first within a level and then across the levels and leaves.
+\end{proof}
+
+\begin{definition}[Extensions of interval-dependent tree maps]
+    \label{def:ldp_interval_tree_extensions}
+    \lean{MPSPreparation.intervalTreeNodeGate,
+        MPSPreparation.intervalTreeLeafGate}
+    \notready
+    \uses{def:ldp_tree_layout}
+    Let $W_{j,p}\colon\C^\chi\to\C^\chi\otimes\C^\chi$ be an
+    isometry at each binary vertex, and let
+    $V_p\colon\C^\chi\to\mathcal H_p$ be an isometry at each leaf.
+    Extend each map to a unitary between the encoded input and output
+    registers, with the other input sites zero. The node and leaf maps
+    may depend on their positions.
+\end{definition}
+
+\begin{lemma}[Coefficients of an interval-dependent tree]
+    \label{lem:ldp_interval_tree_coefficients}
+    \lean{MPSPreparation.intervalTreeLeafOp_apply_nodeCfg,
+        MPSPreparation.intervalTreeLevelsOp_apply_nodeCfg,
+        MPSPreparation.intervalTreeOp_apply}
+    \notready
+    \uses{def:ldp_interval_tree_extensions}
+    For each complete output configuration $\tau$, let $F_{j,p}(\tau,x)$
+    be amplitudes satisfying
+    \begin{align*}
+        F_{h+1,p}(\tau,x)&=V_p(\tau|_p,x),\\
+        F_{j,p}(\tau,x)&=\sum_{a,b}
+        F_{j+1,2p}(\tau,a)F_{j+1,2p+1}(\tau,b)W_{j,p}((a,b),x).
+    \end{align*}
+    The product of the extended node gates, followed by the leaf gates,
+    has coefficient $F_{0,0}(\tau,x)$ on the encoded root input $x$.
+    More generally, the remaining product below depth $j$ has coefficient
+    $\prod_pF_{j,p}(\tau,x_p)$ on the encoded inputs $x_p$ at that depth.
+    These equalities include every physical output site.
+\end{lemma}
+\begin{proof}
+    At the leaves, disjoint supports give the product of the leaf
+    coefficients. Induct upwards. At a node level, expand the unitary
+    extensions on the encoded inputs, sum over their virtual outputs,
+    and group each pair of children under its parent. Distributivity
+    gives the stated binary recursion. At the root the product has one
+    factor.
+\end{proof}
+
 \begin{lemma}[Coherent measurement rounds for position-dependent tree gates]
     \label{lem:ldp_interval_tree_measurement_rounds}
     \lean{MPSPreparation.exists_rounds_blockLayerOp_treeUnitaryOp}
     \notready
+    \uses{lem:ldp_interval_tree_unitary_product}
     Fix a physical dimension, a register width and a bound on the physical
     leaf lengths. Arbitrary unitary node and leaf gates on disjoint binary
     layouts have a measurement implementation of depth at most $C(h+1)$,

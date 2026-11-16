@@ -82,6 +82,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Unitary products on binary layouts — promoted (2026-11-16)
+
+- **Pattern:** Prove unitarity of embedded gates, then finite products within
+  each level and across levels and leaves.
+- **Seen:** `MPS/Preparation/UnequalRegisterTreeState.lean` and
+  `MPS/Preparation/IsometryTreePreparation.lean`.
+- **Abstraction:** `MPSPreparation.treeLeafOp_mul_treeLevelsOp_mem_unitary`
+  at the register-state owner. Both the homogeneous gate specialization and
+  the position-dependent measurement compiler use it.
+- **Decision:** Share the mathematical closure argument instead of copying
+  the homogeneous gate-product proof into the measurement compiler.
+
 ### Reduced coordinate heights from a common denominator — promoted (2026-11-04)
 
 - **Pattern:** Convert a common Gaussian-integer denominator and a norm bound
