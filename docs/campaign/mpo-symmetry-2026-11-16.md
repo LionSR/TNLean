@@ -338,3 +338,36 @@ The relative-class and new reduction-path subsections compile together as five X
 pages without a TeX error. This is a focused typesetting check, not complete-volume
 acceptance. The expanded head still requires its own full hosted Lean, web and PDF
 checks, fresh independent reviews and the applicable approvals. No merge occurred.
+
+### Next batch: restricted embedding candidate (not exported)
+
+Scope claimed only on `candidate/10521-physical-embedding`, stacked on #10686:
+`ControlledZEmbeddingObstruction` contains two additional proof candidates. The first
+uses the actual length-four periodic operators: configurations 1100 and 1010 have the
+same single-site multiplicities but opposite controlled-Z phases. Every on-site matrix
+power gives equal diagonal entries on these configurations, so the combined family
+is not on-site. This avoids relying on a length-one ring convention.
+
+The second applies the existing closed-fusion/on-site theorem. It excludes any
+one-site-injective family on the original qubits whose periodic operators equal the
+combined family's at every positive length and whose fusion is exactly closed. This
+narrows the alternative-embedding question; it does not exclude weaker injectivity,
+different physical realizations, or establish physical phase separation. Positive
+blocking of a different embedding is not handled by this candidate.
+
+The candidate source passed direct strict elaboration against the checked #10686
+artifacts with automatic implicits disabled, synthesis-depth bound 3, standard
+Mathlib linters and warnings as errors. It has not passed a package build, full CI,
+foundational-dependency audit, Blueprint coverage or independent review. It is not
+exported through the generated aggregators. There is no additional PR or merge claim.
+
+The next substantive dependency is local continuous action-cap selection. A possible
+implementation route remains unverified: use a continuous coefficient-dual inverse at
+a locally injective blocking, the mixed-bond cross matrix from `ReductionExistence`,
+and a dimension-uniform nilpotent bound to obtain a continuous rank-one spectral
+factor. Local factorization and the padded contraction would then produce continuous
+actual caps without assuming a supplied virtual path. The chosen coefficient dual
+in the existing proof is noncanonical; continuity cannot simply be asserted for it.
+Physical Hamiltonian-path realization and changing minimal dimensions remain separate
+obligations even if this local algebra is completed. This paragraph is an unverified
+implementation plan, not a Lean theorem.
