@@ -77,51 +77,51 @@ theorem torusDualFacePlanCheck_eq_true (R : Finset X) (l : List A) :
     FreeGroup.toWord_eq_nil_iff]
 
 private def facePlanSearch (R : Finset X) : ℕ → List A → Option (List A)
-  | 0, prefix => if torusDualFacePlanCheck R prefix = true then some prefix else none
-  | n + 1, prefix =>
-    if torusDualFacePlanCheck R prefix = true then some prefix
-    else nativeAtoms.findSome? fun d => facePlanSearch R n (prefix ++ [d])
+  | 0, acc => if torusDualFacePlanCheck R acc = true then some acc else none
+  | n + 1, acc =>
+    if torusDualFacePlanCheck R acc = true then some acc
+    else nativeAtoms.findSome? fun d => facePlanSearch R n (acc ++ [d])
 
-private theorem search_sound (R : Finset X) (fuel : ℕ) (prefix result : List A)
-    (h : facePlanSearch R fuel prefix = some result) :
+private theorem search_sound (R : Finset X) (fuel : ℕ) (acc result : List A)
+    (h : facePlanSearch R fuel acc = some result) :
     torusDualFacePlanCheck R result = true := by
   revert h
-  induction fuel generalizing prefix result with
+  induction fuel generalizing acc result with
   | zero =>
     intro h
-    by_cases hc : torusDualFacePlanCheck R prefix = true
-    · rw [facePlanSearch, if_pos hc] at h
+    by_cases hc : torusDualFacePlanCheck R acc = true
+    · rw [facePlanSearch, ite_eq_left hc] at h
       exact (Option.some.inj h) ▸ hc
-    · rw [facePlanSearch, if_neg hc] at h
+    · rw [facePlanSearch, ite_eq_right hc] at h
       cases h
   | succ fuel ih =>
     intro h
-    by_cases hc : torusDualFacePlanCheck R prefix = true
-    · rw [facePlanSearch, if_pos hc] at h
+    by_cases hc : torusDualFacePlanCheck R acc = true
+    · rw [facePlanSearch, ite_eq_left hc] at h
       exact (Option.some.inj h) ▸ hc
-    · rw [facePlanSearch, if_neg hc] at h
+    · rw [facePlanSearch, ite_eq_right hc] at h
       obtain ⟨d, _, hd⟩ := List.exists_of_findSome?_eq_some h
-      exact ih (prefix ++ [d]) result hd
+      exact ih (acc ++ [d]) result hd
 
-private theorem search_none (R : Finset X) (fuel : ℕ) (prefix : List A)
-    (h : facePlanSearch R fuel prefix = none) :
+private theorem search_none (R : Finset X) (fuel : ℕ) (acc : List A)
+    (h : facePlanSearch R fuel acc = none) :
     ∀ suffix : List A, suffix.length ≤ fuel →
-      torusDualFacePlanCheck R (prefix ++ suffix) ≠ true := by
+      torusDualFacePlanCheck R (acc ++ suffix) ≠ true := by
   revert h
-  induction fuel generalizing prefix with
+  induction fuel generalizing acc with
   | zero =>
     intro h suffix hlen hgood
     have hs : suffix = [] := List.length_eq_zero_iff.mp (Nat.eq_zero_of_le_zero hlen)
     subst suffix
-    have hc : torusDualFacePlanCheck R prefix = true := by simpa using hgood
-    rw [facePlanSearch, if_pos hc] at h
+    have hc : torusDualFacePlanCheck R acc = true := by simpa using hgood
+    rw [facePlanSearch, ite_eq_left hc] at h
     cases h
   | succ fuel ih =>
     intro h suffix hlen hgood
-    by_cases hc : torusDualFacePlanCheck R prefix = true
-    · rw [facePlanSearch, if_pos hc] at h
+    by_cases hc : torusDualFacePlanCheck R acc = true
+    · rw [facePlanSearch, ite_eq_left hc] at h
       cases h
-    · rw [facePlanSearch, if_neg hc] at h
+    · rw [facePlanSearch, ite_eq_right hc] at h
       have hall := List.findSome?_eq_none_iff.mp h
       cases suffix with
       | nil => exact hc (by simpa using hgood)
@@ -130,7 +130,7 @@ private theorem search_none (R : Finset X) (fuel : ℕ) (prefix : List A)
         have hlen' : tail.length ≤ fuel := by
           simp only [List.length_cons] at hlen
           omega
-        apply ih (prefix ++ [d]) hrec tail hlen'
+        apply ih (acc ++ [d]) hrec tail hlen'
         simpa only [List.append_assoc, List.singleton_append] using hgood
 
 private def greedyFacePlan (R : Finset X) : List A :=
@@ -161,7 +161,7 @@ theorem torusDualComputedFacePlan_spec (R : Finset X) (hR : R ≠ Finset.univ) :
         torusDualFaceEliminationSequence (torusDualComputedFacePlan R)
           (torusDualFaceWord v) = 1 := by
   by_cases hg : torusDualFacePlanCheck R (greedyFacePlan R) = true
-  · simpa only [torusDualComputedFacePlan, if_neg hR, if_pos hg] using
+  · simpa only [torusDualComputedFacePlan, ite_eq_right hR, ite_eq_left hg] using
       (torusDualFacePlanCheck_eq_true R (greedyFacePlan R)).mp hg
   · obtain ⟨witness, hlen, hm, hf⟩ := exists_torusDualFaceEliminationSequence R hR
     have hw : torusDualFacePlanCheck R witness = true :=
@@ -172,7 +172,7 @@ theorem torusDualComputedFacePlan_spec (R : Finset X) (hR : R ≠ Finset.univ) :
       exact False.elim (hbad (by simpa using hw))
     | some l =>
       have hl := search_sound R (Fintype.card X) [] l hs
-      simpa only [torusDualComputedFacePlan, if_neg hR, if_neg hg, hs,
+      simpa only [torusDualComputedFacePlan, ite_eq_right hR, ite_eq_right hg, hs,
         Option.getD_some] using (torusDualFacePlanCheck_eq_true R l).mp hl
 
 end TNLean.PEPS
