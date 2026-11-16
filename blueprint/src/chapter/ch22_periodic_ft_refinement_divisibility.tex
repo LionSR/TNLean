@@ -892,7 +892,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \label{lem:periodic_qubit_refinement}
     \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_fin_two}
     \leanok
-    \uses{def:p_refinable}
+    \uses{def:p_refinable, def:p_divisible_channel}
     Let $B$ have physical dimension $d$ and bond dimension two. For every $p>0$,
     $p$-divisibility of $\mathcal E_B$ implies that $B$ is $p$-refinable.
     This includes singular and reducible transfer maps and assumes no
@@ -901,10 +901,13 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{proof}\leanok
     \uses{lem:periodic_qubit_root_rank, thm:periodic_refinement_from_bounded_root}
-    Every channel root has Choi rank at most that of $\mathcal E_B$,
-    which is at most $d$. Choose a minimal Kraus representation of the
-    root, pad it to $d$ letters, and apply the bounded-root refinement
-    theorem.
+    Every channel root $\mathcal F$ with $\mathcal F^p=\E_B$ satisfies
+    \begin{align}
+        \operatorname{rank}C_{\mathcal F}\le
+        \operatorname{rank}C_{\E_B}\le d. \notag
+    \end{align}
+    Choose a minimal Kraus representation of $\mathcal F$, pad it to $d$
+    letters, and apply the bounded-root refinement theorem.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready
