@@ -138,6 +138,38 @@ private theorem action_inverseCrossGolden : ∀ (a b x y : Fin 2)
     intro q p
   all_goals fin_cases q <;> fin_cases p <;> decide +kernel
 
+set_option maxRecDepth 8000 in
+private theorem action_crossFinalGolden : ∀ (a b x y v : Fin 2), y ≠ v →
+    ∀ (p : SequentialActionMultiplicity fibMult a b x y)
+      (q : FusionActionMultiplicity fibMult fibMult a b x v),
+    sequentialAnalysisGolden a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩ *
+        fusionActionSynthesisGolden a b x ⟨⟨q.1, q.2.2⟩, v, q.2.1⟩ = 0 ∧
+      fusionActionAnalysisGolden a b x ⟨⟨q.1, q.2.2⟩, v, q.2.1⟩ *
+        sequentialSynthesisGolden a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩ = 0 := by
+  intro a b x y v
+  fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;> fin_cases v <;>
+    intro h p q
+  all_goals first
+    | exact (h rfl).elim
+    | fin_cases p <;> fin_cases q <;> decide +kernel
+
+/-- Both actual action-tree cross contractions vanish between distinct final
+blocks. Source: GLM23, `1Fsymbol`, for the displayed two-block construction. -/
+theorem actionTrees_cross_final (a b x y v : Fin 2) (hyv : y ≠ v)
+    (p : SequentialActionMultiplicity fibMult a b x y)
+    (q : FusionActionMultiplicity fibMult fibMult a b x v) :
+    sequentialActionAnalysis actionAnalysis a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩ *
+        fusionThenActionSynthesis fusionSynthesis actionSynthesis a b x
+          ⟨⟨q.1, q.2.2⟩, v, q.2.1⟩ = 0 ∧
+      fusionThenActionAnalysis fusionAnalysis actionAnalysis a b x
+          ⟨⟨q.1, q.2.2⟩, v, q.2.1⟩ *
+        sequentialActionSynthesis actionSynthesis a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩ = 0 := by
+  constructor
+  · rw [sequentialAnalysis_eq, fusionActionSynthesis_eq, ← complexOfGolden_mul,
+      (action_crossFinalGolden a b x y v hyv p q).1, complexOfGolden_zero]
+  · rw [fusionActionAnalysis_eq, sequentialSynthesis_eq, ← complexOfGolden_mul,
+      (action_crossFinalGolden a b x y v hyv p q).2, complexOfGolden_zero]
+
 private theorem inv_dim_trace {D : ℕ} (hD : 0 < D) (z : ℂ) :
     (D : ℂ)⁻¹ * Matrix.trace (z • (1 : Matrix (Fin D) (Fin D) ℂ)) = z := by
   rw [Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin, smul_eq_mul]

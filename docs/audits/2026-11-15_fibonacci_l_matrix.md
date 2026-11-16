@@ -1,6 +1,6 @@
 # Exact Fibonacci action-tree calculation for #8053, item 2
 
-Status: **partially kernel checked; all-sector L identification pending**, with separately verified exact arithmetic evidence.
+Status: **all-sector L identification kernel checked; cross-final extension pending**, with separately verified exact arithmetic evidence.
 The continuation adds `FibonacciActionDecomposition.lean` and
 `FibonacciActionLMatrix.lean`, with proofs rather than proof placeholders.
 The blueprint records the precise constructed family but carries no completion
@@ -43,19 +43,24 @@ exact complex decompositions, normality, and both actual action trees are
 kernel checked. The source blob is
 `c1c5aa8cf44867afa60e5e1a874045bcf9e47cef`.
 
-That run did not complete `FibonacciActionLMatrix.lean`: two rewrite steps
-retained path-dependent dimension instances. The all-sector GoldenInt cross
-contractions, the reverse contractions, and the same-gauge fusion contraction
-produced no errors, but the module as a whole is not yet validated.
-Commit `080ea322075e41abb201ef7635891ffc691b723d` makes the final-block path
-coordinates explicit before the ring-to-complex multiplication rewrite;
-[run 43954895318](https://github.com/LionSR/TNLean/actions/runs/43954895318)
-then accepted that transport step but failed the next rewrite because the
-GoldenInt certificate still used the unreduced path equivalence. The follow-up
-states those private certificates in the same explicit path coordinates.
-Its complete module check remains pending. No final L theorem is claimed
-kernel checked on this evidence alone. These modules extend the merged
-construction.
+The subsequent run at `080ea322075e41abb201ef7635891ffc691b723d`
+accepted the complex multiplication transport but failed the next rewrite
+because the GoldenInt certificate retained an unreduced path equivalence.
+Commit `c1d793c355835da25acf770657373a2b51bf4b99` states those certificates
+in explicit path coordinates. Its pinned
+[run 43956358566](https://github.com/LionSR/TNLean/actions/runs/43956358566)
+passed both the strict changed-source check and the early module build.
+Thus the actual all-sector L/F equality, reverse comparisons, both inverse
+identities, and all supporting proofs in that source are kernel checked.
+The full project and blueprint checks were still running when this status
+was recorded.
+
+A subsequent extension promotes the exact verifier's ten cross-final zero
+products to a Lean theorem: `actionTrees_cross_final` covers both rectangular
+cross contractions between different final blocks. That extension and its
+blueprint statement remain pending kernel checking. No completion marker is
+placed on the combined blueprint entry until that check succeeds. These
+modules extend the merged construction; they do not replace its map tables.
 
 ## Ownership and baseline
 
@@ -207,8 +212,8 @@ FibonacciFSymbol.lean be53c7fb4b675bd12c0da6219e7c930bac955cb63fdec62171c0641bf9
 ## Formal obligations recorded before the Lean candidate
 
 The following list preserves the obligations recorded before the candidate.
-Items 1–3 are now kernel checked in the decomposition module. Item 4 and the
-full validation in item 5 remain pending as described above.
+Items 1–4 are now kernel checked at `c1d793c`. The additional cross-final
+extension and the full validation in item 5 remain pending as described above.
 
 1. Define the typed fusion and action maps over the existing GoldenInt ring,
    including `1·C → C`, and map them to ℂ with `goldenToComplex`. Use

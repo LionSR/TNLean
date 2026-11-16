@@ -205,6 +205,7 @@ and action analysis and synthesis maps.
         FibonacciCompression.Boundary.action_isBiorthogonal,
         FibonacciCompression.Boundary.states_isNormal,
         FibonacciCompression.Boundary.actionTrees_isBiorthogonal,
+        FibonacciCompression.Boundary.actionTrees_cross_final,
         FibonacciCompression.Boundary.actionLMatrix_eq_fSymbol,
         FibonacciCompression.Boundary.inverseActionLMatrix_eq_fSymbol,
         FibonacciCompression.Boundary.actionLMatrix_tau,
@@ -232,7 +233,9 @@ and action analysis and synthesis maps.
         =F^{\tau\tau\tau}_{\tau}
         =\begin{pmatrix}\sigma^2&\sigma\\\sigma&-\sigma^2\end{pmatrix}.
     \]
-    The reverse action comparison has the transposed coefficients.
+    Cross contractions between distinct final state blocks vanish in
+    both directions. The reverse action comparison within a final block
+    has the transposed coefficients.
     The forward and reverse matrices are inverse, including on empty
     multiplicity spaces.
 \end{lemma}
