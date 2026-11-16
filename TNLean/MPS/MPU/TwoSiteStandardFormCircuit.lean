@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.Algebra.FinSumPermutation
+import TNLean.Algebra.FinKronecker
 
 /-!
 # Periodic circuit of a two-site standard form
