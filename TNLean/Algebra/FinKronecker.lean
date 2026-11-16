@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.KroneckerFactorPositivity
+import QICLean.Algebra.MatrixUnitaryBetween
 import TNLean.Algebra.ListProduct
 
 /-!
@@ -23,10 +24,12 @@ expands as a sum over choice functions.
 * `Matrix.finKronecker_mul`, `Matrix.finKronecker_one`, `Matrix.finKronecker_ite_smul_one`,
   `Matrix.finKronecker_conjTranspose`, `Matrix.finKronecker_transpose`.
 * `Matrix.rectKronecker_mul`, `Matrix.rectKronecker_one`, `Matrix.rectKronecker_conjTranspose`,
-  `Matrix.sum_rectKronecker` for the product `Matrix.rectKronecker` of rectangular matrices.
+  `Matrix.rectKronecker_isUnitaryBetween`, `Matrix.sum_rectKronecker` for the
+  product `Matrix.rectKronecker` of rectangular matrices.
 * `Matrix.piKronecker_mul`, `Matrix.piKronecker_one` for the product `Matrix.piKronecker` of
   matrices whose labels vary with the site.
-* `Matrix.finKronecker_diagonal`, `Matrix.finKronecker_conjTranspose_mul_self`.
+* `Matrix.finKronecker_diagonal`, `Matrix.finKronecker_conjTranspose_mul_self`,
+  `Matrix.finKronecker_mem_unitaryGroup`.
 * `Matrix.finKronecker_mul_apply_of_eq_ite`, `Matrix.mul_finKronecker_apply_of_eq_ite`.
 * `Matrix.trace_prod_ofFn_sum_smul`.
 -/
@@ -141,6 +144,16 @@ theorem rectKronecker_conjTranspose_mul_self {N : ℕ} [Fintype ι] [Finite κ] 
   rw [rectKronecker_conjTranspose, rectKronecker_mul, hu,
     rectKronecker_eq_finKronecker, finKronecker_one]
 
+/-- Every tensor power of a matrix that is unitary between its coordinate spaces is unitary
+between the configuration spaces. -/
+theorem rectKronecker_isUnitaryBetween {N : ℕ} [Fintype ι] [Fintype κ] [DecidableEq ι]
+    [DecidableEq κ] {u : Matrix ι κ ℂ} (hu : u.IsUnitaryBetween) :
+    (rectKronecker fun _ : Fin N => u).IsUnitaryBetween := by
+  refine ⟨rectKronecker_conjTranspose_mul_self hu.1, ?_⟩
+  have h := rectKronecker_conjTranspose_mul_self (N := N) (u := uᴴ)
+    (by rw [conjTranspose_conjTranspose]; exact hu.2)
+  rwa [← rectKronecker_conjTranspose (fun _ : Fin N => u), conjTranspose_conjTranspose] at h
+
 /-- Summing product operators over all choice functions gives the product of the sums. -/
 theorem sum_rectKronecker [DecidableEq ν] {r : ν → ℕ} (K : (k : ν) → Fin (r k) → Matrix ι κ ℂ) :
     ∑ J : (k : ν) → Fin (r k), rectKronecker (fun k ↦ K k (J k)) =
@@ -197,6 +210,12 @@ theorem finKronecker_conjTranspose_mul_self {u : Matrix ι ι ℂ} (hu : uᴴ * 
     (finKronecker fun _ : Fin N => u)ᴴ * finKronecker (fun _ : Fin N => u) = 1 := by
   rw [finKronecker_conjTranspose, finKronecker_mul]
   simp [hu]
+
+/-- The Kronecker power of a unitary matrix is unitary. -/
+theorem finKronecker_mem_unitaryGroup {u : Matrix ι ι ℂ} (hu : u ∈ unitaryGroup ι ℂ) :
+    (finKronecker fun _ : Fin N => u) ∈ unitaryGroup (Fin N → ι) ℂ := by
+  rw [mem_unitaryGroup_iff, star_eq_conjTranspose, finKronecker_conjTranspose, finKronecker_mul]
+  simp [← star_eq_conjTranspose, mem_unitaryGroup_iff.mp hu]
 
 /-- The Kronecker power of a diagonal matrix is diagonal, with the product of the entries. -/
 theorem finKronecker_diagonal (f : ι → ℂ) :

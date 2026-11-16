@@ -29,46 +29,6 @@ positive-length identity is derived here from the supplied open contraction.
 open scoped Matrix BigOperators
 open Matrix
 
-private noncomputable def rectangularProduct {N : ℕ} {α β : Type*}
-    [Fintype α] [Fintype β] (A : Matrix α β ℂ) :
-    Matrix (Fin N → α) (Fin N → β) ℂ :=
-  fun a b => ∏ x : Fin N, A (a x) (b x)
-
-private theorem rectangularProduct_isIsometry {N : ℕ} {α β : Type*}
-    [Fintype α] [Fintype β] [DecidableEq β]
-    (A : Matrix α β ℂ) (hA : A.IsIsometry) :
-    (rectangularProduct (N := N) A).IsIsometry := by
-  classical
-  change (rectangularProduct (N := N) A)ᴴ * rectangularProduct A = 1
-  ext a b
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, rectangularProduct,
-    star_prod, ← Finset.prod_mul_distrib]
-  rw [(Fintype.prod_sum (fun x c => star (A c (a x)) * A c (b x))).symm]
-  simp only [← Matrix.mul_apply, ← Matrix.conjTranspose_apply]
-  rw [show Aᴴ * A = 1 from hA]
-  simp only [Matrix.one_apply]
-  by_cases hab : a = b
-  · subst b
-    simp
-  · obtain ⟨x, hx⟩ := Function.ne_iff.mp hab
-    simp only [hab, ↓reduceIte]
-    exact Finset.prod_eq_zero (Finset.mem_univ x) (by simp [hx])
-
-private theorem rectangularProduct_conjTranspose {N : ℕ} {α β : Type*}
-    [Fintype α] [Fintype β] (A : Matrix α β ℂ) :
-    (rectangularProduct (N := N) A)ᴴ = rectangularProduct Aᴴ := by
-  ext a b
-  simp [rectangularProduct, Matrix.conjTranspose_apply, star_prod]
-
-private theorem rectangularProduct_isUnitaryBetween {N : ℕ} {α β : Type*}
-    [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
-    (A : Matrix α β ℂ) (hA : A.IsUnitaryBetween) :
-    (rectangularProduct (N := N) A).IsUnitaryBetween := by
-  refine ⟨rectangularProduct_isIsometry A hA.1, ?_⟩
-  have h := rectangularProduct_isIsometry (N := N) Aᴴ (hA.2.conjTranspose A)
-  rw [← rectangularProduct_conjTranspose] at h
-  simpa using h.conjTranspose _
-
 namespace MPOTensor
 
 variable {d D ℓ r N : ℕ}
@@ -117,7 +77,7 @@ theorem twoSiteUnshiftedLayer_isUnitaryBetween
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (hu : u.IsUnitaryBetween) :
     (twoSiteUnshiftedLayer (N := N) u).IsUnitaryBetween :=
-  rectangularProduct_isUnitaryBetween (N := N) u hu
+  rectKronecker_isUnitaryBetween hu
 
 /-- The shifted layer is unitary between the intermediate-pair and
 physical-pair configuration spaces.
@@ -127,8 +87,8 @@ theorem twoSiteShiftedLayer_isUnitaryBetween [NeZero N]
     (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
     (hv : v.IsUnitaryBetween) :
     (twoSiteShiftedLayer (N := N) v).IsUnitaryBetween := by
-  have h := rectangularProduct_isUnitaryBetween (N := N) v hv
-  have h' := h.reindex (rectangularProduct (N := N) v)
+  have h := rectKronecker_isUnitaryBetween (N := N) hv
+  have h' := h.reindex (rectKronecker fun _ : Fin N => v)
     (twoSiteShiftedPairEquiv (N := N) (ℓ := d) (r := d)).symm
     (twoSiteShiftedPairEquiv (N := N) (ℓ := ℓ) (r := r)).symm
   convert h' using 1

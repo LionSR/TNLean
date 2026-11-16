@@ -82,6 +82,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Sitewise Kronecker power in configuration coordinates — promoted (2026-11-16)
+
+- **Seen:** three local copies of the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι`
+  with its product, identity, conjugate-transpose and unitarity lemmas: `siteProduct` in
+  `MPS/MPU/FundamentalTheoremGates.lean`, the private `chainPower` in
+  `MPS/MPU/Examples/ShiftStrictEquivalence.lean`, and the private rectangular
+  `rectangularProduct` in `MPS/MPU/TwoSiteStandardFormCircuit.lean`.
+- **Abstraction:** the existing `Matrix.rectKronecker` and `Matrix.finKronecker` of
+  `Algebra/FinKronecker.lean`, with the new `Matrix.rectKronecker_isUnitaryBetween` and
+  `Matrix.finKronecker_mem_unitaryGroup`; all three copies are deleted.
+- **Notes:** `MPOTensor.sitewise_prod_conjTranspose_mul_self` in
+  `MPS/MPDO/LemmaC5CaseI.lean` restates `Matrix.finKronecker_conjTranspose_mul_self` for the
+  same matrix written with `Matrix.of`; it is outside the MPU scope and remains.
+
 ### Polynomial AKLV threshold above the logarithmic one — promoted (2026-11-15)
 
 - **Pattern:** From `0 < g ≤ 1`, `0 ≤ E0` and `(1024/g)*(E0/g+1) ≤ t`, derive
@@ -5987,14 +6001,6 @@ no additional helper is proposed.
   appears; the shared endpoint-ray theorem already contains the geometry.
 - **Notes:** noncentrality is essential when composing the directed-ray
   relations. The center remains in every triangle when no radial is removed.
-
-### sitewise Kronecker power in configuration coordinates — candidate
-- **Pattern:** the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι` with its product,
-  identity, conjugate-transpose and unitarity lemmas.
-- **Seen:** two copies (2026-10-06): `siteProduct` (index `Fin ℓ × Fin r`) in
-  `TNLean/MPS/MPU/FundamentalTheoremGates.lean` and the private `chainPower` (index `Fin d`) in
-  `TNLean/MPS/MPU/Examples/ShiftStrictEquivalence.lean`.
-- **Abstraction:** one definition over an arbitrary fintype; a third copy promotes it.
 
 ### simplicity of a tensor with diagonal rank-one double-layer letters — candidate
 - **Pattern:** `isMPUSimple_of_rankOne_diagonal` (`TNLean/MPS/MPU/SimpleRankOne.lean`,
