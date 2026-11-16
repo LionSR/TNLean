@@ -81,7 +81,7 @@
       "paper": "glm23",
       "eyebrow": "Part I · Sections 2 and 3",
       "heading": "Fusion and action tensors, F- and L-symbols",
-      "intro": "A family of matrix product operators closes under multiplication when the product of any two is a non-negative integer combination of the others, for every chain length and every choice of boundary. The matrix product states invariant under such an algebra are described by local data: fusion tensors that reduce a product of two operators to the operators in its decomposition, and action tensors that reduce an operator applied to a state to the states in its decomposition. Comparing two ways of reducing a triple product gives the F-symbols; comparing two ways of reducing two operators applied to a state gives the L-symbols. The two satisfy a coupled pentagon equation, and both are fixed only up to a change of basis of the fusion and action tensors.",
+      "intro": "A family of matrix product operators forms an algebra when its operators with arbitrary boundary conditions are closed under multiplication: for every pair of boundaries there is an output boundary, the same at every chain length, whose operator is the product. On periodic chains this gives fusion rules: the product of two operator blocks is a non-negative integer combination of blocks. The matrix product states invariant under such an algebra are described by local data: fusion tensors that reduce a product of two operators to the operators in its decomposition, and action tensors that reduce an operator applied to a state to the states in its decomposition. Comparing two ways of reducing a triple product gives the F-symbols; comparing two ways of reducing two operators applied to a state gives the L-symbols. The two satisfy a coupled pentagon equation, and both are fixed only up to a change of basis of the fusion and action tensors.",
       "stages": [
         {
           "title": "Arbitrary-boundary closedness and the fusion and action tensors",
@@ -90,7 +90,7 @@
             8142,
             8143
           ],
-          "physics": "Closedness with arbitrary boundary conditions, rather than only periodic ones, forces the product of two operators to be block-reducible with an explicit nilpotent remainder; the fusion tensors are the reducing maps and their left inverses. The Perron–Frobenius eigenvector of the fusion matrices gives the quantum dimensions of the labels.",
+          "physics": "Closedness with arbitrary boundary conditions, rather than only periodic ones, makes the product of two injective operator blocks an exact sum of blocks: every letter of the product tensor is reconstructed from the blocks, with no remainder. The fusion tensors are the maps into these blocks and their left inverses, and the action tensors arise in the same way. The Perron–Frobenius eigenvector of the fusion matrices gives the quantum dimensions of the labels.",
           "delivers": "Fusion and action tensors with multiplicity, their uniqueness up to gauge, and the Perron–Frobenius fusion dimensions."
         },
         {
@@ -103,12 +103,12 @@
           "delivers": "The L-symbols with multiplicity, the corrected coupled pentagon, and the joint gauge law."
         },
         {
-          "title": "No injective state is invariant under a non-trivial algebra",
+          "title": "No injective state without multiplicity is invariant under an anomalous algebra",
           "issues": [
             7968,
             8049
           ],
-          "physics": "An injective state has a single block, and the integer action matrices must then be a one-dimensional representation of the fusion ring. A non-trivial algebra has no such representation, so its symmetric states must have several blocks; a positive common eigenvector of the action matrices instead gives a symmetric boundary state.",
+          "physics": "If a symmetric state has a single injective block and every action multiplicity is one, the action tensors turn the L-symbols into a trivialization of the F-symbols, so an algebra whose F-symbols are not gauge-trivial has no such state. A single block with higher multiplicity is not excluded: the paper's one-block solution for Rep(<i>S</i><sub>3</sub>) has multiplicity two. A positive common eigenvector of the integer action matrices gives a symmetric boundary state.",
           "delivers": "The cohomological single-block obstruction and the symmetric boundary state."
         }
       ]
@@ -118,15 +118,15 @@
       "paper": "glm23",
       "eyebrow": "Part II · Section 4",
       "heading": "Algebras built from a group",
-      "intro": "When the labels form a group <i>G</i> and the fusion is group multiplication, the F-symbols reduce to a three-cocycle ω and the symmetric states are permuted by <i>G</i>. The stabilizer of one block carries a two-cocycle that trivializes ω there, and the L-symbols of all blocks are reconstructed from it.",
+      "intro": "When the labels form a group <i>G</i> and the fusion is group multiplication, the F-symbols reduce to a three-cocycle ω and the symmetric states are permuted by <i>G</i>. On the stabilizer <i>H</i> of one block, ω is the coboundary of a two-cochain, and the L-symbols of all blocks are reconstructed from this trivialization.",
       "stages": [
         {
-          "title": "Reconstruction from the stabilizer and its two-cocycle",
+          "title": "Reconstruction from the stabilizer and its trivializing two-cochain",
           "issues": [
             8046,
             8047
           ],
-          "physics": "The L-symbols of a group-like algebra are determined by a subgroup <i>H</i> and a two-cochain on <i>H</i> whose coboundary is ω restricted to <i>H</i>; two such cochains give the same phase exactly when they differ by a two-cocycle, so the solutions form a torsor under the second cohomology of <i>H</i>. Closedness with arbitrary boundary conditions forces an on-site representation with trivial anomaly.",
+          "physics": "The L-symbols of a group-like algebra are determined by a subgroup <i>H</i> and a two-cochain β on <i>H</i> with coboundary dβ equal to ω restricted to <i>H</i>. Two such cochains differ by a two-cocycle, and they give the same phase exactly when that two-cocycle is a coboundary, so the solutions form a torsor under the second cohomology group of <i>H</i>. For an injective group representation whose identity operator is the identity and whose fusion is exact, closedness forces an on-site representation with trivial anomaly.",
           "delivers": "The reconstruction formula for arbitrary three-cocycles and the torsor of its solutions."
         },
         {
@@ -174,8 +174,8 @@
             8348,
             8053
           ],
-          "physics": "Section 6 solves the coupled pentagon for small fusion categories: groups such as ℤ<sub>2</sub>×ℤ<sub>2</sub> with a controlled-Z realization, Rep(<i>S</i><sub>3</sub>), su(2)<sub>4</sub>, and the Fibonacci category, whose only module is the regular one with L equal to F.",
-          "delivers": "The ℤ<sub>2</sub>×ℤ<sub>2</sub> table, the Rep(<i>S</i><sub>3</sub>) and su(2)<sub>4</sub> module lists, and the uniqueness of the Fibonacci realization are proved; the explicit Fibonacci L-symbol remains."
+          "physics": "Section 6 solves the coupled pentagon for small fusion categories: groups such as ℤ<sub>2</sub>×ℤ<sub>2</sub> with a controlled-Z realization, Rep(<i>S</i><sub>3</sub>), su(2)<sub>4</sub>, and the Fibonacci category, whose indecomposable module is the regular one with L equal to F. Read literally, the printed uniqueness of the two-block Fibonacci solution fails, since two copies of it form another solution; every finite unital action is a direct sum of regular two-block actions.",
+          "delivers": "The ℤ<sub>2</sub>×ℤ<sub>2</sub> table, the Rep(<i>S</i><sub>3</sub>) and su(2)<sub>4</sub> module lists, and the decomposition of every Fibonacci action multiplicity into regular two-block actions are proved; the exact action trees and the explicit Fibonacci L-symbol are the remaining part of the Fibonacci example."
         }
       ]
     }
