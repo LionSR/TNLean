@@ -199,11 +199,12 @@ For the MPU index of arXiv:1703.09188:
   standard form is the two-site block of a simple canonical tensor, so the
   time-reversal and transposition criteria and the sign results apply to every
   such standard form without a further hypothesis.
-- `mpu_standard_form_path_cross_section.tex` (clarification, open) records
+- `mpu_standard_form_path_cross_section.tex` (clarification, resolved) records
   that the proof of the continuous standard form along a path cites the slice
   theorem of Montgomery and Yang, and that the formalization replaces it by a
   direct local cross-section of the local-unitary action on the gates, built
-  from the nearest Kronecker product and the polar factor.
+  from the nearest Kronecker product and the polar factor; the continuity of
+  the second gate is read off the circuits on two and three blocks.
 - `mpu_canonical_form_full_support.tex` (scope restriction, partly superseded)
   records that the reduced canonical-form-II representative must be
   constructed rather than inferred from bare canonical form, and the
