@@ -56,7 +56,8 @@ private theorem stepLetter_word {a b : X} (e : TorusDualStep a b) :
   cases e <;> simp [torusDualStepLetter, torusDualStepWord, FreeGroup.of,
     FreeGroup.inv_mk, FreeGroup.invRev]
 
-private theorem pathLetters_word {a b : X} (p : TorusDualPath a b) :
+/-- Interpreting the computable native letter list gives the actual free-group path word. -/
+theorem torusDualPathLetters_word {a b : X} (p : TorusDualPath a b) :
     FreeGroup.mk (torusDualPathLetters p) = torusDualPathWord p := by
   induction p with
   | nil => rfl
@@ -68,7 +69,7 @@ private theorem pathLetters_word {a b : X} (p : TorusDualPath a b) :
 private theorem reducedWord_eq_toWord {a b : X} (p : TorusDualPath a b) :
     torusDualReducedWord p = (torusDualPathWord p).toWord := by
   change (FreeGroup.mk (torusDualPathLetters p)).toWord = _
-  rw [pathLetters_word]
+  rw [torusDualPathLetters_word]
 
 private theorem stepWord_reverse {a b : X} (e : TorusDualStep a b) :
     torusDualStepWord e.reverse = (torusDualStepWord e)⁻¹ := by

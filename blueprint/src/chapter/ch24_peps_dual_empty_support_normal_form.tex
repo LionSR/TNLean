@@ -1,7 +1,8 @@
 \begin{definition}[Reduced native edge words]
     \label{def:peps_dual_reduced_edge_word}
     \lean{TNLean.PEPS.torusDualStepLetter,TNLean.PEPS.torusDualPathLetters,
-        TNLean.PEPS.torusDualReducedWord,TNLean.PEPS.torusDualEmptyHomotopyDecision}\leanok
+        TNLean.PEPS.torusDualReducedWord,TNLean.PEPS.torusDualEmptyHomotopyDecision,
+        TNLean.PEPS.torusDualPathLetters_word}\leanok
     \uses{def:peps_dual_flux_path}
     For a native torus with arbitrary periods, assign one signed letter
     to each labelled step, retaining its positive edge's base vertex and
@@ -13,6 +14,7 @@
         \label{eq:peps_dual_reduced_word_decision}
     \end{align}
     Both lists are finite, including when a torus period is zero.
+    Interpreting $L(p)$ in the native free group gives $W(p)$.
 \end{definition}
 
 \begin{lemma}[Equal reduced words give a supported homotopy]
