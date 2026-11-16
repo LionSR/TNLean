@@ -5,7 +5,7 @@
     \lean{MPSPreparation.mul_pow_mul_exp_neg_le_iff,
         MPSPreparation.mul_pow_mul_exp_neg_nat_le_iff,
         MPSPreparation.mul_div_mul_exp_neg_le_iff}
-    \notready
+    \leanok
     Let $K,N,\varepsilon,r>0$ and $k\ge0$ be an integer. Then
     \begin{align*}
         KN^k e^{-rq}\le\varepsilon
@@ -21,7 +21,7 @@
         rq+\log q\ge\log K+\log N-\log\varepsilon.
     \end{align*}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Express the left sides as exponentials, use the strict monotonicity
     of the exponential and rearrange. For integral scales, apply the
     defining property of the nonnegative ceiling.
@@ -38,19 +38,19 @@ a uniform sharp rate for the unspecified long-range sequence class.
 \begin{lemma}[Concatenation of ordered chain products]
     \label{lem:ldp_chain_eval_append}
     \lean{MPSChainTensor.eval_append}
-    \notready
+    \leanok
     For two site-dependent chains $A,B$ and physical words $\sigma,\tau$,
     the ordered matrix product along their concatenation satisfies
     $F_{AB}(\sigma\tau)=F_A(\sigma)F_B(\tau)$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Concatenate the ordered lists of local matrices and multiply.
 \end{proof}
 
 \begin{definition}[Contraction of child remainders]
     \label{def:ldp_chain_pair_merge}
     \lean{MPSPreparation.chainPairMerge}
-    \notready
+    \leanok
     Identify the virtual space with pairs $(a,b)$ of indices in
     $\{1,\ldots,D\}$. For $D^2\times D^2$ matrices $P,Q$, set
     \begin{align*}
@@ -62,7 +62,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
 \begin{lemma}[The actual parent lies in the child ranges]
     \label{lem:ldp_chain_pair_append_factorization}
     \lean{MPSPreparation.chainPairMatrix_append_eq_joinMatrix_mul}
-    \notready
+    \leanok
     \uses{lem:ldp_chain_eval_append, def:ldp_chain_pair_merge}
     Let $F_A,F_B$ be the physical matrices of two site-dependent chains.
     If $F_A=XP$ and $F_B=YQ$, then the physical matrix of their
@@ -70,7 +70,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
     contraction of $P,Q$ from Definition~\ref{def:ldp_chain_pair_merge}.
     The rows of the tensor product are read in physical chain order.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     At the column $(a,b)$ and word $\sigma\tau$, expand
     $(F_A(\sigma)F_B(\tau))_{ab}$ over the common bond index.
     Substitute the two child factorizations and exchange the finite sums.
@@ -79,7 +79,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
 \begin{lemma}[An isometric merge for actual adjacent intervals]
     \label{lem:ldp_chain_pair_actual_merge}
     \lean{MPSPreparation.exists_isometry_chainPairMatrix_append}
-    \notready
+    \leanok
     \uses{lem:ldp_chain_pair_append_factorization,
         lem:ldp_isometric_polar_merge}
     Let $D\ge1$. If $X,Y$ are isometries with
@@ -88,7 +88,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
     $W\colon\C^{D^2}\to\C^{D^4}$ satisfying
     $(X\otimes Y)WP_{AB}=F_{AB}$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The preceding lemma establishes that $F_{AB}$ lies in the range of
     $X\otimes Y$. Complete its polar factor within that range by
     Lemma~\ref{lem:ldp_isometric_polar_merge}.
@@ -97,11 +97,11 @@ a uniform sharp rate for the unspecified long-range sequence class.
 \begin{lemma}[Agreement on the polar support]
     \label{lem:ldp_factor_agrees_on_polar_support}
     \lean{Matrix.mul_polarSupport_eq_polarIso_of_mul_polarPos_eq}
-    \notready
+    \leanok
     If $M=VP$ is the canonical polar decomposition with support $\Pi$
     and $XP=M$, then $X\Pi=V$. No injectivity or isometry of $X$ is needed.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Choose $R$ with $PR=\Pi$. Then
     $X\Pi=XPR=MR=VPR=V\Pi=V$.
 \end{proof}
@@ -109,7 +109,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
 \begin{lemma}[Exact polar tree on a feasible binary geometry]
     \label{lem:ldp_inhomogeneous_exact_polar_tree}
     \lean{MPSPreparation.exists_isometryTree_mul_polarPos_eq}
-    \notready
+    \leanok
     \uses{lem:ldp_chain_pair_actual_merge,
         lem:ldp_factor_agrees_on_polar_support,
         lem:ldp_isometric_polar_completion}
@@ -120,7 +120,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
     $XP=F$ and $X\Pi=V$ for the physical matrix $F$ and its canonical
     polar factors. The maps may depend on their intervals.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Induct over the supplied binary geometry. At a leaf, its feasible
     dimension permits an isometric polar completion of the actual leaf
     matrix. At a parent, split the actual chain into its two intervals,
@@ -133,13 +133,13 @@ a uniform sharp rate for the unspecified long-range sequence class.
     \label{lem:ldp_balanced_inhomogeneous_polar_tree}
     \lean{MPSPreparation.IsometryTree.nonempty_of_leaf_dimension,
         MPSPreparation.exists_isometryTree_chainPairMatrix}
-    \notready
+    \leanok
     \uses{lem:ldp_inhomogeneous_exact_polar_tree}
     For $s\ge1$ and $d^s\ge D^2\ge1$, every site-dependent chain of
     length $s2^h$ has an exact polar tree of height $h$, virtual dimension
     $D^2$, and leaves of at most $s$ sites.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Choose an isometric inclusion into each $s$-site leaf and an
     isometry from $\C^{D^2}$ to $\C^{D^4}$ at every parent. This supplies
     a balanced feasible geometry. Apply

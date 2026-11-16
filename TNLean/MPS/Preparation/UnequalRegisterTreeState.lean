@@ -19,6 +19,10 @@ The equality concerns every output configuration of the original physical block.
 traces out an environment nor makes the gates depend on a sector label. The polar maps of
 normal tensors and the polar maps restricted to a common support are both instances.
 
+The position-dependent versions allow a separate map at each leaf and binary vertex.
+Local leaf and binary amplitude identities determine the full placed gate product
+(`intervalTreeOp_apply`), with all physical output sites retained.
+
 Source: arXiv:2307.01696, eqs. (11) and (16), "Tree-RG circuit with measurements", and
 "Long-range MPS using measurements".
 -/
@@ -690,6 +694,7 @@ theorem intervalTreeOp_apply
     simp only [nodeCfg, treeInput, ↓reduceIte]
   rw [← hcfg, h0, Finset.prod_eq_single (0 : Fin (2 ^ 0))
     (fun b _ hb => absurd (Fin.ext (by have := b.isLt; simp at this; omega)) hb) (by simp)]
+  simp only [Fin.val_zero]
 
 end State
 
