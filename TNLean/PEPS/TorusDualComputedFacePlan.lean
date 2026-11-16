@@ -26,10 +26,21 @@ candidate is asserted here.
 
 namespace TNLean.PEPS
 
-variable {width height : ℕ} [widthNeZero : NeZero width] [heightNeZero : NeZero height]
+variable {width height : ℕ}
 local notation "X" => TorusVertex width height
 local notation "A" => X × Bool
 local notation "FG" => FreeGroup (X ⊕ X)
+
+private def computedFaceWord (v : X) : FG :=
+  FreeGroup.of (Sum.inr (v.1 + 1, v.2)) * FreeGroup.of (Sum.inl v) *
+    (FreeGroup.of (Sum.inr v))⁻¹ * (FreeGroup.of (Sum.inl (v.1, v.2 + 1)))⁻¹
+
+private theorem computedFaceWord_eq [NeZero width] [NeZero height] (v : X) :
+    computedFaceWord v = torusDualFaceWord v := by
+  simp [computedFaceWord, torusDualFaceWord, torusDualPathWord, torusDualEastNorth,
+    torusDualNorthEast, torusDualStepWord, mul_assoc]
+
+variable [NeZero width] [NeZero height]
 
 private def nativeVertices : List X :=
   Finset.univ.sort (fun v w => v ≤ w)
@@ -44,15 +55,6 @@ private theorem mem_nativeAtoms (d : A) : d ∈ (nativeAtoms : List A) := by
   refine ⟨v, ?_, ?_⟩
   · simp [nativeVertices]
   · cases b <;> simp
-
-private def computedFaceWord (v : X) : FG :=
-  FreeGroup.of (Sum.inr (v.1 + 1, v.2)) * FreeGroup.of (Sum.inl v) *
-    (FreeGroup.of (Sum.inr v))⁻¹ * (FreeGroup.of (Sum.inl (v.1, v.2 + 1)))⁻¹
-
-include widthNeZero heightNeZero in
-private theorem computedFaceWord_eq (v : X) : computedFaceWord v = torusDualFaceWord v := by
-  simp [computedFaceWord, torusDualFaceWord, torusDualPathWord, torusDualEastNorth,
-    torusDualNorthEast, torusDualStepWord, mul_assoc]
 
 /-- A computable local certificate for a finite native face-elimination plan.
 It checks the length, allowed supports, and reduced images of all face words.
