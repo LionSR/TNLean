@@ -4263,8 +4263,8 @@
     give $\sigma(u_0)=u_0$.
 \end{proof}
 
-\begin{proposition}[Lifting paths continuous modulo local unitaries]
-    \label{prop:kronecker_path_lifting}
+\begin{lemma}[Lifting paths continuous modulo local unitaries]
+    \label{lem:kronecker_path_lifting}
     \lean{exists_continuousOn_Icc_lift,
         Matrix.exists_continuous_lift_of_continuous_mod_localUnitary}
     \leanok
@@ -4278,7 +4278,7 @@
     proof of \cite[Corollary~IV.7]{Cirac2017MPU} that the source obtains from
     the slice theorem of Montgomery and Yang.
     % Source lines: paper_v2.tex 942--947.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}\leanok
     Fix $p$ and let $\sigma_p$ be the local section of the previous lemma with
@@ -4301,7 +4301,7 @@
     \discussion{6024}
     \uses{prop:continuity-index, IndexTh, SF, lem:matrix_realignment_kronecker,
         lem:nearest_kronecker_product, lem:kronecker_local_section,
-        prop:kronecker_path_lifting}
+        lem:kronecker_path_lifting}
     For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
     necessarily in canonical form, there are an integer $k_0\leq D^4$ and
     continuous paths of unitaries $u(p)$ and $v(p)$ such that
