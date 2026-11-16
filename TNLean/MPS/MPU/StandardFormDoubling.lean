@@ -145,6 +145,103 @@ private theorem sum_reorder_five {A B C P Q R : Type*}
     (fun _ ↦ rfl)
   simpa only [Fintype.sum_prod_type] using h
 
+/-! ### Determinants and reality of the doubled gates -/
+
+/-- The identification of the doubled ranks with the doubled physical pair
+induced by an identification `e` of `ℂ^ℓ ⊗ ℂ^r` with `ℂ^d ⊗ ℂ^d`. -/
+def doubledIdent (e : Fin ℓ × Fin r ≃ Fin d × Fin d) :
+    Fin (ℓ * d) × Fin (d * r) ≃ Fin (d * d) × Fin (d * d) :=
+  (doubledOutEquiv ℓ d r).symm.trans
+    (((Equiv.prodCongr (Equiv.refl _)
+        (Equiv.prodCongr (e.symm.trans (Equiv.prodComm _ _)) (Equiv.refl _))).trans
+      ((doubledMidEquiv ℓ r).symm.trans (Equiv.prodCongr e e))).trans (doubledInEquiv d))
+
+/-- The identification of the doubled physical pair with the doubled ranks
+induced by an identification `f` of `ℂ^d ⊗ ℂ^d` with `ℂ^r ⊗ ℂ^ℓ`. -/
+def doubledShiftIdent (f : Fin d × Fin d ≃ Fin r × Fin ℓ) :
+    Fin (d * d) × Fin (d * d) ≃ Fin (d * r) × Fin (ℓ * d) :=
+  (doubledShiftOutEquiv d).symm.trans
+    ((Equiv.prodCongr (Equiv.refl _) (Equiv.prodCongr f (Equiv.refl _))).trans
+      (doubledShiftInEquiv ℓ d r))
+
+/-- The determinant of the doubled unshifted gate:
+`det u⁽²⁾ = det(v)^{rℓ} det(u)^{2ℓr}`, read through the induced identifications.
+Source: arXiv:1703.09188, lines 1556--1560. -/
+theorem det_doubledU_submatrix (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
+    (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) (e : Fin ℓ × Fin r ≃ Fin d × Fin d) :
+    ((doubledU u v).submatrix id (doubledIdent e)).det =
+      (v.submatrix id (e.symm.trans (Equiv.prodComm _ _))).det ^ (r * ℓ) *
+        (u.submatrix id e).det ^ (2 * (ℓ * r)) := by
+  set f := e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r))
+  set H : Fin ℓ × ((Fin d × Fin d) × Fin r) ≃ Fin ℓ × ((Fin r × Fin ℓ) × Fin r) :=
+    Equiv.prodCongr (Equiv.refl _) (Equiv.prodCongr f (Equiv.refl _))
+  set K := H.trans (doubledMidEquiv ℓ r).symm
+  set M₁ := (1 : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (v ⊗ₖ (1 : Matrix (Fin r) (Fin r) ℂ))
+  set N := Matrix.reindex (doubledMidEquiv ℓ r) (Equiv.refl _) (u ⊗ₖ u)
+  have h₀ : (doubledU u v).submatrix id (doubledIdent e) =
+      ((M₁ * N).submatrix id (K.trans (Equiv.prodCongr e e))).submatrix
+        (doubledOutEquiv ℓ d r).symm (doubledOutEquiv ℓ d r).symm := by
+    ext x y
+    simp [doubledU, doubledIdent, Matrix.reindex_apply, M₁, N, K, H, f]
+  have h₁ : M₁.submatrix id H = (1 : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ
+      ((v.submatrix id f) ⊗ₖ (1 : Matrix (Fin r) (Fin r) ℂ)) := by
+    ext ⟨t, ⟨a, s⟩⟩ ⟨t', ⟨b, s'⟩⟩
+    simp [M₁, H, Matrix.kroneckerMap_apply]
+  have h₂ : N.submatrix H (K.trans (Equiv.prodCongr e e)) =
+      ((u.submatrix id e) ⊗ₖ (u.submatrix id e)).submatrix K K := by
+    ext x y
+    simp [N, K, Matrix.reindex_apply, Matrix.kroneckerMap_apply]
+  rw [h₀, Matrix.det_submatrix_equiv_self, ← Matrix.submatrix_mul_equiv M₁ N id H, Matrix.det_mul, h₁, h₂,
+    Matrix.det_submatrix_equiv_self, Matrix.det_kronecker, Matrix.det_kronecker, Matrix.det_kronecker]
+  simp only [Matrix.det_one, one_pow, mul_one, one_mul, Fintype.card_prod, Fintype.card_fin]
+  rw [← pow_mul, ← pow_add]
+  ring_nf
+
+/-- The determinant of the doubled shifted gate: `det v⁽²⁾ = det(v)^{d²}`, read
+through the induced identification. Source: arXiv:1703.09188, lines 1556--1561. -/
+theorem det_doubledV_submatrix (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
+    (f : Fin d × Fin d ≃ Fin r × Fin ℓ) :
+    ((doubledV v).submatrix id (doubledShiftIdent f)).det =
+      (v.submatrix id f).det ^ (d * d) := by
+  have h₀ : (doubledV v).submatrix id (doubledShiftIdent f) =
+      ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ ((v.submatrix id f) ⊗ₖ
+        (1 : Matrix (Fin d) (Fin d) ℂ))).submatrix
+        (doubledShiftOutEquiv d).symm (doubledShiftOutEquiv d).symm := by
+    ext x y
+    simp only [doubledV, doubledShiftIdent, Matrix.reindex_apply, Matrix.submatrix_apply,
+      Matrix.kroneckerMap_apply, Equiv.trans_apply, Equiv.symm_apply_apply, id_eq]
+    rfl
+  rw [h₀, Matrix.det_submatrix_equiv_self, Matrix.det_kronecker, Matrix.det_kronecker]
+  simp only [Matrix.det_one, one_pow, mul_one, one_mul, Fintype.card_prod, Fintype.card_fin]
+  rw [← pow_mul]
+
+/-- The doubled gates of real gates are real. Source: arXiv:1703.09188,
+line 1562 ("`u⁽²⁾` and `v⁽²⁾` still satisfy (ortuv)"). -/
+theorem doubledU_map_star (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
+    (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) :
+    (doubledU u v).map (starRingEnd ℂ) =
+      doubledU (u.map (starRingEnd ℂ)) (v.map (starRingEnd ℂ)) := by
+  ext x y
+  simp [doubledU, Matrix.reindex_apply, Matrix.mul_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, map_sum, apply_ite]
+
+theorem doubledV_map_star (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) :
+    (doubledV v).map (starRingEnd ℂ) = doubledV (v.map (starRingEnd ℂ)) := by
+  ext x y
+  simp only [doubledV, Matrix.map_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.kroneckerMap_apply, Matrix.one_apply]
+  split_ifs <;> simp
+
+/-- Changing the identification of the coordinate spaces multiplies the
+determinant by the sign of the change, which does not depend on the matrix. -/
+theorem det_submatrix_eq_sign_mul {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
+    [DecidableEq n] (A : Matrix m n ℂ) (g g' : m ≃ n) :
+    (A.submatrix id g).det = (Equiv.Perm.sign (g.trans g'.symm) : ℂ) * (A.submatrix id g').det := by
+  rw [← Matrix.det_permute']
+  congr 1
+  ext i j
+  simp
+
 namespace TwoSiteStandardFormData
 
 variable {W : MPOTensor (d * d) D} {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
