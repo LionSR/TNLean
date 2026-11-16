@@ -294,23 +294,57 @@ theorem circuitOp_dressedPairCircuit_single_entry (τ : Equiv.Perm κ)
 def cellSuccessor (M : ℕ) [NeZero M] : Equiv.Perm (Fin M) :=
   (Equiv.subRight (1 : Fin M)).symm
 
-/-- A nonwrapping interval with positive left cut has exactly one entry
-boundary for the fixed shifted matching. Source context: arXiv:2405.00439,
-Section V, lines 2081–2087. -/
+/-- A nonwrapping interval with an exterior cell has exactly one entry
+boundary for the fixed shifted matching. Either its left cut is positive
+or its right cut leaves a cell before the periodic wraparound. Source
+context: arXiv:2405.00439, Section V, lines 2081–2087. -/
 theorem cellSuccessor_Icc_single_entry {M : ℕ} [NeZero M] (a b : Fin M)
-    (ha : 0 < a.val) :
+    (hproper : 0 < a.val ∨ b.val + 1 < M) :
     ∀ k ∈ Finset.Icc a b, (cellSuccessor M).symm k ∈ Finset.Icc a b ↔ k ≠ a := by
   intro k hk
-  have hk0 : k ≠ 0 := by
-    intro heq
-    have hak : a.val ≤ k.val := (Finset.mem_Icc.mp hk).1
-    have hval := congrArg Fin.val heq
-    simp only [Fin.val_zero] at hval
-    omega
-  change k - 1 ∈ Finset.Icc a b ↔ k ≠ a
-  simp only [Finset.mem_Icc, Fin.le_def,
-    Fin.val_sub_one_of_ne_zero hk0]
-  simp only [Finset.mem_Icc, Fin.le_def] at hk
-  omega
+  by_cases hk0 : k = 0
+  · subst k
+    have ha : a = 0 := by
+      apply Fin.ext
+      have hak : a.val ≤ (0 : Fin M).val := (Finset.mem_Icc.mp hk).1
+      simp only [Fin.val_zero] at hak ⊢
+      exact Nat.eq_zero_of_le_zero hak
+    subst a
+    have hb : b.val + 1 < M := by
+      simpa only [Fin.val_zero, Nat.lt_irrefl, false_or] using hproper
+    have hN : 1 < M := by omega
+    have hval : (1 : Fin M).val = 1 := by
+      rw [Fin.val_one', Nat.mod_eq_of_lt hN]
+    have hne : (1 : Fin M) ≠ 0 := by
+      intro h
+      have h' := congrArg Fin.val h
+      rw [hval, Fin.val_zero] at h'
+      omega
+    have hpred : ((0 : Fin M) - 1).val = M - 1 := by
+      rw [zero_sub, Fin.val_neg, ite_eq_right hne, hval]
+    change (0 : Fin M) - 1 ∈ Finset.Icc 0 b ↔ (0 : Fin M) ≠ 0
+    constructor
+    · intro h
+      have hle : ((0 : Fin M) - 1).val ≤ b.val := (Finset.mem_Icc.mp h).2
+      rw [hpred] at hle
+      omega
+    · intro h
+      exact (h rfl).elim
+  · change k - 1 ∈ Finset.Icc a b ↔ k ≠ a
+    simp only [Finset.mem_Icc, Fin.le_def, Fin.val_sub_one_of_ne_zero hk0]
+    have hka : a.val ≤ k.val := (Finset.mem_Icc.mp hk).1
+    have hkb : k.val ≤ b.val := (Finset.mem_Icc.mp hk).2
+    constructor
+    · intro h heq
+      subst k
+      have hkval : a.val ≠ 0 := by
+        intro hval
+        apply hk0
+        apply Fin.ext
+        simpa only [Fin.val_zero] using hval
+      omega
+    · intro h
+      have hval : k.val ≠ a.val := fun heq ↦ h (Fin.ext heq)
+      omega
 
 end MPOTensor.FiniteGroupDetector

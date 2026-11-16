@@ -109,7 +109,7 @@
 
 \begin{proof}\leanok
     \uses{lem:mpug_group_domain_wall_string_creation,
-        thm:mpug_domain_wall_pair}
+        def:mpug_domain_wall_action, thm:mpug_domain_wall_string_creation}
     The endpoint contractions give $e_{y,gy}^aV_{g,y}$ and
     $W_{g,z}e_{gz,z}^b$. The blocked local action on the interior wall is
     $V_{g,y}(O_g\cdot C_{yz})(\mu)W_{g,z}=B^g_{y,z}C_{gy,gz}(\mu)$.
@@ -148,8 +148,7 @@
 
 \begin{lemma}[The complete retained-circuit detector at even order]
     \label{lem:mpug_detector_complete_circuit}
-    \lean{MPOTensor.FiniteGroupDetector.detectorRoot_triangular_even,
-        MPOTensor.FiniteGroupDetector.detectorRetainedInterval,
+    \lean{MPOTensor.FiniteGroupDetector.detectorRetainedInterval,
         MPOTensor.FiniteGroupDetector.detectorRetainedInterval_eq_intervalTensor,
         MPOTensor.FiniteGroupDetector.detectorCircuitWord,
         MPOTensor.FiniteGroupDetector.detectorCircuitWord_eq_tensorWord,
@@ -185,6 +184,7 @@
 \begin{lemma}[The even cyclic clock and shift obstruction]
     \label{lem:mpug_detector_clock_tensor}
     \lean{MPOTensor.FiniteGroupDetector.detectorShift,
+        MPOTensor.FiniteGroupDetector.detectorRoot_triangular_even,
         MPOTensor.FiniteGroupDetector.detectorClock,
         MPOTensor.FiniteGroupDetector.detectorClockPhase,
         MPOTensor.FiniteGroupDetector.detectorClockPhase_coe,
@@ -241,7 +241,6 @@
         MPOTensor.FiniteGroupDetector.circuitOp_dressedPairCircuit_single_entry,
         MPOTensor.FiniteGroupDetector.cellSuccessor,
         MPOTensor.FiniteGroupDetector.cellSuccessor_Icc_single_entry}
-    \leanok
     Let $u,w$ be one-site unitaries. On a periodic chain partitioned into
     even--odd cells, apply $(wu)\otimes u$ on each cell, followed by
     $\mathbf 1\otimes w^{\dagger}$ on each pair consisting of a cell's odd
@@ -254,11 +253,11 @@
         T(S) & =w_{(a,\mathrm{even})}\prod_{s\in S\times\{\mathrm{even},\mathrm{odd}\}}u_s.
         \label{eq:mpug_endpoint_circuit_interval}
     \end{align}
-    A nonwrapping interval of cells with positive left endpoint has this
-    entry-boundary property.
+    A nonwrapping interval $[a,b]$ of cells has this entry-boundary
+    property whenever $0<a$ or $b+1<N$, so that an exterior cell remains.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     The two matchings partition the sites, so gates in each layer have
     disjoint nominal pairs. Multiplication of their one-site factors gives
     $w^{\dagger}wu=u$ on every even site and $u$ on every odd site.
