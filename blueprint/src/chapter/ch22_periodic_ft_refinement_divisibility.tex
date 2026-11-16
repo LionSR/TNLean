@@ -772,6 +772,28 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Kraus span. In dimension zero, both ranks are zero.
 \end{proof}
 
+\begin{lemma}[Matrix rank comparison under reindexing]
+    \label{lem:periodic_rank_comparison_reindex}
+    \lean{Matrix.rank_le_rank_map_of_reindexEndomorphism}
+    \leanok
+    Let $\alpha,\beta$ be finite index sets, let $e:\alpha\to\beta$ be a
+    bijection, and define $R_e(X)_{e(i),e(j)}=X_{ij}$.
+    For a complex-linear endomorphism $T$ of $\C^{\alpha\times\alpha}$,
+    put $T_e=R_eTR_e^{-1}$. If
+    $\operatorname{rank}Y\le\operatorname{rank}T_e(Y)$ for every $Y\ge0$,
+    then $\operatorname{rank}X\le\operatorname{rank}T(X)$ for every $X\ge0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Reindexing preserves positivity and rank, and
+    $T_e(R_eX)=R_e(TX)$. Thus for $X\ge0$,
+    \begin{align}
+        \operatorname{rank}X=\operatorname{rank}R_eX
+        \le\operatorname{rank}T_e(R_eX)
+        =\operatorname{rank}R_e(TX)=\operatorname{rank}T(X). \notag
+    \end{align}
+\end{proof}
+
 \begin{lemma}[Rank under an injective positive map]
     \label{thm:periodic_injective_positive_rank}
     \lean{Matrix.rank_le_rank_map_of_injective_positive,
@@ -782,6 +804,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:periodic_rank_comparison_reindex}
     The positive matrices bounded above by a positive multiple of $A$
     span the matrix algebra on its support. Positivity carries this span
     into the analogous span for $\Phi(A)$. Their complex dimensions are
@@ -883,6 +906,99 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Since a completely positive map admits a Kraus representation with as many
     operators as its Choi rank,
     Lemma~\ref{thm:periodic_refinement_from_bounded_root} applies.
+\end{proof}
+
+\begin{lemma}[Rank under an identity- and trace-preserving positive map]
+    \label{lem:periodic_unital_positive_rank}
+    \lean{Matrix.rank_le_rank_map_of_unital_tracePreserving}
+    \leanok
+    Let $T$ be a positive endomorphism of a finite complex matrix algebra
+    satisfying $T(\Id)=\Id$ and $\tr T(X)=\tr X$.
+    For every $X\ge0$, one has $\operatorname{rank}X\le\operatorname{rank}T(X)$.
+    The map need not be injective.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_rank_comparison_reindex}
+    Let $P$ and $Q$ be the support projections of $X$ and $T(X)$.
+    Positivity carries the support face of $X$ into that of $T(X)$,
+    so $QT(P)Q=T(P)$. Since $0\le P\le \Id$, unital positivity gives
+    $0\le T(P)\le \Id$. Compressing $\Id-T(P)$ by $Q$ gives
+    $Q-T(P)\ge0$. Taking traces yields
+    $\operatorname{rank}X=\tr P=\tr T(P)
+        \le\tr Q=\operatorname{rank}T(X)$.
+\end{proof}
+
+\begin{lemma}[Choi rank under composition by a unital channel]
+    \label{lem:periodic_unital_composition_choi_rank}
+    \lean{Channel.choiRank_le_comp_of_unital, Channel.choiRank_le_pow_of_unital}
+    \leanok
+    If $\mathcal F$ is a unital channel and $\mathcal G$ is completely
+    positive, then $\operatorname{rank}C_{\mathcal G}\le
+        \operatorname{rank}C_{\mathcal F\circ\mathcal G}$.
+    Consequently, for every $p>0$,
+    $\operatorname{rank}C_{\mathcal F}\le\operatorname{rank}C_{\mathcal F^p}$.
+    The maps may be singular.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_unital_positive_rank}
+    The amplification $\mathcal F\otimes\Id$ preserves positivity,
+    identity and trace, and satisfies
+    \begin{align}
+        (\mathcal F\otimes\Id)(C_{\mathcal G})
+        =C_{\mathcal F\circ\mathcal G}. \notag
+    \end{align}
+    Apply the preceding lemma and iterate.
+\end{proof}
+
+\begin{lemma}[Roots of irreducible unital channels]
+    \label{lem:periodic_irreducible_unital_root_rank}
+    \lean{IsChannel.map_one_eq_one_of_irreducible_pow,
+        Channel.choiRank_le_pow_of_irreducible_unital}
+    \leanok
+    Let $\mathcal F$ be a channel and suppose that $\mathcal F^p$ is
+    irreducible and unital. Then $\mathcal F(\Id)=\Id$. If $p>0$, then
+    $\operatorname{rank}C_{\mathcal F}\le\operatorname{rank}C_{\mathcal F^p}$.
+    The bond dimension is arbitrary and the power may be singular.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_unital_composition_choi_rank}
+    Commutation and unitality of the power give
+    \begin{align}
+        \mathcal F^p(\mathcal F(\Id))
+        =\mathcal F(\mathcal F^p(\Id))=\mathcal F(\Id). \notag
+    \end{align}
+    Perron uniqueness gives $\mathcal F(\Id)=c\Id$.
+    In positive dimension, trace preservation yields
+    \begin{align}
+        cD=\tr\mathcal F(\Id)=\tr\Id=D,\qquad c=1. \notag
+    \end{align}
+    Dimension zero is immediate. The unital-channel rank inequality applies.
+\end{proof}
+
+\begin{lemma}[Refinement for an irreducible unital transfer map]
+    \label{lem:periodic_refinement_irreducible_unital_transfer}
+    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_irreducible_unital}
+    \leanok
+    \uses{def:p_refinable, def:p_divisible_channel}
+    Let $B$ have physical dimension $d$, let $p>0$, and suppose that
+    $\mathcal E_B$ is irreducible and unital. If $\mathcal E_B$ is
+    $p$-divisible as a channel, then $B$ is $p$-refinable, even when
+    $\mathcal E_B$ is singular. Whole-map irreducibility and unitality are explicit restrictions
+    relative to the general converse of Theorem~4.1, whose irreducible
+    form II permits several irreducible blocks.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_irreducible_unital_root_rank, thm:periodic_refinement_from_bounded_root}
+    Every channel root $\mathcal F$ with $\mathcal F^p=\E_B$ satisfies
+    \begin{align}
+        \operatorname{rank}C_{\mathcal F}\le
+        \operatorname{rank}C_{\E_B}\le d. \notag
+    \end{align}
+    The bounded-root refinement theorem supplies the refinement tensor.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready

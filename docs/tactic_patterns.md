@@ -12531,3 +12531,20 @@ length-one word indices is needed.
 - **Decision:** Separate the numerical/physical argument from the common
   interval selection argument. No second recursion, target approximation or
   repeated matrix-coordinate proof is introduced.
+
+### Matrix rank comparison under reindexing — promoted (2026-11-16)
+
+- **Seen:** `Algebra/InjectivePositiveMapRank.lean` and
+  `Algebra/UnitalChannelRank.lean`.
+- **Pattern:** Reindex an endomorphism to `Fin (Fintype.card α)`, apply the
+  rank inequality there, and recover the original inequality with
+  `Matrix.rank_reindex`.
+- **Helper:** `Matrix.rank_le_rank_map_of_reindexEndomorphism` in
+  `Algebra/MatrixRankReindex.lean`; both callers supply only their
+  transported hypotheses and the finite-index rank theorem.
+- **Decision:** Promote the shared rank-conjugation calculation at the
+  explicit request of the #10648 review. The injective and unital
+  hypotheses remain distinct and unchanged. Pinned Mathlib supplies
+  `Matrix.rank_reindex`; QICLean supplies `reindexEndomorphism` and its
+  positivity/trace transport. No equivalent combined comparison helper
+  was found in those APIs.
