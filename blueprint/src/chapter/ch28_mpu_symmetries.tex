@@ -1477,55 +1477,6 @@
     to these gate relations without enlarging its local antecedent.
 \end{proof}
 
-\begin{lemma}[Admissible local characterization of time reversal]
-    \label{prop:mpu_admissible_local_time_reversal}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (two-site blocked comparison):** the tensor obtained by
-    % blocking two sites, and the adjoint comparison tensor to which the
-    % fundamental theorem is applied, carry reduced full-support source data.
-    % No preservation under blocking is asserted. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{FundamentalMPU, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
-    Let an MPU be in the standard form determined by its given source datum.
-    Suppose its one-site tensor
-    $\mathcal U$, its two-site block $\mathcal U_2$, and the
-    physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and each
-    carries its own reduced full-support source datum. Write the one-site
-    physical space as $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Time-reversal
-    symmetry then forces $\operatorname{ind}(\mathcal U)=0$. Under these
-    hypotheses, $U^{(N)}=U^{(N)\dagger}$ for every even $N$ if and only if there is a
-    unitary $x$ such that
-    \begin{align}
-        (\Id_1\otimes v_{23}\otimes\Id_4)(u_{12}\otimes u_{34})
-         & =\pm(x_{12}\otimes x_{34}^\dagger)
-        (\Id_1\otimes v_{23}^\dagger\otimes\Id_4).
-    \end{align}
-    % Source lines: paper_v2.tex 1201--1252.
-\end{lemma}
-
-\begin{proof}
-    \uses{FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
-    Under time reversal, $\mathcal U_2$ and $\mathcal U_2^\sharp$ generate the
-    same MPU. Applying the same-tensor converse to each given pair produces
-    presentations that record the original fixed matrices, and Theorem~\ref{FundamentalMPU}
-    then identifies their source spaces,
-    so their corresponding source-cut ranks agree. Physical adjunction exchanges
-    the two cuts. Hence
-    \begin{align}
-        r(\mathcal U_2)
-         & =r(\mathcal U_2^\sharp)
-        =\ell(\mathcal U_2).
-    \end{align}
-    Definition~\ref{def:mpu_admissible_index} therefore gives
-    $\operatorname{ind}(\mathcal U_2)=0$, and blocking independence gives
-    $\operatorname{ind}(\mathcal U)=0$. Applying Theorem~\ref{FundamentalMPU}
-    to the standard forms of $\mathcal U_2$ and
-    $\mathcal U_2^\sharp$ as in the source proof gives the forward implication. The converse follows by
-    contracting the displayed local relation around every even periodic chain.
-    % Source lines: paper_v2.tex 1201--1252.
-\end{proof}
-
 \begin{lemma}[Physical transposition of normalized source factors]
     \label{lem:mpu_physical_transpose_source_factors}
     \lean{MPOTensor.physicalTransposeTensor, MPOTensor.physicalTransposeTensor_apply, MPOTensor.physicalTransposeTensor_physicalTransposeTensor, MPOTensor.mpo_physicalTransposeTensor, MPOTensor.sourceCutM₁_physicalTransposeTensor, MPOTensor.sourceCutM₂_physicalTransposeTensor, MPOTensor.source_ranks_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalTransposeTensor, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_transpose, MPOTensor.SourceFactors.physicalTranspose, MPOTensor.SourceFactors.sourceU_physicalTranspose, MPOTensor.SourceFactors.sourceV_physicalTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_physicalTranspose_of_even_mpo_eq_transpose}
@@ -1786,56 +1737,6 @@
     gives $y=e^{i\phi}x^T$ for some phase $e^{i\phi}$, which yields the
     displayed local relation. Conversely, contract that relation around an
     even periodic chain; the phases cancel pairwise.
-    % Source lines: paper_v2.tex 1257--1288.
-\end{proof}
-
-\begin{lemma}[Admissible local characterization of transposition]
-    \label{prop:mpu_admissible_local_transposition}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (two-site blocked comparison):** the tensor obtained by
-    % blocking two sites, and the transposed comparison tensor to which the
-    % fundamental theorem is applied, carry reduced full-support source data.
-    % No preservation under blocking is asserted. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{FundamentalMPU, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
-    Let an MPU be in the standard form determined by its given source datum.
-    Suppose its one-site tensor
-    $\mathcal U$, its two-site block $\mathcal U_2$, and the transposed
-    comparison tensor $\mathcal U_2^{\mathsf T}$ are simple and each carries its
-    own reduced full-support source datum. Write the one-site physical space as
-    $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Transposition symmetry then forces
-    $\operatorname{ind}(\mathcal U)=0$. Under these hypotheses,
-    $U^{(N)}=U^{(N)T}$ for every even $N$ if and only if there are a unitary
-    $x$ and a phase $e^{i\phi}$ such that
-    \begin{align}
-        (\Id_1\otimes v_{23}\otimes\Id_4)(u_{12}\otimes u_{34})
-         & =e^{i\phi}(x_{12}\otimes x_{34}^T)
-        (\Id_1\otimes v_{23}^T\otimes\Id_4).
-    \end{align}
-    % Source lines: paper_v2.tex 1257--1288.
-\end{lemma}
-
-\begin{proof}
-    \uses{FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
-    Under transposition, $\mathcal U_2$ and $\mathcal U_2^{\mathsf T}$ generate
-    the same MPU. Applying the same-tensor converse to each given pair produces
-    presentations that record the original fixed matrices, and Theorem~\ref{FundamentalMPU}
-    then identifies their source spaces, so their corresponding source-cut
-    ranks agree. Transposition
-    exchanges the two cuts. Hence
-    \begin{align}
-        r(\mathcal U_2)
-         & =r(\mathcal U_2^{\mathsf T})
-        =\ell(\mathcal U_2).
-    \end{align}
-    Thus $\operatorname{ind}(\mathcal U_2)=0$ by
-    Definition~\ref{def:mpu_admissible_index}, and blocking independence gives
-    $\operatorname{ind}(\mathcal U)=0$. Applying Theorem~\ref{FundamentalMPU}
-    to the standard forms of $\mathcal U_2$ and
-    $\mathcal U_2^{\mathsf T}$ and repeating the time-reversal argument while retaining
-    the unrestricted phase $e^{i\phi}$. The converse follows by contracting the
-    local relation around every even periodic chain.
     % Source lines: paper_v2.tex 1257--1288.
 \end{proof}
 
@@ -2475,28 +2376,6 @@
     the normalized trace.
 \end{proof}
 
-\begin{lemma}[Admissible trace formula for the time-reversal sign]
-    \label{lem:mpu_admissible_sigma_trace}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (two-site blocked comparison):** the trace formula uses
-    % the blocked source data required by Lemma~\ref{prop:mpu_admissible_local_time_reversal}.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum}
-    For a time-reversal-invariant MPU in the standard form determined by its
-    given source datum, suppose its
-    one-site tensor $\mathcal U$, its two-site block $\mathcal U_2$, and
-    the physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and
-    each carries its own reduced full-support source datum. Then the sign
-    $\sigma$ in
-    Lemma~\ref{prop:mpu_admissible_local_time_reversal} is
-    \begin{align}
-        \sigma & =\frac1{d^2}\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right],
-    \end{align}
-    where $\mathbb S_{12,34}$ exchanges the pairs of sites $12$ and $34$.
-    % Source lines: paper_v2.tex 1588--1611.
-\end{lemma}
-
 \begin{lemma}[Gauge invariance of the time-reversal sign]
     \label{lem:mpu_sigma_gauge_invariant}
     \lean{MPOTensor.timeReversalTrace_gauge}
@@ -2527,40 +2406,6 @@
         =x_1y_4v_{23}u_{12}u_{34}v_{23}y_2^\dagger x_3^\dagger$,
     since the outer-leg operators commute with $v_{23}$. The identity
     $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ then gives
-    \begin{align}
-        \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
-         & =\tr\!\left[x_3y_2\mathbb S_{12,34}
-        v_{23}u_{12}u_{34}v_{23}y_2^\dagger x_3^\dagger\right]           \\
-         & =\tr\!\left[\mathbb S_{12,34}v_{23}u_{12}u_{34}v_{23}\right].
-    \end{align}
-    The last equality follows from cyclicity of the trace and unitarity of
-    $x$ and $y$.
-\end{proof}
-
-\begin{lemma}[Admissible gauge invariance of the time-reversal sign]
-    \label{lem:mpu_admissible_sigma_gauge_invariant}
-    \notready
-    \discussion{5714}
-    \uses{lem:mpu_admissible_sigma_trace}
-    % Source proof: paper_v2.tex 1624--1630.
-    Under the hypotheses of Lemma~\ref{lem:mpu_admissible_sigma_trace}, let $x$ and $y$ be
-    unitaries and change the standard-form gauge by
-    \begin{align}
-        u' & =(x\otimes y)u,                 &
-        v' & =v(y^\dagger\otimes x^\dagger).
-    \end{align}
-    Then the trace formula has the same value for $(u',v')$ as for $(u,v)$.
-    Consequently the sign $\sigma$ is independent of the standard-form gauge.
-\end{lemma}
-
-\begin{proof}
-    \uses{lem:mpu_admissible_sigma_trace, thm:matrix_swap_kronecker_intertwine}
-    With $x_i$ and $y_i$ denoting the unitaries acting on site $i$, the gated factors are
-    $u'_{12}=x_1y_2u_{12}$, $u'_{34}=x_3y_4u_{34}$, and
-    $v'_{23}=v_{23}y_2^\dagger x_3^\dagger$.
-    Substitution into Lemma~\ref{lem:mpu_admissible_sigma_trace}, cancellation on the
-    middle legs, and
-    $\mathbb S_{12,34}x_1y_4=x_3y_2\mathbb S_{12,34}$ give
     \begin{align}
         \tr\!\left[\mathbb S_{12,34}v'_{23}u'_{12}u'_{34}v'_{23}\right]
          & =\tr\!\left[x_3y_2\mathbb S_{12,34}
@@ -2697,24 +2542,6 @@
     from the connected interval to this two-point set is constant.
 \end{proof}
 
-\begin{lemma}[Admissible well-definedness of the time-reversal sign]
-    \label{prop:mpu_admissible_sigma_well_defined}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (admissible deformation):** the deformation carries the
-    % path datum of Definition~\ref{def:mpu_admissible_equivalence_datum}.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, lem:mpu_admissible_symmetry_path_criterion, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Suppose a time-reversal-preserving path carries an admissible equivalence
-    datum of blocking length one. At every path point, require the one-site
-    tensor, its two-site block, and the physical-adjoint comparison of
-    that two-site block to be simple and to carry continuously varying reduced
-    full-support source data. Then the sign
-    $\sigma=\pm1$ is independent of the admissible standard-form gauge and is
-    constant along the path.
-    % Source lines: paper_v2.tex 1613--1631.
-\end{lemma}
-
 \begin{lemma}[Scalar parity law for the blocked sign]
     \label{thm:mpu_blocked_sign_parity_scalar}
     \lean{TNLean.Algebra.sq_mul_eq_one_of_sign,
@@ -2793,7 +2620,7 @@
     % reduced full-support source data. No preservation under blocking is
     % asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, def:mpu_reduced_full_support_source_datum}
+    \uses{lem:mpu_sigma_gauge_invariant, PropChiral, lem:mpu_blocking, def:mpu_reduced_full_support_source_datum}
     For every blocking length $k$ under consideration, suppose the endpoint
     tensor $\mathcal U_k$, its two-site block $\mathcal U_{2k}$, and the
     physical-adjoint comparison tensor $\mathcal U_{2k}^\sharp$ are simple and
@@ -2810,7 +2637,7 @@
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, thm:mpu_blocked_sign_parity_scalar}
+    \uses{lem:mpu_sigma_gauge_invariant, PropChiral, lem:mpu_blocking, thm:mpu_blocked_sign_parity_scalar}
     Gauge invariance permits the standard blocked representatives
     of the source proof, namely
     \begin{align}
@@ -2933,7 +2760,7 @@
     % **Scope restriction (one-, two-, and four-site source data):** the tensors
     % used to define both $\sigma^{(1)}$ and $\sigma^{(2)}$ carry their own data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_local_time_reversal, prop:mpu_admissible_sigma_blocking_parity, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{PropChiral, prop:mpu_admissible_sigma_blocking_parity, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Let an MPU in the standard form determined by its given source datum
     be invariant under time reversal.
     Suppose $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$, together with the

@@ -3857,23 +3857,6 @@
     Lemma~\ref{prop:continuity-index}.
 \end{proof}
 
-\begin{lemma}[Admissible constancy of the source ranks]
-    \label{prop:mpu_admissible_continuity_index}
-    \notready
-    \discussion{6022}
-    % **Scope restriction (pathwise reduced source data):** every associated
-    % simple tensor must carry a supplied fixed pair, to which the
-    % same-tensor converse applies before Theorem~\ref{ThmFund1}.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, thm:mpu_bounded_simple_blocking, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
-    generating MPUs, without requiring the path to be in canonical form.
-    Suppose that the path carries an admissible equivalence datum with blocking
-    length $m$. Then the ranks $r(x)$ and $\ell(x)$ of the blocked path
-    tensors $\mathcal W(x)_m$ are constant on $[0,1]$.
-    % Source lines: paper_v2.tex 733--818.
-\end{lemma}
-
 \begin{lemma}[Source ranks along a canonical-form-II path]
     \label{thm:mpu_cfii_path_source_ranks}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceRanks_blockTensor_pow_four_const,
@@ -3892,12 +3875,8 @@
         \ell[\mathcal U(x)_{D^4}] & =\ell[\mathcal U(y)_{D^4}].
     \end{align}
     This is the canonical-form-II path case of
-    \cite[Proposition~IV.5]{Cirac2017MPU}. Its hypotheses are not comparable
-    with those of Lemma~\ref{prop:mpu_admissible_continuity_index}: here
-    each tensor of the path is in canonical form II, but no continuously
-    varying source data are assumed; there the path may leave canonical form,
-    but continuously varying source data at a common blocking length are
-    assumed.
+    \cite[Proposition~IV.5]{Cirac2017MPU}; the general case, for paths that
+    leave canonical form, is Lemma~\ref{prop:continuity-index}.
     % Source lines: paper_v2.tex 739--818.
 \end{lemma}
 
@@ -4110,41 +4089,6 @@
     Lemma~\ref{thm:mpu_equivalent_of_index_eq}.
 \end{proof}
 
-\begin{corollary}[Admissible Index Theorem]
-    \label{thm:mpu_admissible_index}
-    \notready
-    \discussion{6023}
-    % **Scope restriction (admissible tensors and operations):** every simple
-    % block and standard form used below carries reduced full-support source
-    % data. Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_index_well_defined, thm:mpu_admissible_index_tensor, thm:mpu_representative_index_tensor_product, thm:mpu_admissible_index_composition, def:equivalent-tensors, def:mpu_admissible_equivalence_datum, prop:mpu_admissible_continuity_index, SF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
-    Assume the following operation-specific admissibility hypotheses. Every pair
-    of simple blockings compared for blocking independence carries reduced
-    full-support source data. Tensor products need no hypothesis, by
-    Lemma~\ref{thm:mpu_representative_index_tensor_product}.
-    For a composition tensor $\mathcal W$ of $\mathcal U$ and $\mathcal U'$, there
-    is one positive length $k$ such that
-    \begin{align}
-        \mathcal U_k,\quad \mathcal U'_k,\quad \mathcal W_k,\quad
-        \mathcal U_{2k},\quad \mathcal U'_{2k},\quad \mathcal W_{4k}
-    \end{align}
-    are simple and carry their own data. Continuous-deformation and equivalence
-    claims use the path data of
-    Definition~\ref{def:mpu_admissible_equivalence_datum}. Under these
-    hypotheses, the MPU index has the following properties.
-    \begin{enumerate}
-        \item It is invariant under blocking.
-        \item It is additive under tensor products and composition.
-        \item It is constant under continuous deformations through MPU tensors.
-        \item Admissibly equivalent MPU tensors have the same index. Conversely,
-              tensors with the same index are admissibly equivalent whenever the
-              standard-form interpolation is equipped with an admissible path datum.
-    \end{enumerate}
-    In \cite[Theorem~IV.6]{Cirac2017MPU}, these three properties are the index-classification conclusions, here restricted
-    to the explicit admissibility hypotheses above.
-    % Source lines: paper_v2.tex 824--865.
-\end{corollary}
-
 \begin{corollary}[Continuous choice of standard form]
     \label{coruvSF}
     \notready
@@ -4165,7 +4109,7 @@
     % simple blocks carry reduced full-support source data varying continuously
     % along the path. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_continuity_index, thm:mpu_admissible_index, SF, ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{prop:continuity-index, IndexTh, SF, ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Let $k_0$ be the common blocking length in an admissible equivalence
     datum for a continuous path $\mathcal U(p)$ of MPU tensors, and suppose that
     this given length satisfies $k_0\leq D^4$. Then there are continuous

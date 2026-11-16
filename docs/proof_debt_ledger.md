@@ -809,6 +809,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   against those statements. The three same-tensor blueprint twins have now
   been merged using the supplied-pair converse; the generic source-u entry,
   twelve derived-tensor entries, and twenty-three pathwise entries remain.
+  Seven further twins, whose source-labelled counterparts are now proved
+  under the standing canonical-form convention (the Index Theorem, constancy
+  of the source ranks, local time reversal and transposition, and the trace
+  formula, gauge invariance and well-definedness of the time-reversal sign),
+  have been deleted; see the superseded-entries subsection of
+  `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
   Other open work includes the `HasFullSupport` deletion
   (still consumed by the physical-adjoint, identity-ancilla, and
   tensor-product transports and by the reduced-representative construction),

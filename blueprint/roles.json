@@ -381,7 +381,6 @@
         "IndexTh"
       ],
       "corollaries": [
-        "thm:mpu_admissible_index",
         "coruvSF",
         "cor:mpu_admissible_continuous_standard_form"
       ],
