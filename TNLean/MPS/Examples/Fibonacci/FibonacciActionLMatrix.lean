@@ -171,8 +171,11 @@ theorem actionLMatrix_eq_fSymbol (a b x y : Fin 2)
     actionLMatrix fusionSynthesis actionAnalysis actionSynthesis a b x y p q =
       goldenToComplex (fibFSymbolGolden a b x y q.1 p.1) := by
   unfold actionLMatrix
-  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
-  rw [sequentialAnalysis_eq, fusionActionSynthesis_eq, ← complexOfGolden_mul]
+  rw [sequentialAnalysis_eq, fusionActionSynthesis_eq]
+  change (fibNimDim y : ℂ)⁻¹ * Matrix.trace
+    (complexOfGolden (sequentialAnalysisGolden a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩) *
+      complexOfGolden (fusionActionSynthesisGolden a b x ⟨⟨q.1, q.2.2⟩, y, q.2.1⟩)) = _
+  rw [← complexOfGolden_mul]
   have hc := action_crossGolden a b x y p q
   dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv] at hc
   rw [hc]
@@ -186,8 +189,11 @@ theorem inverseActionLMatrix_eq_fSymbol (a b x y : Fin 2)
     inverseActionLMatrix fusionAnalysis actionAnalysis actionSynthesis a b x y q p =
       goldenToComplex (fibFSymbolGolden a b x y q.1 p.1) := by
   unfold inverseActionLMatrix
-  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
-  rw [fusionActionAnalysis_eq, sequentialSynthesis_eq, ← complexOfGolden_mul]
+  rw [fusionActionAnalysis_eq, sequentialSynthesis_eq]
+  change (fibNimDim y : ℂ)⁻¹ * Matrix.trace
+    (complexOfGolden (fusionActionAnalysisGolden a b x ⟨⟨q.1, q.2.2⟩, y, q.2.1⟩) *
+      complexOfGolden (sequentialSynthesisGolden a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩)) = _
+  rw [← complexOfGolden_mul]
   have hc := action_inverseCrossGolden a b x y q p
   dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv] at hc
   rw [hc]
