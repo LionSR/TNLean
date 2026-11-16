@@ -49,6 +49,7 @@ import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationMPSClass
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationStandardForms
+import TNLean.MPS.MPU.ConjugationStrictEquivalence
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
 import TNLean.MPS.MPU.ContinuousStandardFormPath
@@ -84,6 +85,7 @@ import TNLean.MPS.MPU.FundamentalTheoremGates
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
 import TNLean.MPS.MPU.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.FundamentalTheoremGatesSupplied
+import TNLean.MPS.MPU.FundamentalTheoremHalfFactors
 import TNLean.MPS.MPU.FundamentalTheoremLetters
 import TNLean.MPS.MPU.GeneralIndexContinuity
 import TNLean.MPS.MPU.GroupCocycleMPO

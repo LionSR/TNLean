@@ -2091,15 +2091,83 @@
     \label{conjphs}
     \notready
     \discussion{5713}
-    \uses{prop1conj, corconj, lem:equivalent-symmetry}
+    \uses{prop1conj, corconj, lem:equivalent-symmetry, thm:mpu_conjugation_odd_rank_if}
     Suppose that either $r$ or $\ell$ is odd. Two conjugation-invariant MPUs
     $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
     conjugation if and only if
     \begin{align}
         \det(u_1v_1) & =\det(u_2v_2).
     \end{align}
+    The ``if'' direction is
+    Lemma~\ref{thm:mpu_conjugation_odd_rank_if}. The ``only if'' direction
+    uses the forward direction of Lemma~\ref{lem:equivalent-symmetry}, which
+    is available only after blocking, where the determinant invariant is
+    trivial; see \cite{gap:mpu_symmetry_path_criterion_blocking}.
     % Source lines: paper_v2.tex 1401--1446.
 \end{theorem}
+
+\begin{lemma}[Interpolation of orthogonal gates]
+    \label{lem:mpu_orthogonal_gate_interpolation}
+    \lean{Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq,
+        Matrix.joined_unitaryGroup_real_of_det_eq,
+        Unitary.joined_one_linearIsometryEquiv_symm}
+    \leanok
+    Two real orthogonal matrices with the same determinant are joined by a
+    continuous path of real orthogonal matrices. Consequently, two real gates
+    that are unitary between the same coordinate spaces and whose determinants
+    agree, read through one identification of those spaces, are joined by a
+    path of such gates.
+    % Source lines: paper_v2.tex 1438--1442.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    By the Cartan--Dieudonn\'e theorem an orthogonal map is a product of
+    reflections in hyperplanes, an even number of them when its determinant
+    is one. In dimension at least two, any two such reflections are joined by
+    moving the unit normal along the sphere, so the product is joined to an
+    even power of one reflection, which is the identity.
+\end{proof}
+
+\begin{lemma}[Conjugation symmetry when one source rank is odd, the ``if'' direction]
+    \label{thm:mpu_conjugation_odd_rank_if}
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq,
+        Matrix.det_gauge_mul_swap,
+        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_gate_path}
+    \leanok
+    \discussion{5713}
+    \uses{prop1conj, corconj, lem:mpu_symmetry_path_criterion_reverse,
+        lem:mpu_orthogonal_gate_interpolation}
+    Let $\mathcal U_1$ and $\mathcal U_2$ be tensors in canonical form II
+    whose MPUs on the standard-form chain are invariant under conjugation, with
+    standard-form unitaries $u_i,v_i$ of the same ranks $r$ and $\ell$.
+    Reading $u_iv_i:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^\ell\otimes
+        \mathbb C^r$ as an operator on $\mathbb C^\ell\otimes\mathbb C^r$ through
+    the swap of the two factors, its determinant is invariant under the gauge
+    $u\mapsto(x\otimes y)u$, $v\mapsto v(y^\dagger\otimes x^\dagger)$. If
+    either $r$ or $\ell$ is odd and
+    \begin{align}
+        \det(u_1v_1) & =\det(u_2v_2),
+    \end{align}
+    then $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
+    conjugation. This is the ``if'' direction of
+    Theorem~\ref{conjphs}; the ``only if'' direction remains open, see
+    \cite{gap:mpu_symmetry_path_criterion_blocking}.
+    % Source lines: paper_v2.tex 1406--1446.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since one rank is odd, only Case I of Lemma~\ref{corconj} occurs, and a
+    gauge makes $u_i,v_i$ real. The determinants of real unitary gates are
+    $\pm1$, and $\det(u_iv_i)$ is their product. If $\det u_1=-\det u_2$, a
+    gauge $O_\ell\otimes\Id_r$ with $r$ odd, or $\Id_\ell\otimes O_r$ with
+    $\ell$ odd, where $O$ flips one coordinate, changes the signs of both
+    determinants of $u_2,v_2$. Lemma~\ref{lem:mpu_orthogonal_gate_interpolation}
+    joins the gates by real unitary gates, whose MPUs are invariant under
+    conjugation by Lemma~\ref{prop1conj}, and
+    Lemma~\ref{lem:mpu_symmetry_path_criterion_reverse} concludes.
+\end{proof}
 
 \begin{lemma}[Admissible conjugation symmetry when one source rank is odd]
     \label{thm:mpu_admissible_conjugation_odd_rank}
@@ -2214,7 +2282,7 @@
     \label{prop:conjsym-strict-equiv}
     \notready
     \discussion{5713}
-    \uses{prop1conj, corconj, cor:sympl-to-orthogonal, lem:equivalent-symmetry, lemma:conjclass-normalform-continuous}
+    \uses{prop1conj, corconj, cor:sympl-to-orthogonal, lem:equivalent-symmetry, lemma:conjclass-normalform-continuous, thm:mpu_conjugation_even_rank_if}
     Suppose $r$ and $\ell$ are even. Two conjugation-invariant MPUs in the
     standard forms of Lemma~\ref{corconj} are strictly equivalent under
     conjugation if and only if they belong to the same case and
@@ -2222,8 +2290,51 @@
         \det(u_1) & =\det(u_2), &
         \det(v_1) & =\det(v_2).
     \end{align}
+    The ``if'' direction is
+    Lemma~\ref{thm:mpu_conjugation_even_rank_if}. The ``only if'' direction
+    uses the forward direction of Lemma~\ref{lem:equivalent-symmetry}, which
+    is available only after blocking, where the determinant invariants are
+    trivial; see \cite{gap:mpu_symmetry_path_criterion_blocking}.
     % Source lines: paper_v2.tex 1464--1546.
 \end{theorem}
+
+\begin{lemma}[Strict conjugation equivalence for even source ranks, the ``if'' direction]
+    \label{thm:mpu_conjugation_even_rank_if}
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even,
+        Matrix.IsUnitaryBetween.joinedIn_symplectic_of_det_eq,
+        Matrix.IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq}
+    \leanok
+    \discussion{5713}
+    \uses{prop1conj, corconj, cor:sympl-to-orthogonal,
+        lem:mpu_symmetry_path_criterion_reverse, lem:mpu_orthogonal_gate_interpolation}
+    Suppose $r$ and $\ell$ are even, and let $\mathcal U_1$ and $\mathcal U_2$
+    be tensors in canonical form II whose standard-form unitaries $u_i,v_i$
+    are both in the orthogonal form or both in the symplectic form of
+    Lemma~\ref{corconj}. Read the determinants of $u_i$ and $v_i$ through one
+    identification of $\mathbb C^\ell\otimes\mathbb C^r$ with
+    $\mathbb C^d\otimes\mathbb C^d$. If
+    \begin{align}
+        \det(u_1) & =\det(u_2), &
+        \det(v_1) & =\det(v_2),
+    \end{align}
+    then $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
+    conjugation. This is the ``if'' direction of
+    Theorem~\ref{prop:conjsym-strict-equiv}; the ``only if'' direction remains
+    open, see \cite{gap:mpu_symmetry_path_criterion_blocking}.
+    % Source lines: paper_v2.tex 1480--1546.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In Case I, Lemma~\ref{lem:mpu_orthogonal_gate_interpolation} joins the real
+    gates. In Case II, Lemma~\ref{cor:sympl-to-orthogonal} writes
+    $u_i=(\Id_{r\ell/4}\otimes R)\widetilde u_i$ and
+    $v_i=\widetilde v_i(\Id_{r\ell/4}\otimes R)$ with $\widetilde u_i,
+        \widetilde v_i$ real and of equal determinants. Joining them by real gates
+    keeps the symplectic form along the path. In both cases the gates
+    generate MPUs invariant under conjugation by Lemma~\ref{prop1conj}, and
+    Lemma~\ref{lem:mpu_symmetry_path_criterion_reverse} concludes.
+\end{proof}
 
 \begin{lemma}[Admissible strict conjugation equivalence for even source ranks]
     \label{thm:mpu_admissible_conjugation_even_rank}
