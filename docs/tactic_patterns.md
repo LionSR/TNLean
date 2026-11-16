@@ -11506,3 +11506,14 @@ removed after the dependency audit exposed it.
 - **Decision:** These two sites remain below the rule of three. The entropy
   development also reuses `aklv_regionEntropy_le_short_side` by exposing its
   existing proof unchanged, rather than copying that dimension argument.
+
+### Golden action-tree coordinates — candidate (2026-11-15)
+
+- **Seen:** four coordinate-image proofs in
+  `MPS/Examples/Fibonacci/FibonacciActionLMatrix.lean`.
+- **Pattern:** enumerate the incoming product bond by surjectivity, apply the
+  existing `BoundaryActionTreeEntries` formula, and map sums and products.
+- **Abstraction:** the four source coordinate formulas already remove the
+  Kronecker/associator calculation; a generic ring-image theorem could remove
+  the remaining repeated transport when another exact-ring example needs it.
+- **Decision:** one file only, below the two-file promotion threshold.
