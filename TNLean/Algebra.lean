@@ -167,6 +167,7 @@ import TNLean.Algebra.PiMulSingleInduction
 import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
+import TNLean.Algebra.PositivePencilBoundary
 import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.PowerExponential
 import TNLean.Algebra.PreBialgebra

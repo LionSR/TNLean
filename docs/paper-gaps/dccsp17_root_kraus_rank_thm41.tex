@@ -539,7 +539,9 @@ This proves a restricted paper-level selection result for supplied roots
 with the stated full cyclic Kraus span. It does not classify arbitrary
 singular roots, and it does not assert the same conclusion when the Kraus
 span is a proper subspace of $S$. The positivity-at-the-endpoint argument
-and the cyclic-corner construction remain to be formalized.
+is separately formalized at the matrix level below. The cyclic-corner
+construction and the identification of its direction with such face
+coordinates remain to be formalized.
 
 \subsection{The full cyclic family with dimensions $(1,m,n,1,1)$}
 
@@ -887,12 +889,16 @@ least two are preserved in this case as well.
 The relations \eqref{eq:dccsp17_root_kraus_rank_thm41_three_sector_anticommuting_zero}
 integrate by the separately proved identities
 \leanid{add_pow_eq_of_sq_eq_of_sq_mul_eq_zero} and
-\leanid{add_pow_eq_of_anticommuting_square_zero}. They are algebraic
-identities, not proofs of the corner construction, its completely
-positive boundary argument, or the whole selection assertion.
+\leanid{add_pow_eq_of_anticommuting_square_zero}. They establish the power identities. The conditional completely positive
+boundary step is separately formalized by
+\leanid{Channel.exists_channel_choiRank_lt_of_supported_anticommuting_direction},
+under supplied simultaneous Choi-face coordinates, as described below.
+The construction of the corner direction and those coordinates from a
+general root, and the whole selection assertion, remain separate obligations.
 This treats full Kraus spaces with three consecutive two-dimensional
-sectors. Proper subspaces of that support, other sector dimensions, and
-the unrestricted singular nonunital problem remain open.
+sectors. Proper Kraus subspaces and other dimensions are outside this
+three-sector argument; the unrestricted singular nonunital problem
+remains open.
 
 The same paper argument also treats full cyclic spaces on
 $(1,m,2,r,1,\ldots,1)$ with $m,r\ge2$ and $\ell\ge5$.
@@ -906,6 +912,58 @@ rank $2m$ and is replaced by at most $m+1$ Kraus operators, decreasing
 the total rank by at least $m-1\ge1$. The same power identities apply.
 This extension, too, remains a paper argument with the stated full-span
 and sector-dimension assumptions.
+
+\subsection{The positive matrix boundary argument}
+
+The abstract boundary step is separately formalized by
+\leanid{Matrix.exists_posSemidef_rank_lt_on_trace_zero_line}.
+For a positive definite complex matrix $A$ and a nonzero Hermitian
+trace-zero direction $H$, it supplies a real $t\ne0$ such that $A+tH$
+is positive semidefinite with rank strictly less than that of $A$.
+Neither trace-one normalization nor a nonzero-dimension hypothesis is
+needed. Compactness at fixed trace bounds the admissible parameters;
+openness of the positive definite locus forces an endpoint to be singular.
+
+The singular-face version
+\leanid{Matrix.exists_posSemidef_rank_lt_on_isometric_face} assumes supplied
+coordinates $A=VGV^\dagger$ and $H=VJV^\dagger$, with $V^\dagger V=I$,
+$G$ positive definite and $J$ nonzero Hermitian of trace zero.
+It produces the same rank decrease in the ambient matrix space, where
+$A$ may already be singular. Both results are in
+\texttt{TNLean/Algebra/PositivePencilBoundary.lean}.
+
+The annihilating-direction channel application is proved by
+\leanid{Channel.exists_channel_choiRank_lt_of_supported_annihilating_direction}
+in the same module. For a channel $\mathcal F$ and a complex-linear
+$\mathcal K$, it assumes zero output trace,
+$\mathcal F\mathcal K=\mathcal K\mathcal F=\mathcal K^2=0$,
+and supplied simultaneous face coordinates
+$C_{\mathcal F}=VGV^\dagger$, $C_{\mathcal K}=VJV^\dagger$, with
+$V^\dagger V=I$, $G$ positive definite and $J$ nonzero Hermitian.
+The trace-zero condition on $J$ follows from the output-trace condition
+on $\mathcal K$; it is not an extra hypothesis. The theorem constructs
+a channel $\mathcal F+t\mathcal K$ of strictly smaller Choi rank with
+every power of order at least two unchanged.
+
+The coupled version is separately proved by
+\leanid{Channel.exists_channel_choiRank_lt_of_supported_anticommuting_direction}.
+It has the same zero-output-trace and supplied Choi-face hypotheses,
+and replaces two-sided annihilation by
+\begin{align}
+  \mathcal F\mathcal K+\mathcal K\mathcal F=0,\qquad
+  \mathcal K^2=0,\qquad \mathcal F^2\mathcal K=0.
+  \label{eq:dccsp17_root_kraus_rank_thm41_coupled_boundary_hypotheses}
+\end{align}
+These are the cancellation identities of
+\eqref{eq:dccsp17_root_kraus_rank_thm41_three_sector_anticommuting_zero}.
+Under the supplied face coordinates, this theorem likewise produces
+$\mathcal F+t\mathcal K$ with strictly smaller Choi rank and preserves
+every power of order at least two.
+
+Existence of a suitable direction and its simultaneous Choi-face
+coordinates remain separate obligations. No theorem here asserts them
+for arbitrary singular roots, so the unrestricted selection gap remains
+open.
 
 \section{Explicit bounded roots from a commuting projected semigroup}
 
