@@ -59,5 +59,12 @@ current-main promotions. The remaining entrywise MPDO isometry candidate is
 recorded once. Site-dependent products continue to use `rectKronecker`;
 no parallel constant-factor unitary API from #10684 is added.
 
+The two existing distributed-compression regressions import their actual
+production dependencies, `Lattice.Compression.CorrectedPositionCost` and
+`Lattice.Compression.DistributedLinks`, instead of the entire PEPS approximation
+aggregator. Their examples, hypotheses, proofs and axiom queries are unchanged.
+This removes the unrelated aggregator-build requirement and selects both scripts
+for the existing focused and strict CI checks on this repair head.
+
 Full exact-head CI and fresh proof and blueprint reviews remain merge gates.
 The earlier temporary-tree checks do not establish those gates.
