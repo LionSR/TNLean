@@ -3954,51 +3954,11 @@
     \end{align}
 \end{proof}
 
-\begin{lemma}[Index Theorem without the classification converse]
-    \label{thm:mpu_index_theorem_without_converse}
-    \lean{MPOTensor.IsMPU.index_blockTensor,
-        MPOTensor.IsMPU.index_tensorProduct,
-        MPOTensor.IsMPU.index_mulTensor,
-        MPOTensor.IsMPU.index_const_of_continuous,
-        MPOTensor.Equivalent.index_eq}
-    \leanok
-    \uses{def:mpu_reduced_representative_index,
-        thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_representative_index_tensor_product,
-        thm:mpu_admissible_index_composition,
-        thm:mpu_path_index_constant, thm:mpu_equivalence_index_eq}
-    For MPU tensors of positive physical and bond dimensions, the index has
-    the following properties.
-    \begin{enumerate}
-        \item It is invariant under positive blocking.
-        \item It is additive under tensor products and composition.
-        \item It is constant along continuous paths of MPU tensors, not
-              necessarily in canonical form.
-        \item Equivalent MPU tensors have the same index.
-    \end{enumerate}
-    These are clauses (i)--(iii) of \cite[Theorem~IV.6]{Cirac2017MPU} and
-    the ``only if'' half of its clause (iv). The converse, that tensors with
-    the same index are equivalent, is not part of this statement.
-    % Source lines: paper_v2.tex 824--857.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_representative_index_tensor_product,
-        thm:mpu_admissible_index_composition,
-        thm:mpu_path_index_constant, thm:mpu_equivalence_index_eq}
-    The four properties are
-    Lemmas~\ref{thm:mpu_representative_index_blocking_adjoint},
-    \ref{thm:mpu_representative_index_tensor_product},
-    \ref{thm:mpu_admissible_index_composition},
-    \ref{thm:mpu_path_index_constant} and~\ref{thm:mpu_equivalence_index_eq}.
-\end{proof}
-
 \begin{theorem}[Index Theorem]
     \label{IndexTh}
     \notready
     \discussion{6023}
-    \uses{def:index, index-well-defined, lem:mpu_index_tensor, lem:mpu_index_composition, prop:continuity-index, def:equivalent-tensors, thm:mpu_index_theorem_without_converse}
+    \uses{def:index, index-well-defined, lem:mpu_index_tensor, lem:mpu_index_composition, prop:continuity-index, def:equivalent-tensors, thm:mpu_equivalence_index_eq}
     For MPU tensors under the source's standing canonical-form convention, take
     the index defined from any simple blocking. This index has the following
     properties.
@@ -4010,8 +3970,13 @@
               equivalent.
     \end{enumerate}
     In \cite[Theorem~IV.6]{Cirac2017MPU}, these four clauses form the unrestricted
-    index theorem. Clauses (i)--(iii) and the ``only if'' half of clause (iv)
-    are Lemma~\ref{thm:mpu_index_theorem_without_converse}; the converse
+    index theorem. For the index of
+    Definition~\ref{def:mpu_reduced_representative_index}, clauses (i)--(iii)
+    are Lemmas~\ref{thm:mpu_representative_index_blocking_adjoint},
+    \ref{thm:mpu_representative_index_tensor_product},
+    \ref{thm:mpu_admissible_index_composition}
+    and~\ref{thm:mpu_path_index_constant}, and the ``only if'' half of
+    clause (iv) is Lemma~\ref{thm:mpu_equivalence_index_eq}. The converse
     half of clause (iv), that tensors with the same index are equivalent, is
     not yet established here.
     % Source lines: paper_v2.tex 824--865.
