@@ -907,6 +907,57 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Apply Lemma~\ref{thm:periodic_annihilating_corner_lift}.
 \end{proof}
 
+\begin{lemma}[A coupled perturbation in two adjacent corners]
+    \label{thm:periodic_two_corner_perturbation}
+    \lean{Matrix.exists_anticommuting_two_corner_perturbation}
+    \leanok
+    Let $V\in M_{D,a}(\C)$, $W\in M_{D,b}(\C)$ and
+    $U\in M_{D,c}(\C)$ satisfy $W^\dagger W=I_b$,
+    $U^\dagger U=I_c$ and $V^\dagger W=V^\dagger U=W^\dagger U=0$.
+    Let $F:M_D\to M_D$, $P:M_a\to M_b$, $Q:M_b\to M_c$ and
+    $H:M_b\to M_b$ be complex linear, with $P,Q,H$ Hermitian preserving.
+    Suppose $Q$ preserves trace, $\tr H(Y)=0$ for every $Y$,
+    $H(P(\rho))=0$, $H^2=0$ and $QH\ne0$.
+    Assume the exact branch identities
+    \begin{align}
+        V^\dagger F(X)V &= \phi(X)\rho,&
+        W^\dagger F(X)W &= P(V^\dagger XV), \\
+        F(WYW^\dagger) &= UQ(Y)U^\dagger,&
+        F(UZU^\dagger) &= \tr(Z)\sigma,
+        \label{eq:periodic_two_corner_branch_identities}
+    \end{align}
+    where $\phi$ is complex linear and $\rho,\sigma$ are fixed matrices.
+    Then
+    \begin{align}
+        K(X) &= WH(P(V^\dagger XV))W^\dagger
+            - UQ(H(W^\dagger XW))U^\dagger
+        \label{eq:periodic_two_corner_direction}
+    \end{align}
+    is nonzero, Hermitian preserving and of zero output trace, with
+    $FK+KF=0$, $K^2=0$ and $F^2K=0$. Hence
+    $(F+tK)^p=F^p$ for every $t\in\C$ and $p\ge2$.
+    Complete positivity and compatibility with a prescribed Choi face
+    are separate obligations.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_square_preserving_power_perturbation}
+    Compression of $K(X)$ to $V$ is zero and compression to $W$ is
+    $H(P(V^\dagger XV))$. Thus $K^2=0$ follows from $H^2=0$.
+    The branch identities give
+    \begin{align}
+        F(K(X)) &= UQ(H(P(V^\dagger XV)))U^\dagger = -K(F(X)),\\
+        F^2(K(X)) &= \tr(Q(H(P(V^\dagger XV))))\sigma=0.
+        \label{eq:periodic_two_corner_cancellation}
+    \end{align}
+    On an input $WYW^\dagger$, the $U$ compression of $K$ recovers
+    $-Q(H(Y))$, so $QH\ne0$ gives $K\ne0$. Cyclicity of trace and
+    Hermitian congruence give the remaining properties. Apply
+    Lemma~\ref{thm:periodic_square_preserving_power_perturbation}
+    to $tK$.
+\end{proof}
+
 \begin{lemma}[Exact powers from a preserved square]
     \label{thm:periodic_square_preserving_power_perturbation}
     \lean{add_pow_eq_of_sq_eq_of_sq_mul_eq_zero,

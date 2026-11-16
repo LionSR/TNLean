@@ -14,6 +14,11 @@ only through its trace allow a rectangular perturbation to be lifted
 to the full matrix algebra. Its square and its two products with the
 original map vanish. This is the isolated middle-corner construction in
 the cyclic selection argument for arXiv:1708.00029, Theorem 4.1.
+
+A second construction couples two adjacent corners through a supplied
+nilpotent middle map. The mixed products cancel and the square of the
+original map kills the perturbation, preserving all powers from the
+square onward. No complete-positivity conclusion is asserted here.
 -/
 
 open scoped Matrix
@@ -225,5 +230,123 @@ theorem exists_annihilating_corner_perturbation_of_two_le {D m n : ℕ}
     exists_annihilating_corner_perturbation V W hV hW hOrth F L hLne
       ρ σ φ hIn hOut hTrace hKill hHerm
   exact ⟨K, hKne, hFK, hKF, hKK, hKT, hKH, hPow⟩
+
+private theorem extract_orthogonal_corner_zero {D m n : ℕ}
+    (V : Matrix (Fin D) (Fin m) ℂ) (W : Matrix (Fin D) (Fin n) ℂ)
+    (hOrth : Vᴴ * W = 0) (Y : Matrix (Fin n) (Fin n) ℂ) :
+    Vᴴ * (W * Y * Wᴴ) * V = 0 := by
+  calc
+    Vᴴ * (W * Y * Wᴴ) * V = (Vᴴ * W) * Y * Wᴴ * V := by
+      simp only [Matrix.mul_assoc]
+    _ = 0 := by rw [hOrth, Matrix.zero_mul, Matrix.zero_mul, Matrix.zero_mul]
+
+/-- A supplied nilpotent, trace-zero middle map gives opposite changes
+in two adjacent matrix corners. Their mixed products cancel, and every
+power from the square onward is unchanged for every scalar parameter.
+The exact branch identities and middle direction are explicit hypotheses;
+complete positivity and Choi-face compatibility are separate obligations.
+This is the coupled-corner construction in the written selection argument
+associated with arXiv:1708.00029, Theorem 4.1. -/
+theorem exists_anticommuting_two_corner_perturbation {D a b c : ℕ}
+    (V : Matrix (Fin D) (Fin a) ℂ) (W : Matrix (Fin D) (Fin b) ℂ)
+    (U : Matrix (Fin D) (Fin c) ℂ)
+    (hW : Wᴴ * W = 1) (hU : Uᴴ * U = 1)
+    (hVW : Vᴴ * W = 0) (hVU : Vᴴ * U = 0) (hWU : Wᴴ * U = 0)
+    (F : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
+    (P : Matrix (Fin a) (Fin a) ℂ →ₗ[ℂ] Matrix (Fin b) (Fin b) ℂ)
+    (Q : Matrix (Fin b) (Fin b) ℂ →ₗ[ℂ] Matrix (Fin c) (Fin c) ℂ)
+    (H : Module.End ℂ (Matrix (Fin b) (Fin b) ℂ))
+    (ρ : Matrix (Fin a) (Fin a) ℂ) (σ : Matrix (Fin D) (Fin D) ℂ)
+    (φ : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] ℂ)
+    (hInV : ∀ X, Vᴴ * F X * V = φ X • ρ)
+    (hInW : ∀ X, Wᴴ * F X * W = P (Vᴴ * X * V))
+    (hOutW : ∀ Y, F (W * Y * Wᴴ) = U * Q Y * Uᴴ)
+    (hOutU : ∀ Z, F (U * Z * Uᴴ) = Z.trace • σ)
+    (hQTrace : ∀ Y, (Q Y).trace = Y.trace)
+    (hHTrace : ∀ Y, (H Y).trace = 0) (hKill : H (P ρ) = 0)
+    (hHH : H * H = 0) (hQH : Q ∘ₗ H ≠ 0)
+    (hPHerm : ∀ X, X.IsHermitian → (P X).IsHermitian)
+    (hQHerm : ∀ Y, Y.IsHermitian → (Q Y).IsHermitian)
+    (hHHerm : ∀ Y, Y.IsHermitian → (H Y).IsHermitian) :
+    ∃ K : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ),
+      K ≠ 0 ∧
+      (∀ X, K X = W * H (P (Vᴴ * X * V)) * Wᴴ -
+        U * Q (H (Wᴴ * X * W)) * Uᴴ) ∧
+      F * K + K * F = 0 ∧ K * K = 0 ∧ F ^ 2 * K = 0 ∧
+      (∀ X, (K X).trace = 0) ∧
+      (∀ X, X.IsHermitian → (K X).IsHermitian) ∧
+      (∀ t : ℂ, ∀ p : ℕ, 2 ≤ p → (F + t • K) ^ p = F ^ p) := by
+  let K : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    (singleKrausMap W ∘ₗ H ∘ₗ P ∘ₗ singleKrausMap Vᴴ) -
+      (singleKrausMap U ∘ₗ Q ∘ₗ H ∘ₗ singleKrausMap Wᴴ)
+  have hK (X : Matrix (Fin D) (Fin D) ℂ) :
+      K X = W * H (P (Vᴴ * X * V)) * Wᴴ -
+        U * Q (H (Wᴴ * X * W)) * Uᴴ := by
+    simp only [K, LinearMap.sub_apply, LinearMap.comp_apply, singleKrausMap_apply,
+      Matrix.conjTranspose_conjTranspose]
+  have hVWK := extract_orthogonal_corner_zero V W hVW
+  have hVUK := extract_orthogonal_corner_zero V U hVU
+  have hWUK := extract_orthogonal_corner_zero W U hWU
+  have hExtractV (X : Matrix (Fin D) (Fin D) ℂ) : Vᴴ * K X * V = 0 := by
+    rw [hK, Matrix.mul_sub, Matrix.sub_mul, hVWK, hVUK, sub_self]
+  have hExtractW (X : Matrix (Fin D) (Fin D) ℂ) :
+      Wᴴ * K X * W = H (P (Vᴴ * X * V)) := by
+    rw [hK, Matrix.mul_sub, Matrix.sub_mul, recover_isometric_corner W hW,
+      hWUK, sub_zero]
+  have hKne : K ≠ 0 := by
+    intro hZero
+    apply hQH
+    ext Y : 1
+    change Q (H Y) = 0
+    have hLift : U * Q (H Y) * Uᴴ = 0 := by
+      have h := congrArg
+        (fun T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) => T (W * Y * Wᴴ)) hZero
+      simpa only [hK, hVWK, recover_isometric_corner W hW, map_zero,
+        Matrix.mul_zero, Matrix.zero_mul, zero_sub, LinearMap.zero_apply,
+        neg_eq_zero] using h
+    have h := congrArg (fun Z => Uᴴ * Z * U) hLift
+    simpa only [recover_isometric_corner U hU, Matrix.mul_zero, Matrix.zero_mul] using h
+  have hFK (X : Matrix (Fin D) (Fin D) ℂ) :
+      F (K X) = U * Q (H (P (Vᴴ * X * V))) * Uᴴ := by
+    rw [hK, map_sub, hOutW, hOutU, hQTrace, hHTrace, zero_smul, sub_zero]
+  have hKF (X : Matrix (Fin D) (Fin D) ℂ) :
+      K (F X) = -(U * Q (H (P (Vᴴ * X * V))) * Uᴴ) := by
+    rw [hK, hInV, hInW, map_smul, map_smul, hKill, smul_zero,
+      Matrix.mul_zero, Matrix.zero_mul, zero_sub]
+  have hMixed : F * K + K * F = 0 := by
+    ext X : 1
+    change F (K X) + K (F X) = 0
+    rw [hFK, hKF, add_neg_cancel]
+  have hHHApply (Y : Matrix (Fin b) (Fin b) ℂ) : H (H Y) = 0 := by
+    exact congrArg (fun T : Module.End ℂ (Matrix (Fin b) (Fin b) ℂ) => T Y) hHH
+  have hKK : K * K = 0 := by
+    ext X : 1
+    change K (K X) = 0
+    calc
+      K (K X) = W * H (P (Vᴴ * K X * V)) * Wᴴ -
+          U * Q (H (Wᴴ * K X * W)) * Uᴴ := hK (K X)
+      _ = 0 := by
+        rw [hExtractV, hExtractW]
+        simp only [map_zero, hHHApply, Matrix.mul_zero, Matrix.zero_mul, sub_self]
+  have hSqK : F ^ 2 * K = 0 := by
+    ext X : 1
+    change F (F (K X)) = 0
+    rw [hFK, hOutU, hQTrace, hHTrace, zero_smul]
+  have hTrace (X : Matrix (Fin D) (Fin D) ℂ) : (K X).trace = 0 := by
+    rw [hK, Matrix.trace_sub, Matrix.trace_mul_cycle, hW, Matrix.one_mul,
+      Matrix.trace_mul_cycle, hU, Matrix.one_mul, hHTrace, hQTrace, hHTrace, sub_self]
+  have hHerm (X : Matrix (Fin D) (Fin D) ℂ) (hX : X.IsHermitian) :
+      (K X).IsHermitian := by
+    rw [hK]
+    exact (Matrix.isHermitian_mul_mul_conjTranspose W
+      (hHHerm _ (hPHerm _ (Matrix.isHermitian_conjTranspose_mul_mul V hX)))).sub
+      (Matrix.isHermitian_mul_mul_conjTranspose U
+        (hQHerm _ (hHHerm _ (Matrix.isHermitian_conjTranspose_mul_mul W hX))))
+  refine ⟨K, hKne, hK, hMixed, hKK, hSqK, hTrace, hHerm, ?_⟩
+  intro t p hp
+  apply add_pow_eq_of_anticommuting_square_zero (F := F) (H := t • K) ?_ ?_ ?_ hp
+  · rw [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, ← smul_add, hMixed, smul_zero]
+  · rw [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, hKK, smul_zero, smul_zero]
+  · rw [Algebra.mul_smul_comm, hSqK, smul_zero]
 
 end Matrix
