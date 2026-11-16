@@ -1,10 +1,10 @@
 # Exact Fibonacci action-tree calculation for #8053, item 2
 
-Status: **all-sector L identification kernel checked; cross-final extension pending**, with separately verified exact arithmetic evidence.
+Status: **all sector identities kernel checked; full validation pending**, with separately verified exact arithmetic evidence.
 The continuation adds `FibonacciActionDecomposition.lean` and
 `FibonacciActionLMatrix.lean`, with proofs rather than proof placeholders.
-The blueprint records the precise constructed family but carries no completion
-marks while hosted compilation is pending. The earlier exact calculation is
+The blueprint records the precise constructed family, with completion marks
+added after the strict hosted kernel check of every stated identity. The earlier exact calculation is
 preserved below. Source presence is not kernel-check evidence.
 
 ## 2026-11-16 continuation: reuse the now-merged construction
@@ -55,12 +55,17 @@ identities, and all supporting proofs in that source are kernel checked.
 The full project and blueprint checks were still running when this status
 was recorded.
 
-A subsequent extension promotes the exact verifier's ten cross-final zero
-products to a Lean theorem: `actionTrees_cross_final` covers both rectangular
-cross contractions between different final blocks. That extension and its
-blueprint statement remain pending kernel checking. No completion marker is
-placed on the combined blueprint entry until that check succeeds. These
-modules extend the merged construction; they do not replace its map tables.
+Commit `a19b3cc80f00229436f0e9935e593137359e696d` promotes the exact
+verifier's ten cross-final zero products to `actionTrees_cross_final`, covering
+both rectangular cross contractions between distinct final blocks. Its pinned
+[run 43957613327](https://github.com/LionSR/TNLean/actions/runs/43957613327)
+passed the strict changed-source check, including the complete L-matrix
+module (source blob `5693a6ccd8e6df28ceb8578dbe69b839e67adab4`).
+Every identity in the combined blueprint entry is now kernel checked;
+its completion markers are added in the following documentation-only change.
+These modules extend the merged construction; they do not replace its map
+tables. A successful focused check is not a claim that the full project or
+blueprint checks have completed.
 
 ## Ownership and baseline
 
@@ -212,8 +217,8 @@ FibonacciFSymbol.lean be53c7fb4b675bd12c0da6219e7c930bac955cb63fdec62171c0641bf9
 ## Formal obligations recorded before the Lean candidate
 
 The following list preserves the obligations recorded before the candidate.
-Items 1–4 are now kernel checked at `c1d793c`. The additional cross-final
-extension and the full validation in item 5 remain pending as described above.
+Items 1–4 are now kernel checked, including the cross-final extension at
+`a19b3cc`. The full validation in item 5 remains pending as described above.
 
 1. Define the typed fusion and action maps over the existing GoldenInt ring,
    including `1·C → C`, and map them to ℂ with `goldenToComplex`. Use
