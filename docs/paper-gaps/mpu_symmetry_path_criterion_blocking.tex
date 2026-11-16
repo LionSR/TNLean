@@ -116,7 +116,38 @@ Lemma~\texttt{lem:equivalent-symmetry}. Conversely, those ``only if''
 directions are evidence about that lemma: if they hold, strict equivalence
 under conjugation already detects $\det(uv)$ at the level of the standard
 form, which the blocked forward direction cannot supply.
-Corollary~\texttt{cor:equiv-under-conjugation} is left untouched.
+
+\section{The case under blocking}
+
+Corollary~\texttt{cor:equiv-under-conjugation} needs no unblocked forward
+direction, because its invariant, the case of Proposition~\texttt{corconj}, is
+preserved by blocking. The source proves only the ``if'' direction
+(lines~1556--1567) and does not state this preservation; it is the missing
+argument for the ``only if'' direction.
+
+Let $\mathcal U$ be conjugation invariant and in canonical form~II. Then
+$\mathcal U$ and $\overline{\mathcal U}$ generate the same MPU, so
+$\overline{\mathcal U^{ij}}=X^\dagger\mathcal U^{ij}X$ for a unitary $X$
+(eq.~\texttt{eq:mps-class-gauge-trafo}, lines~1761--1782). The same $X$ is a
+conjugation gauge of every block of $\mathcal U$, as the source notes at
+line~1774, and $X\overline X=\pm1$. For any standard form $u,v$ of any block of
+$\mathcal U$, Case~I holds exactly when $X\overline X=1$ and Case~II exactly
+when $X\overline X=-1$ (the first half of
+Proposition~\texttt{prop:mps-class-eq-mpu-class-for-conjugation},
+lines~1791--1797). Hence the case is the same for all blocks.
+
+The ``only if'' direction then follows the source's argument for
+Theorem~\texttt{prop:conjsym-strict-equiv} (lines~1493--1505) on the blocked
+chain. Equivalence gives strict equivalence of the blocks of $k$ sites, with
+trivial ancillas since the physical dimensions agree. The blocked forward
+direction gives a continuous path of gates on longer blocks, each generating a
+conjugation-invariant MPU, hence each in one of the two cases. The matrix
+$\overline{u}u^\dagger=x\otimes y$ is continuous along the path, and its
+partial transpose on the first factor is $+\,x\otimes y$ in Case~I and
+$-\,x\otimes y$ in Case~II. The two cases are therefore closed, disjoint, and
+cover the path, so the case is constant along it. By the preservation under
+blocking, the original tensors are in the same case. This needs no lift of
+$x(p),y(p)$ to continuous families.
 
 \section{Formal statements}
 
@@ -134,6 +165,15 @@ The ``if'' directions of Theorems~\texttt{conjphs} and
 \texttt{prop:conjsym-strict-equiv} are
 \leanid{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq} and
 \leanid{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even}.
+Corollary~\texttt{cor:equiv-under-conjugation} is
+\leanid{MPOTensor.equivalentUnderSymmetry_conjugation_iff_same_case}, with the
+``only if'' direction
+\leanid{MPOTensor.same_case_of_equivalentUnderSymmetry_conjugation}. The
+preservation of the case under blocking is
+\leanid{MPOTensor.isConjugationCaseI_iff_of_blockTensor}, through
+\leanid{MPOTensor.TwoSiteStandardFormData.isConjugationCase_iff_sign}, and the
+constancy along a path of gates is
+\leanid{MPOTensor.isConjugationCase_const_of_path}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

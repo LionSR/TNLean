@@ -2395,15 +2395,50 @@
 
 \begin{lemma}[Equivalence under conjugation]
     \label{cor:equiv-under-conjugation}
-    \notready
+    \lean{MPOTensor.equivalentUnderSymmetry_conjugation_iff_same_case,
+        MPOTensor.same_case_of_equivalentUnderSymmetry_conjugation,
+        MPOTensor.isConjugationCaseI_iff_of_blockTensor,
+        MPOTensor.isConjugationCase_const_of_path,
+        MPOTensor.not_isConjugationCaseI_and_isConjugationCaseII,
+        MPOTensor.TwoSiteStandardFormData.isConjugationCase_iff_sign,
+        MPOTensor.IsMPUCanonicalFormII.exists_conjugation_gauge}
+    \leanok
     \discussion{5713}
+    % **Local fix (missing argument):** the source proves only the "if"
+    % direction; the "only if" direction uses the preservation of the case
+    % under blocking. Documented in
+    % docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex.
     \uses{corconj, prop:conjsym-strict-equiv, def:equivalent-symmetry,
-        thm:mpu_conjugation_same_case_equiv_if}
-    Two conjugation-invariant MPUs are equivalent under conjugation symmetry if
-    and only if they belong to the same case of Lemma~\ref{corconj}. The
-    ``if'' direction is Lemma~\ref{thm:mpu_conjugation_same_case_equiv_if}.
+        thm:mpu_conjugation_same_case_equiv_if,
+        lem:mpu_symmetry_path_criterion_forward}
+    Let $\mathcal U_1$ and $\mathcal U_2$ be simple conjugation-invariant
+    tensors in canonical form II on the same physical dimension, whose standard
+    forms have the same even ranks $r$ and $\ell$. Then $\mathcal U_1$ and
+    $\mathcal U_2$ are equivalent under conjugation symmetry if and only if they
+    belong to the same case of Lemma~\ref{corconj}. The ``if'' direction is
+    Lemma~\ref{thm:mpu_conjugation_same_case_equiv_if}. The source proves only
+    that direction; for the other, see
+    \cite{gap:mpu_symmetry_path_criterion_blocking}.
     % Source lines: paper_v2.tex 1548--1567.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    The two cases exclude each other: $\overline uu^\dagger=x\otimes y$
+    determines $x$ up to a phase, and its partial transpose on the first factor
+    is $x^T\otimes y=\pm\,x\otimes y$ according to the case. For the ``only
+    if'' direction, equivalence with equal physical dimensions gives strict
+    equivalence of the blocks of $k$ sites with trivial ancillas. The forward
+    direction of the path criterion after blocking gives a continuous path of
+    gates on longer blocks, each generating a conjugation-invariant MPU and so
+    lying in one of the two cases. Along the path the partial transpose of the
+    continuous matrix $\overline uu^\dagger$ is either $+\overline uu^\dagger$
+    or $-\overline uu^\dagger$, so the case is constant. Finally, a unitary
+    $X$ with $\overline{\mathcal U_i^{jk}}=X^\dagger\mathcal U_i^{jk}X$ is a
+    conjugation gauge of every block, and the case of every standard form of
+    every block is the sign $X\overline X=\pm1$. So the original tensors are
+    in the same case.
+\end{proof}
 
 \begin{lemma}[Equivalence under conjugation, the ``if'' direction]
     \label{thm:mpu_conjugation_same_case_equiv_if}
