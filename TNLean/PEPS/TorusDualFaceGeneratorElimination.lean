@@ -54,10 +54,10 @@ def torusDualFaceEliminationSequence : List (X × Bool) → (FG →* FG)
   | (v, b) :: l => (torusDualFaceEliminationSequence l).comp
       (if b then torusDualWestFaceElimination v else torusDualSouthFaceElimination v)
 
-variable [NeZero width] [NeZero height]
+variable [widthNeZero : NeZero width] [heightNeZero : NeZero height]
 
 -- Retain the established positive-period theorem signatures explicitly.
-include [NeZero width] [NeZero height]
+include widthNeZero heightNeZero
 
 omit [NeZero width] [NeZero height] in
 private theorem faceWord_eq (v : X) :
