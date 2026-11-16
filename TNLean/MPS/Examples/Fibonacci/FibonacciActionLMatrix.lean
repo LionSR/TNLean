@@ -121,6 +121,7 @@ private theorem action_crossGolden : ∀ (a b x y : Fin 2)
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
   intro a b x y
+  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
   fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
     intro p q
   all_goals fin_cases p <;> fin_cases q <;> decide +kernel
@@ -134,6 +135,7 @@ private theorem action_inverseCrossGolden : ∀ (a b x y : Fin 2)
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
   intro a b x y
+  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
   fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
     intro q p
   all_goals fin_cases q <;> fin_cases p <;> decide +kernel
@@ -143,6 +145,19 @@ private theorem inv_dim_trace {D : ℕ} (hD : 0 < D) (z : ℂ) :
   rw [Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin, smul_eq_mul]
   have hn : (D : ℂ) ≠ 0 := by exact_mod_cast hD.ne'
   field_simp [hn]
+
+private theorem inv_dim_trace_golden {D : ℕ} (hD : 0 < D) (z : GoldenInt) :
+    (D : ℂ)⁻¹ * Matrix.trace
+      (complexOfGolden (z • (1 : Matrix (Fin D) (Fin D) GoldenInt))) = goldenToComplex z := by
+  have hm : complexOfGolden (z • (1 : Matrix (Fin D) (Fin D) GoldenInt)) =
+      goldenToComplex z • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    calc
+      complexOfGolden (z • (1 : Matrix (Fin D) (Fin D) GoldenInt)) =
+          goldenToComplex z • complexOfGolden (1 : Matrix (Fin D) (Fin D) GoldenInt) :=
+        complexOfRing_smul goldenToComplex z _
+      _ = goldenToComplex z • 1 := by rw [complexOfGolden_one]
+  rw [hm]
+  exact inv_dim_trace hD _
 
 private theorem state_dim_pos (y : Fin 2) : 0 < fibNimDim y := by
   fin_cases y <;> decide
@@ -156,10 +171,12 @@ theorem actionLMatrix_eq_fSymbol (a b x y : Fin 2)
     actionLMatrix fusionSynthesis actionAnalysis actionSynthesis a b x y p q =
       goldenToComplex (fibFSymbolGolden a b x y q.1 p.1) := by
   unfold actionLMatrix
-  rw [sequentialAnalysis_eq, fusionActionSynthesis_eq,
-    ← complexOfGolden_mul, action_crossGolden]
-  erw [complexOfRing_smul, complexOfGolden_one]
-  exact inv_dim_trace (state_dim_pos y) _
+  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
+  rw [sequentialAnalysis_eq, fusionActionSynthesis_eq, ← complexOfGolden_mul]
+  have hc := action_crossGolden a b x y p q
+  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv] at hc
+  rw [hc]
+  exact inv_dim_trace_golden (state_dim_pos y) _
 
 /-- The reverse action-tree comparison has the transposed standard F entries.
 Source: GLM23, `eq:F_symbol2` and `1Fsymbol`. -/
@@ -169,10 +186,12 @@ theorem inverseActionLMatrix_eq_fSymbol (a b x y : Fin 2)
     inverseActionLMatrix fusionAnalysis actionAnalysis actionSynthesis a b x y q p =
       goldenToComplex (fibFSymbolGolden a b x y q.1 p.1) := by
   unfold inverseActionLMatrix
-  rw [fusionActionAnalysis_eq, sequentialSynthesis_eq,
-    ← complexOfGolden_mul, action_inverseCrossGolden]
-  erw [complexOfRing_smul, complexOfGolden_one]
-  exact inv_dim_trace (state_dim_pos y) _
+  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
+  rw [fusionActionAnalysis_eq, sequentialSynthesis_eq, ← complexOfGolden_mul]
+  have hc := action_inverseCrossGolden a b x y q p
+  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv] at hc
+  rw [hc]
+  exact inv_dim_trace_golden (state_dim_pos y) _
 
 /-- The only two-dimensional multiplicity sector is the standard
 `[[sigma², sigma], [sigma, -sigma²]]` Fibonacci matrix. -/
@@ -288,8 +307,7 @@ theorem fusionFMatrix_eq_fSymbol (a b x y : Fin 2)
   rcases p with ⟨z, j, i⟩
   change (fibBlockDim y : ℂ)⁻¹ * Matrix.trace (_ * _) = _
   rw [hH, hS, ← complexOfGolden_mul, fusion_crossGolden]
-  erw [complexOfRing_smul, complexOfGolden_one]
-  apply inv_dim_trace
+  apply inv_dim_trace_golden
   fin_cases y <;> decide
 
 /-- The actual L and F constructions agree after the explicit channel gauges
