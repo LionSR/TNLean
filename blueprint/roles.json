@@ -997,14 +997,13 @@
       ],
       "corollaries": [
         "cor:glm_group_specialization",
-        "cor:glm_group_single_block_trivial",
-        "cor:glm_l_path_gauge_tangent"
+        "cor:glm_group_single_block_trivial"
       ],
       "notes": {
         "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening",
         "thm:glm_mixed_gauge_joint": "The L- and F-symbols are determined by the blocks up to the source's gauge equivalence",
         "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening",
-        "thm:glm_l_path_invariance": "Along a differentiable symmetric path the L-symbols change by an infinitesimal gauge transformation (Garre-Rubio et al., Section 5), named in the opening"
+        "thm:glm_l_path_invariance": "The gauge class of the L-symbols is constant along a differentiable symmetric path (Garre-Rubio et al., Section 5), named in the opening; its first-order part is proved"
       }
     },
     "ch:peps_anyons": {

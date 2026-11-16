@@ -11,9 +11,15 @@ import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
 
 Along a path of symmetric states, with the operator blocks and fusion maps
 fixed, the first-order change of the L matrix is an infinitesimal gauge
-transformation. This is the invariance step of the classification of
-symmetric phases in Garre-Rubio, Lootens and Molnár, Section 5.2
-("MPSs with inequivalent L-symbols belong to different phases").
+transformation. This is the first-order computation in the invariance step
+of the classification of symmetric phases in Garre-Rubio, Lootens and
+Molnár, Section 5.2 ("MPSs with inequivalent L-symbols belong to different
+phases").
+
+The source's conclusion at line 1551, that the gauge class of the
+L-symbols is constant along the path, is not proved here. It requires
+integrating the first-order law along the path, which the source does not
+carry out; see `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
 
 The source fixes a point `γ` of the path and writes, after a basis change
 of the action multiplicity spaces, `V(γ + dγ) = V(γ) + ∑ X V(γ) dγ`
@@ -44,7 +50,7 @@ The index convention is that of `actionLMatrix_regauge`: the source's
 
 * `MPOTensor.hasDerivAt_actionLMatrix`: the derivative of every L entry
   along the path is `X_{az}^y L + X_{bx}^z L - L X_{cx}^y`, GLM23
-  lines 1352--1551.
+  lines 1387--1551.
 * `MPOTensor.hasDerivAt_actionLMatrix_gaugeCurve`: the same expression is
   the velocity of the gauge orbit `t ↦` (gauge law with `1 + t X`).
 
@@ -252,12 +258,28 @@ $L'^{zij}_{c\mu k} = \sum_{\hat i,\hat j,\hat k}
 that the $L'$-symbol is in the same class as the $L$-symbol since they are
 related by a (differentiable) gauge transformation."
 
-The hypotheses are the source's: fixed operators and fusion maps
-(line 1359), exact action tensors at every point near `γ₀`
-(`fusiontensors2`), injective and pairwise inequivalent blocks, a fixed
-bond dimension (line 1361), and the span assumption on the derivative.
+The hypotheses are the source's:
+* fixed operators and fusion maps: "by assumption, the symmetry operators
+  are the same along such path" (line 1359);
+* exact action tensors near `γ₀`: "We further assume that there are action
+  tensors locally realizing this symmetry, i.e. Eq. (fusiontensors2) is
+  satisfied", for paths "that have an exact MPS ground space through the
+  whole path, so that a set of L-symbols can also be defined all along"
+  (lines 1269--1272);
+* injective, pairwise inequivalent blocks: "we restrict w.l.o.g. to MPSs
+  whose blocks are injective and orthogonal between each other"
+  (line 317) and "we can assume that the MPS tensors are injective and
+  orthogonal between them" (line 1332); for injective blocks,
+  orthogonality in the thermodynamic limit is pairwise
+  non-proportionality, `BlocksNotGaugePhaseEquiv`;
+* a fixed bond dimension: "we assume for now that the bond dimension does
+  not change" (line 1361);
+* the span assumption on the derivative (lines 1387--1405).
+
 Differentiability of the left inverses is not assumed; the source's
-claim that the `L'`-symbols are differentiable (line 1440) is derived. -/
+claim that the `L'`-symbols are differentiable (line 1440) is derived.
+The conclusion is first order. The source's final step, that the class of
+the L-symbols is constant along the path (line 1551), is not asserted. -/
 theorem hasDerivAt_actionLMatrix
     (hF : ∀ a b,
       MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
