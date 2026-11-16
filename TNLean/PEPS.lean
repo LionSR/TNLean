@@ -200,6 +200,7 @@ import TNLean.PEPS.PureCutLocalEquivalence
 import TNLean.PEPS.RegionBlock
 import TNLean.PEPS.RegionBondGaugeHolonomy
 import TNLean.PEPS.RegionComplementComparison
+import TNLean.PEPS.RegionPhysicalCutMarginal
 import TNLean.PEPS.RegionPhysicalMap
 import TNLean.PEPS.RegionTransferCovariance
 import TNLean.PEPS.RegionTransport
@@ -426,6 +427,7 @@ import TNLean.PEPS.TorusEdgePhysicalChargeMeasurement
 import TNLean.PEPS.TorusExteriorPathApproximation
 import TNLean.PEPS.TorusFlatConnectionGauge
 import TNLean.PEPS.TorusFluxBoundaryComponent
+import TNLean.PEPS.TorusFluxEnvelopeDensity
 import TNLean.PEPS.TorusFourLegTransformation
 import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGClosure

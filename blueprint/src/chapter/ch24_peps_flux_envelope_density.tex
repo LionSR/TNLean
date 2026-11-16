@@ -1,0 +1,50 @@
+\begin{definition}[Physical coefficient cut]
+    \label{def:peps_region_physical_cut}
+    \lean{TNLean.PEPS.regionPhysicalCutMatrix}\leanok
+    For a finite physical coefficient vector $\psi$ and a region $R$, let
+    $M_R(\sigma,\tau)=\psi(\sigma\cup\tau)$, where the two configurations
+    on $R$ and its complement are joined into a global configuration.
+\end{definition}
+
+\begin{lemma}[Marginals of normalized physical coefficient cuts]
+    \label{lem:peps_cut_density_subregion}
+    \lean{TNLean.PEPS.regionPhysicalCutMatrix_ne_zero_iff,
+        TNLean.PEPS.regionPhysicalCutMatrix_mul_conjTranspose,
+        TNLean.PEPS.regionPhysicalCutMatrix_normalized_reduced_eq_of_subset}\leanok
+    The cut $M_R$ is nonzero exactly when $\psi$ is nonzero, and
+    $M_RM_R^\dagger=\operatorname{Tr}_{R^c}|\psi\rangle\langle\psi|$.
+    If two physical coefficient vectors have equal trace-normalized row
+    Gram matrices on $S$, they have equal trace-normalized row Gram matrices
+    on every $R\subseteq S$. Empty and disconnected regions are allowed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_region_physical_cut}
+    Restrict a global configuration to $R$ and $R^c$ to recover each
+    coefficient from the cut. Expanding the row Gram gives the stated
+    partial trace. For $R\subseteq S$, split $S=R\sqcup(S\setminus R)$
+    and trace over $S\setminus R$. Partial trace preserves the full trace,
+    so the same scalar normalization applies before and after this reduction.
+\end{proof}
+
+\begin{lemma}[Vacuum flux density in subregions of an admissible envelope]
+    \label{lem:peps_flux_envelope_density}
+    \lean{TNLean.PEPS.IsGIsometric.torusFlux_normalized_density_eq_vacuum_of_subset_isSimplyConnected}
+    \leanok
+    Let $R\subseteq S$ be physical regions in a native regular group-isometric
+    torus with finite group and both periods at least three. Suppose the
+    induced observation graph on $S$ is connected, the closed-cell realization
+    of $S$ is simply connected, and the computed four-corner forbidden dual set
+    of $S$ has simply connected realization. If both endpoints of a native
+    flux path lie outside this computed set, its normalized observed reduced
+    density on $R$ equals the vacuum density, and both actual cuts on $R$
+    are nonzero. There is no topology or connectedness assumption on $R$.
+    The insertion element is arbitrary and winding is unrestricted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_native_noncentral_flux_density,
+        lem:peps_cut_density_subregion}
+    The native flux-density result gives equal normalized densities and
+    nonzero cuts on $S$. The marginal identity passes the equality to $R$.
+    Nonzero cuts on $S$ imply nonzero coefficient vectors, and therefore
+    nonzero cuts on $R$.
+\end{proof}
