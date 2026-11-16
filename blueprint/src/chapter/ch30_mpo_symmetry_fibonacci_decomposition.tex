@@ -180,6 +180,23 @@
 \end{proof}
 
 
+The channel gauges and their reciprocals are golden integers. Applying
+these factors to the exact maps, and then applying the ring homomorphism
+$\mathbb{Z}[\sigma]\to\mathbb{C}$ entrywise, defines the gauged fusion
+and action analysis and synthesis maps.
+\lean{FibonacciCompression.Boundary.actionGauge,
+    FibonacciCompression.Boundary.actionGaugeInv,
+    FibonacciCompression.Boundary.fusionGauge,
+    FibonacciCompression.Boundary.fusionGaugeInv,
+    FibonacciCompression.Boundary.fusionAnalysisGolden,
+    FibonacciCompression.Boundary.fusionAnalysis,
+    FibonacciCompression.Boundary.fusionSynthesisGolden,
+    FibonacciCompression.Boundary.fusionSynthesis,
+    FibonacciCompression.Boundary.actionAnalysisGolden,
+    FibonacciCompression.Boundary.actionAnalysis,
+    FibonacciCompression.Boundary.actionSynthesisGolden,
+    FibonacciCompression.Boundary.actionSynthesis}
+
 \begin{lemma}[A standard gauge for every Fibonacci action sector]%
     \label{lem:mpo_symmetry_fibonacci_l_all_sectors}
     \lean{FibonacciCompression.Boundary.gauge_mul_inv,
@@ -228,5 +245,16 @@
     synthesis gives the same coefficient, with the opposite left and right
     multiplicity index types. The reverse contractions and multiplication
     of the displayed coefficient matrices give both inverse identities.
+    The four action-tree contractions, the forward and reverse coefficient
+    matrices, and the two fusion contractions are computed over
+    $\mathbb{Z}[\sigma]$ before this entrywise transport.
+    \lean{FibonacciCompression.Boundary.fusionActionAnalysisGolden,
+        FibonacciCompression.Boundary.fusionActionSynthesisGolden,
+        FibonacciCompression.Boundary.sequentialAnalysisGolden,
+        FibonacciCompression.Boundary.sequentialSynthesisGolden,
+        FibonacciCompression.Boundary.printedLGolden,
+        FibonacciCompression.Boundary.printedInverseLGolden,
+        FibonacciCompression.Boundary.fusionLeftAnalysisGolden,
+        FibonacciCompression.Boundary.fusionRightSynthesisGolden}
 \end{proof}
 

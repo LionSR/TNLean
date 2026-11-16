@@ -1,6 +1,6 @@
 # Exact Fibonacci action-tree calculation for #8053, item 2
 
-Status: **uncompiled Lean candidate**, with separately verified exact arithmetic evidence.
+Status: **partially kernel checked; all-sector L identification pending**, with separately verified exact arithmetic evidence.
 The continuation adds `FibonacciActionDecomposition.lean` and
 `FibonacciActionLMatrix.lean`, with proofs rather than proof placeholders.
 The blueprint records the precise constructed family but carries no completion
@@ -35,8 +35,27 @@ Run `python3 scripts/fibonacci_action_l_check.py` on the refreshed branch;
 on the older local checkout pass
 `--tree-maps /path/to/FibonacciActionTrees.lean`.
 
-The two candidate modules remain uncompiled until hosted CI provides actual
-kernel-check evidence. They are not replacements for the merged modules.
+Hosted pinned CI has checked `FibonacciActionDecomposition.lean` strictly at
+commit `8e322be197bdfc869bf26ea4c3d8bcb92ab50887` in
+[run 43953366828](https://github.com/LionSR/TNLean/actions/runs/43953366828).
+Its log records that module as `ok`: the displayed gauge units, all eight
+exact complex decompositions, normality, and both actual action trees are
+kernel checked. The source blob is
+`c1c5aa8cf44867afa60e5e1a874045bcf9e47cef`.
+
+That run did not complete `FibonacciActionLMatrix.lean`: two rewrite steps
+retained path-dependent dimension instances. The all-sector GoldenInt cross
+contractions, the reverse contractions, and the same-gauge fusion contraction
+produced no errors, but the module as a whole is not yet validated.
+Commit `080ea322075e41abb201ef7635891ffc691b723d` makes the final-block path
+coordinates explicit before the ring-to-complex multiplication rewrite;
+[run 43954895318](https://github.com/LionSR/TNLean/actions/runs/43954895318)
+then accepted that transport step but failed the next rewrite because the
+GoldenInt certificate still used the unreduced path equivalence. The follow-up
+states those private certificates in the same explicit path coordinates.
+Its complete module check remains pending. No final L theorem is claimed
+kernel checked on this evidence alone. These modules extend the merged
+construction.
 
 ## Ownership and baseline
 
@@ -187,9 +206,9 @@ FibonacciFSymbol.lean be53c7fb4b675bd12c0da6219e7c930bac955cb63fdec62171c0641bf9
 
 ## Formal obligations recorded before the Lean candidate
 
-The continuation authors the constructions and proofs listed in items 1–4
-below. Their correctness remains subject to kernel checking; item 5 is pending.
-These are not yet completed obligations.
+The following list preserves the obligations recorded before the candidate.
+Items 1–3 are now kernel checked in the decomposition module. Item 4 and the
+full validation in item 5 remain pending as described above.
 
 1. Define the typed fusion and action maps over the existing GoldenInt ring,
    including `1·C → C`, and map them to ℂ with `goldenToComplex`. Use
@@ -211,16 +230,17 @@ These are not yet completed obligations.
    theorem axioms, run the required full build and blueprint checks, and leave
    #8053 open until those formal obligations are actually discharged.
 
-Lean validation is blocked in this environment: neither `lake` nor a Lean
+Local Lean validation is unavailable: neither `lake` nor a Lean
 installation nor `.lake` artifacts are present. The managed environment reports
 network policy `disabled/enforced`; a normal HTTPS request to GitHub receives
 HTTP 403 (`CONNECT tunnel failed`). No cold Mathlib source build, pin change,
 network-policy bypass, unproved declaration or weakened completion theorem
-was introduced. No Lean build, full CI, or blueprint check is claimed.
-
-A machine with the pinned Lean and dependency artifacts is required to finish
-items 1–5. This branch must not be merged as completion of #8053 item 2 until the candidate
-proofs and required checks pass. Hosted CI is the intended compilation host.
+was introduced. Hosted CI supplies the pinned compilation evidence above.
+A full successful build, final strict checks, blueprint web/PDF and declaration
+checks, and a separate resulting-theorem axiom inspection remain required.
+No committed diagnostic fixture or workflow exception is added to obtain the
+axiom printout. The branch stays draft and #8053 stays open. The user explicitly
+instructed that this work must not be merged.
 
 Source references: GLM23, `Papers/2203.12563/REsubmission.tex`, `rawrels`,
 `eq:F_symbol2`, `1Fsymbol`, gauge transformations at lines 595–605, and the

@@ -116,12 +116,11 @@ set_option maxRecDepth 8000 in
 private theorem action_crossGolden : ∀ (a b x y : Fin 2)
     (p : SequentialActionMultiplicity fibMult a b x y)
     (q : FusionActionMultiplicity fibMult fibMult a b x y),
-    sequentialAnalysisGolden a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) *
-        fusionActionSynthesisGolden a b x (fusionActionPathEquiv a b x ⟨y, q⟩) =
+    sequentialAnalysisGolden a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩ *
+        fusionActionSynthesisGolden a b x ⟨⟨q.1, q.2.2⟩, y, q.2.1⟩ =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
   intro a b x y
-  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
   fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
     intro p q
   all_goals fin_cases p <;> fin_cases q <;> decide +kernel
@@ -130,12 +129,11 @@ set_option maxRecDepth 8000 in
 private theorem action_inverseCrossGolden : ∀ (a b x y : Fin 2)
     (q : FusionActionMultiplicity fibMult fibMult a b x y)
     (p : SequentialActionMultiplicity fibMult a b x y),
-    fusionActionAnalysisGolden a b x (fusionActionPathEquiv a b x ⟨y, q⟩) *
-        sequentialSynthesisGolden a b x (sequentialActionPathEquiv a b x ⟨y, p⟩) =
+    fusionActionAnalysisGolden a b x ⟨⟨q.1, q.2.2⟩, y, q.2.1⟩ *
+        sequentialSynthesisGolden a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩ =
       fibFSymbolGolden a b x y q.1 p.1 •
         (1 : Matrix (Fin (fibNimDim y)) (Fin (fibNimDim y)) GoldenInt) := by
   intro a b x y
-  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv]
   fin_cases a <;> fin_cases b <;> fin_cases x <;> fin_cases y <;>
     intro q p
   all_goals fin_cases q <;> fin_cases p <;> decide +kernel
@@ -177,7 +175,6 @@ theorem actionLMatrix_eq_fSymbol (a b x y : Fin 2)
       complexOfGolden (fusionActionSynthesisGolden a b x ⟨⟨q.1, q.2.2⟩, y, q.2.1⟩)) = _
   rw [← complexOfGolden_mul]
   have hc := action_crossGolden a b x y p q
-  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv] at hc
   rw [hc]
   exact inv_dim_trace_golden (state_dim_pos y) _
 
@@ -195,7 +192,6 @@ theorem inverseActionLMatrix_eq_fSymbol (a b x y : Fin 2)
       complexOfGolden (sequentialSynthesisGolden a b x ⟨⟨p.1, p.2.2⟩, y, p.2.1⟩)) = _
   rw [← complexOfGolden_mul]
   have hc := action_inverseCrossGolden a b x y q p
-  dsimp only [sequentialActionPathEquiv, fusionActionPathEquiv] at hc
   rw [hc]
   exact inv_dim_trace_golden (state_dim_pos y) _
 
