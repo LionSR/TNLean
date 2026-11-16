@@ -26,7 +26,7 @@ proposition states that the two signs agree.
 The source proof (lines 1817--1829) contracts four gates against the gauge
 relation. The proof here works with the trace instead. Write `𝒲₂` for the
 two-site block of the standard form. Using the gauge relation once,
-`tr(𝕊 U⁽²⁾) = ∑_{a,b} tr(𝒲₂ᵇᵃ 𝒲₂ᵃᵇ) = ζ̄ ∑_{a,b} tr(Gᵀ conj(𝒲₂ᵃᵇ) conj(G) 𝒲₂ᵃᵇ)`.
+`tr(𝕊 U⁽²⁾) = ∑_{a,b} tr(𝒲₂ᵇᵃ 𝒲₂ᵃᵇ) = conj(ζ) ∑_{a,b} tr(Gᵀ conj(𝒲₂ᵃᵇ) conj(G) 𝒲₂ᵃᵇ)`.
 For a simple MPU in canonical form II the normalized double-layer diagonal `E`
 satisfies `E² = |ρ)(1|` (from `simple2` and `Erightleft`), and the double layer
 of `𝒲₂` is `E²`. The sum is then `d tr(G conj(G) ρ)`. Invariance at length two
