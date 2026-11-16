@@ -1,0 +1,119 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{The Block-Injective Interpolation: Action, Fusion, and the Ground Space}
+\author{}
+\date{2026-11-16}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source claim}
+Garre-Rubio, Lootens and Moln\'ar extend the interpolation between two
+symmetric states with equal $L$-symbols to states with a degenerate ground
+space \cite[Section~5]{GarreRubio2023MPOSym}:
+\begin{quote}
+    ``We now deal with the case of systems with ground state degeneracy. We
+    want to connect two block-injective MPSs (with the same number of
+    blocks) that share the $L$-symbols under the action of two MPO algebras
+    with the same fusion category $\mathcal{C}$ and same $F$-symbols.
+    [\ldots] The embedding MPS tensor has the block-diagonal form
+    $A(\gamma)=\bigoplus_x A_x(\gamma)$.''
+\end{quote}
+The section closes with
+\begin{quote}
+    ``The previous MPO tensors define an MPO representation of
+    $\mathcal{C}$ if $L^0=L^1$ and $F^0=F^1$, this can be seen as in the
+    injective case. Also, it corresponds to an MPO symmetry of
+    $|\psi_{A(\gamma)}\rangle$ since it satisfies [\ldots] The injectivity
+    of every block of $A(\gamma)$ and the injectivity of $T_a$ is justified
+    in the same way as in the previous case. Moreover, $H(\gamma)$ is
+    well-behaved in the whole path its ground space is spanned by
+    $\{ |\psi_{A_x(\gamma)}\rangle\}$.''
+\end{quote}
+The injective case is introduced with the remark that ``the general case
+with ground state degeneracy is a straightforward
+generalization''.\footnote{Source traceability:
+    \path{Papers/2203.12563/REsubmission.tex}, line 1582 (straightforward
+    generalization), lines 1695--1704 (block correspondence and
+    $A_x(\gamma)$), lines 1706--1726 (the common operators and their
+    fusion), lines 1726--1775 (the action relation, injectivity, and the
+    ground space).}
+
+\section{Does the block argument use commutation?}
+None of the assertions of lines 1695--1775 invokes commutation of the path
+Hamiltonians $H(\gamma)$ with the periodic operators $O_a$: the passage
+asserts the block-diagonal form of $A(\gamma)$, the definition of $T_a$,
+its fusion under $L^0=L^1$ and $F^0=F^1$, the local action relation, the
+injectivity of the blocks and of $T_a$, and the ground space of
+$H(\gamma)$. The action and fusion statements formalized below therefore
+need no adjoint closure and carry no restriction from
+\texttt{glm23\_mixed\_path\_parent\_commutation.tex}.
+
+The purpose of the section, to \emph{connect} the two states in the sense
+of the definition of a phase, does require that $H(\gamma)$ commute with an
+injective MPO representation. The block passage inherits this from the
+injective case through line 1582. With one block the construction below is
+exactly the injective interpolation, so the counterexample of
+\texttt{glm23\_mixed\_path\_parent\_commutation.tex} (an involutive
+non-unitary on-site symmetry whose canonical parent does not commute with
+it) is also a block-injective counterexample. Any commutation statement for
+the block path must carry the adjoint-closure restriction recorded there.
+No such statement is made here.
+
+\section{The formal boundary}
+The blocks of both endpoints are indexed by one finite set, which records
+the correspondence $x:x_0\to x_1$, and the action multiplicities are
+common to both endpoints, which records the correspondence of the
+degeneracies. The local space of each endpoint is the span of its tensor,
+$\bigoplus_x\mathbb C^{D^p_x}\otimes\mathbb C^{D^p_x}$, as the source
+assumes in the injective case (lines 1584--1586).
+
+The common operators act on every block by an exact biorthogonal
+decomposition into the blocks $A_y(\gamma)$, for every real $\gamma$,
+without injectivity, fusion, or equal $L$-symbols. The periodic operators
+map each block state to the multiplicity-weighted sum of block states.
+Each block is continuous and injective on $(0,1)$. When all endpoint blocks
+are injective with positive dimension and the chosen raw $L$ matrices agree
+for every pair of labels and every pair of corresponding blocks, the common
+operators fuse exactly with the original multiplicities and satisfy the
+fusion rules at every length. The common $F$-symbols are not needed for
+exact fusion.\footnote{\leanid{MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_blockMixedInterpolation},
+    \leanid{MPSTensor.MPOSymmetry.mpo_mulVec_blockMixedInterpolation},
+    \leanid{MPSTensor.MPOSymmetry.isInjective_blockMixedInterpolation},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/BlockMixedMPO}, and
+    \leanid{MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_blockMixedMPO},
+    \leanid{MPSTensor.MPOSymmetry.isMPOFusionAlgebra_blockMixedMPO},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/BlockMixedMPOFusion}.}
+
+Three claims of the passage remain open: injectivity of the operators
+$T_a$ on the enlarged space (also open in the injective case), the
+statement that $H(\gamma)$ is well behaved along the path, and the
+statement that its ground space is spanned by the block states. The source
+gives no argument for the last two beyond the injective case. The
+restriction of an arbitrary physical alphabet to the span of a
+block-injective tensor, derived for one block in the arbitrary-alphabet
+construction, is not derived for several blocks.
+
+\section{Elimination plan}
+\begin{enumerate}
+    \item Prove the ground-space claim from the block-injective parent
+          Hamiltonian theory: for $\gamma\in(0,1)$ the canonical parent
+          of $A(\gamma)$ has the block states as a basis of its periodic
+          ground space, and the limits at $\gamma=0,1$ are handled as in
+          the injective case.
+    \item State any commutation of $H(\gamma)$ with the common operators
+          under the adjoint-closure restriction of
+          \texttt{glm23\_mixed\_path\_parent\_commutation.tex}, or replace
+          the canonical parent by the symmetrized parent.
+    \item Derive the restriction to the span of the tensor for several
+          blocks with arbitrary alphabets, from a simultaneous span of the
+          blocks, as in the one-block polar construction.
+\end{enumerate}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

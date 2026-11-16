@@ -839,6 +839,12 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   equal-L-matrix hypothesis satisfied for which the canonical parent does not
   commute, and formalizes commutation along the closed interval under adjoint
   closure of the two-site boundary range.
+- `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
+  that the block-injective interpolation of Section 5 uses no commutation of
+  the path Hamiltonians, so its exact action and fusion are formalized without
+  adjoint closure, while any commutation statement inherits the one-block
+  counterexample; the injectivity of the common operators and the claimed
+  ground space of the path Hamiltonians remain open.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer
