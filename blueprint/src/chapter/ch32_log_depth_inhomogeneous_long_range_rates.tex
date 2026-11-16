@@ -37,7 +37,7 @@
     \label{lem:ldp_coherent_pair_uniform_rate}
     \lean{MPSPreparation.exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate}
     \leanok
-    \uses{lem:ldp_coherent_pair_approximation_preparation}
+    \uses{lem:ldp_coherent_pair_varying_labels}
     Fix $d\ge2$, $D\ge1$, $b$, $K,r>0$ and an integer $k\ge0$. Let $A_N$
     be a family of inhomogeneous chains with bond dimension $D$. Suppose
     that for every $N\ge1$ and $1\le q\le N$ there is a partition into blocks
@@ -49,17 +49,8 @@
     depth at most $C(1+\log(N/\varepsilon))$.
 \end{lemma}
 \begin{proof}\leanok
-    Let $C_b,L_0$ be the constants of
-    Lemma~\ref{lem:ldp_coherent_pair_approximation_preparation}. Set
-    $a=\max(k,1)/r$, $B=\max(\log K,0)/r+L_0+1$ and
-    $q=\lceil a\log(N/\varepsilon)+B\rceil$. Then $q\ge L_0$,
-    $KN^ke^{-rq}\le\varepsilon$ and
-    $q\le(a+B+1)(1+\log(N/\varepsilon))$. For $q\le N$, apply the
-    approximation hypothesis and the preceding lemma. For $q>N$, exact
-    preparation of the entire inhomogeneous chain has depth at most $C_eN$,
-    which is bounded by $C_eq$. Thus
-    $C=(2C_b+C_e)(a+B+1)$ suffices in both cases. The additive one includes
-    a one-site ring at accuracy one.
+    Apply Lemma~\ref{lem:ldp_coherent_pair_varying_labels} with the same
+    label count on every partition.
 \end{proof}
 
 \begin{lemma}[The label count is bounded by the pair dimension]
@@ -82,7 +73,8 @@
         MPSPreparation.exists_inhomogeneousLongRange_depth_le_log_of_uniform_rate_varying_labels}
     \leanok
     \uses{lem:ldp_coherent_pair_label_bound,
-        lem:ldp_coherent_pair_approximation_preparation}
+        lem:ldp_coherent_pair_approximation_preparation,
+        thm:ldp_inhomogeneous_exact, thm:ldp_polynomial_exponential_scale}
     For fixed $d\ge2$ and $D\ge1$, the constants $C,L_0$ for coherent
     pair preparation can be chosen independently of the number of
     labels. In the uniform exponential-rate hypothesis, the number
@@ -92,9 +84,16 @@
 \end{lemma}
 \begin{proof}\leanok
     Choose preparation constants for each of the finitely many label
-    counts from $0$ through $D^2$. Their sums bound all choices at once.
-    Use these uniform constants in the blocking argument of
-    Lemma~\ref{lem:ldp_coherent_pair_uniform_rate}.
+    counts from $0$ through $D^2$. Their sums give uniform constants
+    $C_b,L_0$. Set $a=\max(k,1)/r$,
+    $B=\max(\log K,0)/r+L_0+1$ and
+    $q=\lceil a\log(N/\varepsilon)+B\rceil$.
+    Lemma~\ref{thm:ldp_polynomial_exponential_scale} gives
+    $KN^ke^{-rq}\le\varepsilon$, and
+    $q\le(a+B+1)(1+\log(N/\varepsilon))$.
+    For $q\le N$, apply uniform coherent pair preparation on the supplied
+    partition. For $q>N$, use exact whole-chain preparation of depth at
+    most $C_eN\le C_eq$. Thus $C'=(2C_b+C_e)(a+B+1)$ suffices.
 \end{proof}
 
 \subsection{What qualitative convergence does not imply}

@@ -146,15 +146,32 @@ a uniform sharp rate for the unspecified long-range sequence class.
     Lemma~\ref{lem:ldp_inhomogeneous_exact_polar_tree}.
 \end{proof}
 
+\begin{lemma}[One branch scalar on an input subspace]
+    \label{lem:ldp_history_scalar}
+    \lean{QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.exists_history_scalar}
+    \leanok
+    \uses{def:qc_measurement_rounds, def:qc_round_implementation}
+    Let measurement rounds implement a unitary $U$ on every vector of a
+    linear subspace $E$. For each fixed outcome history with Kraus map
+    $K$, there is one scalar $a$ such that $Kv=aUv$ for every $v\in E$.
+    The scalar may be zero and is independent of the input vector.
+\end{lemma}
+\begin{proof}\leanok
+    The implementation property gives $Kv\in\C Uv$ for every $v\in E$.
+    Thus $U^\dagger K$ restricts to an endomorphism of $E$ preserving
+    every line. Such an endomorphism is scalar, including when $E$ has
+    dimension zero or one.
+\end{proof}
+
 \begin{lemma}[Unitary product of position-dependent tree gates]
     \label{lem:ldp_interval_tree_unitary_product}
     \lean{MPSPreparation.treeLeafOp_mul_treeLevelsOp_mem_unitary}
-    \notready
+    \leanok
     \uses{def:ldp_tree_layout}
     If every node and leaf gate of a disjoint binary layout is unitary,
     their placed product is unitary on the entire physical chain.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Embedded unitary gates are unitary. Apply closure under finite
     products first within a level and then across the levels and leaves.
 \end{proof}
@@ -163,7 +180,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
     \label{def:ldp_interval_tree_extensions}
     \lean{MPSPreparation.intervalTreeNodeGate,
         MPSPreparation.intervalTreeLeafGate}
-    \notready
+    \leanok
     \uses{def:ldp_tree_layout}
     Let $W_{j,p}\colon\C^\chi\to\C^\chi\otimes\C^\chi$ be an
     isometry at each binary vertex, and let
@@ -178,7 +195,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
     \lean{MPSPreparation.intervalTreeLeafOp_apply_nodeCfg,
         MPSPreparation.intervalTreeLevelsOp_apply_nodeCfg,
         MPSPreparation.intervalTreeOp_apply}
-    \notready
+    \leanok
     \uses{def:ldp_interval_tree_extensions}
     For each complete output configuration $\tau$, let $F_{j,p}(\tau,x)$
     be amplitudes satisfying
@@ -193,7 +210,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
     $\prod_pF_{j,p}(\tau,x_p)$ on the encoded inputs $x_p$ at that depth.
     These equalities include every physical output site.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     At the leaves, disjoint supports give the product of the leaf
     coefficients. Induct upwards. At a node level, expand the unitary
     extensions on the encoded inputs, sum over their virtual outputs,
@@ -205,7 +222,7 @@ a uniform sharp rate for the unspecified long-range sequence class.
 \begin{lemma}[Coherent measurement rounds for position-dependent tree gates]
     \label{lem:ldp_interval_tree_measurement_rounds}
     \lean{MPSPreparation.exists_rounds_blockLayerOp_treeUnitaryOp}
-    \notready
+    \leanok
     \uses{lem:ldp_interval_tree_unitary_product}
     Fix a physical dimension, a register width and a bound on the physical
     leaf lengths. Arbitrary unitary node and leaf gates on disjoint binary
@@ -216,15 +233,19 @@ a uniform sharp rate for the unspecified long-range sequence class.
     one scalar times the full tree gate product; that scalar is independent
     of the input and hence shared by all coherent sectors.
 \end{lemma}
-\begin{proof}
-    Implement the register levels by the coherent teleportation rounds
-    and the bounded leaves by one local circuit. Compose the rounds.
-    Their unitary target product makes each outcome history a scalar
-    multiple of the same linear map on the zero-scratch subspace.
+\begin{proof}\leanok
+    \uses{thm:ldp_unequal_tree_rounds, thm:qc_bounded_unitary_two_site_gates,
+        lem:ldp_history_scalar}
+    Implement the register levels by coherent teleportation rounds and
+    the bounded leaves by one local circuit. Compose the rounds.
+    Their target product is unitary by
+    Lemma~\ref{lem:ldp_interval_tree_unitary_product}. Apply
+    Lemma~\ref{lem:ldp_history_scalar} to the zero-scratch subspace.
 \end{proof}
 
-The exact factorization and the gate implementation remain distinct.
-To combine them, choose the extensions of each interval isometry and
-identify the entire placed gate product on encoded inputs with the
-algebraic tree map, including every scratch site. An approximation rate
-for a specified sequence class is a separate requirement.
+To apply these coefficient identities to the exact polar tree, fit its
+intervals to one register layout and verify the local leaf and binary
+factorizations in Lemma~\ref{lem:ldp_interval_tree_coefficients}.
+That lemma then identifies the full placed product with the algebraic
+tree on encoded inputs, including every scratch site. An approximation
+rate for a specified sequence class is a separate requirement.
