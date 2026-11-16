@@ -13,7 +13,10 @@ For a time-reversal-invariant MPU in standard form, Proposition `PropChiral`
 provides a unitary `x` and a sign `σ = ±1` with
 `v₂₃ (u₁₂ ⊗ u₃₄) = σ (x₁₂ ⊗ x₃₄†) v₂₃†`. The normalized four-spin trace
 `d⁻² tr[𝕊₁₂,₃₄ v₂₃ u₁₂ u₃₄ v₂₃]` recovers that sign. Here the local relation
-is a consequence of the global symmetry, not a hypothesis.
+is a consequence of the global symmetry, not a hypothesis. As in
+`MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff`, `N` counts
+two-spin sites of the standard-form chain; see
+`docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
 
 ## Main results
 
