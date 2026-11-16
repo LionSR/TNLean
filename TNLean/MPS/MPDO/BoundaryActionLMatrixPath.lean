@@ -21,8 +21,10 @@ of the action multiplicity spaces, `V(γ + dγ) = V(γ) + ∑ X V(γ) dγ`
 L-symbols, `eq:F_symbol3`, and applies the inverse L-symbols. The
 conclusion, lines 1537--1551, is
 
-`L'^{zij}_{cμk} = ∑ L^{z î ĵ}_{c μ k̂} [δδδ + (X_{bx}^z)^j_ĵ δδ`
-`  + (X_{az}^y)^i_î δδ - (X_{cx}^y)^k̂_k δδ]`,
+`L'^{zij}_{cμk} = ∑ L^{z i' j'}_{c μ k'} [δδδ + (X_{bx}^z)^j_{j'} δδ`
+`  + (X_{az}^y)^i_{i'} δδ - (X_{cx}^y)^{k'}_k δδ]`,
+
+(the source's hatted summation indices are written primed),
 
 "which means that the L'-symbol is in the same class as the L-symbol
 since they are related by a (differentiable) gauge transformation."
