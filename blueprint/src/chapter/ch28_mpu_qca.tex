@@ -3502,6 +3502,57 @@ completion from compatible forward and inverse finite-local actions.
     change cancels its adjoint in the adjacent circuit layer.
 \end{proof}
 
+\begin{lemma}[Paths of unitary matrices]
+    \label{lem:unitary_matrices_joined}
+    \lean{Matrix.joined_one_unitaryGroup, Matrix.IsUnitaryBetween.joinedIn}
+    \leanok
+    Every unitary complex square matrix is joined to the identity by a
+    continuous path of unitary matrices. Consequently, any two linear maps
+    that are unitary between the same pair of finite-dimensional coordinate
+    spaces are joined by a continuous path of such maps.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Let $u$ be unitary. Its spectrum is a finite subset of the unit circle,
+    so there is $z$ on the unit circle with $-z$ not an eigenvalue of $u$.
+    The spectrum of $z^{-1}u$ then avoids $-1$, hence
+    \begin{align}
+        \|z^{-1}u-1\| & <2,
+    \end{align}
+    and $z^{-1}u$ is joined to the identity by the exponential of a
+    multiple of its self-adjoint logarithm. The scalar $z$ is joined to $1$
+    along the unit circle, and the product of the two paths joins $1$ to
+    $u$. For maps $a,b$ unitary between the same spaces, $ba^\dagger$ is
+    unitary; a path $g(t)$ from $1$ to $ba^\dagger$ gives the path $g(t)a$
+    from $a$ to $b$.
+\end{proof}
+
+\begin{lemma}[Paths of tensors constructed from unitary gates]
+    \label{lem:mpu_tensor_from_gates_path}
+    \lean{MPOTensor.continuous_standardFormTensorOfGates,
+        MPOTensor.joinedIn_standardFormTensorOfGates}
+    \leanok
+    \uses{def:mpu_tensor_from_two_gates,
+        lem:mpu_tensor_from_gates_periodic_circuit, lem:unitary_matrices_joined}
+    The tensor of Definition~\ref{def:mpu_tensor_from_two_gates} depends
+    continuously on its two gates. If $(u_0,v_0)$ and $(u_1,v_1)$ are pairs
+    of unitary gates with the same input and output dimensions, the
+    corresponding tensors are joined by a continuous path of tensors of bond
+    dimension $dr$, each of which generates a matrix product unitary. This is
+    the interpolation of gates in the proof of
+    \cite[Theorem~IV.6(iv)]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 857--865.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:unitary_matrices_joined,
+        lem:mpu_tensor_from_gates_periodic_circuit}
+    Join $u_0$ to $u_1$ and $v_0$ to $v_1$ by paths of unitary gates. The
+    tensor built from the gates at time $t$ is a polynomial in their entries,
+    hence continuous in $t$, and it generates a matrix product unitary at
+    every $t$.
+\end{proof}
+
 \begin{lemma}[Constructing the tensor from generalized Margolus gates]
     \label{lem:mpu_tensor_from_margolus_gates}
     \lean{MPOTensor.margolusShiftedGate,
