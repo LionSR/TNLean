@@ -30,6 +30,10 @@
       "label": "Rigorous renormalization group"
     },
     {
+      "slug": "mpu",
+      "label": "Matrix product unitaries"
+    },
+    {
       "slug": "mpo-symmetry",
       "label": "MPO symmetries"
     }
