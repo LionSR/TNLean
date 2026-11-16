@@ -2452,7 +2452,8 @@
 
 \begin{lemma}[Trace formula for the time-reversal sign]
     \label{eq:sigma-from-trace}
-    \notready
+    \lean{MPOTensor.IsMPUCanonicalFormII.standardForm_timeReversalSign}
+    \leanok
     \discussion{5714}
     \uses{PropChiral, lem:matrix_trace_swap_kronecker}
     For a time-reversal-invariant MPU in standard form, the sign $\sigma$ of
@@ -2464,6 +2465,15 @@
     where $\mathbb S_{12,34}$ exchanges the pairs of sites $12$ and $34$.
     % Source lines: paper_v2.tex 1588--1611.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{PropChiral, lem:mpu_supplied_time_reversal_sign}
+    Lemma~\ref{PropChiral} gives $r=\ell=d_0$, a unitary $x$ and a sign
+    $\sigma$ with
+    $v_{23}(u_{12}\otimes u_{34})=\sigma(x_{12}\otimes x_{34}^\dagger)v_{23}^\dagger$.
+    Lemma~\ref{lem:mpu_supplied_time_reversal_sign} identifies $\sigma$ with
+    the normalized trace.
+\end{proof}
 
 \begin{lemma}[Admissible trace formula for the time-reversal sign]
     \label{lem:mpu_admissible_sigma_trace}
