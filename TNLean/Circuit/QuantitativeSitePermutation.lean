@@ -70,12 +70,6 @@ namespace QuantumCircuit
 
 variable {d n a K : ℕ}
 
-/-- Site permutation operators preserve products exactly, with no scalar
-phase discarded. Source: swap routing in Section 5 of the circuit audit. -/
-theorem permOp_list_prod (l : List (Equiv.Perm (Fin n))) :
-    permOp (d := d) l.prod = (l.map (permOp (d := d))).prod :=
-  map_list_prod (permOpHom (d := d)) l
-
 /-- Every actual site permutation has an additive quadratic routing bound.
 No swap factorization or circuit witness is supplied. Source: logical
 register regrouping in Section 5 of the circuit audit. -/

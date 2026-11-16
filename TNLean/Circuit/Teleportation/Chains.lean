@@ -35,8 +35,6 @@ The gates between distant sites built from these chains are in
 
 ## Main results
 
-* `QuantumCircuit.permMatrix_cfgPerm_mul_embedOp_mul` — relabelling the sites of an embedded
-  operator.
 * `QuantumCircuit.TeleportHop.exists_eq_smul_of_mem_outputs_conj`.
 * `QuantumCircuit.TeleportHop.sitePerm_forwardChain`,
   `QuantumCircuit.TeleportHop.sitePerm_backwardChain`,
@@ -56,37 +54,6 @@ namespace QuantumCircuit
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-! ### Permutations of sites -/
-
-/-- **Relabelling the sites of an embedded operator.** Conjugating `X` at the sites `e` by the
-permutation of configurations `x ↦ x ∘ σ` places `X` at the sites `σ ∘ e`. -/
-theorem permMatrix_cfgPerm_mul_embedOp_mul {κ : Type*} [Fintype κ]
-    (σ : Equiv.Perm ι) (e : κ → ι) (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
-    (cfgPerm σ).permMatrix ℂ * embedOp e X * (cfgPerm σ.symm).permMatrix ℂ =
-      embedOp (σ ∘ e) X := by
-  classical
-  ext x y
-  simp only [mul_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
-    Option.mem_def, Option.some.injEq, ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq, Finset.mem_univ, ite_true]
-  rw [Finset.sum_eq_single ((cfgPerm σ.symm).symm y), ite_eq_left (Equiv.apply_symm_apply _ _)]
-  rotate_left
-  · intro w _ hw
-    rw [ite_eq_right fun h => hw (by rw [← h, Equiv.symm_apply_apply])]
-  · simp
-  rw [embedOp_apply, embedOp_apply]
-  have hy : (cfgPerm σ.symm).symm y = y ∘ σ := by
-    funext i; simp [cfgPerm]
-  rw [hy]
-  have hag : AgreeOff e (cfgPerm σ x) (y ∘ σ) ↔ AgreeOff (σ ∘ e) x y := by
-    constructor
-    · intro h i hi
-      have := h (σ.symm i) fun j hj => hi j (by rw [Function.comp_apply, hj]; simp)
-      simpa [cfgPerm] using this
-    · intro h i hi
-      exact h (σ i) fun j hj => hi j (σ.injective hj)
-  by_cases h : AgreeOff (σ ∘ e) x y
-  · rw [ite_eq_left (hag.mpr h), ite_eq_left h]; rfl
-  · rw [ite_eq_right (fun h' => h (hag.mp h')), ite_eq_right h]
 
 variable [NeZero d]
 

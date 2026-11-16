@@ -149,11 +149,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
         _ = (P * F) * L ^ (t + k) := by rw [pow_add]; ring
         _ ≤ _ := Nat.mul_le_mul_right _ (le_max_right 1 (P * F))
     · intro v hv
-      apply isOpenMPS_of_internal_cutMatrix_rank_le
-        (WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x))
-      intro j hj0 hji
-      exact ((hout.2.1 v hv).rank_cutMatrix_le
-        (ψ := WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x)) hj0 hji).trans
+      exact (hout.2.1 v hv).mono
         (max_le_max_left 1 (by
           calc
             _ ≤ (P * L ^ t) * (max 1 ⌈M⌉₊ * L ^ u) := Nat.mul_le_mul hbudgets.2 hmax

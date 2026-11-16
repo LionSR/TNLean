@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.LinearAlgebra.Basis.VectorSpace
+import QICLean.Algebra.MatrixGramUnitary
 import TNLean.Algebra.GaussRepresentation
 
 /-!
@@ -95,56 +96,23 @@ private theorem exists_unitary_eq_mulVec_on_submodule
     (hA : ∀ ξ ∈ K, (star A * A) *ᵥ ξ = ξ) :
     ∃ U : Matrix.unitaryGroup n ℂ, ∀ ξ ∈ K, (U : Matrix n n ℂ) *ᵥ ξ = A *ᵥ ξ := by
   classical
-  let e : (n → ℂ) ≃ₗ[ℂ] EuclideanSpace ℂ n :=
-    (WithLp.linearEquiv 2 ℂ (n → ℂ)).symm
-  let S : Submodule ℂ (EuclideanSpace ℂ n) := Submodule.map e.toLinearMap K
-  let L₀ : S →ₗ[ℂ] EuclideanSpace ℂ n :=
-    (Matrix.toLpLin 2 2 A).comp S.subtype
-  have hL₀_norm (x : S) : ‖L₀ x‖ = ‖x‖ := by
-    have hx : WithLp.ofLp (x : EuclideanSpace ℂ n) ∈ K := by
-      change e.symm (x : EuclideanSpace ℂ n) ∈ K
-      rw [← Submodule.mem_map_equiv K]
-      exact x.property
-    have hA' := hA _ hx
-    change (Aᴴ * A) *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n) =
-      WithLp.ofLp (x : EuclideanSpace ℂ n) at hA'
-    have hinner :
-        inner ℂ (WithLp.toLp 2 (A *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n)))
-            (WithLp.toLp 2 (A *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n))) =
-          inner ℂ (x : EuclideanSpace ℂ n) (x : EuclideanSpace ℂ n) := by
-      rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm, Matrix.star_mulVec,
-        ← Matrix.dotProduct_mulVec, Matrix.mulVec_mulVec, hA']
-      change star (WithLp.ofLp (x : EuclideanSpace ℂ n)) ⬝ᵥ
-          WithLp.ofLp (x : EuclideanSpace ℂ n) =
-        inner ℂ (WithLp.toLp 2 (WithLp.ofLp (x : EuclideanSpace ℂ n)))
-          (WithLp.toLp 2 (WithLp.ofLp (x : EuclideanSpace ℂ n)))
-      rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm]
-    change ‖WithLp.toLp 2 (A *ᵥ WithLp.ofLp (x : EuclideanSpace ℂ n))‖ =
-      ‖(x : EuclideanSpace ℂ n)‖
-    apply (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp
-    rw [← inner_self_eq_norm_sq (𝕜 := ℂ), ← inner_self_eq_norm_sq (𝕜 := ℂ)]
-    exact congrArg RCLike.re hinner
-  let L : S →ₗᵢ[ℂ] EuclideanSpace ℂ n :=
-    { toLinearMap := L₀
-      norm_map' := hL₀_norm }
-  let E : EuclideanSpace ℂ n ≃ₗᵢ[ℂ] EuclideanSpace ℂ n :=
-    L.extend.toLinearIsometryEquiv rfl
-  let b : OrthonormalBasis n ℂ (EuclideanSpace ℂ n) := EuclideanSpace.basisFun n ℂ
-  let U₀ : Matrix n n ℂ := E.toMatrix b.toBasis b.toBasis
-  have hU₀ : U₀ ∈ Matrix.unitaryGroup n ℂ := E.toMatrix_mem_unitaryGroup b b
-  refine ⟨⟨U₀, hU₀⟩, fun ξ hξ ↦ ?_⟩
-  apply WithLp.toLp_injective
-  change Matrix.toLpLin 2 2 U₀ (WithLp.toLp 2 ξ) =
-    Matrix.toLpLin 2 2 A (WithLp.toLp 2 ξ)
-  have hUlin : Matrix.toLpLin 2 2 U₀ = E.toLinearEquiv.toLinearMap := by
-    rw [Matrix.toLpLin_eq_toLin]
-    dsimp only [U₀]
-    exact Matrix.toLin_toMatrix b.toBasis b.toBasis E.toLinearEquiv.toLinearMap
-  rw [hUlin]
-  let x : S := ⟨WithLp.toLp 2 ξ, Submodule.mem_map.mpr ⟨ξ, hξ, rfl⟩⟩
-  change E (x : EuclideanSpace ℂ n) = L₀ x
-  rw [LinearIsometry.toLinearIsometryEquiv_apply, LinearIsometry.extend_apply]
-  rfl
+  obtain ⟨p, hp⟩ := (LinearMap.id : K →ₗ[ℂ] K).exists_extend
+  let P := LinearMap.toMatrix' (K.subtype.comp p)
+  have hP (x : n → ℂ) : P *ᵥ x = (p x : n → ℂ) := by simp [P]
+  have hPfix (ξ : n → ℂ) (hξ : ξ ∈ K) : P *ᵥ ξ = ξ := by
+    rw [hP]
+    exact congrArg Subtype.val (LinearMap.congr_fun hp ⟨ξ, hξ⟩)
+  have hAP : (Aᴴ * A) * P = P := by
+    apply Matrix.ext_iff_mulVec.2
+    intro x
+    rw [← Matrix.mulVec_mulVec]
+    simpa only [hP, Matrix.star_eq_conjTranspose] using hA _ (p x).property
+  have hGram : (A * P)ᴴ * (A * P) = Pᴴ * P := by
+    rw [Matrix.conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Aᴴ A P, hAP]
+  obtain ⟨U, hU⟩ := Matrix.exists_unitary_mul_eq_of_conjTranspose_mul_eq (A * P) P hGram
+  refine ⟨U, fun ξ hξ => ?_⟩
+  have h := congrArg (fun M : Matrix n n ℂ => M *ᵥ ξ) hU
+  simpa only [← Matrix.mulVec_mulVec, hPfix ξ hξ] using h.symm
 
 /-- Every family of prescribed defect isometries admits a full unitary
 completion. -/

@@ -62,30 +62,12 @@ theorem norm_map_gaussianFilteredTerm_le_mass (q ΔE : ℝ) {H : Matrix n n ℂ}
   set f : ℝ → Matrix n n ℂ := fun t =>
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t)
   have hint : Integrable f μ := integrable_intertwinerIntegrand _ hH hH W
-  have hbound : ∀ t, ‖L (f t)‖ ≤ Set.indicator (Set.Icc (-T) T) (fun _ => ε) t +
-      Set.indicator (Set.Icc (-T) T)ᶜ (fun _ => C) t := by
-    intro t
-    by_cases ht : t ∈ Set.Icc (-T) T
-    · simp only [Set.indicator_of_mem ht, Set.indicator_of_notMem (Set.notMem_compl_iff.mpr ht),
-        add_zero]
-      exact hloc t ht
-    · simp only [Set.indicator_of_notMem ht, Set.indicator_of_mem (Set.mem_compl ht), zero_add]
-      exact hglob t
-  have hi1 : Integrable (Set.indicator (Set.Icc (-T) T) (fun _ : ℝ => ε)) μ :=
-    (integrable_const ε).indicator measurableSet_Icc
-  have hi2 : Integrable (Set.indicator (Set.Icc (-T) T)ᶜ (fun _ : ℝ => C)) μ :=
-    (integrable_const _).indicator measurableSet_Icc.compl
-  rw [gaussianFilteredTerm, gaussianIntertwiner, ← L.integral_comp_comm hint]
-  calc ‖∫ t, L (f t) ∂μ‖ ≤ ∫ t, (Set.indicator (Set.Icc (-T) T) (fun _ => ε) t +
-        Set.indicator (Set.Icc (-T) T)ᶜ (fun _ => C) t) ∂μ :=
-      norm_integral_le_of_norm_le (hi1.add hi2) (Filter.Eventually.of_forall hbound)
-    _ = ε * μ.real (Set.Icc (-T) T) + C * μ.real (Set.Icc (-T) T)ᶜ := by
-      rw [integral_add hi1 hi2, integral_indicator_const _ measurableSet_Icc,
-        integral_indicator_const _ measurableSet_Icc.compl, smul_eq_mul, smul_eq_mul,
-        mul_comm, mul_comm (μ.real _)]
-    _ ≤ ε + C * μ.real (Set.Icc (-T) T)ᶜ := by
-      gcongr
-      exact mul_le_of_le_one_right hε measureReal_le_one
+  rw [gaussianFilteredTerm, gaussianIntertwiner, ← L.integral_comp_comm hint,
+    ← integral_add_compl (s := Set.Icc (-T) T) measurableSet_Icc (L.integrable_comp hint)]
+  refine (norm_add_le _ _).trans ?_
+  refine (add_le_add (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) hloc)
+    (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) (fun t _ => hglob t))).trans ?_
+  exact add_le_add (mul_le_of_le_one_right hε measureReal_le_one) le_rfl
 
 /-- If `‖[W(t), O]‖ ≤ ε` for all `|t| ≤ T`, then `‖[W_tilde, O]‖` is at most `ε` plus `2 ‖W‖ ‖O‖`
 times the Gaussian mass of the complement of `[-T, T]`. Hastings, arXiv:cond-mat/0508554v3,

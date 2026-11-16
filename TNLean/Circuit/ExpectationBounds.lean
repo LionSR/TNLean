@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.UnitaryMulVecInner
-import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SupportedOperators
 
 /-!
 # Stability of expectations and connected correlations

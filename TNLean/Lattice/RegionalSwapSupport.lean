@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.PermutationMatrixUnitary
-import TNLean.Circuit.Gates.Permutation
+import TNLean.Circuit.SitePermutation
 import TNLean.Circuit.SitewiseTensorSupport
-import TNLean.Lattice.RegionalSwap
+import TNLean.Circuit.RegionalSwap
 import QICLean.Analysis.DoubledSystemGap
 
 /-!
