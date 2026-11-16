@@ -242,16 +242,34 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    For one step, split the first gate from the remaining shifted layer
-    and the first forward cell from the remaining cell layer. Move the
-    selected shifted gate past the preceding adjoint cells and use
-    Lemma~\ref{lem:mpu_printed_window_unwind} on its four spins. Move the
-    resulting adjoint shifted gate past the remaining forward cells.
-    This appends one adjoint cell and one adjoint link to the initial
-    layers and moves $x^\dagger$ one cell to the right, multiplying the
-    scalar by $\zeta$. Induction gives $Y_0=Y_s$. Empty layers give the
-    initial endpoint. At the last endpoint, expand $X^\dagger$ and commute
-    its final pair past the disjoint adjoint cell layer.
+    Fix $s+1<k$ and put $m=k-2-s$. Split the first shifted gate and
+    the first forward cell, writing
+    \begin{align*}
+        L & =v_{2s+2,2s+3},         & V & =L_{s+1,m}(v),          & P & =C_{0,s}(u^\dagger), \\
+        Z & =x_{2s+1,2s+2}^\dagger, & U & =u_{2s+3,2s+4},         & R & =C_{s+2,m}(u),       \\
+        T & =L_{0,s}(v)^\dagger,    & A & =u_{2s+1,2s+2}^\dagger, &
+        B & =x_{2s+3,2s+4}^\dagger.
+    \end{align*}
+    Disjoint supports and Lemma~\ref{lem:mpu_printed_window_unwind} give
+    \[
+        LV=VL,\qquad LP=PL,\qquad L^\dagger R=RL^\dagger,
+        \qquad LZU=\zeta ABL^\dagger.
+    \]
+    Consequently,
+    \begin{align*}
+        (LV)PZ(UR)T
+         & =VP(LZU)RT                                      \\
+         & =\zeta VPABL^\dagger RT                         \\
+         & =\zeta V(PA)BR(L^\dagger T),                    \\
+        Y_s
+         & =\sigma\zeta^s(LV)PZ(UR)T                       \\
+         & =\sigma\zeta^{s+1}V(PA)BR(L^\dagger T)=Y_{s+1}.
+    \end{align*}
+    The last product has one more adjoint cell and adjoint link, with
+    $x^\dagger$ on the next cell. Induction gives $Y_0=Y_s$.
+    Empty layers give the initial endpoint. At the last endpoint,
+    expand $X^\dagger$ and commute its final pair past the disjoint
+    adjoint cell layer.
 \end{proof}
 
 \begin{lemma}[Full finite-spin sequential unwinding]
@@ -455,10 +473,32 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
 \end{lemma}
 \begin{proof}\leanok
     The gate-trace identity applies to the actual constructed standard
-    form. A common physical basis relabelling preserves the intrinsic
-    trace: write it as the sum of the two-ring entries with exchanged
-    words and reindex both physical sums. Apply intrinsic blocking parity
-    to the MPU supplied by the original standard form. At length two,
-    the existing printed two-block standard form identifies its normalized
-    trace with that of the same actual two-block tensor.
+    form. For a tensor $Z$ with nonempty finite physical alphabet
+    $\mathcal I$, its intrinsic trace is
+    \[
+        \mathfrak t(Z)=\frac{1}{|\mathcal I|}
+        \sum_{c,d\in\mathcal I}Z^{(2)}_{(d,c),(c,d)}.
+    \]
+    Let $e:\mathcal J\to\mathcal I$ be a bijection and write $Z_e$
+    for $Z$ after applying this relabelling to both physical indices.
+    Then $|\mathcal J|=|\mathcal I|$ and
+    \begin{align*}
+        \mathfrak t(Z_e)
+         & =\frac{1}{|\mathcal J|}
+        \sum_{a,b\in\mathcal J}(Z_e)^{(2)}_{(b,a),(a,b)}         \\
+         & =\frac{1}{|\mathcal J|}
+        \sum_{a,b\in\mathcal J}Z^{(2)}_{(e(b),e(a)),(e(a),e(b))} \\
+         & =\frac{1}{|\mathcal I|}
+        \sum_{c,d\in\mathcal I}Z^{(2)}_{(d,c),(c,d)}
+        =\mathfrak t(Z).
+    \end{align*}
+    Apply this calculation to the actual length-$k$ block $W_k$ and
+    $e=e_k$ to obtain $\tau_k=\mathfrak t(W_k)$. Intrinsic blocking
+    parity applies to the MPU supplied by the original standard form.
+    The original and printed two-block standard forms give, respectively,
+    \[
+        \mathfrak t(W)=\sigma(u,v),\qquad
+        \mathfrak t(W_2)=\sigma(u^{(2)},v^{(2)}),
+    \]
+    which identify the odd and even values.
 \end{proof}

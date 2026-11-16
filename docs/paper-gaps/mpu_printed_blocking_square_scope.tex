@@ -14,13 +14,17 @@
 
 The proof of Proposition~\texttt{prop:sigma1-and-sigma2-equal} in
 \cite[lines~1643--1733]{Cirac2017MPU} chooses particular blocked gates,
-\[
-    u^{(k)}=(I\otimes v^{\otimes(k-1)}\otimes I)u^{\otimes k},\qquad
-    v^{(k)}=I^{\otimes(k-1)}\otimes v\otimes I^{\otimes(k-1)}.
-\]
+\begin{align}
+    u^{(k)} & = (I\otimes v^{\otimes(k-1)}\otimes I)u^{\otimes k},
+    \label{eq:mpu_printed_blocking_square_scope_input_gate}        \\
+    v^{(k)} & = I^{\otimes(k-1)}\otimes v\otimes I^{\otimes(k-1)}.
+    \label{eq:mpu_printed_blocking_square_scope_output_gate}
+\end{align}
 The construction
-\leanid{MPOTensor.TwoSiteStandardFormData.printedBlock} proves that these
-are the gates of the actual positive-length blocked tensor, after its
+\leanid{MPOTensor.TwoSiteStandardFormData.printedBlock} proves that the gates in
+(\ref{eq:mpu_printed_blocking_square_scope_input_gate}) and
+(\ref{eq:mpu_printed_blocking_square_scope_output_gate}) are those of the
+actual positive-length blocked tensor, after its
 explicit physical half-word relabelling. It retains the original bond
 space and constructs both half factors by adjoining identity spectators.
 Its input is supplied square standard-form data: both gates act on two
