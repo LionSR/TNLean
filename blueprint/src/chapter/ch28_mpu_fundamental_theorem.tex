@@ -3941,11 +3941,58 @@
     Lemma~\ref{thm:mpu_cfii_path_source_ranks}.
 \end{proof}
 
+\begin{lemma}[Equivalent tensors have equal index]
+    \label{thm:mpu_equivalence_index_eq}
+    \lean{MPOTensor.StrictlyEquivalent.index_eq,
+        MPOTensor.Equivalent.index_eq,
+        MPOTensor.not_equivalent_of_index_ne}
+    \leanok
+    \uses{def:mpu_reduced_representative_index,
+        def:strictly-equivalent-tensors, def:equivalent-tensors}
+    Let $\mathcal U$ and $\mathcal V$ be MPU tensors of positive physical and
+    bond dimensions. If $\mathcal U$ and $\mathcal V$ are strictly equivalent,
+    or more generally equivalent, then
+    \begin{align}
+        \operatorname{ind}(\mathcal U) & =\operatorname{ind}(\mathcal V).
+    \end{align}
+    Equivalently, two tensors with different indices are not equivalent.
+    This is the ``only if'' half of clause (iv) of
+    \cite[Theorem~IV.6]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 852--857.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_path_index_constant,
+        thm:mpu_representative_index_blocking_adjoint,
+        thm:mpu_physical_ancilla_index,
+        thm:mpu_reduced_representative_index_invariance}
+    Suppose first that $\mathcal U$ and $\mathcal V$ are strictly equivalent,
+    with a path $\mathcal W(p)$ of MPU tensors of bond dimension $D'$ from
+    $\mathcal U_{\uparrow D'}$ to $\mathcal V_{\uparrow D'}$. Adjoining unused
+    bond directions changes no periodic operator of positive length, hence
+    not the index. By Lemma~\ref{thm:mpu_path_index_constant},
+    \begin{align}
+        \operatorname{ind}(\mathcal U)
+         & =\operatorname{ind}(\mathcal W(0))
+        =\operatorname{ind}(\mathcal W(1))
+        =\operatorname{ind}(\mathcal V).
+    \end{align}
+    In general, $(\mathcal U^{(p_a)})_k$ and $(\mathcal V^{(p_b)})_k$ are
+    strictly equivalent. Attaching an identity ancilla and blocking do not
+    change the index, so
+    \begin{align}
+        \operatorname{ind}(\mathcal U)
+         & =\operatorname{ind}((\mathcal U^{(p_a)})_k)
+        =\operatorname{ind}((\mathcal V^{(p_b)})_k)
+        =\operatorname{ind}(\mathcal V).
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Index Theorem]
     \label{IndexTh}
     \notready
     \discussion{6023}
-    \uses{def:index, index-well-defined, lem:mpu_index_tensor, lem:mpu_index_composition, prop:continuity-index, def:equivalent-tensors}
+    \uses{def:index, index-well-defined, lem:mpu_index_tensor, lem:mpu_index_composition, prop:continuity-index, def:equivalent-tensors, thm:mpu_equivalence_index_eq}
     For MPU tensors under the source's standing canonical-form convention, take
     the index defined from any simple blocking. This index has the following
     properties.
@@ -3956,8 +4003,16 @@
         \item Two MPU tensors have the same index if and only if they are
               equivalent.
     \end{enumerate}
-    In \cite[Theorem~IV.6]{Cirac2017MPU}, these three clauses form the unrestricted
-    index theorem.
+    In \cite[Theorem~IV.6]{Cirac2017MPU}, these four clauses form the unrestricted
+    index theorem. For the index of
+    Definition~\ref{def:mpu_reduced_representative_index}, clauses (i)--(iii)
+    are Lemmas~\ref{thm:mpu_representative_index_blocking_adjoint},
+    \ref{thm:mpu_representative_index_tensor_product},
+    \ref{thm:mpu_admissible_index_composition}
+    and~\ref{thm:mpu_path_index_constant}, and the ``only if'' half of
+    clause (iv) is Lemma~\ref{thm:mpu_equivalence_index_eq}. The converse
+    half of clause (iv), that tensors with the same index are equivalent, is
+    not yet established here.
     % Source lines: paper_v2.tex 824--865.
 \end{theorem}
 

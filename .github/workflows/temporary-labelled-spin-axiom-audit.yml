@@ -1,0 +1,97 @@
+name: Temporary physical-matrix modularity audit
+on:
+  push:
+    branches: [codex/7574-axiom-audit-20261115]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 70d50a0347f7bad5c9f0c9029b9010436d350bd4
+          fetch-depth: 0
+      - name: Verify exact production merge and unchanged dependency pins
+        run: |
+          test "$(git rev-parse HEAD)" = 70d50a0347f7bad5c9f0c9029b9010436d350bd4
+          git merge-base --is-ancestor ce24300185a58f06ba1123ee549fdd2b9d928e3e HEAD
+          git merge-base --is-ancestor 621124d3f015d6278c89f74c7ca96b8f93270b7f HEAD
+          git merge-base --is-ancestor eb588dc15332a3798431015e6c27ecbaf329b2d1 HEAD
+          git merge-base --is-ancestor 990051363e264c7ad45460e271fbc765ae3dda76 HEAD
+          git diff --exit-code 0b00ff5002eba6f2a9d9e259d0f517dd5b5859a3 -- lean-toolchain lakefile.toml lake-manifest.json
+      - uses: actions/cache/restore@v6
+        with:
+          path: |
+            .lake/build
+            .lake/packages/Gametheory/.lake/build
+            .lake/packages/checkdecls/.lake/build
+            .lake/packages/qiclean/.lake/build
+            .lake/packages/cslib/.lake/build
+          key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-eb588dc15332a3798431015e6c27ecbaf329b2d1
+          fail-on-cache-miss: true
+      - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          use-github-cache: false
+      - name: Verify prebuilt Mathlib and build audited modules
+        run: |
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.MPS.MPU.PhysicalAncillaLeftMul TNLean.MPS.MPU.PhysicalMatrixSymmetry TNLean.MPS.MPU.Examples.SwapSymmetryStabilization TNLean.MPS.MPU.Examples.SwapAncillaCompatibility TNLean.MPS.MPU.PhysicalMatrixBlocking TNLean.MPS.MPU.PhysicalMatrixSymmetryTransport TNLean.MPS.MPU.PhysicalMatrixEquivalence TNLean.MPS.MPU.Examples.LabelledSwapEquivalence
+      - name: Check new modules strictly and generated imports
+        run: |
+          python3 scripts/generate_import_aggregators.py --check
+          for audited_path in TNLean/MPS/MPU/PhysicalAncillaLeftMul.lean TNLean/MPS/MPU/PhysicalMatrixSymmetry.lean TNLean/MPS/MPU/Examples/SwapAncillaCompatibility.lean TNLean/MPS/MPU/PhysicalMatrixBlocking.lean TNLean/MPS/MPU/PhysicalMatrixSymmetryTransport.lean TNLean/MPS/MPU/PhysicalMatrixEquivalence.lean TNLean/MPS/MPU/Examples/SwapSymmetryStabilization.lean TNLean/MPS/MPU/Examples/LabelledSwapEquivalence.lean; do
+            lake env lean -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true "$audited_path"
+          done
+      - name: Audit transitive declaration axioms with a temporary Lean file
+        run: |
+          python3 - <<'PY_AUDIT'
+          import os,re,subprocess,tempfile
+          from pathlib import Path
+          names = ['MPOTensor.physicalIdMatrix', 'MPOTensor.physicalIdMatrix_apply', 'MPOTensor.physicalIdMatrix_one', 'MPOTensor.physicalIdMatrix_mul', 'MPOTensor.physicalIdMatrix_conjTranspose', 'MPOTensor.physicalIdMatrix_transpose', 'MPOTensor.physicalIdMatrix_map_star', 'MPOTensor.physicalIdMatrix_mem_unitaryGroup', 'MPOTensor.ketLeftMul_tensorPhysicalId', 'MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix', 'MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix', 'MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_tensorPhysicalId_semiconj', 'MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_tensorPhysicalId_semiconj', 'MPOTensor.conjugationSymmetry_tensorPhysicalId_semiconj', 'MPOTensor.ancillaSwapMatrix', 'MPOTensor.ancillaSwapDaggerSymmetry', 'MPOTensor.ancillaSwapTransposeSymmetry', 'MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff', 'MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff', 'MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff', 'MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff', 'MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff', 'MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff', 'MPOTensor.shiftSwap_sandwich_not_mem_range_physicalIdMatrix', 'MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapDagger', 'MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapTranspose', 'MPOTensor.symmetryFamily_at_ne_shiftSwapDagger', 'MPOTensor.symmetryFamily_at_ne_shiftSwapTranspose', 'MPOTensor.physicalIdMatrix_shiftSwap_sandwich_ne', 'MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapDagger', 'MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapTranspose', 'MPOTensor.balanced_coprime_ancilla_eq_one', 'MPOTensor.sitewisePhysicalMatrix_blockKron_reindex', 'MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_block', 'MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_block', 'MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_one', 'MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_one', 'MPOTensor.conjugationSymmetry_block', 'MPOTensor.PhysicalSymmetryKind', 'MPOTensor.PhysicalSymmetryKind.withMatrix', 'MPOTensor.EquivalentUnderPhysicalMatrixSymmetry', 'MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff', 'MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff', 'MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff', 'MPOTensor.shiftExampleFamilyBondDim', 'MPOTensor.shiftExampleFamily', 'MPOTensor.shiftExampleTildeFamily', 'MPOTensor.labelledShiftExamples_swap_dagger_iff', 'MPOTensor.labelledShiftExamples_swap_transpose_iff', 'MPOTensor.labelledShiftExamples_swap_conjugation_iff', 'MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix', 'MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix', 'MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix_eq', 'MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix_eq', 'MPOTensor.strictlyEquivalentUnderSymmetry_blockedDaggerWithPhysicalMatrix_iff', 'MPOTensor.strictlyEquivalentUnderSymmetry_blockedTransposeWithPhysicalMatrix_iff', 'MPOTensor.strictlyEquivalentUnderSymmetry_blockedConjugationWithPhysicalMatrix_iff', 'MPOTensor.equivalentUnderPhysicalMatrixSymmetry_dagger_iff', 'MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff', 'MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff']
+          modules = ['TNLean.MPS.MPU.PhysicalAncillaLeftMul', 'TNLean.MPS.MPU.PhysicalMatrixSymmetry', 'TNLean.MPS.MPU.Examples.SwapSymmetryStabilization', 'TNLean.MPS.MPU.Examples.SwapAncillaCompatibility', 'TNLean.MPS.MPU.PhysicalMatrixBlocking', 'TNLean.MPS.MPU.PhysicalMatrixSymmetryTransport', 'TNLean.MPS.MPU.PhysicalMatrixEquivalence', 'TNLean.MPS.MPU.Examples.LabelledSwapEquivalence']
+          fd,path=tempfile.mkstemp(suffix=".lean",prefix="tnlean-axiom-audit-",dir=os.environ["RUNNER_TEMP"])
+          os.close(fd)
+          try:
+              Path(path).write_text("\n".join("import "+m for m in modules)+"\n\n"+"\n".join("#print axioms "+n for n in names)+"\n")
+              result=subprocess.run(["lake","env","lean",path],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+              print(result.stdout,flush=True)
+              Path(os.environ["RUNNER_TEMP"],"7574-axioms.txt").write_text(result.stdout)
+              if result.returncode: raise SystemExit(result.returncode)
+              matches=re.findall(r"'([^']+)' depends on axioms:\s*\[([^]]*)\]",result.stdout,re.S)
+              observed={name:set(filter(None,re.split(r"[\s,]+",axioms.strip()))) for name,axioms in matches}
+              for name in names:
+                  if name not in observed:
+                      if f"'{name}' does not depend on any axioms" in result.stdout: observed[name]=set()
+                      else: raise SystemExit("Missing axiom result: "+name)
+                  unknown=observed[name]-{"propext","Classical.choice","Quot.sound"}
+                  if unknown: raise SystemExit(f"Unexpected axioms for {name}: {sorted(unknown)}")
+              print(f"PASS: transitive axiom audit of {len(names)} declarations; only propext, Classical.choice, Quot.sound allowed.")
+          finally:
+              Path(path).unlink(missing_ok=True)
+          PY_AUDIT
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: labelled-swap-candidate-axioms
+          path: ${{ runner.temp }}/7574-axioms.txt
+          if-no-files-found: warn
+
+
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: 70d50a0347f7bad5c9f0c9029b9010436d350bd4
+      - name: Check final Blueprint sources with pinned latexindent
+        run: |
+          scripts/latexindent --version
+          CHECK_TMPDIR=$(mktemp -d)
+          export CHECK_TMPDIR
+          trap 'rm -rf "$CHECK_TMPDIR"' EXIT
+          scripts/check_latexindent_formatting.sh --one blueprint/src/chapter/ch28_mpu_labelled_swap_equivalence.tex
+          scripts/check_latexindent_formatting.sh --one blueprint/src/chapter/ch28_mpu_swap_stabilization.tex

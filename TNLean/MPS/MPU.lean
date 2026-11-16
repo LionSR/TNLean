@@ -47,6 +47,7 @@ import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
 import TNLean.MPS.MPU.ConjugationSourceFactors
+import TNLean.MPS.MPU.ConjugationStandardForms
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
 import TNLean.MPS.MPU.CyclicConjugation
@@ -62,6 +63,7 @@ import TNLean.MPS.MPU.EncodedUniformMergingCircuit
 import TNLean.MPS.MPU.EndpointBondEncoding
 import TNLean.MPS.MPU.EndpointGramNormalization
 import TNLean.MPS.MPU.Equivalence
+import TNLean.MPS.MPU.EquivalenceIndex
 import TNLean.MPS.MPU.EvenFamilySourceGauges
 import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.ExactBoundedCutRankCircuit
@@ -227,6 +229,8 @@ import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
+import TNLean.MPS.MPU.StandardFormSymmetryCriteria
+import TNLean.MPS.MPU.StandardFormTimeReversalSign
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
