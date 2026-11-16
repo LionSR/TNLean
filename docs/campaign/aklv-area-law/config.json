@@ -28,6 +28,10 @@
     {
       "slug": "alvv-rg-algorithm",
       "label": "Rigorous renormalization group"
+    },
+    {
+      "slug": "mpu",
+      "label": "Matrix product unitaries"
     }
   ],
   "label": "1301.1162",
@@ -138,7 +142,7 @@
             9838
           ],
           "physics": "For a frustration-free chain, ε<sub>0</sub> = 0 and Γ is annihilated by every term. Truncating the left and right sums at height <i>t</i> keeps Γ as the ground state and, for <i>t</i> of order 1/ε, keeps a gap of the same order, while the truncated Hamiltonian has norm at most <i>s</i> + 2<i>t</i>. The Chebyshev polynomial of degree of order <i>s</i><sup>2</sup> of the truncated Hamiltonian is then an approximate projector with <i>D</i>Δ ≤ 1/2 once <i>s</i> is of order log<sup>2</sup> <i>d</i>/ε, and log <i>D</i> = <i>O</i>(log<sup>3</sup> <i>d</i>/ε). The formal proof constructs that polynomial for the original ground vector, with the window chosen uniformly in the chain, and bounds the entropy at every cut, including cuts too close to the ends for the window to fit. Its parameter choice keeps logarithms of 1/ε that the printed rate omits.",
-          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustration-free chain, for 0 < ε ≤ 1, with one universal constant <i>C</i>. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε), without the logarithm of 1/ε, is open."
+          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustration-free chain, for 0 < ε ≤ 1, with one universal constant <i>C</i>. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε), without the logarithm of 1/ε, does not follow from the paper's certificates: every favorable pair of the Chebyshev and rank bounds has log <i>D</i> > <i>c</i><sup>3</sup>(log <i>d</i> + 2 log(1/ε))<sup>3</sup>/(16ε), which is proved."
         }
       ]
     },
@@ -154,8 +158,8 @@
           "issues": [
             9837
           ],
-          "physics": "Shift the terms so that the left block, the right block and the middle of the window each have ground energy zero; the shifted Hamiltonian <i>H</i> then has ground energy ε<sub>0</sub> ≤ 6. The truncation <i>A</i><sup>≤<i>t</i></sup> of a Hermitian <i>A</i> keeps its eigenvectors and replaces every eigenvalue above <i>t</i> by <i>t</i>. Truncating the two exterior blocks, each together with its neighbouring window term, gives <i>H</i><sup>(<i>t</i>)</sup> ≤ <i>H</i> with norm at most 2<i>t</i> + <i>s</i>. Let <i>A</i> be the sum of the two window terms that join these blocks to the rest of the window, and <i>P<sub>t</sub></i> the spectral projection of <i>H</i> − <i>A</i> below <i>t</i>; then <i>H</i><sup>(<i>t</i>)</sup><i>P<sub>t</sub></i> = <i>HP<sub>t</sub></i>. The ground state of <i>H</i> has exponentially small weight outside the range of <i>P<sub>t</sub></i>, because <i>A</i> couples the spectral subspaces of <i>H</i> − <i>A</i> below <i>u</i> and above <i>t</i> only with a factor 2e<sup>−(<i>t</i>−<i>u</i>)/8</sup>. The formal proof replaces the paper's shell-by-shell induction for this weight by a single exponential-moment estimate, recovers the coefficient 2 by centring the boundary terms, and corrects the shift of the middle terms, whose denominator is <i>s</i> − 6 rather than <i>s</i> − 7. Windows with fewer than six terms are not covered.",
-          "delivers": "For windows of at least six terms and <i>t</i> ≥ 1024 + 16 log(1/ε), the truncated Hamiltonian has gap at least 9ε/10 and a ground state φ with ‖φ − Γ‖<sup>2</sup> ≤ e<sup>−<i>t</i>/16</sup>/100 after a choice of phase. This improves the printed threshold of order (1/ε)(ε<sub>0</sub>/ε + 1), which is also proved."
+          "physics": "Shift the terms so that the left block, the right block and the middle of the window each have ground energy zero; the shifted Hamiltonian <i>H</i> then has ground energy ε<sub>0</sub> ≤ 6. The truncation <i>A</i><sup>≤<i>t</i></sup> of a Hermitian <i>A</i> keeps its eigenvectors and replaces every eigenvalue above <i>t</i> by <i>t</i>. Truncating the two exterior blocks, each together with its neighbouring window term, gives <i>H</i><sup>(<i>t</i>)</sup> ≤ <i>H</i> with norm at most 2<i>t</i> + <i>s</i>. Let <i>A</i> be the sum of the two window terms that join these blocks to the rest of the window, and <i>P<sub>t</sub></i> the spectral projection of <i>H</i> − <i>A</i> below <i>t</i>; then <i>H</i><sup>(<i>t</i>)</sup><i>P<sub>t</sub></i> = <i>HP<sub>t</sub></i>. The ground state of <i>H</i> has exponentially small weight outside the range of <i>P<sub>t</sub></i>, because <i>A</i> couples the spectral subspaces of <i>H</i> − <i>A</i> below <i>u</i> and above <i>t</i> only with a factor 2e<sup>−(<i>t</i>−<i>u</i>)/8</sup>. The formal proof replaces the paper's shell-by-shell induction for this weight by a single exponential-moment estimate, recovers the coefficient 2 by centring the boundary terms, and corrects the shift of the middle terms, whose denominator is <i>s</i> − 6 rather than <i>s</i> − 7. For windows of one or two terms the enlarged blocks overlap, so the two exterior blocks themselves are truncated instead, keeping all <i>s</i> window terms; the same proof applies. At <i>s</i> = 3 the connecting term is counted once, and the middle reference sum is empty for <i>s</i> ≤ 6.",
+          "delivers": "For every window and <i>t</i> ≥ 1024 + 16 log(1/ε), the truncated Hamiltonian has gap at least 9ε/10 and a ground state φ with ‖φ − Γ‖<sup>2</sup> ≤ e<sup>−<i>t</i>/16</sup>/100 after a choice of phase. This improves the printed threshold of order (1/ε)(ε<sub>0</sub>/ε + 1), which is also proved."
         },
         {
           "title": "The general area law",
@@ -163,7 +167,7 @@
             9839
           ],
           "physics": "Choose heights <i>t<sub>i</sub></i> growing linearly in <i>i</i>, so that the ground state of <i>H</i><sup>(<i>t<sub>i</sub></i>)</sup> has squared distance at most 2<sup>−(<i>i</i>+4)</sup> from Γ. Start from a product state with good overlap with the first truncated ground state and apply, at step <i>i</i>, a Chebyshev projector of <i>H</i><sup>(<i>t<sub>i</sub></i>)</sup> of degree ℓ<sub><i>i</i></sub> of order √((<i>t<sub>i</sub></i> + <i>s</i>)/ε). Each step multiplies the Schmidt rank by a factor whose logarithm is of order ℓ<sub><i>i</i></sub> log <i>d</i>, and brings the state within squared distance 2<sup>−(<i>i</i>+4)</sup> of the current target. The printed summary adds these logarithms to the rank itself; the ranks multiply. Summing 2<sup>−<i>i</i></sup> times the logarithm of the rank over <i>i</i> bounds the entropy of Γ.",
-          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustrated chain whose gap ε is the distance from ε<sub>0</sub> to the next eigenvalue. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε) is open, as in the frustration-free case."
+          "delivers": "Entanglement entropy at most <i>C</i>(1 + log <i>d</i> + log(1/ε))<sup>3</sup>/ε at every cut of a frustrated chain whose gap ε is the distance from ε<sub>0</sub> to the next eigenvalue. The printed rate <i>O</i>(log<sup>3</sup> <i>d</i>/ε) does not follow from the paper's certificates, as in the frustration-free case."
         },
         {
           "title": "Sub-polynomial matrix product states",

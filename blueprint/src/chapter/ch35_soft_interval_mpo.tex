@@ -5,10 +5,11 @@
 For $t>0$ and an integer $m\geq0$, write
 $h_{m,t}(x)=t\sum_{j=1}^m(1-e^{-x/t})^j/j$.
 This section constructs an approximation to one regional replacement,
-including its exterior and scalar shift, for independent parameters $m\geq1$ and $t\geq3m$.
-It uses the corrected label estimate, and does not assert a running-time
-bound or the unrestricted soft-truncation lemma of
-\cite[lines 1262--1268]{Arad2016RigorousRG}.
+including its exterior and scalar shift, first for independent parameters
+$m\geq1$ and $t\geq3m$, and then on the whole scale range
+$m<(\log2/2)\,t$ of \cite[lines 1262--1268]{Arad2016RigorousRG}.
+It uses the corrected label estimate of~\cite{gap:alvv16_cluster_approximation},
+and does not assert a running-time bound.
 
 
 \begin{lemma}[Weighted sums of operator chains]
@@ -197,3 +198,70 @@ they do not assert a polynomial bound for arbitrary $m$.
 The source's choice $m=4$ is covered whenever $t\geq12$.
 This is an existence result with explicit dimensions; a computational
 running-time claim and the multi-region spectral argument are not included.
+
+\begin{lemma}[The soft Hamiltonian on the source's scale range]
+    \label{thm:soft_hamiltonian_mpo_source_range}
+    \lean{TNLean.MPS.AreaLaw.exp_log_two_div_two,
+        TNLean.MPS.AreaLaw.softHeat_sourceRange_base_bounds,
+        TNLean.MPS.AreaLaw.softHeat_base_le_of_lt_log_two,
+        TNLean.MPS.AreaLaw.clusterOrder_le_one_add_log,
+        TNLean.MPS.AreaLaw.clusterBond_le_rpow,
+        TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_accuracy_of_base,
+        TNLean.MPS.AreaLaw.exists_softTruncatedHamiltonian_mpo_of_accuracy_of_base,
+        TNLean.MPS.AreaLaw.exists_softTruncatedHamiltonian_mpo_of_lt_log_two}
+    \leanok
+
+    \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
+        lem:trace_chain_linear_combination}
+    Keep the chain, the interactions, the set $I$, the regional sum $A$
+    and the lower energy $\epsilon I\leq A$ of
+    Theorem~\ref{thm:soft_hamiltonian_mpo_accuracy}. Let $m\geq1$,
+    $t$ real with $m<(\log2/2)\,t$, and $\xi>0$. Put
+    \begin{align}
+        W & =t2^{m+1},                    & b & =2(\sqrt2-1), & c & =-\log b, &
+        E & =\frac{2\max\{1,N^2\}W}{\xi},
+        \label{eq:soft_interval_source_range_constants}
+    \end{align}
+    and define $\ell$ by~(\ref{eq:soft_interval_cluster_order}) with this $b$.
+    Then $0<b<1$, and the full replacement~(\ref{eq:soft_interval_full_operator})
+    has actual approximating tensors $T$ of dimension
+    $D=1+Nq^2+(m+1)\ell^2q^\ell$ with
+    $\|\widetilde H-T\|\leq\xi$. If moreover $\xi\leq W$, then
+    \begin{align}
+        D\leq1+Nq^2+(m+1)\Bigl(1+\frac{\log E}{c}\Bigr)^2qE^{\log q/c}.
+        \label{eq:soft_interval_source_range_bond}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
+        lem:trace_chain_linear_combination}
+    The hypothesis gives $t>0$ and $m/t<\log2/2$, so every heat time
+    $a/t$, $0\leq a\leq m$, satisfies $e^{a/t}\leq e^{\log2/2}=\sqrt2$,
+    and every heat-time base is at most $b$. Since $1<\sqrt2<3/2$,
+    $0<b<1$. The proof of Theorem~\ref{thm:soft_hamiltonian_mpo_accuracy}
+    uses only these two facts about its base, and gives the tensors.
+
+    For the bond, write $x=\xi/W\in(0,1]$. Then
+    $\log(1+x)\geq1-(1+x)^{-1}=x/(1+x)\geq x/2$, hence
+    $\log\max\{1,N^2\}-\log\log(1+x)\leq\log E$ and $E\geq1$.
+    Monotonicity of the ceiling and $\lceil y\rceil<y+1$ for $y\geq0$
+    give $\ell\leq1+\log E/c$. As $q\geq1$,
+    $q^\ell\leq q^{1+\log E/c}=qE^{\log q/c}$, which
+    gives~(\ref{eq:soft_interval_source_range_bond}).
+\end{proof}
+
+For fixed $q$, the bound~(\ref{eq:soft_interval_source_range_bond}) is
+$1+Nq^2$ plus $m+1$ times a polynomial in $E$ and $\log E$, of degree
+depending only on $q$, since $c=-\log(2(\sqrt2-1))>0$ is an absolute
+constant. The factor $m+1$ is kept: with $q=2$, $N=1$ and $\xi=W$, the
+quantity $E$ is constant while the bound grows with $m$. Since $\log E\leq E$,
+the bond is polynomial in $m$, $N$ and $t2^mN/\xi$, hence in
+$t2^mN/\xi$ and $t'2^{t'}$ together. This is the bond of
+\cite[Lemma on efficient soft truncation, lines 1262--1268]{Arad2016RigorousRG}
+on the whole scale range of that lemma, except that the bond grows
+polynomially with the scale $t$ as well as with $t'2^{t'}n/\xi$: the heat
+coefficients of the soft series have absolute sum at most $t2^{m+1}$, and
+this budget enters the required cluster precision. The source's bound
+$\operatorname{poly}(t'2^{t'}n/\xi)$ without the scale is not
+established. The proof uses the corrected interaction-label estimate in
+place of the false printed one; see~\cite{gap:alvv16_cluster_approximation}.

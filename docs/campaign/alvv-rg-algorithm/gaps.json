@@ -114,12 +114,12 @@
         ]
       },
       "title": "The truncation height in hard truncation",
-      "summary": "The comparison of low-energy spaces under hard truncation needs a truncation height larger than the printed condition <i>t</i> > η; an explicit chain fails under that condition, so the printed form cannot be formalized. With <i>t</i> ≥ η + 7 the comparisons are proved for chains, which is the setting of the paper. The general lattice theorem of Arad, Kuwahara and Landau, which the paper quotes and applies only to chains, is not formalized.",
+      "summary": "The comparison of low-energy spaces under hard truncation needs a truncation height larger than the printed condition <i>t</i> > η; an explicit chain fails under that condition, so the printed form cannot be formalized. With <i>t</i> ≥ η + 7 the comparisons are proved for chains, which is the setting of the paper. The general lattice theorem of Arad, Kuwahara and Landau, which the paper quotes, is proved for interactions on at most <i>k</i> sites with every site in at most <i>g</i> terms, under the sufficient height <i>t</i> ≥ η + 3<i>b</i> + 1 for <i>b</i> crossing terms.",
       "context": "Hard truncation caps the energy of a region at height <i>t</i> and keeps the terms that cross its boundary. Lemma 4.5 compares the low-energy space <i>T</i><sub>η</sub> of the chain, spanned by the eigenvectors with energy within η of the ground energy, with the corresponding space of the truncated Hamiltonian.",
       "claims": "Proposition 4.4 (lines 894–921 of the source, adapted from Arad, Kuwahara and Landau) bounds ‖(<i>H</i> − <i>H̃<sub>t</sub></i>)Π̃<sub>≤ε<sub>0</sub>+η</sub>‖ by ξ, and Lemma 4.5 (lines 925–969) asks only <i>t</i> > η. Its proof splits a low-energy vector into closed spectral windows, counts them as ⌈(η − ε<sub>0</sub>)/(2<i>h</i>)⌉, and prints ξ with a positive exponent in <i>t</i> − η.",
       "found": "On qubits 0, …, <i>K</i> + 1, take a boundary term (1 − <i>P</i><sub>1</sub>/4)<i>P</i><sub>0</sub> on the first bond, region terms on the others, and <i>t</i> = 3/2, η = 1. The all-ones state lies in the truncated low-energy space, and there the two Hamiltonians differ by <i>K</i> − 3/2, which exceeds any constant. The window count should be ⌈η/(2<i>h</i>)⌉, the truncated window must be enlarged by the shift of the ground energy, and ξ = e<sup>−Ω(<i>t</i>−η)</sup>.",
       "impact": "The area-law and algorithm arguments choose <i>t</i> large compared with η, so a larger sufficient height costs only constants. The printed lemma is not proved in its unrestricted form.",
-      "plan": "For a chain and one interval, with ξ = 32e<sup>−(<i>t</i>−η)/8</sup> and <i>t</i> ≥ η + 7, the eigenvalue shifts, the ground-energy shift and both window comparisons are proved, and the failing chain is proved to fail. These are the chain proofs and the sufficient height that the note lists as outstanding; its status line predates them. The lattice theorem of Arad, Kuwahara and Landau remains to be formalized under its own issue."
+      "plan": "For a chain and one interval, with ξ = 32e<sup>−(<i>t</i>−η)/8</sup> and <i>t</i> ≥ η + 7, the eigenvalue shifts, the ground-energy shift and both window comparisons are proved, and the failing chain is proved to fail. These are the chain proofs and the sufficient height that the note lists as outstanding; its status line predates them. On a lattice whose terms act on at most <i>k</i> sites, with every site in at most <i>g</i> terms and <i>b</i> terms crossing the region boundary, the same conclusions are proved for <i>t</i> ≥ η + 3<i>b</i> + 1 with ξ = 4<i>gk</i>(<i>b</i> + 1)e<sup>−(<i>t</i>−η−3<i>b</i>−1)/(2<i>gk</i>)</sup>; for chains this height is η + 7. The chain and lattice proofs share one spectral estimate, which needs only a bound on the imaginary-time conjugation of the boundary terms."
     },
     {
       "id": "docs/paper-gaps/alvv16_chebyshev_filter_positivity.tex",
@@ -143,6 +143,28 @@
       "found": "For <i>a</i> = 0, <i>b</i> = 1/2, <i>u</i> = 1 and degree one, <i>p</i>(<i>x</i>) = (3 − 4<i>x</i>)/3, so <i>p</i>(diag(0, 1)) = diag(1, −1/3) is not positive although the Hamiltonian is. Even degree does not help: <i>T</i><sub>2</sub>(0) = −1.",
       "impact": "None. The error-reduction lemma holds without positivity once its spectral conditions are closed, so the filter can be used as it is. Squaring the filter would restore positivity at the cost of the degree.",
       "plan": "The unsquared filter is proved to fix the ground space of any dimension, to be at least one below the ground energy, and to approximate the ground-space projection within 2 exp(−2<i>n</i>√((<i>b</i> − <i>a</i>)/(<i>u</i> − <i>a</i>)))."
+    },
+    {
+      "id": "docs/paper-gaps/alvv16_chebyshev_near_ground_slope.tex",
+      "repo": "QICLean",
+      "kind": "error",
+      "status": "resolved",
+      "paper": "alvv",
+      "result": "Theorem 4.2, the filter near the ground energy",
+      "issue": 9845,
+      "stage": "al:2",
+      "prs": {
+        "QICLean": [
+          1030
+        ]
+      },
+      "title": "The slope of the Chebyshev filter near the ground energy",
+      "summary": "The printed lower bound for the filter just above the ground energy fails for large degree; a bound with the correct slope holds on the whole window below the excited cutoff and is proved, and is joined with the rank estimates at the two cuts for the actual two-window Hamiltonian.",
+      "context": "Item 2 of Theorem 4.2 says that the normalized Chebyshev filter of degree <i>k</i> stays close to one on eigenvalues slightly above η<sub>0</sub>, so that a viable subspace for a slightly larger window is not damaged.",
+      "claims": "Theorem 4.2 (lines 822–824 of the source) asserts <i>P</i><sub><i>k</i></sub>(λ) ≥ 1 − <i>O</i>(<i>k</i>|λ − η<sub>0</sub>|√Δ/(γ‖<i>H</i>‖)) for λ ≤ η<sub>0</sub> + γ/<i>k</i>.",
+      "found": "The proof omits the exponential growth of the derivative of <i>T</i><sub><i>k</i></sub> outside [−1, 1]. At λ = η<sub>0</sub> + γ/<i>k</i> the filter is at most 2 exp(−√(γ/(‖<i>H</i>‖ − η<sub>0</sub>))), independent of <i>k</i>; for η<sub>0</sub> = 0, η<sub>1</sub> = 1 and ‖<i>H</i>‖ = 2 this is below 0.99, while the printed bound tends to one.",
+      "impact": "None for the paper's later uses, which only need the filter to be at least one on the target window and small above η<sub>1</sub>.",
+      "plan": "The bound <i>P</i><sub><i>k</i></sub>(λ) ≥ 1 − <i>k</i>|λ − η<sub>0</sub>|/√(γ(<i>u</i> − η<sub>0</sub>)) is proved for every eigenvalue λ ≤ η<sub>1</sub>. TNLean states all four items of Theorem 4.2 for one polynomial of the actual two-window Hamiltonian, with this slope and with the rank estimates at the two cuts and inside the bulk regions."
     },
     {
       "id": "docs/paper-gaps/alvv16_low_energy_family_buffers.tex",
@@ -183,12 +205,12 @@
         ]
       },
       "title": "Independent parameters in the ground-state approximation",
-      "summary": "The parameter prescription in the proof of the degenerate area law does not reach the stated accuracy for small gaps; a different choice that keeps two scales gives the stated Schmidt-rank and matrix product state bounds, in review. The note also corrects two details of the merge procedure; what it leaves open concerns gaps above one and the algorithm theorem itself.",
+      "summary": "The parameter prescription in the proof of the degenerate area law does not reach the stated accuracy for small gaps; a different choice that keeps two scales gives the stated Schmidt-rank and matrix product state bounds, in review. Gaps above one force a ground space of dimension at least the local dimension, and then cost at most a factor 1 + log <i>r</i>/log <i>q</i> in the exponent. The note also corrects two details of the merge procedure.",
       "context": "The proof of Theorem 4.9 improves a viable subspace of small Schmidt rank with an approximate projector built from a Hamiltonian hard-truncated at height <i>t</i> around windows of length ℓ. The projector's shrinking exponent is of order ℓ<sup>2</sup>√γ/√(<i>t</i> + ℓ), and it must exceed log(1/δ) for accuracy δ.",
       "claims": "The proof (line 1080 of the source) prescribes <i>t</i> of order γ<sup>−1/4</sup> log(1/δ) and ℓ of order <i>t</i><sup>3/4</sup>, and the theorem states Schmidt rank <i>r</i> exp(Õ(γ<sup>−1</sup> log<sup>3</sup> <i>d</i> + γ<sup>−1/4</sup> log<sup>3/4</sup>(1/δ) log <i>d</i>)) at a cut, with δ replaced by δ/<i>n</i> for a matrix product state.",
-      "found": "With universal constants this prescription fails for small gaps: taking δ = exp(−γ<sup>−2</sup>) makes the exponent of order γ<sup>−7/4</sup>, much smaller than log(1/δ) = γ<sup>−2</sup>. Choosing ℓ = ⌈7/<i>g</i> + (7<i>ta</i><sup>2</sup>/<i>g</i>)<sup>1/4</sup>⌉, with <i>g</i> = min(γ, 1) and <i>t</i> a fixed multiple of an accuracy logarithm <i>a</i>, restores the needed exponent. The note also shows that 0 ≤ <i>h<sub>i</sub></i> ≤ 1 does not force γ ≤ 1.",
-      "impact": "None for 0 < γ ≤ 1: the corrected choice gives the printed powers of γ and of log(1/δ), with the logarithmic correction shown. For γ > 1 the bound uses <i>g</i> = 1 and does not reproduce the printed improvement.",
-      "plan": "Review and merge the Schmidt-rank bound and a matrix product state for every ground state whose bond dimension is <i>r</i> times a factor of the printed form. For the merge tree the note records that the printed loop of the modified merge reassigns the same subspace in every round, so the trimmed image must be iterated, and that the printed round count ½⌈log<sub><i>D</i></sub> <i>s</i>⌉ need not be an integer; the corrected tree, its success probability and its Ritz output are in review. Open: the comparison with the printed bound for γ > 1, the identification of the hard-truncated families with the paper's soft construction, and the energy estimates along the sampled tree."
+      "found": "With universal constants this prescription fails for small gaps: taking δ = exp(−γ<sup>−2</sup>) makes the exponent of order γ<sup>−7/4</sup>, much smaller than log(1/δ) = γ<sup>−2</sup>. Choosing ℓ = ⌈7/<i>g</i> + (7<i>ta</i><sup>2</sup>/<i>g</i>)<sup>1/4</sup>⌉, with <i>g</i> = min(γ, 1) and <i>t</i> a fixed multiple of an accuracy logarithm <i>a</i>, restores the needed exponent. The note also shows that 0 ≤ <i>h<sub>i</sub></i> ≤ 1 does not force γ ≤ 1. The normalization does bound the gap by the ground-space dimension <i>r</i>: every natural <i>m</i> < γ satisfies <i>q</i><sup><i>m</i></sup> ≤ <i>r</i>, so γ ≤ 1 + log <i>r</i>/log <i>q</i>, and γ ≤ 1 when <i>r</i> < <i>q</i>.",
+      "impact": "None for 0 < γ ≤ 1 or for <i>r</i> < <i>q</i>, which includes a unique ground state: the corrected choice gives the printed powers of γ and of log(1/δ), with the logarithmic correction shown. For γ > 1 and <i>r</i> ≥ <i>q</i> the capped bound is the printed uncapped exponent multiplied by max(γ, 1) ≤ 1 + log <i>r</i>/log <i>q</i>, which is <i>O</i>(log <i>n</i>) when <i>r</i> = poly(<i>n</i>).",
+      "plan": "Review and merge the Schmidt-rank bound, the matrix product state for every ground state whose bond dimension is <i>r</i> times a factor of the printed form, the gap bound and the comparison with the uncapped exponent. For the merge tree the note records that the printed loop of the modified merge reassigns the same subspace in every round, so the trimmed image must be iterated, and that the printed round count ½⌈log<sub><i>D</i></sub> <i>s</i>⌉ need not be an integer; the corrected tree, its success probability, the energy induction along the sampled soft tree and the refined Ritz output of its successful root are in review. Open: the printed single factor <i>r</i> for γ > 1 and <i>r</i> ≥ <i>q</i>, the identification of the corrected soft families with the paper's fourth-order Generate procedure, and the running time."
     },
     {
       "id": "docs/paper-gaps/alvv16_bootstrap_constants.tex",
@@ -280,12 +302,12 @@
         ]
       },
       "title": "Support size and negative terms in the cluster approximation",
-      "summary": "The printed error bound for the truncated cluster expansion fails, for positive terms and again for negative terms; a corrected bound that counts terms and is normalized by a lower bound on the energy is in review.",
+      "summary": "The printed error bound for the truncated cluster expansion fails, for positive terms and again for negative terms; a corrected bound that counts terms and is normalized by a lower bound on the energy is proved, together with a matrix product operator for the truncated expansion and the efficient soft-truncation approximation on the paper's whole range of scales.",
       "context": "The cluster expansion writes e<sup>−β<i>H</i></sup> as a sum over words of local terms and keeps only the words whose support has no connected piece of <i>r</i> or more sites. The kept part has a matrix product operator description of small bond dimension, which the efficient algorithms use to represent soft truncations.",
       "claims": "Theorem 5.5 (lines 1270–1291 of the source, proof 1924–1968) states ‖e<sup>−β<i>H</i></sup> − <i>M<sub>r</sub></i>(<i>H</i>)‖ ≤ exp(<i>n</i><sup>2</sup>(e<sup>β</sup> − 1)<sup><i>r</i></sup>) − 1 for 0 < β < log 2, and the surrounding text allows terms that are not positive.",
       "found": "For the single positive term |00⟩⟨00| on two qubits, <i>r</i> = 2 and β = log(11/10), the error is 1/11 while the bound is below 1/24: a connected piece of <i>r</i> sites needs only <i>r</i> − 1 terms, and the proof counts terms. On forty qubits with terms −|00⟩⟨00| and <i>r</i> = 20, the omitted words have expectation 3<sup>19</sup>/2<sup>39</sup> in the all-zero state, above the bound for either way of counting. The proof bounds the exponential of the remaining terms by one, which needs positive terms.",
       "impact": "The efficient soft-truncation construction cites this theorem and needs a corrected estimate. The area laws do not use it.",
-      "plan": "In review: for Hermitian terms of norm at most one and any lower bound λ ≤ <i>H</i>, e<sup>βλ</sup>‖e<sup>−β<i>H</i></sup> − <i>M</i><sub><i>r</i></sub>‖ ≤ exp(<i>N</i><sup>2</sup><i>b<sup>r</sup></i>) − 1 with <i>b</i> = 2(e<sup>β</sup> − 1) ≤ 1, when <i>M<sub>r</sub></i> drops the words containing <i>r</i> consecutive terms and <i>N</i> is the number of terms; a matrix product operator of bond dimension at most <i>r</i><sup>2</sup><i>d</i><sup><i>r</i></sup> for this truncated expansion; and from both a matrix product operator approximation of one soft-truncated interval. The printed bound itself stays refuted."
+      "plan": "Proved: for Hermitian terms of norm at most one and any lower bound λ ≤ <i>H</i>, e<sup>βλ</sup>‖e<sup>−β<i>H</i></sup> − <i>M</i><sub><i>r</i></sub>‖ ≤ exp(<i>N</i><sup>2</sup><i>b<sup>r</sup></i>) − 1 with <i>b</i> = 2(e<sup>β</sup> − 1) ≤ 1, when <i>M<sub>r</sub></i> drops the words containing <i>r</i> consecutive terms and <i>N</i> is the number of terms; a matrix product operator of bond dimension at most <i>r</i><sup>2</sup><i>d</i><sup><i>r</i></sup> for this truncated expansion; and, for every order <i>m</i> ≥ 1 and scale with <i>m</i> < (ln 2/2)<i>t</i>, a matrix product operator within ξ of one soft-truncated interval, of bond dimension polynomial in <i>m</i>, <i>n</i> and <i>t</i>2<sup><i>m</i></sup><i>n</i>/ξ. Open: the explicit tensor of the paper, the representation for its selector by the support of a word product, and a bond that does not grow with <i>t</i>. The printed bound itself stays refuted."
     },
     {
       "id": "docs/paper-gaps/alvv16_ff_rank.tex",
@@ -472,6 +494,26 @@
       "found": "For qubits with <i>h</i><sub><i>i</i></sub> = 1 − |00⟩⟨00| on neighbouring sites (commuting projections, unique ground state, gap one), |1⋯1⟩ is an eigenvector of the replaced chain with eigenvalue 4ℓ + 6. The argument gives bond dimension (<i>d</i><sup>2</sup> + <i>O</i>(1))<sup><i>k</i>+<i>O</i>(1)</sup>, not <i>O</i>(<i>d</i><sup><i>k</i></sup>).",
       "impact": "None on the statement: ℓ = Θ̃(γ<sup>−1</sup> log<sup>2</sup> <i>d</i>) is the choice that works with norm Θ(ℓ), and (<i>d</i><sup>2</sup> + 4)<sup>ℓ<sup>2</sup>+1</sup> still has the stated form 2<sup>Õ(γ<sup>−2</sup> log<sup>5</sup> <i>d</i>)</sup>.",
       "plan": "Proved in review: the existence part of Theorem 5.15 with norm at most 4ℓ + 6, gap at least γ/15, D = (<i>d</i>ℓ<sup>2</sup>)<sup>22ℓ</sup> and bond dimension at most (<i>d</i><sup>2</sup> + 4)<sup>ℓ<sup>2</sup>+1</sup> at every interior cut. The running time is not formalized."
+    },
+    {
+      "id": "docs/paper-gaps/alvv16_unique_ground_state_tree.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "alvv",
+      "result": "Theorem 6.2, the frustration-free unique ground state",
+      "issue": 9848,
+      "stage": "alg:3",
+      "prs": {
+        "TNLean": []
+      },
+      "title": "The merge tree for a unique frustration-free ground state",
+      "summary": "The existence content of the frustration-free theorem is proved with the source's hypotheses through the degenerate-gap tree, whose intermediate spaces grow with the chain length instead of staying of constant dimension.",
+      "context": "For a frustration-free chain with a unique ground state Γ and gap γ, the source runs the merge tree with the frustration-free improving family, whose bond dimension does not depend on the chain length, and obtains a faster algorithm.",
+      "claims": "Theorem t:unique (lines 1829–1855 of the source) asserts that the algorithm outputs a matrix product state approximating Γ, in time close to that of matrix multiplication.",
+      "found": "Such a chain is the case of Assumption (DG) with ground energy 0 and ground-space dimension 1, and the low-energy span at energy 0 is the line ℂΓ. The degenerate-gap tree and its refinement therefore give, on an event of failure probability at most 1/(<i>L</i> + 1)<sup>2</sup>, a line of matrix product states of polynomial bond dimension mutually η/2-close to ℂΓ. Its node spaces have dimension polynomial in <i>L</i> rather than the constant <i>D s</i><sup>2</sup>.",
+      "impact": "None for the mathematical output; the constant intermediate dimension, which drives the source's running time, is not established.",
+      "plan": "Feed the proved frustration-free improving family into the generic tree selection, after transporting it to region coordinates and supplying a trimming reference of length-independent Schmidt rank."
     }
   ]
 }

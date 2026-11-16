@@ -58,6 +58,19 @@ LVV = HEADER + """
 
 
 class ResultTableTests(unittest.TestCase):
+    def test_roman_section_numbers_are_kept_whole(self):
+        rows = result_table(HEADER + """
+| Proposition III.1 | `prop:normal-tensor` — single nonzero transfer eigenvalue | #5706 | Proved |
+| Theorem IV.6 | `IndexTh` — index theorem | #6023 | Open |
+| Lemma VI.8 | Trace formula for the time-reversal sign | #7108 | Open |
+| Lemma A | `lem:a` — a lettered lemma | #1 | Proved |
+""")
+        self.assertEqual([(r["kind"], r["num"]) for r in rows],
+                         [("Proposition", "III.1"), ("Theorem", "IV.6"), ("Lemma", "VI.8"),
+                          ("Lemma", "A")])
+        self.assertEqual(rows[0]["label"], "prop:normal-tensor")
+        self.assertIsNone(rows[2]["label"])
+
     def test_hastings_source_has_five_results_without_invented_labels(self):
         rows = result_table(HASTINGS)
         self.assertEqual([(r["kind"], r["num"], r["label"]) for r in rows], [

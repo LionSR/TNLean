@@ -94,6 +94,18 @@ eigenvectors. The actual repeated trims, their parameter choices and
 this spectral extraction must be combined before the final source
 algorithm can be marked complete.
 
+\paragraph{Composition with the physical tree.}
+The same-root refinement is now applied to the actual root of the physical
+soft resampling tree. On its joint success event, of probability at least
+$1-(L+1)^{-2}$, the root is $3/200$-close to the ground space in chain
+coordinates, so the literal refinement of that root and its Ritz extraction
+give a subspace of the ground-space dimension, mutually $\eta/2$-close to it,
+consisting of matrix product states of bond dimension polynomial in $L$,
+$\dim G$ and $1/\eta$. The formal statement is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_tree_refined_ritz_approximation}.
+The printed round count, the identification with literal soft Generate and
+any running-time claim remain open.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
