@@ -57,6 +57,9 @@ theorem norm_covariance_sq_le_overlap_error_of_isPreparedInDepth {T : ℕ}
     rw [norm_smul, hc, hφ, mul_one]
   have hdiff := norm_covariance_sub_le hψ hcφ hAu hBu
   simp only [expect_smul_state hc, hfactor, sub_self, zero_sub, norm_neg] at hdiff
+  change ‖expect φ (A * B) - expect φ A * expect φ B‖ ≤
+    6 * ‖(WithLp.toLp 2 ψ - c • WithLp.toLp 2 φ :
+      EuclideanSpace ℂ (Fin N → Fin 2))‖ at hdiff
   have hsquare := (sq_le_sq₀
     (norm_nonneg (expect φ (A * B) - expect φ A * expect φ B))
     (by positivity)).mpr hdiff
