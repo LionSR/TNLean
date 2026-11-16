@@ -52,6 +52,7 @@ import TNLean.MPS.MPU.ConjugationStandardForms
 import TNLean.MPS.MPU.ConjugationStrictEquivalence
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.ConstantBranchingBounds
+import TNLean.MPS.MPU.ContinuousStandardFormPath
 import TNLean.MPS.MPU.CyclicConjugation
 import TNLean.MPS.MPU.CyclicFinitePropagation
 import TNLean.MPS.MPU.DaggerFusionCompatibility

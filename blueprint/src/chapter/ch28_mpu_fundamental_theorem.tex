@@ -4148,7 +4148,8 @@
     $\mathcal U_{k_0}(p)$ has a standard form with gates
     $u(p)\colon\mathbb C^{d'}\otimes\mathbb C^{d'}\to\mathbb C^\ell\otimes\mathbb C^r$
     and
-    $v(p)\colon\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^{d'}\otimes\mathbb C^{d'}$.
+    $v(p)\colon\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^{d'}\otimes\mathbb C^{d'}$;
+    moreover $\ell r=d'^2$ and $\operatorname{ind}\mathcal U(0)=\log_2(r/d')$.
     This is the remark in the proof of \cite[Corollary~IV.7]{Cirac2017MPU} that
     the dimensions of $u(p)$ and $v(p)$ do not depend on $p$.
     % Source lines: paper_v2.tex 877--884.
@@ -4325,17 +4326,35 @@
 
 \begin{corollary}[Continuous choice of standard form]
     \label{coruvSF}
-    \notready
+    \lean{MPOTensor.IsMPU.exists_continuous_standardForm_of_path}
+    \leanok
     \discussion{6024}
-    \uses{prop:continuity-index, IndexTh, SF, lem:matrix_realignment_kronecker,
-        lem:nearest_kronecker_product, lem:kronecker_local_section,
-        lem:kronecker_path_lifting}
+    \uses{prop:continuity-index, IndexTh, SF}
     For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
     necessarily in canonical form, there are an integer $k_0\leq D^4$ and
     continuous paths of unitaries $u(p)$ and $v(p)$ such that
     $U^{(2k_0N)}(p)$ has standard form given by $u(p)$ and $v(p)$.
     % Source lines: paper_v2.tex 867--910.
 \end{corollary}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_path_fixed_gate_dims,
+        lem:mpu_standard_form_gates_continuous_mod_local,
+        lem:kronecker_path_lifting}
+    Take $k_0=D^4$. By Lemma~\ref{lem:mpu_path_fixed_gate_dims} the blocked
+    tensors have standard forms with gates $u(p)$, $v(p)$ of dimensions
+    independent of $p$, and by
+    Lemma~\ref{lem:mpu_standard_form_gates_continuous_mod_local} the first gate
+    is continuous modulo local unitaries. In place of the slice theorem used by
+    the source, Lemma~\ref{lem:kronecker_path_lifting} gives local unitaries
+    $x(p)$, $y(p)$ with $\hat u(p)=(x(p)\otimes y(p))u(p)$ continuous, and
+    $\hat v(p)=v(p)(y(p)^\dagger\otimes x(p)^\dagger)$ completes a standard form
+    of the same blocked tensor \cite{gap:mpu_standard_form_path_cross_section}.
+    The entries of $\hat v(p)$ are quotients of entries of its products over the
+    shifted pairs on rings of two and three blocks, which are continuous because
+    the operators on these rings and $\hat u(p)$ are, so $\hat v(p)$ is
+    continuous.
+\end{proof}
 
 \begin{lemma}[Standard-form gates along a path are continuous modulo local unitaries]
     \label{lem:mpu_standard_form_gates_continuous_mod_local}

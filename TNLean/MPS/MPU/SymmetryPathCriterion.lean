@@ -11,6 +11,7 @@ import TNLean.MPS.MPU.SourceFactorChoiceGates
 import TNLean.MPS.MPU.TimeReversalSignInvariance
 import TNLean.MPS.MPU.Index
 import TNLean.MPS.MPU.FundamentalTheoremGatesSupplied
+import TNLean.MPS.MPU.ContinuousStandardFormPath
 
 /-!
 # The symmetry-preserving standard-form path criterion
@@ -57,6 +58,8 @@ chain lengths. See `docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex`.
   direction on the standard-form chain, with gates on pairs of original sites.
 * `MPOTensor.gatePath_of_symmetricPath`: the forward direction from gate data along
   a symmetric path, as supplied by Corollary `coruvSF`.
+* `MPOTensor.exists_gate_path_of_strictlyEquivalentUnderSymmetry`: the forward
+  direction after blocking.
 -/
 
 open scoped Matrix
@@ -508,5 +511,56 @@ theorem gatePath_of_symmetricPath
     rw [← reindexPhysical_blockTwo_blockTensor_two_mul, mpo_reindexPhysical,
       mpo_reindexPhysical, G.mpo_eq_of_same_gates T N hN,
       mpo_blockTwo_eq_of_mpo_eq (hV p) N hN]
+
+/-- **Forward direction of the symmetry path criterion, after blocking.** Let
+`𝒰₁, 𝒰₂` be simple tensors in canonical form II that are strictly equivalent
+under a symmetry `S` imposed at positive lengths. Then for some block length
+`k > 0` there are continuous families of unitary gates `u(p), v(p)` on blocks of
+`k` sites such that `u(0), v(0)` and `u(1), v(1)` are standard-form gates of the
+two-site blocks of the `k`-site blocks of `𝒰₁` and `𝒰₂`, and the MPU generated
+by `u(p), v(p)` is invariant under `S` blocked `2k` sites for every `p`. The
+printed forward direction asks for this with `k = 1`; see
+`docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex`.
+
+Source: arXiv:1703.09188, Lemma `lem:equivalent-symmetry`, lines 1369--1379,
+"only if" direction, through Corollary `coruvSF` (lines 869--875). -/
+theorem exists_gate_path_of_strictlyEquivalentUnderSymmetry
+    {S : FiniteChainOperatorSymmetry d} (hpos : ∀ N ∈ S.applicable, 0 < N)
+    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
+    (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
+    (hs₁ : IsMPUSimple 𝒰₁) (hs₂ : IsMPUSimple 𝒰₂)
+    (h : StrictlyEquivalentUnderSymmetry S 𝒰₁ 𝒰₂ rfl) :
+    ∃ k : ℕ, 0 < k ∧ ∃ (ℓ r : ℕ)
+      (u : unitInterval → Matrix (Fin ℓ × Fin r)
+        (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ)
+      (v : unitInterval → Matrix (Fin (MPSTensor.blockPhysDim d k) ×
+        Fin (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ),
+      Continuous u ∧ Continuous v ∧
+      (∀ p, (u p).IsUnitaryBetween) ∧ (∀ p, (v p).IsUnitaryBetween) ∧
+      Nonempty (TwoSiteStandardFormData (blockTwo (blockTensor 𝒰₁ k)) (u 0) (v 0)) ∧
+      Nonempty (TwoSiteStandardFormData (blockTwo (blockTensor 𝒰₂ k)) (u 1) (v 1)) ∧
+      ∀ p, IsInvariantUnderSymmetry (S.block (2 * k))
+        (reindexPhysical (twoSiteDirectBlockEquiv d k)
+          (standardFormTensorOfGates (u p) (v p))) := by
+  have : NeZero d := h₁.neZero_phys
+  obtain ⟨-, -, D', ha, hb, hJ⟩ := h
+  let γ := hJ.somePath
+  have hγmem := hJ.somePath_mem
+  have hMPU : ∀ p, IsMPU (γ p) := fun p ↦ (hγmem p).1
+  obtain ⟨k, hk, -, ℓ, r, u, v, hind, -, hu, hv, hsf⟩ :=
+    IsMPU.exists_continuous_standardForm_of_path γ.continuous hMPU
+  have hrefl : reindexPhysical (finCongr (rfl : d = d)).symm (padBond 𝒰₁ D' ha) =
+      padBond 𝒰₁ D' ha := by
+    funext i j
+    simp [reindexPhysical]
+  have hγ₀ : ∀ N : ℕ, 0 < N → mpo (γ 0) N = mpo 𝒰₁ N := fun N hN ↦ by
+    have : NeZero N := ⟨hN.ne'⟩
+    rw [γ.source, hrefl, mpo_padBond]
+  have hγ₁ : ∀ N : ℕ, 0 < N → mpo (γ 1) N = mpo 𝒰₂ N := fun N hN ↦ by
+    have : NeZero N := ⟨hN.ne'⟩
+    rw [γ.target, mpo_padBond]
+  obtain ⟨S₁, S₂, hu', hv', hinv⟩ := gatePath_of_symmetricPath hpos h₁ h₂ hs₁ hs₂
+    γ.continuous hMPU (fun p ↦ (hγmem p).2) hγ₀ hγ₁ hk (fun {_ _} ↦ hind) hsf
+  exact ⟨k, hk, ℓ, r, u, v, hu, hv, hu', hv', S₁, S₂, hinv⟩
 
 end MPOTensor
