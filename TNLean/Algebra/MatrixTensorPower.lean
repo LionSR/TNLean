@@ -121,9 +121,9 @@ theorem IsUnitaryBetween.tensorPower {ι κ : Type*} [Fintype ι] [Fintype κ] [
 /-- The tensor power of a unitary matrix is unitary. -/
 theorem tensorPower_mem_unitaryGroup {κ : Type*} [Fintype κ] [DecidableEq κ] (M : ℕ)
     {u : Matrix κ κ ℂ} (hu : u ∈ unitaryGroup κ ℂ) :
-    tensorPower M u ∈ unitaryGroup (Fin M → κ) ℂ := by
-  rw [mem_unitaryGroup_iff, star_eq_conjTranspose, conjTranspose_tensorPower, tensorPower_mul,
-    ← star_eq_conjTranspose, mem_unitaryGroup_iff.mp hu, tensorPower_one]
+    tensorPower M u ∈ unitaryGroup (Fin M → κ) ℂ :=
+  (isUnitaryBetween_iff_mem_unitaryGroup _).mp
+    (((isUnitaryBetween_iff_mem_unitaryGroup u).mpr hu).tensorPower M)
 
 /-- `⟨W^{⊗M} ψ, W'^{⊗M} φ⟩ = ⟨ψ, (Wᴴ W')^{⊗M} φ⟩`. -/
 theorem sum_star_tensorPower_mulVec_mul {n κ κ' : Type*} [Fintype n] [Fintype κ] [Fintype κ']
