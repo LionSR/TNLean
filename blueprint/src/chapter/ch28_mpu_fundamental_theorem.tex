@@ -4172,11 +4172,59 @@
     $\operatorname{vec}A$ and $\operatorname{vec}B$, which has rank one.
 \end{proof}
 
+\begin{lemma}[Nearest Kronecker product]
+    \label{lem:nearest_kronecker_product}
+    \lean{Matrix.kroneckerProjector, Matrix.nearestKronecker,
+        Matrix.kroneckerGapSet, Matrix.continuous_nearestKronecker,
+        Matrix.isOpen_kroneckerGapSet, Matrix.nearestKronecker_kronecker_mul,
+        Matrix.exists_eq_kronecker_nearestKronecker,
+        Matrix.nearestKronecker_kronecker_of_unitary,
+        Matrix.kronecker_mem_kroneckerGapSet}
+    \leanok
+    \uses{lem:matrix_realignment_kronecker}
+    Let $0<a<b<\ell r$, and let $f$ be the continuous function equal to $0$ on
+    $(-\infty,a]$, to $1$ on $[b,\infty)$, and affine in between. For
+    $M\in\mathrm M_{\ell r}$ put $P(M)=f\bigl(R(M)R(M)^\dagger\bigr)$ and let
+    $N(M)$ be the matrix with $R(N(M))=P(M)R(M)$. Let $W$ be the set of $M$
+    such that the spectrum of $R(M)R(M)^\dagger$ does not meet $[a,b]$ and
+    $\operatorname{tr}P(M)\in(1/2,3/2)$. Then:
+    \begin{enumerate}
+        \item $N$ is continuous and $W$ is open;
+        \item $N((h\otimes k)M)=(h\otimes k)N(M)$ for unitaries $h$ and $k$,
+              and $W$ is invariant under these left multiplications;
+        \item for $M\in W$, $N(M)=A\otimes B$ with $A\neq0$ and $B\neq0$;
+        \item for unitaries $x$ and $y$, $x\otimes y\in W$ and
+              $N(x\otimes y)=x\otimes y$.
+    \end{enumerate}
+    This is the second step of the direct construction that replaces the
+    slice theorem in the proof of \cite[Corollary~IV.7]{Cirac2017MPU}. The gap
+    is the closed interval $[a,b]$, since avoiding an open interval is not an
+    open condition on the spectrum.
+    % Source lines: paper_v2.tex 942--947.
+\end{lemma}
+
+\begin{proof}\leanok
+    The map $P$ is continuous by continuity of the functional calculus, and
+    $W$ is open because the spectrum is upper semicontinuous. Left
+    multiplication by $h\otimes k$ sends $R(M)$ to
+    $(h\otimes\mathbb 1)R(M)(k\otimes\mathbb 1)^{\mathsf T}$, so it conjugates
+    $R(M)R(M)^\dagger$ and $P(M)$ by the unitary $h\otimes\mathbb 1$. On $W$ the
+    function $f$ takes only the values $0$ and $1$ on the spectrum, so $P(M)$ is
+    an orthogonal projector whose rank equals its trace, which is $1$. Hence
+    $P(M)R(M)$ has rank at most one; it is nonzero, for otherwise
+    $f(t)t=0$ on the spectrum, which forces $P(M)=0$. The previous lemma then
+    writes $N(M)$ as a Kronecker product of nonzero factors. Finally,
+    $R(\mathbb 1)R(\mathbb 1)^\dagger$ is $\ell r$ times a rank-one projector,
+    so $P(\mathbb 1)R(\mathbb 1)=R(\mathbb 1)$ and $N(\mathbb 1)=\mathbb 1$; equivariance
+    gives the statement for $x\otimes y$.
+\end{proof}
+
 \begin{corollary}[Continuous choice of standard form]
     \label{coruvSF}
     \notready
     \discussion{6024}
-    \uses{prop:continuity-index, IndexTh, SF, lem:matrix_realignment_kronecker}
+    \uses{prop:continuity-index, IndexTh, SF, lem:matrix_realignment_kronecker,
+        lem:nearest_kronecker_product}
     For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
     necessarily in canonical form, there are an integer $k_0\leq D^4$ and
     continuous paths of unitaries $u(p)$ and $v(p)$ such that
