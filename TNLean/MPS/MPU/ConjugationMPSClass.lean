@@ -18,7 +18,9 @@ conjugate are related by a unitary gauge, `conj(𝒲ⁱ) = ζ G† 𝒲ⁱ G`, a
 (`eq:mps-class-gauge-trafo`, lines 1761--1788). On the other hand,
 Proposition `corconj` sorts the MPU into Case I or Case II according to
 whether the unitary `x` of Proposition `prop1conj` is symmetric or
-skew-symmetric. The proposition states that the two signs agree.
+skew-symmetric. The proposition states that the two signs agree, "i.e." that
+the sign also labels the two MPU phases under equivalence. This file proves
+the first half, the agreement of the two signs.
 
 The source proof (lines 1799--1805) deduces this from the classification of
 the phases under conjugation (Corollary `cor:equiv-under-conjugation`), the
@@ -34,15 +36,15 @@ As in `prop1conj`, the tensor in standard form is the two-site block `𝒱₂` o
 a simple tensor `𝒱` in canonical form II
 (`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`). The closing
 clause of the source, that the two cases are "the two possible MPU phases
-under equivalence", is Corollary `cor:equiv-under-conjugation` and is not
-part of these statements.
+under equivalence", is Corollary `cor:equiv-under-conjugation`; the full
+proposition combines that corollary with these statements.
 
 ## Main results
 
 * `MPOTensor.TwoSiteStandardFormData.sign_eq_of_conjugation_gauge`.
 * `MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff`,
-  `MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge`: Proposition
-  `prop:mps-class-eq-mpu-class-for-conjugation`, for a gauge of the standard-form
+  `MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge`: the first half
+  of Proposition `prop:mps-class-eq-mpu-class-for-conjugation`, for a gauge of the standard-form
   tensor and of the MPU tensor.
 -/
 
@@ -205,7 +207,7 @@ standard form whose gate satisfies `conj(u) = (x ⊗ y) u` with unitaries `x, y`
 and let `X` be a unitary gauge with `conj(𝒲ⁱʲ) = ζ X† 𝒲ⁱʲ X`. If `xᵀ = s x` and
 `X conj(X) = s' 1` with `s, s' ∈ {1, -1}`, then `s = s'`.
 
-Source: arXiv:1703.09188, Proposition
+Source: arXiv:1703.09188, the first half of Proposition
 `prop:mps-class-eq-mpu-class-for-conjugation`, lines 1791--1797. The proof is
 local; see the module docstring. -/
 theorem TwoSiteStandardFormData.sign_eq_of_conjugation_gauge
@@ -342,7 +344,7 @@ state of `𝒱₂` under conjugation: `conj(𝒱₂ⁱʲ) = ζ G† 𝒱₂ⁱʲ
 of physical indices. Then `G conj(G) = 1` exactly in Case I (`xᵀ = x`) and
 `G conj(G) = -1` exactly in Case II (`xᵀ = -x`) of Proposition `corconj`.
 
-Source: arXiv:1703.09188, Proposition
+Source: arXiv:1703.09188, the first half of Proposition
 `prop:mps-class-eq-mpu-class-for-conjugation`, lines 1791--1797, with the
 sign `G conj(G) = ±1` of `eq:mps-class-gauge-trafo` (lines 1761--1770) and the
 unitary choice of `G` (lines 1780--1782), and the reading of a tensor in standard form in
@@ -429,8 +431,8 @@ theorem blockTwo_map_star_eq_of_gauge {V : MPOTensor d D} (G : Matrix (Fin D) (F
 tensor.** The same comparison as `mps_conjugation_sign_iff`, for a unitary
 gauge `conj(𝒱ⁱʲ) = ζ G† 𝒱ⁱʲ G` of the one-site tensor `𝒱` itself; the
 source notes that `G` is invariant under blocking (line 1774). Source:
-arXiv:1703.09188, Proposition `prop:mps-class-eq-mpu-class-for-conjugation`,
-lines 1791--1797. -/
+arXiv:1703.09188, the first half of Proposition
+`prop:mps-class-eq-mpu-class-for-conjugation`, lines 1791--1797. -/
 theorem IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge
     {V : MPOTensor d D} (hV : IsMPUCanonicalFormII V) (hsimple : IsMPUSimple V)
     (S : SourceFactors V hV.ρ)
