@@ -11,11 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: cf732a22981c7f3baa898ae2b156ec39ec924722
+          ref: 00cefbed18cf07a7e449a6139d8b712be834c6d3
           fetch-depth: 0
       - name: Verify exact production merge and unchanged dependency pins
         run: |
-          test "$(git rev-parse HEAD)" = cf732a22981c7f3baa898ae2b156ec39ec924722
+          test "$(git rev-parse HEAD)" = 00cefbed18cf07a7e449a6139d8b712be834c6d3
           git merge-base --is-ancestor 874723c7704223ef7993b785c2a91553b898f022 HEAD
           git merge-base --is-ancestor c3592ac8f47a205f4cf9106f3353c147b65b0109 HEAD
           git merge-base --is-ancestor eb588dc15332a3798431015e6c27ecbaf329b2d1 HEAD
@@ -86,7 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: cf732a22981c7f3baa898ae2b156ec39ec924722
+          ref: 00cefbed18cf07a7e449a6139d8b712be834c6d3
       - name: Check final Blueprint sources with pinned latexindent
         run: |
           scripts/latexindent --version
