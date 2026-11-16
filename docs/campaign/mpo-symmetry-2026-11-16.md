@@ -338,3 +338,33 @@ The relative-class and new reduction-path subsections compile together as five X
 pages without a TeX error. This is a focused typesetting check, not complete-volume
 acceptance. The expanded head still requires its own full hosted Lean, web and PDF
 checks, fresh independent reviews and the applicable approvals. No merge occurred.
+
+### Formal review repairs after complete CI
+
+Head `1585429a7a08e1b60fef360919b6b1624bc55f02` passed complete PR CI
+run `43793931262`: the full 32,385-job Lean build, strict/style/timing checks,
+complete Blueprint web render/layout/page/synchronization checks, and both PDF
+volumes. The CI-triggered code and prose reviewers then requested changes in
+reviews `5914874111` and `5914867202`. Both found no mathematical or equivalence
+error. Their outstanding findings were equation formatting and four missing
+public transport-theorem docstrings; green CI did not remove those blockers.
+
+The repair converts every bare display added in the three Blueprint files
+(15 occurrences) to `align`, splits distinct identities onto aligned lines,
+and adds semantic labels/references where the proofs cite them. The separate
+paper-gap display is also converted to a labelled `align` equation. Four
+public rational-to-complex transport theorems now have docstrings. No theorem
+statement or proof term changes: the Lean source is identical after removing
+comments and whitespace.
+
+Repair validation: the eleven-module focused build passes (19,109 jobs), the
+changed Lean source passes direct strict elaboration, all three Blueprint
+files pass the pinned formatter, and source synchronization/reverse coverage,
+generated imports, reader-facing prose, roles, forbidden-token and whitespace
+checks pass. With the actual print preamble, the relative-class/path sections
+typeset as six XeTeX pages and the full touched chapter as 41 pages. These are
+focused typesetting checks. A standalone paper-gap PDF check is locally
+blocked by the absent `dsfont.sty` package; no substitute package was used.
+The repaired head still requires its own complete hosted CI and formal review
+approval. The two change-request reviews must be superseded by reviewer
+approval; resolving repaired inline threads does not supply that approval.

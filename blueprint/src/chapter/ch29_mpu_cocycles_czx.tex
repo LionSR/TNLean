@@ -661,11 +661,10 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     Let $g\mapsto T_g$ be a group family of matrix product operators on
     $d$-level sites, and let $c:G\to(\C^\times)^d$ be a homomorphism.
     Define
-    \[
-        D_g^{(N)}=\operatorname{diag}\left(\prod_{k=0}^{N-1}c_g(t_k)\right)_{t},
-        \qquad
-        \widetilde T_g^{ij}=c_g(j)T_g^{ij}.
-    \]
+    \begin{align}
+        D_g^{(N)}           & =\operatorname{diag}\left(\prod_{k=0}^{N-1}c_g(t_k)\right)_{t}, \\
+        \widetilde T_g^{ij} & =c_g(j)T_g^{ij}.
+    \end{align}
     The bond dimensions of $T_g$ and $\widetilde T_g$ agree.
 \end{definition}
 
@@ -679,21 +678,26 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     \uses{def:mpug_diagonal_twist}
     Suppose $T$ is an exact normal group representation, and $D_g^{(N)}$
     commutes with $O_h^{(N)}$ for every $g,h$ and every $N\geq1$. Then
-    \[
-        \widetilde O_g^{(N)}=O_g^{(N)}D_g^{(N)},\qquad
-        D_g^{(N)}D_h^{(N)}=D_{gh}^{(N)},\qquad
+    \begin{align}
+        \widetilde O_g^{(N)} & =O_g^{(N)}D_g^{(N)},
+        \label{eq:mpug_twist_operator}                   \\
+        D_g^{(N)}D_h^{(N)}   & =D_{gh}^{(N)},
+        \label{eq:mpug_twist_character}                  \\
         \widetilde O_g^{(N)}\widetilde O_h^{(N)}
-        =\widetilde O_{gh}^{(N)},
-    \]
+                             & =\widetilde O_{gh}^{(N)},
+        \label{eq:mpug_twist_multiplication}
+    \end{align}
     and every $\widetilde T_g$ is normal. Any periodic state fixed by every
     $O_g^{(N)}$ and $D_g^{(N)}$ is fixed by every $\widetilde O_g^{(N)}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Pulling the scalar factors out of the ordered product gives the first
-    identity, and the homomorphism law for $c$ gives the second. Commuting
+    Pulling the scalar factors out of the ordered product gives
+    (\ref{eq:mpug_twist_operator}), and the homomorphism law for $c$ gives
+    (\ref{eq:mpug_twist_character}). Commuting
     the middle factors in
-    $(O_g^{(N)}D_g^{(N)})(O_h^{(N)}D_h^{(N)})$ gives the third.
+    $(O_g^{(N)}D_g^{(N)})(O_h^{(N)}D_h^{(N)})$ gives
+    (\ref{eq:mpug_twist_multiplication}).
     Each doubled-index letter is multiplied by a nonzero scalar, so the
     spans of words at every length are unchanged. Applying the two
     operators successively proves the assertion about invariant states.
@@ -724,12 +728,12 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     \cite[line~3970]{FrancoRubio2025MPUGauging}. The resulting tensors have
     bond dimension $1$ when $q=0$ and $2$ when $q=1$. They form an exact
     normal representation, with unitary operators on every nonempty ring:
-    \[
-        O_g^{(N)}=U^q\left(\prod_jZ_j\right)^p
+    \begin{align}
+        O_g^{(N)} & =U^q\left(\prod_jZ_j\right)^p
         =\operatorname{diag}\left(
         \prod_{k=0}^{N-1}\chi_g(t_k,t_{k+1})\right)_{t},
         \qquad t_N=t_0.
-    \]
+    \end{align}
     Here $\chi_g(a,b)=(-1)^{pa+qab}$ is the two-leg phase, while
     $c_g(a)=(-1)^{pa}$ is the on-site character. At $N=1$ the periodic
     convention gives the controlled-$Z$ factor $(-1)^{t_0^2}$.

@@ -9,17 +9,18 @@
     onto the same normal tensor $A$ of positive bond dimension. Assume
     $B$ and $A$ have equal periodic vectors at every positive length.
     Their selected comparison scalar $z$ satisfies
-    \[
-        VB^w=zV'B^w\qquad (|w|>2E).
-    \]
+    \begin{align}
+        VB^w & =zV'B^w\qquad (|w|>2E).
+        \label{eq:mpug_reduction_comparison}
+    \end{align}
     In a family over a topological space, if $B,V,V'$ are continuous and
     these hypotheses hold at every parameter, then $z$ is continuous.
     Neither the right caps nor the target tensors need be continuous.
 \end{lemma}
 \begin{proof}\leanok
     The source bond dimension bounds both residual nilpotency lengths.
-    The uniqueness theorem for reductions therefore gives the displayed
-    comparison after the common threshold $2E$. Uniqueness identifies its
+    The uniqueness theorem for reductions therefore gives
+    (\ref{eq:mpug_reduction_comparison}) after the common threshold $2E$. Uniqueness identifies its
     scalar with the selected one. At any parameter choose a longer word
     and an entry of $V'B^w$ that is nonzero there. It remains nonzero on a
     neighborhood, on which $z$ is the quotient of the corresponding
@@ -65,9 +66,9 @@
     Construct the regular projective representation of each $\omega_t$.
     Its matrices, and hence their nonzero determinants $d_t(g)$, depend
     continuously on $t$. The determinant identity is
-    \[
-        d_t(g)d_t(h)=\omega_t(g,h)^{|G|}d_t(gh).
-    \]
+    \begin{align}
+        d_t(g)d_t(h) & =\omega_t(g,h)^{|G|}d_t(gh).
+    \end{align}
     Lift every $d_t(g)$ continuously through the $|G|$th power covering
     of $\C^\times$. After removing the resulting coboundary, the cocycle
     values lie among finitely many roots of unity, so are constant on
@@ -100,10 +101,10 @@
     normal invariant tensor families of fixed positive bond dimensions
     $D,E$. Suppose actual action reductions have been chosen with left
     caps continuous for every group element. Then
-    \[
-        [L_{A_1}/L_{B_1}]=[L_{A_0}/L_{B_0}]
+    \begin{align}
+        [L_{A_1}/L_{B_1}] & =[L_{A_0}/L_{B_0}]
         \quad\hbox{in }H^2(G,\C^\times).
-    \]
+    \end{align}
     No continuity of the right caps is required.
 \end{lemma}
 \begin{proof}\leanok

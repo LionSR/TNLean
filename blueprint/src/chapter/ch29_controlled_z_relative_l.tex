@@ -7,15 +7,18 @@
     \leanok
     Let $f:R\to\C$ be a homomorphism from a commutative ring. It preserves
     matrix Kronecker products. Suppose matrices over $R$ satisfy
-    \[
-        VW=I,\qquad VB^iW=A^i,\qquad B^iWVB^j=B^iB^j.
-    \]
+    \begin{align}
+        VW       & =I,\notag   \\
+        VB^iW    & =A^i,\notag \\
+        B^iWVB^j & =B^iB^j.
+        \label{eq:mpug_local_reduction_identities}
+    \end{align}
     Their entrywise images under $f$ are a reduction from $f(B)$ onto
     $f(A)$ on every word, including the empty word.
 \end{lemma}
 \begin{proof}\leanok
     The homomorphism preserves products, sums and identity matrices.
-    Transport the displayed identities and induct on the length of a word,
+    Transport~(\ref{eq:mpug_local_reduction_identities}) and induct on the length of a word,
     inserting $WV$ between its first two letters.
 \end{proof}
 
@@ -50,15 +53,15 @@
     agrees with the one-block $L$-symbol. If the reduction data are changed,
     with common fusion gauge $\beta$ and action gauges $\gamma_A,\gamma_B$,
     then
-    \[
-        L_A'(g,h)=\frac{\gamma_A(gh)\beta(g,h)}
+    \begin{align}
+        L_A'(g,h) & =\frac{\gamma_A(gh)\beta(g,h)}
         {\gamma_A(g)\gamma_A(h)}L_A(g,h).
-    \]
+    \end{align}
     The analogous equation holds for $B$. Thus, writing $Q=L_A/L_B$,
-    \[
-        Q'(g,h)=\frac{\phi(g)\phi(h)}{\phi(gh)}Q(g,h),
-        \qquad \phi(g)=\frac{\gamma_B(g)}{\gamma_A(g)}.
-    \]
+    \begin{align}
+        Q'(g,h) & =\frac{\phi(g)\phi(h)}{\phi(gh)}Q(g,h), \\
+        \phi(g) & =\frac{\gamma_B(g)}{\gamma_A(g)}.
+    \end{align}
     In particular $Q'/Q$ is a two-coboundary.
 \end{lemma}
 \begin{proof}\leanok
@@ -79,32 +82,32 @@
         ControlledZGauging.combinedFusionV, ControlledZGauging.combinedFusionW}
     \leanok
     Write $g=(p,q)$, with $p,q\in\{0,1\}$. Over $\mathbb{Q}$, the tensor is
-    \[
-        T_{p,0}^{ij}=\delta_{ij}(-1)^{pj},\qquad
-        (T_{p,1}^{ij})_{lr}=\delta_{ij}\delta_{rj}(-1)^{pj+lj}.
-    \]
+    \begin{align}
+        T_{p,0}^{ij}        & =\delta_{ij}(-1)^{pj},               \\
+        (T_{p,1}^{ij})_{lr} & =\delta_{ij}\delta_{rj}(-1)^{pj+lj}.
+    \end{align}
     The state matrices are the rational forms of $A^i$ and
     $A_0^i=\delta_{i0}$. Their action and stacked product use the same
     Kronecker contractions as the complex tensors. Set
-    \[
-        V_{p,0}=W_{p,0}=\operatorname{diag}(1,(-1)^p,(-1)^p).
-    \]
+    \begin{align}
+        V_{p,0} & =W_{p,0}=\operatorname{diag}(1,(-1)^p,(-1)^p).
+    \end{align}
     For $s=(-1)^p$, set
-    \[
-        V_{p,1}=\begin{pmatrix}
-            0 & 2s & 2s & 0  & 0 & 0 \\
-            1 & 0  & 0  & -1 & 0 & 0 \\
-            1 & 0  & 0  & 1  & 0 & 0
-        \end{pmatrix},\qquad
-        W_{p,1}=\frac12\begin{pmatrix}
-            0  & 1  & 1 \\
-            s  & 0  & 0 \\
-            0  & 0  & 0 \\
-            0  & -1 & 1 \\
-            -s & 0  & 0 \\
-            0  & 0  & 0
-        \end{pmatrix}.
-    \]
+    \begin{align}
+        V_{p,1} & =\begin{pmatrix}
+                       0 & 2s & 2s & 0  & 0 & 0 \\
+                       1 & 0  & 0  & -1 & 0 & 0 \\
+                       1 & 0  & 0  & 1  & 0 & 0
+                   \end{pmatrix}, \\
+        W_{p,1} & =\frac12\begin{pmatrix}
+                              0  & 1  & 1 \\
+                              s  & 0  & 0 \\
+                              0  & 0  & 0 \\
+                              0  & -1 & 1 \\
+                              -s & 0  & 0 \\
+                              0  & 0  & 0
+                          \end{pmatrix}.
+    \end{align}
     For the product state the caps are $V_{0}=W_{0}=1$ and
     $V_{1}=(1\;0)$, $W_{1}=(1\;1)^T$. Fusion caps are the identity unless
     both controlled-$Z$ bits are one; in that case they are
@@ -148,10 +151,10 @@
     fusion tree is $V_{gh}(F^<_{g,h}\otimes I)$, with $\alpha$ the canonical
     bond reassociation. They act on $(T_gT_h)\cdot A$.
     For $g=(p,q)$ and $h=(r,s)$ define
-    \[
-        \lambda(g,h)=(-1)^{ps}4^{qs},\qquad
-        \phi(g)=(-1)^{pq}2^q.
-    \]
+    \begin{align}
+        \lambda(g,h) & =(-1)^{ps}4^{qs}, \\
+        \phi(g)      & =(-1)^{pq}2^q.
+    \end{align}
     For arbitrary actual action and common fusion reductions define the
     relative factor $Q(g,h)=L_A(g,h)/L_0(g,h)$.
 \end{definition}
@@ -174,15 +177,16 @@
         lem:mpug_relative_l_gauge, def:mpug_controlled_z_relative_factor}
     The explicit reductions give $L_A(g,h)=\lambda(g,h)$ and $L_0(g,h)=1$.
     For the cluster factor system $\omega(g,h)=(-1)^{qr}$,
-    \[
-        \lambda(g,h)=\frac{\phi(g)\phi(h)}{\phi(gh)}\omega(g,h).
-    \]
+    \begin{align}
+        \lambda(g,h) & =\frac{\phi(g)\phi(h)}{\phi(gh)}\omega(g,h).
+        \label{eq:mpug_relative_l_coboundary}
+    \end{align}
     Consequently every choice of actual reduction data gives a genuine
     relative two-cocycle $Q$, with
-    \[
-        [Q]=[\lambda]=[\omega]\ne0
+    \begin{align}
+        [Q] & =[\lambda]=[\omega]\ne0
         \quad\hbox{in }H^2(\Z_2\times\Z_2,\C^\times).
-    \]
+    \end{align}
     This identifies the action class with the split-index class. Physical
     gapped-path invariance remains separate; see
     \cite{gap:fbc25_controlled_z_split_index_class_scope}.
@@ -190,8 +194,8 @@
 \begin{proof}\leanok
     Each one-letter comparison of the two action trees has scalar
     $\lambda(g,h)$ for $A$ and scalar one for the product state. Apply
-    Lemma~\ref{lem:mpug_action_scalar_local}. The displayed coboundary
-    equation is checked on the four group elements. The cluster class is
+    Lemma~\ref{lem:mpug_action_scalar_local}. Identity~(\ref{eq:mpug_relative_l_coboundary})
+    is checked on the four group elements. The cluster class is
     nonzero. Lemma~\ref{lem:mpug_relative_l_gauge} then removes all dependence
     on the chosen action and common fusion reductions.
 \end{proof}

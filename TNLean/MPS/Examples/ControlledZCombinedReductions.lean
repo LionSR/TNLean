@@ -111,16 +111,19 @@ theorem complexOfRing_combinedRationalTensor (g : Multiplicative (ZMod 2 × ZMod
       norm_num [combinedLabelRational, combinedZCharacter, czRepTensor,
         czMPUTensor, czSign, idTensor, Matrix.one_apply, ZMod.val, czBondDim]
 
+/-- The rational state letters map to the original complex bond-three state. -/
 theorem complexOfRing_stateRational (i : Fin 2) :
     complexOfRing (Rat.castHom ℂ) (stateRational i) = stateTensor i := by
   ext l r
   simp [complexOfRing, stateRational, stateTensor]
 
+/-- The rational product-state letters map to the complex zero product state. -/
 theorem complexOfRing_zeroRational (i : Fin 2) :
     complexOfRing (Rat.castHom ℂ) (zeroRational i) = zeroState i := by
   ext l r
   by_cases hi : i = 0 <;> simp [complexOfRing, zeroRational, zeroState, hi]
 
+/-- The rational action contraction maps to the actual complex MPO action tensor. -/
 theorem complexOfRing_combinedRationalAction {D : ℕ}
     (g : Multiplicative (ZMod 2 × ZMod 2))
     (A : Fin 2 → Matrix (Fin D) (Fin D) ℚ) (i : Fin 2) :
@@ -130,6 +133,7 @@ theorem complexOfRing_combinedRationalAction {D : ℕ}
     complexOfRing_sum, complexOfRing_kronecker, complexOfRing_combinedRationalTensor]
   rfl
 
+/-- The rational stacked product maps to the actual product of the complex MPO tensors. -/
 theorem complexOfRing_combinedRationalProduct
     (g h : Multiplicative (ZMod 2 × ZMod 2)) (i j : Fin 2) :
     complexOfRing (Rat.castHom ℂ) (combinedRationalProduct g h i j) =
