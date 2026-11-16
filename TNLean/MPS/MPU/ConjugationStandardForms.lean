@@ -35,6 +35,12 @@ canonical form II, with gates from source factors normalized at its canonical
 fixed point, and count lengths on the two-spin standard-form chain. See
 `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
 
+In the two uniqueness theorems the second pair of gates `u'', v''` is itself a
+standard form: the source's clause concerns "the choice of `u'` and `v'`"
+(lines 1100--1104), and its proof obtains `u'' = (a ⊗ b) u'` from
+`FundamentalMPU` (lines 1151--1153), which is stated for tensors in standard
+form. This is the source's reading, not an added hypothesis.
+
 **Local fix (Case II uniqueness of `v`):**
 `exists_symplectic_gauge_of_mpo_eq` states `v'' = v' (S_r† ⊗ S_ℓ†)` where the
 source prints `S_rᵀ ⊗ S_ℓᵀ`; see
