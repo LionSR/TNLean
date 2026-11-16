@@ -46,6 +46,7 @@ import TNLean.MPS.MPU.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
+import TNLean.MPS.MPU.ConjugationMPSClass
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationStandardForms
 import TNLean.MPS.MPU.ConjugationSymmetry
@@ -163,7 +164,12 @@ import TNLean.MPS.MPU.PermutedEncodedMergingCircuit
 import TNLean.MPS.MPU.PhaseSelectorRows
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.PhysicalAncilla
+import TNLean.MPS.MPU.PhysicalAncillaLeftMul
 import TNLean.MPS.MPU.PhysicalCutConfigurations
+import TNLean.MPS.MPU.PhysicalMatrixBlocking
+import TNLean.MPS.MPU.PhysicalMatrixEquivalence
+import TNLean.MPS.MPU.PhysicalMatrixSymmetry
+import TNLean.MPS.MPU.PhysicalMatrixSymmetryTransport
 import TNLean.MPS.MPU.PhysicalTransposeSourceFactors
 import TNLean.MPS.MPU.PolynomialOverheadBounds
 import TNLean.MPS.MPU.PositiveCanonicalGauge
@@ -249,6 +255,7 @@ import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.ThreeLeggedDecomposition
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
+import TNLean.MPS.MPU.TimeReversalMPSClass
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalSignInvariance

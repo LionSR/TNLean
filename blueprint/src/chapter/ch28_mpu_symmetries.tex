@@ -2676,65 +2676,160 @@
     % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
 
+\begin{lemma}[Local comparison of the conjugation signs]
+    \label{lem:mpu_conjugation_mps_sign_local}
+    \lean{MPOTensor.TwoSiteStandardFormData.sign_eq_of_conjugation_gauge}
+    \leanok
+    \uses{SF}
+    Let $\mathcal W=AuB$ be a tensor in standard form, the open contraction of
+    the unshifted gate $u$ with the two half factors $A$ and $B$, and let
+    $x,y$ be unitaries with $\overline u=(x\otimes y)u$. Let $G$ be a unitary
+    with $\overline{\mathcal W^{ij}}=\zeta G^\dagger\mathcal W^{ij}G$ for all
+    physical indices. If $x^T=sx$ and $G\overline G=s'\Id$ with
+    $s,s'\in\{1,-1\}$, then $s=s'$.
+    % Source lines: paper_v2.tex 1791--1797.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Since $u$ is unitary, contracting with $\overline u$ strips the gate:
+    $\overline A x\otimes y^T\overline B=G^\dagger A\otimes\zeta BG$ as tensor
+    products. Both factors are nonzero because the shifted gate $v=BA$ is
+    unitary, so $\overline Ax=cG^\dagger A$ for a nonzero scalar $c$.
+    Conjugating once more gives
+    \begin{align}
+        A & =|c|^2\,(G^TG^\dagger)\,A\,(x^\dagger x^T)=|c|^2ss'\,A,
+    \end{align}
+    using $G^T=s'G$ and $x^T=sx$. Since $A\neq0$, $|c|^2ss'=1$, hence $s=s'$.
+\end{proof}
+
+\begin{lemma}[The MPS sign and the conjugation case]
+    \label{lem:mpu_mps_sign_conjugation_case}
+    \lean{MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff,
+        MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge}
+    \leanok
+    \discussion{5714}
+    \uses{prop1conj, corconj, lem:mpu_conjugation_mps_sign_local}
+    For a conjugation-invariant MPU, the MPS sign
+    $G\overline G=\pm\Id$ corresponds to Case I and Case II, respectively, of
+    Lemma~\ref{corconj}: if $x,y$ are as in Lemma~\ref{prop1conj} and $G$ is a
+    unitary with $\overline{\mathcal U^{ij}}=\zeta G^\dagger\mathcal U^{ij}G$
+    for all physical indices, then $G\overline G=\Id$ if and only if $x=x^T$,
+    and $G\overline G=-\Id$ if and only if $x=-x^T$. Here the MPU is generated
+    by a simple tensor in canonical form II, its standard form is that of the
+    two-site block, as in \cite{gap:mpu_standard_form_canonical_convention},
+    and $G$ may be a gauge of either tensor. This is the first half of
+    \cite[Proposition~VI.12]{Cirac2017MPU}; it does not identify the two cases
+    with the phases under equivalence.
+    % Source lines: paper_v2.tex 1791--1797.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{prop1conj, lem:mpu_conjugation_mps_sign_local}
+    Lemma~\ref{prop1conj} gives $x=\pm x^T$. The tensor is normal, so the MPS
+    sign is $G\overline G=\pm\Id$. Lemma~\ref{lem:mpu_conjugation_mps_sign_local}
+    applied to the two-site block shows that the two signs agree. A gauge of
+    the one-site tensor is a gauge of its two-site block with phase
+    $\zeta^2$.
+\end{proof}
+
 \begin{lemma}[Conjugation class and the MPS sign]
     \label{prop:mps-class-eq-mpu-class-for-conjugation}
     \notready
     \discussion{5714}
-    \uses{corconj, cor:equiv-under-conjugation}
+    \uses{lem:mpu_mps_sign_conjugation_case, cor:equiv-under-conjugation}
     For a conjugation-invariant MPU, the MPS sign
     $G\overline G=\pm\Id$ agrees with Case I and Case II, respectively, of
-    Lemma~\ref{corconj}.
+    Lemma~\ref{corconj}, that is, with the two possible phases under
+    equivalence. The correspondence of the sign with the two cases is
+    Lemma~\ref{lem:mpu_mps_sign_conjugation_case}; the identification of the
+    two cases with the two phases is Lemma~\ref{cor:equiv-under-conjugation}.
+    This is \cite[Proposition~VI.12]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1791--1805.
 \end{lemma}
 
-\begin{lemma}[Admissible conjugation class and the MPS sign]
-    \label{prop:mpu_admissible_mps_conjugation_class}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (admissible conjugation class):** the standard forms,
-    % blockings, and comparison paths carry the required source data. Documented
-    % in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{corconj, cor:mpu_admissible_equiv_under_conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let $\mathcal U$ be conjugation invariant. Suppose $\mathcal U$ and its
-    conjugate comparison tensor are simple and carry their own reduced
-    full-support source data. Let $p\mapsto\mathcal W(p)$ be the explicit
-    standard-form interpolation from $\mathcal U$ to its Case I or Case II
-    representative. Suppose this interpolation carries an admissible
-    conjugation-symmetry path datum of blocking length one: the path
-    $\mathcal W(p)$ and its fixed conjugate, physical-adjoint, transposed, and
-    conjugation-image comparison paths are simple and carry continuously varying
-    source data. Then the sign
-    $G\overline G=\pm\Id$ in the MPS classification agrees with Case I and
-    Case II, respectively, of
-    Lemma~\ref{corconj}.
-    % Source lines: paper_v2.tex 1791--1805.
+\begin{lemma}[The double layer of a simple MPU squares to its fixed pair]
+    \label{lem:mpu_double_layer_square_fixed_pair}
+    \lean{MPOTensor.IsMPUCanonicalFormII.normalizedDiagonal_sq_eq_fixedPairProjector,
+        MPOTensor.normalizedDiagonal_doubleLayerTensor_blockTwo}
+    \leanok
+    \uses{def:mpu_simple}
+    Let $\mathcal U$ be a simple tensor in canonical form II with right fixed
+    point $\rho$, and let $\mathbb E$ be its normalized double-layer transfer
+    matrix. Then $\mathbb E^2=|\rho)(\Id|$. The normalized double-layer
+    transfer matrix of the two-site block is $\mathbb E^2$.
+    % Source lines: paper_v2.tex 269--281, 356--374, 397--405.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    Summing the second simplicity identity over the diagonal letters gives
+    $\mathbb E^2=\mathbb E|\rho)(\Id|\mathbb E$. Since $\rho$ is a fixed point,
+    $\mathbb E|\rho)(\Id|=|\rho)(\Id|$, and since $\mathbb E$ commutes with
+    its stabilized power $|\rho)(\Id|$, also $|\rho)(\Id|\mathbb E=|\rho)(\Id|$.
+\end{proof}
+
+\begin{lemma}[The twisted trace of a rank-one double layer]
+    \label{lem:mpu_twisted_trace_rank_one}
+    \lean{MPOTensor.sum_trace_mul_map_star_mul_eq}
+    \leanok
+    Let $\mathcal W$ have $d$ physical values and normalized double-layer
+    transfer matrix $|\rho)(\Id|$. Then for all matrices $M,M'$,
+    \begin{align}
+        \sum_{a,b}\tr\bigl(M\,\overline{\mathcal W^{ab}}\,M'\,\mathcal W^{ab}\bigr)
+         & =d\,\tr\bigl(M^TM'\rho\bigr).
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The entries of the double layer give
+    $\sum_{a,b}\overline{\mathcal W^{ab}_{pq}}\mathcal W^{ab}_{\beta\alpha}
+        =d\,\rho_{\beta p}\delta_{\alpha q}$; expanding the trace and summing
+    gives the identity.
+\end{proof}
 
 \begin{lemma}[Time-reversal class and the MPS sign]
     \label{prop:dagger-mps-class-and-mpu-class-equal}
-    \notready
+    \lean{MPOTensor.IsMPUCanonicalFormII.mps_timeReversal_sign_eq,
+        MPOTensor.IsMPUCanonicalFormII.mps_timeReversal_sign_eq_of_gauge}
+    \leanok
     \discussion{5714}
-    \uses{PropChiral, prop:sigma1-and-sigma2-equal}
+    \uses{PropChiral, eq:sigma-from-trace, prop:sigma-well-defined,
+        lem:mpu_double_layer_square_fixed_pair, lem:mpu_twisted_trace_rank_one}
     For a time-reversal-invariant MPU in standard form, the MPS sign
     $G\overline G=\pm\Id$ equals the sign $\sigma^{(2)}$ obtained after
-    blocking two sites.
-    % Source lines: paper_v2.tex 1807--1829.
+    blocking two sites: if $G$ is a unitary with
+    $\overline{\mathcal U^{ba}}=\zeta G^\dagger\mathcal U^{ab}G$ for all
+    physical indices, then $G\overline G=\sigma^{(2)}\Id$. Here, as in
+    Lemma~\ref{PropChiral}, the standard form is that of the two-site block of
+    a simple tensor in canonical form II
+    \cite{gap:mpu_standard_form_canonical_convention}, invariance is required
+    at even lengths of the two-spin chain
+    \cite{gap:mpu_standard_form_parity_gap}, $\sigma^{(2)}$ is read from the
+    trace formula of Lemma~\ref{eq:sigma-from-trace} for the two-site block of
+    the standard form, and $G$ may be a gauge of the standard-form tensor or of
+    its two-site block. This is \cite[Proposition~VI.13]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1808--1829.
 \end{lemma}
 
-\begin{lemma}[Admissible time-reversal class and the MPS sign]
-    \label{prop:mpu_admissible_mps_time_reversal_class}
-    \notready
-    \discussion{5714}
-    % **Scope restriction (one-, two-, and four-site source data):** the tensors
-    % used to define both $\sigma^{(1)}$ and $\sigma^{(2)}$ carry their own data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{PropChiral, prop:mpu_admissible_sigma_blocking_parity, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let an MPU in the standard form determined by its given source datum
-    be invariant under time reversal.
-    Suppose $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$, together with the
-    physical-adjoint comparison tensors $\mathcal U_2^\sharp$ and
-    $\mathcal U_4^\sharp$, are simple and each carries its own reduced
-    full-support source datum. Then the MPS sign $G\overline G=\pm\Id$ equals
-    the sign $\sigma^{(2)}$.
-    % Source lines: paper_v2.tex 1807--1829.
-\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:mpu_double_layer_square_fixed_pair, lem:mpu_twisted_trace_rank_one}
+    Write $\mathcal W_2$ for the two-site block of the standard form; its
+    double layer is $|\rho)(\Id|$ by
+    Lemma~\ref{lem:mpu_double_layer_square_fixed_pair}. The gauge relation
+    gives $\mathcal W_2^{ba}=\overline\zeta\,G^T\overline{\mathcal W_2^{ab}}\,\overline G$,
+    so by Lemma~\ref{lem:mpu_twisted_trace_rank_one}
+    \begin{align}
+        \tr(\mathbb S\,U^{(2)}(\mathcal W_2))
+         & =\overline\zeta\sum_{a,b}\tr\bigl(G^T\overline{\mathcal W_2^{ab}}\,\overline G\,\mathcal W_2^{ab}\bigr)
+        =\overline\zeta\,d\,\tr(G\overline G\rho).
+    \end{align}
+    Invariance at length two forces $\zeta=1$. Applying the gauge relation
+    twice and using normality gives $G\overline G=\pm\Id$, and $\tr\rho=1$, so
+    $\sigma^{(2)}=d^{-1}\tr(\mathbb S\,U^{(2)}(\mathcal W_2))$ is the MPS sign.
+    Unlike the source, the argument does not contract the four gates of the
+    blocked standard form.
+\end{proof}
