@@ -49,7 +49,6 @@ chain lengths. See `docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex`.
 
 ## Main results
 
-* `MPOTensor.TwoSiteStandardFormData.joinedIn_sameMPOSet_padBond`.
 * `MPOTensor.strictlyEquivalentUnderSymmetry_reindexPhysical_of_gate_path`: the reverse
   direction for standard forms on pairs of sites, after a physical relabelling.
 * `MPOTensor.strictlyEquivalentUnderSymmetry_blockTensor_of_gate_path`: the reverse
@@ -67,116 +66,6 @@ open scoped Matrix
 namespace MPOTensor
 
 variable {d D D₁ D₂ ℓ r : ℕ}
-
-/-- The tensors of bond dimension `D` with the periodic operators of `W` at
-every positive length. -/
-def SameMPOSet (W : MPOTensor d D) : Set (MPOTensor d D) :=
-  {X | ∀ N : ℕ, 0 < N → mpo X N = mpo W N}
-
-/-- A virtual gauge is joined to the tensor through tensors with the same
-periodic operators. Source: the gauge freedom of arXiv:1703.09188, lines 294
-and 356. -/
-theorem joinedIn_sameMPOSet_virtualSandwich (W : MPOTensor d D)
-    {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X.det) :
-    JoinedIn (SameMPOSet W) W (MPOTensor.virtualSandwich X W X⁻¹) := by
-  obtain ⟨γ, hγ⟩ := Matrix.joinedIn_isUnit_det_one hX
-  have hdet : ∀ t, (γ t).det ≠ 0 := fun t ↦ (hγ t).ne_zero
-  have hinv : Continuous fun t ↦ (γ t)⁻¹ := by
-    simp_rw [Matrix.inv_def, Ring.inverse_eq_inv']
-    exact ((γ.continuous.matrix_det).inv₀ hdet).smul γ.continuous.matrix_adjugate
-  have hcont : Continuous fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹ := by
-    refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
-    simp only [virtualSandwich_apply]
-    exact (γ.continuous.matrix_mul continuous_const).matrix_mul hinv
-  refine ⟨⟨⟨fun t ↦ MPOTensor.virtualSandwich (γ t) W (γ t)⁻¹, hcont⟩, ?_, ?_⟩, fun t ↦ ?_⟩
-  · funext i j
-    simp
-  · simp
-  · intro N _
-    exact mpo_virtualSandwich _ W _ (Matrix.nonsing_inv_mul _ (hγ t)) N
-
-/-- A bond relabelling is joined to the tensor through tensors with the same
-periodic operators. -/
-theorem joinedIn_sameMPOSet_bondReindex (W : MPOTensor d D) (σ : Fin D ≃ Fin D) :
-    JoinedIn (SameMPOSet W) W (bondReindex σ W) := by
-  set P : Matrix (Fin D) (Fin D) ℂ := σ.toPEquiv.toMatrix
-  set Q : Matrix (Fin D) (Fin D) ℂ := σ.symm.toPEquiv.toMatrix
-  have hQP : Q * P = 1 := by
-    ext a b
-    simp [Q, P, PEquiv.mul_toMatrix_toPEquiv, Matrix.one_apply, PEquiv.toMatrix_apply]
-  have hPQ : P * Q = 1 := mul_eq_one_comm.mp hQP
-  have hdet : IsUnit P.det :=
-    (Matrix.isUnit_iff_isUnit_det P).mp ⟨⟨P, Q, hPQ, hQP⟩, rfl⟩
-  have hinv : P⁻¹ = Q := Matrix.inv_eq_right_inv hPQ
-  have hEq : bondReindex σ W = MPOTensor.virtualSandwich P W P⁻¹ := by
-    funext i j
-    rw [hinv, virtualSandwich_apply, PEquiv.toMatrix_toPEquiv_mul,
-      PEquiv.mul_toMatrix_toPEquiv]
-    simp [bondReindex]
-  rw [hEq]
-  exact joinedIn_sameMPOSet_virtualSandwich W hdet
-
-/-- Two standard forms with the same gates have the same periodic operators at
-every positive length. Source: arXiv:1703.09188, equation `StandardForm`,
-lines 603--617. -/
-theorem TwoSiteStandardFormData.mpo_eq_of_same_gates {W₁ : MPOTensor (d * d) D₁}
-    {W₂ : MPOTensor (d * d) D₂}
-    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
-    {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
-    (S₁ : TwoSiteStandardFormData W₁ u v) (S₂ : TwoSiteStandardFormData W₂ u v)
-    (N : ℕ) (hN : 0 < N) : mpo W₁ N = mpo W₂ N := by
-  have : NeZero N := ⟨hN.ne'⟩
-  have h₁ := TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted (N := N) W₁ u v S₁
-  have h₂ := TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted (N := N) W₂ u v S₂
-  exact (Matrix.reindex _ _).injective (h₁.trans h₂.symm)
-
-/-- **Two standard forms with the same gates are joined through tensors with
-the same periodic operators**, after adjoining unused bond directions. This
-is `TwoSiteStandardFormData.joinedIn_padBond` with the periodic operators kept
-fixed along the path. -/
-theorem TwoSiteStandardFormData.joinedIn_sameMPOSet_padBond {W₁ : MPOTensor (d * d) D₁}
-    {W₂ : MPOTensor (d * d) D₂}
-    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
-    {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
-    (S₁ : TwoSiteStandardFormData W₁ u v) (S₂ : TwoSiteStandardFormData W₂ u v) :
-    JoinedIn (SameMPOSet (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _)))
-      (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _))
-      (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) := by
-  let c : unitInterval → ℂ := fun t ↦ Complex.cos ((Real.pi / 2 * t : ℝ) : ℂ)
-  let s : unitInterval → ℂ := fun t ↦ Complex.sin ((Real.pi / 2 * t : ℝ) : ℂ)
-  have hc : Continuous c := by fun_prop
-  have hs : Continuous s := by fun_prop
-  let F : unitInterval → MPOTensor (d * d) (D₁ + D₂) := fun t ↦
-    tensorOfHalves (stackRight (c t) (s t) S₁.X₁ S₂.X₁) (stackLeft (c t) (s t) S₁.X₂ S₂.X₂) u
-  have hF : Continuous F :=
-    continuous_tensorOfHalves (continuous_stackRight hc hs _ _)
-      (continuous_stackLeft hc hs _ _) u
-  have h0 : F 0 = padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _) := by
-    rw [← S₁.tensorOfHalves_stack_one_zero S₂]
-    simp [F, c, s]
-  have h1 : F 1 = bondReindex (stackFlip D₁ D₂) (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) := by
-    rw [← S₁.tensorOfHalves_stack_zero_one S₂]
-    simp [F, c, s]
-  have hSt : ∀ t, TwoSiteStandardFormData (F t) u v := fun t ↦
-    S₁.stack S₂ (c t) (s t) (Complex.cos_sq_add_sin_sq _)
-  have hpath : JoinedIn (SameMPOSet (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _)))
-      (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _))
-      (bondReindex (stackFlip D₁ D₂) (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _))) := by
-    refine ⟨⟨⟨F, hF⟩, h0, h1⟩, fun t N hN ↦ ?_⟩
-    change mpo (F t) N = _
-    have h := (hSt t).mpo_eq_of_same_gates (hSt 0) N hN
-    rwa [h0] at h
-  have hW₂ : padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _) ∈
-      SameMPOSet (padBond W₁ (D₁ + D₂) (Nat.le_add_right _ _)) := by
-    intro N hN
-    have : NeZero N := ⟨hN.ne'⟩
-    rw [mpo_padBond, mpo_padBond]
-    exact S₂.mpo_eq_of_same_gates S₁ N hN
-  have hflip := (joinedIn_sameMPOSet_bondReindex
-    (padBond W₂ (D₁ + D₂) (Nat.le_add_left _ _)) (stackFlip D₁ D₂)).symm
-  refine hpath.trans (hflip.mono fun X hX N hN ↦ ?_)
-  rw [hX N hN]
-  exact hW₂ N hN
 
 /-- Physical relabelling depends continuously on the tensor. -/
 theorem continuous_reindexPhysical {d' : ℕ} (e : Fin d' ≃ Fin d) :
