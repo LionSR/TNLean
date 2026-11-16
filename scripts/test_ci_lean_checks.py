@@ -481,9 +481,28 @@ class FocusedRunnerTest(unittest.TestCase):
             ["TNLean/Bad.lean", "TNLean/Good.lean"], [], {}, {"TNLean.Bad": 3})
         self.assertEqual(code, 1)
         self.assertEqual([c.args[0] for c in build.call_args_list],
-                         [["TNLean.Bad"], ["TNLean.Good"]])
+                         [["TNLean.Bad", "TNLean.Good"], ["TNLean.Bad"], ["TNLean.Good"]])
         self.assertEqual(runner.call_args_list[0].args[0], ["TNLean/Good.lean"])
         self.assertFalse(any("TNLean/Bad.lean" in c.args[0] for c in runner.call_args_list))
+
+    def test_sources_are_prepared_by_one_build_and_checked_together(self):
+        sources = ["TNLean/A.lean", "TNLean/B.lean", "TNLean/C.lean"]
+        code, build, runner = self.run_checks(sources, [], {})
+        self.assertEqual(code, 0)
+        self.assertEqual([c.args[0] for c in build.call_args_list],
+                         [["TNLean.A", "TNLean.B", "TNLean.C"]])
+        self.assertEqual([c.args[0] for c in runner.call_args_list], [sources, []])
+
+    def test_prepared_sources_are_not_rebuilt_for_tests(self):
+        sources = ["TNLean/Core.lean", "TNLean/Other.lean"]
+        test = "scripts/core_regression.lean"
+        graph = {"scripts.core_regression": {"TNLean.Core"},
+                 "TNLean.Core": set(), "TNLean.Other": set()}
+        code, build, runner = self.run_checks(sources, [test], graph)
+        self.assertEqual(code, 0)
+        self.assertEqual([c.args[0] for c in build.call_args_list],
+                         [["TNLean.Core", "TNLean.Other"]])
+        self.assertEqual([c.args[0] for c in runner.call_args_list], [sources, [test]])
 
     def test_strict_and_timeout_failures_remain_nonzero(self):
         source = "TNLean/Good.lean"
