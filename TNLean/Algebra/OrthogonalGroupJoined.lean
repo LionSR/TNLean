@@ -182,8 +182,8 @@ private theorem mem_unitary_starAlgEquiv {R S : Type*} [Ring R] [StarRing R] [Ri
 in the orthogonal group.
 
 Source: arXiv:1703.09188, proof of Theorem `conjphs`, lines 1438--1442. -/
-theorem joined_one_unitaryGroup_real (A : unitaryGroup n ℝ) (hA : (A : Matrix n n ℝ).det = 1) :
-    Joined 1 A := by
+theorem joined_one_unitaryGroup_real (A : unitaryGroup n ℝ)
+    (hA : (A : Matrix n n ℝ).det = 1) : Joined 1 A := by
   let E := EuclideanSpace ℝ n
   let T := toEuclideanCLM (n := n) (𝕜 := ℝ)
   let U : unitary (E →L[ℝ] E) := ⟨T A, mem_unitary_starAlgEquiv T A.2⟩
@@ -195,7 +195,8 @@ theorem joined_one_unitaryGroup_real (A : unitaryGroup n ℝ) (hA : (A : Matrix 
   rw [MulEquiv.symm_apply_apply] at hJ
   have hc : Continuous fun f : E →L[ℝ] E ↦ T.symm f :=
     LinearMap.continuous_of_finiteDimensional T.symm.toAlgEquiv.toLinearMap
-  let ψ : unitary (E →L[ℝ] E) → unitaryGroup n ℝ := fun u ↦ ⟨T.symm u, mem_unitary_starAlgEquiv T.symm u.2⟩
+  let ψ : unitary (E →L[ℝ] E) → unitaryGroup n ℝ := fun u ↦
+    ⟨T.symm u, mem_unitary_starAlgEquiv T.symm u.2⟩
   have hψ : Continuous ψ := (hc.comp continuous_subtype_val).subtype_mk _
   have h1 : ψ 1 = 1 := Subtype.ext (map_one T.symm)
   have hU : ψ U = A := Subtype.ext (T.symm_apply_apply _)
