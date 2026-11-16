@@ -17,6 +17,11 @@ factors are explicit.
 
 Source: arXiv:1703.09188, equations `eq:defeq-sigma1` and
 `eq:unwind-dagger-trick`, lines 1657--1687.
+
+**Scope restriction (square supplied gates):** The supplied-form applications
+start with both intermediate spaces equal to the original spin space.
+Reduction from a general rectangular standard form is separate; see
+`docs/paper-gaps/mpu_printed_blocking_square_scope.tex`.
 -/
 
 open scoped Matrix Kronecker BigOperators

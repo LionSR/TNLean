@@ -13,6 +13,11 @@ import TNLean.Algebra.MatrixCyclicPathSum
 
 Source: arXiv:1703.09188, StandardForm, lines 603--617, and
 `prop:sigma1-and-sigma2-equal`, lines 1689--1700.
+
+**Scope restriction (square supplied gates):** The supplied-form applications
+start with both intermediate spaces equal to the original spin space.
+Reduction from a general rectangular standard form is separate; see
+`docs/paper-gaps/mpu_printed_blocking_square_scope.tex`.
 -/
 
 open scoped Matrix BigOperators

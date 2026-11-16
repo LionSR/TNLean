@@ -172,3 +172,25 @@ head needs fresh review and hosted checks; no stale approval is reused.
 
 OpenAI Codex (GPT-6) performed the source/ownership audit and wrote the
 proofs and documentation. Maintainer mathematical review remains required.
+
+## Final-head review follow-up
+
+Claude's mathematical review of `5aa775c` at
+[6905822515](https://github.com/LionSR/TNLean/pull/10690#issuecomment-6905822515)
+found no substantive mathematical, source-scope or ownership issue. The
+Codex and Copilot reviews identified documentation gaps: the source modules
+needed a direct scope-note path, and the rendered blueprint needed a cited
+published-URL bibliography entry. The follow-up adds the self-contained
+square-scope marker to all six module headers and a rendered citation.
+The statements and proof bodies are byte-identical to the reviewed head.
+
+The shared bibliography boundary was explicitly agreed with the active
+Claude conjugation owner in #10693:
+[6906027597](https://github.com/LionSR/TNLean/pull/10693#issuecomment-6906027597)
+and
+[6906039160](https://github.com/LionSR/TNLean/pull/10693#issuecomment-6906039160).
+Only the unique `gap:mpu_printed_blocking_square_scope` entry is added;
+existing entries and all other owner files remain untouched. The entry is
+placed away from that branch's insertion point. No direct session contact
+or wider ownership transfer is claimed. Fresh final-head validation and
+review are still required after this documentation-only change.

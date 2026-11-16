@@ -18,6 +18,11 @@ parity theorem then applies to these particular representatives.
 Source: arXiv:1703.09188, `prop:sigma1-and-sigma2-equal`, lines 1643--1733.
 The input is supplied square standard-form data; extracting square gates
 from a general symmetry-invariant presentation remains separate.
+
+**Scope restriction (square supplied gates):** The supplied-form applications
+start with both intermediate spaces equal to the original spin space.
+Reduction from a general rectangular standard form is separate; see
+`docs/paper-gaps/mpu_printed_blocking_square_scope.tex`.
 -/
 
 open Matrix
