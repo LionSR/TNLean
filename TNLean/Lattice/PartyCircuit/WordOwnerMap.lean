@@ -45,17 +45,17 @@ def mapOwner (f : P → Q) : {ℓ ℓ' : Layout P} → Word ℓ ℓ' →
     Word (Layout.mapOwner f ℓ) (Layout.mapOwner f ℓ')
   | _, _, .id ℓ => .id (Layout.mapOwner f ℓ)
   | _, _, .comp w v => .comp (mapOwner f w) (mapOwner f v)
-  | _, _, @Word.localMap _ p a b ha hb A ℓ =>
+  | _, _, @Circuit.localMap _ _ _ p a b ha hb A ℓ _ =>
       (Word.localMap (f p) (homogeneous_mapOwner f ha) (homogeneous_mapOwner f hb)
         (isoL (Layout.mapOwnerIso f b) ∘L A ∘L isoL (Layout.mapOwnerIso f a).symm)
         (Layout.mapOwner f ℓ)).castLayouts
           (Layout.mapOwner_append f a ℓ).symm (Layout.mapOwner_append f b ℓ).symm
-  | _, _, @Word.source _ p q hpq U V η ℓ => by
+  | _, _, Circuit.gate (@SourceGate.mk _ p q hpq U V η ℓ) => by
       classical
       exact if h : f p = f q then
         (localPairSource (f p) U V η (Layout.mapOwner f ℓ)).castLayouts rfl
           (by simp only [Layout.mapOwner_cons, h])
-      else .source h U V η (Layout.mapOwner f ℓ)
+      else Word.source h U V η (Layout.mapOwner f ℓ)
   | _, _, .swap r s ℓ => .swap ⟨f r.owner, r.space⟩ ⟨f s.owner, s.space⟩
       (Layout.mapOwner f ℓ)
   | _, _, .frame r w => .frame ⟨f r.owner, r.space⟩ (mapOwner f w)
@@ -65,13 +65,12 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–434
 and 565–588. -/
 theorem mapOwner_castLayouts (f : P → Q) {a b a' b' : Layout P}
     (w : Word a b) (ha : a = a') (hb : b = b') :
-    (w.castLayouts ha hb).mapOwner f =
+    Word.mapOwner f (w.castLayouts ha hb) =
       (w.mapOwner f).castLayouts (congrArg (Layout.mapOwner f) ha)
         (congrArg (Layout.mapOwner f) hb) := by
   cases ha
   cases hb
   rfl
-
 /-- Grouping owners preserves allowedness of the actual operations.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–427. -/
 theorem isAllowed_mapOwner (f : P → Q) {ℓ ℓ' : Layout P}
@@ -196,7 +195,7 @@ private theorem localSource_mapOwnerIso (f : P → Q) {p q : P} (hpq : p ≠ q)
     isoL (Layout.mapOwnerIso f (⟨p, U⟩ :: ⟨q, V⟩ :: ℓ)) ∘L
       (Word.source hpq U V η ℓ).eval := by
   ext x
-  rw [Word.eval_castLayouts]
+  rw [Circuit.eval_castLayouts]
   simp only [comp_apply, isoL_apply, Word.eval_localPairSource, appendLeft_apply,
     Word.eval_source]
   change Layout.memCongr (a := ⟨f p, U⟩ :: ⟨f p, V⟩ :: Layout.mapOwner f ℓ)
@@ -233,7 +232,7 @@ theorem eval_mapOwner (f : P → Q) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (x
         isoL (Layout.mapOwnerIso f (r :: ℓ')) ∘L (frame r w).eval := by
       apply clm_ext_tmul
       intro u z
-      change u ⊗ₜ (w.mapOwner f).eval (Layout.mapOwnerIso f ℓ z) =
+      change u ⊗ₜ (mapOwner f w).eval (Layout.mapOwnerIso f ℓ z) =
         u ⊗ₜ Layout.mapOwnerIso f ℓ' (w.eval z)
       rw [ih]
     exact DFunLike.congr_fun he x

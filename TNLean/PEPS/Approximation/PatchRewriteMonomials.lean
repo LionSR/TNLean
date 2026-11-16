@@ -224,7 +224,7 @@ theorem tagBraWord_props (tail : Layout Party) {S : Set Party} :
       obtain ⟨h₁, h₂, h₃⟩ := tagBraWord_props tail l
         (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh')) b.2
       exact ⟨⟨norm_regBra_le _ _, h₁⟩, ⟨hS h List.mem_cons_self, h₂⟩,
-        by simp [tagBraWord, Word.sourceCount, h₃]⟩
+        by simp [tagBraWord, Word.sourceCount, Circuit.gateCount, h₃]⟩
 
 theorem tagKetWord_props (tail : Layout Party) {S : Set Party} :
     (l : List (Hole pos q Party)) → (∀ h ∈ l, h.tagOwner ∈ S) → (a : TagSpace l) →
@@ -235,7 +235,7 @@ theorem tagKetWord_props (tail : Layout Party) {S : Set Party} :
       obtain ⟨h₁, h₂, h₃⟩ := tagKetWord_props tail l
         (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh')) a.2
       exact ⟨⟨h₁, norm_regKet_le _ _⟩, ⟨h₂, hS h List.mem_cons_self⟩,
-        by simp [tagKetWord, Word.sourceCount, h₃]⟩
+        by simp [tagKetWord, Word.sourceCount, Circuit.gateCount, h₃]⟩
 
 /-- **The tag maps of a branch.** On the registers of a frame with holes `U ++ A`, contract the
 tags of `A` with `⟨b|` and prepare tags of `A'` in `|a⟩`, each at its tag owner, leaving the tags
@@ -252,10 +252,10 @@ theorem eval_tagChangeWord (U A A' : List (Hole pos q Party)) (b : TagSpace A) (
     (tagChangeWord U A A' b a own).eval (layoutVec (U ++ A) own τ c) =
       (if (tagAppendEquiv U A τ).2 = b then (1 : ℂ) else 0) •
         layoutVec (U ++ A') own ((tagAppendEquiv U A').symm ((tagAppendEquiv U A τ).1, a)) c := by
-  simp only [tagChangeWord, Word.eval_comp, ContinuousLinearMap.comp_apply, layoutVec]
-  rw [eval_tagSplit, Word.eval_frameList_appendIso_symm, eval_tagBraWord,
+  simp only [tagChangeWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply, layoutVec]
+  rw [eval_tagSplit, Circuit.eval_frameList_appendIso_symm, eval_tagBraWord,
     TensorProduct.tmul_smul, LinearIsometryEquiv.map_smul, map_smul,
-    Word.eval_frameList_appendIso_symm, eval_tagKetWord, map_smul, eval_tagMerge]
+    Circuit.eval_frameList_appendIso_symm, eval_tagKetWord, map_smul, eval_tagMerge]
 
 theorem tagChangeWord_props (U A A' : List (Hole pos q Party)) (b : TagSpace A) (a : TagSpace A')
     (own : ι → Party) {S : Set Party} (hA : ∀ h ∈ A, h.tagOwner ∈ S)
@@ -270,8 +270,8 @@ theorem tagChangeWord_props (U A A' : List (Hole pos q Party)) (b : TagSpace A) 
       (Word.isAllowed_frameList_iff _ _).2 k₁, m.isAllowed⟩,
     ⟨s.usesOnly S, (Word.usesOnly_frameList_iff _ _ _).2 b₂,
       (Word.usesOnly_frameList_iff _ _ _).2 k₂, m.usesOnly S⟩, ?_⟩
-  simp only [tagChangeWord, Word.sourceCount, s.sourceCount_eq, m.sourceCount_eq,
-    Word.sourceCount_frameList, b₃, k₃]
+  simp only [tagChangeWord, Word.sourceCount, Circuit.gateCount, s.sourceCount_eq, m.sourceCount_eq,
+    Circuit.gateCount_frameList, b₃, k₃]
 
 theorem swapsMeet_tagBraWord (f : Party → Bool) (tail : Layout Party) :
     (l : List (Hole pos q Party)) → (b : TagSpace l) → (tagBraWord l b tail).SwapsMeet f

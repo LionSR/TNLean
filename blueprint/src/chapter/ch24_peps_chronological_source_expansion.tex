@@ -11,8 +11,6 @@ the subsequent separation and second-moment arguments.
 \begin{definition}[A chronological composition]
     \label{def:peps_source_circuit}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsAllowed}
     \leanok
     \uses{def:peps_prepared_source_gate,def:peps_party_registers}
     For a party set $P$, a chronological composition from register list $a$ to
@@ -27,7 +25,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[Norm of the complete composition]
     \label{thm:peps_source_circuit_norm}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_eval_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Circuit.norm_eval_le_one}
     \leanok
     \uses{def:peps_source_circuit}
     Every allowed chronological composition satisfies $\|W\|\leq1$.
@@ -43,12 +41,12 @@ the subsequent separation and second-moment arguments.
 
 \begin{definition}[Gate occurrences and source positions]
     \label{def:peps_source_circuit_positions}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gateLocationsFintype}
+    \lean{TNLean.Lattice.PartyCircuit.Circuit.gateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.Circuit.gateLocationsFintype}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotCount}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceLocations}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceLocationsFintype}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants}
+    \lean{TNLean.Lattice.PartyCircuit.Circuit.participants}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabels}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabelsFintype}

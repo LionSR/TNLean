@@ -200,6 +200,6 @@ theorem exists_partial_source_preparation (A : P → Bool) {a b : Layout P}
   · intro ξ
     simp only [Word.sources, Word.sources_localPart, hds, List.nil_append]
   · intro ξ
-    rw [Word.eval_comp, comp_assoc, hde, Word.eval_eq_localPart_comp_prepare]
+    rw [Circuit.eval_comp, comp_assoc, hde, Word.eval_eq_localPart_comp_prepare]
 
 end TNLean.Lattice.PartyCircuit.SourceCircuit

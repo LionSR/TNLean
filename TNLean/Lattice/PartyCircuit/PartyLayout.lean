@@ -143,7 +143,7 @@ theorem gateIso_prepGate : (L : PartyGate ℓX ℓY) → (x : Mem ℓY) →
     gateIso m L ((prepGate m L).eval x) = x ⊗ₜ inventoryVector m (toGate L)
   | [], x => rfl
   | p :: L, x => by
-      simp only [prepGate, Word.eval_comp, comp_apply]
+      simp only [prepGate, Circuit.eval_comp, comp_apply]
       rw [gateIso_cons, PartyChain.stackAppIso_prepStack, iso_rTensor_apply, rTensor_tmul]
       simp only [isoL_apply]
       rw [gateIso_prepGate L x]

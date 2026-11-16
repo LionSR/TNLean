@@ -102,22 +102,153 @@ theorem exists_prepared_effectReplacement {P : Type} [Finite P] {a b : Layout P}
 
 variable {P : Type}
 
-/-- Original chronological gates, including the actual effectful expansions.
+/-- A nonprivate gate: a weighted list of party chains on the registers of the participating
+parties `C`, embedded among all parties by `owner`, next to the untouched registers `tail`.
 Source: polynomial-PEPS 04-compression.tex, lines 21–36 and 199–229. -/
-inductive EffectCircuit : Layout P → Layout P → Type 1
-  | id (a : Layout P) : EffectCircuit a a
-  | comp {a b d : Layout P} (w : EffectCircuit a b) (v : EffectCircuit b d) :
-      EffectCircuit a d
-  | localMap (p : P) {a b : Layout P}
-      (ha : ∀ r ∈ a, r.owner = p) (hb : ∀ r ∈ b, r.owner = p)
-      (A : Mem a →L[ℂ] Mem b) (tail : Layout P) :
-      EffectCircuit (a ++ tail) (b ++ tail)
-  | gate {C : Type} [Fintype C] (owner : C ↪ P) {a b : Layout C}
+inductive EffectGate : Layout P → Layout P → Type 1
+  | mk {C : Type} [Fintype C] (owner : C ↪ P) {a b : Layout C}
       (L : PartyGate a b) (tail : Layout P) :
-      EffectCircuit (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail)
-  | swap (r s : Reg P) (tail : Layout P) : EffectCircuit (r :: s :: tail) (s :: r :: tail)
-  | frame (r : Reg P) {a b : Layout P} (w : EffectCircuit a b) :
-      EffectCircuit (r :: a) (r :: b)
+      EffectGate (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail)
+
+namespace EffectGate
+
+/-- The original actual memory map of a nonprivate gate, with all spectator identities.
+Source: polynomial-PEPS 04-compression.tex, lines 21–36. -/
+@[simp] def eval : {a b : Layout P} → EffectGate a b → (Mem a →L[ℂ] Mem b)
+  | _, _, @EffectGate.mk _ _ _ owner a b L tail =>
+      isoL (appendIso (Layout.mapOwner owner b) tail).symm ∘L
+        (isoL (Layout.mapOwnerIso owner b) ∘L PartyCircuit.gate (toGate L) ∘L
+          isoL (Layout.mapOwnerIso owner a).symm).rTensor (Mem tail) ∘L
+        isoL (appendIso (Layout.mapOwner owner a) tail)
+
+/-- A nonprivate gate is allowed when its monomials are allowed and its operator is a
+contraction. These are precisely gate and monomial contraction conditions; input states
+and density comparisons are not part of this predicate.
+Source: polynomial-PEPS 04-compression.tex, lines 28–35 and 55–57. -/
+@[simp] def IsAllowed : {a b : Layout P} → EffectGate a b → Prop
+  | _, _, @EffectGate.mk _ _ _ _ _ _ L _ =>
+      (∀ q ∈ L, q.2.IsAllowed) ∧ ‖PartyCircuit.gate (toGate L)‖ ≤ 1
+
+/-- The participating parties of a nonprivate gate.
+Source: polynomial-PEPS 04-compression.tex, lines 25–27 and 229. -/
+@[simp] def participants : {a b : Layout P} → EffectGate a b → Finset P
+  | _, _, @EffectGate.mk _ _ _ owner _ _ _ _ => Finset.univ.map owner
+
+/-- An allowed nonprivate gate is a contraction.
+Source: polynomial-PEPS 04-compression.tex, lines 215–217. -/
+theorem norm_eval_le_one : {a b : Layout P} → (g : EffectGate a b) → g.IsAllowed →
+    ‖g.eval‖ ≤ 1
+  | _, _, @EffectGate.mk _ _ _ _ _ _ _ tail, hw =>
+      norm_comp_le_one (LinearIsometry.norm_toContinuousLinearMap_le _)
+        (norm_comp_le_one ((norm_rTensor_le (Mem tail) _).trans
+          (norm_comp_le_one (LinearIsometry.norm_toContinuousLinearMap_le _)
+            (norm_comp_le_one hw.2 (LinearIsometry.norm_toContinuousLinearMap_le _))))
+          (LinearIsometry.norm_toContinuousLinearMap_le _))
+
+end EffectGate
+
+/-- Nonprivate gates as a gate family.
+Source: polynomial-PEPS 04-compression.tex, lines 21–36 and 215–217. -/
+instance : GateFamily (EffectGate (P := P)) where
+  eval := EffectGate.eval
+  IsAllowed := EffectGate.IsAllowed
+  norm_eval_le_one := EffectGate.norm_eval_le_one
+  participants := EffectGate.participants
+
+@[simp] theorem EffectGate.gateFamily_eval {a b : Layout P} (g : EffectGate a b) :
+    GateFamily.eval g = g.eval :=
+  rfl
+
+@[simp] theorem EffectGate.gateFamily_isAllowed {a b : Layout P} (g : EffectGate a b) :
+    GateFamily.IsAllowed g ↔ g.IsAllowed :=
+  Iff.rfl
+
+@[simp] theorem EffectGate.gateFamily_participants {a b : Layout P} (g : EffectGate a b) :
+    GateFamily.participants g = g.participants :=
+  rfl
+
+/-- Original chronological gates, including the actual effectful expansions: circuits whose
+gates are nonprivate gates, with arbitrary local maps.
+Source: polynomial-PEPS 04-compression.tex, lines 21–36 and 199–229. -/
+abbrev EffectCircuit : Layout P → Layout P → Type 1 := Circuit LocalCondition.any EffectGate
+
+namespace EffectCircuit
+
+/-- The empty circuit. -/
+@[match_pattern] abbrev id (ℓ : Layout P) : EffectCircuit ℓ ℓ :=
+  Circuit.id (κ := LocalCondition.any) (G := EffectGate) ℓ
+
+/-- Composition, in chronological order. -/
+@[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : EffectCircuit ℓ₁ ℓ₂) (w'
+    : EffectCircuit ℓ₂ ℓ₃) :
+    EffectCircuit ℓ₁ ℓ₃ :=
+  Circuit.comp (κ := LocalCondition.any) (G := EffectGate) w w'
+
+/-- A local map on registers of one party, next to untouched registers. -/
+@[match_pattern] abbrev localMap (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
+    (h₂ : ∀ r ∈ ℓ₂, r.owner = p) (U : Mem ℓ₁ →L[ℂ] Mem ℓ₂) (ℓ : Layout P) :
+    EffectCircuit (ℓ₁ ++ ℓ) (ℓ₂ ++ ℓ) :=
+  Circuit.localMap p h₁ h₂ U ℓ True.intro
+
+/-- Exchange of two adjacent tensor factors. -/
+@[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : EffectCircuit (r :: r' :: ℓ)
+    (r' :: r :: ℓ) :=
+  Circuit.swap (κ := LocalCondition.any) (G := EffectGate) r r' ℓ
+
+/-- A circuit next to an untouched register. -/
+@[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : EffectCircuit ℓ ℓ') :
+    EffectCircuit (r :: ℓ) (r :: ℓ') :=
+  Circuit.frame (κ := LocalCondition.any) (G := EffectGate) r w
+
+/-- A nonprivate gate as a circuit. -/
+@[match_pattern] abbrev gate {C : Type} [Fintype C] (owner : C ↪ P) {a b : Layout C}
+    (L : PartyGate a b) (tail : Layout P) :
+    EffectCircuit (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail) :=
+  Circuit.gate (EffectGate.mk owner L tail)
+
+/-- A circuit framed by a list of untouched registers. -/
+abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : EffectCircuit ℓ ℓ') :
+    EffectCircuit (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
+  Circuit.frameList (κ := LocalCondition.any) (G := EffectGate) ℓ₀ w
+
+/-- Identify equal input and output layouts without adding an operation. -/
+abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : EffectCircuit ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
+    EffectCircuit a b :=
+  Circuit.castLayouts (κ := LocalCondition.any) (G := EffectGate) w h h'
+
+/-- Induction on the constructors of `EffectCircuit`. -/
+@[induction_eliminator, elab_as_elim]
+theorem induction {motive : {ℓ ℓ' : Layout P} → EffectCircuit ℓ ℓ' → Prop}
+    (id : ∀ ℓ : Layout P, motive (EffectCircuit.id ℓ))
+    (comp : ∀ {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : EffectCircuit ℓ₁ ℓ₂) (w' : EffectCircuit ℓ₂ ℓ₃),
+      motive w → motive w' → motive (EffectCircuit.comp w w'))
+    (localMap : ∀ (p : P) {ℓ₁ ℓ₂ : Layout P} (h₁ : ∀ r ∈ ℓ₁, r.owner = p)
+      (h₂ : ∀ r ∈ ℓ₂, r.owner = p) (U : Mem ℓ₁ →L[ℂ] Mem ℓ₂) (ℓ : Layout P),
+      motive (EffectCircuit.localMap p h₁ h₂ U ℓ))
+    (gate : ∀ {C : Type} [Fintype C] (owner : C ↪ P) {a b : Layout C} (L : PartyGate a b)
+      (tail : Layout P), motive (EffectCircuit.gate owner L tail))
+    (swap : ∀ (r r' : Reg P) (ℓ : Layout P), motive (EffectCircuit.swap r r' ℓ))
+    (frame : ∀ (r : Reg P) {ℓ ℓ' : Layout P} (w : EffectCircuit ℓ ℓ'),
+      motive w → motive (EffectCircuit.frame r w))
+    {ℓ ℓ' : Layout P} (w : EffectCircuit ℓ ℓ') : motive w := by
+  induction w with
+  | id ℓ₀ => exact id ℓ₀
+  | comp w w' ih ih' => exact comp w w' ih ih'
+  | localMap p h₁ h₂ U ℓ => exact localMap p h₁ h₂ U ℓ
+  | gate g => cases g with | mk owner L tail => exact gate owner L tail
+  | swap r r' ℓ => exact swap r r' ℓ
+  | frame r w ih => exact frame r w ih
+
+theorem eval_gate {C : Type} [Fintype C] (owner : C ↪ P) {a b : Layout C}
+    (L : PartyGate a b) (tail : Layout P) :
+    (gate owner L tail).eval =
+      isoL (appendIso (Layout.mapOwner owner b) tail).symm ∘L
+        (isoL (Layout.mapOwnerIso owner b) ∘L PartyCircuit.gate (toGate L) ∘L
+          isoL (Layout.mapOwnerIso owner a).symm).rTensor (Mem tail) ∘L
+        isoL (appendIso (Layout.mapOwner owner a) tail) :=
+  rfl
+
+end EffectCircuit
 
 /-- A normalized product input with independently recorded register occurrences.
 Source: polynomial-PEPS 04-compression.tex, lines 137–139. -/
@@ -148,50 +279,6 @@ def ofParties (H : P → HSpace) (x : ∀ p, H p) (hx : ∀ p, ‖x p‖ = 1) :
   | p :: ps => .cons ⟨p, H p⟩ (x p) (hx p) (ofParties H x hx ps)
 end ProductInput
 
-namespace EffectCircuit
-/-- The original actual memory map, with all spectator identities.
-Source: polynomial-PEPS 04-compression.tex, lines 21–36. -/
-def eval : {a b : Layout P} → EffectCircuit a b → Mem a →L[ℂ] Mem b
-  | _, _, .id _ => .id ℂ _
-  | _, _, .comp w v => v.eval ∘L w.eval
-  | _, _, .localMap p ha hb A tail => (Word.localMap p ha hb A tail).eval
-  | _, _, @EffectCircuit.gate _ C _ owner a b L tail =>
-      isoL (appendIso (Layout.mapOwner owner b) tail).symm ∘L
-        (isoL (Layout.mapOwnerIso owner b) ∘L PartyCircuit.gate (toGate L) ∘L
-          isoL (Layout.mapOwnerIso owner a).symm).rTensor (Mem tail) ∘L
-        isoL (appendIso (Layout.mapOwner owner a) tail)
-  | _, _, .swap r s tail => (Word.swap r s tail).eval
-  | _, _, .frame r w => w.eval.lTensor r.space
-
-/-- These are precisely gate and monomial contraction conditions. Input states
-and density comparisons are not fields of this predicate.
-Source: polynomial-PEPS 04-compression.tex, lines 28–35 and 55–57. -/
-def IsAllowed : {a b : Layout P} → EffectCircuit a b → Prop
-  | _, _, .id _ => True
-  | _, _, .comp w v => w.IsAllowed ∧ v.IsAllowed
-  | _, _, .localMap _ _ _ A _ => ‖A‖ ≤ 1
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ =>
-      (∀ q ∈ L, q.2.IsAllowed) ∧ ‖PartyCircuit.gate (toGate L)‖ ≤ 1
-  | _, _, .swap .. => True
-  | _, _, .frame _ w => w.IsAllowed
-/-- Original chronological evaluation is a contraction.
-Source: polynomial-PEPS 04-compression.tex, lines 215–217. -/
-theorem norm_eval_le_one {a b : Layout P} (w : EffectCircuit a b)
-    (hw : w.IsAllowed) : ‖w.eval‖ ≤ 1 := by
-  induction w with
-  | id => exact norm_id_le
-  | comp w v ihw ihv => exact norm_comp_le_one (ihv hw.2) (ihw hw.1)
-  | localMap p ha hb A tail =>
-      exact Word.norm_eval_le_one (.localMap p ha hb A tail) (show ‖A‖ ≤ 1 from hw)
-  | @gate C _ owner a b L tail =>
-      exact norm_comp_le_one (LinearIsometry.norm_toContinuousLinearMap_le _)
-        (norm_comp_le_one ((norm_rTensor_le (Mem tail) _).trans
-          (norm_comp_le_one (LinearIsometry.norm_toContinuousLinearMap_le _)
-            (norm_comp_le_one hw.2 (LinearIsometry.norm_toContinuousLinearMap_le _))))
-          (LinearIsometry.norm_toContinuousLinearMap_le _))
-  | swap r s tail => exact Word.norm_eval_le_one (.swap r s tail) trivial
-  | frame r w ih => exact (norm_lTensor_le r.space _).trans (ih hw)
-end EffectCircuit
 namespace SourceCircuit
 /-- Regard an actual word without sources as a circuit of exact operations.
 Source: polynomial-PEPS 04-compression.tex, lines 21–36 and 210–217. -/
@@ -201,7 +288,7 @@ def ofLocalWord : {a b : Layout P} → (w : Word a b) → w.sources = [] → Sou
       .comp (ofLocalWord w (List.append_eq_nil_iff.mp h).2)
         (ofLocalWord v (List.append_eq_nil_iff.mp h).1)
   | _, _, .localMap p ha hb A tail, _ => .localMap p ha hb A tail
-  | _, _, .source .., h => nomatch h
+  | _, _, Word.source .., h => nomatch h
   | _, _, .swap r s tail, _ => .swap r s tail
   | _, _, .frame r w, h => .frame r (ofLocalWord w h)
 
@@ -212,13 +299,13 @@ theorem eval_ofLocalWord {a b : Layout P} (w : Word a b) (h : w.sources = []) :
   induction w with
   | id => rfl
   | comp w v ihw ihv =>
-      simp only [ofLocalWord, SourceCircuit.eval, Word.eval]
+      simp only [ofLocalWord, Circuit.eval, Circuit.eval]
       rw [ihw _, ihv _]
   | localMap => rfl
   | source => cases h
   | swap => rfl
   | frame r w ih =>
-      simp only [ofLocalWord, SourceCircuit.eval, Word.eval]
+      simp only [ofLocalWord, Circuit.eval, Circuit.eval]
       rw [ih h]
 
 /-- Exact local and permutation operations remain allowed after conversion.
@@ -247,34 +334,6 @@ theorem eval_exchangeBlocks (a b tail : Layout P) :
     (exchangeBlocks a b tail).eval = (Word.exchangeBlocks a b tail).eval :=
   eval_ofLocalWord _ _
 
-/-- All previously retained registers remain spectators of the later circuit.
-Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
-def frameList {a b : Layout P} (rs : Layout P) (w : SourceCircuit a b) :
-    SourceCircuit (rs ++ a) (rs ++ b) :=
-  match rs with
-  | [] => w
-  | r :: rest => .frame r (frameList rest w)
-
-/-- Retaining registers does not alter allowedness of later gates.
-Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
-theorem isAllowed_frameList {a b : Layout P} (w : SourceCircuit a b)
-    (hw : w.IsAllowed) (rs : Layout P) : (w.frameList rs).IsAllowed := by
-  induction rs with
-  | nil => exact hw
-  | cons r rs ih => exact ih
-
-/-- The actual evaluation acts as the identity on arbitrary retained vectors.
-Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
-theorem eval_frameList_tmul {a b : Layout P} (w : SourceCircuit a b)
-    (rs : Layout P) (x : Mem rs) (y : Mem a) :
-    (w.frameList rs).eval ((appendIso rs a).symm (x ⊗ₜ[ℂ] y)) =
-      (appendIso rs b).symm (x ⊗ₜ[ℂ] w.eval y) := by
-  induction rs with
-  | nil => exact map_smul w.eval x y
-  | cons r rs ih =>
-      induction x using TensorProduct.inductionOn with
-      | tmul u v => exact congrArg (fun z => u ⊗ₜ[ℂ] z) (ih v)
-      | add x z hx hz => simp only [TensorProduct.add_tmul, map_add, hx, hz]
 end SourceCircuit
 namespace Word
 /-- Prepare a normalized private vector without any pair source.
@@ -293,7 +352,7 @@ theorem isAllowed_localPrepare (r : Reg P) (x : r.space) (hx : ‖x‖ = 1)
 Source: polynomial-PEPS 04-compression.tex, lines 137–139. -/
 theorem eval_localPrepare (r : Reg P) (x : r.space) (a : Layout P) (y : Mem a) :
     (localPrepare r x a).eval y = x ⊗ₜ[ℂ] y := by
-  simp [localPrepare, Word.eval, appendIso, appendLeft,
+  simp [localPrepare, Circuit.eval, appendIso, appendLeft,
     LinearIsometryEquiv.symm_lTensor]
 end Word
 
@@ -354,7 +413,7 @@ Source: polynomial-PEPS 04-compression.tex, lines 103–112. -/
 def IsPreparation : {a b : Layout P} → Word a b → Prop
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsPreparation ∧ v.IsPreparation
-  | _, _, .source .. => True
+  | _, _, Word.source .. => True
   | _, _, .localMap .. => False
   | _, _, .swap .. => False
   | _, _, .frame .. => False
@@ -569,27 +628,6 @@ theorem partitionIso_symm_mapOwner_vector {Q : Type} (g : P → Q) (f : Q → Bo
   rw [partitionIso_symm_vector, mapOwnerIso_vector]
 end ProductInput
 namespace SourceCircuit
-/-- Identify equal register layouts without adding a gate or changing its parties.
-Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
-def castLayouts {a b a' b' : Layout P} (w : SourceCircuit a b)
-    (h : a = a') (h' : b = b') : SourceCircuit a' b' := h ▸ h' ▸ w
-
-/-- Layout identification preserves the original contraction conditions.
-Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
-theorem isAllowed_castLayouts {a b a' b' : Layout P} (w : SourceCircuit a b)
-    (h : a = a') (h' : b = b') : (w.castLayouts h h').IsAllowed ↔ w.IsAllowed := by
-  cases h
-  cases h'
-  rfl
-
-/-- Equal layouts are identified by their canonical isometries in the actual evaluation.
-Source: polynomial-PEPS 04-compression.tex, lines 210–217. -/
-theorem eval_castLayouts {a b a' b' : Layout P} (w : SourceCircuit a b)
-    (h : a = a') (h' : b = b') : (w.castLayouts h h').eval =
-      isoL (Layout.memCongr h') ∘L w.eval ∘L isoL (Layout.memCongr h).symm := by
-  cases h
-  cases h'
-  rfl
 end SourceCircuit
 
 end TNLean.Lattice.PartyCircuit

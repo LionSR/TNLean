@@ -34,7 +34,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43 and 590
   | _, _, .id _ => PUnit
   | _, _, .comp w v => GateLists w × GateLists v
   | _, _, .localMap .. => PUnit
-  | _, _, @EffectCircuit.gate _ _ _ _ a b _ _ => PartyGate a b
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ a b _ _) => PartyGate a b
   | _, _, .swap .. => PUnit
   | _, _, .frame _ w => GateLists w
 
@@ -45,7 +45,7 @@ def reexpand : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, .id a, _ => .id a
   | _, _, .comp w v, lists => .comp (w.reexpand lists.1) (v.reexpand lists.2)
   | _, _, .localMap p ha hb A tail, _ => .localMap p ha hb A tail
-  | _, _, @EffectCircuit.gate _ _ _ owner _ _ _ tail, lists => .gate owner lists tail
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ owner _ _ _ tail), lists => .gate owner lists tail
   | _, _, .swap r s tail, _ => .swap r s tail
   | _, _, .frame r w, lists => .frame r (w.reexpand lists)
 
@@ -57,7 +57,7 @@ def reexpandGateMaps : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, .comp w v, lists, G =>
       (w.reexpandGateMaps lists.1 G.1, v.reexpandGateMaps lists.2 G.2)
   | _, _, .localMap .., _, _ => PUnit.unit
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ _ _, _, G => G
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ _ _), _, G => G
   | _, _, .swap .., _, _ => PUnit.unit
   | _, _, .frame _ w, lists, G => w.reexpandGateMaps lists G
 
@@ -87,7 +87,7 @@ def reexpandLocationsEquiv : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, .comp w v, lists => Equiv.sumCongr
       (w.reexpandLocationsEquiv lists.1) (v.reexpandLocationsEquiv lists.2)
   | _, _, .localMap .., _ => Equiv.refl _
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ _ _, _ => Equiv.refl _
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ _ _), _ => Equiv.refl _
   | _, _, .swap .., _ => Equiv.refl _
   | _, _, .frame _ w, lists => w.reexpandLocationsEquiv lists
 
