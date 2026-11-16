@@ -40,6 +40,16 @@ cross contractions of the endpoint action maps of `x → y`, as in the source's
 equality of L-symbols is needed for the action. Fusion and the ground-space
 claims are treated separately.
 
+**Scope restriction (sector-separated blocks):** the endpoint blocks are
+square-alphabet tensors placed in disjoint physical sectors, that is, the
+local Hilbert space is already the span `⊕ₓ ℂ^{D^p_x} ⊗ ℂ^{D^p_x}` of the
+block-diagonal tensor. The source takes this restriction without loss of
+generality (lines 317 and 1584--1586); its derivation from block-injective
+tensors on an arbitrary common physical alphabet is not formalized. The
+injectivity of the common MPO, the ground space of the path Hamiltonians, and
+their commutation with the common MPO are not asserted. See
+`docs/paper-gaps/glm23_block_injective_mixed_path.tex`.
+
 Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,
 lines 1695--1775, with `defAgamma` and `Agammasym`.
 -/
