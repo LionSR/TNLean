@@ -189,7 +189,7 @@ theorem rightRank_blockTensor_rightShiftTensor (k : ℕ) :
     r[blockTensor (rightShiftTensor d) (k + 1)] = d ^ (k + 2) := by
   rw [rightRank, sourceCutM₁_blockTensor_rightShiftTensor, Matrix.rank_submatrix,
     Matrix.rank_one]
-  simp [Kraus.blockPhysDim, Kraus.blockPhysDim_eq_pow, pow_succ]
+  simp [Kraus.blockPhysDim, pow_succ]
   ring
 
 /-- The second source cut of the blocked right shift factors through the
