@@ -49,6 +49,7 @@ import TNLean.Algebra.ConvexWeightsCompactness
 import TNLean.Algebra.CoreWordCoefficients
 import TNLean.Algebra.CoveringMatching
 import TNLean.Algebra.CycleLaplacianFourier
+import TNLean.Algebra.CyclicCornerPerturbation
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.DependentSequence
