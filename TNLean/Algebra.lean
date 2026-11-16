@@ -109,6 +109,7 @@ import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
 import TNLean.Algebra.KroneckerLeastEigenvalue
+import TNLean.Algebra.KroneckerLocalSection
 import TNLean.Algebra.LSymbol
 import TNLean.Algebra.LSymbolActionMatrix
 import TNLean.Algebra.LSymbolBlockIndependence
