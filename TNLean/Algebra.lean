@@ -273,4 +273,5 @@ import TNLean.Algebra.UnitaryVectorSwap
 import TNLean.Algebra.WeightedLowRestriction
 import TNLean.Algebra.WordAlgebra
 import TNLean.Algebra.WordAlgebraNilpotent
+import TNLean.Algebra.ZMod2Representation
 import TNLean.Algebra.ZModSmallDifference

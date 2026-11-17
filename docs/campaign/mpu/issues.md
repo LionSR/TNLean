@@ -14,7 +14,7 @@ even length; the printed all-length converse fails
 (`docs/paper-gaps/mpu_standard_form_parity_gap.tex`).
 
 Out of scope here: the MPO-symmetry campaign (tracker #8012, #8048–#8060, #8321,
-#8322), #7574 (pull request #10640), and `mpu`-labelled issues about other papers
+#8322), and `mpu`-labelled issues about other papers
 (#10521, #8040, #8011, #8273, #8315, #8319, #8320). The MPU–QCA and gauging issues
 #5710, #6028, #7036 were handed over to QCALean (see `docs/related_libraries.md`).
 
@@ -51,8 +51,19 @@ Out of scope here: the MPO-symmetry campaign (tracker #8012, #8048–#8060, #832
 | #7111 | `prop:sigma1-and-sigma2-equal`, blocking parity of σ (equation `eq:unwind-dagger-trick`) | 1643–1655, proof 1657–1733 | `TwoSiteStandardFormData.timeReversalSign_blocking_parity` (`TimeReversalBlockingParity.lean`), from the intrinsic parity in `IntrinsicBlockingParity.lean` | Proved (#10770) for arbitrary standard-form gates of each blocking, as the source allows ("we can choose the representations at will", lines 1657–1658); the sequential unwinding is replaced by the intrinsic trace parity, Local fix (proof route) in `docs/paper-gaps/mpu_time_reversal_blocking_parity_route.tex` |
 | #7110 | unnumbered corollary `cor:sigma-equivalence-necessary`: σ is a necessary invariant of equivalence | 1736–1743 | `StrictlyEquivalentUnderSymmetry.timeReversalSign_eq` (`TimeReversalStrictEquivalence.lean`); `timeReversalSign_eq_of_blocked_ancilla_strictlyEquivalent`, `EquivalentUnderSymmetry.timeReversalSign_eq` (`TimeReversalEquivalence.lean`) | Proved (#10773, #10775). The non-strict part uses the canonical time-reversal family, for which the coherent-family restriction of `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex` is discharged, and assumes no coprimality of the ancillas |
 | #7023 | `prop:mps-class-eq-mpu-class-for-conjugation`, `prop:dagger-mps-class-and-mpu-class-equal` (equation `eq:mps-class-gauge-trafo`) | 1748–1789, 1791–1805, 1808–1829 | `IsMPUCanonicalFormII.mps_conjugation_sign_iff` (`ConjugationMPSClass.lean`), `equivalentUnderSymmetry_conjugation_iff_mps_sign` (`ConjugationMPSPhase.lean`); `IsMPUCanonicalFormII.mps_timeReversal_sign_eq` (`TimeReversalMPSClass.lean`) | Proved (#10730, #10732, #10776); the conjugation proposition needs no parity hypothesis and carries the Local fix (missing argument) of `cor:equiv-under-conjugation` |
+| #10781 | gate-level local certificates for `PropChiral` and `prop:local-char-transposition` (no canonical form) | 1214–1252, 1266–1288 | `TimeReversalGateCertificate.lean`, `TranspositionGateCertificate.lean`; `mpo_standardFormTensorOfGates_even_eq_transpose_of_transposition_certificate` | Proved (#10799, #10806); the canonical-form-II hypothesis is dropped from both supplied criteria |
 
 ## Examples (tracker #5715)
 
-Open stream #6290 (symmetry phases of shift families) has only #7574 open, handled
-by pull request #10640.
+| Issue | Source result | Lines | Lean on main | Status |
+|---|---|---|---|---|
+| #5715 | `example:czx`, `ex:dagger-all-but-czx` (time-reversal signs of the CZX examples) | 1914–1958 | `MPOTensor.TimeReversalExamples.timeReversalSigns_czx`, `timeReversalSigns_one` and companions (`TimeReversalSecondSigns.lean`, `TimeReversalTraceSigns.lean`) | Proved (#10766, #10782), including time-reversal invariance and both signs |
+| #5715 | `ex:all-phases-under-conjugation` | 1850–1870, check 1871–1876 | `MPOTensor.ConjugationExamples.conjugation_caseI_gates` (gate invariants); `conjugation_oddRank_two_phases` | Gate invariants proved (#10790), with the Local fix `docs/paper-gaps/mpu_conjugation_example_r_side.tex`; odd-rank half proved (#10807) through the canonical-form representative of #10804; even-rank half open, waiting on the "only if" of `prop:conjsym-strict-equiv` |
+| #10804 | a canonical-form tensor realizing the MPU of given standard-form gates (needed by the examples) | 603–622, 258–267 | `MPOTensor.exists_isMPUCanonicalForm_twoSiteStandardFormData` (`StandardFormCanonicalRepresentative.lean`) | Proved (#10807), bond the operator-Schmidt rank of `v` |
+| #7574 | `lemma:sym-trafo-swap` | 2065–2074, proof 2076–2085 | `strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff`, `_shiftSwapTranspose_iff`, `_conjugation_ketLeftMul_swap_iff` | Proved (#10640, #10810) under the strict reading fixed by the section (lines 725–730, 2071–2078, 2208) |
+| #5715 | `prop:U2-U3-trivial-conjugation` | 2130–2134 | `MPOTensor.shiftExampleU₂_strictlyEquivalentUnderSymmetry_conjugation` | Proved (#10796) for every `d` |
+| #5715 | `prop:U2-U3-trivial-tr-transpose` | 2137–2141, proof 2143–2155 | `MPOTensor.shiftExampleTildeU₂_strictlyEquivalentUnderSymmetry_dagger`, `_transpose` (`ShiftTildeSymmetricPhases.lean`) | Proved (#10798) |
+| #5715 | `prop:eqiv-U1-U2-conjugate` | 2164–2172, proof 2174–2191 | — | Open: its "different phases when d = 4k+2" clause needs the "only if" of `prop:conjsym-strict-equiv` |
+| #5715 | `prop:U1-U2-equiv-ancillatrick` | 2210–2215, proof 2225–2235 | level-triangular bridge `IsLevelTriangular` (#10800) | Open, parked: the endpoint reduction has a spectator loop; plan and estimate recorded on #5715 |
+
+The admissible twin nodes of these and of the conjugation classification were deleted as scaffolding (#10750, #10789, #10809), and so were the supplied local-action nodes, which state no source result (#10829; lines 2300–2310, QCALean handover).
