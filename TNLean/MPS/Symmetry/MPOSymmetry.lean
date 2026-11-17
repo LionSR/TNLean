@@ -17,6 +17,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedParentCommutation
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedPathGap
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedWeakHopf
+import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedWeakHopfParent
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
@@ -110,6 +111,8 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSwap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointTripleMaps
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointUniformPathGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointZeroSectorGap
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedWeakHopfAverage
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedWeakHopfRealizationObstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.PBCGroupProjector
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks

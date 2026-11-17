@@ -1,0 +1,114 @@
+\section{Completed integral averages on the active mixed space}
+\label{sec:mpo_mixed_wha_parent}
+
+The weak-Hopf construction of Appendix B of
+\cite{GarreRubio2023MPOSym} applies to the active physical space of the
+mixed interpolation. The literal enlarged tensor has an obstruction to a
+unital realization. The conditional construction below distinguishes
+averaging from the two ambient-complement penalties; the realization
+from fusion data remains a separate hypothesis
+\cite{gap:glm23_mixed_weak_hopf_realization}.
+
+\begin{lemma}[Zero physical summands obstruct unital realization]
+    \label{lem:mpo_mixed_wha_obstruction}
+    \leanok
+    \lean{MPOTensor.WeakHopfRepresentation.tensor_diag_ne_zero,
+        MPSTensor.MPOSymmetry.commonFixedPointInclusion_last_row,
+        MPSTensor.MPOSymmetry.commonFixedPointInclusion_middle_row,
+        MPSTensor.MPOSymmetry.changePhysicalBasis_eq_zero_of_row,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedMPO_ne_weakHopfTensor}
+    \uses{def:glm_dual_representation_tensor,def:mpo_arbitrary_mixed_operator}
+    If the physical representation $\phi$ is unital and the dual
+    representation $\psi$ is faithful, every diagonal tensor letter
+    $\psi(f_{ii})$ is nonzero. Consequently the enlarged common mixed
+    tensor cannot equal such a tensor whenever $d_0+d_1>0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Faithfulness and $\psi(f_{ii})=0$ would give $f_{ii}=0$, contradicting
+    $f_{ii}(1)=\phi(1)_{ii}=1$. The enlarged common tensor is zero on
+    both unused physical summands.
+\end{proof}
+
+\begin{definition}[Completed mixed integral interaction]
+    \label{def:mpo_mixed_wha_completion}
+    \leanok
+    \lean{MPOTensor.WeakHopfRepresentation.averageMatrix,
+        MPSTensor.MPOSymmetry.mixedWeakHopfCompletedInteraction,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedWeakHopfParent}
+    \uses{def:mpo_arbitrary_mixed_operator,thm:glm_wha_parent_average}
+    On the active alphabet put $Q=\rho_2(1)$ and
+    $E(B)=\sum\rho_2(\Omega_{(1)})B\rho_2(S_\Omega(\Omega_{(2)}))$.
+    For the extended mixed interaction $h_\gamma$, put
+    $\widehat h_\gamma=E(h_\gamma)+I-Q$.
+    With $J$ the common physical inclusion and $J_2=J\otimes J$, put
+    $\widetilde h_\gamma=I-J_2(I-\widehat h_\gamma)J_2^*$.
+\end{definition}
+
+\begin{lemma}[Continuous completion of the integral average]
+    \label{lem:mpo_mixed_wha_completion}
+    \leanok
+    \lean{MPOTensor.WeakHopfRepresentation.averageMatrix_eq_sum,
+        MPOTensor.WeakHopfRepresentation.continuous_averageMatrix,
+        MPSTensor.MPOSymmetry.averageMatrix_mixedEndpointInteraction_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.averageMatrix_mixedEndpointInteraction,
+        MPSTensor.MPOSymmetry.mixedWeakHopfCompletedInteraction_eq,
+        MPSTensor.MPOSymmetry.continuous_mixedWeakHopfCompletedInteraction,
+        MPSTensor.MPOSymmetry.mixedWeakHopfCompletedInteraction_posSemidef,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedWeakHopfParent_eq,
+        MPSTensor.MPOSymmetry.continuousOn_arbitraryPhysicalMixedWeakHopfParent,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedWeakHopfParent_posSemidef}
+    \uses{def:mpo_mixed_wha_completion,thm:glm_wha_parent_average}
+    Assume injective endpoints of positive bond dimensions, exact
+    biorthogonal action decompositions with a common multiplicity, and
+    a normalized weak-Hopf realization of the actual active common
+    operator. Then $E(h_\gamma)=Q-I+h_\gamma$ and
+    $\widehat h_\gamma=h_\gamma$ throughout $[0,1]$.
+    The enlarged completed terms equal the existing enlarged mixed
+    interaction, are positive, and vary continuously on $[0,1]$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_parent_average}
+    Interior injectivity and compatibility give $E(P_\gamma)=P_\gamma$.
+    Since $E(I)=Q$, subtraction gives the stated average identity.
+    Finite sums of fixed matrix multiplications are continuous, so
+    density extends the identity to both endpoints. Adding $I-Q$ and
+    then the unused physical-space penalty gives the claimed equality.
+\end{proof}
+
+\begin{lemma}[Symmetry and gap of the completed path]
+    \label{lem:mpo_mixed_wha_symmetry_gap}
+    \leanok
+    \lean{MPOTensor.WeakHopfRepresentation.rep_one_commute_mpoWithBoundary,
+        MPSTensor.MPOSymmetry.averageMatrix_mixedEndpointInteraction_commute,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_averageMatrix_mixedEndpointInteraction_commute,
+        MPOTensor.WeakHopfRepresentation.exists_adjointBoundary_changePhysicalBasis,
+        MPSTensor.MPOSymmetry.mixedWeakHopfCompletedInteraction_commute,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_mixedWeakHopfCompletedInteraction_commute,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedWeakHopfParent_commute,
+        MPSTensor.MPOSymmetry.exists_uniform_arbitraryPhysicalMixedWeakHopfParent_gap}
+    \uses{lem:mpo_mixed_wha_completion,thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    Under the preceding hypotheses, both active and enlarged completed
+    periodic Hamiltonians commute with their common periodic operators
+    for all $N\ge2$. For the enlarged Hamiltonians there is
+    $0<\delta\le1$, independent of $\gamma\in[0,1]$ and $N\ge2$,
+    such that $\delta\|v\|\le\|H_\gamma^N v\|$ for every vector
+    orthogonal to the kernel. No separate adjoint-closure hypothesis is
+    imposed, and no gap claim is made for the uncompleted average.
+    If the weak-Hopf algebra is finite dimensional, the literal active
+    average also commutes with every two-site boundary operator, and its
+    periodic sum commutes with the common periodic operator for all $N\ge2$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:mpo_mixed_wha_completion,thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    The realization supplies adjoint boundaries on the active space.
+    Conjugation by $J^{\otimes N}$ preserves the same adjoint boundary.
+    Compatibility gives local commutation in the interior; continuity
+    extends it to the endpoints, and cyclic placement gives the periodic
+    assertion. Equality with the existing mixed path transfers its
+    uniform gap without a spectral comparison of different Hamiltonians.
+    In finite dimension every boundary operator represents an algebra
+    element, so $Q$ commutes with it; adding $Q-I$ preserves commutation.
+\end{proof}
