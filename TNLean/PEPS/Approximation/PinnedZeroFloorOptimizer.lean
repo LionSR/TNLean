@@ -228,6 +228,6 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
   dsimp only at hresult
   rw [hbudget] at hresult
   exact ⟨fromCanonical K hK,
-    fromCanonical_physical_estimates h a ha K hK hmax hresult⟩
+    fromCanonical_physical_estimates h hh hhJ a ha K hK hmax hresult⟩
 
 end TNLean.PEPS.Approximation

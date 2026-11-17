@@ -181,7 +181,7 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A)
     (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∀ (L : ℕ), 2 ≤ L →
-      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+      ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace L q),
         Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
@@ -235,7 +235,7 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
     {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∃ R₀ : ℝ, 0 < R₀ ∧
       ∀ (L : ℕ), 2 ≤ L →
-        ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+        ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
             (E₀ : ℝ) (Ω : StateSpace L q),
           Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →

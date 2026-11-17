@@ -55,7 +55,7 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
   classical
   intro p K F boundary Z
   have hsum := congrArg (Matrix.reindex p p)
-    (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing hh hhJ R)
+    (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
   change F * K * Fᴴ - K = ∑ e ∈ boundary,
     (F * Matrix.reindex p p (doubledHamiltonian (h.term (.inr e))) * Fᴴ -

@@ -89,7 +89,7 @@ theorem squareEntropyAreaLawAt_range_of_areaLawBound {q R : ℕ} {J Δ C : ℝ} 
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card) :
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C := by
-  refine ⟨hC, fun L Ω ⟨H, hH, hHJ, E₀, hgap⟩ A ↦ ?_⟩
+  refine ⟨hC, fun L Ω ⟨H, E₀, hgap⟩ A ↦ ?_⟩
   have := hbound (AreaLaw.rectangularDomain L L) H E₀ (AreaLaw.rectangleAreaLawState Ω) hgap
     (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
