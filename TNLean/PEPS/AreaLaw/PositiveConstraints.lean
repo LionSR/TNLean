@@ -252,7 +252,7 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
     gcongr
   exact htail hH hΩ (hHerm i) (hJh i) (ManyBody.regionExpectationLM K)
     (fun B ↦ ManyBody.norm_regionExpectation_le B)
-    ((ManyBody.regionExpectation_one (D := K))) (fun Y hY =>
+    (ManyBody.regionExpectation_one (D := K)) (fun Y hY =>
         (ManyBody.isHermitian_regionExpectation (D := K) hY)) hfix
     (Nat.cast_nonneg l) hloc
 

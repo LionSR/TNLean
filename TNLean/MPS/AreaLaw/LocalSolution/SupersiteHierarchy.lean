@@ -54,8 +54,8 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 theorem windowProjection_mem_supportedOperators {S : Finset ι}
     {M : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
     windowProjection M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
-  ManyBody.cfc_mem_supportedOperators _ (Submodule.sub_mem _ hM
-    (Submodule.smul_mem _ _ ((one_mem (ManyBody.supportedOperators _ S)))))
+  ManyBody.cfc_mem_supportedOperators _ (sub_mem hM
+    (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ S))))
 
 /-- The window projection inside the range of `Q` acts on `S` when `Q` and `M` do. -/
 theorem compressedWindowProjection_mem_supportedOperators {S : Finset ι}

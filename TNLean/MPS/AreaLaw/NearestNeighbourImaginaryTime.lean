@@ -128,23 +128,22 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
   have hXJ : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
     ManyBody.supportedOperators_mono
       (by simpa only [Finset.coe_subset] using enlarged_interval_subset_succ L c m)
-      (hX)
+      hX
   have hterm (i : Fin (L - 1)) (hi : i ∈ s) :
       h i * X - X * h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := by
     by_cases hd : Disjoint (interval L i.val (i.val + 2))
         (interval L (c - m) (c + 2 + m))
-    · have hc : Commute (h i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint ((hs i hi)) (hX) hd
+    · have hc : Commute (h i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i hi) hX hd
       rw [sub_eq_zero.mpr hc.eq]
-      exact Submodule.zero_mem _
+      exact zero_mem _
     · have hhJ : h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
         ManyBody.supportedOperators_mono
           (by simpa only [Finset.coe_subset] using bond_subset_enlarged_interval_succ hd)
-          ((hs i hi))
-      exact Submodule.sub_mem _ (mul_mem hhJ hXJ)
-        (mul_mem hXJ hhJ)
+          (hs i hi)
+      exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
   have hsupport : Entropy.IsSupportedOn (n := fun _ ↦ q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
-    apply have hsum := (ManyBody.supportedOperators (fun _ ↦ Fin q) J).sum_mem hterm
+    have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
     simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum
   refine ⟨hsupport, ?_⟩
   let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))

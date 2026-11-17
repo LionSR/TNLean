@@ -171,7 +171,7 @@ theorem isPairProduct_smul_one (hd : 0 < d) (hn : 2 ≤ n) {μ : ℂ} (hμ : ‖
       Matrix.one_mul, Complex.star_def, Complex.conj_mul', Complex.mul_conj', hμ]
     simp
   refine isPairProduct_of_mem_supportedOperators_card_le_two hd hn (T := ∅) (by simp) hu ?_
-  exact SMulMemClass.smul_mem _ ((one_mem (ManyBody.supportedOperators _ _)))
+  exact SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
 
 /-- **Unitaries on a constant number of sites.** For `d ≥ 1` and `n ≥ 2` there is `K`
 such that every unitary on the open chain of `n` sites is a product of at most `K` unitary

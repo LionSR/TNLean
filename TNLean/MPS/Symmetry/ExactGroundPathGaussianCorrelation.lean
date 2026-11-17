@@ -105,7 +105,7 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
       (Q.nonzero γ hγ N (by omega))
   let A₀ := centeredObservable ψ A
   have hA₀ : A₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X :=
-    centeredObservable_mem ψ ((one_mem (ManyBody.supportedOperators _ _))) hA
+    centeredObservable_mem ψ (one_mem (ManyBody.supportedOperators _ _)) hA
   have hcenter : ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A₀ ψ⟫_ℂ = 0 :=
     inner_centeredObservable_eq_zero hψne A
   have hNormA : ‖A₀‖ ≤ 2 * ‖A‖ := norm_centeredObservable_le hψne A

@@ -30,7 +30,7 @@ theorem isSupportedOn_sum_retained_clusterOp
     (B : Finset κ) (β : ℝ) :
     Entropy.IsSupportedOn (n := fun _ : σ ↦ q)
       (∑ A ∈ B.powerset with NoLargeCluster G large A, clusterOp h A β) (B.biUnion acts) := by
-  apply refine Submodule.sum_mem _ fun A hA ↦ ?_
+  refine Submodule.sum_mem _ fun A hA ↦ ?_
   apply ManyBody.supportedOperators_mono _ (clusterOp_mem_supportedOperators
     (fun i ↦ (hs i)) A β)
   exact Finset.coe_subset.mpr (Finset.biUnion_subset_biUnion_of_subset_left acts

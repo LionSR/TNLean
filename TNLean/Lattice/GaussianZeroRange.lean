@@ -108,7 +108,6 @@ section Metric
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] [MetricSpace ι] {d : ℕ}
 
-omit [DecidableEq ι] in
 /-- In a genuine metric, radius-zero balls are singletons. -/
 theorem singleton_support_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)

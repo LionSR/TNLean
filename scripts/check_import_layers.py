@@ -59,7 +59,6 @@ SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset(
     f"TNLean.Circuit.{name}"
     for name in (
         "EmbeddedProduct",
-        "EntropySupport",
         "ExpectationBounds",
         "ProductVector",
         "RegionSplit",
@@ -76,7 +75,6 @@ SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset(
         "SpectatorSiteExpectation",
         "SupportProjection",
         "SupportedComplementProduct",
-        "SupportedFunctionalCalculus",
         "SupportedGroundSpace",
         "SupportedMatrixElements",
         "SupportedNormalizedGroundSpace",

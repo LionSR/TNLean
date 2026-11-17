@@ -64,9 +64,7 @@ private theorem commute_bonds_of_separated
       (h i) (interval L i.val (i.val + 2)))
     (i j : Fin (L - 1)) (hsep : i.val + 1 < j.val ∨ j.val + 1 < i.val) :
     Commute (h i) (h j) := by
-  refine QuantumCircuit.commute_of_mem_supportedOperators ?_
-    ((hs i))
-    ((hs j))
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i) (hs j) ?_
   rw [Finset.disjoint_left]
   intro x hx hy
   rw [mem_interval] at hx hy

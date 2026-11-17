@@ -122,7 +122,7 @@ theorem partialOp_mem_supportedOperators (L : BondLayer d bond) (s : Finset β)
     (hs : s ⊆ L.bonds) {S : Finset ι} (hS : ∀ k ∈ s, bond k ⊆ S) :
     L.partialOp s hs ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
   Finset.noncommProd_induction _ _ _ (· ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
-    (fun _ _ ha hb ↦ mul_mem ha hb) ((one_mem (ManyBody.supportedOperators _ S)))
+    (fun _ _ ha hb ↦ mul_mem ha hb) (one_mem (ManyBody.supportedOperators _ S))
     fun k hk ↦ ManyBody.supportedOperators_mono (hS k hk) (L.gate_mem_supportedOperators k (hs hk))
 
 theorem op_mem_unitary (L : BondLayer d bond) : L.op ∈ unitary

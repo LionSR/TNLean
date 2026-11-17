@@ -64,7 +64,7 @@ theorem norm_commutator_sum_le_active_card (s : Finset I)
     apply Finset.sum_subset (Finset.filter_subset _ _)
     intro i hi hia
     by_cases hd : Disjoint (D i) S
-    · have hc : Commute (h i) O := ManyBody.commute_of_mem_supportedOperators_of_disjoint ((hsupport i hi)) (hO) hd
+    · have hc : Commute (h i) O := ManyBody.commute_of_mem_supportedOperators_of_disjoint (hsupport i hi) hO hd
       exact sub_eq_zero.mpr hc.eq
     · exact False.elim (hia (Finset.mem_filter.mpr ⟨hi, hd⟩))
   calc
@@ -147,7 +147,7 @@ theorem exists_commutator_iterate_decomposition {s : Finset I}
         apply Finset.sum_subset (Finset.filter_subset _ _)
         intro i hi hiT
         by_cases hd : Disjoint (D i) (S a)
-        · have hc : Commute (h i) (X a) := ManyBody.commute_of_mem_supportedOperators_of_disjoint ((hs i hi)) ((hsupp a)) hd
+        · have hc : Commute (h i) (X a) := ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i hi) (hsupp a) hd
           exact sub_eq_zero.mpr hc.eq
         · exact False.elim (hiT (Finset.mem_filter.mpr ⟨hi, hd⟩))
       rw [Function.iterate_succ_apply', hsum, Finset.mul_sum, Finset.sum_mul,
@@ -162,11 +162,11 @@ theorem exists_commutator_iterate_decomposition {s : Finset I}
       let p := e.symm j
       have hhR : h p.2.1 ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R p : Finset ι) :=
         ManyBody.supportedOperators_mono (by simp [R])
-          ((hs _ (hTs p)))
+          (hs _ (hTs p))
       have hXR : X p.1 ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R p : Finset ι) :=
         ManyBody.supportedOperators_mono (by simp [R])
-          ((hsupp p.1))
-      exact (Submodule.sub_mem _ (mul_mem hhR hXR)
+          (hsupp p.1)
+      exact (sub_mem (mul_mem hhR hXR)
           (mul_mem hXR hhR))
     · intro j
       exact (Matrix.norm_commutator_le_of_nonneg_le_one _ _ (h0 _ (hTs _))

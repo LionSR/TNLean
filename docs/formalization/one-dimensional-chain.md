@@ -152,9 +152,8 @@ chain length. These statements include the empty chain and all natural
 radii. They concern the contiguous path; coordinate distance does not replace
 graph distance across holes in a disconnected domain.
 
-The matrix-entry condition for support is equivalent to membership in the
-supported-operator algebra by `QuantumCircuit.mem_supportedOperators_of_isSupportedOn`
-and its converse. The paired two-copy construction
+The matrix-entry condition for support is the carrier of the
+supported-operator algebra `ManyBody.supportedOperators` of QICLean. The paired two-copy construction
 `MPS.AreaLaw.ChainHamiltonian.doubled` keeps the same physical supports and
 has local dimension q² and term bound 2J. The equality
 `MPS.AreaLaw.ChainHamiltonian.doubled_operator` identifies its sum exactly

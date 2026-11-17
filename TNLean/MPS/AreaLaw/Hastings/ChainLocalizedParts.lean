@@ -143,7 +143,7 @@ theorem ChainHamiltonian.norm_gaussianFilteredTerm_sub_localized_le_of_commutato
   have ha := chainLRPrefactor_nonneg R J
   have hv := chainLRVelocity_nonneg R J
   have hA : Entropy.IsSupportedOn (n := fun _ ↦ q) (Complex.I • C) S :=
-    (Submodule.smul_mem _ _ (hS))
+    (SMulMemClass.smul_mem _ (hS))
   have hloc : ∀ s ∈ Set.Icc (-T) T,
       ‖hermitianUnitaryPath h.operator s * (Complex.I • C) *
           hermitianUnitaryPath h.operator (-s) -

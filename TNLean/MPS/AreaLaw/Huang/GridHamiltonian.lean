@@ -147,7 +147,7 @@ theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
     chainGridBlockHamiltonian hw h j ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) := by
   classical
-  apply Submodule.sum_mem
+  apply sum_mem
   intro i hi
   obtain ⟨hinot, hiowner⟩ := (Finset.mem_filter.mp hi).2
   have hsub := chainGridEdge_subset_ownerBlock hw i hinot

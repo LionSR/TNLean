@@ -86,7 +86,6 @@ theorem reindex_sumArrow_sitePair_embedOp (q : ℕ) (e : κ → ι)
           · exact hi j (Sum.inr_injective hj))]
   simp only [hagree, hcomp]
 
-omit [DecidableEq ι] in
 /-- **An operator on paired sites acts on both replicas of the same sites.**
 Source: `02-information.tex`, lines 416–424 and 597–609. -/
 theorem reindex_sumArrow_sitePair_mem_supportedOperators (q : ℕ) {S : Finset ι}

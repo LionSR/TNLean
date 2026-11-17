@@ -135,8 +135,7 @@ theorem extendFiniteEdges_mem_supportedOperators (blk : ι → ℕ)
   by_cases hjN : j < N
   · simpa only [extendFiniteEdges, dite_eq_left hjN] using ha ⟨j, hjN⟩ hj
   · simpa only [extendFiniteEdges, dite_eq_right hjN] using
-      (Submodule.zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin d)
-          (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j)))
+      (zero_mem _)
 
 /-- Every joining operator of the hierarchy has its parent-block support, derived from
 only the finite internal-edge assumptions.

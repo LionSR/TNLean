@@ -90,9 +90,9 @@ theorem ChainHamiltonian.exists_cut_decomposition_of_range_one {L q : ℕ}
     have hTC : (∑ X ∈ U, h.term X) = HR + K :=
       (Finset.sum_filter_add_sum_filter_not U (fun X ↦ X.1 ⊆ Aᶜ) h.term).symm
     rw [hSU, hTC, add_assoc]
-  · exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+  · exact sum_mem fun X hX ↦
       (h.supported X).mono (Finset.mem_filter.mp hX).2
-  · exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+  · exact sum_mem fun X hX ↦
       (h.supported X).mono (Finset.mem_filter.mp hX).2
 
 end TNLean.MPS.AreaLaw

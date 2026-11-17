@@ -153,9 +153,9 @@ theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : D
       ManyBody.supportedOperators (fun _ ↦ Fin q) (X ∪ Y : Finset (Site Λ)) := by
   set uE := FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY
   have h : ancillaPhysical U (restoringSplit q X Y hXY) M =
-      localLift Λ q (X ∪ Y) ((((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
+      localLift Λ q (X ∪ Y) (((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
         (RegionalConfiguration q Y) ℂ)) * M * (U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
-          (RegionalConfiguration q Y) ℂ))ᴴ)).submatrix uE uE) := by
+          (RegionalConfiguration q Y) ℂ))ᴴ).submatrix uE uE) := by
     rw [localLift_eq_kronecker_one_submatrix]
     ext c c'
     simp only [ancillaPhysical, submatrix_apply, kroneckerMap_apply]

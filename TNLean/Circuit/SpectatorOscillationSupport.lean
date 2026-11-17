@@ -51,11 +51,11 @@ theorem spectatorSiteExpectation_eq_self_iff (K : Finset ι)
       rw [← spectatorSiteExpectation_apply, h]
       rfl
     rw [← hblock]
-    exact ((ManyBody.regionExpectation_mem_supportedOperators K _))
+    exact (ManyBody.regionExpectation_mem_supportedOperators K _)
   · intro h
     ext ⟨σ, a⟩ ⟨τ, b⟩
     rw [spectatorSiteExpectation_apply, ManyBody.regionExpectation_of_mem_supportedOperators
-      ((h a b))]
+      (h a b)]
     rfl
 
 /-- A supported operator, with an arbitrary finite spectator, has zero

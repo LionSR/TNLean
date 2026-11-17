@@ -281,7 +281,7 @@ theorem branch_mem_supportedOperators [NeZero q] (s : p.Tag) :
       (siteLift_mem_supportedOperators _ _)
 
 theorem proj_mem_supportedOperators : p.proj ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer :=
-  Submodule.sum_mem _ fun s _ => p.cyl_mem_supportedOperators s
+  sum_mem fun s _ => p.cyl_mem_supportedOperators s
 
 /-- The hole encoder `K_{c,h} = ∑_{j,ℓ} |j, ℓ⟩ ⊗ (|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1)`
 (`eq:hole-encoder`). It keeps a raw register at every site. -/

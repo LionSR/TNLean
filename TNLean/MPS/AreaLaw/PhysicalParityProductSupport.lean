@@ -29,7 +29,7 @@ theorem isSupportedOn_physicalParityProduct
     (hs : ∀ i, i.val % 2 = p → Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       ((T).symm (physicalParityProduct h p)) D := by
-  apply apply QuantumCircuit.mem_supportedOperators_complementProd
+  apply QuantumCircuit.mem_supportedOperators_complementProd
   intro k hk
   change (T).symm (if hk' : k < L - 1 then
       if k % 2 = p then T (h ⟨k, hk'⟩) else 0 else 0) ∈
@@ -39,7 +39,7 @@ theorem isSupportedOn_physicalParityProduct
   · simpa only [StarAlgEquiv.symm_apply_apply] using
       (hs ⟨k, hk⟩ hp)
   · simpa only [map_zero] using
-      (ManyBody.supportedOperators (fun _ ↦ Fin q) D).zero_mem
+      (zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) D))
 
 /-- The actual parity product of the interval-restricted family is supported
 on that same site interval. The support is derived from the original

@@ -54,7 +54,6 @@ namespace QuantumCircuit
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-omit [DecidableEq ι] in
 /-- An entry of an operator supported on `S` depends only on the labels on `S`, provided both
 pairs of configurations agree with each other off `S`. -/
 theorem apply_eq_apply_of_mem_supportedOperators {S : Finset ι}
@@ -75,11 +74,9 @@ theorem apply_eq_apply_of_mem_supportedOperators {S : Finset ι}
 /-- The operators supported on a set of sites are closed under the exponential. -/
 theorem exp_mem_supportedOperators {S : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) : NormedSpace.exp A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
-  let s : Subalgebra ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ) :=
-    (ManyBody.supportedOperators (fun _ ↦ Fin d) S).toSubalgebra ((one_mem (ManyBody.supportedOperators _ S)))
-      fun _ _ ↦ mul_mem
+  let s := (ManyBody.supportedOperators (fun _ ↦ Fin d) S).toSubalgebra
   exact NormedSpace.exp_mem (R := ℂ) (s := s)
-    (Submodule.closed_of_finiteDimensional (ManyBody.supportedOperators (fun _ ↦ Fin d) S)) hA
+    (Submodule.closed_of_finiteDimensional (Subalgebra.toSubmodule s)) hA
 
 end QuantumCircuit
 
@@ -271,7 +268,9 @@ theorem hasProductForm_of_mem_supportedOperators_radius {X : Finset ι}
     · simp only [single_apply_same, Finset.prod_const_one, mul_one, Finset.prod_mul_distrib,
         Fintype.prod_ite_eq']
       by_cases hoff : ∃ j ∉ (X : Set ι), u j ≠ v j
-      · rw [apply_eq_zero_of_mem_supportedOperators hρ hoff]
+      · rw [show ρ u v = 0 by
+          obtain ⟨j, hj, hne⟩ := hoff
+          exact ManyBody.apply_eq_zero_of_mem_supportedOperators hρ hj hne]
         obtain ⟨j, hj, huv⟩ := hoff
         refine (mul_eq_zero_of_right _ (Finset.prod_eq_zero (Finset.mem_univ j) ?_)).symm
         simp [show j ∉ X from hj, huv]
@@ -319,7 +318,7 @@ theorem hasProductForm_trotterProduct_of_radius
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
   obtain ⟨i, _, rfl⟩ := List.mem_map.mp hρ
   exact hasProductForm_of_mem_supportedOperators_radius hnear i (hX i)
-    (exp_mem_supportedOperators (Submodule.smul_mem _ _ (hH i)))
+    (exp_mem_supportedOperators (SMulMemClass.smul_mem _ (hH i)))
 
 /-- The Trotter product on an arbitrary finite pseudometric site set has product form
 of range `R` when each term is supported within distance `R` of its centre.
@@ -354,6 +353,6 @@ theorem LocalHamiltonian.hasProductForm_trotterProduct {R : ℕ} {J : ℝ}
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
   obtain ⟨X, _, rfl⟩ := List.mem_map.mp hρ
   exact hasProductForm_of_mem_supportedOperators (fun _ ↦ ⟨.nil, Nat.zero_le _⟩) X.2
-    (exp_mem_supportedOperators (Submodule.smul_mem _ _ (h.supported X)))
+    (exp_mem_supportedOperators (SMulMemClass.smul_mem _ (h.supported X)))
 
 end TNLean.Lattice

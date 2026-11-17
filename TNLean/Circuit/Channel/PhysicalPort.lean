@@ -93,7 +93,7 @@ theorem conjTranspose {P : PhysicalPortLayout N W} {T : ℕ} {U}
 /-- The identity needs no physical layers. -/
 theorem one (P : PhysicalPortLayout N W) :
     IsPhysicalPortUnitary (d := d) P 0 1 :=
-  .onsite 0 (Submonoid.one_mem _) ((one_mem (ManyBody.supportedOperators _ _)))
+  .onsite 0 (Submonoid.one_mem _) (one_mem (ManyBody.supportedOperators _ _))
 
 /-- Swapping wires inside one spatial site costs no physical layer. -/
 theorem onsite_swap (P : PhysicalPortLayout N W) {a b : Fin W}

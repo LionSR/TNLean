@@ -369,7 +369,7 @@ theorem commute_of_not_adj_overlapGraph {h : κ → Matrix (σ → Fin d) (σ �
   by_cases hjk' : j = k
   · subst hjk'
     exact Commute.refl _
-  refine commute_of_mem_supportedOperators ?_ (hh j) (hh k)
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (hh j) (hh k) ?_
   rw [Finset.disjoint_iff_inter_eq_empty, ← Finset.not_nonempty_iff_eq_empty]
   exact fun hne ↦ hjk ⟨hjk', hne⟩
 

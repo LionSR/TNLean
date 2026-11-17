@@ -78,10 +78,9 @@ private theorem isSupportedOn_bond_complement
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (1 - h i) (interval L i.val (i.val + 2)) := by
   classical
-  apply exact (ManyBody.supportedOperators (fun _ ↦ Fin q)
-    (interval L i.val (i.val + 2) : Finset (Fin L))).sub_mem
-    ((one_mem (ManyBody.supportedOperators _ _)))
-    ((hs i))
+  exact sub_mem
+    (one_mem (ManyBody.supportedOperators _ _))
+    (hs i)
 
 private theorem parityFactor_rank_le_one
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)

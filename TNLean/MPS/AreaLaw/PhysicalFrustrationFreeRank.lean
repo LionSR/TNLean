@@ -43,7 +43,7 @@ private theorem isSupportedOn_outsidePiece
     (hside : ∀ i, P i → interval L i.val (i.val + 2) ⊆ S) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (outsidePiece h a b P) S := by
   classical
-  apply unfold outsidePiece
+  unfold outsidePiece
   apply Submodule.sum_mem
   intro i _
   split_ifs with hi
@@ -146,12 +146,12 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
   · obtain ⟨i, hout, hik⟩ := hcross
     have hside : b ≤ k ∨ k ≤ a := by omega
     have hQleft (hb : b ≤ k) (p : ℕ) : Q p ∈ U := by
-      apply apply (isSupportedOn_regionalParityProduct h hs a b p).mono
+      apply (isSupportedOn_regionalParityProduct h hs a b p).mono
       intro v hv
       simp only [mem_interval, mem_leftBlock] at *
       omega
     have hQright (ha : k ≤ a) (p : ℕ) : Q p ∈ V := by
-      apply apply (isSupportedOn_regionalParityProduct h hs a b p).mono
+      apply (isSupportedOn_regionalParityProduct h hs a b p).mono
       intro v hv
       simp only [Finset.mem_compl, mem_interval, mem_leftBlock] at *
       omega
@@ -172,11 +172,11 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
           (hQright ha 0)) (hQright ha 1)
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (hX)
+        hX
         (Or.inl (Finset.Subset.refl _))
     have hYrank : operatorSchmidtRank (cut Y) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (hY)
+        hY
         (Or.inr hdisjoint)
     have hterm : operatorSchmidtRank (cut (h i)) ≤ q ^ 2 :=
       (hs i).operatorSchmidtRank_cutOperator_le_pow_card (A := leftBlock L k) hq |>.trans
@@ -196,11 +196,11 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     have hX : X ∈ U := U.add_mem (U.add_mem hHL hU1) hU1
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (hX)
+        hX
         (Or.inl (Finset.Subset.refl _))
     have hHRrank : operatorSchmidtRank (cut HR) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (hHR)
+        hHR
         (Or.inr hdisjoint)
     have hdecomp : cut (physicalFrustrationFreeTruncation h a b) =
         cut X + cut HR + (-1 : ℂ) • cut (Q 0) + (-1 : ℂ) • cut (Q 1) := by

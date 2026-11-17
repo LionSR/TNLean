@@ -30,7 +30,7 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | The induced nearest-neighbor graph | `domainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
 | Site space `ℂ^q` | `StateSpace Λ q = EuclideanSpace ℂ (Site Λ → Fin q)` | Exactly `q ^ Λ.card` configuration coordinates. |
 | One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `LocalHamiltonian.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
-| Support on `X` | `QuantumCircuit.supportedOperators q X` | The existing site-operator algebra; `localLift` uses the existing placement `embedOp`. |
+| Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; `localLift` uses the existing placement `embedOp`. |
 | `h_X = h_X*` and `‖h_X‖ ≤ J` | The `hermitian` and `norm_le` fields | The norm is the Euclidean induced operator norm. |
 | `H = ∑_X h_X` | `LocalHamiltonian.operator` | The sum is Hermitian by `operator_isHermitian`. |
 | A unit ground vector at real energy `E₀` | Unit-norm and eigenvector clauses of `IsGappedGroundState` | The positive projector-gap clause forces this eigenvalue to be minimal when `Δ > 0`. The checked equivalence is part of #8739. |

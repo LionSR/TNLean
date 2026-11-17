@@ -49,12 +49,12 @@
 
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
-- **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
+- **Seen:** `Circuit/EntropySupport.lean` (deleted), `MPS/AreaLaw/SelectedMiddleData.lean`,
   and the native middle approximation in `MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean`.
 - **Pattern:** Compare the entries of a regional local lift with placement
   along the inclusion of the same sites, then identify the exterior matching
   condition with agreement away from the inclusion.
-- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/EntropySupport.lean`.
+- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/SiteEmbedding.lean`.
 - **Decision:** The existing coordinate identity is stated once and reused;
   the support characterization and selected singleton calculation retain their
   mathematical statements.
@@ -2662,8 +2662,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   `expect_productVector_mul` and `trace_rectKronecker_mul_mul` in
   `TNLean/Circuit/SupportedOperators.lean`, and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean`.
-- **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
-  `TNLean/Circuit/SupportedOperators.lean`: two bilinear maps
+- **Abstraction:** `ManyBody.eq_of_mem_supportedOperators₂` in QICLean
+  (formerly `QuantumCircuit.eq_of_mem_supportedOperators₂`): two bilinear maps
   `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
   generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
   maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
@@ -9609,7 +9609,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Agreement outside a finite support — candidate (2026-10-17)
 
 - **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
-- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
+- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn` (both since deleted), and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
 - **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
 - **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
 
@@ -11533,7 +11533,8 @@ removed after the dependency audit exposed it.
 - **Pattern:** Produce regional ground cutoffs by real functional calculus, factor
   their product trace on disjoint supports, and extract a nonzero common ground column.
 - **Reuse:** Promoted the existing Hastings functional-calculus support theorem to
-  `QuantumCircuit.cfc_mem_supportedOperators`; the Hastings consumer now uses that owner.
+  `QuantumCircuit.cfc_mem_supportedOperators`, now QICLean's
+  `ManyBody.cfc_mem_supportedOperators`; the Hastings consumer uses that owner.
   `exists_normalized_common_ground_of_disjoint` performs normalization once for the
   actual ground-energy bound consumer. The annihilator equations use three distinct
   reassociations within one file; no custom tactic is warranted.

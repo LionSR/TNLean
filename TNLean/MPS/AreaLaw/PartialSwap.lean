@@ -72,7 +72,7 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
     have hT : Matrix.reindex e e (U ⊗ₖ V) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1 := by
       simpa only [Finset.union_self] using reindex_kronecker_mem_supportedOperators hU hV
-    refine ⟨ ((ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1).sub_mem
+    refine ⟨ (sub_mem
         (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators D X.1 hU hV) hT), ?_, ?_⟩
     · have hTherm := hUVherm.reindex e
       exact (Matrix.isHermitian_mul_mul_conjTranspose F hTherm).sub hTherm
@@ -148,7 +148,7 @@ theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
       Matrix.submatrix_mul_equiv] using
       congrArg (Matrix.reindex e e)
         (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-          ((h.supported X)) hside)
+          (h.supported X) hside)
   refine ⟨?_, ?_⟩
   · change δ h.doubled.operator = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
     rw [hsum, map_sum]
@@ -205,7 +205,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   change K = ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b) at hsum
   have hsupp : Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z := by
-    apply rw [hsum]
+    rw [hsum]
     apply Submodule.sum_mem
     intro X hXC
     apply Submodule.sum_mem

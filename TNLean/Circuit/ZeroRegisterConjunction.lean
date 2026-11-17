@@ -71,13 +71,13 @@ theorem zeroConjunctionIncrement_update (j : Fin a) (z : (Fin (a + a) → Fin d)
 /-- One reversible controlled shift writes the next conjunction into its
 scratch coordinate. It is defined on all configurations. Source:
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-noncomputable def zeroConjunctionStep (j : Fin a) : Equiv.Perm ((Fin (a + a) → Fin d)) :=
+noncomputable def zeroConjunctionStep (j : Fin a) : Equiv.Perm (Fin (a + a) → Fin d) :=
   shiftPerm (Fin.natAdd a j) (zeroConjunctionIncrement j)
     (zeroConjunctionIncrement_update j)
 
 /-- Forward composition of the first `k` controlled shifts. Source:
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-noncomputable def zeroConjunctionPerm : ℕ → Equiv.Perm ((Fin (a + a) → Fin d))
+noncomputable def zeroConjunctionPerm : ℕ → Equiv.Perm (Fin (a + a) → Fin d)
   | 0 => 1
   | k + 1 => if h : k < a then zeroConjunctionStep ⟨k, h⟩ * zeroConjunctionPerm k
       else zeroConjunctionPerm k

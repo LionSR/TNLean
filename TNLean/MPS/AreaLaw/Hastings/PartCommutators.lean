@@ -68,7 +68,7 @@ variable {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ} {D : Finset V}
 theorem Entropy.IsSupportedOn.commutator (hX : Entropy.IsSupportedOn X D)
     (hY : Entropy.IsSupportedOn Y D) (σ₀ : Entropy.SiteConfig n) :
     Entropy.IsSupportedOn (X * Y - Y * X) D :=
-  (ManyBody.supportedOperators (fun v ↦ Fin (n v)) D).sub_mem (hX.mul hY σ₀) (hY.mul hX σ₀)
+  sub_mem (hX.mul hY σ₀) (hY.mul hX σ₀)
 
 end Supported
 
@@ -260,9 +260,9 @@ theorem ChainHamiltonian.isSupportedOn_commutator_termSum_inner (h : ChainHamilt
   · exact ⟨fun σ _ _ ↦ (hE.false σ).elim, fun σ _ _ _ _ _ _ _ ↦ (hE.false σ).elim⟩
   obtain ⟨σ₀⟩ := hne
   rw [h.commutator_termSum_inner_eq_sum]
-  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦ ?_
+  refine sum_mem fun X hX ↦ ?_
   rw [h.term_commutator_termSum_eq]
-  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun Y hY ↦ ?_
+  refine sum_mem fun Y hY ↦ ?_
   obtain ⟨hYS, hYX⟩ := Finset.mem_filter.mp hY
   obtain ⟨hXW, hYW⟩ := hW X hX Y (Finset.mem_filter.mp hYS).2 hYX
   exact ((h.supported X).mono hXW).commutator ((h.supported Y).mono hYW) σ₀
@@ -411,7 +411,7 @@ theorem ChainHamiltonian.isSupportedOn_commutator_bufferPart (h : ChainHamiltoni
       (h.operator * h.bufferPart j m - h.bufferPart j m * h.operator)
       (interval L (j - m - 2 * R) (j - m + R) ∪ interval L (j + m - R) (j + m + 2 * R)) := by
   rw [h.commutator_bufferPart_eq]
-  exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).neg_mem (add_mem
+  exact neg_mem (add_mem
     ((h.isSupportedOn_commutator_leftPart j m).mono Finset.subset_union_left)
     ((h.isSupportedOn_commutator_rightPart j m).mono Finset.subset_union_right))
 

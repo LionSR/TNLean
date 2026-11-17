@@ -134,14 +134,14 @@ theorem localRootChannel_eq_self_of_forall_commute (K : Finset ι)
       (Matrix.nonneg_iff_posSemidef.mp hk₀)))
   have hl₁ := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
       ManyBody.regionExpectation_one)
-  have hlK := ((ManyBody.regionExpectation_mem_supportedOperators K k))
+  have hlK := (ManyBody.regionExpectation_mem_supportedOperators K k)
   refine rootChannel_eq_self_of_commute
     (rootChannel_kronecker_hyp (sqrt_one_sub_mul_add_sqrt_mul hl₀ hl₁)) ?_ ?_
-  · exact hB _ (((ManyBody.sqrt_mem_supportedOperators
-      (((ManyBody.supportedOperators (fun _ ↦ Fin q) K).sub_mem
-          ((one_mem (ManyBody.supportedOperators _ _))) hlK)))))
-  · exact hB _ (((ManyBody.sqrt_mem_supportedOperators
-      (hlK))))
+  · exact hB _ (ManyBody.sqrt_mem_supportedOperators
+      (sub_mem
+          (one_mem (ManyBody.supportedOperators _ _)) hlK))
+  · exact hB _ (ManyBody.sqrt_mem_supportedOperators
+      hlK)
 
 /-- The local channel intertwines commutators with any operator in the physical
 regional commutant, with spectators (`09-amplification.tex`, lines 122–127). -/
@@ -157,12 +157,12 @@ theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
       (Matrix.nonneg_iff_posSemidef.mp hk₀)))
   have hl₁ := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
       ManyBody.regionExpectation_one)
-  have hlK := ((ManyBody.regionExpectation_mem_supportedOperators K k))
-  have hG := hA _ (((ManyBody.sqrt_mem_supportedOperators
-      (((ManyBody.supportedOperators (fun _ ↦ Fin q) K).sub_mem
-          ((one_mem (ManyBody.supportedOperators _ _))) hlK)))))
-  have hKr := hA _ (((ManyBody.sqrt_mem_supportedOperators
-      (hlK))))
+  have hlK := (ManyBody.regionExpectation_mem_supportedOperators K k)
+  have hG := hA _ (ManyBody.sqrt_mem_supportedOperators
+      (sub_mem
+          (one_mem (ManyBody.supportedOperators _ _)) hlK))
+  have hKr := hA _ (ManyBody.sqrt_mem_supportedOperators
+      hlK)
   have hleft (R : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
       (hR : Commute R A) : R * (A * B) * R = A * (R * B * R) := by
     rw [hR.left_comm, mul_assoc]

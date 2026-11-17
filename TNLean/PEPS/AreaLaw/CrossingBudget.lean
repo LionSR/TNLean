@@ -176,7 +176,7 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
         simp [E, cutEdges, huv, hu, hv]
       · rw [ManyBody.mem_graphBall, SimpleGraph.edist_comm]; exact hau
     · obtain ⟨u, v, huv, hu, hv, hau⟩ :=
-        exists_cut_edge_near (S := ((X : Set ι)ᶜ)) ha (by simpa using hx₁X) hx₁
+        exists_cut_edge_near (S := (X : Set ι)ᶜ) ha (by simpa using hx₁X) hx₁
       refine ⟨u, ?_, ?_⟩
       · refine Finset.mem_union_right _ (Finset.mem_image.mpr ⟨(v, u), ?_, rfl⟩)
         simp only [Set.mem_compl_iff, Finset.mem_coe, not_not] at hu hv
@@ -387,6 +387,6 @@ theorem truncatedConstraint_mem_supportedOperators {q : ℕ} (G : SimpleGraph ι
   unfold truncatedConstraint designatedSupport
   split_ifs with h
   · exact hk
-  · exact ((ManyBody.regionExpectation_mem_supportedOperators _ k))
+  · exact (ManyBody.regionExpectation_mem_supportedOperators _ k)
 
 end TNLean.PEPS.AreaLaw

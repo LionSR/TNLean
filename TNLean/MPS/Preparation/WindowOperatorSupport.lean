@@ -324,9 +324,9 @@ theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
     conv_lhs => rw [Matrix.matrix_eq_sum_single X]
     simp only [Matrix.smul_single, smul_eq_mul, mul_one]
   rw [hX, chainWindowOperator_eq_embedLocalOperatorAlgHom ha haL, map_sum]
-  refine Submodule.sum_mem _ fun τ₀ _ ↦ ?_
+  refine sum_mem fun τ₀ _ ↦ ?_
   rw [map_sum]
-  refine Submodule.sum_mem _ fun σ₀ _ ↦ ?_
+  refine sum_mem fun σ₀ _ ↦ ?_
   rw [map_smul, ← chainWindowOperator_eq_embedLocalOperatorAlgHom ha haL]
   exact Submodule.smul_mem _ _ (hunit τ₀ σ₀)
 

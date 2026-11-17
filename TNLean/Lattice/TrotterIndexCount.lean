@@ -17,8 +17,7 @@ most `n S` components there, each with `d_j²` values at a site `j` of physical 
 `d_j`.
 
 The physical dimension may vary with the site. Supports are the matrix-entry supports
-`Entropy.IsSupportedOn`; for a common dimension `q` these are the operators of
-`ManyBody.supportedOperators (fun _ ↦ Fin q)` (`QuantumCircuit.isSupportedOn_of_mem_supportedOperators`).
+`Entropy.IsSupportedOn`, the carrier of `ManyBody.supportedOperators`.
 
 ## Main results
 

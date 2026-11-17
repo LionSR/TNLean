@@ -774,9 +774,9 @@ theorem operatorSchmidtRank_aeval_sum_le_pow_of_bulk
   have hM : M = F β₀ + ((∑ β ∈ s, F β) + ∑ β ∈ t, F β) := by
     rw [Finset.sum_filter_add_sum_filter_not, Finset.add_sum_erase _ _ (Finset.mem_univ β₀)]
   have hleft : (∑ β ∈ s, F β) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S :=
-    Submodule.sum_mem _ fun β hβ ↦ (Finset.mem_filter.mp hβ).2
+    sum_mem fun β hβ ↦ (Finset.mem_filter.mp hβ).2
   have hright : (∑ β ∈ t, F β) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Sᶜ : Finset ι) := by
-    refine Submodule.sum_mem _ fun β hβ ↦ ?_
+    refine sum_mem fun β hβ ↦ ?_
     obtain ⟨hβ, hnot⟩ := Finset.mem_filter.mp hβ
     exact (hside β (Finset.ne_of_mem_erase hβ)).resolve_left hnot
   obtain ⟨X, hX⟩ := exists_kronecker_one_of_mem_supportedOperators hleft

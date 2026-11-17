@@ -121,7 +121,9 @@ theorem noncommProd_apply_of_pairwiseDisjoint (X : ι → Finset σ)
       ring
     · intro w' _ hw'
       by_cases hoff : ∃ j ∉ (X C : Set σ), u j ≠ w' j
-      · rw [apply_eq_zero_of_mem_supportedOperators (hO C (mem_insert_self C S)) hoff, zero_mul]
+      · obtain ⟨j, hj, hne⟩ := hoff
+        rw [ManyBody.apply_eq_zero_of_mem_supportedOperators (hO C (mem_insert_self C S)) hj hne,
+          zero_mul]
       · push Not at hoff
         obtain ⟨j, hj⟩ := Function.ne_iff.1 hw'
         have hjX : j ∈ X C := by

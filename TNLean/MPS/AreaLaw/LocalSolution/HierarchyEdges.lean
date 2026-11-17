@@ -59,7 +59,7 @@ section Support
 
 open Matrix QuantumCircuit
 
-variable {ι : Type*} [Fintype ι] {d : ℕ}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ℕ}
 
 /-- A nearest-neighbour edge acts on the parent block containing both its endpoints.
 Hastings, arXiv:cond-mat/0508554v3, lines 609–628 and 668–685. -/

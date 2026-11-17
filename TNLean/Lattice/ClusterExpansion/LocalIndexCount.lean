@@ -189,7 +189,7 @@ theorem exists_productForm_truncatedExp_card_index [PseudoMetricSpace σ]
     exact absurd ⟨x, hxk⟩ ((mem_filter.1 hA).2 k hk)
   let P₀ := ProductForm.ofSupported (d := fun _ ↦ q) (near := near) (X := ∅)
     (fun _ ↦ (0 : Fin q)) (Classical.arbitrary σ) (by simp)
-    (h₀)
+    h₀
   let P₁ := localClusterProductForm acts near hnear hh β
   refine ⟨P₀.mul P₁, fun i ↦ ?_⟩
   change Fintype.card (P₀.Index i × P₁.Index i) ≤ _
@@ -198,7 +198,7 @@ theorem exists_productForm_truncatedExp_card_index [PseudoMetricSpace σ]
     simpa only [Finset.notMem_empty, ite_false] using
       ProductForm.card_index_ofSupported (d := fun _ ↦ q) (near := near) (X := ∅)
         (fun _ ↦ (0 : Fin q)) (Classical.arbitrary σ) (by simp)
-        (h₀) i
+        h₀ i
   rw [hP₀, one_mul]
   exact card_index_localClusterProductForm_le acts near hnear hh β i _
     fun _ hC hi ↦ hC.subset_centres_ball hR hi

@@ -45,9 +45,9 @@ theorem chainWindowOperator_commute_of_disjoint {L K N a b : ℕ}
     (hSep : a + L ≤ b ∨ b + K ≤ a)
     (X : Matrix (Cfg d L) (Cfg d L) ℂ) (Y : Matrix (Cfg d K) (Cfg d K) ℂ) :
     Commute (chainWindowOperator N a X) (chainWindowOperator N b Y) := by
-  refine QuantumCircuit.commute_of_mem_supportedOperators ?_
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint
     (chainWindowOperator_mem_supportedOperators ha haL X)
-    (chainWindowOperator_mem_supportedOperators hb hbK Y)
+    (chainWindowOperator_mem_supportedOperators hb hbK Y) ?_
   refine Finset.disjoint_left.2 (fun i hi hj => ?_)
   simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
   omega

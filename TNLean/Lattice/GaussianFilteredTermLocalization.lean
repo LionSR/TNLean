@@ -113,8 +113,8 @@ theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq 
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
     ⟨h, fun k => (hSupport k)⟩
   have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm R
-    hDiam vR hCard b₀ hBudget S (hW) y
-    ((by assumption)) μ hμ l
+    hDiam vR hCard b₀ hBudget S hW y
+    (by assumption) μ hμ l
     hl t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (by positivity))
   have hv : 0 ≤ 2 * vR * |b₀| * Real.exp (2 * μ * R) + 1 := by positivity
@@ -163,7 +163,7 @@ theorem norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood [Ne
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
     ⟨h, fun k => (hSupport k)⟩
   have hLR := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le G Φ hHerm
-    R hDiam vR hCard b₀ hBudget Kg kg hGrowth S (hW) l t
+    R hDiam vR hCard b₀ hBudget Kg kg hGrowth S hW l t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) hP)
   have htT : |t| ≤ T := abs_le.mpr ht
   nlinarith
@@ -191,8 +191,8 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
             Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
   have hH : (∑ k, h k).IsHermitian := isHermitian_sum _ fun k _ => hHerm k
-  exact ⟨_, ((ManyBody.regionExpectation_mem_supportedOperators _ _)),
-    ((ManyBody.norm_regionExpectation_le _)).trans (norm_gaussianFilteredTerm_le q ΔE hH W),
+  exact ⟨_, (ManyBody.regionExpectation_mem_supportedOperators _ _),
+    (ManyBody.norm_regionExpectation_le _).trans (norm_gaussianFilteredTerm_le q ΔE hH W),
     fun hW' => (ManyBody.isHermitian_regionExpectation (isHermitian_gaussianFilteredTerm q ΔE hH
         hW')),
     norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X h hHerm

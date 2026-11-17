@@ -1733,29 +1733,28 @@ in `MPS/Preparation/` uses it.
 
 ### Local circuits and two-site gates
 
-#### `QuantumCircuit.supportedOperators`
+#### `ManyBody.supportedOperators` (QICLean)
 
 - **Declaration:**
-  `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
-- **Defined in:** `TNLean/Circuit/SupportedOperators.lean`.
-- **Meaning:** the complex span of the product operators
-  `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
-  `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S` of a finite type
-  of `d`-level sites `ι`. The chain of `N` sites is `ι = Fin N`, where
-  `Matrix.rectKronecker m` is `Matrix.finKronecker m`.
+  `ManyBody.supportedOperators (X : V → Type*) (D : Finset V) : StarSubalgebra ℂ (Matrix (Config X) (Config X) ℂ)`.
+- **Defined in:** QICLean, `QICLean/ManyBody/Sites/Support.lean`. TNLean has no
+  copy; circuits on `d`-level sites use `ManyBody.supportedOperators (fun _ ↦ Fin d) S`.
+- **Meaning:** the operators acting on the sites of `D`, that is `M^{⊗ D} ⊗ 1`.
+  Its carrier is the matrix-entry condition `ManyBody.IsSupportedOn`
+  (`Entropy.IsSupportedOn` for dimensions `n : V → ℕ`), and
+  `ManyBody.supportedOperators_toSubmodule_eq_span` identifies it with the span of
+  the product operators `⊗ᵥ mᵥ` with `mᵥ = 1` off `D`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
 - **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
-  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`,
-  `QuantumCircuit.supportedOperators_mono`,
-  `QuantumCircuit.one_mem_supportedOperators`,
-  `QuantumCircuit.mul_mem_supportedOperators`,
-  `QuantumCircuit.star_mem_supportedOperators`,
-  `QuantumCircuit.commute_of_mem_supportedOperators` (operators acting on
-  disjoint sets commute), and `QuantumCircuit.embedOp_mem_supportedOperators`
-  (an operator placed by an injective map acts on its range).
-- **Caveat:** membership says nothing about unitarity; for `S = ∅` the
-  submodule consists of the scalar multiples of the identity.
+  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`
+  (with `QuantumCircuit.prodOp_eq_rectKronecker`), `ManyBody.supportedOperators_mono`,
+  `ManyBody.commute_of_mem_supportedOperators_of_disjoint`,
+  `ManyBody.supportedOperators_induction`, and
+  `QuantumCircuit.embedOp_mem_supportedOperators` (an operator placed by an
+  injective map acts on its range).
+- **Caveat:** membership says nothing about unitarity; for `D = ∅` the
+  subalgebra consists of the scalar multiples of the identity.
 
 #### `QuantumCircuit.bondNeighbourhood` and `QuantumCircuit.lightCone`
 

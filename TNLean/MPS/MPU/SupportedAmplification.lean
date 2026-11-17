@@ -33,8 +33,8 @@ initialized and success reflections in Section 5 of the circuit audit. -/
 theorem subspaceReflection_mem_supportedOperators
     {P : Matrix (Cfg d n) (Cfg d n) ℂ} (hP : P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     Matrix.subspaceReflection P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
-  (ManyBody.supportedOperators (fun _ ↦ Fin d) S).sub_mem ((one_mem (ManyBody.supportedOperators _ S)))
-    ((ManyBody.supportedOperators (fun _ ↦ Fin d) S).smul_mem (2 : ℂ) hP)
+  sub_mem (one_mem (ManyBody.supportedOperators _ S))
+    (SMulMemClass.smul_mem (2 : ℂ) hP)
 
 /-- Powers do not enlarge logical support. Source: repeated amplification
 in Section 5 of the circuit audit. -/
@@ -72,7 +72,7 @@ theorem postselectionAmplificationStep_mem_supportedOperators
     (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hP : Matrix.subspaceReflection P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     Matrix.postselectionAmplificationStep (Z * E) P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
-  (ManyBody.supportedOperators (fun _ ↦ Fin d) S).neg_mem
+  neg_mem
     (mul_mem
       (subspaceReflection_image_mem_supportedOperators Z E hZ hZS hR) hP)
 

@@ -336,9 +336,9 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
   obtain ⟨W, hW_def⟩ : ∃ W : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ,
       W = chainWindowOperator w 0 X * chainWindowOperator w (s' - 1) Y := ⟨_, rfl⟩
   have hcomm : Commute (chainWindowOperator w 0 X) (chainWindowOperator w (s' - 1) Y) := by
-    refine QuantumCircuit.commute_of_mem_supportedOperators ?_
+    refine ManyBody.commute_of_mem_supportedOperators_of_disjoint
       (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) X)
-      (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) Y)
+      (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) Y) ?_
     rw [Finset.disjoint_left]
     intro k hk hk'
     simp only [MPSPreparation.window, Finset.mem_filter, Finset.mem_univ, true_and] at hk hk'

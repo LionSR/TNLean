@@ -214,7 +214,7 @@ theorem spectatorSiteExpectation_commute (K : Finset ι)
     (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * spectatorSiteExpectation q K B
   ext ⟨σ, a⟩ ⟨τ, b⟩
   have h := congrArg (fun M : Matrix (ι → Fin q) (ι → Fin q) ℂ => M σ τ)
-    (ManyBody.commute_of_mem_supportedOperators_of_disjoint ((regionExpectation_mem_supportedOperators K (Matrix.of fun σ' τ' => B (σ', a) (τ', b)))) hU disjoint_compl_right).eq
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint (regionExpectation_mem_supportedOperators K (Matrix.of fun σ' τ' => B (σ', a) (τ', b))) hU disjoint_compl_right).eq
   simpa [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
     Matrix.one_apply, mul_ite, ite_mul, spectatorSiteExpectation_apply] using h
 

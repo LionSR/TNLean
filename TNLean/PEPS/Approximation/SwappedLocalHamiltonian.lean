@@ -181,7 +181,7 @@ theorem sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing (h : LocalHamilton
       (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators (h.supported X) ?_)
     rcases hX with hX | hX
     · exact Or.inl (Finset.coe_subset.mpr hX)
-    · exact Or.inr (hX)
+    · exact Or.inr hX
   have hsum : F * doubledHamiltonian h.operator * Fᴴ - doubledHamiltonian h.operator =
       ∑ X, (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
     rw [LocalHamiltonian.operator, doubledHamiltonian_sum, Finset.mul_sum, Finset.sum_mul,
@@ -232,11 +232,11 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
       reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hM
   have hsupport : F * K * Fᴴ - K ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (crossingSites Λ R A : Finset (Site Λ)) :=
-    hsum.symm ▸ (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (crossingSites Λ R A : Finset (Site Λ))).sum_mem
+    hsum.symm ▸ sum_mem
       fun X hX ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
           (fun X : AdmissibleSupport Λ R ↦ X.1) hX))
-        ((ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1).sub_mem
+        (sub_mem
           (reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators A X.1
             (h.supported X))
           (hplain X.1 (h.supported X)))

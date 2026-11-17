@@ -129,8 +129,8 @@ theorem ChainHamiltonian.isSupportedOn_localizedPart
     Entropy.IsSupportedOn (n := fun _ ↦ q) (h.localizedPart Ω s ΔE P K) (D ∪ K) := by
   refine (Submodule.add_mem _ ?_ ?_)
   · exact ManyBody.supportedOperators_mono (by simp)
-      ((hP.groundCentered Ω))
-  · exact ManyBody.supportedOperators_mono (by simp) (((ManyBody.regionExpectation_mem_supportedOperators K _)))
+      (hP.groundCentered Ω)
+  · exact ManyBody.supportedOperators_mono (by simp) (ManyBody.regionExpectation_mem_supportedOperators K _)
 
 /-- The centered part of `0` is `0`. -/
 theorem groundCentered_zero :
@@ -305,16 +305,16 @@ theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q 
   · rw [hrem]
     refine (Submodule.sub_mem _
       (Submodule.sub_mem _ ?_ ?_) ?_)
-    · refine ManyBody.supportedOperators_mono ?_ (((h.isSupportedOn_bufferPart c m).groundCentered Ω))
+    · refine ManyBody.supportedOperators_mono ?_ ((h.isSupportedOn_bufferPart c m).groundCentered Ω)
       intro x hx
       simp only [mem_interval] at hx ⊢
       omega
-    · refine ManyBody.supportedOperators_mono ?_ (((ManyBody.regionExpectation_mem_supportedOperators KL DL)))
+    · refine ManyBody.supportedOperators_mono ?_ (ManyBody.regionExpectation_mem_supportedOperators KL DL)
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
       simp only [mem_interval] at this ⊢
       omega
-    · refine ManyBody.supportedOperators_mono ?_ (((ManyBody.regionExpectation_mem_supportedOperators KR DR)))
+    · refine ManyBody.supportedOperators_mono ?_ (ManyBody.regionExpectation_mem_supportedOperators KR DR)
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
       simp only [mem_interval] at this ⊢
@@ -325,7 +325,7 @@ theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q 
         ‖ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.operator (groundCentered Ω P) -
           groundCentered Ω P)‖ ≤
           Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) * (partCommutatorConst R * J ^ 2) := by
-      refine ((ManyBody.norm_regionExpectation_le (D := K) _)).trans ?_
+      refine (ManyBody.norm_regionExpectation_le (D := K) _).trans ?_
       rw [h.gaussianFilteredTerm_groundCentered_sub]
       exact (norm_gaussianFilteredTerm_sub_self_le s ΔE h.operator_isHermitian P).trans
         (by gcongr)

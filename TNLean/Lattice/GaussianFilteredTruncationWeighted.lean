@@ -129,8 +129,8 @@ theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
     let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
       ⟨h, fun k => (hSupport k)⟩
     have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ
-      hHerm R hDiam vR hCard b₀ hBudget S (hW) Y
-      (hB) μ hμ.le l hd t
+      hHerm R hDiam vR hCard b₀ hBudget S hW Y
+      hB μ hμ.le l hd t
     calc _ = ‖ManyBody.heisenbergEvolution (∑ k, h k) t W * B -
           B * ManyBody.heisenbergEvolution (∑ k, h k) t W‖ := norm_sub_rev _ _
       _ ≤ 4 * (S.card : ℝ) * ‖W‖ * ‖B‖ *

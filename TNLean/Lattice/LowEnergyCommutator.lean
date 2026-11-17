@@ -237,7 +237,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
   have hloc := norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X h
     hHerm hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth (ΔE := ΔE) hq S hW l hT
   have hcomm : Commute M B :=
-    ManyBody.commute_of_mem_supportedOperators_of_disjoint (((ManyBody.regionExpectation_mem_supportedOperators _ _))) hB hY
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (ManyBody.regionExpectation_mem_supportedOperators _ _) hB hY
   have hsplit : F * B - B * F = (F - M) * B - B * (F - M) := by
     rw [sub_mul, mul_sub, hcomm.eq]; abel
   rw [hsplit]

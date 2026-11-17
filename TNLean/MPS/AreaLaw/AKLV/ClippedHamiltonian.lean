@@ -132,11 +132,11 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
     exact (ManyBody.cfc_mem_supportedOperators _
-        ((hC j)))
+        (hC j))
   have hleft : Entropy.IsSupportedOn HL (interval L 0 (a + 2)) := by
-    apply exact Submodule.sub_mem _
-      ((hF 0))
-      (Submodule.smul_mem _ _ ((one_mem (ManyBody.supportedOperators _ _))))
+    exact Submodule.sub_mem _
+      (hF 0)
+      (Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _)))
   refine ⟨HL, HR, hleft, hF 2, fun j ↦ hsupp _, ?_, by omega⟩
   exact aklv_clipped_hamiltonian_formula hs ha h e t
 

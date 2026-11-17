@@ -89,12 +89,12 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
       Matrix.add_mul, add_comm] using
       congrArg₂ (· + ·)
         (sheetSwapOp_mul_kronecker_of_mem_supportedOperators
-          (ManyBody.supportedOperators_mono hinside hA) ((one_mem (ManyBody.supportedOperators _ _))))
+          (ManyBody.supportedOperators_mono hinside hA) (one_mem (ManyBody.supportedOperators _ _)))
         (sheetSwapOp_mul_kronecker_of_mem_supportedOperators
-          ((one_mem (ManyBody.supportedOperators _ _))) (ManyBody.supportedOperators_mono hinside hA))
+          (one_mem (ManyBody.supportedOperators _ _)) (ManyBody.supportedOperators_mono hinside hA))
   · exact (commute_sheetSwapOp_kronecker houtside hA
-      ((one_mem (ManyBody.supportedOperators _ _)))).add_right
-      (commute_sheetSwapOp_kronecker houtside ((one_mem (ManyBody.supportedOperators _ _))) hA)
+      (one_mem (ManyBody.supportedOperators _ _))).add_right
+      (commute_sheetSwapOp_kronecker houtside (one_mem (ManyBody.supportedOperators _ _)) hA)
 
 /-- Conjugating a product of two operators supported on `S` depends only on
 the partial swap inside `S`. Empty site types and zero local dimension are
@@ -144,8 +144,8 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_inter
       (sheetSwapOp q (R ∩ S))ᴴ * doubledHamiltonian A * sheetSwapOp q (R ∩ S) := by
   simpa only [doubledHamiltonian, Matrix.mul_add, Matrix.add_mul] using
     congrArg₂ (· + ·)
-      (sheetSwapOp_conj_kronecker_eq_inter R S hA ((one_mem (ManyBody.supportedOperators _ _))))
-      (sheetSwapOp_conj_kronecker_eq_inter R S ((one_mem (ManyBody.supportedOperators _ _))) hA)
+      (sheetSwapOp_conj_kronecker_eq_inter R S hA (one_mem (ManyBody.supportedOperators _ _)))
+      (sheetSwapOp_conj_kronecker_eq_inter R S (one_mem (ManyBody.supportedOperators _ _)) hA)
 
 /-- A regional swap preserves the common support of an individual tensor
 product after pairing the two local coordinates. Empty regions and zero local
@@ -194,10 +194,10 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
   simpa only [doubledHamiltonian, Matrix.reindex_apply, Matrix.submatrix_add,
     Pi.add_apply, Matrix.mul_add, Matrix.add_mul] using
-    (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S).add_mem
+    add_mem
       (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators R S hA
-        ((one_mem (ManyBody.supportedOperators _ _))))
+        (one_mem (ManyBody.supportedOperators _ _)))
       (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators R S
-        ((one_mem (ManyBody.supportedOperators _ _))) hA)
+        (one_mem (ManyBody.supportedOperators _ _)) hA)
 
 end TNLean.Lattice

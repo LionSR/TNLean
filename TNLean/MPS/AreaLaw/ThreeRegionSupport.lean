@@ -264,7 +264,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
   have hs := s.isLt
   have hzero : Entropy.IsSupportedOn (n := fun _ : E ↦ q)
       (0 : Matrix (E → Fin q) (E → Fin q) ℂ) C :=
-    (Submodule.zero_mem _)
+    (zero_mem _)
   have hLeft : ∀ r : Fin (2 * ℓ),
       ∃ (B : Matrix (T → Fin q) (T → Fin q) ℂ)
         (W : Matrix (E → Fin q) (E → Fin q) ℂ),
@@ -300,7 +300,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
         have hWsupp := isSupportedOn_of_threeSplit_middle T E
           (interval L (a + r.val) (a + r.val + 2)) hTE
           (F (Sum.inl (Sum.inl r)))
-          ((hleft r)) W hW
+          (hleft r) W hW
         have hcollar : (Finset.univ.filter
             (fun x : E ↦ x.val ∈ interval L (a + r.val) (a + r.val + 2))) ⊆ C := by
           intro x hx
@@ -353,7 +353,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
         have hWsupp := isSupportedOn_of_threeSplit_middle T E
           (interval L (b + r.val) (b + r.val + 2)) hTE
           (F (Sum.inl (Sum.inr r)))
-          ((hright r)) W hW
+          (hright r) W hW
         have hcollar : (Finset.univ.filter
             (fun x : E ↦ x.val ∈ interval L (b + r.val) (b + r.val + 2))) ⊆ C := by
           intro x hx
@@ -677,16 +677,16 @@ theorem exists_weighted_ordinary_middle_eq_central_add_supported
     change (∑ r ∈ (Finset.univ : Finset (Fin (2 * ℓ))).filter (fun r ↦ p < r),
       z (Sum.inl (Sum.inl r)) • HM (Sum.inl (Sum.inl r))) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin q) C
-    refine Submodule.sum_mem _ fun r hr ↦ ?_
-    exact Submodule.smul_mem _ _
-      ((hleftC r (Finset.mem_filter.mp hr).2))
+    refine sum_mem fun r hr ↦ ?_
+    exact SMulMemClass.smul_mem _
+      (hleftC r (Finset.mem_filter.mp hr).2)
   have hKRmem : KR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) C := by
     change (∑ r ∈ (Finset.univ : Finset (Fin (2 * ℓ))).filter (fun r ↦ r < s),
       z (Sum.inl (Sum.inr r)) • HM (Sum.inl (Sum.inr r))) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin q) C
-    refine Submodule.sum_mem _ fun r hr ↦ ?_
-    exact Submodule.smul_mem _ _
-      ((hrightC r (Finset.mem_filter.mp hr).2))
+    refine sum_mem fun r hr ↦ ?_
+    exact SMulMemClass.smul_mem _
+      (hrightC r (Finset.mem_filter.mp hr).2)
   refine ⟨KL + KR, ?_, ?_⟩
   · calc
       (∑ i ∈ O, z i • HM i) = ∑ i, z i • HM i := hOrd
@@ -696,7 +696,7 @@ theorem exists_weighted_ordinary_middle_eq_central_add_supported
         simp only [hL0, hR0, smul_zero, add_zero, zero_add]
       _ = z (Sum.inr (1 : Fin 3)) • HM (Sum.inr (1 : Fin 3)) + (KL + KR) :=
         add_comm _ _
-  · exact (Submodule.add_mem _ hKLmem hKRmem)
+  · exact (add_mem hKLmem hKRmem)
 
 end TNLean.MPS.AreaLaw
 

@@ -117,7 +117,7 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     have hAs : A ∈ V := (isSupportedOn_sum_internal_bonds (N + 1) q l r h hs)
     have hp : (p : ℂ) • (1 : Matrix (Fin (N + 1) → Fin q)
         (Fin (N + 1) → Fin q) ℂ) ∈ V :=
-      V.smul_mem _ ((one_mem (ManyBody.supportedOperators _ _)))
+      V.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
     exact (V.add_mem hp (ManyBody.cfc_mem_supportedOperators _ (V.sub_mem hAs hp)))
   obtain ⟨Acore, C0, hZ, hZphys, hRecon, hNativeError, hPlacedError⟩ :=
     exists_native_interval_slice_of_mpo_approximation hq hlr hrL P hPs Ah hAh xi hAhError

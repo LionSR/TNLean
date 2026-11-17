@@ -269,8 +269,8 @@ set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `T` exchanges the
 `T`-components. -/
 theorem sheetSwapOp_eq_submatrix :
-    sheetSwapOp q T = (((tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).toPEquiv.toMatrix :
-      Matrix _ _ ℂ)).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
+    sheetSwapOp q T = ((tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).toPEquiv.toMatrix :
+      Matrix _ _ ℂ).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
   have he : (threeSplit₂ h).symm.trans ((sheetSwap q T).trans (threeSplit₂ h)) =
       tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q) := by
     refine Equiv.ext fun w => ?_

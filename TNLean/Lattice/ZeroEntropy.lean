@@ -68,10 +68,10 @@ theorem regionEntropy_eq_zero_of_forall_subset_or_disjoint
   set Hout := ∑ i ∈ Finset.univ.filter (fun i ↦ ¬ D i ⊆ B), h i
   have hH : ∑ i, h i = Hin + Hout := (Finset.sum_filter_add_sum_filter_not _ _ _).symm
   have hin : Entropy.IsSupportedOn Hin B :=
-    (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _).sum_mem fun i hi ↦
+    sum_mem fun i hi ↦
       (hsupp i).mono (Finset.mem_filter.mp hi).2
   have hout : Entropy.IsSupportedOn Hout Bᶜ := by
-    refine (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _).sum_mem fun i hi ↦ (hsupp i).mono ?_
+    refine sum_mem fun i hi ↦ (hsupp i).mono ?_
     have hi' := (Finset.mem_filter.mp hi).2
     rcases hsplit i with h' | h'
     · exact absurd h' hi'

@@ -322,7 +322,7 @@ private theorem exists_long_frustrationFree_family
     (G₀ : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
     (hG₀ : LinearMap.ker (chainOperator h).toLinearMap = G₀)
     (htrade : ∀ R : ℝ, 0 < R → R ≤ 2 * 80 * (ℓ : ℝ) →
-      ((((d * ℓ ^ 2) ^ (22 * ℓ) : ℕ) : ℝ)) ^ 12 *
+      (((d * ℓ ^ 2) ^ (22 * ℓ) : ℕ) : ℝ) ^ 12 *
         (4 * Real.exp (-(4 * (ℓ : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)))) ≤ 1 / 100000) :
     let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
     let J := interval L p r
@@ -737,7 +737,7 @@ theorem exists_frustrationFree_improving_family_words :
     intro i
     have hmem := ManyBody.cfc_mem_supportedOperators
       (fun x : ℝ ↦ if x ≠ 0 then 1 else 0)
-      ((hs i))
+      (hs i)
     rw [← (hpsd i).isHermitian.supportProj_eq_cfc] at hmem
     exact hmem
   have hzero (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)

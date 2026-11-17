@@ -77,7 +77,7 @@ theorem ctrlOp_mem_supportedOperators (S : Finset ι) (c : ι → Fin d) (t : ι
   have hs := ManyBody.supportedOperators_mono (Finset.singleton_subset_iff.mpr (Finset.mem_insert_self t S))
     (siteOp_mem_supportedOperators (d := d) t u)
   exact add_mem (mul_mem hp hs)
-    (sub_mem ((one_mem (ManyBody.supportedOperators _ _))) hp)
+    (sub_mem (one_mem (ManyBody.supportedOperators _ _)) hp)
 
 /-- **Controlled commutator on the sites.** Removing one control site `s` from the controls of
 a commutator `v w v† w†` at the site `t`. -/

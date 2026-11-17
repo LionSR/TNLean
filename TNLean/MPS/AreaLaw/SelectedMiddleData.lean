@@ -644,9 +644,9 @@ theorem exists_physical_selected_window_fixed_middle_data
   have hPLT : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T :=
     ManyBody.supportedOperators_mono
       (interval_mono (by omega) (by omega))
-      (hPL)
+      hPL
   have hPRU : PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset (Fin L)) := by
-    apply ManyBody.supportedOperators_mono ?_ (hPR)
+    apply ManyBody.supportedOperators_mono ?_ hPR
     intro x hx
     have hx' := mem_interval.mp hx
     simp only [Finset.mem_compl, Finset.mem_union, T, E, mem_interval]

@@ -70,7 +70,7 @@ Source: area-law `eq:hamiltonian`, zero summands are permitted. -/
 noncomputable def LocalHamiltonian.zero (Λ : Finset (ℤ × ℤ)) (q R : ℕ)
     (J : ℝ) (hJ : 0 ≤ J) : LocalHamiltonian Λ q R J where
   term _ := 0
-  supported _ := Submodule.zero_mem _
+  supported _ := zero_mem _
   hermitian _ := Matrix.isHermitian_zero
   norm_le _ := by simpa using hJ
 

@@ -83,12 +83,12 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
       F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ -
           Matrix.reindex p p (doubledHamiltonian A) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S :=
-    (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S).sub_mem
+    sub_mem
       (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R S hA)
       (hplain S hA)
   have hsupport : F * K * Fᴴ - K ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z :=
-    hsum.symm ▸ (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z).sum_mem
+    hsum.symm ▸ sum_mem
       (fun e he ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
           (fun e : Edge (squareLatticeGraph L L) ↦

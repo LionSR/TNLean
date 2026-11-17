@@ -197,8 +197,8 @@ theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
     (anchors X a) (anchors_mem ha) h.hermitian R
     (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) X
-    (hA) y
-    ((by assumption)) μ hμ n
+    hA y
+    (by assumption) μ hμ n
     (by rwa [anchors_self]) t
 
 /-- **Exact vanishing between components.** If the anchor `a` and the site `y` lie in
@@ -217,8 +217,8 @@ theorem commutator_eq_zero_of_edist_eq_top (h : LocalHamiltonian Λ q R J)
         A = 0 :=
   ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top (domainGraph Λ) h.interaction
     (anchors X a) (anchors_mem ha) R (fun Y => Y.2.edist_le) X
-    (hA) y
-    ((by assumption))
+    hA y
+    (by assumption)
     (by rwa [anchors_self]) t
 
 /-- **Localization onto graph balls**, explicit form, for the finite-domain Hamiltonian.
@@ -246,7 +246,7 @@ theorem norm_sub_regionExpectation_graphBall_le (h : LocalHamiltonian Λ q R J)
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) 2 2
     (fun x d => card_domainGraph_sphere_le Λ x d) X
-    (hA) l t
+    hA l t
   rwa [anchors_self] at hBound
 
 end TNLean.Lattice.LocalHamiltonian
@@ -305,8 +305,8 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   · have hXY := hLR (domainGraph Λ) h.interaction (LocalHamiltonian.anchors X a)
       (LocalHamiltonian.anchors_mem ha) h.hermitian
       (fun Y => Y.2.edist_le) (fun Y => Y.2.card_le)
-      (h.sum_norm_term_containing_le hJ) X A B (hA) y
-      ((by assumption)) t
+      (h.sum_norm_term_containing_le hJ) X A B hA y
+      (by assumption) t
     rw [LocalHamiltonian.anchors_self] at hXY
     refine ⟨fun d hd => (hXY.1 d hd.symm.le).trans ?_, hXY.2⟩
     gcongr

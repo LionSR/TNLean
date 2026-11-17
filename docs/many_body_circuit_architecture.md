@@ -209,7 +209,8 @@ cannot be admitted by recording it. The 17 imports recorded when the check was
 introduced were repaired by step 0.3, and the set is empty:
 
 - nine site and dynamics modules imported `Circuit/LocalCircuit` for
-  `supportedOperators`, now defined in `Circuit/SupportedOperators`;
+  `supportedOperators`, which was defined in `Circuit/SupportedOperators` and
+  was replaced by QICLean's `ManyBody.supportedOperators` in follow-up F12;
 - four modules of the Sites and Hamiltonian layers imported gate modules for
   `siteOp`, `ctrlProj` and local permutations, now in `Circuit/SiteOperators`
   and `Circuit/SitePermutation`;
@@ -289,7 +290,9 @@ else.
   entries, with site-dependent dimensions `n : V → ℕ` and `D : Finset V` (311
   TNLean modules, 29 QICLean modules). 61 modules use both. The two bridge
   lemmas in `Circuit/EntropySupport` are each applied in about 50 modules and
-  exist only for one local dimension.
+  exist only for one local dimension. Follow-up F12 deleted the first predicate
+  and the bridges: supports are now `ManyBody.supportedOperators`, whose carrier
+  is the entry condition.
 - The algebra of `Entropy.IsSupportedOn` (`add`, `neg`, `sub`, `smul`,
   `conjTranspose`, finite sums, `exp`) is proved in TNLean area-law modules
   under the QICLean namespace, not in QICLean. Its product and commutation

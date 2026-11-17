@@ -38,7 +38,7 @@ theorem mem_supportedOperators_complementProd
   | succ n ih =>
     rw [ContinuousLinearMap.complementProd_succ, map_mul, map_sub, map_one]
     exact mul_mem
-      ((ManyBody.supportedOperators (fun _ ↦ Fin q) S).sub_mem ((one_mem (ManyBody.supportedOperators _ S)))
+      (sub_mem (one_mem (ManyBody.supportedOperators _ S))
         (hh n (Nat.lt_succ_self n))) (ih fun k hk ↦ hh k (Nat.lt_succ_of_lt hk))
 
 end QuantumCircuit

@@ -49,7 +49,7 @@ private theorem ring_step_le_one {n : ℕ} [NeZero n] (x y : Fin n)
     rw [Fin.val_sub, ZMod.natCast_mod, Nat.cast_add, Nat.cast_sub u.isLt.le,
       ZMod.natCast_self]
     ring
-  have hone : ((1 : ZMod n)).valMinAbs.natAbs ≤ 1 := by
+  have hone : (1 : ZMod n).valMinAbs.natAbs ≤ 1 := by
     rw [ZMod.valMinAbs_natAbs_eq_min]
     exact (min_le_left _ _).trans (by rw [ZMod.val_one_eq_one_mod]; exact Nat.mod_le 1 n)
   rcases SimpleGraph.cycleGraph_adj'.mp h with h | h

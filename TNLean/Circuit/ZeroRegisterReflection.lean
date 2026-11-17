@@ -152,7 +152,7 @@ theorem zeroRegisterReflection_mul_cleanEmbedding (hd : 2 ≤ d) (ha : 0 < a) :
           (1 - (2 : ℂ) • Matrix.diagonal fun x : Fin a → Fin d ↦
             if x = 0 then (1 : ℂ) else 0) := by
   classical
-  let J : Matrix ((Fin (a + a) → Fin d)) ((Fin a → Fin d)) ℂ :=
+  let J : Matrix (Fin (a + a) → Fin d) (Fin a → Fin d) ℂ :=
     Matrix.of fun z x ↦ if z = Fin.append x 0 then 1 else 0
   change zeroRegisterReflection ha * J =
     J * (1 - (2 : ℂ) • Matrix.diagonal fun x : (Fin a → Fin d) ↦ if x = 0 then (1 : ℂ) else 0)
@@ -228,13 +228,13 @@ On a chain containing a neighboring pair this is one exact two-site gate,
 including its global phase. This covers the empty-register case in
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem isPairProduct_neg_one {n : ℕ} (hn : 2 ≤ n) :
-    IsPairProduct d n 1 (-1 : Matrix ((Fin n → Fin d)) ((Fin n → Fin d)) ℂ) := by
+    IsPairProduct d n 1 (-1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
   let p : Fin n := ⟨0, by omega⟩
   let q : Fin n := ⟨1, by omega⟩
   apply IsPairProduct.of_isNeighbourGate
   refine ⟨?_, p, q, rfl, ?_⟩
   · rw [Matrix.mem_unitaryGroup_iff']
     simp
-  · exact (ManyBody.supportedOperators (fun _ ↦ Fin d) {p, q}).neg_mem ((one_mem (ManyBody.supportedOperators _ _)))
+  · exact neg_mem (one_mem (ManyBody.supportedOperators _ _))
 
 end QuantumCircuit

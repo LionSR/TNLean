@@ -159,7 +159,6 @@ end ThreeSplit
 
 /-! ### Product forms of supported operators -/
 
-omit [DecidableEq ι] in
 /-- If every product operator acting on `D` has the form `Φ A'` in the coordinates `e`, for a
 linear map `Φ`, then so does every operator acting on `D`. -/
 theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Module ℂ M]

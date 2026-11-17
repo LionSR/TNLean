@@ -520,7 +520,7 @@ theorem isZeroOn_regInteriorFrom_mulVec [NeZero d] {j : ℕ} {v : Cfg d N → �
 
 /-! ### The trees of all the blocks with measurements -/
 
-variable (hN) in
+variable hN in
 /-- The sites of the blocks other than their first and their last `s` sites. -/
 noncomputable def regCentralSites : Finset (Fin N) := by
   classical

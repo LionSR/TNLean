@@ -178,7 +178,7 @@ theorem exists_staircase_isWindowProduct (hd : 0 < d) {r D' : ℕ} (hD' : 0 < D'
     refine ⟨embedOp Fin.castSucc U' * embedOp win W, ?_, ?_⟩
     · intro Z hZ hZS
       have hU'1 : IsWindowProduct d n (r + 1) (max 1 (n - r)) U' := by
-        simpa using hU' 1 (one_mem _) ((one_mem (ManyBody.supportedOperators _ _)))
+        simpa using hU' 1 (one_mem _) (one_mem (ManyBody.supportedOperators _ _))
       have hWu' := embedOp_mem_unitary hwini hWu
       by_cases hnr : n = r
       · -- the last step and the unitary on the first `r` sites form one gate on all `r + 1` sites
@@ -283,7 +283,7 @@ theorem exists_staircase (hd : 0 < d) {r D' : ℕ} (hr : 2 ≤ r) (hD' : 0 < D')
   refine ⟨C, C, fun n hn b Q hb0 hrow hiso => ?_⟩
   obtain ⟨U, hU, hUQ⟩ := exists_staircase_isWindowProduct hd hD' henc n hn b Q hb0 hrow hiso
   have hU1 : IsWindowProduct d n (r + 1) (max 1 (n - r)) U := by
-    simpa using hU 1 (one_mem _) ((one_mem (ManyBody.supportedOperators _ _)))
+    simpa using hU 1 (one_mem _) (one_mem (ManyBody.supportedOperators _ _))
   refine ⟨U, (hC n _ (by omega) U hU1).mono ?_, hUQ⟩
   calc max 1 (n - r) * C ≤ (1 + (n - r)) * C := Nat.mul_le_mul_right _ (by omega)
     _ = C + (n - r) * C := by rw [Nat.add_mul, one_mul]

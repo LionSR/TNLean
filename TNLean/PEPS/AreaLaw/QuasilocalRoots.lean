@@ -125,6 +125,6 @@ theorem quasilocalRoots (K : Finset ι) {k : Matrix (ι → Fin q) (ι → Fin q
       linarith
     exact mul_le_mul_of_nonneg_right h1 hB
   · exact rootChannel_sqrt_eq_self_of_commute hl₀ hl₁
-      (hB _ (((ManyBody.regionExpectation_mem_supportedOperators K k))))
+      (hB _ (ManyBody.regionExpectation_mem_supportedOperators K k))
 
 end TNLean.PEPS.AreaLaw

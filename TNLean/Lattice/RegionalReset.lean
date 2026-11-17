@@ -479,7 +479,7 @@ theorem exists_supported_unitary_of_two_sided (S : Finset ι)
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 φ‖ ≤ 2 * C * ε := by
   have hz0 : 0 < z := (Real.exp_pos _).trans_le hz
   obtain ⟨U, hU, hUsupp, hcorr⟩ := exists_supported_unitary_polar_correction S
-    (Submodule.smul_mem _ ((z : ℂ)⁻¹) hMsupp)
+    (SMulMemClass.smul_mem ((z : ℂ)⁻¹) hMsupp)
   refine ⟨U, hU, hUsupp, (hcorr ψ φ).trans ?_⟩
   have hzinv : (z : ℂ)⁻¹ = ((z⁻¹ : ℝ) : ℂ) := by push_cast; rfl
   have hstar : star ((z : ℂ)⁻¹) = (z : ℂ)⁻¹ := by

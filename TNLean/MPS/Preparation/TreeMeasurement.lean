@@ -162,7 +162,7 @@ private theorem val_of_mem_span {i p : ℕ} {hp : p < N / 2 ^ (i + 1)} {x : Fin 
   change t' ≤ 2 * (2 ^ i - 1) at h2'
   have hL := (treeGate u hu i p hp).lt
   change 2 * (2 ^ i - 1) + 1 < N at hL
-  have := add_natCast_injective (((p * 2 ^ (i + 1) : ℕ) : Fin N)) (j := t) (k := t')
+  have := add_natCast_injective ((p * 2 ^ (i + 1) : ℕ) : Fin N) (j := t) (k := t')
     (by omega) (by omega) he
   omega
 

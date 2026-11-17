@@ -490,7 +490,7 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
         Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
         (Real.exp ((8 * Real.exp a) * |t|) - 1) := by
   have hMap := ManyBody.norm_heisenberg_commutator_le_heisenbergCommutatorNorm
-    (∑ j, h j) B X t (hA)
+    (∑ j, h j) B X t hA
   have hBound := ringCommutatorNorm_le_exp_abs_of_disjoint h hHerm hSupport hNorm
     B X Y hX hY hB hXY a ha t
   calc

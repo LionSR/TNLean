@@ -222,14 +222,14 @@ theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (
       let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
         ⟨h, fun k => (hSupport k)⟩
       have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm
-        R hDiam vR hCard b₀ hBudget S (hA) y
+        R hDiam vR hCard b₀ hBudget S hA y
         hU
         μ hμ m (fun x hx => hm x hx y hyY) t
       rw [CStarRing.norm_of_mem_unitary hUu, mul_one] at hLR
       exact hLR
   rw [compl_compl, Finset.sum_const, nsmul_eq_mul] at hloc
   have hcomm : Commute B (ManyBody.regionExpectation Yᶜ τA) :=
-    ManyBody.commute_of_mem_supportedOperators_of_disjoint hB ((ManyBody.regionExpectation_mem_supportedOperators _ _)) disjoint_compl_right
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hB (ManyBody.regionExpectation_mem_supportedOperators _ _) disjoint_compl_right
   have hsplit : B * τA - τA * B =
       B * (τA - ManyBody.regionExpectation Yᶜ τA) -
         (τA - ManyBody.regionExpectation Yᶜ τA) * B := by

@@ -90,15 +90,15 @@ private theorem actual_clipped_two_window_alphabet
   intro k A J Y WL WR C S PL Pmid PR F K B
   let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
   have hA (j : Fin 5) : Entropy.IsSupportedOn (A j) (R j) := by
-    apply (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem
+    apply sum_mem
     intro i hi
     exact (hs i).mono (internal_bond_support_subset hi)
   have hC (j : Fin 5) : C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R j : Finset (Fin L)) :=
     ManyBody.cfc_mem_supportedOperators _
-      ((hA j))
+      (hA j)
   have hPL : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R 0 : Finset (Fin L)) :=
     Submodule.sub_mem _ (hC 0)
-      (Submodule.smul_mem _ _ ((one_mem (ManyBody.supportedOperators _ _))))
+      (Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _)))
   refine ⟨?_, ?_, hPL,
     (hC 2),
     (hC 4), ?_⟩

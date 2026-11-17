@@ -81,8 +81,8 @@ theorem norm_groundCompression_commutator_le_graphSeparation
     let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
       ⟨h, fun k => (hSupport k)⟩
     have hn := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ
-      hHerm R hDiam vR hCard b₀ hBudget S (hW) Y
-      (hB) 1 (by norm_num) m hm t
+      hHerm R hDiam vR hCard b₀ hBudget S hW Y
+      hB 1 (by norm_num) m hm t
     refine hn.trans (mul_le_mul_of_nonneg_left (le_trans ?_ e1) (by positivity))
     apply Real.exp_le_exp.mpr
     have htT : |t| ≤ T := abs_le.mpr ht

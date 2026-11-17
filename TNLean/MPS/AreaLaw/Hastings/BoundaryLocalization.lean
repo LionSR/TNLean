@@ -198,7 +198,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     unfold interactionPropagator
     simpa using this
   have habs : Integrable (fun t : ℝ ↦ |t|) (gaussianReal 0 η) :=
-    ((memLp_one_iff_integrable.1 (memLp_id_gaussianReal (μ := 0) (v := η) 1))).abs
+    (memLp_one_iff_integrable.1 (memLp_id_gaussianReal (μ := 0) (v := η) 1)).abs
   have hind : Integrable ((Set.Icc (-T) T)ᶜ.indicator (fun _ ↦ (2 : ℝ)))
       (gaussianReal 0 η) :=
     (integrable_const (2 : ℝ)).indicator measurableSet_Icc.compl
@@ -207,12 +207,12 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   refine ⟨∫ t, U t ∂gaussianReal 0 η, ?_, ?_, ?_⟩
   · have hfix (t : ℝ) : ManyBody.regionExpectation N (U t) = U t :=
       (ManyBody.regionExpectation_of_mem_supportedOperators (D := N)
-          (((hsupport t))))
+          (hsupport t))
     have hMint : ManyBody.regionExpectation N (∫ t, U t ∂gaussianReal 0 η) =
         ∫ t, U t ∂gaussianReal 0 η :=
       ((ManyBody.regionExpectationLM N).toContinuousLinearMap.integral_comp_comm hUint).symm.trans
         (integral_congr_ae (Filter.Eventually.of_forall hfix))
-    exact hMint ▸ ((ManyBody.regionExpectation_mem_supportedOperators N _))
+    exact hMint ▸ (ManyBody.regionExpectation_mem_supportedOperators N _)
   · simpa using norm_integral_le_of_norm_le_const (μ := gaussianReal 0 η)
       (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
   · rw [interactionAverage_eq_integral, ← integral_sub hPint hUint]

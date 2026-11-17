@@ -106,7 +106,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
       (fun X : ChainSupport L R ↦ X) (h.swappedDoubled D).term
       (h.swappedDoubled D).hermitian (h.swappedDoubled D).supported b₀
       (h.swappedDoubled D).sum_norm_terms_containing_le hqq Q
-      (hW) ℓ hℓ t
+      hW ℓ hℓ t
     have hc : (Q.card : ℝ) ≤ (L : ℝ) := by
       have hcNat : Q.card ≤ L := by
         simpa only [Fintype.card_fin] using Finset.card_le_univ Q
