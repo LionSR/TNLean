@@ -49,7 +49,9 @@ eight consumers use the QICLean name. `Matrix.l2_opNorm_kronecker_le_one` has no
 QICLean counterpart and stays. From LionSR/QICLean#1095,
 `Matrix.IsHermitian.posSemidef_sub_smul_one_of_le_eigenvalues`
 (`Algebra/KroneckerLeastEigenvalue`) is QICLean's, moved unchanged to
-`ManyBody/Hamiltonian/GroundSpace`.
+`ManyBody/Hamiltonian/GroundSpace`. `Matrix.finKronecker_mul` (`Algebra/FinKronecker`) is QICLean's
+(`Analysis/FiniteKroneckerPowers`), stated in the opposite orientation, so its ten
+consumer modules rewrite in the other direction.
 
 The QICLean statements take an interaction `Φ : ManyBody.Interaction X T` and
 regions `Finset V`. The TNLean consumers keep their statements: each builds
@@ -96,6 +98,7 @@ and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 | F9 | `SquareHamiltonian.hermitianTerm`, `RectangularHamiltonian.hermitianTerm` and their lemmas | `ManyBody.Interaction.hermitianPart` | 5 |
 | F10 | `Lattice.groundEigenspace` | `ManyBody.groundSpace` | 25 |
 | F11 | `Matrix.IsGappedGroundState` | `ManyBody.IsGapped` with `groundSpace = span {Ω}`, through `ManyBody.isGapped_and_groundSpace_eq_span_iff` | 186 |
-| F12 | `QuantumCircuit.siteExpectation`; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral`, `MPS/AreaLaw/DomainSupportedGaussianIntegral` and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
+| F12 | `QuantumCircuit.siteExpectation`; deletes `QuantumCircuit.siteExpectation_eq_regionExpectation`, the one translating lemma admitted by this pin PR against the migration rules; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral`, `MPS/AreaLaw/DomainSupportedGaussianIntegral` and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
 | F13 | `Entropy.crossingTerms` (QICLean's temporary export) | `ManyBody.crossingTerms` | 35 |
 | F14 | `QuantumCircuit.Layer`, the ring abbreviation `BondLayer d ringBond` (`Circuit/LocalCircuit`), which collides with the `QuantumCircuit.Layer` of QICLean's circuit core (step 3C.1) | renamed `QuantumCircuit.RingLayer`, with no alias, before the pin move that brings in the core; the modules that open `QuantumCircuit` are checked for unqualified `Circuit`, `Geometry`, `GateFamily`, `Interpretation` and `KrausGate` | 13 |
+| F15 | `Matrix.toEuclideanLin_reindex_piLpCongrLeft` (`Algebra/MatrixReindexGap`), the statement of `ManyBody.toEuclideanLin_reindex_piLpCongrLeft` (LionSR/QICLean#1095) under another namespace | `ManyBody.toEuclideanLin_reindex_piLpCongrLeft` | 3 |
