@@ -263,3 +263,66 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     with $\eta=\eta_{\rm LD}-3w\lceil\log_2L\rceil$; the hypothesis gives
     $6w\le\eta$.
 \end{proof}
+
+\begin{lemma}[Extracting a window from a close space]
+    \label{lem:window_extraction}
+    \lean{Submodule.norm_inner_sq_le_norm_sq_mul_norm_starProjection_sq,
+        Submodule.IsCloseTo.map_starProjection_isCloseTo,
+        TNLean.MPS.AreaLaw.window_extraction_of_isCloseTo}
+    \leanok
+    Let $H$ be Hermitian with ground energy $E_0$, let $c\ge0$, and let
+    $G(c)$ be the span of the eigenvectors of energy at most $E_0+c$. Let
+    $0\le\delta<1$, and let $R$ be a space that is $\delta$-close to $G(c)$.
+    Then the projection $V$ of $G(c)$ onto $R$ lies in $R$, has the dimension
+    of $G(c)$, and is $\delta$-close to $G(c)$ in both directions. The Ritz
+    space of the compression of $H$ to $R$ of the same dimension lies in $R$,
+    and every vector $x$ in it satisfies, for every $\rho>0$,
+    \[
+        \langle x,Hx\rangle\le\Bigl(E_0+
+            \frac{(1+1/\rho)c+(1+\rho)\|H-E_0\|\delta}{1-\delta}\Bigr)\|x\|^2.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    For $g\in G(c)$ the vector $P_Rg$ lies in $V$, and $\langle P_Rg,g\rangle=
+    \|P_Rg\|^2$; the Cauchy--Schwarz inequality for the projections onto $V$
+    and onto $G(c)$ gives both closeness bounds. Projection into $R$ is
+    injective on $G(c)$, so $V$ has the dimension of $G(c)$. The energy of
+    $H-E_0\ge0$ on $V$ is controlled by its energy on $G(c)$ and the
+    projection loss, and the min--max characterization of the Ritz space
+    compares it with the trial space $V$. No gap at the edge of the window
+    is used.
+\end{proof}
+
+\begin{lemma}[The merge-tree algorithm for a low-density spectrum]
+    \label{lem:low_density_tree_algorithm}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_sampled_interval_tree_of_clause,
+        TNLean.MPS.AreaLaw.exists_low_density_tree_algorithm}
+    \leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
+        lem:window_extraction}
+    In the setting of Lemma~\ref{lem:physical_ld_sampled_interval_tree},
+    suppose $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$ and put
+    $\eta=\eta_{\rm LD}-3w\lceil\log_2L\rceil$. For every failure parameter,
+    the tree of that lemma has a root $S_0$, and for every $0<\delta<1$ the
+    refinement $R$ of $S_0$ of Lemma~\ref{lem:physical_ld_root_refinement},
+    the trim of the word image of $S_0$ unless the chain is short, is
+    $\delta$-close to $G(\eta-3w)$ and consists of matrix product states of
+    the bond dimension stated there. Inside $R$, the projection of
+    $G(\eta-3w)$ has the dimension of $G(\eta-3w)$ and is $\delta$-close to it
+    in both directions, and the Ritz space of $H$ compressed to $R$ of the same
+    dimension satisfies the energy bound of
+    Lemma~\ref{lem:window_extraction} with $c=\eta-3w$. Both consist of matrix
+    product states. The number of states and the energy threshold claimed by
+    the source for its output are not verified here, and no hypothesis is
+    drawn from them.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
+        lem:window_extraction}
+    The tree is stated with its conclusion at the root left as any
+    consequence of the closeness, dimension and matrix product bounds of
+    the root. Take that consequence to be the refinement of
+    Lemma~\ref{lem:physical_ld_root_refinement}, followed by
+    Lemma~\ref{lem:window_extraction} in the refinement. Every subspace of $R$
+    consists of matrix product states of the bond dimension of $R$.
+\end{proof}
