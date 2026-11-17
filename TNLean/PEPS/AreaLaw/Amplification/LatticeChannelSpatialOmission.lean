@@ -269,6 +269,7 @@ lines 42–72 and 188–226. -/
 noncomputable def latticeOmissionExponent (c : ℝ) (p : ℕ) : ℝ :=
   channelOmissionExponent c (kernelExponent p)
 
+open Classical in
 /-- **Omission of distant events for the exact positive constraints, with explicit
 constants** (Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.tex`,
 lines 17–30, 42–72 and 188–226). Let `C ≥ 0` and `c > 0` be localization constants of the

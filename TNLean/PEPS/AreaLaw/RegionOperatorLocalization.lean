@@ -122,7 +122,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       Commute A (ManyBody.regionExpectation (ManyBody.graphBall (planeDomainGraph Λ) y l)
         (ManyBody.heisenbergEvolution h.operator (-t) U)) :=
     ManyBody.commute_of_mem_supportedOperators_of_disjoint hA
-      (ManyBody.regionExpectation_mem_supportedOperators _ _) (hdisj y hy)
+        (ManyBody.regionExpectation_mem_supportedOperators _ _) (hdisj y hy)
   have hε (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
@@ -143,9 +143,11 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       ‖A‖ * (2 * C * (Λ.card : ℝ) * Real.exp (v * |t| - 1 / 2 * l)) := by
     simpa only [Finset.sum_const, Finset.card_univ, Fintype.card_coe, nsmul_eq_mul,
       mul_assoc, mul_comm, mul_left_comm] using
-      (norm_sub_siteExpectation_le (graphNeighborhood Λ l S)
+      (ManyBody.norm_sub_regionExpectation_le (graphNeighborhood Λ l S)
         (ManyBody.heisenbergEvolution h.operator t A)
-        (fun _ ↦ 2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖) hε).trans
+        (fun _ ↦ 2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖) fun y hy U hU hUu ↦
+          hε y hy U (by simpa using hU)
+            hUu).trans
         (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
   have hτnorm : ‖ManyBody.heisenbergEvolution h.operator t A‖ = ‖A‖ :=
     letI : NormedAlgebra ℚ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=

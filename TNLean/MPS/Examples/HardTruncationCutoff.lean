@@ -189,7 +189,7 @@ theorem bondTerm_positive_contraction (K : ℕ) (i : Fin (K + 1)) :
 
 private theorem oneSite_mem {K : ℕ} (i : Fin (K + 2)) (S : Finset (Fin (K + 2)))
     (hi : i ∈ S) : oneSite K i ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S := by
-  apply ManyBody.supportedOperators_mono (Set.singleton_subset_iff.mpr hi)
+  apply ManyBody.supportedOperators_mono (Finset.singleton_subset_iff.mpr hi)
   simpa only [oneSite, bit, Complex.ofReal_natCast] using
     QuantumCircuit.diagonal_comp_eval_mem_supportedOperators i (fun x ↦ (x.val : ℂ))
 
@@ -221,8 +221,7 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
       (interval (K + 2) i.val (i.val + 2)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   refine Fin.cases ?_ (fun j ↦ ?_) i
-  · change _ ∈ ManyBody.supportedOperators _ _
-    change boundary K ∈ _
+  · change boundary K ∈ _
     rw [boundary_formula]
     apply mul_mem
     · change _ ∈ ManyBody.supportedOperators _ _
@@ -231,18 +230,17 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     · change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (oneSite_mem 1 _ (by simp [interval]))
-  · change _ ∈ ManyBody.supportedOperators _ _
-    change internalTerm K j ∈ _
+  · change internalTerm K j ∈ _
     rw [internal_formula]
     split_ifs with hj
     · apply SMulMemClass.smul_mem
       apply add_mem
-      · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
-          Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
-      · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
-          Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
-    · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
-        Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
+      · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
+          Finset.mem_univ, true_and, Fin.val_succ]; omega)
+      · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
+          Finset.mem_univ, true_and, Fin.val_succ]; omega)
+    · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
+        Finset.mem_univ, true_and, Fin.val_succ]; omega)
 
 private def groundConfig (K : ℕ) : Config K := fun i ↦ if i = 0 then 1 else 0
 private def highConfig (K : ℕ) : Config K := fun _ ↦ 1

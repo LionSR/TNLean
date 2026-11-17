@@ -63,9 +63,9 @@ theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : 
         Finset.coe_singleton]
         using h.edge_supported e
   exact coe_realPart_mem_of_star_mem
-    (S := (Subalgebra.toSubmodule (ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (squareLatticeSiteOrEdgeSupport i : Finset (Vertex L))).toSubalgebra).restrictScalars ℝ)
-    hs (show star _ ∈ ManyBody.supportedOperators _ _ from star_mem hs)
+    (S := (ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (squareLatticeSiteOrEdgeSupport i : Finset (Vertex L))).restrictScalars ℝ)
+    hs (star_mem hs)
 
 /-- Hermitian replacement preserves the original interaction support.
 Source: `00-introduction.tex`, `eq:model`. -/

@@ -79,7 +79,7 @@ noncomputable def ringSupportDistance (X Y : Set (Fin N))
 
 private theorem reaches_ringSupportDistance (X Y : Set (Fin N))
     (hX : X.Nonempty) (hY : Y.Nonempty) :
-    reaches X Y (ringSupportDistance X Y hX hY) := by
+    reaches X Y (ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) := by
   classical
   exact Nat.find_spec (exists_reaches X Y hX hY)
 
@@ -87,18 +87,19 @@ private theorem reaches_ringSupportDistance (X Y : Set (Fin N))
 shortest-path distance inequality. -/
 theorem isSeparatedBy_iff_lt_ringSupportDistance
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty) (r : ℕ) :
-    IsSeparatedBy X Y r ↔ r < ringSupportDistance X Y hX hY := by
+    IsSeparatedBy X Y r ↔ r < ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY := by
   classical
   constructor
   · intro h
     by_contra hlt
     have hle := Nat.le_of_not_gt hlt
-    obtain ⟨x, hx, y, hy, m, hm, heq⟩ := reaches_ringSupportDistance X Y hX hY
+    obtain ⟨x, hx, y, hy, m, hm, heq⟩ :=
+      reaches_ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY
     exact h x hx y hy m (hm.trans (by exact_mod_cast hle)) heq
   · intro hr x hx y hy m hm heq
-    have hReach : reaches X Y r := ⟨x, hx, y, hy, m, hm, heq⟩
-    have hle : ringSupportDistance X Y hX hY ≤ r :=
-      Nat.find_min' (exists_reaches X Y hX hY) hReach
+    have hReach : reaches (X : Set (Fin N)) (Y : Set (Fin N)) r := ⟨x, hx, y, hy, m, hm, heq⟩
+    have hle : ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY ≤ r :=
+      Nat.find_min' (exists_reaches (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) hReach
     exact (Nat.not_lt_of_ge hle) hr
 
 
@@ -216,7 +217,8 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
     (hNorm : ∀ j, ‖h j‖ ≤ 1)
     (A B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) (t : ℝ) :
     ‖(exp (t • (Complex.I • ∑ j, h j)) * A *
@@ -255,7 +257,8 @@ theorem norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) (t : ℝ) :
     ‖(exp (t • (Complex.I • interactionHamiltonian h hN)) * A *

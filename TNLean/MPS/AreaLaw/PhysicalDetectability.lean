@@ -70,10 +70,8 @@ private theorem commute_bonds_of_separated
     (i j : Fin (L - 1)) (hsep : i.val + 1 < j.val ∨ j.val + 1 < i.val) :
     Commute (h i) (h j) := by
   refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i) (hs j) ?_
-  rw [Set.disjoint_left]
+  rw [Finset.disjoint_left]
   intro x hx hy
-  change x ∈ interval L i.val (i.val + 2) at hx
-  change x ∈ interval L j.val (j.val + 2) at hy
   rw [mem_interval] at hx hy
   omega
 

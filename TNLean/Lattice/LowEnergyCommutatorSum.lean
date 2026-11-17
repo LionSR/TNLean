@@ -285,14 +285,13 @@ include ha hDiam in
 is disjoint from the sites within distance `l` of the first. -/
 theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
     (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
-    Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i) := by
-  rw [Set.disjoint_left]
+    Disjoint ((X j).biUnion fun x => ManyBody.graphBall G x l) (X i) := by
+  rw [Finset.disjoint_left]
   intro y hy hyi
-  simp only [Finset.coe_biUnion, Finset.mem_coe, Set.mem_iUnion, exists_prop] at hy
-  obtain ⟨x, hx, hxy⟩ := hy
+  obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hy
   have hxy' := ManyBody.mem_graphBall.mp hxy
   have h1 := hDiam j (a j) (ha j) x hx
-  have h2 := hDiam i y (Finset.mem_coe.mp hyi) (a i) (ha i)
+  have h2 := hDiam i y hyi (a i) (ha i)
   have htri : G.edist (a j) (a i) ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) :=
     calc G.edist (a j) (a i) ≤ G.edist (a j) y + G.edist y (a i) := SimpleGraph.edist_triangle
       _ ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) := by

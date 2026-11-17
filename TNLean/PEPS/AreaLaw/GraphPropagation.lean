@@ -174,7 +174,7 @@ theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
     (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) X
     hA y
-    (by rwa [Finset.coe_singleton]) μ hμ n
+    (by assumption) μ hμ n
     (by rwa [anchors_self]) t
 
 /-- **Exact vanishing between components.** If the anchor `a` and the site `y` lie in
@@ -194,7 +194,7 @@ theorem commutator_eq_zero_of_edist_eq_top (h : LocalHamiltonian Λ q R J)
   ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top (planeDomainGraph Λ) h.interaction
     (anchors X a) (anchors_mem ha) R (fun Y => Y.2.edist_le) X
     hA y
-    (by rwa [Finset.coe_singleton])
+    (by assumption)
     (by rwa [anchors_self]) t
 
 /-- **Localization onto graph balls**, explicit form, for the finite-domain Hamiltonian.
@@ -205,7 +205,7 @@ with `C₀ = 2 e^R · 2 · 2² 2! e^{1/2} / (1 - e^{-1/2})`.
 
 Source: OpenAI area law, Lemma 4.1, `eq:quasilocal-lr-ce` (`03-quasilocal.tex`,
 lines 65–68 and 117–128), with `E_{i,l}` from `eq:quasilocal-ce` (lines 17–29). -/
-theorem norm_sub_regionExpectation_graphBall_le [NeZero q] (h : LocalHamiltonian Λ q R J)
+theorem norm_sub_regionExpectation_graphBall_le (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (l : ℕ) (t : ℝ) :
@@ -282,7 +282,7 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       (LocalHamiltonian.anchors_mem ha) h.hermitian
       (fun Y => Y.2.edist_le) (fun Y => Y.2.card_le)
       (h.sum_norm_term_containing_le hJ) X A B hA y
-      (by rwa [Finset.coe_singleton]) t
+      (by assumption) t
     rw [LocalHamiltonian.anchors_self] at hXY
     refine ⟨fun d hd => (hXY.1 d hd.symm.le).trans ?_, hXY.2⟩
     gcongr

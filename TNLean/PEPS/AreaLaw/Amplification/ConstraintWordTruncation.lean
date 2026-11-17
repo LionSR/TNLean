@@ -262,10 +262,10 @@ theorem card_anchor_graphNeighborhood_le {R : ℕ} (a : AdmissibleSupport Λ R �
 /-- Every product of the radius-`r` local roots `(I - E_{N_r(a_i)} k_i)^{1/2}` over labels
 anchored in `N_r(S)` is supported on `N_{2r}(S)`.
 Source: area law, `09-amplification.tex`, lines 232–234. -/
-theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ} [NeZero q]
+theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ}
     {κ : Type*} (a : κ → Site Λ) {S : Finset (Site Λ)} {r : ℕ}
     (k : {i // a i ∈ graphNeighborhood Λ r S} →
-      Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hk₁ : ∀ i, k i ≤ 1) :
+      Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
     ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
       contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
           ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i))
@@ -326,7 +326,8 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
         constraintWordTruncationPrefactor μ C * t * S.card * (1 + (r : ℝ)) ^ 2 *
           Real.exp (-(c / 2 * (r : ℝ) ^ α)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
-        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   unfold constraintWordTruncationPrefactor
   intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail S r t P kr D L
   have hkr₀ (i : {i // P i}) : 0 ≤ kr i := Matrix.nonneg_iff_posSemidef.mpr
@@ -344,7 +345,7 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
   obtain ⟨hint, hle⟩ := integrable_and_integral_norm_contractionWord_retained_sub_le P
     (fun i : {i // P i} => k i) kr (fun i => hk₀ i) hkr₀ hε t
   refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
-    contractionWord_regionExpectation_mem_supportedOperators a _ (fun i => hk₁ i) _ _⟩⟩
+    contractionWord_regionExpectation_mem_supportedOperators a _ _ _⟩⟩
   have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
     rw [Fintype.card_subtype]; exact card_filter_anchor_mem_graphNeighborhood_le a hμ hfiber S r
   have hε0 : 0 ≤ ε := by positivity
@@ -390,10 +391,12 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
         (∫ w, ‖D w - L w‖ ∂PoissonWord.measure κ t) ≤
           A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
-          L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
+          L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+              (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
   ⟨_, _, constraintWordTruncationPrefactor_nonneg hμ C, half_pos hc,
     domainConstraintWord_truncation hC hμ⟩
 
+open Classical in
 /-- **Truncation of the retained constraint product for the exact positive constraints, with
 explicit constants** (Lemma 10.1, `eq:amplification-product-truncation`;
 `09-amplification.tex`, lines 42–63 and 228–234). Let `C ≥ 0` be a localization prefactor of
@@ -480,7 +483,8 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
             (latticePositiveConstraintConst R J Δ p) * t * S.card * (1 + (r : ℝ)) ^ 2 *
           Real.exp (-(latticePositiveConstraintRate R J Δ p / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
-        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
+        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
   latticeConstraintWord_truncation_of_positiveConstraints R
     (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraints_explicit hp R hJ hΔ)
 
@@ -522,7 +526,8 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
           C * t * S.card * (1 + (r : ℝ)) ^ 2 *
             Real.exp (-(c * (r : ℝ) ^ kernelExponent p)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
-          L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+          L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+              (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   exact ⟨_, _, constraintWordTruncationPrefactor_nonneg (Nat.cast_nonneg _) C, half_pos hc,
     latticeConstraintWord_truncation_of_positiveConstraints R hC hpos⟩

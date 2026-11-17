@@ -44,7 +44,8 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
+          (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+              (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (Ω : EuclideanSpace ℂ (Fin M → Fin d)) (E₀ : ℝ),
             ‖Ω‖ = 1 → IsGapped (∑ i, g i) E₀ Δ →
@@ -52,7 +53,8 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
             ∀ (ℓ : ℕ), R ≤ (ℓ : ℝ) → ∀ i,
               let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i
               let Jb := 2 * max J (J * C)
-              a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
+              a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+                  (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
                 a.IsHermitian ∧ ‖a‖ ≤ Jb ∧
                 ‖gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
                   Jb * Real.exp (-(η * (ℓ : ℝ))) ∧
@@ -115,7 +117,8 @@ theorem exists_periodicPhysicalHierarchy_of_isGapped {R J Δ : ℝ}
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
+          (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+              (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (Ω : EuclideanSpace ℂ (Fin M → Fin d)) (E₀ : ℝ),
             ‖Ω‖ = 1 → IsGapped (∑ i, g i) E₀ Δ →

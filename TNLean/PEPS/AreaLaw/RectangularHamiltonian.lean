@@ -111,10 +111,9 @@ theorem RectangularHamiltonian.hermitianTerm_mem_supportedOperators {width heigh
         Finset.coe_singleton]
         using h.edge_supported e
   exact coe_realPart_mem_of_star_mem
-    (S := (Subalgebra.toSubmodule (ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (squareLatticeSiteOrEdgeSupport i : Finset
-        (SquareLatticeVertex width height))).toSubalgebra).restrictScalars ℝ)
-    hs (show star _ ∈ ManyBody.supportedOperators _ _ from star_mem hs)
+    (S := (ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (squareLatticeSiteOrEdgeSupport i : Finset (SquareLatticeVertex width height))).restrictScalars ℝ)
+    hs (star_mem hs)
 
 /-- Every replaced interaction is Hermitian. Source:
 `00-introduction.tex`, `eq:model`. -/
