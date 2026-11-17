@@ -101,7 +101,7 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le [NeZ
   have hk0 : ∀ i j, 0 ≤ k i j := graphDecayKernel_nonneg G γ
   have hcomm (i j : ι) : ‖B i * B j - B j * B i‖ ≤ C * ‖h i‖ * ‖h j‖ * k i j := by
     refine (norm_groundSpaceCompression_commutator_le _ _ _ _).trans ?_
-    refine (norm_groundCompression_observables_commutator_le_exp_edist G X id hX h hHerm
+    refine (norm_groundCompression_observables_commutator_le_exp_edist G X h hHerm
       hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap
       K id (fun i ↦ hXK i (hX i)) M hMsupp Robs hKDiam vObs hKCard j i).trans ?_
     change C * ‖M i‖ * ‖M j‖ * k i j ≤ C * ‖h i‖ * ‖h j‖ * k i j
