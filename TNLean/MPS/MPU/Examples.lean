@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPU.Examples
 
 import TNLean.MPS.MPU.Examples.CZXNormalizationAudit
+import TNLean.MPS.MPU.Examples.ConjugationPhaseRepresentatives
 import TNLean.MPS.MPU.Examples.ControlledZ
 import TNLean.MPS.MPU.Examples.LabelledSwapEquivalence
 import TNLean.MPS.MPU.Examples.OddRing
