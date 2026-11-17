@@ -480,6 +480,52 @@ its stated bounds are not the printed count with a missing rounding
 argument. Neither correction alone establishes the adaptive probability,
 energy-estimation invariant or computational cost of the source algorithm.
 
+\paragraph{Local fix (rounding of the number of rounds).}
+The merge tree is now also formalized with the rounded number of rounds
+$k=\lceil\lceil\log_Ds\rceil/2\rceil$, the least integer with $D^{2k}\ge s$,
+the families of Theorems~4.2 and~4.3 on every long interval, and the
+sampling size $s=\lceil4096r(1+\log r+\log D+\log(1/\beta))\rceil$. Every
+node carries a $3/200$-viable space for the original ground space of
+dimension at most
+\[
+    M=D^{2k}s\le D^2s^2,
+\]
+which depends on neither $L$ nor the trimming threshold; the root, after the
+final filter-and-trim iterates and the Ritz extraction, gives an
+$r$-dimensional space of matrix product states mutually $\eta/2$-close to the
+ground
+space.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_sampled_interval_node_event_of_power},
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree} and
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree_ritz_approximation}.}
+When $c=\lceil\log_Ds\rceil$ is even, $k=c/2$ is the source's number of rounds
+and $M\le Ds^2$, the printed bound.
+
+When $c$ is odd the printed bound $Ds^2$ is not attained by the source's
+merge argument with an integer number of rounds. The node bound after $j$
+rounds is $D^{2j}s$, so $D^{2j}s\le Ds^2$ means $D^{2j}\le Ds$. The error
+estimate of the merge needs $s\le D^{2j}$: a merged space has dimension
+$Q\le(D^{2j}s)^2$, a sample of dimension $s$ overlaps the target by at least
+$3/(32D^{4j}s)$, and the error after $j$ rounds is at most
+$(1024/9)\Delta^jD^{8j}s^2$, which the budget $D^{12}\Delta\le10^{-5}$
+bounds by $(1024/9)(D^{12}\Delta)^j$ only when $s^2\le D^{4j}$. If $s<D^c$,
+the two conditions are incompatible: $D^{2j}\le Ds<D^{c+1}$ gives
+$2j\le c$, hence $2j\le c-1$ and $D^{2j}\le D^{c-1}<s$; in particular $c=1$
+leaves only $j=0$, with no improvement at
+all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
+Only when $s=D^c$ does $j=(c+1)/2$ give $M=Ds^2$. The odd case is therefore
+a printed rounding gap, not a missing argument, and the formalized bound is
+$M\le D^2s^2$, at most a factor $D$ above the source's: indeed
+$M/(Ds^2)=D^c/s<D$. For the parameters used, $D=(m\ell^2)^{22\ell}$ with
+$\ell\ge21$ is far larger than $s$ unless $r$ or $1/\beta$ is enormous, so
+typically $c=1$, $k=1$ and $M=D^2s$.
+
+The tree of constant node dimension keeps the scope restrictions of the
+tree above: it is shown to exist, with no joint sampling probability; its
+leaves are full blocks of length at most $4\ell$; each long parent applies
+one collective trim after its $k$ rounds rather than after each round; the
+parameters use $g=\min\{\gamma,1\}$; and the bond dimension of the output
+grows with $L$ through the trimming threshold.
+
 \bibliographystyle{unsrt}
 \subsection*{The literal interleaved interval tree}
 A separate construction now uses the current-space family image followed

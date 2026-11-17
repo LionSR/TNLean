@@ -10,6 +10,10 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.ALVV.BalancedRegionalEnergy
 import TNLean.MPS.AreaLaw.ALVV.CalibratedRootEnergy
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTreeApproximation
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftClusters
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftNorm
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftRepresentation
@@ -30,6 +34,7 @@ import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
 import TNLean.MPS.AreaLaw.ALVV.LargeGapComparison
 import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
+import TNLean.MPS.AreaLaw.ALVV.MergeRounds
 import TNLean.MPS.AreaLaw.ALVV.NativeLongIntervalSoftFamily
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment

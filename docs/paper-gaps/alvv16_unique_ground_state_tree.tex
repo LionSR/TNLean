@@ -84,15 +84,36 @@ $\mathrm{count}\le\mathcal D^2s^2$ with $\mathrm{count}=\mathcal D^{2k}s$.
 When $\lceil\log_{\mathcal D}s\rceil$ is even, $k$ is the source's
 $\lceil\log_{\mathcal D}s\rceil/2$ and $\mathrm{count}\le\mathcal Ds^2$, the
 source's bound. When $\lceil\log_{\mathcal D}s\rceil$ is odd, the bound
-$\mathcal D^2s^2$ is up to a factor $\mathcal D$ weaker than the source's; this
-case is a remaining gap, listed below. The condition $\mathcal D^{2k}\ge s$
-is what the error estimate needs: a merged space has dimension
+$\mathcal D^2s^2$ is up to a factor $\mathcal D$ weaker than the source's, and
+this is a printed rounding gap: no integer number of rounds attains the
+source's bound in that case, as shown below. The condition
+$\mathcal D^{2k}\ge s$ is what the error estimate needs: a merged space has dimension
 $Q\le(\mathcal D^{2k}s)^2$, a random sample of dimension $s$ overlaps the
 target by at least $3/(32\mathcal D^{4k}s)$, and the error after $k$
 applications is at most
 $(1024/9)\Delta^k\mathcal D^{8k}s^2\le(1024/9)(\mathcal D^{12}\Delta)^k$.
 The node bound $\mathcal D^6s^3$ of the earlier formalization came from the
 choice $k=\lceil\log_{\mathcal D}(\mathcal D^2s)\rceil$.
+
+Write $c=\lceil\log_{\mathcal D}s\rceil$, and suppose $c$ is odd and
+$s<\mathcal D^c$. The node bound after $j$ rounds is $\mathcal D^{2j}s$, so
+the source's bound $\mathcal Ds^2$ requires $\mathcal D^{2j}\le\mathcal Ds$,
+while the error estimate above requires $s\le\mathcal D^{2j}$: with
+$\mathcal D^{2j}<s$ the bound $(1024/9)\Delta^j\mathcal D^{8j}s^2$ is not
+controlled by $(\mathcal D^{12}\Delta)^j$. The two are incompatible, since
+$\mathcal D^{2j}\le\mathcal Ds<\mathcal D^{c+1}$ forces $2j\le c-1$ and then
+$\mathcal D^{2j}\le\mathcal D^{c-1}<s$; for $c=1$ only $j=0$ remains, which
+does not improve the sample at
+all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
+Only for $s=\mathcal D^c$ does $j=(c+1)/2$ attain $\mathcal Ds^2$. The
+formalized bound exceeds the source's by the factor
+$\mathcal D^c/s<\mathcal D$. For the parameters of Theorem~t:aisff,
+$\mathcal D=(d\ell^2)^{22\ell}$ is far larger than
+$s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$ unless $\beta$ is
+extremely small, so typically $c=1$, $k=1$ and the node bound is
+$\mathcal D^2s$. The same rounding is made in the degenerate-gap tree of
+constant node dimension, recorded in
+\url{https://sirui-lu.com/TNLean/paper-gaps/alvv16_approximation_parameters.pdf}.
 
 The source's lower bound $s\ge1600r(\log r+1)$ is a lower bound, and the
 formalized $s$ satisfies it; the random-sampling lemma needs in addition that
@@ -102,10 +123,6 @@ $\mathcal D^4s^4$.
 \paragraph{Deviation.}
 The remaining differences from the source are:
 \begin{enumerate}
-    \item when $\lceil\log_{\mathcal D}s\rceil$ is odd, the node bound is
-          $\mathcal D^{2k}s\le\mathcal D^2s^2$, up to a factor $\mathcal D$ weaker
-          than the source's $\mathcal Ds^2$, because the number of applications
-          is an integer;
     \item the length-independent node bound is attained by a tree shown to
           exist, not by one found with high probability; the probabilistic tree
           of the first item of the list of results above has node dimension growing
@@ -120,7 +137,8 @@ The remaining differences from the source are:
     \item no running time is asserted.
 \end{enumerate}
 The conclusions are mathematically correct as stated, and narrower than the
-source in the items listed.
+source in the items listed. The factor $\mathcal D$ in the odd case is the local
+fix above, not a further deviation.
 
 \paragraph{Elimination plan.}
 A reference space for collective trimming whose Schmidt ranks are bounded

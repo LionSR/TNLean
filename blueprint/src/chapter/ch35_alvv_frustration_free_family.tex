@@ -392,7 +392,12 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     takes $\lceil\log_{\mathcal D}s\rceil/2$ applications, which need not be an
     integer, and obtains $\mathcal Ds^2$: when $\lceil\log_{\mathcal D}s\rceil$
     is even the bound above equals the source's $\mathcal Ds^2$, and otherwise
-    it is up to a factor $\mathcal D$ weaker, $\mathcal D^2s^2$. The tree is
+    it is up to a factor $\mathcal D$ weaker, $\mathcal D^2s^2$. In the odd
+    case no integer number of rounds $j$ satisfies both
+    $\mathcal D^{2j}\le\mathcal Ds$ and the condition $s\le\mathcal D^{2j}$ of
+    the error estimate, unless $s$ is a power of $\mathcal D$, so the factor is a
+    rounding of the printed number of rounds,
+    see~\cite{gap:alvv16_unique_ground_state_tree}. The tree is
     shown to exist rather than to be found with high probability, and the
     output bond dimension grows with $L$.
 \end{lemma}
