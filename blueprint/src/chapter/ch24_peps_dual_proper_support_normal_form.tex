@@ -6,9 +6,9 @@
     primal square support. There exists a finite list of tagged native faces
     whose substitution composition $\Sigma$ has the following properties:
     its length is at most $|X|$, every listed face has its primal support in $R$,
-    and
+    and for every $v$ with $v+(1,1)\in R$,
     \begin{align}
-        \Sigma(r_v)=1\qquad\text{whenever }v+(1,1)\in R.
+        \Sigma(r_v)=1.
         \label{eq:peps_dual_finite_face_elimination}
     \end{align}
     The list is constructed from $R$, independently of any compared paths.
@@ -29,12 +29,11 @@
     Choose an allowed face $v$ of least rank and recurse on the remaining
     allowed faces. Its substitution $\sigma_v$ fixes every remaining face
     relation, since the only other incident face has smaller rank and
-    hence is not among those remaining. Thus
+    hence is not among those remaining. Thus, for every remaining face $w$,
     \begin{align}
         \Sigma=\Sigma_{\rm tail}\circ\sigma_v,\qquad
         \Sigma(r_v)=1,\qquad
-        \Sigma(r_w)=\Sigma_{\rm tail}(r_w)=1
-        \quad(w\text{ remaining}).
+        \Sigma(r_w)=\Sigma_{\rm tail}(r_w)=1.
         \label{eq:peps_dual_face_elimination_induction}
     \end{align}
     The induction adds exactly one list entry for each allowed face base,
@@ -63,8 +62,13 @@
     The maps $F_e(z)=\Sigma(W(e))z$ form a reversible transport flat on the
     allowed squares, proving necessity. For sufficiency the native quotient
     $\pi_R$ is flat on each selected face, so
-    $\pi_R\circ\Sigma=\pi_R$. Equal transformed words therefore have equal
-    original quotient words, and finite-presentation completeness applies.
+    \begin{align}
+        \pi_R\circ\Sigma=\pi_R.
+        \label{eq:peps_dual_proper_support_quotient}
+    \end{align}
+    By~(\ref{eq:peps_dual_proper_support_quotient}), equal transformed words
+    have equal original quotient words, and finite-presentation completeness
+    applies.
 \end{proof}
 
 \begin{lemma}[A reduced-word normal form for every proper square support]
@@ -88,22 +92,11 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_dual_finite_face_elimination,
-        lem:peps_dual_flat_transport_invariance,
-        lem:peps_dual_face_elimination_sequence,
-        lem:peps_dual_finite_presentation_classification,
-        def:peps_dual_finite_presentation}
-    The composition kills every allowed face word. Therefore
-    $F_e(z)=\Sigma(W(e))z$ is reversible and flat on every allowed square.
-    Its path action satisfies $F_p(1)=\Sigma(W(p))$, so homotopy invariance
-    gives the forward implication. Conversely let $\pi_R$ be the finite
-    presentation quotient. Each selected original face is a defining relator,
-    hence finite substitution preservation gives
-    \begin{align}
-        \pi_R\circ\Sigma=\pi_R.
-        \label{eq:peps_dual_proper_support_quotient}
-    \end{align}
-    Equal reduced free-group words imply equal group elements, then equal
-    images under $\pi_R$. The identity above gives
-    $\pi_R(W(p))=\pi_R(W(q))$, and finite-presentation completeness gives
-    $p\sim_Rq$.
+        lem:peps_dual_face_certificate_classification}
+    Lemma~\ref{lem:peps_dual_finite_face_elimination} supplies the list with
+    the stated length, support and vanishing-relator properties.
+    Lemma~\ref{lem:peps_dual_face_certificate_classification} then identifies
+    $p\sim_Rq$ with $\Sigma(W(p))=\Sigma(W(q))$.
+    Free reduction identifies equal free-group elements with equal reduced
+    words, giving~(\ref{eq:peps_dual_proper_support_normal_form}).
 \end{proof}
