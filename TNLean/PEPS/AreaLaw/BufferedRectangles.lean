@@ -50,14 +50,16 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport IsAdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-! ### Ambient distances -/
 
 /-- Nearest-neighbor edges of an induced domain have ambient displacement one. -/
 theorem latticeL1Distance_le_one_of_adj {Λ : Finset (ℤ × ℤ)} {x y : Site Λ}
-    (h : (domainGraph Λ).Adj x y) : latticeL1Distance x.1 y.1 ≤ 1 := by
-  simp only [domainGraph] at h
+    (h : (planeDomainGraph Λ).Adj x y) : latticeL1Distance x.1 y.1 ≤ 1 := by
+  simp only [planeDomainGraph] at h
   simp only [latticeL1Distance]
   omega
 
@@ -79,7 +81,7 @@ theorem supDist_le_latticeL1Distance (a b : ℤ × ℤ) : supDist a b ≤ lattic
 /-- A walk of length at most `R` in an induced domain moves its endpoints by sup-norm distance
 at most `R`. -/
 theorem supDist_le_of_walk {Λ : Finset (ℤ × ℤ)} {x y : Site Λ} {R : ℕ}
-    (p : (domainGraph Λ).Walk x y) (hp : p.length ≤ R) : supDist x.1 y.1 ≤ R :=
+    (p : (planeDomainGraph Λ).Walk x y) (hp : p.length ≤ R) : supDist x.1 y.1 ≤ R :=
   (supDist_le_latticeL1Distance _ _).trans
     ((latticeL1Distance_le_walk_length Subtype.val
       (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) p).trans hp)
@@ -310,7 +312,7 @@ theorem card_admissibleSupport_containing_le (v : Site Λ) :
     (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card ≤
       2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
   classical
-  have h := card_supports_containing_le_diamond (G := domainGraph Λ) Subtype.val
+  have h := card_supports_containing_le_diamond (G := planeDomainGraph Λ) Subtype.val
     Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h)
     (Finset.univ.image fun X : AdmissibleSupport Λ R ↦ X.1) R (by
       intro S hS a ha x hx

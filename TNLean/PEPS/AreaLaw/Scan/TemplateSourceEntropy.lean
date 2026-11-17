@@ -36,6 +36,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Geometry

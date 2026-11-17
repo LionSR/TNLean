@@ -43,6 +43,8 @@ open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.Approximation
 
 /-- The energy coefficient `C_E = 18 s_R R μ_R q^(2(v_R - 1)) J` of the range-`R` patch
@@ -99,7 +101,7 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
     have hlt : (X.1 ∩ D).card < X.1.card :=
       Finset.card_lt_card ⟨Finset.inter_subset_left, fun h ↦ hwD
         (Finset.mem_inter.mp (h hwX)).2⟩
-    have hdiam := AreaLaw.card_support_le_diamond (G := domainGraph Λ) Subtype.val
+    have hdiam := AreaLaw.card_support_le_diamond (G := planeDomainGraph Λ) Subtype.val
       Subtype.val_injective (fun _ _ h ↦ AreaLaw.latticeL1Distance_le_one_of_adj h) X.1 R
       X.2.2
     have hle : (X.1 ∩ D).card ≤ 2 * R * (R + 1) := by omega

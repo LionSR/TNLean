@@ -54,6 +54,8 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal
 
 noncomputable section
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}

@@ -25,6 +25,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
@@ -59,7 +61,7 @@ positive terminal regions, uniformly in history and band. Source:
 theorem terminalPartition_positiveEntropy_le
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
     (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
-    (hgraph : S.graph = domainGraph Λ)
+    (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hn : 0 < S.n) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)

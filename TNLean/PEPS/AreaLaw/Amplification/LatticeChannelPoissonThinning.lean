@@ -29,6 +29,8 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Filtering the actual full Poisson sample gives the same uniform spatial
@@ -49,7 +51,7 @@ theorem exists_latticeChannelWord_filter_spatial_growth {p : ℕ} (hp : 1 ≤ p)
         (∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
           supportedOperators q (S : Set (Site Λ))) →
         ∀ (t : ℝ≥0) (y : Site Λ),
-        letI := graphPseudoEMetricSpace (domainGraph Λ)
+        letI := graphPseudoEMetricSpace (planeDomainGraph Λ)
         let α := kernelExponent p
         let k := fun i : AdmissibleSupport Λ R =>
           positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -70,7 +72,7 @@ theorem exists_latticeChannelWord_filter_spatial_growth {p : ℕ} (hp : 1 ≤ p)
   obtain ⟨c, v, hc, hv, hgrowth⟩ := exists_latticeChannelWord_spatial_growth hp R hJ hΔ
   refine ⟨c, v, hc, hv, ?_⟩
   intro q _ Λ h a ha E₀ Ω hgs P _ Aux _ _ S B hB t y
-  let := graphPseudoEMetricSpace (domainGraph Λ)
+  let := graphPseudoEMetricSpace (planeDomainGraph Λ)
   let k := fun i : AdmissibleSupport Λ R =>
     positiveConstraint (positiveNormalization p (Δ / 2) J)
       (centeredFilter p (Δ / 2) h.operator Ω (h.term i))

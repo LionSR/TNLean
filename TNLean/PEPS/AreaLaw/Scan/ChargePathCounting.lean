@@ -24,6 +24,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped BigOperators
@@ -113,14 +115,14 @@ theorem card_nearbyChargeLabels_domainGraph_le (Λ : Finset (ℤ × ℤ))
     (anchor : I → Site Λ) (r μ : ℕ)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ anchor i = y).card ≤ μ)
     (x : Site Λ) :
-    (nearbyChargeLabels (domainGraph Λ) anchor r x).card ≤
+    (nearbyChargeLabels (planeDomainGraph Λ) anchor r x).card ≤
       (1 + 2 * (2 * r) * (2 * r + 1)) * μ := by
   apply card_nearbyChargeLabels_le_of_vertex_count _ _ _ _ _ _ hmult
   intro y
   apply card_le_diamond_of_edist_le Subtype.val _ Subtype.val_injective _ y (2 * r)
     (fun z hz ↦ (Finset.mem_filter.mp hz).2)
   intro a b hab
-  simp only [domainGraph] at hab
+  simp only [planeDomainGraph] at hab
   unfold latticeL1Distance
   rcases hab with ⟨h₁, h₂ | h₂⟩ | ⟨h₁, h₂ | h₂⟩ <;> omega
 
@@ -132,7 +134,7 @@ theorem card_chargeAnchorPaths_domainGraph_le (Λ : Finset (ℤ × ℤ))
     (anchor : I → Site Λ) (r μ : ℕ)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ anchor i = y).card ≤ μ)
     (x : Site Λ) (j : ℕ) :
-    (chargeAnchorPaths (domainGraph Λ) anchor r x j).card ≤
+    (chargeAnchorPaths (planeDomainGraph Λ) anchor r x j).card ≤
       ((1 + 2 * (2 * r) * (2 * r + 1)) * μ) ^ j :=
   card_chargeAnchorPaths_le _ _ _ _
     (card_nearbyChargeLabels_domainGraph_le Λ anchor r μ hmult) x j

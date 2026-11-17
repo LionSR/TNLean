@@ -73,6 +73,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 namespace CollarScan
@@ -94,7 +96,7 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ C
   (`08-scanner.tex`, lines 343–347). -/
   groundState : IsGappedGroundState Λ q h.operator E₀ Ω Δ
   /-- Interaction supports use the graph metric of `Λ` (lines 15–16). -/
-  graph_eq : S.graph = domainGraph Λ
+  graph_eq : S.graph = planeDomainGraph Λ
   /-- Depth is the ambient sup-norm distance to the target (lines 14–15). -/
   depth_eq : S.depth = fun x ↦ ambientDepth T hT x.val
   /-- Every designated support contains its anchor: `a_i ∈ X_i` (`03-quasilocal.tex`,

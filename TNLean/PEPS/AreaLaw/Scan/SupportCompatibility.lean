@@ -21,6 +21,8 @@ at `openai/math@adc7f124`.
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open TensorPower.ReplicaTransport
@@ -92,7 +94,7 @@ compatibility condition. The only support identification is its physical
 embedding; compatibility is derived from the source geometric margins. -/
 theorem chargeTransportData_supportCompatible_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (choiceTree : History S.K S.m S.M k → Matrix.MeanTree (ChargeChoices S.K S.M))
