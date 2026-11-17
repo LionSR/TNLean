@@ -69,7 +69,6 @@ import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import TNLean.MPS.AreaLaw.DGEntropyParameters
 import TNLean.MPS.AreaLaw.DesignatedCutTruncation
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
-import TNLean.MPS.AreaLaw.DomainInformationReset
 import TNLean.MPS.AreaLaw.DomainInteractionBudget
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhood
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy

@@ -985,6 +985,40 @@ Theorem~B a second way, by a sequential preparation protocol.
     $w-R<|a-z|\le\ell\le w-R$, a contradiction.
 \end{proof}
 
+\begin{lemma}[Information reset from a supported localization]
+    \label{lem:information_reset_of_supported_localization}
+    \lean{TNLean.MPS.AreaLaw.information_reset_of_supported_localization}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
+        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    Fix $q\ge1$, a natural $R$, a gap $\Delta>0$, an exponent $p>0$ and
+    constants $C_{\mathrm{int}},v>0$. There are $C_p>0$ and a natural
+    $L_0\ge1$, depending only on these data, with the following property.
+    Let $L\ge L_0$, let $\Omega$ be a gapped ground vector of a Hamiltonian
+    $H$ on $L$ sites of local dimension $q$ with gap $\Delta$, let $D,C$ be
+    disjoint regions with $R_0\subseteq D$, $C_0\subseteq C$ and
+    $I(D:C)_\Omega\le b$, and put $w=C_p(1+b+\log L)$ and
+    $Q=(D\cup C)^c$. Let $K$ be the doubled Hamiltonian of $H$ and $K'$
+    its regional swap at $D$. Let $N_\ell$, for natural $\ell$, be maps on
+    regions and $Z$ a region such that for every $\ell$ there is a path $U$
+    for which, for every region $Q'$, every operator $W$ supported on $Q'$,
+    and all $\eta,T\ge0$, the average
+    $\int_{[-T,T]}E_{N_\ell(Q')}(e^{itK'}We^{-itK'})U(t)\,d\gamma_\eta(t)$
+    is supported on $N_\ell(Q'\cup Z)$ and differs from the truncated
+    Gaussian filter of $W$ by at most
+    $\|W\|C_{\mathrm{int}}L^2(1+T)e^{vT-\ell/2}$. Suppose that
+    $N_\ell(Q\cup Z)$ is disjoint from $R_0\cup C_0$ whenever
+    $\ell+R\le w$. Then $I(R_0:C_0)_\Omega\le L^{-p}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
+        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    This is the argument of Lemma~\ref{thm:chain_information_reset} below,
+    with the supported Gaussian integral and the separation of the reset
+    support from the cores taken as the two hypotheses.
+\end{proof}
+
 \begin{lemma}[Information reset on a contiguous chain]
     \label{thm:chain_information_reset}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}
@@ -1019,9 +1053,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
-        thm:peps_reset_polar_step,lem:chain_reset_support_separation,
-        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    \uses{lem:information_reset_of_supported_localization,
+        thm:chain_supported_gaussian_integral,lem:chain_reset_support_separation}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Corollary~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Lemma~\ref{thm:chain_supported_gaussian_integral}.
@@ -1946,10 +1979,9 @@ Theorem~B a second way, by a sequential preparation protocol.
     \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:domain_supported_gaussian_integral,thm:peps_reset_regional_filter,
-        thm:peps_reset_polar_step,lem:qc_graph_ball_strict_margin,
-        thm:qc_graph_support_separation,thm:regional_reset_cores_entropy,
-        thm:peps_reset_entropy_scalar}
+    \uses{lem:information_reset_of_supported_localization,
+        thm:domain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,
+        thm:qc_graph_support_separation}
     Set $r=2p+10$. Choose the filter constants $A,T_0>0$ and the domain
     locality constants $C,v>0$, and put
     \begin{align}
