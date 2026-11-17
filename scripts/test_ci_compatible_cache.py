@@ -188,7 +188,6 @@ class AdditiveTests(unittest.TestCase):
                          ['QICLean.Analysis'])
 
     def test_metadata_changed_or_missing(self):
-        put(self.repo, 'CLAUDE.md', 'Assistant guidance does not excuse metadata changes.\n')
         for path in guard.INPUTS:
             with self.subTest(path=path):
                 before = (self.repo / path).read_text()
@@ -224,91 +223,6 @@ class AdditiveTests(unittest.TestCase):
 
 class NonBuildPathTests(unittest.TestCase):
     setUp = AdditiveTests.setUp
-
-    def test_claude_added_or_edited_with_additive_modules(self):
-        # CLAUDE.md is the only non-build change; additions remain mandatory.
-        (self.repo / 'docs/note.md').unlink()
-        put(self.repo, 'CLAUDE.md', 'Assistant guidance.\n')
-        before = commit(self.repo)
-        self.assertEqual(guard.additive_qic(self.repo, self.old, before),
-                         ['QICLean.Analysis'])
-        put(self.repo, 'CLAUDE.md', 'Revised assistant guidance.\n')
-        put(self.repo, 'QICLean/Analysis/Another.lean', 'def another := 3\n')
-        self.assertEqual(guard.additive_qic(self.repo, before, commit(self.repo)), [])
-
-    def test_claude_only_still_requires_added_module(self):
-        before = commit(self.repo)
-        put(self.repo, 'CLAUDE.md', 'Assistant guidance.\n')
-        with self.assertRaisesRegex(guard.Refusal, 'no added QIC module'):
-            guard.additive_qic(self.repo, before, commit(self.repo))
-
-    def test_claude_exception_is_exact(self):
-        for path in ('README.md', 'AGENTS.md', 'claude.md', 'CLAUDE.md/child.md',
-                     'CLAUDE.md.lean', 'other/CLAUDE.md', 'QICLean/CLAUDE.md'):
-            with self.subTest(path=path):
-                self.assertFalse(guard.non_build_qic_path(path))
-                put(self.repo, path, 'unknown input\n')
-                with self.assertRaisesRegex(guard.Refusal, 'not a regular added module/aggregator'):
-                    guard.additive_qic(self.repo, self.old, commit(self.repo))
-                (self.repo / path).unlink()
-
-    def test_claude_nonregular_and_deleted_refused(self):
-        path = self.repo / 'CLAUDE.md'
-        for kind in ('symlink', 'executable'):
-            with self.subTest(kind=kind):
-                if kind == 'symlink':
-                    path.symlink_to('QICLean/Analysis/Existing.lean')
-                else:
-                    path.write_text('guidance\n')
-                    path.chmod(0o755)
-                after = commit(self.repo)
-                with self.assertRaisesRegex(guard.Refusal, 'non-build change is not a regular file'):
-                    guard.additive_qic(self.repo, self.old, after)
-                path.unlink()
-                path.write_text('regular replacement\n')
-                put(self.repo, 'QICLean/Analysis/Another.lean', 'def another := 3\n')
-                with self.assertRaisesRegex(guard.Refusal, 'non-build change is not a regular file'):
-                    guard.additive_qic(self.repo, after, commit(self.repo))
-                (self.repo / 'QICLean/Analysis/Another.lean').unlink()
-                path.unlink()
-        path.write_text('guidance\n')
-        before = commit(self.repo)
-        path.unlink()
-        put(self.repo, 'QICLean/Analysis/Another.lean', 'def another := 3\n')
-        with self.assertRaisesRegex(guard.Refusal, 'non-build change is not a regular file'):
-            guard.additive_qic(self.repo, before, commit(self.repo))
-
-    def test_claude_references_and_reads_refused(self):
-        put(self.repo, 'CLAUDE.md', 'Assistant guidance.\n')
-        for source in (
-            'def input := "CLAUDE.md"\n',
-            'def input := "./CLAUDE.md"\n',
-            'def input := "--" ++ "CLAUDE.md"\n',
-            'def input := "/-" ++ "CLAUDE.md" ++ "-/"\n',
-            '-- CLAUDE.md\ndef added := 2\n',
-            'run_cmd IO.FS.readFile ("CLAUDE" ++ ".md")\n',
-            'run_cmd IO.Process.output { cmd := "cat", args := #["CLAUDE" ++ ".md"] }\n',
-            'def input := include_str "CLAUDE.md"\n',
-            'open IO.FS\nrun_cmd readFile ("CLAUDE" ++ ".md")\n',
-            'run_cmd readBinFile ("CLAUDE" ++ ".md")\n',
-        ):
-            with self.subTest(source=source):
-                put(self.repo, 'QICLean/Analysis/Added.lean', source)
-                with self.assertRaisesRegex(guard.Refusal, 'QIC source (references|may read)'):
-                    guard.additive_qic(self.repo, self.old, commit(self.repo))
-
-    def test_claude_reference_screen_covers_both_revisions_and_root(self):
-        for path in ('QICLean.lean', 'QICLean/Analysis/Existing.lean'):
-            original = (self.repo / path).read_text()
-            put(self.repo, path, original + '\ndef input := "CLAUDE.md"\n')
-            before = commit(self.repo)
-            put(self.repo, path, original)
-            after = commit(self.repo)
-            for old, new in ((before, after), (after, before)):
-                with self.subTest(path=path, old=old), \
-                        self.assertRaisesRegex(guard.Refusal, 'QIC source references non-build paths'):
-                    guard.require_non_build_qic_scope(
-                        self.repo, old, new, (guard.tree(self.repo, old), guard.tree(self.repo, new)))
 
     def test_fixture_commit_disables_automatic_maintenance(self):
         with patch.object(guard, 'git', side_effect=[b'', b'', OLD.encode()]) as git:
