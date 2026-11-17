@@ -26,7 +26,8 @@ lower window `G(η - 3w)` with suppression `Δ^k` on words of length `k`, so
 the window shrinks by the buffer `3w` at each level. The level of `[p, r)`
 is `clog₂ (r - p)`, and every node is `3/200`-viable for the window
 `etaLD - 3w · clog₂ (r - p)`. The node dimension is at most `D^6 s^3`,
-where `s` is logarithmic in the dimension `r` of the window `G(etaLD)`.
+where `s = ⌈4096 r (1 + log r + log D + log (1/β))⌉` is linear, up to a logarithmic
+factor, in the dimension `r` of the window `G(etaLD)`.
 The root is close to the window shortened by `3w · clog₂ L`, and it consists
 of matrix product states.
 
