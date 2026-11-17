@@ -192,8 +192,9 @@ theorem exists_region_hard_truncation_residuals {k g : ℕ}
   intro Iin Iout Ib Hin Hout Y b κ
   classical
   have sum_supported_of_subset (s : Finset I) (R : Finset ι) (hR : ∀ i ∈ s, D i ⊆ R) :
-      Entropy.IsSupportedOn (n := fun _ : ι ↦ q) (∑ i ∈ s, h i) R :=
-    Submodule.sum_mem _ fun i hi ↦
+      Entropy.IsSupportedOn (n := fun _ : ι ↦ q) (∑ i ∈ s, h i) R := by
+    show _ ∈ ManyBody.supportedOperators _ _
+    exact sum_mem fun i hi ↦
       ManyBody.supportedOperators_mono (by exact_mod_cast hR i hi)
         (hs i)
   let A : Fin 2 → Matrix (ι → Fin q) (ι → Fin q) ℂ := ![Hin, Hout]

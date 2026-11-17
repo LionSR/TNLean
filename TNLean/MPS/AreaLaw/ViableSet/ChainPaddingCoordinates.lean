@@ -58,8 +58,7 @@ theorem cutOperator_embedOp_prefix {L N q : ℕ} (hi : L ≤ N)
       Finset.coe_injective (by simpa using hrange)
     simpa only [hrange'] using
       QuantumCircuit.embedOp_mem_supportedOperators (Fin.castLE_injective hi) X
-  have hs := hmem
-  rw [hs.cutOperator_eq_kronecker_one (le_refl _) b0]
+  rw [Entropy.IsSupportedOn.cutOperator_eq_kronecker_one hmem (le_refl _) b0]
   congr 1
   ext a a'
   change QuantumCircuit.embedOp (Fin.castLE hi) X
@@ -96,8 +95,7 @@ theorem cutOperator_appended_penalty {L N q : ℕ} (z : Fin q)
     apply ManyBody.supportedOperators_mono _
       (QuantumCircuit.siteOp_mem_supportedOperators v.val _)
     exact Finset.singleton_subset_iff.mpr (Finset.mem_compl.mpr v.property)
-  have hs := hmem
-  rw [hs.cutOperator_eq_one_kronecker disjoint_compl_left a0]
+  rw [Entropy.IsSupportedOn.cutOperator_eq_one_kronecker hmem disjoint_compl_left a0]
   congr 1
   rw [QuantumCircuit.productBasisPenalty_eq_diagonal]
   ext b b'

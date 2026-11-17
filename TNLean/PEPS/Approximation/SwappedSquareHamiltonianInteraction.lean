@@ -125,7 +125,7 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       rw [embedOp_rectangle_eq_reindex] at hs
       simpa only [squareAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      exact Submodule.zero_mem _
+      exact zero_mem _
   · intro X
     by_cases hx : ∃ i, squareAreaLawSupport L i = X
     · obtain ⟨i, rfl⟩ := hx

@@ -650,7 +650,7 @@ theorem hasProductForm_truncatedExp [Nonempty σ] (acts : κ → Finset σ)
   refine HasProductForm.mul ?_ (hasProductForm_sum_clusterOp hnear hh β)
   refine hasProductForm_of_mem_supportedOperators_radius (X := ∅) hnear (Classical.arbitrary _)
     (by simp) ?_
-  refine Submodule.sum_mem _ fun A hA ↦
+  refine sum_mem fun A hA ↦
     ManyBody.supportedOperators_mono ?_ (clusterOp_mem_supportedOperators hh A β)
   intro x hx
   obtain ⟨k, hk, hxk⟩ := mem_biUnion.1 hx

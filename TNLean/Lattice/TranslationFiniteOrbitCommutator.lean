@@ -270,7 +270,7 @@ theorem norm_groundCompression_truncated_commutator_le_finite_translation_exp
   have hMsupp (a : ι) : gaussianFilteredTerm q Δ (∑ k ∈ s a, h k) (h a) ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (K a : Finset ι) :=
     gaussianFilteredTerm_mem_supportedOperators q Δ
-      (Submodule.sum_mem _ fun k hk ↦ ManyBody.supportedOperators_mono
+      (sum_mem fun k hk ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (hsK a k hk)) (hSupport k))
       (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (hXK a)) (hSupport a))
   have hMnorm (a : ι) : ‖gaussianFilteredTerm q Δ (∑ k ∈ s a, h k) (h a)‖ ≤ J :=

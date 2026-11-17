@@ -121,7 +121,7 @@ theorem isFactorizationAt_zero_one_one {Ω : EuclideanSpace ℂ (Fin L → Fin q
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (leftBlock L c) :=
     Entropy.isSupportedOn_one _
   refine ⟨IsStarProjection.one _, IsStarProjection.one _, Commute.one_left 1, by simp,
-    (Submodule.zero_mem _), h1,
+    (zero_mem _), h1,
     Entropy.isSupportedOn_one _, ?_⟩
   simpa using (isStarProjection_vecMulVec_of_norm_eq_one hΩ).norm_le
 
@@ -186,7 +186,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
     Hastings.ChainHamiltonian.exists_boundaryOperator_factorization hq1 h hH₀ E₀ _ hZ hOL hOR
       (timeAverageVariance s ΔE) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
   refine ⟨OB, OL, OR, hOL, hOR, hcomm, hOB1, ?_, hsL, hsR, ?_⟩
-  · refine (hOBs).mono
+  · refine Entropy.IsSupportedOn.mono hOBs
       ((chainNeighborhood_interval_subset _ _ ℓn).trans fun x hx ↦ ?_)
     simp only [mem_interval] at hx ⊢
     omega

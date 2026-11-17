@@ -66,8 +66,7 @@ theorem operatorSchmidtRank_clusterOp_nearestNeighbor_le {q r : ℕ} (hq : 1 ≤
     (hshort : C.card < r) (A : Finset (Fin (N + 1))) (β : ℝ) :
     Matrix.operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin (N + 1) ↦ q)
       A (clusterOp h C β)) ≤ q ^ r := by
-  have hTC := (clusterOp_mem_supportedOperators
-      (fun i ↦ (hs i)) C β)
+  have hTC := clusterOp_mem_supportedOperators (fun i ↦ hs i) C β
   exact (Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_pow_card hq
     (A := A) hTC).trans (Nat.pow_le_pow_right hq
       ((card_biUnion_nearestNeighbor_le hC).trans (Nat.succ_le_of_lt hshort)))

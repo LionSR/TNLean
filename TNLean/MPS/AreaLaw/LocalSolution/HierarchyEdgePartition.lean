@@ -110,7 +110,7 @@ theorem edgePartition_mem_supportedOperators (f : α → β)
     (a : α → Matrix (ι → Fin d) (ι → Fin d) ℂ) (j : β) (S : Finset ι)
     (ha : ∀ i, f i = j → a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     edgePartition f a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
-  apply Submodule.sum_mem
+  apply sum_mem
   intro i hi
   exact ha i (Finset.mem_filter.mp hi).2
 

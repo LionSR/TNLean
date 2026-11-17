@@ -238,7 +238,7 @@ theorem restoringTransport_restoringGlobal_eq_sum (Ω : StateSpace Λ q)
           (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)) := by
   refine ⟨fun x => Entropy.restoringWeight (p x) • ancillaPhysical (restoringEigenbasis Ω X)
     (restoringSplit q X Y hXY) (Q * (Entropy.basisColumn x xBlank ⊗ₖ T)),
-    fun x => Submodule.smul_mem _ _ (ancillaPhysical_mem_supportedOperators X Y hXY _ _), ?_⟩
+    fun x => SMulMemClass.smul_mem _ (ancillaPhysical_mem_supportedOperators X Y hXY _ _), ?_⟩
   rw [restoringTransport, ancillaTransport_conj_restoringGlobal
     (restoringEigenbasis_unitary Ω X).1]
   refine Finset.sum_congr rfl fun x _ => ?_

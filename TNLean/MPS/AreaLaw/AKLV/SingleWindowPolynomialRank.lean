@@ -180,7 +180,7 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
     dsimp [b]
     omega
   have hleftbulk : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (interval T 0 1 : Finset (Fin T)) := Submodule.zero_mem _
+      (interval T 0 1 : Finset (Fin T)) := zero_mem _
   have hmidbulk : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval T (2 * w) (b + 1) : Finset (Fin T)) := by
     apply hmove hPL

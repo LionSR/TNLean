@@ -254,8 +254,9 @@ private theorem leftExterior_supported
     (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
-      (leftExterior h s t m k) (interval L 0 k) :=
-  sum_mem fun i hi ↦
+      (leftExterior h s t m k) (interval L 0 k) := by
+  show _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun i hi ↦
     (hh i).mono (edge_subset_left (Finset.mem_filter.mp hi).2)
 
 private theorem rightExterior_supported
@@ -264,6 +265,7 @@ private theorem rightExterior_supported
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (rightExterior h s t m k) (interval L 0 k)ᶜ := by
+  show _ ∈ ManyBody.supportedOperators _ _
   apply sum_mem
   intro i hi
   apply (hh i).mono
@@ -353,11 +355,13 @@ private theorem rank_inside_le
   let t := oddBonds a b
   let X := leftExterior h s t m k + 1
   let Y := rightExterior h s t m k + 1
-  have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) :=
-    add_mem
+  have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) := by
+    show _ ∈ ManyBody.supportedOperators _ _
+    exact add_mem
       (leftExterior_supported hh s t m k) (Entropy.isSupportedOn_one _)
-  have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ :=
-    add_mem
+  have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ := by
+    show _ ∈ ManyBody.supportedOperators _ _
+    exact add_mem
       (rightExterior_supported hh s t m k) (Entropy.isSupportedOn_one _)
   have hrX : cutRank X k ≤ 1 :=
     hX.operatorSchmidtRank_cutOperator_le_one (Or.inl (Finset.Subset.refl _))
@@ -410,8 +414,9 @@ private theorem rank_outside_le
           have := (Finset.mem_Ico.mp hi).1
           omega)) hx hy)
     let Y := rightExterior h s t m k + 1 + 1 - Ps - Pt
-    have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ :=
-      sub_mem
+    have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ := by
+      show _ ∈ ManyBody.supportedOperators _ _
+      exact sub_mem
         (sub_mem (add_mem (add_mem hr (Entropy.isSupportedOn_one _)) (Entropy.isSupportedOn_one _))
           hPs) hPt
     have hrY : cutRank Y k ≤ 1 :=
@@ -432,8 +437,9 @@ private theorem rank_outside_le
       intro i hi
       exact edge_subset_left (by have := (Finset.mem_Ico.mp hi).2; omega))
     let X := leftExterior h s t m k + 1 + 1 - Ps - Pt
-    have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) :=
-      sub_mem
+    have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) := by
+      show _ ∈ ManyBody.supportedOperators _ _
+      exact sub_mem
         (sub_mem (add_mem (add_mem hl (Entropy.isSupportedOn_one _)) (Entropy.isSupportedOn_one _))
           hPs) hPt
     have hrX : cutRank X k ≤ 1 :=
@@ -486,8 +492,9 @@ private theorem rank_boundary_inside_le
         simp only [Finset.mem_Ico] at hn
         omega
       have hr : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
-          (rightExterior h s t m k + 1 + 1) (interval L 0 k)ᶜ :=
-        add_mem
+          (rightExterior h s t m k + 1 + 1) (interval L 0 k)ᶜ := by
+        show _ ∈ ManyBody.supportedOperators _ _
+        exact add_mem
           (add_mem (rightExterior_supported hh s t m k) (Entropy.isSupportedOn_one _))
           (Entropy.isSupportedOn_one _)
       simpa only [cutRank, W, hl, zero_add] using hr.operatorSchmidtRank_cutOperator_le_one
@@ -501,8 +508,9 @@ private theorem rank_boundary_inside_le
         simp only [Finset.mem_Ico, Finset.mem_range] at hn him
         omega
       have hl : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
-          (leftExterior h s t m k + 1 + 1) (interval L 0 k) :=
-        add_mem
+          (leftExterior h s t m k + 1 + 1) (interval L 0 k) := by
+        show _ ∈ ManyBody.supportedOperators _ _
+        exact add_mem
           (add_mem (leftExterior_supported hh s t m k) (Entropy.isSupportedOn_one _))
           (Entropy.isSupportedOn_one _)
       simpa only [cutRank, W, hr, add_zero] using hl.operatorSchmidtRank_cutOperator_le_one

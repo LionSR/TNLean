@@ -206,9 +206,9 @@ theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
   have hO : Entropy.IsSupportedOn (n := fun _ ↦ q) O
       (interval L a.val (a.val + 2)) := by
     show _ ∈ ManyBody.supportedOperators _ _
-    exact Submodule.sub_mem _
+    exact sub_mem
       (hs a)
-      (Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _)))
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   have hnorm : ‖O‖ ≤ (1 / 2 : ℝ) := norm_sub_half_one_le (h a) (h0 a) (h1 a)
   have hconj := norm_exp_conjugation_nearest_neighbour_shift_le_two I h
     (fun i _ ↦ hs i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) O hO (z : ℂ)

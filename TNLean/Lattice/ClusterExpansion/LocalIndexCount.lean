@@ -182,7 +182,7 @@ theorem exists_productForm_truncatedExp_card_index [PseudoMetricSpace σ]
   let ρ₀ : Matrix (σ → Fin q) (σ → Fin q) ℂ :=
     ∑ A with ∀ k ∈ A, ¬ (acts k).Nonempty, clusterOp h A β
   have h₀ : ρ₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (∅ : Finset σ) := by
-    refine Submodule.sum_mem _ fun A hA ↦ ManyBody.supportedOperators_mono ?_
+    refine sum_mem fun A hA ↦ ManyBody.supportedOperators_mono ?_
       (clusterOp_mem_supportedOperators hh A β)
     intro x hx
     obtain ⟨k, hk, hxk⟩ := mem_biUnion.1 hx

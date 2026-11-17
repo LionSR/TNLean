@@ -148,7 +148,7 @@ private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
       ext x y
       exact Fin.elim0 (x e₀)
     rw [hzero]
-    exact Submodule.zero_mem _
+    exact zero_mem _
   · let e : Fin 1 → E := fun _ ↦ e₀
     let S : Finset E := {e₀}
     let σ₀ : E → Fin q := fun _ ↦ ⟨0, Nat.pos_of_ne_zero hq⟩
@@ -190,16 +190,16 @@ private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
     rw [hX]
     change Φ X ∈ Submodule.span ℂ (Set.range N)
     rw [Matrix.matrix_eq_sum_single X, map_sum]
-    apply Submodule.sum_mem
+    apply sum_mem
     intro i _
     rw [map_sum]
-    apply Submodule.sum_mem
+    apply sum_mem
     intro j _
     have hsingle : Matrix.single i j (X i j) =
         (X i j) • Matrix.single i j (1 : ℂ) := by
       simp
     rw [hsingle, map_smul]
-    apply Submodule.smul_mem
+    apply SMulMemClass.smul_mem
     apply Submodule.subset_span
     refine ⟨finProdFinEquiv (i 0, j 0), ?_⟩
     have hi : (fun _ : Fin 1 ↦ i 0) = i :=
@@ -579,7 +579,7 @@ theorem exists_physical_selected_window_fixed_middle_data
   have hFleftBulk : F₀ (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a + 1) : Finset (Fin L)) := by
     rw [hF₀left]
-    exact Submodule.zero_mem _
+    exact zero_mem _
   have hPmid : Pmid ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K :=
     TNLean.Lattice.siteLift_mem_supportedOperators K M
   have hFmiddleBulk : F₀ (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
@@ -589,7 +589,7 @@ theorem exists_physical_selected_window_fixed_middle_data
   have hFrightBulk : F₀ (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + 2 * ℓ) L : Finset (Fin L)) := by
     rw [hF₀right]
-    exact Submodule.zero_mem _
+    exact zero_mem _
   obtain ⟨HL₀, HM, HR₀, UL, VR, hlocal₀, hUL₀, hVR₀, _hULrank, _hVRrank,
       hMleftBulk, hMrightBulk, hLmiddleZero, hRmiddleZero, hLzero, hRzero, hLsupp, hRsupp⟩ :=
     exists_threeSplit_two_window_factors_with_collars F₀ hFleft hFright hFleftBulk hFmiddleBulk
@@ -627,7 +627,7 @@ theorem exists_physical_selected_window_fixed_middle_data
           (Matrix.single
             (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
             (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).2) (1 : ℂ))
-    exact (hmem).mono
+    exact Entropy.IsSupportedOn.mono hmem
       (Finset.singleton_subset_iff.mpr he₀)
   have hweighted : ∀ z : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → ℂ,
       ∃ Kz : Matrix (E → Fin q) (E → Fin q) ℂ,

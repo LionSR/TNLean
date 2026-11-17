@@ -67,8 +67,9 @@ variable {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ} {D : Finset V}
 /-- The commutator of two operators supported on `D` is supported on `D`. -/
 theorem Entropy.IsSupportedOn.commutator (hX : Entropy.IsSupportedOn X D)
     (hY : Entropy.IsSupportedOn Y D) (σ₀ : Entropy.SiteConfig n) :
-    Entropy.IsSupportedOn (X * Y - Y * X) D :=
-  sub_mem (hX.mul hY σ₀) (hY.mul hX σ₀)
+    Entropy.IsSupportedOn (X * Y - Y * X) D := by
+  show _ ∈ ManyBody.supportedOperators _ _
+  exact sub_mem (hX.mul hY σ₀) (hY.mul hX σ₀)
 
 end Supported
 

@@ -135,9 +135,9 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
         (hC j))
   have hleft : Entropy.IsSupportedOn HL (interval L 0 (a + 2)) := by
     show _ ∈ ManyBody.supportedOperators _ _
-    exact Submodule.sub_mem _
+    exact sub_mem
       (hF 0)
-      (Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _)))
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   refine ⟨HL, HR, hleft, hF 2, fun j ↦ hsupp _, ?_, by omega⟩
   exact aklv_clipped_hamiltonian_formula hs ha h e t
 

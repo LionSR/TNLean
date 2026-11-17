@@ -462,7 +462,7 @@ private theorem ringCommutatorNorm_le_exp_abs_of_disjoint
   · have ht' : 0 ≤ -t := neg_nonneg.mpr (le_of_not_ge ht)
     have hHerm' : ∀ j, (-h j).IsHermitian := fun j => (hHerm j).neg
     have hSupport' : ∀ j, -h j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond j) :=
-      fun j => Submodule.neg_mem _ (hSupport j)
+      fun j => neg_mem (hSupport j)
     have hNorm' : ∀ j, ‖-h j‖ ≤ 1 := fun j => (norm_neg _).trans_le (hNorm j)
     have hBound := ringCommutatorNorm_le_exp_of_disjoint (fun j => -h j)
       hHerm' hSupport' hNorm' B X Y hX hY hB hXY a ha (-t) ht'

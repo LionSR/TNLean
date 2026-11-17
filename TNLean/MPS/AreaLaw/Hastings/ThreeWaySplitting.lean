@@ -283,8 +283,9 @@ theorem ChainHamiltonian.norm_termSum_le (h : ChainHamiltonian L q R J)
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–89 (finite range). -/
 theorem ChainHamiltonian.isSupportedOn_termSum (h : ChainHamiltonian L q R J)
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D :=
-  sum_mem fun X hX ↦
+    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D := by
+  show _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun X hX ↦
     (h.supported X).mono (hS X hX)
 
 /-! ### The parts `H_L`, `H_B`, `H_R` -/

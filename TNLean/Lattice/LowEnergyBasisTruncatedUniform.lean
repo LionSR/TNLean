@@ -90,7 +90,7 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le [NeZ
     (Matrix.isHermitian_sum _ fun j _ ↦ hHerm j) (hHerm i)
   have hMsupp (i : ι) : M i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (K i : Finset ι) :=
     gaussianFilteredTerm_mem_supportedOperators r ΔE
-      (Submodule.sum_mem _ fun j hj ↦
+      (sum_mem fun j hj ↦
         ManyBody.supportedOperators_mono (by exact_mod_cast hsK i j hj) (hSupport j))
       (ManyBody.supportedOperators_mono (by exact_mod_cast hXK i) (hSupport i))
   have hGrow : ∀ x (t : ℕ),

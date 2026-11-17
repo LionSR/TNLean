@@ -161,7 +161,8 @@ theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Finset ι}
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K := by
   have hU (s : ℝ) : hermitianUnitaryPath H s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
     exp_mem_supportedOperators
-      (Submodule.smul_of_tower_mem _ s (SMulMemClass.smul_mem Complex.I hH))
+      (Submodule.smul_of_tower_mem (Subalgebra.toSubmodule (ManyBody.supportedOperators _ _).toSubalgebra) s
+        (SMulMemClass.smul_mem Complex.I hH))
   exact mul_mem (mul_mem (hU t) hW) (hU (-t))
 
 /-- If the generator `H` and the operator `W` act on `K`, so does the filtered operator. With
@@ -177,8 +178,8 @@ theorem gaussianFilteredTerm_mem_supportedOperators (q ΔE : ℝ) {K : Finset ι
   have hf : gaussianFilteredTerm q ΔE H W = ∫ t, f t ∂μ := rfl
   rw [hf]
   by_cases hint : Integrable f μ
-  · exact ((ManyBody.supportedOperators (fun _ ↦ Fin d) K).restrictScalars ℝ).convex.integral_mem
-      (Submodule.closed_of_finiteDimensional (ManyBody.supportedOperators (fun _ ↦ Fin d) K))
+  · let V := Subalgebra.toSubmodule (ManyBody.supportedOperators (fun _ ↦ Fin d) K).toSubalgebra
+    exact (V.restrictScalars ℝ).convex.integral_mem (Submodule.closed_of_finiteDimensional V)
       (Filter.Eventually.of_forall fun t => hermitianUnitaryPath_conj_mem_supportedOperators
         hH hW t) hint
   · rw [integral_undef hint]

@@ -416,31 +416,31 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
     (hs _)
   have hX : leftCutBlock h a x ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a.val + 1) : Finset (Fin L)) := by
-    apply Submodule.sub_mem
-    · apply Submodule.sum_mem
+    apply sub_mem
+    · apply sum_mem
       intro i hi
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
       exact ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (interval_mono (by omega) (by omega)))
         (hs i)
-    · exact Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _))
+    · exact SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
   have hY : rightCutBlock h b y ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a.val + 2 * w) L : Finset (Fin L)) := by
-    apply Submodule.sub_mem
-    · apply Submodule.sum_mem
+    apply sub_mem
+    · apply sum_mem
       intro i hi
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
       exact ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (interval_mono (a := i.val) (b := i.val + 2)
           (a' := a.val + 2 * w) (b' := L) (by omega) (by omega)))
         (hs i)
-    · exact Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _))
+    · exact SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
   let PL := Matrix.energyTruncation (leftCutBlock h a x) t - (m : ℂ) • 1
   let PR := Matrix.energyTruncation (rightCutBlock h b y) t
   have hPL : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a.val + 1) : Finset (Fin L)) :=
-    Submodule.sub_mem _ (ManyBody.cfc_mem_supportedOperators _ hX)
-      (Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _)))
+    sub_mem (ManyBody.cfc_mem_supportedOperators _ hX)
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   have hPR : PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a.val + 2 * w) L : Finset (Fin L)) :=
     ManyBody.cfc_mem_supportedOperators _ hY

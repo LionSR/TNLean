@@ -31,7 +31,7 @@ private theorem isSupportedOn_bond_sum {L q : ℕ}
     (I : Finset (Fin (L - 1))) (S : Finset (Fin L))
     (hIS : ∀ i ∈ I, interval L i.val (i.val + 2) ⊆ S) :
     Entropy.IsSupportedOn (n := fun _ ↦ q) (∑ i ∈ I, h i) S := by
-  exact (Submodule.sum_mem _ fun i hi ↦
+  exact (sum_mem fun i hi ↦
       ((hs i).mono (hIS i hi)))
 
 /-- The original positive nearest-neighbour chain admits the regional shifts

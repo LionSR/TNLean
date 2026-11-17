@@ -61,6 +61,6 @@ theorem isSupportedOn_regionalParityProduct
     intro v hv
     simp only [mem_interval] at *
     omega
-  · exact (Submodule.zero_mem _)
+  · exact (zero_mem _)
 
 end TNLean.MPS.AreaLaw

@@ -68,7 +68,7 @@ theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
     ext c c'
     simp only [submatrix_apply, Matrix.sum_apply]
   rw [hsum]
-  exact Submodule.sum_mem _ fun i _ =>
+  exact sum_mem fun i _ =>
     kronecker_submatrix_ancillaSplit_mem_supportedOperators (hP i) (b i)
 
 /-- **The blocks of a column operator act on a physical region.** If `B = ∑_i P_i ⊗ A_i` with
@@ -87,7 +87,7 @@ theorem block_mem_supportedOperators_of_eq_sum {S : Finset (Site Λ)} {α κ : T
     simp only [of_apply, Matrix.sum_apply, kroneckerMap_apply, Matrix.smul_apply, smul_eq_mul]
     exact Finset.sum_congr rfl fun i _ => mul_comm _ _
   rw [hblock]
-  exact Submodule.sum_mem _ fun i _ => Submodule.smul_mem _ _ (hP i)
+  exact sum_mem fun i _ => SMulMemClass.smul_mem _ (hP i)
 
 /-- **The polar correction on the enlarged sites.** Work in the coordinates
 `physical × (s', e')` of the enlarged sites. Let the restoring operator `R₀` act on `N ⊔ s'`

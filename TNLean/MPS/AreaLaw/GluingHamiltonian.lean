@@ -46,14 +46,16 @@ theorem ChainHamiltonian.cutLeftPart_add_cutBoundaryPart (h : ChainHamiltonian L
 
 /-- The left part is supported on the first `k` sites. -/
 theorem ChainHamiltonian.cutLeftPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
-  sum_mem fun X hX ↦
+    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) := by
+  show _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun X hX ↦
     (h.supported X).mono (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
 theorem ChainHamiltonian.cutBoundaryPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
+  show _ ∈ ManyBody.supportedOperators _ _
   refine sum_mem fun X hX ↦
     (h.supported X).mono ?_
   have hX' := (Finset.mem_filter.mp hX).2

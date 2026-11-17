@@ -144,6 +144,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
   have hsupport : Entropy.IsSupportedOn (n := fun _ ↦ q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
     have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
+    show _ ∈ ManyBody.supportedOperators _ _
     simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum
   refine ⟨hsupport, ?_⟩
   let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))

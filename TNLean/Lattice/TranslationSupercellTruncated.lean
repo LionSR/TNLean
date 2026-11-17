@@ -113,7 +113,7 @@ theorem norm_groundCompression_truncatedTerm_commutator_le_of_momenta [NeZero d]
   have hkK (k : ι) : k ∈ K k := hXK k (hX k)
   have hMsupp (k : ι) : M k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (K k : Finset ι) :=
     gaussianFilteredTerm_mem_supportedOperators r ΔE
-      (Submodule.sum_mem _ fun k' hk' ↦
+      (sum_mem fun k' hk' ↦
         ManyBody.supportedOperators_mono (by exact_mod_cast hsK k k' hk') (hSupport k'))
       (ManyBody.supportedOperators_mono (by exact_mod_cast hXK k) (hSupport k))
   obtain ⟨g, hg, hfar⟩ :=

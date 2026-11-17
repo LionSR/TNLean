@@ -66,7 +66,7 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
   let z (j : Fin 3) := minEigenvalue (hC j)
   have hsC (j : Fin 3) :
       C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (normalizationCoreSites a b j : Finset (Fin L)) := by
-    refine Submodule.sum_mem _ fun i hi => ?_
+    refine sum_mem fun i hi => ?_
     have hsub : (interval L i.val (i.val + 2) : Set (Fin L)) ⊆
         (normalizationCoreSites a b j : Set (Fin L)) := by
       intro x hx

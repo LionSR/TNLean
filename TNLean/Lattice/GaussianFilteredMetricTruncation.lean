@@ -191,7 +191,7 @@ theorem metric_truncated_filter_properties {ι : Type*} [PseudoMetricSpace ι]
     Matrix.isHermitian_sum _ fun j _ ↦ hHerm j
   have hHsSupp : (∑ j ∈ metricRangeBall (ℓ - R) i, h j) ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall ℓ i : Finset ι) :=
-    Submodule.sum_mem _ fun j hj ↦ ManyBody.supportedOperators_mono
+    sum_mem fun j hj ↦ ManyBody.supportedOperators_mono
       (metricRangeBall_retained_support hj) (hsupp j)
   have hWi := ManyBody.supportedOperators_mono (metricRangeBall_initial_support hℓ i) (hsupp i)
   refine ⟨?_, isHermitian_gaussianFilteredTerm q Δ hHs (hHerm i),

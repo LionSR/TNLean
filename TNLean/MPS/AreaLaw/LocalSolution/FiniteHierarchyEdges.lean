@@ -120,7 +120,7 @@ end Matrices
 
 section Support
 
-variable {ι : Type*} [Fintype ι] {d N : ℕ}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d N : ℕ}
 
 /-- Internal finite edges retain their two-supersite support after zero extension.
 The closing edge is unrestricted here and is treated by its separate spectral window.

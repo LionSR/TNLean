@@ -45,11 +45,11 @@ private theorem isSupportedOn_outsidePiece
   classical
   show _ ∈ ManyBody.supportedOperators _ _
   unfold outsidePiece
-  apply Submodule.sum_mem
+  apply sum_mem
   intro i _
   split_ifs with hi
   · exact ((hs i).mono (hside i hi.2))
-  · exact Submodule.zero_mem _
+  · exact zero_mem _
 
 private theorem outside_sum_split
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b k : ℕ) :
@@ -246,7 +246,7 @@ theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
   rw [hzero]
   have hz : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ 0)
       (0 : Matrix (Fin L → Fin 0) (Fin L → Fin 0) ℂ) ∅ :=
-    (Submodule.zero_mem _)
+    (zero_mem _)
   exact (hz.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
     (Or.inl (Finset.empty_subset _))).trans (by decide : 1 ≤ 0 ^ 2 + 3)
 

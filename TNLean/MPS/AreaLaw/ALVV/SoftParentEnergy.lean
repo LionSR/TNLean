@@ -151,8 +151,8 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
   have hCV : Csoft ∈ V :=
     sub_mem (sub_mem (add_mem (add_mem (sub_mem hPV hMV)
       (SMulMemClass.smul_mem _ hIV)) hFV) (SMulMemClass.smul_mem _ hIV)) (SMulMemClass.smul_mem _ hIV)
-  have hCs := hCV
-  obtain ⟨K, hK, hKnorm, hLift⟩ := hCs.exists_posSemidef_localLift_norm_le hBlow budget hnorm
+  obtain ⟨K, hK, hKnorm, hLift⟩ :=
+    Entropy.IsSupportedOn.exists_posSemidef_localLift_norm_le hCV hBlow budget hnorm
   have hRnative : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J K + (eSoft : ℂ) • 1 := by
     rw [← hLift, hCraw]
     abel

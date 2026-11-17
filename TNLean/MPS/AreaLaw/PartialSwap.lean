@@ -207,9 +207,9 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
   have hsupp : Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z := by
     show _ ∈ ManyBody.supportedOperators _ _
     rw [hsum]
-    apply Submodule.sum_mem
+    apply sum_mem
     intro X hXC
-    apply Submodule.sum_mem
+    apply sum_mem
     intro b _
     apply ManyBody.supportedOperators_mono
       (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem (fun X ↦ X.1) hXC))
