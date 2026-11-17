@@ -51,6 +51,7 @@ import TNLean.MPS.MPU.ConjugationCaseInvariance
 import TNLean.MPS.MPU.ConjugationEvenRankEquivalence
 import TNLean.MPS.MPU.ConjugationGaugeSign
 import TNLean.MPS.MPU.ConjugationMPSClass
+import TNLean.MPS.MPU.ConjugationMPSPhase
 import TNLean.MPS.MPU.ConjugationOddRankEquivalence
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationStandardForms
