@@ -107,7 +107,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
           (fun X : DomainSupport Λ R ↦ X) (h.swappedDoubled D).term
           (h.swappedDoubled D).hermitian (h.swappedDoubled D).supported b₀
           (h.swappedDoubled D).sum_norm_terms_containing_le hqq Q
-          (isSupportedOn_of_mem_supportedOperators hW) (m : ℝ) (Nat.cast_nonneg m) t
+          (isSupportedOn_of_mem_supportedOperators hW) (m : ℝ) t
     have hc : (Q.card : ℝ) ≤ (Λ.card : ℝ) := by
       have hcNat : Q.card ≤ Λ.card := by
         simpa only [Fintype.card_fin] using Finset.card_le_univ Q

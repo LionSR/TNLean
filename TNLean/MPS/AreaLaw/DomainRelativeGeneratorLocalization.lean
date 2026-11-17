@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainPartialSwap
-import TNLean.MPS.AreaLaw.DomainLiebRobinson
+import TNLean.MPS.AreaLaw.LiebRobinson
 
 /-!
 # Localization of the relative-evolution generator on finite integer domains
@@ -73,7 +73,7 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
       Nat.cast_add, Nat.cast_one] using
       norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
         (fun X : DomainSupport Λ R ↦ X) g.term g.hermitian g.supported b₀
-        g.sum_norm_terms_containing_le hqq S hA (m : ℝ) (Nat.cast_nonneg m) t
+        g.sum_norm_terms_containing_le hqq S hA (m : ℝ) t
   have hcommon (S : Finset (Fin Λ.card)) (hS : S ⊆ Z)
       (A : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
