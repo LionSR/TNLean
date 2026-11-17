@@ -213,6 +213,9 @@ coefficients of the span.
     \label{thm:glm_l_path_invariance}
     \lean{MPOTensor.exists_actionLMatrix_regauge_of_hasDerivAt}
     \uses{def:glm_boundary_action_l_matrix,lem:glm_mixed_gauge_coefficients}
+    % Source anchors: REsubmission.tex line 1361 (fixed bond dimension),
+    % lines 1387--1405 (differentiable action tensors and the span expansion),
+    % line 1551 (conclusion).
     Let $U\subseteq\mathbb R$ be open and connected. Fix operator blocks
     $O_a$ of positive bond dimensions with exact biorthogonal fusion maps.
     Let $A_x(\gamma)$, $\gamma\in U$, be state blocks of fixed positive bond
@@ -243,8 +246,14 @@ coefficients of the span.
         ${L}$-symbol since they are related by a (differentiable) gauge
         transformation.
     \end{quote}
-    No continuity of the generators $X_{ax}^y(\gamma)$ in $\gamma$ is
-    assumed. The source states that similar results hold when the action
+    The fixed bond dimension and the span hypothesis are the source's
+    assumptions: ``we assume for now that the bond dimension does not
+    change'' (line~1361), and ``Let us absorb this basis change and assume
+    \ldots{} that the action tensors are differentiable'', with the displayed
+    expansion of $V(\gamma+d\gamma)$, ``where we have spanned the term in
+    $d\gamma$ using the orthogonal set of action tensors''
+    (lines~1387--1405). No continuity of the generators $X_{ax}^y(\gamma)$ in
+    $\gamma$ is assumed. The source states that similar results hold when the action
     tensors are only continuous and when the bond dimension grows along the
     path (line~1551); these extensions are not part of this statement.
 \end{theorem}

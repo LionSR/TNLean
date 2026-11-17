@@ -475,7 +475,13 @@ every point of the path: fixed operators and fusion maps (line 1359), exact
 action tensors along the whole path (lines 1269--1272), injective blocks
 orthogonal between each other (lines 317 and 1332), a fixed bond dimension
 (line 1361), and the span assumption on the derivative of the action
-tensors at every point (lines 1387--1405). No continuity of the generators
+tensors at every point (lines 1387--1405). The last two are the source's
+assumptions at line 1361, "we assume for now that the bond dimension does
+not change", and at lines 1387--1405: "Let us absorb this basis change and
+assume [...] that the action tensors are differentiable", followed by the
+displayed expansion `V(γ + dγ)^i = V(γ)^i + ∑_{i'} (X_{ax}^y)_{i'}^i V(γ)^{i'} dγ`
+(lines 1388--1404), "where we have spanned the term in $d\gamma$ using the
+orthogonal set of action tensors" (line 1405). No continuity of the generators
 `X` is assumed. The source gives no integration argument; here, near each
 parameter the pairing matrices `Q` of the analysis maps against the
 synthesis maps there satisfy `Q' = X Q`, so `Q⁻¹ V` is locally constant,
