@@ -30,8 +30,6 @@ transfer map gives a canonical block.
 
 ## Main results
 
-* `Kraus.isIrreducibleFamily_of_isInjective`: an injective family is irreducible.
-* `MPSTensor.IsMPUCanonicalBlock.isMPUCanonicalForm`: a canonical block is in canonical form.
 * `MPSTensor.isMPUCanonicalForm_of_isIrreducibleFamily`: a nonzero irreducible tensor is in
   canonical form, with one block.
 * `MPOTensor.exists_isMPUCanonicalForm_twoSiteStandardFormData`: for unitary gates `u, v`, a tensor
@@ -42,103 +40,9 @@ transfer map gives a canonical block.
 open scoped Matrix
 open Matrix
 
-namespace Kraus
-
-variable {d D : ℕ}
-
-/-- **An injective family is irreducible.** If the matrices span the full matrix algebra, an
-invariant projection `P` satisfies `(1 - P) X P = 0` for every matrix `X`; taking matrix units,
-either `P = 0` or `P = 1`.
-
-Source context: arXiv:1703.09188, canonical form, lines 258--267, with the irreducible blocks of
-the canonical form. -/
-theorem isIrreducibleFamily_of_isInjective {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (hA : IsInjective A) : IsIrreducibleFamily A := by
-  rintro ⟨P, -, hP0, hP1, hinv⟩
-  have hall : ∀ X ∈ Submodule.span ℂ (Set.range A), (1 - P) * X * P = 0 := by
-    intro X hX
-    induction hX using Submodule.span_induction with
-    | mem x hx =>
-        obtain ⟨i, rfl⟩ := hx
-        exact hinv i
-    | zero => simp
-    | add x y _ _ hx hy => rw [Matrix.mul_add, Matrix.add_mul, hx, hy, add_zero]
-    | smul c x _ hx => rw [Matrix.mul_smul, Matrix.smul_mul, hx, smul_zero]
-  rw [hA.span_eq_top] at hall
-  apply hP1
-  by_contra hne
-  have hne' : 1 - P ≠ 0 := fun h ↦ hne (sub_eq_zero.mp h).symm
-  obtain ⟨i, a, hia⟩ : ∃ i a, (1 - P) i a ≠ 0 := by
-    by_contra h
-    simp only [not_exists, not_not] at h
-    exact hne' (Matrix.ext h)
-  apply hP0
-  ext b j
-  have h := congrFun (congrFun (hall (Matrix.single a b 1) Submodule.mem_top) i) j
-  have hentry : ((1 - P) * Matrix.single a b (1 : ℂ) * P) i j = (1 - P) i a * P b j := by
-    simp only [Matrix.mul_apply, Matrix.single_apply]
-    rw [Finset.sum_eq_single b]
-    · rw [Finset.sum_eq_single a]
-      · simp
-      · intro y _ hy
-        simp [Ne.symm hy]
-      · simp
-    · intro x _ hx
-      rw [Finset.sum_eq_zero]
-      · simp
-      · intro y _
-        simp [Ne.symm hx]
-    · simp
-  rw [hentry, Matrix.zero_apply] at h
-  simpa using (mul_eq_zero.mp h).resolve_left hia
-
-end Kraus
-
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- **A canonical block is in canonical form**, as the canonical form with one block of weight
-one filling the bond space.
-
-Source: arXiv:1703.09188, canonical form, lines 258--267. -/
-theorem IsMPUCanonicalBlock.isMPUCanonicalForm [NeZero D] {A : MPSTensor d D}
-    (hA : IsMPUCanonicalBlock A) : IsMPUCanonicalForm A := by
-  classical
-  let V : Matrix (Fin (∑ _ : Fin 1, D)) (Fin D) ℂ :=
-    MPSTensor.blockInclusion (fun _ : Fin 1 => D) 0
-  have hV : (Vᴴ * V : Matrix (Fin D) (Fin D) ℂ) = 1 :=
-    MPSTensor.blockInclusion_conjTranspose_mul_self _ _
-  refine ⟨{
-    r := 1
-    dim := fun _ => D
-    dim_pos := fun _ => NeZero.pos D
-    weights := fun _ => 1
-    weights_ne_zero := fun _ => one_ne_zero
-    blocks := fun _ => A
-    ambient_coisometry := V
-    coisometric := ?_
-    reconstruct := ?_
-    blocks_canonical := fun _ => hA
-    total_dim_eq := by simp }⟩
-  · have hcard : Fintype.card (Fin D) = Fintype.card (Fin (∑ _ : Fin 1, D)) := by simp
-    exact (Matrix.mul_eq_one_comm_of_card_eq _ _ ℂ
-      (A := (Vᴴ : Matrix (Fin D) (Fin (∑ _ : Fin 1, D)) ℂ))
-      (B := V) hcard).mp hV
-  · intro i
-    have hmul := MPSTensor.toTensorFromBlocks_mul_blockInclusion
-      (fun _ : Fin 1 => (1 : ℂ)) (fun _ : Fin 1 => A) 0 i
-    have hmul' : MPSTensor.toTensorFromBlocks (fun _ : Fin 1 => (1 : ℂ))
-        (fun _ : Fin 1 => A) i * V = V * A i := by
-      simpa only [one_smul] using hmul
-    calc
-      A i = (Vᴴ * V) * A i := by rw [hV, Matrix.one_mul]
-      _ = Vᴴ * (MPSTensor.toTensorFromBlocks
-            (fun _ : Fin 1 => (1 : ℂ)) (fun _ : Fin 1 => A) i * V) := by
-              rw [hmul', Matrix.mul_assoc]
-      _ = (Vᴴ * MPSTensor.toTensorFromBlocks (fun _ : Fin 1 => (1 : ℂ))
-            (fun _ : Fin 1 => A) i) * V :=
-              (Matrix.mul_assoc Vᴴ _ V).symm
 
 /-- **A nonzero irreducible tensor is in canonical form**, with one block. The transfer map has a
 positive Perron eigenvalue `r` with a positive-definite eigenvector, and `r^{-1/2} A` is an
@@ -364,6 +268,7 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
     rw [hspan, Submodule.mem_bot] at h1
     exact one_ne_zero h1
   exact MPSTensor.isMPUCanonicalForm_of_isIrreducibleFamily _
-    (Kraus.isIrreducibleFamily_of_isInjective hinj) hne
+    (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
+      (Kraus.injective_implies_irreducibleCP _ hinj)) hne
 
 end MPOTensor

@@ -49,13 +49,12 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A normal tensor is in MPU canonical form, with one block of weight one
-filling the bond space.
+/-- **A canonical block is in canonical form**, as the canonical form with one block of weight
+one filling the bond space.
 
-Source: arXiv:1703.09188, canonical form, lines 259--267. -/
-theorem IsNormalTensor.isMPUCanonicalForm {A : MPSTensor d D}
-    (hA : IsNormalTensor A) : IsMPUCanonicalForm A := by
-  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
+Source: arXiv:1703.09188, canonical form, lines 258--267. -/
+theorem IsMPUCanonicalBlock.isMPUCanonicalForm [NeZero D] {A : MPSTensor d D}
+    (hA : IsMPUCanonicalBlock A) : IsMPUCanonicalForm A := by
   classical
   let V : Matrix (Fin (∑ _ : Fin 1, D)) (Fin D) ℂ :=
     MPSTensor.blockInclusion (fun _ : Fin 1 => D) 0
@@ -71,7 +70,7 @@ theorem IsNormalTensor.isMPUCanonicalForm {A : MPSTensor d D}
     ambient_coisometry := V
     coisometric := ?_
     reconstruct := ?_
-    blocks_canonical := fun _ => ⟨hA.no_invariant_proj, hA.spectral_radius_one⟩
+    blocks_canonical := fun _ => hA
     total_dim_eq := by simp }⟩
   · have hcard : Fintype.card (Fin D) = Fintype.card (Fin (∑ _ : Fin 1, D)) := by simp
     exact (Matrix.mul_eq_one_comm_of_card_eq _ _ ℂ
@@ -91,6 +90,15 @@ theorem IsNormalTensor.isMPUCanonicalForm {A : MPSTensor d D}
       _ = (Vᴴ * MPSTensor.toTensorFromBlocks (fun _ : Fin 1 => (1 : ℂ))
             (fun _ : Fin 1 => A) i) * V :=
               (Matrix.mul_assoc Vᴴ _ V).symm
+
+/-- A normal tensor is in MPU canonical form, with one block of weight one
+filling the bond space.
+
+Source: arXiv:1703.09188, canonical form, lines 259--267. -/
+theorem IsNormalTensor.isMPUCanonicalForm {A : MPSTensor d D}
+    (hA : IsNormalTensor A) : IsMPUCanonicalForm A :=
+  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  IsMPUCanonicalBlock.isMPUCanonicalForm ⟨hA.no_invariant_proj, hA.spectral_radius_one⟩
 
 end MPSTensor
 
