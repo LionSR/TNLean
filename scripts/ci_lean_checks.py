@@ -358,12 +358,10 @@ def _stop_group(proc: subprocess.Popen, grace: int = 30) -> None:
     proc.wait()
 
 
-def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
-    """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
-    since the root build compiles the same modules, so when it exceeds `budget`
-    seconds (for example behind a cold dependency cache) it is stopped with a
-    warning instead of failing the job."""
-    deadline = time.monotonic() + budget if budget else None
+def build_until(modules: list[str], log_path: Path | None, budget: float | None) -> int | None:
+    """Fail-fast `lake build` of `modules`: its exit code, or `None` when it
+    was stopped because it ran for `budget` seconds (`None` means no limit)."""
+    deadline = time.monotonic() + budget if budget is not None else None
     proc = subprocess.Popen(["lake", "--fail-fast", "build", *modules],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
                             start_new_session=True)
@@ -392,6 +390,15 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
             # A descendant that outlived `lake` would keep the pipe open.
             _signal_group(proc.pid, signal.SIGKILL)
             reader.join(timeout=60)
+    return code
+
+
+def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
+    """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
+    since the root build compiles the same modules, so when it exceeds `budget`
+    seconds (for example behind a cold dependency cache) it is stopped with a
+    warning instead of failing the job. Zero means no limit."""
+    code = build_until(modules, log_path, budget or None)
     if code is None:
         print(f"::warning::Early build stopped after {budget}s; "
               "the root build compiles the remaining modules.", flush=True)
@@ -426,12 +433,8 @@ def focused_checks(
         if deadline is None:
             # Zero disables the early shortcut's warning-and-success budget.
             return early_build(modules, log_path, 0)
-        left = int(deadline - time.monotonic())
-        if left <= 0:
-            return None
-        code = early_build(modules, log_path, left)
-        # `early_build` reports a build stopped at its budget as success.
-        return None if code == 0 and expired() else code
+        left = deadline - time.monotonic()
+        return build_until(modules, log_path, left) if left > 0 else None
 
     def prepare(module: str) -> bool:
         if module in unprepared:

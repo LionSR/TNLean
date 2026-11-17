@@ -650,7 +650,7 @@ class FocusedRunnerTest(unittest.TestCase):
         """Run with a fake clock that `build` and `strict` advance."""
         self.clock = 0.0
         with mock.patch.object(ci.time, "monotonic", side_effect=lambda: self.clock), \
-                mock.patch.object(ci, "early_build", side_effect=build) as builder, \
+                mock.patch.object(ci, "build_until", side_effect=build) as builder, \
                 mock.patch.object(ci, "run_batch", side_effect=strict) as runner:
             code = ci.focused_checks(sources, tests, graph, 3, 240, None, budget)
         return code, builder, runner
@@ -658,8 +658,7 @@ class FocusedRunnerTest(unittest.TestCase):
     def test_budget_spent_in_preparation_defers_every_target(self):
         def build(modules, log, budget):
             self.assertEqual(budget, 100)
-            self.clock += budget  # stopped at its budget, reported as success
-            return 0
+            return None  # stopped at its budget, even if the clock lags behind
 
         code, builder, runner = self.run_budgeted(
             ["TNLean/A.lean", "TNLean/B.lean"], ["scripts/a_regression.lean"],
@@ -919,6 +918,20 @@ class EarlyBuildTest(unittest.TestCase):
             code = ci.early_build(["TNLean.Core"], self.log, 1)
         self.assertEqual(code, 0)
         self.assertIn("::warning::Early build stopped after 1s", out.getvalue())
+
+    def test_focused_preparation_stopped_at_the_budget_skips_strict_checks(self) -> None:
+        # The build ends at the budget; the strict runner must not see targets
+        # whose dependencies were never prepared, however the clock rounds.
+        self.lake("sleep 30\n")
+        import io
+        from contextlib import redirect_stdout
+        out = io.StringIO()
+        with redirect_stdout(out), mock.patch.object(ci, "run_batch") as runner:
+            code = ci.focused_checks(
+                ["TNLean/A.lean", "TNLean/B.lean"], [], {}, 3, 240, self.log, 2)
+        self.assertEqual(code, 0)
+        runner.assert_not_called()
+        self.assertIn("::warning::Focused checks stopped at their 2s budget", out.getvalue())
 
 
 if __name__ == "__main__":
