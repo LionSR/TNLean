@@ -31,8 +31,8 @@ variable {P : Type}
 
 /-- Every original circuit is a contraction by its actual gate hypotheses. -/
 theorem OriginalCircuit.norm_eval_le_one {a b : Layout P} (w : OriginalCircuit a b) :
-    ‖w.eval‖ ≤ 1 := by
-  simpa only [w.eval_produce] using w.produce.norm_eval_le_one w.isAllowed_produce
+    ‖w.eval‖ ≤ 1 :=
+  Circuit.norm_eval_le_one w (Circuit.isAllowed_of_contraction w fun _ => trivial)
 
 namespace EffectCircuit
 /-- The actual rescaled chronological operator differs from the original
@@ -43,19 +43,21 @@ theorem norm_rescaledOriginal_sub_evalWithGateMaps_le {δ : ℝ} (hδ : 0 ≤ δ
     ‖(w.rescaledOriginal hδ G h).eval - w.evalWithGateMaps G‖ ≤
       2 * δ * w.expandedGateCount := by
   induction w with
-  | id => simp only [rescaledOriginal, OriginalCircuit.eval, evalWithGateMaps,
-      sub_self, norm_zero, expandedGateCount, Nat.cast_zero, mul_zero, le_refl]
+  | id => simp only [rescaledOriginal, Circuit.eval, evalWithGateMaps,
+      sub_self, norm_zero, expandedGateCount, Circuit.gateCount, Nat.cast_zero, mul_zero, le_refl]
   | @comp a b d w v ihw ihv =>
       have hc := norm_comp_sub_comp_le_one (Mem a) (Mem b) (Mem d)
         (w.rescaledOriginal hδ G.1 h.1).eval (w.evalWithGateMaps G.1)
         (v.rescaledOriginal hδ G.2 h.2).eval (v.evalWithGateMaps G.2)
         (OriginalCircuit.norm_eval_le_one _) (w.norm_evalWithGateMaps_le_one G.1 h.1)
       exact hc.trans ((add_le_add (ihw G.1 h.1) (ihv G.2 h.2)).trans_eq
-        (by simp only [expandedGateCount, Nat.cast_add, mul_add]))
-  | localMap => simp only [rescaledOriginal, OriginalCircuit.eval, evalWithGateMaps,
-      Word.eval, sub_self, norm_zero, expandedGateCount, Nat.cast_zero, mul_zero, le_refl]
+        (by simp only [expandedGateCount, Circuit.gateCount, Nat.cast_add, mul_add]))
+  | localMap => simp only [rescaledOriginal, Circuit.eval, evalWithGateMaps,
+      sub_self, norm_zero, expandedGateCount, Circuit.gateCount, Nat.cast_zero, mul_zero, le_refl]
   | @gate C _ owner a b L tail =>
-      dsimp only [rescaledOriginal, OriginalCircuit.eval, evalWithGateMaps, expandedGateCount]
+      dsimp only [rescaledOriginal, Circuit.eval, GateFamily.eval, OriginalGate.toEffectGate,
+        EffectGate.eval,
+        evalWithGateMaps, expandedGateCount, Circuit.gateCount]
       have he : ‖gateMemoryMap owner a b tail
           (PartyCircuit.gate (toGate (rescalePartyGate δ L))) -
           gateMemoryMap owner a b tail G‖ ≤ 2 * δ := by
@@ -63,8 +65,8 @@ theorem norm_rescaledOriginal_sub_evalWithGateMaps_le {δ : ℝ} (hδ : 0 ≤ δ
         exact (norm_gateMemoryMap_le _ _ _ _ _).trans
           (norm_inv_one_add_smul_sub_le hδ h.2.2.1 h.2.2.2)
       simpa only [gateMemoryMap, Nat.cast_one, mul_one] using he
-  | swap => simp only [rescaledOriginal, OriginalCircuit.eval, evalWithGateMaps,
-      Word.eval, sub_self, norm_zero, expandedGateCount, Nat.cast_zero, mul_zero, le_refl]
+  | swap => simp only [rescaledOriginal, Circuit.eval, evalWithGateMaps,
+      sub_self, norm_zero, expandedGateCount, Circuit.gateCount, Nat.cast_zero, mul_zero, le_refl]
   | frame r w ih =>
       change ‖(w.rescaledOriginal hδ G h).eval.lTensor r.space -
         (w.evalWithGateMaps G).lTensor r.space‖ ≤ _

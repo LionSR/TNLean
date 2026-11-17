@@ -38,7 +38,8 @@ theorem markovDensity_fixed : Kraus.transferMap markovTensor markovDensity = mar
 
 /-- The Markov tensor satisfies the faithful primitive fixed-point hypotheses
 of the FNW projector estimate. -/
-theorem markovTensor_isPrimitiveMPS : IsPrimitiveMPS markovTensor markovDensity := by
+theorem markovTensor_hasComplementaryFixedPointGap :
+    Kraus.HasComplementaryFixedPointGap markovTensor markovDensity := by
   have hne : markovDensity ≠ 0 := fun h ↦ by
     have := markovDensity_trace
     simp [h] at this

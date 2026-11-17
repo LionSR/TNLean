@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPDO.OperatorCyclicSum
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Periodic circuit of a two-site standard form
@@ -198,10 +199,7 @@ theorem TwoSiteStandardFormData.mpo_apply_eq_shifted_mul_unshifted
         (S.X₂ (g x, (i x).1) h.1 *
           S.X₁ ((i x).2, g (x + 1)) h.2) * u h (j x) := by
     rw [Fintype.sum_prod_type]
-    apply Finset.sum_congr rfl
-    intro t _
-    apply Finset.sum_congr rfl
-    intro s _
+    refine Finset.sum_congr₂ fun t _ s _ ↦ ?_
     ring
   simp_rw [hletter]
   simp only [Fintype.prod_sum]

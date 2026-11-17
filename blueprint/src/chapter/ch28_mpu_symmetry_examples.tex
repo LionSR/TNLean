@@ -16,6 +16,67 @@
     % Source lines: paper_v2.tex 1845--1876.
 \end{lemma}
 
+\begin{proof}
+    \uses{lem:mpu_conjugation_example_gate_invariants, conjphs, prop:conjsym-strict-equiv}
+    The gates generate conjugation-invariant MPUs with the case and
+    determinants recorded in
+    Lemma~\ref{lem:mpu_conjugation_example_gate_invariants}. When one rank is
+    odd, the two classes then follow from the determinant $\det(u_+v_\pm)=\pm1$
+    and Theorem~\ref{conjphs}; when both are even, distinguishing the four
+    classes in each case needs the ``only if'' direction of
+    Theorem~\ref{prop:conjsym-strict-equiv}, which remains open.
+\end{proof}
+
+\begin{lemma}[Invariants of the example gates under conjugation]
+    \label{lem:mpu_conjugation_example_gate_invariants}
+    \lean{MPOTensor.ConjugationExamples.conjugation_caseI_gates,
+        MPOTensor.ConjugationExamples.conjugation_caseII_gates,
+        MPOTensor.ConjugationExamples.signGate,
+        MPOTensor.ConjugationExamples.gateU,
+        MPOTensor.ConjugationExamples.gateV,
+        MPOTensor.ConjugationExamples.regroupedR,
+        MPOTensor.ConjugationExamples.det_regroupedR}
+    \leanok
+    \discussion{5715}
+    \uses{prop1conj, corconj, cor:sympl-to-orthogonal, def:mpu_tensor_from_two_gates}
+    Fix an identification of $\mathbb C^\ell\otimes\mathbb C^r$ with
+    $\mathbb C^d\otimes\mathbb C^d$, and let
+    $u_\pm,v_\pm\in\{\Id,\operatorname{diag}(-1,1,\ldots,1)\}$, with $u_+=v_+=\Id$.
+    For every choice of signs, the tensor in standard form with gates
+    $u_\pm,v_\pm$ generates a conjugation-invariant MPU; the gates are in
+    Case I of Lemma~\ref{corconj}, and
+    \begin{align}
+        \det u_\pm & =\pm1, & \det v_\pm & =\pm1, & \det(u_\pm v_\pm) & =\det u_\pm\det v_\pm.
+    \end{align}
+    If $r$ and $\ell$ are even, let
+    \begin{align}
+        u'_\pm & =(\Id_{r\ell/4}\otimes R)u_\pm, &
+        v'_\pm & =v_\pm(\Id_{r\ell/4}\otimes R),
+    \end{align}
+    with $R$ the matrix of Lemma~\ref{cor:sympl-to-orthogonal}. Then the
+    tensor in standard form with gates $u'_\pm,v'_\pm$ generates a
+    conjugation-invariant MPU, the gates are in Case II, and
+    \begin{align}
+        \det u'_\pm & =\pm(-1)^{r\ell/4}, & \det v'_\pm & =\pm(-1)^{r\ell/4}.
+    \end{align}
+    The source prints $v'_\pm=(\Id\otimes R)v_\pm$; the matrix $R$ acts on
+    the input of $v'_\pm$, as in Lemma~\ref{cor:sympl-to-orthogonal}
+    \cite{gap:mpu_conjugation_example_r_side}.
+    % Source lines: paper_v2.tex 1847--1876.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The gates $u_\pm,v_\pm$ are real and orthogonal, so the conjugation
+    relations of Lemma~\ref{prop1conj} hold with $x=y=\Id$, and the MPU is
+    conjugation invariant. The matrix $R$ is unitary and satisfies
+    $\overline R=(Y\otimes Y)R=R(Y\otimes Y)$, so
+    $\overline{u'_\pm}=(\Sigma_\ell\otimes\Sigma_r)u'_\pm$ and
+    $\overline{v'_\pm}=v'_\pm(\Sigma_r\otimes\Sigma_\ell)$, the Case II
+    relations. The determinants follow from $\det R=-1$ and
+    $\det(\Id_{r\ell/4}\otimes R)=(\det R)^{r\ell/4}$.
+\end{proof}
+
 \begin{lemma}[Admissible phases under conjugation]
     \label{ex:mpu_admissible_all_conjugation_phases}
     \notready
@@ -23,7 +84,7 @@
     % **Scope restriction (realization by source-derived standard forms):** each
     % displayed standard-form tensor carries reduced full-support source data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, prop:mpu_admissible_conjugation_standard_forms, cor:mpu_admissible_symplectic_to_orthogonal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{conjphs, prop:conjsym-strict-equiv, corconj, cor:sympl-to-orthogonal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Assume the standard-form tensors displayed below carry reduced full-support
     source data and that the comparison paths used to classify them carry
     admissible path data of blocking length one. Let
@@ -32,9 +93,9 @@
         u_- & =v_-=\operatorname{diag}(-1,1,\ldots,1).
     \end{align}
     If at least one of $r$ and $\ell$ is odd, the pairs $(u_+,v_+)$ and
-    $(u_+,v_-)$ represent the two classes of Lemma~\ref{thm:mpu_admissible_conjugation_odd_rank}. If $r$
+    $(u_+,v_-)$ represent the two classes of Theorem~\ref{conjphs}. If $r$
     and $\ell$ are both even, the four pairs $(u_\pm,v_\pm)$ represent the
-    four Case I classes of Lemma~\ref{thm:mpu_admissible_conjugation_even_rank}. With
+    four Case I classes of Theorem~\ref{prop:conjsym-strict-equiv}. With
     \begin{align}
         u'_\pm & =(\Id_{r\ell/4}\otimes R)u_\pm, &
         v'_\pm & =v_\pm(\Id_{r\ell/4}\otimes R),
@@ -96,76 +157,82 @@
 
 \begin{lemma}[CZX]
     \label{example:czx}
-    \notready
+    \lean{MPOTensor.TimeReversalExamples.timeReversalSigns_czx,
+        MPOTensor.TimeReversalExamples.mpo_czx_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_czx}
+    \leanok
     \discussion{5715}
-    \uses{prop:sigma1-and-sigma2-equal, prop:dagger-mps-class-and-mpu-class-equal, thm:czx_printed_normalization_obstruction}
-    The normalized tensor printed below is not an MPU, by
-    Lemma~\ref{thm:czx_printed_normalization_obstruction}.
-    The following is the source classification claim, not an assertion
-    of unitarity for that printed tensor; \cite{gap:mpu_czx_tensor_normalization} discusses its normalization and comparison
-    with the Z-decorated
-    tensor.
+    \uses{def:mpu_tensor_from_two_gates, thm:mpu_supplied_two_site_periodic_circuit, lem:mpu_source_time_reversal_sign_independent, cor:all-equivalent-under-conjugation, thm:mpu_example_time_reversal_trace_signs, thm:czx_printed_normalization_obstruction}
     The CZX MPU of Chen, Liu and Wen~\cite{ChenLiuWen2011CZX} (see also
     \cite[lines~1906--1943]{Cirac2017MPU}) is defined by
     \begin{align}
         u & =CZ(\sigma_x\otimes\sigma_x), & v & =CZ,
     \end{align}
-    where $CZ=\operatorname{diag}(1,1,1,-1)$. Let
-    \begin{align}
-        H & =\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}
-    \end{align}
-    be the Hadamard matrix. The corresponding tensor is
-    \begin{align}
-        \mathcal U_{\ell r}^{ud}
-         & =(\sigma_x)_{ud}\delta_{u,\ell}H_{\ell,r}.
-    \end{align}
-    It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
-    % Source lines: paper_v2.tex 1906--1943.
+    where $CZ=\operatorname{diag}(1,1,1,-1)$. Its tensor in standard form
+    is time-reversal invariant: its periodic operators are self-adjoint on
+    every ring. It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
+
+    The source also prints the one-site tensor
+    $\mathcal U_{\ell r}^{ud}=(\sigma_x)_{ud}\delta_{u,\ell}H_{\ell,r}$, with
+    $H$ the Hadamard matrix. That tensor is not an MPU, by
+    Lemma~\ref{thm:czx_printed_normalization_obstruction}; its normalization
+    and the Z-decorated tensor are discussed in
+    \cite{gap:mpu_czx_tensor_normalization}. The lemma is stated for the
+    tensor in standard form built from $u$ and $v$, which defines the MPU in
+    the source. Here $\sigma^{(1)}$ is the trace sign of $u$ and $v$, and
+    $\sigma^{(2)}$ is the normalized trace of
+    Lemma~\ref{lem:mpu_source_time_reversal_sign_independent} for the
+    two-site blocking of that tensor in standard form.
+    % Source lines: paper_v2.tex 1913--1932.
 \end{lemma}
 
-\begin{lemma}[Admissible CZX data]
-    \label{ex:mpu_admissible_czx}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (blocked CZX data):** the one-, two-, and four-site
-    % tensors used to define the two signs carry reduced full-support source data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:mpu_admissible_sigma_blocking_parity, prop:mpu_admissible_mps_time_reversal_class, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, thm:czx_printed_normalization_obstruction}
-    The normalized tensor printed below is not an MPU, by
-    Lemma~\ref{thm:czx_printed_normalization_obstruction}.
-    Under the conventions recorded in \cite{gap:mpu_czx_tensor_normalization}, the classification below evaluates the given tensor
-    data.
-    Suppose the CZX tensors $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$,
-    together with the physical-adjoint comparison tensors
-    $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are simple and each carries
-    its own reduced full-support source datum. The CZX MPU of
-    Chen, Liu and Wen~\cite{ChenLiuWen2011CZX} (see also
-    \cite[lines~1906--1943]{Cirac2017MPU}) is defined by
+\begin{proof}\leanok
+    All gates are monomial matrices with phases $\pm1$. The periodic operator
+    on $N$ sites of the standard form is the shifted layer of $v$ after the
+    unshifted layer of $u$
+    (Lemma~\ref{thm:mpu_supplied_two_site_periodic_circuit}), again a
+    monomial matrix. Its permutation flips every spin, and its phase is the
+    product of the $CZ$ phases on the $2N$ bonds of the ring. With
+    $s(a)=(-1)^a$,
     \begin{align}
-        u  & =CZ(\sigma_x\otimes\sigma_x),   & v & =CZ, \\
-        CZ & =\operatorname{diag}(1,1,1,-1).
+        CZ_{1-a,1-b} & =-\,CZ_{a,b}\,s(a)\,s(b).
     \end{align}
-    Its tensor is
-    \begin{align}
-        \mathcal U_{\ell r}^{ud}
-          & =(\sigma_x)_{ud} \delta_{u,\ell}H_{\ell,r},           &
-        H & =\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
-    \end{align}
-    It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
-    % Source lines: paper_v2.tex 1906--1943.
-\end{lemma}
+    Every spin lies on two bonds and there are $2N$ bonds, so flipping every
+    spin leaves the phase unchanged. Hence the operator equals its adjoint.
+
+    The first sign is Lemma~\ref{thm:mpu_example_time_reversal_trace_signs}.
+    For the second, the two-site blocking of the tensor in standard form has
+    the doubled standard form with gates
+    $u^{(2)}=(\Id\otimes v\otimes\Id)(u\otimes u)$ and
+    $v^{(2)}=\Id\otimes v\otimes\Id$, so $\sigma^{(2)}$ is the trace sign of
+    $u^{(2)},v^{(2)}$ by
+    Lemma~\ref{lem:mpu_source_time_reversal_sign_independent}. Its trace is
+    the trace of a monomial matrix on $256$ configurations, a signed count of
+    the fixed points of its permutation; the count is $-16$, evaluated
+    exactly.
+\end{proof}
 
 \begin{lemma}[The other three time-reversal classes]
     \label{ex:dagger-all-but-czx}
-    \notready
+    \lean{MPOTensor.TimeReversalExamples.timeReversalSigns_one,
+        MPOTensor.TimeReversalExamples.timeReversalSigns_I_smul_one,
+        MPOTensor.TimeReversalExamples.timeReversalSigns_I_smul_czx,
+        MPOTensor.TimeReversalExamples.mpo_one_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.mpo_I_smul_one_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.mpo_I_smul_czx_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_one,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_I_smul_one,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_I_smul_czx}
+    \leanok
     \discussion{5715}
-    \uses{example:czx, prop:sigma1-and-sigma2-equal}
+    \uses{example:czx}
     The standard forms
     \begin{align}
         u & =v=\Id,                                      \\
         u & =i\Id,                           & v & =\Id, \\
         u & =i\,CZ(\sigma_x\otimes\sigma_x), & v & =CZ
     \end{align}
+    are time-reversal invariant on every ring of an even number of sites and
     realize, respectively,
     \begin{align}
         (\sigma^{(1)},\sigma^{(2)})
@@ -174,31 +241,57 @@
     % Source lines: paper_v2.tex 1945--1962.
 \end{lemma}
 
-\begin{lemma}[Admissible remaining time-reversal classes]
-    \label{ex:mpu_admissible_time_reversal_classes}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (blocked example data):** every standard form and
-    % blocking used to define the signs carries reduced full-support source data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{ex:mpu_admissible_czx, prop:mpu_admissible_sigma_blocking_parity, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    For each displayed example, suppose the tensors $\mathcal U$,
-    $\mathcal U_2$, and $\mathcal U_4$, together with the physical-adjoint
-    comparison tensors $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are
-    simple and each carries its own reduced full-support source datum.
-    The standard forms
+\begin{proof}\leanok
+    For $u=v=\Id$ the periodic operator is the identity, and the trace of the
+    doubled gates is $16$, evaluated as in Lemma~\ref{example:czx}. A scalar
+    $i$ on $u$ multiplies the periodic operator on $N$ sites by $i^N$, which
+    is real for even $N$, so time-reversal invariance persists on those rings.
+    The scalar enters the trace sign of $u,v$ as $i^2=-1$ and the doubled
+    gate $u^{(2)}$ as $i^2$, hence the trace sign of $u^{(2)},v^{(2)}$ as
+    $i^4=1$. The second and third rows follow from the first row and from
+    Lemma~\ref{example:czx}.
+\end{proof}
+
+\begin{lemma}[Trace signs of the example gates]
+    \label{thm:mpu_example_time_reversal_trace_signs}
+    \lean{MPOTensor.timeReversalTrace_smul_left,
+        MPOTensor.timeReversalSign_smul_left,
+        MPOTensor.TimeReversalExamples.pauliX,
+        MPOTensor.TimeReversalExamples.controlledZ,
+        MPOTensor.TimeReversalExamples.timeReversalSign_czx,
+        MPOTensor.TimeReversalExamples.timeReversalSign_one,
+        MPOTensor.TimeReversalExamples.timeReversalSign_I_smul_one,
+        MPOTensor.TimeReversalExamples.timeReversalSign_I_smul_czx}
+    \leanok
+    \uses{eq:sigma-from-trace, lem:mpu_supplied_time_reversal_sign}
+    For gates $u,v$ on $\mathbb C^2\otimes\mathbb C^2$ let
     \begin{align}
-        u & =v=\Id,                                      \\
-        u & =i\Id,                           & v & =\Id, \\
-        u & =i\,CZ(\sigma_x\otimes\sigma_x), & v & =CZ
+        s(u,v) & =\frac14\tr\!\left[\mathbb S_{12,34}
+            v_{23}u_{12}u_{34}v_{23}\right]
     \end{align}
-    realize, respectively,
+    be the trace sign of Lemma~\ref{eq:sigma-from-trace}. With
+    $CZ=\operatorname{diag}(1,1,1,-1)$ and the Pauli matrix $\sigma_x$,
     \begin{align}
-        (\sigma^{(1)},\sigma^{(2)})
-         & =(1,1),\quad(-1,1),\quad(1,-1).
+        s\bigl(CZ(\sigma_x\otimes\sigma_x),CZ\bigr)  & =-1, &
+        s(\Id,\Id)                                   & =1,    \\
+        s(i\Id,\Id)                                  & =-1, &
+        s\bigl(iCZ(\sigma_x\otimes\sigma_x),CZ\bigr) & =1.
     \end{align}
-    % Source lines: paper_v2.tex 1945--1962.
+    These are the first signs $\sigma^{(1)}$ printed in
+    Lemmas~\ref{example:czx} and~\ref{ex:dagger-all-but-czx}. This lemma
+    concerns the trace signs of these gate pairs only; the second signs
+    $\sigma^{(2)}$ and time-reversal invariance are proved in those two
+    lemmas. The normalization of the printed one-site CZX tensor,
+    discussed in \cite{gap:mpu_czx_tensor_normalization}, does not enter.
+    % Source lines: paper_v2.tex 1906--1962, with eq:sigma-from-trace at 1595--1611.
 \end{lemma}
+
+\begin{proof}\leanok
+    A scalar $c$ on $u$ enters the trace as $c^2$, since $u$ occurs twice;
+    with $i^2=-1$ the last two values follow from the first two. The first
+    two traces, $-4$ and $4$, are finite sums of integers and are evaluated
+    exactly.
+\end{proof}
 
 \begin{lemma}[Source cuts and ranks of the cyclic shifts]
     \label{thm:mpu_shift_source_cuts_ranks}
@@ -1171,7 +1264,7 @@
     % reduced full-support source data. No preservation under blocking is
     % asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU, thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, def:mpu_admissible_symmetry_equivalence}
+    \uses{threeMPU, conjphs, prop:conjsym-strict-equiv, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, def:mpu_admissible_symmetry_equivalence}
     Suppose the two-site blocked tensors carry reduced full-support source data
     and the standard-form comparison paths carry admissible path data of
     blocking length one. Then the two-site blocked tensors of $U_2$ and
@@ -1295,7 +1388,7 @@
     % **Scope restriction (admissible blockings and paths):** every standard form,
     % blocked endpoint, and comparison path carries the required source data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, cor:mpu_admissible_equiv_under_conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, conjphs, prop:conjsym-strict-equiv, cor:equiv-under-conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     For each endpoint tensor $\mathcal A$ among
     $U_1$, $U_2$, $\widetilde U_1$, and $\widetilde U_2$, suppose that
     $\mathcal A$, its conjugate comparison $\overline{\mathcal A}$, its
@@ -1748,3 +1841,5 @@
 \input{chapter/ch28_mpu_qca_index_comparison}
 
 \input{chapter/ch28_mpu_supplied_window}
+
+\input{chapter/ch28_mpu_supplied_local_action}

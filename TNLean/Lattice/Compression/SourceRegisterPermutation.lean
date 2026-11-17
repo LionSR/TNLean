@@ -46,7 +46,7 @@ def prepareSourcePositions (r : I → PairSource P)
   | [], ℓ => .id ℓ
   | i :: indices, ℓ =>
     .comp (prepareSourcePositions r η indices ℓ)
-      (.source (r i).distinct (r i).leftSpace (r i).rightSpace (η i)
+      (Word.source (r i).distinct (r i).leftSpace (r i).rightSpace (η i)
         (sourcePositionsLayout r indices ++ ℓ))
 
 /-- The position-indexed layout is the actual source inventory layout. -/
@@ -143,7 +143,7 @@ theorem exists_reorderSourcePositions (r : I → PairSource P)
     refine ⟨.comp w v, ⟨hw, hv⟩, ?_, ?_⟩
     · simp [Word.sources, hws, hvs]
     · intro η
-      rw [Word.eval_comp, ContinuousLinearMap.comp_assoc, hwe, hve]
+      rw [Circuit.eval_comp, ContinuousLinearMap.comp_assoc, hwe, hve]
 
 /-- Selection keeps the original finite positions, even when source records repeat. -/
 theorem selectedSources_eq_map (R : SourceInventory P)
@@ -184,7 +184,8 @@ theorem eval_prepareSourcePositions_filter (R : SourceInventory P)
   change HEq ((prepare (((List.finRange R.length).filter free).map (fun i ↦
     ⟨(R.get i).left, (R.get i).right, (R.get i).distinct, U i, V i, η i⟩)) ℓ).eval x) _
   rw [← selectedSources_eq_map]
-  exact (Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl).symm
+  exact (Word.eval_castLayouts_apply_heq _ rfl
+    (congrArg (· ++ ℓ) (layout_selectedSources_eq R U V free η (fun _ ↦ 0))) HEq.rfl).symm
 
 /-- Preparation respects equal spectator spaces and equal spectator vectors. -/
 private theorem prepareSourcePositions_apply_heq (r : I → PairSource P)
@@ -225,7 +226,7 @@ theorem exists_reorderFreeSlots (R : SourceInventory P) (U V : Fin R.length → 
   have ho : sourcePositionsLayout r positions ++ ℓ = freeSlotLayout R U V free ++ ℓ :=
     congrArg (· ++ ℓ) (sourcePositionsLayout_filter R U V free)
   refine ⟨w.castLayouts hi ho, ?_, ?_, ?_⟩
-  · exact (Word.isAllowed_castLayouts _ _ _).mpr hw
+  · exact (Circuit.isAllowed_castLayouts _ _ _).mpr hw
   · simpa using hws
   · intro η
     ext1 x

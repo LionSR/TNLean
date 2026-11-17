@@ -53,8 +53,8 @@ private theorem reindex_mul {α β : Type*} [Fintype α] [Fintype β]
   (Matrix.reindexLinearEquiv_mul ℂ ℂ e e e X Y).symm
 
 private theorem block_dagger_action (k N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim d k))
-      (Fin N → Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim d k))
+      (Fin N → Fin (Kraus.blockPhysDim d k)) ℂ) :
     ((daggerSymmetry d).block k).action X = Xᴴ := by
   simp only [FiniteChainOperatorSymmetry.block, daggerSymmetry,
     Matrix.conjTranspose_reindex]
@@ -62,24 +62,24 @@ private theorem block_dagger_action (k N : ℕ)
   simp [Matrix.reindex_apply]
 
 private theorem block_transpose_action (k N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim d k))
-      (Fin N → Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim d k))
+      (Fin N → Fin (Kraus.blockPhysDim d k)) ℂ) :
     ((transposeSymmetry d).block k).action X = Xᵀ := by
   ext σ τ
   simp [FiniteChainOperatorSymmetry.block, transposeSymmetry,
     Matrix.reindex_apply, Matrix.transpose_apply]
 
 private theorem block_conjugation_action (k N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim d k))
-      (Fin N → Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim d k))
+      (Fin N → Fin (Kraus.blockPhysDim d k)) ℂ) :
     ((conjugationSymmetry d).block k).action X = X.map (starRingEnd ℂ) := by
   ext σ τ
   simp [FiniteChainOperatorSymmetry.block, conjugationSymmetry,
     Matrix.reindex_apply, Matrix.map_apply]
 
 private theorem block_swap_dagger_action (d k N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim (d * d) k))
-      (Fin N → Fin (MPSTensor.blockPhysDim (d * d) k)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim (d * d) k))
+      (Fin N → Fin (Kraus.blockPhysDim (d * d) k)) ℂ) :
     ((shiftSwapDaggerSymmetry d).block k).action X =
       sitewisePhysicalMatrix (MPSTensor.blockKron k (shiftPhysicalSwap d)) N * Xᴴ *
         sitewisePhysicalMatrix (MPSTensor.blockKron k (shiftPhysicalSwap d)) N := by
@@ -90,8 +90,8 @@ private theorem block_swap_dagger_action (d k N : ℕ)
   simp [Matrix.reindex_apply]
 
 private theorem block_swap_transpose_action (d k N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim (d * d) k))
-      (Fin N → Fin (MPSTensor.blockPhysDim (d * d) k)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim (d * d) k))
+      (Fin N → Fin (Kraus.blockPhysDim (d * d) k)) ℂ) :
     ((shiftSwapTransposeSymmetry d).block k).action X =
       sitewisePhysicalMatrix (MPSTensor.blockKron k (shiftPhysicalSwap d)) N * Xᵀ *
         sitewisePhysicalMatrix (MPSTensor.blockKron k (shiftPhysicalSwap d)) N := by
@@ -122,8 +122,8 @@ private theorem blocked_chainSwap_transpose (d k N : ℕ) :
       Equiv.Perm.inv_def, bondPairSwapEquiv_symm]
   ext σ τ
   change (∏ n, ∏ i, shiftPhysicalSwap d
-    (MPSTensor.decodeBlock (d * d) k (τ n) i)
-    (MPSTensor.decodeBlock (d * d) k (σ n) i)) = _
+    (Kraus.decodeBlock (d * d) k (τ n) i)
+    (Kraus.decodeBlock (d * d) k (σ n) i)) = _
   refine Finset.prod_congr rfl fun n _ => ?_
   refine Finset.prod_congr rfl fun i _ => ?_
   exact congrFun (congrFun hQ _) _
@@ -137,7 +137,7 @@ private theorem blocked_chainSwap_map_star (d k N : ℕ) :
     Equiv.Perm.permMatrix, PEquiv.toMatrix_apply]
 
 private theorem block_swap_dagger_invariance_iff (d k : ℕ) {E : ℕ}
-    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) E) :
+    (W : MPOTensor (Kraus.blockPhysDim (d * d) k) E) :
     IsInvariantUnderSymmetry ((shiftSwapDaggerSymmetry d).block k) W ↔
       IsInvariantUnderSymmetry ((daggerSymmetry (d * d)).block k)
         (W.ketLeftMul (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
@@ -149,7 +149,7 @@ private theorem block_swap_dagger_invariance_iff (d k : ℕ) {E : ℕ}
   rw [Matrix.conjTranspose_mul, blocked_chainSwap_conjTranspose]
 
 private theorem block_swap_transpose_invariance_iff (d k : ℕ) {E : ℕ}
-    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) E) :
+    (W : MPOTensor (Kraus.blockPhysDim (d * d) k) E) :
     IsInvariantUnderSymmetry ((shiftSwapTransposeSymmetry d).block k) W ↔
       IsInvariantUnderSymmetry ((transposeSymmetry (d * d)).block k)
         (W.ketLeftMul (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
@@ -161,7 +161,7 @@ private theorem block_swap_transpose_invariance_iff (d k : ℕ) {E : ℕ}
   rw [Matrix.transpose_mul, blocked_chainSwap_transpose]
 
 private theorem block_conjugation_invariance_iff (d k : ℕ) {E : ℕ}
-    (W : MPOTensor (MPSTensor.blockPhysDim (d * d) k) E) :
+    (W : MPOTensor (Kraus.blockPhysDim (d * d) k) E) :
     IsInvariantUnderSymmetry ((conjugationSymmetry (d * d)).block k) W ↔
       IsInvariantUnderSymmetry ((conjugationSymmetry (d * d)).block k)
         (W.ketLeftMul (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by

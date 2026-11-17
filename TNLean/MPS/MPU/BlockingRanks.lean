@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.SourceFactors
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Source-cut ranks under physical blocking
@@ -118,10 +119,7 @@ private theorem sourceCutM₁_blockTensor_succ_factorization
             (S.diagonal * S.U) q (γ, blockTail k J) := by
             simp only [Finset.mul_sum]
             rw [Finset.sum_comm]
-            apply Finset.sum_congr rfl
-            intro γ _
-            apply Finset.sum_congr rfl
-            intro q _
+            refine Finset.sum_congr₂ fun γ _ q _ ↦ ?_
             ring
       _ = ∑ γ, U (blockHead k I) (blockHead k J) α γ *
             sourceCutM₁ (blockTensor U k) (blockTail k I, β)

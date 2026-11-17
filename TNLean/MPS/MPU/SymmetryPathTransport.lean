@@ -190,13 +190,13 @@ theorem blockTensor_ketLeftMul (W : MPOTensor d D)
     blockTensor (W.ketLeftMul Q) k = (blockTensor W k).ketLeftMul (MPSTensor.blockKron k Q) := by
   funext i j
   change evalWord (W.ketLeftMul Q)
-    (List.ofFn (MPSTensor.decodeBlock d k i)) (List.ofFn (MPSTensor.decodeBlock d k j)) =
-      ∑ l : Fin (MPSTensor.blockPhysDim d k),
+    (List.ofFn (Kraus.decodeBlock d k i)) (List.ofFn (Kraus.decodeBlock d k j)) =
+      ∑ l : Fin (Kraus.blockPhysDim d k),
         MPSTensor.blockKron k Q i l •
-          evalWord W (List.ofFn (MPSTensor.decodeBlock d k l))
-            (List.ofFn (MPSTensor.decodeBlock d k j))
+          evalWord W (List.ofFn (Kraus.decodeBlock d k l))
+            (List.ofFn (Kraus.decodeBlock d k j))
   rw [evalWord_ketLeftMul_ofFn]
-  exact (Fintype.sum_equiv (MPSTensor.decodeBlockEquiv d k) _ _ fun l => rfl).symm
+  exact (Fintype.sum_equiv (Kraus.decodeBlockEquiv d k) _ _ fun l => rfl).symm
 
 /-- The one-site involution also identifies strict symmetry-preserving
 equivalence after some common positive blocking length. The symmetry
@@ -209,7 +209,7 @@ theorem exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul
     (S T : FiniteChainOperatorSymmetry d)
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hQQ : Q * Q = 1)
-    (hST : ∀ k : ℕ, 0 < k → ∀ {E : ℕ} (W : MPOTensor (MPSTensor.blockPhysDim d k) E),
+    (hST : ∀ k : ℕ, 0 < k → ∀ {E : ℕ} (W : MPOTensor (Kraus.blockPhysDim d k) E),
       IsInvariantUnderSymmetry (S.block k) W ↔
         IsInvariantUnderSymmetry (T.block k) (W.ketLeftMul (MPSTensor.blockKron k Q)))
     (U : MPOTensor d Da) (V : MPOTensor d Db) :
@@ -219,7 +219,7 @@ theorem exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul
         (blockTensor (U.ketLeftMul Q) k) (blockTensor (V.ketLeftMul Q) k) rfl) := by
   refine exists_congr fun k => and_congr_right fun hk => ?_
   have hQk : MPSTensor.blockKron k Q ∈
-      Matrix.unitaryGroup (Fin (MPSTensor.blockPhysDim d k)) ℂ := by
+      Matrix.unitaryGroup (Fin (Kraus.blockPhysDim d k)) ℂ := by
     rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose]
     exact MPSTensor.blockKron_mul_conjTranspose k Q
       (by simpa only [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff.mp hQ)

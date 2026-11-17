@@ -52,6 +52,7 @@ makes `𝔼_B` trace preserving. Documented in
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Algebra.Star.TensorProduct
 import Mathlib.LinearAlgebra.Basis.Bilinear
 import Mathlib.LinearAlgebra.Matrix.StdBasis
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.Symmetry.WeakHopfParentAverage
 
 /-!
@@ -35,10 +36,18 @@ dimension \(r^2\), and the weak-Hopf average of GLM23 Appendix B is
 the sum running over pairs of indices. The comultiplication is a scoped
 instance, since a matrix algebra carries many coalgebra structures.
 
+The represented coproduct is \(\rho_{n+1}(e_{pq})=r^{-n}|u_p\rangle\langle u_q|\),
+where \(u_{(i,j)}(\sigma)=(E_{\sigma_1}\cdots E_{\sigma_{n+1}})_{ij}\) for the matrix
+units \(E_{st}\) of \(M_r\). Hence \(E_n(X)=r^{-2}\operatorname{tr}(Q_nX)\,Q_n\) with
+\(Q_n=\rho_n(1)\), at two sites the displayed evaluation of the note. The state
+tensor \(A^{ij}=E_{ij}/\sqrt r\) is injective at one site and compatible with
+the operator tensor, its support projection is \(P_n=Q_n\), and so
+\(E_n(P_n)=P_n\) while the uncompleted average \(E_n(I-P_n)\) vanishes.
+
 ## References
 
 * `docs/paper-gaps/glm23_wha_parent_completion.tex`, section "An elementary
-  fusion-compatible test", lines 41--125.
+  fusion-compatible test", and section "The weak-Hopf realization".
 * Garre-Rubio--Lootens--Molnár, arXiv:2203.12563v3, Appendix B,
   lines 2463--2466.
 * Molnár et al., arXiv:2204.05940v1, Section 4.
@@ -467,6 +476,377 @@ theorem weakHopfAverage_eq_sum_single (n : ℕ)
       (bellAntipode r (single p.swap q.swap 1))) = _
   rw [bellAntipode_single, Prod.swap_swap, Prod.swap_swap, map_smul, map_smul, smul_mul_assoc,
     smul_mul_assoc]
+
+end NeZero
+
+/-! ### The Bell-pair state tensor -/
+
+/-- The matrix units \(E_{ij}\) of \(M_r\), indexed by the flattened pair \((i,j)\). -/
+def unitTensor : MPSTensor (r * r) r :=
+  fun σ ↦ single (finProdFinEquiv.symm σ).1 (finProdFinEquiv.symm σ).2 1
+
+/-- The Bell-pair state tensor \(A^{ij}=E_{ij}/\sqrt r\) of
+`docs/paper-gaps/glm23_wha_parent_completion.tex`, section "An elementary
+fusion-compatible test"; its states with boundary \(Y\) are the vectors
+obtained from \(Y\) by inserting \(n-1\) normalized Bell pairs. -/
+def stateTensor : MPSTensor (r * r) r :=
+  fun σ ↦ ((Real.sqrt r : ℝ) : ℂ)⁻¹ • unitTensor r σ
+
+/-- The entry \((E_{\sigma_1}\cdots E_{\sigma_n})_{ij}\) of a word of matrix units,
+with `p = (i, j)`: it is one when consecutive letters chain from `i` to `j`, and
+zero otherwise. -/
+def unitWordEntry {n : ℕ} (p : Fin r × Fin r) (σ : Fin n → Fin (r * r)) : ℂ :=
+  Kraus.evalWord (unitTensor r) (List.ofFn σ) p.1 p.2
+
+theorem unitWordEntry_zero (p : Fin r × Fin r) (σ : Fin 0 → Fin (r * r)) :
+    unitWordEntry r p σ = if p.1 = p.2 then 1 else 0 := by
+  simp only [unitWordEntry, List.ofFn_zero, Kraus.evalWord_nil, Matrix.one_apply]
+
+/-- Peeling off the first letter \(E_{st}\) of a word of matrix units. -/
+theorem unitWordEntry_succ {n : ℕ} (p : Fin r × Fin r) (σ : Fin (n + 1) → Fin (r * r)) :
+    unitWordEntry r p σ =
+      if (finProdFinEquiv.symm (σ 0)).1 = p.1 then
+        unitWordEntry r ((finProdFinEquiv.symm (σ 0)).2, p.2) (Fin.tail σ)
+      else 0 := by
+  rw [unitWordEntry, List.ofFn_succ, Kraus.evalWord_cons]
+  dsimp only [unitTensor]
+  split_ifs with h
+  · rw [← h, Matrix.single_mul_apply_same, one_mul]
+    rfl
+  · exact Matrix.single_mul_apply_of_ne _ _ _ _ _ (Ne.symm h) _
+
+/-- Summing over the first letter of a word of matrix units against a boundary
+trace moves the letter into the boundary. -/
+private theorem sum_unitWordEntry_mul_trace_succ (n : ℕ) (q : Fin r × Fin r)
+    (Y : Matrix (Fin r) (Fin r) ℂ) :
+    ∑ τ : Fin (n + 1) → Fin (r * r),
+        unitWordEntry r q τ * (Y * Kraus.evalWord (unitTensor r) (List.ofFn τ)).trace =
+      ∑ a : Fin r, ∑ w : Fin n → Fin (r * r),
+        unitWordEntry r (a, q.2) w *
+          (Y * single q.1 a 1 * Kraus.evalWord (unitTensor r) (List.ofFn w)).trace := by
+  have hsplit : ∀ G : (Fin (n + 1) → Fin (r * r)) → ℂ, ∑ τ, G τ =
+      ∑ s : Fin r × Fin r, ∑ w : Fin n → Fin (r * r), G (Fin.cons (finProdFinEquiv s) w) := by
+    intro G
+    rw [← (Fin.consEquiv fun _ ↦ Fin (r * r)).sum_comp, Fintype.sum_prod_type,
+      ← finProdFinEquiv.sum_comp]
+    rfl
+  rw [hsplit, Fintype.sum_prod_type]
+  refine (Finset.sum_eq_single q.1 (fun b _ hb ↦ ?_)
+    (fun h ↦ absurd (Finset.mem_univ _) h)).trans ?_
+  · simp only [unitWordEntry_succ, Fin.cons_zero, Equiv.symm_apply_apply, hb, ↓reduceIte,
+      zero_mul, Finset.sum_const_zero]
+  · refine Finset.sum_congr rfl fun a _ ↦ Finset.sum_congr rfl fun w _ ↦ ?_
+    simp only [unitWordEntry_succ, Fin.cons_zero, Fin.tail_cons, Equiv.symm_apply_apply,
+      ↓reduceIte, List.ofFn_cons, Kraus.evalWord_cons, unitTensor, Matrix.mul_assoc]
+
+/-- The overlap of a word-entry vector with a state of boundary \(Y\) on
+\(n+1\) sites: the \(r^n\) chains from `q.1` to `q.2` each contribute
+\(Y_{q_2q_1}\). -/
+theorem sum_unitWordEntry_mul_trace (n : ℕ) (q : Fin r × Fin r)
+    (Y : Matrix (Fin r) (Fin r) ℂ) :
+    ∑ τ : Fin (n + 1) → Fin (r * r),
+        unitWordEntry r q τ * (Y * Kraus.evalWord (unitTensor r) (List.ofFn τ)).trace =
+      (r : ℂ) ^ n * Y q.2 q.1 := by
+  induction n generalizing q Y with
+  | zero =>
+    rw [sum_unitWordEntry_mul_trace_succ]
+    simp [unitWordEntry_zero, Matrix.trace_mul_single]
+  | succ n ih =>
+    rw [sum_unitWordEntry_mul_trace_succ]
+    simp only [ih, Matrix.mul_single_apply_same, mul_one, Finset.sum_const, Finset.card_univ,
+      Fintype.card_fin, nsmul_eq_mul, pow_succ]
+    ring
+
+theorem evalWord_stateTensor (w : List (Fin (r * r))) :
+    Kraus.evalWord (stateTensor r) w =
+      (((Real.sqrt r : ℝ) : ℂ)⁻¹ ^ w.length) • Kraus.evalWord (unitTensor r) w :=
+  Kraus.evalWord_smul (((Real.sqrt r : ℝ) : ℂ)⁻¹) (unitTensor r) w
+
+theorem mpvWithBoundary_stateTensor {n : ℕ} (Y : Matrix (Fin r) (Fin r) ℂ)
+    (τ : Fin n → Fin (r * r)) :
+    MPSTensor.mpvWithBoundary (stateTensor r) Y τ =
+      ((Real.sqrt r : ℝ) : ℂ)⁻¹ ^ n *
+        (Y * Kraus.evalWord (unitTensor r) (List.ofFn τ)).trace := by
+  rw [MPSTensor.mpvWithBoundary, evalWord_stateTensor, List.length_ofFn, Matrix.mul_smul,
+    Matrix.trace_smul, smul_eq_mul]
+
+/-- `toEuclideanLin` turns matrix products into products of operators. -/
+private theorem toEuclideanLin_mul {m : Type*} [Fintype m] [DecidableEq m]
+    (M N : Matrix m m ℂ) :
+    Matrix.toEuclideanLin (M * N) = Matrix.toEuclideanLin M * Matrix.toEuclideanLin N :=
+  Matrix.toLpLin_mul_same 2 M N
+
+private theorem trace_toEuclideanLin {m : Type*} [Fintype m] [DecidableEq m]
+    (M : Matrix m m ℂ) : LinearMap.trace ℂ _ (Matrix.toEuclideanLin M) = M.trace :=
+  Matrix.trace_toLin_eq M (EuclideanSpace.basisFun m ℂ).toBasis
+
+section NeZero
+
+variable [NeZero r]
+
+/-- The represented coproduct of a matrix unit factors through words of matrix
+units, \(\rho_{n+1}(e_{pq})_{\sigma\tau}=r^{-n}(E_\sigma)_p(E_\tau)_q\); this is
+\(\rho_{n+1}(x)=W_{n+1}xW_{n+1}^*\) in
+`docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
+theorem rep_single_apply (n : ℕ) (p q : Fin r × Fin r) (σ τ : Fin (n + 1) → Fin (r * r)) :
+    (weakHopfRepresentation r).rep (n + 1) (single p q 1) σ τ =
+      (r : ℂ)⁻¹ ^ n * unitWordEntry r p σ * unitWordEntry r q τ := by
+  induction n generalizing p q with
+  | zero =>
+    have h1 : (weakHopfRepresentation r).rep 1 (single p q 1) σ τ =
+        phys r (single p q 1) (σ 0) (τ 0) := weakHopfRep_one_apply _ _ _ _
+    rw [h1, unitWordEntry_succ, unitWordEntry_succ, unitWordEntry_zero, unitWordEntry_zero]
+    change single p q (1 : ℂ) (finProdFinEquiv.symm (σ 0)) (finProdFinEquiv.symm (τ 0)) = _
+    generalize finProdFinEquiv.symm (σ 0) = s
+    generalize finProdFinEquiv.symm (τ 0) = t
+    rw [Matrix.single_apply, ← ite_and, ← ite_and, pow_zero, one_mul, ite_zero_mul_ite_zero,
+      mul_one]
+    exact if_congr (by simp only [Prod.ext_iff, @eq_comm _ p.1, @eq_comm _ p.2,
+      @eq_comm _ q.1, @eq_comm _ q.2]) rfl rfl
+  | succ n ih =>
+    have hcoeff : ∀ x : BellPairAlgebra r,
+        (weakHopfCoeff (weakHopfRepresentation r).phys.toLinearMap (Fin.tail σ)
+          (Fin.tail τ)).ofConv x =
+          (weakHopfRepresentation r).rep (n + 1) x (Fin.tail σ) (Fin.tail τ) := fun _ ↦ rfl
+    have hdual : ∀ x : BellPairAlgebra r,
+        (dualCoefficient (weakHopfRepresentation r).phys.toLinearMap (σ 0) (τ 0)).ofConv x =
+          x (finProdFinEquiv.symm (σ 0)) (finProdFinEquiv.symm (τ 0)) := fun _ ↦ rfl
+    rw [WeakHopfRepresentation.rep, weakHopfRep_succ_apply, comul_single, comulSingle]
+    simp only [map_smul, map_sum, TensorProduct.map_tmul, LinearMap.mul'_apply, smul_eq_mul,
+      hcoeff, hdual, ih]
+    rw [unitWordEntry_succ r p σ, unitWordEntry_succ r q τ]
+    generalize finProdFinEquiv.symm (σ 0) = s
+    generalize finProdFinEquiv.symm (τ 0) = t
+    rw [Finset.sum_eq_single (s.2, t.2)]
+    · dsimp only
+      by_cases h1 : s.1 = p.1
+      · by_cases h2 : t.1 = q.1
+        · rw [Matrix.single_apply, ite_eq_left ⟨Prod.ext h1.symm rfl, Prod.ext h2.symm rfl⟩,
+            ite_eq_left h1, ite_eq_left h2, pow_succ]
+          ring
+        · rw [Matrix.single_apply, ite_eq_right fun h ↦ h2 (by
+              have e := congrArg Prod.fst h.2
+              exact e.symm), ite_eq_right h2]
+          ring
+      · rw [Matrix.single_apply, ite_eq_right fun h ↦ h1 (by
+            have e := congrArg Prod.fst h.1
+            exact e.symm), ite_eq_right h1]
+        ring
+    · intro c _ hc
+      rw [Matrix.single_apply, ite_eq_right, zero_mul]
+      rintro ⟨e1, e2⟩
+      have e3 := congrArg Prod.snd e1
+      have e4 := congrArg Prod.snd e2
+      exact hc (Prod.ext e3 e4)
+    · intro h
+      exact absurd (Finset.mem_univ _) h
+
+/-- The represented coproduct of a matrix unit is the rank-one matrix
+\(r^{-n}\,|E_{\cdot}{}_p\rangle\langle E_{\cdot}{}_q|\) of word entries. -/
+theorem rep_single_eq_vecMulVec (n : ℕ) (p q : Fin r × Fin r) :
+    (weakHopfRepresentation r).rep (n + 1) (single p q 1) =
+      (r : ℂ)⁻¹ ^ n • Matrix.vecMulVec (unitWordEntry r p) (unitWordEntry r q) := by
+  ext σ τ
+  rw [rep_single_apply, Matrix.smul_apply, Matrix.vecMulVec_apply, smul_eq_mul, mul_assoc]
+
+/-- The represented unit \(Q_{n+1}=\rho_{n+1}(1)\) as a sum of rank-one matrices. -/
+theorem rep_one_eq_sum (n : ℕ) :
+    (weakHopfRepresentation r).rep (n + 1) 1 =
+      ∑ p : Fin r × Fin r,
+        (r : ℂ)⁻¹ ^ n • Matrix.vecMulVec (unitWordEntry r p) (unitWordEntry r p) := by
+  rw [show (1 : BellPairAlgebra r) = ∑ p, single p p 1 from Matrix.sum_single_one.symm,
+    map_sum]
+  exact Finset.sum_congr rfl fun p _ ↦ rep_single_eq_vecMulVec r n p p
+
+/-- The matrix form of the Bell-pair average:
+\(r^{-2}\sum_{p,q}\rho(e_{pq})M\rho(e_{qp})=r^{-2}\operatorname{tr}(QM)\,Q\). -/
+private theorem sum_rep_single_mul_mul (n : ℕ)
+    (M : Matrix (Fin (n + 1) → Fin (r * r)) (Fin (n + 1) → Fin (r * r)) ℂ) :
+    ∑ p : Fin r × Fin r, ∑ q : Fin r × Fin r, ((r : ℂ)⁻¹ * (r : ℂ)⁻¹) •
+        ((weakHopfRepresentation r).rep (n + 1) (single p q 1) * M *
+          (weakHopfRepresentation r).rep (n + 1) (single q p 1)) =
+      ((r : ℂ)⁻¹ * (r : ℂ)⁻¹ * ((weakHopfRepresentation r).rep (n + 1) 1 * M).trace) •
+        (weakHopfRepresentation r).rep (n + 1) 1 := by
+  have hV : ∀ p q, (weakHopfRepresentation r).rep (n + 1) (single p q 1) * M *
+      (weakHopfRepresentation r).rep (n + 1) (single q p 1) =
+        ((r : ℂ)⁻¹ ^ n * (r : ℂ)⁻¹ ^ n *
+          ((unitWordEntry r q ᵥ* M) ⬝ᵥ unitWordEntry r q)) •
+          Matrix.vecMulVec (unitWordEntry r p) (unitWordEntry r p) := by
+    intro p q
+    rw [rep_single_eq_vecMulVec, rep_single_eq_vecMulVec, Matrix.smul_mul, Matrix.smul_mul,
+      Matrix.mul_smul, Matrix.vecMulVec_mul, Matrix.vecMulVec_mul_vecMulVec,
+      Matrix.vecMulVec_smul, smul_smul, smul_smul]
+  have hT : ((weakHopfRepresentation r).rep (n + 1) 1 * M).trace =
+      (r : ℂ)⁻¹ ^ n * ∑ q, (unitWordEntry r q ᵥ* M) ⬝ᵥ unitWordEntry r q := by
+    rw [rep_one_eq_sum, Finset.sum_mul, Matrix.trace_sum, Finset.mul_sum]
+    refine Finset.sum_congr rfl fun q _ ↦ ?_
+    rw [Matrix.smul_mul, Matrix.trace_smul, Matrix.vecMulVec_mul, Matrix.trace_vecMulVec,
+      smul_eq_mul, dotProduct_comm]
+  rw [hT, rep_one_eq_sum, Finset.smul_sum]
+  refine Finset.sum_congr rfl fun p _ ↦ ?_
+  rw [smul_smul, Finset.mul_sum, Finset.mul_sum, Finset.sum_mul, Finset.sum_smul]
+  refine Finset.sum_congr rfl fun q _ ↦ ?_
+  rw [hV, smul_smul]
+  congr 1
+  ring
+
+/-- The weak-Hopf average of the Bell-pair algebra is
+\(E_n(X)=r^{-2}\operatorname{tr}(Q_nX)\,Q_n\) at every positive length, with
+\(Q_n=\rho_n(1)\). At two sites this is the displayed computation
+\(E(X)=r^{-2}\operatorname{Tr}(QX)\,Q\) of
+`docs/paper-gaps/glm23_wha_parent_completion.tex`, section "An elementary
+fusion-compatible test". -/
+theorem weakHopfAverage_eq_trace_smul {n : ℕ} (hn : 0 < n)
+    (X : Module.End ℂ (EuclideanSpace ℂ (Fin n → Fin (r * r)))) :
+    (weakHopfRepresentation r).weakHopfAverage n X =
+      ((r : ℂ)⁻¹ * (r : ℂ)⁻¹ * LinearMap.trace ℂ _
+          (Matrix.toEuclideanLin ((weakHopfRepresentation r).rep n 1) * X)) •
+        Matrix.toEuclideanLin ((weakHopfRepresentation r).rep n 1) := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  obtain ⟨M, rfl⟩ := Matrix.toEuclideanLin.surjective X
+  rw [weakHopfAverage_eq_sum_single, ← toEuclideanLin_mul, trace_toEuclideanLin]
+  have key := congrArg (fun B ↦ Matrix.toEuclideanLin B) (sum_rep_single_mul_mul r m M)
+  simp only [map_sum, map_smul, toEuclideanLin_mul] at key
+  exact key
+
+/-- The represented coproduct of a matrix unit moves a state of the Bell-pair
+tensor to another one, with a boundary independent of the length:
+\(\rho_n(e_{pq})\psi^n_Y=\psi^n_{Y_{q_2q_1}E_{p_2p_1}}\). -/
+theorem rep_single_mulVec_mpvWithBoundary {n : ℕ} (hn : 0 < n) (p q : Fin r × Fin r)
+    (Y : Matrix (Fin r) (Fin r) ℂ) :
+    (weakHopfRepresentation r).rep n (single p q 1) *ᵥ
+        MPSTensor.mpvWithBoundary (stateTensor r) Y =
+      (MPSTensor.mpvWithBoundary (stateTensor r) (Y q.2 q.1 • single p.2 p.1 1) :
+        (Fin n → Fin (r * r)) → ℂ) := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hr : (r : ℂ) ^ m ≠ 0 := pow_ne_zero _ (Nat.cast_ne_zero.mpr (NeZero.ne r))
+  funext σ
+  simp only [Matrix.mulVec, dotProduct, rep_single_apply, mpvWithBoundary_stateTensor]
+  simp only [Matrix.smul_mul, Matrix.trace_smul, Matrix.trace_single_mul, smul_eq_mul, one_mul]
+  calc ∑ τ, (r : ℂ)⁻¹ ^ m * unitWordEntry r p σ * unitWordEntry r q τ *
+          (((Real.sqrt r : ℝ) : ℂ)⁻¹ ^ (m + 1) *
+            (Y * Kraus.evalWord (unitTensor r) (List.ofFn τ)).trace)
+      = (r : ℂ)⁻¹ ^ m * unitWordEntry r p σ * ((Real.sqrt r : ℝ) : ℂ)⁻¹ ^ (m + 1) *
+          ∑ τ, unitWordEntry r q τ *
+            (Y * Kraus.evalWord (unitTensor r) (List.ofFn τ)).trace := by
+        rw [Finset.mul_sum]
+        exact Finset.sum_congr rfl fun τ _ ↦ by ring
+    _ = _ := by
+        have hinv : (r : ℂ)⁻¹ ^ m * (r : ℂ) ^ m = 1 := by rw [inv_pow, inv_mul_cancel₀ hr]
+        rw [sum_unitWordEntry_mul_trace,
+          show unitWordEntry r p σ = Kraus.evalWord (unitTensor r) (List.ofFn σ) p.1 p.2 from rfl]
+        linear_combination (((Real.sqrt r : ℝ) : ℂ)⁻¹ ^ (m + 1) * Y q.2 q.1 *
+          Kraus.evalWord (unitTensor r) (List.ofFn σ) p.1 p.2) * hinv
+
+/-- The Bell-pair state tensor is compatible with the Bell-pair operator tensor,
+with one output boundary for all positive lengths, in the sense of GLM23
+`eq:compatible`, as asserted in
+`docs/paper-gaps/glm23_wha_parent_completion.tex`, section "An elementary
+fusion-compatible test". -/
+theorem isBoundaryCompatible :
+    IsBoundaryCompatible (weakHopfRepresentation r).tensor (stateTensor r) := by
+  intro X Y
+  obtain ⟨x, hx⟩ := exists_weakHopfRep_eq_mpoWithBoundary
+    (weakHopfRepresentation r).phys.toLinearMap (weakHopfRepresentation r).virt X
+  refine ⟨∑ p, ∑ q, (x p q * Y q.2 q.1) • single p.2 p.1 1, fun n hn ↦ ?_⟩
+  have hxn : mpoWithBoundary (weakHopfRepresentation r).tensor X n =
+      (weakHopfRepresentation r).rep n x := hx n
+  rw [hxn]
+  conv_lhs => rw [Matrix.matrix_eq_sum_single x]
+  simp only [map_sum, Matrix.sum_mulVec, fun p q ↦ single_eq_smul_single r p q (x p q),
+    map_smul, Matrix.smul_mulVec, rep_single_mulVec_mpvWithBoundary r hn]
+  simp only [MPSTensor.mpvWithBoundary_eq_groundSpaceMap, map_sum, map_smul, smul_smul]
+
+/-- The Bell-pair state tensor is injective at one site: its letters are
+nonzero multiples of the matrix units. -/
+theorem isNBlkInjective_stateTensor : Kraus.IsNBlkInjective (stateTensor r) 1 := by
+  have hc : ((Real.sqrt r : ℝ) : ℂ) ≠ 0 :=
+    Complex.ofReal_ne_zero.mpr (Real.sqrt_ne_zero'.mpr (Nat.cast_pos.mpr (NeZero.pos r)))
+  refine Submodule.eq_top_of_forall_single_mem _ fun i j ↦ ?_
+  have h : single i j (1 : ℂ) = ((Real.sqrt r : ℝ) : ℂ) •
+      Kraus.evalWord (stateTensor r) (List.ofFn fun _ : Fin 1 ↦ finProdFinEquiv (i, j)) := by
+    rw [evalWord_stateTensor, List.length_ofFn, pow_one, smul_smul, mul_inv_cancel₀ hc,
+      one_smul, List.ofFn_succ, List.ofFn_zero, Kraus.evalWord_cons, Kraus.evalWord_nil,
+      Matrix.mul_one]
+    dsimp only [unitTensor]
+    rw [Equiv.symm_apply_apply]
+  rw [h]
+  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨_, rfl⟩)
+
+/-- Each word-entry vector is a state of the Bell-pair tensor. -/
+theorem unitWordEntry_mem_groundSpace (n : ℕ) (p : Fin r × Fin r) :
+    (unitWordEntry r p : (Fin n → Fin (r * r)) → ℂ) ∈
+      MPSTensor.groundSpace (stateTensor r) n := by
+  have hc : ((Real.sqrt r : ℝ) : ℂ)⁻¹ ^ n ≠ 0 := pow_ne_zero _ (inv_ne_zero
+    (Complex.ofReal_ne_zero.mpr (Real.sqrt_ne_zero'.mpr (Nat.cast_pos.mpr (NeZero.pos r)))))
+  refine LinearMap.mem_range.mpr
+    ⟨(((Real.sqrt r : ℝ) : ℂ)⁻¹ ^ n)⁻¹ • single p.2 p.1 1, funext fun σ ↦ ?_⟩
+  rw [MPSTensor.groundSpaceMap_apply, evalWord_stateTensor, List.length_ofFn, Matrix.smul_mul,
+    Matrix.mul_smul, smul_smul, Matrix.trace_smul, mul_inv_cancel₀ hc, one_smul,
+    Matrix.trace_mul_single, MulOpposite.op_one, one_smul]
+  rfl
+
+attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
+
+/-- For the Bell-pair state tensor the support projection is the represented
+unit, \(P_n=Q_n\), at every positive length; at two sites
+\(P=Q=I_K\otimes|\Phi\rangle\langle\Phi|\otimes I_K\), as in
+`docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
+theorem starProjection_groundSpaceES_stateTensor {n : ℕ} (hn : 0 < n) :
+    (MPSTensor.groundSpaceES (stateTensor r) n).starProjection.toLinearMap =
+      Matrix.toEuclideanLin ((weakHopfRepresentation r).rep n 1) := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hQP := (weakHopfRepresentation r).toEuclideanLin_rep_one_comp_starProjection
+    (isBoundaryCompatible r) (isNBlkInjective_stateTensor r) hn
+  have hPQ : (MPSTensor.groundSpaceES (stateTensor r) (m + 1)).starProjection.toLinearMap ∘ₗ
+      Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1) =
+        Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1) := by
+    refine LinearMap.ext fun v ↦ Submodule.starProjection_eq_self_iff.mpr ?_
+    rw [MPSTensor.mem_groundSpaceES_iff]
+    change (weakHopfRepresentation r).rep (m + 1) 1 *ᵥ
+      (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (r * r) (m + 1))) v ∈ _
+    rw [rep_one_eq_sum, Matrix.sum_mulVec]
+    refine Submodule.sum_mem _ fun p _ ↦ ?_
+    rw [Matrix.smul_mulVec, Matrix.vecMulVec_mulVec, op_smul_eq_smul]
+    exact Submodule.smul_mem _ _ (Submodule.smul_mem _ _ (unitWordEntry_mem_groundSpace r _ p))
+  have hQ : LinearMap.adjoint (Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1)) =
+      Matrix.toEuclideanLin ((weakHopfRepresentation r).rep (m + 1) 1) := by
+    rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
+      ← (weakHopfRepresentation r).rep_star, star_one]
+  have hP := (Submodule.starProjection_isSymmetric
+    (MPSTensor.groundSpaceES (stateTensor r) (m + 1))).adjoint_eq
+  rw [← hP, ← hQP, LinearMap.adjoint_comp, hP, hQ, hPQ]
+
+/-- The weak-Hopf average fixes the support projection of the Bell-pair state,
+\(E_n(P_n)=P_n\) at every positive length: an instance of GLM23 Appendix B,
+lines 2463--2466. -/
+theorem weakHopfAverage_starProjection_stateTensor {n : ℕ} (hn : 0 < n) :
+    (weakHopfRepresentation r).weakHopfAverage n
+        (MPSTensor.groundSpaceES (stateTensor r) n).starProjection.toLinearMap =
+      (MPSTensor.groundSpaceES (stateTensor r) n).starProjection.toLinearMap :=
+  (weakHopfRepresentation r).weakHopfAverage_starProjection (isBoundaryCompatible r)
+    (isNBlkInjective_stateTensor r) hn
+
+/-- The uncompleted average of the canonical parent term of the Bell-pair state
+vanishes, \(E_n(I-P_n)=Q_n-P_n=0\), at every positive length; see
+`docs/paper-gaps/glm23_wha_parent_completion.tex`, section "An elementary
+fusion-compatible test". -/
+theorem weakHopfAverage_parentInteractionES_stateTensor {n : ℕ} (hn : 0 < n) :
+    (weakHopfRepresentation r).weakHopfAverage n
+      (MPSTensor.parentInteractionES (stateTensor r) n) = 0 := by
+  rw [(weakHopfRepresentation r).weakHopfAverage_parentInteractionES (isBoundaryCompatible r)
+    (isNBlkInjective_stateTensor r) hn, starProjection_groundSpaceES_stateTensor r hn, sub_self]
+
+omit [NeZero r] in
+/-- The canonical parent term \(I-P_n\) of the Bell-pair state is nonzero for
+\(r\ge2\) and \(n\ge2\), although its uncompleted average vanishes; it equals the
+ambient complement \(I-E_n(P_n)\). -/
+theorem parentInteractionES_stateTensor_ne_zero (hr : 2 ≤ r) {n : ℕ} (hn : 2 ≤ n) :
+    MPSTensor.parentInteractionES (stateTensor r) n ≠ 0 := by
+  refine MPSTensor.parentInteractionES_ne_zero _ n ?_
+  have h1 : r < r * r := by nlinarith
+  exact lt_of_lt_of_le (Nat.pow_lt_pow_left h1 two_ne_zero)
+    (Nat.pow_le_pow_right (Nat.mul_pos (by omega) (by omega)) hn)
 
 end NeZero
 

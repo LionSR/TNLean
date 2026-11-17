@@ -147,7 +147,7 @@ theorem expandedEval_mapOwner (A : P → Bool) {a b : Layout P} (w : SourceCircu
       change (∑ _ : Unit, (1 : ℂ) • (Word.id (Layout.mapOwner (affectedOwner A) a)).eval) ∘L
         isoL (Layout.mapOwnerIso (affectedOwner A) a) =
           isoL (Layout.mapOwnerIso (affectedOwner A) a) ∘L (Word.id a).eval
-      simp only [Fintype.sum_unique, one_smul, Word.eval, id_comp, comp_id]
+      simp only [Fintype.sum_unique, one_smul, Circuit.eval, id_comp, comp_id]
   | comp w v ihw ihv =>
       rw [expandedEval_comp, comp_assoc, ihw, ← comp_assoc, ihv, comp_assoc]
       rfl
@@ -156,7 +156,8 @@ theorem expandedEval_mapOwner (A : P → Bool) {a b : Layout P} (w : SourceCircu
         ((Word.localMap p ha hb T tail).mapOwner (affectedOwner A)).eval) ∘L _ = _
       simpa only [Fintype.sum_unique, one_smul, eval] using
         Word.eval_mapOwner_comp (affectedOwner A) (Word.localMap p ha hb T tail)
-  | @gate C ι _ _ owner a b c G tail => exact eval_partial_gate A owner G tail
+  | @gate C ι _ _ owner a b c G tail =>
+      exact eval_partial_gate A owner G tail
   | swap r t tail =>
       change (∑ _ : Unit, (1 : ℂ) •
         ((Word.swap r t tail).mapOwner (affectedOwner A)).eval) ∘L _ = _

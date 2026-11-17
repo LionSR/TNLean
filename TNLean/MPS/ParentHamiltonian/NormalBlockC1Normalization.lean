@@ -21,7 +21,7 @@ namespace MPSTensor
 pairwise inequivalence, and every periodic parent Hamiltonian of the block sum.
 This retains the C1 length used in PGVWC07, arXiv:quant-ph/0608197,
 Theorem 12, lines 1424--1458. -/
-theorem exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_common_isNBlkInjective
+theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_common_isNBlkInjective
     {d r L₀ : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hL₀ : 0 < L₀)
@@ -30,7 +30,7 @@ theorem exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_common_isNBlkInje
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ (B : (j : Fin r) → MPSTensor d (dim j))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-      (∀ j, IsPrimitiveMPS (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
+      (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       (∀ j, Kraus.IsNBlkInjective (B j) L₀) ∧
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
@@ -38,7 +38,7 @@ theorem exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_common_isNBlkInje
         parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) B) L N) := by
   classical
   choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI _hCGS using
-    fun j ↦ exists_isPrimitiveMPS_gauge_of_isNormal ⟨L₀, hL₀, hBlk j⟩
+    fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal ⟨L₀, hL₀, hBlk j⟩
   refine ⟨B, ρ, hP, hρ, fun j ↦ ?_, ?_, ?_⟩
   · exact isNBlkInjective_of_gaugeEquiv
       ((isNBlkInjective_smul_iff (hζ j) (A j) L₀).2 (hBlk j)) (hGauge j)

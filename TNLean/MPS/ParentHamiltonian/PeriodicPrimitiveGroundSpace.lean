@@ -32,6 +32,7 @@ this corrected period is one.
 -/
 
 open scoped ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -41,9 +42,10 @@ variable {d D m : ℕ}
 witnesses with a faithful invariant matrix. This is the finite-dimensional
 Perron--Frobenius step underlying the normalization in Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines 1394--1435. -/
-theorem exists_isPrimitiveMPS_of_isPeriodic_one [NeZero D] {A : MPSTensor d D}
+theorem exists_hasComplementaryFixedPointGap_of_isPeriodic_one [NeZero D] {A : MPSTensor d D}
     (hA : IsPeriodic 1 A) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, IsPrimitiveMPS A ρ ∧ ρ.PosDef := by
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
+      Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
   obtain ⟨hIrr, hTP, hPrim⟩ := (IsPeriodic.one_iff_primitive A).1 hA
   obtain ⟨ρ, hP⟩ :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
@@ -55,7 +57,7 @@ Their direct sum has the exact blocked local support space at every length.
 The sector dimensions sum to the original bond dimension. Source: DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd
+theorem IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd
     {A : MPSTensor d D} (hA : IsPeriodic m A) (p : ℕ)
     (hp : 0 < p) (hdiv : m ∣ p) :
     ∃ (dim : Fin (m.gcd p) → ℕ) (hdim : ∀ a, 0 < dim a),
@@ -63,7 +65,7 @@ theorem IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd
       ∃ (B : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
         (ρ : (a : Fin (m.gcd p)) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
       (∑ a, dim a) = D ∧
-      (∀ a, IsPrimitiveMPS (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
+      (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       (∀ N, groundSpaceES (blockTensor A p) N =
         groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N) := by
   classical
@@ -76,24 +78,24 @@ theorem IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd
   have hOne (a : Fin (m.gcd p)) : IsPeriodic 1 (B a) := by
     simpa only [hquot] using hPeriod a
   let : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
-  choose ρ hP hρ using fun a => exists_isPrimitiveMPS_of_isPeriodic_one (hOne a)
+  choose ρ hP hρ using fun a => exists_hasComplementaryFixedPointGap_of_isPeriodic_one (hOne a)
   exact ⟨dim, hdim, B, ρ, htotal, hP, hρ, hGS⟩
 
 /-- Blocking by the period gives exactly that many primitive sectors,
 retaining the original blocked support spaces for all lengths, including zero.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451, specialized to the block length equal to the period. -/
-theorem IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition
+theorem IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (hdim : ∀ a, 0 < dim a),
       let _ : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
       ∃ (B : (a : Fin m) → MPSTensor (blockPhysDim d m) (dim a))
         (ρ : (a : Fin m) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ),
       (∑ a, dim a) = D ∧
-      (∀ a, IsPrimitiveMPS (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
+      (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       (∀ N, groundSpaceES (blockTensor A m) N =
         groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N) := by
-  have h := hA.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd
+  have h := hA.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd
     m hA.period_pos (dvd_refl m)
   rw [Nat.gcd_self] at h
   exact h

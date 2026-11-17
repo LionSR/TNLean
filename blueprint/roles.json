@@ -253,14 +253,28 @@
     "ch:symmetry_spt": {
       "theorems": [
         "thm:spt_classification",
-        "thm:has_string_order_of_symmetric_injective",
-        "thm:spt_exact_ground_physical_class",
-        "thm:spt_exact_phase_injective_classification"
+        "thm:has_string_order_of_symmetric_injective"
       ],
       "corollaries": [],
       "notes": {
         "thm:spt_classification": "Classification of SPT phases along symmetric parent-Hamiltonian paths by the cocycle class",
-        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay (string order) for injective symmetric tensors",
+        "thm:has_string_order_of_symmetric_injective": "Virtual-boundary nondecay (string order) for injective symmetric tensors"
+      }
+    },
+    "ch:symmetry_spt_virtual_paths": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
+    "ch:symmetry_spt_compact_limits": {
+      "theorems": [
+        "thm:spt_exact_ground_physical_class",
+        "thm:spt_exact_phase_injective_classification"
+      ],
+      "corollaries": [
+        "cor:spt_exact_phase_injective_character_classification"
+      ],
+      "notes": {
         "thm:spt_exact_ground_physical_class": "Physical-gap converse across changes of minimal MPS bond dimension, derived without a supplied transfer bound",
         "thm:spt_exact_phase_injective_classification": "Phase/cohomology equivalence for one-site injective endpoints with prescribed exact virtual covariance, combining physical forward and converse directions"
       }
@@ -331,6 +345,11 @@
       ],
       "notes": {}
     },
+    "ch:mpdo_rfp_algebraic_coefficients": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
+    },
     "ch:mpdo_rfp_algebraic_fusion": {
       "theorems": [
         "thm:cpsv_theorem414_printed_status",
@@ -362,9 +381,7 @@
         "IndexTh"
       ],
       "corollaries": [
-        "thm:mpu_admissible_index",
-        "coruvSF",
-        "cor:mpu_admissible_continuous_standard_form"
+        "coruvSF"
       ],
       "notes": {
         "ThmFund1": "Simple-tensor equivalence theorem (Cirac et al. 2017, Theorem III.8)",
@@ -380,9 +397,7 @@
       ],
       "corollaries": [
         "cor:all-equivalent-under-conjugation",
-        "cor:mpu_admissible_all_conjugation_equivalent",
-        "cor:sigma-equivalence-necessary",
-        "cor:mpu_admissible_sigma_equivalence_necessary"
+        "cor:sigma-equivalence-necessary"
       ],
       "notes": {
         "conjphs": "Classification under conjugation when one source rank is odd (Cirac et al. 2017, Section V)",
@@ -405,7 +420,8 @@
         "thm:asym_mpo_product",
         "thm:asym_splitting",
         "thm:asym_uniq_all",
-        "thm:asym_uniq_all_reductions"
+        "thm:asym_uniq_all_reductions",
+        "thm:asym_arbitrary_ft"
       ],
       "corollaries": [
         "prop:asym_split_intertwiners",
@@ -420,14 +436,16 @@
         "cor:asym_anomaly_not_star",
         "cor:asym_zipper_fusion_uniqueness",
         "cor:asym_zipper_action_uniqueness",
-        "cor:asym_single_block"
+        "cor:asym_single_block",
+        "thm:asym_arbitrary_weighted"
       ],
       "notes": {
         "thm:asym_multiblock": "Multi-block asymmetric compression theorem named in the chapter title; cited 77 times from five chapters",
         "thm:asym_mpo_product": "Reduction of a product of matrix product operators; cited from two other chapters",
         "thm:asym_splitting": "Splitting criterion, the second named result of the chapter",
         "thm:asym_uniq_all": "The set of all compressions of a tensor onto a family, one triangular-gauge orbit per labelled invariant flag",
-        "thm:asym_uniq_all_reductions": "The set of all reductions: existence from a labelled invariant flag and a unique torsor element for each"
+        "thm:asym_uniq_all_reductions": "The set of all reductions: existence from a labelled invariant flag and a unique torsor element for each",
+        "thm:asym_arbitrary_ft": "The fundamental theorem for arbitrary tensors: equal states exactly when both tensors reduce onto one admissible family"
       }
     },
     "ch:mpu_gauging": {
@@ -675,7 +693,9 @@
         "thm:chain_boundary_net_polynomial",
         "thm:alvv_collective_trim"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:physical_interleaved_ritz_polynomial"
+      ],
       "notes": {
         "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
         "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
@@ -685,24 +705,73 @@
       "theorems": [
         "thm:lvv_uniform_successive_approximation",
         "thm:lvv_successive_arbitrary_accuracy",
-        "thm:lvv_sampled_ground_state"
+        "thm:lvv_sampled_ground_state",
+        "thm:physical_dg_interval_tree_parameters",
+        "thm:physical_dg_normalized_mps_approximation",
+        "thm:lvv_ground_state_program_spec",
+        "thm:lvv_polynomial_running_time",
+        "thm:lvv_sampled_program_success",
+        "thm:lvv_valid_oracle_correct",
+        "thm:lvv_theorem_one_accuracy",
+        "thm:lvv_sampled_theorem_one_valid"
       ],
       "corollaries": [],
       "notes": {
         "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
         "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension",
-        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio"
+        "thm:lvv_sampled_ground_state": "Polynomial final bond from sampled successive families with bounded ground-energy-to-gap ratio",
+        "thm:lvv_ground_state_program_spec": "The ground-state computation run with honest answers outputs a matrix product state with the required overlap: the approximation part of Theorem 1 as an algorithm",
+        "thm:lvv_polynomial_running_time": "Polynomial cost of the ground-state computation in the declared cost model: the running-time part of Theorem 1",
+        "thm:lvv_sampled_program_success": "Theorem 1 on the sampled route as an algorithm, with its success probability over the sampled words",
+        "thm:lvv_valid_oracle_correct": "The algorithm is correct for every valid oracle, every solver returning optimal solutions, not only the chosen one",
+        "thm:lvv_theorem_one_accuracy": "Theorem 1 of Landau, Vazirani and Vidick with overlap 1 − η in cost polynomial in n and 1/η, for every valid oracle",
+        "thm:lvv_sampled_theorem_one_valid": "Theorem 1 on the sampled route for every valid oracle: accuracy 1 − η and polynomial cost on one event of probability at least 1 − 1/(2n²)"
       }
     },
     "ch:gapped_chain_polynomial_filters": {
       "theorems": [
         "thm:alvv_ff_chain_replacement",
-        "thm:alvv_ff_corrected_rank"
+        "thm:alvv_ff_corrected_rank",
+        "thm:physical_low_energy_interval_family",
+        "thm:physical_soft_windows_and_mpo",
+        "thm:fixed_bandwidth_low_energy_family",
+        "thm:interval_low_energy_family",
+        "thm:physical_low_density_minimum_dimension",
+        "thm:physical_low_density_entropy",
+        "thm:ld_sharp_single_witness",
+        "thm:low_energy_orthonormal_mps_basis",
+        "thm:uniform_physical_soft_improving_family"
+      ],
+      "corollaries": [
+        "cor:physical_original_low_energy_interval_family",
+        "cor:canonical_low_energy_family",
+        "cor:physical_low_density_log_dimension",
+        "cor:calibrated_uniform_physical_soft_family",
+        "cor:original_ground_reference_trimming_profile"
+      ],
+      "notes": {
+        "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
+        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)",
+        "thm:physical_low_energy_interval_family": "A physical low-energy improving family with an explicit count on every prescribed interval, without a gap assumption",
+        "thm:physical_soft_windows_and_mpo": "One physical soft truncation has both low-energy spectral comparisons and constructed operator tensors at prescribed norm accuracy",
+        "thm:fixed_bandwidth_low_energy_family": "Actual buffered low-energy improving family with one common count and suppression bound, without a global spectral gap",
+        "thm:interval_low_energy_family": "One actual low-energy improving family on every prescribed interval, with canonical original targets and a common count-suppression envelope",
+        "thm:physical_low_density_minimum_dimension": "Actual original-window viable space on every interval from attained minima and calibrated nested sampling, with a fixed-bandwidth natural count bound",
+        "thm:physical_low_density_entropy": "Actual original-band regional entropy with coefficient one on the full-band logarithmic dimension and a fixed-bandwidth regularized cubic remainder",
+        "thm:ld_sharp_single_witness": "One actual normalized low-energy MPS with the sharper designated-cut rank and simultaneous global bond bound in every positive local dimension",
+        "thm:low_energy_orthonormal_mps_basis": "Actual linear image of an original inner-band orthonormal basis, with exact dimension, two-sided closeness and an orthonormal native MPS basis",
+        "thm:uniform_physical_soft_improving_family": "One actual pre-center physical soft family, its same represented matrix cluster and actual Chebyshev word powers under explicit corrected residual budgets",
+        "cor:calibrated_uniform_physical_soft_family": "Uniform numerical calibration and a natural polynomial cap for the same actual physical soft family, with all choices before the volume",
+        "cor:original_ground_reference_trimming_profile": "One original-ground reference, including flat spectra, and one radius for all parent intervals, with the exact weighted loss and polynomial rank and output-cost profiles"
+      }
+    },
+    "ch:alvv_ff_improving_family": {
+      "theorems": [
+        "thm:alvv_ff_improving_family"
       ],
       "corollaries": [],
       "notes": {
-        "thm:alvv_ff_chain_replacement": "ALVV Theorem 5.14 with the corrected rank bound: regional replacement of a frustration-free chain",
-        "thm:alvv_ff_corrected_rank": "Corrected regional rank bound d^2+3, replacing the false unrestricted claim of ALVV Theorem 5.14(2)"
+        "thm:alvv_ff_improving_family": "ALVV Theorem 5.15, existence part: the improving family for frustration-free chains"
       }
     },
     "ch:peps_ft": {
@@ -920,7 +989,8 @@
       "theorems": [
         "thm:glm_boundary_reverse",
         "thm:glm_mixed_gauge_joint",
-        "thm:glm_single_block_obstruction"
+        "thm:glm_single_block_obstruction",
+        "thm:glm_l_path_invariance"
       ],
       "corollaries": [
         "cor:glm_group_specialization",
@@ -929,7 +999,8 @@
       "notes": {
         "thm:glm_boundary_reverse": "Exact reconstruction of an operator from a boundary map, named in the opening",
         "thm:glm_mixed_gauge_joint": "The L- and F-symbols are determined by the blocks up to the source's gauge equivalence",
-        "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening"
+        "thm:glm_single_block_obstruction": "A single injective block without multiplicity forces trivial F-symbols (Garre-Rubio et al., Section 3.2), named in the opening",
+        "thm:glm_l_path_invariance": "The gauge class of the L-symbols is constant along a differentiable symmetric path (Garre-Rubio et al., Section 5), named in the opening; its first-order part is proved"
       }
     },
     "ch:peps_anyons": {
@@ -1181,19 +1252,38 @@
     "ch:mpu_cocycles": {
       "theorems": [
         "thm:mpug_anomaly_three_cocycle",
-        "thm:mpug_anomaly_obstruction",
         "thm:mpug_h3_group_cohomology"
       ],
       "corollaries": [
-        "cor:mpug_anomaly_class",
-        "cor:mpug_domain_wall_string_exchange_printed",
-        "cor:mpug_normalized_source_decomposition_gauges"
+        "cor:mpug_anomaly_class"
       ],
       "notes": {
         "thm:mpug_anomaly_three_cocycle": "The anomaly three-cocycle of a finite-group MPU representation",
-        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states",
         "thm:mpug_h3_group_cohomology": "Fusion-gauge classes are degree-three cohomology classes"
       }
+    },
+    "ch:mpu_cocycles_permuted_blocks": {
+      "theorems": [
+        "thm:mpug_anomaly_obstruction"
+      ],
+      "corollaries": [
+        "cor:mpug_domain_wall_string_exchange_printed"
+      ],
+      "notes": {
+        "thm:mpug_anomaly_obstruction": "An anomaly obstructs invariant normal states"
+      }
+    },
+    "ch:mpu_cocycles_gauss_law": {
+      "theorems": [],
+      "corollaries": [
+        "cor:mpug_normalized_source_decomposition_gauges"
+      ],
+      "notes": {}
+    },
+    "ch:mpu_cocycles_l_symbol_classification": {
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     },
     "ch:mpo_interpolation": {
       "theorems": [
@@ -1237,10 +1327,29 @@
         "thm:area_law_product_ground_state": "Gapped ground vectors of a sum of factor Hamiltonians are product vectors (OpenAI 2026 area law, Lemma 2.2)"
       }
     },
+    "ch:peps_ft_normal_square": {
+      "theorems": [
+        "thm:fundamentalTheorem_normalSquarePEPS"
+      ],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalSquarePEPS_unconditional"
+      ],
+      "notes": {
+        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)"
+      }
+    },
+    "ch:peps_ft_normal_torus": {
+      "theorems": [],
+      "corollaries": [
+        "thm:fundamentalTheorem_normalTorusPEPS",
+        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
+        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
+      ],
+      "notes": {}
+    },
     "ch:peps_ft_normal": {
       "theorems": [
-        "thm:fundamentalTheorem_normalPEPS",
-        "thm:fundamentalTheorem_normalSquarePEPS"
+        "thm:fundamentalTheorem_normalPEPS"
       ],
       "corollaries": [
         "cor:fundamentalTheorem_normalMPS_cycle",
@@ -1258,15 +1367,10 @@
         "cor:exists_gauge_to_first_of_cyclicShiftInvariantState",
         "cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos",
         "cor:peps_state_translation_bond_uniform",
-        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective",
-        "thm:fundamentalTheorem_normalSquarePEPS_unconditional",
-        "thm:fundamentalTheorem_normalTorusPEPS",
-        "thm:fundamentalTheorem_normalTorusPEPS_unconditional",
-        "cor:peps_lambda_pow_card_torus_eq_one_of_twoBlockProportional"
+        "thm:fundamentalTheorem_normalPEPS_of_vertexInjective"
       ],
       "notes": {
-        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)",
-        "thm:fundamentalTheorem_normalSquarePEPS": "Fundamental Theorem for normal square-lattice PEPS (Molnar et al., Theorem 3)"
+        "thm:fundamentalTheorem_normalPEPS": "Fundamental Theorem for normal PEPS (Molnar et al., Section 4)"
       }
     },
     "ch:peps_g_injective_regions": {
@@ -1409,14 +1513,45 @@
         "thm:aklv_physical_sequence_entropy",
         "thm:aklv_sharp_sequential_mps",
         "thm:aklv_frustration_free_entropy",
-        "thm:physical_dg_interval_entropy_bound"
+        "thm:aklv_frustration_free_mps",
+        "thm:physical_dg_interval_entropy_bound",
+        "thm:physical_canonical_ritz_polynomial",
+        "thm:physical_canonical_tree_joint_probability"
       ],
-      "corollaries": [],
+      "corollaries": [
+        "cor:canonical_ritz_energy"
+      ],
       "notes": {
         "thm:aklv_physical_sequence_entropy": "Uniform physical entropy bound obtained from the coherent AKLV sequence",
         "thm:aklv_sharp_sequential_mps": "Accuracy-dependent physical matrix product approximation with the fourth-root rank bound",
         "thm:aklv_frustration_free_entropy": "Uniform entropy of the original frustration-free ground vector from a projector gap lower bound",
-        "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9"
+        "thm:aklv_frustration_free_mps": "Matrix product approximation of a frustration-free ground vector with the cube-root accuracy dependence",
+        "thm:physical_dg_interval_entropy_bound": "Interval entropy bound for a degenerate gapped ground space, the interval version of ALVV Theorem 4.9",
+        "thm:physical_canonical_ritz_polynomial": "Joint success of the actual canonical hierarchy and its same-root literal Ritz/MPS output",
+        "thm:physical_canonical_tree_joint_probability": "Joint original-ground-space viability on the actual sampled root hierarchy, with an unconditional failure bound.",
+        "cor:canonical_ritz_energy": "Same-family subtree energy certificate retained with the actual probabilistic Ritz/MPS output"
+      }
+    },
+    "sec:interval_cluster_truncation": {
+      "theorems": [
+        "thm:normalized_cluster_label_tail",
+        "thm:physical_cluster_label_mpo",
+        "thm:soft_hamiltonian_mpo_accuracy"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:normalized_cluster_label_tail": "The corrected path estimate specifies interaction labels and retains the lower-energy normalization.",
+        "thm:physical_cluster_label_mpo": "The finite label truncation has constructed operator tensors of dimension r squared times q to the r.",
+        "thm:soft_hamiltonian_mpo_accuracy": "One complete regional soft replacement at scale at least three times the order has an explicit bond bound at every norm accuracy."
+      }
+    },
+    "sec:physical_soft_resampling_tree": {
+      "theorems": [
+        "thm:physical_soft_resampling_tree"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:physical_soft_resampling_tree": "Constructs the actual corrected resampling tree from primitive chain data, with one original-target joint history event and unconditional size bounds."
       }
     }
   }

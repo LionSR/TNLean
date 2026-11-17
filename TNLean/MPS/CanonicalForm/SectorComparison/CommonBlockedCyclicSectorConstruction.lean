@@ -16,6 +16,7 @@ data and chooses a common physical blocking length for a finite block family.
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

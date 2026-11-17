@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.GraphOpenBondCoordinateTransport
 import TNLean.PEPS.GraphOrientedAveragingBondState
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Fourier transport for arbitrary graph edge orientations
@@ -47,10 +48,7 @@ theorem bondCoordinateMatrix_map_star_mulVec (Q : Matrix Y X ℂ) (M : Matrix X 
   simp only [bondCoordinateMatrix, Matrix.mulVec, dotProduct, Matrix.kronecker_apply,
     Matrix.map_apply, star_star, Matrix.mul_apply, Matrix.conjTranspose_apply,
     Fintype.sum_prod_type, Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro j _
-  apply Finset.sum_congr rfl
-  intro i _
+  refine Finset.sum_congr₂ fun j _ i _ ↦ ?_
   ring
 
 /-- The effective virtual coordinate matrix in the original ordered edge
@@ -209,10 +207,7 @@ theorem graphOrientedRegionCoordinateMatrix_open_superposition
     graphOrientedRegionCoordinateMatrix_open Q hQ U L hL,
     Finset.smul_sum, smul_smul, Finset.sum_smul]
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro a _
-  apply Finset.sum_congr rfl
-  intro θ _
+  refine Finset.sum_congr₂ fun a _ θ _ ↦ ?_
   rw [mul_comm]
 
 /-- Inclusion of the actual regional contraction ranges follows from the

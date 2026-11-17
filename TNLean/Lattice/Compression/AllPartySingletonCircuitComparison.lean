@@ -134,6 +134,7 @@ private theorem selectedRemainingComparison_of_selectedLocalPartComparison {Q R 
     lift r q hlift v
   exact h.trans hLift
 
+set_option maxHeartbeats 400000 in -- comparing party layouts unfolds the shared circuit syntax
 /-- The chronological induction compares words through the canonical
 selected-operation proposition before the final owner-lifting conversion.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434

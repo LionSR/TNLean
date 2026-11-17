@@ -111,12 +111,26 @@ It supplies the full-chain propagator approximation used in
     identity identifies the localization region with $K_k$.
 \end{proof}
 
+\begin{definition}[The two-layer grid propagator]
+    \label{def:huang_grid_propagator}
+    \lean{TNLean.MPS.AreaLaw.chainGridPropagator,
+        TNLean.MPS.AreaLaw.chainGridPropagator_spec}
+    \leanok
+    \uses{def:qc_disjoint_projected_propagator, thm:huang_grid_exact_evolution}
+    Let $w>0$ and $r\ge0$. The grid propagator $K(t)$ is the product of the
+    block evolutions $e^{-itH_j}$ of the retained Hamiltonian, in order,
+    followed by the ordered product of the projected propagators
+    (Definition~\ref{def:qc_disjoint_projected_propagator}) of the omitted
+    boundary terms on their buffers. For $2r+2\le w$ it satisfies the error
+    and rank bounds of Lemma~\ref{thm:huang_grid_propagator} below.
+\end{definition}
+
 \begin{lemma}[One physical two-layer approximation at every cut]
     \label{thm:huang_grid_propagator}
     \lean{TNLean.MPS.AreaLaw.exists_chainGrid_propagator_approximation}
     \leanok
     \uses{thm:huang_grid_generator_localization, thm:huang_grid_exact_evolution,
-        thm:huang_two_interval_layer_ranks}
+        thm:huang_two_interval_layer_ranks, def:huang_grid_propagator}
     Let $2r+2\le w$ and let $m=\lfloor(L-1)/w\rfloor$. The original terms determine
     a family $K(t)$ such that
     \[
@@ -127,8 +141,9 @@ It supplies the full-chain propagator approximation used in
 \end{lemma}
 \begin{proof}
     \leanok
-    Construct the projected relative-evolution paths on the disjoint boundary
-    buffers. Their ordered product approximates the full relative evolution with
+    Take the grid propagator of Definition~\ref{def:huang_grid_propagator}.
+    The projected propagators on the disjoint boundary buffers have an ordered
+    product that approximates the full relative evolution with
     error bounded by $|t|$ times the sum of the generator errors. Multiply by the
     exact retained evolution, written as its actual block product. This is a product
     of two disjoint interval layers of widths $w$ and $2r+2$, giving the rank bound.
@@ -157,12 +172,29 @@ It supplies the full-chain propagator approximation used in
     $\log(T+1)\le T$ and the elementary upper bound on the natural ceiling.
 \end{proof}
 
+\begin{definition}[The physical chain propagator]
+    \label{def:huang_physical_propagator}
+    \lean{TNLean.MPS.AreaLaw.physicalChainPropagator,
+        TNLean.MPS.AreaLaw.physicalChainPropagator_spec,
+        TNLean.MPS.AreaLaw.positiveChainPropagator,
+        TNLean.MPS.AreaLaw.positiveChainPropagator_spec}
+    \leanok
+    \uses{def:huang_grid_propagator, thm:huang_propagation_radius}
+    For $T\ge0$ and $\varepsilon>0$, the physical chain propagator is the grid
+    propagator of Definition~\ref{def:huang_grid_propagator} with the radius
+    $r$ of Lemma~\ref{thm:huang_propagation_radius} and width $w=2r+2$. For
+    positive contractions $0\le h_i\le I$ the Hermiticity of the terms is
+    derived, and the propagator satisfies the bounds of
+    Lemma~\ref{thm:huang_physical_propagation} below.
+\end{definition}
+
 \begin{lemma}[Uniform physical propagation at prescribed precision]
     \label{thm:huang_physical_propagation}
     \lean{TNLean.MPS.AreaLaw.exists_physical_chain_propagator_approximation,
         TNLean.MPS.AreaLaw.exists_positive_chain_propagator_approximation}
     \leanok
-    \uses{thm:huang_grid_propagator, thm:huang_propagation_radius}
+    \uses{thm:huang_grid_propagator, thm:huang_propagation_radius,
+        def:huang_physical_propagator}
     Let $q\ge1$, let $H=\sum_ih_i$ be the original nearest-neighbor Hamiltonian,
     and suppose $0\le h_i\le I$. For $T\ge0$ and $\varepsilon>0$, choose the radius
     above and put $w=2r+2$. There is one family $K(t)$ with
@@ -176,8 +208,8 @@ It supplies the full-chain propagator approximation used in
 \end{lemma}
 \begin{proof}
     \leanok
-    Positive contractions are Hermitian and have norm at most one. Apply the
-    constructed grid approximation. The error bound increases with $|t|$ on
+    Positive contractions are Hermitian and have norm at most one. Take the
+    physical chain propagator of Definition~\ref{def:huang_physical_propagator}. The error bound increases with $|t|$ on
     $[0,T]$, and there are at most $L$ boundary labels. The radius estimate gives
     the desired error; substituting $w=2r+2$ gives the rank exponent $8r+8$.
 \end{proof}

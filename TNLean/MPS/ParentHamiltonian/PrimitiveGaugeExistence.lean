@@ -50,7 +50,7 @@ valence-bond construction.
 
 ## Main results
 
-* `MPSTensor.exists_isPrimitiveMPS_gauge_of_isNormal`: the normalized primitive
+* `MPSTensor.exists_hasComplementaryFixedPointGap_gauge_of_isNormal`: the normalized primitive
   gauge of a normal tensor.
 * `MPSTensor.exists_parentHamiltonianES_gap_of_isNormal`: the finite-range
   Knabe gap for the parent Hamiltonian of an arbitrary normal tensor.
@@ -113,19 +113,19 @@ gauge; the trace-preserving representative is therefore normal as well, and the
 full equivalence of Proposition 3, which does assume the trace-preserving
 normalization, returns the complementary transfer-map gap with a positive
 definite fixed point. -/
-theorem exists_isPrimitiveMPS_gauge_of_isNormal [NeZero D] {A : MPSTensor d D}
+theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal [NeZero D] {A : MPSTensor d D}
     (hA : Kraus.IsNormal A) :
     ∃ (B : MPSTensor d D) (ζ : ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ),
       ζ ≠ 0 ∧
       GaugeEquiv (ζ • A) B ∧
       (∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) ∧
-      IsPrimitiveMPS B ρ ∧ ρ.PosDef ∧
+      Kraus.HasComplementaryFixedPointGap B ρ ∧ ρ.PosDef ∧
       (∀ L : ℕ, groundSpace A L = groundSpace B L) ∧
       (∀ L : ℕ, parentInteraction A L = parentInteraction B L) ∧
       (∀ L N : ℕ, chainGroundSpace A L N = chainGroundSpace B L N) := by
   classical
   have hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
-    isIrreducibleTensor_of_isPrimitivePaper A (isPrimitivePaper_of_isNormal A hA)
+    isIrreducibleFamily_of_isNormal A hA
   obtain ⟨B, r, σ, _hσ, hr, _hBdef, hBnorm, hBgauge⟩ :=
     exists_tp_data_of_irreducible A hIrr (exists_apply_ne_zero_of_isNormal hA)
   set ζ : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ) with hζ_def
@@ -136,8 +136,7 @@ theorem exists_isPrimitiveMPS_gauge_of_isNormal [NeZero D] {A : MPSTensor d D}
   have hNormalScaled : Kraus.IsNormal (ζ • A) := (isNormal_smul_iff hζ A).2 hA
   have hNormalB : Kraus.IsNormal B := isNormal_of_gaugeEquiv hNormalScaled hgauge
   obtain ⟨ρ, hPrim, hρ⟩ :=
-    isPrimitiveMPS_of_isStronglyIrreduciblePaper B hBnorm
-      (isNormal_implies_stronglyIrreducible B hBnorm hNormalB)
+    exists_hasComplementaryFixedPointGap_posDef_of_isNormal B hBnorm hNormalB
   have hGS : ∀ L : ℕ, groundSpace A L = groundSpace B L := by
     intro L
     rw [← groundSpace_smul_eq A ζ hζ L]
@@ -177,7 +176,7 @@ theorem exists_parentHamiltonianES_gap_of_isNormal [NeZero D] {A : MPSTensor d D
         (LinearMap.ker (parentHamiltonianES A (l + 1) N))ᗮ,
         δ * ‖v‖ ≤ ‖parentHamiltonianES A (l + 1) N v‖ := by
   obtain ⟨B, ζ, ρ, hζ, hgauge, _hmpv, hPrim, hρ, hGS, _hPI, _hCGS⟩ :=
-    exists_isPrimitiveMPS_gauge_of_isNormal hA
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   obtain ⟨l, ε, m, δ, hl, hInjB, hε, hεlt, hm, hδ_def, hδ, hGap⟩ :=
     hPrim.exists_parentHamiltonianES_gap_of_finiteRangeKnabe hρ
   have hInjA : Kraus.IsNBlkInjective A l :=

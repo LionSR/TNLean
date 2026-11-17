@@ -22,6 +22,9 @@ injective-perturbation condition is assumed; no intersection, closure or
 kernel equality is supplied as an extra hypothesis.
 -/
 
+open Kraus (blockPhysDim decodeBlock wordOfBlock decodeBlockEquiv flattenBlockedWord_nil
+  flattenBlockedWord_cons)
+
 noncomputable section
 
 open scoped Matrix BigOperators

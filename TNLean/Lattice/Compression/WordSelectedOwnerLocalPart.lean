@@ -63,11 +63,11 @@ private theorem mapOwner_moveHead_heq (f : P → Q) (r : Reg P)
 
 private theorem eval_mapOwner_restrict_frameList (f : P → Q) (g : P → Bool)
     (rs : Layout P) {a b : Layout P} (w : Word a b) (hs : w.sources = []) :
-    HEq (((frameList rs w).restrict g ((sources_frameList w rs).trans hs)).mapOwner f).eval
+    HEq ((Word.restrict g (frameList rs w) ((sources_frameList w rs).trans hs)).mapOwner f).eval
       (frameList (Layout.mapOwner f (Layout.restrict g rs))
         ((w.restrict g hs).mapOwner f)).eval := by
   have h := eval_mapOwner_of_eval_heq f
-    ((frameList rs w).restrict g ((sources_frameList w rs).trans hs))
+    (Word.restrict g (frameList rs w) ((sources_frameList w rs).trans hs))
     (frameList (Layout.restrict g rs) (w.restrict g hs))
     (restrict_frameList_eval_heq g rs w hs)
   exact h.trans (eval_heq
@@ -84,13 +84,12 @@ private theorem eval_mapOwner_restrict_castInput (f : P → Q) (g : P → Bool)
 
 private theorem restrict_localPart_castLayouts_eval_heq (g : Q → Bool)
     {a b a' b' : Layout Q} (w : Word a b) (ha : a = a') (hb : b = b') :
-    HEq (((w.castLayouts ha hb).localPart).restrict g
-      (w.castLayouts ha hb).sources_localPart).eval
+    HEq (Word.restrict g (Word.localPart (w.castLayouts ha hb))
+      (Word.sources_localPart (w.castLayouts ha hb))).eval
       (w.localPart.restrict g w.sources_localPart).eval := by
   cases ha
   cases hb
   rfl
-
 /-- The exact selected local-part identity, kept as one proposition during
 constructor induction. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 246–267, 383–434 and 565–588. -/
@@ -268,10 +267,10 @@ private theorem selected_localPart_comp_eval_heq
           (eval_mapOwner_restrict_frameList f sp v.sources.layout
             w.localPart w.sources_localPart).symm)
   have hcomp := eval_comp_heq
-    ((frameList V.sources.layout W.localPart).restrict sq
+    (Word.restrict sq (frameList V.sources.layout W.localPart)
       ((sources_frameList W.localPart V.sources.layout).trans W.sources_localPart))
     (V.localPart.restrict sq V.sources_localPart)
-    (((frameList v.sources.layout w.localPart).restrict sp
+    ((Word.restrict sp (frameList v.sources.layout w.localPart)
       ((sources_frameList w.localPart v.sources.layout).trans w.sources_localPart)).mapOwner f)
     ((v.localPart.restrict sp v.sources_localPart).mapOwner f)
     (by

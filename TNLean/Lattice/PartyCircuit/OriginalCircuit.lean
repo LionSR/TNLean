@@ -29,61 +29,143 @@ open ContinuousLinearMap
 namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-/-- An original chronology with arbitrary private contractions and prescribed
-nonprivate participating sets. Registers exchanged by the syntax retain their owners.
+/-- An original nonprivate gate: a weighted list of allowed party chains whose operator is a
+contraction, on the registers of the participating parties `C`, whose number is not one.
 Source: polynomial-PEPS 04-compression.tex, lines 21–36 and 199–229. -/
-inductive OriginalCircuit : Layout P → Layout P → Type 1
-  | id (a : Layout P) : OriginalCircuit a a
-  | comp {a b d : Layout P} (w : OriginalCircuit a b) (v : OriginalCircuit b d) :
-      OriginalCircuit a d
-  | privateMap (p : P) {a b : Layout P}
-      (ha : ∀ r ∈ a, r.owner = p) (hb : ∀ r ∈ b, r.owner = p)
-      (A : Mem a →L[ℂ] Mem b) (hA : ‖A‖ ≤ 1) (tail : Layout P) :
-      OriginalCircuit (a ++ tail) (b ++ tail)
-  | nonprivateGate {C : Type} [Fintype C] (owner : C ↪ P)
+inductive OriginalGate : Layout P → Layout P → Type 1
+  | mk {C : Type} [Fintype C] (owner : C ↪ P)
       (hC : Fintype.card C ≠ 1) {a b : Layout C} (L : PartyGate a b)
       (hL : ∀ q ∈ L, q.2.IsAllowed) (hG : ‖gate (toGate L)‖ ≤ 1) (tail : Layout P) :
-      OriginalCircuit (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail)
-  | swap (r s : Reg P) (tail : Layout P) : OriginalCircuit (r :: s :: tail) (s :: r :: tail)
-  | frame (r : Reg P) {a b : Layout P} (w : OriginalCircuit a b) :
-      OriginalCircuit (r :: a) (r :: b)
+      OriginalGate (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail)
+
+namespace OriginalGate
+
+/-- An original nonprivate gate without its side conditions. -/
+@[simp] def toEffectGate : {a b : Layout P} → OriginalGate a b → EffectGate a b
+  | _, _, @OriginalGate.mk _ _ _ owner _ _ _ L _ _ tail => .mk owner L tail
+
+/-- An original nonprivate gate carries its contraction conditions. -/
+theorem isAllowed_toEffectGate : {a b : Layout P} → (g : OriginalGate a b) →
+    g.toEffectGate.IsAllowed
+  | _, _, @OriginalGate.mk _ _ _ _ _ _ _ _ hL hG _ => ⟨hL, hG⟩
+
+end OriginalGate
+
+/-- Original nonprivate gates as a gate family: the operator and the participants are those
+of the underlying nonprivate gate, and every gate is allowed.
+Source: polynomial-PEPS 04-compression.tex, lines 21–36. -/
+instance : GateFamily (OriginalGate (P := P)) where
+  eval g := g.toEffectGate.eval
+  IsAllowed _ := True
+  norm_eval_le_one g _ := g.toEffectGate.norm_eval_le_one g.isAllowed_toEffectGate
+  participants g := g.toEffectGate.participants
+
+@[simp] theorem OriginalGate.gateFamily_eval {a b : Layout P} (g : OriginalGate a b) :
+    GateFamily.eval g = g.toEffectGate.eval :=
+  rfl
+
+@[simp] theorem OriginalGate.gateFamily_isAllowed {a b : Layout P} (g : OriginalGate a b) :
+    GateFamily.IsAllowed g :=
+  trivial
+
+@[simp] theorem OriginalGate.gateFamily_participants {a b : Layout P} (g : OriginalGate a b) :
+    GateFamily.participants g = g.toEffectGate.participants :=
+  rfl
+
+/-- An original chronology with arbitrary private contractions and prescribed
+nonprivate participating sets: a circuit whose gates are original nonprivate gates and whose
+local maps are contractions. Registers exchanged by the syntax retain their owners.
+Source: polynomial-PEPS 04-compression.tex, lines 21–36 and 199–229. -/
+abbrev OriginalCircuit : Layout P → Layout P → Type 1 :=
+  Circuit LocalCondition.contraction OriginalGate
 
 namespace OriginalCircuit
-/-- The original operator, evaluated directly from its local maps and original
-monomial expansions. Source: polynomial-PEPS 04-compression.tex, lines 21–36. -/
-def eval : {a b : Layout P} → OriginalCircuit a b → Mem a →L[ℂ] Mem b
-  | _, _, .id _ => .id ℂ _
-  | _, _, .comp w v => v.eval ∘L w.eval
-  | _, _, @OriginalCircuit.privateMap _ _ a b _ _ A _ tail =>
-      isoL (appendIso b tail).symm ∘L A.rTensor (Mem tail) ∘L isoL (appendIso a tail)
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ owner _ a b L _ _ tail =>
-      isoL (appendIso (Layout.mapOwner owner b) tail).symm ∘L
-        (isoL (Layout.mapOwnerIso owner b) ∘L gate (toGate L) ∘L
-          isoL (Layout.mapOwnerIso owner a).symm).rTensor (Mem tail) ∘L
-            isoL (appendIso (Layout.mapOwner owner a) tail)
-  | _, _, .swap r s tail => leftCommL r.space s.space (Mem tail)
-  | _, _, .frame r w => w.eval.lTensor r.space
+
+/-- The empty circuit. -/
+@[match_pattern] abbrev id (ℓ : Layout P) : OriginalCircuit ℓ ℓ :=
+  Circuit.id (κ := LocalCondition.contraction) (G := OriginalGate) ℓ
+
+/-- Composition, in chronological order. -/
+@[match_pattern] abbrev comp {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : OriginalCircuit ℓ₁ ℓ₂) (w'
+    : OriginalCircuit ℓ₂ ℓ₃) :
+    OriginalCircuit ℓ₁ ℓ₃ :=
+  Circuit.comp (κ := LocalCondition.contraction) (G := OriginalGate) w w'
+
+/-- Exchange of two adjacent tensor factors. -/
+@[match_pattern] abbrev swap (r r' : Reg P) (ℓ : Layout P) : OriginalCircuit (r :: r' :: ℓ)
+    (r' :: r :: ℓ) :=
+  Circuit.swap (κ := LocalCondition.contraction) (G := OriginalGate) r r' ℓ
+
+/-- A circuit next to an untouched register. -/
+@[match_pattern] abbrev frame (r : Reg P) {ℓ ℓ' : Layout P} (w : OriginalCircuit ℓ ℓ') :
+    OriginalCircuit (r :: ℓ) (r :: ℓ') :=
+  Circuit.frame (κ := LocalCondition.contraction) (G := OriginalGate) r w
+
+/-- An arbitrary contraction on the registers of one party. -/
+@[match_pattern] abbrev privateMap (p : P) {a b : Layout P}
+    (ha : ∀ r ∈ a, r.owner = p) (hb : ∀ r ∈ b, r.owner = p)
+    (A : Mem a →L[ℂ] Mem b) (hA : ‖A‖ ≤ 1) (tail : Layout P) :
+    OriginalCircuit (a ++ tail) (b ++ tail) :=
+  Circuit.localMap p ha hb A tail hA
+
+/-- An original nonprivate gate as a circuit. -/
+@[match_pattern] abbrev nonprivateGate {C : Type} [Fintype C] (owner : C ↪ P)
+    (hC : Fintype.card C ≠ 1) {a b : Layout C} (L : PartyGate a b)
+    (hL : ∀ q ∈ L, q.2.IsAllowed) (hG : ‖gate (toGate L)‖ ≤ 1) (tail : Layout P) :
+    OriginalCircuit (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail) :=
+  Circuit.gate (OriginalGate.mk owner hC L hL hG tail)
+
+/-- A circuit framed by a list of untouched registers. -/
+abbrev frameList {ℓ ℓ' : Layout P} (ℓ₀ : Layout P) (w : OriginalCircuit ℓ ℓ') :
+    OriginalCircuit (ℓ₀ ++ ℓ) (ℓ₀ ++ ℓ') :=
+  Circuit.frameList (κ := LocalCondition.contraction) (G := OriginalGate) ℓ₀ w
+
+/-- Identify equal input and output layouts without adding an operation. -/
+abbrev castLayouts {ℓ ℓ' a b : Layout P} (w : OriginalCircuit ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
+    OriginalCircuit a b :=
+  Circuit.castLayouts (κ := LocalCondition.contraction) (G := OriginalGate) w h h'
+
+/-- Induction on the constructors of `OriginalCircuit`. -/
+@[induction_eliminator, elab_as_elim]
+theorem induction {motive : {ℓ ℓ' : Layout P} → OriginalCircuit ℓ ℓ' → Prop}
+    (id : ∀ ℓ : Layout P, motive (OriginalCircuit.id ℓ))
+    (comp : ∀ {ℓ₁ ℓ₂ ℓ₃ : Layout P} (w : OriginalCircuit ℓ₁ ℓ₂) (w' : OriginalCircuit ℓ₂ ℓ₃),
+      motive w → motive w' → motive (OriginalCircuit.comp w w'))
+    (privateMap : ∀ (p : P) {a b : Layout P} (ha : ∀ r ∈ a, r.owner = p)
+      (hb : ∀ r ∈ b, r.owner = p) (A : Mem a →L[ℂ] Mem b) (hA : ‖A‖ ≤ 1) (tail : Layout P),
+      motive (OriginalCircuit.privateMap p ha hb A hA tail))
+    (nonprivateGate : ∀ {C : Type} [Fintype C] (owner : C ↪ P) (hC : Fintype.card C ≠ 1)
+      {a b : Layout C} (L : PartyGate a b) (hL : ∀ q ∈ L, q.2.IsAllowed)
+      (hG : ‖PartyCircuit.gate (toGate L)‖ ≤ 1) (tail : Layout P),
+      motive (OriginalCircuit.nonprivateGate owner hC L hL hG tail))
+    (swap : ∀ (r r' : Reg P) (ℓ : Layout P), motive (OriginalCircuit.swap r r' ℓ))
+    (frame : ∀ (r : Reg P) {ℓ ℓ' : Layout P} (w : OriginalCircuit ℓ ℓ'),
+      motive w → motive (OriginalCircuit.frame r w))
+    {ℓ ℓ' : Layout P} (w : OriginalCircuit ℓ ℓ') : motive w := by
+  induction w with
+  | id ℓ₀ => exact id ℓ₀
+  | comp w w' ih ih' => exact comp w w' ih ih'
+  | localMap p h₁ h₂ U ℓ hU => exact privateMap p h₁ h₂ U hU ℓ
+  | gate g =>
+      cases g with
+      | mk owner hC L hL hG tail => exact nonprivateGate owner hC L hL hG tail
+  | swap r r' ℓ => exact swap r r' ℓ
+  | frame r w ih => exact frame r w ih
 
 /-- Embed the original chronology into the effect-elimination syntax without
 expanding private gates. Source: polynomial-PEPS 04-compression.tex, lines 199–212. -/
 def produce : {a b : Layout P} → OriginalCircuit a b → EffectCircuit a b
   | _, _, .id a => .id a
   | _, _, .comp w v => .comp w.produce v.produce
-  | _, _, .privateMap p ha hb A _ tail => .localMap p ha hb A tail
-  | _, _, @OriginalCircuit.nonprivateGate _ C _ owner _ a b L _ _ tail =>
-      @EffectCircuit.gate P C _ owner a b L tail
+  | _, _, .localMap p ha hb A tail _ => .localMap p ha hb A tail
+  | _, _, .gate (@OriginalGate.mk _ _ _ owner _ _ _ L _ _ tail) => EffectCircuit.gate owner L tail
   | _, _, .swap r s tail => .swap r s tail
   | _, _, .frame r w => .frame r w.produce
 
 /-- Count original nonprivate gates, excluding private maps and permutations
 of tensor-factor order. Source: polynomial-PEPS 04-compression.tex, lines 199–202. -/
-def nonprivateCount : {a b : Layout P} → OriginalCircuit a b → ℕ
-  | _, _, .id _ => 0
-  | _, _, .comp w v => w.nonprivateCount + v.nonprivateCount
-  | _, _, .privateMap .. => 0
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _ => 1
-  | _, _, .swap .. => 0
-  | _, _, .frame _ w => w.nonprivateCount
+abbrev nonprivateCount {a b : Layout P} (w : OriginalCircuit a b) : ℕ :=
+  w.gateCount
 
 /-- The produced circuit has exactly the original operator, including all
 spectator identities. Source: polynomial-PEPS 04-compression.tex, lines 21–36. -/
@@ -91,11 +173,11 @@ theorem eval_produce {a b : Layout P} (w : OriginalCircuit a b) :
     w.produce.eval = w.eval := by
   induction w with
   | id => rfl
-  | comp w v ihw ihv => simp only [produce, EffectCircuit.eval, eval, ihw, ihv]
+  | comp w v ihw ihv => simp only [produce, Circuit.eval_comp, ihw, ihv]
   | privateMap => rfl
   | nonprivateGate => rfl
   | swap => rfl
-  | frame r w ih => simp only [produce, EffectCircuit.eval, eval, ih]
+  | frame r w ih => simp only [produce, Circuit.eval_frame, ih]
 
 /-- The producer establishes contraction and constituent normalization; these
 are not operator-comparison premises.
@@ -116,67 +198,25 @@ theorem expandedGateCount_produce {a b : Layout P} (w : OriginalCircuit a b) :
     w.produce.expandedGateCount = w.nonprivateCount := by
   induction w with
   | id => rfl
-  | comp w v ihw ihv =>
-      simp only [produce, EffectCircuit.expandedGateCount, nonprivateCount, ihw, ihv]
+  | comp w v ihw ihv => exact congrArg₂ (· + ·) ihw ihv
   | privateMap => rfl
   | nonprivateGate => rfl
   | swap => rfl
   | frame r w ih => exact ih
-end OriginalCircuit
 
-namespace EffectCircuit
-/-- The expanded occurrences of the analytic circuit, excluding private maps
-and changes of tensor order. Source: polynomial-PEPS 04-compression.tex, lines 199–229. -/
-def gateLocations : {a b : Layout P} → EffectCircuit a b → Type
-  | _, _, .id _ => Empty
-  | _, _, .comp w v => gateLocations w ⊕ gateLocations v
-  | _, _, .localMap .. => Empty
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ _ _ => Unit
-  | _, _, .swap .. => Empty
-  | _, _, .frame _ w => gateLocations w
-
-/-- The original prescribed participating set at each expanded occurrence.
-Source: polynomial-PEPS 04-compression.tex, lines 25–27 and 229. -/
-def participants : {a b : Layout P} → (w : EffectCircuit a b) → gateLocations w → Finset P
-  | _, _, .id _ => Empty.elim
-  | _, _, .comp w v => Sum.elim (participants w) (participants v)
-  | _, _, .localMap .. => Empty.elim
-  | _, _, @EffectCircuit.gate _ _ _ owner _ _ _ _ => fun _ => Finset.univ.map owner
-  | _, _, .swap .. => Empty.elim
-  | _, _, .frame _ w => participants w
-end EffectCircuit
-
-namespace OriginalCircuit
 /-- Original nonprivate occurrences are kept distinct even when their operators
 coincide. Source: polynomial-PEPS 04-compression.tex, lines 199–229. -/
-def nonprivateLocations : {a b : Layout P} → OriginalCircuit a b → Type
-  | _, _, .id _ => Empty
-  | _, _, .comp w v => nonprivateLocations w ⊕ nonprivateLocations v
-  | _, _, .privateMap .. => Empty
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _ => Unit
-  | _, _, .swap .. => Empty
-  | _, _, .frame _ w => nonprivateLocations w
-
-/-- The source-facing original participant image at a nonprivate occurrence.
-Source: polynomial-PEPS 04-compression.tex, lines 25–27 and 229. -/
-def participants : {a b : Layout P} → (w : OriginalCircuit a b) →
-    nonprivateLocations w → Finset P
-  | _, _, .id _ => Empty.elim
-  | _, _, .comp w v => Sum.elim (participants w) (participants v)
-  | _, _, .privateMap .. => Empty.elim
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ owner _ _ _ _ _ _ _ =>
-      fun _ => Finset.univ.map owner
-  | _, _, .swap .. => Empty.elim
-  | _, _, .frame _ w => participants w
+abbrev nonprivateLocations {a b : Layout P} (w : OriginalCircuit a b) : Type :=
+  Circuit.gateLocations w
 
 /-- The producer neither merges nor creates nonprivate gate occurrences.
 Source: polynomial-PEPS 04-compression.tex, lines 199–229. -/
 def produceLocationsEquiv : {a b : Layout P} → (w : OriginalCircuit a b) →
-    nonprivateLocations w ≃ EffectCircuit.gateLocations w.produce
+    nonprivateLocations w ≃ Circuit.gateLocations w.produce
   | _, _, .id _ => Equiv.refl _
   | _, _, .comp w v => Equiv.sumCongr (produceLocationsEquiv w) (produceLocationsEquiv v)
-  | _, _, .privateMap .. => Equiv.refl _
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _ => Equiv.refl _
+  | _, _, .localMap .. => Equiv.refl _
+  | _, _, .gate (@OriginalGate.mk _ _ _ _ _ _ _ _ _ _ _) => Equiv.refl _
   | _, _, .swap .. => Equiv.refl _
   | _, _, .frame _ w => produceLocationsEquiv w
 
@@ -184,7 +224,7 @@ def produceLocationsEquiv : {a b : Layout P} → (w : OriginalCircuit a b) →
 Source: polynomial-PEPS 04-compression.tex, line 229. -/
 theorem participants_produce {a b : Layout P} (w : OriginalCircuit a b)
     (g : w.nonprivateLocations) :
-    EffectCircuit.participants w.produce (w.produceLocationsEquiv g) = w.participants g := by
+    Circuit.participants w.produce (w.produceLocationsEquiv g) = Circuit.participants w g := by
   induction w with
   | id => exact nomatch g
   | comp w v ihw ihv =>
@@ -209,7 +249,8 @@ theorem card_participants_ne_one {a b : Layout P} (w : OriginalCircuit a b)
       | inr g => exact ihv g
   | privateMap => exact nomatch g
   | nonprivateGate owner hC L hL hG tail =>
-      simpa only [participants, Finset.card_map, Finset.card_univ] using hC
+      simpa only [Circuit.participants, GateFamily.participants, OriginalGate.toEffectGate,
+        EffectGate.participants, Finset.card_map, Finset.card_univ] using hC
   | swap => exact nomatch g
   | frame r w ih => exact ih g
 
@@ -218,8 +259,8 @@ averages are expanded. Source: polynomial-PEPS 04-compression.tex, lines 199–2
 def IsExpansionBounded (r : ℕ) (S : ℝ) : {a b : Layout P} → OriginalCircuit a b → Prop
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsExpansionBounded r S ∧ v.IsExpansionBounded r S
-  | _, _, .privateMap .. => True
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ L _ _ _ =>
+  | _, _, OriginalCircuit.privateMap .. => True
+  | _, _, Circuit.gate (@OriginalGate.mk _ _ _ _ _ _ _ L _ _ _) =>
       (∀ q ∈ L, q.2.toEffectChain.effectCount ≤ r) ∧ (L.map fun q => ‖q.1‖).sum ≤ S
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsExpansionBounded r S
@@ -232,7 +273,7 @@ theorem isExpansionBounded_produce_iff {a b : Layout P} (w : OriginalCircuit a b
   induction w with
   | id => rfl
   | comp w v ihw ihv =>
-      simp only [produce, EffectCircuit.IsExpansionBounded, IsExpansionBounded, ihw, ihv]
+      exact and_congr ihw ihv
   | privateMap => rfl
   | nonprivateGate => rfl
   | swap => rfl

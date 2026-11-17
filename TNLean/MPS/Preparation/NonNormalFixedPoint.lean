@@ -79,6 +79,7 @@ which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
 open scoped BigOperators Matrix
 open Matrix
 open QuantumCircuit
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

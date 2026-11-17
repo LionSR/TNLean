@@ -60,6 +60,7 @@ neither. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder
 open QuantumCircuit
+open Kraus (blockPhysDim decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 

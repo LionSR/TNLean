@@ -51,8 +51,8 @@ formalized only at prime length `N`, with `L₀ = (D²+1)²` from the general Wi
 element with a nonzero eigenvalue (the project refinement), not in general, nor is
 `O(D² log D)`.
 Distinctness is taken in the form used by the direct-sum lemma, no two blocks related by a
-gauge and a phase, which is stricter than the source's pairwise different block states
-(lines 1329–1330).
+gauge and a phase: the source's pairwise different block states (lines 1329–1330) read as
+pairwise nonproportional, as recorded in `docs/paper-gaps/pgvwc07_direct_sum_input.tex`.
 Consequently neither the unconditional `D = Ω(N^{1/3})` nor `D³ log D = Ω(N)` is formalized.
 Documented in `docs/paper-gaps/rmp_w_state_ti_bound.tex`.
 
@@ -318,9 +318,9 @@ by a gauge and a phase. If the periodic vector of `A` on `N` sites is `c W_N` fo
 coefficients `λ_j^N` of the canonical form.
 
 The scope restriction and the local fix stated in the module docstring apply: the canonical
-form with condition C1 at `L₀` is a hypothesis, the distinctness hypothesis is stricter than
-the source's pairwise different block states, and the threshold contains `L₀` for a single
-block. -/
+form with condition C1 at `L₀` is a hypothesis, the distinctness hypothesis is the source's
+pairwise different block states read as pairwise nonproportional, and the threshold contains
+`L₀` for a single block. -/
 theorem PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator {D : ℕ} {A : MPSTensor 2 D}
     (h : PGVWC07CanonicalFormData A) {L₀ : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ k, Kraus.IsNBlkInjective (h.blocks k) L₀)

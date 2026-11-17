@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.DistributedOperatorContraction
 import TNLean.Lattice.Compression.PartyProductScalar
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Absorbing a scalar into a distributed local matrix
@@ -41,10 +42,7 @@ theorem contractedOperator_smul_at_party
     DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix]
   simp_rw [TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party]
   simp only [Finset.smul_sum, smul_smul]
-  apply Finset.sum_congr rfl
-  intro ξ _
-  apply Finset.sum_congr rfl
-  intro j _
+  refine Finset.sum_congr₂ fun ξ _ j _ ↦ ?_
   rw [mul_comm]
 
 end TNLean.Lattice.Compression.DistributedOperatorContraction

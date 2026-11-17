@@ -1,0 +1,113 @@
+\section{Uniform numerical parameters and polynomial bond bounds}
+\label{sec:uniform_physical_soft_calibration}
+
+Corollary~\ref{cor:calibrated_uniform_physical_soft_family} chooses the
+parameters of Theorem~\ref{thm:uniform_physical_soft_improving_family}
+before the chain length. It retains that theorem's actual family and
+bounds its permitted member bond by one natural polynomial. The
+parameter dependence is a corrected auxiliary to
+\cite[Proposition~5.7 and Theorem~5.8]{Arad2016RigorousRG}, with the
+qualifications in
+\cite{gap:alvv16_soft_regional_residuals,gap:alvv16_cluster_approximation}.
+
+\begin{lemma}[Uniform numerical soft parameters]
+    \label{lem:uniform_soft_parameters}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_uniform_soft_parameters}
+    \leanok
+    Fix $q\ge2$ and $g>0$. There exist natural numbers
+    $u\ge2$, $C_{\rm pol}\ge1$ and $p_{\rm pol}$ before every volume
+    $N$, with the following properties. Define the quantities in
+    (\ref{eq:calibrated_soft_parameters}), with $g$ in place of
+    $\gamma$. Then $\ell\ge1$, $m\ge2$, $k\ge1$, $D\ge2$, $M\ge34$,
+    $0<\tau,\xi\le1$, $t,T\ge156+2g$ and $T\ge g/40+24$.
+    Both residual inequalities in~(\ref{eq:uniform_soft_residual_budgets})
+    hold with $T_0=T_1=T$, as do the sampling inequalities
+    (\ref{eq:calibrated_soft_sampling}) and, for every $N$, the member-bond
+    bound (\ref{eq:calibrated_soft_member_bond}). These choices require
+    neither an interaction Hamiltonian nor a sampled family.
+\end{lemma}
+\begin{proof}\leanok
+    The uniform numerical calibration with exponents $(24,10,10)$
+    chooses $u$ before the volume and interactions. The definitions give
+    $D\ge2$ and $M\ge34$. Thus $D^{20}\ge10000$ and
+    $M^{10}\ge100000$, so
+    \[
+        \tau\le\frac1{10000D^4},\qquad
+        D^{12}\Delta\le\frac1{M^{10}}\le\frac1{100000}.
+    \]
+    These give the remaining sampling inequalities. The geometric-order
+    polynomial estimate at base $2(e^{1/3}-1)$ and coefficient budget
+    $t2^{m+1}$ gives natural $C_{\rm pol}$ and $p_{\rm pol}$ before $N$.
+    Its coefficient multiplicity is $m+1$ and its filter degree is $k$.
+    Since $B_N\ge1$, this is exactly the displayed member-bond bound.
+\end{proof}
+
+\begin{corollary}[A calibrated common physical soft family]
+    \label{cor:calibrated_uniform_physical_soft_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_uniform_physical_soft_improving_family}
+    \leanok
+    Fix $q\ge2$ and $\gamma>0$. There are natural numbers
+    $u\ge2$, $C_{\rm pol}\ge1$ and $p_{\rm pol}$, before every chain
+    length $N$, with the following properties. Put
+    \begin{align}
+        \ell   & =u^8,                                                               & m & =u^{10},    & k & =u^{16}, &
+        t      & =3m,                                                                & T & =u^9,\notag                  \\
+        D      & =(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor},                        &
+        M      & =3t(1+\log m)+4\ell+34,\notag                                                                          \\
+        \tau   & =\frac1{D^{24}M^{10}},                                              &
+        \xi    & =\min\left\{1,\frac{\tau\gamma^2}{20000(M+\gamma+8)}\right\},\notag                                    \\
+        U      & =M+\xi+4+\gamma,                                                    &
+        \Delta & =4\exp\left(-4k\sqrt{\frac{\gamma}{2U}}\right).
+        \label{eq:calibrated_soft_parameters}
+    \end{align}
+    The scale satisfies $t\ge156+2\gamma$, and the common residual
+    cutoff satisfies $T\ge156+2\gamma$ and $T\ge\gamma/40+24$.
+    Both inequalities in~(\ref{eq:uniform_soft_residual_budgets}) hold
+    with $T_0=T_1=T$. In addition, $D\ge2$, $M\ge34$,
+    $0<\tau,\xi\le1$, and
+    \begin{align}
+        \Delta            & \le\frac1{D^{12}M^{10}},\notag                   \\
+        \frac{3\tau}{200}
+                          & \le\frac1{100}\left(\frac{3}{100D^2}\right)^2, &
+        \frac{3\tau}{200} & \le\frac1{200},                                &
+        D^{12}\Delta      & \le\frac1{100000}.
+        \label{eq:calibrated_soft_sampling}
+    \end{align}
+
+    For every $N$, let $s_N$ and $B_N=2s_N^2q^{s_N}(m+1)$ be exactly
+    the cluster order and native bond in
+    (\ref{eq:uniform_soft_native_family}). Then
+    \begin{align}
+        (\max\{1,B_N\})^{2k}
+        \le C_{\rm pol}(N+1)^{p_{\rm pol}}.
+        \label{eq:calibrated_soft_member_bond}
+    \end{align}
+    For every positive-contraction nearest-neighbour Hamiltonian and
+    natural two-window geometry of
+    Theorem~\ref{thm:uniform_physical_soft_improving_family}, all that
+    theorem's conclusions hold with these same numerical choices.
+    Thus one actual original minimum tuple, native core, polynomial
+    closing coefficients and common left family precede every allowed
+    regional estimate. Each member has its original allowed bond
+    $(\max\{1,B_N\})^{2k}$, bounded by
+    (\ref{eq:calibrated_soft_member_bond}). The approximants, their own
+    closed spectral clusters, actual Chebyshev operators and all ordered
+    word powers are unchanged.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:uniform_soft_parameters,thm:uniform_physical_soft_improving_family}
+    Lemma~\ref{lem:uniform_soft_parameters} supplies the common numerical
+    choices and polynomial member-bond bound.
+    Apply Theorem~\ref{thm:uniform_physical_soft_improving_family}
+    once to the supplied original interactions with the derived
+    numerical budgets. Retain the same family and all its conclusions together
+    with~(\ref{eq:calibrated_soft_member_bond}); no other approximant,
+    target or family is selected.
+\end{proof}
+
+Here the soft order $m$ and filter degree $k$ are fixed before $N$;
+the cluster order $s_N$ varies according to its logarithmic formula. Thus
+(\ref{eq:calibrated_soft_member_bond}) is a polynomial bound in the
+volume. No polynomial assertion is made when the soft order or filter degree
+is allowed to vary independently with $N$. Sharp inverse-gap dependence,
+an adaptive generating algorithm and running time are separate conclusions.

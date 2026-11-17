@@ -356,6 +356,108 @@ theorem exists_pgvwc07_chain_root {n : ℕ} (lam : ℕ → ℂ) (hne : ∃ k < n
   · norm_num at hz'
   · rw [zero_pow (by have := Finset.mem_range.mp hk; omega), mul_zero]
 
+/-! ## The intertwiner from a complete chain of cuts -/
+
+/-- **The nonzero intertwiner from a complete chain of cuts**, PGVWC07
+(arXiv:quant-ph/0608197, MPSarchive.tex lines 1087-1095). Let
+`W 0, …, W (D⁴)` be nonzero matrices on the doubled bond space with
+`W_k (C_i ⊗ 1) = (B_i ⊗ 1) W_{k+1}` for every `k < D⁴` and every `i`. Then
+there are a nonzero matrix `R` and a scalar `x ≠ 0` with `R C_i = x⁻¹ B_i R`
+for every physical index `i`.
+
+Since `D⁴ + 1` matrices in the `D⁴`-dimensional space are linearly
+dependent, there is a first index `n` with `W 0, …, W (n - 1)` independent and
+`W n` in their span (lines 1087-1089); the chain-combination result gives a
+nonzero combination `W` with `W (C_i ⊗ 1) = (x⁻¹ B_i ⊗ 1) W`
+(lines 1089-1093), and the Kronecker intertwiner result extracts `R`
+(lines 1094-1095).
+
+**Local fix (`docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex`):**
+the printed proof takes `D⁴` intertwiners, which need not be linearly
+dependent; this statement takes one matrix at each of the `D⁴ + 1` cuts of
+the window. -/
+theorem exists_intertwiner_of_kronecker_chain {B C : MPSTensor d D}
+    (W : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
+    (hW : ∀ j ≤ D ^ 4, W j ≠ 0)
+    (hchain : ∀ j < D ^ 4, ∀ i,
+      W j * (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
+        (B i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * W (j + 1)) :
+    ∃ (R : Matrix (Fin D) (Fin D) ℂ) (x : ℂ), R ≠ 0 ∧ x ≠ 0 ∧
+      ∀ i, R * C i = x⁻¹ • (B i * R) := by
+  classical
+  -- `D⁴ + 1` matrices on the doubled bond space are linearly dependent.
+  have hdepAll : ¬ LinearIndependent ℂ (fun j : Fin (D ^ 4 + 1) => W j) := by
+    intro h
+    have hcard := h.fintype_card_le_finrank
+    simp only [Fintype.card_fin, Module.finrank_matrix, Fintype.card_prod,
+      Module.finrank_self, mul_one] at hcard
+    have : D * D * (D * D) = D ^ 4 := by ring
+    omega
+  have hP : ∃ n, ¬ LinearIndependent ℂ (fun j : Fin (n + 1) => W j) := ⟨D ^ 4, hdepAll⟩
+  obtain ⟨n, hn_spec, hn_min, hn_le⟩ : ∃ n, ¬ LinearIndependent ℂ (fun j : Fin (n + 1) => W j) ∧
+      (∀ m < n, LinearIndependent ℂ (fun j : Fin (m + 1) => W j)) ∧ n ≤ D ^ 4 :=
+    ⟨Nat.find hP, Nat.find_spec hP, fun m hm => not_not.mp (Nat.find_min hP hm),
+      Nat.find_min' hP hdepAll⟩
+  have hn_pos : 0 < n := by
+    rcases Nat.eq_zero_or_pos n with h0 | h0
+    · exfalso
+      apply hn_spec
+      subst h0
+      change LinearIndependent ℂ (fun j : Fin 1 => W j)
+      exact linearIndependent_unique_iff.mpr (by simpa using hW 0 (by omega))
+    · exact h0
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
+  have hindep : LinearIndependent ℂ (fun j : Fin (m + 1) => W j) := hn_min m (by omega)
+  have hsnoc : (fun j : Fin (m + 1 + 1) => W j) =
+      Fin.snoc (fun j : Fin (m + 1) => W j) (W (m + 1)) := by
+    funext j
+    refine Fin.lastCases ?_ (fun j => ?_) j
+    · simp
+    · simp
+  rw [hsnoc, linearIndependent_finSnoc, not_and, not_not] at hn_spec
+  have hmem := hn_spec hindep
+  rw [Submodule.mem_span_range_iff_exists_fun] at hmem
+  obtain ⟨lam, hlam⟩ := hmem
+  -- The dependence in the zero-based form of the chain-combination result.
+  let lam' : ℕ → ℂ := fun k => if h : k < m + 1 then lam ⟨k, h⟩ else 0
+  have hdep : W (m + 1) = ∑ k ∈ Finset.range (m + 1), lam' k • W k := by
+    rw [Finset.sum_range, ← hlam]
+    refine Finset.sum_congr rfl fun k _ => ?_
+    change lam k • W k = (if h : (k : ℕ) < m + 1 then lam ⟨k, h⟩ else 0) • W k
+    rw [dite_eq_left k.is_lt]
+  have hlam_ne : ∃ k < m + 1, lam' k ≠ 0 := by
+    by_contra hall
+    push Not at hall
+    have hzero : W (m + 1) = 0 := by
+      rw [hdep]
+      exact Finset.sum_eq_zero fun k hk => by rw [hall k (Finset.mem_range.mp hk), zero_smul]
+    exact hW (m + 1) (by omega) hzero
+  obtain ⟨x, hx, hxeq⟩ := exists_pgvwc07_chain_root lam' hlam_ne
+  -- The nonzero combination and its intertwining relation.
+  set Wc := ∑ k ∈ Finset.range (m + 1), pgvwc07ChainCoeff lam' x k • W k with hWc_def
+  have hWc_ne : Wc ≠ 0 :=
+    (pgvwc07_chainCoeff_combination_spec
+      (0 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
+      0 W lam' (fun _ _ => by simp) hindep hdep hx hxeq).1
+  have hWc_rel : ∀ i, Wc * (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
+      x⁻¹ • ((B i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * Wc) := by
+    intro i
+    have := (pgvwc07_chainCoeff_combination_spec
+      (LinearMap.mulRight ℂ (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
+      (LinearMap.mulLeft ℂ (B i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
+      W lam' (fun k hk => by simpa using hchain k (by omega) i) hindep hdep hx hxeq).2
+    simp only [LinearMap.mulRight_apply, LinearMap.mulLeft_apply] at this
+    rw [hWc_def]
+    exact this
+  have hkron : ∀ i, Wc * (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
+      ((x⁻¹ • B i) ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * Wc := by
+    intro i
+    rw [hWc_rel i, Matrix.smul_kronecker, smul_mul_assoc]
+  obtain ⟨R, hR, hRrel⟩ :=
+    Matrix.exists_nonzero_intertwiner_of_kronecker_one_intertwines
+      (fun i => x⁻¹ • B i) C Wc hWc_ne hkron
+  exact ⟨R, x, hR, hx, fun i => by rw [hRrel i, smul_mul_assoc]⟩
+
 /-! ## The fixed-length intertwiner -/
 
 /-- **The nonzero intertwiner of the proof of Theorem 7**, PGVWC07
@@ -371,16 +473,8 @@ The proof takes the `D⁴ + 1` cuts after `L₀, …, L₀ + D⁴` sites, all of
 leave at least `L₀` sites on both sides. The cut vectors of `B` are linearly
 independent there (lines 936-949), so each cut carries an invertible
 intertwiner and consecutive cuts satisfy the chain relation
-`W_k (C_i ⊗ 1) = (B_i ⊗ 1) W_{k+1}` (lines 1080-1086). Since `D⁴ + 1` matrices
-on the doubled bond space are linearly dependent, there is a first index `n`
-with `W_{L₀}, …, W_{L₀+n-1}` independent and `W_{L₀+n}` in their span
-(lines 1087-1089); the chain-combination result gives a nonzero combination
-`W` with `W (C_i ⊗ 1) = (x⁻¹ B_i ⊗ 1) W` (lines 1089-1093), and the Kronecker
-intertwiner result extracts `R` (lines 1094-1095).
-
-**Local fix (`docs/paper-gaps/pgvwc07_intertwiner_chain_off_by_one.tex`):**
-the printed proof takes `D⁴` intertwiners, which need not be linearly
-dependent; the formal argument takes all `D⁴ + 1` cuts of the window. -/
+`W_k (C_i ⊗ 1) = (B_i ⊗ 1) W_{k+1}` (lines 1080-1086). The rest of the proof
+is `exists_intertwiner_of_kronecker_chain` (lines 1087-1095). -/
 theorem exists_intertwiner_of_fixedLength_mpv_eq [NeZero D] {B C : MPSTensor d D}
     {L₀ N : ℕ}
     (hB_unital : ∑ i, B i * (B i)ᴴ = 1)
@@ -421,77 +515,6 @@ theorem exists_intertwiner_of_fixedLength_mpv_eq [NeZero D] {B C : MPSTensor d D
       linearIndependent_leftCutVector
         (isNBlkInjective_of_le_of_unital hB_unital hC1 (by omega))
     exact cutGauge_chain hΦ (hW j (by omega)).2 (hW (j + 1) (by omega)).2 i
-  -- `D⁴ + 1` matrices on the doubled bond space are linearly dependent.
-  have hdepAll : ¬ LinearIndependent ℂ (fun j : Fin (D ^ 4 + 1) => W j) := by
-    intro h
-    have hcard := h.fintype_card_le_finrank
-    simp only [Fintype.card_fin, Module.finrank_matrix, Fintype.card_prod,
-      Module.finrank_self, mul_one] at hcard
-    have : D * D * (D * D) = D ^ 4 := by ring
-    omega
-  have hP : ∃ n, ¬ LinearIndependent ℂ (fun j : Fin (n + 1) => W j) := ⟨D ^ 4, hdepAll⟩
-  obtain ⟨n, hn_spec, hn_min, hn_le⟩ : ∃ n, ¬ LinearIndependent ℂ (fun j : Fin (n + 1) => W j) ∧
-      (∀ m < n, LinearIndependent ℂ (fun j : Fin (m + 1) => W j)) ∧ n ≤ D ^ 4 :=
-    ⟨Nat.find hP, Nat.find_spec hP, fun m hm => not_not.mp (Nat.find_min hP hm),
-      Nat.find_min' hP hdepAll⟩
-  have hn_pos : 0 < n := by
-    rcases Nat.eq_zero_or_pos n with h0 | h0
-    · exfalso
-      apply hn_spec
-      subst h0
-      change LinearIndependent ℂ (fun j : Fin 1 => W j)
-      exact linearIndependent_unique_iff.mpr (by simpa using (hW 0 (by omega)).1.ne_zero)
-    · exact h0
-  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
-  have hindep : LinearIndependent ℂ (fun j : Fin (m + 1) => W j) := hn_min m (by omega)
-  have hsnoc : (fun j : Fin (m + 1 + 1) => W j) =
-      Fin.snoc (fun j : Fin (m + 1) => W j) (W (m + 1)) := by
-    funext j
-    refine Fin.lastCases ?_ (fun j => ?_) j
-    · simp
-    · simp
-  rw [hsnoc, linearIndependent_finSnoc, not_and, not_not] at hn_spec
-  have hmem := hn_spec hindep
-  rw [Submodule.mem_span_range_iff_exists_fun] at hmem
-  obtain ⟨lam, hlam⟩ := hmem
-  -- The dependence in the zero-based form of the chain-combination result.
-  let lam' : ℕ → ℂ := fun k => if h : k < m + 1 then lam ⟨k, h⟩ else 0
-  have hdep : W (m + 1) = ∑ k ∈ Finset.range (m + 1), lam' k • W k := by
-    rw [Finset.sum_range, ← hlam]
-    refine Finset.sum_congr rfl fun k _ => ?_
-    change lam k • W k = (if h : (k : ℕ) < m + 1 then lam ⟨k, h⟩ else 0) • W k
-    rw [dite_eq_left k.is_lt]
-  have hlam_ne : ∃ k < m + 1, lam' k ≠ 0 := by
-    by_contra hall
-    push Not at hall
-    have hzero : W (m + 1) = 0 := by
-      rw [hdep]
-      exact Finset.sum_eq_zero fun k hk => by rw [hall k (Finset.mem_range.mp hk), zero_smul]
-    exact (hW (m + 1) (by omega)).1.ne_zero hzero
-  obtain ⟨x, hx, hxeq⟩ := exists_pgvwc07_chain_root lam' hlam_ne
-  -- The nonzero combination and its intertwining relation.
-  set Wc := ∑ k ∈ Finset.range (m + 1), pgvwc07ChainCoeff lam' x k • W k with hWc_def
-  have hWc_ne : Wc ≠ 0 :=
-    (pgvwc07_chainCoeff_combination_spec
-      (0 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ →ₗ[ℂ] Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
-      0 W lam' (fun _ _ => by simp) hindep hdep hx hxeq).1
-  have hWc_rel : ∀ i, Wc * (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
-      x⁻¹ • ((B i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * Wc) := by
-    intro i
-    have := (pgvwc07_chainCoeff_combination_spec
-      (LinearMap.mulRight ℂ (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
-      (LinearMap.mulLeft ℂ (B i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
-      W lam' (fun k hk => by simpa using hchain k (by omega) i) hindep hdep hx hxeq).2
-    simp only [LinearMap.mulRight_apply, LinearMap.mulLeft_apply] at this
-    rw [hWc_def]
-    exact this
-  have hkron : ∀ i, Wc * (C i ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) =
-      ((x⁻¹ • B i) ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) * Wc := by
-    intro i
-    rw [hWc_rel i, Matrix.smul_kronecker, smul_mul_assoc]
-  obtain ⟨R, hR, hRrel⟩ :=
-    Matrix.exists_nonzero_intertwiner_of_kronecker_one_intertwines
-      (fun i => x⁻¹ • B i) C Wc hWc_ne hkron
-  exact ⟨R, x, hR, hx, fun i => by rw [hRrel i, smul_mul_assoc]⟩
+  exact exists_intertwiner_of_kronecker_chain W (fun j hj ↦ (hW j hj).1.ne_zero) hchain
 
 end MPSTensor

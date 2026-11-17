@@ -32,6 +32,7 @@ Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors".
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder
+open Kraus (blockPhysDim decodeBlock decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 

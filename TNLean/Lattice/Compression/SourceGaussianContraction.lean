@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.PreparedSourceTransport
 import TNLean.Lattice.Compression.SourceCorrectedContractionIdentity
 import TNLean.Lattice.Compression.SourceGaussianDensity
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Actual corrected terms in Gaussian Schmidt coordinates
@@ -120,10 +121,7 @@ theorem correctedSourceTerm_gaussian_eq_sum {m n : Type} [Fintype m] [Fintype n]
   classical
   dsimp only
   rw [correctedSourceTerm_eq_sourceContraction A w S hS]
-  apply Finset.sum_congr rfl
-  intro ξ _
-  apply Finset.sum_congr rfl
-  intro ζ _
+  refine Finset.sum_congr₂ fun ξ _ ζ _ ↦ ?_
   apply congrArg ((coefficient A w ξ * conj (coefficient A w ζ)) • ·)
   simp_rw [sourceGaussianCorrection_eq_transport w k lam E F hsource]
   let R := partialSlots A w

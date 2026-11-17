@@ -19,8 +19,10 @@ on:
       - 'texra-blueprint.toml'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_import_layers.py'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/check_pass_through_declarations.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
@@ -125,8 +127,10 @@ on:
       - 'lake-manifest.json'
       - 'scripts/LintStyle.lean'
       - 'scripts/nolints-style.txt'
+      - 'scripts/check_import_layers.py'
       - 'scripts/check_numbered_lean_files.py'
       - 'scripts/check_oversized_lean_files.py'
+      - 'scripts/check_pass_through_declarations.py'
       - 'scripts/lean_import_syntax.py'
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
@@ -226,6 +230,7 @@ env:
     .lake/packages/Gametheory/.lake/build
     .lake/packages/checkdecls/.lake/build
     .lake/packages/qiclean/.lake/build
+    .lake/packages/cslib/.lake/build
 
 jobs:
   # Per-job change gating. Push and dispatch runs skip this and run
@@ -281,8 +286,10 @@ jobs:
               - 'scripts/export_coherent_tn_prerequisites.py'
               - 'scripts/test_export_coherent_tn_prerequisites.py'
             module_policy:
+              - 'scripts/check_import_layers.py'
               - 'scripts/check_numbered_lean_files.py'
               - 'scripts/check_oversized_lean_files.py'
+              - 'scripts/check_pass_through_declarations.py'
               - 'scripts/lean_import_syntax.py'
               - 'scripts/test_lean_file_policies.py'
               - 'docbuild/**'
@@ -837,6 +844,24 @@ jobs:
           git fetch --no-tags origin "$BASE_REF"
           git merge-base --is-ancestor "$BASE_REF" HEAD
 
+      # Imports between the layers below the tensor-network directories must
+      # point downward, no new pair of directories may import each other, no
+      # library module may newly import a worked example, and no declaration
+      # may newly restate another one under a second name. The recorded
+      # violations may only shrink against the base; see
+      # docs/many_body_circuit_architecture.md.
+      - name: Check import layers
+        env:
+          EVENT_BEFORE: ${{ github.event.before }}
+        run: |
+          case "$GITHUB_EVENT_NAME" in
+            pull_request) base="$BASE_REF" ;;
+            push) base="$EVENT_BEFORE" ;;
+            *) base="HEAD^" ;;
+          esac
+          python3 scripts/check_import_layers.py --root . --base-ref "$base"
+          python3 scripts/check_pass_through_declarations.py --root . --base-ref "$base"
+
       - name: Reject new numbered-sequel modules (pull request)
         if: github.event_name == 'pull_request'
         run: >
@@ -1346,16 +1371,19 @@ jobs:
           key: blueprint-print-aux-${{ github.run_id }}
           restore-keys: blueprint-print-aux-
 
-      # As in blueprint.yml: a stale auxiliary file can name a macro that a
-      # changed preamble no longer defines, so a failed seeded build is retried
-      # from a clean print directory and only a broken source fails the step.
-      - name: Build blueprint PDF
+      # One XeTeX pass over the print volume catches every TeX error that the
+      # web build misses; settling cross-references would double the job, so
+      # the check stops after one run and reads the log itself. As in
+      # blueprint.yml, a stale auxiliary file can name a macro that a changed
+      # preamble no longer defines, so a failed seeded run is retried from a
+      # clean print directory and only a broken source fails the step.
+      - name: Check blueprint PDF compiles
         id: print-pdf
         run: |
-          if ! leanblueprint pdf; then
-            echo "::warning::Seeded PDF build failed; rebuilding from a clean print directory"
+          if ! scripts/check_blueprint_pdf_compiles.sh; then
+            echo "::warning::Seeded PDF check failed; retrying from a clean print directory"
             rm -rf blueprint/print
-            leanblueprint pdf
+            scripts/check_blueprint_pdf_compiles.sh
           fi
 
       # The focused FT-MPS volume compiles the \ifftmpsvolume branches, which

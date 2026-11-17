@@ -1,0 +1,96 @@
+\section{Positive local dimension and strict low-energy approximation}
+
+Let the local dimension be any positive integer $q$. Fix $\eta>0$ before
+the chain and its interactions. As above, let
+$G(c)=\mathbf1_{(-\infty,\lambda_0+c]}(H)\mathcal H$ and
+$r_\eta=\dim G(\eta)$, and put
+\[
+    b=\min\{v,\eta/2\},\qquad g=\min\{b/6,1\},\qquad
+    u=1+\log q+\log(1/g)
+\]
+for $v>0$. The physical construction for $q\ge2$ is unchanged.
+When $q=1$, every configuration space is one dimensional, and the original
+unit vector has exact cut rank and MPS bond dimension one. This includes
+the empty chain. Positive local dimension is the usual qudit convention;
+it does not omit a physical case of the source.
+
+The following are separate entropy, fixed-cut and global consequences of
+\cite[Theorem~thm:al-ld, lines 1096--1105]{Arad2016RigorousRG}.
+They have no spectral-gap or original-band invariance premise. The capped
+width and its comparison with the source variables are recorded in
+\cite{gap:alvv16_low_energy_family_scope}.
+
+\begin{lemma}[Low-energy entropy in positive local dimension]
+    \label{lem:ld_entropy_positive_dimension}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_entropy_bound_of_pos_dimension}
+    \leanok
+    There is $K_\eta>0$, chosen before the physical chain, prescribed
+    interval $J$, deficit and vector, such that every unit
+    $\psi\in G(\eta-v)$ satisfies
+    \[
+        S(\psi_J)\le\log r_\eta+
+        \frac{K_\eta}{v}
+        \bigl(1+\log q+\log(1+1/v)\bigr)^3.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    For $q\ge2$, use the original-band entropy estimate.
+    For $q=1$, the regional dimension bound gives
+    $S(\psi_J)\le |J|\log1=0$. The displayed right side is nonnegative.
+\end{proof}
+
+\begin{lemma}[Strict fixed-cut approximation]
+    \label{lem:ld_sharp_strict_cut_positive_dimension}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_interval_low_energy_strict_approximation}
+    \leanok
+    There is $K_\eta>0$, chosen before the physical data, interval,
+    deficit, accuracy and vector, with the following property.
+    For $0<\delta\le1$, set
+    $a=16+\log(1/g)+\log(2/\delta)$.
+    Every unit $\psi\in G(\eta-v)$ has a unit approximation $\phi$ with
+    \[
+        |\langle\phi,\psi\rangle|>1-\delta,\qquad
+        \log\operatorname{SR}_{J:J^c}(\phi)
+        \le\log r_\eta+
+        K_\eta\left(\frac{u^3}{g}+g^{-1/4}a^{3/4}u\right)(1+\log a).
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    For $q\ge2$, apply the proved sharp cut estimate at accuracy
+    $\delta/2$. Its overlap is at least $1-\delta/2>1-\delta$.
+    The accuracy logarithm becomes exactly $\log(2/\delta)$, so no
+    change to the bandwidth-dependent coefficient is needed.
+    For $q=1$, take $\phi=\psi$. Its exact cut rank is at most one,
+    while the logarithmic dimension and remainder are nonnegative.
+\end{proof}
+
+\begin{lemma}[Strict global MPS approximation]
+    \label{lem:ld_sharp_strict_mps_positive_dimension}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation}
+    \leanok
+    There is $K_\eta>0$ chosen before the physical data, deficit,
+    accuracy and vector, such that the following holds.
+    For $0<\delta\le1$, set
+    \[
+        A=16+\log(1/g)+\log\frac{32(L+1)}\delta.
+    \]
+    There is an integer $B\ge1$, selected before the vector, with
+    \[
+        \log B\le K_\eta
+        \left(\frac{u^3}{g}+g^{-1/4}A^{3/4}u\right)(1+\log A).
+    \]
+    Every unit $\psi\in G(\eta-v)$ has one unit open-boundary MPS
+    $\Phi$ of bond dimension at most $r_\eta B$, with
+    $|\langle\Phi,\psi\rangle|>1-\delta$ and
+    $\|\Phi-\psi\|^2\le\delta/4$.
+\end{lemma}
+\begin{proof}\leanok
+    For $q\ge2$, use the same actual sequential projection construction
+    at accuracy $\delta/2$. Its uniform integer bond factor is chosen
+    before the vector. The global accuracy logarithm becomes the displayed
+    expression, and the squared distance is at most $\delta/4$.
+    For $q=1$, choose $B=1$ and $\Phi=\psi$.
+    Every cut matrix has at most one row, so the exact internal-cut rank
+    theorem constructs a bond-one MPS. The positive-band spectral space
+    contains a ground eigenvector, hence $r_\eta\ge1$.
+\end{proof}

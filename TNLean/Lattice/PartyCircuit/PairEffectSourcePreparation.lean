@@ -54,7 +54,7 @@ theorem Word.exists_grouped_source_preparation (w : Word ℓX ℓY) (hw : w.IsAl
   refine ⟨S, hS, hN, hK, .comp v w.localPart,
     ⟨hv, w.isAllowed_localPart hw⟩, ?_, ?_⟩
   · simp only [Word.sources, Word.sources_localPart, hs, List.nil_append]
-  · rw [Word.eval_comp, comp_assoc, he, ← w.eval_eq_localPart_comp_prepare]
+  · rw [Circuit.eval_comp, comp_assoc, he, ← w.eval_eq_localPart_comp_prepare]
 
 /-- Elimination of pair effects, including the combination of all sources on
 each unordered pair of parties. Every conclusion of `partyPairEffectElimination`

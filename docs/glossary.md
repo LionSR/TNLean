@@ -66,6 +66,51 @@ is deliberately source-faithful.
   forward comparison given a virtual conjugation, not a converse asserting
   equality of the original periodic operators at every length.
 
+## Symmetry-preserving matrix product unitary equivalence
+
+### `MPOTensor.EquivalentUnderPhysicalMatrixSymmetry`
+
+- **Declaration:** `EquivalentUnderPhysicalMatrixSymmetry kind Q U V`, where
+  `U` and `V` have one fixed labelled physical space and independent virtual
+  dimensions, and `kind` is adjunction, transposition or conjugation.
+- **Defined in:** `TNLean/MPS/MPU/PhysicalMatrixEquivalence.lean`.
+- **Meaning:** the original tensors are MPUs, and some common positive
+  identity ancilla and common positive canonical blocking give the existing
+  strict symmetry-preserving path relation. The physical matrix is retained
+  as $Q\otimes I_x$ when an ancilla is added. Endpoint canonical form and a
+  common padded virtual dimension come from `StrictlyEquivalentUnderSymmetry`;
+  intermediate paths range over the full enlarged physical space.
+- **Source:** the fixed-labelled-space reading of arXiv:1703.09188,
+  `SSymmetries` (lines 1301--1322), `def:equivalent-symmetry` (1356--1366),
+  and the labelled ancillary-spin construction (2210--2234), in
+  `Papers/1703.09188/paper_v2.tex`.
+- **Sanctioned bridges:** for a unitary involution $Q$, the three declarations
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_dagger_iff`,
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff`, and
+  `MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff` identify the
+  retained-matrix comparison of $U,V$ with the comparison of $QU,QV$ under
+  retained matrix $I$ in the same labelled relation,
+  under $Q^\dagger=Q$, $Q^{\mathsf T}=Q$, and $\overline Q=Q$, respectively.
+  Both directions use the same ancilla and blocking witnesses. The generic
+  blocked-action identities include blocking length zero; the stabilized
+  relation itself requires positive blocking.
+- **Source-example specialization:**
+  `MPOTensor.labelledShiftExamples_swap_dagger_iff`,
+  `MPOTensor.labelledShiftExamples_swap_transpose_iff`, and
+  `MPOTensor.labelledShiftExamples_swap_conjugation_iff` cover every ordered pair of
+  the three source examples and their source-defined output transforms.
+  The one-sided transformation follows the documented correction in
+  `docs/paper-gaps/mpu_swap_symmetry_one_sided.tex`.
+- **Caveat:** this is not interchangeable with `EquivalentUnderSymmetry`.
+  The latter uses a coherent dimension-indexed symmetry family and coprime
+  ancilla sizes; the labelled relation retains $Q$ and permits arbitrary
+  common positive ancillas. No equivalence theorem between those predicates
+  is asserted. The global-family obstruction concerns that API, not a
+  counterexample to the labelled-spin source statement. General commensurate-
+  dimension integration remains open under #6017 and
+  `docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`; no phase classification
+  is claimed.
+
 ## Normality
 
 ### `Kraus.IsNormal`
@@ -80,9 +125,9 @@ is deliberately source-faithful.
   Cirac--Pérez-García--Schuch--Verstraete, arXiv:2011.12127,
   `Papers/2011.12127/TN-Review-main.tex:1815-1830`.
 - **Sanctioned bridges:**
-  `MPSTensor.hasEventuallyFullKrausRank_iff_isNormal`,
-  `Kraus.IsInjective.isNormal`, and
-  `MPSTensor.IsNormalTensor.isNormal`.
+  `Kraus.IsInjective.isNormal` and
+  `MPSTensor.IsNormalTensor.isNormal`. This is the "eventually full Kraus
+  rank" of arXiv:0909.5347, clause (b) of `MPSTensor.primitivity_tfae`.
 - **Caveat:** `MPSTensor.IsNormalTensor.isNormal` derives nonzero bond dimension
   from the spectral-radius-one clause; it requires no external positivity
   assumption. There is no equivalence theorem between `Kraus.IsNormal` and
@@ -201,20 +246,29 @@ is deliberately source-faithful.
 
 ## Primitivity
 
-The unqualified canonical predicate is the generic transfer-map predicate
-`_root_.IsPrimitive`. The MPS predicates below retain distinct source or proof
-normalizations.
+Three notions are in use, each with one definition: the peripheral-spectrum
+predicate `_root_.IsPrimitive`, the algebraic span condition `Kraus.IsNormal`
+(see "Normality" above), and the complementary fixed-point gap
+`Kraus.HasComplementaryFixedPointGap`. The three properties of
+arXiv:0909.5347 (primitivity, eventually full Kraus rank, strong
+irreducibility) have no predicates of their own; Proposition 3 of that paper
+is the single theorem `MPSTensor.primitivity_tfae`, with each clause written
+out.
 
 ### `_root_.IsPrimitive`
 
 - **Declaration:**
   `_root_.IsPrimitive (E : V →ₗ[ℂ] V) : Prop`.
 - **Defined in:** `QICLean/Channel/Peripheral/Spectrum.lean`.
-- **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`.
+- **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`. For an
+  MPS tensor it is applied to the transfer map, as
+  `IsPrimitive (Kraus.transferMap A)`.
 - **Source:** Wolf, *Quantum Channels & Operations: Guided Tour*, §6.3,
   Theorem 6.7; compare arXiv:2011.12127 §IV.
 - **Sanctioned bridges:** `_root_.isPrimitive_iff` and
-  `_root_.isPrimitive_iff_period_one`.
+  `_root_.isPrimitive_iff_period_one`;
+  `MPSTensor.isPrimitive_transferMap_of_isNormal` for a normal left-canonical
+  tensor.
 - **Caveat:** `_root_.isPrimitive_iff_period_one` requires a specified nonzero
   fixed point and finiteness of `peripheralEigenvalues E`; it is not an
   unconditional period-one characterization of an arbitrary linear map. By
@@ -222,113 +276,58 @@ normalizations.
   positive-definite fixed point, trace preservation, or spectral radius one.
   Those facts must be supplied separately where required.
 
-### `MPSTensor.IsPeripherallyPrimitive`
-
-- **Declaration:**
-  `MPSTensor.IsPeripherallyPrimitive (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** a reducible MPS terminology alias for
-  `_root_.IsPrimitive (Kraus.transferMap A)`.
-- **Source:** Wolf §6.3, Theorem 6.7, and arXiv:0909.5347 Proposition 3(c).
-- **Sanctioned bridge:**
-  `MPSTensor.isPeripherallyPrimitive_of_isPrimitivePaper`.
-- **Caveat:** the last bridge requires `[NeZero D]` and the left-canonical
-  normalization `∑ i, (A i)ᴴ * A i = 1`.
-
-### `MPSTensor.IsPrimitivePaper`
-
-- **Declaration:**
-  `MPSTensor.IsPrimitivePaper (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** the uniform spreading condition from Proposition 3(a): at one
-  positive length `q`, all nonzero virtual vectors are spread by length-`q`
-  Kraus words to the whole virtual space.
-- **Source:** Sanz--Pérez-García--Wolf--Cirac, arXiv:0909.5347,
-  Proposition 3(a), `Papers/0909.5347/main.tex:403-409` and `:501-509`;
-  Wolf Chapter 6, Theorem 6.8.
-- **Sanctioned bridges:**
-  `MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank`, which is also
-  the Kraus-span form of Wolf Theorem 6.8, and
-  `MPSTensor.primitivePaper_iff_stronglyIrreducible`.
-- **Caveat:** each stated equivalence requires `[NeZero D]` and the explicit
-  left-canonical normalization `∑ i, (A i)ᴴ * A i = 1`. The unconditional
-  directions `MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank` and
-  `MPSTensor.isPrimitivePaper_of_isNormal` do not remove those hypotheses from
-  the converse direction.
-
-### `MPSTensor.HasEventuallyFullKrausRank`
-
-- **Declaration:**
-  `MPSTensor.HasEventuallyFullKrausRank (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** some positive-length Kraus-word space is the full matrix algebra.
-- **Source:** arXiv:0909.5347, definition after equation (1),
-  `Papers/0909.5347/main.tex:413-419`.
-- **Sanctioned bridge:**
-  `MPSTensor.hasEventuallyFullKrausRank_iff_isNormal` is unconditional.
-  Its Proposition 3 equivalences are the normalization-conditional declarations
-  listed under `IsPrimitivePaper`.
-- **Caveat:** despite appearing in the primitivity development, this is the same
-  algebraic eventual-span condition as `Kraus.IsNormal`, not the generic
-  peripheral-spectrum predicate `_root_.IsPrimitive`.
-
-### `MPSTensor.IsPrimitiveMPS` and `MPSTensor.HasPrimitiveFixedPoint`
+### `Kraus.HasComplementaryFixedPointGap`
 
 - **Declarations:**
-  `MPSTensor.IsPrimitiveMPS A ρ` and
-  `MPSTensor.HasPrimitiveFixedPoint A`.
-- **Defined in:** `TNLean/MPS/Structure/PrimitiveFixedPoint.lean` as reducible
-  abbreviations for `Kraus.HasComplementaryFixedPointGap A ρ` and
-  `Kraus.HasPrimitiveFixedPoint A`.
-- **Meaning:** `IsPrimitiveMPS A ρ` exposes the QIC finite-Kraus certificate packaging
-  left-canonical normalization, a nonzero positive-semidefinite fixed point `ρ`, and
-  spectral radius less than one on the complement of the fixed-point projection.
-  `HasPrimitiveFixedPoint A` uses the QIC existential certificate directly.
+  `Kraus.HasComplementaryFixedPointGap A ρ`, with the existential form
+  `Kraus.HasPrimitiveFixedPoint A`, in
+  `QICLean/Kraus/PrimitiveFixedPoint/Basic.lean`. It has no second name in
+  TNLean; lemmas about it are stated in the namespace
+  `Kraus.HasComplementaryFixedPointGap`.
+- **Meaning:** left-canonical normalization, a nonzero positive-semidefinite
+  fixed point `ρ`, and spectral radius less than one on the complement of the
+  fixed-point projection.
 - **Source:** the complementary transfer-map-gap formulation used in the MPS
   convergence route; compare Wolf §6.3, Theorem 6.7, and the convergence
   consequences of arXiv:0909.5347 Proposition 3.
 - **Sanctioned bridges:**
-  QICLean's `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive`,
-  `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`,
-  `MPSTensor.isPrimitiveMPS_of_isStronglyIrreduciblePaper`, and
-  `MPSTensor.isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef`.
-- **Caveat:** every listed bridge requires `[NeZero D]`. The two bridges from
-  peripheral primitivity additionally require left-canonical normalization and,
-  respectively, injectivity or irreducibility.
-  `isPrimitiveMPS_of_isStronglyIrreduciblePaper` likewise requires the explicit
-  left-canonical equation; strong irreducibility alone is insufficient. The
-  bridge in the opposite direction requires `ρ.PosDef`; PSD alone is
-  insufficient. Consequently `HasPrimitiveFixedPoint` is not an unconditional
-  synonym for any of the preceding predicates.
+  QICLean's `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive` and
+  `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`;
+  `MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive`
+  and `MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isNormal`; in the
+  opposite direction
+  `MPSTensor.isNormal_of_hasComplementaryFixedPointGap_with_posDef`,
+  `Kraus.HasComplementaryFixedPointGap.isPrimitive` and
+  `Kraus.HasComplementaryFixedPointGap.isIrreducibleMap_of_posDef`.
+- **Caveat:** every listed bridge requires `[NeZero D]`. The bridges into the
+  gap require left-canonical normalization. The bridges to normality and to
+  irreducibility require `ρ.PosDef`; positive semidefiniteness alone is
+  insufficient.
 
-### `MPSTensor.IsStronglyIrreduciblePaper`
+### Proposition 3 of arXiv:0909.5347
 
-- **Declaration:**
-  `MPSTensor.IsStronglyIrreduciblePaper (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/Wielandt/Primitivity/Definitions.lean`.
-- **Meaning:** the project's strengthened interpretation of Proposition 3(c):
-  a positive-definite fixed point, peripheral primitivity, and an explicit
-  `IsIrreducibleMap` conjunct. The last conjunct formalizes the paper's phrase
-  “the corresponding eigenvector” as uniqueness of the fixed-point space, as
-  documented in the declaration's source comment.
-- **Source:** arXiv:0909.5347 Proposition 3(c),
-  `Papers/0909.5347/main.tex:420-430` and `:501-509`; Wolf Theorem 6.7(3).
-- **Sanctioned bridges:**
-  `MPSTensor.primitivePaper_iff_stronglyIrreducible` and
-  `MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible`.
-- **Caveat:** both equivalences require `[NeZero D]` and left-canonical
-  normalization. The explicit irreducibility conjunct is additional data beyond
-  the cited passage's literal positive-eigenvector and peripheral-uniqueness
-  wording; it records the interpretation above and makes this predicate
-  strictly stronger than peripheral primitivity alone.
-- **Literal source criterion:**
-  `MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint` and
-  `MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint`
-  in `TNLean/Wielandt/Primitivity/PeripheralCriterion.lean` state the source's
-  third clause directly, with a positive-definite fixed matrix spanning the
-  fixed eigenspace and no other peripheral eigenvalue. Their reverse direction
-  derives irreducibility through QICLean's channel criterion; it does not
-  assume it as additional input.
+- **Declaration:** `MPSTensor.primitivity_tfae`, in
+  `TNLean/Wielandt/Primitivity/Equivalence.lean`.
+- **Statement:** for `[NeZero D]` and a left-canonical tensor
+  (`∑ i, (A i)ᴴ * A i = 1`), the following are equivalent:
+  (a) some positive length `q` has `Kraus.vectorSpreadSpan A φ q = ⊤` for every
+  nonzero `φ`; (b) some positive length `n` has `Kraus.wordSpan A n = ⊤`;
+  (c) there is a positive-definite fixed matrix of `Kraus.transferMap A` that
+  spans the fixed eigenspace, and `IsPrimitive (Kraus.transferMap A)`.
+- **Source:** Sanz--Pérez-García--Wolf--Cirac, arXiv:0909.5347, the three
+  definitions at `Papers/0909.5347/main.tex:403-430` and Proposition 3 at
+  `:501-509`; Wolf Chapter 6, Theorems 6.7 and 6.8.
+- **Relation to the kept notions:** clause (b) is `Kraus.IsNormal A` by
+  definition. Clause (c) is the source's literal one; irreducibility of the
+  transfer map is a consequence
+  (`MPSTensor.isIrreducibleMap_transferMap_of_isNormal`), not an assumption.
+- **Caveat:** the implication from (b) to (a),
+  `MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal`, needs no
+  normalization; the other implications do. The predicates
+  `MPSTensor.IsPrimitivePaper`, `MPSTensor.HasEventuallyFullKrausRank`,
+  `MPSTensor.IsStronglyIrreduciblePaper`, `MPSTensor.IsPeripherallyPrimitive`
+  and `MPSTensor.HasPrimitiveFixedPoint` were removed; see
+  `docs/audits/2026-11-16_primitivity_one_definition.md`.
 
 ## Injectivity
 
@@ -345,7 +344,7 @@ normalizations.
   `Papers/2011.12127/TN-Review-main.tex:298-300`.
 - **Sanctioned bridges:** `Kraus.isNBlkInjective_one_of_isInjective`,
   `Kraus.IsInjective.isNormal`, and
-  `MPSTensor.isNBlkInjective_iff_blockTensor_isInjective`.
+  `Kraus.isNBlkInjective_iff_blockTensor_isInjective`.
 - **Caveat:** this is one-site injectivity. A tensor can fail this predicate and
   satisfy `Kraus.IsNBlkInjective A N` for a larger `N`.
 
@@ -360,8 +359,8 @@ normalizations.
   eventual full Kraus rank; arXiv:2011.12127 §IV.A, normal tensors becoming
   injective after blocking.
 - **Sanctioned bridge:**
-  `MPSTensor.isNBlkInjective_iff_blockTensor_isInjective` in
-  `TNLean/MPS/Core/Blocking.lean`.
+  `Kraus.isNBlkInjective_iff_blockTensor_isInjective` in
+  `QICLean/Kraus/Blocking.lean`.
 - **Caveat:** no positivity condition on `N` is built into this predicate;
   `Kraus.IsNormal` explicitly requires a positive witness.
 
@@ -1712,7 +1711,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
-- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
+- **Defined in:** `TNLean/Circuit/SupportedOperators.lean`.
 - **Meaning:** the complex span of the product operators
   `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
   `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S` of a finite type
@@ -2047,7 +2046,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsLocalPerm {ι : Type*} (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
-- **Defined in:** `TNLean/Circuit/Gates/Permutation.lean`.
+- **Defined in:** `TNLean/Circuit/SitePermutation.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
   `S`.
@@ -2487,6 +2486,118 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** no converse is asserted. The predicate fixes the accuracy before
   the polynomial; it is not a statement about a single chain length, and it is
   not the half-trace-norm convention.
+
+### `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound`
+
+- **Declaration:**
+  `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound (L q p r count : ℕ) (xi : ℝ) (S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))) : Prop`.
+- **Defined in:** `TNLean/MPS/AreaLaw/IntervalGenerators.lean`.
+- **Meaning:** there are `n ≤ count` vectors `u i` on the interval `[p, r]`
+  whose span is exactly `S`, and every internal cut `j < r - p - 1` of every
+  `u i` has Schmidt rank `R` with `xi² R ≤ count`.
+- **Source:** Arad–Landau–Vazirani–Vidick, arXiv:1602.08828v2, collective
+  trimming, lines 646–697 (the count and per-vector rank bounds retained by
+  `lem:trimming`), used in the degenerate-ground-space construction,
+  lines 1777–1817.
+- **Sanctioned bridges:**
+  `IsIntervalSpanWithRankBound.finrank_le` (the recorded count bounds
+  `finrank S`); `isIntervalSpanWithRankBound_intervalTrimSubspace` (the
+  collective trim of an orthonormal basis of size `n ≤ count` satisfies the
+  predicate).
+- **Caveat:** the cutwise rank bound is a property of an existentially chosen
+  spanning family, not of every vector in `S`. A linear combination of the
+  generators can have Schmidt rank up to the sum of their ranks, so no uniform
+  rank bound on the whole span follows.
+
+## Ground-state algorithm oracles
+
+These predicates record what a solver of the one-dimensional ground-state
+algorithm of Landau–Vazirani–Vidick (LVV13, arXiv:1307.5143v1, `algo53.tex`) must
+return for the correctness and cost theorems to apply. Each is satisfied by the
+chosen honest construction, so the honest-oracle statements are instances. They
+lift, for correctness, the honest-oracle restriction recorded in
+`docs/paper-gaps/lvv13_cost_model.tex`.
+
+### `TNLean.MPS.AreaLaw.IsBoundaryProgramSolution`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/FiniteBoundarySelection.lean`.
+- **Meaning:** `σ` is a feasible density of the size-trimming convex program at the
+  boundary point `X` (positive semidefinite, trace one, supported on `span S ⊗ ℂᵐ`,
+  with partial trace within trace-norm distance `η` of `X`) of least left energy
+  among all feasible densities, and `u` is a unit eigenvector of `σ` for its
+  largest eigenvalue `μ > 0`, fixed by the span projection.
+- **Source:** LVV13, `algo53.tex`, equation `eq:conv` and lines 477–478.
+- **Sanctioned bridges:** `isAdmissibleLeadingVector_boundaryLeadingVector` (the
+  chosen minimizer and its leading vector solve the program).
+- **Caveat:** optimality is exact; an approximate solver of the convex program is
+  not covered.
+
+### `TNLean.MPS.AreaLaw.IsAdmissibleLeadingVector`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/FiniteBoundarySelection.lean`.
+- **Meaning:** at every boundary point with a nonempty feasible set, the assignment
+  returns the leading vector of some `IsBoundaryProgramSolution`.
+- **Source:** LVV13, `algo53.tex`, lines 219 and 484–487 (any solver of the convex
+  programs).
+- **Sanctioned bridges:** `isAdmissibleLeadingVector_boundaryLeadingVector`; it is
+  the `leadingVector` field of `LinearAlgebraQuery.IsValidOracle`.
+- **Caveat:** nothing is asserted at infeasible boundary points.
+
+### `TNLean.MPS.AreaLaw.ChainHamiltonian.IsAdmissibleNet` and `IsAdmissibleSolver`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/SizeTrimming.lean`.
+- **Meaning:** `IsAdmissibleNet` says that for every bond dimension `m` up to the
+  uniform cut bound, the net covers the trace-norm unit ball of boundary densities
+  within `c / (2L)`, `c = (Δ / 169)²`. `IsAdmissibleSolver` says that at every bond
+  dimension the solver is an `IsAdmissibleLeadingVector` for the left part of the
+  Hamiltonian at tolerance `c / (2L)`.
+- **Source:** LVV13, `algo53.tex`, equation `eq:conv`, lines 472–478, and Claim
+  `c:2`, lines 520–527.
+- **Sanctioned bridges:** `ChainHamiltonian.sizeTrimmingSelectionWith_subset_span`
+  (the selection of an admissible solver lies in the span of the input family);
+  `isAdmissibleNet_oracleNets` and `isAdmissibleSolver_oracleSolver` (a valid
+  oracle supplies both).
+- **Caveat:** `IsAdmissibleNet` bounds no cardinality; the point count used by the
+  cost bound is the separate `boundaryNet_card` field of `IsValidOracle`.
+
+### `TNLean.MPS.AreaLaw.IsAdmissibleFilterFactors`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/Huang/ViableFilter.lean`.
+- **Meaning:** a finite family `F` of left factors at cut `i` contains, for every
+  Gaussian filter approximant, the left factors of some cut decomposition
+  `∑ₜ Aₜ ⊗ Bₜ` of that approximant.
+- **Source:** LVV13, `algo53.tex`, error reduction, with the Gaussian filter of the
+  Huang route.
+- **Sanctioned bridges:** `isAdmissibleFilterFactors_gaussianFilterFactors` (the
+  chosen factors are admissible);
+  `isViable_errorReductionSet_of_isAdmissibleFilterFactors` (error reduction with
+  admissible factors is viable).
+- **Caveat:** the predicate bounds neither the number of factors nor their Schmidt
+  ranks; those bounds are the `gaussianFilterFactors_card` and
+  `gaussianFilterFactors_rank` fields of `IsValidOracle`.
+
+### `TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle`
+
+- **Defined in:** `TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean`.
+- **Meaning:** an oracle for the linear-algebra queries of the ground-state program
+  that answers the deterministic queries (site extension, Schmidt trimming,
+  applying a factor, feasibility) exactly, returns trace-norm nets with the
+  standard cover and point bound, admissible leading vectors, admissible filter
+  and sampled factors with the standard count and rank bounds, and a unit vector
+  of least energy for the final program.
+- **Source:** LVV13, `algo53.tex`, lines 219 and 484–487, and the proof of
+  Theorem 1, lines 652–678.
+- **Sanctioned bridges:** `LinearAlgebraQuery.isValidOracle_honestOracle`;
+  correctness `groundStateProgram_spec_of_valid`, `sweepProgram_spec_of_valid` and
+  the sampled variants `sampledGroundStateProgram_spec_of_valid`,
+  `measureReal_sampledGroundStateProgram_success_of_valid`; cost
+  `cost_groundStateProgram_le_of_valid`,
+  `exists_groundStateProgram_cost_polynomial_of_valid`, and on the sampled route
+  `cost_sampledGroundStateProgram_le_of_valid` and
+  `exists_sampledGroundStateProgram_success_cost_polynomial_of_valid`; Theorem 1
+  with explicit accuracy `exists_theorem_one_of_valid`.
+- **Caveat:** feasibility answers must equal the honest ones, and optimal convex
+  solutions are exact; numerical tolerance in the solver is not modelled.
 
 ## Worked examples
 
@@ -3096,10 +3207,17 @@ involve no boundary.
   cohomology equivalence when the fixed-space and injectivity assumptions hold
   at every parameter; preconnectedness extends the local conclusion.
 - **Caveat:** the relation contains no virtual representation, factor system,
-  or continuous canonical bond data. Its general converse remains open:
-  continuous balanced canonical data and the surviving invariant bond subspace
-  must be derived from the physical gap when minimal bond dimensions change.
-  The obstruction to using raw tensor continuity alone is documented in
+  or continuous canonical bond data. Its converse, the cohomology obstruction
+  `MPSTensor.IsSameExactMPSGappedPhase.cohomologousTo`, is proved through
+  changes of minimal bond dimension. Every clause matches the source's phase
+  relation for paths with unique MPS ground states except the continuous
+  ambient tensor family of `MPSTensor.ExactMPSGroundPath`: arXiv:1010.3732
+  derives that family from the gap (Section II.F.2, lines 938–991) instead
+  of assuming it. The one-site injective endpoint domain of the
+  classification theorems is the source's standard-form convention. The
+  decision and the plan for a pointwise converse are recorded in
+  `docs/paper-gaps/spc11_spt_classification_continuous_realization.tex`;
+  the obstruction to using raw tensor continuity alone is documented in
   `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 
 ## Exact circuits with initialized auxiliaries

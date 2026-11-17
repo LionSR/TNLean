@@ -7,6 +7,7 @@ import TNLean.Circuit.Channel.PhysicalPortDilation
 import QICLean.Channel.MaximalOverlap
 import QICLean.Channel.EnvironmentDilation
 import Mathlib.LinearAlgebra.Matrix.DotProduct
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Pure outputs of physical-port unitary dilations
@@ -70,10 +71,7 @@ private theorem exists_product_of_pure_marginal
   have hProduct : star Ω ⬝ᵥ Ω = (star φ ⬝ᵥ φ) * (star η ⬝ᵥ η) := by
     simp only [dotProduct, Fintype.sum_prod_type, Pi.star_apply, hfactor,
       star_mul', Finset.sum_mul_sum]
-    apply Finset.sum_congr rfl
-    intro s _
-    apply Finset.sum_congr rfl
-    intro e _
+    refine Finset.sum_congr₂ fun s _ e _ ↦ ?_
     ring
   refine ⟨η, ?_, hfactor⟩
   rw [hφ, one_mul] at hProduct

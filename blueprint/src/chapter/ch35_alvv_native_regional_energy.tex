@@ -1,0 +1,59 @@
+\section{The actual native compressed regional minimum}
+
+\begin{lemma}[A one-sided estimate from a viable interval space]
+    \label{lem:native_regional_compressed_energy_estimate}
+    \lean{TNLean.MPS.AreaLaw.exists_native_regional_compressed_energy_estimate}
+    \leanok
+    \uses{lem:regional_ground_energy_bound}
+    Let $H=\sum_i h_i$ be a chain of $L$ sites of positive local
+    dimension, with $0\le h_i\le I$ supported on sites $i,i+1$.
+    Fix an interval $J$ and let $G$ be the full ground space of $H$.
+    There is an actual Hermitian matrix $K_J$ on the native Hilbert
+    space of $J$ whose extension by the identity equals the sum of
+    the bonds internal to $J$. Set $e_J=\lambda_{\min}(K_J)$.
+    These data are chosen before every candidate subspace below.
+
+    Identify the full Hilbert space with
+    $\mathcal H_J\otimes\mathcal H_{J^c}$ by the standard coordinate
+    isometry $T_J$. Let $S\subseteq\mathcal H_J$ be $\delta$-viable
+    for $T_JG$, where
+    \[
+        0\le\delta\le\frac{1}{100(L+1)}.
+    \]
+    Then $S$ has positive dimension. Its actual orthogonal compression
+    $P_SK_J|_S$ has least eigenvalue $\lambda_S$ satisfying
+    \[
+        e_J\le\lambda_S\le e_J+3.
+    \]
+    Thus the actual estimate $p_S=\lambda_S-3$ satisfies
+    $e_J-3\le p_S\le e_J$. Empty intervals and chain endpoints are
+    included; no gap or unique ground vector is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    Restrict the regional matrix to a fixed complementary configuration
+    to obtain $K_J$. Designated support makes its identity extension
+    equal to the original regional sum. Restricting positive scalar
+    lower bounds to this slice, and lifting the canonical lower bound
+    of $K_J$ back to the full space, identifies the two regional minima.
+
+    Pull $S\otimes\mathcal H_{J^c}$ back to the physical space. The
+    preceding lemma gives an actual nonzero candidate vector of
+    centered regional energy at most three times its squared norm.
+    Transport it by $T_J$ and expand along an orthonormal basis of
+    the complementary factor. One nonzero slice lies in $S$ and
+    has Rayleigh quotient at most $e_J+3$. This bounds the actual
+    compressed minimum from above. Positivity of $K_J-e_JI$ gives
+    the lower bound. Subtracting three gives the stated estimate.
+\end{proof}
+
+The loss bound in this lemma is explicit. A constant-accuracy viable
+space does not alone satisfy it: in particular, a recorded loss of
+$3/200$ is insufficient. The energy-estimation step of
+\cite[Figure~\texttt{fig:algo1}, lines 1631--1632, and lines
+    1793--1807]{Arad2016RigorousRG} uses a separate untrimmed powered image of the child product as
+its energy candidate, and compresses the generated soft regional
+Hamiltonian on that space. Its smaller operator norm and the accuracy
+of that same construction require a separate argument. The present
+lemma proves a conditional estimate for the original regional
+Hamiltonian; it does not complete the recursive energy invariant,
+the generation procedure, or its running-time estimate.

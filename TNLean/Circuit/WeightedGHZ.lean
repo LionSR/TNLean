@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.ExpectationBounds
 import TNLean.Circuit.GHZState
+import TNLean.Circuit.LocalCircuit
 import TNLean.Circuit.SupportedMatrixElements
 
 /-!

@@ -14,8 +14,8 @@ Checks:
 
 * figure files: flat ``[a-z0-9_]+.tex`` names, ASCII only, a ``% Figure`` /
   ``% Owner:`` / ``% Used by:`` header, exactly one top-level display
-  (``tenkzequation``, ``tenkz`` or ``tikzcd``, or one picture in ``center``)
-  and nothing else outside comments, no blank line inside it, no
+  (``tenkzequation``, ``tenkz``, ``tikzcd`` or ``quantikz``, or one picture in
+  ``center``) and nothing else outside comments, no blank line inside it, no
   ``\\label``/``\\lean``/``\\uses``/``\\leanok``/``\\notready``/refs/cites/
   definitions/inputs, no theorem-like environment or raw ``tikzpicture``, no
   blueprint macro outside the provided four, no ``\\tnset``/``\\tndeclare``/
@@ -76,8 +76,8 @@ HOST_RE = re.compile(
 ALLOWED_NON_FIGURES = {"README.md", ".gitkeep"}
 PROVIDED = ("ket", "bra", "C", "spn")
 
-DISPLAY_ENVS = {"tenkzequation", "tenkz", "tikzcd"}
-PICTURE_ENVS = {"tenkz", "tikzcd"}
+DISPLAY_ENVS = {"tenkzequation", "tenkz", "tikzcd", "quantikz"}
+PICTURE_ENVS = {"tenkz", "tikzcd", "quantikz"}
 FORBIDDEN_ENVS = {
     "theorem", "proposition", "lemma", "corollary", "definition", "remark",
     "example", "proof", "conjecture", "notation", "claim", "tikzpicture",
@@ -265,7 +265,7 @@ def check_figure(
         if env.name == "center":
             inner = [e for e in envs if e.depth == 1 and env.start < e.start < env.end]
             if len(inner) != 1 or inner[0].name not in PICTURE_ENVS:
-                fail(line_of(text, env.start), "a top-level center must hold one tenkz or tikzcd")
+                fail(line_of(text, env.start), "a top-level center must hold one tenkz, tikzcd or quantikz")
         elif env.name not in DISPLAY_ENVS:
             fail(line_of(text, env.start), f"top-level \\begin{{{env.name}}} is not a display")
         # Check the raw lines: stripping comments blanks comment-only lines, which TeX

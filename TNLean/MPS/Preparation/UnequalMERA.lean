@@ -30,6 +30,7 @@ and the Supplemental Material, proof of Theorem 1, where the last block may be l
 
 open Matrix MPSTensor
 open scoped BigOperators InnerProductSpace
+open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace MPSPreparation
 

@@ -160,7 +160,6 @@ theorem eval_castLayouts_memCongr {a b a' b' : Layout P} (w : OriginalCircuit a 
   cases ha
   cases hb
   rfl
-
 theorem norm_memCongr_sub {a b : Layout P} (h : a = b) (x y : Mem a) :
     ‖Layout.memCongr h x - Layout.memCongr h y‖ = ‖x - y‖ := by
   rw [← map_sub, LinearIsometryEquiv.norm_map]

@@ -39,6 +39,7 @@ of the blocks with the norm of the target. The error bounds themselves are
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

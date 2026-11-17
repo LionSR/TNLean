@@ -192,10 +192,7 @@ private theorem twoLinkMiddleLift_mul_boundaryInput_apply
   simp only [Finset.mem_univ, ite_true, Finset.sum_ite_irrel,
     Finset.sum_const_zero, Finset.sum_ite_eq]
   simp only [Finset.mul_sum, Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro x₁ _
-  apply Finset.sum_congr rfl
-  intro x₂ _
+  refine Finset.sum_congr₂ fun x₁ _ x₂ _ ↦ ?_
   ring
 
 private theorem twoLink_boundaryInput_pullThrough

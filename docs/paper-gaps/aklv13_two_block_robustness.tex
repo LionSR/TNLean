@@ -5,12 +5,12 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 \input{command}
-\title{AKLV's two exterior truncations: source conventions and large-window robustness}
+\title{AKLV's two exterior truncations: source conventions and robustness for every window}
 \author{}
-\date{2026-10-29}
+\date{2026-11-15}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{wip}
+\gapnote{local-correction}{resolved}
 
 \section{The original bounded-term setting remains part of the argument}
 
@@ -57,7 +57,7 @@ The three reference regions are
 $[0,a+1)$, $[a+3,a+s-2)$, and $[a+s,L)$.
 Their actual internal sums $A_j$ have pairwise disjoint supports. The
 module \doclink{TNLean/MPS/AreaLaw/AKLV/Normalization} constructs genuine minima $e_j$
-and a common unit vector attaining them. The remaining six boundary
+and a common unit vector attaining them. The remaining at most six boundary
 contractions give an attained ground energy $E_0\in[0,6]$ for
 $H=\sum_i h_i-(\sum_j e_j)\Id$.
 
@@ -115,23 +115,76 @@ polynomial-threshold conclusions follow as corollaries without changing
 their physical hypotheses. The later changing-target and entropy
 construction remains separate.
 
-\section{The remaining finite-window restriction}
+\section{Windows of every width}
 
-The proved geometry assumes $s\ge6$, so the six boundary labels are
-distinct; at $s=6$ the middle reference sum is empty and is normalized by
-its genuine minimum zero. The source does not state a numerical minimum
-for $s$ beside Theorem~6.1. Its application at line 1023 chooses
-$s=O(\log^2 d/g)$ with a sufficiently large constant. The actual uniform
-choice in \doclink{TNLean/MPS/AreaLaw/AKLV/FavorableFilter} proves $s\ge21$,
-so this application satisfies the six-interaction restriction.
-Windows with fewer than six interactions remain separate. The blueprint
-states this restriction explicitly and does not identify the large-window
-statement with an unrestricted all-window formulation of the printed theorem.
+The normalization holds for every $s\ge1$. For $s\ge6$ the six
+boundary labels $a,a+1,a+2,a+s-3,a+s-2,a+s-1$ are distinct; at $s=6$ the
+middle reference sum is empty and is normalized by its genuine minimum
+zero. For $s\le5$ the middle reference region $[a+3,a+s-2)$ is
+empty, and the remaining boundary labels are exactly the $s$ window starts
+$a,\ldots,a+s-1$. In every case at most six boundary contractions remain,
+so $0\le E_0\le6$. The three reference regions $[0,a+1)$,
+$[a+3,a+s-2)$ and $[a+s,L)$ are pairwise disjoint once $s\ge1$.
+
+\paragraph{The enlarged arrangement, $s\ge3$.}
+The two-exterior truncation used by the clipped filter and the rank
+estimate clips the enlarged sums $C_0=A_0+h_a$ on $[0,a+2)$ and
+$C_2=h_{a+s-1}+A_2$ on $[a+s-1,L)$. Its only geometric requirement is
+$a+2\le a+s-1$: the enlarged exteriors then have disjoint supports, and
+the retained middle consists of the $s-2$ interactions
+$h_{a+1},\ldots,h_{a+s-2}$. For $s=2$ the enlarged exteriors share the
+site $a+1$, and for $s=1$ the single window interaction would belong to
+both of them.
+
+\paragraph{The reference arrangement, $s\ge1$.}
+The exponential residual comparison uses the cuts $l\le r$ only through
+two facts: the three regional sums dominate the subtracted minima, and
+every bond crossing a cut has norm at most one. Take $l=a+1$ and $r=a+s$.
+The exterior regional sums are then the reference sums $A_0$ on
+$[0,a+1)$ and $A_2$ on $[a+s,L)$ themselves, whose minima $e_0,e_2$ are
+attained. The middle regional sum on $[a+1,a+s)$ contains $A_1$, since
+$[a+3,a+s-2)\subseteq[a+1,a+s)$, and positivity of the remaining bonds
+gives $e_1\Id\le C_1$. The two crossing bonds are $h_a$ and $h_{a+s-1}$,
+equal when $s=1$. So the truncation
+\begin{align}
+ B&=\min(A_0,(e_0+t)\Id)+\sum_{i=a}^{a+s-1}h_i+\min(A_2,(e_2+t)\Id)
+   -\Bigl(\sum_je_j\Bigr)\Id
+ \label{eq:aklv13_two_block_robustness_reference_truncation}
+\end{align}
+clips two operators with disjoint supports and retains all $s$ window
+interactions. The exponential residual comparison, the spectral cluster and
+the robustness theorem then apply verbatim, with the same genuine minima,
+the same thresholds $T(g)$ and $(1024/g)(E_0/g+1)$, the same gap $9g/10$
+and the same squared error $e^{-t/16}/100$. This is proved for every
+$s\ge1$ in \doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalRobustness}, and in
+particular for $s\in\{1,2\}$.
+
+\paragraph{Classification.}
+The source construction at lines 901--925 is written for a long window and
+does not single out a decomposition for $s\le2$; it is not degenerate in
+the sense of an unintended reading, because the robustness conclusion
+holds there. Using the reference arrangement for those widths is a local
+choice of the two clipped operators, both of which are original
+nearest-neighbour sums of the source's left and right blocks. No
+counterexample and no additional hypothesis is involved. The enlarged
+arrangement is retained for $s\ge3$ because the clipped filter and the
+changing-target construction use its shorter retained window.
+
+The source does not state a numerical minimum for $s$ beside
+Theorem~6.1. Its application at line 1023 chooses $s=O(\log^2 d/g)$ with
+a sufficiently large constant. The actual uniform choice in
+\doclink{TNLean/MPS/AreaLaw/AKLV/FavorableFilter} proves $s\ge21$, so this
+application satisfies the restriction. The clipped filter and the
+changing-target sequence keep the stronger requirement $s\ge6$, which
+they use in their division-with-remainder degree count; the application
+satisfies it as well. The blueprint states the restriction $s\ge3$
+explicitly for the enlarged arrangement, and states the reference
+arrangement for every $s\ge1$ separately.
 The actual favorable square-degree filter and initial product approximation
 are constructed for every window selected by the universal scalar choice
 that fits in the chain. The fixed-window changing-target sequence is now constructed by actual
-normalized polynomial images with an exact product rank budget. Finite
-small windows remain a separate robustness statement. The entropy
+normalized polynomial images with an exact product rank budget. Windows of
+one or two interactions are covered by the reference arrangement above. The entropy
 argument from the actual coherent sequence is completed below. The
 accuracy-dependent enlarged-window optimization is completed below,
 including exact boundary alternatives for chains too short for that window.
@@ -290,4 +343,7 @@ interaction independently of window fit. No supplied spectral tail,
 approximant, filter, or independent area-law theorem is used. The displayed
 logarithmic gap dependence is retained explicitly; no sharper dependence
 with all inverse-gap logarithms removed is asserted.
+The note \path{docs/paper-gaps/aklv13_entropy_inverse_gap_logarithm.tex}
+proves that no parameter choice in the Chebyshev and rank estimates removes
+these logarithms.
 \end{document}

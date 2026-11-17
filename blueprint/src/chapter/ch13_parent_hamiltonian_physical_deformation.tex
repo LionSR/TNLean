@@ -134,6 +134,35 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     induction on $N$ yields the formula.
 \end{proof}
 
+\begin{lemma}[Boundary spaces under physical embeddings]
+    \label{thm:spt_physical_embedding_boundary}
+    \lean{Matrix.rectKronecker_conjTranspose,
+        Matrix.rectKronecker_conjTranspose_mul_self,
+        MPSTensor.groundSpaceMap_rotatePhysical_rectangular,
+        MPSTensor.groundSpace_rotatePhysical_rectangular,
+        MPSTensor.groundSpaceES_rotatePhysical_rectangular}
+    \leanok
+    \uses{def:physical_rotation, def:ground_space_map, def:ground_space_es}
+    Let $E:\mathbb C^d\to\mathbb C^m$ be a linear map and let
+    $(EA)^i=\sum_jE_{ij}A^j$. Write $T_L=E^{\otimes L}$. Then
+    $\Gamma_L^{EA}(X)=T_L\Gamma_L^A(X)$ and
+    $G_L(EA)=T_LG_L(A)$ for every boundary matrix $X$ and every $L\ge0$.
+    If $E^\dagger E=I$, then $T_L^\dagger T_L=I$.
+    More generally, adjoints distribute over finite tensor products:
+    $(\bigotimes_j E_j)^\dagger=\bigotimes_j E_j^\dagger$.
+    These identities apply to the physical inclusions in
+    \cite[Section~II.F.2]{Schuch2011Phases}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:physical_rotation_word, def:ground_space_map}
+    Expand each rotated letter in the ordered product. Taking the trace
+    against $X$ gives the boundary-map identity. Taking its range gives
+    the boundary-space identity, including its Hilbert-space realization.
+    Multiplication and adjoints commute with tensor powers, so
+    $T_L^\dagger T_L=(E^\dagger E)^{\otimes L}=I$.
+\end{proof}
+
 \begin{lemma}[State and boundary map of the rotated tensor]\label{lem:physical_rotation_state}
     \lean{MPSTensor.mpv_rotatePhysical_eq_toLin'}
     \lean{MPSTensor.groundSpaceMap_rotatePhysical}

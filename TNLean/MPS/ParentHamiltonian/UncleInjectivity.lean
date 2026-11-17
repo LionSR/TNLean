@@ -31,6 +31,7 @@ also holds for zero-dimensional blocks; no extra hypothesis is imposed.
 -/
 
 open scoped Matrix BigOperators Topology
+open Kraus (decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm)
 
 namespace MPSTensor
 

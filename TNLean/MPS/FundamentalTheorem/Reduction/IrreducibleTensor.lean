@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Eigenspace.Triangularizable
 import QICLean.Algebra.MatrixFamilyAction
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
+import TNLean.MPS.FundamentalTheorem.Reduction.GaugeWordModule
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
 
 /-!
 # Irreducible tensors: Schur's lemma, density and independence of traces
@@ -163,6 +164,12 @@ theorem eq_zero_or_exists_inverse_of_intertwines {D D' : ℕ} {C : MPSTensor d D
     rw [Matrix.toLin'_mul, Matrix.toLin'_toMatrix', Matrix.toLin'_one]
     exact LinearMap.ext fun v => e.symm_apply_apply v
   · simpa using e.finrank_eq
+
+/-- A normal tensor of positive bond dimension has a nonzero letter. -/
+theorem exists_ne_zero_of_isNormal_of_pos {D : ℕ} {C : MPSTensor d D} (hC : Kraus.IsNormal C)
+    (hD : 0 < D) : ∃ i, C i ≠ 0 := by
+  have : NeZero D := ⟨hD.ne'⟩
+  exact exists_ne_zero_of_isNormal hC
 
 /-- **Schur's lemma, second assertion** (*The asymmetric fundamental theorem of matrix product
 states*, Lemma 3.1): a self-intertwiner of an irreducible tensor is a scalar. For `D ≥ 1`, `X` has

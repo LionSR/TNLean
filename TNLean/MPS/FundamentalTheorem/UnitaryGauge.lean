@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.MatrixGramUnitary
 import QICLean.Channel.Irreducible.PerronFrobenius
 import TNLean.MPS.Core.CanonicalNormalization
 import QICLean.Kraus.CPPrimitive
@@ -198,38 +199,15 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
     simp only [Matrix.mul_assoc]
   -- `W` is a fixed point of the adjoint transfer map: `∑ᵢ Aᵢᴴ W Aᵢ = W`.
   have hSfix : (∑ i, (A i)ᴴ * W * A i) = W := by
-    -- First: conjugating `∑ᵢ Aᵢᴴ W Aᵢ` by `X⁻¹` recovers the identity.
-    have e1 : (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ * (∑ i, (A i)ᴴ * W * A i) *
-        (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ) = 1 := by
-      calc
-        (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ * (∑ i, (A i)ᴴ * W * A i) *
-              (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)
-            = ∑ i, (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ * ((A i)ᴴ * W * A i) *
-                (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ) := by
-              rw [Finset.mul_sum, Finset.sum_mul]
-          _ = ∑ i, (B i)ᴴ * B i :=
-              Finset.sum_congr rfl (fun i _ => (hbb_term i).symm)
-          _ = 1 := hB_left
-    -- `Xᴴ Xⁱᴴ = 1`.
     have hVXi : (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ *
         (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := by
       rw [← Matrix.conjTranspose_mul, hXiXv, Matrix.conjTranspose_one]
-    -- Conjugate `e1` by `X` to extract the fixed-point identity.
-    have key : (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-          ((↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ * (∑ i, (A i)ᴴ * W * A i) *
-            (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)) * (↑X : Matrix (Fin D) (Fin D) ℂ)
-        = (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ * 1 * (↑X : Matrix (Fin D) (Fin D) ℂ) := by
-      rw [e1]
-    rw [show (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-            ((↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ * (∑ i, (A i)ᴴ * W * A i) *
-              (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)) * (↑X : Matrix (Fin D) (Fin D) ℂ)
-          = ((↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ *
-              (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ) * (∑ i, (A i)ᴴ * W * A i) *
-              ((↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ) * (↑X : Matrix (Fin D) (Fin D) ℂ))
-          from by simp only [Matrix.mul_assoc]] at key
-    rw [hVXi, hXiXv, Matrix.one_mul, Matrix.mul_one, Matrix.mul_one] at key
-    -- `key : ∑ᵢ Aᵢᴴ W Aᵢ = Xᴴ X = W`.
-    rw [key, hW_def]
+    have hcancel := congrArg
+      (fun Z : Matrix (Fin D) (Fin D) ℂ =>
+        (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ * Z * (↑X : Matrix (Fin D) (Fin D) ℂ)) hB_left
+    simp only [Finset.mul_sum, Finset.sum_mul, hbb_term] at hcancel
+    simp only [← Matrix.mul_assoc, hVXi, Matrix.one_mul] at hcancel
+    simpa only [Matrix.mul_assoc, hXiXv, Matrix.mul_one, Matrix.one_mul, ← hW_def] using hcancel
   -- Transfer-map phrasing of the fixed-point identity.
   have hWfix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) W = W := by
     rw [Kraus.transferMap_apply]
@@ -276,48 +254,13 @@ theorem exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
   obtain ⟨hc_re_pos, _⟩ := Complex.pos_iff.mp hc_pos
   have hc_eq : (c.re : ℂ) = c :=
     Complex.ext (Complex.ofReal_re c.re) (by rw [Complex.ofReal_im]; exact hc_im)
-  -- The unitary normalization scalar `s = √(c.re)`.
-  set s : ℝ := Real.sqrt c.re with hs_def
-  have hs_pos : 0 < s := Real.sqrt_pos.mpr hc_re_pos
-  have hs_ne : (s : ℂ) ≠ 0 := by exact_mod_cast ne_of_gt hs_pos
-  have hs_sq : s * s = c.re := Real.mul_self_sqrt (le_of_lt hc_re_pos)
-  have hsc : (s : ℂ) * (s : ℂ) = c := by rw [← Complex.ofReal_mul, hs_sq, hc_eq]
-  have hscalar : ((s : ℂ)⁻¹ * (s : ℂ)⁻¹) * c = 1 := by
-    rw [← hsc]; field_simp
-  have hconjs : star ((s : ℂ)⁻¹) = (s : ℂ)⁻¹ := by
-    rw [star_inv₀]
-    congr 1
-    exact Complex.conj_ofReal s
-  -- The unitary gauge matrix.
-  set U : Matrix (Fin D) (Fin D) ℂ :=
-    (s : ℂ)⁻¹ • (↑X : Matrix (Fin D) (Fin D) ℂ) with hU_def
-  have hU_unit : Uᴴ * U = 1 := by
-    rw [hU_def, Matrix.conjTranspose_smul, hconjs]
-    simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
-    rw [show (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ * (↑X : Matrix (Fin D) (Fin D) ℂ) = W
-        from hW_def.symm, hc, smul_smul, hscalar, one_smul]
-  have hU_mem : U ∈ Matrix.unitaryGroup (Fin D) ℂ :=
-    Matrix.mem_unitaryGroup_iff'.mpr (by rw [Matrix.star_eq_conjTranspose]; exact hU_unit)
-  -- `Xᴴ = c • X⁻¹`, the key for rewriting the conjugation.
-  have hXadj : (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ
-      = c • (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ) := by
-    have hmul := congrArg (· * (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ)) hc
-    simp only [hW_def] at hmul
-    rwa [Matrix.mul_assoc, hXvXi, Matrix.mul_one, smul_mul_assoc, Matrix.one_mul] at hmul
-  -- The unitary conjugation reproduces the gauge conjugation.
-  have hconj_i : ∀ i, U * A i * Uᴴ
-      = (↑X : Matrix (Fin D) (Fin D) ℂ) * A i * (↑X⁻¹ : Matrix (Fin D) (Fin D) ℂ) := by
-    intro i
-    rw [hU_def, Matrix.conjTranspose_smul, hconjs]
-    simp only [smul_mul_assoc, mul_smul_comm, smul_smul]
-    rw [hXadj]
-    simp only [mul_smul_comm, smul_smul]
-    rw [hscalar, one_smul]
-  -- Assemble the result.
-  refine ⟨⟨U, hU_mem⟩, hζ1, fun i => ?_⟩
-  rw [hB i]
-  congr 1
-  exact (hconj_i i).symm
+  have hGram : (↑X : Matrix (Fin D) (Fin D) ℂ)ᴴ * X = (c.re : ℂ) • 1 := by
+    simpa only [hW_def, hc_eq] using hc
+  refine ⟨⟨_, Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
+    hc_re_pos hGram⟩, hζ1, ?_⟩
+  intro i
+  simpa only [Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one
+    (A i) X hc_re_pos hGram] using hB i
 
 /-- **Per-sector unitarity of the canonical-form gauge.**
 

@@ -42,7 +42,7 @@ theorem isNBlkInjective_pow_four_of_isNormal [NeZero D]
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     Kraus.IsNBlkInjective A (D ^ 4) := by
   obtain ⟨B, ζ, ρ, hζ, hGauge, _hMPV, hP, _hρ, _hGS, _hPI, _hChain⟩ :=
-    exists_isPrimitiveMPS_gauge_of_isNormal hA
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   have hNormalB : Kraus.IsNormal B :=
     isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
   have hInjB : Kraus.IsNBlkInjective B (D ^ 4) :=
@@ -61,7 +61,7 @@ theorem exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective
       ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
         δ * ‖v‖ ≤ ‖openParentHamiltonianES A (p + 1) N v‖ := by
   obtain ⟨B, ζ, ρ, _hζ, _hGauge, _hMPV, hP, hρ, hGS, _hPI, _hChain⟩ :=
-    exists_isPrimitiveMPS_gauge_of_isNormal ⟨p, hp, hA⟩
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal ⟨p, hp, hA⟩
   obtain ⟨l, hlp, hl, hInjB, ε, hε, hsmall, hDefect⟩ :=
     ((Filter.eventually_ge_atTop p).and
       (hP.eventually_openChain_groundProjection_defect_mul_sqrt_lt hρ zero_lt_one)).exists

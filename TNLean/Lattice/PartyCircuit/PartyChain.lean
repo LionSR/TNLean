@@ -220,7 +220,7 @@ theorem stackAppIso_prepStack : {ℓX ℓY : Layout P} → (M : PartyChain ℓX 
     M.stackAppIso m ℓ ((M.prepStack m ℓ).eval x) = x ⊗ₜ M.toEffectChain.stackVector m
   | _, _, final _, _, _ => rfl
   | _, _, effect hpq α β ℓS w η rest, ℓ, x => by
-      simp only [prepStack, Word.eval_comp, comp_apply]
+      simp only [prepStack, Circuit.eval_comp, comp_apply]
       rw [stackAppIso_effect, iso_lTensor_apply, stackIso_prepWord, lTensor_tmul]
       simp only [isoL_apply]
       rw [stackAppIso_prepStack rest ℓ x, leftCommL_tmul]

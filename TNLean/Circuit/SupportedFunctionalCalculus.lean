@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Range
-import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SupportedOperators
 
 /-!
 # Functional calculus preserves finite quantum-circuit support

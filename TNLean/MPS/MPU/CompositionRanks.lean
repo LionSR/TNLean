@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.SimpleBlocking
+import TNLean.Algebra.FinSumPermutation
 
 /-!
 # Source-rank bounds for composition
@@ -60,10 +61,7 @@ private theorem sourceCutM₁_blockTwo_factorization (U : MPOTensor d D₁)
   rw [SourceFactors.blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂ U S I J a b,
     Fintype.sum_prod_type, Finset.sum_eq_single (finProdFinEquiv.symm J).2]
   · simp only [ite_true, Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro r _
-    apply Finset.sum_congr rfl
-    intro l _
+    refine Finset.sum_congr₂ fun r _ l _ ↦ ?_
     ring
   · intro x _ hx
     simp only [hx, ite_false, mul_zero, Finset.sum_const_zero]

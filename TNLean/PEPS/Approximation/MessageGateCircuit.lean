@@ -37,7 +37,7 @@ def toOriginalCircuit (L : MessageGate a b) (owner : C ↪ P)
     (hC : Fintype.card C ≠ 1) (hL : ∀ q ∈ L, q.2.IsAllowed)
     (hG : ‖L.eval‖ ≤ 1) (tail : Layout P) :
     OriginalCircuit (Layout.mapOwner owner a ++ tail) (Layout.mapOwner owner b ++ tail) :=
-  .nonprivateGate owner hC L.expand (L.isAllowed_expand hL)
+  OriginalCircuit.nonprivateGate owner hC L.expand (L.isAllowed_expand hL)
     ((congrArg norm L.eval_expand).trans_le hG) tail
 
 /-- Evaluation is exactly the original operator extended by the original
@@ -47,7 +47,8 @@ theorem eval_toOriginalCircuit (L : MessageGate a b) (owner : C ↪ P)
     (hG : ‖L.eval‖ ≤ 1) (tail : Layout P) :
     (L.toOriginalCircuit owner hC hL hG tail).eval =
       gateMemoryMap owner a b tail L.eval := by
-  simp only [toOriginalCircuit, OriginalCircuit.eval, L.eval_expand, gateMemoryMap]
+  simp only [toOriginalCircuit, Circuit.eval, GateFamily.eval, OriginalGate.toEffectGate,
+    EffectGate.eval, L.eval_expand, gateMemoryMap]
 
 /-- Message expansion does not split the original nonprivate occurrence. -/
 theorem nonprivateCount_toOriginalCircuit (L : MessageGate a b) (owner : C ↪ P)

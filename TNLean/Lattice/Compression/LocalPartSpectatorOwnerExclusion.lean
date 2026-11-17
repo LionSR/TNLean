@@ -45,7 +45,7 @@ private theorem restrict_localPart_comp_id (f : P → Bool) {a b c : Layout P}
   have hleft := (restrict_frameList_eval_heq_of_eq_nil f v.sources.layout hv
     w.localPart w.sources_localPart).trans hew
   have hcomp := eval_comp_heq
-    ((frameList v.sources.layout w.localPart).restrict f
+    (Word.restrict f (frameList v.sources.layout w.localPart)
       ((sources_frameList w.localPart v.sources.layout).trans w.sources_localPart))
     (v.localPart.restrict f v.sources_localPart) (Word.id T) (Word.id T)
     (by simp only [Layout.restrict_append, hv, hw, ha, List.nil_append])

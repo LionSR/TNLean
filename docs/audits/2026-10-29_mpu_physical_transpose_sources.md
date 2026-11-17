@@ -32,6 +32,16 @@ from that symmetry. No additional physical blocking occurs in this module.
 
 ## Scope and remaining obligations
 
+> **Superseded 2026-11-16 (PR #10688).** The remaining source scope below is
+> closed. A tensor in standard form is, in the source, the two-site block of
+> a simple tensor in canonical form II (`paper_v2.tex` lines 325–326 and 356;
+> normalization at the canonical fixed point, lines 486–499; the remark at
+> lines 646–648), as opposed to the explicit "not necessarily in CF" at lines
+> 710–712, 741, 747, 871 and 1349. Under this reading
+> `MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff`
+> formalizes `prop:local-char-transposition` with no added hypothesis. See
+> `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
+
 This is actual transpose and source-factor transport, not the global/local
 transposition equivalence. The general canonical and rank/simplicity
 transports do not require a local gate certificate. The factor construction

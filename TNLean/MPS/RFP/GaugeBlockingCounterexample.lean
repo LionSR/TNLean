@@ -29,6 +29,7 @@ See `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`.
 -/
 
 open scoped Matrix BigOperators Kronecker
+open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock wordOfBlock blockTensor)
 
 namespace MPOTensor
 

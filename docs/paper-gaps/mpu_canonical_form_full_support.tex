@@ -525,21 +525,20 @@ comparison results
 \texttt{prop:mpu\_admissible\_mps\_time\_reversal\_class}.
 
 The source example and swap labels
-\texttt{ex:all-phases-under-conjugation}, \texttt{example:czx},
-\texttt{ex:dagger-all-but-czx}, \texttt{lemma:sym-trafo-swap},
+\texttt{ex:all-phases-under-conjugation}, \texttt{lemma:sym-trafo-swap},
 \texttt{prop:U2-U3-trivial-conjugation},
 \texttt{prop:U2-U3-trivial-tr-transpose},
 \texttt{prop:eqiv-U1-U2-conjugate}, and
 \texttt{prop:U1-U2-equiv-ancillatrick} have the scoped counterparts
 \texttt{ex:mpu\_admissible\_all\_conjugation\_phases},
-\texttt{ex:mpu\_admissible\_czx},
-\texttt{ex:mpu\_admissible\_time\_reversal\_classes},
 \texttt{lem:mpu\_admissible\_swap\_symmetry\_equivalence},
 \texttt{prop:mpu\_admissible\_u2\_u3\_conjugation},
 \texttt{prop:mpu\_admissible\_u2\_u3\_time\_reversal\_transposition},
 \texttt{prop:mpu\_admissible\_u1\_u2\_conjugation}, and
-\texttt{prop:mpu\_admissible\_u1\_u2\_ancilla}. The unrestricted CZX entry
-defines the Hadamard matrix used in its tensor formula. Comment-only source
+\texttt{prop:mpu\_admissible\_u1\_u2\_ancilla}. The time-reversal examples
+\texttt{example:czx} and \texttt{ex:dagger-all-but-czx} need no scoped
+counterpart: they are proved for the tensor in standard form built from the
+printed gates, with no source datum. Comment-only source
 locators identify the exact passages for the unitary normal-form lemma, the
 three topological-insulator-inspired MPUs, and their swap transformation.
 
@@ -645,6 +644,73 @@ explicitly supplied tensors, comparison tensors, and paths. Parallel
 source-labelled statements retain the hypotheses of Ref.~\cite{Cirac2017MPU};
 those not yet proved remain unformalized. No restricted statement is presented
 under a source label.
+
+\subsection*{Superseded entries}
+
+Fourteen admissible entries are superseded by the standing canonical-form
+convention of \path{docs/paper-gaps/mpu_standard_form_canonical_convention.tex}
+and have been deleted from Chapter~28. Each had a source-labelled counterpart
+that is now proved with no hypothesis beyond those of
+Ref.~\cite{Cirac2017MPU} under that convention, so the reduced full-support
+data it assumed restricted nothing that remains open.
+\begin{center}
+    \begin{tabular}{ll}
+        deleted entry                                         & source-labelled entry                            \\
+        \path{thm:mpu_admissible_index}                       & \path{IndexTh}                                   \\
+        \path{prop:mpu_admissible_continuity_index}           & \path{prop:continuity-index}                     \\
+        \path{prop:mpu_admissible_local_time_reversal}        & \path{PropChiral}                                \\
+        \path{prop:mpu_admissible_local_transposition}        & \path{prop:local-char-transposition}             \\
+        \path{lem:mpu_admissible_sigma_trace}                 & \path{eq:sigma-from-trace}                       \\
+        \path{lem:mpu_admissible_sigma_gauge_invariant}       & \path{lem:mpu_sigma_gauge_invariant}             \\
+        \path{prop:mpu_admissible_sigma_well_defined}         & \path{prop:sigma-well-defined}                   \\
+        \path{prop:mpu_admissible_conjugation_symmetry}       & \path{prop1conj}                                 \\
+        \path{prop:mpu_admissible_conjugation_standard_forms} & \path{corconj}                                   \\
+        \path{cor:mpu_admissible_symplectic_to_orthogonal}    & \path{cor:sympl-to-orthogonal}                   \\
+        \path{prop:mpu_admissible_mps_conjugation_class}      & \path{prop:mps-class-eq-mpu-class-for-conjugation} \\
+        \path{prop:mpu_admissible_mps_time_reversal_class}    & \path{prop:dagger-mps-class-and-mpu-class-equal} \\
+        \path{cor:mpu_admissible_continuous_standard_form}    & \path{coruvSF}                                   \\
+        \path{prop:mpu_admissible_sigma_blocking_parity}      & \path{prop:sigma1-and-sigma2-equal}
+    \end{tabular}
+\end{center}
+The continuous choice of standard form is superseded directly: Corollary
+\path{coruvSF} is proved for an arbitrary continuous path of tensors generating
+matrix product unitaries, with no canonical-form or source-datum hypothesis
+(\path{MPOTensor.IsMPU.exists_continuous_standardForm_of_path}).
+The blocking parity of the time-reversal sign is likewise proved for
+arbitrary supplied standard forms of the blocked tensors
+(\path{MPOTensor.TwoSiteStandardFormData.timeReversalSign_blocking_parity}).
+Its only consumer among the admissible entries,
+\path{cor:mpu_admissible_sigma_equivalence_necessary}, was deleted with it; its
+source-labelled counterpart \path{cor:sigma-equivalence-necessary} remains open.
+The discussion of these entries above is retained as a historical
+record; where it describes them as retained or restricted, it is superseded
+by this subsection. Retained entries that cited them now cite the
+source-labelled entries.
+
+Four admissible entries of the classification of conjugation-symmetric phases
+were deleted later, once the directions of their source-labelled counterparts
+that the admissible versions supplied were proved with no source datum:
+\begin{center}
+    \begin{tabular}{ll}
+        deleted entry                                          & proved entry                                  \\
+        \path{thm:mpu_admissible_conjugation_odd_rank}         & \path{thm:mpu_conjugation_odd_rank_if}        \\
+        \path{cor:mpu_admissible_all_conjugation_equivalent}   & \path{cor:all-equivalent-under-conjugation}   \\
+        \path{thm:mpu_admissible_conjugation_even_rank}        & \path{thm:mpu_conjugation_even_rank_if}       \\
+        \path{cor:mpu_admissible_equiv_under_conjugation}      & \path{cor:equiv-under-conjugation}
+    \end{tabular}
+\end{center}
+The ``only if'' directions of \path{conjphs} and \path{prop:conjsym-strict-equiv}
+remain open in the source-labelled entries; they need the unblocked forward
+direction of the symmetry path criterion, recorded in
+\path{docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex}. The admissible
+versions reached them only through the admissible path datum, which assumes the
+continuously varying source data that this note records as unconstructed.
+Retained entries that cited the deleted ones now cite the source-labelled
+entries.
+
+The remaining admissible entries concern the worked examples, whose
+source-labelled counterparts are still open; they keep the restrictions recorded
+here.
 
 \section{Elimination plan}
 

@@ -46,6 +46,8 @@ primitive simultaneously.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock wordOfBlock length_wordOfBlock
+  blockTensor flattenBlockedWord evalWord_blockTensor length_flattenBlockedWord)
 
 namespace MPSTensor
 
@@ -193,11 +195,11 @@ theorem EventuallyNonzeroProportionalMPV₂.blockTensor
   rcases hN₀ (N * p) (hN.trans hNle) with ⟨c, hc, hEq⟩
   refine ⟨c, hc, fun σ => ?_⟩
   calc
-    mpv (MPSTensor.blockTensor (d := d) (D := D₁) A p) σ =
+    mpv (Kraus.blockTensor (d := d) (D := D₁) A p) σ =
         mpv A (blockedFlatConfig (d := d) p σ) :=
       mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
     _ = c * mpv B (blockedFlatConfig (d := d) p σ) := hEq _
-    _ = c * mpv (MPSTensor.blockTensor (d := d) (D := D₂) B p) σ := by
+    _ = c * mpv (Kraus.blockTensor (d := d) (D := D₂) B p) σ := by
       rw [mpv_blockTensor_eq_mpv_blockedFlatConfig]
 
 /-- Positive-length equality with a weighted nonzero-block tensor is preserved by

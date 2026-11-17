@@ -243,3 +243,37 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     $s=80\max\{u,1\}$. Since $1+u\le2\max\{u,1\}$, one has
     $2\zeta\le s$. Apply Lemma~\ref{thm:hastings_area_law_printed}.
 \end{proof}
+
+\begin{lemma}[Logarithmic size of the factorization constant]
+    \label{thm:hastings_area_law_log_constant}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_with_log_constant}
+    \leanok
+    \uses{def:chain_model,def:hastings_area_law_bound}
+    For every range $R$ there are constants $K,a\ge0$, depending only on $R$,
+    with the following property. Let $\tilde\xi$ be the length of
+    Lemma~\ref{thm:hastings_lemma1_endpoint}, and put $\xi'=6\tilde\xi$ and
+    $C_1=\max\{K\tilde\xi^3,1\}$. Under the hypotheses of
+    Lemma~\ref{thm:hastings_area_law}, these constants satisfy
+    \begin{align}
+        \ln C_1               & \le a\ln\xi',             \\
+        S(\rho_{\lbrack0,i)}) & \le S_{\max}(\xi',C_1,q).
+        \label{eq:hastings_area_log_constant}
+    \end{align}
+    The same $K$ occurs in both bounds. In particular $a$ is independent
+    of the chain length, local dimension, coupling and gap. The first
+    inequality is the logarithmic consequence of the polynomial bound
+    in~\cite[lines 258--262]{Hastings2007AreaLaw}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_area_law}
+    Choose $K$ from Lemma~\ref{thm:hastings_area_law} and set
+    $a=3+\ln(\max\{K,1\})/\ln2$. Since $\tilde\xi\ge8$,
+    $C_1\le\max\{K,1\}\tilde\xi^3$. Thus
+    \begin{align}
+        \ln C_1
+         & \le\ln(\max\{K,1\})+3\ln\tilde\xi
+        \le\left(3+\frac{\ln(\max\{K,1\})}{\ln2}\right)\ln(6\tilde\xi),
+        \label{eq:hastings_area_log_estimate}
+    \end{align}
+    because $\ln(6\tilde\xi)\ge\ln2$ and $\ln(\max\{K,1\})\ge0$.
+\end{proof}

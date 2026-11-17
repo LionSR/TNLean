@@ -1,0 +1,159 @@
+\section{Original-target histories of the actual interval recursion}
+
+Fix the original ground space and all families, thresholds and trimming
+parameters before sampling. The following events record the successive
+spaces in the repeated-sampling construction of
+\cite{Arad2016RigorousRG}, rather than just its final retained space.
+
+\begin{definition}[Original-target history on an interval]
+    \label{def:interval_original_target_history}
+    \lean{TNLean.MPS.AreaLaw.canonicalHalfSampledIntervalHistory,
+        TNLean.MPS.AreaLaw.canonicalIntervalResamplingHistory}\leanok
+    For the interval $J=[p,r)$, identify the full chain with
+    $\mathcal H_J\otimes\mathcal H_{J^c}$ and write $G_J$ for the original
+    global ground space in these coordinates. Given a candidate $W$, let
+    $Q_j(W,u)$ be the actual stopped projection after $j$ of the $R$
+    prescribed unitary coordinates. Put
+    $V_j(W,u)=I_J\operatorname{ran}Q_j(W,u)$, with the coordinate isometry
+    $I_J$ from Definition~\ref{def:complete_interval_resampling_parent}.
+    The event $H_J(W)$ consists of the sequences $u$ such that every
+    $V_j(W,u)\otimes\mathcal H_{J^c}$, $0\le j\le R$, is $0.04$-close to
+    $G_J$, and every active next space
+    $V_{j+1}(W,u)\otimes\mathcal H_{J^c}$ is $3/200$-close to $G_J$.
+    Here the step $j<R$ is active when
+    $\operatorname{rank}Q_j(W,u)\ge\theta_J$.
+
+    For the balanced recursion $S_\omega$, let $W_J(\omega)$ be the actual
+    adjacent merge of the two child spaces of $J$. Its original-target
+    history event is $\{\omega:\omega_J\in H_J(W_J(\omega))\}$.
+\end{definition}
+
+\begin{lemma}[Initial viability recorded by the history]
+    \label{lem:interval_history_initial_viability}
+    \lean{TNLean.MPS.AreaLaw.isViable_of_mem_canonicalHalfSampledIntervalHistory}\leanok
+    If $u\in H_J(W)$, then $W$ is $0.04$-viable for the original
+    ground space, with the whole exterior of $J$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_original_target_history}
+    Take $j=0$ in the defining history condition. The transported range
+    of the orthogonal projection onto $W$ is precisely $W$.
+\end{proof}
+
+\begin{lemma}[Joint measurability of the original-target history]
+    \label{lem:interval_original_target_history_measurable}
+    \lean{TNLean.MPS.AreaLaw.measurableSet_canonicalHalfSampledIntervalHistory,
+        TNLean.MPS.AreaLaw.measurableSet_canonicalIntervalResamplingHistory}\leanok
+    If $x\mapsto P_{W(x)}$ is measurable, then
+    $\{(x,u):u\in H_J(W(x))\}$ is measurable. In particular, the
+    original-target history event of each actual long parent is measurable
+    in the full collection of interval sequences.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_original_target_history,
+        lem:actual_interval_resampling_tree_probability}
+    Reindex the candidate projection into the fixed finite coordinates.
+    The stopped projections, their ranks and their full-exterior
+    closeness tests are jointly measurable. The history event is a finite
+    intersection of these tests and of the active-step implications.
+    For the actual parent, both child projections and their adjacent
+    merge projection are measurable; compose with
+    $\omega\mapsto(\omega,\omega_J)$.
+\end{proof}
+
+\begin{lemma}[The true section at a parent's own coordinate]
+    \label{lem:interval_original_target_history_section}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalResamplingHistory_update_parent}\leanok
+    Fix a baseline collection $\omega$. Replacing only $\omega_J$ by $u$
+    leaves both actual child spaces unchanged. The resulting global
+    history condition at $J$ is therefore exactly
+    $u\in H_J(W_J(\omega))$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:interval_original_target_history,
+        lem:independent_interval_tree_sections}
+    Both children are strictly shorter than $J$. Their projections depend
+    only on coordinates of intervals no longer than themselves, so the
+    coordinate replacement leaves them unchanged. Substitution into
+    Definition~\ref{def:interval_original_target_history} gives the stated
+    equivalence.
+\end{proof}
+
+
+\begin{lemma}[One joint history bound for the actual resampling tree]
+    \label{lem:actual_interval_original_target_joint_probability}
+    \lean{TNLean.MPS.AreaLaw.intervalResamplingMeasure_canonical_tree_joint_history_failure_le}\leanok
+    Suppose that for every long $J$ and every fixed candidate $W$ that is
+    $0.04$-viable for the original global ground space, the true sequence
+    law satisfies $\mu_J(H_J(W)^c)\le\beta$. Suppose also that on $H_J(W)$
+    the actual complete parent is $3/200$-viable for that same ground
+    space. Then failure of simultaneous $3/200$-viability at a valid
+    root $[p,r)$, $3/200$-viability at every interval in its actual
+    internal-node list, and the original-target history condition at
+    each of those listed parents has outer measure at most
+    $\max\{r-p-1,0\}\beta$ under the fixed independent product law.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:interval_original_target_history_measurable,
+        lem:interval_original_target_history_section,
+        lem:balanced_interval_joint_history_probability,
+        thm:actual_adjacent_interval_merge}
+    Two $3/200$-viable adjacent child spaces merge to a $3/100$-viable
+    candidate, which is $0.04$-viable. Thus a successful history implies
+    viability of the same retained parent. The guarded history failure
+    consists of two viable actual children and a failed parent history.
+    This event is measurable by
+    Lemma~\ref{lem:interval_original_target_history_measurable}.
+    In its own-coordinate section, both child spaces remain fixed by
+    Lemma~\ref{lem:interval_original_target_history_section}. The section
+    is empty if a baseline child is not viable; otherwise it is contained
+    in $H_J(W_J(\omega))^c$ and has measure at most $\beta$.
+    Apply the single-union estimate of
+    Lemma~\ref{lem:balanced_interval_joint_history_probability} to these
+    actual events. Full short leaves are viable, and the internal-node
+    list has at most $\max\{r-p-1,0\}$ members.
+\end{proof}
+
+\begin{definition}[The actual joint success event]
+    \label{def:canonical_interval_resampling_good}
+    \lean{TNLean.MPS.AreaLaw.canonicalIntervalResamplingGood}\leanok
+    Fix the original target $G$, the interval families, scalar parameters
+    and finite-sequence spaces of the repeated-sampling construction.
+    Let $S_{a,b}(U)$ be its actual retained interval space and let
+    $\mathcal B_{p,r}$ be the internal intervals of the balanced root
+    subdivision of $[p,r)$. Write $P_{a,b}(U)$ for $3/200$-viability of
+    $S_{a,b}(U)$ for that same original global target, retaining the full
+    exterior, and let $H_J$ be its literal original-target history event
+    from Definition~\ref{def:interval_original_target_history}.
+    The joint success event is
+    \begin{align}
+        \mathcal G_{p,r}
+         & =\{U:P_{p,r}(U)\}\cap
+        \bigcap_{J\in\mathcal B_{p,r}}\bigl(\{U:P_J(U)\}\cap H_J\bigr).
+    \end{align}
+    Its complement is exactly the failure event in
+    Lemma~\ref{lem:actual_interval_original_target_joint_probability}.
+    No condition is imposed on overlapping intervals outside the actual
+    root subdivision.
+\end{definition}
+
+\begin{lemma}[Measurability of the same joint success event]
+    \label{lem:canonical_interval_resampling_good_measurable}
+    \lean{TNLean.MPS.AreaLaw.measurableSet_canonicalIntervalResamplingGood}\leanok
+    For $p\le r\le L$, the event $\mathcal G_{p,r}$ of
+    Definition~\ref{def:canonical_interval_resampling_good} is measurable.
+    No initial viability, success probability or measurable eigenbasis
+    selection is assumed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:canonical_interval_resampling_good,
+        lem:actual_interval_resampling_tree_probability,
+        lem:interval_original_target_history_measurable}
+    The actual root and retained-parent viability events are measurable,
+    as are the literal history events. Express the listed-parent condition
+    as an intersection over all valid long intervals: its factor is
+    $P_J\cap H_J$ when $J$ belongs to the actual subdivision and the whole
+    sequence space otherwise. The long interval index is a subtype of
+    $\mathbb N^2$, hence countable. A countable intersection, followed by
+    intersection with the root event, proves the assertion.
+\end{proof}

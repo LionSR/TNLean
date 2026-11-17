@@ -182,7 +182,7 @@ def freshCircuit (Z : Layout Party) : (rs : List Party) → (∀ p ∈ rs, d p =
   | [], _ => .id Z
   | p :: rs, h =>
       .comp (freshCircuit Z rs fun p' hp' => h p' (List.mem_cons_of_mem _ hp'))
-        (.privateMap p (a := []) (b := [⟨p, euc (Fin (d p))⟩]) (by simp) (by simp)
+        (OriginalCircuit.privateMap p (a := []) (b := [⟨p, euc (Fin (d p))⟩]) (by simp) (by simp)
           (freshMap p (EuclideanSpace.single (finOneOf d (h p List.mem_cons_self)) (1 : ℂ)))
           (norm_freshMap_le p (by simp)) (familyPhysicalLayout d rs ++ Z))
 
@@ -222,7 +222,7 @@ def siteCircuit (own : ι → Party) (hd : ∀ x, d (own x) = q) (Z : Layout Par
       (familyPhysicalLayout d (xs.map own ++ rs) ++ Z)
   | [] => freshCircuit d Z rs hrs
   | x :: xs =>
-      .comp (.privateMap (own x) (a := [⟨own x, euc (Fin q)⟩])
+      .comp (OriginalCircuit.privateMap (own x) (a := [⟨own x, euc (Fin q)⟩])
           (b := [⟨own x, euc (Fin (d (own x)))⟩]) (by simp) (by simp)
           (renameMap (own x) (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (finCongr (hd x).symm)))
           (norm_renameMap_le _ _) (siteRegs q own xs ++ Z))
@@ -334,9 +334,9 @@ theorem nonprivateCount_readoutCircuit (M : Frame pos q Party) (Fs : List (Frame
     (readoutCircuit d M Fs ℓ hd hd1).nonprivateCount = 0 := by
   change OriginalCircuit.nonprivateCount (OriginalCircuit.castLayouts _ _ _) +
     (siteCircuit d M.owner hd _ _ _ (sites ι)).nonprivateCount = 0
-  rw [OriginalCircuit.nonprivateCount_castLayouts,
+  simp only [Circuit.gateCount_castLayouts,
     Word.nonprivateCount_toOriginalCircuit_of_isReordering
-      (Word.isReordering_exchangeBlocks _ _ _), nonprivateCount_siteCircuit]
+      (Word.isReordering_exchangeBlocks _ _ _), nonprivateCount_siteCircuit, add_zero]
 
 end Readout
 

@@ -134,7 +134,7 @@ theorem intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace
       Matrix.trace (Matrix.swapMatrix D * timeReversalTwistedTransfer U ^ k) := by
   classical
   rw [intrinsicTimeReversalSign, timeReversalPeriodicTrace_blockTensor,
-    MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, ← inv_pow,
+    Kraus.blockPhysDim_eq_pow, Nat.cast_pow, ← inv_pow,
     timeReversalTwistedTransfer_pow_eq_sum_evalWord,
     Matrix.mul_smul, Matrix.trace_smul]
   simp only [Finset.mul_sum, Matrix.trace_sum,

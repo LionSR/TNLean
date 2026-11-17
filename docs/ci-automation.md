@@ -102,7 +102,8 @@ When you push to a PR branch, several things happen in parallel:
   │  │  PR CI — blueprint job                                       │
   │  │  Runs `texra-blueprint web` to check blueprint compilation.  │
   │  │  PR CI — blueprint-pdf job, when blueprint TeX changed:      │
-  │  │  runs `leanblueprint pdf` on the print volume, seeded from   │
+  │  │  runs one XeTeX pass over the print volume                   │
+  │  │  (`scripts/check_blueprint_pdf_compiles.sh`), seeded from    │
   │  │  the auxiliary files of the last main build, and the FT-MPS  │
   │  │  volume build.                                               │
   │  │                                                              │
@@ -313,12 +314,12 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the blueprint linter fails on a PR, this workflow reads the error logs and asks Claude to fix the LaTeX.
 
-**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`texra-blueprint web`, a wrapper of `leanblueprint web` that also fails on unrecognized renderer commands) or the `blueprint-pdf` job (`leanblueprint pdf` and `./scripts/build_blueprint_ch01_12.sh`, XeLaTeX). Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`texra-blueprint web`, a wrapper of `leanblueprint web` that also fails on unrecognized renderer commands) or the `blueprint-pdf` job (`scripts/check_blueprint_pdf_compiles.sh`, one XeTeX pass over the print volume, and `./scripts/build_blueprint_ch01_12.sh`). Runs on any PR from the same repository (not forks).
 
 **What Claude does**:
 - Reads the blueprint compilation error logs and identifies which of the two jobs failed
 - Fixes common issues: unresolved `\ref`/`\label` references, duplicate labels, mismatched `\begin`/`\end` environments, invalid `\lean{DeclName}` references, malformed LaTeX, plasTeX parse errors
-- Validates the fix with the command matching the failed job: `texra-blueprint web` for the `blueprint` job; `leanblueprint pdf` for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
+- Validates the fix with the command matching the failed job: `texra-blueprint web` for the `blueprint` job; `scripts/check_blueprint_pdf_compiles.sh` (or the full `leanblueprint pdf`) for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
 - Pushes a commit with the `[claude-auto-fix]` prefix
 - Posts a summary comment on the PR
 
@@ -335,7 +336,7 @@ during review.
 
 ### Lean Module Policy (`pr-ci.yml`, `file-length` job)
 
-**What it does**: Enforces two blocking structural checks:
+**What it does**: Enforces these blocking structural checks:
 
 - Ordinary `.lean` files may not exceed 1000 lines. The exact path passed with
   `--import-only-aggregator` is exempt only after the checker removes nested Lean
@@ -351,6 +352,17 @@ during review.
   Exact names whose numeral
   denotes a mathematical object or source label have path-specific documented
   exceptions in `scripts/check_numbered_lean_files.py`.
+- Imports must respect the layers of
+  `docs/many_body_circuit_architecture.md`. `scripts/check_import_layers.py`
+  rejects an import that points upward between the layers below the
+  tensor-network directories, a new pair of directories that import each
+  other, and a new import of a module in an `Examples` directory by a module
+  outside one. `scripts/check_pass_through_declarations.py` rejects a new
+  declaration whose whole body applies the declaration of the same name in
+  another namespace to its own explicit arguments. The existing cases are
+  recorded in the two scripts in sets that may only shrink, compared with the
+  merge base as the numbered-module allowlist is: recording a new case fails,
+  and a case that is repaired must be removed from its set in the same change.
 
 When a proof approaches the cap, split by mathematical responsibility rather
 than chronology. Put shared definitions and setup in a family `Basic.lean`

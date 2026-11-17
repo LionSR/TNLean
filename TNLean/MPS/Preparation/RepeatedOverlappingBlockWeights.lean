@@ -67,6 +67,7 @@ replaced by `e^{-γ q/ξ}` with `ξ ≥ max(ξ_diag, ξ_off-diag)`. Documented i
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

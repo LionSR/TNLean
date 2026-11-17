@@ -221,6 +221,187 @@ chosen raw matrices rather than equivalent classes; see
 The source obtains the endpoint limit at the level of the local supports
 by orthonormalizing a continuous basis. The periodic statement above
 identifies the limit with the ground projection of the canonical parent
-itself. Commutation of the Hamiltonians with the common operators, and
-the construction for degenerate ground spaces, are not asserted here;
-see \cite{gap:glm23_mpo_symmetric_mps_scope}.
+itself.
+
+\cite[Section~5]{GarreRubio2023MPOSym} calls the interpolation ``a
+continuous and symmetric embedding path that connects both MPSs and
+therefore, their parent Hamiltonians'', and takes for $H(\gamma)$ the
+canonical parent with local terms ``$h_\gamma = \Id - \Pi_{S_\gamma}$''.
+The source does not show that these canonical parents commute with the
+common operators, and they need not. The two-site support of an injective
+tensor is invariant under an exactly acting symmetry. Its orthogonal
+complement need not be invariant when the symmetry is not unitary. An
+involutive non-unitary on-site symmetry of the tensor
+$(E_{11},E_{12},E_{21},\Id_2)$ satisfies every action, fusion and
+equal-$L$-matrix hypothesis above, yet its canonical parent does not
+commute with it; see \cite{gap:glm23_mixed_path_parent_commutation}.
+For unitary on-site endpoint symmetries the outcome depends on the
+virtual gauge of the endpoint tensors, which leaves the endpoint states
+and their parents unchanged but changes the interpolation and the common
+operator. Let $\mathbb Z_2$ act at both endpoints by one unitary on-site
+representation, on two different injective tensors with equal $L$-data.
+If both tensors are in canonical form, the two-site boundary range of the
+common operator is closed under the adjoint and the canonical path
+commutes with it. If one tensor is in a gauge whose action gauge is not
+proportional to a Hermitian matrix, the range is not closed under the
+adjoint and the canonical parent does not commute with the periodic
+common operator; see the same note.
+The source's claim of a symmetric canonical path is therefore not
+formalized. The following restricted statement assumes adjoint closure
+of the two-site boundary range of the common operator.
+
+\begin{lemma}[Commutation of the path under adjoint closure]
+    \label{thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo}
+    \leanok
+    \uses{thm:mpo_arbitrary_mixed_action,
+        thm:mpo_arbitrary_interior_parent,
+        thm:mpo_arbitrary_interaction_continuity,
+        thm:glm_boundary_parent_local,thm:glm_boundary_parent_periodic,
+        thm:glm_boundary_embed_commutation}
+    Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action},
+    that $D_0,D_1>0$, and that $A_0,A_1$ are one-site injective. Assume
+    in addition, as a restriction not made by the source, that
+    $\mathcal R_2(\widetilde T)^*=\mathcal R_2(\widetilde T)$. Then for
+    every $\gamma\in[0,1]$ and every $X$,
+    $[\widetilde h_\gamma,O^2_{\widetilde T,X}]=0$. Consequently, for
+    every $N\geq2$ and every $X\in\mathcal C(\widetilde T)$,
+    $[\widetilde H_{\gamma,N},O^N_{\widetilde T,X}]=0$, and in particular
+    $[\widetilde H_{\gamma,N},O^{(N)}_{\widetilde T}]=0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For $0<\gamma<1$, Lemma~\ref{thm:mpo_arbitrary_interior_parent}
+    identifies $\widetilde h_\gamma$ with the canonical two-site parent
+    of $\widetilde A(\gamma)$, which is compatible with $\widetilde T$ by
+    Lemma~\ref{thm:mpo_arbitrary_mixed_action}. Under adjoint closure,
+    Lemma~\ref{thm:glm_boundary_parent_local} gives the commutation.
+    The set of $\gamma$ at which $\widetilde h_\gamma$ commutes with a
+    fixed operator is closed, because $\widetilde h_\gamma$ is continuous
+    by Lemma~\ref{thm:mpo_arbitrary_interaction_continuity}. It contains
+    $(0,1)$, hence it contains $[0,1]$. Embedding each cyclic translate as
+    in Lemma~\ref{thm:glm_boundary_embed_commutation} and summing gives
+    the periodic statements; the identity boundary lies in
+    $\mathcal C(\widetilde T)$.
+\end{proof}
+
+For on-site endpoint symmetries with Hermitian on-site matrices, which
+include unitary representations of $\mathbb Z_2$, adjoint closure follows from
+a condition on the action gauges. Let the operator bonds of $T_0,T_1$ be
+one-dimensional, so that $T_p$ is given by a matrix $u_p$, let the action
+multiplicity be $m=1$, and write $Y_p$ for the synthesis map $W_{p,0}$ read
+as a square matrix and $V_p$ for $V_{p,0}$, so that $V_pY_p=\Id$.
+
+\begin{lemma}[Adjoint closure for Hermitian action gauges]
+    \label{thm:mpo_arbitrary_hermitian_gauge_adjoint_closure}
+    \lean{MPOTensor.mpoWithBoundary_eq_of_apply_eq_div_mul,
+        MPOTensor.physicalAdjointTensor_changePhysicalBasis,
+        MPOTensor.changePhysicalBasis_apply_of_apply_eq_mul,
+        MPOTensor.physicalAdjointTensor_eq_self_of_isHermitian,
+        MPSTensor.MPOSymmetry.bondOneActionGauge,
+        MPSTensor.MPOSymmetry.bondOneActionAnalysis,
+        MPSTensor.MPOSymmetry.bondOneActionAnalysis_mul_bondOneActionGauge,
+        MPSTensor.MPOSymmetry.mixedEndpointBondWeight,
+        MPSTensor.MPOSymmetry.mixedEndpointBondWeight_ne_zero,
+        MPSTensor.MPOSymmetry.physicalAdjointTensor_mixedEndpointMPO_apply,
+        MPSTensor.MPOSymmetry.exists_star_synthesis_analysis_of_isHermitian,
+        MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq}
+    \leanok
+    \uses{def:mpo_arbitrary_mixed_operator,def:mpo_mixed_action_tensor,
+        def:mpdo_physical_adjoint,thm:glm_boundary_physical_adjoint,
+        thm:glm_boundary_similarity}
+    Restrict the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action}
+    to on-site endpoint operators with $m=1$ as above. Suppose that $u_0$
+    and $u_1$ are Hermitian, and that $c_pY_p$ is Hermitian for some
+    $c_p\neq0$, for $p=0,1$. Then for every $N$ and every $X$ there is a
+    $X'$ with $(O^N_{\widetilde T,X})^*=O^N_{\widetilde T,X'}$. In
+    particular $\mathcal R_2(\widetilde T)^*=\mathcal R_2(\widetilde T)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $K^\sharp$ for the tensor with letters
+    $(K^\sharp)^{ij}_{\beta\alpha}=\overline{K^{ji}_{\beta\alpha}}$. Then
+    $(O^N_{K,X})^*=O^N_{K^\sharp,\bar X}$, where $\bar X$ is the entrywise
+    conjugate, and $K^\sharp$ commutes with every change of physical
+    coordinates. Since $u_p$ is Hermitian, $S_p^\sharp=S_p$. Since
+    $c_pY_p$ is Hermitian, $Y_p^*=\omega_pY_p$ with
+    $\omega_p=c_p/\bar c_p$. From $V_pY_p=\Id$ also $Y_pV_p=\Id$, hence
+    $V_p^*Y_p^*=\Id$ and $V_p^*=\omega_p^{-1}V_p$. The crossed blocks
+    $W_0^{\mathsf T}\otimes V_1$ and $W_1^{\mathsf T}\otimes V_0$ of the
+    mixed operator are therefore multiplied by $t=\omega_0\omega_1^{-1}$
+    and $t^{-1}$ under ${}^\sharp$, and the diagonal blocks are fixed. With
+    $g=\operatorname{diag}(1,t^{-1})$ on the bond $\C^2$, this says
+    $(\widetilde T^\sharp)^{ij}=g\,\widetilde T^{ij}g^{-1}$, so
+    $O^N_{\widetilde T^\sharp,Z}=O^N_{\widetilde T,g^{-1}Zg}$ for every $Z$.
+    Take $X'=g^{-1}\bar Xg$.
+\end{proof}
+
+Unitary endpoint symmetries supply the gauge condition when the endpoint
+tensors are in canonical form.
+
+\begin{lemma}[Hermitian action gauges in canonical form]
+    \label{thm:mpo_arbitrary_canonical_hermitian_gauge}
+    \lean{Matrix.isHermitian_of_mem_unitaryGroup_of_mul_self_eq_one,
+        MPSTensor.MPOSymmetry.sum_smul_eq_bondOneActionGauge_mul_mul,
+        MPSTensor.MPOSymmetry.exists_isHermitian_smul_bondOneActionGauge}
+    \leanok
+    \uses{def:injective,thm:virtual_gauge_fixes_boundary_state,
+        thm:mpo_arbitrary_hermitian_gauge_adjoint_closure}
+    Let $A$ be injective with $\E_A(\Id)=\Id$ and with a positive definite
+    $\Lambda$ satisfying $\E_A^\dagger(\Lambda)=\Lambda$, and let a unitary
+    on-site matrix $u$ with $u^2=\Id$ act on $A$ as above, with action
+    gauge $Y$. Then $u$ is Hermitian and $cY$ is Hermitian for some
+    $c\neq0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    From $u^*u=\Id$ and $u^2=\Id$, $u^*=u^*u^2=u$. The action identity reads
+    $\sum_ju_{ij}A^j=YA^iY^{-1}$. By
+    Lemma~\ref{thm:virtual_gauge_fixes_boundary_state}, $Y=cU$ with $c\neq0$
+    and $U$ unitary. Applying the action identity twice and using $u^2=\Id$
+    gives $Y^2A^iY^{-2}=A^i$, so $Y^2$ commutes with the span of the
+    letters, which is all of $\MN D$; hence $Y^2$ and $U^2$ are scalar,
+    $U^2=\ell\Id$. Then $\ell U^*=U^*U^2=U$, and taking adjoints gives
+    $\ell\bar\ell=1$. Choose $s\neq0$ with $\bar s=s\ell$: $s=1+\bar\ell$ if
+    $\ell\neq-1$ and $s=i$ otherwise. Then $(sU)^*=\bar sU^*=s\ell U^*=sU$,
+    so $(s/c)Y=sU$ is Hermitian.
+\end{proof}
+
+\begin{lemma}[Commutation of the path for Hermitian action gauges]
+    \label{thm:mpo_arbitrary_parent_commutation_hermitian_gauge}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_isHermitian,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_isHermitian,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_canonical}
+    \leanok
+    \uses{thm:mpo_arbitrary_parent_commutation_adjoint_closed,
+        thm:mpo_arbitrary_hermitian_gauge_adjoint_closure,
+        thm:mpo_arbitrary_canonical_hermitian_gauge}
+    Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action}
+    restricted to on-site endpoint operators with $m=1$ as above, that
+    $D_0,D_1>0$, and that $A_0,A_1$ are one-site injective. Assume, as a
+    restriction not made by the source, that $u_0,u_1$ are Hermitian and
+    that $Y_0,Y_1$ are nonzero multiples of Hermitian matrices. Then the
+    conclusions of
+    Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed} hold.
+    They hold in particular for unitary on-site endpoint symmetries with
+    $u_0^2=u_1^2=\Id$, the case of $\mathbb Z_2$, when both endpoint tensors
+    satisfy $\E_{A_p}(\Id)=\Id$ and have positive definite fixed points of
+    $\E_{A_p}^\dagger$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Lemma~\ref{thm:mpo_arbitrary_hermitian_gauge_adjoint_closure} supplies
+    adjoint closure of $\mathcal R_2(\widetilde T)$, and
+    Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed} gives
+    the commutation. In the canonical case,
+    Lemma~\ref{thm:mpo_arbitrary_canonical_hermitian_gauge} supplies the
+    hypotheses on $u_p$ and $Y_p$.
+\end{proof}
+
+The fusion hypotheses and the equality of $L$ matrices are not needed for
+this commutation. The construction for degenerate ground spaces is the
+subject of Section~\ref{sec:mpo_block_mixed_path}.

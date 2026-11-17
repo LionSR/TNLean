@@ -8,9 +8,9 @@
 \date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
-\section{The unresolved interpretation}
+\section{The interpretation}
 The discussion of~\cite{Malz2024Preparation} states that MPS in the same
 phase can be transformed into each other with a logarithmic-depth circuit.
 It does not specify a non-normal phase predicate or how a selected vector
@@ -20,6 +20,12 @@ between normalized periodic vectors, without a compatibility condition on
 their sector amplitudes. The obstruction below concerns the interpretation
 that equality of parent groundspaces suffices for this chosen-vector claim.
 It does not refute every interpretation of the paper's informal remark.
+The faithful reading, recorded in
+\cite{gap:mswc24_same_phase_circuit_normal_case}, is the ground-space one: a
+phase fixes the parent Hamiltonian's ground space, and the conversion of whole
+ground spaces is formalized. The compatible-seed condition below is a further
+sufficient condition for converting chosen vectors, and the obstruction shows
+that some such condition is necessary.
 
 \section{A quantitative obstruction}
 Consider the tensors

@@ -7,7 +7,7 @@ import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.TimeReversalTwistedTransfer
-import TNLean.Algebra.StabilizedWeightedTrace
+import QICLean.Algebra.StabilizedWeightedTrace
 import TNLean.Algebra.UnitaryKronecker
 import Mathlib.Algebra.Star.UnitaryStarAlgAut
 
@@ -70,10 +70,8 @@ theorem IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison
   classical
   let : NeZero d := hU.neZero_phys
   have hEq : ∀ N : ℕ, 1 < N → Even N →
-      mpo U N = mpo (MPOTensor.physicalAdjointTensor U) N := by
-    intro N hN heven
-    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
-    exact hTR N hN heven
+      mpo U N = mpo (MPOTensor.physicalAdjointTensor U) N :=
+    fun N hN heven ↦ (hTR N hN heven).trans (mpo_physicalAdjointTensor_eq_conjTranspose U N).symm
   obtain ⟨_, η, z, hη, hrel⟩ :=
     hU.exists_unitary_virtual_sign_gauge_of_mpo_eq_even hU.physicalAdjointTensor hEq
   have hrel' (i j : Fin d) : MPOTensor.physicalAdjointTensor U i j =

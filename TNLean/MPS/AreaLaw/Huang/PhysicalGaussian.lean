@@ -43,12 +43,30 @@ private theorem norm_weighted_sum_sub_le
       exact Finset.sum_congr rfl fun j _ ↦ mul_comm _ _
     _ ≤ rho := mul_le_of_le_one_right hrho hsum
 
-/-- The energy-centered Gaussian filter of the original positive chain has a finite
-approximation with explicit term count, error and simultaneous cut ranks. The original
-Hamiltonian alone is propagated; the energy shift contributes only scalar phases.
-Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19 and equations (19)--(22).
-This statement asserts no spectral filtering or viable-set improvement. -/
-theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
+/-- The number of quadrature nodes of the Gaussian approximant: the time mesh of accuracy
+`eta / (‖H - E‖ + 1)` on the window `[-T, T]`. Huang, arXiv:1406.6355v6, Section 5.4,
+equation (22). -/
+noncomputable def positiveChainGaussianSampleCount {L q : ℕ}
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (energy T eta : ℝ) : ℕ :=
+  timeMeshCount T (eta / (‖(∑ i, h i) - (energy : ℂ) • 1‖ + 1))
+
+/-- **The Gaussian approximant of a positive chain.** The Gaussian quadrature, over the
+time mesh, of the phase-shifted positive-chain propagators at the mesh nodes: an
+approximation to the Gaussian filter `exp(-variance (H - E)² / 2)` with simultaneous
+cut-rank bounds. Huang, arXiv:1406.6355v6, Section 5.4, equation (22) and Lemma 19. -/
+noncomputable def positiveChainGaussianApproximant {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (variance : ℝ≥0) (energy T eta rho : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
+  let delta := eta / (‖(∑ i, h i) - (energy : ℂ) • 1‖ + 1)
+  ∑ j : Fin (timeMeshCount T delta), timeMeshWeight variance T delta j •
+    (Complex.exp (((-energy * timeMeshNode T delta j : ℝ) : ℂ) * Complex.I) •
+      positiveChainPropagator hq h h0 T rho (-timeMeshNode T delta j))
+
+/-- The Gaussian approximant has at least one and at most polynomially many nodes,
+approximates the Gaussian filter to accuracy `2 exp(-T²/(2 variance)) + eta + rho`, and
+has cut rank at most the number of nodes times the propagator rank at every cut. Huang,
+arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
+theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
@@ -56,8 +74,9 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
     (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
     let H := ∑ i, h i
     let r := chainPropagationRadius L T rho
-    ∃ (N : ℕ) (Q : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      1 ≤ N ∧ (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 ∧
+    let N := positiveChainGaussianSampleCount h energy T eta
+    let Q := positiveChainGaussianApproximant hq h h0 variance energy T eta rho
+    1 ≤ N ∧ (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 ∧
       ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
         2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
       ∀ cut : ℕ, operatorSchmidtRank
@@ -65,7 +84,7 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
           N * q ^ (8 * r + 8) := by
   classical
   let : NeZero q := ⟨by omega⟩
-  intro H r
+  intro H r N Q
   let Hcenter := H - (energy : ℂ) • 1
   have hHerm : H.IsHermitian :=
     Matrix.isHermitian_sum _ fun i _ ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian
@@ -89,7 +108,7 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
       _ ≤ (L : ℝ) + |energy| := by linarith
   let delta := eta / (‖Hcenter‖ + 1)
   have hdelta : 0 < delta := div_pos heta (by positivity)
-  let N := timeMeshCount T delta
+  have hNdef : N = timeMeshCount T delta := rfl
   let times := timeMeshNode T delta
   let weights := timeMeshWeight variance T delta
   let phase := fun t : ℝ ↦ Complex.exp (((-energy * t : ℝ) : ℂ) * Complex.I)
@@ -104,9 +123,9 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
         congr 1
         push_cast
         ring
-  obtain ⟨K, hKerror, hKrank⟩ :=
-    exists_positive_chain_propagator_approximation hq h hs h0 h1 hT hrho
-  let Q := ∑ j : Fin N, weights j • (phase (times j) • K (-times j))
+  obtain ⟨hKerror, hKrank⟩ := positiveChainPropagator_spec hq h hs h0 h1 hT hrho
+  let K := positiveChainPropagator hq h h0 T rho
+  have hQdef : Q = ∑ j : Fin N, weights j • (phase (times j) • K (-times j)) := rfl
   have hsamples (j : Fin N) :
       ‖hermitianUnitaryPath Hcenter (times j) - phase (times j) • K (-times j)‖ ≤ rho := by
     rw [hshift, ← smul_sub, norm_smul, hphase, one_mul]
@@ -121,12 +140,13 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
   have hquad := norm_gaussianIntertwiner_sub_unitary_timeMesh_sum_le variance hcenter hT heta
   have hN : (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 :=
     (timeMeshCount_accuracy_le hT (norm_nonneg Hcenter) heta).trans (by gcongr)
-  refine ⟨N, Q, by dsimp only [N, timeMeshCount]; omega, hN, ?_, ?_⟩
-  · exact (norm_sub_le_norm_sub_add_norm_sub _
+  refine ⟨by rw [hNdef, timeMeshCount]; omega, hN, ?_, ?_⟩
+  · rw [hQdef]
+    exact (norm_sub_le_norm_sub_add_norm_sub _
       (∑ j : Fin N, weights j • hermitianUnitaryPath Hcenter (times j)) _).trans
         (add_le_add hquad hreplace)
   · have hQ : Q = ∑ j : Fin N, ((weights j : ℂ) * phase (times j)) • K (-times j) := by
-      dsimp only [Q]
+      rw [hQdef]
       simp only [RCLike.real_smul_eq_coe_smul (K := ℂ), smul_smul]
       rfl
     rw [hQ]
@@ -135,5 +155,28 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
       (operatorSchmidtRank_weighted_chain_sum_le Finset.univ
         (fun j : Fin N ↦ (weights j : ℂ) * phase (times j))
         (fun j ↦ K (-times j)) (q ^ (8 * r + 8)) (fun j _ ↦ hKrank (-times j)) cut)
+
+
+/-- A finite-node Gaussian approximant of a positive chain: the existence form of
+`positiveChainGaussianApproximant_spec`. Huang, arXiv:1406.6355v6, Section 5.4,
+Lemmas 18--19. -/
+theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (variance : ℝ≥0) (energy : ℝ) {T eta rho : ℝ}
+    (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
+    let H := ∑ i, h i
+    let r := chainPropagationRadius L T rho
+    ∃ (N : ℕ) (Q : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
+      1 ≤ N ∧ (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 ∧
+      ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
+        2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
+      ∀ cut : ℕ, operatorSchmidtRank
+        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) Q) ≤
+          N * q ^ (8 * r + 8) :=
+  ⟨positiveChainGaussianSampleCount h energy T eta,
+    positiveChainGaussianApproximant hq h h0 variance energy T eta rho,
+    positiveChainGaussianApproximant_spec hq h hs h0 h1 variance energy hT heta hrho⟩
 
 end TNLean.MPS.AreaLaw

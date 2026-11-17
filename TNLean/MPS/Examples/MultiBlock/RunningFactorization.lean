@@ -110,8 +110,16 @@ theorem eq_zero_of_mem_span_e0_of_mem_span_e1 {v : Fin 2 → ℂ}
 noncomputable abbrev gOne : MultiBlockCompression tensorB labels blocks :=
   redUpper 1 0 1 (by norm_num)
 
+theorem isIrreducibleAction_blocks :
+    ∀ s ∈ labels, Matrix.IsIrreducibleAction (blocks s) := fun s hs =>
+  isIrreducibleAction_of_isNormal _ (isNormal_blocks s hs) (dims_pos s hs)
+
+theorem exists_ne_zero_blocks : ∀ s ∈ labels, ∃ i, blocks s i ≠ 0 := fun s hs =>
+  exists_ne_zero_of_isNormal_of_pos (isNormal_blocks s hs) (dims_pos s hs)
+
 theorem matching_slot0 (α β δ : ℂ) (h : α * δ ≠ 0) :
-    gOne.matching (redSwap α β δ h) isNormal_blocks dims_pos isNormal_blocks dims_pos
+    gOne.matching (redSwap α β δ h) isIrreducibleAction_blocks exists_ne_zero_blocks
+      isIrreducibleAction_blocks exists_ne_zero_blocks
       (gOne.ord (Sum.inl slot0)) = (redSwap α β δ h).ord (Sum.inl slot0) := by
   refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨e 0, ?_, ?_, ?_⟩ ?_
   · rw [flagVec_redUpper _ _ _ _ _ rfl]; exact Submodule.mem_span_singleton_self _
@@ -128,7 +136,8 @@ theorem matching_slot0 (α β δ : ℂ) (h : α * δ ≠ 0) :
     exact Submodule.zero_mem _
 
 theorem matching_slot1 (α β δ : ℂ) (h : α * δ ≠ 0) :
-    gOne.matching (redSwap α β δ h) isNormal_blocks dims_pos isNormal_blocks dims_pos
+    gOne.matching (redSwap α β δ h) isIrreducibleAction_blocks exists_ne_zero_blocks
+      isIrreducibleAction_blocks exists_ne_zero_blocks
       (gOne.ord (Sum.inl slot1)) = (redSwap α β δ h).ord (Sum.inl slot1) := by
   refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨e 1, ?_, ?_, ?_⟩ ?_
   · rw [flagVec_eq_top _ _ rfl]; exact Submodule.mem_top
@@ -152,7 +161,8 @@ with `λ₁ = δ_tilde`, and `V_tilde₁ - δ_tilde⁻¹ V₁ = (0, -β_tilde/(�
 `V_tilde₂ = α_tilde⁻¹ V₂`. -/
 theorem matching_left_right_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
     let Q := redSwap α β δ h
-    let π := gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
+    let π := gOne.matching Q isIrreducibleAction_blocks exists_ne_zero_blocks
+      isIrreducibleAction_blocks exists_ne_zero_blocks
     let k₁ := gOne.ord (Sum.inl slot0)
     let k₂ := gOne.ord (Sum.inl slot1)
     π k₁ = Q.ord (Sum.inl slot0) ∧ π k₂ = Q.ord (Sum.inl slot1) ∧
@@ -246,7 +256,8 @@ theorem isAdaptedFactorization_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0)
       (!![0, α; δ, 0]).submatrix tau21 tau12
     let 𝔄' : Matrix (BlockSpace dims labels 0) (BlockSpace dims labels 0) ℂ :=
       (!![1, β / δ; 0, 1]).submatrix tau21 tau21
-    IsAdaptedFactorization gOne Q isNormal_blocks dims_pos isNormal_blocks dims_pos (Equiv.refl _)
+    IsAdaptedFactorization gOne Q isIrreducibleAction_blocks exists_ne_zero_blocks
+      isIrreducibleAction_blocks exists_ne_zero_blocks (Equiv.refl _)
       complement gOne.gauge 1 𝔄'
       (fun b => intertwinerScalar α δ b •
         (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ)) ∧
@@ -307,14 +318,16 @@ theorem isAdaptedFactorization_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0)
   · intro j
     rcases hj j with rfl | rfl
     · have hK : (gOne.flag (gOne.ord (Sum.inl slot0)).castSucc ⊓
-          Q.flag (gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
+          Q.flag (gOne.matching Q isIrreducibleAction_blocks exists_ne_zero_blocks
+            isIrreducibleAction_blocks exists_ne_zero_blocks
             (gOne.ord (Sum.inl slot0))).succ).restrictScalars ℂ = ⊥ := by
         apply eq_of_map_toVec_eq
         rw [Submodule.map_bot, map_toVec_inf]
         change flagVec gOne _ ⊓ flagVec Q _ = ⊥
         rw [flagVec_eq_bot gOne _ rfl, bot_inf_eq]
       have hU : (gOne.flag (gOne.ord (Sum.inl slot0)).succ ⊓
-          Q.flag (gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
+          Q.flag (gOne.matching Q isIrreducibleAction_blocks exists_ne_zero_blocks
+            isIrreducibleAction_blocks exists_ne_zero_blocks
             (gOne.ord (Sum.inl slot0))).succ).restrictScalars ℂ =
               complement (gOne.ord (Sum.inl slot0)) := by
         apply eq_of_map_toVec_eq
@@ -323,7 +336,8 @@ theorem isAdaptedFactorization_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0)
         funext i; fin_cases i <;> rfl
       exact ⟨hK ▸ disjoint_bot_left, by rw [hK, hU, bot_sup_eq]⟩
     · have hK : (gOne.flag (gOne.ord (Sum.inl slot1)).castSucc ⊓
-          Q.flag (gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
+          Q.flag (gOne.matching Q isIrreducibleAction_blocks exists_ne_zero_blocks
+            isIrreducibleAction_blocks exists_ne_zero_blocks
             (gOne.ord (Sum.inl slot1))).succ).restrictScalars ℂ = ⊥ := by
         apply eq_of_map_toVec_eq
         rw [Submodule.map_bot, map_toVec_inf, hm2]
@@ -333,7 +347,8 @@ theorem isAdaptedFactorization_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0)
         exact (Submodule.mem_bot ℂ).2 (eq_zero_of_mem_span_e0_of_mem_span_e1
           (Submodule.mem_inf.1 hv).1 (Submodule.mem_inf.1 hv).2)
       have hU : (gOne.flag (gOne.ord (Sum.inl slot1)).succ ⊓
-          Q.flag (gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
+          Q.flag (gOne.matching Q isIrreducibleAction_blocks exists_ne_zero_blocks
+            isIrreducibleAction_blocks exists_ne_zero_blocks
             (gOne.ord (Sum.inl slot1))).succ).restrictScalars ℂ =
               complement (gOne.ord (Sum.inl slot1)) := by
         apply eq_of_map_toVec_eq

@@ -17,7 +17,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -29,7 +29,7 @@ qudits of local dimension $d$.
 \section{What is formalized}
 
 Write $L$ for the number of sites and $q$ for the local dimension. The
-viable-witness and leading-vector theorems assume $L\ge1$ and $q\ge2$. These
+boundary-contraction and leading-vector theorems assume $L\ge1$ and $q\ge2$. These
 restrictions are separate from the constant bond dimension, which is
 recorded in the note on the constant bond dimension. They give the estimate
 $\Delta\le4$ for a range-one Hamiltonian with interaction norm at most one,
@@ -38,13 +38,18 @@ leading-vector argument.
 
 \section{Elimination}
 
-For $q=1$, the chain Hilbert space is one-dimensional and the state and
-energy conclusions can be proved directly, without a gap upper bound; such a
-statement must also specify a bond cutoff of at least one. The empty chain
-requires a separate formulation of the quantities $c/L$ and $c/(2L)$. These
-separate statements remain to be proved as part of the viable-set
-construction tracked in
-issue~\href{https://github.com/LionSR/TNLean/issues/9820}{9820}.
+For $q=1$, the chain and left Hilbert spaces are one-dimensional.  The theorem
+\leanid{TNLean.MPS.AreaLaw.exists_size_trimmed_family_localDimension_one}
+therefore reduces any viable finite family to one nonzero member, with exact
+viability and without increasing its bond bound.  This proves the degenerate
+local-dimension case directly, without a gap upper bound.
+
+For the empty chain, the theorem
+\leanid{TNLean.MPS.AreaLaw.exists\_size\_trimmed\_family\_chainLength\_zero}
+gives the same singleton reduction directly.  Its statement avoids the
+quantities $c/L$ and $c/(2L)$, which have no meaning at $L=0$.  Thus both
+degenerate cases excluded from the boundary-contraction proof have separate
+formal statements, and the scope restriction is resolved.
 
 \bibliographystyle{alpha}
 \bibliography{references}
