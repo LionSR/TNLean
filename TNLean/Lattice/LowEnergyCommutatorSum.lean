@@ -311,10 +311,10 @@ private theorem gaussian_error_prefactor (a w b n g c e : ℝ) :
 
 include ha hHerm hSupport hDiam hCard hBudget
 
-omit ha in
 set_option maxHeartbeats 400000 in
 -- The explicit Gaussian prefactor comparison expands several nested products and real casts.
 set_option backward.isDefEq.respectTransparency false in
+omit ha in
 /-- The exponential low-energy commutator estimate for arbitrary separated local
 observables. The observable support cardinality `vObs` is independent of the generator
 cardinality `vR`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, eq. `blecm`,
@@ -391,8 +391,8 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
         exact gaussian_error_prefactor A ‖W‖ ‖B‖ vObs |Kg| Ck E
 
 
-omit ha in
 set_option backward.isDefEq.respectTransparency false in
+omit ha in
 /-- Exponential decay between arbitrary local observables in the distance between
 anchors. The velocity uses the Hamiltonian generator parameters `R,vR`; the observable
 support parameters `Robs,vObs` enter only the prefactor and support-separation correction.
