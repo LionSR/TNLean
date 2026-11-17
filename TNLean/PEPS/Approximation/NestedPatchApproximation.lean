@@ -30,6 +30,10 @@ states*, Proposition 4.1, `03-patches.tex`, lines 335–563,
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareInteraction)
+
 open scoped BigOperators ComplexOrder MatrixOrder
 open TNLean.Lattice
 
@@ -177,8 +181,9 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     {q : ℕ} {J Δ C_A : ℝ} (hA : SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A)
     (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∀ (L : ℕ), 2 ≤ L →
-      ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+          (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
           let Λ := AreaLaw.rectangularDomain L L
           letI : LinearOrder (Lattice.Site Λ) :=
@@ -188,7 +193,7 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
             fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
           let U := dependentGlobalConfigIsometry
             (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-          let Ωᵤ := U.symm (squareAreaLawState Ω)
+          let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
           ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
             (v : EuclideanSpace ℂ
               ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)),
@@ -201,8 +206,8 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
   intro L hL h E₀ Ω hgs center u hu huL
   have hκ : 0 < patchFilterExponent q J Δ := patchFilterExponent_pos_of_pos (by omega) hJ hΔ
   exact exists_closedSquare_cylinders_of_marginal_closeness hL hB₀ hp hκ
-    (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (squareAreaLawState Ω)
-    ((norm_squareAreaLawState Ω).trans hgs.1) center (by linarith) huL
+    (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (AreaLaw.rectangleAreaLawState Ω)
+    ((AreaLaw.norm_rectangleAreaLawState Ω).trans hgs.1) center (by linarith) huL
     (AreaLaw.Geometry.nestedPatchCount_pos u)
     (fun j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
     (fun i j hij ↦ add_le_add_right (mul_le_mul_of_nonneg_left (Nat.cast_le.mpr hij)
@@ -230,8 +235,9 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
     {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∃ R₀ : ℝ, 0 < R₀ ∧
       ∀ (L : ℕ), 2 ≤ L →
-        ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+            (E₀ : ℝ) (Ω : StateSpace L q),
+          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
             let Λ := AreaLaw.rectangularDomain L L
             letI : LinearOrder (Lattice.Site Λ) :=
@@ -241,7 +247,7 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
               fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
             let U := dependentGlobalConfigIsometry
               (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-            let Ωᵤ := U.symm (squareAreaLawState Ω)
+            let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
             ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
               (v : EuclideanSpace ℂ
                 ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)),

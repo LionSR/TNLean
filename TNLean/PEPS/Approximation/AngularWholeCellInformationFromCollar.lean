@@ -27,6 +27,10 @@ Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareInteraction)
+
 open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
@@ -52,8 +56,9 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (r : ℝ) (Aold A : Set (ℝ × ℝ)),
       Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
         (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
-        ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+            (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
             (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
               c * s ≤ dist x (sitePosition L v)) →
@@ -93,8 +98,9 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (r : ℝ) (Aold A : Set (ℝ × ℝ)),
         Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
           (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
-          ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-            h.IsGappedGroundState E₀ Ω Δ →
+          ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+              (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+            Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
             ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
               (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
                 c * s ≤ dist x (sitePosition L v)) →

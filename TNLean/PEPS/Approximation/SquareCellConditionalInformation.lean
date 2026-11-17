@@ -29,6 +29,10 @@ lines 163–178, and Proposition 3.4, lines 688–737.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareInteraction)
+
 noncomputable section
 
 open TNLean.Lattice
@@ -75,7 +79,7 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
       (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner (o - (1, 1)) s m₀) s),
         ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
       FiniteProduct.conditionalMutualInformation
-        (fun _ : Site (rectangularDomain L L) ↦ Fin q) (squareAreaLawState Ω)
+        (fun _ : Site (rectangularDomain L L) ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
         (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
           x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀)) E
         (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
@@ -141,10 +145,10 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
       ∀ y ∈ E.map σ.toEmbedding, c * s ≤ dist x (integerPoint y.val) := by
     intro x hx y hy
     obtain ⟨v, hv, rfl⟩ := Finset.mem_map.mp hy
-    have hh := hclear (x + (1, 1)) (hcl hx) v hv
-    simpa only [Equiv.toEmbedding_apply, ← hpos, dist_add_right] using hh
+    have hcv := hclear (x + (1, 1)) (hcl hx) v hv
+    simpa only [Equiv.toEmbedding_apply, ← hpos, dist_add_right] using hcv
   have hfinal := hbound (E.map σ.toEmbedding) hE' hclear'
-  simpa only [squareAreaLawState, show rectangleConfigurationEquiv L L q =
+  simpa only [AreaLaw.rectangleAreaLawState, show rectangleConfigurationEquiv L L q =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     FiniteProduct.conditionalMutualInformation, ← Finset.map_union,
     finiteProductEntropy_relabel] using hfinal
@@ -167,8 +171,9 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
     (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         let G : Finset (Vertex L) :=
           Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
         let B : Finset (Vertex L) := Finset.univ.filter
@@ -182,8 +187,8 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
   have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
   intro s hs o m₀ A hm₀ L h E₀ Ω hΩ
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
-    (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) h.toAreaLawHamiltonian E₀
-      (squareAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hΩ))
+    (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
+      (AreaLaw.rectangleAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hΩ))
 
 open Classical in
 /-- **Lemma 3.2 on the original open square, at the named amplification constants.** Under
@@ -201,8 +206,9 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_ex
     (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         let G : Finset (Vertex L) :=
           Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
         let B : Finset (Vertex L) := Finset.univ.filter
@@ -237,8 +243,9 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
     ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
         m₀ ∉ A →
-        ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+            (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           let G : Finset (Vertex L) :=
             Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
           let B : Finset (Vertex L) := Finset.univ.filter

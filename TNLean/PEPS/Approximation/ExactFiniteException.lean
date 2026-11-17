@@ -22,6 +22,8 @@ September 24, 2026, `07-assembly.tex`, lines 203–214, at immutable manuscript
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (SquareInteraction)
+
 namespace TNLean.PEPS.Approximation
 
 /-- Increasing the prefactor preserves the same PEPS, phase, and error bound.
@@ -77,9 +79,10 @@ theorem polynomialPEPSApproximation_iff_sufficiently_large :
     PolynomialPEPSApproximation ↔
       ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
         ∃ C c : ℝ, 0 < C ∧ 0 < c ∧ ∃ L₀ : ℕ,
-          ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareHamiltonian L q J,
+          ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian →
+              (∀ i, ‖h.term i‖ ≤ J) →
             ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-              h.IsGappedGroundState E₀ Ω Δ → HasPEPSApproximation C c L q Ω := by
+              Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ → HasPEPSApproximation C c L q Ω := by
   constructor
   · intro happ q hq J Δ hJ hΔ
     obtain ⟨C, c, hC, hc, hall⟩ := happ q hq J Δ hJ hΔ

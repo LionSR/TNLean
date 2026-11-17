@@ -39,12 +39,12 @@ regional sheet swap with the partial swap of the retained regional registers.
 
 * `TNLean.PEPS.Approximation.resetRadius`, `TNLean.PEPS.Approximation.resetFilterPrefactor`,
   `TNLean.PEPS.Approximation.resetUnitaryPrefactor`: the constants of the reset.
-* `TNLean.PEPS.Approximation.SquareHamiltonian.reset_localized_filter`,
-  `TNLean.PEPS.Approximation.SquareHamiltonian.reset_unitary`: the statements below with
+* `ManyBody.SquareInteraction.reset_localized_filter`,
+  `ManyBody.SquareInteraction.reset_unitary`: the statements below with
   these constants.
-* `TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_localized_filter`: the localized
+* `ManyBody.SquareInteraction.exists_reset_localized_filter`: the localized
   two-sided filter of `eq:info-local-two-sided`.
-* `TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_unitary`: the unitary of
+* `ManyBody.SquareInteraction.exists_reset_unitary`: the unitary of
   `eq:info-reset-unitary`.
 
 The steps that do not depend on the geometry of the sites are stated in
@@ -67,7 +67,7 @@ arbitrary coordinates of the two replicas, and the polar step
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal ComplexOrder
@@ -129,16 +129,17 @@ theorem resetUnitaryPrefactor_eq (J Δ r : ℝ) :
   rw [resetUnitaryPrefactor, resetFilterPrefactor, squareLocalizationPrefactor_eq, resetCutoff]
 
 /-- **The localized two-sided filter of the information reset, with explicit constants.**
-The statement of `SquareHamiltonian.exists_reset_localized_filter` holds with the radius
+The statement of `ManyBody.SquareInteraction.exists_reset_localized_filter` holds with the radius
 coefficient `K = resetRadius J Δ r` and the residual prefactor
 `C = resetFilterPrefactor J Δ r`. They are built from the localization prefactor and
 velocity of the doubled square Hamiltonian, the decay rate `1/2`, and the Gaussian cutoff
 `T₀ = resetCutoff Δ r`.
 Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. -/
-theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
+theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
-    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+      Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
@@ -176,10 +177,11 @@ theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : �
   have hCg : 0 < Cg := squareLocalizationPrefactor_pos
   have hT₀ : 0 < T₀ := resetCutoff_pos hΔ hr
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.operator E₀ Ω b hgs
+    regional_physicalBuffer_filter.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.hamiltonian E₀ Ω b hgs
       hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
-  obtain ⟨U, -, -, -, -, hM⟩ := SquareHamiltonian.supported_buffer_gaussian_integral q hq J hJ
+  obtain ⟨U, -, -, -, -, hM⟩ :=
+      ManyBody.SquareInteraction.supported_buffer_gaussian_integral q hq J hJ
     L h R C₀ hRC W ⌈K * (1 + b + Real.log L)⌉₊
   obtain ⟨hMsupp, hMnorm, hMerr⟩ := hM (Real.toNNReal (resetVariance Δ r * (1 + b + Real.log L)))
     (T₀ * (1 + b + Real.log L)) hT
@@ -233,11 +235,12 @@ graph neighborhood of radius `⌈K B⌉` of the buffer and of the endpoints of t
 `R`, with `‖M Ψ - z Φ‖` and `‖Mᴴ Φ - z Ψ‖` at most `C exp (-10 b) L^(-r)`.
 Source: `02-information.tex`, lines 355–562, equations `eq:info-reset-overlap` and
 `eq:info-local-two-sided`. -/
-theorem SquareHamiltonian.exists_reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
+theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
-      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ
@@ -264,18 +267,19 @@ theorem SquareHamiltonian.exists_reset_localized_filter (q : ℕ) (hq : 1 ≤ q)
           ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
             C * Real.exp (-10 * b) * (L : ℝ) ^ (-r) :=
   ⟨resetFilterPrefactor J Δ r, resetRadius J Δ r, resetFilterPrefactor_pos hJ hΔ hr,
-    resetRadius_pos hJ hΔ hr, SquareHamiltonian.reset_localized_filter q hq J hJ hΔ hr⟩
+    resetRadius_pos hJ hΔ hr, ManyBody.SquareInteraction.reset_localized_filter q hq J hJ hΔ hr⟩
 
 /-- **The unitary of the information reset, with explicit constants.** The statement of
-`SquareHamiltonian.exists_reset_unitary` holds with the radius coefficient
+`ManyBody.SquareInteraction.exists_reset_unitary` holds with the radius coefficient
 `K = resetRadius J Δ r` and the error prefactor `C = resetUnitaryPrefactor J Δ r`, twice the
 residual prefactor of the localized filter.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
-theorem SquareHamiltonian.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
+theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
-    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+      Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
@@ -300,7 +304,8 @@ theorem SquareHamiltonian.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
             resetUnitaryPrefactor J Δ r * (L : ℝ) ^ (-r) := by
   intro L hL h E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
-    SquareHamiltonian.reset_localized_filter q hq J hJ hΔ hr L hL h E₀ Ω hgs R C₀ hRC b hb hI
+    ManyBody.SquareInteraction.reset_localized_filter q hq J hJ hΔ hr L hL h E₀ Ω hgs
+        R C₀ hRC b hb hI
   obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
     (resetFilterPrefactor_pos hJ hΔ hr).le (by positivity)
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr⟩
@@ -315,11 +320,12 @@ edges crossing `R` satisfies `‖U Ψ - Φ‖ ≤ C L^(-r)`. It is the polar fac
 `exp (-10 b)` of the two-sided errors, and no unitary dilation is used.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
-theorem SquareHamiltonian.exists_reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
+theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
-      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ
@@ -342,6 +348,6 @@ theorem SquareHamiltonian.exists_reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ
           U ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
           ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ C * (L : ℝ) ^ (-r) :=
   ⟨resetUnitaryPrefactor J Δ r, resetRadius J Δ r, resetUnitaryPrefactor_pos hJ hΔ hr,
-    resetRadius_pos hJ hΔ hr, SquareHamiltonian.reset_unitary q hq J hJ hΔ hr⟩
+    resetRadius_pos hJ hΔ hr, ManyBody.SquareInteraction.reset_unitary q hq J hJ hΔ hr⟩
 
 end TNLean.PEPS.Approximation

@@ -25,6 +25,10 @@ lines 692–778, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareInteraction)
+
 open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
@@ -157,8 +161,9 @@ theorem angular_single_scale_reset_of_sublinearCollarBoundAt
     (hd : 0 < d) (hda : d < a' / 4) (hd1 : d ≤ 1)
     (hp : 0 < p) (M : ℕ) {D : ℝ} (hD : angularCellResetSlope (resetWidth J Δ p) a' d ≤ D) :
     ∀ L : ℕ, angularSingleScaleThreshold q J Δ a a' d p Ctpl N Ca Na M ≤ (L : ℝ) →
-      ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+          (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
           ∀ (o : ℝ × ℝ) (Aold A E : Set (ℝ × ℝ)), Aold ⊆ A →
             (∀ x ∈ A, ∀ y ∈ E, (a / 2) * s ≤ dist x y) →
@@ -213,8 +218,9 @@ theorem exists_angular_single_scale_reset_of_sublinearCollarBound
     (hp : 0 < p) (N : ℕ) :
     ∃ D L₀ : ℝ, 1 ≤ D ∧ Real.exp 1 ≤ L₀ ∧
       ∀ L : ℕ, L₀ ≤ (L : ℝ) →
-        ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+            (E₀ : ℝ) (Ω : StateSpace L q),
+          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
             ∀ (o : ℝ × ℝ) (Aold A E : Set (ℝ × ℝ)), Aold ⊆ A →
               (∀ x ∈ A, ∀ y ∈ E, (a / 2) * s ≤ dist x y) →

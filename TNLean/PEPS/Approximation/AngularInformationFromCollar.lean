@@ -41,7 +41,7 @@ Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`),
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (SquareLatticeVertex)
+open ManyBody (SquareLatticeVertex SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -228,8 +228,9 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
     (hD : angularScale J Δ a p ≤ D)
     (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na ≤ L₀) :
     ∀ L : ℕ, L₀ ≤ L →
-      ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ,
+          ∀ Ω : StateSpace L q,
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
         ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →

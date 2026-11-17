@@ -25,7 +25,7 @@ states*, Proposition 4.1, `03-patches.tex`, lines 213–336,
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareInteraction)
 
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -47,10 +47,11 @@ minimum. No density is assumed nonsingular.
 Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 213–336,
 eq:patch-single-crossing, eq:patch-one-term-energy and eq:patch-energy-bound;
 00-introduction.tex, eq:model and eq:global-gap. -/
-theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
-    {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
+theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
+    {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     (hJ : 0 ≤ J) (_hΔ : 0 < Δ)
-    (Ω : StateSpace L q) (hgs : h.IsGappedGroundState E₀ Ω Δ)
+    (Ω : StateSpace L q) (hgs : Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ)
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     let Λ := AreaLaw.rectangularDomain L L
@@ -62,7 +63,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
     let U := dependentGlobalConfigIsometry
       (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-    let Ωᵤ := U.symm (squareAreaLawState Ω)
+    let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
       x ∈ regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
       IsMinOn
@@ -72,13 +73,13 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
       let φ : Lattice.StateSpace Λ q := U
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ x)
-      (inner ℂ φ (Matrix.toEuclideanLin h.toAreaLawHamiltonian.operator φ)).re - E₀ ≤
+      (inner ℂ φ (Matrix.toEuclideanLin ((h.toAreaLawHamiltonian hhJ) hhJ).operator φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
   intro Λ m regions a U Ωᵤ x hx hmin φ
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
-    (U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hgs.1)
+    (U.symm.norm_map _).trans ((AreaLaw.norm_rectangleAreaLawState Ω).trans hgs.1)
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
@@ -100,7 +101,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
     (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
-    (U (U.symm (squareAreaLawState Ω))) at hφpatch
+    (U (U.symm (AreaLaw.rectangleAreaLawState Ω))) at hφpatch
   simp only [U.apply_symm_apply, Entropy.patchState, Entropy.patchOutput,
     map_filter_regularizedPatchFactorList_eq_chainList] at hφpatch
   have hinv : Entropy.liftProdInv (Entropy.chainList D K fun _ ↦ True) *
@@ -108,9 +109,9 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (h.isGappedGroundState_toAreaLawHamiltonian hgs).2.1 hinv
+    (h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hgs).2.1 hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-      (squareAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
+      (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
   rw [← hφpatch, ← hTsum] at heig
   have hφne : φ ≠ 0 := norm_ne_zero_iff.mp (hφ.trans_ne one_ne_zero)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp (show (φ : _ → ℂ) ≠ 0 from by

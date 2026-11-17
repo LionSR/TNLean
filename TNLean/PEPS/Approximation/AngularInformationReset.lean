@@ -21,7 +21,9 @@ Source: polynomial-PEPS manuscript, Proposition 3.4,
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (SquareLatticeVertex)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareLatticeVertex SquareInteraction)
 
 open TNLean.Lattice
 
@@ -99,7 +101,7 @@ theorem IsSquareGroundState.squareResetBound (q : ℕ) (hq : 1 ≤ q) (J : ℝ) 
     SquareResetBound q (IsSquareGroundState q J Δ) p (resetWidth J Δ p)
       (resetThreshold q J Δ p) :=
   fun L hL Ω ⟨h, E₀, hΩ⟩ ↦
-    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L hL h E₀ Ω hΩ
+    ManyBody.SquareInteraction.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L hL h E₀ Ω hΩ
 
 open Classical in
 /-- **The information reset for the padded annular regions, with explicit constants.** The
@@ -112,8 +114,9 @@ of Lemma 3.3 at lines 606–608 and 612–630. -/
 theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
     (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
-      ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+          (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
           0 ≤ a' → 0 < d → 0 < s →
           let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter
@@ -145,8 +148,9 @@ theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
     (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L →
-        ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+            (E₀ : ℝ) (Ω : StateSpace L q),
+          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
             0 ≤ a' → 0 < d → 0 < s →
             let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter

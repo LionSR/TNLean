@@ -217,13 +217,12 @@ import TNLean.PEPS.Approximation.SourceBlockMatrix
 import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SpectatorOwnerExclusion
-import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 import TNLean.PEPS.Approximation.SquareCellConditionalInformation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
-import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
+import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.Approximation.SquareInteractionSupport
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity

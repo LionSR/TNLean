@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Entropy.MovementEtaRegional
 import QICLean.Entropy.RegionCovariance
-import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
+import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TwoFamilies
@@ -54,7 +54,10 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge
+  SquareInteraction)
 
 open scoped BigOperators ComplexOrder
 
@@ -69,8 +72,8 @@ most one in the integer rectangle. Source: polynomial-PEPS `eq:model`
 (`00-introduction.tex`, lines 40–45) and area-law Corollary 1.2. -/
 theorem squareAreaLawSupport_isAdmissibleSupport (L : ℕ) (i : SquareLatticeSiteOrEdge L L) :
     Lattice.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
-      (squareAreaLawSupport L i).1 :=
-  (squareAreaLawSupport L i).2
+      (AreaLaw.rectangleAreaLawSupport L L i).1 :=
+  (AreaLaw.rectangleAreaLawSupport L L i).2
 
 section Relabel
 
@@ -190,16 +193,17 @@ Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58),
 area-law Theorem 1.1 and Corollary 1.2. -/
 theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : Lattice.LocalHamiltonian Λ q 1 J, ∀ E₀ : ℝ,
-      ∀ Ω : Lattice.StateSpace Λ q, Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Ω : Lattice.StateSpace Λ q, Lattice.IsGappedGroundState Λ q h.hamiltonian E₀ Ω Δ →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
-    {L : ℕ} (h : SquareHamiltonian L q J) {E₀ : ℝ} {Ω : StateSpace L q}
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (A : Finset (Vertex L)) :
+    {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+        {E₀ : ℝ} {Ω : StateSpace L q}
+    (hΩ : Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ) (A : Finset (Vertex L)) :
     FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
-  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hΩ
-  have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
-    (squareAreaLawState Ω) hgap (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
+  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hΩ
+  have := hbound (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
+    (AreaLaw.rectangleAreaLawState Ω) hgap (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
     this

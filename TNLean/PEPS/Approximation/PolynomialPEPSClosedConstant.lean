@@ -27,6 +27,8 @@ Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground stat
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareInteraction)
+
 namespace TNLean.PEPS.Approximation
 
 /-- The area-law constant of Proposition 2.1 at the closed form of the range-one area law. -/
@@ -72,8 +74,9 @@ has a PEPS approximation with bond dimensions at most `C L^c` and normalized err
 Source: polynomial-PEPS Theorem 1.1 and its proof in §8 (`07-assembly.tex`, lines 9–214). -/
 theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ} (hJ : 0 < J)
     (hΔ : 0 < Δ) :
-    ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-      h.IsGappedGroundState E₀ Ω Δ →
+    ∀ L : ℕ, 2 ≤ L → ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian →
+        (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
+      Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         HasPEPSApproximation (pepsBondPrefactor q J Δ) (pepsBondExponent q J Δ) L q Ω := by
   have hA := AreaLaw.squareEntropyAreaLawAt_closed (q := q) (by omega) hJ.le hΔ
   have hD : IsAngularScale q (IsSquareGroundState q J Δ) (angularConstant / 2) 1 4 60

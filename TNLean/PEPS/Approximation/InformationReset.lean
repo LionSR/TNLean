@@ -23,7 +23,7 @@ dimension.
 The proof treats the two replicas as the sites `V ⊕ V`. The doubled vector `Ψ = Ω ⊗ Ω` keeps
 the original mutual information of the cores in the first replica, and in `Φ = F_R Ψ` the two
 cores come from different replicas, so they have no mutual information. The unitary of
-`TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_unitary` acts on paired sites at
+`ManyBody.SquareInteraction.exists_reset_unitary` acts on paired sites at
 graph distance at most `⌈K B⌉` from the buffer and from the endpoints of the edges crossing `R`;
 these sites are disjoint from both cores. Continuity of mutual information then costs only the
 physical dimension `q^(L^2)` of a core.
@@ -36,9 +36,9 @@ physical dimension `q^(L^2)` of a core.
 * `TNLean.PEPS.Approximation.resetWidth`, `TNLean.PEPS.Approximation.resetThreshold`: the
   width `C_p` and the size threshold `L₀`, with the closed form
   `C_p = 1280 e² (J/Δ)(2p + 40) + 4p + 52` (`TNLean.PEPS.Approximation.resetWidth_eq`).
-* `TNLean.PEPS.Approximation.SquareHamiltonian.information_reset_of_resetThreshold_le`:
+* `ManyBody.SquareInteraction.information_reset_of_resetThreshold_le`:
   Lemma 3.3 with these constants.
-* `TNLean.PEPS.Approximation.SquareHamiltonian.information_reset`: Lemma 3.3.
+* `ManyBody.SquareInteraction.information_reset`: Lemma 3.3.
 
 ## References
 
@@ -49,7 +49,9 @@ physical dimension `q^(L^2)` of a core.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
 open Matrix QuantumCircuit
 open scoped Kronecker
@@ -323,15 +325,17 @@ theorem resetWidth_eq (J Δ p : ℝ) :
   ring
 
 /-- **Lemma 3.3 (information reset), with explicit constants.** The statement of
-`SquareHamiltonian.information_reset` holds with the reset width `C_p = resetWidth J Δ p`
+`ManyBody.SquareInteraction.information_reset` holds with the reset width `C_p = resetWidth J Δ p`
 and the size threshold `L₀ = resetThreshold q J Δ p`.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630,
 with `A, T₀` at lines 443–450, `K_loc` at lines 551–554 and `C_p` at lines 606–608. -/
-theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
+theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le (q : ℕ)
+    (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
-      ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+          (E₀ : ℝ) (Ω : StateSpace L q),
+      Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
       ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
       ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
       (∀ x ∈ R₀, ∀ y, y ∉ R → resetWidth J Δ p * (1 + b + Real.log L) <
@@ -339,7 +343,8 @@ theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq :
       (∀ x ∈ C₀, ∀ y, y ∉ C → resetWidth J Δ p * (1 + b + Real.log L) <
         (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
-  have hreset := SquareHamiltonian.reset_unitary q hq J hJ hΔ (r := 2 * p + 10) (by linarith)
+  have hreset := ManyBody.SquareInteraction.reset_unitary q hq J hJ hΔ
+      (r := 2 * p + 10) (by linarith)
   have hK : 0 < resetRadius J Δ (2 * p + 10) := resetRadius_pos hJ hΔ (by linarith)
   have hCu : 0 < resetUnitaryPrefactor J Δ (2 * p + 10) :=
     resetUnitaryPrefactor_pos hJ hΔ (by linarith)
@@ -381,11 +386,13 @@ gapped ground state of an open `L × L` square Hamiltonian with interaction boun
 are at sup-distance greater than `w = C_p (1 + b + log L)` from the complements of `R` and of
 `C`, then `I_Ω(R₀ : C₀) ≤ L^(-p)`. Only the original full-system gap is assumed.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
-theorem SquareHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (hJ : 0 ≤ J)
+theorem _root_.ManyBody.SquareInteraction.information_reset (q : ℕ) (hq : 1 ≤ q)
+    (J : ℝ) (hJ : 0 ≤ J)
     {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
-      ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
         ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
         (∀ x ∈ R₀, ∀ y, y ∉ R → Cp * (1 + b + Real.log L) <
@@ -394,6 +401,6 @@ theorem SquareHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (
           (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨resetWidth J Δ p, resetThreshold q J Δ p, resetWidth_pos hJ hΔ hp,
-    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ hΔ hp⟩
+    ManyBody.SquareInteraction.information_reset_of_resetThreshold_le q hq J hJ hΔ hp⟩
 
 end TNLean.PEPS.Approximation

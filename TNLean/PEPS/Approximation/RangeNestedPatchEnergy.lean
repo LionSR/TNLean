@@ -29,7 +29,7 @@ choice with `C_E` in place of `36 q² J`.
 **Extension beyond the source:** the source proves the energy bound for on-site and
 nearest-neighbour interactions with `C_E = 36 q² J`; the range-`R` statement and its
 constant are not in the source. The nearest-neighbour theorem
-`SquareHamiltonian.nestedPatch_minimizer_energy_le` is unchanged.
+`ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le` is unchanged.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*,
 Proposition 4.1, `03-patches.tex`, lines 213–343, `eq:patch-energy-bound` and

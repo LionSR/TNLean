@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
+import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.IsoTransport
 
@@ -31,7 +31,7 @@ theorem squareAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
     (i : SquareLatticeSiteOrEdge L L) :
     let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
       (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
-    (squareAreaLawSupport L i).val = AreaLaw.nearestNeighborSupport (e i) := by
+    (AreaLaw.rectangleAreaLawSupport L L i).val = AreaLaw.nearestNeighborSupport (e i) := by
   rcases i with v | e <;>
     simp only [squareAreaLawSupport, squareLatticeSiteOrEdgeSupport,
       AreaLaw.nearestNeighborSupport, Finset.image_singleton, Finset.image_insert,

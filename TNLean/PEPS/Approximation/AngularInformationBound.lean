@@ -43,7 +43,7 @@ use the proposition as a premise independently of its proof.
   accuracy `L^{-60}`, `06-geometry.tex`, lines 440–445.
 -/
 
-open ManyBody (SquareLatticeVertex)
+open ManyBody (SquareLatticeVertex SquareInteraction)
 
 noncomputable section
 
@@ -76,8 +76,9 @@ with the conventions of lines 4–13, under `eq:model` and `eq:global-gap`
 def AngularInformationBound (q : ℕ) (J Δ : ℝ) : Prop :=
   ∀ a A₀ : ℝ, 0 < a → 1 ≤ A₀ → ∀ m₀ : ℕ, ∀ p : ℝ, 0 < p →
     ∃ D L₀ : ℝ, ∀ L : ℕ, L₀ ≤ L →
-      ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ,
+          ∀ Ω : StateSpace L q,
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
         ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →

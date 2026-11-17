@@ -22,7 +22,9 @@ edge interactions cancel.
   revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
 open Matrix
 open scoped BigOperators
@@ -34,14 +36,15 @@ perturbation. The individual interactions need not be Hermitian, and zero local
 dimension and empty square grids are included.
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 513–524. -/
-theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
-    {L q : ℕ} {J : ℝ} (h : SquareHamiltonian L q J)
+theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
+    {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     (R : Finset (SquareLatticeVertex L L)) :
     let F := TNLean.Lattice.sheetSwapOp q R
-    F * doubledHamiltonian h.operator * Fᴴ - doubledHamiltonian h.operator =
+    F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
       ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R),
-        (F * doubledHamiltonian (h.edgeTerm e) * Fᴴ -
-          doubledHamiltonian (h.edgeTerm e)) := by
+        (F * doubledHamiltonian (h.term (.inr e)) * Fᴴ -
+          doubledHamiltonian (h.term (.inr e))) := by
   classical
   let δ : Matrix (Configuration L q) (Configuration L q) ℂ →ₗ[ℂ]
       Matrix (Configuration L q × Configuration L q)
@@ -53,8 +56,8 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
         Matrix.kroneckerBilinear (R := ℂ)
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
-  change δ h.operator = ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R), δ (h.edgeTerm e)
-  simp only [SquareHamiltonian.operator, map_add, map_sum]
+  change δ h.hamiltonian = ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R), δ (h.term (.inr e))
+  simp only [ManyBody.SquareInteraction.operator, map_add, map_sum]
   have hcancel {S : Set (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ QuantumCircuit.supportedOperators q S)
@@ -62,12 +65,12 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
     sub_eq_zero.mpr
       (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators hA hS)
   have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
-      δ (h.edgeTerm e) = 0 := by
+      δ (h.term (.inr e)) = 0 := by
     apply hcancel (h.edge_supported e)
     simp only [IsRegionBoundaryEdge, Set.insert_subset_iff, Set.singleton_subset_iff,
       Set.disjoint_insert_left, Set.disjoint_singleton_left, Finset.mem_coe] at he ⊢
     tauto
-  have hsite (v : SquareLatticeVertex L L) : δ (h.siteTerm v) = 0 :=
+  have hsite (v : SquareLatticeVertex L L) : δ (h.term (.inl v)) = 0 :=
     hcancel (h.site_supported v) (by
       simp only [Set.singleton_subset_iff, SetLike.mem_coe, Set.disjoint_singleton_left]
       exact em _)

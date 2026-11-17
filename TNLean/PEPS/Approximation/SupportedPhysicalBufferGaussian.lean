@@ -22,7 +22,7 @@ September 24, 2026, `02-information.tex`, lines 498–564,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal
@@ -72,9 +72,10 @@ constants.** The error of the supported integral is at most
 dimension `q²`, range one and term-norm bound `2J`.
 Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562, with the
 constants of `eq:info-lr` (lines 486–496). -/
-theorem SquareHamiltonian.supported_buffer_gaussian_integral
+theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (hJ : 0 ≤ J) :
-    ∀ (L : ℕ) (h : SquareHamiltonian L q J)
+    ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
       (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
       let Q := (R ∪ C₀)ᶜ
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
@@ -85,7 +86,7 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
       let Λ := AreaLaw.rectangularDomain L L
       let a := AreaLaw.rectangleSiteEquiv L L
       let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-      let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.operator)
+      let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
       let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
       let K' := F * K * Fᴴ
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
@@ -122,10 +123,10 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
   have hK' : gH.operator = K' := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
-  have hDK : (doubledHamiltonian h.operator).IsHermitian := by
+  have hDK : (doubledHamiltonian h.hamiltonian).IsHermitian := by
     simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
       Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
-      (show h.operator.IsHermitian from h.hermitian).eq]
+      (show h.hamiltonian.IsHermitian from h.hermitian).eq]
   have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
       ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
         supportedOperators (q * q) (Q : Set (SquareLatticeVertex L L)) :=
@@ -133,12 +134,12 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
       TNLean.Lattice.siteLift_mem_supportedOperators Q
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
   have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (Lattice.Site Λ)) := by
-    simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
+    simpa only [a, V, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective hV₀
   have hD : gH.operator - K ∈
       supportedOperators (q * q) (Z.image a : Set (Lattice.Site Λ)) := by
-    simpa only [hK', a, K', F, K, embedOp_rectangle_eq_reindex, Finset.coe_image,
+    simpa only [hK', a, K', F, K, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
       Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound R).1
@@ -177,10 +178,11 @@ supported Gaussian approximation. Both spatial support hypotheses are derived
 from the original interactions and coordinate maps. The constants precede all
 finite systems, and the same relative path precedes every variance and cutoff.
 Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562. -/
-theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
+theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integral
     (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (hJ : 0 ≤ J) :
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J)
+      ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J)
         (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
         let Q := (R ∪ C₀)ᶜ
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
@@ -191,7 +193,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
         let Λ := AreaLaw.rectangularDomain L L
         let a := AreaLaw.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-        let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.operator)
+        let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
         let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
         let K' := F * K * Fᴴ
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
@@ -225,7 +227,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     by linarith [squareLocalizationVelocity_nonneg hJ], one_half_pos, fun L h R C₀ hRC ↦ ?_⟩
   intro Q P s g p Λ a e K F K' boundary Z W V l B
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
-    SquareHamiltonian.supported_buffer_gaussian_integral q hq J hJ L h R C₀ hRC W l
+    ManyBody.SquareInteraction.supported_buffer_gaussian_integral q hq J hJ L h R C₀ hRC W l
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
   obtain ⟨hMs, hMn, hMe⟩ := hM η T hT
   refine ⟨hMs, hMn, hMe.trans ?_⟩

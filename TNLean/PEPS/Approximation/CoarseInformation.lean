@@ -58,6 +58,10 @@ Proposition 3.4 of the polynomial-PEPS manuscript.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareInteraction)
+
 open TNLean.PEPS.AreaLaw
 open TNLean.Lattice
 
@@ -385,8 +389,10 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
     {J Δ D₀ Ctpl : ℝ} (hΔ : 0 < Δ)
     (hcol : SublinearCollarBound q 1 J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ → ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
+      ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ → ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ),
+            IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v + c ∈ T),
           ∀ E : Finset (Vertex L),
@@ -406,8 +412,8 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   have hdist' (x y : ℤ × ℤ) :
       Scan.ambientSupDistance (x + -c) (y + -c) = Scan.ambientSupDistance x y := by
     rw [hdist, neg_add_cancel_right]
-  have h := hmain u hu (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
-    (squareAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hΩ)
+  have h := hmain u hu (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
+    (AreaLaw.rectangleAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hΩ)
     (T.image fun t ↦ t + -c) (hT.translate (-c))
     (by
       simp only [Finset.mem_image]
@@ -428,7 +434,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
       rintro _ ⟨t, ht, rfl⟩ _ ⟨v, hv, rfl⟩
       rw [Equiv.toEmbedding_apply, rectangleSiteEquiv_val, hdist]
       exact hE t ht v hv)
-  rwa [squareAreaLawState, show AreaLaw.rectangleConfigurationEquiv L L q =
+  rwa [AreaLaw.rectangleAreaLawState, show AreaLaw.rectangleConfigurationEquiv L L q =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     finiteProductMutualInformation_relabel] at h
 

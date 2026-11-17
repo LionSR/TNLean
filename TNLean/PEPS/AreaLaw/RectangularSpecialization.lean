@@ -30,7 +30,9 @@ Proposition 2.1, at revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open ManyBody (Edge RectangleInteraction SquareLatticeVertex squareLatticeGraph)
+
+open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 
@@ -44,9 +46,11 @@ conclusion; `rectangularEntropyAreaLaw` proves it. -/
 def RectangularEntropyAreaLaw : Prop :=
   ∀ q : ℕ, 1 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C : ℝ, 0 ≤ C ∧
-      ∀ width height : ℕ, ∀ h : RectangularHamiltonian width height q J,
+      ∀ width height : ℕ, ∀ h : RectangleInteraction width height q,
+        h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) →
         ∀ E₀ : ℝ, ∀ Ω : RectangleStateSpace width height q,
-          h.IsGappedGroundState E₀ Ω Δ → ∀ A : Finset (SquareLatticeVertex width height),
+          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
+          ∀ A : Finset (SquareLatticeVertex width height),
             FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω A ≤
               C * Fintype.card
                 {e : Edge (squareLatticeGraph width height) // IsRegionBoundaryEdge A e} ∧
@@ -66,16 +70,16 @@ theorem regionalEntropy_rectangleAreaLawState {width height q : ℕ}
   exact Approximation.finiteProductEntropy_relabel (rectangleSiteEquiv width height) q Ω A
 
 /-- The finite-domain area law implies all three native rectangular bounds
-with the same constant. Only source support, term-norm, total-Hermiticity and
-full-system gap hypotheses enter the physical instance. Source: the implication
+with the same constant. Only the term-norm, total-Hermiticity and full-system gap
+hypotheses enter the physical instance, beyond the supports that the interaction carries. Source: the implication
 from Theorem 1.1 to Corollary 1.2. Theorem 1.1 is an explicit hypothesis. -/
 theorem UniformAreaLaw.rectangularEntropyAreaLaw (harea : UniformAreaLaw) :
     RectangularEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q hq 1 J Δ hJ hΔ
-  refine ⟨C, hC, fun width height h E₀ Ω hΩ A ↦ ?_⟩
-  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hJ.le hΩ
-  have h := hbound (rectangularDomain width height) (h.toAreaLawHamiltonian hJ.le) E₀
+  refine ⟨C, hC, fun width height h hH hΦ E₀ Ω hΩ A ↦ ?_⟩
+  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hΦ hH hΩ
+  have h := hbound (rectangularDomain width height) (h.toAreaLawHamiltonian hΦ) E₀
     (rectangleAreaLawState Ω) hgap (A.map (rectangleSiteEquiv width height).toEmbedding)
   have hi := regionalEntropy_le_four_mul_innerBoundary_card hC h
   have he := regionalEntropy_le_two_mul_endpointBoundary_card hC h
@@ -84,28 +88,13 @@ theorem UniformAreaLaw.rectangularEntropyAreaLaw (harea : UniformAreaLaw) :
   rw [regionalEntropy_rectangleAreaLawState, card_endpointBoundary_rectangular] at he
   exact ⟨h, hi, he⟩
 
-/-- The accepted square model is the equal-side case of the native rectangular
-model, with exactly the same operators and source hypotheses.
-Source: polynomial-PEPS `eq:model`. -/
-def _root_.TNLean.PEPS.Approximation.SquareHamiltonian.toRectangularHamiltonian
-    {L q : ℕ} {J : ℝ} (h : Approximation.SquareHamiltonian L q J) :
-    RectangularHamiltonian L L q J where
-  siteTerm := h.siteTerm
-  edgeTerm := h.edgeTerm
-  site_supported := h.site_supported
-  edge_supported := h.edge_supported
-  site_norm_le := h.site_norm_le
-  edge_norm_le := h.edge_norm_le
-  hermitian := h.hermitian
-
-/-- The rectangular result supplies the accepted square statement without
-changing its `q ≥ 2` signature. Source: polynomial-PEPS Proposition 2.1.
+/-- The rectangular result supplies the accepted square statement, the equal-side case,
+without changing its `q ≥ 2` signature. Source: polynomial-PEPS Proposition 2.1.
 The rectangular area law is an explicit hypothesis. -/
 theorem RectangularEntropyAreaLaw.squareEntropyAreaLaw (harea : RectangularEntropyAreaLaw) :
     Approximation.SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) J Δ hJ hΔ
-  exact ⟨C, hC, fun L Ω ⟨h, E₀, hΩ⟩ A ↦
-    (hbound L L h.toRectangularHamiltonian E₀ Ω hΩ A).1⟩
+  exact ⟨C, hC, fun L Ω ⟨h, hH, hΦ, E₀, hΩ⟩ A ↦ (hbound L L h hH hΦ E₀ Ω hΩ A).1⟩
 
 end TNLean.PEPS.AreaLaw

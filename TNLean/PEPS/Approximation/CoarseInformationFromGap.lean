@@ -27,6 +27,10 @@ Source: polynomial-PEPS manuscript, Proposition 3.1 (`prop:coarse`),
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareInteraction)
+
 open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
@@ -155,8 +159,10 @@ theorem coarse_mutualInformation_le_square {q : ℕ} (hq : 1 ≤ q)
     {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ → ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
+      ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ → ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ),
+            IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v + c ∈ T),
           ∀ E : Finset (Vertex L),
@@ -176,8 +182,9 @@ Source: polynomial-PEPS manuscript, Proposition 3.1 (`prop:coarse`),
 theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
     {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ → ∀ d : ℝ × ℝ,
+      ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ → ∀ d : ℝ × ℝ,
           ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T,
             dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) ≤ A₀ * u) →

@@ -5,19 +5,22 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.Lattice.LocalHamiltonian
-import QICLean.Algebra.HermitianPartSum
+import TNLean.Circuit.EntropySupport
+import QICLean.ManyBody.Hamiltonian.Models
+import QICLean.ManyBody.Hamiltonian.HermitianPart
 import QICLean.Algebra.L2OpNormReindex
 import Mathlib.Analysis.Complex.Basic
 
 /-!
-# Native rectangular Hamiltonians and range-one interactions
+# Rectangular interactions as range-one interactions on the integer rectangle
 
-A rectangle has arbitrary natural width and height, including zero. The input
-is one matrix per native site and undirected nearest-neighbor edge, with the
-source support and Euclidean operator-norm bounds. Only their total sum must
-be Hermitian. Taking Hermitian parts preserves the bound and total; placing
-these terms at distinct singleton and pair supports gives an actual finite-domain
-Hamiltonian. The configuration isometry preserves the unit vector and gap.
+A rectangle has arbitrary natural width and height, including zero. The input is a
+`ManyBody.RectangleInteraction`: one matrix per native site and undirected nearest-neighbor
+edge, supported on that site or on the two endpoints. The source's bound `‖h_i‖ ≤ J` and
+its Hermiticity of the total sum are hypotheses of the statements that use them. Taking
+Hermitian parts preserves the bound and, for a Hermitian total, the total; placing these
+terms at distinct singleton and pair supports gives an actual finite-domain Hamiltonian. The
+configuration isometry preserves the unit vector and gap.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Corollary 1.2 (`cor:rectangles`), and *Polynomial PEPS approximation of gapped
@@ -47,111 +50,6 @@ abbrev RectangleConfiguration (width height q : ℕ) :=
 Source: area-law Corollary 1.2. -/
 abbrev RectangleStateSpace (width height q : ℕ) :=
   EuclideanSpace ℂ (RectangleConfiguration width height q)
-
-/-- Bounded native site and edge interactions, with Hermiticity only for their
-sum. No positivity of the side lengths or lower bound on `q` is built in.
-Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
-structure RectangularHamiltonian (width height q : ℕ) (J : ℝ) where
-  /-- One matrix for each site, as in `eq:model`. -/
-  siteTerm : SquareLatticeVertex width height →
-    Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ
-  /-- One matrix for each undirected nearest-neighbor edge, as in `eq:model`. -/
-  edgeTerm : Edge (squareLatticeGraph width height) →
-    Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ
-  /-- The site support condition in `eq:model`. -/
-  site_supported : ∀ v, siteTerm v ∈ QuantumCircuit.supportedOperators q {v}
-  /-- The edge support condition in `eq:model`. -/
-  edge_supported : ∀ e, edgeTerm e ∈
-    QuantumCircuit.supportedOperators q {e.1.1, e.1.2}
-  /-- The site-term Euclidean operator-norm bound in `eq:model`. -/
-  site_norm_le : ∀ v, ‖siteTerm v‖ ≤ J
-  /-- The edge-term Euclidean operator-norm bound in `eq:model`. -/
-  edge_norm_le : ∀ e, ‖edgeTerm e‖ ≤ J
-  /-- Only total Hermiticity is required by `eq:model`. -/
-  hermitian : ((∑ v, siteTerm v) + ∑ e, edgeTerm e).IsHermitian
-
-/-- The original sum, before taking Hermitian parts. Source: `eq:model`. -/
-def RectangularHamiltonian.operator {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) :
-    Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ :=
-  (∑ v, h.siteTerm v) + ∑ e, h.edgeTerm e
-
-/-- The unit eigenvector and full-system projector gap in native coordinates.
-Source: area-law Theorem 1.1 and polynomial-PEPS `eq:global-gap`. -/
-def RectangularHamiltonian.IsGappedGroundState {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (E₀ : ℝ)
-    (Ω : RectangleStateSpace width height q) (Δ : ℝ) : Prop :=
-  Matrix.IsGappedGroundState h.operator E₀ Ω Δ
-
-private def rectangleInteractionTerm {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) : SquareLatticeSiteOrEdge width height →
-      Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ
-  | .inl v => h.siteTerm v
-  | .inr e => h.edgeTerm e
-
-/-- The Hermitian part of each original interaction. Source:
-`00-introduction.tex`, lines 39–44; `03-patches.tex`, lines 214–333. -/
-def RectangularHamiltonian.hermitianTerm {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
-    Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ :=
-  ℜ (rectangleInteractionTerm h i)
-
-/-- The Hermitian part of an original interaction remains in its designated
-circuit supported-operator algebra, since that algebra is closed under
-adjoints and real linear combinations. Source: `00-introduction.tex`, `eq:model`. -/
-theorem RectangularHamiltonian.hermitianTerm_mem_supportedOperators {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
-    h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
-      (squareLatticeSiteOrEdgeSupport i : Set (SquareLatticeVertex width height)) := by
-  have hs : rectangleInteractionTerm h i ∈
-      QuantumCircuit.supportedOperators q
-        (squareLatticeSiteOrEdgeSupport i : Set (SquareLatticeVertex width height)) := by
-    cases i with
-    | inl v =>
-      simpa only [rectangleInteractionTerm, squareLatticeSiteOrEdgeSupport, Finset.coe_singleton]
-        using h.site_supported v
-    | inr e =>
-      simpa only [rectangleInteractionTerm, squareLatticeSiteOrEdgeSupport, Finset.coe_insert,
-        Finset.coe_singleton]
-        using h.edge_supported e
-  exact coe_realPart_mem_of_star_mem
-    (S := (QuantumCircuit.supportedOperators q
-      (squareLatticeSiteOrEdgeSupport i : Set
-          (SquareLatticeVertex width height))).restrictScalars ℝ)
-    hs (QuantumCircuit.star_mem_supportedOperators hs)
-
-/-- Every replaced interaction is Hermitian. Source:
-`00-introduction.tex`, `eq:model`. -/
-theorem RectangularHamiltonian.hermitianTerm_isHermitian {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
-    (h.hermitianTerm i).IsHermitian :=
-  (ℜ (rectangleInteractionTerm h i)).property.isHermitian
-
-/-- The original norm bound holds without any factor loss. Source:
-`00-introduction.tex`, `eq:model`. -/
-theorem RectangularHamiltonian.hermitianTerm_norm_le {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
-    ‖h.hermitianTerm i‖ ≤ J := by
-  apply (realPart.norm_le (rectangleInteractionTerm h i)).trans
-  cases i with
-  | inl v => exact h.site_norm_le v
-  | inr e => exact h.edge_norm_le e
-
-/-- Hermitian replacement recovers exactly the original Hamiltonian.
-Only total Hermiticity is used. Source: `00-introduction.tex`, `eq:model`. -/
-theorem RectangularHamiltonian.sum_hermitianTerm {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) :
-    (∑ i : SquareLatticeSiteOrEdge width height, h.hermitianTerm i) = h.operator := by
-  have hsum : (∑ i : SquareLatticeSiteOrEdge width height, rectangleInteractionTerm h i) =
-      h.operator := by
-    rw [Fintype.sum_sum_type]
-    change (∑ v, h.siteTerm v) + (∑ e, h.edgeTerm e) = _
-    rfl
-  have hh : IsSelfAdjoint
-      (∑ i : SquareLatticeSiteOrEdge width height, rectangleInteractionTerm h i) := by
-    rw [hsum]
-    exact h.hermitian.isSelfAdjoint
-  exact (sum_coe_realPart_of_isSelfAdjoint Finset.univ (rectangleInteractionTerm h) hh).trans hsum
 
 /-- Each original site or undirected edge determines its actual admissible
 range-one support in the integer rectangle. Source: area-law Corollary 1.2
@@ -207,15 +105,25 @@ theorem embedOp_rectangular_eq_reindex {width height q : ℕ}
     exact False.elim (hv ((rectangleSiteEquiv width height).symm v)
       ((rectangleSiteEquiv width height).apply_symm_apply v))
 
-/-- The original rectangular Hamiltonian, with Hermitian parts at its actual
-range-one supports and zero at unused supports. The interaction bound is
-unchanged. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
-def RectangularHamiltonian.toAreaLawHamiltonian {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (hJ : 0 ≤ J) :
-    LocalHamiltonian (rectangularDomain width height) q 1 J := by
+end TNLean.PEPS.AreaLaw
+
+namespace ManyBody.RectangleInteraction
+
+open TNLean.PEPS.AreaLaw
+
+variable {width height q : ℕ} {J : ℝ}
+
+/-- The rectangular interaction, with Hermitian parts at its actual range-one supports and
+zero at unused supports. The bound `J` is unchanged, for every real `J`: each unused
+admissible support is nonempty, so one of its sites supplies the nonnegative bound needed
+for its zero term. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
+def toAreaLawHamiltonian (Φ : RectangleInteraction width height q)
+    (hΦ : ∀ i, ‖Φ.term i‖ ≤ J) :
+    TNLean.Lattice.LocalHamiltonian (rectangularDomain width height) q 1 J := by
   classical
   let e := rectangleConfigurationEquiv width height q
-  let T := fun i : SquareLatticeSiteOrEdge width height => Matrix.reindex e e (h.hermitianTerm i)
+  let T := fun i : SquareLatticeSiteOrEdge width height =>
+    Matrix.reindex e e (Φ.hermitianPart.term i)
   refine { term := Function.extend (rectangleAreaLawSupport width height) T 0
            supported := ?_, hermitian := ?_, norm_le := ?_ }
   · intro X
@@ -223,7 +131,8 @@ def RectangularHamiltonian.toAreaLawHamiltonian {width height q : ℕ} {J : ℝ}
     · obtain ⟨i, rfl⟩ := hx
       rw [(rectangleAreaLawSupport_injective width height).extend_apply]
       have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
-        (rectangleSiteEquiv width height).injective (h.hermitianTerm_mem_supportedOperators i)
+        (rectangleSiteEquiv width height).injective
+        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (Φ.hermitianPart.mem i))
       rw [embedOp_rectangular_eq_reindex] at hs
       simpa only [T, e, rectangleAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
@@ -232,31 +141,34 @@ def RectangularHamiltonian.toAreaLawHamiltonian {width height q : ℕ} {J : ℝ}
     by_cases hx : ∃ i, rectangleAreaLawSupport width height i = X
     · obtain ⟨i, rfl⟩ := hx
       rw [(rectangleAreaLawSupport_injective width height).extend_apply]
-      exact (h.hermitianTerm_isHermitian i).submatrix e.symm
+      exact (Φ.isHermitian_hermitianPart_term i).submatrix e.symm
     · rw [Function.extend_apply' _ _ _ hx]
       exact Matrix.isHermitian_zero
   · intro X
     by_cases hx : ∃ i, rectangleAreaLawSupport width height i = X
     · obtain ⟨i, rfl⟩ := hx
       rw [(rectangleAreaLawSupport_injective width height).extend_apply]
-      exact (Matrix.l2_opNorm_reindex_equiv e (h.hermitianTerm i)).le.trans
-        (h.hermitianTerm_norm_le i)
+      exact (Matrix.l2_opNorm_reindex_equiv e (Φ.hermitianPart.term i)).le.trans
+        ((Φ.norm_hermitianPart_term_le i).trans (hΦ i))
     · rw [Function.extend_apply' _ _ _ hx]
-      simpa only [Pi.zero_apply, norm_zero] using hJ
+      obtain ⟨v, _⟩ := X.property.1
+      simpa only [Pi.zero_apply, norm_zero] using
+        (norm_nonneg _).trans (hΦ (.inl ((rectangleSiteEquiv width height).symm v)))
 
-/-- The interaction conversion has exactly the transported original sum.
-Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
-theorem RectangularHamiltonian.toAreaLawHamiltonian_operator {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (hJ : 0 ≤ J) :
-    (h.toAreaLawHamiltonian hJ).operator =
+/-- For a Hermitian total, the interaction conversion has exactly the transported original
+sum. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
+theorem toAreaLawHamiltonian_operator (Φ : RectangleInteraction width height q)
+    (hΦ : ∀ i, ‖Φ.term i‖ ≤ J) (hH : Φ.hamiltonian.IsHermitian) :
+    (Φ.toAreaLawHamiltonian hΦ).operator =
       Matrix.reindex (rectangleConfigurationEquiv width height q)
-        (rectangleConfigurationEquiv width height q) h.operator := by
+        (rectangleConfigurationEquiv width height q) Φ.hamiltonian := by
   classical
   let e := rectangleConfigurationEquiv width height q
-  let T := fun i : SquareLatticeSiteOrEdge width height => Matrix.reindex e e (h.hermitianTerm i)
+  let T := fun i : SquareLatticeSiteOrEdge width height =>
+    Matrix.reindex e e (Φ.hermitianPart.term i)
   let f := Function.extend (rectangleAreaLawSupport width height) T 0
   have hsum : (∑ i : SquareLatticeSiteOrEdge width height, T i) =
-      ∑ X : AdmissibleSupport (rectangularDomain width height) 1, f X := by
+      ∑ X : TNLean.Lattice.AdmissibleSupport (rectangularDomain width height) 1, f X := by
     apply Finset.sum_of_injOn (rectangleAreaLawSupport width height)
       (rectangleAreaLawSupport_injective width height).injOn (fun _ _ => Finset.mem_univ _)
     · intro X _ hX
@@ -266,39 +178,41 @@ theorem RectangularHamiltonian.toAreaLawHamiltonian_operator {width height q : �
   change (∑ X, f X) = _
   rw [← hsum]
   change (∑ i : SquareLatticeSiteOrEdge width height,
-    (Matrix.reindexAlgEquiv ℂ ℂ e) (h.hermitianTerm i)) = _
-  rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), h.sum_hermitianTerm]
+    (Matrix.reindexAlgEquiv ℂ ℂ e) (Φ.hermitianPart.term i)) = _
+  rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e)]
+  change (Matrix.reindexAlgEquiv ℂ ℂ e) Φ.hermitianPart.hamiltonian = _
+  rw [Φ.hamiltonian_hermitianPart hH]
   rfl
 
-/-- The original unit ground vector and full-system gap are preserved by
-the actual conversion. Source: area-law Corollary 1.2 and polynomial-PEPS
-`eq:global-gap`. -/
-theorem RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian
-    {width height q : ℕ} {J : ℝ} (h : RectangularHamiltonian width height q J) (hJ : 0 ≤ J)
-    {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q} (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
+/-- The original unit ground vector and full-system gap are preserved by the actual
+conversion. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:global-gap`. -/
+theorem isGappedGroundState_toAreaLawHamiltonian (Φ : RectangleInteraction width height q)
+    (hΦ : ∀ i, ‖Φ.term i‖ ≤ J) (hH : Φ.hamiltonian.IsHermitian)
+    {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q}
+    (hΩ : Matrix.IsGappedGroundState Φ.hamiltonian E₀ Ω Δ) :
     TNLean.Lattice.IsGappedGroundState (rectangularDomain width height) q
-      (h.toAreaLawHamiltonian hJ).operator E₀ (rectangleAreaLawState Ω) Δ := by
+      (Φ.toAreaLawHamiltonian hΦ).operator E₀ (rectangleAreaLawState Ω) Δ := by
   classical
   let e := rectangleConfigurationEquiv width height q
   let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e
   refine ⟨(norm_rectangleAreaLawState Ω).trans hΩ.1, ?_, ?_⟩
-  · rw [h.toAreaLawHamiltonian_operator hJ]
-    have heq : Matrix.toEuclideanLin (Matrix.reindex e e h.operator) (E Ω) =
-        E (Matrix.toEuclideanLin h.operator Ω) := by
+  · rw [Φ.toAreaLawHamiltonian_operator hΦ hH]
+    have heq : Matrix.toEuclideanLin (Matrix.reindex e e Φ.hamiltonian) (E Ω) =
+        E (Matrix.toEuclideanLin Φ.hamiltonian Ω) := by
       ext x
-      change (h.operator.submatrix e.symm e.symm *ᵥ (Ω.ofLp ∘ e.symm)) x =
-        (h.operator *ᵥ Ω.ofLp) (e.symm x)
+      change (Φ.hamiltonian.submatrix e.symm e.symm *ᵥ (Ω.ofLp ∘ e.symm)) x =
+        (Φ.hamiltonian *ᵥ Ω.ofLp) (e.symm x)
       rw [Matrix.submatrix_mulVec_equiv]
       simp only [Function.comp_def, Equiv.symm_symm, Equiv.symm_apply_apply]
-    change Matrix.toEuclideanLin (Matrix.reindex e e h.operator) (E Ω) = _
-    rw [heq, show Matrix.toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω from hΩ.2.1,
+    change Matrix.toEuclideanLin (Matrix.reindex e e Φ.hamiltonian) (E Ω) = _
+    rw [heq, show Matrix.toEuclideanLin Φ.hamiltonian Ω = (E₀ : ℂ) • Ω from hΩ.2.1,
       map_smul]
     rfl
-  · rw [h.toAreaLawHamiltonian_operator hJ]
+  · rw [Φ.toAreaLawHamiltonian_operator hΦ hH]
     have hg := hΩ.2.2.submatrix e.symm
-    have hdef : (h.operator - (E₀ : ℂ) • 1 -
+    have hdef : (Φ.hamiltonian - (E₀ : ℂ) • 1 -
         (Δ : ℂ) • (1 - vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).submatrix
-        e.symm e.symm = Matrix.reindex e e h.operator - (E₀ : ℂ) • 1 -
+        e.symm e.symm = Matrix.reindex e e Φ.hamiltonian - (E₀ : ℂ) • 1 -
           (Δ : ℂ) • (1 - vecMulVec (fun x ↦ rectangleAreaLawState Ω x)
             (star (fun x ↦ rectangleAreaLawState Ω x))) := by
       ext i j
@@ -308,4 +222,4 @@ theorem RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian
       rfl
     exact hdef ▸ hg
 
-end TNLean.PEPS.AreaLaw
+end ManyBody.RectangleInteraction
