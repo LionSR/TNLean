@@ -854,7 +854,8 @@ finite product of samples; the same estimate applies.
 \end{proof}
 
 \begin{lemma}[A recursive witness tree with prescribed word length and node count]
-    \label{lem:sampled_interval_witness_tree}
+    % Preserve the published label despite its legacy prefix.
+    \label{thm:sampled_interval_witness_tree}
     \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_power,
         TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
     \leanok
@@ -930,7 +931,7 @@ finite product of samples; the same estimate applies.
     \label{thm:physical_dg_recursive_interval_spaces}
     \lean{TNLean.MPS.AreaLaw.exists_physical_dg_recursive_interval_spaces}
     \leanok
-    \uses{thm:physical_dg_sampled_node,lem:sampled_interval_witness_tree}
+    \uses{thm:physical_dg_sampled_node,thm:sampled_interval_witness_tree}
     Under the physical hypotheses and explicit scalar conditions of
     Lemma~\ref{thm:physical_dg_sampled_node}, choose the same common
     reference bound $B$ and put $D_{\rm ref}=r_G^2B$ and
@@ -1341,7 +1342,7 @@ recursive root remains a separate step.
     or running-time claim is added.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:interval_trimming_reference,lem:sampled_interval_witness_tree,
+    \uses{thm:interval_trimming_reference,thm:sampled_interval_witness_tree,
         thm:dg_accuracy_scalar_parameters}
     The physical improving families do not use the trimming threshold.
     Choose them first. For fixed child spaces their measurable sampling
