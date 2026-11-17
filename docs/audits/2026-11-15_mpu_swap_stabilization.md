@@ -216,7 +216,7 @@ comparison signatures; the unitary involution preserves such guards if needed.
 The two transport modules have 18 public declarations, covered by auxiliary Blueprint entries
 in `ch28_mpu_swap_stabilization.tex`. Their entries are marked checked following
 the exact-head strict result at `82f750c8` below; obstruction entries remain
-`notready`. The source-labelled `lemma:sym-trafo-swap` is unchanged. The two generated import
+`notready`. The two generated import
 aggregators are updated with the repository's generator.
 
 The existing `EquivalentUnderSymmetry` cannot express this conclusion directly:
@@ -225,8 +225,16 @@ For equal positive physical dimensions, balance gives $p_a=p_b$, and
 $\gcd(p_a,p_b)=p_a$ then forces both to be one. Changing that general definition
 belongs to #6017; it is unnecessary to write the specialized comparison as an
 explicit existential over common $x,k>0$. No second generic path predicate is
-needed. The source-labelled `lemma:sym-trafo-swap` must remain unfinished until
-the intended stabilization convention is settled and the result is checked.
+needed.
+
+**Update (2026-11-17).** The convention is settled by the section's own usage,
+and the source-labelled `lemma:sym-trafo-swap` now points to the three strict
+comparisons. The paper omits "strictly" when it is clear from the context
+(`paper_v2.tex`, lines 725--730). The lemma's proof transports continuous
+symmetric paths $U(x)^{(N)}$ at fixed chain length, with no blocking or
+ancilla step (lines 2071--2078). Where the section means stabilized
+equivalence it says so explicitly, "once we allow for ancillas" (line 2208).
+The stabilized declarations above remain as proved auxiliary results.
 
 ## Initial local validation and limits
 
