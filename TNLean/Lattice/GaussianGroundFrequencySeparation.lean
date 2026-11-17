@@ -29,6 +29,8 @@ noncomputable section
 open MeasureTheory ProbabilityTheory Complex Matrix Filter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal Topology
 
+open ManyBody (groundSpace mem_groundSpace_iff_mulVec)
+
 namespace TNLean.Lattice
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
@@ -95,9 +97,9 @@ private theorem norm_le_of_inner_coefficients_le
 
 private theorem centered_ground_line_inner_eq_zero
     {H : Matrix n n ℂ} {E₀ : ℝ} {ψ : EuclideanSpace ℂ n}
-    (hline : groundEigenspace H E₀ = Submodule.span ℂ {ψ})
+    (hline : groundSpace H E₀ = Submodule.span ℂ {ψ})
     (A : Matrix n n ℂ) (hcenter : ⟪ψ, L A ψ⟫_ℂ = 0)
-    {φ : EuclideanSpace ℂ n} (hφ : φ ∈ groundEigenspace H E₀) :
+    {φ : EuclideanSpace ℂ n} (hφ : φ ∈ groundSpace H E₀) :
     ⟪φ, L A ψ⟫_ℂ = 0 := by
   rw [hline, Submodule.mem_span_singleton] at hφ
   obtain ⟨c, rfl⟩ := hφ
@@ -111,8 +113,8 @@ theorem exists_gaussianNegativeFrequency_ground_limits
     {q Δ : ℝ} (hq : 0 < q) (hΔ : 0 < Δ)
     {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ i, hH.eigenvalues i = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues i)
-    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀)
-    (hline : groundEigenspace H E₀ = Submodule.span ℂ {ψ})
+    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀)
+    (hline : groundSpace H E₀ = Submodule.span ℂ {ψ})
     (A : Matrix n n ℂ) (hcenter : ⟪ψ, L A ψ⟫_ℂ = 0) :
     ∃ ξ η : EuclideanSpace ℂ n,
       Tendsto (fun ε : ℝ ↦
@@ -129,7 +131,7 @@ theorem exists_gaussianNegativeFrequency_ground_limits
   have hb (i : n) :
       H *ᵥ WithLp.ofLp (b i) = (hH.eigenvalues i : ℂ) • WithLp.ofLp (b i) :=
     SpectralFilter.mulVec_eigenvectorBasis_complex hH i
-  have hψ' := mem_groundEigenspace_iff.mp hψ
+  have hψ' := mem_groundSpace_iff_mulVec.mp hψ
   have hplus (i : n) := actual_inner_cutoff_limit hq hΔ hH A (hb i) hψ'
   have hminus (i : n) :
       Tendsto (fun ε : ℝ ↦ ⟪b i, L (F ε)ᴴ ψ⟫_ℂ)
@@ -145,8 +147,8 @@ theorem exists_gaussianNegativeFrequency_ground_limits
     (fun ε ↦ L (F ε)ᴴ ψ) _ hminus
   have hcenterAdj : ⟪ψ, L Aᴴ ψ⟫_ℂ = 0 := by
     rw [inner_adjoint_matrix, hcenter, star_zero]
-  have hground (i : n) (hi : hH.eigenvalues i = E₀) : b i ∈ groundEigenspace H E₀ :=
-    mem_groundEigenspace_iff.mpr (by simpa only [hi] using hb i)
+  have hground (i : n) (hi : hH.eigenvalues i = E₀) : b i ∈ groundSpace H E₀ :=
+    mem_groundSpace_iff_mulVec.mpr (by simpa only [hi] using hb i)
   refine ⟨ξ, η, hξ, hη, ?_, ?_⟩
   · apply norm_le_of_inner_coefficients_le b ξ (L A ψ) (Real.exp_pos _).le
     intro i
@@ -191,8 +193,8 @@ theorem exists_gaussianNegativeFrequency_ground_commutator_limit
     {q Δ : ℝ} (hq : 0 < q) (hΔ : 0 < Δ)
     {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ i, hH.eigenvalues i = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues i)
-    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀)
-    (hline : groundEigenspace H E₀ = Submodule.span ℂ {ψ})
+    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀)
+    (hline : groundSpace H E₀ = Submodule.span ℂ {ψ})
     (A B : Matrix n n ℂ) (hcenter : ⟪ψ, L A ψ⟫_ℂ = 0) :
     ∃ z : ℂ,
       Tendsto (fun ε : ℝ ↦

@@ -47,6 +47,8 @@ the unique ground state (lines 375–387).
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 /-- At the time window `T = q / ΔE`, the Gaussian tail `e^{-(TΔE)²/(2q)}` is `e^{-q/2}`.
@@ -104,9 +106,9 @@ theorem norm_sub_starProjection_truncated_apply_le [NeZero d] [DecidableEq κ] {
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
-    {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ψ ∈ groundEigenspace (∑ k, h k) E₀) :
+    {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ψ ∈ groundSpace (∑ k, h k) E₀) :
     ‖toEuclideanLin (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W) ψ -
-        (groundEigenspace (∑ k, h k) E₀).starProjection
+        (groundSpace (∑ k, h k) E₀).starProjection
           (toEuclideanLin (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W) ψ)‖ ≤
       (3 * ‖W‖ * Real.exp (-q / 2) +
         2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ * J *

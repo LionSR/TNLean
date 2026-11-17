@@ -74,6 +74,8 @@ accuracy.
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section Graph
@@ -208,10 +210,10 @@ inequality before eq. `facld` (lines 322–348); with `M` as in
 theorem norm_sub_starProjection_apply_le_of_gaussianFilteredTerm {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
-    (W M : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀) :
-    ‖toEuclideanLin M ψ - (groundEigenspace H E₀).starProjection (toEuclideanLin M ψ)‖ ≤
+    (W M : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀) :
+    ‖toEuclideanLin M ψ - (groundSpace H E₀).starProjection (toEuclideanLin M ψ)‖ ≤
       (‖W‖ * Real.exp (-q / 2) + ‖gaussianFilteredTerm q ΔE H W - M‖) * ‖ψ‖ := by
-  set K := groundEigenspace H E₀
+  set K := groundSpace H E₀
   set x := toEuclideanLin (gaussianFilteredTerm q ΔE H W) ψ
   set z := toEuclideanLin (M - gaussianFilteredTerm q ΔE H W) ψ
   have hMxz : toEuclideanLin M ψ = x + z := by
@@ -241,8 +243,8 @@ theorem norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm {q ΔE : ℝ} (hq :
     ‖toEuclideanLin M Ω - ⟪Ω, toEuclideanLin M Ω⟫_ℂ • Ω‖ ≤
       ‖W‖ * Real.exp (-q / 2) + ‖gaussianFilteredTerm q ΔE H W - M‖ := by
   obtain ⟨hH, hgap⟩ := eigenvalues_eq_or_le_of_isGappedGroundState hgs hΔE
-  have hspan : groundEigenspace H E₀ = Submodule.span ℂ {Ω} := hgs.eigenspace_eq_span hΔE
-  have hΩ : Ω ∈ groundEigenspace H E₀ := by
+  have hspan : groundSpace H E₀ = Submodule.span ℂ {Ω} := hgs.eigenspace_eq_span hΔE
+  have hΩ : Ω ∈ groundSpace H E₀ := by
     rw [hspan]; exact Submodule.mem_span_singleton_self Ω
   have h := norm_sub_starProjection_apply_le_of_gaussianFilteredTerm hq hΔE hH hgap W M hΩ
   rwa [hspan, Submodule.starProjection_unit_singleton ℂ hgs.1, hgs.1, mul_one] at h

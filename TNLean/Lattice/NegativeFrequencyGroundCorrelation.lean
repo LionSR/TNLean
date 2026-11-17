@@ -26,6 +26,8 @@ noncomputable section
 open Matrix
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace mem_groundSpace_iff_mulVec)
+
 namespace TNLean.Lattice
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
@@ -71,7 +73,7 @@ arXiv:math-ph/0507008, equations (3.2)–(3.5). -/
 theorem negativeFrequencyPart_apply_ground_eq_zero {H : Matrix n n ℂ}
     (hH : H.IsHermitian) {E₀ : ℝ} (hmin : ∀ i, E₀ ≤ hH.eigenvalues i)
     (A : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n}
-    (hψ : ψ ∈ groundEigenspace H E₀) : negativeFrequencyPart hH A ψ = 0 := by
+    (hψ : ψ ∈ groundSpace H E₀) : negativeFrequencyPart hH A ψ = 0 := by
   classical
   unfold negativeFrequencyPart
   dsimp only
@@ -82,7 +84,7 @@ theorem negativeFrequencyPart_apply_ground_eq_zero {H : Matrix n n ℂ}
   intro j _
   by_cases hij : hH.eigenvalues i < hH.eigenvalues j
   · have hj : hH.eigenvalues j ≠ E₀ := by linarith [hmin i]
-    have hzero := inner_eq_zero_of_mem_groundEigenspace hH hj
+    have hzero := inner_eq_zero_of_mem_groundSpace hH hj
       (SpectralFilter.mulVec_eigenvectorBasis_complex hH j) hψ
     simp only [ite_eq_left hij, _root_.smul_apply,
       InnerProductSpace.rankOne_apply, hzero, zero_smul, smul_zero]
@@ -91,8 +93,8 @@ theorem negativeFrequencyPart_apply_ground_eq_zero {H : Matrix n n ℂ}
 private theorem inner_ground_negativeFrequencyPart_apply
     {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hmin : ∀ i, E₀ ≤ hH.eigenvalues i) (A : Matrix n n ℂ)
-    {ψ x : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀)
-    (hx : x ∈ (groundEigenspace H E₀)ᗮ) :
+    {ψ x : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀)
+    (hx : x ∈ (groundSpace H E₀)ᗮ) :
     ⟪ψ, negativeFrequencyPart hH A x⟫_ℂ =
       ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A x⟫_ℂ := by
   classical
@@ -114,13 +116,13 @@ private theorem inner_ground_negativeFrequencyPart_apply
           have hge := hmin j
           rw [hi] at hij
           linarith
-        have hmem : b j ∈ groundEigenspace H E₀ :=
-          mem_groundEigenspace_iff.mpr (by
+        have hmem : b j ∈ groundSpace H E₀ :=
+          mem_groundSpace_iff_mulVec.mpr (by
             simpa only [hj] using SpectralFilter.mulVec_eigenvectorBasis_complex hH j)
-        have hz := ((groundEigenspace H E₀).mem_orthogonal x).mp hx (b j) hmem
+        have hz := ((groundSpace H E₀).mem_orthogonal x).mp hx (b j) hmem
         simp only [hz, zero_mul]
       · have hz : ⟪ψ, b i⟫_ℂ = 0 := inner_eq_zero_symm.mpr
-          (inner_eq_zero_of_mem_groundEigenspace hH hi
+          (inner_eq_zero_of_mem_groundSpace hH hi
             (SpectralFilter.mulVec_eigenvectorBasis_complex hH i) hψ)
         simp only [hz, mul_zero]
     simpa only [ite_eq_right hij, _root_.zero_apply, inner_zero_right] using hvanish.symm
@@ -134,14 +136,14 @@ arXiv:math-ph/0507008, equations (3.1)–(3.6). -/
 theorem inner_ground_projected_eq_negativeFrequency_commutator
     {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hmin : ∀ i, E₀ ≤ hH.eigenvalues i) (A B : Matrix n n ℂ)
-    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀) :
+    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀) :
     ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A
       (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ -
-        (groundEigenspace H E₀).starProjection
+        (groundSpace H E₀).starProjection
           (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ))⟫_ℂ =
       ⟪ψ, ((negativeFrequencyPart hH A).comp (toEuclideanCLM (n := n) (𝕜 := ℂ) B) -
         (toEuclideanCLM (n := n) (𝕜 := ℂ) B).comp (negativeFrequencyPart hH A)) ψ⟫_ℂ := by
-  let K := groundEigenspace H E₀
+  let K := groundSpace H E₀
   let y := toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ
   have hsplit := inner_ground_negativeFrequencyPart_apply hH hmin A hψ
     (K.sub_starProjection_mem_orthogonal y)
@@ -161,8 +163,8 @@ specialized to an exactly one-dimensional ground eigenspace. -/
 theorem inner_ground_connected_eq_negativeFrequency_commutator
     {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hmin : ∀ i, E₀ ≤ hH.eigenvalues i) (A B : Matrix n n ℂ)
-    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀)
-    (hline : groundEigenspace H E₀ = Submodule.span ℂ {ψ}) :
+    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀)
+    (hline : groundSpace H E₀ = Submodule.span ℂ {ψ}) :
     ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A
         (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ)⟫_ℂ -
         ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A ψ⟫_ℂ *
@@ -173,7 +175,7 @@ theorem inner_ground_connected_eq_negativeFrequency_commutator
   calc
     _ = ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A
         (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ -
-          (groundEigenspace H E₀).starProjection
+          (groundSpace H E₀).starProjection
             (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ))⟫_ℂ := by
       rw [hline, Submodule.starProjection_singleton (𝕜 := ℂ)]
       simp only [map_sub, map_smul, inner_sub_right, inner_smul_right]

@@ -50,6 +50,8 @@ eq. `facld` (lines 322–348), the choice of `q` (lines 337–349), and the uniq
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace Nat
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 /-- The two terms of eq. `facld` at `q = c₁ l ΔE` and `m = l - 3R` decay as `e^{-δ l / 2}`,
@@ -144,9 +146,9 @@ theorem exists_norm_sub_starProjection_truncated_apply_le_exp [NeZero d] [Decida
       ((l - 3 * R : ℕ) : ℕ∞) ≤ G.edist x y)
     (Kg kg : ℕ) (hN : ∀ l, ((s l)ᶜ.filter (fun k => ¬Disjoint (X k) (K l))).card ≤
       Kg * (l + 1) ^ kg) :
-    ∃ C' : ℝ, 0 ≤ C' ∧ ∀ l : ℕ, ∀ ψ ∈ groundEigenspace (∑ k, h k) E₀,
+    ∃ C' : ℝ, 0 ≤ C' ∧ ∀ l : ℕ, ∀ ψ ∈ groundSpace (∑ k, h k) E₀,
       ‖toEuclideanLin (gaussianFilteredTerm (c₁ * l * ΔE) ΔE (∑ k ∈ s l, h k) W) ψ -
-          (groundEigenspace (∑ k, h k) E₀).starProjection
+          (groundSpace (∑ k, h k) E₀).starProjection
             (toEuclideanLin (gaussianFilteredTerm (c₁ * l * ΔE) ΔE (∑ k ∈ s l, h k) W) ψ)‖ ≤
         ‖W‖ * (3 + C' * J) * Real.exp (-(min (c₁ * ΔE)
           (μ - c₁ * (2 * vR * |b₀| * Real.exp (2 * μ * R) + 1)) / 2) * l) * ‖ψ‖ := by
