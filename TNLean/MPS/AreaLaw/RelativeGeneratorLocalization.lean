@@ -19,7 +19,7 @@ in the proof; no factor quadratic in the full crossing zone is used.
 
 ## Main result
 
-* `ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le`: localization
+* `ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le`: localization
   of the generator with explicit constants and an error linear in `L`.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
@@ -39,7 +39,7 @@ namespace TNLean.MPS.AreaLaw
 /-- The relative-evolution generator is exponentially close to its
 expectation on the neighborhood of the crossing supports, with error linear
 in the chain length. Source: TNLean note, `part2a_mps_information.tex`, lines 380–400. -/
-theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
+theorem ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
     {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J)
     (D : Finset (Fin L)) (hq : 1 ≤ q) (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     let K := h.doubled.operator
@@ -52,7 +52,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
-    ‖G - QuantumCircuit.siteExpectation (q * q) B G‖ ≤
+    ‖G - ManyBody.regionExpectation B G‖ ≤
       (4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)) *
         (L : ℝ) * Real.exp (v * |t| - ℓ / 2) := by
   classical
@@ -67,7 +67,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
     (1 - Real.exp (-(1 / 2)))
   let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
-  change ‖G - siteExpectation (q * q) B G‖ ≤
+  change ‖G - ManyBody.regionExpectation B G‖ ≤
     (4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)) *
       (L : ℝ) * Real.exp (v * |t| - ℓ / 2)
   have hqq : 1 ≤ q * q := by nlinarith
@@ -75,17 +75,17 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   have hloc (S : Finset (Fin L))
       (A : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q)
+      ‖ManyBody.heisenbergEvolution K' t A - ManyBody.regionExpectation
         (chainNeighborhood S ℓ)
         (ManyBody.heisenbergEvolution K' t A)‖ ≤
           a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - ℓ / 2) := by
-    exact norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
+    exact norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) g.term g.hermitian g.supported b₀
       g.sum_norm_terms_containing_le hqq S hA ℓ hℓ t
   have hcommon (S : Finset (Fin L)) (hS : S ⊆ Z)
       (A : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q) B
+      ‖ManyBody.heisenbergEvolution K' t A - ManyBody.regionExpectation B
         (ManyBody.heisenbergEvolution K' t A)‖ ≤
           2 * (a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - ℓ / 2)) := by
     let N := chainNeighborhood S ℓ
@@ -93,11 +93,13 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
       intro y hy
       obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hy).2
       exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hS hx, hxy⟩
-    exact (norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators B
-      (ManyBody.heisenbergEvolution K' t A) (siteExpectation (q * q) N
-          (ManyBody.heisenbergEvolution K' t A))
-      (supportedOperators_mono (Finset.coe_subset.mpr hNB)
-        (siteExpectation_mem_supportedOperators N (ManyBody.heisenbergEvolution K' t A)))).trans
+    exact ((ManyBody.norm_sub_regionExpectation_le_two_mul_norm_sub B (ManyBody.heisenbergEvolution
+        K' t A) (ManyBody.regionExpectation N
+          (ManyBody.heisenbergEvolution K' t
+              A)) (isSupportedOn_of_mem_supportedOperators (supportedOperators_mono (Finset.coe_subset.mpr hNB)
+        ((mem_supportedOperators_of_isSupportedOn
+            (ManyBody.regionExpectation_mem_supportedOperators N (ManyBody.heisenbergEvolution K' t
+                A)))))))).trans
           (mul_le_mul_of_nonneg_left (hloc S A hA) (by norm_num))
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
@@ -105,14 +107,14 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
     (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
   let A (X : ChainSupport L R) (b : Bool) := F * T X b * Fᴴ - T X b
-  let δ := (LinearMap.id - siteExpectationLM (q * q) B).comp
+  let δ := (LinearMap.id - ManyBody.regionExpectationLM B).comp
     (LinearMap.mulLeftRight ℂ
       (NormedSpace.exp (t • (Complex.I • K')), NormedSpace.exp ((-t) • (Complex.I • K'))))
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   have hdiff : K' - K = ∑ X ∈ C, ∑ b : Bool, A X b := by
     rw [show K' = F * h.doubled.operator * Fᴴ from h.swappedDoubled_operator D]
     exact hsum
-  have hsumδ : G - siteExpectation (q * q) B G = ∑ X ∈ C, ∑ b : Bool, δ (A X b) := by
+  have hsumδ : G - ManyBody.regionExpectation B G = ∑ X ∈ C, ∑ b : Bool, δ (A X b) := by
     change δ (K' - K) = _
     rw [hdiff, map_sum]
     simp only [map_sum]
@@ -139,7 +141,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
           (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (Nat.cast_nonneg _) hc 2) ha)
           hn (norm_nonneg _) (mul_nonneg ha (sq_nonneg _))
       _ = _ := by ring
-  have hsumBound : ‖G - siteExpectation (q * q) B G‖ ≤
+  have hsumBound : ‖G - ManyBody.regionExpectation B G‖ ≤
       (C.card : ℝ) * 2 *
         (4 * |J| * a * (R + 1 : ℝ) ^ 2 * Real.exp (v * |t| - ℓ / 2)) := by
     rw [hsumδ]
@@ -154,7 +156,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   have hc : (C.card : ℝ) * 2 ≤
       (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
     exact_mod_cast hcount
-  have hsharp : ‖G - siteExpectation (q * q) B G‖ ≤
+  have hsharp : ‖G - ManyBody.regionExpectation B G‖ ≤
       (4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)) *
         ((boundaryEdges L D).card : ℝ) * Real.exp (v * |t| - ℓ / 2) := by
     calc

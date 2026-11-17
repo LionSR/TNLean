@@ -2377,9 +2377,9 @@ in `MPS/Preparation/` uses it.
   average over products of on-site Weyl operators outside `K`),
   `siteExpectation_mem_supportedOperators`,
   `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
-  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
+  `norm_siteExpectation_le`, `ManyBody.regionExpectationLM_isKrausCPTP`,
   `norm_sub_siteExpectation_le` (error through on-site commutators), and
-  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
+  `ManyBody.norm_heisenberg_sub_regionExpectation_graphBall_le` (localization of the
   dynamics onto graph balls under a sphere-growth hypothesis).
 - **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
 

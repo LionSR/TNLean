@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.SupportProjectionOrder
-import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Circuit.EntropySupport
 import QICLean.ManyBody.Sites.Twirl
 

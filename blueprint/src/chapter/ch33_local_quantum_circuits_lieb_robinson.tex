@@ -291,7 +291,7 @@ with every tensor factor at its original site.
     \lean{QuantumCircuit.siteExpectation_mem_supportedOperators,
         QuantumCircuit.siteExpectation_of_mem_supportedOperators,
         QuantumCircuit.siteExpectation_one, QuantumCircuit.norm_siteExpectation_le,
-        QuantumCircuit.siteExpectationLM_isKrausCPTP}\leanok
+        ManyBody.regionExpectationLM_isKrausCPTP}\leanok
     \uses{lem:qc_site_expectation_average}
     For $q\geq1$, $E_K$ is a unital CPTP map onto $\mathcal A_K$ satisfying $E_K|_{\mathcal A_K}=\operatorname{id}$ and $\|E_K(B)\|\le\|B\|$.
 \end{lemma}
@@ -357,7 +357,7 @@ with every tensor factor at its original site.
 % the real-radius observation below receive no completion credit here.
 \begin{lemma}[Localization near an arbitrary finite support]
     \label{thm:qc_graph_neighborhood_localization}
-    \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le}
+    \lean{ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le}
     \leanok
     \uses{def:qc_site_expectation}
     Under the finite-range interaction and sphere-growth bounds $|\{y:d_G(x,y)=d\}|\le K_g(d+1)^k$ above, let $q\geq1$, $S\subseteq I$, $A\in\mathcal A_S$, $\ell\in\mathbb N$, and $N_\ell(S)=\bigcup_{x\in S}N_\ell(x)$. With $C=2+4|b_0|e^{2R}$, $v=2v_R|b_0|e^{2R}+1$, and $T_k=2^kk!e^{1/2}/(1-e^{-1/2})$, for all $t\in\mathbb R$,
@@ -394,7 +394,7 @@ space with the graph interaction hypotheses.
 
 \begin{lemma}[Localization onto graph balls]
     \label{thm:qc_graph_ball_localization}
-    \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le,
+    \lean{ManyBody.norm_heisenberg_sub_regionExpectation_graphBall_le,
         QuantumCircuit.siteExpectation_eq_regionExpectation,
         ManyBody.graphBall, ManyBody.sum_pow_mul_exp_neg_le}\leanok
     \uses{thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,

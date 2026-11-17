@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SiteExpectation
+import TNLean.Circuit.EntropySupport
+import QICLean.ManyBody.Sites.Twirl
 
 /-!
 # Site expectations with an untouched spectator
@@ -43,7 +44,7 @@ lines 111–121, including the sentence about operators acting on spectators. -/
 noncomputable def spectatorSiteExpectation (q : ℕ) (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ :=
-  Matrix.of fun x y => siteExpectation q K
+  Matrix.of fun x y => ManyBody.regionExpectation K
     (Matrix.of fun σ τ => B (σ, x.2) (τ, y.2)) x.1 y.1
 
 omit [Fintype Aux] [DecidableEq Aux] in
@@ -52,13 +53,13 @@ this formula preserves arbitrary, possibly non-Hermitian spectator operators.
 Source: area law, `09-amplification.tex`, lines 111–121. -/
 theorem spectatorSiteExpectation_kronecker [NeZero q] (K : Finset ι)
     (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) (S : Matrix Aux Aux ℂ) :
-    spectatorSiteExpectation q K (A ⊗ₖ S) = siteExpectation q K A ⊗ₖ S := by
+    spectatorSiteExpectation q K (A ⊗ₖ S) = ManyBody.regionExpectation K A ⊗ₖ S := by
   ext ⟨σ, a⟩ ⟨τ, b⟩
   have hblock : (Matrix.of fun σ' τ' => (A ⊗ₖ S) (σ', a) (τ', b)) = S a b • A := by
     ext σ' τ'
     simp [Matrix.kroneckerMap_apply, mul_comm]
-  change siteExpectation q K (Matrix.of fun σ' τ' => (A ⊗ₖ S) (σ', a) (τ', b)) σ τ = _
-  rw [hblock, ← siteExpectationLM_apply, map_smul, siteExpectationLM_apply]
+  change ManyBody.regionExpectation K (Matrix.of fun σ' τ' => (A ⊗ₖ S) (σ', a) (τ', b)) σ τ = _
+  rw [hblock, ← ManyBody.regionExpectationLM_apply, map_smul, ManyBody.regionExpectationLM_apply]
   simp [Matrix.kroneckerMap_apply, mul_comm]
 
 omit [Fintype Aux] [DecidableEq Aux] in
@@ -107,8 +108,8 @@ theorem spectatorSiteExpectation_commute (K : Finset ι)
   ext ⟨σ, a⟩ ⟨τ, b⟩
   have h := congrArg (fun M : Matrix (ι → Fin q) (ι → Fin q) ℂ => M σ τ)
     (commute_of_mem_supportedOperators disjoint_compl_right
-      (siteExpectation_mem_supportedOperators K
-        (Matrix.of fun σ' τ' => B (σ', a) (τ', b))) hU).eq
+      ((mem_supportedOperators_of_isSupportedOn (ManyBody.regionExpectation_mem_supportedOperators
+          K (Matrix.of fun σ' τ' => B (σ', a) (τ', b))))) hU).eq
   simpa [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
     Matrix.one_apply, mul_ite, ite_mul, spectatorSiteExpectation] using h
 
@@ -119,9 +120,10 @@ of a spectator. Source: area law, `09-amplification.tex`, lines 101 and 111–12
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     spectatorSiteExpectation q Finset.univ B = B := by
   ext ⟨σ, a⟩ ⟨τ, b⟩
-  change siteExpectation q Finset.univ (Matrix.of fun σ' τ' => B (σ', a) (τ', b)) σ τ = _
-  rw [siteExpectation_of_mem_supportedOperators _ (by
-    simpa using mem_supportedOperators_univ (Matrix.of fun σ' τ' => B (σ', a) (τ', b)))]
+  change ManyBody.regionExpectation Finset.univ (Matrix.of fun σ' τ' => B (σ', a) (τ', b)) σ τ = _
+  rw [(ManyBody.regionExpectation_of_mem_supportedOperators
+      (isSupportedOn_of_mem_supportedOperators (by
+    simpa using mem_supportedOperators_univ (Matrix.of fun σ' τ' => B (σ', a) (τ', b)))))]
   rfl
 
 private theorem norm_weyl_average_le [NeZero q]

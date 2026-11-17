@@ -50,7 +50,9 @@ theorem truncatedConstraint_mem_Icc {q : ℕ} [NeZero q] {ι : Type*} [Fintype �
   unfold truncatedConstraint
   split_ifs
   · exact ⟨hk₀, hk₁⟩
-  · exact ⟨siteExpectation_nonneg _ hk₀, siteExpectation_le_one _ hk₁⟩
+  · exact ⟨(Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation
+      (Matrix.nonneg_iff_posSemidef.mp
+          hk₀))), ((ManyBody.regionExpectation_mono hk₁).trans_eq ManyBody.regionExpectation_one)⟩
 
 /-- The truncation constant `C₁ = truncationRadiusConstant (C μ K_b A) C₀ c g` of
 Proposition 4.5, with `A = shellSeriesConstant c (1/2)` the constant of the volume-free
@@ -76,7 +78,7 @@ theorem finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc : 0 < c)
       (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) →
       ((∑ i, k i) - (g : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
       (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
@@ -138,7 +140,7 @@ theorem exists_finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc :
         (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) →
         ((∑ i, k i) - (g : ℂ) •
           (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
         (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
@@ -243,7 +245,8 @@ theorem finiteSetTruncation_of_locality (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ)
     rw [← Matrix.le_iff]; exact hgapk.trans hsum
   have htail' : ∀ i (l : ℕ), ‖SpectralFilter.positiveConstraint cs
       (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)) -
-        siteExpectation q (ManyBody.graphBall G (a i) l) (SpectralFilter.positiveConstraint cs
+        ManyBody.regionExpectation (ManyBody.graphBall G (a i)
+            l) (SpectralFilter.positiveConstraint cs
           (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)))‖ ≤
         C₃ * Real.exp (-(c₃ * (l : ℝ) ^ (1 / 2 : ℝ))) := by
     intro i l

@@ -82,7 +82,8 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l)
+          (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (P : κ → Prop) [DecidablePred P]
         (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -129,7 +130,8 @@ theorem exists_domain_integrable_and_integral_channelWordOmissionDefect_le
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i)
+            l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (P : κ → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -160,7 +162,8 @@ theorem domainConstraintWord_omission
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l)
+          (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -223,7 +226,8 @@ theorem exists_domainConstraintWord_omission
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i)
+            l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -282,9 +286,10 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ∧
-          siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l)
+            (k i) ∧
+          ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x})) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)

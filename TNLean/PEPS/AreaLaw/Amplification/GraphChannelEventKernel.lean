@@ -95,7 +95,7 @@ theorem sum_siteOscillation_spectatorRootChannel_sub_le_exp_card
     (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ) (hn : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ n)
-    (hε : ∀ i l, l ≤ n → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+    (hε : ∀ i l, l ≤ n → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -

@@ -27,7 +27,7 @@ namespace TNLean.MPS.AreaLaw
 actual finite integer domain. This extends the chain localization argument of
 TNLean note, part2a_mps_information.tex, lines 380–400, to the finite domains of
 part0_preamble.tex, lines 191–215. No spectral gap or reset conclusion is asserted. -/
-theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
+theorem DomainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
     {Λ : Finset ℤ} {q R : ℕ} {J : ℝ} (h : DomainHamiltonian Λ q R J)
     (D : Finset (Fin Λ.card)) (hq : 1 ≤ q) (m : ℕ) (t : ℝ) :
     let K := h.doubled.operator
@@ -40,7 +40,7 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
-    ‖G - QuantumCircuit.siteExpectation (q * q) B G‖ ≤
+    ‖G - ManyBody.regionExpectation B G‖ ≤
       (4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)) *
         (Λ.card : ℝ) * Real.exp (v * |t| - (m : ℝ) / 2) := by
   classical
@@ -55,7 +55,7 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
     (1 - Real.exp (-(1 / 2)))
   let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
-  change ‖G - siteExpectation (q * q) B G‖ ≤
+  change ‖G - ManyBody.regionExpectation B G‖ ≤
     (4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)) *
       (Λ.card : ℝ) * Real.exp (v * |t| - (m : ℝ) / 2)
   have hqq : 1 ≤ q * q := by nlinarith
@@ -63,28 +63,30 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   have hloc (S : Finset (Fin Λ.card))
       (A : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q)
+      ‖ManyBody.heisenbergEvolution K' t A - ManyBody.regionExpectation
         (S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m))
         (ManyBody.heisenbergEvolution K' t A)‖ ≤
           a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - (m : ℝ) / 2) := by
     simpa only [Nat.floor_natCast, K', DomainHamiltonian.operator, a, v,
       Nat.cast_add, Nat.cast_one] using
-      norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
+      norm_heisenberg_sub_regionExpectation_domainNeighborhood_le
         (fun X : DomainSupport Λ R ↦ X) g.term g.hermitian g.supported b₀
         g.sum_norm_terms_containing_le hqq S hA (m : ℝ) (Nat.cast_nonneg m) t
   have hcommon (S : Finset (Fin Λ.card)) (hS : S ⊆ Z)
       (A : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q) B
+      ‖ManyBody.heisenbergEvolution K' t A - ManyBody.regionExpectation B
         (ManyBody.heisenbergEvolution K' t A)‖ ≤
           2 * (a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - (m : ℝ) / 2)) := by
     let N := S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
     have hNB : N ⊆ B := Finset.biUnion_subset_biUnion_of_subset_left _ hS
-    exact (norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators B
-      (ManyBody.heisenbergEvolution K' t A) (siteExpectation (q * q) N
-          (ManyBody.heisenbergEvolution K' t A))
-      (supportedOperators_mono (Finset.coe_subset.mpr hNB)
-        (siteExpectation_mem_supportedOperators N (ManyBody.heisenbergEvolution K' t A)))).trans
+    exact ((ManyBody.norm_sub_regionExpectation_le_two_mul_norm_sub B (ManyBody.heisenbergEvolution
+        K' t A) (ManyBody.regionExpectation N
+          (ManyBody.heisenbergEvolution K' t
+              A)) (isSupportedOn_of_mem_supportedOperators (supportedOperators_mono (Finset.coe_subset.mpr hNB)
+        ((mem_supportedOperators_of_isSupportedOn
+            (ManyBody.regionExpectation_mem_supportedOperators N (ManyBody.heisenbergEvolution K' t
+                A)))))))).trans
           (mul_le_mul_of_nonneg_left (hloc S A hA) (by norm_num))
   let e := sitePairConfigurationEquiv (Fin Λ.card) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
@@ -92,12 +94,12 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
     (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
   let A (X : DomainSupport Λ R) (b : Bool) := F * T X b * Fᴴ - T X b
-  let δ := (LinearMap.id - siteExpectationLM (q * q) B).comp
+  let δ := (LinearMap.id - ManyBody.regionExpectationLM B).comp
     (LinearMap.mulLeftRight ℂ
       (NormedSpace.exp (t • (Complex.I • K')), NormedSpace.exp ((-t) • (Complex.I • K'))))
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   have hdiff : K' - K = ∑ X ∈ C, ∑ b : Bool, A X b := hsum
-  have hsumδ : G - siteExpectation (q * q) B G = ∑ X ∈ C, ∑ b : Bool, δ (A X b) := by
+  have hsumδ : G - ManyBody.regionExpectation B G = ∑ X ∈ C, ∑ b : Bool, δ (A X b) := by
     change δ (K' - K) = _
     rw [hdiff, map_sum]
     simp only [map_sum]
@@ -124,7 +126,7 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
           (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (Nat.cast_nonneg _) hc 2) ha)
           hn (norm_nonneg _) (mul_nonneg ha (sq_nonneg _))
       _ = _ := by ring
-  have hsumBound : ‖G - siteExpectation (q * q) B G‖ ≤
+  have hsumBound : ‖G - ManyBody.regionExpectation B G‖ ≤
       (C.card : ℝ) * 2 *
         (4 * |J| * a * (R + 1 : ℝ) ^ 2 * Real.exp (v * |t| - (m : ℝ) / 2)) := by
     rw [hsumδ]

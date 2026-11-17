@@ -46,7 +46,7 @@ example :
       (1 : Matrix (Unit → Fin 2) (Unit → Fin 2) ℂ) ⊗ₖ
         diagonal ![(1 / 2 : ℂ), 2] := by
   ext ⟨σ, a⟩ ⟨τ, b⟩
-  simp only [spectatorSiteExpectation, siteExpectation, traceOutside, embedOp,
+  simp only [spectatorSiteExpectation, ManyBody.regionExpectation, traceOutside, embedOp,
     Matrix.of_apply, Matrix.smul_apply, smul_eq_mul, Fintype.card_unique]
   rw [sum_empty_complement]
   have hglue (u : (∅ : Finset Unit) → Fin 2) (i : Fin 2) :

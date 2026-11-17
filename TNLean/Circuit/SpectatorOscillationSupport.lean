@@ -46,16 +46,18 @@ theorem spectatorSiteExpectation_eq_self_iff [NeZero q] (K : Finset ι)
         supportedOperators q (K : Set ι) := by
   constructor
   · intro h a b
-    have hblock : siteExpectation q K (Matrix.of fun σ τ => B (σ, a) (τ, b)) =
+    have hblock : ManyBody.regionExpectation K (Matrix.of fun σ τ => B (σ, a) (τ, b)) =
         Matrix.of fun σ τ => B (σ, a) (τ, b) := by
       ext σ τ
       exact congrArg (fun M => M (σ, a) (τ, b)) h
     rw [← hblock]
-    exact siteExpectation_mem_supportedOperators K _
+    exact (mem_supportedOperators_of_isSupportedOn
+        (ManyBody.regionExpectation_mem_supportedOperators K _))
   · intro h
     ext ⟨σ, a⟩ ⟨τ, b⟩
-    change siteExpectation q K (Matrix.of fun σ' τ' => B (σ', a) (τ', b)) σ τ = _
-    rw [siteExpectation_of_mem_supportedOperators K (h a b)]
+    change ManyBody.regionExpectation K (Matrix.of fun σ' τ' => B (σ', a) (τ', b)) σ τ = _
+    rw [(ManyBody.regionExpectation_of_mem_supportedOperators (D := K)
+        (isSupportedOn_of_mem_supportedOperators (h a b)))]
     rfl
 
 /-- A supported operator, with an arbitrary finite spectator, has zero

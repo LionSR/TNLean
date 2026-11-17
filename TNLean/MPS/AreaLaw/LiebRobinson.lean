@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import QICLean.ManyBody.Sites.Lattice.PathGraph
 import TNLean.Circuit.EntropySupport
-import TNLean.Circuit.SiteExpectationGraphLocalization
+import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!
 # Lieb–Robinson estimates on a contiguous chain
@@ -23,7 +23,7 @@ on the range and the per-site interaction budget. Explicitly, they are
 
 * `norm_heisenberg_commutator_le_chainDistance`: propagation with decay in
   distance from the initial support, including the empty-support convention.
-* `norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`: localization
+* `norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`: localization
   onto the exact real-radius neighborhood of that support.
 
 **Source convention (contiguous chains):** The note fixes a contiguous chain in
@@ -112,7 +112,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
 
 /-- Contiguous-chain specialization of Lemma lem:LR, real-radius localization.
 TNLean note, part2a_mps_information.tex:274–280. -/
-theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
+theorem norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
     {L q R : ℕ} {κ : Type*} [Fintype κ]
     (X : κ → ChainSupport L R)
     (h : κ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -126,7 +126,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
-        QuantumCircuit.siteExpectation q
+        ManyBody.regionExpectation
           (chainNeighborhood S ℓ)
           (ManyBody.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -143,7 +143,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     simp only [pow_zero, mul_one]
     exact_mod_cast SimpleGraph.pathGraph_card_sphere_le_two L x d
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
-  have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
+  have hGraph := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) Φ hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
     (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   have hN : (S.biUnion fun x ↦
