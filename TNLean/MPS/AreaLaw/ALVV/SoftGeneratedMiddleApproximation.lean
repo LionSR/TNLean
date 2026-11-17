@@ -112,6 +112,7 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     MPOTensor.exists_hermitian_traceChainOperator_approximation (by omega) hP Aglobal hGlobalError
   have hPs : Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
       P (interval (N + 1) l r) := by
+    show _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) l r : Finset (Fin (N + 1)))
     have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r h hs

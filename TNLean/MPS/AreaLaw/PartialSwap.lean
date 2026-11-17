@@ -69,6 +69,7 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
       let T := Matrix.reindex e e (U ⊗ₖ V)
       let K := F * T * Fᴴ - T
       Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
+    show _ ∈ ManyBody.supportedOperators _ _
     have hT : Matrix.reindex e e (U ⊗ₖ V) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1 := by
       simpa only [Finset.union_self] using reindex_kronecker_mem_supportedOperators hU hV

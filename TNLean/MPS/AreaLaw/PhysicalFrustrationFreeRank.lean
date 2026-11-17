@@ -42,6 +42,7 @@ private theorem isSupportedOn_outsidePiece
     (P : Fin (L - 1) → Prop) (S : Finset (Fin L))
     (hside : ∀ i, P i → interval L i.val (i.val + 2) ⊆ S) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (outsidePiece h a b P) S := by
+  show _ ∈ ManyBody.supportedOperators _ _
   classical
   show _ ∈ ManyBody.supportedOperators _ _
   unfold outsidePiece

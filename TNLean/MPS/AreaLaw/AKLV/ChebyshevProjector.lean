@@ -413,7 +413,7 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
     fun r ↦ h ⟨a.val + r.val, by omega⟩
   have hW (r : Fin (2 * w)) : W r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a.val + r.val) (a.val + r.val + 2) : Finset (Fin L)) :=
-    (hs _)
+    hs ⟨a.val + r.val, by omega⟩
   have hX : leftCutBlock h a x ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a.val + 1) : Finset (Fin L)) := by
     apply sub_mem

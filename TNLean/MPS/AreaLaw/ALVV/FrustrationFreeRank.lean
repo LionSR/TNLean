@@ -125,6 +125,7 @@ theorem regionalProjectionMatrix_supported
       (interval L i (i + 2))) (s : Finset ℕ) (m : ℕ) (D : Finset (Fin L))
     (hD : ∀ i < m, i ∈ s → interval L i (i + 2) ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (regionalProjectionMatrix h s m) D := by
+  show _ ∈ ManyBody.supportedOperators _ _
   classical
   induction m with
   | zero => exact Entropy.isSupportedOn_one D

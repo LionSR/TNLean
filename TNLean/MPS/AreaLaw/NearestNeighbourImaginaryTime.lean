@@ -143,6 +143,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
   have hsupport : Entropy.IsSupportedOn (n := fun _ ↦ q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
+    show _ ∈ ManyBody.supportedOperators _ _
     have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
     show _ ∈ ManyBody.supportedOperators _ _
     simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum

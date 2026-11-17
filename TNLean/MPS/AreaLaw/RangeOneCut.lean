@@ -53,6 +53,7 @@ theorem ChainHamiltonian.exists_cut_decomposition_of_range_one {L q : ℕ}
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (interval L 0 k)ᶜ ∧
       K.PosSemidef ∧ (1 - K).PosSemidef := by
+  show _ ∈ ManyBody.supportedOperators _ _
   classical
   let A := interval L 0 k
   let S := Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ A

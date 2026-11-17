@@ -288,15 +288,16 @@ private theorem exists_uniform_physical_soft_polynomial_family
     (Fin (N + 1) → Fin q) ℂ) + (p 2 : ℂ) • 1
   have hFsupport (j : Fin 5) : Entropy.IsSupportedOn (Fraw j)
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ)) := by
+    show _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Finset (Fin (N + 1)))
     have hAmem : A j ∈ V :=
       isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs
-    show _ ∈ V
     exact add_mem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
       (ManyBody.cfc_mem_supportedOperators _
         (sub_mem hAmem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))))
   have hPL : Entropy.IsSupportedOn PL (interval (N + 1) 0 (a + 1)) := by
+    show _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) 0 (a + 1) : Finset (Fin (N + 1)))
     have hFmem : Fraw 0 ∈ V := hFsupport 0

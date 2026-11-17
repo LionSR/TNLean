@@ -128,6 +128,7 @@ theorem regionTermMatrix_supported {h : ℕ → Matrix (Fin L → Fin q) (Fin L 
     (x y m : ℕ) (D : Finset (Fin L))
     (hD : ∀ i, x ≤ i → i < y → interval L i (i + 2) ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (regionTermMatrix h x y m) D := by
+  show _ ∈ ManyBody.supportedOperators _ _
   have hE := regionalProjectionMatrix_supported hq hh (evenBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2

@@ -71,6 +71,7 @@ private theorem retained_support (hw : 0 < w)
       (interval L i.val (i.val + 2))) (i : Fin (L - 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridRetainedTerm hw h i)
       (nearestNeighborChainSupport i).val := by
+  show _ ∈ ManyBody.supportedOperators _ _
   classical
   unfold chainGridRetainedTerm
   split_ifs
@@ -118,6 +119,7 @@ theorem chainGridBoundaryTerm_supported (hw : 0 < w)
       (interval L i.val (i.val + 2))) (k : Fin ((L - 1) / w)) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridBoundaryTerm hw h k)
       (chainCutPair L (chainGridCut w k.val)) := by
+  show _ ∈ ManyBody.supportedOperators _ _
   have hneg := neg_mem (show _ ∈ ManyBody.supportedOperators _ _ from
     hs (chainGridBoundaryEdge hw k))
   rw [chainGrid_boundary_edge_eq_pair k (chainGridBoundaryEdge_val_succ hw k).symm] at hneg

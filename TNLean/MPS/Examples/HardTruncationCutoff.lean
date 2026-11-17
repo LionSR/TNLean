@@ -217,6 +217,7 @@ private theorem internal_formula (K : ℕ) (j : Fin K) :
 theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin (K + 2) ↦ 2) (bondTerm K i)
       (interval (K + 2) i.val (i.val + 2)) := by
+  show _ ∈ ManyBody.supportedOperators _ _
   refine Fin.cases ?_ (fun j ↦ ?_) i
   · show _ ∈ ManyBody.supportedOperators _ _
     change boundary K ∈ _
