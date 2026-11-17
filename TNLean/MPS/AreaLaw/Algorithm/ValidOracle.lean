@@ -34,6 +34,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 219 and 484--487 (the solv
 polynomial-time solver of the convex programs), and the proof of Theorem 1, lines 652--678.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
 open scoped InnerProductSpace ComplexOrder MatrixOrder Kronecker
 

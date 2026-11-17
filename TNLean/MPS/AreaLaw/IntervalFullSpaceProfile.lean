@@ -14,6 +14,8 @@ constructions. Source: ALVV, arXiv:1602.08828v2, initialization,
 lines 1650–1662. No viability premise is required for these size bounds.
 -/
 
+open ManyBody (card_interval_le interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The full short interval satisfies the common dimension and recorded

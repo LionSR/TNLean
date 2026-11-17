@@ -30,6 +30,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 381–4
 No gap, information bound or reset conclusion is assumed or asserted here.
 -/
 
+open ManyBody (ChainSupport)
+
 open MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix Matrix.Norms.L2Operator NNReal
 

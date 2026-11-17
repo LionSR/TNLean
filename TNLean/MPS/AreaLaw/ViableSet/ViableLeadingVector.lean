@@ -32,6 +32,8 @@ The net and its cardinality bound (Claim `c:2`) remain an open gap, recorded in
 `docs/paper-gaps/lvv13_leading_net_point.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker Matrix.Norms.L2Operator
 

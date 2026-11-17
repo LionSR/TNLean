@@ -65,6 +65,8 @@ Lieb–Robinson estimates used here; see
 `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
 -/
 
+open ManyBody (ChainSupport)
+
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix.Norms.L2Operator NNReal
 

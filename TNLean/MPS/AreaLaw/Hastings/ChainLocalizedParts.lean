@@ -55,6 +55,8 @@ supported near the cut. Documented in
   P08024, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828.
 -/
 
+open ManyBody (ChainSupport card_interval_le interval mem_interval)
+
 open GaussianFilter Matrix QuantumCircuit TNLean.Lattice
 open scoped Matrix.Norms.L2Operator
 

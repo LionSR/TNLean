@@ -42,6 +42,8 @@ in `TNLean.MPS.AreaLaw.ComponentReduction`.
   and Section 2 (reductions).
 -/
 
+open ManyBody (ChainSupport interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw

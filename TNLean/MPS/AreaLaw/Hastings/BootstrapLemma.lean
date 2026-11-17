@@ -28,6 +28,8 @@ See `docs/paper-gaps/hastings07_lemma1_decay_length.tex` for the physical
 rescaling and the reciprocal-length convention of the printed bound.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw.Hastings
 
 open TNLean.MPS.AreaLaw

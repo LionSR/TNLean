@@ -61,6 +61,8 @@ parameter corrections are recorded in
   P08024, arXiv:0705.2024v4, `law16.tex`, lines 246–267 and 766–1003.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open GaussianFilter Matrix QuantumCircuit TNLean.Lattice Real
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal ComplexOrder
 
@@ -204,10 +206,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
       simp only [hT, hθ, hs, hξ', hm, hℓn, hk] at hν hcard ⊢
       gcongr
       all_goals first
-        | exact hcard
-        | exact hν
         | exact chainLRPrefactor_nonneg R J
-        | positivity
         | exact mul_nonneg (chainLRPrefactor_nonneg R J) (by positivity)
     · exact mul_le_mul_of_nonneg_right (add_le_add (le_max_left _ _) le_rfl) (exp_pos _).le
 

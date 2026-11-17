@@ -35,6 +35,8 @@ additive term `u³/g`. For accuracy `L^{-c}` at fixed `q` and `g` it is of order
 `docs/paper-gaps/aklv13_frustration_free_mps_rate.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

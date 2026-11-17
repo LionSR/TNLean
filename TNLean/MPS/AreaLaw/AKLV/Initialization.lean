@@ -31,6 +31,8 @@ Lemma 2.2 is applied to the clipped target fixed by the constructed filter;
 see `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

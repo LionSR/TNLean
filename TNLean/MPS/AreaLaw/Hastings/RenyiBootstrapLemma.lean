@@ -27,6 +27,8 @@ The distinction and the reciprocal-length convention are recorded in
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw.Hastings
 
 open TNLean.MPS.AreaLaw Matrix

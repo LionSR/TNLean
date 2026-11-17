@@ -53,6 +53,8 @@ and the chain has at least one site and local dimension at least two. See
 `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

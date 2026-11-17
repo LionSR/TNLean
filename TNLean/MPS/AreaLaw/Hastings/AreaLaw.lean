@@ -57,6 +57,8 @@ printed `2^{ξ' ln q}` of eq. `smd`. Documented in
   478–503.
 -/
 
+open ManyBody (interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw.Hastings

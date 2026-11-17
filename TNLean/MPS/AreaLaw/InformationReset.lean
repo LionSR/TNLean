@@ -35,6 +35,8 @@ Source: TNLean one-dimensional note, Lemma `lem:reset`,
 `part2a_mps_information.tex`, lines 319–435.
 -/
 
+open ManyBody (ChainSupport)
+
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
 open TNLean.Lattice (exists_regional_physicalBuffer_filter

@@ -34,6 +34,8 @@ corrected recurrence recorded in `docs/paper-gaps/alvv16_final_filter_gain.tex`.
 The printed iteration count is not identified with this accuracy choice.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

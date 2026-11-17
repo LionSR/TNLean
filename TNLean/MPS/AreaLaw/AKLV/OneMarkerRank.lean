@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 import QICLean.Algebra.OneMarkerWeightedSchmidtRank
 import QICLean.Entropy.SupportedOperatorSchmidtRank
@@ -25,6 +25,8 @@ Source: AKLV, arXiv:1301.1162v1, Lemma 4.2 (`l:agsp`), source lines 626--662.
 This is the fixed-frequency estimate at its distinguished cut. Partition into low
 frequencies, summation over distinguished cuts and optimization remain separate steps.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped BigOperators Kronecker

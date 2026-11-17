@@ -21,6 +21,8 @@ Extension of the chain lemma in the TNLean one-dimensional note, `lem:reset`,
 `part0_preamble.tex`, lines 191–215.
 -/
 
+open ManyBody (DomainSupport lineDomainGraph)
+
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
 open TNLean.Lattice (exists_regional_physicalBuffer_filter
@@ -48,9 +50,9 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
           FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω D C ≤ b →
           let w := Cp * (1 + b + Real.log (Λ.card : ℝ))
           (∀ x ∈ R₀, ∀ y : Fin Λ.card, y ∉ D → ∀ d : ℕ,
-            (domainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ)) →
+            (lineDomainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ)) →
           (∀ x ∈ C₀, ∀ y : Fin Λ.card, y ∉ C → ∀ d : ℕ,
-            (domainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ)) →
+            (lineDomainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ)) →
           FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω R₀ C₀ ≤
             (Λ.card : ℝ) ^ (-p) := by
   classical
@@ -177,7 +179,7 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   let crossing := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
   let Z := crossing.biUnion (fun X ↦ X.1)
   let N := fun A : Finset (Fin L) ↦
-    A.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ℓ)
+    A.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ℓ)
   let S := N (Q ∪ Z)
   obtain ⟨path, _, _, _, _, hpathIntegral⟩ :=
     hlocal q hq Λ h D ℓ
@@ -207,13 +209,13 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   have hrad : ((ℓ + R : ℕ) : ℝ) ≤ w := by
     simpa only [Nat.cast_add] using hsepRadius.le
   have hS : Disjoint S (R₀ ∪ C₀) := by
-    exact ManyBody.reset_graphNeighborhood_disjoint_cores (domainGraph Λ)
+    exact ManyBody.reset_graphNeighborhood_disjoint_cores (lineDomainGraph Λ)
       (fun X : DomainSupport Λ R ↦ X.1) R ℓ
       (fun X x hx y hy ↦ X.2.2 x hx y hy) D C R₀ C₀ hDC
       (fun x hx ↦ ManyBody.graphBall_subset_of_finite_distance_margin
-        (domainGraph Λ) D x w (ℓ + R) hrad (hRw x hx))
+        (lineDomainGraph Λ) D x w (ℓ + R) hrad (hRw x hx))
       (fun x hx ↦ ManyBody.graphBall_subset_of_finite_distance_margin
-        (domainGraph Λ) C x w (ℓ + R) hrad (hCw x hx))
+        (lineDomainGraph Λ) C x w (ℓ + R) hrad (hCw x hx))
   have hent := TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary q hq hΩ
     D R₀ C₀ hR₀ (Finset.disjoint_of_subset_left hC₀ hDC.symm) S hS U hUu hUs
     (8 * (L : ℝ) ^ (-r)) hUerr'

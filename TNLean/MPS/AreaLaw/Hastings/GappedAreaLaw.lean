@@ -55,6 +55,8 @@ recorded in `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 124–144.
 -/
 
+open ManyBody (interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw.Hastings

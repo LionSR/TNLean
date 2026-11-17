@@ -30,6 +30,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 380–4
 This estimate does not construct a Gaussian filter or an information reset.
 -/
 
+open ManyBody (ChainSupport)
+
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
 open TNLean.Lattice (sheetSwapOp)

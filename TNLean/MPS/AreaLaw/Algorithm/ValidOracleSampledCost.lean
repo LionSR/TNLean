@@ -37,6 +37,8 @@ not the printed quantitative bounds; see `docs/paper-gaps/lvv13_constant_bond.te
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 and 652--678.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib MeasureTheory
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 

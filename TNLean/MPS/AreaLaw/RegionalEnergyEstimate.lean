@@ -29,6 +29,8 @@ The source energy estimate compresses the generated soft Hamiltonian;
 closing that estimate requires its own quantitative energy argument.
 -/
 
+open ManyBody (interval mem_interval)
+
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator TensorProduct Kronecker
 

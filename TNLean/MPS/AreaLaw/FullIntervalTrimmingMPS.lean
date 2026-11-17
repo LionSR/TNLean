@@ -19,6 +19,8 @@ and final refinement, lines 1809–1817. The finite-span argument is LVV,
 arXiv:1307.5143v1, Claim `c:2`, lines 520–527.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The actual full-interval space with recorded weighted trimming bounds

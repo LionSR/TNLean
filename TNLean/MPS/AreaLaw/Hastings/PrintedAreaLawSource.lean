@@ -28,6 +28,8 @@ Source: Hastings, arXiv:0705.2024v4, eq. `lrb`, lines 96–112, and the main the
 eqs. `entbd` and `smd`, lines 124–144.
 -/
 
+open ManyBody (interval)
+
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

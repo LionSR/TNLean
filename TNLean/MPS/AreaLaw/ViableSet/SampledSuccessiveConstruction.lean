@@ -39,6 +39,8 @@ Claims `c:ext`, `c:2`, `c:trim`, `c:errorreduction`, lines 379–592, and
 induction, lines 652–678.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder Kronecker
 

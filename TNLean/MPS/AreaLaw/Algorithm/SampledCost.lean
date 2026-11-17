@@ -30,6 +30,8 @@ charged a declared polynomial cost in the dimensions of its arguments, arithmeti
 nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
 

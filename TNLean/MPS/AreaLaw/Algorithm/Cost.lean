@@ -32,6 +32,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 (Theorem 1) and 6
 `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
 

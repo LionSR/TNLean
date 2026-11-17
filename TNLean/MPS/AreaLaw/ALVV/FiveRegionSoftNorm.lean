@@ -24,6 +24,8 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_soft_truncation_log_bound.pdf
 and `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

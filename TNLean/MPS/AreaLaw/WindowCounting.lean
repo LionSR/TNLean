@@ -42,6 +42,8 @@ The one-dimensional area-law note, `part1_arealaw.tex`, Remark `rem:sharper`,
 lines 706–709, and Lemma `lem:tail`, equations `eq:theta` and `eq:mgf`, lines 152–166.
 -/
 
+open ManyBody (ChainSupport card_interval_le interval mem_interval)
+
 noncomputable section
 
 open Matrix

@@ -30,6 +30,8 @@ Source: Hastings, arXiv:0705.2024v4, eqs. `lrb`, `smd`, lines 96–142,
 and Lemma 1 with the note added, lines 246–267 and 912–1003.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix.Norms.L2Operator ComplexOrder
 namespace TNLean.MPS.AreaLaw
 

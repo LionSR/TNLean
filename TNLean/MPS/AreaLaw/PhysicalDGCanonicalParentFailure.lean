@@ -33,6 +33,8 @@ current space, with the larger integer count documented in
 probability and runtime are separate assertions.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

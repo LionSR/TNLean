@@ -29,6 +29,8 @@ Supporting ALVV, arXiv:1602.08828v2, Figure `fig:algo1`, line 1631,
 and the energy-estimation argument at lines 1793–1807.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct InnerProductSpace ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator

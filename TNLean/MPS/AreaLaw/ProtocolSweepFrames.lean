@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
 import TNLean.MPS.AreaLaw.BandDissolution
@@ -29,6 +29,8 @@ the unchanged open exchange window belongs to the separate band construction.
 The correction is recorded in
 `docs/paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex`.
 -/
+
+open ManyBody (interval mem_interval)
 
 noncomputable section
 

@@ -51,6 +51,8 @@ ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821, and
 Proposition 5.7 (`prop:Cheby-AGSP-eff`), lines 1324–1333.
 -/
 
+open ManyBody (interval interval_mono mem_interval)
+
 open TNLean.Lattice.Sheet
 
 noncomputable section

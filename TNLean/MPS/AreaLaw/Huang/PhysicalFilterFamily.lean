@@ -24,6 +24,8 @@ in place of the energy-dependent power sampler of LVV; see
 `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

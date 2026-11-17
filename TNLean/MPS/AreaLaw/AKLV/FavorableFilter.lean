@@ -26,6 +26,8 @@ six-interaction restriction and conventions in
 the subsequent varying-target sequence remain separate.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

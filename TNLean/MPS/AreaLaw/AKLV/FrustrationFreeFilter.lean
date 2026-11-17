@@ -28,6 +28,8 @@ asserted. The corrected polynomial word count is recorded at
 https://sirui-lu.com/QICLean/paper-gaps/aklv13_interpolation_and_word_count.pdf.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

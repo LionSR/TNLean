@@ -20,6 +20,8 @@ Source: Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19, equations (19)--(22), u
 Osborne, arXiv:quant-ph/0508031v2, Figure 2 and equations (12)--(13).
 -/
 
+open ManyBody (interval)
+
 open Matrix MeasureTheory ProbabilityTheory
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder MatrixOrder NNReal
 

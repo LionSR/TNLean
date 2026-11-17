@@ -16,6 +16,8 @@ This is auxiliary geometry for ALVV, arXiv:1602.08828v2,
 Figure `fig:generate`, lines 1348–1392.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw

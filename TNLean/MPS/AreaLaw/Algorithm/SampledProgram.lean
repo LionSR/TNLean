@@ -44,6 +44,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216 (Theorem 1), 611
 (`d:sagsp`), 626--649 (`c:agsp`), 652--678 (the induction and the success probability).
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib MeasureTheory
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

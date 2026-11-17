@@ -20,6 +20,8 @@ The bounds concern recorded spanning vectors. Joint viability probability,
 all-span MPS bounds and runtime are separate conclusions.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Every actually retained interval space has the common dimension and

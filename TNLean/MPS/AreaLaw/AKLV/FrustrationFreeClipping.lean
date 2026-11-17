@@ -20,6 +20,8 @@ uses the accepted Theorem 6.1(a) estimate at original energy zero. This result
 asserts no final entropy rate, parameter optimization, or detectability argument.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section

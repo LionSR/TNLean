@@ -28,6 +28,7 @@ lines 96–112 and 139–142.
 -/
 
 open QuantumCircuit
+open ManyBody (ChainSupport)
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -52,7 +53,7 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_numeric
     ⟨h.term, h.supported⟩
   have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
     (SimpleGraph.pathGraph L) Φ
-    h.hermitian R (fun Z x hx y hy ↦ Z.edist_le x hx y hy)
+    h.hermitian R (fun Z x hx y hy ↦ ChainSupport.edist_le Z x hx y hy)
     (R + 1) (fun Z ↦ Z.2.card_le)
     (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) h.sum_norm_terms_containing_le X hA Y hB 1 (by norm_num) d
     (fun x hx y hy ↦ by

@@ -31,6 +31,8 @@ Only the original nearest-neighbour geometry is considered; the source's arbitra
 exterior-operator formulation and comparison with its printed threshold are separate.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

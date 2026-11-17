@@ -19,6 +19,8 @@ actual projection products. The construction is ALVV, arXiv:1602.08828v2,
 without a uniqueness or gap hypothesis.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw

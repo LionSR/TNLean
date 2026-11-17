@@ -50,6 +50,7 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, Lemma
 -/
 
 open scoped Matrix.Norms.L2Operator
+open ManyBody (ChainSupport DomainSupport lineDomainGraph)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -202,7 +203,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) :=
   norm_heisenberg_commutator_le_graphDistance_inf (SimpleGraph.pathGraph L) (fun k ↦ (X k).1)
-    (fun k ↦ (X k).edist_le) (fun k ↦ (X k).2.card_le)
+    (fun k ↦ ChainSupport.edist_le (X k)) (fun k ↦ (X k).2.card_le)
     h hHerm hSupport b₀ hBudget S hA y hB t
 
 /-- Contiguous-chain specialization of Lemma lem:LR, real-radius localization.
@@ -235,7 +236,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       mem_chainNeighborhood]
   rw [← hN]
   exact norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
-    (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ (X k).edist_le)
+    (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ ChainSupport.edist_le (X k))
     (fun k ↦ (X k).2.card_le) (SimpleGraph.pathGraph_card_sphere_le_two L)
     h hHerm hSupport b₀ hBudget S hA ℓ t
 
@@ -257,13 +258,13 @@ theorem norm_heisenberg_commutator_le_domainDistance
     {A B : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : Fin Λ.card)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
-    let δ : ℕ∞ := S.inf (fun x ↦ (domainGraph Λ).edist x y)
+    let δ : ℕ∞ := S.inf (fun x ↦ (lineDomainGraph Λ).edist x y)
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
         B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) :=
-  norm_heisenberg_commutator_le_graphDistance_inf (domainGraph Λ) (fun k ↦ (X k).1)
+  norm_heisenberg_commutator_le_graphDistance_inf (lineDomainGraph Λ) (fun k ↦ (X k).1)
     (fun k ↦ (X k).2.2) (fun k ↦ (X k).2.isChainSupport.card_le)
     h hHerm hSupport b₀ hBudget S hA y hB t
 
@@ -285,13 +286,13 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     (ℓ : ℝ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         QuantumCircuit.siteExpectation q
-          (S.biUnion fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)
+          (S.biUnion fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ⌊ℓ⌋₊)
           (ManyBody.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - ℓ / 2) :=
   norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
-    (domainGraph Λ) (fun k ↦ (X k).1) (fun k ↦ (X k).2.2)
+    (lineDomainGraph Λ) (fun k ↦ (X k).1) (fun k ↦ (X k).2.2)
     (fun k ↦ (X k).2.isChainSupport.card_le) (domainGraph_card_sphere_le_two Λ)
     h hHerm hSupport b₀ hBudget S hA ℓ t
 

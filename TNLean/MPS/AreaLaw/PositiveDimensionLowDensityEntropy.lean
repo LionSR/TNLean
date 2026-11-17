@@ -20,6 +20,8 @@ arXiv:1602.08828v2, Assumption (LD), lines 281–284. The conclusion is the
 entropy part of Theorem `thm:al-ld`, lines 1096–1105.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

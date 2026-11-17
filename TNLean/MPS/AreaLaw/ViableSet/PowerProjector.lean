@@ -67,6 +67,8 @@ sites, so the spectral statements and the expansion take `0 < L`, the source's c
   expansion `eq:a-exp`, lines 606–609.
 -/
 
+open ManyBody (ChainSupport interval mem_interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
