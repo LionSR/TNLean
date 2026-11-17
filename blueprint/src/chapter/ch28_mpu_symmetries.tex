@@ -2331,6 +2331,57 @@
     % Source lines: paper_v2.tex 1464--1546.
 \end{theorem}
 
+\begin{proof}
+    \uses{lem:equivalent-symmetry, lem:mpu_conjugation_gate_path_determinants,
+        thm:mpu_conjugation_even_rank_if}
+    The ``if'' direction is Lemma~\ref{thm:mpu_conjugation_even_rank_if}. For the
+    ``only if'' direction, the forward direction of
+    Lemma~\ref{lem:equivalent-symmetry} gives a continuous path of
+    standard-form unitaries $u(p),v(p)$ whose MPUs are invariant under
+    conjugation, and Lemma~\ref{lem:mpu_conjugation_gate_path_determinants}
+    shows that $\det u(p)$ and $\det v(p)$ of the gauge-fixed unitaries cannot
+    change along it. The case is constant along the path as in
+    Lemma~\ref{cor:equiv-under-conjugation}.
+\end{proof}
+
+\begin{lemma}[Determinants along a conjugation-invariant gate path]
+    \label{lem:mpu_conjugation_gate_path_determinants}
+    \lean{MPOTensor.det_eq_of_symmetric_gate_path,
+        MPOTensor.kronFactorDet_mul_det_eq_of_path,
+        MPOTensor.kronFactorDet_mul_det_eq_one_or_neg_one,
+        MPOTensor.kronFactorDet_eq_of_kronecker_eq}
+    \leanok
+    \discussion{5713}
+    \uses{prop1conj, corconj}
+    Suppose $r$ and $\ell$ are even, and let $u(p),v(p)$, $p\in[0,1]$, be
+    continuous families of unitaries whose MPUs are invariant under conjugation.
+    Let $x(p),y(p)$ be the unitaries of Lemma~\ref{prop1conj}, so that
+    $\overline{u}u^\dagger=x\otimes y$. Then
+    \begin{align}
+        J(u) & =\det(x)^{r/2}\det(y)^{\ell/2}\det(u)
+    \end{align}
+    does not depend on the choice of $x,y$, equals $\pm1$, and is the
+    determinant of $u$ after the orthogonal or symplectic gauge fixing of
+    Lemma~\ref{corconj}; similarly for $v$ with the conjugate weight. Both are
+    constant in $p$. In particular, if $u(0),v(0)$ and $u(1),v(1)$ are both in
+    the orthogonal form, or both in the symplectic form, then
+    $\det u(0)=\det u(1)$ and $\det v(0)=\det v(1)$. This is the step of the
+    ``only if'' direction of Theorem~\ref{prop:conjsym-strict-equiv} that
+    follows the symmetry path criterion.
+    % Source lines: paper_v2.tex 1500--1534.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Writing $x=U^T\Lambda U$, $y=V^T\Lambda'V$ with $U,V$ unitary and
+    $\Lambda,\Lambda'$ equal to $\Id$ or $\Sigma$, the gate $(U\otimes V)u$ is in
+    the normal form and $\det\big((U\otimes V)u\big)=\det(U)^r\det(V)^\ell\det
+        u=J(u)$, since $\det x=\det(U)^2$. Its determinant is real and unimodular, so
+    $J(u)=\pm1$. Locally, $x$ and $y$ are read off continuously from entries of
+    $\overline uu^\dagger$, so $J(u(p))$ is continuous in $p$, hence constant.
+    No continuous choice of $x(p),y(p)$ along the whole path is needed.
+\end{proof}
+
 \begin{lemma}[Strict conjugation equivalence for even source ranks, the ``if'' direction]
     \label{thm:mpu_conjugation_even_rank_if}
     \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even,
