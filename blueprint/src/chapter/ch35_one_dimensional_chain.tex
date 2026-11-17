@@ -2177,17 +2177,12 @@ Theorem~B a second way, by a sequential preparation protocol.
     spectral-gap hypothesis is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_model,thm:qc_graph_lieb_robinson_finset,
-        thm:qc_graph_lieb_robinson_zero_finset}
-    Every range-$R$ support has at most $R+1$ sites. For finite $\delta$,
-    the graph propagation estimate with exponential weight parameter one
-    gives the stronger decay $e^{-\delta}$, which is at most
-    $e^{-\delta/2}$. For infinite $\delta$, every $x\in S$ has
-    $d_\Lambda(x,y)=\infty$, so $[\tau_t(A),B]=0$ by
-    Lemma~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
-    vanishes. All distances are those of the
-    induced graph; sites separated by a hole are not identified with
-    consecutive sites of a longer chain.
+    \uses{def:domain_model,thm:graph_lieb_robinson_two_spheres}
+    Every range-$R$ support has at most $R+1$ sites and induced-graph
+    diameter at most $R$, so this is the commutator estimate of
+    Lemma~\ref{thm:graph_lieb_robinson_two_spheres} for the induced graph.
+    All distances are those of the induced graph; sites separated by a hole
+    are not identified with consecutive sites of a longer chain.
 \end{proof}
 
 \begin{lemma}[Localization on a finite integer domain]
@@ -2224,18 +2219,11 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:domain_graph_spheres,thm:qc_graph_neighborhood_localization,
-        thm:area_law_supported_identity}
-    Each interaction support has at most $R+1$ sites. Apply graph
-    localization with this support-size bound, sphere coefficient $2$,
-    sphere exponent zero, and natural radius $m=\lfloor\ell\rfloor$.
-    Its neighborhood is precisely the displayed union of closed balls.
-    Graph distances are integers when finite, and
-    $e^{-m/2}\le e^{1/2}e^{-\ell/2}$.
-    The natural-radius coefficient is $2Ce^{1/2}/(1-e^{-1/2})$;
-    multiplication by this rounding factor gives $C'$.
-    The graph localization theorem includes the empty union and its
-    vanishing factor $|S|^2$.
+    \uses{thm:domain_graph_spheres,thm:graph_lieb_robinson_two_spheres}
+    Each interaction support has at most $R+1$ sites, and every distance
+    sphere of the induced graph has at most two sites. The localization
+    estimate of Lemma~\ref{thm:graph_lieb_robinson_two_spheres} for the
+    induced graph is the displayed bound.
 \end{proof}
 
 \begin{lemma}[A cut that splits no term]

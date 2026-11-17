@@ -4302,8 +4302,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** The anchored theorem
   `heisenberg_commutator_eq_zero_of_edist_eq_top`, the infinite-distance branch of
   `norm_heisenberg_commutator_le_graph_kernel_sum` in `GraphLocalization.lean`,
-  and `MPS/AreaLaw/DomainLiebRobinson.lean`,
-  `norm_heisenberg_commutator_le_domainDistance`.
+  and `MPS/AreaLaw/LiebRobinson.lean`,
+  `norm_heisenberg_commutator_le_graphDistance_inf`.
 - **Notes:** Both existing closed-region arguments and the finite-domain
   specialization use the shared theorem. The existing public statements are
   retained. No tactic or global attribute is introduced.
@@ -5622,17 +5622,20 @@ three-plaquette output measurement, and the routed reunion measurement.
   no additional tactic or abstraction is proposed. Both comparisons are in
   `TNLean/Algebra/GraphDistanceTransport.lean`.
 
-### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
+### Passing from a natural localization radius to a real radius — resolved (2026-11-17)
 
 - **Pattern:** Use the floor inequality to bound
   `exp (a - (⌊ℓ⌋₊ : ℝ) / 2)` by `exp (1 / 2) * exp (a - ℓ / 2)`;
   combine this factor with the coefficient of the natural-radius estimate.
 - **Seen:** The chain localization theorem in `MPS/AreaLaw/LiebRobinson.lean`
-  and the domain localization theorem in `MPS/AreaLaw/DomainLiebRobinson.lean`.
+  and the domain localization theorem formerly in
+  `MPS/AreaLaw/DomainLiebRobinson.lean`.
 - **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
   `Real.exp_le_exp` and `Real.exp_add`.
-- **Notes:** Two occurrences in two files. A third occurrence would warrant
-  extracting the scalar inequality, independently of the graph and Hamiltonian.
+- **Notes:** Both occurrences now go through the one graph localization
+  theorem `norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two`
+  in `MPS/AreaLaw/LiebRobinson.lean`, so the rounding step occurs once. A new
+  occurrence elsewhere would warrant extracting the scalar inequality.
 
 ### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
 
@@ -9688,19 +9691,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   the clearance and physical data. These are two occurrences across two
   files; no promotion or proof refactor is proposed.
 
-### Commutator decay from the least support distance — candidate (2026-10-21)
+### Commutator decay from the least support distance — resolved (2026-11-17)
 
 - **Pattern:** Choose anchors from nonempty interaction supports, take the
   infimum of distances from the initial support to the observed site, separate
   infinite distance from finite distance, and weaken exponential decay from
   exponent one to one half.
-- **Seen:** `norm_heisenberg_commutator_le_chainDistance` in
-  `MPS/AreaLaw/LiebRobinson.lean` and
-  `norm_heisenberg_commutator_le_domainDistance` in
-  `MPS/AreaLaw/DomainLiebRobinson.lean`.
-- **Notes:** Two occurrences. Their infinite-distance arguments differ:
-  the finite path is connected, whereas an induced domain uses exact
-  commutation across components. No further abstraction is proposed yet.
+- **Seen:** `norm_heisenberg_commutator_le_chainDistance` and
+  `norm_heisenberg_commutator_le_domainDistance`, formerly proved separately
+  in `MPS/AreaLaw/LiebRobinson.lean` and `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Abstraction:** `norm_heisenberg_commutator_le_graphDistance_inf` in
+  `MPS/AreaLaw/LiebRobinson.lean`, for an arbitrary finite graph; infinite
+  distance uses exact commutation across components, which also covers the
+  connected path. Both estimates are now its specializations.
 
 ### Opposite-side witnesses for reset supports — candidate (2026-10-21)
 

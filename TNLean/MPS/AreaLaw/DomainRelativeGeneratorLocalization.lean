@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainPartialSwap
-import TNLean.MPS.AreaLaw.DomainLiebRobinson
+import TNLean.MPS.AreaLaw.LiebRobinson
 
 /-!
 # Localization of the relative-evolution generator on finite integer domains
