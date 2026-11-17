@@ -37,8 +37,8 @@ theorem isSupportedOn_physicalParityProduct
     ManyBody.supportedOperators (fun _ ↦ Fin q) D
   rw [dite_eq_left hk]
   split_ifs with hp
-  · simpa only [StarAlgEquiv.symm_apply_apply] using
-      (hs ⟨k, hk⟩ hp)
+  · rw [StarAlgEquiv.symm_apply_apply]
+    exact hs ⟨k, hk⟩ hp
   · simpa only [map_zero] using
       (zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) D))
 
@@ -62,6 +62,6 @@ theorem isSupportedOn_regionalParityProduct
     intro v hv
     simp only [mem_interval] at *
     omega
-  · exact (zero_mem _)
+  · exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
 
 end TNLean.MPS.AreaLaw
