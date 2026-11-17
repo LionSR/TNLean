@@ -104,11 +104,23 @@ from fusion data remains a separate hypothesis
     \leanok
     \uses{lem:mpo_mixed_wha_completion,thm:mpo_arbitrary_parent_commutation_adjoint_closed}
     The realization supplies adjoint boundaries on the active space.
-    Conjugation by $J^{\otimes N}$ preserves the same adjoint boundary.
+    For $J_N=J^{\otimes N}$, physical inclusion gives
+    \[
+        O^N_{\widetilde T,X}=J_N O^N_{T,X}J_N^*.
+    \]
+    Thus $(O^N_{T,X})^*=O^N_{T,Y}$ implies
+    $(O^N_{\widetilde T,X})^*=O^N_{\widetilde T,Y}$, preserving the same
+    adjoint boundary.
     Compatibility gives local commutation in the interior; continuity
     extends it to the endpoints, and cyclic placement gives the periodic
     assertion. Equality with the existing mixed path transfers its
     uniform gap without a spectral comparison of different Hamiltonians.
-    In finite dimension every boundary operator represents an algebra
-    element, so $Q$ commutes with it; adding $Q-I$ preserves commutation.
+    In finite dimension, for $n>0$ every boundary operator has the form
+    $B=O^n_{T,X}=\rho_n(x)$. Multiplicativity gives
+    \[
+        \rho_n(1)\rho_n(x)=\rho_n(1x)=\rho_n(x1)
+        =\rho_n(x)\rho_n(1).
+    \]
+    In particular, at $n=2$ we have $\rho_2(1)=Q$ and $QB=BQ$;
+    adding $Q-I$ therefore preserves commutation with $B$.
 \end{proof}
