@@ -389,7 +389,7 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
     -- Split off the unitary at `c`.
     have hsplit : finKronecker g = finKronecker (Function.update g h.c 1) *
         finKronecker (Function.update 1 h.c U) := by
-      rw [finKronecker_mul]
+      rw [← finKronecker_mul]
       congr 1
       funext i
       by_cases hi : i = h.c
@@ -425,7 +425,7 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
             Function.update_of_ne hi]
     have hframe : finKronecker (Function.update g h.c 1) * (finKronecker (h.frame z) *
         finKronecker (Function.update 1 h.f U)) = finKronecker (chainFrame (h :: hs) z) := by
-      rw [finKronecker_mul, finKronecker_mul]
+      rw [← finKronecker_mul, ← finKronecker_mul]
       congr 1
       funext i
       simp only [chainFrame, Matrix.mul_assoc]
@@ -493,7 +493,7 @@ theorem isImplementationOn_round (pre : List (Layer d N)) {hs : List (TeleportHo
     simp only [Matrix.mul_assoc]
   have hstar : finKronecker (fun i => star (chainFrame hs z i)) *
       finKronecker (chainFrame hs z) = 1 := by
-    rw [finKronecker_mul]
+    rw [← finKronecker_mul]
     simp only [Unitary.star_mul_self_of_mem (chainFrame_mem_unitary hs z _), finKronecker_one]
   rw [hkraus, ← mulVec_mulVec, ← mulVec_mulVec, chainPre_mulVec hv z hv', mulVec_smul,
     mulVec_mulVec, hstar, one_mulVec, mulVec_mulVec]
