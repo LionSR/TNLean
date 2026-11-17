@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Entropy.RegionalViability
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeImprovingFamily
 
 /-!
@@ -105,7 +106,24 @@ theorem exists_frustrationFree_improving_family_regionTensorCoordinates :
   refine ⟨hlogD, hlogR, W, Δ, hΔ, hbudget, hrank, ?_⟩
   have hcoords := (Entropy.regionTensorCoordinates_eq_exteriorFirst q J).symm
   rw [hker] at himprove
-  intro S δ hS hδ
-  exact hcoords ▸ himprove S δ (hcoords ▸ hS) hδ
+  have himprove' : ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
+      Submodule.IsViable δ S ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+          (Equiv.prodComm _ _))).trans
+            (Submodule.euclideanTensorEquiv (↥(Jᶜ) → Fin q) (J → Fin q))).trans
+          (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            (EuclideanSpace ℂ (J → Fin q)))).toLinearEquiv.toLinearMap) → δ < 1 →
+      Submodule.IsViable (Δ / (1 - δ) ^ 2)
+        (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j) :
+          EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q)))
+        ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+          (Equiv.prodComm _ _))).trans
+            (Submodule.euclideanTensorEquiv (↥(Jᶜ) → Fin q) (J → Fin q))).trans
+          (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            (EuclideanSpace ℂ (J → Fin q)))).toLinearEquiv.toLinearMap) :=
+    himprove
+  rw [hcoords] at himprove'
+  exact himprove'
 
 end TNLean.MPS.AreaLaw.ALVV

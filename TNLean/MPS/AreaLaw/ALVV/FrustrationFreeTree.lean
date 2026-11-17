@@ -45,7 +45,7 @@ theorem exists_pos_mem_spectrum_of_unique_ground_state {L q : ℕ} (hq : 2 ≤ q
     (hgap : ∀ z ∈ spectrum ℝ H, z = 0 ∨ gamma ≤ z) :
     ∃ nu ∈ spectrum ℝ H, 0 < nu := by
   by_contra hnot
-  push_neg at hnot
+  push Not at hnot
   have hzero : hH.eigenvalues = 0 := by
     funext j
     have hmem := hH.eigenvalues_mem_spectrum_real j
@@ -59,8 +59,8 @@ theorem exists_pos_mem_spectrum_of_unique_ground_state {L q : ℕ} (hq : 2 ≤ q
   have hle := Submodule.finrank_mono htop
   rw [finrank_top, finrank_euclideanSpace, Fintype.card_fun, Fintype.card_fin,
     Fintype.card_fin] at hle
-  have hspan := finrank_span_le_card ({Γ} : Set (EuclideanSpace ℂ (Fin L → Fin q)))
-  simp only [Set.toFinset_singleton, Finset.card_singleton] at hspan
+  have hspan : Module.finrank ℂ (ℂ ∙ Γ) ≤ 1 := by
+    simpa using finrank_span_le_card (R := ℂ) ({Γ} : Set (EuclideanSpace ℂ (Fin L → Fin q)))
   have hpow : q ≤ q ^ L := Nat.le_self_pow (by omega) q
   omega
 
@@ -157,13 +157,16 @@ theorem exists_unique_ground_state_tree_ritz_approximation :
   have hrank : Module.finrank ℂ (ℂ ∙ Γ) = 1 := finrank_span_singleton hΓ0
   dsimp only at key
   rw [hGeq, hrank] at key
-  simp only [Nat.cast_one, Real.log_one, add_zero, one_mul, one_pow] at key
+  simp only [Nat.cast_one, Real.log_one, add_zero, one_mul, mul_one, one_pow] at key
   obtain ⟨hell, -, Btree, -, -, Nfam, F, hNfam, hrest⟩ := key
-  refine ⟨by omega, Nfam, F, hNfam, ?_⟩
+  refine ⟨by simp only [width, ell, m, v, g] at hell ⊢; omega, Nfam, F, hNfam, ?_⟩
   intro eta heta beta hbeta hbeta1 s count
   obtain ⟨B, -, -, Uref, -, -, -, -, hxi, -, -, hfinal⟩ := hrest eta heta
   obtain ⟨-, operation, hliteral, hspaces, -, -, hdimS, hRW, hdimR, hGR, hRG, hmps⟩ :=
     hfinal beta hbeta hbeta1
+  have e1 : (1 : ℕ) ^ 2 * Btree = Btree := by simp
+  have e2 : (1 : ℕ) ^ 2 * B = B := by simp
+  rw [e1, e2] at hdimS hdimR
   exact ⟨_, _, _, operation, hxi, hliteral, fun p r hpr hrL ↦
     ⟨(hspaces p r hpr hrL).1, (hspaces p r hpr hrL).2.1⟩, hdimS, hRW, hdimR, hGR, hRG, hmps⟩
 
