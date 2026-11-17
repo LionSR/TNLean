@@ -160,8 +160,8 @@ private theorem outcomeProj_mulVec_of_isEmpty {S : Finset (Fin N)} [IsEmpty S] (
 theorem _root_.Matrix.finKronecker_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
     (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
     finKronecker u ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
-  rw [Unitary.mem_iff, star_eq_conjTranspose, finKronecker_conjTranspose, finKronecker_mul,
-    finKronecker_mul]
+  rw [Unitary.mem_iff, star_eq_conjTranspose, finKronecker_conjTranspose, ← finKronecker_mul,
+    ← finKronecker_mul]
   simp only [← star_eq_conjTranspose, Unitary.star_mul_self_of_mem (hu _),
     Unitary.mul_star_self_of_mem (hu _), finKronecker_one, and_self]
 
@@ -297,7 +297,7 @@ theorem exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty {T : �
   rw [hψ, mulVec_smul, MeasurementProtocol.output, mulVec_mulVec, hpost]
   have hstar : finKronecker (fun i => star (P.correction m i)) *
       finKronecker (P.correction m) = 1 := by
-    rw [finKronecker_mul]
+    rw [← finKronecker_mul]
     simp only [Unitary.star_mul_self_of_mem (P.correction_mem_unitary m _), finKronecker_one]
   rw [hstar, one_mulVec]
   rfl
