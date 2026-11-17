@@ -1906,27 +1906,6 @@
     under $\mathcal S$.
 \end{proof}
 
-\begin{definition}[Admissible strict equivalence under a symmetry]
-    \label{def:mpu_admissible_strict_symmetry_equivalence}
-    \notready
-    \discussion{6017}
-    \uses{def:strictly-equivalent-tensors, def:mpu_admissible_equivalence_datum}
-    Two tensors $\mathcal U$ and $\mathcal V$ are strictly equivalent under a
-    symmetry $\mathcal S$ if they have the same physical dimension and there is
-    a continuous path $\mathcal W(p)$ of MPU tensors from $\mathcal U$ to
-    $\mathcal V$ such that
-    \begin{align}
-        \mathcal S[W^{(N)}(p)] & =W^{(N)}(p)
-    \end{align}
-    for every $p\in[0,1]$ and every chain length $N$ under consideration. The
-    path need not be in canonical form. The equivalence is admissible if its
-    connecting path carries an admissible equivalence datum for the
-    blocked path tensor and the fixed conjugate, physical-adjoint, transposed,
-    and $\mathcal S$-image comparison paths, and if the common blocking length
-    $m$ of that datum satisfies $m\leq D^4$.
-    % Source lines: paper_v2.tex 1340--1354.
-\end{definition}
-
 \begin{definition}[Equivalence under a symmetry]
     \label{def:equivalent-symmetry}
     \notready
@@ -1981,24 +1960,6 @@
     symmetry-preserving equivalence data. Forgetting invariance from its final strict
     path gives the required ordinary stabilized equivalence.
 \end{proof}
-
-\begin{definition}[Admissible equivalence under a symmetry]
-    \label{def:mpu_admissible_symmetry_equivalence}
-    \notready
-    \discussion{6017}
-    \uses{def:mpu_admissible_strict_symmetry_equivalence, def:equivalent-tensors, def:mpu_admissible_equivalence_datum}
-    Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d_a$ and
-    $d_b$. They are equivalent under a symmetry $\mathcal S$ if there are a
-    positive blocking length $k$ and coprime positive ancilla dimensions
-    $p_a,p_b$ with $p_ad_a=p_bd_b$ such that $(\mathcal U^{(p_a)})_k$ and
-    $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$. Thus
-    the ancillas are attached before the common blocking. The equivalence is
-    admissible if this strict-equivalence path carries an admissible
-    equivalence datum for the blocked path itself and the fixed conjugate,
-    physical-adjoint, transposed, and $\mathcal S$-image comparison paths, with
-    common blocking length at most $D^4$.
-    % Source lines: paper_v2.tex 1356--1364.
-\end{definition}
 
 \begin{lemma}[Standard-form path criterion]
     \label{lem:equivalent-symmetry}
@@ -2107,31 +2068,6 @@
     block of the path are standard forms with the same gates, so they
     generate the same MPUs, and the blocks of the path are invariant.
 \end{proof}
-
-\begin{lemma}[Admissible standard-form path criterion]
-    \label{lem:mpu_admissible_symmetry_path_criterion}
-    \notready
-    \discussion{6017}
-    % **Scope restriction (admissible symmetry path):** the strict-equivalence
-    % witness carries the path datum of
-    % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_strict_symmetry_equivalence, coruvSF, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_admissible_equivalence_datum}
-    Fix a positive integer $m\leq D^4$. The $m$-site blocked endpoint
-    MPUs $U_1^{(mN)}$ and $U_2^{(mN)}$ are admissibly strictly equivalent under
-    $\mathcal S$ if and only if there are continuous families of unitaries
-    $\widetilde u(p)$ and $\widetilde v(p)$ whose endpoints generate
-    $U_1^{(mN)}$ and $U_2^{(mN)}$, whose generated MPU is invariant under
-    $\mathcal S$ for every $p\in[0,1]$, and whose tensor path and fixed
-    conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
-    paths carry continuously varying reduced full-support source data. These
-    families arise from the blocked path $\mathcal W(p)_m$ in an
-    admissible equivalence datum of common length $m$; the blocked path itself is
-    the length-one admissible path for the displayed endpoint families,
-    matching in \cite[Lemma following the symmetry-equivalence definitions]{Cirac2017MPU} the blocking
-    lemma.
-    % Source lines: paper_v2.tex 1366--1380.
-\end{lemma}
 
 \begin{lemma}[The determinant on one standard-form site]
     \label{lem:mpu_conjugation_one_site_determinant}
