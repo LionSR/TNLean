@@ -79,22 +79,6 @@ private theorem exists_vector_limit_of_inner_limits
   refine ⟨ξ, hf, fun i ↦ ?_⟩
   exact tendsto_nhds_unique (tendsto_const_nhds.inner hf) (hc i)
 
-omit [DecidableEq n] in
-private theorem norm_le_of_inner_coefficients_le
-    (b : OrthonormalBasis n ℂ (EuclideanSpace ℂ n))
-    (x y : EuclideanSpace ℂ n) {r : ℝ} (hr : 0 ≤ r)
-    (hcoef : ∀ i, ‖⟪b i, x⟫_ℂ‖ ≤ r * ‖⟪b i, y⟫_ℂ‖) :
-    ‖x‖ ≤ r * ‖y‖ := by
-  have hsq : ‖x‖ ^ 2 ≤ (r * ‖y‖) ^ 2 := by
-    rw [← b.sum_sq_norm_inner_right x, mul_pow, ← b.sum_sq_norm_inner_right y,
-      Finset.mul_sum]
-    apply Finset.sum_le_sum
-    intro i _
-    rw [← mul_pow]
-    exact pow_le_pow_left₀ (norm_nonneg _) (hcoef i) 2
-  exact (pow_le_pow_iff_left₀ (norm_nonneg _) (mul_nonneg hr (norm_nonneg _))
-    two_ne_zero).mp hsq
-
 private theorem centered_ground_line_inner_eq_zero
     {H : Matrix n n ℂ} {E₀ : ℝ} {ψ : EuclideanSpace ℂ n}
     (hline : groundSpace H E₀ = Submodule.span ℂ {ψ})
@@ -148,7 +132,7 @@ theorem exists_gaussianNegativeFrequency_ground_limits
   have hcenterAdj : ⟪ψ, L Aᴴ ψ⟫_ℂ = 0 := by
     rw [inner_adjoint_matrix, hcenter, star_zero]
   have hground (i : n) (hi : hH.eigenvalues i = E₀) : b i ∈ groundSpace H E₀ :=
-    mem_groundSpace_iff_mulVec.mpr (by simpa only [hi] using hb i)
+    eigenvectorBasis_mem_groundSpace hH hi
   refine ⟨ξ, η, hξ, hη, ?_, ?_⟩
   · apply norm_le_of_inner_coefficients_le b ξ (L A ψ) (Real.exp_pos _).le
     intro i
