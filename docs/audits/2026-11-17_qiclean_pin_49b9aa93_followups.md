@@ -114,3 +114,11 @@ proves the converse, that a gapped Kronecker sum with a one-dimensional ground s
 factors; QICLean has no statement of it, and the proof keeps the positive-semidefinite form.
 
 The information reset is proved once, as `TNLean.MPS.AreaLaw.information_reset_of_supported_localization` in `MPS/AreaLaw/InformationReset.lean`, over any finite site type, from a supported Gaussian localization at every natural radius and the separation of its support from the cores; the chain and domain resets are its corollaries. Two further resets repeat the same argument and become corollaries with F8, in their own areas: `TNLean.PEPS.Approximation.SquareHamiltonian.information_reset` (with `information_reset_of_resetThreshold_le`) and `TNLean.Lattice.LocalHamiltonian.information_reset` (with `information_reset_of_card_le` and `information_reset_of_rangeResetThreshold_le`).
+
+Third-pin candidate for QICLean (`ManyBody/Hamiltonian/KroneckerSum`), the converse of
+`groundSpace_kronecker_add_eq_span`: for Hermitian `A`, `B` and `0 < Δ`, if
+`IsGapped (A ⊗ₖ 1 + 1 ⊗ₖ B) E₀ Δ` and the ground space of `A ⊗ₖ 1 + 1 ⊗ₖ B` at `E₀` is the line
+through a unit vector `Ω`, then there are `a + b = E₀` and unit vectors `u`, `v` with
+`Ω p = u p.1 * v p.2`, `IsGapped A a Δ`, `IsGapped B b Δ`, `groundSpace A a = span {u}` and
+`groundSpace B b = span {v}`. It is `TNLean.Lattice.exists_isGapped_factors_of_kronecker_sum`,
+whose proof would then shrink to the eigenvalue description of the Kronecker sum.
