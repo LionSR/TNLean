@@ -54,6 +54,8 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport exists_walk_length_le_iff_edist_le graphBall planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 section Generic
@@ -182,7 +184,7 @@ section Lattice
 variable {Λ : Finset (ℤ × ℤ)}
 
 private theorem mem_graphNeighborhood_iff {R : ℕ} {X : Finset (Site Λ)} {y : Site Λ} :
-    y ∈ graphNeighborhood Λ R X ↔ ∃ x ∈ X, (domainGraph Λ).edist x y ≤ R := by
+    y ∈ graphNeighborhood Λ R X ↔ ∃ x ∈ X, (planeDomainGraph Λ).edist x y ≤ R := by
   classical
   constructor
   · intro h
@@ -196,11 +198,12 @@ private theorem mem_graphNeighborhood_iff {R : ℕ} {X : Finset (Site Λ)} {y : 
 Source: area law, `09-amplification.tex`, lines 232–234. -/
 theorem graphBall_subset_graphNeighborhood_two_mul {S : Finset (Site Λ)} {r : ℕ}
     {x : Site Λ} (hx : x ∈ graphNeighborhood Λ r S) :
-    ManyBody.graphBall (domainGraph Λ) x r ⊆ graphNeighborhood Λ (2 * r) S := by
+    graphBall (planeDomainGraph Λ) x r ⊆ graphNeighborhood Λ (2 * r) S := by
   intro y hy
   obtain ⟨s, hs, hd⟩ := mem_graphNeighborhood_iff.mp hx
   refine mem_graphNeighborhood_iff.mpr ⟨s, hs, ?_⟩
-  calc (domainGraph Λ).edist s y ≤ (domainGraph Λ).edist s x + (domainGraph Λ).edist x y :=
+  calc (planeDomainGraph Λ).edist s y
+      ≤ (planeDomainGraph Λ).edist s x + (planeDomainGraph Λ).edist x y :=
         SimpleGraph.edist_triangle
     _ ≤ r + r := add_le_add hd (ManyBody.mem_graphBall.mp hy)
     _ = ((2 * r : ℕ) : ℕ∞) := by push_cast; ring
@@ -216,27 +219,27 @@ theorem card_filter_anchor_mem_graphNeighborhood_le {κ : Type*} [Fintype κ]
       2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
   classical
   have hsub : (Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S) ⊆
-      S.biUnion fun s => (ManyBody.graphBall (domainGraph Λ) s r).biUnion
+      S.biUnion fun s => (graphBall (planeDomainGraph Λ) s r).biUnion
         fun x => Finset.univ.filter fun i => a i = x := by
     intro i hi
     obtain ⟨s, hs, hd⟩ := mem_graphNeighborhood_iff.mp (Finset.mem_filter.mp hi).2
     simp only [Finset.mem_biUnion, Finset.mem_filter, Finset.mem_univ, true_and]
     exact ⟨s, hs, a i, ManyBody.mem_graphBall.mpr hd, rfl⟩
   have hcard := (Finset.card_le_card hsub).trans Finset.card_biUnion_le
-  have hball (s : Site Λ) : (((ManyBody.graphBall (domainGraph Λ) s r).biUnion
+  have hball (s : Site Λ) : (((graphBall (planeDomainGraph Λ) s r).biUnion
       fun x => Finset.univ.filter fun i => a i = x).card : ℝ) ≤
         μ * (2 * ((r : ℝ) + 1) ^ 2) := by
-    calc _ ≤ ((∑ x ∈ ManyBody.graphBall (domainGraph Λ) s r,
+    calc _ ≤ ((∑ x ∈ graphBall (planeDomainGraph Λ) s r,
           (Finset.univ.filter fun i => a i = x).card : ℕ) : ℝ) := by
           exact_mod_cast Finset.card_biUnion_le
-      _ ≤ ∑ _x ∈ ManyBody.graphBall (domainGraph Λ) s r, μ := by
+      _ ≤ ∑ _x ∈ graphBall (planeDomainGraph Λ) s r, μ := by
           push_cast; exact Finset.sum_le_sum fun x _ => hfiber x
-      _ = μ * (ManyBody.graphBall (domainGraph Λ) s r).card := by
+      _ = μ * (graphBall (planeDomainGraph Λ) s r).card := by
           rw [Finset.sum_const, nsmul_eq_mul, mul_comm]
       _ ≤ μ * (2 * ((r : ℝ) + 1) ^ 2) :=
           mul_le_mul_of_nonneg_left (card_graphBall_domainGraph_le s r) hμ
   calc ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ)
-      ≤ ((∑ s ∈ S, ((ManyBody.graphBall (domainGraph Λ) s r).biUnion
+      ≤ ((∑ s ∈ S, ((graphBall (planeDomainGraph Λ) s r).biUnion
           fun x => Finset.univ.filter fun i => a i = x).card : ℕ) : ℝ) := by
         exact_mod_cast hcard
     _ ≤ ∑ _s ∈ S, μ * (2 * ((r : ℝ) + 1) ^ 2) := by
@@ -263,12 +266,12 @@ theorem contractionWord_siteExpectation_mem_supportedOperators {q : ℕ} [NeZero
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hk₁ : ∀ i, k i ≤ 1) :
     ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
       contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
-          siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i))
+          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i))
         m u ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
   have hmem (i : {i // a i ∈ graphNeighborhood Λ r S}) :
-      CFC.sqrt (1 - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)) ∈
+      CFC.sqrt (1 - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)) ∈
         supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
-    set K := ManyBody.graphBall (domainGraph Λ) (a i) r
+    set K := graphBall (planeDomainGraph Λ) (a i) r
     have hK : CFC.sqrt (1 - siteExpectation q K (k i)) ∈
         supportedOperators q (K : Set (Site Λ)) :=
       sqrt_mem_supportedOperators K (sub_nonneg.mpr (siteExpectation_le_one _ (hk₁ i)))
@@ -303,12 +306,12 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
       let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
       let kr := fun i : {i // P i} =>
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)
+        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word κ =>
         contractionWord (fun i : {i // P i} => k i) (PoissonWord.partitionWords P w).1.1
           (PoissonWord.partitionWords P w).1.2
@@ -365,12 +368,12 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
         let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
         let kr := fun i : {i // P i} =>
-          siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)
+          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
         let D := fun w : PoissonWord.Word κ =>
           contractionWord (fun i : {i // P i} => k i) (PoissonWord.partitionWords P w).1.1
             (PoissonWord.partitionWords P w).1.2
@@ -406,11 +409,11 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ∧
-          siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ∧
+          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x})) :
+        (∀ i, k i ∈ supportedOperators q {x | (planeDomainGraph Λ).Reachable (a i) x})) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
@@ -419,7 +422,7 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
         (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
       let kr := fun i : {i // P i} =>
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)
+        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
         contractionWord k (PoissonWord.partitionWords P w).1.1
           (PoissonWord.partitionWords P w).1.2
@@ -454,7 +457,7 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
         (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
       let kr := fun i : {i // P i} =>
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)
+        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
         contractionWord k (PoissonWord.partitionWords P w).1.1
           (PoissonWord.partitionWords P w).1.2
@@ -496,7 +499,7 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
         let kr := fun i : {i // P i} =>
-          siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)
+          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
         let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
           contractionWord k (PoissonWord.partitionWords P w).1.1
             (PoissonWord.partitionWords P w).1.2

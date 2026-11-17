@@ -29,6 +29,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open TensorPower.ReplicaTransport
@@ -92,7 +94,7 @@ theorem logDim_quantumFillMove_le (g r k : ℕ) (σ : PhysicalPartition V)
 
 /-- Each actual charge move has the explicit physical transport cap. -/
 theorem logDim_quantumChargeMove_le_domainGraph {Λ : Finset (ℤ × ℤ)}
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (g r k : ℕ) (c : Bool × Fin S.M) (σ : PhysicalPartition (Site Λ))
     (n : Site Λ ⊕ Bool → ℕ) {q : ℕ} (hq : 1 ≤ q)
     (hphysical : ∀ x, n (Sum.inl x) = q) :
@@ -117,7 +119,7 @@ theorem fillTransportData_logDim_move_le {k : ℕ}
 
 /-- Every move of an actual charge round satisfies the physical cap. -/
 theorem chargeTransportData_logDim_move_le_domainGraph {Λ : Finset (ℤ × ℤ)}
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ) {k : ℕ}
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ) {k : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (choiceTree : History S.K S.m S.M k → Matrix.MeanTree (ChargeChoices S.K S.M))
     (n : Site Λ ⊕ Bool → ℕ) {q : ℕ} (hq : 1 ≤ q)
@@ -131,7 +133,7 @@ theorem chargeTransportData_logDim_move_le_domainGraph {Λ : Finset (ℤ × ℤ)
 /-- A designated support with any split leaf in an actual charge round has the
 physical cap. No cap is asserted when its split-leaf set is empty. -/
 theorem chargeTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × ℤ)}
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ) {k L q : ℕ}
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (choiceTree : History S.K S.m S.M k → Matrix.MeanTree (ChargeChoices S.K S.M))
     (n : Site Λ ⊕ Bool → ℕ) (hq : 1 ≤ q) (hphysical : ∀ x, n (Sum.inl x) = q)
@@ -158,7 +160,7 @@ theorem chargeTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × �
 
 /-- Nonempty actual fill split-leaf sets satisfy the same designated-support cap. -/
 theorem fillTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × ℤ)}
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ) {k L q : ℕ}
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (n : Site Λ ⊕ Bool → ℕ) (hq : 1 ≤ q) (hphysical : ∀ x, n (Sum.inl x) = q)
     (hL : 8 * S.K * S.m ≤ L) (E : EnergyTerms (Site Λ ⊕ Bool) n I)

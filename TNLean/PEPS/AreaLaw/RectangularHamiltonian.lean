@@ -33,6 +33,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport isAdmissibleSupport_singleton)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Configuration coordinates on an arbitrary native rectangle.

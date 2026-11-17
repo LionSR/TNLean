@@ -33,6 +33,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped BigOperators Matrix Matrix.Norms.L2Operator ComplexOrder
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.Lattice
 
 /-- The physical Hilbert space in configuration coordinates.

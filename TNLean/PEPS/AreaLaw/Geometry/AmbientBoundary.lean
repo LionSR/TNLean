@@ -19,13 +19,15 @@ no upstream Lean proof text is reused.
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The four nearest neighbors of an integer lattice point. -/
 def latticeNeighbors (p : ℤ × ℤ) : Finset (ℤ × ℤ) :=
   {(p.1 + 1, p.2), (p.1 - 1, p.2), (p.1, p.2 + 1), (p.1, p.2 - 1)}
 
-/-- Neighbor membership agrees with the coordinate convention of `domainGraph`. -/
+/-- Neighbor membership agrees with the coordinate convention of `planeDomainGraph`. -/
 theorem mem_latticeNeighbors_iff {p q : ℤ × ℤ} :
     q ∈ latticeNeighbors p ↔
       (p.2 = q.2 ∧ (p.1 + 1 = q.1 ∨ q.1 + 1 = p.1)) ∨
@@ -81,7 +83,7 @@ theorem mem_ambientBoundary_iff {S : Finset (ℤ × ℤ)} {e : Sym2 (ℤ × ℤ)
     obtain ⟨f, hf, rfl⟩ := Finset.mem_image.mp he
     obtain ⟨hf, p, hp, q, hq, rfl⟩ := Finset.mem_filter.mp hf
     simp only [ambientBoundaryRegion, Finset.mem_filter, Finset.mem_univ, true_and] at hp hq
-    have hadj : (domainGraph (ambientDilation S 1)).Adj p q := by
+    have hadj : (planeDomainGraph (ambientDilation S 1)).Adj p q := by
       simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using hf
     exact ⟨p.1, hp, q.1, hq, mem_latticeNeighbors_iff.mpr hadj, rfl⟩
   · rintro ⟨p, hp, q, hq, hpq, rfl⟩
@@ -96,7 +98,7 @@ theorem mem_ambientBoundary_iff {S : Finset (ℤ × ℤ)} {e : Sym2 (ℤ × ℤ)
     apply Finset.mem_filter.mpr
     constructor
     · apply SimpleGraph.mem_edgeFinset.mpr
-      change (domainGraph (ambientDilation S 1)).Adj a b
+      change (planeDomainGraph (ambientDilation S 1)).Adj a b
       exact mem_latticeNeighbors_iff.mp hpq
     · exact ⟨a, by simpa [ambientBoundaryRegion, a] using hp,
         b, by simpa [ambientBoundaryRegion, b] using hq, rfl⟩

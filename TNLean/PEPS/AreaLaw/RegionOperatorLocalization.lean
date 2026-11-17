@@ -27,6 +27,8 @@ open QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (exists_walk_length_le_iff_edist_le isAdmissibleSupport_singleton planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The prefactor `C₀(R) = 2 e^R · 2 · 2² 2! e^{1/2} / (1 - e^{-1/2})` of the graph-ball
@@ -85,7 +87,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   set v := graphBallLocalizationVelocity R J
   have hC : 0 < C := graphBallLocalizationPrefactor_pos R
   have hdisj (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S) :
-      Disjoint (S : Set (Site Λ)) (ManyBody.graphBall (domainGraph Λ) y l : Set (Site Λ)) :=
+      Disjoint (S : Set (Site Λ)) (ManyBody.graphBall (planeDomainGraph Λ) y l : Set (Site Λ)) :=
     Set.disjoint_left.mpr fun x hxS hxball =>
       hy (Finset.mem_filter.mpr ⟨Finset.mem_univ y, x, hxS,
         (exists_walk_length_le_iff_edist_le Λ l x y).mpr
@@ -105,7 +107,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       (hU : U ∈ supportedOperators q ({y} : Set (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
       ‖ManyBody.heisenbergEvolution h.operator (-t) U -
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) y l)
+        siteExpectation q (ManyBody.graphBall (planeDomainGraph Λ) y l)
           (ManyBody.heisenbergEvolution h.operator (-t) U)‖ ≤
         C * Real.exp (v * |t| - 1 / 2 * l) := by
     have hestimate := h.norm_sub_siteExpectation_graphBall_le
@@ -116,7 +118,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     exact hestimate.trans (min_le_right _ _)
   have hcommute (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
-      Commute A (siteExpectation q (ManyBody.graphBall (domainGraph Λ) y l)
+      Commute A (siteExpectation q (ManyBody.graphBall (planeDomainGraph Λ) y l)
         (ManyBody.heisenbergEvolution h.operator (-t) U)) :=
     commute_of_mem_supportedOperators (hdisj y hy) hA
       (siteExpectation_mem_supportedOperators _ _)
@@ -130,7 +132,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     simpa only [Matrix.mul_sub, Matrix.sub_mul, (hcommute y hy U).eq,
       sub_sub_sub_cancel_right, hreverse U] using
       (norm_commutator_le A (ManyBody.heisenbergEvolution h.operator (-t) U -
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) y l)
+        siteExpectation q (ManyBody.graphBall (planeDomainGraph Λ) y l)
           (ManyBody.heisenbergEvolution h.operator (-t) U))).trans
         (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_left (hnear y U hU hUu) zero_le_two) (norm_nonneg A))

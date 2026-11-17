@@ -42,6 +42,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}

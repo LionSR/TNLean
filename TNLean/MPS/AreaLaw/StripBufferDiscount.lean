@@ -23,6 +23,8 @@ preamble, lines 193–206; a degenerate ground-space gap is not sufficient here.
 open Matrix TNLean.Lattice
 open scoped Matrix.Norms.L2Operator
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The width coefficient of the strip logarithmic cut budget. -/

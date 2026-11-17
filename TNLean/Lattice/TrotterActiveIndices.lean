@@ -13,6 +13,8 @@ contains a site contribute an index component there. This file first records
 the count used in Hastings, arXiv:cond-mat/0508554v3, lines 1069–1075.
 -/
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.Lattice
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -50,7 +52,7 @@ number of sites in the radius ball. Source: Hastings, arXiv:cond-mat/0508554v3,
 lines 1073–1075, on the finite planar domain. -/
 theorem card_trotterActiveOccurrences_le {R : ℕ}
     (X : Site Λ → Finset (Site Λ))
-    (hX : ∀ i j, j ∈ X i → ∃ p : (domainGraph Λ).Walk i j, p.length ≤ R)
+    (hX : ∀ i j, j ∈ X i → ∃ p : (planeDomainGraph Λ).Walk i j, p.length ≤ R)
     (n : ℕ) (j : Site Λ) :
     (trotterActiveOccurrences X n j).card ≤
       n * (graphNeighborhood Λ R {j}).card := by
