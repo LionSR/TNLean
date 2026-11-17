@@ -25,7 +25,7 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms
 
 namespace TNLean.MPS.AreaLaw
 
-variable {L q : ℕ} [NeZero q]
+variable {L q : ℕ}
 
 /-- Range projections of the actual positive local terms give the detectability
 contraction for the original spectral gap and the full original ground kernel.

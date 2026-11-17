@@ -69,14 +69,11 @@ import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import TNLean.MPS.AreaLaw.DGEntropyParameters
 import TNLean.MPS.AreaLaw.DesignatedCutTruncation
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
-import TNLean.MPS.AreaLaw.DomainInformationReset
 import TNLean.MPS.AreaLaw.DomainInteractionBudget
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhood
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.DomainLogarithmicSeparation
 import TNLean.MPS.AreaLaw.DomainPartialSwap
-import TNLean.MPS.AreaLaw.DomainRelativeGeneratorLocalization
-import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.DyadicIntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.DyadicLongIntervalLowDensityFamily

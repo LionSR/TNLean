@@ -63,6 +63,47 @@ theorem chainNeighborhood_interval_eq {L : ℕ} (a z : ℕ)
           omega
   · simp [Finset.not_nonempty_iff_eq_empty.mp hI]
 
+/-- On the sites `Fin L`, let every interval have a neighborhood `⋃_{x ∈ I} g x` that is
+again an interval, and let every interval have entropy at most `c`. Then the neighborhood of
+a union of `|s|` intervals has entropy at most `|s| c`, by subadditivity of the entropy over
+the neighborhoods of the intervals. TNLean note, `part2a_mps_information.tex`,
+lines 482–487. -/
+theorem regionEntropy_biUnion_neighborhood_intervals_le
+    {L q : ℕ} {κ : Type*}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {c : ℝ}
+    (hI : ∀ a z : ℕ,
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c)
+    (g : Fin L → Finset (Fin L))
+    (hg : ∀ a z : ℕ, ∃ u v : ℕ, (interval L a z).biUnion g = interval L u v)
+    (s : Finset κ) (a z : κ → ℕ) :
+    Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
+      ((s.biUnion (fun i ↦ interval L (a i) (z i))).biUnion g) Ω ≤ (s.card : ℝ) * c := by
+  classical
+  have hn (X : Finset (Fin L)) :
+      0 ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω :=
+    vonNeumannEntropy_nonneg_of_posSemidef_trace_one
+      (Entropy.regionState_posSemidef X Ω) (Entropy.trace_regionState_eq_one hΩ)
+  have hsub (X Y : Finset (Fin L)) :
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ Y) Ω ≤
+        Entropy.regionEntropy X Ω + Entropy.regionEntropy Y Ω := by
+    linarith [TNLean.Lattice.regionEntropy_union_add_inter_le (Ω := Ω) X Y, hn (X ∩ Y)]
+  have hsum : Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
+      (s.biUnion (fun i ↦ (interval L (a i) (z i)).biUnion g)) Ω ≤
+      ∑ i ∈ s, Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
+        ((interval L (a i) (z i)).biUnion g) Ω := by
+    simpa only [Finset.sup_eq_biUnion] using
+      (Finset.apply_sup_le_sum
+        (f := fun X : Finset (Fin L) ↦
+          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω)
+        (TNLean.Lattice.regionEntropy_empty hΩ) (fun {X Y} ↦ hsub X Y)
+        (s := fun i ↦ (interval L (a i) (z i)).biUnion g) s)
+  have hNi (i : κ) : Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
+      ((interval L (a i) (z i)).biUnion g) Ω ≤ c := by
+    obtain ⟨u, v, hgeo⟩ := hg (a i) (z i)
+    simpa only [hgeo] using hI u v
+  simpa only [Finset.biUnion_biUnion, Finset.sum_const, nsmul_eq_mul] using
+    hsum.trans (Finset.sum_le_sum (fun i _ ↦ hNi i))
+
 /-- A uniform interval entropy bound controls the neighborhood of a finite
 interval union, including overlapping and empty components.
 Source: TNLean note, Lemma `lem:logsep`, `part2a_mps_information.tex:458–461, 482–487`. -/
@@ -77,36 +118,17 @@ theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (chainNeighborhood T ρ) Ω ≤
       (s.card : ℝ) * c := by
   classical
-  let N := fun S : Finset (Fin L) ↦ chainNeighborhood S ρ
-  change Entropy.regionEntropy (N (s.biUnion (fun i ↦ interval L (a i) (z i)))) Ω ≤
-    (s.card : ℝ) * c
-  have hc : 0 ≤ c := by
-    simpa only [interval_eq_empty (L := L) (Nat.le_refl 0), TNLean.Lattice.regionEntropy_empty hΩ]
-      using hI 0 0
-  have hn (X : Finset (Fin L)) :
-      0 ≤ FiniteProduct.entropy (fun _ : Fin L ↦ Fin q) Ω X :=
-    vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-      (FiniteProduct.reducedPure_posSemidef _ Ω X) (FiniteProduct.trace_reducedPure _ Ω hΩ X)
-  have hsub (X Y : Finset (Fin L)) : Entropy.regionEntropy (X ∪ Y) Ω ≤
-      Entropy.regionEntropy X Ω + Entropy.regionEntropy Y Ω := by
-    simp only [Entropy.regionEntropy_eq_entropy]
-    linarith [FiniteProduct.entropy_submodular (fun _ : Fin L ↦ Fin q) Ω X Y, hn (X ∩ Y)]
-  have hNi (i : κ) : Entropy.regionEntropy (N (interval L (a i) (z i))) Ω ≤ c := by
-    change Entropy.regionEntropy
-      (chainNeighborhood (interval L (a i) (z i)) ρ) Ω ≤ c
-    rw [chainNeighborhood_interval_eq (L := L) (a i) (z i) ρ hρ]
-    split_ifs
-    · exact hI _ _
-    · simpa only [TNLean.Lattice.regionEntropy_empty hΩ] using hc
-  have hNu (X Y : Finset (Fin L)) : N (X ∪ Y) = N X ∪ N Y := by
+  have hN (S : Finset (Fin L)) :
+      chainNeighborhood S ρ = S.biUnion fun x ↦ chainNeighborhood {x} ρ := by
     ext y
-    simp only [N, mem_chainNeighborhood, Finset.mem_union,
-      or_and_right, exists_or]
-  induction s using Finset.induction_on with
-  | empty => simp [N, TNLean.Lattice.regionEntropy_empty hΩ]
-  | @insert i s hi ih =>
-    rw [Finset.biUnion_insert, hNu, Finset.card_insert_of_notMem hi, Nat.cast_add, Nat.cast_one]
-    nlinarith [hsub (N (interval L (a i) (z i)))
-      (N (s.biUnion (fun j ↦ interval L (a j) (z j)))), hNi i]
+    simp only [mem_chainNeighborhood, Finset.mem_biUnion, Finset.mem_singleton,
+      exists_eq_left]
+  intro T
+  rw [hN]
+  refine regionEntropy_biUnion_neighborhood_intervals_le hΩ hI _ (fun a z ↦ ?_) s a z
+  rw [← hN, chainNeighborhood_interval_eq a z ρ hρ]
+  split_ifs
+  · exact ⟨_, _, rfl⟩
+  · exact ⟨0, 0, (interval_eq_empty le_rfl).symm⟩
 
 end TNLean.MPS.AreaLaw
