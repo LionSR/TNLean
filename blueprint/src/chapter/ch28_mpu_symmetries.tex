@@ -2395,15 +2395,50 @@
 
 \begin{lemma}[Equivalence under conjugation]
     \label{cor:equiv-under-conjugation}
-    \notready
+    \lean{MPOTensor.equivalentUnderSymmetry_conjugation_iff_same_case,
+        MPOTensor.same_case_of_equivalentUnderSymmetry_conjugation,
+        MPOTensor.isConjugationCaseI_iff_of_blockTensor,
+        MPOTensor.isConjugationCase_const_of_path,
+        MPOTensor.not_isConjugationCaseI_and_isConjugationCaseII,
+        MPOTensor.TwoSiteStandardFormData.isConjugationCase_iff_sign,
+        MPOTensor.IsMPUCanonicalFormII.exists_conjugation_gauge}
+    \leanok
     \discussion{5713}
+    % **Local fix (missing argument):** the source proves only the "if"
+    % direction; the "only if" direction uses the preservation of the case
+    % under blocking. Documented in
+    % docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex.
     \uses{corconj, prop:conjsym-strict-equiv, def:equivalent-symmetry,
-        thm:mpu_conjugation_same_case_equiv_if}
-    Two conjugation-invariant MPUs are equivalent under conjugation symmetry if
-    and only if they belong to the same case of Lemma~\ref{corconj}. The
-    ``if'' direction is Lemma~\ref{thm:mpu_conjugation_same_case_equiv_if}.
+        thm:mpu_conjugation_same_case_equiv_if,
+        lem:mpu_symmetry_path_criterion_forward}
+    Let $\mathcal U_1$ and $\mathcal U_2$ be simple conjugation-invariant
+    tensors in canonical form II on the same physical dimension, whose standard
+    forms have the same even ranks $r$ and $\ell$. Then $\mathcal U_1$ and
+    $\mathcal U_2$ are equivalent under conjugation symmetry if and only if they
+    belong to the same case of Lemma~\ref{corconj}. The ``if'' direction is
+    Lemma~\ref{thm:mpu_conjugation_same_case_equiv_if}. The source proves only
+    that direction; for the other, see
+    \cite{gap:mpu_symmetry_path_criterion_blocking}.
     % Source lines: paper_v2.tex 1548--1567.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    The two cases exclude each other: $\overline uu^\dagger=x\otimes y$
+    determines $x$ up to a phase, and its partial transpose on the first factor
+    is $x^T\otimes y=\pm\,x\otimes y$ according to the case. For the ``only
+    if'' direction, equivalence with equal physical dimensions gives strict
+    equivalence of the blocks of $k$ sites with trivial ancillas. The forward
+    direction of the path criterion after blocking gives a continuous path of
+    gates on longer blocks, each generating a conjugation-invariant MPU and so
+    lying in one of the two cases. Along the path the partial transpose of the
+    continuous matrix $\overline uu^\dagger$ is either $+\overline uu^\dagger$
+    or $-\overline uu^\dagger$, so the case is constant. Finally, a unitary
+    $X$ with $\overline{\mathcal U_i^{jk}}=X^\dagger\mathcal U_i^{jk}X$ is a
+    conjugation gauge of every block, and the case of every standard form of
+    every block is the sign $X\overline X=\pm1$. So the original tensors are
+    in the same case.
+\end{proof}
 
 \begin{lemma}[Equivalence under conjugation, the ``if'' direction]
     \label{thm:mpu_conjugation_same_case_equiv_if}
@@ -2845,12 +2880,52 @@
     \label{cor:sigma-equivalence-necessary}
     \notready
     \discussion{5714}
-    \uses{prop:sigma1-and-sigma2-equal, def:strictly-equivalent-symmetry, def:equivalent-symmetry}
+    \uses{prop:sigma1-and-sigma2-equal, def:strictly-equivalent-symmetry, def:equivalent-symmetry,
+        thm:mpu_sigma_strict_equivalence_necessary}
     Strictly equivalent time-reversal-invariant MPUs have the same
     $\sigma^{(1)}$ and $\sigma^{(2)}$. Equivalent time-reversal-invariant MPUs
     have the same $\sigma^{(2)}$.
     % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
+
+\begin{lemma}[The time-reversal signs are invariants of strict equivalence]
+    \label{thm:mpu_sigma_strict_equivalence_necessary}
+    \lean{MPOTensor.StrictlyEquivalentUnderSymmetry.timeReversalSign_eq,
+        MPOTensor.IsMPU.intrinsicTimeReversalSign_eq_one_or_neg_one,
+        MPOTensor.intrinsicTimeReversalSign_eq_of_joinedIn,
+        MPOTensor.IsMPU.blockTwo, MPOTensor.mpo_blockTensor_selfAdjoint,
+        MPOTensor.mpo_blockTwo_selfAdjoint}
+    \leanok
+    \uses{def:strictly-equivalent-symmetry, eq:sigma-from-trace,
+        prop:sigma-well-defined, lem:mpu_canonical_intrinsic_blocking_parity}
+    Let $\mathcal U_1$ and $\mathcal U_2$ be MPUs in standard form, and let
+    $\sigma^{(1)}$ and $\sigma^{(2)}$ be the signs of standard forms of their
+    two-site blocks and of the two-site blocks of their blockings by two sites.
+    If $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under a
+    symmetry whose invariant operators are self-adjoint on every ring whose
+    length is a positive multiple of four, such as time reversal, then
+    $\sigma^{(1)}(\mathcal U_1)=\sigma^{(1)}(\mathcal U_2)$ and
+    $\sigma^{(2)}(\mathcal U_1)=\sigma^{(2)}(\mathcal U_2)$. The tensors of the
+    connecting path need not be simple or in canonical form. This is the first
+    sentence of Corollary~\ref{cor:sigma-equivalence-necessary}; its second
+    sentence uses Definition~\ref{def:equivalent-symmetry} and remains open.
+    % Source lines: paper_v2.tex 1735--1740, first sentence.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_source_time_reversal_sign_independent,
+        lem:mpu_intrinsic_blocking_parity}
+    Every MPU whose operators are self-adjoint on the rings of even length has
+    intrinsic trace sign $\pm1$: for a canonical representative the blocked
+    traces are $\eta^kC$ with $\eta=\pm1$, and at the even length $2D^4$ the
+    blocked tensor is simple, so its trace is a standard-form sign and
+    $C=\pm1$. Along the connecting path the operators of the two-site blocks,
+    and of the two-site blocks of the blockings by two sites, are self-adjoint
+    on the rings of even length. The two intrinsic signs are continuous and
+    take values $\pm1$, so they are constant on the path. At its endpoints they
+    are $\sigma^{(1)}$ and $\sigma^{(2)}$ of $\mathcal U_1$ and $\mathcal U_2$,
+    since a sign depends only on the operator on a ring of two sites.
+\end{proof}
 
 \begin{lemma}[Local comparison of the conjugation signs]
     \label{lem:mpu_conjugation_mps_sign_local}

@@ -32,7 +32,6 @@ for matrix product states "with bond dimension at most `D`".
 -/
 
 open scoped BigOperators Matrix
-open Kraus (blockTensor)
 
 /-- A periodic chain of tensors on a ring of `N` sites with **bond dimensions at most `D`**: the
 bond `k`, to the left of site `k`, has dimension `D_k ≤ D`, and site `k` carries the rectangular

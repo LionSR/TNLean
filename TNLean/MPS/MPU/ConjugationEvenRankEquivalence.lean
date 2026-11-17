@@ -56,7 +56,7 @@ def IsConjugationCaseII (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     x ∈ Matrix.unitaryGroup (Fin ℓ) ℂ ∧ y ∈ Matrix.unitaryGroup (Fin r) ℂ ∧ xᵀ = -x ∧
       yᵀ = -y ∧ u.map (starRingEnd ℂ) = (x ⊗ₖ y) * u ∧ v.map (starRingEnd ℂ) = v * (yᴴ ⊗ₖ xᴴ)
 
-private theorem map_star_kronecker {m n m' n' : Type*} (A : Matrix m n ℂ) (B : Matrix m' n' ℂ) :
+theorem map_star_kronecker {m n m' n' : Type*} (A : Matrix m n ℂ) (B : Matrix m' n' ℂ) :
     (A ⊗ₖ B).map (starRingEnd ℂ) = A.map (starRingEnd ℂ) ⊗ₖ B.map (starRingEnd ℂ) := by
   ext i j
   simp [Matrix.kroneckerMap_apply]
