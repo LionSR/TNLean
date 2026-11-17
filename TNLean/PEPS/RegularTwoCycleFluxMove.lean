@@ -70,7 +70,7 @@ theorem regularTreeCycleAssignment_eq_of_support {V : Type*} [LinearOrder V]
   classical
   funext e
   simp only [regularTreeCycleAssignment]
-  split_ifs <;> first | rfl | skip
+  split_ifs <;> try rfl
   all_goals
     symm
     by_contra he

@@ -41,8 +41,8 @@ a walk, including the vacuous cases with a zero dimension. -/
 theorem squareLatticeGraph_preconnected (width height : ℕ) :
     (squareLatticeGraph width height).Preconnected := by
   rw [squareLatticeGraph_eq_boxProd]
-  exact (SimpleGraph.pathGraph_preconnected width).boxProd
-    (SimpleGraph.pathGraph_preconnected height)
+  exact (SimpleGraph.preconnected_pathGraph width).boxProd
+    (SimpleGraph.preconnected_pathGraph height)
 
 /-- A finite rectangular square lattice with positive dimensions is connected. -/
 theorem squareLatticeGraph_connected {width height : ℕ}

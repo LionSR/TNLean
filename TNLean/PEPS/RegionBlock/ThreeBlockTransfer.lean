@@ -274,6 +274,8 @@ the shared one-edge blocking data and positive bond dimensions; the forward
 multiplicativity `hmul` and the two-directional bond locality are the remaining
 hypotheses, the open content `V=W` of the block frame. -/
 
+variable {A B : Tensor G d} {e : Edge G}
+
 /-- The forward coefficient transfer of a shared one-edge blocking datum, derived from
 the `A → B` bond locality. For each inserted matrix `M` on the boundary edge `f` of
 the shared red region there is a bond matrix `N` on the second tensor whose
