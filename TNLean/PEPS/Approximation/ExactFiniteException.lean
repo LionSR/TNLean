@@ -94,7 +94,7 @@ theorem polynomialPEPSApproximation_iff_sufficiently_large :
     obtain ⟨C', hC', _, hall⟩ :=
       exists_uniform_approximation_of_sufficiently_large (G := IsSquareGroundState q J Δ)
         (fun _ _ hΩ ↦ hΩ.norm_eq_one) (by omega) hc.le
-        fun L hL hL₀ Ω ⟨h hh hhJ, E₀, hΩ⟩ ↦ htail L hL hL₀ h hh hhJ E₀ Ω hΩ
+        fun L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ⟩ ↦ htail L hL hL₀ h hh hhJ E₀ Ω hΩ
     exact ⟨C', c, hC', hc, fun L hL h hh hhJ E₀ Ω hΩ ↦ hall L hL Ω ⟨h, hh, hhJ, E₀, hΩ⟩⟩
 
 end TNLean.PEPS.Approximation
