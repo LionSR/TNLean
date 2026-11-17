@@ -45,7 +45,7 @@ variable {d : ℕ} {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
 /-- Exponential low-energy commutator decay needs no growth assumption.
 Hastings, arXiv:cond-mat/0508554v3, lines 1548–1601. -/
 theorem norm_groundCompression_commutator_le_graphSeparation
-    (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+    (G : SimpleGraph ι) (X : κ → Finset ι)
     (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
     (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
@@ -80,8 +80,8 @@ theorem norm_groundCompression_commutator_le_graphSeparation
       4 * (S.card : ℝ) * ‖W‖ * ‖B‖ * Real.exp (-(γ * m)) := by
     let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
       ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-    have hn := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ a ha
-      hHerm R hDiam vR hvR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
+    have hn := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ
+      hHerm R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
       (isSupportedOn_of_mem_supportedOperators hB) 1 (by norm_num) m hm t
     refine hn.trans (mul_le_mul_of_nonneg_left (le_trans ?_ e1) (by positivity))
     apply Real.exp_le_exp.mpr
@@ -136,9 +136,8 @@ theorem norm_groundCompression_commutator_le_metricSeparation
     rw [heq]
     exact hsep x hx y hy
   have hg := norm_groundCompression_commutator_le_graphSeparation
-    (metricRangeGraph R) (metricRangeBall R) id (fun i ↦ self_mem_metricRangeBall hR.le i)
-    h hHerm hgen 2 (metricRangeBall_graph_diameter_le_two R)
-    vR (by dsimp [vR]; omega)
+    (metricRangeGraph R) (metricRangeBall R) h hHerm hgen 2
+    (metricRangeBall_graph_diameter_le_two R) vR (by dsimp [vR]; omega)
     (fun i ↦ (hCard i).trans (by dsimp [vR]; omega)) ((S : ℝ) * J)
     (metricRangeBall_norm_budget_le hCard hJ h hNorm) hΔ hH hgap X Y hW hB
     (Nat.ceil (ℓ / R)) hdist

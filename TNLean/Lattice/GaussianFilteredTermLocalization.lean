@@ -82,14 +82,14 @@ namespace TNLean.Lattice
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **Locality of a filtered term on a finite graph.** Let `W` act on `S` and `B` on one site
 `y` at graph distance at least `l` from every site of `S`. For every `μ ≥ 0` and `T ≥ 0`,
@@ -111,7 +111,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq 
   refine norm_commutator_gaussianFilteredTerm_le hq hH W B hT (by positivity) fun t ht => ?_
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
     ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-  have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ a ha hHerm R
+  have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm R
     hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) y
     (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) μ hμ l
     hl t
@@ -161,7 +161,7 @@ theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZe
     fun t ht => ?_
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
     ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-  have hLR := norm_heisenberg_sub_siteExpectation_graphNeighborhood_le G Φ a ha hHerm
+  have hLR := norm_heisenberg_sub_siteExpectation_graphNeighborhood_le G Φ hHerm
     R hDiam vR hCard b₀ hBudget Kg kg hGrowth S (isSupportedOn_of_mem_supportedOperators hW) l t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) hP)
   have htT : |t| ≤ T := abs_le.mpr ht
@@ -193,7 +193,7 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
   exact ⟨_, siteExpectation_mem_supportedOperators _ _,
     (norm_siteExpectation_le _ _).trans (norm_gaussianFilteredTerm_le q ΔE hH W),
     fun hW' => isHermitian_siteExpectation _ (isHermitian_gaussianFilteredTerm q ΔE hH hW'),
-    norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood G X a ha h hHerm
+    norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood G X h hHerm
       hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hq S hW l hT⟩
 
 end Graph

@@ -37,14 +37,14 @@ private theorem gaussian_error_prefactor (a w b n g c e : ℝ) :
       (2 * a * n ^ 2 * g * c + 6) * w * b * e := by ring
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 set_option maxHeartbeats 400000 in
 -- The explicit Gaussian prefactor comparison expands several nested products and real casts.
@@ -79,7 +79,7 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
   have hT0 : 0 ≤ T := by positivity
   set q : ℝ := T * ΔE with hq
   have hq0 : 0 ≤ q := by positivity
-  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X a ha h hHerm hSupport R
+  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget |Kg| kg hGrowthAbs hq0 hΔE hH hgap S hW l Y hY hB hT0
   set A : ℝ := 2 + 4 * |b₀| * Real.exp (2 * R)
   set Ck : ℝ := 2 ^ kg * kg ! * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))
@@ -154,7 +154,7 @@ theorem norm_groundCompression_observables_commutator_le_exp_edist [NeZero d]
   apply le_anchorDecay_of_separated_exp hγ hC (norm_nonneg _) (norm_nonneg _)
     Robs (G.edist (c j) (c i)) (norm_groundCompression_commutator_le_two_mul _ _ _ _)
   intro l hlt
-  exact norm_groundCompression_observables_commutator_le_exp G X a ha h hHerm hSupport R
+  exact norm_groundCompression_observables_commutator_le_exp G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (Y j) (hW j) vObs (hYCard j)
     l (Y i : Set ι)
     (disjoint_biUnion_graphBall_of_lt_edist G Y c hc Robs hYDiam i j l hlt) (hW i)

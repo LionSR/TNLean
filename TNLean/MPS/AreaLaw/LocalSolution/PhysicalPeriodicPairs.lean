@@ -191,7 +191,6 @@ private theorem periodic_local_filter_data {N ℓ d R S m : ℕ} [NeZero d]
   let G := periodicPhysicalGraph N ℓ
   let X := fun i ↦ ManyBody.graphBall G i R
   have hR : R ≤ ℓ := by omega
-  have hself : ∀ i, i ∈ X i := by intro i; exact ManyBody.mem_graphBall.mpr (by simp)
   have hdiam : ∀ i, ∀ x ∈ X i, ∀ y ∈ X i, G.edist x y ≤ (2 * R : ℕ) :=
     fun i _ hx _ hy ↦ radius_support_diameter G R i hx hy
   have hbudget := radius_interaction_budget G h hJ0 hJ hS
@@ -204,7 +203,7 @@ private theorem periodic_local_filter_data {N ℓ d R S m : ℕ} [NeZero d]
       ¬Disjoint (X k) (ManyBody.graphBall G i ℓ) → ∀ x ∈ X i, ∀ y ∈ X k,
         (m : ℕ∞) ≤ G.edist x y :=
     fun k hk _ _ hx _ hy ↦ omitted_centres_separated G hm i k hk hx hy
-  have hdata := truncated_approx_gaussianFilteredTerm G X id hself h hherm hsupp
+  have hdata := truncated_approx_gaussianFilteredTerm G X h hherm hsupp
     (2 * R) hdiam S hS (S * J) hbudget (ΔE := Δ) hθ
     (ManyBody.graphBall G i (ℓ - R)) (ManyBody.graphBall G i ℓ) hsK (X i) hXi (hsupp i) J hJ μ hμ m
         hsep

@@ -114,8 +114,8 @@ sphere growth, with no diameter bound on the initial support. Source: TNLean
 one-dimensional note, Lemma `lem:LR` (`part2a_mps_information.tex`, lines 267–309). -/
 theorem norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
     {κ : Type*} [Fintype κ] {T : κ → Finset ι}
-    (G : SimpleGraph ι) (Φ : Interaction (fun _ : ι ↦ Fin q) T) (a : κ → ι)
-    (ha : ∀ k, a k ∈ T k) (hHerm : ∀ k, (Φ.term k).IsHermitian)
+    (G : SimpleGraph ι) (Φ : Interaction (fun _ : ι ↦ Fin q) T)
+    (hHerm : ∀ k, (Φ.term k).IsHermitian)
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ T k, ∀ z ∈ T k, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ k, (T k).card ≤ vR)
     (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ T j), ‖Φ.term j‖ ≤ b₀)
@@ -131,7 +131,7 @@ theorem norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
         (2 ^ kg * kg ! * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))) *
         Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * |t| - l / 2) := by
   rw [siteExpectation_eq_regionExpectation]
-  exact norm_heisenberg_sub_regionExpectation_graphNeighborhood_le G Φ a ha hHerm R hDiam vR
+  exact norm_heisenberg_sub_regionExpectation_graphNeighborhood_le G Φ hHerm R hDiam vR
     hCard b₀ hBudget Kg kg hGrowth S hA l t
 
 end QuantumCircuit
