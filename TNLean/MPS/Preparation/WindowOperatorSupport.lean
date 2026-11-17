@@ -328,6 +328,6 @@ theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
   rw [map_sum]
   refine sum_mem fun σ₀ _ ↦ ?_
   rw [map_smul, ← chainWindowOperator_eq_embedLocalOperatorAlgHom ha haL]
-  exact Submodule.smul_mem _ _ (hunit τ₀ σ₀)
+  exact SMulMemClass.smul_mem _ (hunit τ₀ σ₀)
 
 end MPSTensor

@@ -281,7 +281,7 @@ def RectangularHamiltonian.toAreaLawHamiltonian {width height q : ℕ} {J : ℝ}
       rw [embedOp_rectangular_eq_reindex] at hs
       simpa only [T, e, rectangleAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      exact Submodule.zero_mem _
+      exact zero_mem _
   · intro X
     by_cases hx : ∃ i, rectangleAreaLawSupport width height i = X
     · obtain ⟨i, rfl⟩ := hx

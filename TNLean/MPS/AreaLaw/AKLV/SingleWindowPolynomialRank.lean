@@ -169,7 +169,7 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
     obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hj
     exact hSR i hi
   have hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (interval T r.val (r.val + 2) : Finset (Fin T)) := fun _ ↦ Submodule.zero_mem _
+      (interval T r.val (r.val + 2) : Finset (Fin T)) := fun _ ↦ zero_mem _
   have hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval T (b + r.val) (b + r.val + 2) : Finset (Fin T)) := by
     intro r

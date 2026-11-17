@@ -91,7 +91,7 @@ theorem cutOperator_appended_penalty {L N q : ℕ} (z : Fin q)
   have hmem : (∑ v : {v : Fin N // v ∉ leftBlock N L},
         QuantumCircuit.siteOp v.val (QuantumCircuit.siteBasisPenalty z)) ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) ((leftBlock N L)ᶜ : Finset (Fin N)) := by
-    apply Submodule.sum_mem
+    apply sum_mem
     intro v _
     apply ManyBody.supportedOperators_mono _
       (QuantumCircuit.siteOp_mem_supportedOperators v.val _)

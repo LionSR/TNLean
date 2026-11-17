@@ -353,8 +353,8 @@ theorem clusterOp_mem_supportedOperators {h : κ → Matrix (σ → Fin d) (σ �
     {acts : κ → Finset σ} (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ))
     (C : Finset κ) (β : ℝ) :
     clusterOp h C β ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (C.biUnion acts : Finset σ) := by
-  refine Submodule.sum_mem _ fun D hD ↦ Submodule.smul_mem _ _ (exp_mem_supportedOperators ?_)
-  refine Submodule.neg_mem _ (Submodule.smul_of_tower_mem _ β (Submodule.sum_mem _ fun k hk ↦ ?_))
+  refine sum_mem fun D hD ↦ SMulMemClass.smul_mem _ (exp_mem_supportedOperators ?_)
+  refine neg_mem (Submodule.smul_of_tower_mem _ β (sum_mem fun k hk ↦ ?_))
   exact ManyBody.supportedOperators_mono (coe_subset.2 (subset_biUnion_of_mem acts
     (mem_powerset.1 hD hk))) (hh k)
 

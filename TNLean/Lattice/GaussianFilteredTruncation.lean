@@ -161,7 +161,7 @@ theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Finset ι}
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K := by
   have hU (s : ℝ) : hermitianUnitaryPath H s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
     exp_mem_supportedOperators
-      (Submodule.smul_of_tower_mem _ s (Submodule.smul_mem _ Complex.I hH))
+      (Submodule.smul_of_tower_mem _ s (SMulMemClass.smul_mem Complex.I hH))
   exact mul_mem (mul_mem (hU t) hW) (hU (-t))
 
 /-- If the generator `H` and the operator `W` act on `K`, so does the filtered operator. With
@@ -182,7 +182,7 @@ theorem gaussianFilteredTerm_mem_supportedOperators (q ΔE : ℝ) {K : Finset ι
       (Filter.Eventually.of_forall fun t => hermitianUnitaryPath_conj_mem_supportedOperators
         hH hW t) hint
   · rw [integral_undef hint]
-    exact Submodule.zero_mem _
+    exact zero_mem _
 
 end Support
 
@@ -272,14 +272,14 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
   have hSupport' (k : κ) : h' k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι) := by
     simp only [h']
     split_ifs
-    exacts [hSupport k, Submodule.zero_mem _]
+    exacts [hSupport k, zero_mem _]
   have hBudget' (x : ι) : ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h' j‖ ≤ b₀ := by
     refine le_trans (Finset.sum_le_sum fun j _ => ?_) (hBudget x)
     simp only [h']
     split_ifs
     exacts [le_rfl, by simp]
   have hHsK : (∑ k ∈ s, h k) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
-    Submodule.sum_mem _ fun k hk =>
+    sum_mem fun k hk =>
       ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
   have hAK := hermitianUnitaryPath_conj_mem_supportedOperators hHsK
     (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hSK) hW) u
@@ -414,7 +414,7 @@ theorem truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
   have hHs : (∑ k ∈ s, h k).IsHermitian := Matrix.isHermitian_sum _ fun k _ => hHerm k
   have hHsK : (∑ k ∈ s, h k) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
-    Submodule.sum_mem _ fun k hk =>
+    sum_mem fun k hk =>
       ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
   exact ⟨gaussianFilteredTerm_mem_supportedOperators q ΔE hHsK
     (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hSK) hW),
