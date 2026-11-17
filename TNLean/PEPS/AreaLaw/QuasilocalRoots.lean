@@ -81,10 +81,10 @@ theorem quasilocalRoots (K : Finset ι) {k : Matrix (ι → Fin q) (ι → Fin q
       (∀ B : Matrix (ι → Fin q) (ι → Fin q) ℂ,
         (∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K, Commute A B) → rootChannel Gl Kl B = B) := by
   intro kl G Kr Gl Kl
-  have hl₀ : 0 ≤ kl := (Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D
-      := K) (Matrix.nonneg_iff_posSemidef.mp hk₀)))
-  have hl₁ : kl ≤ 1 := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
-      ManyBody.regionExpectation_one)
+  have hl₀ : 0 ≤ kl := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D
+      := K) (Matrix.nonneg_iff_posSemidef.mp hk₀))
+  have hl₁ : kl ≤ 1 := (ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
+      ManyBody.regionExpectation_one
   have hG : 0 ≤ G := CFC.sqrt_nonneg _
   have hKr : 0 ≤ Kr := CFC.sqrt_nonneg _
   have hGl : 0 ≤ Gl := CFC.sqrt_nonneg _

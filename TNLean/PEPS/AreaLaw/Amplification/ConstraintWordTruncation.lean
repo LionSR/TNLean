@@ -323,10 +323,10 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
         L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   unfold constraintWordTruncationPrefactor
   intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail S r t P kr D L
-  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := (Matrix.nonneg_iff_posSemidef.mpr
-      (ManyBody.posSemidef_regionExpectation (Matrix.nonneg_iff_posSemidef.mp (hk₀ i))))
-  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := ((ManyBody.regionExpectation_mono (hk₁ i)).trans_eq
-      ManyBody.regionExpectation_one)
+  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := Matrix.nonneg_iff_posSemidef.mpr
+      (ManyBody.posSemidef_regionExpectation (Matrix.nonneg_iff_posSemidef.mp (hk₀ i)))
+  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := (ManyBody.regionExpectation_mono (hk₁ i)).trans_eq
+      ManyBody.regionExpectation_one
   set ε := Real.sqrt C * Real.exp (-(c / 2 * (r : ℝ) ^ α)) with hε_def
   have hε (i : {i // P i}) : ‖CFC.sqrt (1 - k i) - CFC.sqrt (1 - kr i)‖ ≤ ε := by
     refine (norm_sqrt_one_sub_sub_le (hk₁ i) (hkr₁ i)).trans ?_

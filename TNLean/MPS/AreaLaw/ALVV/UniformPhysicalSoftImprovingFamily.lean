@@ -290,17 +290,20 @@ private theorem exists_uniform_physical_soft_polynomial_family
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ)) := by
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Finset (Fin (N + 1)))
-    have hAmem : A j ∈ V := (isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs)
-    exact V.add_mem (V.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
+    have hAmem : A j ∈ V :=
+      isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs
+    show _ ∈ V
+    exact add_mem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
       (ManyBody.cfc_mem_supportedOperators _
-        (V.sub_mem hAmem (V.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))))
+        (sub_mem hAmem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))))
   have hPL : Entropy.IsSupportedOn PL (interval (N + 1) 0 (a + 1)) := by
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) 0 (a + 1) : Finset (Fin (N + 1)))
-    have hFmem : Fraw 0 ∈ V := (hFsupport 0)
-    exact V.add_mem (V.sub_mem hFmem (V.sum_mem fun j _ ↦
-      V.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))))
-      (V.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
+    have hFmem : Fraw 0 ∈ V := hFsupport 0
+    show _ ∈ ManyBody.supportedOperators _ _
+    exact add_mem (sub_mem hFmem (sum_mem fun j _ ↦
+      SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))))
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   have hPR : Entropy.IsSupportedOn (Fraw 4) (interval (N + 1) (b + 2 * ell) (N + 1)) :=
     hFsupport 4
   have hAlphabet : (∑ i, Sum.elim (Sum.elim WL WR) ![PL, Zphys (z : ℂ), Fraw 4] i) = Ghat :=

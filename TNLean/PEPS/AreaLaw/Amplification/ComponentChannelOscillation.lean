@@ -51,6 +51,7 @@ theorem regionExpectation_graphBall_eq_of_component_support
     {n : ℕ} (hn : Finset.univ.sup (G.dist a) ≤ n) :
     ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k := by
   apply ManyBody.regionExpectation_of_mem_supportedOperators
+  show _ ∈ ManyBody.supportedOperators _ _
   convert hk using 2
   apply Finset.coe_injective
   rw [ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a hn]

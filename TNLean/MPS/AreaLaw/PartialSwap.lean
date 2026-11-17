@@ -58,8 +58,8 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
   classical
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
-  have hterm := (h.supported X)
-  have hone := (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) X.1))
+  have hterm := h.supported X
+  have hone := one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) X.1)
   have hF : ‖F‖ ≤ 1 := by
     simpa only [F, Matrix.l2_opNorm_reindex_equiv] using norm_sheetSwapOp_le_one (q := q) D
   have hgeneral (U V : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -205,6 +205,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   change K = ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b) at hsum
   have hsupp : Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z := by
+    show _ ∈ ManyBody.supportedOperators _ _
     rw [hsum]
     apply Submodule.sum_mem
     intro X hXC

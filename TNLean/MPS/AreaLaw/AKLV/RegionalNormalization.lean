@@ -58,7 +58,7 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
       (∀ j, ((∑ i ∈ normalizationCoreBonds a b j, h i) - (z j : ℂ) • 1).PosSemidef) ∧
       ∃ v : (Fin L → Fin q) → ℂ, star v ⬝ᵥ v = 1 ∧
         ∀ j, ((∑ i ∈ normalizationCoreBonds a b j, h i) - (z j : ℂ) • 1) *ᵥ v = 0 := by
-  have hmem (i : Fin (L - 1)) := (hs i)
+  have hmem (i : Fin (L - 1)) := hs i
   classical
   let C (j : Fin 3) := ∑ i ∈ normalizationCoreBonds a b j, h i
   have hC (j : Fin 3) : (C j).IsHermitian :=

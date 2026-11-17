@@ -43,6 +43,7 @@ private theorem isSupportedOn_outsidePiece
     (hside : ∀ i, P i → interval L i.val (i.val + 2) ⊆ S) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (outsidePiece h a b P) S := by
   classical
+  show _ ∈ ManyBody.supportedOperators _ _
   unfold outsidePiece
   apply Submodule.sum_mem
   intro i _
@@ -160,7 +161,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     have hX : X ∈ U := by
       dsimp only [X]
       split_ifs with hb
-      · exact U.sub_mem (U.sub_mem (U.add_mem (U.add_mem hHL hU1) hU1)
+      · exact sub_mem (sub_mem (add_mem (add_mem hHL hU1) hU1)
           (hQleft hb 0)) (hQleft hb 1)
       · exact hHL
     have hY : Y ∈ V := by
@@ -168,7 +169,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       split_ifs with hb
       · exact hHR
       · have ha : k ≤ a := by omega
-        exact V.sub_mem (V.sub_mem (V.add_mem (V.add_mem hHR hV1) hV1)
+        exact sub_mem (sub_mem (add_mem (add_mem hHR hV1) hV1)
           (hQright ha 0)) (hQright ha 1)
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
@@ -193,7 +194,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       (intervalBondRestriction a b h) (intervalBondRestriction_supported a b h hs) k
     change operatorSchmidtRank (cut (Q 0)) + operatorSchmidtRank (cut (Q 1)) ≤ q ^ 2 + 1 at hQ
     let X := HL + 1 + 1
-    have hX : X ∈ U := U.add_mem (U.add_mem hHL hU1) hU1
+    have hX : X ∈ U := add_mem (add_mem hHL hU1) hU1
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
         hX

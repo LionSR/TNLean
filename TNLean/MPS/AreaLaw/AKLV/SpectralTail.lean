@@ -205,6 +205,7 @@ theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
       exact (IsSelfAdjoint.all z).smul (IsSelfAdjoint.one _)
   have hO : Entropy.IsSupportedOn (n := fun _ ↦ q) O
       (interval L a.val (a.val + 2)) := by
+    show _ ∈ ManyBody.supportedOperators _ _
     exact Submodule.sub_mem _
       (hs a)
       (Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _)))

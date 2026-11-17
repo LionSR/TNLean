@@ -100,10 +100,10 @@ theorem norm_spectatorRootChannel_sub_localRootChannel_le (K : Finset ι)
     (hε : ‖k - ManyBody.regionExpectation K k‖ ≤ ε)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖spectatorRootChannel k B - localRootChannel K k B‖ ≤ 4 * Real.sqrt ε * ‖B‖ := by
-  have hl₀ := (Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
-      (Matrix.nonneg_iff_posSemidef.mp hk₀)))
-  have hl₁ := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
-      ManyBody.regionExpectation_one)
+  have hl₀ := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
+      (Matrix.nonneg_iff_posSemidef.mp hk₀))
+  have hl₁ := (ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
+      ManyBody.regionExpectation_one
   have hsqrt {a : Matrix (ι → Fin q) (ι → Fin q) ℂ} (ha : a ≤ 1) : ‖CFC.sqrt a‖ ≤ 1 :=
     norm_le_one_of_nonneg_of_le_one (CFC.sqrt_nonneg _) (sqrt_le_one ha)
   have hG := hsqrt (sub_le_self 1 hk₀)
@@ -130,11 +130,11 @@ theorem localRootChannel_eq_self_of_forall_commute (K : Finset ι)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
     (hB : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K,
       Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) : localRootChannel K k B = B := by
-  have hl₀ := (Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
-      (Matrix.nonneg_iff_posSemidef.mp hk₀)))
-  have hl₁ := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
-      ManyBody.regionExpectation_one)
-  have hlK := (ManyBody.regionExpectation_mem_supportedOperators K k)
+  have hl₀ := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
+      (Matrix.nonneg_iff_posSemidef.mp hk₀))
+  have hl₁ := (ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
+      ManyBody.regionExpectation_one
+  have hlK := ManyBody.regionExpectation_mem_supportedOperators K k
   refine rootChannel_eq_self_of_commute
     (rootChannel_kronecker_hyp (sqrt_one_sub_mul_add_sqrt_mul hl₀ hl₁)) ?_ ?_
   · exact hB _ (ManyBody.sqrt_mem_supportedOperators
@@ -153,11 +153,11 @@ theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     A * localRootChannel K k B - localRootChannel K k B * A =
       localRootChannel K k (A * B - B * A) := by
-  have hl₀ := (Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
-      (Matrix.nonneg_iff_posSemidef.mp hk₀)))
-  have hl₁ := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
-      ManyBody.regionExpectation_one)
-  have hlK := (ManyBody.regionExpectation_mem_supportedOperators K k)
+  have hl₀ := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
+      (Matrix.nonneg_iff_posSemidef.mp hk₀))
+  have hl₁ := (ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
+      ManyBody.regionExpectation_one
+  have hlK := ManyBody.regionExpectation_mem_supportedOperators K k
   have hG := hA _ (ManyBody.sqrt_mem_supportedOperators
       (sub_mem
           (one_mem (ManyBody.supportedOperators _ _)) hlK))

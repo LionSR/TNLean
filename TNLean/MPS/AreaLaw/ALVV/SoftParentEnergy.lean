@@ -145,12 +145,12 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
   have hMV : M ∈ V := hMs
   have hIV : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
     (one_mem (ManyBody.supportedOperators _ J))
-  have hXV : M - (p : ℂ) • 1 ∈ V := V.sub_mem hMV (V.smul_mem _ hIV)
+  have hXV : M - (p : ℂ) • 1 ∈ V := sub_mem hMV (SMulMemClass.smul_mem _ hIV)
   have hFV : cfc (Real.softTruncation t m) (M - (p : ℂ) • 1) ∈ V :=
     ManyBody.cfc_mem_supportedOperators _ hXV
   have hCV : Csoft ∈ V :=
-    V.sub_mem (V.sub_mem (V.add_mem (V.add_mem (V.sub_mem hPV hMV)
-      (V.smul_mem _ hIV)) hFV) (V.smul_mem _ hIV)) (V.smul_mem _ hIV)
+    sub_mem (sub_mem (add_mem (add_mem (sub_mem hPV hMV)
+      (SMulMemClass.smul_mem _ hIV)) hFV) (SMulMemClass.smul_mem _ hIV)) (SMulMemClass.smul_mem _ hIV)
   have hCs := hCV
   obtain ⟨K, hK, hKnorm, hLift⟩ := hCs.exists_posSemidef_localLift_norm_le hBlow budget hnorm
   have hRnative : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J K + (eSoft : ℂ) • 1 := by

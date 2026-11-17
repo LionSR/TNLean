@@ -219,6 +219,7 @@ theorem aklv_two_block_exterior_data {L q a s : ℕ}
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (C j - (e : ℂ) • 1)
         (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
           ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
+    show _ ∈ ManyBody.supportedOperators _ _
     exact Submodule.sub_mem _
       (hsupport j)
       (Submodule.smul_mem _ _ (one_mem (ManyBody.supportedOperators _ _)))

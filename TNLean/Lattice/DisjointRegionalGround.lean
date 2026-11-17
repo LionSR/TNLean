@@ -316,7 +316,7 @@ private theorem exists_common_unit_fixed_ground_of_disjoint_family
     let S : Finset V := s.biUnion R
     let B : Matrix (V → Fin q) (V → Fin q) ℂ :=
       ∑ i ∈ s, (A i - (e i : ℂ) • 1)
-    have hBS : Entropy.IsSupportedOn (n := fun _ : V ↦ q) B S := by
+    have hBS : B ∈ ManyBody.supportedOperators (fun _ : V ↦ Fin q) S := by
       apply sum_mem
       intro i hi
       apply sub_mem

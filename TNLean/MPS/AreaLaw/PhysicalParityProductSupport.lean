@@ -29,6 +29,7 @@ theorem isSupportedOn_physicalParityProduct
     (hs : ∀ i, i.val % 2 = p → Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       ((T).symm (physicalParityProduct h p)) D := by
+  show _ ∈ ManyBody.supportedOperators _ _
   apply QuantumCircuit.mem_supportedOperators_complementProd
   intro k hk
   change (T).symm (if hk' : k < L - 1 then

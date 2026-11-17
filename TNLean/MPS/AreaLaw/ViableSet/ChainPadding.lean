@@ -34,6 +34,7 @@ theorem isSupportedOn_embedOp_prefix {L N q a b : ℕ} (hi : L ≤ N)
       (QuantumCircuit.embedOp (Fin.castLE hi) X) (interval N a b) := by
   have h := QuantumCircuit.embedOp_mem_supportedOperators_image
     (Fin.castLE_injective hi) hX
+  show _ ∈ ManyBody.supportedOperators _ _
   apply ManyBody.supportedOperators_mono ?_ h
   intro _ hw
   obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hw
@@ -92,7 +93,8 @@ theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
   unfold paddedInteraction
   split_ifs with hj
   · exact isSupportedOn_embedOp_prefix hi (hs ⟨j.val, hj⟩)
-  · apply ManyBody.supportedOperators_mono ?_
+  · show _ ∈ ManyBody.supportedOperators _ _
+    apply ManyBody.supportedOperators_mono ?_
       (QuantumCircuit.siteOp_mem_supportedOperators
         (⟨j.val + 1, by omega⟩ : Fin N) (QuantumCircuit.siteBasisPenalty z))
     intro v hv

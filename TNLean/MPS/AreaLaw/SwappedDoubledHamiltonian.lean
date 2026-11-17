@@ -45,8 +45,9 @@ noncomputable def ChainHamiltonian.swappedDoubled
     let F := Matrix.reindex e e (sheetSwapOp q D)
     F * h.doubled.term X * Fᴴ
   supported X := by
+    show _ ∈ ManyBody.supportedOperators _ _
     exact reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
-      D X.1 ((h.supported X))
+      D X.1 (h.supported X)
   hermitian X :=
     Matrix.isHermitian_mul_mul_conjTranspose _ (h.doubled.hermitian X)
   norm_le X := by

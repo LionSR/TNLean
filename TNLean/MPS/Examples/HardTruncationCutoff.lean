@@ -218,14 +218,16 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin (K + 2) ↦ 2) (bondTerm K i)
       (interval (K + 2) i.val (i.val + 2)) := by
   refine Fin.cases ?_ (fun j ↦ ?_) i
-  · change boundary K ∈ _
+  · show _ ∈ ManyBody.supportedOperators _ _
+    change boundary K ∈ _
     rw [boundary_formula]
     apply mul_mem
     · exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (SMulMemClass.smul_mem _ (oneSite_mem 0 _ (by simp [interval])))
     · exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (oneSite_mem 1 _ (by simp [interval]))
-  · change internalTerm K j ∈ _
+  · show _ ∈ ManyBody.supportedOperators _ _
+    change internalTerm K j ∈ _
     rw [internal_formula]
     split_ifs with hj
     · apply SMulMemClass.smul_mem

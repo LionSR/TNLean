@@ -131,9 +131,9 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
         (heat a) (interval (N + 1) l r) := by
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) l r : Finset (Fin (N + 1)))
-    have hAs : A ∈ V := (isSupportedOn_sum_internal_bonds (N + 1) q l r h hs)
-    have hUs : U ∈ V := V.sub_mem hAs
-      (V.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
+    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r h hs
+    have hUs : U ∈ V := sub_mem hAs
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
     dsimp only [heat]
     rw [← neg_smul, hU.exp_smul_eq_cfc]
     exact (ManyBody.cfc_mem_supportedOperators _ hUs)
