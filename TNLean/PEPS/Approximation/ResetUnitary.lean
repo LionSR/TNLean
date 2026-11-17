@@ -137,8 +137,8 @@ velocity of the doubled square Hamiltonian, the decay rate `1/2`, and the Gaussi
 Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. -/
 theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
-    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-        (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+        (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
       Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
@@ -182,7 +182,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ :=
       ManyBody.SquareInteraction.supported_buffer_gaussian_integral q hq J hJ
-    L h R C₀ hRC W ⌈K * (1 + b + Real.log L)⌉₊
+    L h hh hhJ R C₀ hRC W ⌈K * (1 + b + Real.log L)⌉₊
   obtain ⟨hMsupp, hMnorm, hMerr⟩ := hM (Real.toNNReal (resetVariance Δ r * (1 + b + Real.log L)))
     (T₀ * (1 + b + Real.log L)) hT
   have hlocb := GaussianFilter.localization_error_bound_of_parameter_constant (L := (L : ℝ))
@@ -238,8 +238,8 @@ Source: `02-information.tex`, lines 355–562, equations `eq:info-reset-overlap`
 theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
-      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
         Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
@@ -277,8 +277,8 @@ Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-er
 `eq:info-reset-unitary`. -/
 theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
-    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-        (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+    ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+        (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
       Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
@@ -323,8 +323,8 @@ Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-er
 theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
-      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+      ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
         Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →

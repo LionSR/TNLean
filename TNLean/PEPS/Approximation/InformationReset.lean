@@ -333,7 +333,7 @@ theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le
     (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
-      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+      ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace L q),
       Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
       ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
@@ -390,8 +390,8 @@ theorem _root_.ManyBody.SquareInteraction.information_reset (q : ℕ) (hq : 1 �
     (J : ℝ) (hJ : 0 ≤ J)
     {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
-      ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-          (hhJ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+      ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
         Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
         ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →

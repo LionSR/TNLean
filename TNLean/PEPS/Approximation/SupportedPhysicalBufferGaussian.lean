@@ -74,8 +74,7 @@ Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562, 
 constants of `eq:info-lr` (lines 486–496). -/
 theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (hJ : 0 ≤ J) :
-    ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+    ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
       (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
       let Q := (R ∪ C₀)ᶜ
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
@@ -181,8 +180,8 @@ Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562. 
 theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integral
     (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (hJ : 0 ≤ J) :
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
-      ∀ (L : ℕ) (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-          (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+      ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+          (_ : ∀ i, ‖h.term i‖ ≤ J)
         (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
         let Q := (R ∪ C₀)ᶜ
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))

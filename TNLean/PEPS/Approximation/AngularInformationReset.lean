@@ -115,7 +115,7 @@ of Lemma 3.3 at lines 606–608 and 612–630. -/
 theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
     (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
-      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+      ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace L q),
         Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
@@ -149,7 +149,7 @@ theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
     (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L →
-        ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+        ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
             (E₀ : ℝ) (Ω : StateSpace L q),
           Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),

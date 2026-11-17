@@ -49,8 +49,8 @@ theorem nestedPatch_minimizer_marginal_closeness
     (q : ℕ) {J Δ κ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hκ : 0 < κ) (hκhalf : κ ≤ 1 / 2)
     (hsmall : 36 * (q : ℝ) ^ 2 * J * κ ^ 2 ≤ Δ / 1024) :
-    ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
-        (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+    ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
+        (E₀ : ℝ) (Ω : StateSpace L q),
       Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →
         let Λ := AreaLaw.rectangularDomain L L

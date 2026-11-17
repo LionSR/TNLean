@@ -161,7 +161,7 @@ theorem angular_single_scale_reset_of_sublinearCollarBoundAt
     (hd : 0 < d) (hda : d < a' / 4) (hd1 : d ≤ 1)
     (hp : 0 < p) (M : ℕ) {D : ℝ} (hD : angularCellResetSlope (resetWidth J Δ p) a' d ≤ D) :
     ∀ L : ℕ, angularSingleScaleThreshold q J Δ a a' d p Ctpl N Ca Na M ≤ (L : ℝ) →
-      ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+      ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace L q),
         Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
         ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
@@ -218,7 +218,7 @@ theorem exists_angular_single_scale_reset_of_sublinearCollarBound
     (hp : 0 < p) (N : ℕ) :
     ∃ D L₀ : ℝ, 1 ≤ D ∧ Real.exp 1 ≤ L₀ ∧
       ∀ L : ℕ, L₀ ≤ (L : ℝ) →
-        ∀ (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+        ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
             (E₀ : ℝ) (Ω : StateSpace L q),
           Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
           ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
