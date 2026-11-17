@@ -1,0 +1,101 @@
+\begin{definition}[Computable native face certificates and search]
+    \label{def:peps_dual_computed_face_plan}
+    \lean{TNLean.PEPS.torusDualFacePlanCheck,
+        TNLean.PEPS.torusDualFacePlanCheck_eq_true,
+        TNLean.PEPS.torusDualComputedFacePlan}\leanok
+    \uses{def:peps_dual_face_generator_elimination,def:peps_dual_reduced_edge_word}
+    Let $X=\mathbb Z_w\times\mathbb Z_h$ with $w,h>0$, and let $R\subseteq X$.
+    A list $l$ of native face bases with west or south tags determines
+    the substitution $\Sigma_l$. Its Boolean certificate checks exactly
+    \begin{align}
+        |l|\le |X|,\qquad
+        v+(1,1)\in R\quad((v,b)\in l),\qquad
+        \operatorname{red}(\Sigma_l(r_v))=[]
+        \quad(v+(1,1)\in R).
+        \label{eq:peps_dual_computed_face_certificate}
+    \end{align}
+    Denote this computable check by $C_R(l)$. It uses only finite native
+    lists, face substitutions and free-word reduction.
+
+    Full support returns the empty plan. Otherwise choose the first excluded
+    face base in coordinate order, sort allowed bases by increasing shifted
+    coordinate rank, and tag each base west when its first shifted coordinate
+    is positive, south otherwise. Return this candidate if its certificate
+    succeeds. If it fails, search all tagged native extensions to depth $|X|$.
+    At each prefix, test the certificate first and stop at the first success.
+    If no success is found, return the empty list. Write $l_R$ for this result.
+    No adequacy assertion for the greedy candidate or running-time bound
+    is part of this definition.
+\end{definition}
+
+\begin{lemma}[The computed plan is certified for every proper support]
+    \label{lem:peps_dual_computed_face_plan}
+    \lean{TNLean.PEPS.torusDualComputedFacePlan_spec}\leanok
+    \uses{def:peps_dual_computed_face_plan}
+    For every proper support $R\subsetneq X$, the computed list satisfies
+    $C_R(l_R)=\mathrm{true}$. In particular, its length is at most $|X|$,
+    every selected face is allowed, and $\Sigma_{l_R}(r_v)=1$ for every
+    allowed face.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_finite_face_elimination}
+    A successful check supplies the stated conditions because a free-group
+    word reduces to the empty list exactly when it equals the identity.
+    Induction on the remaining search depth $n$ proves the two assertions
+    \begin{align}
+        \text{success at }l & \ \Longrightarrow\ C_R(l)=\mathrm{true}, \\
+        \text{failure from prefix }u
+                            & \ \Longrightarrow\
+        C_R(u\,s)\ne\mathrm{true}\quad(|s|\le n).
+        \label{eq:peps_dual_computed_face_search}
+    \end{align}
+    Every possible tagged face is enumerated. Finite geometric elimination
+    supplies a valid list of length at most $|X|$, so failure from the empty
+    prefix contradicts the second assertion. The fallback empty result
+    is therefore unreachable for proper support.
+\end{proof}
+
+\begin{definition}[An executable homotopy decision]
+    \label{def:peps_dual_homotopy_decision}
+    \lean{TNLean.PEPS.torusDualHomotopyDecision}\leanok
+    \uses{def:peps_dual_computed_face_plan,def:peps_dual_reduced_edge_word,
+        def:peps_dual_flux_displacement}
+    Write $\Delta(p)\in\mathbb Z^2$ for the lifted displacement.
+    For finite parallel native paths $p,q:a\to b$, define
+    \begin{align}
+        D_R(p,q)=
+        \begin{cases}
+            [\,\Delta(p)=\Delta(q)\,],                  & R=X,    \\
+            [\,\operatorname{red}(\Sigma_{l_R}(W(p)))
+            =\operatorname{red}(\Sigma_{l_R}(W(q)))\,], & R\ne X.
+        \end{cases}
+        \label{eq:peps_dual_homotopy_decision}
+    \end{align}
+    Brackets denote the Boolean test of an equality of finite data.
+    The actual implementation reads $W(p)$ from its computable signed
+    native letter list. No homotopy or quotient-word oracle is supplied.
+\end{definition}
+
+\begin{lemma}[The algorithm decides every finite square support]
+    \label{lem:peps_dual_homotopy_decision}
+    \lean{TNLean.PEPS.torusDualHomotopyDecision_eq_true}\leanok
+    \uses{def:peps_dual_homotopy_decision,def:peps_dual_flux_homotopy}
+    For every finite $R\subseteq X$ and all finite parallel labelled paths,
+    \begin{align}
+        D_R(p,q)=\mathrm{true}\quad\Longleftrightarrow\quad p\sim_Rq.
+        \label{eq:peps_dual_homotopy_decision_correct}
+    \end{align}
+    Both periods are positive and may equal one or two. This classifies
+    generated supported homotopy, retaining winding and missing-face words.
+    It makes no endpoint-only or physical density assertion.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_full_support_classification,
+        lem:peps_dual_computed_face_plan,lem:peps_dual_face_certificate_classification,
+        def:peps_dual_reduced_edge_word}
+    For $R=X$, the full-support displacement classification gives the result.
+    Otherwise the computed plan is certified. The finite-certificate
+    classifier gives $p\sim_Rq$ exactly when
+    $\Sigma_{l_R}(W(p))=\Sigma_{l_R}(W(q))$ in the free group, which is
+    equivalent to equality of their reduced signed lists.
+\end{proof}
