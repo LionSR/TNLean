@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.KitaevCheckerboardBlocking
+import TNLean.PEPS.TorusLatticeGraph
 import Mathlib.Logic.Equiv.Fin.Basic
 
 /-!
