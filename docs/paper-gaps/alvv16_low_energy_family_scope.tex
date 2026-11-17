@@ -181,6 +181,28 @@ per node, and the existence of successful samples rather than a success
 probability. The reference bond is existential; no explicit logarithmic
 bound on $D_{\rm ref}$ is asserted, and no final refinement of the root.
 
+\paragraph{Refinement of the root.}
+The conclusion of Theorem~t:alg1, lines 1779--1781, is that the output is
+$\delta$-viable for its target, and Theorem~t:alg2 is its analogue. A space
+on the whole chain that is $3/200$-close to $G(\eta)$, with $6w\le\eta$, is
+refined for every $0<\delta\le1$ by one more application of the
+low-density words on the whole chain, at the index $i$ with
+$16^i\ge\lceil1/\delta\rceil$ (comparison loss at most $\delta/200$) and of
+length $a$ with $2^a\ge\lceil32/\delta\rceil$, followed by a collective trim
+against a matrix product space $\delta/48$-close in both directions to
+$G(\eta-3w)$. The output is $\delta$-close to $G(\eta-3w)$ and consists of
+matrix product states with bond at most $M\lceil256D_{\rm ref}^2(L+1)M/
+\delta^2\rceil$, where $M=\max\{q^{4\ell_i},D_i^{2a}M_0\}$ and $M_0$ is the
+dimension bound of the given space. Applied to the root of the tree this
+needs $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$, one level more than the
+tree. The factor $D_i^{2a}$ grows quasi-polynomially in $1/\delta$, because
+the comparison loss decreases only through the enlarged count base; no
+polynomial dependence on $1/\delta$ is asserted. No Ritz extraction or
+energy estimate is used. The energy-output and number-of-states clause of
+Theorem~t:alg2, lines 1869--1878, is not verified: the source text of those
+lines is not recorded in the repository, so only the $\delta$-viability
+form of the conclusion is formalized.
+
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
 the actual polynomial and tensor factors of one global clipped matrix.
