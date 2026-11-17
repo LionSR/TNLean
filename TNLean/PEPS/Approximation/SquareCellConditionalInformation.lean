@@ -165,7 +165,7 @@ unchanged.
 Source: polynomial-PEPS Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`,
 lines 161–178, and its application in Proposition 3.4, lines 688–737. -/
 theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
-    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ} (hΔ : 0 < Δ)
+    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ}
     (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
     (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
@@ -185,7 +185,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
   have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
   intro s hs o m₀ A hm₀ L h E₀ Ω hΩ hgap hspan
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΔ hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΩ hgap hspan
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
     (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) h.toAreaLawHamiltonian E₀
       (squareAreaLawState Ω) hΩ' hgap' hspan')
@@ -222,7 +222,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_ex
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N
                 (collarAmplificationConstant q 1 J Δ C)
                 (collarAmplificationThreshold q 1 J Δ C) :=
-  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hΔ hcol
+  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol
     (amplificationBoundAt_collarAmplification hΔ C) hc
 
 open Classical in
@@ -259,6 +259,6 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
-    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hΔ hcol hamp hc⟩
+    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc⟩
 
 end TNLean.PEPS.Approximation

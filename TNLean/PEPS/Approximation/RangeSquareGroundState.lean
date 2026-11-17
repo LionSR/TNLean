@@ -64,11 +64,11 @@ the Hamiltonian is placed on the integer square with its Hermitian interaction p
 range-one supports.
 Source: polynomial-PEPS `eq:model` (`00-introduction.tex`, lines 40–45) and area-law
 Corollary 1.2. -/
-theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ)
+theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ}
     {L : ℕ} {Ω : StateSpace L q} (hΩ : IsSquareGroundState q J Δ L Ω) :
     IsRangeSquareGroundState q 1 J Δ L Ω := by
   obtain ⟨h, E₀, hΩ, hgap, hspan⟩ := hΩ
-  exact ⟨h.toAreaLawHamiltonian, E₀, h.isGapped_toAreaLawHamiltonian hΔ hΩ hgap hspan⟩
+  exact ⟨h.toAreaLawHamiltonian, E₀, h.isGapped_toAreaLawHamiltonian hΩ hgap hspan⟩
 
 /-- The square-grid area law passes to a smaller family of states at the same constant.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–52). -/

@@ -61,7 +61,7 @@ lines 62–109, at the revision cited in the module docstring. The vectors and
 regional matrices below are in the canonical integer square coordinates. -/
 theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
-    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] (hΔ : 0 < Δ)
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.operator E₀ Δ)
     (hΩs : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (D : ℕ → Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))
@@ -96,7 +96,7 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms
-  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hΔ hΩn hΩg hΩs
+  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hΩn hΩg hΩs
   have hΩ0 : squareAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm
