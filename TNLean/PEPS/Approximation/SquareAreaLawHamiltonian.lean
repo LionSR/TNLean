@@ -28,6 +28,8 @@ spectral gap*, Theorem 1.1 and Corollary 1.2. Source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (SquareLatticeSiteOrEdge squareLatticeGraph squareLatticeSiteOrEdgeSupport)
+
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
@@ -37,27 +39,10 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
-private theorem forwardAdjacent_ne {L : ℕ} {v w : Vertex L}
-    (h : ForwardAdjacent v w) : v ≠ w := by
-  intro heq
-  subst w
-  rcases h with h | h <;> omega
-
-private theorem forwardAdjacent_not_reverse {L : ℕ} {v w : Vertex L}
-    (h : ForwardAdjacent v w) : ¬ ForwardAdjacent w v := by
-  intro h'
-  rcases h with h | h <;> rcases h' with h' | h'
-  · omega
-  · have := congrArg Fin.val h'.1
-    omega
-  · have := congrArg Fin.val h.1
-    omega
-  · omega
-
-private theorem squareInteractionSupport_injective (L : ℕ) :
-    Function.Injective (squareInteractionSupport (L := L)) := by
+private theorem squareLatticeSiteOrEdgeSupport_injective (L : ℕ) :
+    Function.Injective (squareLatticeSiteOrEdgeSupport (width := L) (height := L)) := by
   intro i j hij
-  unfold squareInteractionSupport at hij
+  unfold squareLatticeSiteOrEdgeSupport at hij
   cases i with
   | inl v =>
     cases j with
@@ -67,61 +52,63 @@ private theorem squareInteractionSupport_injective (L : ℕ) :
       dsimp only at hij
       have h₁ : e.val.1 = v := by
         have := hij.symm ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [squareInteractionSupport, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
       have h₂ : e.val.2 = v := by
         have := hij.symm ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [squareInteractionSupport, Finset.mem_singleton] using this
-      exact False.elim (forwardAdjacent_ne e.property (h₁.trans h₂.symm))
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
+      exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
   | inr e =>
     cases j with
     | inl v =>
       dsimp only at hij
       have h₁ : e.val.1 = v := by
         have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [squareInteractionSupport, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
       have h₂ : e.val.2 = v := by
         have := hij ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [squareInteractionSupport, Finset.mem_singleton] using this
-      exact False.elim (forwardAdjacent_ne e.property (h₁.trans h₂.symm))
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
+      exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
     | inr f =>
       dsimp only at hij
       have h₁ : e.val.1 = f.val.1 ∨ e.val.1 = f.val.2 := by
         have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [squareInteractionSupport, Finset.mem_insert, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_insert,
+            Finset.mem_singleton] using this
       have h₂ : e.val.2 = f.val.1 ∨ e.val.2 = f.val.2 := by
         have := hij ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [squareInteractionSupport, Finset.mem_insert, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_insert,
+            Finset.mem_singleton] using this
       rcases h₁ with h₁ | h₁ <;> rcases h₂ with h₂ | h₂
-      · exact False.elim (forwardAdjacent_ne e.property (h₁.trans h₂.symm))
+      · exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
       · exact congrArg Sum.inr (Subtype.ext (Prod.ext h₁ h₂))
-      · exact False.elim (forwardAdjacent_not_reverse f.property (by
-          simpa only [h₁, h₂] using e.property))
-      · exact False.elim (forwardAdjacent_ne e.property (h₁.trans h₂.symm))
+      · exact congrArg Sum.inr ((ManyBody.Edge.ofAdj_eq_of_endpoints e.property.2 e
+          (Or.inl ⟨rfl, rfl⟩)).symm.trans
+            (ManyBody.Edge.ofAdj_eq_of_endpoints e.property.2 f (Or.inr ⟨h₁, h₂⟩)))
+      · exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
 
 /-- Each original site or forward edge determines its actual admissible
 range-one support in the integer rectangle. Source: area-law Corollary 1.2
 and polynomial-PEPS `eq:model`. -/
-def squareAreaLawSupport (L : ℕ) (i : SquareInteraction L) :
+def squareAreaLawSupport (L : ℕ) (i : SquareLatticeSiteOrEdge L L) :
     Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1 := by
   classical
-  refine ⟨(squareInteractionSupport i).image (AreaLaw.rectangleSiteEquiv L L), ?_⟩
+  refine ⟨(squareLatticeSiteOrEdgeSupport i).image (AreaLaw.rectangleSiteEquiv L L), ?_⟩
   cases i with
   | inl v =>
-    simpa only [squareInteractionSupport, Finset.image_singleton] using
+    simpa only [squareLatticeSiteOrEdgeSupport, Finset.image_singleton] using
       Lattice.isAdmissibleSupport_singleton (AreaLaw.rectangularDomain L L) 1
         (AreaLaw.rectangleSiteEquiv L L v)
   | inr e =>
-    simpa only [squareInteractionSupport, Finset.image_insert, Finset.image_singleton,
-      forwardSquareEdgeEquiv_val] using
+    simpa only [squareLatticeSiteOrEdgeSupport, Finset.image_insert, Finset.image_singleton] using
       AreaLaw.isAdmissibleSupport_rectangle_pair_of_adj
-        (forwardSquareEdgeEquiv L e).property.2
+        e.property.2
 
 /-- Distinct original interactions have distinct designated supports.
 Source: polynomial-PEPS `eq:model`, one term per site and nearest-neighbor edge. -/
 theorem squareAreaLawSupport_injective (L : ℕ) :
     Function.Injective (squareAreaLawSupport L) := by
   intro i j hij
-  apply squareInteractionSupport_injective L
+  apply squareLatticeSiteOrEdgeSupport_injective L
   exact Finset.image_injective (AreaLaw.rectangleSiteEquiv L L).injective
     (congrArg Subtype.val hij)
 
@@ -163,7 +150,7 @@ def SquareHamiltonian.toAreaLawHamiltonian {L q : ℕ} {J : ℝ}
     Lattice.LocalHamiltonian (AreaLaw.rectangularDomain L L) q 1 J := by
   classical
   let e := AreaLaw.rectangleConfigurationEquiv L L q
-  let T := fun i : SquareInteraction L => Matrix.reindex e e (h.hermitianTerm i)
+  let T := fun i : SquareLatticeSiteOrEdge L L => Matrix.reindex e e (h.hermitianTerm i)
   refine { term := Function.extend (squareAreaLawSupport L) T 0
            supported := ?_, hermitian := ?_, norm_le := ?_ }
   · intro X
@@ -204,9 +191,9 @@ theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
         (AreaLaw.rectangleConfigurationEquiv L L q) h.operator := by
   classical
   let e := AreaLaw.rectangleConfigurationEquiv L L q
-  let T := fun i : SquareInteraction L => Matrix.reindex e e (h.hermitianTerm i)
+  let T := fun i : SquareLatticeSiteOrEdge L L => Matrix.reindex e e (h.hermitianTerm i)
   let f := Function.extend (squareAreaLawSupport L) T 0
-  have hsum : (∑ i : SquareInteraction L, T i) =
+  have hsum : (∑ i : SquareLatticeSiteOrEdge L L, T i) =
       ∑ X : Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1, f X := by
     apply Finset.sum_of_injOn (squareAreaLawSupport L)
       (squareAreaLawSupport_injective L).injOn (fun _ _ => Finset.mem_univ _)
@@ -216,7 +203,7 @@ theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
       exact ((squareAreaLawSupport_injective L).extend_apply T 0 i).symm
   change (∑ X, f X) = _
   rw [← hsum]
-  change (∑ i : SquareInteraction L,
+  change (∑ i : SquareLatticeSiteOrEdge L L,
     (Matrix.reindexAlgEquiv ℂ ℂ e) (h.hermitianTerm i)) = _
   rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), h.sum_hermitianTerm]
   rfl

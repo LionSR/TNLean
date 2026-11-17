@@ -54,7 +54,7 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge)
 
 open scoped BigOperators ComplexOrder
 
@@ -67,7 +67,7 @@ namespace TNLean.PEPS.Approximation
 /-- Every designated support is a nonempty set of induced graph diameter at
 most one in the integer rectangle. Source: polynomial-PEPS `eq:model`
 (`00-introduction.tex`, lines 40–45) and area-law Corollary 1.2. -/
-theorem squareAreaLawSupport_isAdmissibleSupport (L : ℕ) (i : SquareInteraction L) :
+theorem squareAreaLawSupport_isAdmissibleSupport (L : ℕ) (i : SquareLatticeSiteOrEdge L L) :
     Lattice.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
       (squareAreaLawSupport L i).1 :=
   (squareAreaLawSupport L i).2

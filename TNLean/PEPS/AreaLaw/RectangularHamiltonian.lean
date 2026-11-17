@@ -26,7 +26,8 @@ Immutable source revision: `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge
+  squareLatticeSiteOrEdgeSupport)
 
 open Matrix ComplexStarModule
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
@@ -82,18 +83,8 @@ def RectangularHamiltonian.IsGappedGroundState {width height q : ℕ} {J : ℝ}
     (Ω : RectangleStateSpace width height q) (Δ : ℝ) : Prop :=
   Matrix.IsGappedGroundState h.operator E₀ Ω Δ
 
-/-- Exactly one label per site or undirected edge. Source: `eq:model`. -/
-abbrev RectangleInteraction (width height : ℕ) :=
-  SquareLatticeVertex width height ⊕ Edge (squareLatticeGraph width height)
-
-/-- The actual designated support of the native interaction. Source: `eq:model`. -/
-def rectangleInteractionSupport {width height : ℕ} :
-    RectangleInteraction width height → Finset (SquareLatticeVertex width height)
-  | .inl v => {v}
-  | .inr e => {e.val.1, e.val.2}
-
 private def rectangleInteractionTerm {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) : RectangleInteraction width height →
+    (h : RectangularHamiltonian width height q J) : SquareLatticeSiteOrEdge width height →
       Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ
   | .inl v => h.siteTerm v
   | .inr e => h.edgeTerm e
@@ -101,7 +92,7 @@ private def rectangleInteractionTerm {width height q : ℕ} {J : ℝ}
 /-- The Hermitian part of each original interaction. Source:
 `00-introduction.tex`, lines 39–44; `03-patches.tex`, lines 214–333. -/
 def RectangularHamiltonian.hermitianTerm {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : RectangleInteraction width height) :
+    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
     Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ :=
   ℜ (rectangleInteractionTerm h i)
 
@@ -109,36 +100,37 @@ def RectangularHamiltonian.hermitianTerm {width height q : ℕ} {J : ℝ}
 circuit supported-operator algebra, since that algebra is closed under
 adjoints and real linear combinations. Source: `00-introduction.tex`, `eq:model`. -/
 theorem RectangularHamiltonian.hermitianTerm_mem_supportedOperators {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : RectangleInteraction width height) :
+    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
     h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
-      (rectangleInteractionSupport i : Set (SquareLatticeVertex width height)) := by
+      (squareLatticeSiteOrEdgeSupport i : Set (SquareLatticeVertex width height)) := by
   have hs : rectangleInteractionTerm h i ∈
       QuantumCircuit.supportedOperators q
-        (rectangleInteractionSupport i : Set (SquareLatticeVertex width height)) := by
+        (squareLatticeSiteOrEdgeSupport i : Set (SquareLatticeVertex width height)) := by
     cases i with
     | inl v =>
-      simpa only [rectangleInteractionTerm, rectangleInteractionSupport, Finset.coe_singleton]
+      simpa only [rectangleInteractionTerm, squareLatticeSiteOrEdgeSupport, Finset.coe_singleton]
         using h.site_supported v
     | inr e =>
-      simpa only [rectangleInteractionTerm, rectangleInteractionSupport, Finset.coe_insert,
+      simpa only [rectangleInteractionTerm, squareLatticeSiteOrEdgeSupport, Finset.coe_insert,
         Finset.coe_singleton]
         using h.edge_supported e
   exact coe_realPart_mem_of_star_mem
     (S := (QuantumCircuit.supportedOperators q
-      (rectangleInteractionSupport i : Set (SquareLatticeVertex width height))).restrictScalars ℝ)
+      (squareLatticeSiteOrEdgeSupport i : Set
+          (SquareLatticeVertex width height))).restrictScalars ℝ)
     hs (QuantumCircuit.star_mem_supportedOperators hs)
 
 /-- Every replaced interaction is Hermitian. Source:
 `00-introduction.tex`, `eq:model`. -/
 theorem RectangularHamiltonian.hermitianTerm_isHermitian {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : RectangleInteraction width height) :
+    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
     (h.hermitianTerm i).IsHermitian :=
   (ℜ (rectangleInteractionTerm h i)).property.isHermitian
 
 /-- The original norm bound holds without any factor loss. Source:
 `00-introduction.tex`, `eq:model`. -/
 theorem RectangularHamiltonian.hermitianTerm_norm_le {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (i : RectangleInteraction width height) :
+    (h : RectangularHamiltonian width height q J) (i : SquareLatticeSiteOrEdge width height) :
     ‖h.hermitianTerm i‖ ≤ J := by
   apply (realPart.norm_le (rectangleInteractionTerm h i)).trans
   cases i with
@@ -149,22 +141,22 @@ theorem RectangularHamiltonian.hermitianTerm_norm_le {width height q : ℕ} {J :
 Only total Hermiticity is used. Source: `00-introduction.tex`, `eq:model`. -/
 theorem RectangularHamiltonian.sum_hermitianTerm {width height q : ℕ} {J : ℝ}
     (h : RectangularHamiltonian width height q J) :
-    (∑ i : RectangleInteraction width height, h.hermitianTerm i) = h.operator := by
-  have hsum : (∑ i : RectangleInteraction width height, rectangleInteractionTerm h i) =
+    (∑ i : SquareLatticeSiteOrEdge width height, h.hermitianTerm i) = h.operator := by
+  have hsum : (∑ i : SquareLatticeSiteOrEdge width height, rectangleInteractionTerm h i) =
       h.operator := by
     rw [Fintype.sum_sum_type]
     change (∑ v, h.siteTerm v) + (∑ e, h.edgeTerm e) = _
     rfl
   have hh : IsSelfAdjoint
-      (∑ i : RectangleInteraction width height, rectangleInteractionTerm h i) := by
+      (∑ i : SquareLatticeSiteOrEdge width height, rectangleInteractionTerm h i) := by
     rw [hsum]
     exact h.hermitian.isSelfAdjoint
   exact (sum_coe_realPart_of_isSelfAdjoint Finset.univ (rectangleInteractionTerm h) hh).trans hsum
 
-private theorem rectangleInteractionSupport_injective (width height : ℕ) :
-    Function.Injective (rectangleInteractionSupport (width := width) (height := height)) := by
+private theorem squareLatticeSiteOrEdgeSupport_injective (width height : ℕ) :
+    Function.Injective (squareLatticeSiteOrEdgeSupport (width := width) (height := height)) := by
   intro i j hij
-  unfold rectangleInteractionSupport at hij
+  unfold squareLatticeSiteOrEdgeSupport at hij
   cases i with
   | inl v =>
     cases j with
@@ -174,10 +166,10 @@ private theorem rectangleInteractionSupport_injective (width height : ℕ) :
       dsimp only at hij
       have h₁ : e.val.1 = v := by
         have := hij.symm ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [rectangleInteractionSupport, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
       have h₂ : e.val.2 = v := by
         have := hij.symm ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [rectangleInteractionSupport, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
       exact False.elim ((squareLatticeGraph width height).ne_of_adj e.property.2 (h₁.trans h₂.symm))
   | inr e =>
     cases j with
@@ -185,19 +177,21 @@ private theorem rectangleInteractionSupport_injective (width height : ℕ) :
       dsimp only at hij
       have h₁ : e.val.1 = v := by
         have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [rectangleInteractionSupport, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
       have h₂ : e.val.2 = v := by
         have := hij ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [rectangleInteractionSupport, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
       exact False.elim ((squareLatticeGraph width height).ne_of_adj e.property.2 (h₁.trans h₂.symm))
     | inr f =>
       dsimp only at hij
       have h₁ : e.val.1 = f.val.1 ∨ e.val.1 = f.val.2 := by
         have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [rectangleInteractionSupport, Finset.mem_insert, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_insert,
+            Finset.mem_singleton] using this
       have h₂ : e.val.2 = f.val.1 ∨ e.val.2 = f.val.2 := by
         have := hij ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [rectangleInteractionSupport, Finset.mem_insert, Finset.mem_singleton] using this
+        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_insert,
+            Finset.mem_singleton] using this
       rcases h₁ with h₁ | h₁ <;> rcases h₂ with h₂ | h₂
       · exact False.elim
           ((squareLatticeGraph width height).ne_of_adj e.property.2 (h₁.trans h₂.symm))
@@ -211,17 +205,17 @@ private theorem rectangleInteractionSupport_injective (width height : ℕ) :
 /-- Each original site or undirected edge determines its actual admissible
 range-one support in the integer rectangle. Source: area-law Corollary 1.2
 and polynomial-PEPS `eq:model`. -/
-def rectangleAreaLawSupport (width height : ℕ) (i : RectangleInteraction width height) :
+def rectangleAreaLawSupport (width height : ℕ) (i : SquareLatticeSiteOrEdge width height) :
     AdmissibleSupport (rectangularDomain width height) 1 := by
   classical
-  refine ⟨(rectangleInteractionSupport i).image (rectangleSiteEquiv width height), ?_⟩
+  refine ⟨(squareLatticeSiteOrEdgeSupport i).image (rectangleSiteEquiv width height), ?_⟩
   cases i with
   | inl v =>
-    simpa only [rectangleInteractionSupport, Finset.image_singleton] using
+    simpa only [squareLatticeSiteOrEdgeSupport, Finset.image_singleton] using
       isAdmissibleSupport_singleton (rectangularDomain width height) 1
         (rectangleSiteEquiv width height v)
   | inr e =>
-    simpa only [rectangleInteractionSupport, Finset.image_insert, Finset.image_singleton] using
+    simpa only [squareLatticeSiteOrEdgeSupport, Finset.image_insert, Finset.image_singleton] using
       isAdmissibleSupport_rectangle_pair_of_adj
         e.property.2
 
@@ -230,7 +224,7 @@ Source: polynomial-PEPS `eq:model`, one term per site and nearest-neighbor edge.
 theorem rectangleAreaLawSupport_injective (width height : ℕ) :
     Function.Injective (rectangleAreaLawSupport width height) := by
   intro i j hij
-  apply rectangleInteractionSupport_injective width height
+  apply squareLatticeSiteOrEdgeSupport_injective width height
   exact Finset.image_injective (rectangleSiteEquiv width height).injective
     (congrArg Subtype.val hij)
 
@@ -270,7 +264,7 @@ def RectangularHamiltonian.toAreaLawHamiltonian {width height q : ℕ} {J : ℝ}
     LocalHamiltonian (rectangularDomain width height) q 1 J := by
   classical
   let e := rectangleConfigurationEquiv width height q
-  let T := fun i : RectangleInteraction width height => Matrix.reindex e e (h.hermitianTerm i)
+  let T := fun i : SquareLatticeSiteOrEdge width height => Matrix.reindex e e (h.hermitianTerm i)
   refine { term := Function.extend (rectangleAreaLawSupport width height) T 0
            supported := ?_, hermitian := ?_, norm_le := ?_ }
   · intro X
@@ -308,9 +302,9 @@ theorem RectangularHamiltonian.toAreaLawHamiltonian_operator {width height q : �
         (rectangleConfigurationEquiv width height q) h.operator := by
   classical
   let e := rectangleConfigurationEquiv width height q
-  let T := fun i : RectangleInteraction width height => Matrix.reindex e e (h.hermitianTerm i)
+  let T := fun i : SquareLatticeSiteOrEdge width height => Matrix.reindex e e (h.hermitianTerm i)
   let f := Function.extend (rectangleAreaLawSupport width height) T 0
-  have hsum : (∑ i : RectangleInteraction width height, T i) =
+  have hsum : (∑ i : SquareLatticeSiteOrEdge width height, T i) =
       ∑ X : AdmissibleSupport (rectangularDomain width height) 1, f X := by
     apply Finset.sum_of_injOn (rectangleAreaLawSupport width height)
       (rectangleAreaLawSupport_injective width height).injOn (fun _ _ => Finset.mem_univ _)
@@ -320,7 +314,7 @@ theorem RectangularHamiltonian.toAreaLawHamiltonian_operator {width height q : �
       exact ((rectangleAreaLawSupport_injective width height).extend_apply T 0 i).symm
   change (∑ X, f X) = _
   rw [← hsum]
-  change (∑ i : RectangleInteraction width height,
+  change (∑ i : SquareLatticeSiteOrEdge width height,
     (Matrix.reindexAlgEquiv ℂ ℂ e) (h.hermitianTerm i)) = _
   rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), h.sum_hermitianTerm]
   rfl

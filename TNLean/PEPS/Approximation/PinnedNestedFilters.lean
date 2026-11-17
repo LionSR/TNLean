@@ -7,7 +7,8 @@ Adapted definitions from openai/math, Apache-2.0, revision
 adc7f1241b42e322a6451854ab7e4b4c146bf78a:
 lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean, lines 35–40, 52–53, 151–179;
 ContourEnergy.lean, lines 65–66; HamiltonianEnergy.lean, lines 64–65.
-Changes: namespace, explicit imports, and the existing shared ForwardEdge name.
+Changes: namespace, explicit imports, and `ManyBody.Edge (squareLatticeGraph L L)`
+for the forward edges.
 The existing Pinned.State and Pinned.RegionConfiguration are reused. Positivity,
 eigenvalue powers, ascending action, inverse-zero normalization and forward-edge
 counting retain the source conventions. No upstream Lean proof text is copied.
@@ -26,6 +27,8 @@ comparison and physical existence theorem are proved in separate modules.
 Singular filters, empty regions, empty configuration types and empty families are
 allowed. No eigenbasis or spectral-coordinate representation is part of the data.
 -/
+
+open ManyBody (Edge squareLatticeGraph)
 
 noncomputable section
 
@@ -87,10 +90,10 @@ def normalizedOutput {L q m : ℕ} {X : Fin m → Finset (Vertex L)}
 namespace Energy
 
 /-- Adapted source crossing predicate on the shared original forward-edge type. -/
-def Crosses {L : ℕ} (X : Finset (Vertex L)) (e : ForwardEdge L) : Prop :=
+def Crosses {L : ℕ} (X : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) : Prop :=
   (e.val.1 ∈ X ∧ e.val.2 ∉ X) ∨ (e.val.2 ∈ X ∧ e.val.1 ∉ X)
 
-instance {L : ℕ} (X : Finset (Vertex L)) (e : ForwardEdge L) :
+instance {L : ℕ} (X : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     Decidable (Crosses X e) :=
   inferInstanceAs (Decidable
     ((e.val.1 ∈ X ∧ e.val.2 ∉ X) ∨ (e.val.2 ∈ X ∧ e.val.1 ∉ X)))

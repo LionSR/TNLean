@@ -30,7 +30,7 @@ OAI types. Regions and weights are supplied; no geometry, inverse-density
 optimization, or full geometric optimizer is constructed here.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge squareLatticeGraph)
 
 noncomputable section
 
@@ -60,14 +60,14 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
-    ForwardEdge L ≃ Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)) :=
-  (forwardSquareEdgeEquiv L).trans (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
+    Edge (squareLatticeGraph L L) ≃ Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)) :=
+  (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
 chosen target order. No order compatibility of rectangleSiteEquiv is assumed. -/
 private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
-    (A : Finset (Vertex L)) (e : ForwardEdge L) :
+    (A : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     s((rectangleForwardEdgeEquiv L e).1.1,
       (rectangleForwardEdgeEquiv L e).1.2) ∈
         Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
@@ -78,7 +78,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
   have hmem : ∀ v : Vertex L, σ v ∈ A.map σ.toEmbedding ↔ v ∈ A :=
     fun v => by simp [σ]
   have hend := ManyBody.Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
-    (forwardSquareEdgeEquiv L e)
+    e
   change ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.1 ∧
       (rectangleForwardEdgeEquiv L e).1.2 = σ e.val.2) ∨
     ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.2 ∧
@@ -98,7 +98,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
 private theorem rectangle_singleCrossing {L m : ℕ}
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     (X : Fin m → Finset (Vertex L))
-    (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
+    (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
     ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
@@ -193,7 +193,7 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
     {Ω : Pinned.State L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
     (X : Fin m → Finset (Vertex L)) (hX : Monotone X)
-    (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
+    (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) (ha1 : ∀ j, a j ≤ 1) :
     ∃ F : FilterFamily q m X,

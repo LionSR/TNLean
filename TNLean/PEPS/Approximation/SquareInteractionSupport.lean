@@ -19,6 +19,8 @@ Source: polynomial-PEPS `00-introduction.tex`, `eq:model`, and
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (SquareLatticeSiteOrEdge squareLatticeSiteOrEdgeSupport)
+
 namespace TNLean.PEPS.Approximation
 
 /-- Relabelling the original sites and forward edges gives precisely the
@@ -26,13 +28,12 @@ nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
 theorem squareAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
-    (i : SquareInteraction L) :
+    (i : SquareLatticeSiteOrEdge L L) :
     let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
-      ((forwardSquareEdgeEquiv L).trans
-        (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L)))
+      (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
     (squareAreaLawSupport L i).val = AreaLaw.nearestNeighborSupport (e i) := by
   rcases i with v | e <;>
-    simp only [squareAreaLawSupport, squareInteractionSupport,
+    simp only [squareAreaLawSupport, squareLatticeSiteOrEdgeSupport,
       AreaLaw.nearestNeighborSupport, Finset.image_singleton, Finset.image_insert,
       Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Sum.elim_inl, Sum.elim_inr,
       Equiv.trans_apply, ManyBody.Edge.equiv_apply]
@@ -40,6 +41,6 @@ theorem squareAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
     (Finset.coe_pair.trans
       ((Set.pair_eq_pair_iff.mpr
         (ManyBody.Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
-          (forwardSquareEdgeEquiv L e))).trans Finset.coe_pair.symm))).symm
+          e)).trans Finset.coe_pair.symm))).symm
 
 end TNLean.PEPS.Approximation

@@ -39,6 +39,8 @@ Lemma 8.1 `lem:columns`, `07-assembly.tex:21–99`, immutable revision
 These are original proofs; no OpenAI Lean code is copied or adapted.
 -/
 
+open ManyBody (Edge squareLatticeGraph)
+
 open scoped Matrix
 
 noncomputable section
@@ -54,7 +56,7 @@ refer to the same joint vector `Ψ`, before and after discarding its private
 coordinates. No positivity or Hermiticity is required of the operator
 network. Source: §8.1 and Lemma 8.1 `lem:columns`. -/
 theorem exists_fixInput_contractPEPS_of_product_reference
-    (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTensor (q * q) D v)
+    (D : Edge (squareLatticeGraph L L) → ℕ) (A : (v : Vertex L) → LocalTensor (q * q) D v)
     {n : ℕ} (e : (Vertex L → Fin q) ≃ Fin n)
     (Ψ : EuclideanSpace ℂ ((Vertex L → Fin q) × b))
     (Ω : State L q) (Ξ : EuclideanSpace ℂ b)
@@ -90,7 +92,7 @@ which are therefore positive and retain every bound satisfied by the
 operator network. Source: §8.1 and Lemma 8.1, in the form required for the
 one-size conclusion of Theorem 1.1. -/
 theorem exists_peps_of_product_reference
-    (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTensor (q * q) D v)
+    (D : Edge (squareLatticeGraph L L) → ℕ) (A : (v : Vertex L) → LocalTensor (q * q) D v)
     {B : ℝ} (hDB : ∀ f, (D f : ℝ) ≤ B)
     {n : ℕ} (e : (Vertex L → Fin q) ≃ Fin n)
     (Ψ : EuclideanSpace ℂ ((Vertex L → Fin q) × b))
