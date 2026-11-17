@@ -103,7 +103,7 @@ theorem groundSpace_gap_le_of_eigenvalues {H : Matrix n n ℂ} (hH : H.IsHermiti
   apply Finset.sum_le_sum
   intro k _
   by_cases hk : hH.eigenvalues k = E₀
-  · have hmem : b k ∈ K := mem_groundSpace_iff_mulVec.mpr (by simpa only [hk] using hb k)
+  · have hmem : b k ∈ K := eigenvectorBasis_mem_groundSpace hH hk
     have hzero : ⟪b k, y⟫_ℂ = 0 := by
       rw [inner_eq_zero_symm]
       exact K.starProjection_inner_eq_zero ψ (b k) hmem

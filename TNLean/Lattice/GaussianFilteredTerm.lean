@@ -156,6 +156,30 @@ theorem sum_gaussianFilteredTerm {ι : Type*} (s : Finset ι) (q ΔE : ℝ) {H :
     ∑ i ∈ s, gaussianFilteredTerm q ΔE H (Hterm i) = H := by
   rw [← gaussianFilteredTerm_sum s q ΔE hH, hsum, gaussianFilteredTerm_self]
 
+/-- An eigenbasis vector of `H` with eigenvalue `E₀` lies in the ground space at `E₀`. -/
+theorem eigenvectorBasis_mem_groundSpace {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
+    {k : n} (hk : hH.eigenvalues k = E₀) : hH.eigenvectorBasis k ∈ groundSpace H E₀ :=
+  mem_groundSpace_iff_mulVec.mpr
+    (by simpa [hk] using SpectralFilter.mulVec_eigenvectorBasis_complex hH k)
+
+omit [DecidableEq n] in
+/-- Comparison of norms through the coefficients in an orthonormal basis: if every coefficient
+of `x` is at most `r` times the corresponding coefficient of `y`, then `‖x‖ ≤ r ‖y‖`. -/
+theorem norm_le_of_inner_coefficients_le
+    (b : OrthonormalBasis n ℂ (EuclideanSpace ℂ n))
+    (x y : EuclideanSpace ℂ n) {r : ℝ} (hr : 0 ≤ r)
+    (hcoef : ∀ i, ‖⟪b i, x⟫_ℂ‖ ≤ r * ‖⟪b i, y⟫_ℂ‖) :
+    ‖x‖ ≤ r * ‖y‖ := by
+  have hsq : ‖x‖ ^ 2 ≤ (r * ‖y‖) ^ 2 := by
+    rw [← b.sum_sq_norm_inner_right x, mul_pow, ← b.sum_sq_norm_inner_right y,
+      Finset.mul_sum]
+    apply Finset.sum_le_sum
+    intro i _
+    rw [← mul_pow]
+    exact pow_le_pow_left₀ (norm_nonneg _) (hcoef i) 2
+  exact (pow_le_pow_iff_left₀ (norm_nonneg _) (mul_nonneg hr (norm_nonneg _))
+    two_ne_zero).mp hsq
+
 /-- An eigenvector of `H` with energy different from `E₀` is orthogonal to the
 ground eigenspace. -/
 theorem inner_eq_zero_of_mem_groundSpace {H : Matrix n n ℂ} (hH : H.IsHermitian)
@@ -195,7 +219,7 @@ theorem norm_sub_starProjection_gaussianFilteredTerm_le {q ΔE : ℝ} (hq : 0 �
   have hcoef (k : n) :
       ‖⟪b k, y⟫_ℂ‖ ≤ Real.exp (-q / 2) * ‖⟪b k, toEuclideanLin W ψ⟫_ℂ‖ := by
     rcases eq_or_ne (hH.eigenvalues k) E₀ with hk | hk
-    · have hmem : b k ∈ K := mem_groundSpace_iff_mulVec.mpr (by simpa [hk] using hb k)
+    · have hmem : b k ∈ K := eigenvectorBasis_mem_groundSpace hH hk
       have : ⟪b k, y⟫_ℂ = 0 := by
         rw [inner_eq_zero_symm]
         exact K.starProjection_inner_eq_zero x (b k) hmem
@@ -212,16 +236,11 @@ theorem norm_sub_starProjection_gaussianFilteredTerm_le {q ΔE : ℝ} (hq : 0 �
           rw [le_div_iff₀ hΔE]; linarith
         nlinarith
       nlinarith
-  have hsq : ‖y‖ ^ 2 ≤ (Real.exp (-q / 2) * ‖toEuclideanLin W ψ‖) ^ 2 := by
-    rw [← b.sum_sq_norm_inner_right y, mul_pow, ← b.sum_sq_norm_inner_right, Finset.mul_sum]
-    refine Finset.sum_le_sum fun k _ => ?_
-    rw [← mul_pow]
-    exact pow_le_pow_left₀ (norm_nonneg _) (hcoef k) 2
   have hWψ : ‖toEuclideanLin W ψ‖ ≤ ‖W‖ * ‖ψ‖ := by
     rw [← l2_opNorm_toEuclideanCLM]
     exact (toEuclideanCLM (n := n) (𝕜 := ℂ) W).le_opNorm ψ
   calc ‖y‖ ≤ Real.exp (-q / 2) * ‖toEuclideanLin W ψ‖ :=
-        (pow_le_pow_iff_left₀ (norm_nonneg _) (by positivity) two_ne_zero).mp hsq
+        norm_le_of_inner_coefficients_le b y _ (Real.exp_pos _).le hcoef
     _ ≤ Real.exp (-q / 2) * (‖W‖ * ‖ψ‖) := by gcongr
     _ = ‖W‖ * Real.exp (-q / 2) * ‖ψ‖ := by ring
 
