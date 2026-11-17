@@ -13,7 +13,8 @@ ALVV, arXiv:1602.08828v2, Theorem `t:unique`, lines 1829–1855, runs the merge 
 improving family of Theorem `t:aisff`, lines 1580–1609, for a frustration-free chain with a
 unique ground state `Γ` and spectral gap `γ`. The merge tree measures viability of a space on
 an interval `J` against the image of `ℂ Γ` under the region-first tensor split of `J` and its
-complement. This file restates Theorem `t:aisff` under the hypotheses of Theorem `t:unique` and
+complement. This file restates the word form of Theorem `t:aisff`, in which the merge applies
+the operators `k` times, under the hypotheses of Theorem `t:unique` and
 in those coordinates.
 
 The spectral gap above the kernel gives the quadratic-form gap used by Theorem `t:aisff`, the
@@ -49,16 +50,17 @@ nearest-neighbour chain of `L` sites of local dimension `q` with `0 ≤ hᵢ ≤
 `H Γ = 0` with every vector of the kernel a multiple of `Γ`, and let every other spectral value
 be at least `γ > 0`. Fix an interval `J = [p, r)`. With the universal constant `A ≥ 1` of
 Theorem `t:aisff` and `g = min (γ, 1)`, `d = max (q, 2)`, `u = 1 + log d + log (1/g)`,
-`ℓ = ⌈A u² / g⌉`, `D = (d ℓ²)^{22ℓ}`, there are `D²` operators `W j` on `J` and `Δ > 0` with
-`D¹² Δ ≤ 10⁻⁵`, each of operator Schmidt rank at most `(d² + 4)^{ℓ² + 1}` at every cut of `J`,
-such that every subspace of the space of `J` that is `δ`-viable for `ℂ Γ` in the region-first
-coordinates of the merge tree, with `δ < 1`, gives a `Δ / (1 - δ)²`-viable span of its images
-under the `W j`, in the same coordinates. None of `D`, `Δ` or the rank bound depends on `L`.
+`ℓ = ⌈A u² / g⌉`, `D = (d ℓ²)^{22ℓ}`, there are `N ≤ D²` operators `W j` on `J` and `Δ > 0`
+with `D¹² Δ ≤ 10⁻⁵`, each of operator Schmidt rank at most `(d² + 4)^{ℓ² + 1}` at every cut of
+`J`, such that for every `k` every subspace of the space of `J` that is `δ`-viable for `ℂ Γ` in
+the region-first coordinates of the merge tree, with `δ < 1`, gives a `Δ^k / (1 - δ)²`-viable
+span of its images under all products of `k` of the `W j`, in the same coordinates. None of
+`D`, `Δ` or the rank bound depends on `L`.
 
-ALVV, arXiv:1602.08828v2, Theorem `t:aisff`, lines 1580–1609, under the hypotheses of
-Theorem `t:unique`, lines 1829–1855. The scope of Theorem `t:aisff` carries over unchanged;
-see `exists_frustrationFree_improving_family`. -/
-theorem exists_frustrationFree_improving_family_regionTensorCoordinates :
+ALVV, arXiv:1602.08828v2, Theorem `t:aisff`, lines 1580–1609, in the word form used by the
+merge, lines 1662–1677, under the hypotheses of Theorem `t:unique`, lines 1829–1855. The scope
+of Theorem `t:aisff` carries over unchanged; see `exists_frustrationFree_improving_family_words`. -/
+theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
@@ -81,16 +83,17 @@ theorem exists_frustrationFree_improving_family_regionTensorCoordinates :
         Finset.univ.filter fun v : ↥J ↦ (v : Fin L) ∈ interval L 0 c
       Real.log (D : ℝ) ≤ 22 * (A + 1) * (6 + 2 * Real.log (A + 1)) / g * u ^ 3 ∧
       Real.log (((d ^ 2 + 4) ^ (ℓ ^ 2 + 1) : ℕ) : ℝ) ≤ 4 * (A + 1) ^ 2 / g ^ 2 * u ^ 5 ∧
-      ∃ (W : Fin (D ^ 2) → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
-        0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
+      ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
+        N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
         (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
           (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
-        ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
+        ∀ (k : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
           Submodule.IsViable δ S G → δ < 1 →
-          Submodule.IsViable (Δ / (1 - δ) ^ 2)
-            (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j) :
-              EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q))) G := by
-  obtain ⟨A, hA, hff⟩ := exists_frustrationFree_improving_family
+          Submodule.IsViable (Δ ^ k / (1 - δ) ^ 2)
+            (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
+              Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod :
+                EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q))) G := by
+  obtain ⟨A, hA, hff⟩ := exists_frustrationFree_improving_family_words
   refine ⟨A, hA, ?_⟩
   intro L q p r hpr hrL h hs h0 h1 γ hγ Γ H hΓ huniq hgap g d u ℓ D J G cut
   have hH : H.IsHermitian :=
@@ -101,21 +104,22 @@ theorem exists_frustrationFree_improving_family_regionTensorCoordinates :
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) H y⟫_ℂ :=
     fun y hy ↦ hH.mul_norm_sq_le_re_inner_of_spectral_gap hgap y fun z hz ↦
       Submodule.inner_right_of_mem_orthogonal (LinearMap.mem_ker.mpr hz) hy
-  obtain ⟨hlogD, hlogR, W, Δ, hΔ, hbudget, hrank, himprove⟩ :=
+  obtain ⟨hlogD, hlogR, N, W, Δ, hN, hΔ, hbudget, hrank, himprove⟩ :=
     hff L q p r hpr hrL h hs h0 h1 γ hγ hgapQ
-  refine ⟨hlogD, hlogR, W, Δ, hΔ, hbudget, hrank, ?_⟩
+  refine ⟨hlogD, hlogR, N, W, Δ, hN, hΔ, hbudget, hrank, ?_⟩
   have hcoords := (Entropy.regionTensorCoordinates_eq_exteriorFirst q J).symm
   rw [hker] at himprove
-  have himprove' : ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
+  have himprove' : ∀ (k : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
       Submodule.IsViable δ S ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
           (Equiv.prodComm _ _))).trans
             (Submodule.euclideanTensorEquiv (↥(Jᶜ) → Fin q) (J → Fin q))).trans
           (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
             (EuclideanSpace ℂ (J → Fin q)))).toLinearEquiv.toLinearMap) → δ < 1 →
-      Submodule.IsViable (Δ / (1 - δ) ^ 2)
-        (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j) :
-          EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q)))
+      Submodule.IsViable (Δ ^ k / (1 - δ) ^ 2)
+        (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
+          Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod :
+            EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q)))
         ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
           (Equiv.prodComm _ _))).trans

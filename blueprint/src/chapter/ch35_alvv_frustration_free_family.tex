@@ -311,87 +311,100 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
     $G$ and $G^\perp$, does not shrink vectors of $G$, and satisfies
     $\|K^kx\|^2\le\Delta^k\|x\|^2$ for $x\perp G$. The two-factor form of error
     reduction applied to $K^k$ gives the improvement $\Delta^k/(1-\delta)^2$.
+\end{proof}
+
 \section{The merge tree for a unique ground state}
 
 The merge tree of \cite[Theorem~\texttt{t:unique}, lines
     1829--1855]{Arad2016RigorousRG} measures the viability of a space on an
 interval $J$ against the image of $\mathbb C\Gamma$ under the splitting of the
 chain into $J$ and its complement, with $J$ placed first. The two results below
-restate the improving family in these coordinates and give a merge tree whose
-node dimension does not depend on the chain length. The second one runs the
-tree with the families of the degenerate-gap case rather than with the family
-of Theorem~\ref{thm:alvv_ff_improving_family}; the remaining differences from
-the source are recorded in~\cite{gap:alvv16_unique_ground_state_tree}.
+restate the products of the improving family in these coordinates and run the
+merge tree with that family, so that the node dimension does not depend on the
+chain length. The remaining differences from the source are recorded
+in~\cite{gap:alvv16_unique_ground_state_tree}.
 
 \begin{lemma}[The improving family in the coordinates of the merge tree]
     \label{lem:alvv_ff_family_region_coordinates}
     \lean{TNLean.MPS.AreaLaw.ALVV.ker_toEuclideanCLM_eq_span_singleton,
-        TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_regionTensorCoordinates}
+        TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_words_regionTensorCoordinates}
     \leanok
-    \uses{thm:alvv_ff_improving_family}
+    \uses{lem:alvv_ff_improving_family_words}
     Let $H=\sum_ih_i$ be a nearest-neighbour Hamiltonian on $(\C^q)^{\otimes L}$
     with $0\le h_i\le\Id$, let $H\Gamma=0$, let every vector of the kernel of
     $H$ be a multiple of $\Gamma$, and let every other spectral value of $H$ be
     at least $\gamma>0$. Fix an interval $J$, and define $g,d,u,\ell,\mathcal D$
     by~\eqref{eq:alvv_ff_family_parameters}. Then the conclusions of
-    Theorem~\ref{thm:alvv_ff_improving_family} hold with $G$ the image of
+    Lemma~\ref{lem:alvv_ff_improving_family_words} hold with $G$ the image of
     $\mathbb C\Gamma$ in the tensor splitting with $J$ first: there are
-    $\mathcal D^2$ operators $W_j$ on $J$, each of operator Schmidt rank at most
-    $(d^2+4)^{\ell^2+1}$ at every cut of $J$, and $\Delta>0$ with
-    $\mathcal D^{12}\Delta\le10^{-5}$, such that every $\delta$-viable subspace
-    $S$ for $G$ with $\delta<1$ gives a $\Delta/(1-\delta)^2$-viable span of
-    the $W_jS$. None of $\mathcal D$, $\Delta$ and the rank bound depends on
-    $L$.
+    $N\le\mathcal D^2$ operators $W_j$ on $J$, each of operator Schmidt rank at
+    most $(d^2+4)^{\ell^2+1}$ at every cut of $J$, and $\Delta>0$ with
+    $\mathcal D^{12}\Delta\le10^{-5}$, such that for every $k$ every
+    $\delta$-viable subspace $S$ for $G$ with $\delta<1$ gives a
+    $\Delta^k/(1-\delta)^2$-viable span of the subspaces
+    $W_{j_0}\cdots W_{j_{k-1}}S$. None of $\mathcal D$, $\Delta$ and the rank
+    bound depends on $L$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:alvv_ff_improving_family}
+    \uses{lem:alvv_ff_improving_family_words}
     The kernel of $H$ is $\mathbb C\Gamma$. On the orthogonal complement of the
     kernel the spectral values are at least $\gamma$, so
     $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$ there, which is the
-    hypothesis of Theorem~\ref{thm:alvv_ff_improving_family}. That theorem is
+    hypothesis of Lemma~\ref{lem:alvv_ff_improving_family_words}. That lemma is
     stated in the splitting with the complement of $J$ first; exchanging the two
     tensor factors gives the splitting with $J$ first, and viability is
     transported along this isometry.
 \end{proof}
 
-\begin{lemma}[A merge tree of length-independent node dimension]
+\begin{lemma}[The merge tree with the frustration-free family]
     \label{thm:alvv_unique_ground_state_tree}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_pos_mem_spectrum_of_unique_ground_state,
         TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}
     \leanok
-    \uses{lem:physical_dg_tree_ritz_approximation,
-        lem:unique_ground_state_spectral_span}
-    There is a constant $C\ge1$ with the following property. Let $q\ge2$ and
-    $L\ge1$, and let $H=\sum_ih_i$ be a nearest-neighbour chain of $L$ sites of
-    local dimension $q$ with $0\le h_i\le\Id$, frustration free with a unique
-    ground state $\Gamma\ne0$ and spectral gap $\gamma>0$. Put $g=\min(\gamma,1)$,
-    $m=\max(q,50)$, $v=1+\log m+\log(1/g)$, $\ell=\lceil Cv^2/g\rceil$ and
-    $\mathcal D=(m\ell^2)^{22\ell}$. On every interval longer than $4\ell$ there
-    is a family of at most $\mathcal D^2$ operators such that, for every
-    $\eta>0$ and $0<\beta<1$, with
+    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
+        thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,
+        thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
+    Let $A\ge1$ be the constant of Theorem~\ref{thm:alvv_ff_improving_family}.
+    Let $q\ge2$ and $L\ge1$, and let $H=\sum_ih_i$ be a nearest-neighbour chain
+    of $L$ sites of local dimension $q$ with $0\le h_i\le\Id$, frustration free
+    with a unique ground state $\Gamma\ne0$ and spectral gap $\gamma>0$. Define
+    $g,d,u,\ell,\mathcal D$ by~\eqref{eq:alvv_ff_family_parameters}. On every
+    interval longer than $4\ell$ fix the family of
+    Lemma~\ref{lem:alvv_ff_family_region_coordinates}: at most $\mathcal D^2$
+    operators of operator Schmidt rank at most $(d^2+4)^{\ell^2+1}$ at every cut.
+    For every $\eta>0$ and $0<\beta<1$, with
     $s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$, there is a merge tree
     with leaves of at most $4\ell$ sites whose parents are sampled and trimmed
     merges with these families, whose node spaces are $3/200$-viable for
     $\mathbb C\Gamma$ of dimension at most $\mathcal D^6s^3$, and whose root,
     after finitely many filter-and-trim steps and a Ritz extraction, gives a
     line of matrix product states mutually $\eta/2$-close to
-    $\mathbb C\Gamma$. The bound $\mathcal D^6s^3$ does not depend on $L$.
-    This is the existence content
+    $\mathbb C\Gamma$. Neither $\mathcal D$ nor $\mathcal D^6s^3$ depends on
+    $L$. This is the existence content
     of~\cite[Theorem~\texttt{t:unique}, lines 1829--1855]{Arad2016RigorousRG}
-    restricted as follows: the families are those of the degenerate-gap case,
-    the node bound is $\mathcal D^6s^3$ instead of $\mathcal Ds^2$, the tree is
-    shown to exist rather than to be found with high probability, and the bond
-    dimension of the output grows with $L$.
+    restricted as follows: the node bound is $\mathcal D^6s^3$ instead of
+    $\mathcal Ds^2$, the tree is shown to exist rather than to be found with
+    high probability, and the bond dimension of the output grows with $L$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_dg_tree_ritz_approximation,
-        lem:unique_ground_state_spectral_span}
+    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
+        thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,
+        thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
     The space of the chain has dimension $q^L\ge2$ and the kernel of $H$ has
-    dimension one, so $H\ne0$ and $H$ has a positive spectral value, which is
-    at least $\gamma$. By Lemma~\ref{lem:unique_ground_state_spectral_span},
-    $0$ is a spectral value of $H$ and the span of the eigenvectors with
-    eigenvalue at most $0$ is $\mathbb C\Gamma$, of dimension one.
-    Lemma~\ref{lem:physical_dg_tree_ritz_approximation} at ground energy $0$
-    then gives the tree, with node bound $\mathcal D^6s^3$ for ground-space
-    dimension one.
+    dimension one, so $H$ has a positive spectral value, which is at least
+    $\gamma$. By Lemma~\ref{lem:unique_ground_state_spectral_span}, $0$ is a
+    spectral value of $H$ and the span of the eigenvectors with eigenvalue at
+    most $0$ is $\mathbb C\Gamma$, so the trimming bound of
+    Lemma~\ref{thm:physical_dg_interval_trimming} and the refinement of
+    Lemma~\ref{lem:physical_dg_automatic_refinement} apply with ground space
+    $\mathbb C\Gamma$. At a long parent, the merged space is $3/200$-viable.
+    The word image of a random subspace of dimension $s$, under the products of
+    length $\lceil\log_{\mathcal D}(\mathcal D^2s)\rceil$ of the family, is
+    $1/400$-viable outside an event of small probability, as in
+    Lemma~\ref{thm:physical_dg_sampled_node} with target $\mathbb C\Gamma$
+    itself, since the family improves viability by $\Delta^k$ and
+    $\mathcal D^{12}\Delta\le10^{-5}$. Collective trimming at a threshold below
+    the bound of the refinement keeps it $3/200$-viable. The recursion of
+    Lemma~\ref{thm:sampled_interval_witness_tree} assembles the tree, and the
+    refinement of its root gives the line.
 \end{proof}
