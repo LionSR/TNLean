@@ -33,8 +33,8 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | Support on `X` | `QuantumCircuit.supportedOperators q X` | The existing site-operator algebra; `localLift` uses the existing placement `embedOp`. |
 | `h_X = h_X*` and `‖h_X‖ ≤ J` | The `hermitian` and `norm_le` fields | The norm is the Euclidean induced operator norm. |
 | `H = ∑_X h_X` | `LocalHamiltonian.operator` | The sum is Hermitian by `operator_isHermitian`. |
-| A unit ground vector at real energy `E₀` | Unit-norm and eigenvector clauses of `IsGappedGroundState` | The positive projector-gap clause forces this eigenvalue to be minimal when `Δ > 0`. The checked equivalence is part of #8739. |
-| Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | The positive-semidefinite clause of `IsGappedGroundState` | With the unit and eigenvector clauses and `Δ > 0`, this implies a one-dimensional ground eigenspace. The corresponding QICLean theorem is tracked in #8739. No gap for a restriction is assumed. |
+| A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
+| Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.operator E₀ Δ` with `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
 | Any `A ⊆ Λ` | `A : Finset (Site Λ)` after all physical data | Includes empty, full, and disconnected cuts. |
 | `∂Λ A` consists of unordered crossing edges | `edgeBoundary Λ A : Finset (Sym2 (Site Λ))` | Each edge occurs once; empty and full cuts have empty boundary. |
 | `ρ_A = Tr_(Λ∖A) |Ω⟩⟨Ω|` | `reducedState` | Uses `Matrix.partialTraceRight` after Mathlib's configuration splitting. |
@@ -66,7 +66,7 @@ Source: [Theorem 1.1](https://github.com/openai/math/blob/adc7f1241b42e322a64518
 | Every open `L × L` grid, `L ≥ 2` | `squareLatticeGraph L L` | No periodic edges or extra routing vertices. |
 | One supported term per site and edge, norm at most `J` | `SquareHamiltonian.siteTerm`, `edgeTerm`, support and norm fields | Individual summands are not required to be Hermitian. |
 | Hermitian total `H` | `SquareHamiltonian.hermitian` | Refers to the sum of the site terms plus the sum of the edge terms. |
-| Unique unit ground vector and full-system projector gap | `SquareHamiltonian.IsGappedGroundState` | Same coordinates and operator inequality as above; equivalences belong to #8739. |
+| Unique unit ground vector and full-system projector gap | `‖Ω‖ = 1`, `ManyBody.IsGapped h.operator E₀ Δ` and `ManyBody.groundSpace h.operator E₀ = span {Ω}` in `IsSquareGroundState` | Same coordinates; for `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these conditions with the printed operator inequality. |
 | PEPS on the same grid | `A : Tensor (squareLatticeGraph L L) q` | Uses TNLean's existing edge-dependent tensor family. |
 | Positive bond dimensions and `Dmax ≤ C L^c` | Both universal edge clauses of `HasPEPSApproximation` | Each original edge is bounded; dimensions need not be equal. |
 | Nonzero contraction `Φ` | `pepsVector A ≠ 0` | Nonvanishing is required before normalization. |
@@ -197,7 +197,7 @@ hypothesis to the printed one.
 
 | Appendix A statement | Formal statement | Status on `main` |
 |---|---|---|
-| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `LocalHamiltonian`, `IsGappedGroundState`, `regionalEntropy`; uniqueness by `Matrix.IsGappedGroundState.eigenspace_eq_span` | Definitions; uniqueness proved. |
+| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `LocalHamiltonian`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
 | Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
 | Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `SquareHamiltonian.sum_hermitianTerm` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |

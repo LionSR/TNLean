@@ -9,6 +9,7 @@ import QICLean.Entropy.RestoringNorm
 import QICLean.Entropy.RestoringGroundComponent
 import QICLean.Entropy.RestoringVectors
 import QICLean.Entropy.SchmidtPinning
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The restoring operator of the amplification proposition on the lattice
@@ -65,6 +66,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped Kronecker ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace Matrix
 
@@ -694,7 +697,8 @@ theorem exists_restoringOperator_estimates (hq : 1 ≤ q) (R : ℕ) {J : ℝ}
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) (K : ℕ) :
     ∃ N : ℕ, 1 ≤ N ∧
       ∀ (n : ℕ), N ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (X Y : Finset (Site Λ)) (hXY : Disjoint X Y),
           ((edgeBoundary Λ X).card : ℝ) ≤ C₀ * n →
           ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
@@ -726,9 +730,9 @@ theorem exists_restoringOperator_estimates (hq : 1 ≤ q) (R : ℕ) {J : ℝ}
                   3 * ((n : ℝ) ^ K)⁻¹ + ‖WithLp.toLp 2 (Lᴴ *ᵥ ψ.ofLp) - ψ‖ := by
   obtain ⟨N, hN1, hN⟩ := exists_typicalProjectors_three_cuts (J := J) hq R hJ hΔ hC₀ K
   refine ⟨N, hN1, ?_⟩
-  intro n hn Λ h E₀ Ω hgs X Y hXY hX hY hS sBlank xBlank eBlank hs hx he
-  have hfail := hN n hn Λ h E₀ Ω hgs X Y (X ∪ Y) hX hY hS
-  have hmain := restoringOperator_estimates Ω hgs.1 X Y hXY ((n : ℝ) ^ ((3 : ℝ) / 5))
+  intro n hn Λ h E₀ Ω hΩ hgap hspan X Y hXY hX hY hS sBlank xBlank eBlank hs hx he
+  have hfail := hN n hn Λ h E₀ Ω hΩ hgap hspan X Y (X ∪ Y) hX hY hS
+  have hmain := restoringOperator_estimates Ω hΩ X Y hXY ((n : ℝ) ^ ((3 : ℝ) / 5))
     ((n : ℝ) ^ (-(2 * K : ℝ))) (hfail X (by simp)).2.2.2 (hfail Y (by simp)).2.2.2
     (hfail (X ∪ Y) (by simp)).2.2.2 sBlank xBlank eBlank hs hx he
   rwa [sqrt_rpow_neg_two_mul] at hmain

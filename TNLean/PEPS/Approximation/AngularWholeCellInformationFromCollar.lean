@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AngularWholeCellInformation
 import TNLean.PEPS.Approximation.SquareCellConditionalInformation
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information of a selected group of square-lattice cells
@@ -28,6 +29,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -53,7 +56,8 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
       Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
         (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
         ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
             (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
               c * s ≤ dist x (sitePosition L v)) →
@@ -67,10 +71,10 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
                 (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na) := by
   have hcell :=
     cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
-  intro s hs o r Aold A hA S hS L h E₀ Ω hΩ E b₀ hclear hold
+  intro s hs o r Aold A hA S hS L h E₀ Ω hΩ hgap hspan E b₀ hclear hold
   exact mutualInformation_selectedRegion_le_of_cell_bound Ω E
     (zero_lt_one.trans_le hs) hc hA S hS hclear
-    (fun i _ I hi ↦ hcell s hs o i I hi L h E₀ Ω hΩ E) hold
+    (fun i _ I hi ↦ hcell s hs o i I hi L h E₀ Ω hΩ hgap hspan E) hold
 
 open Classical in
 /-- The original-gap collar hypothesis gives uniform information costs for
@@ -94,7 +98,8 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
         Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
           (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
           ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-            h.IsGappedGroundState E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+            groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
               (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
                 c * s ≤ dist x (sitePosition L v)) →

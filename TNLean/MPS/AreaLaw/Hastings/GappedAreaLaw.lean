@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.AreaLaw
 import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Hastings' area law for gapped chains
@@ -59,6 +60,8 @@ open ManyBody (interval)
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw.Hastings
 
 /-- **Hastings' area law for gapped chains.** Let `R` be a range. There is a constant `K ≥ 0`,
@@ -74,18 +77,19 @@ length is proved in `Hastings/PrintedAreaLawSource.lean`. -/
 theorem exists_regionEntropy_prefix_le (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
         areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
           (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_endpoint R
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hgs i ↦ ?_⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hΩ hgap hspan i ↦ ?_⟩
   have hξ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]
     exact mul_pos (by norm_num) (mul_pos (by norm_num) (lemmaOneLength_pos R _ 1))
-  refine regionEntropy_prefix_le_of_factorization h hgs hξ0 (le_max_right _ _)
+  refine regionEntropy_prefix_le_of_factorization h hΩ hgap hspan hξ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) i
-  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hgs c l
+  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
 
@@ -133,7 +137,8 @@ theorem exists_regionEntropy_prefix_le_with_log_constant (R : ℕ) :
       ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
         ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
         {Ω : EuclideanSpace ℂ (Fin L → Fin q)},
-        Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
           areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
             (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q := by

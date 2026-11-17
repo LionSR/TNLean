@@ -8,6 +8,7 @@ import TNLean.Lattice.LocalHamiltonian
 import QICLean.Algebra.HermitianPartSum
 import QICLean.Algebra.L2OpNormReindex
 import Mathlib.Analysis.Complex.Basic
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Native rectangular Hamiltonians and range-one interactions
@@ -32,6 +33,8 @@ open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -72,13 +75,6 @@ def RectangularHamiltonian.operator {width height q : ℕ} {J : ℝ}
     (h : RectangularHamiltonian width height q J) :
     Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ :=
   (∑ v, h.siteTerm v) + ∑ e, h.edgeTerm e
-
-/-- The unit eigenvector and full-system projector gap in native coordinates.
-Source: area-law Theorem 1.1 and polynomial-PEPS `eq:global-gap`. -/
-def RectangularHamiltonian.IsGappedGroundState {width height q : ℕ} {J : ℝ}
-    (h : RectangularHamiltonian width height q J) (E₀ : ℝ)
-    (Ω : RectangleStateSpace width height q) (Δ : ℝ) : Prop :=
-  Matrix.IsGappedGroundState h.operator E₀ Ω Δ
 
 /-- Exactly one label per site or undirected edge. Source: `eq:model`. -/
 abbrev RectangleInteraction (width height : ℕ) :=
@@ -326,39 +322,15 @@ theorem RectangularHamiltonian.toAreaLawHamiltonian_operator {width height q : �
 /-- The original unit ground vector and full-system gap are preserved by
 the actual conversion. Source: area-law Corollary 1.2 and polynomial-PEPS
 `eq:global-gap`. -/
-theorem RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian
+theorem RectangularHamiltonian.isGapped_toAreaLawHamiltonian
     {width height q : ℕ} {J : ℝ} (h : RectangularHamiltonian width height q J) (hJ : 0 ≤ J)
-    {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q} (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
-    TNLean.Lattice.IsGappedGroundState (rectangularDomain width height) q
-      (h.toAreaLawHamiltonian hJ).operator E₀ (rectangleAreaLawState Ω) Δ := by
-  classical
-  let e := rectangleConfigurationEquiv width height q
-  let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e
-  refine ⟨(norm_rectangleAreaLawState Ω).trans hΩ.1, ?_, ?_⟩
-  · rw [h.toAreaLawHamiltonian_operator hJ]
-    have heq : Matrix.toEuclideanLin (Matrix.reindex e e h.operator) (E Ω) =
-        E (Matrix.toEuclideanLin h.operator Ω) := by
-      ext x
-      change (h.operator.submatrix e.symm e.symm *ᵥ (Ω.ofLp ∘ e.symm)) x =
-        (h.operator *ᵥ Ω.ofLp) (e.symm x)
-      rw [Matrix.submatrix_mulVec_equiv]
-      simp only [Function.comp_def, Equiv.symm_symm, Equiv.symm_apply_apply]
-    change Matrix.toEuclideanLin (Matrix.reindex e e h.operator) (E Ω) = _
-    rw [heq, show Matrix.toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω from hΩ.2.1,
-      map_smul]
-    rfl
-  · rw [h.toAreaLawHamiltonian_operator hJ]
-    have hg := hΩ.2.2.submatrix e.symm
-    have hdef : (h.operator - (E₀ : ℂ) • 1 -
-        (Δ : ℂ) • (1 - vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).submatrix
-        e.symm e.symm = Matrix.reindex e e h.operator - (E₀ : ℂ) • 1 -
-          (Δ : ℂ) • (1 - vecMulVec (fun x ↦ rectangleAreaLawState Ω x)
-            (star (fun x ↦ rectangleAreaLawState Ω x))) := by
-      ext i j
-      simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sub_apply,
-        Matrix.smul_apply, Matrix.one_apply, Matrix.vecMulVec_apply, Pi.star_apply,
-        e.symm.injective.eq_iff]
-      rfl
-    exact hdef ▸ hg
+    {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q} (hΩ : ‖Ω‖ = 1)
+    (hgap : IsGapped h.operator E₀ Δ) (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) :
+    ‖rectangleAreaLawState Ω‖ = 1 ∧ IsGapped (h.toAreaLawHamiltonian hJ).operator E₀ Δ ∧
+      groundSpace (h.toAreaLawHamiltonian hJ).operator E₀ =
+        Submodule.span ℂ {rectangleAreaLawState Ω} := by
+  rw [h.toAreaLawHamiltonian_operator hJ]
+  exact ⟨(norm_rectangleAreaLawState Ω).trans hΩ, (ManyBody.isGapped_reindex_iff _).mpr hgap,
+    ManyBody.groundSpace_reindex_eq_span _ hspan⟩
 
 end TNLean.PEPS.AreaLaw

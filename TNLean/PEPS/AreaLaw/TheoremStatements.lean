@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.RegionalEntropy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The uniform finite-domain area-law statement
@@ -28,6 +29,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The uniform area-law target, with its constant chosen before all physical
@@ -38,7 +41,8 @@ def UniformAreaLaw : Prop :=
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J,
         ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card
 
 end TNLean.PEPS.AreaLaw

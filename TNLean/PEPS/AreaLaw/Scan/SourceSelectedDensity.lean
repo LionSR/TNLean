@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Scan.SourceChargeSelection
 import TNLean.PEPS.AreaLaw.Scan.SelectedDensityDelta
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 import TNLean.PEPS.AreaLaw.Scan.ScannerRoundedAdmissibility
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical selected density for arbitrary scanner exponents
@@ -38,6 +39,8 @@ lines 475–490, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -70,7 +73,8 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
@@ -101,7 +105,8 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -217,14 +222,14 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
   refine ⟨4 * (C₁ + 1) * (6 * Ce + 13 + 6 * Real.log q + 2 * Ct) * Cscale,
     Clt, by positivity, hClt, max Nb (max Ns (max Ng Nt)),
     hNb.trans (le_max_left _ _), ?_⟩
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
   obtain ⟨hrD, hDpos, hDm, hbands, hKL⟩ :
       2 * S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧ 4 * S.D ≤ S.m ∧
         8 ≤ S.K ∧ 8 * S.K * S.m ≤ F.L S.n := by
     simpa only [hr, hmScale, hDScale, hKScale, roundedLogRadius] using
       hgeom S.n (by omega)
-  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h S E₀ Ω hgs hgraph hanchor (by omega)
+  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hanchor (by omega)
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     Ce F.e hprefix hrD hDpos hDm
   refine ⟨hrD, hDpos, hDm, hm, hM, ?_⟩
@@ -237,8 +242,8 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
   refine ⟨hwindow, hd, ?_⟩
   have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy
-  have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
-  have hcont := (haux S.n (by omega)).2.2 Λ Ω Ωt hgs.1 hΩt X
+  have hΩt : ‖Ωt‖ = 1 := htrgs.1
+  have hcont := (haux S.n (by omega)).2.2 Λ Ω Ωt hΩ hΩt X
     ((Nat.cast_le.mpr (Finset.card_le_card hX)).trans hcard) htrace
   have hSt : regionalEntropy Λ q Ωt X ≤
       Ce * (S.n : ℝ) ^ (1 + F.e) + (S.n : ℝ) ^ (-247 : ℝ) := by

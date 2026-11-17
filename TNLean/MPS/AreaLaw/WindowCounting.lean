@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.Algebra.FinsetSubtypeSum
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Consecutive-window interactions on a chain
@@ -47,6 +48,8 @@ open ManyBody (ChainSupport card_interval_le interval mem_interval)
 noncomputable section
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -194,7 +197,8 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1))
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (l r : ℕ) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (windowBudgetConst q R)) :
     Real.log (Entropy.surprisalMoment
@@ -225,8 +229,9 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
     apply one_div_le_one_div_of_le hpos
     apply mul_le_mul_of_nonneg_left _ (by norm_num)
     exact Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hbudget (by linarith))
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  change toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω at heig
+  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
+  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
   have heig' : toEuclideanLin (∑ X : A, g X) Ω = (E₀ : ℂ) • Ω := by
     rw [hsum]
     exact heig

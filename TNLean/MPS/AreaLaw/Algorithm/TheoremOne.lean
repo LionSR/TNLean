@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Theorem 1: polynomial time in the chain length and the accuracy
@@ -38,6 +39,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216.
 open ManyBody (interval)
 
 open Matrix Cslib
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
@@ -140,7 +143,8 @@ theorem exists_theorem_one_of_valid (hq : 2 ≤ q) {Delta : ℝ} (hDelta : 0 < D
       let R := lvvAccuracyParameter L Delta η
       let ψ := FreeM.eval o (groundStateProgram hq h hs h0 h1 Delta R)
       (∀ (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        IsGappedGroundState (∑ j, h j) E Γ Delta →
+        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E Delta →
+        groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ} →
         ‖ψ‖ = 1 ∧ 1 - η ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧
           IsOpenMPS L q (lvvSuccessiveCardBound q (min Delta 1) (L + 2 * R ^ 2) *
             max 1 (lvvSuccessiveBondBound q (min Delta 1) (L + 2 * R ^ 2))) (fun x ↦ ψ x)) ∧
@@ -149,9 +153,9 @@ theorem exists_theorem_one_of_valid (hq : 2 ≤ q) {Delta : ℝ} (hDelta : 0 < D
   obtain ⟨P, d, hP, hcost⟩ := exists_groundStateProgram_cost_polynomial_of_valid hq hDelta
   refine ⟨P, d, hP, fun o hv L hL η hη hΔη h hs h0 h1 ↦ ?_⟩
   intro R ψ
-  refine ⟨fun E Γ hgs ↦ ?_, ?_⟩
+  refine ⟨fun E Γ hΩ hgap hspan ↦ ?_, ?_⟩
   · obtain ⟨hψ1, hover, hmps⟩ := groundStateProgram_spec_of_valid hv hL hq h hs h0 h1 hDelta
-      (one_le_lvvAccuracyParameter L Delta η) E Γ hgs
+      (one_le_lvvAccuracyParameter L Delta η) E Γ hΩ hgap hspan
     exact ⟨hψ1, le_trans (by linarith [four_mul_div_lvvAccuracyParameter_le (L := L) hDelta hη])
       hover, hmps⟩
   · have hc := (hcost o hv L R hL h hs h0 h1).2

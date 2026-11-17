@@ -10,6 +10,7 @@ import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeFilter
 import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeParameters
 import TNLean.MPS.AreaLaw.AKLV.SequentialApproximation
 import TNLean.MPS.AreaLaw.AKLV.VariableWindowRefinement
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Matrix product approximation of a frustration-free ground vector
@@ -39,6 +40,8 @@ open ManyBody (interval)
 
 open Matrix Polynomial Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -76,10 +79,11 @@ theorem aklv_frustrationFree_dimension_and_gap_bounds {L q : ℕ}
     have heq : (0 : ℝ) = g := hi.symm.trans
       ((congrArg hH.eigenvalues (Subsingleton.elim i j)).trans hj)
     linarith
-  have hgs : IsGappedGroundState (∑ j, h j) 0 Ω g :=
-    isGappedGroundState_iff.mpr ⟨hΩ, hground,
-      by simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using hgap⟩
-  exact ⟨hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hgs⟩
+  obtain ⟨-, -, hgap, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
+    ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
+      WithLp.ofLp_smul]; exact hground, by simpa only [Complex.ofReal_zero, zero_smul, sub_zero]
+        using hgap⟩
+  exact ⟨hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hΩ hgap hspan⟩
 
 /-- Two physical filters at one cut. The filter of degree `s₀²` on the window of width
 `s₀`, applied to a product vector of good overlap, gives a vector of rank at most `D₀`

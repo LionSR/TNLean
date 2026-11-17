@@ -57,6 +57,8 @@ are stated under their displayed hypotheses.
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace Nat Topology
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section ShellSums
@@ -175,8 +177,8 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 /-- The compression of an operator to the ground space has norm at most that of the operator. -/
 theorem norm_groundCompression_le (H : Matrix n n ℂ) (E₀ : ℝ) (W : Matrix n n ℂ) :
     ‖groundCompression H E₀ W‖ ≤ ‖W‖ := by
-  set P := (groundEigenspace H E₀).starProjection
-  have hP : ‖P‖ ≤ 1 := (groundEigenspace H E₀).starProjection_norm_le
+  set P := (groundSpace H E₀).starProjection
+  have hP : ‖P‖ ≤ 1 := (groundSpace H E₀).starProjection_norm_le
   calc ‖groundCompression H E₀ W‖ ≤ ‖P‖ * ‖toEuclideanCLM (n := n) (𝕜 := ℂ) W‖ * ‖P‖ := by
         unfold groundCompression
         exact (norm_mul_le _ _).trans (mul_le_mul_of_nonneg_right (norm_mul_le _ _)
@@ -213,10 +215,10 @@ theorem isSelfAdjoint_groundCompression (H : Matrix n n ℂ) (E₀ : ℝ) {W : M
 orthonormal basis `v` of the ground space it is determined by its matrix elements. -/
 theorem groundCompression_apply_eq_sum {H : Matrix n n ℂ} {E₀ : ℝ} {m : ℕ}
     {v : Fin m → EuclideanSpace ℂ n}
-    (hspan : ∀ u ∈ groundEigenspace H E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c) (W : Matrix n n ℂ)
+    (hspan : ∀ u ∈ groundSpace H E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c) (W : Matrix n n ℂ)
     (x : EuclideanSpace ℂ n) :
     groundCompression H E₀ W x = ∑ c, ⟪v c, groundCompression H E₀ W x⟫_ℂ • v c :=
-  hspan _ ((groundEigenspace H E₀).starProjection_apply_mem _)
+  hspan _ ((groundSpace H E₀).starProjection_apply_mem _)
 
 end Compression
 
@@ -561,7 +563,7 @@ theorem sum_norm_offDiagonalPartFamily_le_oibu_levels [NeZero d] (Kg : ℝ) (kg 
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) {J : ℝ}
     (hJ : ∀ k, ‖h k‖ ≤ J) {m : ℕ} [NeZero m] {v : Fin m → EuclideanSpace ℂ (ι → Fin d)}
     (hv : Orthonormal ℂ v)
-    (hspan : ∀ u ∈ groundEigenspace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
+    (hspan : ∀ u ∈ groundSpace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
     {L : ℕ} (j : ℕ → κ) (hj : ∀ ℓ, ∃ ℓ' < L, j ℓ' = j ℓ) (r : ℕ → Fin m → ℝ)
     (hdiag : ∀ ℓ a, ∀ c ∈ labelClass r ℓ a, ∀ e ∈ labelClass r ℓ a,
       ⟪v c, groundCompression (∑ k, h k) E₀ (h (j ℓ)) (v e)⟫_ℂ =

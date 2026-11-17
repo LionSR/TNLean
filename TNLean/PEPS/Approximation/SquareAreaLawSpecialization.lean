@@ -10,6 +10,7 @@ import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.RegionBlock.Basic
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The square-grid entropy area law at range one
@@ -59,6 +60,8 @@ open scoped BigOperators ComplexOrder
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -188,16 +191,18 @@ Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58),
 area-law Theorem 1.1 and Corollary 1.2. -/
 theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : Lattice.LocalHamiltonian Λ q 1 J, ∀ E₀ : ℝ,
-      ∀ Ω : Lattice.StateSpace Λ q, Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
     {L : ℕ} (h : SquareHamiltonian L q J) {E₀ : ℝ} {Ω : StateSpace L q}
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (A : Finset (Vertex L)) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
     FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
-  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hΩ
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΩ hgap hspan
   have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
-    (squareAreaLawState Ω) hgap (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
+    (squareAreaLawState Ω) hΩ' hgap' hspan' (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
     this
@@ -212,6 +217,7 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
     (harea : AreaLaw.UniformAreaLaw) : SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) 1 J Δ hJ hΔ
-  exact ⟨C, hC, fun _ _ ⟨h, _, hΩ⟩ A ↦ finiteProductEntropy_le_of_areaLawBound hbound h hΩ A⟩
+  exact ⟨C, hC, fun _ _ ⟨h, _, hΩ, hgap, hspan⟩ A ↦
+    finiteProductEntropy_le_of_areaLawBound hbound h hΩ hgap hspan A⟩
 
 end TNLean.PEPS.Approximation

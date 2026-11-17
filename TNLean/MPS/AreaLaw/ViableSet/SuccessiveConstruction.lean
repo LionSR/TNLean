@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep
 import TNLean.MPS.AreaLaw.ViableSet.Endpoints
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The sweep
@@ -31,6 +32,8 @@ open ManyBody (interval)
 
 open Matrix
 open scoped ComplexOrder MatrixOrder
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -84,7 +87,8 @@ theorem lvvSweep_spec (hq : 2 ≤ q)
       (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS
         (if i = 0 then 1 else lvvSuccessiveBondBound q Delta L) v) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
+        groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
         IsViable Γ (lvvSuccessiveError Delta / L)
           (lvvSweep hq h hs h0 h1 Delta i : Set (LeftBlockVector L q i)) := by
   induction i with
@@ -96,9 +100,9 @@ theorem lvvSweep_spec (hq : 2 ≤ q)
       exact isOpenMPS_of_internal_cutMatrix_rank_le
         (WithLp.toLp 2 fun x ↦ emptyLeftVector L q (leftConfigOfFin x))
         (fun k hk0 hkL ↦ by omega)
-    · intro E₀ Γ hgs
+    · intro E₀ Γ hΩ hgap hspan
       obtain ⟨v, hv, hoverlap, hsupport⟩ :=
-        (isViableMPS_emptyLeftVector hgs.1).2.2
+        (isViableMPS_emptyLeftVector hΩ).2.2
       refine ⟨v, hv, ?_, hsupport⟩
       have hδ : 0 ≤ lvvSuccessiveError Delta / (L : ℝ) :=
         div_nonneg (lvvSuccessiveError_pos hDelta).le (Nat.cast_nonneg L)
@@ -109,8 +113,8 @@ theorem lvvSweep_spec (hq : 2 ≤ q)
     simp only [Nat.succ_ne_zero, ↓reduceIte]
     exact ⟨card_lvvSweepStep_le hq h hs h0 h1 hDelta hi _,
       fun v hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq h hs h0 h1 hDelta hi _ hv,
-      fun E₀ Γ hgs ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi _ E₀ Γ hgs
-        (hviable E₀ Γ hgs)⟩
+      fun E₀ Γ hΩ hgap hspan ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi _ E₀ Γ hΩ hgap hspan
+        (hviable E₀ Γ hΩ hgap hspan)⟩
 
 /-- The scalar singleton and the successive steps give one sequence of viable families
 before every ground pair: the existence form of `lvvSweep_spec`. LVV13, `algo53.tex`,
@@ -129,7 +133,8 @@ theorem exists_positive_chain_successive_viable_sets (hq : 2 ≤ q)
         (∀ v ∈ S i, IsLeftOpenMPS
           (if i = 0 then 1 else lvvSuccessiveBondBound q Delta L) v) ∧
         ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-          IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+          ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
+          groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
           IsViable Γ (lvvSuccessiveError Delta / L) (S i : Set (LeftBlockVector L q i)) :=
   ⟨lvvSweep hq h hs h0 h1 Delta, rfl, fun _ hi ↦ lvvSweep_succ hq h hs h0 h1 Delta hi,
     fun i hi ↦ lvvSweep_spec hq h hs h0 h1 hDelta i hi⟩

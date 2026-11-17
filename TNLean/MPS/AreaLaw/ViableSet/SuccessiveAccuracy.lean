@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveApproximation
 import TNLean.MPS.AreaLaw.ViableSet.PrefixMPS
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Arbitrary accuracy with a uniform polynomial degree
@@ -32,6 +33,8 @@ open ManyBody (interval)
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The capped-gap successive error is strictly below one. -/
@@ -50,7 +53,7 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L → ∀ R : ℕ, 1 ≤ R →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-          (interval L j.val (j.val + 2))) (_h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
+          (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
       let N := L + 2 * R ^ 2
       let hi : L ≤ N := Nat.le_add_right _ _
       let z : Fin q := ⟨0, by omega⟩
@@ -59,11 +62,13 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
         (∀ i : ℕ, i ≤ N → (S i).card ≤ P * (N + 1) ^ d ∧
           (∀ v ∈ S i, IsLeftOpenMPS (P * (N + 1) ^ d) v) ∧
           ∀ (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-            IsGappedGroundState (∑ j, h j) E Γ Delta →
+            ‖Γ‖ = 1 → IsGapped (∑ j, h j) E Delta →
+            groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ} →
             IsViable (paddedGroundVector hi z Γ)
               (lvvSuccessiveError (min Delta 1) / N) (S i : Set (LeftBlockVector N q i))) ∧
         ∀ (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-          IsGappedGroundState (∑ j, h j) E Γ Delta →
+          ‖Γ‖ = 1 → IsGapped (∑ j, h j) E Delta →
+          groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ} →
           ∃ w ∈ Submodule.span ℂ (S L : Set (LeftBlockVector N q L)), ‖w‖ = 1 ∧
             ‖(LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv hi)).symm w - Γ‖ ^ 2 ≤
               1 / (R : ℝ) ^ 2 ∧
@@ -102,14 +107,18 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
     refine ⟨hcard.trans (hBB.trans_eq hbudget.symm), ?_, ?_⟩
     · intro v hv
       exact (hmps v hv).mono (max_le_max le_rfl (hBB.trans_eq hbudget.symm))
-    · intro E Γ hgs
-      exact hviable E (paddedGroundVector hi z Γ)
-        (isGappedGroundState_paddedInteraction hL hi z h hgs hDelta)
-  · intro E Γ hgs
+    · intro E Γ hΩ hgap hspan
+      obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
+        (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
+        hspan hDelta
+      exact hviable E _ hpn hpg hps
+  · intro E Γ hΩ hgap hspan
     obtain ⟨hcard, hmps, hviable⟩ := hS L hi
-    have hpad := isGappedGroundState_paddedInteraction hL hi z h hgs hDelta
+    obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
+      hspan hDelta
     obtain ⟨w, hw, hwnorm, herror, hmpsw⟩ :=
-      (hviable E _ hpad).exists_prefix_mps_of_paddedGroundVector hi z hgs.1 hδ hmps
+      (hviable E _ hpn hpg hps).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ hmps
     refine ⟨w, hw, hwnorm, ?_, hmpsw.mono ?_⟩
     · have hRreal : 0 < (R : ℝ) ^ 2 := sq_pos_of_pos (by exact_mod_cast (show 0 < R by omega))
       have hNR : 2 * (R : ℝ) ^ 2 ≤ N := by

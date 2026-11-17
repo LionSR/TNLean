@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The marginal-tail parameter of a general cut
@@ -45,6 +46,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -207,14 +210,15 @@ finite-range Hamiltonian with local dimension `q ≥ 1`, every cut `A`, every `n
 Source: `02-initial.tex`, lines 207–212. -/
 theorem _root_.TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary
     (h : LocalHamiltonian Λ q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q}
-    (hΔ : 0 < Δ) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ))
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
     (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
         (regionalEntropy Λ q Ω A)
         (typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
-          Real.log (n + 2)) :=
-  (h.one_sub_rpow_le_typicalMass_reducedState hJ hΔ hgs A n M).trans
+          Real.log (n + 2)) := by
+  exact (h.one_sub_rpow_le_typicalMass_reducedState hJ hΔ hΩ hgap hspan A n M).trans
     (typicalMass_le_typicalMass_of_le (reducedState_posSemidef Λ q Ω A).eigenvalues_nonneg _
       (concentrationWidth_le hq R hJ hΔ A n hM))
 

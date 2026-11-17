@@ -179,7 +179,7 @@ theorem SquareEntropyAreaLawAt.adaptivePatchSupply
     ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
         AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
           (adaptivePatchExponent q J Δ B₀ p C_A) p L := by
-  intro L hL Ω ⟨h, E₀, hgs⟩
+  intro L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩
   refine adaptivePatchSupply_of_closedSquare_cylinders (by omega) hB₀
     (nestedPatchRadiusExponent_pos C_A (by omega) hJ hΔ hB₀.le hp.le).le hL Ω
     AreaLaw.Geometry.nestedPatchCount (fun u j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
@@ -188,8 +188,8 @@ theorem SquareEntropyAreaLawAt.adaptivePatchSupply
     (fun u j ↦ AreaLaw.Geometry.le_nestedPatchRadius u j.val)
     (fun u hu j ↦ AreaLaw.Geometry.nestedPatchRadius_le_two_mul hu j.isLt)
     (fun u hu huL ↦ ?_)
-    (fun z u hu4 huL ↦ hA.uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp L hL h E₀ Ω hgs z u
-      hu4 huL)
+    (fun z u hu4 huL ↦ hA.uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp L hL h E₀ Ω hΩ hgap hspan
+      z u hu4 huL)
   have hf : (⌊u / 2⌋₊ : ℝ) ≤ u / 2 :=
     Nat.floor_le (R := ℝ) (a := u / 2) (div_nonneg hu zero_le_two)
   simp only [AreaLaw.Geometry.nestedPatchCount, Nat.cast_add, Nat.cast_one]

@@ -9,6 +9,7 @@ import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.ViableSet.Basic
 import TNLean.MPS.AreaLaw.ViableSet.TrimmedWitness
 import TNLean.MPS.AreaLaw.ViableSet.TrimmingConstants
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A trimmed witness for a viable set
@@ -34,6 +35,8 @@ open ManyBody (interval)
 open Matrix
 open scoped InnerProductSpace Matrix Kronecker ComplexOrder
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
@@ -47,7 +50,8 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {k : ℕ}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {k : ℕ}
     {S : Set (LeftBlockVector L q k)}
     (hviable : IsViable Γ (((Δ / 169) ^ 2) / L) S) :
     ∃ (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ)
@@ -66,7 +70,7 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
   classical
   let c : ℝ := (Δ / 169) ^ 2
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   obtain ⟨hc0, hc, -⟩ := lvv_trimming_constant_bounds hΔ hΔ4
   change 0 < c at hc0
   change c ≤ 1 / 1600 at hc
@@ -76,18 +80,18 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
   have hΓψ : 1 - c / L ≤ ‖⟪Γ, ψ⟫_ℂ‖ := by
     rw [norm_inner_symm]
     exact hψΓ
-  have hE := h.re_inner_le_of_overlap_div_of_range_one hgs hL hψ hΓψ
+  have hE := h.re_inner_le_of_overlap_div_of_range_one hΩ hspan hL hψ hΓψ
   let D := constantCutBond q 1 1 Δ c
   obtain ⟨PΓ, hPΓ⟩ := exists_isTrimmingProjection
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Γ) D
   let u := ‖chainTrim Γ k PΓ‖⁻¹ • chainTrim Γ k PΓ
   have hB := h.one_sub_le_re_inner_chainTrim (by omega : 1 ≤ q) (by norm_num)
-    hΔ hgs hc0 k hPΓ
+    hΔ hΩ hgap hspan hc0 k hPΓ
   have hu : ‖u‖ = 1 := norm_normalized_chainTrim_eq_one (by linarith : c < 1) hB
   have huD : (cutMatrix u k).rank ≤ D := rank_cutMatrix_normalized_chainTrim_le hPΓ
   have huΓ : 1 - c ≤ ‖⟪u, Γ⟫_ℂ‖ := hB.trans (Complex.re_le_norm _)
   have huψ : 1 - 4 * c ≤ ‖⟪u, ψ⟫_ℂ‖ := by
-    have hov := one_sub_two_mul_add_le_norm_inner hu hψ hgs.1 hc0.le
+    have hov := one_sub_two_mul_add_le_norm_inner hu hψ hΩ hc0.le
       (by linarith : c ≤ 1) (div_nonneg hc0.le (by positivity))
       (hcdiv.trans (by linarith : c ≤ 1)) huΓ hψΓ
     linarith
@@ -99,7 +103,7 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
   rw [hblock] at hHL hHR
   obtain ⟨w, m, W, x, hw, hwD, hwE, hwPV, hW, hmD, hwx, hxPV⟩ :=
     exists_trimmed_witness_chain hsplit hHL hHR hK0 hK1
-      (hgs.posSemidef_sub_smul_one hΔ.le) hψ hE hu huD huψ
+      (hgap.posSemidef_sub_ground h.operator_isHermitian hΔ.le) hψ hE hu huD huψ
       (by linarith : 2 * (4 * c) < 1)
       ((spanProjection_mul_cutMatrix_eq_iff (S := S)).mpr hψS)
   refine ⟨w, m, W, x, hw, (spanProjection_mul_cutMatrix_eq_iff (S := S)).mp hwPV,

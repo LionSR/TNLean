@@ -34,12 +34,14 @@ recorded in `docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 noncomputable local instance (H : Matrix (ι → Fin d) (ι → Fin d) ℂ) (E₀ : ℝ) :
-    InnerProductSpace ℂ (groundEigenspace H E₀) := (groundEigenspace H E₀).innerProductSpace
+    InnerProductSpace ℂ (groundSpace H E₀) := (groundSpace H E₀).innerProductSpace
 
 set_option backward.isDefEq.respectTransparency false in
 /-- A constructed basis bounds the summed off-diagonal parts of the actual truncated
@@ -64,17 +66,17 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le [NeZ
     (hsK : ∀ i, ∀ j ∈ s i, X j ⊆ K i) (hXK : ∀ i, X i ⊆ K i)
     (Robs : ℕ) (hKDiam : ∀ i, ∀ x ∈ K i, ∀ z ∈ K i, G.edist x z ≤ Robs)
     (vObs : ℕ) (hKCard : ∀ i, (K i).card ≤ vObs)
-    [NeZero (Module.finrank ℂ (groundEigenspace (∑ i, h i) E₀))] :
-    let n := Module.finrank ℂ (groundEigenspace (∑ i, h i) E₀)
+    [NeZero (Module.finrank ℂ (groundSpace (∑ i, h i) E₀))] :
+    let n := Module.finrank ℂ (groundSpace (∑ i, h i) E₀)
     let γ := commutatorRate R vR b₀ ΔE
     let C := commutatorConst R vObs b₀ |Kg| kg * Real.exp (γ * (2 * Robs + 1))
-    ∃ b : OrthonormalBasis (Fin n) ℂ (groundEigenspace (∑ i, h i) E₀),
+    ∃ b : OrthonormalBasis (Fin n) ℂ (groundSpace (∑ i, h i) E₀),
       ∑ i, ‖offDiagonalPartFamily (fun c ↦ (b c : EuclideanSpace ℂ (ι → Fin d)))
         (groundCompression (∑ i, h i) E₀ (truncatedTerm r ΔE h s i))‖ ≤
         ((n - 1 : ℕ) : ℝ) ^ 2 * recursiveBasisCoeff n C *
           (|b₀| * (|Kg| * shellSumConst (γ / 2 ^ n) kg)) := by
   classical
-  let V := groundEigenspace (∑ i, h i) E₀
+  let V := groundSpace (∑ i, h i) E₀
   let M := truncatedTerm r ΔE h s
   let B := fun i ↦ groundSpaceCompression (∑ i, h i) E₀ (M i)
   let n := Module.finrank ℂ V

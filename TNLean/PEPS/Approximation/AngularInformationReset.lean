@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 
 import TNLean.PEPS.Approximation.AngularInformationGeometry
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information reset for the padded annular regions
@@ -22,6 +23,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -96,8 +99,9 @@ theorem IsSquareGroundState.squareResetBound (q : ℕ) (hq : 1 ≤ q) (J : ℝ) 
     {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     SquareResetBound q (IsSquareGroundState q J Δ) p (resetWidth J Δ p)
       (resetThreshold q J Δ p) :=
-  fun L hL Ω ⟨h, E₀, hΩ⟩ ↦
-    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L hL h E₀ Ω hΩ
+  fun L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩ ↦
+    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L hL h E₀ Ω
+      hΩ hgap hspan
 
 open Classical in
 /-- **The information reset for the padded annular regions, with explicit constants.** The
@@ -111,7 +115,8 @@ theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
     (J : ℝ) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
       ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
           0 ≤ a' → 0 < d → 0 < s →
           let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter
@@ -128,9 +133,9 @@ theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
             resetWidth J Δ p * (1 + b + Real.log L) ≤ a' * s / 2 →
             FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
               (L : ℝ) ^ (-p) := by
-  intro L hL h E₀ Ω hΩ
+  intro L hL h E₀ Ω hΩ hgap hspan
   exact angular_information_reset_of_squareResetBound
-    (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp) L hL Ω ⟨h, E₀, hΩ⟩
+    (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp) L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩
 
 open Classical in
 /-- The original-gap information reset applied to the actual padded annular
@@ -144,7 +149,8 @@ theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L →
         ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (o : ℝ × ℝ) (A E : Set (ℝ × ℝ)) (a' d s : ℝ),
             0 ≤ a' → 0 < d → 0 < s →
             let R : Finset (SquareLatticeVertex L L) := Finset.univ.filter

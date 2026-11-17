@@ -74,6 +74,8 @@ the degenerate ground space at lines 395–491, eq. `lc` (lines 1548–1561), eq
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace mem_groundSpace_iff_mulVec)
+
 namespace TNLean.Lattice
 
 section Ground
@@ -85,22 +87,22 @@ as an operator on the Euclidean space, where `P` is the orthogonal projection on
 eigenspace. This is `P_low W P_low` in Hastings, arXiv:cond-mat/0508554v3, lines 1562–1601. -/
 noncomputable def groundCompression (H : Matrix n n ℂ) (E₀ : ℝ) (W : Matrix n n ℂ) :
     EuclideanSpace ℂ n →L[ℂ] EuclideanSpace ℂ n :=
-  (groundEigenspace H E₀).starProjection * toEuclideanCLM (n := n) (𝕜 := ℂ) W *
-    (groundEigenspace H E₀).starProjection
+  (groundSpace H E₀).starProjection * toEuclideanCLM (n := n) (𝕜 := ℂ) W *
+    (groundSpace H E₀).starProjection
 
 /-- The filtered operator and `W` have the same compression to the ground space:
 `P W_tilde P = P W P`. Hastings, arXiv:cond-mat/0508554v3, line 1562. -/
 theorem groundCompression_gaussianFilteredTerm {q ΔE : ℝ} (hq : 0 ≤ q) {H : Matrix n n ℂ}
     (hH : H.IsHermitian) (E₀ : ℝ) (W : Matrix n n ℂ) :
     groundCompression H E₀ (gaussianFilteredTerm q ΔE H W) = groundCompression H E₀ W := by
-  set K := groundEigenspace H E₀
+  set K := groundSpace H E₀
   ext1 x
   refine ext_inner_left ℂ fun y => ?_
   simp only [groundCompression, mul_apply_eq_comp]
   rw [← K.inner_starProjection_left_eq_right, ← K.inner_starProjection_left_eq_right]
   exact inner_gaussianFilteredTerm_ground hq hH W
-    (mem_groundEigenspace_iff.mp (K.starProjection_apply_mem y))
-    (mem_groundEigenspace_iff.mp (K.starProjection_apply_mem x))
+    (mem_groundSpace_iff_mulVec.mp (K.starProjection_apply_mem y))
+    (mem_groundSpace_iff_mulVec.mp (K.starProjection_apply_mem x))
 
 /-- The filtered operator maps the ground space nearly into itself:
 `‖(1 - P) W_tilde P‖ ≤ ‖W‖ e^{-q/2}`. Hastings, arXiv:cond-mat/0508554v3, line 1585,
@@ -108,10 +110,10 @@ following eq. `gs`. -/
 theorem norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (W : Matrix n n ℂ) :
-    ‖(1 - (groundEigenspace H E₀).starProjection) *
+    ‖(1 - (groundSpace H E₀).starProjection) *
         toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W) *
-        (groundEigenspace H E₀).starProjection‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
-  set K := groundEigenspace H E₀
+        (groundSpace H E₀).starProjection‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
+  set K := groundSpace H E₀
   refine ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun x => ?_
   simp only [mul_apply_eq_comp, _root_.sub_apply, one_apply_eq_self]
   refine (norm_sub_starProjection_gaussianFilteredTerm_le hq hΔE hH hgap W
@@ -124,10 +126,10 @@ theorem norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le {q ΔE : ℝ
 theorem norm_starProjection_mul_gaussianFilteredTerm_mul_one_sub_le {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (W : Matrix n n ℂ) :
-    ‖(groundEigenspace H E₀).starProjection *
+    ‖(groundSpace H E₀).starProjection *
         toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W) *
-        (1 - (groundEigenspace H E₀).starProjection)‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
-  set P := (groundEigenspace H E₀).starProjection
+        (1 - (groundSpace H E₀).starProjection)‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
+  set P := (groundSpace H E₀).starProjection
   have hP : star P = P := (isSelfAdjoint_starProjection _).star_eq
   have hstar : star (toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W)) =
       toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H Wᴴ) := by
@@ -154,11 +156,11 @@ theorem norm_groundCompression_commutator_le {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE 
   have hlow := norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le hq hΔE hH hgap W
   have hhigh := norm_starProjection_mul_gaussianFilteredTerm_mul_one_sub_le hq hΔE hH hgap W
   rw [← groundCompression_gaussianFilteredTerm (ΔE := ΔE) hq hH E₀ W]
-  set P := (groundEigenspace H E₀).starProjection
+  set P := (groundSpace H E₀).starProjection
   set A := toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W)
   set B' := toEuclideanCLM (n := n) (𝕜 := ℂ) B
-  have hPP : P * P = P := (groundEigenspace H E₀).isIdempotentElem_starProjection.eq
-  have hP : ‖P‖ ≤ 1 := (groundEigenspace H E₀).starProjection_norm_le
+  have hPP : P * P = P := (groundSpace H E₀).isIdempotentElem_starProjection.eq
+  have hP : ‖P‖ ≤ 1 := (groundSpace H E₀).starProjection_norm_le
   have hB : ‖B'‖ = ‖B‖ := l2_opNorm_toEuclideanCLM B
   have hWe : 0 ≤ ‖W‖ * Real.exp (-q / 2) := mul_nonneg (norm_nonneg _) (Real.exp_pos _).le
   have hAB : ‖A * B' - B' * A‖ =

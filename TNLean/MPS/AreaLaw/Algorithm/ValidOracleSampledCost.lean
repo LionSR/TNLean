@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Algorithm.SampledCost
 import TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost
 import TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Theorem 1 on the sampled route under every valid oracle
@@ -40,6 +41,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 and 652--678.
 open ManyBody (interval)
 
 open Matrix Cslib MeasureTheory
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
@@ -101,7 +104,8 @@ theorem cost_sampledSweepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b : ℕ) (i : ℕ) (hi : i ≤ L) :
@@ -120,7 +124,8 @@ theorem cost_sampledSweepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
           ((hgood ⟨i, by omega⟩).2 t) k
     have hcard : (FreeM.eval o (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) i)).card ≤
         max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) := by
-      refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I hm hgood
+      refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I
+          hm hgood
         b i (by omega)).1.trans ?_
       unfold sampledSizeBudget
       split_ifs <;> simp
@@ -134,7 +139,8 @@ theorem cost_sampledGroundStateProgram_le_of_valid (hv : IsValidOracle o) (hL : 
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b : ℕ) :
@@ -143,13 +149,15 @@ theorem cost_sampledGroundStateProgram_le_of_valid (hv : IsValidOracle o) (hL : 
   classical
   simp only [sampledGroundStateProgram, FreeM.cost_bind, FreeM.cost_lift,
     queryCost_energyMinimizer, sampledGroundStateCostBound]
-  have hsweep := cost_sampledSweepProgram_le_of_valid hv hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I
+  have hsweep := cost_sampledSweepProgram_le_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1
+      hδc I
     hm hgood b L le_rfl
   have hcard : ((FreeM.eval o (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) L)).image
       fun w ↦ (fullLeftEquiv L q).symm w).card ≤
       max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) := by
     refine Finset.card_image_le.trans ?_
-    refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I hm hgood
+    refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm
+        hgood
       b L le_rfl).1.trans ?_
     simp only [show L ≠ 0 by omega, ↓reduceIte]
     exact le_max_of_le_right le_rfl
@@ -172,7 +180,8 @@ theorem exists_sampledGroundStateProgram_success_cost_polynomial_of_valid (hq : 
       (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
       (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
+      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∀ o : {ι : Type} → LinearAlgebraQuery q ι → ι, IsValidOracle o →
       let δ := sampledPrecisionConstant Δ η / L
       1 - 1 / (2 * (L : ℝ) ^ 2) ≤
@@ -189,20 +198,21 @@ theorem exists_sampledGroundStateProgram_success_cost_polynomial_of_valid (hq : 
   obtain ⟨P, d, hP, hpoly⟩ := (isNatPolynomialBounded_sampledGroundStateCostBound (q := q) hΔ
     C₁ p₁ C p).exists_one_le
   refine ⟨C, p, P, d, hC, hP, ?_⟩
-  intro L _ h hs h0 h1 E₀ Γ hgs hEB o hv δ
+  intro L _ h hs h0 h1 E₀ Γ hΩ hgap hspan hEB o hv δ
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
   obtain ⟨hδ0, hδ1, hδc, hover⟩ := sampledPrecision_spec hΔ hη hL
   obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
   have hD1 : 1 ≤ sampledRankBound q L E₀ Δ δ := Nat.one_le_pow _ _ (by omega)
   have hℓ : sampledWordCount q L E₀ Δ δ ≤ C₁ * L ^ p₁ :=
     (Nat.le_mul_of_pos_right _ hD1).trans hℓD
-  refine (measureReal_forall_goodWords_ge h h0 h1 hgs hΔ hδ0).trans (measureReal_mono ?_)
+  refine (measureReal_forall_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
   intro I hI
   obtain ⟨hψ1, hψover, hψmps⟩ := sampledGroundStateProgram_spec_of_valid hv
-    (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I (Nat.le_ceil _) hI (C * L ^ p)
+    (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I (Nat.le_ceil _) hI
+      (C * L ^ p)
   have hcost := cost_sampledGroundStateProgram_le_of_valid hv (Nat.pos_of_neZero L) hq h hs h0 h1
-    hΔ hgs hδ0 hδ1 hδc I (Nat.le_ceil _) hI (C * L ^ p)
+    hΔ hΩ hgap hspan hδ0 hδ1 hδc I (Nat.le_ceil _) hI (C * L ^ p)
   refine ⟨hψ1, le_trans (by linarith) hψover, hψmps.mono (hbond L E₀ hL hE₀ hE₀L hEB), ?_⟩
   exact hcost.trans ((sampledGroundStateCostBound_mono q Δ L hℓ hD le_rfl).trans (hpoly L hL))
 

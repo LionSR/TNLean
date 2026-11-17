@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.DomainInformationReset
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy
 import QICLean.Entropy.ConditionalTwoFamilies
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information at logarithmic separation in a finite integer domain
@@ -23,6 +24,8 @@ Extension of the chain lemma in the TNLean one-dimensional note, `lem:logsep`,
 open ManyBody (interval lineDomainGraph sitePos sitePos_sub_val_of_walk)
 
 open QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -54,7 +57,8 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
       ∀ (Λ : Finset ℤ), L₀ ≤ Λ.card →
       ∀ (h : DomainHamiltonian Λ q R J)
         (Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)) (E₀ : ℝ),
-        Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ T E : Finset (Fin Λ.card),
           (∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ k₀ ∧
             T = Finset.univ.biUnion (fun i ↦ interval Λ.card (a i) (z i))) →
@@ -73,7 +77,7 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     DomainHamiltonian.information_reset q hq R J Δ hΔ p hp
   refine ⟨3 * Cp * (2 + b) + 4, max Lreset ⌈Real.exp 1⌉₊,
     by positivity, hLreset.trans (le_max_left _ _), ?_⟩
-  intro Λ hL h Ω E₀ hgs T E hT hdist
+  intro Λ hL h Ω E₀ hΩ hgap hspan T E hT hdist
   have hLn : 1 ≤ Λ.card := hLreset.trans ((le_max_left _ _).trans hL)
   have hL1 : (1 : ℝ) ≤ Λ.card := by exact_mod_cast hLn
   have hLexp : Real.exp 1 ≤ (Λ.card : ℝ) :=
@@ -137,18 +141,18 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
   have hJ : 0 ≤ J := h.norm_bound_nonneg ⟨0, hLn⟩
   have hD : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
     obtain ⟨n₀, a, z, hn₀, hT⟩ := hT
-    have hbound := h.regionEntropy_neighborhood_biUnion_intervals_le hq hJ hΔ hgs
+    have hbound := h.regionEntropy_neighborhood_biUnion_intervals_le hq hJ hΔ hΩ hgap hspan
       (Finset.univ : Finset (Fin n₀)) a z n
     rw [← hT, Finset.card_univ, Fintype.card_fin] at hbound
     exact hbound.trans ((mul_le_mul_of_nonneg_left (le_max_right _ _) (by positivity)).trans
       (mul_le_mul_of_nonneg_right (by exact_mod_cast hn₀) hc))
   have hMI : FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω D C ≤ b := by
     have hbound := FiniteProduct.mutualInformation_le_two_entropy
-      (fun _ : Fin Λ.card ↦ Fin q) Ω hgs.1 D C hDC
+      (fun _ : Fin Λ.card ↦ Fin q) Ω hΩ D C hDC
     rw [← Entropy.regionEntropy_eq_entropy] at hbound
     dsimp only [b]
     nlinarith only [hbound, hD, mul_nonneg hk₀r hc]
-  exact hreset Λ ((le_max_left _ _).trans hL) h Ω E₀ hgs
+  exact hreset Λ ((le_max_left _ _).trans hL) h Ω E₀ hΩ hgap hspan
     D C T E hDC hTD hEC b hMI hmarginT hmarginE
 
 end TNLean.MPS.AreaLaw

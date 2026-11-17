@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.GaussianFilter.MatrixIntegral
 import QICLean.Analysis.SpectralFilter.MatrixFilter
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Gaussian-filtered terms of a gapped Hamiltonian
@@ -56,6 +57,8 @@ Hamiltonians equal to `H`, and the matrix elements are
 
 open GaussianFilter Matrix
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
+
+open ManyBody (groundSpace mem_groundSpace_iff_mulVec)
 
 namespace TNLean.Lattice
 
@@ -153,27 +156,11 @@ theorem sum_gaussianFilteredTerm {ι : Type*} (s : Finset ι) (q ΔE : ℝ) {H :
     ∑ i ∈ s, gaussianFilteredTerm q ΔE H (Hterm i) = H := by
   rw [← gaussianFilteredTerm_sum s q ΔE hH, hsum, gaussianFilteredTerm_self]
 
-/-- The ground eigenspace of `H` at energy `E₀`, as a subspace of the Euclidean space. -/
-noncomputable abbrev groundEigenspace (H : Matrix n n ℂ) (E₀ : ℝ) :
-    Submodule ℂ (EuclideanSpace ℂ n) :=
-  Module.End.eigenspace (toEuclideanLin H) (E₀ : ℂ)
-
-/-- A vector lies in the ground eigenspace exactly when `H` acts on its coordinates as `E₀`. -/
-theorem mem_groundEigenspace_iff {H : Matrix n n ℂ} {E₀ : ℝ} {v : EuclideanSpace ℂ n} :
-    v ∈ groundEigenspace H E₀ ↔ H *ᵥ WithLp.ofLp v = (E₀ : ℂ) • WithLp.ofLp v := by
-  rw [groundEigenspace, Module.End.mem_eigenspace_iff]
-  constructor
-  · intro h
-    simpa using congrArg WithLp.ofLp h
-  · intro h
-    apply (WithLp.ofLp_injective 2)
-    simpa using h
-
 /-- An eigenvector of `H` with energy different from `E₀` is orthogonal to the
 ground eigenspace. -/
-theorem inner_eq_zero_of_mem_groundEigenspace {H : Matrix n n ℂ} (hH : H.IsHermitian)
+theorem inner_eq_zero_of_mem_groundSpace {H : Matrix n n ℂ} (hH : H.IsHermitian)
     {E₀ E : ℝ} (hE : E ≠ E₀) {v w : EuclideanSpace ℂ n}
-    (hv : H *ᵥ WithLp.ofLp v = (E : ℂ) • WithLp.ofLp v) (hw : w ∈ groundEigenspace H E₀) :
+    (hv : H *ᵥ WithLp.ofLp v = (E : ℂ) • WithLp.ofLp v) (hw : w ∈ groundSpace H E₀) :
     ⟪v, w⟫_ℂ = 0 := by
   have hsymm := (Matrix.isSymmetric_toEuclideanLin_iff.mpr hH) v w
   have hv' : toEuclideanLin H v = (E : ℂ) • v := by
@@ -193,22 +180,22 @@ the component of `W_tilde ψ` orthogonal to the ground eigenspace has norm at mo
 theorem norm_sub_starProjection_gaussianFilteredTerm_le {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
-    (W : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀) :
+    (W : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀) :
     ‖toEuclideanLin (gaussianFilteredTerm q ΔE H W) ψ -
-        (groundEigenspace H E₀).starProjection
+        (groundSpace H E₀).starProjection
           (toEuclideanLin (gaussianFilteredTerm q ΔE H W) ψ)‖ ≤
       ‖W‖ * Real.exp (-q / 2) * ‖ψ‖ := by
-  set K := groundEigenspace H E₀
+  set K := groundSpace H E₀
   set b := hH.eigenvectorBasis
   set x := toEuclideanLin (gaussianFilteredTerm q ΔE H W) ψ
   set y := x - K.starProjection x
-  have hψ' := mem_groundEigenspace_iff.mp hψ
+  have hψ' := mem_groundSpace_iff_mulVec.mp hψ
   have hb (k : n) : H *ᵥ WithLp.ofLp (b k) = (hH.eigenvalues k : ℂ) • WithLp.ofLp (b k) :=
     SpectralFilter.mulVec_eigenvectorBasis_complex hH k
   have hcoef (k : n) :
       ‖⟪b k, y⟫_ℂ‖ ≤ Real.exp (-q / 2) * ‖⟪b k, toEuclideanLin W ψ⟫_ℂ‖ := by
     rcases eq_or_ne (hH.eigenvalues k) E₀ with hk | hk
-    · have hmem : b k ∈ K := mem_groundEigenspace_iff.mpr (by simpa [hk] using hb k)
+    · have hmem : b k ∈ K := mem_groundSpace_iff_mulVec.mpr (by simpa [hk] using hb k)
       have : ⟪b k, y⟫_ℂ = 0 := by
         rw [inner_eq_zero_symm]
         exact K.starProjection_inner_eq_zero x (b k) hmem
@@ -216,7 +203,7 @@ theorem norm_sub_starProjection_gaussianFilteredTerm_le {q ΔE : ℝ} (hq : 0 �
       positivity
     · have hgapk : E₀ + ΔE ≤ hH.eigenvalues k := (hgap k).resolve_left hk
       have hzero : ⟪b k, K.starProjection x⟫_ℂ = 0 :=
-        inner_eq_zero_of_mem_groundEigenspace hH hk (hb k) (K.starProjection_apply_mem x)
+        inner_eq_zero_of_mem_groundSpace hH hk (hb k) (K.starProjection_apply_mem x)
       rw [inner_sub_right, hzero, sub_zero, inner_gaussianFilteredTerm hq hH W (hb k) hψ',
         norm_mul, Complex.norm_real, Real.norm_of_nonneg (Real.exp_pos _).le]
       gcongr

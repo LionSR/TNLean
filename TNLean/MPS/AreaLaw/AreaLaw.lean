@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.WindowCounting
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The one-dimensional area law from a global gap
@@ -45,6 +46,8 @@ in `TNLean.MPS.AreaLaw.ComponentReduction`.
 open ManyBody (ChainSupport interval)
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -92,11 +95,11 @@ in `1 + J/Δ`, giving the coarser bound `C₀ (1 + J/Δ)`. That scalar relaxatio
 recover the exact intermediate bound stated here. -/
 theorem regionEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (a b : ℕ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a b) Ω ≤
       chainIntervalEntropyBound q R J Δ := by
-  have hΩ : ‖Ω‖ = 1 := hgs.1
-  have hdisc := two_mul_condEntropy_interval_le hq hJ hΔ h hgs a b
+  have hdisc := two_mul_condEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a b
   have hAL := regionEntropy_le_union_add hΩ (disjoint_interval_chainBuffer L q R J Δ a b)
   have hT := regionEntropy_le_card_mul_log hΩ (chainBuffer L q R J Δ a b)
   have hcard : (((chainBuffer L q R J Δ a b).card : ℕ) : ℝ) ≤
@@ -201,12 +204,13 @@ Hamiltonian on the chain of `L` sites, the entropy of every subset `A` is at mos
 `C_int(q, R, J, Δ)` times its number of boundary edges. TNLean note, Theorem A. -/
 theorem regionEntropy_le_mul_card_boundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (A : Finset (Fin L)) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
       chainIntervalEntropyBound q R J Δ * (boundaryEdges L A).card :=
-  regionEntropy_le_mul_card_boundaryEdges_of_intervals hgs.1
+  regionEntropy_le_mul_card_boundaryEdges_of_intervals hΩ
     (chainIntervalEntropyBound_nonneg hq hJ hΔ)
-    (fun a b ↦ regionEntropy_interval_le hq hJ hΔ h hgs a b) A
+    (fun a b ↦ regionEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a b) A
 
 /-- **The one-dimensional area law.** For every local dimension `q ≥ 1`, range `R`, term
 norm `J ≥ 0` and gap `Δ > 0` there is a constant, namely `C₀(q, R) (1 + J/Δ)`, such that
@@ -216,13 +220,14 @@ Theorem A, on the chain. -/
 theorem chainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ C = chainAreaLawConst q R * (1 + J / Δ) ∧
       ∀ L : ℕ, ∀ h : ChainHamiltonian L q R J, ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
-        Matrix.IsGappedGroundState h.operator E₀ Ω Δ → ∀ A : Finset (Fin L),
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Fin L),
           Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤ C * (boundaryEdges L A).card := by
   have hle := chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ
   refine ⟨chainAreaLawConst q R * (1 + J / Δ), h0.trans hle, rfl, ?_⟩
-  intro L h E₀ Ω hgs A
-  refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hgs A).trans ?_
+  intro L h E₀ Ω hΩ hgap hspan A
+  refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans ?_
   exact mul_le_mul_of_nonneg_right hle (Nat.cast_nonneg _)
 
 open scoped Matrix.Norms.L2Operator in
@@ -245,7 +250,8 @@ private theorem regionEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 
       (Entropy.crossingTerms (fun i ↦ (σ i).1) (interval L a b))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ fun i ↦ (σ i).1) ≤ B)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState (∑ i, g i) E₀ Ω Δ) (l r : ℕ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, g i) E₀ Δ)
+    (hspan : groundSpace (∑ i, g i) E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω ≤
       ((8 * R * Real.log q + Real.log 2) *
           (5 + min (32 * N * (q : ℝ) ^ (2 * (R + 1)))
@@ -268,9 +274,8 @@ private theorem regionEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 
   have hmE : E ≤ m := (le_max_right _ _).trans ((le_max_left _ _).trans hM)
   have hmT : Tt ≤ m := (le_max_right _ _).trans hM
   -- the discount, the Araki--Lieb inequality and the buffer
-  have hΩ : ‖Ω‖ = 1 := hgs.1
   have hdisc := two_mul_condEntropy_interval_le_of_family_budget hq hJ hΔ g σ hsupp hherm
-    hnorm N hB hcross hbudget m hm4 hmE hmT hgs l r
+    hnorm N hB hcross hbudget m hm4 hmE hmT hΩ hgap hspan l r
   set T := interval L (l - m * R) (r + m * R) \ interval L l r
   have hAL := regionEntropy_le_union_add hΩ (show Disjoint (interval L l r) T from
     Finset.disjoint_sdiff)
@@ -344,7 +349,8 @@ theorem chainAreaLaw_of_consecutive_terms
         (∀ X : ChainSupport L R, h.term X ≠ 0 →
           ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
         ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
-          Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Fin L),
             Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
               C * (boundaryEdges L A).card := by
@@ -352,28 +358,27 @@ theorem chainAreaLaw_of_consecutive_terms
   have hC : 0 ≤ windowAreaLawConst q R * (1 + J / Δ) :=
     mul_nonneg (cutAreaLawConst_nonneg _ q R) (by have := div_nonneg hJ hΔ.le; linarith)
   refine ⟨_, hC, rfl, ?_⟩
-  intro L h hwindow E₀ Ω hgs A
+  intro L h hwindow E₀ Ω hΩ hgap hspan A
   let I := {X : ChainSupport L R // h.term X ≠ 0}
   let g : I → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
   have hsum : (∑ X : I, g X) = h.operator :=
     (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
-  have hgs' : Matrix.IsGappedGroundState (∑ X : I, g X) E₀ Ω Δ := by
-    rw [hsum]
-    exact hgs
-  refine regionEntropy_le_mul_card_boundaryEdges_of_intervals hgs.1 hC
+  rw [← hsum] at hgap hspan
+  refine regionEntropy_le_mul_card_boundaryEdges_of_intervals hΩ hC
     (fun a b ↦ ?_) A
   exact regionEntropy_interval_le_of_family_budget hq hJ hΔ g (fun X ↦ X.val)
     (fun X ↦ h.supported X.val) (fun X ↦ h.hermitian X.val) (fun X ↦ h.norm_le X.val)
     (2 * R) (one_le_windowBudgetConst q R)
     (h.card_crossingTerms_interval_le_of_consecutive_terms hwindow)
-    (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hgs' a b
+    (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hΩ hgap hspan a b
 
 /-- The interval entropy estimate with the original polynomial source constants.
 Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679. -/
 theorem regionEntropy_interval_le_polynomial
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (l r : ℕ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
     let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
     let m : ℕ :=
       ⌈max (max (max 4 (4 * C_E / Δ))
@@ -383,14 +388,14 @@ theorem regionEntropy_interval_le_polynomial
       8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ := by
   intro C_E m
   let T := interval L (l - m * R) (r + m * R) \ interval L l r
-  have hdisc := two_mul_condEntropy_interval_le_polynomial hq hJ hΔ h hgs l r
+  have hdisc := two_mul_condEntropy_interval_le_polynomial hq hJ hΔ h hΩ hgap hspan l r
   change 2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r ∪ T) Ω -
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
       1 + 2 * C_E / Δ at hdisc
-  have hAL := regionEntropy_le_union_add hgs.1 (Finset.disjoint_sdiff :
+  have hAL := regionEntropy_le_union_add hΩ (Finset.disjoint_sdiff :
     Disjoint (interval L l r) T)
-  have hT := regionEntropy_le_card_mul_log hgs.1 T
+  have hT := regionEntropy_le_card_mul_log hΩ T
   have hcard : (T.card : ℝ) ≤ 2 * ((m : ℝ) * R) := by
     exact_mod_cast card_interval_enlargement_sdiff_le L l r (m * R)
   have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)

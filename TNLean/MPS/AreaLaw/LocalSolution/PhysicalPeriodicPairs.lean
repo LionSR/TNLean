@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
 import TNLean.Lattice.GaussianFilteredTruncationGround
 import TNLean.Lattice.TranslationSupercellSpacing
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Periodic neighbouring-block operators from local Gaussian filters
@@ -18,6 +19,8 @@ are the input.
 
 open Matrix QuantumCircuit TNLean.Lattice
 open scoped Matrix.Norms.L2Operator InnerProductSpace ComplexOrder MatrixOrder
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw.LocalSolution
 
@@ -264,7 +267,8 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
     (hJ : ∀ i, ‖h i‖ ≤ J)
     (hS : ∀ i, (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R).card ≤ S)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ ((Fin N × Fin (2 * ℓ)) → Fin d)}
-    (hgs : Matrix.IsGappedGroundState (∑ i, h i) E₀ Ω Δ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Ω}) :
     let M := periodicFilteredPair R θ Δ h
     let ε := periodicFilterError N ℓ R S m J θ Δ μ
     (∀ j, (M j).IsHermitian ∧
@@ -287,7 +291,8 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
       (a i - ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤
         J * Real.exp (-θ / 2) + ε := by
     intro i
-    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ hgs (h i) (a i)
+    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ
+      (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hgap hspan (h i) (a i)
     have hreal : ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) =
         ⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ :=
       (isSymmetric_toEuclideanLin_iff.mpr (haH i)).coe_re_inner_self_apply Ω
@@ -317,9 +322,10 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
         exact_mod_cast hdv)
   · exact norm_edgePartition_le_of_fibre_card periodicCoarseEdge a hJ0 haJ j
       (card_periodicCoarseEdge_fibre j).le
-  · exact centeredNorm_periodicCoarseOperator_le a hgs.1 hJ0 haJ j
+  · exact centeredNorm_periodicCoarseOperator_le a hΩ hJ0 haJ j
   · exact residual_periodicCoarseOperator_le a Ω (by positivity) hares j
   · exact norm_error_gap_transfer (Matrix.isHermitian_sum _ fun i _ ↦ hherm i)
-      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) hgs.2.2 herr
+      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) (hgap.posSemidef_sub_smul_one
+        (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hspan) herr
 
 end TNLean.MPS.AreaLaw.LocalSolution

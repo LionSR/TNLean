@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hamiltonian
 import QICLean.Algebra.UnitaryTraceZero
 import QICLean.Representation.RegionPowerSymbol
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Upper bounds for the gap of an open chain
@@ -27,6 +28,8 @@ open ManyBody (ChainSupport interval mem_interval)
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ} {J E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -35,7 +38,8 @@ variable {L q : ℕ} {J E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q
 at most four times the interaction norm bound. The Hamiltonian and gap inequalities are those
 of the TNLean one-dimensional note, Section 1, `eq:ham` and `eq:gap`. -/
 theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 1 J)
-    (hL : 0 < L) (hq : 2 ≤ q) (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) :
+    (hL : 0 < L) (hq : 2 ≤ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) :
     Δ ≤ 4 * J := by
   classical
   let x : Fin L := ⟨0, hL⟩
@@ -55,17 +59,18 @@ theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 
       Entropy.localLift_one] using
       congrArg (Entropy.localLift (n := fun _ : Fin L ↦ q) {x}) hUunit
   have hφ : ‖toEuclideanLin K Ω‖ = 1 :=
-    (Entropy.norm_toEuclideanLin_of_conjTranspose_mul_self hK Ω).trans hgs.1
+    (Entropy.norm_toEuclideanLin_of_conjTranspose_mul_self hK Ω).trans hΩ
   have horth : ⟪Ω, toEuclideanLin K Ω⟫_ℂ = 0 := by
     simpa only [K, Entropy.inner_localLift] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin h.operator (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
-    simpa [hφ, horth] using hgs.2.2.gap_le (toEuclideanLin K Ω)
+    simpa [hφ, horth] using
+      (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_le (toEuclideanLin K Ω)
   have hE : (⟪Ω, toEuclideanLin h.operator Ω⟫_ℂ).re = E₀ := by
     have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
       rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
-      exact hgs.2.1
-    rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hgs.1]
+      exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+    rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
     simp
   have hnorm (X : ChainSupport L 1) (v : EuclideanSpace ℂ (Fin L → Fin q))
       (hv : ‖v‖ = 1) : |(⟪v, toEuclideanLin (h.term X) v⟫_ℂ).re| ≤ J := by
@@ -92,7 +97,7 @@ theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 
         (⟪Ω, toEuclideanLin (h.term X) Ω⟫_ℂ).re ≤ if x ∈ X.1 then 2 * J else 0 := by
     split_ifs with hx
     · linarith [(abs_le.mp (hnorm X (toEuclideanLin K Ω) hφ)).2,
-        (abs_le.mp (hnorm X Ω hgs.1)).1]
+        (abs_le.mp (hnorm X Ω hΩ)).1]
     · simp only [hsame X hx, sub_self, le_refl]
   have hcard : (Finset.univ.filter (fun X : ChainSupport L 1 ↦ x ∈ X.1)).card ≤ 2 := by
     let t := Finset.univ.filter (fun y : Fin L ↦ y.val = 1)
@@ -145,7 +150,8 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState (∑ i, h i) E₀ Ω Δ) : Δ ≤ 1 := by
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Ω}) : Δ ≤ 1 := by
   classical
   let x : Fin L := ⟨0, hL⟩
   obtain ⟨U, hU⟩ := Matrix.IsHermitian.exists_unitary_trace_mul_eq_zero
@@ -164,12 +170,14 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
       Entropy.localLift_one] using
       congrArg (Entropy.localLift (n := fun _ : Fin L ↦ q) {x}) hUunit
   have hφ : ‖toEuclideanLin K Ω‖ = 1 :=
-    (Entropy.norm_toEuclideanLin_of_conjTranspose_mul_self hK Ω).trans hgs.1
+    (Entropy.norm_toEuclideanLin_of_conjTranspose_mul_self hK Ω).trans hΩ
   have horth : ⟪Ω, toEuclideanLin K Ω⟫_ℂ = 0 := by
     simpa only [K, Entropy.inner_localLift] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
-    simpa [hφ, horth] using hgs.2.2.gap_le (toEuclideanLin K Ω)
+    simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian hΩ
+      hspan).gap_le (toEuclideanLin K Ω)
   have hnonneg (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q)) :
       0 ≤ (⟪v, toEuclideanLin (h i) v⟫_ℂ).re := by
     simpa only [RCLike.re_to_complex] using
@@ -207,8 +215,8 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
   have hE : (⟪Ω, toEuclideanLin (∑ i, h i) Ω⟫_ℂ).re = E₀ := by
     have heig : toEuclideanLin (∑ i, h i) Ω = (E₀ : ℂ) • Ω := by
       rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
-      exact hgs.2.1
-    rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hgs.1]
+      exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+    rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
     simp
   have hcard : (Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val = 0)).card ≤ 1 :=
     Finset.card_le_one.mpr fun i hi j hj ↦

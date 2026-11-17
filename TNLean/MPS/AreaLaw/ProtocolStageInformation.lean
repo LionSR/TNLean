@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolSweepFrames
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import Mathlib.Data.Nat.Dist
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information estimates for the births and the first direct death
@@ -38,6 +39,8 @@ noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 variable {L w : ℕ}
 
@@ -91,7 +94,8 @@ theorem birth_death_information_of_logarithmic_separation
       ∀ (L : ℕ), L₀ ≤ L →
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (w : ℕ), 1 ≤ w →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
@@ -112,7 +116,7 @@ theorem birth_death_information_of_logarithmic_separation
     ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
       q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
   refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
-  intro L hL h Ω E₀ hgs w hw hwidth k
+  intro L hL h Ω E₀ hΩ hgap hspan w hw hwidth k
   obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation hw k
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
@@ -121,7 +125,7 @@ theorem birth_death_information_of_logarithmic_separation
     have hT : ∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ 1 ∧
         interval L b c = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)) :=
       ⟨1, fun _ ↦ b, fun _ ↦ c, le_rfl, by simp⟩
-    have hi := hlogsep L hL h Ω E₀ hgs (interval L b c) E hT
+    have hi := hlogsep L hL h Ω E₀ hΩ hgap hspan (interval L b c) E hT
       (fun x hx y hy ↦ hwidth.trans (by exact_mod_cast hd x hx y hy))
     have hexponent : -(24 : ℝ) = ((-24 : ℤ) : ℝ) := by norm_num
     rw [hexponent, Real.rpow_intCast] at hi

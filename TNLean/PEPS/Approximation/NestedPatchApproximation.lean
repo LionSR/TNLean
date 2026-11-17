@@ -8,6 +8,7 @@ import TNLean.PEPS.Approximation.NestedPatchMarginalCloseness
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimumGrowth
 import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusChoice
 import TNLean.PEPS.AreaLaw.RegularizedPatchInverseCylinder
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform approximation in the selected nested cylinders
@@ -31,6 +32,8 @@ Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
 open scoped BigOperators ComplexOrder MatrixOrder
+
+open ManyBody (IsGapped groundSpace)
 open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
@@ -178,7 +181,8 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     (hq : 2 ≤ q) (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∀ (L : ℕ), 2 ≤ L →
       ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
           let Λ := AreaLaw.rectangularDomain L L
           letI : LinearOrder (Lattice.Site Λ) :=
@@ -198,19 +202,19 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
               (⨆ j, dependentRegionCylinder
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
             ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
-  intro L hL h E₀ Ω hgs center u hu huL
+  intro L hL h E₀ Ω hΩ hgap hspan center u hu huL
   have hκ : 0 < patchFilterExponent q J Δ := patchFilterExponent_pos_of_pos (by omega) hJ hΔ
   exact exists_closedSquare_cylinders_of_marginal_closeness hL hB₀ hp hκ
     (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (squareAreaLawState Ω)
-    ((norm_squareAreaLawState Ω).trans hgs.1) center (by linarith) huL
+    ((norm_squareAreaLawState Ω).trans hΩ) center (by linarith) huL
     (AreaLaw.Geometry.nestedPatchCount_pos u)
     (fun j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
     (fun i j hij ↦ add_le_add_right (mul_le_mul_of_nonneg_left (Nat.cast_le.mpr hij)
       (by norm_num : (0 : ℝ) ≤ 2)) u)
-    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, E₀, hgs⟩ center u (by linarith) j)
+    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, E₀, hΩ, hgap, hspan⟩ center u (by linarith) j)
     (fun b hb ↦ nestedPatch_minimizer_marginal_closeness q hJ.le hΔ hκ
       (patchFilterExponent_le_half q J Δ) (mul_patchFilterExponent_sq_le hJ.le hΔ.le)
-      L h E₀ Ω hgs center u b hu hb)
+      L h E₀ Ω hΩ hgap hspan center u b hu hb)
 
 open Classical in
 /-- The original square entropy area law gives a sum of nested regional cylinders
@@ -231,7 +235,8 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
     ∃ R₀ : ℝ, 0 < R₀ ∧
       ∀ (L : ℕ), 2 ≤ L →
         ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
             let Λ := AreaLaw.rectangularDomain L L
             letI : LinearOrder (Lattice.Site Λ) :=

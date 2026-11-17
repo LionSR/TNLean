@@ -4,13 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPS
-import TNLean.Algebra.GappedGroundState
 import QICLean.Channel.LeadingEigenvector
 import QICLean.Entropy.ThreeWayCut
 import QICLean.Entropy.RegionSplit
 import QICLean.Analysis.RectangularTraceNormAlgebra
 import QICLean.Analysis.EuclideanReindex
 import QICLean.Analysis.KroneckerOperatorNorm
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Gluing a left state at a cut of the chain
@@ -56,6 +56,8 @@ overlap at least `1 - 2 (e + ‖K‖ τ)/Δ` with the ground state.
 
 open Matrix
 open scoped Matrix Kronecker Matrix.Norms.L2Operator ComplexOrder InnerProductSpace
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -260,8 +262,10 @@ theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : �
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
     (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hgs : IsGappedGroundState (HL + K) E₀ Γ Δ) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
+    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
+    (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -292,7 +296,8 @@ theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : �
   set Γ' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × CutRight L q k) :=
     WithLp.toLp 2 (WithLp.ofLp Γ ∘ E.symm)
   have hsplit := reindex_gluingCut_eq hHL hK hDA
-  obtain ⟨hΓ, -, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   have hΓ' : ‖Γ'‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ
   have hgap' : (reindex E E (HL + K) - (E₀ : ℂ) • 1 -
@@ -364,8 +369,10 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
     (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hgs : IsGappedGroundState (HL + K) E₀ Γ Δ) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
+    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
+    (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -395,7 +402,8 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
   set Γ' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × CutRight L q k) :=
     WithLp.toLp 2 (WithLp.ofLp Γ ∘ E.symm)
   have hsplit := reindex_gluingCut_eq hHL hK hDA
-  obtain ⟨hΓ, -, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   -- The ground state and the gap in the cut coordinates.
   have hΓ' : ‖Γ'‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ

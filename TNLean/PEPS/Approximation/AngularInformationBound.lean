@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Entropy.FiniteProduct
 import TNLean.PEPS.Approximation.AngularSeparationBridges
 import TNLean.PEPS.Approximation.Basic
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information under angular separation
@@ -49,6 +50,8 @@ namespace TNLean.PEPS.Approximation
 
 open Set
 
+open ManyBody (IsGapped groundSpace)
+
 /-- The site `(i, j)` of the open square of side `L`, placed in the plane at `(i + 1, j + 1)`, so
 that the sites form `Λ_L = {1, …, L}²`. Source: `00-introduction.tex`, line 21. -/
 def sitePosition (L : ℕ) (v : SquareLatticeVertex L L) : ℝ × ℝ :=
@@ -75,7 +78,8 @@ def AngularInformationBound (q : ℕ) (J Δ : ℝ) : Prop :=
   ∀ a A₀ : ℝ, 0 < a → 1 ≤ A₀ → ∀ m₀ : ℕ, ∀ p : ℝ, 0 < p →
     ∃ D L₀ : ℝ, ∀ L : ℕ, L₀ ≤ L →
       ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
         ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
@@ -149,6 +153,7 @@ theorem AngularInformationBound.exists_isAngularScale {q : ℕ} {J Δ : ℝ}
     {p : ℕ} (hp : 0 < p) :
     ∃ D L₀ : ℝ, IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ := by
   obtain ⟨D, L₀, hD⟩ := hang a A₀ ha hA₀ m₀ p (by exact_mod_cast hp)
-  exact ⟨D, L₀, IsAngularScale.of_sitePosition fun L hL Ω ⟨h, E₀, hΩ⟩ ↦ hD L hL h E₀ Ω hΩ⟩
+  exact ⟨D, L₀, IsAngularScale.of_sitePosition fun L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩ ↦
+    hD L hL h E₀ Ω hΩ hgap hspan⟩
 
 end TNLean.PEPS.Approximation

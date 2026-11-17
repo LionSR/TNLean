@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedCollarInformation
 import TNLean.PEPS.AreaLaw.Scan.SourceActualTerminalEntropy
 import TNLean.PEPS.AreaLaw.Scan.SharpInformationScalar
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical information from the same source-selected sharp comparison
@@ -31,6 +32,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -58,7 +61,8 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
@@ -100,7 +104,8 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -185,14 +190,14 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
   have hterminal := fun n (hn : truncationEntropyThreshold q
       (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) ≤ n) =>
     source_actualTerminal_preEntropy_bounds_of_truncationEntropyThreshold_le q hq _ (C_T + 1) hg hn
-  intro Ce hCe Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Ce hCe Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm
   have hnT := hn
   simp only [sourceSelectedSharpEnergyThreshold, max_le_iff] at hnT
   replace hnT := hnT.2.2.2.1
   have hnpos : 0 < S.n := lt_of_lt_of_le two_pos
     ((two_le_sourceSelectedSharpEnergyThreshold _ _ _ _ _ _ _ _ _ _ _ _ _).trans hn)
-  obtain ⟨hm, hM, hdata⟩ := hsource Ce hCe Λ T hT h S E₀ Ω hgs hgraph hanchor hn
+  obtain ⟨hm, hM, hdata⟩ := hsource Ce hCe Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     htargetEntropy hprefix hrD hDpos hDm
   refine ⟨hm, hM, ?_⟩
@@ -206,7 +211,7 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
   have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
     St c Bpre continuity
-  have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
+  have hΩt : ‖Ωt‖ = 1 := htrgs.1
   have hKpos : 0 < S.K := by omega
   have hSt : 0 ≤ St := regionalEntropy_nonneg Λ q Ωt hΩt X
   have hselected := abs_log_card_and_selectedSchmidtEntropy_sub_le
@@ -218,7 +223,7 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
   have hSent : Sent ≤ St + c := by linarith only [(abs_le.mp hselected.2).2]
   have hpreBounds := hterminal S.n hnT (AdmissibleSupport Λ R) Λ T hT S
     rfl hgraph hdepth hnpos hKpos (by omega) hDpos hDm L hKL hrows
-    Ω Ωt hgs.1 hΩt hcard htrace Ce (Exponents.boxError : ℝ) hprefix
+    Ω Ωt hΩ hΩt hcard htrace Ce (Exponents.boxError : ℝ) hprefix
   change 0 ≤ gmax ∧ gmax ≤ max 0 Bpre ∧
     ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),
       0 ≤ (∑ band, ∑ j, tree.weight j * gpre j band) / (S.K : ℝ) ∧
@@ -240,7 +245,7 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
   obtain ⟨s, p, hp, hQ0, hQ, hδ0, hδcap, hδpower, hsharp⟩ := hk
   have hMI := (actualCharge_two_mutualInformation_le_selectedSharpExpression hT S hdepth
     hm hM hKpos L hKL Ωt hΩt E w hwindow.2.2.1
-    (fun i hi ↦ (hwindow.2.2.2.2.2 i hi).2) s p).2 Ω hgs.1
+    (fun i hi ↦ (hwindow.2.2.2.2.2 i hi).2) s p).2 Ω hΩ
   have hGpre : Gpre s p ≤ Bpre := (hpreBounds.2.2 (tree s p)).2
   have hδ : 0 ≤ (S.n : ℝ) ^ (-(1 / 2000 : ℝ)) + rem k / (g / 2) :=
     add_nonneg (Real.rpow_nonneg (Nat.cast_nonneg S.n) _)
@@ -279,7 +284,8 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
@@ -321,7 +327,8 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -425,7 +432,8 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
@@ -464,7 +472,8 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))

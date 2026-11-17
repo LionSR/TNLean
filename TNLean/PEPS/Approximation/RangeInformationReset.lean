@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.RangeResetUnitary
 import TNLean.PEPS.Approximation.InformationReset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The information reset at interaction range `R`
@@ -49,6 +50,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open Matrix QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 open scoped Kronecker
 
 noncomputable section
@@ -148,7 +151,8 @@ Source: `02-information.tex`, Lemma 3.3, lines 334–353, proof lines 355–630,
 theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ)
     (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L) (hΛ : Λ.card ≤ L ^ 2)
     (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q)
-    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site Λ)) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (b : ℝ) (hb : 0 ≤ b) (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A →
@@ -163,9 +167,9 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
   rw [rangeResetThreshold] at hL
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
-  have hΩ : ‖Ω‖ = 1 := (Matrix.isGappedGroundState_iff.mp hgs).1
   obtain ⟨-, -, U, hUu, hUs, hUerr⟩ :=
-    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ E₀ Ω hgs A C hAC b hb hI
+    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ E₀ Ω hΩ hgap hspan A C hAC
+      b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈rangeResetRadius R J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) +
       R ≤ rangeResetWidth R J Δ p * (1 + b + Real.log L) := by
@@ -205,7 +209,8 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
     (hΔ : 0 < Δ) (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L)
     (h : LocalHamiltonian (rectangularDomain L L) q R J) (E₀ : ℝ)
     (Ω : StateSpace (rectangularDomain L L) q)
-    (hgs : IsGappedGroundState (rectangularDomain L L) q h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site (rectangularDomain L L))) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A)
     (hC₀ : C₀ ⊆ C) (b : ℝ) (hb : 0 ≤ b)
     (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
@@ -214,7 +219,7 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
     (hCw : ∀ x ∈ C₀, ∀ y, y ∉ C →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) :
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
-  h.information_reset_of_card_le hq hJ hΔ hp hL (card_rectangularDomain L).le E₀ Ω hgs
+  h.information_reset_of_card_le hq hJ hΔ hp hL (card_rectangularDomain L).le E₀ Ω hΩ hgap hspan
     A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw
 
 /-- **Lemma 3.3 (information reset) at range `R`.** Fix `q ≥ 1`, `J ≥ 0`, a gap `Δ > 0` and
@@ -229,15 +234,17 @@ theorem information_reset (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < 
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L → ∀ (h : LocalHamiltonian (rectangularDomain L L) q R J) (E₀ : ℝ)
         (Ω : StateSpace (rectangularDomain L L) q),
-        IsGappedGroundState (rectangularDomain L L) q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (A C A₀ C₀ : Finset (Site (rectangularDomain L L))), Disjoint A C → A₀ ⊆ A →
         C₀ ⊆ C → ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b →
         (∀ x ∈ A₀, ∀ y, y ∉ A → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨rangeResetWidth R J Δ p, rangeResetThreshold q R J Δ p, rangeResetWidth_pos R hJ hΔ hp,
-    fun _L hL h E₀ Ω hgs A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
-      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀ Ω hgs A C A₀ C₀ hAC hA₀
+    fun _L hL h E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
+      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC
+        hA₀
         hC₀ b hb hI hAw hCw⟩
 
 end TNLean.Lattice.LocalHamiltonian

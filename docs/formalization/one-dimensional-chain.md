@@ -15,8 +15,8 @@ Theorem B by the preparation protocol).
 The model is stated natively on the chain of `L` sites (`Fin L`), with local
 dimension `q`, supports of range `R` (nonempty sets of sites of diameter at most
 `R`), one Hermitian term of norm at most `J` per support acting as the identity
-off its support, and a gapped ground vector in the sense of
-`Matrix.IsGappedGroundState`. Regional entropies are QICLean's
+off its support, and a unit vector spanning the ground space of a gapped
+Hamiltonian (`ManyBody.IsGapped` and `ManyBody.groundSpace`). Regional entropies are QICLean's
 `Entropy.regionEntropy`. The chain proof uses only the site-generic layer
 `TNLean/Lattice/` and QICLean: no module of `TNLean/MPS/AreaLaw/` imports
 `TNLean.PEPS`, directly or transitively. The two finite-dimensional cores (the
@@ -31,7 +31,7 @@ site of the chain, with no encoded holes.
 
 | Note statement | Formal statement | Status |
 |---|---|---|
-| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `ManyBody.interval`, `ManyBody.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `Matrix.IsGappedGroundState` | Definitions. |
+| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `ManyBody.interval`, `ManyBody.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `ManyBody.IsGapped`, `ManyBody.groundSpace` | Definitions. |
 | Lemma 3.1 (marginal tail bound) at a cut | `MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
 | Rényi entropies near one (`rem:renyi`) | `MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
@@ -43,7 +43,7 @@ site of the chain, with no encoded holes.
 | Original interval constant (`eq:final`) | `MPS.AreaLaw.regionEntropy_interval_le_polynomial` | Proved with `C_int = 8 m R log q + 1 + 2 C_E/Δ`, using the same original `C_E` and four-entry `m`, for every clipped coordinate interval. |
 | Prescribed accuracy with the original interval constant (extension of the printed `1/L` statement) | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial` | Proved for `L ≥ 1` and `0 < ε ≤ 1`: a unit MPS has error at most `ε` and bond dimension at most `⌊exp(C_int + 64 s log(2 L c₀/ε))⌋`, with `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`, using the original printed `C_int`. |
 | Quantitative two-line MPS bound (`thm:Bshort`) with the original constants | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial` | Proved for every `L ≥ 2`: a unit nonzero open MPS has error at most `1/L`, explicit integer bond dimension `⌊exp(C_int + 64 s log(2 L² c₀))⌋`, and the printed upper bound `2 exp(C_int) (32 exp(e/2) L⁴)^(1/u₀)`, where `u₀ = 1/(32 s)`. Normalization and phase adjustment follow with phase zero. |
-| Component factorization with the same gap (`lem:reductions`) | `Lattice.exists_isGappedGroundState_factors_of_kronecker_sum`, `Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator` | Proved for two Hermitian factors and for every nonempty finite family of them: the ground vector is the product of normalized factor ground vectors, the energies add, and each factor is a gapped ground vector with the original gap `Δ`. The finite-domain Theorem A below does not use it. |
+| Component factorization with the same gap (`lem:reductions`) | `Lattice.exists_isGapped_factors_of_kronecker_sum`, `Lattice.exists_isGapped_factors_of_sum_factorOperator` | Proved for two Hermitian factors and for every nonempty finite family of them: the ground vector is the product of normalized factor ground vectors, the energies add, and each factor is a gapped ground vector with the original gap `Δ`. The finite-domain Theorem A below does not use it. |
 | Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
@@ -227,7 +227,7 @@ doubled interaction by the actual paired swap. It retains the same supports
 and range, local dimension q² and term bound 2J; its operator identity is
 `MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator`.
 The theorem
-`MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState`
+`MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGapped`
 constructs the two ground-state predicates for the actual paired tensor
 square Ψ and its swap image Φ. Both vectors are normalized, have energy
 2E₀ and inherit the lower gap Δ from the original ground-state predicate

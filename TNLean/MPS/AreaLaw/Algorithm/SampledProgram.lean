@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Algorithm.GroundStateProgram
 import TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The sampled ground-state program and its success probability
@@ -47,6 +48,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216 (Theorem 1), 611
 open ManyBody (interval)
 
 open Matrix Cslib MeasureTheory
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -98,11 +101,12 @@ theorem measureReal_goodWords_ge [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) {δ : ℝ} (hδ : 0 < δ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {δ : ℝ} (hδ : 0 < δ) :
     1 - 1 / (2 * (L : ℝ) ^ 3) ≤
       (sampleMeasure (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ) L).real
         {I | GoodWords h E₀ (sampledPower L E₀ Δ δ) (δ / 8) (sampledLetterBound q L E₀ Δ δ) I} :=
-  one_sub_le_measureReal_sampledProjector h h0 h1 hgs hΔ (sampledPower L E₀ Δ δ)
+  one_sub_le_measureReal_sampledProjector h h0 h1 hΩ hgap hspan hΔ (sampledPower L E₀ Δ δ)
     (by positivity) (ℓ := sampledWordCount q L E₀ Δ δ) (κ := sampledLetterBound q L E₀ Δ δ)
     ((Nat.le_ceil _).trans (by simp [sampledWordCount, sampledProjectorWordCount]))
     (Nat.le_ceil _)
@@ -154,7 +158,8 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : GoodWords h E₀ m (δ / 8) κ I) {i : ℕ} (hi : i + 1 ≤ L)
@@ -165,8 +170,10 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       (sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S) := by
   classical
   let chain := ChainHamiltonian.ofBonds h hs h0 h1
-  have hgs' : IsGappedGroundState chain.operator E₀ Γ Δ := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgs
+  have hgapC : IsGapped chain.operator E₀ Δ := by
+    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
+  have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -179,7 +186,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
         (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
-        (AreaLaw.extend (i + 1) S) E₀ Γ hgs' hext⟩
+        (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
     operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs (I t)
@@ -192,9 +199,9 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
             vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ :=
           norm_sub_le_norm_sub_add_norm_sub _ _ _
       _ ≤ δ / 8 + δ / 8 := add_le_add hgood.1.le
-          (norm_powerProjector_sub_le hL h h0 h1 hgs hΔ (by positivity) m hm)
+          (norm_powerProjector_sub_le hL h h0 h1 hΩ hgap hspan hΔ (by positivity) m hm)
       _ = δ / 4 := by ring
-  have hout := isViableMPS_errorReductionSet_sampledFactors hi h E₀ I hrank hgs.1 hT hKP
+  have hout := isViableMPS_errorReductionSet_sampledFactors hi h E₀ I hrank hΩ hT hKP
     (by linarith)
   have hδeq : 4 * (δ / 4) = δ := by ring
   rw [hδeq] at hout
@@ -206,7 +213,8 @@ theorem sampledSweep_spec (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (i : ℕ) (hi : i ≤ L) :
@@ -219,14 +227,14 @@ theorem sampledSweep_spec (hL : 0 < L) (hq : 2 ≤ q)
       IsViable Γ δ (sampledSweep hq h hs h0 h1 E₀ Δ I i : Set (LeftBlockVector L q i)) := by
   induction i with
   | zero =>
-    obtain ⟨hcard, hmps, hviable⟩ := isViableMPS_emptyLeftVector (L := L) (q := q) hgs.1
+    obtain ⟨hcard, hmps, hviable⟩ := isViableMPS_emptyLeftVector (L := L) (q := q) hΩ
     exact ⟨by simp [sampledSweep], by simpa [sampledSweep] using hmps,
       by simpa [sampledSweep] using hviable.mono hδ0.le⟩
   | succ i ih =>
     obtain ⟨-, -, hviable⟩ := ih (by omega)
     rw [sampledSweep_succ hq h hs h0 h1 E₀ Δ I hi]
     simp only [Nat.succ_ne_zero, ↓reduceIte]
-    exact isViableMPS_sampledSweepStep hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc _ hm
+    exact isViableMPS_sampledSweepStep hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc _ hm
       (hgood ⟨i, by omega⟩) hi _ hviable
 
 /-! ## The programs -/
@@ -331,7 +339,8 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b D : ℕ) :
@@ -348,7 +357,7 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
   have hψ : ψ = energyMinimizer (∑ j, h j) (S.image fun w ↦ e.symm w) :=
     eval_sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I b D
   obtain ⟨hcard, hmps, hviable⟩ :=
-    sampledSweep_spec hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I hm hgood L le_rfl
+    sampledSweep_spec hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood L le_rfl
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
   obtain ⟨v, hv, hvnorm, hover⟩ := hviable.exists_fullLeftVector
   set U := Submodule.span ℂ ((S.image fun w ↦ e.symm w : Finset _) :
@@ -369,7 +378,10 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
   obtain ⟨hψU, hψnorm, hψmin⟩ := energyMinimizer_spec (∑ j, h j) (S.image fun w ↦ e.symm w) hUne
   rw [← hψ] at hψU hψnorm hψmin
   refine ⟨hψnorm, ?_, ?_⟩
-  · obtain ⟨hΓ, hEig, hgap⟩ := isGappedGroundState_iff.mp hgs
+  · have hΓ := hΩ
+    have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+    have hgap := hgap.posSemidef_sub_smul_one
+      (Matrix.posSemidef_sum Finset.univ fun i _ ↦ h0 i).isHermitian hΩ hspan
     have hover' : 1 - δ ≤ ‖⟪Γ, e.symm v⟫_ℂ‖ := by
       have : ⟪e.symm v, Γ⟫_ℂ = ⟪v, e Γ⟫_ℂ := by
         rw [← e.inner_map_map, e.apply_symm_apply]
@@ -377,8 +389,9 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
       exact hover
     let chain := ChainHamiltonian.ofBonds h hs h0 h1
     have hchain : chain.operator = ∑ j, h j := ChainHamiltonian.ofBonds_operator h hs h0 h1
-    have hgsChain : IsGappedGroundState chain.operator E₀ Γ Δ := by rwa [hchain]
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hgsChain hw'norm hover'
+    have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+      rw [hchain]; assumption
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy
@@ -411,7 +424,8 @@ theorem measureReal_forall_goodWords_ge [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) {δ : ℝ} (hδ : 0 < δ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {δ : ℝ} (hδ : 0 < δ) :
     1 - 1 / (2 * (L : ℝ) ^ 2) ≤
       (stepWordsMeasure L (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ)).real
         {I | ∀ i, GoodWords h E₀ (sampledPower L E₀ Δ δ) (δ / 8)
@@ -426,7 +440,7 @@ theorem measureReal_forall_goodWords_ge [NeZero L]
   have hμuniv : μ.real Set.univ = 1 := by simp [measureReal_def]
   have hGbad : (sampleMeasure ℓ m L).real Gᶜ ≤ 1 / (2 * (L : ℝ) ^ 3) := by
     rw [measureReal_compl (MeasurableSet.of_discrete), huniv]
-    have := measureReal_goodWords_ge h h0 h1 hgs hΔ hδ
+    have := measureReal_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ
     linarith
   -- The complement of the event is the union over the cuts of the bad coordinates.
   have hcompl : {I : Fin L → Fin ℓ → Fin m → Fin L | ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)}ᶜ =
@@ -462,7 +476,8 @@ theorem measureReal_sampledGroundStateProgram_success [NeZero L] (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) (b D : ℕ) :
     1 - 1 / (2 * (L : ℝ) ^ 2) ≤
       (stepWordsMeasure L (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ)).real
@@ -473,9 +488,10 @@ theorem measureReal_sampledGroundStateProgram_success [NeZero L] (hq : 2 ≤ q)
               max 1 (sampledRankBound q L E₀ Δ δ *
                 max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))))
               (fun x ↦ ψ x)} := by
-  refine (measureReal_forall_goodWords_ge h h0 h1 hgs hΔ hδ0).trans (measureReal_mono ?_)
+  refine (measureReal_forall_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
   intro I hI
-  exact sampledGroundStateProgram_spec (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc
+  exact sampledGroundStateProgram_spec (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1
+      hδc
     I (Nat.le_ceil _) hI b D
 
 /-- The viability precision constant giving overlap `1 - η`: the smaller of the precision
@@ -598,7 +614,8 @@ theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B
       (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
       (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
+      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       let δ := sampledPrecisionConstant Δ η / L
       1 - 1 / (2 * (L : ℝ) ^ 2) ≤
         (stepWordsMeasure L (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ)).real
@@ -608,11 +625,11 @@ theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B
             ‖ψ‖ = 1 ∧ 1 - η ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧ IsOpenMPS L q (C * L ^ p) (fun x ↦ ψ x)} := by
   obtain ⟨C, p, hC, hbond⟩ := exists_sampledBond_polynomial (B := B) hq hΔ hη
   refine ⟨C, p, hC, ?_⟩
-  intro L _ h hs h0 h1 E₀ Γ hgs hEB δ
+  intro L _ h hs h0 h1 E₀ Γ hΩ hgap hspan hEB δ
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
   obtain ⟨hδ0, hδ1, hδc, hover⟩ := sampledPrecision_spec hΔ hη hL
-  refine (measureReal_sampledGroundStateProgram_success hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc
+  refine (measureReal_sampledGroundStateProgram_success hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc
     (C * L ^ p) (sampledRankBound q L E₀ Δ δ)).trans (measureReal_mono fun I hI ↦ ?_)
   obtain ⟨hψ1, hψover, hψmps⟩ := hI
   exact ⟨hψ1, le_trans (by linarith) hψover, hψmps.mono (hbond L E₀ hL hE₀ hE₀L hEB)⟩

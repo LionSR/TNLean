@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.Lattice.LocalHamiltonian
 import QICLean.Algebra.L2OpNormReindex
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The original square Hamiltonian on its integer lattice domain
@@ -34,6 +35,8 @@ open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -224,39 +227,15 @@ theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
 /-- The original unit ground vector and full-system gap are preserved by
 the actual conversion. Source: area-law Corollary 1.2 and polynomial-PEPS
 `eq:global-gap`. -/
-theorem SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian
+theorem SquareHamiltonian.isGapped_toAreaLawHamiltonian
     {L q : ℕ} {J : ℝ} (h : SquareHamiltonian L q J)
-    {E₀ Δ : ℝ} {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
-    Lattice.IsGappedGroundState (AreaLaw.rectangularDomain L L) q
-      h.toAreaLawHamiltonian.operator E₀ (squareAreaLawState Ω) Δ := by
-  classical
-  let e := AreaLaw.rectangleConfigurationEquiv L L q
-  let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e
-  refine ⟨(norm_squareAreaLawState Ω).trans hΩ.1, ?_, ?_⟩
-  · rw [h.toAreaLawHamiltonian_operator]
-    have heq : Matrix.toEuclideanLin (Matrix.reindex e e h.operator) (E Ω) =
-        E (Matrix.toEuclideanLin h.operator Ω) := by
-      ext x
-      change (h.operator.submatrix e.symm e.symm *ᵥ (Ω.ofLp ∘ e.symm)) x =
-        (h.operator *ᵥ Ω.ofLp) (e.symm x)
-      rw [Matrix.submatrix_mulVec_equiv]
-      simp only [Function.comp_def, Equiv.symm_symm, Equiv.symm_apply_apply]
-    change Matrix.toEuclideanLin (Matrix.reindex e e h.operator) (E Ω) = _
-    rw [heq, show Matrix.toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω from hΩ.2.1,
-      map_smul]
-    rfl
-  · rw [h.toAreaLawHamiltonian_operator]
-    have hg := hΩ.2.2.submatrix e.symm
-    have hdef : (h.operator - (E₀ : ℂ) • 1 -
-        (Δ : ℂ) • (1 - vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).submatrix
-        e.symm e.symm = Matrix.reindex e e h.operator - (E₀ : ℂ) • 1 -
-          (Δ : ℂ) • (1 - vecMulVec (fun x ↦ squareAreaLawState Ω x)
-            (star (fun x ↦ squareAreaLawState Ω x))) := by
-      ext i j
-      simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sub_apply,
-        Matrix.smul_apply, Matrix.one_apply, Matrix.vecMulVec_apply, Pi.star_apply,
-        e.symm.injective.eq_iff]
-      rfl
-    exact hdef ▸ hg
+    {E₀ Δ : ℝ} {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
+    (hgap : IsGapped h.operator E₀ Δ) (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) :
+    ‖squareAreaLawState Ω‖ = 1 ∧ IsGapped h.toAreaLawHamiltonian.operator E₀ Δ ∧
+      groundSpace h.toAreaLawHamiltonian.operator E₀ =
+        Submodule.span ℂ {squareAreaLawState Ω} := by
+  rw [h.toAreaLawHamiltonian_operator]
+  exact ⟨(norm_squareAreaLawState Ω).trans hΩ, (ManyBody.isGapped_reindex_iff _).mpr hgap,
+    ManyBody.groundSpace_reindex_eq_span _ hspan⟩
 
 end TNLean.PEPS.Approximation

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap
 import TNLean.MPS.AreaLaw.Hastings.Window
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Hastings' area law on the chain from Lemma 1
@@ -60,6 +61,8 @@ printed `2^{ξ' ln q}` of eq. `smd`. Documented in
 open ManyBody (interval)
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -130,14 +133,14 @@ The assumption `C₁ ≥ 1` loses nothing, since enlarging `C₁` only weakens L
 of `S_max` carries the local fix of the module docstring. -/
 theorem regionEntropy_prefix_le_of_factorization (h : ChainHamiltonian L q R J)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁)
     (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l (C₁ * Real.exp (-(l / ξ'))) OB OL OR)
     (i : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
       areaLawBound ξ' C₁ q := by
-  have hΩ : ‖Ω‖ = 1 := hgs.1
   rcases lt_or_ge q 2 with hq | hq
   · -- For `q ≤ 1` every entropy vanishes, since `ln q = 0`.
     have hlog : Real.log q = 0 := by interval_cases q <;> simp
@@ -164,7 +167,7 @@ theorem regionEntropy_prefix_le_of_factorization (h : ChainHamiltonian L q R J)
         field_simp] at this
     have hl' : (2 * l : ℝ) ≤ l₀ := by exact_mod_cast hl
     nlinarith
-  refine regionEntropy_prefix_le_of_windowClaim_of_le (by omega) h hgs hξ' hC₁' hC l₀
+  refine regionEntropy_prefix_le_of_windowClaim_of_le (by omega) hΩ hξ' hC₁' hC l₀
     (le_max_left _ _) (fun i l ↦ windowEntropy Ω i l₀ l)
     (fun i k hik _ ↦ by
       have := cutEntropy_sub_le (q := q) hΩ hik

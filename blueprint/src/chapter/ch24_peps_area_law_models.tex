@@ -112,9 +112,9 @@ state the two models separately following
 \begin{definition}[Ground vector and regional entropy]
     \label{def:area_law_ground_entropy}
     \lean{
-        Matrix.IsGappedGroundState,
-        Matrix.isGappedGroundState_iff,
-        TNLean.Lattice.IsGappedGroundState,
+        ManyBody.IsGapped,
+        ManyBody.groundSpace,
+        ManyBody.isGapped_and_groundSpace_eq_span_iff,
         TNLean.Lattice.reducedState,
         TNLean.Lattice.reducedState_isHermitian,
         TNLean.Lattice.regionalEntropy,
@@ -132,6 +132,9 @@ state the two models separately following
         \label{eq:area_law_projector_gap}
         H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
     \end{align}
+    For $\Delta>0$ these conditions hold exactly when $H$ is Hermitian, every
+    eigenvalue of $H$ other than $E_0$ is at least $E_0+\Delta$, and the
+    eigenspace of $H$ at $E_0$ is the line spanned by $\Omega$.
     For $A\subseteq\Lambda$, the Hermitian reduced state and natural-logarithm
     von Neumann entropy ($0\log0=0$) are
     \begin{align}
@@ -147,7 +150,7 @@ state the two models separately following
 
 \begin{lemma}[Uniqueness from a positive global gap]
     \label{thm:area_law_ground_eigenspace}
-    \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
+    \lean{Matrix.PosSemidef.eigenspace_eq_span_of_gap}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $H$ be a finite-dimensional complex matrix, $E_0\in\mathbb R$, and
@@ -367,7 +370,6 @@ state the two models separately following
         TNLean.PEPS.Approximation.StateSpace,
         TNLean.PEPS.Approximation.SquareHamiltonian,
         TNLean.PEPS.Approximation.SquareHamiltonian.operator,
-        TNLean.PEPS.Approximation.SquareHamiltonian.IsGappedGroundState,
         TNLean.PEPS.Approximation.pepsVector,
         TNLean.PEPS.Approximation.HasPEPSApproximation,
         TNLean.PEPS.Approximation.PolynomialPEPSApproximation
@@ -649,7 +651,7 @@ state the two models separately following
 
 \begin{lemma}[The same ground vector and full-system gap]
     \label{thm:square_area_law_ground_gap}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGapped_toAreaLawHamiltonian}
     \leanok
     \uses{thm:square_area_law_hamiltonian_operator,thm:norm_square_area_law_state}
     Let $E_0,\Delta\in\mathbb R$. If a unit vector $\Omega$ satisfies
