@@ -46,7 +46,9 @@ import TNLean.MPS.MPU.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
+import TNLean.MPS.MPU.ConjugationEvenRankEquivalence
 import TNLean.MPS.MPU.ConjugationMPSClass
+import TNLean.MPS.MPU.ConjugationOddRankEquivalence
 import TNLean.MPS.MPU.ConjugationSourceFactors
 import TNLean.MPS.MPU.ConjugationStandardForms
 import TNLean.MPS.MPU.ConjugationStrictEquivalence
@@ -233,6 +235,7 @@ import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
 import TNLean.MPS.MPU.StandardFormConjugation
+import TNLean.MPS.MPU.StandardFormDoubling
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardFormParityCounterexample
@@ -259,6 +262,7 @@ import TNLean.MPS.MPU.TensorProductIndex
 import TNLean.MPS.MPU.ThreeFormInsertion
 import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.ThreeLeggedDecomposition
+import TNLean.MPS.MPU.TimeReversalBlockingParity
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalMPSClass
