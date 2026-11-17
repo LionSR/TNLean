@@ -16,6 +16,67 @@
     % Source lines: paper_v2.tex 1845--1876.
 \end{lemma}
 
+\begin{proof}
+    \uses{lem:mpu_conjugation_example_gate_invariants, conjphs, prop:conjsym-strict-equiv}
+    The gates generate conjugation-invariant MPUs with the case and
+    determinants recorded in
+    Lemma~\ref{lem:mpu_conjugation_example_gate_invariants}. When one rank is
+    odd, the two classes then follow from the determinant $\det(u_+v_\pm)=\pm1$
+    and Theorem~\ref{conjphs}; when both are even, distinguishing the four
+    classes in each case needs the ``only if'' direction of
+    Theorem~\ref{prop:conjsym-strict-equiv}, which remains open.
+\end{proof}
+
+\begin{lemma}[Invariants of the example gates under conjugation]
+    \label{lem:mpu_conjugation_example_gate_invariants}
+    \lean{MPOTensor.ConjugationExamples.conjugation_caseI_gates,
+        MPOTensor.ConjugationExamples.conjugation_caseII_gates,
+        MPOTensor.ConjugationExamples.signGate,
+        MPOTensor.ConjugationExamples.gateU,
+        MPOTensor.ConjugationExamples.gateV,
+        MPOTensor.ConjugationExamples.regroupedR,
+        MPOTensor.ConjugationExamples.det_regroupedR}
+    \leanok
+    \discussion{5715}
+    \uses{prop1conj, corconj, cor:sympl-to-orthogonal, def:mpu_tensor_from_two_gates}
+    Fix an identification of $\mathbb C^\ell\otimes\mathbb C^r$ with
+    $\mathbb C^d\otimes\mathbb C^d$, and let
+    $u_\pm,v_\pm\in\{\Id,\operatorname{diag}(-1,1,\ldots,1)\}$, with $u_+=v_+=\Id$.
+    For every choice of signs, the tensor in standard form with gates
+    $u_\pm,v_\pm$ generates a conjugation-invariant MPU; the gates are in
+    Case I of Lemma~\ref{corconj}, and
+    \begin{align}
+        \det u_\pm & =\pm1, & \det v_\pm & =\pm1, & \det(u_\pm v_\pm) & =\det u_\pm\det v_\pm.
+    \end{align}
+    If $r$ and $\ell$ are even, let
+    \begin{align}
+        u'_\pm & =(\Id_{r\ell/4}\otimes R)u_\pm, &
+        v'_\pm & =v_\pm(\Id_{r\ell/4}\otimes R),
+    \end{align}
+    with $R$ the matrix of Lemma~\ref{cor:sympl-to-orthogonal}. Then the
+    tensor in standard form with gates $u'_\pm,v'_\pm$ generates a
+    conjugation-invariant MPU, the gates are in Case II, and
+    \begin{align}
+        \det u'_\pm & =\pm(-1)^{r\ell/4}, & \det v'_\pm & =\pm(-1)^{r\ell/4}.
+    \end{align}
+    The source prints $v'_\pm=(\Id\otimes R)v_\pm$; the matrix $R$ acts on
+    the input of $v'_\pm$, as in Lemma~\ref{cor:sympl-to-orthogonal}
+    \cite{gap:mpu_conjugation_example_r_side}.
+    % Source lines: paper_v2.tex 1847--1876.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The gates $u_\pm,v_\pm$ are real and orthogonal, so the conjugation
+    relations of Lemma~\ref{prop1conj} hold with $x=y=\Id$, and the MPU is
+    conjugation invariant. The matrix $R$ is unitary and satisfies
+    $\overline R=(Y\otimes Y)R=R(Y\otimes Y)$, so
+    $\overline{u'_\pm}=(\Sigma_\ell\otimes\Sigma_r)u'_\pm$ and
+    $\overline{v'_\pm}=v'_\pm(\Sigma_r\otimes\Sigma_\ell)$, the Case II
+    relations. The determinants follow from $\det R=-1$ and
+    $\det(\Id_{r\ell/4}\otimes R)=(\det R)^{r\ell/4}$.
+\end{proof}
+
 \begin{lemma}[Admissible phases under conjugation]
     \label{ex:mpu_admissible_all_conjugation_phases}
     \notready

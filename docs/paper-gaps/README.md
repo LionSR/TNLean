@@ -169,6 +169,9 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
 For the MPU index of arXiv:1703.09188:
 
+- `mpu_conjugation_example_r_side.tex` (local correction, resolved) puts the
+  matrix `R` on the input of the shifted gate `v'` of the all-phases example
+  under conjugation, as in Corollary `cor:sympl-to-orthogonal`.
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
   tensors and physical Z gates of the 2025 diagram. The corrected
