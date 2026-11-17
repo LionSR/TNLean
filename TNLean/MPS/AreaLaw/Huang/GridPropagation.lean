@@ -67,7 +67,7 @@ equations (2)--(13); Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
 noncomputable def chainGridPropagator (hq : 1 ≤ q) (hw : 0 < w) (r : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hHerm : ∀ i, (h i).IsHermitian) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  haveI : NeZero q := ⟨by omega⟩
+  haveI : NeZero q := ⟨Nat.one_le_iff_ne_zero.mp hq⟩
   (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
     (List.ofFn fun j ↦ ManyBody.disjointProjectedPropagator
       (fun k : Fin ((L - 1) / w) ↦ chainCutBuffer L (chainGridCut w k.val) r)
