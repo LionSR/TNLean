@@ -281,18 +281,31 @@ derived.\footnote{
 related by a (differentiable) gauge transformation'', that is, the gauge
 class is constant along the path. Its argument establishes only that the
 derivative of the L-symbols is an infinitesimal gauge transformation at each
-point. Passing to equality of classes requires integrating this first-order
-law: constructing a path of invertible gauges $X(\gamma)$ with
-$L(\gamma)=X(\gamma)\cdot L(\gamma_0)$, for instance by solving the linear
-equation $\dot X=\xi(\gamma)X$ with the generators $\xi(\gamma)$ of the
-first-order law. This needs generators depending continuously on $\gamma$,
-which the source does not discuss. This step is
-not formalized. Nor are the source's extensions to action tensors that are
-only continuous and to a bond dimension growing along the path (line 1551),
-the step from a gapped path of parent Hamiltonians to a continuous path of
+point; it does not integrate this first-order law. Integrating it through
+the linear equation $\dot g=\xi(\gamma)g$ for the generators $\xi(\gamma)$
+would need generators depending continuously on $\gamma$, which the source
+does not discuss. The gap is closed without that hypothesis by integrating
+on the action tensors instead. Near a parameter $t$, the matrix $Q(\gamma)$
+of normalized trace pairings of the analysis maps at $\gamma$ against the
+synthesis maps at $t$ satisfies $Q'=XQ$ and $Q(t)=1$, so $Q^{-1}V$ has zero
+derivative and $V(\gamma)=Q(\gamma)V(t)$ with $Q(\gamma)$ invertible. The
+relation of being related by an invertible change of basis is an
+equivalence relation with open classes, so on a connected open parameter
+set it has one class. The L matrices at two parameters are then related by
+the gauge law with the analysis gauge $G$, the synthesis gauge
+$(G^{-1})^{\mathsf T}$, and the trivial fusion gauge. The hypotheses are the
+source's, imposed at every point of a connected open parameter set: the
+source's argument at a point $\gamma$ uses a two-sided environment
+$\gamma+d\gamma$ (line 1361). No continuity of the generators is
+assumed.\footnote{
+    \leanid{Matrix.exists_eq_sum_smul_of_hasDerivAt}, in
+    \doclink{TNLean/Algebra/MatrixFrameDeriv}, and
+    \leanid{MPOTensor.exists_actionLMatrix_regauge_of_hasDerivAt}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPath}.}
+Not formalized are the source's extensions to action tensors that are only
+continuous and to a bond dimension growing along the path (line 1551), the
+step from a gapped path of parent Hamiltonians to a continuous path of
 tensors (line 1356), and the periodic-boundary variant (lines 1555--1578).
-The blueprint states the source's class-constancy theorem without a Lean
-tag and tags only the first-order lemmas.
 
 \paragraph{The single-block obstruction for exact maps.}
 For a single injective state block acted on without multiplicity, the L
@@ -421,10 +434,9 @@ Further independent work concerns the tensor-derived time-reversal
 constraint on the L-symbols;
 the weak-Hopf realization, represented-unit support, and canonical-integral
 normalization used by the source's parent construction; the general physical
-phase classification of Section 5, beyond the first-order invariance along a
-differentiable path of fixed bond dimension recorded above, including the
-integration of that first-order law to constancy of the gauge class,
-continuous and varying-bond paths, and the interpolation between equal
+phase classification of Section 5, beyond the constancy of the gauge class
+of the L-symbols along a differentiable path of fixed bond dimension
+recorded above, including continuous and varying-bond paths, and the interpolation between equal
 L-symbols; and remaining exact examples and completeness claims in Section 6.
 The local parent and finite-boundary averaging results do not themselves
 supply the missing weak-Hopf realization and integral normalization; see

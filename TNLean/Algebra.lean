@@ -125,6 +125,7 @@ import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixEntrywiseDeriv
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.MatrixFixedSection
+import TNLean.Algebra.MatrixFrameDeriv
 import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Algebra.MatrixIdempotentFactorization
