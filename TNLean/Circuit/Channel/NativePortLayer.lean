@@ -68,8 +68,9 @@ theorem dataChannelLift_local (e : Fin s ↪ Fin N)
   · intro a
     apply supportedOperators_mono _
       (embedOp_mem_supportedOperators (selectedData e).injective _)
-    rintro x ⟨p, rfl⟩
-    change (layout N k).site (selectedData e p) = i
+    intro x hmemImage
+    obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hmemImage
+    refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
     obtain ⟨⟨j, t⟩, rfl⟩ := finProdFinEquiv.surjective p
     simpa only [selectedData_apply, site_data] using he j
   · exact sum_conjTranspose_embedOp_mul (selectedData e) _ (nativeMatrixEquiv_complete A hnorm)
@@ -141,8 +142,10 @@ theorem dataChannelLift_channelLayer (hd : 0 < d) (hN : 2 ≤ N)
   apply IsPhysicalPortProtocol.onsite (P := layout N k) (i + 1)
   · intro a
     apply supportedOperators_mono _ (embedOp_mem_supportedOperators f.injective _)
-    rintro x ⟨p, rfl⟩
-    exact routed_selected_pair_site L.bonds L.pairwiseDisjoint hi hne p
+    intro x hmemImage
+    obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hmemImage
+    exact Finset.mem_filter.mpr
+      ⟨Finset.mem_univ _, routed_selected_pair_site L.bonds L.pairwiseDisjoint hi hne p⟩
   · exact sum_conjTranspose_embedOp_mul f _ (nativeMatrixEquiv_complete A hnorm)
 
 end

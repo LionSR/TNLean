@@ -108,6 +108,7 @@ theorem integrable_and_integral_siteOscillation_le_of_graph_kernel
   exact PoissonWord.eq_zero_of_spatial_growth_of_infEDist_eq_top f A (S : Set ι)
     hβ hα hα₁ hf hA hv hnorm hinitial hword hsupport hmetric y hy u
 
+open Classical in
 /-- The expected site oscillation of the actual physical channel word, from
 component-supported positive contractions and their localization tails. The
 cutoff covers every retained anchor, and the assumed row bound is for the

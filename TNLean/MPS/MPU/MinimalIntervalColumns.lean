@@ -140,7 +140,8 @@ theorem minimalIntervalChildColumns_of_supported_individual {d D N : ℕ} [NeZer
       (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P m))))
     (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.le_of_lt hmk))
       (CFC.sqrt (P m)) (CFC.sqrt (dualGramMetric (P k))))
-    (by rwa [intervalPacketSites_range]) (by rwa [intervalPacketSites_range]) hX hY using 1
+    (by rwa [image_univ_intervalPacketSites])
+        (by rwa [image_univ_intervalPacketSites]) hX hY using 1
   all_goals congr!
 
 end MPUCircuit

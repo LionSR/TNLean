@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.GaussianFilteredTerm
+import TNLean.Lattice.MetricInteractionGraph
 import TNLean.Circuit.SupportedOperators
 import TNLean.Algebra.ToEuclideanLinApply
 import Mathlib.Topology.MetricSpace.Defs
@@ -12,7 +13,7 @@ import Mathlib.Topology.MetricSpace.Defs
 # Exact Gaussian filtering for zero-range Hamiltonians
 
 Let a finite metric space index both the sites and the terms of a local Hamiltonian.
-If each term `Hᵢ` acts inside `Metric.closedBall i 0`, it acts only at site `i`.
+If each term `Hᵢ` acts inside the closed ball of radius `0` about `i`, it acts only at site `i`.
 The terms therefore commute pairwise, and filtering `Hᵢ` under the full Hamiltonian
 or any partial sum returns `Hᵢ` exactly. Each term also preserves every eigenspace
 of the full Hamiltonian, so its excited component on a ground vector vanishes.
@@ -78,9 +79,9 @@ theorem commute_of_singleton_support
   · subst j
     exact Commute.refl _
   · apply commute_of_mem_supportedOperators _ (hsupp i) (hsupp j)
-    apply Set.disjoint_left.mpr
+    apply Finset.disjoint_left.mpr
     intro k hki hkj
-    simp only [Set.mem_singleton_iff] at hki hkj
+    simp only [Finset.mem_singleton] at hki hkj
     exact hij (hki.symm.trans hkj)
 
 /-- Any partial sum of zero-range terms commutes with each individual term, even when the
@@ -111,15 +112,17 @@ omit [DecidableEq ι] in
 /-- In a genuine metric, radius-zero balls are singletons. -/
 theorem singleton_support_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0)) :
+    (hsupp : ∀ i, h i ∈ supportedOperators d (metricRangeBall 0 i)) :
     ∀ i, h i ∈ supportedOperators d ({i} : Finset ι) := by
   intro i
-  simpa only [Metric.closedBall_zero] using hsupp i
+  convert hsupp i using 2
+  ext j
+  simp [mem_metricRangeBall, dist_le_zero, eq_comm]
 
 /-- The Gaussian filter under every retained local generator fixes a zero-range term. -/
 theorem gaussianFilteredTerm_sum_eq_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ supportedOperators d (metricRangeBall 0 i))
     (s : Finset ι) (q ΔE : ℝ) (i : ι) :
     gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i) = h i :=
   gaussianFilteredTerm_sum_eq_of_singleton_support h
@@ -128,7 +131,7 @@ theorem gaussianFilteredTerm_sum_eq_of_zero_range
 /-- Full and truncated filters agree exactly in the physical metric zero-range case. -/
 theorem gaussianFilteredTerm_full_and_sum_eq_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ supportedOperators d (metricRangeBall 0 i))
     (s : Finset ι) (q ΔE : ℝ) (i : ι) :
     gaussianFilteredTerm q ΔE (∑ j, h j) (h i) = h i ∧
       gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i) = h i :=
@@ -138,7 +141,7 @@ theorem gaussianFilteredTerm_full_and_sum_eq_of_zero_range
 /-- A zero-range term preserves the full ground eigenspace exactly. -/
 theorem starProjection_term_eq_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ supportedOperators d (metricRangeBall 0 i))
     {E₀ : ℝ} {ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hψ : ψ ∈ groundEigenspace (∑ j, h j) E₀) (i : ι) :
     (groundEigenspace (∑ j, h j) E₀).starProjection (toEuclideanLin (h i) ψ) =
@@ -150,7 +153,7 @@ theorem starProjection_term_eq_of_zero_range
 its excited component vanishes exactly, for every retained generator. -/
 theorem sub_starProjection_gaussianFilteredTerm_sum_eq_zero_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ supportedOperators d (metricRangeBall 0 i))
     (s : Finset ι) (q ΔE : ℝ) {E₀ : ℝ} {ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hψ : ψ ∈ groundEigenspace (∑ j, h j) E₀) (i : ι) :
     toEuclideanLin (gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i)) ψ -

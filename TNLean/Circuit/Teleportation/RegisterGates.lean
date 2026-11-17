@@ -65,11 +65,11 @@ variable {d N s : ℕ} [NeZero N]
 omit [NeZero N] in
 /-- If the permutation `π` maps no site outside `S` into `S'`, it moves the sites carrying
 `|0⟩` from `S` onto `S'`. -/
-theorem IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo [NeZero d] {S S' : Set (Fin N)}
+theorem IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo [NeZero d] {S S' : Finset (Fin N)}
     {v : (Fin N → Fin d) → ℂ} (h : IsZeroOn S v) {π : Equiv.Perm (Fin N)}
     (hπ : ∀ x, x ∉ S → π x ∉ S') : IsZeroOn S' ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
   refine (h.permMatrix_cfgPerm_mulVec_image π).mono fun y hy => ?_
-  refine ⟨π.symm y, ?_, by simp⟩
+  refine Finset.mem_image.mpr ⟨π.symm y, ?_, by simp⟩
   by_contra hx
   exact hπ _ hx (by simpa using hy)
 
@@ -107,14 +107,23 @@ first register is teleported. -/
 def localSites (t : Fin (s + s)) : Fin N := g.a + ((2 * g.L + t.val : ℕ) : Fin N)
 
 /-- The stretch `a, …, a + 2L + 2s - 1` of the gate. -/
-def span : Set (Fin N) := {i | ∃ j < 2 * g.L + 2 * s, i = g.a + (j : Fin N)}
+def span : Finset (Fin N) :=
+  (Finset.range (2 * g.L + 2 * s)).image fun j : ℕ => g.a + (j : Fin N)
 
 /-- The `2L` sites `a + t, …, a + t + 2L - 1`, which carry `|0⟩` before the chain of the site
 `t - 1` of the first register and after the chain of the site `t`. -/
-def zone (t : ℕ) : Set (Fin N) := {i | ∃ j, t ≤ j ∧ j < t + 2 * g.L ∧ i = g.a + (j : Fin N)}
+def zone (t : ℕ) : Finset (Fin N) :=
+  (Finset.Ico t (t + 2 * g.L)).image fun j : ℕ => g.a + (j : Fin N)
 
 /-- The `2L` sites `a + s, …, a + s + 2L - 1` strictly between the two registers. -/
-def interior : Set (Fin N) := g.zone s
+def interior : Finset (Fin N) := g.zone s
+
+theorem mem_span {i : Fin N} : i ∈ g.span ↔ ∃ j < 2 * g.L + 2 * s, i = g.a + (j : Fin N) := by
+  simp [span, eq_comm]
+
+theorem mem_zone {t : ℕ} {i : Fin N} :
+    i ∈ g.zone t ↔ ∃ j, t ≤ j ∧ j < t + 2 * g.L ∧ i = g.a + (j : Fin N) := by
+  simp [zone, eq_comm, and_assoc]
 
 /-- The gate on the ring: `X` at the two registers. -/
 noncomputable def op : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := embedOp g.sites g.X
@@ -144,13 +153,15 @@ theorem localSites_succ (t t' : Fin (s + s)) (h : t'.val = t.val + 1) :
     g.localSites t' = g.localSites t + 1 := by
   rw [localSites, localSites, add_natCast_succ, h, Nat.add_assoc]
 
-theorem sites_mem_span (t : Fin (s + s)) : g.sites t ∈ g.span := ⟨_, g.offset_lt t, rfl⟩
+theorem sites_mem_span (t : Fin (s + s)) : g.sites t ∈ g.span :=
+  g.mem_span.mpr ⟨_, g.offset_lt t, rfl⟩
 
 theorem localSites_mem_span (t : Fin (s + s)) : g.localSites t ∈ g.span :=
-  ⟨_, by omega, rfl⟩
+  g.mem_span.mpr ⟨_, by omega, rfl⟩
 
-theorem zone_subset_span {t : ℕ} (ht : t ≤ s) : g.zone t ⊆ g.span :=
-  fun _ ⟨j, _, hj, hi⟩ => ⟨j, by omega, hi⟩
+theorem zone_subset_span {t : ℕ} (ht : t ≤ s) : g.zone t ⊆ g.span := fun _ hi => by
+  obtain ⟨j, _, hj, hi⟩ := g.mem_zone.mp hi
+  exact g.mem_span.mpr ⟨j, by omega, hi⟩
 
 theorem op_mem_unitary (hX : g.X ∈ unitary (Matrix (Fin (s + s) → Fin d) (Fin (s + s) → Fin d) ℂ)) :
     g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
@@ -185,37 +196,45 @@ private theorem add_add (t j : ℕ) :
     g.a + (t : Fin N) + (j : Fin N) = g.a + ((t + j : ℕ) : Fin N) := by
   rw [add_assoc, Nat.cast_add]
 
-theorem allSites_there_subset (t : ℕ) :
-    allSites (g.there t) ⊆ {i | ∃ j, t ≤ j ∧ j ≤ t + 2 * g.L ∧ i = g.a + (j : Fin N)} := by
+omit [NeZero s] in
+private theorem image_add_subset (t : ℕ) {J : Finset ℕ} :
+    J.image (fun j : ℕ => g.a + (t : Fin N) + (j : Fin N)) ⊆
+      (J.image (t + ·)).image fun j : ℕ => g.a + (j : Fin N) := by
   intro i hi
-  obtain ⟨j, hj, rfl⟩ := allSites_forwardChain_subset _ _ _ hi
-  exact ⟨t + j, by omega, by omega, g.add_add t j⟩
+  obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
+  exact Finset.mem_image.mpr ⟨t + j, Finset.mem_image_of_mem _ hj, (g.add_add t j).symm⟩
+
+theorem allSites_there_subset (t : ℕ) :
+    allSites (g.there t) ⊆
+      ((Finset.range (2 * g.L + 1)).image (t + ·)).image fun j : ℕ => g.a + (j : Fin N) :=
+  (allSites_forwardChain_subset _ _ _).trans (g.image_add_subset t)
 
 theorem allSites_back_subset (t : ℕ) :
-    allSites (g.back t) ⊆ {i | ∃ j, t ≤ j ∧ j ≤ t + 2 * g.L ∧ i = g.a + (j : Fin N)} := by
-  intro i hi
-  obtain ⟨j, hj, rfl⟩ := allSites_backwardChain_subset _ _ _ hi
-  exact ⟨t + j, by omega, by omega, g.add_add t j⟩
+    allSites (g.back t) ⊆
+      ((Finset.range (2 * g.L + 1)).image (t + ·)).image fun j : ℕ => g.a + (j : Fin N) :=
+  (allSites_backwardChain_subset _ _ _).trans (g.image_add_subset t)
 
-theorem allSites_there_subset_span {t : ℕ} (ht : t < s) : allSites (g.there t) ⊆ g.span := by
-  intro i hi
-  obtain ⟨j, -, hj, rfl⟩ := g.allSites_there_subset t hi
-  exact ⟨j, by omega, rfl⟩
+theorem allSites_there_subset_span {t : ℕ} (ht : t < s) : allSites (g.there t) ⊆ g.span :=
+  (g.allSites_there_subset t).trans (Finset.image_subset_image fun j hj => by
+    simp only [Finset.mem_image, Finset.mem_range] at hj ⊢
+    omega)
 
-theorem allSites_back_subset_span {t : ℕ} (ht : t < s) : allSites (g.back t) ⊆ g.span := by
-  intro i hi
-  obtain ⟨j, -, hj, rfl⟩ := g.allSites_back_subset t hi
-  exact ⟨j, by omega, rfl⟩
+theorem allSites_back_subset_span {t : ℕ} (ht : t < s) : allSites (g.back t) ⊆ g.span :=
+  (g.allSites_back_subset t).trans (Finset.image_subset_image fun j hj => by
+    simp only [Finset.mem_image, Finset.mem_range] at hj ⊢
+    omega)
 
-theorem pairSites_there_subset (t : ℕ) : TeleportHop.pairSites (g.there t) ⊆ g.zone (t + 1) := by
-  intro i hi
-  obtain ⟨j, hj1, hj2, rfl⟩ := pairSites_forwardChain_subset _ _ _ hi
-  exact ⟨t + j, by omega, by omega, g.add_add t j⟩
+theorem pairSites_there_subset (t : ℕ) : TeleportHop.pairSites (g.there t) ⊆ g.zone (t + 1) :=
+  (pairSites_forwardChain_subset _ _ _).trans ((g.image_add_subset t).trans
+    (Finset.image_subset_image fun j hj => by
+      simp only [Finset.mem_image, Finset.mem_Icc, Finset.mem_Ico] at hj ⊢
+      omega))
 
-theorem pairSites_back_subset (t : ℕ) : TeleportHop.pairSites (g.back t) ⊆ g.zone t := by
-  intro i hi
-  obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp (pairSites_backwardChain_subset _ _ _ hi)
-  exact ⟨t + j, by omega, by simp at hj; omega, g.add_add t j⟩
+theorem pairSites_back_subset (t : ℕ) : TeleportHop.pairSites (g.back t) ⊆ g.zone t :=
+  (pairSites_backwardChain_subset _ _ _).trans ((g.image_add_subset t).trans
+    (Finset.image_subset_image fun j hj => by
+      simp only [Finset.mem_image, Finset.mem_range, Finset.mem_Ico] at hj ⊢
+      omega))
 
 /-- The site `a + j` is fixed by the chains of the site `t` when `j < t` or `t + 2L < j`. -/
 theorem sitePerm_there_apply_of_lt {t j : ℕ} (ht : t < s) (hj : j < 2 * g.L + 2 * s)
@@ -223,8 +242,10 @@ theorem sitePerm_there_apply_of_lt {t j : ℕ} (ht : t < s) (hj : j < 2 * g.L + 
     sitePerm (g.there t) (g.a + (j : Fin N)) = g.a + (j : Fin N) := by
   rcases htj with htj | htj
   · refine sitePerm_apply_of_notMem fun hi => ?_
-    obtain ⟨j', hj1, hj2, he⟩ := g.allSites_there_subset t hi
-    have : j = j' := (g.add_eq_add_iff hj (by have := g.le; omega)).mp he
+    obtain ⟨j', hj', he⟩ := Finset.mem_image.mp (g.allSites_there_subset t hi)
+    simp only [Finset.mem_image, Finset.mem_range] at hj'
+    obtain ⟨k, hk, rfl⟩ := hj'
+    have : j = t + k := (g.add_eq_add_iff hj (by have := g.le; omega)).mp he.symm
     omega
   · have hN := g.le
     have := (sitePerm_forwardChain (g.a + (t : Fin N)) g.L g.two_mul_L_lt).2 (j - t)
@@ -251,8 +272,9 @@ theorem sitePerm_back_apply_self (t : ℕ) :
 /-- The chain of the site `t` maps no site outside `zone (t + 1)` into `zone t`. -/
 theorem sitePerm_there_notMem_zone {t : ℕ} (ht : t < s) {x : Fin N} (hx : x ∈ g.span)
     (hx' : x ∉ g.zone (t + 1)) : sitePerm (g.there t) x ∉ g.zone t := by
-  obtain ⟨j, hj, rfl⟩ := hx
-  rintro ⟨j', h1, h2, he⟩
+  obtain ⟨j, hj, rfl⟩ := g.mem_span.mp hx
+  intro hz
+  obtain ⟨j', h1, h2, he⟩ := g.mem_zone.mp hz
   have hj' : j' < 2 * g.L + 2 * s := by omega
   rcases Nat.lt_trichotomy j t with hjt | rfl | hjt
   · rw [g.sitePerm_there_apply_of_lt ht hj (Or.inl hjt), g.add_eq_add_iff hj hj'] at he
@@ -261,22 +283,23 @@ theorem sitePerm_there_notMem_zone {t : ℕ} (ht : t < s) {x : Fin N} (hx : x �
     omega
   · have : t + 2 * g.L < j := by
       by_contra h
-      exact hx' ⟨j, by omega, by omega, rfl⟩
+      exact hx' (g.mem_zone.mpr ⟨j, by omega, by omega, rfl⟩)
     rw [g.sitePerm_there_apply_of_lt ht hj (Or.inr this), g.add_eq_add_iff hj hj'] at he
     omega
 
 /-- The backward chain of the site `t` maps no site outside `zone t` into `zone (t + 1)`. -/
 theorem sitePerm_back_notMem_zone {t : ℕ} (ht : t < s) {x : Fin N} (hx : x ∈ g.span)
     (hx' : x ∉ g.zone t) : sitePerm (g.back t) x ∉ g.zone (t + 1) := by
-  obtain ⟨j, hj, rfl⟩ := hx
-  rintro ⟨j', h1, h2, he⟩
+  obtain ⟨j, hj, rfl⟩ := g.mem_span.mp hx
+  intro hz
+  obtain ⟨j', h1, h2, he⟩ := g.mem_zone.mp hz
   have hj' : j' < 2 * g.L + 2 * s := by omega
   rcases Nat.lt_or_ge j t with hjt | hjt
   · rw [g.sitePerm_back_apply_of_lt ht hj (Or.inl hjt), g.add_eq_add_iff hj hj'] at he
     omega
   have hjt' : t + 2 * g.L ≤ j := by
     by_contra h
-    exact hx' ⟨j, hjt, by omega, rfl⟩
+    exact hx' (g.mem_zone.mpr ⟨j, hjt, by omega, rfl⟩)
   rcases hjt'.lt_or_eq with hjt' | rfl
   · rw [g.sitePerm_back_apply_of_lt ht hj (Or.inr hjt'), g.add_eq_add_iff hj hj'] at he
     omega
@@ -301,8 +324,13 @@ def backAll (gs : List (RegisterGate d N s)) (t : ℕ) : List (TeleportHop N) :=
   gs.flatMap fun g => g.back t
 
 /-- The sites of the zones `zone t` of all the gates. -/
-def zoneAll (gs : List (RegisterGate d N s)) (t : ℕ) : Set (Fin N) :=
-  {i | ∃ g ∈ gs, i ∈ g.zone t}
+def zoneAll (gs : List (RegisterGate d N s)) (t : ℕ) : Finset (Fin N) :=
+  Finset.univ.filter fun i ↦ ∃ g ∈ gs, i ∈ g.zone t
+
+omit [NeZero s] in
+theorem mem_zoneAll {gs : List (RegisterGate d N s)} {t : ℕ} {i : Fin N} :
+    i ∈ zoneAll gs t ↔ ∃ g ∈ gs, i ∈ g.zone t := by
+  simp [zoneAll]
 
 include hgs in
 theorem valid_thereAll {t : ℕ} (ht : t < s) : Valid (thereAll gs t) :=
@@ -331,10 +359,11 @@ private theorem notMem_zoneAll_of_mem_span {t : ℕ} (ht : t ≤ s) {g : Registe
     (hg : g ∈ gs) {y : Fin N} (hy : y ∈ g.span) (hy' : y ∉ g.zone t) : y ∉ zoneAll gs t := by
   have : Std.Symm fun g g' : RegisterGate d N s => Disjoint g.span g'.span :=
     ⟨fun _ _ h => h.symm⟩
-  rintro ⟨g', hg', hy''⟩
+  intro h
+  obtain ⟨g', hg', hy''⟩ := mem_zoneAll.mp h
   by_cases hgg : g = g'
   · exact hy' (hgg ▸ hy'')
-  · exact Set.disjoint_left.mp (hgs.forall hg hg' hgg) hy (g'.zone_subset_span ht hy'')
+  · exact Finset.disjoint_left.mp (hgs.forall hg hg' hgg) hy (g'.zone_subset_span ht hy'')
 
 include hgs in
 /-- The forward chains of the site `t` move the sites carrying `|0⟩` from the zones `t + 1` to
@@ -349,10 +378,11 @@ theorem isZeroOn_chainPerm_thereAll [NeZero d] {t : ℕ} (ht : t < s) {v : (Fin 
       sitePerm_apply_of_notMem fun hi' => hi (g.allSites_there_subset_span ht hi')
     rw [sitePerm_thereAll_apply hgs ht hg hxg]
     exact notMem_zoneAll_of_mem_span hgs ht.le hg (Equiv.Perm.apply_mem_of_forall_notMem hfix hxg)
-      (g.sitePerm_there_notMem_zone ht hxg fun h => hx ⟨g, hg, h⟩)
+      (g.sitePerm_there_notMem_zone ht hxg fun h => hx (mem_zoneAll.mpr ⟨g, hg, h⟩))
   · simp only [not_exists, not_and] at hxs
     rw [thereAll, sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_there_subset_span ht) hxs]
-    rintro ⟨g, hg, hxg⟩
+    intro h
+    obtain ⟨g, hg, hxg⟩ := mem_zoneAll.mp h
     exact hxs g hg (g.zone_subset_span ht.le hxg)
 
 include hgs in
@@ -369,22 +399,23 @@ theorem isZeroOn_chainPerm_backAll [NeZero d] {t : ℕ} (ht : t < s) {v : (Fin N
     rw [sitePerm_backAll_apply hgs ht hg hxg]
     exact notMem_zoneAll_of_mem_span hgs (by omega) hg
       (Equiv.Perm.apply_mem_of_forall_notMem hfix hxg)
-      (g.sitePerm_back_notMem_zone ht hxg fun h => hx ⟨g, hg, h⟩)
+      (g.sitePerm_back_notMem_zone ht hxg fun h => hx (mem_zoneAll.mpr ⟨g, hg, h⟩))
   · simp only [not_exists, not_and] at hxs
     rw [backAll, sitePerm_flatMap_apply_of_notMem (fun g _ => g.allSites_back_subset_span ht) hxs]
-    rintro ⟨g, hg, hxg⟩
+    intro h
+    obtain ⟨g, hg, hxg⟩ := mem_zoneAll.mp h
     exact hxs g hg (g.zone_subset_span (by omega) hxg)
 
 theorem pairSites_thereAll_subset (t : ℕ) :
     TeleportHop.pairSites (thereAll gs t) ⊆ zoneAll gs (t + 1) :=
   fun _ hi => by
     obtain ⟨g, hg, hi⟩ := mem_pairSites_flatMap.mp hi
-    exact ⟨g, hg, g.pairSites_there_subset t hi⟩
+    exact mem_zoneAll.mpr ⟨g, hg, g.pairSites_there_subset t hi⟩
 
 theorem pairSites_backAll_subset (t : ℕ) : TeleportHop.pairSites (backAll gs t) ⊆ zoneAll gs t :=
   fun _ hi => by
     obtain ⟨g, hg, hi⟩ := mem_pairSites_flatMap.mp hi
-    exact ⟨g, hg, g.pairSites_back_subset t hi⟩
+    exact mem_zoneAll.mpr ⟨g, hg, g.pairSites_back_subset t hi⟩
 
 include hgs in
 /-- The backward chains invert the forward chains. -/
@@ -424,7 +455,8 @@ theorem therePerm_apply {g : RegisterGate d N s} (hg : g ∈ gs) :
   | 0, _ => ⟨fun u hu => absurd hu (Nat.not_lt_zero u), fun _ _ _ => rfl⟩
   | t + 1, ht => by
     obtain ⟨h1, h2⟩ := therePerm_apply hg (t := t) (by omega)
-    have hspan : ∀ j < 2 * g.L + 2 * s, g.a + (j : Fin N) ∈ g.span := fun j hj => ⟨j, hj, rfl⟩
+    have hspan : ∀ j < 2 * g.L + 2 * s, g.a + (j : Fin N) ∈ g.span := fun j hj =>
+      g.mem_span.mpr ⟨j, hj, rfl⟩
     refine ⟨fun u hu => ?_, fun j hj hjs => ?_⟩
     · rw [therePerm, Equiv.Perm.mul_apply,
         sitePerm_thereAll_apply hgs (by omega) hg (hspan u (by omega))]
@@ -592,21 +624,24 @@ theorem isZeroOn_localProd_mulVec {v : (Fin N → Fin d) → ℂ} (hv : IsZeroOn
     IsZeroOn (zoneAll gs 0) (localProd gs *ᵥ v) := by
   have : Std.Symm fun g g' : RegisterGate d N s => Disjoint g.span g'.span :=
     ⟨fun _ _ h => h.symm⟩
-  refine hv.mulVec_of_mem_supportedOperators (T := {i | ∃ g ∈ gs, i ∈ Set.range g.localSites})
+  refine hv.mulVec_of_mem_supportedOperators
+    (T := Finset.univ.filter fun i ↦ ∃ g ∈ gs, i ∈ Finset.univ.image g.localSites)
     ?_ (list_prod_mem_supportedOperators _ fun A hA => ?_)
-  · rw [Set.disjoint_left]
+  · rw [Finset.disjoint_left]
     intro i hi hi'
-    obtain ⟨g, hg, j, hj1, hj2, rfl⟩ := hi
-    obtain ⟨g', hg', t, ht⟩ := hi'
+    obtain ⟨g, hg, hi⟩ := mem_zoneAll.mp hi
+    obtain ⟨j, hj1, hj2, rfl⟩ := g.mem_zone.mp hi
+    obtain ⟨g', hg', hi'⟩ := (Finset.mem_filter.mp hi').2
+    obtain ⟨t, -, ht⟩ := Finset.mem_image.mp hi'
     by_cases hgg : g = g'
     · subst hgg
       rw [localSites, g.add_eq_add_iff (by omega) (by omega)] at ht
       omega
-    · exact Set.disjoint_left.mp (hgs.forall hg hg' hgg) (g.zone_subset_span (Nat.zero_le s)
-        ⟨j, hj1, hj2, rfl⟩) (ht ▸ g'.localSites_mem_span t)
+    · exact Finset.disjoint_left.mp (hgs.forall hg hg' hgg) (g.zone_subset_span (Nat.zero_le s)
+        (g.mem_zone.mpr ⟨j, hj1, hj2, rfl⟩)) (ht ▸ g'.localSites_mem_span t)
   · obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
     refine supportedOperators_mono ?_ (embedOp_mem_supportedOperators g.localSites_injective g.X)
-    exact fun i hi => ⟨g, hg, hi⟩
+    exact fun i hi => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g, hg, hi⟩
 
 omit [NeZero d] in
 include hgs in
@@ -637,8 +672,10 @@ omit [NeZero s] in
 between the two registers of every gate. -/
 theorem isZeroOn_zoneAll_iff {v : (Fin N → Fin d) → ℂ} :
     IsZeroOn (zoneAll gs s) v ↔ ∀ g ∈ gs, IsZeroOn g.interior v :=
-  ⟨fun h g hg => h.mono fun _ hi => ⟨g, hg, hi⟩,
-    fun h y hy _ ⟨g, hg, hi⟩ => h g hg y hy _ hi⟩
+  ⟨fun h g hg => h.mono fun _ hi => mem_zoneAll.mpr ⟨g, hg, hi⟩,
+    fun h y hy _ hi => by
+      obtain ⟨g, hg, hi⟩ := mem_zoneAll.mp hi
+      exact h g hg y hy _ hi⟩
 
 /-- **A layer of register gates in constant depth with measurements.** For register gates on
 pairwise disjoint stretches and a circuit `Ls` applying the gates `X` on the consecutive sites,
@@ -662,7 +699,7 @@ theorem isRoundsImplementationOn_rounds {Ls : List (Layer d N)}
       {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs 0) v} (localProd gs) := by
     have := (isImplementationOn_round (d := d) Ls (valid_nil (N := N))).isRoundsImplementationOn
     rw [chainPerm_nil, Matrix.one_mul, hLs] at this
-    exact this.mono fun v _ => fun _ _ _ h => h.elim
+    exact this.mono fun v _ => fun _ _ _ h => by simp [TeleportHop.pairSites] at h
   have h₂₃ := h₂.append h₃ fun v hv => isZeroOn_localProd_mulVec hgs hv
   have := h₁.append h₂₃ h₁'
   rw [← permMatrix_mul_localProd_mul_permMatrix hgs]
@@ -678,18 +715,22 @@ theorem isCircuitOn_localProd {K : ℕ} (hK : ∀ g ∈ gs, IsPairProduct d (s +
   induction gs with
   | nil =>
     simpa [localProd] using IsBondCircuitOn.one (d := d) (ringBond (N := N))
-      {i | ∃ g ∈ ([] : List (RegisterGate d N s)), i ∈ g.span} K
+      (Finset.univ.filter fun i ↦ ∃ g ∈ ([] : List (RegisterGate d N s)), i ∈ g.span) K
   | cons g gs ih =>
     rw [List.pairwise_cons] at hgs
     have h₁ := ((hK g List.mem_cons_self).isCircuitOn g.localSites_injective
       fun t t' h => g.localSites_succ t t' h).mono_set
-        (show Set.range g.localSites ⊆ g.span by rintro _ ⟨t, rfl⟩; exact g.localSites_mem_span t)
+        (show Finset.univ.image g.localSites ⊆ g.span from fun _ hi => by
+          obtain ⟨t, -, rfl⟩ := Finset.mem_image.mp hi
+          exact g.localSites_mem_span t)
     have h₂ := ih hgs.2 fun g' hg' => hK g' (List.mem_cons_of_mem _ hg')
-    have hdisj : Disjoint g.span {i | ∃ g ∈ gs, i ∈ g.span} := by
-      rw [Set.disjoint_left]
-      rintro i hi ⟨g', hg', hi'⟩
-      exact Set.disjoint_left.mp (hgs.1 g' hg') hi hi'
+    have hdisj : Disjoint g.span (Finset.univ.filter fun i ↦ ∃ g ∈ gs, i ∈ g.span) := by
+      rw [Finset.disjoint_left]
+      intro i hi hi'
+      obtain ⟨g', hg', hi'⟩ := (Finset.mem_filter.mp hi').2
+      exact Finset.disjoint_left.mp (hgs.1 g' hg') hi hi'
     refine (IsCircuitOn.par hdisj h₁ h₂).mono_set fun i hi => ?_
+    simp only [Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and] at hi ⊢
     rcases hi with hi | ⟨g', hg', hi⟩
     · exact ⟨g, List.mem_cons_self, hi⟩
     · exact ⟨g', List.mem_cons_of_mem _ hg', hi⟩

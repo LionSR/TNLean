@@ -29,7 +29,7 @@ theorem diagonal_comp_eval_mem_supportedOperators {d : ℕ} (i : Fin N) (f : Fin
     diagonal (fun σ : Fin N → Fin d => f (σ i)) ∈ supportedOperators d {i} := by
   let m : Fin N → Matrix (Fin d) (Fin d) ℂ :=
     fun j => diagonal (fun x => if j = i then f x else 1)
-  have hm : ∀ j ∉ ({i} : Set (Fin N)), m j = 1 := by
+  have hm : ∀ j ∉ ({i} : Finset (Fin N)), m j = 1 := by
     intro j hj
     have hji : j ≠ i := by simpa using hj
     simp [m, hji]
@@ -129,9 +129,9 @@ theorem covariance_ghzState_two {S S' : Finset (Fin N)} (hSS' : Disjoint S S')
         (A (fun _ => 0) (fun _ => 0) - A (fun _ => 1) (fun _ => 1)) *
         (B (fun _ => 0) (fun _ => 0) - B (fun _ => 1) (fun _ => 1)) := by
   have hAu : A ∈ supportedOperators 2 (S ∪ S') :=
-    supportedOperators_mono Set.subset_union_left hA
+    supportedOperators_mono Finset.subset_union_left hA
   have hBu : B ∈ supportedOperators 2 (S ∪ S') :=
-    supportedOperators_mono Set.subset_union_right hB
+    supportedOperators_mono Finset.subset_union_right hB
   rw [expect_ghzState_two a b (mul_mem_supportedOperators hAu hBu) hcover,
     expect_ghzState_two a b hAu hcover, expect_ghzState_two a b hBu hcover,
     mul_apply_eq_mul_of_mem_supportedOperators hSS' hA hB,

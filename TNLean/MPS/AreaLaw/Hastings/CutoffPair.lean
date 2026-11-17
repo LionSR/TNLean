@@ -309,19 +309,19 @@ theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q 
     · refine supportedOperators_mono ?_ (mem_supportedOperators_of_isSupportedOn
         ((h.isSupportedOn_bufferPart c m).groundCentered Ω))
       intro x hx
-      simp only [Finset.mem_coe, mem_interval] at hx ⊢
+      simp only [mem_interval] at hx ⊢
       omega
     · refine supportedOperators_mono ?_ ((mem_supportedOperators_of_isSupportedOn
         (ManyBody.regionExpectation_mem_supportedOperators KL DL)))
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
-      simp only [Finset.mem_coe, mem_interval] at this ⊢
+      simp only [mem_interval] at this ⊢
       omega
     · refine supportedOperators_mono ?_ ((mem_supportedOperators_of_isSupportedOn
         (ManyBody.regionExpectation_mem_supportedOperators KR DR)))
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
-      simp only [Finset.mem_coe, mem_interval] at this ⊢
+      simp only [mem_interval] at this ⊢
       omega
   · have hD (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hP : P.IsHermitian)
         (hc : ‖h.operator * P - P * h.operator‖ ≤ partCommutatorConst R * J ^ 2)

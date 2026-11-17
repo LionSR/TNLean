@@ -159,9 +159,11 @@ theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (S
     (embedOp_mem_supportedOperators_image Sum.inl_injective hP))
     (supportedOperators_mono ?_ (embedOp_mem_supportedOperators
       (Sum.inr_injective.comp Sum.inl_injective) b))
-  · rintro _ ⟨v, hv, rfl⟩
+  · intro _ h
+    obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp h
     simpa using hv
-  · rintro _ ⟨x, rfl⟩
+  · intro _ h
+    obtain ⟨x, -, rfl⟩ := Finset.mem_image.mp h
     simp
 
 /-- **Physical operators on the enlarged sites.** A physical operator acting on a region `S`,
@@ -175,7 +177,8 @@ theorem kronecker_one_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
       supportedOperators q (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
   rw [kronecker_one_submatrix_ancillaSplit]
   refine supportedOperators_mono ?_ (embedOp_mem_supportedOperators_image Sum.inl_injective hL)
-  rintro _ ⟨v, hv, rfl⟩
+  intro _ h
+  obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp h
   simpa using hv
 
 /-! ### Vectors and mutual information -/

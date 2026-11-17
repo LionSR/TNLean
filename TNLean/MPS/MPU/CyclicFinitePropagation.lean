@@ -66,13 +66,13 @@ theorem mpo_conjugation_singleton_propagation_of_one
       simp only [Equiv.apply_symm_apply, finRotate_apply, add_assoc]
     have hA₀ : A₀ ∈ QuantumCircuit.supportedOperators d ({x₀ + i} : Finset (Fin N)) := by
       have h := QuantumCircuit.supportedOperators_submatrix_siteEquiv (finRotate N).symm hA
-      simpa only [Set.image_singleton, hpred] using h
+      simpa only [Finset.image_singleton, hpred] using h
     have hcancel : A₀.submatrix (rotateConfig N d) (rotateConfig N d) = A := by
       ext σ τ
       simp only [A₀, Matrix.submatrix_apply, rotateConfig_apply, Function.comp_def,
         Equiv.apply_symm_apply]
     have h := mpo_conjugation_mem_supportedOperators_rotate U (hi A₀ hA₀)
-    rw [QuantumCircuit.neighbourhood_finRotate, Set.image_singleton] at h
+    rw [QuantumCircuit.neighbourhood_finRotate, Finset.image_singleton] at h
     simpa only [hcancel, finRotate_apply, add_assoc] using h
   intro x
   have h := Fin.cyclic_induction hbase hstep (x - x₀)
@@ -101,17 +101,20 @@ theorem mpo_conjugation_mem_supportedOperators_singleton
   apply mpo_conjugation_singleton_propagation_of_one U x₀ (4 * k) ?_ x A hA
   intro B hB
   have hCentral : B ∈ QuantumCircuit.supportedOperators d
-      (Finset.univ.filter fun (i : Fin (0 + (3 * (2 * k) + s))) ↦ 0 + 2 * k ≤ i.val ∧ i.val < 0 + 2 * k + 2 * k) :=
+      (Finset.univ.filter fun (i : Fin (0 + (3 * (2 * k) + s))) ↦
+          0 + 2 * k ≤ i.val ∧ i.val < 0 + 2 * k + 2 * k) :=
     QuantumCircuit.supportedOperators_mono (by
       intro i hi
-      obtain rfl := Set.mem_singleton_iff.mp hi
+      obtain rfl := Finset.mem_singleton.mp hi
+      refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
       change 0 + 2 * k ≤ 2 * k ∧ 2 * k < 0 + 2 * k + 2 * k
       omega) hB
   have hForward := mpo_conjugation_mem_supportedOperators_central hU k 0 s hk S hCentral
   apply QuantumCircuit.supportedOperators_mono ?_ hForward
   intro j hj
-  have hj' : j.val < 0 + 3 * (2 * k) := hj.2
-  refine ⟨x₀, Set.mem_singleton x₀, (j.val : ℤ) - x₀.val, ?_, ?_⟩
+  have hj' : j.val < 0 + 3 * (2 * k) := (Finset.mem_filter.mp hj).2.2
+  refine QuantumCircuit.mem_neighbourhood.mpr
+    ⟨x₀, Finset.mem_singleton_self x₀, (j.val : ℤ) - x₀.val, ?_, ?_⟩
   · apply abs_le.mpr
     change -((4 * k : ℕ) : ℤ) ≤ (j.val : ℤ) - (2 * k : ℕ) ∧
       (j.val : ℤ) - (2 * k : ℕ) ≤ (4 * k : ℕ)

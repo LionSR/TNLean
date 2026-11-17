@@ -35,6 +35,7 @@ open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder Comp
 
 namespace TNLean.PEPS.AreaLaw
 
+open Classical in
 /-- Localization tails at every radius force exact support on the anchor
 component: beyond the largest distance in the component the graph balls stop
 growing, while the tail tends to zero. Source: area law, `09-amplification.tex`,
@@ -60,9 +61,13 @@ theorem mem_supportedOperators_reachable_of_forall_tail
     ge_of_tendsto htend (Filter.eventually_atTop.mpr ⟨n, fun l hl => hball l hl ▸ hε l⟩)
   have hk : ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k :=
     (sub_eq_zero.mp (norm_le_zero_iff.mp hzero)).symm
-  rw [← hk, ← ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl]
-  exact (mem_supportedOperators_of_isSupportedOn (ManyBody.regionExpectation_mem_supportedOperators
-      _ k))
+  rw [← hk]
+  convert mem_supportedOperators_of_isSupportedOn
+    (ManyBody.regionExpectation_mem_supportedOperators (ManyBody.graphBall G a n) k) using 2
+  apply Finset.coe_injective
+  rw [ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl]
+  ext
+  simp
 
 /-- The prefactor `2 A₀ L` of the spatial omission bound, with `A₀ = 2 + 8 √C e^{c/2}` and
 `L = omittedAnchorTailConstant K μ (c / 2) (c / (4 · 2^α)) α`. Source: area law,
@@ -98,6 +103,7 @@ theorem channelOmissionExponent_pos {c : ℝ} (hc : 0 < c) (α : ℝ) :
   unfold channelOmissionExponent
   positivity
 
+open Classical in
 /-- **Uniform spatial decay of the omission defect, with explicit constants.** For every
 graph, finite family of component-supported effects with localization tails `C e^{-c l^α}`,
 retained predicate, spectator operator `B` on `S` and time `T`, the full/retained defect is
@@ -247,6 +253,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
       rw [setIntegral_const, Real.volume_real_Ioc_of_le T.coe_nonneg, sub_zero, smul_eq_mul]
       ring
 
+open Classical in
 /-- Uniform spatial decay for the expectation of the full/retained
 operator-norm defect. Every constant is chosen before the graph, all finite
 types, physical effects, retained predicate, cutoff, observable and time.

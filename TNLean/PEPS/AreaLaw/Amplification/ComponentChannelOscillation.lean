@@ -40,6 +40,7 @@ namespace TNLean.PEPS.AreaLaw
 variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+open Classical in
 /-- Component support makes every sufficiently large ball expectation exact.
 Source: area law, `09-amplification.tex`, lines 135–139. -/
 theorem regionExpectation_graphBall_eq_of_component_support
@@ -49,8 +50,13 @@ theorem regionExpectation_graphBall_eq_of_component_support
     ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k := by
   apply ManyBody.regionExpectation_of_mem_supportedOperators
   apply isSupportedOn_of_mem_supportedOperators
-  rwa [ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a hn]
+  convert hk using 2
+  apply Finset.coe_injective
+  rw [ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a hn]
+  ext
+  simp
 
+open Classical in
 /-- The actual localization error vanishes beyond the component cutoff.
 Source: area law, `09-amplification.tex`, lines 135–139. -/
 theorem norm_sub_regionExpectation_graphBall_eq_zero_of_component_support
@@ -60,6 +66,7 @@ theorem norm_sub_regionExpectation_graphBall_eq_zero_of_component_support
     ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a n) k‖ = 0 := by
   rw [regionExpectation_graphBall_eq_of_component_support G a hk hn, sub_self, norm_zero]
 
+open Classical in
 /-- Component support makes the localized and full root channels equal at
 all sufficiently large finite radii. Source: area law,
 `09-amplification.tex`, lines 124–139. -/
@@ -71,6 +78,7 @@ theorem localRootChannel_graphBall_eq_of_component_support
     localRootChannel (ManyBody.graphBall G a n) k B = spectatorRootChannel k B := by
   rw [localRootChannel, regionExpectation_graphBall_eq_of_component_support G a hk hn]
 
+open Classical in
 /-- A single finite radius gives exact expectation and channel stabilization,
 uniformly over all spectator observables. Source: area law,
 `09-amplification.tex`, lines 135–139. -/
@@ -84,6 +92,7 @@ theorem exists_localRootChannel_graphBall_eq_of_component_support
     ⟨regionExpectation_graphBall_eq_of_component_support G a hk hn,
       localRootChannel_graphBall_eq_of_component_support G a hk hn⟩⟩
 
+open Classical in
 /-- Every successor shell beyond the component cutoff is exactly zero.
 Source: area law, `09-amplification.tex`, lines 124–139. -/
 theorem localRootChannelShell_graphBall_succ_eq_zero_of_component_support
@@ -96,6 +105,7 @@ theorem localRootChannelShell_graphBall_succ_eq_zero_of_component_support
     localRootChannel_graphBall_eq_of_component_support G a hk (hn.trans (Nat.le_succ n)),
     localRootChannel_graphBall_eq_of_component_support G a hk hn, sub_self]
 
+open Classical in
 /-- The full root channel satisfies the finite-shell increment once the cutoff
 contains the anchor's component. Only actual localization errors up to that
 finite cutoff are needed. Source: area law,
@@ -116,6 +126,7 @@ theorem siteOscillation_spectatorRootChannel_le_of_component_support [NeZero q]
   simpa only [localRootChannel_graphBall_eq_of_component_support G a hk hn,
     ManyBody.mem_graphBall] using h
 
+open Classical in
 /-- A component-supported full channel cannot increase oscillation at a site
 in a different component. Source: area law,
 `09-amplification.tex`, lines 133–139. -/

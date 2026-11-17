@@ -318,10 +318,20 @@ end SquarePatch
 variable {pos : ι → ℝ × ℝ}
 
 /-- The union of the physical outer footprints of a list of square patches. -/
-def footprint (l : List (SquarePatch pos q)) : Set ι := {x | ∃ p ∈ l, x ∈ p.outer}
+def footprint (l : List (SquarePatch pos q)) : Finset ι :=
+  Finset.univ.filter fun x ↦ ∃ p ∈ l, x ∈ p.outer
 
 /-- The union of the physical inner samples of a list of square patches. -/
-def innerUnion (l : List (SquarePatch pos q)) : Set ι := {x | ∃ p ∈ l, x ∈ p.inner}
+def innerUnion (l : List (SquarePatch pos q)) : Finset ι :=
+  Finset.univ.filter fun x ↦ ∃ p ∈ l, x ∈ p.inner
+
+theorem mem_footprint {l : List (SquarePatch pos q)} {x : ι} :
+    x ∈ footprint l ↔ ∃ p ∈ l, x ∈ p.outer := by
+  simp [footprint]
+
+theorem mem_innerUnion {l : List (SquarePatch pos q)} {x : ι} :
+    x ∈ innerUnion l ↔ ∃ p ∈ l, x ∈ p.inner := by
+  simp [innerUnion]
 
 /-- The outer samples of distinct entries of the list are disjoint. -/
 def PairwiseDisjointOuter (l : List (SquarePatch pos q)) : Prop :=
@@ -335,12 +345,12 @@ theorem footprint_nil : footprint ([] : List (SquarePatch pos q)) = ∅ := by
   simp [footprint]
 
 theorem footprint_cons (p : SquarePatch pos q) (l : List (SquarePatch pos q)) :
-    footprint (p :: l) = (p.outer : Set ι) ∪ footprint l := by
+    footprint (p :: l) = p.outer ∪ footprint l := by
   ext x; simp [footprint]
 
 theorem footprint_append (l₁ l₂ : List (SquarePatch pos q)) :
     footprint (l₁ ++ l₂) = footprint l₁ ∪ footprint l₂ := by
-  ext x; simp only [footprint, List.mem_append, Set.mem_ofPred_eq, Set.mem_union]
+  ext x; simp only [mem_footprint, List.mem_append, Finset.mem_union]
   constructor
   · rintro ⟨p, hp | hp, hx⟩
     · exact Or.inl ⟨p, hp, hx⟩
@@ -349,22 +359,26 @@ theorem footprint_append (l₁ l₂ : List (SquarePatch pos q)) :
     · exact ⟨p, Or.inl hp, hx⟩
     · exact ⟨p, Or.inr hp, hx⟩
 
-theorem disjoint_footprint_of_forall {l : List (SquarePatch pos q)} {S : Set ι}
-    (h : ∀ p ∈ l, Disjoint (p.outer : Set ι) S) : Disjoint (footprint l) S := by
-  rw [Set.disjoint_left]
-  rintro x ⟨p, hp, hx⟩
-  exact Set.disjoint_left.mp (h p hp) hx
+theorem disjoint_footprint_of_forall {l : List (SquarePatch pos q)} {S : Finset ι}
+    (h : ∀ p ∈ l, Disjoint p.outer S) : Disjoint (footprint l) S := by
+  rw [Finset.disjoint_left]
+  intro x hx
+  obtain ⟨p, hp, hx⟩ := mem_footprint.mp hx
+  exact Finset.disjoint_left.mp (h p hp) hx
 
 theorem subset_footprint {p : SquarePatch pos q} {l : List (SquarePatch pos q)} (hp : p ∈ l) :
-    (p.outer : Set ι) ⊆ footprint l := fun _ hx => ⟨p, hp, hx⟩
+    p.outer ⊆ footprint l := fun _ hx => mem_footprint.mpr ⟨p, hp, hx⟩
 
 theorem innerUnion_subset_footprint (l : List (SquarePatch pos q)) :
-    innerUnion l ⊆ footprint l := fun _ ⟨p, hp, hx⟩ => ⟨p, hp, p.inner_subset_outer hx⟩
+    innerUnion l ⊆ footprint l := fun _ hx => by
+  obtain ⟨p, hp, hx⟩ := mem_innerUnion.mp hx
+  exact mem_footprint.mpr ⟨p, hp, p.inner_subset_outer hx⟩
 
 theorem disjoint_outer_footprint {p : SquarePatch pos q} {l : List (SquarePatch pos q)}
-    (h : PairwiseDisjointOuter (p :: l)) : Disjoint (p.outer : Set ι) (footprint l) := by
-  rw [Set.disjoint_left]
-  rintro x hx ⟨b, hb, hxb⟩
+    (h : PairwiseDisjointOuter (p :: l)) : Disjoint p.outer (footprint l) := by
+  rw [Finset.disjoint_left]
+  intro x hx hx'
+  obtain ⟨b, hb, hxb⟩ := mem_footprint.mp hx'
   exact Finset.disjoint_left.mp (List.rel_of_pairwise_cons h hb) hx hxb
 
 theorem PairwiseDisjointOuter.of_cons {p : SquarePatch pos q} {l : List (SquarePatch pos q)}
@@ -375,12 +389,12 @@ theorem projProd_mem_supportedOperators :
     (l : List (SquarePatch pos q)) → projProd l ∈ supportedOperators q (footprint l)
   | [] => by
     rw [footprint_nil]
-    simpa [projProd] using one_mem_supportedOperators (d := q) (∅ : Set ι)
+    simpa [projProd] using one_mem_supportedOperators (d := q) (∅ : Finset ι)
   | p :: l => by
     rw [projProd, List.map_cons, List.prod_cons, footprint_cons]
     exact mul_mem_supportedOperators
-      (supportedOperators_mono Set.subset_union_left p.proj_mem_supportedOperators)
-      (supportedOperators_mono Set.subset_union_right (projProd_mem_supportedOperators l))
+      (supportedOperators_mono Finset.subset_union_left p.proj_mem_supportedOperators)
+      (supportedOperators_mono Finset.subset_union_right (projProd_mem_supportedOperators l))
 
 theorem projProd_append (l₁ l₂ : List (SquarePatch pos q)) :
     projProd (l₁ ++ l₂) = projProd l₁ * projProd l₂ := by
@@ -475,8 +489,9 @@ theorem rawProd_mem_supportedOperators [NeZero q] :
   | h :: l, t => by
     rw [List.map_cons, footprint_cons]
     exact mul_mem_supportedOperators
-      (supportedOperators_mono Set.subset_union_left (h.patch.branch_mem_supportedOperators t.1))
-      (supportedOperators_mono Set.subset_union_right (rawProd_mem_supportedOperators l t.2))
+      (supportedOperators_mono Finset.subset_union_left
+        (h.patch.branch_mem_supportedOperators t.1))
+      (supportedOperators_mono Finset.subset_union_right (rawProd_mem_supportedOperators l t.2))
 
 theorem rawProd_conjTranspose_mem_supportedOperators [NeZero q] (l : List (Hole pos q Party))
     (t : TagSpace l) : (rawProd l t)ᴴ ∈ supportedOperators q (footprint (l.map Hole.patch)) :=
@@ -527,8 +542,8 @@ theorem exists_tagEquiv_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
       fun _ => rfl⟩, fun t => ?_⟩
     change x.patch.branch t.2.1 * (y.patch.branch t.1 * rawProd l t.2.2) =
       y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
-    have hyx : Disjoint (y.patch.outer : Set ι) x.patch.outer :=
-      Finset.disjoint_coe.mpr (List.rel_of_pairwise_cons hd List.mem_cons_self)
+    have hyx : Disjoint y.patch.outer x.patch.outer :=
+      (List.rel_of_pairwise_cons hd List.mem_cons_self)
     rw [← mul_assoc, ← mul_assoc, (commute_of_mem_supportedOperators hyx
       (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _)).eq]
   | trans h₁ _ ih₁ ih₂ =>
@@ -620,10 +635,10 @@ variable (F : Frame pos q Party)
 def patches : List (SquarePatch pos q) := F.holes.map Hole.patch
 
 /-- The union `H^-(F)` of the physical samples of the inner hole squares. -/
-def innerHoles : Set ι := innerUnion F.patches
+def innerHoles : Finset ι := innerUnion F.patches
 
 /-- The union `H^+(F)` of the physical samples of the outer hole squares. -/
-def outerHoles : Set ι := footprint F.patches
+def outerHoles : Finset ι := footprint F.patches
 
 /-- The layout of a frame: its tag registers followed by the raw registers of its sheet. -/
 abbrev Layout : Type _ := TagSpace F.holes × (ι → Fin q)

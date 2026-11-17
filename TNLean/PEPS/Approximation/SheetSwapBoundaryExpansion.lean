@@ -53,21 +53,21 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
   change δ h.operator = ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R), δ (h.edgeTerm e)
   simp only [SquareHamiltonian.operator, map_add, map_sum]
-  have hcancel {S : Set (SquareLatticeVertex L L)}
+  have hcancel {S : Finset (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ QuantumCircuit.supportedOperators q S)
-      (hS : S ⊆ (R : Set _) ∨ Disjoint S (R : Set _)) : δ A = 0 :=
+      (hS : S ⊆ R ∨ Disjoint S R) : δ A = 0 :=
     sub_eq_zero.mpr
       (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators hA hS)
   have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
       δ (h.edgeTerm e) = 0 := by
     apply hcancel (h.edge_supported e)
-    simp only [IsRegionBoundaryEdge, Set.insert_subset_iff, Set.singleton_subset_iff,
-      Set.disjoint_insert_left, Set.disjoint_singleton_left, Finset.mem_coe] at he ⊢
+    simp only [IsRegionBoundaryEdge, Finset.insert_subset_iff, Finset.singleton_subset_iff,
+      Finset.disjoint_insert_left, Finset.disjoint_singleton_left] at he ⊢
     tauto
   have hsite (v : SquareLatticeVertex L L) : δ (h.siteTerm v) = 0 :=
     hcancel (h.site_supported v) (by
-      simp only [Set.singleton_subset_iff, SetLike.mem_coe, Set.disjoint_singleton_left]
+      simp only [Finset.singleton_subset_iff, Finset.disjoint_singleton_left]
       exact em _)
   rw [Finset.sum_eq_zero fun v _ => hsite v, zero_add]
   refine (Finset.sum_subset (Finset.filter_subset _ _) ?_).symm

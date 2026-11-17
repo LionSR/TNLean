@@ -65,10 +65,8 @@ private theorem commute_bonds_of_separated
   refine QuantumCircuit.commute_of_mem_supportedOperators ?_
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs j))
-  rw [Set.disjoint_left]
+  rw [Finset.disjoint_left]
   intro x hx hy
-  change x ∈ interval L i.val (i.val + 2) at hx
-  change x ∈ interval L j.val (j.val + 2) at hy
   rw [mem_interval] at hx hy
   omega
 

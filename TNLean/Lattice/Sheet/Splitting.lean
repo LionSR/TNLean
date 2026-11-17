@@ -231,7 +231,7 @@ Lemma 4.2 (`l:agsp`), lines 646–654, and ALVV, arXiv:1602.08828v2,
 `eq:H-mid-cut`, lines 810–821, and `prop:Cheby-AGSP-eff`, lines 1324–1332. -/
 theorem exists_threeSplit_eq_reindex_one_kronecker
     {T E : Finset ι} (h : Disjoint T E) {D : Finset ι}
-    (hD : Disjoint D (T : Set ι))
+    (hD : Disjoint D T)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ supportedOperators q D) :
     ∃ V : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))

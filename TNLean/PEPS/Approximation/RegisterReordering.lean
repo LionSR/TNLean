@@ -138,8 +138,8 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
       fun _ => rfl⟩, fun t => ?_, .swap _ _ _, Word.isReordering_swap .., fun τ z => ?_⟩
     · change x.patch.branch t.2.1 * (y.patch.branch t.1 * rawProd l t.2.2) =
         y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
-      have hyx : Disjoint (y.patch.outer : Set ι) x.patch.outer :=
-        Finset.disjoint_coe.mpr (List.rel_of_pairwise_cons hd List.mem_cons_self)
+      have hyx : Disjoint y.patch.outer x.patch.outer :=
+        (List.rel_of_pairwise_cons hd List.mem_cons_self)
       rw [← mul_assoc, ← mul_assoc, (commute_of_mem_supportedOperators hyx
         (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _)).eq]
     · obtain ⟨t, s, τ⟩ := τ

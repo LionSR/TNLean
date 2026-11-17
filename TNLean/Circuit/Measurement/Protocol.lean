@@ -288,7 +288,7 @@ theorem exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty {T : �
   have hpost : P.postMeasurement m = P.preMeasurement :=
     outcomeProj_mulVec_of_isEmpty m _
   have hcirc : IsCircuitOn Finset.univ T (circuitOp P.first) :=
-    IsBondCircuitOn.mono ⟨P.first, rfl, fun _ _ _ _ => Set.subset_univ _, rfl⟩ hT
+    IsBondCircuitOn.mono ⟨P.first, rfl, fun _ _ _ _ => Finset.subset_univ _, rfl⟩ hT
   refine ⟨fun i => star (P.correction m i),
     fun i => Unitary.star_mem (P.correction_mem_unitary m i),
     _, hcirc.isBondCircuitOfDepth, Function.update P.initial 0 (c⁻¹ • P.initial 0), ?_⟩

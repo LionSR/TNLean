@@ -86,8 +86,8 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   set v := graphBallLocalizationVelocity R J
   have hC : 0 < C := graphBallLocalizationPrefactor_pos R
   have hdisj (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S) :
-      Disjoint (S : Set (Site Λ)) (ManyBody.graphBall (domainGraph Λ) y l : Set (Site Λ)) :=
-    Set.disjoint_left.mpr fun x hxS hxball =>
+      Disjoint S (ManyBody.graphBall (domainGraph Λ) y l) :=
+    Finset.disjoint_left.mpr fun x hxS hxball =>
       hy (Finset.mem_filter.mpr ⟨Finset.mem_univ y, x, hxS,
         (exists_walk_length_le_iff_edist_le Λ l x y).mpr
           (by simpa only [SimpleGraph.edist_comm] using (ManyBody.mem_graphBall.mp hxball))⟩)

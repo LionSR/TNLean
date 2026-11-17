@@ -73,7 +73,7 @@ theorem selectedZeroRegisterLogical_mem_supportedOperators (s : Fin a ↪ Fin n)
 the reflection. Source: interval support preservation in Section 5 of the
 circuit audit. -/
 theorem selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset
-    (s : Fin a ↪ Fin n) {S : Finset (Fin n)} (hS : Set.range s ⊆ S) :
+    (s : Fin a ↪ Fin n) {S : Finset (Fin n)} (hS : Finset.univ.image s ⊆ S) :
     selectedZeroRegisterLogical (d := d) s ∈ supportedOperators d S :=
   supportedOperators_mono hS (selectedZeroRegisterLogical_mem_supportedOperators s)
 

@@ -80,8 +80,9 @@ theorem wholeSite_local (hd : 0 < d) (e : Fin s ↪ Fin N)
   · intro a
     apply supportedOperators_mono _
       (embedOp_mem_supportedOperators (blockDigits e).injective _)
-    rintro x ⟨p, rfl⟩
-    change (layout N k).site (blockDigits e p) = i
+    intro x hmemImage
+    obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hmemImage
+    refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
     obtain ⟨⟨j, t⟩, rfl⟩ := finProdFinEquiv.surjective p
     rw [blockDigits_apply]
     change (finProdFinEquiv.symm (finProdFinEquiv (e j, t))).1 = i

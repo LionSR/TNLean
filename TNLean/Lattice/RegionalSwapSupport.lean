@@ -76,7 +76,7 @@ theorem sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {R : Finset ι} {S : Finset ι} {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ supportedOperators q S)
-    (hS : S ⊆ (R : Set ι) ∨ Disjoint S (R : Set ι)) :
+    (hS : S ⊆ R ∨ Disjoint S R) :
     sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ =
       doubledHamiltonian A := by
   classical
@@ -123,7 +123,7 @@ theorem sheetSwapOp_conj_kronecker_eq_inter
   have hcancel : sheetSwapOp q (D \ S) * (A ⊗ₖ B) *
       (sheetSwapOp q (D \ S))ᴴ = A ⊗ₖ B := by
     have hcomm := commute_sheetSwapOp_kronecker (S := D \ S)
-      (Finset.disjoint_coe.mpr Finset.disjoint_sdiff) hA hB
+      Finset.disjoint_sdiff hA hB
     have hunitE : sheetSwapOp q (D \ S) * (sheetSwapOp q (D \ S))ᴴ = 1 :=
       Matrix.mem_unitaryGroup_iff.mp (sheetSwap q (D \ S)).permMatrix_mem_unitaryGroup
     rw [hcomm.eq, Matrix.mul_assoc, hunitE, Matrix.mul_one]
@@ -166,13 +166,12 @@ theorem reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
         (sheetSwapOp q (D ∩ S)) ∈ supportedOperators (q * q) S :=
     supportedOperators_mono
-      (show (↑(D ∩ S) : Set ι) ⊆ (S : Set ι) from
-        Finset.coe_subset.mpr Finset.inter_subset_right)
+      Finset.inter_subset_right
       (reindex_sheetSwapOp_mem_supportedOperators q (D ∩ S))
   have hT :
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
         (A ⊗ₖ B) ∈ supportedOperators (q * q) S := by
-    simpa only [Set.union_self] using reindex_kronecker_mem_supportedOperators hA hB
+    simpa only [Finset.union_self] using reindex_kronecker_mem_supportedOperators hA hB
   dsimp only
   simpa only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_submatrix,
     Matrix.reindex_apply, Matrix.submatrix_mul_equiv,

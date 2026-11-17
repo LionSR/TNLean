@@ -48,8 +48,8 @@ theorem chainWindowOperator_commute_of_disjoint {L K N a b : ℕ}
   refine QuantumCircuit.commute_of_mem_supportedOperators ?_
     (chainWindowOperator_mem_supportedOperators ha haL X)
     (chainWindowOperator_mem_supportedOperators hb hbK Y)
-  refine Set.disjoint_left.2 (fun i hi hj => ?_)
-  simp only [Set.mem_ofPred_eq] at hi hj
+  refine Finset.disjoint_left.2 (fun i hi hj => ?_)
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
   omega
 
 /-- The matrix of the open-chain interaction sum. Source: Nachtergaele,

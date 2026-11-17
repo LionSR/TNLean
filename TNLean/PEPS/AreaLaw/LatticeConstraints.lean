@@ -53,6 +53,7 @@ namespace TNLean.PEPS.AreaLaw
 open QuantumCircuit SpectralFilter
 open Matrix (rootChannel)
 
+open Classical in
 /-- **Positive replacement of the Hamiltonian on a lattice domain, with named constants**
 (Proposition 4.3, `prop:positive`, `03-quasilocal.tex`, lines 220–334). Let `C₃, c₃` be the
 constants of the filter-locality tail of the positive constraints for the lattice localization
@@ -99,7 +100,8 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
         ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
         ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
           C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) := by
+      (∀ i, k i ∈ supportedOperators q
+          (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) := by
   intro q _ Λ h a ha E₀ Ω hgs
   obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
   obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := positiveQuasilocalConstraints_of_locality hp R
@@ -169,6 +171,7 @@ theorem norm_latticePositiveConstraint_sub_map_le {p : ℕ} (hp : 1 ≤ p) (R : 
       (localizationVelocity_pos _ _ _) one_half_pos hH hΩ hh hhJ L hcontr hunit hherm hfix hl hτ
   · exact absurd ((norm_nonneg h).trans hhJ) (not_le.mpr hJ)
 
+open Classical in
 /-- **Positive replacement of the Hamiltonian on a lattice domain, at the named constants**
 (Proposition 4.3, `prop:positive`, `03-quasilocal.tex`, lines 220–334). Every conclusion of
 `exists_latticePositiveConstraints` holds with `C = latticePositiveConstraintConst R J Δ p` and
@@ -193,12 +196,14 @@ theorem latticePositiveConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {
         ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
           latticePositiveConstraintConst R J Δ p *
             Real.exp (-(latticePositiveConstraintRate R J Δ p * (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) :=
+      (∀ i, k i ∈ supportedOperators q
+          (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) :=
   latticePositiveConstraints_of_locality hp R hJ hΔ
     (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
       norm_latticePositiveConstraint_sub_map_le hp R hΔ hH hΩ hh hhJ L hcontr hunit hherm hfix
         hl hτ)
 
+open Classical in
 /-- **Positive replacement of the Hamiltonian on a lattice domain** (Proposition 4.3,
 `prop:positive`, `03-quasilocal.tex`, lines 220–246). For `p ≥ 1`, `α = p / (p + 1)`,
 `R`, `J ≥ 0` and `Δ > 0` there are `C ≥ 0`, `c > 0` such that for every `q ≥ 1`, every
@@ -231,7 +236,8 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
           ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
           ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) := by
+        (∀ i, k i ∈ supportedOperators q
+            (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) := by
   exact ⟨_, _, latticePositiveConstraintConst_nonneg R J Δ p,
     latticePositiveConstraintRate_pos hp R J hΔ, latticePositiveConstraints_explicit hp R hJ hΔ⟩
 
@@ -273,11 +279,13 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
           ‖rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤ ‖B‖ ∧
           ‖rootChannel (G ⊗ₖ (1 : Matrix κ κ ℂ)) (Kr ⊗ₖ 1) B -
               rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤ ε * ‖B‖ ∧
-          ((∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Finset (Site Λ)),
+          ((∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Finset
+              (Site Λ)),
               Commute (A ⊗ₖ (1 : Matrix κ κ ℂ)) B) →
             rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B = B)) ∧
         (∀ B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-          (∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Finset (Site Λ)),
+          (∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Finset
+              (Site Λ)),
             Commute A B) → rootChannel Gl Kl B = B) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   refine ⟨4 * Real.sqrt C, c / 2, by positivity, by positivity, ?_⟩

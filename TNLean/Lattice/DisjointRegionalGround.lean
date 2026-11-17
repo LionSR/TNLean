@@ -135,8 +135,7 @@ private theorem exists_product_ground_of_complementary_support
   have : Nonempty (↥Sᶜ → Fin q) := ⟨b₀⟩
   obtain ⟨A₀, hAe⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hAS)
-  have hdisj : Disjoint (↑Sᶜ : Set V) (↑S : Set V) := by
-    exact Set.disjoint_left.mpr fun _ hv hvS ↦ (Finset.mem_compl.mp hv) hvS
+  have hdisj : Disjoint Sᶜ S := disjoint_compl_left
   obtain ⟨B₀, hBe⟩ := TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators hdisj
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hBS)
   have hA₀ : A₀.IsHermitian := by
@@ -470,7 +469,7 @@ theorem exists_disjoint_regional_clipping_structure
   have hcomm : Pairwise fun i j ↦ Commute (A i) (A j) := by
     intro i j hij
     exact QuantumCircuit.commute_of_mem_supportedOperators
-      (Finset.disjoint_coe.mpr (hdisj hij))
+      (hdisj hij)
       (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hsupp i))
       (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hsupp j))
   refine ⟨e, x, hxunit, hxall, helowall, ?_⟩

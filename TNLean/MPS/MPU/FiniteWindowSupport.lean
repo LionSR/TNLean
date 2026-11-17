@@ -97,7 +97,8 @@ theorem mpo_bufferedWindow_conjugation_mem_supportedOperators
         bufferedWindowMatrix d (3 * (2 * k)) p s (originalSiteHeisenbergInputWindow d k A) *
         (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
       QuantumCircuit.supportedOperators d
-        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦ p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
+        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+            p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
   rw [mpo_bufferedWindow_conjugation hU k p s hN S A]
   exact bufferedWindowMatrix_mem_supportedOperators d (3 * (2 * k)) p s (by omega)
     (originalSiteHeisenbergOutputWindow k u v A)
@@ -146,7 +147,8 @@ theorem mpo_chainWindow_conjugation_mem_supportedOperators
         MPSTensor.chainWindowOperator (p + (3 * (2 * k) + s)) (p + 2 * k) C *
         (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
       QuantumCircuit.supportedOperators d
-        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦ p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
+        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+            p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
   classical
   let E := originalSiteHeisenbergCentreEquiv d k
   let A := Matrix.reindex E.symm E.symm C
@@ -182,10 +184,12 @@ theorem mpo_conjugation_mem_supportedOperators_central
     {A : Matrix (Fin (p + (3 * (2 * k) + s)) → Fin d)
       (Fin (p + (3 * (2 * k) + s)) → Fin d) ℂ}
     (hA : A ∈ QuantumCircuit.supportedOperators d
-      (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦ p + 2 * k ≤ i.val ∧ i.val < (p + 2 * k) + 2 * k)) :
+      (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+          p + 2 * k ≤ i.val ∧ i.val < (p + 2 * k) + 2 * k)) :
     mpo U (p + (3 * (2 * k) + s)) * A * (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
       QuantumCircuit.supportedOperators d
-        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦ p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
+        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+            p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
   obtain ⟨C, rfl⟩ := MPSTensor.exists_chainWindowOperator_eq_of_mem_supportedOperators
     (by omega : p + 2 * k < p + (3 * (2 * k) + s))
     (by omega : (p + 2 * k) + 2 * k ≤ p + (3 * (2 * k) + s)) hA

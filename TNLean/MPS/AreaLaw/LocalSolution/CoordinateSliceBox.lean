@@ -45,9 +45,11 @@ strip. No separately supplied coordinate-Lipschitz hypothesis is needed.
 Hastings, arXiv:cond-mat/0508554v3, lines 745–756. -/
 theorem coordinateBox_ball_subset_strip {D : ℕ} (L : Fin D → ℕ) (axis : Fin D) (ℓ : ℕ)
     (i : ∀ k, Fin (L k)) :
-    {v : (∀ k, Fin (L k)) | dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ} ⊆
-      {v | Nat.dist (v axis) (i axis) ≤ ℓ} := by
+    (Finset.univ.filter fun v : (∀ k, Fin (L k)) ↦
+        dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ) ⊆
+      Finset.univ.filter fun v ↦ Nat.dist (v axis) (i axis) ≤ ℓ := by
   intro v hv
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hv ⊢
   exact natDist_coordinate_le_of_dist_le (fun w : Fin D → ℕ ↦ w)
     (fun _ _ ↦ le_rfl) axis hv
 

@@ -55,8 +55,10 @@ theorem exists_native_interval_slice_of_mpo_approximation {N q l r D : ℕ}
     simpa only [e, Function.comp_def, Subtype.range_val_subtype, Finset.setOfPred_mem] using
       eJ.surjective.range_comp
         (Subtype.val : interval (N + 1) l r → Fin (N + 1))
+  have hrange' : Finset.univ.image e = interval (N + 1) l r :=
+    Finset.coe_injective (by simpa using hrange)
   obtain ⟨M, hM⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he
-    (by simpa only [hrange] using
+    (by simpa only [hrange'] using
       QuantumCircuit.mem_supportedOperators_of_isSupportedOn hPs)
   have hread (sigma : Fin (r - l) → Fin q) : insert sigma ∘ e = sigma := by
     funext u

@@ -223,7 +223,8 @@ theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) �
       rw [Finset.prod_eq_zero (Finset.mem_univ i) (by simp [hi])]
       simp [hx]
   rw [this]
-  exact Submodule.smul_mem _ _ (rectKronecker_mem_supportedOperators fun i hi => absurd trivial hi)
+  exact Submodule.smul_mem _ _
+    (rectKronecker_mem_supportedOperators fun i hi => absurd (Finset.mem_univ i) hi)
 
 omit [DecidableEq κ] in
 /-- An operator acting on the sites `S` of the placed sites acts, as `X ⊗ 1`, on the sites
@@ -240,7 +241,7 @@ theorem embedOp_mem_supportedOperators_image {e : κ → ι} (he : Function.Inje
     by_cases h : ∃ j, e j = i
     · obtain ⟨j, rfl⟩ := h
       rw [he.extend_apply]
-      exact hA j fun hj => hi ⟨j, hj, rfl⟩
+      exact hA j fun hj => hi (Finset.mem_image_of_mem e hj)
     · rw [Function.extend_apply' _ _ _ h, Pi.one_apply]
   | zero => rw [embedOp_zero]; exact Submodule.zero_mem _
   | add x y _ _ hx hy => rw [embedOp_add]; exact Submodule.add_mem _ hx hy

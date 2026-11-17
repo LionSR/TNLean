@@ -99,8 +99,10 @@ theorem exists_chainWindowOperator_eq_of_mem_supportedOperators
     have hval := congrArg Fin.val hij
     dsimp [e] at hval
     omega
-  have hRange : Set.range e = {i : Fin N | a ≤ i.val ∧ i.val < a + L} := by
+  have hRange : Finset.univ.image e =
+      Finset.univ.filter fun i : Fin N ↦ a ≤ i.val ∧ i.val < a + L := by
     ext i
+    simp only [Finset.mem_image, Finset.mem_univ, true_and, Finset.mem_filter]
     constructor
     · rintro ⟨j, rfl⟩
       change a ≤ a + j.val ∧ a + j.val < a + L
@@ -231,9 +233,10 @@ Theorem 1, is applied to. -/
 theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     chainWindowOperator N a X ∈
-      QuantumCircuit.supportedOperators d (Finset.univ.filter fun (k : Fin N) ↦ a ≤ k.val ∧ k.val < a + L) := by
+      QuantumCircuit.supportedOperators d
+          (Finset.univ.filter fun (k : Fin N) ↦ a ≤ k.val ∧ k.val < a + L) := by
   classical
-  set S : Set (Fin N) := {k : Fin N | a ≤ k.val ∧ k.val < a + L}
+  set S : Finset (Fin N) := Finset.univ.filter fun k : Fin N ↦ a ≤ k.val ∧ k.val < a + L
   have hunit : ∀ τ₀ σ₀ : Fin L → Fin d,
       chainWindowOperator N a (Matrix.single τ₀ σ₀ (1 : ℂ)) ∈
         QuantumCircuit.supportedOperators d S := by
@@ -242,7 +245,7 @@ theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
       if h : a ≤ k.val ∧ k.val < a + L then
         Matrix.single (τ₀ ⟨k.val - a, by omega⟩) (σ₀ ⟨k.val - a, by omega⟩) 1
       else 1
-    have hm : ∀ k ∉ S, m k = 1 := fun k hk ↦ dite_eq_right hk
+    have hm : ∀ k ∉ S, m k = 1 := fun k hk ↦ dite_eq_right (by simpa [S] using hk)
     have heq : chainWindowOperator N a (Matrix.single τ₀ σ₀ (1 : ℂ)) = Matrix.finKronecker m := by
       ext τ σ
       rw [chainWindowOperator_apply ha haL, Matrix.finKronecker_apply]

@@ -67,8 +67,10 @@ theorem unitary {P : PhysicalPortLayout N W} {Q : PhysicalPortLayout N W'}
   | onsite i hU hs =>
     apply IsPhysicalPortUnitary.onsite i (embedOp_mem_unitary e.wires.injective hU)
     apply supportedOperators_mono _ (embedOp_mem_supportedOperators_image e.wires.injective hs)
-    rintro _ ⟨j, hj, rfl⟩
-    exact (e.site_wires j).trans hj
+    intro _ hmemImage
+    obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hmemImage
+    exact Finset.mem_filter.mpr
+      ⟨Finset.mem_univ _, (e.site_wires j).trans (Finset.mem_filter.mp hj).2⟩
   | onsitePermutation π hπ =>
     rw [embedOp_permOp_viaEmbedding]
     apply IsPhysicalPortUnitary.onsitePermutation

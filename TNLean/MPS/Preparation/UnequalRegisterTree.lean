@@ -97,7 +97,7 @@ theorem exists_rounds_registerLayersOp [NeZero d] [NeZero s] {K : ℕ}
     (gs : ℕ → List (RegisterGate d N s)) (m : ℕ)
     (hdisj : ∀ j < m, (gs j).Pairwise fun g g' => Disjoint g.span g'.span)
     (hreg : ∀ j' j, j' < j → j < m → ∀ g' ∈ gs j', ∀ g ∈ gs j,
-      Disjoint (Set.range g'.sites) g.interior)
+      Disjoint (Finset.univ.image g'.sites) g.interior)
     (hK : ∀ j < m, ∀ g ∈ gs j, IsPairProduct d (s + s) K g.X) :
     ∃ Rs : List (MeasurementRound d N),
       (Rs.map MeasurementRound.depth).sum = m * (4 * s + K + 2) ∧
@@ -129,14 +129,17 @@ theorem exists_rounds_registerLayersOp [NeZero d] [NeZero s] {K : ℕ}
     · exact hRsE.append hRs'E fun v hv g hg => hRsZ v hv j le_rfl (by omega) g hg
     · rw [registerLayersOp, ← mulVec_mulVec]
       refine (hRsZ v hv j' (by omega) hj'm g hg).mulVec_of_mem_supportedOperators
-        (T := {x | ∃ g' ∈ gs j, x ∈ Set.range g'.sites}) ?_
+        (T := Finset.univ.filter fun x ↦ ∃ g' ∈ gs j, x ∈ Finset.univ.image g'.sites) ?_
         (list_prod_mem_supportedOperators _ fun A hA => ?_)
-      · rw [Set.disjoint_left]
-        rintro x hx ⟨g', hg', hx'⟩
-        exact Set.disjoint_left.mp (hreg j j' (by omega) hj'm g' hg' g hg) hx' hx
+      · rw [Finset.disjoint_left]
+        intro x hx hx'
+        obtain ⟨g', hg', hx'⟩ := (Finset.mem_filter.mp hx').2
+        exact Finset.disjoint_left.mp (hreg j j' (by omega) hj'm g' hg' g hg) hx' hx
       · obtain ⟨g', hg', rfl⟩ := List.mem_map.mp hA
-        exact supportedOperators_mono (S' := {x | ∃ g' ∈ gs j, x ∈ Set.range g'.sites})
-          (fun x hx => ⟨g', hg', hx⟩) g'.op_mem_supportedOperators
+        exact supportedOperators_mono
+          (S' := Finset.univ.filter fun x ↦ ∃ g' ∈ gs j, x ∈ Finset.univ.image g'.sites)
+          (fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g', hg', hx⟩)
+          g'.op_mem_supportedOperators
 
 end Layers
 
@@ -537,7 +540,7 @@ theorem mem_span_treeRegGate {j : ℕ} {b : Fin M} {p : ℕ} (hj : j ≤ h) (hp 
     ∃ m, ∃ hm : m < nodeStop h (w b) j p - nodeStart h (w b) j p,
       x = blockSite hN b ⟨nodeStart h (w b) j p + m, by
         have := nodeStop_le_n (hT b) (by omega) hp; omega⟩ := by
-  obtain ⟨m, hm, rfl⟩ := hx
+  obtain ⟨m, hm, rfl⟩ := (treeRegGate hN hT X j b p hj hp).mem_span.mp hx
   have hL := two_mul_treeRegGate_L (hN := hN) (hT := hT) (X := X) b hj hp
   exact ⟨m, by omega, treeRegGate_a_add b hj hp (by omega)⟩
 
@@ -547,7 +550,7 @@ theorem mem_interior_treeRegGate {j : ℕ} {b : Fin M} {p : ℕ} (hj : j ≤ h) 
       nodeStart h (w b) j p + m + s < nodeStop h (w b) j p ∧
       x = blockSite hN b ⟨nodeStart h (w b) j p + m, by
         have := nodeStop_le_n (hT b) (by omega) hp; omega⟩ := by
-  obtain ⟨m, hm1, hm2, rfl⟩ := hx
+  obtain ⟨m, hm1, hm2, rfl⟩ := (treeRegGate hN hT X j b p hj hp).mem_zone.mp hx
   have hL := two_mul_treeRegGate_L (hN := hN) (hT := hT) (X := X) b hj hp
   have := nodeStart_add_le (hT b) (by omega : j ≤ h + 1) hp
   exact ⟨m, by omega, hm1, by omega, treeRegGate_a_add b hj hp (by omega)⟩
@@ -578,7 +581,7 @@ theorem pairwise_treeLevelGates (j : ℕ) :
         Disjoint (treeRegGate hN hT X j b p hj p.isLt).span
           (treeRegGate hN hT X j b' p' hj p'.isLt).span := by
       intro b b' p p' hne
-      rw [Set.disjoint_left]
+      rw [Finset.disjoint_left]
       intro x hx hx'
       obtain ⟨m, hm, rfl⟩ := mem_span_treeRegGate hj p.isLt hx
       obtain ⟨m', hm', he⟩ := mem_span_treeRegGate hj p'.isLt hx'
@@ -604,11 +607,12 @@ theorem pairwise_treeLevelGates (j : ℕ) :
 depth `j > j'`. -/
 theorem disjoint_range_sites_interior_treeLevelGates {j' j : ℕ} (hjj : j' < j)
     {g' g : RegisterGate d N s} (hg' : g' ∈ treeLevelGates hN hT X j')
-    (hg : g ∈ treeLevelGates hN hT X j) : Disjoint (Set.range g'.sites) g.interior := by
+    (hg : g ∈ treeLevelGates hN hT X j) : Disjoint (Finset.univ.image g'.sites) g.interior := by
   obtain ⟨hj', b', p', rfl⟩ := mem_treeLevelGates hg'
   obtain ⟨hj, b, p, rfl⟩ := mem_treeLevelGates hg
-  rw [treeRegGate_sites b' hj' p'.isLt, Set.disjoint_left]
-  rintro x ⟨t, rfl⟩ hx
+  rw [treeRegGate_sites b' hj' p'.isLt, Finset.disjoint_left]
+  intro x hx' hx
+  obtain ⟨t, -, rfl⟩ := Finset.mem_image.mp hx'
   obtain ⟨m, hm, hm1, hm2, he⟩ := mem_interior_treeRegGate hj p.isLt hx
   obtain ⟨rfl, he'⟩ := (blockSite_eq_iff hN).mp he
   simp only at he'
@@ -645,8 +649,18 @@ theorem registerLayersOp_treeLevelGates :
     simp only [treeLevelsOp, zero_add]
 
 /-- The sites `s, …, o - s - 1` of every block, `o` the number of sites of its leaves. -/
-def treeCentralSites (h s : ℕ) (hN : ∑ b, ℓ b = N) (w : Fin M → ℕ → ℕ) : Set (Fin N) :=
-  {x | ∃ b y, s ≤ y.val ∧ y.val + s < leafOffset (w b) (2 ^ (h + 1)) ∧ x = blockSite hN b y}
+noncomputable def treeCentralSites (h s : ℕ) (hN : ∑ b, ℓ b = N) (w : Fin M → ℕ → ℕ) :
+    Finset (Fin N) := by
+  classical
+  exact Finset.univ.filter fun x ↦
+    ∃ b y, s ≤ y.val ∧ y.val + s < leafOffset (w b) (2 ^ (h + 1)) ∧ x = blockSite hN b y
+
+omit [NeZero N] in
+theorem mem_treeCentralSites {h s : ℕ} {hN : ∑ b, ℓ b = N} {w : Fin M → ℕ → ℕ} {x : Fin N} :
+    x ∈ treeCentralSites h s hN w ↔
+      ∃ b y, s ≤ y.val ∧ y.val + s < leafOffset (w b) (2 ^ (h + 1)) ∧ x = blockSite hN b y := by
+  classical
+  simp [treeCentralSites]
 
 /-- **The depths `0, …, h` of the trees of all the blocks in depth `(h + 1)(4s + K + 2)` with
 measurements.** If every unitary `X b j p` of the nodes is a product of at most `K` gates on
@@ -677,7 +691,7 @@ theorem exists_rounds_blockLayerOp_treeLevelsOp [NeZero d] {K : ℕ}
   obtain ⟨hj, b, p, rfl⟩ := mem_treeLevelGates hg
   obtain ⟨m, hm, hm1, hm2, rfl⟩ := mem_interior_treeRegGate hj p.isLt hx
   have := nodeStop_le (h := h) (w := w b) (by omega : j ≤ h + 1) p.isLt
-  exact ⟨b, _, by simp only; omega, by simp only; omega, rfl⟩
+  exact mem_treeCentralSites.mpr ⟨b, _, by simp only; omega, by simp only; omega, rfl⟩
 
 /-- **The leaves of all the blocks by one local circuit.** If every unitary of the leaves is a
 product of at most `K` gates on neighbouring sites, the leaves of all the blocks form a local
@@ -687,9 +701,9 @@ theorem isCircuitOn_blockLayerOp_treeLeafOp {K : ℕ}
       Matrix (Cfg d (leafLen h (ℓ b) (w b) p)) (Cfg d (leafLen h (ℓ b) (w b) p)) ℂ)
     (hU : ∀ b (p : Fin (2 ^ (h + 1))), IsPairProduct d (leafLen h (ℓ b) (w b) p) K (U b p)) :
     IsCircuitOn Finset.univ K (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
-  refine (IsCircuitOn.finset_noncommProd Finset.univ (fun b => Set.range (blockSite hN b))
-    (fun b _ b' _ h' => disjoint_range_blockSite hN h') _ (fun b _ => ?_) _).mono_set
-      (Set.subset_univ _)
+  refine (IsCircuitOn.finset_noncommProd Finset.univ (fun b => Finset.univ.image (blockSite hN b))
+    (fun b _ b' _ h' => Finset.disjoint_coe.mp (by simpa using disjoint_range_blockSite hN h')) _
+    (fun b _ => ?_) _).mono_set (Finset.subset_univ _)
   change IsCircuitOn _ K (embedOp (blockSite hN b) (treeLeafOp (hT b) (U b)))
   rw [treeLeafOp, embedOp_list_prod (blockSite_injective hN b), List.map_map]
   have hcomp : (embedOp (blockSite hN b) ∘ fun p : Fin (2 ^ (h + 1)) =>
@@ -703,12 +717,17 @@ theorem isCircuitOn_blockLayerOp_treeLeafOp {K : ℕ}
     (fun p i i' hi => blockSite_succ hN b _ _ (leafWindow_succ (hT b) p.isLt i i' hi)) (hU b) _
     ?_).mono_set ?_
   · refine List.Pairwise.imp (fun {p p'} (hne : p ≠ p') => ?_) (List.nodup_finRange _)
+    refine Finset.disjoint_coe.mp ?_
+    simp only [Finset.coe_image, Finset.coe_univ, Set.image_univ]
     rw [Set.range_comp, Set.range_comp]
     exact (disjoint_range_leafWindow (hT b) p.isLt p'.isLt
       (fun h' => hne (Fin.ext h'))).image (blockSite_injective hN b).injOn
       (Set.subset_univ _) (Set.subset_univ _)
-  · rintro x ⟨p, -, i, rfl⟩
-    exact ⟨_, rfl⟩
+  · intro x hx
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hx
+    obtain ⟨p, -, hx⟩ := hx
+    obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hx
+    exact Finset.mem_image.mpr ⟨_, Finset.mem_univ _, rfl⟩
 
 end Ring
 

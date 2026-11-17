@@ -54,7 +54,8 @@ theorem IsSeparatedBy.symm {X Y : Finset (Fin N)} {s : ℕ} (h : IsSeparatedBy X
 /-- A separated site lies outside the backward neighbourhood. -/
 theorem IsSeparatedBy.notMem_neighbourhood {X Y : Finset (Fin N)} {s : ℕ}
     (h : IsSeparatedBy X Y s) {y : Fin N} (hy : y ∈ Y) : y ∉ neighbourhood X s := by
-  rintro ⟨x, hx, m, hm, heq⟩
+  intro hmem
+  obtain ⟨x, hx, m, hm, heq⟩ := mem_neighbourhood.mp hmem
   exact h x hx y hy m hm heq
 
 /-- Two disjoint backward light cones with a site outside their union. -/
@@ -67,13 +68,13 @@ theorem exists_separated_singletons_notMem_neighbourhood {T : ℕ} (hN : 4 * T +
   have hsep (x y : Fin N) (s : ℕ) (hxy : x.val + 1 + s ≤ y.val)
       (hyx : y.val + 1 + s ≤ x.val + N) : IsSeparatedBy {x} {y} s :=
     isSeparatedBy_of_val_bounds
-      (fun z hz => by rcases Set.mem_singleton_iff.mp hz with rfl; exact ⟨le_rfl, by omega⟩)
-      (fun z hz => by rcases Set.mem_singleton_iff.mp hz with rfl; exact ⟨le_rfl, by omega⟩)
+      (fun z hz => by rcases Finset.mem_singleton.mp hz with rfl; exact ⟨le_rfl, by omega⟩)
+      (fun z hz => by rcases Finset.mem_singleton.mp hz with rfl; exact ⟨le_rfl, by omega⟩)
       hxy hyx
   refine ⟨i, j, k, hsep i j (2 * T) (by dsimp [i, j]; omega) (by dsimp [i, j]; omega), ?_⟩
   have hik := hsep i k T (by dsimp [i, k]; omega) (by dsimp [i, k]; omega)
   have hkj := hsep k j T (by dsimp [k, j]; omega) (by dsimp [k, j]; omega)
-  exact fun h => h.elim (hik.notMem_neighbourhood (by simp))
+  exact fun h => (Finset.mem_union.mp h).elim (hik.notMem_neighbourhood (by simp))
     (hkj.symm.notMem_neighbourhood (by simp))
 
 

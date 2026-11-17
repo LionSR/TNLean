@@ -127,7 +127,7 @@ theorem IsPairProduct.embedOp {K : ℕ} {e : Fin m → Fin n} (he : Function.Inj
   obtain ⟨hu, p, p', hp, hS⟩ := hg Z' hZ'
   refine ⟨embedOp_mem_unitary he hu, e p, e p', by rw [hea, hea, hp]; ring, ?_⟩
   have := embedOp_mem_supportedOperators_image he hS
-  rwa [Set.image_pair] at this
+  rwa [Finset.image_insert, Finset.image_singleton] at this
 
 /-! ### Operators acting on a subset of the sites -/
 
@@ -148,7 +148,7 @@ theorem exists_embedOp_eq_of_mem_supportedOperators {e : Fin m → Fin n}
     · obtain ⟨j, rfl⟩ := h
       rw [he.extend_apply]; rfl
     · rw [Function.extend_apply' _ _ _ h, Pi.one_apply]
-      exact hA i fun ⟨j, hj⟩ => h ⟨j, hj⟩
+      exact hA i fun hi => h (by simpa using hi)
   | zero => exact ⟨0, by simp⟩
   | add x y _ _ hx hy =>
     obtain ⟨X, rfl⟩ := hx
@@ -202,7 +202,7 @@ theorem isNeighbourGate_permOp_swap {j j' : Fin n} (hj : j'.val = j.val + 1) :
     IsNeighbourGate (permOp (d := d) (Equiv.swap j j')) := by
   have hjj' : j ≠ j' := fun h => by rw [h] at hj; omega
   refine ⟨permOp_mem_unitary _, j, j', hj, ?_⟩
-  rw [permOp_swap_eq_embedOp hjj', ← range_pairSites]
+  rw [permOp_swap_eq_embedOp hjj', ← image_univ_pairSites]
   exact embedOp_mem_supportedOperators (pairSites_injective hjj') _
 
 theorem embedOp_comp_perm (e : Fin m → Fin n) (σ : Equiv.Perm (Fin m))
@@ -228,7 +228,7 @@ private theorem isPairProduct_embedOp_pairSites_of_lt {g : Matrix (Fin 2 → Fin
     have hne : i ≠ j := fun h => by rw [h] at hij; omega
     refine IsPairProduct.of_isNeighbourGate ⟨embedOp_mem_unitary (pairSites_injective hne) hg,
       i, j, by omega, ?_⟩
-    rw [← range_pairSites]
+    rw [← image_univ_pairSites]
     exact embedOp_mem_supportedOperators (pairSites_injective hne) _
   | succ k ih =>
     intro i j hij
@@ -280,7 +280,7 @@ theorem isPairProduct_of_mem_supportedOperators_pair (hd : 0 < d) {i j : Fin n} 
     {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
     (hZu : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ))
     (hZ : Z ∈ supportedOperators d {i, j}) : IsPairProduct d n (2 * n) Z := by
-  rw [← range_pairSites] at hZ
+  rw [← image_univ_pairSites] at hZ
   obtain ⟨g, rfl⟩ := exists_embedOp_eq_of_mem_supportedOperators (pairSites_injective hij) hZ
   exact isPairProduct_embedOp_pairSites hij
     (mem_unitary_of_embedOp_mem_unitary (pairSites_injective hij) hd hZu)

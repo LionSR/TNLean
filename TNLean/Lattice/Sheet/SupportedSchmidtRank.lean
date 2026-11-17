@@ -54,7 +54,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
   · let σ₀ : ι → Fin q := Classical.choice hconfig
     let t₀ : T → Fin q := fun v ↦ σ₀ v
     let e₀ : E → Fin q := fun v ↦ σ₀ v
-    have hDTset : Disjoint (D : Set ι) (T : Set ι) := Finset.disjoint_coe.mpr hDT
+    have hDTset : Disjoint D T := hDT
     obtain ⟨V, hV⟩ :=
       exists_threeSplit_eq_reindex_one_kronecker hTE hDTset hA
     let γ : (↥(T ∪ E)ᶜ → Fin q) → ((v : {v // v ∉ E}) → Fin q) :=

@@ -19,7 +19,7 @@ open Matrix
 
 namespace QuantumCircuit
 
-variable {d : ℕ} {ι : Type*} [Fintype ι]
+variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- Permuting the sites permutes the support of an operator. Source context:
 Hastings–Koma, arXiv:math-ph/0507008, Appendix A, finite-volume local interactions. -/
@@ -37,7 +37,7 @@ theorem supportedOperators_submatrix_siteEquiv {S : Finset ι} (p : Equiv.Perm �
         (fun k ↦ m (p.symm k) (σ k) (τ k)) (by simp))
     rw [heq]
     exact rectKronecker_mem_supportedOperators fun k hk ↦ hm _ (by
-      intro h; exact hk ⟨p.symm k, h, p.apply_symm_apply k⟩)
+      intro h; exact hk (Finset.mem_image.mpr ⟨p.symm k, h, p.apply_symm_apply k⟩))
   | zero => simp
   | add A B _ _ hA hB => exact Submodule.add_mem _ hA hB
   | smul c A _ hA => exact Submodule.smul_mem _ c hA

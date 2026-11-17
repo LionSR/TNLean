@@ -374,6 +374,7 @@ theorem truncatedConstraint_of_setDist_eq_top {q : ℕ} {G : SimpleGraph ι} {S�
     truncatedConstraint q G S₀ r₀ a k = k := by
   simp [truncatedConstraint, ha]
 
+open Classical in
 /-- **The truncated constraint acts on its designated support** (`03-quasilocal.tex`,
 lines 419–424): the ball expectation acts on the ball, and a retained constraint acting on
 the component of its anchor acts on the designated component. -/
@@ -385,9 +386,7 @@ theorem truncatedConstraint_mem_supportedOperators {q : ℕ} (G : SimpleGraph ι
   classical
   unfold truncatedConstraint designatedSupport
   split_ifs with h
-  · have hc : ((componentFinset G a : Finset ι) : Set ι) = {x | G.Reachable a x} := by
-      ext x; simp [componentFinset]
-    rw [hc]; exact hk
+  · exact hk
   · exact (mem_supportedOperators_of_isSupportedOn
       (ManyBody.regionExpectation_mem_supportedOperators _ k))
 

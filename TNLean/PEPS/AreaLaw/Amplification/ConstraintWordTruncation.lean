@@ -388,6 +388,7 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
   ⟨_, _, constraintWordTruncationPrefactor_nonneg hμ C, half_pos hc,
     domainConstraintWord_truncation hC hμ⟩
 
+open Classical in
 /-- **Truncation of the retained constraint product for the exact positive constraints, with
 explicit constants** (Lemma 10.1, `eq:amplification-product-truncation`;
 `09-amplification.tex`, lines 42–63 and 228–234). Let `C ≥ 0` be a localization prefactor of
@@ -414,7 +415,8 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
           ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
           ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x))) :
+        (∀ i, k i ∈ supportedOperators q
+            (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →

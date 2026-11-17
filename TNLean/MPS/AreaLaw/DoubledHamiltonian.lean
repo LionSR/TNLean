@@ -46,10 +46,10 @@ noncomputable def ChainHamiltonian.doubled (h : ChainHamiltonian L q R J) :
       (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)) (_ + _) ∈ _
     rw [map_add]
     have hterm := QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.supported X)
-    have hone := QuantumCircuit.one_mem_supportedOperators (d := q) (X.1 : Set (Fin L))
+    have hone := QuantumCircuit.one_mem_supportedOperators (d := q) X.1
     have hleft := QuantumCircuit.reindex_kronecker_mem_supportedOperators hterm hone
     have hright := QuantumCircuit.reindex_kronecker_mem_supportedOperators hone hterm
-    simpa only [Set.union_self, Matrix.coe_reindexAddEquiv] using
+    simpa only [Finset.union_self, Matrix.coe_reindexAddEquiv] using
       (QuantumCircuit.supportedOperators (q * q)
         (X.1 ∪ X.1)).add_mem hleft hright
   hermitian X := by

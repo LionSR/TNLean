@@ -227,7 +227,7 @@ theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (
       exact hLR
   rw [compl_compl, Finset.sum_const, nsmul_eq_mul] at hloc
   have hcomm : Commute B (ManyBody.regionExpectation Yᶜ τA) :=
-    commute_of_mem_supportedOperators (by simp [Finset.coe_compl, disjoint_compl_right]) hB
+    commute_of_mem_supportedOperators disjoint_compl_right hB
       (mem_supportedOperators_of_isSupportedOn
         (ManyBody.regionExpectation_mem_supportedOperators _ _))
   have hsplit : B * τA - τA * B =
@@ -295,7 +295,7 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
   have hterm (k : κ) (hk : k ∉ s) :
       ‖h k * A - A * h k‖ ≤ if ¬Disjoint (X k) K then F * ‖h k‖ else 0 := by
     split_ifs with hd
-    · rw [(commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr hd) (hSupport k)
+    · rw [(commute_of_mem_supportedOperators hd (hSupport k)
         hAK).eq, sub_self, norm_zero]
     · have hLR := norm_commutator_heisenbergEvolution_le_graphDistance_finset G X h'
         hHerm' hSupport' R hDiam vR hCard b₀ hBudget' S hW (X k) (hSupport k) μ hμ m

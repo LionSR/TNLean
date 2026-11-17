@@ -42,7 +42,7 @@ local dimensions are included.
 
 Source: polynomial-PEPS, `02-information.tex`, lines 416–424 and 513–524. -/
 theorem reindex_kronecker_mem_supportedOperators
-    {ι : Type*} [Fintype ι] {d e : ℕ} {S T : Finset ι}
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {d e : ℕ} {S T : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     {B : Matrix (ι → Fin e) (ι → Fin e) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators e T) :
@@ -58,7 +58,8 @@ theorem reindex_kronecker_mem_supportedOperators
     refine Submodule.subset_span
       ⟨fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (m i ⊗ₖ n i), ?_, ?_⟩
     · intro i hi
-      simp only [hm i (fun h ↦ hi (Or.inl h)), hn i (fun h ↦ hi (Or.inr h)),
+      simp only [hm i (fun h ↦ hi (Finset.mem_union_left _ h)),
+        hn i (fun h ↦ hi (Finset.mem_union_right _ h)),
         Matrix.one_kronecker_one, Matrix.reindex_apply, Matrix.submatrix_one_equiv]
     · ext x y
       exact Finset.prod_mul_distrib.symm

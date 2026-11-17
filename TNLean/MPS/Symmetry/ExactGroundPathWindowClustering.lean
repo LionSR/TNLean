@@ -30,25 +30,17 @@ open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 namespace MPSTensor
 
-private def windowFinset (N a L : ℕ) : Finset (Fin N) :=
-  Finset.univ.filter fun k ↦ a ≤ k.val ∧ k.val < a + L
-
-private theorem coe_windowFinset (N a L : ℕ) :
-    (windowFinset N a L : Set (Fin N)) = window N a L := by
-  ext k
-  simp [windowFinset, window]
-
-private theorem card_windowFinset_le (N a L : ℕ) : (windowFinset N a L).card ≤ L := by
+private theorem card_window_le (N a L : ℕ) : (window N a L).card ≤ L := by
   have hMaps : Set.MapsTo (fun k : Fin N ↦ k.val - a)
-      (windowFinset N a L) (Finset.range L) := by
+      (window N a L) (Finset.range L) := by
     intro k hk
-    simp only [windowFinset, Finset.mem_coe, Finset.mem_filter, Finset.mem_univ,
+    simp only [window, Finset.mem_coe, Finset.mem_filter, Finset.mem_univ,
       true_and] at hk
     simp only [Finset.mem_coe, Finset.mem_range]
     omega
-  have hInj : Set.InjOn (fun k : Fin N ↦ k.val - a) (windowFinset N a L) := by
+  have hInj : Set.InjOn (fun k : Fin N ↦ k.val - a) (window N a L) := by
     intro i hi j hj heq
-    simp only [windowFinset, Finset.mem_coe, Finset.mem_filter,
+    simp only [window, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and] at hi hj
     have heq' : (i : ℕ) - a = (j : ℕ) - a := heq
     exact Fin.ext (by omega)
@@ -87,17 +79,15 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
   let N := L + t + L + n
   have hN : 2 ≤ N := by dsimp only [N]; omega
   let : NeZero N := ⟨by omega⟩
-  let F := windowFinset N 0 L
-  let F' := windowFinset N (L + t) L
+  let F := window N 0 L
+  let F' := window N (L + t) L
   have hF : F.Nonempty := by
     refine ⟨⟨0, by omega⟩, ?_⟩
-    simp [F, windowFinset, hL]
+    simp [F, window, hL]
   have hF' : F'.Nonempty := by
     refine ⟨⟨L + t, by dsimp only [N]; omega⟩, ?_⟩
-    simp [F', windowFinset, hL]
+    simp [F', window, hL]
   have hSep : IsSeparatedBy F F' t := by
-    rw [show (F : Set (Fin N)) = window N 0 L from coe_windowFinset N 0 L,
-      show (F' : Set (Fin N)) = window N (L + t) L from coe_windowFinset N (L + t) L]
     exact isSeparatedBy_window (by omega) (by dsimp only [N]; omega)
   have hDist : (t : ℝ) ≤ ringSupportDistance (F : Set (Fin N))
       (F' : Set (Fin N)) hF hF' := by
@@ -105,15 +95,13 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
   have hDisj : Disjoint (F : Set (Fin N)) (F' : Set (Fin N)) := by
     apply Set.disjoint_left.mpr
     intro k hk hk'
-    simp only [F, F', windowFinset, Finset.mem_coe, Finset.mem_filter,
+    simp only [F, F', window, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and] at hk hk'
     omega
   have hX : chainWindowOperator N 0 X ∈ supportedOperators d F := by
-    rw [show (F : Set (Fin N)) = window N 0 L from coe_windowFinset N 0 L]
     exact chainWindowOperator_mem_supportedOperators_window (by omega)
       (by dsimp only [N]; omega) X
   have hY : chainWindowOperator N (L + t) Y ∈ supportedOperators d F' := by
-    rw [show (F' : Set (Fin N)) = window N (L + t) L from coe_windowFinset N (L + t) L]
     exact chainWindowOperator_mem_supportedOperators_window (by dsimp only [N]; omega)
       (by dsimp only [N]; omega) Y
   have h := hEst γ hγ N hN (chainWindowOperator N 0 X)
@@ -122,7 +110,7 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
     (by dsimp only [N]; omega) X
   have hNormY := norm_window_le (N := N) (a := L + t) (by dsimp only [N]; omega)
     (by dsimp only [N]; omega) Y
-  have hCard : (F.card : ℝ) ≤ L := by exact_mod_cast card_windowFinset_le N 0 L
+  have hCard : (F.card : ℝ) ≤ L := by exact_mod_cast card_window_le N 0 L
   change ‖mpvConnectedCorrelator (Q.tensor γ) N 0 (L + t) X Y‖ ≤ _
   simp only [mpvConnectedCorrelator, mpvExpectation_eq_normalizedVectorExpectation]
   exact h.trans (by gcongr)

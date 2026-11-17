@@ -196,7 +196,7 @@ theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
     (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) X
     (isSupportedOn_of_mem_supportedOperators hA) y
-    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) μ hμ n
+    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by assumption)) μ hμ n
     (by rwa [anchors_self]) t
 
 /-- **Exact vanishing between components.** If the anchor `a` and the site `y` lie in
@@ -216,7 +216,7 @@ theorem commutator_eq_zero_of_edist_eq_top (h : LocalHamiltonian Λ q R J)
   ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top (domainGraph Λ) h.interaction
     (anchors X a) (anchors_mem ha) R (fun Y => Y.2.edist_le) X
     (isSupportedOn_of_mem_supportedOperators hA) y
-    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton]))
+    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by assumption))
     (by rwa [anchors_self]) t
 
 /-- **Localization onto graph balls**, explicit form, for the finite-domain Hamiltonian.
@@ -304,7 +304,7 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       (LocalHamiltonian.anchors_mem ha) h.hermitian
       (fun Y => Y.2.edist_le) (fun Y => Y.2.card_le)
       (h.sum_norm_term_containing_le hJ) X A B (isSupportedOn_of_mem_supportedOperators hA) y
-      (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) t
+      (isSupportedOn_of_mem_supportedOperators (S := {y}) (by assumption)) t
     rw [LocalHamiltonian.anchors_self] at hXY
     refine ⟨fun d hd => (hXY.1 d hd.symm.le).trans ?_, hXY.2⟩
     gcongr

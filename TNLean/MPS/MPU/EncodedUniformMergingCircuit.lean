@@ -660,7 +660,7 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
         initializedBasisMatrix
           (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A)) *
           encodedJoiningParent hd hr f e P V ∧
-      ∀ support : Set (Fin (a + (2 * q + 2))),
+      ∀ support : Finset (Fin (a + (2 * q + 2))),
         C₁ ∈ supportedOperators d support →
         C₂ ∈ supportedOperators d support →
         Set.range s ⊆ support →
@@ -719,14 +719,17 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
   · intro support hC₁support hC₂support hinputSupport hpacketSupport
     have hZ₀unitary := hjointClean.logical_mem_unitary hJ hjoint.mem_unitary
     have hZ₀support : Z₀ ∈ supportedOperators d support :=
-      mul_mem_supportedOperators (supportedOperators_mono hpacketSupport hTsupport)
+      mul_mem_supportedOperators (supportedOperators_mono (fun x hx => by
+          obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hx
+          exact Finset.mem_coe.mp (hpacketSupport ⟨i, rfl⟩)) hTsupport)
         (mul_mem_supportedOperators hC₁support hC₂support)
     have hinputReflection : subspaceReflection (E * Eᴴ) ∈ supportedOperators d support := by
       change subspaceReflection
         (initializedBasisMatrix (zeroFlagEmbedding (d := d) s) *
           (initializedBasisMatrix (zeroFlagEmbedding (d := d) s))ᴴ) ∈ _
       rw [← selectedZeroRegisterLogical_eq_subspaceReflection]
-      exact selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset s hinputSupport
+      exact selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset s
+        (Finset.coe_subset.mp (by simpa using hinputSupport))
     have hsuccessSupport : Set.range (mergingFlagSites a q) ⊆ support := by
       rintro i ⟨p, rfl⟩
       apply hpacketSupport
@@ -739,7 +742,8 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
         (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
           (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) ∈ _
       rw [← selectedZeroRegisterLogical_eq_subspaceReflection]
-      exact selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset _ hsuccessSupport
+      exact selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset _
+        (Finset.coe_subset.mp (by simpa using hsuccessSupport))
     exact postselectionAmplification_mem_supportedOperators Z₀ E S hZ₀unitary hZ₀support
       hinputReflection hsuccessReflection (amplificationRounds r)
 

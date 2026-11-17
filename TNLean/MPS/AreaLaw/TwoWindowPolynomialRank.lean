@@ -781,7 +781,7 @@ theorem operatorSchmidtRank_aeval_sum_le_pow_of_bulk
     exact (hside β (Finset.ne_of_mem_erase hβ)).resolve_left hnot
   obtain ⟨X, hX⟩ := exists_kronecker_one_of_mem_supportedOperators hleft
   obtain ⟨Y, hY⟩ := exists_one_kronecker_of_mem_supportedOperators
-    (by simpa only [Finset.coe_compl] using (disjoint_compl_left : Disjoint (↑S)ᶜ (S : Set ι)))
+    (disjoint_compl_left : Disjoint Sᶜ S)
     hright
   have hrankM : operatorSchmidtRank (M.reindex g g) ≤ B + 2 := by
     rw [hM, Matrix.reindex_apply, Matrix.submatrix_add, Matrix.submatrix_add]

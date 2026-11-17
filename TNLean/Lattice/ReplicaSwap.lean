@@ -100,8 +100,8 @@ theorem reindex_sumArrow_sitePair_mem_supportedOperators (q : ℕ) {S : Finset �
     rw [embedOp_val_eq_kronecker_one_submatrix, ← hA']
     simp
   rw [hAeq, reindex_sumArrow_sitePair_embedOp q Subtype.val]
-  have hrange : Set.range (Sum.map (fun x : S ↦ x.val) (fun x : S ↦ x.val)) =
-      ((S.disjSum S : Finset (ι ⊕ ι)) : Set (ι ⊕ ι)) := by
+  have hrange : Finset.univ.image (Sum.map (fun x : S ↦ x.val) (fun x : S ↦ x.val)) =
+      (S.disjSum S : Finset (ι ⊕ ι)) := by
     ext z
     rcases z with z | z <;> simp
   rw [← hrange]

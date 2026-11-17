@@ -49,7 +49,7 @@ theorem singleSitePaddedOperator_isNeighbourGate
     {U : Matrix (Cfg d 1) (Cfg d 1) ℂ}
     (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
     IsNeighbourGate (singleSitePaddedOperator U) := by
-  have hpair : ({0, 1} : Set (Fin 2)) = Set.univ := by
+  have hpair : ({0, 1} : Finset (Fin 2)) = Finset.univ := by
     ext i
     fin_cases i <;> simp
   refine ⟨singleSitePaddedOperator_mem_unitary hU, 0, 1, by decide, ?_⟩

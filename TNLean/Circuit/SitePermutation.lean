@@ -53,7 +53,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The permutation `σ` of the configurations changes only the sites of `S`, and the new values
 at the sites of `S` depend only on the old values at the sites of `S`. -/
-def IsLocalPerm (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop :=
+def IsLocalPerm (S : Finset ι) (σ : Equiv.Perm (ι → Fin d)) : Prop :=
   (∀ x, ∀ i ∉ S, σ x i = x i) ∧
     ∀ x y, (∀ j ∈ S, x j = y j) → ∀ i ∈ S, σ x i = σ y i
 
@@ -78,7 +78,7 @@ theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Finset ι}
       exact ⟨Fintype.equivFin S ⟨i, hi⟩, by simp [e]⟩
     · rintro ⟨j, rfl⟩
       exact ((Fintype.equivFin S).symm j).prop
-  have hrange : Set.range e = S := Set.ext fun i => (hmem i).symm
+  have hrange : Finset.univ.image e = S := Finset.ext fun i => by simpa using (hmem i).symm
   let X : Matrix (Fin (Fintype.card S) → Fin d) (Fin (Fintype.card S) → Fin d) ℂ :=
     of fun u w => if ∃ x : ι → Fin d, x ∘ e = u ∧ σ x ∘ e = w then 1 else 0
   have hX : σ.permMatrix ℂ = embedOp e X := by
@@ -133,7 +133,7 @@ theorem shiftPerm_apply (t : ι) (f : (ι → Fin d) → Fin d)
   rfl
 
 omit [Fintype ι] in
-theorem isLocalPerm_shiftPerm {S : Set ι} {t : ι} (ht : t ∈ S)
+theorem isLocalPerm_shiftPerm {S : Finset ι} {t : ι} (ht : t ∈ S)
     (f : (ι → Fin d) → Fin d)
     (hf : ∀ x c, f (Function.update x t c) = f x)
     (hfS : ∀ x y, (∀ j ∈ S, x j = y j) → f x = f y) : IsLocalPerm S (shiftPerm t f hf) := by
@@ -258,14 +258,9 @@ theorem pairSites_injective {i j : Fin n} (hij : i ≠ j) : Function.Injective (
   intro a b h
   fin_cases a <;> fin_cases b <;> simp_all [pairSites, eq_comm]
 
-theorem range_pairSites (i j : Fin n) : Set.range (pairSites i j) = {i, j} := by
+theorem image_univ_pairSites (i j : Fin n) : Finset.univ.image (pairSites i j) = {i, j} := by
   ext k
-  simp only [Set.mem_range, Set.mem_insert_iff, Set.mem_singleton_iff, pairSites]
-  constructor
-  · rintro ⟨a, rfl⟩; fin_cases a <;> simp
-  · rintro (rfl | rfl)
-    · exact ⟨0, rfl⟩
-    · exact ⟨1, rfl⟩
+  simp [pairSites, Fin.exists_fin_two, eq_comm]
 
 theorem permOp_swap_eq_embedOp {j j' : Fin n} (hjj' : j ≠ j') :
     permOp (d := d) (Equiv.swap j j') = embedOp (pairSites j j') swapTwo := by

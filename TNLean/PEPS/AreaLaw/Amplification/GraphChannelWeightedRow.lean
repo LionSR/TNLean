@@ -262,6 +262,7 @@ theorem exists_graphChannelEventKernel_weighted_row_le {D K μ b α : ℝ}
 
 variable {q : ℕ} [NeZero q] {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+open Classical in
 /-- The actual summed full-channel oscillation increments are dominated by
 the finite graph-ball event kernel. The coefficient is the one derived from
 the actual localization tails, including its factor of two. This is only a
@@ -298,6 +299,7 @@ theorem channelEventRowConstant_nonneg {μ : ℝ} (hμ : 0 ≤ μ) (C K c α : �
     0 ≤ channelEventRowConstant C K μ c α :=
   graphChannelRowConstant_nonneg (by positivity) hμ _ _
 
+open Classical in
 /-- **Uniform weighted rows and channel-increment domination, with an explicit row
 constant.** For an actual finite family of component-supported effects, the weighted rows of
 the event kernel are at most `channelEventRowConstant C K μ c α`, and the summed channel
@@ -341,6 +343,7 @@ theorem graphChannelEventKernel_bounds_of_component_support {C K μ c α : ℝ}
   · exact sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
       G a k hk₀ hk₁ hk hC hc hα hα₁ N hN hε
 
+open Classical in
 /-- Uniform weighted rows and literal channel-increment domination for an
 actual finite family of component-supported effects. If
 `A = 2 + 8 * sqrt C * exp (c / 2)`, the kernel uses `D = 2 * A`, `b = c / 2`,

@@ -130,11 +130,13 @@ theorem extendFiniteEdges_mem_supportedOperators (blk : ι → ℕ)
     (ha : ∀ j : Fin N, 0 < (j : ℕ) →
       a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (j : ℕ) (hj : 0 < j) :
-    extendFiniteEdges a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j) := by
+    extendFiniteEdges a j ∈ supportedOperators d
+        (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j) := by
   by_cases hjN : j < N
   · simpa only [extendFiniteEdges, dite_eq_left hjN] using ha ⟨j, hjN⟩ hj
   · simpa only [extendFiniteEdges, dite_eq_right hjN] using
-      (Submodule.zero_mem (supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j)))
+      (Submodule.zero_mem (supportedOperators d
+          (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j)))
 
 /-- Every joining operator of the hierarchy has its parent-block support, derived from
 only the finite internal-edge assumptions.

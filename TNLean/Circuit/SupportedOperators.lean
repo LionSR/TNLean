@@ -56,7 +56,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (operators `𝒪₁`, `𝒪'ₛ`
 acting on sites of the chain). -/
-def supportedOperators (d : ℕ) (S : Set ι) :
+def supportedOperators (d : ℕ) (S : Finset ι) :
     Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ) :=
   Submodule.span ℂ {A | ∃ m : ι → Matrix (Fin d) (Fin d) ℂ,
     (∀ i ∉ S, m i = 1) ∧ A = rectKronecker m}
@@ -138,7 +138,7 @@ theorem commute_of_mem_supportedOperators {S S' : Finset ι} (hSS' : Disjoint S 
   congr 1
   funext i
   by_cases hi : i ∈ S
-  · simp [hm' i (Set.disjoint_left.mp hSS' hi)]
+  · simp [hm' i (Finset.disjoint_left.mp hSS' hi)]
   · simp [hm i hi]
 
 /-! ### Expectations in product vectors -/
@@ -202,7 +202,7 @@ theorem expect_productVector_mul {S S' : Finset ι} (hSS' : Disjoint S S')
     expect_productVector_rectKronecker, ← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
   refine Finset.prod_congr rfl fun i _ ↦ ?_
   by_cases hi : i ∈ S
-  · simp [hm' i (Set.disjoint_left.mp hSS' hi), mul_comm]
+  · simp [hm' i (Finset.disjoint_left.mp hSS' hi), mul_comm]
   · simp [hm i hi]
 
 /-! ### Traces against product operators -/
@@ -228,7 +228,7 @@ theorem trace_rectKronecker_mul_mul {S S' : Finset ι} (hSS' : Disjoint S S')
   simp only [rectKronecker_mul, trace_rectKronecker, ← Finset.prod_mul_distrib]
   refine Finset.prod_congr rfl fun i _ ↦ ?_
   by_cases hi : i ∈ S
-  · simp [hm' i (Set.disjoint_left.mp hSS' hi), mul_comm]
+  · simp [hm' i (Finset.disjoint_left.mp hSS' hi), mul_comm]
   · simp [hm i hi]
 
 end QuantumCircuit

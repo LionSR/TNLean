@@ -9,7 +9,7 @@ import QICLean.Channel.KrausCPTP
 /-!
 # Local channel circuits and their light cone
 
-A local channel circuit of depth `T` on a bond geometry `bond : β → Set ι`
+A local channel circuit of depth `T` on a bond geometry `bond : β → Finset ι`
 (`TNLean.Circuit.Geometry`) is a composition of `T` layers, each a composition of
 trace-preserving completely positive maps (channels) acting on pairwise disjoint bonds. On the
 ring of `N` sites the bonds are the pairs of neighbouring sites `{k, k + 1}`. These circuits act
@@ -141,7 +141,7 @@ acts on `bond b`.
 
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the light cone of a local
 circuit), here for the dual of a channel. -/
-structure IsHeisenbergLocal (S : Set ι)
+structure IsHeisenbergLocal (S : Finset ι)
     (φ : Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)) : Prop where
   map_eq_self : ∀ A ∈ supportedOperators d Sᶜ, φ A = A
   map_mem : ∀ Z, S ⊆ Z → ∀ A ∈ supportedOperators d Z, φ A ∈ supportedOperators d Z
@@ -154,14 +154,14 @@ variable {S S' : Finset ι} {φ ψ : Module.End ℂ (Matrix (ι → Fin d) (ι �
 
 theorem mono (h : IsHeisenbergLocal S φ) (hSS' : S ⊆ S') : IsHeisenbergLocal S' φ where
   map_eq_self A hA :=
-    h.map_eq_self A (supportedOperators_mono (Set.compl_subset_compl.mpr hSS') hA)
+    h.map_eq_self A (supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hA)
   map_mem Z hZ := h.map_mem Z (hSS'.trans hZ)
   map_mul_right A B hB :=
-    h.map_mul_right A B (supportedOperators_mono (Set.compl_subset_compl.mpr hSS') hB)
+    h.map_mul_right A B (supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hB)
   map_mul_left A B hB :=
-    h.map_mul_left A B (supportedOperators_mono (Set.compl_subset_compl.mpr hSS') hB)
+    h.map_mul_left A B (supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hB)
 
-theorem one (S : Set ι) :
+theorem one (S : Finset ι) :
     IsHeisenbergLocal S (1 : Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)) where
   map_eq_self _ _ := rfl
   map_mem _ _ _ hA := hA
@@ -237,7 +237,7 @@ theorem trace_noncommProd_mul {κ : Type*} (s : Finset κ)
 
 section Bonds
 
-variable {β : Type*} {bond : β → Set ι}
+variable {β : Type*} {bond : β → Finset ι}
 
 /-- One layer of a local channel circuit on the bond geometry `bond`: for `b` in a finite set
 `bonds` of pairwise disjoint bonds, a channel on the bond `bond b`, given by Kraus operators
@@ -247,7 +247,7 @@ Source: arXiv:2307.01696, main text before Theorem 1 (layers of a local circuit)
 unitary gate replaced by a channel on the same bond, as for the local operations of
 arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (gates acting with
 product ancillas on nearest-neighbour pairs of a lattice). -/
-structure BondChannelLayer (d : ℕ) (bond : β → Set ι) where
+structure BondChannelLayer (d : ℕ) (bond : β → Finset ι) where
   /-- The bonds carrying a channel. -/
   bonds : Finset β
   /-- The number of Kraus operators of the channel on the bond `b`. -/
@@ -322,7 +322,7 @@ theorem trace_map_mul (L : BondChannelLayer d bond) (ρ A : Matrix (ι → Fin d
     (L.gateDual_commute _ subset_rfl) (fun k _ ↦ trace_rectangularKrausMap_mul (L.kraus k)) ρ A
 
 theorem partialDual_isHeisenbergLocal (L : BondChannelLayer d bond) (s : Finset β)
-    (hs : s ⊆ L.bonds) {S : Set ι} (hS : ∀ k ∈ s, bond k ⊆ S) :
+    (hs : s ⊆ L.bonds) {S : Finset ι} (hS : ∀ k ∈ s, bond k ⊆ S) :
     IsHeisenbergLocal S (L.partialDual s hs) :=
   Finset.noncommProd_induction _ _ _ (IsHeisenbergLocal S) (fun _ _ ha hb ↦ ha.mul hb)
     (IsHeisenbergLocal.one S) fun k hk ↦
@@ -342,17 +342,17 @@ theorem partialDual_eq_filter_mul (L : BondChannelLayer d bond) (s : Finset β)
 
 /-- The part of a partial dual on the bonds missing `X` acts off `X`. -/
 private theorem partialDual_filter_not_isHeisenbergLocal (L : BondChannelLayer d bond)
-    (s : Finset β) (hs : s ⊆ L.bonds) (X : Set ι)
+    (s : Finset β) (hs : s ⊆ L.bonds) (X : Finset ι)
     [DecidablePred fun k : β ↦ (bond k ∩ X).Nonempty] :
     IsHeisenbergLocal Xᶜ
       (L.partialDual (s.filter fun k ↦ ¬ (bond k ∩ X).Nonempty)
         ((Finset.filter_subset _ _).trans hs)) :=
-  L.partialDual_isHeisenbergLocal _ _ fun _ hk j hj hjX ↦
-    (Finset.mem_filter.mp hk).2 ⟨j, hj, hjX⟩
+  L.partialDual_isHeisenbergLocal _ _ fun _ hk j hj ↦ Finset.mem_compl.mpr fun hjX ↦
+    (Finset.mem_filter.mp hk).2 ⟨j, Finset.mem_inter.mpr ⟨hj, hjX⟩⟩
 
 /-- The part of a partial dual on the bonds meeting `X` acts on the one-step neighbourhood
 of `X`. -/
-private theorem partialDual_filter_isHeisenbergLocal (L : BondChannelLayer d bond)
+private theorem partialDual_filter_isHeisenbergLocal [Fintype β] (L : BondChannelLayer d bond)
     (s : Finset β) (hs : s ⊆ L.bonds) (X : Finset ι)
     [DecidablePred fun k : β ↦ (bond k ∩ X).Nonempty] :
     IsHeisenbergLocal (bondNeighbourhood bond X)
@@ -363,7 +363,7 @@ private theorem partialDual_filter_isHeisenbergLocal (L : BondChannelLayer d bon
 
 /-- Any part of the dual of one layer enlarges the support of an operator to at most its
 one-step neighbourhood. -/
-theorem partialDual_mem_supportedOperators (L : BondChannelLayer d bond) (s : Finset β)
+theorem partialDual_mem_supportedOperators [Fintype β] (L : BondChannelLayer d bond) (s : Finset β)
     (hs : s ⊆ L.bonds) {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) :
     L.partialDual s hs A ∈ supportedOperators d (bondNeighbourhood bond X) := by
@@ -375,14 +375,14 @@ theorem partialDual_mem_supportedOperators (L : BondChannelLayer d bond) (s : Fi
 
 /-- **Light cone of one layer.** The Heisenberg dual of a layer enlarges the support of an
 operator to at most its one-step neighbourhood. -/
-theorem dual_mem_supportedOperators (L : BondChannelLayer d bond) {X : Finset ι}
+theorem dual_mem_supportedOperators [Fintype β] (L : BondChannelLayer d bond) {X : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     L.dual A ∈ supportedOperators d (bondNeighbourhood bond X) :=
   L.partialDual_mem_supportedOperators _ _ hA
 
 /-- The Heisenberg dual of a layer is multiplicative on operators acting on sets whose
 one-step neighbourhoods are disjoint: no channel of the layer acts on both. -/
-theorem dual_mul (L : BondChannelLayer d bond) {X Y : Finset ι}
+theorem dual_mul [Fintype β] (L : BondChannelLayer d bond) {X Y : Finset ι}
     (hXY : Disjoint (bondNeighbourhood bond X) (bondNeighbourhood bond Y))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
@@ -393,7 +393,7 @@ theorem dual_mul (L : BondChannelLayer d bond) {X Y : Finset ι}
   have hA' : A ∈ supportedOperators d (Xᶜ)ᶜ := by rwa [compl_compl]
   have hQB := L.partialDual_mem_supportedOperators
     (L.bonds.filter fun k ↦ ¬ (bond k ∩ X).Nonempty) (Finset.filter_subset _ _) hB
-  have hQB' := supportedOperators_mono hXY.subset_compl_left hQB
+  have hQB' := supportedOperators_mono hXY.le_compl_left hQB
   rw [dual, L.partialDual_eq_filter_mul L.bonds subset_rfl fun k ↦ (bond k ∩ X).Nonempty]
   simp only [Module.End.mul_apply]
   rw [hQ.map_mul_left B A hA', hP.map_mul_right A _ hQB', hQ.map_eq_self A hA',
@@ -449,7 +449,8 @@ operator acting on the sites `X` to an operator acting on the light cone of radi
 
 Source: arXiv:2307.01696, main text after Theorem 1 ("strictly finite light cone") and
 Supplemental Material, proof of Theorem 1, here for channels in place of unitary gates. -/
-theorem channelCircuitDual_mem_supportedOperators_lightCone (Ls : List (BondChannelLayer d bond))
+theorem channelCircuitDual_mem_supportedOperators_lightCone [Fintype β]
+    (Ls : List (BondChannelLayer d bond))
     {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     channelCircuitDual Ls A ∈ supportedOperators d (lightCone bond X Ls.length) := by
   induction Ls with
@@ -458,7 +459,8 @@ theorem channelCircuitDual_mem_supportedOperators_lightCone (Ls : List (BondChan
 
 /-- The Heisenberg dual of a local channel circuit of depth `T` is multiplicative on operators
 acting on sets whose light cones of radius `T` are disjoint. -/
-theorem channelCircuitDual_mul_of_disjoint_lightCone (Ls : List (BondChannelLayer d bond))
+theorem channelCircuitDual_mul_of_disjoint_lightCone [Fintype β]
+    (Ls : List (BondChannelLayer d bond))
     {X Y : Finset ι} (hXY : Disjoint (lightCone bond X Ls.length) (lightCone bond Y Ls.length))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :
@@ -532,7 +534,7 @@ cones of radius `T` are disjoint, `tr(ρ AB) = tr(ρ A) tr(ρ B)`.
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 ("every connected
 correlation for operators at a distance larger than `2T` vanishes"), here for channels in
 place of unitary gates and product densities in place of product vectors. -/
-theorem IsBondChannelPreparedInDepth.trace_mul_mul_eq {T : ℕ}
+theorem IsBondChannelPreparedInDepth.trace_mul_mul_eq [Fintype β] {T : ℕ}
     {ρ : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hρ : IsBondChannelPreparedInDepth bond T ρ)
     {X Y : Finset ι} (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}

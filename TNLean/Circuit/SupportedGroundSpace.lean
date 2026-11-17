@@ -96,10 +96,10 @@ theorem exists_common_ground_of_disjoint
   obtain ⟨Q, hsQ, hQ, hBQ⟩ := exists_supported_ground_cutoff hB hsB
   obtain ⟨W, hsW, hW, hCW⟩ := exists_supported_ground_cutoff hC hsC
   have hsPQ : P * Q ∈ supportedOperators d (S ∪ T) :=
-    mul_mem_supportedOperators (supportedOperators_mono Set.subset_union_left hsP)
-      (supportedOperators_mono Set.subset_union_right hsQ)
+    mul_mem_supportedOperators (supportedOperators_mono Finset.subset_union_left hsP)
+      (supportedOperators_mono Finset.subset_union_right hsQ)
   have hPQ := trace_mul_ne_zero_of_disjoint hST hsP hsQ hP hQ
-  have hPQW := trace_mul_ne_zero_of_disjoint (Set.disjoint_union_left.mpr ⟨hSR, hTR⟩)
+  have hPQW := trace_mul_ne_zero_of_disjoint (Finset.disjoint_union_left.mpr ⟨hSR, hTR⟩)
     hsPQ hsW hPQ hW
   have hnonzero : P * Q * W ≠ 0 := by
     intro hzero

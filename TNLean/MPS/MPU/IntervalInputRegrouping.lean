@@ -59,7 +59,7 @@ theorem mem_range_intervalPacketSites_iff (d D N j k : ℕ)
     (s : Fin (logicalSiteCount d D N)) :
     s ∈ Set.range (intervalPacketSites d D N j k) ↔
       (logicalSiteEquivFin d D N).symm s ∈ intervalLogicalSupport d D N j k := by
-  rw [intervalPacketSites_range]
+  rw [intervalPacketSites_range, coe_intervalConsecutiveSupport]
   constructor
   · rintro ⟨t, ht, rfl⟩
     simpa only [Equiv.symm_apply_apply] using ht
@@ -452,7 +452,8 @@ theorem minimalIntervalJointInitializedChildColumns_of_supported_individual {d D
       (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P m))))
     (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.le_of_lt hmk))
       (CFC.sqrt (P m)) (CFC.sqrt (dualGramMetric (P k))))
-    (by rwa [intervalPacketSites_range]) (by rwa [intervalPacketSites_range]) hX hY using 1
+    (by rwa [image_univ_intervalPacketSites])
+        (by rwa [image_univ_intervalPacketSites]) hX hY using 1
   all_goals congr!
 
 

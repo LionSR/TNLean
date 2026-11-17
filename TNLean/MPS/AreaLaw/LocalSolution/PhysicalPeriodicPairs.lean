@@ -310,6 +310,7 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
     intro i hi
     apply supportedOperators_mono _ ((hd i).1)
     intro v hv
+    refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
     exact periodicCoarseEdge_support_all hℓ i v hi
       (by
         have hdv := (periodicPhysicalDistance_le_edist hN hℓ i v).trans (ManyBody.mem_graphBall.mp

@@ -224,7 +224,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ supportedOperators d S) (l : ℕ) (Y : Finset ι)
-    (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
+    (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
     (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W * B - B * gaussianFilteredTerm q ΔE (∑ k, h k) W‖ ≤
       2 * ‖B‖ *
@@ -263,7 +263,7 @@ theorem norm_groundCompression_commutator_le_graphNeighborhood [NeZero d] (Kg : 
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ supportedOperators d S) (l : ℕ) (Y : Finset ι)
-    (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
+    (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
     (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
         groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤

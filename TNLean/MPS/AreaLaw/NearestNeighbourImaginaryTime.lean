@@ -132,7 +132,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
     by_cases hd : Disjoint (interval L i.val (i.val + 2))
         (interval L (c - m) (c + 2 + m))
     · have hc : Commute (h i) X := commute_of_mem_supportedOperators
-        (Finset.disjoint_coe.mpr hd)
+        hd
         (mem_supportedOperators_of_isSupportedOn (hs i hi))
         (mem_supportedOperators_of_isSupportedOn hX)
       rw [sub_eq_zero.mpr hc.eq]

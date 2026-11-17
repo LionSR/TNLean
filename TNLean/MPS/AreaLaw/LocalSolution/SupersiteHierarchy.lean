@@ -69,34 +69,35 @@ end Support
 
 section Supersites
 
-variable {ι : Type*}
+variable {ι : Type*} [Fintype ι]
 
 /-- The sites of block `k` at level `m`: those whose supersite has quotient `k` by `2^m`. -/
-def levelBlock (blk : ι → ℕ) (m k : ℕ) : Set ι :=
-  {i | blk i / 2 ^ m = k}
+def levelBlock (blk : ι → ℕ) (m k : ℕ) : Finset ι :=
+  Finset.univ.filter fun i ↦ blk i / 2 ^ m = k
+
+theorem mem_levelBlock {blk : ι → ℕ} {m k : ℕ} {i : ι} :
+    i ∈ levelBlock blk m k ↔ blk i / 2 ^ m = k := by
+  simp [levelBlock]
 
 theorem levelBlock_two_mul_subset (blk : ι → ℕ) (m k : ℕ) :
     levelBlock blk m (2 * k) ⊆ levelBlock blk (m + 1) k := fun i hi ↦ by
-  change blk i / 2 ^ m = _ at hi
-  change blk i / 2 ^ (m + 1) = k
+  rw [mem_levelBlock] at hi ⊢
   rw [pow_succ, ← Nat.div_div_eq_div_mul, hi]
   omega
 
 theorem levelBlock_two_mul_add_one_subset (blk : ι → ℕ) (m k : ℕ) :
     levelBlock blk m (2 * k + 1) ⊆ levelBlock blk (m + 1) k := fun i hi ↦ by
-  change blk i / 2 ^ m = _ at hi
-  change blk i / 2 ^ (m + 1) = k
+  rw [mem_levelBlock] at hi ⊢
   rw [pow_succ, ← Nat.div_div_eq_div_mul, hi]
   omega
 
 theorem disjoint_levelBlock_two_mul (blk : ι → ℕ) (m k : ℕ) :
     Disjoint (levelBlock blk m (2 * k)) (levelBlock blk m (2 * k + 1)) :=
-  Set.disjoint_left.mpr fun i h₁ h₂ ↦ by
-    change blk i / 2 ^ m = 2 * k at h₁
-    change blk i / 2 ^ m = 2 * k + 1 at h₂
+  Finset.disjoint_left.mpr fun i h₁ h₂ ↦ by
+    rw [mem_levelBlock] at h₁ h₂
     omega
 
-variable {d : ℕ} [Fintype ι] [DecidableEq ι]
+variable {d : ℕ} [DecidableEq ι]
 
 /-- **Each projection acts on its block.** If `P 0 k = 1`, `P (m + 1) k` is the window of
 `M m k` inside the range of `P m (2k) P m (2k + 1)`, and the pair operator `M m k` acts on the

@@ -47,7 +47,7 @@ theorem exists_ne_of_two_le (hn : 2 ≤ n) (a : Fin n) : ∃ b : Fin n, b ≠ a 
   · exact ⟨⟨0, by omega⟩, fun h' => h (by rw [← h'])⟩
 
 theorem exists_pair_superset (hn : 2 ≤ n) {T : Finset (Fin n)} (hT : T.card ≤ 2) :
-    ∃ s t : Fin n, s ≠ t ∧ (T : Set (Fin n)) ⊆ {s, t} := by
+    ∃ s t : Fin n, s ≠ t ∧ T ⊆ {s, t} := by
   rcases Nat.lt_or_ge T.card 2 with h | h
   · rcases Nat.lt_or_ge T.card 1 with h' | h'
     · rw [Nat.lt_one_iff, Finset.card_eq_zero] at h'

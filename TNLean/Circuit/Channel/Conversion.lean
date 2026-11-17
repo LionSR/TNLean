@@ -236,7 +236,7 @@ theorem dual_mul (Φ : OnsiteChannel d e ι) {X Y : Finset ι} (hXY : Disjoint X
       congr 1
       funext i
       by_cases hi : i ∈ X
-      · rw [hm' i (Set.disjoint_left.mp hXY hi), Matrix.mul_one, siteDual_one, Matrix.mul_one]
+      · rw [hm' i (Finset.disjoint_left.mp hXY hi), Matrix.mul_one, siteDual_one, Matrix.mul_one]
       · rw [hm i hi, Matrix.one_mul, siteDual_one, Matrix.one_mul]) hA hB
   simpa only [LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply'] using key
 
@@ -436,9 +436,9 @@ theorem exists_dual {T : ℕ}
     (h : IsLocalChannelProtocol T Ψ) :
     ∃ Ψ' : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ,
       (∀ ρ A, trace (Ψ ρ * A) = trace (ρ * Ψ' A)) ∧
-      (∀ X : Set (Fin N), ∀ A ∈ supportedOperators e X,
+      (∀ X : Finset (Fin N), ∀ A ∈ supportedOperators e X,
         Ψ' A ∈ supportedOperators d (neighbourhood X T)) ∧
-      (∀ X Y : Set (Fin N), Disjoint (neighbourhood X T) (neighbourhood Y T) →
+      (∀ X Y : Finset (Fin N), Disjoint (neighbourhood X T) (neighbourhood Y T) →
         ∀ A ∈ supportedOperators e X, ∀ B ∈ supportedOperators e Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
   induction h with
@@ -448,8 +448,9 @@ theorem exists_dual {T : ℕ}
     · exact Φ.dual_mul (hXY.mono (subset_neighbourhood X 0) (subset_neighbourhood Y 0)) hA hB
   | @layer e T Ψ _ L ih =>
     obtain ⟨Ψ', hdual, hcone, hmul⟩ := ih
-    have hsub (Z : Set (Fin N)) : neighbourhood (neighbourhood Z 1) T ⊆ neighbourhood Z (T + 1) :=
-      by simpa only [add_comm] using neighbourhood_neighbourhood_subset Z 1 T
+    have hsub (Z : Finset (Fin N)) :
+        neighbourhood (neighbourhood Z 1) T ⊆ neighbourhood Z (T + 1) := by
+      simpa only [add_comm] using neighbourhood_neighbourhood_subset Z 1 T
     refine ⟨Ψ' ∘ₗ L.dual, fun ρ A ↦ ?_, fun X A hA ↦ ?_, fun X Y hXY A hA B hB ↦ ?_⟩
     · rw [LinearMap.comp_apply, LinearMap.comp_apply, ← hdual]
       exact L.trace_map_mul _ A

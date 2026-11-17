@@ -62,7 +62,7 @@ private theorem commute_separated_bond_sums {L q : ℕ}
     intro v hv hw
     rw [mem_interval] at hv hw
     omega
-  exact QuantumCircuit.commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr hd)
+  exact QuantumCircuit.commute_of_mem_supportedOperators hd
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs j))
 

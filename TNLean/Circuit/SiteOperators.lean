@@ -132,7 +132,7 @@ theorem siteOp_mem_supportedOperators (t : ι) (u : Matrix (Fin d) (Fin d) ℂ) 
     siteOp t u ∈ supportedOperators d {t} := by
   have := embedOp_mem_supportedOperators (siteSites_injective t)
     (u.submatrix (Equiv.funUnique (Fin 1) (Fin d)) (Equiv.funUnique (Fin 1) (Fin d)))
-  rwa [Matrix.range_cons, Matrix.range_empty, Set.union_empty] at this
+  rwa [show Finset.univ.image ![t] = {t} by ext; simp [eq_comm]] at this
 
 theorem siteOp_diagonal (t : ι) (f : Fin d → ℂ) :
     siteOp t (diagonal f) = diagonal fun x : (ι → Fin d) => f (x t) := by
@@ -184,7 +184,7 @@ theorem siteOp_sub (t : ι) (u v : Matrix (Fin d) (Fin d) ℂ) :
 
 theorem commute_ctrlProj_siteOp {S : Finset ι} {t : ι} (ht : t ∉ S) (c : ι → Fin d)
     (u : Matrix (Fin d) (Fin d) ℂ) : Commute (ctrlProj S c) (siteOp t u) :=
-  commute_of_mem_supportedOperators (Set.disjoint_singleton_right.mpr (by simpa using ht))
+  commute_of_mem_supportedOperators (Finset.disjoint_singleton_right.mpr ht)
     (ctrlProj_mem_supportedOperators S c) (siteOp_mem_supportedOperators t u)
 
 end QuantumCircuit

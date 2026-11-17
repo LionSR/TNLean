@@ -186,7 +186,7 @@ theorem norm_groundCompression_commutator_le_finite_translation_exp
     have hBg : sitePermMatrix d g * B * (sitePermMatrix d g)ᴴ ∈
         supportedOperators d Yg := by
       have heq : ((MulAction.toPerm g).toEmbedding : ι → ι) = (g • ·) := rfl
-      simpa only [Yg, Finset.coe_map, heq] using
+      simpa only [Yg, Finset.map_eq_image, heq] using
         sitePermMatrix_mul_mul_conjTranspose_mem_supportedOperators d g hB
     have hYg (y : ι) (hy : y ∈ Yg) : G.edist (g • j) y ≤ ρ := by
       obtain ⟨w, hw, rfl⟩ := Finset.mem_map.mp hy

@@ -155,18 +155,16 @@ private def evenBonds (N : ℕ) [NeZero N] : Finset (Fin N) :=
 private def evenSites (N : ℕ) [NeZero N] : Finset (Fin N) :=
   (evenBonds N).biUnion fun k => {k, k + 1}
 
-private theorem coe_pair_eq_bond (k : Fin N) : (({k, k + 1} : Finset (Fin N)) : Set (Fin N)) =
-    ringBond k := by
-  simp [ringBond]
+private theorem pair_eq_bond (k : Fin N) : ({k, k + 1} : Finset (Fin N)) = ringBond k := rfl
 
 private theorem disjoint_bond_of_mem_evenBonds {k l : Fin N} (hk : k ∈ evenBonds N)
     (hl : l ∈ evenBonds N) (hkl : k ≠ l) : Disjoint (ringBond k) (ringBond l) := by
   simp only [evenBonds, Finset.mem_filter, Finset.mem_univ, true_and] at hk hl
   have e1 : ((k + 1 : Fin N) : ℕ) = k + 1 := Fin.val_add_one_of_lt' hk.2
   have e2 : ((l + 1 : Fin N) : ℕ) = l + 1 := Fin.val_add_one_of_lt' hl.2
-  rw [Set.disjoint_left]
+  rw [Finset.disjoint_left]
   intro x hx hx'
-  simp only [ringBond, Set.mem_insert_iff, Set.mem_singleton_iff] at hx hx'
+  simp only [ringBond, Finset.mem_insert, Finset.mem_singleton] at hx hx'
   apply hkl
   ext
   rcases hx with rfl | rfl <;> rcases hx' with h | h <;> rw [Fin.ext_iff] at h <;> omega
@@ -178,7 +176,7 @@ private noncomputable def evenLayer (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
   bonds := evenBonds N
   gate k := siteOp u {k, k + 1}
   gate_mem_unitary _ _ := siteOp_mem_unitary hu _
-  gate_mem_supportedOperators k _ := siteOp_mem_supportedOperators u (coe_pair_eq_bond k).le
+  gate_mem_supportedOperators k _ := siteOp_mem_supportedOperators u (pair_eq_bond k).le
   pairwiseDisjoint _ hk _ hl hkl := disjoint_bond_of_mem_evenBonds hk hl hkl
 
 private theorem evenLayer_op (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
@@ -186,7 +184,6 @@ private theorem evenLayer_op (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
     (evenLayer u hu).op = siteOp u (evenSites N) := by
   unfold BondLayer.op BondLayer.partialOp
   exact noncommProd_siteOp u (fun k => {k, k + 1}) (evenBonds N) (fun _ hk _ hl hkl => by
-    rw [Function.onFun, ← Finset.disjoint_coe, coe_pair_eq_bond, coe_pair_eq_bond]
     exact disjoint_bond_of_mem_evenBonds hk hl hkl) _
 
 /-- Every site not covered by the even pairs is the last site. -/
@@ -216,10 +213,10 @@ theorem isLocalCircuitOfDepth_finKronecker {u : Fin N → Matrix (Fin d) (Fin d)
     (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) :
     IsLocalCircuitOfDepth (finKronecker u) 2 := by
   classical
-  have hrest : ((Finset.univ \ evenSites N : Finset (Fin N)) : Set (Fin N)) ⊆
-      ringBond (lastSite N) := fun i hi => by
-    rw [eq_lastSite_of_notMem_evenSites (Finset.mem_sdiff.mp hi).2]
-    exact Set.mem_insert _ _
+  have hrest : (Finset.univ \ evenSites N : Finset (Fin N)) ⊆ ringBond (lastSite N) :=
+    fun i hi => by
+      rw [eq_lastSite_of_notMem_evenSites (Finset.mem_sdiff.mp hi).2]
+      exact Finset.mem_insert_self _ _
   let L₂ := BondLayer.single (lastSite N) (siteOp u (Finset.univ \ evenSites N))
     (siteOp_mem_unitary hu _) (siteOp_mem_supportedOperators u hrest)
   refine ⟨[evenLayer u hu, L₂], rfl, ?_⟩

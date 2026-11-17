@@ -339,14 +339,11 @@ private theorem exists_threeSplit_two_window_late_exterior
   classical
   intro g F₀ hlocal hMleft hMright hLmid hRmid PL PR hPL hPR F
   obtain ⟨BL, hBL⟩ := exists_threeSplit_eq_kronecker_one_kronecker_one
-    (ι := V) (q := q) (T := T) (E := E) (D := (T : Set V)) (A := PL)
-    hTE (Set.Subset.rfl) hPL
+    (ι := V) (q := q) (T := T) (E := E) (D := T) (A := PL)
+    hTE (Finset.Subset.refl T) hPL
   obtain ⟨BR, hBR⟩ := exists_threeSplit_eq_one_kronecker
     (ι := V) (q := q) (T := T) (E := E)
-    (D := ((T ∪ E)ᶜ : Set V)) (A := PR) hTE
-    (by simpa only [Finset.coe_compl, Finset.coe_union] using
-      (Set.Subset.rfl : ((T : Set V) ∪ (E : Set V))ᶜ ⊆
-        ((T : Set V) ∪ (E : Set V))ᶜ)) hPR
+    (D := (T ∪ E)ᶜ) (A := PR) hTE (Finset.Subset.refl _) hPR
   have hF₀mid : F₀ (Sum.inr 1) = Pmid := by
     change (if (1 : Fin 3) = 1 then Pmid else 0) = Pmid
     exact ite_eq_left rfl
@@ -625,7 +622,7 @@ theorem exists_physical_selected_window_fixed_middle_data
     have hinj : Function.Injective (fun _ : Fin 1 ↦ e₀) :=
       fun _ _ _ ↦ Subsingleton.elim _ _
     have hmem : N e₀ z ∈ supportedOperators q ({e₀} : Finset E) := by
-      simpa only [N, Set.range_const, Finset.coe_singleton] using
+      simpa only [N, Finset.univ_nonempty, Finset.image_const] using
         QuantumCircuit.embedOp_mem_supportedOperators hinj
           (Matrix.single
             (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
@@ -646,14 +643,13 @@ theorem exists_physical_selected_window_fixed_middle_data
   intro PL PR hPL hPR F
   have hPLT : PL ∈ supportedOperators q T :=
     supportedOperators_mono
-      (Finset.coe_subset.mpr (interval_mono (by omega) (by omega)))
+      (interval_mono (by omega) (by omega))
       (mem_supportedOperators_of_isSupportedOn hPL)
   have hPRU : PR ∈ supportedOperators q ((T ∪ E)ᶜ : Finset (Fin L)) := by
     apply supportedOperators_mono ?_ (mem_supportedOperators_of_isSupportedOn hPR)
     intro x hx
     have hx' := mem_interval.mp hx
-    change ¬(x ∈ T ∨ x ∈ E)
-    simp only [T, E, mem_interval]
+    simp only [Finset.mem_compl, Finset.mem_union, T, E, mem_interval]
     have hp := p.isLt
     have hs := s.isLt
     omega

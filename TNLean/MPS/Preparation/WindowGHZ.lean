@@ -674,7 +674,7 @@ theorem exists_isPreparedWithMeasurementsInDepth_windowGHZState (hr₁ : 2 ≤ r
   have hcirc : IsCircuitOn Finset.univ (KS + KA + CB * L)
       (blockLayerOp hN Y * pairLayerOp hN hr (fun _ => WA) * embedOp e₀ S) := by
     have h1 : IsCircuitOn Finset.univ KS (embedOp e₀ S) := by
-      refine ((hKS S hSu).isCircuitOn he₀ fun i j h => ?_).mono_set (Set.subset_univ _)
+      refine ((hKS S hSu).isCircuitOn he₀ fun i j h => ?_).mono_set (Finset.subset_univ _)
       rw [he₀def, registerSite_eq, registerSite_eq]
       exact blockSite_succ hN 0 _ _ (by simp; omega)
     have h2 := isCircuitOn_pairLayerOp hN hr fun _ =>

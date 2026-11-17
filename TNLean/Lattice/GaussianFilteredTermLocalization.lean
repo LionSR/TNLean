@@ -112,7 +112,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq 
     ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
   have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm R
     hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) y
-    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) μ hμ l
+    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by assumption)) μ hμ l
     hl t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (by positivity))
   have hv : 0 ≤ 2 * vR * |b₀| * Real.exp (2 * μ * R) + 1 := by positivity

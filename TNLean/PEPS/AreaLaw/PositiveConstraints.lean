@@ -70,6 +70,7 @@ theorem commute_filterIntegral_of_forall_commute {p : ℕ} (hp : 1 ≤ p) {δ : 
   rw [hΦ, sub_eq_zero] at h0
   exact h0
 
+open Classical in
 /-- **Exact component support** (Proposition 4.3, `03-quasilocal.tex`, lines 244–245 and
 330–334): each positive constraint acts on the connected component of its anchor. -/
 theorem positiveConstraint_mem_supportedOperators_component {p : ℕ} (hp : 1 ≤ p)
@@ -105,10 +106,9 @@ theorem positiveConstraint_mem_supportedOperators_component {p : ℕ} (hp : 1 �
     exact hClosed k
   have hiK : h i ∈ ManyBody.supportedOperators (fun _ : ι ↦ Fin q) K :=
     isSupportedOn_of_mem_supportedOperators
-      (supportedOperators_mono (by rw [hK]; exact hXi) (hSupport i))
+      (supportedOperators_mono (by rw [← Finset.coe_subset, hK]; exact hXi) (hSupport i))
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) X :=
     ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-  rw [← hK]
   refine mem_supportedOperators_of_isSupportedOn <|
     ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun B hB => ?_
   have hτ : ∀ t : ℝ, Commute (Matrix.hermitianUnitaryPath H t * h i *
@@ -144,6 +144,7 @@ noncomputable def localizationVelocity (R vR : ℕ) (b₀ : ℝ) : ℝ :=
 theorem localizationVelocity_pos (R vR : ℕ) (b₀ : ℝ) : 0 < localizationVelocity R vR b₀ := by
   unfold localizationVelocity; positivity
 
+open Classical in
 /-- **Positive replacement of the Hamiltonian, with named constants** (Proposition 4.3,
 `prop:positive`, `03-quasilocal.tex`, lines 220–334). Let `C₃, c₃` be the constants of the
 filter-locality tail of the positive constraints for the localization constants
@@ -255,6 +256,7 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
         (ManyBody.isHermitian_regionExpectation (D := K) hY)) hfix
     (Nat.cast_nonneg l) hloc
 
+open Classical in
 /-- **Positive replacement of the Hamiltonian, at the named filter-locality constants**
 (Proposition 4.3, `prop:positive`, `03-quasilocal.tex`, lines 220–334). Every conclusion of
 `exists_positiveQuasilocalConstraints` holds with
@@ -295,6 +297,7 @@ theorem positiveQuasilocalConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R vR : 
         (localizationVelocity_pos R vR b₀) one_half_pos hH hΩ hh hhJ L hcontr hunit hherm hfix
         hl hτ)
 
+open Classical in
 /-- **Positive replacement of the Hamiltonian** (Proposition 4.3, `prop:positive`,
 `03-quasilocal.tex`, lines 220–246). Fix `p ≥ 1`, the range `R`, the support size `v_R`, the
 site budget `b₀`, the sphere growth `K_g (d + 1)^{k_g}`, `J ≥ 0` and `Δ > 0`. There are

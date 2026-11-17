@@ -181,7 +181,7 @@ theorem sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing (h : LocalHamilton
       (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators (h.supported X) ?_)
     rcases hX with hX | hX
     · exact Or.inl (Finset.coe_subset.mpr hX)
-    · exact Or.inr (Finset.disjoint_coe.mpr hX)
+    · exact Or.inr (hX)
   have hsum : F * doubledHamiltonian h.operator * Fᴴ - doubledHamiltonian h.operator =
       ∑ X, (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
     rw [LocalHamiltonian.operator, doubledHamiltonian_sum, Finset.mul_sum, Finset.sum_mul,

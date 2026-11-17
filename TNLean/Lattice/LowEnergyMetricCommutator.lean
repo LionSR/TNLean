@@ -111,7 +111,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 1548–1601. -/
 theorem norm_groundCompression_commutator_le_metricSeparation
     [PseudoMetricSpace ι] {R J Δ : ℝ} (hR : 0 < R) (S : ℕ) (hJ : 0 ≤ J)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ i, (h i).IsHermitian)
-    (hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+    (hSupport : ∀ i, h i ∈ supportedOperators d (metricRangeBall R i))
     (hNorm : ∀ i, ‖h i‖ ≤ J) (hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
     (hΔ : 0 < Δ) (hH : (∑ i, h i).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
@@ -127,8 +127,8 @@ theorem norm_groundCompression_commutator_le_metricSeparation
       (4 * (X.card : ℝ) + 4) * ‖W‖ * ‖B‖ * Real.exp (-((γ / R) * ℓ)) := by
   classical
   intro vR v γ
-  have hgen (i : ι) : h i ∈ supportedOperators d (metricRangeBall R i : Finset ι) := by
-    simpa only [coe_metricRangeBall] using hSupport i
+  have hgen (i : ι) : h i ∈ supportedOperators d (metricRangeBall R i : Finset ι) :=
+    hSupport i
   have hdist (x : ι) (hx : x ∈ X) (y : ι) (hy : y ∈ Y) :
       (Nat.ceil (ℓ / R) : ℕ∞) ≤ (metricRangeGraph R).edist x y := by
     apply metricRangeGraph_edist_lower_ceil hR
@@ -160,13 +160,13 @@ Hastings, arXiv:cond-mat/0508554v3, lines 1548–1601. -/
 theorem norm_groundCompression_commutator_le_metricBalls
     [PseudoMetricSpace ι] {R J Δ : ℝ} (hR : 0 < R) (S : ℕ) (hJ : 0 ≤ J)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ i, (h i).IsHermitian)
-    (hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+    (hSupport : ∀ i, h i ∈ supportedOperators d (metricRangeBall R i))
     (hNorm : ∀ i, ‖h i‖ ≤ J) (hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
     (hΔ : 0 < Δ) (hH : (∑ i, h i).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
     (ρ : ℝ) (i j : ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (Metric.closedBall i ρ))
-    (hB : B ∈ supportedOperators d (Metric.closedBall j ρ)) :
+    (hW : W ∈ supportedOperators d (metricRangeBall ρ i))
+    (hB : B ∈ supportedOperators d (metricRangeBall ρ j)) :
     let vR := S + 1
     let v := 4 * vR * |(S : ℝ) * J| * Real.exp (2 * (2 : ℝ)) + 1
     let γ := min (1 / 4) (Δ / (8 * v))
@@ -175,10 +175,10 @@ theorem norm_groundCompression_commutator_le_metricBalls
       (4 * ((metricRangeBall ρ j).card : ℝ) + 4) * ‖W‖ * ‖B‖ *
         Real.exp (2 * (γ / R) * ρ) * Real.exp (-((γ / R) * dist i j)) := by
   intro vR v γ
-  have hW' : W ∈ supportedOperators d (metricRangeBall ρ i : Finset ι) := by
-    simpa only [coe_metricRangeBall] using hW
-  have hB' : B ∈ supportedOperators d (metricRangeBall ρ j : Finset ι) := by
-    simpa only [coe_metricRangeBall] using hB
+  have hW' : W ∈ supportedOperators d (metricRangeBall ρ i : Finset ι) :=
+    hW
+  have hB' : B ∈ supportedOperators d (metricRangeBall ρ j : Finset ι) :=
+    hB
   have hsep (x : ι) (hx : x ∈ metricRangeBall ρ j) (y : ι)
       (hy : y ∈ metricRangeBall ρ i) : dist i j - 2 * ρ ≤ dist x y := by
     have hx' : dist x j ≤ ρ := by simpa only [dist_comm] using mem_metricRangeBall.mp hx
@@ -206,7 +206,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 1548–1601. -/
 theorem norm_groundCompression_metric_truncated_commutator_le
     [PseudoMetricSpace ι] {R J Δ : ℝ} (hR : 0 < R) (S : ℕ) (hJ : 0 ≤ J)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ i, (h i).IsHermitian)
-    (hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+    (hSupport : ∀ i, h i ∈ supportedOperators d (metricRangeBall R i))
     (hNorm : ∀ i, ‖h i‖ ≤ J) (hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
     (hΔ : 0 < Δ) (hH : (∑ i, h i).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)

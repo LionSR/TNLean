@@ -339,8 +339,9 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
     refine QuantumCircuit.commute_of_mem_supportedOperators ?_
       (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) X)
       (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) Y)
-    rw [Set.disjoint_left]
-    rintro k ⟨-, hk⟩ ⟨hk', -⟩
+    rw [Finset.disjoint_left]
+    intro k hk hk'
+    simp only [MPSPreparation.window, Finset.mem_filter, Finset.mem_univ, true_and] at hk hk'
     omega
   have hW : W.IsHermitian := by
     rw [Matrix.IsHermitian, hW_def, Matrix.conjTranspose_mul,

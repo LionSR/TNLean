@@ -166,7 +166,9 @@ theorem exists_selected_onsite_dilation (P : PhysicalPortLayout N W) (i : Fin N)
         (appendConfigurationSplit m (2 * m) d).symm V V.property
     · apply supportedOperators_mono _
         (embedOp_mem_supportedOperators (selectedEnvironmentEmbedding e (2 * m)).injective _)
-      rintro _ ⟨j, rfl⟩
+      intro _ hmemImage
+      obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hmemImage
+      refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
       refine Fin.addCases (fun l => ?_) (fun l => ?_) j
       · rw [selectedEnvironmentEmbedding_old]
         change Fin.addCases P.site (fun _ => i) (Fin.castAdd (2 * m) (e l)) = i
@@ -200,9 +202,10 @@ omit [NeZero N] in
 
 omit [NeZero N] in
 /-- The local enumeration includes every wire of its site and no wire of any other site. -/
-theorem PhysicalPortLayout.range_siteRegister (P : PhysicalPortLayout N W) (i : Fin N) :
-    Set.range (P.siteRegister i) = P.site ⁻¹' {i} := by
+theorem PhysicalPortLayout.image_univ_siteRegister (P : PhysicalPortLayout N W) (i : Fin N) :
+    Finset.univ.image (P.siteRegister i) = Finset.univ.filter fun p ↦ P.site p = i := by
   ext j
+  simp only [Finset.mem_image, Finset.mem_univ, true_and, Finset.mem_filter]
   constructor
   · rintro ⟨a, rfl⟩
     exact P.site_siteRegister i a
@@ -236,7 +239,7 @@ realization. Environment size depends only on the site's wire count, not Kraus c
 theorem exists_onsite_appended_dilation {r : ℕ}
     (P : PhysicalPortLayout N W) (i : Fin N)
     (K : Fin r → Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ)
-    (hs : ∀ a, K a ∈ supportedOperators d (Finset.univ.filter fun p ↦ P.site p ∈ {i}))
+    (hs : ∀ a, K a ∈ supportedOperators d (Finset.univ.filter fun p ↦ P.site p = i))
     (hnorm : ∑ a, (K a)ᴴ * K a = 1) :
     ∃ A : ℕ, ∃ owner : Fin A → Fin N,
       ∃ U : Matrix (Fin (W + A) → Fin d) (Fin (W + A) → Fin d) ℂ,
@@ -245,7 +248,7 @@ theorem exists_onsite_appended_dilation {r : ℕ}
           appendEnvironmentInput W A d = rectangularKrausMap K := by
   let e := P.siteRegister i
   obtain ⟨L, hL, hnormL⟩ := exists_localKraus e K
-    (fun a => by simpa only [e, P.range_siteRegister i] using hs a) hnorm
+    (fun a => by simpa only [e, P.image_univ_siteRegister i] using hs a) hnorm
   obtain ⟨U, hU, heq⟩ := exists_selected_onsite_dilation P i e
     (P.site_siteRegister i) (rectangularKrausMap L)
     (rectangularKrausMap_isKrausCPTP L hnormL)

@@ -67,6 +67,7 @@ theorem norm_localRootChannel_sub_self_le_exp_sum_siteOscillation
     exact (norm_sub_le_norm_sub_add_norm_sub _ (localRootChannel (regions n) k B) _).trans
       ((add_le_add hnext hprev).trans_eq (add_comm _ _))
 
+open Classical in
 /-- Once the graph-ball cutoff contains the anchor component, the finite shell
 bound controls the full physical event error. Source: area law,
 `09-amplification.tex`, lines 135–137 and 188–191. -/

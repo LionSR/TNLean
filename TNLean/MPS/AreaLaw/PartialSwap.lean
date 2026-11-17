@@ -59,7 +59,7 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
   have hterm := mem_supportedOperators_of_isSupportedOn (h.supported X)
-  have hone := one_mem_supportedOperators (d := q) (X.1 : Set (Fin L))
+  have hone := one_mem_supportedOperators (d := q) X.1
   have hF : ‖F‖ ≤ 1 := by
     simpa only [F, Matrix.l2_opNorm_reindex_equiv] using norm_sheetSwapOp_le_one (q := q) D
   have hgeneral (U V : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -71,7 +71,7 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
       Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
     have hT : Matrix.reindex e e (U ⊗ₖ V) ∈
         supportedOperators (q * q) X.1 := by
-      simpa only [Set.union_self] using reindex_kronecker_mem_supportedOperators hU hV
+      simpa only [Finset.union_self] using reindex_kronecker_mem_supportedOperators hU hV
     refine ⟨isSupportedOn_of_mem_supportedOperators
       ((supportedOperators (q * q) X.1).sub_mem
         (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators D X.1 hU hV) hT), ?_, ?_⟩
@@ -134,15 +134,13 @@ theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
     have hnot : ¬ ((∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D) := by
       simpa only [C, Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         using hX
-    have hside : (X.1 : Set (Fin L)) ⊆ (D : Set (Fin L)) ∨
-        Disjoint (X.1 : Set (Fin L)) (D : Set (Fin L)) := by
+    have hside : X.1 ⊆ D ∨ Disjoint X.1 D := by
       rcases not_and_or.mp hnot with hi | ho
-      · exact Or.inr (Finset.disjoint_coe.mpr
-          (Finset.disjoint_left.mpr (fun x hx hxD ↦ hi ⟨x, hx, hxD⟩)))
-      · exact Or.inl (Finset.coe_subset.mpr (by
+      · exact Or.inr (Finset.disjoint_left.mpr (fun x hx hxD ↦ hi ⟨x, hx, hxD⟩))
+      · exact Or.inl (by
           intro x hx
           by_contra hxD
-          exact ho ⟨x, hx, hxD⟩))
+          exact ho ⟨x, hx, hxD⟩)
     rw [← hpair X]
     change F * Matrix.reindex e e (doubledHamiltonian (h.term X)) * Fᴴ -
       Matrix.reindex e e (doubledHamiltonian (h.term X)) = 0

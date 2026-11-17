@@ -212,11 +212,10 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     · simp only [Finset.inl_mem_disjSum] at hv hv'
       exact Finset.disjoint_left.mp hAC (hA₀ hv) (hC₀ hv')
     · simp at hv
-  have hS : Disjoint ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V))
-      ((A₀.disjSum ∅ ∪ C₀.disjSum ∅ : Finset (V ⊕ V)) : Set (V ⊕ V)) := by
-    rw [Set.disjoint_left]
+  have hS : Disjoint (B.disjSum B : Finset (V ⊕ V)) (A₀.disjSum ∅ ∪ C₀.disjSum ∅) := by
+    rw [Finset.disjoint_left]
     rintro (v | v) hv hv'
-    · simp only [Finset.mem_coe, Finset.inl_mem_disjSum] at hv
+    · simp only [Finset.inl_mem_disjSum] at hv
       have hmem : v ∈ A₀ ∪ C₀ := by
         simpa [Finset.mem_union, Finset.inl_mem_disjSum] using hv'
       exact hnot v hmem hv
@@ -265,7 +264,7 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
       rw [embedOp_equiv_eq_reindex]
       rfl
-    rw [h₀, Finset.coe_image]
+    rw [h₀]
     exact embedOp_mem_supportedOperators_image a.symm.injective hUs
   have hnot' : ∀ v ∈ R₀ ∪ C₀, v ∉ S := by
     intro v hv hvS

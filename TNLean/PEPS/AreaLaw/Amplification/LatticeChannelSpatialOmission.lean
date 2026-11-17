@@ -266,6 +266,7 @@ lines 42–72 and 188–226. -/
 noncomputable def latticeOmissionExponent (c : ℝ) (p : ℕ) : ℝ :=
   channelOmissionExponent c (kernelExponent p)
 
+open Classical in
 /-- **Omission of distant events for the exact positive constraints, with explicit
 constants** (Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.tex`,
 lines 17–30, 42–72 and 188–226). Let `C ≥ 0` and `c > 0` be localization constants of the
@@ -291,7 +292,8 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
           ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
           ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x))) :
+        (∀ i, k i ∈ supportedOperators q
+            (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →

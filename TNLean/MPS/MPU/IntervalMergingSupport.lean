@@ -34,6 +34,7 @@ variable {d D N j m k : ℕ}
 Source: the interval support decomposition in Section 5 of the circuit manuscript. -/
 theorem intervalConsecutiveSupport_left_subset (hjm : j < m) (hmk : m < k) :
     intervalConsecutiveSupport d D N j m ⊆ intervalConsecutiveSupport d D N j k := by
+  rw [← Finset.coe_subset, coe_intervalConsecutiveSupport, coe_intervalConsecutiveSupport]
   rintro x ⟨s, hs, rfl⟩
   refine ⟨s, ?_, rfl⟩
   rw [intervalLogicalSupport_split hjm hmk]
@@ -43,6 +44,7 @@ theorem intervalConsecutiveSupport_left_subset (hjm : j < m) (hmk : m < k) :
 Source: the interval support decomposition in Section 5 of the circuit manuscript. -/
 theorem intervalConsecutiveSupport_right_subset (hjm : j < m) (hmk : m < k) :
     intervalConsecutiveSupport d D N m k ⊆ intervalConsecutiveSupport d D N j k := by
+  rw [← Finset.coe_subset, coe_intervalConsecutiveSupport, coe_intervalConsecutiveSupport]
   rintro x ⟨s, hs, rfl⟩
   refine ⟨s, ?_, rfl⟩
   rw [intervalLogicalSupport_split hjm hmk]
@@ -70,6 +72,7 @@ theorem interval_initializedSites_range_subset_reindexed_parent {L : ℕ}
     Set.range ((logicalSupportSites
       (intervalAuxiliaryInitializationSupport d D N j k)).trans e.symm.toEmbedding) ⊆
       e.symm '' intervalConsecutiveSupport d D N j k := by
+  rw [coe_intervalConsecutiveSupport]
   rintro x ⟨i, rfl⟩
   refine ⟨logicalSupportSites (intervalAuxiliaryInitializationSupport d D N j k) i, ?_, rfl⟩
   have hi : logicalSupportSites (intervalAuxiliaryInitializationSupport d D N j k) i ∈
@@ -96,9 +99,11 @@ theorem interval_joiningSuffix_range_subset_reindexed_parent {a : ℕ}
       Fin (2 * cutBondRegisterWidth d D N (internalCutEmbedding N c) + 2) →
         Fin (a + (2 * cutBondRegisterWidth d D N (internalCutEmbedding N c) + 2))) ⊆
       ((finCongr hn).trans τ).symm '' intervalConsecutiveSupport d D N j.val k.val := by
+  rw [coe_intervalConsecutiveSupport]
   rintro x ⟨i, rfl⟩
-  refine ⟨joiningPacketSites d D N c i,
-    joiningPacketSites_range_subset_interval c hjm hmk ⟨i, rfl⟩, ?_⟩
+  have hi := joiningPacketSites_range_subset_interval c hjm hmk ⟨i, rfl⟩
+  rw [coe_intervalConsecutiveSupport] at hi
+  refine ⟨joiningPacketSites d D N c i, hi, ?_⟩
   apply ((finCongr hn).trans τ).injective
   rw [Equiv.apply_symm_apply]
   exact (hτ i).symm

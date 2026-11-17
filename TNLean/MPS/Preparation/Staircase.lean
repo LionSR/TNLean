@@ -190,11 +190,12 @@ theorem exists_staircase_isWindowProduct (hd : 0 < d) {r D' : ℕ} (hD' : 0 < D'
         refine ⟨Submonoid.mul_mem _ hWu' hZ, n - r, mul_mem_supportedOperators
           (supportedOperators_mono ?_ (embedOp_mem_supportedOperators hwini W))
           (supportedOperators_mono ?_ hZS)⟩
-        · rintro _ ⟨i, rfl⟩
-          simp only [windowSites, Set.mem_ofPred_eq, hwin]
+        · intro _ hp
+          obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hp
+          simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and, hwin]
           omega
         · intro p hp
-          simp only [windowSites, Set.mem_ofPred_eq] at hp ⊢
+          simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and] at hp ⊢
           omega
       rw [mul_assoc]
       exact ((hU'1.embedOp (a := 0) hcs (fun i => by simp)).mul

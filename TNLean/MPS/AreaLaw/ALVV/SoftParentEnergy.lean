@@ -144,7 +144,7 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
   have hPV : P ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hPs
   have hMV : M ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hMs
   have hIV : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
-    QuantumCircuit.one_mem_supportedOperators (J : Set (Fin L))
+    QuantumCircuit.one_mem_supportedOperators J
   have hXV : M - (p : ℂ) • 1 ∈ V := V.sub_mem hMV (V.smul_mem _ hIV)
   have hFV : cfc (Real.softTruncation t m) (M - (p : ℂ) • 1) ∈ V :=
     QuantumCircuit.cfc_mem_supportedOperators _ hXV

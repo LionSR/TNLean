@@ -98,6 +98,7 @@ theorem siteOscillation_spectatorRootChannelWord_bounds
   exact mul_le_mul_of_nonneg_left (norm_spectatorRootChannelWord_le k hk₀ hk₁ w B)
     (by norm_num)
 
+open Classical in
 /-- The literal summed append increments of the actual evolved observable are
 dominated by the graph-ball event kernel at that observable. Source: area law,
 `09-amplification.tex`, lines 139–173. -/

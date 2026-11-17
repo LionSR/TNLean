@@ -76,7 +76,7 @@ theorem commute_chainGridBlockHamiltonian (hw : 0 < w)
   intro j k hjk
   have hdisj := pairwise_disjoint_chainGridBlock L w
     (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq))
-  exact commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr hdisj)
+  exact commute_of_mem_supportedOperators hdisj
     (chainGridBlockHamiltonian_mem_supported hw h hs j)
     (chainGridBlockHamiltonian_mem_supported hw h hs k)
 

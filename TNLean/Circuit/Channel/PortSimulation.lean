@@ -48,19 +48,20 @@ private theorem pairData_site_mem_bond {i : Fin N} (hne : i ≠ i + 1)
     (a : Fin (k + k)) : (layout N k).site (pairData i (i + 1) hne a) ∈ ringBond i := by
   refine Fin.addCases (fun t => ?_) (fun t => ?_) a
   · rw [pairData_left, site_data]
-    exact Set.mem_insert i _
+    exact Finset.mem_insert_self i _
   · rw [pairData_right, site_data]
-    exact Set.mem_insert_of_mem _ (Set.mem_singleton _)
+    exact Finset.mem_insert_of_mem (Finset.mem_singleton_self _)
 
 private theorem pair_kraus_mem_supportedOperators (hN : 2 ≤ N) {r : Fin N → ℕ}
     (A : ∀ i, Fin (r i) → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
     (i : Fin N) (a : Fin (r i)) :
     embedOp (pairData i (i + 1) (left_ne_right hN i)) (A i a) ∈
-      supportedOperators d (Finset.univ.filter fun p ↦ ((layout N k).site) p ∈ ringBond i) := by
+      supportedOperators d (Finset.univ.filter fun p ↦ (layout N k).site p ∈ ringBond i) := by
   apply supportedOperators_mono _
     (embedOp_mem_supportedOperators (pairData i (i + 1) (left_ne_right hN i)).injective _)
-  rintro x ⟨j, rfl⟩
-  exact pairData_site_mem_bond (left_ne_right hN i) j
+  intro x hmemImage
+  obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hmemImage
+  exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, pairData_site_mem_bond (left_ne_right hN i) j⟩
 
 /-- Channels placed on distinct bonds of a matching commute. -/
 theorem pairChannel_commute (hN : 2 ≤ N) {r : Fin N → ℕ}
@@ -71,7 +72,8 @@ theorem pairChannel_commute (hN : 2 ≤ N) {r : Fin N → ℕ}
   apply commute_rectangularKrausMap
   intro a b
   exact commute_of_mem_supportedOperators
-    (Disjoint.preimage (layout N k).site (hK hi hj hij))
+    (Finset.disjoint_left.mpr fun _ hx hx' ↦ Finset.disjoint_left.mp (hK hi hj hij)
+      (Finset.mem_filter.mp hx).2 (Finset.mem_filter.mp hx').2)
     (pair_kraus_mem_supportedOperators hN A i a) (pair_kraus_mem_supportedOperators hN A j b)
 
 /-- The concrete product of the data-register channels on a matching. -/
@@ -102,8 +104,10 @@ theorem matchingChannel_isPhysicalPortProtocol (hN : 2 ≤ N) {r : Fin N → ℕ
   apply IsPhysicalPortProtocol.onsite (P := layout N k) (i + 1)
   · intro a
     apply supportedOperators_mono _ (embedOp_mem_supportedOperators e.injective (A i a))
-    rintro x ⟨j, rfl⟩
-    exact routingPermutation_pairData_site K hK hi (left_ne_right hN i) j
+    intro x hmemImage
+    obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hmemImage
+    exact Finset.mem_filter.mpr
+      ⟨Finset.mem_univ _, routingPermutation_pairData_site K hK hi (left_ne_right hN i) j⟩
   · exact sum_conjTranspose_embedOp_mul e (A i) (hA i hi)
 
 end QuantumCircuit.PortRegisters

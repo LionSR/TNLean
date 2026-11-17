@@ -96,7 +96,7 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
 /-- An operator acting on a set disjoint from `S` is `1 ⊗ A'` in the coordinates of
 `sheetSplit S`. -/
 theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Finset ι}
-    (hD : Disjoint D (S : Set ι)) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hD : Disjoint D S) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ supportedOperators q D) :
     ∃ A' : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ,
       A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
@@ -110,7 +110,7 @@ theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Fins
     rw [← rectKronecker_one (ν := ↥S) (ι := Fin q)]
     congr 1
     funext v
-    exact hm v fun hv => Set.disjoint_left.mp hD hv v.2
+    exact hm v fun hv => Finset.disjoint_left.mp hD hv v.2
   | zero => exact ⟨0, by simp⟩
   | add x y _ _ hx hy =>
     obtain ⟨X, hX⟩ := hx
@@ -141,7 +141,7 @@ theorem siteLift_mem_supportedOperators (D : Finset ι)
     (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
     siteLift D X ∈ supportedOperators q D := by
   have h := embedOp_mem_supportedOperators (d := q) (Subtype.val_injective (p := (· ∈ D))) X
-  rwa [Subtype.range_coe_subtype] at h
+  rwa [show Finset.univ.image Subtype.val = D by ext; simp] at h
 
 end TNLean.Lattice
 

@@ -138,10 +138,9 @@ theorem DomainHamiltonian.partialSwap_difference_eq_sum_crossing
       Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ :=
     LinearMap.mulLeftRight ℂ (F, Fᴴ) - LinearMap.id
   have hcancel (X : DomainSupport Λ R) (hX : X ∉ C) : δ (h.doubled.term X) = 0 := by
-    have hside : (X.1 : Set (Fin Λ.card)) ⊆ (D : Set (Fin Λ.card)) ∨
-        Disjoint (X.1 : Set (Fin Λ.card)) (D : Set (Fin Λ.card)) := by
+    have hside : X.1 ⊆ D ∨ Disjoint X.1 D := by
       simp only [C, Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
-      simp only [Finset.coe_subset, Finset.disjoint_coe, Finset.disjoint_left]
+      simp only [Finset.disjoint_left]
       grind
     change F * Matrix.reindex e e (doubledHamiltonian (h.term X)) * Fᴴ -
       Matrix.reindex e e (doubledHamiltonian (h.term X)) = 0

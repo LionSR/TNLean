@@ -64,7 +64,7 @@ theorem exists_metric_truncated_filter_budget {R J Δ : ℝ} (hR : 0 < R)
       ∀ {ι : Type*} [PseudoMetricSpace ι] [Fintype ι] [DecidableEq ι] {d : ℕ},
         ∀ (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
           (_hHerm : ∀ i, (h i).IsHermitian)
-          (_hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+          (_hSupport : ∀ i, h i ∈ supportedOperators d (metricRangeBall R i))
           (_hNorm : ∀ i, ‖h i‖ ≤ J)
           (_hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
           (ℓ : ℝ), R ≤ ℓ → ∀ i : ι,
@@ -104,9 +104,7 @@ theorem exists_metric_truncated_filter_budget {R J Δ : ℝ} (hR : 0 < R)
   have hq : 0 ≤ q := by dsimp [q]; positivity
   have hS : 1 ≤ S := (Finset.one_le_card.mpr ⟨i, self_mem_metricRangeBall hR.le i⟩).trans
     (hCard i)
-  have hSupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j : Finset ι) := by
-    rw [coe_metricRangeBall]
-    exact hSupport j
+  have hSupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j) := hSupport j
   have hDegree (x : ι) : (metricRangeGraph R).degree x ≤ S := by
     simpa only [SimpleGraph.card_neighborFinset_eq_degree] using
       metricRangeGraph_neighbor_card_le hCard x
@@ -183,25 +181,22 @@ theorem metric_truncated_filter_properties {ι : Type*} [PseudoMetricSpace ι]
     [Fintype ι] [DecidableEq ι] {d : ℕ} {R ℓ J : ℝ} (hℓ : R ≤ ℓ)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hHerm : ∀ i, (h i).IsHermitian)
-    (hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+    (hSupport : ∀ i, h i ∈ supportedOperators d (metricRangeBall R i))
     (hNorm : ∀ i, ‖h i‖ ≤ J) (q Δ : ℝ) (i : ι) :
     let M := gaussianFilteredTerm q Δ (∑ j ∈ metricRangeBall (ℓ - R) i, h j) (h i)
-    M ∈ supportedOperators d (Metric.closedBall i ℓ) ∧ M.IsHermitian ∧ ‖M‖ ≤ J := by
+    M ∈ supportedOperators d (metricRangeBall ℓ i) ∧ M.IsHermitian ∧ ‖M‖ ≤ J := by
   intro M
-  have hsupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j : Finset ι) := by
-    simpa only [coe_metricRangeBall] using hSupport j
+  have hsupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j) := hSupport j
   have hHs : (∑ j ∈ metricRangeBall (ℓ - R) i, h j).IsHermitian :=
     Matrix.isHermitian_sum _ fun j _ ↦ hHerm j
   have hHsSupp : (∑ j ∈ metricRangeBall (ℓ - R) i, h j) ∈
       supportedOperators d (metricRangeBall ℓ i : Finset ι) :=
     Submodule.sum_mem _ fun j hj ↦ supportedOperators_mono
-      (Finset.coe_subset.mpr (metricRangeBall_retained_support hj)) (hsupp j)
-  have hWi := supportedOperators_mono
-    (Finset.coe_subset.mpr (metricRangeBall_initial_support hℓ i)) (hsupp i)
+      (metricRangeBall_retained_support hj) (hsupp j)
+  have hWi := supportedOperators_mono (metricRangeBall_initial_support hℓ i) (hsupp i)
   refine ⟨?_, isHermitian_gaussianFilteredTerm q Δ hHs (hHerm i),
     (norm_gaussianFilteredTerm_le q Δ hHs (h i)).trans (hNorm i)⟩
-  simpa only [coe_metricRangeBall] using
-    gaussianFilteredTerm_mem_supportedOperators q Δ hHsSupp hWi
+  exact gaussianFilteredTerm_mem_supportedOperators q Δ hHsSupp hWi
 
 
 /-- Source-faithful exponential localization for the actual physical-ball truncated
@@ -214,13 +209,13 @@ theorem exists_metric_truncated_filter_localization {R J Δ : ℝ} (hR : 0 < R)
       ∀ {ι : Type*} [PseudoMetricSpace ι] [Fintype ι] [DecidableEq ι] {d : ℕ},
         ∀ (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
           (_hHerm : ∀ i, (h i).IsHermitian)
-          (_hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+          (_hSupport : ∀ i, h i ∈ supportedOperators d (metricRangeBall R i))
           (_hNorm : ∀ i, ‖h i‖ ≤ J)
           (_hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
           (ℓ : ℝ), R ≤ ℓ → ∀ i : ι,
           let q := c₁ * ℓ * Δ
           let M := gaussianFilteredTerm q Δ (∑ j ∈ metricRangeBall (ℓ - R) i, h j) (h i)
-          M ∈ supportedOperators d (Metric.closedBall i ℓ) ∧ M.IsHermitian ∧ ‖M‖ ≤ J ∧
+          M ∈ supportedOperators d (metricRangeBall ℓ i) ∧ M.IsHermitian ∧ ‖M‖ ≤ J ∧
             ‖gaussianFilteredTerm q Δ (∑ j, h j) (h i) - M‖ ≤ J * C * Real.exp (-(η * ℓ)) ∧
             (∀ (hH : (∑ j, h j).IsHermitian) {E₀ : ℝ}
               (_hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
@@ -262,7 +257,7 @@ theorem exists_metric_truncated_filter_sum_bound {R J Δ : ℝ} (hR : 0 < R)
       ∀ {ι : Type*} [PseudoMetricSpace ι] [Fintype ι] [DecidableEq ι] {d : ℕ},
         ∀ (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
           (_hHerm : ∀ i, (h i).IsHermitian)
-          (_hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+          (_hSupport : ∀ i, h i ∈ supportedOperators d (metricRangeBall R i))
           (_hNorm : ∀ i, ‖h i‖ ≤ J)
           (_hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
           (ℓ : ℝ), R ≤ ℓ →

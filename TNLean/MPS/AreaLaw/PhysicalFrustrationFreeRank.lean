@@ -134,10 +134,9 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     QuantumCircuit.mem_supportedOperators_of_isSupportedOn (S := (leftBlock L k)ᶜ)
       (outside_right_supported h hs a b k)
   have hU1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ U :=
-    QuantumCircuit.one_mem_supportedOperators (d := q) (leftBlock L k : Set (Fin L))
+    QuantumCircuit.one_mem_supportedOperators (d := q) (leftBlock L k)
   have hV1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
-    QuantumCircuit.one_mem_supportedOperators (d := q)
-      (((leftBlock L k)ᶜ : Finset (Fin L)) : Set (Fin L))
+    QuantumCircuit.one_mem_supportedOperators (d := q) (leftBlock L k)ᶜ
   have hdisjoint : Disjoint (leftBlock L k)ᶜ (leftBlock L k) :=
     Finset.disjoint_left.mpr (fun _ hv hw ↦ (Finset.mem_compl.mp hv) hw)
   have heq : physicalFrustrationFreeTruncation h a b =

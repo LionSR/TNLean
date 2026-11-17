@@ -315,10 +315,10 @@ theorem exists_region_hard_truncation_residuals {k g : ℕ}
       (fun i j hij ↦ by
         fin_cases i <;> fin_cases j
         · exact absurd rfl hij
-        · exact commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr (hR hij))
+        · exact commute_of_mem_supportedOperators (hR hij)
             (mem_supportedOperators_of_isSupportedOn (hsA 0))
             (mem_supportedOperators_of_isSupportedOn (hsA 1))
-        · exact commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr (hR hij))
+        · exact commute_of_mem_supportedOperators (hR hij)
             (mem_supportedOperators_of_isSupportedOn (hsA 1))
             (mem_supportedOperators_of_isSupportedOn (hsA 0))
         · exact absurd rfl hij)

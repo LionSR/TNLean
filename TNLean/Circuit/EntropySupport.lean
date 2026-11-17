@@ -84,7 +84,7 @@ theorem mem_supportedOperators_of_isSupportedOn {S : Finset ι}
   by_cases hconfig : Nonempty (ι → Fin q)
   · obtain ⟨K, rfl⟩ := hA.exists_localLift (Classical.choice hconfig)
     rw [localLift_eq_embedOp]
-    simpa only [Subtype.range_val_subtype, Finset.setOfPred_mem] using
+    simpa [show Finset.univ.image (Subtype.val : ↥S → ι) = S by ext; simp] using
       embedOp_mem_supportedOperators (e := (Subtype.val : ↥S → ι)) Subtype.val_injective K
   · have : IsEmpty (ι → Fin q) := ⟨fun σ ↦ hconfig ⟨σ⟩⟩
     have hzero : A = 0 := Subsingleton.elim _ _

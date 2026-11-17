@@ -336,7 +336,7 @@ theorem bandBirth_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L₀
     (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
     {T : Finset (SquareLatticeVertex L L)} {Q : Party}
     (hTP : ∀ x ∈ T, own (f (pos x)) = own op.label)
-    (hTH : Disjoint (T : Set _) (guideFrame pos q f own ph rank V hole hV).outerHoles)
+    (hTH : Disjoint T (guideFrame pos q f own ph rank V hole hV).outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hT : ∀ x ∈ T, fb (pos x) ≠ fa (pos x)) :
     ∃ w : Word (guideFrame pos q f own ph rank V hole hV).regs
@@ -376,7 +376,7 @@ theorem bandDeath_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L₀
     (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
     {T : Finset (SquareLatticeVertex L L)} {Q : Party}
     (hTP : ∀ x ∈ T, own (f (pos x)) = own op.label)
-    (hTH : Disjoint (T : Set _) (guideFrame pos q f own ph rank V hole hV).outerHoles)
+    (hTH : Disjoint T (guideFrame pos q f own ph rank V hole hV).outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hT : ∀ x ∈ T, fb (pos x) ≠ fa (pos x)) :
     ∃ M : PartyChain ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regs
@@ -417,7 +417,7 @@ theorem centralBirth_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L
     (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
     {T : Finset (SquareLatticeVertex L L)} {Q : Party}
     (hTP : ∀ x ∈ T, own (f (pos x)) = own R.oldLabel)
-    (hTH : Disjoint (T : Set _) (guideFrame pos q f own ph rank V hole hV).outerHoles)
+    (hTH : Disjoint T (guideFrame pos q f own ph rank V hole hV).outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * R.n)
     (hT : ∀ x ∈ T, f (pos x) ≠ fa (pos x)) :
     ∃ w : Word (guideFrame pos q f own ph rank V hole hV).regs
@@ -464,10 +464,10 @@ theorem edgeExchange_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ (guideFrame pos q f₁ own ph rank V₁ hole hV₁).holes ++
         (guideFrame pos q f₂ own ph rank V₂ hole hV₂).holes, out h = true →
-      Disjoint (h.patch.outer : Set (SquareLatticeVertex L L)) (lensSample pos R.n e d))
+      Disjoint h.patch.outer (lensSample pos R.n e d))
     (hin : ∀ h ∈ (guideFrame pos q f₁ own ph rank V₁ hole hV₁).holes ++
         (guideFrame pos q f₂ own ph rank V₂ hole hV₂).holes, out h = false →
-      (h.patch.outer : Set (SquareLatticeVertex L L)) ⊆ lensSample pos R.n e d)
+      h.patch.outer ⊆ lensSample pos R.n e d)
     (hdiam : ∀ x ∈ (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
         (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
           hin).tSet (own (R.nbrLabel e)),

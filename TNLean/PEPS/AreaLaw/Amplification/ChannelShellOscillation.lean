@@ -47,8 +47,8 @@ theorem siteOscillation_localRootChannel_le_of_notMem (K : Finset ι)
   have hUK : U ∈ supportedOperators q Kᶜ := by
     apply supportedOperators_mono _ hU
     intro z hz
-    have hzy : z = y := Set.mem_singleton_iff.mp hz
-    simpa only [Set.mem_compl_iff, Finset.mem_coe, hzy] using hy
+    rw [Finset.mem_singleton.mp hz]
+    exact Finset.mem_compl.mpr hy
   rw [localRootChannel_commutator K hk₀ hk₁ hUK B]
   exact (norm_localRootChannel_le K hk₀ hk₁ _).trans
     (norm_commutator_le_siteOscillation y B hU hunitary)

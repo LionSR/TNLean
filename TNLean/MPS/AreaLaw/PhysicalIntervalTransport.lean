@@ -489,8 +489,9 @@ theorem exists_traceChainOperator_of_supported_interval
   let eI := intervalShiftOrderIso hcd hd
   let e : Fin (d - c) → Fin L := fun u ↦ (eI u).val
   have he : Function.Injective e := Subtype.val_injective.comp eI.injective
-  have hrange : Set.range e = (interval L c d : Set (Fin L)) := by
+  have hrange : Finset.univ.image e = interval L c d := by
     ext i
+    simp only [Finset.mem_image, Finset.mem_univ, true_and]
     constructor
     · rintro ⟨u, rfl⟩
       exact (eI u).property

@@ -75,9 +75,8 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
         simp only [normalizationCoreSites, Finset.mem_coe, mem_interval] at hx ⊢ <;> omega
     exact supportedOperators_mono hsub (hmem i)
   have hd (j k : Fin 3) (hjk : j ≠ k) :
-      Disjoint (normalizationCoreSites a b j : Set (Fin L))
-        (normalizationCoreSites a b k : Set (Fin L)) := by
-    apply Set.disjoint_left.mpr
+      Disjoint (normalizationCoreSites a b j) (normalizationCoreSites a b k) := by
+    apply Finset.disjoint_left.mpr
     intro x hx hy
     fin_cases j <;> fin_cases k <;>
       simp_all [normalizationCoreSites, mem_interval] <;> omega

@@ -165,7 +165,8 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
       (hX : X ∈ supportedOperators q S)
       (hSR : ∀ i ∈ S, e i ∈ R) : E X ∈ supportedOperators q R := by
     apply supportedOperators_mono ?_ (embedOp_mem_supportedOperators_image e.injective hX)
-    rintro j ⟨i, hi, rfl⟩
+    intro j hj
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hj
     exact hSR i hi
   have hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
       (interval T r.val (r.val + 2) : Finset (Fin T)) := fun _ ↦ Submodule.zero_mem _

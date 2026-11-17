@@ -273,13 +273,15 @@ For the coarsening in Hastings, arXiv:cond-mat/0508554v3, lines 609–639. -/
 theorem periodicCoarseOperator_mem_supportedOperators {N ℓ d : ℕ} (hℓ : 0 < ℓ)
     (a : (Fin N × Fin (2 * ℓ)) →
       Matrix ((Fin N × Fin (2 * ℓ)) → Fin d) ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ periodicPhysicalDistance i v ≤ ℓ))
+    (ha : ∀ i, a i ∈ supportedOperators d
+        (Finset.univ.filter fun v ↦ periodicPhysicalDistance i v ≤ ℓ))
     (j : Fin N) (hj : 0 < (j : ℕ)) :
     periodicCoarseOperator a j ∈ supportedOperators d
       (Finset.univ.filter fun v ↦ (v.1 : ℕ) + 1 = (j : ℕ) ∨ (v.1 : ℕ) = (j : ℕ)) := by
   apply edgePartition_mem_supportedOperators
   intro i hi
-  exact supportedOperators_mono (fun v hv ↦ periodicCoarseEdge_support hℓ i v hj hi hv) (ha i)
+  exact supportedOperators_mono (fun v hv ↦ Finset.mem_filter.mpr ⟨Finset.mem_univ _,
+    periodicCoarseEdge_support hℓ i v hj hi (Finset.mem_filter.mp hv).2⟩) (ha i)
 
 /-- Hermiticity is preserved by the periodic grouping.
 For the coarsening in Hastings, arXiv:cond-mat/0508554v3, lines 609–639. -/

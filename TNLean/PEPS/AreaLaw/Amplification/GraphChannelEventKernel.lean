@@ -83,6 +83,7 @@ theorem sum_graphBall_shell_eq_sum_card (G : SimpleGraph ι) (a : κ → ι)
 
 variable {q : ℕ} [NeZero q] {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+open Classical in
 /-- Sum the actual full-channel oscillation increments over a finite family of
 event labels. Uniform actual localization tails and exact component support
 give the explicit finite ball-incidence bound. No injectivity of the anchors

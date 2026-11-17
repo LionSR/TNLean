@@ -32,6 +32,7 @@ namespace TNLean.PEPS.AreaLaw
 variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] [NeZero q]
 variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+open Classical in
 /-- The full component-supported root channel has an explicit finite
 stretched-exponential shell bound, with arbitrary finite spectators. Source:
 area law, `eq:amplification-oscillation-increment`, lines 124–139, using exact

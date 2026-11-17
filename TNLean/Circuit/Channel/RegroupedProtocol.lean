@@ -65,8 +65,9 @@ theorem regroupColor_pairwiseDisjoint [NeZero M] (c : Fin 3) :
     simp only [regroupColor] at hc'
     split_ifs at hc' <;> simp at hc' <;>
       split_ifs at hv <;> omega
-  apply Set.disjoint_left.mpr
+  apply Finset.disjoint_left.mpr
   intro x hx hy
+  rw [mem_ringBond] at hx hy
   rcases hx with hx | hx <;> rcases hy with hy | hy
   · exact hij (hx.symm.trans hy)
   · exact hnext j i hij.symm hcolor.symm (hy.symm.trans hx)
@@ -76,7 +77,7 @@ theorem regroupColor_pairwiseDisjoint [NeZero M] (c : Fin 3) :
 /-- The seam bonds at positions 1, 3 and 5 are a matching on six sites. -/
 theorem sixSite_seam_matching :
     ({1, 3, 5} : Set (Fin 6)).PairwiseDisjoint ringBond := by
-  simp only [Set.PairwiseDisjoint, Set.Pairwise, Set.disjoint_left, mem_ringBond,
+  simp only [Set.PairwiseDisjoint, Set.Pairwise, Finset.disjoint_left, mem_ringBond,
     Set.mem_insert_iff, Set.mem_singleton_iff, Function.onFun]
   decide
 
@@ -85,24 +86,26 @@ layers. This only concerns a direct partition of the three triangle edges. -/
 theorem threeBlock_seams_no_two_colors :
     ¬ ∃ c : Fin 3 → Fin 2, ∀ i j, i ≠ j → c i = c j →
       Disjoint (ringBond i) (ringBond j) := by
-  simp only [Set.disjoint_left, mem_ringBond]
+  simp only [Finset.disjoint_left, mem_ringBond]
   decide
 
 /-- The actual blocking map sends the six-site seam matching to the three triangle
 bonds. This connects the obstruction above to grouping consecutive pairs. -/
 theorem sixSite_seam_block_image (j : Fin 3) :
-    siteBlock (M := 3) (k := 2) '' ringBond (⟨2 * j.val + 1, by omega⟩ : Fin 6) =
+    (ringBond (⟨2 * j.val + 1, by omega⟩ : Fin 6)).image (siteBlock (M := 3) (k := 2)) =
       ringBond j := by
-  simp only [ringBond, Set.image_pair]
+  simp only [ringBond, Finset.image_insert, Finset.image_singleton]
   fin_cases j <;> ext x <;> fin_cases x <;> decide
 
 /-- Every original nearest-neighbor bond lies in its left block and the next block. -/
 theorem ringBond_subset_preimage_siteBlock [NeZero M] [NeZero k] (i : Fin (M * k)) :
-    ringBond i ⊆ siteBlock ⁻¹' ringBond (siteBlock i) := by
-  rintro x (rfl | rfl)
+    ringBond i ⊆ Finset.univ.filter fun p ↦ siteBlock p ∈ ringBond (siteBlock i) := by
+  intro x hmem₀
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, mem_ringBond]
+  rw [mem_ringBond] at hmem₀
+  rcases hmem₀ with rfl | rfl
   · exact Or.inl rfl
-  · change siteBlock (i + 1) = siteBlock i ∨ siteBlock (i + 1) = siteBlock i + 1
-    apply Or.imp (fun h => Fin.ext h) (fun h => Fin.ext h)
+  · apply Or.imp (fun h => Fin.ext h) (fun h => Fin.ext h)
     change (i + 1).val / k = i.val / k ∨ (i + 1).val / k = (siteBlock i + 1).val
     have hik : i.val / k < M := (siteBlock i).isLt
     have hk := Nat.pos_of_ne_zero (NeZero.ne k)
@@ -508,7 +511,7 @@ private theorem exists_oneSite_onsite
   apply LinearMap.ext
   intro X
   apply LinearMap.eqOn_span' (s := {Z | ∃ A : Fin 1 → Matrix (Fin d) (Fin d) ℂ,
-    (∀ i ∉ (Set.univ : Set (Fin 1)), A i = 1) ∧ Z = rectKronecker A})
+    (∀ i ∉ (Finset.univ : Finset (Fin 1)), A i = 1) ∧ Z = rectKronecker A})
   · rintro _ ⟨A, _, rfl⟩
     apply (oneSiteMatrixEquiv e).injective
     rw [OnsiteChannel.map_rectKronecker, oneSiteMatrixEquiv_rectKronecker]

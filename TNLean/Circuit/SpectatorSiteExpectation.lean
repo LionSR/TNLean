@@ -273,7 +273,6 @@ private theorem exists_kronecker_one_of_mem_supportedOperators_some {i : ι}
       exact ManyBody.apply_eq_zero_of_mem_supportedOperators hU (v := none)
         (fun h ↦ by simp at h) hab
   have hU₀ : U₀ ∈ supportedOperators q ({i} : Finset ι) := by
-    rw [← Finset.coe_singleton]
     refine mem_supportedOperators_of_isSupportedOn ⟨fun σ τ ⟨j, hj, hne⟩ ↦ ?_,
       fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
     · exact ManyBody.apply_eq_zero_of_mem_supportedOperators hU (v := some j)

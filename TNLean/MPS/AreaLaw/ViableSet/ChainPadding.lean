@@ -36,7 +36,8 @@ theorem isSupportedOn_embedOp_prefix {L N q a b : ℕ} (hi : L ≤ N)
     (Fin.castLE_injective hi) (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hX)
   apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
   apply QuantumCircuit.supportedOperators_mono ?_ h
-  rintro _ ⟨v, hv, rfl⟩
+  intro _ hw
+  obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hw
   exact mem_interval.mpr ((mem_interval (L := L)).mp hv)
 
 /-- Padded bonds are exactly the old bonds together with the new sites on
@@ -96,7 +97,8 @@ theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
     apply QuantumCircuit.supportedOperators_mono ?_
       (QuantumCircuit.siteOp_mem_supportedOperators
         (⟨j.val + 1, by omega⟩ : Fin N) (QuantumCircuit.siteBasisPenalty z))
-    rintro v rfl
+    intro v hv
+    rw [Finset.mem_singleton.mp hv]
     apply mem_interval.mpr
     change j.val ≤ j.val + 1 ∧ j.val + 1 < j.val + 2
     omega

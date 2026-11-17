@@ -60,7 +60,8 @@ For the coarsening in Hastings, arXiv:cond-mat/0508554v3, lines 609–730. -/
 theorem card_le_two_mul_re_trace_of_periodicHierarchyProjection_of_error
     {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ℕ} (blk : ι → ℕ)
     (a : ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ j, 0 < j → a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j))
+    (hsupp : ∀ j, 0 < j → a j ∈ supportedOperators d
+        (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j))
     (ha : ∀ j, (a j).IsHermitian)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {K r J Δ δ : ℝ} (hK : 0 < K)
     {h : ℕ} (hh : 2 ≤ h) (hJ : 0 < J) (hΔ : 0 < Δ)
@@ -108,7 +109,8 @@ For the coarsening in Hastings, arXiv:cond-mat/0508554v3, lines 609–730. -/
 theorem exists_unit_mem_periodicCoarseProjection {N ℓ d : ℕ} (hℓ : 0 < ℓ)
     (a : (Fin N × Fin (2 * ℓ)) →
       Matrix ((Fin N × Fin (2 * ℓ)) → Fin d) ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ periodicPhysicalDistance i v ≤ ℓ))
+    (hsupp : ∀ i, a i ∈ supportedOperators d
+        (Finset.univ.filter fun v ↦ periodicPhysicalDistance i v ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian)
     {ψ : EuclideanSpace ℂ ((Fin N × Fin (2 * ℓ)) → Fin d)} (hψ : ‖ψ‖ = 1)
     {J η Δ r : ℝ} (hJ : 0 < J)
@@ -148,7 +150,8 @@ For the coarsening in Hastings, arXiv:cond-mat/0508554v3, lines 609–730. -/
 theorem card_le_two_mul_re_trace_of_periodicCoarseProjection {N ℓ d : ℕ} (hℓ : 0 < ℓ)
     (a g : (Fin N × Fin (2 * ℓ)) →
       Matrix ((Fin N × Fin (2 * ℓ)) → Fin d) ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ periodicPhysicalDistance i v ≤ ℓ))
+    (hsupp : ∀ i, a i ∈ supportedOperators d
+        (Finset.univ.filter fun v ↦ periodicPhysicalDistance i v ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian)
     {ψ : EuclideanSpace ℂ ((Fin N × Fin (2 * ℓ)) → Fin d)} (hψ : ‖ψ‖ = 1)
     {J η Δ r : ℝ} (hJ : 0 < J) (hη : 0 < η) (hΔ : 0 < Δ)

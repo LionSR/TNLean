@@ -41,8 +41,8 @@ variable [NeZero N]
 
 private theorem swap_apply_of_notMem_bond {i x : Fin N} (hx : x ∉ ringBond i) :
     Equiv.swap i (i + 1) x = x := by
-  have hx' : x ≠ i ∧ x ≠ i + 1 := by simpa only [ringBond, Set.mem_insert_iff,
-    Set.mem_singleton_iff, not_or] using hx
+  have hx' : x ≠ i ∧ x ≠ i + 1 := by simpa only [ringBond, Finset.mem_insert,
+    Finset.mem_singleton, not_or] using hx
   exact Equiv.swap_apply_of_ne_of_ne hx'.1 hx'.2
 
 private theorem swap_disjoint_of_disjoint_bond {i j : Fin N}
@@ -50,7 +50,7 @@ private theorem swap_disjoint_of_disjoint_bond {i j : Fin N}
     Equiv.Perm.Disjoint (Equiv.swap i (i + 1)) (Equiv.swap j (j + 1)) := by
   intro x
   by_cases hx : x ∈ ringBond i
-  · exact Or.inr (swap_apply_of_notMem_bond fun hj => Set.disjoint_left.mp h hx hj)
+  · exact Or.inr (swap_apply_of_notMem_bond fun hj => Finset.disjoint_left.mp h hx hj)
   · exact Or.inl (swap_apply_of_notMem_bond hx)
 
 private theorem swap_commute (K : Finset (Fin N))
@@ -85,7 +85,7 @@ theorem perm_apply_of_mem (K : Finset (Fin N))
   have hfix : perm (K.erase i) hE x = x := by
     apply perm_apply_of_notMem
     intro j hj
-    exact fun hxj => Set.disjoint_left.mp
+    exact fun hxj => Finset.disjoint_left.mp
       (hK hi (Finset.mem_of_mem_erase hj) (Finset.ne_of_mem_erase hj).symm) hx hxj
   have hprod : perm K hK = Equiv.swap i (i + 1) * perm (K.erase i) hE :=
     (Finset.mul_noncommProd_erase K hi (fun j => Equiv.swap j (j + 1))
@@ -110,7 +110,7 @@ theorem perm_involutive (K : Finset (Fin N))
   intro x
   by_cases hx : ∃ i ∈ K, x ∈ ringBond i
   · obtain ⟨i, hi, hx⟩ := hx
-    rcases hx with rfl | rfl
+    rcases mem_ringBond.mp hx with rfl | rfl
     · rw [perm_apply_left K hK hi, perm_apply_right K hK hi]
     · rw [perm_apply_right K hK hi, perm_apply_left K hK hi]
   · have hfix : perm K hK x = x :=
@@ -133,7 +133,7 @@ private theorem swap_mem_supportedOperators (i : Fin N) :
     rw [map_one]
     exact one_mem_supportedOperators _
   · rw [permOp_swap_eq_embedOp hi]
-    simpa only [range_pairSites, ringBond] using
+    simpa only [image_univ_pairSites, ringBond] using
       embedOp_mem_supportedOperators (pairSites_injective hi) (swapTwo (d := d))
 
 /-- One physical layer, containing a SWAP on every selected neighboring bond. -/

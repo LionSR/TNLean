@@ -62,8 +62,8 @@ private def pairEmbedding (hN : 2 ≤ N) (i : Fin N) : Fin 2 ↪ Fin N :=
     have hN1 : N = 1 := Fin.one_eq_zero_iff.mp h01.symm
     omega)⟩
 
-private theorem range_pairEmbedding (hN : 2 ≤ N) (i : Fin N) :
-    Set.range (pairEmbedding hN i) = ringBond i := range_pairSites i (i + 1)
+private theorem image_univ_pairEmbedding (hN : 2 ≤ N) (i : Fin N) :
+    Finset.univ.image (pairEmbedding hN i) = ringBond i := image_univ_pairSites i (i + 1)
 
 /-- A native gate's supported global Kraus operators come from normalized two-site
 Kraus operators. Positivity of the local dimension makes placement injective. -/
@@ -75,7 +75,7 @@ theorem exists_pairKraus (L : ChannelLayer m N) (hN : 2 ≤ N) (hm : 0 < m)
   classical
   let e := pairEmbedding hN i
   have hs (a : Fin (L.r i)) : L.kraus i a ∈ supportedOperators m (Finset.univ.image e) := by
-    rw [range_pairEmbedding]
+    rw [image_univ_pairEmbedding]
     exact L.kraus_mem_supportedOperators i hi a
   choose A hA using fun a => exists_embedOp_eq_of_mem_supportedOperators e.injective (hs a)
   refine ⟨A, hA, ?_⟩
@@ -143,7 +143,7 @@ theorem exists_encodedRegisters (L : ChannelLayer m N) (hN : 2 ≤ N) (hm : 0 < 
       kraus i a := embedOp (e i) (B i a)
       kraus_mem_supportedOperators := by
         intro i _ a
-        rw [← range_pairEmbedding hN i]
+        rw [← image_univ_pairEmbedding hN i]
         exact embedOp_mem_supportedOperators (e i).injective _
       sum_kraus i _ := sum_conjTranspose_embedOp_mul (e i) (B i) (hnorm i)
       pairwiseDisjoint := L.pairwiseDisjoint }

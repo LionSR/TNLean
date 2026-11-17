@@ -129,7 +129,7 @@ theorem pairwise_commute_sum_internal_consecutive_regions
           (fun r ↦ k j.castSucc ≤ r.val ∧ r.val + 1 < k j.succ), h r) := by
   intro i j hij
   apply QuantumCircuit.commute_of_mem_supportedOperators
-    (Finset.disjoint_coe.mpr (pairwise_disjoint_consecutive_intervals k hk hij))
+    (pairwise_disjoint_consecutive_intervals k hk hij)
   · exact QuantumCircuit.mem_supportedOperators_of_isSupportedOn
       (isSupportedOn_sum_internal_bonds L q (k i.castSucc) (k i.succ) h hs)
   · exact QuantumCircuit.mem_supportedOperators_of_isSupportedOn

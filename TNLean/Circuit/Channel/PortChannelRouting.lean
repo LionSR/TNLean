@@ -170,8 +170,9 @@ theorem IsPhysicalPortProtocol.of_register_routing {m r : ℕ} (P : PhysicalPort
   apply IsPhysicalPortProtocol.onsite (P := P) i
   · intro j
     apply supportedOperators_mono _ (embedOp_mem_supportedOperators f.injective (K j))
-    rintro x ⟨a, rfl⟩
-    exact hsite a
+    intro x hmemImage
+    obtain ⟨a, -, rfl⟩ := Finset.mem_image.mp hmemImage
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsite a⟩
   · exact sum_conjTranspose_embedOp_mul f K hK
 
 /-- A commuting family shares one forward and backward routing. In particular, the bound

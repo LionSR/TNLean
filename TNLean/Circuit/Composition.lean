@@ -36,12 +36,12 @@ open scoped BigOperators
 
 namespace QuantumCircuit
 
-variable {d : ℕ} {ι β : Type*} [Fintype ι] [DecidableEq ι] {bond : β → Set ι}
+variable {d : ℕ} {ι β : Type*} [Fintype ι] [DecidableEq ι] {bond : β → Finset ι}
 
 namespace BondLayer
 
 /-- All gates of the layer act inside the set of sites `R`. -/
-def IsIn (L : BondLayer d bond) (R : Set ι) : Prop := ∀ k ∈ L.bonds, bond k ⊆ R
+def IsIn (L : BondLayer d bond) (R : Finset ι) : Prop := ∀ k ∈ L.bonds, bond k ⊆ R
 
 theorem IsIn.mono {L : BondLayer d bond} {R R' : Finset ι} (h : L.IsIn R) (hR : R ⊆ R') :
     L.IsIn R' := fun k hk => (h k hk).trans hR
@@ -97,7 +97,7 @@ theorem disjoint_bonds (hne : ∀ b, (bond b).Nonempty) {L₁ L₂ : BondLayer d
   rw [Finset.disjoint_left]
   intro k hk hk'
   obtain ⟨i, hi⟩ := hne k
-  exact Set.disjoint_left.mp hR (h₁ k hk hi) (h₂ k hk' hi)
+  exact Finset.disjoint_left.mp hR (h₁ k hk hi) (h₂ k hk' hi)
 
 variable [DecidableEq β]
 
@@ -128,8 +128,8 @@ theorem union_isIn {L₁ L₂ : BondLayer d bond} {R₁ R₂ : Finset ι} (h₁ 
     (h₂ : L₂.IsIn R₂) (hR : Disjoint R₁ R₂) : (union L₁ L₂ h₁ h₂ hR).IsIn (R₁ ∪ R₂) := by
   intro k hk
   rcases Finset.mem_union.mp hk with hk | hk
-  · exact (h₁ k hk).trans Set.subset_union_left
-  · exact (h₂ k hk).trans Set.subset_union_right
+  · exact (h₁ k hk).trans Finset.subset_union_left
+  · exact (h₂ k hk).trans Finset.subset_union_right
 
 theorem union_op (hne : ∀ b, (bond b).Nonempty) {L₁ L₂ : BondLayer d bond} {R₁ R₂ : Finset ι}
     (h₁ : L₁.IsIn R₁) (h₂ : L₂.IsIn R₂) (hR : Disjoint R₁ R₂) :
@@ -164,7 +164,7 @@ inside the set of sites `R`.
 Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits"),
 restricted to gates inside `R` as in the parallel application of the block unitaries in the
 paragraph "The sequential-RG circuit". -/
-def IsBondCircuitOn (R : Set ι) (T : ℕ) (U : Matrix (ι → Fin d) (ι → Fin d) ℂ) : Prop :=
+def IsBondCircuitOn (R : Finset ι) (T : ℕ) (U : Matrix (ι → Fin d) (ι → Fin d) ℂ) : Prop :=
   ∃ Ls : List (BondLayer d bond), Ls.length = T ∧ (∀ L ∈ Ls, L.IsIn R) ∧ U = circuitOp Ls
 
 namespace IsBondCircuitOn
@@ -187,7 +187,7 @@ theorem mono_set (h : IsBondCircuitOn bond R T U) (hR : R ⊆ R') :
   exact ⟨Ls, hl, fun L hL => (hLs L hL).mono hR, rfl⟩
 
 variable (bond) in
-theorem one (R : Set ι) (T : ℕ) : IsBondCircuitOn (d := d) bond R T 1 := by
+theorem one (R : Finset ι) (T : ℕ) : IsBondCircuitOn (d := d) bond R T 1 := by
   refine ⟨List.replicate T BondLayer.empty, by simp, by simp [BondLayer.empty_isIn], ?_⟩
   induction T with
   | zero => rfl
@@ -261,23 +261,23 @@ theorem par (hne : ∀ b, (bond b).Nonempty) {R₁ R₂ : Finset ι} (hR : Disjo
 /-- Circuits in parallel: a family of circuits of depth `T` acting inside pairwise disjoint
 sets of sites is a circuit of depth `T`, when every bond is nonempty. -/
 theorem finset_noncommProd (hne : ∀ b, (bond b).Nonempty) {κ : Type*} (s : Finset κ)
-    (R : κ → Set ι) (hR : (s : Set κ).PairwiseDisjoint R)
+    (R : κ → Finset ι) (hR : (s : Set κ).PairwiseDisjoint R)
     (U : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hU : ∀ i ∈ s, IsBondCircuitOn bond (R i) T (U i))
     (hcomm : (s : Set κ).Pairwise (Function.onFun Commute U)) :
-    IsBondCircuitOn bond (⋃ i ∈ s, R i) T (s.noncommProd U hcomm) := by
+    IsBondCircuitOn bond (s.biUnion R) T (s.noncommProd U hcomm) := by
   classical
   induction s using Finset.induction_on with
-  | empty => simpa using one (d := d) bond (∅ : Set ι) T
+  | empty => simpa using one (d := d) bond (∅ : Finset ι) T
   | insert a s ha ih =>
     rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha]
-    have hdisj : Disjoint (R a) (⋃ i ∈ s, R i) := by
-      rw [Set.disjoint_iUnion₂_right]
+    have hdisj : Disjoint (R a) (s.biUnion R) := by
+      rw [Finset.disjoint_biUnion_right]
       intro i hi
       exact hR (by simp) (by simp [hi]) (fun h => ha (h ▸ hi))
     have := (hU a (by simp)).par hne hdisj
       (ih (hR.subset (by simp)) (fun i hi => hU i (by simp [hi])) (hcomm.mono (by simp)))
-    simpa [Finset.set_biUnion_insert] using this
+    simpa [Finset.biUnion_insert] using this
 
 end IsBondCircuitOn
 
@@ -293,7 +293,7 @@ sites `R`.
 Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits"),
 restricted to gates inside `R` as in the parallel application of the block unitaries in the
 paragraph "The sequential-RG circuit". -/
-abbrev IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
+abbrev IsCircuitOn (R : Finset (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     Prop :=
   IsBondCircuitOn ringBond R T U
 
@@ -311,11 +311,11 @@ theorem par {R₁ R₂ : Finset (Fin N)} (hR : Disjoint R₁ R₂)
 
 /-- Circuits in parallel on the ring: a family of circuits of depth `T` acting inside pairwise
 disjoint sets of sites is a circuit of depth `T`. -/
-theorem finset_noncommProd {κ : Type*} (s : Finset κ) (R : κ → Set (Fin N))
+theorem finset_noncommProd {κ : Type*} (s : Finset κ) (R : κ → Finset (Fin N))
     (hR : (s : Set κ).PairwiseDisjoint R) (U : κ → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
     (hU : ∀ i ∈ s, IsCircuitOn (R i) T (U i))
     (hcomm : (s : Set κ).Pairwise (Function.onFun Commute U)) :
-    IsCircuitOn (⋃ i ∈ s, R i) T (s.noncommProd U hcomm) :=
+    IsCircuitOn (s.biUnion R) T (s.noncommProd U hcomm) :=
   IsBondCircuitOn.finset_noncommProd ringBond_nonempty s R hR U hU hcomm
 
 end IsCircuitOn
@@ -332,17 +332,18 @@ theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Functi
   refine IsBondCircuitOn.mono ?_ hl
   clear hl
   induction l with
-  | nil => simpa using IsBondCircuitOn.one (d := d) ringBond (Set.range e) 0
+  | nil => simpa using IsBondCircuitOn.one (d := d) ringBond (Finset.univ.image e) 0
   | cons Z l ih =>
     obtain ⟨hZu, p, p', hp, hZ⟩ := hg Z List.mem_cons_self
     have hZ' : QuantumCircuit.embedOp e Z ∈ supportedOperators d (ringBond (e p)) := by
       have := embedOp_mem_supportedOperators_image he hZ
-      rwa [Set.image_pair, hsucc p p' hp] at this
+      rwa [Finset.image_insert, Finset.image_singleton, hsucc p p' hp] at this
     have h1 := IsBondCircuitOn.single (embedOp_mem_unitary he hZu) hZ'
-      (R := Set.range e) (by
-        rintro x (rfl | rfl)
-        · exact ⟨p, rfl⟩
-        · exact ⟨p', (hsucc p p' hp)⟩)
+      (R := Finset.univ.image e) (by
+        intro x hx
+        rcases mem_ringBond.mp hx with rfl | rfl
+        · exact Finset.mem_image_of_mem e (Finset.mem_univ p)
+        · exact Finset.mem_image.mpr ⟨p', Finset.mem_univ _, (hsucc p p' hp)⟩)
     have h2 := ih fun Z' hZ' => hg Z' (List.mem_cons_of_mem _ hZ')
     rw [List.prod_cons, ← embedOp_mul he, List.length_cons]
     exact h2.mul h1
@@ -354,25 +355,29 @@ theorem isCircuitOn_list_prod_embedOp {κ : Type*} {m : κ → ℕ} {K : ℕ}
     (he : ∀ i, Function.Injective (e i))
     (hsucc : ∀ i (a a' : Fin (m i)), a'.val = a.val + 1 → e i a' = e i a + 1)
     (hY : ∀ i, IsPairProduct d (m i) K (Y i)) :
-    ∀ l : List κ, l.Pairwise (fun i i' => Disjoint (Set.range (e i)) (Set.range (e i'))) →
-      IsCircuitOn (Finset.univ.filter fun x ↦ ∃ i ∈ l, x ∈ Set.range (e i)) K
+    ∀ l : List κ, l.Pairwise (fun i i' =>
+        Disjoint (Finset.univ.image (e i)) (Finset.univ.image (e i'))) →
+      IsCircuitOn (Finset.univ.filter fun x ↦ ∃ i ∈ l, x ∈ Finset.univ.image (e i)) K
         ((l.map fun i => embedOp (e i) (Y i)).prod)
   | [], _ => by
     simpa using IsBondCircuitOn.one (d := d) ringBond
-      ({x | ∃ i ∈ ([] : List κ), x ∈ Set.range (e i)}) K
+      (Finset.univ.filter fun x ↦ ∃ i ∈ ([] : List κ), x ∈ Finset.univ.image (e i)) K
   | i :: l, hl => by
     rw [List.pairwise_cons] at hl
     have h₁ := (hY i).isCircuitOn (he i) (hsucc i)
     have h₂ := isCircuitOn_list_prod_embedOp e Y he hsucc hY l hl.2
-    have hdisj : Disjoint (Set.range (e i)) {x | ∃ i' ∈ l, x ∈ Set.range (e i')} := by
-      rw [Set.disjoint_left]
-      rintro x hx ⟨i', hi', hx'⟩
-      exact Set.disjoint_left.mp (hl.1 i' hi') hx hx'
+    have hdisj : Disjoint (Finset.univ.image (e i))
+        (Finset.univ.filter fun x ↦ ∃ i' ∈ l, x ∈ Finset.univ.image (e i')) := by
+      rw [Finset.disjoint_left]
+      intro x hx hx'
+      obtain ⟨i', hi', hx'⟩ := (Finset.mem_filter.mp hx').2
+      exact Finset.disjoint_left.mp (hl.1 i' hi') hx hx'
     rw [List.map_cons, List.prod_cons]
     refine (h₁.par hdisj h₂).mono_set fun x hx => ?_
-    rcases hx with hx | ⟨i', hi', hx⟩
-    · exact ⟨i, List.mem_cons_self, hx⟩
-    · exact ⟨i', List.mem_cons_of_mem _ hi', hx⟩
+    rcases Finset.mem_union.mp hx with hx | hx
+    · exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, i, List.mem_cons_self, hx⟩
+    · obtain ⟨i', hi', hx⟩ := (Finset.mem_filter.mp hx).2
+      exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, i', List.mem_cons_of_mem _ hi', hx⟩
 
 end Ring
 

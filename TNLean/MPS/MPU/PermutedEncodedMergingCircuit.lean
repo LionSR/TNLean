@@ -219,10 +219,12 @@ theorem exists_permuted_encoded_uniform_merging_circuit
     rw [← permOp_conjTranspose_mul_mul]
     simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₂support
-  have hZsupport := hsupport (siteEquiv.symm '' support) hZ₁' hZ₂'
-    hinputSupport hpacketSupport
+  have hZsupport := hsupport (support.image siteEquiv.symm) hZ₁' hZ₂'
+    (by simpa only [Finset.coe_image] using hinputSupport)
+    (by simpa only [Finset.coe_image] using hpacketSupport)
   have hreturnedSupport : R * Z * Rᴴ ∈ supportedOperators d support := by
-    simpa only [Set.image_image, Function.comp_def, Equiv.apply_symm_apply, Set.image_id'] using
+    simpa only [Finset.image_image, Function.comp_def, Equiv.apply_symm_apply,
+        Finset.image_id'] using
       permOp_conjugate_mem_supportedOperators siteEquiv hZsupport
   have hreturnedUnitary := hnew.2.logical_mem_unitary
     (initializedBasisMatrix_isIsometry _) hnew.1.mem_unitary

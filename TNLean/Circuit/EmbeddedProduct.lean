@@ -35,7 +35,8 @@ theorem commute_embedOp_of_disjoint {m' : ℕ} {e : Fin m → Fin n} {e' : Fin m
     (he : Function.Injective e) (he' : Function.Injective e')
     (h : Disjoint (Set.range e) (Set.range e')) (X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ)
     (X' : Matrix (Fin m' → Fin d) (Fin m' → Fin d) ℂ) : Commute (embedOp e X) (embedOp e' X') :=
-  commute_of_mem_supportedOperators h (embedOp_mem_supportedOperators he X)
+  commute_of_mem_supportedOperators (by rw [← Finset.disjoint_coe]; simpa using h)
+    (embedOp_mem_supportedOperators he X)
     (embedOp_mem_supportedOperators he' X')
 
 /-- **Matrix elements of a product of placed operators.** -/

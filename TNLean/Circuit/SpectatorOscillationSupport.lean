@@ -70,7 +70,7 @@ theorem siteOscillation_eq_zero_of_not_mem_support (K : Finset ι)
   apply siteOscillation_eq_zero_of_commute
   intro U hU
   have hUK : U ∈ supportedOperators q Kᶜ :=
-    supportedOperators_mono (Set.singleton_subset_iff.mpr hy) hU
+    supportedOperators_mono (Finset.singleton_subset_iff.mpr (Finset.mem_compl.mpr hy)) hU
   have hfix := (spectatorSiteExpectation_eq_self_iff K B).mpr hB
   simpa only [hfix] using (spectatorSiteExpectation_commute K B hUK).symm
 

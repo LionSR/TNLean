@@ -46,11 +46,19 @@ private theorem exists_rounds_of_isCircuitOn [NeZero d] [NeZero N] {K : ℕ}
   · have h := (TeleportHop.isImplementationOn_round (d := d) Ls
       (TeleportHop.valid_nil (N := N))).isRoundsImplementationOn
     rw [TeleportHop.chainPerm_nil, Matrix.one_mul, ← hLs] at h
-    exact h.mono fun _ _ => fun _ _ _ hi => hi.elim
+    exact h.mono fun _ _ => fun _ _ _ hi => by simp [TeleportHop.pairSites] at hi
 
 /-- The physical scratch sites strictly between a block's first and last registers. -/
-def windowCentralSites (hN : ∑ k, ℓ k = N) (r : ℕ) : Set (Fin N) :=
-  {i | ∃ (k : Fin M) (p : Fin (ℓ k)), r ≤ p.val ∧ p.val < ℓ k - r ∧ i = blockSite hN k p}
+noncomputable def windowCentralSites (hN : ∑ k, ℓ k = N) (r : ℕ) : Finset (Fin N) := by
+  classical
+  exact Finset.univ.filter fun i ↦
+    ∃ (k : Fin M) (p : Fin (ℓ k)), r ≤ p.val ∧ p.val < ℓ k - r ∧ i = blockSite hN k p
+
+theorem mem_windowCentralSites {hN : ∑ k, ℓ k = N} {r : ℕ} {i : Fin N} :
+    i ∈ windowCentralSites hN r ↔
+      ∃ (k : Fin M) (p : Fin (ℓ k)), r ≤ p.val ∧ p.val < ℓ k - r ∧ i = blockSite hN k p := by
+  classical
+  simp [windowCentralSites]
 
 /-- The distant controlled-subtraction layer has a constant-depth measurement implementation
 on every coherent state whose central physical scratch sites carry zero. Odd gaps are handled
@@ -91,7 +99,7 @@ theorem exists_rounds_sparseBlockShift [NeZero d] (hr : 2 ≤ r) :
     obtain ⟨k, rfl⟩ := List.mem_ofFn.mp hg
     obtain ⟨⟨p, hp₁, hp₂, hi'⟩, hfix⟩ := SparseRegister.gate_interior hN hr hℓ k hi
     rw [Matrix.permMatrix_mulVec] at hx
-    have h := hv (cfgPerm π x) hx i ⟨k, p, hp₁, hp₂, hi'⟩
+    have h := hv (cfgPerm π x) hx i (mem_windowCentralSites.mpr ⟨k, p, hp₁, hp₂, hi'⟩)
     change x (π i) = 0 at h
     simpa only [π, hfix] using h
   have hPQ := ((hP.mono (Set.subset_univ _)).append hG hmap).append hQ
@@ -133,7 +141,8 @@ private theorem seed_copy_isZeroOn [NeZero d] [NeZero M]
         embedOp (registerSite hN hr 0) S) *ᵥ productVector (windowGHZInitial (d := d) hN hr)) := by
   classical
   have hoff : ∀ i ∈ windowCentralSites hN r, ∀ k j, pairSite hN hr k j ≠ i := by
-    rintro i ⟨k, p, hp₁, hp₂, rfl⟩ k' j h
+    intro i hi k' j h
+    obtain ⟨k, p, hp₁, hp₂, rfl⟩ := mem_windowCentralSites.mp hi
     have := (blockSite_mem_pairSite hN hr k p).mp ⟨k', j, h⟩
     omega
   have hi : IsZeroOn (d := d) (windowCentralSites hN r)
@@ -151,8 +160,9 @@ private theorem seed_copy_isZeroOn [NeZero d] [NeZero M]
       (embedOp (registerSite hN hr 0) S *ᵥ productVector (windowGHZInitial (d := d) hN hr)) := by
     refine hi.mulVec_of_mem_supportedOperators ?_
       (embedOp_mem_supportedOperators (registerSite_injective hN hr 0) S)
-    rw [Set.disjoint_left]
-    rintro i hi ⟨j, hj⟩
+    rw [Finset.disjoint_left]
+    intro i hi hi'
+    obtain ⟨j, -, hj⟩ := Finset.mem_image.mp hi'
     exact hoff i hi 0 (Fin.castAdd r j) hj
   rw [← mulVec_mulVec, pairLayerOp_mulVec_eq_comp hN hr
     (fun _ _ => Matrix.permMatrix_mulVec (copyShift r))]
@@ -180,7 +190,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState [NeZero d] 
   obtain ⟨S, hSu, hS⟩ := exists_windowGHZSeedUnitary α hα
   have hseed : IsCircuitOn Finset.univ KS (embedOp (registerSite hN hr 0) S) := by
     refine ((hKS S hSu).isCircuitOn (registerSite_injective hN hr 0) fun i j h => ?_).mono_set
-      (Set.subset_univ _)
+      (Finset.subset_univ _)
     rw [registerSite_eq, registerSite_eq]
     exact blockSite_succ hN 0 _ _ (by simp; omega)
   have hcopy := isCircuitOn_pairLayerOp hN hr fun _ =>

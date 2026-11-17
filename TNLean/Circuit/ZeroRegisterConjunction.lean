@@ -200,7 +200,7 @@ theorem zeroConjunctionPerm_apply_clean (hd : 2 ≤ d) (x : (Fin a → Fin d)) :
 
 /-- The full register on which one conjunction step is supported. Source:
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-def zeroConjunctionStepSites (j : Fin a) : Set (Fin (a + a)) :=
+def zeroConjunctionStepSites (j : Fin a) : Finset (Fin (a + a)) :=
   {Fin.castAdd a j, Fin.natAdd a (zeroConjunctionPrev j), Fin.natAdd a j}
 
 /-- Each controlled shift changes and reads at most three sites. Source:
@@ -253,11 +253,14 @@ theorem isPairProduct_zeroConjunctionStep (hd : 2 ≤ d) (j : Fin a) :
         have hval := congrArg Fin.val huv
         norm_num [e, zeroConjunctionPrev] at hval
         omega
-    have hrange : Set.range e = zeroConjunctionStepSites j := by
+    have hrange : Finset.univ.image e = zeroConjunctionStepSites j := by
       ext p
-      simp only [e, zeroConjunctionStepSites, Matrix.range_cons, Matrix.range_empty,
-        Set.union_empty, Set.singleton_union, Set.mem_insert_iff, Set.mem_singleton_iff]
-    have hs : (zeroConjunctionStep j).permMatrix ℂ ∈ supportedOperators d (Finset.univ.image e) := by
+      simp only [e, zeroConjunctionStepSites, Finset.mem_image, Finset.mem_univ, true_and,
+        Fin.exists_fin_succ, Fin.exists_fin_zero, Finset.mem_insert, Finset.mem_singleton,
+        Matrix.cons_val_zero, Matrix.cons_val_succ]
+      tauto
+    have hs : (zeroConjunctionStep j).permMatrix ℂ ∈
+        supportedOperators d (Finset.univ.image e) := by
       rw [hrange]
       exact (zeroConjunctionStep_isLocalPerm j).permMatrix_mem_supportedOperators
     obtain ⟨X, hX⟩ := exists_embedOp_eq_of_mem_supportedOperators he hs

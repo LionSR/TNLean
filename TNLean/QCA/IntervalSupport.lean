@@ -79,7 +79,9 @@ theorem intervalCoordinates_localInclusion_mem_supportedOperators
     simpa only [e, Equiv.apply_symm_apply] using h
   apply QuantumCircuit.supportedOperators_mono ?_
     (QuantumCircuit.embedOp_mem_supportedOperators he (CStarMatrix.ofMatrix.symm A))
-  rintro _ ⟨x, rfl⟩
-  simpa only [e, Set.mem_ofPred_eq, Equiv.apply_symm_apply] using x.property
+  intro _ hx
+  obtain ⟨x, -, rfl⟩ := Finset.mem_image.mp hx
+  simpa only [e, Finset.mem_filter, Finset.mem_univ, true_and, Equiv.apply_symm_apply] using
+    x.property
 
 end SpinChain

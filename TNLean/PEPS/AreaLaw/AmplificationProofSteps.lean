@@ -122,7 +122,8 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
       RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *
         R₀)ᴴ *ᵥ η) - WithLp.toLp 2 φ‖ ≤ a) :
     ∃ U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ,
-      U ∈ supportedOperators q (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) ∧ Uᴴ * U = 1 ∧
+      U ∈ supportedOperators q (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) ∧
+          Uᴴ * U = 1 ∧
       ‖WithLp.toLp 2 (U *ᵥ (φ ∘ ancillaSplit q X)) - WithLp.toLp 2 (η ∘ ancillaSplit q X)‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
   set sp := ancillaSplit q X with hspdef
@@ -216,7 +217,8 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
     (hη : ‖WithLp.toLp 2 (restoringTransport Ω X Y hXY *ᵥ
       (Entropy.restoringRestored p (restoringVector Ω X Y hXY)).ofLp)‖ = 1)
     {U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X))) (hUu : Uᴴ * U = 1)
+    (hU : U ∈ supportedOperators q (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
+        (hUu : Uᴴ * U = 1)
     {C₁ C₂ : ℝ} {n M K : ℕ} (hn : 1 ≤ n) (hK : 4 * (M + 2) ≤ K)
     (hδ : ‖WithLp.toLp 2 (U *ᵥ ((restoringTransport Ω X Y hXY *ᵥ
         (Entropy.restoringCopy sBlank xBlank (restoringVector Ω X Y hXY)).ofLp) ∘
@@ -272,7 +274,7 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
   have hfinal := mutualInformation_le_inv_pow_of_supported_unitary (φ := WithLp.toLp 2 (φ ∘ sp))
     (η := WithLp.toLp 2 (η ∘ sp)) (by rw [hTn]; exact hφ) (by rw [hTn]; exact hη)
     (disjoint_ancillaCopyRegion_ancillaPhysicalRegion _ _)
-    (by rw [Finset.disjoint_coe]; exact disjoint_disjSum_ancillaCopyRegion_union hJ _)
+    (disjoint_disjSum_ancillaCopyRegion_union hJ _)
     hU hUu hprod hn hK hδ hdim'
   -- Back to `Ω` and the part `X'` of the target.
   set X'' : Finset ↥X := X'.subtype (· ∈ X)

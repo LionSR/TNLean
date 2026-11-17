@@ -95,7 +95,7 @@ theorem isOpenMPS_operator_entries_of_supported_singleton {L q : ℕ} (v : Fin L
   let e := fun _ : Fin 1 ↦ v
   have he : Function.Injective e := fun _ _ _ ↦ Subsingleton.elim _ _
   have hs : M ∈ QuantumCircuit.supportedOperators q (Finset.univ.image e) := by
-    simpa only [e, Set.range_const] using hM
+    simpa only [e, Finset.univ_nonempty, Finset.image_const] using hM
   obtain ⟨X, rfl⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hs
   exact isOpenMPS_operator_entries_embed_one_site v X
 

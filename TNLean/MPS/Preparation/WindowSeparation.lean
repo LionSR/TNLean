@@ -41,7 +41,8 @@ open MPSTensor
 variable {d N : ℕ}
 
 /-- The sites `a, …, a + w - 1` of the ring, as a set of sites. -/
-def window (N a w : ℕ) : Set (Fin N) := {k : Fin N | a ≤ k.val ∧ k.val < a + w}
+def window (N a w : ℕ) : Finset (Fin N) := Finset.univ.filter fun k : Fin N ↦
+    a ≤ k.val ∧ k.val < a + w
 
 theorem chainWindowOperator_mem_supportedOperators_window {L a : ℕ} (ha : a < N)
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
@@ -65,7 +66,8 @@ distance larger than `2T`"). -/
 theorem isSeparatedBy_window {a w b w' s : ℕ} (hab : a + w + s ≤ b)
     (hba : b + w' + s ≤ a + N) :
     IsSeparatedBy (window N a w) (window N b w') s := by
-  exact isSeparatedBy_of_val_bounds (fun _ h => h) (fun _ h => h) hab hba
+  exact isSeparatedBy_of_val_bounds (fun _ h => (Finset.mem_filter.mp h).2)
+    (fun _ h => (Finset.mem_filter.mp h).2) hab hba
 
 end Ring
 

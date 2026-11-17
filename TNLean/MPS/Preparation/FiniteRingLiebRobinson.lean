@@ -78,7 +78,7 @@ noncomputable def ringSupportDistance (X Y : Set (Fin N))
 
 private theorem reaches_ringSupportDistance (X Y : Set (Fin N))
     (hX : X.Nonempty) (hY : Y.Nonempty) :
-    reaches X Y (ringSupportDistance X Y hX hY) := by
+    reaches X Y (ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) := by
   classical
   exact Nat.find_spec (exists_reaches X Y hX hY)
 
@@ -86,29 +86,31 @@ private theorem reaches_ringSupportDistance (X Y : Set (Fin N))
 shortest-path distance inequality. -/
 theorem isSeparatedBy_iff_lt_ringSupportDistance
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty) (r : ℕ) :
-    IsSeparatedBy X Y r ↔ r < ringSupportDistance X Y hX hY := by
+    IsSeparatedBy X Y r ↔ r < ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY := by
   classical
   constructor
   · intro h
     by_contra hlt
     have hle := Nat.le_of_not_gt hlt
-    obtain ⟨x, hx, y, hy, m, hm, heq⟩ := reaches_ringSupportDistance X Y hX hY
+    obtain ⟨x, hx, y, hy, m, hm, heq⟩ :=
+      reaches_ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY
     exact h x hx y hy m (hm.trans (by exact_mod_cast hle)) heq
   · intro hr x hx y hy m hm heq
-    have hReach : reaches X Y r := ⟨x, hx, y, hy, m, hm, heq⟩
-    have hle : ringSupportDistance X Y hX hY ≤ r :=
-      Nat.find_min' (exists_reaches X Y hX hY) hReach
+    have hReach : reaches (X : Set (Fin N)) (Y : Set (Fin N)) r := ⟨x, hx, y, hy, m, hm, heq⟩
+    have hle : ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY ≤ r :=
+      Nat.find_min' (exists_reaches (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) hReach
     exact (Nat.not_lt_of_ge hle) hr
 
 
 /-- Distance zero is precisely overlap of the two supports. -/
 private theorem ringSupportDistance_eq_zero_iff
     (X Y : Set (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty) :
-    ringSupportDistance X Y hX hY = 0 ↔ (X ∩ Y).Nonempty := by
+    ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY = 0 ↔ (X ∩ Y).Nonempty := by
   classical
   constructor
   · intro hZero
-    obtain ⟨x, hx, y, hy, m, hm, heq⟩ := reaches_ringSupportDistance X Y hX hY
+    obtain ⟨x, hx, y, hy, m, hm,
+        heq⟩ := reaches_ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY
     have hmZero : m = 0 := abs_nonpos_iff.mp (by simpa only [hZero, Nat.cast_zero] using hm)
     rw [hmZero, Int.cast_zero, add_zero] at heq
     exact ⟨x, hx, heq ▸ hy⟩
@@ -121,26 +123,31 @@ another support by at most one. This is the weighted path estimate for a
 nearest-neighbor ring. -/
 private theorem ringSupportDistance_le_bond_add_one
     (X Y : Set (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (j : Fin N) (hTouch : (X ∩ ringBond j).Nonempty) :
-    ringSupportDistance X Y hX hY ≤
-      ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 := by
+    (j : Fin N) (hTouch : (X ∩ ((ringBond (N := N) j : Finset (Fin N)) : Set (Fin N))).Nonempty) :
+    ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY ≤
+      ringSupportDistance ((ringBond (N :=
+          N) j : Finset (Fin N)) : Set (Fin N)) Y (ringBond_nonempty j).to_set hY + 1 := by
   classical
   apply Nat.find_min' (exists_reaches X Y hX hY)
   obtain ⟨x, hx, hxb⟩ := hTouch
   obtain ⟨z, hzb, y, hy, m, hm, heq⟩ :=
-    reaches_ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY
+    reaches_ringSupportDistance ((ringBond (N :=
+        N) j : Finset (Fin N)) : Set (Fin N)) Y (ringBond_nonempty j).to_set hY
   have hmOld : |m| ≤
-      (ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 : ℕ) :=
+      (ringSupportDistance ((ringBond (N :=
+          N) j : Finset (Fin N)) : Set (Fin N)) Y (ringBond_nonempty j).to_set hY + 1 : ℕ) :=
     hm.trans (by omega)
   have hmPlus : |m + 1| ≤
-      (ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 : ℕ) := by
+      (ringSupportDistance ((ringBond (N :=
+          N) j : Finset (Fin N)) : Set (Fin N)) Y (ringBond_nonempty j).to_set hY + 1 : ℕ) := by
     simpa only [Nat.cast_add, Nat.cast_one, abs_one] using
       (abs_add_le m 1).trans (add_le_add hm (le_refl |(1 : ℤ)|))
   have hmMinus : |m - 1| ≤
-      (ringSupportDistance (ringBond j) Y (ringBond_nonempty j) hY + 1 : ℕ) := by
+      (ringSupportDistance ((ringBond (N :=
+          N) j : Finset (Fin N)) : Set (Fin N)) Y (ringBond_nonempty j).to_set hY + 1 : ℕ) := by
     simpa only [Nat.cast_add, Nat.cast_one, abs_one] using
       (abs_sub m 1).trans (add_le_add hm (le_refl |(1 : ℤ)|))
-  simp only [ringBond, Set.mem_insert_iff, Set.mem_singleton_iff] at hxb hzb
+  simp only [Finset.mem_coe, mem_ringBond] at hxb hzb
   rcases hxb with hxj | hxj
   · rcases hzb with hzj | hzj
     · refine ⟨x, hx, y, hy, m, hmOld, ?_⟩
@@ -169,13 +176,15 @@ open Classical in
 oriented bonds meeting that support. This remains valid for one- and two-site
 periodic chains, where distinct bonds may have the same support. -/
 private theorem card_bonds_meeting_le {N : ℕ} [NeZero N] (X : Finset (Fin N)) :
-    (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ ringBond j).Nonempty).card ≤ 2 * X.card := by
+    (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ ((ringBond (N :=
+        N) j : Finset (Fin N)) : Set (Fin N))).Nonempty).card ≤ 2 * X.card := by
   classical
-  have hSub : (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ ringBond j).Nonempty) ⊆
+  have hSub : (Finset.univ.filter fun j => ((X : Set (Fin N)) ∩ ((ringBond (N :=
+      N) j : Finset (Fin N)) : Set (Fin N))).Nonempty) ⊆
       X ∪ X.image (fun x => x - 1) := by
     intro j hj
     obtain ⟨x, hx, hxb⟩ := (Finset.mem_filter.mp hj).2
-    simp only [ringBond, Set.mem_insert_iff, Set.mem_singleton_iff] at hxb
+    simp only [Finset.mem_coe, mem_ringBond] at hxb
     rcases hxb with hxj | hxj
     · exact Finset.mem_union_left _ (hxj ▸ hx)
     · apply Finset.mem_union_right
@@ -202,7 +211,8 @@ independent of the ring length. -/
 private theorem sum_bond_distance_exp_le {N : ℕ} [NeZero N]
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
     (a : ℝ) (ha : 0 ≤ a) :
-    (∑ j : Fin N, if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+    (∑ j : Fin N, if ((X : Set (Fin N)) ∩ ((ringBond (N :=
+        N) j : Finset (Fin N)) : Set (Fin N))).Nonempty then
       Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
         ⟨j, by simp [ringBond]⟩ hY) else 0) ≤
     2 * X.card * Real.exp a *
@@ -211,7 +221,8 @@ private theorem sum_bond_distance_exp_le {N : ℕ} [NeZero N]
   let R := Real.exp a *
     Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY)
   have hR : 0 ≤ R := mul_nonneg (Real.exp_pos _).le (Real.exp_pos _).le
-  have hPoint (j : Fin N) (hj : ((X : Set (Fin N)) ∩ ringBond j).Nonempty) :
+  have hPoint (j : Fin N) (hj : ((X : Set (Fin N)) ∩ ((ringBond (N :=
+      N) j : Finset (Fin N)) : Set (Fin N))).Nonempty) :
       Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
         ⟨j, by simp [ringBond]⟩ hY) ≤ R := by
     have hDist : (ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY : ℝ) ≤
@@ -225,14 +236,17 @@ private theorem sum_bond_distance_exp_le {N : ℕ} [NeZero N]
         nlinarith
       _ = R := by rw [Real.exp_add]
   calc
-    _ ≤ ∑ j : Fin N, if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then R else 0 := by
+    _ ≤ ∑ j : Fin N,
+        if ((X : Set (Fin N)) ∩ ((ringBond (N :=
+        N) j : Finset (Fin N)) : Set (Fin N))).Nonempty then R else 0 := by
       apply Finset.sum_le_sum
       intro j _
       split_ifs with hj
       · exact hPoint j hj
       · exact le_rfl
     _ = ((Finset.univ.filter fun j =>
-          ((X : Set (Fin N)) ∩ ringBond j).Nonempty).card : ℝ) * R := by
+          ((X : Set (Fin N)) ∩ ((ringBond (N :=
+              N) j : Finset (Fin N)) : Set (Fin N))).Nonempty).card : ℝ) * R := by
       rw [← Finset.sum_filter]
       simp only [Finset.sum_const, nsmul_eq_mul]
     _ ≤ (2 * X.card : ℝ) * R := by
@@ -252,7 +266,8 @@ private theorem ring_weighted_row_le {N : ℕ} [NeZero N]
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
     (a : ℝ) (ha : 0 ≤ a) (k : Fin N → ℝ)
     (hkOne : ∀ j, k j ≤ 1) :
-    (∑ j : Fin N, (if Disjoint (X : Set (Fin N)) (ringBond j) then 0 else 2 * k j) *
+    (∑ j : Fin N, (if Disjoint (X : Set (Fin N)) ((ringBond (N :=
+        N) j : Finset (Fin N)) : Set (Fin N)) then 0 else 2 * k j) *
       (({j, j + 1} : Finset (Fin N)).card * Real.exp
         (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
           ⟨j, by simp [ringBond]⟩ hY))) ≤
@@ -260,14 +275,16 @@ private theorem ring_weighted_row_le {N : ℕ} [NeZero N]
         (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY)) := by
   classical
   have hPoint (j : Fin N) :
-      (if Disjoint (X : Set (Fin N)) (ringBond j) then 0 else 2 * k j) *
+      (if Disjoint (X : Set (Fin N)) ((ringBond (N :=
+          N) j : Finset (Fin N)) : Set (Fin N)) then 0 else 2 * k j) *
         (({j, j + 1} : Finset (Fin N)).card * Real.exp
           (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
             ⟨j, by simp [ringBond]⟩ hY)) ≤
-      4 * (if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+      4 * (if ((X : Set (Fin N)) ∩ ((ringBond (N :=
+          N) j : Finset (Fin N)) : Set (Fin N))).Nonempty then
         Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
           ⟨j, by simp [ringBond]⟩ hY) else 0) := by
-    by_cases hj : Disjoint (X : Set (Fin N)) (ringBond j)
+    by_cases hj : Disjoint (X : Set (Fin N)) ((ringBond (N := N) j : Finset (Fin N)) : Set (Fin N))
     · have hNo := Set.not_disjoint_iff_nonempty_inter.not.mp (not_not.mpr hj)
       simp only [ite_eq_left hj, zero_mul, ite_eq_right hNo, mul_zero]
       exact le_rfl
@@ -283,10 +300,14 @@ private theorem ring_weighted_row_le {N : ℕ} [NeZero N]
         (Real.exp_pos (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
           ⟨j, by simp [ringBond]⟩ hY)).le
   calc
-    _ ≤ ∑ j : Fin N, 4 * (if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+    _ ≤ ∑ j : Fin N,
+        4 * (if ((X : Set (Fin N)) ∩ ((ringBond (N :=
+        N) j : Finset (Fin N)) : Set (Fin N))).Nonempty then
           Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
             ⟨j, by simp [ringBond]⟩ hY) else 0) := Finset.sum_le_sum (fun j _ => hPoint j)
-    _ = 4 * ∑ j : Fin N, if ((X : Set (Fin N)) ∩ ringBond j).Nonempty then
+    _ = 4 * ∑ j : Fin N,
+        if ((X : Set (Fin N)) ∩ ((ringBond (N :=
+        N) j : Finset (Fin N)) : Set (Fin N))).Nonempty then
           Real.exp (-a * ringSupportDistance (ringBond j) (Y : Set (Fin N))
             ⟨j, by simp [ringBond]⟩ hY) else 0 := by rw [Finset.mul_sum]
     _ ≤ 4 * (2 * X.card * Real.exp a *

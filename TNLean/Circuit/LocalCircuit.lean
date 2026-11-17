@@ -11,7 +11,7 @@ import Mathlib.Data.Finset.NoncommProd
 # Local circuits of finite depth and their light cone
 
 A local circuit of depth `T` is a product of `T` layers, each a product of unitaries acting on
-pairwise disjoint bonds of a geometry. The geometry is a family `bond : β → Set ι` of sets of
+pairwise disjoint bonds of a geometry. The geometry is a family `bond : β → Finset ι` of sets of
 sites (`TNLean.Circuit.Geometry`): the pairs `{k, k + 1}` of the ring of `N` sites, the pairs
 of an open chain, or the edges of a lattice graph. A vector is prepared in depth `T` when it is
 such a circuit applied to a product vector. On the ring this is the class of states in the lower
@@ -78,7 +78,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 section Bonds
 
-variable {β : Type*} {bond : β → Set ι}
+variable {β : Type*} {bond : β → Finset ι}
 
 /-- One layer of a local circuit on the bond geometry `bond`: unitaries `gate b`, each acting
 on the bond `bond b`, for `b` in a finite set `bonds` of pairwise disjoint bonds.
@@ -87,7 +87,7 @@ Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum c
 arXiv:2103.13367, main text, paragraph "Quantum circuits and LOCC" (each layer "contains
 quantum gates acting on disjoint pairs of nearest-neighbor spins"), with the pairs replaced by
 the bonds of `bond`. -/
-structure BondLayer (d : ℕ) (bond : β → Set ι) where
+structure BondLayer (d : ℕ) (bond : β → Finset ι) where
   /-- The bonds carrying a gate. -/
   bonds : Finset β
   /-- The gate on the bond `b`, as an operator on all the sites. -/
@@ -132,7 +132,7 @@ theorem op_mem_unitary (L : BondLayer d bond) : L.op ∈ unitary
 
 /-- **Light cone of one layer.** One layer enlarges the support of `U† A U` to at most the
 one-step neighbourhood: the sites of `X` and the bonds meeting `X`. -/
-theorem conj_op_mem_supportedOperators (L : BondLayer d bond) {X : Finset ι}
+theorem conj_op_mem_supportedOperators [Fintype β] (L : BondLayer d bond) {X : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     star L.op * A * L.op ∈ supportedOperators d (bondNeighbourhood bond X) := by
   classical
@@ -147,8 +147,8 @@ theorem conj_op_mem_supportedOperators (L : BondLayer d bond) {X : Finset ι}
     rw [Finset.noncommProd_congr hbonds (fun _ _ ↦ rfl)]
     exact Finset.noncommProd_union_of_disjoint (Finset.disjoint_filter_filter_not _ _ _).symm _ _
   have hQX : L.partialOp Q hQ ∈ supportedOperators d Xᶜ :=
-    L.partialOp_mem_supportedOperators Q hQ fun k hk j hj hjX ↦
-      (Finset.mem_filter.mp hk).2 ⟨j, hj, hjX⟩
+    L.partialOp_mem_supportedOperators Q hQ fun k hk j hj ↦ Finset.mem_compl.mpr fun hjX ↦
+      (Finset.mem_filter.mp hk).2 ⟨j, Finset.mem_inter.mpr ⟨hj, hjX⟩⟩
   have hPX : L.partialOp P hP ∈ supportedOperators d (bondNeighbourhood bond X) :=
     L.partialOp_mem_supportedOperators P hP fun k hk ↦
       bond_subset_bondNeighbourhood (Finset.mem_filter.mp hk).2
@@ -232,7 +232,7 @@ theorem circuitOp_map_adjoint_reverse (Ls : List (BondLayer d bond)) :
 
 /-- **Backward light cone of a list of layers.** If `A` acts on the sites `X`, then
 `U† A U` acts on the light cone of radius `T` of `X`, for the unitary `U` of `T` layers. -/
-theorem conj_circuitOp_mem_supportedOperators_lightCone (Ls : List (BondLayer d bond))
+theorem conj_circuitOp_mem_supportedOperators_lightCone [Fintype β] (Ls : List (BondLayer d bond))
     {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     star (circuitOp Ls) * A * circuitOp Ls ∈
       supportedOperators d (lightCone bond X Ls.length) := by
@@ -285,7 +285,7 @@ theorem mul (h : IsBondCircuitOfDepth bond U T) (h' : IsBondCircuitOfDepth bond 
 
 Source: arXiv:2307.01696, main text after Theorem 1 ("`|ψ_N⟩` have a strictly finite light
 cone") and Supplemental Material, proof of Theorem 1. -/
-theorem conj_mem_supportedOperators (hU : IsBondCircuitOfDepth bond U T) {X : Finset ι}
+theorem conj_mem_supportedOperators [Fintype β] (hU : IsBondCircuitOfDepth bond U T) {X : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     Star.star U * A * U ∈ supportedOperators d (lightCone bond X T) := by
   obtain ⟨Ls, rfl, rfl⟩ := hU
@@ -313,7 +313,7 @@ depth `T` and operators `A`, `B` acting on sets with disjoint light cones of rad
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1: "since `ψ` is created
 from a product state by a depth-`T` circuit, every connected correlation for operators at a
 distance larger than `2T` vanishes". -/
-theorem expect_mul_mul_expect_one (hψ : IsBondPreparedInDepth bond T ψ) {X Y : Finset ι}
+theorem expect_mul_mul_expect_one [Fintype β] (hψ : IsBondPreparedInDepth bond T ψ) {X Y : Finset ι}
     (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :
@@ -334,7 +334,7 @@ theorem expect_mul_mul_expect_one (hψ : IsBondPreparedInDepth bond T ψ) {X Y :
 with disjoint light cones of radius `T` vanishes: `⟨AB⟩ = ⟨A⟩⟨B⟩`.
 
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1. -/
-theorem expect_mul_eq (hψ : IsBondPreparedInDepth bond T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1)
+theorem expect_mul_eq [Fintype β] (hψ : IsBondPreparedInDepth bond T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1)
     {X Y : Finset ι} (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :

@@ -197,17 +197,19 @@ Source: arXiv:2103.13367v3, `main.tex`, line 289 ("an operator `U ∈ 𝒰` acti
 theorem blockSites_symm_mem_supportedOperators [NeZero d] {X : Finset (Fin M)}
     {A : Matrix (Fin M → Fin (d ^ k)) (Fin M → Fin (d ^ k)) ℂ}
     (hA : A ∈ supportedOperators (d ^ k) X) :
-    (blockSites M k d).symm A ∈ supportedOperators d (Finset.univ.filter fun p ↦ siteBlock p ∈ X) := by
+    (blockSites M k d).symm A ∈
+      supportedOperators d (Finset.univ.filter fun p ↦ siteBlock p ∈ X) := by
   classical
-  have hK := mem_supportedOperators_of_isSupportedOn (q := d) (S := (siteBlock ⁻¹' X).toFinset)
+  refine mem_supportedOperators_of_isSupportedOn
     ((ManyBody.mem_supportedOperators_iff_forall_commute (X := fun _ : Fin (M * k) ↦ Fin d)
-      (A := (blockSites M k d).symm A)).mpr fun B hB ↦ by
-        have hB' := mem_supportedOperators_of_isSupportedOn hB
-        rw [Finset.coe_compl, Set.coe_toFinset, ← Set.preimage_compl] at hB'
-        have hc := commute_of_mem_supportedOperators disjoint_compl_right hA
-          (blockSites_mem_supportedOperators hB')
-        simpa using hc.map (blockSites M k d).symm)
-  simpa using hK
+      (A := (blockSites M k d).symm A)).mpr fun B hB ↦ ?_)
+  have hB' : B ∈ supportedOperators d (Finset.univ.filter fun p ↦ siteBlock (k := k) p ∈ Xᶜ) := by
+    convert mem_supportedOperators_of_isSupportedOn hB using 2
+    ext p
+    simp
+  have hc := commute_of_mem_supportedOperators disjoint_compl_right hA
+    (blockSites_mem_supportedOperators hB')
+  simpa using hc.map (blockSites M k d).symm
 
 /-- Moving a block by `m` moves each of its sites by `k * m` in the original chain. -/
 theorem finProdFinEquiv_add_intCast [NeZero M] [NeZero k] (j : Fin M) (t : Fin k) (m : ℤ) :
@@ -240,13 +242,14 @@ Source: arXiv:2103.13367v3, `main.tex`, line 289 (locality on the blocked chain,
 unblocked chain). -/
 theorem preimage_siteBlock_neighbourhood_subset [NeZero M] [NeZero k] (X : Finset (Fin M))
     (r : ℕ) :
-    siteBlock ⁻¹' neighbourhood X r ⊆ neighbourhood (Finset.univ.filter fun p ↦ (siteBlock (k := k)) p ∈ X) (k * r) := by
+    (Finset.univ.filter fun p ↦ siteBlock (k := k) p ∈ neighbourhood X r) ⊆
+      neighbourhood (Finset.univ.filter fun p ↦ siteBlock (k := k) p ∈ X) (k * r) := by
   intro i hi
   obtain ⟨⟨j', t⟩, rfl⟩ := finProdFinEquiv.surjective i
-  obtain ⟨j, hj, m, hm, hij⟩ := hi
+  obtain ⟨j, hj, m, hm, hij⟩ := mem_neighbourhood.mp (Finset.mem_filter.mp hi).2
   rw [siteBlock_finProdFinEquiv] at hij
   subst hij
-  refine ⟨finProdFinEquiv (j, t), by simpa using hj, (k : ℤ) * m, ?_,
+  refine mem_neighbourhood.mpr ⟨finProdFinEquiv (j, t), by simpa using hj, (k : ℤ) * m, ?_,
     finProdFinEquiv_add_intCast j t m⟩
   rw [abs_mul, Nat.abs_cast]
   push_cast
@@ -269,9 +272,10 @@ theorem IsLocalChannelProtocol.exists_dual_comp_blockSites [NeZero M] [NeZero d]
     ∃ Ψ' : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ →ₗ[ℂ]
         Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ,
       (∀ ρ A, trace (Ψ (blockSites M k d ρ) * A) = trace (ρ * Ψ' A)) ∧
-      (∀ X : Set (Fin M), ∀ A ∈ supportedOperators e X,
-        Ψ' A ∈ supportedOperators d (Finset.univ.filter fun p ↦ siteBlock p ∈ (neighbourhood X T))) ∧
-      (∀ X Y : Set (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
+      (∀ X : Finset (Fin M), ∀ A ∈ supportedOperators e X,
+        Ψ' A ∈ supportedOperators d
+          (Finset.univ.filter fun p ↦ siteBlock p ∈ neighbourhood X T)) ∧
+      (∀ X Y : Finset (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
         ∀ A ∈ supportedOperators e X, ∀ B ∈ supportedOperators e Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
   obtain ⟨Φ, hdual, hcone, hmul⟩ := h.exists_dual
@@ -359,22 +363,23 @@ theorem exists_dual [NeZero d] {T : ℕ}
     ∃ Ψ' : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ →ₗ[ℂ]
         Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ,
       (∀ A, trace (σ * A) = trace (ρ * Ψ' A)) ∧
-      (∀ X : Set (Fin M), ∀ A ∈ supportedOperators e X,
-        Ψ' A ∈ supportedOperators d (neighbourhood (Finset.univ.filter fun p ↦ (siteBlock (k := k)) p ∈ X) (k * T))) ∧
-      (∀ X Y : Set (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
+      (∀ X : Finset (Fin M), ∀ A ∈ supportedOperators e X,
+        Ψ' A ∈ supportedOperators d
+          (neighbourhood (Finset.univ.filter fun p ↦ siteBlock (k := k) p ∈ X) (k * T))) ∧
+      (∀ X Y : Finset (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
         ∀ A ∈ supportedOperators e X, ∀ B ∈ supportedOperators e Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
   obtain ⟨T', hT', Ψ, hΨ, rfl⟩ := h
   obtain ⟨Ψ', hdual, hcone, hmul⟩ := hΨ.exists_dual_comp_blockSites
-  have hmono (Z : Set (Fin M)) : neighbourhood Z T' ⊆ neighbourhood Z T := by
+  have hmono (Z : Finset (Fin M)) : neighbourhood Z T' ⊆ neighbourhood Z T := by
     have := neighbourhood_neighbourhood_subset Z T' (T - T')
     rw [Nat.add_sub_cancel' hT'] at this
     exact (subset_neighbourhood _ _).trans this
   refine ⟨Ψ', fun A ↦ hdual ρ A, fun X A hA ↦ ?_, fun X Y hXY A hA B hB ↦
     hmul X Y (hXY.mono (hmono X) (hmono Y)) A hA B hB⟩
   refine supportedOperators_mono ?_ (hcone X A hA)
-  refine (Set.preimage_mono (hmono X)).trans ?_
-  exact preimage_siteBlock_neighbourhood_subset X T
+  refine Finset.Subset.trans (fun p hp ↦ ?_) (preimage_siteBlock_neighbourhood_subset X T)
+  exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hmono X (Finset.mem_filter.mp hp).2⟩
 
 end IsBlockedLocalChannelConversion
 

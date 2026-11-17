@@ -63,7 +63,7 @@ theorem norm_commutator_sum_le_active_card (s : Finset I)
     intro i hi hia
     by_cases hd : Disjoint (D i) S
     · have hc : Commute (h i) O := commute_of_mem_supportedOperators
-        (Finset.disjoint_coe.mpr hd)
+        hd
         (mem_supportedOperators_of_isSupportedOn (hsupport i hi))
         (mem_supportedOperators_of_isSupportedOn hO)
       exact sub_eq_zero.mpr hc.eq
@@ -149,7 +149,7 @@ theorem exists_commutator_iterate_decomposition {s : Finset I}
         intro i hi hiT
         by_cases hd : Disjoint (D i) (S a)
         · have hc : Commute (h i) (X a) := commute_of_mem_supportedOperators
-            (Finset.disjoint_coe.mpr hd)
+            hd
             (mem_supportedOperators_of_isSupportedOn (hs i hi))
             (mem_supportedOperators_of_isSupportedOn (hsupp a))
           exact sub_eq_zero.mpr hc.eq

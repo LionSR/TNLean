@@ -85,13 +85,12 @@ theorem mutualInformation_cores_le_of_reset_unitary
     · simp only [Finset.inl_mem_disjSum] at hv hv'
       exact Finset.disjoint_left.mp hC₀ hv' (hR₀ hv)
     · simp at hv
-  have hSsum : Disjoint ((S.disjSum S : Finset (ι ⊕ ι)) : Set (ι ⊕ ι))
-      ((R₀.disjSum ∅ ∪ C₀.disjSum ∅ : Finset (ι ⊕ ι)) : Set (ι ⊕ ι)) := by
-    apply Set.disjoint_left.mpr
+  have hSsum : Disjoint (S.disjSum S : Finset (ι ⊕ ι)) (R₀.disjSum ∅ ∪ C₀.disjSum ∅) := by
+    apply Finset.disjoint_left.mpr
     rintro (v | v) hv hv'
-    · simp only [Finset.mem_coe, Finset.inl_mem_disjSum] at hv
+    · simp only [Finset.inl_mem_disjSum] at hv
       have hcore : v ∈ R₀ ∪ C₀ := by
-        simpa only [Finset.mem_coe, Finset.mem_union, Finset.inl_mem_disjSum] using hv'
+        simpa only [Finset.mem_union, Finset.inl_mem_disjSum] using hv'
       exact Finset.disjoint_left.mp hS hv hcore
     · simp at hv'
   have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero hΩ hR₀
