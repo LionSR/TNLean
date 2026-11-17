@@ -37,6 +37,16 @@ integer `k` with `D^{2k} ≥ s` and proves `count = D^{2k} s ≤ D² s²`. When 
 `D` weaker than the source's. See
 `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
 
+**Local fix (norm of the replaced chain and bond dimension):** the improving family is that of
+Theorem `t:aisff`, whose proof (line 1599) states that the replaced chain has norm `O(1)`. Its
+untruncated windows give norm up to `4ℓ + 6`, which is the bound used, with the printed choice of
+`ℓ`. The proof (line 1606) states bond dimension `O(d^k)`; the argument gives `(d² + 4)^{k+1}`,
+which still has the theorem's form. See `docs/paper-gaps/alvv16_ff_truncated_norm.tex`.
+
+**Local fix (viability boundary):** the improvement `Δ^k / (1 - δ)²` is stated for viability
+error `δ < 1`, where it is defined; see
+https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
+
 **Scope restriction (tree witness):** the tree is a recursive witness, with no sampling
 probability; the bond dimension of the output grows with `L`, through the trimming threshold;
 and the chain has at least one site and local dimension at least two. See
