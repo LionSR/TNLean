@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Huang.GridEvolution
 import TNLean.MPS.AreaLaw.Huang.GridLocalization
 import TNLean.MPS.AreaLaw.Huang.BlockProductBonds
-import TNLean.Circuit.DisjointRelativeEvolution
+import QICLean.ManyBody.Dynamics.DisjointRelativeEvolution
+import TNLean.Circuit.SiteExpectationGraphLocalization
 
 /-!
 # A physical two-layer approximation to chain propagation
@@ -66,7 +67,7 @@ noncomputable def chainGridPropagator (hq : 1 ≤ q) (hw : 0 < w) (r : ℕ)
     (hHerm : ∀ i, (h i).IsHermitian) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   haveI : NeZero q := ⟨by omega⟩
   (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
-    (List.ofFn fun j ↦ disjointProjectedPropagator q
+    (List.ofFn fun j ↦ ManyBody.disjointProjectedPropagator
       (fun k : Fin ((L - 1) / w) ↦ chainCutBuffer L (chainGridCut w k.val) r)
       (A := chainGridRetainedHamiltonian hw h)
       (Matrix.isHermitian_sum _ fun j _ ↦ isHermitian_chainGridBlockHamiltonian hw h hHerm j)
@@ -98,20 +99,20 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
   have hA : A.IsHermitian :=
     Matrix.isHermitian_sum _ fun j _ ↦ isHermitian_chainGridBlockHamiltonian hw h hHerm j
   have hB : ∀ k, (B k).IsHermitian := fun k ↦ (hHerm (chainGridBoundaryEdge hw k)).neg
-  have hbuffers : Pairwise fun j k ↦ Disjoint (buffers j : Set (Fin L)) (buffers k : Set (Fin L)) :=
-    fun j k hjk ↦ Finset.disjoint_coe.mpr (pairwise_disjoint_chainGridBuffer L hwidth
-      (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq)))
+  have hbuffers : Pairwise fun j k ↦ Disjoint (buffers j) (buffers k) :=
+    fun j k hjk ↦ pairwise_disjoint_chainGridBuffer L hwidth
+      (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq))
   obtain ⟨_hU0, _hUd, _hUunit, hUsupport, hcompare⟩ :=
-    disjointProjectedPropagator_spec q buffers hbuffers hA B hB
-  let U := disjointProjectedPropagator q buffers hA B hB
+    ManyBody.disjointProjectedPropagator_spec buffers hbuffers hA B hB
+  let U := ManyBody.disjointProjectedPropagator buffers hA B hB
   have hK : chainGridPropagator (w := w) hq (by omega) r h hHerm t =
       (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
         (List.ofFn fun j ↦ U j t).prod := rfl
   rw [hK]
   constructor
   · have herror (k : Fin ((L - 1) / w)) (s : ℝ) (hs' : s ∈ Set.uIcc 0 t) :
-        ‖heisenbergEvolution A s (B k) -
-          siteExpectation q (buffers k) (heisenbergEvolution A s (B k))‖ ≤
+        ‖ManyBody.heisenbergEvolution A s (B k) -
+          siteExpectation q (buffers k) (ManyBody.heisenbergEvolution A s (B k))‖ ≤
           chainGridLRPrefactor * Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) := by
       have hst : |s| ≤ |t| := by
         simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs'
@@ -121,7 +122,9 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
           (Real.exp_le_exp.mpr (by nlinarith [mul_le_mul_of_nonneg_left hst hv]))
           chainGridLRPrefactor_pos.le)
     have herr := hcompare t (fun _ ↦ chainGridLRPrefactor *
-      Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2)) herror
+      Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2)) fun k s hs ↦ by
+        rw [← siteExpectation_eq_regionExpectation]
+        exact herror k s hs
     change ‖hermitianUnitaryPath
         (chainGridRetainedHamiltonian hw h - ∑ j, chainGridBoundaryTerm hw h j) (-t) -
       hermitianUnitaryPath (chainGridRetainedHamiltonian hw h) (-t) *
@@ -132,7 +135,7 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
       mul_assoc] using herr
   · exact rank_two_grid_layers_le hq hwidth _ _
       (fun j ↦ chainGridBlockEvolution_mem_supported hw h hs j (-t))
-      (fun j ↦ hUsupport j t)
+      (fun j ↦ mem_supportedOperators_of_isSupportedOn (hUsupport j t))
 
 /-- The original physical interaction determines one two-layer propagator approximation
 with simultaneous cut-rank bounds: the existence form of `chainGridPropagator_spec`.

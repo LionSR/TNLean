@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SiteExpectation
+import TNLean.Circuit.EntropySupport
 import QICLean.Analysis.HermitianUnitaryPath
+import QICLean.ManyBody.Sites.Twirl
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 
@@ -14,15 +16,15 @@ import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 The normalized partial-trace expectation `E_K` onto the sites `K` is an average of
 conjugations by unitaries acting outside `K`. Hence it preserves adjoints and the matrix
 order, maps positive contractions to positive contractions, and fixes every matrix that
-commutes with all operators acting outside `K`. Such a matrix therefore acts on `K`. The
-absolute value of a Hermitian matrix acting on `K` again acts on `K`.
+commutes with all operators acting outside `K`. That such a matrix acts on `K` is
+`ManyBody.mem_supportedOperators_iff_forall_commute`. The absolute value of a Hermitian matrix
+acting on `K` again acts on `K`.
 
 ## Main results
 
 * `QuantumCircuit.siteExpectation_conjTranspose`, `QuantumCircuit.siteExpectation_nonneg`,
   `QuantumCircuit.siteExpectation_mono`.
-* `QuantumCircuit.siteExpectation_eq_self_of_forall_commute`,
-  `QuantumCircuit.mem_supportedOperators_of_forall_commute`.
+* `QuantumCircuit.siteExpectation_eq_self_of_forall_commute`.
 * `QuantumCircuit.siteExpectation_abs_of_mem_supportedOperators`.
 * `QuantumCircuit.sqrt_mem_supportedOperators`: the square root of a positive matrix acting
   on `K` acts on `K`.
@@ -101,15 +103,6 @@ theorem siteExpectation_eq_self_of_forall_commute [NeZero q] (K : Finset ι)
     card_weylLabels]
   rw [inv_mul_cancel₀ (pow_ne_zero _ hq), one_smul]
 
-/-- **Commutants act on the complementary sites.** A matrix commuting with every operator
-acting outside `K` acts on `K`. -/
-theorem mem_supportedOperators_of_forall_commute [NeZero q] (K : Finset ι)
-    {Y : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hY : ∀ B ∈ supportedOperators q ((K : Set ι)ᶜ), Commute Y B) :
-    Y ∈ supportedOperators q (K : Set ι) := by
-  rw [← siteExpectation_eq_self_of_forall_commute K hY]
-  exact siteExpectation_mem_supportedOperators K Y
-
 /-- The absolute value of a Hermitian matrix commuting with `B` commutes with `B`. -/
 theorem _root_.Commute.cfcAbs_of_isHermitian {X B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hX : X.IsHermitian) (h : Commute X B) : Commute (CFC.abs X) B := by
@@ -131,8 +124,11 @@ theorem sqrt_mem_supportedOperators [NeZero q] (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k)
     (hk : k ∈ supportedOperators q (K : Set ι)) :
     CFC.sqrt k ∈ supportedOperators q (K : Set ι) :=
-  mem_supportedOperators_of_forall_commute K fun Y hY => by
-    rw [CFC.sqrt_eq_real_sqrt _ hk₀, cfcₙ_eq_cfc]
-    exact (commute_of_mem_supportedOperators disjoint_compl_right hk hY).cfc_real _
+  mem_supportedOperators_of_isSupportedOn <|
+    ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun Y hY => by
+      have hY' : Y ∈ supportedOperators q ((K : Set ι)ᶜ) := by
+        simpa only [Finset.coe_compl] using mem_supportedOperators_of_isSupportedOn hY
+      rw [CFC.sqrt_eq_real_sqrt _ hk₀, cfcₙ_eq_cfc]
+      exact (commute_of_mem_supportedOperators disjoint_compl_right hk hY').cfc_real _
 
 end QuantumCircuit

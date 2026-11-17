@@ -61,7 +61,7 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ supportedOperators d (S : Set ι)) (vObs : ℕ) (hSCard : S.card ≤ vObs)
     (l : ℕ) (Y : Set ι)
-    (hY : Disjoint ((S.biUnion fun x => graphBall G x l : Finset ι) : Set ι) Y)
+    (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
     (hB : B ∈ supportedOperators d Y) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
       groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤

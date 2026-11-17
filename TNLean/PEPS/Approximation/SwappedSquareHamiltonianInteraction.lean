@@ -73,7 +73,7 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       J + J :=
     (norm_add_le _ _).trans (add_le_add
       ((Matrix.l2_opNorm_kronecker_one_le _).trans (h.hermitianTerm_norm_le i))
-      ((Matrix.l2_opNorm_one_kronecker_rect_le _).trans (h.hermitianTerm_norm_le i)))
+      ((Matrix.l2_opNorm_one_kronecker_le _).trans (h.hermitianTerm_norm_le i)))
   have hBn (i : SquareLatticeSiteOrEdge L L) : ‖B i‖ ≤ 2 * J := by
     simpa only [B, one_mul, mul_one, two_mul] using
       norm_mul_le_of_le

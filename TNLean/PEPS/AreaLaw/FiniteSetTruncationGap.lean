@@ -76,9 +76,9 @@ theorem finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc : 0 < c)
       (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) →
       ((∑ i, k i) - (g : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
-      (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+      (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
       ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
       let r₀ := ⌈finiteSetTruncationConstant C c g μ Kb C₀ * Real.log n ^ 2⌉₊
@@ -138,9 +138,9 @@ theorem exists_finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc :
         (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) →
         ((∑ i, k i) - (g : ℂ) •
           (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
-        (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+        (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
         ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ι, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
         let r₀ := ⌈C₁ * Real.log n ^ 2⌉₊
@@ -200,7 +200,7 @@ theorem finiteSetTruncation_of_locality (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ)
       (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
       (∀ x (d : ℕ),
         ((Finset.univ.filter fun y => G.edist x y = d).card : ℝ) ≤ Kg * ((d : ℝ) + 1) ^ kg) →
-      (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+      (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
       (∀ k, ‖h k‖ ≤ J) →
       ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →
@@ -243,7 +243,7 @@ theorem finiteSetTruncation_of_locality (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ)
     rw [← Matrix.le_iff]; exact hgapk.trans hsum
   have htail' : ∀ i (l : ℕ), ‖SpectralFilter.positiveConstraint cs
       (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)) -
-        siteExpectation q (graphBall G (a i) l) (SpectralFilter.positiveConstraint cs
+        siteExpectation q (ManyBody.graphBall G (a i) l) (SpectralFilter.positiveConstraint cs
           (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)))‖ ≤
         C₃ * Real.exp (-(c₃ * (l : ℝ) ^ (1 / 2 : ℝ))) := by
     intro i l
@@ -273,7 +273,7 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
         (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
         (∀ x (d : ℕ),
           ((Finset.univ.filter fun y => G.edist x y = d).card : ℝ) ≤ Kg * ((d : ℝ) + 1) ^ kg) →
-        (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+        (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
         (∀ k, ‖h k‖ ≤ J) →
         ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →

@@ -68,7 +68,7 @@ theorem norm_groundCompression_commutator_le_of_supercell_separation [NeZero d]
     (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace (∑ k, h k) E₀,
       sitePermMatrix d g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : Γ} (hg : g ∈ S) (i j : κ) (l : ℕ)
-    (hsep : Disjoint (((X i).biUnion fun x => graphBall G x l : Finset ι) : Set ι)
+    (hsep : Disjoint (((X i).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι)
       (X (g • j) : Set ι))
     {T : ℝ} (hT : 0 ≤ T) :
     ‖groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h i)) *
