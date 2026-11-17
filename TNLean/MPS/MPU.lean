@@ -284,6 +284,7 @@ import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
 import TNLean.MPS.MPU.TransferStabilizationConverse
+import TNLean.MPS.MPU.TranspositionGateCertificate
 import TNLean.MPS.MPU.TranspositionLocalNecessity
 import TNLean.MPS.MPU.TranspositionLocalSufficiency
 import TNLean.MPS.MPU.TranspositionPhaseDeformation
