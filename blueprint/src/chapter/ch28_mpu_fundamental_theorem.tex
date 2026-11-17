@@ -1,41 +1,5 @@
 \section{Standard form and index}
 
-\begin{definition}[Reduced full-support source datum]
-    \label{def:mpu_reduced_full_support_source_datum}
-    \notready
-    % **Scope restriction (source data for the same tensor):** this datum is an
-    % explicit hypothesis, not a construction of a reduced representative.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one}
-    Let $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ be the normalized
-    flattening, and let $E$ be its transfer matrix. A reduced full-support source
-    datum for $\mathcal U$, with physical dimension $d>0$ and positive bond
-    dimension, consists of an integer $J>0$, a diagonal positive definite matrix
-    $\rho$ with $\tr(\rho)=1$, and
-    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$ such that
-    \begin{align}
-        E^J & =\lvert\rho)(\Phi\rvert.
-    \end{align}
-    The one-dimensional case is immediate: if $D=1$, take $J=1$
-    and $\rho=\Id_1$ using
-    Lemma~\ref{thm:mpu_normalized_transfer_fin_one}. If $D>1$, chosen
-    canonical-form-II data with full support give a positive trace-one ambient
-    fixed point with $J=D^2-1$ by
-    Lemma~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Diagonality of
-    this ambient fixed point is an additional hypothesis: the theorem gives a
-    diagonal matrix in the unique block coordinates, but conjugation into the
-    ambient coordinates need not preserve diagonality.
-    For $D>1$, this states the fixed-pair convention in
-    \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
-        proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
-    one-dimensional specialization. When $\mathcal U$ is an MPU,
-    Lemma~\ref{thm:mpu_canonical_form_ii_stabilization_converse} gives a
-    canonical-form-II presentation of this same tensor whose ambient fixed
-    matrix is the given $\rho$; it makes no assertion about continuous
-    choices along a path.
-    % Source lines: paper_v2.tex 269--280 and 397--405.
-\end{definition}
-
 \begin{lemma}[Staggered Gram expansion of the source tensor $u$]
     \label{thm:mpu_source_u_staggered_gram}
     \lean{MPOTensor.SourceFactors.sourceU_gram_eq_staggered_four_u}
@@ -2673,48 +2637,6 @@
     \end{align}
     As in \cite[lines~716--724]{Cirac2017MPU}, canonical form of the blocked
     tensors with ancilla is a condition of the definition.
-\end{definition}
-
-\begin{definition}[Admissible equivalence and path datum]
-    \label{def:mpu_admissible_equivalence_datum}
-    \notready
-    % **Scope restriction (no existence or preservation theorem):** this datum
-    % records every reduced source hypothesis needed along a chosen path. It does
-    % not assert preservation under blocking, ancillas, products, composition, or
-    % continuous variation. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:strictly-equivalent-tensors, def:equivalent-tensors, def:mpu_reduced_full_support_source_datum}
-    An admissible strict-equivalence datum for a path
-    $[0,1]\ni p\mapsto\mathcal W(p)$ consists of a common positive blocking
-    length $m$ such that the blocked path tensor $\mathcal W(p)_m$ itself is
-    simple and carries a reduced full-support source datum for every $p$. The
-    blocked tensors and their source data vary continuously with $p$, after
-    fixed identifications of the finite-dimensional spaces involved. No
-    equivalent or reduced representative may replace $\mathcal W(p)_m$. In
-    particular, the blocked endpoint tensors themselves carry their own source data.
-
-    When the path is used under a specified symmetry $\mathcal S$, the datum also
-    includes continuously varying reduced full-support source data for the fixed
-    family of comparison paths
-    \begin{align}
-        \overline{\mathcal W(p)_m},\qquad
-        \mathcal W(p)_m^\sharp,\qquad
-        \mathcal W(p)_m^{\mathsf T},\qquad
-        \mathcal S[\mathcal W(p)_m].
-    \end{align}
-    Every tensor in this family is simple. This requirement is part of the datum
-    independently of which comparisons a later proof uses; no preservation under
-    conjugation, physical adjoint, transposition, or $\mathcal S$ is assumed.
-
-    Two tensors are admissibly strictly equivalent if their strict equivalence
-    is realized by such a path. They are admissibly equivalent if the blocked,
-    ancilla-enlarged endpoints in Definition~\ref{def:equivalent-tensors} are
-    joined by an admissible strict-equivalence path. The source arguments
-    motivating these additional path hypotheses are Proposition~IV.5,
-    Theorem~IV.6, Corollary~IV.7, and the lemma following the
-    symmetry-equivalence definitions in \cite{Cirac2017MPU}; the datum itself is
-    introduced here and has no source-labelled counterpart.
-    % Source lines: paper_v2.tex 733--910 and 1366--1380.
 \end{definition}
 
 \begin{lemma}[Generic two-projection angle block]
