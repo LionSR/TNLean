@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.KroneckerFactorPositivity
+import QICLean.Analysis.FiniteKroneckerPowers
 import TNLean.Algebra.ListProduct
 
 /-!
@@ -20,7 +20,7 @@ expands as a sum over choice functions.
 
 ## Main results
 
-* `Matrix.finKronecker_mul`, `Matrix.finKronecker_one`, `Matrix.finKronecker_ite_smul_one`,
+* `Matrix.finKronecker_one`, `Matrix.finKronecker_ite_smul_one`,
   `Matrix.finKronecker_conjTranspose`, `Matrix.finKronecker_transpose`.
 * `Matrix.rectKronecker_mul`, `Matrix.rectKronecker_one`, `Matrix.rectKronecker_conjTranspose`,
   `Matrix.sum_rectKronecker` for the product `Matrix.rectKronecker` of rectangular matrices.
@@ -69,11 +69,6 @@ end Dependent
 section Family
 
 variable {N : ℕ} {α : Fin N → Type*} [∀ k, Fintype (α k)]
-
-/-- The finite Kronecker product is multiplicative. -/
-theorem finKronecker_mul (A B : (k : Fin N) → Matrix (α k) (α k) ℂ) :
-    finKronecker A * finKronecker B = finKronecker fun k => A k * B k := by
-  exact piKronecker_mul A B
 
 /-- The finite Kronecker product of identities is the identity. -/
 @[simp] theorem finKronecker_one [∀ k, DecidableEq (α k)] :
