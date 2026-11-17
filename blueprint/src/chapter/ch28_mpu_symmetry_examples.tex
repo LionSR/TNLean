@@ -17,14 +17,46 @@
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_conjugation_example_gate_invariants, conjphs, prop:conjsym-strict-equiv}
+    \uses{lem:mpu_conjugation_example_gate_invariants, conjphs, prop:conjsym-strict-equiv,
+        lem:mpu_conjugation_odd_rank_two_phases}
     The gates generate conjugation-invariant MPUs with the case and
     determinants recorded in
     Lemma~\ref{lem:mpu_conjugation_example_gate_invariants}. When one rank is
-    odd, the two classes then follow from the determinant $\det(u_+v_\pm)=\pm1$
-    and Theorem~\ref{conjphs}; when both are even, distinguishing the four
-    classes in each case needs the ``only if'' direction of
-    Theorem~\ref{prop:conjsym-strict-equiv}, which remains open.
+    odd, the statement is
+    Lemma~\ref{lem:mpu_conjugation_odd_rank_two_phases}. When both are even,
+    distinguishing the four classes in each case needs the ``only if''
+    direction of Theorem~\ref{prop:conjsym-strict-equiv}, which remains open;
+    this half of the example waits on it.
+\end{proof}
+
+\begin{lemma}[The two phases under conjugation when one rank is odd]
+    \label{lem:mpu_conjugation_odd_rank_two_phases}
+    \lean{MPOTensor.ConjugationExamples.conjugation_oddRank_two_phases,
+        MPOTensor.ConjugationExamples.exists_isMPUCanonicalForm_signGates}
+    \leanok
+    \discussion{5715}
+    \uses{conjphs, lem:mpu_conjugation_example_gate_invariants,
+        thm:mpu_standard_form_canonical_representative, lem:mpu_conjugation_one_site_determinant}
+    Suppose one of $\ell,r$ is odd and fix an identification of
+    $\mathbb C^\ell\otimes\mathbb C^r$ with $\mathbb C^d\otimes\mathbb C^d$. There
+    are tensors on pairs of sites in canonical form, invariant under
+    conjugation, with standard-form gates $(u_+,v_+)$ and $(u_+,v_-)$, that are
+    not strictly equivalent under conjugation. Every tensor on pairs in canonical
+    form, invariant under conjugation, with a standard form of the same ranks, is
+    strictly equivalent under conjugation to one of them.
+    % Source lines: paper_v2.tex 1845--1876.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{thm:mpu_standard_form_canonical_representative} gives the two
+    tensors; their MPUs are those of the gates and hence invariant under
+    conjugation, with $\det(u_+v_\pm)=\pm1$. By Theorem~\ref{conjphs} they are not
+    strictly equivalent. For any other such tensor with gates $u,v$, the MPU on one
+    standard-form site is real and unitary with determinant $\varepsilon\det(uv)$,
+    $\varepsilon=\pm1$
+    (Lemma~\ref{lem:mpu_conjugation_one_site_determinant}), so $\det(uv)=\pm1$, and
+    Theorem~\ref{conjphs} places it in one of the two classes.
 \end{proof}
 
 \begin{lemma}[Invariants of the example gates under conjugation]
@@ -1182,16 +1214,47 @@
 
 \begin{lemma}[Transformation with swaps and symmetry equivalence]
     \label{lemma:sym-trafo-swap}
-    \notready
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff,
+        MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff,
+        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff}
+    \leanok
     \discussion{5715}
-    \uses{threeMPU, threeMPU2, def:equivalent-symmetry}
+    \uses{threeMPU, threeMPU2, def:strictly-equivalent-symmetry,
+        def:mpu_swap_comparison_symmetries}
     Two MPUs $U_i^{(N)}$ and $U_j^{(N)}$ are in the same phase under time
     reversal combined with the local swap, transposition combined with the
     local swap, or conjugation if and only if the corresponding
     $\widetilde U_i^{(N)}$ and $\widetilde U_j^{(N)}$ are in the same phase
     under time reversal, transposition, or conjugation, respectively.
+    Here ``same phase'' means strict equivalence under the symmetry: the
+    source omits the qualifier when it is clear from the context
+    \cite[lines~725--730]{Cirac2017MPU}, its proof transports continuous
+    symmetric paths at fixed chain length without blocking or ancillas
+    \cite[lines~2071--2078]{Cirac2017MPU}, and the section names ancillas
+    explicitly where it allows them \cite[line~2208]{Cirac2017MPU}. The
+    equivalence holds for any two tensors $\mathcal U,\mathcal V$ with two
+    $d$-dimensional physical spins and
+    $\widetilde{\mathcal U}=\mathbb S\mathcal U$,
+    $\widetilde{\mathcal V}=\mathbb S\mathcal V$.
     % Source lines: paper_v2.tex 2045--2085.
+    % **Local fix (one-sided swap):** the conjugation case uses the one-sided
+    % multiplication of threeMPU2 rather than the two-sided display in the
+    % printed proof. Documented in docs/paper-gaps/mpu_swap_symmetry_one_sided.tex.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_one_sided_swap_invariance,
+        thm:mpu_symmetry_path_transport,
+        thm:threeMPU2_chain_formulas}
+    Since the swap $Q=\mathbb S$ is a unitary involution and
+    Lemma~\ref{thm:mpu_one_sided_swap_invariance} gives the three
+    pointwise invariance equivalences,
+    Lemma~\ref{thm:mpu_symmetry_path_transport} yields the three
+    strict-equivalence correspondences. As recorded in
+    \cite{gap:mpu_swap_symmetry_one_sided}, the local transformation acts
+    on one physical leg, as in the defining equation of the transformed
+    examples.
+\end{proof}
 
 \begin{lemma}[Conjugation phases of $U_2$ and $U_3$]
     \label{prop:U2-U3-trivial-conjugation}
@@ -1301,7 +1364,7 @@
     \discussion{5715}
     \uses{threeMPU2, thm:tildeU3, thm:mpu-continuous-unitary-swap-path,
         def:strictly-equivalent-symmetry, def:mpu_swap_comparison_symmetries,
-        thm:mpu_strict_swap_comparison}
+        lemma:sym-trafo-swap}
     The MPUs $\widetilde U_2^{(N)}$ and $\widetilde U_3^{(N)}$ are strictly
     equivalent under time reversal and under transposition, imposed as
     $X^\dagger=X$ and $X^{\mathsf T}=X$ on every chain of positive length.
@@ -1311,7 +1374,7 @@
 
 \begin{proof}
     \leanok
-    By Lemma~\ref{thm:mpu_strict_swap_comparison} it suffices to join
+    By Lemma~\ref{lemma:sym-trafo-swap} it suffices to join
     $\mathcal U_2$ and $\mathcal U_3$, with
     $\widetilde{\mathcal U}_a=\mathbb S\mathcal U_a$, by paths of matrix product unitaries invariant under
     $X\mapsto S_NX^\dagger S_N$ and $X\mapsto S_NX^{\mathsf T}S_N$, where
@@ -1749,4 +1812,3 @@
 
 \input{chapter/ch28_mpu_supplied_window}
 
-\input{chapter/ch28_mpu_supplied_local_action}
