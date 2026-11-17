@@ -2133,6 +2133,7 @@
 \begin{theorem}[Conjugation symmetry when one source rank is odd]
     \label{conjphs}
     \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq,
+        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_iff_det_mul_eq,
         MPOTensor.StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation}
     \leanok
     \discussion{5713}
@@ -2144,7 +2145,9 @@
     \begin{align}
         \det(u_1v_1) & =\det(u_2v_2).
     \end{align}
-    The ``only if'' direction does not use that one rank is odd.
+    The ``only if'' direction does not use that one rank is odd. The MPUs are
+    given by tensors in canonical form on pairs of sites with standard forms
+    $u_i,v_i$; no canonical form II is assumed.
     % Source lines: paper_v2.tex 1401--1446.
 \end{theorem}
 
@@ -2186,16 +2189,20 @@
 
 \begin{lemma}[Conjugation symmetry when one source rank is odd, the ``if'' direction]
     \label{thm:mpu_conjugation_odd_rank_if}
-    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq,
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_mul_eq,
+        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq,
         Matrix.det_gauge_mul_swap,
-        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_gate_path}
+        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path,
+        MPOTensor.reindexPhysical_twoSiteBlockEquiv_symm_blockTwo,
+        MPOTensor.IsMPUCanonicalFormII.isMPUCanonicalForm_reindexPhysical_blockTwo}
     \leanok
     \discussion{5713}
     \uses{prop1conj, corconj, lem:mpu_symmetry_path_criterion_reverse,
         lem:mpu_orthogonal_gate_interpolation}
-    Let $\mathcal U_1$ and $\mathcal U_2$ be tensors in canonical form II
-    whose MPUs on the standard-form chain are invariant under conjugation, with
-    standard-form unitaries $u_i,v_i$ of the same ranks $r$ and $\ell$.
+    Let $\mathcal U_1$ and $\mathcal U_2$ be tensors on pairs of sites in
+    canonical form whose MPUs are invariant under conjugation, with
+    standard-form unitaries $u_i,v_i$ of the same ranks $r$ and $\ell$. For
+    tensors in canonical form II this applies to their two-site blocks.
     Reading $u_iv_i:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^\ell\otimes
         \mathbb C^r$ as an operator on $\mathbb C^\ell\otimes\mathbb C^r$ through
     the swap of the two factors, its determinant is invariant under the gauge
@@ -2386,7 +2393,8 @@
 
 \begin{lemma}[Strict conjugation equivalence for even source ranks, the ``if'' direction]
     \label{thm:mpu_conjugation_even_rank_if}
-    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even,
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_eq_of_even,
+        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even,
         Matrix.IsUnitaryBetween.joinedIn_symplectic_of_det_eq,
         Matrix.IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq}
     \leanok
@@ -2394,9 +2402,10 @@
     \uses{prop1conj, corconj, cor:sympl-to-orthogonal,
         lem:mpu_symmetry_path_criterion_reverse, lem:mpu_orthogonal_gate_interpolation}
     Suppose $r$ and $\ell$ are even, and let $\mathcal U_1$ and $\mathcal U_2$
-    be tensors in canonical form II whose standard-form unitaries $u_i,v_i$
-    are both in the orthogonal form or both in the symplectic form of
-    Lemma~\ref{corconj}. Read the determinants of $u_i$ and $v_i$ through one
+    be tensors on pairs of sites in canonical form whose standard-form
+    unitaries $u_i,v_i$ are both in the orthogonal form or both in the
+    symplectic form of Lemma~\ref{corconj}. For tensors in canonical form II
+    this applies to their two-site blocks. Read the determinants of $u_i$ and $v_i$ through one
     identification of $\mathbb C^\ell\otimes\mathbb C^r$ with
     $\mathbb C^d\otimes\mathbb C^d$. If
     \begin{align}
