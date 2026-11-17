@@ -154,7 +154,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
         "MPS/Core <-> MPS/MPDO",
         "MPS/Core <-> MPS/ParentHamiltonian",
         "MPS/Core <-> Spectral",
-        "MPS/Examples <-> MPS/FundamentalTheorem",
         "MPS/Examples <-> MPS/MPU",
         "MPS/Examples <-> MPS/Symmetry",
         "MPS/FundamentalTheorem <-> MPS/MPDO",
@@ -199,8 +198,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
 # move the declaration the library needs out of the example.
 EXAMPLES_IMPORTS: frozenset[str] = frozenset(
     {
-        "TNLean.MPS.FundamentalTheorem.Arbitrary.Examples -> TNLean.MPS.Examples.MultiBlock.Worked",
-        "TNLean.MPS.FundamentalTheorem.Arbitrary.OneBlockSharpness -> TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral",
         "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.CZX.CZXAnomalyClass",
         "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.GHZ",
         "TNLean.MPS.Symmetry.MPOSymmetry.Examples -> TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation",
