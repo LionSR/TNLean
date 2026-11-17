@@ -1631,7 +1631,9 @@
     The phase can be written $c=e^{i\phi}$ with a pointwise chosen real
     $\phi$. The local equation is preserved under any common coordinate
     relabeling of the pair spaces. No normalization of the supplied half
-    factors is required. Every standard form in the sense of
+    factors is required. The converse direction needs no canonical form
+    (Lemma~\ref{lem:mpu_local_transposition_certificate}). Every standard form
+    in the sense of
     \cite[Definition~III.9]{Cirac2017MPU} is of this kind
     \cite{gap:mpu_standard_form_canonical_convention}, so this gives the
     source criterion \cite[lines~1258--1288]{Cirac2017MPU}, which is
@@ -1653,6 +1655,51 @@
     with $z=XxY^T$, whose actual even-ring contraction proves transpose
     symmetry. The argument of the resulting unit complex phase gives
     its displayed exponential form. No further physical blocking is used.
+\end{proof}
+
+\begin{lemma}[Local certificate for transposition without canonical form]
+    \label{lem:mpu_local_transposition_certificate}
+    \lean{MPOTensor.twoSiteCircuit_transpose,
+        MPOTensor.transpose_gate_gauges_of_local_phase,
+        MPOTensor.TwoSiteStandardFormData.mpo_blockTwo_eq_transpose_of_local_phase,
+        MPOTensor.mpo_even_eq_transpose_of_blockTwo,
+        MPOTensor.mpo_standardFormTensorOfGates_even_eq_transpose_of_transposition_certificate}
+    \leanok
+    \discussion{5714}
+    \uses{prop:local-char-transposition, def:mpu_tensor_from_two_gates,
+        thm:mpu_supplied_two_site_periodic_circuit,
+        lem:mpu_local_time_reversal_certificate}
+    Let $V$ be a tensor whose two-site block has a standard form with gates
+    $A,B$ of equal intermediate dimensions $q$, and suppose
+    \begin{align}
+        A & =c(x\otimes x^T)B^T
+    \end{align}
+    for a unitary $x$ and $|c|=1$. Then the operators of the two-site block of
+    $V$ equal their transposes on every ring, so the operators of $V$ equal
+    their transposes on every ring of an even number of sites. No canonical
+    form of $V$ is assumed. In particular, if square unitary gates $u,v$
+    satisfy
+    \begin{align}
+        v_{23}(u\otimes u) & =c(x\otimes x^T)v_{23}^T,
+    \end{align}
+    then the tensor in standard form built from $u$ and $v$ generates
+    transpose-invariant operators on every ring of an even number of
+    standard-form sites.
+    % Source lines: paper_v2.tex 1266--1282.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        lem:mpu_local_time_reversal_certificate}
+    As in Lemma~\ref{lem:mpu_local_time_reversal_certificate}, the operator of
+    the two-site block on $N$ sites is the circuit $C(A,B)$. Its transpose is
+    the circuit $C(B^T,A^T)$ read on the chain translated by one site of $V$.
+    The local equation gives unitaries $X=x^\dagger$ and $Y=\overline c\,\overline x$
+    with $B^T=(X\otimes Y)A$ and $A^T=B(Y^\dagger\otimes X^\dagger)$, a gauge of
+    the gates, so $C(B^T,A^T)=C(A,B)$. Invariance of the operator of a two-site
+    block under the translation by one site gives $C(A,B)^T=C(A,B)$. For gates
+    $u,v$, the two-site block of the tensor in standard form has the doubled
+    standard form with gates $v_{23}(u\otimes u)$ and $v_{23}$.
 \end{proof}
 
 \begin{lemma}[Continuous removal of the local transposition phase]
