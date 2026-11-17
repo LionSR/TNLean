@@ -31,9 +31,10 @@ raw-filter-and-trim iterates of its root give a line mutually `η/2`-close to `�
 product states.
 
 **Local fix (rounding of the number of rounds):** the source takes `k = ⌈log_D s⌉ / 2` rounds,
-which need not be an integer, and obtains the node bound `D s²`. With an integer number of rounds
-the least admissible `k` gives `count = D^{2k} s ≤ D² s²`, one factor of `D` more; when
-`⌈log_D s⌉` is even, `k` is the source's and `count ≤ D s²`. See
+which need not be an integer, and obtains the node bound `D s²`. The formalization takes the least
+integer `k` with `D^{2k} ≥ s` and proves `count = D^{2k} s ≤ D² s²`. When `⌈log_D s⌉` is even this
+`k` is the source's and `count ≤ D s²`, the source's bound; otherwise the bound is up to a factor
+`D` weaker than the source's. See
 `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
 
 **Scope restriction (tree witness):** the tree is a recursive witness, with no sampling

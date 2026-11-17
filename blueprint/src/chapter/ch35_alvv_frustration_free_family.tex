@@ -386,14 +386,15 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     $\mathcal D^{2k}s\le\mathcal D^2s^2$, and whose root, after finitely many
     filter-and-trim steps and a Ritz extraction, gives a line of matrix
     product states mutually $\eta/2$-close to $\mathbb C\Gamma$. Neither
-    $\mathcal D$ nor the node bound depends on $L$. This is the existence
-    content of~\cite[Theorem~\texttt{t:unique}, lines
-        1829--1855]{Arad2016RigorousRG} with two differences: the source takes
-    $\lceil\log_{\mathcal D}s\rceil/2$ applications, which need not be an
-    integer, and obtains $\mathcal Ds^2$, so rounding to an integer costs one
-    factor of $\mathcal D$; and the tree is shown to exist rather than to be
-    found with high probability, with an output bond dimension that grows with
-    $L$.
+    $\mathcal D$ nor the node bound depends on $L$. This is a restricted
+    form of the existence content of~\cite[Theorem~\texttt{t:unique}, lines
+        1829--1855]{Arad2016RigorousRG}, not that theorem itself. The source
+    takes $\lceil\log_{\mathcal D}s\rceil/2$ applications, which need not be an
+    integer, and obtains $\mathcal Ds^2$: when $\lceil\log_{\mathcal D}s\rceil$
+    is even the bound above equals the source's $\mathcal Ds^2$, and otherwise
+    it is up to a factor $\mathcal D$ weaker, $\mathcal D^2s^2$. The tree is
+    shown to exist rather than to be found with high probability, and the
+    output bond dimension grows with $L$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
