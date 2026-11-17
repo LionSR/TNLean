@@ -122,7 +122,7 @@ theorem norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_tw
     (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ T k), ‖h k‖ ≤ b₀)
     (S : Finset ι) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
-    (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
+    (ℓ : ℝ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         QuantumCircuit.siteExpectation q
           (S.biUnion fun x ↦ ManyBody.graphBall G x ⌊ℓ⌋₊)
@@ -216,7 +216,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin L,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
-    (hq : 1 ≤ q) (S : Finset (Fin L))
+    (_hq : 1 ≤ q) (S : Finset (Fin L))
     {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
@@ -237,7 +237,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
   exact norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
     (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ (X k).2.1) (fun k ↦ (X k).edist_le)
     (fun k ↦ (X k).2.card_le) (SimpleGraph.pathGraph_card_sphere_le_two L)
-    h hHerm hSupport b₀ hBudget S hA ℓ hℓ t
+    h hHerm hSupport b₀ hBudget S hA ℓ t
 
 /-! ### Finite integer domains -/
 
@@ -279,10 +279,10 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin Λ.card,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
-    (hq : 1 ≤ q) (S : Finset (Fin Λ.card))
+    (_hq : 1 ≤ q) (S : Finset (Fin Λ.card))
     {A : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
-    (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
+    (ℓ : ℝ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         QuantumCircuit.siteExpectation q
           (S.biUnion fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)
@@ -293,6 +293,6 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
   norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
     (domainGraph Λ) (fun k ↦ (X k).1) (fun k ↦ (X k).2.1) (fun k ↦ (X k).2.2)
     (fun k ↦ (X k).2.isChainSupport.card_le) (domainGraph_card_sphere_le_two Λ)
-    h hHerm hSupport b₀ hBudget S hA ℓ hℓ t
+    h hHerm hSupport b₀ hBudget S hA ℓ t
 
 end TNLean.MPS.AreaLaw
