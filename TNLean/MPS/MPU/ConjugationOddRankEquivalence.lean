@@ -92,12 +92,12 @@ private noncomputable def fourSiteEquiv (d : ℕ) :
     ((twoSiteBlockEquiv (MPSTensor.blockPhysDim d 2)).trans
       (MPSTensor.directIteratedBlockEquiv d 2 2).symm))
 
-private theorem reindexPhysical_symm_reindexPhysical {n n' E : ℕ} (σ : Fin n ≃ Fin n')
+theorem reindexPhysical_symm_reindexPhysical {n n' E : ℕ} (σ : Fin n ≃ Fin n')
     (W : MPOTensor n' E) : reindexPhysical σ.symm (reindexPhysical σ W) = W := by
   funext i j
   simp [reindexPhysical]
 
-private theorem blockTwo_eq_reindexPhysical {n E : ℕ} (W : MPOTensor n E) :
+theorem blockTwo_eq_reindexPhysical {n E : ℕ} (W : MPOTensor n E) :
     blockTwo W = reindexPhysical (twoSiteBlockEquiv n) (blockTensor W 2) := by
   rw [blockTwo_eq_blockTensor_reindex]
   rfl
@@ -143,24 +143,35 @@ theorem det_doubledU_submatrix_of_real {u : Matrix (Fin ℓ × Fin r) (Fin d × 
   rcases det_submatrix_eq_one_or_neg_one_of_real hu hur e with h | h <;> simp [h]
 
 /-- An identity ancilla of dimension one is a relabelling of the physical index. -/
-private theorem tensorPhysicalId_one {D : ℕ} (U : MPOTensor d D) :
+theorem tensorPhysicalId_one {D : ℕ} (U : MPOTensor d D) :
     tensorPhysicalId U 1 = reindexPhysical (finCongr (Nat.mul_one d)) U := by
   funext i j
   have hi : i.divNat = finCongr (Nat.mul_one d) i := Fin.ext (by simp [Fin.divNat])
   have hj : j.divNat = finCongr (Nat.mul_one d) j := Fin.ext (by simp [Fin.divNat])
   simp [tensorPhysicalId, reindexPhysical, hi, hj, Subsingleton.elim i.modNat j.modNat]
 
-private theorem strictlyEquivalent_finCongr {n : ℕ} (h : n = d)
-    {U₁ : MPOTensor d D₁} {U₂ : MPOTensor d D₂}
-    (H : StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 4))
-      (blockTensor U₁ 4) (blockTensor U₂ 4) rfl) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim n 4))
-      (blockTensor (reindexPhysical (finCongr h) U₁) 4)
-      (blockTensor (reindexPhysical (finCongr h) U₂) 4) rfl := by
+/-- Strict equivalence under conjugation of blocks is unchanged by relabelling the
+physical index along an equality of dimensions. -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_finCongr_iff {n : ℕ} (h : n = d) (k : ℕ)
+    {U₁ : MPOTensor d D₁} {U₂ : MPOTensor d D₂} :
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim n k))
+        (blockTensor (reindexPhysical (finCongr h) U₁) k)
+        (blockTensor (reindexPhysical (finCongr h) U₂) k) rfl ↔
+      StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d k))
+        (blockTensor U₁ k) (blockTensor U₂ k) rfl := by
   subst h
   have hrefl : ∀ {E : ℕ} (W : MPOTensor n E), reindexPhysical (finCongr rfl) W = W :=
     fun W ↦ by funext i j; simp [reindexPhysical]
-  simpa only [hrefl] using H
+  simp only [hrefl]
+
+/-- Invariance under conjugation passes to the two-site block. -/
+theorem IsInvariantUnderSymmetry.blockTwo_conjugation {n E : ℕ} {W : MPOTensor n E}
+    (hW : IsInvariantUnderSymmetry (conjugationSymmetry n) W) :
+    IsInvariantUnderSymmetry (conjugationSymmetry (n * n)) (blockTwo W) := by
+  rw [blockTwo_eq_reindexPhysical]
+  apply isInvariantUnderSymmetry_conjugation_reindexPhysical
+  rw [← conjugationSymmetry_block (by norm_num)]
+  exact hW.blockTensor 2
 
 /-- **Equivalence from the doubled blocks.** If the blocks of two sites of the
 two-site blocks of `𝒰₁, 𝒰₂` are strictly equivalent under conjugation, then
@@ -189,7 +200,7 @@ theorem equivalentUnderSymmetry_conjugation_of_blockTensor_blockTwo
     Nat.coprime_one_left 1, rfl, ?_⟩
   rw [conjugationSymmetryFamily_at, conjugationSymmetry_block (by norm_num),
     tensorPhysicalId_one, tensorPhysicalId_one]
-  exact strictlyEquivalent_finCongr (Nat.mul_one d) H4
+  exact (strictlyEquivalentUnderSymmetry_conjugation_finCongr_iff (Nat.mul_one d) 4).mpr H4
 
 /-- **Conjugation-invariant MPUs with an odd source rank are equivalent.** Let
 `𝒰₁, 𝒰₂` be MPUs in canonical form II, invariant under complex conjugation,
@@ -223,18 +234,10 @@ theorem equivalentUnderSymmetry_conjugation_of_odd
     EquivalentUnderSymmetry conjugationSymmetryFamily 𝒰₁ 𝒰₂ := by
   have : NeZero d := h₁.neZero_phys
   -- Invariance and canonical form II of two-site blocks.
-  have hinvB : ∀ {n E : ℕ} {W : MPOTensor n E},
-      IsInvariantUnderSymmetry (conjugationSymmetry n) W →
-        IsInvariantUnderSymmetry (conjugationSymmetry (n * n)) (blockTwo W) := by
-    intro n E W hW
-    rw [blockTwo_eq_reindexPhysical]
-    apply isInvariantUnderSymmetry_conjugation_reindexPhysical
-    rw [← conjugationSymmetry_block (by norm_num)]
-    exact hW.blockTensor 2
   have hcc : ∀ {n E : ℕ} {W : MPOTensor n E},
       IsInvariantUnderSymmetry (conjugationSymmetry n) W →
         ∀ N : ℕ, 0 < N → mpo (blockTwo W) N = (mpo (blockTwo W) N).map (starRingEnd ℂ) :=
-    fun hW _ hN ↦ (hinvB hW hN).symm
+    fun hW _ hN ↦ (hW.blockTwo_conjugation hN).symm
   -- Real standard forms (Case I of `corconj`).
   obtain ⟨x₁, y₁, hU₁, hV₁⟩ := S₁.exists_real_gauge_of_conjugation (hcc hc₁) hodd
   obtain ⟨x₂, y₂, hU₂, hV₂⟩ := S₂.exists_real_gauge_of_conjugation (hcc hc₂) hodd
@@ -294,7 +297,7 @@ theorem equivalentUnderSymmetry_conjugation_of_odd
         · rw [mul_left_comm, ← pow_add, ← two_mul, pow_mul]
           simp
       refine strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq h₁.blockTwo h₂.blockTwo
-        (hcc (hinvB hc₁)) (hcc (hinvB hc₂)) T₁.doubled T₂.doubled hodd' ?_
+        (hcc hc₁.blockTwo_conjugation) (hcc hc₂.blockTwo_conjugation) T₁.doubled T₂.doubled hodd' ?_
       rw [Matrix.det_mul_swap_eq _ _ e', Matrix.det_mul_swap_eq _ _ e',
         det_doubledU_submatrix_of_real T₁.u_unitary hU₁,
         det_doubledU_submatrix_of_real T₂.u_unitary hU₂, hdV, hdV, hℓr, hsq _ hs₁, hsq _ hs₂]

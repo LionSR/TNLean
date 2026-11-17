@@ -46,7 +46,10 @@ import TNLean.MPS.MPU.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.CompositionFlattening
 import TNLean.MPS.MPU.CompositionIndex
 import TNLean.MPS.MPU.CompositionRanks
+import TNLean.MPS.MPU.ConjugationCaseEquivalence
+import TNLean.MPS.MPU.ConjugationCaseInvariance
 import TNLean.MPS.MPU.ConjugationEvenRankEquivalence
+import TNLean.MPS.MPU.ConjugationGaugeSign
 import TNLean.MPS.MPU.ConjugationMPSClass
 import TNLean.MPS.MPU.ConjugationOddRankEquivalence
 import TNLean.MPS.MPU.ConjugationSourceFactors
