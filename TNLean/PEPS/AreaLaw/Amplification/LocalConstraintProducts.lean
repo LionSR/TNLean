@@ -92,12 +92,12 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
           (∫ w, ‖Dret w - L w‖ ∂PoissonWord.measure κ t) ≤
             A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α))) ∧
         (∀ w, ‖L w‖ ≤ 1 ∧
-          L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Finset (Site Λ))) ∧
+          L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ))) ∧
         ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux]
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q S) →
+            ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 →
             let F := fun w : PoissonWord.Word κ =>
               ‖WithLp.toLp 2 (((D w - Dret w) ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ

@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import QICLean.ManyBody.Sites.Lattice.PathGraph
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!

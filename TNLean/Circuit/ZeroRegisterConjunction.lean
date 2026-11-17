@@ -260,7 +260,7 @@ theorem isPairProduct_zeroConjunctionStep (hd : 2 ≤ d) (j : Fin a) :
         Matrix.cons_val_zero, Matrix.cons_val_succ]
       tauto
     have hs : (zeroConjunctionStep j).permMatrix ℂ ∈
-        supportedOperators d (Finset.univ.image e) := by
+        ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image e) := by
       rw [hrange]
       exact (zeroConjunctionStep_isLocalPerm j).permMatrix_mem_supportedOperators
     obtain ⟨X, hX⟩ := exists_embedOp_eq_of_mem_supportedOperators he hs

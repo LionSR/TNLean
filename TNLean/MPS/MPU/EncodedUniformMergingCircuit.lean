@@ -549,7 +549,7 @@ theorem exists_clean_encoded_merging_preparation {d r q a A : ℕ}
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ
           (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
             attenuationQuditRotation hd (mergingAttenuation r))) ∧
-      Z ∈ supportedOperators d
+      Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.image (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2)))) := by
   obtain ⟨T, hT, hTactive⟩ := exists_compatible_merging_preparation_circuit hd hr e he hP
   let sites : Fin (2 * q + 2) ↪ Fin (a + (2 * q + 2)) :=
@@ -661,11 +661,11 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
           (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A)) *
           encodedJoiningParent hd hr f e P V ∧
       ∀ support : Finset (Fin (a + (2 * q + 2))),
-        C₁ ∈ supportedOperators d support →
-        C₂ ∈ supportedOperators d support →
+        C₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support →
+        C₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support →
         Set.range s ⊆ support →
         Set.range (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2))) ⊆ support →
-        Z ∈ supportedOperators d support := by
+        Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
   obtain ⟨T, U, hU, hUclean, hTactive, hTsupport⟩ :=
     exists_clean_encoded_merging_preparation (A := A) hd hr f e he hP
   let J := initializedBasisMatrix
@@ -718,12 +718,12 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
     simpa only [hnorm] using hcolumns
   · intro support hC₁support hC₂support hinputSupport hpacketSupport
     have hZ₀unitary := hjointClean.logical_mem_unitary hJ hjoint.mem_unitary
-    have hZ₀support : Z₀ ∈ supportedOperators d support :=
-      mul_mem_supportedOperators (supportedOperators_mono (fun x hx => by
+    have hZ₀support : Z₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support :=
+      mul_mem (ManyBody.supportedOperators_mono (fun x hx => by
           obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hx
           exact Finset.mem_coe.mp (hpacketSupport ⟨i, rfl⟩)) hTsupport)
-        (mul_mem_supportedOperators hC₁support hC₂support)
-    have hinputReflection : subspaceReflection (E * Eᴴ) ∈ supportedOperators d support := by
+        (mul_mem hC₁support hC₂support)
+    have hinputReflection : subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
       change subspaceReflection
         (initializedBasisMatrix (zeroFlagEmbedding (d := d) s) *
           (initializedBasisMatrix (zeroFlagEmbedding (d := d) s))ᴴ) ∈ _
@@ -737,7 +737,7 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
       apply Fin.ext
       change a + (2 * q + p.val) = a + 2 * q + p.val
       omega
-    have hsuccessReflection : subspaceReflection S ∈ supportedOperators d support := by
+    have hsuccessReflection : subspaceReflection S ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
       change subspaceReflection
         (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
           (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) ∈ _

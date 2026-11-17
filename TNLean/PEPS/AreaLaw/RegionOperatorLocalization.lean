@@ -75,7 +75,7 @@ lines 498–508), with the constants of OpenAI area law, Lemma 4.1. -/
 theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : ℝ)
     (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (S : Finset (Site Λ))
     (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (hA : A ∈ supportedOperators q S) (l : ℕ) (t : ℝ) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) (l : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.operator t A -
         ManyBody.regionExpectation (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution
             h.operator t A)‖ ≤
@@ -103,7 +103,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       norm_exp_commutator_eq (Complex.I • h.operator) hK A U t
   have : NeZero q := ⟨by omega⟩
   have hnear (y : Site Λ) (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hU : U ∈ supportedOperators q ({y} : Finset (Site Λ)))
+      (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
       ‖ManyBody.heisenbergEvolution h.operator (-t) U -
         ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) y l)
@@ -119,12 +119,10 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
       Commute A (ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) y l)
         (ManyBody.heisenbergEvolution h.operator (-t) U)) :=
-    commute_of_mem_supportedOperators (hdisj y hy) hA
-      (mem_supportedOperators_of_isSupportedOn
-        (ManyBody.regionExpectation_mem_supportedOperators _ _))
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hA ((ManyBody.regionExpectation_mem_supportedOperators _ _)) (hdisj y hy)
   have hε (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hU : U ∈ supportedOperators q ({y} : Finset (Site Λ)))
+      (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
       ‖ManyBody.heisenbergEvolution h.operator t A * U -
         U * ManyBody.heisenbergEvolution h.operator t A‖ ≤
@@ -145,7 +143,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       (ManyBody.norm_sub_regionExpectation_le (graphNeighborhood Λ l S)
         (ManyBody.heisenbergEvolution h.operator t A)
         (fun _ ↦ 2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖) fun y hy U hU hUu ↦
-          hε y hy U (by simpa using mem_supportedOperators_of_isSupportedOn (S := {y}) hU)
+          hε y hy U (by simpa using hU)
             hUu).trans
         (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
   have hτnorm : ‖ManyBody.heisenbergEvolution h.operator t A‖ = ‖A‖ :=
@@ -178,7 +176,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-        A ∈ supportedOperators q S → ∀ (l : ℕ) (t : ℝ),
+        A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S → ∀ (l : ℕ) (t : ℝ),
         ‖ManyBody.heisenbergEvolution h.operator t A -
             ManyBody.regionExpectation (graphNeighborhood Λ l S)
               (ManyBody.heisenbergEvolution h.operator t A)‖ ≤

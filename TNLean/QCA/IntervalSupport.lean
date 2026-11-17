@@ -67,7 +67,7 @@ theorem intervalCoordinates_localInclusion_mem_supportedOperators
     {d N : ℕ} {a : ℤ} {Λ : Finset ℤ} (hΛ : Λ ⊆ finiteChainRegion a N)
     (A : LocalAlgebra d Λ) :
     intervalCoordinates d a N (localInclusion hΛ A) ∈
-      QuantumCircuit.supportedOperators d
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.filter fun (i : Fin N) ↦ (finiteChainSiteEquiv a N i).val ∈ Λ) := by
   classical
   rw [intervalCoordinates_localInclusion_eq_embedOp]
@@ -77,7 +77,7 @@ theorem intervalCoordinates_localInclusion_mem_supportedOperators
     apply Subtype.ext
     have h := congrArg (fun i => (finiteChainSiteEquiv a N i).val) hxy
     simpa only [e, Equiv.apply_symm_apply] using h
-  apply QuantumCircuit.supportedOperators_mono ?_
+  apply ManyBody.supportedOperators_mono ?_
     (QuantumCircuit.embedOp_mem_supportedOperators he (CStarMatrix.ofMatrix.symm A))
   intro _ hx
   obtain ⟨x, -, rfl⟩ := Finset.mem_image.mp hx

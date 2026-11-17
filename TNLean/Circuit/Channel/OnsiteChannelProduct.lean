@@ -49,10 +49,7 @@ namespace OnsiteChannel
 /-- Equal site maps define equal global maps, including on correlated inputs. -/
 theorem map_congr (Φ Ψ : OnsiteChannel q q (Fin N))
     (h : ∀ i, Φ.siteMap i = Ψ.siteMap i) : Φ.map = Ψ.map := by
-  apply LinearMap.ext
-  intro X
-  apply LinearMap.eqOn_span' _ (mem_supportedOperators_univ X)
-  rintro _ ⟨A, _, rfl⟩
+  refine linearMap_ext_rectKronecker _ _ fun A => ?_
   simp only [map_rectKronecker, h]
 
 /-- Apply an onsite channel only at the sites in a chosen finite set. -/
@@ -126,10 +123,7 @@ noncomputable def oneSite (Φ : OnsiteChannel q q (Fin N)) (i : Fin N) :
 on every other site; no assumption on input correlations is required. -/
 theorem onSites_singleton_map_eq_lift (Φ : OnsiteChannel q q (Fin N)) (i : Fin N) :
     (Φ.onSites {i}).map = registerChannelLift (singletonSite i) (Φ.oneSite i).map := by
-  apply LinearMap.ext
-  intro X
-  apply LinearMap.eqOn_span' _ (mem_supportedOperators_univ X)
-  rintro _ ⟨A, _, rfl⟩
+  refine linearMap_ext_rectKronecker _ _ fun A => ?_
   apply (registerMatrixSplit (d := q) (singletonSite i)).injective
   rw [map_rectKronecker, registerMatrixSplit_channelLift,
     registerMatrixSplit_rectKronecker, registerMatrixSplit_rectKronecker,

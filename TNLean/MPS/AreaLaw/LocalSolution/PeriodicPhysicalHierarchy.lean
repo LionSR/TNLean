@@ -106,11 +106,11 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ supportedOperators d
+          (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
               (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) → ∀ (ℓ : ℕ), R ≤ (ℓ : ℝ) → ∀ i,
           let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i
-          a ∈ supportedOperators d (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
+          a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
             a.IsHermitian ∧ ‖a‖ ≤ J ∧
             ‖TNLean.Lattice.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
               J * C * Real.exp (-(η * (ℓ : ℝ))) := by
@@ -120,9 +120,9 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     intro M d hM g hg hsupp hnorm ℓ hℓ i a
     let _ : NeZero M := ⟨by omega⟩
     let _ := periodicPhysicalMetricSpace M
-    have hsupp' : ∀ j, g j ∈ supportedOperators d (TNLean.Lattice.metricRangeBall 0 j) := by
+    have hsupp' : ∀ j, g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall 0 j) := by
       intro j
-      apply supportedOperators_mono _ (hsupp j)
+      apply ManyBody.supportedOperators_mono _ (hsupp j)
       intro v hv
       rw [TNLean.Lattice.mem_metricRangeBall]
       exact (Finset.mem_filter.mp hv).2
@@ -134,7 +134,7 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       rw [heq, one_mul, sub_zero]
       exact hfilters.2
     rw [ha]
-    refine ⟨supportedOperators_mono (fun v hv ↦ ?_) (hsupp i), hg i, hnorm i, ?_⟩
+    refine ⟨ManyBody.supportedOperators_mono (fun v hv ↦ ?_) (hsupp i), hg i, hnorm i, ?_⟩
     · have hv : (roundedPeriodicDistance i v : ℝ) ≤ 0 := (Finset.mem_filter.mp hv).2
       refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
       have hd : roundedPeriodicDistance i v = 0 := by
@@ -149,9 +149,9 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     intro M d hM g hg hsupp hnorm ℓ hℓ i a
     let _ : NeZero M := ⟨by omega⟩
     let _ := periodicPhysicalMetricSpace M
-    have hsupp' : ∀ j, g j ∈ supportedOperators d (TNLean.Lattice.metricRangeBall R j) := by
+    have hsupp' : ∀ j, g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall R j) := by
       intro j
-      apply supportedOperators_mono _ (hsupp j)
+      apply ManyBody.supportedOperators_mono _ (hsupp j)
       intro v hv
       rw [TNLean.Lattice.mem_metricRangeBall]
       exact (Finset.mem_filter.mp hv).2
@@ -161,7 +161,7 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       rfl
     dsimp only at ha
     rw [heq] at ha
-    refine ⟨supportedOperators_mono (fun v hv ↦ ?_) ha.1, ha.2.1, ha.2.2.1, ha.2.2.2.1⟩
+    refine ⟨ManyBody.supportedOperators_mono (fun v hv ↦ ?_) ha.1, ha.2.1, ha.2.2.1, ha.2.2.2.1⟩
     · rw [TNLean.Lattice.mem_metricRangeBall] at hv
       refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
       have hd : (roundedPeriodicDistance i v : ℝ) ≤ (ℓ : ℝ) := hv
@@ -175,7 +175,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ supportedOperators d
+          (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
               (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (ψ : EuclideanSpace ℂ (Fin M → Fin d)), ‖ψ‖ = 1 →
@@ -214,7 +214,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
   obtain ⟨hℓ, hℓR⟩ := physicalPeriodicProjectionRadius_spec R M Jb Δ hη
   have hr := hierarchyProjectionLength_le_physicalPeriodicProjectionRadius hM R Jb Δ hη
   have haloc (i : Fin M) := hloc hM g hg hsupp hnorm ℓ hℓR i
-  have haSupp (i : Fin M) : a i ∈ supportedOperators d
+  have haSupp (i : Fin M) : a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) :=
     (haloc i).1
   have haHerm (i : Fin M) : (a i).IsHermitian := (haloc i).2.1

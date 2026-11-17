@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!
@@ -143,7 +145,7 @@ theorem sum_norm_term_containing_le (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ 
 /-- The terms of `h` as an interaction on the sites of `Λ`, with Hamiltonian `h.operator`. -/
 private noncomputable def interaction (h : LocalHamiltonian Λ q R J) :
     ManyBody.Interaction (fun _ : Site Λ ↦ Fin q) (fun X : AdmissibleSupport Λ R ↦ X.1) :=
-  ⟨h.term, fun X ↦ isSupportedOn_of_mem_supportedOperators (h.supported X)⟩
+  ⟨h.term, fun X ↦ (h.supported X)⟩
 
 /-- An anchor family that takes the prescribed value `a` at `X` and an arbitrary site of
 every other support. -/
@@ -183,8 +185,8 @@ lines 52–64 and 70–112), with the budget `eq:quasilocal-budget` (lines 31–
 theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ supportedOperators q X.1) (y : Site Λ)
-    (hB : B ∈ supportedOperators q ({y} : Finset (Site Λ)))
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (y : Site Λ)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
     (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ) (hn : (n : ℕ∞) ≤ (domainGraph Λ).edist a y) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
         t A‖ ≤
@@ -195,8 +197,8 @@ theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
     (anchors X a) (anchors_mem ha) h.hermitian R
     (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) X
-    (isSupportedOn_of_mem_supportedOperators hA) y
-    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by assumption)) μ hμ n
+    (hA) y
+    ((by assumption)) μ hμ n
     (by rwa [anchors_self]) t
 
 /-- **Exact vanishing between components.** If the anchor `a` and the site `y` lie in
@@ -208,15 +210,15 @@ Source: OpenAI area law, Lemma 4.1: "The commutator is zero when `d_Λ(a_i, y) =
 theorem commutator_eq_zero_of_edist_eq_top (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ supportedOperators q X.1) (y : Site Λ)
-    (hB : B ∈ supportedOperators q ({y} : Finset (Site Λ)))
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (y : Site Λ)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
     (hy : (domainGraph Λ).edist a y = ⊤) (t : ℝ) :
     ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator t
         A = 0 :=
   ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top (domainGraph Λ) h.interaction
     (anchors X a) (anchors_mem ha) R (fun Y => Y.2.edist_le) X
-    (isSupportedOn_of_mem_supportedOperators hA) y
-    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by assumption))
+    (hA) y
+    ((by assumption))
     (by rwa [anchors_self]) t
 
 /-- **Localization onto graph balls**, explicit form, for the finite-domain Hamiltonian.
@@ -230,7 +232,7 @@ lines 65–68 and 117–128), with `E_{i,l}` from `eq:quasilocal-ce` (lines 17�
 theorem norm_sub_regionExpectation_graphBall_le (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ supportedOperators q X.1) (l : ℕ) (t : ℝ) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (l : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.operator t A -
         ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) a l)
           (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
@@ -244,7 +246,7 @@ theorem norm_sub_regionExpectation_graphBall_le (h : LocalHamiltonian Λ q R J)
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) 2 2
     (fun x d => card_domainGraph_sphere_le Λ x d) X
-    (isSupportedOn_of_mem_supportedOperators hA) l t
+    (hA) l t
   rwa [anchors_self] at hBound
 
 end TNLean.Lattice.LocalHamiltonian
@@ -273,9 +275,9 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (X : AdmissibleSupport Λ R)
         (a : Site Λ), a ∈ X.1 →
         ∀ A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-        A ∈ supportedOperators q X.1 → ∀ t : ℝ,
+        A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1 → ∀ t : ℝ,
         (∀ (y : Site Λ) (B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-          B ∈ supportedOperators q ({y} : Finset (Site Λ)) →
+          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)) →
           (∀ d : ℕ, (domainGraph Λ).edist a y = d →
             ‖ManyBody.heisenbergEvolution h.operator t A * B -
                 B * ManyBody.heisenbergEvolution h.operator t A‖ ≤
@@ -303,8 +305,8 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   · have hXY := hLR (domainGraph Λ) h.interaction (LocalHamiltonian.anchors X a)
       (LocalHamiltonian.anchors_mem ha) h.hermitian
       (fun Y => Y.2.edist_le) (fun Y => Y.2.card_le)
-      (h.sum_norm_term_containing_le hJ) X A B (isSupportedOn_of_mem_supportedOperators hA) y
-      (isSupportedOn_of_mem_supportedOperators (S := {y}) (by assumption)) t
+      (h.sum_norm_term_containing_le hJ) X A B (hA) y
+      ((by assumption)) t
     rw [LocalHamiltonian.anchors_self] at hXY
     refine ⟨fun d hd => (hXY.1 d hd.symm.le).trans ?_, hXY.2⟩
     gcongr

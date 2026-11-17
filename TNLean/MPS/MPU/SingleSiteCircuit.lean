@@ -54,7 +54,7 @@ theorem singleSitePaddedOperator_isNeighbourGate
     fin_cases i <;> simp
   refine ⟨singleSitePaddedOperator_mem_unitary hU, 0, 1, by decide, ?_⟩
   rw [hpair]
-  exact mem_supportedOperators_univ _
+  exact (by simp)
 
 /-- A single-site unitary therefore has a one-gate neighboring-pair
 implementation on two qudits. Source: the single-site endpoint in Section 5

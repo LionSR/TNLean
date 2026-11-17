@@ -77,15 +77,15 @@ theorem exists_two_window_chebyshev_spectral_projector
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
+    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L)))
-    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
+    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L)))
-    (hL : F (Sum.inr 0) ∈ supportedOperators q
+    (hL : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a + 1) : Finset (Fin L)))
-    (hM : F (Sum.inr 1) ∈ supportedOperators q
+    (hM : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)))
-    (hR : F (Sum.inr 2) ∈ supportedOperators q
+    (hR : F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1) (hℓ : 1 ≤ ℓ)
     (hH : (∑ α, F α).IsHermitian)

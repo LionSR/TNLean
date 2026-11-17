@@ -58,14 +58,14 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
       (∀ j, ((∑ i ∈ normalizationCoreBonds a b j, h i) - (z j : ℂ) • 1).PosSemidef) ∧
       ∃ v : (Fin L → Fin q) → ℂ, star v ⬝ᵥ v = 1 ∧
         ∀ j, ((∑ i ∈ normalizationCoreBonds a b j, h i) - (z j : ℂ) • 1) *ᵥ v = 0 := by
-  have hmem (i : Fin (L - 1)) := mem_supportedOperators_of_isSupportedOn (hs i)
+  have hmem (i : Fin (L - 1)) := (hs i)
   classical
   let C (j : Fin 3) := ∑ i ∈ normalizationCoreBonds a b j, h i
   have hC (j : Fin 3) : (C j).IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ => h0 i)).isHermitian
   let z (j : Fin 3) := minEigenvalue (hC j)
   have hsC (j : Fin 3) :
-      C j ∈ supportedOperators q (normalizationCoreSites a b j : Finset (Fin L)) := by
+      C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (normalizationCoreSites a b j : Finset (Fin L)) := by
     refine Submodule.sum_mem _ fun i hi => ?_
     have hsub : (interval L i.val (i.val + 2) : Set (Fin L)) ⊆
         (normalizationCoreSites a b j : Set (Fin L)) := by
@@ -73,7 +73,7 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
       fin_cases j <;>
         simp only [normalizationCoreBonds, Finset.mem_filter, Finset.mem_univ, true_and] at hi <;>
         simp only [normalizationCoreSites, Finset.mem_coe, mem_interval] at hx ⊢ <;> omega
-    exact supportedOperators_mono hsub (hmem i)
+    exact ManyBody.supportedOperators_mono hsub (hmem i)
   have hd (j k : Fin 3) (hjk : j ≠ k) :
       Disjoint (normalizationCoreSites a b j) (normalizationCoreSites a b k) := by
     apply Finset.disjoint_left.mpr

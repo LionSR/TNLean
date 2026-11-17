@@ -515,7 +515,7 @@ theorem isZeroOn_regInteriorFrom_mulVec [NeZero d] {j : ℕ} {v : Cfg d N → �
     obtain ⟨g', hg', hx'⟩ := (Finset.mem_filter.mp hx').2
     exact Finset.disjoint_left.mp (disjoint_range_sites_interior (by omega) hjk hg' hg) hx' hx
   · obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
-    refine supportedOperators_mono ?_ g.op_mem_supportedOperators
+    refine ManyBody.supportedOperators_mono ?_ g.op_mem_supportedOperators
     exact fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g, hg, hx⟩
 
 /-! ### The trees of all the blocks with measurements -/

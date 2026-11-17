@@ -193,7 +193,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
       Matrix (Lattice.Configuration Λ q) (Lattice.Configuration Λ q) ℂ := H.term
   let S : AdmissibleSupport Λ R → Finset (Lattice.Site Λ) := fun X ↦ X.1
   have hsupp : ∀ X, Entropy.IsSupportedOn (n := fun _ : Lattice.Site Λ ↦ q) (T X) (S X) :=
-    fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (H.supported X)
+    fun X ↦ (H.supported X)
   let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.rangeNestedPatch Λ center R u
   let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j))
       (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j)) ℂ :=

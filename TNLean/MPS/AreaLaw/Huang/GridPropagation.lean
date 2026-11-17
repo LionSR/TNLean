@@ -7,7 +7,9 @@ import TNLean.MPS.AreaLaw.Huang.GridEvolution
 import TNLean.MPS.AreaLaw.Huang.GridLocalization
 import TNLean.MPS.AreaLaw.Huang.BlockProductBonds
 import QICLean.ManyBody.Dynamics.DisjointRelativeEvolution
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!
@@ -32,8 +34,8 @@ variable {L q w r : ℕ}
 private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
     (P : Fin (L / w + 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (Q : Fin ((L - 1) / w) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hP : ∀ j, P j ∈ supportedOperators q (chainGridBlock L w j.val : Finset (Fin L)))
-    (hQ : ∀ j, Q j ∈ supportedOperators q
+    (hP : ∀ j, P j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)))
+    (hQ : ∀ j, Q j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (chainCutBuffer L (chainGridCut w j.val) r : Finset (Fin L))) :
     ∀ cut : ℕ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L cut) ((List.ofFn P).prod * (List.ofFn Q).prod)) ≤
@@ -51,8 +53,8 @@ private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w
     (fun j : Fin (L / w + 1) ↦ j.val * w) (fun j ↦ (j.val + 1) * w)
     (fun j : Fin ((L - 1) / w) ↦ chainGridCut w j.val - 1 - r)
     (fun j ↦ chainGridCut w j.val + r + 1) P Q
-    (fun j ↦ isSupportedOn_of_mem_supportedOperators (hP j))
-    (fun j ↦ isSupportedOn_of_mem_supportedOperators (hQ j))
+    (fun j ↦ (hP j))
+    (fun j ↦ (hQ j))
     (List.ofFn (fun j : Fin (L / w + 1) ↦ j))
     (List.ofFn (fun j : Fin ((L - 1) / w) ↦ j)) hpairP hpairQ w (2 * r + 2)
     (fun j _ ↦ (chainGridBlock_width w j.val).le)
@@ -135,7 +137,7 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
       mul_assoc] using herr
   · exact rank_two_grid_layers_le hq hwidth _ _
       (fun j ↦ chainGridBlockEvolution_mem_supported hw h hs j (-t))
-      (fun j ↦ mem_supportedOperators_of_isSupportedOn (hUsupport j t))
+      (fun j ↦ (hUsupport j t))
 
 /-- The original physical interaction determines one two-layer propagator approximation
 with simultaneous cut-rank bounds: the existence form of `chainGridPropagator_spec`.

@@ -39,7 +39,7 @@ private theorem gaussian_error_prefactor (a w b n g c e : ℝ) :
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
+  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -59,10 +59,10 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d S) (vObs : ℕ) (hSCard : S.card ≤ vObs)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (vObs : ℕ) (hSCard : S.card ≤ vObs)
     (l : ℕ) (Y : Finset ι)
     (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
-    (hB : B ∈ supportedOperators d Y) :
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
       groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤
         commutatorConst R vObs b₀ |Kg| kg * ‖W‖ * ‖B‖ *
@@ -138,7 +138,7 @@ theorem norm_groundCompression_observables_commutator_le_exp_edist [NeZero d]
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     {η : Type*} (Y : η → Finset ι) (c : η → ι) (hc : ∀ i, c i ∈ Y i)
     (W : η → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hW : ∀ i, W i ∈ supportedOperators d (Y i : Finset ι))
+    (hW : ∀ i, W i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Y i : Finset ι))
     (Robs : ℕ) (hYDiam : ∀ i, ∀ x ∈ Y i, ∀ y ∈ Y i, G.edist x y ≤ Robs)
     (vObs : ℕ) (hYCard : ∀ i, (Y i).card ≤ vObs) (i j : η) :
     ‖groundCompression (∑ k, h k) E₀ (W j) * groundCompression (∑ k, h k) E₀ (W i) -

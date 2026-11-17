@@ -56,10 +56,10 @@ structure SquareHamiltonian (L q : ℕ) (J : ℝ) where
   edgeTerm : Edge (squareLatticeGraph L L) →
     Matrix (Configuration L q) (Configuration L q) ℂ
   /-- Site operators act trivially off their designated site. -/
-  site_supported : ∀ v, siteTerm v ∈ QuantumCircuit.supportedOperators q {v}
+  site_supported : ∀ v, siteTerm v ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) {v}
   /-- Edge operators act trivially off their two designated endpoints. -/
   edge_supported : ∀ e, edgeTerm e ∈
-    QuantumCircuit.supportedOperators q {e.1.1, e.1.2}
+    ManyBody.supportedOperators (fun _ ↦ Fin q) {e.1.1, e.1.2}
   /-- The site-term bound uses the Euclidean operator norm. -/
   site_norm_le : ∀ v, ‖siteTerm v‖ ≤ J
   /-- The edge-term bound uses the Euclidean operator norm. -/

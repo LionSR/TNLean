@@ -55,16 +55,16 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
             ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin L → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ supportedOperators (q * q) (N Z : Finset (Fin L))) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (N Z : Finset (Fin L))) ∧
           ∀ (Q : Finset (Fin L))
             (W : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ),
-            W ∈ supportedOperators (q * q) Q →
+            W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
                 ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
-              M ∈ supportedOperators (q * q) B ∧
+              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                 ‖W‖ * C * (L : ℝ) ^ 2 * (1 + T) *
@@ -88,7 +88,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
     ManyBody.exists_supported_gaussian_integral_of_projection_bounds
       (h.swappedDoubled D).operator_isHermitian h.doubled.operator_isHermitian (N Z)
-  refine ⟨U, hU0, hU, hunit, fun t ↦ mem_supportedOperators_of_isSupportedOn (hsupport t), ?_⟩
+  refine ⟨U, hU0, hU, hunit, fun t ↦ (hsupport t), ?_⟩
   intro Q W hW η T hT B M
   have hgen (s : ℝ) (hs : |s| ≤ T) :
       ‖ManyBody.heisenbergEvolution K' s (K' - K) -
@@ -106,7 +106,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
       (fun X : ChainSupport L R ↦ X) (h.swappedDoubled D).term
       (h.swappedDoubled D).hermitian (h.swappedDoubled D).supported b₀
       (h.swappedDoubled D).sum_norm_terms_containing_le hqq Q
-      (isSupportedOn_of_mem_supportedOperators hW) ℓ hℓ t
+      (hW) ℓ hℓ t
     have hc : (Q.card : ℝ) ≤ (L : ℝ) := by
       have hcNat : Q.card ≤ L := by
         simpa only [Fintype.card_fin] using Finset.card_le_univ Q
@@ -146,7 +146,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
     (a * (L : ℝ) ^ 2 * Real.exp (v * T - ℓ / 2))
     (d * (L : ℝ) * Real.exp (v * T - ℓ / 2)) (by positivity) (by positivity)
     (fun t ht ↦ by simpa only [mul_assoc] using hnear t ht) hgen
-  refine ⟨mem_supportedOperators_of_isSupportedOn hMsupport, hMnorm, hMerror.trans ?_⟩
+  refine ⟨ hMsupport, hMnorm, hMerror.trans ?_⟩
   have hscaleT : a * (L : ℝ) ^ 2 + d * (L : ℝ) * T ≤
       (a + d) * (L : ℝ) ^ 2 * (1 + T) := by
     simpa only [abs_of_nonneg hT] using hscale T (le_of_eq (abs_of_nonneg hT))

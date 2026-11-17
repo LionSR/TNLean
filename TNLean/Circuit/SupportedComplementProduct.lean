@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.DetectabilityLemma
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 
 /-!
 # Support of ordered complementary products
@@ -27,16 +29,16 @@ algebra as each selected term. ALVV, arXiv:1602.08828v2,
 theorem mem_supportedOperators_complementProd
     (h : ℕ → EuclideanSpace ℂ (ι → Fin q) →L[ℂ] EuclideanSpace ℂ (ι → Fin q))
     (S : Finset ι) (n : ℕ)
-    (hh : ∀ k, k < n → (T).symm (h k) ∈ supportedOperators q S) :
-    (T).symm (ContinuousLinearMap.complementProd h n) ∈ supportedOperators q S := by
+    (hh : ∀ k, k < n → (T).symm (h k) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
+    (T).symm (ContinuousLinearMap.complementProd h n) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S := by
   induction n with
   | zero =>
     simpa only [ContinuousLinearMap.complementProd_zero, map_one] using
-      one_mem_supportedOperators (d := q) S
+      (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) S))
   | succ n ih =>
     rw [ContinuousLinearMap.complementProd_succ, map_mul, map_sub, map_one]
-    exact mul_mem_supportedOperators
-      ((supportedOperators q S).sub_mem (one_mem_supportedOperators S)
+    exact mul_mem
+      ((ManyBody.supportedOperators (fun _ ↦ Fin q) S).sub_mem ((one_mem (ManyBody.supportedOperators _ S)))
         (hh n (Nat.lt_succ_self n))) (ih fun k hk ↦ hh k (Nat.lt_succ_of_lt hk))
 
 end QuantumCircuit

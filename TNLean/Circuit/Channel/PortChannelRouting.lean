@@ -169,7 +169,7 @@ theorem IsPhysicalPortProtocol.of_register_routing {m r : ℕ} (P : PhysicalPort
   change IsPhysicalPortProtocol P 0 (rectangularKrausMap fun j => embedOp f (K j))
   apply IsPhysicalPortProtocol.onsite (P := P) i
   · intro j
-    apply supportedOperators_mono _ (embedOp_mem_supportedOperators f.injective (K j))
+    apply ManyBody.supportedOperators_mono _ (embedOp_mem_supportedOperators f.injective (K j))
     intro x hmemImage
     obtain ⟨a, -, rfl⟩ := Finset.mem_image.mp hmemImage
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsite a⟩

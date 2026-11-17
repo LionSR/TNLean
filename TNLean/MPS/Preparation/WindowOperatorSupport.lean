@@ -88,7 +88,7 @@ arXiv:2307.01696, supported local observables on consecutive blocks. -/
 theorem exists_chainWindowOperator_eq_of_mem_supportedOperators
     {L N a : ℕ} (ha : a < N) (haL : a + L ≤ N)
     {X : Matrix (Cfg d N) (Cfg d N) ℂ}
-    (hX : X ∈ QuantumCircuit.supportedOperators d
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun (i : Fin N) ↦ a ≤ i.val ∧ i.val < a + L)) :
     ∃ Y : Matrix (Cfg d L) (Cfg d L) ℂ, X = chainWindowOperator N a Y := by
   classical
@@ -113,7 +113,7 @@ theorem exists_chainWindowOperator_eq_of_mem_supportedOperators
       apply Fin.ext
       dsimp [e]
       omega
-  have hX' : X ∈ QuantumCircuit.supportedOperators d (Finset.univ.image e) := by
+  have hX' : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image e) := by
     rw [hRange]
     exact hX
   obtain ⟨Y, hY⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hX'
@@ -233,13 +233,13 @@ Theorem 1, is applied to. -/
 theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     chainWindowOperator N a X ∈
-      QuantumCircuit.supportedOperators d
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
           (Finset.univ.filter fun (k : Fin N) ↦ a ≤ k.val ∧ k.val < a + L) := by
   classical
   set S : Finset (Fin N) := Finset.univ.filter fun k : Fin N ↦ a ≤ k.val ∧ k.val < a + L
   have hunit : ∀ τ₀ σ₀ : Fin L → Fin d,
       chainWindowOperator N a (Matrix.single τ₀ σ₀ (1 : ℂ)) ∈
-        QuantumCircuit.supportedOperators d S := by
+        ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
     intro τ₀ σ₀
     let m : Fin N → Matrix (Fin d) (Fin d) ℂ := fun k ↦
       if h : a ≤ k.val ∧ k.val < a + L then

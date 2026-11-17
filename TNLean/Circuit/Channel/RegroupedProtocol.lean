@@ -131,17 +131,17 @@ private theorem supportedKraus_mul {ι : Type*} [Fintype ι] [DecidableEq ι]
     {S : Finset ι} {F G : Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)}
     (hF : ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       F = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
-        ∀ a, A a ∈ supportedOperators d S)
+        ∀ a, A a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hG : ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       G = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
-        ∀ a, A a ∈ supportedOperators d S) :
+        ∀ a, A a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       F * G = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
-        ∀ a, A a ∈ supportedOperators d S := by
+        ∀ a, A a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   obtain ⟨r, A, rfl, hA, hsA⟩ := hF
   obtain ⟨s, B, rfl, hB, hsB⟩ := hG
   let C (a : Fin (r * s)) := A (finProdFinEquiv.symm a).1 * B (finProdFinEquiv.symm a).2
-  refine ⟨r * s, C, ?_, ?_, fun a => mul_mem_supportedOperators (hsA _) (hsB _)⟩
+  refine ⟨r * s, C, ?_, ?_, fun a => mul_mem (hsA _) (hsB _)⟩
   · apply LinearMap.ext
     intro X
     change (∑ a, A a * (∑ b, B b * X * (B b)ᴴ) * (A a)ᴴ) = _
@@ -164,16 +164,16 @@ private theorem supportedKraus_noncommProd {ι α : Type*} [Fintype ι] [Decidab
     (hc : (s : Set α).Pairwise (Function.onFun Commute F)) (S : Finset ι)
     (hF : ∀ i ∈ s, ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       F i = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
-        ∀ a, A a ∈ supportedOperators d S) :
+        ∀ a, A a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       s.noncommProd F hc = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
-        ∀ a, A a ∈ supportedOperators d S := by
+        ∀ a, A a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   refine Finset.noncommProd_induction s F hc
     (fun G => ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       G = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
-        ∀ a, A a ∈ supportedOperators d S)
+        ∀ a, A a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (fun _ _ => supportedKraus_mul) ?_ hF
-  refine ⟨1, fun _ => 1, ?_, by simp, fun _ => one_mem_supportedOperators _⟩
+  refine ⟨1, fun _ => 1, ?_, by simp, fun _ => (one_mem (ManyBody.supportedOperators _ _))⟩
   apply LinearMap.ext
   intro X
   change X = ∑ _ : Fin 1, 1 * X * 1ᴴ
@@ -315,8 +315,7 @@ theorem regroup_map (Φ : OnsiteChannel d e (Fin (M * k))) :
   rw [AlgEquiv.symm_apply_apply]
   change (Φ.regroup.map ∘ₗ (blockSites M k d).toLinearMap) Y =
     ((blockSites M k e).toLinearMap ∘ₗ Φ.map) Y
-  exact LinearMap.eqOn_span' (by rintro _ ⟨A, _, rfl⟩; exact hprod A)
-    (mem_supportedOperators_univ Y)
+  exact LinearMap.congr_fun (linearMap_ext_rectKronecker _ _ hprod) Y
 
 end OnsiteChannel
 
@@ -339,7 +338,7 @@ theorem exists_regrouped_layers [NeZero M] [NeZero k] (L : ChannelLayer d (M * k
   have hH (j : Fin M) : ∃ r, ∃ A : Fin r →
       Matrix (Fin M → Fin (d ^ k)) (Fin M → Fin (d ^ k)) ℂ,
       H j = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
-        ∀ a, A a ∈ supportedOperators (d ^ k) (ringBond j) := by
+        ∀ a, A a ∈ ManyBody.supportedOperators (fun _ ↦ Fin (d ^ k)) (ringBond j) := by
     apply supportedKraus_noncommProd
     intro i hi
     obtain ⟨hi, hij⟩ := Finset.mem_filter.mp hi
@@ -349,7 +348,7 @@ theorem exists_regrouped_layers [NeZero M] [NeZero k] (L : ChannelLayer d (M * k
       simp only [← map_mul, ← map_sum, L.sum_kraus i hi, map_one]
     · intro a
       apply blockSites_mem_supportedOperators
-      apply supportedOperators_mono _ (L.kraus_mem_supportedOperators i hi a)
+      apply ManyBody.supportedOperators_mono _ (L.kraus_mem_supportedOperators i hi a)
       simpa only [hij] using ringBond_subset_preimage_siteBlock i
   choose r A hA hnorm hs using hH
   obtain ⟨hHc, hHeq⟩ := noncommProd_fibers L.bonds F hc siteBlock (Finset.univ : Finset (Fin M))
@@ -508,18 +507,13 @@ private theorem exists_oneSite_onsite
     (equivReindexMap_isKrausCPTP (Equiv.funUnique (Fin 1) (Fin e)))
   let Φ := OnsiteChannel.ofSiteMaps (fun _ : Fin 1 => G) (fun _ => hG)
   refine ⟨Φ, ?_⟩
-  apply LinearMap.ext
-  intro X
-  apply LinearMap.eqOn_span' (s := {Z | ∃ A : Fin 1 → Matrix (Fin d) (Fin d) ℂ,
-    (∀ i ∉ (Finset.univ : Finset (Fin 1)), A i = 1) ∧ Z = rectKronecker A})
-  · rintro _ ⟨A, _, rfl⟩
-    apply (oneSiteMatrixEquiv e).injective
-    rw [OnsiteChannel.map_rectKronecker, oneSiteMatrixEquiv_rectKronecker]
-    simp only [Φ, OnsiteChannel.ofSiteMaps_siteMap]
-    change G (A 0) = oneSiteMatrixEquiv e (F (rectKronecker A))
-    change oneSiteMatrixEquiv e (F ((oneSiteMatrixEquiv d).symm (A 0))) = _
-    rw [← oneSiteMatrixEquiv_rectKronecker A, AlgEquiv.symm_apply_apply]
-  · exact mem_supportedOperators_univ X
+  refine linearMap_ext_rectKronecker _ _ fun A => ?_
+  apply (oneSiteMatrixEquiv e).injective
+  rw [OnsiteChannel.map_rectKronecker, oneSiteMatrixEquiv_rectKronecker]
+  simp only [Φ, OnsiteChannel.ofSiteMaps_siteMap]
+  change G (A 0) = oneSiteMatrixEquiv e (F (rectKronecker A))
+  change oneSiteMatrixEquiv e (F ((oneSiteMatrixEquiv d).symm (A 0))) = _
+  rw [← oneSiteMatrixEquiv_rectKronecker A, AlgEquiv.symm_apply_apply]
 
 /-- With one block the entire regrouped channel is onsite and costs zero depth.
 This holds for arbitrary finite Kraus channels, independently of their original depth. -/

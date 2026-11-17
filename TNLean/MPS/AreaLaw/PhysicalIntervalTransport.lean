@@ -7,12 +7,11 @@ import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.TraceCoreSlices
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.LocalLift
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.FilterOutputCovariance
 import Mathlib.Data.List.OfFn
-import TNLean.Circuit.EntropySupport
 import Mathlib.Order.Interval.Finset.Nat
 import TNLean.Circuit.PairProduct
 import TNLean.MPS.MPDO.TraceChainOperator
@@ -498,7 +497,7 @@ theorem exists_traceChainOperator_of_supported_interval
     · intro hi
       refine ⟨eI.symm ⟨i, hi⟩, ?_⟩
       exact congrArg Subtype.val (eI.apply_symm_apply ⟨i, hi⟩)
-  have hs := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA
+  have hs := hA
   rw [← hrange] at hs
   obtain ⟨M, hM⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hs
   obtain ⟨B, Acore, C0, hcore⟩ := MPOTensor.exists_traceChainOperator_of_finite_matrix M

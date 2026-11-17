@@ -259,7 +259,7 @@ theorem isZeroOn_levelOp_mulVec (k : ℕ) {v : Cfg d N → ℂ}
     disjoint_compl_right (list_prod_mem_supportedOperators _ fun A hA => ?_)
   obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
   obtain ⟨⟨p, hp⟩, rfl⟩ := List.mem_ofFn.mp hg
-  refine supportedOperators_mono ?_ (LongRangeGate.op_mem_supportedOperators _)
+  refine ManyBody.supportedOperators_mono ?_ (LongRangeGate.op_mem_supportedOperators _)
   intro x hx
   refine Finset.mem_compl.mpr fun hx' => ?_
   rw [Finset.mem_insert, Finset.mem_singleton] at hx

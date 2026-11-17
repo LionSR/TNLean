@@ -98,10 +98,10 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
     simp only [F, F', window, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and] at hk hk'
     omega
-  have hX : chainWindowOperator N 0 X ∈ supportedOperators d F := by
+  have hX : chainWindowOperator N 0 X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) F := by
     exact chainWindowOperator_mem_supportedOperators_window (by omega)
       (by dsimp only [N]; omega) X
-  have hY : chainWindowOperator N (L + t) Y ∈ supportedOperators d F' := by
+  have hY : chainWindowOperator N (L + t) Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) F' := by
     exact chainWindowOperator_mem_supportedOperators_window (by dsimp only [N]; omega)
       (by dsimp only [N]; omega) Y
   have h := hEst γ hγ N hN (chainWindowOperator N 0 X)

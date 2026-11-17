@@ -66,7 +66,7 @@ theorem dataChannelLift_local (e : Fin s ↪ Fin N)
   rw [hA, dataChannelLift_register_kraus]
   apply IsPhysicalPortProtocol.onsite (P := layout N k) i
   · intro a
-    apply supportedOperators_mono _
+    apply ManyBody.supportedOperators_mono _
       (embedOp_mem_supportedOperators (selectedData e).injective _)
     intro x hmemImage
     obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hmemImage
@@ -141,7 +141,7 @@ theorem dataChannelLift_channelLayer (hd : 0 < d) (hN : 2 ≤ N)
     (rectangularKrausMap fun a => embedOp f (nativeMatrixEquiv 2 k d (A a)))
   apply IsPhysicalPortProtocol.onsite (P := layout N k) (i + 1)
   · intro a
-    apply supportedOperators_mono _ (embedOp_mem_supportedOperators f.injective _)
+    apply ManyBody.supportedOperators_mono _ (embedOp_mem_supportedOperators f.injective _)
     intro x hmemImage
     obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hmemImage
     exact Finset.mem_filter.mpr

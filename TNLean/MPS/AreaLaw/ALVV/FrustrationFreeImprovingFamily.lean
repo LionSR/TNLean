@@ -12,7 +12,7 @@ import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.WeightedProjection
 import QICLean.Channel.FiniteProductOperatorSchmidt
 import TNLean.Algebra.CommonKernelSpectralGap
-import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
@@ -79,13 +79,13 @@ private theorem coe_interval_subset_left {c x y : ℕ} (hyc : y ≤ c) :
 /-- An operator supported on `[x, y)` lies on one side of the cut after the first `c` sites
 when the interval ends by `c` or starts at or after `c`. -/
 private theorem mem_supportedOperators_side {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    {c x y : ℕ} (hX : X ∈ QuantumCircuit.supportedOperators q (interval L x y : Finset (Fin L)))
+    {c x y : ℕ} (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L x y : Finset (Fin L)))
     (hxy : y ≤ c ∨ c ≤ x) :
-    X ∈ QuantumCircuit.supportedOperators q (interval L 0 c : Finset (Fin L)) ∨
-      X ∈ QuantumCircuit.supportedOperators q
+    X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 c : Finset (Fin L)) ∨
+      X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
         ((interval L 0 c)ᶜ : Finset (Fin L)) :=
-  hxy.imp (fun h ↦ QuantumCircuit.supportedOperators_mono (coe_interval_subset_left h) hX)
-    fun h ↦ QuantumCircuit.supportedOperators_mono (coe_interval_subset_compl h) hX
+  hxy.imp (fun h ↦ ManyBody.supportedOperators_mono (coe_interval_subset_left h) hX)
+    fun h ↦ ManyBody.supportedOperators_mono (coe_interval_subset_compl h) hX
 
 /-- A nearest-neighbour bond has operator Schmidt rank at most `q²` at every cut. -/
 private theorem rank_bond_le {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
@@ -735,11 +735,11 @@ theorem exists_frustrationFree_improving_family_words :
   have hPs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (P i)
       (interval L i.val (i.val + 2)) := by
     intro i
-    have hmem := QuantumCircuit.cfc_mem_supportedOperators
+    have hmem := ManyBody.cfc_mem_supportedOperators
       (fun x : ℝ ↦ if x ≠ 0 then 1 else 0)
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
+      ((hs i))
     rw [← (hpsd i).isHermitian.supportProj_eq_cfc] at hmem
-    exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators hmem
+    exact hmem
   have hzero (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (x : EuclideanSpace ℂ (Fin L → Fin q)) :
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) X x = 0 ↔ X *ᵥ x.ofLp = 0 := by

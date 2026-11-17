@@ -129,7 +129,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ supportedOperators q (chainNeighborhood Z ℓ : Finset (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧ ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (v * T - ℓ / 2)) +
@@ -207,14 +207,12 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   refine ⟨∫ t, U t ∂gaussianReal 0 η, ?_, ?_, ?_⟩
   · have hfix (t : ℝ) : ManyBody.regionExpectation N (U t) = U t :=
       (ManyBody.regionExpectation_of_mem_supportedOperators (D := N)
-          (isSupportedOn_of_mem_supportedOperators (mem_supportedOperators_of_isSupportedOn
-              (hsupport t))))
+          (((hsupport t))))
     have hMint : ManyBody.regionExpectation N (∫ t, U t ∂gaussianReal 0 η) =
         ∫ t, U t ∂gaussianReal 0 η :=
       ((ManyBody.regionExpectationLM N).toContinuousLinearMap.integral_comp_comm hUint).symm.trans
         (integral_congr_ae (Filter.Eventually.of_forall hfix))
-    exact hMint ▸ (mem_supportedOperators_of_isSupportedOn
-        (ManyBody.regionExpectation_mem_supportedOperators N _))
+    exact hMint ▸ ((ManyBody.regionExpectation_mem_supportedOperators N _))
   · simpa using norm_integral_le_of_norm_le_const (μ := gaussianReal 0 η)
       (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
   · rw [interactionAverage_eq_integral, ← integral_sub hPint hUint]
@@ -245,7 +243,7 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ supportedOperators q (chainNeighborhood Z ℓ : Finset (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧ ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (-(ℓ / 4))) +

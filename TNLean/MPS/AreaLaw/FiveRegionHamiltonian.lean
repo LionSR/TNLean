@@ -8,7 +8,9 @@ import Mathlib.Order.Interval.Finset.Nat
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import QICLean.Analysis.GroundEnergyBounds
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Lattice.ZeroEntropy
 import TNLean.MPS.AreaLaw.Basic
 
@@ -130,10 +132,8 @@ theorem pairwise_commute_sum_internal_consecutive_regions
   intro i j hij
   apply QuantumCircuit.commute_of_mem_supportedOperators
     (pairwise_disjoint_consecutive_intervals k hk hij)
-  · exact QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-      (isSupportedOn_sum_internal_bonds L q (k i.castSucc) (k i.succ) h hs)
-  · exact QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-      (isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs)
+  · exact (isSupportedOn_sum_internal_bonds L q (k i.castSucc) (k i.succ) h hs)
+  · exact (isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs)
 end TNLean.MPS.AreaLaw
 end
 end

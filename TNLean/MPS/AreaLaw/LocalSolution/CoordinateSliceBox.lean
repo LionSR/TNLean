@@ -74,7 +74,7 @@ theorem exists_unit_mem_coordinateSliceProjection_of_box {D d : ℕ}
     {ℓ : ℕ} (hℓ : 0 < ℓ)
     (a : (∀ k, Fin (L k)) →
       Matrix ((∀ k, Fin (L k)) → Fin d) ((∀ k, Fin (L k)) → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d
+    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun v ↦ dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian)
     {ψ : EuclideanSpace ℂ ((∀ k, Fin (L k)) → Fin d)} (hψ : ‖ψ‖ = 1)
@@ -97,10 +97,10 @@ theorem exists_unit_mem_coordinateSliceProjection_of_box {D d : ℕ}
           (hierarchyWindowRadius K r h)) h 0 φ ∧
       ∀ i, coordinateSlice ℓ (z i) < L axis := by
   let : Nonempty (∀ k, Fin (L k)) := ⟨fun k ↦ ⟨0, hL k⟩⟩
-  have hsupp' : ∀ i, a i ∈ supportedOperators d
+  have hsupp' : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun (v : (∀ k, Fin (L k))) ↦ Nat.dist (v axis) (i axis) ≤ ℓ) := by
     intro i
-    exact supportedOperators_mono (d := d) (ι := ∀ k, Fin (L k))
+    exact ManyBody.supportedOperators_mono (X := fun _ ↦ Fin d) (V := ∀ k, Fin (L k))
       (coordinateBox_ball_subset_strip L axis ℓ i) (hsupp i)
   exact exists_unit_mem_coordinateSliceProjection (ι := ∀ k, Fin (L k)) (d := d)
     (fun v ↦ (v axis : ℕ)) hℓ (hL axis) (coordinateBox_slice_extent L axis hℓ) a hsupp'
@@ -114,7 +114,7 @@ theorem card_le_two_mul_re_trace_of_coordinateSliceProjection_of_box {D d : ℕ}
     {ℓ : ℕ} (hℓ : 0 < ℓ)
     (a : (∀ k, Fin (L k)) →
       Matrix ((∀ k, Fin (L k)) → Fin d) ((∀ k, Fin (L k)) → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d
+    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun v ↦ dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian)
     {ψ : EuclideanSpace ℂ ((∀ k, Fin (L k)) → Fin d)} (hψ : ‖ψ‖ = 1)
@@ -135,10 +135,10 @@ theorem card_le_two_mul_re_trace_of_coordinateSliceProjection_of_box {D d : ℕ}
         ℓ (hL axis) a ψ J r) (φ j) = φ j) :
     (s.card : ℝ) ≤ 2 * (trace P₀).re := by
   let : Nonempty (∀ k, Fin (L k)) := ⟨fun k ↦ ⟨0, hL k⟩⟩
-  have hsupp' : ∀ i, a i ∈ supportedOperators d
+  have hsupp' : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun (v : (∀ k, Fin (L k))) ↦ Nat.dist (v axis) (i axis) ≤ ℓ) := by
     intro i
-    exact supportedOperators_mono (d := d) (ι := ∀ k, Fin (L k))
+    exact ManyBody.supportedOperators_mono (X := fun _ ↦ Fin d) (V := ∀ k, Fin (L k))
       (coordinateBox_ball_subset_strip L axis ℓ i) (hsupp i)
   exact card_le_two_mul_re_trace_of_coordinateSliceProjection (ι := ∀ k, Fin (L k)) (d := d)
     (fun v ↦ (v axis : ℕ)) hℓ (hL axis) a hsupp'

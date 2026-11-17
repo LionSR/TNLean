@@ -87,7 +87,7 @@ corrected constant; see `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`. -
 theorem exists_twoDimensional_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le [NeZero d]
     (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
     (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)

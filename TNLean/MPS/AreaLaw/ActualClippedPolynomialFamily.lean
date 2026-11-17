@@ -8,7 +8,7 @@ import Mathlib.Data.Fin.VecNotation
 import QICLean.Analysis.MatrixTensorCoordinates
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.TwoWindowSum
-import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
@@ -93,15 +93,15 @@ private theorem actual_clipped_two_window_alphabet
     apply (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem
     intro i hi
     exact (hs i).mono (internal_bond_support_subset hi)
-  have hC (j : Fin 5) : C j ∈ supportedOperators q (R j : Finset (Fin L)) :=
-    QuantumCircuit.cfc_mem_supportedOperators _
-      (mem_supportedOperators_of_isSupportedOn (hA j))
-  have hPL : PL ∈ supportedOperators q (R 0 : Finset (Fin L)) :=
+  have hC (j : Fin 5) : C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R j : Finset (Fin L)) :=
+    ManyBody.cfc_mem_supportedOperators _
+      ((hA j))
+  have hPL : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R 0 : Finset (Fin L)) :=
     Submodule.sub_mem _ (hC 0)
-      (Submodule.smul_mem _ _ (one_mem_supportedOperators _))
-  refine ⟨?_, ?_, isSupportedOn_of_mem_supportedOperators hPL,
-    isSupportedOn_of_mem_supportedOperators (hC 2),
-    isSupportedOn_of_mem_supportedOperators (hC 4), ?_⟩
+      (Submodule.smul_mem _ _ ((one_mem (ManyBody.supportedOperators _ _))))
+  refine ⟨?_, ?_, hPL,
+    (hC 2),
+    (hC 4), ?_⟩
   · intro r
     exact hs ⟨a + r.val, by omega⟩
   · intro r

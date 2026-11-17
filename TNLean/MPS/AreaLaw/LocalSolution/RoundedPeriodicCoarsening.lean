@@ -113,16 +113,16 @@ theorem sum_roundedPeriodicOperator {M d : ℕ} (ℓ : ℕ)
 Hastings, arXiv:cond-mat/0508554v3, Section II, lines 609–730. -/
 theorem roundedPeriodicOperator_mem_supportedOperators {M ℓ d : ℕ} (hℓ : 0 < ℓ)
     (a : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d
+    (ha : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ))
     (j : Fin (roundedPeriodicBlockCount M ℓ)) (hj : 0 < (j : ℕ)) :
-    roundedPeriodicOperator ℓ a j ∈ supportedOperators d
+    roundedPeriodicOperator ℓ a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun v ↦
           roundedPeriodicBlock (roundedPeriodicBlockCount M ℓ) ℓ v + 1 = (j : ℕ) ∨
           roundedPeriodicBlock (roundedPeriodicBlockCount M ℓ) ℓ v = (j : ℕ)) := by
   apply edgePartition_mem_supportedOperators
   intro i hi
-  exact supportedOperators_mono
+  exact ManyBody.supportedOperators_mono
     (fun v hv ↦ Finset.mem_filter.mpr ⟨Finset.mem_univ _,
       roundedPeriodicEdge_support_of_cover hℓ (roundedPeriodicBlockCount_pos M ℓ)
         (roundedPeriodicBlockCount_cover M ℓ) i v hj hi (Finset.mem_filter.mp hv).2⟩) (ha i)

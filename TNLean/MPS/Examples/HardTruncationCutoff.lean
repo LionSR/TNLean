@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.WeightedGHZ
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.MPS.AreaLaw.Basic
 import QICLean.Analysis.CfcConjugation
 import QICLean.Analysis.EnergyTruncation
@@ -184,8 +186,8 @@ theorem bondTerm_positive_contraction (K : ℕ) (i : Fin (K + 1)) :
   · exact diagonal_positive_contraction _ (internal_bounds K j)
 
 private theorem oneSite_mem {K : ℕ} (i : Fin (K + 2)) (S : Finset (Fin (K + 2)))
-    (hi : i ∈ S) : oneSite K i ∈ QuantumCircuit.supportedOperators 2 S := by
-  apply QuantumCircuit.supportedOperators_mono (Finset.singleton_subset_iff.mpr hi)
+    (hi : i ∈ S) : oneSite K i ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S := by
+  apply ManyBody.supportedOperators_mono (Finset.singleton_subset_iff.mpr hi)
   simpa only [oneSite, bit, Complex.ofReal_natCast] using
     QuantumCircuit.diagonal_comp_eval_mem_supportedOperators i (fun x ↦ (x.val : ℂ))
 
@@ -216,16 +218,14 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin (K + 2) ↦ 2) (bondTerm K i)
       (interval (K + 2) i.val (i.val + 2)) := by
   refine Fin.cases ?_ (fun j ↦ ?_) i
-  · apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    change boundary K ∈ _
+  · apply change boundary K ∈ _
     rw [boundary_formula]
-    apply QuantumCircuit.mul_mem_supportedOperators
-    · exact Submodule.sub_mem _ (QuantumCircuit.one_mem_supportedOperators _)
+    apply mul_mem
+    · exact Submodule.sub_mem _ ((one_mem (ManyBody.supportedOperators _ _)))
         (Submodule.smul_mem _ _ (oneSite_mem 0 _ (by simp [interval])))
-    · exact Submodule.sub_mem _ (QuantumCircuit.one_mem_supportedOperators _)
+    · exact Submodule.sub_mem _ ((one_mem (ManyBody.supportedOperators _ _)))
         (oneSite_mem 1 _ (by simp [interval]))
-  · apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    change internalTerm K j ∈ _
+  · apply change internalTerm K j ∈ _
     rw [internal_formula]
     split_ifs with hj
     · apply Submodule.smul_mem

@@ -75,9 +75,8 @@ noncomputable def DomainHamiltonian.swappedDoubled
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     F * h.doubled.term X * Fᴴ
   supported X := by
-    exact isSupportedOn_of_mem_supportedOperators
-      (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
-        D X.1 (mem_supportedOperators_of_isSupportedOn (h.supported X)))
+    exact (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
+        D X.1 ((h.supported X)))
   hermitian X := Matrix.isHermitian_mul_mul_conjTranspose _ (h.doubled.hermitian X)
   norm_le X := by
     simpa only [ChainHamiltonian.swappedDoubled, ChainHamiltonian.doubled,
@@ -149,7 +148,7 @@ theorem DomainHamiltonian.partialSwap_difference_eq_sum_crossing
       Matrix.submatrix_mul_equiv] using
       congrArg (Matrix.reindex e e)
         (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-          (mem_supportedOperators_of_isSupportedOn (h.supported X)) hside)
+          ((h.supported X)) hside)
   refine ⟨?_, card_domain_crossingTerms_mul_two_le Λ R D⟩
   rw [h.swappedDoubled_operator D]
   change δ h.doubled.operator = ∑ X ∈ C, ∑ b : Bool, δ (T X b)

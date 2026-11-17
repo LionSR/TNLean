@@ -142,11 +142,11 @@ physical region `S` and `b` acting on `s'`, acts on `S ⊔ s'`.
 Source: `09-amplification.tex`, lines 345–346 and 524–525. -/
 theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (Site Λ)}
     {P : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hP : P ∈ supportedOperators q S)
+    (hP : P ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     (b : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) :
     (P ⊗ₖ (b ⊗ₖ (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) ∈
-      supportedOperators q (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
   have hsplit : P ⊗ₖ (b ⊗ₖ (1 : Matrix (RegionalConfiguration q X)
       (RegionalConfiguration q X) ℂ)) = (P ⊗ₖ (1 : Matrix (RegionalConfiguration q X ×
         RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *
@@ -155,9 +155,9 @@ theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (S
     rw [← mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
   rw [hsplit, ← submatrix_mul_equiv _ _ _ (ancillaSplit q X),
     kronecker_one_submatrix_ancillaSplit, one_kronecker_submatrix_ancillaSplit]
-  refine mul_mem_supportedOperators (supportedOperators_mono ?_
+  refine mul_mem (ManyBody.supportedOperators_mono ?_
     (embedOp_mem_supportedOperators_image Sum.inl_injective hP))
-    (supportedOperators_mono ?_ (embedOp_mem_supportedOperators
+    (ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators
       (Sum.inr_injective.comp Sum.inl_injective) b))
   · intro _ h
     obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp h
@@ -170,13 +170,13 @@ theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (S
 tensored with the identity on both copies, acts on `S ⊔ s'`. -/
 theorem kronecker_one_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (Site Λ)}
     {L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hL : L ∈ supportedOperators q S) :
+    (hL : L ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
     (L ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
       (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)).submatrix
         (ancillaSplit q X) (ancillaSplit q X) ∈
-      supportedOperators q (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
   rw [kronecker_one_submatrix_ancillaSplit]
-  refine supportedOperators_mono ?_ (embedOp_mem_supportedOperators_image Sum.inl_injective hL)
+  refine ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators_image Sum.inl_injective hL)
   intro _ h
   obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp h
   simpa using hv

@@ -76,7 +76,7 @@ lines 1603–1641, for the source's `M_i`, with eq. `blecm` (lines 1555–1601) 
 theorem norm_groundCompression_truncatedTerm_commutator_le_of_momenta [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
     (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -111,11 +111,11 @@ theorem norm_groundCompression_truncatedTerm_commutator_le_of_momenta [NeZero d]
   set M := truncatedTerm r ΔE h s
   have hInv := isSiteInvariant_sum_of_covariant d h hcov
   have hkK (k : ι) : k ∈ K k := hXK k (hX k)
-  have hMsupp (k : ι) : M k ∈ supportedOperators d (K k : Finset ι) :=
+  have hMsupp (k : ι) : M k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (K k : Finset ι) :=
     gaussianFilteredTerm_mem_supportedOperators r ΔE
       (Submodule.sum_mem _ fun k' hk' ↦
-        supportedOperators_mono (by exact_mod_cast hsK k k' hk') (hSupport k'))
-      (supportedOperators_mono (by exact_mod_cast hXK k) (hSupport k))
+        ManyBody.supportedOperators_mono (by exact_mod_cast hsK k k' hk') (hSupport k'))
+      (ManyBody.supportedOperators_mono (by exact_mod_cast hXK k) (hSupport k))
   obtain ⟨g, hg, hfar⟩ :=
     exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R' + l) hl i j
   have hsep := disjoint_biUnion_graphBall_of_lt_edist G K id hkK R' hKdiam

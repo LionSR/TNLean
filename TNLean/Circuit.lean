@@ -16,7 +16,6 @@ import TNLean.Circuit.CoherentEncoder
 import TNLean.Circuit.Composition
 import TNLean.Circuit.ConfigurationLayers
 import TNLean.Circuit.EmbeddedProduct
-import TNLean.Circuit.EntropySupport
 import TNLean.Circuit.ExpectationBounds
 import TNLean.Circuit.GHZState
 import TNLean.Circuit.Gates
@@ -50,7 +49,6 @@ import TNLean.Circuit.SpectatorOscillationSupport
 import TNLean.Circuit.SpectatorSiteExpectation
 import TNLean.Circuit.SupportProjection
 import TNLean.Circuit.SupportedComplementProduct
-import TNLean.Circuit.SupportedFunctionalCalculus
 import TNLean.Circuit.SupportedGroundSpace
 import TNLean.Circuit.SupportedMatrixElements
 import TNLean.Circuit.SupportedNormalizedGroundSpace

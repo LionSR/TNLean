@@ -162,7 +162,7 @@ theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
   change toEuclideanLin (∑ X, h.term X) Ω = (E₀ : ℂ) • Ω at heig
   have ht := Entropy.surprisalTail_cut_le (n := fun _ : Site (stripDomain L w) ↦ q)
     (h := h.term) (D := fun X ↦ X.1) (B := A)
-    (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
+    (fun X ↦ (h.supported X))
     h.hermitian hJ h.norm_le hΩ hΔ heig hgap rfl
     (Entropy.regionState_isHermitian A Ω) u
   refine (ht.trans (min_le_right _ _)).trans ?_

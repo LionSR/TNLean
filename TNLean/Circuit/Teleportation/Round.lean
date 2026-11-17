@@ -55,7 +55,7 @@ variable {ι : Type*} (l : List ι) (key : ι → Fin N)
   (G : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
   (hl : l.Pairwise fun i j => Disjoint (ringBond (key i)) (ringBond (key j)))
   (hu : ∀ i ∈ l, G i ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
-  (hs : ∀ i ∈ l, G i ∈ supportedOperators d (ringBond (key i)))
+  (hs : ∀ i ∈ l, G i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond (key i)))
 
 private theorem key_mem_bond (k : Fin N) : k ∈ ringBond k := Finset.mem_insert_self _ _
 
@@ -119,13 +119,13 @@ end LayerOfList
 /-- A product of operators acting on `S` acts on `S`. -/
 theorem list_prod_mem_supportedOperators {ι : Type*} [Fintype ι] [DecidableEq ι] {S : Finset ι}
     (l : List (Matrix (ι → Fin d) (ι → Fin d) ℂ))
-    (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
-    l.prod ∈ supportedOperators d S := by
+    (hl : ∀ A ∈ l, A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    l.prod ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   induction l with
-  | nil => exact one_mem_supportedOperators S
+  | nil => exact (one_mem (ManyBody.supportedOperators _ S))
   | cons A l ih =>
     rw [List.prod_cons]
-    exact mul_mem_supportedOperators (hl A (List.mem_cons_self ..))
+    exact mul_mem (hl A (List.mem_cons_self ..))
       (ih fun B hB => hl B (List.mem_cons_of_mem _ hB))
 
 /-! ### Lists of hops -/
@@ -309,26 +309,26 @@ theorem chainFrame_of_notMem (hs : List (TeleportHop N)) (z : Fin N → Fin d) {
       ih hrest, h.frame_of_ne z hi'.1 hi'.2.1 hi'.2.2, Pi.one_apply, mul_one]
 
 theorem prod_gate₂_mem_supportedOperators (hs : List (TeleportHop N)) :
-    (hs.map TeleportHop.gate₂).prod ∈ supportedOperators d (allSites hs) := by
+    (hs.map TeleportHop.gate₂).prod ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (allSites hs) := by
   refine list_prod_mem_supportedOperators _ fun A hA => ?_
   obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hA
-  refine supportedOperators_mono ?_ h.gate₂_mem_supportedOperators
+  refine ManyBody.supportedOperators_mono ?_ h.gate₂_mem_supportedOperators
   intro i hmem₀
   simp only [Finset.mem_insert, Finset.mem_singleton] at hmem₀
   rcases hmem₀ with rfl | rfl <;> exact mem_allSites.mpr ⟨h, hh, by simp [sites]⟩
 
 theorem pre_mem_supportedOperators (h : TeleportHop N) (z : Fin N → Fin d) :
-    h.pre z ∈ supportedOperators d h.sites := by
+    h.pre z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) h.sites := by
   have hc : ({h.c} : Finset (Fin N)) ⊆ h.sites := by simp [sites]
   have he : ({h.e} : Finset (Fin N)) ⊆ h.sites := by simp [sites]
-  refine mul_mem_supportedOperators (mul_mem_supportedOperators (mul_mem_supportedOperators
+  refine mul_mem (mul_mem (mul_mem
     ?_ ?_) ?_) ?_
-  · exact supportedOperators_mono (by simpa using he) (ctrlProj_mem_supportedOperators _ z)
-  · exact supportedOperators_mono (by simpa using hc) (ctrlProj_mem_supportedOperators _ z)
-  · refine supportedOperators_mono (fun i hi => ?_) h.gate₂_mem_supportedOperators
+  · exact ManyBody.supportedOperators_mono (by simpa using he) (ctrlProj_mem_supportedOperators _ z)
+  · exact ManyBody.supportedOperators_mono (by simpa using hc) (ctrlProj_mem_supportedOperators _ z)
+  · refine ManyBody.supportedOperators_mono (fun i hi => ?_) h.gate₂_mem_supportedOperators
     simp only [Finset.mem_insert, Finset.mem_singleton] at hi
     rcases hi with rfl | rfl <;> simp [sites]
-  · refine supportedOperators_mono (fun i hi => ?_) h.gate₁_mem_supportedOperators
+  · refine ManyBody.supportedOperators_mono (fun i hi => ?_) h.gate₁_mem_supportedOperators
     simp only [Finset.mem_insert, Finset.mem_singleton] at hi
     rcases hi with rfl | rfl <;> simp [sites]
 
@@ -343,11 +343,9 @@ theorem chainPre_cons {h : TeleportHop N} {hs : List (TeleportHop N)} (hv : Vali
     · exact hv.2.1
     · exact hv.2.2.1
   have h1 : Commute (h.gate₁ (d := d)) (hs.map TeleportHop.gate₂).prod :=
-    commute_of_mem_supportedOperators hdisj h.gate₁_mem_supportedOperators
-      (prod_gate₂_mem_supportedOperators hs)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint h.gate₁_mem_supportedOperators (prod_gate₂_mem_supportedOperators hs) hdisj
   have h2 : Commute (ctrlProj (measuredSites hs) z) (h.pre z) :=
-    commute_of_mem_supportedOperators (disjoint_measuredSites hv)
-      (ctrlProj_mem_supportedOperators _ z) (pre_mem_supportedOperators h z)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators _ z) (pre_mem_supportedOperators h z) (disjoint_measuredSites hv)
   simp only [chainPre, measuredSites, List.map_cons, List.prod_cons, ctrlProj_insert]
   calc ctrlProj (measuredSites hs) z * ctrlProj {h.e} z * ctrlProj {h.c} z *
         (h.gate₂ * (hs.map TeleportHop.gate₂).prod) * (h.gate₁ * (hs.map TeleportHop.gate₁).prod)
@@ -409,8 +407,7 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
       · subst hi; simp [U]
       · simp [Function.update_of_ne hi]
     have hcomm : Commute (h.pre z) (finKronecker (Function.update g h.c 1)) := by
-      refine commute_of_mem_supportedOperators disjoint_compl_right
-        (pre_mem_supportedOperators h z) (finKronecker_mem_supportedOperators fun i hi => ?_)
+      refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (pre_mem_supportedOperators h z) (finKronecker_mem_supportedOperators fun i hi => ?_) disjoint_compl_right
       simp only [Finset.mem_compl, not_not, sites, Finset.mem_insert,
         Finset.mem_singleton] at hi
       rcases hi with rfl | rfl | rfl

@@ -35,7 +35,7 @@ theorem mutualInformation_cores_le_of_reset_unitary
     (S : Finset ι) (hS : Disjoint S (R₀ ∪ C₀))
     (U : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ)
     (hUu : U ∈ Matrix.unitaryGroup _ ℂ)
-    (hUs : U ∈ QuantumCircuit.supportedOperators (q * q) S) (δ : ℝ) :
+    (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S) (δ : ℝ) :
     let e := QuantumCircuit.sitePairConfigurationEquiv ι q q
     let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
     let F := Matrix.reindex e e (sheetSwapOp q D)

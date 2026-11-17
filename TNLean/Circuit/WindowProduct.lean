@@ -53,7 +53,7 @@ Source: arXiv:2307.01696, main text before Theorem 1 and paragraph "The sequenti
 (unitaries "with constant support"). -/
 def IsWindowGate (m : ℕ) (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop :=
   Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) ∧
-    ∃ a, Z ∈ supportedOperators d (windowSites n a m)
+    ∃ a, Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (windowSites n a m)
 
 /-- `X` is a product of at most `K` unitary gates, each acting on a window of `m` consecutive
 sites of the open chain of `n` sites.
@@ -71,7 +71,7 @@ theorem isWindowGate_embedOp {l : ℕ} (hl : l ≤ m) {e : Fin l → Fin n}
     {X : Matrix (Fin l → Fin d) (Fin l → Fin d) ℂ}
     (hX : X ∈ unitary (Matrix (Fin l → Fin d) (Fin l → Fin d) ℂ)) :
     IsWindowGate m (embedOp e X) := by
-  refine ⟨embedOp_mem_unitary he hX, a, supportedOperators_mono ?_
+  refine ⟨embedOp_mem_unitary he hX, a, ManyBody.supportedOperators_mono ?_
     (embedOp_mem_supportedOperators he X)⟩
   intro p hp
   obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hp
@@ -82,9 +82,9 @@ theorem isWindowGate_embedOp {l : ℕ} (hl : l ≤ m) {e : Fin l → Fin n}
 sites. -/
 theorem isWindowGate_of_le {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hnm : n ≤ m)
     (hZ : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ)) : IsWindowGate m Z :=
-  ⟨hZ, 0, supportedOperators_mono
+  ⟨hZ, 0, ManyBody.supportedOperators_mono
     (fun p _ => Finset.mem_filter.mpr ⟨Finset.mem_univ _, Nat.zero_le _, by omega⟩)
-    (mem_supportedOperators_univ Z)⟩
+    (show Z ∈ ManyBody.supportedOperators _ Finset.univ by simp)⟩
 
 namespace IsWindowProduct
 
@@ -127,7 +127,7 @@ theorem embedOp {n' K : ℕ} {e : Fin n → Fin n'} (he : Function.Injective e) 
     embedOp_list_prod he l⟩
   obtain ⟨Z', hZ', rfl⟩ := List.mem_map.mp hZ
   obtain ⟨hu, b, hS⟩ := hg Z' hZ'
-  refine ⟨embedOp_mem_unitary he hu, a + b, supportedOperators_mono ?_
+  refine ⟨embedOp_mem_unitary he hu, a + b, ManyBody.supportedOperators_mono ?_
     (embedOp_mem_supportedOperators_image he hS)⟩
   intro p hp
   obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hp
@@ -140,7 +140,7 @@ theorem _root_.QuantumCircuit.IsWindowGate.isNeighbourGate (hn : 2 ≤ n)
     {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hZ : IsWindowGate 2 Z) : IsNeighbourGate Z := by
   obtain ⟨hu, a, hS⟩ := hZ
   refine ⟨hu, ⟨min a (n - 2), by omega⟩, ⟨min a (n - 2) + 1, by omega⟩, rfl,
-    supportedOperators_mono ?_ hS⟩
+    ManyBody.supportedOperators_mono ?_ hS⟩
   intro p hp
   simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and] at hp
   simp only [Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff]
@@ -187,7 +187,7 @@ theorem exists_isPairProduct (hd : 0 < d) (hm : 2 ≤ m) :
       exact Finset.mem_image.mpr ⟨⟨p.val - a', by omega⟩, Finset.mem_univ _,
         Fin.ext (by simp [e]; omega)⟩
     obtain ⟨Y, rfl⟩ := exists_embedOp_eq_of_mem_supportedOperators he
-      (supportedOperators_mono hsub hS)
+      (ManyBody.supportedOperators_mono hsub hS)
     have hY := hf w (by omega) Y (mem_unitary_of_embedOp_mem_unitary he hd hu)
     refine (hY.embedOp he (a := a') fun i => rfl).mono ?_
     exact Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_range.mpr (by omega))

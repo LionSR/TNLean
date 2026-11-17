@@ -78,12 +78,10 @@ private theorem isSupportedOn_bond_complement
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (1 - h i) (interval L i.val (i.val + 2)) := by
   classical
-  apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators (q := q)
-    (S := interval L i.val (i.val + 2))
-  exact (QuantumCircuit.supportedOperators q
+  apply exact (ManyBody.supportedOperators (fun _ ↦ Fin q)
     (interval L i.val (i.val + 2) : Finset (Fin L))).sub_mem
-    (QuantumCircuit.one_mem_supportedOperators _)
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
+    ((one_mem (ManyBody.supportedOperators _ _)))
+    ((hs i))
 
 private theorem parityFactor_rank_le_one
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)

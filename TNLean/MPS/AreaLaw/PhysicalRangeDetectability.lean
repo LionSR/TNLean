@@ -46,9 +46,8 @@ theorem norm_sq_physicalDetectability_supportProj_le
     (hh i).isHermitian.isStarProjection_supportProj
   have hps (i : Fin (L - 1)) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (P i) (interval L i.val (i.val + 2)) :=
-    QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      (QuantumCircuit.supportProj_mem_supportedOperators _ (hh i).isHermitian
-        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i)))
+    (QuantumCircuit.supportProj_mem_supportedOperators _ (hh i).isHermitian
+        ((hs i)))
   have hker (z : EuclideanSpace ℂ (Fin L → Fin q)) :
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, P i) z = 0 ↔
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) z = 0 := by

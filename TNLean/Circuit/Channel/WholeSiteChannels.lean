@@ -78,7 +78,7 @@ theorem wholeSite_local (hd : 0 < d) (e : Fin s ↪ Fin N)
   rw [hA, nativeChannelReindex_register_kraus hd]
   apply IsPhysicalPortProtocol.onsite (P := layout N k) i
   · intro a
-    apply supportedOperators_mono _
+    apply ManyBody.supportedOperators_mono _
       (embedOp_mem_supportedOperators (blockDigits e).injective _)
     intro x hmemImage
     obtain ⟨p, -, rfl⟩ := Finset.mem_image.mp hmemImage

@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import QICLean.Analysis.HermitianUnitaryPath
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Twirl
 
 /-!

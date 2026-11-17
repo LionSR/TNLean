@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.SupportProjectionOrder
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Twirl
 
 /-!
@@ -24,13 +26,12 @@ variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 operator. ALVV, arXiv:1602.08828v2, Section 6.1, lines 1457–1460. -/
 theorem supportProj_mem_supportedOperators (K : Finset ι)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A.IsHermitian)
-    (hK : A ∈ supportedOperators q K) :
-    hA.supportProj ∈ supportedOperators q K := by
+    (hK : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K) :
+    hA.supportProj ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K := by
   rw [hA.supportProj_eq_cfc]
-  refine mem_supportedOperators_of_isSupportedOn <|
-    ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun Y hY ↦ ?_
-  have hY' : Y ∈ supportedOperators q Kᶜ := by
-    simpa only [Finset.coe_compl] using mem_supportedOperators_of_isSupportedOn hY
-  exact (commute_of_mem_supportedOperators disjoint_compl_right hK hY').cfc_real _
+  refine ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun Y hY ↦ ?_
+  have hY' : Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Kᶜ := by
+    simpa only [Finset.coe_compl] using hY
+  exact (ManyBody.commute_of_mem_supportedOperators_of_disjoint hK hY' disjoint_compl_right).cfc_real _
 
 end QuantumCircuit

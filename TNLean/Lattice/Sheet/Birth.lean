@@ -309,7 +309,7 @@ theorem norm_act_sheetBirthOp_sub_le (σ : SplittingData q T E)
 /-- The canonical map commutes with every operator acting on a subset of `E`; in particular it
 commutes with every hole encoder supported in `E` (`05-frames.tex`, lines 434–437). -/
 theorem commute_sheetBirthOp (σ : SplittingData q T E) {D : Finset ι} (hD : D ⊆ E)
-    {R : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hR : R ∈ supportedOperators q D) :
+    {R : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hR : R ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     Commute (sheetBirthOp h σ) R := by
   obtain ⟨R', hR'⟩ := exists_threeSplit_eq_one_kronecker_kronecker_one h hD hR
   have hR₀ := submatrix_symm_submatrix R (threeSplit q T E h).symm

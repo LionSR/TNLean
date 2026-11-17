@@ -124,8 +124,8 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
   have hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion a N :=
     Finset.singleton_subset_iff.mpr hxΓ
   have hC : intervalCoordinates d a N (localInclusion hsingle C) ∈
-      QuantumCircuit.supportedOperators d ({ix} : Finset (Fin N)) := by
-    apply QuantumCircuit.supportedOperators_mono ?_
+      ManyBody.supportedOperators (fun _ ↦ Fin d) ({ix} : Finset (Fin N)) := by
+    apply ManyBody.supportedOperators_mono ?_
       (intervalCoordinates_localInclusion_mem_supportedOperators hsingle C)
     intro j hj
     apply Finset.mem_singleton.mpr
@@ -150,7 +150,7 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
     apply Finset.mem_image.mpr
     refine ⟨ix, hix, ?_⟩
     simp only [ix, E, Equiv.apply_symm_apply]
-  have hCommute := QuantumCircuit.commute_of_mem_supportedOperators hDisjoint hB hF
+  have hCommute := ManyBody.commute_of_mem_supportedOperators_of_disjoint hB hF hDisjoint
   rw [commute_iff_eq]
   apply EquivLike.injective (intervalCoordinates d a N)
   simpa only [map_mul, intervalCoordinates_finiteChainConjugation] using hCommute.eq

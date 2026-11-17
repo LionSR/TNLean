@@ -26,7 +26,7 @@ variable {N : ℕ}
 
 /-- A diagonal observable depending on one site's label is supported on that site. -/
 theorem diagonal_comp_eval_mem_supportedOperators {d : ℕ} (i : Fin N) (f : Fin d → ℂ) :
-    diagonal (fun σ : Fin N → Fin d => f (σ i)) ∈ supportedOperators d {i} := by
+    diagonal (fun σ : Fin N → Fin d => f (σ i)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {i} := by
   let m : Fin N → Matrix (Fin d) (Fin d) ℂ :=
     fun j => diagonal (fun x => if j = i then f x else 1)
   have hm : ∀ j ∉ ({i} : Finset (Fin N)), m j = 1 := by
@@ -108,31 +108,31 @@ theorem expect_ghzState_two_diagonal [NeZero N] (a b : ℂ)
 /-- A supported observable has a classical two-branch expectation if any site is unobserved. -/
 theorem expect_ghzState_two {S : Finset (Fin N)} (a b : ℂ)
     {A : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hA : A ∈ supportedOperators 2 S) (hS : ∃ i, i ∉ S) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S) (hS : ∃ i, i ∉ S) :
     expect (ghzState (M := N) ![a, b]) A =
       star a * a * A (fun _ => 0) (fun _ => 0) +
         star b * b * A (fun _ => 1) (fun _ => 1) := by
   obtain ⟨i, hi⟩ := hS
   rw [ghzState_two_eq]
   exact expect_smul_single_add_of_offDiag_zero a b
-    (apply_eq_zero_of_mem_supportedOperators hA ⟨i, hi, by decide⟩)
-    (apply_eq_zero_of_mem_supportedOperators hA ⟨i, hi, by decide⟩)
+    (ManyBody.apply_eq_zero_of_mem_supportedOperators hA hi (by decide))
+    (ManyBody.apply_eq_zero_of_mem_supportedOperators hA hi (by decide))
 
 /-- The exact connected correlation of two separated observables in a binary GHZ vector. -/
 theorem covariance_ghzState_two {S S' : Finset (Fin N)} (hSS' : Disjoint S S')
     (hcover : ∃ i, i ∉ S ∪ S') {a b : ℂ} (hab : star a * a + star b * b = 1)
     {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hA : A ∈ supportedOperators 2 S) (hB : B ∈ supportedOperators 2 S') :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S') :
     expect (ghzState (M := N) ![a, b]) (A * B) -
         expect (ghzState (M := N) ![a, b]) A * expect (ghzState (M := N) ![a, b]) B =
       (star a * a) * (star b * b) *
         (A (fun _ => 0) (fun _ => 0) - A (fun _ => 1) (fun _ => 1)) *
         (B (fun _ => 0) (fun _ => 0) - B (fun _ => 1) (fun _ => 1)) := by
-  have hAu : A ∈ supportedOperators 2 (S ∪ S') :=
-    supportedOperators_mono Finset.subset_union_left hA
-  have hBu : B ∈ supportedOperators 2 (S ∪ S') :=
-    supportedOperators_mono Finset.subset_union_right hB
-  rw [expect_ghzState_two a b (mul_mem_supportedOperators hAu hBu) hcover,
+  have hAu : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) (S ∪ S') :=
+    ManyBody.supportedOperators_mono Finset.subset_union_left hA
+  have hBu : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) (S ∪ S') :=
+    ManyBody.supportedOperators_mono Finset.subset_union_right hB
+  rw [expect_ghzState_two a b (mul_mem hAu hBu) hcover,
     expect_ghzState_two a b hAu hcover, expect_ghzState_two a b hBu hcover,
     mul_apply_eq_mul_of_mem_supportedOperators hSS' hA hB,
     mul_apply_eq_mul_of_mem_supportedOperators hSS' hA hB]
@@ -145,7 +145,7 @@ four times the product of the sector probabilities. -/
 theorem norm_covariance_ghzState_two_le {S S' : Finset (Fin N)} (hSS' : Disjoint S S')
     (hcover : ∃ i, i ∉ S ∪ S') {a b : ℂ} (hab : star a * a + star b * b = 1)
     {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hA : A ∈ supportedOperators 2 S) (hB : B ∈ supportedOperators 2 S')
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S')
     (hAu : A ∈ unitary _) (hBu : B ∈ unitary _) :
     ‖expect (ghzState (M := N) ![a, b]) (A * B) -
         expect (ghzState (M := N) ![a, b]) A * expect (ghzState (M := N) ![a, b]) B‖ ≤
@@ -177,7 +177,7 @@ theorem norm_covariance_mulVec_ghzState_two_le {T : ℕ}
     (hU : IsLocalCircuitOfDepth U T) {X Y : Finset (Fin N)}
     (hXY : IsSeparatedBy X Y (2 * T))
     (hcover : ∃ k, k ∉ neighbourhood X T ∪ neighbourhood Y T)
-    (hA : A ∈ supportedOperators 2 X) (hB : B ∈ supportedOperators 2 Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) Y)
     (hAu : A ∈ unitary _) (hBu : B ∈ unitary _)
     {a b : ℂ} (hab : star a * a + star b * b = 1) :
     ‖expect (U *ᵥ ghzState (M := N) ![a, b]) (A * B) -

@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Algebra.L2OpNormReindex
 
@@ -206,16 +208,13 @@ the averaged set). -/
 theorem spectatorSiteExpectation_commute (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     {U : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q Kᶜ) :
+    (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Kᶜ) :
     Commute (spectatorSiteExpectation q K B) (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) := by
   change spectatorSiteExpectation q K B * (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) =
     (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * spectatorSiteExpectation q K B
   ext ⟨σ, a⟩ ⟨τ, b⟩
   have h := congrArg (fun M : Matrix (ι → Fin q) (ι → Fin q) ℂ => M σ τ)
-    (commute_of_mem_supportedOperators disjoint_compl_right
-      (mem_supportedOperators_of_isSupportedOn
-        (regionExpectation_mem_supportedOperators K (Matrix.of fun σ' τ' => B (σ', a) (τ', b))))
-      hU).eq
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint ((regionExpectation_mem_supportedOperators K (Matrix.of fun σ' τ' => B (σ', a) (τ', b)))) hU disjoint_compl_right).eq
   simpa [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
     Matrix.one_apply, mul_ite, ite_mul, spectatorSiteExpectation_apply] using h
 
@@ -247,12 +246,12 @@ private theorem exists_kronecker_one_of_mem_supportedOperators_some {i : ι}
     (hU : U ∈ ManyBody.supportedOperators (spectatorBasis (ι := ι) q Aux) {some i})
     (hUu : U ∈ unitary (Matrix (Config (spectatorBasis (ι := ι) q Aux))
       (Config (spectatorBasis (ι := ι) q Aux)) ℂ)) :
-    ∃ U₀ ∈ supportedOperators q ({i} : Finset ι), U₀ ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
+    ∃ U₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({i} : Finset ι), U₀ ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
       reindex (spectatorConfigEquiv q ι Aux) (spectatorConfigEquiv q ι Aux) U =
         U₀ ⊗ₖ (1 : Matrix Aux Aux ℂ) := by
   set e := spectatorConfigEquiv q ι Aux
   rcases isEmpty_or_nonempty Aux with hAux | hAux
-  · exact ⟨1, one_mem_supportedOperators _, one_mem _, Subsingleton.elim _ _⟩
+  · exact ⟨1, (one_mem (ManyBody.supportedOperators _ _)), one_mem _, Subsingleton.elim _ _⟩
   obtain ⟨a₀⟩ := hAux
   let U₀ : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
     Matrix.of fun σ τ ↦ U (e.symm (σ, a₀)) (e.symm (τ, a₀))
@@ -272,8 +271,8 @@ private theorem exists_kronecker_one_of_mem_supportedOperators_some {i : ι}
     · rw [ite_eq_right hab, mul_zero]
       exact ManyBody.apply_eq_zero_of_mem_supportedOperators hU (v := none)
         (fun h ↦ by simp at h) hab
-  have hU₀ : U₀ ∈ supportedOperators q ({i} : Finset ι) := by
-    refine mem_supportedOperators_of_isSupportedOn ⟨fun σ τ ⟨j, hj, hne⟩ ↦ ?_,
+  have hU₀ : U₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({i} : Finset ι) := by
+    refine ⟨fun σ τ ⟨j, hj, hne⟩ ↦ ?_,
       fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
     · exact ManyBody.apply_eq_zero_of_mem_supportedOperators hU (v := some j)
         (fun h ↦ hj (Finset.mem_singleton.mpr (Option.some_injective _
@@ -321,7 +320,7 @@ area law, `09-amplification.tex`, lines 111–121, the averaging argument before
 `eq:amplification-shell-oscillation`. -/
 theorem norm_sub_spectatorSiteExpectation_le (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) (ε : ι → ℝ)
-    (hε : ∀ y ∉ K, ∀ U ∈ supportedOperators q ({y} : Finset ι),
+    (hε : ∀ y ∉ K, ∀ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι),
       U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) →
         ‖B * (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) - (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * B‖ ≤ ε y) :
     ‖B - spectatorSiteExpectation q K B‖ ≤ ∑ y ∈ Kᶜ, ε y := by

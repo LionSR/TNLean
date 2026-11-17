@@ -91,9 +91,9 @@ omit [DecidableEq ι] in
 Source: `02-information.tex`, lines 416–424 and 597–609. -/
 theorem reindex_sumArrow_sitePair_mem_supportedOperators (q : ℕ) {S : Finset ι}
     {A : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ}
-    (hA : A ∈ supportedOperators (q * q) S) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S) :
     reindex (sumArrowSitePair ι q).symm (sumArrowSitePair ι q).symm A ∈
-      supportedOperators q (S.disjSum S : Finset (ι ⊕ ι)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (S.disjSum S : Finset (ι ⊕ ι)) := by
   classical
   obtain ⟨A', hA'⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hA
   have hAeq : A = embedOp (fun x : S ↦ x.val) A' := by

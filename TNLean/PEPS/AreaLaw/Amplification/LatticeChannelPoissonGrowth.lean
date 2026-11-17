@@ -53,7 +53,7 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-          supportedOperators q S) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (t : ℝ≥0) (y : Site Λ),
         letI := graphPseudoEMetricSpace (domainGraph Λ)
         let α := kernelExponent p

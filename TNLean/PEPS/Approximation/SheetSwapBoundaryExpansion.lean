@@ -55,7 +55,7 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
   simp only [SquareHamiltonian.operator, map_add, map_sum]
   have hcancel {S : Finset (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
-      (hA : A ∈ QuantumCircuit.supportedOperators q S)
+      (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
       (hS : S ⊆ R ∨ Disjoint S R) : δ A = 0 :=
     sub_eq_zero.mpr
       (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators hA hS)

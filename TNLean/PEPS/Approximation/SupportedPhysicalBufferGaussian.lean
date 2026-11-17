@@ -102,12 +102,12 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
               ((Complex.I • ManyBody.regionExpectation B
                 (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
             (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
-            (∀ t, U t ∈ supportedOperators (q * q) B) ∧
+            (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let M := ∫ t : ℝ in Set.Icc (-T) T,
                 ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                   ∂gaussianReal 0 η
-              M ∈ supportedOperators (q * q) B ∧
+              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
                 ‖W‖ * squareLocalizationPrefactor * (L : ℝ) ^ 2 *
@@ -126,16 +126,16 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
       (show h.operator.IsHermitian from h.hermitian).eq]
   have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
       ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
-        supportedOperators (q * q) Q :=
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q :=
     (TNLean.Lattice.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
       TNLean.Lattice.siteLift_mem_supportedOperators Q
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-  have hV : V ∈ supportedOperators (q * q) (Q.image a : Finset (Lattice.Site Λ)) := by
+  have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Q.image a : Finset (Lattice.Site Λ)) := by
     simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective hV₀
   have hD : gH.operator - K ∈
-      supportedOperators (q * q) (Z.image a : Finset (Lattice.Site Λ)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset (Lattice.Site Λ)) := by
     simpa only [hK', a, K', F, K, embedOp_rectangle_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
       Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
@@ -208,12 +208,12 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
                 ((Complex.I • ManyBody.regionExpectation B
                   (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
               (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
-              (∀ t, U t ∈ supportedOperators (q * q) B) ∧
+              (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
                   ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                     ∂gaussianReal 0 η
-                M ∈ supportedOperators (q * q) B ∧
+                M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
                 ‖M‖ ≤ ‖W‖ ∧
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
                   ‖W‖ * C * (L : ℝ) ^ 2 * (1 + 8 * J * (L : ℝ) ^ 2 * T) *

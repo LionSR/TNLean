@@ -62,9 +62,7 @@ private theorem commute_separated_bond_sums {L q : ℕ}
     intro v hv hw
     rw [mem_interval] at hv hw
     omega
-  exact QuantumCircuit.commute_of_mem_supportedOperators hd
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs j))
+  exact ManyBody.commute_of_mem_supportedOperators_of_disjoint ((hs i)) ((hs j)) hd
 
 /-- Scalar energy shifts preserve pairwise commutation. -/
 private theorem commute_sub_smul_one {n : Type*} [Fintype n] [DecidableEq n]

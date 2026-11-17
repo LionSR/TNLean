@@ -56,12 +56,12 @@ Source: the recursive interval merger in Section 5 of the circuit manuscript. -/
 theorem interval_children_mem_parent_supportedOperators
     (hjm : j < m) (hmk : m < k)
     {X Y : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ}
-    (hX : X ∈ supportedOperators d (intervalConsecutiveSupport d D N j m))
-    (hY : Y ∈ supportedOperators d (intervalConsecutiveSupport d D N m k)) :
-    X ∈ supportedOperators d (intervalConsecutiveSupport d D N j k) ∧
-      Y ∈ supportedOperators d (intervalConsecutiveSupport d D N j k) :=
-  ⟨supportedOperators_mono (intervalConsecutiveSupport_left_subset hjm hmk) hX,
-    supportedOperators_mono (intervalConsecutiveSupport_right_subset hjm hmk) hY⟩
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N j m))
+    (hY : Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N m k)) :
+    X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N j k) ∧
+      Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N j k) :=
+  ⟨ManyBody.supportedOperators_mono (intervalConsecutiveSupport_left_subset hjm hmk) hX,
+    ManyBody.supportedOperators_mono (intervalConsecutiveSupport_right_subset hjm hmk) hY⟩
 
 /-- The selected parent auxiliary initialization sites remain in the parent
 support after any site-coordinate bijection. The selection is the actual

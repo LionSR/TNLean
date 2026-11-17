@@ -58,10 +58,10 @@ circuit supported-operator algebra, since that algebra is closed under
 adjoints and real linear combinations. Source: `00-introduction.tex`, `eq:model`. -/
 theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (i : SquareInteraction L) :
-    h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
+    h.hermitianTerm i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (squareInteractionSupport i : Finset (Vertex L)) := by
   have hs : squareInteractionTerm h i ∈
-      QuantumCircuit.supportedOperators q (squareInteractionSupport i : Finset (Vertex L)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (squareInteractionSupport i : Finset (Vertex L)) := by
     cases i with
     | inl v =>
       simpa only [squareInteractionTerm, squareInteractionSupport, Finset.coe_singleton]
@@ -71,9 +71,9 @@ theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : 
         Finset.coe_singleton, forwardSquareEdgeEquiv_val]
         using h.edge_supported (forwardSquareEdgeEquiv L e)
   exact coe_realPart_mem_of_star_mem
-    (S := (QuantumCircuit.supportedOperators q
+    (S := (ManyBody.supportedOperators (fun _ ↦ Fin q)
       (squareInteractionSupport i : Finset (Vertex L))).restrictScalars ℝ)
-    hs (QuantumCircuit.star_mem_supportedOperators hs)
+    hs (star_mem hs)
 
 /-- Hermitian replacement preserves the original interaction support.
 Source: `00-introduction.tex`, `eq:model`. -/
@@ -81,7 +81,7 @@ theorem SquareHamiltonian.hermitianTerm_supported {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (i : SquareInteraction L) :
     Entropy.IsSupportedOn (n := fun _ : Vertex L => q)
       (h.hermitianTerm i) (squareInteractionSupport i) :=
-  QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.hermitianTerm_mem_supportedOperators i)
+  (h.hermitianTerm_mem_supportedOperators i)
 
 /-- Every replaced interaction is Hermitian. Source:
 `00-introduction.tex`, `eq:model`. -/

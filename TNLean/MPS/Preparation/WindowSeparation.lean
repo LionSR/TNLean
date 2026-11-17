@@ -46,7 +46,7 @@ def window (N a w : ℕ) : Finset (Fin N) := Finset.univ.filter fun k : Fin N �
 
 theorem chainWindowOperator_mem_supportedOperators_window {L a : ℕ} (ha : a < N)
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    chainWindowOperator N a X ∈ supportedOperators d (window N a L) :=
+    chainWindowOperator N a X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (window N a L) :=
   MPSTensor.chainWindowOperator_mem_supportedOperators ha haL X
 
 section Ring

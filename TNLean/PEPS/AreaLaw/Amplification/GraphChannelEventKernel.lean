@@ -93,7 +93,7 @@ lines 124–139. The common cutoff contains every anchor component. -/
 theorem sum_siteOscillation_spectatorRootChannel_sub_le_exp_card
     (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
-    (hk : ∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x))
+    (hk : ∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦ G.Reachable (a i) x))
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ) (hn : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ n)
     (hε : ∀ i l, l ≤ n → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤

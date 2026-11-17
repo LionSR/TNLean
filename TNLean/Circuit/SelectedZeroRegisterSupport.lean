@@ -65,7 +65,7 @@ theorem selectedZeroRegisterLogical_eq_embedOp (s : Fin a ↪ Fin n) :
 arbitrary states on all other logical sites. Source: the input/image
 reflection construction in Section 5 of the circuit audit. -/
 theorem selectedZeroRegisterLogical_mem_supportedOperators (s : Fin a ↪ Fin n) :
-    selectedZeroRegisterLogical (d := d) s ∈ supportedOperators d (Finset.univ.image s) := by
+    selectedZeroRegisterLogical (d := d) s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image s) := by
   rw [selectedZeroRegisterLogical_eq_embedOp]
   exact embedOp_mem_supportedOperators s.injective _
 
@@ -74,7 +74,7 @@ the reflection. Source: interval support preservation in Section 5 of the
 circuit audit. -/
 theorem selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset
     (s : Fin a ↪ Fin n) {S : Finset (Fin n)} (hS : Finset.univ.image s ⊆ S) :
-    selectedZeroRegisterLogical (d := d) s ∈ supportedOperators d S :=
-  supportedOperators_mono hS (selectedZeroRegisterLogical_mem_supportedOperators s)
+    selectedZeroRegisterLogical (d := d) s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+  ManyBody.supportedOperators_mono hS (selectedZeroRegisterLogical_mem_supportedOperators s)
 
 end QuantumCircuit

@@ -34,8 +34,8 @@ theorem exists_normalized_common_ground_of_disjoint
     {S T R : Finset ι} (hST : Disjoint S T) (hSR : Disjoint S R) (hTR : Disjoint T R)
     {A B C : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A.IsHermitian) (hB : B.IsHermitian) (hC : C.IsHermitian)
-    (hsA : A ∈ supportedOperators d S) (hsB : B ∈ supportedOperators d T)
-    (hsC : C ∈ supportedOperators d R) :
+    (hsA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (hsB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T)
+    (hsC : C ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) R) :
     ∃ v : (ι → Fin d) → ℂ, star v ⬝ᵥ v = 1 ∧
       (A - (minEigenvalue hA : ℂ) • 1) *ᵥ v = 0 ∧
       (B - (minEigenvalue hB : ℂ) • 1) *ᵥ v = 0 ∧

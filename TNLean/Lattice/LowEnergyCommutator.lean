@@ -205,7 +205,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
+  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -223,9 +223,9 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d S) (l : ℕ) (Y : Finset ι)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (l : ℕ) (Y : Finset ι)
     (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
-    (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W * B - B * gaussianFilteredTerm q ΔE (∑ k, h k) W‖ ≤
       2 * ‖B‖ *
         ((2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) ^ 2 * ‖W‖ * Kg *
@@ -237,8 +237,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
   have hloc := norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X h
     hHerm hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth (ΔE := ΔE) hq S hW l hT
   have hcomm : Commute M B :=
-    commute_of_mem_supportedOperators hY ((mem_supportedOperators_of_isSupportedOn
-        (ManyBody.regionExpectation_mem_supportedOperators _ _))) hB
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (((ManyBody.regionExpectation_mem_supportedOperators _ _))) hB hY
   have hsplit : F * B - B * F = (F - M) * B - B * (F - M) := by
     rw [sub_mul, mul_sub, hcomm.eq]; abel
   rw [hsplit]
@@ -262,9 +261,9 @@ theorem norm_groundCompression_commutator_le_graphNeighborhood [NeZero d] (Kg : 
     {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d S) (l : ℕ) (Y : Finset ι)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (l : ℕ) (Y : Finset ι)
     (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
-    (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
         groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤
       2 * ‖B‖ *

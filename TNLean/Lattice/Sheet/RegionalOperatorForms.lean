@@ -33,7 +33,7 @@ theorem exists_threeSplit_eq_kronecker_one_kronecker_one
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {T E : Finset ι} (h : Disjoint T E) {D : Finset ι} (hD : D ⊆ T)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q D) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     ∃ B : Matrix (T → Fin q) (T → Fin q) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
@@ -60,7 +60,7 @@ theorem exists_threeSplit_eq_one_kronecker
     {T E : Finset ι} (h : Disjoint T E) {D : Finset ι}
     (hD : D ⊆ ((T ∪ E)ᶜ : Finset ι))
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q D) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     ∃ B : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         (1 : Matrix ((T → Fin q) × (E → Fin q))

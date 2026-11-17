@@ -49,8 +49,8 @@ theorem permOp_conjTranspose_mul_mul (τ : Equiv.Perm (Fin n))
 See the coordinate changes in §5 of the circuit manuscript. -/
 theorem permOp_conjugate_mem_supportedOperators (τ : Equiv.Perm (Fin n))
     {S : Finset (Fin n)} {X : Matrix (Cfg d n) (Cfg d n) ℂ}
-    (hX : X ∈ supportedOperators d S) :
-    permOp τ * X * (permOp τ)ᴴ ∈ supportedOperators d (S.image τ) := by
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    permOp τ * X * (permOp τ)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image τ) := by
   have hid : embedOp id X = X := by
     ext x y
     rw [embedOp_apply,
@@ -149,8 +149,8 @@ theorem exists_permuted_encoded_uniform_merging_circuit
       (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := L) (a := A))) C₁ Z₁)
     (hclean₂ : IsCleanImplementation
       (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := L) (a := A))) C₂ Z₂)
-    (hZ₁support : Z₁ ∈ supportedOperators d support)
-    (hZ₂support : Z₂ ∈ supportedOperators d support)
+    (hZ₁support : Z₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support)
+    (hZ₂support : Z₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support)
     (V : Matrix (ρ × (Fin r × Fin r))
       ({i : Fin (a + (2 * q + 2)) // i ∉ Set.range s} → Fin d) ℂ)
     (hchild :
@@ -165,7 +165,7 @@ theorem exists_permuted_encoded_uniform_merging_circuit
     ∃ Z : Matrix (Cfg d L) (Cfg d L) ℂ,
     ∃ C : Matrix (Cfg d (L + A)) (Cfg d (L + A)) ℂ,
       Z ∈ unitary (Matrix (Cfg d L) (Cfg d L) ℂ) ∧
-      Z ∈ supportedOperators d support ∧
+      Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support ∧
       IsPairProduct d (L + A)
         (encodedUniformMergingGateCount d q L A b
           (K₁ + 4 * (L + A) ^ 2) (K₂ + 4 * (L + A) ^ 2) r + 4 * (L + A) ^ 2) C ∧
@@ -210,19 +210,19 @@ theorem exists_permuted_encoded_uniform_merging_circuit
   have hnew := isPairProduct_isCleanImplementation_conjugate_workspaceFixedSitePerm
     siteEquiv hW hWclean
   have hZ₁' : Z₁.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      supportedOperators d (support.image siteEquiv.symm) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (support.image siteEquiv.symm) := by
     rw [← permOp_conjTranspose_mul_mul]
     simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₁support
   have hZ₂' : Z₂.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      supportedOperators d (support.image siteEquiv.symm) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (support.image siteEquiv.symm) := by
     rw [← permOp_conjTranspose_mul_mul]
     simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₂support
   have hZsupport := hsupport (support.image siteEquiv.symm) hZ₁' hZ₂'
     (by simpa only [Finset.coe_image] using hinputSupport)
     (by simpa only [Finset.coe_image] using hpacketSupport)
-  have hreturnedSupport : R * Z * Rᴴ ∈ supportedOperators d support := by
+  have hreturnedSupport : R * Z * Rᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
     simpa only [Finset.image_image, Function.comp_def, Equiv.apply_symm_apply,
         Finset.image_id'] using
       permOp_conjugate_mem_supportedOperators siteEquiv hZsupport

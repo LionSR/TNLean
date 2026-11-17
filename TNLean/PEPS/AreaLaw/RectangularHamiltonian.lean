@@ -56,10 +56,10 @@ structure RectangularHamiltonian (width height q : ℕ) (J : ℝ) where
   edgeTerm : Edge (squareLatticeGraph width height) →
     Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ
   /-- The site support condition in `eq:model`. -/
-  site_supported : ∀ v, siteTerm v ∈ QuantumCircuit.supportedOperators q {v}
+  site_supported : ∀ v, siteTerm v ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) {v}
   /-- The edge support condition in `eq:model`. -/
   edge_supported : ∀ e, edgeTerm e ∈
-    QuantumCircuit.supportedOperators q {e.1.1, e.1.2}
+    ManyBody.supportedOperators (fun _ ↦ Fin q) {e.1.1, e.1.2}
   /-- The site-term Euclidean operator-norm bound in `eq:model`. -/
   site_norm_le : ∀ v, ‖siteTerm v‖ ≤ J
   /-- The edge-term Euclidean operator-norm bound in `eq:model`. -/
@@ -108,10 +108,10 @@ circuit supported-operator algebra, since that algebra is closed under
 adjoints and real linear combinations. Source: `00-introduction.tex`, `eq:model`. -/
 theorem RectangularHamiltonian.hermitianTerm_mem_supportedOperators {width height q : ℕ} {J : ℝ}
     (h : RectangularHamiltonian width height q J) (i : RectangleInteraction width height) :
-    h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
+    h.hermitianTerm i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (rectangleInteractionSupport i : Finset (SquareLatticeVertex width height)) := by
   have hs : rectangleInteractionTerm h i ∈
-      QuantumCircuit.supportedOperators q
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
         (rectangleInteractionSupport i : Finset (SquareLatticeVertex width height)) := by
     cases i with
     | inl v =>
@@ -122,10 +122,10 @@ theorem RectangularHamiltonian.hermitianTerm_mem_supportedOperators {width heigh
         Finset.coe_singleton]
         using h.edge_supported e
   exact coe_realPart_mem_of_star_mem
-    (S := (QuantumCircuit.supportedOperators q
+    (S := (ManyBody.supportedOperators (fun _ ↦ Fin q)
       (rectangleInteractionSupport i : Finset
           (SquareLatticeVertex width height))).restrictScalars ℝ)
-    hs (QuantumCircuit.star_mem_supportedOperators hs)
+    hs (star_mem hs)
 
 /-- Every replaced interaction is Hermitian. Source:
 `00-introduction.tex`, `eq:model`. -/

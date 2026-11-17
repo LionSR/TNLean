@@ -34,15 +34,15 @@ theorem exists_threeSplit_two_window_factors
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
+    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L)))
-    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
+    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L)))
-    (hL : F (Sum.inr 0) ∈ supportedOperators q
+    (hL : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a + 1) : Finset (Fin L)))
-    (hM : F (Sum.inr 1) ∈ supportedOperators q
+    (hM : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)))
-    (hR : F (Sum.inr 2) ∈ supportedOperators q
+    (hR : F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1)
     (p s : Fin (2 * ℓ)) :
@@ -94,24 +94,24 @@ theorem exists_threeSplit_two_window_factors
   have hVRrank : operatorSchmidtRank VR ≤ q ^ 2 := by
     simpa only [E, hvE, Finset.card_singleton, Nat.mul_one] using hrVR
   have hregional : ∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
-      F r ∈ supportedOperators q T ∨
-        F r ∈ supportedOperators q E ∨
-        F r ∈ supportedOperators q ((T ∪ E)ᶜ : Finset (Fin L)) := by
+      F r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T ∨
+        F r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) E ∨
+        F r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset (Fin L)) := by
     intro r hru hrv
     have hp := p.isLt
     have hs := s.isLt
     have hmono (t : ℕ) (ht : t + 1 < L)
         (htu : t ≠ a + p.val) (htv : t ≠ b + s.val)
         {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-        (hA : A ∈ supportedOperators q
+        (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
           (interval L t (t + 2) : Finset (Fin L))) :
-        A ∈ supportedOperators q T ∨
-          A ∈ supportedOperators q E ∨
-          A ∈ supportedOperators q ((T ∪ E)ᶜ : Finset (Fin L)) := by
+        A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T ∨
+          A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) E ∨
+          A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset (Fin L)) := by
       rcases hord t ht htu htv with hT | hE | hU
-      · exact Or.inl (supportedOperators_mono (Finset.coe_subset.mpr hT) hA)
-      · exact Or.inr (Or.inl (supportedOperators_mono (Finset.coe_subset.mpr hE) hA))
-      · exact Or.inr (Or.inr (supportedOperators_mono (Finset.coe_subset.mpr hU) hA))
+      · exact Or.inl (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hT) hA)
+      · exact Or.inr (Or.inl (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hE) hA))
+      · exact Or.inr (Or.inr (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hU) hA))
     rcases r with (t | t) | j
     · have ht := t.isLt
       refine hmono (a + t.val) (by omega) ?_ (by omega) (hleft t)
@@ -129,15 +129,15 @@ theorem exists_threeSplit_two_window_factors
         (Fin.ext (Nat.add_left_cancel h))
     · fin_cases j
       · left
-        exact supportedOperators_mono
+        exact ManyBody.supportedOperators_mono
           (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) hL
       · right
         left
-        exact supportedOperators_mono
+        exact ManyBody.supportedOperators_mono
           (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) hM
       · right
         right
-        apply supportedOperators_mono ?_ hR
+        apply ManyBody.supportedOperators_mono ?_ hR
         intro x hx
         have hx' := (mem_interval.mp hx).1
         change x ∈ (T ∪ E)ᶜ

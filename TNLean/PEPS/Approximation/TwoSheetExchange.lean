@@ -256,7 +256,7 @@ theorem exists_in_form [NeZero q] {i : List (Hole pos q Party)}
       (rawProd i a).submatrix (sheetSplit q X.region).symm (sheetSplit q X.region).symm =
         I' ⊗ₖ 1 :=
   exists_kronecker_one_of_mem_supportedOperators
-    (supportedOperators_mono (fun x hx => by
+    (ManyBody.supportedOperators_mono (fun x hx => by
       obtain ⟨p, hp, hx⟩ := mem_footprint.mp hx
       obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
       exact X.inside h (hi h hh) hx)
@@ -413,9 +413,9 @@ theorem commute_correction [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P
     (a : TagSpace (X.out₁ ++ X.in₂)) (b : TagSpace (X.out₂ ++ X.in₁)) :
     Commute (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P))
       (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b) := by
-  have h₁ := supportedOperators_mono (X.footprint_new₁_subset P)
+  have h₁ := ManyBody.supportedOperators_mono (X.footprint_new₁_subset P)
     (rawProd_mem_supportedOperators _ a)
-  have h₂ := supportedOperators_mono (X.footprint_new₂_subset P)
+  have h₂ := ManyBody.supportedOperators_mono (X.footprint_new₂_subset P)
     (rawProd_mem_supportedOperators _ b)
   refine Commute.mul_left (commute_sheetBufferCorrection _ σ h₁ h₂)
     (commute_sheetSwapOp_kronecker ?_ h₁ h₂)

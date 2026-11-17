@@ -301,8 +301,8 @@ in particular with the encoders of both sheets when all holes lie in `T ∪ E`
 (`05-frames.tex`, lines 514–515). -/
 theorem commute_sheetBufferCorrection (σ : SplittingData q T E)
     {R₁ R₂ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hR₁ : R₁ ∈ supportedOperators q (T ∪ E : Finset ι))
-    (hR₂ : R₂ ∈ supportedOperators q (T ∪ E : Finset ι)) :
+    (hR₁ : R₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (T ∪ E : Finset ι))
+    (hR₂ : R₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (T ∪ E : Finset ι)) :
     Commute (sheetBufferCorrection h σ) (R₁ ⊗ₖ R₂) := by
   obtain ⟨R₁', hR₁'⟩ := exists_threeSplit_eq_kronecker_one h hR₁
   obtain ⟨R₂', hR₂'⟩ := exists_threeSplit_eq_kronecker_one h hR₂

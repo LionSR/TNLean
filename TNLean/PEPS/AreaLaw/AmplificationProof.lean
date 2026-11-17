@@ -380,7 +380,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
     restoringTransport_restoringColumnGlobal_eq_sum Ω X Y hXY E p blank blank Q Tq
   have hBsum : Bp = ∑ i ∈ E ×ˢ Finset.univ, PB i ⊗ₖ AB i := hBsum
   have hBblocks : ∀ x y : RegionalConfiguration q X × RegionalConfiguration q X,
-      (Matrix.of fun σ τ => Bp (σ, x) (τ, y)) ∈ supportedOperators q S₀ := by
+      (Matrix.of fun σ τ => Bp (σ, x) (τ, y)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S₀ := by
     intro x y
     rw [hBsum, ← hXYS]
     exact block_mem_supportedOperators_of_eq_sum _ hPB AB x y
@@ -468,7 +468,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hZint : Integrable (fun u => ‖Dret u - Lt u‖) μ := hZint
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle
-  have hLt : ∀ u, ‖Lt u‖ ≤ 1 ∧ Lt u ∈ supportedOperators q
+  have hLt : ∀ u, ‖Lt u‖ ≤ 1 ∧ Lt u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (graphNeighborhood Λ (2 * r) S₀ : Finset (Site Λ)) := hLt
   -- Markov's inequality and a union bound: a good realization.
   have hrα : 0 ≤ (r : ℝ) ^ α := Real.rpow_nonneg (Nat.cast_nonneg r) α
@@ -528,10 +528,10 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   let Dfull := contractionWord k u0.1 u0.2
   have hkle : ∀ i, k i ≤ 1 := fun i => (hk i).2.1
   have hkΩ : ∀ i, k i *ᵥ WithLp.ofLp Ω = 0 := fun i => (hk i).2.2
-  have hR₀supp : Rp.submatrix sp sp ∈ supportedOperators q
+  have hR₀supp : Rp.submatrix sp sp ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
     rw [hRsum]
-    exact supportedOperators_mono (Finset.coe_subset.mpr
+    exact ManyBody.supportedOperators_mono (Finset.coe_subset.mpr
       (Finset.disjSum_mono (hXYS ▸ hS₀N) le_rfl))
       (sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators E hPR _)
   obtain ⟨U₁, hU₁supp, hU₁unit, hU₁err⟩ := exists_ancilla_unitary_of_good_realization hR₀supp

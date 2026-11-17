@@ -235,6 +235,6 @@ theorem isPairProduct_neg_one {n : ℕ} (hn : 2 ≤ n) :
   refine ⟨?_, p, q, rfl, ?_⟩
   · rw [Matrix.mem_unitaryGroup_iff']
     simp
-  · exact (supportedOperators d {p, q}).neg_mem (one_mem_supportedOperators _)
+  · exact (ManyBody.supportedOperators (fun _ ↦ Fin d) {p, q}).neg_mem ((one_mem (ManyBody.supportedOperators _ _)))
 
 end QuantumCircuit

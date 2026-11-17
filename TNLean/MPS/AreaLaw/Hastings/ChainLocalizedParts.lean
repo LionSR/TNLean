@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.Lattice.GaussianFilteredIncrement
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.Algebra.ExpMulSubMonotone
 
@@ -100,8 +102,7 @@ theorem isSupportedOn_localized_sub_self (K : Finset ι)
     (W X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
     Entropy.IsSupportedOn (n := fun _ ↦ d) (W + ManyBody.regionExpectation K X - W) K := by
   rw [add_sub_cancel_left]
-  exact isSupportedOn_of_mem_supportedOperators ((mem_supportedOperators_of_isSupportedOn
-      (ManyBody.regionExpectation_mem_supportedOperators K X)))
+  exact (((ManyBody.regionExpectation_mem_supportedOperators K X)))
 
 /-- The localized operator `M = W + E_K(W_tilde - W)` of a Hermitian `W` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
@@ -142,8 +143,7 @@ theorem ChainHamiltonian.norm_gaussianFilteredTerm_sub_localized_le_of_commutato
   have ha := chainLRPrefactor_nonneg R J
   have hv := chainLRVelocity_nonneg R J
   have hA : Entropy.IsSupportedOn (n := fun _ ↦ q) (Complex.I • C) S :=
-    isSupportedOn_of_mem_supportedOperators
-      (Submodule.smul_mem _ _ (mem_supportedOperators_of_isSupportedOn hS))
+    (Submodule.smul_mem _ _ (hS))
   have hloc : ∀ s ∈ Set.Icc (-T) T,
       ‖hermitianUnitaryPath h.operator s * (Complex.I • C) *
           hermitianUnitaryPath h.operator (-s) -

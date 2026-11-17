@@ -202,7 +202,7 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
       (g i) (interval L i.val (i.val + 2)) := by
     dsimp only [g]
     split_ifs <;> first
-      | exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+      | exact (Submodule.zero_mem _)
       | exact hs i
   have hP (p : ℕ) : IsStarProjection
       (physicalParityProduct (intervalBondRestriction a b h) p) :=

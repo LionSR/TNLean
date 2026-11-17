@@ -53,12 +53,12 @@ theorem cutOperator_embedOp_prefix {L N q : ℕ} (hi : L ≤ N)
     · intro hv
       exact ⟨⟨v.val, mem_leftBlock.mp hv⟩, Fin.ext rfl⟩
   have hmem : QuantumCircuit.embedOp (Fin.castLE hi) X ∈
-      QuantumCircuit.supportedOperators q (leftBlock N L : Finset (Fin N)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock N L : Finset (Fin N)) := by
     have hrange' : Finset.univ.image (Fin.castLE hi) = leftBlock N L :=
       Finset.coe_injective (by simpa using hrange)
     simpa only [hrange'] using
       QuantumCircuit.embedOp_mem_supportedOperators (Fin.castLE_injective hi) X
-  have hs := QuantumCircuit.isSupportedOn_of_mem_supportedOperators hmem
+  have hs := hmem
   rw [hs.cutOperator_eq_kronecker_one (le_refl _) b0]
   congr 1
   ext a a'
@@ -90,13 +90,13 @@ theorem cutOperator_appended_penalty {L N q : ℕ} (z : Fin q)
   classical
   have hmem : (∑ v : {v : Fin N // v ∉ leftBlock N L},
         QuantumCircuit.siteOp v.val (QuantumCircuit.siteBasisPenalty z)) ∈
-      QuantumCircuit.supportedOperators q ((leftBlock N L)ᶜ : Finset (Fin N)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) ((leftBlock N L)ᶜ : Finset (Fin N)) := by
     apply Submodule.sum_mem
     intro v _
-    apply QuantumCircuit.supportedOperators_mono _
+    apply ManyBody.supportedOperators_mono _
       (QuantumCircuit.siteOp_mem_supportedOperators v.val _)
     exact Finset.singleton_subset_iff.mpr (Finset.mem_compl.mpr v.property)
-  have hs := QuantumCircuit.isSupportedOn_of_mem_supportedOperators hmem
+  have hs := hmem
   rw [hs.cutOperator_eq_one_kronecker disjoint_compl_left a0]
   congr 1
   rw [QuantumCircuit.productBasisPenalty_eq_diagonal]

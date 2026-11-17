@@ -7,7 +7,8 @@ import TNLean.Lattice.Sheet.RegionalOperatorForms
 import TNLean.Lattice.Sheet.SupportedSchmidtRank
 import TNLean.Lattice.Sheet.LeftSupportedSchmidtRank
 import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Circuit.SiteEmbedding
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.Algebra.OperatorBlock
@@ -190,15 +191,15 @@ theorem exists_threeSplit_two_window_factors_with_collars
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
+    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L)))
-    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
+    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L)))
-    (hL : F (Sum.inr 0) ∈ supportedOperators q
+    (hL : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a + 1) : Finset (Fin L)))
-    (hM : F (Sum.inr 1) ∈ supportedOperators q
+    (hM : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)))
-    (hR : F (Sum.inr 2) ∈ supportedOperators q
+    (hR : F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1)
     (p s : Fin (2 * ℓ)) :
@@ -263,7 +264,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
   have hs := s.isLt
   have hzero : Entropy.IsSupportedOn (n := fun _ : E ↦ q)
       (0 : Matrix (E → Fin q) (E → Fin q) ℂ) C :=
-    isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+    (Submodule.zero_mem _)
   have hLeft : ∀ r : Fin (2 * ℓ),
       ∃ (B : Matrix (T → Fin q) (T → Fin q) ℂ)
         (W : Matrix (E → Fin q) (E → Fin q) ℂ),
@@ -278,8 +279,8 @@ theorem exists_threeSplit_two_window_factors_with_collars
     · subst r
       exact ⟨0, 0, by simp, fun _ ↦ rfl, hzero⟩
     · by_cases hlt : r < p
-      · have hrT : F (Sum.inl (Sum.inl r)) ∈ supportedOperators q T :=
-          supportedOperators_mono
+      · have hrT : F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T :=
+          ManyBody.supportedOperators_mono
             (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) (hleft r)
         obtain ⟨B, hB⟩ := exists_threeSplit_eq_kronecker_one_kronecker_one hTE
           (Set.Subset.rfl) hrT
@@ -291,15 +292,15 @@ theorem exists_threeSplit_two_window_factors_with_collars
           have hnr : ¬r.val < p.val := hlt
           omega
         have hr := r.isLt
-        have hrE : F (Sum.inl (Sum.inl r)) ∈ supportedOperators q E :=
-          supportedOperators_mono
+        have hrE : F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) E :=
+          ManyBody.supportedOperators_mono
             (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) (hleft r)
         obtain ⟨W, hW⟩ := exists_threeSplit_eq_one_kronecker_kronecker_one hTE
           (Set.Subset.rfl) hrE
         have hWsupp := isSupportedOn_of_threeSplit_middle T E
           (interval L (a + r.val) (a + r.val + 2)) hTE
           (F (Sum.inl (Sum.inl r)))
-          (isSupportedOn_of_mem_supportedOperators (hleft r)) W hW
+          ((hleft r)) W hW
         have hcollar : (Finset.univ.filter
             (fun x : E ↦ x.val ∈ interval L (a + r.val) (a + r.val + 2))) ⊆ C := by
           intro x hx
@@ -329,8 +330,8 @@ theorem exists_threeSplit_two_window_factors_with_collars
       exact ⟨0, 0, by simp, fun _ ↦ rfl, hzero⟩
     · by_cases hgt : s < r
       · have hrR : F (Sum.inl (Sum.inr r)) ∈
-            supportedOperators q ((T ∪ E)ᶜ : Finset (Fin L)) := by
-          apply supportedOperators_mono ?_ (hright r)
+            ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset (Fin L)) := by
+          apply ManyBody.supportedOperators_mono ?_ (hright r)
           intro x hx
           have hx' := mem_interval.mp hx
           change x ∈ (T ∪ E)ᶜ
@@ -344,15 +345,15 @@ theorem exists_threeSplit_two_window_factors_with_collars
           have hne : r.val ≠ s.val := fun h ↦ hrs (Fin.ext h)
           have hng : ¬s.val < r.val := hgt
           omega
-        have hrE : F (Sum.inl (Sum.inr r)) ∈ supportedOperators q E :=
-          supportedOperators_mono
+        have hrE : F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) E :=
+          ManyBody.supportedOperators_mono
             (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) (hright r)
         obtain ⟨W, hW⟩ := exists_threeSplit_eq_one_kronecker_kronecker_one hTE
           (Set.Subset.rfl) hrE
         have hWsupp := isSupportedOn_of_threeSplit_middle T E
           (interval L (b + r.val) (b + r.val + 2)) hTE
           (F (Sum.inl (Sum.inr r)))
-          (isSupportedOn_of_mem_supportedOperators (hright r)) W hW
+          ((hright r)) W hW
         have hcollar : (Finset.univ.filter
             (fun x : E ↦ x.val ∈ interval L (b + r.val) (b + r.val + 2))) ⊆ C := by
           intro x hx
@@ -369,15 +370,15 @@ theorem exists_threeSplit_two_window_factors_with_collars
           omega
   choose LL LM hLeftData using hLeft
   choose RM RR hRightData using hRight
-  have hbulkL : F (Sum.inr 0) ∈ supportedOperators q T :=
-    supportedOperators_mono
+  have hbulkL : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T :=
+    ManyBody.supportedOperators_mono
       (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) hL
-  have hbulkM : F (Sum.inr 1) ∈ supportedOperators q E :=
-    supportedOperators_mono
+  have hbulkM : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) E :=
+    ManyBody.supportedOperators_mono
       (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) hM
   have hbulkR : F (Sum.inr 2) ∈
-      supportedOperators q ((T ∪ E)ᶜ : Finset (Fin L)) := by
-    apply supportedOperators_mono ?_ hR
+      ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset (Fin L)) := by
+    apply ManyBody.supportedOperators_mono ?_ hR
     intro x hx
     have hx' := mem_interval.mp hx
     change x ∈ (T ∪ E)ᶜ
@@ -672,22 +673,20 @@ theorem exists_weighted_ordinary_middle_eq_central_add_supported
       intro hrs
       exact hr (Finset.mem_filter.mpr ⟨Finset.mem_univ _, hrs⟩)
     rw [hright0 r (le_of_not_gt hnot), smul_zero]
-  have hKLmem : KL ∈ QuantumCircuit.supportedOperators q C := by
+  have hKLmem : KL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) C := by
     change (∑ r ∈ (Finset.univ : Finset (Fin (2 * ℓ))).filter (fun r ↦ p < r),
       z (Sum.inl (Sum.inl r)) • HM (Sum.inl (Sum.inl r))) ∈
-        QuantumCircuit.supportedOperators q C
+        ManyBody.supportedOperators (fun _ ↦ Fin q) C
     refine Submodule.sum_mem _ fun r hr ↦ ?_
     exact Submodule.smul_mem _ _
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-        (hleftC r (Finset.mem_filter.mp hr).2))
-  have hKRmem : KR ∈ QuantumCircuit.supportedOperators q C := by
+      ((hleftC r (Finset.mem_filter.mp hr).2))
+  have hKRmem : KR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) C := by
     change (∑ r ∈ (Finset.univ : Finset (Fin (2 * ℓ))).filter (fun r ↦ r < s),
       z (Sum.inl (Sum.inr r)) • HM (Sum.inl (Sum.inr r))) ∈
-        QuantumCircuit.supportedOperators q C
+        ManyBody.supportedOperators (fun _ ↦ Fin q) C
     refine Submodule.sum_mem _ fun r hr ↦ ?_
     exact Submodule.smul_mem _ _
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-        (hrightC r (Finset.mem_filter.mp hr).2))
+      ((hrightC r (Finset.mem_filter.mp hr).2))
   refine ⟨KL + KR, ?_, ?_⟩
   · calc
       (∑ i ∈ O, z i • HM i) = ∑ i, z i • HM i := hOrd
@@ -697,8 +696,7 @@ theorem exists_weighted_ordinary_middle_eq_central_add_supported
         simp only [hL0, hR0, smul_zero, add_zero, zero_add]
       _ = z (Sum.inr (1 : Fin 3)) • HM (Sum.inr (1 : Fin 3)) + (KL + KR) :=
         add_comm _ _
-  · exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      (Submodule.add_mem _ hKLmem hKRmem)
+  · exact (Submodule.add_mem _ hKLmem hKRmem)
 
 end TNLean.MPS.AreaLaw
 

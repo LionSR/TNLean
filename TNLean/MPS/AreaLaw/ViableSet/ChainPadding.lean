@@ -33,9 +33,8 @@ theorem isSupportedOn_embedOp_prefix {L N q a b : ℕ} (hi : L ≤ N)
     Entropy.IsSupportedOn (n := fun _ : Fin N ↦ q)
       (QuantumCircuit.embedOp (Fin.castLE hi) X) (interval N a b) := by
   have h := QuantumCircuit.embedOp_mem_supportedOperators_image
-    (Fin.castLE_injective hi) (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hX)
-  apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-  apply QuantumCircuit.supportedOperators_mono ?_ h
+    (Fin.castLE_injective hi) (hX)
+  apply apply ManyBody.supportedOperators_mono ?_ h
   intro _ hw
   obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hw
   exact mem_interval.mpr ((mem_interval (L := L)).mp hv)
@@ -93,8 +92,7 @@ theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
   unfold paddedInteraction
   split_ifs with hj
   · exact isSupportedOn_embedOp_prefix hi (hs ⟨j.val, hj⟩)
-  · apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    apply QuantumCircuit.supportedOperators_mono ?_
+  · apply apply ManyBody.supportedOperators_mono ?_
       (QuantumCircuit.siteOp_mem_supportedOperators
         (⟨j.val + 1, by omega⟩ : Fin N) (QuantumCircuit.siteBasisPenalty z))
     intro v hv

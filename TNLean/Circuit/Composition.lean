@@ -47,7 +47,7 @@ theorem IsIn.mono {L : BondLayer d bond} {R R' : Finset ι} (h : L.IsIn R) (hR :
     L.IsIn R' := fun k hk => (h k hk).trans hR
 
 theorem op_mem_supportedOperators {L : BondLayer d bond} {R : Finset ι} (h : L.IsIn R) :
-    L.op ∈ supportedOperators d R :=
+    L.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) R :=
   L.partialOp_mem_supportedOperators _ _ h
 
 /-- The layer without gates. -/
@@ -67,7 +67,7 @@ theorem empty_isIn (R : Finset ι) : (empty : BondLayer d bond).IsIn R := by
 /-- The layer with the single gate `Z` on the bond `b`. -/
 def single (b : β) (Z : Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hZu : Z ∈ unitary (Matrix (ι → Fin d) (ι → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d (bond b)) :
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bond b)) :
     BondLayer d bond where
   bonds := {b}
   gate := fun _ => Z
@@ -78,13 +78,13 @@ def single (b : β) (Z : Matrix (ι → Fin d) (ι → Fin d) ℂ)
 
 theorem single_op (b : β) (Z : Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hZu : Z ∈ unitary (Matrix (ι → Fin d) (ι → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d (bond b)) :
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bond b)) :
     (single b Z hZu hZ).op = Z := by
   simp [op, partialOp, single]
 
 theorem single_isIn (b : β) (Z : Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hZu : Z ∈ unitary (Matrix (ι → Fin d) (ι → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d (bond b))
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bond b))
     {R : Finset ι} (hR : bond b ⊆ R) : (single b Z hZu hZ).IsIn R := by
   intro l hl
   rw [show l = b from Finset.mem_singleton.mp hl]
@@ -151,9 +151,9 @@ end BondLayer
 
 /-- The unitary of a circuit whose layers act inside `R` acts on `R`. -/
 theorem circuitOp_mem_supportedOperators {R : Finset ι} :
-    ∀ Ls : List (BondLayer d bond), (∀ L ∈ Ls, L.IsIn R) → circuitOp Ls ∈ supportedOperators d R
-  | [], _ => one_mem_supportedOperators R
-  | L :: Ls, h => mul_mem_supportedOperators
+    ∀ Ls : List (BondLayer d bond), (∀ L ∈ Ls, L.IsIn R) → circuitOp Ls ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) R
+  | [], _ => (one_mem (ManyBody.supportedOperators _ R))
+  | L :: Ls, h => mul_mem
       (circuitOp_mem_supportedOperators Ls fun L' hL' => h L' (List.mem_cons_of_mem _ hL'))
       (BondLayer.op_mem_supportedOperators (h L List.mem_cons_self))
 
@@ -210,7 +210,7 @@ theorem mono (h : IsBondCircuitOn bond R T U) (hT : T ≤ T') : IsBondCircuitOn 
 /-- A single gate on a bond inside `R`. -/
 theorem single {b : β} {Z : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hZu : Z ∈ unitary (Matrix (ι → Fin d) (ι → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d (bond b))
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bond b))
     (hR : bond b ⊆ R) : IsBondCircuitOn bond R 1 Z :=
   ⟨[BondLayer.single b Z hZu hZ], rfl, by simpa using BondLayer.single_isIn b Z hZu hZ hR, by
     simp [circuitOp, BondLayer.single_op]⟩
@@ -238,8 +238,7 @@ private theorem zip_union (hne : ∀ b, (bond b).Nonempty) :
         circuitOp Ms * (BondLayer.union L₁ L₂ hL₁ hL₂ hR).op
       rw [← hMeq, BondLayer.union_op hne]
       have hc : Commute (circuitOp Ls₂) L₁.op :=
-        commute_of_mem_supportedOperators hR.symm (circuitOp_mem_supportedOperators Ls₂ h₂')
-          (BondLayer.op_mem_supportedOperators hL₁)
+        ManyBody.commute_of_mem_supportedOperators_of_disjoint (circuitOp_mem_supportedOperators Ls₂ h₂') (BondLayer.op_mem_supportedOperators hL₁) hR.symm
       calc circuitOp Ls₁ * L₁.op * (circuitOp Ls₂ * L₂.op)
           = circuitOp Ls₁ * (L₁.op * circuitOp Ls₂) * L₂.op := by
             simp only [Matrix.mul_assoc]
@@ -335,7 +334,7 @@ theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Functi
   | nil => simpa using IsBondCircuitOn.one (d := d) ringBond (Finset.univ.image e) 0
   | cons Z l ih =>
     obtain ⟨hZu, p, p', hp, hZ⟩ := hg Z List.mem_cons_self
-    have hZ' : QuantumCircuit.embedOp e Z ∈ supportedOperators d (ringBond (e p)) := by
+    have hZ' : QuantumCircuit.embedOp e Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond (e p)) := by
       have := embedOp_mem_supportedOperators_image he hZ
       rwa [Finset.image_insert, Finset.image_singleton, hsucc p p' hp] at this
     have h1 := IsBondCircuitOn.single (embedOp_mem_unitary he hZu) hZ'

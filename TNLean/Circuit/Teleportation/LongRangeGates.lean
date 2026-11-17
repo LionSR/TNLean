@@ -257,7 +257,7 @@ theorem localGate_mem_unitary :
   embedOp_mem_unitary (pair_injective g.near_ne_far) g.u_mem_unitary
 
 theorem localGate_mem_supportedOperators :
-    g.localGate ∈ supportedOperators d (ringBond g.near) := by
+    g.localGate ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond g.near) := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.near_ne_far) g.u
   rw [show Finset.univ.image ![g.near, g.far] = {g.near, g.far} from
     image_univ_pairSites _ _] at this
@@ -275,7 +275,7 @@ theorem op_mem_unitary : g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → F
   embedOp_mem_unitary (pair_injective g.a_ne_far) g.u_mem_unitary
 
 /-- The gate acts on its two sites `a` and `a + 2L + 1`. -/
-theorem op_mem_supportedOperators : g.op ∈ supportedOperators d {g.a, g.far} := by
+theorem op_mem_supportedOperators : g.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {g.a, g.far} := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.a_ne_far) g.u
   rwa [show Finset.univ.image ![g.a, g.far] = {g.a, g.far} from
     image_univ_pairSites _ _] at this
@@ -404,7 +404,7 @@ theorem isZeroOn_localLayer {w : (Fin N → Fin d) → ℂ}
   refine (hw g hg).mulVec_of_mem_supportedOperators disjoint_compl_right
     (list_prod_mem_supportedOperators _ fun A hA => ?_)
   obtain ⟨g', hg', rfl⟩ := List.mem_map.mp hA
-  refine supportedOperators_mono
+  refine ManyBody.supportedOperators_mono
     (show ringBond g'.near ⊆ g.clearedᶜ from fun i hi => Finset.mem_compl.mpr fun hi' => ?_)
     g'.localGate_mem_supportedOperators
   by_cases hgg : g = g'

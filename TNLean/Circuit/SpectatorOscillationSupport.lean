@@ -10,7 +10,7 @@ import TNLean.Circuit.SpectatorSiteExpectation
 # Initial site oscillation of supported operators with spectators
 
 The native spectator expectation fixes an operator exactly when each physical
-matrix block belongs to the existing space `supportedOperators q K`. Such an
+matrix block belongs to the existing space `ManyBody.supportedOperators (fun _ ↦ Fin q) K`. Such an
 operator commutes with the physical algebra outside `K`, so its site
 oscillation vanishes there. Together with `d_y(B) ≤ 2 * ‖B‖`, this gives the
 initial bound `d_y(B) ≤ 2 * ‖B‖ * 1_K(y)` without a spectator dimension factor
@@ -42,7 +42,7 @@ theorem spectatorSiteExpectation_eq_self_iff (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     spectatorSiteExpectation q K B = B ↔
       ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-        supportedOperators q K := by
+        ManyBody.supportedOperators (fun _ ↦ Fin q) K := by
   constructor
   · intro h a b
     have hblock : ManyBody.regionExpectation K (Matrix.of fun σ τ => B (σ, a) (τ, b)) =
@@ -51,12 +51,11 @@ theorem spectatorSiteExpectation_eq_self_iff (K : Finset ι)
       rw [← spectatorSiteExpectation_apply, h]
       rfl
     rw [← hblock]
-    exact (mem_supportedOperators_of_isSupportedOn
-        (ManyBody.regionExpectation_mem_supportedOperators K _))
+    exact ((ManyBody.regionExpectation_mem_supportedOperators K _))
   · intro h
     ext ⟨σ, a⟩ ⟨τ, b⟩
     rw [spectatorSiteExpectation_apply, ManyBody.regionExpectation_of_mem_supportedOperators
-      (isSupportedOn_of_mem_supportedOperators (h a b))]
+      ((h a b))]
     rfl
 
 /-- A supported operator, with an arbitrary finite spectator, has zero
@@ -65,12 +64,12 @@ oscillation at any physical site outside its support. Source: area law,
 theorem siteOscillation_eq_zero_of_not_mem_support (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     (hB : ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-      supportedOperators q K) {y : ι} (hy : y ∉ K) :
+      ManyBody.supportedOperators (fun _ ↦ Fin q) K) {y : ι} (hy : y ∉ K) :
     siteOscillation q y B = 0 := by
   apply siteOscillation_eq_zero_of_commute
   intro U hU
-  have hUK : U ∈ supportedOperators q Kᶜ :=
-    supportedOperators_mono (Finset.singleton_subset_iff.mpr (Finset.mem_compl.mpr hy)) hU
+  have hUK : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Kᶜ :=
+    ManyBody.supportedOperators_mono (Finset.singleton_subset_iff.mpr (Finset.mem_compl.mpr hy)) hU
   have hfix := (spectatorSiteExpectation_eq_self_iff K B).mpr hB
   simpa only [hfix] using (spectatorSiteExpectation_commute K B hUK).symm
 
@@ -80,7 +79,7 @@ support and no spectator dimension factor. Source: area law,
 theorem siteOscillation_le_support_indicator [NeZero q] (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     (hB : ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-      supportedOperators q K) (y : ι) :
+      ManyBody.supportedOperators (fun _ ↦ Fin q) K) (y : ι) :
     siteOscillation q y B ≤ 2 * ‖B‖ * (K : Set ι).indicator (fun _ => (1 : ℝ)) y := by
   by_cases hy : y ∈ K
   · simpa only [Set.indicator_of_mem hy, mul_one] using

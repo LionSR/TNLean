@@ -59,7 +59,7 @@ theorem exists_native_interval_slice_of_mpo_approximation {N q l r D : ℕ}
     Finset.coe_injective (by simpa using hrange)
   obtain ⟨M, hM⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he
     (by simpa only [hrange'] using
-      QuantumCircuit.mem_supportedOperators_of_isSupportedOn hPs)
+      hPs)
   have hread (sigma : Fin (r - l) → Fin q) : insert sigma ∘ e = sigma := by
     funext u
     simp [insert, insertInterval, e, eJ, intervalShiftOrderIso, u.isLt]

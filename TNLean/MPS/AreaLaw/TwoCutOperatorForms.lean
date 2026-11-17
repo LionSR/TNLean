@@ -42,7 +42,7 @@ lines 810–821, and prop:Cheby-AGSP-eff, lines 1324–1332. -/
 theorem exists_threeSplit_edge_factors
     {L q : ℕ}
     (H : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ r, H r ∈ supportedOperators q
+    (hsupp : ∀ r, H r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L r.val (r.val + 2) : Finset (Fin L)))
     (u v : Fin (L - 1)) (huv : u.val < v.val)
     {T E : Finset (Fin L)} (hT : T = interval L 0 (u.val + 1))

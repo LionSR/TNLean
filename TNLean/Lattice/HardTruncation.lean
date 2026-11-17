@@ -193,9 +193,9 @@ theorem exists_region_hard_truncation_residuals {k g : ℕ}
   classical
   have sum_supported_of_subset (s : Finset I) (R : Finset ι) (hR : ∀ i ∈ s, D i ⊆ R) :
       Entropy.IsSupportedOn (n := fun _ : ι ↦ q) (∑ i ∈ s, h i) R :=
-    isSupportedOn_of_mem_supportedOperators <| Submodule.sum_mem _ fun i hi ↦
-      supportedOperators_mono (by exact_mod_cast hR i hi)
-        (mem_supportedOperators_of_isSupportedOn (hs i))
+    Submodule.sum_mem _ fun i hi ↦
+      ManyBody.supportedOperators_mono (by exact_mod_cast hR i hi)
+        ((hs i))
   let A : Fin 2 → Matrix (ι → Fin q) (ι → Fin q) ℂ := ![Hin, Hout]
   let R : Fin 2 → Finset ι := ![Λ, Λᶜ]
   let c : Fin 2 → ℕ := ![Iin.card, Iout.card]
@@ -315,12 +315,8 @@ theorem exists_region_hard_truncation_residuals {k g : ℕ}
       (fun i j hij ↦ by
         fin_cases i <;> fin_cases j
         · exact absurd rfl hij
-        · exact commute_of_mem_supportedOperators (hR hij)
-            (mem_supportedOperators_of_isSupportedOn (hsA 0))
-            (mem_supportedOperators_of_isSupportedOn (hsA 1))
-        · exact commute_of_mem_supportedOperators (hR hij)
-            (mem_supportedOperators_of_isSupportedOn (hsA 1))
-            (mem_supportedOperators_of_isSupportedOn (hsA 0))
+        · exact ManyBody.commute_of_mem_supportedOperators_of_disjoint ((hsA 0)) ((hsA 1)) (hR hij)
+        · exact ManyBody.commute_of_mem_supportedOperators_of_disjoint ((hsA 1)) ((hsA 0)) (hR hij)
         · exact absurd rfl hij)
       e (fun j ↦ Matrix.le_iff.mpr (he j)) T 0 Y u (E + η) s t (2 * b) hs0
       (by simp only [u]; linarith) ht hM.eigenvectorBasis hM.eigenvalues hEigen hconj hgap

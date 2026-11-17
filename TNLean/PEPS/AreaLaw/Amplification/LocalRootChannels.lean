@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.RootChannel
 
@@ -126,28 +128,27 @@ observables acting on spectators (`09-amplification.tex`, lines 107–110 and 12
 theorem localRootChannel_eq_self_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hB : ∀ A ∈ supportedOperators q K,
+    (hB : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K,
       Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) : localRootChannel K k B = B := by
   have hl₀ := (Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
       (Matrix.nonneg_iff_posSemidef.mp hk₀)))
   have hl₁ := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
       ManyBody.regionExpectation_one)
-  have hlK := (mem_supportedOperators_of_isSupportedOn
-      (ManyBody.regionExpectation_mem_supportedOperators K k))
+  have hlK := ((ManyBody.regionExpectation_mem_supportedOperators K k))
   refine rootChannel_eq_self_of_commute
     (rootChannel_kronecker_hyp (sqrt_one_sub_mul_add_sqrt_mul hl₀ hl₁)) ?_ ?_
-  · exact hB _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
-      (isSupportedOn_of_mem_supportedOperators ((supportedOperators q K).sub_mem
-          (one_mem_supportedOperators _) hlK)))))
-  · exact hB _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
-      (isSupportedOn_of_mem_supportedOperators hlK))))
+  · exact hB _ (((ManyBody.sqrt_mem_supportedOperators
+      (((ManyBody.supportedOperators (fun _ ↦ Fin q) K).sub_mem
+          ((one_mem (ManyBody.supportedOperators _ _))) hlK)))))
+  · exact hB _ (((ManyBody.sqrt_mem_supportedOperators
+      (hlK))))
 
 /-- The local channel intertwines commutators with any operator in the physical
 regional commutant, with spectators (`09-amplification.tex`, lines 122–127). -/
 theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {A : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hA : ∀ C ∈ supportedOperators q K,
+    (hA : ∀ C ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K,
       Commute (C ⊗ₖ (1 : Matrix Aux Aux ℂ)) A)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     A * localRootChannel K k B - localRootChannel K k B * A =
@@ -156,13 +157,12 @@ theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
       (Matrix.nonneg_iff_posSemidef.mp hk₀)))
   have hl₁ := ((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
       ManyBody.regionExpectation_one)
-  have hlK := (mem_supportedOperators_of_isSupportedOn
-      (ManyBody.regionExpectation_mem_supportedOperators K k))
-  have hG := hA _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
-      (isSupportedOn_of_mem_supportedOperators ((supportedOperators q K).sub_mem
-          (one_mem_supportedOperators _) hlK)))))
-  have hKr := hA _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
-      (isSupportedOn_of_mem_supportedOperators hlK))))
+  have hlK := ((ManyBody.regionExpectation_mem_supportedOperators K k))
+  have hG := hA _ (((ManyBody.sqrt_mem_supportedOperators
+      (((ManyBody.supportedOperators (fun _ ↦ Fin q) K).sub_mem
+          ((one_mem (ManyBody.supportedOperators _ _))) hlK)))))
+  have hKr := hA _ (((ManyBody.sqrt_mem_supportedOperators
+      (hlK))))
   have hleft (R : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
       (hR : Commute R A) : R * (A * B) * R = A * (R * B * R) := by
     rw [hR.left_comm, mul_assoc]
@@ -179,7 +179,7 @@ local channel. In particular this applies to every on-site unitary outside `K`
 theorem localRootChannel_commutator [NeZero q] (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {U : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q Kᶜ)
+    (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Kᶜ)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * localRootChannel K k B -
         localRootChannel K k B * (U ⊗ₖ 1) =
@@ -188,7 +188,7 @@ theorem localRootChannel_commutator [NeZero q] (K : Finset ι)
   intro C hC
   change (C ⊗ₖ 1) * (U ⊗ₖ 1) = (U ⊗ₖ 1) * (C ⊗ₖ 1)
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
-    (commute_of_mem_supportedOperators disjoint_compl_right hC hU).eq]
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint hC hU disjoint_compl_right).eq]
 
 /-- The zeroth shell has norm at most two, including with spectators
 (`09-amplification.tex`, lines 101–106, the case `l = 0`). -/
@@ -267,17 +267,17 @@ theorem localRootChannelShell_eq_zero_of_forall_commute [NeZero q]
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) (l : ℕ)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hB : ∀ A ∈ supportedOperators q (regions l : Finset ι),
+    (hB : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (regions l : Finset ι),
       Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) :
     localRootChannelShell regions k l B = 0 := by
   cases l with
   | zero =>
     exact sub_eq_zero.mpr (localRootChannel_eq_self_of_forall_commute _ hk₀ hk₁ hB)
   | succ l =>
-    have hPrev : ∀ A ∈ supportedOperators q (regions l : Finset ι),
+    have hPrev : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (regions l : Finset ι),
         Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B := by
       intro A hA
-      exact hB A (supportedOperators_mono (by exact hregions (Nat.le_succ l)) hA)
+      exact hB A (ManyBody.supportedOperators_mono (by exact hregions (Nat.le_succ l)) hA)
     simp only [localRootChannelShell,
       localRootChannel_eq_self_of_forall_commute _ hk₀ hk₁ hB,
       localRootChannel_eq_self_of_forall_commute _ hk₀ hk₁ hPrev, sub_self]

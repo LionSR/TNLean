@@ -321,8 +321,8 @@ theorem gate₂_mem_unitary : h.gate₂ (d := d) ∈ unitary (Matrix (Fin N → 
     (Equiv.Perm.permMatrix_mem_unitaryGroup _)
 
 theorem gate₁_mem_supportedOperators :
-    h.gate₁ (d := d) ∈ supportedOperators d ({h.e, h.f} : Finset (Fin N)) := by
-  refine mul_mem_supportedOperators
+    h.gate₁ (d := d) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({h.e, h.f} : Finset (Fin N)) := by
+  refine mul_mem
     (IsLocalPerm.permMatrix_mem_supportedOperators
       (isLocalPerm_shiftPerm (ι := Fin N) (by simp) _ _ fun x y hxy => by
         rw [hxy h.e (by simp)]))
@@ -331,8 +331,8 @@ theorem gate₁_mem_supportedOperators :
   rfl
 
 theorem gate₂_mem_supportedOperators :
-    h.gate₂ (d := d) ∈ supportedOperators d ({h.c, h.e} : Finset (Fin N)) := by
-  refine mul_mem_supportedOperators (finKronecker_mem_supportedOperators fun i hi => ?_)
+    h.gate₂ (d := d) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({h.c, h.e} : Finset (Fin N)) := by
+  refine mul_mem (finKronecker_mem_supportedOperators fun i hi => ?_)
     (IsLocalPerm.permMatrix_mem_supportedOperators
       (isLocalPerm_shiftPerm (ι := Fin N) (by simp) _ _ fun x y hxy => by
         rw [hxy h.c (by simp)]))

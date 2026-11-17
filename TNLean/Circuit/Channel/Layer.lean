@@ -143,10 +143,10 @@ Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the light c
 circuit), here for the dual of a channel. -/
 structure IsHeisenbergLocal (S : Finset ι)
     (φ : Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)) : Prop where
-  map_eq_self : ∀ A ∈ supportedOperators d Sᶜ, φ A = A
-  map_mem : ∀ Z, S ⊆ Z → ∀ A ∈ supportedOperators d Z, φ A ∈ supportedOperators d Z
-  map_mul_right : ∀ A, ∀ B ∈ supportedOperators d Sᶜ, φ (A * B) = φ A * B
-  map_mul_left : ∀ A, ∀ B ∈ supportedOperators d Sᶜ, φ (B * A) = B * φ A
+  map_eq_self : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Sᶜ, φ A = A
+  map_mem : ∀ Z, S ⊆ Z → ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Z, φ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Z
+  map_mul_right : ∀ A, ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Sᶜ, φ (A * B) = φ A * B
+  map_mul_left : ∀ A, ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Sᶜ, φ (B * A) = B * φ A
 
 namespace IsHeisenbergLocal
 
@@ -154,12 +154,12 @@ variable {S S' : Finset ι} {φ ψ : Module.End ℂ (Matrix (ι → Fin d) (ι �
 
 theorem mono (h : IsHeisenbergLocal S φ) (hSS' : S ⊆ S') : IsHeisenbergLocal S' φ where
   map_eq_self A hA :=
-    h.map_eq_self A (supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hA)
+    h.map_eq_self A (ManyBody.supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hA)
   map_mem Z hZ := h.map_mem Z (hSS'.trans hZ)
   map_mul_right A B hB :=
-    h.map_mul_right A B (supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hB)
+    h.map_mul_right A B (ManyBody.supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hB)
   map_mul_left A B hB :=
-    h.map_mul_left A B (supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hB)
+    h.map_mul_left A B (ManyBody.supportedOperators_mono (Finset.compl_subset_compl.mpr hSS') hB)
 
 theorem one (S : Finset ι) :
     IsHeisenbergLocal S (1 : Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)) where
@@ -184,20 +184,20 @@ end IsHeisenbergLocal
 /-- The Heisenberg dual `A ↦ ∑ⱼ Kⱼ† A Kⱼ` of a channel whose Kraus operators act on `S` acts
 on `S`. -/
 theorem isHeisenbergLocal_rectangularKrausMap {S : Finset ι} {κ : Type*} [Fintype κ]
-    {K : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ} (hK : ∀ j, K j ∈ supportedOperators d S)
+    {K : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ} (hK : ∀ j, K j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hsum : ∑ j, (K j)ᴴ * K j = 1) :
     IsHeisenbergLocal S (rectangularKrausMap fun j ↦ (K j)ᴴ) := by
   have happ (A : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
       rectangularKrausMap (fun j ↦ (K j)ᴴ) A = ∑ j, (K j)ᴴ * A * K j := by
     simp only [krausMap_apply, conjTranspose_conjTranspose]
-  have hcomm {B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hB : B ∈ supportedOperators d Sᶜ)
+  have hcomm {B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Sᶜ)
     (j : κ) :
       Commute B (K j) :=
-    commute_of_mem_supportedOperators disjoint_compl_left hB (hK j)
-  have hcomm' {B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hB : B ∈ supportedOperators d Sᶜ)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hB (hK j) disjoint_compl_left
+  have hcomm' {B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Sᶜ)
     (j : κ) :
       Commute (K j)ᴴ B :=
-    commute_of_mem_supportedOperators disjoint_compl_right (star_mem_supportedOperators (hK j)) hB
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (star_mem (hK j)) hB disjoint_compl_right
   refine ⟨fun A hA ↦ ?_, fun Z hZ A hA ↦ ?_, fun A B hB ↦ ?_, fun A B hB ↦ ?_⟩
   · rw [happ]
     calc ∑ j, (K j)ᴴ * A * K j = ∑ j, (K j)ᴴ * K j * A :=
@@ -205,9 +205,9 @@ theorem isHeisenbergLocal_rectangularKrausMap {S : Finset ι} {κ : Type*} [Fint
             rw [Matrix.mul_assoc, (hcomm hA j).eq, ← Matrix.mul_assoc]
       _ = A := by rw [← Finset.sum_mul, hsum, Matrix.one_mul]
   · rw [happ]
-    have hKZ (j : κ) := supportedOperators_mono hZ (hK j)
-    exact Submodule.sum_mem _ fun j _ ↦ mul_mem_supportedOperators
-      (mul_mem_supportedOperators (star_mem_supportedOperators (hKZ j)) hA) (hKZ j)
+    have hKZ (j : κ) := ManyBody.supportedOperators_mono hZ (hK j)
+    exact sum_mem fun j _ ↦ mul_mem
+      (mul_mem (star_mem (hKZ j)) hA) (hKZ j)
   · rw [happ, happ, Finset.sum_mul]
     refine Finset.sum_congr rfl fun j _ ↦ ?_
     simp only [Matrix.mul_assoc, (hcomm hB j).eq]
@@ -254,7 +254,7 @@ structure BondChannelLayer (d : ℕ) (bond : β → Finset ι) where
   r : β → ℕ
   /-- The Kraus operators of the channel on the bond `b`, as operators on all the sites. -/
   kraus : (b : β) → Fin (r b) → Matrix (ι → Fin d) (ι → Fin d) ℂ
-  kraus_mem_supportedOperators : ∀ b ∈ bonds, ∀ j, kraus b j ∈ supportedOperators d (bond b)
+  kraus_mem_supportedOperators : ∀ b ∈ bonds, ∀ j, kraus b j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bond b)
   sum_kraus : ∀ b ∈ bonds, ∑ j, (kraus b j)ᴴ * kraus b j = 1
   pairwiseDisjoint : (bonds : Set β).PairwiseDisjoint bond
 
@@ -277,15 +277,12 @@ noncomputable def gateDual (L : BondChannelLayer d bond) (b : β) :
 theorem gateMap_commute (L : BondChannelLayer d bond) :
     (L.bonds : Set β).Pairwise (Function.onFun Commute L.gateMap) :=
   fun k hk l hl hkl ↦ commute_rectangularKrausMap fun i j ↦
-    commute_of_mem_supportedOperators (L.pairwiseDisjoint hk hl hkl)
-      (L.kraus_mem_supportedOperators k hk i) (L.kraus_mem_supportedOperators l hl j)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (L.kraus_mem_supportedOperators k hk i) (L.kraus_mem_supportedOperators l hl j) (L.pairwiseDisjoint hk hl hkl)
 
 theorem gateDual_commute (L : BondChannelLayer d bond) (s : Finset β) (hs : s ⊆ L.bonds) :
     (s : Set β).Pairwise (Function.onFun Commute L.gateDual) :=
   fun k hk l hl hkl ↦ commute_rectangularKrausMap fun i j ↦
-    commute_of_mem_supportedOperators (L.pairwiseDisjoint (hs hk) (hs hl) hkl)
-      (star_mem_supportedOperators (L.kraus_mem_supportedOperators k (hs hk) i))
-      (star_mem_supportedOperators (L.kraus_mem_supportedOperators l (hs hl) j))
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (star_mem (L.kraus_mem_supportedOperators k (hs hk) i)) (star_mem (L.kraus_mem_supportedOperators l (hs hl) j)) (L.pairwiseDisjoint (hs hk) (hs hl) hkl)
 
 /-- The channel of a layer on states: the composition of its commuting channels.
 
@@ -365,19 +362,19 @@ private theorem partialDual_filter_isHeisenbergLocal [Fintype β] (L : BondChann
 one-step neighbourhood. -/
 theorem partialDual_mem_supportedOperators [Fintype β] (L : BondChannelLayer d bond) (s : Finset β)
     (hs : s ⊆ L.bonds) {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ supportedOperators d X) :
-    L.partialDual s hs A ∈ supportedOperators d (bondNeighbourhood bond X) := by
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    L.partialDual s hs A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bondNeighbourhood bond X) := by
   classical
   rw [L.partialDual_eq_filter_mul s hs fun k ↦ (bond k ∩ X).Nonempty, Module.End.mul_apply,
     (L.partialDual_filter_not_isHeisenbergLocal s hs X).map_eq_self A (by rwa [compl_compl])]
   exact (L.partialDual_filter_isHeisenbergLocal s hs X).map_mem _ subset_rfl A
-    (supportedOperators_mono (subset_bondNeighbourhood X) hA)
+    (ManyBody.supportedOperators_mono (subset_bondNeighbourhood X) hA)
 
 /-- **Light cone of one layer.** The Heisenberg dual of a layer enlarges the support of an
 operator to at most its one-step neighbourhood. -/
 theorem dual_mem_supportedOperators [Fintype β] (L : BondChannelLayer d bond) {X : Finset ι}
-    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
-    L.dual A ∈ supportedOperators d (bondNeighbourhood bond X) :=
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    L.dual A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bondNeighbourhood bond X) :=
   L.partialDual_mem_supportedOperators _ _ hA
 
 /-- The Heisenberg dual of a layer is multiplicative on operators acting on sets whose
@@ -385,15 +382,15 @@ one-step neighbourhoods are disjoint: no channel of the layer acts on both. -/
 theorem dual_mul [Fintype β] (L : BondChannelLayer d bond) {X Y : Finset ι}
     (hXY : Disjoint (bondNeighbourhood bond X) (bondNeighbourhood bond Y))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     L.dual (A * B) = L.dual A * L.dual B := by
   classical
   have hP := L.partialDual_filter_isHeisenbergLocal L.bonds subset_rfl X
   have hQ := L.partialDual_filter_not_isHeisenbergLocal L.bonds subset_rfl X
-  have hA' : A ∈ supportedOperators d (Xᶜ)ᶜ := by rwa [compl_compl]
+  have hA' : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Xᶜ)ᶜ := by rwa [compl_compl]
   have hQB := L.partialDual_mem_supportedOperators
     (L.bonds.filter fun k ↦ ¬ (bond k ∩ X).Nonempty) (Finset.filter_subset _ _) hB
-  have hQB' := supportedOperators_mono hXY.le_compl_left hQB
+  have hQB' := ManyBody.supportedOperators_mono hXY.le_compl_left hQB
   rw [dual, L.partialDual_eq_filter_mul L.bonds subset_rfl fun k ↦ (bond k ∩ X).Nonempty]
   simp only [Module.End.mul_apply]
   rw [hQ.map_mul_left B A hA', hP.map_mul_right A _ hQB', hQ.map_eq_self A hA',
@@ -451,8 +448,8 @@ Source: arXiv:2307.01696, main text after Theorem 1 ("strictly finite light cone
 Supplemental Material, proof of Theorem 1, here for channels in place of unitary gates. -/
 theorem channelCircuitDual_mem_supportedOperators_lightCone [Fintype β]
     (Ls : List (BondChannelLayer d bond))
-    {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
-    channelCircuitDual Ls A ∈ supportedOperators d (lightCone bond X Ls.length) := by
+    {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    channelCircuitDual Ls A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (lightCone bond X Ls.length) := by
   induction Ls with
   | nil => exact hA
   | cons L Ls ih => exact L.dual_mem_supportedOperators ih
@@ -462,8 +459,8 @@ acting on sets whose light cones of radius `T` are disjoint. -/
 theorem channelCircuitDual_mul_of_disjoint_lightCone [Fintype β]
     (Ls : List (BondChannelLayer d bond))
     {X Y : Finset ι} (hXY : Disjoint (lightCone bond X Ls.length) (lightCone bond Y Ls.length))
-    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
-    (hB : B ∈ supportedOperators d Y) :
+    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     channelCircuitDual Ls (A * B) = channelCircuitDual Ls A * channelCircuitDual Ls B := by
   induction Ls with
   | nil => rfl
@@ -538,7 +535,7 @@ theorem IsBondChannelPreparedInDepth.trace_mul_mul_eq [Fintype β] {T : ℕ}
     {ρ : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hρ : IsBondChannelPreparedInDepth bond T ρ)
     {X Y : Finset ι} (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     trace (ρ * (A * B)) = trace (ρ * A) * trace (ρ * B) := by
   obtain ⟨Ls, rfl, σ, hσ, rfl⟩ := hρ
   have h := trace_rectKronecker_mul_mul hXY σ
@@ -566,8 +563,8 @@ abbrev ChannelLayer (d N : ℕ) [NeZero N] := BondChannelLayer d (ringBond (N :=
 /-- **Light cone of one layer on the ring.** The Heisenberg dual of a layer enlarges the
 support of an operator by at most one site on each side. -/
 theorem ChannelLayer.dual_mem_supportedOperators (L : ChannelLayer d N) {X : Finset (Fin N)}
-    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
-    L.dual A ∈ supportedOperators d (neighbourhood X 1) :=
+    {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    L.dual A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (neighbourhood X 1) :=
   bondNeighbourhood_ringBond X ▸ BondChannelLayer.dual_mem_supportedOperators L hA
 
 /-- On the ring, the Heisenberg dual of a layer is multiplicative on operators acting on sets
@@ -575,7 +572,7 @@ whose neighbourhoods of radius `1` are disjoint. -/
 theorem ChannelLayer.dual_mul (L : ChannelLayer d N) {X Y : Finset (Fin N)}
     (hXY : Disjoint (neighbourhood X 1) (neighbourhood Y 1))
     {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     L.dual (A * B) = L.dual A * L.dual B :=
   BondChannelLayer.dual_mul L (by rwa [bondNeighbourhood_ringBond, bondNeighbourhood_ringBond])
     hA hB
@@ -588,16 +585,16 @@ Source: arXiv:2307.01696, main text after Theorem 1 ("strictly finite light cone
 Supplemental Material, proof of Theorem 1, here for channels in place of unitary gates. -/
 theorem channelCircuitDual_mem_supportedOperators (Ls : List (ChannelLayer d N))
     {X : Finset (Fin N)} {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    (hA : A ∈ supportedOperators d X) :
-    channelCircuitDual Ls A ∈ supportedOperators d (neighbourhood X Ls.length) :=
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    channelCircuitDual Ls A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (neighbourhood X Ls.length) :=
   lightCone_ringBond X Ls.length ▸ channelCircuitDual_mem_supportedOperators_lightCone Ls hA
 
 /-- On the ring, the Heisenberg dual of a local channel circuit of depth `T` is multiplicative
 on operators acting on sets whose `T`-neighbourhoods are disjoint. -/
 theorem channelCircuitDual_mul (Ls : List (ChannelLayer d N)) {X Y : Finset (Fin N)}
     (hXY : Disjoint (neighbourhood X Ls.length) (neighbourhood Y Ls.length))
-    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
-    (hB : B ∈ supportedOperators d Y) :
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     channelCircuitDual Ls (A * B) = channelCircuitDual Ls A * channelCircuitDual Ls B :=
   channelCircuitDual_mul_of_disjoint_lightCone Ls
     (by rwa [lightCone_ringBond, lightCone_ringBond]) hA hB
@@ -631,7 +628,7 @@ theorem trace_mul_mul_eq_of_isChannelPreparedInDepth {T : ℕ}
     {ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hρ : IsChannelPreparedInDepth T ρ)
     {X Y : Finset (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     trace (ρ * (A * B)) = trace (ρ * A) * trace (ρ * B) :=
   IsBondChannelPreparedInDepth.trace_mul_mul_eq hρ
     (disjoint_lightCone_ringBond_of_isSeparatedBy hXY) hA hB

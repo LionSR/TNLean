@@ -48,7 +48,7 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
     let boundary : Finset (Edge (squareLatticeGraph L L)) :=
       Finset.univ.filter (IsRegionBoundaryEdge R)
     let Z := boundary.biUnion fun e ↦ ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))
-    F * K * Fᴴ - K ∈ supportedOperators (q * q) Z ∧
+    F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z ∧
       ‖F * K * Fᴴ - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
   classical
   intro p K F boundary Z
@@ -69,9 +69,9 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
         (EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le R A)
   have hplain (S : Finset (SquareLatticeVertex L L))
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
-      (hA : A ∈ supportedOperators q S) :
+      (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       Matrix.reindex p p (doubledHamiltonian A) ∈
-        supportedOperators (q * q) S := by
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
     simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
       Matrix.submatrix_mul_equiv,
       TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
@@ -79,17 +79,17 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
       TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hA
   have hlocal (S : Finset (SquareLatticeVertex L L))
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
-      (hA : A ∈ supportedOperators q S) :
+      (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ -
           Matrix.reindex p p (doubledHamiltonian A) ∈
-        supportedOperators (q * q) S :=
-    (supportedOperators (q * q) S).sub_mem
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S :=
+    (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S).sub_mem
       (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R S hA)
       (hplain S hA)
   have hsupport : F * K * Fᴴ - K ∈
-      supportedOperators (q * q) Z :=
-    hsum.symm ▸ (supportedOperators (q * q) Z).sum_mem
-      (fun e he ↦ supportedOperators_mono
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z :=
+    hsum.symm ▸ (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z).sum_mem
+      (fun e he ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
           (fun e : Edge (squareLatticeGraph L L) ↦
             ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))) he))

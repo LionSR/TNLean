@@ -62,12 +62,11 @@ private theorem permMatrix_cfg_apply (σ : Equiv.Perm (ι → Fin d)) (x y : ι 
     σ.permMatrix ℂ x y = if σ x = y then 1 else 0 := by
   simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
 
-omit [DecidableEq ι] in
 /-- The permutation matrix of a permutation changing and reading only the sites of `S` acts
 on `S`. -/
 theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Finset ι}
     {σ : Equiv.Perm (ι → Fin d)} (h : IsLocalPerm S σ) :
-    σ.permMatrix ℂ ∈ supportedOperators d S := by
+    σ.permMatrix ℂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   classical
   let e : Fin (Fintype.card S) → ι := fun j => ((Fintype.equivFin S).symm j : ι)
   have he : Function.Injective e :=

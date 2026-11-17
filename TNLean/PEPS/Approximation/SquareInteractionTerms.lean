@@ -49,8 +49,7 @@ theorem SquareHamiltonian.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
         AreaLaw.nearestNeighborSupport i := by
       simpa only [e, Equiv.apply_symm_apply] using
         squareAreaLawSupport_val_eq_nearestNeighborSupport L (e.symm i)
-    apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    simpa only [← hi, cfg, squareAreaLawSupport, Finset.coe_image] using hs
+    apply simpa only [← hi, cfg, squareAreaLawSupport, Finset.coe_image] using hs
   · exact fun i ↦ (h.hermitianTerm_isHermitian (e.symm i)).reindex cfg
   · exact fun i ↦ (Matrix.l2_opNorm_reindex_equiv cfg (h.hermitianTerm (e.symm i))).le.trans
       (h.hermitianTerm_norm_le (e.symm i))

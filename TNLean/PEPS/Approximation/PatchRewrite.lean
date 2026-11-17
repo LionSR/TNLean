@@ -227,10 +227,9 @@ theorem commute_untouched [NeZero q] (hR : R.AvoidsUntouched) (u : TagSpace R.un
       exact hR.affected_avoid h (List.mem_append_left _ hh)).symm
   have hpatch : Disjoint R.untouchedFootprint (footprint R.patches) :=
     (disjoint_footprint_of_forall hR.patch_avoid).symm
-  refine ((commute_of_mem_supportedOperators hnew hU
-    (rawProd_mem_supportedOperators _ a)).mul_right
-    (commute_of_mem_supportedOperators hpatch hU (projProd_mem_supportedOperators _))).mul_right
-    (commute_of_mem_supportedOperators hold hU (projProd_mem_supportedOperators _))
+  refine ((ManyBody.commute_of_mem_supportedOperators_of_disjoint hU (rawProd_mem_supportedOperators _ a) hnew).mul_right
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint hU (projProd_mem_supportedOperators _) hpatch)).mul_right
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint hU (projProd_mem_supportedOperators _) hold)
 
 /-- The encoding of a frame `untouched ++ affected`, in the coordinates with the untouched tags
 as the outer factor. -/
