@@ -36,6 +36,8 @@ class ParseImportsTest(unittest.TestCase):
 
 
 class EarlyModulesTest(unittest.TestCase):
+    modules = staticmethod(ci.early_modules)
+
     def setUp(self) -> None:
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
@@ -46,11 +48,11 @@ class EarlyModulesTest(unittest.TestCase):
         (self.root / self.aggregator).write_text("import TNLean.Other\n")
 
     def test_no_changed_sources(self) -> None:
-        self.assertEqual(ci.early_modules(self.root, []), [])
+        self.assertEqual(self.modules(self.root, []), [])
 
     def test_all_import_only_targets_are_preserved(self) -> None:
         (self.root / self.other).write_text("import Mathlib\n")
-        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
                          ["TNLean.Aggregator", "TNLean.Other"])
 
     def test_non_import_commands_and_uncertain_syntax_stay_early(self) -> None:
@@ -79,7 +81,7 @@ class EarlyModulesTest(unittest.TestCase):
             with self.subTest(name=name):
                 (self.root / self.other).write_text(source)
                 self.assertEqual(
-                    ci.early_modules(self.root, [self.aggregator, self.other]),
+                    self.modules(self.root, [self.aggregator, self.other]),
                     ["TNLean.Other"])
 
     def test_comments_do_not_make_an_aggregator_substantive(self) -> None:
@@ -88,16 +90,16 @@ class EarlyModulesTest(unittest.TestCase):
             "  import TNLean.Other -- theorem hidden : True := by trivial\n"
             "import /- nested /- comment -/ -/ Mathlib\n")
         (self.root / self.other).write_text("import Mathlib\ndef answer := 42\n")
-        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
                          ["TNLean.Other"])
 
     def test_invalid_utf8_even_inside_a_comment_stays_early(self) -> None:
         (self.root / self.other).write_bytes(b"import Mathlib\n-- invalid \xff\n")
-        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
                          ["TNLean.Other"])
 
     def test_missing_file_stays_early(self) -> None:
-        self.assertEqual(ci.early_modules(self.root, [self.aggregator, self.other]),
+        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
                          ["TNLean.Other"])
 
     def test_read_failure_stays_early(self) -> None:
@@ -110,8 +112,36 @@ class EarlyModulesTest(unittest.TestCase):
 
         with patch.object(Path, "read_text", read):
             self.assertEqual(
-                ci.early_modules(self.root, [self.aggregator, self.other]),
+                self.modules(self.root, [self.aggregator, self.other]),
                 ["TNLean.Other"])
+
+
+class FocusedSourcesTest(EarlyModulesTest):
+    # Reuse every uncertain-source/read-error case above against the focused
+    # classifier, whose all-aggregator policy intentionally differs from early.
+    @staticmethod
+    def modules(root, sources):
+        return [ci.module_of(p) for p in ci.focused_sources(root, sources)]
+
+    def test_all_import_only_targets_are_preserved(self):
+        (self.root / self.other).write_text("import Mathlib\n")
+        self.assertEqual(ci.focused_sources(self.root, [self.aggregator, self.other]), [])
+
+    def test_comment_token_splicing_is_not_an_import(self):
+        for source in ("im/- comment -/port Mathlib\n",
+                       "import Math/- comment -/lib\n",
+                       "import Mathlib\n\"-- unterminated string\n"):
+            with self.subTest(source=source):
+                (self.root / self.other).write_text(source)
+                self.assertEqual(ci.focused_sources(self.root, [self.other]), [self.other])
+
+    def test_supported_import_spellings_are_deferred(self):
+        for source in ("\timport A.B'\r\nimport C_D.E2 -- note\r\n",
+                       "/- header -/ import A\nimport /- note -/ B\n",
+                       "import A/- trailing comment -/\n"):
+            with self.subTest(source=source):
+                (self.root / self.other).write_text(source)
+                self.assertEqual(ci.focused_sources(self.root, [self.other]), [])
 
 
 class SelectTest(unittest.TestCase):
@@ -459,6 +489,64 @@ class FocusedSelectTest(unittest.TestCase):
         finally:
             os.chdir(cwd)
 
+    def test_cli_deferral_preserves_post_build_coverage_and_failures(self):
+        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
+        self.change("TNLean/Uses.lean", "import TNLean.Core\n-- aggregator edit\n")
+        self.change("scripts/core_regression.lean", "import TNLean.Uses\n-- test edit\n")
+        head = git(self.root, "rev-parse", "HEAD")
+        cwd = Path.cwd()
+        try:
+            for outcome in (0, 1):
+                with mock.patch.object(ci, "focused_checks", return_value=outcome) as run:
+                    self.assertEqual(ci.main(["focused", "--root", str(self.root),
+                                              "--base", self.base, "--head", head]), outcome)
+                self.assertEqual(run.call_args.args[:2],
+                                 (["TNLean/Core.lean"], ["scripts/core_regression.lean"]))
+                self.assertIn("TNLean.Uses", run.call_args.args[2])
+            early, sources, tests = ci.select(Path("."), self.base)
+            self.assertEqual(early, ["TNLean.Core"])
+            self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
+            self.assertEqual(tests, ["scripts/core_regression.lean"])
+            with mock.patch.object(ci, "selection_base", return_value=self.base), \
+                    mock.patch.object(ci, "run_batch", return_value=["TNLean/Uses.lean"]) as run:
+                self.assertEqual(ci.main(["strict", "--root", str(self.root),
+                                          "--base", self.base]), 1)
+            self.assertEqual(run.call_args.args, (sources + tests, 3, 240))
+        finally:
+            os.chdir(cwd)
+
+    def test_cli_import_only_and_empty_selection_do_not_prepare_root(self):
+        for changed in (False, True):
+            if changed:
+                self.change("TNLean/Uses.lean", "import TNLean.Core\n-- edit\n")
+            head = git(self.root, "rev-parse", "HEAD")
+            cwd = Path.cwd()
+            try:
+                with mock.patch.object(ci, "early_build") as build, \
+                        mock.patch.object(ci, "run_batch", return_value=[]) as run:
+                    self.assertEqual(ci.main(["focused", "--root", str(self.root),
+                                              "--base", self.base, "--head", head]), 0)
+                build.assert_not_called()
+                self.assertTrue(all(not call.args[0] for call in run.call_args_list))
+                # Existing early's all-import-only fallback remains unchanged.
+                self.assertEqual(ci.select(Path("."), self.base)[:2],
+                                 (["TNLean.Uses"], ["TNLean/Uses.lean"]) if changed else ([], []))
+            finally:
+                os.chdir(cwd)
+
+    def test_unreadable_checkout_fails_focused_before_any_build(self):
+        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
+        head = git(self.root, "rev-parse", "HEAD")
+        cwd = Path.cwd()
+        try:
+            with patch.object(Path, "read_text", side_effect=PermissionError("unreadable")), \
+                    patch.object(ci, "focused_checks") as run:
+                self.assertEqual(ci.main(["focused", "--root", str(self.root),
+                                          "--base", self.base, "--head", head]), 1)
+            run.assert_not_called()
+        finally:
+            os.chdir(cwd)
+
 
 class FocusedRunnerTest(unittest.TestCase):
     def run_checks(self, sources, tests, graph, build_codes=None, strict_failures=None):
@@ -609,6 +697,26 @@ class FocusedWorkflowTest(unittest.TestCase):
         self.assertIn('--base "$BASE_SHA" --head "$PR_HEAD_SHA"', self.script)
         self.assertNotIn("TNLean.", self.script)
         self.assertNotIn("||", self.script)
+
+    def test_full_build_and_post_build_strict_remain_required_in_order(self):
+        import yaml
+        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/pr-ci.yml"
+        steps = yaml.safe_load(workflow.read_text())["jobs"]["build"]["steps"]
+        names = [step["name"] for step in steps if "name" in step]
+        ordered = ["Check directly changed Lean sources and tests strictly",
+                   "Build changed Lean modules early",
+                   "Build Lean project and capture timings",
+                   "Check changed Lean files and affected tests strictly"]
+        self.assertEqual(sorted(names.index(n) for n in ordered),
+                         [names.index(n) for n in ordered])
+        full, strict = [next(s for s in steps if s.get("name") == n) for n in ordered[2:]]
+        for step in (full, strict):
+            self.assertNotIn("if", step)
+            self.assertNotIn("continue-on-error", step)
+            self.assertIn("set -eo pipefail", step["run"])
+        self.assertIn("lake build\n", full["run"])
+        self.assertIn("ci_lean_checks.py strict --jobs 3", strict["run"])
+        self.assertEqual(strict["timeout-minutes"], 60)
 
 
 class EarlyBuildTest(unittest.TestCase):

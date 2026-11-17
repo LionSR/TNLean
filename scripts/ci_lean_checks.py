@@ -15,8 +15,9 @@ Commands
 ``focused`` Check the PR's directly changed sources and regression scripts
             before the full build. Select against the explicit feature head's
             merge base, but build and elaborate the actual (possibly merged)
-            checkout. Failures remain failures while independent targets are
-            still diagnosed.
+            checkout. Defer confidently import-only production sources to the
+            full build and post-build strict checks. Failures remain failures
+            while independent targets are still diagnosed.
 ``strict``  After the full build, elaborate with warnings as errors
 
             * every changed production source file, and
@@ -217,6 +218,27 @@ def early_modules(root: Path, sources: list[str]) -> list[str]:
         if error is not None or not imports:
             substantive.append(path)
     return [module_of(path) for path in substantive or sources]
+
+
+def focused_sources(root: Path, sources: list[str]) -> list[str]:
+    """Defer confidently import-only sources; full strict selection is unchanged."""
+    retained = []
+    for path in sources:
+        try:
+            text = (root / path).read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            retained.append(path)
+            continue
+        # Comments separate tokens in Lean. Do not let the shared comment
+        # stripper join e.g. im/- comment -/port into an import command.
+        spaced = text.replace("/-", " /-").replace("-/", "-/ ")
+        imports, error = pure_import_modules(spaced)
+        if error is not None or not imports:
+            retained.append(path)
+        else:
+            print(f"Deferring import-only source to full build and post-build strict: {path}",
+                  flush=True)
+    return retained
 
 
 def select(root: Path, base: str | None) -> tuple[list[str], list[str], list[str]]:
@@ -448,6 +470,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "focused":
         try:
             sources, tests, graph = select_focused(Path("."), args.base, args.head)
+            sources = focused_sources(Path("."), sources)
             return focused_checks(sources, tests, graph, args.jobs, args.timeout, args.log)
         except (ValueError, OSError, subprocess.CalledProcessError) as exc:
             print(f"::error::Focused checks could not complete: {exc}", file=sys.stderr)
