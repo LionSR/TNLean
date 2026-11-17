@@ -96,76 +96,82 @@
 
 \begin{lemma}[CZX]
     \label{example:czx}
-    \notready
+    \lean{MPOTensor.TimeReversalExamples.timeReversalSigns_czx,
+        MPOTensor.TimeReversalExamples.mpo_czx_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_czx}
+    \leanok
     \discussion{5715}
-    \uses{prop:sigma1-and-sigma2-equal, prop:dagger-mps-class-and-mpu-class-equal, thm:czx_printed_normalization_obstruction}
-    The normalized tensor printed below is not an MPU, by
-    Lemma~\ref{thm:czx_printed_normalization_obstruction}.
-    The following is the source classification claim, not an assertion
-    of unitarity for that printed tensor; \cite{gap:mpu_czx_tensor_normalization} discusses its normalization and comparison
-    with the Z-decorated
-    tensor.
+    \uses{def:mpu_tensor_from_two_gates, thm:mpu_supplied_two_site_periodic_circuit, lem:mpu_source_time_reversal_sign_independent, cor:all-equivalent-under-conjugation, thm:mpu_example_time_reversal_trace_signs, thm:czx_printed_normalization_obstruction}
     The CZX MPU of Chen, Liu and Wen~\cite{ChenLiuWen2011CZX} (see also
     \cite[lines~1906--1943]{Cirac2017MPU}) is defined by
     \begin{align}
         u & =CZ(\sigma_x\otimes\sigma_x), & v & =CZ,
     \end{align}
-    where $CZ=\operatorname{diag}(1,1,1,-1)$. Let
-    \begin{align}
-        H & =\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}
-    \end{align}
-    be the Hadamard matrix. The corresponding tensor is
-    \begin{align}
-        \mathcal U_{\ell r}^{ud}
-         & =(\sigma_x)_{ud}\delta_{u,\ell}H_{\ell,r}.
-    \end{align}
-    It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
-    % Source lines: paper_v2.tex 1906--1943.
+    where $CZ=\operatorname{diag}(1,1,1,-1)$. Its tensor in standard form
+    is time-reversal invariant: its periodic operators are self-adjoint on
+    every ring. It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
+
+    The source also prints the one-site tensor
+    $\mathcal U_{\ell r}^{ud}=(\sigma_x)_{ud}\delta_{u,\ell}H_{\ell,r}$, with
+    $H$ the Hadamard matrix. That tensor is not an MPU, by
+    Lemma~\ref{thm:czx_printed_normalization_obstruction}; its normalization
+    and the Z-decorated tensor are discussed in
+    \cite{gap:mpu_czx_tensor_normalization}. The lemma is stated for the
+    tensor in standard form built from $u$ and $v$, which defines the MPU in
+    the source. Here $\sigma^{(1)}$ is the trace sign of $u$ and $v$, and
+    $\sigma^{(2)}$ is the normalized trace of
+    Lemma~\ref{lem:mpu_source_time_reversal_sign_independent} for the
+    two-site blocking of that tensor in standard form.
+    % Source lines: paper_v2.tex 1913--1932.
 \end{lemma}
 
-\begin{lemma}[Admissible CZX data]
-    \label{ex:mpu_admissible_czx}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (blocked CZX data):** the one-, two-, and four-site
-    % tensors used to define the two signs carry reduced full-support source data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:sigma1-and-sigma2-equal, prop:dagger-mps-class-and-mpu-class-equal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, thm:czx_printed_normalization_obstruction}
-    The normalized tensor printed below is not an MPU, by
-    Lemma~\ref{thm:czx_printed_normalization_obstruction}.
-    Under the conventions recorded in \cite{gap:mpu_czx_tensor_normalization}, the classification below evaluates the given tensor
-    data.
-    Suppose the CZX tensors $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$,
-    together with the physical-adjoint comparison tensors
-    $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are simple and each carries
-    its own reduced full-support source datum. The CZX MPU of
-    Chen, Liu and Wen~\cite{ChenLiuWen2011CZX} (see also
-    \cite[lines~1906--1943]{Cirac2017MPU}) is defined by
+\begin{proof}\leanok
+    All gates are monomial matrices with phases $\pm1$. The periodic operator
+    on $N$ sites of the standard form is the shifted layer of $v$ after the
+    unshifted layer of $u$
+    (Lemma~\ref{thm:mpu_supplied_two_site_periodic_circuit}), again a
+    monomial matrix. Its permutation flips every spin, and its phase is the
+    product of the $CZ$ phases on the $2N$ bonds of the ring. With
+    $s(a)=(-1)^a$,
     \begin{align}
-        u  & =CZ(\sigma_x\otimes\sigma_x),   & v & =CZ, \\
-        CZ & =\operatorname{diag}(1,1,1,-1).
+        CZ_{1-a,1-b} & =-\,CZ_{a,b}\,s(a)\,s(b).
     \end{align}
-    Its tensor is
-    \begin{align}
-        \mathcal U_{\ell r}^{ud}
-          & =(\sigma_x)_{ud} \delta_{u,\ell}H_{\ell,r},           &
-        H & =\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
-    \end{align}
-    It has $\sigma^{(1)}=\sigma^{(2)}=-1$.
-    % Source lines: paper_v2.tex 1906--1943.
-\end{lemma}
+    Every spin lies on two bonds and there are $2N$ bonds, so flipping every
+    spin leaves the phase unchanged. Hence the operator equals its adjoint.
+
+    The first sign is Lemma~\ref{thm:mpu_example_time_reversal_trace_signs}.
+    For the second, the two-site blocking of the tensor in standard form has
+    the doubled standard form with gates
+    $u^{(2)}=(\Id\otimes v\otimes\Id)(u\otimes u)$ and
+    $v^{(2)}=\Id\otimes v\otimes\Id$, so $\sigma^{(2)}$ is the trace sign of
+    $u^{(2)},v^{(2)}$ by
+    Lemma~\ref{lem:mpu_source_time_reversal_sign_independent}. Its trace is
+    the trace of a monomial matrix on $256$ configurations, a signed count of
+    the fixed points of its permutation; the count is $-16$, evaluated
+    exactly.
+\end{proof}
 
 \begin{lemma}[The other three time-reversal classes]
     \label{ex:dagger-all-but-czx}
-    \notready
+    \lean{MPOTensor.TimeReversalExamples.timeReversalSigns_one,
+        MPOTensor.TimeReversalExamples.timeReversalSigns_I_smul_one,
+        MPOTensor.TimeReversalExamples.timeReversalSigns_I_smul_czx,
+        MPOTensor.TimeReversalExamples.mpo_one_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.mpo_I_smul_one_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.mpo_I_smul_czx_eq_conjTranspose,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_one,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_I_smul_one,
+        MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_I_smul_czx}
+    \leanok
     \discussion{5715}
-    \uses{example:czx, prop:sigma1-and-sigma2-equal}
+    \uses{example:czx}
     The standard forms
     \begin{align}
         u & =v=\Id,                                      \\
         u & =i\Id,                           & v & =\Id, \\
         u & =i\,CZ(\sigma_x\otimes\sigma_x), & v & =CZ
     \end{align}
+    are time-reversal invariant on every ring of an even number of sites and
     realize, respectively,
     \begin{align}
         (\sigma^{(1)},\sigma^{(2)})
@@ -173,6 +179,17 @@
     \end{align}
     % Source lines: paper_v2.tex 1945--1962.
 \end{lemma}
+
+\begin{proof}\leanok
+    For $u=v=\Id$ the periodic operator is the identity, and the trace of the
+    doubled gates is $16$, evaluated as in Lemma~\ref{example:czx}. A scalar
+    $i$ on $u$ multiplies the periodic operator on $N$ sites by $i^N$, which
+    is real for even $N$, so time-reversal invariance persists on those rings.
+    The scalar enters the trace sign of $u,v$ as $i^2=-1$ and the doubled
+    gate $u^{(2)}$ as $i^2$, hence the trace sign of $u^{(2)},v^{(2)}$ as
+    $i^4=1$. The second and third rows follow from the first row and from
+    Lemma~\ref{example:czx}.
+\end{proof}
 
 \begin{lemma}[Trace signs of the example gates]
     \label{thm:mpu_example_time_reversal_trace_signs}
@@ -201,10 +218,9 @@
     \end{align}
     These are the first signs $\sigma^{(1)}$ printed in
     Lemmas~\ref{example:czx} and~\ref{ex:dagger-all-but-czx}. This lemma
-    concerns the trace signs of these gate pairs only. The second signs
-    $\sigma^{(2)}$ and the classification by both signs rest on
-    Theorem~\ref{prop:sigma1-and-sigma2-equal}, and those two lemmas
-    remain open. The normalization of the printed one-site CZX tensor,
+    concerns the trace signs of these gate pairs only; the second signs
+    $\sigma^{(2)}$ and time-reversal invariance are proved in those two
+    lemmas. The normalization of the printed one-site CZX tensor,
     discussed in \cite{gap:mpu_czx_tensor_normalization}, does not enter.
     % Source lines: paper_v2.tex 1906--1962, with eq:sigma-from-trace at 1595--1611.
 \end{lemma}
@@ -215,32 +231,6 @@
     two traces, $-4$ and $4$, are finite sums of integers and are evaluated
     exactly.
 \end{proof}
-
-\begin{lemma}[Admissible remaining time-reversal classes]
-    \label{ex:mpu_admissible_time_reversal_classes}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (blocked example data):** every standard form and
-    % blocking used to define the signs carries reduced full-support source data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{ex:mpu_admissible_czx, prop:sigma1-and-sigma2-equal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    For each displayed example, suppose the tensors $\mathcal U$,
-    $\mathcal U_2$, and $\mathcal U_4$, together with the physical-adjoint
-    comparison tensors $\mathcal U_2^\sharp$ and $\mathcal U_4^\sharp$, are
-    simple and each carries its own reduced full-support source datum.
-    The standard forms
-    \begin{align}
-        u & =v=\Id,                                      \\
-        u & =i\Id,                           & v & =\Id, \\
-        u & =i\,CZ(\sigma_x\otimes\sigma_x), & v & =CZ
-    \end{align}
-    realize, respectively,
-    \begin{align}
-        (\sigma^{(1)},\sigma^{(2)})
-         & =(1,1),\quad(-1,1),\quad(1,-1).
-    \end{align}
-    % Source lines: paper_v2.tex 1945--1962.
-\end{lemma}
 
 \begin{lemma}[Source cuts and ranks of the cyclic shifts]
     \label{thm:mpu_shift_source_cuts_ranks}

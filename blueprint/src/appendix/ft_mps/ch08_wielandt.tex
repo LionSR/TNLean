@@ -561,7 +561,7 @@ overlap convergence, non-vanishing of iterated transfer maps, and fixed-point
 uniqueness.
 
 \begin{lemma}[Primitive overlap convergence]\label{thm:prim_overlap_one}
-    \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
+    \lean{Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one}
     \leanok
     \uses{def:primitive_mps, def:mpv_overlap}
     If $A$ is a primitive MPS tensor, then $O_{AA}(N)\to1$.
@@ -593,7 +593,7 @@ uniqueness.
 \end{proof}
 
 \begin{lemma}[Primitive MPS tensors have nonzero word products]\label{lem:prim_nonzero_word}
-    \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitiveMPS}
+    \lean{MPSTensor.exists_nonzero_evalWord_of_hasComplementaryFixedPointGap}
     \leanok
     \uses{def:primitive_mps, def:eval_word}
     If $A$ is a primitive MPS tensor,
@@ -610,7 +610,7 @@ uniqueness.
 \end{proof}
 
 \begin{lemma}[Iterated transfer does not vanish]\label{lem:transfer_pow_ne_zero}
-    \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitiveMPS}
+    \lean{MPSTensor.transferMap_pow_ne_zero_of_hasComplementaryFixedPointGap}
     \leanok
     \uses{def:primitive_mps, def:transfer_map}
     If $A$ is a primitive MPS tensor, then

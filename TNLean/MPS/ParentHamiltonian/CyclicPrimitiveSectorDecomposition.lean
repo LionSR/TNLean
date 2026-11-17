@@ -42,7 +42,7 @@ theorem IsPeriodic.exists_cyclic_primitive_sector_resolution
         (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
         (V : (j : Fin m) → Matrix (Fin D) (Fin (dim j)) ℂ)
         (ρ : (j : Fin m) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-        (∀ j, IsPrimitiveMPS (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
+        (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
         (∀ j, IsOrthogonalProjection (P j)) ∧ (∑ j, P j) = 1 ∧
         (∀ j i, P (j + 1) * A i = A i * P j) ∧
@@ -70,7 +70,7 @@ theorem IsPeriodic.exists_cyclic_primitive_sector_resolution
       hComm hTrace hTransfer hMul hStar hLetter hiso hV hEmbed hdim hjk e
   have hShift : ∀ j i, P (j + 1) * A i = A i * P j :=
     offDiag_shift_of_adjoint_cyclic_shift A hA.leftCanonical hproj hcycle'
-  choose ρ hP hρ using fun j => exists_isPrimitiveMPS_of_isPeriodic_one (hOne j)
+  choose ρ hP hρ using fun j => exists_hasComplementaryFixedPointGap_of_isPeriodic_one (hOne j)
   have hCorner (j : Fin m) (i : Fin (blockPhysDim d m)) :
       V j * B j i * (V j)ᴴ = P j * blockTensor A m i * P j :=
     (hEmbed j (B j i)).symm.trans (hLetter j i)

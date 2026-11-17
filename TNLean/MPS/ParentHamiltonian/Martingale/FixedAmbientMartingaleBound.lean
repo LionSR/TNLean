@@ -265,12 +265,13 @@ theorem fixedAmbient_martingaleDifference_norm_le_of_openChain
     exact (norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
       (r := r) hInj hl.le (by omega)).trans (hOpen K (by omega))
 
+set_option linter.style.longLine false in
 /-- A primitive MPS satisfies Nachtergaele's C3 bound on every active index of
 the fixed final-volume filtration.  The same overlap length and coefficient as
 in the physical open-chain estimate are used. -/
-theorem IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ _hl : 1 < l, ∃ _hInj : Kraus.IsNBlkInjective A l,
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
       ∀ (N n : ℕ), n < N →

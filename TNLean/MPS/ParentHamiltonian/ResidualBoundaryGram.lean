@@ -279,14 +279,15 @@ theorem residualBoundaryGramLimit_apply_of_cyclic_support
   simpa only [hV, sum_word_conjTranspose_cyclic_projection_mul_word A P hTP hShift] using
     residualBoundaryGramLimit_frobeniusEquivEuclidean_apply A V ρ htr r Y
 
+set_option linter.style.longLine false in
 /-- Primitive prefix convergence bounds the residual Gram error
 geometrically, uniformly over every original tail length. The cyclic corner
 and contraction are derived from the original trace-preserving tensor.
 This is a quantitative intermediate estimate for Nachtergaele,
 arXiv:cond-mat/9410110, Lemma commutation (i), lines 2442--2531. -/
-theorem IsPrimitiveMPS.residualBoundaryGram_sub_limit_norm_sq_le_geometric
+theorem _root_.Kraus.HasComplementaryFixedPointGap.residualBoundaryGram_sub_limit_norm_sq_le_geometric
     [NeZero E] {B : MPSTensor (blockPhysDim d L) E}
-    {ρ : Matrix (Fin E) (Fin E) ℂ} (hB : IsPrimitiveMPS B ρ)
+    {ρ : Matrix (Fin E) (Fin E) ℂ} (hB : Kraus.HasComplementaryFixedPointGap B ρ)
     {m : ℕ} [NeZero m] (A : MPSTensor d D)
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hProj : ∀ a, IsOrthogonalProjection (P a))
@@ -343,7 +344,7 @@ theorem IsPeriodic.exists_cyclic_residualBoundaryGram_bound
       ∃ (B : (a : Fin (m.gcd m)) → MPSTensor (blockPhysDim d m) (dim a))
         (V : (a : Fin (m.gcd m)) → Matrix (Fin D) (Fin (dim a)) ℂ)
         (ρ : (a : Fin (m.gcd m)) → Matrix (Fin (dim a)) (Fin (dim a)) ℂ)
-        (hPrimitive : ∀ a, IsPrimitiveMPS (B a) (ρ a)),
+        (hPrimitive : ∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)),
         (∀ a, (ρ a).PosDef) ∧ (∀ u, IsOrthogonalProjection (P u)) ∧ (∑ u, P u) = 1 ∧
         (∀ u i, P u * A i = A i * P (u + 1)) ∧ (∑ a, dim a) = D ∧
         (∀ a, (V a)ᴴ * V a = 1) ∧
@@ -374,7 +375,8 @@ theorem IsPeriodic.exists_cyclic_residualBoundaryGram_bound
   let : ∀ a, NeZero (dim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
   have hOne (a : Fin (m.gcd m)) : IsPeriodic 1 (B a) := by
     simpa only [Nat.gcd_self, Nat.div_self hA.period_pos] using hPeriod a
-  choose ρ hPrimitive hFaithful using fun a => exists_isPrimitiveMPS_of_isPeriodic_one (hOne a)
+  choose ρ hPrimitive hFaithful using
+    fun a => exists_hasComplementaryFixedPointGap_of_isPeriodic_one (hOne a)
   have hV' (a : Fin (m.gcd m)) : V a * (V a)ᴴ = P (Fin.cast (Nat.gcd_self m) a) := by
     simpa only [stepOrbitProjection_self] using hV a
   refine ⟨P, dim, hdim, B, V, ρ, hPrimitive, hFaithful, hProj, hSum, hShift,

@@ -31,7 +31,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {L₀ R : ℕ} (hL₀ : 0 < L₀) (hBlk : ∀ j, Kraus.IsNBlkInjective (A j) L₀)

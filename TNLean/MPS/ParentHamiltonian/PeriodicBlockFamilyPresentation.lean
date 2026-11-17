@@ -64,13 +64,13 @@ theorem exists_primitive_nestedFamilyPresentation
     [∀ j a, NeZero (dims j a)]
     (B : ∀ j a, MPSTensor d (dims j a))
     (ρ : ∀ j a, Matrix (Fin (dims j a)) (Fin (dims j a)) ℂ)
-    (hP : ∀ j a, IsPrimitiveMPS (B j a) (ρ j a))
+    (hP : ∀ j a, Kraus.HasComplementaryFixedPointGap (B j a) (ρ j a))
     (hρ : ∀ j a, (ρ j a).PosDef) :
     ∃ (g : ℕ) (bdim : Fin g → ℕ) (hdim : ∀ a, 0 < bdim a),
       let _ : ∀ a, NeZero (bdim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
       ∃ (C : ∀ a, MPSTensor d (bdim a))
         (σ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
-      (∀ a, IsPrimitiveMPS (C a) (σ a)) ∧ (∀ a, (σ a).PosDef) ∧
+      (∀ a, Kraus.HasComplementaryFixedPointGap (C a) (σ a)) ∧ (∀ a, (σ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv C ∧
       ∀ N, (⨆ j, ⨆ a, groundSpaceES (B j a) N) =
         groundSpaceES (toTensorFromBlocks (fun _ => 1) C) N := by
@@ -108,13 +108,13 @@ theorem exists_primitive_blockFamilyPresentation_of_period_dvd
       let _ : ∀ a, NeZero (bdim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
       ∃ (B : ∀ a, MPSTensor (blockPhysDim d L) (bdim a))
         (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
-      (∀ a, IsPrimitiveMPS (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
+      (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv B ∧
       ∀ N, groundSpaceES (blockTensor (toTensorFromBlocks μ A) L) N =
         groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N := by
   classical
   choose dims hdims rest using fun j =>
-    (hPeriodic j).exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd L hL (hdiv j)
+    (hPeriodic j).exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd L hL (hdiv j)
   choose B ρ _htotal hP hρ hGS using rest
   let : ∀ j a, NeZero (dims j a) := fun j a => ⟨Nat.ne_of_gt (hdims j a)⟩
   obtain ⟨g, bdim, hdim, C, σ, hprim, hfaithful, hsep, hflat⟩ :=
@@ -139,7 +139,7 @@ theorem exists_primitive_blockFamilyPresentation_of_isPeriodic
         let _ : ∀ a, NeZero (bdim a) := fun a => ⟨Nat.ne_of_gt (hdim a)⟩
         ∃ (B : ∀ a, MPSTensor (blockPhysDim d L) (bdim a))
           (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
-        (∀ a, IsPrimitiveMPS (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
+        (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
         ∀ N, groundSpaceES (blockTensor (toTensorFromBlocks μ A) L) N =
           groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N := by

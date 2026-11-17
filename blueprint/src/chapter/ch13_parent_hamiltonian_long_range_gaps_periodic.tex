@@ -212,8 +212,8 @@
 
 \begin{lemma}[All states supported in primitive joint MPS spaces]
     \label{thm:primitive_joint_mps_supported_state_classification}
-    \lean{MPSTensor.groundSpace_supported_iff_convex_combination_of_isPrimitiveMPS,
-        MPSTensor.isPure_groundSpace_supported_iff_sector_of_isPrimitiveMPS}
+    \lean{MPSTensor.groundSpace_supported_iff_convex_combination_of_hasComplementaryFixedPointGap,
+        MPSTensor.isPure_groundSpace_supported_iff_sector_of_hasComplementaryFixedPointGap}
     \leanok
     Suppose finitely many pairwise inequivalent primitive tensors $A_j$
     have faithful invariant matrices, and let $T=\bigoplus_j\mu_j A_j$
@@ -247,7 +247,7 @@
 
 \begin{lemma}[Primitive sectors after blocking by a multiple of the period]
     \label{thm:periodic_primitive_ground_space}
-    \lean{MPSTensor.IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition_of_dvd}
+    \lean{MPSTensor.IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd}
     \leanok
     Let $A$ be periodic of period $m$, and let $p>0$ satisfy $m\mid p$.
     Put $r=\gcd(m,p)=m$. There are positive bond dimensions $D_j$ with
@@ -282,7 +282,7 @@
 
 \begin{lemma}[Primitive sectors after blocking by the period]
     \label{thm:periodic_primitive_ground_space_at_period}
-    \lean{MPSTensor.IsPeriodic.exists_isPrimitiveMPS_groundSpaceDecomposition}
+    \lean{MPSTensor.IsPeriodic.exists_hasComplementaryFixedPointGap_groundSpaceDecomposition}
     \leanok
     A periodic tensor of period $m$ admits $m$ positive-dimensional
     primitive sectors after blocking by $m$. Their bond dimensions sum to
@@ -1462,7 +1462,7 @@
 
 \begin{lemma}[Residual-sector overlap decay]
     \label{thm:residual_sector_overlap_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent}
     \leanok
     For two inequivalent normalized primitive blocked-prefix tensors of
     positive bond dimensions with faithful invariant matrices, their correlated residual ranges become
@@ -1910,7 +1910,7 @@
 
 \begin{lemma}[Faithful primitive fixed point at period one]
     \label{thm:period_one_primitive_witness}
-    \lean{MPSTensor.exists_isPrimitiveMPS_of_isPeriodic_one}
+    \lean{MPSTensor.exists_hasComplementaryFixedPointGap_of_isPeriodic_one}
     \leanok
     \uses{def:primitive_mps}
     Let $A$ be a normalized irreducible tensor of period one with positive
@@ -2027,7 +2027,7 @@
 \begin{lemma}[Residual Gram error uniformly in the tail length]
     \label{thm:correlated_residual_gram_error}
     \lean{MPSTensor.norm_blockedResidualBoundaryMapES_gram_sub_limit_le,
-        MPSTensor.IsPrimitiveMPS.residualBoundaryGram_sub_limit_norm_sq_le_geometric}
+        Kraus.HasComplementaryFixedPointGap.residualBoundaryGram_sub_limit_norm_sq_le_geometric}
     \leanok
     Whenever $\|C_r\|\leq1$,
     \begin{align}
@@ -2515,9 +2515,9 @@
 
 \begin{lemma}[Uniform supported inverse convergence]
     \label{thm:residual_supported_inverse_uniform_tail}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_residualBoundaryGramInverse_properties,
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_residualBoundaryGramInverse_properties,
         MPSTensor.norm_residualBoundaryGramInverse_sub_limit_le,
-        MPSTensor.IsPrimitiveMPS.residualBoundaryGramInverse_sub_limit_tendsto_zero}
+        Kraus.HasComplementaryFixedPointGap.residualBoundaryGramInverse_sub_limit_tendsto_zero}
     \leanok
     Assume $D>0$, and let the positive-dimensional prefix tensor $B$ be
     primitive with faithful invariant matrix $\rho$. Suppose that every exact tail Gram matrix $Q_r$
@@ -2696,8 +2696,8 @@
 
 \begin{lemma}[Uniform cross-sector residual window decay]
     \label{thm:residual_window_cross_sector_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_residualWindow_cross_projection_le_of_inequivalent,
-        MPSTensor.IsPrimitiveMPS.residualWindow_cross_projection_tendsto_zero_of_inequivalent}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_residualWindow_cross_projection_le_of_inequivalent,
+        Kraus.HasComplementaryFixedPointGap.residualWindow_cross_projection_tendsto_zero_of_inequivalent}
     \leanok
     Suppose $B_i$ and $B_j$ are inequivalent normalized primitive tensors
     with positive bond dimensions and faithful invariant matrices.
@@ -3200,7 +3200,7 @@
 
 \begin{lemma}[Primitive residual mixed-Gram decay]
     \label{thm:residual_window_mixed_gram_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.residualWindowMixedGramResidual_tendsto_zero}
+    \lean{Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidual_tendsto_zero}
     \leanok
     Let $D,E>0$, and let the blocked tensor $B$ be primitive with a faithful
     invariant matrix $\rho$. Suppose the correlated tail Gram is an orthogonal
@@ -3454,7 +3454,7 @@
 
 \begin{lemma}[Primitive residual window projection decay]
     \label{thm:residual_window_primitive_projection_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.residualWindow_projection_comp_sub_tendsto_zero}
+    \lean{Kraus.HasComplementaryFixedPointGap.residualWindow_projection_comp_sub_tendsto_zero}
     \leanok
     Let $D,E>0$, and let $B$ be primitive with a faithful invariant matrix
     $\rho$. Suppose the exact correlated-tail Gram is an orthogonal projection
@@ -4189,7 +4189,7 @@
 \begin{lemma}[Eventual joint intersection for primitive sectors]
     \label{thm:primitive_joint_intersection_from_overlap}
     \lean{MPSTensor.eventually_iSup_groundSpace_restriction_intersection_of_independent_middle,
-        MPSTensor.eventually_iSup_groundSpace_restriction_intersection_of_isPrimitiveMPS}
+        MPSTensor.eventually_iSup_groundSpace_restriction_intersection_of_hasComplementaryFixedPointGap}
     \leanok
     For a finite tensor family, eventual independence of the middle ground
     spaces and the individual eventual one-step intersection identities
@@ -4797,8 +4797,8 @@
 
 \begin{lemma}[Preservation of a primitive stationary fixed point]
     \label{thm:primitive_stationary_witness_transport}
-    \lean{MPSTensor.IsPrimitiveMPS.blockTensor,
-        MPSTensor.IsPrimitiveMPS.reindexPhysical}
+    \lean{Kraus.HasComplementaryFixedPointGap.blockTensor,
+        Kraus.HasComplementaryFixedPointGap.reindexPhysical}
     \leanok
     Let $A$ be a normalized primitive tensor of positive bond dimension with
     stationary matrix $\rho$. If $\rho$ is positive definite, then blocking by any positive length

@@ -61,7 +61,7 @@ theorem IsPeriodic.exists_parentGroundStateFace_classification_of_eventually_ope
         let _ : ∀ j, NeZero (dim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
         ∃ (B : ∀ j, MPSTensor (blockPhysDim d m) (dim j))
           (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-          (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)),
+          (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)),
           (∀ j, (ρ j).PosDef) ∧ BlocksNotGaugePhaseEquiv B ∧
           (∀ N, groundSpaceES (blockTensor A m) N =
             groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N) ∧

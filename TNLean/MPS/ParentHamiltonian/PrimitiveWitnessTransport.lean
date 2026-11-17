@@ -30,10 +30,10 @@ variable {d D : ℕ} [NeZero D]
 witness. Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451, specialized to a period-one tensor; Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.blockTensor {A : MPSTensor d D}
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.blockTensor {A : MPSTensor d D}
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) {q : ℕ} (hq : 0 < q) :
-    IsPrimitiveMPS (blockTensor A q) ρ := by
+    Kraus.HasComplementaryFixedPointGap (blockTensor A q) ρ := by
   obtain ⟨hTP, hPrim, hIrr⟩ := tp_primitive_irreducible_extra_blocking A
     hP.norm hP.isPrimitive (hP.isIrreducibleFamily_of_posDef hρ) hq
   have hFix := transferMap_blockTensor_fixedPoint A q ρ hP.fixedPoint_is_fixed
@@ -48,9 +48,10 @@ theorem IsPrimitiveMPS.blockTensor {A : MPSTensor d D}
 fixed-point witness, since both the Kraus normalization and transfer map
 are unchanged. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), lines 1394--1435. -/
-theorem IsPrimitiveMPS.reindexPhysical {d₁ d₂ : ℕ} {A : MPSTensor d₂ D}
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ)
-    (e : Fin d₁ ≃ Fin d₂) : IsPrimitiveMPS (Kraus.reindexPhysical e A) ρ := by
+theorem _root_.Kraus.HasComplementaryFixedPointGap.reindexPhysical {d₁ d₂ : ℕ} {A : MPSTensor d₂ D}
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
+    (e : Fin d₁ ≃ Fin d₂) :
+    Kraus.HasComplementaryFixedPointGap (Kraus.reindexPhysical e A) ρ := by
   have hMap : Kraus.mapLM (Kraus.reindexPhysical e A) = Kraus.mapLM A :=
     transferMap_reindexPhysical_equiv e A
   refine ⟨(leftCanonical_reindexPhysical_equiv e A).mpr hP.norm,

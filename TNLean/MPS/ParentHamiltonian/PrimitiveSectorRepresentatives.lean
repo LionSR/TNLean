@@ -93,10 +93,10 @@ Nachtergaele, arXiv:cond-mat/9410110, Section 3 and Lemma disjoint. -/
 theorem exists_primitive_sector_representatives [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef) :
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef) :
     ∃ (g : ℕ) (sel : Fin g → Fin r), Function.Injective sel ∧
       (∀ k, 0 < dim (sel k)) ∧
-      (∀ k, IsPrimitiveMPS (A (sel k)) (ρ (sel k))) ∧
+      (∀ k, Kraus.HasComplementaryFixedPointGap (A (sel k)) (ρ (sel k))) ∧
       (∀ k, (ρ (sel k)).PosDef) ∧
       BlocksNotGaugePhaseEquiv (fun k => A (sel k)) ∧
       (∀ j, ∃ k, ∃ e : dim (sel k) = dim j,
@@ -106,7 +106,7 @@ theorem exists_primitive_sector_representatives [∀ j, NeZero (dim j)]
   let classes := mpvPhaseClassData A
   have hNormal : ∀ j, IsNormalTensor (A j) := fun j =>
     isNormalTensor_of_isNormal_leftCanonical (A j)
-      (isNormal_of_isPrimitiveMPS_with_posDef (hP j) (hρ j)) (hP j).norm
+      (isNormal_of_hasComplementaryFixedPointGap_with_posDef (hP j) (hρ j)) (hP j).norm
   have hinj : Function.Injective classes.repr := by
     intro i j hij
     by_contra hne
