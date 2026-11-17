@@ -132,12 +132,12 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     (TNLean.Lattice.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
       TNLean.Lattice.siteLift_mem_supportedOperators Q
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-  have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (Lattice.Site Λ)) := by
+  have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Q.image a : Finset (Lattice.Site Λ)) := by
     simpa only [a, V, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective hV₀
   have hD : gH.operator - K ∈
-      supportedOperators (q * q) (Z.image a : Set (Lattice.Site Λ)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset (Lattice.Site Λ)) := by
     simpa only [hK', a, K', F, K, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
       Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!

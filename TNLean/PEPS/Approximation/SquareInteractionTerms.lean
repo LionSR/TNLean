@@ -45,17 +45,17 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
   · intro i
     have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
       (AreaLaw.rectangleSiteEquiv L L).injective
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.hermitianPart.mem (e.symm i)))
+      (h.hermitianPart.mem (e.symm i))
     rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
     have hi : (AreaLaw.rectangleAreaLawSupport L L (e.symm i)).val =
         AreaLaw.nearestNeighborSupport i := by
       simpa only [e, Equiv.apply_symm_apply] using
         rectangleAreaLawSupport_val_eq_nearestNeighborSupport L (e.symm i)
-    apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
+    change _ ∈ ManyBody.supportedOperators _ _
     simpa only [← hi, cfg, AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
   · exact fun i ↦ (h.isHermitian_hermitianPart_term (e.symm i)).reindex cfg
   · exact fun i ↦ (Matrix.l2_opNorm_reindex_equiv cfg (h.hermitianPart.term (e.symm i))).le.trans
-      (((h.norm_hermitianPart_term_le (e.symm i)).trans (hhJ (e.symm i))))
+      ((h.norm_hermitianPart_term_le (e.symm i)).trans (hhJ (e.symm i)))
   · exact calc
       _ = ∑ j : SquareLatticeSiteOrEdge L L, Matrix.reindex cfg cfg (h.hermitianPart.term j) :=
         e.symm.sum_comp _

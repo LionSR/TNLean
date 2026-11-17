@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.Basic
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.PEPS.RegionBlock.Basic
 
@@ -65,7 +67,7 @@ theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_
       δ A = 0 :=
     sub_eq_zero.mpr
       (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) hS)
+        hA hS)
   have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
       δ (h.term (.inr e)) = 0 := by
     apply hcancel (h.mem (.inr e))

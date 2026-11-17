@@ -96,7 +96,7 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
           (fun e : Edge (squareLatticeGraph L L) ↦
             ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))) he))
         (hlocal {e.1.1, e.1.2}
-          (mem_supportedOperators_of_isSupportedOn (h.mem (.inr e)))))
+          (h.mem (.inr e))))
   have hbound : ‖F * K * Fᴴ - K‖ ≤ (boundary.card : ℝ) * (4 * J) := by
     simpa only [hsum, nsmul_eq_mul] using
       (norm_sum_le boundary (fun e ↦
