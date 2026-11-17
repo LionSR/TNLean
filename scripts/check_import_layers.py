@@ -145,10 +145,7 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
         "MPS/Core <-> MPS/MPDO",
         "MPS/Core <-> MPS/ParentHamiltonian",
         "MPS/Core <-> Spectral",
-        "MPS/Examples <-> MPS/FundamentalTheorem",
-        "MPS/Examples <-> MPS/MPDO",
         "MPS/Examples <-> MPS/MPU",
-        "MPS/Examples <-> MPS/Preparation",
         "MPS/Examples <-> MPS/Symmetry",
         "MPS/FundamentalTheorem <-> MPS/MPDO",
         "MPS/FundamentalTheorem <-> MPS/MPU",
@@ -192,14 +189,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
 # move the declaration the library needs out of the example.
 EXAMPLES_IMPORTS: frozenset[str] = frozenset(
     {
-        "TNLean.MPS.FundamentalTheorem.Arbitrary.Examples -> TNLean.MPS.Examples.MultiBlock.Worked",
-        "TNLean.MPS.FundamentalTheorem.Arbitrary.OneBlockSharpness -> TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral",
-        "TNLean.MPS.MPDO.CZXFusionTensors -> TNLean.MPS.MPU.Examples.Shift",
-        "TNLean.MPS.MPDO.CZXGHZAction -> TNLean.MPS.Examples.GHZ",
-        "TNLean.MPS.MPDO.CZXGaussCircuitTuple -> TNLean.MPS.Examples.ZMod2",
-        "TNLean.MPS.MPU.GroupCocycleMPO.Instances -> TNLean.MPS.Examples.CZX.CZXUnitary",
-        "TNLean.MPS.MPU.IdentityIndex -> TNLean.MPS.MPU.Examples.ShiftSourceFactors",
-        "TNLean.MPS.Preparation.GHZSectorParent -> TNLean.MPS.Examples.GHZ",
         "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.CZX.CZXAnomalyClass",
         "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.GHZ",
         "TNLean.MPS.Symmetry.MPOSymmetry.Examples -> TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation",

@@ -280,3 +280,145 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
     projector. Their ranks at the cuts of $J$ are at most those of $K$, which
     Lemma~\ref{lem:alvv_ff_family_cut_rank} bounds by $(q^2+4)^{\ell^2+1}$.
 \end{proof}
+
+\begin{lemma}[Products of the improving family]
+    \label{lem:alvv_ff_improving_family_words}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_words}
+    \leanok
+    \uses{thm:alvv_ff_improving_family}
+    Under the hypotheses of Theorem~\ref{thm:alvv_ff_improving_family}, and with
+    the parameters~\eqref{eq:alvv_ff_family_parameters}, there are
+    $N\le\mathcal D^2$ operators $W_j$ on $J$ and $\Delta>0$ with
+    $\mathcal D^{12}\Delta\le10^{-5}$, each of operator Schmidt rank at most
+    $(d^2+4)^{\ell^2+1}$ at every cut of $J$, such that for every $k\ge0$ every
+    subspace $S$ of the space of $J$ that is $\delta$-viable for $G$ with
+    $\delta<1$ gives a $\Delta^k/(1-\delta)^2$-viable span of the subspaces
+    $W_{j_0}\cdots W_{j_{k-1}}S$. This is the form in which the merge step
+    of~\cite[lines 1662--1677]{Arad2016RigorousRG} applies the operators of
+    \cite[Theorem~5.15]{Arad2016RigorousRG} $k$ times; the case $k=1$ is
+    Theorem~\ref{thm:alvv_ff_improving_family}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:alvv_ff_improving_family}
+    If $q\le1$, the identity alone serves, since the space of $J$ has dimension
+    at most one. If $J$ has at most $4\ell$ sites, take the configuration matrix
+    units of $J$: their images of a nonzero viable subspace, and of the whole
+    space, span the whole space, so by induction on $k$ so do the images under
+    their products of every positive length, while $k=0$ leaves $S$ unchanged and
+    $\delta\le1/(1-\delta)^2$. Otherwise take the slices of the filter $K$ in the
+    proof of Theorem~\ref{thm:alvv_ff_improving_family}, without extension by
+    zero. Their products of length $k$ are the slices of $K^k$, which preserves
+    $G$ and $G^\perp$, does not shrink vectors of $G$, and satisfies
+    $\|K^kx\|^2\le\Delta^k\|x\|^2$ for $x\perp G$. The two-factor form of error
+    reduction applied to $K^k$ gives the improvement $\Delta^k/(1-\delta)^2$.
+\end{proof}
+
+\section{The merge tree for a unique ground state}
+
+The merge tree of \cite[Theorem~\texttt{t:unique}, lines
+    1829--1855]{Arad2016RigorousRG} measures the viability of a space on an
+interval $J$ against the image of $\mathbb C\Gamma$ under the splitting of the
+chain into $J$ and its complement, with $J$ placed first. The two results below
+restate the products of the improving family in these coordinates and run the
+merge tree with that family, so that the node dimension does not depend on the
+chain length. The remaining differences from the source are recorded
+in~\cite{gap:alvv16_unique_ground_state_tree}.
+
+\begin{lemma}[The improving family in the coordinates of the merge tree]
+    \label{lem:alvv_ff_family_region_coordinates}
+    \lean{TNLean.MPS.AreaLaw.ALVV.ker_toEuclideanCLM_eq_span_singleton,
+        TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_words_regionTensorCoordinates}
+    \leanok
+    \uses{lem:alvv_ff_improving_family_words}
+    Let $H=\sum_ih_i$ be a nearest-neighbour Hamiltonian on $(\C^q)^{\otimes L}$
+    with $0\le h_i\le\Id$, let $H\Gamma=0$, let every vector of the kernel of
+    $H$ be a multiple of $\Gamma$, and let every other spectral value of $H$ be
+    at least $\gamma>0$. Fix an interval $J$, and define $g,d,u,\ell,\mathcal D$
+    by~\eqref{eq:alvv_ff_family_parameters}. Then the conclusions of
+    Lemma~\ref{lem:alvv_ff_improving_family_words} hold with $G$ the image of
+    $\mathbb C\Gamma$ in the tensor splitting with $J$ first: there are
+    $N\le\mathcal D^2$ operators $W_j$ on $J$, each of operator Schmidt rank at
+    most $(d^2+4)^{\ell^2+1}$ at every cut of $J$, and $\Delta>0$ with
+    $\mathcal D^{12}\Delta\le10^{-5}$, such that for every $k$ every
+    $\delta$-viable subspace $S$ for $G$ with $\delta<1$ gives a
+    $\Delta^k/(1-\delta)^2$-viable span of the subspaces
+    $W_{j_0}\cdots W_{j_{k-1}}S$. None of $\mathcal D$, $\Delta$ and the rank
+    bound depends on $L$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_improving_family_words}
+    The kernel of $H$ is $\mathbb C\Gamma$. On the orthogonal complement of the
+    kernel the spectral values are at least $\gamma$, so
+    $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$ there, which is the
+    hypothesis of Lemma~\ref{lem:alvv_ff_improving_family_words}. That lemma is
+    stated in the splitting with the complement of $J$ first; exchanging the two
+    tensor factors gives the splitting with $J$ first, and viability is
+    transported along this isometry.
+\end{proof}
+
+\begin{lemma}[The merge tree with the frustration-free family]
+    \label{thm:alvv_unique_ground_state_tree}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_pos_mem_spectrum_of_unique_ground_state,
+        TNLean.MPS.AreaLaw.ALVV.merge_rounds_bounds,
+        TNLean.MPS.AreaLaw.ALVV.merge_sample_overlap_lower,
+        TNLean.MPS.AreaLaw.ALVV.merge_power_error_le,
+        TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_power,
+        TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}
+    \leanok
+    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
+        thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,
+        thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
+    Let $A\ge1$ be the constant of Theorem~\ref{thm:alvv_ff_improving_family}.
+    Let $q\ge2$ and $L\ge1$, and let $H=\sum_ih_i$ be a nearest-neighbour chain
+    of $L$ sites of local dimension $q$ with $0\le h_i\le\Id$, frustration free
+    with a unique ground state $\Gamma\ne0$ and spectral gap $\gamma>0$. Define
+    $g,d,u,\ell,\mathcal D$ by~\eqref{eq:alvv_ff_family_parameters}. On every
+    interval longer than $4\ell$ fix the family of
+    Lemma~\ref{lem:alvv_ff_family_region_coordinates}: at most $\mathcal D^2$
+    operators of operator Schmidt rank at most $(d^2+4)^{\ell^2+1}$ at every cut.
+    For every $\eta>0$ and $0<\beta<1$, put
+    $s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$ and let
+    $k=\lceil\lceil\log_{\mathcal D}s\rceil/2\rceil$, the least integer with
+    $\mathcal D^{2k}\ge s$. There is a merge tree with leaves of at most $4\ell$
+    sites whose parents are sampled merges, with $k$ applications of these
+    families and a collective trim, whose node spaces are $3/200$-viable for
+    $\mathbb C\Gamma$ of dimension at most
+    $\mathcal D^{2k}s\le\mathcal D^2s^2$, and whose root, after finitely many
+    filter-and-trim steps and a Ritz extraction, gives a line of matrix
+    product states mutually $\eta/2$-close to $\mathbb C\Gamma$. Neither
+    $\mathcal D$ nor the node bound depends on $L$. This is a restricted
+    form of the existence content of~\cite[Theorem~\texttt{t:unique}, lines
+        1829--1855]{Arad2016RigorousRG}, not that theorem itself. The source
+    takes $\lceil\log_{\mathcal D}s\rceil/2$ applications, which need not be an
+    integer, and obtains $\mathcal Ds^2$: when $\lceil\log_{\mathcal D}s\rceil$
+    is even the bound above equals the source's $\mathcal Ds^2$, and otherwise
+    it is up to a factor $\mathcal D$ weaker, $\mathcal D^2s^2$. The tree is
+    shown to exist rather than to be found with high probability, and the
+    output bond dimension grows with $L$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
+        thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,
+        thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
+    The space of the chain has dimension $q^L\ge2$ and the kernel of $H$ has
+    dimension one, so $H$ has a positive spectral value, which is at least
+    $\gamma$. By Lemma~\ref{lem:unique_ground_state_spectral_span}, $0$ is a
+    spectral value of $H$ and the span of the eigenvectors with eigenvalue at
+    most $0$ is $\mathbb C\Gamma$, so the trimming bound of
+    Lemma~\ref{thm:physical_dg_interval_trimming} and the refinement of
+    Lemma~\ref{lem:physical_dg_automatic_refinement} apply with ground space
+    $\mathbb C\Gamma$. Since $\mathcal D^{2(k-1)}<s\le\mathcal D^{2k}$, the
+    node bound $n=\mathcal D^{2k}s$ satisfies $s^2\le n\le\mathcal D^2s^2$. At a
+    long parent the merged space has dimension $Q\le n^2$ and is
+    $1/4$-viable. A random subspace of dimension $s$ has overlap at least
+    $3/(32\mathcal D^{4k}s)$ with $\mathbb C\Gamma$ outside an event of small
+    probability, as in Lemma~\ref{thm:physical_dg_sampled_node}, and its images
+    under the products of length $k$ of the family, at most $\mathcal D^{2k}s$
+    vectors, are viable with error at most
+    $(1024/9)\,\Delta^k\mathcal D^{8k}s^2\le(1024/9)(\mathcal D^{12}\Delta)^k$,
+    which is at most $(1024/9)\cdot10^{-5}<1/400$, using $s^2\le\mathcal D^{4k}$.
+    Collective trimming at a threshold below
+    the bound of the refinement keeps it $3/200$-viable. The recursion of
+    Lemma~\ref{thm:sampled_interval_witness_tree} assembles the tree, and the
+    refinement of its root gives the line.
+\end{proof}
