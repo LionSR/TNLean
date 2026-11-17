@@ -62,6 +62,7 @@ theorem isSupportedOn_regionalParityProduct
     intro v hv
     simp only [mem_interval] at *
     omega
-  · exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
+  · show _ ∈ ManyBody.supportedOperators _ _
+    exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
 
 end TNLean.MPS.AreaLaw

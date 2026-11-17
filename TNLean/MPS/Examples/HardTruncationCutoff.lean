@@ -223,9 +223,11 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     change boundary K ∈ _
     rw [boundary_formula]
     apply mul_mem
-    · exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
+    · show _ ∈ ManyBody.supportedOperators _ _
+      exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (SMulMemClass.smul_mem _ (oneSite_mem 0 _ (by simp [interval])))
-    · exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
+    · show _ ∈ ManyBody.supportedOperators _ _
+      exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (oneSite_mem 1 _ (by simp [interval]))
   · show _ ∈ ManyBody.supportedOperators _ _
     change internalTerm K j ∈ _

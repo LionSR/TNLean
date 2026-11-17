@@ -121,7 +121,7 @@ theorem isFactorizationAt_zero_one_one {Ω : EuclideanSpace ℂ (Fin L → Fin q
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (leftBlock L c) :=
     Entropy.isSupportedOn_one _
   refine ⟨IsStarProjection.one _, IsStarProjection.one _, Commute.one_left 1, by simp,
-    (zero_mem _), h1,
+    zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _), h1,
     Entropy.isSupportedOn_one _, ?_⟩
   simpa using (isStarProjection_vecMulVec_of_norm_eq_one hΩ).norm_le
 

@@ -79,6 +79,7 @@ private theorem isSupportedOn_bond_complement
       (1 - h i) (interval L i.val (i.val + 2)) := by
   show _ ∈ ManyBody.supportedOperators _ _
   classical
+  show _ ∈ ManyBody.supportedOperators _ _
   exact sub_mem
     (one_mem (ManyBody.supportedOperators _ _))
     (hs i)

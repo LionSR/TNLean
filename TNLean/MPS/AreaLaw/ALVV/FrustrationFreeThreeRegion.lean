@@ -135,6 +135,7 @@ theorem regionTermMatrix_supported {h : ℕ → Matrix (Fin L → Fin q) (Fin L 
   have hO := regionalProjectionMatrix_supported hq hh (oddBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2
+  show _ ∈ ManyBody.supportedOperators _ _
   exact add_mem
     (sub_mem (Entropy.isSupportedOn_one D) hE) (sub_mem (Entropy.isSupportedOn_one D) hO)
 
@@ -578,7 +579,8 @@ theorem rank_regionTermMatrix_le {h : ℕ → Matrix (Fin L → Fin q) (Fin L �
   have hone : operatorSchmidtRank (Entropy.cutOperator (interval L 0 c)
       ((1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) + 1)) ≤ 1 :=
     Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
-      (add_mem
+      ((Subalgebra.toSubmodule
+          (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) ∅).toSubalgebra).add_mem
         (Entropy.isSupportedOn_one (∅ : Finset (Fin L))) (Entropy.isSupportedOn_one _))
         (Or.inl (Finset.empty_subset _))
   have hsq (s : Finset ℕ) := rank_regionalProjectionMatrix_le_sq hq hh s m c

@@ -163,6 +163,7 @@ theorem ChainHamiltonian.isSupportedOn_localizedPart_leftPart {c m k : ℕ} (hmk
       (h.localizedPart Ω s ΔE (h.leftPart c m) (leftWindow L R c m k)) (leftBlock L c) := by
   by_cases hcm : c ≤ m
   · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
+    show _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) _)
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans

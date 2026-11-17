@@ -75,7 +75,8 @@ private theorem retained_support (hw : 0 < w)
   classical
   unfold chainGridRetainedTerm
   split_ifs
-  · exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
+  · show _ ∈ ManyBody.supportedOperators _ _
+    exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
   · exact hs i
 
 private theorem retained_hermitian (hw : 0 < w)
