@@ -22,6 +22,8 @@ and `03-patches.tex`, lines 14–22 and 53–54, revision
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 namespace TNLean.PEPS.Approximation
 
 /-- The metric square sample equals the closed coordinate sample on any finite

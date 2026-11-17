@@ -41,6 +41,8 @@ Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`),
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 namespace TNLean.PEPS.Approximation
 
 /-- The padding coefficient `a' = min(a, 1) / 200` of the proof of Proposition 3.4, which

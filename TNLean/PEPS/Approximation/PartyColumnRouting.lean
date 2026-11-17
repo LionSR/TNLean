@@ -51,7 +51,7 @@ the protocol and the compression theorem in
   code is copied or adapted.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge squareLatticeGraph)
 
 noncomputable section
 

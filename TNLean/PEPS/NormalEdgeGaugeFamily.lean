@@ -27,7 +27,7 @@ realized as conjugation by an invertible gauge matrix.
 The geometry layer builds its blocking data over the canonical product decidable
 equality on `Fin width × Fin height`, whereas the gauge interface synthesizes a
 decidable equality from the lattice's linear order.  These now coincide
-definitionally (`TNLean.PEPS.instLinearOrderSquareLatticeVertex` pins its
+definitionally (`ManyBody.instLinearOrderSquareLatticeVertex` pins its
 `toDecidableEq` field to the product instance), so the interior data feed the gauge
 interface directly.
 
@@ -48,7 +48,7 @@ steps above this interior gauge family, recorded in the same note.
   lines 1449--1500 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge squareLatticeGraph)
 
 open scoped BigOperators Matrix
 

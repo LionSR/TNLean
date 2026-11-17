@@ -25,6 +25,8 @@ The result includes empty grids, one-site grids, and prefixes beyond the last si
   truncation argument used after this geometry.
 -/
 
+open ManyBody (squareLatticeGraph)
+
 open TNLean.Lattice TNLean.PEPS TNLean.PEPS.AreaLaw
 
 namespace TNLean.MPS.AreaLaw

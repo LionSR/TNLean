@@ -26,7 +26,7 @@ Immutable source revision: `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 open Matrix ComplexStarModule
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder

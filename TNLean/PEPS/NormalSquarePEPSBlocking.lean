@@ -18,7 +18,7 @@ general normal PEPS blocking hypotheses.
   Section 3, Theorem 3]
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 namespace TNLean
 namespace PEPS

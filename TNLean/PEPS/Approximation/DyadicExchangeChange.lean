@@ -30,6 +30,8 @@ the treated guides after it, conditional on Proposition 3.4 through `IsAngularSc
   389–430); Lemma 6.6 `lem:exchange`, `05-frames.tex`.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric Filter Topology

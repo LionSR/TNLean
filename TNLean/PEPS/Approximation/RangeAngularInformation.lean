@@ -49,6 +49,8 @@ with `angularScale` and `angularThresholdClosed`, are unchanged.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open TNLean.Lattice

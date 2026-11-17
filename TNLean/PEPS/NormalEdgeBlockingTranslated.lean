@@ -17,7 +17,9 @@ edge-blocking pictures used after the normalized one-edge constructions.
   Section 3, Theorem 3]
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge IsHorizontalSquareLatticeEdge IsVerticalSquareLatticeEdge SquareLatticeVertex
+  horizontalSquareLatticeEdge_eq_rightEdge squareLatticeGraph squareLatticeRightEdge
+  squareLatticeUpEdge verticalSquareLatticeEdge_eq_upEdge)
 
 namespace TNLean.PEPS
 

@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Open rectangular domains in integer coordinates
@@ -23,6 +24,9 @@ both coordinates by one gives the convention of the polynomial-PEPS manuscript.
 
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (SquareLatticeVertex squareLatticeGraph squareLatticeGraph_adj
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor)
 
 open TNLean.Lattice
 

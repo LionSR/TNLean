@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.NormalEdgeComplementCover
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Coordinate edge blockings in the normal PEPS proof
@@ -19,7 +20,9 @@ the normal square-lattice PEPS theorem.
   Section 3, Theorem 3]
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge IsHorizontalSquareLatticeEdge IsVerticalSquareLatticeEdge SquareLatticeVertex
+  squareLatticeGraph squareLatticeGraph_adj_right squareLatticeGraph_adj_up
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor)
 
 namespace TNLean
 namespace PEPS

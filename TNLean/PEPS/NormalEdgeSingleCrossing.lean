@@ -32,7 +32,8 @@ is `(xStart + 1, yStart + 2)`--`(xStart + 2, yStart + 2)`, the distinguished edg
   blue blocks share exactly the distinguished edge](https://arxiv.org/abs/1804.04964)
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge squareLatticeGraph squareLatticeGraph_adj squareLatticeHorizontalNeighbor
+  squareLatticeVerticalNeighbor)
 
 namespace TNLean
 namespace PEPS

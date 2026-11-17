@@ -14,7 +14,8 @@ with the `height × width` lattice. This exchanges horizontal and vertical edges
 and transposes contiguous rectangles.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph squareLatticeGraph_adj
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor)
 
 namespace TNLean
 namespace PEPS

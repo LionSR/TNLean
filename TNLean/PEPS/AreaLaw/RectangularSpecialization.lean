@@ -30,7 +30,7 @@ Proposition 2.1, at revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 noncomputable section
 

@@ -20,7 +20,7 @@ discrete torus: the vertex set is `ZMod width × ZMod height` with cyclic
 nearest-neighbour edges, on which the coordinate translations are graph
 automorphisms (see `TNLean/PEPS/TorusTranslation.lean`).
 
-The open rectangular model `TNLean/PEPS/SquareLatticeGraph.lean` has a boundary
+The open rectangular model `QICLean/ManyBody/Sites/Lattice/Square.lean` has a boundary
 that breaks translation: its boundary edges have no interior margin, so the
 every-edge blocking construction only reaches interior edges
 (`docs/paper-gaps/peps_normal_ft_section3_route.tex`, remaining obligation 4).
@@ -41,7 +41,7 @@ The project-level `Edge` type orients an undirected edge by an ambient
 `LinearOrder` on the vertices. We give `TorusVertex width height` the
 lexicographic order through the coordinate value injection `v ↦ (v.1.val,
 v.2.val)`, mirroring the open-lattice instance
-(`TNLean.PEPS.instLinearOrderSquareLatticeVertex`). As there, the
+(`ManyBody.instLinearOrderSquareLatticeVertex`). As there, the
 `toDecidableEq` field is pinned to the canonical product decidable equality
 `instDecidableEqProd` rather than the comparison-derived one that
 `LinearOrder.lift'` would synthesize, so the geometry constructions over the
@@ -98,7 +98,7 @@ torus graph use the same edge type as the general PEPS development.
 The decidable-equality field is pinned to the canonical product decidable
 equality `instDecidableEqProd` rather than the comparison-derived one that
 `LinearOrder.lift'` would synthesize, exactly as for the open-lattice instance
-`TNLean.PEPS.instLinearOrderSquareLatticeVertex`.  All other order fields are
+`ManyBody.instLinearOrderSquareLatticeVertex`.  All other order fields are
 taken from `LinearOrder.lift'`, so the lexicographic comparison is unchanged. -/
 instance instLinearOrderTorusVertex (width height : ℕ) [NeZero width] [NeZero height] :
     LinearOrder (TorusVertex width height) := by

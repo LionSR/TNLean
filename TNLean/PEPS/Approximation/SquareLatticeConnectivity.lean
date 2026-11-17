@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Hasse
 
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Connectivity of finite rectangular square lattices
@@ -19,6 +20,9 @@ These are geometric facts about the rectangular lattice used in
 arXiv:1804.04964, Section 3, Theorem 3. They also supply the connectivity
 hypotheses for exact finite-graph PEPS constructions.
 -/
+
+open ManyBody (SquareLatticeVertex squareLatticeGraph squareLatticeGraph_adj
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor)
 
 namespace TNLean.PEPS
 

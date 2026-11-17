@@ -79,7 +79,8 @@ margins.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex horizontalSquareLatticeEdge_eq_rightEdge squareLatticeGraph
+  squareLatticeUpEdge verticalSquareLatticeEdge_eq_upEdge)
 
 open scoped BigOperators Matrix
 

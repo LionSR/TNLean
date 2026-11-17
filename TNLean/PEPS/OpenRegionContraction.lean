@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionBlock.BlockRangeCoincidence
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 import Mathlib.Logic.Equiv.Prod
 
 /-!
@@ -28,7 +29,7 @@ No assertion about the entropy of a particular PEPS is made here.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge squareLatticeGraph)
 
 open scoped BigOperators Matrix
 

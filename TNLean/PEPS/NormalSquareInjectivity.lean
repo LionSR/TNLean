@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlapBridge
 import TNLean.PEPS.RegionBlock.UnionClosure
 import TNLean.PEPS.NormalEdgeComplementCover
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Square-lattice region injectivity from the overlapping union lemma
@@ -51,7 +52,7 @@ from rectangular injectivity and positivity alone.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex)
 
 open scoped BigOperators
 

@@ -26,6 +26,8 @@ September 24, 2026, `00-introduction.tex`, `eq:model`, and
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator
 

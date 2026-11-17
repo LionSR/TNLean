@@ -54,7 +54,7 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 open scoped BigOperators ComplexOrder
 

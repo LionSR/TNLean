@@ -50,6 +50,8 @@ is left to the assembly of Proposition 7.1.
   `02-information.tex`, lines 635–658.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation

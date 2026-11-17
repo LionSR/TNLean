@@ -22,7 +22,7 @@ September 24, 2026, Corollary 1.2 (`cor:rectangles`), at immutable revision
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 noncomputable section
 

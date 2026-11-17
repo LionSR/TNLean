@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.RoutedContraction
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Folding the dyadic routing into the genuine square
@@ -51,7 +52,9 @@ an arbitrary party network; they are verified for the compressed protocol networ
   `eq:final-bond`, `07-assembly.tex:102–177`.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex horizontalSquareLatticeEdge_coords
+  squareLatticeEdge_horizontal_or_vertical squareLatticeGraph squareLatticeGraph_adj
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor verticalSquareLatticeEdge_coords)
 
 noncomputable section
 

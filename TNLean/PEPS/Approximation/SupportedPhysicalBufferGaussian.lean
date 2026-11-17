@@ -22,7 +22,7 @@ September 24, 2026, `02-information.tex`, lines 498–564,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal

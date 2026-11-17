@@ -15,7 +15,8 @@ injectivity nor uniform or positive dimensions are needed for the physical-first
 conversion. The virtual-first adapter retains its source's positivity field.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge horizontalSquareLatticeEdge_coords squareLatticeEdge_horizontal_or_vertical
+  squareLatticeGraph verticalSquareLatticeEdge_coords)
 
 noncomputable section
 open scoped BigOperators
