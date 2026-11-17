@@ -397,7 +397,6 @@
       ],
       "corollaries": [
         "cor:all-equivalent-under-conjugation",
-        "cor:mpu_admissible_all_conjugation_equivalent",
         "cor:sigma-equivalence-necessary"
       ],
       "notes": {

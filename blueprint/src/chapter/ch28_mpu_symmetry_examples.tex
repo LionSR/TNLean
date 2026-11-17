@@ -23,7 +23,7 @@
     % **Scope restriction (realization by source-derived standard forms):** each
     % displayed standard-form tensor carries reduced full-support source data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, corconj, cor:sympl-to-orthogonal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{conjphs, prop:conjsym-strict-equiv, corconj, cor:sympl-to-orthogonal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Assume the standard-form tensors displayed below carry reduced full-support
     source data and that the comparison paths used to classify them carry
     admissible path data of blocking length one. Let
@@ -32,9 +32,9 @@
         u_- & =v_-=\operatorname{diag}(-1,1,\ldots,1).
     \end{align}
     If at least one of $r$ and $\ell$ is odd, the pairs $(u_+,v_+)$ and
-    $(u_+,v_-)$ represent the two classes of Lemma~\ref{thm:mpu_admissible_conjugation_odd_rank}. If $r$
+    $(u_+,v_-)$ represent the two classes of Theorem~\ref{conjphs}. If $r$
     and $\ell$ are both even, the four pairs $(u_\pm,v_\pm)$ represent the
-    four Case I classes of Lemma~\ref{thm:mpu_admissible_conjugation_even_rank}. With
+    four Case I classes of Theorem~\ref{prop:conjsym-strict-equiv}. With
     \begin{align}
         u'_\pm & =(\Id_{r\ell/4}\otimes R)u_\pm, &
         v'_\pm & =v_\pm(\Id_{r\ell/4}\otimes R),
@@ -1203,7 +1203,7 @@
     % reduced full-support source data. No preservation under blocking is
     % asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU, thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, def:mpu_admissible_symmetry_equivalence}
+    \uses{threeMPU, conjphs, prop:conjsym-strict-equiv, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, def:mpu_admissible_symmetry_equivalence}
     Suppose the two-site blocked tensors carry reduced full-support source data
     and the standard-form comparison paths carry admissible path data of
     blocking length one. Then the two-site blocked tensors of $U_2$ and
@@ -1327,7 +1327,7 @@
     % **Scope restriction (admissible blockings and paths):** every standard form,
     % blocked endpoint, and comparison path carries the required source data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, cor:mpu_admissible_equiv_under_conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
+    \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, conjphs, prop:conjsym-strict-equiv, cor:equiv-under-conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     For each endpoint tensor $\mathcal A$ among
     $U_1$, $U_2$, $\widetilde U_1$, and $\widetilde U_2$, suppose that
     $\mathcal A$, its conjugate comparison $\overline{\mathcal A}$, its

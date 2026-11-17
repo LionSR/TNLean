@@ -2169,29 +2169,6 @@
     Lemma~\ref{lem:mpu_symmetry_path_criterion_reverse} concludes.
 \end{proof}
 
-\begin{lemma}[Admissible conjugation symmetry when one source rank is odd]
-    \label{thm:mpu_admissible_conjugation_odd_rank}
-    \notready
-    \discussion{5713}
-    % **Scope restriction (endpoints and admissible symmetry path):** each
-    % original endpoint and its conjugate comparison carry source data, and
-    % equivalence means admissible strict equivalence in
-    % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{corconj, lem:mpu_admissible_symmetry_path_criterion, def:mpu_admissible_equivalence_datum, def:mpu_reduced_full_support_source_datum}
-    For $i=1,2$, suppose the original one-site endpoint tensor
-    $\mathcal U_i$ and its conjugate comparison tensor are simple and each
-    carries reduced full-support source data. Suppose that either $r$ or $\ell$
-    is odd and that the standard-form interpolation determined below carries an
-    admissible path datum of blocking length one. Then $\mathcal U_1$ and
-    $\mathcal U_2$ are admissibly strictly equivalent
-    under conjugation symmetry if and only if
-    \begin{align}
-        \det(u_1v_1) & =\det(u_2v_2).
-    \end{align}
-    % Source lines: paper_v2.tex 1401--1446.
-\end{lemma}
-
 \begin{corollary}[Equivalence of conjugation-symmetric MPUs after blocking]
     \label{cor:all-equivalent-under-conjugation}
     \lean{MPOTensor.equivalentUnderSymmetry_conjugation_of_odd,
@@ -2232,38 +2209,6 @@
     $\det v^{(2)}=c$ for both tensors, and
     Lemma~\ref{thm:mpu_conjugation_even_rank_if} applies in Case I. Either way
     the blocks of four sites are strictly equivalent under conjugation.
-\end{proof}
-
-\begin{corollary}[Admissible equivalence of conjugation-symmetric MPUs after blocking]
-    \label{cor:mpu_admissible_all_conjugation_equivalent}
-    \notready
-    \discussion{5713}
-    % **Scope restriction (endpoints, blocking, and admissible path):** the
-    % one-site and two-site endpoints and their conjugate comparisons carry
-    % source data, and the resulting symmetry path is admissible. No
-    % preservation under blocking is asserted. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{corconj, cor:mpu_admissible_equiv_under_conjugation, def:mpu_admissible_symmetry_equivalence, def:mpu_admissible_equivalence_datum, def:mpu_reduced_full_support_source_datum}
-    For $i=1,2$, suppose the endpoint tensor $\mathcal U_i$, its conjugate
-    comparison $\overline{\mathcal U_i}$, the two-site block
-    $\mathcal U_{i,2}$, and its conjugate comparison
-    $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
-    full-support source data. Suppose that either $r$ or $\ell$ is odd and that
-    the resulting standard-form interpolation carries an admissible path datum
-    of blocking length one. Then
-    $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
-    conjugation symmetry.
-    % Source lines: paper_v2.tex 1450--1460.
-\end{corollary}
-
-\begin{proof}
-    \uses{corconj, cor:mpu_admissible_equiv_under_conjugation}
-    If either $r$ or $\ell$ is odd, both endpoints lie in Case I of
-    Lemma~\ref{corconj}. The full
-    admissible classification in
-    Lemma~\ref{cor:mpu_admissible_equiv_under_conjugation} handles both
-    possible parities of the source ranks after blocking and gives the claimed
-    admissible equivalence.
 \end{proof}
 
 \begin{lemma}[Determinants of orthogonal Kronecker products]
@@ -2420,30 +2365,6 @@
     Lemma~\ref{lem:mpu_symmetry_path_criterion_reverse} concludes.
 \end{proof}
 
-\begin{lemma}[Admissible strict conjugation equivalence for even source ranks]
-    \label{thm:mpu_admissible_conjugation_even_rank}
-    \notready
-    \discussion{5713}
-    % **Scope restriction (admissible symmetry path):** equivalence means
-    % admissible strict equivalence in
-    % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{corconj, cor:sympl-to-orthogonal, lem:mpu_admissible_symmetry_path_criterion, lemma:conjclass-normalform-continuous, def:mpu_admissible_equivalence_datum}
-    Suppose that $r$ and $\ell$ are both even and that the standard-form
-    interpolation determined below carries an admissible path datum of blocking
-    length one. Choose standard forms from the given source data of two
-    conjugation-invariant
-    MPUs as in
-    Lemma~\ref{corconj}. They are admissibly strictly equivalent under
-    conjugation symmetry if and only if they belong
-    to the same case of Lemma~\ref{corconj} and
-    \begin{align}
-        \det(u_1) & =\det(u_2), &
-        \det(v_1) & =\det(v_2).
-    \end{align}
-    % Source lines: paper_v2.tex 1464--1546.
-\end{lemma}
-
 \begin{lemma}[Equivalence under conjugation]
     \label{cor:equiv-under-conjugation}
     \lean{MPOTensor.equivalentUnderSymmetry_conjugation_iff_same_case,
@@ -2533,81 +2454,6 @@
     Lemma~\ref{thm:mpu_conjugation_even_rank_if} applies to the two-site
     blocks, and the blocks of four sites are strictly equivalent under
     conjugation.
-\end{proof}
-
-\begin{lemma}[Admissible equivalence under conjugation]
-    \label{cor:mpu_admissible_equiv_under_conjugation}
-    \notready
-    \discussion{5713}
-    % **Scope restriction (endpoints, blocking, and admissible path):** the
-    % original one-site endpoints and their conjugate comparisons carry source
-    % data, all blocked endpoints used below carry their own data, and the
-    % symmetry path is admissible. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, corconj, prop:mpu_admissible_index_well_defined, def:mpu_admissible_symmetry_equivalence, def:mpu_admissible_equivalence_datum, def:mpu_reduced_full_support_source_datum}
-    For $i=1,2$, suppose the original one-site endpoint tensor
-    $\mathcal U_i$, its conjugate comparison $\overline{\mathcal U_i}$, the
-    two-site block $\mathcal U_{i,2}$, and its conjugate comparison
-    $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
-    full-support source data. Suppose also that the resulting standard-form
-    interpolation carries an admissible path datum of blocking length one. Then
-    $\mathcal U_1$ and $\mathcal U_2$ are admissibly equivalent under
-    conjugation symmetry if and only if they belong to the same case of
-    Lemma~\ref{corconj}.
-    % Source lines: paper_v2.tex 1548--1567.
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, corconj, prop:mpu_admissible_index_well_defined, def:mpu_admissible_symmetry_equivalence}
-    Suppose first that either $r$ or $\ell$ is odd. Then both original
-    endpoints lie in Case I. After one blocking, write $r^{(2)}$ and
-    $\ell^{(2)}$ for the blocked source ranks. Admissible blocking independence,
-    applied to the given one-site and two-site endpoint data, gives
-    \begin{align}
-        r^{(2)} & =dr,
-    \end{align}
-    and
-    \begin{align}
-        \ell^{(2)} & =d\ell.
-    \end{align}
-    For each endpoint,
-    \begin{align}
-        \det(u_i^{(2)}v_i^{(2)}) & =\det(u_iv_i)^{2r\ell}=1.
-    \end{align}
-    Blocking preserves Case I. If either $r^{(2)}$ or $\ell^{(2)}$ is odd, the
-    odd-rank theorem applied to the blocked endpoints gives admissible strict
-    equivalence. If both blocked ranks are even, then $d$ is even because one
-    original source rank is odd. Hence $r\ell=d^2$ is even.
-    % **Local fix:** paper_v2.tex 1554--1559 states the two separate determinant
-    % identities before checking parity. They are used here only when the
-    % blocked source ranks are both even, which forces the required even power.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    Consequently,
-    \begin{align}
-        \det(u_i^{(2)}) & =(\det(u_i)^2\det(v_i))^{r\ell}=1,
-    \end{align}
-    and
-    \begin{align}
-        \det(v_i^{(2)}) & =\det(v_i)^{r\ell}=1.
-    \end{align}
-    The even-rank theorem now applies to the preserved Case I endpoints. Thus
-    the odd-source-rank branch has a single admissible equivalence class without
-    imposing a parity condition on the blocked ranks.
-
-    If $r$ and $\ell$ are both even, admissible blocking independence shows that
-    the blocked ranks remain even. Since $r\ell$ is even, the same calculations
-    give
-    \begin{align}
-        \det(u_i^{(2)}) & =(\det(u_i)^2\det(v_i))^{r\ell}=1,
-    \end{align}
-    and
-    \begin{align}
-        \det(v_i^{(2)}) & =\det(v_i)^{r\ell}=1.
-    \end{align}
-    Blocking preserves Case I and Case II. The even-rank theorem therefore shows
-    that the blocked endpoints are admissibly strictly equivalent exactly when
-    they belong to the same case. This is precisely admissible equivalence of
-    the original endpoints.
 \end{proof}
 
 \begin{lemma}[SWAP trace contraction]
