@@ -219,7 +219,7 @@ theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (
       have hyY : y ∈ Y := by simpa using hy
       let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
         ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-      have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ a ha hHerm
+      have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm
         R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hA) y
         (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton]))
         μ hμ m (fun x hx => hm x hx y hyY) t

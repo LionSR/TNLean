@@ -128,8 +128,8 @@ theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
       exact (not_le_of_gt hl) hz
     let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
       ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-    have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ a ha
-      hHerm R hDiam vR hvR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
+    have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ
+      hHerm R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
       (isSupportedOn_of_mem_supportedOperators hB) μ hμ.le l hd t
     calc _ = ‖ManyBody.heisenbergEvolution (∑ k, h k) t W * B -
           B * ManyBody.heisenbergEvolution (∑ k, h k) t W‖ := norm_sub_rev _ _
