@@ -65,9 +65,9 @@ theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
     have heq : mu = mu + g := hi.symm.trans
       ((congrArg hH.eigenvalues (Subsingleton.elim i j)).trans hj)
     linarith
-  have hΩ hgap hspan : (‖Ω‖ = 1 ∧ IsGapped (∑ j, h j) mu g ∧
-    groundSpace (∑ j, h j) mu = Submodule.span ℂ {Ω}) :=
-    isGappedGroundState_iff.mpr ⟨hΩ, hground, hgap⟩
+  obtain ⟨-, -, hgap, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
+    ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
+      WithLp.ofLp_smul]; exact hground, hgap⟩
   exact ⟨hL, hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hΩ hgap hspan⟩
 
 /-- The actual same-cut physical approximants obey the sharp fourth-root

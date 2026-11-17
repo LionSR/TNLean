@@ -98,7 +98,7 @@ cut, for every `k' ≥ k₀`, is an open-boundary matrix product state of bond d
 `k'` with `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`. The constants depend
 only on `R`, `κ`, `J/ΔE` and `q`, not on `L`. Hastings, arXiv:0705.2024v4, lines 505–557, with
 `C₁` polynomial in `ξ̂` as at lines 258–262 and the restrictions of the module docstring. -/
-theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
+theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
@@ -130,10 +130,10 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState (R : ℕ) {κ : �
 constant `K ≥ 0`, depending only on `R`, with the following property. Let `J ≥ 0` bound the
 interaction terms, let `ΔE > 0` be a gap, and put `ζ = lemmaOneEndpointLength R J ΔE =
 (5/4) ξ̂`, `ξ' = 6ζ` and `C₁ = max (K ζ³) 1`. Then the conclusion of
-`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState` holds with these `ξ'` and `C₁`.
+`exists_isOpenMPS_norm_sub_sq_le_of_isGapped` holds with these `ξ'` and `C₁`.
 Hastings, arXiv:0705.2024v4, lines 505–557, with `ξ' = 6ξ` (lines 141–142) for `ξ = ζ`, `C₁`
 polynomial in `ζ` (lines 258–262), and the restriction on `ζ` of the module docstring. -/
-theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint (R : ℕ) :
+theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →

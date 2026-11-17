@@ -112,8 +112,6 @@ state the two models separately following
 \begin{definition}[Ground vector and regional entropy]
     \label{def:area_law_ground_entropy}
     \lean{
-        Matrix.IsGappedGroundState,
-        Matrix.isGappedGroundState_iff,
         ManyBody.IsGapped,
         ManyBody.groundSpace,
         ManyBody.isGapped_and_groundSpace_eq_span_iff,
@@ -152,7 +150,7 @@ state the two models separately following
 
 \begin{lemma}[Uniqueness from a positive global gap]
     \label{thm:area_law_ground_eigenspace}
-    \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
+    \lean{Matrix.PosSemidef.eigenspace_eq_span_of_gap}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $H$ be a finite-dimensional complex matrix, $E_0\in\mathbb R$, and

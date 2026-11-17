@@ -51,7 +51,7 @@ For local dimension `q = 1` the window condition never holds, since the entropy 
 
 Hastings, arXiv:0705.2024v4, `law16.tex`, eq. `relent` (lines 234–242), proved at
 lines 413–503, with the constants of the module docstring. -/
-theorem exists_relent_of_isGappedGroundState (R : ℕ) :
+theorem exists_relent_of_isGapped (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →

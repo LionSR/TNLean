@@ -108,7 +108,7 @@ Hastings, arXiv:cond-mat/0508554v3, eq. `low`, lines 375–387 and 609–743, wi
 corrected deficiency recurrence and closing window documented in
 `docs/paper-gaps/hastings05_hierarchical_projection.tex` and
 `docs/paper-gaps/hastings05_hierarchical_energy.tex`. -/
-theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
+theorem exists_periodicPhysicalHierarchy_of_isGapped {R J Δ : ℝ}
     (hR : 0 ≤ R) (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ c₁ η C : ℝ, 0 < c₁ ∧ 0 < η ∧ 0 ≤ C ∧
       ∀ {M d : ℕ}, 0 < M →

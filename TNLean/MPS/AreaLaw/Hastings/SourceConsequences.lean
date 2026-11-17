@@ -169,7 +169,7 @@ namespace Hastings
 /-- The entropy gain at the same source pair, with the explicit constants of
 `docs/paper-gaps/hastings07_relent_constants.tex`.
 Hastings, arXiv:0705.2024v4, eq. `relent`, lines 234–242 and 413–503. -/
-theorem exists_relent_of_isGappedGroundState_source (R : ℕ) :
+theorem exists_relent_of_isGapped_source (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
@@ -219,7 +219,7 @@ theorem exists_relent_of_isGappedGroundState_source (R : ℕ) :
 same order-`J` Lieb–Robinson pair as Lemma 1. Hastings, arXiv:0705.2024v4,
 lines 130–144 and 505–557. The squared error and the factor `exp(2/ξ')`
 have the local corrections described in the module docstring. -/
-theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_source (R : ℕ) :
+theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
     ∃ c₀ K : ℝ, 0 < c₀ ∧ 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →

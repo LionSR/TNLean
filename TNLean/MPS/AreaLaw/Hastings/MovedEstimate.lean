@@ -105,7 +105,7 @@ theorem norm_gaussianTimeAverage_mul_sub_groundProjector_le {M H O : Matrix n n 
   rw [hsplit]
   exact (norm_add_le _ _).trans (add_le_add hfirst
     ((norm_groundProjector_mul_sub_le hO.isSelfAdjoint
-      (isGappedGroundState_iff.mp hΩ hgap hspan).1).trans hη))
+      hΩ).trans hη))
 
 /-- **Eq. `moved`.** Let `Ω` be a gapped ground vector of the Hermitian matrix `H`, with
 energy `0` and gap `ΔE > 0`, and let `M` be Hermitian with `‖M - H‖ ≤ δ`. Let `O_L` and

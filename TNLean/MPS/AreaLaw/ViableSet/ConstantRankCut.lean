@@ -257,20 +257,6 @@ theorem cutOperator_sub_smul_one (k : ℕ) (X : Matrix (Fin L → Fin q) (Fin L 
   ext a b
   simp [one_apply]
 
-/-- A gapped ground state lies at the bottom of the spectrum: `H - E₀ 1 ≥ 0`. -/
-theorem _root_.Matrix.IsGappedGroundState.posSemidef_sub_smul_one {ι : Type*} [Fintype ι]
-    [DecidableEq ι] {H : Matrix ι ι ℂ} {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ ι}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ Δ)
-    (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 ≤ Δ) : (H - (E₀ : ℂ) • 1).PosSemidef := by
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  have hsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 ≤ 1 := by
-    have h := EuclideanSpace.norm_sq_eq Ω
-    rw [hΩ, one_pow] at h
-    exact h.symm.le
-  have hP := one_sub_vecMulVec_posSemidef_of_sum_normSq_le_one (WithLp.ofLp Ω) hsum
-  have h := hgap.add (hP.smul (Complex.zero_le_real.mpr hΔ))
-  rwa [sub_add_cancel] at h
-
 /-- **Lemma `l:2`**, chain form, corrected (arXiv:1307.5143v1, algo53.tex, lines 347–359).
 Let `H = H_L + H_R + K`, with `H_L` supported on the first `k` sites, `H_R` on the others and
 `0 ≤ K ≤ 1`, have gapped ground state `Ω` with gap `Δ`. Let `B` be a bond dimension at which
@@ -285,8 +271,8 @@ theorem re_inner_normalized_chainTrim_le
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hHR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (leftBlock L k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ Δ : ℝ}
-    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ Δ)
-    (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω})
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : H.IsHermitian) (hΩ : ‖Ω‖ = 1)
+    (hgap : IsGapped H E₀ Δ) (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω})
     {PΩ : LeftBlockMatrix L q k}
     (hPΩ : IsTrimmingProjection (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)
       B PΩ)
@@ -304,8 +290,8 @@ theorem re_inner_normalized_chainTrim_le
   · exfalso
     have h0 : w = 0 := Subsingleton.elim _ _
     simp [h0] at hw
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  have hH0 := hgs.posSemidef_sub_smul_one hΔ.le
+  have hH0 := hgap.posSemidef_sub_ground hH hΔ.le
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   -- The energy excess and the trimming loss are nonnegative.
   have hδ : 0 ≤ δ := by
     have := hH0.mul_sq_norm_le_re_inner_toEuclideanLin w
@@ -396,7 +382,7 @@ theorem ChainHamiltonian.re_inner_normalized_chainTrim_le {R : ℕ} {J Δ : ℝ}
       E₀ + (δ + 2 * √(2 * η)) / (1 - 2 * η) := by
   obtain ⟨PΩ, hPΩ⟩ := exists_isTrimmingProjection
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ δB)
-  exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ hΩ hgap hspan hPΩ
+  exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ h.operator_isHermitian hΩ hgap hspan hPΩ
     (h.one_sub_le_re_inner_chainTrim hq hJ hΔ hΩ hgap hspan hδB0 k hPΩ) hw hE hP hη hη2
 
 /-- **Corollary `c:1`**, chain form (arXiv:1307.5143v1, algo53.tex, lines 361–364).

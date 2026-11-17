@@ -18,7 +18,7 @@ ground vector and its swap image have energy `2 * E₀` and lower gap `Δ`.
 
 * `ChainHamiltonian.swappedDoubled`: the conjugated doubled interaction family.
 * `ChainHamiltonian.swappedDoubled_operator`: the exact conjugated operator.
-* `ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState`: the normalized
+* `ChainHamiltonian.doubled_swappedDoubled_isGapped`: the normalized
   explicit ground vectors, their doubled energy and their inherited lower gap.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
@@ -77,7 +77,7 @@ lemma ChainHamiltonian.swappedDoubled_operator
 /-- The paired tensor-square ground vector and its regional swap image
 have doubled energy and the original positive lower-gap bound.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
-theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
+theorem ChainHamiltonian.doubled_swappedDoubled_isGapped
     {L q R : ℕ} {J E₀ Δ : ℝ} (h : ChainHamiltonian L q R J)
     (D : Finset (Fin L)) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
@@ -91,8 +91,8 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
       WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
     (‖Ψ‖ = 1 ∧ IsGapped h.doubled.operator (2 * E₀) Δ ∧
       groundSpace h.doubled.operator (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
-      (‖2 * E₀‖ = 1 ∧ IsGapped (h.swappedDoubled D) .operator Φ ∧
-        groundSpace (h.swappedDoubled D) .operator = Submodule.span ℂ {2 * E₀}) Δ := by
+      (‖Φ‖ = 1 ∧ IsGapped (h.swappedDoubled D).operator (2 * E₀) Δ ∧
+        groundSpace (h.swappedDoubled D).operator (2 * E₀) = Submodule.span ℂ {Φ}) := by
   classical
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
@@ -102,8 +102,8 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
     WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
   change (‖Ψ‖ = 1 ∧ IsGapped h.doubled.operator (2 * E₀) Δ ∧
     groundSpace h.doubled.operator (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
-    (‖2 * E₀‖ = 1 ∧ IsGapped (h.swappedDoubled D) .operator Φ ∧
-      groundSpace (h.swappedDoubled D) .operator = Submodule.span ℂ {2 * E₀}) Δ
+    (‖Φ‖ = 1 ∧ IsGapped (h.swappedDoubled D).operator (2 * E₀) Δ ∧
+      groundSpace (h.swappedDoubled D).operator (2 * E₀) = Submodule.span ℂ {Φ})
   have heigen := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
   have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
@@ -134,13 +134,13 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
   have hF : F ∈ Matrix.unitaryGroup _ ℂ :=
     Matrix.reindex_mem_unitaryGroup e (sheetSwapOp q D)
       (sheetSwap q D).permMatrix_mem_unitaryGroup
-  refine ⟨Matrix.isGappedGroundState_iff.mpr ⟨hΨ, heigenΨ, hgapΨ⟩, ?_⟩
-  apply Matrix.isGappedGroundState_iff.mpr
+  obtain ⟨-, hΨ', hgapD, hspanD⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ψ).mp
+    ⟨hΨ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
+      WithLp.ofLp_smul]; exact heigenΨ, hgapΨ⟩
+  refine ⟨⟨hΨ', hgapD, hspanD⟩, ?_⟩
   rw [h.swappedDoubled_operator]
-  change ‖Φ‖ = 1 ∧ (F * h.doubled.operator * Fᴴ) *ᵥ (F *ᵥ WithLp.ofLp Ψ) =
-    ((2 * E₀ : ℝ) : ℂ) • (F *ᵥ WithLp.ofLp Ψ) ∧ _
-  refine ⟨?_, Matrix.mulVec_unitary_conj_eigenvector hF heigenΨ,
-    hgapΨ.gap_unitary_conj hF⟩
+  refine ⟨?_, (ManyBody.isGapped_unitary_conj_iff hF).mpr hgapD,
+    ManyBody.groundSpace_unitary_conj_eq_span hF hspanD⟩
   change ‖WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)‖ = 1
   rw [Matrix.norm_toLp_mulVec_of_unitary hF]
   exact hΨ

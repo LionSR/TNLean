@@ -101,11 +101,12 @@ for the unique gapped ground state of lines 126–127 with the ground energy nor
 zero as on lines 766–767. The bound is stated for every real `q`. -/
 theorem norm_gaussianTimeAverage_sub_groundProjector_le {H : Matrix n n ℂ}
     (hH : H.IsHermitian) {ΔE : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped H 0 ΔE)
-    (hΩs : groundSpace H 0 = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (q : ℝ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H 0 ΔE)
+    (hspan : groundSpace H 0 = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (q : ℝ) :
     ‖gaussianTimeAverage q ΔE H - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
       Real.exp (-q / 2) := by
-  obtain ⟨hΩn, hHΩ, hgap⟩ := isGappedGroundState_iff.mp hΩ
+  have hHΩ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  replace hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   set h := timeAverageVariance q ΔE
   have hexp : Real.exp (-(h : ℝ) * ΔE ^ 2 / 2) ≤ Real.exp (-q / 2) := by
     apply Real.exp_le_exp.mpr
@@ -123,7 +124,7 @@ theorem norm_gaussianTimeAverage_sub_groundProjector_le {H : Matrix n n ℂ}
     congr 2
     push_cast
     ring
-  have hmain := GaussianFilter.norm_sub_ground_le_of_coefficients hH hΩn hHΩ hgap hΔ h.property
+  have hmain := GaussianFilter.norm_sub_ground_le_of_coefficients hH hΩ hHΩ hgap hΔ h.property
     hcoeff
   have happly : toEuclideanCLM (n := n) (𝕜 := ℂ)
       (gaussianTimeAverage q ΔE H - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) x =

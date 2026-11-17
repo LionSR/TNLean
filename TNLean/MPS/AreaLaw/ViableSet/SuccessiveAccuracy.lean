@@ -51,7 +51,7 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L → ∀ R : ℕ, 1 ≤ R →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-          (interval L j.val (j.val + 2))) (_h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
+          (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
       let N := L + 2 * R ^ 2
       let hi : L ≤ N := Nat.le_add_right _ _
       let z : Fin q := ⟨0, by omega⟩
@@ -107,10 +107,12 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
       exact (hmps v hv).mono (max_le_max le_rfl (hBB.trans_eq hbudget.symm))
     · intro E Γ hΩ hgap hspan
       exact hviable E (paddedGroundVector hi z Γ)
-        (isGappedGroundState_paddedInteraction hL hi z h hΩ hgap hspan hDelta)
+        (isGapped_paddedInteraction hL hi z h
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap hspan hDelta)
   · intro E Γ hΩ hgap hspan
     obtain ⟨hcard, hmps, hviable⟩ := hS L hi
-    have hpad := isGappedGroundState_paddedInteraction hL hi z h hΩ hgap hspan hDelta
+    have hpad := isGapped_paddedInteraction hL hi z h
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap hspan hDelta
     obtain ⟨w, hw, hwnorm, herror, hmpsw⟩ :=
       (hviable E _ hpad).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ hmps
     refine ⟨w, hw, hwnorm, ?_, hmpsw.mono ?_⟩

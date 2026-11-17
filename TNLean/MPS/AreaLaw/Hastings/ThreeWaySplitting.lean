@@ -47,7 +47,7 @@ through the Lieb–Robinson localization.
 * `ChainHamiltonian.operator_eq_leftPart_add_bufferPart_add_rightPart`: `H = H_L + H_B + H_R`.
 * `ChainHamiltonian.groundCentered_parts_sum_of_eigen`: the centered parts sum to
   `H - E₀ 1` for a unit eigenvector of energy `E₀`.
-* `ChainHamiltonian.isGappedGroundState_groundCentered_parts_sum`: the centered sum has
+* `ChainHamiltonian.isGapped_groundCentered_parts_sum`: the centered sum has
   the same gapped ground vector, at energy zero.
 * `ChainHamiltonian.isSupportedOn_leftPart`, `isSupportedOn_rightPart`,
   `isSupportedOn_bufferPart`: the support statements.
@@ -355,7 +355,7 @@ theorem ChainHamiltonian.groundCentered_parts_sum_of_eigen (h : ChainHamiltonian
 /-- The centered splitting of a gapped Hamiltonian has the same gapped ground vector, at
 energy zero: the normalization of the source.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–767 and 779–782. -/
-theorem ChainHamiltonian.isGappedGroundState_groundCentered_parts_sum
+theorem ChainHamiltonian.isGapped_groundCentered_parts_sum
     (h : ChainHamiltonian L q R J) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
     (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (j m : ℕ) :

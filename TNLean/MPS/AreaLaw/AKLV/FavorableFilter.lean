@@ -90,9 +90,9 @@ theorem exists_aklv_physical_favorable_filter :
     (by intro hz; simp only [hz, norm_zero, zero_ne_one] at hΩ) hground
   have hq2 : 2 ≤ q := hH.two_le_local_dimension_of_two_spectral_values
     hmu hexcited (by linarith)
-  have hΩ hgap hspan : (‖Ω‖ = 1 ∧ IsGapped (∑ i, h i) mu g ∧
-    groundSpace (∑ i, h i) mu = Submodule.span ℂ {Ω}) :=
-    Matrix.isGappedGroundState_iff.mpr ⟨hΩ, hground, hgap⟩
+  obtain ⟨-, -, hgap, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
+    ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
+      WithLp.ofLp_smul]; exact hground, hgap⟩
   have hg1 := gap_le_one_of_positive_nearest_neighbor_terms (by omega : 0 < L)
     hq2 h hsupp h0 h1 hΩ hgap hspan
   obtain ⟨_hsLower, _hsUpper, hs21, _hsb, hdiv, hsqrt, _hR, _hRup, _hDaux,

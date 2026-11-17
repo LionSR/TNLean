@@ -101,7 +101,7 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
   rw [hblock] at hHL hHR
   obtain ⟨w, m, W, x, hw, hwD, hwE, hwPV, hW, hmD, hwx, hxPV⟩ :=
     exists_trimmed_witness_chain hsplit hHL hHR hK0 hK1
-      (hgs.posSemidef_sub_smul_one hΔ.le) hψ hE hu huD huψ
+      (hgap.posSemidef_sub_ground h.operator_isHermitian hΔ.le) hψ hE hu huD huψ
       (by linarith : 2 * (4 * c) < 1)
       ((spanProjection_mul_cutMatrix_eq_iff (S := S)).mpr hψS)
   refine ⟨w, m, W, x, hw, (spanProjection_mul_cutMatrix_eq_iff (S := S)).mp hwPV,

@@ -42,13 +42,14 @@ theorem norm_paddedGroundVector {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
 /-- The original ground vector, extended by the actual ancillary product state,
 is a ground vector of the actual padded interaction with projector gap at least
 the minimum of the original lower bound and one. -/
-theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
+theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
     (z : Fin q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    {E Delta : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
+    {E Delta : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hH : (∑ j, h j).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E Delta)
     (hspan : groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ}) (hDelta : 0 < Delta) :
-    (‖paddedGroundVector hi z Γ‖ = 1 ∧ IsGapped (∑ j, paddedInteraction hi z h j) E (min Delta 1) ∧
-      groundSpace (∑ j, paddedInteraction hi z h j) E = Submodule.span ℂ {paddedGroundVector hi z Γ}) := by
+    ‖paddedGroundVector hi z Γ‖ = 1 ∧ IsGapped (∑ j, paddedInteraction hi z h j) E (min Delta 1) ∧
+      groundSpace (∑ j, paddedInteraction hi z h j) E =
+        Submodule.span ℂ {paddedGroundVector hi z Γ} := by
   classical
   let e := leftConfigOfFinEquiv (q := q) hi
   let H := ∑ j, h j
@@ -73,7 +74,7 @@ theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi :
     · simp
   have hA : (A - (E : ℂ) • 1 - ((min Delta 1 : ℝ) : ℂ) •
       (1 - vecMulVec u (star u))).PosSemidef := by
-    have hp := ((hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_mono (by
+    have hp := ((hgap.posSemidef_sub_smul_one hH hΩ hspan).gap_mono (by
       simpa only [← EuclideanSpace.norm_sq_eq, hΩ] using (show (1 : ℝ) ^ 2 = 1 by norm_num))
       (min_le_left Delta 1)).submatrix e.symm
     convert hp using 1
@@ -136,8 +137,10 @@ theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi :
       paddedGroundVector hi z Γ σ := by
     simpa only [Prod.eta, c.symm_apply_apply] using (hΨ (c σ).1 (c σ).2).symm
   rw [← hpad] at hgap
-  apply isGappedGroundState_iff.mpr
-  refine ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, heq, ?_⟩
+  refine ((ManyBody.isGapped_and_groundSpace_eq_span_iff (lt_min hDelta one_pos) _).mp
+    ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, ?_, ?_⟩).2
+  · rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul]
+    exact heq
   convert hgap.submatrix c using 1
   ext σ τ
   simp only [submatrix_apply, Matrix.sub_apply, Matrix.smul_apply, smul_eq_mul,
