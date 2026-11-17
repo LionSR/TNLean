@@ -41,9 +41,13 @@ unit vector $\Omega$ on the chain of $L$ sites.
     \lean{ManyBody.supportedOperators}
     \leanok
     \uses{def:chain_model}
-    If $A$ is supported on $S$, then $A^\dagger$ is supported on $S$.
+    The operators supported on $S$ form a unital $*$-subalgebra of the
+    operators on the chain. In particular, if $A$ is supported on $S$, then
+    $A^\dagger$ is supported on $S$.
 \end{lemma}
 \begin{proof}\leanok
+    Sums, scalar multiples and products of operators supported on $S$, and the
+    identity, are supported on $S$. For the adjoint,
     $(A^\dagger)_{x,y}=\overline{A_{y,x}}$ preserves the support condition on
     $x,y$.
 \end{proof}
