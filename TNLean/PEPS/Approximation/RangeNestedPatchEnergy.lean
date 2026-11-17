@@ -112,18 +112,12 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
       simp [zero_pow (Nat.one_le_iff_ne_zero.mp hpos)]
     · exact pow_le_pow_right₀ (by exact_mod_cast hq) hle
   -- Each split support contains a site of the inner layer.
-  have hsub : C ⊆ N.biUnion fun v ↦
-      Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
-    intro X hX
-    obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
-    have hv : v ∈ N := AreaLaw.Geometry.mem_squareLayer_of_split
-      (fun x hx y hy ↦ AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport c X.2
-        hx hy) hvX hvD hwX hwD
-    exact Finset.mem_biUnion.mpr ⟨v, hv, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hvX⟩⟩
   have hcount : (C.card : ℝ) ≤ R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) := by
-    have h := (Finset.card_le_card hsub).trans
-      (Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦
-        AreaLaw.card_admissibleSupport_containing_le (R := R) v)
+    have h := AreaLaw.card_le_card_mul_of_forall_exists_mem (N := N) (S := C) fun X hX ↦ by
+      obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
+      exact ⟨v, AreaLaw.Geometry.mem_squareLayer_of_split
+        (fun x hx y hy ↦ AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport c X.2
+          hx hy) hvX hvD hwX hwD, hvX⟩
     have hN := AreaLaw.Geometry.card_squareLayer_rangeNestedPatch_le Λ c hu hj
     have hexp : 1 + 2 * R * (R + 1) - 1 = 2 * R * (R + 1) := by omega
     rw [hexp] at h

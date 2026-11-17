@@ -66,22 +66,10 @@ Source: area-law `01-preliminaries.tex`, lines 95–102. -/
 theorem card_admissibleSupport_le (Λ : Finset (ℤ × ℤ)) (R : ℕ) :
     Fintype.card (AdmissibleSupport Λ R) ≤ 2 ^ ((1 + 2 * R * (R + 1)) - 1) * Λ.card := by
   classical
-  have hcover : (Finset.univ : Finset (AdmissibleSupport Λ R)) ⊆
-      (Finset.univ : Finset (Site Λ)).biUnion
-        fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
-    intro X _
-    obtain ⟨v, hv⟩ := X.2.1
-    exact Finset.mem_biUnion.mpr
-      ⟨v, Finset.mem_univ v, Finset.mem_filter.mpr ⟨Finset.mem_univ X, hv⟩⟩
-  calc Fintype.card (AdmissibleSupport Λ R)
-      = (Finset.univ : Finset (AdmissibleSupport Λ R)).card := Finset.card_univ.symm
-    _ ≤ _ := Finset.card_le_card hcover
-    _ ≤ ∑ v : Site Λ, (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card :=
-        Finset.card_biUnion_le
-    _ ≤ ∑ _v : Site Λ, 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-        Finset.sum_le_sum fun v _ ↦ PEPS.AreaLaw.card_admissibleSupport_containing_le v
-    _ = 2 ^ ((1 + 2 * R * (R + 1)) - 1) * Λ.card := by
-        rw [Finset.sum_const, Finset.card_univ, Fintype.card_coe, smul_eq_mul, mul_comm]
+  have h := PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem
+    (N := (Finset.univ : Finset (Site Λ))) (S := Finset.univ) fun X _ ↦
+      let ⟨v, hv⟩ := X.2.1; ⟨v, Finset.mem_univ v, hv⟩
+  rwa [Finset.card_univ, Finset.card_univ, Fintype.card_coe, mul_comm] at h
 
 /-- The coefficient `4 μ_R` of the norm bound `4 μ_R J |Λ|` of the partial-swap perturbation at
 range `R`, with `μ_R = 2^(v_R - 1)` supports through a site and `v_R = 1 + 2R(R + 1)`. -/

@@ -89,20 +89,14 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
       card_le_diamond_of_walks Subtype.val ball Subtype.val_injective
         (fun _ _ ↦ latticeL1Distance_le_one_of_planeDomainGraph_adj) x R
         fun v hv ↦ (Finset.mem_filter.mp hv).2
-    have hsub : near s(x, y) ⊆
-        ball.biUnion fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
-      intro X hX
-      obtain ⟨-, z, hz, hzA, v, hvX, p, hp⟩ := Finset.mem_filter.mp hX
-      obtain rfl : z = x := by
-        rcases Sym2.mem_iff.mp hz with rfl | rfl
-        · rfl
-        · exact absurd hzA hy
-      exact Finset.mem_biUnion.mpr ⟨v, Finset.mem_filter.mpr ⟨Finset.mem_univ _, p, hp⟩,
-        Finset.mem_filter.mpr ⟨Finset.mem_univ _, hvX⟩⟩
-    calc _ ≤ _ := Finset.card_le_card hsub
-      _ ≤ ball.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-          Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦ card_admissibleSupport_containing_le v
-      _ ≤ _ := Nat.mul_le_mul_right _ hball
+    refine (card_le_card_mul_of_forall_exists_mem fun X hX ↦ ?_).trans
+      (Nat.mul_le_mul_right _ hball)
+    obtain ⟨-, z, hz, hzA, v, hvX, p, hp⟩ := Finset.mem_filter.mp hX
+    obtain rfl : z = x := by
+      rcases Sym2.mem_iff.mp hz with rfl | rfl
+      · rfl
+      · exact absurd hzA hy
+    exact ⟨v, Finset.mem_filter.mpr ⟨Finset.mem_univ _, p, hp⟩, hvX⟩
   exact (Finset.card_le_card hcover).trans (Finset.card_biUnion_le_card_mul _ _ _ hcard)
 
 /-! ### The tail parameter -/
