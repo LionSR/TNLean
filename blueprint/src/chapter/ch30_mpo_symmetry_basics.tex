@@ -665,6 +665,100 @@ relation between word traces has nonnegative integer coefficients.
     %   multiplicities); the fusion character is not used by the source.
 \end{definition}
 
+\begin{definition}[Integer combinations and convolution]%
+    \label{def:mposym_integer_fusion}
+    \lean{MPOTensor.integerFusionMul,
+        MPOTensor.integerFusionMul_apply,
+        MPOTensor.integerFusionEval,
+        MPOTensor.integerFusionEval_single}
+    \leanok
+    \uses{def:fusion_character_nimrep}
+    For a finite label set $I$, integer combinations form the additive
+    group $\Z^{(I)}$. Natural structure constants define the product
+    \[
+        (uv)_c=\sum_{a,b\in I}u_av_bN_{ab}^c.
+    \]
+    For an additive commutative group $A$ and a family $f_a\in A$, its
+    additive evaluation is $u\mapsto\sum_a u_af_a$; the singleton with
+    coefficient $m$ at $a$ evaluates to $mf_a$.
+    % Project construction; not drawn from a cited source.
+\end{definition}
+
+\begin{lemma}[Additivity of integer convolution]%
+    \label{thm:mposym_integer_fusion_add}
+    \lean{MPOTensor.integerFusionMul_add_left,
+        MPOTensor.integerFusionMul_add_right,
+        MPOTensor.integerFusionMul_zero_left,
+        MPOTensor.integerFusionMul_zero_right,
+        MPOTensor.integerFusionMul_single_apply}
+    \leanok
+    \uses{def:mposym_integer_fusion}
+    Integer convolution is additive in each argument, vanishes when either
+    argument is zero, and satisfies
+    $((m[a])(n[b]))_c=mnN_{ab}^c$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Distribute integer multiplication through each finite sum. For singleton
+    inputs only the summand indexed by $(a,b)$ can be nonzero.
+\end{proof}
+
+\begin{definition}[Integer action matrices]%
+    \label{def:mposym_integer_nimrep}
+    \lean{MPOTensor.integerNIMRepMatrix, MPOTensor.integerNIMRepEval}
+    \leanok
+    \uses{def:fusion_character_nimrep, def:mposym_integer_fusion}
+    The integer action matrix associated to multiplicities is
+    $\rho_a(y,x)=M_{a,x}^y$, with the output block as row and the input
+    block as column. Its additive extension sends $u$ to $\sum_a u_a\rho_a$.
+\end{definition}
+
+\begin{lemma}[Matrix order and the unit]%
+    \label{thm:mposym_integer_nimrep}
+    \lean{MPOTensor.IsNIMRep.integerNIMRepMatrix_mul,
+        MPOTensor.integerNIMRepMatrix_unit,
+        MPOTensor.isNIMRep_of_ringHom,
+        MPOTensor.nimRep_unit_of_ringHom}
+    \leanok
+    \uses{def:mposym_integer_nimrep}
+    A nonnegative integer representation satisfies
+    $\rho_a\rho_b=\sum_c N_{ab}^c\rho_c$.
+    If also $M_{e,x}^y=\delta_{xy}$, then $\rho_e=1$.
+    Conversely, suppose a unital ring $R$ has elements $b_a$ with
+    $b_ab_b=\sum_cN_{ab}^cb_c$, and a ring homomorphism
+    $\phi:R\to\operatorname{Mat}_K(\Z)$ satisfies $\phi(b_a)=\rho_a$.
+    Then the multiplicities satisfy~\eqref{eq:mpo_nimrep}; if $b_e=1$,
+    they also satisfy $M_{e,x}^y=\delta_{xy}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The $(y,x)$ entry of $\rho_a\rho_b$ is
+    $\sum_zM_{a,z}^yM_{b,x}^z$, which equals the right side
+    of~\eqref{eq:mpo_nimrep}. For the converse apply the homomorphism
+    to $b_ab_b=\sum_cN_{ab}^cb_c$ and compare the same entries.
+    The identity matrix has entries $\delta_{xy}$.
+\end{proof}
+
+\begin{lemma}[Multiplicative evaluation of integer combinations]%
+    \label{thm:mposym_integer_fusion_eval}
+    \lean{MPOTensor.integerFusionEval_mul}
+    \leanok
+    \uses{def:mposym_integer_fusion}
+    If $f_a$ are elements of a unital ring with
+    $f_af_b=\sum_cN_{ab}^cf_c$, then integer evaluation satisfies
+    $\operatorname{ev}_f(uv)=\operatorname{ev}_f(u)\operatorname{ev}_f(v)$.
+    The target ring need not be commutative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Finite distributivity and the centrality of integer scalars give
+    \[
+        \sum_c\sum_{a,b}u_av_bN_{ab}^cf_c
+        =\sum_{a,b}u_av_b\Bigl(\sum_cN_{ab}^cf_c\Bigr)
+        =\Bigl(\sum_a u_af_a\Bigr)\Bigl(\sum_bv_bf_b\Bigr).
+    \]
+\end{proof}
+
 \begin{lemma}[Word-trace relations against a normal tensor are integral]%
     \label{thm:asymex_fib_anomaly_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_mul}
@@ -1301,6 +1395,75 @@ fusion ring.
     the identity object and the dual objects.
     % Source anchor: arXiv:2203.12563, line 1236.
 \end{definition}
+
+\begin{definition}[The ring of integer fusion combinations]%
+    \label{def:mposym_integer_based_ring}
+    \lean{MPOTensor.FusionRing,
+        MPOTensor.FusionRing.Carrier,
+        MPOTensor.FusionRing.basis,
+        MPOTensor.FusionRing.basis_unit,
+        MPOTensor.FusionRing.mul_apply,
+        MPOTensor.IsFusionRing.integerFusionRing}
+    \leanok
+    \uses{def:mposym_integer_fusion, def:mposym_fusion_ring}
+    For fusion data on a finite label set $I$ as in
+    Definition~\ref{def:mposym_fusion_ring}, the associated integer ring
+    has underlying additive group $\Z^{(I)}$, the convolution product
+    and unit $[e]$.
+\end{definition}
+
+\begin{lemma}[Faithful regular action and the ring laws]%
+    \label{thm:mposym_integer_based_ring_regular}
+    \lean{MPOTensor.IsFusionRing.isNIMRep,
+        MPOTensor.IsFusionRing.integerNIMRepEval_unit_column,
+        MPOTensor.IsFusionRing.integerNIMRepEval_injective,
+        MPOTensor.IsFusionRing.integerFusionMul_assoc,
+        MPOTensor.IsFusionRing.integerFusionMul_one_left,
+        MPOTensor.IsFusionRing.integerFusionMul_one_right}
+    \leanok
+    \uses{def:mposym_fusion_ring, def:mposym_integer_based_ring,
+        thm:mposym_integer_fusion_eval, thm:mposym_integer_nimrep}
+    The regular action has matrices $L_a(c,b)=N_{ab}^c$.
+    Its integer extension $L_u$ satisfies $L_u(c,e)=u_c$ and is therefore
+    injective. Convolution is associative and $[e]$ is its two-sided unit.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Associativity of the structure constants gives
+    $L_aL_b=\sum_cN_{ab}^cL_c$. Multiplicative evaluation gives
+    $L_{uv}=L_uL_v$. Also
+    $L_u(c,e)=\sum_a u_aN_{ae}^c=u_c$ and $L_e=1$.
+    Injectivity transports matrix associativity and both unit laws to
+    integer combinations.
+\end{proof}
+
+\begin{lemma}[Extension of fusion representations]%
+    \label{thm:mposym_integer_based_ring_lift}
+    \lean{MPOTensor.FusionRing.lift,
+        MPOTensor.FusionRing.lift_basis,
+        MPOTensor.FusionRing.nimRepHom,
+        MPOTensor.FusionRing.nimRepHom_basis,
+        MPOTensor.FusionRing.nimRepHom_basis_nonneg,
+        MPOTensor.FusionRing.characterHom,
+        MPOTensor.FusionRing.characterHom_basis}
+    \leanok
+    \uses{thm:mposym_integer_based_ring_regular,
+        thm:mposym_integer_fusion_eval, thm:mposym_integer_nimrep}
+    A family $f_a$ in a unital ring $R$ with $f_e=1$ and
+    $f_af_b=\sum_cN_{ab}^cf_c$ extends to a unital ring homomorphism
+    $\Z^{(I)}\to R$ by $u\mapsto\sum_au_af_a$.
+    In particular a nonnegative integer representation with
+    $M_{e,x}^y=\delta_{xy}$ extends to integer matrices by
+    $[a]\mapsto\rho_a$, with nonnegative entries on basis images.
+    Ring-valued fusion characters also extend, preserving their basis values.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Additivity follows from the finite sum formula, multiplication from
+    multiplicative evaluation, and preservation of the unit from $f_e=1$.
+    For multiplicity matrices use $\rho_a(y,x)=M_{a,x}^y$ and the explicit
+    unit condition. For a character use its defining product and unit identities.
+\end{proof}
 
 \begin{lemma}[Positive regular element of a fusion ring]%
     \label{thm:mposym_fusion_ring_regular}

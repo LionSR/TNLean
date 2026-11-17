@@ -22,6 +22,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorOrderTwo
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
+import TNLean.MPS.Symmetry.MPOSymmetry.BasedRing
 import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedMPOFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
@@ -41,6 +42,8 @@ import TNLean.MPS.Symmetry.MPOSymmetry.FusionRing
 import TNLean.MPS.Symmetry.MPOSymmetry.FusionTensors
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupAction
 import TNLean.MPS.Symmetry.MPOSymmetry.GroupFusion
+import TNLean.MPS.Symmetry.MPOSymmetry.IntegerFusion
+import TNLean.MPS.Symmetry.MPOSymmetry.IntegerNIMRep
 import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedIntersection

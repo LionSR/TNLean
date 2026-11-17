@@ -2813,6 +2813,10 @@ involve no boundary.
   and `MPOTensor.IsNIMRep.exists_equiv_of_isInvertibleLabel`.
 - **Caveat:** the definition does not require the unit to act as the identity;
   the permutation result adds `M_e = 1` as a hypothesis, matching line 683.
+  With input block as row and output block as column the multiplication law
+  reads `M_ab = M_b * M_a`. Ordinary matrix representations use the transpose,
+  with output block as row. `MPOTensor.FusionRing.nimRepHom` uses this convention
+  and requires the additional unit condition explicitly.
 
 ### `MPOTensor.GroupFamily.IsNormalRepresentation`
 
@@ -2961,6 +2965,26 @@ involve no boundary.
   `F`-symbols, the pivotal structure and the rigidity maps are not. The
   predicate is independent of `MPOTensor.IsMPOFusionAlgebra`, which constrains
   periodic operators rather than structure constants.
+
+### `MPOTensor.FusionRing`
+
+- **Declaration:** `MPOTensor.FusionRing ι`, with natural `constants`, a `unit`
+  label, a `dual` map and `laws : MPOTensor.IsFusionRing constants unit dual`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/BasedRing.lean`.
+- **Meaning:** finite fusion data whose integer combinations `F.Carrier` carry
+  convolution multiplication and unit `F.basis F.unit`. The faithful regular
+  action recovers each coefficient from the column at the unit label.
+- **Source:** project construction from `MPOTensor.IsFusionRing`; its fusion
+  data are anchored at arXiv:2203.12563, line 1236.
+- **Sanctioned bridges:** `F.lift` extends a compatible ring-valued family;
+  `F.nimRepHom` extends legacy multiplicities with the explicit unit law to
+  integer matrices using output rows and input columns; `F.characterHom`
+  extends ring-valued characters. Each extension has the prescribed basis
+  values, and NIM-rep basis images have nonnegative entries.
+- **Caveats:** the legacy predicates and consumers have not been migrated.
+  Uniqueness of the extension, the duality anti-involution and the identification
+  of the group case with `MonoidAlgebra` remain to be formalized. Characters
+  into general semirings are outside the integer RingHom construction.
 
 ## Domain walls of permuted blocks
 
