@@ -2399,9 +2399,7 @@
         MPOTensor.same_case_of_equivalentUnderSymmetry_conjugation,
         MPOTensor.isConjugationCaseI_iff_of_blockTensor,
         MPOTensor.isConjugationCase_const_of_path,
-        MPOTensor.not_isConjugationCaseI_and_isConjugationCaseII,
-        MPOTensor.TwoSiteStandardFormData.isConjugationCase_iff_sign,
-        MPOTensor.IsMPUCanonicalFormII.exists_conjugation_gauge}
+        MPOTensor.not_isConjugationCaseI_and_isConjugationCaseII}
     \leanok
     \discussion{5713}
     % **Local fix (missing argument):** the source proves only the "if"
@@ -2914,51 +2912,28 @@
     using $G^T=s'G$ and $x^T=sx$. Since $A\neq0$, $|c|^2ss'=1$, hence $s=s'$.
 \end{proof}
 
-\begin{lemma}[The MPS sign and the conjugation case]
-    \label{lem:mpu_mps_sign_conjugation_case}
-    \lean{MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff,
-        MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge}
-    \leanok
-    \discussion{5714}
-    \uses{prop1conj, corconj, lem:mpu_conjugation_mps_sign_local}
-    For a conjugation-invariant MPU, the MPS sign
-    $G\overline G=\pm\Id$ corresponds to Case I and Case II, respectively, of
-    Lemma~\ref{corconj}: if $x,y$ are as in Lemma~\ref{prop1conj} and $G$ is a
-    unitary with $\overline{\mathcal U^{ij}}=\zeta G^\dagger\mathcal U^{ij}G$
-    for all physical indices, then $G\overline G=\Id$ if and only if $x=x^T$,
-    and $G\overline G=-\Id$ if and only if $x=-x^T$. Here the MPU is generated
-    by a simple tensor in canonical form II, its standard form is that of the
-    two-site block, as in \cite{gap:mpu_standard_form_canonical_convention},
-    and $G$ may be a gauge of either tensor. This is the first half of
-    \cite[Proposition~VI.12]{Cirac2017MPU}; it does not identify the two cases
-    with the phases under equivalence.
-    % Source lines: paper_v2.tex 1791--1797.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{prop1conj, lem:mpu_conjugation_mps_sign_local}
-    Lemma~\ref{prop1conj} gives $x=\pm x^T$. The tensor is normal, so the MPS
-    sign is $G\overline G=\pm\Id$. Lemma~\ref{lem:mpu_conjugation_mps_sign_local}
-    applied to the two-site block shows that the two signs agree. A gauge of
-    the one-site tensor is a gauge of its two-site block with phase
-    $\zeta^2$.
-\end{proof}
-
 \begin{lemma}[Conjugation class and the MPS sign]
     \label{prop:mps-class-eq-mpu-class-for-conjugation}
-    \lean{MPOTensor.equivalentUnderSymmetry_conjugation_iff_mps_sign}
+    \lean{MPOTensor.equivalentUnderSymmetry_conjugation_iff_mps_sign,
+        MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff,
+        MPOTensor.IsMPUCanonicalFormII.mps_conjugation_sign_iff_of_gauge,
+        MPOTensor.TwoSiteStandardFormData.isConjugationCase_iff_sign,
+        MPOTensor.IsMPUCanonicalFormII.exists_conjugation_gauge}
     \leanok
     \discussion{5714}
     % **Local fix (missing argument):** uses the "only if" direction of
     % Lemma cor:equiv-under-conjugation. Documented in
     % docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex.
-    \uses{lem:mpu_mps_sign_conjugation_case, cor:equiv-under-conjugation,
-        cor:all-equivalent-under-conjugation}
+    \uses{prop1conj, corconj, lem:mpu_conjugation_mps_sign_local,
+        cor:equiv-under-conjugation, cor:all-equivalent-under-conjugation}
     For a conjugation-invariant MPU, the MPS sign
     $G\overline G=\pm\Id$ agrees with Case I and Case II, respectively, of
-    Lemma~\ref{corconj}, that is, with the two possible phases under
-    equivalence: two simple conjugation-invariant tensors in canonical form II
+    Lemma~\ref{corconj}: if $G$ is a unitary with
+    $\overline{\mathcal U^{ij}}=\zeta G^\dagger\mathcal U^{ij}G$ for all
+    physical indices, then Case I holds exactly when $G\overline G=\Id$ and
+    Case II exactly when $G\overline G=-\Id$, for any standard form of any
+    block of $\mathcal U$. Such a $G$ always exists. The sign therefore labels
+    the two possible phases under equivalence: two simple conjugation-invariant tensors in canonical form II
     on the same physical dimension, whose standard forms have the same ranks,
     are equivalent under conjugation symmetry if and only if their signs
     $G\overline G$ agree. This is \cite[Proposition~VI.12]{Cirac2017MPU}.
@@ -2967,8 +2942,13 @@
 
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:mpu_mps_sign_conjugation_case}, Case I holds exactly when
-    $G\overline G=\Id$ and Case II exactly when $G\overline G=-\Id$. If both
+    Since $\mathcal U$ and $\overline{\mathcal U}$ generate the same MPU and are
+    in canonical form II, they differ by a unitary gauge $G$. By
+    Lemma~\ref{prop1conj}, $x=\pm x^T$, and the tensor is normal, so
+    $G\overline G=\pm\Id$. Lemma~\ref{lem:mpu_conjugation_mps_sign_local},
+    applied to the two-site block, shows that the two signs agree; a gauge of
+    the one-site tensor is a gauge of its two-site block with phase $\zeta^2$.
+    The same $G$ is a gauge of every block. If both
     ranks are even, Lemma~\ref{cor:equiv-under-conjugation} identifies the
     phases with the cases. If one rank is odd, only Case I occurs, so both
     signs are $\Id$, and all such MPUs are equivalent by

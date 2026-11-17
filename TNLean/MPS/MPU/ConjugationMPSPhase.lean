@@ -51,7 +51,11 @@ forms of the same ranks, and let `G_i` be unitary gauges with
 `conj(𝒰_iʲᵏ) = ζ_i G_i† 𝒰_iʲᵏ G_i`. Then `𝒰₁` and `𝒰₂` are equivalent under
 conjugation symmetry exactly when their MPS signs `G_i conj(G_i) = ±1` agree.
 
-The hypotheses are those of Corollary `cor:equiv-under-conjugation`, with its
+The gauges `G_i` are the objects the source statement speaks about
+(eq. `eq:mps-class-gauge-trafo`), chosen unitary as at lines 1780--1782, so taking
+them as data adds no hypothesis; such gauges always exist by
+`IsMPUCanonicalFormII.exists_conjugation_gauge`. The remaining hypotheses are those
+of Corollary `cor:equiv-under-conjugation`, with its
 standing conventions recorded at `equivalentUnderSymmetry_conjugation_iff_same_case`.
 No parity hypothesis is needed: if `ℓ` or `r` is odd, both standard forms are in
 Case I, both signs are `1`, and the MPUs are equivalent by
