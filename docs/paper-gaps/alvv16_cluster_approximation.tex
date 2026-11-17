@@ -263,6 +263,54 @@ It still uses the corrected estimate
 (\ref{eq:alvv_normalized_label_replacement}) in place of the false printed
 one.
 
+\section{The selector by physical support: the missing step}
+\label{sec:alvv_physical_selector_gap}
+
+The bond bound $r^2q^r$ for the interaction-label selector rests on one
+step. At a cut, a retained word factors as the letters to the left, the
+unique connected label component crossing the cut and the letters to the
+right, and the word is retained exactly when each label component is.
+Retention of a component depends only on its set of labels, so only the
+crossing components with fewer than $r$ labels have to be carried across
+the cut, and they give the operator Schmidt rank.
+
+Under the selector by the minimal physical support of the product
+$h_w$, the selector recorded for the source in
+Section~\ref{sec:alvv_cluster_status}, the same step needs the following
+property:
+\begin{itemize}
+    \item[(P)] whether a word is retained is determined by the label sets
+          of its connected label components.
+\end{itemize}
+The source does not establish~(P), and it fails. On three qubits take
+\begin{align}
+    h_1 & =X\otimes Z\otimes I, & h_2 & =I\otimes X\otimes Z.
+\end{align}
+Both are Hermitian of norm one and supported on $\{1,2\}$ and $\{2,3\}$, and
+they anticommute because $ZX=-XZ$ on the second qubit. Hence
+\begin{align}
+    h_1h_2   & =X\otimes ZX\otimes Z, &
+    h_1h_2h_1 & =-h_1h_1h_2=-h_2.
+\end{align}
+The words $(1,2)$ and $(1,2,1)$ have the same label set $\{1,2\}$. The
+product of the first acts nontrivially on all three qubits, while the
+product of the second is supported on $\{2,3\}$. With the cutoff $r=3$ on
+physical sites, the first word is omitted and the second is retained. So
+retention is not a function of the label sets, and no reading of the labels
+letter by letter decides it. Under the designated-site reading both words
+are omitted.
+
+Consequently the crossing decomposition, and with it the bound $r^2q^r$,
+does not transfer to the physical-support selector, and the source gives no
+other argument for that selector that is recorded here. A decomposition
+for that selector would have to carry the crossing product itself, whose
+support depends on the multiplicities of the letters and not only on their
+labels. Neither a bond bound nor a counterexample to one is known for that
+selector. The formalized representation therefore remains a statement for
+the interaction-label selector, a scope restriction relative to the source's
+selector. How the explicit tensor of equation~\path{eq:Atensor} reads the
+words was not rechecked against the source for this section.
+
 \section{Status of the remaining items}
 \label{sec:alvv_cluster_status}
 
@@ -279,7 +327,8 @@ one.
           Under that selector a word can be retained because its product has
           a smaller support than its labels designate, so the retained set is
           not determined by the labels, and the label construction does not
-          apply. A designated-site reading, in which two labels at distance
+          apply; Section~\ref{sec:alvv_physical_selector_gap} gives the missing
+          property and a three-qubit example where it fails. A designated-site reading, in which two labels at distance
           two already join one physical component, is a third selector that
           would need its own crossing decomposition.
     \item Lemma~\path{lem:exp-approx-eff} is formalized on its whole scale
