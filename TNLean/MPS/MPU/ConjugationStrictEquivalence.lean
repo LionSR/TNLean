@@ -35,12 +35,18 @@ determinant invariants are trivial; it remains open, see
 ## Main results
 
 * `Matrix.det_gauge_mul_swap`: gauge invariance of `det(u v)`.
-* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_gate_path`: gate paths
-  satisfying the local conjugation equations give strict equivalence.
-* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq`: the "if"
-  direction of Theorem `conjphs`.
-* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even`: the "if"
-  direction of Theorem `prop:conjsym-strict-equiv`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path`: gate
+  paths satisfying the local conjugation equations give strict equivalence.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_mul_eq`: the
+  "if" direction of Theorem `conjphs`, for any standard forms of tensors in canonical form.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_eq_of_even`:
+  the "if" direction of Theorem `prop:conjsym-strict-equiv`, likewise.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq`,
+  `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even`: the same for the
+  two-site blocks of tensors in canonical form II.
+
+The standard forms need not come from canonical form II: the statements only use the
+standard-form data and the canonical form of the endpoints, which strict equivalence requires.
 -/
 
 open scoped Matrix Kronecker
@@ -374,10 +380,10 @@ standard form is fixed by complex conjugation and one of the ranks `ℓ, r` is
 odd, then a gauge `(x ⊗ y)` makes both gates real. Source: arXiv:1703.09188,
 Proposition `corconj` (lines 1098--1149), Case I being the only case when `r`
 or `ℓ` is odd (lines 1402--1403). -/
-theorem TwoSiteStandardFormData.exists_real_gauge_of_conjugation {V : MPOTensor d D}
+theorem TwoSiteStandardFormData.exists_real_gauge_of_conjugation {W : MPOTensor (d * d) D}
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ} {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
-    (S : TwoSiteStandardFormData (blockTwo V) u v)
-    (hc : ∀ N : ℕ, 0 < N → mpo (blockTwo V) N = (mpo (blockTwo V) N).map (starRingEnd ℂ))
+    (S : TwoSiteStandardFormData W u v)
+    (hc : ∀ N : ℕ, 0 < N → mpo W N = (mpo W N).map (starRingEnd ℂ))
     (hodd : Odd ℓ ∨ Odd r) :
     ∃ (x : Matrix.unitaryGroup (Fin ℓ) ℂ) (y : Matrix.unitaryGroup (Fin r) ℂ),
       (((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u).map
@@ -429,41 +435,56 @@ theorem isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates {d' : ℕ
   change mpo (reindexPhysical e (mapStar G)) N = _
   rw [mpo_reindexPhysical, mpo_reindexPhysical, hG]
 
-/-- **Strict equivalence under conjugation from a conjugation-invariant gate
-path.** If continuous families of unitary gates join standard-form gates of
-the two-site blocks of `𝒰₁` and `𝒰₂`, and at every point satisfy the local
-conjugation equations of `prop1conj`, then the two-site blocks are strictly
-equivalent under conjugation. Source: arXiv:1703.09188, Lemma
-`lem:equivalent-symmetry` (lines 1369--1376, "if" direction) with Proposition
-`prop1conj` (lines 1014--1027), as combined in the proofs of Theorems
-`conjphs` (line 1445) and `prop:conjsym-strict-equiv` (lines 1540--1546). -/
-theorem strictlyEquivalentUnderSymmetry_conjugation_of_gate_path
-    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
-    (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
+/-- **Strict equivalence under conjugation from a conjugation-invariant gate path, for any
+standard forms.** Let `W₁, W₂` be tensors on pairs of sites in canonical form after the physical
+relabelling `e`, with standard forms whose gates are joined by continuous families of unitary
+gates satisfying the local conjugation equations of `prop1conj` at every point. Then the
+relabelled tensors are strictly equivalent under conjugation. No canonical form II is assumed.
+
+Source: arXiv:1703.09188, Lemma `lem:equivalent-symmetry` (lines 1369--1376, "if" direction)
+with Proposition `prop1conj` (lines 1014--1027). -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path {d' : ℕ}
+    (e : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
+    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical e W₁).toMPSTensor)
+    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical e W₂).toMPSTensor)
     (u : unitInterval → Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (v : unitInterval → Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
     (hu : Continuous u) (hv : Continuous v)
     (hu' : ∀ p, (u p).IsUnitaryBetween) (hv' : ∀ p, (v p).IsUnitaryBetween)
-    (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) (u 0) (v 0))
-    (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) (u 1) (v 1))
+    (S₁ : TwoSiteStandardFormData W₁ (u 0) (v 0))
+    (S₂ : TwoSiteStandardFormData W₂ (u 1) (v 1))
     (hloc : ∀ p, ∃ (x : Matrix.unitaryGroup (Fin ℓ) ℂ) (y : Matrix.unitaryGroup (Fin r) ℂ),
       (u p).map (starRingEnd ℂ) =
           ((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u p ∧
         (v p).map (starRingEnd ℂ) =
           v p * (star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ))) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
-      (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
-  have : NeZero d := h₁.neZero_phys
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry d')
+      (reindexPhysical e W₁) (reindexPhysical e W₂) rfl := by
+  have : NeZero d := ⟨S₁.phys_pos.ne'⟩
   have : NeZero ℓ := ⟨S₁.left_pos.ne'⟩
   have : NeZero r := ⟨S₁.right_pos.ne'⟩
-  have h := strictlyEquivalentUnderSymmetry_blockTwo_of_gate_path
-    (S := conjugationSymmetry d) (fun N hN ↦ hN) h₁ h₂ u v hu hv hu' hv' S₁ S₂
-    (fun p ↦ by
+  exact strictlyEquivalentUnderSymmetry_reindexPhysical_of_gate_path e (fun _ hN ↦ hN)
+    hcf₁ hcf₂ u v hu hv hu' hv' S₁ S₂ fun p ↦ by
       obtain ⟨x, y, hcu, hcv⟩ := hloc p
-      rw [conjugationSymmetry_block (by norm_num)]
-      exact isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates _
-        (hu' p) (hv' p) x y hcu hcv)
-  rwa [conjugationSymmetry_block (by norm_num)] at h
+      exact isInvariantUnderSymmetry_conjugation_standardFormTensorOfGates e
+        (hu' p) (hv' p) x y hcu hcv
+
+/-- The two-site block, relabelled to the alphabet of length-two words, is the block of two
+sites. -/
+theorem reindexPhysical_twoSiteBlockEquiv_symm_blockTwo {E : ℕ} (W : MPOTensor d E) :
+    reindexPhysical (twoSiteBlockEquiv d).symm (blockTwo W) = blockTensor W 2 := by
+  funext i j
+  rw [blockTwo_eq_blockTensor_reindex]
+  simp [reindexPhysical]
+
+/-- The relabelled two-site block of a tensor in canonical form II is in canonical form. -/
+theorem IsMPUCanonicalFormII.isMPUCanonicalForm_reindexPhysical_blockTwo {E : ℕ}
+    {W : MPOTensor d E} (h : IsMPUCanonicalFormII W) :
+    MPSTensor.IsMPUCanonicalForm
+      (MPOTensor.reindexPhysical (twoSiteBlockEquiv d).symm (MPOTensor.blockTwo W)).toMPSTensor :=
+  have : NeZero d := h.neZero_phys
+  (reindexPhysical_twoSiteBlockEquiv_symm_blockTwo W).symm ▸
+    (h.blockTensor 2 (by omega)).isMPUCanonicalForm
 
 /-- Real gates satisfy the local conjugation equations with `x = y = 1`. -/
 private theorem exists_local_conjugation_of_real
@@ -476,33 +497,30 @@ private theorem exists_local_conjugation_of_real
           v * (star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ)) :=
   ⟨1, 1, by simpa using hur, by simpa using hvr⟩
 
-/-- **Conjugation symmetry when one source rank is odd, "if" direction.** Let
-`𝒰₁, 𝒰₂` be simple tensors in canonical form II whose standard-form MPUs are
-fixed by complex conjugation, with standard-form gates `u_i, v_i` of the same
-ranks `ℓ, r`. If `r` or `ℓ` is odd and `det(u₁ v₁) = det(u₂ v₂)`, then the two
-MPUs are strictly equivalent under conjugation. The standard-form chain is the
-chain of two-site blocks, as in
-`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`; the determinant
-of `u v` is read on `ℂ^ℓ ⊗ ℂ^r` through the swap, see
-`Matrix.det_gauge_mul_swap`.
+/-- **Conjugation symmetry when one rank is odd, "if" direction, for any standard forms.** Let
+`W₁, W₂` be tensors on pairs of sites in canonical form after the physical relabelling `eP`,
+fixed by complex conjugation at every positive length, with standard forms `u_i, v_i` of the
+same ranks `ℓ, r`, one of them odd. If `det(u₁ v₁) = det(u₂ v₂)`, read on `ℂ^ℓ ⊗ ℂ^r` through
+the swap, the relabelled tensors are strictly equivalent under conjugation. No canonical form
+II is assumed.
 
-Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, "if"
-direction, proof at lines 1426--1446. -/
-theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq
-    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
-    (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
-    (hc₁ : ∀ N : ℕ, 0 < N → mpo (blockTwo 𝒰₁) N = (mpo (blockTwo 𝒰₁) N).map (starRingEnd ℂ))
-    (hc₂ : ∀ N : ℕ, 0 < N → mpo (blockTwo 𝒰₂) N = (mpo (blockTwo 𝒰₂) N).map (starRingEnd ℂ))
+Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, "if" direction, proof at lines
+1426--1446. -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_mul_eq {d' : ℕ}
+    (eP : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
+    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
+    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
+    (hc₁ : ∀ N : ℕ, 0 < N → mpo W₁ N = (mpo W₁ N).map (starRingEnd ℂ))
+    (hc₂ : ∀ N : ℕ, 0 < N → mpo W₂ N = (mpo W₂ N).map (starRingEnd ℂ))
     {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
-    (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
-    (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
+    (S₁ : TwoSiteStandardFormData W₁ u₁ v₁) (S₂ : TwoSiteStandardFormData W₂ u₂ v₂)
     (hodd : Odd ℓ ∨ Odd r)
     (hdet : ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
       ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
-      (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
-  have : NeZero d := h₁.neZero_phys
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry d')
+      (reindexPhysical eP W₁) (reindexPhysical eP W₂) rfl := by
+  have : NeZero d := ⟨S₁.phys_pos.ne'⟩
   have : NeZero ℓ := ⟨S₁.left_pos.ne'⟩
   have : NeZero r := ⟨S₁.right_pos.ne'⟩
   -- Real gates for both standard forms (Case I of `corconj`).
@@ -536,7 +554,7 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq
   obtain ⟨U₂', V₂', T₂', hU₂', hV₂', hdU, hdV⟩ :
       ∃ (U₂' : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
         (V₂' : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ),
-        Nonempty (TwoSiteStandardFormData (blockTwo 𝒰₂) U₂' V₂') ∧
+        Nonempty (TwoSiteStandardFormData W₂ U₂' V₂') ∧
         U₂'.map (starRingEnd ℂ) = U₂' ∧ V₂'.map (starRingEnd ℂ) = V₂' ∧
         (U₁.submatrix id e).det = (U₂'.submatrix id e).det ∧
         (V₁.submatrix id f).det = (V₂'.submatrix id f).det := by
@@ -560,10 +578,102 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq
     T₂'.u_unitary hU₁ hU₂' hdU
   obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq f T₁.v_unitary
     T₂'.v_unitary hV₁ hV₂' hdV
-  exact strictlyEquivalentUnderSymmetry_conjugation_of_gate_path h₁ h₂ γu γv γu.continuous
+  exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂ γu γv γu.continuous
     γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
     (by rw [γu.source, γv.source]; exact T₁) (by rw [γu.target, γv.target]; exact T₂')
     (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
+
+/-- **Conjugation symmetry when one source rank is odd, "if" direction.** Let
+`𝒰₁, 𝒰₂` be simple tensors in canonical form II whose standard-form MPUs are
+fixed by complex conjugation, with standard-form gates `u_i, v_i` of the same
+ranks `ℓ, r`. If `r` or `ℓ` is odd and `det(u₁ v₁) = det(u₂ v₂)`, then the two
+MPUs are strictly equivalent under conjugation. The standard-form chain is the
+chain of two-site blocks, as in
+`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`; the determinant
+of `u v` is read on `ℂ^ℓ ⊗ ℂ^r` through the swap, see
+`Matrix.det_gauge_mul_swap`.
+
+Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, "if"
+direction, proof at lines 1426--1446. -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq
+    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
+    (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
+    (hc₁ : ∀ N : ℕ, 0 < N → mpo (blockTwo 𝒰₁) N = (mpo (blockTwo 𝒰₁) N).map (starRingEnd ℂ))
+    (hc₂ : ∀ N : ℕ, 0 < N → mpo (blockTwo 𝒰₂) N = (mpo (blockTwo 𝒰₂) N).map (starRingEnd ℂ))
+    {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
+    (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
+    (hodd : Odd ℓ ∨ Odd r)
+    (hdet : ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
+      ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det) :
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
+      (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
+  have h := strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_mul_eq
+    (twoSiteBlockEquiv d).symm h₁.isMPUCanonicalForm_reindexPhysical_blockTwo
+    h₂.isMPUCanonicalForm_reindexPhysical_blockTwo hc₁ hc₂ S₁ S₂ hodd hdet
+  rwa [reindexPhysical_twoSiteBlockEquiv_symm_blockTwo,
+    reindexPhysical_twoSiteBlockEquiv_symm_blockTwo] at h
+
+/-- **Strict conjugation equivalence for even ranks, "if" direction, for any standard forms.**
+The statement of `strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even` for tensors on
+pairs of sites in canonical form after the physical relabelling `eP`, with no canonical form II.
+
+Source: arXiv:1703.09188, Theorem `prop:conjsym-strict-equiv`, lines 1480--1491, "if" direction,
+proof at lines 1540--1546. -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_eq_of_even {d' : ℕ}
+    (eP : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
+    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
+    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
+    {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S₁ : TwoSiteStandardFormData W₁ u₁ v₁) (S₂ : TwoSiteStandardFormData W₂ u₂ v₂)
+    (hℓ : Even ℓ) (hr : Even r)
+    (hcase : (u₁.map (starRingEnd ℂ) = u₁ ∧ v₁.map (starRingEnd ℂ) = v₁ ∧
+        u₂.map (starRingEnd ℂ) = u₂ ∧ v₂.map (starRingEnd ℂ) = v₂) ∨
+      (u₁.map (starRingEnd ℂ) = (Matrix.sourceSkewForm hℓ ⊗ₖ Matrix.sourceSkewForm hr) * u₁ ∧
+        v₁.map (starRingEnd ℂ) = v₁ * (Matrix.sourceSkewForm hr ⊗ₖ Matrix.sourceSkewForm hℓ) ∧
+        u₂.map (starRingEnd ℂ) = (Matrix.sourceSkewForm hℓ ⊗ₖ Matrix.sourceSkewForm hr) * u₂ ∧
+        v₂.map (starRingEnd ℂ) = v₂ * (Matrix.sourceSkewForm hr ⊗ₖ Matrix.sourceSkewForm hℓ)))
+    (e : Fin ℓ × Fin r ≃ Fin d × Fin d)
+    (hu : (u₁.submatrix id e).det = (u₂.submatrix id e).det)
+    (hv : (v₁.submatrix id (e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r)))).det =
+      (v₂.submatrix id (e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r)))).det) :
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry d')
+      (reindexPhysical eP W₁) (reindexPhysical eP W₂) rfl := by
+  set f := e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r))
+  rcases hcase with ⟨hu₁, hv₁, hu₂, hv₂⟩ | ⟨hu₁, hv₁, hu₂, hv₂⟩
+  · -- Case I: real gates.
+    obtain ⟨γu, hγu⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq e S₁.u_unitary
+      S₂.u_unitary hu₁ hu₂ hu
+    obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq f S₁.v_unitary
+      S₂.v_unitary hv₁ hv₂ hv
+    exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂ γu γv γu.continuous
+      γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
+      (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
+      (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
+  · -- Case II: symplectic gates.
+    obtain ⟨γu, hγu⟩ := Matrix.IsUnitaryBetween.joinedIn_symplectic_of_det_eq hℓ hr e
+      S₁.u_unitary S₂.u_unitary hu₁ hu₂ hu
+    obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq hℓ hr f
+      S₁.v_unitary S₂.v_unitary hv₁ hv₂ hv
+    have hstar : ∀ {n : ℕ} (h : Even n),
+        star (Matrix.sourceSkewForm h) = -Matrix.sourceSkewForm h :=
+      fun h ↦ by
+        rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose, Matrix.transpose_map]
+        exact (congrArg Matrix.transpose (Matrix.map_star_sourceSkewForm h)).trans
+          (Matrix.transpose_sourceSkewForm h)
+    let x : Matrix.unitaryGroup (Fin ℓ) ℂ := ⟨_, Matrix.sourceSkewForm_mem_unitaryGroup hℓ⟩
+    let y : Matrix.unitaryGroup (Fin r) ℂ := ⟨_, Matrix.sourceSkewForm_mem_unitaryGroup hr⟩
+    have hyx : star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ) =
+        Matrix.sourceSkewForm hr ⊗ₖ Matrix.sourceSkewForm hℓ := by
+      simp only [x, y, hstar]
+      ext i j
+      simp [Matrix.kroneckerMap_apply]
+    exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂ γu γv γu.continuous
+      γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
+      (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
+      (fun p ↦ ⟨x, y, (hγu p).2, by rw [hyx]; exact (hγv p).2⟩)
 
 /-- **Strict conjugation equivalence for even source ranks, "if" direction.**
 Let `𝒰₁, 𝒰₂` be tensors in canonical form II whose two-site blocks have
@@ -597,38 +707,10 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even
       (v₂.submatrix id (e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r)))).det) :
     StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
       (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
-  set f := e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r))
-  rcases hcase with ⟨hu₁, hv₁, hu₂, hv₂⟩ | ⟨hu₁, hv₁, hu₂, hv₂⟩
-  · -- Case I: real gates.
-    obtain ⟨γu, hγu⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq e S₁.u_unitary
-      S₂.u_unitary hu₁ hu₂ hu
-    obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq f S₁.v_unitary
-      S₂.v_unitary hv₁ hv₂ hv
-    exact strictlyEquivalentUnderSymmetry_conjugation_of_gate_path h₁ h₂ γu γv γu.continuous
-      γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
-      (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
-      (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
-  · -- Case II: symplectic gates.
-    obtain ⟨γu, hγu⟩ := Matrix.IsUnitaryBetween.joinedIn_symplectic_of_det_eq hℓ hr e
-      S₁.u_unitary S₂.u_unitary hu₁ hu₂ hu
-    obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq hℓ hr f
-      S₁.v_unitary S₂.v_unitary hv₁ hv₂ hv
-    have hstar : ∀ {n : ℕ} (h : Even n),
-        star (Matrix.sourceSkewForm h) = -Matrix.sourceSkewForm h :=
-      fun h ↦ by
-        rw [Matrix.star_eq_conjTranspose, Matrix.conjTranspose, Matrix.transpose_map]
-        exact (congrArg Matrix.transpose (Matrix.map_star_sourceSkewForm h)).trans
-          (Matrix.transpose_sourceSkewForm h)
-    let x : Matrix.unitaryGroup (Fin ℓ) ℂ := ⟨_, Matrix.sourceSkewForm_mem_unitaryGroup hℓ⟩
-    let y : Matrix.unitaryGroup (Fin r) ℂ := ⟨_, Matrix.sourceSkewForm_mem_unitaryGroup hr⟩
-    have hyx : star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ) =
-        Matrix.sourceSkewForm hr ⊗ₖ Matrix.sourceSkewForm hℓ := by
-      simp only [x, y, hstar]
-      ext i j
-      simp [Matrix.kroneckerMap_apply]
-    exact strictlyEquivalentUnderSymmetry_conjugation_of_gate_path h₁ h₂ γu γv γu.continuous
-      γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
-      (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
-      (fun p ↦ ⟨x, y, (hγu p).2, by rw [hyx]; exact (hγv p).2⟩)
+  have h := strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_eq_of_even
+    (twoSiteBlockEquiv d).symm h₁.isMPUCanonicalForm_reindexPhysical_blockTwo
+    h₂.isMPUCanonicalForm_reindexPhysical_blockTwo S₁ S₂ hℓ hr hcase e hu hv
+  rwa [reindexPhysical_twoSiteBlockEquiv_symm_blockTwo,
+    reindexPhysical_twoSiteBlockEquiv_symm_blockTwo] at h
 
 end MPOTensor
