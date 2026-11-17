@@ -253,6 +253,7 @@ of the two-site boundary range of the common operator.
 \begin{lemma}[Commutation of the path under adjoint closure]
     \label{thm:mpo_arbitrary_parent_commutation_adjoint_closed}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_of_forall_mem_Ioo,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary,
         MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary,
         MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo}
@@ -400,6 +401,114 @@ tensors are in canonical form.
     the commutation. In the canonical case,
     Lemma~\ref{thm:mpo_arbitrary_canonical_hermitian_gauge} supplies the
     hypotheses on $u_p$ and $Y_p$.
+\end{proof}
+
+For a group the hypothesis of
+Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed}, imposed
+label by label, fails for unitary on-site symmetries as soon as some
+$u_g^2$ is not a scalar, already for $\mathbb Z_3$ with unitary action
+gauges; see \cite{gap:glm23_mixed_path_parent_commutation}. The adjoint
+of an operator of the label $g$ is instead an operator of the label
+$g^{-1}$. Let a group $G$ act at both endpoints by unitary on-site
+representations $g\mapsto u_{p,g}$, with on-site operator tensors
+$T_{p,g}$, multiplicity $m=1$, action maps $V_{p,g},W_{p,g}$ and action
+gauges $Y_{p,g}$ as above, and write $\widetilde T_g$ for the common
+operator of the label $g$.
+
+\begin{lemma}[Adjoint closure of the union for unitary action gauges]
+    \label{thm:mpo_arbitrary_unitary_gauge_union_closure}
+    \lean{MPOTensor.physicalAdjointTensor_eq_of_conjTranspose_physicalSlice,
+        MPSTensor.MPOSymmetry.star_synthesis_analysis_of_conjTranspose_eq_smul,
+        MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_conjTranspose,
+        MPSTensor.MPOSymmetry.exists_bondOneActionGauge_mul_eq_smul_one,
+        MPSTensor.MPOSymmetry.exists_conjTranspose_bondOneActionGauge_eq_smul_of_mem_unitaryGroup,
+        MPSTensor.MPOSymmetry.conjTranspose_physicalSlice_eq_inv,
+        MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_inv_eq}
+    \leanok
+    \uses{def:mpo_arbitrary_mixed_operator,def:mpo_mixed_action_tensor,
+        def:mpdo_physical_adjoint,def:injective,thm:glm_boundary_physical_adjoint,
+        thm:mpo_arbitrary_hermitian_gauge_adjoint_closure,
+        thm:mpo_arbitrary_canonical_hermitian_gauge}
+    Suppose that $A_0,A_1$ are one-site injective and that every action
+    gauge $Y_{p,g}$ is a nonzero multiple of a unitary matrix. Then for
+    every $g\in G$, every $N$ and every $X$ there is an $X'$ with
+    $(O^N_{\widetilde T_g,X})^*=O^N_{\widetilde T_{g^{-1}},X'}$. Hence the
+    union $\bigcup_g\mathcal R_N(\widetilde T_g)$ is closed under the
+    adjoint.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $u_{p,g}$ is unitary and $g\mapsto u_{p,g}$ is a homomorphism,
+    $u_{p,g}^*=u_{p,g}^{-1}=u_{p,g^{-1}}$, so $S_{p,g}^\sharp=S_{p,g^{-1}}$
+    in the notation of
+    Lemma~\ref{thm:mpo_arbitrary_hermitian_gauge_adjoint_closure}. Applying
+    the action identities of $g^{-1}$ and $g$ in turn, conjugation by
+    $Y_{p,g}Y_{p,g^{-1}}$ fixes every letter of $A_p$; since the letters
+    span $\MN{D_p}$, $Y_{p,g}Y_{p,g^{-1}}=\kappa\Id$, and $\kappa\neq0$
+    because both factors are invertible. Writing $Y_{p,g}=cU$ with $U$
+    unitary, $Y_{p,g}^*=\bar c\,U^{-1}=|c|^2Y_{p,g}^{-1}=
+        (|c|^2/\kappa)\,Y_{p,g^{-1}}$. So $Y_{p,g}^*=\omega_pY_{p,g^{-1}}$
+    with $\omega_p\neq0$, and from $V_{p,g}Y_{p,g}=\Id$ also
+    $V_{p,g}^*=\omega_p^{-1}V_{p,g^{-1}}$. As in the proof of
+    Lemma~\ref{thm:mpo_arbitrary_hermitian_gauge_adjoint_closure}, the
+    crossed blocks of $\widetilde T_g^\sharp$ are those of
+    $\widetilde T_{g^{-1}}$ multiplied by $t=\omega_0\omega_1^{-1}$ and
+    $t^{-1}$, and the diagonal blocks agree. With
+    $\Delta=\operatorname{diag}(1,t^{-1})$ on the bond,
+    $(\widetilde T_g^\sharp)^{ij}=\Delta\,\widetilde T_{g^{-1}}^{ij}\Delta^{-1}$,
+    so $(O^N_{\widetilde T_g,X})^*=O^N_{\widetilde T_g^\sharp,\bar X}=
+        O^N_{\widetilde T_{g^{-1}},\Delta^{-1}\bar X\Delta}$.
+\end{proof}
+
+\begin{lemma}[Commutation of the path for unitary group symmetries]
+    \label{thm:mpo_arbitrary_parent_commutation_unitary_group}
+    \lean{MPSTensor.MPOSymmetry.exists_smul_bondOneActionGauge_mem_unitaryGroup,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary_canonical}
+    \leanok
+    \uses{thm:mpo_arbitrary_unitary_gauge_union_closure,
+        thm:mpo_arbitrary_mixed_action,thm:mpo_arbitrary_interior_parent,
+        thm:glm_boundary_parent_local_family,
+        thm:glm_boundary_embed_commutation}
+    Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action}
+    for every label, restricted to unitary on-site endpoint representations
+    of a group $G$ with $m=1$ as above, that $D_0,D_1>0$, and that
+    $A_0,A_1$ are one-site injective. Assume, as a restriction not made by
+    the source, that every action gauge $Y_{p,g}$ is a nonzero multiple of a
+    unitary matrix. Then for every $g\in G$, every $\gamma\in[0,1]$ and
+    every $X$, $[\widetilde h_\gamma,O^2_{\widetilde T_g,X}]=0$.
+    Consequently, for every $N\geq2$ and every
+    $X\in\mathcal C(\widetilde T_g)$,
+    $[\widetilde H_{\gamma,N},O^N_{\widetilde T_g,X}]=0$, and in particular
+    $[\widetilde H_{\gamma,N},O^{(N)}_{\widetilde T_g}]=0$. The gauge
+    hypothesis holds when both endpoint tensors satisfy
+    $\E_{A_p}(\Id)=\Id$ and have positive definite fixed points of
+    $\E_{A_p}^\dagger$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_arbitrary_parent_commutation_adjoint_closed,
+        thm:mpo_arbitrary_canonical_hermitian_gauge,
+        thm:virtual_gauge_fixes_boundary_state,def:mpdo_commuting_boundary}
+    For $0<\gamma<1$, Lemma~\ref{thm:mpo_arbitrary_interior_parent}
+    identifies $\widetilde h_\gamma$ with the canonical two-site parent of
+    $\widetilde A(\gamma)$, which is compatible with every $\widetilde T_g$
+    by Lemma~\ref{thm:mpo_arbitrary_mixed_action}. By
+    Lemma~\ref{thm:mpo_arbitrary_unitary_gauge_union_closure} the union of
+    the two-site boundary ranges is closed under the adjoint, so
+    Lemma~\ref{thm:glm_boundary_parent_local_family} gives the commutation.
+    It extends to $[0,1]$ by continuity of $\widetilde h_\gamma$, as in
+    the proof of
+    Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed}, and
+    to the ring by embedding each cyclic translate as in
+    Lemma~\ref{thm:glm_boundary_embed_commutation}; the identity boundary
+    lies in $\mathcal C(\widetilde T_g)$. In the canonical case,
+    Lemma~\ref{thm:virtual_gauge_fixes_boundary_state}, applied to the
+    action identity of
+    Lemma~\ref{thm:mpo_arbitrary_canonical_hermitian_gauge}, writes each
+    $Y_{p,g}$ as a nonzero multiple of a unitary.
 \end{proof}
 
 The source states its symmetrization of parent terms for operators that
