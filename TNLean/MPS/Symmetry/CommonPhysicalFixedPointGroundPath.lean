@@ -82,7 +82,7 @@ theorem mpv_rotatePhysical_isometry_ne_zero {d m D N : ℕ}
     (A : MPSTensor d D) (hA : (mpv A : (Fin N → Fin d) → ℂ) ≠ 0) :
     (mpv (rotatePhysical E A) : (Fin N → Fin m) → ℂ) ≠ 0 := by
   intro hzero
-  have h := toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical
+  have h := toEuclideanLin_tensorPower_mpv_rotatePhysical
     (N := N) Eᴴ (rotatePhysical E A)
   rw [rotatePhysical_rotatePhysical, hE, rotatePhysical_one, hzero] at h
   apply hA
@@ -111,8 +111,8 @@ theorem commonPhysicalWeightedMatrixUnitInterpolation_injective_representative
     intro N hN
     apply congrArg (fun v => Submodule.span ℂ {v})
     apply WithLp.toLp_injective 2
-    rw [← toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical,
-      ← toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical]
+    rw [← toEuclideanLin_tensorPower_mpv_rotatePhysical,
+      ← toEuclideanLin_tensorPower_mpv_rotatePhysical]
     exact congrArg _ (congrArg (WithLp.toLp 2)
       (funext (mpv_embeddedSptFixedPointLeft hN)))
   · by_cases hone : γ = 1
@@ -123,8 +123,8 @@ theorem commonPhysicalWeightedMatrixUnitInterpolation_injective_representative
       intro N hN
       apply congrArg (fun v => Submodule.span ℂ {v})
       apply WithLp.toLp_injective 2
-      rw [← toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical,
-        ← toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical]
+      rw [← toEuclideanLin_tensorPower_mpv_rotatePhysical,
+        ← toEuclideanLin_tensorPower_mpv_rotatePhysical]
       exact congrArg _ (congrArg (WithLp.toLp 2)
         (funext (mpv_embeddedSptFixedPointRight hN)))
     · refine ⟨D₀ + D₁, by omega, le_rfl, _, ?_, SamePositiveMpvRay.refl _⟩

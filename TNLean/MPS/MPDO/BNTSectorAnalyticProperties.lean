@@ -216,12 +216,12 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     (hMpdo : IsMPDO M) (s : Fin S.basisCount) :
     IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
   intro N hN
-  let P := sitewisePhysicalMatrix (bntSectorProjection hC hρ hη hR s) N
+  let P := Matrix.tensorPower N (bntSectorProjection hC hρ hη hR s)
   have heq : P * mpo M N * P =
       (S.copies s : ℂ) • mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N :=
     sitewise_bntSectorProjection_mul_mpo_mul_self
       M S hM hWeight hC hρ hη hR hN s
-  have hP : P.IsHermitian := sitewisePhysicalMatrix_isHermitian
+  have hP : P.IsHermitian := tensorPower_isHermitian
     (bntSectorProjection_isOrthogonal hC hρ hη hR s).1 N
   have hcompressed : (P * mpo M N * P).PosSemidef := by
     simpa only [hP.eq] using (hMpdo N hN).mul_mul_conjTranspose_same P

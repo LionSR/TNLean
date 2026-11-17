@@ -173,7 +173,7 @@ theorem nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState {M : ℕ} (α : 
     nonNormalFixedPointState α ω ((bondRegrouping M D).symm p) =
       (Matrix.tensorPower M (pairIsometry ω) *ᵥ ghzState α) p := by
   rw [nonNormalFixedPointState_bondRegrouping_symm]
-  simp only [Matrix.mulVec, dotProduct, Matrix.tensorPower, pairIsometry, Matrix.of_apply,
+  simp only [Matrix.mulVec, dotProduct, Matrix.tensorPower_apply, pairIsometry, Matrix.of_apply,
     ghzState, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun j _ => ?_

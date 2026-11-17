@@ -359,11 +359,11 @@ private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
   have hs := congrFun hfix (e s)
   simpa only [Function.comp_apply, Equiv.symm_apply_apply] using hs
 
-private theorem loopProductState_eq_sitewisePhysicalMatrix_mulVec
+private theorem loopProductState_eq_tensorPower_mulVec
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] :
     F.loopProductState l =
-      (MPOTensor.sitewisePhysicalMatrix F.unitary N).mulVec
+      (Matrix.tensorPower N F.unitary).mulVec
         (F.loopCyclicProduct l) := by
   rfl
 
@@ -374,12 +374,12 @@ theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     F.loopProductState (N := N) l ≠ 0 := by
   classical
-  let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
+  let W := Matrix.tensorPower N F.unitary
   have hWstarW : Wᴴ * W = 1 := by
-    apply MPOTensor.sitewisePhysicalMatrix_isometry
+    apply MPOTensor.tensorPower_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
-  rw [F.loopProductState_eq_sitewisePhysicalMatrix_mulVec l]
+  rw [F.loopProductState_eq_tensorPower_mulVec l]
   intro hzero
   apply F.loopCyclicProduct_ne_zero (N := N) l
   have hzero' := congrArg (fun v ↦ Wᴴ *ᵥ v) hzero
@@ -408,16 +408,16 @@ theorem loopProductStateES_inner_eq_zero_of_ne
     inner ℂ (F.loopProductStateES (N := N) l)
       (F.loopProductStateES (N := N) m) = 0 := by
   classical
-  let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
+  let W := Matrix.tensorPower N F.unitary
   have hWstarW : Wᴴ * W = 1 := by
-    apply MPOTensor.sitewisePhysicalMatrix_isometry
+    apply MPOTensor.tensorPower_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
   rw [loopProductStateES, loopProductStateES]
   change inner ℂ (WithLp.toLp 2 (F.loopProductState l))
     (WithLp.toLp 2 (F.loopProductState m)) = 0
-  rw [F.loopProductState_eq_sitewisePhysicalMatrix_mulVec l,
-    F.loopProductState_eq_sitewisePhysicalMatrix_mulVec m]
+  rw [F.loopProductState_eq_tensorPower_mulVec l,
+    F.loopProductState_eq_tensorPower_mulVec m]
   change inner ℂ (WithLp.toLp 2 (W *ᵥ F.loopCyclicProduct l))
     (WithLp.toLp 2 (W *ᵥ F.loopCyclicProduct m)) = 0
   rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm, Matrix.star_mulVec,
@@ -449,7 +449,7 @@ private theorem groundBondProduct_mulVec_loopProductState
           (twoSiteParentGroundProjectorMatrix A))).prod).mulVec
         (F.loopProductState l) = F.loopProductState l := by
   classical
-  let W := MPOTensor.sitewisePhysicalMatrix F.unitary N
+  let W := Matrix.tensorPower N F.unitary
   let Q := (List.ofFn fun i : Fin N ↦
     MPOTensor.embedLocalOperator (d := d) 2 N hN i
       (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
@@ -465,21 +465,21 @@ private theorem groundBondProduct_mulVec_loopProductState
   have hUUstar := F.unitary_mul_conjTranspose
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
-    rw [MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose, hUUstar,
-      MPOTensor.sitewisePhysicalMatrix_one]
-  have hconj : singleKrausMap (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N) Q = T := by
+    rw [MPOTensor.tensorPower_mul_conjTranspose, hUUstar,
+      Matrix.tensorPower_one]
+  have hconj : singleKrausMap (Matrix.tensorPower N F.unitaryᴴ) Q = T := by
     simpa only [Q, T] using F.singleKrausMap_groundBondProduct hN
   have hmatrix : Q * W = W * T := by
     have hconj' : Wᴴ * Q * W = T := by
       simpa only [singleKrausMap_apply,
-        MPOTensor.sitewisePhysicalMatrix_conjTranspose,
+        Matrix.conjTranspose_tensorPower,
         Matrix.conjTranspose_conjTranspose, W] using hconj
     calc
       Q * W = 1 * (Q * W) := by rw [Matrix.one_mul]
       _ = (W * Wᴴ) * (Q * W) := by rw [hWWstar]
       _ = W * (Wᴴ * Q * W) := by simp only [Matrix.mul_assoc]
       _ = W * T := by rw [hconj']
-  rw [F.loopProductState_eq_sitewisePhysicalMatrix_mulVec l]
+  rw [F.loopProductState_eq_tensorPower_mulVec l]
   change Q.mulVec (W.mulVec (F.loopCyclicProduct l)) =
     W.mulVec (F.loopCyclicProduct l)
   rw [Matrix.mulVec_mulVec, hmatrix, ← Matrix.mulVec_mulVec,

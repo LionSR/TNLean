@@ -68,11 +68,11 @@ theorem normalizedBondInteraction_commute_onSite
       (normalizedBondInterpolationVector D₀ D₁ γ) S hS hfix (by omega)
       (finRotate 2 0)).map (Unitary.conjStarAlgAut ℂ _ U)
   simp only [Unitary.conjStarAlgAut_apply, U, Matrix.star_eq_conjTranspose] at hlocal
-  have haction : P * MPOTensor.sitewiseMatrixFamily (fun _ : Fin 2 => S) * Pᴴ =
+  have haction : P * Matrix.rectKronecker (fun _ : Fin 2 => S) * Pᴴ =
       onSiteTensorPow 2 (sptFixedPointAction ρ 1 g) := by
     change P * Matrix.finKronecker (fun _ : Fin 2 => S) * Pᴴ = _
     simpa only [P, S, X, onSiteTensorPow_eq_finKronecker,
-      MPOTensor.sitewiseMatrixFamily, Matrix.finKronecker_apply, sptGauge,
+      Matrix.rectKronecker_apply, Matrix.finKronecker_apply, sptGauge,
       Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup (ρ.X g⁻¹) hX] using
         incomingBondPerm_conj_sptFixedPointAction ρ g 2
   have hBond : P * bondPenaltyAt (normalizedBondInterpolationVector D₀ D₁ γ)

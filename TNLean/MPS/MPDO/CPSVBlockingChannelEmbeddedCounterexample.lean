@@ -45,11 +45,11 @@ private theorem exists_sourceMap_of_exists_embeddedMap (N : ℕ)
   let Tsource : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ →ₗ[ℂ]
       Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
     sitewisePhysicalRecovery physicalInclusion N ∘ₗ T ∘ₗ
-      singleKrausMap (sitewisePhysicalMatrix physicalInclusion 2)
+      singleKrausMap (Matrix.tensorPower 2 physicalInclusion)
   have hForward : IsKrausCPTP
-      (singleKrausMap (sitewisePhysicalMatrix physicalInclusion 2)) :=
-    singleKrausMap_isKrausCPTP (sitewisePhysicalMatrix physicalInclusion 2)
-      (sitewisePhysicalMatrix_isometry physicalInclusion
+      (singleKrausMap (Matrix.tensorPower 2 physicalInclusion)) :=
+    singleKrausMap_isKrausCPTP (Matrix.tensorPower 2 physicalInclusion)
+      (tensorPower_isometry physicalInclusion
         physicalInclusion_isometry 2)
   have hRecover : IsKrausCPTP
       (sitewisePhysicalRecovery physicalInclusion N) :=
@@ -59,7 +59,7 @@ private theorem exists_sourceMap_of_exists_embeddedMap (N : ℕ)
     isKrausCPTP_comp (isKrausCPTP_comp hForward hT) hRecover
   refine ⟨Tsource, hTsource, fun X ↦ ?_⟩
   simp only [Tsource, LinearMap.comp_apply]
-  rw [singleKrausMap_sitewisePhysicalMatrix_physCloseN]
+  rw [singleKrausMap_tensorPower_physCloseN]
   change sitewisePhysicalRecovery physicalInclusion N
       (T (physCloseN embeddedObstruction 2 X)) = _
   rw [hclose X]

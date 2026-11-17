@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
+import QICLean.Entropy.SupportedOperatorAlgebra
 
 /-!
 # Lemma 1 of Hastings' area law in units of the gap
@@ -28,9 +29,8 @@ restrictions of `exists_projectorFactorization` are unchanged. Documented in
 
 ## Main results
 
-* `Entropy.IsSupportedOn.smul`, `Matrix.IsGappedGroundState.smul`,
-  `ChainHamiltonian.smul`: rescaling a supported operator by any scalar, and a gapped ground
-  state and a chain Hamiltonian by a nonnegative real number.
+* `Matrix.IsGappedGroundState.smul`, `ChainHamiltonian.smul`: rescaling a gapped ground state
+  and a chain Hamiltonian by a nonnegative real number.
 * `lemmaOneLength_div`: `lemmaOneLength R (J/ΔE) 1 = 16 (1 + (v₀ − 1)/ΔE)`.
 * `exists_projectorFactorization_div`: Lemma 1 with the length `lemmaOneLength R (J/ΔE) 1`.
 -/
@@ -41,14 +41,6 @@ open scoped ComplexOrder Matrix.Norms.L2Operator
 namespace TNLean.MPS.AreaLaw
 
 open Hastings
-
-/-- A scalar multiple of an operator supported on `D` is supported on `D`. -/
-theorem _root_.Entropy.IsSupportedOn.smul {V : Type*} {n : V → ℕ} {D : Finset V}
-    {X : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ}
-    (hX : Entropy.IsSupportedOn X D) (c : ℂ) : Entropy.IsSupportedOn (c • X) D := by
-  refine ⟨fun σ τ h ↦ ?_, fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
-  · simp [hX.1 σ τ h]
-  · simp [hX.2 σ τ σ' τ' h1 h2 h3 h4]
 
 /-- **Rescaling a gapped ground state.** If `Ω` is a gapped ground state of `H` with energy
 `E₀` and gap `Δ`, then for `c ≥ 0` it is one of `c H` with energy `c E₀` and gap `c Δ`. -/
@@ -74,7 +66,7 @@ Hamiltonian of the same range with term norms at most `c J`. -/
 noncomputable def smul (h : ChainHamiltonian L q R J) (c : ℝ) (hc : 0 ≤ c) :
     ChainHamiltonian L q R (c * J) where
   term X := (c : ℂ) • h.term X
-  supported X := (h.supported X).smul _
+  supported X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).smul_mem (h.supported X) _
   hermitian X := (h.hermitian X).smul (by simp [IsSelfAdjoint, Complex.conj_ofReal])
   norm_le X := by
     rw [norm_smul, Complex.norm_real, Real.norm_of_nonneg hc]

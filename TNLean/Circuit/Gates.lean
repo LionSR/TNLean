@@ -10,7 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.Circuit.Gates.Controlled
 import TNLean.Circuit.Gates.ControlledProducts
-import TNLean.Circuit.Gates.Givens
 import TNLean.Circuit.Gates.Permutation
-import TNLean.Circuit.Gates.TwoLevel
 import TNLean.Circuit.Gates.TwoSiteUniversality

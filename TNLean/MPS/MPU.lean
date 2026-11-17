@@ -148,6 +148,7 @@ import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.KetLeftMulCanonicalForm
 import TNLean.MPS.MPU.LeafIntervalCircuit
 import TNLean.MPS.MPU.LengthDependentPhase
+import TNLean.MPS.MPU.LevelTriangularReduction
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.MinimalCutEndpointMetrics
@@ -270,6 +271,7 @@ import TNLean.MPS.MPU.ThreeFormSpan
 import TNLean.MPS.MPU.ThreeLeggedDecomposition
 import TNLean.MPS.MPU.TimeReversalBlockingParity
 import TNLean.MPS.MPU.TimeReversalEquivalence
+import TNLean.MPS.MPU.TimeReversalGateCertificate
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.TimeReversalMPSClass
@@ -284,6 +286,7 @@ import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
 import TNLean.MPS.MPU.TransferStabilizationConverse
+import TNLean.MPS.MPU.TranspositionGateCertificate
 import TNLean.MPS.MPU.TranspositionLocalNecessity
 import TNLean.MPS.MPU.TranspositionLocalSufficiency
 import TNLean.MPS.MPU.TranspositionPhaseDeformation

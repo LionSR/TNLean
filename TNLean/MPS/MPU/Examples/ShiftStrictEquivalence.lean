@@ -12,6 +12,7 @@ import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.TensorProductCanonicalForm
 import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.MPDO.BondSimilarity
+import TNLean.Algebra.MatrixTensorPower
 
 /-!
 # The two shift products are strictly equivalent
@@ -51,40 +52,6 @@ variable {d D : ℕ}
 
 /-! ### Physical conjugation -/
 
-/-- The sitewise power `u^{⊗N}` of a one-site matrix, in configuration coordinates. -/
-private noncomputable def chainPower (N : ℕ) (u : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-  Matrix.of fun σ σ' => ∏ n, u (σ n) (σ' n)
-
-private theorem chainPower_mul (N : ℕ) (u v : Matrix (Fin d) (Fin d) ℂ) :
-    chainPower N (u * v) = chainPower N u * chainPower N v := by
-  ext a c
-  simp only [Matrix.mul_apply, chainPower, Matrix.of_apply]
-  rw [Fintype.prod_sum]
-  simp only [Finset.prod_mul_distrib]
-
-private theorem chainPower_one (N : ℕ) :
-    chainPower N (1 : Matrix (Fin d) (Fin d) ℂ) = 1 := by
-  ext a b
-  simp only [chainPower, Matrix.of_apply, Matrix.one_apply]
-  by_cases hab : a = b
-  · subst b
-    simp
-  · obtain ⟨x, hx⟩ := Function.ne_iff.mp hab
-    simp only [hab, ↓reduceIte]
-    exact Finset.prod_eq_zero (Finset.mem_univ x) (by simp [hx])
-
-private theorem chainPower_conjTranspose (N : ℕ) (u : Matrix (Fin d) (Fin d) ℂ) :
-    chainPower N uᴴ = (chainPower N u)ᴴ := by
-  ext a b
-  simp [chainPower, Matrix.conjTranspose_apply, star_prod]
-
-private theorem chainPower_mem_unitaryGroup (N : ℕ) {u : Matrix (Fin d) (Fin d) ℂ}
-    (hu : u ∈ Matrix.unitaryGroup (Fin d) ℂ) :
-    chainPower N u ∈ Matrix.unitaryGroup (Fin N → Fin d) ℂ := by
-  rw [mem_unitaryGroup_iff, star_eq_conjTranspose, ← chainPower_conjTranspose,
-    ← chainPower_mul, ← star_eq_conjTranspose, mem_unitaryGroup_iff.mp hu, chainPower_one]
-
 /-- Physical conjugation by a unitary preserves the MPU property: the periodic operator of the
 conjugated tensor is `u^{⊗N} U^{(N)} (u^{⊗N})†`.
 
@@ -96,7 +63,7 @@ theorem IsMPU.conjugatePhysical {U : MPOTensor d D} (hU : IsMPU U)
   intro N hN
   have : NeZero N := ⟨by omega⟩
   rw [mpo_conjugatePhysical_eq]
-  have hP := chainPower_mem_unitaryGroup N hu
+  have hP := Matrix.tensorPower_mem_unitaryGroup N hu
   exact mul_mem (mul_mem hP (hU N hN)) (Unitary.star_mem hP)
 
 /-- Physical conjugation is continuous in the conjugating matrix: every entry of every letter

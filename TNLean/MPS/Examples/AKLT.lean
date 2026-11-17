@@ -7,7 +7,7 @@ import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Examples.ZMod2
 import TNLean.Algebra.CocycleCohomology
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 
 /-!
 # AKLT state as a Matrix Product State

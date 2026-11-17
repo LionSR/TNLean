@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.MPS.Examples.Ising.IsingGauge
 import TNLean.MPS.Examples.Ising.Zsqrt2OperatorFusion
 import TNLean.MPS.MPDO.SimpleScaling
