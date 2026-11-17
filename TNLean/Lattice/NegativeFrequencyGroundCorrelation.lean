@@ -116,9 +116,7 @@ private theorem inner_ground_negativeFrequencyPart_apply
           have hge := hmin j
           rw [hi] at hij
           linarith
-        have hmem : b j ∈ groundSpace H E₀ :=
-          mem_groundSpace_iff_mulVec.mpr (by
-            simpa only [hj] using SpectralFilter.mulVec_eigenvectorBasis_complex hH j)
+        have hmem : b j ∈ groundSpace H E₀ := eigenvectorBasis_mem_groundSpace hH hj
         have hz := ((groundSpace H E₀).mem_orthogonal x).mp hx (b j) hmem
         simp only [hz, zero_mul]
       · have hz : ⟪ψ, b i⟫_ℂ = 0 := inner_eq_zero_symm.mpr
