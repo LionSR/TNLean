@@ -103,7 +103,7 @@ end Matrices
 
 section Support
 
-variable {α β ι : Type*} [Fintype α] [DecidableEq β] [Fintype ι] {d : ℕ}
+variable {α β ι : Type*} [Fintype α] [DecidableEq β] [Fintype ι] [DecidableEq ι] {d : ℕ}
 
 /-- A coarse edge has the support shared by the terms assigned to it. -/
 theorem edgePartition_mem_supportedOperators (f : α → β)
