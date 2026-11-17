@@ -29,17 +29,17 @@ theorem squareAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
     (i : SquareInteraction L) :
     let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
       ((forwardSquareEdgeEquiv L).trans
-        (Edge.equiv (AreaLaw.rectangleGraphIso L L)))
+        (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L)))
     (squareAreaLawSupport L i).val = AreaLaw.nearestNeighborSupport (e i) := by
   rcases i with v | e <;>
     simp only [squareAreaLawSupport, squareInteractionSupport,
       AreaLaw.nearestNeighborSupport, Finset.image_singleton, Finset.image_insert,
       Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Sum.elim_inl, Sum.elim_inr,
-      Equiv.trans_apply, Edge.equiv_apply]
+      Equiv.trans_apply, ManyBody.Edge.equiv_apply]
   exact (Finset.coe_injective
     (Finset.coe_pair.trans
       ((Set.pair_eq_pair_iff.mpr
-        (Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
+        (ManyBody.Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
           (forwardSquareEdgeEquiv L e))).trans Finset.coe_pair.symm))).symm
 
 end TNLean.PEPS.Approximation

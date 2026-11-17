@@ -33,6 +33,8 @@ contraction of injective tensors over any finite region is injective.
   complement).
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

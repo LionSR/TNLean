@@ -12,6 +12,8 @@ Replacing exterior and crossing operators does not change an actual walk
 entirely inside a region. This elementary restriction identity supports the
 closed-walk measurement of SCP10, Section 6.6, lines 2380–2415.
 -/
+
+open ManyBody (Edge)
 namespace TNLean.PEPS
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
 variable {G : Type*} [Group G]

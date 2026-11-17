@@ -31,6 +31,8 @@ lines 1440–1514. No G-isometry is required.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -46,12 +48,12 @@ local notation "R₀" => torusPlaquetteRegion ((-1, -1) : X)
 variable {G : Type*} [Group G]
 
 private theorem transport_from_ordered_head (u : Edge Γₜ → G) {x y : X}
-    (hxy : (Γₜ).Adj x y) (hh : (Edge.ofAdj hxy).1.2 = x) :
-    regularDirectedTransport u hxy = (u (Edge.ofAdj hxy))⁻¹ := by
+    (hxy : (Γₜ).Adj x y) (hh : (ManyBody.Edge.ofAdj hxy).1.2 = x) :
+    regularDirectedTransport u hxy = (u (ManyBody.Edge.ofAdj hxy))⁻¹ := by
   have hyx : y < x := by
-    rcases Edge.ofAdj_endpoints hxy with ⟨ht, he⟩ | ⟨ht, he⟩
+    rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨ht, he⟩ | ⟨ht, he⟩
     · exact (hxy.ne (hh.symm.trans he)).elim
-    · simpa only [ht, hh] using (Edge.ofAdj hxy).2.1
+    · simpa only [ht, hh] using (ManyBody.Edge.ofAdj hxy).2.1
   simp only [regularDirectedTransport, ite_eq_right (not_lt.mpr hyx.le)]
 
 /-- The seam-intersection plaquette has identity closure holonomy exactly

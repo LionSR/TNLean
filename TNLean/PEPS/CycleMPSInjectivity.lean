@@ -41,6 +41,8 @@ pairing against the spanning word products
   1585--1668 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 
 namespace TNLean

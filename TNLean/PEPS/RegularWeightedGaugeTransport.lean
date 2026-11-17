@@ -21,6 +21,8 @@ Source: SCP10, arXiv:1001.3807, charge–flux string deformation, lines 2560–2
 These are auxiliary gauge-presentation identities. A physical crossing or
 braiding route is not inferred from equality of gauge presentations.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

@@ -20,6 +20,8 @@ single-bond and bundled representations.
 Source: SCP10, arXiv:1001.3807, lines 1840–1909 and 1515–1525.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix Kronecker
 namespace TNLean.PEPS

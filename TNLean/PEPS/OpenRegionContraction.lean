@@ -28,6 +28,8 @@ No assertion about the entropy of a particular PEPS is made here.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

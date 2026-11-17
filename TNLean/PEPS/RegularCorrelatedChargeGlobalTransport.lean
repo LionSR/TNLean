@@ -17,6 +17,8 @@ replacing the character pair with independent character insertions.
 
 Source: SCP10, arXiv:1001.3807, lines 2505–2535 and 2560–2581.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

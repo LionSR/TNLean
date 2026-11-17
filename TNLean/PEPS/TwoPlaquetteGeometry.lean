@@ -33,6 +33,8 @@ the full flux-moving theorem; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 /-- The graph of two adjacent squares, numbered along their outer five-edge path. -/
@@ -281,11 +283,11 @@ noncomputable def twoPlaquetteTorusCycleBond (i : Fin 2) :
     {e : {e : Edge (torusGraph width height) //
       e.1.1 ∈ twoPlaquetteTorusRegion ∧ e.1.2 ∈ twoPlaquetteTorusRegion} //
       ¬ twoPlaquetteTorusTree.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} := by
-  let e := Edge.equiv (twoPlaquetteTorusIso (width := width) (height := height))
+  let e := ManyBody.Edge.equiv (twoPlaquetteTorusIso (width := width) (height := height))
     (twoPlaquetteCycleBond i)
   refine ⟨inducedRegionEdgeEquiv twoPlaquetteTorusRegion e, ?_⟩
   change ¬ twoPlaquetteTorusTree.Adj e.1.1 e.1.2
-  exact (Edge.comap_adj_map_iff (twoPlaquetteTorusIso (width := width) (height := height))
+  exact (ManyBody.Edge.comap_adj_map_iff (twoPlaquetteTorusIso (width := width) (height := height))
     twoPlaquetteTree (twoPlaquetteCycleBond i)).not.mpr (twoPlaquetteCycleBond_not_tree i)
 
 /-- The actual leftmost and middle vertical non-tree bonds are distinct. Source: SCP10, lines
@@ -294,7 +296,7 @@ theorem twoPlaquetteTorusCycleBond_injective :
     Function.Injective (twoPlaquetteTorusCycleBond (width := width) (height := height)) := by
   intro i j h
   apply twoPlaquetteCycleBond_injective
-  apply (Edge.equiv (twoPlaquetteTorusIso (width := width) (height := height))).injective
+  apply (ManyBody.Edge.equiv (twoPlaquetteTorusIso (width := width) (height := height))).injective
   apply (inducedRegionEdgeEquiv twoPlaquetteTorusRegion).injective
   exact congrArg Subtype.val h
 
@@ -304,7 +306,8 @@ theorem twoPlaquetteTorusRegion_card_internalEdges :
     Fintype.card {e : Edge (torusGraph width height) //
       e.1.1 ∈ twoPlaquetteTorusRegion ∧ e.1.2 ∈ twoPlaquetteTorusRegion} = 7 := by
   rw [← Fintype.card_congr (inducedRegionEdgeEquiv twoPlaquetteTorusRegion),
-    ← Fintype.card_congr (Edge.equiv (twoPlaquetteTorusIso (width := width) (height := height)))]
+    ← Fintype.card_congr (ManyBody.Edge.equiv
+        (twoPlaquetteTorusIso (width := width) (height := height)))]
   exact twoPlaquetteGraph_card_edges
 
 /-- The actual fixed spanning tree has exactly five bonds. Source: SCP10, lines 2271–2305. -/
@@ -312,7 +315,7 @@ theorem twoPlaquetteTorusTree_card_edges :
     Fintype.card (Edge (twoPlaquetteTorusTree (width := width) (height := height))) = 5 := by
   change Fintype.card (Edge (twoPlaquetteTree.comap
     (twoPlaquetteTorusVertexEquiv (width := width) (height := height)).symm)) = 5
-  rw [Fintype.card_congr (Edge.equiv (SimpleGraph.Iso.comap
+  rw [Fintype.card_congr (ManyBody.Edge.equiv (SimpleGraph.Iso.comap
     twoPlaquetteTorusVertexEquiv.symm twoPlaquetteTree))]
   exact twoPlaquetteTree_card_edges
 
@@ -341,13 +344,13 @@ theorem twoPlaquetteTorusCycleBond_endpoints (i : Fin 2) :
         (twoPlaquetteTorusVertex (twoPlaquetteCycleBond j).1.2).2.val)
     fin_cases j <;> simp [twoPlaquetteCycleBond, twoPlaquetteTorusVertex,
       twoPlaquetteX, twoPlaquetteY, Prod.Lex.toLex_lt_toLex, ZMod.val_one]
-  change (Edge.map twoPlaquetteTorusIso (twoPlaquetteCycleBond i)).1.1.1 = _ ∧
-    (Edge.map twoPlaquetteTorusIso (twoPlaquetteCycleBond i)).1.2.1 = _
+  change (ManyBody.Edge.map twoPlaquetteTorusIso (twoPlaquetteCycleBond i)).1.1.1 = _ ∧
+    (ManyBody.Edge.map twoPlaquetteTorusIso (twoPlaquetteCycleBond i)).1.2.1 = _
   have hi := hlt i
   change (twoPlaquetteTorusIso (width := width) (height := height)).toEquiv
     (twoPlaquetteCycleBond i).1.1 < twoPlaquetteTorusIso.toEquiv
       (twoPlaquetteCycleBond i).1.2 at hi
-  simp only [Edge.map, Edge.ofAdj, dite_eq_left hi]
+  simp only [ManyBody.Edge.map, ManyBody.Edge.ofAdj, dite_eq_left hi]
   fin_cases i <;> simp [twoPlaquetteTorusIso, twoPlaquetteTorusVertexEquiv,
     twoPlaquetteCycleBond, twoPlaquetteTorusVertex, twoPlaquetteX, twoPlaquetteY]
 end TNLean.PEPS

@@ -17,6 +17,8 @@ edge-blocking pictures used after the normalized one-edge constructions.
   Section 3, Theorem 3]
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 /-! ### Edge windows for the every-edge construction -/

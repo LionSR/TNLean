@@ -23,6 +23,8 @@ assert that a prescribed region admits a gauge removing its incident twists.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

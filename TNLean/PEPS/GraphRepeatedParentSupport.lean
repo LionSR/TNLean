@@ -18,6 +18,8 @@ the full product range, without any assumption on closed-state spanning.
 Source: SCP10, arXiv:1001.3807, Theorem 5.7 and Section 7, lines 2977–3019.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

@@ -36,6 +36,8 @@ as in the source's simple square lattice. The derivation is recorded in
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964).
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 
@@ -105,8 +107,8 @@ theorem bondDim_translateEdge_of_isTorusTranslationInvariantState
     bondDim_eq_of_isInjective_sameState A (A.transport φ) hInj (hInj.transport φ)
       (sameState_transport_of_isTorusTranslationInvariantState hTI a b)
   rw [translateEdge_eq_map]
-  have h := congrFun hDim (Edge.map φ e)
-  simpa only [Tensor.transport_bondDim, Edge.map_symm_map] using h
+  have h := congrFun hDim (ManyBody.Edge.map φ e)
+  simpa only [Tensor.transport_bondDim, ManyBody.Edge.map_symm_map] using h
 
 /-- The horizontal bond dimension of an injective translation-invariant state
 is independent of the left endpoint of the edge.

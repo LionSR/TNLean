@@ -42,6 +42,8 @@ with the companion code's own filter types is recorded in
 https://sirui-lu.com/QICLean/paper-gaps/oai26_zero_floor_energy_scope.pdf.
 -/
 
+open ManyBody (Edge)
+
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice

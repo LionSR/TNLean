@@ -15,6 +15,8 @@ injectivity nor uniform or positive dimensions are needed for the physical-first
 conversion. The virtual-first adapter retains its source's positivity field.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 

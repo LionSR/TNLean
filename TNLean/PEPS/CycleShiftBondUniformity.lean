@@ -41,6 +41,8 @@ It does not construct the repeated tensor `B` from lines 1843--1889.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 
@@ -84,17 +86,17 @@ from `v + 1` to `v + 2`.
 Source: arXiv:1804.04964, Applications section, lines 1828--1842 of
 `Papers/1804.04964/paper_normal.tex`, where the Fundamental Theorem gauges are
 indexed by successive bonds. -/
-theorem Edge.map_cycleRotate_cycleSuccEdge (hn : 3 ≤ n) (v : Fin n) :
-    Edge.map (cycleRotate hn) (cycleSuccEdge hn v) = cycleSuccEdge hn (v + 1) := by
+theorem _root_.ManyBody.Edge.map_cycleRotate_cycleSuccEdge (hn : 3 ≤ n) (v : Fin n) :
+    ManyBody.Edge.map (cycleRotate hn) (cycleSuccEdge hn v) = cycleSuccEdge hn (v + 1) := by
   symm
   rw [cycleSuccEdge]
-  apply Edge.ofAdj_eq_of_endpoints
+  apply ManyBody.Edge.ofAdj_eq_of_endpoints
   have hsource :
       (((cycleSuccEdge hn v).1.1 = v ∧ (cycleSuccEdge hn v).1.2 = v + 1) ∨
         ((cycleSuccEdge hn v).1.1 = v + 1 ∧ (cycleSuccEdge hn v).1.2 = v)) := by
     rw [cycleSuccEdge]
-    exact Edge.ofAdj_endpoints (cycleGraph_adj_succ hn v)
-  have hmap := Edge.map_endpoints (cycleRotate hn) (cycleSuccEdge hn v)
+    exact ManyBody.Edge.ofAdj_endpoints (cycleGraph_adj_succ hn v)
+  have hmap := ManyBody.Edge.map_endpoints (cycleRotate hn) (cycleSuccEdge hn v)
   rcases hsource with hs | hs <;> rcases hmap with hm | hm
   · exact Or.inl ⟨by rw [hm.1, hs.1, cycleRotate_apply],
       by rw [hm.2, hs.2, cycleRotate_apply]⟩
@@ -161,9 +163,9 @@ theorem bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState
   have h := congrFun hDim (cycleSuccEdge hn v)
   rw [Tensor.cycleShift, Tensor.transport_bondDim] at h
   have h' : A.bondDim (cycleSuccEdge hn v) =
-      A.bondDim (Edge.map (cycleRotate hn) (cycleSuccEdge hn v)) := by
+      A.bondDim (ManyBody.Edge.map (cycleRotate hn) (cycleSuccEdge hn v)) := by
     simpa only [RelIso.symm_symm] using h
-  rw [Edge.map_cycleRotate_cycleSuccEdge] at h'
+  rw [ManyBody.Edge.map_cycleRotate_cycleSuccEdge] at h'
   exact h'.symm
 
 /-- All bonds of a cyclically invariant injective closed-chain MPS have the

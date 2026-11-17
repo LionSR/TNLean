@@ -27,6 +27,8 @@ one-site-different injective regions with injective complements.
   Section 3, Theorem 3 and Theorem normal](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

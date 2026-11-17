@@ -35,6 +35,8 @@ the normalized global vector, with a freely chosen phase.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
 namespace TNLean.PEPS.Approximation

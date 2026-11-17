@@ -19,6 +19,8 @@ the normal square-lattice PEPS theorem.
   Section 3, Theorem 3]
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

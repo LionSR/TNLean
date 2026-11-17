@@ -33,6 +33,8 @@ in the proof of Theorem 6.9, local source lines 1935–1990.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open Set
 

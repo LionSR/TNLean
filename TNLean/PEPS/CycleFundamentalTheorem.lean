@@ -65,6 +65,8 @@ development's translation-invariant setting is the torus
   1585--1622 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 
 namespace TNLean

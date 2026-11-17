@@ -26,6 +26,8 @@ Immutable source revision: `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge)
+
 open Matrix ComplexStarModule
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
@@ -200,9 +202,9 @@ private theorem rectangleInteractionSupport_injective (width height : ℕ) :
       · exact False.elim
           ((squareLatticeGraph width height).ne_of_adj e.property.2 (h₁.trans h₂.symm))
       · exact congrArg Sum.inr (Subtype.ext (Prod.ext h₁ h₂))
-      · exact congrArg Sum.inr ((Edge.ofAdj_eq_of_endpoints e.property.2 e
+      · exact congrArg Sum.inr ((ManyBody.Edge.ofAdj_eq_of_endpoints e.property.2 e
           (Or.inl ⟨rfl, rfl⟩)).symm.trans
-            (Edge.ofAdj_eq_of_endpoints e.property.2 f (Or.inr ⟨h₁, h₂⟩)))
+            (ManyBody.Edge.ofAdj_eq_of_endpoints e.property.2 f (Or.inr ⟨h₁, h₂⟩)))
       · exact False.elim
           ((squareLatticeGraph width height).ne_of_adj e.property.2 (h₁.trans h₂.symm))
 

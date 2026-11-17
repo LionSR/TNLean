@@ -18,6 +18,8 @@ only the representation matrices; the global state identity is derived.
 Source: SCP10, arXiv:1001.3807, Section 7, lines 2938–3019.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS

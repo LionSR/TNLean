@@ -33,6 +33,8 @@ Theorem 6.9, local source lines 1935–2072.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 
 namespace TNLean.PEPS

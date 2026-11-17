@@ -51,6 +51,8 @@ an arbitrary party network; they are verified for the compressed protocol networ
   `eq:final-bond`, `07-assembly.tex:102–177`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation

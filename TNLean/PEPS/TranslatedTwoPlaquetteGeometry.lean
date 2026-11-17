@@ -28,6 +28,8 @@ statement remains separate; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -148,7 +150,7 @@ theorem translatedTwoPlaquetteRegion_card_internalEdges (v : X) :
     Fintype.card {e : Edge Γₜ // e.1.1 ∈ translatedTwoPlaquetteRegion v ∧
       e.1.2 ∈ translatedTwoPlaquetteRegion v} = 7 := by
   rw [← Fintype.card_congr (inducedRegionEdgeEquiv (translatedTwoPlaquetteRegion v)),
-    ← Fintype.card_congr (Edge.equiv (translatedTwoPlaquetteIso v))]
+    ← Fintype.card_congr (ManyBody.Edge.equiv (translatedTwoPlaquetteIso v))]
   exact twoPlaquetteGraph_card_edges
 
 /-- The two derived non-tree vertical bonds of the translated region.
@@ -157,10 +159,10 @@ noncomputable def translatedTwoPlaquetteCycleBond (v : X) (i : Fin 2) :
     {e : {e : Edge Γₜ // e.1.1 ∈ translatedTwoPlaquetteRegion v ∧
       e.1.2 ∈ translatedTwoPlaquetteRegion v} //
       ¬ (translatedTwoPlaquetteTree v).Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} := by
-  let e := Edge.equiv (translatedTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
+  let e := ManyBody.Edge.equiv (translatedTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
   refine ⟨inducedRegionEdgeEquiv (translatedTwoPlaquetteRegion v) e, ?_⟩
   change ¬ (translatedTwoPlaquetteTree v).Adj e.1.1 e.1.2
-  exact (Edge.comap_adj_map_iff (translatedTwoPlaquetteIso v)
+  exact (ManyBody.Edge.comap_adj_map_iff (translatedTwoPlaquetteIso v)
     twoPlaquetteTree (twoPlaquetteCycleBond i)).not.mpr (twoPlaquetteCycleBond_not_tree i)
 
 /-- The two translated non-tree bonds are distinct.
@@ -169,7 +171,7 @@ theorem translatedTwoPlaquetteCycleBond_injective (v : X) :
     Function.Injective (translatedTwoPlaquetteCycleBond v) := by
   intro i j h
   apply twoPlaquetteCycleBond_injective
-  apply (Edge.equiv (translatedTwoPlaquetteIso v)).injective
+  apply (ManyBody.Edge.equiv (translatedTwoPlaquetteIso v)).injective
   apply (inducedRegionEdgeEquiv (translatedTwoPlaquetteRegion v)).injective
   exact congrArg Subtype.val h
 
@@ -177,10 +179,10 @@ theorem translatedTwoPlaquetteCycleBond_injective (v : X) :
 Source: SCP10, Theorem 6.16, lines 2271–2305. -/
 theorem translatedTwoPlaquetteCycleBond_eq_up (v : X) (i : Fin 2) :
     (translatedTwoPlaquetteCycleBond v i).1.1 =
-      Edge.ofAdj (torusGraph_adj_up (v.1 + (i.val : ZMod width)) v.2) := by
+      ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + (i.val : ZMod width)) v.2) := by
   symm
-  apply Edge.ofAdj_eq_of_endpoints
-  have he := Edge.map_endpoints (translatedTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
+  apply ManyBody.Edge.ofAdj_eq_of_endpoints
+  have he := ManyBody.Edge.map_endpoints (translatedTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
   have hlo : (translatedTwoPlaquetteIso v (twoPlaquetteCycleBond i).1.1).1 =
       (v.1 + (i.val : ZMod width), v.2) := by
     fin_cases i
@@ -201,11 +203,11 @@ theorem translatedTwoPlaquetteCycleBond_eq_up (v : X) (i : Fin 2) :
       simp [add_comm]
   rcases he with ⟨h₁,h₂⟩ | ⟨h₁,h₂⟩
   · exact Or.inl ⟨by simpa only [translatedTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₁).symm,
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₁).symm,
       by simpa only [translatedTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₂).symm⟩
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₂).symm⟩
   · exact Or.inr ⟨by simpa only [translatedTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₂).symm,
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₂).symm,
       by simpa only [translatedTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₁).symm⟩
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₁).symm⟩
 end TNLean.PEPS

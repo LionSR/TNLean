@@ -20,6 +20,8 @@ coordinate lattice used in the normal PEPS proof.
   Section 3, Theorem 3]
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

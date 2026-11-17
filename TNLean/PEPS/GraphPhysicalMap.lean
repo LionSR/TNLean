@@ -17,6 +17,8 @@ Source: SCP10, arXiv:1001.3807, Observation 6.4 and its use in blocking,
 `Papers/1001.3807/paper_v3.tex`, lines 1765–1880.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

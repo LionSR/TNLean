@@ -25,6 +25,8 @@ states*, Proposition 4.1, `03-patches.tex`, lines 213–336,
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
+open ManyBody (Edge)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice

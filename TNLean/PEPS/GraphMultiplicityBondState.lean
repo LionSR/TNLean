@@ -28,6 +28,8 @@ by |G|, and both actual states carry the same factor |G|⁻ᴺ. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix Kronecker
 namespace TNLean.PEPS

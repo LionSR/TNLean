@@ -19,6 +19,8 @@ normal square-lattice construction is translated around every edge.
   Section 3, Theorem 3]
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

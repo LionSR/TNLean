@@ -47,6 +47,8 @@ The development mirrors the edge-level chain piece by piece:
   block).
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

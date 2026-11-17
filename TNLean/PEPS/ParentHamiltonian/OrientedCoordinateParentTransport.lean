@@ -18,6 +18,8 @@ any coverage assumption on that family.
 Source: SCP10, arXiv:1001.3807, Theorem 5.7 and Section 7, lines 2938–3019.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators
 namespace TNLean.PEPS

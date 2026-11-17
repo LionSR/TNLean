@@ -54,6 +54,8 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators ComplexOrder
 
 noncomputable section
@@ -139,12 +141,12 @@ theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
       obtain ⟨b, rfl⟩ := σ.surjective y
       rw [hadj] at hxy
       rw [hmem, hmem] at hcut
-      refine ⟨Edge.ofAdj hxy, ?_, ?_⟩
+      refine ⟨ManyBody.Edge.ofAdj hxy, ?_, ?_⟩
       · rw [Finset.mem_filter]
         refine ⟨Finset.mem_univ _, ?_⟩
-        unfold IsRegionBoundaryEdge Edge.ofAdj
+        unfold IsRegionBoundaryEdge ManyBody.Edge.ofAdj
         split_ifs <;> tauto
-      · unfold Edge.ofAdj
+      · unfold ManyBody.Edge.ofAdj
         split_ifs
         · rfl
         · exact Sym2.eq_swap

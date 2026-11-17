@@ -34,6 +34,8 @@ The statements concern actual contractions; the parent-Hamiltonian interpretatio
 and unrestricted geometry remain separate, as recorded in the same paper-gap note.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators
 namespace TNLean.PEPS
@@ -51,15 +53,15 @@ private theorem shared_side_insertion (v : TorusVertex width height) (g : G) :
       torusPlaquetteSideInsertion (v.1+1,v.2) 3 g⁻¹ := by
   classical
   funext e
-  change (if e = Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2) then
+  change (if e = ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2) then
     if (v.1+1,v.2) < (v.1+1,v.2+1) then g else g⁻¹ else 1) =
-    (if e = Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2).symm then
+    (if e = ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2).symm then
       if (v.1+1,v.2+1) < (v.1+1,v.2) then g⁻¹ else (g⁻¹)⁻¹ else 1)
   have hne : (v.1+1,v.2) ≠ (v.1+1,v.2+1) := by simp
   rcases lt_or_gt_of_ne hne with h | h
-  · rw [Edge.ofAdj_of_lt _ h, Edge.ofAdj_of_gt _ h]
+  · rw [ManyBody.Edge.ofAdj_of_lt _ h, ManyBody.Edge.ofAdj_of_gt _ h]
     simp [h, not_lt_of_gt h]
-  · rw [Edge.ofAdj_of_gt _ h, Edge.ofAdj_of_lt _ h]
+  · rw [ManyBody.Edge.ofAdj_of_gt _ h, ManyBody.Edge.ofAdj_of_lt _ h]
     simp [h, not_lt_of_gt h]
 
 /-- A literal shared-bond insertion has opposite adjacent plaquette holonomies.

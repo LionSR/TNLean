@@ -27,6 +27,8 @@ see `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 - [arXiv:2011.12127](https://arxiv.org/abs/2011.12127), Appendix A, CZX tensor.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

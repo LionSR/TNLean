@@ -20,6 +20,8 @@ internal bonds of a finite simple graph with regular local G-isometric sites.
 No native lattice geometry or parent-Hamiltonian membership is asserted here.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 open scoped BigOperators Matrix ComplexOrder
 noncomputable section
 namespace TNLean.PEPS

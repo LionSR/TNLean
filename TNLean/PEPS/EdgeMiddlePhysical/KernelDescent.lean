@@ -30,6 +30,8 @@ Section 3.
   injective three-site chain.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

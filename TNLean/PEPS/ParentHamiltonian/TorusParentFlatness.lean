@@ -30,6 +30,8 @@ and the fluxon string discussion, lines 2181–2197.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

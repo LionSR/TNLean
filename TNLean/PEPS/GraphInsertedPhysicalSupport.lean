@@ -16,6 +16,8 @@ Observations 6.4–6.6, lines 1765–1915. The arbitrary-matrix formulation is a
 auxiliary extension; it does not assert ground-space membership.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

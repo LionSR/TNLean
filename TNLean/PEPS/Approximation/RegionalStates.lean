@@ -23,6 +23,8 @@ Source: openai/math at adc7f1241b42e322a6451854ab7e4b4c146bf78a,
 September 24 polynomial PEPS manuscript, introduction lines 20–34.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators ComplexOrder
 

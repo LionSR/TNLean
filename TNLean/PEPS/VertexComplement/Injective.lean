@@ -25,6 +25,8 @@ theorem, with no second kernel-descent argument.
 - `Papers/1804.04964/paper_normal.tex`, lines 979--981 and 1207--1210.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

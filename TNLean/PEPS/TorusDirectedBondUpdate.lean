@@ -13,6 +13,8 @@ its native positive step crosses a torus seam. These auxiliary coordinate
 identities support SCP10, Section 6.6, lines 2340–2423; they do not assert that
 an arbitrary update is a physical operation.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -38,7 +40,7 @@ def torusDirectedBondTransport (axis : Bool) (u : Edge Γₜ → G) (p : X) : G 
 Source: SCP10, the elementary string operation, lines 2340–2423. -/
 def torusDirectedBondUpdate (axis : Bool) (p : X) (t : G) (u : Edge Γₜ → G)
     (e : Edge Γₜ) : G :=
-  if e = Edge.ofAdj (stepAdj axis p) then
+  if e = ManyBody.Edge.ofAdj (stepAdj axis p) then
     if p < nextVertex axis p then t else t⁻¹
   else u e
 /-- Exactly the selected transport changes in its own axis, with seam inversions included.
@@ -52,12 +54,12 @@ theorem torusDirectedBondTransport_update_same (axis : Bool) (p q : X) (t : G)
     simp only [torusDirectedBondTransport, regularDirectedTransport,
       torusDirectedBondUpdate, ite_true]
     split_ifs <;> simp
-  · have hn : Edge.ofAdj (stepAdj axis q) ≠ Edge.ofAdj (stepAdj axis p) := by
+  · have hn : ManyBody.Edge.ofAdj (stepAdj axis q) ≠ ManyBody.Edge.ofAdj (stepAdj axis p) := by
       cases axis
       · exact (torusRightEdge_injective (width := width) (height := height)).ne hq
       · exact (torusUpEdge_injective (width := width) (height := height)).ne hq
-    have he : torusDirectedBondUpdate axis p t u (Edge.ofAdj (stepAdj axis q)) =
-        u (Edge.ofAdj (stepAdj axis q)) := by
+    have he : torusDirectedBondUpdate axis p t u (ManyBody.Edge.ofAdj (stepAdj axis q)) =
+        u (ManyBody.Edge.ofAdj (stepAdj axis q)) := by
       simp only [torusDirectedBondUpdate, ite_eq_right hn]
     simp only [torusDirectedBondTransport, regularDirectedTransport, he, ite_eq_right hq]
 /-- Updating one axis retains every transport in the other axis.
@@ -66,12 +68,12 @@ theorem torusDirectedBondTransport_update_other (axis : Bool) (p q : X) (t : G)
     (u : Edge Γₜ → G) :
     torusDirectedBondTransport (!axis) (torusDirectedBondUpdate axis p t u) q =
       torusDirectedBondTransport (!axis) u q := by
-  have hn : Edge.ofAdj (stepAdj (!axis) q) ≠ Edge.ofAdj (stepAdj axis p) := by
+  have hn : ManyBody.Edge.ofAdj (stepAdj (!axis) q) ≠ ManyBody.Edge.ofAdj (stepAdj axis p) := by
     cases axis
     · exact (torusRightEdge_ne_torusUpEdge p q).symm
     · exact torusRightEdge_ne_torusUpEdge q p
-  have he : torusDirectedBondUpdate axis p t u (Edge.ofAdj (stepAdj (!axis) q)) =
-      u (Edge.ofAdj (stepAdj (!axis) q)) := by
+  have he : torusDirectedBondUpdate axis p t u (ManyBody.Edge.ofAdj (stepAdj (!axis) q)) =
+      u (ManyBody.Edge.ofAdj (stepAdj (!axis) q)) := by
     simp only [torusDirectedBondUpdate, ite_eq_right hn]
   simp only [torusDirectedBondTransport, regularDirectedTransport, he]
 /-- Both axes obey the literal single-edge update rule. -/
@@ -87,7 +89,7 @@ theorem torusDirectedBondTransport_update (axis ax : Bool) (p q : X) (t : G)
 /-- Every other ordered bond coefficient is retained literally.
 Source: SCP10, the elementary string operation, lines 2340–2423. -/
 theorem torusDirectedBondUpdate_eq_of_ne (axis : Bool) (p : X) (t : G)
-    (u : Edge Γₜ → G) (e : Edge Γₜ) (he : e ≠ Edge.ofAdj (stepAdj axis p)) :
+    (u : Edge Γₜ → G) (e : Edge Γₜ) (he : e ≠ ManyBody.Edge.ofAdj (stepAdj axis p)) :
     torusDirectedBondUpdate axis p t u e = u e := by
   simp only [torusDirectedBondUpdate, ite_eq_right he]
 end TNLean.PEPS

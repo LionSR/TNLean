@@ -37,6 +37,8 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1544 of
   of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

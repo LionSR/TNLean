@@ -17,6 +17,8 @@ Source: polynomial-PEPS manuscript, `00-introduction.tex`, `eq:model`, and
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.Approximation
@@ -37,7 +39,7 @@ theorem SquareHamiltonian.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
       (∀ i, (T i).IsHermitian) ∧ (∀ i, ‖T i‖ ≤ J) ∧
       (∑ i, T i) = h.toAreaLawHamiltonian.operator := by
   let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
-    ((forwardSquareEdgeEquiv L).trans (Edge.equiv (AreaLaw.rectangleGraphIso L L)))
+    ((forwardSquareEdgeEquiv L).trans (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L)))
   let cfg := AreaLaw.rectangleConfigurationEquiv L L q
   refine ⟨fun i ↦ Matrix.reindex cfg cfg (h.hermitianTerm (e.symm i)), ?_, ?_, ?_, ?_⟩
   · intro i

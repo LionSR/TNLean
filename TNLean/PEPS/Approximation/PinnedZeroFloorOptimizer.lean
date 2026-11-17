@@ -30,6 +30,8 @@ OAI types. Regions and weights are supplied; no geometry, inverse-density
 optimization, or full geometric optimizer is constructed here.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 
 open Matrix
@@ -59,7 +61,7 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 private def rectangleForwardEdgeEquiv (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
     ForwardEdge L ≃ Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)) :=
-  (forwardSquareEdgeEquiv L).trans (Edge.equiv (AreaLaw.rectangleGraphIso L L))
+  (forwardSquareEdgeEquiv L).trans (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
 chosen target order. No order compatibility of rectangleSiteEquiv is assumed. -/
@@ -75,7 +77,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
   let σ := AreaLaw.rectangleSiteEquiv L L
   have hmem : ∀ v : Vertex L, σ v ∈ A.map σ.toEmbedding ↔ v ∈ A :=
     fun v => by simp [σ]
-  have hend := Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
+  have hend := ManyBody.Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
     (forwardSquareEdgeEquiv L e)
   change ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.1 ∧
       (rectangleForwardEdgeEquiv L e).1.2 = σ e.val.2) ∨

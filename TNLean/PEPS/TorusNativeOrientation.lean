@@ -17,6 +17,8 @@ used to store the finite simple graph edges.
 Source: SCP10, Definition 5.1, equation `eq:2d-ug-sym`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -57,13 +59,13 @@ theorem torusNativeEdgeTail_mem_endpoints (f : Edge (torusGraph width height)) :
   · change torusNativeEdgeTail (torusRightEdge v) = (torusRightEdge v).1.1 ∨
       torusNativeEdgeTail (torusRightEdge v) = (torusRightEdge v).1.2
     rw [torusNativeEdgeTail_right]
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with h | h
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with h | h
     · exact Or.inl h.1.symm
     · exact Or.inr h.2.symm
   · change torusNativeEdgeTail (torusUpEdge v) = (torusUpEdge v).1.1 ∨
       torusNativeEdgeTail (torusUpEdge v) = (torusUpEdge v).1.2
     rw [torusNativeEdgeTail_up]
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with h | h
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with h | h
     · exact Or.inr h.2.symm
     · exact Or.inl h.1.symm
 

@@ -20,6 +20,8 @@ height at least four. Both periodic seams are included; no Hamiltonian
 statement is made. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -92,10 +94,10 @@ def verticalTwoPlaquetteCycleBond (v : X) (i : Fin 2) :
     {e : {e : Edge Γₜ // e.1.1 ∈ verticalTwoPlaquetteRegion v ∧
       e.1.2 ∈ verticalTwoPlaquetteRegion v} //
       ¬ (verticalTwoPlaquetteTree v).Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} := by
-  let e := Edge.equiv (verticalTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
+  let e := ManyBody.Edge.equiv (verticalTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
   refine ⟨inducedRegionEdgeEquiv (verticalTwoPlaquetteRegion v) e, ?_⟩
   change ¬ (verticalTwoPlaquetteTree v).Adj e.1.1 e.1.2
-  exact (Edge.comap_adj_map_iff (verticalTwoPlaquetteIso v)
+  exact (ManyBody.Edge.comap_adj_map_iff (verticalTwoPlaquetteIso v)
     twoPlaquetteTree (twoPlaquetteCycleBond i)).not.mpr (twoPlaquetteCycleBond_not_tree i)
 
 /-- The two horizontal chords are distinct, including at either seam.
@@ -104,7 +106,7 @@ theorem verticalTwoPlaquetteCycleBond_injective (v : X) :
     Function.Injective (verticalTwoPlaquetteCycleBond v) := by
   intro i j h
   apply twoPlaquetteCycleBond_injective
-  apply (Edge.equiv (verticalTwoPlaquetteIso v)).injective
+  apply (ManyBody.Edge.equiv (verticalTwoPlaquetteIso v)).injective
   apply (inducedRegionEdgeEquiv (verticalTwoPlaquetteRegion v)).injective
   exact congrArg Subtype.val h
 
@@ -129,10 +131,10 @@ theorem verticalTwoPlaquetteIso_apply (v : X) (i : Fin 6) :
 Source: SCP10, Theorem 6.16, lines 2271–2305. -/
 theorem verticalTwoPlaquetteCycleBond_eq_right (v : X) (i : Fin 2) :
     (verticalTwoPlaquetteCycleBond v i).1.1 =
-      Edge.ofAdj (torusGraph_adj_right v.1 (v.2 + (i.val : ZMod height))) := by
+      ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (v.2 + (i.val : ZMod height))) := by
   symm
-  apply Edge.ofAdj_eq_of_endpoints
-  have he := Edge.map_endpoints (verticalTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
+  apply ManyBody.Edge.ofAdj_eq_of_endpoints
+  have he := ManyBody.Edge.map_endpoints (verticalTwoPlaquetteIso v) (twoPlaquetteCycleBond i)
   have hlo : (verticalTwoPlaquetteIso v (twoPlaquetteCycleBond i).1.1).1 =
       (v.1, v.2 + (i.val : ZMod height)) := by
     rw [verticalTwoPlaquetteIso_apply]
@@ -143,12 +145,12 @@ theorem verticalTwoPlaquetteCycleBond_eq_right (v : X) (i : Fin 2) :
     fin_cases i <;> simp [twoPlaquetteCycleBond]
   rcases he with ⟨h₁,h₂⟩ | ⟨h₁,h₂⟩
   · exact Or.inl ⟨by simpa only [verticalTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₁).symm,
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₁).symm,
       by simpa only [verticalTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₂).symm⟩
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₂).symm⟩
   · exact Or.inr ⟨by simpa only [verticalTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₂).symm,
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hlo] using (congrArg Subtype.val h₂).symm,
       by simpa only [verticalTwoPlaquetteCycleBond, inducedRegionEdgeEquiv,
-        Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₁).symm⟩
+        ManyBody.Edge.equiv_apply, Equiv.coe_fn_mk, ← hhi] using (congrArg Subtype.val h₁).symm⟩
 
 end TNLean.PEPS

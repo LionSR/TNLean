@@ -21,6 +21,8 @@ orientation. The resulting bound includes the empty and one-vertex squares.
   used in the bound for the doubled Hamiltonian boundary perturbation.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 /-- An open square of side length `L` has at most `2 * L ^ 2` edges,

@@ -35,6 +35,8 @@ decomposition or uniform bulk gap is asserted.
   in Projected Entangled Pair States*
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS

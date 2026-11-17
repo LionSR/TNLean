@@ -38,6 +38,8 @@ window is the set of offsets the open blocking geometry reaches.
   of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

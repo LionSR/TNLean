@@ -23,6 +23,8 @@ joint-measurement step; it asserts neither braiding nor parent-Hamiltonian
 membership. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -97,18 +99,19 @@ private def orderedUp (v : X) (g : G) : G :=
 `b⁻¹` on the left and middle vertical bonds, respectively. All other bonds
 carry the identity. Source: SCP10, joint flux measurement, lines 2380–2415. -/
 def torusJointFluxAssignment (v : X) (a b : G) (e : Edge Γₜ) : G :=
-  if e = Edge.ofAdj (torusGraph_adj_up v.1 v.2) then orderedUp v (a * b)⁻¹
-  else if e = Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2) then orderedUp v b⁻¹
+  if e = ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2) then orderedUp v (a * b)⁻¹
+  else if e = ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2) then orderedUp v b⁻¹
   else 1
 
 private theorem up_endpoints_fst (x : ZMod width) (y : ZMod height) :
-    (Edge.ofAdj (torusGraph_adj_up x y)).1.1.1 = x ∧
-      (Edge.ofAdj (torusGraph_adj_up x y)).1.2.1 = x := by
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up x y) with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;>
+    (ManyBody.Edge.ofAdj (torusGraph_adj_up x y)).1.1.1 = x ∧
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up x y)).1.2.1 = x := by
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up x y) with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;>
     simp only [h₁, h₂, and_self]
 
 private theorem up_edge_eq_iff (x x' : ZMod width) (y : ZMod height) :
-    Edge.ofAdj (torusGraph_adj_up x y) = Edge.ofAdj (torusGraph_adj_up x' y) ↔ x = x' := by
+    ManyBody.Edge.ofAdj (torusGraph_adj_up x y) =
+        ManyBody.Edge.ofAdj (torusGraph_adj_up x' y) ↔ x = x' := by
   constructor
   · intro h
     have hx := (up_endpoints_fst x y).1
@@ -118,11 +121,12 @@ private theorem up_edge_eq_iff (x x' : ZMod width) (y : ZMod height) :
     rfl
 
 private theorem horizontal_ne_vertical (x a : ZMod width) (y b : ZMod height) :
-    Edge.ofAdj (torusGraph_adj_right x y) ≠ Edge.ofAdj (torusGraph_adj_up a b) := by
+    ManyBody.Edge.ofAdj (torusGraph_adj_right x y) ≠
+        ManyBody.Edge.ofAdj (torusGraph_adj_up a b) := by
   intro h
   have hv := up_endpoints_fst a b
   rw [← h] at hv
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right x y) with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right x y) with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
   · simp only [h₁, h₂] at hv
     exact (show x ≠ x + 1 by simp) (hv.1.trans hv.2.symm)
   · simp only [h₁, h₂] at hv

@@ -26,6 +26,8 @@ virtual-bond constraints and site inverses, lines 2017–2044.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS
