@@ -47,7 +47,7 @@ theorem usesOnly_localPart {S : Set P} {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
         cases h
         exact hv
       have hfl : ∀ {a b : Layout P} (v : Word a b), v.UsesOnly S → (ℓ₀ : Layout P) →
-          (frameList ℓ₀ v).UsesOnly S := by
+          Word.UsesOnly S (frameList ℓ₀ v) := by
         intro a b v hv ℓ₀
         induction ℓ₀ with
         | nil => exact hv
@@ -164,7 +164,6 @@ private theorem castInput_eval_heq {ℓ ℓ' ℓ₁ : Layout P} (w : Word ℓ �
     HEq (w.castInput h).eval w.eval := by
   cases h
   rfl
-
 /-- The complementary part of a word meeting the selection is the identity. -/
 theorem complementPart_eval_heq_id (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
     (hU : w.UsesOnly {p | f p = true}) (hM : w.SwapsMeet f) :
@@ -184,7 +183,7 @@ namespace Lattice.PartyCircuit.PartyChain
 
 private theorem castLayouts_eval_heq {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ') (h : ℓ = a)
     (h' : ℓ' = b) : HEq (w.castLayouts h h').eval w.eval :=
-  Word.eval_castLayouts_heq w h h'
+  Circuit.eval_castLayouts_heq w h h'
 
 theorem complementPart_eval_heq_id (f : P → Bool) {ℓX ℓY : Layout P} (M : PartyChain ℓX ℓY)
     (hU : M.UsesOnly {p | f p = true}) (hM : M.SwapsMeet f) :

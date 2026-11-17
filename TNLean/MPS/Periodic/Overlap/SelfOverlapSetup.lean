@@ -46,6 +46,7 @@ of arXiv:1708.00029.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

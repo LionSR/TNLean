@@ -19,6 +19,7 @@ Wielandt Lemma 2(b). The finite-family construction is in
 -/
 
 open scoped Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

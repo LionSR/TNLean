@@ -16,15 +16,30 @@ check was introduced.  A new violation fails, and so does an entry that no
 longer violates a rule: remove it in the change that repairs the import.  With
 ``--base-ref`` the set is also compared with its value at the merge base, and
 an added entry fails, so a new violation cannot be admitted by recording it.
+
+Two further ratchets of the same kind cover every module of ``TNLean``, with
+the same reading of imports and the same treatment of aggregators.
+
+``MUTUAL_DIRECTORIES`` lists the unordered pairs of directories that import
+each other: some module of the first imports a module of the second, and some
+module of the second imports a module of the first.  The directory of a module
+is its first two path components below ``TNLean/MPS`` and ``TNLean/PEPS`` and
+its first component elsewhere; a module directly below ``TNLean/`` belongs to
+no directory.  Directories are meant to be layers, so a new pair fails.
+
+``EXAMPLES_IMPORTS`` lists the imports of a module inside an ``Examples``
+directory by a module outside every ``Examples`` directory.  A worked example
+is not a prerequisite of the theory it illustrates, so a new such import fails.
 """
 
 from __future__ import annotations
 
 import argparse
 import ast
+import functools
 import re
 import subprocess
-from collections.abc import Mapping
+from collections.abc import Callable, Iterable, Mapping
 from pathlib import Path
 
 from lean_import_syntax import MODULE_NAME, strip_lean_comments
@@ -111,6 +126,101 @@ ALLOWED: dict[str, frozenset[str]] = {
 # an entry: move the shared declaration down to the layer both sides may import.
 DEBT: frozenset[str] = frozenset({})
 
+# Top-level directories whose subdirectories count as directories of their own.
+DEEP_ROOTS: frozenset[str] = frozenset({"MPS", "PEPS"})
+
+# Existing pairs of directories that import each other, as "A <-> B" with A
+# before B in sorted order.  Never add a pair: move the shared declaration to a
+# directory both sides already import.
+MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
+    {
+        "MPS <-> MPS/Overlap",
+        "MPS/BNT <-> MPS/CanonicalForm",
+        "MPS/BNT <-> MPS/FundamentalTheorem",
+        "MPS/BNT <-> MPS/MPDO",
+        "MPS/CanonicalForm <-> MPS/Core",
+        "MPS/CanonicalForm <-> MPS/FundamentalTheorem",
+        "MPS/CanonicalForm <-> MPS/Irreducible",
+        "MPS/CanonicalForm <-> MPS/MPU",
+        "MPS/CanonicalForm <-> MPS/Overlap",
+        "MPS/CanonicalForm <-> MPS/Periodic",
+        "MPS/CanonicalForm <-> MPS/Preparation",
+        "MPS/CanonicalForm <-> MPS/SharedInfra",
+        "MPS/CanonicalForm <-> PiAlgebra",
+        "MPS/Chain <-> MPS/Core",
+        "MPS/Chain <-> MPS/FundamentalTheorem",
+        "MPS/Chain <-> MPS/Structure",
+        "MPS/Core <-> MPS/FundamentalTheorem",
+        "MPS/Core <-> MPS/MPDO",
+        "MPS/Core <-> MPS/ParentHamiltonian",
+        "MPS/Core <-> Spectral",
+        "MPS/Examples <-> MPS/FundamentalTheorem",
+        "MPS/Examples <-> MPS/MPDO",
+        "MPS/Examples <-> MPS/MPU",
+        "MPS/Examples <-> MPS/Preparation",
+        "MPS/Examples <-> MPS/Symmetry",
+        "MPS/FundamentalTheorem <-> MPS/MPDO",
+        "MPS/FundamentalTheorem <-> MPS/MPU",
+        "MPS/FundamentalTheorem <-> MPS/ParentHamiltonian",
+        "MPS/FundamentalTheorem <-> MPS/Periodic",
+        "MPS/FundamentalTheorem <-> MPS/Preparation",
+        "MPS/FundamentalTheorem <-> MPS/Structure",
+        "MPS/FundamentalTheorem <-> MPS/Symmetry",
+        "MPS/MPDO <-> MPS/MPU",
+        "MPS/MPDO <-> MPS/ParentHamiltonian",
+        "MPS/MPDO <-> MPS/RFP",
+        "MPS/MPDO <-> MPS/Symmetry",
+        "MPS/MPU <-> MPS/Preparation",
+        "MPS/MPU <-> MPS/Symmetry",
+        "MPS/MPU <-> QCA",
+        "MPS/Overlap <-> MPS/Symmetry",
+        "MPS/Overlap <-> Spectral",
+        "MPS/ParentHamiltonian <-> MPS/Preparation",
+        "MPS/ParentHamiltonian <-> MPS/RFP",
+        "MPS/ParentHamiltonian <-> MPS/Symmetry",
+        "MPS/Periodic <-> MPS/SharedInfra",
+        "MPS/Preparation <-> MPS/SharedInfra",
+        "MPS/Preparation <-> MPS/Symmetry",
+        "MPS/Preparation <-> Spectral",
+        "MPS/SharedInfra <-> Spectral",
+        "MPS/Structure <-> MPS/Symmetry",
+        "PEPS <-> PEPS/EdgeMiddlePhysical",
+        "PEPS <-> PEPS/Examples",
+        "PEPS <-> PEPS/FundamentalTheorem",
+        "PEPS <-> PEPS/ParentHamiltonian",
+        "PEPS <-> PEPS/RegionBlock",
+        "PEPS <-> PEPS/TorusWindowPeeling",
+        "PEPS/Approximation <-> PEPS/AreaLaw",
+        "PEPS/RegionBlock <-> PEPS/TorusWindowPeeling",
+        "PEPS/RegionBlock <-> PEPS/VertexComplement",
+    }
+)
+
+# Existing imports of a worked example by a module outside every ``Examples``
+# directory, as "importing module -> imported module".  Never add an entry:
+# move the declaration the library needs out of the example.
+EXAMPLES_IMPORTS: frozenset[str] = frozenset(
+    {
+        "TNLean.MPS.FundamentalTheorem.Arbitrary.Examples -> TNLean.MPS.Examples.MultiBlock.Worked",
+        "TNLean.MPS.FundamentalTheorem.Arbitrary.OneBlockSharpness -> TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral",
+        "TNLean.MPS.MPDO.CZXFusionTensors -> TNLean.MPS.MPU.Examples.Shift",
+        "TNLean.MPS.MPDO.CZXGHZAction -> TNLean.MPS.Examples.GHZ",
+        "TNLean.MPS.MPDO.CZXGaussCircuitTuple -> TNLean.MPS.Examples.ZMod2",
+        "TNLean.MPS.MPU.GroupCocycleMPO.Instances -> TNLean.MPS.Examples.CZX.CZXUnitary",
+        "TNLean.MPS.MPU.IdentityIndex -> TNLean.MPS.MPU.Examples.ShiftSourceFactors",
+        "TNLean.MPS.Preparation.GHZSectorParent -> TNLean.MPS.Examples.GHZ",
+        "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.CZX.CZXAnomalyClass",
+        "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.GHZ",
+        "TNLean.MPS.Symmetry.MPOSymmetry.Examples -> TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation",
+        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraOnePsi",
+        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraOneSigma",
+        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraPsiSigma",
+        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraSigma",
+        "TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule -> TNLean.MPS.Examples.KramersWannier.KramersWannierSource",
+        "TNLean.PEPS.KitaevCheckerboardBlocking -> TNLean.PEPS.Examples.QuantumDouble",
+    }
+)
+
 
 def layer_of(module: str) -> str | None:
     """Return the layer that owns ``module``, or ``None`` if it is unconstrained."""
@@ -121,15 +231,17 @@ def layer_of(module: str) -> str | None:
     return None
 
 
-def parse_module(source: str) -> tuple[list[str], bool]:
+@functools.cache
+def parse_module(source: str) -> tuple[tuple[str, ...], bool]:
     """Return the imported modules of a source and whether it is import-only.
 
     Comments are removed first.  A source whose comments cannot be removed is
     treated as having no imports and as not import-only; Lean rejects it anyway.
+    The result is cached, since each check of this script reads every module.
     """
     uncommented, error = strip_lean_comments(source)
     if error is not None:
-        return [], False
+        return (), False
     imports: list[str] = []
     import_only = True
     for line in uncommented.splitlines():
@@ -141,7 +253,37 @@ def parse_module(source: str) -> tuple[list[str], bool]:
             import_only = False
         else:
             imports.append(match.group(1))
-    return imports, import_only and bool(imports)
+    return tuple(imports), import_only and bool(imports)
+
+
+def resolved_imports(sources: Mapping[str, str]) -> dict[str, set[str]]:
+    """Return the ``TNLean`` modules each module with declarations depends on.
+
+    An import-only module (an aggregator) has no entry, and an imported
+    aggregator is replaced by the modules it re-exports, through nested
+    aggregators.
+    """
+    parsed = {module: parse_module(source) for module, source in sources.items()}
+
+    def reexports(module: str, seen: frozenset[str]) -> set[str]:
+        imports, import_only = parsed.get(module, ((), False))
+        if not import_only or module in seen:
+            return {module}
+        result: set[str] = set()
+        for imported in imports:
+            result |= reexports(imported, seen | {module})
+        return result
+
+    resolved: dict[str, set[str]] = {}
+    for module, (imports, import_only) in parsed.items():
+        if import_only:
+            continue
+        targets: set[str] = set()
+        for imported in imports:
+            if imported.startswith("TNLean."):
+                targets |= reexports(imported, frozenset())
+        resolved[module] = {target for target in targets if target.startswith("TNLean.")}
+    return resolved
 
 
 def violations(sources: Mapping[str, str]) -> set[str]:
@@ -150,32 +292,71 @@ def violations(sources: Mapping[str, str]) -> set[str]:
     ``B`` is a module with declarations: an imported aggregator is replaced by
     the modules it re-exports, through nested aggregators.
     """
-    parsed = {module: parse_module(source) for module, source in sources.items()}
-
-    def reexports(module: str, seen: frozenset[str]) -> set[str]:
-        imports, import_only = parsed.get(module, ([], False))
-        if not import_only or module in seen:
-            return {module}
-        result: set[str] = set()
-        for imported in imports:
-            result |= reexports(imported, seen | {module})
-        return result
-
     found: set[str] = set()
-    for module, (imports, import_only) in parsed.items():
+    for module, targets in resolved_imports(sources).items():
         layer = layer_of(module)
-        if layer is None or import_only:
+        if layer is None:
             continue
-        for imported in imports:
-            if not imported.startswith("TNLean."):
-                continue
-            for target_module in reexports(imported, frozenset()):
-                if not target_module.startswith("TNLean."):
-                    continue
-                target = layer_of(target_module)
-                if target is None or (target != layer and target not in ALLOWED[layer]):
-                    found.add(f"{module} -> {target_module}")
+        for target_module in targets:
+            target = layer_of(target_module)
+            if target is None or (target != layer and target not in ALLOWED[layer]):
+                found.add(f"{module} -> {target_module}")
     return found
+
+
+def directory_of(module: str) -> str | None:
+    """Return the directory of a module, or ``None`` for one directly below ``TNLean/``.
+
+    Directories are taken at depth two below the roots in ``DEEP_ROOTS`` and at
+    depth one elsewhere.
+    """
+    parts = module.split(".")[1:-1]
+    if not parts:
+        return None
+    depth = 2 if parts[0] in DEEP_ROOTS else 1
+    return "/".join(parts[:depth])
+
+
+def mutual_directories(sources: Mapping[str, str]) -> dict[str, tuple[str, str]]:
+    """Return the pairs of directories that import each other.
+
+    A key is ``"A <-> B"`` with ``A`` before ``B`` in sorted order.  Its value
+    is one import from ``A`` into ``B`` and one from ``B`` into ``A``, each
+    the first in sorted order, for the error message.
+    """
+    witness: dict[tuple[str, str], str] = {}
+    for module, targets in sorted(resolved_imports(sources).items()):
+        source_directory = directory_of(module)
+        if source_directory is None:
+            continue
+        for target_module in sorted(targets):
+            target_directory = directory_of(target_module)
+            if target_directory is None or target_directory == source_directory:
+                continue
+            witness.setdefault(
+                (source_directory, target_directory), f"{module} -> {target_module}"
+            )
+    return {
+        f"{first} <-> {second}": (forward, witness[second, first])
+        for (first, second), forward in witness.items()
+        if first < second and (second, first) in witness
+    }
+
+
+def in_examples(module: str) -> bool:
+    """Whether a module lies in a directory named ``Examples``."""
+    return "Examples" in module.split(".")[1:-1]
+
+
+def examples_imports(sources: Mapping[str, str]) -> set[str]:
+    """Return every ``"A -> B"`` with ``B`` inside an ``Examples`` directory and ``A`` outside."""
+    return {
+        f"{module} -> {target}"
+        for module, targets in resolved_imports(sources).items()
+        if not in_examples(module)
+        for target in targets
+        if in_examples(target)
+    }
 
 
 def tracked_sources(root: Path) -> dict[str, str]:
@@ -196,14 +377,17 @@ def tracked_sources(root: Path) -> dict[str, str]:
     return sources
 
 
-def debt_from_source(source: str) -> frozenset[str]:
-    """Read ``DEBT`` from one revision of this checker."""
+def record_from_source(source: str, name: str) -> frozenset[str] | None:
+    """Read the recorded set ``name`` from one revision of a checker.
+
+    ``None`` means that the revision does not define ``name``.
+    """
     tree = ast.parse(source)
     for statement in tree.body:
         if not isinstance(statement, (ast.Assign, ast.AnnAssign)):
             continue
         targets = statement.targets if isinstance(statement, ast.Assign) else [statement.target]
-        if not any(isinstance(target, ast.Name) and target.id == "DEBT" for target in targets):
+        if not any(isinstance(target, ast.Name) and target.id == name for target in targets):
             continue
         value = statement.value
         if (
@@ -213,20 +397,31 @@ def debt_from_source(source: str) -> frozenset[str]:
             or len(value.args) != 1
             or value.keywords
         ):
-            raise ValueError("DEBT must be a literal frozenset")
+            raise ValueError(f"{name} must be a literal frozenset")
         parsed = ast.literal_eval(value.args[0])
         if not isinstance(parsed, (set, dict)) or not all(isinstance(e, str) for e in parsed):
-            raise ValueError("DEBT must contain only literal strings")
+            raise ValueError(f"{name} must contain only literal strings")
         return frozenset(parsed)
-    raise ValueError("DEBT assignment not found")
+    return None
 
 
-def debt_at_merge_base(root: Path, base_ref: str) -> frozenset[str] | None:
-    """Return ``DEBT`` at the merge base with ``base_ref``.
+def debt_from_source(source: str) -> frozenset[str]:
+    """Read ``DEBT`` from one revision of this checker."""
+    debt = record_from_source(source, "DEBT")
+    if debt is None:
+        raise ValueError("DEBT assignment not found")
+    return debt
 
-    ``None`` is returned only while this checker is first introduced and is
-    therefore absent from the base revision.
+
+def records_at_merge_base(
+    root: Path, base_ref: str, checker_path: str, names: Iterable[str]
+) -> dict[str, frozenset[str] | None]:
+    """Return the recorded sets ``names`` of a checker at the merge base with ``base_ref``.
+
+    A value is ``None`` only while the set is first introduced: the checker, or
+    the set in it, is absent from the base revision.
     """
+    names = tuple(names)
     merge_base = subprocess.run(
         ["git", "-C", str(root), "merge-base", "HEAD", base_ref],
         check=False,
@@ -238,7 +433,7 @@ def debt_at_merge_base(root: Path, base_ref: str) -> frozenset[str] | None:
         raise ValueError(f"cannot find merge base with {base_ref}: {merge_base.stderr.strip()}")
     base_commit = merge_base.stdout.strip()
     result = subprocess.run(
-        ["git", "-C", str(root), "show", f"{base_commit}:{CHECKER_PATH}"],
+        ["git", "-C", str(root), "show", f"{base_commit}:{checker_path}"],
         check=False,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -246,11 +441,34 @@ def debt_at_merge_base(root: Path, base_ref: str) -> frozenset[str] | None:
     )
     if result.returncode != 0:
         if "does not exist in" in result.stderr or "exists on disk, but not in" in result.stderr:
-            return None
+            return dict.fromkeys(names)
         raise ValueError(
             f"cannot read checker at merge base {base_commit}: {result.stderr.strip()}"
         )
-    return debt_from_source(result.stdout)
+    return {name: record_from_source(result.stdout, name) for name in names}
+
+
+def ratchet_errors(
+    current: frozenset[str],
+    recorded: frozenset[str],
+    base: frozenset[str] | None,
+    *,
+    new: str,
+    stale: str,
+    added: str,
+    describe: Callable[[str], str] = str,
+) -> list[str]:
+    """Compare what the tree has with a recorded set that may only shrink.
+
+    An entry of ``current`` that is not recorded gives the message ``new``, a
+    recorded entry that is not current gives ``stale``, and, when the set at
+    the base revision is known, a recorded entry absent from it gives ``added``.
+    """
+    errors = [f"{new}: {describe(entry)}" for entry in sorted(current - recorded)]
+    errors += [f"{stale}: {entry}" for entry in sorted(recorded - current)]
+    if base is not None:
+        errors += [f"{added}: {entry}" for entry in sorted(recorded - base)]
+    return errors
 
 
 def check_layers(
@@ -259,60 +477,127 @@ def check_layers(
     base_debt: frozenset[str] | None = None,
 ) -> list[str]:
     """Return the error messages of the layer check; an empty list means it passes."""
-    current = violations(sources)
-    errors = [
-        f"Import points outside the allowed layers: {entry}" for entry in sorted(current - debt)
-    ]
-    errors += [
-        f"Repaired import still listed in DEBT; remove it: {entry}"
-        for entry in sorted(debt - current)
-    ]
-    if base_debt is not None:
-        errors += [
-            f"Entry added to DEBT; this set may only shrink: {entry}"
-            for entry in sorted(debt - base_debt)
-        ]
-    return errors
+    return ratchet_errors(
+        frozenset(violations(sources)),
+        debt,
+        base_debt,
+        new="Import points outside the allowed layers",
+        stale="Repaired import still listed in DEBT; remove it",
+        added="Entry added to DEBT; this set may only shrink",
+    )
+
+
+def check_mutual_directories(
+    sources: Mapping[str, str],
+    recorded: frozenset[str] = MUTUAL_DIRECTORIES,
+    base: frozenset[str] | None = None,
+) -> list[str]:
+    """Return the error messages of the check on directories that import each other."""
+    current = mutual_directories(sources)
+
+    def describe(pair: str) -> str:
+        forward, backward = current[pair]
+        return f"{pair} (by {forward} and {backward})"
+
+    return ratchet_errors(
+        frozenset(current),
+        recorded,
+        base,
+        new="Directories import each other",
+        stale=(
+            "Directories no longer import each other but are listed in "
+            "MUTUAL_DIRECTORIES; remove the pair"
+        ),
+        added="Pair added to MUTUAL_DIRECTORIES; this set may only shrink",
+        describe=describe,
+    )
+
+
+def check_examples_imports(
+    sources: Mapping[str, str],
+    recorded: frozenset[str] = EXAMPLES_IMPORTS,
+    base: frozenset[str] | None = None,
+) -> list[str]:
+    """Return the error messages of the check on imports of ``Examples`` modules."""
+    return ratchet_errors(
+        frozenset(examples_imports(sources)),
+        recorded,
+        base,
+        new="Module outside Examples imports a worked example",
+        stale="Removed import still listed in EXAMPLES_IMPORTS; remove it",
+        added="Entry added to EXAMPLES_IMPORTS; this set may only shrink",
+    )
+
+
+RECORDS: tuple[str, ...] = ("DEBT", "MUTUAL_DIRECTORIES", "EXAMPLES_IMPORTS")
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description="Reject upward imports, new mutually importing directories, "
+        "and new imports of worked examples by library modules."
+    )
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument(
         "--base-ref",
-        help="ref whose merge base with HEAD fixes the DEBT entries that may remain",
+        help="ref whose merge base with HEAD fixes the recorded entries that may remain",
     )
     parser.add_argument(
-        "--print-debt", action="store_true", help="print the current violations and exit"
+        "--print-debt", action="store_true", help="print the current layer violations and exit"
+    )
+    parser.add_argument(
+        "--print-mutual-directories",
+        action="store_true",
+        help="print the current pairs of directories that import each other and exit",
+    )
+    parser.add_argument(
+        "--print-examples-imports",
+        action="store_true",
+        help="print the current imports of worked examples by library modules and exit",
     )
     args = parser.parse_args()
     root = args.root.resolve()
 
     sources = tracked_sources(root)
+    printed: Iterable[str] | None = None
     if args.print_debt:
-        for entry in sorted(violations(sources)):
+        printed = violations(sources)
+    elif args.print_mutual_directories:
+        printed = mutual_directories(sources)
+    elif args.print_examples_imports:
+        printed = examples_imports(sources)
+    if printed is not None:
+        for entry in sorted(printed):
             print(f'        "{entry}",')
         return 0
 
-    base_debt: frozenset[str] | None = None
+    base: dict[str, frozenset[str] | None] = dict.fromkeys(RECORDS)
     if args.base_ref is not None:
         try:
-            base_debt = debt_at_merge_base(root, args.base_ref)
+            base = records_at_merge_base(root, args.base_ref, CHECKER_PATH, RECORDS)
         except (SyntaxError, ValueError) as error:
             print(f"::error title=Import layer check failed::{error}")
             return 1
 
-    errors = check_layers(sources, DEBT, base_debt)
+    errors = check_layers(sources, DEBT, base["DEBT"])
+    errors += check_mutual_directories(sources, MUTUAL_DIRECTORIES, base["MUTUAL_DIRECTORIES"])
+    errors += check_examples_imports(sources, EXAMPLES_IMPORTS, base["EXAMPLES_IMPORTS"])
     for message in errors:
         print(f"::error title=Import layer policy::{message}")
     if errors:
         print(
-            "A lower layer must not import a higher one, and DEBT may only shrink. Move "
-            "the shared declaration down to a layer both modules may import; see "
+            "A lower layer must not import a higher one, two directories must not "
+            "import each other, a module outside Examples must not import a worked "
+            "example, and the recorded sets may only shrink. Move the shared "
+            "declaration to a module both sides may import; see "
             "docs/many_body_circuit_architecture.md."
         )
         return 1
-    print(f"Import layers respected ({len(DEBT)} recorded violations remain).")
+    print(
+        f"Import layers respected ({len(DEBT)} recorded violations, "
+        f"{len(MUTUAL_DIRECTORIES)} recorded pairs of directories that import each "
+        f"other and {len(EXAMPLES_IMPORTS)} recorded imports of worked examples remain)."
+    )
     return 0
 
 

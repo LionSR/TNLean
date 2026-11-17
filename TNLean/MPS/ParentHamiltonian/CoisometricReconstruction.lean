@@ -29,6 +29,7 @@ result for any exact coisometric reconstruction.
 -/
 
 open scoped Matrix
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 
@@ -75,8 +76,8 @@ theorem groundSpace_eq_of_coisometry_reconstruction
 private theorem groundSpace_blockTensor_cast_dim
     {D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor s D₁) (p L : ℕ) :
     groundSpace
-        (MPSTensor.blockTensor (cast (congr_arg (MPSTensor s) h) A) p) L =
-      groundSpace (MPSTensor.blockTensor A p) L := by
+        (Kraus.blockTensor (cast (congr_arg (MPSTensor s) h) A) p) L =
+      groundSpace (Kraus.blockTensor A p) L := by
   subst D₂
   rfl
 
@@ -91,14 +92,14 @@ regrouping in equations `eq:II_ABasicTensors` and `decBSV`, lines 265--301. -/
 theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
     {A : MPSTensor s d} (data : CPSVCanonicalFormData A)
     (ref : data.BNTRefinement) {p L : ℕ} (hp : 0 < p) (hL : 0 < L) :
-    groundSpace (MPSTensor.blockTensor A p) L =
+    groundSpace (Kraus.blockTensor A p) L =
       ⨆ j : Fin data.phaseClasses.g,
-        groundSpace (MPSTensor.blockTensor (data.blocks (data.representativeIndex j)) p) L := by
+        groundSpace (Kraus.blockTensor (data.blocks (data.representativeIndex j)) p) L := by
   classical
   have hCopy (k : Fin data.r) :
-      groundSpace (MPSTensor.blockTensor (data.blocks k) p) L =
+      groundSpace (Kraus.blockTensor (data.blocks k) p) L =
         groundSpace
-          (MPSTensor.blockTensor
+          (Kraus.blockTensor
             (data.blocks (data.representativeIndex (data.classCopy k).1)) p) L := by
     have hGauge : GaugeEquiv (ref.regroupedBlocks k) (data.blocks k) :=
       ⟨ref.listedGauge k, ref.blocksEqListedGaugeConj k⟩
@@ -106,42 +107,42 @@ theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
       intro hk
       simpa [hk] using ref.copyPhaseNorm k
     have hBlockedEq :
-        MPSTensor.blockTensor (ref.regroupedBlocks k) p =
+        Kraus.blockTensor (ref.regroupedBlocks k) p =
           (ref.copyPhase k ^ p) •
-            MPSTensor.blockTensor
+            Kraus.blockTensor
               (cast (congr_arg (MPSTensor s) (ref.copyDimEq k))
                 (data.blocks (data.representativeIndex (data.classCopy k).1))) p := by
       funext i
       simp [Kraus.blockTensor, ref.regroupedBlocksEq, Kraus.evalWord_smul,
         Kraus.length_wordOfBlock]
     calc
-      groundSpace (MPSTensor.blockTensor (data.blocks k) p) L =
-          groundSpace (MPSTensor.blockTensor (ref.regroupedBlocks k) p) L :=
+      groundSpace (Kraus.blockTensor (data.blocks k) p) L =
+          groundSpace (Kraus.blockTensor (ref.regroupedBlocks k) p) L :=
         (hGauge.blockTensor p).groundSpace_eq L |>.symm
       _ = groundSpace
           ((ref.copyPhase k ^ p) •
-            MPSTensor.blockTensor
+            Kraus.blockTensor
               (cast (congr_arg (MPSTensor s) (ref.copyDimEq k))
                 (data.blocks (data.representativeIndex (data.classCopy k).1))) p) L := by
         rw [hBlockedEq]
       _ = groundSpace
-          (MPSTensor.blockTensor
+          (Kraus.blockTensor
             (cast (congr_arg (MPSTensor s) (ref.copyDimEq k))
               (data.blocks (data.representativeIndex (data.classCopy k).1))) p) L :=
         groundSpace_smul_eq _ _ (pow_ne_zero p hPhaseNe) L
       _ = groundSpace
-          (MPSTensor.blockTensor
+          (Kraus.blockTensor
             (data.blocks (data.representativeIndex (data.classCopy k).1)) p) L :=
         groundSpace_blockTensor_cast_dim (ref.copyDimEq k) _ p L
   have hCopies :
-      (⨆ k : Fin data.r, groundSpace (MPSTensor.blockTensor (data.blocks k) p) L) =
+      (⨆ k : Fin data.r, groundSpace (Kraus.blockTensor (data.blocks k) p) L) =
         ⨆ j : Fin data.phaseClasses.g,
-          groundSpace (MPSTensor.blockTensor (data.blocks (data.representativeIndex j)) p) L := by
+          groundSpace (Kraus.blockTensor (data.blocks (data.representativeIndex j)) p) L := by
     apply le_antisymm
     · refine iSup_le fun k ↦ ?_
       rw [hCopy k]
       exact le_iSup (fun j : Fin data.phaseClasses.g ↦
-        groundSpace (MPSTensor.blockTensor (data.blocks (data.representativeIndex j)) p) L)
+        groundSpace (Kraus.blockTensor (data.blocks (data.representativeIndex j)) p) L)
         (data.classCopy k).1
     · refine iSup_le fun j ↦ ?_
       let q : Fin (data.phaseClasses.copies j) :=
@@ -153,15 +154,15 @@ theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
         mpvPhaseClassData_enum_zero_eq_repr data.blocks j
       rw [← hkRep, hCopy k, hkClass]
       exact le_iSup (fun k : Fin data.r ↦
-        groundSpace (MPSTensor.blockTensor (data.blocks k) p) L) k
+        groundSpace (Kraus.blockTensor (data.blocks k) p) L) k
   let blocked := data.blockTensor p hp
   calc
-    groundSpace (MPSTensor.blockTensor A p) L =
+    groundSpace (Kraus.blockTensor A p) L =
         groundSpace
           (toTensorFromBlocks (d := blockPhysDim s p) blocked.weights blocked.blocks) L :=
       groundSpace_eq_of_coisometry_reconstruction blocked.ambient_coisometry
         blocked.coisometric blocked.reconstruct hL
-    _ = ⨆ k : Fin data.r, groundSpace (MPSTensor.blockTensor (data.blocks k) p) L := by
+    _ = ⨆ k : Fin data.r, groundSpace (Kraus.blockTensor (data.blocks k) p) L := by
       simpa [blocked, CPSVCanonicalFormData.blockTensor] using
         groundSpace_toTensorFromBlocks_eq_iSup
           blocked.weights blocked.blocks blocked.weights_ne_zero L

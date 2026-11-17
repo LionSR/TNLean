@@ -56,6 +56,7 @@ only the anticommuting pair `iσ_x`, `iσ_z` inside `SU(2)`.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 

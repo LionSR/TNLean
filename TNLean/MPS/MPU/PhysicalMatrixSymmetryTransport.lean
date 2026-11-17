@@ -35,7 +35,7 @@ variable {d Da Db : ℕ}
 private theorem blockKron_unitary (Q : Matrix (Fin d) (Fin d) ℂ)
     (hQ : Q ∈ Matrix.unitaryGroup (Fin d) ℂ) (k : ℕ) :
     MPSTensor.blockKron k Q ∈
-      Matrix.unitaryGroup (Fin (MPSTensor.blockPhysDim d k)) ℂ := by
+      Matrix.unitaryGroup (Fin (Kraus.blockPhysDim d k)) ℂ := by
   rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose]
   exact MPSTensor.blockKron_mul_conjTranspose k Q
     (by simpa only [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff.mp hQ)

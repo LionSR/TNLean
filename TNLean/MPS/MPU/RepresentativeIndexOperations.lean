@@ -32,8 +32,8 @@ theorem IsMPU.index_blockTensor
     {d D : ℕ} [NeZero d] [NeZero D] {U : MPOTensor d D}
     (hU : IsMPU U) (p : ℕ) (hp : 0 < p) :
     (hU.blockTensor p hp).index = hU.index := by
-  let : NeZero (MPSTensor.blockPhysDim d p) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  let : NeZero (Kraus.blockPhysDim d p) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero p (NeZero.ne d)⟩
   obtain ⟨Dred, _, Ured, hred, _, hMpo⟩ :=
     hU.exists_reduced_cfii_representative

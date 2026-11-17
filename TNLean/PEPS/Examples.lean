@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Examples.AKLT
 import TNLean.PEPS.Examples.CZX
+import TNLean.PEPS.Examples.CZXBoundaryAnomaly
 import TNLean.PEPS.Examples.CZXBoundaryChain
 import TNLean.PEPS.Examples.CZXOnSiteSymmetry
 import TNLean.PEPS.Examples.CZXOpenRegion

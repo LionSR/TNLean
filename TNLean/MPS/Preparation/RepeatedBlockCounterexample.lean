@@ -65,6 +65,7 @@ fails. Documented in `docs/paper-gaps/mswc24_multiplicity_fixed_point.tex`.
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

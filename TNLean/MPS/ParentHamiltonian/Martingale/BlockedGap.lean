@@ -30,6 +30,8 @@ tensor. No comparison with an interaction on the original unblocked chain is mad
 -/
 
 open scoped ComplexOrder InnerProductSpace Matrix.Norms.Frobenius
+open Kraus (blockPhysDim decodeBlockEquiv decodeBlockEquiv_apply blockTensor
+  isNBlkInjective_iff_blockTensor_isInjective evalWord_blockTensor)
 
 namespace MPSTensor
 

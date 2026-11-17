@@ -46,6 +46,7 @@ them (`MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero`).
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Matrix
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

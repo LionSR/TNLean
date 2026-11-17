@@ -21,6 +21,7 @@ Only equality-based relabeling of the final bond is needed at the ring closure.
 
 open Matrix MPSPreparation MPSTensor Fin.NatCast
 open scoped BigOperators
+open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace VaryingBondChain
 

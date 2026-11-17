@@ -155,15 +155,15 @@ theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)}
     .comp (c₁.appendTail N₂.regs) (OriginalCircuit.frameList G₁.regs c₂)
   have he0 : e.nonprivateCount = 0 := by
     change (c₁.appendTail N₂.regs).nonprivateCount +
-      (OriginalCircuit.frameList G₁.regs c₂).nonprivateCount = 0
-    rw [OriginalCircuit.nonprivateCount_appendTail, OriginalCircuit.nonprivateCount_frameList,
-      h₁, h₂]
+      OriginalCircuit.nonprivateCount (OriginalCircuit.frameList G₁.regs c₂) = 0
+    rw [OriginalCircuit.nonprivateCount_appendTail, h₁, zero_add]
+    exact (Circuit.gateCount_frameList _ _).trans h₂
   have heval : e.eval (pairRef N₁ N₂ Ω) = pairRef G₁ G₂ Ω := by
     change (OriginalCircuit.frameList G₁.regs c₂).eval ((c₁.appendTail N₂.regs).eval
       ((appendIso N₁.regs N₂.regs).symm (N₁.regRef Ω ⊗ₜ N₂.regRef Ω))) =
       (appendIso G₁.regs G₂.regs).symm (G₁.regRef Ω ⊗ₜ G₂.regRef Ω)
     rw [OriginalCircuit.eval_appendTail_appendIso_symm,
-      OriginalCircuit.eval_frameList_appendIso_symm, Word.eval_toOriginalCircuit,
+      Circuit.eval_frameList_appendIso_symm, Word.eval_toOriginalCircuit,
       Word.eval_toOriginalCircuit]
     exact congrArg₂ (fun x y => (appendIso G₁.regs G₂.regs).symm (x ⊗ₜ y)) (he₁ Ω) (he₂ Ω)
   have hE : ∀ (s : ℝ), e.IsExpansionBounded r s := fun s =>

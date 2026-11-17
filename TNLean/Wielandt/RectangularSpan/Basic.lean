@@ -33,6 +33,7 @@ live in `TNLean.Wielandt.RectangularSpan.Growth` and
 -/
 
 open scoped Matrix
+open Kraus (blockPhysDim blockPhysDim_eq_pow blockTensor)
 
 namespace MPSTensor
 

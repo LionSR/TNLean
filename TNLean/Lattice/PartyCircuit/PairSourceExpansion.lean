@@ -57,17 +57,18 @@ theorem eval_expandCombinedPair {p q : P} (hpq : p ≠ q) (U V U' V' : HSpace)
   ext1 x
   induction η using TensorProduct.inductionOn with
   | add a b ha hb =>
-      simp only [Word.eval_comp, Word.eval_source, comp_apply, appendLeft_apply,
+      simp only [Circuit.eval_comp, Word.eval_source, comp_apply, appendLeft_apply,
         TensorProduct.add_tmul, map_add] at ha hb ⊢
       exact congrArg₂ (· + ·) ha hb
   | tmul u v =>
       induction η' using TensorProduct.inductionOn with
       | add a b ha hb =>
-          simp only [Word.eval_comp, Word.eval_source, comp_apply, appendLeft_apply,
+          simp only [Circuit.eval_comp, Word.eval_source, comp_apply, appendLeft_apply,
             TensorProduct.tmul_add, TensorProduct.add_tmul, map_add] at ha hb ⊢
           exact congrArg₂ (· + ·) ha hb
       | tmul u' v' =>
-          simp [expandCombinedPair, Word.eval, appendIso, mergeIso, pairRegroup_tmul,
+          simp [expandCombinedPair, Circuit.eval, GateFamily.eval, SourceGate.eval, appendIso,
+            mergeIso, pairRegroup_tmul,
             TensorProduct.assoc_symm_tmul, TensorProduct.lid_symm_apply,
             LinearIsometryEquiv.symm_lTensor]
 

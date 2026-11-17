@@ -24,6 +24,7 @@ agree with the even-cutoff tree-root windows also when a block length is odd.
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators
+open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 

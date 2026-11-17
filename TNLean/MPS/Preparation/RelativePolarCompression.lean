@@ -34,6 +34,7 @@ recorded in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex` and
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Kronecker InnerProductSpace
+open Kraus (blockTensor)
 
 noncomputable section
 

@@ -75,8 +75,8 @@ theorem isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero :
       have := isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero w (by omega)
       have := isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero v (by omega)
       exact inferInstanceAs (IsEmpty (w.nonprivateLocations ⊕ v.nonprivateLocations))
-  | _, _, .privateMap .., _ => inferInstanceAs (IsEmpty Empty)
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _, h => absurd h one_ne_zero
+  | _, _, OriginalCircuit.privateMap .., _ => inferInstanceAs (IsEmpty Empty)
+  | _, _, Circuit.gate (@OriginalGate.mk _ _ _ _ _ _ _ _ _ _ _), h => absurd h one_ne_zero
   | _, _, .swap .., _ => inferInstanceAs (IsEmpty Empty)
   | _, _, .frame _ w, h => isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero w h
 
@@ -93,8 +93,8 @@ theorem isExpansionBounded_of_nonprivateCount_eq_zero (r : ℕ) (s : ℝ) :
       have h' : w.nonprivateCount + v.nonprivateCount = 0 := h
       exact ⟨isExpansionBounded_of_nonprivateCount_eq_zero r s w (by omega),
         isExpansionBounded_of_nonprivateCount_eq_zero r s v (by omega)⟩
-  | _, _, .privateMap .., _ => trivial
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _, h => absurd h one_ne_zero
+  | _, _, OriginalCircuit.privateMap .., _ => trivial
+  | _, _, Circuit.gate (@OriginalGate.mk _ _ _ _ _ _ _ _ _ _ _), h => absurd h one_ne_zero
   | _, _, .swap .., _ => trivial
   | _, _, .frame _ w, h => isExpansionBounded_of_nonprivateCount_eq_zero r s w h
 
@@ -106,8 +106,8 @@ theorem isMonomialBounded_of_nonprivateCount_eq_zero (K : ℕ) :
       have h' : w.nonprivateCount + v.nonprivateCount = 0 := h
       exact ⟨isMonomialBounded_of_nonprivateCount_eq_zero K w (by omega),
         isMonomialBounded_of_nonprivateCount_eq_zero K v (by omega)⟩
-  | _, _, .privateMap .., _ => trivial
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _, h => absurd h one_ne_zero
+  | _, _, OriginalCircuit.privateMap .., _ => trivial
+  | _, _, Circuit.gate (@OriginalGate.mk _ _ _ _ _ _ _ _ _ _ _), h => absurd h one_ne_zero
   | _, _, .swap .., _ => trivial
   | _, _, .frame _ w, h => isMonomialBounded_of_nonprivateCount_eq_zero K w h
 

@@ -49,6 +49,7 @@ This file proves these three steps.
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Filter Topology
+open Kraus (blockTensor)
 
 
 namespace MPSTensor

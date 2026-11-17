@@ -49,6 +49,8 @@ of the characteristic polynomial. A simple eigenvalue one contributes exactly on
 to every positive trace power. The complementary quotient contributes at most its
 dimension times the corresponding power of a uniform spectral bound.
 -/
+open Kraus (blockTensor)
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true

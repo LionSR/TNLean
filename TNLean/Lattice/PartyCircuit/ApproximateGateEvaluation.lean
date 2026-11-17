@@ -37,7 +37,7 @@ Composition keeps repeated occurrences distinct. -/
   | _, _, .id _ => PUnit
   | _, _, .comp w v => GateMaps w × GateMaps v
   | _, _, .localMap .. => PUnit
-  | _, _, @EffectCircuit.gate _ _ _ _ a b _ _ => Mem a →L[ℂ] Mem b
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ a b _ _) => Mem a →L[ℂ] Mem b
   | _, _, .swap .. => PUnit
   | _, _, .frame _ w => GateMaps w
 
@@ -48,7 +48,7 @@ def evalWithGateMaps : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, .id _, _ => .id ℂ _
   | _, _, .comp w v, G => v.evalWithGateMaps G.2 ∘L w.evalWithGateMaps G.1
   | _, _, .localMap p ha hb A tail, _ => (Word.localMap p ha hb A tail).eval
-  | _, _, @EffectCircuit.gate _ _ _ owner a b _ tail, G =>
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ owner a b _ tail), G =>
       gateMemoryMap owner a b tail G
   | _, _, .swap r s tail, _ => (Word.swap r s tail).eval
   | _, _, .frame r w, G => (w.evalWithGateMaps G).lTensor r.space
@@ -62,7 +62,7 @@ def IsGateApproximation (δ : ℝ) : {a b : Layout P} → (w : EffectCircuit a b
   | _, _, .id _, _ => True
   | _, _, .comp w v, G => w.IsGateApproximation δ G.1 ∧ v.IsGateApproximation δ G.2
   | _, _, .localMap _ _ _ A _, _ => ‖A‖ ≤ 1
-  | _, _, @EffectCircuit.gate _ C _ _ a b L _, G =>
+  | _, _, Circuit.gate (@EffectGate.mk _ C _ _ a b L _), G =>
       Fintype.card C ≠ 1 ∧ (∀ q ∈ L, q.2.IsAllowed) ∧ ‖(G : Mem a →L[ℂ] Mem b)‖ ≤ 1 ∧
         ‖PartyCircuit.gate (toGate L) - (G : Mem a →L[ℂ] Mem b)‖ ≤ δ
   | _, _, .swap .., _ => True
@@ -76,9 +76,11 @@ theorem norm_evalWithGateMaps_le_one {a b : Layout P} (w : EffectCircuit a b)
   induction w with
   | id => exact norm_id_le
   | comp w v ihw ihv => exact norm_comp_le_one (ihv G.2 h.2) (ihw G.1 h.1)
-  | localMap p ha hb A tail => exact Word.norm_eval_le_one (.localMap p ha hb A tail) h
-  | gate owner L tail => exact (norm_gateMemoryMap_le _ _ _ _ G).trans h.2.2.1
-  | swap r s tail => exact Word.norm_eval_le_one (.swap r s tail) trivial
+  | localMap p ha hb A tail =>
+      exact Circuit.norm_eval_le_one (EffectCircuit.localMap p ha hb A tail) h
+  | gate owner L tail =>
+      exact (norm_gateMemoryMap_le _ _ _ _ G).trans h.2.2.1
+  | swap r s tail => exact Circuit.norm_eval_le_one (.swap r s tail) trivial
   | frame r w ih => exact (norm_lTensor_le _ _).trans (ih G h)
 
 end TNLean.Lattice.PartyCircuit.EffectCircuit

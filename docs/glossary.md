@@ -344,7 +344,7 @@ out.
   `Papers/2011.12127/TN-Review-main.tex:298-300`.
 - **Sanctioned bridges:** `Kraus.isNBlkInjective_one_of_isInjective`,
   `Kraus.IsInjective.isNormal`, and
-  `MPSTensor.isNBlkInjective_iff_blockTensor_isInjective`.
+  `Kraus.isNBlkInjective_iff_blockTensor_isInjective`.
 - **Caveat:** this is one-site injectivity. A tensor can fail this predicate and
   satisfy `Kraus.IsNBlkInjective A N` for a larger `N`.
 
@@ -359,8 +359,8 @@ out.
   eventual full Kraus rank; arXiv:2011.12127 §IV.A, normal tensors becoming
   injective after blocking.
 - **Sanctioned bridge:**
-  `MPSTensor.isNBlkInjective_iff_blockTensor_isInjective` in
-  `TNLean/MPS/Core/Blocking.lean`.
+  `Kraus.isNBlkInjective_iff_blockTensor_isInjective` in
+  `QICLean/Kraus/Blocking.lean`.
 - **Caveat:** no positivity condition on `N` is built into this predicate;
   `Kraus.IsNormal` explicitly requires a positive witness.
 

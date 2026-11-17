@@ -25,6 +25,8 @@ needed for the review's general bond-dimension bound.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim decodeBlock wordOfBlock decodeBlockEquiv
+  decodeBlock_decodeBlockEquiv_symm blockTensor flattenBlockedWord_cons evalWord_blockTensor)
 
 namespace MPSTensor
 

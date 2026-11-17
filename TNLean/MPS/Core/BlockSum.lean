@@ -23,6 +23,7 @@ These identities do not assume orthogonality of physical sector states.
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

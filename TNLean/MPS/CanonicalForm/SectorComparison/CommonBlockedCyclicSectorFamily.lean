@@ -20,6 +20,7 @@ not independent results of 1606.00608 or 2011.12127.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Kraus (blockPhysDim blockPhysDim_eq_pow wordOfBlock blockTensor flattenBlockedWord)
 
 namespace MPSTensor
 

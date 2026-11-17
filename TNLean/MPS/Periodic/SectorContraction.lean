@@ -60,6 +60,8 @@ right inverse.
 
 open scoped Matrix BigOperators
 open Matrix
+open Kraus (blockPhysDim wordOfBlock length_wordOfBlock decodeBlockEquiv decodeBlockEquiv_apply
+  blockTensor flattenBlockedWord flattenBlockedWord_nil flattenBlockedWord_cons)
 
 namespace MPSTensor
 

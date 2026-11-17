@@ -35,6 +35,7 @@ overlap estimate, not a claim that the optimal physical circuit depth has been h
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace
+open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSPreparation
 

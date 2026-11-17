@@ -28,7 +28,7 @@ namespace Lattice.PartyCircuit
 private theorem eval_localEndpoint_tmul (r : Reg P)
     (A : r.space →L[ℂ] r.space) (tail : Layout P) (x : r.space) (y : Mem tail) :
     (Word.localEndpoint r A tail).eval (x ⊗ₜ[ℂ] y) = A x ⊗ₜ[ℂ] y := by
-  simp [Word.localEndpoint, Word.eval, appendIso, isoL_apply,
+  simp [Word.localEndpoint, Circuit.eval, appendIso, isoL_apply,
     LinearIsometryEquiv.symm_lTensor]
 
 end Lattice.PartyCircuit
@@ -56,10 +56,10 @@ theorem eval_endpointWord_slotVector_tmul (R : SourceInventory P)
   induction R with
   | nil => rfl
   | cons r R ih =>
-      simp only [endpointWord, Word.eval_castLayouts, comp_apply, isoL_apply,
+      simp only [endpointWord, Circuit.eval_castLayouts, comp_apply, isoL_apply,
         slotVector_cons_eq, LinearIsometryEquiv.symm_apply_apply]
       apply congrArg (Layout.memCongr (slotLayout_cons r R U V).symm)
-      simp only [assocL_tmul, Word.eval_comp, comp_apply, Word.eval_frame]
+      simp only [assocL_tmul, Circuit.eval_comp, comp_apply, Circuit.eval_frame]
       rw [eval_localEndpoint_tmul ⟨r.left, U 0⟩ (A 0) _ (u 0) _, lTensor_tmul,
         comp_apply, eval_localEndpoint_tmul ⟨r.right, V 0⟩ (B 0) _ (v 0) _,
         lTensor_tmul, ih]

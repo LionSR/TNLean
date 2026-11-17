@@ -41,7 +41,7 @@ chi space of `χ_{α,β,γ}`.
 Source: arXiv:1606.00608, equation `Ualphabeta`, lines 986--993, specialized
 by the length-independence observation at lines 995--1010. -/
 noncomputable def blockedUnweightedDirectSumLetter
-    (L : ℕ) (α β : Λ) (I J : Fin (MPSTensor.blockPhysDim p L)) :
+    (L : ℕ) (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     Matrix ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ)))
       ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ :=
   Matrix.blockDiagonal' fun γ =>
@@ -59,7 +59,7 @@ theorem blocked_fusion_of_lengthIndependent
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
-    (α β : Λ) (I J : Fin (MPSTensor.blockPhysDim p L)) :
+    (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     Fam.fusionIsometry α β *
           mulTensor (blockTensor (Fam.tensor α) L)
             (blockTensor (Fam.tensor β) L) I J *
@@ -119,7 +119,7 @@ theorem fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
-    (α β : Λ) (I J : Fin (MPSTensor.blockPhysDim p L)) :
+    (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     Fam.fusionIsometry α β *
         mulTensor (blockTensor (Fam.tensor α) L)
           (blockTensor (Fam.tensor β) L) I J =
@@ -143,7 +143,7 @@ theorem blocked_mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
-    (α β : Λ) (I J : Fin (MPSTensor.blockPhysDim p L)) :
+    (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     mulTensor (blockTensor (Fam.tensor α) L)
           (blockTensor (Fam.tensor β) L) I J *
         (Fam.fusionIsometry α β)ᴴ =
@@ -169,7 +169,7 @@ theorem blocked_mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {L : ℕ} (hL : 0 < L)
-    (α β : Λ) (I J : Fin (MPSTensor.blockPhysDim p L)) :
+    (α β : Λ) (I J : Fin (Kraus.blockPhysDim p L)) :
     mulTensor (blockTensor (Fam.tensor α) L)
         (blockTensor (Fam.tensor β) L) I J =
       (Fam.fusionIsometry α β)ᴴ *
@@ -215,7 +215,7 @@ theorem exists_positive_block_with_injective_fusion
         (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) 1 ∧
       (∀ γ, Kraus.IsInjective
         (blockTensor (Fam.tensor γ) L).toMPSTensor) ∧
-      ∀ (α β : Fin g) (I J : Fin (MPSTensor.blockPhysDim p L)),
+      ∀ (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L)),
         (Fam.fusionIsometry α β *
               mulTensor (blockTensor (Fam.tensor α) L)
                 (blockTensor (Fam.tensor β) L) I J *

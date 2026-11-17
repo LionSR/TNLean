@@ -85,6 +85,7 @@ file replace it by the bound `λ₂` on the eigenvalues of the mixed transfer ma
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

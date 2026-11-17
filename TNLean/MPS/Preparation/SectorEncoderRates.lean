@@ -22,6 +22,7 @@ or an external reference.
 
 open Matrix QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

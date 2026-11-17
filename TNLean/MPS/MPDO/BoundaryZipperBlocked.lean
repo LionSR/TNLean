@@ -30,6 +30,7 @@ decomposition. See `docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockTensor)
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
@@ -76,7 +77,7 @@ biorthogonal family. The multiplicities and both rectangular maps are
 unchanged. Source: GLM23 Appendix A and arXiv:1511.08090, lines 427--431. -/
 @[reducible] noncomputable def ofBiorthogonalBlocked :
     CompleteZipperFusionFamily (Fin g)
-      (MPSTensor.blockPhysDim p (jointBlockLength T hT hD hne)) :=
+      (Kraus.blockPhysDim p (jointBlockLength T hT hD hne)) :=
   let hspec := (exists_blockTensor_isMPOBlockLeftInverse T hT hD hne).choose_spec
   ofBiorthogonal hD hspec.2.1 V W (fun a b ↦ (hVW a b).blockMPO hspec.1)
     hspec.2.2.choose hspec.2.2.choose_spec
@@ -122,7 +123,7 @@ theorem IsBoundaryClosed.exists_completeZipperFusionFamily
       (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b)).toMPSTensor
         (fun q : (c : Fin g) × Fin (N a b c) ↦ (A q.1).toMPSTensor)
         (fun q ↦ V a b q.1 q.2) (fun q ↦ W a b q.1 q.2)) ∧
-      ∃ L : ℕ, 0 < L ∧ ∃ F : CompleteZipperFusionFamily (Fin g) (MPSTensor.blockPhysDim p L),
+      ∃ L : ℕ, 0 < L ∧ ∃ F : CompleteZipperFusionFamily (Fin g) (Kraus.blockPhysDim p L),
         F.bondDim = D ∧ F.fusionMultiplicity = N ∧
         HEq F.tensor (fun c ↦ blockTensor (A c) L) ∧
         HEq F.fusionSynthesis

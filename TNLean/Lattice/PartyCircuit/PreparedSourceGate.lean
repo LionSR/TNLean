@@ -84,7 +84,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267. -/
 theorem branchWord_isAllowed (G : PreparedSourceGate c a b) (ξ : ι) :
     (G.branchWord ξ).IsAllowed := by
   refine ⟨?_, G.remaining_allowed ξ⟩
-  rw [SourceInventory.prepareSlots, Word.isAllowed_castLayouts,
+  rw [SourceInventory.prepareSlots, Circuit.isAllowed_castLayouts,
     SourceInventory.isAllowed_prepare_iff]
   exact SourceInventory.isNormalized_ofSlots _ _ _ _ (G.vector_norm ξ)
 
@@ -145,6 +145,6 @@ theorem Word.exists_preparedSourceGate {P ι : Type} [Finite P] [Fintype ι]
       remaining := z, remaining_allowed := hz, remaining_sources := hzs,
       contraction := by simpa only [← he] using hG }
   refine ⟨G, ?_⟩
-  simp only [PreparedSourceGate.eval, PreparedSourceGate.branchWord, Word.eval_comp, G, ← he]
+  simp only [PreparedSourceGate.eval, PreparedSourceGate.branchWord, Circuit.eval_comp, G, ← he]
 
 end TNLean.Lattice.PartyCircuit

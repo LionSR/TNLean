@@ -76,6 +76,7 @@ length with nonzero periodic state, using uniformly bounded physical leaves chos
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 
