@@ -201,7 +201,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
   have hunit : ∀ j, IsUnit (K j).det := fun j ↦
     (Matrix.isUnit_iff_isUnit_det _).mp (((hx j).1.add_smul_one_posDef hb).rpow _).isUnit
   have ha₁ : ∀ j, a j ≤ 1 := fun _ ↦
-    (div_nat_le_self_of_nonnneg hκ.le m).trans hκ₁
+    (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
   have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
     (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ψᵤ x
