@@ -864,17 +864,17 @@ finite product of samples; the same estimate applies.
     and $0<\xi\le1$, and fix an arbitrary global subspace
     $G\subseteq(\mathbb C^q)^{\otimes L}$. Set
     \begin{align}
-        A&=1+\log r_G+\log D+\log(1/\beta),\nonumber\\
-        s&=\lceil4096r_GA\rceil.
+        A & =1+\log r_G+\log D+\log(1/\beta),\nonumber \\
+        s & =\lceil4096r_GA\rceil.
         \label{eq:sampled_tree_sample_size}
     \end{align}
     At each interval $J=[p,r)\subseteq[0,L)$ with $r-p>w$, fix
     $N_J\le D^2$ operators $F_{J,j}$ on its local space, independently of
     the child spaces. Let $a,M\ge0$ be integers satisfying
     \begin{align}
-        M^2&\le D^{12}s^6,\nonumber\\
-        D^{2a}s&\le M,\nonumber\\
-        q^w&\le M.
+        M^2     & \le D^{12}s^6,\nonumber \\
+        D^{2a}s & \le M,\nonumber         \\
+        q^w     & \le M.
         \label{eq:sampled_tree_count_hypotheses}
     \end{align}
     For every split $p\le k\le r$ and every pair of $3/200$-viable child
@@ -883,11 +883,11 @@ finite product of samples; the same estimate applies.
     is a set $\mathcal E\subseteq U(Q)$ such that its complement has Haar
     measure at most $f(Q)$, where
     \begin{align}
-        f(Q)&=\begin{cases}
-            0,&Q\le s,\\
-            \left(1+\dfrac{2}{\sqrt{3s/(32Q)}}\right)^{2r_G}
-            Qe^{-s/16},&Q>s,
-        \end{cases}
+        f(Q) & =\begin{cases}
+                    0,          & Q\le s, \\
+                    \left(1+\dfrac{2}{\sqrt{3s/(32Q)}}\right)^{2r_G}
+                    Qe^{-s/16}, & Q>s,
+                \end{cases}
         \label{eq:sampled_tree_failure}
     \end{align}
     and every $U\in\mathcal E$ gives a $3/200$-viable space after sampling
@@ -915,7 +915,7 @@ finite product of samples; the same estimate applies.
     good set contains a unitary. Choose one for each admissible input.
     Before trimming, the word image has dimension at most
     \begin{align}
-        N_J^a\min(s,Q)&\le D^{2a}s\le M.
+        N_J^a\min(s,Q) & \le D^{2a}s\le M.
         \label{eq:sampled_tree_word_count}
     \end{align}
     Lemma~\ref{lem:interval_recorded_generator_bounds} gives the retained
