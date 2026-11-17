@@ -1,11 +1,11 @@
-# QICLean pin c9d54bbc: the Dynamics deletions and the follow-ups
+# QICLean pin 49b9aa93: the Dynamics deletions and the follow-ups
 
 Date: 2026-11-17.
 
 This audit records the TNLean side of moving the QICLean pin from
-`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `c9d54bbc4def5929cbfe2a9334585366644f89bd`, past QICLean's
+`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `49b9aa933615d4a9ce663f94d2556a93ce7b76ea`, past QICLean's
 Dynamics, Hamiltonian and lattice-geometry layers (LionSR/QICLean#1063, #1064,
-#1067, #1079, #1082, #1084, #1085, #1086, #1087 and #1088; issue LionSR/QICLean#1062). Tracker:
+#1067, #1079, #1082, #1084, #1085, #1086, #1087, #1088 and #1095; issue LionSR/QICLean#1062). Tracker:
 #10718; the rule is the section "No dual systems" of
 `docs/many_body_circuit_architecture.md`. The toolchain, Mathlib and every other
 shared package do not move.
@@ -46,7 +46,10 @@ positive local dimension. From LionSR/QICLean#1086, `Matrix.l2_opNorm_kronecker_
 statements, and `Matrix.l2_opNorm_one_kronecker_rect_le` is QICLean's
 `Matrix.l2_opNorm_one_kronecker_le`, generalized to rectangular matrices; its
 eight consumers use the QICLean name. `Matrix.l2_opNorm_kronecker_le_one` has no
-QICLean counterpart and stays.
+QICLean counterpart and stays. From LionSR/QICLean#1095,
+`Matrix.IsHermitian.posSemidef_sub_smul_one_of_le_eigenvalues`
+(`Algebra/KroneckerLeastEigenvalue`) is QICLean's, moved unchanged to
+`ManyBody/Hamiltonian/GroundSpace`.
 
 The QICLean statements take an interaction `Φ : ManyBody.Interaction X T` and
 regions `Finset V`. The TNLean consumers keep their statements: each builds
@@ -78,7 +81,7 @@ Module counts are of `origin/main` at `868d2c9`, by word match of the
 identifiers; for the generic words `Edge` and `interval`, which also occur in
 prose and in unrelated names, they are the counts of the TNLean declarations'
 uses from the tracker. Each follow-up recounts. Order: F1 first; F8 needs F4–F7
-and F9.
+and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 
 | | TNLean notion | QICLean replacement | Modules |
 |---|---|---|---|
@@ -95,6 +98,7 @@ and F9.
 | F11 | `Matrix.IsGappedGroundState` | `ManyBody.IsGapped` with `groundSpace = span {Ω}`, through `ManyBody.isGapped_and_groundSpace_eq_span_iff` | 186 |
 | F12 | `QuantumCircuit.siteExpectation`; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral` (graph, chain and domain statements) and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
 | F13 | `Entropy.crossingTerms` (QICLean's temporary export) | `ManyBody.crossingTerms` | 35 |
+| F14 | `QuantumCircuit.Layer`, the ring abbreviation `BondLayer d ringBond` (`Circuit/LocalCircuit`), which collides with the `QuantumCircuit.Layer` of QICLean's circuit core (step 3C.1) | renamed `QuantumCircuit.RingLayer`, with no alias, before the pin move that brings in the core; the modules that open `QuantumCircuit` are checked for unqualified `Circuit`, `Geometry`, `GateFamily`, `Interpretation` and `KrausGate` | 13 |
 
 After F12, move the general Lieb–Robinson statements (i) and (ii) to QICLean `ManyBody/Dynamics` over `regionExpectation` at the next pin: `TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_graphDistance_inf` and `TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two` in `MPS/AreaLaw/LiebRobinson.lean`, with the chain and domain corollaries left in TNLean.
 
