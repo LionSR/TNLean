@@ -15,7 +15,7 @@ The blocking length and depth constants are chosen before the chain length and a
 There is no supplied canonical form, period, transfer gap or injectivity assumption.
 
 **Scope restriction (grouped sites):** circuits act on sites of dimension `d ^ p`.
-The target is `blockTensor A p` on `M` grouped sites. Thus the represented physical lengths are `p * M`.
+The target is `blockTensor A p` on `M` grouped sites, representing physical lengths `p * M`.
 Transport to circuits on the original sites and lengths not divisible by `p` remains open;
 these results do not close the unrestricted source theorem. See
 `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
