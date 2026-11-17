@@ -27,6 +27,8 @@ The older reference to Part IIb, Section 7, does not locate this argument.
 
 open Matrix TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.MPS.AreaLaw
 
 private theorem trace_reindexed_complement_mul {m n : Type*}

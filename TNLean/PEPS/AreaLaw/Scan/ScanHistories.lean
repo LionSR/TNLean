@@ -49,6 +49,8 @@ open Filter TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators symmDiff
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 universe u
@@ -213,7 +215,7 @@ omit [Fintype I] [LinearOrder I] in
 /-- A splitting graph ball lies in `A`, once its middle witness lies in the
 compact collar. -/
 private theorem ball_subset_of_middle {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
@@ -242,7 +244,7 @@ open Classical in
 scales satisfy for large `n` and from the bad-history bound `hbad`, which is the
 first assertion of item 4 (`08-scanner.tex`, lines 195–347). -/
 theorem historyProperties_of_scales {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L μ : ℕ} {p : ℝ}
     (hn : 2 ≤ S.n) (hr : 2 * S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
@@ -349,7 +351,7 @@ theorem eventually_historyProperties {ell kappa mu Cr C1 Ct : ℝ} (hell : 0 < e
       S.K = ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ kappa⌉₊ → S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,

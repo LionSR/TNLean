@@ -35,6 +35,8 @@ open Matrix
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open _root_.TNLean.PEPS.AreaLaw.Geometry

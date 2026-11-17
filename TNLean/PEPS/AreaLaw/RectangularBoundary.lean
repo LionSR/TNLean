@@ -26,6 +26,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Native sites in a cut adjacent to its complement. Source: Corollary 1.2. -/
@@ -54,7 +56,7 @@ theorem card_edgeBoundary_rectangular {width height : ℕ}
   classical
   let σ := rectangleSiteEquiv width height
   have hadj : ∀ a b : SquareLatticeVertex width height,
-      (domainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
+      (planeDomainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph width height).Adj a b :=
     fun a b ↦ (rectangleGraphIso width height).map_rel_iff
   have hmem : ∀ a : SquareLatticeVertex width height,
@@ -103,7 +105,7 @@ theorem card_edgeBoundary_rectangular {width height : ℕ}
 Source: Corollary 1.2, definition of `Z_A`. -/
 theorem mem_endpointBoundary_iff_adj {Λ : Finset (ℤ × ℤ)}
     (A : Finset (Site Λ)) (x : Site Λ) :
-    x ∈ endpointBoundary Λ A ↔ ∃ y, (domainGraph Λ).Adj x y ∧
+    x ∈ endpointBoundary Λ A ↔ ∃ y, (planeDomainGraph Λ).Adj x y ∧
       ((x ∈ A ∧ y ∉ A) ∨ (y ∈ A ∧ x ∉ A)) := by
   classical
   simp only [endpointBoundary, Finset.mem_biUnion, Sym2.mem_toFinset,
@@ -124,7 +126,7 @@ theorem map_rectangleInnerBoundary {width height : ℕ}
   classical
   let σ := rectangleSiteEquiv width height
   have hadj (a b : SquareLatticeVertex width height) :
-      (domainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
+      (planeDomainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph width height).Adj a b :=
     (rectangleGraphIso width height).map_rel_iff
   have hmem (a : SquareLatticeVertex width height) :
@@ -153,7 +155,7 @@ theorem map_rectangleEndpointBoundary {width height : ℕ}
   classical
   let σ := rectangleSiteEquiv width height
   have hadj (a b : SquareLatticeVertex width height) :
-      (domainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
+      (planeDomainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph width height).Adj a b :=
     (rectangleGraphIso width height).map_rel_iff
   have hmem (a : SquareLatticeVertex width height) :

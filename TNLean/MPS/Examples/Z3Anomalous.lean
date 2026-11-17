@@ -25,3 +25,4 @@ import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUUU
 import TNLean.MPS.Examples.Z3Anomalous.Z3ClockAnomalyClass
 import TNLean.MPS.Examples.Z3Anomalous.Z3ClockDefect
 import TNLean.MPS.Examples.Z3Anomalous.Z3ClockTensor
+import TNLean.MPS.Examples.Z3Anomalous.Z3FusionAlgebra

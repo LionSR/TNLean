@@ -21,6 +21,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
@@ -143,7 +145,7 @@ theorem split_interval_band_unique {g g' r r' k a b : ℕ} {z : ℤ}
 anchor interval. Ambient row counts and physical cut clearance discharge the
 geometric hypotheses; goodness is not required. -/
 theorem old_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hn : 0 < S.n) (hL : 8 * S.K * S.m ≤ L)
@@ -167,7 +169,7 @@ theorem old_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T
 /-- The same geometric interval holds for every completed actual history,
 including the new leaves after arbitrary charges. -/
 theorem state_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hn : 0 < S.n) (hL : 8 * S.K * S.m ≤ L)

@@ -12,7 +12,7 @@ state the two models separately following
         TNLean.Lattice.Site,
         TNLean.Lattice.Configuration,
         TNLean.Lattice.StateSpace,
-        TNLean.Lattice.domainGraph,
+        ManyBody.planeDomainGraph,
         TNLean.Lattice.graphNeighborhood,
         TNLean.Lattice.configurationSplit,
         TNLean.Lattice.card_configuration,
@@ -45,8 +45,8 @@ state the two models separately following
 \begin{definition}[Finite-range interactions and boundary]
     \label{def:area_law_hamiltonian}
     \lean{
-        TNLean.Lattice.IsAdmissibleSupport,
-        TNLean.Lattice.AdmissibleSupport,
+        ManyBody.IsAdmissibleSupport,
+        ManyBody.AdmissibleSupport,
         TNLean.Lattice.LocalHamiltonian,
         TNLean.Lattice.LocalHamiltonian.operator,
         TNLean.Lattice.LocalHamiltonian.operator_isHermitian,
@@ -78,10 +78,10 @@ state the two models separately following
 \begin{lemma}[Interaction range and rectangular coordinates]
     \label{thm:area_law_domain_identifications}
     \lean{
-        TNLean.Lattice.exists_walk_length_le_iff_edist_le,
-        TNLean.Lattice.isAdmissibleSupport_zero_iff,
-        TNLean.Lattice.isAdmissibleSupport_singleton,
-        TNLean.Lattice.isAdmissibleSupport_pair_of_adj,
+        ManyBody.exists_walk_length_le_iff_edist_le,
+        ManyBody.isAdmissibleSupport_zero_iff,
+        ManyBody.isAdmissibleSupport_singleton,
+        ManyBody.isAdmissibleSupport_pair_of_adj,
         TNLean.PEPS.AreaLaw.rectangleEmbedding,
         TNLean.PEPS.AreaLaw.rectangleEmbedding_injective,
         TNLean.PEPS.AreaLaw.rectangularDomain,

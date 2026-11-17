@@ -52,6 +52,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TensorPower.ReplicaTransport
 
 variable {V : Type*} [Fintype V] [DecidableEq V] (n : V → ℕ) [∀ v, NeZero (n v)]
@@ -172,7 +174,7 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
         ⟨Sum.inl, Sum.inl_injective⟩)
     (a : ℝ) (pre : (k : ℕ) → Config k (fun v => Fin (dims v)) → ℂ)
     (hSn : S.n = N) (hSm : S.m = X.m N) (hSK : S.K = X.K N) (hSD : S.D = X.D N)
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hN : 2 ≤ N) (hr : 2 * S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
@@ -440,7 +442,7 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
         S.n = N → S.m = X.m N → S.K = X.K N → S.D = X.D N →
         S.r₀ = ⌈Ctr * Real.log N ^ 2⌉₊ → S.C₁ = C₁ →
         (T.card : ℝ) ≤ CT * (N : ℝ) ^ 2 →
-        S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →

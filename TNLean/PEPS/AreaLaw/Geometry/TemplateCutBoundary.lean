@@ -24,6 +24,8 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Restricting a cut to a set avoiding its cut endpoints creates only ambient
@@ -45,7 +47,7 @@ theorem edgeBoundary_filter_image_subset_ambientBoundary
     exact Finset.disjoint_left.mp hU hpU
       (mem_boundaryEndpoints_of_mem_edgeBoundary hcut (by simp))
   have hqU : q.1 ∉ U := fun h ↦ hq (Finset.mem_filter.mpr ⟨hqA, h⟩)
-  have hadj : (domainGraph Λ).Adj p q := by
+  have hadj : (planeDomainGraph Λ).Adj p q := by
     simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using hedge
   exact mem_ambientBoundary_iff.mpr
     ⟨p.1, hpU, q.1, hqU, mem_latticeNeighbors_iff.mpr hadj, rfl⟩

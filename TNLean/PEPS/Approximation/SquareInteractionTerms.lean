@@ -28,7 +28,7 @@ theorem SquareHamiltonian.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
     ∃ T : (Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
-        Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L))) →
+        Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L))) →
         Matrix (Lattice.Configuration (AreaLaw.rectangularDomain L L) q)
           (Lattice.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
       (∀ i, Entropy.IsSupportedOn

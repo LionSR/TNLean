@@ -24,6 +24,8 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 open scoped BigOperators
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
@@ -61,7 +63,7 @@ variable {Λ : Finset (ℤ × ℤ)} [siteOrder : LinearOrder (Site Λ)]
 
 /-- The physical on-site and nearest-neighbor supports, with each edge counted once. -/
 noncomputable def nearestNeighborSupport :
-    Site Λ ⊕ Edge (domainGraph Λ) → Finset (Site Λ) := by
+    Site Λ ⊕ Edge (planeDomainGraph Λ) → Finset (Site Λ) := by
   classical
   exact Sum.elim (fun v ↦ {v}) (fun e ↦ {e.1.1, e.1.2})
 
@@ -78,7 +80,7 @@ theorem inl_not_mem_crossingTerms (A : Finset (Site Λ))
 
 /-- Crossing of the edge support is precisely membership in the unordered boundary. -/
 theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
-    (e : Edge (domainGraph Λ)) :
+    (e : Edge (planeDomainGraph Λ)) :
     Sum.inr e ∈ Entropy.crossingTerms nearestNeighborSupport A ↔
       s(e.1.1, e.1.2) ∈ edgeBoundary Λ A := by
   classical
@@ -105,7 +107,7 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
 
 /-- Every crossing term has one inside site, including in the presence of on-site terms. -/
 theorem card_nearestNeighbor_insideConfig (q : ℕ)
-    (A : Finset (Site Λ)) {i : Site Λ ⊕ Edge (domainGraph Λ)}
+    (A : Finset (Site Λ)) {i : Site Λ ⊕ Edge (planeDomainGraph Λ)}
     (hi : i ∈ Entropy.crossingTerms nearestNeighborSupport A) :
     Fintype.card (↥(nearestNeighborSupport i ∩ A) → Fin q) = q := by
   classical
@@ -121,7 +123,7 @@ theorem card_crossingTerms_nearestNeighbor
     (A : Finset (Site Λ)) :
     (Entropy.crossingTerms nearestNeighborSupport A).card = (edgeBoundary Λ A).card := by
   classical
-  let f : Site Λ ⊕ Edge (domainGraph Λ) → Sym2 (Site Λ) :=
+  let f : Site Λ ⊕ Edge (planeDomainGraph Λ) → Sym2 (Site Λ) :=
     Sum.elim (fun v ↦ s(v, v)) (fun e ↦ s(e.1.1, e.1.2))
   apply Finset.card_bij (fun i _ ↦ f i)
   · intro i hi
@@ -145,7 +147,7 @@ theorem card_crossingTerms_nearestNeighbor
           exact False.elim (@lt_asymm (Site Λ) siteOrder.toPreorder _ _ d.2.1 he)
   · intro b hb
     obtain ⟨x, y⟩ := b
-    have hxy : (domainGraph Λ).Adj x y :=
+    have hxy : (planeDomainGraph Λ).Adj x y :=
       SimpleGraph.mem_edgeFinset.mp (Finset.mem_filter.mp hb).1
     let e := Edge.ofAdj hxy
     have he : s(e.1.1, e.1.2) = s(x, y) := by

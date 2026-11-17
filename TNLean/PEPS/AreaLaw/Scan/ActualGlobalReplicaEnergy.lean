@@ -26,6 +26,8 @@ open TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 variable {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]

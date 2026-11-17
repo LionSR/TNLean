@@ -64,6 +64,8 @@ open Matrix MeasureTheory SpectralFilter QuantumCircuit
 open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport IsAdmissibleSupport graphBall planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The square root of `(n^K)⁻¹` is `n^(-K/2)`. -/
@@ -445,7 +447,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ := fun u =>
     contractionWord (fun i : {i // Pr i} => k i) (PoissonWord.partitionWords Pr u).1.1
       (PoissonWord.partitionWords Pr u).1.2
-  let kr := fun i : {i // Pr i} => ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ)
+  let kr := fun i : {i // Pr i} => ManyBody.regionExpectation (graphBall (planeDomainGraph Λ)
     (a i) r)
       (k i)
   let Lt : PoissonWord.Word (AdmissibleSupport Λ R) →
