@@ -51,12 +51,13 @@ noncomputable def gateConjugationMatrix (u : Matrix (Fin ℓ × Fin r) (Fin d ×
     Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ :=
   u.map (starRingEnd ℂ) * uᴴ
 
-private theorem gateConjugationMatrix_eq {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+theorem gateConjugationMatrix_eq {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     (hu : u.IsCoisometry) {x : Matrix (Fin ℓ) (Fin ℓ) ℂ} {y : Matrix (Fin r) (Fin r) ℂ}
     (h : u.map (starRingEnd ℂ) = (x ⊗ₖ y) * u) : gateConjugationMatrix u = x ⊗ₖ y := by
   rw [gateConjugationMatrix, h, Matrix.mul_assoc, hu, Matrix.mul_one]
 
-private theorem kronecker_ne_zero [NeZero ℓ] [NeZero r] {x : Matrix (Fin ℓ) (Fin ℓ) ℂ}
+theorem kronecker_ne_zero_of_mem_unitaryGroup [NeZero ℓ] [NeZero r]
+    {x : Matrix (Fin ℓ) (Fin ℓ) ℂ}
     {y : Matrix (Fin r) (Fin r) ℂ} (hx : x ∈ Matrix.unitaryGroup (Fin ℓ) ℂ)
     (hy : y ∈ Matrix.unitaryGroup (Fin r) ℂ) : x ⊗ₖ y ≠ 0 := by
   intro h
@@ -89,7 +90,7 @@ theorem gateConjugationMatrix_ne_zero [NeZero ℓ] [NeZero r]
     (hu : u.IsCoisometry) (h : IsConjugationCaseI u v ∨ IsConjugationCaseII u v) :
     gateConjugationMatrix u ≠ 0 := by
   rcases h with ⟨x, y, hx, hy, -, -, hcu, -⟩ | ⟨x, y, hx, hy, -, -, hcu, -⟩ <;>
-    rw [gateConjugationMatrix_eq hu hcu] <;> exact kronecker_ne_zero hx hy
+    rw [gateConjugationMatrix_eq hu hcu] <;> exact kronecker_ne_zero_of_mem_unitaryGroup hx hy
 
 /-- **The two cases of `corconj` exclude each other.** Source: arXiv:1703.09188,
 Proposition `corconj`, lines 1098--1120: `x ⊗ y = conj(u) u†` fixes `x` up to a
