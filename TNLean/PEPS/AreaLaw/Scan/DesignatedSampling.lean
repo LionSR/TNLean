@@ -68,8 +68,8 @@ theorem designatedSupport_eq_ball_of_incidence [Finite I] (σ : PhysicalPartitio
       y, (Finset.mem_inter.mp hy).1, ?_⟩
     have hs := (Finset.mem_filter.mp (Finset.mem_inter.mp hy).2).2
     simp [middle, hs]
-  simpa only [QuantumCircuit.graphBall, ball] using
-    (truncationRadius_eq_of_mem_crossingLabels hsub hcross).2.2
+  exact (truncationRadius_eq_of_mem_crossingLabels hsub hcross).2.2.trans
+    (Finset.ext fun _ ↦ by simp [ball, ManyBody.mem_graphBall])
 
 /-- Splitting designated supports, including the variable-radius truncation case,
 are exactly the base-radius balls that the actual charge lottery selects. -/

@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Circuit.EntropySupport
-import TNLean.Circuit.LiebRobinson.GraphLocalization
+import TNLean.Circuit.SiteExpectationGraphLocalization
 
 /-!
 # Lieb–Robinson estimates on a contiguous chain
@@ -67,25 +67,22 @@ theorem norm_heisenberg_commutator_le_chainDistance
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : Fin L)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
     let δ : ℕ∞ := S.inf (fun x ↦ (SimpleGraph.pathGraph L).edist x y)
-    ‖QuantumCircuit.heisenbergEvolution (∑ k, h k) t A * B -
-        B * QuantumCircuit.heisenbergEvolution (∑ k, h k) t A‖ ≤
+    ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
+        B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) := by
   classical
   let a : κ → Fin L := fun k ↦ Classical.choose (X k).2.1
   have ha : ∀ k, a k ∈ (X k).1 := fun k ↦ Classical.choose_spec (X k).2.1
+  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
+  have hΦ : Φ.hamiltonian = ∑ k, h k := rfl
   have hBound (n : ℕ)
       (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (SimpleGraph.pathGraph L).edist x y) :=
-    QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset
-      (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) a ha h hHerm
-      (fun k ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hSupport k))
-      R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
-      (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget S
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) y
-      (by simpa only [Finset.coe_singleton] using
-        QuantumCircuit.mem_supportedOperators_of_isSupportedOn hB)
-      1 (by norm_num) n hn t
+    ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
+      (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
+      (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget S hA y hB 1 (by norm_num) n hn t
+  simp only [hΦ] at hBound
   dsimp only
   set δ := S.inf (fun x ↦ (SimpleGraph.pathGraph L).edist x y)
   by_cases hS : S = ∅
@@ -128,10 +125,10 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
-    ‖QuantumCircuit.heisenbergEvolution (∑ k, h k) t A -
+    ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         QuantumCircuit.siteExpectation q
           (chainNeighborhood S ℓ)
-          (QuantumCircuit.heisenbergEvolution (∑ k, h k) t A)‖ ≤
+          (ManyBody.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - ℓ / 2) := by
@@ -145,17 +142,15 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     intro x d
     simp only [pow_zero, mul_one]
     exact_mod_cast SimpleGraph.pathGraph_card_sphere_le_two L x d
+  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
   have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
-    (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) a ha h hHerm
-    (fun k ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hSupport k))
-    R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
-    (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget 2 0 hGrowth S
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) ⌊ℓ⌋₊ t
+    (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
+    (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   have hN : (S.biUnion fun x ↦
-      QuantumCircuit.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =
+      ManyBody.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =
       chainNeighborhood S ℓ := by
     ext y
-    simp only [Finset.mem_biUnion, QuantumCircuit.mem_graphBall,
+    simp only [Finset.mem_biUnion, ManyBody.mem_graphBall,
       SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast, Nat.le_floor_iff hℓ,
       mem_chainNeighborhood]
   rw [hN] at hGraph

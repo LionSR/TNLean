@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SupportedGaussianIntegral
+import QICLean.ManyBody.Dynamics.SupportedGaussianIntegral
 import TNLean.PEPS.AreaLaw.RegionOperatorLocalization
 
 /-!
@@ -44,8 +44,9 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
     {J C v c : ℝ} (hC : 0 ≤ C) (hv : 0 ≤ v) {Λ : Finset (ℤ × ℤ)} (g : LocalHamiltonian Λ q R J)
     (hlocal : ∀ (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
-      ‖heisenbergEvolution g.operator t A -
-          siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution g.operator t A)‖ ≤
+      ‖ManyBody.heisenbergEvolution g.operator t A -
+          siteExpectation q (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution g.operator t
+              A)‖ ≤
         ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)))
     (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
     (Q Z : Finset (Site Λ)) (hW : W ∈ supportedOperators q (Q : Set (Site Λ)))
@@ -55,12 +56,12 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
         ((Complex.I • siteExpectation q B
-          (heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
+          (ManyBody.heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
       (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
       (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
       ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
         let M := ∫ t : ℝ in Set.Icc (-T) T,
-          siteExpectation q B (heisenbergEvolution g.operator t W) * U t
+          siteExpectation q B (ManyBody.heisenbergEvolution g.operator t W) * U t
             ∂gaussianReal 0 η
         M ∈ supportedOperators q (B : Set (Site Λ)) ∧
         ‖M‖ ≤ ‖W‖ ∧
@@ -71,13 +72,15 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
   intro B
   have : NeZero q := ⟨by omega⟩
   obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
-    exists_supported_gaussian_integral_of_projection_bounds q g.operator_isHermitian hH B
-  refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
+    ManyBody.exists_supported_gaussian_integral_of_projection_bounds g.operator_isHermitian hH B
+  simp only [← siteExpectation_eq_regionExpectation] at hU haverage
+  refine ⟨U, hU0, hU, hunit, fun t ↦ mem_supportedOperators_of_isSupportedOn (hsupport t),
+    fun η T hT ↦ ?_⟩
   have hnear (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hA : A ∈ supportedOperators q ((Q ∪ Z : Finset (Site Λ)) : Set (Site Λ)))
       (t : ℝ) (ht : |t| ≤ T) :
-      ‖heisenbergEvolution g.operator t A -
-        siteExpectation q B (heisenbergEvolution g.operator t A)‖ ≤
+      ‖ManyBody.heisenbergEvolution g.operator t A -
+        siteExpectation q B (ManyBody.heisenbergEvolution g.operator t A)‖ ≤
         ‖A‖ * (C * (Λ.card : ℝ) * Real.exp (v * T - c * l)) :=
     (hlocal (Q ∪ Z) A hA l t).trans
       (mul_le_mul_of_nonneg_left
@@ -95,7 +98,7 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
     (hnear W (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_left Z hx) hW))
     (hnear (g.operator - H)
       (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_right Q hx) hD))
-  refine ⟨hMsupport, hMnorm, hMerror.trans_eq ?_⟩
+  refine ⟨mem_supportedOperators_of_isSupportedOn hMsupport, hMnorm, hMerror.trans_eq ?_⟩
   ring
 
 
@@ -115,12 +118,12 @@ theorem supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q) (R : ℕ) {J : ℝ}
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
         ((Complex.I • siteExpectation q B
-          (heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
+          (ManyBody.heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
       (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
       (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
       ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
         let M := ∫ t : ℝ in Set.Icc (-T) T,
-          siteExpectation q B (heisenbergEvolution g.operator t W) * U t
+          siteExpectation q B (ManyBody.heisenbergEvolution g.operator t W) * U t
             ∂gaussianReal 0 η
         M ∈ supportedOperators q (B : Set (Site Λ)) ∧
         ‖M‖ ≤ ‖W‖ ∧
@@ -153,12 +156,12 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
               U 0 = 1 ∧
               (∀ t, HasDerivAt U
                 ((Complex.I • siteExpectation q B
-                  (heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
+                  (ManyBody.heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
               (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
               (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
-                  siteExpectation q B (heisenbergEvolution g.operator t W) * U t
+                  siteExpectation q B (ManyBody.heisenbergEvolution g.operator t W) * U t
                     ∂gaussianReal 0 η
                 M ∈ supportedOperators q (B : Set (Site Λ)) ∧
                 ‖M‖ ≤ ‖W‖ ∧

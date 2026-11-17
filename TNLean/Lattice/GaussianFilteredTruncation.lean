@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Convex.Integral
 import QICLean.Analysis.ProjectedEvolution
 import TNLean.Algebra.MatrixHermitianSum
-import TNLean.Circuit.LiebRobinson.GraphPropagation
+import QICLean.ManyBody.Dynamics.GraphPropagation
+import TNLean.Circuit.EntropySupport
 import TNLean.Lattice.GaussianFilteredLocality
 import TNLean.Lattice.ProductForm
 
@@ -206,17 +207,22 @@ theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d (S : Set ι))
     (Y : Finset ι) (hB : B ∈ supportedOperators d (Y : Set ι)) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ x ∈ S, ∀ y ∈ Y, (m : ℕ∞) ≤ G.edist x y) (t : ℝ) :
-    ‖B * heisenbergEvolution (∑ k, h k) t A - heisenbergEvolution (∑ k, h k) t A * B‖ ≤
+    ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t A - ManyBody.heisenbergEvolution (∑ k, h k) t A
+        * B‖ ≤
       2 * (Y.card : ℝ) * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * |t| - μ * m) := by
-  set τA := heisenbergEvolution (∑ k, h k) t A
+  set τA := ManyBody.heisenbergEvolution (∑ k, h k) t A
   set c : ℝ := (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖A‖ *
     Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * |t| - μ * m)
   have hloc : ‖τA - siteExpectation d Yᶜ τA‖ ≤ ∑ _y ∈ Yᶜᶜ, c :=
     norm_sub_siteExpectation_le Yᶜ τA (fun _ => c) fun y hy U hU hUu => by
       have hyY : y ∈ Y := by simpa using hy
-      have hLR := norm_heisenberg_commutator_le_graphDistance_finset G X a ha h hHerm hSupport
-        R hDiam vR hCard b₀ hBudget S hA y hU μ hμ m (fun x hx => hm x hx y hyY) t
+      let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
+        ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
+      have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ a ha hHerm
+        R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hA) y
+        (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton]))
+        μ hμ m (fun x hx => hm x hx y hyY) t
       rw [CStarRing.norm_of_mem_unitary hUu, mul_one] at hLR
       exact hLR
   rw [compl_compl, Finset.sum_const, nsmul_eq_mul] at hloc
@@ -275,7 +281,8 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
       supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
   have hAK := hermitianUnitaryPath_conj_mem_supportedOperators hHsK
     (supportedOperators_mono (Finset.coe_subset.mpr hSK) hW) u
-  have hA : heisenbergEvolution (∑ k, h' k) u W = hermitianUnitaryPath (∑ k ∈ s, h k) u * W *
+  have hA : ManyBody.heisenbergEvolution (∑ k, h' k) u W = hermitianUnitaryPath (∑ k ∈ s, h k) u *
+      W *
       hermitianUnitaryPath (∑ k ∈ s, h k) (-u) := by
     rw [hsum]
     rfl

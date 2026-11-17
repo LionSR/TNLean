@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.SupportProjectionOrder
 import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Circuit.EntropySupport
+import QICLean.ManyBody.Sites.Twirl
 
 /-!
 # The range projection of a supported Hermitian operator
@@ -27,7 +28,10 @@ theorem supportProj_mem_supportedOperators (K : Finset ι)
     (hK : A ∈ supportedOperators q (K : Set ι)) :
     hA.supportProj ∈ supportedOperators q (K : Set ι) := by
   rw [hA.supportProj_eq_cfc]
-  exact mem_supportedOperators_of_forall_commute K fun Y hY ↦
-    (commute_of_mem_supportedOperators disjoint_compl_right hK hY).cfc_real _
+  refine mem_supportedOperators_of_isSupportedOn <|
+    ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun Y hY ↦ ?_
+  have hY' : Y ∈ supportedOperators q ((K : Set ι)ᶜ) := by
+    simpa only [Finset.coe_compl] using mem_supportedOperators_of_isSupportedOn hY
+  exact (commute_of_mem_supportedOperators disjoint_compl_right hK hY').cfc_real _
 
 end QuantumCircuit

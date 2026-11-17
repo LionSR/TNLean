@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainRelativeGeneratorLocalization
-import TNLean.Circuit.SupportedGaussianIntegral
+import QICLean.ManyBody.Dynamics.SupportedGaussianIntegral
 import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
@@ -40,12 +40,12 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         let crossing := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin Λ.card) ↦
-          S.biUnion (fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x m)
+          S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
         ∃ U : ℝ → Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
             ((Complex.I • siteExpectation (q * q) (N Z)
-              (heisenbergEvolution K' t (K' - K))) * U t) t) ∧
+              (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin Λ.card → Fin (q * q)) ℂ) ∧
           (∀ t, U t ∈ supportedOperators (q * q) (N Z : Set (Fin Λ.card))) ∧
           ∀ (Q : Finset (Fin Λ.card))
@@ -54,7 +54,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
-                siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W) * U t
+                siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
               M ∈ supportedOperators (q * q) (B : Set (Fin Λ.card)) ∧
               ‖M‖ ≤ ‖W‖ ∧
@@ -78,25 +78,26 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
   have hqq : 1 ≤ q * q := by nlinarith
   have : NeZero (q * q) := ⟨by omega⟩
   obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
-    exists_supported_gaussian_integral_of_projection_bounds (q * q)
+    ManyBody.exists_supported_gaussian_integral_of_projection_bounds
       (h.swappedDoubled D).operator_isHermitian h.doubled.operator_isHermitian (N Z)
-  refine ⟨U, hU0, hU, hunit, hsupport, ?_⟩
+  simp only [← siteExpectation_eq_regionExpectation] at hU haverage
+  refine ⟨U, hU0, hU, hunit, fun t ↦ mem_supportedOperators_of_isSupportedOn (hsupport t), ?_⟩
   intro Q W hW η T hT B M
   have hgen (s : ℝ) (hs : |s| ≤ T) :
-      ‖heisenbergEvolution K' s (K' - K) -
-        siteExpectation (q * q) (N Z) (heisenbergEvolution K' s (K' - K))‖ ≤
+      ‖ManyBody.heisenbergEvolution K' s (K' - K) -
+        siteExpectation (q * q) (N Z) (ManyBody.heisenbergEvolution K' s (K' - K))‖ ≤
           d * (Λ.card : ℝ) * Real.exp (v * T - (m : ℝ) / 2) :=
     (h.norm_relativeGenerator_sub_siteExpectation_le D hq m s).trans
       (mul_le_mul_of_nonneg_left
         (Real.exp_mul_sub_le_exp_mul_sub hv.le hs)
         (mul_nonneg hd (Nat.cast_nonneg _)))
   have hnear (t : ℝ) (ht : |t| ≤ T) :
-      ‖heisenbergEvolution K' t W -
-        siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W)‖ ≤
+      ‖ManyBody.heisenbergEvolution K' t W -
+        siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
           ‖W‖ * a * (Λ.card : ℝ) ^ 2 * Real.exp (v * T - (m : ℝ) / 2) := by
     have hloc :
-        ‖heisenbergEvolution K' t W -
-          siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W)‖ ≤
+        ‖ManyBody.heisenbergEvolution K' t W -
+          siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
             a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * |t| - (m : ℝ) / 2) := by
       simpa only [Nat.floor_natCast, N, K', DomainHamiltonian.operator, a, v,
         Nat.cast_add, Nat.cast_one] using
@@ -128,7 +129,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
     (a * (Λ.card : ℝ) ^ 2 * Real.exp (v * T - (m : ℝ) / 2))
     (d * (Λ.card : ℝ) * Real.exp (v * T - (m : ℝ) / 2)) (by positivity) (by positivity)
     (fun t ht ↦ by simpa only [mul_assoc] using hnear t ht) hgen
-  refine ⟨hMsupport, hMnorm, hMerror.trans ?_⟩
+  refine ⟨mem_supportedOperators_of_isSupportedOn hMsupport, hMnorm, hMerror.trans ?_⟩
   have hLsq : (Λ.card : ℝ) ≤ (Λ.card : ℝ) ^ 2 := by
     exact_mod_cast (show Λ.card ≤ Λ.card ^ 2 by
       simpa only [pow_two] using Nat.le_mul_self Λ.card)

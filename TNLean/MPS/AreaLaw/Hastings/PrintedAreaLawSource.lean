@@ -42,8 +42,8 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings_source
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / (40 * (chainLRVelocity R J - 1))) :
-    ‖QuantumCircuit.heisenbergEvolution h.operator t A * B -
-        B * QuantumCircuit.heisenbergEvolution h.operator t A‖ ≤
+    ‖ManyBody.heisenbergEvolution h.operator t A * B -
+        B * ManyBody.heisenbergEvolution h.operator t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-(d / 80)) := by
   have hw := chainLRVelocity_sub_one_pos R hJ
   exact h.norm_heisenberg_commutator_le_hastings

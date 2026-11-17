@@ -161,7 +161,7 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
     exact hs
   have hV : ‖V‖ ≤ 1 :=
     ((Matrix.l2_opNorm_reindex_equiv (g.symm.trans e) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_rect_le W)).trans hW
+      (Matrix.l2_opNorm_one_kronecker_le W)).trans hW
   let η := Real.toNNReal (A * B)
   let K := h.doubled.operator
   let K' := (h.swappedDoubled D).operator
@@ -190,7 +190,7 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨path, _, _, _, _, hpathIntegral⟩ :=
     hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)
   let M := ∫ t : ℝ in Set.Icc (-(T₀ * B)) (T₀ * B),
-    siteExpectation (q * q) (N Q) (heisenbergEvolution K' t V) * path t ∂gaussianReal 0 η
+    siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t V) * path t ∂gaussianReal 0 η
   obtain ⟨hMs, _, hMerr⟩ := hpathIntegral Q V hVsupp η (T₀ * B) hT
   have hMclose : ‖M - M₀‖ ≤ ε := by
     calc
