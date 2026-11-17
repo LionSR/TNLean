@@ -173,6 +173,8 @@ theorem edgeBoundary_card_le_two_mul_endpointBoundary_card
         (G.degree_le_of_le (H := planeDomainGraph Λ) SimpleGraph.between_le).trans
           (domainGraph_degree_le_four Λ x)
       _ = 4 * (endpointBoundary Λ A).card := by simp [Nat.mul_comm]
+  have h : 2 * (edgeBoundary Λ A).card ≤ 4 * (endpointBoundary Λ A).card :=
+    hsum.symm.trans_le hbound
   omega
 
 end TNLean.PEPS.AreaLaw
