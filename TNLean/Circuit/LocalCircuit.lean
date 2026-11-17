@@ -38,7 +38,7 @@ sites `ι` in `TNLean.Circuit.SupportedOperators`. A gate on the bond `b` is a u
 the sites acting on `bond b`. Layers are listed in the order in which they are applied.
 
 The ring circuits of the source are the specialization to the sites `Fin N` and the bonds
-`ringBond k = {k, k + 1}` taken modulo `N`: `QuantumCircuit.Layer`,
+`ringBond k = {k, k + 1}` taken modulo `N`: `QuantumCircuit.RingLayer`,
 `QuantumCircuit.IsLocalCircuitOfDepth` and `QuantumCircuit.IsPreparedInDepth` abbreviate the
 general notions for this geometry.
 
@@ -47,7 +47,7 @@ general notions for this geometry.
 * `QuantumCircuit.BondLayer`, `QuantumCircuit.circuitOp` — layers and local circuits on a bond
   geometry.
 * `QuantumCircuit.IsBondCircuitOfDepth`, `QuantumCircuit.IsBondPreparedInDepth`.
-* `QuantumCircuit.Layer`, `QuantumCircuit.IsLocalCircuitOfDepth`,
+* `QuantumCircuit.RingLayer`, `QuantumCircuit.IsLocalCircuitOfDepth`,
   `QuantumCircuit.IsPreparedInDepth` — their ring specializations.
 
 ## Main results
