@@ -280,3 +280,35 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
     projector. Their ranks at the cuts of $J$ are at most those of $K$, which
     Lemma~\ref{lem:alvv_ff_family_cut_rank} bounds by $(q^2+4)^{\ell^2+1}$.
 \end{proof}
+
+\begin{lemma}[Products of the improving family]
+    \label{lem:alvv_ff_improving_family_words}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_words}
+    \leanok
+    \uses{thm:alvv_ff_improving_family}
+    Under the hypotheses of Theorem~\ref{thm:alvv_ff_improving_family}, and with
+    the parameters~\eqref{eq:alvv_ff_family_parameters}, there are
+    $N\le\mathcal D^2$ operators $W_j$ on $J$ and $\Delta>0$ with
+    $\mathcal D^{12}\Delta\le10^{-5}$, each of operator Schmidt rank at most
+    $(d^2+4)^{\ell^2+1}$ at every cut of $J$, such that for every $k\ge0$ every
+    subspace $S$ of the space of $J$ that is $\delta$-viable for $G$ with
+    $\delta<1$ gives a $\Delta^k/(1-\delta)^2$-viable span of the subspaces
+    $W_{j_0}\cdots W_{j_{k-1}}S$. This is the form in which the merge step
+    of~\cite[lines 1662--1677]{Arad2016RigorousRG} applies the operators of
+    \cite[Theorem~5.15]{Arad2016RigorousRG} $k$ times; the case $k=1$ is
+    Theorem~\ref{thm:alvv_ff_improving_family}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:alvv_ff_improving_family}
+    If $q\le1$, the identity alone serves, since the space of $J$ has dimension
+    at most one. If $J$ has at most $4\ell$ sites, take the configuration matrix
+    units of $J$: their images of a nonzero viable subspace, and of the whole
+    space, span the whole space, so by induction on $k$ so do the images under
+    their products of every positive length, while $k=0$ leaves $S$ unchanged and
+    $\delta\le1/(1-\delta)^2$. Otherwise take the slices of the filter $K$ in the
+    proof of Theorem~\ref{thm:alvv_ff_improving_family}, without extension by
+    zero. Their products of length $k$ are the slices of $K^k$, which preserves
+    $G$ and $G^\perp$, does not shrink vectors of $G$, and satisfies
+    $\|K^kx\|^2\le\Delta^k\|x\|^2$ for $x\perp G$. The two-factor form of error
+    reduction applied to $K^k$ gives the improvement $\Delta^k/(1-\delta)^2$.
+\end{proof}

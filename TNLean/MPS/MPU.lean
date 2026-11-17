@@ -241,6 +241,7 @@ import TNLean.MPS.MPU.SpinOneSchmidtObstruction
 import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPU.StaircaseUnitarity
 import TNLean.MPS.MPU.StandardForm
+import TNLean.MPS.MPU.StandardFormCanonicalRepresentative
 import TNLean.MPS.MPU.StandardFormConjugation
 import TNLean.MPS.MPU.StandardFormDoubling
 import TNLean.MPS.MPU.StandardFormFromGates
@@ -254,11 +255,9 @@ import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
 import TNLean.MPS.MPU.SuppliedHalfFactorMinimality
-import TNLean.MPS.MPU.SuppliedQuasiLocalAction
 import TNLean.MPS.MPU.SuppliedTimeReversalCriterion
 import TNLean.MPS.MPU.SuppliedTranspositionCriterion
 import TNLean.MPS.MPU.SuppliedTwoBlockStandardForm
-import TNLean.MPS.MPU.SuppliedWindowCoordinates
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
 import TNLean.MPS.MPU.SymmetryPathCriterion
