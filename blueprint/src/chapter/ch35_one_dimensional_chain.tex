@@ -724,6 +724,40 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \section{The buffered discount with a constant-width buffer}
 
+\begin{lemma}[Localization of an evolved sum of local perturbations]
+    \label{lem:graph_evolved_perturbation_localization}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sum_sub_siteExpectation_graphNeighborhood_le}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,def:qc_site_expectation}
+    Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
+    most two vertices, and let $H=\sum_k h_k$ be a finite family of Hermitian
+    terms with supports of graph diameter at most $R$ and at most $R+1$
+    vertices, such that the norms of the terms meeting any vertex sum to at
+    most $b_0$. Let $\mathcal C$ be a finite index set, and for $c\in\mathcal C$
+    let $P_c$ be an operator of norm at most $\varepsilon$ supported on a set
+    $U_c\subseteq Z$ of at most $R+1$ vertices. For real $\ell$ and $t$ put
+    $B=\bigcup_{x\in Z}\{y:d_\Gamma(x,y)\le\lfloor\ell\rfloor\}$ and
+    $G(t)=e^{itH}\bigl(\sum_{c\in\mathcal C}P_c\bigr)e^{-itH}$. With $a$ and
+    $v$ the constants of Lemma~\ref{thm:graph_lieb_robinson_two_spheres},
+    \begin{align}
+        \|G(t)-E_B(G(t))\|
+        \le|\mathcal C|\cdot2a(R+1)^2\varepsilon\,e^{v|t|-\ell/2}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,lem:qc_site_expectation_properties,
+        thm:qc_site_expectation_supported_approximant}
+    For one index $c$ put $A=e^{itH}P_ce^{-itH}$, and let $A_0$ be its
+    expectation on the balls of radius $\lfloor\ell\rfloor$ about $U_c$. The
+    localization estimate gives
+    $\|A-A_0\|\le a|U_c|^2\|P_c\|e^{v|t|-\ell/2}\le a(R+1)^2\varepsilon
+    e^{v|t|-\ell/2}$. Since $U_c\subseteq Z$, the operator $A_0$ is
+    supported on $B$ and fixed by $E_B$, so
+    $\|A-E_B(A)\|=\|(A-A_0)-E_B(A-A_0)\|\le2\|A-A_0\|$. Conjugation and the
+    expectation are linear; summing over $\mathcal C$ proves the claim.
+\end{proof}
+
 \begin{lemma}[Localization of the relative-evolution generator]
     \label{thm:chain_relative_generator_localization}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
@@ -764,8 +798,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{proof}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        lem:chain_site_norm_budget,thm:chain_lieb_robinson,
-        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+        lem:chain_site_norm_budget,lem:graph_evolved_perturbation_localization}
     The swapped doubled interactions have range $R$ and bound $2J$.
     Their per-site norm sum is at most $b_0$. The chain localization
     estimate therefore has constants $a,v$ as displayed.
@@ -1745,8 +1778,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
-        thm:domain_lieb_robinson_localization,
-        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+        thm:domain_lieb_robinson_localization,lem:graph_evolved_perturbation_localization}
     The swapped domain family has interaction bound $2J$, so its per-site
     norm budget is $b_0$. Domain localization gives an error
     $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation

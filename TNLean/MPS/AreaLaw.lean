@@ -75,7 +75,6 @@ import TNLean.MPS.AreaLaw.DomainIntervalNeighborhood
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.DomainLogarithmicSeparation
 import TNLean.MPS.AreaLaw.DomainPartialSwap
-import TNLean.MPS.AreaLaw.DomainRelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.DyadicIntervalLowDensityFamily

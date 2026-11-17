@@ -183,6 +183,17 @@ theorem ChainSupport.edist_le {L R : ℕ} (X : ChainSupport L R)
     simp only [Nat.dist]
     omega)
 
+/-- The real-radius chain neighborhood of `S` is the union of the path-graph balls of radius
+`⌊ℓ⌋` about its sites. -/
+theorem biUnion_graphBall_pathGraph_eq_chainNeighborhood {L : ℕ} (S : Finset (Fin L))
+    {ℓ : ℝ} (hℓ : 0 ≤ ℓ) :
+    (S.biUnion fun x ↦ ManyBody.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =
+      chainNeighborhood S ℓ := by
+  ext y
+  simp only [Finset.mem_biUnion, ManyBody.mem_graphBall,
+    SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast, Nat.le_floor_iff hℓ,
+    mem_chainNeighborhood]
+
 /-- Contiguous-chain specialization of Lemma lem:LR, first estimate.
 TNLean note, part2a_mps_information.tex:260–273. -/
 theorem norm_heisenberg_commutator_le_chainDistance
@@ -229,13 +240,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - ℓ / 2) := by
-  have hN : (S.biUnion fun x ↦ ManyBody.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =
-      chainNeighborhood S ℓ := by
-    ext y
-    simp only [Finset.mem_biUnion, ManyBody.mem_graphBall,
-      SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast, Nat.le_floor_iff hℓ,
-      mem_chainNeighborhood]
-  rw [← hN]
+  rw [← biUnion_graphBall_pathGraph_eq_chainNeighborhood S hℓ]
   exact norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
     (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ (X k).2.1)
     (fun k ↦ ChainSupport.edist_le (X k))
