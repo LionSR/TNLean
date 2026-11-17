@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
+import TNLean.MPS.Examples.CZX.CZXUnitary
 
 /-!
 # The `ℤ₂` group-cocycle operator as a symmetry of spin-chain Hamiltonians
