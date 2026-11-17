@@ -498,16 +498,14 @@
     "ch:mpo_algebras": {
       "theorems": [
         "thm:mpoalg_fusion_tensors_exist",
-        "thm:mpoalg_associator_cocycle",
-        "thm:mpoalg_no_symmetric_normal"
+        "thm:mpoalg_associator_cocycle"
       ],
       "corollaries": [
         "thm:mpoalg_action_tensors_exist"
       ],
       "notes": {
         "thm:mpoalg_fusion_tensors_exist": "Existence of fusion tensors, the lift of periodic fusion to the virtual level",
-        "thm:mpoalg_associator_cocycle": "The associator is a three-cocycle",
-        "thm:mpoalg_no_symmetric_normal": "No symmetric normal tensor under a nontrivial associator (Garre-Rubio et al., Section 3.2)"
+        "thm:mpoalg_associator_cocycle": "The associator is a three-cocycle"
       }
     },
     "ch:local_quantum_circuits": {

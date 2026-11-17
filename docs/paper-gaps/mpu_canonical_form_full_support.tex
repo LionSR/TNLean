@@ -608,7 +608,8 @@ original MPU tensors. Promoting the witness-level equality to an invariant of
 the original tensors requires preservation of the selected source data under
 adjoining identity ancillas. The closed \ghissue{6138} proves preservation of
 CFII and full support but does not identify the selected compact-SVD factors.
-That remaining boundary is tracked by \ghissue{6136}.
+That boundary concerned only the admissible entries, all of which have since
+been deleted; see the subsection on superseded entries below.
 
 All later time-reversal descendants and examples repeat the necessary endpoint
 and comparison data after blocking or adjoining ancillas. The swap
@@ -710,13 +711,40 @@ The admissible entry \path{prop:mpu_admissible_u2_u3_conjugation} was deleted
 once its source-labelled counterpart \path{prop:U2-U3-trivial-conjugation} was
 proved for the actual shift tensors, with no source datum.
 
-The remaining admissible entries concern the worked examples, whose
-source-labelled counterparts are still open; they keep the restrictions recorded
-here.
+The nine remaining entries that carried the admissible equivalence and path
+datum were deleted last, together with the two data definitions they assumed:
+\begin{center}
+    \begin{tabular}{ll}
+        deleted entry                                          & source-labelled entry                       \\
+        \path{def:mpu_reduced_full_support_source_datum}       & (none)                                      \\
+        \path{def:mpu_admissible_equivalence_datum}            & (none)                                      \\
+        \path{def:mpu_admissible_strict_symmetry_equivalence}  & \path{def:strictly-equivalent-symmetry}     \\
+        \path{def:mpu_admissible_symmetry_equivalence}         & \path{def:equivalent-symmetry}              \\
+        \path{lem:mpu_admissible_symmetry_path_criterion}      & \path{lem:equivalent-symmetry}              \\
+        \path{ex:mpu_admissible_all_conjugation_phases}        & \path{ex:all-phases-under-conjugation}      \\
+        \path{lem:mpu_admissible_swap_symmetry_equivalence}    & \path{lemma:sym-trafo-swap}                 \\
+        \path{prop:mpu_admissible_u1_u2_conjugation}           & \path{prop:eqiv-U1-U2-conjugate}            \\
+        \path{prop:mpu_admissible_u1_u2_ancilla}               & \path{prop:U1-U2-equiv-ancillatrick}
+    \end{tabular}
+\end{center}
+None of these entries had a formal statement. Each restated an unproved source
+result under the continuously varying source data that this note records as
+unconstructed, which is the parallel restricted family that the library's
+convention for degenerate readings excludes. The source-labelled entries keep
+their status; those still open are recorded in their own notes, namely
+\path{docs/paper-gaps/mpu_symmetry_ancilla_transport.tex} for the
+stabilized symmetry equivalence and
+\path{docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex} for the
+unblocked forward direction of the path criterion and the determinant
+classification that depends on it. No entry of Chapter~28 now carries the
+admissible path datum; the earlier discussion of these entries in this note is
+retained as a historical record.
 
 \section{Elimination plan}
 
-The native source-data scope tracker is \ghissue{6136}. The
+The native source-data scope tracker was \ghissue{6136}; all of its children
+are closed, and the path-datum entries it was to merge have been deleted
+instead (see the subsection on superseded entries). The
 dimension-bounded full-support representative is constructed by
 \ghissue{7065} and the two theorems identified above. This closes
 representative existence but does not transport selected compact-SVD factors
@@ -735,12 +763,13 @@ symmetry-transformed comparison paths. It removes the path hypotheses from the
 admissible continuity, symmetry-equivalence, phase-classification, swap, and
 MPS-comparison nodes.
 
-The twenty-nine source/scoped pairs in the continuity and symmetry subtree are
-merged only after the relevant branches close. Until then, the unproved source
-labels remain unrestricted statements, and the corresponding reduced-source or
-path-dependent statements remain under their \texttt{mpu\_admissible} labels.
-The supplied-fixed-pair contraction does not by itself construct the source
-data required to remove these restrictions.
+Both issues are closed. The twenty-nine source/scoped pairs in the continuity
+and symmetry subtree have been resolved: the scoped member was deleted, either
+because the source-labelled member was proved or, for the path-datum family,
+because it restated an open source result under an unconstructed hypothesis.
+The unproved source labels remain unrestricted statements. The
+supplied-fixed-pair contraction does not by itself construct continuously
+varying source data, and no remaining entry assumes it.
 
 \subsection*{The pointwise family is one connected group}
 
