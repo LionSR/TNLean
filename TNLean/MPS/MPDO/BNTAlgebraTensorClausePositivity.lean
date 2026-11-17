@@ -83,7 +83,7 @@ theorem physTraceTransfer_verticalBNTMPO_posSemidef
     fun x _ ↦ verticalSectorFinEquiv H.bondDim H.multiplicity ⟨γ, (q, x)⟩
   have hRetained :
       (mpo (changePhysicalBasis H.verticalCoisometry M) 1).PosSemidef := by
-    rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
+    rw [← singleKrausMap_tensorPower_mpo]
     exact (singleKrausMap_isKrausCP _).map_posSemidef (hM 1 zero_lt_one)
   have hPrincipalEq :
       (mpo (changePhysicalBasis H.verticalCoisometry M) 1).submatrix e e =

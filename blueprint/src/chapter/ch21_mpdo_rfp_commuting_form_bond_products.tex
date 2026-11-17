@@ -326,10 +326,8 @@
 % retains that scalar.  See docs/paper-gaps/cpsv16_commuting_form_to_sal.tex.
 \begin{lemma}[Scaled finite-chain cyclic neighboring-operator form]
     \label{thm:mpdo_eta_local_sigma_nk2}
-    \lean{MPOTensor.sitewisePhysicalMatrix_conjTranspose}
-    \lean{MPOTensor.reindex_sitewisePhysicalMatrix_two}
-    \lean{MPOTensor.sitewisePhysicalMatrix_one}
-    \lean{MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose}
+    \lean{MPOTensor.reindex_tensorPower_two}
+    \lean{MPOTensor.tensorPower_mul_conjTranspose}
     \lean{MPOTensor.singleKrausMap_bondProduct_of_unitary}
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_positive_cyclic_eta_block_decomposition}
@@ -359,9 +357,11 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition, thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport, lem:mpdo_tensor_power_laws}
     Choosing the unitary $U$ and the neighboring operators $\eta_{q,h}$ from
-    the commuting-bond positive $\eta$-decomposition, conjugation by
+    the commuting-bond positive $\eta$-decomposition, the identities of
+    Lemma~\ref{lem:mpdo_tensor_power_laws} show that conjugation by
     $(U^*)^{\otimes N}$ carries the product of the bond translates to the
     product of the conjugated two-site bonds, which then expands into the
     displayed direct sum. Applying both transformations to

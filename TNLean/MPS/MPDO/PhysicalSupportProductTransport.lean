@@ -62,9 +62,9 @@ private theorem embed_twoSiteSectorProjection_eq_finKronecker
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     embedLocalOperator (d := d) 2 N hN i (twoSiteSectorProjection P) =
       Matrix.finKronecker (fun n ↦ cyclicBondProjectionFactor P i n) := by
-  rw [← sitewisePhysicalMatrix_two_eq_twoSiteSectorProjection]
+  rw [← tensorPower_two_eq_twoSiteSectorProjection]
   ext σ τ
-  simp only [embedLocalOperator_apply, sitewisePhysicalMatrix,
+  simp only [embedLocalOperator_apply, Matrix.tensorPower_apply,
     Matrix.finKronecker_apply]
   by_cases hAgree : AgreesOutsideWindow (d := d) 2 hN i σ τ
   · rw [ite_eq_left hAgree, MPSTensor.prod_cyclicWindow_complement 2 N hN i]
@@ -188,7 +188,7 @@ private noncomputable def openBondProjectionProduct
 private theorem openBondProjectionProduct_eq_sitewise
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P * P = P)
     {N : ℕ} (hN : 2 ≤ N) :
-    openBondProjectionProduct P hN = sitewisePhysicalMatrix P N := by
+    openBondProjectionProduct P hN = Matrix.tensorPower N P := by
   classical
   let factors : Fin (N - 1) → Fin N → Matrix (Fin d) (Fin d) ℂ :=
     fun i n ↦ cyclicBondProjectionFactor P ⟨i.val, by omega⟩ n
@@ -274,12 +274,12 @@ private theorem twoSiteSectorProjection_mul_isometricBond
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     twoSiteSectorProjection (V * Vᴴ) *
-        singleKrausMap (sitewisePhysicalMatrix V 2) B =
-      singleKrausMap (sitewisePhysicalMatrix V 2) B := by
-  rw [← sitewisePhysicalMatrix_two_mul_conjTranspose V]
+        singleKrausMap (Matrix.tensorPower 2 V) B =
+      singleKrausMap (Matrix.tensorPower 2 V) B := by
+  rw [← tensorPower_two_mul_conjTranspose V]
   simp only [singleKrausMap_apply, Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc (sitewisePhysicalMatrix V 2)ᴴ
-    (sitewisePhysicalMatrix V 2), sitewisePhysicalMatrix_isometry V hV 2, Matrix.one_mul]
+  rw [← Matrix.mul_assoc (Matrix.tensorPower 2 V)ᴴ
+    (Matrix.tensorPower 2 V), tensorPower_isometry V hV 2, Matrix.one_mul]
 
 /-- The complete product of commuting lifted bonds is supported on the
 included physical space at every site. No tensor or injectivity hypothesis
@@ -291,17 +291,17 @@ theorem isometricBondProduct_left_supported
     {N : ℕ} (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
       Commute (embedLocalOperator 2 N hN i
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B))
+          (singleKrausMap (Matrix.tensorPower 2 V) B))
         (embedLocalOperator 2 N hN j
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B))) :
-    sitewisePhysicalMatrix (V * Vᴴ) N *
+          (singleKrausMap (Matrix.tensorPower 2 V) B))) :
+    Matrix.tensorPower N (V * Vᴴ) *
         (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod =
+          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod =
       (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
-        (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod := by
+        (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ embedLocalOperator (d := d) 2 N hN i
-      (singleKrausMap (sitewisePhysicalMatrix V 2) B)
+      (singleKrausMap (Matrix.tensorPower 2 V) B)
   let R : Fin (N - 1) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ embedLocalOperator (d := d) 2 N hN ⟨i.val, by omega⟩
       (twoSiteSectorProjection (V * Vᴴ))
@@ -338,7 +338,7 @@ theorem isometricBondProduct_left_supported
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc Vᴴ V,
       hV, Matrix.one_mul]
-  have hR : (List.ofFn R).prod = sitewisePhysicalMatrix (V * Vᴴ) N := by
+  have hR : (List.ofFn R).prod = Matrix.tensorPower N (V * Vᴴ) := by
     simpa [R, openBondProjectionProduct] using
       openBondProjectionProduct_eq_sitewise (V * Vᴴ) hP hN
   simpa [A, hR] using hRprod
@@ -356,28 +356,28 @@ theorem singleKrausMap_embedLocalOperator_eq_range_mul_lift
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    singleKrausMap (sitewisePhysicalMatrix V N)
+    singleKrausMap (Matrix.tensorPower N V)
         (embedLocalOperator (d := e) 2 N hN i B) =
-      singleKrausMap (sitewisePhysicalMatrix V N) 1 *
+      singleKrausMap (Matrix.tensorPower N V) 1 *
         embedLocalOperator (d := d) 2 N hN i
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B) := by
+          (singleKrausMap (Matrix.tensorPower 2 V) B) := by
   let ed := windowComplementEquiv (d := d) 2 N hN i
   let ee := windowComplementEquiv (d := e) 2 N hN i
   apply (Matrix.reindex ed ed).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ ed ed)
-      (singleKrausMap (sitewisePhysicalMatrix V N)
+      (singleKrausMap (Matrix.tensorPower N V)
         (embedLocalOperator (d := e) 2 N hN i B)) =
     (Matrix.reindexLinearEquiv ℂ ℂ ed ed)
-      (singleKrausMap (sitewisePhysicalMatrix V N) 1 *
+      (singleKrausMap (Matrix.tensorPower N V) 1 *
         embedLocalOperator (d := d) 2 N hN i
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B))
+          (singleKrausMap (Matrix.tensorPower 2 V) B))
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ ed ed ed]
   simp only [Matrix.coe_reindexLinearEquiv]
   rw [Matrix.reindex_singleKrausMap ee ed,
-    reindex_sitewisePhysicalMatrix_windowComplement,
+    reindex_tensorPower_windowComplement,
     reindex_embedLocalOperator_windowComplement]
   change singleKrausMap
-      (sitewisePhysicalMatrix V 2 ⊗ₖ sitewisePhysicalMatrix V (N - 2))
+      (Matrix.tensorPower 2 V ⊗ₖ Matrix.tensorPower (N - 2) V)
         (B ⊗ₖ (1 : Matrix (Fin (N - 2) → Fin e)
           (Fin (N - 2) → Fin e) ℂ)) = _
   rw [Matrix.singleKrausMap_kronecker]
@@ -390,15 +390,15 @@ theorem singleKrausMap_embedLocalOperator_eq_range_mul_lift
     · have hne : ee.symm x ≠ ee.symm y := fun h ↦ hxy (ee.symm.injective h)
       simp [Matrix.reindex_apply, hxy, hne]
   rw [Matrix.reindex_singleKrausMap ee ed,
-    reindex_sitewisePhysicalMatrix_windowComplement,
+    reindex_tensorPower_windowComplement,
     reindex_embedLocalOperator_windowComplement, hone]
   simp only [singleKrausMap_apply, Matrix.mul_one,
     Matrix.conjTranspose_kronecker]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
-  have htwo := sitewisePhysicalMatrix_isometry V hV 2
+  have htwo := tensorPower_isometry V hV 2
   simp only [Matrix.mul_assoc]
   rw [← Matrix.mul_assoc
-      (sitewisePhysicalMatrix V 2)ᴴ (sitewisePhysicalMatrix V 2),
+      (Matrix.tensorPower 2 V)ᴴ (Matrix.tensorPower 2 V),
     htwo, Matrix.one_mul]
   simp
 
@@ -412,12 +412,12 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1593. -
 theorem singleKrausMap_bondProduct_of_unitary
     (V : Matrix (Fin d) (Fin d) ℂ) (hV : Vᴴ * V = 1) (hV' : V * Vᴴ = 1)
     {N : ℕ} (hN : 2 ≤ N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
-    singleKrausMap (sitewisePhysicalMatrix V N)
+    singleKrausMap (Matrix.tensorPower N V)
         (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i B).prod =
       (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i
-        (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod := by
-  have hW : (sitewisePhysicalMatrix V N)ᴴ * sitewisePhysicalMatrix V N = 1 :=
-    sitewisePhysicalMatrix_isometry V hV N
+        (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
+  have hW : (Matrix.tensorPower N V)ᴴ * Matrix.tensorPower N V = 1 :=
+    tensorPower_isometry V hV N
   have hne : (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i B) ≠ [] := by
     rw [List.ne_nil_iff_length_pos, List.length_ofFn]
     omega
@@ -425,12 +425,12 @@ theorem singleKrausMap_bondProduct_of_unitary
   apply congrArg List.prod
   apply congrArg List.ofFn
   funext i
-  change singleKrausMap (sitewisePhysicalMatrix V N)
+  change singleKrausMap (Matrix.tensorPower N V)
       (embedLocalOperator 2 N hN i B) = _
   rw [singleKrausMap_embedLocalOperator_eq_range_mul_lift V hV hN i B]
   simp only [singleKrausMap_apply, Matrix.mul_one]
-  rw [sitewisePhysicalMatrix_mul_conjTranspose, hV']
-  rw [sitewisePhysicalMatrix_one, Matrix.one_mul]
+  rw [tensorPower_mul_conjTranspose, hV']
+  rw [Matrix.tensorPower_one, Matrix.one_mul]
 
 /-- Isometric inclusion carries a complete periodic product of Hermitian
 bonds to the product of their included bonds, provided the included
@@ -443,23 +443,23 @@ theorem singleKrausMap_bondProduct_of_isometry
     {N : ℕ} (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
       Commute (embedLocalOperator 2 N hN i
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B))
+          (singleKrausMap (Matrix.tensorPower 2 V) B))
         (embedLocalOperator 2 N hN j
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B))) :
-    singleKrausMap (sitewisePhysicalMatrix V N)
+          (singleKrausMap (Matrix.tensorPower 2 V) B))) :
+    singleKrausMap (Matrix.tensorPower N V)
         (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i B).prod =
       (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
-        (singleKrausMap (sitewisePhysicalMatrix V 2) B)).prod := by
-  let W := sitewisePhysicalMatrix V N
+        (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
+  let W := Matrix.tensorPower N V
   let Q := singleKrausMap W 1
   let X : Fin N → Matrix (Fin N → Fin e)
       (Fin N → Fin e) ℂ :=
     fun i ↦ embedLocalOperator (d := e) 2 N hN i B
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ embedLocalOperator (d := d) 2 N hN i
-      (singleKrausMap (sitewisePhysicalMatrix V 2) B)
+      (singleKrausMap (Matrix.tensorPower 2 V) B)
   have hW : Wᴴ * W = 1 :=
-    sitewisePhysicalMatrix_isometry V hV N
+    tensorPower_isometry V hV N
   have hQ : Q * Q = Q := by
     calc
       Q * Q = singleKrausMap W (1 * 1) :=
@@ -486,16 +486,16 @@ theorem singleKrausMap_bondProduct_of_isometry
       Matrix.isHermitian_mul_mul_conjTranspose W hXherm
     have hAherm : (A i).IsHermitian :=
       embedLocalOperator_isHermitian 2 N hN i
-        (Matrix.isHermitian_mul_mul_conjTranspose (sitewisePhysicalMatrix V 2) hB)
+        (Matrix.isHermitian_mul_mul_conjTranspose (Matrix.tensorPower 2 V) hB)
     calc
       Q * A i = singleKrausMap W (X i) := hleft.symm
       _ = (singleKrausMap W (X i))ᴴ := hφherm.eq.symm
       _ = (Q * A i)ᴴ := congrArg Matrix.conjTranspose hleft
       _ = A i * Q := by
         rw [Matrix.conjTranspose_mul, hAherm.eq, hQherm.eq]
-  have hQrange : Q = sitewisePhysicalMatrix (V * Vᴴ) N := by
+  have hQrange : Q = Matrix.tensorPower N (V * Vᴴ) := by
     simp only [Q, singleKrausMap_apply, Matrix.mul_one, W]
-    rw [sitewisePhysicalMatrix_mul_conjTranspose]
+    rw [tensorPower_mul_conjTranspose]
   have hne : List.ofFn X ≠ [] := by
     rw [List.ne_nil_iff_length_pos, List.length_ofFn]
     omega
@@ -535,7 +535,7 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
     (F : PhysicalSupportRestrictionData P K)
     (data : TranslationInvariantBondData F.supportDim)
     {N : ℕ} (hN : 2 ≤ N) :
-    singleKrausMap (sitewisePhysicalMatrix F.inclusion N)
+    singleKrausMap (Matrix.tensorPower N F.inclusion)
         (List.ofFn fun i : Fin N ↦
           embedLocalOperator (d := F.supportDim) 2 N hN i data.bond).prod =
       (List.ofFn fun i : Fin N ↦
@@ -566,10 +566,10 @@ noncomputable def liftedEtaLocalStructureData
         embedLocalOperator (d := d) 2 N hN i
           (F.liftedBond data.bondData.bond)).prod
     have hmpo : mpo K N =
-        singleKrausMap (sitewisePhysicalMatrix F.inclusion N)
+        singleKrausMap (Matrix.tensorPower N F.inclusion)
           (mpo (PhysicalSectorFactorization.changePhysicalBasis
             F.inclusionᴴ K) N) := by
-      rw [singleKrausMap_sitewisePhysicalMatrix_mpo, F.reembed]
+      rw [singleKrausMap_tensorPower_mpo, F.reembed]
     change mpo (PhysicalSectorFactorization.changePhysicalBasis
       F.inclusionᴴ K) N = (c : ℂ) •
         (List.ofFn fun i : Fin N ↦
@@ -577,7 +577,7 @@ noncomputable def liftedEtaLocalStructureData
             data.bondData.bond).prod at hreal
     rw [hmpo, hreal]
     rw [(singleKrausMap
-      (sitewisePhysicalMatrix F.inclusion N)).map_smul]
+      (Matrix.tensorPower N F.inclusion)).map_smul]
     rw [F.singleKrausMap_bondProduct_eq_liftedBondProduct data.bondData hN]
 
 
@@ -606,12 +606,12 @@ theorem exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactoriza
     ((F.liftedTranslationInvariantBondData restrictedData.bondData).toCommutingFormData
       hN).product
   have hmpo : mpo K N =
-      singleKrausMap (sitewisePhysicalMatrix F.inclusion N)
+      singleKrausMap (Matrix.tensorPower N F.inclusion)
         (mpo (PhysicalSectorFactorization.changePhysicalBasis
           F.inclusionᴴ K) N) := by
-    rw [singleKrausMap_sitewisePhysicalMatrix_mpo, F.reembed]
+    rw [singleKrausMap_tensorPower_mpo, F.reembed]
   rw [hmpo]
-  change singleKrausMap (sitewisePhysicalMatrix F.inclusion N)
+  change singleKrausMap (Matrix.tensorPower N F.inclusion)
       (mpo (PhysicalSectorFactorization.changePhysicalBasis
         F.inclusionᴴ K) N) =
     (List.ofFn fun i : Fin N ↦

@@ -76,8 +76,8 @@ theorem isometricInteractionExtension_commute_onSiteTensorPow {d m : ℕ}
     Commute (isometricInteractionExtension E A)
       (onSiteTensorPow 2 (U : Matrix (Fin m) (Fin m) ℂ)) := by
   have hInt : onSiteTensorPow 2 (U : Matrix (Fin m) (Fin m) ℂ) *
-      MPOTensor.sitewisePhysicalMatrix E 2 =
-      MPOTensor.sitewisePhysicalMatrix E 2 *
+      Matrix.tensorPower 2 E =
+      Matrix.tensorPower 2 E *
         onSiteTensorPow 2 (V : Matrix (Fin d) (Fin d) ℂ) := by
     change Matrix.rectKronecker (fun _ : Fin 2 => (U : Matrix (Fin m) (Fin m) ℂ)) *
       Matrix.rectKronecker (fun _ : Fin 2 => E) =
@@ -143,8 +143,7 @@ Section II.F.2, eq:sym:omega-gamma. -/
 theorem continuous_commonPhysicalNormalizedBondInteraction
     {D₀ D₁ : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (d₀ d₁ : ℕ) :
     Continuous (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁) := by
-  let E := MPOTensor.sitewisePhysicalMatrix
-    (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) 2
+  let E := Matrix.tensorPower 2 (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
   change Continuous (fun γ => 1 - E * (1 - normalizedBondInteraction D₀ D₁ γ) * Eᴴ)
   exact continuous_const.sub
     ((continuous_const.matrix_mul (continuous_const.sub
@@ -174,17 +173,17 @@ theorem isometricInteractionExtension_ker_le_of_ker_le {d m N : ℕ}
   have hyB := LinearMap.mem_ker.mp (hker hy)
   have hInt : Matrix.toEuclideanLin
       (interactionHamiltonian (isometricInteractionExtension E B) hN) ∘ₗ
-        Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N) =
-      Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N) ∘ₗ
+        Matrix.toEuclideanLin (Matrix.tensorPower N E) =
+      Matrix.toEuclideanLin (Matrix.tensorPower N E) ∘ₗ
         Matrix.toEuclideanLin (interactionHamiltonian B hN) := by
     simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same] using
       congrArg Matrix.toEuclideanLin
         (interactionHamiltonian_isometricInteractionExtension_intertwiner E hE B hB hN)
   change Matrix.toEuclideanLin
     (interactionHamiltonian (isometricInteractionExtension E B) hN)
-      (Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N) y) = 0
+      (Matrix.toEuclideanLin (Matrix.tensorPower N E) y) = 0
   calc
-    _ = Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N)
+    _ = Matrix.toEuclideanLin (Matrix.tensorPower N E)
         (Matrix.toEuclideanLin (interactionHamiltonian B hN) y) :=
       LinearMap.congr_fun hInt y
     _ = 0 := by rw [hyB, map_zero]
@@ -260,8 +259,7 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace
     LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ) hN)) =
       Submodule.span ℂ {(Matrix.toEuclideanLin
-        (MPOTensor.sitewisePhysicalMatrix
-          (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) N)
+        (Matrix.tensorPower N (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁))
         (WithLp.toLp 2 (mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
   have : NeZero N := ⟨by omega⟩
   exact isometricInteractionExtension_ker_eq_span _
@@ -274,9 +272,9 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace
 /-- The tensor power of a rectangular physical map carries the periodic
 MPS vector to that of the rotated tensor. Source context: arXiv:1010.3732,
 Section II.F.2, eq:1d-sym:jointsym. -/
-theorem toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical {d m D N : ℕ}
+theorem toEuclideanLin_tensorPower_mpv_rotatePhysical {d m D N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
-    Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N)
+    Matrix.toEuclideanLin (Matrix.tensorPower N E)
         (WithLp.toLp 2 (mpv (N := N) A)) =
       WithLp.toLp 2 (mpv (N := N) (rotatePhysical E A)) := by
   change WithLp.toLp 2 ((Matrix.rectKronecker fun _ : Fin N => E).mulVec (mpv A)) =
@@ -296,7 +294,7 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv
         (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
           (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
   rw [commonPhysicalNormalizedBondInteraction_groundSpace h₀ h₁ d₀ d₁ γ hN,
-    toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical]
+    toEuclideanLin_tensorPower_mpv_rotatePhysical]
 
 /-- Every enlarged bond zero mode is a canonical-parent zero mode whenever
 this inclusion holds before adjoining the unused physical states.

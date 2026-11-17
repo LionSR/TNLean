@@ -79,10 +79,9 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     \lean{Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one,
         MPSTensor.conjTranspose_mul_sum_of_isometry,
         MPSTensor.sum_mul_conjTranspose_mul_sum_of_isometry,
-        Matrix.conjTranspose_tensorPower,
         Matrix.sum_star_tensorPower_mulVec_mul,
         Matrix.sum_norm_sq_tensorPower_mulVec_le,
-        Matrix.tensorPower_one, Matrix.tensorPower_zero,
+        Matrix.tensorPower_zero,
         MPSTensor.conjTranspose_coordEmbedding,
         MPSTensor.transpose_kronecker_apply_eq_mul_single_mul,
         MPSTensor.exists_norm_gram_sum_sub_le,
@@ -151,7 +150,9 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 \end{lemma}
 \begin{proof}
     \leanok
-    Part~(1) is $\lVert L\rVert^2=\lVert L^\dagger L\rVert$. Part~(2) is
+    \uses{lem:mpdo_tensor_power_laws}
+    Part~(1) is $\lVert L\rVert^2=\lVert L^\dagger L\rVert$. By
+    Lemma~\ref{lem:mpdo_tensor_power_laws}, part~(2) follows from
     $\bigl(W^{\otimes M}\bigr)^\dagger W'^{\otimes M}=(W^\dagger W')^{\otimes M}$,
     together with $\Id-\Pi\geq0$ for the Hermitian idempotent
     $\Pi=(W^\dagger W)^{\otimes M}$. Part~(3) is a computation of entries. For part~(4),
