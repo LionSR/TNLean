@@ -1135,7 +1135,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
   with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
   when the selected block length exceeds the ring length.
-- `mswc24_measurement_preparation_scope.tex` records the scope of the
+- `mswc24_measurement_preparation_scope.tex` (scope restriction, open) records
+  the remaining original-site and all-length obligations for arbitrary tensors.
+  A fixed positive blocking now gives normal sectors and both measurement depth
+  bounds without supplied canonical data, on grouped sites. The note also records
+  the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes
   orthogonal `q`-site states of distinct blocks, block lengths dividing `N`, and

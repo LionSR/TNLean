@@ -8,7 +8,7 @@
 \date{2026-10-05}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{What the source states}
 The paragraph ``Long-range MPS using measurements'' of~\cite{Malz2024Preparation}
@@ -143,15 +143,49 @@ The same construction covers the singleton cyclic ring and arbitrary parity
 patterns. The original cyclic measurement and corrections finish the GHZ
 state, with an outcome scalar independent of the coherent label amplitudes.
 
-\section{Resolution and resource convention}
-The overlapping-block result removes the earlier orthogonality and
-chain-length restrictions. The sparse-register
+\section{Canonical-form resolution and resource convention}
+For tensors already in canonical form, the overlapping-block result removes
+the earlier orthogonality and chain-length restrictions. The sparse-register
 construction now removes the remaining GHZ depth restriction. It restores
 all scratch sites and ancillas exactly to $\ket0$, uses no postselection or
 additional physical sites, and counts all quantum layers on neighbouring
 sites. On-site measurements, on-site corrections and global classical
 feedforward are free in the measurement-round model. Neither an arbitrary
 unitary on $q$ sites nor a hidden environment is treated as free.
+
+\section{Arbitrary tensors after fixed blocking}
+An arbitrary tensor now supplies its own fixed positive blocking length $p$,
+inequivalent normal representatives, copy weights, faithful stationary matrices,
+and strict mixed-transfer gaps. No decomposition or injectivity hypothesis is
+supplied. At every positive grouped length $M$ the exact expansion is
+\begin{align}
+    \ket{\phi_M(A^{[p]})}
+     & =\sum_j\left(\sum_k\mu_{j,k}^{M}\right)\ket{\phi_M(B_j)}.
+    \label{eq:mswc24_arbitrary_blocked_expansion}
+\end{align}
+The logarithmic and double-logarithmic preparation estimates apply to every
+nonzero target in (\ref{eq:mswc24_arbitrary_blocked_expansion}) with $M\geq2$.
+The preparation constants and $p$ are independent of $M$ and the accuracy.
+The empty family and vanishing individual power sums are allowed.\footnote{
+    Declarations:
+    \leanid{MPSTensor.exists_blockTensor_normal_sectors_fixedPoints},
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockTensor_le_log},
+    and
+    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockTensor_le_log_log}.}
+
+\paragraph{Remaining scope restriction.}
+The circuits act on $M$ grouped sites of dimension $d^p$. To obtain the source
+statement on the original chain, one must compile those protocols into
+nearest-neighbour circuits on $pM$ physical sites, preserving deterministic
+measurement branches and bounding depth by a constant depending on $p$ and $d$.
+One must also cover original lengths not divisible by $p$ with constants uniform
+in the length. An arbitrary positive blocking theorem alone supplies neither
+step. Periodic sectors can vanish at some lengths, but this does not imply that
+the entire tensor vanishes outside multiples of a single common period: a
+normal sector can coexist with a sector of period two. A length-dependent
+primitive decomposition needs a finite common choice of normal families and
+uniform estimates before the preparation theorem can be applied. The
+unrestricted all-translation-invariant source assertion therefore remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
