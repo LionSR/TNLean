@@ -181,7 +181,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
         "MPS/SharedInfra <-> Spectral",
         "MPS/Structure <-> MPS/Symmetry",
         "PEPS <-> PEPS/EdgeMiddlePhysical",
-        "PEPS <-> PEPS/Examples",
         "PEPS <-> PEPS/FundamentalTheorem",
         "PEPS <-> PEPS/ParentHamiltonian",
         "PEPS <-> PEPS/RegionBlock",
@@ -197,7 +196,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
 # move the declaration the library needs out of the example.
 EXAMPLES_IMPORTS: frozenset[str] = frozenset(
     {
-        "TNLean.PEPS.KitaevCheckerboardBlocking -> TNLean.PEPS.Examples.QuantumDouble",
     }
 )
 

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.QuantumDoubleTensor
 import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Data.ZMod.Defs
 import Mathlib.LinearAlgebra.Matrix.Permutation
@@ -138,13 +139,6 @@ theorem colorDiag_mul (g h : G) : colorDiag G (g * h) = colorDiag G g * colorDia
 
 variable {G}
 
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2460–2463 (figure
-`fig_app_tc-dual`). The four physical spins `(h₂h₁⁻¹, h₃h₂⁻¹, h₃h₄⁻¹, h₄h₁⁻¹)` of the dual
-tensor, the differences of adjacent plaquette colors, for the colors `(t, r, b, l)` on the
-top, right, down and left legs, that is `(h₂, h₃, h₄, h₁)`. -/
-def quantumDoubleDualSpins (c : G × G × G × G) : G × G × G × G :=
-  (c.1 * c.2.2.2⁻¹, c.2.1 * c.1⁻¹, c.2.1 * c.2.2.1⁻¹, c.2.2.1 * c.2.2.2⁻¹)
-
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 2465: shifting all
 plaquette colors does not change the physical spins. -/
 @[simp] theorem quantumDoubleDualSpins_mul_colorDiag (c : G × G × G × G) (g : G) :
@@ -200,15 +194,6 @@ theorem mem_invariants_colorShiftRep_iff (x : (G × G × G × G) → ℂ) :
   exact forall_comm
 
 variable (G) [DecidableEq G]
-
-/-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2460–2463. The
-dual quantum-double tensor with virtual colors `t, r, b, l` on the top, right, down and left
-legs: it is `1` at the physical configuration `quantumDoubleDualSpins (t, r, b, l)` of
-differences of adjacent colors and `0` elsewhere. This is the tensor `K` of
-arXiv:1001.3807, `Papers/1001.3807/paper_v3.tex` lines 2906–2911, up to the orientation of the
-differences. -/
-def quantumDoubleDualTensor (t r b l : G) (s : G × G × G × G) : ℂ :=
-  if s = quantumDoubleDualSpins (t, r, b, l) then 1 else 0
 
 variable {G} [Fintype G]
 
@@ -285,9 +270,6 @@ theorem isGIsometric_quantumDoubleDualTensor :
       siteMap_quantumDoubleDualTensor_apply_spins_of_mem_invariants hx, Complex.star_def,
       map_mul, Complex.conj_natCast, Complex.ofReal_natCast]
     ring
-
-/-- The group `ℤ₂` of the toric code, written multiplicatively. -/
-abbrev ToricCodeGroup : Type := Multiplicative (ZMod 2)
 
 /-- Source: arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` lines 2450–2465, and
 arXiv:quant-ph/9707021, `References/quant-ph_9707021/source/anyons.tex` lines 189–226: the

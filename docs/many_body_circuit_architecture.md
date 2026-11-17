@@ -238,9 +238,12 @@ it.
   directories that are layers today stay layers.
 - `EXAMPLES_IMPORTS`, in the same script, lists the imports of a module inside
   an `Examples` directory by a module outside every such directory. It
-  recorded 17 when introduced. A worked example is not a prerequisite of the
-  theory it illustrates: the declaration the library needs moves out of the
-  example.
+  recorded 17 when introduced and is now empty under the checker's expanded
+  dependency interpretation. Shared interfaces live in library modules;
+  concrete demonstrations live under `Examples`. Seven historical import-only
+  compatibility paths still literally import examples; the checker expands
+  them when checking declaration-bearing callers. See
+  `audits/2026-11-17_examples_import_extraction.md` for the inventory and scope.
 - `PASS_THROUGH`, in `scripts/check_pass_through_declarations.py`, lists the
   declarations whose whole body applies the declaration of the same name in
   another namespace to their own explicit arguments in order, as in
