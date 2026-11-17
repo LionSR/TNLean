@@ -37,6 +37,9 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
+      - 'scripts/ci_resource_diagnostics.py'
+      - 'scripts/ci_resource_diagnostics.sh'
+      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
@@ -145,6 +148,9 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
+      - 'scripts/ci_resource_diagnostics.py'
+      - 'scripts/ci_resource_diagnostics.sh'
+      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
@@ -304,6 +310,9 @@ jobs:
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/ci_lean_checks.py'
               - 'scripts/test_ci_lean_checks.py'
+              - 'scripts/ci_resource_diagnostics.py'
+              - 'scripts/ci_resource_diagnostics.sh'
+              - 'scripts/test_ci_resource_diagnostics.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/test_pr_ci_base_snapshot.py'
               - 'scripts/lake_build_locked.sh'
@@ -593,12 +602,38 @@ jobs:
           python3 scripts/ci_lean_checks.py early --budget 1200 --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
+        id: lean-build
         run: |
           set -eo pipefail
+          source scripts/ci_resource_diagnostics.sh
           {
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Validate closed resource diagnostics for upload
+        id: resource-diagnostics
+        if: always() && steps.lean-build.outputs.resource_directory != ''
+        continue-on-error: true
+        timeout-minutes: 1
+        env:
+          RESOURCE_DIRECTORY: ${{ steps.lean-build.outputs.resource_directory }}
+        run: |
+          python3 scripts/ci_resource_diagnostics.py publish \
+            --directory "$RESOURCE_DIRECTORY" --temp-root "$RUNNER_TEMP" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Upload build resource diagnostics
+        if: always() && steps.resource-diagnostics.outputs.artifact_path != ''
+        continue-on-error: true
+        timeout-minutes: 2
+        uses: actions/upload-artifact@v7
+        with:
+          name: lean-resources-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.resource-diagnostics.outputs.artifact_path }}
+          if-no-files-found: ignore
+          retention-days: 7
+          compression-level: 6
 
       # Elaborate changed production files and every affected
       # scripts/*_regression.lean file with warnings as errors. A regression is
@@ -804,6 +839,11 @@ jobs:
 
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
+
+      - name: Test build resource diagnostics
+        run: |
+          bash -n scripts/ci_resource_diagnostics.sh
+          python3 scripts/test_ci_resource_diagnostics.py
 
       - name: Check local cache-seeding shell syntax
         run: |
