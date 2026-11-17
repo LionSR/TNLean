@@ -135,7 +135,8 @@ theorem regionalProjectionMatrix_supported
     by_cases hm : m ∈ s
     · simp only [hm, ↓reduceIte]
       exact Entropy.IsSupportedOn.mul
-        (sub_mem
+        ((Subalgebra.toSubmodule
+          (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
           (Entropy.isSupportedOn_one D) ((hh m).mono (hD m (by omega) hm)))
         hprefix (fun _ : Fin L ↦ (⟨0, Nat.lt_of_lt_of_le Nat.zero_lt_one hq⟩ : Fin q))
     · simpa [hm] using hprefix
@@ -158,7 +159,8 @@ theorem rank_regionalProjectionMatrix_le_one
     by_cases hm : m ∈ s
     · simp only [hm, ↓reduceIte, Entropy.cutOperator_mul]
       have hfactor := Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
-        (sub_mem
+        ((Subalgebra.toSubmodule
+          (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
           (Entropy.isSupportedOn_one _) (hh m))
         (edge_oneSided (hcross m (by omega) hm))
       exact (operatorSchmidtRank_mul_le _ _).trans (by simpa using Nat.mul_le_mul hfactor hprefix)
@@ -183,12 +185,14 @@ theorem rank_regionalProjectionMatrix_le_sq
       · have hprefix := rank_regionalProjectionMatrix_le_one hh s m k
           (fun i hi _ ↦ by omega)
         have hfactor := edge_rank_le_sq (k := k) hq
-          (sub_mem
+          ((Subalgebra.toSubmodule
+            (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
             (Entropy.isSupportedOn_one _) (hh m))
         exact (operatorSchmidtRank_mul_le _ _).trans
           (by simpa using Nat.mul_le_mul hfactor hprefix)
       · have hfactor := Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
-          (sub_mem
+          ((Subalgebra.toSubmodule
+            (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
             (Entropy.isSupportedOn_one _) (hh m))
           (edge_oneSided hk)
         exact (operatorSchmidtRank_mul_le _ _).trans
