@@ -9,7 +9,7 @@
 \date{2026-11-17}
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{scope-restriction}{open}
 
 \section{The source claim}
 Garre-Rubio, Lootens and Moln\'ar connect two injective matrix product
@@ -125,11 +125,21 @@ source's claim that the canonical parents form a symmetric path does not
 follow from the data that Section~5 constructs.
 
 \section{Unitary on-site endpoints}
-Unitarity of the endpoint symmetries does not repair the canonical path.
-Adjoint closure of the two-site boundary range fails, and so does
-commutation, already for $\mathbb Z_2$ acting by one unitary on-site
-representation at both endpoints, with two different injective endpoint
-tensors and equal $L$-data.
+For unitary on-site endpoint symmetries the answer depends on a choice
+that the source does not make: the virtual gauge of the endpoint tensors.
+For $\mathbb Z_2$, in a canonical gauge the two-site boundary range of the
+common operator is closed under the adjoint and the canonical parent
+commutes. In a non-canonical gauge both fail, with two different injective
+endpoint tensors and equal $L$-data. A virtual gauge
+$A_p\mapsto ZA_pZ^{-1}$ changes neither the endpoint state nor its
+canonical parent $H_p$, but it changes $A(\gamma)$, the action maps, and
+hence the common operator. The source imposes no canonical form on the
+tensors and no normalization making the action gauges unitary: the
+background of lines 302--429 and the definition of a phase, lines
+1250--1272, contain no such condition, the group lemma of line 1211 treats
+representations that are ``not necessarily unitary'', and the remark after
+definition \texttt{defsym}, lines 1240--1246, states that ``the unitarity
+of the operators is not required''.
 
 \paragraph{The common operator of on-site symmetries.} Let $u_p$ act on
 $\mathcal H_p=\mathbb C^{D_p}\otimes\mathbb C^{D_p}$ with
@@ -172,13 +182,40 @@ proportional to Hermitian matrices. For $\mathbb Z_2$ with unitary
 on-site endpoints, closure therefore holds exactly when both gauges $Y_p$
 are proportional to Hermitian matrices. Unitarity of $u_p$ does not force
 this: a gauge transformation $A_p\mapsto ZA_pZ^{-1}$ leaves $u_p$ fixed
-and replaces $Y_p$ by $ZY_pZ^{-1}$. The source fixes no gauge for $A_p$.
+and replaces $Y_p$ by $ZY_pZ^{-1}$. In particular closure holds whenever
+both $Y_p$ are unitary: a unitary $Y_p$ with $Y_p^2$ scalar is a scalar
+multiple of a Hermitian involution. For an injective tensor in canonical
+form, the gauge of a unitary on-site symmetry is unitary
+\cite[Lemma~1 and Theorem~2]{PerezGarcia2008StringOrder}.
+
+\paragraph{The canonical gauge: closure holds.} Take
+\[
+    A_0^{\rm c}=\tfrac12\bigl(\mathbb 1,\ \sigma_x,\ J,\ \sigma_z\bigr),\qquad
+    A_1^{\rm c}=\tfrac15\bigl(\mathbb 1,\ 2\sigma_x,\ 2J,\ 4\sigma_z\bigr),
+    \qquad J=\begin{pmatrix}0&1\\-1&0\end{pmatrix},
+\]
+with $u=\operatorname{diag}(1,-1,-1,1)$ at both endpoints. Each letter is
+a scalar multiple of an orthogonal matrix, and the squared scalars sum to
+one, so $\sum_k(A_p^k)^*A_p^k=\sum_kA_p^k(A_p^k)^*=\mathbb 1$: both tensors
+are left and right canonical with identity fixed points. Both are
+one-site injective and they generate different states. The action gauge
+is $Y_0=Y_1=\sigma_z$, unitary and Hermitian, and the raw $L$ entries
+agree. By the criterion above the two-site boundary range is closed under
+the adjoint, and by the formal theorem of the next section the canonical
+path commutes with the common operator. The script named below confirms,
+in exact rational arithmetic, closure and $[h_\gamma,O^2_X]=0$ for every
+$X$ at $\gamma=1/2$ and $\gamma=1/3$. This is the decisive check: in the
+canonical gauge the unitary $\mathbb Z_2$ case satisfies the closure
+hypothesis.
+
+\paragraph{A non-canonical gauge: closure fails.} The remaining data show
+that the gauge choice is load-bearing; they illustrate the omitted choice
+and do not refute the source.
 
 \paragraph{Explicit data.} Take $D_0=D_1=2$, write $e_1,e_2$ and
 $f_1,f_2$ for the bases of $\mathbb C^{D_0}$ and $\mathbb C^{D_1}$, and
 order the letters $(1,1),(1,2),(2,1),(2,2)$. Put
 \[
-    J=\begin{pmatrix}0&1\\-1&0\end{pmatrix},\qquad
     Z=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
     Y_0=Z\sigma_zZ^{-1}=\begin{pmatrix}1&-2\\0&-1\end{pmatrix},
 \]
@@ -265,8 +302,8 @@ commute with the periodic common operator either: at $\gamma=1/2$,
 The script \path{scripts/check_glm23_unitary_mixed_adjoint_closure.py}
 checks the covariance, the exact action, the failure of closure, both
 commutators, and this entry in exact rational arithmetic. With
-$Z=\mathbb 1$, so that $Y_0=\sigma_z$, it confirms closure and
-commutation with every $O^2_X$.
+$Z=\mathbb 1$, so that $Y_0=\sigma_z$, and for the canonical-gauge data
+above, it confirms closure and commutation with every $O^2_X$.
 
 The formal construction replaces each $A_p$ by its positive polar factor
 $F_p^*A_p$ and $u$ by $F_p^*uF_p$. Here $d_p=D_p^2$ and $A_p$ is
@@ -284,16 +321,18 @@ tensor still commutes with such a $u_g$, because $u_g^*=u_{g^{-1}}$ is
 again a symmetry. A natural hypothesis for groups is closure of the
 union of the boundary ranges over all labels.
 
-\paragraph{Classification.} This is a false source claim rather than an
-open gap. The source asserts that $A(\gamma)$ with the canonical parents
-$h_\gamma$ is a symmetric path, that is, that $H(\gamma)$ commutes with
-the common operators; the data above satisfy every hypothesis of
-Section~5, in the unitary on-site setting that the source singles out
-after definition \texttt{defsym}, and the assertion fails on them. The
-conclusion of the section, that the two Hamiltonians lie in the same
-phase, is not refuted. Gauge fixing the endpoints, or replacing the
-canonical parent, may repair the construction; neither is part of the
-source, so the status stays open.
+\paragraph{Classification.} In the unitary on-site case this is a scope
+restriction, not a false source claim. The construction of Section~5 is
+under-determined by the virtual gauge of the endpoint tensors, and the
+source omits the choice that makes the canonical path symmetric. For
+$\mathbb Z_2$ in a canonical gauge closure holds, as checked above; in the
+non-canonical gauge of the second example it fails. The formalization
+must therefore make the gauge choice explicit, through adjoint closure or
+a canonical-gauge hypothesis on the endpoints. The failure for
+non-canonical gauges shows that the choice is needed, not that the
+source's claim is false. The non-unitary example of the previous section
+is not affected by any gauge choice, since the endpoint parent itself
+fails to commute there.
 
 \section{The formal boundary}
 The enlarged mixed interaction is the canonical two-site parent of the
@@ -312,7 +351,8 @@ The fusion hypotheses and the equal $L$ matrices are not used for this
 conclusion. Adjoint closure is the only hypothesis added to those of the
 action decompositions and one-site injectivity. The first example shows
 that it cannot be dropped, and the second shows that unitary on-site
-endpoint symmetries do not supply it. The source-labelled claim of a
+endpoint symmetries supply it only in a suitable gauge, such as a
+canonical one. The source-labelled claim of a
 symmetric canonical path remains unformalized.
 
 \section{Elimination plan}
@@ -326,16 +366,14 @@ symmetric canonical path remains unformalized.
           averaging versus ambient completion,
           \texttt{glm23\_wha\_parent\_completion.tex}.
     \item Adjoint closure does not follow from unitary on-site endpoint
-          symmetries; the $\mathbb Z_2$ example above refutes it together
-          with commutation. Two restricted routes remain. For
-          $\mathbb Z_2$, closure holds when both gauges $Y_p$ are
-          proportional to Hermitian matrices, as computed above, and this
-          case can be formalized as a separate restricted statement. For
-          general groups, replace the per-label hypothesis by closure of
-          the union of the boundary ranges over all labels, and derive it
-          from endpoint tensors in a gauge in which the action gauges are
-          unitary. Both routes add a hypothesis that the source does not
-          state.
+          symmetries alone, since it depends on the virtual gauge of the
+          endpoint tensors. For $\mathbb Z_2$ it holds exactly when both
+          action gauges $Y_p$ are proportional to Hermitian matrices, in
+          particular in a canonical gauge; formalize this as a separate
+          statement with an explicit gauge hypothesis. For general groups,
+          replace the per-label hypothesis by closure of the union of the
+          boundary ranges over all labels, and derive it from endpoint
+          tensors in a gauge in which the action gauges are unitary.
 \end{enumerate}
 
 \bibliographystyle{alpha}

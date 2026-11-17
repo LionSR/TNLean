@@ -16,7 +16,11 @@ agree. The script checks, in exact rational arithmetic:
   two-site operator O^2_1, and that the periodic three-site Hamiltonian does
   not commute with the periodic three-site operator, at gamma = 1/2;
 * the control: with the Hermitian gauge Y_0 = sz the range is adjoint closed
-  and h_gamma commutes with every O^2_X.
+  and h_gamma commutes with every O^2_X;
+* the canonical-gauge instance A_0 = (1, sx, J, sz) / 2 and
+  A_1 = (1, 2 sx, 2 J, 4 sz) / 5: both tensors satisfy
+  sum_i A^i* A^i = sum_i A^i A^i* = 1, the action gauges are unitary, the
+  range is adjoint closed and h_gamma commutes with every O^2_X.
 
 Only the Python standard library is used; no rank is estimated numerically.
 """
@@ -117,11 +121,15 @@ def local(r):
     return r if r < D0 else r - D0
 
 
-def build(gauge):
+def scale(c, a):
+    return [[c * x for x in r] for r in a]
+
+
+def build(gauge, c0=F(1), w1=(1, 2, 1, 1), c1=F(1)):
     """Endpoint data, common operator letters and the mixed tensor."""
     gi = inverse(gauge)
-    a0 = [mul(mul(gauge, x), gi) for x in (ONE, SX, J, SZ)]
-    a1 = [ONE, [[2 * x for x in r] for r in SX], J, SZ]
+    a0 = [scale(c0, mul(mul(gauge, x), gi)) for x in (ONE, SX, J, SZ)]
+    a1 = [scale(c1 * w, x) for w, x in zip(w1, (ONE, SX, J, SZ))]
     y0, y1 = mul(mul(gauge, SZ), gi), SZ
     for a, y in ((a0, y0), (a1, y1)):
         assert mul(y, y) == eye(2)
@@ -248,8 +256,8 @@ def three_site_commutator_entry(mpo, h, out_cfg, in_cfg):
     return ham_vec(op(e)).get(out_cfg, F(0)) - op(ham_vec(e)).get(out_cfg, F(0))
 
 
-def run(gauge, expect_closed):
-    mpo, tensor, synth, anal, y0 = build(gauge)
+def run(gauge, expect_closed, **kw):
+    mpo, tensor, synth, anal, y0 = build(gauge, **kw)
     gam = F(1, 3)
     a = tensor(gam)
     for p in LETTERS:
@@ -286,6 +294,20 @@ def main():
     assert value == F(-4, 75)
     print(f"<e1e1,e1e1,e2e2|[H_3,O_3]|e1e1,e1e1,e1e2> at gamma = 1/2: {value}")
     run(ONE, expect_closed=True)
+    # Canonical gauge: both tensors are left and right canonical with identity
+    # fixed points, and the action gauge sz is unitary at both endpoints.
+    c0, w1, c1 = F(1, 2), (1, 2, 2, 4), F(1, 5)
+    a0 = [scale(c0, x) for x in (ONE, SX, J, SZ)]
+    a1 = [scale(c1 * w, x) for w, x in zip(w1, (ONE, SX, J, SZ))]
+    for a in (a0, a1):
+        left = right = zeros(2, 2)
+        for x in a:
+            left = [[p + q for p, q in zip(r, t)] for r, t in zip(left, mul(transpose(x), x))]
+            right = [[p + q for p, q in zip(r, t)] for r, t in zip(right, mul(x, transpose(x)))]
+        assert left == right == eye(2), "canonical form"
+    assert mul(SZ, transpose(SZ)) == eye(2), "unitary action gauge"
+    print("canonical gauge:", end=" ")
+    run(ONE, expect_closed=True, c0=c0, w1=w1, c1=c1)
     print("all checks passed")
 
 
