@@ -66,9 +66,10 @@ Source: area-law `01-preliminaries.tex`, lines 95–102. -/
 theorem card_admissibleSupport_le (Λ : Finset (ℤ × ℤ)) (R : ℕ) :
     Fintype.card (AdmissibleSupport Λ R) ≤ 2 ^ ((1 + 2 * R * (R + 1)) - 1) * Λ.card := by
   classical
-  have h := PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem
-    (N := (Finset.univ : Finset (Site Λ))) (S := Finset.univ) fun X _ ↦
-      let ⟨v, hv⟩ := X.2.1; ⟨v, Finset.mem_univ v, hv⟩
+  have h := PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem (R := R)
+    (N := (Finset.univ : Finset (Site Λ))) (S := Finset.univ) fun X _ ↦ by
+      obtain ⟨v, hv⟩ := X.2.1
+      exact ⟨v, Finset.mem_univ v, hv⟩
   rwa [Finset.card_univ, Finset.card_univ, Fintype.card_coe, mul_comm] at h
 
 /-- The coefficient `4 μ_R` of the norm bound `4 μ_R J |Λ|` of the partial-swap perturbation at
