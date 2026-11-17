@@ -1248,30 +1248,34 @@
 
 \begin{lemma}[Conjugation phases of $U_2$ and $U_3$]
     \label{prop:U2-U3-trivial-conjugation}
-    \notready
+    \lean{MPOTensor.shiftExampleU₂_strictlyEquivalentUnderSymmetry_conjugation,
+        MPOTensor.shiftExampleU₃_strictlyEquivalentUnderSymmetry_conjugation,
+        MPOTensor.shiftExampleU₁BlockedStandardForm}
+    \leanok
     \discussion{5715}
-    \uses{threeMPU, conjphs, prop:conjsym-strict-equiv}
+    \uses{threeMPU, thm:threeMPU_supplied_decompositions, thm:mpu_shift_public_index_values, thm:mpu_conjugation_odd_rank_if, thm:mpu_conjugation_even_rank_if}
     After blocking two sites, $U_2^{(N)}$ and $U_3^{(N)}$ are both in the
     trivial phase under conjugation.
     % Source lines: paper_v2.tex 2110--2134.
 \end{lemma}
 
-\begin{lemma}[Admissible conjugation phases of $U_2$ and $U_3$]
-    \label{prop:mpu_admissible_u2_u3_conjugation}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (two-site blocked data):** both blocked tensors carry
-    % reduced full-support source data. No preservation under blocking is
-    % asserted. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU, conjphs, prop:conjsym-strict-equiv, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, def:mpu_admissible_symmetry_equivalence}
-    Suppose the two-site blocked tensors carry reduced full-support source data
-    and the standard-form comparison paths carry admissible path data of
-    blocking length one. Then the two-site blocked tensors of $U_2$ and
-    $U_3$ are both in the trivial admissible strict phase under conjugation.
-    Consequently $U_2$ and $U_3$ lie in the same admissible equivalence class.
-    % Source lines: paper_v2.tex 2110--2134.
-\end{lemma}
+\begin{proof}
+    \leanok
+    The trivial phase is that of $U_1^{(N)}$, whose two-site block has the
+    standard form $u=v=\Id$ with ranks $\ell=r=d^2$. The two-site blocks of
+    $U_2^{(N)}$ and $U_3^{(N)}$ have the standard forms of
+    Lemma~\ref{thm:threeMPU_supplied_decompositions}, with the same ranks.
+    All three tensors are in canonical form II and real, so their matrix product
+    unitaries are invariant under conjugation and all gates are real, in Case I.
+    With $\det(\Id\otimes\mathbb S\otimes\Id)=(\det\mathbb S)^{d^2}$,
+    $\det(\mathbb S\otimes\mathbb S)=(\det\mathbb S)^{2d^2}=1$ and
+    $\det\mathbb S=\pm1$, the product $u_i^{(2)}v_i^{(2)}$ has determinant one.
+    If $d$ is odd, the ranks are odd and
+    Lemma~\ref{thm:mpu_conjugation_odd_rank_if} gives strict equivalence to
+    $U_1^{(N)}$ after blocking. If $d$ is even, $d^2$ is even, so all four
+    determinants equal one, and Lemma~\ref{thm:mpu_conjugation_even_rank_if}
+    applies.
+\end{proof}
 
 \begin{lemma}[Continuous unitary path to the factor swap]
     \label{thm:mpu-continuous-unitary-swap-path}
