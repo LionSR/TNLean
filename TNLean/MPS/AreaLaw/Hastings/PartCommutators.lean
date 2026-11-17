@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
 import TNLean.MPS.AreaLaw.Counting
+import QICLean.Entropy.SupportedOperatorAlgebra
 
 /-!
 # Commutators of the Hamiltonian with the parts of the three-way splitting
@@ -56,42 +57,18 @@ The same argument applies to the right part. For the buffer part,
 open Matrix
 open scoped Matrix.Norms.L2Operator
 
-/-! ### Supported operators under addition and commutators -/
+/-! ### Supported operators under commutators -/
 
 section Supported
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ} {D : Finset V}
   {X Y : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ}
 
-omit [Fintype V] [DecidableEq V] in
-/-- A sum of operators supported on `D` is supported on `D`. -/
-theorem Entropy.IsSupportedOn.add (hX : Entropy.IsSupportedOn X D)
-    (hY : Entropy.IsSupportedOn Y D) : Entropy.IsSupportedOn (X + Y) D := by
-  refine ⟨fun σ τ h ↦ ?_, fun σ τ σ' τ' ha hb hc hd ↦ ?_⟩
-  · rw [Matrix.add_apply, hX.1 σ τ h, hY.1 σ τ h, add_zero]
-  · rw [Matrix.add_apply, Matrix.add_apply, hX.2 σ τ σ' τ' ha hb hc hd,
-      hY.2 σ τ σ' τ' ha hb hc hd]
-
-omit [Fintype V] [DecidableEq V] in
-/-- The negative of an operator supported on `D` is supported on `D`. -/
-theorem Entropy.IsSupportedOn.neg (hX : Entropy.IsSupportedOn X D) :
-    Entropy.IsSupportedOn (-X) D := by
-  refine ⟨fun σ τ h ↦ ?_, fun σ τ σ' τ' ha hb hc hd ↦ ?_⟩
-  · rw [Matrix.neg_apply, hX.1 σ τ h, neg_zero]
-  · rw [Matrix.neg_apply, Matrix.neg_apply, hX.2 σ τ σ' τ' ha hb hc hd]
-
-omit [Fintype V] [DecidableEq V] in
-/-- A difference of operators supported on `D` is supported on `D`. -/
-theorem Entropy.IsSupportedOn.sub (hX : Entropy.IsSupportedOn X D)
-    (hY : Entropy.IsSupportedOn Y D) : Entropy.IsSupportedOn (X - Y) D := by
-  rw [sub_eq_add_neg]
-  exact hX.add hY.neg
-
 /-- The commutator of two operators supported on `D` is supported on `D`. -/
 theorem Entropy.IsSupportedOn.commutator (hX : Entropy.IsSupportedOn X D)
     (hY : Entropy.IsSupportedOn Y D) (σ₀ : Entropy.SiteConfig n) :
     Entropy.IsSupportedOn (X * Y - Y * X) D :=
-  (hX.mul hY σ₀).sub (hY.mul hX σ₀)
+  (ManyBody.supportedOperators (fun v ↦ Fin (n v)) D).sub_mem (hX.mul hY σ₀) (hY.mul hX σ₀)
 
 end Supported
 
@@ -283,9 +260,9 @@ theorem ChainHamiltonian.isSupportedOn_commutator_termSum_inner (h : ChainHamilt
   · exact ⟨fun σ _ _ ↦ (hE.false σ).elim, fun σ _ _ _ _ _ _ _ ↦ (hE.false σ).elim⟩
   obtain ⟨σ₀⟩ := hne
   rw [h.commutator_termSum_inner_eq_sum]
-  refine TNLean.Lattice.isSupportedOn_sum _ fun X hX ↦ ?_
+  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦ ?_
   rw [h.term_commutator_termSum_eq]
-  refine TNLean.Lattice.isSupportedOn_sum _ fun Y hY ↦ ?_
+  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun Y hY ↦ ?_
   obtain ⟨hYS, hYX⟩ := Finset.mem_filter.mp hY
   obtain ⟨hXW, hYW⟩ := hW X hX Y (Finset.mem_filter.mp hYS).2 hYX
   exact ((h.supported X).mono hXW).commutator ((h.supported Y).mono hYW) σ₀
@@ -434,8 +411,9 @@ theorem ChainHamiltonian.isSupportedOn_commutator_bufferPart (h : ChainHamiltoni
       (h.operator * h.bufferPart j m - h.bufferPart j m * h.operator)
       (interval L (j - m - 2 * R) (j - m + R) ∪ interval L (j + m - R) (j + m + 2 * R)) := by
   rw [h.commutator_bufferPart_eq]
-  exact (((h.isSupportedOn_commutator_leftPart j m).mono Finset.subset_union_left).add
-    ((h.isSupportedOn_commutator_rightPart j m).mono Finset.subset_union_right)).neg
+  exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).neg_mem (add_mem
+    ((h.isSupportedOn_commutator_leftPart j m).mono Finset.subset_union_left)
+    ((h.isSupportedOn_commutator_rightPart j m).mono Finset.subset_union_right))
 
 end PartCommutators
 

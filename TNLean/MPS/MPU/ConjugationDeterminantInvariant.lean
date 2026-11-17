@@ -42,7 +42,10 @@ hypotheses; the "only if" direction does not use that one rank is odd.
   equivalence under conjugation fixes the determinant on one site.
 * `MPOTensor.StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation`: the "only if"
   direction of Theorem `conjphs`.
-* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq`: Theorem `conjphs`.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq`: Theorem `conjphs`,
+  for tensors on pairs of sites in canonical form with any standard forms.
+* `MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_iff_det_mul_eq`: the
+  same after a physical relabelling, as for the two-site blocks of one-site tensors.
 -/
 
 open scoped Matrix Kronecker
@@ -239,11 +242,11 @@ theorem StrictlyEquivalentUnderSymmetry.det_mpo_one_eq_of_conjugation {da db Da 
     mpo_padBond] at hends
   exact hends
 
-/-- **Conjugation symmetry, the "only if" direction of Theorem `conjphs`.** Let `𝒰₁, 𝒰₂` have
-standard forms with gates `u_i, v_i` of the same ranks `ℓ, r` on their two-site blocks. If the
-two-site blocks are strictly equivalent under conjugation, then `det(u₁ v₁) = det(u₂ v₂)`, read
-on `ℂ^ℓ ⊗ ℂ^r` through the swap as in `Matrix.det_gauge_mul_swap`. The standard-form chain is
-the chain of two-site blocks, as in `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
+/-- **Conjugation symmetry, the "only if" direction of Theorem `conjphs`.** Let `W₁, W₂` be
+tensors on pairs of sites with standard forms with gates `u_i, v_i` of the same ranks `ℓ, r`.
+If the tensors, after the physical relabelling `eP`, are strictly equivalent under
+conjugation, then `det(u₁ v₁) = det(u₂ v₂)`, read on `ℂ^ℓ ⊗ ℂ^r` through the swap as in
+`Matrix.det_gauge_mul_swap`.
 
 The source assumes one of `r, ℓ` odd; this direction does not use it. The proof reads the
 determinant off the MPU on one standard-form site instead of using the forward direction of
@@ -251,53 +254,68 @@ Lemma `lem:equivalent-symmetry`; see the module docstring.
 
 Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, "only if" direction, proof at
 lines 1421--1424. -/
-theorem StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation
-    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
+theorem StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation {d' : ℕ}
+    (eP : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
     {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
-    (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
-    (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
-    (h : StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
-      (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl) :
+    (S₁ : TwoSiteStandardFormData W₁ u₁ v₁) (S₂ : TwoSiteStandardFormData W₂ u₂ v₂)
+    (h : StrictlyEquivalentUnderSymmetry (conjugationSymmetry d')
+      (reindexPhysical eP W₁) (reindexPhysical eP W₂) rfl) :
     ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
       ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det := by
-  have hblock : ∀ {E : ℕ} (𝒰 : MPOTensor d E),
-      (mpo (blockTwo 𝒰) 1).det = (mpo (blockTensor 𝒰 2) 1).det := fun 𝒰 ↦ by
-    rw [blockTwo_eq_blockTensor_reindex]
-    exact (mpo_reindexPhysical (twoSiteBlockEquiv d) (blockTensor 𝒰 2) 1).symm ▸
-      Matrix.det_reindex_self _ _
-  have h1 := S₁.det_mpo_one_eq
-  have h2 := S₂.det_mpo_one_eq
-  rw [hblock] at h1 h2
   have hdet := h.det_mpo_one_eq_of_conjugation
-  rw [h1, h2] at hdet
+  rw [mpo_reindexPhysical, mpo_reindexPhysical, Matrix.det_reindex_self, Matrix.det_reindex_self,
+    S₁.det_mpo_one_eq, S₂.det_mpo_one_eq] at hdet
   have hs : (Equiv.Perm.sign (Equiv.prodComm (Fin d) (Fin d)) : ℂ) ≠ 0 := by
     rcases Int.units_eq_one_or (Equiv.Perm.sign (Equiv.prodComm (Fin d) (Fin d))) with h' | h' <;>
       simp [h']
   exact mul_left_cancel₀ hs hdet
 
-/-- **Theorem `conjphs`.** Let `𝒰₁, 𝒰₂` be simple tensors in canonical form II whose MPUs on
-the standard-form chain are invariant under conjugation, with standard-form gates `u_i, v_i` of
-the same ranks `ℓ, r`, one of them odd. The two-site blocks are strictly equivalent under
-conjugation if and only if `det(u₁ v₁) = det(u₂ v₂)`, read on `ℂ^ℓ ⊗ ℂ^r` through the swap.
+/-- **Theorem `conjphs`, for relabelled tensors on pairs of sites.** The statement of
+`strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq` after a physical relabelling `eP`,
+as for the alphabet of length-two words of a one-site tensor.
+
+Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, proof at lines 1419--1446. -/
+theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_iff_det_mul_eq {d' : ℕ}
+    (eP : Fin d' ≃ Fin (d * d)) {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
+    (hcf₁ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₁).toMPSTensor)
+    (hcf₂ : MPSTensor.IsMPUCanonicalForm (reindexPhysical eP W₂).toMPSTensor)
+    (hc₁ : ∀ N : ℕ, 0 < N → mpo W₁ N = (mpo W₁ N).map (starRingEnd ℂ))
+    (hc₂ : ∀ N : ℕ, 0 < N → mpo W₂ N = (mpo W₂ N).map (starRingEnd ℂ))
+    {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S₁ : TwoSiteStandardFormData W₁ u₁ v₁) (S₂ : TwoSiteStandardFormData W₂ u₂ v₂)
+    (hodd : Odd ℓ ∨ Odd r) :
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry d')
+        (reindexPhysical eP W₁) (reindexPhysical eP W₂) rfl ↔
+      ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
+        ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det :=
+  ⟨StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation eP S₁ S₂,
+    strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_mul_eq eP hcf₁ hcf₂
+      hc₁ hc₂ S₁ S₂ hodd⟩
+
+/-- **Theorem `conjphs`.** Let `W₁, W₂` be tensors on pairs of sites in canonical form whose
+MPUs are invariant under conjugation, with standard forms with gates `u_i, v_i` of the same
+ranks `ℓ, r`, one of them odd. Then `W₁` and `W₂` are strictly equivalent under conjugation if
+and only if `det(u₁ v₁) = det(u₂ v₂)`, read on `ℂ^ℓ ⊗ ℂ^r` through the swap. No canonical
+form II is assumed; the canonical form of the two tensors is part of strict equivalence.
 
 Source: arXiv:1703.09188, Theorem `conjphs`, lines 1406--1414, proof at lines 1419--1446; the
 "only if" direction follows the route of the module docstring. -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq
-    {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
-    (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
-    (hc₁ : ∀ N : ℕ, 0 < N → mpo (blockTwo 𝒰₁) N = (mpo (blockTwo 𝒰₁) N).map (starRingEnd ℂ))
-    (hc₂ : ∀ N : ℕ, 0 < N → mpo (blockTwo 𝒰₂) N = (mpo (blockTwo 𝒰₂) N).map (starRingEnd ℂ))
+    {W₁ : MPOTensor (d * d) D₁} {W₂ : MPOTensor (d * d) D₂}
+    (hcf₁ : MPSTensor.IsMPUCanonicalForm W₁.toMPSTensor)
+    (hcf₂ : MPSTensor.IsMPUCanonicalForm W₂.toMPSTensor)
+    (hc₁ : ∀ N : ℕ, 0 < N → mpo W₁ N = (mpo W₁ N).map (starRingEnd ℂ))
+    (hc₂ : ∀ N : ℕ, 0 < N → mpo W₂ N = (mpo W₂ N).map (starRingEnd ℂ))
     {u₁ u₂ : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
-    (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
-    (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
+    (S₁ : TwoSiteStandardFormData W₁ u₁ v₁) (S₂ : TwoSiteStandardFormData W₂ u₂ v₂)
     (hodd : Odd ℓ ∨ Odd r) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
-        (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl ↔
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (d * d)) W₁ W₂ rfl ↔
       ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
         ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det :=
-  ⟨StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation S₁ S₂,
-    strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq h₁ h₂ hc₁ hc₂ S₁ S₂ hodd⟩
+  strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_iff_det_mul_eq (Equiv.refl _)
+    hcf₁ hcf₂ hc₁ hc₂ S₁ S₂ hodd
 
 end MPOTensor

@@ -1248,30 +1248,34 @@
 
 \begin{lemma}[Conjugation phases of $U_2$ and $U_3$]
     \label{prop:U2-U3-trivial-conjugation}
-    \notready
+    \lean{MPOTensor.shiftExampleU₂_strictlyEquivalentUnderSymmetry_conjugation,
+        MPOTensor.shiftExampleU₃_strictlyEquivalentUnderSymmetry_conjugation,
+        MPOTensor.shiftExampleU₁BlockedStandardForm}
+    \leanok
     \discussion{5715}
-    \uses{threeMPU, conjphs, prop:conjsym-strict-equiv}
+    \uses{threeMPU, thm:threeMPU_supplied_decompositions, thm:mpu_shift_public_index_values, thm:mpu_conjugation_odd_rank_if, thm:mpu_conjugation_even_rank_if}
     After blocking two sites, $U_2^{(N)}$ and $U_3^{(N)}$ are both in the
     trivial phase under conjugation.
     % Source lines: paper_v2.tex 2110--2134.
 \end{lemma}
 
-\begin{lemma}[Admissible conjugation phases of $U_2$ and $U_3$]
-    \label{prop:mpu_admissible_u2_u3_conjugation}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (two-site blocked data):** both blocked tensors carry
-    % reduced full-support source data. No preservation under blocking is
-    % asserted. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU, conjphs, prop:conjsym-strict-equiv, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, def:mpu_admissible_symmetry_equivalence}
-    Suppose the two-site blocked tensors carry reduced full-support source data
-    and the standard-form comparison paths carry admissible path data of
-    blocking length one. Then the two-site blocked tensors of $U_2$ and
-    $U_3$ are both in the trivial admissible strict phase under conjugation.
-    Consequently $U_2$ and $U_3$ lie in the same admissible equivalence class.
-    % Source lines: paper_v2.tex 2110--2134.
-\end{lemma}
+\begin{proof}
+    \leanok
+    The trivial phase is that of $U_1^{(N)}$, whose two-site block has the
+    standard form $u=v=\Id$ with ranks $\ell=r=d^2$. The two-site blocks of
+    $U_2^{(N)}$ and $U_3^{(N)}$ have the standard forms of
+    Lemma~\ref{thm:threeMPU_supplied_decompositions}, with the same ranks.
+    All three tensors are in canonical form II and real, so their matrix product
+    unitaries are invariant under conjugation and all gates are real, in Case I.
+    With $\det(\Id\otimes\mathbb S\otimes\Id)=(\det\mathbb S)^{d^2}$,
+    $\det(\mathbb S\otimes\mathbb S)=(\det\mathbb S)^{2d^2}=1$ and
+    $\det\mathbb S=\pm1$, the product $u_i^{(2)}v_i^{(2)}$ has determinant one.
+    If $d$ is odd, the ranks are odd and
+    Lemma~\ref{thm:mpu_conjugation_odd_rank_if} gives strict equivalence to
+    $U_1^{(N)}$ after blocking. If $d$ is even, $d^2$ is even, so all four
+    determinants equal one, and Lemma~\ref{thm:mpu_conjugation_even_rank_if}
+    applies.
+\end{proof}
 
 \begin{lemma}[Continuous unitary path to the factor swap]
     \label{thm:mpu-continuous-unitary-swap-path}
@@ -1339,35 +1343,58 @@
 
 \begin{lemma}[Time-reversal and transposition phases of $U_2$ and $U_3$]
     \label{prop:U2-U3-trivial-tr-transpose}
-    \notready
+    \lean{MPOTensor.shiftExampleTildeU₂_strictlyEquivalentUnderSymmetry_dagger,
+        MPOTensor.shiftExampleTildeU₂_strictlyEquivalentUnderSymmetry_transpose,
+        MPOTensor.shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapDagger,
+        MPOTensor.shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapTranspose,
+        MPOTensor.mpo_braRightMul,
+        Matrix.swapMatrix_mul_swapPath,
+        Matrix.transpose_swapPath}
+    \leanok
     \discussion{5715}
-    \uses{threeMPU2, lemma:sym-trafo-swap, thm:mpu-continuous-unitary-swap-path, def:strictly-equivalent-symmetry}
-    The MPUs $\widetilde U_2^{(N)}$ and $\widetilde U_3^{(N)}$ are in the same
-    phase under both time reversal and transposition.
+    \uses{threeMPU2, thm:tildeU3, thm:mpu-continuous-unitary-swap-path,
+        def:strictly-equivalent-symmetry, def:mpu_swap_comparison_symmetries,
+        thm:mpu_strict_swap_comparison}
+    The MPUs $\widetilde U_2^{(N)}$ and $\widetilde U_3^{(N)}$ are strictly
+    equivalent under time reversal and under transposition, imposed as
+    $X^\dagger=X$ and $X^{\mathsf T}=X$ on every chain of positive length.
+    In particular they are in the same phase under both symmetries.
     % Source lines: paper_v2.tex 2136--2155.
 \end{lemma}
 
-\begin{lemma}[Admissible time-reversal and transposition phases of $U_2$ and $U_3$]
-    \label{prop:mpu_admissible_u2_u3_time_reversal_transposition}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (admissible symmetry path):** the comparison path
-    % carries the datum of Definition~\ref{def:mpu_admissible_equivalence_datum}.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, def:mpu_admissible_strict_symmetry_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    For each of time reversal and transposition, let
-    $p\mapsto\mathcal W_{\mathcal S}(p)$ be the source-constructed
-    interpolation from $\widetilde U_2$ to $\widetilde U_3$. Suppose it carries
-    an admissible symmetry-path datum of blocking length one. Thus the path
-    $\mathcal W_{\mathcal S}(p)$ and its fixed conjugate, physical-adjoint,
-    transposed, and $\mathcal S$-image comparison paths are simple and carry
-    continuously varying reduced full-support source data. Suppose also that
-    the one- and two-site endpoint tensors used in the local comparison carry
-    their own data. Then $\widetilde U_2^{(N)}$ and
-    $\widetilde U_3^{(N)}$ are in the same admissible phase under both time
-    reversal and transposition.
-    % Source lines: paper_v2.tex 2136--2155.
-\end{lemma}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{thm:mpu_strict_swap_comparison} it suffices to join
+    $\mathcal U_2$ and $\mathcal U_3$, with
+    $\widetilde{\mathcal U}_a=\mathbb S\mathcal U_a$, by paths of matrix product unitaries invariant under
+    $X\mapsto S_NX^\dagger S_N$ and $X\mapsto S_NX^{\mathsf T}S_N$, where
+    $S_N=\mathbb S^{\otimes N}$. By Lemma~\ref{thm:tildeU3},
+    $(U_2^{(N)})^\dagger=U_3^{(N)}=S_NU_2^{(N)}S_N$, and $U_2^{(N)}$ is real,
+    so $U_2^{(N)}$ is invariant under both maps.
+
+    Let $\mathbb S(x)$ be the path of
+    Lemma~\ref{thm:mpu-continuous-unitary-swap-path}. It is a polynomial in
+    $\mathbb S$, so it commutes with $\mathbb S$, and it is symmetric,
+    $\mathbb S(x)^{\mathsf T}=\mathbb S(x)$. For time reversal take the tensors
+    $\mathbb S(x)\mathcal U_2\mathbb S(x)^\dagger$, with
+    \begin{align}
+        W^{(N)}(x) & =P_N(x)\,U_2^{(N)}P_N(x)^\dagger,
+        \qquad P_N(x)=\mathbb S(x)^{\otimes N},
+    \end{align}
+    and for transposition take
+    $\mathbb S(x)\mathcal U_2\mathbb S(x)^{\mathsf T}$, with
+    $W^{(N)}(x)=P_N(x)U_2^{(N)}P_N(x)$. Both are unitary. Since
+    $S_N$ commutes with $P_N(x)$ and $P_N(x)^{\mathsf T}=P_N(x)$,
+    \begin{align}
+        S_NW^{(N)}(x)^\dagger S_N
+         & =P_N(x)\,S_N(U_2^{(N)})^\dagger S_N\,P_N(x)^\dagger
+        =W^{(N)}(x)
+    \end{align}
+    in the first case, and likewise for the transpose in the second. At $x=1$
+    both tensors relabel the two spins of $\mathcal U_2$; conjugating the
+    virtual space by $\mathbb S(x)$ then reaches $\mathcal U_3$ without
+    changing any $W^{(N)}$. The endpoints are in canonical form.
+\end{proof}
 
 \begin{lemma}[Conjugation phases of $U_1$ and $U_2$]
     \label{prop:eqiv-U1-U2-conjugate}

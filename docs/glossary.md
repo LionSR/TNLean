@@ -45,6 +45,32 @@ is deliberately source-faithful.
   equation is source-specific. The construction from canonical form II is
   restricted as recorded in `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 
+### `MPOTensor.IsLevelTriangular`
+
+- **Declaration:** `MPOTensor.IsLevelTriangular w W`, for a tensor
+  `W : MPOTensor d D` and levels `w : Fin D → ℕ` on the bond directions.
+- **Defined in:** `TNLean/MPS/MPU/LevelTriangularReduction.lean`.
+- **Meaning:** no letter has an entry from a higher level to a lower one:
+  $(W^{ij})_{\beta\alpha}=0$ whenever $w(\beta)<w(\alpha)$, with $\beta$ the
+  row and $\alpha$ the column of the bond matrix. `MPOTensor.levelDiag w W`
+  keeps the entries with $w(\beta)=w(\alpha)$.
+- **Source:** auxiliary; no source predicate. It realizes as a path the
+  standard fact that only the diagonal blocks of a block-triangular family
+  contribute to traces of words, which is what the endpoints of strict
+  equivalence need (arXiv:1703.09188, Definition
+  `def:strictly-equivalent-tensors`, `Papers/1703.09188/paper_v2.tex:708-714`).
+- **Sanctioned bridge:** `MPOTensor.joinedIn_sameMPOSet_levelDiag` joins a
+  level-triangular tensor to `levelDiag w W` inside `SameMPOSet W`, through the
+  bond gauges $\operatorname{diag}(s^{w})$, $s\to0$; and
+  `MPOTensor.joinedIn_sameMPOSet_padBond_of_levelDiag_eq` ends the path at a
+  padding. Combine with `joinedIn_sameMPOSet_bondReindex` or
+  `joinedIn_sameMPOSet_virtualSandwich` when the triangular form appears only
+  after a bond relabelling or gauge.
+- **Caveat:** the predicate depends on the chosen levels and on the bond basis;
+  it is not invariant under bond gauges. A block whose words all have zero
+  trace is removed by the reduction only when the levels make it strictly
+  level-triangular; no general triangularization is provided.
+
 ### Source factors under virtual conjugation
 
 - **Declarations:**
@@ -1911,8 +1937,8 @@ in `MPS/Preparation/` uses it.
   `QuantumCircuit.IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop`,
   `QuantumCircuit.IsTwoLevelWord (K : ℕ) (X : Matrix ι ι ℂ) : Prop`, and
   `QuantumCircuit.FixesOutside (T : Finset ι) (X : Matrix ι ι ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Gates/ControlledProducts.lean`
-  (`IsSpecialTwo`) and `TNLean/Circuit/Gates/Givens.lean`.
+- **Defined in:** `QICLean/Circuit/Gate/TwoLevel.lean` (`IsSpecialTwo`) and
+  `QICLean/Circuit/Gate/Givens.lean` (QICLean dependency).
 - **Meaning:** `IsSpecialTwo g` says that `g` is a real rotation `rotTwo z` or
   a diagonal phase `diagTwo ν` with `‖z‖ = ‖ν‖ = 1`. `IsTwoLevelWord K X` says
   that `X` is a product of at most `K` two-level operators `twoLevel a b g` with

@@ -229,7 +229,7 @@ theorem cutMatrix_localLift (k : ℕ) (K : LeftBlockMatrix L q k)
     cutMatrix (toEuclideanLin (Entropy.localLift (leftBlock L k) K) ψ) k = K * cutMatrix ψ k := by
   ext a b
   rw [mul_apply, cutMatrix_apply]
-  simp only [toLpLin_apply, PiLp.toLp_apply, mulVec, dotProduct, Entropy.localLift,
+  simp only [toLpLin_apply, PiLp.toLp_apply, mulVec, dotProduct, Entropy.localLift, ManyBody.place,
     reindex_apply, submatrix_apply, Equiv.symm_symm, cutMatrix_apply]
   rw [← Equiv.sum_comp (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm]
   simp [Fintype.sum_prod_type, one_apply]
@@ -315,7 +315,7 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
       rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
         ← toEuclideanLin_mul_apply, ← Entropy.localLift_conjTranspose, ← Entropy.localLift_mul,
         hPP]
-      simp [Entropy.localLift]
+      simp [Entropy.localLift, ManyBody.place]
     have hcontr : ‖toEuclideanLin (Entropy.localLift D Pj) x‖ ≤ ‖x‖ :=
       Entropy.norm_toEuclideanLin_localLift_le (hP _) x
     have hpy := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horth

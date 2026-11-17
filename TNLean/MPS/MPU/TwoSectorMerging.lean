@@ -7,7 +7,7 @@ import Mathlib.Algebra.Star.StarProjection
 import Mathlib.LinearAlgebra.UnitaryGroup
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.Tactic.Module
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 
 /-!
 # Coherent merging of two orthogonal sectors

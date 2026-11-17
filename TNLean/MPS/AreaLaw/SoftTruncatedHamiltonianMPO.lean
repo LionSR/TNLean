@@ -58,7 +58,7 @@ theorem exists_softTruncatedHamiltonian_mpo_of_accuracy_of_base {N q m : ℕ}
   have hgs (i : Fin N) : Entropy.IsSupportedOn (g i) {i.castSucc, i.succ} := by
     by_cases hi : i ∈ I
     · simpa only [g, ite_eq_left hi] using hs i
-    · simp [g, hi, Entropy.IsSupportedOn]
+    · simp [g, hi, Entropy.IsSupportedOn, ManyBody.IsSupportedOn]
   have hgh (i : Fin N) : (g i).IsHermitian := by
     by_cases hi : i ∈ I <;> simp [g, hi, hh i]
   have hgn (i : Fin N) : ‖g i‖ ≤ 1 := by
@@ -73,7 +73,7 @@ theorem exists_softTruncatedHamiltonian_mpo_of_accuracy_of_base {N q m : ℕ}
     by_cases hi : i ∈ Iᶜ
     · simpa only [f, ite_eq_left hi] using hs i
     · have hiI : i ∈ I := by simpa using hi
-      simp [f, hiI, Entropy.IsSupportedOn]
+      simp [f, hiI, Entropy.IsSupportedOn, ManyBody.IsSupportedOn]
   have hfsum : (∑ i, f i) = ∑ i ∈ Iᶜ, h i := by
     simp only [f, Finset.sum_ite_mem, Finset.univ_inter]
   have hcomp : (∑ i ∈ Iᶜ, h i) = (∑ i, h i) - ∑ i ∈ I, h i :=

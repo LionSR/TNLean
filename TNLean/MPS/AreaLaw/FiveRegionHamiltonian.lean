@@ -81,7 +81,7 @@ theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
         (fun j ↦ lo ≤ j.val ∧ j.val + 1 < hi), h i) (interval L lo hi) := by
-  exact TNLean.Lattice.isSupportedOn_sum _ fun i hiI ↦
+  exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun i hiI ↦
     (hs i).mono (internal_bond_support_subset hiI)
 end TNLean.MPS.AreaLaw
 
