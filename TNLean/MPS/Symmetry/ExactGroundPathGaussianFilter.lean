@@ -40,8 +40,6 @@ and the resulting uniform minimal-transfer spectral bound remain separate.
 open TNLean.Lattice Matrix
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
-open ManyBody (groundSpace)
-
 namespace MPSTensor
 
 variable {G : Type} [Group G] {d : ℕ}
@@ -58,7 +56,7 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
     (Q : ExactMPSGroundPath P) :
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
       ∃ E : ℝ, ∃ hH : (interactionHamiltonian (P.interaction γ) hN).IsHermitian,
-        groundSpace (interactionHamiltonian (P.interaction γ) hN) E =
+        ManyBody.groundSpace (interactionHamiltonian (P.interaction γ) hN) E =
             Submodule.span ℂ {mpvState (Q.tensor γ) N} ∧
           ∀ k, hH.eigenvalues k = E ∨ E + Δ ≤ hH.eigenvalues k := by
   obtain ⟨Δ, hΔ, hgap⟩ := P.gap
@@ -73,12 +71,12 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
   let H := interactionHamiltonian (P.interaction γ) hN
   have hH : H.IsHermitian := interactionHamiltonian_isHermitian hN (P.hermitian γ hγ)
   refine ⟨E, hH, ?_, ?_⟩
-  · have hker : groundSpace H E =
+  · have hker : ManyBody.groundSpace H E =
         LinearMap.ker (Matrix.toEuclideanLin (H - (E : ℂ) • 1)) := by
       ext x
-      simp only [groundSpace, Module.End.mem_eigenspace_iff, LinearMap.mem_ker,
-        map_sub, map_smul, LinearMap.sub_apply, LinearMap.smul_apply, Matrix.toLpLin_one,
-        LinearMap.id_apply, sub_eq_zero]
+      rw [ManyBody.mem_groundSpace_iff]
+      simp only [LinearMap.mem_ker, map_sub, map_smul, LinearMap.sub_apply,
+        LinearMap.smul_apply, Matrix.toLpLin_one, LinearMap.id_apply, sub_eq_zero]
     rw [hker]
     exact hline
   · intro k
@@ -112,7 +110,7 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
   obtain ⟨E, hH, hline, hgap⟩ := hdata γ hγ N hN
   let H := interactionHamiltonian (P.interaction γ) hN
   let ψ := mpvState (Q.tensor γ) N
-  have hψ : ψ ∈ groundSpace H E := by
+  have hψ : ψ ∈ ManyBody.groundSpace H E := by
     rw [hline]
     exact Submodule.mem_span_singleton_self ψ
   constructor

@@ -24,8 +24,6 @@ exact MPS path of SPC11, arXiv:1010.3732, Section II.F, lines 929–953.
 open TNLean.Lattice Matrix QuantumCircuit MPSPreparation GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
 
-open ManyBody (groundSpace)
-
 namespace MPSTensor
 
 variable {G : Type} [Group G] {d : ℕ}
@@ -64,7 +62,7 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
   intro γ hγ N _ hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
   have hψ : mpvState (Q.tensor γ) N ∈
-      groundSpace (interactionHamiltonian (P.interaction γ) hN) E₀ := by
+      ManyBody.groundSpace (interactionHamiltonian (P.interaction γ) hN) E₀ := by
     rw [hline]
     exact Submodule.mem_span_singleton_self _
   apply norm_centered_ground_correlation_le_gaussian hq hΔ hT (by positivity)
