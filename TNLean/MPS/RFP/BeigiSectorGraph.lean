@@ -256,7 +256,7 @@ private theorem embedLocalOperator_groundBond_eq_one_sub {N : ℕ} (hN : 2 ≤ N
 
 private theorem singleKrausMap_groundBond_eq_transformedGroundBond
     (F : BeigiSectorGraphData A) :
-    singleKrausMap (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ 2) (groundBond A) =
+    singleKrausMap (Matrix.tensorPower 2 F.unitaryᴴ) (groundBond A) =
       Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
         (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond := by
   rw [MPOTensor.singleKrausMap_sitewise_conjTranspose_two_eq]
@@ -269,7 +269,7 @@ coordinates.
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
 theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
-    singleKrausMap (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N)
+    singleKrausMap (Matrix.tensorPower N F.unitaryᴴ)
         ((List.ofFn fun i : Fin N ↦
           MPOTensor.embedLocalOperator (d := d) 2 N hN i
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
@@ -297,7 +297,7 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
       (MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A))
       (MPOTensor.embedLocalOperator (d := d) 2 N hN j (groundBond A)) := by
   classical
-  let W := MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N
+  let W := Matrix.tensorPower N F.unitaryᴴ
   let G : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
     MPOTensor.embedLocalOperator (d := d) 2 N hN n (groundBond A)
   let T : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
@@ -310,16 +310,16 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
     simpa only [Matrix.star_eq_conjTranspose] using hUstarU
   have hUUstar' := F.unitary_mul_conjTranspose
   have hWstarW : Wᴴ * W = 1 := by
-    simp only [W, MPOTensor.sitewisePhysicalMatrix_conjTranspose,
+    simp only [W, Matrix.conjTranspose_tensorPower,
       Matrix.conjTranspose_conjTranspose]
-    rw [← MPOTensor.sitewisePhysicalMatrix_conjTranspose,
-      MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose, hUUstar',
-      MPOTensor.sitewisePhysicalMatrix_one]
+    rw [← Matrix.conjTranspose_tensorPower,
+      MPOTensor.tensorPower_mul_conjTranspose, hUUstar',
+      Matrix.tensorPower_one]
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
-    rw [MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose]
+    rw [MPOTensor.tensorPower_mul_conjTranspose]
     simp only [Matrix.conjTranspose_conjTranspose]
-    rw [hUstarU', MPOTensor.sitewisePhysicalMatrix_one]
+    rw [hUstarU', Matrix.tensorPower_one]
   have hWone : singleKrausMap W 1 = 1 := by
     simp only [singleKrausMap_apply, Matrix.mul_one]
     exact hWWstar
@@ -329,7 +329,7 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
       F.unitaryᴴ (by simpa using hUUstar') hN n,
       singleKrausMap_groundBond_eq_transformedGroundBond]
     rw [show singleKrausMap
-      (MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N) 1 = 1 by exact hWone]
+      (Matrix.tensorPower N F.unitaryᴴ) 1 = 1 by exact hWone]
     exact Matrix.one_mul _
   have hT : Commute (T i) (T j) := by
     exact MPOTensor.embedLocalOperator_commute_of_etaPair_decomposition hN
@@ -451,16 +451,16 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
   classical
-  let W := MPOTensor.sitewisePhysicalMatrix F.unitaryᴴ N
+  let W := Matrix.tensorPower N F.unitaryᴴ
   let Q := (List.ofFn fun i : Fin N ↦
     MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
   have hUUstar := F.unitary_mul_conjTranspose
   have hWstarW : Wᴴ * W = 1 := by
-    simp only [W, MPOTensor.sitewisePhysicalMatrix_conjTranspose,
+    simp only [W, Matrix.conjTranspose_tensorPower,
       Matrix.conjTranspose_conjTranspose]
-    rw [← MPOTensor.sitewisePhysicalMatrix_conjTranspose,
-      MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose, hUUstar,
-      MPOTensor.sitewisePhysicalMatrix_one]
+    rw [← Matrix.conjTranspose_tensorPower,
+      MPOTensor.tensorPower_mul_conjTranspose, hUUstar,
+      Matrix.tensorPower_one]
   have hprod := F.singleKrausMap_groundBondProduct hN
   have htrace := F.transformedGroundBondProduct_trace hN
   have hconj : singleKrausMap W Q =

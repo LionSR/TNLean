@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
+import TNLean.Algebra.FinKronecker
 import Mathlib.Analysis.Normed.Algebra.MatrixExponential
 
 /-!
@@ -251,51 +252,22 @@ theorem exp_embedLocalOperator
     (LinearMap.continuous_of_finiteDimensional
       (embedLocalOperatorAlgHom (d := d) L N hLN i).toLinearMap) A
 
-/-- The tensor product of one matrix at each site, in configuration coordinates. -/
-noncomputable def sitewiseMatrixFamily
-    (A : Fin N → Matrix (Fin d) (Fin d) ℂ) : ChainOperator d N :=
-  fun σ τ ↦ ∏ n, A n (σ n) (τ n)
-
-/-- Multiplication of tensor products is multiplication at each site. -/
-theorem sitewiseMatrixFamily_mul
-    (A B : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    sitewiseMatrixFamily A * sitewiseMatrixFamily B =
-      sitewiseMatrixFamily fun n ↦ A n * B n := by
-  classical
-  ext σ τ
-  simp only [Matrix.mul_apply, sitewiseMatrixFamily]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin d)))
-    (fun n a ↦ A n (σ n) a * B n a (τ n))]
-
-private theorem sitewiseMatrixFamily_one :
-    sitewiseMatrixFamily (fun _ : Fin N ↦
-      (1 : Matrix (Fin d) (Fin d) ℂ)) = 1 := by
-  classical
-  ext σ τ
-  simp only [sitewiseMatrixFamily, Matrix.one_apply]
-  rw [Fintype.prod_boole]
-  congr 1
-  exact propext funext_iff.symm
-
-private def sitewiseMatrixFamilyMonoidHom :
+private def rectKroneckerMonoidHom :
     (Fin N → Matrix (Fin d) (Fin d) ℂ) →*
       ChainOperator d N where
-  toFun := sitewiseMatrixFamily
-  map_one' := sitewiseMatrixFamily_one
-  map_mul' A B := (sitewiseMatrixFamily_mul A B).symm
+  toFun := Matrix.rectKronecker
+  map_one' := Matrix.rectKronecker_one
+  map_mul' A B := (Matrix.rectKronecker_mul A B).symm
 
 /-- A one-site matrix embedded at `i` is the tensor product of that matrix
 at `i` and identities at every other site. -/
-theorem sitewiseMatrixFamily_mulSingle
+theorem rectKronecker_mulSingle
     (hN : 1 ≤ N) (i : Fin N) (A : Matrix (Fin d) (Fin d) ℂ) :
-    sitewiseMatrixFamily (Pi.mulSingle i A) =
+    Matrix.rectKronecker (Pi.mulSingle i A) =
       embedLocalOperator 1 N hN i (oneSiteOperator A) := by
   classical
   ext σ τ
-  simp only [sitewiseMatrixFamily, embedLocalOperator_apply, oneSiteOperator]
+  simp only [Matrix.rectKronecker_apply, embedLocalOperator_apply, oneSiteOperator]
   have hσ :
       MPSTensor.extractWindow 1 i σ ⟨0, by omega⟩ = σ i := by
     simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
@@ -368,14 +340,14 @@ theorem embedLocalOperator_one_commute
 
 /-- The product of one-site embeddings of a matrix is its tensor power in
 configuration coordinates. -/
-theorem prod_embedLocalOperator_one_eq_sitewiseMatrixFamily
+theorem prod_embedLocalOperator_one_eq_rectKronecker
     (hN : 1 ≤ N) (A : Matrix (Fin d) (Fin d) ℂ) :
     (Finset.univ : Finset (Fin N)).noncommProd
       (fun i => embedLocalOperator 1 N hN i (oneSiteOperator A))
       (by
         intro i _ j _ _
         exact embedLocalOperator_one_commute hN A i j) =
-      sitewiseMatrixFamily (fun _ : Fin N => A) := by
+      Matrix.rectKronecker (fun _ : Fin N => A) := by
   classical
   let x : Fin N → Matrix (Fin d) (Fin d) ℂ := fun _ => A
   let g : Fin N → (Fin N → Matrix (Fin d) (Fin d) ℂ) :=
@@ -385,22 +357,22 @@ theorem prod_embedLocalOperator_one_eq_sitewiseMatrixFamily
         ∀ j ∈ (Finset.univ : Finset (Fin N)), i ≠ j → Commute (g i) (g j) :=
     fun i _ j _ _ => Pi.mulSingle_apply_commute x i j
   calc
-    _ = Finset.univ.noncommProd (fun i => sitewiseMatrixFamily (g i))
+    _ = Finset.univ.noncommProd (fun i => Matrix.rectKronecker (g i))
         (fun i hi j hj hij =>
-          Commute.map (hgcomm i hi j hj hij) sitewiseMatrixFamilyMonoidHom) :=
+          Commute.map (hgcomm i hi j hj hij) rectKroneckerMonoidHom) :=
       Finset.noncommProd_congr rfl
-        (fun i _ => (sitewiseMatrixFamily_mulSingle hN i A).symm) _
-    _ = sitewiseMatrixFamily x := by
+        (fun i _ => (rectKronecker_mulSingle hN i A).symm) _
+    _ = Matrix.rectKronecker x := by
       have hmap := Finset.map_noncommProd Finset.univ g hgcomm
-        sitewiseMatrixFamilyMonoidHom
+        rectKroneckerMonoidHom
       calc
-        _ = sitewiseMatrixFamilyMonoidHom
+        _ = rectKroneckerMonoidHom
             (Finset.univ.noncommProd g hgcomm) := hmap.symm
-        _ = sitewiseMatrixFamilyMonoidHom x := by
+        _ = rectKroneckerMonoidHom x := by
           congr 1
           exact Finset.noncommProd_mulSingle x
-        _ = sitewiseMatrixFamily x := rfl
-    _ = sitewiseMatrixFamily (fun _ : Fin N => A) := rfl
+        _ = Matrix.rectKronecker x := rfl
+    _ = Matrix.rectKronecker (fun _ : Fin N => A) := rfl
 
 /-- The exponential of a sum of identical one-site energies is their
 sitewise tensor power. -/
@@ -409,7 +381,7 @@ theorem exp_sum_embedLocalOperator_one
     NormedSpace.exp
         (∑ i : Fin N,
           embedLocalOperator 1 N hN i (oneSiteOperator A)) =
-      sitewisePhysicalMatrix (NormedSpace.exp A) N := by
+      Matrix.tensorPower N (NormedSpace.exp A) := by
   let f : Fin N → ChainOperator d N := fun i ↦
     embedLocalOperator 1 N hN i (oneSiteOperator A)
   have hpair :
@@ -427,7 +399,7 @@ theorem exp_sum_embedLocalOperator_one
           embedLocalOperator_one_commute hN (NormedSpace.exp A) i j) :=
       Finset.noncommProd_congr rfl (fun i _ ↦ by
         rw [exp_embedLocalOperator, exp_oneSiteOperator]) _
-    _ = sitewisePhysicalMatrix (NormedSpace.exp A) N :=
-      prod_embedLocalOperator_one_eq_sitewiseMatrixFamily hN _
+    _ = Matrix.tensorPower N (NormedSpace.exp A) :=
+      prod_embedLocalOperator_one_eq_rectKronecker hN _
 
 end MPOTensor

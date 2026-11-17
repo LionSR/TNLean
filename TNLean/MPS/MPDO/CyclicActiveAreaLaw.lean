@@ -100,9 +100,9 @@ theorem isSAL_of_isSourceZCL
   have hMMPDO : IsMPDO M := by
     intro N hN
     dsimp only [M]
-    rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
+    rw [← singleKrausMap_tensorPower_mpo]
     exact (hMPDO N hN).mul_mul_conjTranspose_same
-      (sitewisePhysicalMatrix U N)
+      (Matrix.tensorPower N U)
   have hMtrace : ∀ N, 0 < N → Matrix.trace (mpo M N) ≠ 0 := by
     intro N hN
     dsimp only [M, U]
