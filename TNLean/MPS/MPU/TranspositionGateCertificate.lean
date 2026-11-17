@@ -40,7 +40,7 @@ namespace MPOTensor
 variable {d ℓ r N : ℕ}
 
 /-- A local phase `A = c (x ⊗ xᵀ) Bᵀ` with `|c| = 1` gives unitaries `X = x†` and
-`Y = c̄ x̄` with `Bᵀ = (X ⊗ Y) A` and `Aᵀ = B (Y† ⊗ X†)`: the gate gauges relating the
+`Y = conj(c) conj(x)` with `Bᵀ = (X ⊗ Y) A` and `Aᵀ = B (Y† ⊗ X†)`: the gate gauges relating the
 standard form `(A, B)` to the transposed standard form `(Bᵀ, Aᵀ)`. Source: CPSV17, the
 "(if)" case of the proof of `PropChiral`, lines 1230–1237, which
 `prop:local-char-transposition` invokes by analogy at lines 1277–1282. -/
