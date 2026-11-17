@@ -220,8 +220,12 @@ $O_\ell\otimes O_r$.
 nearest-neighbour on the standard-form chain, the support algebras vary
 continuously with fixed dimensions, which suggests that $\det u$ cannot jump;
 the argument through continuous gates above makes this precise for paths of
-standard forms. Two- and three-layer real circuits invariant under translation by
-one standard-form site are nearest-neighbour. A path from the identity to the
+standard forms. Real two-layer circuits (an on-site layer followed by an
+inter-site layer) and three-layer circuits of the order on-site, inter-site,
+on-site are nearest-neighbour. Other layer orders need not be: with each site
+written as two qubits $(a_i,b_i)$, an inter-site, an on-site and another
+inter-site layer of swaps send $a_i$ to $b_{i-2}$ and $b_i$ to $a_{i+2}$, an
+automaton of range two built from real layers. A path from the identity to the
 brickwork $\prod_j\mathrm{CZ}_{j,j+1}$ must therefore pass through real automata
 of range at least two on the standard-form chain.
 
@@ -261,10 +265,11 @@ constant along paths and multiplicative under composition? If it does, the
 brickwork is the product of the on-site layer of $\mathrm{CZ}$, with
 $\det u=-1$, and the inter-site layer, with $\det u=1$, so it is separated from
 the identity and the ``only if'' direction of
-Theorem~\texttt{prop:conjsym-strict-equiv} holds for this pair. If it does not,
-that direction, and the unblocked forward direction of
-Lemma~\texttt{lem:equivalent-symmetry}, fail. Whether the source claim holds is
-undecided.
+Theorem~\texttt{prop:conjsym-strict-equiv} holds for this pair. Such an
+extension is a sufficient route to separation, not a necessary one: its
+nonexistence would not by itself produce a symmetric path between the two
+standard forms, and a counterexample to the source claim needs an actual path.
+Whether the source claim holds is undecided.
 
 \section{Formal statements}
 
