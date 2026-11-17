@@ -1,7 +1,7 @@
 % Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1687--1689;
 % eq:orthoV, and the square-physical restriction in lines 1584--1601.
 % This proves three-site injectivity from isolated biorthogonal maps.
-% The one-site source claim belongs to the aligned categorical setting.
+% The one-site source claim fails in the aligned categorical setting.
 
 \subsection{Three-site injectivity of the mixed operator}
 \label{sec:mpo_mixed_normality}
@@ -13,10 +13,7 @@ $m>0$. Suppose the maps $V_{p,\mu}:K_p\otimes E_p\to E_p$ and
 $W_{p,\mu}:E_p\to K_p\otimes E_p$ satisfy
 $V_{p,\mu}W_{p,\nu}=\delta_{\mu\nu}\Id_{E_p}$.
 Let $T$ be the mixed operator of
-Definition~\ref{def:mpo_mixed_action_tensor}, on $K=K_0\oplus K_1$; as
-recorded in \cite{gap:glm23_mpo_symmetric_mps_scope}, the isolated
-biorthogonal hypotheses yield a three-site conclusion rather than the
-source's one-site assertion.
+Definition~\ref{def:mpo_mixed_action_tensor}, on $K=K_0\oplus K_1$.
 Its diagonal letters are the embedded letters of $T_0,T_1$; in a
 crossed physical sector $p\ne q$ its coefficients are
 \begin{align}
@@ -180,10 +177,37 @@ matrix units force those indices to be $u$ and $v$, respectively.
     Lemma~\ref{thm:mpo_mixed_normality}.
 \end{proof}
 
-The operator construction and the one-site injectivity discussion occur
-in \cite[Section~5]{GarreRubio2023MPOSym}. Lemmas
-\ref{thm:mpo_mixed_normality} and
-\ref{thm:mpo_mixed_normality_exact_action} establish a three-site
-conclusion. The first uses only the two injective operator tensors and
-biorthogonality with positive multiplicity; the second derives that
-positivity from exact action on a square-physical injective tensor.
+The source asserts one-site injectivity of the mixed operator
+\cite[Section~5]{GarreRubio2023MPOSym}:
+\begin{quote}
+    ``Let us first show that $T_a$ is injective. Since we $T_a^0$ and
+    $T_a^1$ are injective we only need to show that
+    $T_a^{0,1} \oplus T_a^{1,0}$ are injective or equivalently, that there
+    is a left inverse acting on the physical level.''
+\end{quote}
+This assertion is false
+\cite{gap:glm23_mixed_operator_one_site_injectivity}. Let
+$\mathcal C=\operatorname{Rep}(A_4)$, let $\rho$ be its
+three-dimensional irreducible representation, and take the label sets
+$S_0=\{e,(123),(01)(23),(02)(13)\}$ and
+$S_1=\{e,(123),(01)(23),(032)\}$. For $p\in\{0,1\}$ let $A_p$ consist of
+the matrix units of $\End(\C^{S_p})$, and let each irreducible
+representation $\rho_a$ act through the maps
+$W_{p,\mu}|r\rangle=\rho_a(r)^{-1}e_\mu\otimes|r\rangle$ and
+$V_{p,\mu}(\kappa\otimes|s\rangle)=(\rho_a(s)\kappa)_\mu|s\rangle$ for
+$r,s\in S_p$. The endpoint letters are then $\rho_a(r^{-1}s)$; both
+endpoint operators are injective, the Clebsch--Gordan maps of $A_4$ are
+common fusion tensors, and the $F$-symbols and the $L$-symbols of the two
+endpoints coincide. By (\ref{eq:mpo_mix_normal_cross}) the crossed
+letters of $\rho$ are $\rho(g^{-1}h)$ with $g\in S_0$, $h\in S_1$, and
+their inverses. Their span is a proper subspace of each crossed corner:
+the matrix coefficient $q\mapsto\sum_jM_{q(j),j}$ of $\rho$, with $M$ the
+integer matrix of rows $(0,0,1,-1)$, $(1,-1,0,0)$, $(-1,1,0,0)$,
+$(0,0,-1,1)$, vanishes on the ten elements of $S_0^{-1}S_1$ and not
+identically. The letters of the mixed operator for $\rho$ span a subspace
+of dimension $34$ of $\End(\C^6)$. Lemmas \ref{thm:mpo_mixed_normality}
+and \ref{thm:mpo_mixed_normality_exact_action} give injectivity after
+blocking three sites instead; the first uses only the two injective
+operator tensors and biorthogonality with positive multiplicity, and the
+second derives that positivity from exact action on a square-physical
+injective tensor.
