@@ -121,11 +121,15 @@ class FocusedSourcesTest(EarlyModulesTest):
     # classifier, whose all-aggregator policy intentionally differs from early.
     @staticmethod
     def modules(root, sources):
-        return [ci.module_of(p) for p in ci.focused_sources(root, sources)]
+        return [ci.module_of(p) for p in ci.focused_sources(root, sources, sources)]
 
     def test_all_import_only_targets_are_preserved(self):
         (self.root / self.other).write_text("import Mathlib\n")
-        self.assertEqual(ci.focused_sources(self.root, [self.aggregator, self.other]), [])
+        self.assertEqual(ci.focused_sources(self.root, [self.aggregator, self.other], [self.aggregator, self.other]), [])
+
+    def test_read_failure_stays_early(self):
+        with patch.object(Path, "read_bytes", side_effect=PermissionError("unreadable")):
+            self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]), [self.other])
 
     def test_comment_token_splicing_is_not_an_import(self):
         for source in ("im/- comment -/port Mathlib\n",
@@ -133,15 +137,27 @@ class FocusedSourcesTest(EarlyModulesTest):
                        "import Mathlib\n\"-- unterminated string\n"):
             with self.subTest(source=source):
                 (self.root / self.other).write_text(source)
-                self.assertEqual(ci.focused_sources(self.root, [self.other]), [self.other])
+                self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]), [self.other])
 
     def test_supported_import_spellings_are_deferred(self):
-        for source in ("\timport A.B'\r\nimport C_D.E2 -- note\r\n",
+        for source in ("import A.B'\nimport C_D.E2 -- note\n",
                        "/- header -/ import A\nimport /- note -/ B\n",
                        "import A/- trailing comment -/\n"):
             with self.subTest(source=source):
                 (self.root / self.other).write_text(source)
-                self.assertEqual(ci.focused_sources(self.root, [self.other]), [])
+                self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]), [])
+
+    def test_uncertain_whitespace_and_doc_tokens_stay_focused(self):
+        for source in ("import\u00a0A", "import A\u2028import B", "import\tA\n",
+                       "import A\n/-- unattached doc -/", "import A\n/-! doc -/",
+                       "import A\v", "import A\f", "import A\r", "import A\r\n"):
+            with self.subTest(source=source):
+                (self.root / self.other).write_text(source)
+                self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]),
+                                 [self.other])
+
+    def test_no_strict_coverage_retains_import_only_source(self):
+        self.assertEqual(ci.focused_sources(self.root, [self.aggregator], []), [self.aggregator])
 
 
 class SelectTest(unittest.TestCase):
@@ -394,6 +410,69 @@ class FocusedSelectTest(unittest.TestCase):
     tearDown = SelectTest.tearDown
     change = SelectTest.change
 
+    def merge_checkout(self, feature):
+        git(self.root, "checkout", "--detach", self.base)
+        git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "merge",
+            "--no-ff", "-m", "synthetic merge", feature)
+
+    def test_orphan_import_failure_retained_without_verified_merge(self):
+        self.change("TNLean/Orphan.lean", "import Does.Not.Exist\n")
+        head = git(self.root, "rev-parse", "HEAD")
+        cwd = Path.cwd()
+        try:
+            with patch.object(ci, "early_build", return_value=1) as build, \
+                    patch.object(ci, "run_batch", return_value=[]):
+                self.assertEqual(ci.main(["focused", "--root", str(self.root),
+                                          "--base", self.base, "--head", head,
+                                          "--pr-head", head]), 1)
+            self.assertEqual(build.call_args.args[0], ["TNLean.Orphan"])
+            self.assertIsNone(ci.selection_base(self.base, head))
+            self.assertEqual(ci.select(Path("."), None)[1], [])
+        finally:
+            os.chdir(cwd)
+
+    def test_type_changed_orphan_is_retained_even_in_verified_merge(self):
+        self.change("TNLean/Orphan.lean", "import Mathlib\n")
+        self.change("target.txt", "import Does.Not.Exist\n")
+        self.base = git(self.root, "rev-parse", "HEAD")
+        (self.root / "TNLean/Orphan.lean").unlink()
+        (self.root / "TNLean/Orphan.lean").symlink_to("../target.txt")
+        self.change("README.md", "type change\n")
+        head = git(self.root, "rev-parse", "HEAD")
+        self.assertIn("T\tTNLean/Orphan.lean", git(self.root, "diff", "--name-status", self.base, head))
+        self.merge_checkout(head)
+        cwd = Path.cwd()
+        try:
+            os.chdir(self.root)
+            self.assertEqual(ci.selection_base(self.base, head), self.base)
+            self.assertEqual(ci.select(Path("."), self.base)[1], [])
+            with patch.object(ci, "early_build", return_value=1) as build, \
+                    patch.object(ci, "run_batch", return_value=[]):
+                self.assertEqual(ci.main(["focused", "--root", str(self.root),
+                                          "--base", self.base, "--head", head,
+                                          "--pr-head", head]), 1)
+            self.assertEqual(build.call_args.args[0], ["TNLean.Orphan"])
+        finally:
+            os.chdir(cwd)
+
+    def test_verified_merge_defers_orphan_but_strict_reports_its_failure(self):
+        orphan = "TNLean/Orphan.lean"
+        self.change(orphan, "import Does.Not.Exist\n")
+        head = git(self.root, "rev-parse", "HEAD")
+        self.merge_checkout(head)
+        cwd = Path.cwd()
+        args = ["--root", str(self.root), "--base", self.base, "--pr-head", head]
+        try:
+            with patch.object(ci, "early_build") as build, \
+                    patch.object(ci, "run_batch", return_value=[]):
+                self.assertEqual(ci.main(["focused", "--head", head, *args]), 0)
+            build.assert_not_called()
+            with patch.object(ci, "run_batch", return_value=[orphan]) as run:
+                self.assertEqual(ci.main(["strict", *args]), 1)
+            self.assertEqual(run.call_args.args, ([orphan], 3, 240))
+        finally:
+            os.chdir(cwd)
+
     def focused(self, base=None, head=None):
         cwd = Path.cwd()
         try:
@@ -494,6 +573,7 @@ class FocusedSelectTest(unittest.TestCase):
         self.change("TNLean/Uses.lean", "import TNLean.Core\n-- aggregator edit\n")
         self.change("scripts/core_regression.lean", "import TNLean.Uses\n-- test edit\n")
         head = git(self.root, "rev-parse", "HEAD")
+        self.merge_checkout(head)
         cwd = Path.cwd()
         try:
             for outcome in (0, 1):
@@ -520,6 +600,8 @@ class FocusedSelectTest(unittest.TestCase):
             if changed:
                 self.change("TNLean/Uses.lean", "import TNLean.Core\n-- edit\n")
             head = git(self.root, "rev-parse", "HEAD")
+            if changed:
+                self.merge_checkout(head)
             cwd = Path.cwd()
             try:
                 with mock.patch.object(ci, "early_build") as build, \
