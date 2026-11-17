@@ -19,7 +19,7 @@ of ALVV, arXiv:1602.08828v2, Section 6.1, lines 1457–1460.
 
 namespace QuantumCircuit
 
-variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] [NeZero q]
+variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The range projection acts on the same sites as the original Hermitian
 operator. ALVV, arXiv:1602.08828v2, Section 6.1, lines 1457–1460. -/
