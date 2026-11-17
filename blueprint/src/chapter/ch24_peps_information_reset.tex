@@ -71,7 +71,7 @@ The unitary of Lemma~\ref{thm:peps_reset_unitary} acts away from two regional co
 
 \begin{lemma}[Information reset, with explicit constants]
     \label{thm:peps_information_reset_explicit}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset_of_resetThreshold_le,
+    \lean{ManyBody.SquareInteraction.information_reset_of_resetThreshold_le,
         TNLean.PEPS.Approximation.IsSquareGroundState.squareResetBound}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_reset_width}
@@ -93,7 +93,7 @@ The unitary of Lemma~\ref{thm:peps_reset_unitary} acts away from two regional co
 
 \begin{lemma}[Information reset]
     \label{thm:peps_information_reset}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset}
+    \lean{ManyBody.SquareInteraction.information_reset}
     \leanok
     \uses{def:polynomial_peps_model}
     Fix $q\ge1$, $J\ge0$, $\Delta>0$, and $p>0$. There exist $C_p>0$ and $L_0$ such that for every $L\ge L_0$, any unit ground vector $\Omega$ of an open $L\times L$ square Hamiltonian with interaction bound $J$ and full-system gap $\Delta$, and any disjoint $R,C$ with $I_\Omega(R:C)\le b$ ($b\ge0$) and cores $R_0\subseteq R$, $C_0\subseteq C$ satisfying (\ref{eq:peps_reset_core_distance}), one has $I_\Omega(R_0:C_0)\le L^{-p}$.

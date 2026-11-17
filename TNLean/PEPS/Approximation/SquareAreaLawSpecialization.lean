@@ -27,8 +27,6 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 
 ## Main definitions and results
 
-* `squareAreaLawSupport_isAdmissibleSupport`: designated supports are
-  admissible at range one.
 * `finiteProductEntropy_relabel`: regional entropy is unchanged by relabeling sites.
 * `card_edgeBoundary_rectangle`: original crossing edges and integer-domain
   crossing edges have the same number.
@@ -66,14 +64,6 @@ noncomputable section
 open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
-
-/-- Every designated support is a nonempty set of induced graph diameter at
-most one in the integer rectangle. Source: polynomial-PEPS `eq:model`
-(`00-introduction.tex`, lines 40–45) and area-law Corollary 1.2. -/
-theorem squareAreaLawSupport_isAdmissibleSupport (L : ℕ) (i : SquareLatticeSiteOrEdge L L) :
-    Lattice.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
-      (AreaLaw.rectangleAreaLawSupport L L i).1 :=
-  (AreaLaw.rectangleAreaLawSupport L L i).2
 
 section Relabel
 

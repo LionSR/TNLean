@@ -31,7 +31,7 @@ and polar correction were proved in Chapter~\ref{ch:finite_site_reset}.
 
 \begin{lemma}[The localized filter, with explicit constants]
     \label{thm:peps_reset_localized_filter_explicit}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.reset_localized_filter}
+    \lean{ManyBody.SquareInteraction.reset_localized_filter}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap,def:peps_reset_constants}
     Fix $q\ge1$, $J\ge0$, $\Delta>0$, and $r\ge0$, with $C=C_F(J,\Delta,r)$ and $K=K(J,\Delta,r)$ from (\ref{eq:peps_reset_constants}). For an open $L\times L$ square Hamiltonian $H$ ($L\ge1$) with interaction bound $J$, unit ground vector $\Omega$ with gap $\Delta$, disjoint $R,C_0$ with $I_\Omega(R:C_0)\le b$ ($b\ge0$), $Q=(R\cup C_0)^c$, crossing-edge endpoints $Z_R$ of $R$, and the paired-site graph neighbourhood $B$ of radius $\lceil K(1+b+\log L)\rceil$ around $Q\cup Z_R$, the unit vectors $\Psi=\Omega\otimes\Omega$ and $\Phi=F_R\Psi$ admit $z\ge e^{-2b}$ and a contraction $M$ supported on $B$ with
@@ -55,7 +55,7 @@ and polar correction were proved in Chapter~\ref{ch:finite_site_reset}.
 
 \begin{lemma}[The localized filter of the information reset]
     \label{thm:peps_reset_localized_filter}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_localized_filter}
+    \lean{ManyBody.SquareInteraction.exists_reset_localized_filter}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
     For every integer $q\ge1$ and $J\ge0$, $\Delta>0$, $r\ge0$, there exist $C,K>0$ such that in the setting of Lemma~\ref{thm:peps_reset_localized_filter_explicit}, some $z\ge e^{-2b}$ and contraction $M$ supported on $B$ satisfy (\ref{eq:peps_reset_localized_filter_err}).
@@ -68,7 +68,7 @@ and polar correction were proved in Chapter~\ref{ch:finite_site_reset}.
 
 \begin{lemma}[The unitary of the information reset, with explicit constants]
     \label{thm:peps_reset_unitary_explicit}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.reset_unitary}
+    \lean{ManyBody.SquareInteraction.reset_unitary}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap,def:peps_reset_constants}
     In the setting of Lemma~\ref{thm:peps_reset_localized_filter_explicit}, there exists a unitary $U$ supported on $B$ with $\|U\Psi-\Phi\|\le C_U(J,\Delta,r)L^{-r}$.
@@ -82,7 +82,7 @@ and polar correction were proved in Chapter~\ref{ch:finite_site_reset}.
 
 \begin{lemma}[The unitary of the information reset]
     \label{thm:peps_reset_unitary}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_unitary}
+    \lean{ManyBody.SquareInteraction.exists_reset_unitary}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
     In the setting of Lemma~\ref{thm:peps_reset_localized_filter}, there exist $C,K>0$ (depending only on $q,J,\Delta,r$) and a unitary $U$ supported on $B$ with $\|U\Psi-\Phi\|\le CL^{-r}$.
