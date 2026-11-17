@@ -26,6 +26,8 @@ inequalities hold without a geometric assumption.
 
 open scoped InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section OffDiagonal
@@ -109,7 +111,7 @@ open scoped Matrix.Norms.L2Operator
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 noncomputable local instance (H : Matrix (ι → Fin d) (ι → Fin d) ℂ) (E₀ : ℝ) :
-    InnerProductSpace ℂ (groundEigenspace H E₀) := (groundEigenspace H E₀).innerProductSpace
+    InnerProductSpace ℂ (groundSpace H E₀) := (groundSpace H E₀).innerProductSpace
 
 set_option backward.isDefEq.respectTransparency false in
 /-- A basis chosen from the original terms works for every truncated family, up to the
@@ -128,11 +130,11 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_perturb
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ i, h i).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
-    [NeZero (Module.finrank ℂ (groundEigenspace (∑ i, h i) E₀))] :
-    let n := Module.finrank ℂ (groundEigenspace (∑ i, h i) E₀)
+    [NeZero (Module.finrank ℂ (groundSpace (∑ i, h i) E₀))] :
+    let n := Module.finrank ℂ (groundSpace (∑ i, h i) E₀)
     let γ := commutatorRate R vR b₀ ΔE
     let C := commutatorConst R vR b₀ |Kg| kg * Real.exp (γ * (2 * R + 1))
-    ∃ b : OrthonormalBasis (Fin n) ℂ (groundEigenspace (∑ i, h i) E₀),
+    ∃ b : OrthonormalBasis (Fin n) ℂ (groundSpace (∑ i, h i) E₀),
       ∀ r : ℝ, 0 ≤ r → ∀ s : ι → Finset ι,
         ∑ i, ‖offDiagonalPartFamily (fun c => (b c : EuclideanSpace ℂ (ι → Fin d)))
           (groundCompression (∑ i, h i) E₀ (truncatedTerm r ΔE h s i))‖ ≤
@@ -141,7 +143,7 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_perturb
             (n - 1 : ℕ) * ∑ i,
               ‖gaussianFilteredTerm r ΔE (∑ j, h j) (h i) - truncatedTerm r ΔE h s i‖ := by
   classical
-  let V := groundEigenspace (∑ i, h i) E₀
+  let V := groundSpace (∑ i, h i) E₀
   obtain ⟨b, hb⟩ := exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le_uniform
     G X id hX h hHerm hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth
     (q := 0) le_rfl hΔE hH hgap

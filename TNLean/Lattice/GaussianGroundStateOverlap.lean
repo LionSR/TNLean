@@ -39,6 +39,8 @@ estimate at lines 343–357.
 open Matrix Complex
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace mem_groundSpace_iff_mulVec)
+
 namespace TNLean.Lattice
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
@@ -55,12 +57,12 @@ private theorem unit_energy_error_le {H M : Matrix n n ℂ} {ε : ℝ}
 
 /-- The eigenvalue gap is the quadratic-form gap above the canonical ground eigenspace.
 Hastings, arXiv:cond-mat/0508554v3, lines 359–367. -/
-theorem groundEigenspace_gap_le_of_eigenvalues {H : Matrix n n ℂ} (hH : H.IsHermitian)
+theorem groundSpace_gap_le_of_eigenvalues {H : Matrix n n ℂ} (hH : H.IsHermitian)
     {E₀ Δ : ℝ} (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
     (ψ : EuclideanSpace ℂ n) :
-    Δ * (‖ψ‖ ^ 2 - ‖(groundEigenspace H E₀).starProjection ψ‖ ^ 2) ≤
+    Δ * (‖ψ‖ ^ 2 - ‖(groundSpace H E₀).starProjection ψ‖ ^ 2) ≤
       (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re - E₀ * ‖ψ‖ ^ 2 := by
-  let K := groundEigenspace H E₀
+  let K := groundSpace H E₀
   let b := hH.eigenvectorBasis
   let y := ψ - K.starProjection ψ
   have hb (k : n) : H *ᵥ WithLp.ofLp (b k) = (hH.eigenvalues k : ℂ) • WithLp.ofLp (b k) :=
@@ -101,13 +103,13 @@ theorem groundEigenspace_gap_le_of_eigenvalues {H : Matrix n n ℂ} (hH : H.IsHe
   apply Finset.sum_le_sum
   intro k _
   by_cases hk : hH.eigenvalues k = E₀
-  · have hmem : b k ∈ K := mem_groundEigenspace_iff.mpr (by simpa only [hk] using hb k)
+  · have hmem : b k ∈ K := eigenvectorBasis_mem_groundSpace hH hk
     have hzero : ⟪b k, y⟫_ℂ = 0 := by
       rw [inner_eq_zero_symm]
       exact K.starProjection_inner_eq_zero ψ (b k) hmem
     simp [hzero, hk]
   · have hzero : ⟪b k, K.starProjection ψ⟫_ℂ = 0 :=
-      inner_eq_zero_of_mem_groundEigenspace hH hk (hb k) (K.starProjection_apply_mem ψ)
+      inner_eq_zero_of_mem_groundSpace hH hk (hb k) (K.starProjection_apply_mem ψ)
     have hge := (hgap k).resolve_left hk
     simp only [y, inner_sub_right, hzero, sub_zero]
     exact mul_le_mul_of_nonneg_right (by linarith) (sq_nonneg _)
@@ -176,18 +178,18 @@ theorem exists_groundVector_projected_mass_of_norm_sub_le {H M : Matrix n n ℂ}
     {E₀ Δ ε : ℝ} {Ω : EuclideanSpace ℂ n} (hΩ : ‖Ω‖ = 1)
     (hHΩ : toEuclideanCLM (𝕜 := ℂ) (n := n) H Ω = (E₀ : ℂ) • Ω)
     (hgap : ∀ ψ : EuclideanSpace ℂ n,
-      Δ * (‖ψ‖ ^ 2 - ‖(groundEigenspace H E₀).starProjection ψ‖ ^ 2) ≤
+      Δ * (‖ψ‖ ^ 2 - ‖(groundSpace H E₀).starProjection ψ‖ ^ 2) ≤
         (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re - E₀ * ‖ψ‖ ^ 2)
     (hM : M.IsHermitian) (hHM : ‖H - M‖ ≤ ε) :
     ∃ (e : ℝ) (φ : EuclideanSpace ℂ n), ‖φ‖ = 1 ∧
       toEuclideanCLM (𝕜 := ℂ) (n := n) M φ = (e : ℂ) • φ ∧
       (∀ ψ : EuclideanSpace ℂ n,
         e * ‖ψ‖ ^ 2 ≤ (⟪ψ, toEuclideanLin M ψ⟫_ℂ).re) ∧
-      Δ * (1 - ‖(groundEigenspace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε ∧
-      (2 * ε < Δ → (groundEigenspace H E₀).starProjection φ ≠ 0) := by
+      Δ * (1 - ‖(groundSpace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε ∧
+      (2 * ε < Δ → (groundSpace H E₀).starProjection φ ≠ 0) := by
   obtain ⟨e, φ, hφ, heig, hmin, henergy⟩ :=
     exists_groundVector_energy_le_of_norm_sub_le hΩ hHΩ hM hHM
-  have hmass : Δ * (1 - ‖(groundEigenspace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε := by
+  have hmass : Δ * (1 - ‖(groundSpace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε := by
     have hg := hgap φ
     rw [hφ, one_pow, mul_one] at hg
     exact hg.trans henergy
@@ -254,7 +256,7 @@ theorem exists_groundVector_projection_of_exp_norm_bound {H M : Matrix n n ℂ}
     {E₀ Δ B β ℓ η : ℝ} {Ω : EuclideanSpace ℂ n} (hΩ : ‖Ω‖ = 1)
     (hHΩ : toEuclideanCLM (𝕜 := ℂ) (n := n) H Ω = (E₀ : ℂ) • Ω)
     (hgap : ∀ ψ : EuclideanSpace ℂ n,
-      Δ * (‖ψ‖ ^ 2 - ‖(groundEigenspace H E₀).starProjection ψ‖ ^ 2) ≤
+      Δ * (‖ψ‖ ^ 2 - ‖(groundSpace H E₀).starProjection ψ‖ ^ 2) ≤
         (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re - E₀ * ‖ψ‖ ^ 2)
     (hΔ : 0 < Δ) (hM : M.IsHermitian) (hβ : 0 < β) (hη : 0 < η)
     (hHM : ‖H - M‖ ≤ B * Real.exp (-(β * ℓ)))
@@ -263,8 +265,8 @@ theorem exists_groundVector_projection_of_exp_norm_bound {H M : Matrix n n ℂ}
       toEuclideanCLM (𝕜 := ℂ) (n := n) M φ = (e : ℂ) • φ ∧
       (∀ ψ : EuclideanSpace ℂ n,
         e * ‖ψ‖ ^ 2 ≤ (⟪ψ, toEuclideanLin M ψ⟫_ℂ).re) ∧
-      (groundEigenspace H E₀).starProjection φ ≠ 0 ∧
-      1 - ‖(groundEigenspace H E₀).starProjection φ‖ ^ 2 ≤ η := by
+      (groundSpace H E₀).starProjection φ ≠ 0 ∧
+      1 - ‖(groundSpace H E₀).starProjection φ‖ ^ 2 ≤ η := by
   have herr := exp_error_le_of_log_radius hβ hΔ (lt_min hη zero_lt_one) hℓ
   obtain ⟨e, φ, hφ, heig, hmin, hmass, hnonzero⟩ :=
     exists_groundVector_projected_mass_of_norm_sub_le hΩ hHΩ hgap hM hHM
@@ -301,8 +303,8 @@ theorem exists_metric_truncated_groundVector_projection {R J Δ : ℝ} (hR : 0 <
             toEuclideanCLM (𝕜 := ℂ) (n := ι → Fin d) M φ = (e : ℂ) • φ ∧
             (∀ ψ : EuclideanSpace ℂ (ι → Fin d),
               e * ‖ψ‖ ^ 2 ≤ (⟪ψ, toEuclideanLin M ψ⟫_ℂ).re) ∧
-            (groundEigenspace (∑ i, h i) E₀).starProjection φ ≠ 0 ∧
-            1 - ‖(groundEigenspace (∑ i, h i) E₀).starProjection φ‖ ^ 2 ≤ η := by
+            (groundSpace (∑ i, h i) E₀).starProjection φ ≠ 0 ∧
+            1 - ‖(groundSpace (∑ i, h i) E₀).starProjection φ‖ ^ 2 ≤ η := by
   obtain ⟨c₁, β, C, hc₁, hβ, hC, hbound⟩ :=
     exists_metric_truncated_filter_sum_bound hR S hJ hΔ
   refine ⟨c₁, β, C, hc₁, hβ, hC, ?_⟩
@@ -314,7 +316,7 @@ theorem exists_metric_truncated_groundVector_projection {R J Δ : ℝ} (hR : 0 <
     intro i _
     exact isHermitian_gaussianFilteredTerm _ _
       (Matrix.isHermitian_sum _ fun j _ ↦ hHerm j) (hHerm i)
-  have hgap := groundEigenspace_gap_le_of_eigenvalues hH hgapSpec
+  have hgap := groundSpace_gap_le_of_eigenvalues hH hgapSpec
   apply exists_groundVector_projection_of_exp_norm_bound hΩ hHΩ hgap hΔ hM hβ hη _ hℓlog
   have hb := hbound h hHerm hSupport hNorm hCard ℓ hℓR
   rw [norm_sub_rev] at hb
