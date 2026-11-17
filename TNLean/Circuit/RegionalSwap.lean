@@ -118,8 +118,10 @@ theorem apply_eq_submatrix_apply {m n : Type*} (M : Matrix m m ℂ) (e : m ≃ n
 /-- The swap of the sheets at `S` commutes with every product `R₁ ⊗ R₂` of operators acting off
 `S`. -/
 theorem commute_sheetSwapOp_kronecker {S : Finset ι} {D : Finset ι} (hD : Disjoint D S)
-    {R₁ R₂ : Matrix (ι → Fin q) (ι → Fin q) ℂ} (h₁ : R₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D)
-    (h₂ : R₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) : Commute (sheetSwapOp q S) (R₁ ⊗ₖ R₂) := by
+    {R₁ R₂ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (h₁ : R₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D)
+    (h₂ : R₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
+        Commute (sheetSwapOp q S) (R₁ ⊗ₖ R₂) := by
   obtain ⟨R₁', hR₁'⟩ := exists_one_kronecker_of_mem_supportedOperators hD h₁
   obtain ⟨R₂', hR₂'⟩ := exists_one_kronecker_of_mem_supportedOperators hD h₂
   change _ * _ = _ * _

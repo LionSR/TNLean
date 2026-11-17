@@ -175,7 +175,7 @@ def SquareHamiltonian.toAreaLawHamiltonian {L q : ℕ} {J : ℝ}
       rw [embedOp_rectangle_eq_reindex] at hs
       simpa only [T, e, squareAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      show _ ∈ ManyBody.supportedOperators _ _
+      change _ ∈ ManyBody.supportedOperators _ _
       exact zero_mem _
   · intro X
     by_cases hx : ∃ i, squareAreaLawSupport L i = X

@@ -350,12 +350,14 @@ variable {σ κ : Type*} [Fintype σ] [DecidableEq σ] [DecidableEq κ] {d : ℕ
 `acts k`, then `E_C` acts on `⋃_{k ∈ C} acts k`. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1268–1269. -/
 theorem clusterOp_mem_supportedOperators {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
-    {acts : κ → Finset σ} (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ))
+    {acts : κ → Finset σ}
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ))
     (C : Finset κ) (β : ℝ) :
     clusterOp h C β ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (C.biUnion acts : Finset σ) := by
   refine sum_mem fun D hD ↦ SMulMemClass.smul_mem _ (exp_mem_supportedOperators ?_)
   refine neg_mem (Submodule.smul_of_tower_mem
-    (Subalgebra.toSubmodule (ManyBody.supportedOperators _ _).toSubalgebra) β (sum_mem fun k hk ↦ ?_))
+    (Subalgebra.toSubmodule (ManyBody.supportedOperators _ _).toSubalgebra) β
+    (sum_mem fun k hk ↦ ?_))
   exact ManyBody.supportedOperators_mono (coe_subset.2 (subset_biUnion_of_mem acts
     (mem_powerset.1 hD hk))) (hh k)
 
@@ -364,7 +366,8 @@ omit [DecidableEq κ] in
 terms that are not adjacent in the overlap graph are equal or act on disjoint sets of sites, so
 they commute. This discharges the commutation hypothesis of the cluster products. -/
 theorem commute_of_not_adj_overlapGraph {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
-    {acts : κ → Finset σ} (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) :
+    {acts : κ → Finset σ}
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) :
     ∀ j k, ¬ (overlapGraph acts).Adj j k → Commute (h j) (h k) := by
   intro j k hjk
   by_cases hjk' : j = k
@@ -382,7 +385,8 @@ over the sets `A` of terms with no large cluster of the product over the cluster
 each `E_C` acts on `⋃_{k ∈ C} acts k` (`clusterOp_mem_supportedOperators`). -/
 theorem truncatedExp_eq_sum_noncommProd_clusters_overlapGraph [Fintype κ]
     (large : Finset κ → Prop) {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
-    {acts : κ → Finset σ} (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) (β : ℝ) :
+    {acts : κ → Finset σ}
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) (β : ℝ) :
     truncatedExp (overlapGraph acts) large h β =
       ∑ A with NoLargeCluster (overlapGraph acts) large A,
         (clusters (overlapGraph acts) A).noncommProd (fun C ↦ clusterOp h C β)

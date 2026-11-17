@@ -214,7 +214,8 @@ spread supports.
 Source: arXiv:2103.13367, Supplemental Material, proof of the area law ("`U_n ∈ LU`, so it
 does not increase" the entanglement across a cut), in the Heisenberg picture. -/
 theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Finset ι}
-    {A : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X) :
+    {A : Matrix (ι → Fin e) (ι → Fin e) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X) :
     Φ.dual A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
@@ -226,8 +227,10 @@ theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Finset ι}
 /-- The dual of an onsite channel is multiplicative on operators acting on disjoint sets of
 sites. -/
 theorem dual_mul (Φ : OnsiteChannel d e ι) {X Y : Finset ι} (hXY : Disjoint X Y)
-    {A B : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X)
-    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y) : Φ.dual (A * B) = Φ.dual A * Φ.dual B := by
+    {A B : Matrix (ι → Fin e) (ι → Fin e) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y) :
+        Φ.dual (A * B) = Φ.dual A * Φ.dual B := by
   have key := ManyBody.eq_of_mem_supportedOperators₂
     ((LinearMap.mul ℂ (Matrix (ι → Fin e) (ι → Fin e) ℂ)).compr₂ Φ.dual)
     ((LinearMap.mul ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)).compl₁₂ Φ.dual Φ.dual)
@@ -441,12 +444,14 @@ theorem exists_dual {T : ℕ}
       (∀ X : Finset (Fin N), ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X,
         Ψ' A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (neighbourhood X T)) ∧
       (∀ X Y : Finset (Fin N), Disjoint (neighbourhood X T) (neighbourhood Y T) →
-        ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X, ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y,
+        ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X,
+            ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
   induction h with
   | onsite Φ =>
     refine ⟨Φ.dual, Φ.trace_map_mul, fun X A hA ↦ ?_, fun X Y hXY A hA B hB ↦ ?_⟩
-    · exact ManyBody.supportedOperators_mono (subset_neighbourhood X 0) (Φ.dual_mem_supportedOperators hA)
+    · exact ManyBody.supportedOperators_mono (subset_neighbourhood X 0)
+        (Φ.dual_mem_supportedOperators hA)
     · exact Φ.dual_mul (hXY.mono (subset_neighbourhood X 0) (subset_neighbourhood Y 0)) hA hB
   | @layer e T Ψ _ L ih =>
     obtain ⟨Ψ', hdual, hcone, hmul⟩ := ih
@@ -572,7 +577,8 @@ theorem trace_mul_mul_eq_of_isLocalChannelConversion {d' T : ℕ}
     (h : IsLocalChannelConversion T (finKronecker σ₀) σ)
     {X Y : Finset (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d') X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d') Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d') X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d') Y) :
     trace (σ * (A * B)) = trace (σ * A) * trace (σ * B) := by
   obtain ⟨T', hT', Ψ, hΨ, rfl⟩ := h
   obtain ⟨Ψ', hdual, hcone, hmul⟩ := hΨ.exists_dual

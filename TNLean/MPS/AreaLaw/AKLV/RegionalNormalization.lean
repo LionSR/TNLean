@@ -65,7 +65,8 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ => h0 i)).isHermitian
   let z (j : Fin 3) := minEigenvalue (hC j)
   have hsC (j : Fin 3) :
-      C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (normalizationCoreSites a b j : Finset (Fin L)) := by
+      C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (normalizationCoreSites a b j : Finset (Fin L)) := by
     refine sum_mem fun i hi => ?_
     have hsub : (interval L i.val (i.val + 2) : Set (Fin L)) ⊆
         (normalizationCoreSites a b j : Set (Fin L)) := by

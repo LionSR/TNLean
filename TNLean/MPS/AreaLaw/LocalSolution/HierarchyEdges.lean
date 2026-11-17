@@ -67,7 +67,9 @@ theorem hierarchyEdge_mem_supportedOperators (blk : ι → ℕ)
     (a : ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (ha : ∀ j, 0 < j → a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j))
-    (m k : ℕ) : hierarchyEdge a m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k) := by
+    (m k : ℕ) :
+        hierarchyEdge a m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+    (levelBlock blk (m + 1) k) := by
   apply ManyBody.supportedOperators_mono (D := {i | blk i + 1 = (2 * k + 1) * 2 ^ m ∨
     blk i = (2 * k + 1) * 2 ^ m}) _ (ha _ (by positivity))
   intro i hi

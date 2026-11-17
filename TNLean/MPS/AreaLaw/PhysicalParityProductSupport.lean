@@ -29,7 +29,7 @@ theorem isSupportedOn_physicalParityProduct
     (hs : ∀ i, i.val % 2 = p → Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       ((T).symm (physicalParityProduct h p)) D := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   apply QuantumCircuit.mem_supportedOperators_complementProd
   intro k hk
   change (T).symm (if hk' : k < L - 1 then
@@ -52,7 +52,7 @@ theorem isSupportedOn_regionalParityProduct
       (h i) (interval L i.val (i.val + 2))) (a b p : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       ((T).symm (physicalParityProduct (intervalBondRestriction a b h) p)) (interval L a b) := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   classical
   apply isSupportedOn_physicalParityProduct
   intro i _
@@ -62,7 +62,7 @@ theorem isSupportedOn_regionalParityProduct
     intro v hv
     simp only [mem_interval] at *
     omega
-  · show _ ∈ ManyBody.supportedOperators _ _
+  · change _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
 
 end TNLean.MPS.AreaLaw

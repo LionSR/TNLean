@@ -69,7 +69,8 @@ theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Finset ι} {v : (ι → Fi
 /-- An operator acting on sites outside `S` keeps `|0⟩` at the sites of `S`. -/
 theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Finset ι} {v : (ι → Fin d) → ℂ}
     (h : IsZeroOn S v) {T : Finset ι} (hST : Disjoint S T)
-    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T) :
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T) :
     IsZeroOn S (A *ᵥ v) := by
   have hP : ∀ u : (ι → Fin d) → ℂ, IsZeroOn S u ↔ ctrlProj S 0 *ᵥ u = u := by
     intro u
@@ -87,7 +88,8 @@ theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Finset ι} {v : (ι → F
       by_contra hne
       exact hx (by rw [ite_eq_right fun h' => hne (h' i hi), zero_mul])
   have hc : Commute (ctrlProj S (0 : ι → Fin d)) A :=
-    ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators S 0) hA hST
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (ctrlProj_mem_supportedOperators S 0) hA hST
   rw [hP] at h ⊢
   rw [mulVec_mulVec, hc.eq, ← mulVec_mulVec, h]
 

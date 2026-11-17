@@ -268,7 +268,8 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
     let M := periodicFilteredPair R θ Δ h
     let ε := periodicFilterError N ℓ R S m J θ Δ μ
     (∀ j, (M j).IsHermitian ∧
-      M j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ v.1 = j ∨ finRotate N v.1 = j) ∧
+      M j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ v.1 = j ∨
+          finRotate N v.1 = j) ∧
       ‖M j‖ ≤ (2 * ℓ : ℕ) * J ∧
       ‖M j - ((⟪Ω, toEuclideanLin (M j) Ω⟫_ℂ).re : ℂ) • 1‖ ≤ 4 * (ℓ : ℝ) * J ∧
       ‖toEuclideanLin (M j - ((⟪Ω, toEuclideanLin (M j) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤

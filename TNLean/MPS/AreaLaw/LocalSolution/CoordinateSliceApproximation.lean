@@ -48,7 +48,9 @@ Hastings, arXiv:cond-mat/0508554v3, lines 633–639, 705–743 and 745–756. -/
 theorem exists_unit_mem_coordinateSliceProjection [Nonempty ι] (z : ι → ℕ)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N) (hz : ∀ i, z i < N * (2 * ℓ))
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ))
+    (hsupp : ∀ i,
+        a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian) {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1)
     {J Δ r : ℝ} (hJ : 0 < J)
     (hr : hierarchyProjectionLength (finiteHierarchyDepth N) (2 * Fintype.card ι * J) Δ ≤ r)
@@ -91,7 +93,9 @@ Hastings, arXiv:cond-mat/0508554v3, lines 709–730 and 745–756. -/
 theorem card_le_two_mul_re_trace_of_coordinateSliceProjection [Nonempty ι] (z : ι → ℕ)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ))
+    (hsupp : ∀ i,
+        a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian) {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1)
     {J Δ r : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
     (hr : hierarchyProjectionLength (finiteHierarchyDepth N) (2 * Fintype.card ι * J) Δ ≤ r)

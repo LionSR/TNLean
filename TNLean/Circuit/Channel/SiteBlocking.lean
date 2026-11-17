@@ -177,7 +177,8 @@ theorem blockSites_rectKronecker (m : Fin (M * k) → Matrix (Fin d) (Fin d) ℂ
 the blocks `Y`. -/
 theorem blockSites_mem_supportedOperators {Y : Finset (Fin M)}
     {B : Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ}
-    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun p ↦ siteBlock p ∈ Y)) :
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun p ↦ siteBlock p ∈ Y)) :
     blockSites M k d B ∈ ManyBody.supportedOperators (fun _ ↦ Fin (d ^ k)) Y := by
   induction hB using ManyBody.supportedOperators_induction with
   | prod m hm =>
@@ -203,11 +204,13 @@ theorem blockSites_symm_mem_supportedOperators [NeZero d] {X : Finset (Fin M)}
   classical
   refine ((ManyBody.mem_supportedOperators_iff_forall_commute (X := fun _ : Fin (M * k) ↦ Fin d)
       (A := (blockSites M k d).symm A)).mpr fun B hB ↦ ?_)
-  have hB' : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun p ↦ siteBlock (k := k) p ∈ Xᶜ) := by
+  have hB' : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun p ↦ siteBlock (k := k) p ∈ Xᶜ) := by
     convert hB using 2
     ext p
     simp
-  have hc := ManyBody.commute_of_mem_supportedOperators_of_disjoint hA (blockSites_mem_supportedOperators hB') disjoint_compl_right
+  have hc := ManyBody.commute_of_mem_supportedOperators_of_disjoint hA
+      (blockSites_mem_supportedOperators hB') disjoint_compl_right
   simpa using hc.map (blockSites M k d).symm
 
 /-- Moving a block by `m` moves each of its sites by `k * m` in the original chain. -/
@@ -275,7 +278,8 @@ theorem IsLocalChannelProtocol.exists_dual_comp_blockSites [NeZero M] [NeZero d]
         Ψ' A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
           (Finset.univ.filter fun p ↦ siteBlock p ∈ neighbourhood X T)) ∧
       (∀ X Y : Finset (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
-        ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X, ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y,
+        ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X,
+            ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
   obtain ⟨Φ, hdual, hcone, hmul⟩ := h.exists_dual
   refine ⟨(blockSites M k d).symm.toLinearMap ∘ₗ Φ, fun ρ A ↦ ?_, fun X A hA ↦ ?_,
@@ -366,7 +370,8 @@ theorem exists_dual [NeZero d] {T : ℕ}
         Ψ' A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
           (neighbourhood (Finset.univ.filter fun p ↦ siteBlock (k := k) p ∈ X) (k * T))) ∧
       (∀ X Y : Finset (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
-        ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X, ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y,
+        ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X,
+            ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
   obtain ⟨T', hT', Ψ, hΨ, rfl⟩ := h
   obtain ⟨Ψ', hdual, hcone, hmul⟩ := hΨ.exists_dual_comp_blockSites
@@ -395,7 +400,8 @@ theorem trace_mul_mul_eq_of_isBlockedLocalChannelConversion [NeZero M] [NeZero k
     (h : IsBlockedLocalChannelConversion k T (finKronecker σ₀) σ)
     {X Y : Finset (Fin M)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y) :
     trace (σ * (A * B)) = trace (σ * A) * trace (σ * B) := by
   rw [IsBlockedLocalChannelConversion, ← rectKronecker_eq_finKronecker, blockSites_rectKronecker,
     rectKronecker_eq_finKronecker] at h

@@ -165,7 +165,8 @@ theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Mo
     {D : Finset ι} (e : (ι → Fin q) ≃ κ) (Φ : M →ₗ[ℂ] Matrix κ κ ℂ)
     (hgen : ∀ m : ι → Matrix (Fin q) (Fin q) ℂ, (∀ i ∉ D, m i = 1) →
       ∃ A', (rectKronecker m).submatrix e.symm e.symm = Φ A')
-    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     ∃ A', A.submatrix e.symm e.symm = Φ A' := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
@@ -181,7 +182,8 @@ theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Mo
 
 /-- An operator acting on `T ∪ E` is `A' ⊗ 1_U` in the coordinates of `threeSplit T E`. -/
 theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
-    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (T ∪ E : Finset ι)) :
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (T ∪ E : Finset ι)) :
     ∃ A' : Matrix ((T → Fin q) × (E → Fin q)) ((T → Fin q) × (E → Fin q)) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         A' ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by

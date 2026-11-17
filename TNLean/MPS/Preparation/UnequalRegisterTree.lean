@@ -136,7 +136,8 @@ theorem exists_rounds_registerLayersOp [NeZero d] [NeZero s] {K : ℕ}
         obtain ⟨g', hg', hx'⟩ := (Finset.mem_filter.mp hx').2
         exact Finset.disjoint_left.mp (hreg j j' (by omega) hj'm g' hg' g hg) hx' hx
       · obtain ⟨g', hg', rfl⟩ := List.mem_map.mp hA
-        exact ManyBody.supportedOperators_mono (D' := Finset.univ.filter fun x ↦ ∃ g' ∈ gs j, x ∈ Finset.univ.image g'.sites)
+        exact ManyBody.supportedOperators_mono (D' := Finset.univ.filter fun x ↦ ∃ g' ∈ gs j,
+            x ∈ Finset.univ.image g'.sites)
           (fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g', hg', hx⟩)
           g'.op_mem_supportedOperators
 

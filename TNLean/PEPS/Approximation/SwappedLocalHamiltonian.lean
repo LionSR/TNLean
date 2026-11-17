@@ -200,7 +200,8 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let K := Matrix.reindex p p (doubledHamiltonian h.operator)
     let F := Matrix.reindex p p (sheetSwapOp q A)
-    F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (crossingSites Λ R A : Finset (Site Λ)) ∧
+    F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+        (crossingSites Λ R A : Finset (Site Λ)) ∧
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
   intro p K F

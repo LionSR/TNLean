@@ -280,7 +280,8 @@ theorem branch_mem_supportedOperators [NeZero q] (s : p.Tag) :
   · exact ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
       (siteLift_mem_supportedOperators _ _)
 
-theorem proj_mem_supportedOperators : p.proj ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer :=
+theorem proj_mem_supportedOperators :
+    p.proj ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer :=
   sum_mem fun s _ => p.cyl_mem_supportedOperators s
 
 /-- The hole encoder `K_{c,h} = ∑_{j,ℓ} |j, ℓ⟩ ⊗ (|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1)`
@@ -386,7 +387,8 @@ theorem PairwiseDisjointOuter.of_cons {p : SquarePatch pos q} {l : List (SquareP
   List.Pairwise.of_cons h
 
 theorem projProd_mem_supportedOperators :
-    (l : List (SquarePatch pos q)) → projProd l ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint l)
+    (l : List (SquarePatch pos q)) →
+        projProd l ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint l)
   | [] => by
     rw [footprint_nil]
     simpa [projProd] using (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (∅ : Finset ι)))
@@ -394,7 +396,8 @@ theorem projProd_mem_supportedOperators :
     rw [projProd, List.map_cons, List.prod_cons, footprint_cons]
     exact mul_mem
       (ManyBody.supportedOperators_mono Finset.subset_union_left p.proj_mem_supportedOperators)
-      (ManyBody.supportedOperators_mono Finset.subset_union_right (projProd_mem_supportedOperators l))
+      (ManyBody.supportedOperators_mono Finset.subset_union_right
+          (projProd_mem_supportedOperators l))
 
 theorem projProd_append (l₁ l₂ : List (SquarePatch pos q)) :
     projProd (l₁ ++ l₂) = projProd l₁ * projProd l₂ := by
@@ -408,7 +411,8 @@ theorem projProd_isStarProjection :
   | p :: l, h => by
     rw [projProd, List.map_cons, List.prod_cons]
     exact p.proj_isStarProjection.mul (projProd_isStarProjection l h.of_cons)
-      (ManyBody.commute_of_mem_supportedOperators_of_disjoint p.proj_mem_supportedOperators (projProd_mem_supportedOperators l) (disjoint_outer_footprint h))
+      (ManyBody.commute_of_mem_supportedOperators_of_disjoint p.proj_mem_supportedOperators
+          (projProd_mem_supportedOperators l) (disjoint_outer_footprint h))
 
 theorem norm_projProd_le_one (l : List (SquarePatch pos q)) : ‖projProd l‖ ≤ 1 :=
   l2_opNorm_list_prod_le_one _ fun A hA => by
@@ -490,10 +494,12 @@ theorem rawProd_mem_supportedOperators [NeZero q] :
     exact mul_mem
       (ManyBody.supportedOperators_mono Finset.subset_union_left
         (h.patch.branch_mem_supportedOperators t.1))
-      (ManyBody.supportedOperators_mono Finset.subset_union_right (rawProd_mem_supportedOperators l t.2))
+      (ManyBody.supportedOperators_mono Finset.subset_union_right
+          (rawProd_mem_supportedOperators l t.2))
 
 theorem rawProd_conjTranspose_mem_supportedOperators [NeZero q] (l : List (Hole pos q Party))
-    (t : TagSpace l) : (rawProd l t)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint (l.map Hole.patch)) :=
+    (t : TagSpace l) :
+    (rawProd l t)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint (l.map Hole.patch)) :=
   star_mem (rawProd_mem_supportedOperators l t)
 
 /-- Encodings of a concatenation factor through the encodings of the two parts. -/
@@ -517,7 +523,8 @@ Polynomial-PEPS manuscript, `05-frames.tex`, lines 84–85. -/
 theorem rawProd_commute [NeZero q] {l₁ l₂ : List (Hole pos q Party)}
     (h : Disjoint (footprint (l₁.map Hole.patch)) (footprint (l₂.map Hole.patch)))
     (t₁ : TagSpace l₁) (t₂ : TagSpace l₂) : Commute (rawProd l₁ t₁) (rawProd l₂ t₂) :=
-  ManyBody.commute_of_mem_supportedOperators_of_disjoint (rawProd_mem_supportedOperators l₁ t₁) (rawProd_mem_supportedOperators l₂ t₂) h
+  ManyBody.commute_of_mem_supportedOperators_of_disjoint (rawProd_mem_supportedOperators l₁ t₁)
+      (rawProd_mem_supportedOperators l₂ t₂) h
 
 /-- **Canonical identification of tag orderings.** If `l'` lists the holes of `l`, whose outer
 footprints are pairwise disjoint, in another order, then some relabelling `e` of the tag
@@ -542,7 +549,9 @@ theorem exists_tagEquiv_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
       y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
     have hyx : Disjoint y.patch.outer x.patch.outer :=
       (List.rel_of_pairwise_cons hd List.mem_cons_self)
-    rw [← mul_assoc, ← mul_assoc, (ManyBody.commute_of_mem_supportedOperators_of_disjoint (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _) hyx).eq]
+    rw [← mul_assoc, ← mul_assoc,
+        (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _) hyx).eq]
   | trans h₁ _ ih₁ ih₂ =>
     obtain ⟨e₁, he₁⟩ := ih₁ hd
     obtain ⟨e₂, he₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
@@ -570,7 +579,8 @@ theorem sum_rawProd_conjTranspose_mul_self [NeZero q] :
   | h :: l, hl => by
     have ih := sum_rawProd_conjTranspose_mul_self l hl.of_cons
     have hc (t : TagSpace l) : Commute h.patch.proj (rawProd l t)ᴴ :=
-      ManyBody.commute_of_mem_supportedOperators_of_disjoint h.patch.proj_mem_supportedOperators (rawProd_conjTranspose_mem_supportedOperators l t) (disjoint_outer_footprint hl)
+      ManyBody.commute_of_mem_supportedOperators_of_disjoint h.patch.proj_mem_supportedOperators
+          (rawProd_conjTranspose_mem_supportedOperators l t) (disjoint_outer_footprint hl)
     change ∑ t : h.patch.Tag × TagSpace l, (h.patch.branch t.1 * rawProd l t.2)ᴴ *
       (h.patch.branch t.1 * rawProd l t.2) = _
     rw [Fintype.sum_prod_type, Finset.sum_comm]

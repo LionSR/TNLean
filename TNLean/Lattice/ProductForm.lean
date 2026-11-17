@@ -73,7 +73,8 @@ theorem apply_eq_apply_of_mem_supportedOperators {S : Finset ι}
 
 /-- The operators supported on a set of sites are closed under the exponential. -/
 theorem exp_mem_supportedOperators {S : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) : NormedSpace.exp A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+        NormedSpace.exp A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   let s := (ManyBody.supportedOperators (fun _ ↦ Fin d) S).toSubalgebra
   exact NormedSpace.exp_mem (R := ℂ) (s := s)
     (Submodule.closed_of_finiteDimensional (Subalgebra.toSubmodule s)) hA
@@ -233,7 +234,8 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061. -/
 theorem hasProductForm_of_mem_supportedOperators_radius {X : Finset ι}
     (hnear : ∀ i, near i i) (i₀ : ι) (hX : ∀ j ∈ X, near i₀ j)
     {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : ρ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X) : HasProductForm (fun _ ↦ q) near ρ := by
+    (hρ : ρ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X) :
+        HasProductForm (fun _ ↦ q) near ρ := by
   classical
   /- The configurations read off the indices: their labels on `X`, and one common label
   (the row label at `i₀`) off `X`. -/
@@ -300,7 +302,8 @@ theorem hasProductForm_of_mem_supportedOperators {X : Finset ι}
     (hnear : ∀ i, near i i)
     (hX : X.Nonempty ∧ ∀ i ∈ X, ∀ j ∈ X, near i j)
     {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : ρ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X) : HasProductForm (fun _ ↦ q) near ρ := by
+    (hρ : ρ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X) :
+        HasProductForm (fun _ ↦ q) near ρ := by
   obtain ⟨i₀, hi₀⟩ := hX.1
   exact hasProductForm_of_mem_supportedOperators_radius hnear i₀ (hX.2 i₀ hi₀) hρ
 

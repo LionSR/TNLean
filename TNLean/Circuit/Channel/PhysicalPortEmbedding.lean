@@ -66,7 +66,8 @@ theorem unitary {P : PhysicalPortLayout N W} {Q : PhysicalPortLayout N W'}
   induction hU with
   | onsite i hU hs =>
     apply IsPhysicalPortUnitary.onsite i (embedOp_mem_unitary e.wires.injective hU)
-    apply ManyBody.supportedOperators_mono _ (embedOp_mem_supportedOperators_image e.wires.injective hs)
+    apply ManyBody.supportedOperators_mono _
+        (embedOp_mem_supportedOperators_image e.wires.injective hs)
     intro _ hmemImage
     obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hmemImage
     exact Finset.mem_filter.mpr

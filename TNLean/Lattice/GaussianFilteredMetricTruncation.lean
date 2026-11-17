@@ -104,7 +104,8 @@ theorem exists_metric_truncated_filter_budget {R J Δ : ℝ} (hR : 0 < R)
   have hq : 0 ≤ q := by dsimp [q]; positivity
   have hS : 1 ≤ S := (Finset.one_le_card.mpr ⟨i, self_mem_metricRangeBall hR.le i⟩).trans
     (hCard i)
-  have hSupp (j : ι) : h j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R j) := hSupport j
+  have hSupp (j : ι) :
+      h j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R j) := hSupport j
   have hDegree (x : ι) : (metricRangeGraph R).degree x ≤ S := by
     simpa only [SimpleGraph.card_neighborFinset_eq_degree] using
       metricRangeGraph_neighbor_card_le hCard x
@@ -184,9 +185,11 @@ theorem metric_truncated_filter_properties {ι : Type*} [PseudoMetricSpace ι]
     (hSupport : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R i))
     (hNorm : ∀ i, ‖h i‖ ≤ J) (q Δ : ℝ) (i : ι) :
     let M := gaussianFilteredTerm q Δ (∑ j ∈ metricRangeBall (ℓ - R) i, h j) (h i)
-    M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall ℓ i) ∧ M.IsHermitian ∧ ‖M‖ ≤ J := by
+    M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (metricRangeBall ℓ i) ∧ M.IsHermitian ∧ ‖M‖ ≤ J := by
   intro M
-  have hsupp (j : ι) : h j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R j) := hSupport j
+  have hsupp (j : ι) :
+      h j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R j) := hSupport j
   have hHs : (∑ j ∈ metricRangeBall (ℓ - R) i, h j).IsHermitian :=
     Matrix.isHermitian_sum _ fun j _ ↦ hHerm j
   have hHsSupp : (∑ j ∈ metricRangeBall (ℓ - R) i, h j) ∈
@@ -215,7 +218,8 @@ theorem exists_metric_truncated_filter_localization {R J Δ : ℝ} (hR : 0 < R)
           (ℓ : ℝ), R ≤ ℓ → ∀ i : ι,
           let q := c₁ * ℓ * Δ
           let M := gaussianFilteredTerm q Δ (∑ j ∈ metricRangeBall (ℓ - R) i, h j) (h i)
-          M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall ℓ i) ∧ M.IsHermitian ∧ ‖M‖ ≤ J ∧
+          M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+              (metricRangeBall ℓ i) ∧ M.IsHermitian ∧ ‖M‖ ≤ J ∧
             ‖gaussianFilteredTerm q Δ (∑ j, h j) (h i) - M‖ ≤ J * C * Real.exp (-(η * ℓ)) ∧
             (∀ (hH : (∑ j, h j).IsHermitian) {E₀ : ℝ}
               (_hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)

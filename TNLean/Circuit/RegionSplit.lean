@@ -70,7 +70,8 @@ theorem rectKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (F
 
 /-- An operator acting on `S` is `A' ⊗ 1` in the coordinates of `sheetSplit S`. -/
 theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
-    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
     ∃ A' : Matrix (S → Fin q) (S → Fin q) ℂ,
       A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
         A' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := by

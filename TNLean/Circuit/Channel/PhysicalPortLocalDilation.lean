@@ -239,7 +239,8 @@ realization. Environment size depends only on the site's wire count, not Kraus c
 theorem exists_onsite_appended_dilation {r : ℕ}
     (P : PhysicalPortLayout N W) (i : Fin N)
     (K : Fin r → Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ)
-    (hs : ∀ a, K a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun p ↦ P.site p = i))
+    (hs : ∀ a, K a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun p ↦ P.site p = i))
     (hnorm : ∑ a, (K a)ᴴ * K a = 1) :
     ∃ A : ℕ, ∃ owner : Fin A → Fin N,
       ∃ U : Matrix (Fin (W + A) → Fin d) (Fin (W + A) → Fin d) ℂ,

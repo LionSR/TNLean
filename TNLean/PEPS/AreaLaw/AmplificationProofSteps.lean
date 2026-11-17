@@ -59,7 +59,8 @@ theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
     (∑ i ∈ s, P i ⊗ₖ (b i ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin q) (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
   have hsum : (∑ i ∈ s, P i ⊗ₖ (b i ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) = ∑ i ∈ s, (P i ⊗ₖ (b i ⊗ₖ
@@ -102,7 +103,8 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
     {R₀ : Matrix (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X))
       (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X)) ℂ}
     (hR₀ : R₀.submatrix (ancillaSplit q X) (ancillaSplit q X) ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin q) (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
     {L' D Dret : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
     (hL : L' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) N)
     {φ η g : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ}
@@ -122,7 +124,8 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
       RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *
         R₀)ᴴ *ᵥ η) - WithLp.toLp 2 φ‖ ≤ a) :
     ∃ U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ,
-      U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) ∧
+      U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) ∧
           Uᴴ * U = 1 ∧
       ‖WithLp.toLp 2 (U *ᵥ (φ ∘ ancillaSplit q X)) - WithLp.toLp 2 (η ∘ ancillaSplit q X)‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
@@ -217,7 +220,8 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
     (hη : ‖WithLp.toLp 2 (restoringTransport Ω X Y hXY *ᵥ
       (Entropy.restoringRestored p (restoringVector Ω X Y hXY)).ofLp)‖ = 1)
     {U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ}
-    (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
+    (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
         (hUu : Uᴴ * U = 1)
     {C₁ C₂ : ℝ} {n M K : ℕ} (hn : 1 ≤ n) (hK : 4 * (M + 2) ≤ K)
     (hδ : ‖WithLp.toLp 2 (U *ᵥ ((restoringTransport Ω X Y hXY *ᵥ

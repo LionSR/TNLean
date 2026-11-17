@@ -110,7 +110,8 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
               (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) → ∀ (ℓ : ℕ), R ≤ (ℓ : ℝ) → ∀ i,
           let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i
-          a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
+          a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+              (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
             a.IsHermitian ∧ ‖a‖ ≤ J ∧
             ‖TNLean.Lattice.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
               J * C * Real.exp (-(η * (ℓ : ℝ))) := by
@@ -120,7 +121,8 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     intro M d hM g hg hsupp hnorm ℓ hℓ i a
     let _ : NeZero M := ⟨by omega⟩
     let _ := periodicPhysicalMetricSpace M
-    have hsupp' : ∀ j, g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall 0 j) := by
+    have hsupp' : ∀ j,
+        g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall 0 j) := by
       intro j
       apply ManyBody.supportedOperators_mono _ (hsupp j)
       intro v hv
@@ -149,7 +151,8 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     intro M d hM g hg hsupp hnorm ℓ hℓ i a
     let _ : NeZero M := ⟨by omega⟩
     let _ := periodicPhysicalMetricSpace M
-    have hsupp' : ∀ j, g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall R j) := by
+    have hsupp' : ∀ j,
+        g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall R j) := by
       intro j
       apply ManyBody.supportedOperators_mono _ (hsupp j)
       intro v hv

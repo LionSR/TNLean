@@ -723,7 +723,8 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
           obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hx
           exact Finset.mem_coe.mp (hpacketSupport ⟨i, rfl⟩)) hTsupport)
         (mul_mem hC₁support hC₂support)
-    have hinputReflection : subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
+    have hinputReflection :
+        subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
       change subspaceReflection
         (initializedBasisMatrix (zeroFlagEmbedding (d := d) s) *
           (initializedBasisMatrix (zeroFlagEmbedding (d := d) s))ᴴ) ∈ _
@@ -737,7 +738,8 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
       apply Fin.ext
       change a + (2 * q + p.val) = a + 2 * q + p.val
       omega
-    have hsuccessReflection : subspaceReflection S ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
+    have hsuccessReflection :
+        subspaceReflection S ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
       change subspaceReflection
         (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
           (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) ∈ _

@@ -479,7 +479,8 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
     (hNorm : ∀ j, ‖h j‖ ≤ 1)
     (A B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) (t : ℝ) :
     ‖(exp (t • (Complex.I • ∑ j, h j)) * A *
@@ -516,7 +517,8 @@ theorem norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) (t : ℝ) :
     ‖(exp (t • (Complex.I • interactionHamiltonian h hN)) * A *

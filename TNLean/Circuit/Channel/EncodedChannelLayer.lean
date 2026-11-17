@@ -74,7 +74,8 @@ theorem exists_pairKraus (L : ChannelLayer m N) (hN : 2 ≤ N) (hm : 0 < m)
       ∑ a, (A a)ᴴ * A a = 1 := by
   classical
   let e := pairEmbedding hN i
-  have hs (a : Fin (L.r i)) : L.kraus i a ∈ ManyBody.supportedOperators (fun _ ↦ Fin m) (Finset.univ.image e) := by
+  have hs (a : Fin (L.r i)) :
+      L.kraus i a ∈ ManyBody.supportedOperators (fun _ ↦ Fin m) (Finset.univ.image e) := by
     rw [image_univ_pairEmbedding]
     exact L.kraus_mem_supportedOperators i hi a
   choose A hA using fun a => exists_embedOp_eq_of_mem_supportedOperators e.injective (hs a)

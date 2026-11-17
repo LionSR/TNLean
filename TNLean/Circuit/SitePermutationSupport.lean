@@ -24,8 +24,10 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-- Permuting the sites permutes the support of an operator. Source context:
 Hastings–Koma, arXiv:math-ph/0507008, Appendix A, finite-volume local interactions. -/
 theorem supportedOperators_submatrix_siteEquiv {S : Finset ι} (p : Equiv.Perm ι)
-    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
-    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image p) := by
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (S.image p) := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
     rw [prodOp_eq_rectKronecker]

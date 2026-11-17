@@ -133,7 +133,8 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       h i * X - X * h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := by
     by_cases hd : Disjoint (interval L i.val (i.val + 2))
         (interval L (c - m) (c + 2 + m))
-    · have hc : Commute (h i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i hi) hX hd
+    · have hc : Commute (h i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (hs i hi) hX hd
       rw [sub_eq_zero.mpr hc.eq]
       exact zero_mem _
     · have hhJ : h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
@@ -143,9 +144,9 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
   have hsupport : Entropy.IsSupportedOn (n := fun _ ↦ q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum
   refine ⟨hsupport, ?_⟩
   let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))

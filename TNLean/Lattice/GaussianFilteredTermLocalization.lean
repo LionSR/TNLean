@@ -102,7 +102,8 @@ Gaussian tail controls the rest. -/
 theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq : 0 ≤ q)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (y : ι)
-    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({y} : Finset ι)) (μ : ℝ) (hμ : 0 ≤ μ) (l : ℕ)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({y} : Finset ι)) (μ : ℝ)
+    (hμ : 0 ≤ μ) (l : ℕ)
     (hl : ∀ x ∈ S, (l : ℕ∞) ≤ G.edist x y) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W * B - B * gaussianFilteredTerm q ΔE (∑ k, h k) W‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ * ‖B‖ *

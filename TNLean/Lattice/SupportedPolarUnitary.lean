@@ -46,7 +46,8 @@ of the local operator of `D`, tensored with the identity outside `S`; no dilatio
 additional system is used.
 Source: `02-information.tex`, lines 580–595, equation `eq:info-reset-unitary`. -/
 theorem exists_supported_unitary_polar_correction (S : Finset ι)
-    {D : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hD : D ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
+    {D : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hD : D ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
     ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
       U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       ∀ x y : (ι → Fin q) → ℂ,

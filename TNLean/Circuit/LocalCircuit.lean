@@ -93,14 +93,16 @@ structure BondLayer (d : ℕ) (bond : β → Finset ι) where
   /-- The gate on the bond `b`, as an operator on all the sites. -/
   gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ
   gate_mem_unitary : ∀ b ∈ bonds, gate b ∈ unitary (Matrix (ι → Fin d) (ι → Fin d) ℂ)
-  gate_mem_supportedOperators : ∀ b ∈ bonds, gate b ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bond b)
+  gate_mem_supportedOperators :
+      ∀ b ∈ bonds, gate b ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bond b)
   pairwiseDisjoint : (bonds : Set β).PairwiseDisjoint bond
 
 namespace BondLayer
 
 theorem gate_commute (L : BondLayer d bond) (s : Finset β) (hs : s ⊆ L.bonds) :
     (s : Set β).Pairwise (Function.onFun Commute L.gate) := fun k hk l hl hkl ↦
-  ManyBody.commute_of_mem_supportedOperators_of_disjoint (L.gate_mem_supportedOperators k (hs hk)) (L.gate_mem_supportedOperators l (hs hl)) (L.pairwiseDisjoint (hs hk) (hs hl) hkl)
+  ManyBody.commute_of_mem_supportedOperators_of_disjoint (L.gate_mem_supportedOperators k (hs hk))
+      (L.gate_mem_supportedOperators l (hs hl)) (L.pairwiseDisjoint (hs hk) (hs hl) hkl)
 
 /-- The product of the gates of `L` on a subset `s` of its bonds. -/
 noncomputable def partialOp (L : BondLayer d bond) (s : Finset β) (hs : s ⊆ L.bonds) :
@@ -132,8 +134,10 @@ theorem op_mem_unitary (L : BondLayer d bond) : L.op ∈ unitary
 /-- **Light cone of one layer.** One layer enlarges the support of `U† A U` to at most the
 one-step neighbourhood: the sites of `X` and the bonds meeting `X`. -/
 theorem conj_op_mem_supportedOperators [Fintype β] (L : BondLayer d bond) {X : Finset ι}
-    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
-    star L.op * A * L.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bondNeighbourhood bond X) := by
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    star L.op * A * L.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (bondNeighbourhood bond X) := by
   classical
   set P := L.bonds.filter fun k ↦ (bond k ∩ X).Nonempty
   set Q := L.bonds.filter fun k ↦ ¬ (bond k ∩ X).Nonempty
@@ -148,7 +152,8 @@ theorem conj_op_mem_supportedOperators [Fintype β] (L : BondLayer d bond) {X : 
   have hQX : L.partialOp Q hQ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Xᶜ :=
     L.partialOp_mem_supportedOperators Q hQ fun k hk j hj ↦ Finset.mem_compl.mpr fun hjX ↦
       (Finset.mem_filter.mp hk).2 ⟨j, Finset.mem_inter.mpr ⟨hj, hjX⟩⟩
-  have hPX : L.partialOp P hP ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (bondNeighbourhood bond X) :=
+  have hPX : L.partialOp P hP ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (bondNeighbourhood bond X) :=
     L.partialOp_mem_supportedOperators P hP fun k hk ↦
       bond_subset_bondNeighbourhood (Finset.mem_filter.mp hk).2
   have hcomm : Commute A (L.partialOp Q hQ) :=
@@ -232,7 +237,8 @@ theorem circuitOp_map_adjoint_reverse (Ls : List (BondLayer d bond)) :
 /-- **Backward light cone of a list of layers.** If `A` acts on the sites `X`, then
 `U† A U` acts on the light cone of radius `T` of `X`, for the unitary `U` of `T` layers. -/
 theorem conj_circuitOp_mem_supportedOperators_lightCone [Fintype β] (Ls : List (BondLayer d bond))
-    {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
     star (circuitOp Ls) * A * circuitOp Ls ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (lightCone bond X Ls.length) := by
   induction Ls with
@@ -285,7 +291,8 @@ theorem mul (h : IsBondCircuitOfDepth bond U T) (h' : IsBondCircuitOfDepth bond 
 Source: arXiv:2307.01696, main text after Theorem 1 ("`|ψ_N⟩` have a strictly finite light
 cone") and Supplemental Material, proof of Theorem 1. -/
 theorem conj_mem_supportedOperators [Fintype β] (hU : IsBondCircuitOfDepth bond U T) {X : Finset ι}
-    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) :
     Star.star U * A * U ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (lightCone bond X T) := by
   obtain ⟨Ls, rfl, rfl⟩ := hU
   exact conj_circuitOp_mem_supportedOperators_lightCone Ls hA
@@ -314,7 +321,8 @@ from a product state by a depth-`T` circuit, every connected correlation for ope
 distance larger than `2T` vanishes". -/
 theorem expect_mul_mul_expect_one [Fintype β] (hψ : IsBondPreparedInDepth bond T ψ) {X Y : Finset ι}
     (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
-    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     expect ψ (A * B) * expect ψ 1 = expect ψ A * expect ψ B := by
   obtain ⟨U, hU, v, rfl⟩ := hψ
@@ -335,7 +343,8 @@ with disjoint light cones of radius `T` vanishes: `⟨AB⟩ = ⟨A⟩⟨B⟩`.
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1. -/
 theorem expect_mul_eq [Fintype β] (hψ : IsBondPreparedInDepth bond T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1)
     {X Y : Finset ι} (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
-    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     expect ψ (A * B) = expect ψ A * expect ψ B := by
   have h := hψ.expect_mul_mul_expect_one hXY hA hB
@@ -395,7 +404,8 @@ from a product state by a depth-`T` circuit, every connected correlation for ope
 distance larger than `2T` vanishes". -/
 theorem expect_mul_mul_expect_one_of_isPreparedInDepth {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
     (hψ : IsPreparedInDepth T ψ) {X Y : Finset (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
-    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     expect ψ (A * B) * expect ψ 1 = expect ψ A * expect ψ B :=
   IsBondPreparedInDepth.expect_mul_mul_expect_one hψ
@@ -412,7 +422,8 @@ one proved here, such as that of a brickwork circuit. -/
 theorem expect_mul_eq_of_isPreparedInDepth {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
     (hψ : IsPreparedInDepth T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) {X Y : Finset (Fin N)}
     (hXY : IsSeparatedBy X Y (2 * T)) {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     expect ψ (A * B) = expect ψ A * expect ψ B :=
   IsBondPreparedInDepth.expect_mul_eq hψ hnorm
     (disjoint_lightCone_ringBond_of_isSeparatedBy hXY) hA hB

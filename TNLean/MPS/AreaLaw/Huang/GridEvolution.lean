@@ -77,7 +77,9 @@ theorem commute_chainGridBlockHamiltonian (hw : 0 < w)
   intro j k hjk
   have hdisj := pairwise_disjoint_chainGridBlock L w
     (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq))
-  exact ManyBody.commute_of_mem_supportedOperators_of_disjoint (chainGridBlockHamiltonian_mem_supported hw h hs j) (chainGridBlockHamiltonian_mem_supported hw h hs k) hdisj
+  exact ManyBody.commute_of_mem_supportedOperators_of_disjoint
+      (chainGridBlockHamiltonian_mem_supported hw h hs j)
+      (chainGridBlockHamiltonian_mem_supported hw h hs k) hdisj
 
 /-- The retained Hamiltonian has an exact product of its actual block evolutions.
 The support layout and each factor are constructed from the original interaction terms.

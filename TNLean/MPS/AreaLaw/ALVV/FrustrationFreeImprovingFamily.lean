@@ -79,7 +79,8 @@ private theorem coe_interval_subset_left {c x y : ℕ} (hyc : y ≤ c) :
 /-- An operator supported on `[x, y)` lies on one side of the cut after the first `c` sites
 when the interval ends by `c` or starts at or after `c`. -/
 private theorem mem_supportedOperators_side {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    {c x y : ℕ} (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L x y : Finset (Fin L)))
+    {c x y : ℕ}
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L x y : Finset (Fin L)))
     (hxy : y ≤ c ∨ c ≤ x) :
     X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 c : Finset (Fin L)) ∨
       X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)

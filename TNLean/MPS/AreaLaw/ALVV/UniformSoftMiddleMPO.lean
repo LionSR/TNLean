@@ -129,7 +129,7 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
   have hheatSupport (a : Fin (m + 1)) :
       Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
         (heat a) (interval (N + 1) l r) := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) l r : Finset (Fin (N + 1)))
     have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r h hs

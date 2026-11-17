@@ -77,9 +77,9 @@ private theorem isSupportedOn_bond_complement
       (h i) (interval L i.val (i.val + 2))) (i : Fin (L - 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (1 - h i) (interval L i.val (i.val + 2)) := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   classical
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   exact sub_mem
     (one_mem (ManyBody.supportedOperators _ _))
     (hs i)

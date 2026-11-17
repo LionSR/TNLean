@@ -275,7 +275,8 @@ theorem op_mem_unitary : g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → F
   embedOp_mem_unitary (pair_injective g.a_ne_far) g.u_mem_unitary
 
 /-- The gate acts on its two sites `a` and `a + 2L + 1`. -/
-theorem op_mem_supportedOperators : g.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {g.a, g.far} := by
+theorem op_mem_supportedOperators :
+    g.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {g.a, g.far} := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.a_ne_far) g.u
   rwa [show Finset.univ.image ![g.a, g.far] = {g.a, g.far} from
     image_univ_pairSites _ _] at this

@@ -60,7 +60,8 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
   let B (i : SquareInteraction L) :=
     F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i)) * Fᴴ
   have hBsupport (i : SquareInteraction L) : B i ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (squareInteractionSupport i : Finset (Vertex L)) :=
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+          (squareInteractionSupport i : Finset (Vertex L)) :=
     TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
       (squareInteractionSupport i) (h.hermitianTerm_mem_supportedOperators i)
   have hFn : ‖F‖ ≤ 1 :=

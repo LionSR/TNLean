@@ -292,7 +292,8 @@ theorem interval_supportedOperators_commute {d D N j m k : ℕ}
     (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N j m))
     (hY : Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N m k)) :
     Commute X Y :=
-  ManyBody.commute_of_mem_supportedOperators_of_disjoint hX hY (intervalConsecutiveSupport_disjoint hjm hmk)
+  ManyBody.commute_of_mem_supportedOperators_of_disjoint hX hY
+      (intervalConsecutiveSupport_disjoint hjm hmk)
 
 
 /-- A bond site is in a boundary register exactly when its cut and side have the prescribed
@@ -512,7 +513,8 @@ theorem leaf_embedOp_mem_supportedOperators {d D N : ℕ} (i : Fin N)
       (MPSTensor.Cfg d
         (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc))) ℂ) :
     QuantumCircuit.embedOp (leafConsecutiveSites d D N i) X ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
   have h := QuantumCircuit.embedOp_mem_supportedOperators
     (leafConsecutiveSites d D N i).injective X
   rw [leafConsecutiveSites_range] at h

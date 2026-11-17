@@ -26,7 +26,8 @@ variable {N : ℕ}
 
 /-- A diagonal observable depending on one site's label is supported on that site. -/
 theorem diagonal_comp_eval_mem_supportedOperators {d : ℕ} (i : Fin N) (f : Fin d → ℂ) :
-    diagonal (fun σ : Fin N → Fin d => f (σ i)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {i} := by
+    diagonal (fun σ : Fin N → Fin d => f (σ i)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        {i} := by
   let m : Fin N → Matrix (Fin d) (Fin d) ℂ :=
     fun j => diagonal (fun x => if j = i then f x else 1)
   have hm : ∀ j ∉ ({i} : Finset (Fin N)), m j = 1 := by
@@ -122,7 +123,8 @@ theorem expect_ghzState_two {S : Finset (Fin N)} (a b : ℂ)
 theorem covariance_ghzState_two {S S' : Finset (Fin N)} (hSS' : Disjoint S S')
     (hcover : ∃ i, i ∉ S ∪ S') {a b : ℂ} (hab : star a * a + star b * b = 1)
     {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S') :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S') :
     expect (ghzState (M := N) ![a, b]) (A * B) -
         expect (ghzState (M := N) ![a, b]) A * expect (ghzState (M := N) ![a, b]) B =
       (star a * a) * (star b * b) *
@@ -145,7 +147,8 @@ four times the product of the sector probabilities. -/
 theorem norm_covariance_ghzState_two_le {S S' : Finset (Fin N)} (hSS' : Disjoint S S')
     (hcover : ∃ i, i ∉ S ∪ S') {a b : ℂ} (hab : star a * a + star b * b = 1)
     {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S')
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S')
     (hAu : A ∈ unitary _) (hBu : B ∈ unitary _) :
     ‖expect (ghzState (M := N) ![a, b]) (A * B) -
         expect (ghzState (M := N) ![a, b]) A * expect (ghzState (M := N) ![a, b]) B‖ ≤
@@ -177,7 +180,8 @@ theorem norm_covariance_mulVec_ghzState_two_le {T : ℕ}
     (hU : IsLocalCircuitOfDepth U T) {X Y : Finset (Fin N)}
     (hXY : IsSeparatedBy X Y (2 * T))
     (hcover : ∃ k, k ∉ neighbourhood X T ∪ neighbourhood Y T)
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) X) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) Y)
     (hAu : A ∈ unitary _) (hBu : B ∈ unitary _)
     {a b : ℂ} (hab : star a * a + star b * b = 1) :
     ‖expect (U *ᵥ ghzState (M := N) ![a, b]) (A * B) -

@@ -264,7 +264,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
   have hs := s.isLt
   have hzero : Entropy.IsSupportedOn (n := fun _ : E ↦ q)
       (0 : Matrix (E → Fin q) (E → Fin q) ℂ) C := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ : E ↦ Fin q) C)
   have hLeft : ∀ r : Fin (2 * ℓ),
       ∃ (B : Matrix (T → Fin q) (T → Fin q) ℂ)

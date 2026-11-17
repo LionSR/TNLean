@@ -67,7 +67,7 @@ noncomputable def smul (h : ChainHamiltonian L q R J) (c : ℝ) (hc : 0 ≤ c) :
     ChainHamiltonian L q R (c * J) where
   term X := (c : ℂ) • h.term X
   supported X := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     exact SMulMemClass.smul_mem _ (h.supported X)
   hermitian X := (h.hermitian X).smul (by simp [IsSelfAdjoint, Complex.conj_ofReal])
   norm_le X := by

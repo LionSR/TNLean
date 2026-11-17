@@ -126,10 +126,12 @@ theorem perm_involutive (K : Finset (Fin N))
   rw [Equiv.apply_symm_apply, perm_involutive K hK x]
 
 private theorem swap_mem_supportedOperators (i : Fin N) :
-    permOp (d := d) (Equiv.swap i (i + 1)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond i) := by
+    permOp (d := d) (Equiv.swap i (i + 1)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (ringBond i) := by
   by_cases hi : i = i + 1
   · rw [← hi, Equiv.swap_self]
-    change permOpHom (1 : Equiv.Perm (Fin N)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond i)
+    change permOpHom (1 : Equiv.Perm (Fin N)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (ringBond i)
     rw [map_one]
     exact (one_mem (ManyBody.supportedOperators _ _))
   · rw [permOp_swap_eq_embedOp hi]

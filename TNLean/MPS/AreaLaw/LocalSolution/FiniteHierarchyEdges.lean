@@ -128,7 +128,8 @@ Hastings, arXiv:cond-mat/0508554v3, lines 609–628 and 668–685. -/
 theorem extendFiniteEdges_mem_supportedOperators (blk : ι → ℕ)
     (a : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (ha : ∀ j : Fin N, 0 < (j : ℕ) →
-      a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
+      a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (j : ℕ) (hj : 0 < j) :
     extendFiniteEdges a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j) := by
@@ -143,7 +144,8 @@ Hastings, arXiv:cond-mat/0508554v3, lines 609–628 and 668–685. -/
 theorem hierarchyEdge_extendFiniteEdges_mem_supportedOperators (blk : ι → ℕ)
     (a : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (ha : ∀ j : Fin N, 0 < (j : ℕ) →
-      a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
+      a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (m k : ℕ) : hierarchyEdge (extendFiniteEdges a) m k ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k) :=
   hierarchyEdge_mem_supportedOperators blk (extendFiniteEdges a)

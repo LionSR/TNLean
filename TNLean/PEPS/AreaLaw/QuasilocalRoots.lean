@@ -79,7 +79,8 @@ theorem quasilocalRoots (K : Finset ι) {k : Matrix (ι → Fin q) (ι → Fin q
             rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤
           4 * Real.sqrt ε * ‖B‖) ∧
       (∀ B : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-        (∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K, Commute A B) → rootChannel Gl Kl B = B) := by
+        (∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K, Commute A B) →
+            rootChannel Gl Kl B = B) := by
   intro kl G Kr Gl Kl
   have hl₀ : 0 ≤ kl := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D
       := K) (Matrix.nonneg_iff_posSemidef.mp hk₀))

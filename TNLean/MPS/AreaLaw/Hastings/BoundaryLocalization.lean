@@ -129,7 +129,8 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+          ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (v * T - ℓ / 2)) +
@@ -243,7 +244,8 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+          ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (-(ℓ / 4))) +

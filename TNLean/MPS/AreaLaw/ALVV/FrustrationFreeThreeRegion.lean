@@ -128,14 +128,14 @@ theorem regionTermMatrix_supported {h : ℕ → Matrix (Fin L → Fin q) (Fin L 
     (x y m : ℕ) (D : Finset (Fin L))
     (hD : ∀ i, x ≤ i → i < y → interval L i (i + 2) ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (regionTermMatrix h x y m) D := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   have hE := regionalProjectionMatrix_supported hq hh (evenBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2
   have hO := regionalProjectionMatrix_supported hq hh (oddBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   exact add_mem
     (sub_mem (Entropy.isSupportedOn_one D) hE) (sub_mem (Entropy.isSupportedOn_one D) hO)
 
@@ -152,9 +152,11 @@ theorem threeRegionFamily_supported {h : Fin m → Matrix (Fin L → Fin q) (Fin
     (hq : 1 ≤ q)
     (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (a b ℓ : ℕ) :
-    (∀ r, threeRegionFamily h a b ℓ (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+    (∀ r, threeRegionFamily h a b ℓ
+        (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))) ∧
-    (∀ r, threeRegionFamily h a b ℓ (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+    (∀ r, threeRegionFamily h a b ℓ
+        (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))) ∧
     threeRegionFamily h a b ℓ (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L 0 (a + 1) : Finset (Fin L)) ∧

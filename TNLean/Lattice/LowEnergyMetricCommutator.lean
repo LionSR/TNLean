@@ -127,7 +127,8 @@ theorem norm_groundCompression_commutator_le_metricSeparation
       (4 * (X.card : ℝ) + 4) * ‖W‖ * ‖B‖ * Real.exp (-((γ / R) * ℓ)) := by
   classical
   intro vR v γ
-  have hgen (i : ι) : h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R i : Finset ι) :=
+  have hgen (i : ι) :
+      h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R i : Finset ι) :=
     hSupport i
   have hdist (x : ι) (hx : x ∈ X) (y : ι) (hy : y ∈ Y) :
       (Nat.ceil (ℓ / R) : ℕ∞) ≤ (metricRangeGraph R).edist x y := by

@@ -45,16 +45,19 @@ theorem reindex_kronecker_mem_supportedOperators
     {ι : Type*} [Fintype ι] [DecidableEq ι] {d e : ℕ} {S T : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     {B : Matrix (ι → Fin e) (ι → Fin e) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) T) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) T) :
     Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
       (A ⊗ₖ B) ∈ ManyBody.supportedOperators (fun _ ↦ Fin (d * e)) (S ∪ T) := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
     induction hB using ManyBody.supportedOperators_induction with
     | prod n hn =>
-      have heq : Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
+      have heq : Matrix.reindex (sitePairConfigurationEquiv ι d e)
+          (sitePairConfigurationEquiv ι d e)
           (Matrix.rectKronecker m ⊗ₖ Matrix.rectKronecker n) =
-          Matrix.rectKronecker fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (m i ⊗ₖ n i) := by
+          Matrix.rectKronecker fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv
+              (m i ⊗ₖ n i) := by
         ext x y
         exact Finset.prod_mul_distrib.symm
       rw [prodOp_eq_rectKronecker, prodOp_eq_rectKronecker, heq]

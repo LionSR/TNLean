@@ -39,16 +39,19 @@ from the last site to the first. Source context: arXiv:1010.3732, Appendix C,
 nearest-neighbour Hamiltonians on finite periodic chains. -/
 theorem embedLocalOperator_twoSite_mem_supportedOperators [NeZero N] (hN : 2 ≤ N) (j : Fin N)
     (A : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
-    MPOTensor.embedLocalOperator 2 N hN j A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond j) := by
+    MPOTensor.embedLocalOperator 2 N hN j A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (ringBond j) := by
   classical
   apply Fin.cyclic_induction (P := fun j ↦
-    MPOTensor.embedLocalOperator 2 N hN j A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond j)) ?_ ?_ j
+    MPOTensor.embedLocalOperator 2 N hN j A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (ringBond j)) ?_ ?_ j
   · have h := MPSTensor.chainWindowOperator_mem_supportedOperators (d := d)
       (L := 2) (a := 0) (by omega : 0 < N) (by omega : 0 + 2 ≤ N) A
     rw [MPSTensor.chainWindowOperator_eq_embedLocalOperatorAlgHom
       (by omega : 0 < N) (by omega : 0 + 2 ≤ N)] at h
     change MPOTensor.embedLocalOperator 2 N hN 0 A ∈ _ at h
-    refine ManyBody.supportedOperators_mono (D := Finset.univ.filter fun k : Fin N ↦ 0 ≤ k.val ∧ k.val < 0 + 2) ?_ h
+    refine ManyBody.supportedOperators_mono (D := Finset.univ.filter fun k : Fin N ↦ 0 ≤ k.val ∧
+        k.val < 0 + 2) ?_ h
     intro k hk
     have hk' : k.val = 0 ∨ k.val = 1 := by
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hk; omega

@@ -380,7 +380,8 @@ lines 419–424): the ball expectation acts on the ball, and a retained constrai
 the component of its anchor acts on the designated component. -/
 theorem truncatedConstraint_mem_supportedOperators {q : ℕ} (G : SimpleGraph ι)
     (S₀ : Finset ι) (r₀ : ℕ) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦ G.Reachable a x)) :
+    (hk : k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable a x)) :
     truncatedConstraint q G S₀ r₀ a k ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (designatedSupport G S₀ r₀ a : Finset ι) := by
   classical

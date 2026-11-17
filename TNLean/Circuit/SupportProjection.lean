@@ -32,6 +32,7 @@ theorem supportProj_mem_supportedOperators (K : Finset ι)
   refine ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun Y hY ↦ ?_
   have hY' : Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Kᶜ := by
     simpa only [Finset.coe_compl] using hY
-  exact (ManyBody.commute_of_mem_supportedOperators_of_disjoint hK hY' disjoint_compl_right).cfc_real _
+  exact (ManyBody.commute_of_mem_supportedOperators_of_disjoint hK hY'
+      disjoint_compl_right).cfc_real _
 
 end QuantumCircuit

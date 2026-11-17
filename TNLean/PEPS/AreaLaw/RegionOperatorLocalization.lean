@@ -119,7 +119,8 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
       Commute A (ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) y l)
         (ManyBody.heisenbergEvolution h.operator (-t) U)) :=
-    ManyBody.commute_of_mem_supportedOperators_of_disjoint hA (ManyBody.regionExpectation_mem_supportedOperators _ _) (hdisj y hy)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hA
+        (ManyBody.regionExpectation_mem_supportedOperators _ _) (hdisj y hy)
   have hε (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))

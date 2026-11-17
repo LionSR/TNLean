@@ -125,7 +125,7 @@ theorem regionalProjectionMatrix_supported
       (interval L i (i + 2))) (s : Finset ℕ) (m : ℕ) (D : Finset (Fin L))
     (hD : ∀ i < m, i ∈ s → interval L i (i + 2) ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (regionalProjectionMatrix h s m) D := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   classical
   induction m with
   | zero => exact Entropy.isSupportedOn_one D
@@ -260,7 +260,7 @@ private theorem leftExterior_supported
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (leftExterior h s t m k) (interval L 0 k) := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   exact sum_mem fun i hi ↦
     (hh i).mono (edge_subset_left (Finset.mem_filter.mp hi).2)
 
@@ -270,7 +270,7 @@ private theorem rightExterior_supported
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (rightExterior h s t m k) (interval L 0 k)ᶜ := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   apply sum_mem
   intro i hi
   apply (hh i).mono
@@ -361,11 +361,11 @@ private theorem rank_inside_le
   let X := leftExterior h s t m k + 1
   let Y := rightExterior h s t m k + 1
   have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     exact add_mem
       (leftExterior_supported hh s t m k) (Entropy.isSupportedOn_one _)
   have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     exact add_mem
       (rightExterior_supported hh s t m k) (Entropy.isSupportedOn_one _)
   have hrX : cutRank X k ≤ 1 :=
@@ -420,7 +420,7 @@ private theorem rank_outside_le
           omega)) hx hy)
     let Y := rightExterior h s t m k + 1 + 1 - Ps - Pt
     have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ := by
-      show _ ∈ ManyBody.supportedOperators _ _
+      change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem
         (sub_mem (add_mem (add_mem hr (Entropy.isSupportedOn_one _)) (Entropy.isSupportedOn_one _))
           hPs) hPt
@@ -443,7 +443,7 @@ private theorem rank_outside_le
       exact edge_subset_left (by have := (Finset.mem_Ico.mp hi).2; omega))
     let X := leftExterior h s t m k + 1 + 1 - Ps - Pt
     have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) := by
-      show _ ∈ ManyBody.supportedOperators _ _
+      change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem
         (sub_mem (add_mem (add_mem hl (Entropy.isSupportedOn_one _)) (Entropy.isSupportedOn_one _))
           hPs) hPt
@@ -498,7 +498,7 @@ private theorem rank_boundary_inside_le
         omega
       have hr : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
           (rightExterior h s t m k + 1 + 1) (interval L 0 k)ᶜ := by
-        show _ ∈ ManyBody.supportedOperators _ _
+        change _ ∈ ManyBody.supportedOperators _ _
         exact add_mem
           (add_mem (rightExterior_supported hh s t m k) (Entropy.isSupportedOn_one _))
           (Entropy.isSupportedOn_one _)
@@ -514,7 +514,7 @@ private theorem rank_boundary_inside_le
         omega
       have hl : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
           (leftExterior h s t m k + 1 + 1) (interval L 0 k) := by
-        show _ ∈ ManyBody.supportedOperators _ _
+        change _ ∈ ManyBody.supportedOperators _ _
         exact add_mem
           (add_mem (leftExterior_supported hh s t m k) (Entropy.isSupportedOn_one _))
           (Entropy.isSupportedOn_one _)

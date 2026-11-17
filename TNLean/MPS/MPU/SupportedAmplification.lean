@@ -39,7 +39,8 @@ theorem subspaceReflection_mem_supportedOperators
 /-- Powers do not enlarge logical support. Source: repeated amplification
 in Section 5 of the circuit audit. -/
 theorem pow_mem_supportedOperators
-    {X : Matrix (Cfg d n) (Cfg d n) ℂ} (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (ℓ : ℕ) :
+    {X : Matrix (Cfg d n) (Cfg d n) ℂ}
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (ℓ : ℕ) :
     X ^ ℓ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   induction ℓ with
   | zero => simpa only [pow_zero] using (one_mem (ManyBody.supportedOperators _ S))
@@ -54,7 +55,8 @@ theorem subspaceReflection_image_mem_supportedOperators
     (hZ : Z ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ))
     (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
-    Matrix.subspaceReflection ((Z * E) * (Z * E)ᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
+    Matrix.subspaceReflection ((Z * E) * (Z * E)ᴴ) ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S := by
   rw [Matrix.subspaceReflection_image Z E hZ]
   have hstar : Zᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
     simpa only [Matrix.star_eq_conjTranspose] using star_mem hZS
@@ -71,7 +73,8 @@ theorem postselectionAmplificationStep_mem_supportedOperators
     (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hP : Matrix.subspaceReflection P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
-    Matrix.postselectionAmplificationStep (Z * E) P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+    Matrix.postselectionAmplificationStep (Z * E) P ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S :=
   neg_mem
     (mul_mem
       (subspaceReflection_image_mem_supportedOperators Z E hZ hZS hR) hP)
@@ -87,7 +90,8 @@ theorem postselectionAmplification_mem_supportedOperators
     (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hP : Matrix.subspaceReflection P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (ℓ : ℕ) :
-    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S :=
   mul_mem
     (pow_mem_supportedOperators
       (postselectionAmplificationStep_mem_supportedOperators Z E P hZ hZS hR hP) ℓ) hZS
@@ -104,7 +108,8 @@ theorem postselectionAmplification_mem_supportedOperators_of_projection_support
     (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hE : E * Eᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hP : P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (ℓ : ℕ) :
-    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S :=
   postselectionAmplification_mem_supportedOperators Z E P hZ hZS
     (subspaceReflection_mem_supportedOperators hE)
     (subspaceReflection_mem_supportedOperators hP) ℓ

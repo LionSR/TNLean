@@ -468,7 +468,8 @@ residuals are at most `C exp (-8 b) ε` because `z⁻¹ ≤ exp (2 b)`.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
 theorem exists_supported_unitary_of_two_sided (S : Finset ι)
-    {M : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hMsupp : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
+    {M : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hMsupp : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     {ψ φ : (ι → Fin q) → ℂ} {z b C ε : ℝ} (hb : 0 ≤ b) (hz : Real.exp (-2 * b) ≤ z)
     (hfwd : ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 φ‖ ≤ C * Real.exp (-10 * b) * ε)
     (hrev : ‖WithLp.toLp 2 (Mᴴ *ᵥ φ) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤

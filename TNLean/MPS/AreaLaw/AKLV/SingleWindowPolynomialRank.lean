@@ -136,7 +136,8 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
     (hW : ∀ r, W r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (c + r.val) (c + r.val + 2) : Finset (Fin L)))
     (hPL : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 (c + 1) : Finset (Fin L)))
-    (hPR : PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L (c + 2 * w) L : Finset (Fin L)))
+    (hPR : PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval L (c + 2 * w) L : Finset (Fin L)))
     (hw : 1 ≤ w) (hc : c + 2 * w ≤ L - 1) (τ : Fin q)
     (k : ℕ) (hk : 1 ≤ k) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     let A := interval L 0 (c + w + 1)

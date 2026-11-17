@@ -211,7 +211,7 @@ theorem truncatedEnergyTerm_isSupportedOn [NeZero q]
     (hΔ : 0 < Δ) (L : ℕ) (i : AdmissibleSupport Λ R) :
     IsSupportedOn (n := fun _ => q) (S.truncatedEnergyTerm h Ω Δ L i)
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   apply truncatedConstraint_mem_supportedOperators
   apply positiveConstraint_mem_supportedOperators_component (le_refl 1) (half_pos hΔ)
     S.graph (fun i : AdmissibleSupport Λ R => i.val) S.anchor hanchor h.term

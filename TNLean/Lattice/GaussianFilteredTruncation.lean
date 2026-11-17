@@ -156,12 +156,15 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 `e^{iHt} W e^{-iHt}`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 302–304:
 `H_i^trunc(t)` acts only on sites within distance `l_proj` of `i`. -/
 theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Finset ι}
-    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K)
+    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hH : H ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K)
     (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K) (t : ℝ) :
-    hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K := by
+    hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) K := by
   have hU (s : ℝ) : hermitianUnitaryPath H s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
     exp_mem_supportedOperators
-      (Submodule.smul_of_tower_mem (Subalgebra.toSubmodule (ManyBody.supportedOperators _ _).toSubalgebra) s
+      (Submodule.smul_of_tower_mem
+          (Subalgebra.toSubmodule (ManyBody.supportedOperators _ _).toSubalgebra) s
         (SMulMemClass.smul_mem Complex.I hH))
   exact mul_mem (mul_mem (hU t) hW) (hU (-t))
 
@@ -169,7 +172,8 @@ theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Finset ι}
 `H = H_loc` and `W = H_i`, this is the support of `M_i` in Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, eqs. `mid`, `odef`, `hpdef` (lines 285–303). -/
 theorem gaussianFilteredTerm_mem_supportedOperators (q ΔE : ℝ) {K : Finset ι}
-    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K)
+    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hH : H ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K)
     (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K) :
     gaussianFilteredTerm q ΔE H W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K := by
   set μ := gaussianReal 0 (q / ΔE ^ 2).toNNReal
@@ -207,8 +211,10 @@ it differs from `τ_t(A)` by at most the sum of the single-site commutator bound
 This is the input `‖[H_j, H_i(t')]‖` of Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
 lines 1484–1505. -/
 theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (S : Finset ι)
-    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
-    (Y : Finset ι) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
+    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (Y : Finset ι) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) (μ : ℝ)
+    (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ x ∈ S, ∀ y ∈ Y, (m : ℕ∞) ≤ G.edist x y) (t : ℝ) :
     ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t A - ManyBody.heisenbergEvolution (∑ k, h k) t A
         * B‖ ≤
@@ -230,7 +236,8 @@ theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (
       exact hLR
   rw [compl_compl, Finset.sum_const, nsmul_eq_mul] at hloc
   have hcomm : Commute B (ManyBody.regionExpectation Yᶜ τA) :=
-    ManyBody.commute_of_mem_supportedOperators_of_disjoint hB (ManyBody.regionExpectation_mem_supportedOperators _ _) disjoint_compl_right
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hB
+        (ManyBody.regionExpectation_mem_supportedOperators _ _) disjoint_compl_right
   have hsplit : B * τA - τA * B =
       B * (τA - ManyBody.regionExpectation Yᶜ τA) -
         (τA - ManyBody.regionExpectation Yᶜ τA) * B := by
@@ -296,7 +303,8 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
   have hterm (k : κ) (hk : k ∉ s) :
       ‖h k * A - A * h k‖ ≤ if ¬Disjoint (X k) K then F * ‖h k‖ else 0 := by
     split_ifs with hd
-    · rw [(ManyBody.commute_of_mem_supportedOperators_of_disjoint (hSupport k) hAK hd).eq, sub_self, norm_zero]
+    · rw [(ManyBody.commute_of_mem_supportedOperators_of_disjoint (hSupport k) hAK hd).eq,
+        sub_self, norm_zero]
     · have hLR := norm_commutator_heisenbergEvolution_le_graphDistance_finset G X h'
         hHerm' hSupport' R hDiam vR hCard b₀ hBudget' S hW (X k) (hSupport k) μ hμ m
         (hm k hk hd) u

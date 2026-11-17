@@ -217,19 +217,19 @@ private theorem internal_formula (K : ℕ) (j : Fin K) :
 theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin (K + 2) ↦ 2) (bondTerm K i)
       (interval (K + 2) i.val (i.val + 2)) := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   refine Fin.cases ?_ (fun j ↦ ?_) i
-  · show _ ∈ ManyBody.supportedOperators _ _
+  · change _ ∈ ManyBody.supportedOperators _ _
     change boundary K ∈ _
     rw [boundary_formula]
     apply mul_mem
-    · show _ ∈ ManyBody.supportedOperators _ _
+    · change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (SMulMemClass.smul_mem _ (oneSite_mem 0 _ (by simp [interval])))
-    · show _ ∈ ManyBody.supportedOperators _ _
+    · change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (oneSite_mem 1 _ (by simp [interval]))
-  · show _ ∈ ManyBody.supportedOperators _ _
+  · change _ ∈ ManyBody.supportedOperators _ _
     change internalTerm K j ∈ _
     rw [internal_formula]
     split_ifs with hj

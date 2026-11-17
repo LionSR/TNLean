@@ -61,7 +61,8 @@ theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : 
     h.hermitianTerm i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (squareInteractionSupport i : Finset (Vertex L)) := by
   have hs : squareInteractionTerm h i ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin q) (squareInteractionSupport i : Finset (Vertex L)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (squareInteractionSupport i : Finset (Vertex L)) := by
     cases i with
     | inl v =>
       simpa only [squareInteractionTerm, squareInteractionSupport, Finset.coe_singleton]

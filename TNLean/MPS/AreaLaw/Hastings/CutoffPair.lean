@@ -127,11 +127,12 @@ theorem ChainHamiltonian.isSupportedOn_localizedPart
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {D : Finset (Fin L)}
     (hP : Entropy.IsSupportedOn (n := fun _ ↦ q) P D) (K : Finset (Fin L)) :
     Entropy.IsSupportedOn (n := fun _ ↦ q) (h.localizedPart Ω s ΔE P K) (D ∪ K) := by
-  show _ ∈ ManyBody.supportedOperators _ _
+  change _ ∈ ManyBody.supportedOperators _ _
   refine (add_mem ?_ ?_)
   · exact ManyBody.supportedOperators_mono (by simp)
       (hP.groundCentered Ω)
-  · exact ManyBody.supportedOperators_mono (by simp) (ManyBody.regionExpectation_mem_supportedOperators K _)
+  · exact ManyBody.supportedOperators_mono (by simp)
+      (ManyBody.regionExpectation_mem_supportedOperators K _)
 
 /-- The centered part of `0` is `0`. -/
 theorem groundCentered_zero :
@@ -163,7 +164,7 @@ theorem ChainHamiltonian.isSupportedOn_localizedPart_leftPart {c m k : ℕ} (hmk
       (h.localizedPart Ω s ΔE (h.leftPart c m) (leftWindow L R c m k)) (leftBlock L c) := by
   by_cases hcm : c ≤ m
   · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) _)
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
@@ -305,18 +306,20 @@ theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q 
     rw [two_mul, add_div]
     gcongr
   · rw [hrem]
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     refine sub_mem (sub_mem ?_ ?_) ?_
     · refine ManyBody.supportedOperators_mono ?_ ((h.isSupportedOn_bufferPart c m).groundCentered Ω)
       intro x hx
       simp only [mem_interval] at hx ⊢
       omega
-    · refine ManyBody.supportedOperators_mono ?_ (ManyBody.regionExpectation_mem_supportedOperators KL DL)
+    · refine ManyBody.supportedOperators_mono ?_
+        (ManyBody.regionExpectation_mem_supportedOperators KL DL)
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
       simp only [mem_interval] at this ⊢
       omega
-    · refine ManyBody.supportedOperators_mono ?_ (ManyBody.regionExpectation_mem_supportedOperators KR DR)
+    · refine ManyBody.supportedOperators_mono ?_
+        (ManyBody.regionExpectation_mem_supportedOperators KR DR)
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
       simp only [mem_interval] at this ⊢

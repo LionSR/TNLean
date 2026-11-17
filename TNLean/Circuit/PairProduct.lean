@@ -278,7 +278,8 @@ sites. -/
 theorem isPairProduct_of_mem_supportedOperators_pair (hd : 0 < d) {i j : Fin n} (hij : i ≠ j)
     {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
     (hZu : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ))
-    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {i, j}) : IsPairProduct d n (2 * n) Z := by
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {i, j}) :
+        IsPairProduct d n (2 * n) Z := by
   rw [← image_univ_pairSites] at hZ
   obtain ⟨g, rfl⟩ := exists_embedOp_eq_of_mem_supportedOperators (pairSites_injective hij) hZ
   exact isPairProduct_embedOp_pairSites hij

@@ -49,7 +49,8 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1259–1275. -/
 theorem coeff_clusterProductForm_eq_zero_of_not_mem_clusterIndexSet
     (acts : κ → Finset σ) (near : σ → σ → Prop) (hnear : ∀ i, near i i)
     {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ)) (β : ℝ) (i : σ)
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ))
+    (β : ℝ) (i : σ)
     (α : σ → Option (Fin (Fintype.card (Finset κ))) × (Fin q × Fin q))
     (hα : α i ∉ clusterIndexSet acts near i) :
     (clusterProductForm acts near hnear hh β).coeff i α = 0 := by

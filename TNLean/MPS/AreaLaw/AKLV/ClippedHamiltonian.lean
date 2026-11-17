@@ -134,7 +134,7 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
     exact (ManyBody.cfc_mem_supportedOperators _
         (hC j))
   have hleft : Entropy.IsSupportedOn HL (interval L 0 (a + 2)) := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     exact sub_mem
       (hF 0)
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))

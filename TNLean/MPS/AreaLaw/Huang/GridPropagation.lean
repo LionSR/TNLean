@@ -34,7 +34,8 @@ variable {L q w r : ℕ}
 private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
     (P : Fin (L / w + 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (Q : Fin ((L - 1) / w) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hP : ∀ j, P j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)))
+    (hP : ∀ j, P j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (chainGridBlock L w j.val : Finset (Fin L)))
     (hQ : ∀ j, Q j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (chainCutBuffer L (chainGridCut w j.val) r : Finset (Fin L))) :
     ∀ cut : ℕ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)

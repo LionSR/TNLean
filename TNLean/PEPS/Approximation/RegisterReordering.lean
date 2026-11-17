@@ -140,7 +140,10 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
         y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
       have hyx : Disjoint y.patch.outer x.patch.outer :=
         (List.rel_of_pairwise_cons hd List.mem_cons_self)
-      rw [← mul_assoc, ← mul_assoc, (ManyBody.commute_of_mem_supportedOperators_of_disjoint (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _) hyx).eq]
+      rw [← mul_assoc, ← mul_assoc,
+          (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+          (y.patch.branch_mem_supportedOperators _)
+          (x.patch.branch_mem_supportedOperators _) hyx).eq]
     · obtain ⟨t, s, τ⟩ := τ
       exact leftCommL_tmul _ _ _
   | trans h₁ _ ih₁ ih₂ =>

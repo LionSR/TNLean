@@ -167,7 +167,8 @@ theorem op_mem_unitary (hX : g.X ∈ unitary (Matrix (Fin (s + s) → Fin d) (Fi
     g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   embedOp_mem_unitary g.sites_injective hX
 
-theorem op_mem_supportedOperators : g.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image g.sites) :=
+theorem op_mem_supportedOperators :
+    g.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image g.sites) :=
   embedOp_mem_supportedOperators g.sites_injective g.X
 
 /-- The sites `a + j` of the stretch are distinct. -/
@@ -640,7 +641,8 @@ theorem isZeroOn_localProd_mulVec {v : (Fin N → Fin d) → ℂ} (hv : IsZeroOn
     · exact Finset.disjoint_left.mp (hgs.forall hg hg' hgg) (g.zone_subset_span (Nat.zero_le s)
         (g.mem_zone.mpr ⟨j, hj1, hj2, rfl⟩)) (ht ▸ g'.localSites_mem_span t)
   · obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
-    refine ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators g.localSites_injective g.X)
+    refine ManyBody.supportedOperators_mono ?_
+        (embedOp_mem_supportedOperators g.localSites_injective g.X)
     exact fun i hi => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g, hg, hi⟩
 
 omit [NeZero d] in

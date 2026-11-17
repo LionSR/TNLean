@@ -30,7 +30,8 @@ theorem mem_supportedOperators_complementProd
     (h : ℕ → EuclideanSpace ℂ (ι → Fin q) →L[ℂ] EuclideanSpace ℂ (ι → Fin q))
     (S : Finset ι) (n : ℕ)
     (hh : ∀ k, k < n → (T).symm (h k) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
-    (T).symm (ContinuousLinearMap.complementProd h n) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S := by
+    (T).symm (ContinuousLinearMap.complementProd h n) ∈ ManyBody.supportedOperators
+    (fun _ ↦ Fin q) S := by
   induction n with
   | zero =>
     simpa only [ContinuousLinearMap.complementProd_zero, map_one] using

@@ -184,6 +184,7 @@ theorem siteOp_sub (t : ι) (u v : Matrix (Fin d) (Fin d) ℂ) :
 
 theorem commute_ctrlProj_siteOp {S : Finset ι} {t : ι} (ht : t ∉ S) (c : ι → Fin d)
     (u : Matrix (Fin d) (Fin d) ℂ) : Commute (ctrlProj S c) (siteOp t u) :=
-  ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators S c) (siteOp_mem_supportedOperators t u) (Finset.disjoint_singleton_right.mpr ht)
+  ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators S c)
+      (siteOp_mem_supportedOperators t u) (Finset.disjoint_singleton_right.mpr ht)
 
 end QuantumCircuit

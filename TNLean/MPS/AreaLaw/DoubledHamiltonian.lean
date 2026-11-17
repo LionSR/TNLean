@@ -43,7 +43,7 @@ noncomputable def ChainHamiltonian.doubled (h : ChainHamiltonian L q R J) :
     (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
       (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X)
   supported X := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     change (Matrix.reindexAddEquiv ℂ (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
       (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)) (_ + _) ∈ _
     rw [map_add]

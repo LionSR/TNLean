@@ -65,7 +65,8 @@ theorem selectedZeroRegisterLogical_eq_embedOp (s : Fin a ↪ Fin n) :
 arbitrary states on all other logical sites. Source: the input/image
 reflection construction in Section 5 of the circuit audit. -/
 theorem selectedZeroRegisterLogical_mem_supportedOperators (s : Fin a ↪ Fin n) :
-    selectedZeroRegisterLogical (d := d) s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image s) := by
+    selectedZeroRegisterLogical (d := d) s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.image s) := by
   rw [selectedZeroRegisterLogical_eq_embedOp]
   exact embedOp_mem_supportedOperators s.injective _
 

@@ -88,7 +88,8 @@ theorem commute_of_singleton_support
 partial sum omits its index. -/
 theorem commute_sum_of_singleton_support
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({i} : Finset ι)) (s : Finset ι) (i : ι) :
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({i} : Finset ι))
+    (s : Finset ι) (i : ι) :
     Commute (∑ j ∈ s, h j) (h i) := by
   change (∑ j ∈ s, h j) * h i = h i * ∑ j ∈ s, h j
   rw [Finset.sum_mul, Finset.mul_sum]

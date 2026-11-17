@@ -43,7 +43,8 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
-      A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X → B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y →
+      A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X →
+          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y →
       Disjoint (X : Set (Fin N)) (Y : Set (Fin N)) →
       ⟪mpvState (Q.tensor γ) N,
         toEuclideanCLM (𝕜 := ℂ) A (mpvState (Q.tensor γ) N)⟫_ℂ = 0 →
@@ -82,7 +83,8 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
-      A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X → B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y →
+      A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X →
+          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y →
       Disjoint (X : Set (Fin N)) (Y : Set (Fin N)) →
       ∀ (q T a : ℝ), 0 < q → 0 < T → 0 ≤ a →
         let ψ := mpvState (Q.tensor γ) N

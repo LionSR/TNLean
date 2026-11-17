@@ -206,7 +206,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   change K = ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b) at hsum
   have hsupp : Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z := by
-    show _ ∈ ManyBody.supportedOperators _ _
+    change _ ∈ ManyBody.supportedOperators _ _
     rw [hsum]
     apply sum_mem
     intro X hXC

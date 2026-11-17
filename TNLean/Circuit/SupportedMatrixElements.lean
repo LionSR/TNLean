@@ -40,7 +40,8 @@ omit [DecidableEq ι] in
 
 /-- Diagonal entries of products of disjointly supported operators factor. -/
 theorem mul_apply_eq_mul_of_mem_supportedOperators {S S' : Finset ι} (hSS' : Disjoint S S')
-    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S') (σ : ι → Fin d) :
     (A * B) σ σ = A σ σ * B σ σ := by
   simpa using expect_productVector_mul hSS' (fun i => Pi.single (σ i) (1 : ℂ)) hA hB

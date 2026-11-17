@@ -309,7 +309,8 @@ theorem chainFrame_of_notMem (hs : List (TeleportHop N)) (z : Fin N → Fin d) {
       ih hrest, h.frame_of_ne z hi'.1 hi'.2.1 hi'.2.2, Pi.one_apply, mul_one]
 
 theorem prod_gate₂_mem_supportedOperators (hs : List (TeleportHop N)) :
-    (hs.map TeleportHop.gate₂).prod ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (allSites hs) := by
+    (hs.map TeleportHop.gate₂).prod ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+    (allSites hs) := by
   refine list_prod_mem_supportedOperators _ fun A hA => ?_
   obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hA
   refine ManyBody.supportedOperators_mono ?_ h.gate₂_mem_supportedOperators
@@ -343,9 +344,11 @@ theorem chainPre_cons {h : TeleportHop N} {hs : List (TeleportHop N)} (hv : Vali
     · exact hv.2.1
     · exact hv.2.2.1
   have h1 : Commute (h.gate₁ (d := d)) (hs.map TeleportHop.gate₂).prod :=
-    ManyBody.commute_of_mem_supportedOperators_of_disjoint h.gate₁_mem_supportedOperators (prod_gate₂_mem_supportedOperators hs) hdisj
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint h.gate₁_mem_supportedOperators
+        (prod_gate₂_mem_supportedOperators hs) hdisj
   have h2 : Commute (ctrlProj (measuredSites hs) z) (h.pre z) :=
-    ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators _ z) (pre_mem_supportedOperators h z) (disjoint_measuredSites hv)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators _ z)
+        (pre_mem_supportedOperators h z) (disjoint_measuredSites hv)
   simp only [chainPre, measuredSites, List.map_cons, List.prod_cons, ctrlProj_insert]
   calc ctrlProj (measuredSites hs) z * ctrlProj {h.e} z * ctrlProj {h.c} z *
         (h.gate₂ * (hs.map TeleportHop.gate₂).prod) * (h.gate₁ * (hs.map TeleportHop.gate₁).prod)
@@ -407,7 +410,9 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
       · subst hi; simp [U]
       · simp [Function.update_of_ne hi]
     have hcomm : Commute (h.pre z) (finKronecker (Function.update g h.c 1)) := by
-      refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (pre_mem_supportedOperators h z) (finKronecker_mem_supportedOperators fun i hi => ?_) disjoint_compl_right
+      refine ManyBody.commute_of_mem_supportedOperators_of_disjoint
+          (pre_mem_supportedOperators h z)
+          (finKronecker_mem_supportedOperators fun i hi => ?_) disjoint_compl_right
       simp only [Finset.mem_compl, not_not, sites, Finset.mem_insert,
         Finset.mem_singleton] at hi
       rcases hi with rfl | rfl | rfl

@@ -68,7 +68,8 @@ omit [NeZero d] in
 Source context: AKLV, Section 6.1, tensor product of regional ground states. -/
 theorem trace_mul_ne_zero_of_disjoint {S T : Finset ι} (hST : Disjoint S T)
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T)
     (htrA : Matrix.trace A ≠ 0) (htrB : Matrix.trace B ≠ 0) :
     Matrix.trace (A * B) ≠ 0 := by
   have hfactor := trace_rectKronecker_mul_mul hST
@@ -85,7 +86,8 @@ theorem exists_common_ground_of_disjoint
     {S T R : Finset ι} (hST : Disjoint S T) (hSR : Disjoint S R) (hTR : Disjoint T R)
     {A B C : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A.IsHermitian) (hB : B.IsHermitian) (hC : C.IsHermitian)
-    (hsA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (hsB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T)
+    (hsA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hsB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T)
     (hsC : C ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) R) :
     ∃ v : (ι → Fin d) → ℂ, v ≠ 0 ∧
       (A - (minEigenvalue hA : ℂ) • 1) *ᵥ v = 0 ∧

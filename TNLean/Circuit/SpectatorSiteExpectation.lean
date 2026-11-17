@@ -214,7 +214,9 @@ theorem spectatorSiteExpectation_commute (K : Finset ι)
     (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * spectatorSiteExpectation q K B
   ext ⟨σ, a⟩ ⟨τ, b⟩
   have h := congrArg (fun M : Matrix (ι → Fin q) (ι → Fin q) ℂ => M σ τ)
-    (ManyBody.commute_of_mem_supportedOperators_of_disjoint (regionExpectation_mem_supportedOperators K (Matrix.of fun σ' τ' => B (σ', a) (τ', b))) hU disjoint_compl_right).eq
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (regionExpectation_mem_supportedOperators K (Matrix.of fun σ' τ' => B (σ', a) (τ', b))) hU
+        disjoint_compl_right).eq
   simpa [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
     Matrix.one_apply, mul_ite, ite_mul, spectatorSiteExpectation_apply] using h
 
@@ -246,7 +248,8 @@ private theorem exists_kronecker_one_of_mem_supportedOperators_some {i : ι}
     (hU : U ∈ ManyBody.supportedOperators (spectatorBasis (ι := ι) q Aux) {some i})
     (hUu : U ∈ unitary (Matrix (Config (spectatorBasis (ι := ι) q Aux))
       (Config (spectatorBasis (ι := ι) q Aux)) ℂ)) :
-    ∃ U₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({i} : Finset ι), U₀ ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
+    ∃ U₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({i} : Finset ι),
+        U₀ ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
       reindex (spectatorConfigEquiv q ι Aux) (spectatorConfigEquiv q ι Aux) U =
         U₀ ⊗ₖ (1 : Matrix Aux Aux ℂ) := by
   set e := spectatorConfigEquiv q ι Aux

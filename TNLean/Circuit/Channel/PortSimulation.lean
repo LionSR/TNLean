@@ -56,7 +56,8 @@ private theorem pair_kraus_mem_supportedOperators (hN : 2 ≤ N) {r : Fin N → 
     (A : ∀ i, Fin (r i) → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
     (i : Fin N) (a : Fin (r i)) :
     embedOp (pairData i (i + 1) (left_ne_right hN i)) (A i a) ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun p ↦ (layout N k).site p ∈ ringBond i) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun p ↦
+          (layout N k).site p ∈ ringBond i) := by
   apply ManyBody.supportedOperators_mono _
     (embedOp_mem_supportedOperators (pairData i (i + 1) (left_ne_right hN i)).injective _)
   intro x hmemImage
@@ -71,7 +72,9 @@ theorem pairChannel_commute (hN : 2 ≤ N) {r : Fin N → ℕ}
   intro i hi j hj hij
   apply commute_rectangularKrausMap
   intro a b
-  exact ManyBody.commute_of_mem_supportedOperators_of_disjoint (pair_kraus_mem_supportedOperators hN A i a) (pair_kraus_mem_supportedOperators hN A j b) (Finset.disjoint_left.mpr fun _ hx hx' ↦ Finset.disjoint_left.mp (hK hi hj hij)
+  exact ManyBody.commute_of_mem_supportedOperators_of_disjoint
+      (pair_kraus_mem_supportedOperators hN A i a) (pair_kraus_mem_supportedOperators hN A j b)
+      (Finset.disjoint_left.mpr fun _ hx hx' ↦ Finset.disjoint_left.mp (hK hi hj hij)
       (Finset.mem_filter.mp hx).2 (Finset.mem_filter.mp hx').2)
 
 /-- The concrete product of the data-register channels on a matching. -/

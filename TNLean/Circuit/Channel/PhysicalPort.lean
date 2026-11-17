@@ -48,7 +48,8 @@ inductive IsPhysicalPortUnitary (P : PhysicalPortLayout N W) : ℕ →
   /-- Unitary operations on one site's wires are free. -/
   | onsite (i : Fin N) {U : Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ}
       (hU : U ∈ unitary (Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ))
-      (hs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun p ↦ P.site p = i)) :
+      (hs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (Finset.univ.filter fun p ↦ P.site p = i)) :
       IsPhysicalPortUnitary P 0 U
   /-- Reordering wires separately within each spatial site is a free local unitary.
   The site-preservation equation forbids moving a wire between sites. -/
@@ -101,7 +102,8 @@ theorem onsite_swap (P : PhysicalPortLayout N W) {a b : Fin W}
     IsPhysicalPortUnitary (d := d) P 0 (permOp (Equiv.swap a b)) := by
   apply onsite (P.site a) (permOp_mem_unitary _)
   rw [permOp_swap_eq_embedOp hab]
-  apply ManyBody.supportedOperators_mono _ (embedOp_mem_supportedOperators (pairSites_injective hab) _)
+  apply ManyBody.supportedOperators_mono _
+      (embedOp_mem_supportedOperators (pairSites_injective hab) _)
   intro x hx
   obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hx
   fin_cases j <;> simp [pairSites, hs]
@@ -121,7 +123,8 @@ inductive IsPhysicalPortProtocol (P : PhysicalPortLayout N W) : ℕ →
   /-- An arbitrary local instrument with its outcome discarded is a free onsite channel. -/
   | onsite (i : Fin N) {r : ℕ}
       (K : Fin r → Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ)
-      (hK : ∀ j, K j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun p ↦ P.site p = i))
+      (hK : ∀ j, K j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (Finset.univ.filter fun p ↦ P.site p = i))
       (htrace : ∑ j, (K j)ᴴ * K j = 1) :
       IsPhysicalPortProtocol P 0 (rectangularKrausMap K)
   /-- Compose actual channels in execution order and add their physical depths. -/

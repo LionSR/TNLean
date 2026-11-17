@@ -74,7 +74,8 @@ theorem ctrlOp_mem_supportedOperators (S : Finset ι) (c : ι → Fin d) (t : ι
     ctrlOp S c t u ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (insert t S) := by
   have hp := ManyBody.supportedOperators_mono (Finset.subset_insert t S)
     (ctrlProj_mem_supportedOperators (d := d) S c)
-  have hs := ManyBody.supportedOperators_mono (Finset.singleton_subset_iff.mpr (Finset.mem_insert_self t S))
+  have hs := ManyBody.supportedOperators_mono
+      (Finset.singleton_subset_iff.mpr (Finset.mem_insert_self t S))
     (siteOp_mem_supportedOperators (d := d) t u)
   exact add_mem (mul_mem hp hs)
     (sub_mem (one_mem (ManyBody.supportedOperators _ _)) hp)

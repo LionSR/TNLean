@@ -56,7 +56,8 @@ adjoint error of `L' R₀` is at most `a`. Then some unitary `U` acting on `S` s
 Source: `09-amplification.tex`, lines 501–545. -/
 theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     {R₀ L' D Dret : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hR₀ : R₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) (hL : L' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
+    (hR₀ : R₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
+    (hL : L' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     {φ η g : (ι → Fin q) → ℂ} (hφ : ‖WithLp.toLp 2 φ‖ = 1) (hη : ‖WithLp.toLp 2 η‖ = 1)
     {M₀ ε a : ℝ} (hζ : ‖WithLp.toLp 2 (R₀ *ᵥ φ)‖ ≤ M₀) (hg : D *ᵥ g = g)
     (hgn : ‖WithLp.toLp 2 g‖ ≤ 1) (hexc : ‖WithLp.toLp 2 (D *ᵥ (R₀ *ᵥ φ - g))‖ ≤ ε)

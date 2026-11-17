@@ -180,7 +180,8 @@ open Classical in
 with no large cluster. -/
 theorem truncatedExp_eq_mul (acts : κ → Finset σ)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ)) (near : σ → σ → Prop) (β : ℝ) :
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ))
+    (near : σ → σ → Prop) (β : ℝ) :
     truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β =
       (∑ A with ∀ k ∈ A, ¬ (acts k).Nonempty, clusterOp h A β) *
         ∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧

@@ -52,14 +52,16 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The window projection of an operator acting on `S` acts on `S`. -/
 theorem windowProjection_mem_supportedOperators {S : Finset ι}
-    {M : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
+    {M : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
     windowProjection M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
   ManyBody.cfc_mem_supportedOperators _ (sub_mem hM
     (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ S))))
 
 /-- The window projection inside the range of `Q` acts on `S` when `Q` and `M` do. -/
 theorem compressedWindowProjection_mem_supportedOperators {S : Finset ι}
-    {Q M : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hQ : Q ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    {Q M : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hQ : Q ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
     compressedWindowProjection Q M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
   mul_mem hQ (windowProjection_mem_supportedOperators
@@ -108,7 +110,8 @@ theorem mem_supportedOperators_hierarchy (blk : ι → ℕ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
+    (hMsupp : ∀ m k,
+        M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
     ∀ m k, P m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk m k) := by
   intro m
   induction m with
@@ -135,10 +138,12 @@ theorem commute_supersiteHierarchy (blk : ι → ℕ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
+    (hMsupp : ∀ m k,
+        M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
     ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)) := by
   have hsupp := mem_supportedOperators_hierarchy blk P M c x hP0 hstep hMsupp
-  exact fun m k ↦ ManyBody.commute_of_mem_supportedOperators_of_disjoint (hsupp m (2 * k)) (hsupp m (2 * k + 1)) (disjoint_levelBlock_two_mul blk m k)
+  exact fun m k ↦ ManyBody.commute_of_mem_supportedOperators_of_disjoint (hsupp m (2 * k))
+      (hsupp m (2 * k + 1)) (disjoint_levelBlock_two_mul blk m k)
 
 /-- **All levels on supersites.** The bound of `norm_sub_hierarchy_le`, with the commutation of
 the two halves of each block derived from the supports: each pair operator `M m k` acts on the
