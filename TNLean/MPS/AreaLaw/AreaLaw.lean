@@ -361,17 +361,14 @@ theorem chainAreaLaw_of_consecutive_terms
   let g : I → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
   have hsum : (∑ X : I, g X) = h.operator :=
     (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
-  have hgs' : (‖Ω‖ = 1 ∧ IsGapped (∑ X : I, g X) E₀ Δ ∧
-    groundSpace (∑ X : I, g X) E₀ = Submodule.span ℂ {Ω}) := by
-    rw [hsum]
-    exact hΩ hgap hspan
+  rw [← hsum] at hgap hspan
   refine regionEntropy_le_mul_card_boundaryEdges_of_intervals hΩ hC
     (fun a b ↦ ?_) A
   exact regionEntropy_interval_le_of_family_budget hq hJ hΔ g (fun X ↦ X.val)
     (fun X ↦ h.supported X.val) (fun X ↦ h.hermitian X.val) (fun X ↦ h.norm_le X.val)
     (2 * R) (one_le_windowBudgetConst q R)
     (h.card_crossingTerms_interval_le_of_consecutive_terms hwindow)
-    (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hgs' a b
+    (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hΩ hgap hspan a b
 
 /-- The interval entropy estimate with the original polynomial source constants.
 Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679. -/

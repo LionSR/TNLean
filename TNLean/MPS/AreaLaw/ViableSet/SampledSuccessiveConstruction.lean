@@ -109,9 +109,10 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     have hδ1 : α / (L : ℝ) ^ a ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
       (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
     let chain := ChainHamiltonian.ofBonds h hs h0 h1
-    have hgs' : (‖Γ‖ = 1 ∧ IsGapped chain.operator E₀ Δ ∧
-      groundSpace chain.operator E₀ = Submodule.span ℂ {Γ}) := by
-      simpa only [chain, ChainHamiltonian.ofBonds_operator] using hΩ hgap hspan
+    have hgapC : IsGapped chain.operator E₀ Δ := by
+      simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
+    have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+      simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
     have hsmall : IsViable Γ (c / L)
         (AreaLaw.extend i S : Set (LeftBlockVector L q i)) := by
       obtain ⟨v, hv, hoverlap, hsupport⟩ := hviable.extend hi0 hiL
@@ -131,7 +132,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
         fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hiL m T₀ hv,
         chain.isViable_bondTrimSet_sizeTrimmingSelection
           (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hiL hΔ
-          (AreaLaw.extend i S) E₀ Γ hgs' hsmall⟩
+          (AreaLaw.extend i S) E₀ Γ hΩ hgapC hspanC hsmall⟩
     obtain ⟨I, hproj, hcuts⟩ := exists_sampled_errorReduction (show 1 ≤ q by omega)
       h hs h0 h1 hΩ hgap hspan hΔ hδ hδ1
     obtain ⟨N, A, B', _, hdec, _, hgood⟩ := hcuts i hiL

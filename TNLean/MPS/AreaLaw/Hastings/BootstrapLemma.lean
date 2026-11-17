@@ -70,6 +70,7 @@ end TNLean.MPS.AreaLaw.Hastings
 namespace TNLean.MPS.AreaLaw
 
 open Hastings Matrix TNLean.Lattice
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace
 
 /-- **Hastings' bootstrap lemma (Lemma 2).** There is a constant `K ≥ 1`, depending only on the

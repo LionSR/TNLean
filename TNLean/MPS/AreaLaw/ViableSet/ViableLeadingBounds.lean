@@ -354,7 +354,7 @@ theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
     WithLp.toLp 2 (WithLp.ofLp Γ ∘ E.symm)
   have hsplit := reindex_gluingCut_eq hHL hK hDA
   have hΓ := hΩ
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   have hΓ' : ‖Γ'‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ
   have hgap' : (reindex E E (HL + K) - (E₀ : ℂ) • 1 -
@@ -758,21 +758,24 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
   have hgood : 14 * √c < Δ / 12 := by rw [hsqrt]; linarith only [hΔ]
   have h4 : 4 * (6 * √c + ‖B‖ * (2 * η)) < Δ := by
     linarith only [htwo, hgood, hΔ]
-  have hgs' : (‖Γ‖ = 1 ∧ IsGapped (HL + B) E₀ Δ ∧
-    groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ}) := by rw [← hsplit]; exact hΩ hgap hspan
+  have hHC : (HL + B).IsHermitian := by rw [← hsplit]; exact h.operator_isHermitian
+  have hgapC : IsGapped (HL + B) E₀ Δ := by rw [← hsplit]; exact hgap
+  have hspanC : groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ} := by
+    rw [← hsplit]; exact hspan
   have hwE' : (⟪w, toEuclideanLin (HL + B) w⟫_ℂ).re ≤ E₀ + 6 * √c := by
     rw [← hsplit]
     exact hwE
   obtain ⟨u₀, ν, hu₀, hu₀σ, hν, -, -⟩ :=
     exists_leading_eigenvector_chain (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
   have hu₀0 : u₀ ≠ 0 := by
     intro hz
     simp only [hz, norm_zero, zero_ne_one] at hu₀
   have hμ : 1 / 2 < μ := hν.trans_le (hmax ν u₀ hu₀0 hu₀σ)
   obtain ⟨huE, huov⟩ :=
     leading_eigenvector_bounds_chain (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4 u μ hu huσ hμ
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
+      u μ hu huσ hμ
   have hμ0 : (μ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (by linarith only [hμ])
   have hQu : (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u =
       WithLp.ofLp u := by
@@ -914,25 +917,27 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
       _ = Δ / 12 := by rw [hsqrt]; ring
   have h4 : 4 * (6 * √c + ξ + ‖B‖ * (2 * η + δ)) < Δ := by
     nlinarith only [htotal, hΔ]
-  have hgs' : (‖Γ‖ = 1 ∧ IsGapped (HL + B) E₀ Δ ∧
-    groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ}) := by rw [← hsplit]; exact hΩ hgap hspan
+  have hHC : (HL + B).IsHermitian := by rw [← hsplit]; exact h.operator_isHermitian
+  have hgapC : IsGapped (HL + B) E₀ Δ := by rw [← hsplit]; exact hgap
+  have hspanC : groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ} := by
+    rw [← hsplit]; exact hspan
   have hwE' : (⟪w, toEuclideanLin (HL + B) w⟫_ℂ).re ≤ E₀ + 6 * √c := by
     rw [← hsplit]
     exact hwE
   obtain ⟨u₀, ν, hu₀, hu₀σ, hν, -, -⟩ :=
     exists_leading_eigenvector_chain_with_objective_slack
       (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η + δ) (ξ := ξ)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
   have hu₀0 : u₀ ≠ 0 := by
     intro hz
     simp only [hz, norm_zero, zero_ne_one] at hu₀
   have hμ : 1 / 2 < μ := hν.trans_le (hmax ν u₀ hu₀0 hu₀σ)
   have hμquant := maxEigenvalue_lower_bound_chain_with_objective_slack
-    hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ hmax
+    hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ hmax
   obtain ⟨huE, huov⟩ :=
     leading_eigenvector_bounds_chain_with_objective_slack
       (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η + δ) (ξ := ξ)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
       u μ hu huσ hμ
   have hμ0 : (μ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (by linarith only [hμ])
   have hQu : (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u =

@@ -368,11 +368,9 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
   refine ⟨Cabs, hCabs, hCeq, ?_⟩
   intro q R J Δ hq hJ hΔ Λ h hwindow E₀ Ω hΩ hgap hspan A
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hΩ hgap hspan A
-  have hgs' : (‖E₀‖ = 1 ∧ IsGapped (h.toChain hJ) .operator Ω ∧
-    groundSpace (h.toChain hJ) .operator = Submodule.span ℂ {E₀}) Δ := by
-    rwa [DomainHamiltonian.toChain_operator]
+  rw [← h.toChain_operator hJ] at hgap hspan
   have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain hJ)
-    (h.toChain_consecutive_terms hJ hwindow) E₀ Ω hgs' A'
+    (h.toChain_consecutive_terms hJ hwindow) E₀ Ω hΩ hgap hspan A'
   simpa only [hS, hB] using hbound
 
 end TNLean.MPS.AreaLaw

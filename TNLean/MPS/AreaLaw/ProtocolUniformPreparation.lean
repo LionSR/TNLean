@@ -96,8 +96,8 @@ theorem exists_uniform_preparation_family
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
           EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-        L₀ ≤ a.1 ∧ (‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ} ∧
-          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1})
+        L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
+          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1
@@ -156,14 +156,14 @@ theorem exists_uniform_preparation_family
   refine ⟨D, K, s, L₀, hL₀, hD, hK, ?_⟩
   let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
       EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-    L₀ ≤ a.1 ∧ (‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ} ∧
-      groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1})
+    L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
+      groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1
   have hfamily := fun i : ι ↦
     hprepare (length i) ((le_max_left N 2).trans i.property.1)
-      i.val.2.1 (ground i) i.val.2.2.2 i.property.2
+      i.val.2.1 (ground i) i.val.2.2.2 i.property.2.1 i.property.2.2.1 i.property.2.2.2
   choose hx C hp using hfamily
   refine ⟨hx, C, ?_⟩
   dsimp only

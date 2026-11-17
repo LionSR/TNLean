@@ -445,10 +445,8 @@ theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hΩ hgap hspan A
-  have hgs' : (‖E₀‖ = 1 ∧ IsGapped (h.toChain hJ) .operator Ω ∧
-    groundSpace (h.toChain hJ) .operator = Submodule.span ℂ {E₀}) Δ := by
-    rwa [DomainHamiltonian.toChain_operator]
-  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain hJ) hgs' A'
+  rw [← h.toChain_operator hJ] at hgap hspan
+  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain hJ) hΩ hgap hspan A'
   simpa only [hS, hB] using hchain
 
 /-- **The one-dimensional area law** (Theorem A). For every local dimension `q ≥ 1`, range

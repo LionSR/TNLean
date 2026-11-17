@@ -128,7 +128,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   have hN : 1 ≤ N := hL.trans hi
   obtain ⟨hcard, hmps, hviable⟩ := lvvSweep_spec hq (paddedInteraction hi z h) hs' h0' h1' hg L hi
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
-  have hpad := isGapped_paddedInteraction hL hi z h
+  obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
         hspan hDelta
   have hNreal : (0 : ℝ) < N := by exact_mod_cast hN
@@ -138,7 +138,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     exact (lvvSuccessiveError_min_lt_one hDelta).trans_le (by exact_mod_cast hN)
   have hδ0 : 0 ≤ δ := div_nonneg (lvvSuccessiveError_pos hg).le hNreal.le
   obtain ⟨w, hw, hwnorm, herror, hwmps⟩ :=
-    (hviable E _ hpad).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ1 hmps
+    (hviable E _ hpn hpg hps).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ1 hmps
   -- The span of the final family, read on the original chain.
   set U := Submodule.span ℂ ((S.image fun w ↦ e.symm w : Finset _) :
     Set (EuclideanSpace ℂ (Fin L → Fin q))) with hUdef
@@ -161,15 +161,17 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   · -- Overlap: least energy in the span, then the gap.
     have hΓ := hΩ
     have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-    have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+    have hgap := hgap.posSemidef_sub_smul_one
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
       one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
     let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
     have hchain : chain.operator = ∑ j, h j :=
       ChainHamiltonian.ofNearestNeighborPositive_operator h hs h0 h1
-    have hgsChain : (‖Γ‖ = 1 ∧ IsGapped chain.operator E Delta ∧
-      groundSpace chain.operator E = Submodule.span ℂ {Γ}) := by rwa [hchain]
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hgsChain hw'norm hover
+    have hgapC : IsGapped chain.operator E Delta := by rw [hchain]; assumption
+    have hspanC : groundSpace chain.operator E = Submodule.span ℂ {Γ} := by
+      rw [hchain]; assumption
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hgapC hspanC hw'norm hover
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E).trans henergy

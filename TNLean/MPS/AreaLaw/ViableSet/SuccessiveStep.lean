@@ -152,16 +152,18 @@ theorem isViable_lvvSweepStep (hq : 2 ≤ q)
   let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
   have hpos (X) : (chain.term X).PosSemidef :=
     (ChainHamiltonian.ofNearestNeighborPositive_term_nonneg h hs h0 h1 X).posSemidef
-  have hgsChain : (‖Γ‖ = 1 ∧ IsGapped chain.operator E₀ Delta ∧
-    groundSpace chain.operator E₀ = Submodule.span ℂ {Γ}) := by
-    simpa only [chain, ChainHamiltonian.ofNearestNeighborPositive_operator] using hΩ hgap hspan
+  have hgapC : IsGapped chain.operator E₀ Delta := by
+    simpa only [chain, ChainHamiltonian.ofNearestNeighborPositive_operator] using hgap
+  have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    simpa only [chain, ChainHamiltonian.ofNearestNeighborPositive_operator] using hspan
   have hΓ := hΩ
   have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
   exact isViable_errorReductionSet_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0 h1
     (lvvSuccessiveError_pos hDelta) hDelta (by omega) E₀ Γ hΓ hEig hgap _
     (chain.isViable_bondTrimSet_sizeTrimmingSelection hpos (by omega) hq hi hDelta
-      (AreaLaw.extend (i + 1) S) E₀ Γ hgsChain (hviable.extend (by omega) hi))
+      (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC (hviable.extend (by omega) hi))
 
 /-- The actual extension, size trimming, independent bond trimming and Gaussian error
 reduction at one cut: the existence form of the step `lvvSweepStep`, with the output

@@ -458,7 +458,7 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
     have : 0 < 1 + J / Δ := by linarith only [hθ]
     positivity
   have hN : 1 ≤ L * w := (Nat.mul_le_mul hL hw)
-  have hΩ : ‖stripSnakeState q Ω‖ = 1 := (norm_stripSnakeState Ω).trans hΩ
+  have hΩs : ‖stripSnakeState q Ω‖ = 1 := (norm_stripSnakeState Ω).trans hΩ
   have hLp : (0 : ℝ) < L := by exact_mod_cast (by omega : 0 < L)
   have hε : 0 < 1 / (L : ℝ) := one_div_pos.mpr hLp
   have hε1 : 1 / (L : ℝ) ≤ 1 := by
@@ -469,7 +469,7 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
     intro k
     rw [regionEntropy_stripSnakeState]
     exact regionEntropy_stripSnakePrefix_le hq hw hJ hΔ h hΩ hgap hspan k
-  obtain ⟨Ψ, hΨ, hmps, hdist⟩ := strip_approximation_of_prefix_bounds hC hs hN hΩ hε hε1 hS
+  obtain ⟨Ψ, hΨ, hmps, hdist⟩ := strip_approximation_of_prefix_bounds hC hs hN hΩs hε hε1 hS
     (fun hu k _ ↦ surprisalTail_stripSnakeState_le hq hw hJ hΔ h hΩ hgap hspan k _ hu)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (Entropy.siteConfigurationEquiv (n := fun _ : Site (stripDomain L w) ↦ q)

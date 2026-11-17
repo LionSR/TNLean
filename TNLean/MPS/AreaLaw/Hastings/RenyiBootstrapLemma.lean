@@ -144,6 +144,7 @@ end TNLean.MPS.AreaLaw.Hastings
 namespace TNLean.MPS.AreaLaw
 
 open Hastings Matrix TNLean.Lattice
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace ComplexOrder
 
 /-- **Hastings' bootstrap lemma for Rényi entropies (Lemma 2, lines 392–410).** There is a constant

@@ -85,6 +85,7 @@ theorem DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le
           (s.card : ℝ) * chainIntervalEntropyBound q R J Δ := by
   exact regionEntropy_domainNeighborhood_biUnion_intervals_le hΩ
     (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain hJ)
-      (by simpa only [h.toChain_operator hJ] using hΩ hgap hspan) u v) s a b m
+      hΩ (by simpa only [h.toChain_operator hJ] using hgap)
+      (by simpa only [h.toChain_operator hJ] using hspan) u v) s a b m
 
 end TNLean.MPS.AreaLaw

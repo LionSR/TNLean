@@ -168,9 +168,10 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       (sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S) := by
   classical
   let chain := ChainHamiltonian.ofBonds h hs h0 h1
-  have hgs' : (‖Γ‖ = 1 ∧ IsGapped chain.operator E₀ Δ ∧
-    groundSpace chain.operator E₀ = Submodule.span ℂ {Γ}) := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hΩ hgap hspan
+  have hgapC : IsGapped chain.operator E₀ Δ := by
+    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
+  have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -183,7 +184,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
         (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
-        (AreaLaw.extend (i + 1) S) E₀ Γ hgs' hext⟩
+        (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
     operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs (I t)
@@ -376,8 +377,9 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
   rw [← hψ] at hψU hψnorm hψmin
   refine ⟨hψnorm, ?_, ?_⟩
   · have hΓ := hΩ
- have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
- have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+    have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+    have hgap := hgap.posSemidef_sub_smul_one
+      (Matrix.posSemidef_sum Finset.univ fun i _ ↦ h0 i).isHermitian hΩ hspan
     have hover' : 1 - δ ≤ ‖⟪Γ, e.symm v⟫_ℂ‖ := by
       have : ⟪e.symm v, Γ⟫_ℂ = ⟪v, e Γ⟫_ℂ := by
         rw [← e.inner_map_map, e.apply_symm_apply]
@@ -385,9 +387,10 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
       exact hover
     let chain := ChainHamiltonian.ofBonds h hs h0 h1
     have hchain : chain.operator = ∑ j, h j := ChainHamiltonian.ofBonds_operator h hs h0 h1
-    have hgsChain : (‖Γ‖ = 1 ∧ IsGapped chain.operator E₀ Δ ∧
-      groundSpace chain.operator E₀ = Submodule.span ℂ {Γ}) := by rwa [hchain]
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hgsChain hw'norm hover'
+    have hgapC : IsGapped chain.operator E₀ Δ := by rw [hchain]; assumption
+    have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+      rw [hchain]; assumption
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hgapC hspanC hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy

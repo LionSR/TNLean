@@ -75,7 +75,8 @@ private theorem surprisalTail_region_le_of_family_budget
     Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hbudget (by linarith))
   have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hspan
   have htail := Entropy.surprisalTail_cut_le
     (n := fun _ : Fin L ↦ q) (h := g) (D := D) (B := A)
     hsupp hherm hJ hnorm hΩ hΔ heig hgap rfl
@@ -144,13 +145,10 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
   have hsum : (∑ X : A, g X) = h.operator := by
     exact (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
-  have hgs' : (‖Ω‖ = 1 ∧ IsGapped (∑ X : A, g X) E₀ Δ ∧
-    groundSpace (∑ X : A, g X) E₀ = Submodule.span ℂ {Ω}) := by
-    rw [hsum]
-    exact hΩ hgap hspan
+  rw [← hsum] at hgap hspan
   refine surprisalTail_region_le_of_family_budget g D
     (fun X ↦ h.supported X.val) (fun X ↦ h.hermitian X.val) hJ
-    (fun X ↦ h.norm_le X.val) hΔ hgs' (leftBlock L k) ?_ w hw
+    (fun X ↦ h.norm_le X.val) hΔ hΩ hgap hspan (leftBlock L k) ?_ w hw
   rw [leftBlock_eq_interval]
   exact h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow 0 k
 

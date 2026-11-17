@@ -164,7 +164,8 @@ lemma groundEnergy_nonneg_and_le [NeZero L]
     simpa only [H, Finset.card_univ, Fintype.card_fin, Nat.cast_smul_eq_nsmul] using
       Finset.sum_le_card_nsmul Finset.univ h 1 fun i _ ↦ h1 i
   have hE : RCLike.re ⟪Γ, toEuclideanLin H Γ⟫_ℂ = E₀ := by
-    have : toEuclideanLin H Γ = (E₀ : ℂ) • Γ := hHΓ
+    have : toEuclideanLin H Γ = (E₀ : ℂ) • Γ :=
+      ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Γ)
     rw [this, inner_smul_right, inner_self_eq_norm_sq_to_K, hΓ]
     simp
   have hlow := (isPositive_toEuclideanLin_iff.mpr hH).re_inner_nonneg_right Γ

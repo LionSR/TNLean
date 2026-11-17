@@ -106,17 +106,17 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
     · intro v hv
       exact (hmps v hv).mono (max_le_max le_rfl (hBB.trans_eq hbudget.symm))
     · intro E Γ hΩ hgap hspan
-      exact hviable E (paddedGroundVector hi z Γ)
-        (isGapped_paddedInteraction hL hi z h
-      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
-        hspan hDelta)
+      obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
+        (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
+        hspan hDelta
+      exact hviable E _ hpn hpg hps
   · intro E Γ hΩ hgap hspan
     obtain ⟨hcard, hmps, hviable⟩ := hS L hi
-    have hpad := isGapped_paddedInteraction hL hi z h
+    obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
-        hspan hDelta
+      hspan hDelta
     obtain ⟨w, hw, hwnorm, herror, hmpsw⟩ :=
-      (hviable E _ hpad).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ hmps
+      (hviable E _ hpn hpg hps).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ hmps
     refine ⟨w, hw, hwnorm, ?_, hmpsw.mono ?_⟩
     · have hRreal : 0 < (R : ℝ) ^ 2 := sq_pos_of_pos (by exact_mod_cast (show 0 < R by omega))
       have hNR : 2 * (R : ℝ) ^ 2 ≤ N := by

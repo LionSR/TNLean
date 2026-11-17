@@ -39,8 +39,8 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
           EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-        L₀ ≤ a.1 ∧ (‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ} ∧
-          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1})
+        L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
+          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1

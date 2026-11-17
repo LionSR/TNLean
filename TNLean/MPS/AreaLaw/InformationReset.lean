@@ -154,7 +154,7 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   let F := Matrix.reindex e e (sheetSwapOp q D)
   let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
   obtain ⟨hψn, hφn, W, z, hW, hz, hgauss⟩ :=
-    hfilter q D C hDC e h.operator E₀ Ω b hg.1 hΩ hgap hspan hb hI
+    hfilter q D C hDC e h.operator E₀ Ω b h.operator_isHermitian hΩ hgap hspan hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
   have hVsupp : V ∈ supportedOperators (q * q) (Q : Set (Fin L)) := by

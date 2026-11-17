@@ -118,9 +118,10 @@ theorem exists_rational_sampled_viable_successor_polynomial
   have hδ1 : δ ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
     (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
   let chain := ChainHamiltonian.ofBonds h hs h0 h1
-  have hgs' : (‖Γ‖ = 1 ∧ IsGapped chain.operator E₀ Δ ∧
-    groundSpace chain.operator E₀ = Submodule.span ℂ {Γ}) := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hΩ hgap hspan
+  have hgapC : IsGapped chain.operator E₀ Δ := by
+    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
+  have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
   have hsmall : IsViable Γ (c / L)
       (AreaLaw.extend (n + 1) S : Set (LeftBlockVector L q (n + 1))) := by
     obtain ⟨v, hv, hoverlap, hsupport⟩ := hviable.extend (by omega) hi
@@ -140,7 +141,7 @@ theorem exists_rational_sampled_viable_successor_polynomial
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
         (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hi hΔ
-        (AreaLaw.extend (n + 1) S) E₀ Γ hgs' hsmall⟩
+        (AreaLaw.extend (n + 1) S) E₀ Γ hΩ hgapC hspanC hsmall⟩
   have hexact := exists_sampled_errorReduction (by omega : 1 ≤ q) h hs h0 h1 hΩ hgap hspan hΔ
     (δ := δ / 2) (by positivity) (by linarith)
   dsimp only at hexact
