@@ -1550,18 +1550,18 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{definition}[Finite domains, supports and admissible Hamiltonians]
     \label{def:domain_model}
     \lean{
-        TNLean.MPS.AreaLaw.sitePos,
-        TNLean.MPS.AreaLaw.sitePos_mem,
-        TNLean.MPS.AreaLaw.exists_sitePos_eq,
-        TNLean.MPS.AreaLaw.sub_le_sitePos_sub,
-        TNLean.MPS.AreaLaw.val_eq_add_one_of_sitePos_eq_add_one,
-        TNLean.MPS.AreaLaw.domainGraph,
-        TNLean.MPS.AreaLaw.sitePos_sub_val_of_walk,
-        TNLean.MPS.AreaLaw.IsDomainSupport,
-        TNLean.MPS.AreaLaw.DomainSupport,
-        TNLean.MPS.AreaLaw.IsDomainSupport.exists_walk,
-        TNLean.MPS.AreaLaw.IsDomainSupport.isChainSupport,
-        TNLean.MPS.AreaLaw.IsDomainSupport.subset_or_disjoint_of_gap,
+        ManyBody.sitePos,
+        ManyBody.sitePos_mem,
+        ManyBody.exists_sitePos_eq,
+        ManyBody.sub_le_sitePos_sub,
+        ManyBody.val_eq_add_one_of_sitePos_eq_add_one,
+        ManyBody.lineDomainGraph,
+        ManyBody.sitePos_sub_val_of_walk,
+        ManyBody.IsDomainSupport,
+        ManyBody.DomainSupport,
+        ManyBody.IsDomainSupport.exists_walk,
+        ManyBody.IsDomainSupport.isChainSupport,
+        ManyBody.IsDomainSupport.subset_or_disjoint_of_gap,
         TNLean.MPS.AreaLaw.DomainHamiltonian,
         TNLean.MPS.AreaLaw.DomainHamiltonian.operator,
         TNLean.MPS.AreaLaw.DomainHamiltonian.operator_isHermitian,
@@ -1596,8 +1596,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Interaction norm budget on a finite integer domain]
     \label{lem:domain_site_norm_budget}
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
-        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport,
-        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
+        ManyBody.DomainSupport.toChainSupport,
+        ManyBody.DomainSupport.toChainSupport_injective,
         TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
         TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
         TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok

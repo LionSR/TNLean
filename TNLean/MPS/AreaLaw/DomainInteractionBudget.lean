@@ -19,7 +19,8 @@ Source: TNLean one-dimensional note, `part0_preamble.tex`, eq:ham, lines 191–2
 and `part2a_mps_information.tex`, lines 260–265 and 355–363.
 -/
 
-open ManyBody (ChainSupport)
+open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
+    DomainSupport.toChainSupport_injective IsDomainSupport)
 
 open scoped Matrix.Norms.L2Operator
 

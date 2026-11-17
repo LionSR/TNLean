@@ -28,7 +28,7 @@ and the interval-neighborhood argument in `part2a_mps_information.tex`,
 lines 472–488.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (interval lineDomainGraph mem_interval val_eq_add_one_of_sitePos_eq_add_one)
 
 open SimpleGraph QuantumCircuit
 
@@ -36,7 +36,7 @@ namespace TNLean.MPS.AreaLaw
 
 /-- A walk of the induced domain graph visits every label between its endpoints. -/
 private theorem mem_support_of_between {Λ : Finset ℤ} {i j : Fin Λ.card}
-    (p : (domainGraph Λ).Walk i j) :
+    (p : (lineDomainGraph Λ).Walk i j) :
     ∀ k : Fin Λ.card, min i j ≤ k → k ≤ max i j → k ∈ p.support := by
   induction p with
   | nil => grind [Walk.support_nil]
@@ -50,9 +50,9 @@ private theorem mem_support_of_between {Λ : Finset ℤ} {i j : Fin Λ.card}
 /-- A label between two sites at graph distance at most `m` is itself within graph
 distance `m` of the first site. -/
 private theorem edist_le_of_between {Λ : Finset ℤ} {i j k : Fin Λ.card}
-    (m : ℕ) (hij : (domainGraph Λ).edist i j ≤ (m : ℕ∞))
+    (m : ℕ) (hij : (lineDomainGraph Λ).edist i j ≤ (m : ℕ∞))
     (hk₁ : min i j ≤ k) (hk₂ : k ≤ max i j) :
-    (domainGraph Λ).edist i k ≤ (m : ℕ∞) := by
+    (lineDomainGraph Λ).edist i k ≤ (m : ℕ∞) := by
   obtain ⟨p, hp⟩ := exists_walk_of_edist_ne_top
     (ne_top_of_le_ne_top (ENat.natCast_ne_top m) hij)
   exact (p.takeUntil k (mem_support_of_between p k hk₁ hk₂)).edist_le.trans
@@ -64,10 +64,10 @@ order-connected. -/
 private theorem neighborhood_between {Λ : Finset ℤ} (I : Finset (Fin Λ.card))
     (hI : Set.OrdConnected (I : Set (Fin Λ.card)))
     (m : ℕ) {u v z : Fin Λ.card}
-    (hu : u ∈ I.biUnion (fun a ↦ ManyBody.graphBall (domainGraph Λ) a m))
-    (hv : v ∈ I.biUnion (fun a ↦ ManyBody.graphBall (domainGraph Λ) a m))
+    (hu : u ∈ I.biUnion (fun a ↦ ManyBody.graphBall (lineDomainGraph Λ) a m))
+    (hv : v ∈ I.biUnion (fun a ↦ ManyBody.graphBall (lineDomainGraph Λ) a m))
     (huz : u ≤ z) (hzv : z ≤ v) :
-    z ∈ I.biUnion (fun a ↦ ManyBody.graphBall (domainGraph Λ) a m) := by
+    z ∈ I.biUnion (fun a ↦ ManyBody.graphBall (lineDomainGraph Λ) a m) := by
   obtain ⟨a, ha, hau⟩ := Finset.mem_biUnion.mp hu
   obtain ⟨b, hb, hbv⟩ := Finset.mem_biUnion.mp hv
   by_cases haz : a ≤ z
@@ -89,10 +89,10 @@ the interval neighborhoods in `part2a_mps_information.tex`, lines 472–488. -/
 theorem domainNeighborhood_eq_interval_of_ordConnected (Λ : Finset ℤ)
     (I : Finset (Fin Λ.card))
     (hI : Set.OrdConnected (I : Set (Fin Λ.card))) (m : ℕ) :
-    ∃ a b : ℕ, I.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m) =
+    ∃ a b : ℕ, I.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m) =
       interval Λ.card a b := by
-  by_cases hN : (I.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)).Nonempty
-  · exact (let N := I.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
+  by_cases hN : (I.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)).Nonempty
+  · exact (let N := I.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)
       ⟨(N.min' hN).val, (N.max' hN).val + 1,
         Finset.ext fun z ↦
           (show z ∈ N ↔ (N.min' hN).val ≤ z.val ∧ z.val < (N.max' hN).val + 1 from
@@ -110,7 +110,7 @@ Source: TNLean one-dimensional note, `part0_preamble.tex`, lines 191–199, and
 theorem domainNeighborhood_interval_eq (Λ : Finset ℤ) (a b m : ℕ) :
     ∃ a' b' : ℕ,
       (interval Λ.card a b).biUnion
-        (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m) = interval Λ.card a' b' := by
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m) = interval Λ.card a' b' := by
   exact domainNeighborhood_eq_interval_of_ordConnected Λ (interval Λ.card a b)
     ⟨fun u hu v hv z hz ↦ mem_interval.mpr
       ⟨(mem_interval.mp hu).1.trans (show u.val ≤ z.val from hz.1),

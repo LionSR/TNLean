@@ -22,34 +22,36 @@ The domain is the one specified in the TNLean one-dimensional note,
 for the finite-domain extension of Lemma `lem:LR`.
 -/
 
+open ManyBody (lineDomainGraph sitePos)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Increasing enumeration identifies the domain graph with the induced integer
 Hasse graph. TNLean note, `part0_preamble.tex`, lines 191–199. -/
 noncomputable def domainGraphIsoHasse (Λ : Finset ℤ) :
-    domainGraph Λ ≃g (SimpleGraph.hasse ℤ).induce (Λ : Set ℤ) where
+    lineDomainGraph Λ ≃g (SimpleGraph.hasse ℤ).induce (Λ : Set ℤ) where
   toEquiv := (Λ.orderIsoOfFin rfl).toEquiv
   map_rel_iff' := by
     intro i j
     change (sitePos Λ i ⋖ sitePos Λ j ∨ sitePos Λ j ⋖ sitePos Λ i) ↔ _
-    simp only [Order.covBy_iff_add_one_eq, domainGraph, eq_comm]
+    simp only [Order.covBy_iff_add_one_eq, lineDomainGraph, eq_comm]
 
 /-- Every sphere of finite radius in an induced integer domain contains at most two
 sites. The component intervals are those of the TNLean note,
 `part1_arealaw.tex`, lines 71–80. -/
 theorem domainGraph_card_sphere_le_two (Λ : Finset ℤ) (x : Fin Λ.card) (d : ℕ) :
-    (Finset.univ.filter (fun y ↦ (domainGraph Λ).edist x y = (d : ℕ∞))).card ≤ 2 := by
+    (Finset.univ.filter (fun y ↦ (lineDomainGraph Λ).edist x y = (d : ℕ∞))).card ≤ 2 := by
   classical
   let e := domainGraphIsoHasse Λ
   let C := ((SimpleGraph.hasse ℤ).induce (Λ : Set ℤ)).connectedComponentMk (e x)
   let xC : C := ⟨e x, rfl⟩
   obtain ⟨φ⟩ := C.nonempty_pathGraph_iso_hasse_int_induce_finset Λ
-  have hyC (y : Fin Λ.card) (hy : (domainGraph Λ).edist x y = (d : ℕ∞)) :
+  have hyC (y : Fin Λ.card) (hy : (lineDomainGraph Λ).edist x y = (d : ℕ∞)) :
       e y ∈ C.supp := by
     exact (C.mem_supp_iff _).mpr (SimpleGraph.ConnectedComponent.sound
       ((SimpleGraph.reachable_of_edist_ne_top
         (hy.trans_ne (ENat.natCast_ne_top d))).map e.toHom).symm)
-  let f : (Finset.univ.filter (fun y ↦ (domainGraph Λ).edist x y = (d : ℕ∞))) →
+  let f : (Finset.univ.filter (fun y ↦ (lineDomainGraph Λ).edist x y = (d : ℕ∞))) →
       (Finset.univ.filter (fun z ↦
         (SimpleGraph.pathGraph (Nat.card C)).edist (φ.symm xC) z = (d : ℕ∞))) :=
     fun y ↦ ⟨φ.symm ⟨e y.val, hyC y.val (Finset.mem_filter.mp y.property).2⟩,

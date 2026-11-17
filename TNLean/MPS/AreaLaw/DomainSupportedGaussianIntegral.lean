@@ -20,6 +20,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 381–4
 in the finite-domain setting of `part0_preamble.tex`, lines 191–215.
 -/
 
+open ManyBody (DomainSupport lineDomainGraph)
+
 open MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix Matrix.Norms.L2Operator NNReal
 
@@ -40,7 +42,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         let crossing := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin Λ.card) ↦
-          S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
+          S.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)
         ∃ U : ℝ → Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U

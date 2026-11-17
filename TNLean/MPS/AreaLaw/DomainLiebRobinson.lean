@@ -21,6 +21,8 @@ domains specified in `part0_preamble.tex`, lines 191–215. No ground-state or
 spectral-gap assumption is used.
 -/
 
+open ManyBody (DomainSupport lineDomainGraph)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -41,7 +43,7 @@ theorem norm_heisenberg_commutator_le_domainDistance
     {A B : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : Fin Λ.card)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
-    let δ : ℕ∞ := S.inf (fun x ↦ (domainGraph Λ).edist x y)
+    let δ : ℕ∞ := S.inf (fun x ↦ (lineDomainGraph Λ).edist x y)
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
         B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) * ‖A‖ * ‖B‖ *
@@ -52,18 +54,18 @@ theorem norm_heisenberg_commutator_le_domainDistance
   have ha : ∀ k, a k ∈ (X k).1 := fun k ↦ Classical.choose_spec (X k).2.1
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
   have hBound (n : ℕ)
-      (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (domainGraph Λ).edist x y) :=
+      (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (lineDomainGraph Λ).edist x y) :=
     ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
-      (domainGraph Λ) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
+      (lineDomainGraph Λ) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
       (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget S hA y hB
       1 (by norm_num) n hn t
   dsimp only
-  set δ := S.inf (fun x ↦ (domainGraph Λ).edist x y)
+  set δ := S.inf (fun x ↦ (lineDomainGraph Λ).edist x y)
   by_cases hδ : δ = ⊤
   · have hComm := ManyBody.heisenberg_commutator_eq_zero_of_forall_edist_eq_top
-      (domainGraph Λ) Φ R (fun k x hx z hz ↦ (X k).2.2 x hx z hz) S hA y hB
+      (lineDomainGraph Λ) Φ R (fun k x hx z hz ↦ (X k).2.2 x hx z hz) S hA y hB
       (fun x hx ↦ top_unique (hδ ▸
-        (Finset.inf_le hx : δ ≤ (domainGraph Λ).edist x y))) t
+        (Finset.inf_le hx : δ ≤ (lineDomainGraph Λ).edist x y))) t
     simp only [hComm, norm_zero, ite_eq_left hδ, mul_zero, le_refl]
   · have hGraph := hBound δ.toNat (fun x hx ↦
       (ENat.natCast_toNat_le_self δ).trans (Finset.inf_le hx))
@@ -99,7 +101,7 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         QuantumCircuit.siteExpectation q
-          (S.biUnion fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)
+          (S.biUnion fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ⌊ℓ⌋₊)
           (ManyBody.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
@@ -109,14 +111,14 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
   let a : κ → Fin Λ.card := fun k ↦ Classical.choose (X k).2.1
   have ha : ∀ k, a k ∈ (X k).1 := fun k ↦ Classical.choose_spec (X k).2.1
   have hGrowth : ∀ x : Fin Λ.card, ∀ d : ℕ,
-      ((Finset.univ.filter fun y ↦ (domainGraph Λ).edist x y = d).card : ℝ) ≤
+      ((Finset.univ.filter fun y ↦ (lineDomainGraph Λ).edist x y = d).card : ℝ) ≤
         2 * ((d : ℝ) + 1) ^ 0 := by
     intro x d
     simp only [pow_zero, mul_one]
     exact_mod_cast domainGraph_card_sphere_le_two Λ x d
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
   have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
-    (domainGraph Λ) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
+    (lineDomainGraph Λ) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
     (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   simp only [pow_zero, Nat.factorial_zero, Nat.cast_one, mul_one, Nat.cast_add] at hGraph
   have hRound :

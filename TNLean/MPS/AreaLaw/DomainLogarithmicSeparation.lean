@@ -20,7 +20,7 @@ Extension of the chain lemma in the TNLean one-dimensional note, `lem:logsep`,
 `part0_preamble.tex`, lines 191–215.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval lineDomainGraph sitePos sitePos_sub_val_of_walk)
 
 open QuantumCircuit
 
@@ -31,7 +31,7 @@ This auxiliary estimate makes no assertion across disconnected components.
 Source: TNLean note, `part0_preamble.tex`, lines 191–199. -/
 private theorem abs_sitePos_sub_le_of_edist_le
     {Λ : Finset ℤ} (x y : Fin Λ.card) (m : ℕ)
-    (hxy : (domainGraph Λ).edist x y ≤ (m : ℕ∞)) :
+    (hxy : (lineDomainGraph Λ).edist x y ≤ (m : ℕ∞)) :
     |(sitePos Λ x : ℝ) - (sitePos Λ y : ℝ)| ≤ (m : ℝ) := by
   obtain ⟨w, hw⟩ := SimpleGraph.exists_walk_of_edist_ne_top
     (ne_top_of_le_ne_top (by simp) hxy)
@@ -91,7 +91,7 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
   have hnhi : (n : ℝ) < w + 2 := by
     simpa only [add_assoc, one_add_one_eq_two] using Nat.ceil_lt_add_one (by linarith : 0 ≤ w + 1)
   let N := fun (j : ℕ) (S : Finset (Fin Λ.card)) ↦
-    S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x j)
+    S.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x j)
   let D := N n T
   let C := (N (2 * n) T)ᶜ
   have hDC : Disjoint D C := by
@@ -113,20 +113,21 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     push_cast at hcoord
     linarith only [hcoord, hdist x hx y hy, hsep, hnhi, hw]
   have hmarginT : ∀ x ∈ T, ∀ y : Fin Λ.card, y ∉ D → ∀ d : ℕ,
-      (domainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ) := by
+      (lineDomainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ) := by
     intro x hx y hy d hd
     by_contra hnot
     have hdn : d ≤ n := by exact_mod_cast (show (d : ℝ) ≤ n by linarith only [not_lt.mp hnot, hnlo])
     exact hy (Finset.mem_biUnion.mpr ⟨x, hx, ManyBody.mem_graphBall.mpr (hd ▸ (by exact_mod_cast
         hdn))⟩)
   have hmarginE : ∀ e ∈ E, ∀ y : Fin Λ.card, y ∉ C → ∀ d : ℕ,
-      (domainGraph Λ).edist e y = (d : ℕ∞) → w < (d : ℝ) := by
+      (lineDomainGraph Λ).edist e y = (d : ℕ∞) → w < (d : ℝ) := by
     intro e he y hy d hd
     have hyN : y ∈ N (2 * n) T := by simpa only [C, Finset.mem_compl, not_not] using hy
     obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hyN
-    have htri : (domainGraph Λ).edist x e ≤ ((2 * n + d : ℕ) : ℕ∞) := by
+    have htri : (lineDomainGraph Λ).edist x e ≤ ((2 * n + d : ℕ) : ℕ∞) := by
       calc
-        _ ≤ (domainGraph Λ).edist x y + (domainGraph Λ).edist y e := (domainGraph Λ).edist_triangle
+        _ ≤ (lineDomainGraph Λ).edist x y + (lineDomainGraph Λ).edist y e :=
+            (lineDomainGraph Λ).edist_triangle
         _ ≤ ((2 * n : ℕ) : ℕ∞) + (d : ℕ∞) := add_le_add (ManyBody.mem_graphBall.mp hxy)
           (by rw [SimpleGraph.edist_comm, hd])
         _ = _ := by simp only [Nat.cast_add]

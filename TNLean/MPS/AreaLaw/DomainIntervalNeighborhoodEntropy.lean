@@ -19,7 +19,7 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 482–4
 and the interval area-law estimate in Part I.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval lineDomainGraph)
 
 open SimpleGraph QuantumCircuit
 
@@ -36,7 +36,7 @@ theorem regionEntropy_domainNeighborhood_biUnion_intervals_le
     (s : Finset κ) (a b : κ → ℕ) (m : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       ((s.biUnion (fun i ↦ interval Λ.card (a i) (b i))).biUnion
-        (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)) Ω ≤ (s.card : ℝ) * c := by
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω ≤ (s.card : ℝ) * c := by
   classical
   have hn (X : Finset (Fin Λ.card)) :
       0 ≤ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) X Ω :=
@@ -48,20 +48,20 @@ theorem regionEntropy_domainNeighborhood_biUnion_intervals_le
     linarith [TNLean.Lattice.regionEntropy_union_add_inter_le (Ω := Ω) X Y, hn (X ∩ Y)]
   have hsum : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       (s.biUnion (fun i ↦ (interval Λ.card (a i) (b i)).biUnion
-        (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m))) Ω ≤
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m))) Ω ≤
       ∑ i ∈ s, Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
         ((interval Λ.card (a i) (b i)).biUnion
-          (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)) Ω := by
+          (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω := by
     simpa only [Finset.sup_eq_biUnion] using
       (Finset.apply_sup_le_sum
         (f := fun X : Finset (Fin Λ.card) ↦
           Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) X Ω)
         (TNLean.Lattice.regionEntropy_empty hΩ) (fun {X Y} ↦ hsub X Y)
         (s := fun i ↦ (interval Λ.card (a i) (b i)).biUnion
-          (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)) s)
+          (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) s)
   have hNi (i : κ) : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       ((interval Λ.card (a i) (b i)).biUnion
-        (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)) Ω ≤ c := by
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω ≤ c := by
     obtain ⟨u, v, hgeo⟩ := domainNeighborhood_interval_eq Λ (a i) (b i) m
     simpa only [hgeo] using hI u v
   simpa only [Finset.biUnion_biUnion, Finset.sum_const, nsmul_eq_mul] using
@@ -79,7 +79,7 @@ theorem DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le
     (s : Finset κ) (a b : κ → ℕ) (m : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       ((s.biUnion (fun i ↦ interval Λ.card (a i) (b i))).biUnion
-        (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)) Ω ≤
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω ≤
           (s.card : ℝ) * chainIntervalEntropyBound q R J Δ := by
   exact regionEntropy_domainNeighborhood_biUnion_intervals_le hgs.1
     (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain hJ)
