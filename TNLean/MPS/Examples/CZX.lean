@@ -16,6 +16,7 @@ import TNLean.MPS.Examples.CZX.CZXDomainWallExchange
 import TNLean.MPS.Examples.CZX.CZXDomainWallString
 import TNLean.MPS.Examples.CZX.CZXDomainWalls
 import TNLean.MPS.Examples.CZX.CZXNoInvariant
+import TNLean.MPS.Examples.CZX.CZXPermutedBlocks
 import TNLean.MPS.Examples.CZX.CZXPlusIdentity
 import TNLean.MPS.Examples.CZX.CZXPlusParity
 import TNLean.MPS.Examples.CZX.CZXReviewCanonicalForm
