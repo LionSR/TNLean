@@ -22,6 +22,8 @@ September 24, 2026, `07-assembly.tex`, lines 203–214, at immutable manuscript
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
@@ -86,13 +88,13 @@ theorem polynomialPEPSApproximation_iff_sufficiently_large :
   constructor
   · intro happ q hq J Δ hJ hΔ
     obtain ⟨C, c, hC, hc, hall⟩ := happ q hq J Δ hJ hΔ
-    exact ⟨C, c, hC, hc, 0, fun L hL _ h E₀ Ω hΩ ↦ hall L hL h E₀ Ω hΩ⟩
+    exact ⟨C, c, hC, hc, 0, fun L hL _ h hh hhJ E₀ Ω hΩ ↦ hall L hL h hh hhJ E₀ Ω hΩ⟩
   · intro hlarge q hq J Δ hJ hΔ
     obtain ⟨C, c, _, hc, L₀, htail⟩ := hlarge q hq J Δ hJ hΔ
     obtain ⟨C', hC', _, hall⟩ :=
       exists_uniform_approximation_of_sufficiently_large (G := IsSquareGroundState q J Δ)
         (fun _ _ hΩ ↦ hΩ.norm_eq_one) (by omega) hc.le
-        fun L hL hL₀ Ω ⟨h, E₀, hΩ⟩ ↦ htail L hL hL₀ h E₀ Ω hΩ
-    exact ⟨C', c, hC', hc, fun L hL h E₀ Ω hΩ ↦ hall L hL Ω ⟨h, E₀, hΩ⟩⟩
+        fun L hL hL₀ Ω ⟨h hh hhJ, E₀, hΩ⟩ ↦ htail L hL hL₀ h hh hhJ E₀ Ω hΩ
+    exact ⟨C', c, hC', hc, fun L hL h hh hhJ E₀ Ω hΩ ↦ hall L hL Ω ⟨h, hh, hhJ, E₀, hΩ⟩⟩
 
 end TNLean.PEPS.Approximation

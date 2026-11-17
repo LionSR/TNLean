@@ -195,13 +195,13 @@ theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
                 (Geometry.integerPoint (rectangleEmbedding v) + d)) →
             FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω X E ≤ C := by
   obtain ⟨β, hβ, C, u₀, hmain⟩ := coarse_mutualInformation_le_square hq hJ hΔ N₀ A₀
-  refine ⟨β, hβ, C, u₀, fun u hu L h E₀ Ω hΩ d T hT hdiam X hX E hE ↦ ?_⟩
+  refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ d T hT hdiam X hX E hE ↦ ?_⟩
   have hdist (x y : ℤ × ℤ) :
       dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) =
         (Scan.ambientSupDistance x y : ℝ) := by
     simp only [dist_add_right, Scan.ambientSupDistance, Geometry.integerPoint,
       Prod.dist_eq, Real.dist_eq, Int.cast_max, Int.cast_abs, Int.cast_sub]
-  exact hmain u hu L h E₀ Ω hΩ 0 T hT
+  exact hmain u hu L h hh hhJ E₀ Ω hΩ 0 T hT
     (fun x hx y hy ↦ by simpa only [hdist] using hdiam x hx y hy)
     X (by simpa only [add_zero] using hX) E
     (fun t ht v hv ↦ by simpa only [hdist, add_zero] using hE t ht v hv)

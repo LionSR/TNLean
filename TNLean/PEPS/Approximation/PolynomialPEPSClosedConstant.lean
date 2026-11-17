@@ -27,6 +27,8 @@ Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground stat
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
@@ -85,8 +87,8 @@ theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : �
       (by norm_num) le_rfl le_rfl
   have hlarge := polynomialPEPSApproximation_of_ratios hq hJ hΔ hA
     (one_le_angularScale _ _ _ _) hD
-  intro L hL h E₀ Ω hΩ
+  intro L hL h hh hhJ E₀ Ω hΩ
   exact hasPEPSApproximation_of_sufficiently_large_le (by omega) hL
-    (pepsBondExponent_pos q J Δ).le hΩ.1 (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, E₀, hΩ⟩)
+    (pepsBondExponent_pos q J Δ).le hΩ.1 (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ⟩)
 
 end TNLean.PEPS.Approximation

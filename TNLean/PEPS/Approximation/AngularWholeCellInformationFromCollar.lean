@@ -72,10 +72,10 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
                 (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na) := by
   have hcell :=
     cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
-  intro s hs o r Aold A hA S hS L h E₀ Ω hΩ E b₀ hclear hold
+  intro s hs o r Aold A hA S hS L h hh hhJ E₀ Ω hΩ E b₀ hclear hold
   exact mutualInformation_selectedRegion_le_of_cell_bound Ω E
     (zero_lt_one.trans_le hs) hc hA S hS hclear
-    (fun i _ I hi ↦ hcell s hs o i I hi L h E₀ Ω hΩ E) hold
+    (fun i _ I hi ↦ hcell s hs o i I hi L h hh hhJ E₀ Ω hΩ E) hold
 
 open Classical in
 /-- The original-gap collar hypothesis gives uniform information costs for

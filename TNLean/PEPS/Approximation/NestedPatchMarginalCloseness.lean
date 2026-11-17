@@ -76,7 +76,7 @@ theorem nestedPatch_minimizer_marginal_closeness
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
                 Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) R
                   (AreaLaw.rectangleAreaLawState Ω))).trace.re ≤ (1 / 16 : ℝ) := by
-  intro L h E₀ Ω hgs center u b hu hb Λ m regions a U Ωᵤ x hx hmin R
+  intro L h hh hhJ E₀ Ω hgs center u b hu hb Λ m regions a U Ωᵤ x hx hmin R
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have henergy := (h.nestedPatch_minimizer_energy_le hJ hΔ Ω hgs center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall

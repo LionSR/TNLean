@@ -203,7 +203,7 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
               (⨆ j, dependentRegionCylinder
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
             ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
-  intro L hL h E₀ Ω hgs center u hu huL
+  intro L hL h hh hhJ E₀ Ω hgs center u hu huL
   have hκ : 0 < patchFilterExponent q J Δ := patchFilterExponent_pos_of_pos (by omega) hJ hΔ
   exact exists_closedSquare_cylinders_of_marginal_closeness hL hB₀ hp hκ
     (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (AreaLaw.rectangleAreaLawState Ω)
@@ -212,10 +212,10 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     (fun j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
     (fun i j hij ↦ add_le_add_right (mul_le_mul_of_nonneg_left (Nat.cast_le.mpr hij)
       (by norm_num : (0 : ℝ) ≤ 2)) u)
-    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, E₀, hgs⟩ center u (by linarith) j)
+    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, hh, hhJ, E₀, hgs⟩ center u (by linarith) j)
     (fun b hb ↦ nestedPatch_minimizer_marginal_closeness q hJ.le hΔ hκ
       (patchFilterExponent_le_half q J Δ) (mul_patchFilterExponent_sq_le hJ.le hΔ.le)
-      L h E₀ Ω hgs center u b hu hb)
+      L h hh hhJ E₀ Ω hgs center u b hu hb)
 
 open Classical in
 /-- The original square entropy area law gives a sum of nested regional cylinders

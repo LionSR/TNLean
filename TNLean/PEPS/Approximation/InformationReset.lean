@@ -348,12 +348,12 @@ theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le
   have hK : 0 < resetRadius J Δ (2 * p + 10) := resetRadius_pos hJ hΔ (by linarith)
   have hCu : 0 < resetUnitaryPrefactor J Δ (2 * p + 10) :=
     resetUnitaryPrefactor_pos hJ hΔ (by linarith)
-  intro L hL h E₀ Ω hgs R C R₀ C₀ hRC hR₀ hC₀ b hb hI hRw hCw
+  intro L hL h hh hhJ E₀ Ω hgs R C R₀ C₀ hRC hR₀ hC₀ b hb hI hRw hCw
   rw [resetThreshold] at hL
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
   have hΩ : ‖Ω‖ = 1 := hgs.1
-  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ := hreset L hLn h E₀ Ω hgs R C hRC b hb hI
+  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ := hreset L hLn h hh hhJ E₀ Ω hgs R C hRC b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈resetRadius J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) + 1 ≤
       resetWidth J Δ p * (1 + b + Real.log L) := by

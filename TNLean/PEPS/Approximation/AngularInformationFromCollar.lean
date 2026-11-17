@@ -41,6 +41,8 @@ Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`),
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (SquareLatticeVertex SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
@@ -243,15 +245,15 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
   have hc : 0 < c := div_pos (AngularGrid.angular_clearance_pos ha' ha'a hda') hd
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
       (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
-    fun s hs o m₀ A hm₀ L Ω ⟨h, E₀, hΩ⟩ ↦
+    fun s hs o m₀ A hm₀ L Ω ⟨h hh hhJ, E₀, hΩ⟩ ↦
       cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
-        s hs o m₀ A hm₀ L h E₀ Ω hΩ
-  intro L hL h E₀ Ω hΩ
+        s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ
+  intro L hL h hh hhJ E₀ Ω hΩ
   exact angularInformation_of_bounds (fun _ _ hΩ ↦ hΩ.norm_eq_one) ha m₀ hp hcell
     (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp)
     (cellInformationConstant_pos q c Ctpl N Ca Na)
     (cellInformationExponent_pos c Ctpl N Ca Na).le (resetWidth_pos hJ hΔ hp) hD hL₀
-    L hL Ω ⟨h, E₀, hΩ⟩
+    L hL Ω ⟨h, hh, hhJ, E₀, hΩ⟩
 
 /-- **Proposition 3.4 at an integer accuracy under the sublinear collar bound, with explicit
 constants,** for sites placed at any common translation of `Λ_L`: every slope

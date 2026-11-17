@@ -133,9 +133,9 @@ theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
             resetWidth J Δ p * (1 + b + Real.log L) ≤ a' * s / 2 →
             FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
               (L : ℝ) ^ (-p) := by
-  intro L hL h E₀ Ω hΩ
+  intro L hL h hh hhJ E₀ Ω hΩ
   exact angular_information_reset_of_squareResetBound
-    (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp) L hL Ω ⟨h, E₀, hΩ⟩
+    (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp) L hL Ω ⟨h, hh, hhJ, E₀, hΩ⟩
 
 open Classical in
 /-- The original-gap information reset applied to the actual padded annular

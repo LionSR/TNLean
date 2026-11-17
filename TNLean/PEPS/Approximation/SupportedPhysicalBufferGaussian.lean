@@ -117,7 +117,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
                   (1 + 8 * J * (L : ℝ) ^ 2 * T) *
                   Real.exp (squareLocalizationVelocity J * T - 1 / 2 * l) := by
   classical
-  intro L h R C₀ hRC Q P s g p Λ a e K F K' boundary Z W V l B
+  intro L h hh hhJ R C₀ hRC Q P s g p Λ a e K F K' boundary Z W V l B
   have hC : 0 < squareLocalizationPrefactor := squareLocalizationPrefactor_pos
   obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hJ R
   have hK' : gH.operator = K' := by
@@ -126,7 +126,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
   have hDK : (doubledHamiltonian h.hamiltonian).IsHermitian := by
     simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
       Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
-      (show h.hamiltonian.IsHermitian from h.hermitian).eq]
+      (show h.hamiltonian.IsHermitian from hh).eq]
   have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
       ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
         supportedOperators (q * q) (Q : Set (SquareLatticeVertex L L)) :=
@@ -224,7 +224,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
                     Real.exp (v * T - c * l) := by
   refine ⟨squareLocalizationPrefactor, squareLocalizationVelocity J + 1, 1 / 2,
     squareLocalizationPrefactor_pos,
-    by linarith [squareLocalizationVelocity_nonneg hJ], one_half_pos, fun L h R C₀ hRC ↦ ?_⟩
+    by linarith [squareLocalizationVelocity_nonneg hJ], one_half_pos, fun L h hh hhJ R C₀ hRC ↦ ?_⟩
   intro Q P s g p Λ a e K F K' boundary Z W V l B
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
     ManyBody.SquareInteraction.supported_buffer_gaussian_integral q hq J hJ L h R C₀ hRC W l

@@ -185,7 +185,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
             Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
   have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
-  intro s hs o m₀ A hm₀ L h E₀ Ω hΩ
+  intro s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
     (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
       (AreaLaw.rectangleAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hΩ))

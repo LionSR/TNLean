@@ -165,7 +165,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
         ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by
-  intro L hL h E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
+  intro L hL h hh hhJ E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
   have hcoef : squareLocalizationVelocity J * resetCutoff Δ r + 15 + r ≤
       1 / 2 * resetRadius J Δ r := by
@@ -302,9 +302,9 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
         U ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
         ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             resetUnitaryPrefactor J Δ r * (L : ℝ) ^ (-r) := by
-  intro L hL h E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
+  intro L hL h hh hhJ E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
-    ManyBody.SquareInteraction.reset_localized_filter q hq J hJ hΔ hr L hL h E₀ Ω hgs
+    ManyBody.SquareInteraction.reset_localized_filter q hq J hJ hΔ hr L hL h hh hhJ E₀ Ω hgs
         R C₀ hRC b hb hI
   obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
     (resetFilterPrefactor_pos hJ hΔ hr).le (by positivity)

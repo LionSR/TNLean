@@ -37,9 +37,7 @@ dimension and empty square grids are included.
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 513–524. -/
 theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
-    {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
-    (R : Finset (SquareLatticeVertex L L)) :
+    {L q : ℕ} (h : SquareInteraction L q) (R : Finset (SquareLatticeVertex L L)) :
     let F := TNLean.Lattice.sheetSwapOp q R
     F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
       ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R),
@@ -57,22 +55,25 @@ theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_
         Matrix.kroneckerBilinear (R := ℂ)
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
   change δ h.hamiltonian = ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R), δ (h.term (.inr e))
-  simp only [ManyBody.SquareInteraction.operator, map_add, map_sum]
-  have hcancel {S : Set (SquareLatticeVertex L L)}
+  simp only [ManyBody.Interaction.hamiltonian, Fintype.sum_sum_type, map_add, map_sum]
+  have hcancel {S : Finset (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
-      (hA : A ∈ QuantumCircuit.supportedOperators q S)
-      (hS : S ⊆ (R : Set _) ∨ Disjoint S (R : Set _)) : δ A = 0 :=
+      (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
+      (hS : (S : Set _) ⊆ (R : Set _) ∨ Disjoint (S : Set _) (R : Set _)) : δ A = 0 :=
     sub_eq_zero.mpr
-      (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators hA hS)
+      (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
+        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) hS)
   have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
       δ (h.term (.inr e)) = 0 := by
-    apply hcancel (h.edge_supported e)
-    simp only [IsRegionBoundaryEdge, Set.insert_subset_iff, Set.singleton_subset_iff,
+    apply hcancel (h.mem (.inr e))
+    simp only [ManyBody.squareLatticeSiteOrEdgeSupport, Finset.coe_insert, Finset.coe_singleton,
+      IsRegionBoundaryEdge, Set.insert_subset_iff, Set.singleton_subset_iff,
       Set.disjoint_insert_left, Set.disjoint_singleton_left, Finset.mem_coe] at he ⊢
     tauto
   have hsite (v : SquareLatticeVertex L L) : δ (h.term (.inl v)) = 0 :=
-    hcancel (h.site_supported v) (by
-      simp only [Set.singleton_subset_iff, SetLike.mem_coe, Set.disjoint_singleton_left]
+    hcancel (h.mem (.inl v)) (by
+      simp only [ManyBody.squareLatticeSiteOrEdgeSupport, Finset.coe_singleton,
+        Set.singleton_subset_iff, SetLike.mem_coe, Set.disjoint_singleton_left]
       exact em _)
   rw [Finset.sum_eq_zero fun v _ => hsite v, zero_add]
   refine (Finset.sum_subset (Finset.filter_subset _ _) ?_).symm

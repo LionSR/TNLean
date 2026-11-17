@@ -402,7 +402,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   classical
   obtain ⟨β, hβ, C, u₀, hmain⟩ :=
     coarse_mutualInformation_le_of_sublinearCollarBound hΔ hcol N₀ A₀
-  refine ⟨β, hβ, C, u₀, fun u hu L h E₀ Ω hΩ c T hT hdiam X hX E hE ↦ ?_⟩
+  refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ c T hT hdiam X hX E hE ↦ ?_⟩
   set σ := rectangleSiteEquiv L L
   have hdist (x y : ℤ × ℤ) :
       Scan.ambientSupDistance (x + -c) y = Scan.ambientSupDistance x (y + c) := by

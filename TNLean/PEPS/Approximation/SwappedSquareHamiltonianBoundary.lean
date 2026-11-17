@@ -42,8 +42,7 @@ need not be Hermitian.
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 513–524. -/
 theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
-    {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+    {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     (R : Finset (SquareLatticeVertex L L)) :
     let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
@@ -97,7 +96,7 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
           (fun e : Edge (squareLatticeGraph L L) ↦
             ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))) he))
         (hlocal {e.1.1, e.1.2}
-          (by simpa only [Finset.coe_insert, Finset.coe_singleton] using h.edge_supported e)))
+          (mem_supportedOperators_of_isSupportedOn (h.mem (.inr e)))))
   have hbound : ‖F * K * Fᴴ - K‖ ≤ (boundary.card : ℝ) * (4 * J) := by
     simpa only [hsum, nsmul_eq_mul] using
       (norm_sum_le boundary (fun e ↦
@@ -109,8 +108,8 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
   have hbcard : boundary.card ≤ 2 * L ^ 2 :=
     (Finset.card_le_univ boundary).trans (TNLean.PEPS.card_squareLatticeEdges_le L)
   have hJ (hL : L ≠ 0) : 0 ≤ J :=
-    (norm_nonneg (h.siteTerm
-      (⟨0, Nat.pos_of_ne_zero hL⟩, ⟨0, Nat.pos_of_ne_zero hL⟩))).trans
+    (norm_nonneg (h.term
+      (.inl (⟨0, Nat.pos_of_ne_zero hL⟩, ⟨0, Nat.pos_of_ne_zero hL⟩)))).trans
       (hhJ (.inl _))
   exact ⟨hsupport, if hL : L = 0 then
     hbound.trans_eq (by
