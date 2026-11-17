@@ -147,8 +147,10 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
   have hT₀ : 0 < T₀ := resetCutoff_pos hΔ hr
   have hc : 0 ≤ c := swapBoundaryCoefficient_nonneg R
   have hcJ : 0 ≤ c * J := mul_nonneg hc hJ
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q A C hAC p h.operator E₀ Ω b hgs hb hI
+    regional_physicalBuffer_filter.{0, 0} hΔ hr q A C hAC p h.operator E₀ Ω b hg.1 hg.2.1
+      hg.2.2.1 hg.2.2.2 hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ :=
     h.supported_buffer_gaussian_integral hq hJ A C hAC W ⌈K * (1 + b + Real.log L)⌉₊

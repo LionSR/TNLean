@@ -210,8 +210,9 @@ theorem ChainHamiltonian.norm_localizedPart_apply_le {E₀ : ℝ}
   set G := gaussianFilteredTerm s ΔE h.operator W
   have hsplit : h.localizedPart Ω s ΔE P K = G - (G - h.localizedPart Ω s ΔE P K) := by abel
   have hG : ‖toEuclideanLin G Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * cP := by
-    refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGappedGroundState hs hΔ hgs W
-      (inner_groundCentered hP hΩ)).trans ?_
+    have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
+    refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ hg.1 hg.2.2.1
+      hg.2.2.2 W (inner_groundCentered hP hΩ)).trans ?_
     rw [h.commutator_groundCentered]
     gcongr
     exact (hop _).trans hc

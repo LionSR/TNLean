@@ -153,9 +153,10 @@ theorem regionalEntropy_eq_zero_of_forall_subset_or_disjoint (h : LocalHamiltoni
     (hsplit : ∀ X : AdmissibleSupport Λ R, X.1 ⊆ A ∨ Disjoint X.1 A) :
     regionalEntropy Λ q Ω A = 0 := by
   rw [regionalEntropy_eq_regionEntropy]
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hΩ
   exact regionEntropy_eq_zero_of_forall_subset_or_disjoint
     (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
-    h.hermitian hΔ hΩ A hsplit
+    h.hermitian hΔ hg.2.1 hg.2.2.1 hg.2.2.2 A hsplit
 
 /-- **A cut with no crossing edge** (area-law preprint, Lemma 2.2,
 `lem:zero-boundary`, `01-preliminaries.tex` lines 123–134). Under the

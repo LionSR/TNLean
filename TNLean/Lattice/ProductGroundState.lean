@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.KroneckerLeastEigenvalue
+import TNLean.Algebra.MatrixHermitianSum
 import QICLean.Analysis.Entropy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Channel.PartialTrace
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.Matrix
@@ -31,12 +32,12 @@ the cut.
 
 ## Main results
 
-* `TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum`: normalized
-  factor ground vectors with additive energies and the same lower gap bound.
+* `TNLean.Lattice.exists_isGapped_factors_of_kronecker_sum`: normalized factor vectors
+  spanning the ground spaces of the factors, with additive energies and the same gap.
 * `TNLean.Lattice.exists_eq_mul_of_gap`: the ground vector is a product.
 * `TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap`: its
   reduced state on the first factor has zero entropy.
-* `TNLean.Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator`: the same
+* `TNLean.Lattice.exists_isGapped_factors_of_sum_factorOperator`: the same
   factorization for a sum `∑ i, H_i` over a nonempty finite family of factors, each `H_i`
   acting on its own factor through `TNLean.Lattice.factorOperator`.
 
@@ -63,6 +64,9 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
+
+open ManyBody (IsGapped groundSpace isGapped_and_groundSpace_eq_span_iff
+  mulVec_eq_of_groundSpace_eq_span)
 
 namespace TNLean.Lattice
 
@@ -146,8 +150,25 @@ private theorem gap_left_of_kronecker_sum
   rw [← hcompress]
   exact hgap.conjTranspose_mul_mul_same V
 
+/-- The eigen-equation of a coordinate vector in the operator form of the gapped ground-state
+iff. -/
+private theorem toEuclideanCLM_toLp_eq_smul {γ : Type*} [Fintype γ] [DecidableEq γ]
+    {K : Matrix γ γ ℂ} {E : ℝ} {w : γ → ℂ} (h : K *ᵥ w = (E : ℂ) • w) :
+    toEuclideanCLM (n := γ) (𝕜 := ℂ) K (WithLp.toLp 2 w) = (E : ℂ) • WithLp.toLp 2 w := by
+  rw [← (WithLp.ofLp_injective 2).eq_iff, ofLp_toEuclideanCLM, WithLp.ofLp_smul]
+  exact h
+
+omit [Fintype α] [Fintype β] in
+/-- A tensor sum `H_A ⊗ 1 + 1 ⊗ H_B` of Hermitian matrices is Hermitian. -/
+private theorem isHermitian_kronecker_sum {HA : Matrix α α ℂ} {HB : Matrix β β ℂ}
+    (hA : HA.IsHermitian) (hB : HB.IsHermitian) :
+    (HA ⊗ₖ (1 : Matrix β β ℂ) + (1 : Matrix α α ℂ) ⊗ₖ HB).IsHermitian := by
+  simp only [IsHermitian, conjTranspose_add, conjTranspose_kronecker, conjTranspose_one, hA.eq,
+    hB.eq]
+
 /-- A gapped ground vector `ω` of `H_A ⊗ 1 + 1 ⊗ H_B` is `u ⊗ v` with `E₀ = a + b`, where `u` and
-`v` are gapped ground vectors of `H_A` and `H_B` at energies `a` and `b`, with the same gap `Δ`. -/
+`v` are unit vectors spanning the ground spaces of `H_A` at `a` and `H_B` at `b`, both gapped
+with the same gap `Δ`. -/
 private theorem exists_gapped_factors_of_gap {HA : Matrix α α ℂ} {HB : Matrix β β ℂ}
     (hA : HA.IsHermitian)
     (hB : HB.IsHermitian) {ω : α × β → ℂ} (hω : star ω ⬝ᵥ ω = 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -156,8 +177,10 @@ private theorem exists_gapped_factors_of_gap {HA : Matrix α α ℂ} {HB : Matri
       (Δ : ℂ) • (1 - vecMulVec ω (star ω))).PosSemidef) :
     ∃ (a b : ℝ) (u : α → ℂ) (v : β → ℂ), E₀ = a + b ∧
       (ω = fun p ↦ u p.1 * v p.2) ∧
-        Matrix.IsGappedGroundState HA a (WithLp.toLp 2 u) Δ ∧
-        Matrix.IsGappedGroundState HB b (WithLp.toLp 2 v) Δ := by
+        (‖WithLp.toLp 2 u‖ = 1 ∧ IsGapped HA a Δ ∧
+          groundSpace HA a = Submodule.span ℂ {WithLp.toLp 2 u}) ∧
+        (‖WithLp.toLp 2 v‖ = 1 ∧ IsGapped HB b Δ ∧
+          groundSpace HB b = Submodule.span ℂ {WithLp.toLp 2 v}) := by
   have hne : Nonempty (α × β) := by
     by_contra h
     rw [not_nonempty_iff] at h
@@ -279,26 +302,32 @@ private theorem exists_gapped_factors_of_gap {HA : Matrix α α ℂ} {HB : Matri
     simpa only [hEeq, add_sub_cancel_left] using
       gap_left_of_kronecker_sum HB HA v u' E₀ a Δ hu'1 ha hswap
   refine ⟨a, b, u', v, hEeq, hprod, ?_, ?_⟩
-  · exact Matrix.isGappedGroundState_iff.mpr ⟨norm_toLp_eq_one_of_star_dotProduct u' hu'1, hu', hga⟩
-  · exact Matrix.isGappedGroundState_iff.mpr ⟨norm_toLp_eq_one_of_star_dotProduct v hv1, hv, hgb⟩
+  · exact ((isGapped_and_groundSpace_eq_span_iff hΔ _).mp
+      ⟨norm_toLp_eq_one_of_star_dotProduct u' hu'1, toEuclideanCLM_toLp_eq_smul hu', hga⟩).2
+  · exact ((isGapped_and_groundSpace_eq_span_iff hΔ _).mp
+      ⟨norm_toLp_eq_one_of_star_dotProduct v hv1, toEuclideanCLM_toLp_eq_smul hv, hgb⟩).2
 
-/-- A normalized gapped ground vector of a tensor sum factors exactly into normalized
-component ground vectors, with additive energies and the same lower gap bound in both factors.
-The global phase is absorbed into the first factor. No component gap is assumed.
+/-- If a tensor sum is gapped with ground space the line through a unit vector, that vector
+factors exactly into unit vectors spanning the ground spaces of the components, with additive
+energies, and both components are gapped with the same gap. The global phase is absorbed into
+the first factor. No component gap is assumed.
 
 TNLean one-dimensional note, Lemma reductions, `part1_arealaw.tex`, lines 64–89,
 particularly lines 71–80; the projector-gap hypothesis is `part0_preamble.tex:191–205`.
 The factorization over any nonempty finite family of factors is
-`exists_isGappedGroundState_factors_of_sum_factorOperator`. -/
-theorem exists_isGappedGroundState_factors_of_kronecker_sum
+`exists_isGapped_factors_of_sum_factorOperator`. -/
+theorem exists_isGapped_factors_of_kronecker_sum
     {HA : Matrix α α ℂ} {HB : Matrix β β ℂ} (hA : HA.IsHermitian) (hB : HB.IsHermitian)
-    {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (α × β)} (hΔ : 0 < Δ)
-    (hgs : Matrix.IsGappedGroundState
-      (HA ⊗ₖ (1 : Matrix β β ℂ) + (1 : Matrix α α ℂ) ⊗ₖ HB) E₀ Ω Δ) :
+    {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (α × β)} (hΔ : 0 < Δ) (hunit : ‖Ω‖ = 1)
+    (hgs : IsGapped (HA ⊗ₖ (1 : Matrix β β ℂ) + (1 : Matrix α α ℂ) ⊗ₖ HB) E₀ Δ)
+    (hspan : groundSpace (HA ⊗ₖ (1 : Matrix β β ℂ) + (1 : Matrix α α ℂ) ⊗ₖ HB) E₀ =
+      Submodule.span ℂ {Ω}) :
     ∃ (a b : ℝ) (u : EuclideanSpace ℂ α) (v : EuclideanSpace ℂ β), E₀ = a + b ∧
       (∀ p : α × β, Ω p = u p.1 * v p.2) ∧
-        Matrix.IsGappedGroundState HA a u Δ ∧ Matrix.IsGappedGroundState HB b v Δ := by
-  obtain ⟨hunit, hev, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+        (‖u‖ = 1 ∧ IsGapped HA a Δ ∧ groundSpace HA a = Submodule.span ℂ {u}) ∧
+        (‖v‖ = 1 ∧ IsGapped HB b Δ ∧ groundSpace HB b = Submodule.span ℂ {v}) := by
+  have hev := mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgs.posSemidef_sub_smul_one (isHermitian_kronecker_sum hA hB) hunit hspan
   have hω : star (WithLp.ofLp Ω) ⬝ᵥ WithLp.ofLp Ω = 1 := by
     simpa only [EuclideanSpace.inner_eq_star_dotProduct, dotProduct_comm] using
       inner_self_eq_one_of_norm_eq_one (𝕜 := ℂ) hunit
@@ -313,14 +342,8 @@ theorem exists_eq_mul_of_gap {HA : Matrix α α ℂ} {HB : Matrix β β ℂ} (hA
     (hgap : (HA ⊗ₖ (1 : Matrix β β ℂ) + (1 : Matrix α α ℂ) ⊗ₖ HB - (E₀ : ℂ) • 1 -
       (Δ : ℂ) • (1 - vecMulVec ω (star ω))).PosSemidef) :
     ∃ (u : α → ℂ) (v : β → ℂ), ω = fun p ↦ u p.1 * v p.2 := by
-  have hgs : Matrix.IsGappedGroundState
-      (HA ⊗ₖ (1 : Matrix β β ℂ) + (1 : Matrix α α ℂ) ⊗ₖ HB) E₀
-        (WithLp.toLp 2 ω) Δ :=
-    Matrix.isGappedGroundState_iff.mpr
-      ⟨norm_toLp_eq_one_of_star_dotProduct ω hω, hev, hgap⟩
-  obtain ⟨a, b, u, v, -, huv, -, -⟩ :=
-    exists_isGappedGroundState_factors_of_kronecker_sum hA hB hΔ hgs
-  exact ⟨fun i ↦ u i, fun j ↦ v j, funext huv⟩
+  obtain ⟨-, -, u, v, -, huv, -, -⟩ := exists_gapped_factors_of_gap hA hB hω hΔ hev hgap
+  exact ⟨u, v, huv⟩
 
 /-- **Zero entanglement of a gapped ground vector of `H_A ⊗ 1 + 1 ⊗ H_B`.** The
 reduced state of the ground vector on the first factor has zero entropy. -/
@@ -372,18 +395,29 @@ theorem isHermitian_factorOperator {ι : Type*} [Fintype ι] [DecidableEq ι] {�
   · exact absurd (hc.mpr h₂) h₁
   · exact star_zero _
 
-/-- Relabelling the coordinates of a gapped ground vector along an equivalence gives a gapped
-ground vector of the relabelled Hamiltonian, with the same energy and gap. -/
-theorem isGappedGroundState_submatrix {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
-    [DecidableEq n] {H : Matrix n n ℂ} {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ n}
-    (h : Matrix.IsGappedGroundState H E₀ Ω Δ) (e : m ≃ n) :
-    Matrix.IsGappedGroundState (H.submatrix e e) E₀ (WithLp.toLp 2 fun x ↦ Ω (e x)) Δ := by
-  obtain ⟨hn, hev, hgap⟩ := Matrix.isGappedGroundState_iff.mp h
-  refine Matrix.isGappedGroundState_iff.mpr ⟨?_, ?_, ?_⟩
-  · rw [← hn, EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
+/-- A sum of factor operators of Hermitian matrices is Hermitian. -/
+theorem isHermitian_sum_factorOperator {ι : Type*} [Fintype ι] [DecidableEq ι] {σ : ι → Type*}
+    [∀ i, DecidableEq (σ i)] {H : ∀ i, Matrix (σ i) (σ i) ℂ}
+    (hH : ∀ i, (H i).IsHermitian) : (∑ i, factorOperator i (H i)).IsHermitian :=
+  isHermitian_sum _ fun i _ ↦ isHermitian_factorOperator i (hH i)
+
+/-- Relabelling the coordinates along an equivalence preserves a gapped Hermitian matrix whose
+ground space is the line through a unit vector, with the same energy and gap. -/
+theorem isGapped_submatrix {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
+    [DecidableEq n] {H : Matrix n n ℂ} {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ n} (hΔ : 0 < Δ)
+    (hH : H.IsHermitian) (hn : ‖Ω‖ = 1) (hgs : IsGapped H E₀ Δ)
+    (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (e : m ≃ n) :
+    ‖WithLp.toLp 2 fun x ↦ Ω (e x)‖ = 1 ∧ IsGapped (H.submatrix e e) E₀ Δ ∧
+      groundSpace (H.submatrix e e) E₀ = Submodule.span ℂ {WithLp.toLp 2 fun x ↦ Ω (e x)} := by
+  have hev := mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgs.posSemidef_sub_smul_one hH hn hspan
+  have hn' : ‖WithLp.toLp 2 fun x ↦ Ω (e x)‖ = 1 := by
+    rw [← hn, EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
     congr 1
     exact e.sum_comp fun x ↦ ‖Ω x‖ ^ 2
-  · rw [WithLp.ofLp_toLp, submatrix_mulVec_equiv]
+  refine ((isGapped_and_groundSpace_eq_span_iff hΔ _).mp ⟨hn', ?_, ?_⟩).2
+  · apply toEuclideanCLM_toLp_eq_smul
+    rw [submatrix_mulVec_equiv]
     have hΩ : ((fun x ↦ Ω (e x)) ∘ e.symm) = WithLp.ofLp Ω := by
       funext y
       simp
@@ -444,28 +478,31 @@ theorem submatrix_consEquiv_sum_factorOperator {n : ℕ} {σ : Fin (n + 1) → T
         fun h ↦ hab (by simpa using h 0 (Fin.succ_ne_zero j).symm)
       simp [hne, Matrix.one_apply_ne hab]
 
-/-- **A gapped ground vector of a sum of factor Hamiltonians is a product of gapped factor
-ground vectors.** Let `H = ∑ i, H_i` on `⨂ i, ℂ^{σ i}` for a nonempty finite family of
-Hermitian `H_i`, each acting on its own factor. If `Ω` is a unit vector with `H Ω = E₀ Ω` and
-`H - E₀ ≥ Δ (1 - |Ω⟩⟨Ω|)` with `Δ > 0`, then `Ω = ⨂ i, ω_i` for unit vectors `ω_i`,
-`E₀ = ∑ i, a_i`, and each `ω_i` is a gapped ground vector of `H_i` at energy `a_i` with the
-same gap `Δ`. The global phase is absorbed into the factors, so the equality is exact.
+/-- **A gapped unique ground vector of a sum of factor Hamiltonians is a product of gapped
+factor ground vectors.** Let `H = ∑ i, H_i` on `⨂ i, ℂ^{σ i}` for a nonempty finite family of
+Hermitian `H_i`, each acting on its own factor. If `H` is gapped at `E₀` with gap `Δ > 0` and its
+ground space is the line through the unit vector `Ω`, then `Ω = ⨂ i, ω_i` for unit vectors
+`ω_i`, `E₀ = ∑ i, a_i`, and each `H_i` is gapped at `a_i` with the same gap `Δ`, with ground
+space the line through `ω_i`. The global phase is absorbed into the factors, so the equality
+is exact.
 
 TNLean one-dimensional note, Lemma reductions (`lem:reductions`), `part1_arealaw.tex`,
 lines 64–89: each component Hamiltonian inherits the gap inequality with the same gap. The
-proof applies `exists_isGappedGroundState_factors_of_kronecker_sum` to the first factor and
+proof applies `exists_isGapped_factors_of_kronecker_sum` to the first factor and
 the sum of the others, and inducts on the number of factors. -/
-theorem exists_isGappedGroundState_factors_of_sum_factorOperator :
+theorem exists_isGapped_factors_of_sum_factorOperator :
     ∀ {n : ℕ} {σ : Fin (n + 1) → Type*} [∀ i, Fintype (σ i)] [∀ i, DecidableEq (σ i)]
       {H : ∀ i, Matrix (σ i) (σ i) ℂ}, (∀ i, (H i).IsHermitian) →
-      ∀ {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (∀ i, σ i)}, 0 < Δ →
-      Matrix.IsGappedGroundState (∑ i, factorOperator i (H i)) E₀ Ω Δ →
+      ∀ {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (∀ i, σ i)}, 0 < Δ → ‖Ω‖ = 1 →
+      IsGapped (∑ i, factorOperator i (H i)) E₀ Δ →
+      groundSpace (∑ i, factorOperator i (H i)) E₀ = Submodule.span ℂ {Ω} →
       ∃ (a : Fin (n + 1) → ℝ) (ω : ∀ i, EuclideanSpace ℂ (σ i)), E₀ = ∑ i, a i ∧
-        (∀ x, Ω x = ∏ i, ω i (x i)) ∧ ∀ i, Matrix.IsGappedGroundState (H i) (a i) (ω i) Δ
-  | 0, σ, _, _, H, hH, E₀, Δ, Ω, hΔ, hgs => by
+        (∀ x, Ω x = ∏ i, ω i (x i)) ∧ ∀ i, ‖ω i‖ = 1 ∧ IsGapped (H i) (a i) Δ ∧
+          groundSpace (H i) (a i) = Submodule.span ℂ {ω i}
+  | 0, σ, _, _, H, hH, E₀, Δ, Ω, hΔ, hn, hgs, hspan => by
     let e : σ 0 ≃ ∀ i, σ i :=
       (Equiv.prodUnique (σ 0) (∀ j : Fin 0, σ j.succ)).symm.trans (Fin.consEquiv σ)
-    have h0 := isGappedGroundState_submatrix hgs e
+    have h0 := isGapped_submatrix hΔ (isHermitian_sum_factorOperator hH) hn hgs hspan e
     have hsum : (∑ i, factorOperator i (H i)).submatrix e e = H 0 := by
       ext a b
       simp [e, factorOperator, Fin.forall_fin_one, Fin.consEquiv]
@@ -481,18 +518,18 @@ theorem exists_isGappedGroundState_factors_of_sum_factorOperator :
     · intro i
       rw [Fin.fin_one_eq_zero i]
       simpa using h0
-  | n + 1, σ, _, _, H, hH, E₀, Δ, Ω, hΔ, hgs => by
-    have hgs' := isGappedGroundState_submatrix hgs (Fin.consEquiv σ)
-    rw [submatrix_consEquiv_sum_factorOperator] at hgs'
+  | n + 1, σ, _, _, H, hH, E₀, Δ, Ω, hΔ, hn, hgs, hspan => by
+    obtain ⟨hn', hgs', hspan'⟩ := isGapped_submatrix hΔ (isHermitian_sum_factorOperator hH) hn
+      hgs hspan (Fin.consEquiv σ)
+    rw [submatrix_consEquiv_sum_factorOperator] at hgs' hspan'
     have hrest : (∑ j : Fin (n + 1),
         factorOperator (σ := fun j : Fin (n + 1) ↦ σ j.succ) j (H j.succ)).IsHermitian :=
-      Finset.sum_induction _ Matrix.IsHermitian (fun _ _ h₁ h₂ ↦ h₁.add h₂)
-        isHermitian_zero fun j _ ↦ isHermitian_factorOperator j (hH j.succ)
+      isHermitian_sum_factorOperator fun j ↦ hH j.succ
     obtain ⟨b₀, b, u, v, hE, hprod, hu, hv⟩ :=
-      exists_isGappedGroundState_factors_of_kronecker_sum (hH 0) hrest hΔ hgs'
+      exists_isGapped_factors_of_kronecker_sum (hH 0) hrest hΔ hn' hgs' hspan'
     obtain ⟨a', ω', hE', hprod', hω'⟩ :=
-      exists_isGappedGroundState_factors_of_sum_factorOperator
-        (σ := fun j : Fin (n + 1) ↦ σ j.succ) (fun j ↦ hH j.succ) hΔ hv
+      exists_isGapped_factors_of_sum_factorOperator
+        (σ := fun j : Fin (n + 1) ↦ σ j.succ) (fun j ↦ hH j.succ) hΔ hv.1 hv.2.1 hv.2.2
     refine ⟨Fin.cons b₀ a', Fin.cons (α := fun i ↦ EuclideanSpace ℂ (σ i)) u ω', ?_, ?_, ?_⟩
     · rw [Fin.sum_univ_succ, hE, hE']
       simp

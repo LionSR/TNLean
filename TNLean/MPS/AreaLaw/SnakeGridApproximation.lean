@@ -168,7 +168,8 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     rw [htrace]
     refine (Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail
       (reducedState_posSemidef _ q Ω (A k)) (S k) w).trans ?_
-    refine (H.surprisalTail_reducedState_le hJ.le hΔ hgs (A k) w |>.trans
+    have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
+    refine (H.surprisalTail_reducedState_le hJ.le hΔ hg.2.1 hg.2.2.1 hg.2.2.2 (A k) w |>.trans
       (min_le_right _ _)).trans ?_
     apply mul_le_mul_of_nonneg_left _ (by positivity)
     apply Real.exp_le_exp.mpr

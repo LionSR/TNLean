@@ -149,7 +149,9 @@ theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
   have hnr : (1 : ℝ) ≤ n := by exact_mod_cast hn
   have hn0 : (0 : ℝ) < n := by linarith
   obtain ⟨-, -, -, hfail⟩ := typicalProjection_failure_le_surprisalTail Ω hgs.1 Y w
-  have htail := (h.surprisalTail_reducedState_le hJ hΔ hgs Y w).trans (min_le_right _ _)
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
+  have htail := (h.surprisalTail_reducedState_le hJ hΔ hg.2.1 hg.2.2.1 hg.2.2.2 Y w).trans
+    (min_le_right _ _)
   refine hfail.trans (htail.trans (mul_le_mul_of_nonneg_left ?_ (by positivity)))
   rw [Real.exp_le_exp, neg_le_neg_iff]
   -- the tail parameter is at most `C (1 + C₀) n`

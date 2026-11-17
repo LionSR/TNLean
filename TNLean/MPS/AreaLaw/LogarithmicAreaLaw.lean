@@ -270,8 +270,9 @@ theorem ChainHamiltonian.regionEntropy_eq_zero_of_range_zero
     (hΔ : 0 < Δ) (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
     (A : Finset (Fin L)) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω = 0 := by
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   refine regionEntropy_eq_zero_of_forall_subset_or_disjoint
-    h.supported h.hermitian hΔ hgs A ?_
+    h.supported h.hermitian hΔ hg.2.1 hg.2.2.1 hg.2.2.2 A ?_
   intro X
   have hcard := X.property.card_le
   grind [Finset.card_le_one_iff, Finset.disjoint_left]

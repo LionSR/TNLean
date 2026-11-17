@@ -65,8 +65,9 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
   have hJb : J ≤ Jb := by
     dsimp only [Jb]
     linarith only [le_max_left J (J * C), hJ]
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   have hlow := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm
-    (by positivity : 0 ≤ c₁ * (ℓ : ℝ) * Δ) hΔ hgs (g i) a
+    (by positivity : 0 ≤ c₁ * (ℓ : ℝ) * Δ) hΔ hg.1 hg.2.1 hg.2.2.1 hg.2.2.2 (g i) a
   have hExpLoc : Real.exp (-(ηloc * (ℓ : ℝ))) ≤
       Real.exp (-(min ηloc (c₁ * Δ / 2) * (ℓ : ℝ))) :=
     Real.exp_le_exp.mpr (neg_le_neg (mul_le_mul_of_nonneg_right

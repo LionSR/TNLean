@@ -173,9 +173,10 @@ theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : �
   set K := resetRadius J Δ r with hKdef
   have hCg : 0 < Cg := squareLocalizationPrefactor_pos
   have hT₀ : 0 < T₀ := resetCutoff_pos hΔ hr
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.operator E₀ Ω b hgs
-      hb hI
+    regional_physicalBuffer_filter.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.operator E₀ Ω b hg.1
+      hg.2.1 hg.2.2.1 hg.2.2.2 hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ := SquareHamiltonian.supported_buffer_gaussian_integral q hq J hJ
     L h R C₀ hRC W ⌈K * (1 + b + Real.log L)⌉₊

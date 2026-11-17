@@ -150,8 +150,9 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   let g := (s.prodCongr s).trans (Equiv.doubledRegroup Pconf (Q → Fin q))
   let F := Matrix.reindex e e (sheetSwapOp q D)
   let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   obtain ⟨hψn, hφn, W, z, hW, hz, hgauss⟩ :=
-    hfilter q D C hDC e h.operator E₀ Ω b hgs hb hI
+    hfilter q D C hDC e h.operator E₀ Ω b hg.1 hg.2.1 hg.2.2.1 hg.2.2.2 hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
   have hVsupp : V ∈ supportedOperators (q * q) (Q : Set (Fin L)) := by

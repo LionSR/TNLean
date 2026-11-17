@@ -404,6 +404,7 @@ theorem DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq
         Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ∧
       (boundaryEdges Λ.card A').card = (domainBoundaryEdges Λ A).card := by
   classical
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   set G := (boundaryEdges Λ.card (domainRegion Λ A)).filter fun p ↦ ¬ IsDomainEdge Λ p
   have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       (interval Λ.card 0 (p + 1)) Ω = 0 := by
@@ -411,7 +412,7 @@ theorem DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq
     obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
     have hp1 := (mem_boundaryEdges.mp hpb).1
     refine ⟨hp1, regionEntropy_eq_zero_of_forall_subset_or_disjoint (h := h.term)
-      (D := fun X ↦ X.1) h.supported h.hermitian hΔ hgs _ fun X ↦ ?_⟩
+      (D := fun X ↦ X.1) h.supported h.hermitian hΔ hg.2.1 hg.2.2.1 hg.2.2.2 _ fun X ↦ ?_⟩
     exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
   obtain ⟨A', hS, hB⟩ :=
     exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hgs.1 G hG (domainRegion Λ A)

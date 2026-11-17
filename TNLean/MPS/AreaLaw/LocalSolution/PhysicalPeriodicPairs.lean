@@ -288,7 +288,9 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
       (a i - ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤
         J * Real.exp (-θ / 2) + ε := by
     intro i
-    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ hgs (h i) (a i)
+    have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
+    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ hg.1 hg.2.1 hg.2.2.1
+      hg.2.2.2 (h i) (a i)
     have hreal : ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) =
         ⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ :=
       (isSymmetric_toEuclideanLin_iff.mpr (haH i)).coe_re_inner_self_apply Ω

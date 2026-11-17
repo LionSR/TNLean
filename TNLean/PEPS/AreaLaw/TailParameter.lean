@@ -213,8 +213,9 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeB
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
         (regionalEntropy Λ q Ω A)
         (typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
-          Real.log (n + 2)) :=
-  (h.one_sub_rpow_le_typicalMass_reducedState hJ hΔ hgs A n M).trans
+          Real.log (n + 2)) := by
+  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
+  exact (h.one_sub_rpow_le_typicalMass_reducedState hJ hΔ hg.2.1 hg.2.2.1 hg.2.2.2 A n M).trans
     (typicalMass_le_typicalMass_of_le (reducedState_posSemidef Λ q Ω A).eigenvalues_nonneg _
       (concentrationWidth_le hq R hJ hΔ A n hM))
 
