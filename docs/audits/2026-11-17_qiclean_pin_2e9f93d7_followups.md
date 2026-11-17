@@ -1,11 +1,11 @@
-# QICLean pin SHORT: the Dynamics deletions and the follow-ups
+# QICLean pin 2e9f93d7: the Dynamics deletions and the follow-ups
 
 Date: 2026-11-17.
 
 This audit records the TNLean side of moving the QICLean pin from
-`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `FULLSHA`, past QICLean's
+`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `2e9f93d7fd9a225e1e5b689efb3ca1660b39456e`, past QICLean's
 Dynamics, Hamiltonian and lattice-geometry layers (LionSR/QICLean#1063, #1064,
-#1067, #1079, #1082, #1084, #1085 and G1; issue LionSR/QICLean#1062). Tracker:
+#1067, #1079, #1082, #1084, #1085 and #1086; issue LionSR/QICLean#1062). Tracker:
 #10718; the rule is the section "No dual systems" of
 `docs/many_body_circuit_architecture.md`. The toolchain, Mathlib and every other
 shared package do not move.
@@ -40,9 +40,13 @@ replacement: `ManyBody.heisenbergEvolution` unfolds to the unitary-path form.
 `QuantumCircuit.mem_supportedOperators_of_forall_commute`
 (`Circuit/SiteExpectationOrder`) is replaced by
 `ManyBody.mem_supportedOperators_iff_forall_commute.mpr`, which needs no
-positive local dimension. `Matrix.l2_opNorm_kronecker_le`
-(`Algebra/MatrixKroneckerContraction`) is QICLean's, generalized in G1 to
-rectangular matrices with no `Nonempty` hypothesis.
+positive local dimension. From LionSR/QICLean#1086, `Matrix.l2_opNorm_kronecker_le`
+(`Algebra/MatrixKroneckerContraction`) and `Matrix.l2_opNorm_reindex_le`
+(`Algebra/MatrixL2Contraction`) are QICLean's under the same names and
+statements, and `Matrix.l2_opNorm_one_kronecker_rect_le` is QICLean's
+`Matrix.l2_opNorm_one_kronecker_le`, generalized to rectangular matrices; its
+eight consumers use the QICLean name. `Matrix.l2_opNorm_kronecker_le_one` has no
+QICLean counterpart and stays.
 
 The QICLean statements take an interaction `Φ : ManyBody.Interaction X T` and
 regions `Finset V`. The TNLean consumers keep their statements: each builds

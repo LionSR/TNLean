@@ -147,7 +147,7 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
       (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound R).2
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_rect_le W)
+      (Matrix.l2_opNorm_one_kronecker_le W)
   have hcard : (Λ.card : ℝ) = (L : ℝ) ^ 2 := by
     simpa only [Λ, Lattice.Site, SquareLatticeVertex, Fintype.card_coe,
       Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using

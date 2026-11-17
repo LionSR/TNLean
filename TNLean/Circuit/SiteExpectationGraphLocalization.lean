@@ -31,7 +31,8 @@ QICLean proves both estimates for the region expectation `ManyBody.regionExpecta
 partial trace, `QuantumCircuit.siteExpectation_eq_regionExpectation`, and the estimates below
 are the QICLean ones rewritten along that equation. They are kept, with the equation, for the
 TNLean statements written with `siteExpectation`, until `siteExpectation` is replaced by
-`ManyBody.regionExpectation` (follow-up F12 of `docs/audits/FOLLOWUPS_FILE`).
+`ManyBody.regionExpectation` (follow-up F12 of
+`docs/audits/2026-11-17_qiclean_pin_2e9f93d7_followups.md`).
 
 ## Main results
 
@@ -57,7 +58,8 @@ variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 This is a transitional bridge between two definitions of one notion. It is used only where a
 `siteExpectation` statement meets a `regionExpectation` one, and it is deleted together with
-`siteExpectation` in follow-up F12 of `docs/audits/FOLLOWUPS_FILE`. -/
+`siteExpectation` in follow-up F12 of
+`docs/audits/2026-11-17_qiclean_pin_2e9f93d7_followups.md`. -/
 theorem siteExpectation_eq_regionExpectation (K : Finset ι)
     (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     siteExpectation q K B = regionExpectation (X := fun _ : ι ↦ Fin q) K B := by

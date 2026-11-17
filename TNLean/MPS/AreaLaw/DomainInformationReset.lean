@@ -152,7 +152,7 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
     exact hs
   have hV : ‖V‖ ≤ 1 :=
     ((Matrix.l2_opNorm_reindex_equiv (g.symm.trans e) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_rect_le W)).trans hW
+      (Matrix.l2_opNorm_one_kronecker_le W)).trans hW
   let η := Real.toNNReal (A * B)
   let K := h.doubled.operator
   let K' := (h.swappedDoubled D).operator
