@@ -193,9 +193,7 @@ theorem mem_invariants_colorShiftRep_iff (x : (G × G × G × G) → ℂ) :
   simp only [Representation.mem_invariants, funext_iff, colorShiftRep_apply]
   exact forall_comm
 
-variable (G) [DecidableEq G]
-
-variable {G} [Fintype G]
+variable [DecidableEq G] [Fintype G]
 
 theorem siteMap_quantumDoubleDualTensor_apply (x : (G × G × G × G) → ℂ)
     (s : G × G × G × G) :
