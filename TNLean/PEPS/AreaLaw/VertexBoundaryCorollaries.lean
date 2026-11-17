@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.TheoremStatements
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Vertex-boundary consequences of an edge-boundary area law
@@ -26,6 +27,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -67,14 +70,15 @@ theorem UniformAreaLaw.vertex_boundary_bounds (h : UniformAreaLaw) :
       ∃ C : ℝ, 0 ≤ C ∧
         ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J,
           ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-            IsGappedGroundState Λ q H.operator E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+            groundSpace H.operator E₀ = Submodule.span ℂ {Ω} →
               ∀ A : Finset (Site Λ),
                 regionalEntropy Λ q Ω A ≤ 4 * C * (innerBoundary Λ A).card ∧
                 regionalEntropy Λ q Ω A ≤ 2 * C * (endpointBoundary Λ A).card := by
   intro q hq R J Δ hJ hΔ
   obtain ⟨C, hC, harea⟩ := h q hq R J Δ hJ hΔ
-  exact ⟨C, hC, fun Λ H E₀ Ω hgap A ↦
-    ⟨regionalEntropy_le_four_mul_innerBoundary_card hC (harea Λ H E₀ Ω hgap A),
-      regionalEntropy_le_two_mul_endpointBoundary_card hC (harea Λ H E₀ Ω hgap A)⟩⟩
+  exact ⟨C, hC, fun Λ H E₀ Ω hΩ hgap hspan A ↦
+    ⟨regionalEntropy_le_four_mul_innerBoundary_card hC (harea Λ H E₀ Ω hΩ hgap hspan A),
+      regionalEntropy_le_two_mul_endpointBoundary_card hC (harea Λ H E₀ Ω hΩ hgap hspan A)⟩⟩
 
 end TNLean.PEPS.AreaLaw

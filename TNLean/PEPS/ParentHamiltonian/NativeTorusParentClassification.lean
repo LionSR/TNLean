@@ -22,6 +22,8 @@ physical alphabets are handled by faithful coordinate padding in the subsequent
 nonuniform classification, rather than by replacing the parent definition.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 open DependentBondNetwork

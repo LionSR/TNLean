@@ -27,6 +27,8 @@ the edges entirely outside `R` carry no tensor and are summed freely.
   Section 3, lines 205--250 and 1205--1210](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

@@ -34,6 +34,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines
 No spectral or ground-state transport is asserted here.
 -/
 
+open ManyBody (ChainSupport mem_interval)
+
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
 open TNLean.Lattice (norm_sheetSwapOp_le_one
@@ -195,7 +197,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
     have hsplit : (∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D := by
       simpa only [C, Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         using hXC
-    obtain ⟨p, hp, hwin⟩ := X.2.exists_boundary_window_of_split hsplit
+    obtain ⟨p, hp, hwin⟩ := IsChainSupport.exists_boundary_window_of_split X.2 hsplit
     refine ⟨p, hp, ?_⟩
     have hxwin := mem_interval.mp (hwin hxX)
     simp only [Nat.dist]

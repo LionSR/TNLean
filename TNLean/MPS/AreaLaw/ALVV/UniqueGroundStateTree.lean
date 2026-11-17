@@ -27,6 +27,8 @@ rather than the source's constant `D s²`, and no running time is asserted. See
 `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory Matrix
 open scoped BigOperators ComplexOrder MatrixOrder ENNReal Matrix.Norms.L2Operator
 

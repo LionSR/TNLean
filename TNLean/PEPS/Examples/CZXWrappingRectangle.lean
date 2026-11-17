@@ -27,6 +27,8 @@ are those of `docs/paper-gaps/rmp_peps_czx_bond_orientation.tex` and
 Source: arXiv:2011.12127, Appendix A, lines 2502–2518 and 2582–2605.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -75,7 +77,7 @@ noncomputable def czxWrappingRectanglePerimeterEquiv :
 clockwise origin bond, with the native stored endpoints reordered by `Edge.map`. -/
 theorem czxWrappingRectanglePerimeterEquiv_apply_val (i : Fin (2 * w + 2 * h)) :
     (czxWrappingRectanglePerimeterEquiv s w h hw hh hwp hhp i).1 =
-      Edge.map (translate s.1 s.2) (torusRectanglePerimeterEdge 0 0 w h i) := rfl
+      ManyBody.Edge.map (translate s.1 s.2) (torusRectanglePerimeterEdge 0 0 w h i) := rfl
 
 /-- Bottom and left pair reversal after clockwise enumeration of every
 actual crossing bond. -/
@@ -170,7 +172,7 @@ theorem exists_czxWrappingRectanglePlaquetteBoundary
   rw [czxWrappingRectangleEffectiveBoundaryConfig, Equiv.apply_symm_apply, ← hq]
   funext e
   change czxPlaquetteBondConfig (fun v => q ((translate s.1 s.2).symm v))
-    (Edge.map (translate s.1 s.2) e.1) = czxPlaquetteBondConfig q e.1
+    (ManyBody.Edge.map (translate s.1 s.2) e.1) = czxPlaquetteBondConfig q e.1
   exact czxWrappingRectangle_plaquetteBond_translate s.1 s.2 q e.1
 
 /-- The physical boundary map is faithful for arbitrary cyclic starts. -/

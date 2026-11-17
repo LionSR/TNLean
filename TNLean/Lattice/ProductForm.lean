@@ -50,6 +50,8 @@ site-dependent dimensions are proved in `TNLean/Lattice/TrotterIndexCount.lean`.
 open Matrix QuantumCircuit
 open scoped BigOperators
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace QuantumCircuit
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -352,7 +354,7 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077. -/
 theorem LocalHamiltonian.hasProductForm_trotterProduct {R : ℕ} {J : ℝ}
     (h : LocalHamiltonian Λ q R J) (seq : List (AdmissibleSupport Λ R)) (β : ℝ) (n : ℕ) :
     HasProductForm (fun _ ↦ q) (fun i j : Site Λ ↦
-      ∃ p : (domainGraph Λ).Walk i j, p.length ≤ R) (h.trotterProduct seq β n) := by
+      ∃ p : (planeDomainGraph Λ).Walk i j, p.length ≤ R) (h.trotterProduct seq β n) := by
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
   obtain ⟨X, _, rfl⟩ := List.mem_map.mp hρ
   exact hasProductForm_of_mem_supportedOperators (fun _ ↦ ⟨.nil, Nat.zero_le _⟩) X.2

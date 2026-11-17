@@ -31,6 +31,8 @@ source's sizes `n, m ≥ 7`.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 
@@ -188,7 +190,7 @@ theorem torusRightEdge_endpoints_of_lt {p : TorusVertex width height}
     change toLex (p.1.val, p.2.val) < toLex ((p.1 + 1).val, p.2.val)
     rw [Prod.Lex.toLex_lt_toLex]
     exact Or.inl (by rw [ZMod.val_add_of_lt (by rw [ZMod.val_one]; omega), ZMod.val_one]; omega)
-  rw [torusRightEdge, Edge.ofAdj_of_lt hadj hcmp]
+  rw [torusRightEdge, ManyBody.Edge.ofAdj_of_lt hadj hcmp]
   exact ⟨rfl, rfl⟩
 
 /-- Ordered endpoints of a torus up edge that avoids wraparound: the first endpoint is the lower
@@ -203,7 +205,7 @@ theorem torusUpEdge_endpoints_of_lt {p : TorusVertex width height}
     exact Or.inr ⟨rfl, by
       rw [ZMod.val_add_of_lt (by rw [ZMod.val_one]; omega), ZMod.val_one]
       omega⟩
-  rw [torusUpEdge, Edge.ofAdj_of_lt hadj hcmp]
+  rw [torusUpEdge, ManyBody.Edge.ofAdj_of_lt hadj hcmp]
   exact ⟨rfl, rfl⟩
 
 omit [Fact (1 < width)] [Fact (1 < height)] in

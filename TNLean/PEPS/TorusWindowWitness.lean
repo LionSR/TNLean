@@ -37,6 +37,8 @@ It is derived from the equal-state normal-window hypotheses in
   derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Steps 4--5.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

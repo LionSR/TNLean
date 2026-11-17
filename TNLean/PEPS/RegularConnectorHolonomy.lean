@@ -20,6 +20,8 @@ alignment discussion, local source lines 2387–2415. These are auxiliary walk
 identities. They do not identify a particular torus path with the paper's braid.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}

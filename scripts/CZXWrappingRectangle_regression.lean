@@ -4,6 +4,8 @@ import TNLean.PEPS.Examples.CZXWrappingRectangle
 region itself crossing each seam, the faithful map and the printed operator,
 and strict properness at maximal lengths. -/
 
+open ManyBody (Edge)
+
 open TNLean.PEPS
 open scoped Matrix
 
@@ -38,14 +40,14 @@ example : ((0, 0) : TorusVertex 5 6) ∈ torusArcRectangle (4, 5) 2 2 := by deci
 example : (czxWrappingRectanglePerimeterEquiv ((4, 5) : TorusVertex 5 6)
     2 2 (by decide) (by decide) (by decide) (by decide) 0).1 = torusUpEdge (4, 0) := by
   rw [czxWrappingRectanglePerimeterEquiv_apply_val]
-  change Edge.map (translate (4 : ZMod 5) (5 : ZMod 6)) (torusUpEdge (0, 1)) = _
+  change ManyBody.Edge.map (translate (4 : ZMod 5) (5 : ZMod 6)) (torusUpEdge (0, 1)) = _
   rw [← translateEdge_eq_map, translateEdge_torusUpEdge]
   rfl
 
 example : (czxWrappingRectanglePerimeterEquiv ((4, 5) : TorusVertex 5 6)
     2 2 (by decide) (by decide) (by decide) (by decide) 4).1 = torusUpEdge (0, 4) := by
   rw [czxWrappingRectanglePerimeterEquiv_apply_val]
-  change Edge.map (translate (4 : ZMod 5) (5 : ZMod 6)) (torusUpEdge (1, -1)) = _
+  change ManyBody.Edge.map (translate (4 : ZMod 5) (5 : ZMod 6)) (torusUpEdge (1, -1)) = _
   rw [← translateEdge_eq_map, translateEdge_torusUpEdge]
   rfl
 

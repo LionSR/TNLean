@@ -33,6 +33,8 @@ in a pseudometric space the radius-zero ball may contain distinct sites.
 open Matrix QuantumCircuit GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section Commuting
@@ -50,19 +52,19 @@ theorem gaussianFilteredTerm_eq_of_commute (q ΔE : ℝ) {H W : Matrix n n ℂ}
   simp [gaussianFilteredTerm, gaussianIntertwiner, hconst]
 
 /-- A commuting observable preserves every ground eigenspace. -/
-theorem mem_groundEigenspace_apply_of_commute {H W : Matrix n n ℂ} (hc : Commute H W)
-    {E₀ : ℝ} {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀) :
-    toEuclideanLin W ψ ∈ groundEigenspace H E₀ := by
+theorem mem_groundSpace_apply_of_commute {H W : Matrix n n ℂ} (hc : Commute H W)
+    {E₀ : ℝ} {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀) :
+    toEuclideanLin W ψ ∈ groundSpace H E₀ := by
   have hψ' := Module.End.mem_eigenspace_iff.mp hψ
   apply Module.End.mem_eigenspace_iff.mpr
   rw [← toEuclideanLin_mul_apply, hc.eq, toEuclideanLin_mul_apply, hψ', map_smul]
 
 /-- A commuting observable has no component outside the ground eigenspace on a ground vector. -/
 theorem starProjection_apply_eq_of_commute {H W : Matrix n n ℂ} (hc : Commute H W)
-    {E₀ : ℝ} {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀) :
-    (groundEigenspace H E₀).starProjection (toEuclideanLin W ψ) = toEuclideanLin W ψ :=
-  (groundEigenspace H E₀).starProjection_eq_self_iff.mpr
-    (mem_groundEigenspace_apply_of_commute hc hψ)
+    {E₀ : ℝ} {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀) :
+    (groundSpace H E₀).starProjection (toEuclideanLin W ψ) = toEuclideanLin W ψ :=
+  (groundSpace H E₀).starProjection_eq_self_iff.mpr
+    (mem_groundSpace_apply_of_commute hc hψ)
 
 end Commuting
 
@@ -143,8 +145,8 @@ theorem starProjection_term_eq_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall 0 i))
     {E₀ : ℝ} {ψ : EuclideanSpace ℂ (ι → Fin d)}
-    (hψ : ψ ∈ groundEigenspace (∑ j, h j) E₀) (i : ι) :
-    (groundEigenspace (∑ j, h j) E₀).starProjection (toEuclideanLin (h i) ψ) =
+    (hψ : ψ ∈ groundSpace (∑ j, h j) E₀) (i : ι) :
+    (groundSpace (∑ j, h j) E₀).starProjection (toEuclideanLin (h i) ψ) =
       toEuclideanLin (h i) ψ :=
   starProjection_apply_eq_of_commute (commute_sum_of_singleton_support h
     (singleton_support_of_zero_range h hsupp) Finset.univ i) hψ
@@ -155,9 +157,9 @@ theorem sub_starProjection_gaussianFilteredTerm_sum_eq_zero_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall 0 i))
     (s : Finset ι) (q ΔE : ℝ) {E₀ : ℝ} {ψ : EuclideanSpace ℂ (ι → Fin d)}
-    (hψ : ψ ∈ groundEigenspace (∑ j, h j) E₀) (i : ι) :
+    (hψ : ψ ∈ groundSpace (∑ j, h j) E₀) (i : ι) :
     toEuclideanLin (gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i)) ψ -
-      (groundEigenspace (∑ j, h j) E₀).starProjection
+      (groundSpace (∑ j, h j) E₀).starProjection
         (toEuclideanLin (gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i)) ψ) = 0 := by
   rw [gaussianFilteredTerm_sum_eq_of_zero_range h hsupp s q ΔE i,
     starProjection_term_eq_of_zero_range h hsupp hψ i, sub_self]

@@ -23,6 +23,8 @@ localization estimate linear in the domain size.
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–363.
 -/
 
+open ManyBody (DomainSupport DomainSupport.toChainSupport)
+
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
 

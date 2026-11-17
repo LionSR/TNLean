@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.LiebRobinson
 import TNLean.MPS.AreaLaw.Hastings.PrintedAreaLaw
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Hastings' factorization and entropy bound at a constructed length
@@ -30,7 +31,11 @@ Source: Hastings, arXiv:0705.2024v4, eqs. `lrb`, `smd`, lines 96–142,
 and Lemma 1 with the note added, lines 246–267 and 912–1003.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix.Norms.L2Operator ComplexOrder
+
+open ManyBody (IsGapped groundSpace)
 namespace TNLean.MPS.AreaLaw
 
 /-- An interaction-proportional velocity for Hastings, arXiv:0705.2024v4, eq. `lrb`. -/
@@ -65,14 +70,15 @@ Lieb–Robinson pair. Hastings, arXiv:0705.2024v4, Lemma 1 and note added. -/
 theorem exists_projectorFactorization_posSemidef_sourceLength (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J Δ : ℝ}, 0 ≤ J → 0 < Δ →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         OB.PosSemidef ∧
         Hastings.IsFactorizationAt Ω c l (K * hastingsLRLength R J Δ ^ 3 *
           Real.exp (-(l / (6 * hastingsLRLength R J Δ)))) OB OL OR := by
   obtain ⟨K, hK, hbound⟩ := exists_projectorFactorization_posSemidef_endpoint R
-  refine ⟨K, hK, fun {J Δ} hJ hΔ {L q} _ h E₀ Ω hgs c l ↦ ?_⟩
-  obtain ⟨OB, OL, OR, hOB, hF⟩ := hbound hJ hΔ h hgs c l
+  refine ⟨K, hK, fun {J Δ} hJ hΔ {L q} _ h E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
+  obtain ⟨OB, OL, OR, hOB, hF⟩ := hbound hJ hΔ h hΩ hgap hspan c l
   refine ⟨OB, OL, OR, hOB, hF.mono ?_⟩
   have hsize : 2 * lemmaOneEndpointLength R J Δ ≤ hastingsLRLength R J Δ :=
     two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ
@@ -91,14 +97,15 @@ lines 139–142, gives the printed entropy-bound shape. -/
 theorem Hastings.exists_regionEntropy_prefix_le_sourceLength (R : ℕ) :
     ∃ c₀ : ℝ, 0 < c₀ ∧ ∀ {J Δ : ℝ}, 0 ≤ J → 0 < Δ →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ i : ℕ,
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
           c₀ * (6 * hastingsLRLength R J Δ) * Real.log (6 * hastingsLRLength R J Δ) *
             Real.log q * (2 : ℝ) ^ ((6 * hastingsLRLength R J Δ) * Real.log q) := by
   obtain ⟨c₀, hc₀, hbound⟩ := Hastings.exists_regionEntropy_prefix_le_printed R
-  exact ⟨c₀, hc₀, fun {J Δ} hJ hΔ {L q} _ h E₀ Ω hgs i ↦
-    hbound hJ hΔ h hgs (hastingsLRLength R J Δ)
+  exact ⟨c₀, hc₀, fun {J Δ} hJ hΔ {L q} _ h E₀ Ω hΩ hgap hspan i ↦
+    hbound hJ hΔ h hΩ hgap hspan (hastingsLRLength R J Δ)
       (two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ) i⟩
 
 end TNLean.MPS.AreaLaw

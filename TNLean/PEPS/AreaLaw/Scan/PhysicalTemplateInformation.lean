@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.Scan.TemplateFinalInformation
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Original-template information from the physical safe-box bootstrap
@@ -32,6 +33,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open _root_.TNLean.PEPS.AreaLaw.Geometry
@@ -50,7 +53,8 @@ theorem exists_template_final_mutualInformation
       ∀ n s₀ : ℕ, N ≤ n →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Template Ctpl n s₀),
             T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ≤ s₀ →

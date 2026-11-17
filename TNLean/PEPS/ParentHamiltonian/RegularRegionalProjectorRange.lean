@@ -15,6 +15,8 @@ No restriction is imposed on exterior half-edge coordinates.
 Source: SCP10, arXiv:1001.3807, Theorem 6.12, lines 2131–2153.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

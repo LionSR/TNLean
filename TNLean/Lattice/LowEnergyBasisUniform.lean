@@ -30,6 +30,8 @@ weighted-budget lemmas do not acquire this restriction.
 
 open scoped InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section WeightedRow
@@ -67,8 +69,8 @@ theorem sum_weight_mul_exp_neg_edist_le (G : SimpleGraph ι) (a : κ → ι)
 end WeightedRow
 
 noncomputable local instance {ν : Type*} [Fintype ν] [DecidableEq ν]
-    (H : Matrix ν ν ℂ) (E₀ : ℝ) : InnerProductSpace ℂ (groundEigenspace H E₀) :=
-  (groundEigenspace H E₀).innerProductSpace
+    (H : Matrix ν ν ℂ) (E₀ : ℝ) : InnerProductSpace ℂ (groundSpace H E₀) :=
+  (groundSpace H E₀).innerProductSpace
 
 section Graph
 
@@ -95,15 +97,15 @@ theorem exists_twoDimensional_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
-    (hdim : Module.finrank ℂ (groundEigenspace (∑ k, h k) E₀) = 2) :
-    ∃ b : OrthonormalBasis (Fin 2) ℂ (groundEigenspace (∑ k, h k) E₀),
+    (hdim : Module.finrank ℂ (groundSpace (∑ k, h k) E₀) = 2) :
+    ∃ b : OrthonormalBasis (Fin 2) ℂ (groundSpace (∑ k, h k) E₀),
       ∑ i, ‖offDiagonalPartFamily (fun c => (b c : EuclideanSpace ℂ (ι → Fin d)))
         (groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm q ΔE (∑ k, h k) (h i)))‖ ≤
         Real.sqrt (commutatorConst R vR b₀ |Kg| kg *
           Real.exp (commutatorRate R vR b₀ ΔE * (2 * R + 1))) *
           (|b₀| * (|Kg| * shellSumConst (commutatorRate R vR b₀ ΔE / 2) kg)) := by
   classical
-  let K := groundEigenspace (∑ k, h k) E₀
+  let K := groundSpace (∑ k, h k) E₀
   let B := fun i => groundSpaceCompression (∑ k, h k) E₀ (h i)
   let γ := commutatorRate R vR b₀ ΔE
   have hγ : 0 < γ := commutatorRate_pos hΔE R vR b₀

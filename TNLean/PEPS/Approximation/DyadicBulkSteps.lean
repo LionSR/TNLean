@@ -44,6 +44,8 @@ of states `G` for which the angular scale holds; the ground vectors of the model
   lines 635–658.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation

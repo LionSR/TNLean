@@ -10,7 +10,7 @@ import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.ViableSubspaceDimension
 import QICLean.Analysis.ViableSubspaceOrder
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
@@ -27,6 +27,8 @@ a clipped spectral cluster; short intervals use configuration matrix units.
 These results support ALVV, arXiv:1602.08828v2,
 `def:hard-trunc`, lines 873–886, and Theorem `t:ais`, lines 1010–1024.
 -/
+
+open ManyBody (card_interval_le interval)
 
 section
 

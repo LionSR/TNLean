@@ -19,6 +19,8 @@ from the actual local supports. No projection or positivity is required.
 Source: ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1543--1568.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open Matrix
 
 namespace TNLean.MPS.AreaLaw

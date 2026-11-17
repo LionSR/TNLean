@@ -14,6 +14,8 @@ Source: SCP10, arXiv:1001.3807, charge insertions, lines 2449–2486, and
 charge–flux transport, lines 2569–2581. This is an auxiliary finite-graph
 coefficient calculation, without a physical or Hamiltonian conclusion.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

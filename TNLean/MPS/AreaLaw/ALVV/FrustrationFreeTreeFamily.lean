@@ -32,6 +32,8 @@ error `δ < 1`, where it is defined; see
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace TensorProduct ComplexOrder MatrixOrder
 open Matrix
 

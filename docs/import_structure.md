@@ -47,10 +47,10 @@ remaining source follows these conceptual layers:
 | 5c | `MPS.AreaLaw` | The one-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and on finite sets of integers, and proved from the QICLean tail bound and buffered discount; it imports the site-generic entropy lemmas `Lattice.RegionEntropyInequalities` and `Lattice.ZeroEntropy`. The regional-swap, paired-site, entropy-comparison and Gaussian-filter lemmas of the information reset come from the lattice layer, and no module of the chain layer imports `PEPS`. There are two exceptions. The square-grid snake specialization, described below, imports the rectangle geometry and area law of `PEPS.AreaLaw`. The bounded-width strip extension `MPS.AreaLaw.StripGeometry` imports `PEPS.AreaLaw.InitialBuffer` for the lattice support counts, the cut-budget bound and the walk-distance bound, which `StripBufferDiscount` and `StripApproximation` then use. `PEPS.AreaLaw` imports nothing from `MPS.AreaLaw`, so neither exception creates a cycle. |
 | 6 | `Wielandt` | Tensor-typed span-growth, primitivity, and quantum Wielandt consequences built on QICLean's channel-generic theory. |
 
-The finite-domain commutator and localization estimates in
-`MPS.AreaLaw.DomainLiebRobinson` use
-the induced path graph and the shared propagation theory in
-QICLean's `ManyBody.Dynamics`. Their initial support may meet several connected
+The chain and finite-domain commutator and localization estimates in
+`MPS.AreaLaw.LiebRobinson` are specializations, to the path graph and to
+the induced path graph, of one graph statement proved from the shared
+propagation theory in QICLean's `ManyBody.Dynamics`. Their initial support may meet several connected
 components; infinite distance gives exact commutation. `DomainGraphGeometry`
 uses the component paths of `Algebra.IntegerHasseGraph` and the extended-distance
 comparisons in `Algebra.GraphDistanceTransport` to bound each finite-radius

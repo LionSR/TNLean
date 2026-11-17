@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixHermitianSum
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.Lattice.MarginalTails
 import TNLean.PEPS.AreaLaw.Scan.DesignatedSampling
@@ -31,6 +32,8 @@ open scoped BigOperators Matrix Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport exists_walk_length_le_iff_edist_le planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -204,10 +207,16 @@ theorem truncatedEnergyTerm_mem_Icc [NeZero q] (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 
     exact (mul_le_mul_of_nonneg_right (h.norm_le i)
       (add_nonneg (filterL1_nonneg _ _) zero_le_one)).trans (le_max_right _ _)
 
+/-- The actual truncated physical sum is Hermitian, since each of its terms is positive. -/
+theorem isHermitian_sum_truncatedEnergyTerm [NeZero q] (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) :
+    (∑ i, S.truncatedEnergyTerm h Ω Δ L i).IsHermitian :=
+  Matrix.isHermitian_sum _ fun i _ ↦
+    (Matrix.nonneg_iff_posSemidef.mp (S.truncatedEnergyTerm_mem_Icc h Ω hΔ hΩ L i).1).isHermitian
+
 /-- The support certificate follows from actual admissibility: every interaction
 support has induced-graph diameter at most `R`, including in disconnected domains. -/
 theorem truncatedEnergyTerm_isSupportedOn [NeZero q]
-    (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (L : ℕ) (i : AdmissibleSupport Λ R) :
     IsSupportedOn (n := fun _ => q) (S.truncatedEnergyTerm h Ω Δ L i)
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) := by
@@ -223,7 +232,7 @@ theorem truncatedEnergyTerm_isSupportedOn [NeZero q]
 /-- All three operator hypotheses of energy transport hold for the actual
 labelled augmented terms; no positivity or support certificate is assumed. -/
 theorem actualEnergyTerms_spec [NeZero q]
-    (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) (aux : Bool → ℕ) :
     (∀ i, 0 ≤ (S.actualEnergyTerms h Ω Δ L aux).term i) ∧
     (∀ i, (S.actualEnergyTerms h Ω Δ L aux).term i ≤ 1) ∧

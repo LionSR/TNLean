@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyBasisIteration
 import TNLean.Lattice.GraphDegreeGrowth
+import TNLean.Lattice.GraphDegreeTail
+import TNLean.Lattice.GaussianTruncationDecayBound
 
 /-!
 # The sum of the low-energy commutators over all terms
@@ -38,15 +40,27 @@ The unrestricted metric-lattice assertion of eq. `oibu` is false; see the mathem
 counterexample in `docs/paper-gaps/hastings05_tree_basis_counterexample.tex` and the
 growth distinction in `docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
 The scalar shell estimates
-are stated under their displayed hypotheses.
+are stated under their displayed hypotheses. The same restriction applies to the decay
+estimates for a separate family of local observables; the growth-free physical-metric
+version of eq. `blecm`, including the actual truncated operators, is proved in
+`LowEnergyMetricCommutator.lean`.
+
+Hastings, `proj3new.tex`, lines 1548–1564 and 1678–1708, applies eq. `blecm` to the localized
+operators `M_i`, whose supports may be larger than those of the Hamiltonian terms. It is proved
+here once, for an arbitrary pair of separated observables: the generator range and
+cardinality determine the velocity, the observable support cardinality the prefactor, and its
+diameter the correction from support separation to the distance between anchors. The
+statements for the terms themselves are its instances.
 
 ## Main results
 
 * `add_one_pow_mul_exp_neg_le`, `sum_add_one_pow_mul_exp_neg_le`,
   `sum_exp_neg_edist_le`: shell sums at any rate `γ > 0`.
-* `norm_groundCompression_commutator_le_exp`: eq. `blecm` with an exponential rate in the
-  separation `l`.
-* `norm_groundCompression_commutator_le_exp_edist`: the same in the distance of the anchors.
+* `norm_groundCompression_observables_commutator_le_exp`,
+  `norm_groundCompression_observables_commutator_le_exp_edist`: eq. `blecm` for separated local
+  observables, with an exponential rate in the separation `l` and in the distance of anchors.
+* `norm_groundCompression_commutator_le_exp`, `norm_groundCompression_commutator_le_exp_edist`:
+  the same for the terms of `H`.
 * `sum_norm_groundCompression_commutator_le`: the sum over all terms.
 * `sum_norm_offDiagonalPartFamily_le_oibu_levels`: eq. `oibu` for a degenerate ground space, by
   the iteration of `LowEnergyBasisIteration.lean` with any number of levels.
@@ -56,6 +70,8 @@ are stated under their displayed hypotheses.
 
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace Nat Topology
+
+open ManyBody (groundSpace)
 
 namespace TNLean.Lattice
 
@@ -175,8 +191,8 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 /-- The compression of an operator to the ground space has norm at most that of the operator. -/
 theorem norm_groundCompression_le (H : Matrix n n ℂ) (E₀ : ℝ) (W : Matrix n n ℂ) :
     ‖groundCompression H E₀ W‖ ≤ ‖W‖ := by
-  set P := (groundEigenspace H E₀).starProjection
-  have hP : ‖P‖ ≤ 1 := (groundEigenspace H E₀).starProjection_norm_le
+  set P := (groundSpace H E₀).starProjection
+  have hP : ‖P‖ ≤ 1 := (groundSpace H E₀).starProjection_norm_le
   calc ‖groundCompression H E₀ W‖ ≤ ‖P‖ * ‖toEuclideanCLM (n := n) (𝕜 := ℂ) W‖ * ‖P‖ := by
         unfold groundCompression
         exact (norm_mul_le _ _).trans (mul_le_mul_of_nonneg_right (norm_mul_le _ _)
@@ -213,10 +229,10 @@ theorem isSelfAdjoint_groundCompression (H : Matrix n n ℂ) (E₀ : ℝ) {W : M
 orthonormal basis `v` of the ground space it is determined by its matrix elements. -/
 theorem groundCompression_apply_eq_sum {H : Matrix n n ℂ} {E₀ : ℝ} {m : ℕ}
     {v : Fin m → EuclideanSpace ℂ n}
-    (hspan : ∀ u ∈ groundEigenspace H E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c) (W : Matrix n n ℂ)
+    (hspan : ∀ u ∈ groundSpace H E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c) (W : Matrix n n ℂ)
     (x : EuclideanSpace ℂ n) :
     groundCompression H E₀ W x = ∑ c, ⟪v c, groundCompression H E₀ W x⟫_ℂ • v c :=
-  hspan _ ((groundEigenspace H E₀).starProjection_apply_mem _)
+  hspan _ ((groundSpace H E₀).starProjection_apply_mem _)
 
 end Compression
 
@@ -225,7 +241,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
+  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -269,13 +285,14 @@ include ha hDiam in
 is disjoint from the sites within distance `l` of the first. -/
 theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
     (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
-    Disjoint ((X j).biUnion fun x => ManyBody.graphBall G x l) (X i) := by
-  rw [Finset.disjoint_left]
+    Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i) := by
+  rw [Set.disjoint_left]
   intro y hy hyi
-  obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hy
+  simp only [Finset.coe_biUnion, Finset.mem_coe, Set.mem_iUnion, exists_prop] at hy
+  obtain ⟨x, hx, hxy⟩ := hy
   have hxy' := ManyBody.mem_graphBall.mp hxy
   have h1 := hDiam j (a j) (ha j) x hx
-  have h2 := hDiam i y hyi (a i) (ha i)
+  have h2 := hDiam i y (Finset.mem_coe.mp hyi) (a i) (ha i)
   have htri : G.edist (a j) (a i) ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) :=
     calc G.edist (a j) (a i) ≤ G.edist (a j) y + G.edist y (a i) := SimpleGraph.edist_triangle
       _ ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) := by
@@ -288,7 +305,126 @@ theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
       _ = ((2 * R + l : ℕ) : ℕ∞) := by push_cast; ring
   exact absurd hlt (not_lt.mpr this)
 
+private theorem gaussian_error_prefactor (a w b n g c e : ℝ) :
+    2 * b * (a * n ^ 2 * w * g * c * e + 2 * w * e) + 2 * w * b * e =
+      (2 * a * n ^ 2 * g * c + 6) * w * b * e := by ring
+
 include ha hHerm hSupport hDiam hCard hBudget
+
+set_option maxHeartbeats 400000 in
+-- The explicit Gaussian prefactor comparison expands several nested products and real casts.
+set_option backward.isDefEq.respectTransparency false in
+omit ha in
+/-- The exponential low-energy commutator estimate for arbitrary separated local
+observables. The observable support cardinality `vObs` is independent of the generator
+cardinality `vR`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, eq. `blecm`,
+lines 1548–1601. -/
+theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
+    (Kg : ℝ) (kg : ℕ) (hGrowth : ∀ x (r : ℕ),
+      ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
+    {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
+    (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
+    (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hW : W ∈ supportedOperators d (S : Set ι)) (vObs : ℕ) (hSCard : S.card ≤ vObs)
+    (l : ℕ) (Y : Set ι)
+    (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
+    (hB : B ∈ supportedOperators d Y) :
+    ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
+      groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤
+        commutatorConst R vObs b₀ |Kg| kg * ‖W‖ * ‖B‖ *
+          Real.exp (-(commutatorRate R vR b₀ ΔE * l)) := by
+  have hKg : 0 ≤ |Kg| := abs_nonneg Kg
+  have hGrowthAbs : ∀ x (r : ℕ),
+      ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ |Kg| * ((r : ℝ) + 1) ^ kg :=
+    fun x r => (hGrowth x r).trans
+      (mul_le_mul_of_nonneg_right (le_abs_self Kg) (by positivity))
+  set v := lrVelocity R vR b₀ with hv
+  have hv1 : 1 ≤ v := one_le_lrVelocity R vR b₀
+  set γ := commutatorRate R vR b₀ ΔE with hγ
+  set T : ℝ := l / (4 * v) with hT
+  have hT0 : 0 ≤ T := by positivity
+  set q : ℝ := T * ΔE with hq
+  have hq0 : 0 ≤ q := by positivity
+  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R
+    hDiam vR hCard b₀ hBudget |Kg| kg hGrowthAbs hq0 hΔE hH hgap S hW l Y hY hB hT0
+  set A : ℝ := 2 + 4 * |b₀| * Real.exp (2 * R)
+  set Ck : ℝ := 2 ^ kg * kg ! * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))
+  have hA : 0 ≤ A := by positivity
+  have hCk : 0 ≤ Ck := by
+    have h1 : Real.exp (-(1 / 2 : ℝ)) < 1 := Real.exp_lt_one_iff.mpr (by norm_num)
+    have : 0 < 1 - Real.exp (-(1 / 2 : ℝ)) := by linarith
+    positivity
+  have hW0 := norm_nonneg W
+  have hB0 := norm_nonneg B
+  have hl : (0 : ℝ) ≤ l := Nat.cast_nonneg l
+  have hbounds := commutator_time_window_exp_bounds
+    (lt_of_lt_of_le zero_lt_one hv1) hΔE hl
+  change Real.exp (v * T - l / 2) ≤ Real.exp (-(γ * l)) ∧
+    Real.exp (-(T * ΔE) ^ 2 / (2 * q)) ≤ Real.exp (-(γ * l)) ∧
+    Real.exp (-q / 2) ≤ Real.exp (-(γ * l)) at hbounds
+  obtain ⟨e1, e2, e3⟩ := hbounds
+  have hS : (S.card : ℝ) ^ 2 ≤ (vObs : ℝ) ^ 2 := by
+    have : (S.card : ℝ) ≤ vObs := by exact_mod_cast hSCard
+    gcongr
+  set E := Real.exp (-(γ * l))
+  have hE : 0 ≤ E := (Real.exp_pos _).le
+  refine hb.trans ?_
+  calc 2 * ‖B‖ * (A * (S.card : ℝ) ^ 2 * ‖W‖ * |Kg| * Ck *
+          Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
+        2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
+        2 * ‖W‖ * ‖B‖ * Real.exp (-q / 2)
+      ≤ 2 * ‖B‖ * (A * (vObs : ℝ) ^ 2 * ‖W‖ * |Kg| * Ck * E + 2 * ‖W‖ * E) +
+        2 * ‖W‖ * ‖B‖ * E := by
+        have hcoef : A * (S.card : ℝ) ^ 2 * ‖W‖ * |Kg| * Ck ≤
+            A * (vObs : ℝ) ^ 2 * ‖W‖ * |Kg| * Ck :=
+          mul_le_mul_of_nonneg_right
+            (mul_le_mul_of_nonneg_right
+              (mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hS hA) hW0) hKg) hCk
+        have hc1 : 0 ≤ A * (vObs : ℝ) ^ 2 * ‖W‖ * |Kg| * Ck := by positivity
+        have ht1 := mul_le_mul hcoef e1 (Real.exp_pos _).le hc1
+        have ht2 := mul_le_mul_of_nonneg_left e2 (by positivity : 0 ≤ 2 * ‖W‖)
+        have ht3 := mul_le_mul_of_nonneg_left e3 (by positivity : 0 ≤ 2 * ‖W‖ * ‖B‖)
+        exact add_le_add
+          (mul_le_mul_of_nonneg_left (add_le_add ht1 ht2) (by positivity : 0 ≤ 2 * ‖B‖)) ht3
+    _ = commutatorConst R vObs b₀ |Kg| kg * ‖W‖ * ‖B‖ * E := by
+        unfold commutatorConst
+        exact gaussian_error_prefactor A ‖W‖ ‖B‖ vObs |Kg| Ck E
+
+
+set_option backward.isDefEq.respectTransparency false in
+omit ha in
+/-- Exponential decay between arbitrary local observables in the distance between
+anchors. The velocity uses the Hamiltonian generator parameters `R,vR`; the observable
+support parameters `Robs,vObs` enter only the prefactor and support-separation correction.
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, eq. `blecm`, lines 1548–1601,
+with the actual truncated observables `M_i` allowed as the family `W`. -/
+theorem norm_groundCompression_observables_commutator_le_exp_edist [NeZero d]
+    (Kg : ℝ) (kg : ℕ) (hGrowth : ∀ x (r : ℕ),
+      ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
+    {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
+    (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
+    {η : Type*} (Y : η → Finset ι) (c : η → ι) (hc : ∀ i, c i ∈ Y i)
+    (W : η → Matrix (ι → Fin d) (ι → Fin d) ℂ)
+    (hW : ∀ i, W i ∈ supportedOperators d (Y i : Set ι))
+    (Robs : ℕ) (hYDiam : ∀ i, ∀ x ∈ Y i, ∀ y ∈ Y i, G.edist x y ≤ Robs)
+    (vObs : ℕ) (hYCard : ∀ i, (Y i).card ≤ vObs) (i j : η) :
+    ‖groundCompression (∑ k, h k) E₀ (W j) * groundCompression (∑ k, h k) E₀ (W i) -
+      groundCompression (∑ k, h k) E₀ (W i) * groundCompression (∑ k, h k) E₀ (W j)‖ ≤
+        commutatorConst R vObs b₀ |Kg| kg *
+          Real.exp (commutatorRate R vR b₀ ΔE * (2 * Robs + 1)) * ‖W j‖ * ‖W i‖ *
+          (if G.edist (c j) (c i) = ⊤ then 0 else
+            Real.exp (-(commutatorRate R vR b₀ ΔE * ((G.edist (c j) (c i)).toNat : ℝ)))) := by
+  let γ := commutatorRate R vR b₀ ΔE
+  have hγ : 0 < γ := commutatorRate_pos hΔE R vR b₀
+  have hC : 2 ≤ commutatorConst R vObs b₀ |Kg| kg :=
+    (by norm_num : (2 : ℝ) ≤ 6).trans (six_le_commutatorConst R vObs b₀ (abs_nonneg Kg) kg)
+  apply le_anchorDecay_of_separated_exp hγ hC (norm_nonneg _) (norm_nonneg _)
+    Robs (G.edist (c j) (c i)) (norm_groundCompression_commutator_le_two_mul _ _ _ _)
+  intro l hlt
+  exact norm_groundCompression_observables_commutator_le_exp G X h hHerm hSupport R
+    hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (Y j) (hW j) vObs (hYCard j)
+    l (Y i : Set ι)
+    (disjoint_biUnion_graphBall_of_lt_edist G Y c hc Robs hYDiam i j l hlt) (hW i)
 
 omit ha in
 include a in
@@ -303,7 +439,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (i j : κ) (l : ℕ)
-    (hY : Disjoint ((X j).biUnion fun x => ManyBody.graphBall G x l) (X i)) :
+    (hY : Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i)) :
     ‖groundCompression (∑ k, h k) E₀ (h j) * groundCompression (∑ k, h k) E₀ (h i) -
         groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖ ≤
       commutatorConst R vR b₀ Kg kg * ‖h j‖ * ‖h i‖ *
@@ -312,72 +448,10 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
     have := hGrowth (a i) 0
     simp only [CharP.cast_eq_zero, zero_add, one_pow, mul_one] at this
     exact (Nat.cast_nonneg _).trans this
-  set v := lrVelocity R vR b₀ with hv
-  have hv1 : 1 ≤ v := one_le_lrVelocity R vR b₀
-  set γ := commutatorRate R vR b₀ ΔE with hγ
-  set T : ℝ := l / (4 * v) with hT
-  have hT0 : 0 ≤ T := by positivity
-  set q : ℝ := T * ΔE with hq
-  have hq0 : 0 ≤ q := by positivity
-  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R
-    hDiam vR hCard b₀ hBudget Kg kg hGrowth hq0 hΔE hH hgap (X j) (hSupport j) l (X i)
-    hY (hSupport i) hT0
-  set A : ℝ := 2 + 4 * |b₀| * Real.exp (2 * R)
-  set Ck : ℝ := 2 ^ kg * kg ! * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))
-  have hA : 0 ≤ A := by positivity
-  have hCk : 0 ≤ Ck := by
-    have h1 : Real.exp (-(1 / 2 : ℝ)) < 1 := Real.exp_lt_one_iff.mpr (by norm_num)
-    have : 0 < 1 - Real.exp (-(1 / 2 : ℝ)) := by linarith
-    positivity
-  have hW := norm_nonneg (h j)
-  have hB := norm_nonneg (h i)
-  have hl : (0 : ℝ) ≤ l := Nat.cast_nonneg l
-  -- The three exponentials.
-  have e1 : Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) ≤
-      Real.exp (-(γ * l)) := by
-    apply Real.exp_le_exp.mpr
-    have hvT : (2 * vR * |b₀| * Real.exp (2 * R) + 1) * T = l / 4 := by
-      rw [hT, show (2 * (vR : ℝ) * |b₀| * Real.exp (2 * R) + 1) = v from rfl]
-      field_simp
-    have hγ4 : γ ≤ 1 / 4 := min_le_left _ _
-    rw [hvT]
-    nlinarith
-  have hqT : (T * ΔE) ^ 2 / (2 * q) = q / 2 := by
-    rw [hq]
-    rcases eq_or_ne (T * ΔE) 0 with h0 | h0
-    · rw [h0]; simp
-    · field_simp
-  have e2 : Real.exp (-(T * ΔE) ^ 2 / (2 * q)) ≤ Real.exp (-(γ * l)) := by
-    apply Real.exp_le_exp.mpr
-    rw [neg_div, hqT]
-    have hq8 : q / 2 = ΔE / (8 * v) * l := by
-      rw [hq, hT]; field_simp; ring
-    have hγ8 : γ ≤ ΔE / (8 * v) := min_le_right _ _
-    rw [hq8]
-    nlinarith
-  have e3 : Real.exp (-q / 2) ≤ Real.exp (-(γ * l)) := by
-    apply Real.exp_le_exp.mpr
-    have hq8 : q / 2 = ΔE / (8 * v) * l := by
-      rw [hq, hT]; field_simp; ring
-    have hγ8 : γ ≤ ΔE / (8 * v) := min_le_right _ _
-    rw [neg_div, hq8]
-    nlinarith
-  have hS : ((X j).card : ℝ) ^ 2 ≤ (vR : ℝ) ^ 2 := by
-    have : ((X j).card : ℝ) ≤ vR := by exact_mod_cast hCard j
-    gcongr
-  set E := Real.exp (-(γ * l))
-  have hE : 0 ≤ E := (Real.exp_pos _).le
-  refine hb.trans ?_
-  calc 2 * ‖h i‖ * (A * ((X j).card : ℝ) ^ 2 * ‖h j‖ * Kg * Ck *
-          Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
-        2 * ‖h j‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
-        2 * ‖h j‖ * ‖h i‖ * Real.exp (-q / 2)
-      ≤ 2 * ‖h i‖ * (A * (vR : ℝ) ^ 2 * ‖h j‖ * Kg * Ck * E + 2 * ‖h j‖ * E) +
-        2 * ‖h j‖ * ‖h i‖ * E := by
-        gcongr
-    _ = commutatorConst R vR b₀ Kg kg * ‖h j‖ * ‖h i‖ * E := by
-        unfold commutatorConst
-        ring
+  simpa only [abs_of_nonneg hKg] using
+    norm_groundCompression_observables_commutator_le_exp G X h hHerm hSupport R hDiam vR
+      hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (X j) (hSupport j) vR (hCard j) l (X i) hY
+      (hSupport i)
 
 /-- **Eq. `blecm` in the distance of the anchors.** If the anchors `a_j`, `a_i` are at finite
 graph distance `D`, then `‖[P h_j P, P h_i P]‖ ≤ C e^{γ(2R+1)} ‖h_j‖ ‖h_i‖ e^{-γ D}`; at
@@ -398,55 +472,9 @@ theorem norm_groundCompression_commutator_le_exp_edist [NeZero d] (Kg : ℝ) (kg
     have := hGrowth (a i) 0
     simp only [CharP.cast_eq_zero, zero_add, one_pow, mul_one] at this
     exact (Nat.cast_nonneg _).trans this
-  set γ := commutatorRate R vR b₀ ΔE
-  have hγ : 0 < γ := commutatorRate_pos hΔE R vR b₀
-  set C := commutatorConst R vR b₀ Kg kg
-  have hC6 : 6 ≤ C := six_le_commutatorConst R vR b₀ hKg kg
-  set N := ‖groundCompression (∑ k, h k) E₀ (h j) * groundCompression (∑ k, h k) E₀ (h i) -
-    groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖
-  have hpair (l : ℕ) (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
-      N ≤ C * ‖h j‖ * ‖h i‖ * Real.exp (-(γ * l)) :=
-    norm_groundCompression_commutator_le_exp G X a h hHerm hSupport R hDiam vR hCard b₀
-      hBudget Kg kg hGrowth hΔE hH hgap i j l
-      (disjoint_biUnion_graphBall_of_lt_edist G X a ha R hDiam i j l hlt)
-  have hW := norm_nonneg (h j)
-  have hB := norm_nonneg (h i)
-  split_ifs with htop
-  · -- At infinite distance the bound holds for every `l`, so the commutator vanishes.
-    rw [mul_zero]
-    have hlim : Filter.Tendsto (fun l : ℕ => C * ‖h j‖ * ‖h i‖ * Real.exp (-(γ * l)))
-        Filter.atTop (𝓝 0) := by
-      have h1 : Filter.Tendsto (fun l : ℕ => γ * (l : ℝ)) Filter.atTop Filter.atTop :=
-        Filter.Tendsto.const_mul_atTop hγ tendsto_natCast_atTop_atTop
-      have h2 := (Real.tendsto_exp_neg_atTop_nhds_zero.comp h1).const_mul (C * ‖h j‖ * ‖h i‖)
-      simpa [Function.comp_def] using h2
-    exact ge_of_tendsto' hlim fun l => hpair l (by rw [htop]; exact ENat.natCast_lt_top _)
-  · set D := (G.edist (a j) (a i)).toNat
-    have hD : G.edist (a j) (a i) = (D : ℕ∞) := (ENat.natCast_toNat htop).symm
-    by_cases hfar : 2 * R + 1 < D
-    · -- Far apart: the separation `l = D - 2R - 1` gives the decay.
-      have hl := hpair (D - (2 * R + 1)) (by rw [hD]; exact_mod_cast (by omega))
-      refine hl.trans (le_of_eq ?_)
-      have hcast : ((D - (2 * R + 1) : ℕ) : ℝ) = (D : ℝ) - (2 * R + 1) := by
-        rw [Nat.cast_sub hfar.le]; push_cast; ring
-      rw [hcast, show -(γ * ((D : ℝ) - (2 * R + 1))) = γ * (2 * R + 1) + -(γ * D) by ring,
-        Real.exp_add]
-      ring
-    · -- Near: the trivial bound `2 ‖h_j‖ ‖h_i‖`.
-      push Not at hfar
-      have hexp : 1 ≤ Real.exp (γ * (2 * R + 1)) * Real.exp (-(γ * D)) := by
-        rw [← Real.exp_add]
-        apply Real.one_le_exp
-        have : (D : ℝ) ≤ 2 * R + 1 := by exact_mod_cast hfar
-        nlinarith
-      calc N ≤ 2 * ‖h j‖ * ‖h i‖ := norm_groundCompression_commutator_le_two_mul _ _ _ _
-        _ ≤ C * ‖h j‖ * ‖h i‖ * 1 := by
-            rw [mul_one]
-            have : 0 ≤ ‖h j‖ * ‖h i‖ := mul_nonneg hW hB
-            nlinarith
-        _ ≤ C * ‖h j‖ * ‖h i‖ * (Real.exp (γ * (2 * R + 1)) * Real.exp (-(γ * D))) := by
-            gcongr
-        _ = _ := by ring
+  simpa only [abs_of_nonneg hKg] using
+    norm_groundCompression_observables_commutator_le_exp_edist G X h hHerm hSupport R hDiam
+      vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap X a ha h hSupport R hDiam vR hCard i j
 
 /-- **The sum of the low-energy commutators over all terms.** Let every eigenvalue of
 `H = ∑ₖ hₖ` equal `E₀` or be at least `E₀ + ΔE`, and let the spheres of the graph grow at most
@@ -560,7 +588,7 @@ theorem sum_norm_offDiagonalPartFamily_le_oibu_levels [NeZero d] (Kg : ℝ) (kg 
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) {J : ℝ}
     (hJ : ∀ k, ‖h k‖ ≤ J) {m : ℕ} [NeZero m] {v : Fin m → EuclideanSpace ℂ (ι → Fin d)}
     (hv : Orthonormal ℂ v)
-    (hspan : ∀ u ∈ groundEigenspace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
+    (hspan : ∀ u ∈ groundSpace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
     {L : ℕ} (j : ℕ → κ) (hj : ∀ ℓ, ∃ ℓ' < L, j ℓ' = j ℓ) (r : ℕ → Fin m → ℝ)
     (hdiag : ∀ ℓ a, ∀ c ∈ labelClass r ℓ a, ∀ e ∈ labelClass r ℓ a,
       ⟪v c, groundCompression (∑ k, h k) E₀ (h (j ℓ)) (v e)⟫_ℂ =

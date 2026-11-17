@@ -36,6 +36,8 @@ momenta of bounded denominator, is `norm_groundCompression_commutator_le_of_mome
 open Matrix GaussianFilter QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
@@ -65,7 +67,7 @@ theorem norm_groundCompression_commutator_le_of_supercell_separation [NeZero d]
     {r q ΔE : ℝ} (hr : 0 ≤ r) (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian)
     {E₀ : ℝ} (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Subgroup Γ)
-    (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace (∑ k, h k) E₀,
+    (hS : ∀ g ∈ S, ∀ v ∈ groundSpace (∑ k, h k) E₀,
       sitePermMatrix d g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : Γ} (hg : g ∈ S) (i j : κ) (l : ℕ)
     (hsep : Disjoint ((X i).biUnion fun x => ManyBody.graphBall G x l) (X (g • j)))

@@ -15,6 +15,8 @@ physical filter and exact transport of every actual regional parent range.
 Source: SCP10, Section 4.1 and Section 7.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators
 namespace TNLean.PEPS

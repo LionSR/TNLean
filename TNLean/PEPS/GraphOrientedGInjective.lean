@@ -15,6 +15,8 @@ identities retain the supplied edge-flip flag.
 Source: SCP10, Definition 5.1 and Section 7.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators
 namespace TNLean.PEPS

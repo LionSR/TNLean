@@ -4,12 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.RegionalEntropy
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
-import QICLean.Entropy.RegionUnion
+import TNLean.Circuit.EntropySupport
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.Analysis.TypicalSet
 import QICLean.Algebra.TraceReindex
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Marginal surprisal tails for finite-range lattice Hamiltonians
@@ -44,6 +43,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace mem_groundSpace_iff AdmissibleSupport)
+
 namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
@@ -71,17 +72,18 @@ Area-law manuscript, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 34–63,
 `eq:initial-tail-mgf`. -/
 theorem LocalHamiltonian.log_surprisalMoment_reducedState_le (h : LocalHamiltonian Λ q R J)
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
-    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ)) {u : ℝ}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (cutLogBudget Λ q R A)) :
     Real.log (Entropy.surprisalMoment (reducedState_isHermitian Λ q Ω A).eigenvalues u) ≤
       u * regionalEntropy Λ q Ω A +
         512 * Real.exp 1 * (J / Δ) * cutLogBudget Λ q R A * u ^ 2 := by
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  replace heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
+  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.log_surprisalMoment_cut_le (n := fun _ ↦ q) (B := A)
-    (fun X ↦ (h.supported X))
-    h.hermitian hJ h.norm_le hΩ hΔ heig hgap (partialTraceRight_cutVector Ω A)
+    (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
+    h.hermitian hJ h.norm_le hΩ hΔ heig
+    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan) (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) hu
 
 /-- **Lemma 3.1 for a finite-range lattice Hamiltonian, tail bound.** Under the hypotheses
@@ -92,17 +94,18 @@ Area-law manuscript, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 64–69,
 `eq:initial-tail-probability`. -/
 theorem LocalHamiltonian.surprisalTail_reducedState_le (h : LocalHamiltonian Λ q R J)
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
-    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ)) (w : ℝ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) (w : ℝ) :
     Entropy.surprisalTail (reducedState_isHermitian Λ q Ω A).eigenvalues
         (regionalEntropy Λ q Ω A) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A))))) := by
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  replace heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
+  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.surprisalTail_cut_le (n := fun _ ↦ q) (B := A)
-    (fun X ↦ (h.supported X))
-    h.hermitian hJ h.norm_le hΩ hΔ heig hgap (partialTraceRight_cutVector Ω A)
+    (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
+    h.hermitian hJ h.norm_le hΩ hΔ heig
+    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan) (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) w
 
 /-- The concentration width `32 √((1 + J/Δ) ℬ_A) (M log (n + 2) + e/2 + log 2)` at which
@@ -119,7 +122,9 @@ Area-law manuscript, `02-initial.tex`, lines 209–219, the concentration statem
 Lemma 3.1, before the lattice budget `ℬ_A ≤ C (1 + |∂_Λ A|)` is inserted. -/
 theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState
     (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
-    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
         (regionalEntropy Λ q Ω A) (concentrationWidth Λ q R J Δ A n M) := by
@@ -130,7 +135,7 @@ theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState
   have hs : ∑ i, (reducedState_isHermitian Λ q Ω A).eigenvalues i = 1 := by
     have htr := (reducedState_isHermitian Λ q Ω A).trace_eq_sum_eigenvalues
     have h1 : (reducedState Λ q Ω A).trace = 1 := by
-      have hn := hgs.1
+      have hn := hΩ
       rw [reducedState, Matrix.trace_partialTraceRight]
       change (Matrix.reindex (configurationSplit Λ q A) (configurationSplit Λ q A)
         (Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).trace = 1
@@ -142,7 +147,8 @@ theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState
     simp only [Complex.one_re, Complex.re_sum] at h2
     rw [h2]
     exact Finset.sum_congr rfl fun i _ ↦ by simp
-  have htail := h.surprisalTail_reducedState_le hJ hΔ hgs A (concentrationWidth Λ q R J Δ A n M)
+  have htail := h.surprisalTail_reducedState_le hJ hΔ hΩ hgap hspan A
+    (concentrationWidth Λ q R J Δ A n M)
   have hmass := Entropy.one_sub_surprisalTail_le_typicalMass hp hs (regionalEntropy Λ q Ω A)
     (concentrationWidth Λ q R J Δ A n M)
   set Rr := Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A)

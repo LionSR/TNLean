@@ -25,6 +25,8 @@ a globally tiled blocking, or a physical renormalization operation. See
 is made.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -79,9 +81,9 @@ private theorem bond_internal (v : TV) (i : Fin 4) :
       (bond v i).1.2 ∈ torusPlaquetteRegion v := by
   have hr (x y : TV) (hadj : (Γₜ).Adj x y)
       (hx : x ∈ torusPlaquetteRegion v) (hy : y ∈ torusPlaquetteRegion v) :
-      (Edge.ofAdj hadj).1.1 ∈ torusPlaquetteRegion v ∧
-        (Edge.ofAdj hadj).1.2 ∈ torusPlaquetteRegion v := by
-    rcases Edge.ofAdj_endpoints hadj with ⟨h₀,h₁⟩ | ⟨h₀,h₁⟩
+      (ManyBody.Edge.ofAdj hadj).1.1 ∈ torusPlaquetteRegion v ∧
+        (ManyBody.Edge.ofAdj hadj).1.2 ∈ torusPlaquetteRegion v := by
+    rcases ManyBody.Edge.ofAdj_endpoints hadj with ⟨h₀,h₁⟩ | ⟨h₀,h₁⟩
     · simpa only [h₀,h₁] using And.intro hx hy
     · simpa only [h₀,h₁] using And.intro hy hx
   fin_cases i
@@ -110,21 +112,23 @@ private theorem bond_surjective (v : TV) :
   fin_cases i <;> fin_cases j <;>
     simp [point, torusGraph, torusHorizontalNeighbor, torusVerticalNeighbor] at hadj
   · refine ⟨1, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up (x + 1) y) e.1 (Or.inr ⟨hj',hi'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up (x + 1) y) e.1 (Or.inr ⟨hj',hi'⟩)
   · refine ⟨0, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x (y + 1)) e.1 (Or.inr ⟨hj',hi'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x (y + 1)) e.1
+        (Or.inr ⟨hj',hi'⟩)
   · refine ⟨1, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up (x + 1) y) e.1 (Or.inl ⟨hi',hj'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up (x + 1) y) e.1 (Or.inl ⟨hi',hj'⟩)
   · refine ⟨2, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x y) e.1 (Or.inr ⟨hj',hi'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x y) e.1 (Or.inr ⟨hj',hi'⟩)
   · refine ⟨2, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x y) e.1 (Or.inl ⟨hi',hj'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x y) e.1 (Or.inl ⟨hi',hj'⟩)
   · refine ⟨3, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up x y) e.1 (Or.inl ⟨hi',hj'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up x y) e.1 (Or.inl ⟨hi',hj'⟩)
   · refine ⟨0, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x (y + 1)) e.1 (Or.inl ⟨hi',hj'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_right x (y + 1)) e.1
+        (Or.inl ⟨hi',hj'⟩)
   · refine ⟨3, Subtype.ext ?_⟩
-    exact Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up x y) e.1 (Or.inr ⟨hj',hi'⟩)
+    exact ManyBody.Edge.ofAdj_eq_of_endpoints (torusGraph_adj_up x y) e.1 (Or.inr ⟨hj',hi'⟩)
 
 private def bonds (v : TV) : Fin 4 ≃ RI v :=
   Equiv.ofBijective (fun i => ⟨bond v i,bond_internal v i⟩)
@@ -170,8 +174,8 @@ private theorem crossing_boundary (v : TV) (i : Fin 4) (second : Bool) :
   have hr (x y : TV) (hadj : (Γₜ).Adj x y)
       (hx : (x ∈ torusPlaquetteRegion v ∧ y ∉ torusPlaquetteRegion v) ∨
         (x ∉ torusPlaquetteRegion v ∧ y ∈ torusPlaquetteRegion v)) :
-      IsRegionBoundaryEdge (torusPlaquetteRegion v) (Edge.ofAdj hadj) := by
-    rcases Edge.ofAdj_endpoints hadj with ⟨h₀,h₁⟩ | ⟨h₀,h₁⟩
+      IsRegionBoundaryEdge (torusPlaquetteRegion v) (ManyBody.Edge.ofAdj hadj) := by
+    rcases ManyBody.Edge.ofAdj_endpoints hadj with ⟨h₀,h₁⟩ | ⟨h₀,h₁⟩
     · simpa only [IsRegionBoundaryEdge,h₀,h₁] using hx
     · simpa only [IsRegionBoundaryEdge,h₀,h₁,or_comm,and_comm] using hx
   fin_cases i <;> cases second

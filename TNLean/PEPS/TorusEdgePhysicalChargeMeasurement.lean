@@ -20,6 +20,8 @@ Theorem `thm:anyons:detect-chargeons`, charge detection, lines 2464–2486.
 No energy, ground-space or nonvanishing assertion for arbitrary exterior
 contractions is made. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix ComplexOrder
 namespace TNLean.PEPS

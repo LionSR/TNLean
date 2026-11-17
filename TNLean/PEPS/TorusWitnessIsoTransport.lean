@@ -19,6 +19,8 @@ Source: arXiv:1804.04964, the exchange of horizontal and vertical directions at 
 2368--2444 of `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 namespace TNLean.PEPS
 variable {V W : Type*} [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
@@ -102,8 +104,8 @@ private noncomputable def edgeCoeffIdentityWitness_transport_pullback
     exact w.hCB
   hposB := by
     intro e
-    have h := w.hposB (Edge.map φ e)
-    simpa only [Tensor.transport_bondDim, Edge.map_symm_map] using h
+    have h := w.hposB (ManyBody.Edge.map φ e)
+    simpa only [Tensor.transport_bondDim, ManyBody.Edge.map_symm_map] using h
   hidZ := by
     apply regionInsertedCoeff_transport_pullback_conj φ R f hE hE' Z
     rcases w with ⟨Rw, hb, hrb, hcb, hp, hid, hidref⟩
@@ -128,11 +130,12 @@ theorem exists_edgeCoeffIdentityWitness_of_transport
     {A B : Tensor (torusGraph width height) d}
     (φ : torusGraph width height ≃g torusGraph width' height')
     (e : Edge (torusGraph width height))
-    (hE' : (A.transport φ).bondDim (Edge.map φ e) = (B.transport φ).bondDim (Edge.map φ e))
-    (Z : GL (Fin ((B.transport φ).bondDim (Edge.map φ e))) ℂ)
-    (w : EdgeCoeffIdentityWitness (A.transport φ) (B.transport φ) (Edge.map φ e) Z Z hE')
-    (hfirst : φ e.1.1 = (Edge.map φ e).1.1)
-    (hmem : (Edge.map φ e).1.1 ∈ w.region) :
+    (hE' : (A.transport φ).bondDim (ManyBody.Edge.map φ e) =
+        (B.transport φ).bondDim (ManyBody.Edge.map φ e))
+    (Z : GL (Fin ((B.transport φ).bondDim (ManyBody.Edge.map φ e))) ℂ)
+    (w : EdgeCoeffIdentityWitness (A.transport φ) (B.transport φ) (ManyBody.Edge.map φ e) Z Z hE')
+    (hfirst : φ e.1.1 = (ManyBody.Edge.map φ e).1.1)
+    (hmem : (ManyBody.Edge.map φ e).1.1 ∈ w.region) :
     ∃ (hE : A.bondDim e = B.bondDim e) (Z₀ : GL (Fin (B.bondDim e)) ℂ)
       (w₀ : EdgeCoeffIdentityWitness A B e Z₀ Z₀ hE),
       e.1.1 ∈ w₀.region ∧ w₀.region = Region.map φ.symm w.region := by
@@ -149,7 +152,7 @@ theorem exists_edgeCoeffIdentityWitness_of_transport
     exact w.isBoundary
   let f : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e} := ⟨e, hBoundary⟩
   have hE : A.bondDim e = B.bondDim e := by
-    simpa only [Tensor.transport_bondDim, Edge.map_symm_map] using hE'
+    simpa only [Tensor.transport_bondDim, ManyBody.Edge.map_symm_map] using hE'
   let w₀ := edgeCoeffIdentityWitness_transport_pullback φ R f hE hE' Z Z w hR.symm
   refine ⟨hE, glReindex (transport_bondDim_boundaryEdgeMap B φ R f) Z, w₀, ?_, rfl⟩
   change e.1.1 ∈ Region.map φ.symm w.region

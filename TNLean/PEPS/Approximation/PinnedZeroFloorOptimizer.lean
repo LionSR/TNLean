@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.PinnedNestedFilterCoordinates
 import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 import TNLean.PEPS.Approximation.RegionalStates
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A source-facing maximizing family for the original square Hamiltonian
@@ -30,9 +31,13 @@ OAI types. Regions and weights are supplied; no geometry, inverse-density
 optimization, or full geometric optimizer is constructed here.
 -/
 
+open ManyBody (Edge squareLatticeGraph)
+
 noncomputable section
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -58,14 +63,15 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
-    ForwardEdge L ≃ Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)) :=
-  (forwardSquareEdgeEquiv L).trans (Edge.equiv (AreaLaw.rectangleGraphIso L L))
+    Edge (squareLatticeGraph L L) ≃
+      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
+  (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
 chosen target order. No order compatibility of rectangleSiteEquiv is assumed. -/
 private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
-    (A : Finset (Vertex L)) (e : ForwardEdge L) :
+    (A : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     s((rectangleForwardEdgeEquiv L e).1.1,
       (rectangleForwardEdgeEquiv L e).1.2) ∈
         Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
@@ -75,8 +81,8 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
   let σ := AreaLaw.rectangleSiteEquiv L L
   have hmem : ∀ v : Vertex L, σ v ∈ A.map σ.toEmbedding ↔ v ∈ A :=
     fun v => by simp [σ]
-  have hend := Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
-    (forwardSquareEdgeEquiv L e)
+  have hend := ManyBody.Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
+    e
   change ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.1 ∧
       (rectangleForwardEdgeEquiv L e).1.2 = σ e.val.2) ∨
     ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.2 ∧
@@ -96,9 +102,9 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
 private theorem rectangle_singleCrossing {L m : ℕ}
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     (X : Fin m → Finset (Vertex L))
-    (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
+    (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
-    ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+    ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           ((X i).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) →
@@ -189,9 +195,10 @@ positive gap and a chosen order on integer-domain sites are not premises.
 Source: `EnergyOptimizer.lean`, lines 62–109, at the revision cited above. -/
 theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
-    {Ω : Pinned.State L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
+    {Ω : Pinned.State L q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (X : Fin m → Finset (Vertex L)) (hX : Monotone X)
-    (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
+    (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) (ha1 : ∀ j, a j ≤ 1) :
     ∃ F : FilterFamily q m X,
@@ -207,7 +214,7 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
   have hD : ∀ i j : Fin m, i ≤ j → canonicalRegions X i ⊆ canonicalRegions X j := by
     intro i j hij
     simpa only [canonicalRegions_fin, Finset.map_subset_map] using hX hij
-  have hsep : ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+  have hsep : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           (canonicalRegions X i) →
@@ -215,7 +222,8 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hΩ (canonicalRegions X) hD hsep a ha ha1
+    h.exists_zero_floor_maximizer_energy_fidelity hΩ hgap hspan (canonicalRegions X) hD
+      hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by

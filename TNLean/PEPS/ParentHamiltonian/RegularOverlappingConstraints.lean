@@ -19,6 +19,8 @@ Theorem 6.12. The physical range identification is not an assumption here.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

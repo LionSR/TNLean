@@ -46,6 +46,8 @@ two-injective comparison on top of it are unconditional.
   Theorem 3, lines 1519--1571 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

@@ -22,6 +22,8 @@ Source: arXiv:1804.04964, the exchange of directions at lines 2368--2444 of
 `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 variable {width height d L K : ℕ} [NeZero width] [NeZero height]
 variable [Fact (1 < width)] [Fact (1 < height)]
@@ -51,16 +53,16 @@ theorem exists_verticalEdgeCoeffIdentityWitness_of_normalArcWindows
     (hA.transportCoordinateSwap A) (hB.transportCoordinateSwap B)
     (hATI.transportCoordinateSwap A) (hBTI.transportCoordinateSwap B)
     (hAB.transport torusCoordinateSwap)
-    (fun e ↦ hposA (Edge.map torusCoordinateSwap.symm e))
-    (fun e ↦ hposB (Edge.map torusCoordinateSwap.symm e)) hK hL
+    (fun e ↦ hposA (ManyBody.Edge.map torusCoordinateSwap.symm e))
+    (fun e ↦ hposB (ManyBody.Edge.map torusCoordinateSwap.symm e)) hK hL
     (by omega) (by omega) (by omega) hyh hxw
   let eh := horizontalStaircaseReferenceEdge
     (((1 : ℕ) : ZMod height), ((0 : ℕ) : ZMod width)) K L
   let p : TorusVertex width height :=
     (((L - 1 : ℕ) : ZMod width), (1 : ZMod height) + ((K - 1 : ℕ) : ZMod height))
-  have hmap : Edge.map torusCoordinateSwap.symm eh = torusUpEdge p := by
+  have hmap : ManyBody.Edge.map torusCoordinateSwap.symm eh = torusUpEdge p := by
     simp only [eh, horizontalStaircaseReferenceEdge, Nat.cast_one, Nat.cast_zero, zero_add,
-      torusCoordinateSwap_symm, Edge.map_torusCoordinateSwap_rightEdge]
+      torusCoordinateSwap_symm, ManyBody.Edge.map_torusCoordinateSwap_rightEdge]
     rfl
   have hp : p.2.val + 1 < height := by
     have hk : (1 : ZMod height) + ((K - 1 : ℕ) : ZMod height) = (K : ZMod height) := by
@@ -71,18 +73,19 @@ theorem exists_verticalEdgeCoeffIdentityWitness_of_normalArcWindows
     omega
   have hUp := torusUpEdge_endpoints_of_lt (p := p) hp
   have hRight := torusRightEdge_endpoints_of_lt (p := (p.2, p.1)) hp
-  have hfirst : torusCoordinateSwap (Edge.map torusCoordinateSwap.symm eh).1.1 = eh.1.1 := by
+  have hfirst : torusCoordinateSwap
+      (ManyBody.Edge.map torusCoordinateSwap.symm eh).1.1 = eh.1.1 := by
     rw [hmap, hUp.1]
     simpa only [torusCoordinateSwap_apply, eh, horizontalStaircaseReferenceEdge,
       Nat.cast_one, Nat.cast_zero, zero_add, p] using hRight.1.symm
   have hPull := exists_edgeCoeffIdentityWitness_of_transport
-    (A := A) (B := B) torusCoordinateSwap (Edge.map torusCoordinateSwap.symm eh)
-  generalize hImage : Edge.map torusCoordinateSwap
-    (Edge.map torusCoordinateSwap.symm eh) = ehImage at hPull
-  rw [Edge.map_map_symm] at hImage
+    (A := A) (B := B) torusCoordinateSwap (ManyBody.Edge.map torusCoordinateSwap.symm eh)
+  generalize hImage : ManyBody.Edge.map torusCoordinateSwap
+    (ManyBody.Edge.map torusCoordinateSwap.symm eh) = ehImage at hPull
+  rw [ManyBody.Edge.map_map_symm] at hImage
   subst ehImage
   obtain ⟨hE₀, Z₀, w₀, hm₀, _⟩ := hPull hE Z w hfirst hmem
-  refine ⟨Edge.map torusCoordinateSwap.symm eh, ?_, hE₀, Z₀, w₀, hm₀⟩
+  refine ⟨ManyBody.Edge.map torusCoordinateSwap.symm eh, ?_, hE₀, Z₀, w₀, hm₀⟩
   rw [hmap]
   exact isVerticalTorusEdge_torusUpEdge p
 

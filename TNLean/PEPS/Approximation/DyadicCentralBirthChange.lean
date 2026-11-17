@@ -27,6 +27,8 @@ Proposition 3.4 through `IsAngularScale`:
   Lemma 6.5 `lem:birth`, `05-frames.tex`.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric Filter Topology

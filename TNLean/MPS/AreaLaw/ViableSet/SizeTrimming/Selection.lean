@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundaryNetPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.FiniteBoundarySelection
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The size-trimming selection, chosen before the ground state
@@ -32,6 +33,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -228,7 +231,8 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelectionWith {L q k : ℕ}
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)}
     (hsol : h.IsAdmissibleSolver hq Δ S sol)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q k))) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -263,7 +267,7 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelectionWith {L q k : ℕ}
     h.exists_uniform_leading_bounds_of_isViable hpos hL hq hΔ
       (h.cutLeftPart k) (h.cutBoundaryPart k) (h.cutLeftPart_add_cutBoundaryPart k)
       (h.cutLeftPart_isSupportedOn k) (h.cutBoundaryPart_isSupportedOn k)
-      (h.norm_cutBoundaryPart_le k) hgs hviable
+      (h.norm_cutBoundaryPart_le k) hΩ hgap hspan hviable
   let ρx := vecMulVec x (star x)
   have hρxp : ρx.PosSemidef := posSemidef_vecMulVec_self_star x
   have hρxt : ρx.trace = 1 := by
@@ -329,7 +333,8 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelection {L q k : ℕ}
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q k))) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -347,6 +352,6 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelection {L q k : ℕ}
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
   exact h.isViable_sizeTrimmingSelectionWith hpos hL hq hΔ S
     (fun _ _ Y hY ↦ exists_mem_rectangularTraceNormNet hη Y hY)
-    (fun m ↦ isAdmissibleLeadingVector_boundaryLeadingVector _ _ m _) E₀ Γ hgs hviable
+    (fun m ↦ isAdmissibleLeadingVector_boundaryLeadingVector _ _ m _) E₀ Γ hΩ hgap hspan hviable
 
 end TNLean.MPS.AreaLaw

@@ -47,11 +47,9 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.site_norm_le,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.edge_norm_le,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitian,
-        TNLean.PEPS.AreaLaw.RectangularHamiltonian.operator,
-        TNLean.PEPS.AreaLaw.RectangularHamiltonian.IsGappedGroundState,
-        TNLean.PEPS.AreaLaw.RectangleInteraction,
-        TNLean.PEPS.AreaLaw.rectangleInteractionSupport}
+        TNLean.PEPS.AreaLaw.RectangularHamiltonian.operator}
     \leanok
+    \uses{def:square_interaction_labels, def:square_interaction_support}
     For each site $v$ and undirected nearest-neighbor edge $e$, choose matrices
     $h_v,h_e$, supported on $\{v\}$ and $e$, respectively, with
     $\|h_v\|,\|h_e\|\le J$. Only their sum
@@ -91,8 +89,9 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.embedOp_rectangular_eq_reindex,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator,
-        TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
+        TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGapped_toAreaLawHamiltonian}
     \leanok
+    \uses{thm:square_interaction_support_injective}
     Let $U$ identify the native configuration basis with the basis of the
     corresponding integer lattice domain. For $J\ge0$, placing $Uk_iU^*$
     at its singleton or pair support, and zero at unused admissible supports,

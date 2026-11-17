@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The marginal-tail parameter of a general cut
@@ -46,6 +47,9 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace AdmissibleSupport card_le_diamond_of_walks
+  latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
@@ -65,7 +69,7 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
   -- the supports with a site within distance `R` of the endpoint of `e` inside `A`
   set near : Sym2 (Site Λ) → Finset (AdmissibleSupport Λ R) := fun e ↦
     Finset.univ.filter fun X ↦ ∃ z ∈ e, z ∈ A ∧ ∃ v ∈ X.1,
-      ∃ p : (domainGraph Λ).Walk z v, p.length ≤ R
+      ∃ p : (planeDomainGraph Λ).Walk z v, p.length ≤ R
   have hcover : Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A ⊆
       (edgeBoundary Λ A).biUnion near := by
     intro X hX
@@ -81,25 +85,19 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
     simp only [edgeBoundary, Finset.mem_filter] at he
     obtain ⟨-, x, hx, y, hy, rfl⟩ := he
     set ball : Finset (Site Λ) :=
-      Finset.univ.filter fun v ↦ ∃ p : (domainGraph Λ).Walk x v, p.length ≤ R
+      Finset.univ.filter fun v ↦ ∃ p : (planeDomainGraph Λ).Walk x v, p.length ≤ R
     have hball : ball.card ≤ 1 + 2 * R * (R + 1) :=
       card_le_diamond_of_walks Subtype.val ball Subtype.val_injective
-        (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) x R
+        (fun _ _ ↦ latticeL1Distance_le_one_of_planeDomainGraph_adj) x R
         fun v hv ↦ (Finset.mem_filter.mp hv).2
-    have hsub : near s(x, y) ⊆
-        ball.biUnion fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
-      intro X hX
-      obtain ⟨-, z, hz, hzA, v, hvX, p, hp⟩ := Finset.mem_filter.mp hX
-      obtain rfl : z = x := by
-        rcases Sym2.mem_iff.mp hz with rfl | rfl
-        · rfl
-        · exact absurd hzA hy
-      exact Finset.mem_biUnion.mpr ⟨v, Finset.mem_filter.mpr ⟨Finset.mem_univ _, p, hp⟩,
-        Finset.mem_filter.mpr ⟨Finset.mem_univ _, hvX⟩⟩
-    calc _ ≤ _ := Finset.card_le_card hsub
-      _ ≤ ball.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-          Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦ card_admissibleSupport_containing_le v
-      _ ≤ _ := Nat.mul_le_mul_right _ hball
+    refine (card_le_card_mul_of_forall_exists_mem fun X hX ↦ ?_).trans
+      (Nat.mul_le_mul_right _ hball)
+    obtain ⟨-, z, hz, hzA, v, hvX, p, hp⟩ := Finset.mem_filter.mp hX
+    obtain rfl : z = x := by
+      rcases Sym2.mem_iff.mp hz with rfl | rfl
+      · rfl
+      · exact absurd hzA hy
+    exact ⟨v, Finset.mem_filter.mpr ⟨Finset.mem_univ _, p, hp⟩, hvX⟩
   exact (Finset.card_le_card hcover).trans (Finset.card_biUnion_le_card_mul _ _ _ hcard)
 
 /-! ### The tail parameter -/
@@ -207,14 +205,15 @@ finite-range Hamiltonian with local dimension `q ≥ 1`, every cut `A`, every `n
 Source: `02-initial.tex`, lines 207–212. -/
 theorem _root_.TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary
     (h : LocalHamiltonian Λ q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q}
-    (hΔ : 0 < Δ) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ))
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
     (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
         (regionalEntropy Λ q Ω A)
         (typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
-          Real.log (n + 2)) :=
-  (h.one_sub_rpow_le_typicalMass_reducedState hJ hΔ hgs A n M).trans
+          Real.log (n + 2)) := by
+  exact (h.one_sub_rpow_le_typicalMass_reducedState hJ hΔ hΩ hgap hspan A n M).trans
     (typicalMass_le_typicalMass_of_le (reducedState_posSemidef Λ q Ω A).eigenvalues_nonneg _
       (concentrationWidth_le hq R hJ hΔ A n hM))
 

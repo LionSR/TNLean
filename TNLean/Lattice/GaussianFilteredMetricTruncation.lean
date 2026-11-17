@@ -44,6 +44,8 @@ polynomial-shell argument and this metric-space result is documented in
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.Lattice
 
 private theorem exp_neg_mul_ceil_metric_le {R β : ℝ} (hR : 0 < R) (hβ : 0 ≤ β) (ℓ : ℝ) :
@@ -223,11 +225,11 @@ theorem exists_metric_truncated_filter_localization {R J Δ : ℝ} (hR : 0 < R)
             ‖gaussianFilteredTerm q Δ (∑ j, h j) (h i) - M‖ ≤ J * C * Real.exp (-(η * ℓ)) ∧
             (∀ (hH : (∑ j, h j).IsHermitian) {E₀ : ℝ}
               (_hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
-              {ψ : EuclideanSpace ℂ (ι → Fin d)}, ψ ∈ groundEigenspace (∑ j, h j) E₀ →
-              ‖toEuclideanLin M ψ - (groundEigenspace (∑ j, h j) E₀).starProjection
+              {ψ : EuclideanSpace ℂ (ι → Fin d)}, ψ ∈ groundSpace (∑ j, h j) E₀ →
+              ‖toEuclideanLin M ψ - (groundSpace (∑ j, h j) E₀).starProjection
                 (toEuclideanLin M ψ)‖ ≤ J * C * Real.exp (-(η * ℓ)) * ‖ψ‖) ∧
-            (∀ {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)},
-              Matrix.IsGappedGroundState (∑ j, h j) E₀ Ω Δ →
+            (∀ {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)}, ‖Ω‖ = 1 →
+              IsGapped (∑ j, h j) E₀ Δ → groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Ω} →
               ‖toEuclideanLin M Ω - ⟪Ω, toEuclideanLin M Ω⟫_ℂ • Ω‖ ≤
                 J * C * Real.exp (-(η * ℓ))) := by
   obtain ⟨c₁, η, C, hc₁, hη, hC, hb⟩ := exists_metric_truncated_filter_budget hR S hJ hΔ
@@ -248,8 +250,9 @@ theorem exists_metric_truncated_filter_localization {R J Δ : ℝ} (hR : 0 < R)
   · intro hH E₀ hgap ψ hψ
     exact (norm_sub_starProjection_apply_le_of_gaussianFilteredTerm hq hΔ hH hgap (h i) M hψ).trans
       (mul_le_mul_of_nonneg_right htotal (norm_nonneg ψ))
-  · intro E₀ Ω hgs
-    exact (norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hq hΔ hgs (h i) M).trans htotal
+  · intro E₀ Ω hΩ hgap hspan
+    exact (norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hq hΔ
+      (isHermitian_sum _ fun j _ ↦ hHerm j) hΩ hgap hspan (h i) M).trans htotal
 
 
 /-- The sum of the actual physical-ball truncated operators approximates the Hamiltonian

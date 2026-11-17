@@ -8,6 +8,7 @@ import QICLean.Analysis.OperatorMean.MatrixPowers
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerFilter
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Energy of minimizing nested patch filters
@@ -25,7 +26,11 @@ states*, Proposition 4.1, `03-patches.tex`, lines 213–336,
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
+open ManyBody (Edge)
+
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -48,7 +53,8 @@ eq:patch-single-crossing, eq:patch-one-term-energy and eq:patch-energy-bound;
 theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
     (hJ : 0 ≤ J) (_hΔ : 0 < Δ)
-    (Ω : StateSpace L q) (hgs : h.IsGappedGroundState E₀ Ω Δ)
+    (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     let Λ := AreaLaw.rectangularDomain L L
@@ -76,7 +82,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
-    (U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hgs.1)
+    (U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hΩ)
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
@@ -106,14 +112,15 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (h.isGappedGroundState_toAreaLawHamiltonian hgs).2.1 hinv
+    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hΩ hgap hspan).2.2 ▸
+      Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (squareAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
   rw [← hφpatch, ← hTsum] at heig
   have hφne : φ ≠ 0 := norm_ne_zero_iff.mp (hφ.trans_ne one_ne_zero)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp (show (φ : _ → ℂ) ≠ 0 from by
     intro hzero; apply hφne; simpa using congrArg (WithLp.toLp 2) hzero)
-  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (Lattice.domainGraph Λ)),
+  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (ManyBody.planeDomainGraph Λ)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
         j = k := by

@@ -7,10 +7,7 @@ import TNLean.MPS.AreaLaw.Huang.GridEvolution
 import TNLean.MPS.AreaLaw.Huang.GridLocalization
 import TNLean.MPS.AreaLaw.Huang.BlockProductBonds
 import QICLean.ManyBody.Dynamics.DisjointRelativeEvolution
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
-import QICLean.Entropy.RegionUnion
-import QICLean.ManyBody.Dynamics.GraphLocalization
+import TNLean.Circuit.SiteExpectationGraphLocalization
 
 /-!
 # A physical two-layer approximation to chain propagation
@@ -24,6 +21,8 @@ Source: Osborne, arXiv:quant-ph/0508031v2, Figure 2 and equations (2)--(13);
 Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
 
@@ -34,10 +33,9 @@ variable {L q w r : ℕ}
 private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
     (P : Fin (L / w + 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (Q : Fin ((L - 1) / w) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hP : ∀ j, P j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-        (chainGridBlock L w j.val : Finset (Fin L)))
-    (hQ : ∀ j, Q j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (chainCutBuffer L (chainGridCut w j.val) r : Finset (Fin L))) :
+    (hP : ∀ j, P j ∈ supportedOperators q (chainGridBlock L w j.val : Set (Fin L)))
+    (hQ : ∀ j, Q j ∈ supportedOperators q
+      (chainCutBuffer L (chainGridCut w j.val) r : Set (Fin L))) :
     ∀ cut : ℕ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L cut) ((List.ofFn P).prod * (List.ofFn Q).prod)) ≤
         q ^ (2 * (w + (2 * r + 2))) := by
@@ -54,8 +52,8 @@ private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w
     (fun j : Fin (L / w + 1) ↦ j.val * w) (fun j ↦ (j.val + 1) * w)
     (fun j : Fin ((L - 1) / w) ↦ chainGridCut w j.val - 1 - r)
     (fun j ↦ chainGridCut w j.val + r + 1) P Q
-    (fun j ↦ (hP j))
-    (fun j ↦ (hQ j))
+    (fun j ↦ isSupportedOn_of_mem_supportedOperators (hP j))
+    (fun j ↦ isSupportedOn_of_mem_supportedOperators (hQ j))
     (List.ofFn (fun j : Fin (L / w + 1) ↦ j))
     (List.ofFn (fun j : Fin ((L - 1) / w) ↦ j)) hpairP hpairQ w (2 * r + 2)
     (fun j _ ↦ (chainGridBlock_width w j.val).le)
@@ -66,10 +64,9 @@ private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w
 Hamiltonian, followed by the product of the chosen projected propagators of the omitted
 boundary terms on their buffers. Osborne, arXiv:quant-ph/0508031v2, Figure 2 and
 equations (2)--(13); Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
-noncomputable def chainGridPropagator (hq : 1 ≤ q) (hw : 0 < w) (r : ℕ)
+noncomputable def chainGridPropagator (hw : 0 < w) (r : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hHerm : ∀ i, (h i).IsHermitian) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  haveI : NeZero q := ⟨Nat.one_le_iff_ne_zero.mp hq⟩
   (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
     (List.ofFn fun j ↦ ManyBody.disjointProjectedPropagator
       (fun k : Fin ((L - 1) / w) ↦ chainCutBuffer L (chainGridCut w k.val) r)
@@ -87,12 +84,12 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) (t : ℝ) :
     ‖hermitianUnitaryPath (∑ i, h i) (-t) -
-        chainGridPropagator (w := w) hq (by omega) r h hHerm t‖ ≤
+        chainGridPropagator (w := w) (by omega) r h hHerm t‖ ≤
         (((L - 1) / w : ℕ) : ℝ) * chainGridLRPrefactor *
           Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) * |t| ∧
       ∀ cut : ℕ, operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
-          (chainGridPropagator (w := w) hq (by omega) r h hHerm t)) ≤
+          (chainGridPropagator (w := w) (by omega) r h hHerm t)) ≤
           q ^ (2 * (w + (2 * r + 2))) := by
   classical
   let : NeZero q := ⟨by omega⟩
@@ -109,24 +106,25 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
   obtain ⟨_hU0, _hUd, _hUunit, hUsupport, hcompare⟩ :=
     ManyBody.disjointProjectedPropagator_spec buffers hbuffers hA B hB
   let U := ManyBody.disjointProjectedPropagator buffers hA B hB
-  have hK : chainGridPropagator (w := w) hq (by omega) r h hHerm t =
+  have hK : chainGridPropagator (w := w) (by omega) r h hHerm t =
       (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) (-t)).prod *
         (List.ofFn fun j ↦ U j t).prod := rfl
   rw [hK]
   constructor
   · have herror (k : Fin ((L - 1) / w)) (s : ℝ) (hs' : s ∈ Set.uIcc 0 t) :
         ‖ManyBody.heisenbergEvolution A s (B k) -
-          ManyBody.regionExpectation (buffers k) (ManyBody.heisenbergEvolution A s (B k))‖ ≤
+          siteExpectation q (buffers k) (ManyBody.heisenbergEvolution A s (B k))‖ ≤
           chainGridLRPrefactor * Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) := by
       have hst : |s| ≤ |t| := by
         simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs'
       have hv : 0 ≤ chainGridLRVelocity := by unfold chainGridLRVelocity; positivity
-      exact (norm_chainGridBoundaryTerm_sub_regionExpectation_le hq hw h hs hHerm hnorm k r s).trans
+      exact (norm_chainGridBoundaryTerm_sub_siteExpectation_le hw h hs hHerm hnorm k r s).trans
         (mul_le_mul_of_nonneg_left
           (Real.exp_le_exp.mpr (by nlinarith [mul_le_mul_of_nonneg_left hst hv]))
           chainGridLRPrefactor_pos.le)
     have herr := hcompare t (fun _ ↦ chainGridLRPrefactor *
       Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2)) fun k s hs ↦ by
+        rw [← siteExpectation_eq_regionExpectation]
         exact herror k s hs
     change ‖hermitianUnitaryPath
         (chainGridRetainedHamiltonian hw h - ∑ j, chainGridBoundaryTerm hw h j) (-t) -
@@ -138,7 +136,7 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
       mul_assoc] using herr
   · exact rank_two_grid_layers_le hq hwidth _ _
       (fun j ↦ chainGridBlockEvolution_mem_supported hw h hs j (-t))
-      (fun j ↦ (hUsupport j t))
+      (fun j ↦ mem_supportedOperators_of_isSupportedOn (hUsupport j t))
 
 /-- The original physical interaction determines one two-layer propagator approximation
 with simultaneous cut-rank bounds: the existence form of `chainGridPropagator_spec`.
@@ -155,7 +153,7 @@ theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r
       ∀ cut : ℕ, operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
           q ^ (2 * (w + (2 * r + 2))) :=
-  ⟨chainGridPropagator (w := w) hq (by omega) r h hHerm,
+  ⟨chainGridPropagator (w := w) (by omega) r h hHerm,
     chainGridPropagator_spec hq hwidth h hs hHerm hnorm⟩
 
 end TNLean.MPS.AreaLaw

@@ -15,6 +15,8 @@ obtained by the normalization in AKLV, arXiv:1301.1162v1, Section 6.1.
 No commutator, tail, residual, or gap of the clipped operator is assumed.
 -/
 
+open ManyBody (interval mem_interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section

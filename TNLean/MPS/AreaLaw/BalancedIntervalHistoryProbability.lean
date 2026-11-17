@@ -21,6 +21,8 @@ conclusion. The bound concerns outer measure, so no additional measurability
 premise on the joint failure event is necessary.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal
 

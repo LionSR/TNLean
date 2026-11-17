@@ -29,6 +29,8 @@ not the unrestricted lattice statement. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -47,8 +49,8 @@ local notation "Γₜ" => torusGraph width height
 /-- The initial or extended string on the two upward vertical bonds at horizontal
 coordinates zero and one. Source: SCP10, Theorem 6.16, lines 2270–2301. -/
 def torusTwoPlaquetteFluxAssignment (extend : Bool) (g : G) (e : Edge Γₜ) : G :=
-  if e = Edge.ofAdj (torusGraph_adj_up (0 : ZMod width) (0 : ZMod height)) ∨
-    (extend = true ∧ e = Edge.ofAdj (torusGraph_adj_up (1 : ZMod width) (0 : ZMod height)))
+  if e = ManyBody.Edge.ofAdj (torusGraph_adj_up (0 : ZMod width) (0 : ZMod height)) ∨
+    (extend = true ∧ e = ManyBody.Edge.ofAdj (torusGraph_adj_up (1 : ZMod width) (0 : ZMod height)))
   then g else 1
 
 private theorem small_coords_lt {x y : ℕ} (_hx : x < 3) (hy : y < 2) :
@@ -106,11 +108,11 @@ theorem torusTwoPlaquetteFluxAssignment_eq_treeCycleAssignment
   classical
   have hedge (i : Fin 2) :
       (twoPlaquetteTorusCycleBond (width := width) (height := height) i).1.1 =
-        Edge.ofAdj (torusGraph_adj_up (i.val : ZMod width) (0 : ZMod height)) := by
+        ManyBody.Edge.ofAdj (torusGraph_adj_up (i.val : ZMod width) (0 : ZMod height)) := by
     have hlt : ((i.val : ZMod width), (0 : ZMod height)) < ((i.val : ZMod width), 1) := by
       simpa using small_coords_lt (width := width) (height := height)
         (x := i.val) (y := 0) (by omega) (by decide)
-    rw [Edge.ofAdj_of_lt (torusGraph_adj_up (i.val : ZMod width)
+    rw [ManyBody.Edge.ofAdj_of_lt (torusGraph_adj_up (i.val : ZMod width)
       (0 : ZMod height)) (by simpa only [zero_add] using hlt)]
     simpa only [zero_add] using Subtype.ext (Prod.ext
       (twoPlaquetteTorusCycleBond_endpoints i).1

@@ -22,6 +22,8 @@ uniform energy estimate or a spectral-subspace comparison. See
 `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

@@ -34,6 +34,8 @@ weights it makes the per-edge transfer maps covariant under translation on the t
   1407--1572 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean
@@ -58,7 +60,7 @@ omit [Fintype V] [Fintype W]
   [DecidableRel G.Adj] [DecidableRel G'.Adj] in
 @[simp] theorem boundaryEdgeMap_coe (φ : G ≃g G') (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
-    (boundaryEdgeMap φ R f).1 = Edge.map φ f.1 := rfl
+    (boundaryEdgeMap φ R f).1 = ManyBody.Edge.map φ f.1 := rfl
 
 omit [Fintype V] [Fintype W] in
 /-- The bond dimension of `A.transport φ` at the image boundary edge equals the bond dimension of
@@ -66,7 +68,7 @@ omit [Fintype V] [Fintype W] in
 theorem transport_bondDim_boundaryEdgeMap (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
     (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
     (A.transport φ).bondDim (boundaryEdgeMap φ R f).1 = A.bondDim f.1 := by
-  rw [boundaryEdgeMap_coe, Tensor.transport_bondDim, Edge.map_symm_map]
+  rw [boundaryEdgeMap_coe, Tensor.transport_bondDim, ManyBody.Edge.map_symm_map]
 
 omit [Fintype V] [Fintype W] in
 /-- The image boundary configuration, read on the image of the distinguished boundary edge,

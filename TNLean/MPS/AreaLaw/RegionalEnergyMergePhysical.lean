@@ -17,6 +17,8 @@ This is auxiliary to ALVV, arXiv:1602.08828v2, Figure `fig:algo1`, lines
 1627–1632, and the energy-estimation argument at lines 1805–1807.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

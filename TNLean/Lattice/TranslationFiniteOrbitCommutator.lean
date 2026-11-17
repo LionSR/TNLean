@@ -39,6 +39,8 @@ eqs. `mid` and `blecm`, lines 285–307 and 1548–1654. In particular, lines
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 /-- Translating the observable itself removes any covariance requirement on a chosen
@@ -51,7 +53,7 @@ theorem norm_groundCompression_commutator_le_of_finite_observable_orbit
     (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
     (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
     (m L : ℕ) (hm : 1 ≤ m)
-    (hdim : (Module.finrank ℂ (groundEigenspace H E₀)) ^ 2 ≤ m)
+    (hdim : (Module.finrank ℂ (groundSpace H E₀)) ^ 2 ≤ m)
     (hn : 2 * (m + 1) * L ≤ n) (i j : ι) {C : ℝ} (hC : 0 ≤ C)
     (hfar : ∀ g : Γ, ((L / 2 : ℕ) : ℕ∞) ≤ G.edist i (g • j) →
       ‖groundCompression H E₀ W * groundCompression H E₀
@@ -74,9 +76,9 @@ theorem norm_groundCompression_commutator_le_of_finite_observable_orbit
   · let T := (groundTranslationConjugation hInv E₀ (e ^ L)).toLinearMap
     let Ag := groundSpaceCompression H E₀ W
     let Bg := groundSpaceCompression H E₀ B
-    have hT (A : groundEigenspace H E₀ →L[ℂ] groundEigenspace H E₀) : ‖T A‖ = ‖A‖ :=
+    have hT (A : groundSpace H E₀ →L[ℂ] groundSpace H E₀) : ‖T A‖ = ‖A‖ :=
       (groundTranslationConjugation hInv E₀ (e ^ L)).norm_map A
-    have hb (k : Fin ((Module.finrank ℂ (groundEigenspace H E₀)) ^ 2)) :
+    have hb (k : Fin ((Module.finrank ℂ (groundSpace H E₀)) ^ 2)) :
         ‖Ag * ((T ^ ((k : ℕ) + 1)) Bg) - ((T ^ ((k : ℕ) + 1)) Bg) * Ag‖ ≤ C := by
       have hk : (k : ℕ) + 1 ≤ m := (Nat.succ_le_iff.mpr k.isLt).trans hdim
       have hsep := edist_pow_mul_ge_of_near hL hn G π hπ e he i j hnear
@@ -92,7 +94,7 @@ theorem norm_groundCompression_commutator_le_of_finite_observable_orbit
       rw [hp]
       exact hfar (e ^ (((k : ℕ) + 1) * L)) hsep
     have hf := norm_commutator_le_of_finite_translation_orbit_bounds T hT Ag Bg hC hb
-    have hc : (2 : ℝ) ^ ((Module.finrank ℂ (groundEigenspace H E₀)) ^ 2) - 1 ≤
+    have hc : (2 : ℝ) ^ ((Module.finrank ℂ (groundSpace H E₀)) ^ 2) - 1 ≤
         (2 : ℝ) ^ m - 1 := sub_le_sub_right (pow_le_pow_right₀ (by norm_num) hdim) 1
     rw [← norm_groundSpaceCompression_commutator_eq H E₀ W B]
     exact hf.trans (mul_le_mul_of_nonneg_right hc hC)
@@ -146,7 +148,7 @@ theorem norm_groundCompression_commutator_le_finite_translation_exp
     {Δ : ℝ} (hΔ : 0 < Δ) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
     (nGroundBound : ℕ)
-    (hDim : Module.finrank ℂ (groundEigenspace (∑ k, h k) E₀) ≤ nGroundBound)
+    (hDim : Module.finrank ℂ (groundSpace (∑ k, h k) E₀) ≤ nGroundBound)
     {n : ℕ} [NeZero n] (π : ι → ZMod n)
     (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
     (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
@@ -171,7 +173,7 @@ theorem norm_groundCompression_commutator_le_finite_translation_exp
   have hv : 0 < v := by dsimp [v]; positivity
   have hγ : 0 < γ := lt_min (by norm_num) (div_pos hΔ (by positivity))
   have hm : 1 ≤ m := le_max_left _ _
-  have hdim : (Module.finrank ℂ (groundEigenspace (∑ k, h k) E₀)) ^ 2 ≤ m :=
+  have hdim : (Module.finrank ℂ (groundSpace (∑ k, h k) E₀)) ^ 2 ≤ m :=
     (Nat.pow_le_pow_left hDim 2).trans (le_max_right _ _)
   have hn : 2 * (m + 1) * L ≤ n := by
     simpa only [Nat.mul_comm] using Nat.div_mul_le_self n (2 * (m + 1))
@@ -247,7 +249,7 @@ theorem norm_groundCompression_truncated_commutator_le_finite_translation_exp
     {Δ : ℝ} (hΔ : 0 < Δ) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
     (nGroundBound : ℕ)
-    (hDim : Module.finrank ℂ (groundEigenspace (∑ k, h k) E₀) ≤ nGroundBound)
+    (hDim : Module.finrank ℂ (groundSpace (∑ k, h k) E₀) ≤ nGroundBound)
     {n : ℕ} [NeZero n] (π : ι → ZMod n)
     (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
     (e : Γ) (he : ∀ v, π (e • v) = π v + 1)

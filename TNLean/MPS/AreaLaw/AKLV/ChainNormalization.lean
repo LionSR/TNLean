@@ -18,6 +18,8 @@ arXiv:1301.1162v1, Section 6.1, lines 901–925. Scalar shifts preserve the
 ground vector and the full-system projector gap.
 -/
 
+open ManyBody (disjoint_interval_interval interval mem_interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section

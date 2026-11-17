@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.ProductGroundState
-import TNLean.Algebra.GappedGroundState
 import QICLean.Entropy.LocalLift
 import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.SupportedOperatorAlgebra
@@ -12,8 +11,9 @@ import QICLean.Entropy.SupportedOperatorAlgebra
 /-!
 # Zero entropy across a cut that splits no term
 
-Let `Ω` be a gapped ground vector, with positive gap, of a finite sum of Hermitian terms on a
-finite set `V` of sites, each supported inside a region `B` or outside it. In cut coordinates
+Let a finite sum of Hermitian terms on a finite set `V` of sites, each supported inside a
+region `B` or outside it, be gapped with positive gap and have ground space the line through a
+unit vector `Ω`. In cut coordinates
 the sum is `H_B ⊗ 1 + 1 ⊗ H_{Bᶜ}`, so `Ω` is a product vector across the cut
 (`vonNeumannEntropy_partialTraceRight_eq_zero_of_gap`) and `S_Ω(B) = 0`. The statement uses
 no geometry of `V`; the chain of `L` sites and the finite lattice domains both read it.
@@ -35,14 +35,17 @@ no geometry of `V`; the chain of `L` sites and the finite lattice domains both r
 open Matrix
 open scoped ComplexOrder Kronecker
 
+open ManyBody (IsGapped groundSpace mulVec_eq_of_groundSpace_eq_span)
+
 namespace TNLean.Lattice
 
 section ZeroEntropy
 
 variable {V ι : Type*} [Fintype V] [DecidableEq V] [Fintype ι] {n : V → ℕ}
 
-/-- **Zero entropy across a cut that splits no term.** Let `Ω` be a gapped ground vector,
-with positive gap, of a sum of Hermitian terms each supported inside `B` or outside `B`.
+/-- **Zero entropy across a cut that splits no term.** Let `H` be a sum of Hermitian terms each
+supported inside `B` or outside `B`, gapped at `E₀` with positive gap and with ground space the
+line through the unit vector `Ω`.
 Then `S_Ω(B) = 0`: in cut coordinates the sum is `H_B ⊗ 1 + 1 ⊗ H_{Bᶜ}`, and a gapped
 ground vector of such a sum is a product vector. TNLean note,
 `docs/notes/one_dimensional_note/part1_arealaw.tex`, Section 2 (`sec:setting`), first
@@ -51,11 +54,13 @@ theorem regionEntropy_eq_zero_of_forall_subset_or_disjoint
     {h : ι → Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ} {D : ι → Finset V}
     (hsupp : ∀ i, Entropy.IsSupportedOn (h i) (D i)) (hherm : ∀ i, (h i).IsHermitian)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : EuclideanSpace ℂ (Entropy.SiteConfig n)}
-    (hgs : Matrix.IsGappedGroundState (∑ i, h i) E₀ Ω Δ) (B : Finset V)
+    (hnorm : ‖Ω‖ = 1) (hgs : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Ω}) (B : Finset V)
     (hsplit : ∀ i, D i ⊆ B ∨ Disjoint (D i) B) :
     Entropy.regionEntropy B Ω = 0 := by
   classical
-  obtain ⟨hnorm, hev, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  have hev := mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgs.posSemidef_sub_smul_one (isHermitian_sum _ fun i _ ↦ hherm i) hnorm hspan
   set e := Entropy.cutEquiv n B
   -- A configuration exists, since `Ω` is a unit vector.
   obtain ⟨σ₀⟩ : Nonempty (Entropy.SiteConfig n) := by

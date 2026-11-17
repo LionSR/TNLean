@@ -30,6 +30,8 @@ hypothesis was identified for the edge-blocked three-site injectivity
 (issue #1366).
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 namespace PhysicalToVirtualCounterexample

@@ -102,8 +102,9 @@ spells the Hamiltonian the same way, as `Φ.hamiltonian`. A lemma stated at
 the bare sum `∑ i, h i` would be a second spelling that `rw` cannot match
 against the first. Hermiticity, norm bounds, range and degree are hypotheses,
 not fields. A gap is `IsGapped H E₀ Δ`, whose ground space is nonzero. The
-eigenvalue dichotomy and the unique gapped ground state
-(`Matrix.IsGappedGroundState`, swept in step 4.0) are theorems about it, not
+eigenvalue dichotomy and the unique gapped ground state (the hypotheses
+`‖Ω‖ = 1`, `IsGapped H E₀ Δ` and `groundSpace H E₀ = span {Ω}`, which replaced
+TNLean's `Matrix.IsGappedGroundState` in step 4.0) are theorems about it, not
 further predicates. An eigenvalue bound that does not assert a ground state is
 a hypothesis, not a gap.
 

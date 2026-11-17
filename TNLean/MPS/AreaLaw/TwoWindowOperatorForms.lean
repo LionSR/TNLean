@@ -19,6 +19,8 @@ ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821, and
 Proposition 5.7 (`prop:Cheby-AGSP-eff`), lines 1324–1332.
 -/
 
+open ManyBody (disjoint_interval_interval interval interval_mono mem_interval)
+
 open Matrix QuantumCircuit
 open scoped Kronecker
 open TNLean.Lattice.Sheet

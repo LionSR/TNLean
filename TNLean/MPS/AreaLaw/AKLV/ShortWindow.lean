@@ -18,6 +18,8 @@ of the original terms. No supplied regrouping or new operator family is assumed.
 Source: AKLV, arXiv:1301.1162v1, Lemma 4.2 (`l:agsp`), lines 586--603 and 658--663.
 -/
 
+open ManyBody (interval interval_mono mem_interval)
+
 open Matrix
 open scoped BigOperators
 

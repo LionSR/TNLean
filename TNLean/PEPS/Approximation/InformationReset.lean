@@ -9,6 +9,7 @@ import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.Lattice.Sheet.SwapCorrection
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The information reset
@@ -49,7 +50,11 @@ physical dimension `q^(L^2)` of a core.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+
 open Matrix QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 open scoped Kronecker
 open TNLean.Lattice
 
@@ -330,7 +335,8 @@ theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq :
     (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
       ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
       ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
       (∀ x ∈ R₀, ∀ y, y ∉ R → resetWidth J Δ p * (1 + b + Real.log L) <
@@ -342,12 +348,11 @@ theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq :
   have hK : 0 < resetRadius J Δ (2 * p + 10) := resetRadius_pos hJ hΔ (by linarith)
   have hCu : 0 < resetUnitaryPrefactor J Δ (2 * p + 10) :=
     resetUnitaryPrefactor_pos hJ hΔ (by linarith)
-  intro L hL h E₀ Ω hgs R C R₀ C₀ hRC hR₀ hC₀ b hb hI hRw hCw
+  intro L hL h E₀ Ω hΩ hgap hspan R C R₀ C₀ hRC hR₀ hC₀ b hb hI hRw hCw
   rw [resetThreshold] at hL
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
-  have hΩ : ‖Ω‖ = 1 := hgs.1
-  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ := hreset L hLn h E₀ Ω hgs R C hRC b hb hI
+  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ := hreset L hLn h E₀ Ω hΩ hgap hspan R C hRC b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈resetRadius J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) + 1 ≤
       resetWidth J Δ p * (1 + b + Real.log L) := by
@@ -384,7 +389,8 @@ theorem SquareHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (
     {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
         ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
         (∀ x ∈ R₀, ∀ y, y ∉ R → Cp * (1 + b + Real.log L) <

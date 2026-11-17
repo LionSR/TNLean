@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ExpConjugation
 import TNLean.Lattice.BoundedDegreeImaginaryTime
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Finset.Disjoint
 import Mathlib.Data.Nat.Factorial.Basic
@@ -36,6 +36,8 @@ side, so at most `2*m + 3` bonds contribute. This gives the factorial
 bound `4^m * m! * ‖O‖`; the exponential series is then bounded by a
 geometric series. The Hamiltonian is the original bond sum throughout.
 -/
+
+open ManyBody (interval mem_interval)
 
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

@@ -22,6 +22,8 @@ The explicit bound is proportional to `w + k/(2*w)` in the exponent;
 the further optimization over the window width is separate.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix QuantumCircuit
 open TNLean.Lattice
 open TNLean.MPS.AreaLaw

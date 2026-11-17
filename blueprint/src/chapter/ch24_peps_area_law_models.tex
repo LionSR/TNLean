@@ -12,7 +12,7 @@ state the two models separately following
         TNLean.Lattice.Site,
         TNLean.Lattice.Configuration,
         TNLean.Lattice.StateSpace,
-        TNLean.Lattice.domainGraph,
+        ManyBody.planeDomainGraph,
         TNLean.Lattice.graphNeighborhood,
         TNLean.Lattice.configurationSplit,
         TNLean.Lattice.card_configuration,
@@ -45,8 +45,8 @@ state the two models separately following
 \begin{definition}[Finite-range interactions and boundary]
     \label{def:area_law_hamiltonian}
     \lean{
-        TNLean.Lattice.IsAdmissibleSupport,
-        TNLean.Lattice.AdmissibleSupport,
+        ManyBody.IsAdmissibleSupport,
+        ManyBody.AdmissibleSupport,
         TNLean.Lattice.LocalHamiltonian,
         TNLean.Lattice.LocalHamiltonian.operator,
         TNLean.Lattice.LocalHamiltonian.operator_isHermitian,
@@ -78,10 +78,10 @@ state the two models separately following
 \begin{lemma}[Interaction range and rectangular coordinates]
     \label{thm:area_law_domain_identifications}
     \lean{
-        TNLean.Lattice.exists_walk_length_le_iff_edist_le,
-        TNLean.Lattice.isAdmissibleSupport_zero_iff,
-        TNLean.Lattice.isAdmissibleSupport_singleton,
-        TNLean.Lattice.isAdmissibleSupport_pair_of_adj,
+        ManyBody.exists_walk_length_le_iff_edist_le,
+        ManyBody.isAdmissibleSupport_zero_iff,
+        ManyBody.isAdmissibleSupport_singleton,
+        ManyBody.isAdmissibleSupport_pair_of_adj,
         TNLean.PEPS.AreaLaw.rectangleEmbedding,
         TNLean.PEPS.AreaLaw.rectangleEmbedding_injective,
         TNLean.PEPS.AreaLaw.rectangularDomain,
@@ -112,9 +112,9 @@ state the two models separately following
 \begin{definition}[Ground vector and regional entropy]
     \label{def:area_law_ground_entropy}
     \lean{
-        Matrix.IsGappedGroundState,
-        Matrix.isGappedGroundState_iff,
-        TNLean.Lattice.IsGappedGroundState,
+        ManyBody.IsGapped,
+        ManyBody.groundSpace,
+        ManyBody.isGapped_and_groundSpace_eq_span_iff,
         TNLean.Lattice.reducedState,
         TNLean.Lattice.reducedState_isHermitian,
         TNLean.Lattice.regionalEntropy,
@@ -132,6 +132,9 @@ state the two models separately following
         \label{eq:area_law_projector_gap}
         H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
     \end{align}
+    For $\Delta>0$ these conditions hold exactly when $H$ is Hermitian, every
+    eigenvalue of $H$ other than $E_0$ is at least $E_0+\Delta$, and the
+    eigenspace of $H$ at $E_0$ is the line spanned by $\Omega$.
     For $A\subseteq\Lambda$, the Hermitian reduced state and natural-logarithm
     von Neumann entropy ($0\log0=0$) are
     \begin{align}
@@ -147,7 +150,7 @@ state the two models separately following
 
 \begin{lemma}[Uniqueness from a positive global gap]
     \label{thm:area_law_ground_eigenspace}
-    \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
+    \lean{Matrix.PosSemidef.eigenspace_eq_span_of_gap}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $H$ be a finite-dimensional complex matrix, $E_0\in\mathbb R$, and
@@ -367,7 +370,6 @@ state the two models separately following
         TNLean.PEPS.Approximation.StateSpace,
         TNLean.PEPS.Approximation.SquareHamiltonian,
         TNLean.PEPS.Approximation.SquareHamiltonian.operator,
-        TNLean.PEPS.Approximation.SquareHamiltonian.IsGappedGroundState,
         TNLean.PEPS.Approximation.pepsVector,
         TNLean.PEPS.Approximation.HasPEPSApproximation,
         TNLean.PEPS.Approximation.PolynomialPEPSApproximation
@@ -425,7 +427,7 @@ state the two models separately following
 
 \begin{definition}[Original interaction labels]
     \label{def:square_interaction_labels}
-    \lean{TNLean.PEPS.Approximation.SquareInteraction}
+    \lean{ManyBody.SquareLatticeSiteOrEdge}
     \leanok
     \uses{def:polynomial_peps_model}
     Let $\mathcal I_L$ be the disjoint union of the vertices of the open
@@ -436,12 +438,26 @@ state the two models separately following
 
 \begin{definition}[Designated interaction supports]
     \label{def:square_interaction_support}
-    \lean{TNLean.PEPS.Approximation.squareInteractionSupport}
+    \lean{ManyBody.squareLatticeSiteOrEdgeSupport}
     \leanok
     \uses{def:square_interaction_labels}
     For $i\in\mathcal I_L$, define its support $S_i=\{v\}$ if $i=v$ and
     $S_i=\{v,w\}$ if $i=(v,w)$.
 \end{definition}
+
+\begin{lemma}[Distinct interactions have distinct supports]
+    \label{thm:square_interaction_support_injective}
+    \lean{TNLean.PEPS.AreaLaw.squareLatticeSiteOrEdgeSupport_injective}
+    \leanok
+    \uses{def:square_interaction_support}
+    On the sites and edges of a rectangular square lattice of any width and
+    height, the map $i\mapsto S_i$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    A site has a one-point support and an edge a two-point support, since the
+    endpoints of an edge are distinct. An edge is determined by the unordered
+    pair of its endpoints, so two edges with the same support coincide.
+\end{proof}
 
 \begin{definition}[Hermitian local terms]
     \label{def:square_hermitian_term}
@@ -533,7 +549,8 @@ state the two models separately following
     \label{thm:square_area_law_support_injective}
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_injective}
     \leanok
-    \uses{def:square_area_law_support,thm:square_area_law_support_admissible}
+    \uses{def:square_area_law_support,thm:square_area_law_support_admissible,
+        thm:square_interaction_support_injective}
     The map $i\mapsto X_i$ on $\mathcal I_L$ is injective.
 \end{lemma}
 \begin{proof}\leanok
@@ -649,7 +666,7 @@ state the two models separately following
 
 \begin{lemma}[The same ground vector and full-system gap]
     \label{thm:square_area_law_ground_gap}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGapped_toAreaLawHamiltonian}
     \leanok
     \uses{thm:square_area_law_hamiltonian_operator,thm:norm_square_area_law_state}
     Let $E_0,\Delta\in\mathbb R$. If a unit vector $\Omega$ satisfies

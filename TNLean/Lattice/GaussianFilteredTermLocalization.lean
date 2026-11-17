@@ -78,6 +78,8 @@ accuracy.
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (IsGapped groundSpace isGapped_iff_eigenvalues)
+
 namespace TNLean.Lattice
 
 section Graph
@@ -214,10 +216,10 @@ inequality before eq. `facld` (lines 322–348); with `M` as in
 theorem norm_sub_starProjection_apply_le_of_gaussianFilteredTerm {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
-    (W M : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀) :
-    ‖toEuclideanLin M ψ - (groundEigenspace H E₀).starProjection (toEuclideanLin M ψ)‖ ≤
+    (W M : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀) :
+    ‖toEuclideanLin M ψ - (groundSpace H E₀).starProjection (toEuclideanLin M ψ)‖ ≤
       (‖W‖ * Real.exp (-q / 2) + ‖gaussianFilteredTerm q ΔE H W - M‖) * ‖ψ‖ := by
-  set K := groundEigenspace H E₀
+  set K := groundSpace H E₀
   set x := toEuclideanLin (gaussianFilteredTerm q ΔE H W) ψ
   set z := toEuclideanLin (M - gaussianFilteredTerm q ΔE H W) ψ
   have hMxz : toEuclideanLin M ψ = x + z := by
@@ -237,21 +239,22 @@ theorem norm_sub_starProjection_apply_le_of_gaussianFilteredTerm {q ΔE : ℝ} (
   exact (norm_add_le _ _).trans (add_le_add
     (norm_sub_starProjection_gaussianFilteredTerm_le hq hΔE hH hgap W hψ) (hz.trans hzψ))
 
-/-- **A unique gapped ground state is nearly an eigenvector of the approximation.** If `Ω` is a
-unique ground state of `H` with gap `ΔE > 0`, then for every operator `M`,
+/-- **A unique gapped ground state is nearly an eigenvector of the approximation.** If `H` is
+Hermitian and gapped at `E₀` with gap `ΔE > 0`, and its ground space is the line through the unit
+vector `Ω`, then for every operator `M`,
 `‖M Ω - ⟨Ω, M Ω⟩ Ω‖ ≤ ‖W‖ e^{-q/2} + ‖W_tilde - M‖`. Hastings, arXiv:cond-mat/0508554v3,
 the case of one ground state (lines 375–387), where `M = M_i`. -/
 theorem norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm {q ΔE : ℝ} (hq : 0 ≤ q)
-    (hΔE : 0 < ΔE) {H : Matrix n n ℂ} {E₀ : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hgs : IsGappedGroundState H E₀ Ω ΔE) (W M : Matrix n n ℂ) :
+    (hΔE : 0 < ΔE) {H : Matrix n n ℂ} {E₀ : ℝ} {Ω : EuclideanSpace ℂ n} (hH : H.IsHermitian)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ ΔE) (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω})
+    (W M : Matrix n n ℂ) :
     ‖toEuclideanLin M Ω - ⟪Ω, toEuclideanLin M Ω⟫_ℂ • Ω‖ ≤
       ‖W‖ * Real.exp (-q / 2) + ‖gaussianFilteredTerm q ΔE H W - M‖ := by
-  obtain ⟨hH, hgap⟩ := eigenvalues_eq_or_le_of_isGappedGroundState hgs hΔE
-  have hspan : groundEigenspace H E₀ = Submodule.span ℂ {Ω} := hgs.eigenspace_eq_span hΔE
-  have hΩ : Ω ∈ groundEigenspace H E₀ := by
+  have hmem : Ω ∈ groundSpace H E₀ := by
     rw [hspan]; exact Submodule.mem_span_singleton_self Ω
-  have h := norm_sub_starProjection_apply_le_of_gaussianFilteredTerm hq hΔE hH hgap W M hΩ
-  rwa [hspan, Submodule.starProjection_unit_singleton ℂ hgs.1, hgs.1, mul_one] at h
+  have h := norm_sub_starProjection_apply_le_of_gaussianFilteredTerm hq hΔE hH
+    ((isGapped_iff_eigenvalues hH).mp hgap).2 W M hmem
+  rwa [hspan, Submodule.starProjection_unit_singleton ℂ hΩ, hΩ, mul_one] at h
 
 /-- **The sum of the approximations.** If the terms `Wᵢ` sum to `H`, then any operators `Mᵢ`
 satisfy `‖∑ᵢ Mᵢ - H‖ ≤ ∑ᵢ ‖W_tildeᵢ - Mᵢ‖`, since the filtered terms also sum to `H`.

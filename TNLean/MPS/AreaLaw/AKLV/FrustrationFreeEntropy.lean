@@ -27,6 +27,8 @@ printed rate. The clipping and entropy scope are recorded in
 `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

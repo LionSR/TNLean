@@ -33,6 +33,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TensorPower.ReplicaTransport.TransportData
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {K : ℕ}
@@ -68,7 +70,7 @@ stage at its odd round and derives the nonnegativity of the remaining fill gains
 Only interval integrability, not continuity in the parameter, is used. -/
 theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {L μ : ℕ}
     (hm0 : 0 < S.m) (hM : 0 < S.M)
     (n : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)]
@@ -164,7 +166,7 @@ theorem actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
       (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
       ∀ {L μ : ℕ} (hn : 2 ≤ S.n), 2 * S.r₀ ≤ S.D →
@@ -228,7 +230,7 @@ theorem actualCharges_integral_bound_domainGraph :
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
         ∀ {L μ : ℕ} (hn : 2 ≤ S.n), 2 * S.r₀ ≤ S.D →

@@ -17,6 +17,8 @@ retains every fine boundary leg and the actual blocked physical tensor.
 Source: SCP10, arXiv:1001.3807, Observations 6.5–6.6, lines 1818–1915.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

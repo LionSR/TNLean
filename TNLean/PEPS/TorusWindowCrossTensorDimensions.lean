@@ -30,6 +30,8 @@ Source: arXiv:1804.04964, lines 582--586 and 2368--2444 of
 `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 variable {width height d L K : ℕ} [NeZero width] [NeZero height]
 variable [Fact (1 < width)] [Fact (1 < height)]
@@ -100,13 +102,13 @@ theorem bondDim_eq_of_normalArcWindows_sameState
     (hA.transportCoordinateSwap A) (hB.transportCoordinateSwap B)
     (hATI.transportCoordinateSwap A) (hBTI.transportCoordinateSwap B)
     (hAB.transport torusCoordinateSwap)
-    (fun e ↦ hposA (Edge.map torusCoordinateSwap.symm e))
-    (fun e ↦ hposB (Edge.map torusCoordinateSwap.symm e)) hK hL hyh hxw
+    (fun e ↦ hposA (ManyBody.Edge.map torusCoordinateSwap.symm e))
+    (fun e ↦ hposB (ManyBody.Edge.map torusCoordinateSwap.symm e)) hK hL hyh hxw
   have hzero : (0 : TorusVertex width height) = (0, 0) := rfl
   have hV : A.bondDim (torusUpEdge 0) = B.bondDim (torusUpEdge 0) := by
     rw [hzero]
     simpa [Tensor.transport_bondDim, torusCoordinateSwap_symm,
-      Edge.map_torusCoordinateSwap_rightEdge] using hV'
+      ManyBody.Edge.map_torusCoordinateSwap_rightEdge] using hV'
   exact bondDim_eq_of_orientation_references A B hATI hBTI hH hV
 
 end TNLean.PEPS

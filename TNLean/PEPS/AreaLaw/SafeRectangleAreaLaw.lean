@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
 import TNLean.PEPS.AreaLaw.InitialBufferReal
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Linear entropy bounds for safe rectangles
@@ -30,6 +31,8 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -61,7 +64,8 @@ theorem exists_regionalEntropy_safe_rect_le_linear
       ∀ d : ℝ, 0 ≤ d →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (A : Finset (Site Λ)) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             d * (Q.size : ℝ) < (supDist t z : ℝ)) →
@@ -69,13 +73,12 @@ theorem exists_regionalEntropy_safe_rect_le_linear
   classical
   obtain ⟨C, hC, harea⟩ := uniformAreaLaw q hq R (J + 1) Δ (by linarith) hΔ
   refine ⟨48 * C, mul_nonneg (by norm_num) hC, ?_⟩
-  intro d hd Λ h E₀ Ω hgs A Q hclear
+  intro d hd Λ h E₀ Ω hΩ hgap hspan A Q hclear
   let h' : LocalHamiltonian Λ q R (J + 1) :=
     { term := h.term
       supported := h.supported
       hermitian := h.hermitian
       norm_le := fun X ↦ (h.norm_le X).trans (by linarith) }
-  have hgs' : IsGappedGroundState Λ q h'.operator E₀ Ω Δ := hgs
   have hdisj : Disjoint Q.toFinset (Geometry.boundaryEndpoints Λ A) := by
     apply Finset.disjoint_left.mpr
     intro z hz hzcut
@@ -84,7 +87,7 @@ theorem exists_regionalEntropy_safe_rect_le_linear
     exact (not_lt_of_ge (mul_nonneg hd (Nat.cast_nonneg Q.size))) hbad
   calc
     regionalEntropy Λ q Ω (rectRegion A Q) ≤
-        C * (edgeBoundary Λ (rectRegion A Q)).card := harea Λ h' E₀ Ω hgs' _
+        C * (edgeBoundary Λ (rectRegion A Q)).card := harea Λ h' E₀ Ω hΩ hgap hspan _
     _ ≤ C * (48 * (Q.size : ℝ)) :=
       mul_le_mul_of_nonneg_left
         (by exact_mod_cast card_edgeBoundary_rectRegion_le_of_disjoint Λ A Q hdisj) hC
@@ -104,7 +107,8 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
       (∀ d : ℝ, 2 * (R : ℝ) + 10 < d →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (Q : IntRect),
             (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
               d * (Q.size : ℝ) < (supDist t z : ℝ)) →
@@ -118,7 +122,8 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
         let F : ℕ → ℝ := fun r ↦ sSup
           {s : ℝ | ∃ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
             (E₀ : ℝ) (Ω : StateSpace Λ q) (A : Finset (Site Λ)) (Q : IntRect),
-            IsGappedGroundState Λ q h.operator E₀ Ω Δ ∧
+            ‖Ω‖ = 1 ∧ IsGapped h.operator E₀ Δ ∧
+              groundSpace h.operator E₀ = Submodule.span ℂ {Ω} ∧
               (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                 d * (Q.size : ℝ) < (supDist t z : ℝ)) ∧
               Q.size ≤ r ∧ s = regionalEntropy Λ q Ω (rectRegion A Q)}
@@ -134,20 +139,20 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
   obtain ⟨K, hK, hlinear⟩ := exists_regionalEntropy_safe_rect_le_linear q R hq hJ hΔ
   have hb : 0 ≤ max b₀ K := hb₀.trans (le_max_left _ _)
   refine ⟨c, hc, max b₀ K, hb, ?_, ?_⟩
-  · intro d hd Λ h E₀ Ω hgs A Q hclear r hr Q₀ hQ₀ hpad
-    exact (hbuffer d hd Λ h E₀ Ω hgs A Q hclear r hr Q₀ hQ₀ hpad).trans
+  · intro d hd Λ h E₀ Ω hΩ hgap hspan A Q hclear r hr Q₀ hQ₀ hpad
+    exact (hbuffer d hd Λ h E₀ Ω hΩ hgap hspan A Q hclear r hr Q₀ hQ₀ hpad).trans
       (add_le_add le_rfl
         (mul_le_mul_of_nonneg_right (le_max_left b₀ K) (Nat.cast_nonneg r)))
   · intro d hd F p₀ M r hM _hr
     have hd0 : 0 ≤ d := by linarith [show (0 : ℝ) ≤ R from Nat.cast_nonneg R]
     have hF0 (t : ℕ) : 0 ≤ F t := by
       apply Real.sSup_nonneg
-      rintro s ⟨Λ, h, E₀, Ω, A, Q, hgs, _, _, rfl⟩
-      exact regionalEntropy_nonneg Λ q Ω hgs.1 _
+      rintro s ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hspan, _, _, rfl⟩
+      exact regionalEntropy_nonneg Λ q Ω hΩ _
     have hFle (t : ℕ) : F t ≤ K * (t : ℝ) := by
       refine Real.sSup_le (fun s hs ↦ ?_) (mul_nonneg hK (Nat.cast_nonneg t))
-      obtain ⟨Λ, h, E₀, Ω, A, Q, hgs, hclear, hQ, rfl⟩ := hs
-      exact (hlinear d hd0 Λ h E₀ Ω hgs A Q hclear).trans
+      obtain ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hspan, hclear, hQ, rfl⟩ := hs
+      exact (hlinear d hd0 Λ h E₀ Ω hΩ hgap hspan A Q hclear).trans
         (mul_le_mul_of_nonneg_left (by exact_mod_cast hQ) hK)
     have hden : 1 ≤ (2 * (c : ℝ) + 5) ^ 2 := by
       nlinarith [sq_nonneg (c : ℝ), show (0 : ℝ) ≤ c from Nat.cast_nonneg c]

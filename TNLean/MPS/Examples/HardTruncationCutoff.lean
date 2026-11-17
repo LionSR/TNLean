@@ -4,10 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.WeightedGHZ
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
-import QICLean.Entropy.RegionUnion
-import TNLean.MPS.AreaLaw.Basic
+import TNLean.Circuit.EntropySupport
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.Analysis.CfcConjugation
 import QICLean.Analysis.EnergyTruncation
 import QICLean.Analysis.GroundEnergyBounds
@@ -32,6 +30,8 @@ recorded in `docs/audits/2026-10-29_hard_truncation_cutoff.md` and the QICLean n
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 The source paper is unchanged.
 -/
+
+open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -185,9 +185,9 @@ theorem bondTerm_positive_contraction (K : ℕ) (i : Fin (K + 1)) :
   · exact diagonal_positive_contraction _ (boundary_bounds K)
   · exact diagonal_positive_contraction _ (internal_bounds K j)
 
-private theorem oneSite_mem {K : ℕ} (i : Fin (K + 2)) (S : Finset (Fin (K + 2)))
-    (hi : i ∈ S) : oneSite K i ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S := by
-  apply ManyBody.supportedOperators_mono (Finset.singleton_subset_iff.mpr hi)
+private theorem oneSite_mem {K : ℕ} (i : Fin (K + 2)) (S : Set (Fin (K + 2)))
+    (hi : i ∈ S) : oneSite K i ∈ QuantumCircuit.supportedOperators 2 S := by
+  apply QuantumCircuit.supportedOperators_mono (Set.singleton_subset_iff.mpr hi)
   simpa only [oneSite, bit, Complex.ofReal_natCast] using
     QuantumCircuit.diagonal_comp_eval_mem_supportedOperators i (fun x ↦ (x.val : ℂ))
 
@@ -217,28 +217,27 @@ private theorem internal_formula (K : ℕ) (j : Fin K) :
 theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin (K + 2) ↦ 2) (bondTerm K i)
       (interval (K + 2) i.val (i.val + 2)) := by
-  change _ ∈ ManyBody.supportedOperators _ _
   refine Fin.cases ?_ (fun j ↦ ?_) i
-  · change boundary K ∈ _
+  · apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
+    change boundary K ∈ _
     rw [boundary_formula]
-    apply mul_mem
-    · change _ ∈ ManyBody.supportedOperators _ _
-      exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
-        (SMulMemClass.smul_mem _ (oneSite_mem 0 _ (by simp [interval])))
-    · change _ ∈ ManyBody.supportedOperators _ _
-      exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
+    apply QuantumCircuit.mul_mem_supportedOperators
+    · exact Submodule.sub_mem _ (QuantumCircuit.one_mem_supportedOperators _)
+        (Submodule.smul_mem _ _ (oneSite_mem 0 _ (by simp [interval])))
+    · exact Submodule.sub_mem _ (QuantumCircuit.one_mem_supportedOperators _)
         (oneSite_mem 1 _ (by simp [interval]))
-  · change internalTerm K j ∈ _
+  · apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
+    change internalTerm K j ∈ _
     rw [internal_formula]
     split_ifs with hj
-    · apply SMulMemClass.smul_mem
-      apply add_mem
-      · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
-          Finset.mem_univ, true_and, Fin.val_succ]; omega)
-      · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
-          Finset.mem_univ, true_and, Fin.val_succ]; omega)
-    · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
-        Finset.mem_univ, true_and, Fin.val_succ]; omega)
+    · apply Submodule.smul_mem
+      apply Submodule.add_mem
+      · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
+          Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
+      · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
+          Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
+    · exact oneSite_mem _ _ (by simp only [interval, Finset.coe_filter,
+        Finset.mem_univ, true_and, Set.mem_ofPred_eq, Fin.val_succ]; omega)
 
 private def groundConfig (K : ℕ) : Config K := fun i ↦ if i = 0 then 1 else 0
 private def highConfig (K : ℕ) : Config K := fun _ ↦ 1

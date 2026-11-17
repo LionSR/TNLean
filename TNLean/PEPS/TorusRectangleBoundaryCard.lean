@@ -23,6 +23,8 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, rectangular blocks
 in the boundary construction, local source lines 1935–1957 and 2043–2076.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 private theorem crossing_symm (p q : Prop) :
@@ -138,7 +140,7 @@ private theorem boundary_torusRightEdge_rectangle_iff
       (v ∉ torusContiguousRectangle xStart yStart xLen yLen ∧
         (v.1 + 1, v.2) ∈ torusContiguousRectangle xStart yStart xLen yLen) := by
     unfold IsRegionBoundaryEdge torusRightEdge
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
     · simp only [h1, h2]
     · simp only [h1, h2]
       exact crossing_symm _ _
@@ -161,7 +163,7 @@ private theorem boundary_torusUpEdge_rectangle_iff
       (v ∉ torusContiguousRectangle xStart yStart xLen yLen ∧
         (v.1, v.2 + 1) ∈ torusContiguousRectangle xStart yStart xLen yLen) := by
     unfold IsRegionBoundaryEdge torusUpEdge
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
     · simp only [h1, h2]
     · simp only [h1, h2]
       exact crossing_symm _ _
@@ -277,7 +279,8 @@ private theorem card_horizontal_boundary_torusRectangle_le
           ¬IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
             (torusRightEdge v) := by
         unfold IsRegionBoundaryEdge torusRightEdge
-        rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
+        rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with
+            ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
           simp [h1, h2, mem_torusContiguousRectangle, hx, hs, ZMod.val_lt]
       rw [Fintype.card_eq_zero_iff.mpr ⟨fun v => hn v.1 v.2⟩]
       omega
@@ -305,7 +308,8 @@ private theorem card_vertical_boundary_torusRectangle_le
           ¬IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
             (torusUpEdge v) := by
         unfold IsRegionBoundaryEdge torusUpEdge
-        rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
+        rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with
+            ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
           simp [h1, h2, mem_torusContiguousRectangle, hy, hs, ZMod.val_lt]
       rw [Fintype.card_eq_zero_iff.mpr ⟨fun v => hn v.1 v.2⟩]
       omega

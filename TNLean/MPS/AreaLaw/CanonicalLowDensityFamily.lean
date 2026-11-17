@@ -28,6 +28,8 @@ see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`. Extension to a
 fixed arbitrary physical interval as the scale grows remains separate.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

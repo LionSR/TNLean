@@ -1035,13 +1035,22 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     Use the defining minimum and its minimizing displacement.
 \end{proof}
 
+\begin{lemma}[Ring distance and cycle-graph distance]
+    \label{aux:ring-support-distance-cycle}
+    \lean{MPSPreparation.ringSupportDistance_le_edist}\leanok
+    \uses{aux:ring-support-distance}
+    For nonempty supports, $x\in X$ and $y\in Y$, the ring distance $d(X,Y)$ is at most
+    the distance from $x$ to $y$ in the cycle graph on $\Lambda$.
+\end{lemma}
+\begin{proof}\leanok
+    Each edge of the cycle graph changes a site by $\pm1$ modulo $N$, so a walk of length
+    $\ell$ from $x$ to $y$ gives a displacement $m$ with $|m|\le\ell$ and $y=x+m$.
+\end{proof}
+
 \begin{lemma}[Finite-ring Lieb--Robinson estimate]
     \label{aux:finite-ring-lieb-robinson}
     \lean{MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint}\leanok
-    \uses{aux:restricted-commutator-recursion,aux:restricted-commutator-continuity,
-        aux:restricted-initial-commutator-bound,aux:restricted-initial-commutator-vanishing,
-        aux:ring-support-distance,aux:restricted-commutator-evaluation,
-        aux:restricted-commutator-negative-time,aux:weighted-volterra-comparison}
+    \uses{aux:ring-support-distance}
     Let $H=\sum_j h_j$, with Hermitian $h_j\in\mathcal A_{e_j}$ and
     $\|h_j\|\leq1$. Suppose $A\in\mathcal A_X$ and $B\in\mathcal A_Y$,
     where $X,Y$ are nonempty and disjoint. For every $a\geq0$ and $t\in\mathbb R$,
@@ -1055,13 +1064,12 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     it is not the unrestricted interaction theorem.
 \end{lemma}
 \begin{proof}\leanok
-    Weight each nonempty support $Z$ by $|Z|e^{-a d(Z,Y)}$.
-    If $e_j$ meets $Z$, then $d(Z,Y)\leq d(e_j,Y)+1$.
-    At most $2|Z|$ oriented bonds meet $Z$, and each bond has at most two sites.
-    Thus the weighted row sum in the commutator recursion is at most $8e^a$.
-    A finite-dimensional integral comparison gives the exponential factor.
-    Vanishing of the initial commutator gives the subtraction of one. Apply the
-    same argument to $-H$ for negative times, and multiply by $\|A\|$.
+    \uses{thm:qc_lr_disjoint,aux:ring-support-distance-cycle}
+    Apply Lemma~\ref{thm:qc_lr_disjoint} on the cycle graph with $\mu=a$ and
+    $n=d(X,Y)$, which is at most the cycle-graph distance between the supports by
+    Lemma~\ref{aux:ring-support-distance-cycle}. Each bond $e_j$ has at most two sites
+    and diameter at most one, and at most two bonds meet a site, so the site budget is at
+    most $s=4e^a$ and $2s=8e^a$.
 \end{proof}
 
 \begin{lemma}[Contractivity of cyclic local embedding]

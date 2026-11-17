@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.RationalSearch
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Canonical rational search and its overlap reserve
@@ -34,6 +35,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -113,7 +116,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_canonical_rational_search
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -318,7 +322,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_canonical_rational_search
   · simpa only [r, K, Et, Dt] using hfind
   · simpa only [r, K, Et, Dt] using hexact
   apply h.exists_viable_vector_of_rational_search_result hL hq hΔ HL B hsplit
-    hHL hBS hBn hgs W hW x hwx hwE X hXphysical Z hZ hZZ
+    hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hXphysical Z hZ hZZ
     η κ ε εb ρ QZ QK QX ε εb (η + ρ) Et (κ + ρ) (ε + ρ) (εb + ρ)
     ((r : ℚ) ^ 2 * Dt) Dt
     (2 * rationalUniformCertificateRoundingMesh n ρ)
@@ -340,7 +344,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_canonical_rational_sear
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -447,11 +452,11 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_canonical_rational_sear
   have hleading := fullyApproxSDP_errors_with_trace_energy_slack_fit_lvv_margin
     hL hΔ.le hκfit hεfit hεbfit hδfit' heηfit heKfit'
   have hΔ₄ : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
   apply h.exists_rationalViableMPSData_of_rational_search_result hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs S hS W hW x hwx hwE X hXphysical Z hZ hZZ
+    HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hXphysical Z hZ hZZ
     η κ ε εb ρ QZ QK QX ε εb (η + ρ) Et (κ + ρ) (ε + ρ) (εb + ρ)
     ((r : ℚ) ^ 2 * Dt) Dt
     (2 * rationalUniformCertificateRoundingMesh n ρ)
@@ -476,7 +481,8 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_canonical_rational_sea
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {s₀ b Hv : ℕ} {δin : ℝ}
     (D : RationalCoordinateViableMPSDataOfHeight Hv Γ s₀ b δin S)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -585,11 +591,11 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_canonical_rational_sea
   have hleading := fullyApproxSDP_errors_with_trace_energy_slack_fit_lvv_margin
     hL hΔ.le hκfit hεfit hεbfit hδfit' heηfit heKfit'
   have hΔ₄ : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
   apply h.exists_rationalCoordinateData_of_rational_search_result hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs S D W hW x hwx hwE X hXphysical Z hZ hZZ
+    HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hXphysical Z hZ hZZ
     η κ ε εb ρ QZ QK QX ε εb (η + ρ) Et (κ + ρ) (ε + ρ) (εb + ρ)
     ((r : ℚ) ^ 2 * Dt) Dt
     (2 * rationalUniformCertificateRoundingMesh n ρ)

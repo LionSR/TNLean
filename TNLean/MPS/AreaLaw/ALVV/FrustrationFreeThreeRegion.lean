@@ -29,6 +29,8 @@ polynomial rank bounds for that family apply. Each regional term has operator Sc
 `q² + 2` at a cut inside its region.
 -/
 
+open ManyBody (interval mem_interval)
+
 open scoped InnerProductSpace Matrix.Norms.L2Operator
 open ContinuousLinearMap Matrix
 

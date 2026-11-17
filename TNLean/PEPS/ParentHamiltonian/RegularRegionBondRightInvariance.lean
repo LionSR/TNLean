@@ -29,6 +29,8 @@ synchronization, lines 1765–1920. This is an auxiliary local contraction ident
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

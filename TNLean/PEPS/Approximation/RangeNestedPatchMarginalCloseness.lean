@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.RangeNestedPatchEnergy
 import TNLean.PEPS.AreaLaw.GapMarginalCloseness
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform marginal closeness at interaction range `R`
@@ -29,6 +30,8 @@ Independently formalized from the manuscripts; no upstream Lean text is reused.
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -48,7 +51,8 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
     (hsmall : rangePatchEnergyConstant q R J * κ ^ 2 ≤ Δ / 1024) :
     ∀ (Λ : Finset (ℤ × ℤ)) (H : LocalHamiltonian Λ q R J) (E₀ : ℝ)
       (Ψ : Lattice.StateSpace Λ q),
-      Lattice.IsGappedGroundState Λ q H.operator E₀ Ψ Δ →
+      ‖Ψ‖ = 1 → IsGapped H.operator E₀ Δ →
+      groundSpace H.operator E₀ = Submodule.span ℂ {Ψ} →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
         letI : LinearOrder (Lattice.Site Λ) :=
           (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -72,16 +76,17 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
                 Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) X Ψ)).trace.re ≤
               (1 / 16 : ℝ) := by
-  intro Λ H E₀ Ψ hgs center u b hu hb m regions a U Ψᵤ x hx hmin X
+  intro Λ H E₀ Ψ hΩ hgap hspan center u b hu hb m regions a U Ψᵤ x hx hmin X
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
-  have henergy := (H.rangeNestedPatch_minimizer_energy_le hR hJ Ψ hgs center u κ b
+  have henergy := (H.rangeNestedPatch_minimizer_energy_le hR hJ Ψ hΩ hspan center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ψᵤ
-    ((U.symm.norm_map _).trans hgs.1) hx
+    ((U.symm.norm_map _).trans hΩ) hx
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
-    (fun _ : Lattice.Site Λ ↦ Fin q) hgs hΔ ((U.norm_map _).trans hnorm) henergy X
+    (fun _ : Lattice.Site Λ ↦ Fin q) H.operator_isHermitian hΩ hgap hspan hΔ
+    ((U.norm_map _).trans hnorm) henergy X
   have hρ := reindex_reducedPure_eq_regionState
     (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) X Ψᵤ
   simp only [dependentRegionFinEquiv, Equiv.piCongrRight_refl,
@@ -105,7 +110,8 @@ theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
     ∃ κ : ℝ, 0 < κ ∧ κ ≤ 1 / 2 ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (H : LocalHamiltonian Λ q R J) (E₀ : ℝ)
         (Ψ : Lattice.StateSpace Λ q),
-        Lattice.IsGappedGroundState Λ q H.operator E₀ Ψ Δ →
+        ‖Ψ‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ψ} →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
           letI : LinearOrder (Lattice.Site Λ) :=
             (Fintype.equivFin (Lattice.Site Λ)).linearOrder

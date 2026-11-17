@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Conditional entropy in a rectangle with real clearance
@@ -29,6 +30,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Conditional entropy in a buffered rectangle for every admissible real
@@ -41,7 +44,8 @@ theorem exists_condEntropy_le_initialBuffer_real
       ∀ D₀ : ℝ, 2 * (R : ℝ) + 10 < D₀ →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (A : Finset (Site Λ)) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
@@ -62,7 +66,7 @@ theorem exists_condEntropy_le_initialBuffer_real
   have hK : 0 ≤ bufferBudgetConst q R := zero_le_one.trans (one_le_bufferBudgetConst q R)
   refine ⟨Cpad, by omega,
     (1024 * Real.exp 1 * (J / Δ) * bufferBudgetConst q R + Cpad) / 2, by positivity, ?_⟩
-  intro D₀ hD₀ Λ h E₀ Ω hgs A Q hclear r hr Q₀ hQ₀ hpad
+  intro D₀ hD₀ Λ h E₀ Ω hΩ hgap hspan A Q hclear r hr Q₀ hQ₀ hpad
   have hRD : ((R + 1 : ℕ) : ℝ) ≤ D₀ := by
     push_cast
     linarith [show (0 : ℝ) ≤ R from Nat.cast_nonneg R]
@@ -73,6 +77,6 @@ theorem exists_condEntropy_le_initialBuffer_real
   exact condEntropy_le_initialBuffer_of_constants hq hJ hΔ (le_max_left _ _)
     ((le_max_left _ _).trans (le_max_right _ _))
     ((le_max_right _ _).trans (le_max_right _ _))
-    (by omega) hCZ (Nat.lt_succ_self R) h hgs hsafe hr hQ₀ hpad
+    (by omega) hCZ (Nat.lt_succ_self R) h hΩ hgap hspan hsafe hr hQ₀ hpad
 
 end TNLean.PEPS.AreaLaw

@@ -87,18 +87,38 @@ and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 
 | | TNLean notion | QICLean replacement | Modules |
 |---|---|---|---|
-| F1 | `Edge` | `ManyBody.Edge` | 486 |
-| F2 | `SquareLatticeVertex`, `PEPS/SquareLatticeGraph` | `ManyBody.SquareLatticeVertex`, `ManyBody.squareLatticeGraph` | 55 / 39 |
+| F1 | `Edge` | `ManyBody.Edge` | 486 (done in #10861) |
+| F2 | `SquareLatticeVertex`, `PEPS/SquareLatticeGraph` | `ManyBody.SquareLatticeVertex`, `ManyBody.squareLatticeGraph` | 55 / 39 (done in #10861) |
 | F3 | `MPS.AreaLaw.interval` | `ManyBody.interval` | 347 |
 | F4 | `IsChainSupport`, `ChainSupport` | `ManyBody.IsChainSupport`, `ManyBody.ChainSupport` | 29 |
 | F5 | `sitePos`, the MPS `domainGraph`, `DomainSupport` | `ManyBody.sitePos`, `ManyBody.lineDomainGraph`, `ManyBody.DomainSupport` | 4 / 10 / 8 |
-| F6 | `Lattice.domainGraph`, `AdmissibleSupport` | `ManyBody.planeDomainGraph`, `ManyBody.AdmissibleSupport` | 111 / 82 |
-| F7 | the `RectangleInteraction` and `SquareInteraction` index types, `ForwardEdge`, `ForwardAdjacent`, `forwardSquareEdgeEquiv` | `ManyBody.SquareLatticeSiteOrEdge` | 12 |
+| F6 | `Lattice.domainGraph`, `AdmissibleSupport` | `ManyBody.planeDomainGraph`, `ManyBody.AdmissibleSupport` | 111 / 82; done in #10858 |
+| F7 | the `RectangleInteraction` and `SquareInteraction` index types, `ForwardEdge`, `ForwardAdjacent`, `forwardSquareEdgeEquiv` | `ManyBody.SquareLatticeSiteOrEdge` | 12 (done in #10861) |
 | F8 | `ChainHamiltonian`, `DomainHamiltonian`, `LocalHamiltonian`, `RectangularHamiltonian`, `SquareHamiltonian` | `ManyBody.ChainInteraction`, `DomainInteraction`, `PlaneInteraction`, `RectangleInteraction`, `SquareInteraction`, with the former fields (Hermiticity, norm bounds) as hypotheses; one pull request each | 80 / 9 / 108 / 3 / 32 |
 | F9 | `SquareHamiltonian.hermitianTerm`, `RectangularHamiltonian.hermitianTerm` and their lemmas | `ManyBody.Interaction.hermitianPart` | 5 |
-| F10 | `Lattice.groundEigenspace` | `ManyBody.groundSpace` | 25 |
+| F10 | `Lattice.groundEigenspace` | `ManyBody.groundSpace` | 25; done in #10860 |
 | F11 | `Matrix.IsGappedGroundState` | `ManyBody.IsGapped` with `groundSpace = span {Ω}`, through `ManyBody.isGapped_and_groundSpace_eq_span_iff` | 186 |
-| F12 | `QuantumCircuit.siteExpectation`; deletes `QuantumCircuit.siteExpectation_eq_regionExpectation`, the one translating lemma admitted by this pin PR against the migration rules; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral`, `MPS/AreaLaw/DomainSupportedGaussianIntegral` and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
+| F12 | `QuantumCircuit.siteExpectation`; deletes `QuantumCircuit.siteExpectation_eq_regionExpectation`, the one translating lemma admitted by this pin PR against the migration rules; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral` (graph, chain and domain statements) and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
 | F13 | `Entropy.crossingTerms` (QICLean's temporary export) | `ManyBody.crossingTerms` | 35 |
 | F14 | `QuantumCircuit.Layer`, the ring abbreviation `BondLayer d ringBond` (`Circuit/LocalCircuit`), which collides with the `QuantumCircuit.Layer` of QICLean's circuit core (step 3C.1) | renamed `QuantumCircuit.RingLayer`, with no alias, before the pin move that brings in the core; the modules that open `QuantumCircuit` are checked for unqualified `Circuit`, `Geometry`, `GateFamily`, `Interpretation` and `KrausGate` | 13 |
 | F15 | `Algebra/MatrixReindexGap` (`Matrix.toEuclideanLin_reindex_piLpCongrLeft`, `ker_toEuclideanLin_reindex_map`, `norm_gap_toEuclideanLin_reindex`) | QICLean's `Algebra/MatrixReindexEuclidean` (LionSR/QICLean#1104), same names; done in the second pin move | 4 |
+
+After F12, move the general Lieb–Robinson statements (i) and (ii) to QICLean `ManyBody/Dynamics` over `regionExpectation` at the next pin: `TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_graphDistance_inf` and `TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two` in `MPS/AreaLaw/LiebRobinson.lean`, with the chain and domain corollaries left in TNLean.
+
+F4 keeps three TNLean lemmas about QICLean's chain supports under their TNLean names and applies them explicitly instead of by dot notation: `TNLean.MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` (`MPS/AreaLaw/BoundaryCounting`), `TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one` (`MPS/AreaLaw/RangeOneCut`) and `TNLean.MPS.AreaLaw.ChainSupport.edist_le` (`MPS/AreaLaw/LiebRobinson`). They are chain geometry and move to QICLean `ManyBody/Sites/Lattice/Chain`; after that pin, delete the TNLean copies and restore dot notation.
+
+After F11, `MPS/AreaLaw/ChainPaddingGroundState` and `MPS/AreaLaw/SwappedDoubledHamiltonian`
+state their Kronecker sums with `ManyBody.IsGapped.kronecker_add` and
+`ManyBody.groundSpace_kronecker_add_eq_span` (QICLean `1af32a2`). `Lattice/ProductGroundState`
+proves the converse, that a gapped Kronecker sum with a one-dimensional ground space has gapped
+factors; QICLean has no statement of it, and the proof keeps the positive-semidefinite form.
+
+The information reset is proved once, as `TNLean.MPS.AreaLaw.information_reset_of_supported_localization` in `MPS/AreaLaw/InformationReset.lean`, over any finite site type, from a supported Gaussian localization at every natural radius and the separation of its support from the cores; the chain and domain resets are its corollaries. Two further resets repeat the same argument and become corollaries with F8, in their own areas: `TNLean.PEPS.Approximation.SquareHamiltonian.information_reset` (with `information_reset_of_resetThreshold_le`) and `TNLean.Lattice.LocalHamiltonian.information_reset` (with `information_reset_of_card_le` and `information_reset_of_rangeResetThreshold_le`).
+
+Third-pin candidate for QICLean (`ManyBody/Hamiltonian/KroneckerSum`), the converse of
+`groundSpace_kronecker_add_eq_span`: for Hermitian `A`, `B` and `0 < Δ`, if
+`IsGapped (A ⊗ₖ 1 + 1 ⊗ₖ B) E₀ Δ` and the ground space of `A ⊗ₖ 1 + 1 ⊗ₖ B` at `E₀` is the line
+through a unit vector `Ω`, then there are `a + b = E₀` and unit vectors `u`, `v` with
+`Ω p = u p.1 * v p.2`, `IsGapped A a Δ`, `IsGapped B b Δ`, `groundSpace A a = span {u}` and
+`groundSpace B b = span {v}`. It is `TNLean.Lattice.exists_isGapped_factors_of_kronecker_sum`,
+whose proof would then shrink to the eigenvalue description of the Kronecker sum.

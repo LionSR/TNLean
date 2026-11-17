@@ -14,6 +14,8 @@ This is the support step in ALVV, arXiv:1602.08828v2, `thm:FF-tH`,
 lines 1543–1568. No commutation or projection hypothesis is required.
 -/
 
+open ManyBody (interval mem_interval)
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}

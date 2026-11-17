@@ -19,6 +19,8 @@ interior region. A prefix or suffix retains the bound `d² + 2`.
 See `docs/paper-gaps/alvv16_ff_rank.tex` for the endpoint convention and examples.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped Kronecker
 

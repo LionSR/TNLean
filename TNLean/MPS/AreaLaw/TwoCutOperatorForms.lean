@@ -27,6 +27,8 @@ Supporting locality algebra for ALVV, arXiv:1602.08828v2,
 `eq:H-mid-cut`, lines 810–821, and `prop:Cheby-AGSP-eff`, lines 1324–1332.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped Kronecker
 open TNLean.Lattice.Sheet

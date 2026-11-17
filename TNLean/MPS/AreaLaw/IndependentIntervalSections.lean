@@ -17,6 +17,8 @@ analytic hypothesis. Supporting ALVV, arXiv:1602.08828v2,
 Figure `fig:algo1`, lines 1777–1817.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator
 

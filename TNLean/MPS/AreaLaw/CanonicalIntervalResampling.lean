@@ -21,6 +21,8 @@ It is not identified with the sample-once Figure `fig:merge-prime`; see
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator ENNReal
 
