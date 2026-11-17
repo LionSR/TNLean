@@ -469,6 +469,7 @@ def focused_checks(
     # back to one build per module, so that each failure is attributed to its
     # own source and independent sources are still checked.
     source_modules = sorted({module_of(source) for source in sources})
+    joint_failure: int | None = None
     if len(source_modules) > 1:
         print(f"Preparing {len(source_modules)} focused targets together", flush=True)
         code = build(source_modules)
@@ -476,7 +477,14 @@ def focused_checks(
             prepared.update(dict.fromkeys(source_modules, True))
         elif code is None:
             unprepared.update(source_modules)
+        else:
+            joint_failure = code
     ready_sources = [source for source in sources if prepare(module_of(source))]
+    if joint_failure is not None and unprepared and not failed:
+        # The budget ended before the fallback reached the failing module; the
+        # failure was observed all the same.
+        failed.append(f"joint dependency build exited {joint_failure}; the budget ended "
+                      "before the failing module was identified")
     deferred += [source for source in sources if module_of(source) in unprepared]
     if ready_sources:
         failed += check(ready_sources)

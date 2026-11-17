@@ -696,6 +696,22 @@ class FocusedRunnerTest(unittest.TestCase):
                          [["TNLean.Bad", "TNLean.Good"], ["TNLean.Bad"]])
         runner.assert_not_called()
 
+    def test_joint_build_failure_survives_a_budget_spent_in_the_fallback(self):
+        def build(modules, log, budget):
+            if len(modules) > 1:
+                self.clock += 50
+                return 3
+            self.clock += 10
+            return 3 if modules == ["TNLean.Zbad"] else 0
+
+        code, builder, runner = self.run_budgeted(
+            ["TNLean/Agood.lean", "TNLean/Zbad.lean"], [], {}, 60, build,
+            lambda paths, jobs, timeout: [])
+        self.assertEqual(code, 1)
+        # The fallback prepares `Agood` and the budget ends before `Zbad`.
+        self.assertEqual([c.args[0] for c in builder.call_args_list],
+                         [["TNLean.Agood", "TNLean.Zbad"], ["TNLean.Agood"]])
+
     def test_strict_failure_within_the_budget_remains_nonzero(self):
         code, _, _ = self.run_budgeted(
             ["TNLean/A.lean", "TNLean/B.lean"], [], {}, 600,
