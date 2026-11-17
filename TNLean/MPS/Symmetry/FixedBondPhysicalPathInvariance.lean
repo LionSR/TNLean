@@ -169,7 +169,7 @@ theorem ExactMPSGroundPath.exists_chain_character
       map_one' := by simp
       map_mul' := by
         intro g h
-        simp only [map_mul, Submonoid.coe_mul, ← Matrix.finKronecker_mul] }
+        simp only [map_mul, Submonoid.coe_mul, Matrix.finKronecker_mul] }
   have hV : ∀ g, V g ∈ Matrix.unitaryGroup (Fin N → Fin d) ℂ := by
     intro g
     rw [Matrix.mem_unitaryGroup_iff']
