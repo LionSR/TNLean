@@ -331,7 +331,8 @@ theorem residualSlice_eq_contractPhysical_tracelessPart [NeZero d]
     contractPhysicalLinear W (X - (((d : ℂ)⁻¹ * Matrix.trace X) • 1))
   rw [map_sub, map_smul]
   simp only [contractPhysicalLinear_apply, smul_smul]
-  rw [mul_comm (Matrix.trace X) ((d : ℂ)⁻¹)]
+  congr 1
+  ring
 
 /-- Source-facing `WIsom` decomposition. There is a physical basis `σ` with a
 distinguished identity vector and traceless remaining vectors, and virtual
