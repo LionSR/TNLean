@@ -178,7 +178,7 @@ theorem isStrongMPOSymmetry_flipXXZF :
     IsStrongMPOSymmetry (fun _ : Unit => onSite flipXXZF) T 1 fun _ _ => 1 := by
   intro _ L hL
   simp only [mpoWithBoundary_one]
-  rw [mpo_onSite, flipXXZF, ← Matrix.finKronecker_mul, sigmaZF, Matrix.finKronecker_diagonal,
+  rw [mpo_onSite, flipXXZF, Matrix.finKronecker_mul, sigmaZF, Matrix.finKronecker_diagonal,
     one_smul, Matrix.mul_assoc]
   ext σ τ
   rw [Matrix.diagonal_mul, Matrix.finKronecker_mul_apply_of_eq_ite flipXX_apply,
