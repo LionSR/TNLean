@@ -295,6 +295,19 @@ coefficients of the span.
     coefficient $X$ has at most one differentiable solution of $F'=XF$
     with prescribed value at $t_0$. If $g'=Xg$ and $g(t_0)=1$, then $g(t)$
     is invertible and $F(t)=g(t)F(t_0)$, also for rectangular $F$.
+    For the two-sided rectangular case, let $X:I\to\mathbb C^{n\times n}$
+    and $Y:I\to\mathbb C^{m\times m}$ be continuous, and let
+    $F:I\to\mathbb C^{n\times m}$, $G:I\to\mathbb C^{n\times n}$ and
+    $H:I\to\mathbb C^{m\times m}$ satisfy
+    \[
+        F'=XF-FY,\qquad G'=XG,\qquad H'=YH,\qquad G(t_0)=1,\quad H(t_0)=1.
+    \]
+    Here the functions are defined in real neighborhoods of the interval so
+    that the derivatives, entrywise for $F$, exist at every point of $I$,
+    including its endpoints. Then $G(t)$ and $H(t)$ are invertible and
+    \[
+        F(t)=G(t)F(t_0)H(t)^{-1}\qquad(t\in I).
+    \]
     More generally, let $X_1,X_2,X_3$ be continuous matrix coefficients
     and let $g_\nu'=X_\nu g_\nu$, $g_\nu(t_0)=1$. If
     $L'= (X_1\otimes1+1\otimes X_2)L-LX_3$, then
@@ -311,7 +324,13 @@ coefficients of the span.
     backwards from $t_0$. Comparing $F$ with $gF(t_0)$ gives transport.
     If $g(t)U=g(t)V$, uniqueness backwards to $t_0$ gives $U=V$;
     finite dimensionality therefore makes $g(t)$ invertible.
-    Apply transport columnwise to rectangular matrices. The product rule
+    Apply transport columnwise to rectangular matrices. For the two-sided
+    equation, the product rule gives
+    \[
+        (FH)'=(XF-FY)H+F(YH)=X(FH),\qquad (FH)(t_0)=F(t_0).
+    \]
+    Rectangular transport yields $F(t)H(t)=G(t)F(t_0)$; multiplying by
+    the inverse of $H(t)$ proves the two-sided formula. The product rule
     gives $(Lg_3)'=(X_1\otimes1+1\otimes X_2)Lg_3$ and
     $(g_1\otimes g_2)'=(X_1\otimes1+1\otimes X_2)(g_1\otimes g_2)$.
     Transport of $Lg_3$, followed by multiplication by $g_3^{-1}$,
