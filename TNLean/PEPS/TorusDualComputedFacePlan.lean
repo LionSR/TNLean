@@ -14,9 +14,9 @@ allowed, and that every allowed face word is killed. All checks use actual
 native words and the computable free-group reduction.
 
 A greedy coordinate-rank plan is tried first. If it fails the certificate,
-a fuel-bounded search enumerates finite native face choices and orientations.
+a depth-bounded search enumerates finite native face choices and orientations.
 The geometric elimination theorem proves that a valid plan exists within
-the fuel bound for every proper support. Thus the fallback cannot fail.
+the search-depth bound for every proper support. Thus the fallback cannot fail.
 No homotopy oracle or supplied elimination witness is used.
 
 Both periods are positive, including one and two. The fallback may be

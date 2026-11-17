@@ -22,6 +22,7 @@ classification, not by itself a homotopy decision procedure.
 
 Source: generated square moves in SCP10, arXiv:1001.3807v3, Lemma 6.14,
 lines 2199–2214, with an explicit proper-support hypothesis.
+See docs/paper-gaps/scp10_dual_proper_support_normal_form.tex.
 -/
 
 noncomputable section

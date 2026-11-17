@@ -41,7 +41,7 @@ def torusDualPathLetters {a : X} :
   | _, .nil => []
   | _, .cons p e => torusDualStepLetter e :: torusDualPathLetters p
 
-/-- Cancel adjacent inverse native edge letters using Mathlib's free-word reduction. -/
+/-- Cancel adjacent inverse native edge letters by free reduction in the free group. -/
 def torusDualReducedWord {a b : X} (p : TorusDualPath a b) :
     List ((X ⊕ X) × Bool) :=
   FreeGroup.reduce (torusDualPathLetters p)

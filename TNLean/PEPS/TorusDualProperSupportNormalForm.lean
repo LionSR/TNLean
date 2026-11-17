@@ -23,6 +23,7 @@ displacement classification.
 
 Source: the restricted generated-move interpretation of SCP10,
 arXiv:1001.3807v3, Lemma 6.14, lines 2199–2214.
+See docs/paper-gaps/scp10_dual_proper_support_normal_form.tex.
 -/
 
 noncomputable section
@@ -66,6 +67,8 @@ private theorem presentation_face_one (R : Finset X) (v : X)
     (hv : (v.1 + 1, v.2 + 1) ∈ R) :
     PresentedGroup.mk (torusDualPresentationRelators R : Set FG) (torusDualFaceWord v) = 1 := by
   classical
+  -- Match the classical equality used to form the relator finset. Free-word reduction
+  -- also supplies a computable equality, so `classical` alone does not select this one.
   let : DecidableEq FG := fun a b => Classical.propDecidable (a = b)
   apply PresentedGroup.one_of_mem
   change torusDualFaceWord v ∈ torusDualPresentationRelators R
