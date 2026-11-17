@@ -155,7 +155,7 @@ theorem chainUnitary_conjTranspose (N : ℕ) : (chainUnitary N)ᴴ = chainUnitar
 theorem chainUnitary_mul_conjTranspose (N : ℕ) :
     chainUnitary N * (chainUnitary N)ᴴ = 1 := by
   rw [chainUnitary_conjTranspose]
-  simp only [chainUnitary, Matrix.submatrix_mul_equiv, powN, Matrix.finKronecker_mul,
+  simp only [chainUnitary, Matrix.submatrix_mul_equiv, powN, ← Matrix.finKronecker_mul,
     localV_mul_self, Matrix.finKronecker_one, Matrix.submatrix_one_equiv]
 
 /-- The second whole-space unitary law. -/
@@ -221,7 +221,7 @@ private lemma conjugate_decoratedState (N : ℕ) :
   rw [decoratedState_eq]
   simp only [chainUnitary, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv,
     powN, Matrix.finKronecker_conjTranspose, Matrix.mul_smul, Matrix.smul_mul,
-    mul_add, add_mul, Matrix.finKronecker_mul, localV_conjugate]
+    mul_add, add_mul, ← Matrix.finKronecker_mul, localV_conjugate]
 
 /-- The closed twisted-dimer operator is the explicit unitary conjugate of
 independent bond states and the even-parity flag state, for every positive

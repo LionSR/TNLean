@@ -124,7 +124,7 @@ theorem embed_twoSiteSectorProjection_commute
     Commute (embedLocalOperator 2 N hN i (twoSiteSectorProjection P))
       (embedLocalOperator 2 N hN j (twoSiteSectorProjection P)) := by
   unfold Commute SemiconjBy
-  simp only [embed_twoSiteSectorProjection_eq_finKronecker, Matrix.finKronecker_mul]
+  simp only [embed_twoSiteSectorProjection_eq_finKronecker, ← Matrix.finKronecker_mul]
   congr 1
   funext n
   simp only [cyclicBondProjectionFactor]
@@ -143,7 +143,7 @@ private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
       | cons B l =>
           rw [List.map_cons, List.prod_cons]
           rw [ih (by simp)]
-          rw [Matrix.finKronecker_mul]
+          rw [← Matrix.finKronecker_mul]
           simp only [List.map_cons, List.prod_cons]
 
 private theorem list_prod_eq_of_mem_idempotent

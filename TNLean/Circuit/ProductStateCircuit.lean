@@ -92,7 +92,7 @@ private noncomputable def siteOp (u : Fin N → Matrix (Fin d) (Fin d) ℂ) (P :
 
 private theorem siteOp_union (u : Fin N → Matrix (Fin d) (Fin d) ℂ) {P Q : Finset (Fin N)}
     (h : Disjoint P Q) : siteOp u P * siteOp u Q = siteOp u (P ∪ Q) := by
-  rw [siteOp, siteOp, finKronecker_mul, siteOp]
+  rw [siteOp, siteOp, ← finKronecker_mul, siteOp]
   congr 1
   funext i
   by_cases hP : i ∈ P
@@ -118,9 +118,9 @@ private theorem siteOp_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
     · exact Unitary.mul_star_self_of_mem (hu i)
     · simp
   refine ⟨?_, ?_⟩
-  · rw [star_eq_conjTranspose, siteOp, finKronecker_conjTranspose, finKronecker_mul]
+  · rw [star_eq_conjTranspose, siteOp, finKronecker_conjTranspose, ← finKronecker_mul]
     simp only [h1, finKronecker_one]
-  · rw [star_eq_conjTranspose, siteOp, finKronecker_conjTranspose, finKronecker_mul]
+  · rw [star_eq_conjTranspose, siteOp, finKronecker_conjTranspose, ← finKronecker_mul]
     simp only [h2, finKronecker_one]
 
 private theorem siteOp_mem_supportedOperators (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
