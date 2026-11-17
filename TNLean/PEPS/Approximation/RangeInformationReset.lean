@@ -168,7 +168,8 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
   obtain ⟨-, -, U, hUu, hUs, hUerr⟩ :=
-    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ E₀ Ω hΩ hgap hspan A C hAC b hb hI
+    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ E₀ Ω hΩ hgap hspan A C hAC
+      b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈rangeResetRadius R J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) +
       R ≤ rangeResetWidth R J Δ p * (1 + b + Real.log L) := by
@@ -242,7 +243,8 @@ theorem information_reset (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < 
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨rangeResetWidth R J Δ p, rangeResetThreshold q R J Δ p, rangeResetWidth_pos R hJ hΔ hp,
     fun _L hL h E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
-      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC hA₀
+      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC
+        hA₀
         hC₀ b hb hI hAw hCw⟩
 
 end TNLean.Lattice.LocalHamiltonian

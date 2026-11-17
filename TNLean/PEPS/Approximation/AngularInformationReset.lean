@@ -100,7 +100,8 @@ theorem IsSquareGroundState.squareResetBound (q : ℕ) (hq : 1 ≤ q) (J : ℝ) 
     SquareResetBound q (IsSquareGroundState q J Δ) p (resetWidth J Δ p)
       (resetThreshold q J Δ p) :=
   fun L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩ ↦
-    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L hL h E₀ Ω hΩ hgap hspan
+    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L hL h E₀ Ω
+      hΩ hgap hspan
 
 open Classical in
 /-- **The information reset for the padded annular regions, with explicit constants.** The

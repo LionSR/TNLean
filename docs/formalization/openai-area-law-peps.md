@@ -66,7 +66,7 @@ Source: [Theorem 1.1](https://github.com/openai/math/blob/adc7f1241b42e322a64518
 | Every open `L × L` grid, `L ≥ 2` | `squareLatticeGraph L L` | No periodic edges or extra routing vertices. |
 | One supported term per site and edge, norm at most `J` | `SquareHamiltonian.siteTerm`, `edgeTerm`, support and norm fields | Individual summands are not required to be Hermitian. |
 | Hermitian total `H` | `SquareHamiltonian.hermitian` | Refers to the sum of the site terms plus the sum of the edge terms. |
-| Unique unit ground vector and full-system projector gap | `SquareHamiltonian.IsGappedGroundState` | Same coordinates and operator inequality as above; equivalences belong to #8739. |
+| Unique unit ground vector and full-system projector gap | `‖Ω‖ = 1`, `ManyBody.IsGapped h.operator E₀ Δ` and `ManyBody.groundSpace h.operator E₀ = span {Ω}` in `IsSquareGroundState` | Same coordinates; for `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these conditions with the printed operator inequality. |
 | PEPS on the same grid | `A : Tensor (squareLatticeGraph L L) q` | Uses TNLean's existing edge-dependent tensor family. |
 | Positive bond dimensions and `Dmax ≤ C L^c` | Both universal edge clauses of `HasPEPSApproximation` | Each original edge is bounded; dimensions need not be equal. |
 | Nonzero contraction `Φ` | `pepsVector A ≠ 0` | Nonvanishing is required before normalization. |

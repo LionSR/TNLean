@@ -48,7 +48,8 @@ def RectangularEntropyAreaLaw : Prop :=
       ∀ width height : ℕ, ∀ h : RectangularHamiltonian width height q J,
         ∀ E₀ : ℝ, ∀ Ω : RectangleStateSpace width height q,
           ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (SquareLatticeVertex width height),
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ∀ A : Finset (SquareLatticeVertex width height),
             FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω A ≤
               C * Fintype.card
                 {e : Edge (squareLatticeGraph width height) // IsRegionBoundaryEdge A e} ∧

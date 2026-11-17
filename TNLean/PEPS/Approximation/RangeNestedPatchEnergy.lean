@@ -42,7 +42,7 @@ Independently formalized from the manuscripts; no upstream Lean text is reused.
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (groundSpace)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -147,7 +147,7 @@ open Classical in
 /-- The normalized regularized output of every feasible patch minimum on the range-`R`
 nested squares has excitation energy at most `C_E κ²`, with
 `C_E = rangePatchEnergyConstant q R J`, for a range-`R` Hamiltonian on any finite induced
-domain with a gapped ground vector.
+domain whose ground space at `E₀` is the line through a unit vector. No gap is used.
 
 The regions are the selected range-`R` squares, including repeated clipped regions, and
 the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
@@ -155,10 +155,9 @@ the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
 Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 213–336,
 `eq:patch-energy-bound`, to interactions of range `R` (area-law `eq:hamiltonian`). -/
 theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le
-    {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ Δ : ℝ} (H : LocalHamiltonian Λ q R J)
+    {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ : ℝ} (H : LocalHamiltonian Λ q R J)
     (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : Lattice.StateSpace Λ q)
-    (hΩ : ‖Ψ‖ = 1) (hgap : IsGapped H.operator E₀ Δ)
-    (hspan : groundSpace H.operator E₀ = Submodule.span ℂ {Ψ})
+    (hΩ : ‖Ψ‖ = 1) (hspan : groundSpace H.operator E₀ = Submodule.span ℂ {Ψ})
     (center : ℝ × ℝ) (u κ b : ℝ) (hu : 0 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder

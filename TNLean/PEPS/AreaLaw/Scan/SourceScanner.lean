@@ -347,7 +347,8 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       (hyp.entropy_shell j hj).trans
         (mul_le_mul_of_nonneg_right (le_max_left Ce 1) (by positivity))
   obtain ⟨hrD, hDpos, hDm, hm, hM, hphysical⟩ :=
-    henergy Λ T hT h S E₀ Ω hyp.norm_eq_one hyp.isGapped hyp.groundSpace_eq hyp.graph_eq hyp.anchor_mem (by omega)
+    henergy Λ T hT h S E₀ Ω hyp.norm_eq_one hyp.isGapped hyp.groundSpace_eq hyp.graph_eq
+      hyp.anchor_mem (by omega)
       hyp.r₀_eq hyp.m_eq hyp.D_eq hyp.K_eq hyp.C₁_eq hyp.card_le hyp.depth_eq hyp.rows_le
       (fun x ↦ card_anchor_fiber_le S.anchor hyp.anchor_mem x) hyp.clearance htarget hsource
   obtain ⟨hK, hKL, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail,

@@ -304,7 +304,8 @@ theorem SquareHamiltonian.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
             resetUnitaryPrefactor J Δ r * (L : ℝ) ^ (-r) := by
   intro L hL h E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
-    SquareHamiltonian.reset_localized_filter q hq J hJ hΔ hr L hL h E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI
+    SquareHamiltonian.reset_localized_filter q hq J hJ hΔ hr L hL h E₀ Ω hΩ hgap hspan R C₀ hRC b
+      hb hI
   obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
     (resetFilterPrefactor_pos hJ hΔ hr).le (by positivity)
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr⟩

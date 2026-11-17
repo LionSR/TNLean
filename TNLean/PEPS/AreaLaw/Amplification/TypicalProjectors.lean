@@ -287,7 +287,8 @@ theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
   obtain ⟨hproj, hcomm, hwin, -⟩ :=
     typicalProjection_failure_le_surprisalTail Ω hΩ Z ((n : ℝ) ^ ((3 : ℝ) / 5))
   exact ⟨hproj, hcomm, hwin,
-    typicalProjection_failure_le_inv_pow_of_threshold_le hq R hJ hΔ hC₀ hn Λ h E₀ Ω hΩ hgap hspan Z hZb⟩
+    typicalProjection_failure_le_inv_pow_of_threshold_le hq R hJ hΔ hC₀ hn Λ h E₀ Ω hΩ hgap hspan
+      Z hZb⟩
 
 /-- **The three typical projectors of the amplification proposition.** For every
 integer `K`, beyond a threshold depending only on `q, R, J, Δ, C₀` and `K`, the

@@ -504,7 +504,8 @@ theorem boxEntropy_le_initialBoxRatio_mul (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0
   set M := initialBoxScale q R J Δ
   refine (boxEntropy_le_of_scale hq (initialBufferConst_nonneg q R hJ hΔ)
     (fun _ h _ _ hΩ hgap hspan _ _ hsafe _ hr _ hQ₀ hpad ↦
-      condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hΩ hgap hspan hsafe hr hQ₀ hpad) M hr).trans ?_
+      condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hΩ hgap hspan hsafe hr hQ₀ hpad) M
+        hr).trans ?_
   have hF0 := boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) r
   gcongr
   -- `(1 - p) M² + p · 2 (2 C_pad + 1) M ≤ (1 - p/2) M²` since `2 (2 C_pad + 1) ≤ M/2`

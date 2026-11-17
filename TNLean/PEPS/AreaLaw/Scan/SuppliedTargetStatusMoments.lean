@@ -56,7 +56,9 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
           ∀ {J Δ : ℝ} (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q),
             0 < Δ → ‖Ω‖ = 1 →
             ∀ (e : ℝ) (Ωt : StateSpace Λ q),
-              ‖Ωt‖ = 1 → IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) →
+              ‖Ωt‖ = 1 →
+              IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
+                ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) →
               groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt} →
               let g := Δ / positiveNormalization 1 (Δ / 2) J
               let C₀ := 512 * Real.exp 1 * (2 / g)

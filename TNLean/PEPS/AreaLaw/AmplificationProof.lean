@@ -395,7 +395,8 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have ha : ∀ Z, a Z ∈ Z.1 := fun Z => Z.2.1.choose_spec
   let k := fun i : AdmissibleSupport Λ R =>
     positiveConstraint cs (centeredFilter pw (Δ / 2) h.operator Ω (h.term i))
-  obtain ⟨-, hk, -⟩ := latticePositiveConstraints_of_locality hpw R hJ hΔ htail Λ h a ha E₀ Ω hΩ hgap hspan
+  obtain ⟨-, hk, -⟩ := latticePositiveConstraints_of_locality hpw R hJ hΔ htail Λ h a ha E₀ Ω hΩ
+      hgap hspan
   have hk : ∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0 := hk
   let Pr := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S₀
   let tt : ℝ≥0 := ⟨t, ht0⟩
@@ -459,13 +460,15 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hXint : Integrable (fun u => Xrv u ^ 2) μ := hXint
   have hXle : (∫ u, Xrv u ^ 2 ∂μ) ≤ Real.exp (-(Δ / cs) * t) * ‖ξe‖ ^ 2 := hXle
   obtain ⟨hYint, hYle⟩ := latticeConstraintWord_omission_of_positiveConstraints
-    hpw R hC₃ hc₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hΩ hgap hspan
+    hpw R hC₃ hc₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hΩ hgap
+      hspan
     _ S₀ Bp hBblocks ξb hξb r tt
   have hYint : Integrable Yrv μ := hYint
   have hYle : (∫ u, Yrv u ∂μ) ≤ Ao * t * S₀.card * ‖Bp‖ *
       Real.exp (vo * t - γ * (r : ℝ) ^ α) := hYle
   obtain ⟨hZint, hZle, hLt⟩ := latticeConstraintWord_truncation_of_positiveConstraints
-    R hC₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hΩ hgap hspan S₀ r tt
+    R hC₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hΩ hgap hspan S₀
+      r tt
   have hZint : Integrable (fun u => ‖Dret u - Lt u‖) μ := hZint
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle

@@ -205,7 +205,8 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
     hscan,
     (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1]
     with n htr hH hS hlog
-  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr hSC hsize hrows hclear
+  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr hSC hsize hrows
+      hclear
     hinX hinQ
   obtain ⟨e, Ωt, htrgs, hmom, Tr, hE0, hgap, hSX, hSXt, hSQ, hSQt, htd, hz, hdstar, hstat⟩ :=
     htr Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr hsize hrows hclear
