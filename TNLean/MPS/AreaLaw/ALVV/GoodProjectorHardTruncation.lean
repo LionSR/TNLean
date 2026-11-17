@@ -41,7 +41,10 @@ not assumed, and the ground space may be degenerate.
   * the window count of the closeness enlargement is the ceiling;
   * the contraction is `Δ = 4 exp(−4ℓ² √((η₁ − η₀)/(3t + 4ℓ − η₀)))`;
   * the two-cut rank is `(qℓ²)^{17(ℓ + ⌊ℓ²/(2ℓ)⌋)}`.
-* With `t > η` alone the truncated-side estimate fails, so a cutoff is needed:
+* The explicit cutoff corrects the printed condition rather than adding a hypothesis. With
+  `t > η` alone the truncated-side estimate of Proposition 4.4 is false: the qubit chain of
+  `TNLean.MPS.AreaLaw.HardTruncationCutoff.exists_truncated_low_discrepancy_gt`
+  (`TNLean/MPS/Examples/HardTruncationCutoff.lean`) has no length-independent bound. See
   https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 * The spectral conditions are the closed ones, and positivity of the filter is not asserted.
 * The slope near `η₀` and the additional `+1` of the word count are those of Theorem 4.2:
@@ -128,9 +131,7 @@ Then:
 The Chebyshev projector of `H̃` at degree `ℓ²` is
 `exists_two_window_chebyshev_projector_degree_sq`.
 
-**Local fix (explicit constants and cutoff):** the constant and the cutoff are explicit, and a
-cutoff is needed because the truncated-side estimate fails for `t > η` alone; see
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf. -/
+The constant and the cutoff are those of the module's local fix. -/
 theorem exists_three_bulk_hard_truncation_spectral_comparison
     (L q a b ell : ℕ) (t : ℝ) (hq : 0 < q) (hell : 1 ≤ ell) (ht0 : 0 ≤ t)
     (hab : a + 2 * ell ≤ b) (hbL : b + 2 * ell ≤ L - 1)
