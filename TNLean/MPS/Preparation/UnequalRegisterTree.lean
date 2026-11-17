@@ -190,7 +190,7 @@ theorem IsTreeLayout.pos [NeZero s] (hT : IsTreeLayout h s n w) : 0 < n := by
   have := hT.le
   omega
 
-variable h in
+variable (h) in
 /-- The number `2^{h+1-j}` of leaves of a node of depth `j`. -/
 def nodeLeaves (j : ℕ) : ℕ := 2 ^ (h + 1 - j)
 
