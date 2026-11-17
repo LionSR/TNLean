@@ -199,8 +199,8 @@ theorem blockSites_symm_mem_supportedOperators [NeZero d] {X : Set (Fin M)}
     (blockSites M k d).symm A ∈ supportedOperators d (siteBlock ⁻¹' X) := by
   classical
   have hK := mem_supportedOperators_of_isSupportedOn (q := d) (S := (siteBlock ⁻¹' X).toFinset)
-    (ManyBody.mem_supportedOperators_iff_forall_commute.mpr
-      (A := (blockSites M k d).symm A) fun B hB ↦ by
+    ((ManyBody.mem_supportedOperators_iff_forall_commute (X := fun _ : Fin (M * k) ↦ Fin d)
+      (A := (blockSites M k d).symm A)).mpr fun B hB ↦ by
         have hB' := mem_supportedOperators_of_isSupportedOn hB
         rw [Finset.coe_compl, Set.coe_toFinset, ← Set.preimage_compl] at hB'
         have hc := commute_of_mem_supportedOperators disjoint_compl_right hA

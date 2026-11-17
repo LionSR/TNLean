@@ -53,6 +53,7 @@ theorem norm_heisenberg_commutator_le_domainDistance
   let a : κ → Fin Λ.card := fun k ↦ Classical.choose (X k).2.1
   have ha : ∀ k, a k ∈ (X k).1 := fun k ↦ Classical.choose_spec (X k).2.1
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
+  have hΦ : Φ.hamiltonian = ∑ k, h k := rfl
   have hBound (n : ℕ)
       (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (lineDomainGraph Λ).edist x y) :=
     ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
@@ -66,8 +67,10 @@ theorem norm_heisenberg_commutator_le_domainDistance
       (lineDomainGraph Λ) Φ R (fun k x hx z hz ↦ (X k).2.2 x hx z hz) S hA y hB
       (fun x hx ↦ top_unique (hδ ▸
         (Finset.inf_le hx : δ ≤ (lineDomainGraph Λ).edist x y))) t
+    rw [hΦ] at hComm
     simp only [hComm, norm_zero, ite_eq_left hδ, mul_zero, le_refl]
-  · have hGraph := hBound δ.toNat (fun x hx ↦
+  · simp only [hΦ] at hBound
+    have hGraph := hBound δ.toNat (fun x hx ↦
       (ENat.natCast_toNat_le_self δ).trans (Finset.inf_le hx))
     simp only [mul_one, one_mul, Nat.cast_add, Nat.cast_one, ite_eq_right hδ] at hGraph ⊢
     have hDecay :

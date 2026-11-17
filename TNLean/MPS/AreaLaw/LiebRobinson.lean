@@ -78,11 +78,13 @@ theorem norm_heisenberg_commutator_le_chainDistance
   let a : κ → Fin L := fun k ↦ Classical.choose (X k).2.1
   have ha : ∀ k, a k ∈ (X k).1 := fun k ↦ Classical.choose_spec (X k).2.1
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
+  have hΦ : Φ.hamiltonian = ∑ k, h k := rfl
   have hBound (n : ℕ)
       (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (SimpleGraph.pathGraph L).edist x y) :=
     ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
       (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k ↦ ChainSupport.edist_le (X k))
       (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget S hA y hB 1 (by norm_num) n hn t
+  simp only [hΦ] at hBound
   dsimp only
   set δ := S.inf (fun x ↦ (SimpleGraph.pathGraph L).edist x y)
   by_cases hS : S = ∅
