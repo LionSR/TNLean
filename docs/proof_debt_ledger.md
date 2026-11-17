@@ -1194,11 +1194,14 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `cycleGraph N`, identifying `ringSupportDistance` with the least cycle-graph
   distance. The constants differ: the ring bound is
   `2 |X| ‖A‖ ‖B‖ e^{-a d} (e^{8 e^a |t|} - 1)`, vanishing at `t = 0`, while the
-  graph bound is `4 |X| ‖A‖ ‖B‖ e^{4 v_R b₀ e^{2a} |t| - a d}`, so the consumers must
-  accept the graph constants or the `- 1` refinement must be added to the graph
-  statement first.
-- **First PR**: prove `ringSupportDistance` equals the cycle-graph support
-  distance, and check whether the three consumers tolerate the graph constants.
+  graph bound is `4 |X| ‖A‖ ‖B‖ e^{4 v_R b₀ e^{2a} |t| - a d}`. The ring form is the
+  source's (Hastings–Koma, Theorem A.2), so the honest route is a QICLean graph
+  theorem in that form, for disjoint supports with factor `e^{v|t|} - 1` and
+  `v = 2 sup_x Σ_{j ∋ x} ‖h_j‖ e^{a diam}`, of which the ring bound is the
+  `cycleGraph N` corollary.
+- **First PR**: the QICLean graph theorem in Hastings–Koma form; then, at the
+  next pin, a TNLean PR proving `ringSupportDistance` equals the cycle-graph
+  support distance and deleting the ring recursion.
 
 ## Honorable mentions (ranks 11-12)
 
