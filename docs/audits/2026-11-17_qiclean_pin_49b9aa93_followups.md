@@ -1,11 +1,11 @@
-# QICLean pin c9d54bbc: the Dynamics deletions and the follow-ups
+# QICLean pin 49b9aa93: the Dynamics deletions and the follow-ups
 
 Date: 2026-11-17.
 
 This audit records the TNLean side of moving the QICLean pin from
-`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `c9d54bbc4def5929cbfe2a9334585366644f89bd`, past QICLean's
+`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `49b9aa933615d4a9ce663f94d2556a93ce7b76ea`, past QICLean's
 Dynamics, Hamiltonian and lattice-geometry layers (LionSR/QICLean#1063, #1064,
-#1067, #1079, #1082, #1084, #1085, #1086, #1087 and #1088; issue LionSR/QICLean#1062). Tracker:
+#1067, #1079, #1082, #1084, #1085, #1086, #1087, #1088 and #1095; issue LionSR/QICLean#1062). Tracker:
 #10718; the rule is the section "No dual systems" of
 `docs/many_body_circuit_architecture.md`. The toolchain, Mathlib and every other
 shared package do not move.
@@ -46,7 +46,10 @@ positive local dimension. From LionSR/QICLean#1086, `Matrix.l2_opNorm_kronecker_
 statements, and `Matrix.l2_opNorm_one_kronecker_rect_le` is QICLean's
 `Matrix.l2_opNorm_one_kronecker_le`, generalized to rectangular matrices; its
 eight consumers use the QICLean name. `Matrix.l2_opNorm_kronecker_le_one` has no
-QICLean counterpart and stays.
+QICLean counterpart and stays. From LionSR/QICLean#1095,
+`Matrix.IsHermitian.posSemidef_sub_smul_one_of_le_eigenvalues`
+(`Algebra/KroneckerLeastEigenvalue`) is QICLean's, moved unchanged to
+`ManyBody/Hamiltonian/GroundSpace`.
 
 The QICLean statements take an interaction `Φ : ManyBody.Interaction X T` and
 regions `Finset V`. The TNLean consumers keep their statements: each builds
