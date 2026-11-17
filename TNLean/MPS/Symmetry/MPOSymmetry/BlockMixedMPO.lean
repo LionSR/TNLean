@@ -171,11 +171,13 @@ theorem blockMixedMPOLetter_action
         mixedEndpointLetter B₀ B₁ r s * blockMixedAnalysis (V₀ μ) (V₁ μ))
           (α, i) (β, j) := by
   classical
+  -- Expand the products and sums once, before duplicating the goal across the sector cases.
+  simp only [Matrix.mul_apply, Fintype.sum_sum_type]
   cases r <;> cases s <;> cases i <;> cases j <;> cases α <;> cases β <;>
-    simp only [Fintype.sum_sum_type, blockMixedMPOLetter, mixedEndpointLetter,
+    simp only [blockMixedMPOLetter, mixedEndpointLetter,
       blockMixedSynthesis, blockMixedAnalysis, Matrix.fromBlocks_apply₁₁,
       Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂,
-      Matrix.mul_apply, Matrix.single_apply, ite_and, mul_ite, ite_mul,
+      Matrix.single_apply, ite_and, mul_ite, ite_mul,
       Finset.sum_mul, Matrix.zero_apply, zero_mul, mul_zero, Finset.sum_const_zero,
       zero_add, add_zero, Sum.inl.injEq, Sum.inr.injEq, Sum.inl_ne_inr,
       Sum.inr_ne_inl, and_false, false_and, ite_false, ite_true,
