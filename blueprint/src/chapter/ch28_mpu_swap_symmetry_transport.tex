@@ -193,37 +193,6 @@
     canonical form at both endpoints.
 \end{proof}
 
-\begin{lemma}[Strict swap comparison]
-    \label{thm:mpu_strict_swap_comparison}
-    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff,
-        MPOTensor.strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff,
-        MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff}
-    \leanok
-    \uses{def:strictly-equivalent-symmetry,
-        def:mpu_swap_comparison_symmetries, threeMPU2}
-    Let $\mathcal U,\mathcal V$ have two $d$-dimensional physical spins,
-    and write $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
-    $\widetilde{\mathcal V}=\mathbb S\mathcal V$. Strict equivalence of
-    $\mathcal U,\mathcal V$ under swap-combined adjunction is equivalent
-    to strict equivalence of
-    $\widetilde{\mathcal U},\widetilde{\mathcal V}$ under adjunction.
-    The analogous equivalence holds for swap-combined transposition and
-    transposition, and strict equivalence under conjugation is preserved.
-    As recorded in \cite{gap:mpu_symmetry_ancilla_transport},
-    identity-ancilla stabilization is outside this statement.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:mpu_one_sided_swap_invariance,
-        thm:mpu_symmetry_path_transport,
-        thm:threeMPU2_chain_formulas}
-    Since the swap $Q=\mathbb S$ is a unitary involution and
-    Lemma~\ref{thm:mpu_one_sided_swap_invariance} gives the three
-    pointwise invariance equivalences,
-    Lemma~\ref{thm:mpu_symmetry_path_transport} yields the three
-    strict-equivalence correspondences.
-\end{proof}
-
 \begin{lemma}[Physical left actions commute with blocking]
     \label{thm:mpu_physical_left_action_blocking}
     \lean{MPOTensor.blockTensor_ketLeftMul}
