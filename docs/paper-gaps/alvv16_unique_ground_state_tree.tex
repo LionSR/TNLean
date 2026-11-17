@@ -79,8 +79,11 @@ This $k$ is an integer only when $\lceil\log_{\mathcal D}s\rceil$ is even. The
 formalization takes the least integer $k$ with $\mathcal D^{2k}\ge s$, namely
 $k=\lceil\lceil\log_{\mathcal D}s\rceil/2\rceil$, so that
 $s\le\mathcal D^{2k}\le\mathcal D^2s$ and the node bound is
-$\mathcal D^{2k}s\le\mathcal D^2s^2$; when $\lceil\log_{\mathcal D}s\rceil$ is
-even it is the source's $\mathcal Ds^2$. The condition $\mathcal D^{2k}\ge s$
+$\mathcal D^{2k}s\le\mathcal D^2s^2$, and the formalized conclusion reads
+$\mathrm{count}\le\mathcal D^2s^2$ with $\mathrm{count}=\mathcal D^{2k}s$.
+When $\lceil\log_{\mathcal D}s\rceil$ is even, $k$ is the source's
+$\lceil\log_{\mathcal D}s\rceil/2$ and $\mathrm{count}\le\mathcal Ds^2$, the
+source's bound. The condition $\mathcal D^{2k}\ge s$
 is what the error estimate needs: a merged space has dimension
 $Q\le(\mathcal D^{2k}s)^2$, a random sample of dimension $s$ overlaps the
 target by at least $3/(32\mathcal D^{4k}s)$, and the error after $k$

@@ -32,7 +32,8 @@ product states.
 
 **Local fix (rounding of the number of rounds):** the source takes `k = ⌈log_D s⌉ / 2` rounds,
 which need not be an integer, and obtains the node bound `D s²`. With an integer number of rounds
-the least admissible `k` gives `D^{2k} s ≤ D² s²`, one factor of `D` more. See
+the least admissible `k` gives `count = D^{2k} s ≤ D² s²`, one factor of `D` more; when
+`⌈log_D s⌉` is even, `k` is the source's and `count ≤ D s²`. See
 `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
 
 **Scope restriction (tree witness):** the tree is a recursive witness, with no sampling
