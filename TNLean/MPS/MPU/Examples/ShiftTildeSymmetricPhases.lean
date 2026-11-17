@@ -82,7 +82,7 @@ private theorem braRightMul_eq (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) �
 
 Source context: arXiv:1703.09188, lines 2138--2151 (the path `𝕊(x) 𝒰 𝕊(x)^T`). -/
 theorem mpo_braRightMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    mpo (M.braRightMul P) N = mpo M N * sitewisePhysicalMatrix P N := by
+    mpo (M.braRightMul P) N = mpo M N * Matrix.tensorPower N P := by
   rw [braRightMul_eq, mpo_physicalTransposeTensor, mpo_ketLeftMul,
     mpo_physicalTransposeTensor, Matrix.transpose_mul, Matrix.transpose_transpose]
   congr 1
@@ -112,16 +112,10 @@ private theorem continuous_ketLeftMul_braRightMul (M : MPOTensor d D) :
 
 /-! ### Sitewise powers -/
 
-private theorem sitewisePhysicalMatrix_transpose (V : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    (sitewisePhysicalMatrix V N)ᵀ = sitewisePhysicalMatrix Vᵀ N := by
+private theorem transpose_tensorPower (V : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+    (Matrix.tensorPower N V)ᵀ = Matrix.tensorPower N Vᵀ := by
   ext s t
-  simp [sitewisePhysicalMatrix]
-
-private theorem sitewisePhysicalMatrix_mem_unitaryGroup {V : Matrix (Fin d) (Fin d) ℂ}
-    (hV : V ∈ unitaryGroup (Fin d) ℂ) (N : ℕ) :
-    sitewisePhysicalMatrix V N ∈ unitaryGroup (Fin N → Fin d) ℂ := by
-  rw [mem_unitaryGroup_iff, star_eq_conjTranspose, sitewisePhysicalMatrix_mul_conjTranspose,
-    ← star_eq_conjTranspose, mem_unitaryGroup_iff.mp hV, sitewisePhysicalMatrix_one]
+  simp [Matrix.tensorPower]
 
 /-! ### The swap and the swap path -/
 
@@ -158,11 +152,11 @@ private theorem shiftPhysicalSwap_transpose (d : ℕ) :
 
 /-- The sitewise swap and the sitewise path commute. -/
 private theorem sitewise_swap_commute (d N : ℕ) (x : ℝ) :
-    sitewisePhysicalMatrix (shiftPhysicalSwap d) N *
-        sitewisePhysicalMatrix (swapPathFin d x) N =
-      sitewisePhysicalMatrix (swapPathFin d x) N *
-        sitewisePhysicalMatrix (shiftPhysicalSwap d) N := by
-  rw [sitewisePhysicalMatrix_mul, sitewisePhysicalMatrix_mul,
+    Matrix.tensorPower N (shiftPhysicalSwap d) *
+        Matrix.tensorPower N (swapPathFin d x) =
+      Matrix.tensorPower N (swapPathFin d x) *
+        Matrix.tensorPower N (shiftPhysicalSwap d) := by
+  rw [Matrix.tensorPower_mul, Matrix.tensorPower_mul,
     shiftPhysicalSwap_commute_swapPathFin]
 
 /-! ### The swap-combined invariance of `U₂` -/
@@ -186,13 +180,13 @@ private theorem mpo_shiftExampleU₂_transpose (d N : ℕ) [NeZero N] :
     ← kroneckerMap_transpose, conjTranspose_conjTranspose, hP, transpose_transpose]
 
 private theorem swap_mul_mpo_shiftExampleU₃_mul_swap (d N : ℕ) [NeZero N] :
-    sitewisePhysicalMatrix (shiftPhysicalSwap d) N * mpo (shiftExampleU₃ d) N *
-        sitewisePhysicalMatrix (shiftPhysicalSwap d) N = mpo (shiftExampleU₂ d) N := by
+    Matrix.tensorPower N (shiftPhysicalSwap d) * mpo (shiftExampleU₃ d) N *
+        Matrix.tensorPower N (shiftPhysicalSwap d) = mpo (shiftExampleU₂ d) N := by
   have h := mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap d N
   rw [shiftExampleTildeU₃, shiftExampleTildeU₂, mpo_ketLeftMul, mpo_ketLeftMul] at h
-  set P := sitewisePhysicalMatrix (shiftPhysicalSwap d) N
+  set P := Matrix.tensorPower N (shiftPhysicalSwap d)
   have hP : P * P = 1 := by
-    rw [sitewisePhysicalMatrix_mul, shiftPhysicalSwap_mul_self, sitewisePhysicalMatrix_one]
+    rw [Matrix.tensorPower_mul, shiftPhysicalSwap_mul_self, Matrix.tensorPower_one]
   have h2 : P * mpo (shiftExampleU₃ d) N = mpo (shiftExampleU₂ d) N * P := by
     rw [h, ← Matrix.mul_assoc, hP, Matrix.one_mul]
   rw [h2, Matrix.mul_assoc, hP, Matrix.mul_one]
@@ -201,15 +195,15 @@ private theorem swap_mul_mpo_shiftExampleU₃_mul_swap (d N : ℕ) [NeZero N] :
 
 private theorem swapDagger_invariant_of_conj {N : ℕ}
     (A M : Matrix (Fin N → Fin (d * d)) (Fin N → Fin (d * d)) ℂ)
-    (hA : sitewisePhysicalMatrix (shiftPhysicalSwap d) N * A =
-      A * sitewisePhysicalMatrix (shiftPhysicalSwap d) N)
-    (hM : sitewisePhysicalMatrix (shiftPhysicalSwap d) N * Mᴴ *
-      sitewisePhysicalMatrix (shiftPhysicalSwap d) N = M) :
-    sitewisePhysicalMatrix (shiftPhysicalSwap d) N * (A * M * Aᴴ)ᴴ *
-        sitewisePhysicalMatrix (shiftPhysicalSwap d) N = A * M * Aᴴ := by
-  set P := sitewisePhysicalMatrix (shiftPhysicalSwap d) N
+    (hA : Matrix.tensorPower N (shiftPhysicalSwap d) * A =
+      A * Matrix.tensorPower N (shiftPhysicalSwap d))
+    (hM : Matrix.tensorPower N (shiftPhysicalSwap d) * Mᴴ *
+      Matrix.tensorPower N (shiftPhysicalSwap d) = M) :
+    Matrix.tensorPower N (shiftPhysicalSwap d) * (A * M * Aᴴ)ᴴ *
+        Matrix.tensorPower N (shiftPhysicalSwap d) = A * M * Aᴴ := by
+  set P := Matrix.tensorPower N (shiftPhysicalSwap d)
   have hPh : Pᴴ = P := by
-    rw [sitewisePhysicalMatrix_conjTranspose, shiftPhysicalSwap_conjTranspose']
+    rw [Matrix.conjTranspose_tensorPower, shiftPhysicalSwap_conjTranspose']
   have hA' : Aᴴ * P = P * Aᴴ := by
     have := congrArg conjTranspose hA
     rwa [conjTranspose_mul, conjTranspose_mul, hPh] at this
@@ -221,13 +215,13 @@ private theorem swapDagger_invariant_of_conj {N : ℕ}
 
 private theorem swapTranspose_invariant_of_sandwich {N : ℕ}
     (A M : Matrix (Fin N → Fin (d * d)) (Fin N → Fin (d * d)) ℂ) (hAt : Aᵀ = A)
-    (hA : sitewisePhysicalMatrix (shiftPhysicalSwap d) N * A =
-      A * sitewisePhysicalMatrix (shiftPhysicalSwap d) N)
-    (hM : sitewisePhysicalMatrix (shiftPhysicalSwap d) N * Mᵀ *
-      sitewisePhysicalMatrix (shiftPhysicalSwap d) N = M) :
-    sitewisePhysicalMatrix (shiftPhysicalSwap d) N * (A * M * A)ᵀ *
-        sitewisePhysicalMatrix (shiftPhysicalSwap d) N = A * M * A := by
-  set P := sitewisePhysicalMatrix (shiftPhysicalSwap d) N
+    (hA : Matrix.tensorPower N (shiftPhysicalSwap d) * A =
+      A * Matrix.tensorPower N (shiftPhysicalSwap d))
+    (hM : Matrix.tensorPower N (shiftPhysicalSwap d) * Mᵀ *
+      Matrix.tensorPower N (shiftPhysicalSwap d) = M) :
+    Matrix.tensorPower N (shiftPhysicalSwap d) * (A * M * A)ᵀ *
+        Matrix.tensorPower N (shiftPhysicalSwap d) = A * M * A := by
+  set P := Matrix.tensorPower N (shiftPhysicalSwap d)
   rw [transpose_mul, transpose_mul, hAt]
   have hA' : A * P = P * A := hA.symm
   calc P * (A * (Mᵀ * A)) * P = (P * A) * Mᵀ * (A * P) := by simp only [Matrix.mul_assoc]
@@ -236,13 +230,13 @@ private theorem swapTranspose_invariant_of_sandwich {N : ℕ}
     _ = A * M * A := by rw [hM]
 
 private theorem shiftExampleU₂_swapDagger_fixed (d N : ℕ) [NeZero N] :
-    sitewisePhysicalMatrix (shiftPhysicalSwap d) N * (mpo (shiftExampleU₂ d) N)ᴴ *
-      sitewisePhysicalMatrix (shiftPhysicalSwap d) N = mpo (shiftExampleU₂ d) N := by
+    Matrix.tensorPower N (shiftPhysicalSwap d) * (mpo (shiftExampleU₂ d) N)ᴴ *
+      Matrix.tensorPower N (shiftPhysicalSwap d) = mpo (shiftExampleU₂ d) N := by
   rw [mpo_shiftExampleU₂_conjTranspose, swap_mul_mpo_shiftExampleU₃_mul_swap]
 
 private theorem shiftExampleU₂_swapTranspose_fixed (d N : ℕ) [NeZero N] :
-    sitewisePhysicalMatrix (shiftPhysicalSwap d) N * (mpo (shiftExampleU₂ d) N)ᵀ *
-      sitewisePhysicalMatrix (shiftPhysicalSwap d) N = mpo (shiftExampleU₂ d) N := by
+    Matrix.tensorPower N (shiftPhysicalSwap d) * (mpo (shiftExampleU₂ d) N)ᵀ *
+      Matrix.tensorPower N (shiftPhysicalSwap d) = mpo (shiftExampleU₂ d) N := by
   rw [mpo_shiftExampleU₂_transpose, shiftExampleU₂_swapDagger_fixed]
 
 /-! ### The bond step -/
@@ -290,7 +284,7 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapDagger (d : �
   have hinv : ∀ x : ℝ, IsInvariantUnderSymmetry (shiftSwapDaggerSymmetry d)
       (conjugatePhysical (shiftExampleU₂ d) (swapPathFin d x)) := fun x N hN ↦ by
     have : NeZero N := ⟨Nat.pos_iff_ne_zero.mp hN⟩
-    change sitewisePhysicalMatrix (shiftPhysicalSwap d) N * _ * _ = _
+    change Matrix.tensorPower N (shiftPhysicalSwap d) * _ * _ = _
     rw [mpo_conjugatePhysical_eq]
     exact swapDagger_invariant_of_conj _ _ (sitewise_swap_commute d N x)
       (shiftExampleU₂_swapDagger_fixed d N)
@@ -328,20 +322,20 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapTranspose (d :
   set W : ℝ → MPOTensor (d * d) (d * d) := fun x =>
     ((shiftExampleU₂ d).ketLeftMul (swapPathFin d x)).braRightMul (swapPathFin d x) with hW
   have hmpo : ∀ (x : ℝ) (N : ℕ), mpo (W x) N =
-      sitewisePhysicalMatrix (swapPathFin d x) N * mpo (shiftExampleU₂ d) N *
-        sitewisePhysicalMatrix (swapPathFin d x) N := fun x N ↦ by
+      Matrix.tensorPower N (swapPathFin d x) * mpo (shiftExampleU₂ d) N *
+        Matrix.tensorPower N (swapPathFin d x) := fun x N ↦ by
     rw [hW, mpo_braRightMul, mpo_ketLeftMul]
   have hmem : ∀ x : ℝ, IsMPU (W x) ∧ IsInvariantUnderSymmetry (shiftSwapTransposeSymmetry d)
       (W x) := fun x ↦ by
-    have hu := sitewisePhysicalMatrix_mem_unitaryGroup (swapPathFin_mem_unitaryGroup d x)
+    have hu := fun N ↦ Matrix.tensorPower_mem_unitaryGroup N (swapPathFin_mem_unitaryGroup d x)
     refine ⟨fun N hN ↦ ?_, fun N hN ↦ ?_⟩
     · rw [hmpo]
       exact mul_mem (mul_mem (hu N) (shiftExampleU₂_isMPU d N hN)) (hu N)
     · have : NeZero N := ⟨Nat.pos_iff_ne_zero.mp hN⟩
-      change sitewisePhysicalMatrix (shiftPhysicalSwap d) N * _ * _ = _
+      change Matrix.tensorPower N (shiftPhysicalSwap d) * _ * _ = _
       rw [hmpo]
       exact swapTranspose_invariant_of_sandwich _ _
-        (by rw [sitewisePhysicalMatrix_transpose, transpose_swapPathFin])
+        (by rw [transpose_tensorPower, transpose_swapPathFin])
         (sitewise_swap_commute d N x) (shiftExampleU₂_swapTranspose_fixed d N)
   have h1 : W 1 = reindexPhysical (siteSwap d) (shiftExampleU₂ d) := by
     have hs : (swapPathFin d 1)ᴴ = swapPathFin d 1 := by
