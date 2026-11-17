@@ -112,10 +112,10 @@ private theorem continuous_ketLeftMul_braRightMul (M : MPOTensor d D) :
 
 /-! ### Sitewise powers -/
 
-private theorem transpose_tensorPower (V : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
+private theorem tensorPower_transpose (V : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     (Matrix.tensorPower N V)ᵀ = Matrix.tensorPower N Vᵀ := by
   ext s t
-  simp [Matrix.transpose_apply, Matrix.tensorPower_apply]
+  simp
 
 /-! ### The swap and the swap path -/
 
@@ -327,7 +327,7 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapTranspose (d :
     rw [hW, mpo_braRightMul, mpo_ketLeftMul]
   have hmem : ∀ x : ℝ, IsMPU (W x) ∧ IsInvariantUnderSymmetry (shiftSwapTransposeSymmetry d)
       (W x) := fun x ↦ by
-    have hu := fun N => Matrix.tensorPower_mem_unitaryGroup N (swapPathFin_mem_unitaryGroup d x)
+    have hu := fun N ↦ Matrix.tensorPower_mem_unitaryGroup N (swapPathFin_mem_unitaryGroup d x)
     refine ⟨fun N hN ↦ ?_, fun N hN ↦ ?_⟩
     · rw [hmpo]
       exact mul_mem (mul_mem (hu N) (shiftExampleU₂_isMPU d N hN)) (hu N)
@@ -335,7 +335,7 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapTranspose (d :
       change Matrix.tensorPower N (shiftPhysicalSwap d) * _ * _ = _
       rw [hmpo]
       exact swapTranspose_invariant_of_sandwich _ _
-        (by rw [transpose_tensorPower, transpose_swapPathFin])
+        (by rw [tensorPower_transpose, transpose_swapPathFin])
         (sitewise_swap_commute d N x) (shiftExampleU₂_swapTranspose_fixed d N)
   have h1 : W 1 = reindexPhysical (siteSwap d) (shiftExampleU₂ d) := by
     have hs : (swapPathFin d 1)ᴴ = swapPathFin d 1 := by

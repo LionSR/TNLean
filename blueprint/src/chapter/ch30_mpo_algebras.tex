@@ -54,7 +54,8 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
     \notready
     % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
     %   MPOTensor.FusionTensors (structure).
-    \uses{def:mpo_fusion_algebra, def:mps_rectangular_reduction}
+    \uses{def:mpo_fusion_algebra, def:mps_rectangular_reduction,
+        def:glm_boundary_decomposition}
     Let $(T_a)_{a\in I}$ be a fusion algebra of normal tensors of positive
     bond dimension. A family of \emph{fusion tensors} for the pair $(a,b)$
     consists of maps
@@ -77,6 +78,10 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
     \cite[Section~2]{GarreRubio2023MPOSym} and
     \cite{Bultinck2017Anyons}, with the nilpotent remainder of
     \cite[Section~4.4]{GarreRubio2023MPOSym} in place of an exact identity.
+    With zero remainder, a family of fusion tensors is an exact biorthogonal
+    decomposition of $T_aT_b$ onto the copies of the $T_c$
+    (Definition~\ref{def:glm_boundary_decomposition}), the form of
+    \cite[Section~2]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 361--391 (fusion tensors and
     %   orthogonality) and lines 1026--1030 (nilpotent off-diagonal blocks);
     %   arXiv:1511.08090, AnyonsPEPS.tex lines 237--251.
@@ -160,7 +165,8 @@ normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
     \notready
     % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
     %   MPOTensor.ActionTensors (structure).
-    \uses{def:mpo_symmetric_family, def:mps_rectangular_reduction}
+    \uses{def:mpo_symmetric_family, def:mps_rectangular_reduction,
+        def:glm_boundary_decomposition}
     Let $(A_x)_{x\in K}$ be a symmetric family of normal tensors of positive
     bond dimension whose coefficients $M_{a,x}^y$ are nonnegative integers. A
     family of \emph{action tensors} for $(a,x)$ consists of maps
@@ -168,6 +174,10 @@ normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
     $W_{ax}^{y,i}\colon\C^{D_y}\to\C^{\chi_a}\otimes\C^{D_x}$, for $y\in K$
     and $1\leq i\leq M_{a,x}^y$, that are mutually biorthogonal reductions of
     $T_a\cdot A_x$ onto the blocks $A_y$ with a nilpotent remainder.
+    With zero remainder, it is an exact biorthogonal decomposition of
+    $T_a\cdot A_x$ onto the copies of the $A_y$
+    (Definition~\ref{def:glm_boundary_decomposition}), the form of
+    \cite[Section~3]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 459--490 (action tensors and
     %   orthogonality) and lines 1062--1091 (periodic-boundary form).
 \end{definition}
@@ -777,111 +787,22 @@ with the corresponding composite embeddings.
 \section{Cohomological obstruction to symmetric states}%
 \label{sec:mpoalg_obstruction}
 
-\begin{definition}[L-symbols of an action]%
-    \label{def:mpoalg_l_symbols}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
-    %   MPOTensor.GroupFusionAlgebra.lSymbol.
-    \uses{def:mpoalg_associator, def:mpoalg_action_tensors,
-        thm:mpo_invertible_labels, def:mpug_l_symbols}
-    In the setting of Section~\ref{sec:mpoalg_associator}, let $(A_x)_{x\in
-                K}$ be a symmetric family as in Lemma~\ref{thm:mpo_invertible_labels},
-    so that $O_g^{(N)}\ket{V^{(N)}(A_x)}=\ket{V^{(N)}(A_{g\cdot x})}$, with
-    action tensors $(V_{g,x},W_{g,x})$ reducing $T_g\cdot A_x$ onto
-    $A_{g\cdot x}$. The tensor $T_gT_h\cdot A_x$ has two composite reductions
-    onto $A_{gh\cdot x}$, and the \emph{$L$-symbol} $L^x_{g,h}\in\C^\times$
-    \cite[Section~4.4]{GarreRubio2023MPOSym} is defined by
-    \begin{align}
-        V_{g,h\cdot x}(\Id\otimes V_{h,x})(T_gT_h\cdot A_x)^w
-         & =L^x_{g,h}\,V_{gh,x}(V_{g,h}\otimes\Id)
-        (T_gT_h\cdot A_x)^w
-        \label{eq:mpoalg_l_symbol}
-    \end{align}
-    for all sufficiently long words $w$.
-    % Source anchor: arXiv:2502.20257, main.tex lines 1874--1889 (eq:defL:
-    %   right trees, (gh)x = L^x_{g,h} g(hx)) and eq:Lsymbgauge;
-    % Source anchor: arXiv:2203.12563, lines 1091--1129 (periodic boundary),
-    %   lines 700--716 (group case).
-\end{definition}
+For a group-like algebra whose operators permute the blocks of a symmetric
+family, the $L$-symbols of the action are
+Definition~\ref{def:mpug_permuted_block_l_symbol}; their compatibility
+with the associator and their gauge law, the group case of the coupled
+pentagon equation \cite[Section~4]{GarreRubio2023MPOSym}, are
+Lemmas~\ref{thm:mpug_permuted_block_l_compatibility}
+and~\ref{lem:mpug_permuted_block_l_gauge}.
+% Source anchor: arXiv:2203.12563, lines 698--726 (F1group, pentagongroups,
+%   gdgroup).
 
-\begin{lemma}[Compatibility of L-symbols with the associator]%
-    \label{thm:mpoalg_l_compatible}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
-    %   MPOTensor.GroupFusionAlgebra.lSymbol_isCompatible.
-    \uses{def:mpoalg_l_symbols, def:mpug_l_symbols, def:mpug_l_gauge}
-    The $L$-symbols of Definition~\ref{def:mpoalg_l_symbols} satisfy the
-    coupled pentagon equation for a group-like algebra
-    \cite[Section~4]{GarreRubio2023MPOSym}, namely the compatibility
-    relation (\ref{eq:mpug_l_compatibility}),
-    \begin{align}
-        L^x_{g,hk}\,L^x_{h,k}
-         & =\omega(g,h,k)\,L^{k\cdot x}_{g,h}\,L^x_{gh,k},
-        \label{eq:mpoalg_l_compatible}
-    \end{align}
-    and replacing the fusion and action tensors by
-    $(\beta_{g,h}^{-1}V_{g,h},\beta_{g,h}W_{g,h})$ and
-    $((\gamma^x_g)^{-1}V_{g,x},\gamma^x_gW_{g,x})$ changes $(\omega,L)$ to
-    $(\beta\mathbin{\triangleright}\omega,(\beta,\gamma)\mathbin{\triangleright}L)$
-    of Definitions~\ref{def:mpug_fusion_gauge} and~\ref{def:mpug_l_gauge}.
-    % Source anchor: arXiv:2203.12563, lines 716--726 (pentagongroups and
-    %   gdgroup).
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:mpoalg_composite_reduction, def:mpoalg_associator}
-    Write $Y=(T_gT_hT_k\cdot A_x)^w$ for a long word $w$ and $V^P$ for the
-    composite compression onto $A_{ghk\cdot x}$ along a bracketing $P$. By
-    Lemma~\ref{thm:mpoalg_composite_reduction}, (\ref{eq:mpoalg_l_symbol})
-    and (\ref{eq:mpoalg_associator}) applied inside a bracketing give
-    \begin{align}
-        V^{g(h(kx))}Y & =L^x_{h,k}\,V^{g((hk)x)}Y
-        =L^x_{h,k}\,L^x_{g,hk}\,V^{(g(hk))x}Y,
-        \notag                                                           \\
-        V^{g(h(kx))}Y & =L^{k\cdot x}_{g,h}\,V^{(gh)(kx)}Y
-        =L^{k\cdot x}_{g,h}\,L^x_{gh,k}\,V^{((gh)k)x}Y
-        \notag                                                           \\
-                      & =L^{k\cdot x}_{g,h}\,L^x_{gh,k}\,\omega(g,h,k)\,
-        V^{(g(hk))x}Y.
-        \label{eq:mpoalg_l_paths}
-    \end{align}
-    Since $V^{(g(hk))x}YW^{(g(hk))x}=A_{ghk\cdot x}^w$ is nonzero for some
-    long word, comparing the two lines of (\ref{eq:mpoalg_l_paths}) gives
-    (\ref{eq:mpoalg_l_compatible}). The gauge
-    statement follows by substituting the rescaled tensors into
-    (\ref{eq:mpoalg_associator}) and (\ref{eq:mpoalg_l_symbol}).
-\end{proof}
-
-\begin{theorem}[No symmetric normal tensor under a nontrivial associator]%
-    \label{thm:mpoalg_no_symmetric_normal}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean,
-    %   MPOTensor.GroupFusionAlgebra.not_isMPOSymmetric_of_not_isTrivialGaugeClass;
-    %   algebraic step TNLean.Algebra.LSymbol.IsCompatible.isTrivialGaugeClass_of_unique.
-    \uses{thm:mpoalg_l_compatible, def:mpug_trivial_gauge_class,
-        thm:mpoalg_associator_gauge}
-    Let $(T_g)_{g\in G}$ be a group-like fusion algebra of normal tensors
-    whose associator does not have trivial gauge class. Then there is no
-    normal tensor $A$ of positive bond dimension with
-    $O_g^{(N)}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for all $g\in G$ and
-    $N\geq1$. This is the statement of
-    \cite[Section~3.2]{GarreRubio2023MPOSym} that an injective state without
-    multiplicity cannot be invariant under a nontrivial algebra, specialized
-    to group-like algebras; for group-like algebras it goes back to
-    \cite{ChenLiuWen2011CZX}.
-    % Source anchor: arXiv:2203.12563, lines 607--636.
-\end{theorem}
-
-\begin{proof}
-    \uses{thm:mpoalg_l_compatible, thm:mpoalg_action_tensors_exist}
-    Action tensors exist by Corollary~\ref{thm:mpoalg_action_tensors_exist}
-    with $K$ a single point fixed by every $g$. Then
-    (\ref{eq:mpoalg_l_compatible}) reads
-    $L_{g,hk}L_{h,k}=\omega(g,h,k)L_{g,h}L_{gh,k}$, that is,
-    $\omega=dL$ in the notation of (\ref{eq:mpug_coboundary}). Hence
-    $\omega=L\mathbin{\triangleright}1$ has trivial gauge class, a
-    contradiction.
-\end{proof}
+The obstruction of \cite[Section~3.2]{GarreRubio2023MPOSym}, that a single
+injective block without multiplicity forces the $F$-symbols to be gauge
+equivalent to $1$, is Theorem~\ref{thm:glm_single_block_obstruction}; for
+group-like algebras with normal blocks it is
+Theorem~\ref{thm:mpug_anomaly_obstruction}.
+% Source anchor: arXiv:2203.12563, lines 607--636.
 
 %% ---------------------------------------------------------
 \section{Weak Hopf algebras, dualities, and density operators}%
