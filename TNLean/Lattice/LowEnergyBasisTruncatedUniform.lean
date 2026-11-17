@@ -54,7 +54,7 @@ lines 1548–1564, and eq. `oibu` with lines 1698–1708. -/
 theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ i, i ∈ X i)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ i, (h i).IsHermitian)
-    (hSupport : ∀ i, h i ∈ supportedOperators d (X i : Set ι))
+    (hSupport : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X i : Finset ι))
     (R : ℕ) (hDiam : ∀ i, ∀ x ∈ X i, ∀ z ∈ X i, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ i, (X i).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ x ∈ X j), ‖h j‖ ≤ b₀)
@@ -87,11 +87,11 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le [NeZ
     (Matrix.isHermitian_sum _ fun j _ ↦ hHerm j) (h i)
   have hMherm (i : ι) : (M i).IsHermitian := isHermitian_gaussianFilteredTerm r ΔE
     (Matrix.isHermitian_sum _ fun j _ ↦ hHerm j) (hHerm i)
-  have hMsupp (i : ι) : M i ∈ supportedOperators d (K i : Set ι) :=
+  have hMsupp (i : ι) : M i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (K i : Finset ι) :=
     gaussianFilteredTerm_mem_supportedOperators r ΔE
-      (Submodule.sum_mem _ fun j hj ↦
-        supportedOperators_mono (by exact_mod_cast hsK i j hj) (hSupport j))
-      (supportedOperators_mono (by exact_mod_cast hXK i) (hSupport i))
+      (sum_mem fun j hj ↦
+        ManyBody.supportedOperators_mono (by exact_mod_cast hsK i j hj) (hSupport j))
+      (ManyBody.supportedOperators_mono (by exact_mod_cast hXK i) (hSupport i))
   refine exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le_of_commutator_le G X id hX h M
     hMherm hMnorm b₀ hBudget Kg kg hGrowth _ E₀ hγ hC fun i j ↦ ?_
   refine (norm_groundSpaceCompression_commutator_le _ _ _ _).trans ?_

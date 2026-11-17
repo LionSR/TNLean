@@ -167,7 +167,7 @@ noncomputable def powerProjector {ι : Type*} [Fintype ι] [DecidableEq ι] (H :
 
 /-- With `L - 1` bonds, one more than their number is the number of sites. -/
 private theorem card_bonds_add_one (hL : 0 < L) :
-    (((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ)) = L := by
+    ((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) = L := by
   rw [Fintype.card_fin, Nat.sub_add_cancel hL]
 
 /-- The three properties of `A` at line 602, from the QICLean estimate for sums of positive

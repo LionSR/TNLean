@@ -73,10 +73,12 @@ private theorem retained_support (hw : 0 < w)
       (interval L i.val (i.val + 2))) (i : Fin (L - 1)) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridRetainedTerm hw h i)
       (nearestNeighborChainSupport i).val := by
+  change _ ∈ ManyBody.supportedOperators _ _
   classical
   unfold chainGridRetainedTerm
   split_ifs
-  · exact isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+  · change _ ∈ ManyBody.supportedOperators _ _
+    exact (zero_mem _)
   · exact hs i
 
 private theorem retained_hermitian (hw : 0 < w)
@@ -120,9 +122,9 @@ theorem chainGridBoundaryTerm_supported (hw : 0 < w)
       (interval L i.val (i.val + 2))) (k : Fin ((L - 1) / w)) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridBoundaryTerm hw h k)
       (chainCutPair L (chainGridCut w k.val)) := by
-  have hneg := isSupportedOn_of_mem_supportedOperators
-    (Submodule.neg_mem _
-      (mem_supportedOperators_of_isSupportedOn (hs (chainGridBoundaryEdge hw k))))
+  change _ ∈ ManyBody.supportedOperators _ _
+  have hneg := (neg_mem
+      ((hs (chainGridBoundaryEdge hw k))))
   rw [chainGrid_boundary_edge_eq_pair k (chainGridBoundaryEdge_val_succ hw k).symm] at hneg
   exact hneg
 
@@ -147,7 +149,7 @@ theorem chainGridLRPrefactor_pos : 0 < chainGridLRPrefactor := by
 /-- The actual projected-generator error at an original grid boundary is derived from
 the original support, Hermiticity and norm bounds. No localization estimate is an input.
 Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang, Lemma 19. -/
-theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
+theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
     (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
@@ -155,7 +157,7 @@ theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
     (hnorm : ∀ i, ‖h i‖ ≤ 1) (k : Fin ((L - 1) / w)) (r : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t (chainGridBoundaryTerm hw h
         k) -
-      siteExpectation q (chainCutBuffer L (chainGridCut w k.val) r)
+      ManyBody.regionExpectation (chainCutBuffer L (chainGridCut w k.val) r)
         (ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
           (chainGridBoundaryTerm hw h k))‖ ≤
       chainGridLRPrefactor * Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) := by
@@ -176,7 +178,7 @@ theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
     calc
       _ ≤ C * 4 * 1 := by gcongr
       _ = chainGridLRPrefactor := by unfold C chainGridLRPrefactor; ring
-  have hLR := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
+  have hLR := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
     nearestNeighborChainSupport (chainGridRetainedTerm hw h) (retained_hermitian hw h hHerm)
     (retained_support hw h hs) 2 (chainGridRetained_site_budget hw h hnorm) S
     (chainGridBoundaryTerm_supported hw h hs k) (r : ℝ) (Nat.cast_nonneg r) t
@@ -185,7 +187,7 @@ theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
     at hLR
   have hLR' : ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
         (chainGridBoundaryTerm hw h k) -
-      siteExpectation q (chainCutBuffer L (chainGridCut w k.val) r)
+      ManyBody.regionExpectation (chainCutBuffer L (chainGridCut w k.val) r)
         (ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
           (chainGridBoundaryTerm hw h k))‖ ≤
       C * (S.card : ℝ) ^ 2 * ‖chainGridBoundaryTerm hw h k‖ *

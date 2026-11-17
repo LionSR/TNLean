@@ -51,7 +51,8 @@ private theorem isSupportedOn_outsidePiece
   intro i _
   split_ifs with hi
   · exact ((hs i).mono (hside i hi.2))
-  · exact zero_mem _
+  · change _ ∈ ManyBody.supportedOperators _ _
+    exact zero_mem _
 
 private theorem outside_sum_split
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b k : ℕ) :

@@ -262,32 +262,32 @@ theorem card_anchor_graphNeighborhood_le {R : ℕ} (a : AdmissibleSupport Λ R �
 /-- Every product of the radius-`r` local roots `(I - E_{N_r(a_i)} k_i)^{1/2}` over labels
 anchored in `N_r(S)` is supported on `N_{2r}(S)`.
 Source: area law, `09-amplification.tex`, lines 232–234. -/
-theorem contractionWord_siteExpectation_mem_supportedOperators {q : ℕ} [NeZero q]
+theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ} [NeZero q]
     {κ : Type*} (a : κ → Site Λ) {S : Finset (Site Λ)} {r : ℕ}
     (k : {i // a i ∈ graphNeighborhood Λ r S} →
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hk₁ : ∀ i, k i ≤ 1) :
     ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
       contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
-          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i))
-        m u ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+          ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i))
+        m u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   have hmem (i : {i // a i ∈ graphNeighborhood Λ r S}) :
-      CFC.sqrt (1 - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)) ∈
-        supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+      CFC.sqrt (1 - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)) ∈
+        ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
     set K := graphBall (planeDomainGraph Λ) (a i) r
-    have hK : CFC.sqrt (1 - siteExpectation q K (k i)) ∈
-        supportedOperators q (K : Set (Site Λ)) :=
-      sqrt_mem_supportedOperators K (sub_nonneg.mpr (siteExpectation_le_one _ (hk₁ i)))
-        ((supportedOperators q (K : Set (Site Λ))).sub_mem (one_mem_supportedOperators _)
-          (siteExpectation_mem_supportedOperators K (k i)))
-    exact supportedOperators_mono
+    have hK : CFC.sqrt (1 - ManyBody.regionExpectation K (k i)) ∈
+        ManyBody.supportedOperators (fun _ ↦ Fin q) K :=
+      (ManyBody.sqrt_mem_supportedOperators
+          ((Subalgebra.toSubmodule (ManyBody.supportedOperators (fun _ ↦ Fin q) K).toSubalgebra).sub_mem (one_mem (ManyBody.supportedOperators _ _))
+          (ManyBody.regionExpectation_mem_supportedOperators K (k i))))
+    exact ManyBody.supportedOperators_mono
       (by exact_mod_cast graphBall_subset_graphNeighborhood_two_mul i.2) hK
   intro m
   induction m with
-  | zero => intro u; rw [contractionWord_zero]; exact one_mem_supportedOperators _
+  | zero => intro u; rw [contractionWord_zero]; exact (one_mem (ManyBody.supportedOperators _ _))
   | succ m ih =>
     intro u
     rw [contractionWord]
-    exact mul_mem_supportedOperators (hmem _) (ih _)
+    exact mul_mem (hmem _) (ih _)
 
 /-- The prefactor `2 μ √C` of the truncation of the retained constraint product, for
 localization tails `C e^{-c l^α}` and at most `μ` labels per site. Source: area law,
@@ -308,12 +308,13 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
+          i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
       let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
       let kr := fun i : {i // P i} =>
-        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
+        ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word κ =>
         contractionWord (fun i : {i // P i} => k i) (PoissonWord.partitionWords P w).1.1
           (PoissonWord.partitionWords P w).1.2
@@ -325,11 +326,13 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
         constraintWordTruncationPrefactor μ C * t * S.card * (1 + (r : ℝ)) ^ 2 *
           Real.exp (-(c / 2 * (r : ℝ) ^ α)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
-        L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   unfold constraintWordTruncationPrefactor
   intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail S r t P kr D L
-  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := siteExpectation_nonneg _ (hk₀ i)
-  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := siteExpectation_le_one _ (hk₁ i)
+  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := Matrix.nonneg_iff_posSemidef.mpr
+      (ManyBody.posSemidef_regionExpectation (Matrix.nonneg_iff_posSemidef.mp (hk₀ i)))
+  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := (ManyBody.regionExpectation_mono (hk₁ i)).trans_eq
+      ManyBody.regionExpectation_one
   set ε := Real.sqrt C * Real.exp (-(c / 2 * (r : ℝ) ^ α)) with hε_def
   have hε (i : {i // P i}) : ‖CFC.sqrt (1 - k i) - CFC.sqrt (1 - kr i)‖ ≤ ε := by
     refine (norm_sqrt_one_sub_sub_le (hk₁ i) (hkr₁ i)).trans ?_
@@ -341,7 +344,7 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
   obtain ⟨hint, hle⟩ := integrable_and_integral_norm_contractionWord_retained_sub_le P
     (fun i : {i // P i} => k i) kr (fun i => hk₀ i) hkr₀ hε t
   refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
-    contractionWord_siteExpectation_mem_supportedOperators a _ (fun i => hk₁ i) _ _⟩⟩
+    contractionWord_regionExpectation_mem_supportedOperators a _ (fun i => hk₁ i) _ _⟩⟩
   have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
     rw [Fintype.card_subtype]; exact card_filter_anchor_mem_graphNeighborhood_le a hμ hfiber S r
   have hε0 : 0 ≤ ε := by positivity
@@ -370,12 +373,13 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
+            i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
         let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
         let kr := fun i : {i // P i} =>
-          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
+          ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
         let D := fun w : PoissonWord.Word κ =>
           contractionWord (fun i : {i // P i} => k i) (PoissonWord.partitionWords P w).1.1
             (PoissonWord.partitionWords P w).1.2
@@ -386,7 +390,7 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
         (∫ w, ‖D w - L w‖ ∂PoissonWord.measure κ t) ≤
           A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
-          L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) :=
+          L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
   ⟨_, _, constraintWordTruncationPrefactor_nonneg hμ C, half_pos hc,
     domainConstraintWord_truncation hC hμ⟩
 
@@ -412,11 +416,12 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ∧
-          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i)
+            ∧
+          ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | (planeDomainGraph Λ).Reachable (a i) x})) :
+        (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
@@ -426,7 +431,7 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
         (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
       let kr := fun i : {i // P i} =>
-        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
+        ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
         contractionWord k (PoissonWord.partitionWords P w).1.1
           (PoissonWord.partitionWords P w).1.2
@@ -438,7 +443,7 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
         constraintWordTruncationPrefactor ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) C * t *
           S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(c / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
-        L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   intro q _ Λ h a ha E₀ Ω hΩ hgap hspan S r t
   obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hΩ hgap hspan
   exact domainConstraintWord_truncation hC (Nat.cast_nonneg _) Λ (AdmissibleSupport Λ R) a _
@@ -462,7 +467,7 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
         (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
       let kr := fun i : {i // P i} =>
-        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
+        ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
         contractionWord k (PoissonWord.partitionWords P w).1.1
           (PoissonWord.partitionWords P w).1.2
@@ -475,7 +480,7 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
             (latticePositiveConstraintConst R J Δ p) * t * S.card * (1 + (r : ℝ)) ^ 2 *
           Real.exp (-(latticePositiveConstraintRate R J Δ p / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
-        L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) :=
+        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
   latticeConstraintWord_truncation_of_positiveConstraints R
     (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraints_explicit hp R hJ hΔ)
 
@@ -505,7 +510,7 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
         let kr := fun i : {i // P i} =>
-          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i)
+          ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
         let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
           contractionWord k (PoissonWord.partitionWords P w).1.1
             (PoissonWord.partitionWords P w).1.2
@@ -517,7 +522,7 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
           C * t * S.card * (1 + (r : ℝ)) ^ 2 *
             Real.exp (-(c * (r : ℝ) ^ kernelExponent p)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
-          L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+          L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   exact ⟨_, _, constraintWordTruncationPrefactor_nonneg (Nat.cast_nonneg _) C, half_pos hc,
     latticeConstraintWord_truncation_of_positiveConstraints R hC hpos⟩

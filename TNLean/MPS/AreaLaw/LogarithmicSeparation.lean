@@ -28,7 +28,7 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 `part2a_mps_information.tex`, lines 472–488.
 -/
 
-open ManyBody (interval IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace interval)
 
 namespace TNLean.MPS.AreaLaw
 

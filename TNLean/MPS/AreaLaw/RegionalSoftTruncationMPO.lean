@@ -85,7 +85,7 @@ theorem exists_regional_softTruncations_hermitian_mpo_of_accuracy {N q m s : ℕ
   let f := fun i : Fin N ↦ c • h i
   have hf (i : Fin N) : Entropy.IsSupportedOn (f i) {i.castSucc, i.succ} := by
     change _ ∈ ManyBody.supportedOperators _ _
-    exact (SMulMemClass.smul_mem c ((hs i)))
+    exact (SMulMemClass.smul_mem c (hs i))
   obtain ⟨C, hC⟩ := exists_local_sum_add_scalar_mpo hq f hf (z : ℂ)
   have hC0 : c • H + (z : ℂ) • 1 = MPOTensor.traceChainOperator C 1 := by
     simpa only [f, ← Finset.smul_sum] using hC

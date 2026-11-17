@@ -115,7 +115,7 @@ theorem stateCoeff_slice_mem_regionGroundSpace (A : Tensor Γ d) (R : Finset V)
       funext σ
       simp [stateCoeff]
     rw [hzero]
-    exact Submodule.zero_mem _
+    exact zero_mem _
 
 /-- Every linear operator vanishing on the local ground space annihilates
 all slices of the closed PEPS vector. Source: arXiv:2011.12127,

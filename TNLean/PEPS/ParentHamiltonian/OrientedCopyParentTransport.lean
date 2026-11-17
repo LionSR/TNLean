@@ -71,7 +71,7 @@ theorem graphRegionCopyMatrix_adjoint_maps_oriented_openBondSpace
       graphOrientedOpenBondSpace (blockMatrixRepresentation d D)
         (blockMultiplicityRootWeight d m) o R
   rw [graphRegionCopyMatrix_adjoint_oriented_open o d m D hm]
-  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨_, rfl⟩)
+  exact SMulMemClass.smul_mem _ (Submodule.subset_span ⟨_, rfl⟩)
 
 /-- The actual numbered regional spaces are carried forward by the explicit
 regional multiplicity matrix. -/
@@ -150,7 +150,7 @@ theorem graphNumberedCopyMatrix_maps_oriented_parent
   rintro _ ⟨φ, hφ, rfl⟩
   change _ *ᵥ φ ∈ _
   rw [hb, Matrix.smul_mulVec]
-  exact Submodule.smul_mem _ _
+  exact SMulMemClass.smul_mem _
     (numberedRegionCopyMatrix_maps_oriented_regionGroundSpace o d m D hm eX eY (R i) _
       ⟨φ, hφ, rfl⟩)
 
@@ -173,7 +173,7 @@ theorem graphNumberedCopyMatrix_adjoint_maps_oriented_parent
   rintro _ ⟨φ, hφ, rfl⟩
   change _ *ᵥ φ ∈ _
   rw [regionOperatorBlock_conjTranspose, hb, Matrix.conjTranspose_smul, Matrix.smul_mulVec]
-  exact Submodule.smul_mem _ _
+  exact SMulMemClass.smul_mem _
     (numberedRegionCopyMatrix_adjoint_maps_oriented_regionGroundSpace o d m D hm eX eY (R i) _
       ⟨φ, hφ, rfl⟩)
 

@@ -62,8 +62,8 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
   let B (i : SquareLatticeSiteOrEdge L L) :=
     F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i)) * Fᴴ
   have hBsupport (i : SquareLatticeSiteOrEdge L L) : B i ∈
-      QuantumCircuit.supportedOperators (q * q)
-          (squareLatticeSiteOrEdgeSupport i : Set (Vertex L)) :=
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+          (squareLatticeSiteOrEdgeSupport i : Finset (Vertex L)) :=
     TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
       (squareLatticeSiteOrEdgeSupport i) (h.hermitianTerm_mem_supportedOperators i)
   have hFn : ‖F‖ ≤ 1 :=
@@ -128,7 +128,7 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       rw [embedOp_rectangle_eq_reindex] at hs
       simpa only [squareAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      exact Submodule.zero_mem _
+      exact zero_mem _
   · intro X
     by_cases hx : ∃ i, squareAreaLawSupport L i = X
     · obtain ⟨i, rfl⟩ := hx

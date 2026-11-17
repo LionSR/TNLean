@@ -104,15 +104,15 @@ theorem isSupportedOn_localized_sub_self (K : Finset ι)
     (W X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
     Entropy.IsSupportedOn (n := fun _ ↦ d) (W + ManyBody.regionExpectation K X - W) K := by
   rw [add_sub_cancel_left]
-  exact (((ManyBody.regionExpectation_mem_supportedOperators K X)))
+  exact (ManyBody.regionExpectation_mem_supportedOperators K X)
 
 /-- The localized operator `M = W + E_K(W_tilde - W)` of a Hermitian `W` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem isHermitian_localized (q' ΔE : ℝ) {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hH : H.IsHermitian) (hW : W.IsHermitian) (K : Finset ι) :
     (W + ManyBody.regionExpectation K (gaussianFilteredTerm q' ΔE H W - W)).IsHermitian := by
-  exact hW.add ((ManyBody.isHermitian_regionExpectation (D := K) ((isHermitian_gaussianFilteredTerm
-      q' ΔE hH hW).sub hW)))
+  exact hW.add (ManyBody.isHermitian_regionExpectation (D := K) ((isHermitian_gaussianFilteredTerm
+      q' ΔE hH hW).sub hW))
 
 end Localized
 
@@ -146,7 +146,7 @@ theorem ChainHamiltonian.norm_gaussianFilteredTerm_sub_localized_le_of_commutato
   have hv := chainLRVelocity_nonneg R J
   have hA : Entropy.IsSupportedOn (n := fun _ ↦ q) (Complex.I • C) S := by
     change _ ∈ ManyBody.supportedOperators _ _
-    exact (SMulMemClass.smul_mem _ (hS))
+    exact (SMulMemClass.smul_mem _ hS)
   have hloc : ∀ s ∈ Set.Icc (-T) T,
       ‖hermitianUnitaryPath h.operator s * (Complex.I • C) *
           hermitianUnitaryPath h.operator (-s) -

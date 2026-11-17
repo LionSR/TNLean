@@ -373,8 +373,8 @@ theorem regionRowB_mem_range (A B : Tensor G d) (R : Finset V)
         rw [Pi.smul_apply, ite_eq_right (Ne.symm hne), smul_zero]
       · intro hσ; exact absurd (Finset.mem_univ σ) hσ
   rw [hexpand]
-  refine Submodule.sum_mem _ (fun σ' _ => ?_)
-  exact Submodule.smul_mem _ _ (hmem σ')
+  refine sum_mem (fun σ' _ => ?_)
+  exact SMulMemClass.smul_mem _ (hmem σ')
 
 /-- The doubly-indexed transfer coefficient: the second tensor's complement blocked
 left inverse applied to the region-row coordinate viewed as a function of the

@@ -5633,7 +5633,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
   `Real.exp_le_exp` and `Real.exp_add`.
 - **Notes:** Both occurrences now go through the one graph localization
-  theorem `norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two`
+  theorem `norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two`
   in `MPS/AreaLaw/LiebRobinson.lean`, so the rounding step occurs once. A new
   occurrence elsewhere would warrant extracting the scalar inequality.
 

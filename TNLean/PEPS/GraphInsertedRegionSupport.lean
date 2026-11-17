@@ -190,9 +190,9 @@ theorem graphInsertedBondNetwork_slice_mem_regionGroundSpace_of_internal_eq_one 
     simp_rw [hv]
     rw [← Finset.mul_sum, graphOpenRegionNetwork_eq_sum_internal]
   rw [heq]
-  apply Submodule.sum_mem
+  apply sum_mem
   intro ζ _
-  apply Submodule.smul_mem
+  apply SMulMemClass.smul_mem
   have h := openRegionWeight_mem_regionGroundSpace (groupBondTensor a) R
     (fun e => Fintype.equivFin X (insertedBoundary R ζ e))
   have heq : openRegionWeight (groupBondTensor a) R
