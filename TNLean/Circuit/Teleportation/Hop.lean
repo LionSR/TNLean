@@ -433,7 +433,7 @@ theorem pre_mulVec (z : Fin N → Fin d) {v : (Fin N → Fin d) → ℂ} (hv : I
       finKronecker (Function.update 1 h.c (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.c)))) *
         (finKronecker (Function.update 1 h.e (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.e)))) *
           finKronecker (Function.update 1 h.f (quditPauli (z h.c) (z h.e)))) := by
-    rw [finKronecker_mul, finKronecker_mul]
+    rw [← finKronecker_mul, ← finKronecker_mul]
     congr 1
     funext i
     simp only [frame, Function.update_apply, Pi.one_apply]
