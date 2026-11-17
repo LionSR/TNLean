@@ -53,7 +53,11 @@ variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-- The normalized partial-trace expectation onto `K` of the sites `ι`, each of local dimension
 `q`, is the region expectation of `ManyBody`: both are
 `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1_{ι \ K}` (OpenAI area law, `eq:quasilocal-ce`,
-`03-quasilocal.tex`, lines 19–25). -/
+`03-quasilocal.tex`, lines 19–25). No hypothesis on `q` is needed.
+
+This is a transitional bridge between two definitions of one notion. It is used only where a
+`siteExpectation` statement meets a `regionExpectation` one, and it is deleted together with
+`siteExpectation` in follow-up F12 of `docs/audits/FOLLOWUPS_FILE`. -/
 theorem siteExpectation_eq_regionExpectation (K : Finset ι)
     (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     siteExpectation q K B = regionExpectation (X := fun _ : ι ↦ Fin q) K B := by

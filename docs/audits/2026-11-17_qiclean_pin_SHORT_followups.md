@@ -89,5 +89,5 @@ and F9.
 | F9 | `SquareHamiltonian.hermitianTerm`, `RectangularHamiltonian.hermitianTerm` and their lemmas | `ManyBody.Interaction.hermitianPart` | 5 |
 | F10 | `Lattice.groundEigenspace` | `ManyBody.groundSpace` | 25 |
 | F11 | `Matrix.IsGappedGroundState` | `ManyBody.IsGapped` with `groundSpace = span {Ω}`, through `ManyBody.isGapped_and_groundSpace_eq_span_iff` | 186 |
-| F12 | `QuantumCircuit.siteExpectation`, with `siteExpectation_eq_regionExpectation` and the two estimates above | `ManyBody.regionExpectation` | 53 |
+| F12 | `QuantumCircuit.siteExpectation`; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral`, `MPS/AreaLaw/DomainSupportedGaussianIntegral` and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
 | F13 | `Entropy.crossingTerms` (QICLean's temporary export) | `ManyBody.crossingTerms` | 35 |
