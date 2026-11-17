@@ -109,33 +109,6 @@
     $\det(\Id_{r\ell/4}\otimes R)=(\det R)^{r\ell/4}$.
 \end{proof}
 
-\begin{lemma}[Admissible phases under conjugation]
-    \label{ex:mpu_admissible_all_conjugation_phases}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (realization by source-derived standard forms):** each
-    % displayed standard-form tensor carries reduced full-support source data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{conjphs, prop:conjsym-strict-equiv, corconj, cor:sympl-to-orthogonal, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Assume the standard-form tensors displayed below carry reduced full-support
-    source data and that the comparison paths used to classify them carry
-    admissible path data of blocking length one. Let
-    \begin{align}
-        u_+ & =v_+=\Id_{r\ell},                        &
-        u_- & =v_-=\operatorname{diag}(-1,1,\ldots,1).
-    \end{align}
-    If at least one of $r$ and $\ell$ is odd, the pairs $(u_+,v_+)$ and
-    $(u_+,v_-)$ represent the two classes of Theorem~\ref{conjphs}. If $r$
-    and $\ell$ are both even, the four pairs $(u_\pm,v_\pm)$ represent the
-    four Case I classes of Theorem~\ref{prop:conjsym-strict-equiv}. With
-    \begin{align}
-        u'_\pm & =(\Id_{r\ell/4}\otimes R)u_\pm, &
-        v'_\pm & =v_\pm(\Id_{r\ell/4}\otimes R),
-    \end{align}
-    the four pairs $(u'_\pm,v'_\pm)$ represent the four Case II classes.
-    % Source lines: paper_v2.tex 1845--1876.
-\end{lemma}
-
 \begin{lemma}[Normalization obstruction in the printed CZX tensor]
     \label{thm:czx_printed_normalization_obstruction}
     % Principal declaration: MPOTensor.CZX.printed2017Tensor_not_isMPU.
@@ -1252,32 +1225,6 @@
     % Source lines: paper_v2.tex 2045--2085.
 \end{lemma}
 
-\begin{lemma}[Admissible transformation with swaps and symmetry equivalence]
-    \label{lem:mpu_admissible_swap_symmetry_equivalence}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (admissible phase comparison):** every blocked endpoint
-    % and comparison path carries the datum of
-    % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU, threeMPU2, def:mpu_admissible_strict_symmetry_equivalence, def:mpu_admissible_symmetry_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Fix one of the three symmetry comparisons and let
-    $p\mapsto\mathcal W(p)$ be the source-constructed interpolation used
-    in that comparison. Suppose it carries an admissible symmetry-path datum of
-    blocking length one. Thus the path $\mathcal W(p)$ and the four fixed
-    comparison paths $\overline{\mathcal W(p)}$, $\mathcal W(p)^\sharp$,
-    $\mathcal W(p)^{\mathsf T}$, and $\mathcal S[\mathcal W(p)]$ are simple and
-    carry continuously varying reduced full-support source data. Suppose
-    also that every one- and two-site endpoint tensor used in the local
-    comparison carries its own datum. Then $U_i^{(N)}$ and $U_j^{(N)}$ are in
-    the same admissible phase under time reversal combined with the local swap,
-    transposition combined with the local swap, or conjugation if and only if
-    the corresponding $\widetilde U_i^{(N)}$ and $\widetilde U_j^{(N)}$ are in
-    the same admissible phase under time reversal, transposition, or
-    conjugation, respectively.
-    % Source lines: paper_v2.tex 2045--2085.
-\end{lemma}
-
 \begin{lemma}[Conjugation phases of $U_2$ and $U_3$]
     \label{prop:U2-U3-trivial-conjugation}
     \lean{MPOTensor.shiftExampleU₂_strictlyEquivalentUnderSymmetry_conjugation,
@@ -1440,39 +1387,6 @@
     % Source lines: paper_v2.tex 2158--2200.
 \end{lemma}
 
-\begin{lemma}[Admissible conjugation phases of $U_1$ and $U_2$]
-    \label{prop:mpu_admissible_u1_u2_conjugation}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (admissible blockings and paths):** every standard form,
-    % blocked endpoint, and comparison path carries the required source data.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, conjphs, prop:conjsym-strict-equiv, cor:equiv-under-conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    For each endpoint tensor $\mathcal A$ among
-    $U_1$, $U_2$, $\widetilde U_1$, and $\widetilde U_2$, suppose that
-    $\mathcal A$, its conjugate comparison $\overline{\mathcal A}$, its
-    two-site block $\mathcal A_2$, and the conjugate comparison
-    $\overline{\mathcal A_2}$ are simple and carry their own reduced
-    full-support source data. For every strict comparison used below, let
-    $p\mapsto\mathcal W(p)$ be the
-    source-constructed interpolation between the corresponding endpoint
-    tensors. Suppose it carries an admissible conjugation-symmetry path datum of
-    blocking length one: the path and its fixed conjugate, physical-adjoint,
-    transposed, and conjugation-image comparison paths are simple and carry
-    continuously varying source data. Require a length-one admissible path datum
-    also for the blocked interpolation used in the final equivalence
-    claim. Under these hypotheses,
-    $U_1^{(N)}$ and $U_2^{(N)}$ are in different admissible strict phases under
-    conjugation exactly when $k$ is a nonnegative integer and
-    \begin{align}
-        d & =4k+2.
-    \end{align}
-    Otherwise they are in the same admissible strict phase. All these standard
-    forms lie in Case I, so $U_1^{(N)}$ and $U_2^{(N)}$ are admissibly equivalent
-    after blocking and adding ancillas.
-    % Source lines: paper_v2.tex 2158--2200.
-\end{lemma}
-
 \begin{definition}[Two-species ancilla configurations]
     \label{def:mpu_shift_ancilla_config}
     \lean{MPOTensor.ShiftAncillaConfig}
@@ -1607,40 +1521,6 @@
     After adding one ancilla of dimension $d$ per site,
     $\widetilde U_1^{(N)}$ and $\widetilde U_2^{(N)}$ are strictly equivalent
     under both time reversal and transposition.
-    % Source lines: paper_v2.tex 2203--2235.
-\end{lemma}
-
-\begin{lemma}[Admissible ancilla equivalence of $U_1$ and $U_2$]
-    \label{prop:mpu_admissible_u1_u2_ancilla}
-    \notready
-    \discussion{5715}
-    % **Scope restriction (ancilla endpoint and admissible path data):** the
-    % ancilla-enlarged tensors carry source data and the comparison path is
-    % admissible. No preservation under adjoining ancillas is asserted.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{threeMPU2,
-        lem:mpu_admissible_swap_symmetry_equivalence,
-        def:mpu_admissible_strict_symmetry_equivalence,
-        def:mpu_admissible_symmetry_equivalence,
-        def:mpu_reduced_full_support_source_datum,
-        def:mpu_admissible_equivalence_datum}
-    After adding one ancilla of dimension $d$ per site and performing the source
-    blocking, denote the enlarged blocked endpoints by
-    $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. For either time
-    reversal or transposition, let $p\mapsto\mathcal W_{\mathcal S}(p)$ be the
-    source-constructed interpolation from $\widehat{\mathcal U}_1$ to
-    $\widehat{\mathcal U}_2$. Suppose this interpolation carries an admissible
-    symmetry-path datum of blocking length one. Thus the path
-    $\mathcal W_{\mathcal S}(p)$ and its fixed conjugate, physical-adjoint,
-    transposed, and $\mathcal S$-image comparison paths are simple and carry
-    continuously varying reduced full-support source data. Suppose also that
-    the one- and two-site enlarged endpoint tensors used in the local comparison
-    carry their own data. Then $\widehat{\mathcal U}_1$ and
-    $\widehat{\mathcal U}_2$ are admissibly strictly equivalent under both time
-    reversal and transposition. No equivalence of the original ancilla-free
-    tensors is asserted, because the equal ancilla dimensions used here need not
-    satisfy the coprimality condition in
-    Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
     % Source lines: paper_v2.tex 2203--2235.
 \end{lemma}
 
