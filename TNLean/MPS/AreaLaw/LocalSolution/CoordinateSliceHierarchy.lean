@@ -113,7 +113,7 @@ theorem natDist_coordinate_le_of_dist_le {σ : Type*} [PseudoMetricSpace σ] {D 
 
 section Operators
 
-variable {ι : Type*} [Fintype ι] {d N : ℕ}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d N : ℕ}
 
 /-- The actual pair operator is the sum of the local terms assigned to its coarse edge.
 Hastings, arXiv:cond-mat/0508554v3, lines 628–639 and 745–756. -/
@@ -168,8 +168,6 @@ theorem isHermitian_coordinateSliceOperator (z : ι → ℕ) (ℓ : ℕ) (hN : 0
     (j : Fin N) : (coordinateSliceOperator z ℓ hN a j).IsHermitian :=
   isHermitian_edgePartition _ a ha j
 
-variable [DecidableEq ι]
-
 /-- The residual of an actual slice pair is at most the number of physical terms times
 the local residual, in every dimension. Hastings, arXiv:cond-mat/0508554v3,
 equation `low`, lines 628–639 and 745–756. -/
@@ -203,7 +201,6 @@ theorem centeredNorm_coordinateSliceOperator_le_two_mul (z : ι → ℕ) (ℓ : 
       2 * Fintype.card ι * J :=
   centeredNorm_edgePartition_le_two_mul _ a hψ hJ ha j
 
-omit [DecidableEq ι] in
 /-- The closing slice operator acts only on the two boundary slices of the finite box. -/
 theorem coordinateSliceOperator_closing_mem_supportedOperators (z : ι → ℕ)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N) (hz : ∀ i, z i < N * (2 * ℓ))
