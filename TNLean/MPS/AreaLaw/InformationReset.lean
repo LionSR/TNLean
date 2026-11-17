@@ -279,8 +279,9 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
     information_reset_of_supported_localization q hq R Δ hΔ p hp Cint v hCint hv
   refine ⟨Cp, L₀, hCp, hL₀, ?_⟩
   intro L hL h Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
-  have hK := h.doubled_operator
-  have hK' := h.swappedDoubled_operator D
+  have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin L) q q)
+      (sitePairConfigurationEquiv (Fin L) q q) (doubledHamiltonian h.operator) =
+        h.doubled.operator := h.doubled_operator.symm
   let Z := (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).biUnion (fun X ↦ X.1)
   refine hreset L hL h.operator Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ chainNeighborhood A (ℓ : ℝ)) Z (fun ℓ ↦ ?_)
@@ -288,7 +289,7 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)
   refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
   obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-  rw [← hK, ← hK']
+  rw [hK, ← h.swappedDoubled_operator D]
   exact ⟨hs, herr⟩
 
 /-- Information reset on an actual finite induced integer domain, using its
@@ -320,8 +321,9 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
     information_reset_of_supported_localization q hq R Δ hΔ p hp Cint v hCint hv
   refine ⟨Cp, L₀, hCp, hL₀, ?_⟩
   intro Λ hL h Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
-  have hK := h.doubled_operator
-  have hK' := h.swappedDoubled_operator D
+  have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
+      (sitePairConfigurationEquiv (Fin Λ.card) q q) (doubledHamiltonian h.operator) =
+        h.doubled.operator := h.doubled_operator.symm
   let Z := (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).biUnion (fun X ↦ X.1)
   refine hreset Λ.card hL h.operator Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ A.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ℓ)) Z
@@ -329,7 +331,7 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h D ℓ
     refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
     obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-    rw [← hK, ← hK']
+    rw [hK, ← h.swappedDoubled_operator D]
     exact ⟨hs, herr⟩
   · have hrad : ((ℓ + R : ℕ) : ℝ) ≤ w := by simpa only [Nat.cast_add] using hℓ
     exact ManyBody.reset_graphNeighborhood_disjoint_cores (lineDomainGraph Λ)
