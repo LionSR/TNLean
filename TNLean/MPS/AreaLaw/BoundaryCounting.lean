@@ -32,7 +32,7 @@ Source: TNLean one-dimensional note, `part1_arealaw.tex`, `eq:count`, lines
 geometric and does not assert a partial-swap operator decomposition.
 -/
 
-open ManyBody (card_interval_le interval mem_interval)
+open ManyBody (ChainSupport IsChainSupport card_interval_le interval mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -88,7 +88,7 @@ lemma card_crossingTerms_le_mul_card_boundaryEdges
       (boundaryEdges L D).biUnion F := by
     intro X hX
     simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
-    obtain ⟨p, hp, hsub⟩ := X.2.exists_boundary_window_of_split hX
+    obtain ⟨p, hp, hsub⟩ := IsChainSupport.exists_boundary_window_of_split X.2 hX
     exact Finset.mem_biUnion.mpr ⟨p, hp, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsub⟩⟩
   have hcard (p : ℕ) : (F p).card ≤ 2 ^ (2 * R) :=
     card_filter_subset_le_pow_of_card_le

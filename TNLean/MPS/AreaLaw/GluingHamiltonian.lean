@@ -18,7 +18,7 @@ arXiv:1307.5143v1, `algo53.tex`, lines 409–410, given as the named parts `cutL
 one-site terms and arbitrary Hermitian contractions.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (ChainSupport interval mem_interval)
 
 open Matrix
 open scoped Matrix.Norms.L2Operator

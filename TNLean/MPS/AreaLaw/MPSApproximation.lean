@@ -33,7 +33,7 @@ produces the matrix product state.
   Proposition 7.1 and Theorem 7.2.
 -/
 
-open ManyBody (interval)
+open ManyBody (ChainSupport interval)
 
 open Matrix
 

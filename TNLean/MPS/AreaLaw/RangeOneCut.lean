@@ -17,7 +17,7 @@ This is the Hamiltonian decomposition used by Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `References/1307.5143/algo53.tex`, lines 283 and 409–410.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (ChainSupport IsChainSupport interval mem_interval)
 
 open Matrix
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder
@@ -65,7 +65,7 @@ theorem ChainHamiltonian.exists_cut_decomposition_of_range_one {L q : ℕ}
       X.1 = interval L (k - 1) (k + 1) := by
     have hnotL := (Finset.mem_filter.mp (Finset.mem_filter.mp hXC).1).2
     have hnotR := (Finset.mem_filter.mp hXC).2
-    apply X.2.eq_interval_of_splits_of_range_one
+    apply IsChainSupport.eq_interval_of_splits_of_range_one X.2
     constructor
     · obtain ⟨x, hx, hxA⟩ := Finset.not_subset.mp hnotR
       exact ⟨x, hx, by simpa [A, mem_interval] using hxA⟩

@@ -36,6 +36,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, Lemma
 `lem:LR`, lines 260–309. No ground-state or spectral-gap assumption is needed.
 -/
 
+open ManyBody (ChainSupport)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -79,7 +81,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
   have hBound (n : ℕ)
       (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (SimpleGraph.pathGraph L).edist x y) :=
     ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
-      (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
+      (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k ↦ ChainSupport.edist_le (X k))
       (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget S hA y hB 1 (by norm_num) n hn t
   dsimp only
   set δ := S.inf (fun x ↦ (SimpleGraph.pathGraph L).edist x y)
@@ -142,7 +144,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     exact_mod_cast SimpleGraph.pathGraph_card_sphere_le_two L x d
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
   have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
-    (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
+    (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k ↦ ChainSupport.edist_le (X k))
     (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   have hN : (S.biUnion fun x ↦
       ManyBody.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =

@@ -57,7 +57,7 @@ site-generic lemmas `TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_di
   Theorem A (`thm:A`), and `part1_arealaw.tex`, Section 2 (`sec:setting`), first reduction.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (ChainSupport IsChainSupport interval mem_interval)
 
 open Matrix
 open scoped ComplexOrder Kronecker symmDiff Matrix.Norms.L2Operator

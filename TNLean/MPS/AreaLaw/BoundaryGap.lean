@@ -22,7 +22,7 @@ normalization stated at the beginning of Section 5 of AKLV, arXiv:1301.1162v1,
 before equation (4).
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (ChainSupport interval mem_interval)
 
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder

@@ -27,6 +27,8 @@ Source: Hastings, arXiv:0705.2024v4, eq. `lrb` and the definition of `ξ`,
 lines 96–112 and 139–142.
 -/
 
+open ManyBody (ChainSupport)
+
 open QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 
@@ -53,7 +55,7 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_numeric
   have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
     (SimpleGraph.pathGraph L) Φ
     (fun Z ↦ Classical.choose Z.2.1) (fun Z ↦ Classical.choose_spec Z.2.1)
-    h.hermitian R (fun Z x hx y hy ↦ Z.edist_le x hx y hy)
+    h.hermitian R (fun Z x hx y hy ↦ ChainSupport.edist_le Z x hx y hy)
     (R + 1) (by omega) (fun Z ↦ Z.2.card_le)
     (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) h.sum_norm_terms_containing_le X hA Y hB 1 (by norm_num) d
     (fun x hx y hy ↦ by

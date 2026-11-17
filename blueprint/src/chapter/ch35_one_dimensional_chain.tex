@@ -270,7 +270,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Interactions split by an interval]
     \label{lem:chain_crossing_count}
     \lean{
-        TNLean.MPS.AreaLaw.IsChainSupport.subset_window_of_splits,
+        ManyBody.IsChainSupport.subset_window_of_splits,
         TNLean.MPS.AreaLaw.chainCrossConst,
         TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
         TNLean.MPS.AreaLaw.cutBudgetConst,
@@ -2319,7 +2319,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 % and rem:sharper, lines 706--748.
 \begin{lemma}[A support of maximal cardinality]
     \label{thm:chain_full_support_window}
-    \lean{TNLean.MPS.AreaLaw.IsChainSupport.exists_eq_interval_of_card_eq}
+    \lean{ManyBody.IsChainSupport.exists_eq_interval_of_card_eq}
     \leanok
     \uses{def:chain_model}
     Let $L,R\in\mathbb N$ and let $X\subseteq\{0,\ldots,L-1\}$
