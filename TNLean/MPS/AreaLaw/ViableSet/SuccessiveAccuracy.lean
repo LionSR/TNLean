@@ -108,11 +108,13 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
     · intro E Γ hΩ hgap hspan
       exact hviable E (paddedGroundVector hi z Γ)
         (isGapped_paddedInteraction hL hi z h
-      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap hspan hDelta)
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
+        hspan hDelta)
   · intro E Γ hΩ hgap hspan
     obtain ⟨hcard, hmps, hviable⟩ := hS L hi
     have hpad := isGapped_paddedInteraction hL hi z h
-      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap hspan hDelta
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
+        hspan hDelta
     obtain ⟨w, hw, hwnorm, herror, hmpsw⟩ :=
       (hviable E _ hpad).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ hmps
     refine ⟨w, hw, hwnorm, ?_, hmpsw.mono ?_⟩

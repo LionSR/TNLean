@@ -138,7 +138,7 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGapped
     ⟨hΨ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact heigenΨ, hgapΨ⟩
   refine ⟨⟨hΨ', hgapD, hspanD⟩, ?_⟩
-  have hΦ : Matrix.toEuclideanLin F Ψ = Φ := Matrix.toLpLin_apply F Ψ
+  have hΦ : Matrix.toEuclideanLin F Ψ = Φ := rfl
   have hΦn : ‖Φ‖ = 1 := by
     change ‖WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)‖ = 1
     rw [Matrix.norm_toLp_mulVec_of_unitary hF]

@@ -172,12 +172,14 @@ theorem cost_sampledGroundStateProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   classical
   simp only [sampledGroundStateProgram, FreeM.cost_bind, FreeM.cost_lift,
     eval_sampledSweepProgram, queryCost_energyMinimizer, sampledGroundStateCostBound]
-  have hsweep := cost_sampledSweepProgram_le hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood b D hD
+  have hsweep := cost_sampledSweepProgram_le hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm
+      hgood b D hD
     L le_rfl
   have hcard : ((sampledSweep hq h hs h0 h1 E₀ Δ I L).image fun w ↦
       (fullLeftEquiv L q).symm w).card ≤ max 1 (sampledSizeBudget q Δ L ℓ D) := by
     refine Finset.card_image_le.trans ?_
-    refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood L le_rfl).1.trans ?_
+    refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood L
+        le_rfl).1.trans ?_
     simp only [show L ≠ 0 by omega, ↓reduceIte]
     exact le_max_of_le_right (Nat.mul_le_mul_right _ (Nat.mul_le_mul_left ℓ hD))
   have hsize : max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) ≤
@@ -319,7 +321,8 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
   calc
     _ ≤ sampledGroundStateCostBound q Δ L (sampledWordCount q L E₀ Δ δ)
           (sampledRankBound q L E₀ Δ δ) (C * L ^ p) :=
-        cost_sampledGroundStateProgram_le (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc
+        cost_sampledGroundStateProgram_le (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0
+          hδ1 hδc
           I (Nat.le_ceil _) hgood (C * L ^ p) (sampledRankBound q L E₀ Δ δ) le_rfl
     _ ≤ sampledGroundStateCostBound q Δ L (max C₁ C * L ^ max p₁ p) (max C₁ C * L ^ max p₁ p)
           (C * L ^ p) :=

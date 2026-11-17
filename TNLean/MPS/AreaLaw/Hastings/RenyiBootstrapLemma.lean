@@ -228,7 +228,8 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
             bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
   obtain ⟨K, hK, hL2⟩ := exists_entropy_le_of_overlap_schmidtRank_mixture R
-  refine ⟨K, hK, fun hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef ↦ ?_⟩
+  refine ⟨K, hK, fun hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef ↦
+    ?_⟩
   exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hΩ j hα).trans
     (hL2 hJ hΔ h hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)
 

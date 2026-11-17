@@ -292,7 +292,8 @@ theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q) (h : ChainHamilton
     (i : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
       maxEntropyBound ξ' C₁ C₂ q :=
-  regionEntropy_prefix_le_of_windowClaim_of_le hq h hΩ hgap hspan hξ' hC₁ hC _ le_rfl W hdrop hpos hinit
+  regionEntropy_prefix_le_of_windowClaim_of_le hq h hΩ hgap hspan hξ' hC₁ hC _ le_rfl W hdrop hpos
+    hinit
     hclaim i
 
 end TNLean.MPS.AreaLaw.Hastings

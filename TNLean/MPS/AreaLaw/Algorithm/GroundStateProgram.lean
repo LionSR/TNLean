@@ -129,7 +129,8 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   obtain ⟨hcard, hmps, hviable⟩ := lvvSweep_spec hq (paddedInteraction hi z h) hs' h0' h1' hg L hi
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
   have hpad := isGapped_paddedInteraction hL hi z h
-      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap hspan hDelta
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
+        hspan hDelta
   have hNreal : (0 : ℝ) < N := by exact_mod_cast hN
   set δ : ℝ := lvvSuccessiveError (min Delta 1) / N with hδdef
   have hδ1 : δ < 1 := by

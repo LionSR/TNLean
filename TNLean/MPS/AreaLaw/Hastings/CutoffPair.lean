@@ -213,8 +213,8 @@ theorem ChainHamiltonian.norm_localizedPart_apply_le {E₀ : ℝ}
   set G := gaussianFilteredTerm s ΔE h.operator W
   have hsplit : h.localizedPart Ω s ΔE P K = G - (G - h.localizedPart Ω s ΔE P K) := by abel
   have hG : ‖toEuclideanLin G Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * cP := by
-    refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ hg.1 hg.2.2.1
-      hg.2.2.2 W (inner_groundCentered hP hΩ)).trans ?_
+    refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ h.operator_isHermitian
+      hgap hspan W (inner_groundCentered hP hΩ)).trans ?_
     rw [h.commutator_groundCentered]
     gcongr
     exact (hop _).trans hc
@@ -281,15 +281,18 @@ theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q 
   -- the bounds `‖M Ω‖ ≤ μ`
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPL KL (h.norm_commutator_leftPart_le c m)
+    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPL KL
+      (h.norm_commutator_leftPart_le c m)
       (h.norm_gaussianFilteredTerm_leftPart_sub_localized_le hq1 c m s ΔE (Nat.cast_nonneg k) hT)
   have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPR KR (h.norm_commutator_rightPart_le c m)
+    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPR KR
+      (h.norm_commutator_rightPart_le c m)
       (h.norm_gaussianFilteredTerm_rightPart_sub_localized_le hq1 c m s ΔE (Nat.cast_nonneg k) hT)
   -- the remainder
   have hE : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
+    exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
   have hsum := h.groundCentered_parts_sum_of_eigen hΩ hE c m
   set DL := gaussianFilteredTerm s ΔE h.operator (groundCentered Ω PL) - groundCentered Ω PL
   set DR := gaussianFilteredTerm s ΔE h.operator (groundCentered Ω PR) - groundCentered Ω PR

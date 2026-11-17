@@ -173,7 +173,8 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
     simp [IsHermitian, conjTranspose_smul]
   have hH' : (h.operator - (E₀ : ℂ) • 1).IsHermitian := h.operator_isHermitian.sub hE
   have hmoved := norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le hH' hH'
-    hΩ hgap.sub_smul_one_self ((ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan) hΔ hOL hOR hcomm s (δ := 0) (by simp) hη
+    hΩ hgap.sub_smul_one_self ((ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan) hΔ hOL hOR
+      hcomm s (δ := 0) (by simp) hη
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
     Hastings.ChainHamiltonian.exists_boundaryOperator_factorization hq1 h hH₀ E₀ _ hZ hOL hOR
       (timeAverageVariance s ΔE) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved

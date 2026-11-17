@@ -264,7 +264,8 @@ theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : �
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
-    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
+    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
+    (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -370,7 +371,8 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
-    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
+    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
+    (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =

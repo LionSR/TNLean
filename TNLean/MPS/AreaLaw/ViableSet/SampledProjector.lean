@@ -236,7 +236,8 @@ lemma norm_scaledBondComplementWord_sub_le [NeZero L]
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {m : ℕ} (I : Fin m → Fin L) :
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {m : ℕ}
+    (I : Fin m → Fin L) :
     ‖scaledBondComplementWord h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ ≤
       powerNormalization L E₀ ^ m + 1 := by
   obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
@@ -530,7 +531,8 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ} (hη : 0 < η)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
+    (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
     (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
         2 * (powerNormalization L E₀ ^ m + 1) * η / 3) / η ^ 2 *
@@ -620,7 +622,8 @@ theorem one_sub_inv_pow_three_le_measureReal_sampledProjector [NeZero L]
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ} (hη : 0 < η)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
+    (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
     (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
         2 * (powerNormalization L E₀ ^ m + 1) * η / 3) / η ^ 2 *
@@ -660,7 +663,8 @@ theorem exists_sampledProjector [NeZero L]
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η) (m : ℕ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
+    (m : ℕ)
     (hm : ((L - E₀) / Δ) * Real.log (1 / η) ≤ m) :
     ∃ I : Fin (sampledProjectorWordCount q L E₀ η m) → Fin m → Fin L,
       ‖powerProjector (∑ i, h i) L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
@@ -673,7 +677,8 @@ theorem exists_sampledProjector [NeZero L]
         q ^ (2 * sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) := by
   set ℓ := sampledProjectorWordCount q L E₀ η m
   set κ := sampledProjectorLetterBound L ℓ m
-  have hprob := one_sub_le_measureReal_sampledProjector h h0 h1 hΩ hgap hspan hΔ m hη (ℓ := ℓ) (κ := κ)
+  have hprob := one_sub_le_measureReal_sampledProjector h h0 h1 hΩ hgap hspan hΔ m hη (ℓ := ℓ)
+      (κ := κ)
     ((Nat.le_ceil _).trans (by simp [ℓ, sampledProjectorWordCount]))
     (Nat.le_ceil _)
   have hpos : 0 < (sampleMeasure ℓ m L).real

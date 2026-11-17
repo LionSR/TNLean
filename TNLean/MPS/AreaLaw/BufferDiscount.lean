@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.Counting
 import TNLean.Algebra.TailRadiusWeights
 import QICLean.Entropy.BufferDiscount
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.Algebra.MatrixHermitianSum
 
 /-!
 # The buffered discount with a constant-width buffer

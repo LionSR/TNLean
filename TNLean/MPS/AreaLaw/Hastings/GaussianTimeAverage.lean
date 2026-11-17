@@ -174,6 +174,7 @@ theorem norm_gaussianTimeAverage_sub_groundProjector_le_add {M H : Matrix n n �
       Real.exp (-q / 2) + Real.sqrt q / ΔE * ‖M - H‖ := by
   exact ((norm_sub_le_norm_sub_add_norm_sub _ (gaussianTimeAverage q ΔE H) _).trans
     (add_le_add (norm_gaussianTimeAverage_sub_le hM hH q hΔ)
-      (norm_gaussianTimeAverage_sub_groundProjector_le hH hΩ hgap hspan hΔ q))).trans_eq (add_comm _ _)
+      (norm_gaussianTimeAverage_sub_groundProjector_le hH hΩ hgap hspan hΔ q))).trans_eq
+        (add_comm _ _)
 
 end TNLean.MPS.AreaLaw.Hastings

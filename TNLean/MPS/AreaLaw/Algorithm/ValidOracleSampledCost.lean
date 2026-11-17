@@ -122,7 +122,8 @@ theorem cost_sampledSweepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
           ((hgood ⟨i, by omega⟩).2 t) k
     have hcard : (FreeM.eval o (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) i)).card ≤
         max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) := by
-      refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood
+      refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I
+          hm hgood
         b i (by omega)).1.trans ?_
       unfold sampledSizeBudget
       split_ifs <;> simp
@@ -146,13 +147,15 @@ theorem cost_sampledGroundStateProgram_le_of_valid (hv : IsValidOracle o) (hL : 
   classical
   simp only [sampledGroundStateProgram, FreeM.cost_bind, FreeM.cost_lift,
     queryCost_energyMinimizer, sampledGroundStateCostBound]
-  have hsweep := cost_sampledSweepProgram_le_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I
+  have hsweep := cost_sampledSweepProgram_le_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1
+      hδc I
     hm hgood b L le_rfl
   have hcard : ((FreeM.eval o (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) L)).image
       fun w ↦ (fullLeftEquiv L q).symm w).card ≤
       max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) := by
     refine Finset.card_image_le.trans ?_
-    refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood
+    refine (sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm
+        hgood
       b L le_rfl).1.trans ?_
     simp only [show L ≠ 0 by omega, ↓reduceIte]
     exact le_max_of_le_right le_rfl
@@ -204,7 +207,8 @@ theorem exists_sampledGroundStateProgram_success_cost_polynomial_of_valid (hq : 
   refine (measureReal_forall_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
   intro I hI
   obtain ⟨hψ1, hψover, hψmps⟩ := sampledGroundStateProgram_spec_of_valid hv
-    (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I (Nat.le_ceil _) hI (C * L ^ p)
+    (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I (Nat.le_ceil _) hI
+      (C * L ^ p)
   have hcost := cost_sampledGroundStateProgram_le_of_valid hv (Nat.pos_of_neZero L) hq h hs h0 h1
     hΔ hΩ hgap hspan hδ0 hδ1 hδc I (Nat.le_ceil _) hI (C * L ^ p)
   refine ⟨hψ1, le_trans (by linarith) hψover, hψmps.mono (hbond L E₀ hL hE₀ hE₀L hEB), ?_⟩

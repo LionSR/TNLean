@@ -486,7 +486,8 @@ theorem measureReal_sampledGroundStateProgram_success [NeZero L] (hq : 2 ≤ q)
               (fun x ↦ ψ x)} := by
   refine (measureReal_forall_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
   intro I hI
-  exact sampledGroundStateProgram_spec (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc
+  exact sampledGroundStateProgram_spec (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1
+      hδc
     I (Nat.le_ceil _) hI b D
 
 /-- The viability precision constant giving overlap `1 - η`: the smaller of the precision

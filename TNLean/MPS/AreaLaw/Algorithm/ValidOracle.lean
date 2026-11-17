@@ -436,7 +436,8 @@ theorem sweepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 ≤ 
     have hstep := sweepStepProgram_spec_of_valid hv hq h hs h0 h1 hDelta hi
       (FreeM.eval o (sweepProgram hq h hs h0 h1 Delta i))
     simp only [S, sweepProgram, hi, ↓reduceDIte, FreeM.eval_bind, Nat.succ_ne_zero, ↓reduceIte]
-    exact ⟨hstep.1, hstep.2.1, fun E₀ Γ hΩ hgap hspan ↦ hstep.2.2 E₀ Γ hΩ hgap hspan (hviable E₀ Γ hΩ hgap hspan)⟩
+    exact ⟨hstep.1, hstep.2.1, fun E₀ Γ hΩ hgap hspan ↦ hstep.2.2 E₀ Γ hΩ hgap hspan
+        (hviable E₀ Γ hΩ hgap hspan)⟩
 
 /-- **The ground-state program finds the ground state under every valid oracle.** For every
 ground pair with gap `Δ > 0` and every `R ≥ 1`, the output of the program with any valid
@@ -478,7 +479,8 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
     sweepProgram_spec_of_valid hv hq (paddedInteraction hi z h) hs' h0' h1' hg L hi
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
   have hpad := isGapped_paddedInteraction hL hi z h
-      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap hspan hDelta
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
+        hspan hDelta
   have hNreal : (0 : ℝ) < N := by exact_mod_cast hN
   set δ : ℝ := lvvSuccessiveError (min Delta 1) / N with hδdef
   have hδ1 : δ < 1 := by

@@ -11,6 +11,7 @@ import QICLean.Analysis.PhysicalPowerFilterLowerGap
 import QICLean.Algebra.FiniteSumPowers
 import QICLean.Entropy.SupportedOperatorSchmidtWords
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.Algebra.MatrixHermitianSum
 
 /-!
 # The power approximate ground-state projector on a nearest-neighbour chain
@@ -177,7 +178,8 @@ private theorem powerProjector_spec (hL : 0 < L)
       toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) Γ = Γ := by
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   have hspec := power_filter_exp_spec_of_posSemidef_terms h h0 h1 hΓ hHΓ hgap hΔ m
   simp only [card_bonds_add_one hL] at hspec
   exact ⟨hspec.1, hspec.2.1, hspec.2.2.1⟩
@@ -229,7 +231,8 @@ theorem norm_inner_powerProjector_le (hL : 0 < L)
       ((1 - (E₀ + Δ) / L) / (1 - E₀ / L)) ^ m := by
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
   set N : ℝ := (L : ℝ)
   set P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
@@ -305,13 +308,15 @@ theorem norm_powerProjector_sub_le (hL : 0 < L)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η) (m : ℕ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
+    (m : ℕ)
     (hm : ((L - E₀) / Δ) * Real.log (1 / η) ≤ m) :
     ‖powerProjector (∑ i, h i) L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
       η := by
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   have hm' : ((((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) - E₀) / Δ) *
       Real.log (1 / η) ≤ (m : ℝ) := by
     rwa [card_bonds_add_one hL]

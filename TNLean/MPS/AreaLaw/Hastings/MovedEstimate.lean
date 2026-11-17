@@ -124,6 +124,7 @@ theorem norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le {M H O_L O_R : M
     ‖gaussianTimeAverage q ΔE M * (O_L * O_R) -
         vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
       Real.exp (-q / 2) + Real.sqrt q / ΔE * δ + η :=
-  norm_gaussianTimeAverage_mul_sub_groundProjector_le hM hH hΩ hgap hspan hΔ (hO_L.mul hO_R hc) q hδ hη
+  norm_gaussianTimeAverage_mul_sub_groundProjector_le hM hH hΩ hgap hspan hΔ (hO_L.mul hO_R hc) q
+    hδ hη
 
 end TNLean.MPS.AreaLaw.Hastings

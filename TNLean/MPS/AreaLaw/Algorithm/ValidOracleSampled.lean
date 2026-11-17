@@ -193,7 +193,8 @@ theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (h
     obtain ⟨-, -, hviable⟩ := ih (by omega)
     simp only [S, sampledSweepProgram, hi, ↓reduceDIte, FreeM.eval_bind, Nat.succ_ne_zero,
       ↓reduceIte]
-    exact sampledSweepStepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc _ hm
+    exact sampledSweepStepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc _
+        hm
       (hgood ⟨i, by omega⟩) b hi _ hviable
 
 /-- **On good words the sampled program finds the ground state under every valid oracle.** -/
@@ -221,7 +222,8 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
     simp only [ψ, sampledGroundStateProgram, FreeM.eval_bind, FreeM.eval_lift]
     rfl
   obtain ⟨hcard, hmps, hviable⟩ :=
-    sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood b L le_rfl
+    sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood b
+      L le_rfl
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
   obtain ⟨v, hv', hvnorm, hover⟩ := hviable.exists_fullLeftVector
   set U := Submodule.span ℂ ((S.image fun w ↦ e.symm w : Finset _) :
@@ -292,7 +294,8 @@ theorem measureReal_sampledGroundStateProgram_success_of_valid [NeZero L]
               (fun x ↦ ψ x)} := by
   refine (measureReal_forall_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
   intro I hI
-  exact sampledGroundStateProgram_spec_of_valid hv (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan
+  exact sampledGroundStateProgram_spec_of_valid hv (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap
+      hspan
     hδ0 hδ1 hδc I (Nat.le_ceil _) hI b
 
 end TNLean.MPS.AreaLaw

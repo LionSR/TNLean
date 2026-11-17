@@ -147,7 +147,7 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
             ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 := by
   have hH : (∑ i, h i).IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-  obtain ⟨-, -, hgap, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
+  obtain ⟨-, -, hgapI, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, hgap⟩
   have hmu := Matrix.mem_spectrum_real_of_mulVec_eq_smul
@@ -155,7 +155,7 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
   have hq2 : 2 ≤ q := hH.two_le_local_dimension_of_two_spectral_values
     hmu hexcited (by linarith)
   have hg1 := gap_le_one_of_positive_nearest_neighbor_terms
-    (by omega : 0 < L) hq2 h hsupp h0 h1 hΩ hgap hspan
+    (by omega : 0 < L) hq2 h hsupp h0 h1 hΩ hgapI hspan
   obtain ⟨e, E0, hregional, hEeq, hE0, hE6, hcluster⟩ :=
     exists_aklv_cut_scaled_low_cluster (by omega) hs ha hlr hrL h hsupp h0 h1
       mu g Ω hΩ hground hgap hg hcut

@@ -326,6 +326,7 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
   · exact centeredNorm_periodicCoarseOperator_le a hΩ hJ0 haJ j
   · exact residual_periodicCoarseOperator_le a Ω (by positivity) hares j
   · exact norm_error_gap_transfer (Matrix.isHermitian_sum _ fun i _ ↦ hherm i)
-      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) (hgap.posSemidef_sub_smul_one (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hspan) herr
+      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) (hgap.posSemidef_sub_smul_one
+        (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hspan) herr
 
 end TNLean.MPS.AreaLaw.LocalSolution

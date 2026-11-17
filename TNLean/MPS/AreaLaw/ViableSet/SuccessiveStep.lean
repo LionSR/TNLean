@@ -184,6 +184,7 @@ theorem exists_positive_chain_successive_step (hq : 2 ≤ q)
         IsViable Γ (lvvSuccessiveError Delta / L) (T : Set (LeftBlockVector L q (i + 1))) :=
   ⟨lvvSweepStep hq h hs h0 h1 Delta hi S, card_lvvSweepStep_le hq h hs h0 h1 hDelta hi S,
     fun _ hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq h hs h0 h1 hDelta hi S hv,
-    fun E₀ Γ hΩ hgap hspan hviable ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi S E₀ Γ hΩ hgap hspan hviable⟩
+    fun E₀ Γ hΩ hgap hspan hviable ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi S E₀ Γ hΩ hgap
+      hspan hviable⟩
 
 end TNLean.MPS.AreaLaw

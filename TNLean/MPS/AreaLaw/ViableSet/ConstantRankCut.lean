@@ -382,7 +382,8 @@ theorem ChainHamiltonian.re_inner_normalized_chainTrim_le {R : ℕ} {J Δ : ℝ}
       E₀ + (δ + 2 * √(2 * η)) / (1 - 2 * η) := by
   obtain ⟨PΩ, hPΩ⟩ := exists_isTrimmingProjection
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ δB)
-  exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ h.operator_isHermitian hΩ hgap hspan hPΩ
+  exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ
+      h.operator_isHermitian hΩ hgap hspan hPΩ
     (h.one_sub_le_re_inner_chainTrim hq hJ hΔ hΩ hgap hspan hδB0 k hPΩ) hw hE hP hη hη2
 
 /-- **Corollary `c:1`**, chain form (arXiv:1307.5143v1, algo53.tex, lines 361–364).
@@ -414,7 +415,8 @@ theorem ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond {R : ℕ} {J �
       (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ d)
     have hov := h.one_sub_le_re_inner_chainTrim hq hJ hΔ hΩ hgap hspan hd0 k hP
     have hEΩ : (⟪Ω, toEuclideanLin h.operator Ω⟫_ℂ).re ≤ E₀ + 0 := by
-      have h2 : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+      have h2 : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+        ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
       rw [h2, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
       simp
     have hE := h.re_inner_normalized_chainTrim_le hq hJ hΔ hsplit hHL hHR hK0 hK1 hΩ hgap hspan hd0

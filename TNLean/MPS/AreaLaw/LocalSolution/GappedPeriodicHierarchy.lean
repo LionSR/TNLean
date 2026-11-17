@@ -69,7 +69,8 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
     dsimp only [Jb]
     linarith only [le_max_left J (J * C), hJ]
   have hlow := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm
-    (by positivity : 0 ≤ c₁ * (ℓ : ℝ) * Δ) hΔ (Matrix.isHermitian_sum _ fun i _ ↦ hg i) hΩ hgap hspan (g i) a
+    (by positivity : 0 ≤ c₁ * (ℓ : ℝ) * Δ) hΔ (Matrix.isHermitian_sum _ fun i _ ↦ hg i) hΩ hgap
+      hspan (g i) a
   have hExpLoc : Real.exp (-(ηloc * (ℓ : ℝ))) ≤
       Real.exp (-(min ηloc (c₁ * Δ / 2) * (ℓ : ℝ))) :=
     Real.exp_le_exp.mpr (neg_le_neg (mul_le_mul_of_nonneg_right
@@ -177,9 +178,11 @@ theorem exists_periodicPhysicalHierarchy_of_isGapped {R J Δ : ℝ}
         (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) v⟫_ℂ).re = _
       rw [toEuclideanLin_vecMulVec_star_self_apply, inner_smul_right,
         ← inner_conj_symm v Ω, Complex.mul_conj, Complex.normSq_eq_norm_sq, Complex.ofReal_re]
-    simpa only [hinner] using (hgap.posSemidef_sub_smul_one (Matrix.isHermitian_sum _ fun i _ ↦ hg i) hΩ hspan).gap_le v
+    simpa only [hinner] using (hgap.posSemidef_sub_smul_one
+        (Matrix.isHermitian_sum _ fun i _ ↦ hg i) hΩ hspan).gap_le v
   have hE₀ : (⟪Ω, toEuclideanLin (∑ i, g i) Ω⟫_ℂ).re = E₀ := by
-    have heigen : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω := (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+    have heigen : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
+      ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
     rw [heigen, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
     simp
   have htrace : (trace P₀).re = 1 := by
