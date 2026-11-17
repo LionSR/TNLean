@@ -7,6 +7,7 @@ import TNLean.Lattice.ProductGroundState
 import TNLean.Algebra.GappedGroundState
 import QICLean.Entropy.LocalLift
 import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.SupportedOperatorAlgebra
 
 /-!
 # Zero entropy across a cut that splits no term
@@ -19,7 +20,6 @@ no geometry of `V`; the chain of `L` sites and the finite lattice domains both r
 
 ## Main results
 
-* `isSupportedOn_sum`: a finite sum of operators supported on `D` is supported on `D`.
 * `regionEntropy_eq_zero_of_forall_subset_or_disjoint`: the zero-entropy statement.
 
 ## References
@@ -40,17 +40,6 @@ namespace TNLean.Lattice
 section ZeroEntropy
 
 variable {V ι : Type*} [Fintype V] [DecidableEq V] [Fintype ι] {n : V → ℕ}
-
-omit [Fintype V] [DecidableEq V] [Fintype ι] in
-/-- A finite sum of operators supported on `D` is supported on `D`. -/
-theorem isSupportedOn_sum (s : Finset ι) {h : ι → Matrix (Entropy.SiteConfig n)
-    (Entropy.SiteConfig n) ℂ} {D : Finset V} (hs : ∀ i ∈ s, Entropy.IsSupportedOn (h i) D) :
-    Entropy.IsSupportedOn (∑ i ∈ s, h i) D := by
-  refine ⟨fun σ τ hστ ↦ ?_, fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
-  · rw [Matrix.sum_apply]
-    exact Finset.sum_eq_zero fun i hi ↦ (hs i hi).1 σ τ hστ
-  · rw [Matrix.sum_apply, Matrix.sum_apply]
-    exact Finset.sum_congr rfl fun i hi ↦ (hs i hi).2 σ τ σ' τ' h1 h2 h3 h4
 
 /-- **Zero entropy across a cut that splits no term.** Let `Ω` be a gapped ground vector,
 with positive gap, of a sum of Hermitian terms each supported inside `B` or outside `B`.
@@ -79,9 +68,10 @@ theorem regionEntropy_eq_zero_of_forall_subset_or_disjoint
   set Hout := ∑ i ∈ Finset.univ.filter (fun i ↦ ¬ D i ⊆ B), h i
   have hH : ∑ i, h i = Hin + Hout := (Finset.sum_filter_add_sum_filter_not _ _ _).symm
   have hin : Entropy.IsSupportedOn Hin B :=
-    isSupportedOn_sum _ fun i hi ↦ (hsupp i).mono (Finset.mem_filter.mp hi).2
+    (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _).sum_mem fun i hi ↦
+      (hsupp i).mono (Finset.mem_filter.mp hi).2
   have hout : Entropy.IsSupportedOn Hout Bᶜ := by
-    refine isSupportedOn_sum _ fun i hi ↦ (hsupp i).mono ?_
+    refine (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _).sum_mem fun i hi ↦ (hsupp i).mono ?_
     have hi' := (Finset.mem_filter.mp hi).2
     rcases hsplit i with h' | h'
     · exact absurd h' hi'

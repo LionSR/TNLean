@@ -18,8 +18,6 @@ import TNLean.Circuit.ConfigurationLayers
 import TNLean.Circuit.DisjointRelativeEvolution
 import TNLean.Circuit.EmbeddedProduct
 import TNLean.Circuit.EntropySupport
-import TNLean.Circuit.ExactAmplificationBudget
-import TNLean.Circuit.ExactSubspaceAmplification
 import TNLean.Circuit.ExpectationBounds
 import TNLean.Circuit.GHZState
 import TNLean.Circuit.Gates
@@ -31,7 +29,6 @@ import TNLean.Circuit.LocalCircuit
 import TNLean.Circuit.Measurement
 import TNLean.Circuit.PairProduct
 import TNLean.Circuit.PairProductPowers
-import TNLean.Circuit.PartialIsometryDilation
 import TNLean.Circuit.ProductBasisPenalty
 import TNLean.Circuit.ProductStateCircuit
 import TNLean.Circuit.ProductVector
@@ -65,8 +62,6 @@ import TNLean.Circuit.SupportedMatrixElements
 import TNLean.Circuit.SupportedNormalizedGroundSpace
 import TNLean.Circuit.SupportedOperators
 import TNLean.Circuit.Teleportation
-import TNLean.Circuit.UniformPostselection
-import TNLean.Circuit.UniformSuccessAttenuation
 import TNLean.Circuit.WeightedGHZ
 import TNLean.Circuit.WindowProduct
 import TNLean.Circuit.ZeroRegisterConjunction

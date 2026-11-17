@@ -8,7 +8,7 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.MatrixScalarIdentity
 

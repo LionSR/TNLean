@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.JordanBlockPower
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.Preparation.OneDimensionalBlocks
 

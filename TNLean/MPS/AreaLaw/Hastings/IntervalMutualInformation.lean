@@ -66,7 +66,7 @@ theorem trace_cutProductState_mul_localLift_union {c : ℕ} {A B : Finset (Fin L
         (K.submatrix (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB))).trace =
       ((Entropy.regionState A Ω ⊗ₖ Entropy.regionState B Ω) * K).trace := by
   induction K using Matrix.induction_on' with
-  | h_zero => simp [Entropy.localLift]
+  | h_zero => simp [Entropy.localLift, ManyBody.place]
   | h_add p r hp hr =>
     rw [show (p + r).submatrix (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB) =
         p.submatrix (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB) +
@@ -118,7 +118,7 @@ private theorem exists_bipartite_effect {c : ℕ} {A B : Finset (Fin L)} (hAB : 
     simpa [f] using congrArg (fun σ ↦ (e σ).1) h
   have hM : (Entropy.localLift (A ∪ B) M₀).submatrix (f ∘ u.symm) (f ∘ u.symm) = M := by
     ext y y'
-    simp [f, M, e, Entropy.localLift]
+    simp [f, M, e, Entropy.localLift, ManyBody.place]
   have huu : M.submatrix u u = M₀ := by
     ext y y'
     simp [M]

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.Examples.GHZ
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 
 /-!
 # A normalization obstruction in the printed CZX tensor

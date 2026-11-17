@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.InformationTheory.Hamming
-import TNLean.Circuit.Gates.Givens
+import QICLean.Circuit.Gate.Givens
+import TNLean.Circuit.Gates.ControlledProducts
 
 /-!
 # Unitaries on a constant number of sites as products of two-site gates

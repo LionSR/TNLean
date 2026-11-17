@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegionPhysicalMap
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 
 /-!
 # Coherent bond states under restoration of representation multiplicities

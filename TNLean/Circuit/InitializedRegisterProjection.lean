@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.SelectedZeroRegisterReflection
 import TNLean.Circuit.SelectedZeroRegisterReflectionPool
-import TNLean.Circuit.ExactSubspaceAmplification
+import QICLean.Circuit.Gate.ExactSubspaceAmplification
 
 /-!
 # The projection onto initialized physical flags

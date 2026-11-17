@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FlatDensityEntropy
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import QICLean.Algebra.MatrixUnitaryBetween
 import QICLean.Channel.MaximallyEntangled
 import QICLean.Channel.PartialTrace
