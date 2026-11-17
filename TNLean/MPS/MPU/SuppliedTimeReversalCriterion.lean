@@ -229,8 +229,15 @@ end TwoSiteStandardFormData
 /-- **Gate-level local certificate for time reversal.** For square unitary gates `u, v`, the
 four-spin sign equation `v₂₃ u₁₂ u₃₄ = σ (x ⊗ x†) v₂₃†` implies that the tensor in standard form
 built from `u, v` generates self-adjoint operators on every ring of an even number of
-standard-form sites. Source: CPSV17, `PropChiral`, `UUdaggertrick` and `eq:dagger-sym-cond`,
-lines 1214–1236. -/
+standard-form sites.
+
+The equation is the four-spin one, on two standard-form sites. The analogous equation on one
+site, `u = σ (x ⊗ x†) v†`, does not suffice: `u = a ⊗ a†`, `v = 1` with `a = diag(1, i)`
+satisfies it, but the operator `a ⊗ a† ⊗ ⋯ ⊗ a ⊗ a†` is not self-adjoint. The two-site block of
+the tensor in standard form is the tensor of the doubled gates, whose operators are invariant
+under the translation by one standard-form site; the gates themselves have no such symmetry.
+
+Source: CPSV17, `PropChiral`, `UUdaggertrick` and `eq:dagger-sym-cond`, lines 1214–1236. -/
 theorem mpo_standardFormTensorOfGates_even_eq_adjoint_of_timeReversal_certificate
     {d : ℕ} [NeZero d] {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (hu : u.IsUnitaryBetween) (hv : v.IsUnitaryBetween)
