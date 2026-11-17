@@ -62,6 +62,7 @@ site of every block other than its first and its last `s` sites
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
+open Kraus (blockPhysDim_eq_pow blockTensor)
 
 namespace MPSPreparation
 

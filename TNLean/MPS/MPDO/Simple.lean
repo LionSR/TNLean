@@ -96,11 +96,11 @@ def IsSimple (M : MPOTensor d D) : Prop :=
   IsMPDO M ∧
     ∃ L : ℕ, 0 < L ∧
       ∃ P : MPSTensor.SectorDecomposition
-          (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L),
+          (Kraus.blockPhysDim d L * Kraus.blockPhysDim d L),
         MPSTensor.IsBNTSectorPresentation
             (blockTensor M L).toMPSTensor P ∧
           ∀ j, ¬ IsNilpotent
-            (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d L) (P.basis j))
+            (doubledPhysTraceTransfer (Kraus.blockPhysDim d L) (P.basis j))
 
 /-- A simple canonical-form tensor is simple in the source-facing sense of
 Definition 4.7.
@@ -121,9 +121,9 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
     (hM : IsSimpleCanonicalForm M) : IsSimple M := by
   obtain ⟨hMPDO, S, hCF, hNonNil, hTotal, X, hEq⟩ := hM
   subst D
-  let e : Fin (MPSTensor.blockPhysDim d 1 * MPSTensor.blockPhysDim d 1) ≃ Fin (d * d) :=
+  let e : Fin (Kraus.blockPhysDim d 1 * Kraus.blockPhysDim d 1) ≃ Fin (d * d) :=
     finProdFinEquiv.symm |>.trans
-      (Equiv.prodCongr (MPSTensor.singleBlockEquiv d) (MPSTensor.singleBlockEquiv d)) |>.trans
+      (Equiv.prodCongr (Kraus.singleBlockEquiv d) (Kraus.singleBlockEquiv d)) |>.trans
         finProdFinEquiv
   let P := S.reindexPhysical e
   have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
@@ -136,8 +136,8 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
       Kraus.reindexPhysical e M.toMPSTensor := by
     funext ij
     change
-      M (MPSTensor.singleBlockEquiv d ij.divNat)
-          (MPSTensor.singleBlockEquiv d ij.modNat) * 1 =
+      M (Kraus.singleBlockEquiv d ij.divNat)
+          (Kraus.singleBlockEquiv d ij.modNat) * 1 =
         M (e ij).divNat (e ij).modNat
     simp [e]
   refine ⟨hMPDO, 1, Nat.one_pos, P, ?_, ?_⟩
@@ -158,17 +158,17 @@ theorem IsSimpleCanonicalForm.isSimple {M : MPOTensor d D}
       exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical (P.basis j)
         (hCF'.basis_isNormal j) (hCF'.basis_left_canonical j)
   · intro j
-    change ¬ IsNilpotent (doubledPhysTraceTransfer (MPSTensor.blockPhysDim d 1)
+    change ¬ IsNilpotent (doubledPhysTraceTransfer (Kraus.blockPhysDim d 1)
       (Kraus.reindexPhysical e (S.basis j)))
     have hTransfer :
-        doubledPhysTraceTransfer (MPSTensor.blockPhysDim d 1)
+        doubledPhysTraceTransfer (Kraus.blockPhysDim d 1)
             (Kraus.reindexPhysical e (S.basis j)) =
           doubledPhysTraceTransfer d (S.basis j) := by
       rw [doubledPhysTraceTransfer, doubledPhysTraceTransfer]
-      change (∑ i : Fin (MPSTensor.blockPhysDim d 1),
+      change (∑ i : Fin (Kraus.blockPhysDim d 1),
           S.basis j (e (finProdFinEquiv (i, i)))) =
         ∑ i : Fin d, S.basis j (finProdFinEquiv (i, i))
-      simpa [e] using (MPSTensor.singleBlockEquiv d).sum_comp
+      simpa [e] using (Kraus.singleBlockEquiv d).sum_comp
         (fun i : Fin d => S.basis j (finProdFinEquiv (i, i)))
     rw [hTransfer]
     exact hNonNil j
@@ -187,8 +187,8 @@ theorem IsSimple.exists_mpo_ne_zero {M : MPOTensor d D}
     apply hStateNe
     apply PiLp.ext
     intro ρ
-    let σ : Fin N → Fin (MPSTensor.blockPhysDim d L) := fun n ↦ (ρ n).divNat
-    let τ : Fin N → Fin (MPSTensor.blockPhysDim d L) := fun n ↦ (ρ n).modNat
+    let σ : Fin N → Fin (Kraus.blockPhysDim d L) := fun n ↦ (ρ n).divNat
+    let τ : Fin N → Fin (Kraus.blockPhysDim d L) := fun n ↦ (ρ n).modNat
     have hρ : (fun n ↦ finProdFinEquiv (σ n, τ n)) = ρ := by
       funext n
       exact finProdFinEquiv.apply_symm_apply (ρ n)

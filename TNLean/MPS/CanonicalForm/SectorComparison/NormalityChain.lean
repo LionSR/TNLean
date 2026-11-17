@@ -54,6 +54,7 @@ matrix product states, canonical form, normality, blocking
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
+open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
@@ -402,11 +403,11 @@ theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
   · intro j
     have hmulN : Kraus.IsNBlkInjective (blocksA j) (LB * LA) :=
       MPSTensor.isNBlkInjective_mul_of_isNBlkInjective (blocksA j) hLB_pos
-        ((MPSTensor.isNBlkInjective_iff_blockTensor_isInjective (blocksA j) LA).2
+        ((Kraus.isNBlkInjective_iff_blockTensor_isInjective (blocksA j) LA).2
           (hLA j))
     have hmulN' : Kraus.IsNBlkInjective (blocksA j) (LA * LB) := by
       simpa [Nat.mul_comm LB LA] using hmulN
-    exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective
+    exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective
       (blocksA j) (LA * LB)).1 hmulN'
   · intro k
     exact MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective

@@ -68,6 +68,7 @@ matrix product states, canonical form, blocking, primitive transfer maps
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

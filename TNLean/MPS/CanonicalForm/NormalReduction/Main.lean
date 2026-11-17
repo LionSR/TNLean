@@ -23,6 +23,7 @@ reordered by decreasing weight norm before the final normal-form statement.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim singleBlockEquiv blockTensor)
 
 namespace MPSTensor
 

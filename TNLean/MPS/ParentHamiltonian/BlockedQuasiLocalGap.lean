@@ -33,6 +33,7 @@ interaction or state.
 
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
 open SpinChain
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d L : ℕ} [NeZero d] [NeZero L]
 /-- Blocking transports each finite-volume commutator energy

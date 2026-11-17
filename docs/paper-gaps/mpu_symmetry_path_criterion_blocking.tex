@@ -173,9 +173,32 @@ with the source's hypotheses, without the parity of $r$ or $\ell$
 (\leanid{MPOTensor.StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation},
 \leanid{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq}).
 
-The ``only if'' direction of Theorem~\texttt{prop:conjsym-strict-equiv} needs
-$\det(u)$ and $\det(v)$ separately, while the determinant on one site gives
-only their product; it remains open.
+\section{The determinant invariants of Theorem \texttt{prop:conjsym-strict-equiv}}
+
+The ``only if'' direction of Theorem~\texttt{prop:conjsym-strict-equiv}
+(lines~1493--1534) reduces to the unblocked forward direction of
+Lemma~\texttt{lem:equivalent-symmetry}. Given a continuous path of
+standard-form gates $u(p),v(p)$ whose MPUs are invariant under conjugation,
+the quantity $J(u)=\det(x)^{r/2}\det(y)^{\ell/2}\det u$, with
+$\overline uu^\dagger=x\otimes y$, is $\pm1$, independent of the choice of
+$x,y$, equal to $\det u$ after gauge fixing, and constant in $p$; the same holds
+for $v$. The determinants $\det u$ and $\det v$ are therefore invariants of
+the gate path, and the remaining step is the existence of such a path between
+the standard forms themselves.
+
+No reading of $\det u$ alone from the MPU operators at a fixed small length is
+known. The determinant of $U^{(N)}$ restricted to the eigenspaces of the
+translation by one standard-form site is a path invariant needing no standard
+form along the path, but for $d=2$, $\ell=r=2$ and random real gates it
+equals $\det(u)\det(v)$ for $N=2$ and $1$ for $N=3,4$; it sees only
+$\det(uv)$.
+
+An open test case is the pair of real Case~I MPUs with $\ell=r=2$ given by
+$u=v=\Id$, the identity, and $u=v=\mathrm{CZ}$, the brickwork
+$\prod_j\mathrm{CZ}_{j,j+1}$. Both have $\det(uv)=1$, while $\det u=1$ and
+$\det u=-1$ respectively. A path joining them would have to leave the MPUs that
+admit a standard form on one standard-form site. Whether they are strictly
+equivalent under conjugation is unknown.
 
 \section{Formal statements}
 
@@ -201,7 +224,10 @@ preservation of the case under blocking is
 \leanid{MPOTensor.isConjugationCaseI_iff_of_blockTensor}, through
 \leanid{MPOTensor.TwoSiteStandardFormData.isConjugationCase_iff_sign}, and the
 constancy along a path of gates is
-\leanid{MPOTensor.isConjugationCase_const_of_path}.
+\leanid{MPOTensor.isConjugationCase_const_of_path}. The constancy of the
+determinant invariants along a gate path is
+\leanid{MPOTensor.det_eq_of_symmetric_gate_path}, through
+\leanid{MPOTensor.kronFactorDet_mul_det_eq_of_path}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

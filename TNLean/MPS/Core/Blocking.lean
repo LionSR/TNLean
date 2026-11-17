@@ -16,67 +16,22 @@ import Mathlib.Algebra.Star.BigOperators
 /-!
 # Physical blocking of matrix product tensors
 
-This file preserves the established matrix-product-tensor blocking interface.
-The finite-family word and blocking identities are the corresponding `Kraus`
-results. Kronecker lifts of physical operators, configuration equivalences,
-canonical normalization, and matrix-product-vector statements remain here.
-
-The established MPS definitions use exactly the formulas of their finite-family
-counterparts. The comparison lemmas below are therefore immediate by reduction
-and make equality of the two formulas an explicit invariant.
+The blocked alphabet, the blocked family, and the word and blocking identities
+of a finite matrix family are the declarations of the `Kraus` namespace
+(`Kraus.blockPhysDim`, `Kraus.blockTensor`, `Kraus.evalWord_blockTensor`, and
+their companions). This file holds what is specific to matrix product tensors:
+Kronecker lifts of physical operators, configuration equivalences, canonical
+normalization, and matrix-product-vector statements.
 -/
 
 open scoped Matrix
+open Kraus (blockPhysDim blockPhysDim_eq_pow singleBlockEquiv decodeBlock wordOfBlock
+  decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm blockTensor flattenBlockedWord
+  evalWord_blockTensor length_flattenBlockedWord)
 
 namespace MPSTensor
 
 variable {d D L : ℕ}
-
-/-- Blocked physical dimension: the number of length-`L` words over an alphabet of size `d`. -/
-noncomputable abbrev blockPhysDim (d L : ℕ) : ℕ :=
-  Kraus.blockPhysDim d L
-
-lemma blockPhysDim_eq_pow (d L : ℕ) : blockPhysDim d L = d ^ L := by
-  exact Kraus.blockPhysDim_eq_pow d L
-
-/-- The physical alphabet after blocking one site is equivalent to the original alphabet. -/
-noncomputable abbrev singleBlockEquiv (d : ℕ) : Fin (blockPhysDim d 1) ≃ Fin d :=
-  Kraus.singleBlockEquiv d
-
-/-- Decode a blocked physical index into the corresponding length-`L` word. -/
-noncomputable abbrev decodeBlock (d L : ℕ) : Fin (blockPhysDim d L) → (Fin L → Fin d) :=
-  Kraus.decodeBlock d L
-
-/-- Turn a blocked physical index into a list of length `L`. -/
-noncomputable abbrev wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) : List (Fin d) :=
-  Kraus.wordOfBlock d L i
-
-lemma length_wordOfBlock (d L : ℕ) (i : Fin (blockPhysDim d L)) :
-    (wordOfBlock d L i).length = L := by
-  exact Kraus.length_wordOfBlock d L i
-
-/-- The blocked index is equivalent to a word of length `L`. -/
-noncomputable abbrev decodeBlockEquiv (d L : ℕ) :
-    Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
-  Kraus.decodeBlockEquiv d L
-
-lemma decodeBlockEquiv_apply (d L : ℕ) (I : Fin (blockPhysDim d L)) :
-    decodeBlockEquiv d L I = decodeBlock d L I := rfl
-
-lemma decodeBlock_decodeBlockEquiv_symm (d L : ℕ) (w : Fin L → Fin d) :
-    decodeBlock d L ((decodeBlockEquiv d L).symm w) = w := by
-  exact Kraus.decodeBlock_decodeBlockEquiv_symm d L w
-
-/-- Block a matrix product tensor by grouping `L` physical sites. -/
-noncomputable abbrev blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    Fin (blockPhysDim d L) → Matrix (Fin D) (Fin D) ℂ :=
-  Kraus.blockTensor A L
-
-/-- Block injectivity is injectivity of the corresponding blocked family. -/
-lemma isNBlkInjective_iff_blockTensor_isInjective
-    (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
-    Kraus.IsNBlkInjective A N ↔ Kraus.IsInjective (blockTensor A N) := by
-  exact Kraus.isNBlkInjective_iff_blockTensor_isInjective A N
 
 /-- Fixed-length injectivity persists at positive multiples of the length. -/
 theorem isNBlkInjective_mul_of_isNBlkInjective
@@ -103,30 +58,6 @@ theorem isNBlkInjective_mul_of_isNBlkInjective
             (show (1 : Matrix (Fin D) (Fin D) ℂ) ∈
                 (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
               Submodule.mem_top))
-
-/-- Flatten a word in blocked indices into a word in the original alphabet. -/
-noncomputable abbrev flattenBlockedWord (d L : ℕ) :
-    List (Fin (blockPhysDim d L)) → List (Fin d) :=
-  Kraus.flattenBlockedWord d L
-
-lemma flattenBlockedWord_nil (d L : ℕ) : flattenBlockedWord d L [] = [] := by
-  exact Kraus.flattenBlockedWord_nil d L
-
-lemma flattenBlockedWord_cons (d L : ℕ) (i : Fin (blockPhysDim d L))
-    (w : List (Fin (blockPhysDim d L))) :
-    flattenBlockedWord d L (i :: w) = wordOfBlock d L i ++ flattenBlockedWord d L w := by
-  exact Kraus.flattenBlockedWord_cons d L i w
-
-lemma evalWord_blockTensor (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    ∀ w : List (Fin (blockPhysDim d L)),
-      Kraus.evalWord (blockTensor (d := d) (D := D) A L) w =
-        Kraus.evalWord A (flattenBlockedWord d L w) := by
-  exact Kraus.evalWord_blockTensor A L
-
-/-- The flattened word has length equal to the number of blocks times the block length. -/
-lemma length_flattenBlockedWord (d L : ℕ) :
-    ∀ w : List (Fin (blockPhysDim d L)), (flattenBlockedWord d L w).length = w.length * L := by
-  exact Kraus.length_flattenBlockedWord d L
 
 /-! ### The Kronecker-power lift of a physical-index operator through blocking
 
@@ -435,13 +366,6 @@ theorem leftCanonical_blockTensor
                 (by intro i; rfl)
     _ = 1 := sum_evalWord_conjTranspose_mul_evalWord (A := A) hLeft L
 
-/-! ### Evaluation on repeated words -/
-
-/-- Evaluating a repeated single-letter word gives a matrix power. -/
-lemma evalWord_replicate (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (i : Fin d) (L : ℕ) :
-    Kraus.evalWord A (List.replicate L i) = (A i) ^ L := by
-  exact Kraus.evalWord_replicate A i L
-
 variable {d D : ℕ}
 
 @[simp] lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
@@ -453,8 +377,8 @@ variable {d D : ℕ}
 
 /-- Physical blocking preserves the `SameMPV` relation. -/
 theorem SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ) :
-    SameMPV (MPSTensor.blockTensor (d := d) (D := D) A L)
-      (MPSTensor.blockTensor (d := d) (D := D) B L) := by
+    SameMPV (Kraus.blockTensor (d := d) (D := D) A L)
+      (Kraus.blockTensor (d := d) (D := D) B L) := by
   intro N σ
   classical
   -- Use the same flattened configuration for both tensors.
@@ -471,11 +395,11 @@ theorem SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ
         (fun i : Fin (N * L) => flat.get (Fin.cast hlen.symm i)))
     simpa [Function.comp, Fin.cast_cast] using hcongr
   have hblock (T : MPSTensor d D) :
-      mpv (MPSTensor.blockTensor (d := d) (D := D) T L) σ = mpv T σflat := by
+      mpv (Kraus.blockTensor (d := d) (D := D) T L) σ = mpv T σflat := by
     simp [mpv, coeff, hofFn, flat_def, evalWord_blockTensor]
   calc
-    mpv (MPSTensor.blockTensor (d := d) (D := D) A L) σ = mpv A σflat := hblock A
+    mpv (Kraus.blockTensor (d := d) (D := D) A L) σ = mpv A σflat := hblock A
     _ = mpv B σflat := hSame (N * L) σflat
-    _ = mpv (MPSTensor.blockTensor (d := d) (D := D) B L) σ := (hblock B).symm
+    _ = mpv (Kraus.blockTensor (d := d) (D := D) B L) σ := (hblock B).symm
 
 end MPSTensor

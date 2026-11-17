@@ -58,6 +58,8 @@ is injective and which lies in a non-trivial symmetry-protected topological
 
 open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
 open Matrix Finset MPSTensor
+open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock blockTensor
+  isNBlkInjective_iff_blockTensor_isInjective)
 
 noncomputable section
 
@@ -220,7 +222,6 @@ private lemma clusterBlocked_apply (i : Fin 4) :
 private lemma decodeBlock_cast_val (i : Fin 4) (j : Fin 2) :
     ((decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i)) j : ℕ) =
       i.val / 2 ^ (j : ℕ) % 2 := by
-  change ((Kraus.decodeBlock 2 2 (Fin.cast cluster_blockPhysDim.symm i)) j : ℕ) = _
   unfold Kraus.decodeBlock
   simp only [Function.comp_apply, finFunctionFinEquiv_symm_apply_val]
   rfl
@@ -655,9 +656,7 @@ theorem clusterBlocked_transferMap_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.empty_val',
       Matrix.cons_val_fin_one, Matrix.one_apply, smul_eq_mul] <;>
     norm_num [Complex.ext_iff, Complex.add_re, Complex.add_im] <;>
-    first
-      | trivial
-      | (constructor <;> ring)
+    (constructor <;> ring)
 
 /-- The length-`2` blocked cluster transfer map is idempotent: `E² = E`.
 

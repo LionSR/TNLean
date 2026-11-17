@@ -36,6 +36,8 @@ unscaled conclusion is false for unrestricted `λ ≠ 1`; see
 -/
 
 open scoped Matrix Kronecker BigOperators
+open Kraus (blockPhysDim blockTensor flattenBlockedWord evalWord_blockTensor
+  length_flattenBlockedWord)
 
 namespace MPSTensor
 

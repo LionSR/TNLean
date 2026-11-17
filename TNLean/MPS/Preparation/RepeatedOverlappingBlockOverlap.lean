@@ -62,6 +62,7 @@ mixed transfer maps of distinct blocks, in place of the block form (S5) and the 
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

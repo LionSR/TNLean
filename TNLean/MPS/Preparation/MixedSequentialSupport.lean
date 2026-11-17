@@ -63,7 +63,7 @@ theorem exists_mixedPolarIsoMatrix_eq_mixedProductMap {l r : ℕ}
   refine ⟨G, ?_⟩
   ext σ x
   change MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor (mixedChain L A R))
-      ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).symm
+      ((Kraus.decodeBlockEquiv d (l + (r + 1))).symm
         (mixedConfigurationEquiv d l r σ)) x = _
   rw [hG, mixedProductMap_apply]
   simp only [MPSChainTensor.blockTensor_decodeBlockEquiv_symm, eval_mixedChain]
@@ -142,7 +142,7 @@ theorem exists_mixed_sequential_polar_support {l r : ℕ} (hD : 0 < D)
       s ≤ D * D ∧ J.IsIsometry ∧
       J * Jᴴ = MPSTensor.polarSupportMatrix (MPSChainTensor.blockTensor A) ∧
       HasMixedSequentialFactorization hD
-        ((Matrix.reindex ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).trans
+        ((Matrix.reindex ((Kraus.decodeBlockEquiv d (l + (r + 1))).trans
           (mixedConfigurationEquiv d l r).symm) (Equiv.refl _)
             (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A))) * J) ∧
       (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * J) * Jᴴ =

@@ -72,11 +72,12 @@ on the first column of `T` breaks. Documented in
 -/
 
 open scoped BigOperators Matrix Kronecker ComplexOrder
+open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 
 open MPSChainTensor (eval eval_succ eval_succ')
-open MPSTensor (blockTensor decodeBlockEquiv virtualPairEquiv)
+open MPSTensor (virtualPairEquiv)
 
 variable {d D : ℕ}
 

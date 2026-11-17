@@ -37,6 +37,7 @@ the cluster state) enter through
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 

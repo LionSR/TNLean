@@ -36,6 +36,7 @@ No normality, primitivity, or translation-invariance hypothesis is imposed.
 -/
 
 open scoped ComplexOrder MatrixOrder
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d R L K N : ℕ}
 

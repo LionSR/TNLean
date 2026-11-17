@@ -96,17 +96,17 @@ theorem normalizedDiagonal_blockTensor [NeZero d] (L : ℕ)
     normalizedDiagonal (blockTensor W L) = normalizedDiagonal W ^ L := by
   classical
   have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
-  have hdim : (MPSTensor.blockPhysDim d L : ℂ)⁻¹ = ((d : ℂ)⁻¹) ^ L := by
-    rw [MPSTensor.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow]
+  have hdim : (Kraus.blockPhysDim d L : ℂ)⁻¹ = ((d : ℂ)⁻¹) ^ L := by
+    rw [Kraus.blockPhysDim_eq_pow, Nat.cast_pow, inv_pow]
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
     one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
     blockTensor_apply, hdim]
-  have hsum := (MPSTensor.decodeBlockEquiv d L).sum_comp
+  have hsum := (Kraus.decodeBlockEquiv d L).sum_comp
     (fun σ ↦ evalWord W (List.ofFn σ) (List.ofFn σ))
-  simp only [MPSTensor.decodeBlockEquiv_apply] at hsum
+  simp only [Kraus.decodeBlockEquiv_apply] at hsum
   change ((d : ℂ)⁻¹) ^ L •
-      (∑ x, evalWord W (List.ofFn (MPSTensor.decodeBlock d L x))
-        (List.ofFn (MPSTensor.decodeBlock d L x))) = _
+      (∑ x, evalWord W (List.ofFn (Kraus.decodeBlock d L x))
+        (List.ofFn (Kraus.decodeBlock d L x))) = _
   rw [hsum]
   simp only [evalWord_ofFn]
   have hprod := List.prod_ofFn_sum (fun _ : Fin L ↦ fun i : Fin d ↦ W i i)
@@ -621,14 +621,14 @@ theorem IsMPU.blocked_normalizedDiagonal_sandwich_residual_prod_eq_zero
     (hpower : transferMatrix (Kraus.transferMap U.normalizedFlattening) ^ J =
       Matrix.vecMulVec ρ Φ)
     {m : ℕ} (hm : 0 < m)
-    (X : Fin m → Matrix (Fin (MPSTensor.blockPhysDim d J))
-      (Fin (MPSTensor.blockPhysDim d J)) ℂ) :
+    (X : Fin m → Matrix (Fin (Kraus.blockPhysDim d J))
+      (Fin (Kraus.blockPhysDim d J)) ℂ) :
     let V := MPOTensor.blockTensor U J
     normalizedDiagonal (doubleLayerTensor V) *
         (List.ofFn (fun k ↦ residualSlice (doubleLayerTensor V) (X k))).prod *
       normalizedDiagonal (doubleLayerTensor V) = 0 := by
-  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  let : NeZero (Kraus.blockPhysDim d J) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero J (NeZero.ne d)⟩
   let V := MPOTensor.blockTensor U J
   have hV : IsMPU V := hU.blockTensor J hJ

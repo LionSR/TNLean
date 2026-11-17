@@ -22,6 +22,7 @@ neither injectivity nor a transfer fixed-point equation.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 variable {d D E L : ℕ}

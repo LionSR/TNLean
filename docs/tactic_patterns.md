@@ -4911,8 +4911,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Reuse:** QICLean's `Kraus.instNeZeroBlockPhysDim` provides the instance,
   replacing exactly those four local calculations in `Martingale/BlockedGap.lean`.
   The former TNLean instance `MPSTensor.instNeZeroBlockPhysDim` was an exact
-  duplicate and has been retired; `MPSTensor.blockPhysDim` is an abbreviation
-  of `Kraus.blockPhysDim`, so the canonical instance applies directly.
+  duplicate and has been retired, and blocked dimensions are written
+  `Kraus.blockPhysDim`, so the canonical instance applies directly.
   `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` is now a thin
   corollary of `IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth`,
   using `1 / 8` as the positive gap witness.

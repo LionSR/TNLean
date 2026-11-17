@@ -25,6 +25,7 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E L : ℕ}
 /-- Decode the blocked common interval and append its original tail.

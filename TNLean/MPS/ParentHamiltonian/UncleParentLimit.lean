@@ -18,6 +18,7 @@ range away from zero, giving the punctured limit of the original parent.
 -/
 
 open scoped Matrix Topology
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

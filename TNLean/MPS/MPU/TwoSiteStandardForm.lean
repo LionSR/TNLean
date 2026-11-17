@@ -129,10 +129,10 @@ length `k`, each with its two physical indices kept in order.
 
 Source: arXiv:1703.09188, lines 603--617. -/
 private noncomputable def twoSiteBlockedPhysicalEquiv (d k : ℕ) :
-    Fin (MPSTensor.blockPhysDim d (k * 2)) ≃
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) :=
+    Fin (Kraus.blockPhysDim d (k * 2)) ≃
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) :=
   (MPSTensor.directIteratedBlockEquiv d k 2).trans
-    (twoSiteBlockEquiv (MPSTensor.blockPhysDim d k)).symm
+    (twoSiteBlockEquiv (Kraus.blockPhysDim d k)).symm
 
 /-- The two-site block of a length-`k` block is direct blocking by `k * 2`,
 after the stated physical-index relabeling.
@@ -151,23 +151,23 @@ private theorem reindexPhysical_blockTwo_blockTensor
 /-- The physical-index equivalence from a direct block of length `2 * k`
 to the two-site block of a length-`k` tensor. -/
 noncomputable def twoSiteDirectBlockEquiv (d k : ℕ) :
-    Fin (MPSTensor.blockPhysDim d (2 * k)) ≃
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) :=
-  (finCongr (congrArg (MPSTensor.blockPhysDim d) (Nat.mul_comm 2 k))).trans
+    Fin (Kraus.blockPhysDim d (2 * k)) ≃
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) :=
+  (finCongr (congrArg (Kraus.blockPhysDim d) (Nat.mul_comm 2 k))).trans
     (twoSiteBlockedPhysicalEquiv d k)
 
 /-- Decoding the actual two-site physical identification concatenates the
 original two block words in their given order. Source: CPSV17, StandardForm,
 lines 603–617; this is the original-site blocking convention. -/
 theorem wordOfBlock_twoSiteDirectBlockEquiv_symm (d k : ℕ)
-    (i : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) :
-    MPSTensor.wordOfBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm i) =
-      MPSTensor.wordOfBlock d k (finProdFinEquiv.symm i).1 ++
-        MPSTensor.wordOfBlock d k (finProdFinEquiv.symm i).2 := by
-  change MPSTensor.wordOfBlock d (2 * k)
-    (Fin.cast (congrArg (MPSTensor.blockPhysDim d) (Nat.mul_comm 2 k).symm)
+    (i : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) :
+    Kraus.wordOfBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm i) =
+      Kraus.wordOfBlock d k (finProdFinEquiv.symm i).1 ++
+        Kraus.wordOfBlock d k (finProdFinEquiv.symm i).2 := by
+  change Kraus.wordOfBlock d (2 * k)
+    (Fin.cast (congrArg (Kraus.blockPhysDim d) (Nat.mul_comm 2 k).symm)
       (MPSTensor.iteratedBlockIndex d k 2
-        (twoSiteBlockEquiv (MPSTensor.blockPhysDim d k) i))) = _
+        (twoSiteBlockEquiv (Kraus.blockPhysDim d k) i))) = _
   rw [MPSTensor.wordOfBlock_cast_length d (Nat.mul_comm 2 k).symm,
     MPSTensor.wordOfBlock_iteratedBlockIndex]
   simp [twoSiteBlockEquiv, Kraus.wordOfBlock, Kraus.flattenBlockedWord, List.ofFn_succ]
@@ -175,7 +175,7 @@ theorem wordOfBlock_twoSiteDirectBlockEquiv_symm (d k : ℕ)
 private theorem reindexPhysical_blockTwo_blockTensor_of_eq
     {d D : ℕ} (U : MPOTensor d D) (k L : ℕ) (hL : L = k * 2) :
     reindexPhysical
-        ((finCongr (congrArg (MPSTensor.blockPhysDim d) hL)).trans
+        ((finCongr (congrArg (Kraus.blockPhysDim d) hL)).trans
           (twoSiteBlockedPhysicalEquiv d k))
         (blockTwo (blockTensor U k)) = blockTensor U L := by
   subst L

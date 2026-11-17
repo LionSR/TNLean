@@ -143,20 +143,20 @@ theorem IsMPU.exists_continuous_standardForm_of_path [NeZero d] {D : ℕ}
     {U : unitInterval → MPOTensor d D} (hU : Continuous U) (hMPU : ∀ p, IsMPU (U p)) :
     ∃ k₀, 0 < k₀ ∧ k₀ ≤ D ^ 4 ∧ ∃ (ℓ r : ℕ)
       (u : unitInterval → Matrix (Fin ℓ × Fin r)
-        (Fin (MPSTensor.blockPhysDim d k₀) × Fin (MPSTensor.blockPhysDim d k₀)) ℂ)
-      (v : unitInterval → Matrix (Fin (MPSTensor.blockPhysDim d k₀) ×
-        Fin (MPSTensor.blockPhysDim d k₀)) (Fin r × Fin ℓ) ℂ),
+        (Fin (Kraus.blockPhysDim d k₀) × Fin (Kraus.blockPhysDim d k₀)) ℂ)
+      (v : unitInterval → Matrix (Fin (Kraus.blockPhysDim d k₀) ×
+        Fin (Kraus.blockPhysDim d k₀)) (Fin r × Fin ℓ) ℂ),
       (∀ [NeZero D], (hMPU 0).index =
-        Real.logb 2 ((r : ℝ) / (MPSTensor.blockPhysDim d k₀ : ℕ))) ∧
-      ℓ * r = MPSTensor.blockPhysDim d k₀ * MPSTensor.blockPhysDim d k₀ ∧
+        Real.logb 2 ((r : ℝ) / (Kraus.blockPhysDim d k₀ : ℕ))) ∧
+      ℓ * r = Kraus.blockPhysDim d k₀ * Kraus.blockPhysDim d k₀ ∧
       Continuous u ∧ Continuous v ∧ ∀ p, ∃ (D' : ℕ)
-        (V : MPOTensor (MPSTensor.blockPhysDim d k₀) D'),
+        (V : MPOTensor (Kraus.blockPhysDim d k₀) D'),
         (∀ N : ℕ, 0 < N → mpo V N = mpo (MPOTensor.blockTensor (U p) k₀) N) ∧
           Nonempty (TwoSiteStandardFormData (blockTwo V) (u p) (v p)) := by
   have : NeZero D := (hMPU 0).neZero_bond
   refine ⟨D ^ 4, pow_pos (NeZero.pos D) 4, le_rfl, ?_⟩
   obtain ⟨ℓ, r, hind, hℓr, hrep⟩ := IsMPU.exists_standardForm_fixed_gateDims_of_path hU hMPU
-  set d' := MPSTensor.blockPhysDim d (D ^ 4)
+  set d' := Kraus.blockPhysDim d (D ^ 4)
   choose D' V u v hV hS using hrep
   have S₀ := (hS 0).some
   have : NeZero ℓ := ⟨S₀.left_pos.ne'⟩

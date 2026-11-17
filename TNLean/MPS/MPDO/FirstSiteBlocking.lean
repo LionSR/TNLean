@@ -44,6 +44,8 @@ blocked insertions implies equality before blocking.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim decodeBlock decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm
+  blockTensor flattenBlockedWord evalWord_blockTensor)
 
 namespace MPSTensor
 

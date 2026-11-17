@@ -52,6 +52,7 @@ feeds the telescoping estimate in `TNLean.MPS.Preparation.ApproximationError`.
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

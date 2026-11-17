@@ -88,8 +88,8 @@ theorem intrinsicTimeReversalSign_blockTensor_tensorPhysicalId (U : MPOTensor d 
     (hx : 0 < x) {k : ℕ} (hk : 0 < k) :
     intrinsicTimeReversalSign (MPOTensor.blockTensor (tensorPhysicalId U x) k) =
       intrinsicTimeReversalSign (MPOTensor.blockTensor U k) := by
-  have : NeZero (MPSTensor.blockPhysDim x k) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim x k) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ hx.ne'⟩
   rw [← intrinsicTimeReversalSign_blockTensor_eq_of_mpo_eq
       (fun N _ ↦ mpo_tensorProduct_identityMPUTensor U x N) k hk,

@@ -46,10 +46,10 @@ theorem isConjugationCaseI_iff_of_blockTensor {D : ℕ} {𝒰 : MPOTensor d D}
     (h : IsMPUCanonicalFormII 𝒰) (hc : IsInvariantUnderSymmetry (conjugationSymmetry d) 𝒰)
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ} {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo 𝒰) u v) (k k' : ℕ) {ℓ' r' : ℕ}
-    {u' : Matrix (Fin ℓ' × Fin r') (Fin (MPSTensor.blockPhysDim (MPSTensor.blockPhysDim d k) k') ×
-      Fin (MPSTensor.blockPhysDim (MPSTensor.blockPhysDim d k) k')) ℂ}
-    {v' : Matrix (Fin (MPSTensor.blockPhysDim (MPSTensor.blockPhysDim d k) k') ×
-      Fin (MPSTensor.blockPhysDim (MPSTensor.blockPhysDim d k) k')) (Fin r' × Fin ℓ') ℂ}
+    {u' : Matrix (Fin ℓ' × Fin r') (Fin (Kraus.blockPhysDim (Kraus.blockPhysDim d k) k') ×
+      Fin (Kraus.blockPhysDim (Kraus.blockPhysDim d k) k')) ℂ}
+    {v' : Matrix (Fin (Kraus.blockPhysDim (Kraus.blockPhysDim d k) k') ×
+      Fin (Kraus.blockPhysDim (Kraus.blockPhysDim d k) k')) (Fin r' × Fin ℓ') ℂ}
     (S' : TwoSiteStandardFormData (blockTwo (blockTensor (blockTensor 𝒰 k) k')) u' v')
     (hcase' : IsConjugationCaseI u' v' ∨ IsConjugationCaseII u' v') :
     (IsConjugationCaseI u v ↔ IsConjugationCaseI u' v') ∧
@@ -108,7 +108,7 @@ theorem same_case_of_equivalentUnderSymmetry_conjugation
     have hp := hinv p
     rw [conjugationSymmetry_block (by omega)] at hp
     have hG := isInvariantUnderSymmetry_conjugation_reindexPhysical
-      (twoSiteDirectBlockEquiv (MPSTensor.blockPhysDim d k) k').symm hp
+      (twoSiteDirectBlockEquiv (Kraus.blockPhysDim d k) k').symm hp
     rw [reindexPhysical_symm_reindexPhysical] at hG
     exact (standardFormTensorOfGatesData (u p) (v p) (hu' p)
       (hv' p)).isConjugationCase_of_conjugation fun N hN ↦ (hG hN).symm

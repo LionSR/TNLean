@@ -54,6 +54,7 @@ isometry of the blocked direct sum only under it. Documented in
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

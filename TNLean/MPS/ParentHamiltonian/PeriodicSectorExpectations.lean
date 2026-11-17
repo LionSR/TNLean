@@ -35,6 +35,7 @@ separate; see docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.t
 
 open scoped Matrix MatrixOrder ComplexOrder BigOperators
 open SpinChain
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D L : ℕ} [NeZero d] [NeZero L]
 

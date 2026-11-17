@@ -22,6 +22,7 @@ blocks before trace-preserving normalization, whereas `IsPeriodic` also includes
 left-canonical normalization.
 -/
 open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
+open Kraus (wordOfBlock blockTensor)
 
 namespace MPSTensor
 

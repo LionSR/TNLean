@@ -37,6 +37,7 @@ the site grouping at lines 825--836, and Section 6, lines 2649--2675.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D L R b : ℕ} [NeZero d] [NeZero L]
   {E : Fin b → ℕ} [∀ j, NeZero (E j)]

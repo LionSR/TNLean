@@ -30,6 +30,7 @@ Lemma commutation (ii), lines 2442--2531, and equations (3.12)--(3.16).
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D L : ℕ}
 

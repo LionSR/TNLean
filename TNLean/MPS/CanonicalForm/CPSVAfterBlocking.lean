@@ -29,8 +29,11 @@ matrix product states, canonical form, blocking, normal tensor
 -/
 
 open scoped BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
+
+variable {d D : ℕ}
 
 /-- After a positive blocking length, every tensor has a possibly different
 representative in literal CPSV canonical form which generates the same

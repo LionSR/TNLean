@@ -49,6 +49,7 @@ MPV families into a virtual gauge.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

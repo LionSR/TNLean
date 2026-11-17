@@ -42,6 +42,7 @@ in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

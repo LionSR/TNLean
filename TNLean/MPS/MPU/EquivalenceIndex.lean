@@ -98,8 +98,8 @@ theorem Equivalent.index_eq [NeZero da] [NeZero db] [NeZero Da] [NeZero Db]
   obtain ⟨-, -, k, pa, pb, hk, hpa, hpb, -, hphys, hstrict⟩ := h
   have : NeZero pa := ⟨hpa.ne'⟩
   have : NeZero pb := ⟨hpb.ne'⟩
-  let : NeZero (MPSTensor.blockPhysDim (da * pa) k) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  let : NeZero (Kraus.blockPhysDim (da * pa) k) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero k (NeZero.ne (da * pa))⟩
   calc
     hU.index = (hU.tensorPhysicalId pa hpa).index := (hU.index_tensorPhysicalId pa).symm

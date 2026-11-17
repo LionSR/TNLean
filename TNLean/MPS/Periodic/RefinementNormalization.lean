@@ -36,6 +36,7 @@ is false as printed without it; see
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

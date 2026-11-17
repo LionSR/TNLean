@@ -27,6 +27,7 @@ Source: arXiv:2307.01696, eq. (16) and "Tree-RG circuit with measurements".
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit TeleportHop
+open Kraus (blockPhysDim)
 
 namespace MPSPreparation
 

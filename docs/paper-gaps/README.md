@@ -844,8 +844,15 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   showing that it commutes with the common operators, gives an explicit
   non-unitary involutive on-site symmetry with every action, fusion and
   equal-L-matrix hypothesis satisfied for which the canonical parent does not
-  commute, and formalizes commutation along the closed interval under adjoint
-  closure of the two-site boundary range.
+  commute, and shows that for `Z₂` acting by unitary on-site representations
+  the outcome depends on the virtual gauge of the endpoint tensors, which the
+  source does not fix: in a canonical gauge the two-site boundary range of the
+  common operator is closed under the adjoint and the canonical path commutes,
+  while in a gauge whose action gauge is not proportional to a Hermitian
+  matrix both fail (checked by
+  `scripts/check_glm23_unitary_mixed_adjoint_closure.py`); it formalizes
+  commutation along the closed interval under adjoint closure of the two-site
+  boundary range.
 - `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
   that the block-injective interpolation of Section 5 uses no commutation of
   the path Hamiltonians, so its exact action and fusion are formalized without

@@ -30,6 +30,7 @@ valid for all positive numbers of blocks at its first-order rate.
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

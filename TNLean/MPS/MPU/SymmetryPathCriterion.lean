@@ -205,9 +205,9 @@ theorem strictlyEquivalentUnderSymmetry_blockTensor_of_gate_path
     {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
     (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂) {k : ℕ} (hk : 0 < k)
     (u : unitInterval → Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ)
-    (v : unitInterval → Matrix (Fin (MPSTensor.blockPhysDim d k) ×
-      Fin (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ)
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ)
+    (v : unitInterval → Matrix (Fin (Kraus.blockPhysDim d k) ×
+      Fin (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ)
     (hu : Continuous u) (hv : Continuous v)
     (hu' : ∀ p, (u p).IsUnitaryBetween) (hv' : ∀ p, (v p).IsUnitaryBetween)
     (S₁ : TwoSiteStandardFormData (blockTwo (blockTensor 𝒰₁ k)) (u 0) (v 0))
@@ -217,8 +217,8 @@ theorem strictlyEquivalentUnderSymmetry_blockTensor_of_gate_path
     StrictlyEquivalentUnderSymmetry (S.block (2 * k))
       (blockTensor 𝒰₁ (2 * k)) (blockTensor 𝒰₂ (2 * k)) rfl := by
   have : NeZero d := h₁.neZero_phys
-  have : NeZero (MPSTensor.blockPhysDim d (2 * k)) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim d (2 * k)) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ (NeZero.ne d)⟩
   have hB₁ := reindexPhysical_blockTwo_blockTensor_two_mul 𝒰₁ k
   have hB₂ := reindexPhysical_blockTwo_blockTensor_two_mul 𝒰₂ k
@@ -261,8 +261,8 @@ theorem strictlyEquivalentUnderSymmetry_blockTwo_of_gate_path
     rw [blockTwo_eq_blockTensor_reindex]
     simp [reindexPhysical]
   have : NeZero d := h₁.neZero_phys
-  have : NeZero (MPSTensor.blockPhysDim d 2) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim d 2) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ (NeZero.ne d)⟩
   have h := strictlyEquivalentUnderSymmetry_reindexPhysical_of_gate_path
     (twoSiteBlockEquiv d).symm (fun N hN ↦ Nat.pos_of_mul_pos_right (hpos _ hN))
@@ -282,10 +282,10 @@ Source: arXiv:1703.09188, Theorem `FundamentalMPU` (lines 640--652) and the
 index formula after `def:index` (lines 686--688). -/
 theorem IsMPUCanonicalFormII.nonempty_twoSiteStandardFormData_blockTensor_of_index
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hs : IsMPUSimple U) {k : ℕ} (hk : 0 < k)
-    {E : ℕ} {V : MPOTensor (MPSTensor.blockPhysDim d k) E}
+    {E : ℕ} {V : MPOTensor (Kraus.blockPhysDim d k) E}
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (hV : ∀ N : ℕ, 0 < N → mpo V N = mpo (MPOTensor.blockTensor U k) N)
     (T : TwoSiteStandardFormData (MPOTensor.blockTwo V) u v)
@@ -307,9 +307,9 @@ theorem IsMPUCanonicalFormII.nonempty_twoSiteStandardFormData_blockTensor_of_ind
       exact h'
     exact_mod_cast this
   have hcard : ∀ {a b : ℕ} (w : Matrix (Fin a × Fin b)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ),
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ),
       w.IsUnitaryBetween → a * b =
-        MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k := by
+        Kraus.blockPhysDim d k * Kraus.blockPhysDim d k := by
     intro a b w hw
     have h1 := Matrix.IsIsometry.card_le w hw.1
     have h2 := Matrix.IsCoisometry.card_le w hw.2
@@ -352,12 +352,12 @@ theorem gatePath_of_symmetricPath
     (hγ₁ : ∀ N : ℕ, 0 < N → mpo (γ 1) N = mpo 𝒰₂ N)
     {k : ℕ} (hk : 0 < k)
     {u : unitInterval → Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : unitInterval → Matrix (Fin (MPSTensor.blockPhysDim d k) ×
-      Fin (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : unitInterval → Matrix (Fin (Kraus.blockPhysDim d k) ×
+      Fin (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
     (hind : ∀ [NeZero d] [NeZero E], (hMPU 0).index =
-      Real.logb 2 ((r : ℝ) / (MPSTensor.blockPhysDim d k : ℕ)))
-    (hsf : ∀ p, ∃ (D' : ℕ) (V : MPOTensor (MPSTensor.blockPhysDim d k) D'),
+      Real.logb 2 ((r : ℝ) / (Kraus.blockPhysDim d k : ℕ)))
+    (hsf : ∀ p, ∃ (D' : ℕ) (V : MPOTensor (Kraus.blockPhysDim d k) D'),
       (∀ N : ℕ, 0 < N → mpo V N = mpo (blockTensor (γ p) k) N) ∧
         Nonempty (TwoSiteStandardFormData (blockTwo V) (u p) (v p))) :
     Nonempty (TwoSiteStandardFormData (blockTwo (blockTensor 𝒰₁ k)) (u 0) (v 0)) ∧
@@ -368,14 +368,14 @@ theorem gatePath_of_symmetricPath
           (standardFormTensorOfGates (u p) (v p))) := by
   have : NeZero d := h₁.neZero_phys
   have : NeZero E := (hMPU 0).neZero_bond
-  have : NeZero (MPSTensor.blockPhysDim d k) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim d k) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ (NeZero.ne d)⟩
   choose D' V hV hS using hsf
   have : NeZero ℓ := ⟨(hS 0).some.left_pos.ne'⟩
   have : NeZero r := ⟨(hS 0).some.right_pos.ne'⟩
   have hidx : (hMPU 0).index = Real.logb 2 ((r : ℝ) / (d ^ k : ℕ)) := by
-    rw [hind, MPSTensor.blockPhysDim_eq_pow]
+    rw [hind, Kraus.blockPhysDim_eq_pow]
   -- The blocked operators of `γ` at the endpoints.
   have hblock : ∀ {D₀ : ℕ} {W : MPOTensor d D₀} (p : unitInterval),
       (∀ N : ℕ, 0 < N → mpo (γ p) N = mpo W N) →
@@ -421,9 +421,9 @@ theorem exists_gate_path_of_strictlyEquivalentUnderSymmetry
     (h : StrictlyEquivalentUnderSymmetry S 𝒰₁ 𝒰₂ rfl) :
     ∃ k : ℕ, 0 < k ∧ ∃ (ℓ r : ℕ)
       (u : unitInterval → Matrix (Fin ℓ × Fin r)
-        (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ)
-      (v : unitInterval → Matrix (Fin (MPSTensor.blockPhysDim d k) ×
-        Fin (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ),
+        (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ)
+      (v : unitInterval → Matrix (Fin (Kraus.blockPhysDim d k) ×
+        Fin (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ),
       Continuous u ∧ Continuous v ∧
       (∀ p, (u p).IsUnitaryBetween) ∧ (∀ p, (v p).IsUnitaryBetween) ∧
       Nonempty (TwoSiteStandardFormData (blockTwo (blockTensor 𝒰₁ k)) (u 0) (v 0)) ∧

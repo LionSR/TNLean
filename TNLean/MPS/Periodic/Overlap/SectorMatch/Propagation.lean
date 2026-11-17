@@ -27,6 +27,7 @@ whole periodic orbit.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct Kraus
 open Filter Matrix Module
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
