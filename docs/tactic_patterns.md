@@ -455,9 +455,9 @@ abstracted — record why, so it is not re-proposed).
   exp (v * x - c) ≤ exp (v * T - c)`.
 - **Use when:** A Lieb–Robinson factor `exp (v |t| - c)` must be bounded
   uniformly on `[-T, T]`; pass `x = |t|`.
-- **Refactored occurrences:** six terms across four files:
-  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
-  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
+- **Refactored occurrences:** four terms across three files:
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two, in the graph statement that the
+  chain and domain statements specialize),
   `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
   `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
 - **Notes:** The variants without the subtracted constant in

@@ -827,6 +827,38 @@ Theorem~B a second way, by a sequential preparation protocol.
     generator; the same nonnegative estimates include $J=0$.
 \end{proof}
 
+\begin{lemma}[A supported Gaussian integral on a graph]
+    \label{lem:graph_supported_gaussian_integral}
+    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_graphNeighborhood}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds,
+        def:qc_site_expectation}
+    Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
+    most two vertices, and let $K'=\sum_k h_k$ be a finite family of
+    Hermitian terms as in Lemma~\ref{thm:graph_lieb_robinson_two_spheres},
+    with per-vertex norm budget $b_0$ and constants $a,v$. Let $K$ be
+    Hermitian, let $Z\subseteq V$, let $\ell$ be real, write $N(S)$ for the
+    union of the balls of radius $\lfloor\ell\rfloor$ about the vertices of
+    $S$, and let $d\ge0$ be such that for every real $s$
+    \begin{align}
+        \bigl\|G(s)-E_{N(Z)}(G(s))\bigr\|\le d|V|e^{v|s|-\ell/2},\qquad
+        G(s)=e^{isK'}(K'-K)e^{-isK'}.\notag
+    \end{align}
+    Then the assertions of
+    Lemma~\ref{thm:chain_supported_gaussian_integral} hold on $V$ for this
+    $N$, with $C=a+d$ and $|V|$ in place of $L$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds}
+    Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
+    $B_g=N(Z)$, $B_o=N(Q)$ and output region $B=N(Q\cup Z)$; the path is
+    chosen from $K,K',N(Z)$ before $Q,W,\eta,T$. The generator hypothesis
+    and the localization estimate, with $|Q|\le|V|$, give
+    $\varepsilon_g=d|V|e^{vT-\ell/2}$ and $\varepsilon_o=a|V|^2e^{vT-\ell/2}$.
+    Since $|V|\le|V|^2$ and $a,d,T\ge0$,
+    $a|V|^2+d|V|T\le(a+d)|V|^2(1+T)$, and substitution gives the error.
+\end{proof}
+
 \begin{lemma}[A supported Gaussian integral on a contiguous chain]
     \label{thm:chain_supported_gaussian_integral}
     \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral}
@@ -877,9 +909,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:chain_swapped_doubled_hamiltonian,
-        thm:chain_relative_generator_localization,thm:chain_lieb_robinson,
-        lem:chain_site_norm_budget,thm:area_law_supported_identity,
-        thm:qc_supported_gaussian_projection_bounds}
+        thm:chain_relative_generator_localization,lem:graph_supported_gaussian_integral,
+        lem:chain_site_norm_budget,thm:area_law_supported_identity}
     Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
     Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
@@ -1825,10 +1856,8 @@ Theorem~B a second way, by a sequential preparation protocol.
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,
-        thm:qc_supported_gaussian_projection_bounds,
-        thm:domain_relative_generator_localization,thm:domain_lieb_robinson_localization,
-        lem:domain_site_norm_budget}
+    \uses{def:domain_doubled_swapped_hamiltonian,lem:graph_supported_gaussian_integral,
+        thm:domain_relative_generator_localization,lem:domain_site_norm_budget}
     Use the constants $a,v$ from the domain generator estimate and put
     $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators
     are Hermitian because their terms are Hermitian.
