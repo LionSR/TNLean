@@ -121,7 +121,9 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     have hc (l : Fin m) (hl : l ∈ Entropy.splitIndices
         (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m) :
         i ∈ Entropy.crossingTerms (AreaLaw.nearestNeighborSupport (Λ := Λ)) (D l) :=
-      Finset.mem_filter.mpr ⟨Finset.mem_univ i, Entropy.mem_splitIndices.mp hl⟩
+      by
+        simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
+        exact Entropy.mem_splitIndices.mp hl
     cases i with
     | inl v => exact False.elim (AreaLaw.inl_not_mem_crossingTerms (D j) v (hc j hj))
     | inr e =>
