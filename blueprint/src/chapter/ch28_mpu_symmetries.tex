@@ -2397,11 +2397,59 @@
     \label{cor:equiv-under-conjugation}
     \notready
     \discussion{5713}
-    \uses{corconj, prop:conjsym-strict-equiv, def:equivalent-symmetry}
+    \uses{corconj, prop:conjsym-strict-equiv, def:equivalent-symmetry,
+        thm:mpu_conjugation_same_case_equiv_if}
     Two conjugation-invariant MPUs are equivalent under conjugation symmetry if
-    and only if they belong to the same case of Lemma~\ref{corconj}.
+    and only if they belong to the same case of Lemma~\ref{corconj}. The
+    ``if'' direction is Lemma~\ref{thm:mpu_conjugation_same_case_equiv_if}.
     % Source lines: paper_v2.tex 1548--1567.
 \end{lemma}
+
+\begin{lemma}[Equivalence under conjugation, the ``if'' direction]
+    \label{thm:mpu_conjugation_same_case_equiv_if}
+    \lean{MPOTensor.equivalentUnderSymmetry_conjugation_of_same_case,
+        MPOTensor.IsConjugationCaseI, MPOTensor.IsConjugationCaseII,
+        MPOTensor.doubledU_map_star_of_skew, MPOTensor.doubledV_map_star_of_skew,
+        MPOTensor.det_doubled_of_sign}
+    \leanok
+    \discussion{5713}
+    \uses{corconj, thm:mpu_conjugation_even_rank_if, def:equivalent-symmetry,
+        cor:all-equivalent-under-conjugation}
+    Let $\mathcal U_1$ and $\mathcal U_2$ be tensors in canonical form II on
+    the same physical dimension $d$, whose standard forms have the same even
+    ranks $r$ and $\ell$. If both standard forms lie in Case I, or both in
+    Case II, of Lemma~\ref{corconj}, then $\mathcal U_1$ and $\mathcal U_2$ are
+    equivalent under conjugation symmetry, with trivial ancillas.
+    % Source lines: paper_v2.tex 1548--1567.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Gauge both standard forms into the normal form of their case. The
+    two-site block has the standard form
+    \begin{align}
+        u^{(2)}_{11',22'} & =v_{1'2}u_{11'}u_{22'},
+                          & v^{(2)}_{11',22'}       & =v_{1'2},
+    \end{align}
+    of ranks $\ell d$ and $dr$, which are even since $r\ell=d^2$ forces $d$
+    to be even. In Case I the gates $u^{(2)},v^{(2)}$ are real. In Case II,
+    using $\Sigma_\ell^2=-\Id$ and $\Sigma_r^2=-\Id$,
+    \begin{align}
+        \overline{u^{(2)}} & =\bigl((\Sigma_\ell\otimes\Id_d)\otimes
+        (\Id_d\otimes\Sigma_r)\bigr)u^{(2)},
+                           & \overline{v^{(2)}}                      & =v^{(2)}\bigl((\Id_d\otimes\Sigma_r)\otimes
+        (\Sigma_\ell\otimes\Id_d)\bigr),
+    \end{align}
+    and a relabelling of the coordinates of $\mathbb C^{\ell d}$ and
+    $\mathbb C^{dr}$ turns $\Sigma_\ell\otimes\Id_d$ and $\Id_d\otimes\Sigma_r$
+    into $\Sigma_{\ell d}$ and $\Sigma_{dr}$. In both cases
+    $\det u,\det v=\pm1$, so $\det u^{(2)}=(\det v)^{r\ell}(\det u)^{2r\ell}=1$,
+    and $\det v^{(2)}=c(\det v)^{d^2}=c$, where the sign $c$ depends only on
+    the fixed identifications of the coordinate spaces. Hence
+    Lemma~\ref{thm:mpu_conjugation_even_rank_if} applies to the two-site
+    blocks, and the blocks of four sites are strictly equivalent under
+    conjugation.
+\end{proof}
 
 \begin{lemma}[Admissible equivalence under conjugation]
     \label{cor:mpu_admissible_equiv_under_conjugation}
