@@ -1289,8 +1289,7 @@
     \lean{MPOTensor.TwoSiteStandardFormData.mpo_eq_of_gate_gauges,
         MPOTensor.IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges,
         MPOTensor.IsMPUCanonicalFormII.mpo_blockTwo_eq_of_source_gate_gauges,
-        MPOTensor.TwoSiteStandardFormData.reindexRanks,
-        MPOTensor.siteProduct}
+        MPOTensor.TwoSiteStandardFormData.reindexRanks}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
@@ -1304,9 +1303,10 @@
     % forms; the parity obstruction limits it to even lengths.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_standard_form_parity_obstruction}
-    Expressing both operators as the two-layer circuit of the standard form shows that in
-    the circuit of $\mathcal V$ the unitary placed on the internal leg of
+    \uses{thm:mpu_standard_form_parity_obstruction, lem:mpdo_tensor_power_laws}
+    Using Lemma~\ref{lem:mpdo_tensor_power_laws}, express both operators as
+    the two-layer circuits of their standard forms. In the circuit of
+    $\mathcal V$ the unitary placed on the internal leg of
     each site by the layer of $u$ meets its adjoint placed there by the layer
     of $v$, so the circuits coincide. The relabelling of the rank spaces is
     carried through the standard-form data.

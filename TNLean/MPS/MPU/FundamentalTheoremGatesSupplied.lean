@@ -161,14 +161,14 @@ theorem exists_gate_gauges_of_twoSiteCircuit_eq [NeZero ℓ] [NeZero r]
       twoSiteShiftedLayer (N := N) v' * twoSiteUnshiftedLayer (N := N) u' =
         twoSiteShiftedLayer (N := N) v * twoSiteUnshiftedLayer (N := N) u →
       twoSiteShiftedLayer (N := N) v' =
-        twoSiteShiftedLayer (N := N) v * siteProduct (N := N) M := by
+        twoSiteShiftedLayer (N := N) v * Matrix.tensorPower N M := by
     intro N _ hN
     have hU' := (twoSiteUnshiftedLayer_isUnitaryBetween (N := N) u' hu').2
     rw [← huM, twoSiteUnshiftedLayer_mul_left, ← Matrix.mul_assoc] at hN
     calc twoSiteShiftedLayer (N := N) v'
         = twoSiteShiftedLayer (N := N) v' * (twoSiteUnshiftedLayer (N := N) u' *
             (twoSiteUnshiftedLayer (N := N) u')ᴴ) := by rw [hU', Matrix.mul_one]
-      _ = twoSiteShiftedLayer (N := N) v * siteProduct (N := N) M := by
+      _ = twoSiteShiftedLayer (N := N) v * Matrix.tensorPower N M := by
           rw [← Matrix.mul_assoc, hN, Matrix.mul_assoc, hU', Matrix.mul_one]
   -- On a ring of two blocks, `M ⊗ M` is a product over the shifted pairs, so `M = X ⊗ Y`.
   have hprod : ∀ g g' : Fin 2 → Fin ℓ × Fin r, ∏ x : Fin 2, M (g x) (g' x) =
@@ -179,7 +179,7 @@ theorem exists_gate_gauges_of_twoSiteCircuit_eq [NeZero ℓ] [NeZero r]
     rw [← Matrix.mul_assoc, hV, Matrix.one_mul] at this
     have hc := congrFun (congrFun this g) g'
     rw [twoSiteShiftedLayer_conjTranspose_mul_apply] at hc
-    simpa [siteProduct] using hc.symm
+    simpa [Matrix.tensorPower_apply] using hc.symm
   have hMne : M ≠ 0 := ne_zero_of_isUnitaryBetween hMunit
   obtain ⟨X, Y, hXY⟩ := exists_kronecker_of_prod_two_eq hMne hprod
   -- Unitarity of `M† = X† ⊗ Y†` makes `X†` and `Y†` multiples of unitaries.

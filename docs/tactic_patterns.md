@@ -1,5 +1,31 @@
 # Tactic Pattern Ledger
 
+### Sitewise tensor powers of a one-site matrix — promoted (2026-11-16)
+
+- **Seen:** five local definitions of the configuration-indexed product
+  `∏ n, V (s n) (t n)`: `MPOTensor.sitewisePhysicalMatrix` (MPDO, MPU, Symmetry and
+  RFP, 36 files), `MPOTensor.sitewiseMatrixFamily` (site-dependent factors), and the
+  MPU copies `chainPower`, `siteProduct` and `rectangularProduct`, each with its own
+  multiplication, identity, adjoint and isometry lemmas.
+  The earlier candidate entry "sitewise Kronecker power in configuration
+  coordinates" (2026-10-06) recorded the first two MPU copies, `siteProduct` in
+  `MPU/FundamentalTheoremGates.lean` and `chainPower` in
+  `MPU/Examples/ShiftStrictEquivalence.lean`; this entry supersedes it.
+- **Abstraction:** `Matrix.tensorPower` (`Algebra/MatrixTensorPower.lean`) for one
+  factor at every site and `Matrix.rectKronecker` (`Algebra/FinKronecker.lean`) for
+  site-dependent factors, with `Matrix.tensorPower_apply`,
+  `Matrix.IsUnitaryBetween.tensorPower` and `Matrix.tensorPower_mem_unitaryGroup`
+  added. The local definitions and their duplicated lemmas are deleted; the lemmas
+  that remain are renamed onto `tensorPower`.
+- **Notes:** The products of identity entries in the deleted proofs close with
+  `simp [Finset.prod_boole, funext_iff]`, the idiom of the PEPS and circuit files.
+  The shared layer still has three parallel definitions, `tensorPower`,
+  `rectKronecker` and `finKronecker`, which agree definitionally; merging them is a
+  separate candidate.
+- **Remaining case:** `MPOTensor.sitewise_prod_conjTranspose_mul_self`
+  (`MPS/MPDO/LemmaC5CaseI.lean`) still restates the isometry of a sitewise product in
+  entrywise form; it is a candidate for `Matrix.IsIsometry.tensorPower`.
+
 ### Disjoint summands of `Fin (m + n)` — promoted (2026-11-16)
 
 - **Seen:** `MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean`,
@@ -4641,7 +4667,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   product theorem holds for every commutative monoid. Isolating these declarations from
   `ParentHamiltonian/Defs.lean` avoids invalidating its broad downstream import cone.
 - **Result:** the exact call sites are the shared public lemma
-  `MPOTensor.reindex_sitewisePhysicalMatrix_windowComplement` in
+  `MPOTensor.reindex_tensorPower_windowComplement` in
   `PhysicalSectorProductTransport.lean`, used from both that file and
   `PhysicalSupportProductTransport.lean`, and
   `embed_twoSiteSectorProjection_eq_finKronecker` in
@@ -6020,14 +6046,6 @@ no additional helper is proposed.
   appears; the shared endpoint-ray theorem already contains the geometry.
 - **Notes:** noncentrality is essential when composing the directed-ray
   relations. The center remains in every triangle when no radial is removed.
-
-### sitewise Kronecker power in configuration coordinates — candidate
-- **Pattern:** the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι` with its product,
-  identity, conjugate-transpose and unitarity lemmas.
-- **Seen:** two copies (2026-10-06): `siteProduct` (index `Fin ℓ × Fin r`) in
-  `TNLean/MPS/MPU/FundamentalTheoremGates.lean` and the private `chainPower` (index `Fin d`) in
-  `TNLean/MPS/MPU/Examples/ShiftStrictEquivalence.lean`.
-- **Abstraction:** one definition over an arbitrary fintype; a third copy promotes it.
 
 ### simplicity of a tensor with diagonal rank-one double-layer letters — candidate
 - **Pattern:** `isMPUSimple_of_rankOne_diagonal` (`TNLean/MPS/MPU/SimpleRankOne.lean`,

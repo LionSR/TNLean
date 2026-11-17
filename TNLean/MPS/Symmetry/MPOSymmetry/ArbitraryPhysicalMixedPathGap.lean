@@ -108,8 +108,7 @@ theorem continuous_arbitraryPhysicalMixedInteraction [NeZero D₀] [NeZero D₁]
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     Continuous (arbitraryPhysicalMixedInteraction A₀ A₁) := by
-  let T := MPOTensor.sitewisePhysicalMatrix
-    (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) 2
+  let T := Matrix.tensorPower 2 (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
   change Continuous (fun γ => 1 - T *
     (1 - mixedEndpointInteractionMatrix (polarPosTensor A₀) (polarPosTensor A₁) γ) * Tᴴ)
   exact continuous_const.sub
@@ -166,7 +165,7 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
         (mixedEndpointInterpolation (polarPosTensor A₀) (polarPosTensor A₁) γ)))}
       from hline,
     Submodule.map_span, Set.image_singleton,
-    toEuclideanLin_sitewisePhysicalMatrix_mpv_rotatePhysical,
+    toEuclideanLin_tensorPower_mpv_rotatePhysical,
     arbitraryPhysicalMixedInterpolation]
 
 /-- The ground space of the actual enlarged path is one-dimensional on the
