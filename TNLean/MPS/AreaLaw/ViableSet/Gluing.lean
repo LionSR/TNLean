@@ -262,7 +262,7 @@ theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : �
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
     (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
     (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -296,7 +296,7 @@ theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : �
     WithLp.toLp 2 (WithLp.ofLp Γ ∘ E.symm)
   have hsplit := reindex_gluingCut_eq hHL hK hDA
   have hΓ := hΩ
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   have hΓ' : ‖Γ'‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ
   have hgap' : (reindex E E (HL + K) - (E₀ : ℂ) • 1 -
@@ -368,7 +368,7 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
     (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
     (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -401,7 +401,7 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     WithLp.toLp 2 (WithLp.ofLp Γ ∘ E.symm)
   have hsplit := reindex_gluingCut_eq hHL hK hDA
   have hΓ := hΩ
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   -- The ground state and the gap in the cut coordinates.
   have hΓ' : ‖Γ'‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ

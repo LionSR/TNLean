@@ -269,10 +269,9 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
         (4096 * Real.exp 1 * (J / Δ) * B / m + m * Real.log 2) := by
   classical
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  replace heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
   set K' : ℝ := B
   have hK' : 1 ≤ K' := hB1
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
@@ -492,10 +491,9 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω + 1 + 2 * C_E / Δ := by
   classical
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  replace heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
   set K' : ℝ := B
   have hK' : 1 ≤ K' := hB
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le

@@ -73,9 +73,9 @@ private theorem surprisalTail_region_le_of_family_budget
   have hsle : Real.sqrt ((1 + J / Δ) * budget) ≤
       Real.sqrt ((1 + J / Δ) * B) :=
     Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hbudget (by linarith))
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  change toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω at heig
   have htail := Entropy.surprisalTail_cut_le
     (n := fun _ : Fin L ↦ q) (h := g) (D := D) (B := A)
     hsupp hherm hJ hnorm hΩ hΔ heig hgap rfl

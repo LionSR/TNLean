@@ -163,9 +163,9 @@ theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
   have hb1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hs : 0 < Real.sqrt ((1 + J / Δ) * budget) := Real.sqrt_pos.mpr (by nlinarith)
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin (∑ X, h.term X) Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  change toEuclideanLin (∑ X, h.term X) Ω = (E₀ : ℂ) • Ω at heig
   have ht := Entropy.surprisalTail_cut_le (n := fun _ : Site (stripDomain L w) ↦ q)
     (h := h.term) (D := fun X ↦ X.1) (B := A)
     (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))

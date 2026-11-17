@@ -199,10 +199,9 @@ theorem ChainHamiltonian.surprisalTail_regionState_le (h : ChainHamiltonian L q 
         (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget L q R A))))) := by
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  replace heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
   exact Entropy.surprisalTail_cut_le (n := fun _ : Fin L ↦ q) (B := A) h.supported h.hermitian hJ
     h.norm_le hΩ hΔ heig hgap rfl (Entropy.regionState_isHermitian A Ω) w
 

@@ -441,10 +441,11 @@ theorem norm_sq_physicalDetectability_le_of_gappedGroundState
     ‖physicalDetectability h x‖ ^ 2 ≤ 4 / (4 + gamma) := by
   have hGamma : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (∑ i, h i) Gamma = 0 := by
-    simpa only [Complex.ofReal_zero, zero_smul] using (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+    simpa only [Complex.ofReal_zero, zero_smul] using (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Gamma))
   have horth' : ⟪Gamma, physicalDetectability h x⟫_ℂ = 0 :=
     (inner_physicalDetectability_eq h hp hs hGamma x).trans horth
-  have hgap := (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_le (physicalDetectability h x)
+  have hH : (∑ i, h i).IsHermitian := Matrix.isHermitian_sum _ fun i _ ↦ (hp i).isSelfAdjoint
+  have hgap := (hgap.posSemidef_sub_smul_one hH hΩ hspan).gap_le (physicalDetectability h x)
   rw [horth', norm_zero, zero_pow (by decide : (2 : ℕ) ≠ 0), sub_zero,
     zero_mul, sub_zero] at hgap
   have henergy := re_inner_physicalDetectability_le h hp hs x

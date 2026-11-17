@@ -227,9 +227,9 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
     apply one_div_le_one_div_of_le hpos
     apply mul_le_mul_of_nonneg_left _ (by norm_num)
     exact Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hbudget (by linarith))
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  change toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω at heig
   have heig' : toEuclideanLin (∑ X : A, g X) Ω = (E₀ : ℂ) • Ω := by
     rw [hsum]
     exact heig

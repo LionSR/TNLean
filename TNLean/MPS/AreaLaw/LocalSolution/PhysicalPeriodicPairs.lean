@@ -292,7 +292,8 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
       (a i - ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤
         J * Real.exp (-θ / 2) + ε := by
     intro i
-    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ hg.1 hΩ hgap hspan (h i) (a i)
+    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ
+      (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hgap hspan (h i) (a i)
     have hreal : ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) =
         ⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ :=
       (isSymmetric_toEuclideanLin_iff.mpr (haH i)).coe_re_inner_self_apply Ω
@@ -325,6 +326,6 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
   · exact centeredNorm_periodicCoarseOperator_le a hΩ hJ0 haJ j
   · exact residual_periodicCoarseOperator_le a Ω (by positivity) hares j
   · exact norm_error_gap_transfer (Matrix.isHermitian_sum _ fun i _ ↦ hherm i)
-      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan) herr
+      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) (hgap.posSemidef_sub_smul_one (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hspan) herr
 
 end TNLean.MPS.AreaLaw.LocalSolution

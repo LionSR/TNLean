@@ -171,9 +171,9 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     intro j hj
     have hd : (j + 1) * R ≤ m * R := Nat.mul_le_mul_right R hj
     exact Finset.sdiff_subset_sdiff (stripInterval_mono (by omega) (by omega)) le_rfl
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin (∑ Y, h.term Y) Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  change toEuclideanLin (∑ Y, h.term Y) Ω = (E₀ : ℂ) • Ω at heig
   have key := Entropy.two_mul_condEntropy_le_logarithmic
     (n := fun _ : Site (stripDomain L w) ↦ q) X T hmono
     (fun _ ↦ Finset.disjoint_sdiff) weights hweights hhalf hΩ h.term S

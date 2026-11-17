@@ -58,9 +58,9 @@ private theorem ChainHamiltonian.log_surprisalMoment_region_le
       (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) X Ω).eigenvalues u) ≤
     u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
       512 * Real.exp 1 * (J / Δ) * cutLogBudget L q R X * u ^ 2 := by
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  change toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω at heig
   exact Entropy.log_surprisalMoment_cut_le (n := fun _ : Fin L ↦ q) (B := X)
     h.supported h.hermitian hJ h.norm_le hΩ hΔ heig hgap rfl
     (Entropy.regionState_isHermitian X Ω) hu
