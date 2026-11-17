@@ -114,14 +114,14 @@ private theorem facld_bound_le_exp {ΔE c₁ μ v B w J N Kg : ℝ} (kg l R : �
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **Eq. `facld` as an exponential decay in the projection radius.** Let every eigenvalue of
 `H = ∑ₖ hₖ` equal `E₀` or be at least `E₀ + ΔE`. Fix `μ > 0` and `c₁ > 0` with `c₁ v < μ`, where
@@ -156,7 +156,7 @@ theorem exists_norm_sub_starProjection_truncated_apply_le_exp [NeZero d] [Decida
   refine ⟨2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * Kg * c₁ *
     Real.exp (3 * μ * R) * ((kg + 1)! * Real.exp (δ / 2) / (δ / 2) ^ (kg + 1)), by positivity,
     fun l ψ hψ => ?_⟩
-  have hb := norm_sub_starProjection_truncated_apply_le G X a ha h hHerm hSupport R hDiam vR hCard
+  have hb := norm_sub_starProjection_truncated_apply_le G X h hHerm hSupport R hDiam vR hCard
     b₀ hBudget (by positivity : 0 ≤ c₁ * l * ΔE) hΔE hH hgap (s l) (K l) (hsK l) S (hSK l) hW J hJ
     μ hμ.le (l - 3 * R) (hm l) hψ
   refine hb.trans (mul_le_mul_of_nonneg_right ?_ (norm_nonneg ψ))
@@ -193,7 +193,7 @@ theorem exists_norm_truncated_apply_sub_inner_smul_le_exp [NeZero d] [DecidableE
   refine ⟨2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * Kg * c₁ *
     Real.exp (3 * μ * R) * ((kg + 1)! * Real.exp (δ / 2) / (δ / 2) ^ (kg + 1)), by positivity,
     fun l => ?_⟩
-  have hb := norm_truncated_apply_sub_inner_smul_le G X a ha h hHerm hSupport R hDiam vR hCard
+  have hb := norm_truncated_apply_sub_inner_smul_le G X h hHerm hSupport R hDiam vR hCard
     b₀ hBudget (by positivity : 0 ≤ c₁ * l * ΔE) hΔE hgs (s l) (K l) (hsK l) S (hSK l) hW J hJ
     μ hμ.le (l - 3 * R) (hm l)
   refine hb.trans ?_
