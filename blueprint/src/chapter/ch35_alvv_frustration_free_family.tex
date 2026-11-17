@@ -359,6 +359,10 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
 \begin{lemma}[The merge tree with the frustration-free family]
     \label{thm:alvv_unique_ground_state_tree}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_pos_mem_spectrum_of_unique_ground_state,
+        TNLean.MPS.AreaLaw.ALVV.merge_rounds_bounds,
+        TNLean.MPS.AreaLaw.ALVV.merge_sample_overlap_lower,
+        TNLean.MPS.AreaLaw.ALVV.merge_power_error_le,
+        TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_power,
         TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}
     \leanok
     \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
@@ -372,19 +376,24 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     interval longer than $4\ell$ fix the family of
     Lemma~\ref{lem:alvv_ff_family_region_coordinates}: at most $\mathcal D^2$
     operators of operator Schmidt rank at most $(d^2+4)^{\ell^2+1}$ at every cut.
-    For every $\eta>0$ and $0<\beta<1$, with
-    $s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$, there is a merge tree
-    with leaves of at most $4\ell$ sites whose parents are sampled and trimmed
-    merges with these families, whose node spaces are $3/200$-viable for
-    $\mathbb C\Gamma$ of dimension at most $\mathcal D^6s^3$, and whose root,
-    after finitely many filter-and-trim steps and a Ritz extraction, gives a
-    line of matrix product states mutually $\eta/2$-close to
-    $\mathbb C\Gamma$. Neither $\mathcal D$ nor $\mathcal D^6s^3$ depends on
-    $L$. This is the existence content
-    of~\cite[Theorem~\texttt{t:unique}, lines 1829--1855]{Arad2016RigorousRG}
-    restricted as follows: the node bound is $\mathcal D^6s^3$ instead of
-    $\mathcal Ds^2$, the tree is shown to exist rather than to be found with
-    high probability, and the bond dimension of the output grows with $L$.
+    For every $\eta>0$ and $0<\beta<1$, put
+    $s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$ and let
+    $k=\lceil\lceil\log_{\mathcal D}s\rceil/2\rceil$, the least integer with
+    $\mathcal D^{2k}\ge s$. There is a merge tree with leaves of at most $4\ell$
+    sites whose parents are sampled merges, with $k$ applications of these
+    families and a collective trim, whose node spaces are $3/200$-viable for
+    $\mathbb C\Gamma$ of dimension at most
+    $\mathcal D^{2k}s\le\mathcal D^2s^2$, and whose root, after finitely many
+    filter-and-trim steps and a Ritz extraction, gives a line of matrix
+    product states mutually $\eta/2$-close to $\mathbb C\Gamma$. Neither
+    $\mathcal D$ nor the node bound depends on $L$. This is the existence
+    content of~\cite[Theorem~\texttt{t:unique}, lines
+        1829--1855]{Arad2016RigorousRG} with two differences: the source takes
+    $\lceil\log_{\mathcal D}s\rceil/2$ applications, which need not be an
+    integer, and obtains $\mathcal Ds^2$, so rounding to an integer costs one
+    factor of $\mathcal D$; and the tree is shown to exist rather than to be
+    found with high probability, with an output bond dimension that grows with
+    $L$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
@@ -397,13 +406,16 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     most $0$ is $\mathbb C\Gamma$, so the trimming bound of
     Lemma~\ref{thm:physical_dg_interval_trimming} and the refinement of
     Lemma~\ref{lem:physical_dg_automatic_refinement} apply with ground space
-    $\mathbb C\Gamma$. At a long parent, the merged space is $3/200$-viable.
-    The word image of a random subspace of dimension $s$, under the products of
-    length $\lceil\log_{\mathcal D}(\mathcal D^2s)\rceil$ of the family, is
-    $1/400$-viable outside an event of small probability, as in
-    Lemma~\ref{thm:physical_dg_sampled_node} with target $\mathbb C\Gamma$
-    itself, since the family improves viability by $\Delta^k$ and
-    $\mathcal D^{12}\Delta\le10^{-5}$. Collective trimming at a threshold below
+    $\mathbb C\Gamma$. Since $\mathcal D^{2(k-1)}<s\le\mathcal D^{2k}$, the
+    node bound $n=\mathcal D^{2k}s$ satisfies $s^2\le n\le\mathcal D^2s^2$. At a
+    long parent the merged space has dimension $Q\le n^2$ and is
+    $1/4$-viable. A random subspace of dimension $s$ has overlap at least
+    $3/(32\mathcal D^{4k}s)$ with $\mathbb C\Gamma$ outside an event of small
+    probability, as in Lemma~\ref{thm:physical_dg_sampled_node}, and its images
+    under the products of length $k$ of the family, at most $\mathcal D^{2k}s$
+    vectors, are viable with error at most
+    $(1024/9)\,\Delta^k\mathcal D^{8k}s^2\le(1024/9)(\mathcal D^{12}\Delta)^k
+    \le(1024/9)\cdot10^{-5}<1/400$, using $s^2\le\mathcal D^{4k}$. Collective trimming at a threshold below
     the bound of the refinement keeps it $3/200$-viable. The recursion of
     Lemma~\ref{thm:sampled_interval_witness_tree} assembles the tree, and the
     refinement of its root gives the line.

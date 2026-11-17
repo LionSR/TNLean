@@ -22,16 +22,23 @@ independent of the chain length.
 
 This file proves that dimension bound with the families of the source. On every long interval
 the merge tree uses the frustration-free family of Theorem `t:aisff`, lines 1580–1609, in the
-word form of the merge, lines 1662–1677, and in the coordinates of the tree. At every node it
-has a `3/200`-viable space for `ℂ Γ` of dimension at most `D⁶ s³`, where `D = (d ℓ²)^{22ℓ}` is
-the parameter of Theorem `t:aisff` and `s` depends only on `D` and a sampling parameter `β`;
-neither depends on `L`. The literal raw-filter-and-trim iterates of its root give a line
-mutually `η/2`-close to `ℂ Γ` of matrix product states.
+word form of the merge, lines 1662–1677, and in the coordinates of the tree. Each merge samples
+`s` vectors and applies the products of `k = ⌈⌈log_D s⌉ / 2⌉` operators of the family, the least
+`k` with `D^{2k} ≥ s`. At every node it has a `3/200`-viable space for `ℂ Γ` of dimension at
+most `D^{2k} s ≤ D² s²`, where `D = (d ℓ²)^{22ℓ}` is the parameter of Theorem `t:aisff` and `s`
+depends only on `D` and a sampling parameter `β`; neither depends on `L`. The literal
+raw-filter-and-trim iterates of its root give a line mutually `η/2`-close to `ℂ Γ` of matrix
+product states.
 
-**Scope restriction (tree witness):** the per-node bound is `D⁶ s³` rather than the source's
-`D s²`; the tree is a recursive witness, with no sampling probability; the bond dimension of the
-output grows with `L`, through the trimming threshold; and the chain has at least one site and
-local dimension at least two. See `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
+**Local fix (rounding of the number of rounds):** the source takes `k = ⌈log_D s⌉ / 2` rounds,
+which need not be an integer, and obtains the node bound `D s²`. With an integer number of rounds
+the least admissible `k` gives `D^{2k} s ≤ D² s²`, one factor of `D` more. See
+`docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
+
+**Scope restriction (tree witness):** the tree is a recursive witness, with no sampling
+probability; the bond dimension of the output grows with `L`, through the trimming threshold;
+and the chain has at least one site and local dimension at least two. See
+`docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
 -/
 
 open Matrix
@@ -70,6 +77,98 @@ theorem exists_pos_mem_spectrum_of_unique_ground_state {L q : ℕ} (hq : 2 ≤ q
   have hpow : q ≤ q ^ L := Nat.le_self_pow (by omega) q
   omega
 
+/-- The least number of rounds `k` with `D^{2k} ≥ s`, namely `k = ⌈⌈log_D s⌉ / 2⌉`, satisfies
+`1 ≤ k` and `s ≤ D^{2k} ≤ D² s`. The source takes `k = ⌈log_D s⌉ / 2`, which need not be an
+integer, and then has `D^{2k} ≤ D s`; rounding up costs one factor of `D`. Auxiliary to ALVV,
+arXiv:1602.08828v2, the merge, lines 1662–1677, and Theorem `t:alg1`, lines 1777–1817. -/
+theorem merge_rounds_bounds {D s : ℕ} (hD : 2 ≤ D) (hs : 2 ≤ s) :
+    let k := (Nat.clog D s + 1) / 2
+    1 ≤ k ∧ s ≤ D ^ (2 * k) ∧ D ^ (2 * k) ≤ D ^ 2 * s := by
+  intro k
+  have hD1 : 1 < D := hD
+  have hc : 0 < Nat.clog D s := Nat.clog_pos hD1 hs
+  have hup : s ≤ D ^ Nat.clog D s := Nat.le_pow_clog hD1 s
+  have hlow : D ^ (Nat.clog D s - 1) < s := by
+    simpa only [Nat.pred_eq_sub_one] using Nat.pow_pred_clog_lt_self hD1 hs
+  have hk1 : Nat.clog D s ≤ 2 * k := by omega
+  have hk2 : 2 * k ≤ 2 + (Nat.clog D s - 1) := by omega
+  refine ⟨by omega, hup.trans (Nat.pow_le_pow_right (by omega) hk1), ?_⟩
+  calc D ^ (2 * k) ≤ D ^ (2 + (Nat.clog D s - 1)) := Nat.pow_le_pow_right (by omega) hk2
+    _ = D ^ 2 * D ^ (Nat.clog D s - 1) := pow_add D 2 _
+    _ ≤ D ^ 2 * s := Nat.mul_le_mul_left _ hlow.le
+
+/-- The sample overlap of a merged space of dimension `Q ≤ M s` is at least `3 / (32 M)`.
+Auxiliary to ALVV, arXiv:1602.08828v2, Lemma `l:rs`, lines 530–558. -/
+theorem merge_sample_overlap_lower {s Q M : ℕ} (hQ0 : 0 < Q) (hM : 1 ≤ M) (hQ : Q ≤ M * s) :
+    (3 : ℝ) / (32 * M) ≤ (1 - (1 / 4 : ℝ)) * (min s Q : ℕ) / (8 * Q) := by
+  have hQR : (0 : ℝ) < Q := by exact_mod_cast hQ0
+  have hMR : (1 : ℝ) ≤ M := by exact_mod_cast hM
+  rcases le_total Q s with hQs | hsQ
+  · rw [min_eq_right hQs]
+    rw [show (1 - (1 / 4 : ℝ)) * (Q : ℝ) / (8 * Q) = 3 / 32 by field_simp; ring]
+    rw [div_le_div_iff₀ (by positivity) (by norm_num)]
+    nlinarith
+  · rw [min_eq_left hsQ]
+    have hQR' : (Q : ℝ) ≤ M * s := by exact_mod_cast hQ
+    rw [div_le_div_iff₀ (by positivity) (by positivity)]
+    nlinarith
+
+/-- With `k` rounds such that `s ≤ D^{2k}`, a merged space of dimension at most `(D^{2k} s)²`,
+and a family whose `k`-fold products improve by `Δ^k` with `D¹² Δ ≤ 10⁻⁵`, the error after
+sampling and filtering is at most `(1024/9) · 10⁻⁵`. Auxiliary to ALVV, arXiv:1602.08828v2,
+Lemmas `l:rs` and `l:er`, lines 530–558 and 597–622, and Theorem `t:alg1`, lines 1777–1817. -/
+theorem merge_power_error_le {D s k Q : ℕ} (hD : 2 ≤ D) (hk : 1 ≤ k) (hsk : s ≤ D ^ (2 * k))
+    (hQ0 : 0 < Q) (hQ : Q ≤ (D ^ (2 * k) * s) ^ 2) {Delta : ℝ} (hDelta : 0 ≤ Delta)
+    (hbase : (D : ℝ) ^ 12 * Delta ≤ 1 / 100000) :
+    let c := (1 - (1 / 4 : ℝ)) * (min s Q : ℕ) / (8 * Q)
+    0 < c ∧ Delta ^ k / c ^ 2 ≤ (1024 / 9 : ℝ) * (1 / 100000) := by
+  intro c
+  have hD1 : 1 ≤ D := by omega
+  have hP1 : 1 ≤ D ^ (2 * k) := Nat.one_le_pow _ _ (by omega)
+  have hs0 : 0 < s := by
+    by_contra h0
+    have : s = 0 := by omega
+    subst this
+    simp at hQ
+    omega
+  let M := D ^ (4 * k) * s
+  have hM : 1 ≤ M := Nat.mul_le_mul (Nat.one_le_pow _ _ (by omega)) hs0
+  have hQM : Q ≤ M * s := by
+    refine hQ.trans (le_of_eq ?_)
+    simp only [M]
+    ring
+  have hlow := merge_sample_overlap_lower hQ0 hM hQM
+  have hlow0 : (0 : ℝ) < 3 / (32 * M) := by
+    have : (0 : ℝ) < M := by exact_mod_cast hM
+    positivity
+  refine ⟨hlow0.trans_le hlow, ?_⟩
+  have hMR : ((M : ℕ) : ℝ) = (D : ℝ) ^ (4 * k) * s := by simp only [M]; push_cast; ring
+  have hsR : (s : ℝ) ≤ (D : ℝ) ^ (2 * k) := by exact_mod_cast hsk
+  have hs0R : (0 : ℝ) ≤ s := Nat.cast_nonneg s
+  have hDR : (0 : ℝ) ≤ D := Nat.cast_nonneg D
+  have hpowk : Delta ^ k * (D : ℝ) ^ (12 * k) ≤ (1 / 100000 : ℝ) := by
+    rw [pow_mul, ← mul_pow, mul_comm]
+    calc ((D : ℝ) ^ 12 * Delta) ^ k ≤ (1 / 100000 : ℝ) ^ k :=
+          pow_le_pow_left₀ (by positivity) hbase k
+      _ ≤ 1 / 100000 := pow_le_of_le_one (by norm_num) (by norm_num) (by omega)
+  have hM2 : ((M : ℕ) : ℝ) ^ 2 ≤ (D : ℝ) ^ (12 * k) := by
+    rw [hMR]
+    have h2 : (s : ℝ) ^ 2 ≤ ((D : ℝ) ^ (2 * k)) ^ 2 := pow_le_pow_left₀ hs0R hsR 2
+    calc ((D : ℝ) ^ (4 * k) * s) ^ 2 = ((D : ℝ) ^ (4 * k)) ^ 2 * (s : ℝ) ^ 2 := by ring
+      _ ≤ ((D : ℝ) ^ (4 * k)) ^ 2 * ((D : ℝ) ^ (2 * k)) ^ 2 :=
+          mul_le_mul_of_nonneg_left h2 (by positivity)
+      _ = (D : ℝ) ^ (12 * k) := by rw [← pow_mul, ← pow_mul, ← pow_add]; ring_nf
+  calc Delta ^ k / c ^ 2 ≤ Delta ^ k / (3 / (32 * M)) ^ 2 :=
+        div_le_div_of_nonneg_left (pow_nonneg hDelta k) (by positivity)
+          (pow_le_pow_left₀ hlow0.le hlow 2)
+    _ = (1024 / 9 : ℝ) * (Delta ^ k * ((M : ℕ) : ℝ) ^ 2) := by
+        have : (0 : ℝ) < M := by exact_mod_cast hM
+        field_simp
+        ring
+    _ ≤ (1024 / 9 : ℝ) * (Delta ^ k * (D : ℝ) ^ (12 * k)) := by
+        gcongr
+    _ ≤ (1024 / 9 : ℝ) * (1 / 100000) := by gcongr
+
 open Classical in
 /-- **The merge tree with the frustration-free family for a unique ground state.** Let
 `H = ∑ hᵢ` be a nearest-neighbour chain of `L ≥ 1` sites of local dimension `q ≥ 2` with
@@ -79,14 +178,15 @@ at least `γ`). With the universal constant `A ≥ 1` of Theorem `t:aisff`, put 
 `d = max (q, 2)`, `u = 1 + log d + log (1/g)`, `ℓ = ⌈A u² / g⌉`, `D = (d ℓ²)^{22ℓ}` and leaf width
 `4ℓ`. On every long interval the frustration-free family of Theorem `t:aisff` is fixed: at most
 `D²` operators, each of operator Schmidt rank at most `(d² + 4)^{ℓ² + 1}` at every cut. For every
-`η > 0` and `0 < β < 1`, with `s = ⌈4096 (1 + log D + log (1/β))⌉` and `count = D⁶ s³`, there is
-a merge tree whose long parents are literal sampled-and-trimmed merges with these families,
-whose node spaces are all `3/200`-viable for `ℂ Γ` of dimension at most `count`, and whose root,
-after its raw-filter-and-trim iterates and Ritz extraction, gives a line mutually `η/2`-close to
-`ℂ Γ` of matrix product states. Neither `D` nor `count` depends on `L`.
+`η > 0` and `0 < β < 1`, put `s = ⌈4096 (1 + log D + log (1/β))⌉`, `k = ⌈⌈log_D s⌉ / 2⌉` and
+`count = D^{2k} s ≤ D² s²`. There is a merge tree whose long parents are literal sampled merges,
+with `k` rounds of these families and a collective trim, whose node spaces are all
+`3/200`-viable for `ℂ Γ` of dimension at most `count`, and whose root, after its
+raw-filter-and-trim iterates and Ritz extraction, gives a line mutually `η/2`-close to `ℂ Γ` of
+matrix product states. Neither `D` nor `count` depends on `L`.
 
 Existence form of ALVV, arXiv:1602.08828v2, Theorem `t:unique`, lines 1829–1855, under the
-scope restriction of this module; the running time is not formalized. -/
+local fix and the scope restriction of this module; the running time is not formalized. -/
 theorem exists_unique_ground_state_tree_ritz_approximation :
     ∃ A : ℝ, 1 ≤ A ∧ ∀ (L q : ℕ), 2 ≤ q → 1 ≤ L →
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -122,25 +222,26 @@ theorem exists_unique_ground_state_tree_ritz_approximation :
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := interval L J.val.1 J.val.2 → Fin q) (W J j)
       ∀ eta : ℝ, 0 < eta → ∀ beta : ℝ, 0 < beta → beta < 1 →
       let s := Nat.ceil (4096 * (1 + Real.log (D : ℝ) + Real.log (1 / beta)))
-      let count := D ^ 6 * s ^ 3
+      let k := (Nat.clog D s + 1) / 2
+      let count := D ^ (2 * k) * s
+      count ≤ D ^ 2 * s ^ 2 ∧
       ∃ (xi : ℝ) (n Bout : ℕ) (operation : IntervalMergeOperation L q), 0 < xi ∧
-        (∀ (J : LongIntervalIndex L width) (k : ℕ) (hpk : J.val.1 ≤ k) (hkr : k ≤ J.val.2)
-          (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L J.val.1 k → Fin q)))
-          (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L k J.val.2 → Fin q))),
+        (∀ (J : LongIntervalIndex L width) (m : ℕ) (hpm : J.val.1 ≤ m) (hmr : m ≤ J.val.2)
+          (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L J.val.1 m → Fin q)))
+          (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L m J.val.2 → Fin q))),
           Submodule.IsViable (3 / 200 : ℝ) S1
             (G.map (Entropy.regionTensorCoordinates q
-              (interval L J.val.1 k)).toLinearEquiv.toLinearMap) →
+              (interval L J.val.1 m)).toLinearEquiv.toLinearMap) →
           Submodule.IsViable (3 / 200 : ℝ) S2
             (G.map (Entropy.regionTensorCoordinates q
-              (interval L k J.val.2)).toLinearEquiv.toLinearMap) →
+              (interval L m J.val.2)).toLinearEquiv.toLinearMap) →
           Module.finrank ℂ S1 ≤ count → Module.finrank ℂ S2 ≤ count →
           ∃ V : Matrix.unitaryGroup
             (Fin (Module.finrank ℂ (adjacentIntervalMerge L q
-              J.val.1 k J.val.2 hpk hkr S1 S2))) ℂ,
-            operation J.val.1 k J.val.2 hpk hkr S1 S2 =
-              sampledIntervalTrim L q J.val.1 J.val.2 (F J)
-                (Nat.clog D (D ^ 2 * s)) s xi
-                (adjacentIntervalMerge L q J.val.1 k J.val.2 hpk hkr S1 S2) V) ∧
+              J.val.1 m J.val.2 hpm hmr S1 S2))) ℂ,
+            operation J.val.1 m J.val.2 hpm hmr S1 S2 =
+              sampledIntervalTrim L q J.val.1 J.val.2 (F J) k s xi
+                (adjacentIntervalMerge L q J.val.1 m J.val.2 hpm hmr S1 S2) V) ∧
         (∀ p r : ℕ, p ≤ r → r ≤ L →
           let S := balancedIntervalSpace operation width hwidth p r
           Submodule.IsViable (3 / 200 : ℝ) S
@@ -216,7 +317,7 @@ theorem exists_unique_ground_state_tree_ritz_approximation :
       hΓ huniq hgap).2.2
   choose Nfam W Δ hN hΔ hbudget hrankW himprove using hfam
   refine ⟨Nfam, W, hN, hrankW, ?_⟩
-  intro F eta heta beta hbeta hbeta1 s count
+  intro F eta heta beta hbeta hbeta1 s k count
   have hrankG : Module.finrank ℂ G = 1 := hrank
   have hG : G ≠ ⊥ := (Submodule.span_singleton_eq_bot.not).mpr hΓ0
   -- the reference for collective trimming, at the error `1/10000`
@@ -240,40 +341,75 @@ theorem exists_unique_ground_state_tree_ritz_approximation :
     have hB1 : (1 : ℝ) ≤ Btree := by exact_mod_cast hBtree
     apply (div_le_iff₀ (by positivity)).mpr
     nlinarith only [one_le_mul_of_one_le_of_one_le hB1 hroot1]
-  -- sampling size
+  -- sampling size and the number of rounds
   obtain ⟨hs1, -, -, -⟩ := Real.viable_node_uniform_sampling_size hD (le_refl 1) hbeta hbeta1.le
   simp only [Nat.cast_one, Real.log_one, add_zero, mul_one] at hs1
+  have hs2 : 2 ≤ s := by
+    have hlogD : 0 ≤ Real.log (D : ℝ) := Real.log_nonneg (by exact_mod_cast (by omega : 1 ≤ D))
+    have hlogb : 0 ≤ Real.log (1 / beta) :=
+      Real.log_nonneg (by rw [le_div_iff₀ hbeta]; linarith)
+    have hceil := Nat.le_ceil (4096 * (1 + Real.log (D : ℝ) + Real.log (1 / beta)))
+    have : (2 : ℝ) ≤ s := le_trans (by nlinarith) hceil
+    exact_mod_cast this
+  obtain ⟨hk1, hsk, hkD⟩ := merge_rounds_bounds hD hs2
+  have hcount2 : count ≤ D ^ 2 * s ^ 2 := by
+    calc count = D ^ (2 * k) * s := rfl
+      _ ≤ (D ^ 2 * s) * s := Nat.mul_le_mul_right s hkD
+      _ = D ^ 2 * s ^ 2 := by ring
+  refine ⟨hcount2, ?_⟩
+  have hcountsq : count * count ≤ D ^ 12 * s ^ 6 := by
+    calc count * count ≤ (D ^ 2 * s ^ 2) * (D ^ 2 * s ^ 2) := Nat.mul_le_mul hcount2 hcount2
+      _ = D ^ 4 * s ^ 4 := by ring
+      _ ≤ D ^ 12 * s ^ 6 := Nat.mul_le_mul (Nat.pow_le_pow_right (by omega) (by norm_num))
+          (Nat.pow_le_pow_right (by omega) (by norm_num))
   have hleaf : q ^ width ≤ count := by
-    have := Nat.viable_tree_leaf_count_le (le_max_left q 2) hd2 hℓ hs1
-    simpa only [width, count, D, d] using this
-  have htree := exists_balanced_sampled_interval_tree (rG := 1) hwidth (by omega : 1 ≤ q) hD
-    le_rfl G hxi hxi1 Nfam F hN hbeta hbeta1
+    have hqD : q ^ width ≤ D := by
+      calc q ^ width = q ^ (4 * ℓ) := rfl
+        _ ≤ q ^ (22 * ℓ) := Nat.pow_le_pow_right (by omega) (by omega)
+        _ ≤ (d * ℓ ^ 2) ^ (22 * ℓ) := Nat.pow_le_pow_left
+          ((le_max_left q 2).trans (by
+            simpa only [mul_one] using Nat.mul_le_mul_left d (Nat.one_le_pow 2 ℓ hℓ))) _
+    calc q ^ width ≤ D := hqD
+      _ ≤ D ^ (2 * k) := Nat.le_self_pow (by omega) D
+      _ ≤ D ^ (2 * k) * s := Nat.le_mul_of_pos_right _ (by omega)
+  have htree := exists_balanced_sampled_interval_tree_of_power (rG := 1) hwidth
+    (by omega : 1 ≤ q) hD le_rfl G hxi hxi1 Nfam F hN hbeta hbeta1 k count
   simp only [Nat.cast_one, Real.log_one, add_zero, mul_one] at htree
-  obtain ⟨operation, hliteral, hspaces⟩ := htree hleaf (by
-    intro J k hpk hkr S1 S2 hS1 hS2 hd1 hd2'
-    obtain ⟨Good, -, hbad, -, himages⟩ :=
-      exists_measurable_interval_word_image_event hpk hkr hD hs1 G G hG (le_refl 0)
-        (by norm_num) (Submodule.isCloseTo_of_le le_rfl le_rfl)
-        (Submodule.isCloseTo_of_le le_rfl le_rfl) (hΔ J).le (hbudget J) (F J) (hN J)
-        (fun a S δ hS hδ ↦ himprove J a S δ hS hδ) S1 S2 hS1 hS2 hd1 hd2'
-    rw [LinearEquiv.finrank_map_eq, hrankG] at hbad
-    simp only [mul_one] at hbad
-    refine ⟨Good, hbad, ?_⟩
+  obtain ⟨operation, hliteral, hspaces⟩ := htree hcountsq le_rfl hleaf (by
+    intro J m hpm hmr S1 S2 hS1 hS2 hd1 hd2'
+    let C := Entropy.regionTensorCoordinates q (interval L J.val.1 J.val.2)
+    let Wm := adjacentIntervalMerge L q J.val.1 m J.val.2 hpm hmr S1 S2
+    have hmerged := isViable_adjacentIntervalMerge hpm hmr G S1 S2 hS1 hS2
+    have hGmap : G.map C.toLinearEquiv.toLinearMap ≠ ⊥ :=
+      (Submodule.map_ne_bot_iff (e := C.toLinearEquiv)).mpr hG
+    have hW : Wm ≠ ⊥ :=
+      Submodule.isViable_ne_bot_of_target_ne_bot hmerged (by norm_num) hGmap
+    have hQ0 : 0 < Module.finrank ℂ Wm :=
+      Nat.zero_lt_of_lt (Submodule.one_le_finrank_iff.mpr hW)
+    have hQ : Module.finrank ℂ Wm ≤ (D ^ (2 * k) * s) ^ 2 := by
+      calc Module.finrank ℂ Wm ≤ Module.finrank ℂ S1 * Module.finrank ℂ S2 :=
+            finrank_adjacentIntervalMerge_le hpm hmr S1 S2
+        _ ≤ count * count := Nat.mul_le_mul hd1 hd2'
+        _ = (D ^ (2 * k) * s) ^ 2 := by ring
+    have hWT : Submodule.IsViable (1 / 4 : ℝ) Wm (G.map C.toLinearEquiv.toLinearMap) :=
+      hmerged.of_le (by norm_num)
+    obtain ⟨Good, -, hbad, -, hout⟩ :=
+      Submodule.exists_measurable_sampledWordImage_event (F J)
+        (G.map C.toLinearEquiv.toLinearMap) (Δ J)
+        (fun a S δ hS hδ ↦ himprove J a S δ hS hδ) k s hs1 Wm hW hWT (by norm_num)
+    have e : 2 * Module.finrank ℂ (G.map C.toLinearEquiv.toLinearMap) = 2 := by
+      rw [LinearEquiv.finrank_map_eq, hrankG]
+    refine ⟨Good, ?_, ?_⟩
+    · convert hbad using 6
+      exact e.symm
     intro U hU
-    obtain ⟨-, hviableV⟩ := himages U hU
-    have hs1R : (1 : ℝ) ≤ s := by exact_mod_cast hs1
-    have hden : (1 : ℝ) ≤ (s : ℝ) ^ 2 := one_le_pow₀ hs1R
-    have hratio : (1024 / 9 : ℝ) * (1 / 100000) / (s : ℝ) ^ 2 ≤
-        (1024 / 9 : ℝ) * (1 / 100000) := by
-      apply (div_le_iff₀ (lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1) hden)).mpr
-      simpa only [mul_one] using mul_le_mul_of_nonneg_left hden
-        (by norm_num : (0 : ℝ) ≤ (1024 / 9 : ℝ) * (1 / 100000))
+    obtain ⟨-, hfiltered⟩ := hout U hU
+    obtain ⟨-, herror⟩ := merge_power_error_le hD hk1 hsk hQ0 hQ (hΔ J).le (hbudget J)
     have hsmall : Submodule.IsViable (1 / 400 : ℝ)
-        (Submodule.sampledWordImage (F J) (Nat.clog D (D ^ 2 * s)) s
-          (adjacentIntervalMerge L q J.val.1 k J.val.2 hpk hkr S1 S2) U)
+        (Submodule.sampledWordImage (F J) k s Wm U)
         (G.map (Entropy.regionTensorCoordinates q
           (interval L J.val.1 J.val.2)).toLinearEquiv.toLinearMap) :=
-      hviableV.of_le (by linarith only [hratio])
+      hfiltered.of_le (herror.trans (by norm_num))
     have htrimmed := htrim J.val.1 J.val.2 J.property.1 J.property.2.1 _ (1 / 400)
       (by norm_num) xi hxi hsmall
     apply htrimmed.of_le
