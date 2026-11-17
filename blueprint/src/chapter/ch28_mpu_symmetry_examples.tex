@@ -17,14 +17,46 @@
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_conjugation_example_gate_invariants, conjphs, prop:conjsym-strict-equiv}
+    \uses{lem:mpu_conjugation_example_gate_invariants, conjphs, prop:conjsym-strict-equiv,
+        lem:mpu_conjugation_odd_rank_two_phases}
     The gates generate conjugation-invariant MPUs with the case and
     determinants recorded in
     Lemma~\ref{lem:mpu_conjugation_example_gate_invariants}. When one rank is
-    odd, the two classes then follow from the determinant $\det(u_+v_\pm)=\pm1$
-    and Theorem~\ref{conjphs}; when both are even, distinguishing the four
-    classes in each case needs the ``only if'' direction of
-    Theorem~\ref{prop:conjsym-strict-equiv}, which remains open.
+    odd, the statement is
+    Lemma~\ref{lem:mpu_conjugation_odd_rank_two_phases}. When both are even,
+    distinguishing the four classes in each case needs the ``only if''
+    direction of Theorem~\ref{prop:conjsym-strict-equiv}, which remains open;
+    this half of the example waits on it.
+\end{proof}
+
+\begin{lemma}[The two phases under conjugation when one rank is odd]
+    \label{lem:mpu_conjugation_odd_rank_two_phases}
+    \lean{MPOTensor.ConjugationExamples.conjugation_oddRank_two_phases,
+        MPOTensor.ConjugationExamples.exists_isMPUCanonicalForm_signGates}
+    \leanok
+    \discussion{5715}
+    \uses{conjphs, lem:mpu_conjugation_example_gate_invariants,
+        thm:mpu_standard_form_canonical_representative, lem:mpu_conjugation_one_site_determinant}
+    Suppose one of $\ell,r$ is odd and fix an identification of
+    $\mathbb C^\ell\otimes\mathbb C^r$ with $\mathbb C^d\otimes\mathbb C^d$. There
+    are tensors on pairs of sites in canonical form, invariant under
+    conjugation, with standard-form gates $(u_+,v_+)$ and $(u_+,v_-)$, that are
+    not strictly equivalent under conjugation. Every tensor on pairs in canonical
+    form, invariant under conjugation, with a standard form of the same ranks, is
+    strictly equivalent under conjugation to one of them.
+    % Source lines: paper_v2.tex 1845--1876.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Lemma~\ref{thm:mpu_standard_form_canonical_representative} gives the two
+    tensors; their MPUs are those of the gates and hence invariant under
+    conjugation, with $\det(u_+v_\pm)=\pm1$. By Theorem~\ref{conjphs} they are not
+    strictly equivalent. For any other such tensor with gates $u,v$, the MPU on one
+    standard-form site is real and unitary with determinant $\varepsilon\det(uv)$,
+    $\varepsilon=\pm1$
+    (Lemma~\ref{lem:mpu_conjugation_one_site_determinant}), so $\det(uv)=\pm1$, and
+    Theorem~\ref{conjphs} places it in one of the two classes.
 \end{proof}
 
 \begin{lemma}[Invariants of the example gates under conjugation]
