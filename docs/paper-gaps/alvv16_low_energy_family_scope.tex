@@ -151,29 +151,35 @@ or satisfies its running-time bound.
 
 \paragraph{The merge tree.}
 The prescribed-interval families compare two windows, so a merge tree
-built from them uses one window per level. In the balanced recursion
-with leaf width $4\ell$, a long node $J$ retains the family image
-$\sum_iA_{J,i}(S_1\otimes S_2)$ of its merged children, with the family
-chosen on every interval before the tree. A node of length at most
-$4\ell\,2^k$ is then $3/200$-viable for $G(\eta_{\rm LD}-3wk)$ whenever
-$3w(k+1)\le\eta_{\rm LD}$, and the root is $3/200$-close to
-$G(\eta_{\rm LD}-3w\lceil\log_2L\rceil)$. Each level uses the index-zero
-family, with comparison loss $1/200$ and suppression at most $10^{-5}$;
-the merge, the two comparisons and the family give the error
-$2(\Delta/(93/100)^2+1/200)\le3/200$. This is the viability induction of
-Theorem~t:alg2, lines 1869--1878, with the shrinking window of the source
-condition $\eta_1\ge2\mu/\log n$ and buffer $w=\mu/(3\log n)$.
-It is restricted to nodes without random sampling or collective trimming,
-so the node dimensions are not bounded and no matrix product state bound
-of the output is asserted. Sampling requires a suppression that beats the
-dimension ratio of the merged and sampled spaces, as the powers of a single
-filter do in the gapped case. A family carrying the upper window to the
-lower one is applied once per level and gives suppression $\Delta$, not
-$\Delta^k$. Elimination: construct word families of the same clipped
-polynomial whose $k$-fold products carry the upper window to the lower one
-with suppression $\Delta^k$, then reuse the sampled node event, the trimming
-reference of the low-density approximations and the final refinement of
-the gapped tree.
+built from them uses one window per level. The power $K^a$ of the nested
+Chebyshev filter has eigenvalues at least one on the lower clipped window
+and squared eigenvalues at most $\Delta^a$ above the upper clipped cutoff;
+its tensor sum is the sum over words of length $a$ in the regional
+operators. Hence the words of length $a$ carry viability for the upper
+target to viability for the lower target with error
+$\Delta^a/(1-\delta)^2$. This is the repeated filter of Theorem~t:alg1,
+lines 1777--1817, applied to the nested targets of Theorem~t:aisgapless;
+no hypothesis beyond the source is added. The sampled tree of the gapped
+case is then run with these word families. The level of $[p,r)$ is
+$\lceil\log_2(r-p)\rceil$, and a node of level $K+1$ uses the window
+$\eta=\eta_{\rm LD}-3wK$; its midpoint children have level at most $K$.
+The source condition $\eta_1\ge2\mu/\log n$ with $w=\mu/(3\log n)$
+corresponds to the hypothesis $3w(\lceil\log_2L\rceil+1)\le\eta_{\rm LD}$,
+which gives $6w\le\eta\le\eta_{\rm LD}$ at every node. The index $i=2$
+makes each comparison loss $1/51200\le10^{-4}$, the same accuracy as the
+gapped sampled node. The upper target has dimension at most
+$r=\dim G(\eta_{\rm LD})$, which sets the sample size $s$, and every node
+has dimension at most $D^6s^3$, independent of $L$ for fixed $w$ and $r$.
+The trim of a node uses a matrix product space $10^{-4}$-close in both
+directions to the window of its level, from the orthonormal basis
+theorem; one bond $D_{\rm ref}$ bounds all of them. The root is close
+to the window shortened by $3w\lceil\log_2L\rceil$ and consists of matrix
+product states of bond $10^6D_{\rm ref}^2(L+1)M^2$.
+The tree retains the restrictions of the gapped tree recorded
+in~\cite{gap:alvv16_approximation_parameters}: full leaves, one final trim
+per node, and the existence of successful samples rather than a success
+probability. The reference bond is existential; no explicit logarithmic
+bound on $D_{\rm ref}$ is asserted, and no final refinement of the root.
 
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
@@ -215,9 +221,10 @@ The sharper accuracy-dependent MPS approximation now follows from the
 independent-scale families as above. An actual inner-band basis image now
 also has the exact inner dimension,
 approximates that band in both directions, and admits a standard
-orthonormal basis of MPS. The merge tree has viable nodes at every level,
-as above; its sampling, trimming and output bounds, a running-time bound and
-identification with the source algorithm remain separate. Closed spectral
+orthonormal basis of MPS. The sampled merge tree is constructed as above;
+an explicit bound on its reference bond, a success probability, a
+running-time bound and identification with the printed algorithm remain
+separate. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial
 follow the companion spectral-projector and positivity notes.
 

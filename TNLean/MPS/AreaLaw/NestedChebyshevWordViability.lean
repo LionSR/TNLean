@@ -33,7 +33,7 @@ open Matrix
 /-- Words of length one in a finite family of operators have the same images
 as the operators themselves. Supporting ALVV, arXiv:1602.08828v2, `l:er`,
 lines 597–622. -/
-theorem Submodule.iSup_map_ofFn_prod_fin_one {M ι : Type*} [NormedAddCommGroup M]
+theorem _root_.Submodule.iSup_map_ofFn_prod_fin_one {M ι : Type*} [NormedAddCommGroup M]
     [InnerProductSpace ℂ M] (A : ι → M →L[ℂ] M) (S : Submodule ℂ M) :
     (⨆ w : Fin 1 → ι, S.map ((List.ofFn (fun j ↦ A (w j))).prod : M →ₗ[ℂ] M)) =
       ⨆ i, S.map (A i : M →ₗ[ℂ] M) := by

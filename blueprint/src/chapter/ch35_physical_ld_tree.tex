@@ -1,20 +1,95 @@
-\section{A merge tree for a low-density spectrum}
+\section{A sampled merge tree for a low-density spectrum}
 \label{sec:physical_ld_tree}
 
-The interval families of Lemma~\ref{lem:dyadic_interval_low_energy_family}
+The interval families of Lemma~\ref{lem:dyadic_long_interval_low_energy_family}
 compare two different low-energy windows: viability for the upper window
 of width $\eta$ is carried to viability for the lower window of width
-$\eta-3w$. A merge tree built from them therefore uses one window per
-level, shortened by the buffer $3w$ at each of its levels, as in the
-condition $\eta_1\ge2\mu/\log n$ and the buffer $w=\mu/(3\log n)$
+$\eta-3w$. The merge of~\cite[Theorem~\texttt{t:alg1}, lines
+    1777--1817]{Arad2016RigorousRG} applies one filter $k$ times, and the
+proof of~\cite[Theorem~\texttt{t:alg2}, lines 1869--1878]{Arad2016RigorousRG}
+runs the same tree with the filters
 of~\cite[Theorem~\texttt{t:aisgapless}, lines 1027--1041]{Arad2016RigorousRG}.
-The statement below is the viability induction of the merge tree
-of~\cite[Theorem~\texttt{t:alg2}, lines 1869--1878]{Arad2016RigorousRG}.
-It is restricted to long nodes that keep the whole family image of the
-merged child spaces: no random sampling, collective trimming, bound on
-the node dimensions, final refinement or matrix product state bound of
-the output is asserted, and no running time. The constant depends on the
-fixed bandwidth, as recorded in~\cite{gap:alvv16_low_energy_family_scope}.
+The power of such a filter is again a filter between the same two windows,
+with the suppression raised to the same power. The tree therefore keeps
+one window per level, shortened by the buffer $3w$ at each level, as in the
+condition $\eta_1\ge2\mu/\log n$ with $w=\mu/(3\log n)$.
+
+The statements below are restricted as the gapped tree is: leaves are full
+blocks, every long node has one final collective trim, and the theorem
+asserts the existence of successful samples, not a success probability or a
+running time. The constant depends on the fixed bandwidth, as recorded
+in~\cite{gap:alvv16_low_energy_family_scope}.
+
+\begin{lemma}[Words of one filter between two nested spectral spaces]
+    \label{lem:chebyshev_nested_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_chebyshev_nested_word_viability_of_polynomial_family,
+        Submodule.iSup_map_ofFn_prod_fin_one}
+    \leanok
+    \uses{lem:chebyshev_nested_polynomial_family}
+    In the setting of Lemma~\ref{lem:chebyshev_nested_polynomial_family},
+    let $A_1,\dots,A_N$ be the operators of the filter on $\mathcal H_J$.
+    For every $a\ge0$, if $S$ is $\delta$-viable for the upper spectral
+    space with $\delta<1$, then the span of all images $A_{i_1}\cdots
+    A_{i_a}S$ has dimension at most $N^a\dim S$ and is
+    $\Delta^a/(1-\delta)^2$-viable for the lower spectral space. For
+    $a=1$ these images are those of the operators themselves.
+\end{lemma}
+\begin{proof}\leanok
+    The filter $K$ has eigenvalue at least one on the lower space and
+    squared eigenvalue at most $\Delta$ above the upper cutoff, so $K^a$
+    has eigenvalue at least one on the lower space and squared eigenvalue
+    at most $\Delta^a$ above the upper cutoff. The power of the tensor sum
+    $K=\sum_iA_i\otimes M_i$ is the sum over words of
+    $A_{i_1}\cdots A_{i_a}\otimes M_{i_1}\cdots M_{i_a}$. Apply the
+    nested error-reduction step to $K^a$.
+\end{proof}
+
+\begin{lemma}[Word families on long intervals]
+    \label{lem:dyadic_long_interval_low_energy_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_regional_dyadic_low_energy_word_family,
+        TNLean.MPS.AreaLaw.exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family}
+    \leanok
+    \uses{lem:chebyshev_nested_word_family,lem:dyadic_regional_low_energy_family,
+        lem:dyadic_long_interval_low_energy_family}
+    In the setting of Lemmas~\ref{lem:dyadic_regional_low_energy_family}
+    and~\ref{lem:dyadic_long_interval_low_energy_family}, the family on a
+    long interval consists of $N\le D_i^2$ operators, chosen before the
+    window, and for every $a\ge0$ the words of length $a$ carry
+    $\delta$-viability for the upper target to
+    $\Delta^a/(1-\delta)^2$-viability for the lower target, with dimension
+    at most $N^a\dim S$. The targets, comparisons and suppression are those
+    of the single-word statements, which are the case $a=1$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:chebyshev_nested_word_family}
+    Repeat the proofs of the single-word statements with
+    Lemma~\ref{lem:chebyshev_nested_word_family} in place of
+    Lemma~\ref{lem:chebyshev_nested_polynomial_family}.
+\end{proof}
+
+\begin{lemma}[A sampled parent between two windows]
+    \label{lem:sampled_parent_two_windows}
+    \lean{Submodule.exists_measurable_sampledWordImage_event_of_nested,
+        TNLean.MPS.AreaLaw.exists_measurable_interval_word_image_event_of_nested}
+    \leanok
+    \uses{thm:physical_dg_sampled_node}
+    Let $G$, $G_{\rm out}$, $T_{\rm hi}$ and $T_{\rm lo}$ be subspaces of
+    the chain, with $G\ne0$, $T_{\rm hi}$ $\epsilon$-close to $G$ and
+    $G_{\rm out}$ $\epsilon$-close to $T_{\rm lo}$, where
+    $\epsilon\le10^{-4}$. Suppose the words of a fixed family of at most
+    $D^2$ operators carry viability for $T_{\rm hi}$ to viability for
+    $T_{\rm lo}$ with suppression $\Delta^a$, where $D^{12}\Delta\le10^{-5}$.
+    Then for two $3/200$-viable child spaces for $G$ of dimension at most
+    $D^6s^3$, the conclusion of Lemma~\ref{thm:physical_dg_sampled_node}
+    holds with output target $G_{\rm out}$, and with the dimension of
+    $T_{\rm hi}$ in the failure bound.
+\end{lemma}
+\begin{proof}\leanok
+    The merged space is viable for $T_{\rm hi}$; sample it for this target,
+    apply the words, and compare the image with $G_{\rm out}$. When
+    $G_{\rm out}=G$ and $T_{\rm hi}=T_{\rm lo}$ this is
+    Lemma~\ref{thm:physical_dg_sampled_node}.
+\end{proof}
 
 \begin{lemma}[Midpoint induction for the interval recursion]
     \label{lem:balanced_interval_invariant_midpoint}
@@ -32,55 +107,83 @@ fixed bandwidth, as recorded in~\cite{gap:alvv16_low_energy_family_scope}.
     a long interval is its midpoint.
 \end{proof}
 
-\begin{lemma}[Viability at every level of the low-density merge tree]
-    \label{lem:physical_ld_interval_tree}
-    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_interval_tree}
+\begin{lemma}[A witness tree with a target on every interval]
+    \label{lem:sampled_interval_witness_tree_targets}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_targets}
     \leanok
-    \uses{lem:dyadic_interval_low_energy_family,
-        lem:balanced_interval_invariant_midpoint,
-        thm:actual_adjacent_interval_merge,
-        lem:full_interval_viability}
-    Fix $\eta_{\rm LD}>0$. There is a constant $C\ge\max\{100,19+\eta_{\rm LD}\}$
-    with the following property. Let $q\ge2$, $m\ge q$ and $w>0$, put
-    $g=\min\{w,1\}$, $u=1+\log m+\log(1/g)$,
-    $\ell=\lceil Cu^2/g\rceil$ and $D=(m\ell^2)^{22\ell}$. Let
-    $H=\sum_ih_i$ be a nearest-neighbour chain of length $L$ and local
-    dimension $q$ with $0\le h_i\le\Id$, and let $G(\eta)$ be the span of
-    the eigenvectors of $H$ with energy at most $E_0+\eta$, where $E_0$ is
-    the ground energy. Then $\ell\ge21$, $\log D$ obeys the bound of
-    Lemma~\ref{lem:dyadic_interval_low_energy_family}, and there are
-    operators $A_{J,1},\dots,A_{J,D^2}$ on every interval $J$ with the
-    following property. In the balanced recursion with leaf width
-    $4\ell$, let a long node $J=[p,r)$ with children $S_1,S_2$ retain
-    \[
-        \sum_{i=1}^{D^2}A_{J,i}\,(S_1\otimes S_2).
-    \]
-    If $r-p\le4\ell\,2^k$ and $3w(k+1)\le\eta_{\rm LD}$, the space on $J$ is
-    $3/200$-viable for $G(\eta_{\rm LD}-3wk)$. In particular, if
-    $3w(\lceil\log_2L\rceil+1)\le\eta_{\rm LD}$, the space at the root is
-    $3/200$-close to $G(\eta_{\rm LD}-3w\lceil\log_2L\rceil)$.
+    \uses{thm:sampled_interval_witness_tree,lem:balanced_interval_invariant_midpoint}
+    The conclusion of Lemma~\ref{thm:sampled_interval_witness_tree} holds
+    when every interval $[p,r)$ carries its own target $T(p,r)$, and the
+    node events are required only at cuts satisfying a prescribed condition
+    that holds at the midpoint. Child spaces are then viable for the targets
+    of the child intervals, and every recursive space is viable for the
+    target of its own interval.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:dyadic_interval_low_energy_family,
-        lem:balanced_interval_invariant_midpoint,
-        thm:actual_adjacent_interval_merge,
-        lem:full_interval_viability}
-    Take the family of Lemma~\ref{lem:dyadic_interval_low_energy_family}
-    on every interval, at the index zero, so that its comparison loss is
-    $1/200$ and its suppression satisfies $\Delta\le D^{12}\Delta\le10^{-5}$.
-    Induct over the recursion with
-    Lemma~\ref{lem:balanced_interval_invariant_midpoint}. A leaf retains
-    the full local space, which is viable for every target. A long node of
-    length at most $4\ell\,2^{k+1}$ has children of length at most
-    $4\ell\,2^k$, which are $3/200$-viable for $G(\eta)$ with
-    $\eta=\eta_{\rm LD}-3wk\ge6w$. By
-    Lemma~\ref{thm:actual_adjacent_interval_merge}, their merge is
-    $3/100$-viable for $G(\eta)$, hence $7/100$-viable for the upper window
-    of the family, which is $1/200$-close to it. The family image is then
-    $\Delta/(1-7/100)^2$-viable for the lower window, which is
-    $1/200$-close to $G(\eta-3w)$. The resulting error
-    $2\bigl(\Delta/(93/100)^2+1/200\bigr)$ is at most $3/200$. At the root,
-    $L\le2^{\lceil\log_2L\rceil}$, and
-    Lemma~\ref{lem:full_interval_viability} turns viability on the whole
-    chain into closeness.
+    \uses{lem:balanced_interval_invariant_midpoint}
+    Select the successful unitaries as in
+    Lemma~\ref{thm:sampled_interval_witness_tree}, and conclude with
+    Lemma~\ref{lem:balanced_interval_invariant_midpoint}.
+\end{proof}
+
+\begin{lemma}[The sampled merge tree for a low-density spectrum]
+    \label{lem:physical_ld_sampled_interval_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_sampled_interval_tree}
+    \leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        lem:sampled_parent_two_windows,
+        lem:sampled_interval_witness_tree_targets,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    Fix $\eta_{\rm LD}>0$. There is a constant $C\ge\max\{100,19+\eta_{\rm LD}\}$
+    with the following property. Let $q\ge2$, $m\ge q$ and $w>0$, put
+    $m'=4m$, $g=\min\{w,1\}$, $u=1+\log m'+\log(1/g)$,
+    $\ell=\lceil Cu^2/g\rceil$ and $D=(m'\ell^2)^{22\ell}$. Let
+    $H=\sum_ih_i$ be a nearest-neighbour chain of length $L$ and local
+    dimension $q$ with $0\le h_i\le\Id$, let $G(\eta)$ be the span of the
+    eigenvectors of energy at most $E_0+\eta$, and put
+    $r=\dim G(\eta_{\rm LD})$. Then $\ell\ge21$, and on every long interval
+    there is a family of at most $D^2$ operators, chosen before the tree.
+    If $3w(\lceil\log_2L\rceil+1)\le\eta_{\rm LD}$, there is a reference
+    bond $D_{\rm ref}\ge1$ with the following property. Put
+    $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$, and for $0<\beta<1$ put
+    $A=1+\log r+\log D+\log(1/\beta)$, $s=\lceil4096rA\rceil$ and
+    $M=D^6s^3$. There is an operation whose values at midpoint cuts are
+    the trims at threshold $\xi$ of sampled word images of the family of
+    the parent, such that every recursive space on $[p,r)$ is
+    $3/200$-viable for $G(\eta_{\rm LD}-3w\lceil\log_2(r-p)\rceil)$, has
+    dimension at most $M$, and is spanned by at most $M$ vectors $u_i$ with
+    $\xi^2\operatorname{SR}(u_i)\le M$ at every cut. The root is
+    $3/200$-close to $G(\eta_{\rm LD}-3w\lceil\log_2L\rceil)$, and each of
+    its vectors is a matrix product state of bond dimension at most
+    $10^6D_{\rm ref}^2(L+1)M^2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        lem:sampled_parent_two_windows,
+        lem:sampled_interval_witness_tree_targets,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    Take the word families of
+    Lemma~\ref{lem:dyadic_long_interval_low_energy_word_family} at the index
+    $i=2$, so that each comparison has loss $1/51200\le10^{-4}$. For every
+    level $K\ge1$, Theorem~\ref{thm:low_energy_orthonormal_mps_basis} gives
+    a matrix product space $10^{-4}$-close to $G(\eta_{\rm LD}-3wK)$ in both
+    directions; let $D_{\rm ref}$ bound all their bonds for
+    $K\le\lceil\log_2L\rceil$. Apply
+    Lemma~\ref{lem:sampled_interval_witness_tree_targets} with the targets
+    $T(p,r)=G(\eta_{\rm LD}-3w\lceil\log_2(r-p)\rceil)$ and the midpoint
+    condition. At a long node of level $K+1$, both children have level at
+    most $K$, so they are viable for $G(\eta)$ with $\eta=\eta_{\rm LD}-3wK$,
+    and $6w\le\eta\le\eta_{\rm LD}$. The upper target of the family has
+    dimension at most $\dim G(\eta)\le r$. By
+    Lemma~\ref{lem:sampled_parent_two_windows} the sampled word image is
+    $1/400$-viable for $G(\eta-3w)=T(p,r)$, and the trim against the
+    reference of level $K+1$ is $3/200$-viable by
+    Lemma~\ref{thm:interval_trimming_reference}. At the root, apply
+    Lemmas~\ref{lem:full_interval_viability} and~\ref{lem:full_interval_mps_span}.
 \end{proof}
