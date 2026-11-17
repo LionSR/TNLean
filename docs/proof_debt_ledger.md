@@ -1194,11 +1194,17 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   `cycleGraph N`, identifying `ringSupportDistance` with the least cycle-graph
   distance. The constants differ: the ring bound is
   `2 |X| ‖A‖ ‖B‖ e^{-a d} (e^{8 e^a |t|} - 1)`, vanishing at `t = 0`, while the
-  graph bound is `4 |X| ‖A‖ ‖B‖ e^{4 v_R b₀ e^{2a} |t| - a d}`, so the consumers must
-  accept the graph constants or the `- 1` refinement must be added to the graph
-  statement first.
-- **First PR**: prove `ringSupportDistance` equals the cycle-graph support
-  distance, and check whether the three consumers tolerate the graph constants.
+  graph bound is `4 |X| ‖A‖ ‖B‖ e^{4 v_R b₀ e^{2a} |t| - a d}`. The ring form is the
+  source's (Hastings–Koma, Theorem A.2), so the honest route is a QICLean graph
+  theorem in that form, for disjoint supports with factor `e^{2s|t|} - 1` under
+  `∀ x, Σ_{j ∋ x} |T_j| ‖h_j‖ e^{a diam T_j} ≤ s`; this is
+  `ManyBody.norm_heisenberg_commutator_le_graphDistance_of_disjoint` in
+  LionSR/QICLean#1094. On the ring `diam T_j = 1`, `|T_j| ≤ 2`, two bonds meet
+  each site and `‖h_j‖ ≤ 1`, so `s = 4 e^a` and `2s = 8 e^a`: the ring bound is
+  exactly its `cycleGraph N` corollary.
+- **First PR**: LionSR/QICLean#1094 (the graph theorem); then, at the
+  next pin, a TNLean PR proving `ringSupportDistance` equals the cycle-graph
+  support distance and deleting the ring recursion.
 
 ## Honorable mentions (ranks 11-12)
 

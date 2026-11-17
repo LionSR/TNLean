@@ -887,7 +887,8 @@ jobs:
     name: Check inline diagram semantics
     needs: changes
     if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true')"
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -904,7 +905,8 @@ jobs:
     name: Check blueprint compiles without errors
     needs: changes
     if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.result == 'success')"
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
+    runs-on: ubuntu-24.04
     env:
       # This SHA belongs to the checked-out PR merge, even if its base branch advances.
       BASE_REF: ${{ github.event.pull_request.base.sha }}
@@ -1289,7 +1291,8 @@ jobs:
     name: Check blueprint PDF compiles
     needs: changes
     if: "!cancelled() && github.event_name == 'pull_request' && needs.changes.result == 'success' && (needs.changes.outputs.blueprint_pdf == 'true' || needs.changes.outputs.workflow == 'true')"
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
     env:
       PRINT_AUX_FILES: |
