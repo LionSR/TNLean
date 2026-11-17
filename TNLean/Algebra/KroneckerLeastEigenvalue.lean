@@ -13,9 +13,9 @@ import QICLean.ManyBody.Hamiltonian.KroneckerSum
 
 A Hermitian matrix has a unit eigenvector for its least eigenvalue; that it
 dominates its least eigenvalue is QICLean's
-`Matrix.IsHermitian.posSemidef_sub_smul_one_of_le_eigenvalues`. A Kronecker
-product acts factorwise on a product vector, and the inner product of two
-product vectors factors. These facts are used in the variational
+`Matrix.IsHermitian.posSemidef_sub_smul_one_of_le_eigenvalues`. The inner
+product of two product vectors factors; that a Kronecker product acts factorwise
+on a product vector is QICLean's `Matrix.kronecker_mulVec_mul`. These facts are used in the variational
 argument that a gapped ground vector of `H_A ⊗ 1 + 1 ⊗ H_B` is a product vector.
 
 ## Main results
