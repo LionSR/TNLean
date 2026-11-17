@@ -24,9 +24,12 @@ it is invariant under the gauge `u ↦ (x ⊗ y) u`, `v ↦ v (y† ⊗ x†)` o
 standard form, as computed at line 1416 of the source
 (`det_gauge_mul_swap`).
 
-The "only if" directions rest on the forward direction of Lemma
+The "only if" direction of Theorem `conjphs` is
+`MPOTensor.StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation`, in
+`TNLean.MPS.MPU.ConjugationDeterminantInvariant`. That of Theorem
+`prop:conjsym-strict-equiv` rests on the forward direction of Lemma
 `lem:equivalent-symmetry`, which is available only after blocking, where the
-determinant invariants are trivial; they remain open, see
+determinant invariants are trivial; it remains open, see
 `docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex`.
 
 ## Main results

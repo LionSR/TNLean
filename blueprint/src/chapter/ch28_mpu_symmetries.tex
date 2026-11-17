@@ -2087,24 +2087,79 @@
     % Source lines: paper_v2.tex 1366--1380.
 \end{lemma}
 
+\begin{lemma}[The determinant on one standard-form site]
+    \label{lem:mpu_conjugation_one_site_determinant}
+    \lean{MPOTensor.IsMPU.mpo_one_mem_unitaryGroup,
+        MPOTensor.mpo_one_eq_one_of_forall_one_lt,
+        Matrix.trace_eq_one_of_forall_trace_pow_eq_one_of_one_lt,
+        MPOTensor.IsMPU.det_mpo_one_eq_one_or_neg_one_of_map_star_eq,
+        MPOTensor.TwoSiteStandardFormData.det_mpo_one_eq,
+        MPOTensor.StrictlyEquivalentUnderSymmetry.det_mpo_one_eq_of_conjugation}
+    \leanok
+    \discussion{5713}
+    \uses{SF, def:strictly-equivalent-symmetry}
+    An MPU is unitary on a ring of one site, although unitarity is required
+    only on rings of at least two sites. For a standard form with unitaries
+    $u,v$, the MPU on one standard-form site has determinant
+    $\varepsilon\det(uv)$, where $\varepsilon=\pm1$ is the sign of the exchange
+    of the two physical sites and $\det(uv)$ is read on
+    $\mathbb C^\ell\otimes\mathbb C^r$ through the swap. If two tensors are
+    strictly equivalent under conjugation, their MPUs on one site have the
+    same determinant.
+    % Source lines: paper_v2.tex 319--335, 603--617, 1406--1424.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Write $W^{ij}=\sum_k\overline{\mathcal U}^{ki}\otimes\mathcal U^{kj}$ for
+    the letters of the double layer, whose MPU on $N$ sites is
+    $U^{(N)\dagger}U^{(N)}$. For $N\geq2$ this is the identity, so
+    $\operatorname{tr}[(W^{ij})^N]=\delta_{ij}$. For $i\neq j$ a matrix whose
+    powers of exponent at least two are traceless is nilpotent, so
+    $\operatorname{tr}W^{ij}=0$. For $i=j$ the same applies to
+    $W^{ii}-(W^{ii})^2$, whose $N$-th power has trace
+    $\sum_m\binom Nm(-1)^m=0$, so
+    $\operatorname{tr}W^{ii}=\operatorname{tr}(W^{ii})^2=1$. Hence
+    $U^{(1)\dagger}U^{(1)}=\Id$.
+
+    On one standard-form site the shifted layer of $v$ closes on the same
+    site, so $U^{(1)}$ is $v$, conjugated by the exchanges of the two factors,
+    times $u$; taking determinants and exchanging the two rectangular factors
+    gives $\varepsilon\det(uv)$. Along a path of MPUs invariant under
+    conjugation, $U^{(1)}(p)$ is real and unitary, so $\det U^{(1)}(p)$ is a
+    continuous function with values $\pm1$, hence constant.
+\end{proof}
+
 \begin{theorem}[Conjugation symmetry when one source rank is odd]
     \label{conjphs}
-    \notready
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq,
+        MPOTensor.StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation}
+    \leanok
     \discussion{5713}
-    \uses{prop1conj, corconj, lem:equivalent-symmetry, thm:mpu_conjugation_odd_rank_if}
+    \uses{prop1conj, corconj, thm:mpu_conjugation_odd_rank_if,
+        lem:mpu_conjugation_one_site_determinant}
     Suppose that either $r$ or $\ell$ is odd. Two conjugation-invariant MPUs
     $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
     conjugation if and only if
     \begin{align}
         \det(u_1v_1) & =\det(u_2v_2).
     \end{align}
-    The ``if'' direction is
-    Lemma~\ref{thm:mpu_conjugation_odd_rank_if}. The ``only if'' direction
-    uses the forward direction of Lemma~\ref{lem:equivalent-symmetry}, which
-    is available only after blocking, where the determinant invariant is
-    trivial; see \cite{gap:mpu_symmetry_path_criterion_blocking}.
+    The ``only if'' direction does not use that one rank is odd.
     % Source lines: paper_v2.tex 1401--1446.
 \end{theorem}
+
+\begin{proof}
+    \leanok
+    The ``if'' direction is Lemma~\ref{thm:mpu_conjugation_odd_rank_if}.
+    Conversely, by Lemma~\ref{lem:mpu_conjugation_one_site_determinant} a
+    strict equivalence under conjugation preserves the determinant
+    $\varepsilon\det(u_iv_i)$ of the MPU on one standard-form site, and
+    $\varepsilon$ depends only on the physical dimension. The source derives
+    this direction from continuous standard-form unitaries along the path,
+    which are available only after blocking, where the invariant is trivial;
+    reading the determinant off the MPU avoids them, see
+    \cite{gap:mpu_symmetry_path_criterion_blocking}.
+\end{proof}
 
 \begin{lemma}[Interpolation of orthogonal gates]
     \label{lem:mpu_orthogonal_gate_interpolation}
@@ -2151,8 +2206,7 @@
     \end{align}
     then $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
     conjugation. This is the ``if'' direction of
-    Theorem~\ref{conjphs}; the ``only if'' direction remains open, see
-    \cite{gap:mpu_symmetry_path_criterion_blocking}.
+    Theorem~\ref{conjphs}.
     % Source lines: paper_v2.tex 1406--1446.
 \end{lemma}
 
@@ -2272,7 +2326,10 @@
     Lemma~\ref{thm:mpu_conjugation_even_rank_if}. The ``only if'' direction
     uses the forward direction of Lemma~\ref{lem:equivalent-symmetry}, which
     is available only after blocking, where the determinant invariants are
-    trivial; see \cite{gap:mpu_symmetry_path_criterion_blocking}.
+    trivial; the determinant of the MPU on one site
+    (Lemma~\ref{lem:mpu_conjugation_one_site_determinant}) gives only the
+    product $\det(u_i)\det(v_i)$; see
+    \cite{gap:mpu_symmetry_path_criterion_blocking}.
     % Source lines: paper_v2.tex 1464--1546.
 \end{theorem}
 

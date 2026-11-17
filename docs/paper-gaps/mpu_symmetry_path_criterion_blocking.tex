@@ -110,12 +110,14 @@ distinction between Theorems~\texttt{conjphs} and
 case of Proposition~\texttt{corconj} itself is preserved (line~1562).
 
 \paragraph{Status.} The ``if'' directions of both theorems are formalized
-faithfully on the standard-form chain. Their ``only if'' directions remain
-open; they depend on the unblocked forward direction of
-Lemma~\texttt{lem:equivalent-symmetry}. Conversely, those ``only if''
-directions are evidence about that lemma: if they hold, strict equivalence
-under conjugation already detects $\det(uv)$ at the level of the standard
-form, which the blocked forward direction cannot supply.
+faithfully on the standard-form chain. The ``only if'' direction of
+Theorem~\texttt{conjphs} is also formalized, by a route that does not use
+Lemma~\texttt{lem:equivalent-symmetry}: strict equivalence under conjugation
+detects $\det(uv)$ through the determinant of the MPU on one standard-form
+site (Section~\ref{sec:conjugation-consequences}). The ``only if'' direction
+of Theorem~\texttt{prop:conjsym-strict-equiv} remains open; it needs
+$\det u$ and $\det v$ separately, and the source derives it from the
+unblocked forward direction of Lemma~\texttt{lem:equivalent-symmetry}.
 
 \section{The case under blocking}
 
@@ -151,6 +153,28 @@ $-\,x\otimes y$ in Case~II. The two cases are therefore closed, disjoint, and
 cover the path, so the case is constant along it. By the preservation under
 blocking, the original tensors are in the same case. This needs no lift of
 $x(p),y(p)$ to continuous families.
+
+\section{Consequences for conjugation symmetry}
+\label{sec:conjugation-consequences}
+
+Theorems~\texttt{conjphs} (lines~1406--1446) and
+\texttt{prop:conjsym-strict-equiv} (lines~1480--1546) derive their ``only if''
+directions from continuous standard-form unitaries along a symmetric path, as
+supplied by the forward direction. After the extra blocking their determinant
+invariants are trivial, so the blocked forward direction does not give them.
+
+For Theorem~\texttt{conjphs} the forward direction is not needed. An MPU is
+unitary on a ring of one site even though unitarity is asked only on rings of
+at least two sites: the letters $W^{ij}$ of the double layer satisfy
+$\operatorname{tr}[(W^{ij})^N]=\delta_{ij}$ for $N\geq2$, which forces
+$\operatorname{tr}W^{ij}=\delta_{ij}$. On one standard-form site the MPU has
+determinant $\varepsilon\det(uv)$, with $\varepsilon=\pm1$ the sign of the
+exchange of the two physical sites. Along a path of MPUs invariant under
+conjugation the MPU on one site is real and unitary, so its determinant is
+constant. This proves the ``only if'' direction of Theorem~\texttt{conjphs}
+with the source's hypotheses, without the parity of $r$ or $\ell$
+(\leanid{MPOTensor.StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation},
+\leanid{MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq}).
 
 \section{The determinant invariants of Theorem \texttt{prop:conjsym-strict-equiv}}
 
