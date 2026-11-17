@@ -724,6 +724,40 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \section{The buffered discount with a constant-width buffer}
 
+\begin{lemma}[Localization of an evolved sum of local perturbations]
+    \label{lem:graph_evolved_perturbation_localization}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sum_sub_siteExpectation_graphNeighborhood_le}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,def:qc_site_expectation}
+    Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
+    most two vertices, and let $H=\sum_k h_k$ be a finite family of Hermitian
+    terms with supports of graph diameter at most $R$ and at most $R+1$
+    vertices, such that the norms of the terms meeting any vertex sum to at
+    most $b_0$. Let $\mathcal C$ be a finite index set, and for $c\in\mathcal C$
+    let $P_c$ be an operator of norm at most $\varepsilon$ supported on a set
+    $U_c\subseteq Z$ of at most $R+1$ vertices. For real $\ell$ and $t$ put
+    $B=\bigcup_{x\in Z}\{y:d_\Gamma(x,y)\le\lfloor\ell\rfloor\}$ and
+    $G(t)=e^{itH}\bigl(\sum_{c\in\mathcal C}P_c\bigr)e^{-itH}$. With $a$ and
+    $v$ the constants of Lemma~\ref{thm:graph_lieb_robinson_two_spheres},
+    \begin{align}
+        \|G(t)-E_B(G(t))\|
+        \le|\mathcal C|\cdot2a(R+1)^2\varepsilon\,e^{v|t|-\ell/2}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,lem:qc_site_expectation_properties,
+        thm:qc_site_expectation_supported_approximant}
+    For one index $c$ put $A=e^{itH}P_ce^{-itH}$, and let $A_0$ be its
+    expectation on the balls of radius $\lfloor\ell\rfloor$ about $U_c$. The
+    localization estimate gives
+    $\|A-A_0\|\le a|U_c|^2\|P_c\|e^{v|t|-\ell/2}\le a(R+1)^2\varepsilon
+    e^{v|t|-\ell/2}$. Since $U_c\subseteq Z$, the operator $A_0$ is
+    supported on $B$ and fixed by $E_B$, so
+    $\|A-E_B(A)\|=\|(A-A_0)-E_B(A-A_0)\|\le2\|A-A_0\|$. Conjugation and the
+    expectation are linear; summing over $\mathcal C$ proves the claim.
+\end{proof}
+
 \begin{lemma}[Localization of the relative-evolution generator]
     \label{thm:chain_relative_generator_localization}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
@@ -764,8 +798,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{proof}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        lem:chain_site_norm_budget,thm:chain_lieb_robinson,
-        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+        lem:chain_site_norm_budget,lem:graph_evolved_perturbation_localization}
     The swapped doubled interactions have range $R$ and bound $2J$.
     Their per-site norm sum is at most $b_0$. The chain localization
     estimate therefore has constants $a,v$ as displayed.
@@ -792,6 +825,38 @@ Theorem~B a second way, by a sequential preparation protocol.
     over the crossing replica labels and using their cardinality
     bound proves the assertion. An empty crossing family gives the zero
     generator; the same nonnegative estimates include $J=0$.
+\end{proof}
+
+\begin{lemma}[A supported Gaussian integral on a graph]
+    \label{lem:graph_supported_gaussian_integral}
+    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_graphNeighborhood}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds,
+        def:qc_site_expectation}
+    Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
+    most two vertices, and let $K'=\sum_k h_k$ be a finite family of
+    Hermitian terms as in Lemma~\ref{thm:graph_lieb_robinson_two_spheres},
+    with per-vertex norm budget $b_0$ and constants $a,v$. Let $K$ be
+    Hermitian, let $Z\subseteq V$, let $\ell$ be real, write $N(S)$ for the
+    union of the balls of radius $\lfloor\ell\rfloor$ about the vertices of
+    $S$, and let $d\ge0$ be such that for every real $s$
+    \begin{align}
+        \bigl\|G(s)-E_{N(Z)}(G(s))\bigr\|\le d|V|e^{v|s|-\ell/2},\qquad
+        G(s)=e^{isK'}(K'-K)e^{-isK'}.\notag
+    \end{align}
+    Then the assertions of
+    Lemma~\ref{thm:chain_supported_gaussian_integral} hold on $V$ for this
+    $N$, with $C=a+d$ and $|V|$ in place of $L$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds}
+    Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
+    $B_g=N(Z)$, $B_o=N(Q)$ and output region $B=N(Q\cup Z)$; the path is
+    chosen from $K,K',N(Z)$ before $Q,W,\eta,T$. The generator hypothesis
+    and the localization estimate, with $|Q|\le|V|$, give
+    $\varepsilon_g=d|V|e^{vT-\ell/2}$ and $\varepsilon_o=a|V|^2e^{vT-\ell/2}$.
+    Since $|V|\le|V|^2$ and $a,d,T\ge0$,
+    $a|V|^2+d|V|T\le(a+d)|V|^2(1+T)$, and substitution gives the error.
 \end{proof}
 
 \begin{lemma}[A supported Gaussian integral on a contiguous chain]
@@ -844,9 +909,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:chain_swapped_doubled_hamiltonian,
-        thm:chain_relative_generator_localization,thm:chain_lieb_robinson,
-        lem:chain_site_norm_budget,thm:area_law_supported_identity,
-        thm:qc_supported_gaussian_projection_bounds}
+        thm:chain_relative_generator_localization,lem:graph_supported_gaussian_integral,
+        lem:chain_site_norm_budget,thm:area_law_supported_identity}
     Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
     Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
@@ -921,6 +985,40 @@ Theorem~B a second way, by a sequential preparation protocol.
     $w-R<|a-z|\le\ell\le w-R$, a contradiction.
 \end{proof}
 
+\begin{lemma}[Information reset from a supported localization]
+    \label{lem:information_reset_of_supported_localization}
+    \lean{TNLean.MPS.AreaLaw.information_reset_of_supported_localization}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
+        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    Fix $q\ge1$, a natural $R$, a gap $\Delta>0$, an exponent $p>0$ and
+    constants $C_{\mathrm{int}},v>0$. There are $C_p>0$ and a natural
+    $L_0\ge1$, depending only on these data, with the following property.
+    Let $L\ge L_0$, let $\Omega$ be a gapped ground vector of a Hamiltonian
+    $H$ on $L$ sites of local dimension $q$ with gap $\Delta$, let $D,C$ be
+    disjoint regions with $R_0\subseteq D$, $C_0\subseteq C$ and
+    $I(D:C)_\Omega\le b$, and put $w=C_p(1+b+\log L)$ and
+    $Q=(D\cup C)^c$. Let $K$ be the doubled Hamiltonian of $H$ and $K'$
+    its regional swap at $D$. Let $N_\ell$, for natural $\ell$, be maps on
+    regions and $Z$ a region such that for every $\ell$ there is a path $U$
+    for which, for every region $Q'$, every operator $W$ supported on $Q'$,
+    and all $\eta,T\ge0$, the average
+    $\int_{[-T,T]}E_{N_\ell(Q')}(e^{itK'}We^{-itK'})U(t)\,d\gamma_\eta(t)$
+    is supported on $N_\ell(Q'\cup Z)$ and differs from the truncated
+    Gaussian filter of $W$ by at most
+    $\|W\|C_{\mathrm{int}}L^2(1+T)e^{vT-\ell/2}$. Suppose that
+    $N_\ell(Q\cup Z)$ is disjoint from $R_0\cup C_0$ whenever
+    $\ell+R\le w$. Then $I(R_0:C_0)_\Omega\le L^{-p}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
+        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    This is the argument of Lemma~\ref{thm:chain_information_reset} below,
+    with the supported Gaussian integral and the separation of the reset
+    support from the cores taken as the two hypotheses.
+\end{proof}
+
 \begin{lemma}[Information reset on a contiguous chain]
     \label{thm:chain_information_reset}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}
@@ -955,9 +1053,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
-        thm:peps_reset_polar_step,lem:chain_reset_support_separation,
-        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    \uses{lem:information_reset_of_supported_localization,
+        thm:chain_supported_gaussian_integral,lem:chain_reset_support_separation}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Corollary~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Lemma~\ref{thm:chain_supported_gaussian_integral}.
@@ -1745,8 +1842,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
-        thm:domain_lieb_robinson_localization,
-        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+        thm:domain_lieb_robinson_localization,lem:graph_evolved_perturbation_localization}
     The swapped domain family has interaction bound $2J$, so its per-site
     norm budget is $b_0$. Domain localization gives an error
     $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation
@@ -1793,10 +1889,8 @@ Theorem~B a second way, by a sequential preparation protocol.
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,
-        thm:qc_supported_gaussian_projection_bounds,
-        thm:domain_relative_generator_localization,thm:domain_lieb_robinson_localization,
-        lem:domain_site_norm_budget}
+    \uses{def:domain_doubled_swapped_hamiltonian,lem:graph_supported_gaussian_integral,
+        thm:domain_relative_generator_localization,lem:domain_site_norm_budget}
     Use the constants $a,v$ from the domain generator estimate and put
     $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators
     are Hermitian because their terms are Hermitian.
@@ -1885,10 +1979,9 @@ Theorem~B a second way, by a sequential preparation protocol.
     \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:domain_supported_gaussian_integral,thm:peps_reset_regional_filter,
-        thm:peps_reset_polar_step,lem:qc_graph_ball_strict_margin,
-        thm:qc_graph_support_separation,thm:regional_reset_cores_entropy,
-        thm:peps_reset_entropy_scalar}
+    \uses{lem:information_reset_of_supported_localization,
+        thm:domain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,
+        thm:qc_graph_support_separation}
     Set $r=2p+10$. Choose the filter constants $A,T_0>0$ and the domain
     locality constants $C,v>0$, and put
     \begin{align}
@@ -2454,6 +2547,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Neighborhoods of intervals and their entropy]
     \label{thm:chain_interval_neighborhood_entropy}
     \lean{TNLean.MPS.AreaLaw.chainNeighborhood_interval_eq,
+        TNLean.MPS.AreaLaw.regionEntropy_biUnion_neighborhood_intervals_le,
         TNLean.MPS.AreaLaw.regionEntropy_chainNeighborhood_biUnion_intervals_le}
     \leanok
     \uses{def:chain_model}

@@ -455,9 +455,9 @@ abstracted — record why, so it is not re-proposed).
   exp (v * x - c) ≤ exp (v * T - c)`.
 - **Use when:** A Lieb–Robinson factor `exp (v |t| - c)` must be bounded
   uniformly on `[-T, T]`; pass `x = |t|`.
-- **Refactored occurrences:** six terms across four files:
-  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
-  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
+- **Refactored occurrences:** four terms across three files:
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two, in the graph statement that the
+  chain and domain statements specialize),
   `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
   `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
 - **Notes:** The variants without the subtracted constant in
@@ -9814,24 +9814,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
-### Gaussian approximation and polar correction for a regional reset — candidate (2026-10-22)
+### Gaussian approximation and polar correction for a regional reset — promoted (2026-11-17)
 
 - **Pattern:** Choose the Gaussian variance, time cutoff and spatial radius;
   compare the actual truncated Gaussian operator with its supported approximation;
   obtain a supported unitary from the two-sided vector estimates; apply the
   common finite-site entropy comparison to that same unitary.
-- **Seen:** `ChainHamiltonian.information_reset` in
-  `MPS/AreaLaw/InformationReset.lean` and `DomainHamiltonian.information_reset`
-  in `MPS/AreaLaw/DomainInformationReset.lean`.
+- **Seen:** `ChainHamiltonian.information_reset` and
+  `DomainHamiltonian.information_reset`, formerly in two modules.
 - **Existing reuse:** The Gaussian estimates,
   `exists_supported_unitary_of_two_sided`, and
   `mutualInformation_cores_le_of_reset_unitary` are shared already. The narrower
   scalar estimate is recorded under “Absorbing a localization coefficient with
   spare decay”.
-- **Possible abstraction:** A common finite-site theorem whose inputs are the
-  original doubled Hamiltonians, the actual supported Gaussian approximation
-  and the required geometric disjointness. Two complete applications are
-  recorded; no new theorem or tactic is introduced here.
+- **Abstraction:** `information_reset_of_supported_localization` in
+  `MPS/AreaLaw/InformationReset.lean`, a finite-site theorem whose inputs are the
+  Hamiltonian, a supported Gaussian approximation at every natural radius and the
+  separation of its support from the cores. The chain and domain resets are its
+  corollaries. The square-lattice and plane-domain resets in `PEPS/Approximation`
+  and `Lattice` are further candidate applications.
 
 ### Mutual information at logarithmic separation — candidate (2026-10-22)
 
