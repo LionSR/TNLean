@@ -158,7 +158,7 @@ theorem LinearAlgebraQuery.isValidOracle_honestOracle :
   feasible _ _ _ _ _ _ _ := rfl
   leadingVector _ _ _ _ HL m η := isAdmissibleLeadingVector_boundaryLeadingVector _ HL m η
   schmidtTrim _ _ _ _ _ _ := rfl
-  gaussianFilterFactors_admissible _ i hq h h0 c Delta :=
+  gaussianFilterFactors_admissible _ i _ h h0 c Delta :=
     isAdmissibleFilterFactors_gaussianFilterFactors h h0 c Delta i
   gaussianFilterFactors_card _ _ hq h hs h0 h1 _ _ hc hDelta :=
     card_gaussianFilterFactors_le hq h hs h0 h1 hc hDelta

@@ -168,7 +168,7 @@ noncomputable def LinearAlgebraQuery.honestOracle : {ι : Type} → LinearAlgebr
   | _, .leadingVector _ _ _ S HL m η X =>
       boundaryLeadingVector (S : Set (LeftBlockVector _ q _)) HL m η X
   | _, .schmidtTrim _ _ hi _ m u => leftSchmidtTrim hi m u
-  | _, .gaussianFilterFactors _ i hq h h0 c Delta =>
+  | _, .gaussianFilterFactors _ i _ h h0 c Delta =>
       AreaLaw.gaussianFilterFactors h h0 c Delta i
   | _, .sampledFactors _ i h E₀ _ _ _ I => AreaLaw.sampledFactors h E₀ I i
   | _, .applyFactor _ _ _ _ A s => toEuclideanLin A s
