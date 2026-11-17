@@ -32,6 +32,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open TensorPower TensorPower.ReplicaTransport
@@ -67,7 +69,7 @@ theorem actualCharge_integral_bound_domainGraph :
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
         ∀ {s L μ : ℕ} (hn : 2 ≤ S.n), s + 1 ≤ S.n * S.m → 2 * S.r₀ ≤ S.D →

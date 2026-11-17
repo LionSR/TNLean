@@ -28,7 +28,7 @@ The older reference to Part IIb, Section 7, does not locate this argument.
 
 open Matrix TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace AdmissibleSupport)
 
 namespace TNLean.MPS.AreaLaw
 

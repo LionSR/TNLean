@@ -43,7 +43,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace mem_groundSpace_iff)
+open ManyBody (IsGapped groundSpace mem_groundSpace_iff AdmissibleSupport)
 
 namespace TNLean.Lattice
 

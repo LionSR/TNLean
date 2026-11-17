@@ -34,7 +34,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace AdmissibleSupport isAdmissibleSupport_singleton)
 
 namespace TNLean.PEPS.AreaLaw
 

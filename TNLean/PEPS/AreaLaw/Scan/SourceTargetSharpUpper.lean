@@ -43,6 +43,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter ActualTerminals
@@ -72,7 +74,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
             (hM : 0 < S.M) (E₀ : ℝ) (Ω : StateSpace Λ q),
             ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
             groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-            S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+            S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
             S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
             S.m = ⌊(S.n : ℝ) ^ F.mu⌋₊ →
             S.D = ⌈(S.n : ℝ) ^ F.kappa⌉₊ →

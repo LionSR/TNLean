@@ -27,7 +27,7 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | Fixed integer `R ≥ 0` | `R : ℕ`, quantified before `C` | Includes range zero. |
 | Fixed `J, Δ > 0` | Explicit positivity hypotheses before `∃ C` | No dependence on the physical instance. |
 | A finite `Λ ⊆ ℤ²` | `Λ : Finset (ℤ × ℤ)` | No connectedness, shape, or nonemptiness hypothesis. |
-| The induced nearest-neighbor graph | `domainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
+| The induced nearest-neighbor graph | `ManyBody.planeDomainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
 | Site space `ℂ^q` | `StateSpace Λ q = EuclideanSpace ℂ (Site Λ → Fin q)` | Exactly `q ^ Λ.card` configuration coordinates. |
 | One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `LocalHamiltonian.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
 | Support on `X` | `QuantumCircuit.supportedOperators q X` | The existing site-operator algebra; `localLift` uses the existing placement `embedOp`. |

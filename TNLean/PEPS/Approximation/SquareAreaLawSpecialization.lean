@@ -69,7 +69,7 @@ namespace TNLean.PEPS.Approximation
 most one in the integer rectangle. Source: polynomial-PEPS `eq:model`
 (`00-introduction.tex`, lines 40–45) and area-law Corollary 1.2. -/
 theorem squareAreaLawSupport_isAdmissibleSupport (L : ℕ) (i : SquareInteraction L) :
-    Lattice.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
+    ManyBody.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
       (squareAreaLawSupport L i).1 :=
   (squareAreaLawSupport L i).2
 
@@ -108,7 +108,7 @@ theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
   classical
   let σ := AreaLaw.rectangleSiteEquiv L L
   have hadj : ∀ a b : Vertex L,
-      (Lattice.domainGraph (AreaLaw.rectangularDomain L L)).Adj (σ a) (σ b) ↔
+      (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph L L).Adj a b :=
     fun a b ↦ (AreaLaw.rectangleGraphIso L L).map_rel_iff
   have hmem : ∀ a : Vertex L, σ a ∈ A.map σ.toEmbedding ↔ a ∈ A := fun a ↦ by simp [σ]

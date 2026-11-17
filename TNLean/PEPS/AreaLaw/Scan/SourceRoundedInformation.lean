@@ -35,6 +35,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter ActualTerminals
@@ -76,7 +78,7 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
           (Ω : StateSpace Λ q),
           ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
           groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceRoundedInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -142,7 +144,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_th
           (Ω : StateSpace Λ q),
           ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
           groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceRoundedInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -201,7 +203,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales
           (Ω : StateSpace Λ q),
           ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
           groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
           S.D = ⌈(S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →

@@ -32,6 +32,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open Classical in
@@ -45,7 +47,7 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
     ∀ {I : Type} [Fintype I] [LinearOrder I]
         {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
         (S : CollarScan (Site Λ) I), max (truncationEntropyThreshold q g Cvol) 2 ≤ S.n →
-        ∀ (_hgraph : S.graph = domainGraph Λ)
+        ∀ (_hgraph : S.graph = planeDomainGraph Λ)
           (_hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
           (hm : 0 < S.m) (hM : 0 < S.M)
           (a : ℝ) (_ha : 0 < a) (_hr : S.r₀ ≤ S.D)
@@ -132,7 +134,7 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
       ∀ {I : Type} [Fintype I] [LinearOrder I]
         {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
         (S : CollarScan (Site Λ) I), N ≤ S.n →
-        ∀ (_hgraph : S.graph = domainGraph Λ)
+        ∀ (_hgraph : S.graph = planeDomainGraph Λ)
           (_hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
           (hm : 0 < S.m) (hM : 0 < S.M)
           (a : ℝ) (_ha : 0 < a) (_hr : S.r₀ ≤ S.D)

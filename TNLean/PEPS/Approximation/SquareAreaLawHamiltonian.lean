@@ -105,13 +105,13 @@ private theorem squareInteractionSupport_injective (L : ℕ) :
 range-one support in the integer rectangle. Source: area-law Corollary 1.2
 and polynomial-PEPS `eq:model`. -/
 def squareAreaLawSupport (L : ℕ) (i : SquareInteraction L) :
-    Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1 := by
+    ManyBody.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1 := by
   classical
   refine ⟨(squareInteractionSupport i).image (AreaLaw.rectangleSiteEquiv L L), ?_⟩
   cases i with
   | inl v =>
     simpa only [squareInteractionSupport, Finset.image_singleton] using
-      Lattice.isAdmissibleSupport_singleton (AreaLaw.rectangularDomain L L) 1
+      ManyBody.isAdmissibleSupport_singleton (AreaLaw.rectangularDomain L L) 1
         (AreaLaw.rectangleSiteEquiv L L v)
   | inr e =>
     simpa only [squareInteractionSupport, Finset.image_insert, Finset.image_singleton,
@@ -210,7 +210,7 @@ theorem SquareHamiltonian.toAreaLawHamiltonian_operator {L q : ℕ} {J : ℝ}
   let T := fun i : SquareInteraction L => Matrix.reindex e e (h.hermitianTerm i)
   let f := Function.extend (squareAreaLawSupport L) T 0
   have hsum : (∑ i : SquareInteraction L, T i) =
-      ∑ X : Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1, f X := by
+      ∑ X : ManyBody.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1, f X := by
     apply Finset.sum_of_injOn (squareAreaLawSupport L)
       (squareAreaLawSupport_injective L).injOn (fun _ _ => Finset.mem_univ _)
     · intro X _ hX

@@ -32,6 +32,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 universe u
@@ -61,7 +63,7 @@ theorem ScannerExponents.badOldHistory_of_badOldHistoryThreshold_le (F : Scanner
       S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
@@ -105,7 +107,7 @@ private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {C
       S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
@@ -134,7 +136,7 @@ private theorem generic_actualCharge_energy_of_threshold_le
       S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
@@ -259,7 +261,7 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
       S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
@@ -388,7 +390,7 @@ theorem ScannerExponents.exists_actualCharge_energy_coefficients
       S.D = ⌈(n : ℝ) ^ F.kappa⌉₊ →
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →

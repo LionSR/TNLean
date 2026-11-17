@@ -29,6 +29,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold of one physical bootstrap round at current safe-box coefficient

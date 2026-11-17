@@ -34,7 +34,7 @@ open Matrix MeasureTheory SpectralFilter
 open scoped Kronecker NNReal MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace AdmissibleSupport)
 
 namespace TNLean.PEPS.AreaLaw
 

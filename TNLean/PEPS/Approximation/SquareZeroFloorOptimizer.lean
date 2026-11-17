@@ -66,7 +66,7 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
     (hΩs : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (D : ℕ → Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
-    (hsingle : ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+    (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D i) →
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j) →
@@ -101,7 +101,7 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
     have hnorm := hΩ
     simp [h0] at hnorm
   have hsplit : ∀ i : Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
-      Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m, j = k := by
     intro i j hj k hk

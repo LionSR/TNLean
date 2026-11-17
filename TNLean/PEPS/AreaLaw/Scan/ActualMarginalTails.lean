@@ -43,6 +43,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -56,7 +58,7 @@ ground-state premise concerns the sum, while positivity, Hermitian symmetry,
 norm and designated support are derived from the actual terms. The original
 vector `Ω` still centers those terms. Source: `08-scanner.tex`, lines 400–414. -/
 theorem log_surprisalMoment_truncated_reducedState_le
-    (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
     (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
@@ -93,7 +95,7 @@ theorem log_surprisalMoment_truncated_reducedState_le
 vector. The cut may meet retained components outside the truncation set, and
 the threshold may be any real number. Source: `08-scanner.tex`, lines 400–414. -/
 theorem surprisalTail_truncated_reducedState_le
-    (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
     (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
@@ -161,7 +163,7 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
       (E₀ : ℝ) (Ω : StateSpace Λ q),
       ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
       groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       (∀ i, S.anchor i ∈ i.val) →
       ∀ L : ℕ, 2 ≤ S.n →
       S.r₀ = ⌈latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃ * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -198,13 +200,13 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
       (S.truncationSet L) hcard
   have hterm (i : AdmissibleSupport Λ R) :
       S.truncatedEnergyTerm h Ω Δ L i =
-        truncatedConstraint q (domainGraph Λ) (S.truncationSet L)
+        truncatedConstraint q (planeDomainGraph Λ) (S.truncationSet L)
           ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
           (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
             (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) := by
     rw [truncatedEnergyTerm, hgraph, hr, LocalHamiltonian.positiveTerm]
   have hsum : (∑ i, S.truncatedEnergyTerm h Ω Δ L i) =
-      ∑ i, truncatedConstraint q (domainGraph Λ) (S.truncationSet L)
+      ∑ i, truncatedConstraint q (planeDomainGraph Λ) (S.truncationSet L)
         ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
         (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
           (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) :=
@@ -240,7 +242,7 @@ theorem truncated_reducedState_moment_tail_bounds_explicit
       (E₀ : ℝ) (Ω : StateSpace Λ q),
       ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
       groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       (∀ i, S.anchor i ∈ i.val) →
       ∀ L : ℕ, 2 ≤ S.n →
       S.r₀ = ⌈latticeTruncationRadiusConstant R J Δ C₀ * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -296,7 +298,7 @@ theorem exists_truncated_reducedState_moment_tail_bounds
         (E₀ : ℝ) (Ω : StateSpace Λ q),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         (∀ i, S.anchor i ∈ i.val) →
         ∀ L : ℕ, 2 ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →

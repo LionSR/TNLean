@@ -42,6 +42,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -138,7 +140,7 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         targetTypicalWindowThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
@@ -248,7 +250,7 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         targetTypicalWindowThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
@@ -326,7 +328,7 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -391,7 +393,7 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →

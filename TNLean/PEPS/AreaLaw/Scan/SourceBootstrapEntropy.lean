@@ -45,6 +45,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -158,7 +160,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
         (Ω : StateSpace Λ q),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
           (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
@@ -422,7 +424,7 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
         (Ω : StateSpace Λ q),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
           (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
@@ -470,7 +472,7 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
         (Ω : StateSpace Λ q),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
           (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
@@ -516,7 +518,7 @@ theorem exists_sourceBootstrap_entropy_improvement
         (Ω : StateSpace Λ q),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
         S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
         S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →

@@ -22,7 +22,7 @@ strip as a chain of `q^w`-dimensional sites.
 
 open Matrix TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace AdmissibleSupport)
 
 namespace TNLean.MPS.AreaLaw
 

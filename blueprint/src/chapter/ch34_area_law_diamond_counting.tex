@@ -6,8 +6,8 @@
 \begin{definition}[Lattice diamond]
     \label{def:area_lattice_diamond}
     \uses{def:area_lattice_displacement}
-    \lean{TNLean.PEPS.AreaLaw.latticeDiamond,
-        TNLean.PEPS.AreaLaw.mem_latticeDiamond}
+    \lean{ManyBody.latticeDiamond,
+        ManyBody.mem_latticeDiamond}
     \leanok
     For $a\in\Z^2$ and $R\in\N$, define the lattice diamond
     $D_R(a)=\{x\in\Z^2:\ell(a,x)\le R\}$.
@@ -16,10 +16,10 @@
 \begin{lemma}[Exact lattice diamond count]
     \label{thm:area_diamond_count}
     \uses{def:area_lattice_diamond}
-    \lean{TNLean.PEPS.AreaLaw.card_latticeDiamond,
-        TNLean.PEPS.AreaLaw.card_le_diamond_of_latticeL1Distance_le,
-        TNLean.PEPS.AreaLaw.card_le_diamond_of_walks,
-        TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le}
+    \lean{ManyBody.card_latticeDiamond,
+        ManyBody.card_le_diamond_of_latticeL1Distance_le,
+        ManyBody.card_le_diamond_of_walks,
+        ManyBody.card_le_diamond_of_edist_le}
     \leanok
     As in \cite[Section~2]{OpenAI2026AreaLaw},
     $|D_R(a)|=v_R=1+2R(R+1)$. If $\iota:V\to\Z^2$ is injective and

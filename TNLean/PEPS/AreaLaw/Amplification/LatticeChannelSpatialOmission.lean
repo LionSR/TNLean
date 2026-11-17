@@ -39,7 +39,7 @@ open scoped BigOperators Kronecker ENNReal NNReal Matrix.Norms.L2Operator Matrix
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -57,12 +57,12 @@ private theorem norm_toLp_prod_vector {n m : Type*} [Fintype n] [Fintype m]
 distance more than `r` from every site of `S`. -/
 private theorem lt_edist_of_notMem_graphNeighborhood {Λ : Finset (ℤ × ℤ)}
     {S : Finset (Site Λ)} {r : ℕ} {y : Site Λ} (hy : y ∉ graphNeighborhood Λ r S) :
-    ∀ s ∈ S, ENNReal.ofReal (r : ℝ) < ((domainGraph Λ).edist y s : ℝ≥0∞) := by
+    ∀ s ∈ S, ENNReal.ofReal (r : ℝ) < ((planeDomainGraph Λ).edist y s : ℝ≥0∞) := by
   classical
   intro s hs
   rw [ENNReal.ofReal_natCast]
   by_contra hle
-  have hle' : (domainGraph Λ).edist y s ≤ r := by
+  have hle' : (planeDomainGraph Λ).edist y s ≤ r := by
     rw [not_lt] at hle
     exact_mod_cast hle
   obtain ⟨w, hw⟩ := SimpleGraph.exists_walk_of_edist_ne_top
@@ -85,7 +85,7 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (P : κ → Prop) [DecidablePred P]
         (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -94,7 +94,7 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
           supportedOperators q (S : Set (Site Λ))) →
         ∀ (r : ℝ), 0 ≤ r →
           (∀ i, ¬ P i → ∀ s ∈ S,
-            ENNReal.ofReal r < ((domainGraph Λ).edist (a i) s : ℝ≥0∞)) →
+            ENNReal.ofReal r < ((planeDomainGraph Λ).edist (a i) s : ℝ≥0∞)) →
           ∀ t : ℝ≥0,
             Integrable (fun w : PoissonWord.Word κ =>
               channelWordOmissionDefect k P (List.ofFn w.2) B) (PoissonWord.measure κ t) ∧
@@ -107,11 +107,11 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
     zero_le_two hμ hc hα hα₁
   intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail P _ Aux _ _ S B hB r hr hfar t
   classical
-  let N := Finset.univ.sup fun i : κ => Finset.univ.sup ((domainGraph Λ).dist (a i))
-  have hN (i : κ) : Finset.univ.sup ((domainGraph Λ).dist (a i)) ≤ N :=
-    Finset.le_sup (f := fun j => Finset.univ.sup ((domainGraph Λ).dist (a j)))
+  let N := Finset.univ.sup fun i : κ => Finset.univ.sup ((planeDomainGraph Λ).dist (a i))
+  have hN (i : κ) : Finset.univ.sup ((planeDomainGraph Λ).dist (a i)) ≤ N :=
+    Finset.le_sup (f := fun j => Finset.univ.sup ((planeDomainGraph Λ).dist (a j)))
       (Finset.mem_univ i)
-  exact hbound (Site Λ) κ Aux q (domainGraph Λ) a k hk₀ hk₁
+  exact hbound (Site Λ) κ Aux q (planeDomainGraph Λ) a k hk₀ hk₁
     (fun i => mem_supportedOperators_reachable_of_forall_tail _ _ hc hα (htail i))
     card_graphBall_domainGraph_le hfiber N hN (fun i l _ => htail i l) P S B hB r hr hfar t
 
@@ -132,7 +132,7 @@ theorem exists_domain_integrable_and_integral_channelWordOmissionDefect_le
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (P : κ → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -141,7 +141,7 @@ theorem exists_domain_integrable_and_integral_channelWordOmissionDefect_le
             supportedOperators q (S : Set (Site Λ))) →
           ∀ (r : ℝ), 0 ≤ r →
             (∀ i, ¬ P i → ∀ s ∈ S,
-              ENNReal.ofReal r < ((domainGraph Λ).edist (a i) s : ℝ≥0∞)) →
+              ENNReal.ofReal r < ((planeDomainGraph Λ).edist (a i) s : ℝ≥0∞)) →
             ∀ t : ℝ≥0,
               Integrable (fun w : PoissonWord.Word κ =>
                 channelWordOmissionDefect k P (List.ofFn w.2) B) (PoissonWord.measure κ t) ∧
@@ -163,7 +163,7 @@ theorem domainConstraintWord_omission
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -226,7 +226,7 @@ theorem exists_domainConstraintWord_omission
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
@@ -286,11 +286,11 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ∧
-          siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ∧
+          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x})) :
+        (∀ i, k i ∈ supportedOperators q {x | (planeDomainGraph Λ).Reachable (a i) x})) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →

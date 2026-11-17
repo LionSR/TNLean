@@ -50,6 +50,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Classical in
@@ -126,7 +128,7 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
         (E₀ : ℝ) (Ω : StateSpace Λ q),
         ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
         groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-        S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
         S.n = n → S.m = X.m n → S.K = X.K n → S.D = X.D n →
         S.r₀ = ⌈Ctr * Real.log (n : ℝ) ^ 2⌉₊ → S.C₁ = C₁ →

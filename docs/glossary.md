@@ -2356,7 +2356,7 @@ in `MPS/Preparation/` uses it.
 - **Caveat:** the graph theorems take the per-support size bound and the
   per-site norm budget as hypotheses. On a finite induced square-lattice domain
   they are discharged in `TNLean/PEPS/AreaLaw/GraphPropagation.lean`:
-  `TNLean.Lattice.IsAdmissibleSupport.card_le` gives the size bound
+  `ManyBody.IsAdmissibleSupport.card_le` gives the size bound
   `v_R = 1 + 2R(R + 1)`,
   `TNLean.Lattice.LocalHamiltonian.sum_norm_term_containing_le` gives the
   budget `μ_R J`, and `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` is
@@ -3481,7 +3481,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 | Declaration | Mathematical meaning | Source and status |
 |---|---|---|
-| `TNLean.Lattice.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
+| `ManyBody.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
 | `TNLean.Lattice.LocalHamiltonian` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
 | `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` | Positive constants `C, v, c`, chosen before the domain and the Hamiltonian, giving exponential decay in induced-graph distance of commutators of evolved supported operators with on-site operators (exact zero between components), and of their distance from graph-ball partial-trace expectations | Area-law Lemma 4.1 (`lem:quasilocal-lr`); proved with the source's hypotheses, the constants depending only on `R` and `J`. |
 | `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` | Positive contractions `kᵢ` annihilating the gapped ground vector, whose sum dominates the gap and whose graph-ball expectations converge stretched-exponentially, with constants chosen before the domain and the Hamiltonian | Area-law Proposition 4.3 (`prop:positive`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
@@ -3903,7 +3903,7 @@ existing finite induced lattice domain, `Geometry.closedSquareSample Λ c r`
 samples the closed coordinate square at any real centre and clips it to `Λ`.
 `Geometry.nestedPatch Λ c u j` uses radius `u + 2j`, with
 `Geometry.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
-These patches use `Lattice.domainGraph` and the unordered `Lattice.edgeBoundary`;
+These patches use `ManyBody.planeDomainGraph` and the unordered `Lattice.edgeBoundary`;
 they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
 source's Proposition 4.1.

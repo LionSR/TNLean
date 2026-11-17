@@ -28,6 +28,8 @@ open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -41,7 +43,7 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
     ∃ CB : ℝ, 0 < CB ∧
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
         ∀ L : ℕ, 2 ≤ S.n →

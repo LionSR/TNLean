@@ -118,7 +118,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have hφne : φ ≠ 0 := norm_ne_zero_iff.mp (hφ.trans_ne one_ne_zero)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp (show (φ : _ → ℂ) ≠ 0 from by
     intro hzero; apply hφne; simpa using congrArg (WithLp.toLp 2) hzero)
-  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (Lattice.domainGraph Λ)),
+  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (ManyBody.planeDomainGraph Λ)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
         j = k := by

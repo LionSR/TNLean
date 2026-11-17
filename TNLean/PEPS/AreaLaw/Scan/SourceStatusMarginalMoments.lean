@@ -36,6 +36,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -59,7 +61,7 @@ theorem exists_source_statusMarginal_moment_bounds
           (E₀ : ℝ) (Ω : StateSpace Λ q),
           ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
           groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-          S.graph = domainGraph Λ →
+          S.graph = planeDomainGraph Λ →
           S.depth = (fun x ↦ ambientDepth T hT x.val) →
           (∀ i, S.anchor i ∈ i.val) →
           ∀ L : ℕ, N ≤ S.n →

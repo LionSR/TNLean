@@ -24,7 +24,7 @@ preamble, lines 193–206; a degenerate ground-space gap is not sufficient here.
 open Matrix TNLean.Lattice
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace AdmissibleSupport)
 
 namespace TNLean.MPS.AreaLaw
 

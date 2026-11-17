@@ -30,6 +30,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- Increasing a positive budget only shortens the allowed real moment interval. -/
@@ -58,7 +60,7 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ} [NeZero q]
 /-- A common upper bound for the geometric budget gives the comparator's exact
 real-u interval, without changing the truncated physical ground vector. -/
 theorem log_surprisalMoment_truncated_reducedState_le_common
-    (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e B : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
     (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
@@ -104,7 +106,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
           (E₀ : ℝ) (Ω : StateSpace Λ q),
           ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
           groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
-          S.graph = domainGraph Λ →
+          S.graph = planeDomainGraph Λ →
           S.depth = (fun x ↦ ambientDepth T hT x.val) →
           (∀ i, S.anchor i ∈ i.val) →
           ∀ L : ℕ, 2 ≤ S.n →
