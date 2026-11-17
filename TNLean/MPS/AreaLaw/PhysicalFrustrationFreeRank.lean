@@ -19,6 +19,8 @@ both exterior sums and the noncrossing parity product. The counterexample
 and correction are recorded in `docs/paper-gaps/alvv16_frustration_free_truncation_rank.tex`.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open Matrix
 open scoped BigOperators Kronecker
 

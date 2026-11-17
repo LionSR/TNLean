@@ -26,6 +26,8 @@ results. They change the constants depending on `q,R`, without changing width sc
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The rectangular lattice domain `[0,L) × [0,w)`. -/

@@ -19,6 +19,8 @@ These results support ALVV, arXiv:1602.08828v2,
 `def:hard-trunc`, lines 873–886, and Theorem `t:ais`, lines 1010–1024.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

@@ -12,7 +12,7 @@ state the two models separately following
         TNLean.Lattice.Site,
         TNLean.Lattice.Configuration,
         TNLean.Lattice.StateSpace,
-        TNLean.Lattice.domainGraph,
+        ManyBody.planeDomainGraph,
         TNLean.Lattice.graphNeighborhood,
         TNLean.Lattice.configurationSplit,
         TNLean.Lattice.card_configuration,
@@ -45,8 +45,8 @@ state the two models separately following
 \begin{definition}[Finite-range interactions and boundary]
     \label{def:area_law_hamiltonian}
     \lean{
-        TNLean.Lattice.IsAdmissibleSupport,
-        TNLean.Lattice.AdmissibleSupport,
+        ManyBody.IsAdmissibleSupport,
+        ManyBody.AdmissibleSupport,
         TNLean.Lattice.LocalHamiltonian,
         TNLean.Lattice.LocalHamiltonian.operator,
         TNLean.Lattice.LocalHamiltonian.operator_isHermitian,
@@ -78,10 +78,10 @@ state the two models separately following
 \begin{lemma}[Interaction range and rectangular coordinates]
     \label{thm:area_law_domain_identifications}
     \lean{
-        TNLean.Lattice.exists_walk_length_le_iff_edist_le,
-        TNLean.Lattice.isAdmissibleSupport_zero_iff,
-        TNLean.Lattice.isAdmissibleSupport_singleton,
-        TNLean.Lattice.isAdmissibleSupport_pair_of_adj,
+        ManyBody.exists_walk_length_le_iff_edist_le,
+        ManyBody.isAdmissibleSupport_zero_iff,
+        ManyBody.isAdmissibleSupport_singleton,
+        ManyBody.isAdmissibleSupport_pair_of_adj,
         TNLean.PEPS.AreaLaw.rectangleEmbedding,
         TNLean.PEPS.AreaLaw.rectangleEmbedding_injective,
         TNLean.PEPS.AreaLaw.rectangularDomain,
@@ -112,9 +112,9 @@ state the two models separately following
 \begin{definition}[Ground vector and regional entropy]
     \label{def:area_law_ground_entropy}
     \lean{
-        Matrix.IsGappedGroundState,
-        Matrix.isGappedGroundState_iff,
-        TNLean.Lattice.IsGappedGroundState,
+        ManyBody.IsGapped,
+        ManyBody.groundSpace,
+        ManyBody.isGapped_and_groundSpace_eq_span_iff,
         TNLean.Lattice.reducedState,
         TNLean.Lattice.reducedState_isHermitian,
         TNLean.Lattice.regionalEntropy,
@@ -132,6 +132,9 @@ state the two models separately following
         \label{eq:area_law_projector_gap}
         H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
     \end{align}
+    For $\Delta>0$ these conditions hold exactly when $H$ is Hermitian, every
+    eigenvalue of $H$ other than $E_0$ is at least $E_0+\Delta$, and the
+    eigenspace of $H$ at $E_0$ is the line spanned by $\Omega$.
     For $A\subseteq\Lambda$, the Hermitian reduced state and natural-logarithm
     von Neumann entropy ($0\log0=0$) are
     \begin{align}
@@ -147,7 +150,7 @@ state the two models separately following
 
 \begin{lemma}[Uniqueness from a positive global gap]
     \label{thm:area_law_ground_eigenspace}
-    \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
+    \lean{Matrix.PosSemidef.eigenspace_eq_span_of_gap}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $H$ be a finite-dimensional complex matrix, $E_0\in\mathbb R$, and

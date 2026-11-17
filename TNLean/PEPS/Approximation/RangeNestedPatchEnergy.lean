@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.NestedPatchEnergy
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.PEPS.AreaLaw.Geometry.RangeNestedPatches
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Energy of minimizing nested patch filters at interaction range `R`
@@ -40,8 +41,12 @@ Independently formalized from the manuscripts; no upstream Lean text is reused.
 -/
 
 open Matrix
+
+open ManyBody (groundSpace)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.Approximation
 
@@ -100,9 +105,9 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
     have hlt : (X.1 ∩ D).card < X.1.card :=
       Finset.card_lt_card ⟨Finset.inter_subset_left, fun h ↦ hwD
         (Finset.mem_inter.mp (h hwX)).2⟩
-    have hdiam := AreaLaw.card_support_le_diamond (G := domainGraph Λ) Subtype.val
-      Subtype.val_injective (fun _ _ h ↦ AreaLaw.latticeL1Distance_le_one_of_adj h) X.1 R
-      X.2.2
+    have hdiam := AreaLaw.card_support_le_diamond (G := planeDomainGraph Λ) Subtype.val
+      Subtype.val_injective (fun _ _ ↦ ManyBody.latticeL1Distance_le_one_of_planeDomainGraph_adj)
+      X.1 R X.2.2
     have hle : (X.1 ∩ D).card ≤ 2 * R * (R + 1) := by omega
     rw [hcard, Nat.cast_pow]
     rcases Nat.eq_zero_or_pos q with hq | hq
@@ -110,18 +115,12 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
       simp [zero_pow (Nat.one_le_iff_ne_zero.mp hpos)]
     · exact pow_le_pow_right₀ (by exact_mod_cast hq) hle
   -- Each split support contains a site of the inner layer.
-  have hsub : C ⊆ N.biUnion fun v ↦
-      Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
-    intro X hX
-    obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
-    have hv : v ∈ N := AreaLaw.Geometry.mem_squareLayer_of_split
-      (fun x hx y hy ↦ AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport c X.2
-        hx hy) hvX hvD hwX hwD
-    exact Finset.mem_biUnion.mpr ⟨v, hv, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hvX⟩⟩
   have hcount : (C.card : ℝ) ≤ R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) := by
-    have h := (Finset.card_le_card hsub).trans
-      (Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦
-        AreaLaw.card_admissibleSupport_containing_le (R := R) v)
+    have h := AreaLaw.card_le_card_mul_of_forall_exists_mem (N := N) (S := C) fun X hX ↦ by
+      obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
+      exact ⟨v, AreaLaw.Geometry.mem_squareLayer_of_split
+        (fun x hx y hy ↦ AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport c X.2
+          hx hy) hvX hvD hwX hwD, hvX⟩
     have hN := AreaLaw.Geometry.card_squareLayer_rangeNestedPatch_le Λ c hu hj
     have hexp : 1 + 2 * R * (R + 1) - 1 = 2 * R * (R + 1) := by omega
     rw [hexp] at h
@@ -144,7 +143,7 @@ open Classical in
 /-- The normalized regularized output of every feasible patch minimum on the range-`R`
 nested squares has excitation energy at most `C_E κ²`, with
 `C_E = rangePatchEnergyConstant q R J`, for a range-`R` Hamiltonian on any finite induced
-domain with a gapped ground vector.
+domain whose ground space at `E₀` is the line through a unit vector. No gap is used.
 
 The regions are the selected range-`R` squares, including repeated clipped regions, and
 the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
@@ -152,9 +151,9 @@ the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
 Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 213–336,
 `eq:patch-energy-bound`, to interactions of range `R` (area-law `eq:hamiltonian`). -/
 theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le
-    {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ Δ : ℝ} (H : LocalHamiltonian Λ q R J)
+    {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ : ℝ} (H : LocalHamiltonian Λ q R J)
     (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : Lattice.StateSpace Λ q)
-    (hgs : Lattice.IsGappedGroundState Λ q H.operator E₀ Ψ Δ)
+    (hΩ : ‖Ψ‖ = 1) (hspan : groundSpace H.operator E₀ = Submodule.span ℂ {Ψ})
     (center : ℝ × ℝ) (u κ b : ℝ) (hu : 0 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -180,7 +179,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
   have hm : (0 : ℝ) < m :=
     Nat.cast_pos.mpr (AreaLaw.Geometry.rangeNestedPatchCount_pos R u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
-  have hΨᵤ : ‖Ψᵤ‖ = 1 := (U.symm.norm_map _).trans hgs.1
+  have hΨᵤ : ‖Ψᵤ‖ = 1 := (U.symm.norm_map _).trans hΩ
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ψᵤ hΨᵤ hx
@@ -216,7 +215,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
   have hop : H.operator = ∑ X, T X := rfl
   have heig₀ : Matrix.toEuclideanLin (∑ X, T X) Ψ = (E₀ : ℂ) • Ψ := by
     rw [← hop]
-    exact hgs.2.1
+    exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ψ)
   have heig := Entropy.toEuclideanLin_conj_apply_eq heig₀ hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       Ψ‖⁻¹ : ℝ) : ℂ))

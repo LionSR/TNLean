@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.OriginalNestedPatchEntropy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Ground states of range-`R` Hamiltonians on the square
@@ -35,6 +36,8 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.Approximation
 
 /-- The unit gapped ground vectors of range-`R` Hamiltonians on the `L × L` square, in the
@@ -46,8 +49,8 @@ Source: polynomial-PEPS `eq:model` and `eq:global-gap` (`00-introduction.tex`, l
 read with interactions of range `R` as in area-law Theorem 1.1. -/
 def IsRangeSquareGroundState (q R : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
   ∃ (H : Lattice.LocalHamiltonian (AreaLaw.rectangularDomain L L) q R J) (E₀ : ℝ),
-    Lattice.IsGappedGroundState (AreaLaw.rectangularDomain L L) q H.operator E₀
-      (AreaLaw.rectangleAreaLawState Ω) Δ
+    (‖AreaLaw.rectangleAreaLawState Ω‖ = 1 ∧ IsGapped H.operator E₀ Δ ∧
+      groundSpace H.operator E₀ = Submodule.span ℂ {AreaLaw.rectangleAreaLawState Ω})
 
 /-- A ground vector of the range-`R` family is a unit vector.
 Source: polynomial-PEPS `eq:global-gap` (`00-introduction.tex`, lines 46–49). -/
@@ -64,8 +67,8 @@ Corollary 1.2. -/
 theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ}
     {L : ℕ} {Ω : StateSpace L q} (hΩ : IsSquareGroundState q J Δ L Ω) :
     IsRangeSquareGroundState q 1 J Δ L Ω := by
-  obtain ⟨h, hh, hhJ, E₀, hgap⟩ := hΩ
-  exact ⟨h.toAreaLawHamiltonian hhJ, E₀, h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hgap⟩
+  obtain ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ := hΩ
+  exact ⟨(h.toAreaLawHamiltonian hhJ), E₀, h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan⟩
 
 /-- The square-grid area law passes to a smaller family of states at the same constant.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–52). -/
@@ -85,12 +88,14 @@ interactions of range `R`, derived from area-law Theorem 1.1 and Corollary 1.2. 
 theorem squareEntropyAreaLawAt_range_of_areaLawBound {q R : ℕ} {J Δ C : ℝ} (hC : 0 ≤ C)
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ H : Lattice.LocalHamiltonian Λ q R J,
       ∀ E₀ : ℝ, ∀ Ω : Lattice.StateSpace Λ q,
-        Lattice.IsGappedGroundState Λ q H.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card) :
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C := by
-  refine ⟨hC, fun L Ω ⟨H, E₀, hgap⟩ A ↦ ?_⟩
-  have := hbound (AreaLaw.rectangularDomain L L) H E₀ (AreaLaw.rectangleAreaLawState Ω) hgap
+  refine ⟨hC, fun L Ω ⟨H, E₀, hΩ, hgap, hspan⟩ A ↦ ?_⟩
+  have := hbound (AreaLaw.rectangularDomain L L) H E₀
+      (AreaLaw.rectangleAreaLawState Ω) hΩ hgap hspan
     (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le

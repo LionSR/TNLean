@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.GaussianFilter.LocalizationParameters
 import TNLean.PEPS.Approximation.SwappedLocalHamiltonian
 import TNLean.Lattice.RegionalReset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The supported unitary of the information reset at interaction range `R`
@@ -49,6 +50,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open Matrix QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 open scoped Kronecker Matrix.Norms.L2Operator
 
 noncomputable section
@@ -118,7 +121,8 @@ The manuscript treats range one only; this extends its estimate to range `R`.
 Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. -/
 theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ)
     (hr : 0 ≤ r) {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : LocalHamiltonian Λ q R J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
@@ -148,7 +152,8 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
   have hc : 0 ≤ c := swapBoundaryCoefficient_nonneg R
   have hcJ : 0 ≤ c * J := mul_nonneg hc hJ
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q A C hAC p h.operator E₀ Ω b hgs hb hI
+    regional_physicalBuffer_filter.{0, 0} hΔ hr q A C hAC p h.operator E₀ Ω b
+      h.operator_isHermitian hΩ hgap hspan hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ :=
     h.supported_buffer_gaussian_integral hq hJ A C hAC W ⌈K * (1 + b + Real.log L)⌉₊
@@ -213,7 +218,8 @@ Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-er
 `eq:info-reset-unitary`. -/
 theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r)
     {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : LocalHamiltonian Λ q R J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
@@ -229,7 +235,7 @@ theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) 
         rangeResetUnitaryPrefactor R J Δ r * (L : ℝ) ^ (-r) := by
   intro p F ψ B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
-    h.reset_localized_filter hq hJ hΔ hr hL hΛ E₀ Ω hgs A C hAC b hb hI
+    h.reset_localized_filter hq hJ hΔ hr hL hΛ E₀ Ω hΩ hgap hspan A C hAC b hb hI
   obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
     (rangeResetFilterPrefactor_pos R hJ hΔ hr).le (by positivity)
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr.trans_eq (by rw [rangeResetUnitaryPrefactor])⟩

@@ -18,12 +18,14 @@ of the original kernel with its original gap. This is the reduction in ALVV,
 arXiv:1602.08828v2, Section 6.1, lines 1457–1460, followed by `lem:dl`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
-variable {L q : ℕ} [NeZero q]
+variable {L q : ℕ}
 
 /-- Range projections of the actual positive local terms give the detectability
 contraction for the original spectral gap and the full original ground kernel.

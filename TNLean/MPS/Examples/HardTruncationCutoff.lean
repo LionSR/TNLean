@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.WeightedGHZ
 import TNLean.Circuit.EntropySupport
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.Analysis.CfcConjugation
 import QICLean.Analysis.EnergyTruncation
 import QICLean.Analysis.GroundEnergyBounds
@@ -30,6 +30,8 @@ recorded in `docs/audits/2026-10-29_hard_truncation_cutoff.md` and the QICLean n
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 The source paper is unchanged.
 -/
+
+open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator

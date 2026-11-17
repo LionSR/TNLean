@@ -42,6 +42,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (IsAdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 open scoped BigOperators
@@ -152,7 +154,7 @@ theorem rangeNestedPatch_mono (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (R : �
 /-- Radial distances of the endpoints of a walk differ by at most its length.
 Source: polynomial-PEPS `03-patches.tex`, lines 215–217, iterated along a walk. -/
 theorem abs_squareRadius_sub_le_length {Λ : Finset (ℤ × ℤ)} (c : ℝ × ℝ) {x y : Site Λ}
-    (p : (domainGraph Λ).Walk x y) :
+    (p : (planeDomainGraph Λ).Walk x y) :
     |squareRadius c x.1 - squareRadius c y.1| ≤ p.length := by
   induction p with
   | nil => simp

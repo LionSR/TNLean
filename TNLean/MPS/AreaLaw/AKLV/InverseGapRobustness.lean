@@ -16,6 +16,8 @@ For the normalized chain, the full robustness conclusion holds at
 no global shift to zero ground energy is made.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section

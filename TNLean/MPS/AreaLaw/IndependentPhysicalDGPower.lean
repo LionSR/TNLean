@@ -8,7 +8,7 @@ import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.ViableSubspaceBootstrap
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
@@ -26,6 +26,8 @@ arXiv:1602.08828v2, Corollary 4.6 and Theorem 4.9, source line 1080.
 retained as documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
 -/
+
+open ManyBody (interval)
 
 open scoped BigOperators Kronecker TensorProduct ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator InnerProductSpace

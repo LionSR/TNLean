@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Precision bounds for compressed leading vectors
@@ -35,6 +36,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A positive approximate solution of the compressed boundary program yields a physical
@@ -50,7 +53,8 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -150,13 +154,13 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
   have herr : 2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) ≤ Δ / 2028 :=
     hnum.trans hprecision
   have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX herr hρpsd hρtrace hρP
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρpsd hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   have hbase : 2 * (6 * (Δ / 169) + ‖B‖ *
       (2 * (((Δ / 169) ^ 2) / (2 * L)))) ≤ 14 * (Δ / 169) := by
     have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
     have hΔ4 : Δ ≤ 4 := by
-      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
     have hcr : 2 * (Δ / 169) ^ 2 ≤ Δ / 169 := by
       nlinarith only [mul_nonneg hΔ.le (sub_nonneg.mpr hΔ4), hΔ]
     have hBτ : ‖B‖ * (2 * (((Δ / 169) ^ 2) / (2 * L))) ≤
@@ -215,7 +219,8 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
     {L q k m : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ ε ζ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
@@ -248,7 +253,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
       (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hζ0 : 0 ≤ ζ := (norm_nonneg (u' - u)).trans hdist
   have hΔL : Δ * ζ ≤ 4 * L * ζ := by
     have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
@@ -274,7 +279,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
     apply ha.trans'
     field_simp [ne_of_gt hΔ]
     nlinarith only [hscaled, hΔ]
-  exact h.nearby_glued_vector_viable_bounds hgs.1 W hW u u' hu hu' hu'P
+  exact h.nearby_glued_vector_viable_bounds hΩ W hW u u' hu hu' hu'P
     hEreserve hareserve hdist
 
 /-- The finite-precision LVV conclusion depends only on the ray of the exact leading
@@ -283,7 +288,8 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance
     {L q k m : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ ε ζ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
@@ -340,7 +346,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance
           gluingCut L q k)⟫_ℂ‖ := by
     rw [show c = Complex.exp (θ * Complex.I) from rfl, hinv.2]
     exact ha
-  exact h.nearby_glued_vector_viable_of_density_and_vector_precision hL hq hΔ hgs
+  exact h.nearby_glued_vector_viable_of_density_and_vector_precision hL hq hΔ hΩ hgap hspan
     W hW (c • u) u' hcu hu' hu'P hEθ haθ hθ hprecision
 
 /-- A normalized numerical vector may be supplied by an eigensolver through its
@@ -351,7 +357,8 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_residu
     {L q k m : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ ε ζ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     {ρ : Matrix ((CutLeft L q k × CutSite L q k) × Fin m)
@@ -393,7 +400,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_residu
     nlinarith only [hscaled]
   obtain ⟨θ, hθ⟩ := Matrix.PosSemidef.exists_phase_distance_le_of_residual_le
     hρ hρtr hu hu' huρ hμ hζ hres
-  exact h.nearby_glued_vector_viable_of_phase_distance hL hq hΔ hgs W hW u u'
+  exact h.nearby_glued_vector_viable_of_phase_distance hL hq hΔ hΩ hgap hspan W hW u u'
     hu hu' hu'P hE ha ⟨θ, hθ⟩ hprecision
 
 /-- Splitting the unused LVV margin equally between the density approximation and the

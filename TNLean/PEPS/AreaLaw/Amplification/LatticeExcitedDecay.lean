@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.LatticeConstraints
 import QICLean.Analysis.PoissonContractionDecay
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Excited-state decay for the exact lattice constraints
@@ -33,6 +34,8 @@ open Matrix MeasureTheory SpectralFilter
 open scoped Kronecker NNReal MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The literal exact lattice constraint product has an integrable squared
@@ -43,7 +46,8 @@ Source: area law, `09-amplification.tex`, lines 237–253,
 theorem latticeConstraintWord_excitedProjection_decay
     {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ} (_hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
     (ζ : EuclideanSpace ℂ (Configuration Λ q × Aux)) (t : ℝ≥0) :
     let cs := positiveNormalization p (Δ / 2) J
@@ -57,7 +61,8 @@ theorem latticeConstraintWord_excitedProjection_decay
       (∫ w, poissonContractionWordEnergy k ξ w
         ∂PoissonWord.measure (AdmissibleSupport Λ R) t) ≤
         Real.exp (-(Δ / cs) * (t : ℝ)) * ‖ξ‖ ^ 2 := by
-  obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  have hHΩ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
   obtain ⟨hk, hsum, hgapk⟩ :=
     positive_replacement hp hΔ hΩ hHΩ hgap h.term h.hermitian h.norm_le rfl
   exact Matrix.poissonContractionWord_excitedProjection_decay _

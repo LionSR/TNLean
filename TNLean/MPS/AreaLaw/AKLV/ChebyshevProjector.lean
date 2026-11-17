@@ -23,6 +23,8 @@ The favorable parameter optimization in the source is not asserted here;
 the explicit rank certificate retains its logarithmic degree dependence.
 -/
 
+open ManyBody (interval interval_mono)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section

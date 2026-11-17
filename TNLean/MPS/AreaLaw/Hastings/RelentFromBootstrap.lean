@@ -35,6 +35,8 @@ eq. `relent` follows from `relent_of_projectorFactorization`.
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 234–242 and 413–503.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
 

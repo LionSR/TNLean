@@ -131,7 +131,7 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
     (fun b hb ↦ rangeNestedPatch_minimizer_marginal_closeness q R hR hJ.le hΔ hκ
       (rangePatchFilterExponent_le_half q R J Δ)
       (mul_sq_le_div_1024_of_le_rangePatchFilterExponent hJ.le hΔ.le hκ.le le_rfl)
-      _ H E₀ _ hgs center u b hu hb)
+      _ H E₀ _ hgs.1 hgs.2.1 hgs.2.2 center u b hu hb)
 
 /-- A square entropy area law at the constant `C_A` for the range-`R` family supplies adaptive
 square patches with at most `C L ^ c` cylinder terms, where `C = adaptivePatchPrefactor q B₀`

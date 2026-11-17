@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.PinnedNestedFilterCoordinates
 import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 import TNLean.PEPS.Approximation.RegionalStates
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A source-facing maximizing family for the original square Hamiltonian
@@ -35,6 +36,8 @@ open ManyBody (Edge squareLatticeGraph SquareInteraction)
 noncomputable section
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -60,7 +63,8 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
-    Edge (squareLatticeGraph L L) ≃ Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)) :=
+    Edge (squareLatticeGraph L L) ≃
+      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
   (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
@@ -100,7 +104,7 @@ private theorem rectangle_singleCrossing {L m : ℕ}
     (X : Fin m → Finset (Vertex L))
     (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
-    ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+    ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           ((X i).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) →
@@ -194,7 +198,8 @@ Source: `EnergyOptimizer.lean`, lines 62–109, at the revision cited above. -/
 theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
-    {Ω : Pinned.State L q} (hΩ : Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ)
+    {Ω : Pinned.State L q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (X : Fin m → Finset (Vertex L)) (hX : Monotone X)
     (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j)
@@ -212,7 +217,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
   have hD : ∀ i j : Fin m, i ≤ j → canonicalRegions X i ⊆ canonicalRegions X j := by
     intro i j hij
     simpa only [canonicalRegions_fin, Finset.map_subset_map] using hX hij
-  have hsep : ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+  have hsep : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           (canonicalRegions X i) →
@@ -220,7 +225,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ (canonicalRegions X) hD hsep a ha ha1
+    h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ hgap hspan (canonicalRegions X) hD
+      hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by

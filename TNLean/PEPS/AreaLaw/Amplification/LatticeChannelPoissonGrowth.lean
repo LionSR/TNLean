@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelWeightedRow
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Expected spatial oscillation for retained lattice channel words
@@ -34,6 +35,8 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The actual retained lattice channel evolution satisfies the expected
@@ -48,14 +51,15 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
     ∃ c v : ℝ, 0 < c ∧ 0 ≤ v ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (P : AdmissibleSupport Λ R → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
           supportedOperators q (S : Set (Site Λ))) →
         ∀ (t : ℝ≥0) (y : Site Λ),
-        letI := graphPseudoEMetricSpace (domainGraph Λ)
+        letI := graphPseudoEMetricSpace (planeDomainGraph Λ)
         let α := kernelExponent p
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
@@ -70,23 +74,23 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
             siteOscillation q y (spectatorRootChannelWord k (List.ofFn u.2) B) = 0) := by
   obtain ⟨C, c, v, hC, hc, hv, hbounds⟩ := exists_latticeChannelEventKernel_bounds hp R hJ hΔ
   refine ⟨c, v, hc, hv, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs P _ Aux _ _ S B hB t y
+  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan P _ Aux _ _ S B hB t y
   let α := kernelExponent p
   let aP := fun i : {i // P i} => a i
   let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
     (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
   let N := Finset.univ.sup fun i : {i // P i} =>
-    Finset.univ.sup ((domainGraph Λ).dist (a i))
-  have hN (i : {i // P i}) : Finset.univ.sup ((domainGraph Λ).dist (a i)) ≤ N :=
+    Finset.univ.sup ((planeDomainGraph Λ).dist (a i))
+  have hN (i : {i // P i}) : Finset.univ.sup ((planeDomainGraph Λ).dist (a i)) ≤ N :=
     Finset.le_sup (f := fun i : {i // P i} =>
-      Finset.univ.sup ((domainGraph Λ).dist (a i))) (Finset.mem_univ i)
-  obtain ⟨hrow, hstep⟩ := hbounds Λ h a ha E₀ Ω hgs P Aux N hN
-  exact integrable_and_integral_siteOscillation_le_of_graph_kernel (domainGraph Λ) k
-    (graphChannelEventKernel (domainGraph Λ) aP
+      Finset.univ.sup ((planeDomainGraph Λ).dist (a i))) (Finset.mem_univ i)
+  obtain ⟨hrow, hstep⟩ := hbounds Λ h a ha E₀ Ω hΩ hgap hspan P Aux N hN
+  exact integrable_and_integral_siteOscillation_le_of_graph_kernel (planeDomainGraph Λ) k
+    (graphChannelEventKernel (planeDomainGraph Λ) aP
       (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2))) (c / 2) α N)
     (by positivity) (kernelExponent_pos hp) (kernelExponent_le_one p) hv
-    (graphChannelEventKernel_nonneg (domainGraph Λ) aP (by positivity) (c / 2) α N)
-    hstep (graphChannelEventKernel_eq_zero_of_not_reachable (domainGraph Λ) aP _ _ _ _)
+    (graphChannelEventKernel_nonneg (planeDomainGraph Λ) aP (by positivity) (c / 2) α N)
+    hstep (graphChannelEventKernel_eq_zero_of_not_reachable (planeDomainGraph Λ) aP _ _ _ _)
     hrow S B hB t y
 
 end TNLean.PEPS.AreaLaw

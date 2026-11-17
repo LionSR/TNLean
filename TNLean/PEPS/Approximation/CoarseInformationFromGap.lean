@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.CoarseInformation
 import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Coarse mutual information from the global spectral gap
@@ -29,9 +30,9 @@ Source: polynomial-PEPS manuscript, Proposition 3.1 (`prop:coarse`),
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (SquareInteraction)
-
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -113,7 +114,8 @@ theorem coarse_mutualInformation_le_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ : �
     ∀ u : ℝ, coarseInformationThresholdClosed q R J Δ N₀ A₀ ≤ u →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
-        Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
@@ -138,7 +140,8 @@ theorem coarse_mutualInformation_le {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ}
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
-        Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
@@ -161,8 +164,9 @@ theorem coarse_mutualInformation_le_square {q : ℕ} (hq : 1 ≤ q)
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
           (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
-        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ → ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ),
-            IsBoxUnion N₀ T →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v + c ∈ T),
           ∀ E : Finset (Vertex L),
@@ -184,7 +188,8 @@ theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
           (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
-        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ → ∀ d : ℝ × ℝ,
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ d : ℝ × ℝ,
           ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T,
             dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) ≤ A₀ * u) →
@@ -195,13 +200,13 @@ theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
                 (Geometry.integerPoint (rectangleEmbedding v) + d)) →
             FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω X E ≤ C := by
   obtain ⟨β, hβ, C, u₀, hmain⟩ := coarse_mutualInformation_le_square hq hJ hΔ N₀ A₀
-  refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ d T hT hdiam X hX E hE ↦ ?_⟩
+  refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ hgap hspan d T hT hdiam X hX E hE ↦ ?_⟩
   have hdist (x y : ℤ × ℤ) :
       dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) =
         (Scan.ambientSupDistance x y : ℝ) := by
     simp only [dist_add_right, Scan.ambientSupDistance, Geometry.integerPoint,
       Prod.dist_eq, Real.dist_eq, Int.cast_max, Int.cast_abs, Int.cast_sub]
-  exact hmain u hu L h hh hhJ E₀ Ω hΩ 0 T hT
+  exact hmain u hu L h hh hhJ E₀ Ω hΩ hgap hspan 0 T hT
     (fun x hx y hy ↦ by simpa only [hdist] using hdiam x hx y hy)
     X (by simpa only [add_zero] using hX) E
     (fun t ht v hv ↦ by simpa only [hdist, add_zero] using hE t ht v hv)

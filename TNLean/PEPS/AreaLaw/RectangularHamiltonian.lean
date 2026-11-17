@@ -8,6 +8,7 @@ import TNLean.Lattice.LocalHamiltonian
 import TNLean.Circuit.EntropySupport
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Hamiltonian.HermitianPart
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Algebra.L2OpNormReindex
 import Mathlib.Analysis.Complex.Basic
 
@@ -38,6 +39,8 @@ open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport isAdmissibleSupport_singleton)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -168,7 +171,7 @@ theorem toAreaLawHamiltonian_operator (Φ : RectangleInteraction width height q)
     Matrix.reindex e e (Φ.hermitianPart.term i)
   let f := Function.extend (rectangleAreaLawSupport width height) T 0
   have hsum : (∑ i : SquareLatticeSiteOrEdge width height, T i) =
-      ∑ X : TNLean.Lattice.AdmissibleSupport (rectangularDomain width height) 1, f X := by
+      ∑ X : ManyBody.AdmissibleSupport (rectangularDomain width height) 1, f X := by
     apply Finset.sum_of_injOn (rectangleAreaLawSupport width height)
       (rectangleAreaLawSupport_injective width height).injOn (fun _ _ => Finset.mem_univ _)
     · intro X _ hX
@@ -186,40 +189,16 @@ theorem toAreaLawHamiltonian_operator (Φ : RectangleInteraction width height q)
 
 /-- The original unit ground vector and full-system gap are preserved by the actual
 conversion. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:global-gap`. -/
-theorem isGappedGroundState_toAreaLawHamiltonian (Φ : RectangleInteraction width height q)
+theorem isGapped_toAreaLawHamiltonian (Φ : RectangleInteraction width height q)
     (hΦ : ∀ i, ‖Φ.term i‖ ≤ J) (hH : Φ.hamiltonian.IsHermitian)
-    {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q}
-    (hΩ : Matrix.IsGappedGroundState Φ.hamiltonian E₀ Ω Δ) :
-    TNLean.Lattice.IsGappedGroundState (rectangularDomain width height) q
-      (Φ.toAreaLawHamiltonian hΦ).operator E₀ (rectangleAreaLawState Ω) Δ := by
-  classical
-  let e := rectangleConfigurationEquiv width height q
-  let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e
-  refine ⟨(norm_rectangleAreaLawState Ω).trans hΩ.1, ?_, ?_⟩
-  · rw [Φ.toAreaLawHamiltonian_operator hΦ hH]
-    have heq : Matrix.toEuclideanLin (Matrix.reindex e e Φ.hamiltonian) (E Ω) =
-        E (Matrix.toEuclideanLin Φ.hamiltonian Ω) := by
-      ext x
-      change (Φ.hamiltonian.submatrix e.symm e.symm *ᵥ (Ω.ofLp ∘ e.symm)) x =
-        (Φ.hamiltonian *ᵥ Ω.ofLp) (e.symm x)
-      rw [Matrix.submatrix_mulVec_equiv]
-      simp only [Function.comp_def, Equiv.symm_symm, Equiv.symm_apply_apply]
-    change Matrix.toEuclideanLin (Matrix.reindex e e Φ.hamiltonian) (E Ω) = _
-    rw [heq, show Matrix.toEuclideanLin Φ.hamiltonian Ω = (E₀ : ℂ) • Ω from hΩ.2.1,
-      map_smul]
-    rfl
-  · rw [Φ.toAreaLawHamiltonian_operator hΦ hH]
-    have hg := hΩ.2.2.submatrix e.symm
-    have hdef : (Φ.hamiltonian - (E₀ : ℂ) • 1 -
-        (Δ : ℂ) • (1 - vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).submatrix
-        e.symm e.symm = Matrix.reindex e e Φ.hamiltonian - (E₀ : ℂ) • 1 -
-          (Δ : ℂ) • (1 - vecMulVec (fun x ↦ rectangleAreaLawState Ω x)
-            (star (fun x ↦ rectangleAreaLawState Ω x))) := by
-      ext i j
-      simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sub_apply,
-        Matrix.smul_apply, Matrix.one_apply, Matrix.vecMulVec_apply, Pi.star_apply,
-        e.symm.injective.eq_iff]
-      rfl
-    exact hdef ▸ hg
+    {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q} (hΩ : ‖Ω‖ = 1)
+    (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Ω}) :
+    ‖rectangleAreaLawState Ω‖ = 1 ∧ IsGapped (Φ.toAreaLawHamiltonian hΦ).operator E₀ Δ ∧
+      groundSpace (Φ.toAreaLawHamiltonian hΦ).operator E₀ =
+        Submodule.span ℂ {rectangleAreaLawState Ω} := by
+  rw [Φ.toAreaLawHamiltonian_operator hΦ hH]
+  exact ⟨(norm_rectangleAreaLawState Ω).trans hΩ, (ManyBody.isGapped_reindex_iff _).mpr hgap,
+    ManyBody.groundSpace_reindex_eq_span _ hspan⟩
 
 end ManyBody.RectangleInteraction

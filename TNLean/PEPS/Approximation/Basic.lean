@@ -7,10 +7,10 @@ import QICLean.ManyBody.Sites.Lattice.Square
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.PEPS.NormalBlocking
 import TNLean.Circuit.LocalCircuit
-import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The polynomial-bond PEPS approximation statement
@@ -41,6 +41,8 @@ open ManyBody (Edge SquareInteraction SquareLatticeVertex squareLatticeGraph)
 
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.Approximation
 
 /-- Configuration coordinates on the original open square.
@@ -58,13 +60,14 @@ Hermitian total sum. Individual terms need not be Hermitian. Source: polynomial-
 `eq:model` and `eq:global-gap`. -/
 def IsSquareGroundState (q : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
   ∃ h : SquareInteraction L q, h.hamiltonian.IsHermitian ∧ (∀ i, ‖h.term i‖ ≤ J) ∧
-    ∃ E₀ : ℝ, Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ
+    ∃ E₀ : ℝ, ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}
 
 /-- A ground vector of the model is a unit vector. Source: polynomial-PEPS `eq:global-gap`. -/
 theorem IsSquareGroundState.norm_eq_one {q : ℕ} {J Δ : ℝ} {L : ℕ} {Ω : StateSpace L q}
     (hΩ : IsSquareGroundState q J Δ L Ω) : ‖Ω‖ = 1 := by
-  obtain ⟨_, _, _, _, hgs⟩ := hΩ
-  exact hgs.1
+  obtain ⟨_, _, _, _, hn, -, -⟩ := hΩ
+  exact hn
 
 /-- The contraction of a native PEPS, in Euclidean configuration coordinates.
 Source: polynomial-PEPS Section 1, the unnormalized vector `Φ`. -/
@@ -91,9 +94,10 @@ The existential phase is equivalent to the printed minimum over phases by
 def PolynomialPEPSApproximation : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
-      ∀ L : ℕ, 2 ≤ L → ∀ h : SquareInteraction L q,
-        h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) →
+      ∀ L : ℕ, 2 ≤ L → ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian →
+          (∀ i, ‖h.term i‖ ≤ J) →
         ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ → HasPEPSApproximation C c L q Ω
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → HasPEPSApproximation C c L q Ω
 
 end TNLean.PEPS.Approximation

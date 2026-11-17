@@ -28,6 +28,8 @@ for `0 < gamma ≤ 1`. See
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw

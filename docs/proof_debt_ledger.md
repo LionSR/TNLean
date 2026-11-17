@@ -1221,4 +1221,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## Burned down / retired
 
-(none yet)
+### D19. Finite-ring Lieb–Robinson estimate re-ran the commutator recursion  —  burned down (net −240 lines)
+
+- **Outcome**: `MPS/Preparation/FiniteRingLiebRobinson.lean` now derives
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` from
+  `ManyBody.norm_heisenberg_commutator_le_graphDistance_of_disjoint` (QICLean#1094,
+  Hastings–Koma, Theorem A.2) on `cycleGraph N`, with bond diameter one and site budget
+  `s = 4 e^a`, so `2s = 8 e^a` and the constants are unchanged. The new
+  `ringSupportDistance_le_edist` compares the ring distance with the cycle-graph distance.
+  The private recursion, bond-counting and weighted-row lemmas are deleted.

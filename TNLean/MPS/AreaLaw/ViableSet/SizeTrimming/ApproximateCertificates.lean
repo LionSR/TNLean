@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Approximate semidefinite certificates and viable vectors
@@ -35,6 +36,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A fully approximate numerical semidefinite certificate, at the independent precision
@@ -49,7 +52,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -117,7 +121,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
   have herr : 2 * (‖K‖ * repair + ‖B‖ * boundaryError) ≤ Δ / 2028 :=
     hnum.trans (by simpa only [repair, boundaryError, add_assoc] using harith)
   apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair] using hσenergy
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
@@ -135,7 +139,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -196,7 +201,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
       simp only [repair, boundaryError]
       ring)
   apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
@@ -213,7 +218,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_tr
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -276,7 +282,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_tr
       simp only [repair, boundaryError]
       ring)
   apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
@@ -294,7 +300,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -351,7 +358,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget
   let boundaryError := eη + 2 * Fintype.card (CutSite L q k × Fin m) * εb + δ + repair
   obtain ⟨σ, hσ, hσtrace, _hclose, hσboundary, hσenergy⟩ := hcert.exists_density hZ
   apply h.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S hS W hW x hwx hwE X hX Z hZ hZZ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hX Z hZ hZZ
       σ hσ hσtrace (hξrat := hξrat) (hξrat1 := hξrat1)
       (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
@@ -369,7 +376,8 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budge
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {s₀ b Hv : ℕ} {δin : ℝ}
     (D : RationalCoordinateViableMPSDataOfHeight Hv Γ s₀ b δin S)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -427,7 +435,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budge
   let boundaryError := eη + 2 * Fintype.card (CutSite L q k × Fin m) * εb + δ + repair
   obtain ⟨σ, hσ, hσtrace, _hclose, hσboundary, hσenergy⟩ := hcert.exists_density hZ
   apply h.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S D W hW x hwx hwE X hX Z hZ hZZ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hX Z hZ hZZ
       σ hσ hσtrace (hξrat := hξrat) (hξrat1 := hξrat1)
       (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy

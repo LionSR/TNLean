@@ -153,7 +153,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       simpa only [Pi.zero_apply, norm_zero] using mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hJ
   · let T := fun i : SquareLatticeSiteOrEdge L L => Matrix.reindex e e (B i)
     have hsum : (∑ i : SquareLatticeSiteOrEdge L L, T i) =
-        ∑ X : Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
+        ∑ X : ManyBody.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
           Function.extend (AreaLaw.rectangleAreaLawSupport L L) T 0 X := by
       apply Finset.sum_of_injOn (AreaLaw.rectangleAreaLawSupport L L)
         (AreaLaw.rectangleAreaLawSupport_injective L L).injOn (fun _ _ => Finset.mem_univ _)

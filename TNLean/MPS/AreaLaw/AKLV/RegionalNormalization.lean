@@ -25,6 +25,8 @@ Source: AKLV, arXiv:1301.1162v1, Section 6.1, normalization preceding
 Theorem 6.1.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators ComplexOrder MatrixOrder
 

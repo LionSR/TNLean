@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.PolynomialPEPSExplicitConstant
 import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.AreaLaw.SquareAreaLawExplicitConstant
 import TNLean.PEPS.Approximation.AngularInformationFromGap
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The polynomial PEPS approximation with explicit constants
@@ -29,7 +30,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (SquareInteraction)
+
+open ManyBody (IsGapped groundSpace SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -78,7 +80,8 @@ theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : �
     (hΔ : 0 < Δ) :
     ∀ L : ℕ, 2 ≤ L → ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian →
         (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-      Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         HasPEPSApproximation (pepsBondPrefactor q J Δ) (pepsBondExponent q J Δ) L q Ω := by
   have hA := AreaLaw.squareEntropyAreaLawAt_closed (q := q) (by omega) hJ.le hΔ
   have hD : IsAngularScale q (IsSquareGroundState q J Δ) (angularConstant / 2) 1 4 60
@@ -87,8 +90,9 @@ theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : �
       (by norm_num) le_rfl le_rfl
   have hlarge := polynomialPEPSApproximation_of_ratios hq hJ hΔ hA
     (one_le_angularScale _ _ _ _) hD
-  intro L hL h hh hhJ E₀ Ω hΩ
+  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan
   exact hasPEPSApproximation_of_sufficiently_large_le (by omega) hL
-    (pepsBondExponent_pos q J Δ).le hΩ.1 (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ⟩)
+    (pepsBondExponent_pos q J Δ).le hΩ
+        (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩)
 
 end TNLean.PEPS.Approximation

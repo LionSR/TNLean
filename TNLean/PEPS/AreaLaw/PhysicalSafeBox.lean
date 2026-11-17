@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.Scan.BoxClearanceComparison
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The physical entropy bound for safe rectangles
@@ -32,6 +33,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The fixed-exponent safe-rectangle bound with an arbitrary real safety
@@ -48,7 +51,8 @@ theorem exists_regionalEntropy_safe_rect_le_boxError
     ∃ C : ℝ, 0 < C ∧ ∀ D₀ : ℝ, 2 * (R : ℝ) + 10 < D₀ →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (A : Finset (Site Λ)) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
@@ -64,7 +68,7 @@ theorem exists_regionalEntropy_safe_rect_le_boxError
     hq hd hCb.le hp (hbox (d + 1) (by dsimp only [d]; omega))
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   refine ⟨4 * Cb + 4 * Real.log q + 1, by linarith, ?_⟩
-  intro D₀ hD₀ Λ h E₀ Ω hgs A Q hclear
+  intro D₀ hD₀ Λ h E₀ Ω hΩ hgap hspan A Q hclear
   have hdreal : (d : ℝ) < D₀ := by
     simpa only [d, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] using hD₀
   have hsafe : IsSafe Λ A d Q := by
@@ -77,6 +81,6 @@ theorem exists_regionalEntropy_safe_rect_le_boxError
       simpa only [Nat.cast_mul] using hle.trans_lt hreal
     exact_mod_cast hcast
   exact regionalEntropy_le_of_boxEntropy_power (e := (Exponents.boxError : ℝ)) hq
-    (by norm_num [Exponents.boxError]) hweak h hgs A Q hsafe
+    (by norm_num [Exponents.boxError]) hweak h hΩ hgap hspan A Q hsafe
 
 end TNLean.PEPS.AreaLaw

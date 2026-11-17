@@ -30,7 +30,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
     (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
     ∃ T : (Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
-        Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L))) →
+        Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L))) →
         Matrix (Lattice.Configuration (AreaLaw.rectangularDomain L L) q)
           (Lattice.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
       (∀ i, Entropy.IsSupportedOn

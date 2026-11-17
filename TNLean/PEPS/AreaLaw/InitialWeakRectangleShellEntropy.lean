@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy
 import TNLean.PEPS.AreaLaw.WeakRectangleShellEntropy
 import Mathlib.Data.Nat.Log
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform weak-rectangle shell entropy at the initial exponent
@@ -33,6 +34,8 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- One initial safe-box constant and exponent control all actual weak-rectangle
@@ -47,7 +50,8 @@ theorem exists_regionalEntropy_weak_rectangle_shell_le_rpow
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
             ∀ j L : ℕ, j ≤ L → L ≤ Q.size →
               D₀ * L + L ≤ D₀ * Q.size →
@@ -58,15 +62,15 @@ theorem exists_regionalEntropy_weak_rectangle_shell_le_rpow
   obtain ⟨C, e₀, hC, he₀, he₀₁, hrect⟩ :=
     exists_regionalEntropy_safe_rect_le_rpow q R hq hJ hΔ
   refine ⟨C, e₀, hC, he₀, he₀₁, ?_⟩
-  intro D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe j L hj hL hbudget
+  intro D₀ hD₀ Λ h E₀ Ω hΩ hgap hspan A Q hsafe j L hj hL hbudget
   by_cases hLzero : L = 0
   · have hjzero : j = 0 := by omega
-    simp [hjzero, hLzero, regionalEntropy_empty Λ q Ω hgs.1,
+    simp [hjzero, hLzero, regionalEntropy_empty Λ q Ω hΩ,
       Real.zero_rpow (ne_of_gt he₀)]
   · exact IntRect.regionalEntropy_shell_le_of_safe_box
-      Λ q D₀ Ω hgs.1 A Q hsafe j L (Nat.log 2 L) hj hL
+      Λ q D₀ Ω hΩ A Q hsafe j L (Nat.log 2 L) hj hL
       (Nat.pow_log_le_self 2 hLzero)
       (Nat.lt_pow_succ_log_self (b := 2) (by decide) L) hbudget
-      e₀ C he₀ hC (hrect D₀ hD₀ Λ h E₀ Ω hgs A)
+      e₀ C he₀ hC (hrect D₀ hD₀ Λ h E₀ Ω hΩ hgap hspan A)
 
 end TNLean.PEPS.AreaLaw

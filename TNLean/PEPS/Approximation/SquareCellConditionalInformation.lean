@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.CellConditionalInformation
 import TNLean.PEPS.Approximation.AngularInformationBound
 import TNLean.PEPS.Approximation.AngularGridCells
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Conditional information of a square-lattice cell
@@ -31,11 +32,11 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (SquareInteraction)
-
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -173,7 +174,8 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
       m₀ ∉ A →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
           (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
-        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Vertex L) :=
           Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
         let B : Finset (Vertex L) := Finset.univ.filter
@@ -185,10 +187,11 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
             Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
   have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
-  intro s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ
+  intro s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
     (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
-      (AreaLaw.rectangleAreaLawState Ω) (h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hΩ))
+      (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan')
 
 open Classical in
 /-- **Lemma 3.2 on the original open square, at the named amplification constants.** Under
@@ -208,7 +211,8 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_ex
       m₀ ∉ A →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
           (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
-        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Vertex L) :=
           Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
         let B : Finset (Vertex L) := Finset.univ.filter
@@ -245,7 +249,8 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
         m₀ ∉ A →
         ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
             (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
-          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           let G : Finset (Vertex L) :=
             Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
           let B : Finset (Vertex L) := Finset.univ.filter

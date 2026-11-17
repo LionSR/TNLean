@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
-
+import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # Nearest-neighbour edges at two cuts of a finite chain
 
@@ -18,6 +17,8 @@ and the algebraic step in `prop:Cheby-AGSP-eff` (lines 1324–1332). The convent
 here agrees with the explicitly named cuts (i1,i1+1) and (i2,i2+1).
 Adjacent cuts are allowed; their crossing supports share the middle site.
 -/
+
+open ManyBody (interval interval_mono mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 

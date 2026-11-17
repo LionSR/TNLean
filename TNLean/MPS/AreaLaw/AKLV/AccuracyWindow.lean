@@ -27,6 +27,8 @@ assembly remain separate. See
 `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

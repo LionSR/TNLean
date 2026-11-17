@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.Lattice.RegionalEntropyBridge
 import TNLean.Lattice.ZeroEntropy
 import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A cut with no crossing edge
@@ -38,8 +39,8 @@ vanishes for every unit vector.
 * `regionalEntropy_eq_zero_of_edgeBoundary_eq_empty`: Lemma 2.2.
 * `regionalEntropy_eq_zero_of_range_eq_zero`: the range-zero case.
 * `regionalEntropy_eq_zero_of_q_eq_one`, `regionalEntropy_eq_zero_of_domain_eq_empty`.
-* `IsAdmissibleSupport.reachable`, `edgeBoundary_connectedComponent_eq_empty`:
-  supports lie in one component, and components have no crossing edge.
+* `edgeBoundary_connectedComponent_eq_empty`: components have no crossing edge; with
+  `ManyBody.IsAdmissibleSupport.reachable` (supports lie in one component).
 
 ## References
 
@@ -52,8 +53,12 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder Kronecker
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport IsAdmissibleSupport isAdmissibleSupport_zero_iff planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -65,9 +70,9 @@ variable {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
 
 /-- Without crossing edges, adjacent sites are on the same side of the cut. -/
 theorem mem_iff_of_adj_of_edgeBoundary_eq_empty (hA : edgeBoundary Λ A = ∅) {x y : Site Λ}
-    (hxy : (domainGraph Λ).Adj x y) : x ∈ A ↔ y ∈ A := by
+    (hxy : (planeDomainGraph Λ).Adj x y) : x ∈ A ↔ y ∈ A := by
   classical
-  have key : ∀ {a b : Site Λ}, (domainGraph Λ).Adj a b → a ∈ A → b ∉ A → False := by
+  have key : ∀ {a b : Site Λ}, (planeDomainGraph Λ).Adj a b → a ∈ A → b ∉ A → False := by
     intro a b hab ha hb
     have hmem : s(a, b) ∈ edgeBoundary Λ A := by
       simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset,
@@ -82,7 +87,7 @@ theorem mem_iff_of_adj_of_edgeBoundary_eq_empty (hA : edgeBoundary Λ A = ∅) {
 /-- Without crossing edges, the two ends of a walk are on the same side of the
 cut. -/
 theorem mem_iff_of_walk_of_edgeBoundary_eq_empty (hA : edgeBoundary Λ A = ∅) {x y : Site Λ}
-    (w : (domainGraph Λ).Walk x y) : x ∈ A ↔ y ∈ A := by
+    (w : (planeDomainGraph Λ).Walk x y) : x ∈ A ↔ y ∈ A := by
   induction w with
   | nil => rfl
   | cons h _ ih => exact (mem_iff_of_adj_of_edgeBoundary_eq_empty hA h).trans ih
@@ -103,20 +108,13 @@ theorem subset_or_disjoint_of_edgeBoundary_eq_empty (hA : edgeBoundary Λ A = �
     obtain ⟨w, -⟩ := hwalk x₀ hx₀ y hy
     exact h ((mem_iff_of_walk_of_edgeBoundary_eq_empty hA w).mpr hyA)
 
-/-- **Every admissible support lies in one connected component.** -/
-theorem _root_.TNLean.Lattice.IsAdmissibleSupport.reachable {R : ℕ} {X : Finset (Site Λ)}
-    (hX : IsAdmissibleSupport Λ R X) {x y : Site Λ} (hx : x ∈ X) (hy : y ∈ X) :
-    (domainGraph Λ).Reachable x y :=
-  let ⟨w, _⟩ := hX.2 x hx y hy
-  ⟨w⟩
-
 open scoped Classical in
 /-- **A union of connected components has no crossing edge.** For a set `s` of
 components of the induced domain graph, the set of sites in components of `s`
 has empty edge boundary. -/
 theorem edgeBoundary_connectedComponents_eq_empty
-    (s : Set (domainGraph Λ).ConnectedComponent) :
-    edgeBoundary Λ (Finset.univ.filter fun x ↦ (domainGraph Λ).connectedComponentMk x ∈ s) =
+    (s : Set (planeDomainGraph Λ).ConnectedComponent) :
+    edgeBoundary Λ (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).connectedComponentMk x ∈ s) =
       ∅ := by
   rw [Finset.eq_empty_iff_forall_notMem]
   intro e he
@@ -124,15 +122,16 @@ theorem edgeBoundary_connectedComponents_eq_empty
     true_and] at he
   obtain ⟨hadj, x, hx, y, hy, rfl⟩ := he
   rw [SimpleGraph.mem_edgeSet] at hadj
-  have hxy : (domainGraph Λ).connectedComponentMk x = (domainGraph Λ).connectedComponentMk y :=
+  have hxy : (planeDomainGraph Λ).connectedComponentMk x =
+      (planeDomainGraph Λ).connectedComponentMk y :=
     SimpleGraph.ConnectedComponent.eq.mpr ⟨SimpleGraph.Walk.cons hadj .nil⟩
   exact hy (hxy ▸ hx)
 
 open scoped Classical in
 /-- **A connected component has no crossing edge.** -/
 theorem edgeBoundary_connectedComponent_eq_empty
-    (c : (domainGraph Λ).ConnectedComponent) :
-    edgeBoundary Λ (Finset.univ.filter fun x ↦ (domainGraph Λ).connectedComponentMk x = c) =
+    (c : (planeDomainGraph Λ).ConnectedComponent) :
+    edgeBoundary Λ (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).connectedComponentMk x = c) =
       ∅ := by
   simpa using edgeBoundary_connectedComponents_eq_empty (Λ := Λ) {c}
 
@@ -149,13 +148,14 @@ ground-state hypothesis of Theorem 1.1, if every admissible support lies inside
 `A` or is disjoint from it, then `S_Ω(A) = 0`. -/
 theorem regionalEntropy_eq_zero_of_forall_subset_or_disjoint (h : LocalHamiltonian Λ q R J)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
-    (hΩ : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ))
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
     (hsplit : ∀ X : AdmissibleSupport Λ R, X.1 ⊆ A ∨ Disjoint X.1 A) :
     regionalEntropy Λ q Ω A = 0 := by
   rw [regionalEntropy_eq_regionEntropy]
   exact regionEntropy_eq_zero_of_forall_subset_or_disjoint
     (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
-    h.hermitian hΔ hΩ A hsplit
+    h.hermitian hΔ hΩ hgap hspan A hsplit
 
 /-- **A cut with no crossing edge** (area-law preprint, Lemma 2.2,
 `lem:zero-boundary`, `01-preliminaries.tex` lines 123–134). Under the
@@ -165,9 +165,10 @@ Only the gapped ground-state hypothesis with `Δ > 0` is used; the bound `J`,
 the range `R` and the local dimension `q` are arbitrary. -/
 theorem regionalEntropy_eq_zero_of_edgeBoundary_eq_empty (h : LocalHamiltonian Λ q R J)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
-    (hΩ : IsGappedGroundState Λ q h.operator E₀ Ω Δ) {A : Finset (Site Λ)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) {A : Finset (Site Λ)}
     (hA : edgeBoundary Λ A = ∅) : regionalEntropy Λ q Ω A = 0 :=
-  regionalEntropy_eq_zero_of_forall_subset_or_disjoint h hΔ hΩ A
+  regionalEntropy_eq_zero_of_forall_subset_or_disjoint h hΔ hΩ hgap hspan A
     (subset_or_disjoint_of_edgeBoundary_eq_empty hA)
 
 /-- **Range zero** (area-law preprint, `01-preliminaries.tex` lines 118–120). For
@@ -175,9 +176,10 @@ theorem regionalEntropy_eq_zero_of_edgeBoundary_eq_empty (h : LocalHamiltonian �
 the gapped ground vector vanishes. -/
 theorem regionalEntropy_eq_zero_of_range_eq_zero (h : LocalHamiltonian Λ q 0 J)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
-    (hΩ : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ)) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) :
     regionalEntropy Λ q Ω A = 0 := by
-  refine regionalEntropy_eq_zero_of_forall_subset_or_disjoint h hΔ hΩ A fun X ↦ ?_
+  refine regionalEntropy_eq_zero_of_forall_subset_or_disjoint h hΔ hΩ hgap hspan A fun X ↦ ?_
   obtain ⟨x, hx⟩ := Finset.card_eq_one.mp ((isAdmissibleSupport_zero_iff Λ X.1).mp X.2)
   rw [hx]
   by_cases hxA : x ∈ A
@@ -221,11 +223,12 @@ connected components of the induced domain graph, in particular on each
 component of a disconnected domain. -/
 theorem regionalEntropy_connectedComponents_eq_zero (h : LocalHamiltonian Λ q R J)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
-    (hΩ : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
-    (s : Set (domainGraph Λ).ConnectedComponent) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (s : Set (planeDomainGraph Λ).ConnectedComponent) :
     regionalEntropy Λ q Ω
-      (Finset.univ.filter fun x ↦ (domainGraph Λ).connectedComponentMk x ∈ s) = 0 :=
-  regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hΔ hΩ
+      (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).connectedComponentMk x ∈ s) = 0 :=
+  regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hΔ hΩ hgap hspan
     (edgeBoundary_connectedComponents_eq_empty s)
 
 end ZeroBoundary

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.AngularWholeCellInformationFromCollar
 import TNLean.PEPS.Approximation.AngularResetWidthFromCellInformation
 import TNLean.PEPS.Approximation.AngularInformationReset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform information reset at a single annular scale
@@ -27,9 +28,9 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (SquareInteraction)
-
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -163,7 +164,8 @@ theorem angular_single_scale_reset_of_sublinearCollarBoundAt
     ∀ L : ℕ, angularSingleScaleThreshold q J Δ a a' d p Ctpl N Ca Na M ≤ (L : ℝ) →
       ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace L q),
-        Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
           ∀ (o : ℝ × ℝ) (Aold A E : Set (ℝ × ℝ)), Aold ⊆ A →
             (∀ x ∈ A, ∀ y ∈ E, (a / 2) * s ≤ dist x y) →
@@ -189,15 +191,15 @@ theorem angular_single_scale_reset_of_sublinearCollarBoundAt
   have hc : 0 < c := div_pos (angular_clearance_pos ha' ha'a hda) hd
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
       (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
-    fun s hs o m₀ A hm₀ L Ω ⟨h, hh, hhJ, E₀, hΩ⟩ ↦
+    fun s hs o m₀ A hm₀ L Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦
       cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
-        s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ
-  intro L hL h hh hhJ E₀ Ω hΩ
+        s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
+  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan
   exact angular_single_scale_reset_of_bounds hcell
     (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp)
     (cellInformationConstant_pos q c Ctpl N Ca Na)
     (cellInformationExponent_pos c Ctpl N Ca Na).le (resetWidth_pos hJ hΔ hp) ha' ha'a hd hda
-    hd1 hp M hD L hL Ω ⟨h, hh, hhJ, E₀, hΩ⟩
+    hd1 hp M hD L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩
 
 open Classical in
 /-- Uniform information reset at one annular scale under the sublinear collar
@@ -220,7 +222,8 @@ theorem exists_angular_single_scale_reset_of_sublinearCollarBound
       ∀ L : ℕ, L₀ ≤ (L : ℝ) →
         ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
             (E₀ : ℝ) (Ω : StateSpace L q),
-          Matrix.IsGappedGroundState h.hamiltonian E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ s : ℝ, D * Real.log (L : ℝ) ≤ s →
             ∀ (o : ℝ × ℝ) (Aold A E : Set (ℝ × ℝ)), Aold ⊆ A →
               (∀ x ∈ A, ∀ y ∈ E, (a / 2) * s ≤ dist x y) →

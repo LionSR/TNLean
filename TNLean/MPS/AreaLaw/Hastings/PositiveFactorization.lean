@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.PositiveFactorRepair
 import QICLean.Entropy.LocalLift
 import QICLean.Entropy.SupportedOperatorAlgebra
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 
 /-!
@@ -39,6 +39,8 @@ unchanged. Documented in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`
 * `exists_factorization_of_isFactorizationAt`: the shape of the factorization hypothesis
   consumed by `entropy_le_of_overlap_schmidtRank_mixture_of_factorization`.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix Real
 open scoped Matrix.Norms.L2Operator ComplexOrder

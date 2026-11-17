@@ -21,6 +21,8 @@ second family or assert energy of the final trimmed space. See
 Supporting ALVV, arXiv:1602.08828v2, the energy estimate at line 1807.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct InnerProductSpace ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator

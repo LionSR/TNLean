@@ -28,6 +28,8 @@ and the recursive energy estimate remain separate. See
 `docs/paper-gaps/alvv16_soft_regional_energy_centering.tex`.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

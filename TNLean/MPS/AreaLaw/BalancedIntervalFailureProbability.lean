@@ -25,6 +25,8 @@ bounds and measurability of the listed guarded events are explicit
 premises. They are not asserted here for a physical sampled operation.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal
 

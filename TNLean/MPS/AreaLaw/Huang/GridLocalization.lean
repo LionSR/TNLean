@@ -18,6 +18,8 @@ Source: Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang,
 arXiv:1406.6355v6, Section 5.4, Lemma 19.
 -/
 
+open ManyBody (ChainSupport card_interval_le interval mem_interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
 
@@ -146,7 +148,7 @@ theorem chainGridLRPrefactor_pos : 0 < chainGridLRPrefactor := by
 the original support, Hermiticity and norm bounds. No localization estimate is an input.
 Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang, Lemma 19. -/
 theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
-    (hq : 1 ≤ q) (hw : 0 < w)
+    (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
@@ -176,7 +178,7 @@ theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
       _ = chainGridLRPrefactor := by unfold C chainGridLRPrefactor; ring
   have hLR := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     nearestNeighborChainSupport (chainGridRetainedTerm hw h) (retained_hermitian hw h hHerm)
-    (retained_support hw h hs) 2 (chainGridRetained_site_budget hw h hnorm) hq S
+    (retained_support hw h hs) 2 (chainGridRetained_site_budget hw h hnorm) S
     (chainGridBoundaryTerm_supported hw h hs k) (r : ℝ) (Nat.cast_nonneg r) t
   rw [sum_chainGridRetainedTerm,
     chainNeighborhood_chainCutPair_eq (chainGridCut_bounds hw k).1 (chainGridCut_bounds hw k).2 r]
