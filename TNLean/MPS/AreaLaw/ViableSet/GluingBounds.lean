@@ -38,7 +38,8 @@ theorem leading_eigenvector_bounds_chain_with_objective_slack [NeZero q] {k : �
     (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
+    (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
+    (hgap : IsGapped (HL + K) E₀ Δ)
     (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -67,7 +68,7 @@ theorem leading_eigenvector_bounds_chain_with_objective_slack [NeZero q] {k : �
   classical
   obtain ⟨v, ν, hv, hvσ, hν, hvE, hvov⟩ :=
     exists_leading_eigenvector_chain_with_objective_slack
-      hHL hK hDA hΔ hΩ hgap hspan W hW x hwx hwE hσ htr hopt hτ h4
+      hHL hK hDA hΔ hH hΩ hgap hspan W hW x hwx hwE hσ htr hopt hτ h4
   obtain ⟨-, z, hz, huz⟩ :=
     hσ.eigenvalue_eq_and_exists_unit_smul_of_gt_half htr hv hu hvσ huσ hν hμ
   let J := (1 : Matrix (CutLeft L q k × CutSite L q k)
@@ -96,7 +97,8 @@ theorem leading_eigenvector_bounds_chain [NeZero q] {k : ℕ}
     (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
+    (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
+    (hgap : IsGapped (HL + K) E₀ Δ)
     (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (hW : Wᴴ * W = 1) (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -123,7 +125,7 @@ theorem leading_eigenvector_bounds_chain [NeZero q] {k : ℕ}
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘ gluingCut L q k)⟫_ℂ‖ := by
   simpa only [add_zero] using
     leading_eigenvector_bounds_chain_with_objective_slack
-      (L := L) (q := q) (k := k) (ξ := 0) hHL hK hDA hΔ hΩ hgap hspan W hW x hwx hwE hσ htr
+      (L := L) (q := q) (k := k) (ξ := 0) hHL hK hDA hΔ hH hΩ hgap hspan W hW x hwx hwE hσ htr
         (by simpa only [add_zero] using hopt) hτ (by simpa only [add_zero] using h4)
         u μ hu huσ hμ
 

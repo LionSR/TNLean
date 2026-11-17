@@ -62,7 +62,8 @@ theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 
     simpa only [K, Entropy.inner_localLift] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin h.operator (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
-    simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_le (toEuclideanLin K Ω)
+    simpa [hφ, horth] using
+      (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_le (toEuclideanLin K Ω)
   have hE : (⟪Ω, toEuclideanLin h.operator Ω⟫_ℂ).re = E₀ := by
     have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
       rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
@@ -172,7 +173,9 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
     simpa only [K, Entropy.inner_localLift] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
-    simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_le (toEuclideanLin K Ω)
+    simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one
+      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian hΩ
+      hspan).gap_le (toEuclideanLin K Ω)
   have hnonneg (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q)) :
       0 ≤ (⟪v, toEuclideanLin (h i) v⟫_ℂ).re := by
     simpa only [RCLike.re_to_complex] using

@@ -271,7 +271,8 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
   classical
   have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ
+    hspan
   set K' : ℝ := B
   have hK' : 1 ≤ K' := hB1
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
@@ -493,7 +494,8 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
   classical
   have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ
+    hspan
   set K' : ℝ := B
   have hK' : 1 ≤ K' := hB
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le

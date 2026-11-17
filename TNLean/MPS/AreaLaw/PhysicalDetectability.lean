@@ -7,6 +7,7 @@ import QICLean.Analysis.DetectabilityLemma
 import QICLean.Analysis.ComplementProdKernel
 import QICLean.Analysis.ComplementProdPartition
 import QICLean.Analysis.ProjectionGeometry
+import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Circuit.EntropySupport
 import TNLean.MPS.AreaLaw.Basic
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -441,7 +442,9 @@ theorem norm_sq_physicalDetectability_le_of_gappedGroundState
     ‖physicalDetectability h x‖ ^ 2 ≤ 4 / (4 + gamma) := by
   have hGamma : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (∑ i, h i) Gamma = 0 := by
-    simpa only [Complex.ofReal_zero, zero_smul] using (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Gamma))
+    have h0 := ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Gamma)
+    rw [Complex.ofReal_zero, zero_smul] at h0
+    exact h0
   have horth' : ⟪Gamma, physicalDetectability h x⟫_ℂ = 0 :=
     (inner_physicalDetectability_eq h hp hs hGamma x).trans horth
   have hH : (∑ i, h i).IsHermitian := Matrix.isHermitian_sum _ fun i _ ↦ (hp i).isSelfAdjoint

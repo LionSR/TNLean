@@ -322,7 +322,8 @@ theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
     {D : Finset (Fin L)} (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ μ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
+    (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
+    (hgap : IsGapped (HL + K) E₀ Δ)
     (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)

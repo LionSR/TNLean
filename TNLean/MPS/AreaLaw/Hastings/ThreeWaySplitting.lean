@@ -359,19 +359,14 @@ theorem ChainHamiltonian.isGapped_groundCentered_parts_sum
     (h : ChainHamiltonian L q R J) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
     (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (j m : ℕ) :
-    (‖Ω‖ = 1 ∧ IsGapped (groundCentered Ω (h.leftPart j m) +
+    ‖Ω‖ = 1 ∧ IsGapped (groundCentered Ω (h.leftPart j m) +
       groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 Δ ∧
-      groundSpace (groundCentered Ω (h.leftPart j m) +
-      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 = Submodule.span ℂ {Ω}) := by
-  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
-  have hE : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
+      groundSpace (groundCentered Ω (h.leftPart j m) + groundCentered Ω (h.bufferPart j m) +
+        groundCentered Ω (h.rightPart j m)) 0 = Submodule.span ℂ {Ω} := by
+  have hE : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   rw [h.groundCentered_parts_sum_of_eigen hΩ hE]
-  refine ⟨hΩ, ?_, ?_⟩
-  · rw [map_sub, map_smul, map_one]
-    simp [heig]
-  · simpa using hgap
+  exact ⟨hΩ, hgap.sub_smul_one_self, (ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan⟩
 
 /-- The left part is supported on the sites `i < j - m`, at distance at least `m` from the
 cut. Hastings, arXiv:0705.2024v4, `law16.tex`, line 776. -/
