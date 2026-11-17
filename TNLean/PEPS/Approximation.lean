@@ -222,7 +222,6 @@ import TNLean.PEPS.Approximation.SquareCellConditionalInformation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
-import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.Approximation.SquareInteractionSupport
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
