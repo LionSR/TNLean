@@ -13,10 +13,7 @@
             every label/.append style={description}},
 }
 
-% Quantum circuits are drawn with quantikz2, outside the tenkz language. Both
-% the print preamble and the standalone web picture units read this file, so a
-% quantikz body compiles the same way in each. Load the package when it is
-% available (the canonical entry point, present in every quantikz2 install) and
-% fall back to the TikZ library file otherwise, since recent TeX trees ship
-% quantikz2.sty without the tikzlibraryquantikz2.code.tex wrapper.
-\IfFileExists{quantikz2.sty}{\usepackage{quantikz2}}{\usetikzlibrary{quantikz2}}
+% Quantum circuits are drawn with quantikz (TikZ library quantikz2), outside
+% the tenkz language. Both the print preamble and the standalone web picture
+% units read this file, so a quantikz body compiles the same way in each.
+\usetikzlibrary{quantikz2}
