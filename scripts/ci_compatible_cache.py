@@ -129,7 +129,7 @@ def non_build_qic_path(path):
     """Reviewed data/test paths, never a blanket exception for non-library files."""
     return ((path.startswith("docs/") and path.endswith(".md"))
             or (path.startswith("blueprint/") and path.endswith((".md", ".tex")))
-            or path in {".github/workflows/pr-ci.yml", "blueprint/src/references.bib"}
+            or path in {"CLAUDE.md", ".github/workflows/pr-ci.yml", "blueprint/src/references.bib"}
             or re.fullmatch(r"QICLeanTest/[A-Za-z_][A-Za-z_0-9]*\.lean", path) is not None
             or re.fullmatch(r"docs/audits/[A-Za-z_0-9-]+_validation\.json", path) is not None
             or re.fullmatch(r"docs/provenance/openai-math\.d/[A-Za-z_0-9-]+\.json", path) is not None
@@ -166,6 +166,12 @@ def require_non_build_qic_scope(repo, old, new, trees):
             # these trees. Recognizable counterexamples require separate review.
             require(not re.search(r"\b(?:IO\.FS|IO\.Process|include_str|readFile|readBinFile)\b", source),
                     f"QIC source may read non-build inputs: {path}")
+            # Scan raw text: the comment stripper is not string-aware, so a
+            # string containing -- or /- must not hide this newly ignored input.
+            # Even a comment mention refuses reuse; dynamic IO remains outside
+            # this conservative screen's guarantees.
+            require("CLAUDE.md" not in source,
+                    f"QIC source references non-build paths: {path}")
             clean, error = strip_lean_comments(source)
             require(not error and not re.search(r"\b(?:docs|blueprint|QICLeanTest)\b|\.github", clean),
                     f"QIC source references non-build paths: {path}")
