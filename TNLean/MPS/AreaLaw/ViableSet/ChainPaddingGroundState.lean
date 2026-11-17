@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.ChainPaddingCoordinates
-import Mathlib.LinearAlgebra.Matrix.Vec
-import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.KroneckerSum
 
 /-!
 # The actual padded ground vector and its projector gap
 
-Appending the prescribed basis state leaves the ground energy unchanged and
-preserves the projector-gap lower bound capped at one. The ancillary operator
-is the actual sum of the appended on-site penalties.
+Appending the prescribed basis state leaves the ground energy unchanged and keeps the gap,
+capped at one. The ancillary operator is the actual sum of the appended on-site penalties, gapped
+at zero with gap one, so the padded operator is a Kronecker sum and
+`ManyBody.IsGapped.kronecker_add` and `ManyBody.groundSpace_kronecker_add_eq_span` apply.
 
 Source: product-ancilla accuracy reduction for LVV13, arXiv:1307.5143v1,
 final successive induction, lines 652--678. This is an auxiliary reduction;
@@ -40,8 +40,8 @@ theorem norm_paddedGroundVector {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
   rw [paddedGroundVector, norm_rightBasisExtension, LinearIsometryEquiv.norm_map]
 
 /-- The original ground vector, extended by the actual ancillary product state,
-is a ground vector of the actual padded interaction with projector gap at least
-the minimum of the original lower bound and one. -/
+spans the ground space of the actual padded interaction, which is gapped with gap the
+minimum of the original gap and one. -/
 theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
     (z : Fin q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     {E Delta : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hH : (∑ j, h j).IsHermitian)
@@ -53,42 +53,9 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
   classical
   let e := leftConfigOfFinEquiv (q := q) hi
   let H := ∑ j, h j
-  let u : Entropy.RegionConfig (fun _ : Fin N ↦ q) (leftBlock N L) → ℂ :=
-    (WithLp.ofLp Γ) ∘ e.symm
   let b0 : (v : {v : Fin N // v ∉ leftBlock N L}) → Fin q := fun _ ↦ z
-  let β : ((v : {v : Fin N // v ∉ leftBlock N L}) → Fin q) → ℂ :=
-    Pi.single b0 (1 : ℂ)
   let A := Matrix.reindex e e H
   let B := QuantumCircuit.productBasisPenalty b0
-  have hu : ∑ a, ‖u a‖ ^ 2 = 1 := by
-    rw [show (∑ a, ‖u a‖ ^ 2) = ‖Γ‖ ^ 2 from by
-      simpa only [u, Function.comp_apply, EuclideanSpace.norm_sq_eq] using
-        (Equiv.sum_comp e.symm (fun x ↦ ‖Γ x‖ ^ 2))]
-    rw [hΩ]
-    norm_num
-  have hβ : ∑ b, ‖β b‖ ^ 2 = 1 := by
-    rw [Finset.sum_eq_single b0]
-    · simp [β]
-    · intro b _ hb
-      simp [β, hb]
-    · simp
-  have hA : (A - (E : ℂ) • 1 - ((min Delta 1 : ℝ) : ℂ) •
-      (1 - vecMulVec u (star u))).PosSemidef := by
-    have hp := ((hgap.posSemidef_sub_smul_one hH hΩ hspan).gap_mono (by
-      simpa only [← EuclideanSpace.norm_sq_eq, hΩ] using (show (1 : ℝ) ^ 2 = 1 by norm_num))
-      (min_le_left Delta 1)).submatrix e.symm
-    convert hp using 1
-    ext a a'
-    simp [A, H, u, reindex_apply, submatrix_apply, one_apply,
-      e.symm.injective.eq_iff, vecMulVec_apply]
-  have hB : (B - (0 : ℂ) • 1 - ((min Delta 1 : ℝ) : ℂ) •
-      (1 - vecMulVec β (star β))).PosSemidef := by
-    have hp : (B - (0 : ℂ) • 1 - (1 : ℂ) •
-        (1 - vecMulVec β (star β))).PosSemidef := by
-      simpa only [zero_smul, sub_zero, one_smul] using
-        QuantumCircuit.productBasisPenalty_gap b0
-    exact hp.gap_mono hβ (min_le_right Delta 1)
-  have hgap := hA.tensorSum_gap hB hu hβ (le_min hDelta.le zero_le_one)
   let c := Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N L)
   have hpad : Entropy.cutOperator (leftBlock N L) (∑ j, paddedInteraction hi z h j) =
       A ⊗ₖ 1 + 1 ⊗ₖ B := by
@@ -99,53 +66,28 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
           QuantumCircuit.siteOp v.val (QuantumCircuit.siteBasisPenalty z)) = _
     rw [cutOperator_embedOp_prefix hi b0 H,
       cutOperator_appended_penalty z (fun _ ↦ z)]
-  have hΨ (a : Entropy.RegionConfig (fun _ : Fin N ↦ q) (leftBlock N L))
-      (b : (v : {v : Fin N // v ∉ leftBlock N L}) → Fin q) :
-      paddedGroundVector hi z Γ (c.symm (a, b)) = u a * β b := by
-    change (if (c (c.symm (a, b))).2 = b0 then u (c (c.symm (a, b))).1 else 0) = _
-    rw [c.apply_symm_apply]
-    by_cases hb : b = b0 <;> simp [β, hb]
-  have hAu : A *ᵥ u = (E : ℂ) • u := by
-    dsimp only [A, u]
-    rw [Matrix.reindex_mulVec]
-    rw [show H *ᵥ WithLp.ofLp Γ = (E : ℂ) • WithLp.ofLp Γ from
-      (ManyBody.mulVec_eq_of_groundSpace_eq_span hspan)]
-    rfl
-  have hBβ : B *ᵥ β = 0 := QuantumCircuit.productBasisPenalty_mulVec b0
-  have hv : (fun p ↦ u p.1 * β p.2) = Matrix.vec (vecMulVec β u) := by
-    funext p
-    exact mul_comm _ _
-  have heigen : (A ⊗ₖ 1 + 1 ⊗ₖ B) *ᵥ (fun p ↦ u p.1 * β p.2) =
-      (E : ℂ) • (fun p ↦ u p.1 * β p.2) := by
-    rw [hv, add_mulVec, Matrix.kronecker_mulVec_vec, Matrix.kronecker_mulVec_vec]
-    simp only [Matrix.transpose_one, Matrix.mul_one,
-      Matrix.vecMulVec_mul, Matrix.vecMul_transpose, Matrix.mul_vecMulVec, hAu, hBβ]
-    simp [Matrix.vecMulVec_smul, Matrix.vec_smul]
-  have hvec : (WithLp.ofLp (paddedGroundVector hi z Γ)) ∘ c.symm =
-      (fun p ↦ u p.1 * β p.2) := by
-    funext p
-    exact hΨ p.1 p.2
-  have heq : (∑ j, paddedInteraction hi z h j) *ᵥ
-      WithLp.ofLp (paddedGroundVector hi z Γ) =
-      (E : ℂ) • WithLp.ofLp (paddedGroundVector hi z Γ) := by
-    rw [← hpad, ← hvec] at heigen
-    rw [Matrix.reindex_mulVec] at heigen
-    funext σ
-    simpa only [c, Function.comp_apply, Pi.smul_apply, Equiv.symm_apply_apply] using
-      congrFun heigen (c σ)
-  have hback (σ : Fin N → Fin q) : u (c σ).1 * β (c σ).2 =
-      paddedGroundVector hi z Γ σ := by
-    simpa only [Prod.eta, c.symm_apply_apply] using (hΨ (c σ).1 (c σ).2).symm
-  rw [← hpad] at hgap
-  refine ((ManyBody.isGapped_and_groundSpace_eq_span_iff (lt_min hDelta one_pos) _).mp
-    ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, ?_, ?_⟩).2
-  · rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul]
-    exact heq
-  convert hgap.submatrix c using 1
-  ext σ τ
-  simp only [submatrix_apply, Matrix.sub_apply, Matrix.smul_apply, smul_eq_mul,
-    vecMulVec_apply, Pi.star_apply, hback, add_zero, one_apply,
-    c.injective.eq_iff, Entropy.cutOperator, reindex_apply]
-  simp only [c, Equiv.symm_apply_apply]
+  have hA : A.IsHermitian := hH.submatrix _
+  have hB : B.IsHermitian := QuantumCircuit.isHermitian_productBasisPenalty b0
+  have hgA : IsGapped A E Delta := (ManyBody.isGapped_reindex_iff e).mpr hgap
+  have hgB := QuantumCircuit.isGapped_productBasisPenalty b0
+  have hgK := hgA.kronecker_add hA hB hgB (Or.inl hDelta.le)
+  have hsK := ManyBody.groundSpace_kronecker_add_eq_span hA hB hgA hgB hDelta.le zero_le_one
+    (ManyBody.groundSpace_reindex_eq_span e hspan)
+    (QuantumCircuit.groundSpace_productBasisPenalty b0)
+  rw [add_zero, ← hpad] at hgK hsK
+  have hsP := ManyBody.groundSpace_reindex_eq_span c.symm hsK
+  rw [show Matrix.reindex c.symm c.symm (Entropy.cutOperator (leftBlock N L)
+      (∑ j, paddedInteraction hi z h j)) = ∑ j, paddedInteraction hi z h j by
+    ext σ τ
+    exact congrArg₂ (∑ j, paddedInteraction hi z h j) (c.symm_apply_apply σ)
+      (c.symm_apply_apply τ)] at hsP
+  refine ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, (ManyBody.isGapped_reindex_iff c).mp hgK,
+    hsP.trans ?_⟩
+  congr 2
+  ext σ
+  rw [show paddedGroundVector hi z Γ σ =
+    if (c σ).2 = b0 then Γ (e.symm (c σ).1) else 0 from rfl]
+  by_cases hb : (c σ).2 = b0 <;>
+    simp [LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft', hb, Pi.single_apply]
 
 end TNLean.MPS.AreaLaw

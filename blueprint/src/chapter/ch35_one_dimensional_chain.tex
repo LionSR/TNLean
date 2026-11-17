@@ -179,28 +179,16 @@ Theorem~B a second way, by a sequential preparation protocol.
     \leanok
     \uses{def:chain_model,def:chain_swapped_doubled_hamiltonian}
     In the setting of Definition~\ref{def:chain_swapped_doubled_hamiltonian},
-    let $E_0,\Delta$ be real with $\Delta>0$, and suppose the original
-    vector $\Omega$ satisfies
-    \begin{align}
-        \|\Omega\|     & =1,\notag                                          \\
-        H\Omega        & =E_0\Omega,\notag                                  \\
-        H-E_0\mathbb 1 & \ge\Delta(\mathbb 1-|\Omega\rangle\langle\Omega|).
-    \end{align}
+    let $E_0,\Delta$ be real with $\Delta>0$, and suppose that $\|\Omega\|=1$
+    and that $H$ is gapped at $E_0$ with gap $\Delta$, with ground space the
+    line through $\Omega$.
     Define the vectors in the paired physical coordinates by
     $\Psi(p(\sigma,\tau))=\Omega(\sigma)\Omega(\tau)$ and
-    $\Phi=F\Psi$. Then
-    \begin{align}
-        \|\Psi\|        & =\|\Phi\|=1,\notag                                   \\
-        \widehat H\Psi  & =2E_0\Psi,\notag                                     \\
-        \widehat H'\Phi & =2E_0\Phi,\notag                                     \\
-        \widehat H-2E_0\mathbb 1
-                        & \ge\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|),\notag \\
-        \widehat H'-2E_0\mathbb 1
-                        & \ge\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|).
-    \end{align}
-    In particular, these vectors give the ground lines of the two
-    Hamiltonians, with common ground energy $2E_0$ and gap at least
-    $\Delta$. This is the contiguous-chain assertion in the paragraph
+    $\Phi=F\Psi$. Then $\|\Psi\|=\|\Phi\|=1$, the Hamiltonian $\widehat H$ is
+    gapped at $2E_0$ with gap $\Delta$ and ground space the line through
+    $\Psi$, and $\widehat H'$ is gapped at $2E_0$ with gap $\Delta$ and ground
+    space the line through $\Phi$.
+    This is the contiguous-chain assertion in the paragraph
     ``Two-sided Gaussian filtering'' of~\cite{TNLean2026OneDimensional},
     before the filtering construction; the distinction from arbitrary
     finite induced domains is recorded
@@ -210,45 +198,18 @@ Theorem~B a second way, by a sequential preparation protocol.
     \leanok
     \uses{lem:chain_doubled_operator,def:chain_swapped_doubled_hamiltonian,
         thm:permutation_matrix_unitary,thm:mpu_reindex_unitary}
-    Put $P=|\Omega\rangle\langle\Omega|$, $Q=\mathbb 1-P$ and
-    $G=H-E_0\mathbb 1-\Delta Q\ge0$. Normalization gives $Q\ge0$.
-    Before pairing coordinates, the doubled defect is
-    \begin{align}
-        H\otimes\mathbb 1+\mathbb 1\otimes H-2E_0\mathbb 1
-        -\Delta(\mathbb 1-P\otimes P)
-         & =G\otimes\mathbb 1+\mathbb 1\otimes G+\Delta Q\otimes Q
-        \ge0.
-    \end{align}
-    The tensor-square vector satisfies
-    \begin{align}
-        (H\otimes\mathbb 1+\mathbb 1\otimes H)(\Omega\otimes\Omega)
-         & =2E_0\,\Omega\otimes\Omega,
-         &
-        \|\Omega\otimes\Omega\|
-         & =\|\Omega\|^2=1.
-    \end{align}
-    Pairing coordinates is unitary, so the same norm, eigen-equation and
-    positive defect hold for $\Psi$ and $\widehat H$.
+    The eigenvalues of $H\otimes\mathbb 1+\mathbb 1\otimes H$ are the sums
+    $\lambda+\mu$ of two eigenvalues of $H$. Such a sum equals $2E_0$ only
+    when $\lambda=\mu=E_0$, and is otherwise at least $2E_0+\Delta$; the
+    eigenspace at $2E_0$ is the tensor product of the two ground spaces, the
+    line through $\Omega\otimes\Omega$, and
+    $\|\Omega\otimes\Omega\|=\|\Omega\|^2=1$. Pairing coordinates is
+    unitary, so the same holds for $\widehat H$ and $\Psi$.
     The regional swap is a permutation matrix; after pairing it remains
-    unitary, $F^\dagger F=\mathbb 1$. Since $\widehat H'=F\widehat HF^\dagger$,
-    \begin{align}
-        \widehat H'\Phi
-         & =F\widehat HF^\dagger F\Psi=F\widehat H\Psi=2E_0\Phi,
-         &
-        \|\Phi\|
-         & =\|F\Psi\|=\|\Psi\|=1,
-    \end{align}
-    and
-    \begin{align}
-         & \widehat H'-2E_0\mathbb 1
-        -\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|)\notag \\
-         & \qquad=F\bigl(\widehat H-2E_0\mathbb 1
-        -\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|)\bigr)F^\dagger
-        \ge0.
-    \end{align}
-    Finally, a positive projector gap forces every vector at the ground
-    energy to lie in the span of the displayed unit vector, giving the
-    asserted ground lines.
+    unitary, $F^\dagger F=\mathbb 1$. Since $\widehat H'=F\widehat HF^\dagger$
+    is unitarily equivalent to $\widehat H$, it has the same spectrum, its
+    ground space is the image of that of $\widehat H$ under $F$, the line
+    through $\Phi=F\Psi$, and $\|\Phi\|=\|\Psi\|=1$.
 \end{proof}
 
 \begin{lemma}[Supports contained in a prescribed set]

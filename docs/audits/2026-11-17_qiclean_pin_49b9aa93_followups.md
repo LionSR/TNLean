@@ -107,12 +107,10 @@ After F12, move the general Lieb–Robinson statements (i) and (ii) to QICLean `
 
 F4 keeps three TNLean lemmas about QICLean's chain supports under their TNLean names and applies them explicitly instead of by dot notation: `TNLean.MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` (`MPS/AreaLaw/BoundaryCounting`), `TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one` (`MPS/AreaLaw/RangeOneCut`) and `TNLean.MPS.AreaLaw.ChainSupport.edist_le` (`MPS/AreaLaw/LiebRobinson`). They are chain geometry and move to QICLean `ManyBody/Sites/Lattice/Chain`; after that pin, delete the TNLean copies and restore dot notation.
 
-After F11, three Kronecker-sum sites still go through TNLean's positive-semidefinite
-gap lemmas (`Matrix.PosSemidef.tensorSum_gap`, `doubled_gap`) and convert once with
-`ManyBody.isGapped_and_groundSpace_eq_span_iff`: `Lattice/ProductGroundState`,
-`MPS/AreaLaw/ChainPaddingGroundState` and `MPS/AreaLaw/SwappedDoubledHamiltonian`. The second
-pin (QICLean `1af32a2`) brings `ManyBody.IsGapped.kronecker_add` and
-`ManyBody.groundSpace_kronecker_add_eq_span`, which state these directly; moving the three
-sites onto them is a follow-up.
+After F11, `MPS/AreaLaw/ChainPaddingGroundState` and `MPS/AreaLaw/SwappedDoubledHamiltonian`
+state their Kronecker sums with `ManyBody.IsGapped.kronecker_add` and
+`ManyBody.groundSpace_kronecker_add_eq_span` (QICLean `1af32a2`). `Lattice/ProductGroundState`
+proves the converse, that a gapped Kronecker sum with a one-dimensional ground space has gapped
+factors; QICLean has no statement of it, and the proof keeps the positive-semidefinite form.
 
 The information reset is proved once, as `TNLean.MPS.AreaLaw.information_reset_of_supported_localization` in `MPS/AreaLaw/InformationReset.lean`, over any finite site type, from a supported Gaussian localization at every natural radius and the separation of its support from the cores; the chain and domain resets are its corollaries. Two further resets repeat the same argument and become corollaries with F8, in their own areas: `TNLean.PEPS.Approximation.SquareHamiltonian.information_reset` (with `information_reset_of_resetThreshold_le`) and `TNLean.Lattice.LocalHamiltonian.information_reset` (with `information_reset_of_card_le` and `information_reset_of_rangeResetThreshold_le`).

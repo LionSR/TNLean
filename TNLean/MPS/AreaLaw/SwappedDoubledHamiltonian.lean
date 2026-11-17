@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.Lattice.RegionalSwapSupport
-import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.KroneckerSum
 
 /-!
 # The swapped doubled Hamiltonian on a chain
@@ -104,40 +104,28 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGapped
     groundSpace h.doubled.operator (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
     (‖Φ‖ = 1 ∧ IsGapped (h.swappedDoubled D).operator (2 * E₀) Δ ∧
       groundSpace (h.swappedDoubled D).operator (2 * E₀) = Submodule.span ℂ {Φ})
-  have heigen := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hH := h.operator_isHermitian
+  have hgK := hgap.kronecker_add hH hH hgap (Or.inl hΔ.le)
+  have hsK := ManyBody.groundSpace_kronecker_add_eq_span hH hH hgap hgap hΔ.le hΔ.le hspan hspan
+  rw [min_self] at hgK
+  have hgapD : IsGapped h.doubled.operator (2 * E₀) Δ := by
+    rw [h.doubled_operator, ManyBody.isGapped_reindex_iff, two_mul]
+    exact hgK
+  have hspanD : groundSpace h.doubled.operator (2 * E₀) = Submodule.span ℂ {Ψ} := by
+    rw [h.doubled_operator, two_mul]
+    exact ManyBody.groundSpace_reindex_eq_span e hsK
   have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
     rw [← EuclideanSpace.norm_sq_eq, hΩ]
     norm_num
-  have hgapΨ : (h.doubled.operator - ((2 * E₀ : ℝ) : ℂ) • 1 -
-      (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Ψ) (star (WithLp.ofLp Ψ)))).PosSemidef := by
-    have hg := (hgap.doubled_gap hΩsum hΔ.le).submatrix e.symm
-    rw [h.doubled_operator]
-    convert hg using 1
-    change _ = (Matrix.reindexAlgEquiv ℂ ℂ e)
-      (doubledHamiltonian h.operator - ((2 * E₀ : ℝ) : ℂ) • 1 -
-        (Δ : ℂ) • (1 - vecMulVec ψ₀ (star ψ₀)))
-    simp only [map_sub, map_smul, map_one]
-    rfl
   have hΨ : ‖Ψ‖ = 1 := by
     have hi := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e).norm_map
       (WithLp.toLp 2 ψ₀)
     change ‖Ψ‖ = ‖WithLp.toLp 2 ψ₀‖ at hi
     exact hi.trans (Matrix.norm_doubledVector hΩsum)
-  have heigenΨ : h.doubled.operator *ᵥ WithLp.ofLp Ψ =
-      ((2 * E₀ : ℝ) : ℂ) • WithLp.ofLp Ψ := by
-    rw [h.doubled_operator]
-    change Matrix.reindex e e (doubledHamiltonian h.operator) *ᵥ
-      (ψ₀ ∘ e.symm) = _
-    rw [Matrix.reindex_mulVec, Matrix.doubledHamiltonian_mulVec heigen]
-    rfl
   have hF : F ∈ Matrix.unitaryGroup _ ℂ :=
     Matrix.reindex_mem_unitaryGroup e (sheetSwapOp q D)
       (sheetSwap q D).permMatrix_mem_unitaryGroup
-  obtain ⟨-, hΨ', hgapD, hspanD⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ψ).mp
-    ⟨hΨ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
-      WithLp.ofLp_smul]; exact heigenΨ, hgapΨ⟩
-  refine ⟨⟨hΨ', hgapD, hspanD⟩, ?_⟩
+  refine ⟨⟨hΨ, hgapD, hspanD⟩, ?_⟩
   have hΦ : Matrix.toEuclideanLin F Ψ = Φ := rfl
   have hΦn : ‖Φ‖ = 1 := by
     change ‖WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)‖ = 1
