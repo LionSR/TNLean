@@ -123,8 +123,8 @@ theorem chainGridBoundaryTerm_supported (hw : 0 < w)
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridBoundaryTerm hw h k)
       (chainCutPair L (chainGridCut w k.val)) := by
   change _ ∈ ManyBody.supportedOperators _ _
-  have hneg := (neg_mem
-      ((hs (chainGridBoundaryEdge hw k))))
+  have hneg := neg_mem (show _ ∈ ManyBody.supportedOperators _ _ from
+    hs (chainGridBoundaryEdge hw k))
   rw [chainGrid_boundary_edge_eq_pair k (chainGridBoundaryEdge_val_succ hw k).symm] at hneg
   exact hneg
 
