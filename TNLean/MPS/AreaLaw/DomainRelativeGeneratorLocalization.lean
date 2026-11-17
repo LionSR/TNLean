@@ -34,8 +34,8 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
     let K' := (h.swappedDoubled D).operator
     let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
-    let B := Z.biUnion (fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x m)
-    let G := QuantumCircuit.heisenbergEvolution K' t (K' - K)
+    let B := Z.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
+    let G := ManyBody.heisenbergEvolution K' t (K' - K)
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
@@ -49,8 +49,8 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   let K' := g.operator
   let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
   let Z := C.biUnion (fun X ↦ X.1)
-  let B := Z.biUnion (fun x ↦ graphBall (domainGraph Λ) x m)
-  let G := heisenbergEvolution K' t (K' - K)
+  let B := Z.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
+  let G := ManyBody.heisenbergEvolution K' t (K' - K)
   let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
   let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
     (1 - Real.exp (-(1 / 2)))
@@ -63,9 +63,9 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   have hloc (S : Finset (Fin Λ.card))
       (A : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖heisenbergEvolution K' t A - siteExpectation (q * q)
-        (S.biUnion (fun x ↦ graphBall (domainGraph Λ) x m))
-        (heisenbergEvolution K' t A)‖ ≤
+      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q)
+        (S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m))
+        (ManyBody.heisenbergEvolution K' t A)‖ ≤
           a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - (m : ℝ) / 2) := by
     simpa only [Nat.floor_natCast, K', DomainHamiltonian.operator, a, v,
       Nat.cast_add, Nat.cast_one] using
@@ -75,15 +75,16 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   have hcommon (S : Finset (Fin Λ.card)) (hS : S ⊆ Z)
       (A : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖heisenbergEvolution K' t A - siteExpectation (q * q) B
-        (heisenbergEvolution K' t A)‖ ≤
+      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q) B
+        (ManyBody.heisenbergEvolution K' t A)‖ ≤
           2 * (a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - (m : ℝ) / 2)) := by
-    let N := S.biUnion (fun x ↦ graphBall (domainGraph Λ) x m)
+    let N := S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
     have hNB : N ⊆ B := Finset.biUnion_subset_biUnion_of_subset_left _ hS
     exact (norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators B
-      (heisenbergEvolution K' t A) (siteExpectation (q * q) N (heisenbergEvolution K' t A))
+      (ManyBody.heisenbergEvolution K' t A) (siteExpectation (q * q) N
+          (ManyBody.heisenbergEvolution K' t A))
       (supportedOperators_mono (Finset.coe_subset.mpr hNB)
-        (siteExpectation_mem_supportedOperators N (heisenbergEvolution K' t A)))).trans
+        (siteExpectation_mem_supportedOperators N (ManyBody.heisenbergEvolution K' t A)))).trans
           (mul_le_mul_of_nonneg_left (hloc S A hA) (by norm_num))
   let e := sitePairConfigurationEquiv (Fin Λ.card) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)

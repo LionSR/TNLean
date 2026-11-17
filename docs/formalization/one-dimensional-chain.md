@@ -119,11 +119,11 @@ estimates remain separate from this contiguous-chain proof.
 ## Analytic estimates for the physical protocol
 
 For the commutator estimate in Part II, Lemma `lem:LR`,
-`QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` proves
+`ManyBody.norm_heisenberg_commutator_le_graphDistance_finset` proves
 graph propagation from an arbitrary finite support S, with prefactor |S| and
 constants independent of its diameter, the number of sites and the local
 dimension. Its restricted-norm version is
-`QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset`.
+`ManyBody.heisenbergCommutatorNorm_le_graphDistance_finset`.
 For support diameter R, support cardinality bound v_R and per-site norm budget
 b₀, the explicit constants are C = 2 + 4|b₀| exp(2μR) and
 v = 2v_R|b₀| exp(2μR) + 1, for μ ≥ 0.
@@ -134,7 +134,7 @@ bounds the error of the normalized partial trace onto the union of the radius-�
 balls about S by C |S|² ‖A‖ K_g T_k exp(v|t| − ℓ/2), for natural ℓ. Here
 C and v are the preceding constants at μ = 1, and
 T_k = 2^k k! exp(1/2) / (1 − exp(−1/2)). The pure graph tail estimate is
-`QuantumCircuit.sum_exp_neg_edist_compl_graphBall_le`.
+`ManyBody.sum_exp_neg_edist_compl_graphBall_le`.
 Neither result requires a diameter bound or nonemptiness assumption on S.
 
 For the undoubled Hamiltonian on the contiguous chain,
@@ -194,7 +194,7 @@ With q ≥ 1, the extension
 `MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le`
 gives localization on every finite integer domain with the same C′ and v
 as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
-`S.biUnion (fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
+`S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
 The bound retains |S|², allows empty S, and requires neither a ground state
 nor a spectral gap. This completes the two propagation/localization
 estimates on finite domains. The additional theorems

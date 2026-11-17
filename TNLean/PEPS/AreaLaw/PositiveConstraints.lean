@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SiteExpectationOrder
-import TNLean.Circuit.LiebRobinson.GraphLocalization
+import TNLean.Circuit.SiteExpectationGraphLocalization
+import QICLean.ManyBody.Dynamics.ComponentLocality
 import QICLean.Analysis.SpectralFilter.FilterLocality
 
 /-!
@@ -98,13 +99,20 @@ theorem positiveConstraint_mem_supportedOperators_component [NeZero q] {p : ℕ}
   have hXi : (X i : Set ι) ⊆ C := fun z hz => hReach i (a i) (ha i) z hz
   set K : Finset ι := Finset.univ.filter fun x => G.Reachable (a i) x
   have hK : (K : Set ι) = C := by ext x; simp [K, C]
+  have hClosedK : ∀ k, X k ⊆ K ∨ Disjoint (X k) K := fun k => by
+    rw [← Finset.coe_subset, ← Finset.disjoint_coe, hK]
+    exact hClosed k
+  have hiK : h i ∈ ManyBody.supportedOperators (fun _ : ι ↦ Fin q) K :=
+    isSupportedOn_of_mem_supportedOperators
+      (supportedOperators_mono (by rw [hK]; exact hXi) (hSupport i))
+  let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) X :=
+    ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
   rw [← hK]
-  refine mem_supportedOperators_of_forall_commute K fun B hB => ?_
-  rw [hK] at hB
+  refine mem_supportedOperators_of_isSupportedOn <|
+    ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun B hB => ?_
   have hτ : ∀ t : ℝ, Commute (Matrix.hermitianUnitaryPath H t * h i *
       Matrix.hermitianUnitaryPath H (-t)) B := fun t =>
-    commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι)) hSupport C Cᶜ hClosed
-      disjoint_compl_right (supportedOperators_mono hXi (hSupport i)) hB t
+    ManyBody.commute_heisenbergEvolution_of_closed Φ K Kᶜ hClosedK disjoint_compl_right hiK hB t
   have hF := commute_filterIntegral_of_forall_commute hp hδ hH hτ
   have hM : Commute (centeredFilter p δ H Ω (h i)) B :=
     hF.sub_left ((Commute.one_left B).smul_left _)
@@ -181,9 +189,9 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
       cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall G (a i) l) (k i) ∧
-        siteExpectation q (graphBall G (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ∧
+        siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
       (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) := by
   set CL := localizationPrefactor R Kg kg
@@ -198,7 +206,7 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
   have hH : H.IsHermitian := by
     simp only [H, Matrix.IsHermitian, Matrix.conjTranspose_sum]
     exact Finset.sum_congr rfl fun j _ => hHerm j
-  set K := graphBall G (a i) l
+  set K := ManyBody.graphBall G (a i) l
   obtain ⟨hk0, hk1, -⟩ := hk i
   refine ⟨siteExpectation_nonneg K hk0, siteExpectation_le_one K hk1, ?_⟩
   set M := centeredFilter p (Δ / 2) H Ω (h i)
@@ -213,9 +221,10 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
           (Matrix.hermitianUnitaryPath H t * h i * Matrix.hermitianUnitaryPath H (-t))‖ ≤
       ‖h i‖ * min 2 (CL * Real.exp (v * |t| - 1 / 2 * (l : ℝ))) := by
     intro t
-    have hLR := norm_heisenberg_sub_siteExpectation_graphBall_le G X a ha h hHerm hSupport R
-      hDiam vR hCard b₀ hBudget Kg kg hGrowth i (hSupport i) l t
-    rw [heisenbergEvolution_eq_hermitianUnitaryPath] at hLR
+    let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) X :=
+      ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
+    have hLR := norm_heisenberg_sub_siteExpectation_graphBall_le G Φ a ha hHerm R
+      hDiam vR hCard b₀ hBudget Kg kg hGrowth i (Φ.mem i) l t
     refine hLR.trans (mul_le_mul_of_nonneg_left (min_le_min_left _ ?_) (norm_nonneg _))
     have hKg : Kg ≤ |Kg| := le_abs_self Kg
     have hpos : 0 < 1 - Real.exp (-(1 / 2) : ℝ) := by
@@ -264,9 +273,9 @@ theorem positiveQuasilocalConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R vR : 
       cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall G (a i) l) (k i) ∧
-        siteExpectation q (graphBall G (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ∧
+        siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           positiveConstraintLocalityConst p Δ J (localizationPrefactor R Kg kg) (1 / 2) *
             Real.exp (-(positiveConstraintLocalityRate p Δ (localizationVelocity R vR b₀) (1 / 2) *
               (l : ℝ) ^ kernelExponent p))) ∧
@@ -310,9 +319,9 @@ theorem exists_positiveQuasilocalConstraints {p : ℕ} (hp : 1 ≤ p) (R vR : �
         cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall G (a i) l) (k i) ∧
-          siteExpectation q (graphBall G (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ∧
+          siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
+          ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) := by
   obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le hp hΔ hJ

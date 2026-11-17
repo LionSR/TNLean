@@ -269,12 +269,12 @@ include ha hDiam in
 is disjoint from the sites within distance `l` of the first. -/
 theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
     (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
-    Disjoint (((X j).biUnion fun x => graphBall G x l : Finset ι) : Set ι) (X i) := by
+    Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i) := by
   rw [Set.disjoint_left]
   intro y hy hyi
   simp only [Finset.coe_biUnion, Finset.mem_coe, Set.mem_iUnion, exists_prop] at hy
   obtain ⟨x, hx, hxy⟩ := hy
-  have hxy' := mem_graphBall.mp hxy
+  have hxy' := ManyBody.mem_graphBall.mp hxy
   have h1 := hDiam j (a j) (ha j) x hx
   have h2 := hDiam i y (Finset.mem_coe.mp hyi) (a i) (ha i)
   have htri : G.edist (a j) (a i) ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) :=
@@ -302,7 +302,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (i j : κ) (l : ℕ)
-    (hY : Disjoint (((X j).biUnion fun x => graphBall G x l : Finset ι) : Set ι) (X i)) :
+    (hY : Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i)) :
     ‖groundCompression (∑ k, h k) E₀ (h j) * groundCompression (∑ k, h k) E₀ (h i) -
         groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖ ≤
       commutatorConst R vR b₀ Kg kg * ‖h j‖ * ‖h i‖ *

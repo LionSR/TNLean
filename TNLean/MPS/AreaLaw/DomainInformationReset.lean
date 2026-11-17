@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
-import TNLean.Circuit.LiebRobinson.SupportSeparation
+import QICLean.ManyBody.Dynamics.GraphBall
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.RegionalResetEntropy
 
@@ -177,12 +177,12 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   let crossing := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
   let Z := crossing.biUnion (fun X ↦ X.1)
   let N := fun A : Finset (Fin L) ↦
-    A.biUnion (fun x ↦ graphBall (domainGraph Λ) x ℓ)
+    A.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ℓ)
   let S := N (Q ∪ Z)
   obtain ⟨path, _, _, _, _, hpathIntegral⟩ :=
     hlocal q hq Λ h D ℓ
   let M := ∫ t : ℝ in Set.Icc (-(T₀ * B)) (T₀ * B),
-    siteExpectation (q * q) (N Q) (heisenbergEvolution K' t V) * path t ∂gaussianReal 0 η
+    siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t V) * path t ∂gaussianReal 0 η
   obtain ⟨hMs, _, hMerr⟩ := hpathIntegral Q V hVsupp η (T₀ * B) hT
   have hMclose : ‖M - M₀‖ ≤ ε := by
     calc
@@ -207,12 +207,12 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   have hrad : ((ℓ + R : ℕ) : ℝ) ≤ w := by
     simpa only [Nat.cast_add] using hsepRadius.le
   have hS : Disjoint S (R₀ ∪ C₀) := by
-    exact reset_graphNeighborhood_disjoint_cores (domainGraph Λ)
+    exact ManyBody.reset_graphNeighborhood_disjoint_cores (domainGraph Λ)
       (fun X : DomainSupport Λ R ↦ X.1) R ℓ
       (fun X x hx y hy ↦ X.2.2 x hx y hy) D C R₀ C₀ hDC
-      (fun x hx ↦ graphBall_subset_of_finite_distance_margin
+      (fun x hx ↦ ManyBody.graphBall_subset_of_finite_distance_margin
         (domainGraph Λ) D x w (ℓ + R) hrad (hRw x hx))
-      (fun x hx ↦ graphBall_subset_of_finite_distance_margin
+      (fun x hx ↦ ManyBody.graphBall_subset_of_finite_distance_margin
         (domainGraph Λ) C x w (ℓ + R) hrad (hCw x hx))
   have hent := TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary q hq hΩ
     D R₀ C₀ hR₀ (Finset.disjoint_of_subset_left hC₀ hDC.symm) S hS U hUu hUs

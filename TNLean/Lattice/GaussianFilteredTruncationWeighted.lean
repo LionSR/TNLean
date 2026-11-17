@@ -92,8 +92,8 @@ theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
     (b : ι) (Y : Finset ι) (hYrad : ∀ y ∈ Y, G.edist y b ≤ R)
     {B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hB : B ∈ supportedOperators d (Y : Set ι))
     {μ : ℝ} (hμ : 0 < μ) (t : ℝ) :
-    ‖B * heisenbergEvolution (∑ k, h k) t W -
-        heisenbergEvolution (∑ k, h k) t W * B‖ ≤
+    ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t W -
+        ManyBody.heisenbergEvolution (∑ k, h k) t W * B‖ ≤
       4 * ((S.card : ℝ) + 1) * Real.exp (μ * (2 * R + 1)) * ‖W‖ * ‖B‖ *
         Real.exp ((4 * vR * |b₀| * Real.exp (2 * μ * R)) * |t|) *
         (if G.edist z b = ⊤ then 0 else Real.exp (-(μ * ((G.edist z b).toNat : ℝ)))) := by
@@ -104,15 +104,15 @@ theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
     calc 2 ≤ 4 * ((S.card : ℝ) + 1) := by have := Nat.cast_nonneg (α := ℝ) S.card; linarith
       _ ≤ C := le_mul_of_one_le_right (by positivity) he
   have hH : (∑ k, h k).IsHermitian := Matrix.isHermitian_sum _ fun k _ ↦ hHerm k
-  have hnorm : ‖heisenbergEvolution (∑ k, h k) t W‖ = ‖W‖ :=
+  have hnorm : ‖ManyBody.heisenbergEvolution (∑ k, h k) t W‖ = ‖W‖ :=
     norm_intertwinerIntegrand hH hH W t
-  have htriv : ‖B * heisenbergEvolution (∑ k, h k) t W -
-      heisenbergEvolution (∑ k, h k) t W * B‖ ≤ 2 * ‖W‖ * ‖B‖ := by
+  have htriv : ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t W -
+      ManyBody.heisenbergEvolution (∑ k, h k) t W * B‖ ≤ 2 * ‖W‖ * ‖B‖ := by
     simpa only [hnorm] using norm_commutator_le B
-      (heisenbergEvolution (∑ k, h k) t W)
+      (ManyBody.heisenbergEvolution (∑ k, h k) t W)
   have hsep (l : ℕ) (hl : ((2 * R + l : ℕ) : ℕ∞) < G.edist z b) :
-      ‖B * heisenbergEvolution (∑ k, h k) t W -
-          heisenbergEvolution (∑ k, h k) t W * B‖ ≤
+      ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t W -
+          ManyBody.heisenbergEvolution (∑ k, h k) t W * B‖ ≤
         C * ‖W‖ * ‖B‖ * Real.exp (-(μ * l)) := by
     have hd (x : ι) (hx : x ∈ S) (y : ι) (hy : y ∈ Y) :
         (l : ℕ∞) ≤ G.edist x y := by
@@ -126,10 +126,13 @@ theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
           _ ≤ R + l + R := add_le_add (add_le_add (hSrad x hx) hxy) (hYrad y hy)
           _ = ((2 * R + l : ℕ) : ℕ∞) := by push_cast; ring
       exact (not_le_of_gt hl) hz
-    have hLR := norm_heisenberg_commutator_le_graphDistance_finsets_numeric G X a ha
-      h hHerm hSupport R hDiam vR hvR hCard b₀ hBudget S hW Y hB μ hμ.le l hd t
-    calc _ = ‖heisenbergEvolution (∑ k, h k) t W * B -
-          B * heisenbergEvolution (∑ k, h k) t W‖ := norm_sub_rev _ _
+    let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
+      ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
+    have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ a ha
+      hHerm R hDiam vR hvR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
+      (isSupportedOn_of_mem_supportedOperators hB) μ hμ.le l hd t
+    calc _ = ‖ManyBody.heisenbergEvolution (∑ k, h k) t W * B -
+          B * ManyBody.heisenbergEvolution (∑ k, h k) t W‖ := norm_sub_rev _ _
       _ ≤ 4 * (S.card : ℝ) * ‖W‖ * ‖B‖ *
           Real.exp (v * |t| - μ * l) := hLR
       _ = 4 * (S.card : ℝ) * Real.exp (v * |t|) * ‖W‖ * ‖B‖ *

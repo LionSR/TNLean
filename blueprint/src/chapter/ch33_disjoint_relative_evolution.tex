@@ -29,8 +29,8 @@ the chain partition or establish its Lieb--Robinson estimates.
 
 \begin{definition}[The projected propagators on disjoint regions]
     \label{def:qc_disjoint_projected_propagator}
-    \lean{QuantumCircuit.disjointProjectedPropagator,
-        QuantumCircuit.disjointProjectedPropagator_spec}
+    \lean{ManyBody.disjointProjectedPropagator,
+        ManyBody.disjointProjectedPropagator_spec}
     \leanok
     \uses{def:qc_projected_relative_evolution,
         thm:qc_disjoint_evolution_product_rule}
@@ -44,7 +44,7 @@ the chain partition or establish its Lieb--Robinson estimates.
 
 \begin{lemma}[Approximation by projected evolutions on disjoint regions]
     \label{thm:qc_disjoint_projected_propagator}
-    \lean{QuantumCircuit.exists_disjoint_projected_propagator_approximation}
+    \lean{ManyBody.exists_disjoint_projected_propagator_approximation}
     \leanok
     \uses{thm:qc_disjoint_evolution_product_rule,
         thm:qc_supported_projected_relative_evolution,

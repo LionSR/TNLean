@@ -15,7 +15,6 @@ import TNLean.Circuit.CleanUnitaryImplementation
 import TNLean.Circuit.CoherentEncoder
 import TNLean.Circuit.Composition
 import TNLean.Circuit.ConfigurationLayers
-import TNLean.Circuit.DisjointRelativeEvolution
 import TNLean.Circuit.EmbeddedProduct
 import TNLean.Circuit.EntropySupport
 import TNLean.Circuit.ExpectationBounds
@@ -24,7 +23,6 @@ import TNLean.Circuit.Gates
 import TNLean.Circuit.Geometry
 import TNLean.Circuit.ImageReflectionCircuit
 import TNLean.Circuit.InitializedRegisterProjection
-import TNLean.Circuit.LiebRobinson
 import TNLean.Circuit.LocalCircuit
 import TNLean.Circuit.Measurement
 import TNLean.Circuit.PairProduct
@@ -32,7 +30,6 @@ import TNLean.Circuit.PairProductPowers
 import TNLean.Circuit.ProductBasisPenalty
 import TNLean.Circuit.ProductStateCircuit
 import TNLean.Circuit.ProductVector
-import TNLean.Circuit.ProjectedRelativeEvolution
 import TNLean.Circuit.QuantitativeSitePermutation
 import TNLean.Circuit.QuantitativeUnitaryGates
 import TNLean.Circuit.RegionSplit
@@ -45,6 +42,7 @@ import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SiteEmbeddingNorm
 import TNLean.Circuit.SiteEmbeddingOrder
 import TNLean.Circuit.SiteExpectation
+import TNLean.Circuit.SiteExpectationGraphLocalization
 import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Circuit.SiteOperators
 import TNLean.Circuit.SiteOscillation
@@ -56,7 +54,6 @@ import TNLean.Circuit.SpectatorSiteExpectation
 import TNLean.Circuit.SupportProjection
 import TNLean.Circuit.SupportedComplementProduct
 import TNLean.Circuit.SupportedFunctionalCalculus
-import TNLean.Circuit.SupportedGaussianIntegral
 import TNLean.Circuit.SupportedGroundSpace
 import TNLean.Circuit.SupportedMatrixElements
 import TNLean.Circuit.SupportedNormalizedGroundSpace
