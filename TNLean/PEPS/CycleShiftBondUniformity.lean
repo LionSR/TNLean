@@ -142,7 +142,7 @@ theorem gaugeEquiv_cycleShift_of_isCycleShiftInvariantState
     (hA : A.IsInjective) (hTI : IsCycleShiftInvariantState A hn) :
     GaugeEquiv A (A.cycleShift hn) :=
   fundamentalTheorem_PEPS A (A.cycleShift hn) hA (hA.transport (cycleRotate hn).symm) hTI
-    ⟨SimpleGraph.cycleGraph_preconnected⟩
+    ⟨SimpleGraph.preconnected_cycleGraph⟩
 
 /-- Adjacent bonds of a cyclically invariant injective closed-chain MPS have
 the same dimension: if `Dᵢ` is the dimension of the bond from site `i` to

@@ -68,8 +68,8 @@ private def tailVertex (R : Finset V) (e : RE (Γ := Γ) R) : {v // v ∈ R} :=
   ⟨e.1.1.1,e.2.1⟩
 private def headVertex (R : Finset V) (e : RE (Γ := Γ) R) : {v // v ∈ R} :=
   ⟨e.1.1.2,e.2.2⟩
-private def tailLeg (e : RE (Γ := Γ) R) : IncidentEdge Γ e.1.1.1 := ⟨e.1,Or.inl rfl⟩
-private def headLeg (e : RE (Γ := Γ) R) : IncidentEdge Γ e.1.1.2 := ⟨e.1,Or.inr rfl⟩
+private def tailLeg {R : Finset V} (e : RE (Γ := Γ) R) : IncidentEdge Γ e.1.1.1 := ⟨e.1,Or.inl rfl⟩
+private def headLeg {R : Finset V} (e : RE (Γ := Γ) R) : IncidentEdge Γ e.1.1.2 := ⟨e.1,Or.inr rfl⟩
 omit [Fintype V] [DecidableRel Γ.Adj] in
 private theorem endpoints_ne (R : Finset V) (e : RE (Γ := Γ) R) :
     tailVertex R e ≠ headVertex R e :=

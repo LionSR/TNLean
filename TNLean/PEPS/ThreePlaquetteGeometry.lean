@@ -43,7 +43,7 @@ private instance stripTreeDecidableAdj : DecidableRel stripTree.Adj :=
   inferInstanceAs (DecidableRel (SimpleGraph.pathGraph 8).Adj)
 private theorem stripTree_isTree : stripTree.IsTree := by
   apply SimpleGraph.isTree_iff_connected_and_card.mpr
-  refine ⟨SimpleGraph.pathGraph_connected 7, ?_⟩
+  refine ⟨SimpleGraph.connected_pathGraph_add_one 7, ?_⟩
   rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
   decide
 private def stripX : Fin 8 → ℕ := ![0, 1, 2, 3, 3, 2, 1, 0]

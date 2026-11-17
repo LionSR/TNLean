@@ -61,7 +61,7 @@ theorem twoPlaquetteTree_le : twoPlaquetteTree ≤ twoPlaquetteGraph := le_sup_l
 /-- The five-edge spanning path is a tree. Source: SCP10, lines 2271–2305. -/
 theorem twoPlaquetteTree_isTree : twoPlaquetteTree.IsTree := by
   apply SimpleGraph.isTree_iff_connected_and_card.mpr
-  refine ⟨SimpleGraph.pathGraph_connected 5, ?_⟩
+  refine ⟨SimpleGraph.connected_pathGraph_add_one 5, ?_⟩
   rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
   decide
 

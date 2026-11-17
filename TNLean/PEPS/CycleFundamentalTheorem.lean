@@ -171,7 +171,7 @@ theorem fundamentalTheorem_normalMPS_cycle {n L d : ℕ}
   have : NeZero n := ⟨by omega⟩
   have hconn : (SimpleGraph.cycleGraph n).Connected := by
     obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
-    exact SimpleGraph.cycleGraph_connected
+    exact SimpleGraph.connected_cycleGraph_add_one
   exact fundamentalTheorem_normalPEPS A B (hA.pairHypotheses hB hL hn)
     (fun e g => isCrossingEdge_cycleEdge_iff A hL hn e g) hAB hd hconn
 
