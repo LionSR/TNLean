@@ -47,7 +47,7 @@ theorem tendsto_norm_residualWindow_joint_projection_comp_sub_zero
     (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i, ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     (Q : ι → ℕ → Matrix (Fin D) (Fin D) ℂ)
     (hQ : ∀ j r, IsOrthogonalProjection (Q j r))

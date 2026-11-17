@@ -18,9 +18,9 @@ tensor. No comparison with an interaction on the original unblocked chain is mad
 
 ## Main results
 
-* `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth` chooses a
+* `Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gap_eighth` chooses a
   physical block length and proves the explicit gap constant \(1/8\) for the blocked tensor.
-* `MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped` proves a
+* `Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gapped` proves a
   uniform positive gap for the same blocked range-two parent Hamiltonians.
 
 ## References
@@ -303,9 +303,9 @@ theorem blockTensor_threeSite_openChain_defect_norm_eq
     rw [U.symm.norm_toContinuousLinearMap] at h
     simpa using h
 
-private theorem IsPrimitiveMPS.exists_blockTensor_anticommutator
+private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_anticommutator
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ (N : ℕ) (_hN : 2 * 2 ≤ N) (i j : Fin N),
@@ -399,9 +399,9 @@ finite-overlap martingale reduction gives the displayed bound.
 
 The conclusion concerns only `blockTensor A p`; it makes no comparison with an
 original-site parent interaction. -/
-theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gap_eighth
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ (N : ℕ) (_hN : 4 ≤ N)
@@ -425,9 +425,9 @@ physical blocking whose range-two blocked parent Hamiltonian has a uniform posit
 
 The conclusion concerns only `blockTensor A p`; it makes no comparison with an
 original-site parent interaction. -/
-theorem IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gapped
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : Matrix.PosDef ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∃ γ > 0, ∀ (N : ℕ) (_hN : 4 ≤ N)

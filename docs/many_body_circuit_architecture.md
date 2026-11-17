@@ -597,8 +597,9 @@ Follow-on projects, each started after wave 2 with its own audit:
 - **F3** `QICLean/Analysis` (530 top-level modules) and the mutual imports of
   QICLean's directories.
 - **F4** One definition per notion, one glossary section at a time, starting
-  with primitivity (done except for the name `IsPrimitiveMPS`); then the layering inside `MPS` and between `MPS`, `PEPS`
-  and `QCA`.
+  with primitivity (done: `_root_.IsPrimitive`, `Kraus.IsNormal` and
+  `Kraus.HasComplementaryFixedPointGap`); then the layering inside `MPS` and
+  between `MPS`, `PEPS` and `QCA`.
 
 A directory with both a sweep in wave 4 and a restructuring in a follow-on gets
 them together, so its modules are rewritten once.

@@ -58,9 +58,9 @@ theorem fixedPointProj_physicalObservableTransfer_fixedPointProj
 /-- The powers of a normalized primitive transfer map converge in operator norm
  to its rank-one fixed-point projection. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and Section 6. -/
-theorem IsPrimitiveMPS.transferMap_pow_tendsto_fixedPointProj
+theorem _root_.Kraus.HasComplementaryFixedPointGap.transferMap_pow_tendsto_fixedPointProj
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin D) (Fin D) ℂ)
     Tendsto (fun n : ℕ => Φ ((Kraus.transferMap A) ^ n)) atTop
       (nhds (Φ (fixedPointProj ρ hP.trace_ne_zero))) := by
@@ -80,9 +80,9 @@ theorem IsPrimitiveMPS.transferMap_pow_tendsto_fixedPointProj
 /-- An observable insertion between two expanding primitive transfer intervals
 converges to its scalar local expectation times the limiting transfer projection.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem IsPrimitiveMPS.physicalObservableTransfer_sandwich_tendsto
+theorem _root_.Kraus.HasComplementaryFixedPointGap.physicalObservableTransfer_sandwich_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     let Φ := Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin D) (Fin D) ℂ)
@@ -208,13 +208,14 @@ private theorem transferReshuffleLinear_apply
   ext p q
   simp [Matrix.gramReshuffleMatrix]
 
+set_option linter.style.longLine false in
 /-- The virtual Gram compression of a fixed interior observable converges to
 its scalar expectation times the limiting boundary Gram operator. Both free
 intervals may expand along any common filter. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem IsPrimitiveMPS.groundSpaceMapES_bulkObservable_compression_tendsto
+theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_bulkObservable_compression_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n => (groundSpaceMapES A ((ℓ n + k) + r n)).adjoint.comp

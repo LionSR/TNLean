@@ -702,7 +702,7 @@ conventions.
 
 \begin{lemma}[Primitive-MPS remainder identity]
     \label{thm:primitive_fnw_remainder_power}
-    \lean{MPSTensor.IsPrimitiveMPS.fnwTransferMap_sub_fnwLimitMap_pow}
+    \lean{Kraus.HasComplementaryFixedPointGap.fnwTransferMap_sub_fnwLimitMap_pow}
     \leanok
     \uses{def:primitive_mps, def:fnw_limit_map}
     Let $A$ be a primitive MPS tensor of nonzero bond dimension with fixed-point
@@ -1012,7 +1012,7 @@ product.
 
 \begin{lemma}[FNW remainder eigenvalue gap]
     \label{thm:fnw_remainder_eigenvalue_gap}
-    \lean{MPSTensor.IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one}
+    \lean{Kraus.HasComplementaryFixedPointGap.fnwRemainder_eigenvalue_norm_lt_one}
     \leanok
     \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
     Let $A$ be a primitive MPS tensor of nonzero bond dimension with fixed-point
@@ -1091,7 +1091,7 @@ product.
 
 \begin{lemma}[Weighted FNW remainder spectral gap]
     \label{thm:fnw_weighted_remainder_spectral_radius_lt_one}
-    \lean{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainder_spectralRadius_lt_one}
+    \lean{Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainder_spectralRadius_lt_one}
     \leanok
     \uses{def:primitive_mps, def:fnw_weighted_remainder_data}
     Let $A$ be primitive with nonzero bond dimension and positive-definite
@@ -1145,7 +1145,7 @@ product.
 
 \begin{lemma}[Prescribed-rate bound for the FNW mixing quantity]
     \label{thm:fnw_mixing_quantity_geometric}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric}
     \leanok
     \uses{def:primitive_mps, def:fnw_mixing_quantity, def:fnw_weighted_remainder_data}
     Let $A$ be primitive with nonzero bond dimension and positive-definite
@@ -1633,7 +1633,7 @@ normalization used in
     \label{thm:fnw_lower_boundary_mono}
     \lean{MPSTensor.fnwLowerBoundaryConstant_le_succ}
     \lean{MPSTensor.fnwLowerBoundaryConstant_mono}
-    \lean{MPSTensor.IsPrimitiveMPS.fnwLowerBoundaryConstant_mono}
+    \lean{Kraus.HasComplementaryFixedPointGap.fnwLowerBoundaryConstant_mono}
     \leanok
     \uses{def:fnw_lower_boundary_constant, thm:fnw_boundary_norm_sq_succ,
         thm:fnw_lower_boundary_optimal, thm:rho_weighted_right_multiplication}
@@ -2276,7 +2276,7 @@ space.
 
 \begin{lemma}[Primitive FNW projector-defect estimate]
     \label{thm:primitive_fnw_projector_defect}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw}
     \leanok
     \uses{def:primitive_mps, def:l_blk_injective,
         thm:fnw_projector_defect_unfactored}
@@ -2362,7 +2362,7 @@ Lemma~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
 
 \begin{theorem}[Geometric FNW projector defect for a primitive tensor]
     \label{thm:primitive_fnw_projector_defect_geometric}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
     \leanok
     \uses{def:primitive_mps, def:l_blk_injective,
         thm:fnw_projector_defect_geometric}
@@ -2390,7 +2390,7 @@ Lemma~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
 \begin{lemma}[Open-chain form of the geometric FNW projector defect]
     \label{thm:primitive_fnw_openchain_defect_geometric}
     \lean{MPSTensor.openChain_groundProjection_defect_eq_wholeIncrement}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric}
     \leanok
     \uses{def:primitive_mps, def:l_blk_injective,
         def:open_chain_ground_subspaces_es, def:ground_space_es,
@@ -2592,7 +2592,7 @@ Lemma~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
 
 \begin{lemma}[Primitive-MPS geometric Gram convergence]
     \label{thm:primitive_ground_space_gram_geometric_fixed_point}
-    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
+    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric}
     \leanok
     \uses{def:primitive_mps, thm:ground_space_gram_geometric_fixed_point}
     Let $A$ be a primitive MPS tensor with fixed-point matrix $\rho$. Then there
@@ -2641,7 +2641,7 @@ Lemma~\ref{thm:fnw-eventual-projector-prescribed-prefactor}. See
 
 \begin{lemma}[Primitive-MPS ground-space Gram convergence]
     \label{thm:primitive_ground_space_gram_tendsto_fixed_point}
-    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
+    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj}
     \leanok
     \uses{def:primitive_mps, thm:ground_space_gram_tendsto_fixed_point}
     If $A$ is a primitive MPS tensor with fixed-point matrix $\rho$, then
@@ -2863,7 +2863,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
 \begin{lemma}[Pointwise geometric Gram inverse bounds]
     \label{thm:primitive_ground_space_gram_geometric_inverse_bounds}
-    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds}
+    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceGram_geometric_inverse_bounds}
     \leanok
     \uses{def:primitive_mps}
     Let $A$ be a primitive MPS tensor of nonzero bond dimension whose
@@ -2908,7 +2908,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
 \begin{lemma}[Pointwise geometric inverse-Gram bounds]
     \label{thm:primitive_ground_space_map_geometric_inverse_gram_bounds}
-    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
+    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_geometric_inverseGram_bounds}
     \leanok
     \uses{def:ground_space_map_es, def:inverse_gram, thm:primitive_ground_space_gram_geometric_inverse_bounds, thm:inverse_gram_identities}
     Under the hypotheses of
@@ -2963,7 +2963,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
 \begin{lemma}[Eventual inverse-Gram control in the limiting metric]
     \label{thm:primitive_ground_space_gram_eventual_inverse_bound}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceGram_isUnit_and_inverse_bound}
     \leanok
     \uses{def:primitive_mps, thm:primitive_ground_space_gram_tendsto_fixed_point}
     Let $A$ be a primitive MPS tensor whose fixed-point matrix $\rho$ is
@@ -2996,7 +2996,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
 \begin{lemma}[Convergence of finite-volume inverse Gram operators]
     \label{thm:primitive_ground_space_gram_inverse_tendsto}
-    \lean{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto}
+    \lean{Kraus.HasComplementaryFixedPointGap.groundSpaceGram_ringInverse_tendsto}
     \leanok
     \uses{def:primitive_mps, thm:primitive_ground_space_gram_tendsto_fixed_point}
     Under the same primitive-MPS and positive-definite fixed-point hypotheses,
@@ -3017,7 +3017,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
 \begin{lemma}[Eventual injectivity and inverse-Gram control]
     \label{thm:primitive_ground_space_map_eventual_inverse_gram_bound}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceMapES_injective_and_inverseGram_bound}
     \leanok
     \uses{def:ground_space_map_es, def:inverse_gram, thm:primitive_ground_space_gram_eventual_inverse_bound, thm:inverse_gram_identities}
     Under the same hypotheses, for every $0<a<1$ and all sufficiently large

@@ -239,7 +239,7 @@ Section~\ref{sec:app_wielandt_blocking_support}.
 \section{Primitive MPS tensors}
 
 \begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
-    \lean{MPSTensor.IsPrimitiveMPS}
+    \lean{Kraus.HasComplementaryFixedPointGap}
     \leanok
     \uses{def:mps_tensor, def:transfer_map}
     Assume $D>0$.
@@ -269,7 +269,7 @@ Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{fixedPointProj_smul}
     \lean{Matrix.trace_inv_trace_smul}
     \lean{Matrix.PosDef.inv_trace_smul}
-    \lean{MPSTensor.IsPrimitiveMPS.smul_inv_trace}
+    \lean{Kraus.HasComplementaryFixedPointGap.smul_inv_trace}
     \leanok
     \uses{def:primitive_mps}
     The fixed-point projection $P$ depends only on the ray through $\rho$: for
@@ -324,7 +324,7 @@ transfer-map gap. It is connected to normality through the following results.
 
 \begin{lemma}[Primitive tensors with positive-definite fixed point are irreducible]%
     \label{lem:primitive_implies_irreducible}
-    \lean{MPSTensor.isIrreducibleTensor_of_isPrimitiveMPS_of_posDef}
+    \lean{Kraus.HasComplementaryFixedPointGap.isIrreducibleFamily_of_posDef}
     \leanok
     \uses{def:primitive_mps, def:irreducible_tensor}
     As part of~\cite[Proposition~3]{Sanz2010Quantum} (see also
@@ -461,7 +461,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
 
 \begin{lemma}[An irreducible transfer map with peripheral spectrum $\{1\}$ gives a primitive tensor]%
     \label{thm:primitive_from_strongly_irred}
-    \lean{MPSTensor.exists_isPrimitiveMPS_posDef_of_isIrreducibleMap_of_isPrimitive}
+    \lean{MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive}
     \leanok
     \uses{def:transfer_map, def:primitive_mps}
     Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $\E_A$ is
@@ -508,7 +508,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
 
 \begin{lemma}[Primitive MPS with positive-definite fixed point is normal]%
     \label{thm:normal_from_primitive_posdef}
-    \lean{MPSTensor.isNormal_of_isPrimitiveMPS_with_posDef}
+    \lean{MPSTensor.isNormal_of_hasComplementaryFixedPointGap_with_posDef}
     \leanok
     \uses{def:primitive_mps, def:normal}
     If $A$ is a primitive MPS tensor with positive-definite fixed point~$\rho$,

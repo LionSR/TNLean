@@ -76,7 +76,8 @@ theorem IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners
     (hL : 0 < L) (B : MPSTensor (blockPhysDim d L) E)
     (C : MPSTensor (blockPhysDim d L) F)
     (V : Matrix (Fin D) (Fin E) ℂ) (W : Matrix (Fin D₂) (Fin F) ℂ)
-    {ρ : Matrix (Fin E) (Fin E) ℂ} (hB : IsPrimitiveMPS B ρ) (hρ : ρ.PosDef)
+    {ρ : Matrix (Fin E) (Fin E) ℂ} (hB : Kraus.HasComplementaryFixedPointGap B ρ)
+    (hρ : ρ.PosDef)
     (hV : Vᴴ * V = 1) (hW : Wᴴ * W = 1)
     (hInt : ∀ i, Vᴴ * blockTensor A L i = B i * Vᴴ)
     (hInt' : ∀ i, Wᴴ * blockTensor A' L i = C i * Wᴴ) :

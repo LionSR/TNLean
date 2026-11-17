@@ -11,7 +11,7 @@ import TNLean.MPS.Structure.PrimitiveFixedPoint
 # Primitivity consequences for MPS transfer maps
 
 This file states the low-level consequences of a complementary fixed-point gap
-`IsPrimitiveMPS A ρ` used in the Wielandt development.
+`Kraus.HasComplementaryFixedPointGap A ρ` used in the Wielandt development.
 
 It does **not** prove that such a gap implies `Kraus.IsNormal`. The currently
 formalized route from complementary transfer-map gap primitivity to normality
@@ -23,9 +23,9 @@ with an additional positive-definite fixed point hypothesis is assembled in
 ### From primitivity
 
 * `transferMap_pow_fixed`: if `E(ρ) = ρ`, then `E^n(ρ) = ρ`
-* `exists_nonzero_evalWord_of_isPrimitiveMPS`: for every `n`, some length-`n`
+* `exists_nonzero_evalWord_of_hasComplementaryFixedPointGap`: for every `n`, some length-`n`
   word product is nonzero
-* `transferMap_pow_ne_zero_of_isPrimitiveMPS`: every transfer-map iterate is nonzero
+* `transferMap_pow_ne_zero_of_hasComplementaryFixedPointGap`: every transfer-map iterate is nonzero
 
 ## References
 
@@ -34,7 +34,7 @@ with an additional positive-definite fixed point hypothesis is assembled in
 -/
 
 open scoped Matrix ComplexOrder BigOperators
-open Matrix Filter MPSTensor
+open Matrix Filter
 
 namespace MPSTensor
 
@@ -58,7 +58,7 @@ theorem transferMap_pow_fixed {A : MPSTensor d D}
 
 /-- **Every word length has a nonzero word product under primitivity.**
 
-Given `IsPrimitiveMPS A ρ` (transfer map has a complementary gap with PSD
+Given `Kraus.HasComplementaryFixedPointGap A ρ` (transfer map has a complementary gap with PSD
 fixed point `ρ`), for every `n : ℕ` there exists a word `σ : Fin n → Fin d`
 such that `Kraus.evalWord A (List.ofFn σ) ≠ 0`.
 
@@ -66,9 +66,9 @@ such that `Kraus.evalWord A (List.ofFn σ) ≠ 0`.
 the sum is nonzero, so at least one summand is nonzero, hence some `Kraus.evalWord A σ ≠ 0`.
 
 Paper: implicit in arXiv:0909.5347, Section III. -/
-theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
+theorem exists_nonzero_evalWord_of_hasComplementaryFixedPointGap [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (n : ℕ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (n : ℕ) :
     ∃ σ : Fin n → Fin d, Kraus.evalWord A (List.ofFn σ) ≠ 0 := by
   by_contra hall
   push Not at hall
@@ -86,9 +86,9 @@ theorem exists_nonzero_evalWord_of_isPrimitiveMPS [NeZero D]
 
 This follows immediately from the existence of nonzero word products,
 since `E^n(ρ) = ρ ≠ 0`. -/
-theorem transferMap_pow_ne_zero_of_isPrimitiveMPS [NeZero D]
+theorem transferMap_pow_ne_zero_of_hasComplementaryFixedPointGap [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (n : ℕ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (n : ℕ) :
     (Kraus.transferMap (d := d) (D := D) A) ^ n ≠ 0 := by
   intro h
   have : ((Kraus.transferMap (d := d) (D := D) A) ^ n) ρ = 0 := by

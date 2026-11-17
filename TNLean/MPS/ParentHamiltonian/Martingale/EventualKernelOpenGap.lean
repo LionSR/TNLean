@@ -42,7 +42,7 @@ theorem exists_openInteractionHamiltonianES_gap_of_eventual_kernel
     (μ : Fin b → ℂ) (A : (j : Fin b) → MPSTensor d (D j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) {R : ℕ} (hR : 0 < R)
     (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
@@ -55,10 +55,10 @@ theorem exists_openInteractionHamiltonianES_gap_of_eventual_kernel
         γ * ‖v‖ ≤ ‖openInteractionHamiltonianES h N v‖ := by
   obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hker
   obtain ⟨L₀, hL₀, hCanonicalKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hpBound, hp, δ, hδ, hCanonicalGap⟩ :=
-    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_isPrimitiveMPS
+    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap
       μ A hμ ρ hP hρ hDistinct (max R (max N₀ L₀))
   obtain ⟨κ, hκ, hLocal⟩ :=
     LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le
@@ -85,7 +85,7 @@ theorem exists_openInteractionMatrix_gap_of_eventual_kernel
     (μ : Fin b → ℂ) (A : (j : Fin b) → MPSTensor d (D j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) {R : ℕ} (hR : 0 < R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)

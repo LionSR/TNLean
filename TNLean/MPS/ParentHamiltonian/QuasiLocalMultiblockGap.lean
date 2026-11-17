@@ -44,7 +44,7 @@ lines 2649--2675; CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem exists_pos_multiblock_quasiLocalCommutator_gap_of_isParentInteraction
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
@@ -84,7 +84,7 @@ theorem exists_primitiveFamily_quasiLocalCommutator_gap_of_wordTupleSpanTop
       (Matrix.toEuclideanLin h)) :
     ∃ (B : ∀ i, MPSTensor d (D i))
       (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-      (hP : ∀ i, IsPrimitiveMPS (B i) (ρ i)),
+      (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (B i) (ρ i)),
       (∀ i, (ρ i).PosDef) ∧ (∀ i N, groundSpace (A i) N = groundSpace (B i) N) ∧
       (let ω := fun α => quasiLocalExpectation (B α) (hP α).norm (hP α).fixedPoint_psd
         (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero
@@ -96,7 +96,7 @@ theorem exists_primitiveFamily_quasiLocalCommutator_gap_of_wordTupleSpanTop
           (ω α (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
             ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X))).re) := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
-    exists_isPrimitiveMPS_family_of_wordTupleSpanTop A hS hSpan
+    exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   refine ⟨B, ρ, hP, hρ, hGS, ?_⟩
   apply exists_pos_multiblock_quasiLocalCommutator_gap_of_isParentInteraction
     μ B hμ ρ hP hρ hS hSpanB hR h

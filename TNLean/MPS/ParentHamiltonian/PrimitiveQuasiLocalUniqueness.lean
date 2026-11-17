@@ -136,13 +136,14 @@ theorem norm_quasiLocalState_interval_sub_scalar_le_projection_compression
     CStarMatrix.ofMatrixStarAlgEquiv (EquivLike.injective _)
       (p * X * p - c • p)
 
+set_option linter.style.longLine false in
 /-- Every normalized positive state supported in all finite-interval primitive
 MPS spaces has the prescribed insertion expectations on every local interval.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3 and the boundary
 convergence argument in Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.quasiLocalState_interval_eq_insertion_of_groundSpace_support
+theorem _root_.Kraus.HasComplementaryFixedPointGap.quasiLocalState_interval_eq_insertion_of_groundSpace_support
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
     (hSupport : ∀ (a : ℤ) (N : ℕ),
       φ (quasiLocalIntervalObservable d a N (groundSpaceProjectionMatrix A N)) = 1)
@@ -173,9 +174,9 @@ theorem IsPrimitiveMPS.quasiLocalState_interval_eq_insertion_of_groundSpace_supp
 supported in its finite-interval MPS spaces. The competing state need not be
 translation invariant. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Section 3, lines 1469--1490, and Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.eq_quasiLocalExpectation_of_groundSpace_support
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eq_quasiLocalExpectation_of_groundSpace_support
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
     (hSupport : ∀ (a : ℤ) (N : ℕ),
       φ (quasiLocalIntervalObservable d a N (groundSpaceProjectionMatrix A N)) = 1) :
