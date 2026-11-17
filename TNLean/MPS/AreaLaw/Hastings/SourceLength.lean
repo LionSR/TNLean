@@ -51,8 +51,8 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings_cone
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (hcone : hastingsLRVelocity R J * |t| ≤ d) :
-    ‖QuantumCircuit.heisenbergEvolution h.operator t A * B -
-      B * QuantumCircuit.heisenbergEvolution h.operator t A‖ ≤
+    ‖ManyBody.heisenbergEvolution h.operator t A * B -
+      B * ManyBody.heisenbergEvolution h.operator t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-((d : ℝ) / 80)) := by
   refine (h.norm_heisenberg_commutator_le_numeric X Y hA hB d hd t).trans ?_
   apply mul_le_mul_of_nonneg_left _ (by positivity)

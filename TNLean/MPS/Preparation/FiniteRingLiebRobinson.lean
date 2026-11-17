@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.LiebRobinson.CommutatorRecursion
-import TNLean.Circuit.LiebRobinson.Volterra
+import QICLean.Analysis.Volterra
+import QICLean.ManyBody.Dynamics.CommutatorRecursion
+import TNLean.Circuit.EntropySupport
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Preparation.CyclicOperatorSupport
 import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
@@ -317,14 +318,19 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
     (hB : B ∈ supportedOperators d Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) (t : ℝ) (ht : 0 ≤ t) :
-    heisenbergCommutatorNorm (∑ j, h j) B X t ≤
+    ManyBody.heisenbergCommutatorNorm (∑ j, h j) B X t ≤
       2 * ‖B‖ * X.card *
         Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
         (Real.exp ((8 * Real.exp a) * t) - 1) := by
   classical
   let ι := {Z : Finset (Fin N) // Z.Nonempty}
   let e (j : Fin N) : ι := ⟨{j, j + 1}, by simp⟩
-  let f (s : ℝ) (Z : ι) := heisenbergCommutatorNorm (∑ j, h j) B Z.val s
+  let Φ : ManyBody.Interaction (fun _ : Fin N ↦ Fin d) (fun j ↦ (e j).val) :=
+    ⟨h, fun j ↦ isSupportedOn_of_mem_supportedOperators (S := (e j).val)
+      (by simpa only [e, Finset.coe_pair, ringBond] using hSupport j)⟩
+  have hB' : B ∈ ManyBody.supportedOperators (fun _ : Fin N ↦ Fin d) Y :=
+    isSupportedOn_of_mem_supportedOperators hB
+  let f (s : ℝ) (Z : ι) := ManyBody.heisenbergCommutatorNorm (∑ j, h j) B Z.val s
   let w (Z : ι) := (Z.val.card : ℝ) *
     Real.exp (-a * ringSupportDistance (Z.val : Set (Fin N))
       (Y : Set (Fin N)) Z.property hY)
@@ -335,7 +341,7 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
   have hf : Continuous f := by
     apply continuous_pi
     intro Z
-    exact continuous_heisenbergCommutatorNorm (∑ j, h j) B Z.val
+    exact ManyBody.continuous_heisenbergCommutatorNorm (∑ j, h j) B Z.val
   have hCoeff : ∀ Z j, 0 ≤ coeff Z j := by
     intro Z j
     dsimp only [coeff]
@@ -349,7 +355,8 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
     intro Z
     by_cases hDis : Disjoint (Z.val : Set (Fin N)) (Y : Set (Fin N))
     · have hbZero : b Z = 0 :=
-        heisenbergCommutatorNorm_zero_of_disjoint (∑ j, h j) B Z.val Y hB hDis
+        ManyBody.heisenbergCommutatorNorm_zero_of_disjoint (∑ j, h j) B Z.val Y hB'
+          (Finset.disjoint_coe.mp hDis)
       rw [hbZero]
       exact mul_nonneg (mul_nonneg (by norm_num) (norm_nonneg _)) (hw Z).le
     · have hdZero : ringSupportDistance (Z.val : Set (Fin N))
@@ -360,7 +367,7 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
       have hCard : (1 : ℝ) ≤ Z.val.card := by
         exact_mod_cast Finset.card_pos.mpr Z.property
       calc
-        b Z ≤ 2 * ‖B‖ := heisenbergCommutatorNorm_zero_le (∑ j, h j) B Z.val
+        b Z ≤ 2 * ‖B‖ := ManyBody.heisenbergCommutatorNorm_zero_le (∑ j, h j) B Z.val
         _ ≤ (2 * ‖B‖) * w Z := by
           dsimp only [w]
           rw [hdZero]
@@ -377,19 +384,19 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
   have hBound : ∀ s ∈ Set.Icc 0 t, ∀ Z,
       f s Z ≤ b Z + ∑ j, coeff Z j * ∫ u in (0 : ℝ)..s, f u (e j) := by
     intro s hs Z
-    have hRec := heisenbergCommutatorNorm_le_integral h ringBond hHerm hSupport B Z.val s hs.1
+    have hRec := ManyBody.heisenbergCommutatorNorm_le_integral Φ hHerm B Z.val s hs.1
     have hEq : (∑ j, coeff Z j * ∫ u in (0 : ℝ)..s, f u (e j)) =
-        2 * ∑ j, if Disjoint (Z.val : Set (Fin N)) (ringBond j) then 0 else
+        2 * ∑ j, if Disjoint Z.val (e j).val then 0 else
           ‖h j‖ * ∫ u in (0 : ℝ)..s,
-            heisenbergCommutatorNorm (∑ j, h j) B (ringBond j) u := by
+            ManyBody.heisenbergCommutatorNorm (∑ j, h j) B (e j).val u := by
       rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro j _
-      have he : ((e j).val : Set (Fin N)) = ringBond j := by
+      have he : Disjoint (Z.val : Set (Fin N)) (ringBond j) ↔ Disjoint Z.val (e j).val := by
+        rw [← Finset.disjoint_coe]
         simp only [e, Finset.coe_pair, ringBond]
       dsimp only [coeff, f]
-      rw [he]
-      simp only [ite_mul, mul_ite, zero_mul, mul_zero, mul_assoc]
+      simp only [he, ite_mul, mul_ite, zero_mul, mul_zero, mul_assoc]
     rw [hEq]
     exact hRec
   have hCompare := finite_rectangular_volterra_zero_le_weight_mul_exp_sub_one f hf
@@ -397,7 +404,8 @@ private theorem ringCommutatorNorm_le_exp_of_disjoint
     (mul_nonneg (by norm_num) (norm_nonneg _))
     (mul_pos (by norm_num) (Real.exp_pos _)) hb hRow hNonneg hBound
   have hbX : b ⟨X, hX⟩ = 0 :=
-    heisenbergCommutatorNorm_zero_of_disjoint (∑ j, h j) B X Y hB hXY
+    ManyBody.heisenbergCommutatorNorm_zero_of_disjoint (∑ j, h j) B X Y hB'
+      (Finset.disjoint_coe.mp hXY)
   simpa only [f, w, mul_assoc] using hCompare t ⟨ht, le_rfl⟩ ⟨X, hX⟩ hbX
 
 end MPSPreparation
@@ -421,7 +429,7 @@ private theorem ringCommutatorNorm_le_exp_abs_of_disjoint
     (hB : B ∈ supportedOperators d Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) (t : ℝ) :
-    heisenbergCommutatorNorm (∑ j, h j) B X t ≤
+    ManyBody.heisenbergCommutatorNorm (∑ j, h j) B X t ≤
       2 * ‖B‖ * X.card *
         Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
         (Real.exp ((8 * Real.exp a) * |t|) - 1) := by
@@ -436,7 +444,7 @@ private theorem ringCommutatorNorm_le_exp_abs_of_disjoint
     have hNorm' : ∀ j, ‖-h j‖ ≤ 1 := fun j => (norm_neg _).trans_le (hNorm j)
     have hBound := ringCommutatorNorm_le_exp_of_disjoint (fun j => -h j)
       hHerm' hSupport' hNorm' B X Y hX hY hB hXY a ha (-t) ht'
-    rw [Finset.sum_neg_distrib, ← heisenbergCommutatorNorm_neg_time, neg_neg] at hBound
+    rw [Finset.sum_neg_distrib, ← ManyBody.heisenbergCommutatorNorm_neg_time, neg_neg] at hBound
     simpa only [abs_of_nonpos (le_of_not_ge ht)] using hBound
 
 /-- A local observable satisfies the same propagation estimate, with its
@@ -459,12 +467,12 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
       2 * ‖A‖ * ‖B‖ * X.card *
         Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
         (Real.exp ((8 * Real.exp a) * |t|) - 1) := by
-  have hMap := norm_heisenberg_commutator_le_heisenbergCommutatorNorm
-    (∑ j, h j) B X t hA
+  have hMap := ManyBody.norm_heisenberg_commutator_le_heisenbergCommutatorNorm
+    (∑ j, h j) B X t (isSupportedOn_of_mem_supportedOperators hA)
   have hBound := ringCommutatorNorm_le_exp_abs_of_disjoint h hHerm hSupport hNorm
     B X Y hX hY hB hXY a ha t
   calc
-    _ ≤ heisenbergCommutatorNorm (∑ j, h j) B X t * ‖A‖ := hMap
+    _ ≤ ManyBody.heisenbergCommutatorNorm (∑ j, h j) B X t * ‖A‖ := hMap
     _ ≤ (2 * ‖B‖ * X.card *
         Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
         (Real.exp ((8 * Real.exp a) * |t|) - 1)) * ‖A‖ :=

@@ -123,7 +123,7 @@ def swappedDoubled (h : LocalHamiltonian Λ q R J) (A : Finset (Site Λ)) :
     have hDn : ‖doubledHamiltonian (h.term X)‖ ≤ J + J :=
       (norm_add_le _ _).trans (add_le_add
         ((Matrix.l2_opNorm_kronecker_one_le _).trans (h.norm_le X))
-        ((Matrix.l2_opNorm_one_kronecker_rect_le _).trans (h.norm_le X)))
+        ((Matrix.l2_opNorm_one_kronecker_le _).trans (h.norm_le X)))
     simpa only [one_mul, mul_one, two_mul] using
       norm_mul_le_of_le
         (norm_mul_le_of_le hFn ((Matrix.l2_opNorm_reindex_equiv p _).le.trans hDn))
@@ -295,12 +295,12 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
             ((Complex.I • siteExpectation (q * q) B
-              (heisenbergEvolution K' t (K' - K))) * U t) t) ∧
+              (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ unitaryGroup (Configuration Λ (q * q)) ℂ) ∧
           (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Site Λ))) ∧
           ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
             let M := ∫ t : ℝ in Set.Icc (-T) T,
-              siteExpectation (q * q) B (heisenbergEvolution K' t V) * U t
+              siteExpectation (q * q) B (ManyBody.heisenbergEvolution K' t V) * U t
                 ∂gaussianReal 0 η
             M ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧
             ‖M‖ ≤ ‖W‖ ∧
@@ -327,7 +327,7 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
     rw [hK']; exact hDs
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans p) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_rect_le W)
+      (Matrix.l2_opNorm_one_kronecker_le W)
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
     PEPS.AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) R
       (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH K V hDK Q Z hV hD l

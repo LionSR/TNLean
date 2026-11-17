@@ -49,11 +49,12 @@ variable {Λ : Finset (ℤ × ℤ)}
 /-- **Ball count** (`eq:ball-count`, `01-preliminaries.tex`, lines 82–87): a graph ball of
 radius `d` in an induced domain has at most `1 + 2 d (d + 1) ≤ 2 (d + 1)²` sites. -/
 theorem card_graphBall_domainGraph_le (x : Site Λ) (d : ℕ) :
-    ((graphBall (domainGraph Λ) x d).card : ℝ) ≤ 2 * ((d : ℝ) + 1) ^ 2 := by
+    ((ManyBody.graphBall (domainGraph Λ) x d).card : ℝ) ≤ 2 * ((d : ℝ) + 1) ^ 2 := by
   have h := card_le_diamond_of_edist_le (G := domainGraph Λ) Subtype.val
-    (graphBall (domainGraph Λ) x d) Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) x d (fun y hy => mem_graphBall.mp hy)
-  have h' : ((graphBall (domainGraph Λ) x d).card : ℝ) ≤ 1 + 2 * d * (d + 1) := by
+    (ManyBody.graphBall (domainGraph Λ) x d) Subtype.val_injective
+    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) x d (fun y hy =>
+        ManyBody.mem_graphBall.mp hy)
+  have h' : ((ManyBody.graphBall (domainGraph Λ) x d).card : ℝ) ≤ 1 + 2 * d * (d + 1) := by
     exact_mod_cast h
   nlinarith
 
