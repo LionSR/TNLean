@@ -126,7 +126,7 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
       G Y hDiam hCard hSphere Φ.term hHerm Φ.mem b₀ hBudget Q
       (isSupportedOn_of_mem_supportedOperators hW) ℓ t
     have hc : (Q.card : ℝ) ≤ n := by
-      show (Q.card : ℝ) ≤ (Fintype.card ι : ℝ)
+      change (Q.card : ℝ) ≤ (Fintype.card ι : ℝ)
       exact_mod_cast Finset.card_le_univ Q
     calc
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * |t| - ℓ / 2) := hloc
@@ -147,7 +147,7 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
     (fun t ht ↦ by simpa only [mul_assoc] using hnear t ht) hgenT
   refine ⟨mem_supportedOperators_of_isSupportedOn hMsupport, hMnorm, hMerror.trans ?_⟩
   have hnsq : n ≤ n ^ 2 := by
-    show (Fintype.card ι : ℝ) ≤ (Fintype.card ι : ℝ) ^ 2
+    change (Fintype.card ι : ℝ) ≤ (Fintype.card ι : ℝ) ^ 2
     exact_mod_cast (show Fintype.card ι ≤ Fintype.card ι ^ 2 by
       simpa only [pow_two] using Nat.le_mul_self (Fintype.card ι))
   have hscaleT : a * n ^ 2 + d * n * T ≤ (a + d) * n ^ 2 * (1 + T) := by

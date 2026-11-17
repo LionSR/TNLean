@@ -122,7 +122,7 @@ theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
       chainNeighborhood S ρ = S.biUnion fun x ↦ chainNeighborhood {x} ρ := by
     ext y
     simp only [mem_chainNeighborhood, Finset.mem_biUnion, Finset.mem_singleton,
-      exists_prop, exists_eq_left]
+      exists_eq_left]
   intro T
   rw [hN]
   refine regionEntropy_biUnion_neighborhood_intervals_le hΩ hI _ (fun a z ↦ ?_) s a z
