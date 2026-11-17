@@ -52,6 +52,7 @@ import TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyEstimate
 import TNLean.MPS.AreaLaw.ALVV.SoftTerminalNodeEnergy
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
+import TNLean.MPS.AreaLaw.ALVV.SoftTruncationScaleFreeBond
 import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate
 import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
 import TNLean.MPS.AreaLaw.ALVV.SpectralProjector
