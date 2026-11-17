@@ -83,4 +83,4 @@ Prebuilt Mathlib was fetched with the pinned Lean 4.36.0-rc1 toolchain;
 no Mathlib source build was attempted. The standalone paper-gap note
 compiles to a three-page PDF using the local CTAN doublestroke package.
 The repeated endpoint-extension pattern is recorded in
-`docs/tactic_patterns/mixed_weak_hopf.md`.
+`docs/tactic_patterns.md` (candidate: “Extending mixed-path identities to the endpoints”).

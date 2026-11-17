@@ -38,7 +38,7 @@ from fusion data remains a separate hypothesis
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedWeakHopfParent}
     \uses{def:mpo_arbitrary_mixed_operator,thm:glm_wha_parent_average}
     On the active alphabet put $Q=\rho_2(1)$ and
-    $E(B)=\sum\rho_2(\Omega_{(1)})B\rho_2(S_\Omega(\Omega_{(2)}))$.
+    $E(B)=\sum\rho_2(\Omega_{(1)})B\rho_2(T_\Omega(\Omega_{(2)}))$.
     For the extended mixed interaction $h_\gamma$, put
     $\widehat h_\gamma=E(h_\gamma)+I-Q$.
     With $J$ the common physical inclusion and $J_2=J\otimes J$, put
@@ -69,7 +69,8 @@ from fusion data remains a separate hypothesis
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_wha_parent_average}
+    \uses{thm:glm_wha_parent_average,thm:mpo_mixed_action_boundary,
+        thm:mpo_mixed_interior,thm:mpo_mixed_support_continuity}
     Interior injectivity and compatibility give $E(P_\gamma)=P_\gamma$.
     Since $E(I)=Q$, subtraction gives the stated average identity.
     Finite sums of fixed matrix multiplications are continuous, so
@@ -88,7 +89,8 @@ from fusion data remains a separate hypothesis
         MPSTensor.MPOSymmetry.interactionHamiltonian_mixedWeakHopfCompletedInteraction_commute,
         MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedWeakHopfParent_commute,
         MPSTensor.MPOSymmetry.exists_uniform_arbitraryPhysicalMixedWeakHopfParent_gap}
-    \uses{lem:mpo_mixed_wha_completion,thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    \uses{lem:mpo_mixed_wha_completion,thm:mpo_arbitrary_parent_commutation_adjoint_closed,
+        thm:mpo_arbitrary_uniform_path_gap}
     Under the preceding hypotheses, both active and enlarged completed
     periodic Hamiltonians commute with their common periodic operators
     for all $N\ge2$. For the enlarged Hamiltonians there is
@@ -102,7 +104,8 @@ from fusion data remains a separate hypothesis
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:mpo_mixed_wha_completion,thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    \uses{lem:mpo_mixed_wha_completion,thm:mpo_arbitrary_parent_commutation_adjoint_closed,
+        thm:mpo_arbitrary_uniform_path_gap}
     The realization supplies adjoint boundaries on the active space.
     For $J_N=J^{\otimes N}$, physical inclusion gives
     \[
