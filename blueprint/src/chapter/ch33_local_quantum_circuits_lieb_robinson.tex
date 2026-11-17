@@ -304,11 +304,8 @@ with every tensor factor at its original site.
     \lean{ManyBody.regionExpectation_conjTranspose,
         ManyBody.isHermitian_regionExpectation,
         ManyBody.posSemidef_regionExpectation, ManyBody.regionExpectation_mono,
-        ManyBody.regionExpectation_one,
-        ManyBody.regionExpectation_of_mem_supportedOperators,
         ManyBody.mem_supportedOperators_iff_forall_commute,
         Commute.cfcAbs_of_isHermitian,
-        QuantumCircuit.cfc_mem_supportedOperators,
         QuantumCircuit.sqrt_mem_supportedOperators}
     \leanok
     \uses{lem:qc_site_expectation_average, lem:qc_site_expectation_properties}
@@ -320,6 +317,7 @@ with every tensor factor at its original site.
     acting on $K$.
 \end{lemma}
 \begin{proof}\leanok
+    \uses{thm:hastings05_window_support}
     By Lemmas~\ref{lem:qc_site_expectation_average}
     and~\ref{lem:qc_site_expectation_properties}, $E_K$ is the uniform average
     of conjugations by products of on-site Weyl operators on $K^c$ and takes
