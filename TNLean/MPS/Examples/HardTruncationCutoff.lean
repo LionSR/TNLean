@@ -183,7 +183,7 @@ theorem bondTerm_positive_contraction (K : ℕ) (i : Fin (K + 1)) :
   · exact diagonal_positive_contraction _ (boundary_bounds K)
   · exact diagonal_positive_contraction _ (internal_bounds K j)
 
-private theorem oneSite_mem {K : ℕ} (i : Fin (K + 2)) (S : Set (Fin (K + 2)))
+private theorem oneSite_mem {K : ℕ} (i : Fin (K + 2)) (S : Finset (Fin (K + 2)))
     (hi : i ∈ S) : oneSite K i ∈ QuantumCircuit.supportedOperators 2 S := by
   apply QuantumCircuit.supportedOperators_mono (Set.singleton_subset_iff.mpr hi)
   simpa only [oneSite, bit, Complex.ofReal_natCast] using

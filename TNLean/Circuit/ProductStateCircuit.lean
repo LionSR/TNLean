@@ -124,7 +124,7 @@ private theorem siteOp_mem_unitary {u : Fin N → Matrix (Fin d) (Fin d) ℂ}
     simp only [h2, finKronecker_one]
 
 private theorem siteOp_mem_supportedOperators (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
-    {P : Finset (Fin N)} {S : Set (Fin N)} (h : (P : Set (Fin N)) ⊆ S) :
+    {P : Finset (Fin N)} {S : Finset (Fin N)} (h : (P : Set (Fin N)) ⊆ S) :
     siteOp u P ∈ supportedOperators d S :=
   finKronecker_mem_supportedOperators fun _ hi => (ite_eq_right_iff.mpr fun hP => absurd (h hP) hi)
 

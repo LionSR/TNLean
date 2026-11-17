@@ -143,7 +143,7 @@ theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (j : Fin (L / w + 1)) :
     chainGridBlockHamiltonian hw h j ∈
-      supportedOperators q (chainGridBlock L w j.val : Set (Fin L)) := by
+      supportedOperators q (chainGridBlock L w j.val : Finset (Fin L)) := by
   classical
   apply Submodule.sum_mem
   intro i hi

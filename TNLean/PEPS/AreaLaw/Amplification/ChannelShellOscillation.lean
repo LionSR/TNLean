@@ -44,7 +44,7 @@ theorem siteOscillation_localRootChannel_le_of_notMem (K : Finset ι)
     siteOscillation q y (localRootChannel K k B) ≤ siteOscillation q y B := by
   apply siteOscillation_le
   intro U hU hunitary
-  have hUK : U ∈ supportedOperators q ((K : Set ι)ᶜ) := by
+  have hUK : U ∈ supportedOperators q Kᶜ := by
     apply supportedOperators_mono _ hU
     intro z hz
     have hzy : z = y := Set.mem_singleton_iff.mp hz

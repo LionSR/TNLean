@@ -550,7 +550,7 @@ theorem exists_clean_encoded_merging_preparation {d r q a A : ℕ}
           (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
             attenuationQuditRotation hd (mergingAttenuation r))) ∧
       Z ∈ supportedOperators d
-        (Set.range (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2)))) := by
+        (Finset.univ.image (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2)))) := by
   obtain ⟨T, hT, hTactive⟩ := exists_compatible_merging_preparation_circuit hd hr e he hP
   let sites : Fin (2 * q + 2) ↪ Fin (a + (2 * q + 2)) :=
     ⟨Fin.natAdd a, Fin.natAdd_injective _ _⟩

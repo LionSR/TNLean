@@ -39,22 +39,22 @@ other sites is required. Source context: arXiv:1703.09188, eq:appendix-1,
 lines 2300–2306; cyclic covariance is the closed virtual trace identity. -/
 theorem mpo_conjugation_singleton_propagation_of_one
     {d D N : ℕ} [NeZero N] (U : MPOTensor d D) (x₀ : Fin N) (r : ℕ)
-    (h₀ : ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀} : Set (Fin N)),
+    (h₀ : ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀} : Finset (Fin N)),
       mpo U N * A * (mpo U N)ᴴ ∈
         QuantumCircuit.supportedOperators d (QuantumCircuit.neighbourhood {x₀} r)) :
-    ∀ x : Fin N, ∀ A ∈ QuantumCircuit.supportedOperators d ({x} : Set (Fin N)),
+    ∀ x : Fin N, ∀ A ∈ QuantumCircuit.supportedOperators d ({x} : Finset (Fin N)),
       mpo U N * A * (mpo U N)ᴴ ∈
         QuantumCircuit.supportedOperators d (QuantumCircuit.neighbourhood {x} r) := by
   classical
-  have hbase : ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀ + 0} : Set (Fin N)),
+  have hbase : ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀ + 0} : Finset (Fin N)),
       mpo U N * A * (mpo U N)ᴴ ∈
         QuantumCircuit.supportedOperators d (QuantumCircuit.neighbourhood {x₀ + 0} r) := by
     simpa only [add_zero] using h₀
   have hstep (i : Fin N)
-      (hi : ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀ + i} : Set (Fin N)),
+      (hi : ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀ + i} : Finset (Fin N)),
         mpo U N * A * (mpo U N)ᴴ ∈
           QuantumCircuit.supportedOperators d (QuantumCircuit.neighbourhood {x₀ + i} r)) :
-      ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀ + (i + 1)} : Set (Fin N)),
+      ∀ A ∈ QuantumCircuit.supportedOperators d ({x₀ + (i + 1)} : Finset (Fin N)),
         mpo U N * A * (mpo U N)ᴴ ∈
           QuantumCircuit.supportedOperators d
             (QuantumCircuit.neighbourhood {x₀ + (i + 1)} r) := by
@@ -64,7 +64,7 @@ theorem mpo_conjugation_singleton_propagation_of_one
     have hpred : (finRotate N).symm (x₀ + (i + 1)) = x₀ + i := by
       apply (finRotate N).injective
       simp only [Equiv.apply_symm_apply, finRotate_apply, add_assoc]
-    have hA₀ : A₀ ∈ QuantumCircuit.supportedOperators d ({x₀ + i} : Set (Fin N)) := by
+    have hA₀ : A₀ ∈ QuantumCircuit.supportedOperators d ({x₀ + i} : Finset (Fin N)) := by
       have h := QuantumCircuit.supportedOperators_submatrix_siteEquiv (finRotate N).symm hA
       simpa only [Set.image_singleton, hpred] using h
     have hcancel : A₀.submatrix (rotateConfig N d) (rotateConfig N d) = A := by
@@ -92,7 +92,7 @@ theorem mpo_conjugation_mem_supportedOperators_singleton
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (x : Fin N) {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    (hA : A ∈ QuantumCircuit.supportedOperators d ({x} : Set (Fin N))) :
+    (hA : A ∈ QuantumCircuit.supportedOperators d ({x} : Finset (Fin N))) :
     mpo U N * A * (mpo U N)ᴴ ∈ QuantumCircuit.supportedOperators d
       (QuantumCircuit.neighbourhood {x} (4 * k)) := by
   classical
@@ -101,7 +101,7 @@ theorem mpo_conjugation_mem_supportedOperators_singleton
   apply mpo_conjugation_singleton_propagation_of_one U x₀ (4 * k) ?_ x A hA
   intro B hB
   have hCentral : B ∈ QuantumCircuit.supportedOperators d
-      {i : Fin (0 + (3 * (2 * k) + s)) | 0 + 2 * k ≤ i.val ∧ i.val < 0 + 2 * k + 2 * k} :=
+      (Finset.univ.filter fun (i : Fin (0 + (3 * (2 * k) + s))) ↦ 0 + 2 * k ≤ i.val ∧ i.val < 0 + 2 * k + 2 * k) :=
     QuantumCircuit.supportedOperators_mono (by
       intro i hi
       obtain rfl := Set.mem_singleton_iff.mp hi

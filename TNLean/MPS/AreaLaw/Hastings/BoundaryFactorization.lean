@@ -87,7 +87,7 @@ theorem ChainHamiltonian.exists_boundaryOperator_factorization (hq : 1 ≤ q)
     (hε₀ : ‖GaussianFilter.gaussianIntertwiner η (h.operator - (E₀ : ℂ) • 1) 0 1 * (OL * OR) -
       P‖ ≤ ε₀) :
     ∃ OB : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      OB ∈ supportedOperators q (chainNeighborhood Z ℓ' : Set (Fin L)) ∧ ‖OB‖ ≤ 1 ∧
+      OB ∈ supportedOperators q (chainNeighborhood Z ℓ' : Finset (Fin L)) ∧ ‖OB‖ ≤ 1 ∧
       ‖OB * OL * OR - P‖ ≤ ε₀ + √(η : ℝ) * θ +
         (√(η : ℝ) * (chainLRPrefactor R J * (Z.card : ℝ) ^ 2 *
             ‖h.operator - (E₀ : ℂ) • 1 - H₀‖ * Real.exp (-(ℓ' / 4))) +

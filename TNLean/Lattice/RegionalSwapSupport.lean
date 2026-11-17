@@ -53,7 +53,7 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
     {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ) (R : Finset ι) :
     Matrix.reindex (sitePairConfigurationEquiv ι q q)
         (sitePairConfigurationEquiv ι q q) (sheetSwapOp q R) ∈
-      supportedOperators (q * q) (R : Set ι) := by
+      supportedOperators (q * q) R := by
   classical
   rw [Matrix.reindex_apply, sheetSwapOp, Matrix.toMatrix_toPEquiv_submatrix]
   apply IsLocalPerm.permMatrix_mem_supportedOperators
@@ -74,7 +74,7 @@ is unchanged by conjugation with the actual sheet swap.
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 513–524. -/
 theorem sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
-    {R : Finset ι} {S : Set ι} {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    {R : Finset ι} {S : Finset ι} {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ supportedOperators q S)
     (hS : S ⊆ (R : Set ι) ∨ Disjoint S (R : Set ι)) :
     sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ =
@@ -105,8 +105,8 @@ Source: polynomial-PEPS manuscript, `05-frames.tex`, lines 516–520, and
 theorem sheetSwapOp_conj_kronecker_eq_inter
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (D S : Finset ι) {A B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q (S : Set ι))
-    (hB : B ∈ supportedOperators q (S : Set ι)) :
+    (hA : A ∈ supportedOperators q S)
+    (hB : B ∈ supportedOperators q S) :
     sheetSwapOp q D * (A ⊗ₖ B) * (sheetSwapOp q D)ᴴ =
       (sheetSwapOp q (D ∩ S))ᴴ * (A ⊗ₖ B) * sheetSwapOp q (D ∩ S) := by
   classical
@@ -139,7 +139,7 @@ Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 51
 theorem sheetSwapOp_conj_doubledHamiltonian_eq_inter
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (R S : Finset ι) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q (S : Set ι)) :
+    (hA : A ∈ supportedOperators q S) :
     sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ =
       (sheetSwapOp q (R ∩ S))ᴴ * doubledHamiltonian A * sheetSwapOp q (R ∩ S) := by
   simpa only [doubledHamiltonian, Matrix.mul_add, Matrix.add_mul] using
@@ -155,23 +155,23 @@ Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 51
 theorem reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (D S : Finset ι) {A B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q (S : Set ι))
-    (hB : B ∈ supportedOperators q (S : Set ι)) :
+    (hA : A ∈ supportedOperators q S)
+    (hB : B ∈ supportedOperators q S) :
     let p := sitePairConfigurationEquiv ι q q
     let F := Matrix.reindex p p (sheetSwapOp q D)
     F * Matrix.reindex p p (A ⊗ₖ B) * Fᴴ ∈
-      supportedOperators (q * q) (S : Set ι) := by
+      supportedOperators (q * q) S := by
   classical
   have hF :
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
-        (sheetSwapOp q (D ∩ S)) ∈ supportedOperators (q * q) (S : Set ι) :=
+        (sheetSwapOp q (D ∩ S)) ∈ supportedOperators (q * q) S :=
     supportedOperators_mono
       (show (↑(D ∩ S) : Set ι) ⊆ (S : Set ι) from
         Finset.coe_subset.mpr Finset.inter_subset_right)
       (reindex_sheetSwapOp_mem_supportedOperators q (D ∩ S))
   have hT :
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
-        (A ⊗ₖ B) ∈ supportedOperators (q * q) (S : Set ι) := by
+        (A ⊗ₖ B) ∈ supportedOperators (q * q) S := by
     simpa only [Set.union_self] using reindex_kronecker_mem_supportedOperators hA hB
   dsimp only
   simpa only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_submatrix,
@@ -188,14 +188,14 @@ Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 51
 theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (R S : Finset ι) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q (S : Set ι)) :
+    (hA : A ∈ supportedOperators q S) :
     let p := sitePairConfigurationEquiv ι q q
     let F := Matrix.reindex p p (sheetSwapOp q R)
     F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ ∈
-      supportedOperators (q * q) (S : Set ι) := by
+      supportedOperators (q * q) S := by
   simpa only [doubledHamiltonian, Matrix.reindex_apply, Matrix.submatrix_add,
     Pi.add_apply, Matrix.mul_add, Matrix.add_mul] using
-    (supportedOperators (q * q) (S : Set ι)).add_mem
+    (supportedOperators (q * q) S).add_mem
       (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators R S hA
         (one_mem_supportedOperators _))
       (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators R S

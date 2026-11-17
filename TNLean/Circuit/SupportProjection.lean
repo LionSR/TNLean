@@ -24,12 +24,12 @@ variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 operator. ALVV, arXiv:1602.08828v2, Section 6.1, lines 1457–1460. -/
 theorem supportProj_mem_supportedOperators (K : Finset ι)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A.IsHermitian)
-    (hK : A ∈ supportedOperators q (K : Set ι)) :
-    hA.supportProj ∈ supportedOperators q (K : Set ι) := by
+    (hK : A ∈ supportedOperators q K) :
+    hA.supportProj ∈ supportedOperators q K := by
   rw [hA.supportProj_eq_cfc]
   refine mem_supportedOperators_of_isSupportedOn <|
     ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun Y hY ↦ ?_
-  have hY' : Y ∈ supportedOperators q ((K : Set ι)ᶜ) := by
+  have hY' : Y ∈ supportedOperators q Kᶜ := by
     simpa only [Finset.coe_compl] using mem_supportedOperators_of_isSupportedOn hY
   exact (commute_of_mem_supportedOperators disjoint_compl_right hK hY').cfc_real _
 

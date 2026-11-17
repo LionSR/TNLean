@@ -380,7 +380,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
     restoringTransport_restoringColumnGlobal_eq_sum Ω X Y hXY E p blank blank Q Tq
   have hBsum : Bp = ∑ i ∈ E ×ˢ Finset.univ, PB i ⊗ₖ AB i := hBsum
   have hBblocks : ∀ x y : RegionalConfiguration q X × RegionalConfiguration q X,
-      (Matrix.of fun σ τ => Bp (σ, x) (τ, y)) ∈ supportedOperators q (S₀ : Set (Site Λ)) := by
+      (Matrix.of fun σ τ => Bp (σ, x) (τ, y)) ∈ supportedOperators q S₀ := by
     intro x y
     rw [hBsum, ← hXYS]
     exact block_mem_supportedOperators_of_eq_sum _ hPB AB x y
@@ -469,7 +469,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle
   have hLt : ∀ u, ‖Lt u‖ ≤ 1 ∧ Lt u ∈ supportedOperators q
-      (graphNeighborhood Λ (2 * r) S₀ : Set (Site Λ)) := hLt
+      (graphNeighborhood Λ (2 * r) S₀ : Finset (Site Λ)) := hLt
   -- Markov's inequality and a union bound: a good realization.
   have hrα : 0 ≤ (r : ℝ) ^ α := Real.rpow_nonneg (Nat.cast_nonneg r) α
   have hS0 : (0 : ℝ) ≤ S₀.card := Nat.cast_nonneg _
@@ -529,8 +529,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hkle : ∀ i, k i ≤ 1 := fun i => (hk i).2.1
   have hkΩ : ∀ i, k i *ᵥ WithLp.ofLp Ω = 0 := fun i => (hk i).2.2
   have hR₀supp : Rp.submatrix sp sp ∈ supportedOperators q
-      ((N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) :
-        Set (AncillaSites Λ X)) := by
+      (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
     rw [hRsum]
     exact supportedOperators_mono (Finset.coe_subset.mpr
       (Finset.disjSum_mono (hXYS ▸ hS₀N) le_rfl))

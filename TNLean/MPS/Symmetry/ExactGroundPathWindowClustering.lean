@@ -95,7 +95,7 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
   have hF' : F'.Nonempty := by
     refine ⟨⟨L + t, by dsimp only [N]; omega⟩, ?_⟩
     simp [F', windowFinset, hL]
-  have hSep : IsSeparatedBy (F : Set (Fin N)) (F' : Set (Fin N)) t := by
+  have hSep : IsSeparatedBy F F' t := by
     rw [show (F : Set (Fin N)) = window N 0 L from coe_windowFinset N 0 L,
       show (F' : Set (Fin N)) = window N (L + t) L from coe_windowFinset N (L + t) L]
     exact isSeparatedBy_window (by omega) (by dsimp only [N]; omega)
@@ -108,11 +108,11 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
     simp only [F, F', windowFinset, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and] at hk hk'
     omega
-  have hX : chainWindowOperator N 0 X ∈ supportedOperators d (F : Set (Fin N)) := by
+  have hX : chainWindowOperator N 0 X ∈ supportedOperators d F := by
     rw [show (F : Set (Fin N)) = window N 0 L from coe_windowFinset N 0 L]
     exact chainWindowOperator_mem_supportedOperators_window (by omega)
       (by dsimp only [N]; omega) X
-  have hY : chainWindowOperator N (L + t) Y ∈ supportedOperators d (F' : Set (Fin N)) := by
+  have hY : chainWindowOperator N (L + t) Y ∈ supportedOperators d F' := by
     rw [show (F' : Set (Fin N)) = window N (L + t) L from coe_windowFinset N (L + t) L]
     exact chainWindowOperator_mem_supportedOperators_window (by dsimp only [N]; omega)
       (by dsimp only [N]; omega) Y

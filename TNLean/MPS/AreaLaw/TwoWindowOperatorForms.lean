@@ -35,15 +35,15 @@ theorem exists_threeSplit_two_window_factors
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
-      (interval L (a + r.val) (a + r.val + 2) : Set (Fin L)))
+      (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L)))
     (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
-      (interval L (b + r.val) (b + r.val + 2) : Set (Fin L)))
+      (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L)))
     (hL : F (Sum.inr 0) ∈ supportedOperators q
-      (interval L 0 (a + 1) : Set (Fin L)))
+      (interval L 0 (a + 1) : Finset (Fin L)))
     (hM : F (Sum.inr 1) ∈ supportedOperators q
-      (interval L (a + 2 * ℓ) (b + 1) : Set (Fin L)))
+      (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)))
     (hR : F (Sum.inr 2) ∈ supportedOperators q
-      (interval L (b + 2 * ℓ) L : Set (Fin L)))
+      (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1)
     (p s : Fin (2 * ℓ)) :
     let T := interval L 0 ((a + p.val) + 1)
@@ -94,8 +94,8 @@ theorem exists_threeSplit_two_window_factors
   have hVRrank : operatorSchmidtRank VR ≤ q ^ 2 := by
     simpa only [E, hvE, Finset.card_singleton, Nat.mul_one] using hrVR
   have hregional : ∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
-      F r ∈ supportedOperators q (T : Set (Fin L)) ∨
-        F r ∈ supportedOperators q (E : Set (Fin L)) ∨
+      F r ∈ supportedOperators q T ∨
+        F r ∈ supportedOperators q E ∨
         F r ∈ supportedOperators q ((T ∪ E)ᶜ : Finset (Fin L)) := by
     intro r hru hrv
     have hp := p.isLt
@@ -104,9 +104,9 @@ theorem exists_threeSplit_two_window_factors
         (htu : t ≠ a + p.val) (htv : t ≠ b + s.val)
         {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
         (hA : A ∈ supportedOperators q
-          (interval L t (t + 2) : Set (Fin L))) :
-        A ∈ supportedOperators q (T : Set (Fin L)) ∨
-          A ∈ supportedOperators q (E : Set (Fin L)) ∨
+          (interval L t (t + 2) : Finset (Fin L))) :
+        A ∈ supportedOperators q T ∨
+          A ∈ supportedOperators q E ∨
           A ∈ supportedOperators q ((T ∪ E)ᶜ : Finset (Fin L)) := by
       rcases hord t ht htu htv with hT | hE | hU
       · exact Or.inl (supportedOperators_mono (Finset.coe_subset.mpr hT) hA)

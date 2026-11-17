@@ -107,7 +107,7 @@ variable {α β ι : Type*} [Fintype α] [DecidableEq β] [Fintype ι] {d : ℕ}
 
 /-- A coarse edge has the support shared by the terms assigned to it. -/
 theorem edgePartition_mem_supportedOperators (f : α → β)
-    (a : α → Matrix (ι → Fin d) (ι → Fin d) ℂ) (j : β) (S : Set ι)
+    (a : α → Matrix (ι → Fin d) (ι → Fin d) ℂ) (j : β) (S : Finset ι)
     (ha : ∀ i, f i = j → a i ∈ supportedOperators d S) :
     edgePartition f a j ∈ supportedOperators d S := by
   apply Submodule.sum_mem

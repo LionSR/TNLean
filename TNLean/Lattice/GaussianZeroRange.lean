@@ -72,7 +72,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ℕ}
 /-- Terms supported on their individual sites commute pairwise. -/
 theorem commute_of_singleton_support
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Set ι)) (i j : ι) :
+    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Finset ι)) (i j : ι) :
     Commute (h i) (h j) := by
   by_cases hij : i = j
   · subst j
@@ -87,7 +87,7 @@ theorem commute_of_singleton_support
 partial sum omits its index. -/
 theorem commute_sum_of_singleton_support
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Set ι)) (s : Finset ι) (i : ι) :
+    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Finset ι)) (s : Finset ι) (i : ι) :
     Commute (∑ j ∈ s, h j) (h i) := by
   change (∑ j ∈ s, h j) * h i = h i * ∑ j ∈ s, h j
   rw [Finset.sum_mul, Finset.mul_sum]
@@ -96,7 +96,7 @@ theorem commute_sum_of_singleton_support
 /-- The local and full Gaussian filters are exact for physical zero-range terms. -/
 theorem gaussianFilteredTerm_sum_eq_of_singleton_support
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Set ι))
+    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Finset ι))
     (s : Finset ι) (q ΔE : ℝ) (i : ι) :
     gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i) = h i :=
   gaussianFilteredTerm_eq_of_commute q ΔE (commute_sum_of_singleton_support h hsupp s i)
@@ -112,7 +112,7 @@ omit [DecidableEq ι] in
 theorem singleton_support_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0)) :
-    ∀ i, h i ∈ supportedOperators d ({i} : Set ι) := by
+    ∀ i, h i ∈ supportedOperators d ({i} : Finset ι) := by
   intro i
   simpa only [Metric.closedBall_zero] using hsupp i
 

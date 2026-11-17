@@ -106,10 +106,10 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ supportedOperators d {v | (roundedPeriodicDistance i v : ℝ) ≤ R}) →
+          (∀ i, g i ∈ supportedOperators d (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) → ∀ (ℓ : ℕ), R ≤ (ℓ : ℝ) → ∀ i,
           let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i
-          a ∈ supportedOperators d {v | roundedPeriodicDistance i v ≤ ℓ} ∧
+          a ∈ supportedOperators d (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
             a.IsHermitian ∧ ‖a‖ ≤ J ∧
             ‖TNLean.Lattice.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
               J * C * Real.exp (-(η * (ℓ : ℝ))) := by
@@ -181,7 +181,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ supportedOperators d {v | (roundedPeriodicDistance i v : ℝ) ≤ R}) →
+          (∀ i, g i ∈ supportedOperators d (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (ψ : EuclideanSpace ℂ (Fin M → Fin d)), ‖ψ‖ = 1 →
           ∀ (P₀ : Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ), IsStarProjection P₀ →
@@ -219,7 +219,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
   obtain ⟨hℓ, hℓR⟩ := physicalPeriodicProjectionRadius_spec R M Jb Δ hη
   have hr := hierarchyProjectionLength_le_physicalPeriodicProjectionRadius hM R Jb Δ hη
   have haloc (i : Fin M) := hloc hM g hg hsupp hnorm ℓ hℓR i
-  have haSupp (i : Fin M) : a i ∈ supportedOperators d {v | roundedPeriodicDistance i v ≤ ℓ} :=
+  have haSupp (i : Fin M) : a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) :=
     (haloc i).1
   have haHerm (i : Fin M) : (a i).IsHermitian := (haloc i).2.1
   have haNorm (i : Fin M) : ‖a i‖ ≤ Jb := ((haloc i).2.2.1).trans (le_max_left _ _)

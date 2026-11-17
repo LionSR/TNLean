@@ -56,7 +56,7 @@ private theorem pair_kraus_mem_supportedOperators (hN : 2 ≤ N) {r : Fin N → 
     (A : ∀ i, Fin (r i) → Matrix (Fin (k + k) → Fin d) (Fin (k + k) → Fin d) ℂ)
     (i : Fin N) (a : Fin (r i)) :
     embedOp (pairData i (i + 1) (left_ne_right hN i)) (A i a) ∈
-      supportedOperators d ((layout N k).site ⁻¹' ringBond i) := by
+      supportedOperators d (Finset.univ.filter fun p ↦ ((layout N k).site) p ∈ ringBond i) := by
   apply supportedOperators_mono _
     (embedOp_mem_supportedOperators (pairData i (i + 1) (left_ne_right hN i)).injective _)
   rintro x ⟨j, rfl⟩

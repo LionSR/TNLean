@@ -93,10 +93,10 @@ private theorem actual_clipped_two_window_alphabet
     apply (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem
     intro i hi
     exact (hs i).mono (internal_bond_support_subset hi)
-  have hC (j : Fin 5) : C j ∈ supportedOperators q (R j : Set (Fin L)) :=
+  have hC (j : Fin 5) : C j ∈ supportedOperators q (R j : Finset (Fin L)) :=
     QuantumCircuit.cfc_mem_supportedOperators _
       (mem_supportedOperators_of_isSupportedOn (hA j))
-  have hPL : PL ∈ supportedOperators q (R 0 : Set (Fin L)) :=
+  have hPL : PL ∈ supportedOperators q (R 0 : Finset (Fin L)) :=
     Submodule.sub_mem _ (hC 0)
       (Submodule.smul_mem _ _ (one_mem_supportedOperators _))
   refine ⟨?_, ?_, isSupportedOn_of_mem_supportedOperators hPL,

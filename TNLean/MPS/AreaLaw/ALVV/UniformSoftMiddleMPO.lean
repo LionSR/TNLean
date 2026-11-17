@@ -130,7 +130,7 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
       Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
         (heat a) (interval (N + 1) l r) := by
     let V := QuantumCircuit.supportedOperators q
-      (interval (N + 1) l r : Set (Fin (N + 1)))
+      (interval (N + 1) l r : Finset (Fin (N + 1)))
     have hAs : A ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn
       (isSupportedOn_sum_internal_bonds (N + 1) q l r h hs)
     have hUs : U ∈ V := V.sub_mem hAs

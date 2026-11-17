@@ -71,7 +71,7 @@ theorem integrable_and_integral_siteOscillation_le_of_graph_kernel
     (hrow : ∀ y, (∑ z, A y z * Real.exp (β * (G.dist y z : ℝ) ^ α)) ≤ v)
     (S : Finset ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     (hB : ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-      supportedOperators q (S : Set ι)) (t : ℝ≥0) (y : ι) :
+      supportedOperators q S) (t : ℝ≥0) (y : ι) :
     letI := graphPseudoEMetricSpace G
     Integrable (fun u : PoissonWord.Word κ =>
         siteOscillation q y (spectatorRootChannelWord k (List.ofFn u.2) B))
@@ -116,7 +116,7 @@ Source: area law, `09-amplification.tex`, lines 139–188. -/
 theorem integrable_and_integral_siteOscillation_le_graphChannelEventKernel
     (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
-    (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
+    (hk : ∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x))
     {C c α v : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (hv : 0 ≤ v) (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
     (hε : ∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
@@ -127,7 +127,7 @@ theorem integrable_and_integral_siteOscillation_le_graphChannelEventKernel
           Real.exp (c / (4 * (2 : ℝ) ^ α) * (G.dist y z : ℝ) ^ α)) ≤ v)
     (S : Finset ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     (hB : ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-      supportedOperators q (S : Set ι)) (t : ℝ≥0) (y : ι) :
+      supportedOperators q S) (t : ℝ≥0) (y : ι) :
     letI := graphPseudoEMetricSpace G
     Integrable (fun u : PoissonWord.Word κ =>
         siteOscillation q y (spectatorRootChannelWord k (List.ofFn u.2) B))

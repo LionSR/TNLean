@@ -65,7 +65,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -79,7 +79,7 @@ include hHerm hSupport hDiam hCard hBudget
 theorem norm_gaussianFilteredTerm_sub_truncated_le_of_time [NeZero d] [DecidableEq κ]
     {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (s : Finset κ) (K : Finset ι)
     (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d S) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
@@ -101,7 +101,7 @@ theorem norm_sub_starProjection_truncated_apply_le [NeZero d] [DecidableEq κ] {
     (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ j, hH.eigenvalues j = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues j) (s : Finset κ)
     (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d S) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ψ ∈ groundEigenspace (∑ k, h k) E₀) :
@@ -128,7 +128,7 @@ theorem norm_truncated_apply_sub_inner_smul_le [NeZero d] [DecidableEq κ] {q Δ
     (hq : 0 ≤ q) (hΔE : 0 < ΔE) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)}
     (hgs : Matrix.IsGappedGroundState (∑ k, h k) E₀ Ω ΔE) (s : Finset κ) (K : Finset ι)
     (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d S) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y) :
     ‖toEuclideanLin (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W) Ω -

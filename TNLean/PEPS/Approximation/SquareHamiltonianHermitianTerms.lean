@@ -59,9 +59,9 @@ adjoints and real linear combinations. Source: `00-introduction.tex`, `eq:model`
 theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (i : SquareInteraction L) :
     h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
-      (squareInteractionSupport i : Set (Vertex L)) := by
+      (squareInteractionSupport i : Finset (Vertex L)) := by
   have hs : squareInteractionTerm h i ∈
-      QuantumCircuit.supportedOperators q (squareInteractionSupport i : Set (Vertex L)) := by
+      QuantumCircuit.supportedOperators q (squareInteractionSupport i : Finset (Vertex L)) := by
     cases i with
     | inl v =>
       simpa only [squareInteractionTerm, squareInteractionSupport, Finset.coe_singleton]
@@ -72,7 +72,7 @@ theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : 
         using h.edge_supported (forwardSquareEdgeEquiv L e)
   exact coe_realPart_mem_of_star_mem
     (S := (QuantumCircuit.supportedOperators q
-      (squareInteractionSupport i : Set (Vertex L))).restrictScalars ℝ)
+      (squareInteractionSupport i : Finset (Vertex L))).restrictScalars ℝ)
     hs (QuantumCircuit.star_mem_supportedOperators hs)
 
 /-- Hermitian replacement preserves the original interaction support.

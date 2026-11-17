@@ -120,7 +120,7 @@ eq. `apb` (lines 300–320 and 1521–1533) and eq. `oibu` (lines 1678–1708). 
 theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_perturbation_le
     [NeZero d] (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ i, i ∈ X i)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ i, (h i).IsHermitian)
-    (hSupport : ∀ i, h i ∈ supportedOperators d (X i : Set ι))
+    (hSupport : ∀ i, h i ∈ supportedOperators d (X i : Finset ι))
     (R : ℕ) (hDiam : ∀ i, ∀ x ∈ X i, ∀ z ∈ X i, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ i, (X i).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)

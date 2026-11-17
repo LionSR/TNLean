@@ -120,7 +120,7 @@ theorem partialOp_mem_unitary (L : BondLayer d bond) (s : Finset β) (hs : s ⊆
     (Submonoid.one_mem _) fun k hk ↦ L.gate_mem_unitary k (hs hk)
 
 theorem partialOp_mem_supportedOperators (L : BondLayer d bond) (s : Finset β)
-    (hs : s ⊆ L.bonds) {S : Set ι} (hS : ∀ k ∈ s, bond k ⊆ S) :
+    (hs : s ⊆ L.bonds) {S : Finset ι} (hS : ∀ k ∈ s, bond k ⊆ S) :
     L.partialOp s hs ∈ supportedOperators d S :=
   Finset.noncommProd_induction _ _ _ (· ∈ supportedOperators d S)
     (fun _ _ ha hb ↦ mul_mem_supportedOperators ha hb) (one_mem_supportedOperators S)
@@ -132,7 +132,7 @@ theorem op_mem_unitary (L : BondLayer d bond) : L.op ∈ unitary
 
 /-- **Light cone of one layer.** One layer enlarges the support of `U† A U` to at most the
 one-step neighbourhood: the sites of `X` and the bonds meeting `X`. -/
-theorem conj_op_mem_supportedOperators (L : BondLayer d bond) {X : Set ι}
+theorem conj_op_mem_supportedOperators (L : BondLayer d bond) {X : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     star L.op * A * L.op ∈ supportedOperators d (bondNeighbourhood bond X) := by
   classical
@@ -233,7 +233,7 @@ theorem circuitOp_map_adjoint_reverse (Ls : List (BondLayer d bond)) :
 /-- **Backward light cone of a list of layers.** If `A` acts on the sites `X`, then
 `U† A U` acts on the light cone of radius `T` of `X`, for the unitary `U` of `T` layers. -/
 theorem conj_circuitOp_mem_supportedOperators_lightCone (Ls : List (BondLayer d bond))
-    {X : Set ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
+    {X : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     star (circuitOp Ls) * A * circuitOp Ls ∈
       supportedOperators d (lightCone bond X Ls.length) := by
   induction Ls with
@@ -285,7 +285,7 @@ theorem mul (h : IsBondCircuitOfDepth bond U T) (h' : IsBondCircuitOfDepth bond 
 
 Source: arXiv:2307.01696, main text after Theorem 1 ("`|ψ_N⟩` have a strictly finite light
 cone") and Supplemental Material, proof of Theorem 1. -/
-theorem conj_mem_supportedOperators (hU : IsBondCircuitOfDepth bond U T) {X : Set ι}
+theorem conj_mem_supportedOperators (hU : IsBondCircuitOfDepth bond U T) {X : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X) :
     Star.star U * A * U ∈ supportedOperators d (lightCone bond X T) := by
   obtain ⟨Ls, rfl, rfl⟩ := hU
@@ -313,7 +313,7 @@ depth `T` and operators `A`, `B` acting on sets with disjoint light cones of rad
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1: "since `ψ` is created
 from a product state by a depth-`T` circuit, every connected correlation for operators at a
 distance larger than `2T` vanishes". -/
-theorem expect_mul_mul_expect_one (hψ : IsBondPreparedInDepth bond T ψ) {X Y : Set ι}
+theorem expect_mul_mul_expect_one (hψ : IsBondPreparedInDepth bond T ψ) {X Y : Finset ι}
     (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :
@@ -335,7 +335,7 @@ with disjoint light cones of radius `T` vanishes: `⟨AB⟩ = ⟨A⟩⟨B⟩`.
 
 Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1. -/
 theorem expect_mul_eq (hψ : IsBondPreparedInDepth bond T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1)
-    {X Y : Set ι} (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
+    {X Y : Finset ι} (hXY : Disjoint (lightCone bond X T) (lightCone bond Y T))
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :
     expect ψ (A * B) = expect ψ A * expect ψ B := by
@@ -381,7 +381,7 @@ the sites `X`, then `U† A U` acts on the sites within ring distance `T` of `X`
 Source: arXiv:2307.01696, main text after Theorem 1 ("`|ψ_N⟩` have a strictly finite light
 cone") and Supplemental Material, proof of Theorem 1. -/
 theorem conj_circuitOp_mem_supportedOperators {U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    {T : ℕ} (hU : IsLocalCircuitOfDepth U T) {X : Set (Fin N)}
+    {T : ℕ} (hU : IsLocalCircuitOfDepth U T) {X : Finset (Fin N)}
     {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) :
     star U * A * U ∈ supportedOperators d (neighbourhood X T) := by
@@ -395,7 +395,7 @@ Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1: "since `ψ`
 from a product state by a depth-`T` circuit, every connected correlation for operators at a
 distance larger than `2T` vanishes". -/
 theorem expect_mul_mul_expect_one_of_isPreparedInDepth {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
-    (hψ : IsPreparedInDepth T ψ) {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
+    (hψ : IsPreparedInDepth T ψ) {X Y : Finset (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ} (hA : A ∈ supportedOperators d X)
     (hB : B ∈ supportedOperators d Y) :
     expect ψ (A * B) * expect ψ 1 = expect ψ A * expect ψ B :=
@@ -411,7 +411,7 @@ this at `s = 2T + 1`, where `𝒪₁` and `𝒪'ₛ` sit at ring distance exactl
 hypothesis here excludes that case, which would need a sharper light cone than the symmetric
 one proved here, such as that of a brickwork circuit. -/
 theorem expect_mul_eq_of_isPreparedInDepth {T : ℕ} {ψ : (Fin N → Fin d) → ℂ}
-    (hψ : IsPreparedInDepth T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) {X Y : Set (Fin N)}
+    (hψ : IsPreparedInDepth T ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) {X Y : Finset (Fin N)}
     (hXY : IsSeparatedBy X Y (2 * T)) {A B : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y) :
     expect ψ (A * B) = expect ψ A * expect ψ B :=

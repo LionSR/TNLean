@@ -63,31 +63,31 @@ def supportedOperators (d : ℕ) (S : Set ι) :
 
 omit [DecidableEq ι] in
 /-- A product operator `⊗ᵢ mᵢ` acts on `S` when `mᵢ = 1` for every site `i ∉ S`. -/
-theorem rectKronecker_mem_supportedOperators {S : Set ι}
+theorem rectKronecker_mem_supportedOperators {S : Finset ι}
     {m : ι → Matrix (Fin d) (Fin d) ℂ} (hm : ∀ i ∉ S, m i = 1) :
     rectKronecker m ∈ supportedOperators d S :=
   Submodule.subset_span ⟨m, hm, rfl⟩
 
 /-- The chain form of `rectKronecker_mem_supportedOperators`, for the sites `Fin N`. -/
-theorem finKronecker_mem_supportedOperators {N : ℕ} {S : Set (Fin N)}
+theorem finKronecker_mem_supportedOperators {N : ℕ} {S : Finset (Fin N)}
     {m : Fin N → Matrix (Fin d) (Fin d) ℂ} (hm : ∀ i ∉ S, m i = 1) :
     finKronecker m ∈ supportedOperators d S :=
   rectKronecker_mem_supportedOperators hm
 
 omit [DecidableEq ι] in
-theorem supportedOperators_mono {S S' : Set ι} (h : S ⊆ S') :
+theorem supportedOperators_mono {S S' : Finset ι} (h : S ⊆ S') :
     supportedOperators d S ≤ supportedOperators d S' := by
   refine Submodule.span_mono ?_
   rintro _ ⟨m, hm, rfl⟩
   exact ⟨m, fun i hi ↦ hm i fun hiS ↦ hi (h hiS), rfl⟩
 
 omit [DecidableEq ι] in
-theorem one_mem_supportedOperators (S : Set ι) :
+theorem one_mem_supportedOperators (S : Finset ι) :
     (1 : Matrix (ι → Fin d) (ι → Fin d) ℂ) ∈ supportedOperators d S := by
   rw [← rectKronecker_one]
   exact rectKronecker_mem_supportedOperators fun _ _ ↦ rfl
 
-theorem mul_mem_supportedOperators {S : Set ι}
+theorem mul_mem_supportedOperators {S : Finset ι}
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S) :
     A * B ∈ supportedOperators d S := by
@@ -100,7 +100,7 @@ theorem mul_mem_supportedOperators {S : Set ι}
   exact rectKronecker_mem_supportedOperators fun i hi ↦ by simp [hm i hi, hm' i hi]
 
 omit [DecidableEq ι] in
-theorem star_mem_supportedOperators {S : Set ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+theorem star_mem_supportedOperators {S : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) : star A ∈ supportedOperators d S := by
   induction hA using Submodule.span_induction with
   | mem x hx =>
@@ -116,7 +116,7 @@ omit [DecidableEq ι] in
 on `S'` once they agree on the pairs of product operators `⊗ᵢ mᵢ`, `⊗ᵢ m'ᵢ` with `mᵢ = 1` off
 `S` and `m'ᵢ = 1` off `S'`. -/
 theorem eq_of_mem_supportedOperators₂ {M : Type*} [AddCommMonoid M] [Module ℂ M]
-    {S S' : Set ι}
+    {S S' : Finset ι}
     (f g : Matrix (ι → Fin d) (ι → Fin d) ℂ →ₗ[ℂ] Matrix (ι → Fin d) (ι → Fin d) ℂ →ₗ[ℂ] M)
     (h : ∀ m m' : ι → Matrix (Fin d) (Fin d) ℂ, (∀ i ∉ S, m i = 1) → (∀ i ∉ S', m' i = 1) →
       f (rectKronecker m) (rectKronecker m') = g (rectKronecker m) (rectKronecker m'))
@@ -128,7 +128,7 @@ theorem eq_of_mem_supportedOperators₂ {M : Type*} [AddCommMonoid M] [Module �
     (by rintro _ ⟨m, hm, rfl⟩; exact hgen m hm) hA
 
 /-- Operators acting on disjoint sets of sites commute. -/
-theorem commute_of_mem_supportedOperators {S S' : Set ι} (hSS' : Disjoint S S')
+theorem commute_of_mem_supportedOperators {S S' : Finset ι} (hSS' : Disjoint S S')
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S)
     (hB : B ∈ supportedOperators d S') : Commute A B := by
   refine eq_of_mem_supportedOperators₂ (LinearMap.mul ℂ _) (LinearMap.mul ℂ _).flip
@@ -184,7 +184,7 @@ theorem expect_productVector_rectKronecker (v : ι → Fin d → ℂ)
 
 /-- Product vectors factorize expectations of products of operators on disjoint sets of
 sites: `⟨AB⟩⟨1⟩ = ⟨A⟩⟨B⟩`. -/
-theorem expect_productVector_mul {S S' : Set ι} (hSS' : Disjoint S S')
+theorem expect_productVector_mul {S S' : Finset ι} (hSS' : Disjoint S S')
     (v : ι → Fin d → ℂ) {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S') :
     expect (productVector v) (A * B) * expect (productVector v) 1 =
@@ -214,7 +214,7 @@ theorem _root_.Matrix.trace_rectKronecker (m : ι → Matrix (Fin d) (Fin d) ℂ
 
 /-- Product densities factorize expectations of products of operators on disjoint sets of
 sites: `tr(σ AB) tr σ = tr(σ A) tr(σ B)` for `σ = ⊗ᵢ σᵢ`. -/
-theorem trace_rectKronecker_mul_mul {S S' : Set ι} (hSS' : Disjoint S S')
+theorem trace_rectKronecker_mul_mul {S S' : Finset ι} (hSS' : Disjoint S S')
     (σ : ι → Matrix (Fin d) (Fin d) ℂ) {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d S') :
     trace (rectKronecker σ * (A * B)) * trace (rectKronecker σ) =

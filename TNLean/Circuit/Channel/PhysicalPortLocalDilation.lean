@@ -212,7 +212,7 @@ theorem PhysicalPortLayout.range_siteRegister (P : PhysicalPortLayout N W) (i : 
 
 private theorem exists_localKraus {r : ℕ} (e : Fin m ↪ Fin W)
     (K : Fin r → Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ)
-    (hs : ∀ a, K a ∈ supportedOperators d (Set.range e))
+    (hs : ∀ a, K a ∈ supportedOperators d (Finset.univ.image e))
     (hnorm : ∑ a, (K a)ᴴ * K a = 1) :
     ∃ A : Fin r → Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ,
       (∀ a, K a = embedOp e (A a)) ∧ ∑ a, (A a)ᴴ * A a = 1 := by
@@ -236,7 +236,7 @@ realization. Environment size depends only on the site's wire count, not Kraus c
 theorem exists_onsite_appended_dilation {r : ℕ}
     (P : PhysicalPortLayout N W) (i : Fin N)
     (K : Fin r → Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ)
-    (hs : ∀ a, K a ∈ supportedOperators d (P.site ⁻¹' {i}))
+    (hs : ∀ a, K a ∈ supportedOperators d (Finset.univ.filter fun p ↦ P.site p ∈ {i}))
     (hnorm : ∑ a, (K a)ᴴ * K a = 1) :
     ∃ A : ℕ, ∃ owner : Fin A → Fin N,
       ∃ U : Matrix (Fin (W + A) → Fin d) (Fin (W + A) → Fin d) ℂ,

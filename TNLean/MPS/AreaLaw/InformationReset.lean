@@ -154,7 +154,7 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
     hfilter q D C hDC e h.operator E₀ Ω b hgs hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
-  have hVsupp : V ∈ supportedOperators (q * q) (Q : Set (Fin L)) := by
+  have hVsupp : V ∈ supportedOperators (q * q) Q := by
     have hs := siteLift_mem_supportedOperators Q
       (Matrix.reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_siteLift q D C hDC W] at hs

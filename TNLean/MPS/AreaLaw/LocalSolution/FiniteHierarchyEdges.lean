@@ -128,13 +128,13 @@ Hastings, arXiv:cond-mat/0508554v3, lines 609–628 and 668–685. -/
 theorem extendFiniteEdges_mem_supportedOperators (blk : ι → ℕ)
     (a : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (ha : ∀ j : Fin N, 0 < (j : ℕ) →
-      a j ∈ supportedOperators d {i | blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)})
+      a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (j : ℕ) (hj : 0 < j) :
-    extendFiniteEdges a j ∈ supportedOperators d {i | blk i + 1 = j ∨ blk i = j} := by
+    extendFiniteEdges a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j) := by
   by_cases hjN : j < N
   · simpa only [extendFiniteEdges, dite_eq_left hjN] using ha ⟨j, hjN⟩ hj
   · simpa only [extendFiniteEdges, dite_eq_right hjN] using
-      (Submodule.zero_mem (supportedOperators d {i | blk i + 1 = j ∨ blk i = j}))
+      (Submodule.zero_mem (supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j)))
 
 /-- Every joining operator of the hierarchy has its parent-block support, derived from
 only the finite internal-edge assumptions.
@@ -142,7 +142,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 609–628 and 668–685. -/
 theorem hierarchyEdge_extendFiniteEdges_mem_supportedOperators (blk : ι → ℕ)
     (a : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (ha : ∀ j : Fin N, 0 < (j : ℕ) →
-      a j ∈ supportedOperators d {i | blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)})
+      a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (m k : ℕ) : hierarchyEdge (extendFiniteEdges a) m k ∈
       supportedOperators d (levelBlock blk (m + 1) k) :=
   hierarchyEdge_mem_supportedOperators blk (extendFiniteEdges a)

@@ -66,7 +66,7 @@ theorem IsZeroOn.permMatrix_cfgPerm_mulVec_image {S : Set ι} {v : (ι → Fin d
   exact h _ hy i hi
 
 private theorem isZeroOn_mulVec_of_finset {S : Finset ι} {v : (ι → Fin d) → ℂ}
-    (h : IsZeroOn (S : Set ι) v) {T : Set ι} (hST : Disjoint (S : Set ι) T)
+    (h : IsZeroOn (S : Set ι) v) {T : Finset ι} (hST : Disjoint (S : Set ι) T)
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
     IsZeroOn (S : Set ι) (A *ᵥ v) := by
   have hP : ∀ u : (ι → Fin d) → ℂ, IsZeroOn (S : Set ι) u ↔ ctrlProj S 0 *ᵥ u = u := by
@@ -91,7 +91,7 @@ private theorem isZeroOn_mulVec_of_finset {S : Finset ι} {v : (ι → Fin d) �
 
 /-- An operator acting on sites outside `S` keeps `|0⟩` at the sites of `S`. -/
 theorem IsZeroOn.mulVec_of_mem_supportedOperators {S : Set ι} {v : (ι → Fin d) → ℂ}
-    (h : IsZeroOn S v) {T : Set ι} (hST : Disjoint S T)
+    (h : IsZeroOn S v) {T : Finset ι} (hST : Disjoint S T)
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d T) :
     IsZeroOn S (A *ᵥ v) := by
   classical

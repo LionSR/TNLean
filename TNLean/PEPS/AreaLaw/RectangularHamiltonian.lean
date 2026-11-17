@@ -109,10 +109,10 @@ adjoints and real linear combinations. Source: `00-introduction.tex`, `eq:model`
 theorem RectangularHamiltonian.hermitianTerm_mem_supportedOperators {width height q : ℕ} {J : ℝ}
     (h : RectangularHamiltonian width height q J) (i : RectangleInteraction width height) :
     h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
-      (rectangleInteractionSupport i : Set (SquareLatticeVertex width height)) := by
+      (rectangleInteractionSupport i : Finset (SquareLatticeVertex width height)) := by
   have hs : rectangleInteractionTerm h i ∈
       QuantumCircuit.supportedOperators q
-        (rectangleInteractionSupport i : Set (SquareLatticeVertex width height)) := by
+        (rectangleInteractionSupport i : Finset (SquareLatticeVertex width height)) := by
     cases i with
     | inl v =>
       simpa only [rectangleInteractionTerm, rectangleInteractionSupport, Finset.coe_singleton]
@@ -123,7 +123,7 @@ theorem RectangularHamiltonian.hermitianTerm_mem_supportedOperators {width heigh
         using h.edge_supported e
   exact coe_realPart_mem_of_star_mem
     (S := (QuantumCircuit.supportedOperators q
-      (rectangleInteractionSupport i : Set (SquareLatticeVertex width height))).restrictScalars ℝ)
+      (rectangleInteractionSupport i : Finset (SquareLatticeVertex width height))).restrictScalars ℝ)
     hs (QuantumCircuit.star_mem_supportedOperators hs)
 
 /-- Every replaced interaction is Hermitian. Source:

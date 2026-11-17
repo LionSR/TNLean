@@ -47,7 +47,7 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1259–1275. -/
 theorem coeff_clusterProductForm_eq_zero_of_not_mem_clusterIndexSet
     (acts : κ → Finset σ) (near : σ → σ → Prop) (hnear : ∀ i, near i i)
     {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) (i : σ)
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ) (i : σ)
     (α : σ → Option (Fin (Fintype.card (Finset κ))) × (Fin q × Fin q))
     (hα : α i ∉ clusterIndexSet acts near i) :
     (clusterProductForm acts near hnear hh β).coeff i α = 0 := by
@@ -71,7 +71,7 @@ theorem coeff_clusterProductForm_eq_zero_of_not_mem_clusterIndexSet
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1259–1279. -/
 noncomputable def localClusterProductForm (acts : κ → Finset σ) (near : σ → σ → Prop)
     (hnear : ∀ i, near i i) {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ) :
     open Classical in ProductForm (fun _ ↦ q) near
       (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
         NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) :=
@@ -146,7 +146,7 @@ actual cardinalities. Hastings, arXiv:cond-mat/0508554v3, lines 1273–1275. -/
 theorem card_index_localClusterProductForm_le (acts : κ → Finset σ)
     (near : σ → σ → Prop) (hnear : ∀ i, near i i)
     {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ)
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ)
     (i : σ) (T : Finset κ)
     (hT : ∀ C, IsValidCluster acts near C → i ∈ C.biUnion acts → C ⊆ T) :
     Fintype.card ((localClusterProductForm acts near hnear hh β).Index i) ≤
@@ -165,7 +165,7 @@ theorem exists_productForm_truncatedExp_card_index [PseudoMetricSpace σ]
     [Nonempty σ] [NeZero q] (acts : κ → Finset σ) (c : κ → σ) (R l : ℝ)
     (hR : ∀ k j, j ∈ acts k → dist (c k) j ≤ R) (hl : 0 ≤ l)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ) :
     ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         (truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β),
       ∀ i, Fintype.card (P.Index i) ≤
@@ -179,7 +179,7 @@ theorem exists_productForm_truncatedExp_card_index [PseudoMetricSpace σ]
   rw [← hlarge, truncatedExp_eq_mul acts h hh near β]
   let ρ₀ : Matrix (σ → Fin q) (σ → Fin q) ℂ :=
     ∑ A with ∀ k ∈ A, ¬ (acts k).Nonempty, clusterOp h A β
-  have h₀ : ρ₀ ∈ supportedOperators q ((∅ : Finset σ) : Set σ) := by
+  have h₀ : ρ₀ ∈ supportedOperators q (∅ : Finset σ) := by
     refine Submodule.sum_mem _ fun A hA ↦ supportedOperators_mono ?_
       (clusterOp_mem_supportedOperators hh A β)
     intro x hx
@@ -208,7 +208,7 @@ theorem exists_productForm_truncatedExp_pow_card_index [PseudoMetricSpace σ]
     [Nonempty σ] [NeZero q] (acts : κ → Finset σ) (c : κ → σ) (R l : ℝ)
     (hR : ∀ k j, j ∈ acts k → dist (c k) j ≤ R) (hl : 0 ≤ l)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ))
     (hHerm : ∀ k, (h k).IsHermitian) (β : ℝ) {m : ℕ} (hm : Even m) :
     ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m),
@@ -232,7 +232,7 @@ theorem exists_productForm_truncatedExp_card_index_of_polynomial_growth
     (hvolume : ∀ i, (Finset.univ.filter (fun k ↦ dist i (c k) ≤ l + R)).card ≤
       C * (⌈l + R⌉₊ + 1) ^ D)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ) :
     ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         (truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β),
       ∀ i, Fintype.card (P.Index i) ≤
@@ -254,7 +254,7 @@ theorem exists_productForm_truncatedExp_pow_card_index_of_polynomial_growth
     (hvolume : ∀ i, (Finset.univ.filter (fun k ↦ dist i (c k) ≤ l + R)).card ≤
       C * (⌈l + R⌉₊ + 1) ^ D)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ))
     (hHerm : ∀ k, (h k).IsHermitian) (β : ℝ) {m : ℕ} (hm : Even m) :
     ∃ P : ProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
         ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m),

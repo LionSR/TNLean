@@ -205,7 +205,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -223,7 +223,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) (Y : Set ι)
+    (hW : W ∈ supportedOperators d S) (l : ℕ) (Y : Finset ι)
     (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
     (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W * B - B * gaussianFilteredTerm q ΔE (∑ k, h k) W‖ ≤
@@ -262,7 +262,7 @@ theorem norm_groundCompression_commutator_le_graphNeighborhood [NeZero d] (Kg : 
     {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) (Y : Set ι)
+    (hW : W ∈ supportedOperators d S) (l : ℕ) (Y : Finset ι)
     (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
     (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -

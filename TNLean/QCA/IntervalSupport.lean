@@ -68,7 +68,7 @@ theorem intervalCoordinates_localInclusion_mem_supportedOperators
     (A : LocalAlgebra d Λ) :
     intervalCoordinates d a N (localInclusion hΛ A) ∈
       QuantumCircuit.supportedOperators d
-        {i : Fin N | (finiteChainSiteEquiv a N i).val ∈ Λ} := by
+        (Finset.univ.filter fun (i : Fin N) ↦ (finiteChainSiteEquiv a N i).val ∈ Λ) := by
   classical
   rw [intervalCoordinates_localInclusion_eq_embedOp]
   let e : Λ → Fin N := fun x => (finiteChainSiteEquiv a N).symm ⟨x.val, hΛ x.property⟩

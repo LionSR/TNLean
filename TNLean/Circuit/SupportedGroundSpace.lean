@@ -31,7 +31,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] [NeZero d]
 /-- A supported Hermitian operator has a supported ground spectral cutoff
 of nonzero trace, killed by subtraction of its actual minimum eigenvalue.
 Source: AKLV, arXiv:1301.1162v1, Section 6.1 normalization. -/
-theorem exists_supported_ground_cutoff {S : Set ι}
+theorem exists_supported_ground_cutoff {S : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A.IsHermitian)
     (hs : A ∈ supportedOperators d S) :
     ∃ P : Matrix (ι → Fin d) (ι → Fin d) ℂ,
@@ -66,7 +66,7 @@ theorem exists_supported_ground_cutoff {S : Set ι}
 omit [NeZero d] in
 /-- On disjoint regions, nonzero traces force a nonzero trace of the product.
 Source context: AKLV, Section 6.1, tensor product of regional ground states. -/
-theorem trace_mul_ne_zero_of_disjoint {S T : Set ι} (hST : Disjoint S T)
+theorem trace_mul_ne_zero_of_disjoint {S T : Finset ι} (hST : Disjoint S T)
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators d T)
     (htrA : Matrix.trace A ≠ 0) (htrB : Matrix.trace B ≠ 0) :
@@ -82,7 +82,7 @@ theorem trace_mul_ne_zero_of_disjoint {S T : Set ι} (hST : Disjoint S T)
 minimum-energy vector. Their individual minimum eigenvalues are derived.
 Source: AKLV, arXiv:1301.1162v1, Section 6.1. -/
 theorem exists_common_ground_of_disjoint
-    {S T R : Set ι} (hST : Disjoint S T) (hSR : Disjoint S R) (hTR : Disjoint T R)
+    {S T R : Finset ι} (hST : Disjoint S T) (hSR : Disjoint S R) (hTR : Disjoint T R)
     {A B C : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A.IsHermitian) (hB : B.IsHermitian) (hC : C.IsHermitian)
     (hsA : A ∈ supportedOperators d S) (hsB : B ∈ supportedOperators d T)

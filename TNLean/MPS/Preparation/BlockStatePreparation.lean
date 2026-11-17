@@ -242,7 +242,7 @@ theorem pairLayerOp_mulVec_apply (hd : 0 < d) (hN : ∑ k, ℓ k = N) (hr : ∀ 
 
 theorem isCircuitOn_blockLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) {K : ℕ}
     {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ} (hU : ∀ k, IsPairProduct d (ℓ k) K (U k)) :
-    IsCircuitOn Set.univ K (blockLayerOp hN U) := by
+    IsCircuitOn Finset.univ K (blockLayerOp hN U) := by
   refine (IsCircuitOn.finset_noncommProd Finset.univ (fun k => Set.range (blockSite hN k))
     (fun k _ k' _ h => disjoint_range_blockSite hN h) _ (fun k _ =>
       (hU k).isCircuitOn (blockSite_injective hN k) fun i j h => blockSite_succ hN k i j h)
@@ -251,7 +251,7 @@ theorem isCircuitOn_blockLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) {K : ℕ}
 theorem isCircuitOn_pairLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
     {K : ℕ} {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
     (hW : ∀ k, IsPairProduct d (r₁ + r₁) K (W k)) :
-    IsCircuitOn Set.univ K (pairLayerOp hN hr W) := by
+    IsCircuitOn Finset.univ K (pairLayerOp hN hr W) := by
   refine (IsCircuitOn.finset_noncommProd Finset.univ
     (fun k => Set.range (pairSite hN hr k))
     (fun k _ k' _ h => disjoint_range_pairSite hN hr h) _ (fun k _ =>

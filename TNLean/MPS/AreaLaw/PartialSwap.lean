@@ -63,17 +63,17 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
   have hF : ‖F‖ ≤ 1 := by
     simpa only [F, Matrix.l2_opNorm_reindex_equiv] using norm_sheetSwapOp_le_one (q := q) D
   have hgeneral (U V : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hU : U ∈ supportedOperators q (X.1 : Set (Fin L)))
-      (hV : V ∈ supportedOperators q (X.1 : Set (Fin L)))
+      (hU : U ∈ supportedOperators q X.1)
+      (hV : V ∈ supportedOperators q X.1)
       (hUVherm : (U ⊗ₖ V).IsHermitian) (hUVnorm : ‖U ⊗ₖ V‖ ≤ J) :
       let T := Matrix.reindex e e (U ⊗ₖ V)
       let K := F * T * Fᴴ - T
       Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
     have hT : Matrix.reindex e e (U ⊗ₖ V) ∈
-        supportedOperators (q * q) (X.1 : Set (Fin L)) := by
+        supportedOperators (q * q) X.1 := by
       simpa only [Set.union_self] using reindex_kronecker_mem_supportedOperators hU hV
     refine ⟨isSupportedOn_of_mem_supportedOperators
-      ((supportedOperators (q * q) (X.1 : Set (Fin L))).sub_mem
+      ((supportedOperators (q * q) X.1).sub_mem
         (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators D X.1 hU hV) hT), ?_, ?_⟩
     · have hTherm := hUVherm.reindex e
       exact (Matrix.isHermitian_mul_mul_conjTranspose F hTherm).sub hTherm

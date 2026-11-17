@@ -19,7 +19,7 @@ open Fin.CommRing
 variable {N : ℕ} [NeZero N]
 
 /-- Sets lying in two intervals are separated when both cyclic gaps exceed the radius. -/
-theorem isSeparatedBy_of_val_bounds {X Y : Set (Fin N)} {a w b w' s : ℕ}
+theorem isSeparatedBy_of_val_bounds {X Y : Finset (Fin N)} {a w b w' s : ℕ}
     (hX : ∀ x ∈ X, a ≤ x.val ∧ x.val < a + w)
     (hY : ∀ y ∈ Y, b ≤ y.val ∧ y.val < b + w')
     (hab : a + w + s ≤ b) (hba : b + w' + s ≤ a + N) :
@@ -44,7 +44,7 @@ theorem isSeparatedBy_of_val_bounds {X Y : Set (Fin N)} {a w b w' s : ℕ}
   omega
 
 /-- Separation on the ring is symmetric. -/
-theorem IsSeparatedBy.symm {X Y : Set (Fin N)} {s : ℕ} (h : IsSeparatedBy X Y s) :
+theorem IsSeparatedBy.symm {X Y : Finset (Fin N)} {s : ℕ} (h : IsSeparatedBy X Y s) :
     IsSeparatedBy Y X s := by
   intro y hy x hx m hm heq
   apply h x hx y hy (-m) (by simpa using hm)
@@ -52,7 +52,7 @@ theorem IsSeparatedBy.symm {X Y : Set (Fin N)} {s : ℕ} (h : IsSeparatedBy X Y 
   linear_combination -heq
 
 /-- A separated site lies outside the backward neighbourhood. -/
-theorem IsSeparatedBy.notMem_neighbourhood {X Y : Set (Fin N)} {s : ℕ}
+theorem IsSeparatedBy.notMem_neighbourhood {X Y : Finset (Fin N)} {s : ℕ}
     (h : IsSeparatedBy X Y s) {y : Fin N} (hy : y ∈ Y) : y ∉ neighbourhood X s := by
   rintro ⟨x, hx, m, hm, heq⟩
   exact h x hx y hy m hm heq

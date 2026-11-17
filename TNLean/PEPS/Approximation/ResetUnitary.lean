@@ -157,7 +157,7 @@ theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : �
       ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
           (Lattice.Configuration Λ (q * q)) ℂ),
         Real.exp (-2 * b) ≤ z ∧
-        M ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧ ‖M‖ ≤ 1 ∧
+        M ∈ supportedOperators (q * q) B ∧ ‖M‖ ≤ 1 ∧
         ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
         ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
@@ -256,7 +256,7 @@ theorem SquareHamiltonian.exists_reset_localized_filter (q : ℕ) (hq : 1 ≤ q)
         ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
             (Lattice.Configuration Λ (q * q)) ℂ),
           Real.exp (-2 * b) ≤ z ∧
-          M ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧ ‖M‖ ≤ 1 ∧
+          M ∈ supportedOperators (q * q) B ∧ ‖M‖ ≤ 1 ∧
           ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             C * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
           ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
@@ -293,7 +293,7 @@ theorem SquareHamiltonian.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
       ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
         U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
-        U ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
+        U ∈ supportedOperators (q * q) B ∧
         ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             resetUnitaryPrefactor J Δ r * (L : ℝ) ^ (-r) := by
   intro L hL h E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
@@ -337,7 +337,7 @@ theorem SquareHamiltonian.exists_reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
         ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
           U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
-          U ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
+          U ∈ supportedOperators (q * q) B ∧
           ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ C * (L : ℝ) ^ (-r) :=
   ⟨resetUnitaryPrefactor J Δ r, resetRadius J Δ r, resetUnitaryPrefactor_pos hJ hΔ hr,
     resetRadius_pos hJ hΔ hr, SquareHamiltonian.reset_unitary q hq J hJ hΔ hr⟩

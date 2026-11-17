@@ -42,7 +42,7 @@ local dimensions are included.
 
 Source: polynomial-PEPS, `02-information.tex`, lines 416–424 and 513–524. -/
 theorem reindex_kronecker_mem_supportedOperators
-    {ι : Type*} [Fintype ι] {d e : ℕ} {S T : Set ι}
+    {ι : Type*} [Fintype ι] {d e : ℕ} {S T : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     {B : Matrix (ι → Fin e) (ι → Fin e) ℂ}
     (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators e T) :

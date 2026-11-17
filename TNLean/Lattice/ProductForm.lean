@@ -57,7 +57,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 omit [DecidableEq ι] in
 /-- An entry of an operator supported on `S` depends only on the labels on `S`, provided both
 pairs of configurations agree with each other off `S`. -/
-theorem apply_eq_apply_of_mem_supportedOperators {S : Set ι}
+theorem apply_eq_apply_of_mem_supportedOperators {S : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S)
     {u v x y : ι → Fin d} (hux : ∀ j ∈ S, u j = x j) (hvy : ∀ j ∈ S, v j = y j)
     (huv : ∀ j ∉ S, u j = v j) (hxy : ∀ j ∉ S, x j = y j) : A u v = A x y := by
@@ -74,7 +74,7 @@ theorem apply_eq_apply_of_mem_supportedOperators {S : Set ι}
   | smul c A _ hA => simp [hA]
 
 /-- The operators supported on a set of sites are closed under the exponential. -/
-theorem exp_mem_supportedOperators {S : Set ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+theorem exp_mem_supportedOperators {S : Finset ι} {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ supportedOperators d S) : NormedSpace.exp A ∈ supportedOperators d S := by
   let s : Subalgebra ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ) :=
     (supportedOperators d S).toSubalgebra (one_mem_supportedOperators S)
@@ -237,7 +237,7 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1061. -/
 theorem hasProductForm_of_mem_supportedOperators_radius {X : Finset ι}
     (hnear : ∀ i, near i i) (i₀ : ι) (hX : ∀ j ∈ X, near i₀ j)
     {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm (fun _ ↦ q) near ρ := by
+    (hρ : ρ ∈ supportedOperators q X) : HasProductForm (fun _ ↦ q) near ρ := by
   classical
   /- The configurations read off the indices: their labels on `X`, and one common label
   (the row label at `i₀`) off `X`. -/
@@ -302,7 +302,7 @@ theorem hasProductForm_of_mem_supportedOperators {X : Finset ι}
     (hnear : ∀ i, near i i)
     (hX : X.Nonempty ∧ ∀ i ∈ X, ∀ j ∈ X, near i j)
     {ρ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hρ : ρ ∈ supportedOperators q (X : Set ι)) : HasProductForm (fun _ ↦ q) near ρ := by
+    (hρ : ρ ∈ supportedOperators q X) : HasProductForm (fun _ ↦ q) near ρ := by
   obtain ⟨i₀, hi₀⟩ := hX.1
   exact hasProductForm_of_mem_supportedOperators_radius hnear i₀ (hX.2 i₀ hi₀) hρ
 
@@ -313,7 +313,7 @@ theorem hasProductForm_trotterProduct_of_radius
     (hnear : ∀ i, near i i)
     (H : ι → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (X : ι → Finset ι) (hX : ∀ i j, j ∈ X i → near i j)
-    (hH : ∀ i, H i ∈ supportedOperators q (X i : Set ι))
+    (hH : ∀ i, H i ∈ supportedOperators q (X i : Finset ι))
     (seq : List ι) (β : ℝ) (n : ℕ) :
     HasProductForm (fun _ ↦ q) near
       (((seq.map fun i ↦ NormedSpace.exp ((-((β : ℂ) / n)) • H i)).prod) ^ n) := by
@@ -328,7 +328,7 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1024–1077. -/
 theorem hasProductForm_trotterProduct_of_dist_le [PseudoMetricSpace ι] {R : ℝ}
     (hR : 0 ≤ R) (H : ι → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (X : ι → Finset ι) (hX : ∀ i j, j ∈ X i → dist i j ≤ R)
-    (hH : ∀ i, H i ∈ supportedOperators q (X i : Set ι))
+    (hH : ∀ i, H i ∈ supportedOperators q (X i : Finset ι))
     (seq : List ι) (β : ℝ) (n : ℕ) :
     HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ R)
       (((seq.map fun i ↦ NormedSpace.exp ((-((β : ℂ) / n)) • H i)).prod) ^ n) := by

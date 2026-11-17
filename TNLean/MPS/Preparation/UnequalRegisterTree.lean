@@ -686,7 +686,7 @@ theorem isCircuitOn_blockLayerOp_treeLeafOp {K : ℕ}
     (U : ∀ b (p : Fin (2 ^ (h + 1))),
       Matrix (Cfg d (leafLen h (ℓ b) (w b) p)) (Cfg d (leafLen h (ℓ b) (w b) p)) ℂ)
     (hU : ∀ b (p : Fin (2 ^ (h + 1))), IsPairProduct d (leafLen h (ℓ b) (w b) p) K (U b p)) :
-    IsCircuitOn Set.univ K (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
+    IsCircuitOn Finset.univ K (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
   refine (IsCircuitOn.finset_noncommProd Finset.univ (fun b => Set.range (blockSite hN b))
     (fun b _ b' _ h' => disjoint_range_blockSite hN h') _ (fun b _ => ?_) _).mono_set
       (Set.subset_univ _)

@@ -164,10 +164,10 @@ theorem exists_commutator_iterate_decomposition {s : Finset I}
         _ = ∑ j, f (e.symm j) := (Equiv.sum_comp e.symm f).symm
     · intro j
       let p := e.symm j
-      have hhR : h p.2.1 ∈ supportedOperators q (R p : Set ι) :=
+      have hhR : h p.2.1 ∈ supportedOperators q (R p : Finset ι) :=
         supportedOperators_mono (by simp [R])
           (mem_supportedOperators_of_isSupportedOn (hs _ (hTs p)))
-      have hXR : X p.1 ∈ supportedOperators q (R p : Set ι) :=
+      have hXR : X p.1 ∈ supportedOperators q (R p : Finset ι) :=
         supportedOperators_mono (by simp [R])
           (mem_supportedOperators_of_isSupportedOn (hsupp p.1))
       exact isSupportedOn_of_mem_supportedOperators

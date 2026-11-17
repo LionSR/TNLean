@@ -213,7 +213,7 @@ spread supports.
 
 Source: arXiv:2103.13367, Supplemental Material, proof of the area law ("`U_n ∈ LU`, so it
 does not increase" the entanglement across a cut), in the Heisenberg picture. -/
-theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Set ι}
+theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Finset ι}
     {A : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ supportedOperators e X) :
     Φ.dual A ∈ supportedOperators d X := by
   refine (Submodule.span_le (p := (supportedOperators d X).comap Φ.dual)).mpr ?_ hA
@@ -223,7 +223,7 @@ theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Set ι}
 
 /-- The dual of an onsite channel is multiplicative on operators acting on disjoint sets of
 sites. -/
-theorem dual_mul (Φ : OnsiteChannel d e ι) {X Y : Set ι} (hXY : Disjoint X Y)
+theorem dual_mul (Φ : OnsiteChannel d e ι) {X Y : Finset ι} (hXY : Disjoint X Y)
     {A B : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ supportedOperators e X)
     (hB : B ∈ supportedOperators e Y) : Φ.dual (A * B) = Φ.dual A * Φ.dual B := by
   have key := eq_of_mem_supportedOperators₂
@@ -567,7 +567,7 @@ theorem trace_mul_mul_eq_of_isLocalChannelConversion {d' T : ℕ}
     {σ₀ : Fin N → Matrix (Fin d) (Fin d) ℂ} (hσ₀ : ∀ i, trace (σ₀ i) = 1)
     {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
     (h : IsLocalChannelConversion T (finKronecker σ₀) σ)
-    {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
+    {X Y : Finset (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
     (hA : A ∈ supportedOperators d' X) (hB : B ∈ supportedOperators d' Y) :
     trace (σ * (A * B)) = trace (σ * A) * trace (σ * B) := by

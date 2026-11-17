@@ -99,10 +99,10 @@ theorem sitePermMatrix_mul_mul_conjTranspose (q : ℕ) (g : G)
 
 /-- `P_g A P_g†` acts on `g • S` when `A` acts on `S`. -/
 theorem sitePermMatrix_mul_mul_conjTranspose_mem_supportedOperators (q : ℕ) (g : G)
-    {S : Set V} {A : Matrix (V → Fin q) (V → Fin q) ℂ}
+    {S : Finset V} {A : Matrix (V → Fin q) (V → Fin q) ℂ}
     (hA : A ∈ QuantumCircuit.supportedOperators q S) :
     sitePermMatrix q g * A * (sitePermMatrix q g)ᴴ ∈
-      QuantumCircuit.supportedOperators q ((g • ·) '' S) := by
+      QuantumCircuit.supportedOperators q (S.image (g • ·)) := by
   rw [sitePermMatrix_mul_mul_conjTranspose]
   exact QuantumCircuit.supportedOperators_submatrix_siteEquiv (MulAction.toPerm g) hA
 

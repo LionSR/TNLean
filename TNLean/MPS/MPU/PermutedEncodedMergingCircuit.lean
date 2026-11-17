@@ -48,9 +48,9 @@ theorem permOp_conjTranspose_mul_mul (τ : Equiv.Perm (Fin n))
 
 See the coordinate changes in §5 of the circuit manuscript. -/
 theorem permOp_conjugate_mem_supportedOperators (τ : Equiv.Perm (Fin n))
-    {S : Set (Fin n)} {X : Matrix (Cfg d n) (Cfg d n) ℂ}
+    {S : Finset (Fin n)} {X : Matrix (Cfg d n) (Cfg d n) ℂ}
     (hX : X ∈ supportedOperators d S) :
-    permOp τ * X * (permOp τ)ᴴ ∈ supportedOperators d (τ '' S) := by
+    permOp τ * X * (permOp τ)ᴴ ∈ supportedOperators d (S.image τ) := by
   have hid : embedOp id X = X := by
     ext x y
     rw [embedOp_apply,
@@ -136,7 +136,7 @@ theorem exists_permuted_encoded_uniform_merging_circuit
     {P : Matrix (Fin r) (Fin r) ℂ} (hP : P.PosDef)
     (siteEquiv : Fin (a + (2 * q + 2)) ≃ Fin L)
     (s : Fin b ↪ Fin (a + (2 * q + 2))) (hpool : b ≤ A) (hpool₂ : 2 ≤ A)
-    (support : Set (Fin L))
+    (support : Finset (Fin L))
     (hinputSupport : Set.range s ⊆ siteEquiv.symm '' support)
     (hpacketSupport :
       Set.range (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2))) ⊆
@@ -210,12 +210,12 @@ theorem exists_permuted_encoded_uniform_merging_circuit
   have hnew := isPairProduct_isCleanImplementation_conjugate_workspaceFixedSitePerm
     siteEquiv hW hWclean
   have hZ₁' : Z₁.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      supportedOperators d (siteEquiv.symm '' support) := by
+      supportedOperators d (support.image siteEquiv.symm) := by
     rw [← permOp_conjTranspose_mul_mul]
     simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₁support
   have hZ₂' : Z₂.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      supportedOperators d (siteEquiv.symm '' support) := by
+      supportedOperators d (support.image siteEquiv.symm) := by
     rw [← permOp_conjTranspose_mul_mul]
     simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₂support

@@ -73,7 +73,7 @@ theorem exists_unit_mem_coordinateSliceProjection_of_box {D d : ℕ}
     (a : (∀ k, Fin (L k)) →
       Matrix ((∀ k, Fin (L k)) → Fin d) ((∀ k, Fin (L k)) → Fin d) ℂ)
     (hsupp : ∀ i, a i ∈ supportedOperators d
-      {v | dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ})
+      (Finset.univ.filter fun v ↦ dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian)
     {ψ : EuclideanSpace ℂ ((∀ k, Fin (L k)) → Fin d)} (hψ : ‖ψ‖ = 1)
     {J Δ r : ℝ} (hJ : 0 < J)
@@ -96,7 +96,7 @@ theorem exists_unit_mem_coordinateSliceProjection_of_box {D d : ℕ}
       ∀ i, coordinateSlice ℓ (z i) < L axis := by
   let : Nonempty (∀ k, Fin (L k)) := ⟨fun k ↦ ⟨0, hL k⟩⟩
   have hsupp' : ∀ i, a i ∈ supportedOperators d
-      {v : (∀ k, Fin (L k)) | Nat.dist (v axis) (i axis) ≤ ℓ} := by
+      (Finset.univ.filter fun (v : (∀ k, Fin (L k))) ↦ Nat.dist (v axis) (i axis) ≤ ℓ) := by
     intro i
     exact supportedOperators_mono (d := d) (ι := ∀ k, Fin (L k))
       (coordinateBox_ball_subset_strip L axis ℓ i) (hsupp i)
@@ -113,7 +113,7 @@ theorem card_le_two_mul_re_trace_of_coordinateSliceProjection_of_box {D d : ℕ}
     (a : (∀ k, Fin (L k)) →
       Matrix ((∀ k, Fin (L k)) → Fin d) ((∀ k, Fin (L k)) → Fin d) ℂ)
     (hsupp : ∀ i, a i ∈ supportedOperators d
-      {v | dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ})
+      (Finset.univ.filter fun v ↦ dist (fun k ↦ (v k : ℕ)) (fun k ↦ (i k : ℕ)) ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian)
     {ψ : EuclideanSpace ℂ ((∀ k, Fin (L k)) → Fin d)} (hψ : ‖ψ‖ = 1)
     {J Δ r : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
@@ -134,7 +134,7 @@ theorem card_le_two_mul_re_trace_of_coordinateSliceProjection_of_box {D d : ℕ}
     (s.card : ℝ) ≤ 2 * (trace P₀).re := by
   let : Nonempty (∀ k, Fin (L k)) := ⟨fun k ↦ ⟨0, hL k⟩⟩
   have hsupp' : ∀ i, a i ∈ supportedOperators d
-      {v : (∀ k, Fin (L k)) | Nat.dist (v axis) (i axis) ≤ ℓ} := by
+      (Finset.univ.filter fun (v : (∀ k, Fin (L k))) ↦ Nat.dist (v axis) (i axis) ≤ ℓ) := by
     intro i
     exact supportedOperators_mono (d := d) (ι := ∀ k, Fin (L k))
       (coordinateBox_ball_subset_strip L axis ℓ i) (hsupp i)

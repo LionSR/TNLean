@@ -54,13 +54,12 @@ Source: `eq:amplification-restoring-operator`, `09-amplification.tex`, lines 350
 524–525. -/
 theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (Site Λ)}
     {κ : Type*} (s : Finset κ) {P : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hP : ∀ i, P i ∈ supportedOperators q (S : Set (Site Λ)))
+    (hP : ∀ i, P i ∈ supportedOperators q S)
     (b : κ → Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) :
     (∑ i ∈ s, P i ⊗ₖ (b i ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) ∈
-      supportedOperators q ((S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) :
-        Set (AncillaSites Λ X)) := by
+      supportedOperators q (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
   have hsum : (∑ i ∈ s, P i ⊗ₖ (b i ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) = ∑ i ∈ s, (P i ⊗ₖ (b i ⊗ₖ
@@ -78,10 +77,10 @@ every `P_i` acting on a physical region `S`, then for all ancillary labels `x, y
 Source: `eq:amplification-column-operator`, `09-amplification.tex`, lines 359–364. -/
 theorem block_mem_supportedOperators_of_eq_sum {S : Finset (Site Λ)} {α κ : Type*}
     (s : Finset κ) {P : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hP : ∀ i, P i ∈ supportedOperators q (S : Set (Site Λ))) (A : κ → Matrix α α ℂ)
+    (hP : ∀ i, P i ∈ supportedOperators q S) (A : κ → Matrix α α ℂ)
     (x y : α) :
     (Matrix.of fun σ τ => (∑ i ∈ s, P i ⊗ₖ A i) (σ, x) (τ, y)) ∈
-      supportedOperators q (S : Set (Site Λ)) := by
+      supportedOperators q S := by
   have hblock : (Matrix.of fun σ τ => (∑ i ∈ s, P i ⊗ₖ A i) (σ, x) (τ, y)) =
       ∑ i ∈ s, A i x y • P i := by
     ext σ τ
@@ -103,10 +102,9 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
     {R₀ : Matrix (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X))
       (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X)) ℂ}
     (hR₀ : R₀.submatrix (ancillaSplit q X) (ancillaSplit q X) ∈
-      supportedOperators q ((N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) :
-        Set (AncillaSites Λ X)))
+      supportedOperators q (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
     {L' D Dret : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hL : L' ∈ supportedOperators q (N : Set (Site Λ)))
+    (hL : L' ∈ supportedOperators q N)
     {φ η g : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ}
     (hφ : ‖WithLp.toLp 2 φ‖ = 1) (hη : ‖WithLp.toLp 2 η‖ = 1) {M₀ ε a : ℝ}
     (hζ : ‖WithLp.toLp 2 (R₀ *ᵥ φ)‖ ≤ M₀)
@@ -124,8 +122,7 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
       RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *
         R₀)ᴴ *ᵥ η) - WithLp.toLp 2 φ‖ ≤ a) :
     ∃ U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ,
-      U ∈ supportedOperators q ((N.disjSum (Finset.univ.disjSum ∅) :
-        Finset (AncillaSites Λ X)) : Set (AncillaSites Λ X)) ∧ Uᴴ * U = 1 ∧
+      U ∈ supportedOperators q (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) ∧ Uᴴ * U = 1 ∧
       ‖WithLp.toLp 2 (U *ᵥ (φ ∘ ancillaSplit q X)) - WithLp.toLp 2 (η ∘ ancillaSplit q X)‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
   set sp := ancillaSplit q X with hspdef
@@ -219,8 +216,7 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
     (hη : ‖WithLp.toLp 2 (restoringTransport Ω X Y hXY *ᵥ
       (Entropy.restoringRestored p (restoringVector Ω X Y hXY)).ofLp)‖ = 1)
     {U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q ((N.disjSum (Finset.univ.disjSum ∅) :
-      Finset (AncillaSites Λ X)) : Set (AncillaSites Λ X))) (hUu : Uᴴ * U = 1)
+    (hU : U ∈ supportedOperators q (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X))) (hUu : Uᴴ * U = 1)
     {C₁ C₂ : ℝ} {n M K : ℕ} (hn : 1 ≤ n) (hK : 4 * (M + 2) ≤ K)
     (hδ : ‖WithLp.toLp 2 (U *ᵥ ((restoringTransport Ω X Y hXY *ᵥ
         (Entropy.restoringCopy sBlank xBlank (restoringVector Ω X Y hXY)).ofLp) ∘

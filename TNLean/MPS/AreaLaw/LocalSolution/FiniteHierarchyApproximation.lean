@@ -91,7 +91,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 633–639 and 705–711. -/
 theorem exists_unit_mem_periodicHierarchyProjection_of_finite (blk : ι → ℕ)
     (a : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hsupp : ∀ j : Fin N, 0 < (j : ℕ) →
-      a j ∈ supportedOperators d {i | blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)})
+      a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (ha : ∀ j, (a j).IsHermitian)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {K r J Δ : ℝ} (hK : 0 < K)
     (hh : 2 ≤ h) (hr : hierarchyProjectionLength h J Δ ≤ r)
@@ -126,7 +126,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 709–730. -/
 theorem card_le_two_mul_re_trace_of_periodicHierarchyProjection_of_finite (blk : ι → ℕ)
     (a : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hN : N ≤ 2 ^ h)
     (hsupp : ∀ j : Fin N, 0 < (j : ℕ) →
-      a j ∈ supportedOperators d {i | blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)})
+      a j ∈ supportedOperators d (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (ha : ∀ j, (a j).IsHermitian)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {K r J Δ : ℝ} (hK : 0 < K)
     (hh : 2 ≤ h) (hJ : 0 < J) (hΔ : 0 < Δ)

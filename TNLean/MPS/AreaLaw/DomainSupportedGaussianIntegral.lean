@@ -47,16 +47,16 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
             ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin Λ.card → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ supportedOperators (q * q) (N Z : Set (Fin Λ.card))) ∧
+          (∀ t, U t ∈ supportedOperators (q * q) (N Z : Finset (Fin Λ.card))) ∧
           ∀ (Q : Finset (Fin Λ.card))
             (W : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ),
-            W ∈ supportedOperators (q * q) (Q : Set (Fin Λ.card)) →
+            W ∈ supportedOperators (q * q) Q →
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
                 ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
-              M ∈ supportedOperators (q * q) (B : Set (Fin Λ.card)) ∧
+              M ∈ supportedOperators (q * q) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                 ‖W‖ * C * (Λ.card : ℝ) ^ 2 * (1 + T) *

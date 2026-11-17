@@ -89,7 +89,7 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
         (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          supportedOperators q S) →
         ∀ (r : ℝ), 0 ≤ r →
           (∀ i, ¬ P i → ∀ s ∈ S,
             ENNReal.ofReal r < ((domainGraph Λ).edist (a i) s : ℝ≥0∞)) →
@@ -137,7 +137,7 @@ theorem exists_domain_integrable_and_integral_channelWordOmissionDefect_le
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set (Site Λ))) →
+            supportedOperators q S) →
           ∀ (r : ℝ), 0 ≤ r →
             (∀ i, ¬ P i → ∀ s ∈ S,
               ENNReal.ofReal r < ((domainGraph Λ).edist (a i) s : ℝ≥0∞)) →
@@ -169,7 +169,7 @@ theorem domainConstraintWord_omission
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          supportedOperators q S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
           let D := fun u : List κ =>
@@ -233,7 +233,7 @@ theorem exists_domainConstraintWord_omission
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set (Site Λ))) →
+            supportedOperators q S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
             let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
             let D := fun u : List κ =>
@@ -291,14 +291,14 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
           ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
           ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x})) :
+        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          supportedOperators q S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -356,7 +356,7 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          supportedOperators q S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -389,7 +389,7 @@ theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : �
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          supportedOperators q S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -431,7 +431,7 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set (Site Λ))) →
+            supportedOperators q S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
             let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
             let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)

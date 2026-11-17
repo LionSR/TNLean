@@ -163,7 +163,7 @@ omit [DecidableEq ι] in
 /-- If every product operator acting on `D` has the form `Φ A'` in the coordinates `e`, for a
 linear map `Φ`, then so does every operator acting on `D`. -/
 theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Module ℂ M]
-    {D : Set ι} (e : (ι → Fin q) ≃ κ) (Φ : M →ₗ[ℂ] Matrix κ κ ℂ)
+    {D : Finset ι} (e : (ι → Fin q) ≃ κ) (Φ : M →ₗ[ℂ] Matrix κ κ ℂ)
     (hgen : ∀ m : ι → Matrix (Fin q) (Fin q) ℂ, (∀ i ∉ D, m i = 1) →
       ∃ A', (rectKronecker m).submatrix e.symm e.symm = Φ A')
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q D) :
@@ -183,7 +183,7 @@ theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Mo
 
 /-- An operator acting on `T ∪ E` is `A' ⊗ 1_U` in the coordinates of `threeSplit T E`. -/
 theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
-    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q (↑(T ∪ E) : Set ι)) :
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q (T ∪ E : Finset ι)) :
     ∃ A' : Matrix ((T → Fin q) × (E → Fin q)) ((T → Fin q) × (E → Fin q)) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         A' ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by
@@ -202,7 +202,7 @@ theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
 /-- An operator acting on a subset of `E` is `(1_T ⊗ A') ⊗ 1_U` in the coordinates of
 `threeSplit T E`. -/
 theorem exists_threeSplit_eq_one_kronecker_kronecker_one {T E : Finset ι} (h : Disjoint T E)
-    {D : Set ι} (hD : D ⊆ E) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    {D : Finset ι} (hD : D ⊆ E) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ supportedOperators q D) :
     ∃ A' : Matrix (E → Fin q) (E → Fin q) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
@@ -230,7 +230,7 @@ Supporting tensor-partition algebra for AKLV, arXiv:1301.1162v1,
 Lemma 4.2 (`l:agsp`), lines 646–654, and ALVV, arXiv:1602.08828v2,
 `eq:H-mid-cut`, lines 810–821, and `prop:Cheby-AGSP-eff`, lines 1324–1332. -/
 theorem exists_threeSplit_eq_reindex_one_kronecker
-    {T E : Finset ι} (h : Disjoint T E) {D : Set ι}
+    {T E : Finset ι} (h : Disjoint T E) {D : Finset ι}
     (hD : Disjoint D (T : Set ι))
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ supportedOperators q D) :

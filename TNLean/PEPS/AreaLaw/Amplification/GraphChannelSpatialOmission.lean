@@ -45,7 +45,7 @@ theorem mem_supportedOperators_reachable_of_forall_tail
     {C c α : ℝ} (hc : 0 < c) (hα : 0 < α)
     (hε : ∀ l : ℕ, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α))) :
-    k ∈ supportedOperators q {x | G.Reachable a x} := by
+    k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x) := by
   classical
   set n := Finset.univ.sup (G.dist a)
   have hball (l : ℕ) (hl : n ≤ l) : ManyBody.graphBall G a l = ManyBody.graphBall G a n :=
@@ -111,7 +111,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
       [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
       (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
       (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
@@ -120,7 +120,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
       ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
         (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set ι)) →
+          supportedOperators q S) →
         ∀ (r : ℝ), 0 ≤ r →
           (∀ i, ¬ P i → ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
           ∀ T : ℝ≥0,
@@ -263,7 +263,7 @@ theorem exists_integrable_and_integral_channelWordOmissionDefect_le
         [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
         (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
         (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
@@ -272,7 +272,7 @@ theorem exists_integrable_and_integral_channelWordOmissionDefect_le
         ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
           (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set ι)) →
+            supportedOperators q S) →
           ∀ (r : ℝ), 0 ≤ r →
             (∀ i, ¬ P i → ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
             ∀ T : ℝ≥0,

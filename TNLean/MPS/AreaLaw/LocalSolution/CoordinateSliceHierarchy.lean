@@ -132,10 +132,10 @@ Hastings, arXiv:cond-mat/0508554v3, lines 609–639 and 745–756. -/
 theorem coordinateSliceOperator_mem_supportedOperators (z : ι → ℕ)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d {v | Nat.dist (z v) (z i) ≤ ℓ})
+    (ha : ∀ i, a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ))
     (j : Fin N) (hj : 0 < (j : ℕ)) :
     coordinateSliceOperator z ℓ hN a j ∈ supportedOperators d
-      {v | coordinateSlice ℓ (z v) + 1 = (j : ℕ) ∨ coordinateSlice ℓ (z v) = (j : ℕ)} := by
+      (Finset.univ.filter fun v ↦ coordinateSlice ℓ (z v) + 1 = (j : ℕ) ∨ coordinateSlice ℓ (z v) = (j : ℕ)) := by
   apply edgePartition_mem_supportedOperators
   intro i hi
   exact supportedOperators_mono (fun v hv ↦ coordinateSliceEdge_support hN hℓ hv hj hi) (ha i)
@@ -148,11 +148,10 @@ theorem coordinateSliceOperator_mem_supportedOperators_of_metric [PseudoMetricSp
     (hcoord : ∀ a b, dist (coord a) (coord b) ≤ dist a b) (axis : Fin D)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d {v | dist v i ≤ ℓ})
+    (ha : ∀ i, a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ dist v i ≤ ℓ))
     (j : Fin N) (hj : 0 < (j : ℕ)) :
     coordinateSliceOperator (fun i ↦ coord i axis) ℓ hN a j ∈ supportedOperators d
-      {v | coordinateSlice ℓ (coord v axis) + 1 = (j : ℕ) ∨
-        coordinateSlice ℓ (coord v axis) = (j : ℕ)} := by
+      (Finset.univ.filter fun v ↦ coordinateSlice ℓ (coord v axis) + 1 = (j : ℕ) ∨ coordinateSlice ℓ (coord v axis) = (j : ℕ)) := by
   apply coordinateSliceOperator_mem_supportedOperators _ hℓ hN a _ j hj
   intro i
   exact supportedOperators_mono
@@ -204,9 +203,9 @@ omit [DecidableEq ι] in
 theorem coordinateSliceOperator_closing_mem_supportedOperators (z : ι → ℕ)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N) (hz : ∀ i, z i < N * (2 * ℓ))
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d {v | Nat.dist (z v) (z i) ≤ ℓ}) :
+    (ha : ∀ i, a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ)) :
     coordinateSliceOperator z ℓ hN a ⟨0, hN⟩ ∈ supportedOperators d
-      {v | coordinateSlice ℓ (z v) + 1 = N ∨ coordinateSlice ℓ (z v) = 0} := by
+      (Finset.univ.filter fun v ↦ coordinateSlice ℓ (z v) + 1 = N ∨ coordinateSlice ℓ (z v) = 0) := by
   apply edgePartition_mem_supportedOperators
   intro i hi
   exact supportedOperators_mono

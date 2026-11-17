@@ -26,7 +26,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-- Real functional calculus preserves the support of a finite operator.
 Source context: Hastings, arXiv:cond-mat/0508554v3, lines 609–628;
 AKLV, arXiv:1301.1162v1, Section 6.1. -/
-theorem cfc_mem_supportedOperators (f : ℝ → ℝ) {S : Set ι}
+theorem cfc_mem_supportedOperators (f : ℝ → ℝ) {S : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S) :
     cfc f A ∈ supportedOperators d S := by
   let s : StarSubalgebra ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ) :=

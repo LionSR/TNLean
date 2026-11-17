@@ -34,13 +34,13 @@ theorem isSupportedOn_physicalParityProduct
   intro k hk
   change (T).symm (if hk' : k < L - 1 then
       if k % 2 = p then T (h ⟨k, hk'⟩) else 0 else 0) ∈
-    QuantumCircuit.supportedOperators q (D : Set (Fin L))
+    QuantumCircuit.supportedOperators q D
   rw [dite_eq_left hk]
   split_ifs with hp
   · simpa only [StarAlgEquiv.symm_apply_apply] using
       QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs ⟨k, hk⟩ hp)
   · simpa only [map_zero] using
-      (QuantumCircuit.supportedOperators q (D : Set (Fin L))).zero_mem
+      (QuantumCircuit.supportedOperators q D).zero_mem
 
 /-- The actual parity product of the interval-restricted family is supported
 on that same site interval. The support is derived from the original

@@ -117,7 +117,7 @@ theorem layerOfList_op : (layerOfList l key G hl hu hs).op = (l.map G).prod := b
 end LayerOfList
 
 /-- A product of operators acting on `S` acts on `S`. -/
-theorem list_prod_mem_supportedOperators {ι : Type*} [Fintype ι] [DecidableEq ι] {S : Set ι}
+theorem list_prod_mem_supportedOperators {ι : Type*} [Fintype ι] [DecidableEq ι] {S : Finset ι}
     (l : List (Matrix (ι → Fin d) (ι → Fin d) ℂ))
     (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
     l.prod ∈ supportedOperators d S := by

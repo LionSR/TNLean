@@ -106,7 +106,7 @@ theorem expect_ghzState_two_diagonal [NeZero N] (a b : ℂ)
   simp
 
 /-- A supported observable has a classical two-branch expectation if any site is unobserved. -/
-theorem expect_ghzState_two {S : Set (Fin N)} (a b : ℂ)
+theorem expect_ghzState_two {S : Finset (Fin N)} (a b : ℂ)
     {A : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
     (hA : A ∈ supportedOperators 2 S) (hS : ∃ i, i ∉ S) :
     expect (ghzState (M := N) ![a, b]) A =
@@ -119,7 +119,7 @@ theorem expect_ghzState_two {S : Set (Fin N)} (a b : ℂ)
     (apply_eq_zero_of_mem_supportedOperators hA ⟨i, hi, by decide⟩)
 
 /-- The exact connected correlation of two separated observables in a binary GHZ vector. -/
-theorem covariance_ghzState_two {S S' : Set (Fin N)} (hSS' : Disjoint S S')
+theorem covariance_ghzState_two {S S' : Finset (Fin N)} (hSS' : Disjoint S S')
     (hcover : ∃ i, i ∉ S ∪ S') {a b : ℂ} (hab : star a * a + star b * b = 1)
     {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
     (hA : A ∈ supportedOperators 2 S) (hB : B ∈ supportedOperators 2 S') :
@@ -142,7 +142,7 @@ theorem covariance_ghzState_two {S S' : Set (Fin N)} (hSS' : Disjoint S S')
 
 /-- Separated unitary observables in a normalized GHZ vector have correlation at most
 four times the product of the sector probabilities. -/
-theorem norm_covariance_ghzState_two_le {S S' : Set (Fin N)} (hSS' : Disjoint S S')
+theorem norm_covariance_ghzState_two_le {S S' : Finset (Fin N)} (hSS' : Disjoint S S')
     (hcover : ∃ i, i ∉ S ∪ S') {a b : ℂ} (hab : star a * a + star b * b = 1)
     {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
     (hA : A ∈ supportedOperators 2 S) (hB : B ∈ supportedOperators 2 S')
@@ -174,7 +174,7 @@ variable [NeZero N]
 /-- A shallow circuit preserves the upper bound on distant GHZ-sector correlations. -/
 theorem norm_covariance_mulVec_ghzState_two_le {T : ℕ}
     {U A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hU : IsLocalCircuitOfDepth U T) {X Y : Set (Fin N)}
+    (hU : IsLocalCircuitOfDepth U T) {X Y : Finset (Fin N)}
     (hXY : IsSeparatedBy X Y (2 * T))
     (hcover : ∃ k, k ∉ neighbourhood X T ∪ neighbourhood Y T)
     (hA : A ∈ supportedOperators 2 X) (hB : B ∈ supportedOperators 2 Y)

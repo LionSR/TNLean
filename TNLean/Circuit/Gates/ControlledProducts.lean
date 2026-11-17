@@ -64,7 +64,7 @@ sites. -/
 theorem isPairProduct_of_mem_supportedOperators_card_le_two (hd : 0 < d) (hn : 2 ≤ n)
     {T : Finset (Fin n)} (hT : T.card ≤ 2) {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
     (hZu : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d (T : Set (Fin n))) : IsPairProduct d n (2 * n) Z := by
+    (hZ : Z ∈ supportedOperators d T) : IsPairProduct d n (2 * n) Z := by
   obtain ⟨s, t, hst, hsub⟩ := exists_pair_superset hn hT
   exact isPairProduct_of_mem_supportedOperators_pair hd hst hZu (supportedOperators_mono hsub hZ)
 

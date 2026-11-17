@@ -53,7 +53,7 @@ theorem cutOperator_embedOp_prefix {L N q : ℕ} (hi : L ≤ N)
     · intro hv
       exact ⟨⟨v.val, mem_leftBlock.mp hv⟩, Fin.ext rfl⟩
   have hmem : QuantumCircuit.embedOp (Fin.castLE hi) X ∈
-      QuantumCircuit.supportedOperators q (leftBlock N L : Set (Fin N)) := by
+      QuantumCircuit.supportedOperators q (leftBlock N L : Finset (Fin N)) := by
     simpa only [hrange] using
       QuantumCircuit.embedOp_mem_supportedOperators (Fin.castLE_injective hi) X
   have hs := QuantumCircuit.isSupportedOn_of_mem_supportedOperators hmem
@@ -88,7 +88,7 @@ theorem cutOperator_appended_penalty {L N q : ℕ} (z : Fin q)
   classical
   have hmem : (∑ v : {v : Fin N // v ∉ leftBlock N L},
         QuantumCircuit.siteOp v.val (QuantumCircuit.siteBasisPenalty z)) ∈
-      QuantumCircuit.supportedOperators q (↑((leftBlock N L)ᶜ) : Set (Fin N)) := by
+      QuantumCircuit.supportedOperators q ((leftBlock N L)ᶜ : Finset (Fin N)) := by
     apply Submodule.sum_mem
     intro v _
     apply QuantumCircuit.supportedOperators_mono _

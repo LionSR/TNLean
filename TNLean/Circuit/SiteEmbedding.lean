@@ -206,7 +206,7 @@ theorem embedOp_rectKronecker {e : κ → ι} (he : Function.Injective e)
 omit [DecidableEq ι] in
 /-- Every operator acts on the set of all sites. -/
 theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-    X ∈ supportedOperators d (Set.univ : Set ι) := by
+    X ∈ supportedOperators d Finset.univ := by
   classical
   rw [matrix_eq_sum_single X]
   refine Submodule.sum_mem _ fun a _ => Submodule.sum_mem _ fun b _ => ?_
@@ -229,9 +229,9 @@ omit [DecidableEq κ] in
 /-- An operator acting on the sites `S` of the placed sites acts, as `X ⊗ 1`, on the sites
 `e '' S`. -/
 theorem embedOp_mem_supportedOperators_image {e : κ → ι} (he : Function.Injective e)
-    {S : Set κ} {X : Matrix (κ → Fin d) (κ → Fin d) ℂ}
+    {S : Finset κ} {X : Matrix (κ → Fin d) (κ → Fin d) ℂ}
     (hX : X ∈ supportedOperators d S) :
-    embedOp e X ∈ supportedOperators d (e '' S) := by
+    embedOp e X ∈ supportedOperators d (S.image e) := by
   induction hX using Submodule.span_induction with
   | mem x hx =>
     obtain ⟨A, hA, rfl⟩ := hx
@@ -250,7 +250,7 @@ omit [DecidableEq κ] in
 /-- `X ⊗ 1` acts on the range of `e`. -/
 theorem embedOp_mem_supportedOperators {e : κ → ι} (he : Function.Injective e)
     (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
-    embedOp e X ∈ supportedOperators d (Set.range e) := by
+    embedOp e X ∈ supportedOperators d (Finset.univ.image e) := by
   simpa using embedOp_mem_supportedOperators_image he (mem_supportedOperators_univ X)
 
 /-! ### Placed operators on placed operators -/

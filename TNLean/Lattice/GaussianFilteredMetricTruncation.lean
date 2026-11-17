@@ -104,7 +104,7 @@ theorem exists_metric_truncated_filter_budget {R J Δ : ℝ} (hR : 0 < R)
   have hq : 0 ≤ q := by dsimp [q]; positivity
   have hS : 1 ≤ S := (Finset.one_le_card.mpr ⟨i, self_mem_metricRangeBall hR.le i⟩).trans
     (hCard i)
-  have hSupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j : Set ι) := by
+  have hSupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j : Finset ι) := by
     rw [coe_metricRangeBall]
     exact hSupport j
   have hDegree (x : ι) : (metricRangeGraph R).degree x ≤ S := by
@@ -188,12 +188,12 @@ theorem metric_truncated_filter_properties {ι : Type*} [PseudoMetricSpace ι]
     let M := gaussianFilteredTerm q Δ (∑ j ∈ metricRangeBall (ℓ - R) i, h j) (h i)
     M ∈ supportedOperators d (Metric.closedBall i ℓ) ∧ M.IsHermitian ∧ ‖M‖ ≤ J := by
   intro M
-  have hsupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j : Set ι) := by
+  have hsupp (j : ι) : h j ∈ supportedOperators d (metricRangeBall R j : Finset ι) := by
     simpa only [coe_metricRangeBall] using hSupport j
   have hHs : (∑ j ∈ metricRangeBall (ℓ - R) i, h j).IsHermitian :=
     Matrix.isHermitian_sum _ fun j _ ↦ hHerm j
   have hHsSupp : (∑ j ∈ metricRangeBall (ℓ - R) i, h j) ∈
-      supportedOperators d (metricRangeBall ℓ i : Set ι) :=
+      supportedOperators d (metricRangeBall ℓ i : Finset ι) :=
     Submodule.sum_mem _ fun j hj ↦ supportedOperators_mono
       (Finset.coe_subset.mpr (metricRangeBall_retained_support hj)) (hsupp j)
   have hWi := supportedOperators_mono

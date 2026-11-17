@@ -149,15 +149,15 @@ theorem threeRegionFamily_supported {h : Fin m → Matrix (Fin L → Fin q) (Fin
     (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (a b ℓ : ℕ) :
     (∀ r, threeRegionFamily h a b ℓ (Sum.inl (Sum.inl r)) ∈ QuantumCircuit.supportedOperators q
-      (interval L (a + r.val) (a + r.val + 2) : Set (Fin L))) ∧
+      (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))) ∧
     (∀ r, threeRegionFamily h a b ℓ (Sum.inl (Sum.inr r)) ∈ QuantumCircuit.supportedOperators q
-      (interval L (b + r.val) (b + r.val + 2) : Set (Fin L))) ∧
+      (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))) ∧
     threeRegionFamily h a b ℓ (Sum.inr 0) ∈ QuantumCircuit.supportedOperators q
-      (interval L 0 (a + 1) : Set (Fin L)) ∧
+      (interval L 0 (a + 1) : Finset (Fin L)) ∧
     threeRegionFamily h a b ℓ (Sum.inr 1) ∈ QuantumCircuit.supportedOperators q
-      (interval L (a + 2 * ℓ) (b + 1) : Set (Fin L)) ∧
+      (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)) ∧
     threeRegionFamily h a b ℓ (Sum.inr 2) ∈ QuantumCircuit.supportedOperators q
-      (interval L (b + 2 * ℓ) L : Set (Fin L)) := by
+      (interval L (b + 2 * ℓ) L : Finset (Fin L)) := by
   have hext := bondTermExtension_supported hh
   refine ⟨fun r ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hext _),
     fun r ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hext _), ?_, ?_, ?_⟩ <;>

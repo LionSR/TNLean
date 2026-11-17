@@ -51,14 +51,14 @@ section Support
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The window projection of an operator acting on `S` acts on `S`. -/
-theorem windowProjection_mem_supportedOperators {S : Set ι}
+theorem windowProjection_mem_supportedOperators {S : Finset ι}
     {M : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hM : M ∈ supportedOperators d S) (c x : ℝ) :
     windowProjection M c x ∈ supportedOperators d S :=
   cfc_mem_supportedOperators _ (Submodule.sub_mem _ hM
     (Submodule.smul_mem _ _ (one_mem_supportedOperators S)))
 
 /-- The window projection inside the range of `Q` acts on `S` when `Q` and `M` do. -/
-theorem compressedWindowProjection_mem_supportedOperators {S : Set ι}
+theorem compressedWindowProjection_mem_supportedOperators {S : Finset ι}
     {Q M : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hQ : Q ∈ supportedOperators d S)
     (hM : M ∈ supportedOperators d S) (c x : ℝ) :
     compressedWindowProjection Q M c x ∈ supportedOperators d S :=

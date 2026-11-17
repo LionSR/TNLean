@@ -70,7 +70,7 @@ theorem ctrlProj_conjTranspose (S : Finset ι) (c : ι → Fin d) :
   congr 1; funext x; simp only [Pi.star_apply]; split_ifs <;> simp
 
 theorem ctrlProj_mem_supportedOperators (S : Finset ι) (c : ι → Fin d) :
-    ctrlProj S c ∈ supportedOperators d (S : Set ι) := by
+    ctrlProj S c ∈ supportedOperators d S := by
   classical
   have : ctrlProj S c = rectKronecker fun i =>
       if i ∈ S then diagonal (fun a : Fin d => if a = c i then (1 : ℂ) else 0) else 1 := by

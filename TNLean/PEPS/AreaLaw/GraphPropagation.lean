@@ -183,8 +183,8 @@ lines 52–64 and 70–112), with the budget `eq:quasilocal-budget` (lines 31–
 theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ supportedOperators q (X.1 : Set (Site Λ))) (y : Site Λ)
-    (hB : B ∈ supportedOperators q ({y} : Set (Site Λ)))
+    (hA : A ∈ supportedOperators q X.1) (y : Site Λ)
+    (hB : B ∈ supportedOperators q ({y} : Finset (Site Λ)))
     (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ) (hn : (n : ℕ∞) ≤ (domainGraph Λ).edist a y) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
         t A‖ ≤
@@ -208,8 +208,8 @@ Source: OpenAI area law, Lemma 4.1: "The commutator is zero when `d_Λ(a_i, y) =
 theorem commutator_eq_zero_of_edist_eq_top (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ supportedOperators q (X.1 : Set (Site Λ))) (y : Site Λ)
-    (hB : B ∈ supportedOperators q ({y} : Set (Site Λ)))
+    (hA : A ∈ supportedOperators q X.1) (y : Site Λ)
+    (hB : B ∈ supportedOperators q ({y} : Finset (Site Λ)))
     (hy : (domainGraph Λ).edist a y = ⊤) (t : ℝ) :
     ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator t
         A = 0 :=
@@ -230,7 +230,7 @@ lines 65–68 and 117–128), with `E_{i,l}` from `eq:quasilocal-ce` (lines 17�
 theorem norm_sub_regionExpectation_graphBall_le (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ supportedOperators q (X.1 : Set (Site Λ))) (l : ℕ) (t : ℝ) :
+    (hA : A ∈ supportedOperators q X.1) (l : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.operator t A -
         ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) a l)
           (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
@@ -273,9 +273,9 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (X : AdmissibleSupport Λ R)
         (a : Site Λ), a ∈ X.1 →
         ∀ A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-        A ∈ supportedOperators q (X.1 : Set (Site Λ)) → ∀ t : ℝ,
+        A ∈ supportedOperators q X.1 → ∀ t : ℝ,
         (∀ (y : Site Λ) (B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-          B ∈ supportedOperators q ({y} : Set (Site Λ)) →
+          B ∈ supportedOperators q ({y} : Finset (Site Λ)) →
           (∀ d : ℕ, (domainGraph Λ).edist a y = d →
             ‖ManyBody.heisenbergEvolution h.operator t A * B -
                 B * ManyBody.heisenbergEvolution h.operator t A‖ ≤

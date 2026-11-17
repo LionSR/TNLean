@@ -267,20 +267,20 @@ theorem branch_conjTranspose_mul_self [NeZero q] (s : p.Tag) :
     rankOne]
 
 theorem cyl_mem_supportedOperators (s : p.Tag) :
-    p.cyl s ∈ supportedOperators q (p.outer : Set ι) := by
+    p.cyl s ∈ supportedOperators q p.outer := by
   rcases s with s | s
   · exact one_mem_supportedOperators _
   · exact supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
       (siteLift_mem_supportedOperators _ _)
 
 theorem branch_mem_supportedOperators [NeZero q] (s : p.Tag) :
-    p.branch s ∈ supportedOperators q (p.outer : Set ι) := by
+    p.branch s ∈ supportedOperators q p.outer := by
   rcases s with s | s
   · exact one_mem_supportedOperators _
   · exact supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
       (siteLift_mem_supportedOperators _ _)
 
-theorem proj_mem_supportedOperators : p.proj ∈ supportedOperators q (p.outer : Set ι) :=
+theorem proj_mem_supportedOperators : p.proj ∈ supportedOperators q p.outer :=
   Submodule.sum_mem _ fun s _ => p.cyl_mem_supportedOperators s
 
 /-- The hole encoder `K_{c,h} = ∑_{j,ℓ} |j, ℓ⟩ ⊗ (|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1)`

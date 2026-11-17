@@ -38,7 +38,7 @@ noncomputable def finiteRingNeighbourhood (a : ℤ) (N : ℕ) [NeZero N]
     (J : Finset ℤ) (R : ℕ) : Finset ℤ := by
   classical
   exact (QuantumCircuit.neighbourhood
-    {i : Fin N | (finiteChainSiteEquiv a N i).val ∈ J} R).toFinset.image
+    (Finset.univ.filter fun (i : Fin N) ↦ (finiteChainSiteEquiv a N i).val ∈ J) R).toFinset.image
       (fun i => (finiteChainSiteEquiv a N i).val)
 
 /-- The numbered ring neighbourhood remains in its finite ambient chain.
@@ -124,7 +124,7 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
   have hsingle : ({x} : Finset ℤ) ⊆ finiteChainRegion a N :=
     Finset.singleton_subset_iff.mpr hxΓ
   have hC : intervalCoordinates d a N (localInclusion hsingle C) ∈
-      QuantumCircuit.supportedOperators d ({ix} : Set (Fin N)) := by
+      QuantumCircuit.supportedOperators d ({ix} : Finset (Fin N)) := by
     apply QuantumCircuit.supportedOperators_mono ?_
       (intervalCoordinates_localInclusion_mem_supportedOperators hsingle C)
     intro j hj

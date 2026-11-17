@@ -36,7 +36,7 @@ namespace MPSPreparation
 variable {d M N r : ℕ} {ℓ : Fin M → ℕ}
 
 private theorem exists_rounds_of_isCircuitOn [NeZero d] [NeZero N] {K : ℕ}
-    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (hW : IsCircuitOn Set.univ K W) :
+    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (hW : IsCircuitOn Finset.univ K W) :
     ∃ Rs : List (MeasurementRound d N), (Rs.map MeasurementRound.depth).sum = K + 2 ∧
       MeasurementRound.IsRoundsImplementationOn Rs Set.univ W := by
   obtain ⟨Ls, hlen, -, hLs⟩ := hW
@@ -178,7 +178,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState [NeZero d] 
   obtain ⟨CB, hCB⟩ := exists_rounds_sparseBlockShift (d := d) hr₁
   refine ⟨KS + KA + 2 + CB, fun {M} _ ℓ {N} _ hN hr hℓ α hα => ?_⟩
   obtain ⟨S, hSu, hS⟩ := exists_windowGHZSeedUnitary α hα
-  have hseed : IsCircuitOn Set.univ KS (embedOp (registerSite hN hr 0) S) := by
+  have hseed : IsCircuitOn Finset.univ KS (embedOp (registerSite hN hr 0) S) := by
     refine ((hKS S hSu).isCircuitOn (registerSite_injective hN hr 0) fun i j h => ?_).mono_set
       (Set.subset_univ _)
     rw [registerSite_eq, registerSite_eq]

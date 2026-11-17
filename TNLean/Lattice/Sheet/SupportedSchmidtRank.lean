@@ -39,7 +39,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {T E D : Finset ι} (hTE : Disjoint T E) (hDT : Disjoint D T)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q (D : Set ι)) :
+    (hA : A ∈ supportedOperators q D) :
     ∃ V : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
         ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ,
       A.submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =

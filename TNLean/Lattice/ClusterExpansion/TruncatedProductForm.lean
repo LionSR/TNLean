@@ -76,7 +76,7 @@ check `u = v` off `⋃_C X C` times the product over `C` of the entries of `O C`
 configuration equal to `v` on `X C` and to `u` elsewhere. -/
 theorem noncommProd_apply_of_pairwiseDisjoint (X : ι → Finset σ)
     (O : ι → Matrix (σ → Fin d) (σ → Fin d) ℂ) (S : Finset ι)
-    (hO : ∀ C ∈ S, O C ∈ supportedOperators d (X C : Set σ))
+    (hO : ∀ C ∈ S, O C ∈ supportedOperators d (X C : Finset σ))
     (hS : (S : Set ι).PairwiseDisjoint X) (hc : (S : Set ι).Pairwise (Commute on O))
     (u v : σ → Fin d) :
     S.noncommProd O hc u v =
@@ -90,7 +90,7 @@ theorem noncommProd_apply_of_pairwiseDisjoint (X : ι → Finset σ)
     have hCS : ∀ C' ∈ S, Disjoint (X C) (X C') := fun C' hC' ↦
       hS (by simp) (by simp [hC']) fun h ↦ hC (h ▸ hC')
     have hXC : Disjoint (X C) (S.biUnion X) := (disjoint_biUnion_right _ _ _).2 hCS
-    have hO' : ∀ C' ∈ S, O C' ∈ supportedOperators d (X C' : Set σ) :=
+    have hO' : ∀ C' ∈ S, O C' ∈ supportedOperators d (X C' : Finset σ) :=
       fun C' hC' ↦ hO C' (mem_insert_of_mem hC')
     rw [noncommProd_insert_of_notMem _ _ _ _ hC, Matrix.mul_apply]
     set w : σ → Fin d := fun j ↦ if j ∈ X C then v j else u j with hw
@@ -178,7 +178,7 @@ open Classical in
 with no large cluster. -/
 theorem truncatedExp_eq_mul (acts : κ → Finset σ)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (near : σ → σ → Prop) (β : ℝ) :
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (near : σ → σ → Prop) (β : ℝ) :
     truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β =
       (∑ A with ∀ k ∈ A, ¬ (acts k).Nonempty, clusterOp h A β) *
         ∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
@@ -304,7 +304,7 @@ acting on some site with no large cluster correspond to the families of valid cl
 disjoint supports, `A ↦ clusters A`, and the entries of `E_A` factor over the clusters.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1108–1110 and 1268–1270. -/
 theorem sum_clusterOp_apply {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ)
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ)
     (u v : σ → Fin q) :
     (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
         NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) u v =
@@ -503,7 +503,7 @@ vanish except at consistent assignments of clusters to sites, which correspond t
 of valid clusters with disjoint supports; at such an assignment the product is the diagonal check
 off the supports times the matrix elements of the `E_C`. -/
 theorem sum_prod_clusterCoeff {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ)
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ)
     (u v : σ → Fin q) :
     ∑ c : σ → Option (Finset κ), ∏ i, clusterCoeff acts near h β i (fun j ↦ (c j, (u j, v j))) =
       ∑ S ∈ validFamilies acts near,
@@ -594,7 +594,7 @@ theorem sum_prod_clusterCoeff {h : κ → Matrix (σ → Fin q) (σ → Fin q) �
 label. Hastings, arXiv:cond-mat/0508554v3, lines 1259–1272. -/
 noncomputable def clusterProductForm (acts : κ → Finset σ) (near : σ → σ → Prop)
     (hnear : ∀ i, near i i) {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ) :
     open Classical in ProductForm (fun _ ↦ q) near
       (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
         NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) := by
@@ -619,7 +619,7 @@ form with coefficient neighborhoods `near`. The index at a site records its clus
 and a matrix-unit label. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1256–1279. -/
 theorem hasProductForm_sum_clusterOp (hnear : ∀ i, near i i)
     {h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ}
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ)) (β : ℝ) :
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ)) (β : ℝ) :
     open Classical in HasProductForm (fun _ ↦ q) near
       (∑ A with (∀ k ∈ A, (acts k).Nonempty) ∧
         NoLargeCluster (overlapGraph acts) (IsLargeSupport near acts) A, clusterOp h A β) :=
@@ -639,7 +639,7 @@ form with coefficient neighborhoods `near`. The relation is assumed reflexive. N
 Hermiticity, nonempty term supports, or connectivity of the site set is assumed. -/
 theorem hasProductForm_truncatedExp [Nonempty σ] (acts : κ → Finset σ)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
+    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Finset σ))
     (near : σ → σ → Prop) (hnear : ∀ i, near i i) (β : ℝ) :
     HasProductForm (fun _ ↦ q) near
       (truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) := by

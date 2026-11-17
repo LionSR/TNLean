@@ -43,15 +43,15 @@ localization bound pass unchanged to the approximation error. -/
 private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 ≤ q) {R : ℕ}
     {J C v c : ℝ} (hC : 0 ≤ C) (hv : 0 ≤ v) {Λ : Finset (ℤ × ℤ)} (g : LocalHamiltonian Λ q R J)
     (hlocal : ∀ (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-      A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
+      A ∈ supportedOperators q S → ∀ (l : ℕ) (t : ℝ),
       ‖ManyBody.heisenbergEvolution g.operator t A -
           ManyBody.regionExpectation (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution
               g.operator t
               A)‖ ≤
         ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)))
     (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
-    (Q Z : Finset (Site Λ)) (hW : W ∈ supportedOperators q (Q : Set (Site Λ)))
-    (hD : g.operator - H ∈ supportedOperators q (Z : Set (Site Λ))) (l : ℕ) :
+    (Q Z : Finset (Site Λ)) (hW : W ∈ supportedOperators q Q)
+    (hD : g.operator - H ∈ supportedOperators q Z) (l : ℕ) :
     let B := graphNeighborhood Λ l (Q ∪ Z)
     ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
       U 0 = 1 ∧
@@ -59,12 +59,12 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
         ((Complex.I • ManyBody.regionExpectation B
           (ManyBody.heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
       (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
-      (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
+      (∀ t, U t ∈ supportedOperators q B) ∧
       ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
         let M := ∫ t : ℝ in Set.Icc (-T) T,
           ManyBody.regionExpectation B (ManyBody.heisenbergEvolution g.operator t W) * U t
             ∂gaussianReal 0 η
-        M ∈ supportedOperators q (B : Set (Site Λ)) ∧
+        M ∈ supportedOperators q B ∧
         ‖M‖ ≤ ‖W‖ ∧
         ‖M - GaussianFilter.gaussianIntertwinerTruncated η T g.operator H W‖ ≤
           ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *
@@ -77,7 +77,7 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
   refine ⟨U, hU0, hU, hunit, fun t ↦ mem_supportedOperators_of_isSupportedOn (hsupport t),
     fun η T hT ↦ ?_⟩
   have hnear (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hA : A ∈ supportedOperators q ((Q ∪ Z : Finset (Site Λ)) : Set (Site Λ)))
+      (hA : A ∈ supportedOperators q (Q ∪ Z : Finset (Site Λ)))
       (t : ℝ) (ht : |t| ≤ T) :
       ‖ManyBody.heisenbergEvolution g.operator t A -
         ManyBody.regionExpectation B (ManyBody.heisenbergEvolution g.operator t A)‖ ≤
@@ -111,8 +111,8 @@ Source: polynomial-PEPS, Section 2, eq:info-local-two-sided, lines 513–562. -/
 theorem supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q) (R : ℕ) {J : ℝ} (hJ : 0 ≤ J)
     (Λ : Finset (ℤ × ℤ)) (g : LocalHamiltonian Λ q R J)
     (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
-    (Q Z : Finset (Site Λ)) (hW : W ∈ supportedOperators q (Q : Set (Site Λ)))
-    (hD : g.operator - H ∈ supportedOperators q (Z : Set (Site Λ))) (l : ℕ) :
+    (Q Z : Finset (Site Λ)) (hW : W ∈ supportedOperators q Q)
+    (hD : g.operator - H ∈ supportedOperators q Z) (l : ℕ) :
     let B := graphNeighborhood Λ l (Q ∪ Z)
     ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
       U 0 = 1 ∧
@@ -120,12 +120,12 @@ theorem supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q) (R : ℕ) {J : ℝ}
         ((Complex.I • ManyBody.regionExpectation B
           (ManyBody.heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
       (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
-      (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
+      (∀ t, U t ∈ supportedOperators q B) ∧
       ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
         let M := ∫ t : ℝ in Set.Icc (-T) T,
           ManyBody.regionExpectation B (ManyBody.heisenbergEvolution g.operator t W) * U t
             ∂gaussianReal 0 η
-        M ∈ supportedOperators q (B : Set (Site Λ)) ∧
+        M ∈ supportedOperators q B ∧
         ‖M‖ ≤ ‖W‖ ∧
         ‖M - GaussianFilter.gaussianIntertwinerTruncated η T g.operator H W‖ ≤
           ‖W‖ * (2 * graphBallLocalizationPrefactor R) * (Λ.card : ℝ) *
@@ -148,8 +148,8 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
         (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         H.IsHermitian →
         ∀ Q Z : Finset (Site Λ),
-          W ∈ supportedOperators q (Q : Set (Site Λ)) →
-          g.operator - H ∈ supportedOperators q (Z : Set (Site Λ)) →
+          W ∈ supportedOperators q Q →
+          g.operator - H ∈ supportedOperators q Z →
           ∀ l : ℕ,
             let B := graphNeighborhood Λ l (Q ∪ Z)
             ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
@@ -158,12 +158,12 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
                 ((Complex.I • ManyBody.regionExpectation B
                   (ManyBody.heisenbergEvolution g.operator t (g.operator - H))) * U t) t) ∧
               (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
-              (∀ t, U t ∈ supportedOperators q (B : Set (Site Λ))) ∧
+              (∀ t, U t ∈ supportedOperators q B) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
                   ManyBody.regionExpectation B (ManyBody.heisenbergEvolution g.operator t W) * U t
                     ∂gaussianReal 0 η
-                M ∈ supportedOperators q (B : Set (Site Λ)) ∧
+                M ∈ supportedOperators q B ∧
                 ‖M‖ ≤ ‖W‖ ∧
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T g.operator H W‖ ≤
                   ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *

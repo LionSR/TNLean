@@ -126,7 +126,7 @@ observables acting on spectators (`09-amplification.tex`, lines 107–110 and 12
 theorem localRootChannel_eq_self_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hB : ∀ A ∈ supportedOperators q (K : Set ι),
+    (hB : ∀ A ∈ supportedOperators q K,
       Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) : localRootChannel K k B = B := by
   have hl₀ := (Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
       (Matrix.nonneg_iff_posSemidef.mp hk₀)))
@@ -137,7 +137,7 @@ theorem localRootChannel_eq_self_of_forall_commute (K : Finset ι)
   refine rootChannel_eq_self_of_commute
     (rootChannel_kronecker_hyp (sqrt_one_sub_mul_add_sqrt_mul hl₀ hl₁)) ?_ ?_
   · exact hB _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
-      (isSupportedOn_of_mem_supportedOperators ((supportedOperators q (K : Set ι)).sub_mem
+      (isSupportedOn_of_mem_supportedOperators ((supportedOperators q K).sub_mem
           (one_mem_supportedOperators _) hlK)))))
   · exact hB _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
       (isSupportedOn_of_mem_supportedOperators hlK))))
@@ -147,7 +147,7 @@ regional commutant, with spectators (`09-amplification.tex`, lines 122–127). -
 theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {A : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hA : ∀ C ∈ supportedOperators q (K : Set ι),
+    (hA : ∀ C ∈ supportedOperators q K,
       Commute (C ⊗ₖ (1 : Matrix Aux Aux ℂ)) A)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     A * localRootChannel K k B - localRootChannel K k B * A =
@@ -159,7 +159,7 @@ theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
   have hlK := (mem_supportedOperators_of_isSupportedOn
       (ManyBody.regionExpectation_mem_supportedOperators K k))
   have hG := hA _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
-      (isSupportedOn_of_mem_supportedOperators ((supportedOperators q (K : Set ι)).sub_mem
+      (isSupportedOn_of_mem_supportedOperators ((supportedOperators q K).sub_mem
           (one_mem_supportedOperators _) hlK)))))
   have hKr := hA _ ((mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
       (isSupportedOn_of_mem_supportedOperators hlK))))
@@ -179,7 +179,7 @@ local channel. In particular this applies to every on-site unitary outside `K`
 theorem localRootChannel_commutator [NeZero q] (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {U : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q ((K : Set ι)ᶜ))
+    (hU : U ∈ supportedOperators q Kᶜ)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * localRootChannel K k B -
         localRootChannel K k B * (U ⊗ₖ 1) =
@@ -267,14 +267,14 @@ theorem localRootChannelShell_eq_zero_of_forall_commute [NeZero q]
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) (l : ℕ)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hB : ∀ A ∈ supportedOperators q (regions l : Set ι),
+    (hB : ∀ A ∈ supportedOperators q (regions l : Finset ι),
       Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) :
     localRootChannelShell regions k l B = 0 := by
   cases l with
   | zero =>
     exact sub_eq_zero.mpr (localRootChannel_eq_self_of_forall_commute _ hk₀ hk₁ hB)
   | succ l =>
-    have hPrev : ∀ A ∈ supportedOperators q (regions l : Set ι),
+    have hPrev : ∀ A ∈ supportedOperators q (regions l : Finset ι),
         Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B := by
       intro A hA
       exact hB A (supportedOperators_mono (by exact hregions (Nat.le_succ l)) hA)

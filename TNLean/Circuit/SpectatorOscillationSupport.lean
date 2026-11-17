@@ -42,7 +42,7 @@ theorem spectatorSiteExpectation_eq_self_iff (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     spectatorSiteExpectation q K B = B ↔
       ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-        supportedOperators q (K : Set ι) := by
+        supportedOperators q K := by
   constructor
   · intro h a b
     have hblock : ManyBody.regionExpectation K (Matrix.of fun σ τ => B (σ, a) (τ, b)) =
@@ -65,11 +65,11 @@ oscillation at any physical site outside its support. Source: area law,
 theorem siteOscillation_eq_zero_of_not_mem_support (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     (hB : ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-      supportedOperators q (K : Set ι)) {y : ι} (hy : y ∉ K) :
+      supportedOperators q K) {y : ι} (hy : y ∉ K) :
     siteOscillation q y B = 0 := by
   apply siteOscillation_eq_zero_of_commute
   intro U hU
-  have hUK : U ∈ supportedOperators q ((K : Set ι)ᶜ) :=
+  have hUK : U ∈ supportedOperators q Kᶜ :=
     supportedOperators_mono (Set.singleton_subset_iff.mpr hy) hU
   have hfix := (spectatorSiteExpectation_eq_self_iff K B).mpr hB
   simpa only [hfix] using (spectatorSiteExpectation_commute K B hUK).symm
@@ -80,7 +80,7 @@ support and no spectator dimension factor. Source: area law,
 theorem siteOscillation_le_support_indicator [NeZero q] (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     (hB : ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-      supportedOperators q (K : Set ι)) (y : ι) :
+      supportedOperators q K) (y : ι) :
     siteOscillation q y B ≤ 2 * ‖B‖ * (K : Set ι).indicator (fun _ => (1 : ℝ)) y := by
   by_cases hy : y ∈ K
   · simpa only [Set.indicator_of_mem hy, mul_one] using

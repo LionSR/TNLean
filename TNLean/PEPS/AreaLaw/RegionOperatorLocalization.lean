@@ -75,7 +75,7 @@ lines 498–508), with the constants of OpenAI area law, Lemma 4.1. -/
 theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : ℝ)
     (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (S : Finset (Site Λ))
     (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (hA : A ∈ supportedOperators q (S : Set (Site Λ))) (l : ℕ) (t : ℝ) :
+    (hA : A ∈ supportedOperators q S) (l : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.operator t A -
         ManyBody.regionExpectation (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution
             h.operator t A)‖ ≤
@@ -103,7 +103,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       norm_exp_commutator_eq (Complex.I • h.operator) hK A U t
   have : NeZero q := ⟨by omega⟩
   have hnear (y : Site Λ) (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hU : U ∈ supportedOperators q ({y} : Set (Site Λ)))
+      (hU : U ∈ supportedOperators q ({y} : Finset (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
       ‖ManyBody.heisenbergEvolution h.operator (-t) U -
         ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) y l)
@@ -124,7 +124,7 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
         (ManyBody.regionExpectation_mem_supportedOperators _ _))
   have hε (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hU : U ∈ supportedOperators q ({y} : Set (Site Λ)))
+      (hU : U ∈ supportedOperators q ({y} : Finset (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
       ‖ManyBody.heisenbergEvolution h.operator t A * U -
         U * ManyBody.heisenbergEvolution h.operator t A‖ ≤
@@ -178,7 +178,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-        A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
+        A ∈ supportedOperators q S → ∀ (l : ℕ) (t : ℝ),
         ‖ManyBody.heisenbergEvolution h.operator t A -
             ManyBody.regionExpectation (graphNeighborhood Λ l S)
               (ManyBody.heisenbergEvolution h.operator t A)‖ ≤

@@ -142,8 +142,8 @@ theorem jointPlacedColumns_of_supported_individual {d a b n : ℕ} [NeZero d]
     (t : τ ↪ OutsidePlacedConfig d (Fin.Embedding.append h))
     (X Y : Matrix (Cfg d n) (Cfg d n) ℂ)
     (V : Matrix γ α ℂ) (W : Matrix δ β ℂ)
-    (hSX : X ∈ supportedOperators d (Set.range e))
-    (hSY : Y ∈ supportedOperators d (Set.range f))
+    (hSX : X ∈ supportedOperators d (Finset.univ.image e))
+    (hSY : Y ∈ supportedOperators d (Finset.univ.image f))
     (hX : X * initializedBasisMatrix (placedBasisEmbedding e g (Function.Embedding.refl _)) =
       initializedBasisMatrix (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
         (V ⊗ₖ (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ)))

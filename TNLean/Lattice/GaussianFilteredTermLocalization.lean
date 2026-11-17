@@ -83,7 +83,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -99,8 +99,8 @@ the filter integral is split at `|t| = T`, the Lieb–Robinson bound controls `|
 Gaussian tail controls the rest. -/
 theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq : 0 ≤ q)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (y : ι)
-    (hB : B ∈ supportedOperators d ({y} : Set ι)) (μ : ℝ) (hμ : 0 ≤ μ) (l : ℕ)
+    (hW : W ∈ supportedOperators d S) (y : ι)
+    (hB : B ∈ supportedOperators d ({y} : Finset ι)) (μ : ℝ) (hμ : 0 ≤ μ) (l : ℕ)
     (hl : ∀ x ∈ S, (l : ℕ∞) ≤ G.edist x y) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W * B - B * gaussianFilteredTerm q ΔE (∑ k, h k) W‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ * ‖B‖ *
@@ -133,7 +133,7 @@ theorem norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood [Ne
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) {T : ℝ} (hT : 0 ≤ T) :
+    (hW : W ∈ supportedOperators d S) (l : ℕ) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W -
         ManyBody.regionExpectation (S.biUnion fun x => ManyBody.graphBall G x l)
           (gaussianFilteredTerm q ΔE (∑ k, h k) W)‖ ≤
@@ -178,10 +178,10 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) {T : ℝ} (hT : 0 ≤ T) :
+    (hW : W ∈ supportedOperators d S) (l : ℕ) {T : ℝ} (hT : 0 ≤ T) :
     ∃ M : Matrix (ι → Fin d) (ι → Fin d) ℂ,
       M ∈ supportedOperators d
-        ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) ∧
+        (S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) ∧
       ‖M‖ ≤ ‖W‖ ∧ (W.IsHermitian → M.IsHermitian) ∧
       ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - M‖ ≤
         (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) ^ 2 * ‖W‖ * Kg *

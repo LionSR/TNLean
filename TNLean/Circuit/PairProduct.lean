@@ -135,7 +135,7 @@ theorem IsPairProduct.embedOp {K : ℕ} {e : Fin m → Fin n} (he : Function.Inj
 sites. -/
 theorem exists_embedOp_eq_of_mem_supportedOperators {e : Fin m → Fin n}
     (he : Function.Injective e) {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
-    (hZ : Z ∈ supportedOperators d (Set.range e)) :
+    (hZ : Z ∈ supportedOperators d (Finset.univ.image e)) :
     ∃ X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ, Z = embedOp e X := by
   induction hZ using Submodule.span_induction with
   | mem x hx =>

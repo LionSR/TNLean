@@ -47,15 +47,15 @@ Hastings, arXiv:cond-mat/0508554v3, lines 1548–1601. -/
 theorem norm_groundCompression_commutator_le_graphSeparation
     (G : SimpleGraph ι) (X : κ → Finset ι)
     (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
     (vR : ℕ) (hvR : 1 ≤ vR) (hCard : ∀ k, (X k).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ x ∈ X j), ‖h j‖ ≤ b₀)
     {Δ : ℝ} (hΔ : 0 < Δ) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
     (S Y : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι))
-    (hB : B ∈ supportedOperators d (Y : Set ι)) (m : ℕ)
+    (hW : W ∈ supportedOperators d S)
+    (hB : B ∈ supportedOperators d Y) (m : ℕ)
     (hm : ∀ x ∈ S, ∀ y ∈ Y, (m : ℕ∞) ≤ G.edist x y) :
     let v := 4 * vR * |b₀| * Real.exp (2 * (R : ℝ)) + 1
     let γ := min (1 / 4) (Δ / (8 * v))
@@ -116,8 +116,8 @@ theorem norm_groundCompression_commutator_le_metricSeparation
     (hΔ : 0 < Δ) (hH : (∑ i, h i).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
     (X Y : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (X : Set ι))
-    (hB : B ∈ supportedOperators d (Y : Set ι)) (ℓ : ℝ)
+    (hW : W ∈ supportedOperators d X)
+    (hB : B ∈ supportedOperators d Y) (ℓ : ℝ)
     (hsep : ∀ x ∈ X, ∀ y ∈ Y, ℓ ≤ dist x y) :
     let vR := S + 1
     let v := 4 * vR * |(S : ℝ) * J| * Real.exp (2 * (2 : ℝ)) + 1
@@ -127,7 +127,7 @@ theorem norm_groundCompression_commutator_le_metricSeparation
       (4 * (X.card : ℝ) + 4) * ‖W‖ * ‖B‖ * Real.exp (-((γ / R) * ℓ)) := by
   classical
   intro vR v γ
-  have hgen (i : ι) : h i ∈ supportedOperators d (metricRangeBall R i : Set ι) := by
+  have hgen (i : ι) : h i ∈ supportedOperators d (metricRangeBall R i : Finset ι) := by
     simpa only [coe_metricRangeBall] using hSupport i
   have hdist (x : ι) (hx : x ∈ X) (y : ι) (hy : y ∈ Y) :
       (Nat.ceil (ℓ / R) : ℕ∞) ≤ (metricRangeGraph R).edist x y := by
@@ -175,9 +175,9 @@ theorem norm_groundCompression_commutator_le_metricBalls
       (4 * ((metricRangeBall ρ j).card : ℝ) + 4) * ‖W‖ * ‖B‖ *
         Real.exp (2 * (γ / R) * ρ) * Real.exp (-((γ / R) * dist i j)) := by
   intro vR v γ
-  have hW' : W ∈ supportedOperators d (metricRangeBall ρ i : Set ι) := by
+  have hW' : W ∈ supportedOperators d (metricRangeBall ρ i : Finset ι) := by
     simpa only [coe_metricRangeBall] using hW
-  have hB' : B ∈ supportedOperators d (metricRangeBall ρ j : Set ι) := by
+  have hB' : B ∈ supportedOperators d (metricRangeBall ρ j : Finset ι) := by
     simpa only [coe_metricRangeBall] using hB
   have hsep (x : ι) (hx : x ∈ metricRangeBall ρ j) (y : ι)
       (hy : y ∈ metricRangeBall ρ i) : dist i j - 2 * ρ ≤ dist x y := by

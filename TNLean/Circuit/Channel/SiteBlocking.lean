@@ -173,9 +173,9 @@ theorem blockSites_rectKronecker (m : Fin (M * k) → Matrix (Fin d) (Fin d) ℂ
 
 /-- Blocking maps an operator acting on the sites of the blocks `Y` to an operator acting on
 the blocks `Y`. -/
-theorem blockSites_mem_supportedOperators {Y : Set (Fin M)}
+theorem blockSites_mem_supportedOperators {Y : Finset (Fin M)}
     {B : Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ}
-    (hB : B ∈ supportedOperators d (siteBlock ⁻¹' Y)) :
+    (hB : B ∈ supportedOperators d (Finset.univ.filter fun p ↦ siteBlock p ∈ Y)) :
     blockSites M k d B ∈ supportedOperators (d ^ k) Y := by
   induction hB using Submodule.span_induction with
   | mem x hx =>
@@ -194,10 +194,10 @@ the blocks `X`.
 
 Source: arXiv:2103.13367v3, `main.tex`, line 289 ("an operator `U ∈ 𝒰` acting on a set
 `A_q ⊂ Λ` of `q` adjacent qudits in the unblocked chain"). -/
-theorem blockSites_symm_mem_supportedOperators [NeZero d] {X : Set (Fin M)}
+theorem blockSites_symm_mem_supportedOperators [NeZero d] {X : Finset (Fin M)}
     {A : Matrix (Fin M → Fin (d ^ k)) (Fin M → Fin (d ^ k)) ℂ}
     (hA : A ∈ supportedOperators (d ^ k) X) :
-    (blockSites M k d).symm A ∈ supportedOperators d (siteBlock ⁻¹' X) := by
+    (blockSites M k d).symm A ∈ supportedOperators d (Finset.univ.filter fun p ↦ siteBlock p ∈ X) := by
   classical
   have hK := mem_supportedOperators_of_isSupportedOn (q := d) (S := (siteBlock ⁻¹' X).toFinset)
     ((ManyBody.mem_supportedOperators_iff_forall_commute (X := fun _ : Fin (M * k) ↦ Fin d)
@@ -238,9 +238,9 @@ theorem finProdFinEquiv_add_intCast [NeZero M] [NeZero k] (j : Fin M) (t : Fin k
 
 Source: arXiv:2103.13367v3, `main.tex`, line 289 (locality on the blocked chain, read on the
 unblocked chain). -/
-theorem preimage_siteBlock_neighbourhood_subset [NeZero M] [NeZero k] (X : Set (Fin M))
+theorem preimage_siteBlock_neighbourhood_subset [NeZero M] [NeZero k] (X : Finset (Fin M))
     (r : ℕ) :
-    siteBlock ⁻¹' neighbourhood X r ⊆ neighbourhood (siteBlock (k := k) ⁻¹' X) (k * r) := by
+    siteBlock ⁻¹' neighbourhood X r ⊆ neighbourhood (Finset.univ.filter fun p ↦ (siteBlock (k := k)) p ∈ X) (k * r) := by
   intro i hi
   obtain ⟨⟨j', t⟩, rfl⟩ := finProdFinEquiv.surjective i
   obtain ⟨j, hj, m, hm, hij⟩ := hi
@@ -270,7 +270,7 @@ theorem IsLocalChannelProtocol.exists_dual_comp_blockSites [NeZero M] [NeZero d]
         Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ,
       (∀ ρ A, trace (Ψ (blockSites M k d ρ) * A) = trace (ρ * Ψ' A)) ∧
       (∀ X : Set (Fin M), ∀ A ∈ supportedOperators e X,
-        Ψ' A ∈ supportedOperators d (siteBlock ⁻¹' neighbourhood X T)) ∧
+        Ψ' A ∈ supportedOperators d (Finset.univ.filter fun p ↦ siteBlock p ∈ (neighbourhood X T))) ∧
       (∀ X Y : Set (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
         ∀ A ∈ supportedOperators e X, ∀ B ∈ supportedOperators e Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
@@ -360,7 +360,7 @@ theorem exists_dual [NeZero d] {T : ℕ}
         Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fin d) ℂ,
       (∀ A, trace (σ * A) = trace (ρ * Ψ' A)) ∧
       (∀ X : Set (Fin M), ∀ A ∈ supportedOperators e X,
-        Ψ' A ∈ supportedOperators d (neighbourhood (siteBlock (k := k) ⁻¹' X) (k * T))) ∧
+        Ψ' A ∈ supportedOperators d (neighbourhood (Finset.univ.filter fun p ↦ (siteBlock (k := k)) p ∈ X) (k * T))) ∧
       (∀ X Y : Set (Fin M), Disjoint (neighbourhood X T) (neighbourhood Y T) →
         ∀ A ∈ supportedOperators e X, ∀ B ∈ supportedOperators e Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
@@ -389,7 +389,7 @@ theorem trace_mul_mul_eq_of_isBlockedLocalChannelConversion [NeZero M] [NeZero k
     {σ₀ : Fin (M * k) → Matrix (Fin d) (Fin d) ℂ} (hσ₀ : ∀ i, trace (σ₀ i) = 1)
     {σ : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ}
     (h : IsBlockedLocalChannelConversion k T (finKronecker σ₀) σ)
-    {X Y : Set (Fin M)} (hXY : IsSeparatedBy X Y (2 * T))
+    {X Y : Finset (Fin M)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin M → Fin e) (Fin M → Fin e) ℂ}
     (hA : A ∈ supportedOperators e X) (hB : B ∈ supportedOperators e Y) :
     trace (σ * (A * B)) = trace (σ * A) * trace (σ * B) := by

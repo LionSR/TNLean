@@ -42,14 +42,14 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ supportedOperators d {v | (roundedPeriodicDistance i v : ℝ) ≤ R}) →
+          (∀ i, g i ∈ supportedOperators d (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (Ω : EuclideanSpace ℂ (Fin M → Fin d)) (E₀ : ℝ),
             IsGappedGroundState (∑ i, g i) E₀ Ω Δ →
             ∀ (ℓ : ℕ), R ≤ (ℓ : ℝ) → ∀ i,
               let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i
               let Jb := 2 * max J (J * C)
-              a ∈ supportedOperators d {v | roundedPeriodicDistance i v ≤ ℓ} ∧
+              a ∈ supportedOperators d (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
                 a.IsHermitian ∧ ‖a‖ ≤ Jb ∧
                 ‖gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
                   Jb * Real.exp (-(η * (ℓ : ℝ))) ∧
@@ -111,7 +111,7 @@ theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
       ∀ {M d : ℕ}, 0 < M →
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
-          (∀ i, g i ∈ supportedOperators d {v | (roundedPeriodicDistance i v : ℝ) ≤ R}) →
+          (∀ i, g i ∈ supportedOperators d (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (Ω : EuclideanSpace ℂ (Fin M → Fin d)) (E₀ : ℝ),
             IsGappedGroundState (∑ i, g i) E₀ Ω Δ →
@@ -141,7 +141,7 @@ theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
   obtain ⟨hℓ, hℓR⟩ := physicalPeriodicProjectionRadius_spec R M Jb Δ hη
   have hr := hierarchyProjectionLength_le_physicalPeriodicProjectionRadius hM R Jb Δ hη
   have ha (i : Fin M) := hdata hM g hg hsupp hnorm Ω E₀ hgs ℓ hℓR i
-  have haSupp (i : Fin M) : a i ∈ supportedOperators d {v | roundedPeriodicDistance i v ≤ ℓ} :=
+  have haSupp (i : Fin M) : a i ∈ supportedOperators d (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) :=
     (ha i).1
   have haHerm (i : Fin M) : (a i).IsHermitian := (ha i).2.1
   have haNorm (i : Fin M) : ‖a i‖ ≤ Jb := (ha i).2.2.1

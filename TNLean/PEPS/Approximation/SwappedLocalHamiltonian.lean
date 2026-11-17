@@ -200,7 +200,7 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let K := Matrix.reindex p p (doubledHamiltonian h.operator)
     let F := Matrix.reindex p p (sheetSwapOp q A)
-    F * K * Fᴴ - K ∈ supportedOperators (q * q) (crossingSites Λ R A : Set (Site Λ)) ∧
+    F * K * Fᴴ - K ∈ supportedOperators (q * q) (crossingSites Λ R A : Finset (Site Λ)) ∧
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
   intro p K F
@@ -222,21 +222,21 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
         (PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le A M)
   have hplain (S : Finset (Site Λ))
       {M : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-      (hM : M ∈ supportedOperators q (S : Set (Site Λ))) :
+      (hM : M ∈ supportedOperators q S) :
       Matrix.reindex p p (doubledHamiltonian M) ∈
-        supportedOperators (q * q) (S : Set (Site Λ)) := by
+        supportedOperators (q * q) S := by
     simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
       Matrix.submatrix_mul_equiv,
       sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
         (R := ∅) hM (Or.inr (by simp))] using!
       reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hM
   have hsupport : F * K * Fᴴ - K ∈
-      supportedOperators (q * q) (crossingSites Λ R A : Set (Site Λ)) :=
-    hsum.symm ▸ (supportedOperators (q * q) (crossingSites Λ R A : Set (Site Λ))).sum_mem
+      supportedOperators (q * q) (crossingSites Λ R A : Finset (Site Λ)) :=
+    hsum.symm ▸ (supportedOperators (q * q) (crossingSites Λ R A : Finset (Site Λ))).sum_mem
       fun X hX ↦ supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
           (fun X : AdmissibleSupport Λ R ↦ X.1) hX))
-        ((supportedOperators (q * q) (X.1 : Set (Site Λ))).sub_mem
+        ((supportedOperators (q * q) X.1).sub_mem
           (reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators A X.1
             (h.supported X))
           (hplain X.1 (h.supported X)))
@@ -297,12 +297,12 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
             ((Complex.I • ManyBody.regionExpectation B
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ unitaryGroup (Configuration Λ (q * q)) ℂ) ∧
-          (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Site Λ))) ∧
+          (∀ t, U t ∈ supportedOperators (q * q) B) ∧
           ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
             let M := ∫ t : ℝ in Set.Icc (-T) T,
               ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                 ∂gaussianReal 0 η
-            M ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧
+            M ∈ supportedOperators (q * q) B ∧
             ‖M‖ ≤ ‖W‖ ∧
             ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
               ‖W‖ * (2 * PEPS.AreaLaw.graphBallLocalizationPrefactor R) * (Λ.card : ℝ) *
@@ -317,13 +317,13 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
   have hK' : gH.operator = K' := h.swappedDoubled_operator A
   have hDK : K.IsHermitian :=
     (doubledHamiltonian_isHermitian h.operator_isHermitian).reindex p
-  have hV : V ∈ supportedOperators (q * q) (Q : Set (Site Λ)) := by
+  have hV : V ∈ supportedOperators (q * q) Q := by
     have hlift := siteLift_mem_supportedOperators Q
       (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_siteLift q A C hAC W] at hlift
     exact hlift
   obtain ⟨hDs, hDn⟩ := h.swapped_doubled_boundary_bound hJ A
-  have hD : gH.operator - K ∈ supportedOperators (q * q) (Z : Set (Site Λ)) := by
+  have hD : gH.operator - K ∈ supportedOperators (q * q) Z := by
     rw [hK']; exact hDs
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans p) _).trans_le

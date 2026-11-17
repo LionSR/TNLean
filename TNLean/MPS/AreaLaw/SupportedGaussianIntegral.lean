@@ -55,16 +55,16 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
             ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin L → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ supportedOperators (q * q) (N Z : Set (Fin L))) ∧
+          (∀ t, U t ∈ supportedOperators (q * q) (N Z : Finset (Fin L))) ∧
           ∀ (Q : Finset (Fin L))
             (W : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ),
-            W ∈ supportedOperators (q * q) (Q : Set (Fin L)) →
+            W ∈ supportedOperators (q * q) Q →
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
                 ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
-              M ∈ supportedOperators (q * q) (B : Set (Fin L)) ∧
+              M ∈ supportedOperators (q * q) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                 ‖W‖ * C * (L : ℝ) ^ 2 * (1 + T) *

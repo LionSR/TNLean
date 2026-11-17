@@ -81,7 +81,7 @@ private theorem isSupportedOn_bond_complement
   apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators (q := q)
     (S := interval L i.val (i.val + 2))
   exact (QuantumCircuit.supportedOperators q
-    ((interval L i.val (i.val + 2)) : Set (Fin L))).sub_mem
+    (interval L i.val (i.val + 2) : Finset (Fin L))).sub_mem
     (QuantumCircuit.one_mem_supportedOperators _)
     (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
 

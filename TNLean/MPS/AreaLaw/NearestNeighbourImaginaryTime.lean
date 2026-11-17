@@ -123,12 +123,12 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       (4 : ℝ) * ((m : ℝ) + 1) * ‖X‖ := by
   classical
   let J := interval L (c - (m + 1)) (c + 2 + (m + 1))
-  have hXJ : X ∈ supportedOperators q (J : Set (Fin L)) :=
+  have hXJ : X ∈ supportedOperators q J :=
     supportedOperators_mono
       (by simpa only [Finset.coe_subset] using enlarged_interval_subset_succ L c m)
       (mem_supportedOperators_of_isSupportedOn hX)
   have hterm (i : Fin (L - 1)) (hi : i ∈ s) :
-      h i * X - X * h i ∈ supportedOperators q (J : Set (Fin L)) := by
+      h i * X - X * h i ∈ supportedOperators q J := by
     by_cases hd : Disjoint (interval L i.val (i.val + 2))
         (interval L (c - m) (c + 2 + m))
     · have hc : Commute (h i) X := commute_of_mem_supportedOperators
@@ -137,7 +137,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
         (mem_supportedOperators_of_isSupportedOn hX)
       rw [sub_eq_zero.mpr hc.eq]
       exact Submodule.zero_mem _
-    · have hhJ : h i ∈ supportedOperators q (J : Set (Fin L)) :=
+    · have hhJ : h i ∈ supportedOperators q J :=
         supportedOperators_mono
           (by simpa only [Finset.coe_subset] using bond_subset_enlarged_interval_succ hd)
           (mem_supportedOperators_of_isSupportedOn (hs i hi))
@@ -146,7 +146,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
   have hsupport : Entropy.IsSupportedOn (n := fun _ ↦ q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
     apply isSupportedOn_of_mem_supportedOperators
-    have hsum := (supportedOperators q (J : Set (Fin L))).sum_mem hterm
+    have hsum := (supportedOperators q J).sum_mem hterm
     simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum
   refine ⟨hsupport, ?_⟩
   let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))

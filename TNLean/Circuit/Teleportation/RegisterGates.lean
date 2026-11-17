@@ -156,7 +156,7 @@ theorem op_mem_unitary (hX : g.X ∈ unitary (Matrix (Fin (s + s) → Fin d) (Fi
     g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :=
   embedOp_mem_unitary g.sites_injective hX
 
-theorem op_mem_supportedOperators : g.op ∈ supportedOperators d (Set.range g.sites) :=
+theorem op_mem_supportedOperators : g.op ∈ supportedOperators d (Finset.univ.image g.sites) :=
   embedOp_mem_supportedOperators g.sites_injective g.X
 
 /-- The sites `a + j` of the stretch are distinct. -/
@@ -674,7 +674,7 @@ include hgs in
 /-- If every gate `X` is a product of at most `K` gates on neighbouring sites, the gates on the
 consecutive sites form a circuit of depth `K`. -/
 theorem isCircuitOn_localProd {K : ℕ} (hK : ∀ g ∈ gs, IsPairProduct d (s + s) K g.X) :
-    IsCircuitOn {i | ∃ g ∈ gs, i ∈ g.span} K (localProd gs) := by
+    IsCircuitOn (Finset.univ.filter fun i ↦ ∃ g ∈ gs, i ∈ g.span) K (localProd gs) := by
   induction gs with
   | nil =>
     simpa [localProd] using IsBondCircuitOn.one (d := d) (ringBond (N := N))

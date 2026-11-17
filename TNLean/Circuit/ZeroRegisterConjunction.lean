@@ -257,7 +257,7 @@ theorem isPairProduct_zeroConjunctionStep (hd : 2 ≤ d) (j : Fin a) :
       ext p
       simp only [e, zeroConjunctionStepSites, Matrix.range_cons, Matrix.range_empty,
         Set.union_empty, Set.singleton_union, Set.mem_insert_iff, Set.mem_singleton_iff]
-    have hs : (zeroConjunctionStep j).permMatrix ℂ ∈ supportedOperators d (Set.range e) := by
+    have hs : (zeroConjunctionStep j).permMatrix ℂ ∈ supportedOperators d (Finset.univ.image e) := by
       rw [hrange]
       exact (zeroConjunctionStep_isLocalPerm j).permMatrix_mem_supportedOperators
     obtain ⟨X, hX⟩ := exists_embedOp_eq_of_mem_supportedOperators he hs

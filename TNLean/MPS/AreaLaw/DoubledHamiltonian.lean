@@ -51,7 +51,7 @@ noncomputable def ChainHamiltonian.doubled (h : ChainHamiltonian L q R J) :
     have hright := QuantumCircuit.reindex_kronecker_mem_supportedOperators hone hterm
     simpa only [Set.union_self, Matrix.coe_reindexAddEquiv] using
       (QuantumCircuit.supportedOperators (q * q)
-        ((X.1 : Set (Fin L)) ∪ (X.1 : Set (Fin L)))).add_mem hleft hright
+        (X.1 ∪ X.1)).add_mem hleft hright
   hermitian X := by
     apply Matrix.IsHermitian.reindex
     change (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X)ᴴ = _

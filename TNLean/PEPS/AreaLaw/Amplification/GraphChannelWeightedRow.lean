@@ -270,7 +270,7 @@ finite reordering of the event-family estimate. Source: area law,
 theorem sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
     (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
-    (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
+    (hk : ∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x))
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
     (hε : ∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
@@ -310,7 +310,7 @@ theorem graphChannelEventKernel_bounds_of_component_support {C K μ c α : ℝ}
       [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
       (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
       (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
@@ -356,7 +356,7 @@ theorem exists_graphChannelEventKernel_bounds_of_component_support {C K μ c α 
         [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
         (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
         (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →

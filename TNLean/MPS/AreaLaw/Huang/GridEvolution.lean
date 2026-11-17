@@ -54,11 +54,11 @@ operator algebra. This supplies the block factors in Osborne, Figure 2. -/
 theorem hermitianUnitaryPath_mem_supported
     {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ) (S : Finset ι)
     {H : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hH : H ∈ supportedOperators q (S : Set ι)) (t : ℝ) :
-    hermitianUnitaryPath H t ∈ supportedOperators q (S : Set ι) := by
+    (hH : H ∈ supportedOperators q S) (t : ℝ) :
+    hermitianUnitaryPath H t ∈ supportedOperators q S := by
   refine mem_supportedOperators_of_isSupportedOn <|
     ManyBody.mem_supportedOperators_iff_forall_commute.mpr fun B hB ↦ ?_
-  have hB' : B ∈ supportedOperators q ((S : Set ι)ᶜ) := by
+  have hB' : B ∈ supportedOperators q Sᶜ := by
     simpa only [Finset.coe_compl] using mem_supportedOperators_of_isSupportedOn hB
   have hc := commute_of_mem_supportedOperators disjoint_compl_right hH hB'
   exact ((hc.smul_left Complex.I).smul_left t).exp_left
@@ -98,7 +98,7 @@ theorem chainGridBlockEvolution_mem_supported [NeZero q] (hw : 0 < w)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (j : Fin (L / w + 1)) (t : ℝ) :
     hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) t ∈
-      supportedOperators q (chainGridBlock L w j.val : Set (Fin L)) :=
+      supportedOperators q (chainGridBlock L w j.val : Finset (Fin L)) :=
   hermitianUnitaryPath_mem_supported q _ (chainGridBlockHamiltonian_mem_supported hw h hs j) t
 
 end TNLean.MPS.AreaLaw

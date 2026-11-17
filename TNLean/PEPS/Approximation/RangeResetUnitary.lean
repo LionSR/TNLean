@@ -129,7 +129,7 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
     ∃ (z : ℝ) (M : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ),
       Real.exp (-2 * b) ≤ z ∧
-      M ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧ ‖M‖ ≤ 1 ∧
+      M ∈ supportedOperators (q * q) B ∧ ‖M‖ ≤ 1 ∧
       ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
         rangeResetFilterPrefactor R J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
       ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
@@ -224,7 +224,7 @@ theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) 
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
     ∃ U : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ,
       U ∈ unitaryGroup (Configuration Λ (q * q)) ℂ ∧
-      U ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧
+      U ∈ supportedOperators (q * q) B ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
         rangeResetUnitaryPrefactor R J Δ r * (L : ℝ) ^ (-r) := by
   intro p F ψ B

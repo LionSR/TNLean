@@ -99,7 +99,7 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
         ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
         ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
           C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
+      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) := by
   intro q _ Λ h a ha E₀ Ω hgs
   obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
   obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := positiveQuasilocalConstraints_of_locality hp R
@@ -193,7 +193,7 @@ theorem latticePositiveConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {
         ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
           latticePositiveConstraintConst R J Δ p *
             Real.exp (-(latticePositiveConstraintRate R J Δ p * (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) :=
+      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) :=
   latticePositiveConstraints_of_locality hp R hJ hΔ
     (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
       norm_latticePositiveConstraint_sub_map_le hp R hΔ hH hΩ hh hhJ L hcontr hunit hherm hfix
@@ -231,7 +231,7 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
           ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
           ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
+        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ (domainGraph Λ).Reachable (a i) x)) := by
   exact ⟨_, _, latticePositiveConstraintConst_nonneg R J Δ p,
     latticePositiveConstraintRate_pos hp R J hΔ, latticePositiveConstraints_explicit hp R hJ hΔ⟩
 
@@ -273,11 +273,11 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
           ‖rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤ ‖B‖ ∧
           ‖rootChannel (G ⊗ₖ (1 : Matrix κ κ ℂ)) (Kr ⊗ₖ 1) B -
               rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤ ε * ‖B‖ ∧
-          ((∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Set (Site Λ)),
+          ((∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Finset (Site Λ)),
               Commute (A ⊗ₖ (1 : Matrix κ κ ℂ)) B) →
             rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B = B)) ∧
         (∀ B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-          (∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Set (Site Λ)),
+          (∀ A ∈ supportedOperators q (ManyBody.graphBall (domainGraph Λ) (a i) l : Finset (Site Λ)),
             Commute A B) → rootChannel Gl Kl B = B) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   refine ⟨4 * Real.sqrt C, c / 2, by positivity, by positivity, ?_⟩
@@ -351,7 +351,7 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
       let ε := min (n ^ (-1000 : ℝ)) (g / 4)
       let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
       (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
-        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
       (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
         truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
       ‖Ht - ∑ i, k i‖ ≤ ε ∧
@@ -411,7 +411,7 @@ theorem latticeFiniteSetTruncation_explicit (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 
       let ε := min (n ^ (-1000 : ℝ)) (g / 4)
       let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
       (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
-        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
       (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
         truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
       ‖Ht - ∑ i, k i‖ ≤ ε ∧
@@ -456,7 +456,7 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
         let ε := min (n ^ (-1000 : ℝ)) (g / 4)
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
         (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
-          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
         (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
           truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
         ‖Ht - ∑ i, k i‖ ≤ ε ∧
@@ -492,7 +492,7 @@ theorem exists_latticeFiniteSetTruncation_eigenspace_eq_span (R : ℕ) {J Δ C�
         let ε := min (n ^ (-1000 : ℝ)) (g / 4)
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
         (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
-          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set (Site Λ))) ∧
+          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
         (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
           truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
         ‖Ht - ∑ i, k i‖ ≤ ε ∧

@@ -125,7 +125,7 @@ theorem ringBond_subset_preimage_siteBlock [NeZero M] [NeZero k] (i : Fin (M * k
       · exact Or.inr (by rw [ite_eq_right (by omega)]; exact h)
 
 private theorem supportedKraus_mul {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {S : Set ι} {F G : Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)}
+    {S : Finset ι} {F G : Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)}
     (hF : ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       F = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
         ∀ a, A a ∈ supportedOperators d S)
@@ -158,7 +158,7 @@ private theorem supportedKraus_mul {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 private theorem supportedKraus_noncommProd {ι α : Type*} [Fintype ι] [DecidableEq ι]
     (s : Finset α) (F : α → Module.End ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ))
-    (hc : (s : Set α).Pairwise (Function.onFun Commute F)) (S : Set ι)
+    (hc : (s : Set α).Pairwise (Function.onFun Commute F)) (S : Finset ι)
     (hF : ∀ i ∈ s, ∃ r, ∃ A : Fin r → Matrix (ι → Fin d) (ι → Fin d) ℂ,
       F i = rectangularKrausMap A ∧ (∑ a, (A a)ᴴ * A a = 1) ∧
         ∀ a, A a ∈ supportedOperators d S) :

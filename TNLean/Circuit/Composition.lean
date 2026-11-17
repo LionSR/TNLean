@@ -43,10 +43,10 @@ namespace BondLayer
 /-- All gates of the layer act inside the set of sites `R`. -/
 def IsIn (L : BondLayer d bond) (R : Set ι) : Prop := ∀ k ∈ L.bonds, bond k ⊆ R
 
-theorem IsIn.mono {L : BondLayer d bond} {R R' : Set ι} (h : L.IsIn R) (hR : R ⊆ R') :
+theorem IsIn.mono {L : BondLayer d bond} {R R' : Finset ι} (h : L.IsIn R) (hR : R ⊆ R') :
     L.IsIn R' := fun k hk => (h k hk).trans hR
 
-theorem op_mem_supportedOperators {L : BondLayer d bond} {R : Set ι} (h : L.IsIn R) :
+theorem op_mem_supportedOperators {L : BondLayer d bond} {R : Finset ι} (h : L.IsIn R) :
     L.op ∈ supportedOperators d R :=
   L.partialOp_mem_supportedOperators _ _ h
 
@@ -61,7 +61,7 @@ def empty : BondLayer d bond where
 theorem empty_op : (empty : BondLayer d bond).op = 1 := by
   simp [op, partialOp, empty]
 
-theorem empty_isIn (R : Set ι) : (empty : BondLayer d bond).IsIn R := by
+theorem empty_isIn (R : Finset ι) : (empty : BondLayer d bond).IsIn R := by
   simp [IsIn, empty]
 
 /-- The layer with the single gate `Z` on the bond `b`. -/
@@ -85,14 +85,14 @@ theorem single_op (b : β) (Z : Matrix (ι → Fin d) (ι → Fin d) ℂ)
 theorem single_isIn (b : β) (Z : Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (hZu : Z ∈ unitary (Matrix (ι → Fin d) (ι → Fin d) ℂ))
     (hZ : Z ∈ supportedOperators d (bond b))
-    {R : Set ι} (hR : bond b ⊆ R) : (single b Z hZu hZ).IsIn R := by
+    {R : Finset ι} (hR : bond b ⊆ R) : (single b Z hZu hZ).IsIn R := by
   intro l hl
   rw [show l = b from Finset.mem_singleton.mp hl]
   exact hR
 
 /-- Layers acting inside disjoint sets of sites use disjoint sets of nonempty bonds. -/
 theorem disjoint_bonds (hne : ∀ b, (bond b).Nonempty) {L₁ L₂ : BondLayer d bond}
-    {R₁ R₂ : Set ι} (h₁ : L₁.IsIn R₁) (h₂ : L₂.IsIn R₂) (hR : Disjoint R₁ R₂) :
+    {R₁ R₂ : Finset ι} (h₁ : L₁.IsIn R₁) (h₂ : L₂.IsIn R₂) (hR : Disjoint R₁ R₂) :
     Disjoint L₁.bonds L₂.bonds := by
   rw [Finset.disjoint_left]
   intro k hk hk'
@@ -102,7 +102,7 @@ theorem disjoint_bonds (hne : ∀ b, (bond b).Nonempty) {L₁ L₂ : BondLayer d
 variable [DecidableEq β]
 
 /-- Two layers acting inside disjoint sets of sites run as one layer. -/
-def union (L₁ L₂ : BondLayer d bond) {R₁ R₂ : Set ι} (h₁ : L₁.IsIn R₁) (h₂ : L₂.IsIn R₂)
+def union (L₁ L₂ : BondLayer d bond) {R₁ R₂ : Finset ι} (h₁ : L₁.IsIn R₁) (h₂ : L₂.IsIn R₂)
     (hR : Disjoint R₁ R₂) : BondLayer d bond where
   bonds := L₁.bonds ∪ L₂.bonds
   gate := fun k => if k ∈ L₁.bonds then L₁.gate k else L₂.gate k
@@ -124,14 +124,14 @@ def union (L₁ L₂ : BondLayer d bond) {R₁ R₂ : Set ι} (h₁ : L₁.IsIn 
     · exact (hR.mono (h₁ l hl) (h₂ k hk)).symm
     · exact L₂.pairwiseDisjoint hk hl hkl
 
-theorem union_isIn {L₁ L₂ : BondLayer d bond} {R₁ R₂ : Set ι} (h₁ : L₁.IsIn R₁)
+theorem union_isIn {L₁ L₂ : BondLayer d bond} {R₁ R₂ : Finset ι} (h₁ : L₁.IsIn R₁)
     (h₂ : L₂.IsIn R₂) (hR : Disjoint R₁ R₂) : (union L₁ L₂ h₁ h₂ hR).IsIn (R₁ ∪ R₂) := by
   intro k hk
   rcases Finset.mem_union.mp hk with hk | hk
   · exact (h₁ k hk).trans Set.subset_union_left
   · exact (h₂ k hk).trans Set.subset_union_right
 
-theorem union_op (hne : ∀ b, (bond b).Nonempty) {L₁ L₂ : BondLayer d bond} {R₁ R₂ : Set ι}
+theorem union_op (hne : ∀ b, (bond b).Nonempty) {L₁ L₂ : BondLayer d bond} {R₁ R₂ : Finset ι}
     (h₁ : L₁.IsIn R₁) (h₂ : L₂.IsIn R₂) (hR : Disjoint R₁ R₂) :
     (union L₁ L₂ h₁ h₂ hR).op = L₁.op * L₂.op := by
   have hdisj := disjoint_bonds hne h₁ h₂ hR
@@ -150,7 +150,7 @@ theorem union_op (hne : ∀ b, (bond b).Nonempty) {L₁ L₂ : BondLayer d bond}
 end BondLayer
 
 /-- The unitary of a circuit whose layers act inside `R` acts on `R`. -/
-theorem circuitOp_mem_supportedOperators {R : Set ι} :
+theorem circuitOp_mem_supportedOperators {R : Finset ι} :
     ∀ Ls : List (BondLayer d bond), (∀ L ∈ Ls, L.IsIn R) → circuitOp Ls ∈ supportedOperators d R
   | [], _ => one_mem_supportedOperators R
   | L :: Ls, h => mul_mem_supportedOperators
@@ -169,7 +169,7 @@ def IsBondCircuitOn (R : Set ι) (T : ℕ) (U : Matrix (ι → Fin d) (ι → Fi
 
 namespace IsBondCircuitOn
 
-variable {R R' : Set ι} {T T' : ℕ} {U U' : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+variable {R R' : Finset ι} {T T' : ℕ} {U U' : Matrix (ι → Fin d) (ι → Fin d) ℂ}
 
 theorem isBondCircuitOfDepth (h : IsBondCircuitOn bond R T U) :
     IsBondCircuitOfDepth bond U T := by
@@ -216,7 +216,7 @@ theorem single {b : β} {Z : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     simp [circuitOp, BondLayer.single_op]⟩
 
 private theorem zip_union (hne : ∀ b, (bond b).Nonempty) :
-    ∀ (Ls₁ Ls₂ : List (BondLayer d bond)) {R₁ R₂ : Set ι}, Disjoint R₁ R₂ →
+    ∀ (Ls₁ Ls₂ : List (BondLayer d bond)) {R₁ R₂ : Finset ι}, Disjoint R₁ R₂ →
       Ls₁.length = Ls₂.length → (∀ L ∈ Ls₁, L.IsIn R₁) → (∀ L ∈ Ls₂, L.IsIn R₂) →
       IsBondCircuitOn bond (R₁ ∪ R₂) Ls₁.length (circuitOp Ls₁ * circuitOp Ls₂)
   | [], [], _, _, _, _, _, _ => by simpa [circuitOp] using one (d := d) bond _ 0
@@ -249,7 +249,7 @@ private theorem zip_union (hne : ∀ b, (bond b).Nonempty) :
 
 /-- Circuits in parallel: two circuits of depth `T` acting inside disjoint sets of sites
 run in the same `T` layers, when every bond is nonempty. -/
-theorem par (hne : ∀ b, (bond b).Nonempty) {R₁ R₂ : Set ι} (hR : Disjoint R₁ R₂)
+theorem par (hne : ∀ b, (bond b).Nonempty) {R₁ R₂ : Finset ι} (hR : Disjoint R₁ R₂)
     {U₁ U₂ : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (h₁ : IsBondCircuitOn bond R₁ T U₁) (h₂ : IsBondCircuitOn bond R₂ T U₂) :
     IsBondCircuitOn bond (R₁ ∪ R₂) T (U₁ * U₂) := by
@@ -303,7 +303,7 @@ variable {T : ℕ}
 
 /-- Circuits in parallel on the ring: two circuits of depth `T` acting inside disjoint sets of
 sites run in the same `T` layers. -/
-theorem par {R₁ R₂ : Set (Fin N)} (hR : Disjoint R₁ R₂)
+theorem par {R₁ R₂ : Finset (Fin N)} (hR : Disjoint R₁ R₂)
     {U₁ U₂ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (h₁ : IsCircuitOn R₁ T U₁) (h₂ : IsCircuitOn R₂ T U₂) :
     IsCircuitOn (R₁ ∪ R₂) T (U₁ * U₂) :=
@@ -327,7 +327,7 @@ whose gates act inside the range of `e`. -/
 theorem IsPairProduct.isCircuitOn {m K : ℕ} {e : Fin m → Fin N} (he : Function.Injective e)
     (hsucc : ∀ i j : Fin m, j.val = i.val + 1 → e j = e i + 1)
     {X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ} (hX : IsPairProduct d m K X) :
-    IsCircuitOn (Set.range e) K (QuantumCircuit.embedOp e X) := by
+    IsCircuitOn (Finset.univ.image e) K (QuantumCircuit.embedOp e X) := by
   obtain ⟨l, hl, hg, rfl⟩ := hX
   refine IsBondCircuitOn.mono ?_ hl
   clear hl
@@ -355,7 +355,7 @@ theorem isCircuitOn_list_prod_embedOp {κ : Type*} {m : κ → ℕ} {K : ℕ}
     (hsucc : ∀ i (a a' : Fin (m i)), a'.val = a.val + 1 → e i a' = e i a + 1)
     (hY : ∀ i, IsPairProduct d (m i) K (Y i)) :
     ∀ l : List κ, l.Pairwise (fun i i' => Disjoint (Set.range (e i)) (Set.range (e i'))) →
-      IsCircuitOn {x | ∃ i ∈ l, x ∈ Set.range (e i)} K
+      IsCircuitOn (Finset.univ.filter fun x ↦ ∃ i ∈ l, x ∈ Set.range (e i)) K
         ((l.map fun i => embedOp (e i) (Y i)).prod)
   | [], _ => by
     simpa using IsBondCircuitOn.one (d := d) ringBond

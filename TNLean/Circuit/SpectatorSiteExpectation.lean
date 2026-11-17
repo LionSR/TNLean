@@ -206,7 +206,7 @@ the averaged set). -/
 theorem spectatorSiteExpectation_commute (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     {U : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q ((K : Set ι)ᶜ)) :
+    (hU : U ∈ supportedOperators q Kᶜ) :
     Commute (spectatorSiteExpectation q K B) (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) := by
   change spectatorSiteExpectation q K B * (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) =
     (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * spectatorSiteExpectation q K B
@@ -247,7 +247,7 @@ private theorem exists_kronecker_one_of_mem_supportedOperators_some {i : ι}
     (hU : U ∈ ManyBody.supportedOperators (spectatorBasis (ι := ι) q Aux) {some i})
     (hUu : U ∈ unitary (Matrix (Config (spectatorBasis (ι := ι) q Aux))
       (Config (spectatorBasis (ι := ι) q Aux)) ℂ)) :
-    ∃ U₀ ∈ supportedOperators q ({i} : Set ι), U₀ ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
+    ∃ U₀ ∈ supportedOperators q ({i} : Finset ι), U₀ ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
       reindex (spectatorConfigEquiv q ι Aux) (spectatorConfigEquiv q ι Aux) U =
         U₀ ⊗ₖ (1 : Matrix Aux Aux ℂ) := by
   set e := spectatorConfigEquiv q ι Aux
@@ -272,7 +272,7 @@ private theorem exists_kronecker_one_of_mem_supportedOperators_some {i : ι}
     · rw [ite_eq_right hab, mul_zero]
       exact ManyBody.apply_eq_zero_of_mem_supportedOperators hU (v := none)
         (fun h ↦ by simp at h) hab
-  have hU₀ : U₀ ∈ supportedOperators q ({i} : Set ι) := by
+  have hU₀ : U₀ ∈ supportedOperators q ({i} : Finset ι) := by
     rw [← Finset.coe_singleton]
     refine mem_supportedOperators_of_isSupportedOn ⟨fun σ τ ⟨j, hj, hne⟩ ↦ ?_,
       fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
@@ -322,7 +322,7 @@ area law, `09-amplification.tex`, lines 111–121, the averaging argument before
 `eq:amplification-shell-oscillation`. -/
 theorem norm_sub_spectatorSiteExpectation_le (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) (ε : ι → ℝ)
-    (hε : ∀ y ∉ K, ∀ U ∈ supportedOperators q ({y} : Set ι),
+    (hε : ∀ y ∉ K, ∀ U ∈ supportedOperators q ({y} : Finset ι),
       U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) →
         ‖B * (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) - (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * B‖ ≤ ε y) :
     ‖B - spectatorSiteExpectation q K B‖ ≤ ∑ y ∈ Kᶜ, ε y := by

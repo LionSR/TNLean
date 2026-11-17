@@ -26,7 +26,7 @@ algebra as each selected term. ALVV, arXiv:1602.08828v2,
 `def:FF-tH` and `thm:FF-tH`, lines 1467–1487 and 1543–1568. -/
 theorem mem_supportedOperators_complementProd
     (h : ℕ → EuclideanSpace ℂ (ι → Fin q) →L[ℂ] EuclideanSpace ℂ (ι → Fin q))
-    (S : Set ι) (n : ℕ)
+    (S : Finset ι) (n : ℕ)
     (hh : ∀ k, k < n → (T).symm (h k) ∈ supportedOperators q S) :
     (T).symm (ContinuousLinearMap.complementProd h n) ∈ supportedOperators q S := by
   induction n with

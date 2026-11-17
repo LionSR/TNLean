@@ -317,7 +317,7 @@ private theorem exists_common_unit_fixed_ground_of_disjoint_family
       ∑ i ∈ s, (A i - (e i : ℂ) • 1)
     have hBS : Entropy.IsSupportedOn (n := fun _ : V ↦ q) B S := by
       apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      apply (QuantumCircuit.supportedOperators q (S : Set V)).sum_mem
+      apply (QuantumCircuit.supportedOperators q S).sum_mem
       intro i hi
       apply Submodule.sub_mem
       · apply QuantumCircuit.mem_supportedOperators_of_isSupportedOn

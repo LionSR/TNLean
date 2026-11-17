@@ -40,7 +40,7 @@ omit [DecidableEq ι] in
 /-- An operator of the supported-operator algebra on `S` acts as the identity outside `S`
 in the sense of the general marginal-tail lemma. -/
 theorem isSupportedOn_of_mem_supportedOperators {S : Finset ι}
-    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q (S : Set ι)) :
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q S) :
     Entropy.IsSupportedOn (n := fun _ ↦ q) A S := by
   refine ⟨fun σ τ ⟨v, hv, hne⟩ ↦ apply_eq_zero_of_mem_supportedOperators hA ⟨v, hv, hne⟩, ?_⟩
   intro σ τ σ' τ' h1 h2 h3 h4
@@ -79,7 +79,7 @@ algebra of operators acting on its support. -/
 theorem mem_supportedOperators_of_isSupportedOn {S : Finset ι}
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) :
-    A ∈ supportedOperators q (S : Set ι) := by
+    A ∈ supportedOperators q S := by
   classical
   by_cases hconfig : Nonempty (ι → Fin q)
   · obtain ⟨K, rfl⟩ := hA.exists_localLift (Classical.choice hconfig)

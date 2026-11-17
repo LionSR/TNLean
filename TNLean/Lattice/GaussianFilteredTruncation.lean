@@ -153,7 +153,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-- If the generator `H` and the operator `W` act on `K`, so does the evolution
 `e^{iHt} W e^{-iHt}`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 302–304:
 `H_i^trunc(t)` acts only on sites within distance `l_proj` of `i`. -/
-theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Set ι}
+theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Finset ι}
     {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H ∈ supportedOperators d K)
     (hW : W ∈ supportedOperators d K) (t : ℝ) :
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) ∈ supportedOperators d K := by
@@ -165,7 +165,7 @@ theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Set ι}
 /-- If the generator `H` and the operator `W` act on `K`, so does the filtered operator. With
 `H = H_loc` and `W = H_i`, this is the support of `M_i` in Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, eqs. `mid`, `odef`, `hpdef` (lines 285–303). -/
-theorem gaussianFilteredTerm_mem_supportedOperators (q ΔE : ℝ) {K : Set ι}
+theorem gaussianFilteredTerm_mem_supportedOperators (q ΔE : ℝ) {K : Finset ι}
     {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H ∈ supportedOperators d K)
     (hW : W ∈ supportedOperators d K) :
     gaussianFilteredTerm q ΔE H W ∈ supportedOperators d K := by
@@ -189,7 +189,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -204,8 +204,8 @@ it differs from `τ_t(A)` by at most the sum of the single-site commutator bound
 This is the input `‖[H_j, H_i(t')]‖` of Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
 lines 1484–1505. -/
 theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (S : Finset ι)
-    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d (S : Set ι))
-    (Y : Finset ι) (hB : B ∈ supportedOperators d (Y : Set ι)) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
+    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S)
+    (Y : Finset ι) (hB : B ∈ supportedOperators d Y) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ x ∈ S, ∀ y ∈ Y, (m : ℕ∞) ≤ G.edist x y) (t : ℝ) :
     ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t A - ManyBody.heisenbergEvolution (∑ k, h k) t A
         * B‖ ≤
@@ -250,7 +250,7 @@ from `i` commute with the truncated evolution, and the remaining ones are bounde
 Lieb–Robinson bound. -/
 theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset κ)
     (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι))
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d S)
     (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y) (u : ℝ) :
     ‖((∑ k, h k) - ∑ k ∈ s, h k) *
@@ -269,7 +269,7 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
     simp only [h']
     split_ifs
     exacts [hHerm k, isHermitian_zero]
-  have hSupport' (k : κ) : h' k ∈ supportedOperators d (X k : Set ι) := by
+  have hSupport' (k : κ) : h' k ∈ supportedOperators d (X k : Finset ι) := by
     simp only [h']
     split_ifs
     exacts [hSupport k, Submodule.zero_mem _]
@@ -278,7 +278,7 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
     simp only [h']
     split_ifs
     exacts [le_rfl, by simp]
-  have hHsK : (∑ k ∈ s, h k) ∈ supportedOperators d (K : Set ι) :=
+  have hHsK : (∑ k ∈ s, h k) ∈ supportedOperators d K :=
     Submodule.sum_mem _ fun k hk =>
       supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
   have hAK := hermitianUnitaryPath_conj_mem_supportedOperators hHsK
@@ -329,7 +329,7 @@ rest. -/
 theorem norm_gaussianFilteredTerm_sub_truncated_le_sum [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (s : Finset κ) (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι)
     (hSK : S ⊆ K) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
+    (hW : W ∈ supportedOperators d S) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
@@ -374,7 +374,7 @@ the terms within distance `l_proj - R` of `i`, this is Hastings, arXiv:cond-mat/
 theorem norm_gaussianFilteredTerm_sub_truncated_le [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (s : Finset κ) (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι)
     (hSK : S ⊆ K) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
+    (hW : W ∈ supportedOperators d S) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
     (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {T : ℝ} (hT : 0 ≤ T) :
@@ -401,11 +401,11 @@ and approximates the filter of `W` under `H` as in
 theorem truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (s : Finset κ) (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι)
     (hSK : S ⊆ K) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
+    (hW : W ∈ supportedOperators d S) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
     (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {T : ℝ} (hT : 0 ≤ T) :
-    gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W ∈ supportedOperators d (K : Set ι) ∧
+    gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W ∈ supportedOperators d K ∧
       ‖gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤ ‖W‖ ∧
       (W.IsHermitian → (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W).IsHermitian) ∧
       ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
@@ -414,7 +414,7 @@ theorem truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE
             Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) +
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
   have hHs : (∑ k ∈ s, h k).IsHermitian := Matrix.isHermitian_sum _ fun k _ => hHerm k
-  have hHsK : (∑ k ∈ s, h k) ∈ supportedOperators d (K : Set ι) :=
+  have hHsK : (∑ k ∈ s, h k) ∈ supportedOperators d K :=
     Submodule.sum_mem _ fun k hk =>
       supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
   exact ⟨gaussianFilteredTerm_mem_supportedOperators q ΔE hHsK

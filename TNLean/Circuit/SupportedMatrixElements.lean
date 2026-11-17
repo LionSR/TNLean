@@ -22,7 +22,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 omit [DecidableEq ι] in
 /-- A supported operator cannot change a computational-basis label outside its support. -/
-theorem apply_eq_zero_of_mem_supportedOperators {S : Set ι}
+theorem apply_eq_zero_of_mem_supportedOperators {S : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S)
     {σ τ : ι → Fin d} (h : ∃ i ∉ S, σ i ≠ τ i) : A σ τ = 0 := by
   obtain ⟨i, hi, hστ⟩ := h
@@ -54,7 +54,7 @@ omit [DecidableEq ι] in
   simp [expect]
 
 /-- Diagonal entries of products of disjointly supported operators factor. -/
-theorem mul_apply_eq_mul_of_mem_supportedOperators {S S' : Set ι} (hSS' : Disjoint S S')
+theorem mul_apply_eq_mul_of_mem_supportedOperators {S S' : Finset ι} (hSS' : Disjoint S S')
     {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S)
     (hB : B ∈ supportedOperators d S') (σ : ι → Fin d) :
     (A * B) σ σ = A σ σ * B σ σ := by

@@ -140,7 +140,7 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     intro i hi
     simp only [J, mem_interval] at hi ⊢
     omega
-  let V := QuantumCircuit.supportedOperators q (J : Set (Fin L))
+  let V := QuantumCircuit.supportedOperators q J
   have hPV : P ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hPs
   have hMV : M ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hMs
   have hIV : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=

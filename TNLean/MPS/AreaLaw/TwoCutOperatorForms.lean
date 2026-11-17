@@ -43,7 +43,7 @@ theorem exists_threeSplit_edge_factors
     {L q : ℕ}
     (H : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ r, H r ∈ supportedOperators q
-      (interval L r.val (r.val + 2) : Set (Fin L)))
+      (interval L r.val (r.val + 2) : Finset (Fin L)))
     (u v : Fin (L - 1)) (huv : u.val < v.val)
     {T E : Finset (Fin L)} (hT : T = interval L 0 (u.val + 1))
     (hE : E = interval L (u.val + 1) (v.val + 1)) (hTE : Disjoint T E) :

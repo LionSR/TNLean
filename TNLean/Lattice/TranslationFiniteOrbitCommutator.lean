@@ -138,7 +138,7 @@ theorem norm_groundCompression_commutator_le_finite_translation_exp
     (hAut : ∀ (g : Γ) x y, G.Adj (g • x) (g • y) ↔ G.Adj x y)
     (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
     (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ x ∈ X j), ‖h j‖ ≤ b₀)
@@ -151,8 +151,8 @@ theorem norm_groundCompression_commutator_le_finite_translation_exp
     (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
     (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
     (i j : ι) (S Y : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι))
-    (hB : B ∈ supportedOperators d (Y : Set ι)) (ρ vObs : ℕ)
+    (hW : W ∈ supportedOperators d S)
+    (hB : B ∈ supportedOperators d Y) (ρ vObs : ℕ)
     (hSrad : ∀ x ∈ S, G.edist i x ≤ ρ) (hYrad : ∀ y ∈ Y, G.edist j y ≤ ρ)
     (hSCard : S.card ≤ vObs) :
     let m := max 1 (nGroundBound ^ 2)
@@ -184,7 +184,7 @@ theorem norm_groundCompression_commutator_le_finite_translation_exp
       C * Real.exp (-(γ * ((D - 2 * ρ : ℕ) : ℝ))) := by
     let Yg := Y.map (MulAction.toPerm g).toEmbedding
     have hBg : sitePermMatrix d g * B * (sitePermMatrix d g)ᴴ ∈
-        supportedOperators d (Yg : Set ι) := by
+        supportedOperators d Yg := by
       have heq : ((MulAction.toPerm g).toEmbedding : ι → ι) = (g • ·) := rfl
       simpa only [Yg, Finset.coe_map, heq] using
         sitePermMatrix_mul_mul_conjTranspose_mem_supportedOperators d g hB
@@ -239,7 +239,7 @@ theorem norm_groundCompression_truncated_commutator_le_finite_translation_exp
     (hAut : ∀ (g : Γ) x y, G.Adj (g • x) (g • y) ↔ G.Adj x y)
     (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
     (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ x ∈ X j), ‖h j‖ ≤ b₀)
@@ -268,7 +268,7 @@ theorem norm_groundCompression_truncated_commutator_le_finite_translation_exp
           Real.exp (-((γ / (4 * ((m : ℝ) + 1))) * n)) := by
   intro m v γ Mi Mj
   have hMsupp (a : ι) : gaussianFilteredTerm q Δ (∑ k ∈ s a, h k) (h a) ∈
-      supportedOperators d (K a : Set ι) :=
+      supportedOperators d (K a : Finset ι) :=
     gaussianFilteredTerm_mem_supportedOperators q Δ
       (Submodule.sum_mem _ fun k hk ↦ supportedOperators_mono
         (Finset.coe_subset.mpr (hsK a k hk)) (hSupport k))

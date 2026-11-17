@@ -46,7 +46,7 @@ structure LocalHamiltonian (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (J : ℝ) wher
   /-- The term assigned to each support; zero terms are permitted. -/
   term : AdmissibleSupport Λ R → Matrix (Configuration Λ q) (Configuration Λ q) ℂ
   /-- Each term acts trivially on the complementary sites. -/
-  supported : ∀ X, term X ∈ QuantumCircuit.supportedOperators q (X.1 : Set (Site Λ))
+  supported : ∀ X, term X ∈ QuantumCircuit.supportedOperators q X.1
   /-- Each summand is Hermitian, as required by `eq:hamiltonian`. -/
   hermitian : ∀ X, (term X).IsHermitian
   /-- Each summand has Euclidean operator norm at most `J`. -/
@@ -85,7 +85,7 @@ noncomputable def localLift (Λ : Finset (ℤ × ℤ)) (q : ℕ) (X : Finset (Si
 /-- A placed local matrix belongs to the existing supported-operator algebra. -/
 theorem localLift_mem_supportedOperators (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (X : Finset (Site Λ)) (K : Matrix (↥X → Fin q) (↥X → Fin q) ℂ) :
-    localLift Λ q X K ∈ QuantumCircuit.supportedOperators q (X : Set (Site Λ)) := by
+    localLift Λ q X K ∈ QuantumCircuit.supportedOperators q X := by
   simpa [localLift] using
     QuantumCircuit.embedOp_mem_supportedOperators
       (e := fun x : ↥X ↦ x.val) Subtype.val_injective K

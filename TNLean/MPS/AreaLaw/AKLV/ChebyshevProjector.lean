@@ -412,10 +412,10 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
   let W : Fin (2 * w) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
     fun r ↦ h ⟨a.val + r.val, by omega⟩
   have hW (r : Fin (2 * w)) : W r ∈ QuantumCircuit.supportedOperators q
-      (interval L (a.val + r.val) (a.val + r.val + 2) : Set (Fin L)) :=
+      (interval L (a.val + r.val) (a.val + r.val + 2) : Finset (Fin L)) :=
     QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs _)
   have hX : leftCutBlock h a x ∈ QuantumCircuit.supportedOperators q
-      (interval L 0 (a.val + 1) : Set (Fin L)) := by
+      (interval L 0 (a.val + 1) : Finset (Fin L)) := by
     apply Submodule.sub_mem
     · apply Submodule.sum_mem
       intro i hi
@@ -425,7 +425,7 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
         (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
     · exact Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _)
   have hY : rightCutBlock h b y ∈ QuantumCircuit.supportedOperators q
-      (interval L (a.val + 2 * w) L : Set (Fin L)) := by
+      (interval L (a.val + 2 * w) L : Finset (Fin L)) := by
     apply Submodule.sub_mem
     · apply Submodule.sum_mem
       intro i hi
@@ -438,11 +438,11 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
   let PL := Matrix.energyTruncation (leftCutBlock h a x) t - (m : ℂ) • 1
   let PR := Matrix.energyTruncation (rightCutBlock h b y) t
   have hPL : PL ∈ QuantumCircuit.supportedOperators q
-      (interval L 0 (a.val + 1) : Set (Fin L)) :=
+      (interval L 0 (a.val + 1) : Finset (Fin L)) :=
     Submodule.sub_mem _ (QuantumCircuit.cfc_mem_supportedOperators _ hX)
       (Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _))
   have hPR : PR ∈ QuantumCircuit.supportedOperators q
-      (interval L (a.val + 2 * w) L : Set (Fin L)) :=
+      (interval L (a.val + 2 * w) L : Finset (Fin L)) :=
     QuantumCircuit.cfc_mem_supportedOperators _ hY
   have hHt : Ht = (∑ r, W r) + PL + PR := by
     dsimp [Ht, twoSidedEnergyTruncation, PL, PR]

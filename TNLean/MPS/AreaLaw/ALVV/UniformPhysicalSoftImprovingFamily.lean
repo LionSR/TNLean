@@ -289,7 +289,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
   have hFsupport (j : Fin 5) : Entropy.IsSupportedOn (Fraw j)
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ)) := by
     let V := QuantumCircuit.supportedOperators q
-      (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Set (Fin (N + 1)))
+      (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Finset (Fin (N + 1)))
     have hAmem : A j ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn
       (isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs)
     apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
@@ -298,7 +298,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
         (V.sub_mem hAmem (V.smul_mem _ (QuantumCircuit.one_mem_supportedOperators _))))
   have hPL : Entropy.IsSupportedOn PL (interval (N + 1) 0 (a + 1)) := by
     let V := QuantumCircuit.supportedOperators q
-      (interval (N + 1) 0 (a + 1) : Set (Fin (N + 1)))
+      (interval (N + 1) 0 (a + 1) : Finset (Fin (N + 1)))
     have hFmem : Fraw 0 ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn
       (hFsupport 0)
     apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators

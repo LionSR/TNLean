@@ -76,11 +76,11 @@ theorem positiveConstraint_mem_supportedOperators_component {p : ℕ} (hp : 1 �
     {δ : ℝ} (hδ : 0 < δ) {κ : Type*} [Fintype κ]
     (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
     (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
     (Ω : EuclideanSpace ℂ (ι → Fin q)) (c : ℝ) (i : κ) :
     positiveConstraint c (centeredFilter p δ (∑ k, h k) Ω (h i)) ∈
-      supportedOperators q {x | G.Reachable (a i) x} := by
+      supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x) := by
   classical
   set H := ∑ k, h k
   have hH : H.IsHermitian := by
@@ -176,7 +176,7 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
     ∀ {q : ℕ} [NeZero q] {ι : Type u} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
       (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
       ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
-      (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+      (∀ k, h k ∈ supportedOperators q (X k : Finset ι)) →
       (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
       (∀ k, (X k).card ≤ vR) →
       (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
@@ -197,7 +197,7 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
         ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
         ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) := by
+      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) := by
   set CL := localizationPrefactor R Kg kg
   set v := localizationVelocity R vR b₀
   intro q _ ι _ _ κ _ G X a ha h hHerm hSupport hDiam hCard hBudget hGrowth hJh E₀ Ω hΩ hHΩ
@@ -265,7 +265,7 @@ theorem positiveQuasilocalConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R vR : 
     ∀ {q : ℕ} [NeZero q] {ι : Type u} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
       (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
       ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
-      (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+      (∀ k, h k ∈ supportedOperators q (X k : Finset ι)) →
       (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
       (∀ k, (X k).card ≤ vR) →
       (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
@@ -288,7 +288,7 @@ theorem positiveQuasilocalConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R vR : 
           positiveConstraintLocalityConst p Δ J (localizationPrefactor R Kg kg) (1 / 2) *
             Real.exp (-(positiveConstraintLocalityRate p Δ (localizationVelocity R vR b₀) (1 / 2) *
               (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) :=
+      (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) :=
   positiveQuasilocalConstraints_of_locality hp R vR b₀ Kg kg hΔ
     (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
       norm_positiveConstraint_sub_map_le hp hΔ hJ (localizationPrefactor_nonneg R Kg kg)
@@ -311,7 +311,7 @@ theorem exists_positiveQuasilocalConstraints {p : ℕ} (hp : 1 ≤ p) (R vR : �
       ∀ {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
         (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
         ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
-        (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+        (∀ k, h k ∈ supportedOperators q (X k : Finset ι)) →
         (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
         (∀ k, (X k).card ≤ vR) →
         (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
@@ -332,7 +332,7 @@ theorem exists_positiveQuasilocalConstraints {p : ℕ} (hp : 1 ≤ p) (R vR : �
           ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
           ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) := by
+        (∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) := by
   obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le hp hΔ hJ
     (localizationPrefactor_nonneg R Kg kg) (localizationVelocity_pos R vR b₀) one_half_pos
   exact ⟨C₃, c₃, hC₃, hc₃, positiveQuasilocalConstraints_of_locality hp R vR b₀ Kg kg hΔ htail⟩

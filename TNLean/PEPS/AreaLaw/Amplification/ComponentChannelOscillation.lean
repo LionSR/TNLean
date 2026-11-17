@@ -44,7 +44,7 @@ variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 Source: area law, `09-amplification.tex`, lines 135–139. -/
 theorem regionExpectation_graphBall_eq_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x))
     {n : ℕ} (hn : Finset.univ.sup (G.dist a) ≤ n) :
     ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k := by
   apply ManyBody.regionExpectation_of_mem_supportedOperators
@@ -55,7 +55,7 @@ theorem regionExpectation_graphBall_eq_of_component_support
 Source: area law, `09-amplification.tex`, lines 135–139. -/
 theorem norm_sub_regionExpectation_graphBall_eq_zero_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x))
     {n : ℕ} (hn : Finset.univ.sup (G.dist a) ≤ n) :
     ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a n) k‖ = 0 := by
   rw [regionExpectation_graphBall_eq_of_component_support G a hk hn, sub_self, norm_zero]
@@ -65,7 +65,7 @@ all sufficiently large finite radii. Source: area law,
 `09-amplification.tex`, lines 124–139. -/
 theorem localRootChannel_graphBall_eq_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x))
     {n : ℕ} (hn : Finset.univ.sup (G.dist a) ≤ n)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     localRootChannel (ManyBody.graphBall G a n) k B = spectatorRootChannel k B := by
@@ -76,7 +76,7 @@ uniformly over all spectator observables. Source: area law,
 `09-amplification.tex`, lines 135–139. -/
 theorem exists_localRootChannel_graphBall_eq_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x}) :
+    (hk : k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x)) :
     ∃ N, ∀ n ≥ N, ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k ∧
       ∀ B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ,
         localRootChannel (ManyBody.graphBall G a n) k B = spectatorRootChannel k B :=
@@ -88,7 +88,7 @@ theorem exists_localRootChannel_graphBall_eq_of_component_support
 Source: area law, `09-amplification.tex`, lines 124–139. -/
 theorem localRootChannelShell_graphBall_succ_eq_zero_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x))
     {n : ℕ} (hn : Finset.univ.sup (G.dist a) ≤ n)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     localRootChannelShell (ManyBody.graphBall G a) k (n + 1) B = 0 := by
@@ -103,7 +103,7 @@ finite cutoff are needed. Source: area law,
 theorem siteOscillation_spectatorRootChannel_le_of_component_support [NeZero q]
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x))
     (ε : ℕ → ℝ) (n : ℕ) (hn : Finset.univ.sup (G.dist a) ≤ n)
     (hε : ∀ l ≤ n, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤ ε l)
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
@@ -122,7 +122,7 @@ in a different component. Source: area law,
 theorem siteOscillation_spectatorRootChannel_le_of_edist_eq_top [NeZero q]
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable a x))
     (y : ι) (hy : G.edist a y = ⊤)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     siteOscillation q y (spectatorRootChannel k B) ≤ siteOscillation q y B := by

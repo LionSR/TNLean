@@ -85,7 +85,7 @@ private theorem reaches_ringSupportDistance (X Y : Set (Fin N))
 /-- The displacement-based separation predicate agrees with the strict
 shortest-path distance inequality. -/
 theorem isSeparatedBy_iff_lt_ringSupportDistance
-    (X Y : Set (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty) (r : ℕ) :
+    (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty) (r : ℕ) :
     IsSeparatedBy X Y r ↔ r < ringSupportDistance X Y hX hY := by
   classical
   constructor

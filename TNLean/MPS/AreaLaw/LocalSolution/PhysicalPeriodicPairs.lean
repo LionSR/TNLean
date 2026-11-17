@@ -175,12 +175,12 @@ private theorem periodic_local_filter_data {N ℓ d R S m : ℕ} [NeZero d]
       ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ)
     (hherm : ∀ i, (h i).IsHermitian)
     (hsupp : ∀ i, h i ∈ supportedOperators d
-      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R : Set (Fin N × Fin (2 * ℓ))))
+      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R : Finset (Fin N × Fin (2 * ℓ))))
     (hJ : ∀ i, ‖h i‖ ≤ J)
     (hS : ∀ i, (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R).card ≤ S)
     (i : Fin N × Fin (2 * ℓ)) :
     periodicLocalFilter R θ Δ h i ∈ supportedOperators d
-      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i ℓ : Set (Fin N × Fin (2 * ℓ))) ∧
+      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i ℓ : Finset (Fin N × Fin (2 * ℓ))) ∧
     ‖periodicLocalFilter R θ Δ h i‖ ≤ J ∧
     (periodicLocalFilter R θ Δ h i).IsHermitian ∧
     ‖gaussianFilteredTerm θ Δ (∑ k, h k) (h i) - periodicLocalFilter R θ Δ h i‖ ≤
@@ -260,7 +260,7 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
       ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ)
     (hherm : ∀ i, (h i).IsHermitian)
     (hsupp : ∀ i, h i ∈ supportedOperators d
-      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R : Set (Fin N × Fin (2 * ℓ))))
+      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R : Finset (Fin N × Fin (2 * ℓ))))
     (hJ : ∀ i, ‖h i‖ ≤ J)
     (hS : ∀ i, (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R).card ≤ S)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ ((Fin N × Fin (2 * ℓ)) → Fin d)}
@@ -268,7 +268,7 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
     let M := periodicFilteredPair R θ Δ h
     let ε := periodicFilterError N ℓ R S m J θ Δ μ
     (∀ j, (M j).IsHermitian ∧
-      M j ∈ supportedOperators d {v | v.1 = j ∨ finRotate N v.1 = j} ∧
+      M j ∈ supportedOperators d (Finset.univ.filter fun v ↦ v.1 = j ∨ finRotate N v.1 = j) ∧
       ‖M j‖ ≤ (2 * ℓ : ℕ) * J ∧
       ‖M j - ((⟪Ω, toEuclideanLin (M j) Ω⟫_ℂ).re : ℂ) • 1‖ ≤ 4 * (ℓ : ℝ) * J ∧
       ‖toEuclideanLin (M j - ((⟪Ω, toEuclideanLin (M j) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤

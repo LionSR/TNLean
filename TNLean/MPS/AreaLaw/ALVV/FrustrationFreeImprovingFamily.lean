@@ -79,11 +79,11 @@ private theorem coe_interval_subset_left {c x y : ℕ} (hyc : y ≤ c) :
 /-- An operator supported on `[x, y)` lies on one side of the cut after the first `c` sites
 when the interval ends by `c` or starts at or after `c`. -/
 private theorem mem_supportedOperators_side {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    {c x y : ℕ} (hX : X ∈ QuantumCircuit.supportedOperators q (interval L x y : Set (Fin L)))
+    {c x y : ℕ} (hX : X ∈ QuantumCircuit.supportedOperators q (interval L x y : Finset (Fin L)))
     (hxy : y ≤ c ∨ c ≤ x) :
-    X ∈ QuantumCircuit.supportedOperators q (interval L 0 c : Set (Fin L)) ∨
+    X ∈ QuantumCircuit.supportedOperators q (interval L 0 c : Finset (Fin L)) ∨
       X ∈ QuantumCircuit.supportedOperators q
-        (((interval L 0 c)ᶜ : Finset (Fin L)) : Set (Fin L)) :=
+        ((interval L 0 c)ᶜ : Finset (Fin L)) :=
   hxy.imp (fun h ↦ QuantumCircuit.supportedOperators_mono (coe_interval_subset_left h) hX)
     fun h ↦ QuantumCircuit.supportedOperators_mono (coe_interval_subset_compl h) hX
 

@@ -61,7 +61,7 @@ theorem originalSiteHeisenbergOutputWindow_mem_supportedOperators
     (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     originalSiteHeisenbergOutputWindow k u v A ∈ QuantumCircuit.supportedOperators d
-      {i : Fin (3 * (2 * k)) | k ≤ i.val ∧ i.val < k + 4 * k} := by
+      (Finset.univ.filter fun (i : Fin (3 * (2 * k))) ↦ k ≤ i.val ∧ i.val < k + 4 * k) := by
   rw [originalSiteHeisenbergOutputWindow_eq_chainWindowOperator k hk u v A]
   exact MPSTensor.chainWindowOperator_mem_supportedOperators (by omega) (by omega) _
 

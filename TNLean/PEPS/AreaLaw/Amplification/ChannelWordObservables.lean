@@ -105,7 +105,7 @@ theorem sum_siteOscillation_spectatorRootChannelWord_append_sub_le_graphChannelE
     [Fintype κ] [NeZero q]
     (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
-    (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
+    (hk : ∀ i, k i ∈ supportedOperators q (Finset.univ.filter fun x ↦ G.Reachable (a i) x))
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
     (hε : ∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤

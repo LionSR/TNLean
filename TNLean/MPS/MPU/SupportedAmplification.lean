@@ -26,7 +26,7 @@ open Matrix MPSTensor QuantumCircuit
 
 namespace MPSPreparation
 
-variable {d n : ℕ} {S : Set (Fin n)}
+variable {d n : ℕ} {S : Finset (Fin n)}
 
 /-- Reflection about a supported matrix preserves its support. Source:
 initialized and success reflections in Section 5 of the circuit audit. -/

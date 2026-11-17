@@ -23,9 +23,9 @@ variable {d : ℕ} {ι : Type*} [Fintype ι]
 
 /-- Permuting the sites permutes the support of an operator. Source context:
 Hastings–Koma, arXiv:math-ph/0507008, Appendix A, finite-volume local interactions. -/
-theorem supportedOperators_submatrix_siteEquiv {S : Set ι} (p : Equiv.Perm ι)
+theorem supportedOperators_submatrix_siteEquiv {S : Finset ι} (p : Equiv.Perm ι)
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S) :
-    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ supportedOperators d (p '' S) := by
+    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ supportedOperators d (S.image p) := by
   induction hA using Submodule.span_induction with
   | mem A hA =>
     obtain ⟨m, hm, rfl⟩ := hA
