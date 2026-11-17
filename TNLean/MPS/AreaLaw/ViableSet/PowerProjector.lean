@@ -120,7 +120,7 @@ noncomputable def ChainHamiltonian.ofBonds
     split_ifs with hX
     · rw [← hX]
       exact hs i
-    · exact ⟨fun _ _ _ ↦ rfl, fun _ _ _ _ _ _ _ _ ↦ rfl⟩
+    · exact zero_mem _
   hermitian X := (posSemidef_sum_bondSupport_ite h h0 X).isHermitian
   norm_le X := by
     classical
