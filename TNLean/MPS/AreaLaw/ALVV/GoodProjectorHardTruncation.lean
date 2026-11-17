@@ -111,24 +111,24 @@ arXiv:1602.08828v2, Corollary `c:goodagsphardtrunc`, lines 979–1005, eqs. `e:s
 Let `0 ≤ hᵢ ≤ 1` be nearest-neighbour terms of a chain of `L` qudits of dimension `q`. Cut the
 chain into three bulks and two windows of `2ℓ` bonds starting at the bonds `a` and `b`, with
 `a + 2ℓ ≤ b` and `b + 2ℓ ≤ L − 1`.
-* The original Hamiltonian `H` and its hard truncation `H̃` are both centred at the sum of the
-  five actual regional minima. `H̃` truncates the three bulks at height `t ≥ 0` above their own
+* The original Hamiltonian `H` and its hard truncation `Ht` are both centred at the sum of the
+  five actual regional minima. `Ht` truncates the three bulks at height `t ≥ 0` above their own
   minima.
 * Constructed, not assumed: the regional minima, a common unit regional ground vector, and the
   centred ground energy `E₀ ∈ [0, 4]` of `H`.
 
 Then:
-* `H̃ ≤ H` and `‖H̃‖ ≤ 3t + 4ℓ`.
-* `H̃` is the sum of the `2ℓ` two-site terms of each window and of three bulk operators
+* `Ht ≤ H` and `‖Ht‖ ≤ 3t + 4ℓ`.
+* `Ht` is the sum of the `2ℓ` two-site terms of each window and of three bulk operators
   supported on the three bulks, which is the form `eq:H-mid-cut` of Theorem 4.2.
 * For every `η ≥ 0` with `19 + η ≤ t`, put `ξ = 288 e^{11/8} e^{−(t−η)/8}`:
-  * the ordered eigenvalues of `H̃` below `E₀ + η` lie at most `ξ` below those of `H`
+  * the ordered eigenvalues of `Ht` below `E₀ + η` lie at most `ξ` below those of `H`
     (eq. `e:specclose`);
   * the ground energies satisfy `E₀′ ≤ E₀ ≤ E₀′ + ξ`;
   * if `η > 0`, then for every `δ > 0` the low-energy spaces are `δ`-close in both directions
     after the window is enlarged to `η′ = η + ξ + 2ξ √(⌈η/(2ξ)⌉/δ)` (eq. `e:setclose`).
 
-The Chebyshev projector of `H̃` at degree `ℓ²` is
+The Chebyshev projector of `Ht` at degree `ℓ²` is
 `exists_two_window_chebyshev_projector_degree_sq`.
 
 The constant and the cutoff are those of the module's local fix. -/
