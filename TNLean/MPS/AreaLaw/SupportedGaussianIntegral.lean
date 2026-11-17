@@ -51,7 +51,7 @@ namespace TNLean.MPS.AreaLaw
 section Graph
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q R : ℕ} {κ : Type*} [Fintype κ]
-  {T : κ → Finset ι}
+  {Y : κ → Finset ι}
 
 /-- A single supported unitary path yields the localized truncated Gaussian integrals for
 every supported observable, variance and cutoff, on a finite graph whose spheres have at most
@@ -62,11 +62,11 @@ the Hermitian `K` is localized on the radius-`⌊ℓ⌋` neighborhood of `Z` wit
 theorem exists_supported_gaussian_integral_graphNeighborhood
     (G : SimpleGraph ι)
     (hSphere : ∀ x : ι, ∀ d : ℕ, (Finset.univ.filter fun y ↦ G.edist x y = d).card ≤ 2)
-    (Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) T) (hT : ∀ k, (T k).Nonempty)
-    (hDiam : ∀ k, ∀ x ∈ T k, ∀ z ∈ T k, G.edist x z ≤ R)
-    (hCard : ∀ k, (T k).card ≤ R + 1)
+    (Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) Y) (hY : ∀ k, (Y k).Nonempty)
+    (hDiam : ∀ k, ∀ x ∈ Y k, ∀ z ∈ Y k, G.edist x z ≤ R)
+    (hCard : ∀ k, (Y k).card ≤ R + 1)
     (hHerm : ∀ k, (Φ.term k).IsHermitian) (b₀ : ℝ)
-    (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ T k), ‖Φ.term k‖ ≤ b₀)
+    (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ Y k), ‖Φ.term k‖ ≤ b₀)
     {K : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hK : K.IsHermitian) (Z : Finset ι) (ℓ d : ℝ)
     (hd : 0 ≤ d)
     (hgen : ∀ s : ℝ,
@@ -123,9 +123,11 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
         siteExpectation q (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
           ‖W‖ * a * n ^ 2 * Real.exp (v * T - ℓ / 2) := by
     have hloc := norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
-      G T hT hDiam hCard hSphere Φ.term hHerm Φ.mem b₀ hBudget Q
+      G Y hY hDiam hCard hSphere Φ.term hHerm Φ.mem b₀ hBudget Q
       (isSupportedOn_of_mem_supportedOperators hW) ℓ t
-    have hc : (Q.card : ℝ) ≤ n := by exact_mod_cast Finset.card_le_univ Q
+    have hc : (Q.card : ℝ) ≤ n := by
+      show (Q.card : ℝ) ≤ (Fintype.card ι : ℝ)
+      exact_mod_cast Finset.card_le_univ Q
     calc
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * |t| - ℓ / 2) := hloc
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * T - ℓ / 2) :=
@@ -145,6 +147,7 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
     (fun t ht ↦ by simpa only [mul_assoc] using hnear t ht) hgenT
   refine ⟨mem_supportedOperators_of_isSupportedOn hMsupport, hMnorm, hMerror.trans ?_⟩
   have hnsq : n ≤ n ^ 2 := by
+    show (Fintype.card ι : ℝ) ≤ (Fintype.card ι : ℝ) ^ 2
     exact_mod_cast (show Fintype.card ι ≤ Fintype.card ι ^ 2 by
       simpa only [pow_two] using Nat.le_mul_self (Fintype.card ι))
   have hscaleT : a * n ^ 2 + d * n * T ≤ (a + d) * n ^ 2 * (1 + T) := by
@@ -205,14 +208,16 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
     ⟨g.term, g.supported⟩
+  have hΦ : Φ.hamiltonian = g.operator := rfl
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
     (fun X ↦ X.2.1) (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
     g.sum_norm_terms_containing_le h.doubled.operator_isHermitian Z ℓ d hd (fun s ↦ by
-      simpa only [biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
-        using h.norm_relativeGenerator_sub_siteExpectation_le D hq ℓ hℓ s)
-  simpa only [biUnion_graphBall_pathGraph_eq_chainNeighborhood _ hℓ, Fintype.card_fin]
-    using hgen
+      rw [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
+      exact h.norm_relativeGenerator_sub_siteExpectation_le D hq ℓ hℓ s)
+  simp only [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood _ hℓ, Fintype.card_fin]
+    at hgen
+  exact hgen
 
 /-- One supported unitary path gives the localized truncated Gaussian integrals
 for every supported observable, variance and cutoff on an actual finite integer
@@ -263,12 +268,14 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
       (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.supported⟩
+  have hΦ : Φ.hamiltonian = g.operator := rfl
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.1) (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) g.hermitian b₀
     g.sum_norm_terms_containing_le h.doubled.operator_isHermitian Z (m : ℝ) d hd (fun s ↦ by
-      simpa only [Nat.floor_natCast, Fintype.card_fin]
-        using h.norm_relativeGenerator_sub_siteExpectation_le D hq m s)
-  simpa only [Nat.floor_natCast, Fintype.card_fin] using hgen
+      rw [hΦ, Nat.floor_natCast, Fintype.card_fin]
+      exact h.norm_relativeGenerator_sub_siteExpectation_le D hq m s)
+  simp only [hΦ, Nat.floor_natCast, Fintype.card_fin] at hgen
+  exact hgen
 
 end TNLean.MPS.AreaLaw
