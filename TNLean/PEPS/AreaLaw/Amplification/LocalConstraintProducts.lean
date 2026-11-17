@@ -122,7 +122,8 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
       ‖contractionWord (fun i : {i // P i} => k i)
           (PoissonWord.partitionWords P w).1.1 (PoissonWord.partitionWords P w).1.2 -
         contractionWord
-          (fun i : {i // P i} => siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k i))
+          (fun i : {i // P i} => siteExpectation q (graphBall (planeDomainGraph Λ) (a i) r) (k
+              i))
           (PoissonWord.partitionWords P w).1.1 (PoissonWord.partitionWords P w).1.2‖ :=
     funext fun w => by rw [hDret, hLw]
   obtain ⟨hint, hle, hL⟩ := htr Λ κ a k hk₀ hk₁ hfiber htail S r t
