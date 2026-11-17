@@ -257,7 +257,7 @@ theorem StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation
     {v₁ v₂ : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
     (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
-    (h : StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 2))
+    (h : StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
       (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl) :
     ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
       ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det := by
@@ -293,7 +293,7 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_iff_det_mul_eq
     (S₁ : TwoSiteStandardFormData (blockTwo 𝒰₁) u₁ v₁)
     (S₂ : TwoSiteStandardFormData (blockTwo 𝒰₂) u₂ v₂)
     (hodd : Odd ℓ ∨ Odd r) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 2))
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
         (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl ↔
       ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
         ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det :=

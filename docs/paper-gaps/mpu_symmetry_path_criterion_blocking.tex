@@ -110,12 +110,14 @@ distinction between Theorems~\texttt{conjphs} and
 case of Proposition~\texttt{corconj} itself is preserved (line~1562).
 
 \paragraph{Status.} The ``if'' directions of both theorems are formalized
-faithfully on the standard-form chain. Their ``only if'' directions remain
-open; they depend on the unblocked forward direction of
-Lemma~\texttt{lem:equivalent-symmetry}. Conversely, those ``only if''
-directions are evidence about that lemma: if they hold, strict equivalence
-under conjugation already detects $\det(uv)$ at the level of the standard
-form, which the blocked forward direction cannot supply.
+faithfully on the standard-form chain. The ``only if'' direction of
+Theorem~\texttt{conjphs} is also formalized, by a route that does not use
+Lemma~\texttt{lem:equivalent-symmetry}: strict equivalence under conjugation
+detects $\det(uv)$ through the determinant of the MPU on one standard-form
+site (Section~\ref{sec:conjugation-consequences}). The ``only if'' direction
+of Theorem~\texttt{prop:conjsym-strict-equiv} remains open; it needs
+$\det u$ and $\det v$ separately, and the source derives it from the
+unblocked forward direction of Lemma~\texttt{lem:equivalent-symmetry}.
 
 \section{The case under blocking}
 
@@ -153,6 +155,7 @@ blocking, the original tensors are in the same case. This needs no lift of
 $x(p),y(p)$ to continuous families.
 
 \section{Consequences for conjugation symmetry}
+\label{sec:conjugation-consequences}
 
 Theorems~\texttt{conjphs} (lines~1406--1446) and
 \texttt{prop:conjsym-strict-equiv} (lines~1480--1546) derive their ``only if''
