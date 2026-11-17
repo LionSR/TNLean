@@ -34,6 +34,7 @@ derived positive-term counting statement.
 
 open SpinChain
 open scoped ComplexOrder MatrixOrder
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 

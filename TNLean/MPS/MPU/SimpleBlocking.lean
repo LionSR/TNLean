@@ -201,12 +201,12 @@ Source: arXiv:1703.09188, corollary following Proposition III.3, lines
 theorem blockTensor_succ_simple2_of_supplied
     {d D : ℕ} {U : MPOTensor d D} {k : ℕ}
     (a b : Fin (D * D) → ℂ)
-    (h₂ : ∀ i j m l : Fin (MPSTensor.blockPhysDim d k),
+    (h₂ : ∀ i j m l : Fin (Kraus.blockPhysDim d k),
       doubleLayerTensor (blockTensor U k) i j *
           doubleLayerTensor (blockTensor U k) m l =
         doubleLayerTensor (blockTensor U k) i j * Matrix.vecMulVec b a *
           doubleLayerTensor (blockTensor U k) m l) :
-    ∀ I J K L : Fin (MPSTensor.blockPhysDim d (k + 1)),
+    ∀ I J K L : Fin (Kraus.blockPhysDim d (k + 1)),
       doubleLayerTensor (blockTensor U (k + 1)) I J *
           doubleLayerTensor (blockTensor U (k + 1)) K L =
         doubleLayerTensor (blockTensor U (k + 1)) I J * Matrix.vecMulVec b a *
@@ -690,7 +690,7 @@ theorem IsMPU.blockTensor_sq_isMPUSimple
       ⟨sub_mem (doubleLayerTensor_mem_doubleLayerAlgebra U i j) (𝒜.smul_mem _ hpA), ?_⟩
     rw [Matrix.trace_sub, Matrix.trace_smul, htrp, hU.trace_doubleLayerTensor]
     simp
-  have hthree (I K : Fin (MPSTensor.blockPhysDim d (D * D))) :
+  have hthree (I K : Fin (Kraus.blockPhysDim d (D * D))) :
       doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K -
           (if I = K then (1 : ℂ) else 0) • p ∈ threeFormSubmodule p 𝒩 := by
     let σ := Kraus.decodeBlock d (D * D) I
@@ -711,7 +711,7 @@ theorem IsMPU.blockTensor_sq_isMPUSimple
       simp [S, σ, τ]
     rw [hentry, ← diagonal_coeff_prod_eq I K]
     exact hword
-  have hsimple2 : ∀ I K L M : Fin (MPSTensor.blockPhysDim d (D * D)),
+  have hsimple2 : ∀ I K L M : Fin (Kraus.blockPhysDim d (D * D)),
       doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K *
           doubleLayerTensor (MPOTensor.blockTensor U (D * D)) L M =
         doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K * Matrix.vecMulVec ρ Φ *

@@ -94,7 +94,7 @@ def liftOne {F F' : κ} (post : List κ) (ℓ : Layout Party) (c : OriginalCircu
     (c : OriginalCircuit (regs F) (regs F')) :
     (pre : List κ) → (liftOne regs post ℓ c pre).nonprivateCount = c.nonprivateCount
   | [] => OriginalCircuit.nonprivateCount_appendTail c _
-  | G :: pre => (OriginalCircuit.nonprivateCount_frameList _ (regs G)).trans
+  | G :: pre => (Circuit.gateCount_frameList _ (regs G)).trans
       (nonprivateCount_liftOne post ℓ c pre)
 
 theorem participants_liftOne_subset {S : Set Party} {F F' : κ} (post : List κ) (ℓ : Layout Party)
@@ -135,9 +135,9 @@ def liftTwo {F₁ F₂ F₁' F₂' : κ} (post : List κ) (ℓ : Layout Party)
 @[simp] theorem nonprivateCount_liftTwo {F₁ F₂ F₁' F₂' : κ} (post : List κ) (ℓ : Layout Party)
     (c : OriginalCircuit (regs F₁ ++ regs F₂) (regs F₁' ++ regs F₂')) :
     (pre : List κ) → (liftTwo regs post ℓ c pre).nonprivateCount = c.nonprivateCount
-  | [] => (OriginalCircuit.nonprivateCount_castLayouts _ _ _).trans
+  | [] => (Circuit.gateCount_castLayouts _ _ _).trans
       (OriginalCircuit.nonprivateCount_appendTail c _)
-  | G :: pre => (OriginalCircuit.nonprivateCount_frameList _ (regs G)).trans
+  | G :: pre => (Circuit.gateCount_frameList _ (regs G)).trans
       (nonprivateCount_liftTwo post ℓ c pre)
 
 theorem participants_liftTwo_subset {S : Set Party} {F₁ F₂ F₁' F₂' : κ} (post : List κ)
@@ -228,7 +228,7 @@ theorem norm_eval_liftOne_stackVec_sub_le {F F' : κ} (post : List κ) {ℓ : La
             (ref G ⊗ₜ stackVec ref (pre ++ F :: post) ξ)) -
         (appendIso (regs G) (stackRegs regs (pre ++ F' :: post) ℓ)).symm
           (ref G ⊗ₜ stackVec ref (pre ++ F' :: post) ξ)‖ ≤ _
-      rw [OriginalCircuit.eval_frameList_appendIso_symm, ← map_sub, ← TensorProduct.tmul_sub,
+      rw [Circuit.eval_frameList_appendIso_symm, ← map_sub, ← TensorProduct.tmul_sub,
         norm_appendIso_symm_tmul]
       exact (mul_le_of_le_one_left (norm_nonneg _) (href G)).trans
         (norm_eval_liftOne_stackVec_sub_le post c href hξ pre)
@@ -264,7 +264,7 @@ theorem norm_eval_liftTwo_stackVec_sub_le {F₁ F₂ F₁' F₂' : κ} (post : L
         (appendIso (regs F₁') (regs F₂' ++ stackRegs regs post ℓ)).symm (ref F₁' ⊗ₜ
             (appendIso (regs F₂') (stackRegs regs post ℓ)).symm
               (ref F₂' ⊗ₜ stackVec ref post ξ))‖ ≤ _
-      rw [OriginalCircuit.eval_castLayouts, ← memCongr_appendIso_assoc, ←
+      rw [Circuit.eval_castLayouts, ← memCongr_appendIso_assoc, ←
         memCongr_appendIso_assoc]
       simp only [comp_apply, isoL_apply, LinearIsometryEquiv.symm_apply_apply]
       rw [OriginalCircuit.eval_appendTail_appendIso_symm, ← map_sub, ← map_sub,
@@ -276,7 +276,7 @@ theorem norm_eval_liftTwo_stackVec_sub_le {F₁ F₂ F₁' F₂' : κ} (post : L
             (ref G ⊗ₜ stackVec ref (pre ++ F₁ :: F₂ :: post) ξ)) -
         (appendIso (regs G) (stackRegs regs (pre ++ F₁' :: F₂' :: post) ℓ)).symm
           (ref G ⊗ₜ stackVec ref (pre ++ F₁' :: F₂' :: post) ξ)‖ ≤ _
-      rw [OriginalCircuit.eval_frameList_appendIso_symm, ← map_sub, ← TensorProduct.tmul_sub,
+      rw [Circuit.eval_frameList_appendIso_symm, ← map_sub, ← TensorProduct.tmul_sub,
         norm_appendIso_symm_tmul]
       exact (mul_le_of_le_one_left (norm_nonneg _) (href G)).trans
         (norm_eval_liftTwo_stackVec_sub_le post c href hξ pre)

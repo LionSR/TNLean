@@ -19,6 +19,7 @@ repeated-block gauge relation.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace TensorProduct
 open Filter Matrix Module
+open Kraus (blockPhysDim wordOfBlock decodeBlockEquiv blockTensor)
 
 namespace MPSTensor
 

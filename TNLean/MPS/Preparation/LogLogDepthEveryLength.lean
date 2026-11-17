@@ -57,6 +57,7 @@ holds for every `N ≥ N₀`. Documented in
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -97,7 +98,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_
     ext s; exact (s ⟨0, Nat.pos_of_ne_zero (NeZero.ne N)⟩).elim0
   have : NeZero D := ⟨hD.ne'⟩
   have : NeZero d := ⟨hd.ne'⟩
-  obtain ⟨B, ζ, σ, t, L, hζ, hmpv, hNB, hLC, hσ, htr, hfix, ht0, ht1, hlam, hnorm, hinj⟩ :=
+  obtain ⟨B, ζ, σ, t, L, hζ, hmpv, hNB, hLC, hσ, htr, hfix, ht0, ht1, hlam, _, hinj⟩ :=
     exists_normalGaugeData hA
   set s := L + 2 with hsdef
   have hs0 : 0 < s := by omega
@@ -106,17 +107,8 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_
     (by omega)
   obtain ⟨Ks, hKs⟩ := exists_isPreparedInDepth_of_norm_eq_one hd (4 * s)
   -- The quadratic unequal-block bound with `γ = 1/2`.
-  obtain ⟨K, hK, herr⟩ := exists_blockApproximationError_le_mul B hNB hLC hσ htr hfix hlam
-    (by rw [hnorm]; exact ht1.le) (γ := 1 / 2) (by norm_num) (by norm_num)
-  set r := -Real.log t with hr
-  have hr0 : 0 < r := by
-    have := Real.log_neg ht0 ht1
-    rw [hr]; linarith
-  have hexp : ∀ q : ℕ, Real.exp (-(2 * (1 / 2)) * q / correlationLength (t : ℂ)) =
-      Real.exp (-(r * q)) := fun q => by
-    congr 1
-    rw [mul_div_right_comm, neg_div_correlationLength, hnorm, hr]
-    ring
+  obtain ⟨K, r, hK, hr0, _, herr⟩ :=
+    exists_blockApproximationError_le_exp B hNB hLC hσ htr hfix hlam ht0 ht1
   have hl2 : 0 < Real.log 2 := Real.log_pos one_lt_two
   set a := 1 / r with ha
   set b : ℝ := max (Real.log K) 0 / r + 4 * s + 1 with hb
@@ -198,7 +190,6 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_
       linarith
     · rw [← hphase]
       refine (herr (m + 1) ℓ hsum q hℓq hinjℓ).trans ?_
-      rw [hexp]
       -- `K M e^{-r q} ≤ ε` from `M ≤ N` and `r q ≥ log K + log(N/ε)`.
       have hMN : ((m + 1 : ℕ) : ℝ) ≤ N := by
         rw [← hm]; exact_mod_cast Nat.div_le_self N q

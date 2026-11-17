@@ -25,6 +25,7 @@ arXiv:cond-mat/9410110, equations (3.10)--(3.11) and Section 6.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D r : ℕ} {dim : Fin r → ℕ}
 

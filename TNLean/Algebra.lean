@@ -13,7 +13,6 @@ import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BinaryProjectionFamily
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
-import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CStarSqrtHolder
 import TNLean.Algebra.CStarSqrtLipschitz
 import TNLean.Algebra.CeilScaling
@@ -123,8 +122,10 @@ import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixEntrywiseDeriv
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.MatrixFixedSection
+import TNLean.Algebra.MatrixFrameDeriv
 import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Algebra.MatrixIdempotentFactorization
@@ -160,6 +161,7 @@ import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation
 import TNLean.Algebra.OrthogonalComplexStructure
 import TNLean.Algebra.OrthogonalComplexStructureBasis
+import TNLean.Algebra.OrthogonalGroupJoined
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSkewNormalForm
@@ -254,6 +256,7 @@ import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitPhaseScalar
 import TNLean.Algebra.UnitaryAdjointKronecker
+import TNLean.Algebra.UnitaryBetweenCompact
 import TNLean.Algebra.UnitaryCompletionClass
 import TNLean.Algebra.UnitaryCongruence
 import TNLean.Algebra.UnitaryConjugationTransposeSign

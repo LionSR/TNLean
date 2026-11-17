@@ -76,11 +76,11 @@ theorem exists_originalCircuit_initial [DecidableEq P] [NeZero q] {ι : Type} [F
   dsimp only at hspace hvec reference_zero ⊢
   subst hspace
   obtain rfl := eq_of_heq hvec
-  refine ⟨c.castLayouts layout_zero.symm rfl, by rw [OriginalCircuit.nonprivateCount_castLayouts,
-    h0], fun S => OriginalCircuit.participants_castLayouts_subset _ _ _ (h1 S),
+  refine ⟨c.castLayouts layout_zero.symm rfl, (Circuit.gateCount_castLayouts _ _ _).trans h0,
+    fun S => OriginalCircuit.participants_castLayouts_subset _ _ _ (h1 S),
     fun r s => OriginalCircuit.isExpansionBounded_castLayouts _ _ _ (h2 r s),
     fun K => OriginalCircuit.isMonomialBounded_castLayouts _ _ _ (h3 K), ?_⟩
-  rw [OriginalCircuit.eval_castLayouts, reference_zero]
+  rw [Circuit.eval_castLayouts, reference_zero]
   simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.isoL_apply,
     LinearIsometryEquiv.symm_apply_apply]
   exact h4

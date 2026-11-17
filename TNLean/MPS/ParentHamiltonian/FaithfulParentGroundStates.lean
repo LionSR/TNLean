@@ -31,6 +31,7 @@ lines 1394--1483.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D R : ℕ}
 

@@ -168,7 +168,7 @@ def coreGateCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ' : Layout P} (G
     OriginalCircuit (Layout.restrict (fun p ↦ decide (p ∈ S)) ℓ ++ T)
       (Layout.restrict (fun p ↦ decide (p ∈ S)) ℓ' ++ T) :=
   if hC : S.card = 1 then
-    .privateMap (Finset.card_eq_one.mp hC).choose
+    OriginalCircuit.privateMap (Finset.card_eq_one.mp hC).choose
       (fun r hr => Finset.mem_singleton.mp
         ((Finset.card_eq_one.mp hC).choose_spec ▸ owner_mem_of_mem_restrict hr))
       (fun r hr => Finset.mem_singleton.mp
@@ -214,12 +214,12 @@ theorem eval_coreGateCircuit_appendIso_symm (S : Finset P) (hS₀ : S.Nonempty)
         (gate (toGate (selectedGate _ G hU)) y ⊗ₜ z) := by
   unfold coreGateCircuit
   split
-  · simp [OriginalCircuit.eval]
+  · simp [Circuit.eval]
   · have hA' : ∀ r ∈ Layout.restrict (fun p ↦ decide (p ∈ S)) ℓ, r.owner ∈ S :=
       fun _ hr => owner_mem_of_mem_restrict hr
     have hB' : ∀ r ∈ Layout.restrict (fun p ↦ decide (p ∈ S)) ℓ', r.owner ∈ S :=
       fun _ hr => owner_mem_of_mem_restrict hr
-    rw [OriginalCircuit.eval_castLayouts]
+    rw [Circuit.eval_castLayouts]
     simp only [comp_apply, isoL_apply]
     rw [memCongr_append_left_symm (mapOwner_val_finsetRetraction (nonemptyPoint hS₀) _ hA'),
       OriginalCircuit.eval_nonprivateGate_appendIso_symm,
@@ -244,8 +244,7 @@ theorem nonprivateCount_coreGateCircuit_le (S : Finset P) (hS₀ : S.Nonempty)
   unfold coreGateCircuit
   split
   · exact Nat.zero_le 1
-  · rw [OriginalCircuit.nonprivateCount_castLayouts]
-    exact le_rfl
+  · exact (Circuit.gateCount_castLayouts _ _ _).le
 
 theorem participants_coreGateCircuit_subset (S : Finset P) (hS₀ : S.Nonempty)
     {ℓ ℓ' : Layout P} (G : PartyGate ℓ ℓ') (hA : ∀ m ∈ G, m.2.IsAllowed)
@@ -388,8 +387,8 @@ theorem eval_gateCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ' : Layout 
         TensorProduct.mapL_tmul] at key
       rw [← LinearIsometryEquiv.symm_apply_apply (Layout.partitionIso _ ℓ')
         (gate (toGate G) _), key]
-      simp only [gateCircuit, OriginalCircuit.eval, comp_apply, Word.eval_toOriginalCircuit, hpw,
-        OriginalCircuit.eval_castLayouts, isoL_apply]
+      simp only [gateCircuit, Circuit.eval, comp_apply, Word.eval_toOriginalCircuit, hpw,
+        Circuit.eval_castLayouts, isoL_apply]
       erw [memCongr_self_symm_apply]
       rw [eval_coreGateCircuit_appendIso_symm, memCongr_append_right,
         Layout.eval_unpartitionWord_appendIso_symm]

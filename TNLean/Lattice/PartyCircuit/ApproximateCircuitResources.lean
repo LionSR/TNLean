@@ -38,7 +38,7 @@ def rescaledLocationsEquiv {δ : ℝ} (hδ : 0 ≤ δ) :
   | _, _, .comp w v, G, h => Equiv.sumCongr
       (w.rescaledLocationsEquiv hδ G.1 h.1) (v.rescaledLocationsEquiv hδ G.2 h.2)
   | _, _, .localMap .., _, _ => Equiv.refl _
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ _ _, _, _ => Equiv.refl _
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ _ _), _, _ => Equiv.refl _
   | _, _, .swap .., _, _ => Equiv.refl _
   | _, _, .frame _ w, G, h => w.rescaledLocationsEquiv hδ G h
 
@@ -106,7 +106,7 @@ def monomialCount : {a b : Layout P} → (w : EffectCircuit a b) → w.gateLocat
   | _, _, .id _ => Empty.elim
   | _, _, .comp w v => Sum.elim w.monomialCount v.monomialCount
   | _, _, .localMap .. => Empty.elim
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ => fun _ ↦ L.length
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ L _) => fun _ ↦ L.length
   | _, _, .swap .. => Empty.elim
   | _, _, .frame _ w => w.monomialCount
 

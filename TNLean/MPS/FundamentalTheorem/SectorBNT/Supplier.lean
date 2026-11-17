@@ -66,6 +66,7 @@ from both directions here is consistent with the overall layer order.
 
 open scoped Matrix BigOperators
 open Filter Topology
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

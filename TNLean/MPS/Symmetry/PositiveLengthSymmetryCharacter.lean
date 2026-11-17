@@ -20,6 +20,8 @@ lines 2614–2632. No additional chain-length threshold is assumed.
 -/
 
 open scoped Matrix
+open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective
+  evalWord_blockTensor)
 
 namespace MPSTensor
 

@@ -37,7 +37,7 @@ def referenceEval (m : ℕ) : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, .comp w v => castOutputMap (List.append_assoc _ _ _).symm
       (retainMap (w.auxiliary m) (v.referenceEval m) ∘L w.referenceEval m)
   | _, _, .localMap p ha hb A tail => (Word.localMap p ha hb A tail).eval
-  | _, _, @EffectCircuit.gate _ _ _ owner a b L tail =>
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ owner a b L tail) =>
       castOutputMap (gate_auxiliary_layout owner m L tail)
         (gateMemoryMap owner a (gateOut m L) tail
           ((prepGate m L).eval ∘L PartyCircuit.gate (toGate L)))
@@ -57,17 +57,17 @@ theorem norm_referenceEval_le_one {a b : Layout P} (w : EffectCircuit a b)
         (retainMap (w.auxiliary m) (v.referenceEval m) ∘L w.referenceEval m)).trans_le
           (norm_comp_le_one ((norm_retainMap_le _ _).trans (ihv hw.2)) (ihw hw.1))
   | localMap p ha hb A tail =>
-      exact Word.norm_eval_le_one (.localMap p ha hb A tail) hw
+      exact Circuit.norm_eval_le_one _ hw
   | @gate C _ owner a b L tail =>
       exact (norm_castOutputMap (gate_auxiliary_layout owner m L tail)
         (gateMemoryMap owner a (gateOut m L) tail
           ((prepGate m L).eval ∘L PartyCircuit.gate (toGate L)))).trans_le
             ((norm_gateMemoryMap_le _ _ _ _ _).trans
-              (norm_comp_le_one (Word.norm_eval_le_one _ (isAllowed_prepGate m L hw.1)) hw.2))
-  | swap t u tail => exact Word.norm_eval_le_one (.swap t u tail) trivial
+              (norm_comp_le_one (Circuit.norm_eval_le_one _ (isAllowed_prepGate m L hw.1)) hw.2))
+  | swap t u tail => exact Circuit.norm_eval_le_one (.swap t u tail) trivial
   | frame t w ih =>
       exact norm_comp_le_one
-        (SourceCircuit.norm_eval_le_one _ (SourceCircuit.isAllowed_exchangeBlocks _ _ _))
+        (Circuit.norm_eval_le_one _ (SourceCircuit.isAllowed_exchangeBlocks _ _ _))
         ((norm_lTensor_le _ _).trans (ih hw))
 end EffectCircuit
 
@@ -265,7 +265,7 @@ and a comparison operator on the same literal output registers. -/
 theorem SourceCircuit.norm_eval_castLayouts_sub {a b b' : Layout P}
     (w : SourceCircuit a b) (h : b = b') (B : Mem a →L[ℂ] Mem b) :
     ‖(w.castLayouts rfl h).eval - castOutputMap h B‖ = ‖w.eval - B‖ := by
-  rw [SourceCircuit.eval_castLayouts]
+  rw [Circuit.eval_castLayouts]
   change ‖castOutputMap h w.eval - castOutputMap h B‖ = _
   rw [← castOutputMap_sub, norm_castOutputMap]
 
@@ -299,7 +299,7 @@ theorem norm_replacement_sub_reference_le {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
         (w.replacement hδ hw.1 hb.1).eval (w.referenceEval m)
         (retainMap (w.auxiliary m) (v.replacement hδ hw.2 hb.2).eval)
         (retainMap (w.auxiliary m) (v.referenceEval m))
-        ((norm_retainMap_le _ _).trans (SourceCircuit.norm_eval_le_one _
+        ((norm_retainMap_le _ _).trans (Circuit.norm_eval_le_one _
           (v.isAllowed_replacement hδ hw.2 hb.2))) (w.norm_referenceEval_le_one hw.1 m)
       have hret : ‖retainMap (w.auxiliary m) (v.replacement hδ hw.2 hb.2).eval -
           retainMap (w.auxiliary m) (v.referenceEval m)‖ ≤
@@ -310,7 +310,7 @@ theorem norm_replacement_sub_reference_le {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
         _ ≤ _ := hcomp
         _ ≤ 2 * δ * w.expandedGateCount + 2 * δ * v.expandedGateCount :=
           add_le_add (ihw hw.1 hb.1) (hret.trans (ihv hw.2 hb.2))
-        _ = _ := by rw [expandedGateCount, Nat.cast_add]; ring
+        _ = _ := by simp only [expandedGateCount, Circuit.gateCount, Nat.cast_add]; ring
   | localMap p hIn hOut A tail =>
       change ‖(Word.localMap p hIn hOut A tail).eval - (Word.localMap p hIn hOut A tail).eval‖ ≤
         2 * δ * (0 : ℕ)
@@ -341,7 +341,7 @@ theorem norm_replacement_sub_reference_le {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
         _ ≤ ‖E‖ * ‖((w.replacement hδ hw hb).eval - w.referenceEval m).lTensor t.space‖ :=
           opNorm_comp_le _ _
         _ ≤ 1 * ‖((w.replacement hδ hw hb).eval - w.referenceEval m).lTensor t.space‖ :=
-          mul_le_mul_of_nonneg_right (SourceCircuit.norm_eval_le_one _
+          mul_le_mul_of_nonneg_right (Circuit.norm_eval_le_one _
             (SourceCircuit.isAllowed_exchangeBlocks _ _ _)) (norm_nonneg _)
         _ ≤ ‖(w.replacement hδ hw hb).eval - w.referenceEval m‖ := by
           rw [one_mul]

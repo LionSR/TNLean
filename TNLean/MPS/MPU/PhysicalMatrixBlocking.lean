@@ -77,7 +77,7 @@ rather than taking the inverse image of the original applicable lengths.
 Source: arXiv:1703.09188, `SSymmetries-dagger` and `def:equivalent-symmetry`. -/
 noncomputable def blockedDaggerWithPhysicalMatrix
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim d k) :=
+    FiniteChainOperatorSymmetry (Kraus.blockPhysDim d k) :=
   { (daggerWithPhysicalMatrix Q).block k with applicable := {N | 0 < N} }
 
 /-- The canonically blocked transposition action, with the same positive-chain
@@ -85,7 +85,7 @@ convention at blocking length zero as the explicit blocked local matrix.
 Source: arXiv:1703.09188, `SSymmetries-transpose` and `def:equivalent-symmetry`. -/
 noncomputable def blockedTransposeWithPhysicalMatrix
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim d k) :=
+    FiniteChainOperatorSymmetry (Kraus.blockPhysDim d k) :=
   { (transposeWithPhysicalMatrix Q).block k with applicable := {N | 0 < N} }
 
 /-- The positive-chain blocked action is exactly the sandwich action of the
@@ -172,7 +172,7 @@ end FiniteChainOperatorSymmetry
 Source: arXiv:1703.09188, `def:equivalent-symmetry`, line 1366. -/
 theorem conjugationSymmetry_block {k : ℕ} (hk : 0 < k) :
     (conjugationSymmetry d).block k =
-      conjugationSymmetry (MPSTensor.blockPhysDim d k) := by
+      conjugationSymmetry (Kraus.blockPhysDim d k) := by
   apply symmetry_eq
   · exact block_applicable_pos _ rfl hk
   · intro N X

@@ -13,6 +13,7 @@ import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
 import TNLean.Lattice.PartyCircuit.ApproximateCircuitResources
 import TNLean.Lattice.PartyCircuit.ApproximateGateEvaluation
 import TNLean.Lattice.PartyCircuit.ApproximateGateRescaling
+import TNLean.Lattice.PartyCircuit.CircuitSyntax
 import TNLean.Lattice.PartyCircuit.CommonPairSources
 import TNLean.Lattice.PartyCircuit.CommonPartyMaps
 import TNLean.Lattice.PartyCircuit.CommonSourcePreparation

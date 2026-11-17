@@ -42,7 +42,7 @@ theorem norm_preparedMatrix_le_one {P m n : Type} [Fintype m] [Fintype n] [Decid
   classical
   let : DecidableEq n := Classical.decEq n
   have hp : (SourceInventory.prepareSlots R U V η ℓ).IsAllowed :=
-    (isAllowed_castLayouts _ _ _).mpr
+    (isAllowed_castLayouts ((SourceInventory.ofSlots R U V η).prepare ℓ) rfl _).mpr
       ((SourceInventory.isAllowed_prepare_iff _ _).mpr
         (SourceInventory.isNormalized_ofSlots R U V η hη))
   change ‖LinearMap.toMatrix bIn.toBasis bOut.toBasis

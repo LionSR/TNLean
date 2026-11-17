@@ -45,6 +45,7 @@ state `|φ_N⟩` only by a phase.
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSPreparation
 

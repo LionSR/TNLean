@@ -34,6 +34,7 @@ this corrected period one.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d r : ℕ} {dim : Fin r → ℕ}
 

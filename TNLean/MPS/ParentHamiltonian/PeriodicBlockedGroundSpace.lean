@@ -29,6 +29,7 @@ docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

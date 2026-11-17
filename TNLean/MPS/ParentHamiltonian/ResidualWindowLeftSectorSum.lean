@@ -28,6 +28,7 @@ lines 2442--2531; the remaining within-sector projector defect is separate.
 -/
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder InnerProductSpace
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d E L : ℕ}
 /-- Move the original tail to the spectator coordinate and concatenate the two blocked

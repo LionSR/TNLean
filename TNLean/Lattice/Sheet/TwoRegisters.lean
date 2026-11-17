@@ -238,8 +238,8 @@ theorem eval_frontCorrectionWord (h : Disjoint T E) (k₁ k₂ : Layout Party)
               (t₁ ⊗ₜ siteVec own₁ (sites ι) (merge h ((fun x : T => c₁ x), u.1) c₁)) ⊗ₜ
             (appendIso k₂ (siteRegs q own₂ (sites ι))).symm
               (t₂ ⊗ₜ siteVec own₂ (sites ι) (merge h ((fun x : T => c₂ x), u.2) c₂))) := by
-  simp only [frontCorrectionWord, Word.eval_comp, ContinuousLinearMap.comp_apply]
-  simp only [Word.eval_assocWord_appendIso_symm, Word.eval_frameList_appendIso_symm,
+  simp only [frontCorrectionWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply]
+  simp only [Word.eval_assocWord_appendIso_symm, Circuit.eval_frameList_appendIso_symm,
     eval_partWordApp, eval_partWord, Word.eval_exchangeBlocks_appendIso_symm,
     Word.eval_unassocWord_appendIso_symm, eval_localMap]
   have hloc : (isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L act W ∘L
@@ -263,7 +263,7 @@ theorem eval_frontCorrectionWord (h : Disjoint T E) (k₁ k₂ : Layout Party)
       fun x hx => (merge_self_of_mem_union h _ c₁ (mem_of_mem_sitesR hx)).symm,
     siteVec_congr own₂ (sitesR T E) (c' := merge h ((fun x : T => c₂ x), u.2) c₂)
       fun x hx => (merge_self_of_mem_union h _ c₂ (mem_of_mem_sitesR hx)).symm]
-  simp only [Word.eval_assocWord_appendIso_symm, Word.eval_frameList_appendIso_symm,
+  simp only [Word.eval_assocWord_appendIso_symm, Circuit.eval_frameList_appendIso_symm,
     Word.eval_exchangeBlocks_appendIso_symm, Word.eval_unassocWord_appendIso_symm,
     eval_unpartWord, eval_unpartWordApp]
 
@@ -372,8 +372,9 @@ theorem frontCorrectionWord_props (k₁ k₂ : Layout Party)
   have hloc : ‖isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L act W ∘L
       isoL (pairUIso own₁ own₂)‖ ≤ 1 :=
     (norm_comp_isoL_le _ _ _).trans ((norm_act W).le.trans hW)
-  simp only [frontCorrectionWord, Word.IsAllowed, Word.UsesOnly, Word.sourceCount,
-    Word.isAllowed_frameList_iff, Word.usesOnly_frameList_iff, Word.sourceCount_frameList,
+  simp only [frontCorrectionWord, Circuit.IsAllowed, Word.UsesOnly, Word.sourceCount,
+      Circuit.gateCount,
+    Word.isAllowed_frameList_iff, Word.usesOnly_frameList_iff, Circuit.gateCount_frameList,
     Word.IsReordering.isAllowed, Word.IsReordering.usesOnly, Word.IsReordering.sourceCount_eq,
     Word.isReordering_assocWord, Word.isReordering_unassocWord, Word.isReordering_exchangeBlocks,
     isReordering_partWordApp, isReordering_partWord, isReordering_unpartWordApp,

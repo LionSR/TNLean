@@ -1204,7 +1204,7 @@
     \label{FundamentalMPU}
     \notready
     \discussion{6020}
-    \uses{SF}
+    \uses{SF, thm:mpu_fundamental_half_factors}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors written in standard
     form, with source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
     $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
@@ -1231,8 +1231,10 @@
     operators at every length is equivalent to a unitary conjugation of the
     letters, the gate relations follow from it, and the gate relations give
     equality of the operators on rings of even length only.
-    % The source's converse from the half-factor relations alone has no
-    % formal counterpart; this entry therefore keeps \notready.
+    The half-factor relations themselves, with the same $x$, $y$, $z$, and
+    their converse on rings of two-site blocks are
+    Lemma~\ref{thm:mpu_fundamental_half_factors}.
+    % The unblocked converse is false; this entry therefore keeps \notready.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
 
@@ -1355,6 +1357,52 @@
     entry with $w_{pq}\neq0$, and the ring of two blocks at mixed
     configurations then gives $v'=w$. The converse is
     Lemma~\ref{thm:mpu_fundamental_gates_sufficiency}.
+\end{proof}
+
+\begin{lemma}[Fundamental theorem of MPU, half factors]
+    \label{thm:mpu_fundamental_half_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_half_factor_gauges_of_mpo_eq,
+        MPOTensor.TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges,
+        MPOTensor.TwoSiteStandardFormData.mpo_eq_of_half_factor_gauges,
+        MPOTensor.SourceFactors.sourceU_eq_of_factor_gauges}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv,
+        def:mpu_supplied_two_site_standard_form, thm:mpu_fundamental_letters}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II,
+    of bond dimensions $D_1$ and $D_2$, with $U^{(N)}=V^{(N)}$ for every
+    $N\ge2$. Build their factors from any compact decompositions of the two
+    source cuts. Then $D_1=D_2$, and after identifying the rank spaces there
+    are unitaries $z$ on $\mathbb C^{D_1}$, $x$ on $\mathbb C^{\ell}$ and $y$
+    on $\mathbb C^{r}$ with
+    \begin{align}
+        u_{\mathcal V}  & =(x\otimes y)u_{\mathcal U},               \\
+        X_2(\mathcal V) & =(z\otimes I)X_2(\mathcal U)x^\dagger,     \\
+        X_1(\mathcal V) & =(I\otimes\bar z)X_1(\mathcal U)y^\dagger.
+    \end{align}
+    Conversely, if two two-site tensors in standard form have gates and
+    half factors related in this way, they are letterwise conjugate by $z$,
+    and hence generate the same operators on every ring of two-site blocks.
+    This is the source's theorem with its equations (SFuu) and (SFvv), with
+    the converse restricted to the two-site blocks, as recorded in
+    \cite{gap:mpu_standard_form_parity_gap}.
+    % Source: paper_v2.tex 624--648, equations SFuu and SFvv; factors 479--502.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_fundamental_letters, thm:mpu_source_factors_virtual_unitary_gauge,
+        thm:mpu_source_factors_change_of_svd}
+    By Lemma~\ref{thm:mpu_fundamental_letters}, $D_1=D_2$ and
+    $\mathcal V=z\,\mathcal U\,z^\dagger$ letterwise. The factors of the
+    conjugate differ from the transported factors of $\mathcal U$ by unitaries
+    $W_1$, $W_2$ on the two rank spaces, because the canonical-form
+    normalizations $X_1^\dagger(I\otimes\rho)X_1=I$ and $X_2^\dagger X_2=I$
+    fix them up to such unitaries. Put $x=W_2^\dagger$ and $y=W_1^\dagger$;
+    contracting the second factors gives the relation for $u$. These
+    normalizations are needed: replacing $(X_1,X_2)$ by $(cX_1,c^{-1}X_2)$
+    with $|c|\ne1$ leaves the tensor and both gates unchanged, but no unitaries
+    relate the two pairs. For the converse, substitute the relations into the
+    standard form: $x^\dagger x$ and $y^\dagger y$ cancel on the internal legs,
+    and $z$ and $z^\dagger$ remain on the two virtual legs.
 \end{proof}
 
 \begin{lemma}[The gate statements hold for every decomposition]
@@ -2049,18 +2097,30 @@
 
 \begin{lemma}[Tensor-product additivity]
     \label{lem:mpu_index_tensor}
-    \notready
+    \lean{MPOTensor.IsMPU.index_tensorProduct}
+    \leanok
     \discussion{6015}
-    \uses{def:index, index-well-defined, thm:mpu_tensor_product_source_ranks}
-    For MPU tensors under the source's standing canonical-form convention,
+    \uses{def:index, def:mpu_reduced_representative_index,
+        def:mpu_independent_tensor_product}
+    Let $\mathcal U$ and $\mathcal V$ be MPU tensors of positive physical and
+    bond dimensions. Then
     \begin{align}
         \operatorname{ind}(\mathcal U\otimes\mathcal V)
          & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
     \end{align}
-    In \cite[Theorem~IV.6(ii)]{Cirac2017MPU}, this additivity identity is the unrestricted tensor-product
-    statement.
+    This is the tensoring clause of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    The index is that of
+    Definition~\ref{def:mpu_reduced_representative_index}, which agrees with
+    the index of Definition~\ref{def:index} for tensors in canonical form; no
+    canonical form is assumed here.
     % Source lines: paper_v2.tex 824--833.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_representative_index_tensor_product}
+    This is the first assertion of
+    Lemma~\ref{thm:mpu_representative_index_tensor_product}.
+\end{proof}
 
 \begin{lemma}[Tensor-product additivity in canonical form II]
     \label{thm:mpu_admissible_index_tensor}
@@ -2117,8 +2177,7 @@
 
 \begin{lemma}[Tensor-product additivity of the representative index]
     \label{thm:mpu_representative_index_tensor_product}
-    \lean{MPOTensor.IsMPU.index_tensorProduct,
-        MPOTensor.IsMPU.index_identityMPUTensor,
+    \lean{MPOTensor.IsMPU.index_identityMPUTensor,
         MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}
     \leanok
     \uses{def:mpu_reduced_representative_index,
@@ -2328,20 +2387,34 @@
 
 \begin{lemma}[Composition additivity]
     \label{lem:mpu_index_composition}
-    \notready
+    \lean{MPOTensor.IsMPU.index_mulTensor}
+    \leanok
     \discussion{6016}
-    \uses{SF, def:index, index-well-defined, lem:mpu_four_site_composition_source_rank_bounds}
-    Let $\mathcal W$ generate the composition of the MPUs generated by
-    $\mathcal U$ and $\mathcal U'$. Under the source's standing canonical-form
-    convention,
+    \uses{def:index, def:mpu_reduced_representative_index,
+        def:mpdo_operator_product}
+    Let $\mathcal U$ and $\mathcal U'$ be MPU tensors with a common positive
+    physical dimension and positive bond dimensions, and let $\mathcal W$ be
+    the tensor with doubled auxiliary indices that generates the composition
+    of the MPUs generated by $\mathcal U$ and $\mathcal U'$. Then
     \begin{align}
         \operatorname{ind}(\mathcal W)
          & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal U').
     \end{align}
-    In \cite[Theorem~IV.6(ii)]{Cirac2017MPU}, this additivity formula is the unrestricted composition
-    statement.
+    This is the composition clause of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    The index is that of
+    Definition~\ref{def:mpu_reduced_representative_index}, which agrees with
+    the index of Definition~\ref{def:index} for tensors in canonical form; no
+    canonical form is assumed here.
     % Source lines: paper_v2.tex 833--845.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_admissible_index_composition,
+        lem:mpu_four_site_composition_source_rank_bounds}
+    This is the first assertion of
+    Lemma~\ref{thm:mpu_admissible_index_composition}, whose proof follows the
+    source's rank-saturation argument on the blocking of length $4k$.
+\end{proof}
 
 \begin{lemma}[Reduction to a canonical representative]
     \label{thm:mpu_canonical_representative_reduction}
@@ -2404,8 +2477,7 @@
 
 \begin{lemma}[Composition additivity of the representative index]
     \label{thm:mpu_admissible_index_composition}
-    \lean{MPOTensor.IsMPU.index_mulTensor,
-        MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}
     \leanok
     \uses{def:mpu_reduced_representative_index, def:mpdo_operator_product,
         def:mpo_family}
@@ -4100,8 +4172,8 @@
     \discussion{6023}
     \uses{def:index, def:mpu_reduced_representative_index,
         thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_representative_index_tensor_product,
-        thm:mpu_admissible_index_composition, thm:mpu_path_index_constant,
+        lem:mpu_index_tensor, lem:mpu_index_composition,
+        thm:mpu_path_index_constant,
         def:equivalent-tensors, thm:mpu_equivalent_of_index_eq}
     For MPU tensors under the source's standing canonical-form convention, take
     the index defined from any simple blocking. This index has the following
@@ -4125,13 +4197,13 @@
 
 \begin{proof}\leanok
     \uses{thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_representative_index_tensor_product,
-        thm:mpu_admissible_index_composition, thm:mpu_path_index_constant,
+        lem:mpu_index_tensor, lem:mpu_index_composition,
+        thm:mpu_path_index_constant,
         thm:mpu_equivalent_of_index_eq}
     Clauses (i)--(iii) are
     Lemmas~\ref{thm:mpu_representative_index_blocking_adjoint},
-    \ref{thm:mpu_representative_index_tensor_product},
-    \ref{thm:mpu_admissible_index_composition}
+    \ref{lem:mpu_index_tensor},
+    \ref{lem:mpu_index_composition}
     and~\ref{thm:mpu_path_index_constant}. Clause (iv) is
     Lemma~\ref{thm:mpu_equivalent_of_index_eq}.
 \end{proof}
@@ -4148,7 +4220,8 @@
     $\mathcal U_{k_0}(p)$ has a standard form with gates
     $u(p)\colon\mathbb C^{d'}\otimes\mathbb C^{d'}\to\mathbb C^\ell\otimes\mathbb C^r$
     and
-    $v(p)\colon\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^{d'}\otimes\mathbb C^{d'}$.
+    $v(p)\colon\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^{d'}\otimes\mathbb C^{d'}$;
+    moreover $\ell r=d'^2$ and $\operatorname{ind}\mathcal U(0)=\log_2(r/d')$.
     This is the remark in the proof of \cite[Corollary~IV.7]{Cirac2017MPU} that
     the dimensions of $u(p)$ and $v(p)$ do not depend on $p$.
     % Source lines: paper_v2.tex 877--884.
@@ -4325,11 +4398,10 @@
 
 \begin{corollary}[Continuous choice of standard form]
     \label{coruvSF}
-    \notready
+    \lean{MPOTensor.IsMPU.exists_continuous_standardForm_of_path}
+    \leanok
     \discussion{6024}
-    \uses{prop:continuity-index, IndexTh, SF, lem:matrix_realignment_kronecker,
-        lem:nearest_kronecker_product, lem:kronecker_local_section,
-        lem:kronecker_path_lifting}
+    \uses{prop:continuity-index, IndexTh, SF}
     For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
     necessarily in canonical form, there are an integer $k_0\leq D^4$ and
     continuous paths of unitaries $u(p)$ and $v(p)$ such that
@@ -4337,15 +4409,34 @@
     % Source lines: paper_v2.tex 867--910.
 \end{corollary}
 
+\begin{proof}\leanok
+    \uses{lem:mpu_path_fixed_gate_dims,
+        lem:mpu_standard_form_gates_continuous_mod_local,
+        lem:kronecker_path_lifting}
+    Take $k_0=D^4$. By Lemma~\ref{lem:mpu_path_fixed_gate_dims} the blocked
+    tensors have standard forms with gates $u(p)$, $v(p)$ of dimensions
+    independent of $p$, and by
+    Lemma~\ref{lem:mpu_standard_form_gates_continuous_mod_local} the first gate
+    is continuous modulo local unitaries. In place of the slice theorem used by
+    the source, Lemma~\ref{lem:kronecker_path_lifting} gives local unitaries
+    $x(p)$, $y(p)$ with $\hat u(p)=(x(p)\otimes y(p))u(p)$ continuous, and
+    $\hat v(p)=v(p)(y(p)^\dagger\otimes x(p)^\dagger)$ completes a standard form
+    of the same blocked tensor \cite{gap:mpu_standard_form_path_cross_section}.
+    The entries of $\hat v(p)$ are quotients of entries of its products over the
+    shifted pairs on rings of two and three blocks, which are continuous because
+    the operators on these rings and $\hat u(p)$ are, so $\hat v(p)$ is
+    continuous.
+\end{proof}
+
 \begin{lemma}[Standard-form gates along a path are continuous modulo local unitaries]
     \label{lem:mpu_standard_form_gates_continuous_mod_local}
-    \lean{MPOTensor.isCompact_setOf_isUnitaryBetween,
+    \lean{Matrix.isCompact_setOf_isUnitaryBetween,
         MPOTensor.continuous_twoSiteCircuit, MPOTensor.continuous_mpo,
         MPOTensor.eventually_exists_gate_gauge_sub_mem,
         MPOTensor.eventually_exists_gate_gauge_sub_mem_of_path}
     \leanok
     \discussion{6024}
-    \uses{SF, FundamentalMPU}
+    \uses{SF}
     Let $p\mapsto\mathcal U(p)$ be a continuous path of tensors, not
     necessarily in canonical form, and fix a blocking length $k$. At every $p$
     let $u(p),v(p)$ be the gates of a standard form of the two-site block of
@@ -4362,7 +4453,7 @@
 
 \begin{proof}
     \leanok
-    \uses{SF}
+    \uses{SF, thm:mpu_fundamental_gates_supplied}
     Unitary gates form a compact set. If gates $u(q_n)$ with $q_n\to p$
     stayed outside $(x\otimes y)u(p)+W$ for all unitaries $x,y$, a subsequence
     of $(u(q_n),v(q_n))$ would converge to a unitary pair $(u^*,v^*)$. The
@@ -4372,25 +4463,6 @@
     $(u(p),v(p))$, and the Fundamental Theorem for gate pairs gives
     $u^*=(x\otimes y)u(p)$, a contradiction for large $n$.
 \end{proof}
-
-\begin{corollary}[Admissible continuous choice of standard form]
-    \label{cor:mpu_admissible_continuous_standard_form}
-    \notready
-    \discussion{6024}
-    % **Scope restriction (continuous source-derived standard forms):** the chosen
-    % simple blocks carry reduced full-support source data varying continuously
-    % along the path. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{prop:continuity-index, IndexTh, SF, ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let $k_0$ be the common blocking length in an admissible equivalence
-    datum for a continuous path $\mathcal U(p)$ of MPU tensors, and suppose that
-    this given length satisfies $k_0\leq D^4$. Then there are continuous
-    paths of unitaries $u(p)$ and $v(p)$ such that the MPU
-    $U^{(2k_0N)}(p)$ has standard form given by $u(p)$ and $v(p)$ for every
-    $p\in[0,1]$. For \cite[Corollary~IV.7]{Cirac2017MPU}, this statement is the reduced-source
-    version.
-    % Source lines: paper_v2.tex 867--910.
-\end{corollary}
 
 \subsection{Simple reduced representatives at the original scale}
 

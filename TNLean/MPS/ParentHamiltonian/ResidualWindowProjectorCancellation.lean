@@ -23,6 +23,7 @@ cancellation. Primitivity supplies them in the subsequent convergence result.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 

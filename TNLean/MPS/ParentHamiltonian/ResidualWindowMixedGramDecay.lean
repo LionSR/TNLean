@@ -27,6 +27,7 @@ projection comparison are separate steps.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 variable {d D E L : ℕ}

@@ -155,7 +155,7 @@ length \(Nk\) is applicable.
 Source: arXiv:1703.09188, line 1366. -/
 noncomputable def FiniteChainOperatorSymmetry.block
     (S : FiniteChainOperatorSymmetry d) (k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim d k) where
+    FiniteChainOperatorSymmetry (Kraus.blockPhysDim d k) where
   applicable := {N | N * k ∈ S.applicable}
   action := fun {N} X ↦
     let e := MPSTensor.blockedConfigEquiv d N k
@@ -167,8 +167,8 @@ equivalence.
 Source: arXiv:1703.09188, line 1366. -/
 theorem FiniteChainOperatorSymmetry.block_action
     (S : FiniteChainOperatorSymmetry d) (k N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim d k))
-      (Fin N → Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim d k))
+      (Fin N → Fin (Kraus.blockPhysDim d k)) ℂ) :
     (S.block k).action X =
       Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
         (MPSTensor.blockedConfigEquiv d N k).symm
@@ -292,8 +292,8 @@ theorem StrictlyEquivalentUnderSymmetry.of_fixedBond {S : FiniteChainOperatorSym
 
 private theorem blockedAncillaPhysicalDim_eq (k : ℕ) {pa pb : ℕ}
     (hphys : pa * da = pb * db) :
-    MPSTensor.blockPhysDim (da * pa) k = MPSTensor.blockPhysDim (db * pb) k := by
-  simp only [MPSTensor.blockPhysDim_eq_pow]
+    Kraus.blockPhysDim (da * pa) k = Kraus.blockPhysDim (db * pb) k := by
+  simp only [Kraus.blockPhysDim_eq_pow]
   rw [Nat.mul_comm da pa, Nat.mul_comm db pb, hphys]
 
 /-- Two MPU tensors are equivalent when positive coprime ancilla sizes \(p_a\)
@@ -328,7 +328,7 @@ theorem Equivalent.of_fixedBond {U : MPOTensor da D} {V : MPOTensor db D}
     (hphys : pa * da = pb * db)
     (hUcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
     (hVcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
-    (hpath : JoinedIn {W : MPOTensor (MPSTensor.blockPhysDim (db * pb) k) D | IsMPU W}
+    (hpath : JoinedIn {W : MPOTensor (Kraus.blockPhysDim (db * pb) k) D | IsMPU W}
       (reindexPhysical (finCongr (blockedAncillaPhysicalDim_eq k hphys)).symm
         (blockTensor (tensorPhysicalId U pa) k))
       (blockTensor (tensorPhysicalId V pb) k)) :
@@ -373,7 +373,7 @@ theorem EquivalentUnderSymmetry.of_fixedBond {S : FiniteChainOperatorSymmetryFam
     (hphys : pa * da = pb * db)
     (hUcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId U pa) k).toMPSTensor)
     (hVcf : MPSTensor.IsMPUCanonicalForm (blockTensor (tensorPhysicalId V pb) k).toMPSTensor)
-    (hpath : JoinedIn {W : MPOTensor (MPSTensor.blockPhysDim (db * pb) k) D |
+    (hpath : JoinedIn {W : MPOTensor (Kraus.blockPhysDim (db * pb) k) D |
         IsMPU W ∧ IsInvariantUnderSymmetry ((S.at (db * pb)).block k) W}
       (reindexPhysical (finCongr (blockedAncillaPhysicalDim_eq k hphys)).symm
         (blockTensor (tensorPhysicalId U pa) k))

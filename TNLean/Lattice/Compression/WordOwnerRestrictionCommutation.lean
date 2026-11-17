@@ -27,12 +27,11 @@ variable {P Q : Type}
 private theorem restrict_castLayouts_word_heq (g : Q → Bool)
     {a b a' b' : Layout Q} (w : Word a b) (ha : a = a') (hb : b = b')
     (hs : w.sources = []) :
-    HEq ((w.castLayouts ha hb).restrict g ((sources_castLayouts w ha hb).trans hs))
+    HEq (Word.restrict g (w.castLayouts ha hb) ((sources_castLayouts w ha hb).trans hs))
       (w.restrict g hs) := by
   cases ha
   cases hb
   rfl
-
 private theorem localMap_tail_heq {q : Q} {a b : Layout Q}
     (ha : ∀ r ∈ a, r.owner = q) (hb : ∀ r ∈ b, r.owner = q)
     (A : Mem a →L[ℂ] Mem b) {t t' : Layout Q} (h : t = t') :
@@ -76,8 +75,8 @@ theorem restrict_mapOwner_heq (f : P → Q) (g : Q → Bool) {a b : Layout P}
         have hleft : HEq
             (((Word.localMap p ha hb A tail).mapOwner f).restrict g
               (by simp only [sources_mapOwner, sources, SourceInventory.mapOwner_nil])) M := by
-          change HEq ((V.castLayouts (Layout.mapOwner_append f a tail).symm
-            (Layout.mapOwner_append f b tail).symm).restrict g _) M
+          change HEq (Word.restrict g (V.castLayouts (Layout.mapOwner_append f a tail).symm
+            (Layout.mapOwner_append f b tail).symm) _) M
           refine (restrict_castLayouts_word_heq g V _ _ rfl).trans ?_
           simp only [V, restrict, dite_eq_left hp]
           exact castLayouts_heq _ _ _
@@ -91,8 +90,8 @@ theorem restrict_mapOwner_heq (f : P → Q) (g : Q → Bool) {a b : Layout P}
             (((Word.localMap p ha hb A tail).mapOwner f).restrict g
               (by simp only [sources_mapOwner, sources, SourceInventory.mapOwner_nil]))
             (Word.id (Layout.restrict g (Layout.mapOwner f tail))) := by
-          change HEq ((V.castLayouts (Layout.mapOwner_append f a tail).symm
-            (Layout.mapOwner_append f b tail).symm).restrict g _) _
+          change HEq (Word.restrict g (V.castLayouts (Layout.mapOwner_append f a tail).symm
+            (Layout.mapOwner_append f b tail).symm) _) _
           refine (restrict_castLayouts_word_heq g V _ _ rfl).trans ?_
           simp only [V, restrict, dite_eq_right hp]
           exact castLayouts_heq _ _ _

@@ -8,7 +8,7 @@
 \date{2026-11-16}
 \begin{document}
 \maketitle
-\gapnote{clarification}{open}
+\gapnote{clarification}{resolved}
 
 \section{The source step}
 
@@ -85,15 +85,34 @@ generates the operators at $p$ by continuity, and the Fundamental Theorem for
 arbitrary standard forms (\path{TwoSiteStandardFormData.mpo_eq_iff_exists_gate_gauges},
 PR~\#10715) places the limit in the orbit of the gates at $p$.
 
+\section{The second gate}
+
+The source concludes (lines 947--950) that the gauged second gate $\hat v(p)$
+is continuous ``by using the continuity of
+$U^{(k_0)}(p)=\hat u(p)\mathbb S\hat v(p)\mathbb S$''. The formalization uses
+the circuits on rings of two and three blocks instead. On a ring of $N$ blocks
+the operator is $V_N(\hat v)\,U_N(\hat u)$, where $U_N(\hat u)$ is the product
+of $\hat u$ over the blocks and $V_N(\hat v)$ the product of $\hat v$ over the
+shifted pairs. The operator is continuous along the path and $U_N(\hat u)$ is
+continuous and unitary, so $V_N(\hat v)$ is continuous for $N=2,3$. Every entry
+$\hat v_{ab}\hat v_{a'b'}$ of $V_2$ and every entry $\hat v_{ab}\hat v_{a'b'}\hat
+v_{a''b''}$ of $V_3$ appears for a suitable choice of the configuration. Near
+$p_0$ fix an entry $\hat v_{a_0b_0}$ that is nonzero at $p_0$; then
+$\hat v_{ab}=(\hat v_{ab}\hat v_{a_0b_0}^2)/\hat v_{a_0b_0}^2$ is a quotient of
+continuous entries with nonvanishing denominator. Two blocks alone would not
+suffice, since $\hat v$ and $-\hat v$ have the same $V_2$.
+
 \section{Status}
 
 The statement of Corollary~\texttt{coruvSF} is unchanged: an arbitrary
 continuous path of matrix product unitary tensors, with no canonical-form
-hypothesis. Only the cited slice theorem is replaced by the direct
-construction above, so this is a clarification of the proof route, not a
-change of hypotheses. The note is open until the construction and the
-corollary are formalized (issue \#6024 and its sub-issue \#10716 for the local
-cross-section).
+hypothesis. Only the cited slice theorem, and the reading of continuity of the
+second gate off a single block, are replaced by the arguments above, so this is
+a clarification of the proof route, not a change of hypotheses. The note is
+resolved: the construction is
+\path{Matrix.exists_continuous_lift_of_continuous_mod_localUnitary}, and the
+corollary is \path{MPOTensor.IsMPU.exists_continuous_standardForm_of_path}
+(issue \#6024, sub-issue \#10716).
 
 \bibliographystyle{alpha}
 \bibliography{references}

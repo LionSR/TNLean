@@ -72,7 +72,7 @@ private def finalRegroupingCircuit (L w : ℕ) :
 private theorem finalRegroupingCircuit_nonprivateCount :
     (finalRegroupingCircuit (q := q) L w).nonprivateCount = 0 := by
   unfold finalRegroupingCircuit
-  rw [OriginalCircuit.nonprivateCount_castLayouts, Word.nonprivateCount_toOriginalCircuit]
+  simp only [Circuit.gateCount_castLayouts, Word.nonprivateCount_toOriginalCircuit]
   exact (terminalRegroupingWord_props (q := q) (terminalRawOrder L w)
     (terminalRawOrder_nodup L w) mem_terminalRawOrder).2.2
 

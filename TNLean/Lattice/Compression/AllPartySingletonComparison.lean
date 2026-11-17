@@ -183,7 +183,7 @@ private theorem selectedSpectatorIdentity_groupedBlockMap {P Q : Type}
     (partySelector q) _ hs).trans ?_
   unfold Word.groupedBlockMap
   rw [Word.restrict_castLayouts (partySelector q) _ _ _ rfl]
-  exact (Word.eval_castLayouts_heq _ _ _).trans
+  exact (Circuit.eval_castLayouts_heq _ _ _).trans
     (Word.restrict_localMap_false_eval_heq (partySelector q) r _ _ _ _
       (by simp [partySelector, hrq]))
 

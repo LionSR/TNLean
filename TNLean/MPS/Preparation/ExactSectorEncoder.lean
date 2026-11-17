@@ -30,6 +30,7 @@ linear combination of periodic states.
 
 open Matrix MPSPreparation
 open scoped BigOperators
+open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSTensor
 

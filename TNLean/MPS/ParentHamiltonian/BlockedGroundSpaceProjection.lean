@@ -32,6 +32,7 @@ periodic GVBS presentations.
 -/
 
 open SpinChain WithLp
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

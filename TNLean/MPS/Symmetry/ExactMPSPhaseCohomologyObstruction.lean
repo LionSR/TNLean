@@ -45,6 +45,7 @@ such paths; see
 
 open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
 open TNLean.Algebra
+open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 

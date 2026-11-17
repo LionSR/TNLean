@@ -35,12 +35,12 @@ private theorem leftInverse_of_finiteChainConjugation
     {U : MPOTensor d D₁} {V : MPOTensor d D₂}
     (hU : U.IsMPU) (hV : V.IsMPU) (k l : ℕ) (hk : 0 < k) (hl : 0 < l)
     {u₁ : Matrix (Fin ℓ₁ × Fin r₁)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v₁ : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v₁ : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r₁ × Fin ℓ₁) ℂ}
     {u₂ : Matrix (Fin ℓ₂ × Fin r₂)
-      (Fin (MPSTensor.blockPhysDim d l) × Fin (MPSTensor.blockPhysDim d l)) ℂ}
-    {v₂ : Matrix (Fin (MPSTensor.blockPhysDim d l) × Fin (MPSTensor.blockPhysDim d l))
+      (Fin (Kraus.blockPhysDim d l) × Fin (Kraus.blockPhysDim d l)) ℂ}
+    {v₂ : Matrix (Fin (Kraus.blockPhysDim d l) × Fin (Kraus.blockPhysDim d l))
       (Fin r₂ × Fin ℓ₂) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u₁ v₁)
     (T : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V l)) u₂ v₂)

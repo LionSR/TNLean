@@ -221,6 +221,62 @@ chosen raw matrices rather than equivalent classes; see
 The source obtains the endpoint limit at the level of the local supports
 by orthonormalizing a continuous basis. The periodic statement above
 identifies the limit with the ground projection of the canonical parent
-itself. Commutation of the Hamiltonians with the common operators, and
-the construction for degenerate ground spaces, are not asserted here;
-see \cite{gap:glm23_mpo_symmetric_mps_scope}.
+itself.
+
+\cite[Section~5]{GarreRubio2023MPOSym} calls the interpolation ``a
+continuous and symmetric embedding path that connects both MPSs and
+therefore, their parent Hamiltonians'', and takes for $H(\gamma)$ the
+canonical parent with local terms ``$h_\gamma = \Id - \Pi_{S_\gamma}$''.
+The source does not show that these canonical parents commute with the
+common operators, and they need not. The two-site support of an injective
+tensor is invariant under an exactly acting symmetry. Its orthogonal
+complement need not be invariant when the symmetry is not unitary. An
+involutive non-unitary on-site symmetry of the tensor
+$(E_{11},E_{12},E_{21},\Id_2)$ satisfies every action, fusion and
+equal-$L$-matrix hypothesis above, yet its canonical parent does not
+commute with it; see \cite{gap:glm23_mixed_path_parent_commutation}.
+The source's claim of a symmetric canonical path is therefore not
+formalized. The following restricted statement assumes adjoint closure
+of the two-site boundary range of the common operator.
+
+\begin{lemma}[Commutation of the path under adjoint closure]
+    \label{thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo}
+    \leanok
+    \uses{thm:mpo_arbitrary_mixed_action,
+        thm:mpo_arbitrary_interior_parent,
+        thm:mpo_arbitrary_interaction_continuity,
+        thm:glm_boundary_parent_local,thm:glm_boundary_parent_periodic,
+        thm:glm_boundary_embed_commutation}
+    Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action},
+    that $D_0,D_1>0$, and that $A_0,A_1$ are one-site injective. Assume
+    in addition, as a restriction not made by the source, that
+    $\mathcal R_2(\widetilde T)^*=\mathcal R_2(\widetilde T)$. Then for
+    every $\gamma\in[0,1]$ and every $X$,
+    $[\widetilde h_\gamma,O^2_{\widetilde T,X}]=0$. Consequently, for
+    every $N\geq2$ and every $X\in\mathcal C(\widetilde T)$,
+    $[\widetilde H_{\gamma,N},O^N_{\widetilde T,X}]=0$, and in particular
+    $[\widetilde H_{\gamma,N},O^{(N)}_{\widetilde T}]=0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    For $0<\gamma<1$, Lemma~\ref{thm:mpo_arbitrary_interior_parent}
+    identifies $\widetilde h_\gamma$ with the canonical two-site parent
+    of $\widetilde A(\gamma)$, which is compatible with $\widetilde T$ by
+    Lemma~\ref{thm:mpo_arbitrary_mixed_action}. Under adjoint closure,
+    Lemma~\ref{thm:glm_boundary_parent_local} gives the commutation.
+    The set of $\gamma$ at which $\widetilde h_\gamma$ commutes with a
+    fixed operator is closed, because $\widetilde h_\gamma$ is continuous
+    by Lemma~\ref{thm:mpo_arbitrary_interaction_continuity}. It contains
+    $(0,1)$, hence it contains $[0,1]$. Embedding each cyclic translate as
+    in Lemma~\ref{thm:glm_boundary_embed_commutation} and summing gives
+    the periodic statements; the identity boundary lies in
+    $\mathcal C(\widetilde T)$.
+\end{proof}
+
+The fusion hypotheses and the equality of $L$ matrices are not needed for
+this commutation. The construction for degenerate ground spaces is the
+subject of Section~\ref{sec:mpo_block_mixed_path}.

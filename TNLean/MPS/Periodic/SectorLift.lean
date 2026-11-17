@@ -56,6 +56,7 @@ from the adjoint shift, repairing the index mismatch so the telescoping applies.
 
 open scoped Matrix BigOperators
 open Matrix
+open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)
 
 namespace MPSTensor
 

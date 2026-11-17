@@ -61,6 +61,7 @@ source does not assume and without which eq. (S5) fails. Documented in
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

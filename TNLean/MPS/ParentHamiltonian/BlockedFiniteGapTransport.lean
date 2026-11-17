@@ -38,6 +38,7 @@ equations (3.12)--(3.14), lines 1547--1570, and Theorem 1.2.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d R L K N : ℕ} [NeZero d] [NeZero L]
 

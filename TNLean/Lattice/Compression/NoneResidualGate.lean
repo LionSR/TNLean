@@ -53,7 +53,8 @@ theorem restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty
     rw [dite_eq_right he]
     rfl
   rw [hw]
-  simp only [Word.groupedBlockMap, Layout.mapOwner_nil, Word.castLayouts, Word.localPart]
+  simp only [Word.groupedBlockMap, Layout.mapOwner_nil, Word.castLayouts, Circuit.castLayouts,
+    Word.localPart]
   refine (Word.restrict_localMap_true_eval_heq Option.isNone none _ _ _ _ rfl).trans ?_
   rw [Layout.restrict_mapOwner_eq_nil (affectedOwner (fun _ : P ↦ true))
     Option.isNone tail (by intro p; simp [affectedOwner])]
@@ -71,7 +72,7 @@ theorem restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty
   rw [hF]
   exact heq_of_eq (by
     ext
-    simp only [Word.eval, ContinuousLinearMap.rTensor_smul, ContinuousLinearMap.rTensor_id,
+    simp only [Circuit.eval, ContinuousLinearMap.rTensor_smul, ContinuousLinearMap.rTensor_id,
       ContinuousLinearMap.comp_apply, smul_apply, ContinuousLinearMap.id_apply,
       isoL_apply, map_smul, LinearIsometryEquiv.symm_apply_apply])
 end Lattice.PartyCircuit.SourceCircuit

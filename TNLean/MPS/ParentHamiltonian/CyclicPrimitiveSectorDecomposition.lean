@@ -24,6 +24,7 @@ Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D m : ℕ}
 

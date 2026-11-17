@@ -14,6 +14,7 @@ the equal-period sector-match case of arXiv:1708.00029, Appendix A.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
+open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 
 namespace MPSTensor
 

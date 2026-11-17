@@ -26,6 +26,7 @@ simultaneous block inverse at lines 269--277 and blocking at lines 427--431.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockTensor)
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
@@ -65,7 +66,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
         (cast (congrArg (MPSTensor (p * p)) h) (T a).toMPSTensor) (T b).toMPSTensor) :
     ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L).toMPSTensor) ∧
       ∃ K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c)))
-          (Fin (MPSTensor.blockPhysDim p L) × Fin (MPSTensor.blockPhysDim p L)) ℂ,
+          (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ,
         ∀ (a b : Λ) (x y : Fin (D a)) (x' y' : Fin (D b)),
           (∑ i, ∑ j, K ⟨a, x, y⟩ (i, j) * blockTensor (T b) L i j x' y') =
             if he : a = b then
@@ -76,9 +77,9 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
     (fun c ↦ T (e.symm c)) (fun c ↦ hT (e.symm c)) (fun c ↦ hD (e.symm c))
     (fun a b hab hdim ↦ hne (e.symm a) (e.symm b) (e.symm.injective.ne hab) hdim)
   let Krow : ∀ c : Λ, Matrix (Fin (D c) × Fin (D c))
-      (Fin (MPSTensor.blockPhysDim p L) × Fin (MPSTensor.blockPhysDim p L)) ℂ :=
+      (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ :=
     Equiv.piCongrLeft (fun c ↦ Matrix (Fin (D c) × Fin (D c))
-      (Fin (MPSTensor.blockPhysDim p L) × Fin (MPSTensor.blockPhysDim p L)) ℂ)
+      (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ)
       e.symm (fun c xy ij ↦ K ⟨c, xy⟩ ij)
   have hKrow (j : Fin g) : Krow (e.symm j) = (fun xy ij ↦ K ⟨j, xy⟩ ij) := by
     exact Equiv.piCongrLeft_apply_apply _ e.symm _ j
@@ -185,8 +186,8 @@ theorem exists_triangular_blockTensor_leftInverse :
       (∀ c, Kraus.IsInjective (blockTensor (triangularTensor O A c) L).toMPSTensor) ∧
       ∃ K : Matrix ((c : Fin r ⊕ Fin s) ×
           (Fin (triangularBondDim χ D c) × Fin (triangularBondDim χ D c)))
-          (Fin (MPSTensor.blockPhysDim (d + 1) L) ×
-            Fin (MPSTensor.blockPhysDim (d + 1) L)) ℂ,
+          (Fin (Kraus.blockPhysDim (d + 1) L) ×
+            Fin (Kraus.blockPhysDim (d + 1) L)) ℂ,
         ∀ (a b : Fin r ⊕ Fin s) (x y : Fin (triangularBondDim χ D a))
           (x' y' : Fin (triangularBondDim χ D b)),
           (∑ i, ∑ j, K ⟨a, x, y⟩ (i, j) *
@@ -236,7 +237,7 @@ family after a derived common positive physical blocking. Its labels remain
 the disjoint union, and its matrices are the original rectangular maps. -/
 @[reducible] noncomputable def ofTriangularBiorthogonalBlocked :
     CompleteZipperFusionFamily (Fin r ⊕ Fin s)
-      (MPSTensor.blockPhysDim (d + 1)
+      (Kraus.blockPhysDim (d + 1)
         (triangularBlockLength O A hInjO hInjA hχ hD hneO hneA)) :=
   let hspec :=
     (exists_triangular_blockTensor_leftInverse O A hInjO hInjA hχ hD hneO hneA).choose_spec

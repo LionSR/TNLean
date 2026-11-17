@@ -22,6 +22,7 @@ and the grouping argument in Section 6, lines 2649--2675.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockTensor)
 namespace MPSTensor
 variable {d D : ℕ} [NeZero D]
 
@@ -38,7 +39,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.blockTensor {A : MPSTensor d 
   have hFix := transferMap_blockTensor_fixedPoint A q ρ hP.fixedPoint_is_fixed
   obtain ⟨htr, hGap⟩ :=
     spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
-      (Kraus.transferMap (MPSTensor.blockTensor A q)) (Kraus.isChannel_mapLM _ hTP)
+      (Kraus.transferMap (Kraus.blockTensor A q)) (Kraus.isChannel_mapLM _ hTP)
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrr)
       hPrim ρ hP.fixedPoint_psd hP.fixedPoint_ne_zero hFix
   exact ⟨hTP, hP.fixedPoint_ne_zero, hP.fixedPoint_psd, hFix, hGap⟩

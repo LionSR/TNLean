@@ -75,7 +75,7 @@ theorem eval_prepareFreeSlots_eq_appendIso_symm (R : SourceInventory P)
     (prepareFreeSlots R U V free η ℓ).eval x =
       (appendIso (freeSlotLayout R U V free) ℓ).symm
         (freeSourceVector R U V free η ⊗ₜ[ℂ] x) := by
-  rw [prepareFreeSlots, Word.eval_castLayouts]
+  rw [prepareFreeSlots, Circuit.eval_castLayouts]
   change Layout.memCongr _ ((prepare (selectedSources R U V free η) ℓ).eval x) = _
   rw [eval_prepare_eq_appendIso_symm]
   exact Layout.memCongr_append_tmul _ ℓ _ x

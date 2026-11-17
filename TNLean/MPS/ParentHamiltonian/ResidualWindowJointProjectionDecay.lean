@@ -31,6 +31,7 @@ isometric transport.
 -/
 
 open scoped Matrix InnerProductSpace ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

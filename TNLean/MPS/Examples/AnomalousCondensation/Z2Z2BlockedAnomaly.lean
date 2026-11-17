@@ -46,12 +46,12 @@ namespace Z2Z2Condensation
 
 /-- Two original physical sites per blocked site, with the original bond dimension. -/
 def blockedTensor (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    MPOTensor (MPSTensor.blockPhysDim 4 2) (bondDim (MPOTensor.GroupCocycle.kleinEquiv g)) :=
+    MPOTensor (Kraus.blockPhysDim 4 2) (bondDim (MPOTensor.GroupCocycle.kleinEquiv g)) :=
   MPOTensor.blockTensor (symTensor (MPOTensor.GroupCocycle.kleinEquiv g)) 2
 
 /-- The two-site-blocked original family. -/
 def blockedFamily : GroupFamily (Multiplicative (ZMod 2 × ZMod 2))
-    (MPSTensor.blockPhysDim 4 2) where
+    (Kraus.blockPhysDim 4 2) where
   bondDim g := bondDim (MPOTensor.GroupCocycle.kleinEquiv g)
   bondDim_pos g := kleinFamily.bondDim_pos g
   tensor := blockedTensor
@@ -134,7 +134,7 @@ theorem raw_odd_square_ne_identity {N : ℕ} (hN : Odd N) :
   norm_num at hh
 
 private abbrev blockedMPS {D : ℕ} (A : MPSTensor 16 D) :=
-  Kraus.reindexPhysical (blockedDoubledIndexEquiv 4 2) (MPSTensor.blockTensor A 2)
+  Kraus.reindexPhysical (blockedDoubledIndexEquiv 4 2) (Kraus.blockTensor A 2)
 
 private theorem block_pair_eq {D₁ D₂ : ℕ} (A : MPOTensor 4 D₁) (B : MPOTensor 4 D₂)
     (C : MPOTensor 4 (D₁ * D₂)) (h : (mulTensor A B).toMPSTensor = C.toMPSTensor) :
@@ -218,10 +218,10 @@ private theorem block_tree {D m : ℕ} (T : MPOTensor 4 D)
         Matrix.smul_mul, Matrix.mul_assoc]
   rw [toMPSTensor_blockTensor]
   refine ⟨1, fun w hlen ↦ ?_⟩
-  rw [Kraus.evalWord_reindexPhysical, MPSTensor.evalWord_blockTensor]
+  rw [Kraus.evalWord_reindexPhysical, Kraus.evalWord_blockTensor]
   apply hw
   intro he
-  have hh := MPSTensor.length_flattenBlockedWord 16 2
+  have hh := Kraus.length_flattenBlockedWord 16 2
     (w.map (blockedDoubledIndexEquiv 4 2))
   rw [he, List.length_nil, List.length_map] at hh
   omega
@@ -278,7 +278,7 @@ theorem blockedFamily_comap_xyHom :
   twoFamily_ext rfl rfl HEq.rfl HEq.rfl
 
 /-- The blocked restriction to `{e,y}` has bond dimension one. -/
-def blockedYFamily : GroupFamily (Multiplicative (ZMod 2)) (MPSTensor.blockPhysDim 4 2) :=
+def blockedYFamily : GroupFamily (Multiplicative (ZMod 2)) (Kraus.blockPhysDim 4 2) :=
   GroupFamily.ofBondOne fun a ↦ MPOTensor.blockTensor (yLabelTensor a.toAdd) 2
 
 /-- The bond-one restriction has identity fusion matrices. -/

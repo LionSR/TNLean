@@ -35,6 +35,7 @@ asserted here.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D E L : ℕ}
 

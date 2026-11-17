@@ -200,9 +200,9 @@ theorem restrict_endpointWord_eval_heq_registerWord (f : P → Bool)
     eq_of_heq ((endpointWord_heq_registerWord R U V A B).trans
       (Word.castLayouts_heq (endpointRegisterWord D) hL hL).symm)
   simp only [hWord]
-  exact (heq_of_eq (congrArg Word.eval
+  exact (heq_of_eq (congrArg Circuit.eval
     (Word.restrict_castLayouts f (endpointRegisterWord D) hL hL
       (sources_endpointRegisterWord D)))).trans
-    ((Word.eval_castLayouts_heq _ _ _).trans (restrict_endpointRegisterWord_eval_heq f D))
+    ((Circuit.eval_castLayouts_heq _ _ _).trans (restrict_endpointRegisterWord_eval_heq f D))
 
 end TNLean.Lattice.PartyCircuit.SourceInventory

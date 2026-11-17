@@ -70,8 +70,8 @@ theorem mpuQuasiLocalEquiv_eq_bufferedMPUQuasiLocalAut
     {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
     (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v) :
     mpuQuasiLocalEquiv hU = bufferedMPUQuasiLocalAut hU k hk S := by

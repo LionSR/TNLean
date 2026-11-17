@@ -29,6 +29,7 @@ C1C2 and limP12.
 
 open scoped Matrix BigOperators InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
 open Filter
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D E D₂ F L : ℕ}
 

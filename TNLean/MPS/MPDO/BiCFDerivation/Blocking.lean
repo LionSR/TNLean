@@ -18,6 +18,7 @@ of arXiv:1606.00608, lines 318--344.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockTensor evalWord_blockTensor)
 
 namespace MPSTensor
 

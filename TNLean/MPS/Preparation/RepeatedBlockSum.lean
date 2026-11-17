@@ -68,6 +68,7 @@ and without which the block form fails. Documented in
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

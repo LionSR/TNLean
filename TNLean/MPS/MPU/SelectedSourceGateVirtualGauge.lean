@@ -227,6 +227,32 @@ private theorem raw_selected_factor_gate_relations
   · simpa only [Matrix.UnitaryGroup.inv_val, star_star] using
       rawV_selected_factor_gauge z er el X₁ X₂ TX₁ TX₂ W₁ W₂ hX₁ hX₂
 
+/-- The gate $u$ of transported source factors, with the rank unitaries kept explicit: if
+$Y_1(V)=W_1^\dagger Y_1(U)(z^T\otimes I_d)$ and $Y_2(V)=W_2^\dagger Y_2(U)(I_d\otimes z^\dagger)$,
+after the rank identifications $e_r$, $e_\ell$, then $u_V=(W_2^\dagger\otimes W_1^\dagger)u_U$.
+The input and output factors need not be the library's selected decompositions.
+
+Source: arXiv:1703.09188, `FundamentalMPU`, equation `SFuu`, lines 624–648, with the factors of
+lines 479–502. -/
+theorem SourceFactors.sourceU_eq_of_factor_gauges
+    {d D : ℕ} {U V : MPOTensor d D}
+    {ρU ρV : Matrix (Fin D) (Fin D) ℂ}
+    (S : SourceFactors U ρU) (T : SourceFactors V ρV)
+    (z : Matrix.unitaryGroup (Fin D) ℂ)
+    (er : Fin r[U] ≃ Fin r[V]) (el : Fin ℓ[U] ≃ Fin ℓ[V])
+    (W₁ : Matrix (Fin r[V]) (Fin r[V]) ℂ) (W₂ : Matrix (Fin ℓ[V]) (Fin ℓ[V]) ℂ)
+    (hY₁ : T.Y₁ = star W₁ *
+      Matrix.reindex er (Equiv.refl _)
+        (S.Y₁ * ((z : Matrix (Fin D) (Fin D) ℂ).transpose ⊗ₖ
+          (1 : Matrix (Fin d) (Fin d) ℂ))))
+    (hY₂ : T.Y₂ = star W₂ *
+      Matrix.reindex el (Equiv.refl _)
+        (S.Y₂ * ((1 : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
+          star (z : Matrix (Fin D) (Fin D) ℂ)))) :
+    SourceFactors.sourceU V T = (star W₂ ⊗ₖ star W₁) *
+      Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) (SourceFactors.sourceU U S) :=
+  rawU_selected_factor_gauge z er el S.Y₁ S.Y₂ T.Y₁ T.Y₂ W₁ W₂ hY₁ hY₂
+
 /-- Contract the four supplied source-factor relations to the literal gate
 relations. The input and output factors need not be the library's selected
 decompositions. Source: arXiv:1703.09188, `FundamentalMPU`, equations

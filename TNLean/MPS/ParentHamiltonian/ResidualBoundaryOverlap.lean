@@ -32,6 +32,7 @@ DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E F L : ℕ}
 

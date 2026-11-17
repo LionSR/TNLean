@@ -71,15 +71,15 @@ tensors block injective in arXiv:1606.00608, lines 317--345.  The ket and bra
 indices remain separate.  This local tensor should not be confused with the
 closed-chain operator `O_L(M)` defined at lines 962--967. -/
 noncomputable def blockTensor (M : MPOTensor d D) (L : ℕ) :
-    MPOTensor (MPSTensor.blockPhysDim d L) D :=
-  fun i j => evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j)
+    MPOTensor (Kraus.blockPhysDim d L) D :=
+  fun i j => evalWord M (Kraus.wordOfBlock d L i) (Kraus.wordOfBlock d L j)
 
 /-- Evaluating a blocked tensor gives the corresponding pair of blocked words. -/
 @[simp]
 lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
-    (i j : Fin (MPSTensor.blockPhysDim d L)) :
+    (i j : Fin (Kraus.blockPhysDim d L)) :
     blockTensor M L i j =
-      evalWord M (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j) :=
+      evalWord M (Kraus.wordOfBlock d L i) (Kraus.wordOfBlock d L j) :=
   rfl
 
 /-- Blocking one site is the original tensor in the canonical identification
@@ -88,7 +88,7 @@ of its one-letter physical alphabet. Source: arXiv:1703.09188, definition
 theorem blockTensor_one_eq_reindexPhysical (M : MPOTensor d D) :
     blockTensor M 1 = reindexPhysical (Kraus.singleBlockEquiv d) M := by
   ext i j
-  simp [blockTensor, reindexPhysical, MPSTensor.wordOfBlock, Kraus.wordOfBlock_one]
+  simp [blockTensor, reindexPhysical]
 
 /-- Physical blocking commutes with the physical adjoint. The equality is
 literal: both operations preserve the order of the virtual word.
@@ -101,7 +101,7 @@ theorem physicalAdjointTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
   ext β α
   rw [blockTensor_apply]
   have h := evalWord_physicalAdjointTensor U
-    (MPSTensor.wordOfBlock d L I) (MPSTensor.wordOfBlock d L K) (by simp)
+    (Kraus.wordOfBlock d L I) (Kraus.wordOfBlock d L K) (by simp)
   rw [h]
   rfl
 
@@ -129,7 +129,7 @@ lines 747--752. -/
 theorem continuous_blockTensor (L : ℕ) :
     Continuous (fun M : MPOTensor d D ↦ blockTensor M L) := by
   refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
-  exact continuous_evalWord (MPSTensor.wordOfBlock d L i) (MPSTensor.wordOfBlock d L j)
+  exact continuous_evalWord (Kraus.wordOfBlock d L i) (Kraus.wordOfBlock d L j)
 
 end MPOTensor
 
@@ -154,24 +154,24 @@ site, and then encodes the resulting word in `Fin (d * d)`.  This is the
 index identification implicit in the blocking argument of
 arXiv:1606.00608, lines 317--345. -/
 noncomputable def blockedDoubledIndexEquiv (d L : ℕ) :
-    Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L) ≃
-      Fin (MPSTensor.blockPhysDim (d * d) L) :=
+    Fin (Kraus.blockPhysDim d L * Kraus.blockPhysDim d L) ≃
+      Fin (Kraus.blockPhysDim (d * d) L) :=
   finProdFinEquiv.symm |>.trans
-    (Equiv.prodCongr (MPSTensor.decodeBlockEquiv d L)
-      (MPSTensor.decodeBlockEquiv d L)) |>.trans
+    (Equiv.prodCongr (Kraus.decodeBlockEquiv d L)
+      (Kraus.decodeBlockEquiv d L)) |>.trans
     (Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin d) (fun _ ↦ Fin d)).symm |>.trans
     (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv) |>.trans
-    (MPSTensor.decodeBlockEquiv (d * d) L).symm
+    (Kraus.decodeBlockEquiv (d * d) L).symm
 
 /-- Decoding the doubled blocked index pairs the ket and bra letters pointwise. -/
 @[simp]
 lemma decodeBlock_blockedDoubledIndexEquiv (d L : ℕ)
-    (ij : Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim d L))
+    (ij : Fin (Kraus.blockPhysDim d L * Kraus.blockPhysDim d L))
     (k : Fin L) :
-    MPSTensor.decodeBlock (d * d) L (blockedDoubledIndexEquiv d L ij) k =
+    Kraus.decodeBlock (d * d) L (blockedDoubledIndexEquiv d L ij) k =
       finProdFinEquiv
-        (MPSTensor.decodeBlock d L ij.divNat k,
-          MPSTensor.decodeBlock d L ij.modNat k) := by
+        (Kraus.decodeBlock d L ij.divNat k,
+          Kraus.decodeBlock d L ij.modNat k) := by
   simp [blockedDoubledIndexEquiv, Equiv.arrowCongr,
     Kraus.decodeBlockEquiv_apply]
 
@@ -181,7 +181,7 @@ bra words. -/
 theorem toMPSTensor_blockTensor (M : MPOTensor d D) {L : ℕ} :
     (blockTensor M L).toMPSTensor =
       Kraus.reindexPhysical (blockedDoubledIndexEquiv d L)
-        (MPSTensor.blockTensor M.toMPSTensor L) := by
+        (Kraus.blockTensor M.toMPSTensor L) := by
   funext ij
   simp [toMPSTensor, blockTensor_apply, Kraus.reindexPhysical,
     Kraus.blockTensor, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn,
@@ -193,7 +193,7 @@ of its doubled-index MPS tensor. -/
 theorem isInjective_toMPSTensor_blockTensor_iff
     (M : MPOTensor d D) {L : ℕ} :
     Kraus.IsInjective (blockTensor M L).toMPSTensor ↔
-      Kraus.IsInjective (MPSTensor.blockTensor M.toMPSTensor L) := by
+      Kraus.IsInjective (Kraus.blockTensor M.toMPSTensor L) := by
   rw [toMPSTensor_blockTensor M,
     MPSTensor.isInjective_reindexPhysical_equiv]
 
@@ -217,10 +217,10 @@ theorem blockTensor_mulTensor {D₁ D₂ : ℕ}
 /-- Evaluating a blocked MPO tensor on finite-index ket and bra words is
 evaluating the original tensor on the flattened words. -/
 theorem evalWord_blockTensor_ofFn (M : MPOTensor d D) (L : ℕ) {N : ℕ}
-    (s t : Fin N → Fin (MPSTensor.blockPhysDim d L)) :
+    (s t : Fin N → Fin (Kraus.blockPhysDim d L)) :
     evalWord (blockTensor M L) (List.ofFn s) (List.ofFn t) =
-      evalWord M (MPSTensor.flattenBlockedWord d L (List.ofFn s))
-        (MPSTensor.flattenBlockedWord d L (List.ofFn t)) := by
+      evalWord M (Kraus.flattenBlockedWord d L (List.ofFn s))
+        (Kraus.flattenBlockedWord d L (List.ofFn t)) := by
   induction N with
   | zero =>
       simp
@@ -278,16 +278,16 @@ length-two blocked alphabet.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 noncomputable def twoSiteBlockEquiv (d : ℕ) :
-    Fin (d * d) ≃ Fin (MPSTensor.blockPhysDim d 2) :=
+    Fin (d * d) ≃ Fin (Kraus.blockPhysDim d 2) :=
   finProdFinEquiv.symm |>.trans
     (finTwoArrowEquiv (Fin d)).symm |>.trans
-    (MPSTensor.decodeBlockEquiv d 2).symm
+    (Kraus.decodeBlockEquiv d 2).symm
 
 /-- Identify the doubled physical index of `blockTwo` with the general
 length-two block of the doubled MPS alphabet. -/
 noncomputable def twoSiteDoubledIndexEquiv (d : ℕ) :
     Fin ((d * d) * (d * d)) ≃
-      Fin (MPSTensor.blockPhysDim (d * d) 2) :=
+      Fin (Kraus.blockPhysDim (d * d) 2) :=
   finProdFinEquiv.symm |>.trans
     (Equiv.prodCongr (twoSiteBlockEquiv d) (twoSiteBlockEquiv d)) |>.trans
     finProdFinEquiv |>.trans
@@ -300,7 +300,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
     (blockTwo M).toMPSTensor =
       Kraus.reindexPhysical (twoSiteDoubledIndexEquiv d)
-        (MPSTensor.blockTensor M.toMPSTensor 2) := by
+        (Kraus.blockTensor M.toMPSTensor 2) := by
   funext ij
   simp [toMPSTensor, blockTwo, Kraus.reindexPhysical,
     Kraus.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
