@@ -8,7 +8,7 @@ import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.MonomialGaussOperator
-import TNLean.MPS.Examples.ZMod2
+import TNLean.Algebra.ZMod2Representation
 
 /-!
 # The displayed CZX circuit tuple and its local Gauss operator
