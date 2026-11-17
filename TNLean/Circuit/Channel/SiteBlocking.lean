@@ -198,12 +198,14 @@ theorem blockSites_symm_mem_supportedOperators [NeZero d] {X : Set (Fin M)}
     (hA : A ∈ supportedOperators (d ^ k) X) :
     (blockSites M k d).symm A ∈ supportedOperators d (siteBlock ⁻¹' X) := by
   classical
-  have hK := mem_supportedOperators_of_forall_commute (q := d) (siteBlock ⁻¹' X).toFinset
-    (Y := (blockSites M k d).symm A) fun B hB ↦ by
-      rw [Set.coe_toFinset, ← Set.preimage_compl] at hB
-      have hc := commute_of_mem_supportedOperators disjoint_compl_right hA
-        (blockSites_mem_supportedOperators hB)
-      simpa using hc.map (blockSites M k d).symm
+  have hK := mem_supportedOperators_of_isSupportedOn (q := d) (S := (siteBlock ⁻¹' X).toFinset)
+    (ManyBody.mem_supportedOperators_iff_forall_commute.mpr
+      (A := (blockSites M k d).symm A) fun B hB ↦ by
+        have hB' := mem_supportedOperators_of_isSupportedOn hB
+        rw [Finset.coe_compl, Set.coe_toFinset, ← Set.preimage_compl] at hB'
+        have hc := commute_of_mem_supportedOperators disjoint_compl_right hA
+          (blockSites_mem_supportedOperators hB')
+        simpa using hc.map (blockSites M k d).symm)
   simpa using hK
 
 /-- Moving a block by `m` moves each of its sites by `k * m` in the original chain. -/

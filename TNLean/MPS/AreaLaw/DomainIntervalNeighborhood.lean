@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ComponentReduction
-import TNLean.Circuit.LiebRobinson.GraphLocalization
+import TNLean.Circuit.SiteExpectationGraphLocalization
 import Mathlib.Order.Interval.Set.OrdConnected
 
 /-!
@@ -64,22 +64,22 @@ order-connected. -/
 private theorem neighborhood_between {Λ : Finset ℤ} (I : Finset (Fin Λ.card))
     (hI : Set.OrdConnected (I : Set (Fin Λ.card)))
     (m : ℕ) {u v z : Fin Λ.card}
-    (hu : u ∈ I.biUnion (fun a ↦ graphBall (domainGraph Λ) a m))
-    (hv : v ∈ I.biUnion (fun a ↦ graphBall (domainGraph Λ) a m))
+    (hu : u ∈ I.biUnion (fun a ↦ ManyBody.graphBall (domainGraph Λ) a m))
+    (hv : v ∈ I.biUnion (fun a ↦ ManyBody.graphBall (domainGraph Λ) a m))
     (huz : u ≤ z) (hzv : z ≤ v) :
-    z ∈ I.biUnion (fun a ↦ graphBall (domainGraph Λ) a m) := by
+    z ∈ I.biUnion (fun a ↦ ManyBody.graphBall (domainGraph Λ) a m) := by
   obtain ⟨a, ha, hau⟩ := Finset.mem_biUnion.mp hu
   obtain ⟨b, hb, hbv⟩ := Finset.mem_biUnion.mp hv
   by_cases haz : a ≤ z
   · by_cases hzb : z ≤ b
     · exact Finset.mem_biUnion.mpr ⟨z, hI.out ha hb ⟨haz, hzb⟩,
-        mem_graphBall.mpr (by simp)⟩
-    · exact Finset.mem_biUnion.mpr ⟨b, hb, mem_graphBall.mpr
-        (edist_le_of_between m (mem_graphBall.mp hbv)
+        ManyBody.mem_graphBall.mpr (by simp)⟩
+    · exact Finset.mem_biUnion.mpr ⟨b, hb, ManyBody.mem_graphBall.mpr
+        (edist_le_of_between m (ManyBody.mem_graphBall.mp hbv)
           ((min_le_left b v).trans (le_of_lt (lt_of_not_ge hzb)))
           (hzv.trans (le_max_right b v)))⟩
-  · exact Finset.mem_biUnion.mpr ⟨a, ha, mem_graphBall.mpr
-      (edist_le_of_between m (mem_graphBall.mp hau) ((min_le_right a u).trans huz)
+  · exact Finset.mem_biUnion.mpr ⟨a, ha, ManyBody.mem_graphBall.mpr
+      (edist_le_of_between m (ManyBody.mem_graphBall.mp hau) ((min_le_right a u).trans huz)
         ((le_of_lt (lt_of_not_ge haz)).trans (le_max_left a u)))⟩
 
 /-- Intrinsic graph neighborhoods of an order-connected subset of a finite integer
@@ -89,10 +89,10 @@ the interval neighborhoods in `part2a_mps_information.tex`, lines 472–488. -/
 theorem domainNeighborhood_eq_interval_of_ordConnected (Λ : Finset ℤ)
     (I : Finset (Fin Λ.card))
     (hI : Set.OrdConnected (I : Set (Fin Λ.card))) (m : ℕ) :
-    ∃ a b : ℕ, I.biUnion (fun x ↦ graphBall (domainGraph Λ) x m) =
+    ∃ a b : ℕ, I.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m) =
       interval Λ.card a b := by
-  by_cases hN : (I.biUnion (fun x ↦ graphBall (domainGraph Λ) x m)).Nonempty
-  · exact (let N := I.biUnion (fun x ↦ graphBall (domainGraph Λ) x m)
+  by_cases hN : (I.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)).Nonempty
+  · exact (let N := I.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m)
       ⟨(N.min' hN).val, (N.max' hN).val + 1,
         Finset.ext fun z ↦
           (show z ∈ N ↔ (N.min' hN).val ≤ z.val ∧ z.val < (N.max' hN).val + 1 from
@@ -110,7 +110,7 @@ Source: TNLean one-dimensional note, `part0_preamble.tex`, lines 191–199, and
 theorem domainNeighborhood_interval_eq (Λ : Finset ℤ) (a b m : ℕ) :
     ∃ a' b' : ℕ,
       (interval Λ.card a b).biUnion
-        (fun x ↦ graphBall (domainGraph Λ) x m) = interval Λ.card a' b' := by
+        (fun x ↦ ManyBody.graphBall (domainGraph Λ) x m) = interval Λ.card a' b' := by
   exact domainNeighborhood_eq_interval_of_ordConnected Λ (interval Λ.card a b)
     ⟨fun u hu v hv z hz ↦ mem_interval.mpr
       ⟨(mem_interval.mp hu).1.trans (show u.val ≤ z.val from hz.1),

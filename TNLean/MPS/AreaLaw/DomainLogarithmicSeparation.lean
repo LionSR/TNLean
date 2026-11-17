@@ -91,7 +91,7 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
   have hnhi : (n : ℝ) < w + 2 := by
     simpa only [add_assoc, one_add_one_eq_two] using Nat.ceil_lt_add_one (by linarith : 0 ≤ w + 1)
   let N := fun (j : ℕ) (S : Finset (Fin Λ.card)) ↦
-    S.biUnion (fun x ↦ graphBall (domainGraph Λ) x j)
+    S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x j)
   let D := N n T
   let C := (N (2 * n) T)ᶜ
   have hDC : Disjoint D C := by
@@ -99,17 +99,17 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     intro y hyD hyC
     obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hyD
     exact (Finset.mem_compl.mp hyC) (Finset.mem_biUnion.mpr
-      ⟨x, hx, mem_graphBall.mpr ((mem_graphBall.mp hxy).trans
+      ⟨x, hx, ManyBody.mem_graphBall.mpr ((ManyBody.mem_graphBall.mp hxy).trans
         (by exact_mod_cast (show n ≤ 2 * n by omega)))⟩)
   have hTD : T ⊆ D := by
     intro x hx
-    exact Finset.mem_biUnion.mpr ⟨x, hx, mem_graphBall.mpr (by simp)⟩
+    exact Finset.mem_biUnion.mpr ⟨x, hx, ManyBody.mem_graphBall.mpr (by simp)⟩
   have hEC : E ⊆ C := by
     intro y hy
     apply Finset.mem_compl.mpr
     intro hyN
     obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hyN
-    have hcoord := abs_sitePos_sub_le_of_edist_le x y (2 * n) (mem_graphBall.mp hxy)
+    have hcoord := abs_sitePos_sub_le_of_edist_le x y (2 * n) (ManyBody.mem_graphBall.mp hxy)
     push_cast at hcoord
     linarith only [hcoord, hdist x hx y hy, hsep, hnhi, hw]
   have hmarginT : ∀ x ∈ T, ∀ y : Fin Λ.card, y ∉ D → ∀ d : ℕ,
@@ -117,7 +117,8 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     intro x hx y hy d hd
     by_contra hnot
     have hdn : d ≤ n := by exact_mod_cast (show (d : ℝ) ≤ n by linarith only [not_lt.mp hnot, hnlo])
-    exact hy (Finset.mem_biUnion.mpr ⟨x, hx, mem_graphBall.mpr (hd ▸ (by exact_mod_cast hdn))⟩)
+    exact hy (Finset.mem_biUnion.mpr ⟨x, hx, ManyBody.mem_graphBall.mpr (hd ▸ (by exact_mod_cast
+        hdn))⟩)
   have hmarginE : ∀ e ∈ E, ∀ y : Fin Λ.card, y ∉ C → ∀ d : ℕ,
       (domainGraph Λ).edist e y = (d : ℕ∞) → w < (d : ℝ) := by
     intro e he y hy d hd
@@ -126,7 +127,7 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     have htri : (domainGraph Λ).edist x e ≤ ((2 * n + d : ℕ) : ℕ∞) := by
       calc
         _ ≤ (domainGraph Λ).edist x y + (domainGraph Λ).edist y e := (domainGraph Λ).edist_triangle
-        _ ≤ ((2 * n : ℕ) : ℕ∞) + (d : ℕ∞) := add_le_add (mem_graphBall.mp hxy)
+        _ ≤ ((2 * n : ℕ) : ℕ∞) + (d : ℕ∞) := add_le_add (ManyBody.mem_graphBall.mp hxy)
           (by rw [SimpleGraph.edist_comm, hd])
         _ = _ := by simp only [Nat.cast_add]
     have hcoord := abs_sitePos_sub_le_of_edist_le x e (2 * n + d) htri

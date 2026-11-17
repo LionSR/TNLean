@@ -78,8 +78,11 @@ theorem norm_groundCompression_commutator_le_graphSeparation
         B *
           (hermitianUnitaryPath (∑ k, h k) t * W * hermitianUnitaryPath (∑ k, h k) (-t))‖ ≤
       4 * (S.card : ℝ) * ‖W‖ * ‖B‖ * Real.exp (-(γ * m)) := by
-    have hn := norm_heisenberg_commutator_le_graphDistance_finsets_numeric G X a ha h hHerm
-      hSupport R hDiam vR hvR hCard b₀ hBudget S hW Y hB 1 (by norm_num) m hm t
+    let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
+      ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
+    have hn := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ a ha
+      hHerm R hDiam vR hvR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
+      (isSupportedOn_of_mem_supportedOperators hB) 1 (by norm_num) m hm t
     refine hn.trans (mul_le_mul_of_nonneg_left (le_trans ?_ e1) (by positivity))
     apply Real.exp_le_exp.mpr
     have htT : |t| ≤ T := abs_le.mpr ht

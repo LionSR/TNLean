@@ -42,17 +42,18 @@ theorem siteOscillation_spectatorRootChannel_le_exp_of_component_support
     (hk : k ∈ supportedOperators q {x | G.Reachable a x})
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ) (hn : Finset.univ.sup (G.dist a) ≤ n)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (graphBall G a l) k‖ ≤
+    (hε : ∀ l ≤ n, ‖k - siteExpectation q (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     siteOscillation q y (spectatorRootChannel k B) ≤ siteOscillation q y B +
       2 * ∑ l ∈ (Finset.range (n + 1)).filter (fun l : ℕ => G.edist a y ≤ l),
         ((2 + 8 * Real.sqrt C * Real.exp (c / 2)) *
           Real.exp (-(c / 2 * (l : ℝ) ^ α))) *
-            ∑ z ∈ graphBall G a l, siteOscillation q z B := by
-  have h := siteOscillation_localRootChannel_le_exp (graphBall G a) (graphBall_mono G a)
+            ∑ z ∈ ManyBody.graphBall G a l, siteOscillation q z B := by
+  have h := siteOscillation_localRootChannel_le_exp (ManyBody.graphBall G a)
+      (ManyBody.graphBall_mono G a)
     hk₀ hk₁ hC hc hα hα₁ n hε y B
   simpa only [localRootChannel_graphBall_eq_of_component_support G a hk hn,
-    mem_graphBall] using h
+    ManyBody.mem_graphBall] using h
 
 end TNLean.PEPS.AreaLaw

@@ -2331,25 +2331,25 @@ in `MPS/Preparation/` uses it.
 
 ### Lieb–Robinson propagation on finite graphs
 
-#### `QuantumCircuit.heisenbergCommutatorNorm`
+#### `ManyBody.heisenbergCommutatorNorm`
 
 - **Declaration:**
-  `QuantumCircuit.heisenbergCommutatorNorm (H B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (X : Set ι) (t : ℝ) : ℝ`,
-  with `QuantumCircuit.heisenbergEvolution H t A = e^{itH} A e^{-itH}`.
-- **Defined in:** `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+  `ManyBody.heisenbergCommutatorNorm (H B : Matrix (Config X) (Config X) ℂ) (S : Finset V) (t : ℝ) : ℝ`,
+  with `ManyBody.heisenbergEvolution H t A = e^{itH} A e^{-itH}`.
+- **Defined in:** `QICLean/ManyBody/Dynamics/CommutatorRecursion.lean`.
 - **Meaning:** the operator norm of `A ↦ [τ_t(A), B]` restricted to
-  `supportedOperators q X`, for any finite type of sites `ι`.
+  `ManyBody.supportedOperators X S`, for any finite system of sites `X`.
 - **Source:** Hastings–Koma, arXiv:math-ph/0507008, Appendix A, (A.13); the
   function `F(X, t)` of OpenAI, *A two-dimensional area law from a global
   spectral gap*, Lemma 4.1 (`03-quasilocal.tex`, lines 70–74).
 - **Sanctioned bridges:**
-  `QuantumCircuit.heisenbergCommutatorNorm_le_integral` (the local commutator
+  `ManyBody.heisenbergCommutatorNorm_le_integral` (the local commutator
   recursion for an arbitrary finite interaction family),
-  `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance` and
-  `QuantumCircuit.exists_graph_lieb_robinson` (graph-distance propagation with
+  `ManyBody.norm_heisenberg_commutator_le_graphDistance` and
+  `ManyBody.exists_graph_lieb_robinson` (graph-distance propagation with
   constants depending only on the support diameter, support size and per-site
   interaction budget), and
-  `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
+  `ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
   vanishing between connected components). The finite-ring estimate
   `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
   nearest-neighbor ring consumer of the same recursion.
@@ -2388,7 +2388,7 @@ in `MPS/Preparation/` uses it.
 - **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
   constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
   from QICLean and their ball expectations
-  `QuantumCircuit.siteExpectation q (QuantumCircuit.graphBall G aᵢ l) kᵢ`.
+  `QuantumCircuit.siteExpectation q (ManyBody.graphBall G aᵢ l) kᵢ`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
   Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
@@ -3501,7 +3501,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.endpointBoundary` | Both endpoints of every crossing edge, with repetitions removed | Area-law Corollary 1.2; the number of crossing edges is at most twice the number of boundary endpoints. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. The unconditional form is `TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds`. |
 | `TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty` | A cut with no crossing edge has zero regional entropy in a gapped ground vector | Area-law Lemma 2.2 (`lem:zero-boundary`), `01-preliminaries.tex`, lines 123–134; proved, using only the gapped ground-vector hypothesis with `Δ > 0`. |
-| `QuantumCircuit.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `TNLean/Circuit/LiebRobinson/GraphLocalization.lean`. |
+| `ManyBody.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `QICLean/ManyBody/Dynamics/GraphLocalization.lean`. |
 | `TNLean.Lattice.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e q^{|X|})` of a cut, summed over the admissible supports meeting both `A` and its complement | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; the lattice instance of QICLean's `Entropy.cutLogBudget`, bounded by the number of crossing supports in `cutLogBudget_le_card`. |
 | `TNLean.Lattice.concentrationWidth` | The width `32 √((1 + J/Δ) ℬ_A) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}` | Area-law `02-initial.tex`, lines 207–212; an explicit width in terms of `ℬ_A`, used in `LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`. |
 | `TNLean.PEPS.AreaLaw.tailParameterConstant` | The constant `C = v_R μ_R log²(e q^{v_R})`, with `v_R = 1 + 2R(R+1)` and `μ_R = 2^{v_R - 1}`, in `ℬ_A ≤ C(1 + |∂_Λ A|)` | Area-law `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206; depends only on `q` and `R`, at least one for `q ≥ 1`; the bound is `cutLogBudget_le_edgeBoundary`. |

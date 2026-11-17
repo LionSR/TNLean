@@ -76,16 +76,16 @@ theorem norm_spectatorRootChannel_sub_self_le_exp_of_component_support
     (hk : k ∈ supportedOperators q {x | G.Reachable a x})
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ) (hn : Finset.univ.sup (G.dist a) ≤ n)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (graphBall G a l) k‖ ≤
+    (hε : ∀ l ≤ n, ‖k - siteExpectation q (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖spectatorRootChannel k B - B‖ ≤
       ∑ l ∈ Finset.range (n + 1),
         ((2 + 8 * Real.sqrt C * Real.exp (c / 2)) *
           Real.exp (-(c / 2 * (l : ℝ) ^ α))) *
-            ∑ z ∈ graphBall G a l, siteOscillation q z B := by
+            ∑ z ∈ ManyBody.graphBall G a l, siteOscillation q z B := by
   simpa only [localRootChannel_graphBall_eq_of_component_support G a hk hn] using
     norm_localRootChannel_sub_self_le_exp_sum_siteOscillation
-      (graphBall G a) (graphBall_mono G a) hk₀ hk₁ hC hc hα hα₁ n hε B
+      (ManyBody.graphBall G a) (ManyBody.graphBall_mono G a) hk₀ hk₁ hC hc hα hα₁ n hε B
 
 end TNLean.PEPS.AreaLaw

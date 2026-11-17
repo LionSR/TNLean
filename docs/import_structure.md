@@ -50,7 +50,7 @@ remaining source follows these conceptual layers:
 The finite-domain commutator and localization estimates in
 `MPS.AreaLaw.DomainLiebRobinson` use
 the induced path graph and the shared propagation theory in
-`Circuit.LiebRobinson`. Their initial support may meet several connected
+QICLean's `ManyBody.Dynamics`. Their initial support may meet several connected
 components; infinite distance gives exact commutation. `DomainGraphGeometry`
 uses the component paths of `Algebra.IntegerHasseGraph` and the extended-distance
 comparisons in `Algebra.GraphDistanceTransport` to bound each finite-radius

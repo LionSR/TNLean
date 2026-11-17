@@ -76,8 +76,8 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (S : Finset (Site Λ))
     (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
     (hA : A ∈ supportedOperators q (S : Set (Site Λ))) (l : ℕ) (t : ℝ) :
-    ‖heisenbergEvolution h.operator t A -
-        siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
+    ‖ManyBody.heisenbergEvolution h.operator t A -
+        siteExpectation q (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
       ‖A‖ * min 2 (2 * graphBallLocalizationPrefactor R * (Λ.card : ℝ) *
         Real.exp (graphBallLocalizationVelocity R J * |t| - 1 / 2 * l)) := by
   classical
@@ -85,28 +85,28 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   set v := graphBallLocalizationVelocity R J
   have hC : 0 < C := graphBallLocalizationPrefactor_pos R
   have hdisj (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S) :
-      Disjoint (S : Set (Site Λ)) (graphBall (domainGraph Λ) y l : Set (Site Λ)) :=
+      Disjoint (S : Set (Site Λ)) (ManyBody.graphBall (domainGraph Λ) y l : Set (Site Λ)) :=
     Set.disjoint_left.mpr fun x hxS hxball =>
       hy (Finset.mem_filter.mpr ⟨Finset.mem_univ y, x, hxS,
         (exists_walk_length_le_iff_edist_le Λ l x y).mpr
-          (by simpa only [SimpleGraph.edist_comm] using (mem_graphBall.mp hxball))⟩)
+          (by simpa only [SimpleGraph.edist_comm] using (ManyBody.mem_graphBall.mp hxball))⟩)
   have hK : Complex.I • h.operator ∈
       skewAdjoint (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
     h.operator_isHermitian.isSelfAdjoint.I_smul_mem_skewAdjoint (K := ℂ)
   have hreverse (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
-      ‖heisenbergEvolution h.operator t A * U -
-        U * heisenbergEvolution h.operator t A‖ =
-      ‖A * heisenbergEvolution h.operator (-t) U -
-        heisenbergEvolution h.operator (-t) U * A‖ := by
-    simpa only [heisenbergEvolution_def, neg_neg] using
+      ‖ManyBody.heisenbergEvolution h.operator t A * U -
+        U * ManyBody.heisenbergEvolution h.operator t A‖ =
+      ‖A * ManyBody.heisenbergEvolution h.operator (-t) U -
+        ManyBody.heisenbergEvolution h.operator (-t) U * A‖ := by
+    simpa only [ManyBody.heisenbergEvolution_def, neg_neg] using
       norm_exp_commutator_eq (Complex.I • h.operator) hK A U t
   have : NeZero q := ⟨by omega⟩
   have hnear (y : Site Λ) (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hU : U ∈ supportedOperators q ({y} : Set (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
-      ‖heisenbergEvolution h.operator (-t) U -
-        siteExpectation q (graphBall (domainGraph Λ) y l)
-          (heisenbergEvolution h.operator (-t) U)‖ ≤
+      ‖ManyBody.heisenbergEvolution h.operator (-t) U -
+        siteExpectation q (ManyBody.graphBall (domainGraph Λ) y l)
+          (ManyBody.heisenbergEvolution h.operator (-t) U)‖ ≤
         C * Real.exp (v * |t| - 1 / 2 * l) := by
     have hestimate := h.norm_sub_siteExpectation_graphBall_le
       ⟨{y}, isAdmissibleSupport_singleton Λ R y⟩ (Finset.mem_singleton_self y)
@@ -116,34 +116,34 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     exact hestimate.trans (min_le_right _ _)
   have hcommute (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
-      Commute A (siteExpectation q (graphBall (domainGraph Λ) y l)
-        (heisenbergEvolution h.operator (-t) U)) :=
+      Commute A (siteExpectation q (ManyBody.graphBall (domainGraph Λ) y l)
+        (ManyBody.heisenbergEvolution h.operator (-t) U)) :=
     commute_of_mem_supportedOperators (hdisj y hy) hA
       (siteExpectation_mem_supportedOperators _ _)
   have hε (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hU : U ∈ supportedOperators q ({y} : Set (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
-      ‖heisenbergEvolution h.operator t A * U -
-        U * heisenbergEvolution h.operator t A‖ ≤
+      ‖ManyBody.heisenbergEvolution h.operator t A * U -
+        U * ManyBody.heisenbergEvolution h.operator t A‖ ≤
         2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖ := by
     simpa only [Matrix.mul_sub, Matrix.sub_mul, (hcommute y hy U).eq,
       sub_sub_sub_cancel_right, hreverse U] using
-      (norm_commutator_le A (heisenbergEvolution h.operator (-t) U -
-        siteExpectation q (graphBall (domainGraph Λ) y l)
-          (heisenbergEvolution h.operator (-t) U))).trans
+      (norm_commutator_le A (ManyBody.heisenbergEvolution h.operator (-t) U -
+        siteExpectation q (ManyBody.graphBall (domainGraph Λ) y l)
+          (ManyBody.heisenbergEvolution h.operator (-t) U))).trans
         (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_left (hnear y U hU hUu) zero_le_two) (norm_nonneg A))
-  have hExp : ‖heisenbergEvolution h.operator t A -
-      siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
+  have hExp : ‖ManyBody.heisenbergEvolution h.operator t A -
+      siteExpectation q (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
       ‖A‖ * (2 * C * (Λ.card : ℝ) * Real.exp (v * |t| - 1 / 2 * l)) := by
     simpa only [Finset.sum_const, Finset.card_univ, Fintype.card_coe, nsmul_eq_mul,
       mul_assoc, mul_comm, mul_left_comm] using
       (norm_sub_siteExpectation_le (graphNeighborhood Λ l S)
-        (heisenbergEvolution h.operator t A)
+        (ManyBody.heisenbergEvolution h.operator t A)
         (fun _ ↦ 2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖) hε).trans
         (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
-  have hτnorm : ‖heisenbergEvolution h.operator t A‖ = ‖A‖ :=
+  have hτnorm : ‖ManyBody.heisenbergEvolution h.operator t A‖ = ‖A‖ :=
     letI : NormedAlgebra ℚ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
       .restrictScalars ℚ ℝ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
     (CStarRing.norm_mul_mem_unitary
@@ -151,8 +151,8 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem (-t) hK))).trans
       (CStarRing.norm_mem_unitary_mul A
         (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem t hK)))
-  have hTwo : ‖heisenbergEvolution h.operator t A -
-      siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
+  have hTwo : ‖ManyBody.heisenbergEvolution h.operator t A -
+      siteExpectation q (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
       ‖A‖ * 2 := by
     refine (norm_sub_le _ _).trans ?_
     refine (add_le_add le_rfl (norm_siteExpectation_le _ _)).trans ?_
@@ -173,9 +173,9 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         A ∈ supportedOperators q (S : Set (Site Λ)) → ∀ (l : ℕ) (t : ℝ),
-        ‖heisenbergEvolution h.operator t A -
+        ‖ManyBody.heisenbergEvolution h.operator t A -
             siteExpectation q (graphNeighborhood Λ l S)
-              (heisenbergEvolution h.operator t A)‖ ≤
+              (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
           ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
   refine ⟨2 * graphBallLocalizationPrefactor R, max (graphBallLocalizationVelocity R J) 1,
     1 / 2, mul_pos two_pos (graphBallLocalizationPrefactor_pos R),

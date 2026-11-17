@@ -153,9 +153,10 @@ theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) (k : Fin ((L - 1) / w)) (r : ℕ) (t : ℝ) :
-    ‖heisenbergEvolution (chainGridRetainedHamiltonian hw h) t (chainGridBoundaryTerm hw h k) -
+    ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t (chainGridBoundaryTerm hw h
+        k) -
       siteExpectation q (chainCutBuffer L (chainGridCut w k.val) r)
-        (heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
+        (ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
           (chainGridBoundaryTerm hw h k))‖ ≤
       chainGridLRPrefactor * Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) := by
   let C : ℝ := 2 * (2 + 8 * Real.exp 2) * Real.exp 1 / (1 - Real.exp (-(1 / 2)))
@@ -182,10 +183,10 @@ theorem norm_chainGridBoundaryTerm_sub_siteExpectation_le
   rw [sum_chainGridRetainedTerm,
     chainNeighborhood_chainCutPair_eq (chainGridCut_bounds hw k).1 (chainGridCut_bounds hw k).2 r]
     at hLR
-  have hLR' : ‖heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
+  have hLR' : ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
         (chainGridBoundaryTerm hw h k) -
       siteExpectation q (chainCutBuffer L (chainGridCut w k.val) r)
-        (heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
+        (ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t
           (chainGridBoundaryTerm hw h k))‖ ≤
       C * (S.card : ℝ) ^ 2 * ‖chainGridBoundaryTerm hw h k‖ *
         Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) := by
