@@ -1,11 +1,11 @@
-# QICLean pin 2e9f93d7: the Dynamics deletions and the follow-ups
+# QICLean pin c9d54bbc: the Dynamics deletions and the follow-ups
 
 Date: 2026-11-17.
 
 This audit records the TNLean side of moving the QICLean pin from
-`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `2e9f93d7fd9a225e1e5b689efb3ca1660b39456e`, past QICLean's
+`e9cc1cc6cd52c6dfc27d7b3aab4b1ba39ea7ed19` to `c9d54bbc4def5929cbfe2a9334585366644f89bd`, past QICLean's
 Dynamics, Hamiltonian and lattice-geometry layers (LionSR/QICLean#1063, #1064,
-#1067, #1079, #1082, #1084, #1085 and #1086; issue LionSR/QICLean#1062). Tracker:
+#1067, #1079, #1082, #1084, #1085, #1086, #1087 and #1088; issue LionSR/QICLean#1062). Tracker:
 #10718; the rule is the section "No dual systems" of
 `docs/many_body_circuit_architecture.md`. The toolchain, Mathlib and every other
 shared package do not move.
