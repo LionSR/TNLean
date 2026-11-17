@@ -194,7 +194,7 @@ With q ≥ 1, the extension
 `MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le`
 gives localization on every finite integer domain with the same C′ and v
 as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
-`S.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ⌊ℓ⌋₊)`.
+`S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
 The bound retains |S|², allows empty S, and requires neither a ground state
 nor a spectral gap. This completes the two propagation/localization
 estimates on finite domains. The additional theorems

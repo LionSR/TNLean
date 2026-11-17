@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.ChebyshevViability
+import QICLean.Analysis.InvariantTensorWordPower
 import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.MatrixTensorCoordinates
 import QICLean.Analysis.SupportProjectionOrder
@@ -36,6 +37,10 @@ Definition 5.10 (lines 1597–1599). The Chebyshev filter of degree `ℓ²` of t
 the spectral projector, and the operators `A_i` are slices of that filter over the complement
 of `M`, so their interior ranks are those of the filter (line 1606). A short interval uses
 configuration matrix units. The running-time clause is not formalized.
+
+The merge (lines 1662–1677) applies the operators `k` times. The products of `k` slices are the
+slices of the `k`-th power of the filter, which improves viability by `Δ^k`; this word form is
+`exists_frustrationFree_improving_family_words`, and the theorem above is its case `k = 1`.
 
 **Local fix (norm of the replaced chain and bond dimension):** The proof at line 1599 states
 that the replaced chain has norm `O(1)`; its untruncated windows give norm up to `4ℓ + 6`, which
@@ -335,14 +340,15 @@ private theorem exists_long_frustrationFree_family
       (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] EM ⊗[ℂ] EE)
     let cut : ℕ → Finset ↥J := fun c ↦
       Finset.univ.filter fun v : ↥J ↦ (v : Fin L) ∈ interval L 0 c
-    ∃ (W : Fin (D ^ 2) → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
-      0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
+    ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
+      N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
       (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
         (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
-      ∀ (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
-        Submodule.IsViable (F := EE) (Δ / (1 - δ) ^ 2)
-          (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j) :
-            EM →ₗ[ℂ] EM)) G := by
+      ∀ (k : ℕ) (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
+        Submodule.IsViable (F := EE) (Δ ^ k / (1 - δ) ^ 2)
+          (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
+            Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod :
+              EM →ₗ[ℂ] EM)) G := by
   subst hqd hG₀
   intro D J tau U Phi Tm EM EE G cut
   classical
@@ -449,50 +455,31 @@ private theorem exists_long_frustrationFree_family
     rw [hN]
     exact operatorSchmidtRank_aeval_threeRegion_region_le hq1 hs hell hab hb Qc hQdeg J hsub
       hcollar
-  obtain ⟨f, B, hBf, hBzero, hspanB⟩ := Submodule.exists_clm_family_extension_of_card_le
-    (by simpa only [Fintype.card_fin] using hNle)
-    (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (slice r))
-  refine ⟨fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)).symm (B j),
+  refine ⟨N, slice,
     (2 * Real.exp (-2 * ((ℓ ^ 2 : ℕ) : ℝ) * Real.sqrt ((g / 20 - 0) / (10 * ℓ - 0)))) ^ 2,
-    by positivity, ?_, ?_, ?_⟩
+    hNle, by positivity, ?_, ?_, ?_⟩
   · rw [chebyshev_contraction_eq ℓ g hell]
     exact htrade (160 * ℓ) (mul_pos (by norm_num) (by exact_mod_cast hell))
       (le_of_eq (by ring))
   · intro j c
-    by_cases hj : j ∈ Set.range f
-    · obtain ⟨i, rfl⟩ := hj
-      simp only [hBf, StarAlgEquiv.symm_apply_apply]
-      exact (operatorSchmidtRank_regionalSlice_le J (interval L 0 c) P _ _).trans
-        (operatorSchmidtRank_aeval_threeRegion_cut_le hq1 hs hab (ℓ ^ 2) Qc hQdeg c)
-    · simp only [hBzero j hj, map_zero, Matrix.reindex_apply, Matrix.submatrix_zero]
-      exact (operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition (r := 0)
-        ⟨Fin.elim0, Fin.elim0, by simp⟩).trans (Nat.zero_le _)
-  · intro S δ hS hδ
-    have hgrow := (Submodule.IsViable.map_of_tensor_decomposition (M := EM) (R := EE)
-      (T := G) (K := Polynomial.aeval Hm Qc) hS
+    exact (operatorSchmidtRank_regionalSlice_le J (interval L 0 c) P _ _).trans
+      (operatorSchmidtRank_aeval_threeRegion_cut_le hq1 hs hab (ℓ ^ 2) Qc hQdeg c)
+  · intro k S δ hS hδ
+    exact (Submodule.IsViable.word_power_of_tensor_decomposition (M := EM) (R := EE)
+      (T := G) (Polynomial.aeval Hm Qc)
       (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (slice r))
       (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥Jᶜ → Fin q) (M r))
-      hKdec hδ (sq_nonneg _) hKT hKTo hlow hhigh).2
-    have hspan : (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)
-        ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)).symm (B j)) : EM →ₗ[ℂ] EM)) =
-        ⨆ r, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (slice r) :
-          EM →ₗ[ℂ] EM) := by
-      simpa only [StarAlgEquiv.apply_symm_apply] using hspanB S
-    rw [hspan]
-    exact hgrow
+      hKdec (sq_nonneg _) hKT hKTo hlow hhigh k S δ hS hδ).2
 
-/-- A family that improves every viable subspace when the regional space has dimension at most
-one: the identity, extended by zero. -/
-private theorem exists_small_space_family {EM EE : Type*} [NormedAddCommGroup EM]
+/-- On a regional space of dimension at most one, a viable subspace for a nonzero target is the
+whole space, so it is viable at every nonnegative error. Auxiliary to ALVV, arXiv:1602.08828v2,
+proof of Theorem `t:aisff`, lines 1592–1607. -/
+private theorem isViable_of_finrank_le_one {EM EE : Type*} [NormedAddCommGroup EM]
     [InnerProductSpace ℂ EM] [FiniteDimensional ℂ EM] [NormedAddCommGroup EE]
     [InnerProductSpace ℂ EE] [FiniteDimensional ℂ EE]
-    (hEM : Module.finrank ℂ EM ≤ 1) {M : ℕ} (hM : 1 ≤ M) :
-    ∃ B : Fin M → EM →L[ℂ] EM, ∀ (T : Submodule ℂ (EM ⊗[ℂ] EE)) (S : Submodule ℂ EM)
-      (δ Δ : ℝ), Submodule.IsViable δ S T → δ < 1 → 0 ≤ Δ →
-        Submodule.IsViable Δ (⨆ j, S.map (B j : EM →ₗ[ℂ] EM)) T := by
-  obtain ⟨-, B, -, -, hspan⟩ := Submodule.exists_clm_family_extension_of_card_le (ι := Unit)
-    (by simpa only [Fintype.card_unit] using hM) (fun _ ↦ (1 : EM →L[ℂ] EM))
-  refine ⟨B, fun T S δ Δ hS hδ hΔ ↦ ?_⟩
+    (hEM : Module.finrank ℂ EM ≤ 1) {T : Submodule ℂ (EM ⊗[ℂ] EE)} {S : Submodule ℂ EM}
+    {δ Δ : ℝ} (hS : Submodule.IsViable δ S T) (hδ : δ < 1) (hΔ : 0 ≤ Δ) :
+    Submodule.IsViable Δ S T := by
   by_cases hT : T = ⊥
   · subst hT
     unfold Submodule.IsViable
@@ -507,12 +494,34 @@ private theorem exists_small_space_family {EM EE : Type*} [NormedAddCommGroup EM
       have h1 : 1 ≤ Module.finrank ℂ S := Submodule.one_le_finrank_iff.mpr hS0
       have h2 := Submodule.finrank_le S
       omega
-    have htop : (⨆ j, S.map (B j : EM →ₗ[ℂ] EM)) = ⊤ := by
-      rw [hspan S, hStop]
-      simp only [ContinuousLinearMap.toLinearMap_one, Module.End.one_eq_id, Submodule.map_id,
-        iSup_const]
-    rw [htop]
+    rw [hStop]
     exact Submodule.isViable_top Δ hΔ T
+
+/-- If the images of `S` and of the whole space under a family of operators each span the whole
+space, then so do the images of `S` under the products of every positive length. Auxiliary to
+ALVV, arXiv:1602.08828v2, the merge, lines 1662–1677. -/
+private theorem iSup_map_word_eq_top {E ι : Type*} [NormedAddCommGroup E]
+    [InnerProductSpace ℂ E] (A : ι → E →L[ℂ] E) (S : Submodule ℂ E)
+    (hS : ⨆ j, S.map (A j : E →ₗ[ℂ] E) = ⊤)
+    (htop : ⨆ j, (⊤ : Submodule ℂ E).map (A j : E →ₗ[ℂ] E) = ⊤) :
+    ∀ k : ℕ, ⨆ w : Fin (k + 1) → ι,
+      S.map ((List.ofFn fun j ↦ A (w j)).prod : E →ₗ[ℂ] E) = ⊤ := by
+  intro k
+  induction k with
+  | zero =>
+    simp only [List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, mul_one]
+    rw [(show Function.Surjective (fun w : Fin 1 → ι ↦ w 0) from
+      fun i ↦ ⟨fun _ ↦ i, rfl⟩).iSup_comp (fun i ↦ S.map (A i : E →ₗ[ℂ] E))]
+    exact hS
+  | succ k ih =>
+    have hcomp : ∀ f g : E →L[ℂ] E,
+        ((f * g : E →L[ℂ] E) : E →ₗ[ℂ] E) = (f : E →ₗ[ℂ] E) ∘ₗ (g : E →ₗ[ℂ] E) :=
+      fun _ _ ↦ rfl
+    rw [← (Fin.consEquiv fun _ : Fin (k + 2) ↦ ι).iSup_comp, iSup_prod]
+    simp only [Fin.consEquiv_apply, Fin.cons_zero, Fin.cons_succ, List.ofFn_succ (n := k + 1),
+      List.prod_cons, hcomp, Submodule.map_comp]
+    simp only [← Submodule.map_iSup, ih]
+    exact htop
 
 /-- The improving family for projector terms with a prescribed kernel; the range-projection
 reduction of ALVV, arXiv:1602.08828v2, line 1457, is applied in
@@ -549,14 +558,15 @@ private theorem exists_improving_family_core :
         Finset.univ.filter fun v : ↥J ↦ (v : Fin L) ∈ interval L 0 c
       Real.log (D : ℝ) ≤ 22 * (A + 1) * (6 + 2 * Real.log (A + 1)) / g * u ^ 3 ∧
       Real.log (((d ^ 2 + 4) ^ (ℓ ^ 2 + 1) : ℕ) : ℝ) ≤ 4 * (A + 1) ^ 2 / g ^ 2 * u ^ 5 ∧
-      ∃ (W : Fin (D ^ 2) → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
-        0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
+      ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
+        N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
         (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
           (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
-        ∀ (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
-          Submodule.IsViable (F := EE) (Δ / (1 - δ) ^ 2)
-            (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j) :
-              EM →ₗ[ℂ] EM)) G := by
+        ∀ (k : ℕ) (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
+          Submodule.IsViable (F := EE) (Δ ^ k / (1 - δ) ^ 2)
+            (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
+              Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod :
+                EM →ₗ[ℂ] EM)) G := by
   obtain ⟨A, hA, hA21, -, -, hall⟩ := Real.exists_dg_scalar_parameters 80 0 (by norm_num)
   refine ⟨A, hA, ?_⟩
   intro L q p r hpr hrL h hs hh γ G₀ hγ hG₀ hgap g d u ℓ D J tau U Phi Tm EM EE G cut
@@ -581,35 +591,69 @@ private theorem exists_improving_family_core :
       change Module.finrank ℂ (EuclideanSpace ℂ (J → Fin q)) ≤ 1
       rw [finrank_euclideanSpace, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
       exact pow_le_one₀ (Nat.zero_le _) hq1
-    obtain ⟨B, hB⟩ := exists_small_space_family (EE := EE) hEM (M := D ^ 2)
-      (Nat.one_le_pow _ _ hDpos)
     have hDR : (0 : ℝ) < D := by exact_mod_cast hDpos
-    refine ⟨fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)).symm (B j),
-      1 / (100000 * (D : ℝ) ^ 12), by positivity, ?_, ?_, ?_⟩
+    refine ⟨1, fun _ ↦ 1, 1 / (100000 * (D : ℝ) ^ 12), Nat.one_le_pow _ _ hDpos,
+      by positivity, ?_, ?_, ?_⟩
     · rw [mul_one_div, div_le_div_iff₀ (by positivity) (by norm_num)]
       linarith
     · intro j c
       refine (hsmall _ c).trans (le_trans ?_ hbond1)
       exact pow_le_one₀ (Nat.zero_le _) (pow_le_one₀ (Nat.zero_le _) hq1)
-    · intro S δ hS hδ
-      simpa only [StarAlgEquiv.apply_symm_apply] using hB G S δ _ hS hδ (by positivity)
+    · intro k S δ hS hδ
+      have hword : (⨆ w : Fin k → Fin 1, S.map ((List.ofFn fun j ↦
+          Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)
+            ((fun _ : Fin 1 ↦ (1 : Matrix (J → Fin q) (J → Fin q) ℂ)) (w j))).prod :
+              EM →ₗ[ℂ] EM)) = S := by
+        simp only [map_one, List.ofFn_const, List.prod_replicate, one_pow,
+          ContinuousLinearMap.toLinearMap_one, Module.End.one_eq_id, Submodule.map_id,
+          iSup_const]
+      rw [hword]
+      exact isViable_of_finrank_le_one hEM hS hδ (by positivity)
   have hq : 2 ≤ q := by omega
   have hdq : d = q := max_eq_left hq
   by_cases hshort : r - p ≤ 4 * ℓ
   · have hJ : J.card ≤ 4 * ℓ := (card_interval_le p r).trans hshort
-    obtain ⟨Af, Δ, hΔ, hbudget, himprove⟩ :=
-      exists_short_actual_region_improving_family_of_count_base (F := EE) L q d ℓ J hq
-        (le_max_left q 2) (by omega) hJ
-    refine ⟨fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)).symm (Af j), Δ, hΔ,
-      hbudget, ?_, ?_⟩
+    obtain ⟨Af, hAf⟩ :=
+      exists_short_actual_region_spanning_family (F := EE) L q ℓ J hq (by omega) hJ
+    have hDR : (0 : ℝ) < D := by exact_mod_cast hDpos
+    refine ⟨_, fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)).symm (Af j),
+      1 / (100000 * (D : ℝ) ^ 12), by simp only [D, hdq, le_refl], by positivity, ?_, ?_, ?_⟩
+    · rw [mul_one_div, div_le_div_iff₀ (by positivity) (by norm_num)]
+      linarith
     · intro j c
       refine (hsmall _ c).trans ?_
       calc (q ^ (cut c).card) ^ 2 ≤ (q ^ (4 * ℓ)) ^ 2 :=
             Nat.pow_le_pow_left (Nat.pow_le_pow_right (by omega) ((hcutcard c).trans hJ)) 2
         _ ≤ (q ^ 2 + 4) ^ (ℓ ^ 2 + 1) := sq_pow_le_bond q ℓ (by omega)
         _ = (d ^ 2 + 4) ^ (ℓ ^ 2 + 1) := by rw [hdq]
-    · intro S δ hS hδ
-      simpa only [StarAlgEquiv.apply_symm_apply] using himprove G S δ hS hδ
+    · intro k S δ hS hδ
+      simp only [StarAlgEquiv.apply_symm_apply]
+      by_cases hG : G = ⊥
+      · rw [hG]
+        unfold Submodule.IsViable
+        apply Submodule.isCloseTo_iff.mpr
+        intro v hv
+        have hv0 : v = 0 := by simpa using hv
+        subst hv0
+        simp
+      rcases k with _ | k
+      · have hword : (⨆ w : Fin 0 → Fin _, S.map ((List.ofFn fun j ↦ Af (w j)).prod :
+            EM →ₗ[ℂ] EM)) = S := by
+          simp only [List.ofFn_zero, List.prod_nil, ContinuousLinearMap.toLinearMap_one,
+            Module.End.one_eq_id, Submodule.map_id, iSup_const]
+        rw [hword]
+        apply hS.of_le
+        rw [pow_zero]
+        by_cases hδ0 : δ ≤ 0
+        · exact hδ0.trans (by positivity)
+        · have h1 : (1 - δ) ^ 2 ≤ 1 := by nlinarith
+          have h2 : 0 < (1 - δ) ^ 2 := by nlinarith
+          rw [le_div_iff₀ h2]
+          nlinarith
+      · have htop := iSup_map_word_eq_top Af S (hAf δ S G hS hδ hG).1
+          (hAf 0 ⊤ G (Submodule.isViable_top 0 le_rfl G) (by norm_num) hG).1 k
+        rw [htop]
+        exact Submodule.isViable_top _ (by positivity) G
   · have hlong : 4 * ℓ < r - p := by omega
     obtain ⟨-, -, hab, hb, -, -, -, -, -, -, -, hsub, hcollar⟩ :=
       inward_effective_cuts L ℓ p r (by omega) hpr hrL hlong
@@ -624,9 +668,104 @@ private theorem exists_improving_family_core :
       have h2 : g * ‖y‖ ^ 2 ≤ γ * ‖y‖ ^ 2 :=
         mul_le_mul_of_nonneg_right (min_le_left γ 1) (sq_nonneg _)
       exact h2.trans h1
-    obtain ⟨W, Δ, hΔ, hbudget, hbond, himprove⟩ := exists_long_frustrationFree_family L q p r ℓ
+    exact exists_long_frustrationFree_family L q p r ℓ
       _ _ d hdq.symm hq (by omega) hab hb hsub hcollar h hs hh g hg hg1 hgapC G₀ hker htrade
-    exact ⟨W, Δ, hΔ, hbudget, hbond, himprove⟩
+
+/-- **Words in the frustration-free improving family.** Arad, Landau, Vazirani and Vidick,
+arXiv:1602.08828v2, Theorem `t:aisff`, lines 1580–1609, in the form used by the merge,
+lines 1662–1677, which applies the operators `k` times.
+
+Under the hypotheses and with the parameters of `exists_frustrationFree_improving_family`, there
+are `N ≤ D²` operators `W j` on `M = [p, r)` and `Δ > 0` with `D¹² Δ ≤ 10⁻⁵`, each of operator
+Schmidt rank at most `(d² + 4)^{ℓ² + 1}` at every cut of `M`, such that for every `k` every
+subspace `S` of the space of `M` that is `δ`-viable for the ground space, with `δ < 1`, gives a
+`Δ^k / (1 - δ)²`-viable span of the images of `S` under all products `W_{j₀} ⋯ W_{j_{k-1}}`.
+On a long interval the `W j` are the slices over the complement of `M` of one filter `K`, so
+the products are the slices of `K^k`; the improvement `Δ^k` is that of `K^k`. On a short interval
+the configuration matrix units are used, whose products of positive length span the whole space.
+
+The local fixes of `exists_frustrationFree_improving_family` apply unchanged: the norm of the
+replaced chain and bond dimension, see `docs/paper-gaps/alvv16_ff_truncated_norm.tex`, and the
+viability boundary `δ < 1`, see
+https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf. -/
+theorem exists_frustrationFree_improving_family_words :
+    ∃ A : ℝ, 1 ≤ A ∧
+      ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
+      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
+        (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+          (interval L i.val (i.val + 2))) →
+        (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+      ∀ γ : ℝ, 0 < γ →
+      let H := Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i)
+      (∀ y ∈ (LinearMap.ker H.toLinearMap)ᗮ, γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, H y⟫_ℂ) →
+      let g := min γ 1
+      let d := max q 2
+      let u : ℝ := 1 + Real.log (d : ℝ) + Real.log (1 / g)
+      let ℓ : ℕ := ⌈A * u ^ 2 / g⌉₊
+      let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
+      let J := interval L p r
+      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) (↥Jᶜ → Fin q))
+      let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
+      let Phi := ((EuclideanSpace.basisFun (↥Jᶜ → Fin q) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
+      let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
+        (EuclideanSpace ℂ (↥Jᶜ → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
+      let EM := EuclideanSpace ℂ (J → Fin q)
+      let EE := EuclideanSpace ℂ (↥Jᶜ → Fin q)
+      let G := (LinearMap.ker H.toLinearMap).map (Tm.toLinearEquiv :
+        EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] EM ⊗[ℂ] EE)
+      let cut : ℕ → Finset ↥J := fun c ↦
+        Finset.univ.filter fun v : ↥J ↦ (v : Fin L) ∈ interval L 0 c
+      Real.log (D : ℝ) ≤ 22 * (A + 1) * (6 + 2 * Real.log (A + 1)) / g * u ^ 3 ∧
+      Real.log (((d ^ 2 + 4) ^ (ℓ ^ 2 + 1) : ℕ) : ℝ) ≤ 4 * (A + 1) ^ 2 / g ^ 2 * u ^ 5 ∧
+      ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
+        N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
+        (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
+          (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
+        ∀ (k : ℕ) (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
+          Submodule.IsViable (F := EE) (Δ ^ k / (1 - δ) ^ 2)
+            (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
+              Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod :
+                EM →ₗ[ℂ] EM)) G := by
+  obtain ⟨A, hA, hcore⟩ := exists_improving_family_core
+  refine ⟨A, hA, ?_⟩
+  intro L q p r hpr hrL h hs h0 h1 γ hγ H hgap
+  have hpsd (i : Fin (L - 1)) : (h i).PosSemidef := Matrix.nonneg_iff_posSemidef.mp (h0 i)
+  let P : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun i ↦ (hpsd i).supportProj
+  have hPp : ∀ i, IsStarProjection (P i) := fun i ↦
+    (hpsd i).isHermitian.isStarProjection_supportProj
+  have hPs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (P i)
+      (interval L i.val (i.val + 2)) := by
+    intro i
+    have hmem := QuantumCircuit.cfc_mem_supportedOperators
+      (fun x : ℝ ↦ if x ≠ 0 then 1 else 0)
+      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
+    rw [← (hpsd i).isHermitian.supportProj_eq_cfc] at hmem
+    exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators hmem
+  have hzero (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (x : EuclideanSpace ℂ (Fin L → Fin q)) :
+      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) X x = 0 ↔ X *ᵥ x.ofLp = 0 := by
+    rw [← WithLp.ofLp_eq_zero, Matrix.ofLp_toEuclideanCLM]
+  have hker : LinearMap.ker (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+      (∑ i, P i)).toLinearMap = LinearMap.ker H.toLinearMap := by
+    ext x
+    simp only [LinearMap.mem_ker, ContinuousLinearMap.coe_coe, H]
+    rw [hzero, hzero]
+    exact Matrix.PosSemidef.sum_supportProj_mulVec_eq_zero_iff hpsd x.ofLp
+  have hle : (∑ i, h i) ≤ ∑ i, P i := Finset.sum_le_sum fun i _ ↦
+    (hpsd i).le_supportProj_of_norm_le_one
+      ((CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i))
+  have hform (y : EuclideanSpace ℂ (Fin L → Fin q)) :
+      Complex.re ⟪y, H y⟫_ℂ ≤ Complex.re ⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ)
+        (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ := by
+    have hpos := ContinuousLinearMap.le_def.mp (Matrix.toEuclideanCLM_le_of_le hle)
+    have := hpos.re_inner_nonneg_right y
+    simp only [_root_.sub_apply, inner_sub_right, map_sub] at this
+    change 0 ≤ RCLike.re _ - RCLike.re _ at this
+    simp only [RCLike.re_to_complex] at this
+    linarith
+  exact hcore L q p r hpr hrL P hPs hPp γ (LinearMap.ker H.toLinearMap) hγ hker
+    (fun y hy ↦ (hgap y hy).trans (hform y))
 
 /-- **Efficient improving family for a frustration-free chain, existence form.** Arad, Landau,
 Vazirani and Vidick, arXiv:1602.08828v2, Theorem `t:aisff`, lines 1580–1609.
@@ -696,45 +835,44 @@ theorem exists_frustrationFree_improving_family :
           Submodule.IsViable (F := EE) (Δ / (1 - δ) ^ 2)
             (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j) :
               EM →ₗ[ℂ] EM)) G := by
-  obtain ⟨A, hA, hcore⟩ := exists_improving_family_core
+  obtain ⟨A, hA, hwords⟩ := exists_frustrationFree_improving_family_words
   refine ⟨A, hA, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 γ hγ H hgap
-  have hpsd (i : Fin (L - 1)) : (h i).PosSemidef := Matrix.nonneg_iff_posSemidef.mp (h0 i)
-  let P : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun i ↦ (hpsd i).supportProj
-  have hPp : ∀ i, IsStarProjection (P i) := fun i ↦
-    (hpsd i).isHermitian.isStarProjection_supportProj
-  have hPs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (P i)
-      (interval L i.val (i.val + 2)) := by
-    intro i
-    have hmem := QuantumCircuit.cfc_mem_supportedOperators
-      (fun x : ℝ ↦ if x ≠ 0 then 1 else 0)
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
-    rw [← (hpsd i).isHermitian.supportProj_eq_cfc] at hmem
-    exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators hmem
-  have hzero (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (x : EuclideanSpace ℂ (Fin L → Fin q)) :
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) X x = 0 ↔ X *ᵥ x.ofLp = 0 := by
-    rw [← WithLp.ofLp_eq_zero, Matrix.ofLp_toEuclideanCLM]
-  have hker : LinearMap.ker (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-      (∑ i, P i)).toLinearMap = LinearMap.ker H.toLinearMap := by
-    ext x
-    simp only [LinearMap.mem_ker, ContinuousLinearMap.coe_coe, H]
-    rw [hzero, hzero]
-    exact Matrix.PosSemidef.sum_supportProj_mulVec_eq_zero_iff hpsd x.ofLp
-  have hle : (∑ i, h i) ≤ ∑ i, P i := Finset.sum_le_sum fun i _ ↦
-    (hpsd i).le_supportProj_of_norm_le_one
-      ((CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i))
-  have hform (y : EuclideanSpace ℂ (Fin L → Fin q)) :
-      Complex.re ⟪y, H y⟫_ℂ ≤ Complex.re ⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ)
-        (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ := by
-    have hpos := ContinuousLinearMap.le_def.mp (Matrix.toEuclideanCLM_le_of_le hle)
-    have := hpos.re_inner_nonneg_right y
-    simp only [_root_.sub_apply, inner_sub_right, map_sub] at this
-    change 0 ≤ RCLike.re _ - RCLike.re _ at this
-    simp only [RCLike.re_to_complex] at this
-    linarith
-  exact hcore L q p r hpr hrL P hPs hPp γ (LinearMap.ker H.toLinearMap) hγ hker
-    (fun y hy ↦ (hgap y hy).trans (hform y))
+  intro L q p r hpr hrL h hs h0 h1 γ hγ H hgap g d u ℓ D J tau U Phi Tm EM EE G cut
+  obtain ⟨hlogD, hlogR, N, W, Δ, hN, hΔ, hbudget, hbond, himprove⟩ :=
+    hwords L q p r hpr hrL h hs h0 h1 γ hγ hgap
+  refine ⟨hlogD, hlogR, ?_⟩
+  obtain ⟨f, B, hBf, hBzero, hspanB⟩ := Submodule.exists_clm_family_extension_of_card_le
+    (by simpa only [Fintype.card_fin] using hN)
+    (fun j ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j))
+  refine ⟨fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)).symm (B j), Δ, hΔ,
+    hbudget, ?_, ?_⟩
+  · intro j c
+    by_cases hj : j ∈ Set.range f
+    · obtain ⟨i, rfl⟩ := hj
+      simp only [hBf, StarAlgEquiv.symm_apply_apply]
+      exact hbond i c
+    · simp only [hBzero j hj, map_zero, Matrix.reindex_apply, Matrix.submatrix_zero]
+      exact (operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition (r := 0)
+        ⟨Fin.elim0, Fin.elim0, by simp⟩).trans (Nat.zero_le _)
+  · intro S δ hS hδ
+    have hone := himprove 1 S δ hS hδ
+    have hwordspan : (⨆ w : Fin 1 → Fin N, S.map ((List.ofFn fun j ↦
+        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod : EM →ₗ[ℂ] EM)) =
+        ⨆ i : Fin N, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W i) :
+          EM →ₗ[ℂ] EM) := by
+      simp only [List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, mul_one]
+      exact (show Function.Surjective (fun w : Fin 1 → Fin N ↦ w 0) from
+        fun i ↦ ⟨fun _ ↦ i, rfl⟩).iSup_comp
+          (fun i : Fin N ↦ S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W i) :
+            EM →ₗ[ℂ] EM))
+    rw [hwordspan, pow_one] at hone
+    have hspan : (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)
+        ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q)).symm (B j)) : EM →ₗ[ℂ] EM)) =
+        ⨆ i, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W i) :
+          EM →ₗ[ℂ] EM) := by
+      simpa only [StarAlgEquiv.apply_symm_apply] using hspanB S
+    rw [hspan]
+    exact hone
 
 end Family
 

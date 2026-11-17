@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOAction
-import TNLean.MPS.MPDO.PhysicalBasisAction
 
 /-!
 # The block-injective mixed path and the action of its common MPO
@@ -171,11 +171,13 @@ theorem blockMixedMPOLetter_action
         mixedEndpointLetter B₀ B₁ r s * blockMixedAnalysis (V₀ μ) (V₁ μ))
           (α, i) (β, j) := by
   classical
+  -- Expand the products and sums once, before duplicating the goal across the sector cases.
+  simp only [Matrix.mul_apply, Fintype.sum_sum_type]
   cases r <;> cases s <;> cases i <;> cases j <;> cases α <;> cases β <;>
-    simp only [Fintype.sum_sum_type, blockMixedMPOLetter, mixedEndpointLetter,
+    simp only [blockMixedMPOLetter, mixedEndpointLetter,
       blockMixedSynthesis, blockMixedAnalysis, Matrix.fromBlocks_apply₁₁,
       Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂,
-      Matrix.mul_apply, Matrix.single_apply, ite_and, mul_ite, ite_mul,
+      Matrix.single_apply, ite_and, mul_ite, ite_mul,
       Finset.sum_mul, Matrix.zero_apply, zero_mul, mul_zero, Finset.sum_const_zero,
       zero_add, add_zero, Sum.inl.injEq, Sum.inr.injEq, Sum.inl_ne_inr,
       Sum.inr_ne_inl, and_false, false_and, ite_false, ite_true,
@@ -524,7 +526,8 @@ private theorem endpoint_block_action_entry {D : Fin s → ℕ} {χ : ℕ}
     (fun Z : Matrix (Fin (χ * D x)) (Fin (χ * D x)) ℂ =>
       Z (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j)))
     (h.letter (finSigmaFinEquiv ⟨y, finProdFinEquiv (r, t)⟩))
-  simp only [MPOTensor.actTensor_apply_finProdFinEquiv, Matrix.sum_apply] at hh
+  simp only [MPOTensor.actTensor, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply] at hh
   rw [sum_sectorTensor A x (fun q Z => T _ q α β * Z i j) (by simp),
     sum_sigma_sectorTensor A y _ (fun q Z => (W x q.1 q.2 * Z * V x q.1 q.2)
       (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j))) (by simp)] at hh
