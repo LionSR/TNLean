@@ -178,3 +178,87 @@
     Both sides of (\ref{eq:mpo_fibonacci_l_equals_f}) on the block
     $x=y=x_\tau$ have the gauge-invariant cross ratio $-\varphi^{-1}$.
 \end{proof}
+
+
+The channel gauges and their reciprocals are golden integers. Applying
+these factors to the exact maps, and then applying the ring homomorphism
+$\mathbb{Z}[\sigma]\to\mathbb{C}$ entrywise, defines the gauged fusion
+and action analysis and synthesis maps.
+\lean{FibonacciCompression.Boundary.actionGauge,
+    FibonacciCompression.Boundary.actionGaugeInv,
+    FibonacciCompression.Boundary.fusionGauge,
+    FibonacciCompression.Boundary.fusionGaugeInv,
+    FibonacciCompression.Boundary.fusionAnalysisGolden,
+    FibonacciCompression.Boundary.fusionAnalysis,
+    FibonacciCompression.Boundary.fusionSynthesisGolden,
+    FibonacciCompression.Boundary.fusionSynthesis,
+    FibonacciCompression.Boundary.actionAnalysisGolden,
+    FibonacciCompression.Boundary.actionAnalysis,
+    FibonacciCompression.Boundary.actionSynthesisGolden,
+    FibonacciCompression.Boundary.actionSynthesis}
+
+\begin{lemma}[A standard gauge for every Fibonacci action sector]%
+    \label{lem:mpo_symmetry_fibonacci_l_all_sectors}
+    \lean{FibonacciCompression.Boundary.gauge_mul_inv,
+        FibonacciCompression.Boundary.gauge_ne_zero,
+        FibonacciCompression.Boundary.fusion_isBiorthogonal,
+        FibonacciCompression.Boundary.action_isBiorthogonal,
+        FibonacciCompression.Boundary.states_isNormal,
+        FibonacciCompression.Boundary.actionTrees_isBiorthogonal,
+        FibonacciCompression.Boundary.actionTrees_cross_final,
+        FibonacciCompression.Boundary.actionLMatrix_eq_fSymbol,
+        FibonacciCompression.Boundary.inverseActionLMatrix_eq_fSymbol,
+        FibonacciCompression.Boundary.actionLMatrix_tau,
+        FibonacciCompression.Boundary.actionLMatrix_inverse,
+        FibonacciCompression.Boundary.fusionFMatrix_eq_fSymbol,
+        FibonacciCompression.Boundary.actionLMatrix_eq_fusionFMatrix}
+    \leanok
+    \uses{lem:mpo_symmetry_fibonacci_exact_trees,
+        lem:mpo_symmetry_fibonacci_l_symbol}
+    For the two normal blocks and exact maps of
+    Lemma~\ref{lem:mpo_symmetry_fibonacci_exact_trees}, multiply both fusion
+    and action analysis in the $(\tau,\tau,1)$ and $(\tau,\tau,\tau)$
+    channels by $\sigma$ and $-\sigma^{-1}$, respectively, and multiply
+    synthesis by the reciprocal factors. All other channel scales are $1$.
+    The maps remain exact biorthogonal decompositions. For every choice of
+    labels $a,b,x,y$, the resulting action comparison and the fusion
+    comparison computed from the same maps satisfy
+    \[
+        (L_{abx}^{y})_{c,k\mu}^{z,ij}
+            = [F^{abx}_{y}]_{c,\mu k}^{z,ji}.
+    \]
+    Every nonempty one-dimensional sector is $1$. With intermediate
+    labels ordered as $1,\tau$, the only two-dimensional sector is
+    \[
+        L_{\tau\tau\tau}^{\tau}
+        =F^{\tau\tau\tau}_{\tau}
+        =\begin{pmatrix}\sigma^2&\sigma\\\sigma&-\sigma^2\end{pmatrix}.
+    \]
+    Cross contractions between distinct final state blocks vanish in
+    both directions. The reverse action comparison within a final block
+    has the transposed coefficients.
+    The forward and reverse matrices are inverse, including on empty
+    multiplicity spaces.
+\end{lemma}
+\begin{proof}\leanok
+    The reciprocal channel factors preserve retractions and letter
+    reconstruction. In common incoming bond coordinates, each sequential
+    analysis followed by fusion-then-action synthesis is the displayed
+    coefficient times the identity of the final state bond. The normalized
+    trace gives $L$. Left fusion analysis followed by right fusion
+    synthesis gives the same coefficient, with the opposite left and right
+    multiplicity index types. The reverse contractions and multiplication
+    of the displayed coefficient matrices give both inverse identities.
+    The four action-tree contractions, the forward and reverse coefficient
+    matrices, and the two fusion contractions are computed over
+    $\mathbb{Z}[\sigma]$ before this entrywise transport.
+    \lean{FibonacciCompression.Boundary.fusionActionAnalysisGolden,
+        FibonacciCompression.Boundary.fusionActionSynthesisGolden,
+        FibonacciCompression.Boundary.sequentialAnalysisGolden,
+        FibonacciCompression.Boundary.sequentialSynthesisGolden,
+        FibonacciCompression.Boundary.printedLGolden,
+        FibonacciCompression.Boundary.printedInverseLGolden,
+        FibonacciCompression.Boundary.fusionLeftAnalysisGolden,
+        FibonacciCompression.Boundary.fusionRightSynthesisGolden}
+\end{proof}
+

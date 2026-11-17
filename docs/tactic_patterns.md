@@ -12536,3 +12536,14 @@ length-one word indices is needed.
 - **Decision:** Separate the numerical/physical argument from the common
   interval selection argument. No second recursion, target approximation or
   repeated matrix-coordinate proof is introduced.
+
+### Golden action-tree coordinates — candidate (2026-11-16)
+
+- **Seen:** four coordinate-image proofs in
+  `MPS/Examples/Fibonacci/FibonacciActionLMatrix.lean`.
+- **Pattern:** enumerate the incoming product bond, apply the existing action-tree
+  coordinate lemma, and map finite sums and products through the ring homomorphism.
+- **Abstraction:** the coordinate lemmas already remove the Kronecker and
+  associator calculation. A generic ring-image result could remove the remaining
+  repeated transport when another exact-ring example needs it.
+- **Decision:** one file only, below the two-file promotion threshold.

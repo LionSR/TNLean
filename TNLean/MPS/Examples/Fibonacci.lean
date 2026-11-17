@@ -10,6 +10,8 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.Fibonacci.Fibonacci
 import TNLean.MPS.Examples.Fibonacci.FibonacciAction
+import TNLean.MPS.Examples.Fibonacci.FibonacciActionDecomposition
+import TNLean.MPS.Examples.Fibonacci.FibonacciActionLMatrix
 import TNLean.MPS.Examples.Fibonacci.FibonacciActionTrees
 import TNLean.MPS.Examples.Fibonacci.FibonacciAmplitudes
 import TNLean.MPS.Examples.Fibonacci.FibonacciAnomaly
