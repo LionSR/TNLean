@@ -5,7 +5,7 @@
 \input{command}
 \title{The ALVV Merge Tree for a Unique Frustration-Free Ground State}
 \author{}
-\date{November 15, 2026}
+\date{November 17, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -31,41 +31,72 @@ contractive nearest-neighbour terms, a nonzero vector $\Gamma$ with
 $H\Gamma=0$, every vector of the kernel a multiple of $\Gamma$, and every
 other spectral value at least $\gamma$. Such a chain satisfies
 Assumption~(DG) with ground energy $0$ and ground-space dimension $1$; the
-closed spectral span at energy $0$ is the line $\mathbb C\Gamma$. The
-physical resampling tree of the degenerate-gap case and its refinement
-therefore apply. On an event of failure probability at most $(L+1)^{-2}$,
-the refinement of the actual root and its Ritz extraction give a line,
-mutually $\eta/2$-close to $\mathbb C\Gamma$, of matrix product states whose
-bond dimension is polynomial in $L$ and $1/\eta$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}.}
-
-\paragraph{Deviation.}
-The per-node families are the corrected soft families of the degenerate-gap
-tree, not the frustration-free family of Theorem~t:aisff. Consequently:
+closed spectral span at energy $0$ is the line $\mathbb C\Gamma$. Three
+results use this.
 \begin{enumerate}
-    \item the dimension of the viable space at every node of the underlying
-          tree is bounded by
+    \item The physical resampling tree of the degenerate-gap case and its
+          refinement: on an event of failure probability at most $(L+1)^{-2}$,
+          the refinement of the actual root and its Ritz extraction give a line,
+          mutually $\eta/2$-close to $\mathbb C\Gamma$, of matrix product states
+          whose bond dimension is polynomial in $L$ and
+          $1/\eta$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}.}
+          Its node dimension is
           $\max\bigl(q^{\mathrm{width}},D^2K\cdot2\,(L+2)^2\bigr)$, which grows
           with $L$ through the corrected sample threshold of
-          \url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf},
-          rather than the constant $\mathcal D s^2$ of the source;
-    \item the constants depend on $\gamma$ through the degenerate-gap
-          parameters, not through the sharper frustration-free parameters
-          $\mathcal D=(d\ell^2)^{22\ell}$;
+          \url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf}.
+    \item The deterministic recursive tree of the degenerate-gap case, run at
+          ground energy $0$: with $\mathcal D=(m\ell^2)^{22\ell}$, $m=\max(q,50)$,
+          $\ell=\lceil Cv^2/g\rceil$, $g=\min(\gamma,1)$ and
+          $s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$ for any
+          $0<\beta<1$, every node carries a $3/200$-viable space for
+          $\mathbb C\Gamma$ of dimension at most $\mathcal D^6s^3$, and the
+          filter-and-trim iterates of the root with a Ritz extraction give a line
+          of matrix product states mutually $\eta/2$-close to
+          $\mathbb C\Gamma$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}.}
+          The node bound $\mathcal D^6s^3$ does not depend on $L$.
+    \item The frustration-free family of Theorem~t:aisff restated under the
+          hypotheses of Theorem~t:unique and in the region-first coordinates in
+          which the tree measures
+          viability.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_regionTensorCoordinates}.}
+          This is the coordinate transport named in the elimination plan below;
+          it carries no hypothesis beyond those of the source.
+\end{enumerate}
+
+\paragraph{Deviation.}
+Neither tree uses the frustration-free family of Theorem~t:aisff. The
+remaining differences from the source are:
+\begin{enumerate}
+    \item the per-node families are those of the degenerate-gap case, so the
+          constants depend on $\gamma$ through the degenerate-gap parameters;
+    \item the length-independent node bound is $\mathcal D^6s^3$, not the
+          $\mathcal Ds^2$ of the source, and it is attained by a tree shown to
+          exist, not by one found with high probability; the probabilistic tree
+          of item~1 has node dimension growing with $L$;
+    \item the bond dimension of the output matrix product states grows with
+          $L$, through the trimming threshold, which is set by a reference space
+          whose Schmidt ranks grow with $L$;
+    \item item~2 assumes $L\ge1$ and $q\ge2$: on an empty chain, or for $q=1$,
+          the space has dimension one, $H$ has no positive spectral value, and the
+          degenerate-gap tree does not apply; this excludes only the trivial
+          case in which $\mathbb C\Gamma$ is the whole space;
     \item no running time is asserted.
 \end{enumerate}
-The conclusion is mathematically correct as stated, and narrower than the
-source only in the size of the intermediate spaces.
+The conclusions are mathematically correct as stated, and narrower than the
+source in the items listed.
 
 \paragraph{Elimination plan.}
-Feed the frustration-free family of Theorem~t:aisff, which is
-proved,\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family}.}
-into the generic selection of interval families on the
-tree.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_canonical_interval_resampling_tree_with_certificate}.}
-Two inputs are missing: a transport of the family from the sheet-split
-coordinates in which it is stated to the region coordinates of the tree, and a
-reference space for collective trimming whose Schmidt ranks are bounded
-independently of $L$. The constant per-node bound $\mathcal D s^2$ additionally
-requires the source's sample threshold, which is not established.
+Run the tree with the frustration-free family, now available in the
+coordinates of the tree (item~3). The sampled merge applies words of length
+$k$ in the operators $A_i$, and its analysis needs the improvement
+$\Delta^k/(1-\delta)^2$ for every word length $k$. Theorem~t:aisff, as
+formalized, gives the improvement for one application only; the word form
+requires the tensor decomposition of the filter behind the family, which the
+family statement does not expose. The next step is therefore a word form of
+Theorem~t:aisff. A reference space for collective trimming whose Schmidt ranks
+are bounded independently of $L$ would further make the output bond dimension
+independent of $L$; it is not needed for the node bound. The constant
+per-node bound $\mathcal D s^2$ additionally requires the source's sample
+threshold, which is not established.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
