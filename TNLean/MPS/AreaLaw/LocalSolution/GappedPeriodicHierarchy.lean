@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalHierarchy
-import TNLean.Algebra.GappedGroundState
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The periodic hierarchy from a unique gapped ground state
@@ -31,6 +31,8 @@ See `docs/paper-gaps/hastings05_hierarchical_projection.tex` and
 open Matrix QuantumCircuit TNLean.Lattice
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw.LocalSolution
 
 /-- The actual truncated filters satisfy the local ground-vector estimate
@@ -45,7 +47,8 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
           (∀ i, g i ∈ supportedOperators d {v | (roundedPeriodicDistance i v : ℝ) ≤ R}) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (Ω : EuclideanSpace ℂ (Fin M → Fin d)) (E₀ : ℝ),
-            IsGappedGroundState (∑ i, g i) E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped (∑ i, g i) E₀ Δ →
+            groundSpace (∑ i, g i) E₀ = Submodule.span ℂ {Ω} →
             ∀ (ℓ : ℕ), R ≤ (ℓ : ℝ) → ∀ i,
               let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i
               let Jb := 2 * max J (J * C)
@@ -60,14 +63,13 @@ private theorem exists_periodic_gapped_truncation_data {R J Δ : ℝ}
     exists_periodicPhysicalTruncatedTerm_localization hR hJ.le hΔ
   refine ⟨c₁, min ηloc (c₁ * Δ / 2), C, hc₁,
     lt_min hηloc (half_pos (mul_pos hc₁ hΔ)), hC, ?_⟩
-  intro M d hM g hg hsupp hnorm Ω E₀ hgs ℓ hℓR i a Jb
+  intro M d hM g hg hsupp hnorm Ω E₀ hΩ hgap hspan ℓ hℓR i a Jb
   obtain ⟨haS, haH, haN, haE⟩ := hloc hM g hg hsupp hnorm ℓ hℓR i
   have hJb : J ≤ Jb := by
     dsimp only [Jb]
     linarith only [le_max_left J (J * C), hJ]
-  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   have hlow := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm
-    (by positivity : 0 ≤ c₁ * (ℓ : ℝ) * Δ) hΔ hg.1 hg.2.1 hg.2.2.1 hg.2.2.2 (g i) a
+    (by positivity : 0 ≤ c₁ * (ℓ : ℝ) * Δ) hΔ hg.1 hΩ hgap hspan (g i) a
   have hExpLoc : Real.exp (-(ηloc * (ℓ : ℝ))) ≤
       Real.exp (-(min ηloc (c₁ * Δ / 2) * (ℓ : ℝ))) :=
     Real.exp_le_exp.mpr (neg_le_neg (mul_le_mul_of_nonneg_right
@@ -115,7 +117,8 @@ theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
           (∀ i, g i ∈ supportedOperators d {v | (roundedPeriodicDistance i v : ℝ) ≤ R}) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (Ω : EuclideanSpace ℂ (Fin M → Fin d)) (E₀ : ℝ),
-            IsGappedGroundState (∑ i, g i) E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped (∑ i, g i) E₀ Δ →
+            groundSpace (∑ i, g i) E₀ = Submodule.span ℂ {Ω} →
             let Jb := 2 * max J (J * C)
             let ℓ := physicalPeriodicProjectionRadius R M Jb η Δ
             let r := η * (ℓ : ℝ)
@@ -137,11 +140,11 @@ theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
   obtain ⟨c₁, η, C, hc₁, hη, hC, hdata⟩ :=
     exists_periodic_gapped_truncation_data hR hJ hΔ
   refine ⟨c₁, η, C, hc₁, hη, hC, ?_⟩
-  intro M d hM g hg hsupp hnorm Ω E₀ hgs Jb ℓ r a P b h K
+  intro M d hM g hg hsupp hnorm Ω E₀ hΩ hgap hspan Jb ℓ r a P b h K
   have hJb : 0 < Jb := mul_pos (by norm_num) (hJ.trans_le (le_max_left _ _))
   obtain ⟨hℓ, hℓR⟩ := physicalPeriodicProjectionRadius_spec R M Jb Δ hη
   have hr := hierarchyProjectionLength_le_physicalPeriodicProjectionRadius hM R Jb Δ hη
-  have ha (i : Fin M) := hdata hM g hg hsupp hnorm Ω E₀ hgs ℓ hℓR i
+  have ha (i : Fin M) := hdata hM g hg hsupp hnorm Ω E₀ hΩ hgap hspan ℓ hℓR i
   have haSupp (i : Fin M) : a i ∈ supportedOperators d {v | roundedPeriodicDistance i v ≤ ℓ} :=
     (ha i).1
   have haHerm (i : Fin M) : (a i).IsHermitian := (ha i).2.1
@@ -150,7 +153,7 @@ theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
       ‖gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a i‖ ≤
         Jb * Real.exp (-r) := (ha i).2.2.2.1
   obtain ⟨φ, hφ, hkeep, hnear, htree⟩ := exists_unit_mem_roundedPeriodicProjection hℓ a
-    haSupp haHerm hgs.1 hJb hr (fun i ↦ (ha i).2.2.2.2) haNorm
+    haSupp haHerm hΩ hJb hr (fun i ↦ (ha i).2.2.2.2) haNorm
   refine ⟨φ, hφ, hkeep, hnear, htree, ?_⟩
   let P₀ := vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))
   have hP₀ : IsStarProjection P₀ := by
@@ -160,7 +163,7 @@ theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
       intro v
       change toEuclideanLin P₀ v = ⟪Ω, v⟫_ℂ • Ω
       exact toEuclideanLin_vecMulVec_star_self_apply Ω v
-    have h := (InnerProductSpace.isStarProjection_rankOne_self (𝕜 := ℂ) hgs.1).map
+    have h := (InnerProductSpace.isStarProjection_rankOne_self (𝕜 := ℂ) hΩ).map
       (Matrix.toEuclideanCLM (n := Fin M → Fin d) (𝕜 := ℂ)).symm.toStarAlgHom
     rw [← heq] at h
     change IsStarProjection ((Matrix.toEuclideanCLM (n := Fin M → Fin d) (𝕜 := ℂ)).symm
@@ -174,18 +177,18 @@ theorem exists_periodicPhysicalHierarchy_of_isGappedGroundState {R J Δ : ℝ}
         (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) v⟫_ℂ).re = _
       rw [toEuclideanLin_vecMulVec_star_self_apply, inner_smul_right,
         ← inner_conj_symm v Ω, Complex.mul_conj, Complex.normSq_eq_norm_sq, Complex.ofReal_re]
-    simpa only [hinner] using hgs.2.2.gap_le v
+    simpa only [hinner] using (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_le v
   have hE₀ : (⟪Ω, toEuclideanLin (∑ i, g i) Ω⟫_ℂ).re = E₀ := by
-    have heigen : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω := hgs.2.1
-    rw [heigen, inner_smul_right, inner_self_eq_norm_sq_to_K, hgs.1]
+    have heigen : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω := (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+    rw [heigen, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
     simp
   have htrace : (trace P₀).re = 1 := by
     change (trace (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).re = 1
     rw [trace_vecMulVec, ← EuclideanSpace.inner_eq_star_dotProduct]
-    rw [inner_self_eq_norm_sq_to_K, hgs.1]
+    rw [inner_self_eq_norm_sq_to_K, hΩ]
     norm_num
   intro n Φ hΦ hfix
-  have hc := card_le_two_mul_re_trace_of_roundedPeriodicProjection hℓ a g haSupp haHerm hg hgs.1
+  have hc := card_le_two_mul_re_trace_of_roundedPeriodicProjection hℓ a g haSupp haHerm hg hΩ
     hJb hη hΔ rfl hr haError hP₀ hgap hE₀ hΦ Finset.univ (fun j _ ↦ hfix j)
   have hc' : (n : ℝ) ≤ 2 := by simpa [htrace] using hc
   exact_mod_cast hc'

@@ -8,6 +8,7 @@ import TNLean.Algebra.MatrixL2Contraction
 import QICLean.Probability.MatrixBernstein
 import Mathlib.MeasureTheory.Integral.Pi
 import Mathlib.Probability.UniformOn
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The sampled approximate ground-state projector
@@ -78,6 +79,8 @@ see `docs/paper-gaps/lvv13_power_expansion_padding.tex`.
 
 open Matrix MeasureTheory ProbabilityTheory
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -150,9 +153,11 @@ lemma groundEnergy_nonneg_and_le [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) :
     0 ≤ E₀ ∧ E₀ + 1 ≤ L := by
-  obtain ⟨hΓ, hHΓ, -⟩ := hgs
+  have hΓ := hΩ
+  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
   have hH : H.PosSemidef := posSemidef_sum Finset.univ fun i _ ↦ h0 i
   have hHu : H ≤ ((L - 1 : ℕ) : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
@@ -230,16 +235,17 @@ lemma norm_scaledBondComplementWord_sub_le [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) {m : ℕ} (I : Fin m → Fin L) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {m : ℕ} (I : Fin m → Fin L) :
     ‖scaledBondComplementWord h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ ≤
       powerNormalization L E₀ ^ m + 1 := by
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
   have hC : 0 ≤ powerNormalization L E₀ ^ m :=
     pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m
   calc _ ≤ ‖scaledBondComplementWord h E₀ I‖ + ‖powerProjector (∑ i, h i) L E₀ m‖ :=
         norm_sub_le _ _
     _ ≤ powerNormalization L E₀ ^ m + 1 := by
-        rw [norm_powerProjector (Nat.pos_of_neZero L) h h0 h1 hgs hΔ m,
+        rw [norm_powerProjector (Nat.pos_of_neZero L) h h0 h1 hΩ hgap hspan hΔ m,
           scaledBondComplementWord, norm_smul, Real.norm_of_nonneg hC]
         gcongr
         exact mul_le_of_le_one_right hC (norm_bondComplementWord_le_one h h0 h1 I)
@@ -252,7 +258,8 @@ lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (ℓ m : ℕ) [NeZero ℓ]
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (ℓ m : ℕ) [NeZero ℓ]
     {t : ℝ} (ht : 0 < t) :
     (sampleMeasure ℓ m L).real
         {I | t ≤ ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖} ≤
@@ -260,7 +267,7 @@ lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
         2 * (powerNormalization L E₀ ^ m + 1) * t / 3))) := by
   set A := powerProjector (∑ i, h i) L E₀ m
   set R := powerNormalization L E₀ ^ m + 1
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
   have hR1 : 1 ≤ R := le_add_of_nonneg_left
     (pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m)
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hd | hd
@@ -289,7 +296,7 @@ lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
     exact integral_scaledBondComplementWord h E₀ m
   have hdev : ∀ k, ∀ᵐ I ∂sampleMeasure ℓ m L, ‖X k I - A‖ ≤ R := fun k ↦
     Filter.Eventually.of_forall fun I ↦
-      norm_scaledBondComplementWord_sub_le h h0 h1 hgs hΔ (I k)
+      norm_scaledBondComplementWord_sub_le h h0 h1 hΩ hgap hspan hΔ (I k)
   have hbern := Matrix.measureReal_le_norm_average_sub_le hind hident
     (fun k ↦ measurable_of_countable _) hmean hdev ht.le
   have hset : {I : Fin ℓ → Fin m → Fin L | t ≤ ‖sampledProjector h E₀ I - A‖} =
@@ -306,7 +313,7 @@ lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
     simpa using norm_integral_le_of_norm_le_const (μ := sampleMeasure ℓ m L)
       (Filter.Eventually.of_forall hf)
   have hsq : ∀ I, ‖X 0 I - A‖ * ‖X 0 I - A‖ ≤ R ^ 2 := fun I ↦ by
-    have := norm_scaledBondComplementWord_sub_le h h0 h1 hgs hΔ (I 0)
+    have := norm_scaledBondComplementWord_sub_le h h0 h1 hΩ hgap hspan hΔ (I 0)
     rw [← sq]
     gcongr
   have hmax := max_le
@@ -522,7 +529,8 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ} (hη : 0 < η)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ} (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
     (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
         2 * (powerNormalization L E₀ ^ m + 1) * η / 3) / η ^ 2 *
@@ -537,14 +545,14 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
   set D := 2 * R ^ 2 + 2 * R * η / 3
   have hL : (0 : ℝ) < L := Nat.cast_pos.mpr (Nat.pos_of_neZero L)
   have hℓ0 : (0 : ℝ) < ℓ := Nat.cast_pos.mpr (Nat.pos_of_neZero ℓ)
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
   have hR1 : 1 ≤ R := le_add_of_nonneg_left
     (pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m)
   have hD : 0 < D := by positivity
   -- the accuracy failure
   set B₁ := {I : Fin ℓ → Fin m → Fin L | η ≤ ‖sampledProjector h E₀ I - A‖}
   have hB₁ : μ.real B₁ ≤ 1 / (4 * (L : ℝ) ^ 3) := by
-    refine (measureReal_le_norm_sampledProjector_sub_le h h0 h1 hgs hΔ ℓ m hη).trans ?_
+    refine (measureReal_le_norm_sampledProjector_sub_le h h0 h1 hΩ hgap hspan hΔ ℓ m hη).trans ?_
     rcases Nat.eq_zero_or_pos q with rfl | hq
     · simp [zero_pow (NeZero.ne L)]
     have hqL : (1 : ℝ) ≤ (q : ℝ) ^ L := one_le_pow₀ (Nat.one_le_cast.mpr hq)
@@ -611,7 +619,8 @@ theorem one_sub_inv_pow_three_le_measureReal_sampledProjector [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ} (hη : 0 < η)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ} (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
     (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
         2 * (powerNormalization L E₀ ^ m + 1) * η / 3) / η ^ 2 *
@@ -620,7 +629,7 @@ theorem one_sub_inv_pow_three_le_measureReal_sampledProjector [NeZero L]
     1 - 1 / (L : ℝ) ^ 3 ≤ (sampleMeasure ℓ m L).real
       {I | ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ < η ∧
         ∀ k j, letterCount (I k) j ≤ κ} := by
-  refine le_trans ?_ (one_sub_le_measureReal_sampledProjector h h0 h1 hgs hΔ m hη hℓ hκ)
+  refine le_trans ?_ (one_sub_le_measureReal_sampledProjector h h0 h1 hΩ hgap hspan hΔ m hη hℓ hκ)
   have : (0 : ℝ) < (L : ℝ) ^ 3 := by have := Nat.pos_of_neZero L; positivity
   gcongr 1 - ?_
   rw [div_le_div_iff_of_pos_left one_pos (by positivity) this]
@@ -650,7 +659,8 @@ theorem exists_sampledProjector [NeZero L]
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η) (m : ℕ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η) (m : ℕ)
     (hm : ((L - E₀) / Δ) * Real.log (1 / η) ≤ m) :
     ∃ I : Fin (sampledProjectorWordCount q L E₀ η m) → Fin m → Fin L,
       ‖powerProjector (∑ i, h i) L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
@@ -663,7 +673,7 @@ theorem exists_sampledProjector [NeZero L]
         q ^ (2 * sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) := by
   set ℓ := sampledProjectorWordCount q L E₀ η m
   set κ := sampledProjectorLetterBound L ℓ m
-  have hprob := one_sub_le_measureReal_sampledProjector h h0 h1 hgs hΔ m hη (ℓ := ℓ) (κ := κ)
+  have hprob := one_sub_le_measureReal_sampledProjector h h0 h1 hΩ hgap hspan hΔ m hη (ℓ := ℓ) (κ := κ)
     ((Nat.le_ceil _).trans (by simp [ℓ, sampledProjectorWordCount]))
     (Nat.le_ceil _)
   have hpos : 0 < (sampleMeasure ℓ m L).real
@@ -675,7 +685,7 @@ theorem exists_sampledProjector [NeZero L]
     rw [sub_pos, div_lt_one (by positivity)]
     linarith
   obtain ⟨I, hK, hcount⟩ := nonempty_of_measureReal_ne_zero hpos.ne'
-  refine ⟨I, norm_powerProjector_sub_le (Nat.pos_of_neZero L) h h0 h1 hgs hΔ hη m hm, hK,
+  refine ⟨I, norm_powerProjector_sub_le (Nat.pos_of_neZero L) h h0 h1 hΩ hgap hspan hΔ hη m hm, hK,
     hcount, fun k b ↦ operatorSchmidtRank_cutOperator_bondComplementWord_le h hs b (I k) ?_⟩
   have hb : b.val < L := by omega
   refine le_of_eq_of_le ?_ (hcount k ⟨b, hb⟩)

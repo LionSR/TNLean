@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import QICLean.Analysis.GaussianFilter.GroundEstimate
 import QICLean.Analysis.GlobalGap
 import QICLean.Analysis.UnitaryEvolution
-import TNLean.Algebra.GappedGroundState
 import TNLean.Lattice.GaussianTailMoment
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The Gaussian time average of a gapped Hamiltonian
@@ -55,6 +55,8 @@ All norms are Euclidean operator norms.
 open MeasureTheory ProbabilityTheory Matrix Complex
 open scoped InnerProductSpace Matrix.Norms.L2Operator NNReal ComplexOrder
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw.Hastings
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
@@ -99,7 +101,8 @@ for the unique gapped ground state of lines 126–127 with the ground energy nor
 zero as on lines 766–767. The bound is stated for every real `q`. -/
 theorem norm_gaussianTimeAverage_sub_groundProjector_le {H : Matrix n n ℂ}
     (hH : H.IsHermitian) {ΔE : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hΩ : IsGappedGroundState H 0 Ω ΔE) (hΔ : 0 < ΔE) (q : ℝ) :
+    (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped H 0 ΔE)
+    (hΩs : groundSpace H 0 = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (q : ℝ) :
     ‖gaussianTimeAverage q ΔE H - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
       Real.exp (-q / 2) := by
   obtain ⟨hΩn, hHΩ, hgap⟩ := isGappedGroundState_iff.mp hΩ
@@ -164,11 +167,12 @@ display after line 848 of Hastings, arXiv:0705.2024v4, `law16.tex`, lines 849–
 `M = M_L + M_B + M_R`, before its integrand is rewritten in the interaction picture. -/
 theorem norm_gaussianTimeAverage_sub_groundProjector_le_add {M H : Matrix n n ℂ}
     (hM : M.IsHermitian) (hH : H.IsHermitian) {ΔE : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hΩ : IsGappedGroundState H 0 Ω ΔE) (hΔ : 0 < ΔE) (q : ℝ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H 0 ΔE)
+    (hspan : groundSpace H 0 = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (q : ℝ) :
     ‖gaussianTimeAverage q ΔE M - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
       Real.exp (-q / 2) + Real.sqrt q / ΔE * ‖M - H‖ := by
   exact ((norm_sub_le_norm_sub_add_norm_sub _ (gaussianTimeAverage q ΔE H) _).trans
     (add_le_add (norm_gaussianTimeAverage_sub_le hM hH q hΔ)
-      (norm_gaussianTimeAverage_sub_groundProjector_le hH hΩ hΔ q))).trans_eq (add_comm _ _)
+      (norm_gaussianTimeAverage_sub_groundProjector_le hH hΩ hgap hspan hΔ q))).trans_eq (add_comm _ _)
 
 end TNLean.MPS.AreaLaw.Hastings

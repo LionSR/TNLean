@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.Lattice.ZeroEntropy
 import QICLean.Entropy.FilterStationarity
 import QICLean.Analysis.ContractionChain
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The three-way splitting of a chain Hamiltonian at a cut
@@ -61,6 +62,8 @@ through the Lieb–Robinson localization.
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw.Hastings
@@ -354,10 +357,14 @@ energy zero: the normalization of the source.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–767 and 779–782. -/
 theorem ChainHamiltonian.isGappedGroundState_groundCentered_parts_sum
     (h : ChainHamiltonian L q R J) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Ω Δ) (j m : ℕ) :
-    IsGappedGroundState (groundCentered Ω (h.leftPart j m) +
-      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 Ω Δ := by
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (j m : ℕ) :
+    (‖Ω‖ = 1 ∧ IsGapped (groundCentered Ω (h.leftPart j m) +
+      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 Δ ∧
+      groundSpace (groundCentered Ω (h.leftPart j m) +
+      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 = Submodule.span ℂ {Ω}) := by
+  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
   have hE : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
   rw [h.groundCentered_parts_sum_of_eigen hΩ hE]

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Algorithm.ValidOracle
 import TNLean.MPS.AreaLaw.Algorithm.SampledProgram
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The sampled route under every valid oracle
@@ -31,6 +32,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216 and 652--678.
 -/
 
 open Matrix Cslib MeasureTheory
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
 
 namespace TNLean.MPS.AreaLaw
@@ -105,7 +108,8 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : GoodWords h E₀ m (δ / 8) κ I) (b : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
@@ -118,8 +122,9 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
   let : NeZero q := ⟨by omega⟩
   rw [eval_sampledSweepStepProgram_of_valid hv hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) hi S]
   let chain := ChainHamiltonian.ofBonds h hs h0 h1
-  have hgs' : IsGappedGroundState chain.operator E₀ Γ Δ := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgs
+  have hgs' : (‖Γ‖ = 1 ∧ IsGapped chain.operator E₀ Δ ∧
+    groundSpace chain.operator E₀ = Submodule.span ℂ {Γ}) := by
+    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hΩ hgap hspan
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -152,10 +157,10 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
             vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ :=
           norm_sub_le_norm_sub_add_norm_sub _ _ _
       _ ≤ δ / 8 + δ / 8 := add_le_add hgood.1.le
-          (norm_powerProjector_sub_le hL h h0 h1 hgs hΔ (by positivity) m hm)
+          (norm_powerProjector_sub_le hL h h0 h1 hΩ hgap hspan hΔ (by positivity) m hm)
       _ = δ / 4 := by ring
   have hout := isViableMPS_errorReductionSet_of_admissible_sampled hi h E₀ I hdec hcardF
-    (hrankF hi) hgs.1 hT hKP (by linarith)
+    (hrankF hi) hΩ hT hKP (by linarith)
   have hδeq : 4 * (δ / 4) = δ := by ring
   rw [hδeq] at hout
   exact hout
@@ -166,7 +171,8 @@ theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (h
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b : ℕ) (i : ℕ) (hi : i ≤ L) :
@@ -180,14 +186,14 @@ theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (h
   intro S
   induction i with
   | zero =>
-    obtain ⟨hcard, hmps, hviable⟩ := isViableMPS_emptyLeftVector (L := L) (q := q) hgs.1
+    obtain ⟨hcard, hmps, hviable⟩ := isViableMPS_emptyLeftVector (L := L) (q := q) hΩ
     exact ⟨by simp [S, sampledSweepProgram], by simpa [S, sampledSweepProgram] using hmps,
       by simpa [S, sampledSweepProgram] using hviable.mono hδ0.le⟩
   | succ i ih =>
     obtain ⟨-, -, hviable⟩ := ih (by omega)
     simp only [S, sampledSweepProgram, hi, ↓reduceDIte, FreeM.eval_bind, Nat.succ_ne_zero,
       ↓reduceIte]
-    exact sampledSweepStepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc _ hm
+    exact sampledSweepStepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc _ hm
       (hgood ⟨i, by omega⟩) b hi _ hviable
 
 /-- **On good words the sampled program finds the ground state under every valid oracle.** -/
@@ -195,7 +201,8 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b : ℕ) :
@@ -214,7 +221,7 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
     simp only [ψ, sampledGroundStateProgram, FreeM.eval_bind, FreeM.eval_lift]
     rfl
   obtain ⟨hcard, hmps, hviable⟩ :=
-    sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I hm hgood b L le_rfl
+    sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood b L le_rfl
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
   obtain ⟨v, hv', hvnorm, hover⟩ := hviable.exists_fullLeftVector
   set U := Submodule.span ℂ ((S.image fun w ↦ e.symm w : Finset _) :
@@ -236,7 +243,9 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
     hv.energyMinimizer L b (∑ j, h j) (S.image fun w ↦ e.symm w) hUne
   rw [← hψ] at hψU hψnorm hψmin
   refine ⟨hψnorm, ?_, ?_⟩
-  · obtain ⟨hΓ, hEig, hgap⟩ := isGappedGroundState_iff.mp hgs
+  · have hΓ := hΩ
+ have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+ have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
     have hover' : 1 - δ ≤ ‖⟪Γ, e.symm v⟫_ℂ‖ := by
       have : ⟪e.symm v, Γ⟫_ℂ = ⟪v, e Γ⟫_ℂ := by
         rw [← e.inner_map_map, e.apply_symm_apply]
@@ -244,7 +253,8 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
       exact hover
     let chain := ChainHamiltonian.ofBonds h hs h0 h1
     have hchain : chain.operator = ∑ j, h j := ChainHamiltonian.ofBonds_operator h hs h0 h1
-    have hgsChain : IsGappedGroundState chain.operator E₀ Γ Δ := by rwa [hchain]
+    have hgsChain : (‖Γ‖ = 1 ∧ IsGapped chain.operator E₀ Δ ∧
+      groundSpace chain.operator E₀ = Submodule.span ℂ {Γ}) := by rwa [hchain]
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hgsChain hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
@@ -267,7 +277,8 @@ theorem measureReal_sampledGroundStateProgram_success_of_valid [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) (b : ℕ) :
     1 - 1 / (2 * (L : ℝ) ^ 2) ≤
       (stepWordsMeasure L (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ)).real
@@ -279,9 +290,9 @@ theorem measureReal_sampledGroundStateProgram_success_of_valid [NeZero L]
               max 1 (sampledRankBound q L E₀ Δ δ *
                 max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))))
               (fun x ↦ ψ x)} := by
-  refine (measureReal_forall_goodWords_ge h h0 h1 hgs hΔ hδ0).trans (measureReal_mono ?_)
+  refine (measureReal_forall_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
   intro I hI
-  exact sampledGroundStateProgram_spec_of_valid hv (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hgs
+  exact sampledGroundStateProgram_spec_of_valid hv (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan
     hδ0 hδ1 hδc I (Nat.le_ceil _) hI b
 
 end TNLean.MPS.AreaLaw

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap
 import TNLean.MPS.AreaLaw.Hastings.LiebRobinson
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The entropy gain across a cut of a gapped chain
@@ -32,6 +33,8 @@ are recorded in `docs/paper-gaps/hastings07_relent_constants.tex`.
 
 open Matrix
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw.Hastings
 
 /-- **Eq. `relent` of Hastings' area law.** Let `R` be a range. There is a constant `K ≥ 0`,
@@ -51,7 +54,8 @@ lines 413–503, with the constants of the module docstring. -/
 theorem exists_relent_of_isGappedGroundState (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, c + l ≤ L →
       (l + 6 * lemmaOneEndpointLength R J ΔE *
           Real.log (K * lemmaOneEndpointLength R J ΔE ^ 3)) * Real.log q +
@@ -66,7 +70,7 @@ theorem exists_relent_of_isGappedGroundState (R : ℕ) :
           Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3)) + relentConst := by
   obtain ⟨K₀, hK₀, hF⟩ := exists_projectorFactorization_endpoint R
   refine ⟨K₀ + 1, by linarith, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs c l hcl hS
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan c l hcl hS
   have hζ8 : 8 ≤ lemmaOneEndpointLength R J ΔE := by
     unfold lemmaOneEndpointLength
     have := le_max_right (2 * (5 / 4 * chainLRVelocity R (J / ΔE))) (1 : ℝ)
@@ -78,15 +82,15 @@ theorem exists_relent_of_isGappedGroundState (R : ℕ) :
   · -- For `q = 1` the window condition fails: the entropy vanishes and `F(ξ', 1) > 0`.
     have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst hq1
-    have hS0 := TNLean.Lattice.regionEntropy_le_card_mul_log hgs.1 (interval L 0 c)
+    have hS0 := TNLean.Lattice.regionEntropy_le_card_mul_log hΩ (interval L 0 c)
     have hξ0 : 0 ≤ Real.log (6 * lemmaOneEndpointLength R J ΔE / 2 + 1) :=
       Real.log_nonneg (by linarith)
     simp only [Nat.cast_one, Real.log_one, mul_zero, zero_add, bootstrapRemainder, one_pow,
       sub_self, Real.log_zero, add_zero] at hS hS0
     exfalso
     linarith
-  refine relent_of_projectorFactorization_of_le_entropy hq hgs.1 hcl hξ hC₁ (fun m _ ↦ ?_) hS
-  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hgs c m
+  refine relent_of_projectorFactorization_of_le_entropy hq hΩ hcl hξ hC₁ (fun m _ ↦ ?_) hS
+  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c m
   refine ⟨OB, OL, OR, hF'.mono (mul_le_mul_of_nonneg_right ?_ (Real.exp_pos _).le)⟩
   nlinarith
 

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolPhysicalPreparation
 import TNLean.Lattice.Compression.DistributedConstruction
 import TNLean.Lattice.Compression.GateCoefficientBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform physical families for chain compression
@@ -35,6 +36,8 @@ noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+
+open ManyBody (IsGapped groundSpace)
 
 /-- The constructed chain sweep, with its original normalized product input,
 actual main physical dimensions and retained auxiliary registers.
@@ -93,7 +96,8 @@ theorem exists_uniform_preparation_family
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
           EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-        L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
+        L₀ ≤ a.1 ∧ (‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ} ∧
+          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1})
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1
@@ -152,7 +156,8 @@ theorem exists_uniform_preparation_family
   refine ⟨D, K, s, L₀, hL₀, hD, hK, ?_⟩
   let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
       EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-    L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
+    L₀ ≤ a.1 ∧ (‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ} ∧
+      groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1})
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1

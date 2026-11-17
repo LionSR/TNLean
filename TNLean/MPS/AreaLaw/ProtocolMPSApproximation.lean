@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.CompressedBlockColumn
 import TNLean.MPS.AreaLaw.ProtocolPolynomialMPS
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Data.Fintype.BigOperators
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical matrix product state approximation by the chain-sweep protocol
@@ -38,6 +39,8 @@ noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+
+open ManyBody (IsGapped groundSpace)
 
 /-- The protocol's density error permits column extraction and the source's
 final phase error for every L≥2. Source: Part II, `thm:B`, lines 587–593. -/
@@ -138,7 +141,8 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
       ∀ (L : ℕ), 2 ≤ L →
         ∀ (h : ChainHamiltonian L q R J)
           (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-          Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∃ (B : ℕ) (Φ : EuclideanSpace ℂ (Fin L → Fin q)),
               ‖Φ‖ = 1 ∧ Φ ≠ 0 ∧ IsOpenMPS L q B (fun x ↦ Φ x) ∧
                 (B : ℝ) ≤ C * (L : ℝ) ^ n ∧
@@ -148,7 +152,8 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
     exists_uniform_preparation_family q hq R J Δ hΔ
   let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
       EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-    L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
+    L₀ ≤ a.1 ∧ (‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ} ∧
+      groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1})
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1
@@ -174,10 +179,10 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   have hCfinal : 0 < Cfinal := hClarge.trans_le (le_max_left _ _)
   have hn : 0 < n := lt_of_lt_of_le Nat.zero_lt_one (le_max_left _ _)
   refine ⟨Cfinal, n, hCfinal, hn, ?_⟩
-  intro L hL h Ω E₀ hgs
+  intro L hL h Ω E₀ hΩ hgap hspan
   have hLreal : (1 : ℝ) ≤ L := by exact_mod_cast (show 1 ≤ L by omega)
   by_cases hlarge : L₀ ≤ L
-  · let i : ι := ⟨⟨L, h, Ω, E₀⟩, hlarge, hgs⟩
+  · let i : ι := ⟨⟨L, h, Ω, E₀⟩, hlarge, hΩ, hgap, hspan⟩
     let w := ⌈D * Real.log (L : ℝ)⌉₊
     have herrors := protocol_error_bounds hL
     obtain ⟨Gate, hGateFinite, hGateDecidable, participants, root, hroot,
@@ -225,9 +230,9 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
     have hmps := exact_isOpenMPS_of_length_le hq hsmall Ω
     have hΩne : Ω ≠ 0 := by
       apply norm_ne_zero_iff.mp
-      rw [hgs.1]
+      rw [hΩ]
       exact one_ne_zero
-    refine ⟨q ^ L₀, Ω, hgs.1, hΩne, hmps, ?_, 0, ?_⟩
+    refine ⟨q ^ L₀, Ω, hΩ, hΩne, hmps, ?_, 0, ?_⟩
     · calc
         ((q ^ L₀ : ℕ) : ℝ) = (q : ℝ) ^ L₀ := by simp only [Nat.cast_pow]
         _ ≤ Cfinal := le_max_right _ _

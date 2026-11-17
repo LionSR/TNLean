@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
 import TNLean.Lattice.GaussianFilteredGround
 import TNLean.MPS.AreaLaw.OpenMPS
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The cut-offs `O_L`, `O_R` of Hastings' Lemma 1
@@ -51,6 +52,8 @@ Documented in `docs/paper-gaps/hastings07_filtered_part_localization.tex`.
 -/
 
 open GaussianFilter Matrix QuantumCircuit TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw
@@ -195,14 +198,14 @@ localization error is at most `δ`, then `‖M Ω‖ ≤ ΔE⁻¹ e^{-s/2} c_P +
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 794–828 (eqs. `tighter`, `tighter2` and the
 bound on `|M_L Ψ₀|`). -/
 theorem ChainHamiltonian.norm_localizedPart_apply_le {E₀ : ℝ}
-    (hgs : IsGappedGroundState h.operator E₀ Ω ΔE) (hΔ : 0 < ΔE) (hs : 0 ≤ s)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ ΔE)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (hs : 0 ≤ s)
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hP : P.IsHermitian) (K : Finset (Fin L))
     {cP δ : ℝ} (hc : ‖h.operator * P - P * h.operator‖ ≤ cP)
     (hδ : ‖gaussianFilteredTerm s ΔE h.operator P -
       (P + siteExpectation q K (gaussianFilteredTerm s ΔE h.operator P - P))‖ ≤ δ) :
     ‖toEuclideanLin (h.localizedPart Ω s ΔE P K) Ω‖ ≤
       ΔE⁻¹ * Real.exp (-s / 2) * cP + δ := by
-  have hΩ : ‖Ω‖ = 1 := hgs.1
   have hop (A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) : ‖toEuclideanLin A Ω‖ ≤ ‖A‖ := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin, ← l2_opNorm_toEuclideanCLM]
     simpa [hΩ] using (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) A).le_opNorm Ω
@@ -210,7 +213,6 @@ theorem ChainHamiltonian.norm_localizedPart_apply_le {E₀ : ℝ}
   set G := gaussianFilteredTerm s ΔE h.operator W
   have hsplit : h.localizedPart Ω s ΔE P K = G - (G - h.localizedPart Ω s ΔE P K) := by abel
   have hG : ‖toEuclideanLin G Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * cP := by
-    have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
     refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ hg.1 hg.2.2.1
       hg.2.2.2 W (inner_groundCentered hP hΩ)).trans ?_
     rw [h.commutator_groundCentered]
@@ -241,7 +243,8 @@ Then:
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 766–842. -/
 theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q R J) (hJ : 0 ≤ J)
     {E₀ ΔE : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Ω ΔE) (hΔ : 0 < ΔE) {s : ℝ} (hs : 0 ≤ s)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ ΔE)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) {s : ℝ} (hs : 0 ≤ s)
     {c m k : ℕ} (hmk : R + k ≤ m) {θ T : ℝ} (hθ : 0 < θ) (hT : 0 ≤ T) :
     ∃ H₀ OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       H₀.IsHermitian ∧ IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧
@@ -258,7 +261,6 @@ theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q 
           2 * (Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) *
             (partCommutatorConst R * J ^ 2)) := by
   have hq1 : 1 ≤ q := NeZero.one_le
-  have hΩ : ‖Ω‖ = 1 := hgs.1
   set PL := h.leftPart c m
   set PR := h.rightPart c m
   set KL := leftWindow L R c m k
@@ -279,15 +281,15 @@ theorem ChainHamiltonian.exists_cutoffPair [NeZero q] (h : ChainHamiltonian L q 
   -- the bounds `‖M Ω‖ ≤ μ`
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le Ω s ΔE hgs hΔ hs hPL KL (h.norm_commutator_leftPart_le c m)
+    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPL KL (h.norm_commutator_leftPart_le c m)
       (h.norm_gaussianFilteredTerm_leftPart_sub_localized_le hq1 c m s ΔE (Nat.cast_nonneg k) hT)
   have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le Ω s ΔE hgs hΔ hs hPR KR (h.norm_commutator_rightPart_le c m)
+    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPR KR (h.norm_commutator_rightPart_le c m)
       (h.norm_gaussianFilteredTerm_rightPart_sub_localized_le hq1 c m s ΔE (Nat.cast_nonneg k) hT)
   -- the remainder
   have hE : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact hgs.2.1
+    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
   have hsum := h.groundCentered_parts_sum_of_eigen hΩ hE c m
   set DL := gaussianFilteredTerm s ΔE h.operator (groundCentered Ω PL) - groundCentered Ω PL
   set DR := gaussianFilteredTerm s ΔE h.operator (groundCentered Ω PR) - groundCentered Ω PR

@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.Hastings.PrintedAreaLawSource
 import TNLean.MPS.AreaLaw.Hastings.RenyiBootstrapLemma
 import TNLean.MPS.AreaLaw.Hastings.RelentGapped
 import TNLean.MPS.AreaLaw.Hastings.MPSGroundState
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Consequences of Hastings' area law at a common source length
@@ -35,6 +36,8 @@ See `docs/paper-gaps/hastings07_relent_constants.tex`,
 namespace TNLean.MPS.AreaLaw
 
 open Hastings Matrix TNLean.Lattice Real
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
 
 /-- Lemma 2 at the length of the order-`J` source pair.
@@ -42,7 +45,8 @@ Hastings, arXiv:0705.2024v4, lines 280–311. -/
 theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
         (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
@@ -55,8 +59,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
             bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_source R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs j k r hk w ψ hw hrank hnorm P hP hPdef
-  have hΩ : ‖Ω‖ = 1 := hgs.1
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan j k r hk w ψ hw hrank hnorm P hP hPdef
   have hs : 80 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := le_max_right _ _
   have hξ : 0 < 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := by linarith
   have hC₁ : 1 ≤ max K 1 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3 :=
@@ -75,7 +78,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     linarith
   · refine entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       (fun m ↦ ?_) hk w ψ hw hrank hnorm hP hPdef
-    obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hgs j m
+    obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hΩ hgap hspan j m
     exact ⟨OB, OL, OR, hFm.mono (mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_pos (by linarith) 3).le)
       (Real.exp_pos _).le)⟩
@@ -85,7 +88,8 @@ Hastings, arXiv:0705.2024v4, lines 392–410. -/
 theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ {α : ℝ}, 0 < α → α < 1 →
       ((q : ℝ) ^ 2) ^ (1 - α) *
         Real.exp (-(2 * α / (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)))) < 1 →
@@ -106,8 +110,7 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
               (1 - α) := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_source R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs α hα0 hα1 hconv j k r hk w ψ hw hrank hnorm P hP hPdef
-  have hΩ : ‖Ω‖ = 1 := hgs.1
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα0 hα1 hconv j k r hk w ψ hw hrank hnorm P hP hPdef
   have hs : 80 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := le_max_right _ _
   have hξ : 0 < 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := by linarith
   have hC₁ : 1 ≤ max K 1 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3 :=
@@ -131,7 +134,7 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     linarith
   · exact renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       hα0 hα1 hconv (fun m ↦ by
-        obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hgs j m
+        obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hΩ hgap hspan j m
         exact ⟨OB, OL, OR, hFm.mono (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_pos (by linarith) 3).le)
           (Real.exp_pos _).le)⟩) hk w ψ hw hrank hnorm hP hPdef
@@ -141,7 +144,8 @@ Hastings, arXiv:0705.2024v4, lines 392–410. -/
 theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ {α : ℝ}, 1 < α →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
@@ -156,9 +160,9 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source (
             bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
   obtain ⟨K, hK, hL2⟩ := exists_entropy_le_of_overlap_schmidtRank_mixture_source R
   refine ⟨K, hK, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs α hα j k r hk w ψ hw hrank hnorm P hP hPdef
-  exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hgs.1 j hα).trans
-    (hL2 hJ hΔ h hgs j hk w ψ hw hrank hnorm hP hPdef)
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef
+  exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hΩ j hα).trans
+    (hL2 hJ hΔ h hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)
 
 namespace Hastings
 
@@ -168,7 +172,8 @@ Hastings, arXiv:0705.2024v4, eq. `relent`, lines 234–242 and 413–503. -/
 theorem exists_relent_of_isGappedGroundState_source (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, c + l ≤ L →
       (l + 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) *
           Real.log (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3)) * Real.log q +
@@ -185,7 +190,7 @@ theorem exists_relent_of_isGappedGroundState_source (R : ℕ) :
             relentConst := by
   obtain ⟨K₀, hK₀, hF⟩ := exists_projectorFactorization_source R
   refine ⟨K₀ + 1, by linarith, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs c l hcl hS
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan c l hcl hS
   have hζ8 : 80 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := le_max_right _ _
   have hξ : 0 < 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := by linarith
   have hpow : 1 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3 :=
@@ -196,7 +201,7 @@ theorem exists_relent_of_isGappedGroundState_source (R : ℕ) :
   · -- For `q = 1` the window condition fails: the entropy vanishes and `F(ξ', 1) > 0`.
     have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst hq1
-    have hS0 := TNLean.Lattice.regionEntropy_le_card_mul_log hgs.1 (interval L 0 c)
+    have hS0 := TNLean.Lattice.regionEntropy_le_card_mul_log hΩ (interval L 0 c)
     have hξ0 : 0 ≤ Real.log
         (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) / 2 + 1) :=
       Real.log_nonneg (by linarith)
@@ -204,8 +209,8 @@ theorem exists_relent_of_isGappedGroundState_source (R : ℕ) :
       sub_self, Real.log_zero, add_zero] at hS hS0
     exfalso
     linarith
-  refine relent_of_projectorFactorization_of_le_entropy hq hgs.1 hcl hξ hC₁ (fun m _ ↦ ?_) hS
-  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hgs c m
+  refine relent_of_projectorFactorization_of_le_entropy hq hΩ hcl hξ hC₁ (fun m _ ↦ ?_) hS
+  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c m
   refine ⟨OB, OL, OR, hF'.mono (mul_le_mul_of_nonneg_right ?_ (Real.exp_pos _).le)⟩
   nlinarith
 
@@ -217,7 +222,8 @@ have the local corrections described in the module docstring. -/
 theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_source (R : ℕ) :
     ∃ c₀ K : ℝ, 0 < c₀ ∧ 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       let s := max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80
       let ξ' := 6 * s
       let C₁ := max (K * s ^ 3) 1
@@ -235,15 +241,15 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_source (R : ℕ) 
   obtain ⟨c₀, hc₀, hS⟩ := exists_regionEntropy_prefix_le_source R
   obtain ⟨K, hK, hF⟩ := exists_projectorFactorization_source R
   refine ⟨c₀, K, hc₀, hK, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs s ξ' C₁ Smax k' hk'
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan s ξ' C₁ Smax k' hk'
   have hs : 80 ≤ s := le_max_right _ _
   have hξ : 0 < ξ' := by dsimp [ξ']; linarith
-  refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hgs.1 hξ
+  refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hΩ hξ
     (fun j _ m _ ↦ ?_) (fun j _ ↦ ?_) hk'
-  · obtain ⟨OB, OL, OR, hfac⟩ := hF hJ hΔ h hgs j m
+  · obtain ⟨OB, OL, OR, hfac⟩ := hF hJ hΔ h hΩ hgap hspan j m
     exact ⟨OB, OL, OR, hfac.mono
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (exp_pos _).le)⟩
-  · have hj := hS hJ hΔ h hgs j
+  · have hj := hS hJ hΔ h hΩ hgap hspan j
     rw [← leftBlock_eq_interval] at hj
     calc exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2
         ≤ exp (2 * Smax) / 2 := by gcongr

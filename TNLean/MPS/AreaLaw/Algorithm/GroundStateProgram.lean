@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Algorithm.SweepProgram
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveAccuracy
 import TNLean.MPS.AreaLaw.OverlapEnergy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The ground-state program
@@ -26,6 +27,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, proof of Theorem 1, lines 652--6
 -/
 
 open Matrix Cslib
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
@@ -103,7 +106,8 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {R : ℕ} (hR : 1 ≤ R)
     (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hgs : IsGappedGroundState (∑ j, h j) E Γ Delta) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E Delta)
+    (hspan : groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ}) :
     let N := L + 2 * R ^ 2
     let ψ := FreeM.eval honestOracle (groundStateProgram hq h hs h0 h1 Delta R)
     ‖ψ‖ = 1 ∧ 1 - 4 * L / (R ^ 2 * Delta) ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧
@@ -124,7 +128,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   have hN : 1 ≤ N := hL.trans hi
   obtain ⟨hcard, hmps, hviable⟩ := lvvSweep_spec hq (paddedInteraction hi z h) hs' h0' h1' hg L hi
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
-  have hpad := isGappedGroundState_paddedInteraction hL hi z h hgs hDelta
+  have hpad := isGappedGroundState_paddedInteraction hL hi z h hΩ hgap hspan hDelta
   have hNreal : (0 : ℝ) < N := by exact_mod_cast hN
   set δ : ℝ := lvvSuccessiveError (min Delta 1) / N with hδdef
   have hδ1 : δ < 1 := by
@@ -132,7 +136,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     exact (lvvSuccessiveError_min_lt_one hDelta).trans_le (by exact_mod_cast hN)
   have hδ0 : 0 ≤ δ := div_nonneg (lvvSuccessiveError_pos hg).le hNreal.le
   obtain ⟨w, hw, hwnorm, herror, hwmps⟩ :=
-    (hviable E _ hpad).exists_prefix_mps_of_paddedGroundVector hi z hgs.1 hδ1 hmps
+    (hviable E _ hpad).exists_prefix_mps_of_paddedGroundVector hi z hΩ hδ1 hmps
   -- The span of the final family, read on the original chain.
   set U := Submodule.span ℂ ((S.image fun w ↦ e.symm w : Finset _) :
     Set (EuclideanSpace ℂ (Fin L → Fin q))) with hUdef
@@ -153,13 +157,16 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   rw [← hψ] at hψU hψnorm hψmin
   refine ⟨hψnorm, ?_, ?_⟩
   · -- Overlap: least energy in the span, then the gap.
-    obtain ⟨hΓ, hEig, hgap⟩ := isGappedGroundState_iff.mp hgs
+    have hΓ := hΩ
+    have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+    have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
-      one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hgs.1 herror
+      one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
     let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
     have hchain : chain.operator = ∑ j, h j :=
       ChainHamiltonian.ofNearestNeighborPositive_operator h hs h0 h1
-    have hgsChain : IsGappedGroundState chain.operator E Γ Delta := by rwa [hchain]
+    have hgsChain : (‖Γ‖ = 1 ∧ IsGapped chain.operator E Delta ∧
+      groundSpace chain.operator E = Submodule.span ℂ {Γ}) := by rwa [hchain]
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hgsChain hw'norm hover
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=

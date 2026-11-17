@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.Lattice.RegionalSwapSupport
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The swapped doubled Hamiltonian on a chain
@@ -32,6 +33,8 @@ open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator ComplexOrder
 open TNLean.Lattice (norm_sheetSwapOp_le_one
   reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators sheetSwap sheetSwapOp)
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -77,7 +80,8 @@ Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
     {L q R : ℕ} {J E₀ Δ : ℝ} (h : ChainHamiltonian L q R J)
     (D : Finset (Fin L)) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (hΔ : 0 < Δ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let ψ₀ := Matrix.doubledVector (WithLp.ofLp Ω)
@@ -85,8 +89,10 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
       WithLp.toLp 2 (ψ₀ ∘ e.symm)
     let Φ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
       WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
-    Matrix.IsGappedGroundState h.doubled.operator (2 * E₀) Ψ Δ ∧
-      Matrix.IsGappedGroundState (h.swappedDoubled D).operator (2 * E₀) Φ Δ := by
+    (‖Ψ‖ = 1 ∧ IsGapped h.doubled.operator (2 * E₀) Δ ∧
+      groundSpace h.doubled.operator (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
+      (‖2 * E₀‖ = 1 ∧ IsGapped (h.swappedDoubled D) .operator Φ ∧
+        groundSpace (h.swappedDoubled D) .operator = Submodule.span ℂ {2 * E₀}) Δ := by
   classical
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
@@ -94,9 +100,12 @@ theorem ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState
   let Ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2 (ψ₀ ∘ e.symm)
   let Φ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
     WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
-  change Matrix.IsGappedGroundState h.doubled.operator (2 * E₀) Ψ Δ ∧
-    Matrix.IsGappedGroundState (h.swappedDoubled D).operator (2 * E₀) Φ Δ
-  obtain ⟨hΩ, heigen, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  change (‖Ψ‖ = 1 ∧ IsGapped h.doubled.operator (2 * E₀) Δ ∧
+    groundSpace h.doubled.operator (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
+    (‖2 * E₀‖ = 1 ∧ IsGapped (h.swappedDoubled D) .operator Φ ∧
+      groundSpace (h.swappedDoubled D) .operator = Submodule.span ℂ {2 * E₀}) Δ
+  have heigen := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
   have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
     rw [← EuclideanSpace.norm_sq_eq, hΩ]
     norm_num

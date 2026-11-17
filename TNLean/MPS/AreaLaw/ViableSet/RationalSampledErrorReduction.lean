@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.RationalOrthonormalFamily
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Rational output of sampled error reduction
@@ -33,6 +34,8 @@ at positive cuts.
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Sampling at half the final target accuracy leaves a half-target reserve for
@@ -45,7 +48,8 @@ theorem exists_rational_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 �
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i (i + 2))) (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ)
     {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1) :
     let η := δ / 16
     let m := ⌈((L - E₀) / Δ) * Real.log (1 / η)⌉₊
@@ -75,7 +79,7 @@ theorem exists_rational_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 �
             IsViableMPS Γ (ℓ * D * s) ((ℓ * D * s) * max 1 (D * max 1 b)) δ T := by
   classical
   intro η m ℓ D
-  have hexact := exists_sampled_errorReduction hq h hs h0 h1 hgs hΔ
+  have hexact := exists_sampled_errorReduction hq h hs h0 h1 hΩ hgap hspan hΔ
     (δ := δ / 2) (by positivity) (by linarith)
   dsimp only at hexact
   rw [show δ / 2 / 8 = δ / 16 by ring] at hexact
@@ -96,6 +100,6 @@ theorem exists_rational_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 �
     · intro w hw
       obtain ⟨R⟩ := hdata w hw
       exact IsOpenMPS.mono R.data.isLeftOpenMPS (max_le_max_left 1 hbond)
-    · simpa only [show δ / 2 + δ / 2 = δ by ring] using hviable Γ (δ / 2) hgs.1 hV.2.2
+    · simpa only [show δ / 2 + δ / 2 = δ by ring] using hviable Γ (δ / 2) hΩ hV.2.2
 
 end TNLean.MPS.AreaLaw

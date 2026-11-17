@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolStageInformation
 import TNLean.MPS.AreaLaw.BandInformation
 import TNLean.MPS.AreaLaw.ProtocolSweepLocalCircuits
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical local circuits for the chain sweep
@@ -38,6 +39,8 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
+open ManyBody (IsGapped groundSpace)
+
 /-- The physical assumptions imply the actual eighteen local circuits at
 every stage, including the seven identity operations after the first direct
 death. The constants precede all chain and state data. Neither information
@@ -50,7 +53,8 @@ theorem local_stage_circuits_of_logarithmic_separation
       ∀ (L : ℕ), L₀ ≤ L →
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (w : ℕ), 1 ≤ w →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
@@ -75,7 +79,7 @@ theorem local_stage_circuits_of_logarithmic_separation
     OneBand.primitive_information_of_logarithmic_separation q hq R J Δ hΔ
   refine ⟨max Dstage Dband, max Nstage Nband,
     hDstage.trans_le (le_max_left _ _), hNstage.trans (le_max_left _ _), ?_⟩
-  intro L hL h Ω E₀ hgs w hw hwidth k
+  intro L hL h Ω E₀ hΩ hgap hspan w hw hwidth k
   have hLs : Nstage ≤ L := (le_max_left _ _).trans hL
   have hLb : Nband ≤ L := (le_max_right _ _).trans hL
   have hlog : 0 ≤ Real.log (L : ℝ) :=
@@ -92,10 +96,10 @@ theorem local_stage_circuits_of_logarithmic_separation
     (Nat.le_div_iff_mul_le (by omega : 0 < 20 * w)).1 hdiv
   have hgeometry : 3 * (20 * w) ≤ L := by omega
   obtain ⟨hRem, hBlock, hBoundary⟩ :=
-    hstage L hLs h Ω E₀ hgs w hw hwidthStage k
+    hstage L hLs h Ω E₀ hΩ hgap hspan w hw hwidthStage k
   have hleftOwners := left_band_owners hw k
   have hleft (hk : 0 < k.val) :=
-    hband L hLb h Ω E₀ hgs (Party L w)
+    hband L hLb h Ω E₀ hΩ hgap hspan (Party L w)
       (afterBlockBirth L w k).owner
       (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))
@@ -111,14 +115,14 @@ theorem local_stage_circuits_of_logarithmic_separation
   rw [← leftBandMain_eq_afterLeftTransfer hw k]
     at hrightOwners
   have hright :=
-    hband L hLb h Ω E₀ hgs (Party L w)
+    hband L hLb h Ω E₀ hΩ hgap hspan (Party L w)
       (leftBandMain L w k).owner
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
       ((k.val + 1) * (20 * w)) w (by simp) (by simp)
       hw (stage_left_margin w (k.val + 1) (by omega))
       hrightOwners.1 hrightOwners.2.1 hrightOwners.2.2 hwidthBand
   exact local_stage_circuits_of_primitive_information (q := q)
-    hw k Ω hgs.1 hRem hBlock hBoundary
+    hw k Ω hΩ hRem hBlock hBoundary
     (fun hk ↦ (hleft hk).1) (fun hk ↦ (hleft hk).2.1)
     (fun hk ↦ (hleft hk).2.2.1) (fun hk ↦ (hleft hk).2.2.2.1)
     (fun hk ↦ (hleft hk).2.2.2.2.1) (fun hk ↦ (hleft hk).2.2.2.2.2.1)

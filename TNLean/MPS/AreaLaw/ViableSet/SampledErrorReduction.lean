@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.SampledCutDecomposition
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Error reduction by the sampled power projector
@@ -28,6 +29,8 @@ Claim `c:errorreduction`, lines 580–592, and Corollary `c:agsp`, lines 626–6
 open Matrix
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder Kronecker
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The sampled projector supplies both the decomposition and its simultaneous left
@@ -38,7 +41,8 @@ theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i (i + 2))) (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ)
     {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1) :
     let η := δ / 8
     let m := ⌈((L - E₀) / Δ) * Real.log (1 / η)⌉₊
@@ -59,7 +63,7 @@ theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
   classical
   intro η m ℓ D
   obtain ⟨I, hpower, hsample, hcount, _⟩ :=
-    exists_sampledProjector h hs h0 h1 hgs hΔ (div_pos hδ (by norm_num)) m (Nat.le_ceil _)
+    exists_sampledProjector h hs h0 h1 hΩ hgap hspan hΔ (div_pos hδ (by norm_num)) m (Nat.le_ceil _)
   have hproj : ‖sampledProjector h E₀ I -
       vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 := by
     calc
@@ -75,7 +79,7 @@ theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
       (hcount t) k)
   refine ⟨N, A, B, hN, hdec, hleft, fun s b S hS ↦ ?_⟩
   have hout := IsViableMPS.errorReduction_of_norm_sub_groundProjection_le
-    (J := Finset.univ) hi hS hgs.1 hdec
+    (J := Finset.univ) hi hS hΩ hdec
     (fun j _ k hk0 hki ↦ hleft j k hk0 hki) hproj.le (by linarith only [hδ1])
   have hout' : IsViableMPS Γ (N * s) (D * max 1 b) δ
       (errorReductionSet Finset.univ A S) := by

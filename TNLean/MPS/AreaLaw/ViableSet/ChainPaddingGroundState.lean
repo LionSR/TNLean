@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.ChainPaddingCoordinates
 import Mathlib.LinearAlgebra.Matrix.Vec
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The actual padded ground vector and its projector gap
@@ -20,6 +21,8 @@ no equality of spectral gaps or running-time bound is asserted.
 
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -42,9 +45,10 @@ the minimum of the original lower bound and one. -/
 theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
     (z : Fin q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     {E Delta : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ j, h j) E Γ Delta) (hDelta : 0 < Delta) :
-    IsGappedGroundState (∑ j, paddedInteraction hi z h j) E
-      (paddedGroundVector hi z Γ) (min Delta 1) := by
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E Delta)
+    (hspan : groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ}) (hDelta : 0 < Delta) :
+    (‖paddedGroundVector hi z Γ‖ = 1 ∧ IsGapped (∑ j, paddedInteraction hi z h j) E (min Delta 1) ∧
+      groundSpace (∑ j, paddedInteraction hi z h j) E = Submodule.span ℂ {paddedGroundVector hi z Γ}) := by
   classical
   let e := leftConfigOfFinEquiv (q := q) hi
   let H := ∑ j, h j
@@ -59,7 +63,7 @@ theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi :
     rw [show (∑ a, ‖u a‖ ^ 2) = ‖Γ‖ ^ 2 from by
       simpa only [u, Function.comp_apply, EuclideanSpace.norm_sq_eq] using
         (Equiv.sum_comp e.symm (fun x ↦ ‖Γ x‖ ^ 2))]
-    rw [hgs.1]
+    rw [hΩ]
     norm_num
   have hβ : ∑ b, ‖β b‖ ^ 2 = 1 := by
     rw [Finset.sum_eq_single b0]
@@ -69,8 +73,8 @@ theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi :
     · simp
   have hA : (A - (E : ℂ) • 1 - ((min Delta 1 : ℝ) : ℂ) •
       (1 - vecMulVec u (star u))).PosSemidef := by
-    have hp := (hgs.2.2.gap_mono (by
-      simpa only [← EuclideanSpace.norm_sq_eq, hgs.1] using (show (1 : ℝ) ^ 2 = 1 by norm_num))
+    have hp := ((hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_mono (by
+      simpa only [← EuclideanSpace.norm_sq_eq, hΩ] using (show (1 : ℝ) ^ 2 = 1 by norm_num))
       (min_le_left Delta 1)).submatrix e.symm
     convert hp using 1
     ext a a'
@@ -104,7 +108,7 @@ theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi :
     dsimp only [A, u]
     rw [Matrix.reindex_mulVec]
     rw [show H *ᵥ WithLp.ofLp Γ = (E : ℂ) • WithLp.ofLp Γ from
-      (isGappedGroundState_iff.mp hgs).2.1]
+      (ManyBody.mulVec_eq_of_groundSpace_eq_span hspan)]
     rfl
   have hBβ : B *ᵥ β = 0 := QuantumCircuit.productBasisPenalty_mulVec b0
   have hv : (fun p ↦ u p.1 * β p.2) = Matrix.vec (vecMulVec β u) := by
@@ -133,7 +137,7 @@ theorem isGappedGroundState_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi :
     simpa only [Prod.eta, c.symm_apply_apply] using (hΨ (c σ).1 (c σ).2).symm
   rw [← hpad] at hgap
   apply isGappedGroundState_iff.mpr
-  refine ⟨(norm_paddedGroundVector hi z Γ).trans hgs.1, heq, ?_⟩
+  refine ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, heq, ?_⟩
   convert hgap.submatrix c using 1
   ext σ τ
   simp only [submatrix_apply, Matrix.sub_apply, Matrix.smul_apply, smul_eq_mul,

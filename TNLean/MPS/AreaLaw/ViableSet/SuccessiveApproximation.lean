@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveConstruction
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform polynomial successive viable sets and final-span MPS approximation
@@ -30,6 +31,8 @@ running-time statement is asserted.
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- **Uniform polynomial budgets for the sweep and the final-span approximation.** Natural
@@ -54,11 +57,13 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
       (∀ i : ℕ, i ≤ L → (lvvSweep hq h hs h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
         (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
         ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-          IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+          ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
+          groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
           IsViable Γ (lvvSuccessiveError Delta / L)
             (lvvSweep hq h hs h0 h1 Delta i : Set (LeftBlockVector L q i))) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
+        groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
         ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
           1 - lvvSuccessiveError Delta / L ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
           IsOpenMPS L q (P * (L + 1) ^ d) (fun x ↦ ψ x) ∧
@@ -90,11 +95,11 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
     refine ⟨hcard.trans hsize, ?_, hviable⟩
     intro v hv
     exact (hMPS v hv).mono (max_le_max le_rfl hbond)
-  · intro E₀ Γ hgs
+  · intro E₀ Γ hΩ hgap hspan
     obtain ⟨hcard, hMPS, hviable⟩ := hS L le_rfl
     have hLne : L ≠ 0 := by omega
     simp only [hLne, ite_false] at hcard hMPS
-    obtain ⟨v, hvspan, hvnorm, hoverlap⟩ := (hviable E₀ Γ hgs).exists_fullLeftVector
+    obtain ⟨v, hvspan, hvnorm, hoverlap⟩ := (hviable E₀ Γ hΩ hgap hspan).exists_fullLeftVector
     let ψ := (fullLeftEquiv L q).symm v
     have hψimage : fullLeftEquiv L q ψ = v := (fullLeftEquiv L q).apply_symm_apply v
     have hinner : ⟪ψ, Γ⟫_ℂ = ⟪v, fullLeftEquiv L q Γ⟫_ℂ := by

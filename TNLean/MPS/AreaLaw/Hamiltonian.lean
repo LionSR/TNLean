@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Basic
-import TNLean.Algebra.GappedGroundState
 import QICLean.Entropy.LocalLift
 import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Finite-range Hamiltonians on the chain of `L` sites
@@ -45,6 +45,8 @@ the chain model instantiates it directly, with the cut budget
 
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -191,12 +193,14 @@ TNLean note, Lemma 3.1; area-law manuscript, Lemma 3.1 (`lem:tail`),
 `eq:initial-tail-probability`. -/
 theorem ChainHamiltonian.surprisalTail_regionState_le (h : ChainHamiltonian L q R J)
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (A : Finset (Fin L)) (w : ℝ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) (w : ℝ) :
     Entropy.surprisalTail (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) A Ω).eigenvalues
         (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget L q R A))))) := by
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
+  have heig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
   replace heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
   exact Entropy.surprisalTail_cut_le (n := fun _ : Fin L ↦ q) (B := A) h.supported h.hermitian hJ

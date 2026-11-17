@@ -517,7 +517,8 @@ $X_{j-l+1,j+l}$.
         TNLean.MPS.AreaLaw.lemmaOneConst_nonneg,
         TNLean.MPS.AreaLaw.exists_isFactorizationAt_lemmaOneConst,
         TNLean.MPS.AreaLaw.isFactorizationAt_zero_one_one,
-        Matrix.IsGappedGroundState.sub_smul_one}
+        ManyBody.IsGapped.sub_smul_one_self,
+        ManyBody.groundSpace_sub_smul_one_self}
     \leanok
     \uses{thm:hastings_three_way_splitting_sum,
         thm:hastings_three_way_splitting_supports,
@@ -600,7 +601,8 @@ $X_{j-l+1,j+l}$.
     \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_div,
         TNLean.MPS.AreaLaw.lemmaOneLength_div,
         TNLean.MPS.AreaLaw.ChainHamiltonian.smul,
-        Matrix.IsGappedGroundState.smul}
+        ManyBody.IsGapped.smul,
+        ManyBody.groundSpace_smul}
     \leanok
     \uses{thm:hastings_projector_factorization}
     Under the assumptions of Lemma~\ref{thm:hastings_projector_factorization},

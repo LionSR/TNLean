@@ -10,6 +10,7 @@ import TNLean.Lattice.RegionalReset
 import TNLean.Lattice.RegionalResetEntropy
 import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.SupportedUnitaryEntropy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information reset on a contiguous chain
@@ -42,6 +43,8 @@ open TNLean.Lattice (exists_regional_physicalBuffer_filter
   reindex_physicalBuffer_eq_siteLift reset_entropy_scalar sheetSwapOp
   siteLift_mem_supportedOperators)
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Contiguous-chain information reset from the original full-system gap.
@@ -52,7 +55,8 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
       ∀ (L : ℕ), L₀ ≤ L →
       ∀ (h : ChainHamiltonian L q R J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (D C R₀ C₀ : Finset (Fin L)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
         ∀ b : ℝ,
           FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω D C ≤ b →
@@ -76,12 +80,11 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   have hCp : 0 < Cp := by positivity
   let L₀ := max 1 ⌈8 * Real.sqrt 8 * (1 + Real.log (q : ℝ))⌉₊
   refine ⟨Cp, L₀, hCp, le_max_left _ _, ?_⟩
-  intro L hL h Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
+  intro L hL h Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
   have hLn : 1 ≤ L := (le_max_left _ _).trans hL
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hLn
   have hLthreshold : 8 * Real.sqrt 8 * (1 + Real.log (q : ℝ)) ≤ (L : ℝ) :=
     (Nat.le_ceil _).trans (by exact_mod_cast (le_max_right _ _).trans hL)
-  have hΩ : ‖Ω‖ = 1 := hgs.1
   have hb : 0 ≤ b := (FiniteProduct.mutualInformation_nonneg _ Ω hΩ D C hDC).trans hI
   let B := 1 + b + Real.log (L : ℝ)
   have hB : 1 ≤ B := by dsimp [B]; linarith [Real.log_nonneg hL1]
@@ -150,9 +153,8 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   let g := (s.prodCongr s).trans (Equiv.doubledRegroup Pconf (Q → Fin q))
   let F := Matrix.reindex e e (sheetSwapOp q D)
   let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
-  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   obtain ⟨hψn, hφn, W, z, hW, hz, hgauss⟩ :=
-    hfilter q D C hDC e h.operator E₀ Ω b hg.1 hg.2.1 hg.2.2.1 hg.2.2.2 hb hI
+    hfilter q D C hDC e h.operator E₀ Ω b hg.1 hΩ hgap hspan hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
   have hVsupp : V ∈ supportedOperators (q * q) (Q : Set (Fin L)) := by

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.Hastings.LiebRobinson
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Hastings' bootstrap lemma from the approximate factorization
@@ -31,6 +32,8 @@ rescaling and the reciprocal-length convention of the printed bound.
 namespace TNLean.MPS.AreaLaw.Hastings
 
 open TNLean.MPS.AreaLaw
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace
 
 variable {L q : ℕ}
@@ -82,7 +85,8 @@ restriction of the module docstring. -/
 theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
       ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
         (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
@@ -93,8 +97,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
             bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_endpoint R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs j k r hk w ψ hw hrank hnorm P hP hPdef
-  have hΩ : ‖Ω‖ = 1 := hgs.1
+  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan j k r hk w ψ hw hrank hnorm P hP hPdef
   have h16 := (sixteen_le_lemmaOneLength_and_le R (div_nonneg hJ hΔ.le)).1
   have hζ : 20 ≤ lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]; linarith
@@ -114,7 +117,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
     linarith
   · refine entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       (fun m ↦ ?_) hk w ψ hw hrank hnorm hP hPdef
-    obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hgs j m
+    obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hΩ hgap hspan j m
     exact ⟨OB, OL, OR, hFm.mono (mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_pos (by linarith) 3).le)
       (Real.exp_pos _).le)⟩

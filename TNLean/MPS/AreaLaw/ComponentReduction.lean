@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.Lattice.ZeroEntropy
 import Mathlib.Combinatorics.SimpleGraph.Metric
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The one-dimensional area law on a finite set of integers
@@ -61,6 +62,8 @@ open Matrix
 open scoped ComplexOrder Kronecker symmDiff Matrix.Norms.L2Operator
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -397,14 +400,14 @@ theorem DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq
     {Λ : Finset ℤ} {q R : ℕ} {J E₀ Δ : ℝ}
     (h : DomainHamiltonian Λ q R J)
     {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
-    (hΔ : 0 < Δ) (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (A : Finset ℤ) :
     ∃ A' : Finset (Fin Λ.card),
       Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) A' Ω =
         Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ∧
       (boundaryEdges Λ.card A').card = (domainBoundaryEdges Λ A).card := by
   classical
-  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   set G := (boundaryEdges Λ.card (domainRegion Λ A)).filter fun p ↦ ¬ IsDomainEdge Λ p
   have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       (interval Λ.card 0 (p + 1)) Ω = 0 := by
@@ -412,10 +415,10 @@ theorem DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq
     obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
     have hp1 := (mem_boundaryEdges.mp hpb).1
     refine ⟨hp1, regionEntropy_eq_zero_of_forall_subset_or_disjoint (h := h.term)
-      (D := fun X ↦ X.1) h.supported h.hermitian hΔ hg.2.1 hg.2.2.1 hg.2.2.2 _ fun X ↦ ?_⟩
+      (D := fun X ↦ X.1) h.supported h.hermitian hΔ hΩ hgap hspan _ fun X ↦ ?_⟩
     exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
   obtain ⟨A', hS, hB⟩ :=
-    exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hgs.1 G hG (domainRegion Λ A)
+    exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hΩ G hG (domainRegion Λ A)
   have hsymm : boundaryEdges Λ.card (domainRegion Λ A) ∆ G =
       (boundaryEdges Λ.card (domainRegion Λ A)).filter (IsDomainEdge Λ) := by
     ext p
@@ -437,11 +440,13 @@ TNLean note, `part0_preamble.tex`, Theorem A (`thm:A`), and `part1_arealaw.tex`,
 (`sec:setting`), first reduction. -/
 theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : DomainHamiltonian Λ q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (A : Finset ℤ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset ℤ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
-  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hgs A
-  have hgs' : Matrix.IsGappedGroundState (h.toChain hJ).operator E₀ Ω Δ := by
+  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hΩ hgap hspan A
+  have hgs' : (‖E₀‖ = 1 ∧ IsGapped (h.toChain hJ) .operator Ω ∧
+    groundSpace (h.toChain hJ) .operator = Submodule.span ℂ {E₀}) Δ := by
     rwa [DomainHamiltonian.toChain_operator]
   have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain hJ) hgs' A'
   simpa only [hS, hB] using hchain
@@ -455,14 +460,15 @@ theorem domainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ C = chainAreaLawConst q R * (1 + J / Δ) ∧
       ∀ Λ : Finset ℤ, ∀ h : DomainHamiltonian Λ q R J, ∀ E₀ : ℝ,
         ∀ Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q),
-          Matrix.IsGappedGroundState h.operator E₀ Ω Δ → ∀ A : Finset ℤ,
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ℤ,
             Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
               C * (domainBoundaryEdges Λ A).card := by
   have hle := chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ
   refine ⟨chainAreaLawConst q R * (1 + J / Δ), h0.trans hle, rfl, ?_⟩
-  intro Λ h E₀ Ω hgs A
-  refine (regionEntropy_le_mul_card_domainBoundaryEdges hq hJ hΔ h hgs A).trans ?_
+  intro Λ h E₀ Ω hΩ hgap hspan A
+  refine (regionEntropy_le_mul_card_domainBoundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans ?_
   exact mul_le_mul_of_nonneg_right hle (Nat.cast_nonneg _)
 
 end TheoremA

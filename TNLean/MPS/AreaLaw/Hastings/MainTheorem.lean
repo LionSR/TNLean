@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings.Doubling
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Hastings' area law on the chain: the contradiction argument
@@ -85,6 +86,8 @@ No other constant differs from the source.
 -/
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -206,7 +209,8 @@ This is a stage theorem: it is the formalization of the source theorem only once
 The lower bound on `l₀` carries the local fix of the module docstring. -/
 theorem regionEntropy_prefix_le_of_windowClaim_of_le (hq : 1 ≤ q) (h : ChainHamiltonian L q R J)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     {ξ' C₁ C₂ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2 * C₁) (hC : 0 ≤ Real.log C₁ + C₂)
     (l₀ : ℕ) (hl₀ : doublingWindowLength ξ' C₁ C₂ q ≤ l₀) (W : ℕ → ℕ → ℝ)
     (hdrop : ∀ i k : ℕ, i ≤ k → k ≤ L →
@@ -229,7 +233,7 @@ theorem regionEntropy_prefix_le_of_windowClaim_of_le (hq : 1 ≤ q) (h : ChainHa
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   rcases lt_or_ge L (i + l₀) with hend | hfit
   · -- The window runs past the end of the chain: `L - i < l₀`.
-    refine (regionEntropy_interval_zero_le hgs.1 hq i).trans ?_
+    refine (regionEntropy_interval_zero_le hΩ hq i).trans ?_
     have hLi : ((L - i : ℕ) : ℝ) ≤ l₀ := by exact_mod_cast (by omega : L - i ≤ l₀)
     calc ((L - i : ℕ) : ℝ) * Real.log q ≤ l₀ * Real.log q :=
           mul_le_mul_of_nonneg_right hLi hlog
@@ -266,7 +270,8 @@ This is a stage theorem: it is the formalization of the source theorem only once
 The value of `S_max` carries the local fix of the module docstring. -/
 theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q) (h : ChainHamiltonian L q R J)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     {ξ' C₁ C₂ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2 * C₁) (hC : 0 ≤ Real.log C₁ + C₂)
     (W : ℕ → ℕ → ℝ)
     (hdrop : ∀ i k : ℕ, i ≤ k → k ≤ L →
@@ -287,7 +292,7 @@ theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q) (h : ChainHamilton
     (i : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
       maxEntropyBound ξ' C₁ C₂ q :=
-  regionEntropy_prefix_le_of_windowClaim_of_le hq h hgs hξ' hC₁ hC _ le_rfl W hdrop hpos hinit
+  regionEntropy_prefix_le_of_windowClaim_of_le hq h hΩ hgap hspan hξ' hC₁ hC _ le_rfl W hdrop hpos hinit
     hclaim i
 
 end TNLean.MPS.AreaLaw.Hastings
