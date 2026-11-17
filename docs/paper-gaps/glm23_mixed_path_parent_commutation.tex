@@ -369,8 +369,19 @@ symmetric canonical path remains unformalized.
           symmetries alone, since it depends on the virtual gauge of the
           endpoint tensors. For $\mathbb Z_2$ it holds exactly when both
           action gauges $Y_p$ are proportional to Hermitian matrices, in
-          particular in a canonical gauge; formalize this as a separate
-          statement with an explicit gauge hypothesis. For general groups,
+          particular in a canonical gauge. The sufficiency of this gauge
+          condition, and the condition itself for endpoint tensors in
+          canonical form, are formalized as a separate scope-restricted
+          statement.\footnote{\leanid{MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq}
+              and
+              \leanid{MPSTensor.MPOSymmetry.exists_isHermitian_smul_bondOneActionGauge},
+              in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedHermitianGauge},
+              with the commutation corollaries
+              \leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian}
+              and
+              \leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_canonical}
+              in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedParentCommutation}.}
+          For general groups,
           replace the per-label hypothesis by closure of the union of the
           boundary ranges over all labels, and derive it from endpoint
           tensors in a gauge in which the action gauges are unitary.
