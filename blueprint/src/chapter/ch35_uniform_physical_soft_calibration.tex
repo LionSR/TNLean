@@ -111,3 +111,29 @@ the cluster order $s_N$ varies according to its logarithmic formula. Thus
 volume. No polynomial assertion is made when the soft order or filter degree
 is allowed to vary independently with $N$. Sharp inverse-gap dependence,
 an adaptive generating algorithm and running time are separate conclusions.
+
+The proof of~\cite[lines 1373--1420]{Arad2016RigorousRG} uses soft truncation
+of fourth order. That choice is not an instance of the calibration above.
+
+\begin{lemma}[The fourth order misses the calibrated residual budget]
+    \label{lem:soft_fourth_order_budget}
+    \lean{TNLean.MPS.AreaLaw.ALVV.not_soft_fourth_order_residual_budget}
+    \leanok
+    Let $m=4$, $t\geq12$, $T_0\geq24$, $M\geq3t$, $D\geq1$, $0<\gamma\leq10^{20}$
+    and $\tau=(D^{24}M^{10})^{-1}$. Then
+    \begin{align}
+        3\left(32e^{-(T_0-\gamma/40-24)/8}+\frac t4\Bigl(\frac{T_0}{t}\Bigr)^4\right)
+        >\frac{\tau\gamma}{10^6}.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The left side is at least $3(t/4)(24/t)^4=248832/t^3$, and the right side
+    is at most $10^{14}/(3t)^{10}$. The resulting inequality
+    $248832\cdot3^{10}t^7\leq10^{14}$ fails for $t\geq12$.
+\end{proof}
+
+The fourth-order remainder decays only like $t^{-3}$, while the budget of the
+calibration decays at least like $t^{-10}$ through the norm ceiling. Recovering
+the source's choice therefore needs a weaker precision requirement than
+$\tau=(D^{24}M^{10})^{-1}$, which is not formalized; see
+\cite{gap:alvv16_soft_regional_residuals}.

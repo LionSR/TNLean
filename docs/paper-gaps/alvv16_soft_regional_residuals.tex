@@ -263,4 +263,30 @@ $(2e^{-2k\sqrt{(c_1-c_0)/(M-c_0)}})^2$, $M=3t(1+\log m)+4\ell+34+\xi$. This is
 The parameters are not chosen: a calibration making the losses and the
 contraction small before the chain length, the source's parameter choice and
 the running time are not formalized.
+\section{The source's parameter choices: what is checked here}
+The source text is not available to this formalization, so the printed
+parameter choices of Proposition \texttt{prop:Cheby-AGSP-eff} and Theorems
+\texttt{t:aisefficient} and \texttt{t:aisgaplessefficient} (source lines
+1309--1457) are not quoted in any note or docstring beyond the paraphrase
+that the efficient constructions use soft truncation of fourth order. In
+particular the sharp form of the improving operator in
+Proposition~\texttt{prop:Cheby-AGSP-eff} is not quoted anywhere, and every
+printed parameter clause other than the order is unverified here.
+What can be checked is the following.
+\begin{itemize}
+ \item The fourth order is admissible in every corrected construction:
+  Definition \texttt{def:soft-trunc} and Lemma \texttt{lem:exp-approx}
+  allow $t\geq m\geq2$, the matrix product constructions need $t\geq3m$,
+  that is $t\geq12$, or $m<(\log2/2)\,t$.
+ \item The fourth order is not an instance of the calibration of the
+  preceding section. With $m=4$, $t\geq12$, $T_0\geq24$, norm ceiling
+  $M\geq3t$, count $D\geq1$, $\tau=(D^{24}M^{10})^{-1}$ and
+  $0<\gamma\leq10^{20}$, the residual condition
+  $3(32e^{-(T_0-\gamma/40-24)/8}+(t/4)(T_0/t)^4)\leq\tau\gamma/10^6$ fails,
+  because its left side is at least $248832/t^3$ and its right side at most
+  $10^{14}/(3t)^{10}$. This is
+  \leanid{TNLean.MPS.AreaLaw.ALVV.not_soft_fourth_order_residual_budget}.
+\end{itemize}
+Recovering the fourth-order choice therefore needs a weaker precision
+requirement than the one fixed by $\tau$, which is not formalized.
 \end{document}
