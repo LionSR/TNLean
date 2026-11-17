@@ -6,6 +6,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.AngularAnnularInformationInduction
 import TNLean.PEPS.Approximation.AngularSingleScaleReset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Angular information from the sublinear collar estimate
@@ -40,6 +41,9 @@ Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`),
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -227,7 +231,8 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
     (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na ≤ L₀) :
     ∀ L : ℕ, L₀ ≤ L →
       ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
         ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
@@ -240,15 +245,15 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
   have hc : 0 < c := div_pos (AngularGrid.angular_clearance_pos ha' ha'a hda') hd
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
       (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
-    fun s hs o m₀ A hm₀ L Ω ⟨h, E₀, hΩ⟩ ↦
-      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
-        s hs o m₀ A hm₀ L h E₀ Ω hΩ
-  intro L hL h E₀ Ω hΩ
+    fun s hs o m₀ A hm₀ L Ω ⟨h, E₀, hΩ, hgap, hspan⟩ ↦
+      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hΔ hcol hamp hc
+        s hs o m₀ A hm₀ L h E₀ Ω hΩ hgap hspan
+  intro L hL h E₀ Ω hΩ hgap hspan
   exact angularInformation_of_bounds (fun _ _ hΩ ↦ hΩ.norm_eq_one) ha m₀ hp hcell
     (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp)
     (cellInformationConstant_pos q c Ctpl N Ca Na)
     (cellInformationExponent_pos c Ctpl N Ca Na).le (resetWidth_pos hJ hΔ hp) hD hL₀
-    L hL Ω ⟨h, E₀, hΩ⟩
+    L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩
 
 /-- **Proposition 3.4 at an integer accuracy under the sublinear collar bound, with explicit
 constants,** for sites placed at any common translation of `Λ_L`: every slope
@@ -265,9 +270,9 @@ theorem isAngularScale_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 ≤ q)
     (hD : angularScale J Δ a p ≤ D)
     (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na ≤ L₀) :
     IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ :=
-  IsAngularScale.of_sitePosition fun L hL Ω ⟨h, E₀, hΩ⟩ ↦
+  IsAngularScale.of_sitePosition fun L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩ ↦
     angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀
-      (by exact_mod_cast hp) hD hL₀ L hL h E₀ Ω hΩ
+      (by exact_mod_cast hp) hD hL₀ L hL h E₀ Ω hΩ hgap hspan
 
 /-- **Proposition 3.4 at an integer accuracy, at the named amplification constants.** Under
 the range-one sublinear collar bound with constant `C` and threshold `N`, every slope

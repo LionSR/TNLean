@@ -7,6 +7,7 @@ import TNLean.Algebra.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.ZeroBoundary
 import QICLean.Entropy.TypicalDensity
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Typical projectors of the amplification proposition
@@ -53,6 +54,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix Filter Topology
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -136,7 +139,8 @@ lines 64–69, and `eq:initial-local-tail-parameter`, lines 202–206. -/
 theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) :
     ∀ (n : ℕ), 1 ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-      (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
         1 - (reducedState Λ q Ω Y *
             typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
@@ -144,13 +148,12 @@ theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
             Real.exp (-(typicalFailureRate q R J Δ C₀ * (n : ℝ) ^ ((1 : ℝ) / 10))) := by
   have hT := one_le_tailParameterConstant hq R
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
-  intro n hn Λ h E₀ Ω hgs Y hY
+  intro n hn Λ h E₀ Ω hΩ hgap hspan Y hY
   set w : ℝ := (n : ℝ) ^ ((3 : ℝ) / 5)
   have hnr : (1 : ℝ) ≤ n := by exact_mod_cast hn
   have hn0 : (0 : ℝ) < n := by linarith
-  obtain ⟨-, -, -, hfail⟩ := typicalProjection_failure_le_surprisalTail Ω hgs.1 Y w
-  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
-  have htail := (h.surprisalTail_reducedState_le hJ hΔ hg.2.1 hg.2.2.1 hg.2.2.2 Y w).trans
+  obtain ⟨-, -, -, hfail⟩ := typicalProjection_failure_le_surprisalTail Ω hΩ Y w
+  have htail := (h.surprisalTail_reducedState_le hJ hΔ hΩ hgap hspan Y w).trans
     (min_le_right _ _)
   refine hfail.trans (htail.trans (mul_le_mul_of_nonneg_left ?_ (by positivity)))
   rw [Real.exp_le_exp, neg_le_neg_iff]
@@ -189,7 +192,8 @@ theorem exists_typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) :
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
       ∀ (n : ℕ), 1 ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
           1 - (reducedState Λ q Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
@@ -218,13 +222,14 @@ theorem typicalProjection_failure_le_inv_pow_of_threshold_le (hq : 1 ≤ q) (R :
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) {K n : ℕ}
     (hn : typicalProjectionThreshold q R J Δ C₀ K ≤ n) (Λ : Finset (ℤ × ℤ))
     (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q)
-    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (Y : Finset (Site Λ))
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (Y : Finset (Site Λ))
     (hY : ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n) :
     1 - (reducedState Λ q Ω Y *
         typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
       (n : ℝ) ^ (-(2 * K : ℝ)) :=
   (typicalProjection_failure_le_stretchedExp hq R hJ hΔ hC₀ n
-    ((one_le_typicalProjectionThreshold q R J Δ C₀ K).trans hn) Λ h E₀ Ω hgs Y hY).trans
+    ((one_le_typicalProjectionThreshold q R J Δ C₀ K).trans hn) Λ h E₀ Ω hΩ hgap hspan Y hY).trans
     (Real.mul_exp_neg_le_rpow_neg_of_ceil_stretchedExpThreshold_le (by positivity)
       (typicalFailureRate_pos hq R hJ hΔ hC₀) (by norm_num) hn)
 
@@ -237,7 +242,8 @@ theorem exists_typicalProjection_failure_le_inv_pow (hq : 1 ≤ q) (R : ℕ)
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) (K : ℕ) :
     ∃ N : ℕ, 1 ≤ N ∧
       ∀ (n : ℕ), N ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
           1 - (reducedState Λ q Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
@@ -257,7 +263,8 @@ theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) (K : ℕ) :
     ∀ (n : ℕ), typicalProjectionThreshold q R J Δ C₀ K ≤ n →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ X Y S₀ : Finset (Site Λ),
           ((edgeBoundary Λ X).card : ℝ) ≤ C₀ * n →
           ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
@@ -273,14 +280,14 @@ theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
               1 - (reducedState Λ q Ω Z * typicalProjection Λ q Ω Z w).trace.re ≤
                 (n : ℝ) ^ (-(2 * K : ℝ)) := by
   classical
-  intro n hn Λ h E₀ Ω hgs X Y S₀ hX hY hS Z hZ
+  intro n hn Λ h E₀ Ω hΩ hgap hspan X Y S₀ hX hY hS Z hZ
   have hZb : ((edgeBoundary Λ Z).card : ℝ) ≤ C₀ * n := by
     simp only [Finset.mem_insert, Finset.mem_singleton] at hZ
     rcases hZ with rfl | rfl | rfl <;> assumption
   obtain ⟨hproj, hcomm, hwin, -⟩ :=
-    typicalProjection_failure_le_surprisalTail Ω hgs.1 Z ((n : ℝ) ^ ((3 : ℝ) / 5))
+    typicalProjection_failure_le_surprisalTail Ω hΩ Z ((n : ℝ) ^ ((3 : ℝ) / 5))
   exact ⟨hproj, hcomm, hwin,
-    typicalProjection_failure_le_inv_pow_of_threshold_le hq R hJ hΔ hC₀ hn Λ h E₀ Ω hgs Z hZb⟩
+    typicalProjection_failure_le_inv_pow_of_threshold_le hq R hJ hΔ hC₀ hn Λ h E₀ Ω hΩ hgap hspan Z hZb⟩
 
 /-- **The three typical projectors of the amplification proposition.** For every
 integer `K`, beyond a threshold depending only on `q, R, J, Δ, C₀` and `K`, the
@@ -295,7 +302,8 @@ theorem exists_typicalProjectors_three_cuts (hq : 1 ≤ q) (R : ℕ)
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) (K : ℕ) :
     ∃ N : ℕ, 1 ≤ N ∧
       ∀ (n : ℕ), N ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ X Y S₀ : Finset (Site Λ),
           ((edgeBoundary Λ X).card : ℝ) ≤ C₀ * n →
           ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →

@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
 import TNLean.Circuit.SiteEmbedding
-import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
@@ -20,7 +19,6 @@ Euclidean operator norms, rather than entrywise matrix norms.
 
 * `LocalHamiltonian`: the bounded Hermitian interaction family.
 * `LocalHamiltonian.operator`: its finite sum.
-* `IsGappedGroundState`: a unit eigenvector and the full-system projector gap.
 
 ## References
 
@@ -89,15 +87,5 @@ theorem localLift_mem_supportedOperators (Λ : Finset (ℤ × ℤ)) (q : ℕ)
   simpa [localLift] using
     QuantumCircuit.embedOp_mem_supportedOperators
       (e := fun x : ↥X ↦ x.val) Subtype.val_injective K
-
-/-- A unit eigenvector with the full-system projector gap, the specialization of
-`Matrix.IsGappedGroundState` to the finite-domain state space.
-Source: area-law Theorem 1.1. For a Hermitian Hamiltonian and positive `Δ`,
-the inequality also forces the eigenvalue to be the ground energy and its
-eigenspace to be one-dimensional; these consequences are separate proof obligations. -/
-def IsGappedGroundState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (H : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (Δ : ℝ) : Prop :=
-  Matrix.IsGappedGroundState H E₀ Ω Δ
 
 end TNLean.Lattice

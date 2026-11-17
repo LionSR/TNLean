@@ -10,6 +10,7 @@ import QICLean.Entropy.FiniteProductSplitting
 import QICLean.Entropy.ProductMarginals
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.Lattice.RegionalReset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The supported unitary of the information reset
@@ -70,6 +71,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal ComplexOrder
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -136,7 +139,8 @@ Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. 
 theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
@@ -162,7 +166,7 @@ theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : �
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
         ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by
-  intro L hL h E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
+  intro L hL h E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
   have hcoef : squareLocalizationVelocity J * resetCutoff Δ r + 15 + r ≤
       1 / 2 * resetRadius J Δ r := by
@@ -173,10 +177,9 @@ theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : �
   set K := resetRadius J Δ r with hKdef
   have hCg : 0 < Cg := squareLocalizationPrefactor_pos
   have hT₀ : 0 < T₀ := resetCutoff_pos hΔ hr
-  have hg := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp hgs
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.operator E₀ Ω b hg.1
-      hg.2.1 hg.2.2.1 hg.2.2.2 hb hI
+    regional_physicalBuffer_filter.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.operator E₀ Ω b
+      h.hermitian hΩ hgap hspan hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ := SquareHamiltonian.supported_buffer_gaussian_integral q hq J hJ
     L h R C₀ hRC W ⌈K * (1 + b + Real.log L)⌉₊
@@ -236,7 +239,8 @@ theorem SquareHamiltonian.exists_reset_localized_filter (q : ℕ) (hq : 1 ≤ q)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
       ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ
@@ -274,7 +278,8 @@ Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-er
 theorem SquareHamiltonian.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
@@ -297,9 +302,9 @@ theorem SquareHamiltonian.reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
         U ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
         ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             resetUnitaryPrefactor J Δ r * (L : ℝ) ^ (-r) := by
-  intro L hL h E₀ Ω hgs R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
+  intro L hL h E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
-    SquareHamiltonian.reset_localized_filter q hq J hJ hΔ hr L hL h E₀ Ω hgs R C₀ hRC b hb hI
+    SquareHamiltonian.reset_localized_filter q hq J hJ hΔ hr L hL h E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI
   obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
     (resetFilterPrefactor_pos hJ hΔ hr).le (by positivity)
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr⟩
@@ -318,7 +323,8 @@ theorem SquareHamiltonian.exists_reset_unitary (q : ℕ) (hq : 1 ≤ q) (J : ℝ
     (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r) :
     ∃ C K : ℝ, 0 < C ∧ 0 < K ∧
       ∀ (L : ℕ), 1 ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ

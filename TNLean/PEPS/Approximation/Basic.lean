@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.SquareLatticeGraph
 import TNLean.Circuit.LocalCircuit
-import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The polynomial-bond PEPS approximation statement
@@ -36,6 +36,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -73,24 +75,18 @@ noncomputable def SquareHamiltonian.operator {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) : Matrix (Configuration L q) (Configuration L q) ℂ :=
   (∑ v, h.siteTerm v) + ∑ e, h.edgeTerm e
 
-/-- Unit eigenvector and the full-system projector gap on the open square, the
-specialization of `Matrix.IsGappedGroundState` to `h.operator`.
-Source: polynomial-PEPS `eq:global-gap`; uniqueness follows for positive `Δ`. -/
-def SquareHamiltonian.IsGappedGroundState {L q : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q) (Δ : ℝ) : Prop :=
-  Matrix.IsGappedGroundState h.operator E₀ Ω Δ
-
 /-- The states admitted by the model at local dimension `q`, term bound `J` and gap `Δ`: the
 unit gapped ground vectors, with gap `Δ`, of the open-square Hamiltonians of side `L`
 with term bound `J`. Source: polynomial-PEPS `eq:model` and `eq:global-gap`. -/
 def IsSquareGroundState (q : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
-  ∃ (h : SquareHamiltonian L q J) (E₀ : ℝ), h.IsGappedGroundState E₀ Ω Δ
+  ∃ (h : SquareHamiltonian L q J) (E₀ : ℝ), ‖Ω‖ = 1 ∧ IsGapped h.operator E₀ Δ ∧
+    groundSpace h.operator E₀ = Submodule.span ℂ {Ω}
 
 /-- A ground vector of the model is a unit vector. Source: polynomial-PEPS `eq:global-gap`. -/
 theorem IsSquareGroundState.norm_eq_one {q : ℕ} {J Δ : ℝ} {L : ℕ} {Ω : StateSpace L q}
     (hΩ : IsSquareGroundState q J Δ L Ω) : ‖Ω‖ = 1 := by
-  obtain ⟨_, _, hgs⟩ := hΩ
-  exact hgs.1
+  obtain ⟨_, _, hn, -, -⟩ := hΩ
+  exact hn
 
 /-- The contraction of a native PEPS, in Euclidean configuration coordinates.
 Source: polynomial-PEPS Section 1, the unnormalized vector `Φ`. -/
@@ -119,6 +115,7 @@ def PolynomialPEPSApproximation : Prop :=
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
       ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J,
         ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-          h.IsGappedGroundState E₀ Ω Δ → HasPEPSApproximation C c L q Ω
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → HasPEPSApproximation C c L q Ω
 
 end TNLean.PEPS.Approximation

@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.LatticeCounts
 import QICLean.Analysis.ContractionWordDecay
 import QICLean.Probability.PoissonWordPartition
 import QICLean.Probability.PoissonWordRealOccupation
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Truncating the retained constraint product
@@ -53,6 +54,8 @@ set_option linter.mathlibStandardSet true
 open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -396,7 +399,8 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
     (hC : 0 ≤ C)
     (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         let cs := positiveNormalization p (Δ / 2) J
         let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
         0 < cs ∧
@@ -413,7 +417,8 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
         (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x})) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
       let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -432,8 +437,8 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
           S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(c / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
         L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
-  intro q _ Λ h a ha E₀ Ω hgs S r t
-  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hgs
+  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan S r t
+  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hΩ hgap hspan
   exact domainConstraintWord_truncation hC (Nat.cast_nonneg _) Λ (AdmissibleSupport Λ R) a _
     (fun i => (hk i).1) (fun i => (hk i).2.1)
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) (fun i l => (htail i l).2.2) S r t
@@ -448,7 +453,8 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
       let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -490,7 +496,8 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
     ∃ C c : ℝ, 0 ≤ C ∧ 0 < c ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
         let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)

@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.AreaLaw.RectangularBoundary
 import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
 import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Entropy area law on arbitrary native rectangles from the uniform area law
@@ -34,6 +35,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Native rectangular entropy, with one constant for the edge and both
@@ -44,7 +47,8 @@ def RectangularEntropyAreaLaw : Prop :=
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ width height : ℕ, ∀ h : RectangularHamiltonian width height q J,
         ∀ E₀ : ℝ, ∀ Ω : RectangleStateSpace width height q,
-          h.IsGappedGroundState E₀ Ω Δ → ∀ A : Finset (SquareLatticeVertex width height),
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (SquareLatticeVertex width height),
             FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω A ≤
               C * Fintype.card
                 {e : Edge (squareLatticeGraph width height) // IsRegionBoundaryEdge A e} ∧
@@ -71,10 +75,10 @@ theorem UniformAreaLaw.rectangularEntropyAreaLaw (harea : UniformAreaLaw) :
     RectangularEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q hq 1 J Δ hJ hΔ
-  refine ⟨C, hC, fun width height h E₀ Ω hΩ A ↦ ?_⟩
-  have hgap := h.isGappedGroundState_toAreaLawHamiltonian hJ.le hΩ
+  refine ⟨C, hC, fun width height h E₀ Ω hΩ hgap hspan A ↦ ?_⟩
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hJ.le hΔ hΩ hgap hspan
   have h := hbound (rectangularDomain width height) (h.toAreaLawHamiltonian hJ.le) E₀
-    (rectangleAreaLawState Ω) hgap (A.map (rectangleSiteEquiv width height).toEmbedding)
+    (rectangleAreaLawState Ω) hΩ' hgap' hspan' (A.map (rectangleSiteEquiv width height).toEmbedding)
   have hi := regionalEntropy_le_four_mul_innerBoundary_card hC h
   have he := regionalEntropy_le_two_mul_endpointBoundary_card hC h
   rw [regionalEntropy_rectangleAreaLawState, card_edgeBoundary_rectangular] at h
@@ -103,7 +107,7 @@ theorem RectangularEntropyAreaLaw.squareEntropyAreaLaw (harea : RectangularEntro
     Approximation.SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) J Δ hJ hΔ
-  exact ⟨C, hC, fun L Ω ⟨h, E₀, hΩ⟩ A ↦
-    (hbound L L h.toRectangularHamiltonian E₀ Ω hΩ A).1⟩
+  exact ⟨C, hC, fun L Ω ⟨h, E₀, hΩ, hgap, hspan⟩ A ↦
+    (hbound L L h.toRectangularHamiltonian E₀ Ω hΩ hgap hspan A).1⟩
 
 end TNLean.PEPS.AreaLaw

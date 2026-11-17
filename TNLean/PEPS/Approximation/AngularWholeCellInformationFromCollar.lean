@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AngularWholeCellInformation
 import TNLean.PEPS.Approximation.SquareCellConditionalInformation
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information of a selected group of square-lattice cells
@@ -29,6 +30,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.Approximation
 
 open AngularGrid
@@ -45,7 +48,7 @@ Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 `02-information.tex`, lines 161–178 and 713–734. The sublinear collar bound is
 an explicit premise of this intermediate implication. -/
 theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
-    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ}
+    {q : ℕ} {J Δ D₀ Ctpl C Ca : ℝ} {N Na : ℕ} (hΔ : 0 < Δ)
     (hcol : AreaLaw.SublinearCollarBoundAt q 1 J Δ D₀ Ctpl C N)
     (hamp : AreaLaw.AmplificationBoundAt q 1 J Δ (max C 1) 1 Ca Na)
     {c : ℝ} (hc : 0 < c) :
@@ -53,7 +56,8 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
       Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
         (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
         ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
             (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
               c * s ≤ dist x (sitePosition L v)) →
@@ -66,11 +70,11 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
               b₀ + (S.card : ℝ) * (cellInformationConstant q c Ctpl N Ca Na *
                 (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na) := by
   have hcell :=
-    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
-  intro s hs o r Aold A hA S hS L h E₀ Ω hΩ E b₀ hclear hold
+    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hΔ hcol hamp hc
+  intro s hs o r Aold A hA S hS L h E₀ Ω hΩ hgap hspan E b₀ hclear hold
   exact mutualInformation_selectedRegion_le_of_cell_bound Ω E
     (zero_lt_one.trans_le hs) hc hA S hS hclear
-    (fun i _ I hi ↦ hcell s hs o i I hi L h E₀ Ω hΩ E) hold
+    (fun i _ I hi ↦ hcell s hs o i I hi L h E₀ Ω hΩ hgap hspan E) hold
 
 open Classical in
 /-- The original-gap collar hypothesis gives uniform information costs for
@@ -94,7 +98,8 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
         Aold ⊆ A → ∀ S : Finset (ℤ × ℤ),
           (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
           ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-            h.IsGappedGroundState E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+            groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
               (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
                 c * s ≤ dist x (sitePosition L v)) →
@@ -110,6 +115,6 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
-    mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt hcol hamp hc⟩
+    mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt hΔ hcol hamp hc⟩
 
 end TNLean.PEPS.Approximation

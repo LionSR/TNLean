@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.StatusMarginalBudget
 import TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Common marginal moment input at every physical status
@@ -21,6 +22,8 @@ at `openai/math@adc7f124`.
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
@@ -57,8 +60,10 @@ real-u interval, without changing the truncated physical ground vector. -/
 theorem log_surprisalMoment_truncated_reducedState_le_common
     (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e B : ℝ} {Ωt : StateSpace Λ q}
-    (hgs : IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt
+    (hΩt : ‖Ωt‖ = 1)
+    (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
       ((Δ / positiveNormalization 1 (Δ / 2) J) / 2))
+    (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt})
     (Q : Finset (Site Λ))
     (hB : cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) {u : ℝ}
     (hu : |u| ≤ (1 / (32 * Real.sqrt
@@ -77,7 +82,7 @@ theorem log_surprisalMoment_truncated_reducedState_le_common
     rw [tailRadius_eq_div_sqrt hϑ]
     exact hu
   refine (S.log_surprisalMoment_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L
-    hgs Q (hu'.trans hr)).trans ?_
+    hΩt hgapt hspant Q (hu'.trans hr)).trans ?_
   gcongr
 
 /-- One truncation and one budget give all five marginal-MGF inputs at every
@@ -97,7 +102,8 @@ theorem exists_truncated_statusMarginal_moment_bounds
           (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = domainGraph Λ →
           S.depth = (fun x ↦ ambientDepth T hT x.val) →
           (∀ i, S.anchor i ∈ i.val) →
@@ -116,7 +122,8 @@ theorem exists_truncated_statusMarginal_moment_bounds
           0 < C₀ ∧ 0 < c₀ ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q) (B : ℝ),
             1 ≤ B ∧ B ≤ CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12) ∧
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
             Matrix.traceDistance
@@ -143,14 +150,14 @@ theorem exists_truncated_statusMarginal_moment_bounds
   obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutBudget_le_log
     (Nat.one_le_iff_ne_zero.mpr (NeZero.ne q)) R hCtr.le
   refine ⟨CB, hCB, ?_⟩
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hdepth hanchor L hn hradius hcard
+  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor L hn hradius hcard
     hr hDpos hD hL hrows hclear
   dsimp only
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   refine ⟨by positivity, by positivity, ?_⟩
   obtain ⟨e, Ωt, htrgs, he0, he, hphase, htrace, _, _⟩ :=
-    htr Λ h S E₀ Ω hgs hgraph hanchor L hn hradius hcard
+    htr Λ h S E₀ Ω hΩ hgap hspan hgraph hanchor L hn hradius hcard
   obtain ⟨hB, hb⟩ := hbudget Λ T hT S hgraph hdepth hanchor L hn hradius
     hr hDpos hD hL hrows hclear
   refine ⟨e, Ωt, CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12),
@@ -159,10 +166,10 @@ theorem exists_truncated_statusMarginal_moment_bounds
   constructor
   · intro hk Q hQ u hu
     exact S.log_surprisalMoment_truncated_reducedState_le_common h Ω hgraph hanchor hΔ
-      hgs.1 L htrgs Q ((hb k hist band).1 hk Q hQ) hu
+      hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hb k hist band).1 hk Q hQ) hu
   · intro hk Q hQ u hu
     exact S.log_surprisalMoment_truncated_reducedState_le_common h Ω hgraph hanchor hΔ
-      hgs.1 L htrgs Q ((hb k hist band).2 hk Q hQ) hu
+      hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hb k hist band).2 hk Q hQ) hu
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

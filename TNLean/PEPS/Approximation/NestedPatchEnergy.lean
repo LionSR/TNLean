@@ -8,6 +8,7 @@ import QICLean.Analysis.OperatorMean.MatrixPowers
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerFilter
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Energy of minimizing nested patch filters
@@ -26,6 +27,8 @@ Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -47,8 +50,9 @@ eq:patch-single-crossing, eq:patch-one-term-energy and eq:patch-energy-bound;
 00-introduction.tex, eq:model and eq:global-gap. -/
 theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
-    (hJ : 0 ≤ J) (_hΔ : 0 < Δ)
-    (Ω : StateSpace L q) (hgs : h.IsGappedGroundState E₀ Ω Δ)
+    (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     let Λ := AreaLaw.rectangularDomain L L
@@ -76,7 +80,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
-    (U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hgs.1)
+    (U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hΩ)
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
@@ -106,7 +110,8 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (h.isGappedGroundState_toAreaLawHamiltonian hgs).2.1 hinv
+    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hΔ hΩ hgap hspan).2.2 ▸
+      Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (squareAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
   rw [← hφpatch, ← hTsum] at heig
