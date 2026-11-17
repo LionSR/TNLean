@@ -155,9 +155,7 @@ lemma norm_algebraicEquiv (hF : F.ForwardNormPreserving)
 family preserves norm. -/
 lemma algebraicEquiv_isometry (hF : F.ForwardNormPreserving) :
     Isometry F.algebraicEquiv := by
-  rw [isometry_iff_dist_eq]
-  intro A B
-  rw [dist_eq_norm, dist_eq_norm, ← map_sub, norm_algebraicEquiv F hF]
+  exact AddMonoidHomClass.isometry_of_norm F.algebraicEquiv (norm_algebraicEquiv F hF)
 
 /-- Mutual invertibility makes the inverse algebraic-local equivalence an isometry whenever the
 forward family preserves norm. -/
@@ -268,23 +266,17 @@ theorem translationCovariant_quasiLocalEquiv
   rw [translationCovariant_iff_commute_one]
   change F.quasiLocalEquiv hF * quasiLocalTranslation d 1 =
     quasiLocalTranslation d 1 * F.quasiLocalEquiv hF
-  ext A
-  simp only [StarAlgEquiv.mul_apply]
-  induction A using UniformSpace.Completion.induction_on with
-  | hp =>
-      exact isClosed_eq
-        ((StarAlgEquiv.isometry (F.quasiLocalEquiv hF)).continuous.comp
-          (quasiLocalTranslation_isometry d 1).continuous)
-        ((quasiLocalTranslation_isometry d 1).continuous.comp
-          (StarAlgEquiv.isometry (F.quasiLocalEquiv hF)).continuous)
-  | ih A =>
-      change F.quasiLocalEquiv hF
-          (quasiLocalTranslation d 1 (algebraicToQuasiLocal d A)) =
-        quasiLocalTranslation d 1
-          (F.quasiLocalEquiv hF (algebraicToQuasiLocal d A))
-      simp only [quasiLocalTranslation_algebraicToQuasiLocal,
-        quasiLocalEquiv_algebraicToQuasiLocal]
-      rw [F.algebraicEquiv_commutes_unitTranslation htrans]
+  apply DFunLike.coe_injective
+  refine UniformSpace.Completion.ext
+    (StarAlgEquiv.isometry _).continuous (StarAlgEquiv.isometry _).continuous ?_
+  intro A
+  change F.quasiLocalEquiv hF
+      (quasiLocalTranslation d 1 (algebraicToQuasiLocal d A)) =
+    quasiLocalTranslation d 1
+      (F.quasiLocalEquiv hF (algebraicToQuasiLocal d A))
+  simp only [quasiLocalTranslation_algebraicToQuasiLocal,
+    quasiLocalEquiv_algebraicToQuasiLocal]
+  rw [F.algebraicEquiv_commutes_unitTranslation htrans]
 
 /-- Compatible finite-local actions satisfying local norm, support, and unit-translation formulas
 assemble to a QCA of the quasi-local completion. -/

@@ -180,13 +180,6 @@ isometry.
 Source: arXiv:1703.09188, Appendix, lines 2292--2296. -/
 lemma localObservable_isometry (d : ℕ) [NeZero d] (Λ : Finset ℤ) :
     Isometry (localObservable d Λ) := by
-  rw [isometry_iff_dist_eq]
-  intro A B
-  rw [dist_eq_norm, dist_eq_norm]
-  change ‖(localObservable d Λ).toAlgHom.toRingHom A -
-    (localObservable d Λ).toAlgHom.toRingHom B‖ = ‖A - B‖
-  rw [← (localObservable d Λ).toAlgHom.toRingHom.map_sub]
-  change ‖localObservable d Λ (A - B)‖ = ‖A - B‖
-  exact norm_localObservable d Λ (A - B)
+  exact AddMonoidHomClass.isometry_of_norm (localObservable d Λ) (norm_localObservable d Λ)
 
 end SpinChain

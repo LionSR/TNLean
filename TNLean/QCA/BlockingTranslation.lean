@@ -245,25 +245,20 @@ lemma quasiLocalBlocking_translation (d L : ℕ) [NeZero d] [NeZero L] (a : ℤ)
     (A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L)) :
     quasiLocalBlocking d L (quasiLocalTranslation _ a A) =
       quasiLocalTranslation d (a * L) (quasiLocalBlocking d L A) := by
-  induction A using UniformSpace.Completion.induction_on with
-  | hp =>
-      change IsClosed {A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) |
-        quasiLocalBlocking d L (quasiLocalTranslation _ a A) =
-          quasiLocalTranslation d (a * L) (quasiLocalBlocking d L A)}
-      exact isClosed_eq
-        ((quasiLocalBlocking_isometry d L).continuous.comp
-          (quasiLocalTranslation_isometry _ a).continuous)
-        ((quasiLocalTranslation_isometry d (a * L)).continuous.comp
-          (quasiLocalBlocking_isometry d L).continuous)
-  | ih A =>
-      change quasiLocalBlocking d L
-          (quasiLocalTranslation _ a (algebraicToQuasiLocal _ A)) =
-        quasiLocalTranslation d (a * L)
-          (quasiLocalBlocking d L (algebraicToQuasiLocal _ A))
-      rw [quasiLocalTranslation_algebraicToQuasiLocal,
-        quasiLocalBlocking_algebraicToQuasiLocal,
-        quasiLocalBlocking_algebraicToQuasiLocal,
-        quasiLocalTranslation_algebraicToQuasiLocal,
-        algebraicLocalBlocking_translation]
+  refine UniformSpace.Completion.ext'
+    ((quasiLocalBlocking_isometry d L).continuous.comp
+      (quasiLocalTranslation_isometry _ a).continuous)
+    ((quasiLocalTranslation_isometry d (a * L)).continuous.comp
+      (quasiLocalBlocking_isometry d L).continuous) ?_ A
+  intro B
+  change quasiLocalBlocking d L
+      (quasiLocalTranslation _ a (algebraicToQuasiLocal _ B)) =
+    quasiLocalTranslation d (a * L)
+      (quasiLocalBlocking d L (algebraicToQuasiLocal _ B))
+  rw [quasiLocalTranslation_algebraicToQuasiLocal,
+    quasiLocalBlocking_algebraicToQuasiLocal,
+    quasiLocalBlocking_algebraicToQuasiLocal,
+    quasiLocalTranslation_algebraicToQuasiLocal,
+    algebraicLocalBlocking_translation]
 
 end SpinChain

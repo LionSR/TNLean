@@ -309,10 +309,7 @@ Context: arXiv:1703.09188, Appendix, lines 2292--2306, which use the norm topolo
 translations in the definition and construction of one-dimensional QCA. -/
 lemma algebraicLocalTranslation_isometry (d : ℕ) [NeZero d] (a : ℤ) :
     Isometry (algebraicLocalTranslation d a) := by
-  rw [isometry_iff_dist_eq]
-  intro A B
-  rw [dist_eq_norm, dist_eq_norm]
-  rw [← map_sub]
-  exact norm_algebraicLocalTranslation d a (A - B)
+  exact AddMonoidHomClass.isometry_of_norm (algebraicLocalTranslation d a)
+    (norm_algebraicLocalTranslation d a)
 
 end SpinChain

@@ -371,10 +371,8 @@ lemma algebraicLocalBlocking_norm (d L : ℕ) [NeZero d] [NeZero L]
 /-- Algebraic-local blocking is an operator-norm isometry. -/
 lemma algebraicLocalBlocking_isometry (d L : ℕ) [NeZero d] [NeZero L] :
     Isometry (algebraicLocalBlocking d L) := by
-  rw [isometry_iff_dist_eq]
-  intro A B
-  rw [dist_eq_norm, dist_eq_norm, ← map_sub]
-  exact algebraicLocalBlocking_norm d L (A - B)
+  exact AddMonoidHomClass.isometry_of_norm (algebraicLocalBlocking d L)
+    (algebraicLocalBlocking_norm d L)
 
 /-- Inverse algebraic-local blocking is an operator-norm isometry. -/
 lemma algebraicLocalBlocking_symm_isometry (d L : ℕ) [NeZero d] [NeZero L] :

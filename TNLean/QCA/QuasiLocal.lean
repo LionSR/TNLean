@@ -84,9 +84,8 @@ theorem norm_quasiLocalObservable (d : ℕ) [NeZero d] (Λ : Finset ℤ)
 Source: arXiv:1703.09188, Appendix, lines 2292--2300. -/
 theorem quasiLocalObservable_isometry (d : ℕ) [NeZero d] (Λ : Finset ℤ) :
     Isometry (quasiLocalObservable d Λ) := by
-  rw [isometry_iff_dist_eq]
-  intro A B
-  rw [dist_eq_norm, dist_eq_norm, ← map_sub, norm_quasiLocalObservable]
+  exact AddMonoidHomClass.isometry_of_norm (quasiLocalObservable d Λ)
+    (norm_quasiLocalObservable d Λ)
 
 /-- Every finite-region map into the quasi-local algebra is injective. -/
 theorem quasiLocalObservable_injective (d : ℕ) [NeZero d] (Λ : Finset ℤ) :
