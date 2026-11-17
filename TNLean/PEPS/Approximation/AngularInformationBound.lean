@@ -154,6 +154,7 @@ theorem AngularInformationBound.exists_isAngularScale {q : ℕ} {J Δ : ℝ}
     {p : ℕ} (hp : 0 < p) :
     ∃ D L₀ : ℝ, IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ := by
   obtain ⟨D, L₀, hD⟩ := hang a A₀ ha hA₀ m₀ p (by exact_mod_cast hp)
-  exact ⟨D, L₀, IsAngularScale.of_sitePosition fun L hL Ω ⟨h, hh, hhJ, E₀, hΩ⟩ ↦ hD L hL h hh hhJ E₀ Ω hΩ⟩
+  exact ⟨D, L₀, IsAngularScale.of_sitePosition fun L hL Ω ⟨h, hh, hhJ, E₀, hΩ⟩ ↦ hD L hL h
+      hh hhJ E₀ Ω hΩ⟩
 
 end TNLean.PEPS.Approximation

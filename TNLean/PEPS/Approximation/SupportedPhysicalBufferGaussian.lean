@@ -142,12 +142,12 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     simpa only [hK', a, K', F, K, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
       Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound hh hhJ R).1
+      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound hhJ R).1
   have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
       Matrix.submatrix_submatrix] using!
-      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound hh hhJ R).2
+      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound hhJ R).2
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_le W)
@@ -227,7 +227,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
     by linarith [squareLocalizationVelocity_nonneg hJ], one_half_pos, fun L h hh hhJ R C₀ hRC ↦ ?_⟩
   intro Q P s g p Λ a e K F K' boundary Z W V l B
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
-    ManyBody.SquareInteraction.supported_buffer_gaussian_integral q hq J hJ L h R C₀ hRC W l
+    ManyBody.SquareInteraction.supported_buffer_gaussian_integral q hq J hJ L h hh hhJ R C₀ hRC W l
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
   obtain ⟨hMs, hMn, hMe⟩ := hM η T hT
   refine ⟨hMs, hMn, hMe.trans ?_⟩

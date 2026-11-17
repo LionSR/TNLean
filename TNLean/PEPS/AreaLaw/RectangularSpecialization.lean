@@ -71,7 +71,8 @@ theorem regionalEntropy_rectangleAreaLawState {width height q : ℕ}
 
 /-- The finite-domain area law implies all three native rectangular bounds
 with the same constant. Only the term-norm, total-Hermiticity and full-system gap
-hypotheses enter the physical instance, beyond the supports that the interaction carries. Source: the implication
+hypotheses enter the physical instance, beyond the supports that the interaction carries. Source:
+the implication
 from Theorem 1.1 to Corollary 1.2. Theorem 1.1 is an explicit hypothesis. -/
 theorem UniformAreaLaw.rectangularEntropyAreaLaw (harea : UniformAreaLaw) :
     RectangularEntropyAreaLaw := by
