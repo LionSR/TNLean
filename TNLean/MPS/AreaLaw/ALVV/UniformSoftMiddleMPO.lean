@@ -29,7 +29,7 @@ normalization. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 The physical lower-estimate convention remains that of `def:soft-trunc`.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder

@@ -34,6 +34,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines
 No spectral or ground-state transport is asserted here.
 -/
 
+open ManyBody (mem_interval)
+
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
 open TNLean.Lattice (norm_sheetSwapOp_le_one

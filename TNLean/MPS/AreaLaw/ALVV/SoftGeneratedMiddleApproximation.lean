@@ -32,7 +32,7 @@ rather than the false printed physical-support estimate; see
 `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder

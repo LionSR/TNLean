@@ -28,7 +28,7 @@ and the interval-neighborhood argument in `part2a_mps_information.tex`,
 lines 472–488.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval mem_interval)
 
 open SimpleGraph QuantumCircuit
 

@@ -20,7 +20,7 @@ This is operator algebra for ALVV, arXiv:1602.08828v2,
 `lem:exp-approx-eff`, lines 1262–1268.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped Matrix.Norms.L2Operator
