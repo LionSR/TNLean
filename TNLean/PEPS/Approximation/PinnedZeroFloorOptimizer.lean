@@ -63,7 +63,8 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
-    Edge (squareLatticeGraph L L) ≃ Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
+    Edge (squareLatticeGraph L L) ≃
+      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
   (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
