@@ -17,7 +17,11 @@ Commands
             merge base, but build and elaborate the actual (possibly merged)
             checkout. Defer confidently import-only production sources to the
             full build and post-build strict checks. Failures remain failures
-            while independent targets are still diagnosed.
+            while independent targets are still diagnosed. With ``--budget``
+            the step is a shortcut like ``early``: once the budget is spent
+            (a cold dependency cache, a change near the bottom of the import
+            graph) the remaining targets are left, with a warning, to the
+            mandatory full build and post-build strict checks.
 ``strict``  After the full build, elaborate with warnings as errors
 
             * every changed production source file, and
@@ -397,26 +401,64 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
 
 def focused_checks(
     sources: list[str], tests: list[str], graph: dict[str, set[str]],
-    jobs: int, timeout: int, log_path: Path | None,
+    jobs: int, timeout: int, log_path: Path | None, budget: int = 0,
 ) -> int:
     """Prepare the targets, then use the ordinary strict runner.
 
-    Preparation has no success-on-timeout shortcut: the surrounding CI step's
-    timeout is the upper bound. A failed preparation blocks its strict check,
-    not independent targets, and always makes the final result nonzero.
+    A failed preparation blocks its strict check, not independent targets, and
+    always makes the final result nonzero. Without a `budget` the surrounding
+    CI step's timeout is the only bound. With one, the step is a shortcut:
+    targets not prepared or not checked within `budget` seconds are left, with
+    a warning, to the root build and the post-build strict checks, which
+    remain mandatory. Failures found before the budget is spent still fail.
     """
     failed: list[str] = []
+    deferred: list[str] = []
     prepared: dict[str, bool] = {}
+    unprepared: set[str] = set()
+    deadline = time.monotonic() + budget if budget else None
+
+    def expired() -> bool:
+        return deadline is not None and time.monotonic() >= deadline
+
+    def build(modules: list[str]) -> int | None:
+        """Exit code of the dependency build, or `None` if the budget ended it."""
+        if deadline is None:
+            # Zero disables the early shortcut's warning-and-success budget.
+            return early_build(modules, log_path, 0)
+        left = int(deadline - time.monotonic())
+        if left <= 0:
+            return None
+        code = early_build(modules, log_path, left)
+        # `early_build` reports a build stopped at its budget as success.
+        return None if code == 0 and expired() else code
 
     def prepare(module: str) -> bool:
+        if module in unprepared:
+            return False
         if module not in prepared:
             print(f"Preparing focused target: {module}", flush=True)
-            # Zero disables the early shortcut's warning-and-success budget.
-            code = early_build([module], log_path, 0)
+            code = build([module])
+            if code is None:
+                unprepared.add(module)
+                return False
             prepared[module] = code == 0
             if code != 0:
                 failed.append(f"{module}: dependency build exited {code}")
         return prepared[module]
+
+    def check(paths: list[str]) -> list[str]:
+        if deadline is None:
+            return run_batch(paths, jobs, timeout)
+        # One batch per `jobs` files, so that the budget is consulted at most
+        # one per-file timeout late.
+        out: list[str] = []
+        for start in range(0, len(paths), max(1, jobs)):
+            if expired():
+                deferred.extend(paths[start:])
+                break
+            out += run_batch(paths[start:start + max(1, jobs)], jobs, timeout)
+        return out
 
     # One `lake build` for every changed module: each separate invocation
     # re-traverses the whole dependency graph, which for a change touching
@@ -426,11 +468,15 @@ def focused_checks(
     source_modules = sorted({module_of(source) for source in sources})
     if len(source_modules) > 1:
         print(f"Preparing {len(source_modules)} focused targets together", flush=True)
-        if early_build(source_modules, log_path, 0) == 0:
+        code = build(source_modules)
+        if code == 0:
             prepared.update(dict.fromkeys(source_modules, True))
+        elif code is None:
+            unprepared.update(source_modules)
     ready_sources = [source for source in sources if prepare(module_of(source))]
+    deferred += [source for source in sources if module_of(source) in unprepared]
     if ready_sources:
-        failed += run_batch(ready_sources, jobs, timeout)
+        failed += check(ready_sources)
 
     ready: list[str] = []
     for test in tests:
@@ -438,19 +484,31 @@ def focused_checks(
         required = closure(graph, module)
         missing = required - graph.keys()
         blocked = bool(missing or any(prepared.get(m) is False for m in required))
+        if not blocked and required & unprepared:
+            deferred.append(test)
+            continue
         if not blocked:
             # Build every immediate import, including a root module if the
             # regression script actually imports one; no allowlist.
-            outcomes = [prepare(m) for m in sorted(graph.get(module, set()))]
+            imports = sorted(graph.get(module, set()))
+            outcomes = [prepare(m) for m in imports]
+            if unprepared.intersection(imports):
+                deferred.append(test)
+                continue
             blocked = not all(outcomes)
         if blocked:
             failed.append(f"{test}: blocked by missing or failed dependencies")
         else:
             ready.append(test)
-    failed += run_batch(ready, jobs, timeout)
+    failed += check(ready)
     if failed:
         print("Focused checks failed:", *failed, sep="\n  ", flush=True)
         return 1
+    if deferred:
+        print(f"::warning::Focused checks stopped at their {budget}s budget; the root build "
+              f"and the post-build strict checks cover the remaining {len(deferred)} "
+              "target(s).", flush=True)
+        return 0
     print("All focused checks passed.", flush=True)
     return 0
 
@@ -470,8 +528,9 @@ def main(argv: list[str] | None = None) -> int:
                         help="seconds allowed for each file")
     parser.add_argument("--log", type=Path, help="append early-build output here")
     parser.add_argument("--budget", type=int, default=0,
-                        help="early: stop after this many seconds and leave the rest "
-                             "to the root build (0 means no limit)")
+                        help="early, focused: stop after this many seconds and leave the "
+                             "rest to the root build and the post-build strict checks "
+                             "(0 means no limit)")
     args = parser.parse_args(argv)
 
     os.chdir(args.root)
@@ -483,7 +542,8 @@ def main(argv: list[str] | None = None) -> int:
             strict_base = selection_base(args.base, args.pr_head or args.head)
             strict_sources = select(Path("."), strict_base)[1] if strict_base else []
             sources = focused_sources(Path("."), sources, strict_sources)
-            return focused_checks(sources, tests, graph, args.jobs, args.timeout, args.log)
+            return focused_checks(sources, tests, graph, args.jobs, args.timeout, args.log,
+                                  args.budget)
         except (ValueError, OSError, subprocess.CalledProcessError) as exc:
             print(f"::error::Focused checks could not complete: {exc}", file=sys.stderr)
             return 1
