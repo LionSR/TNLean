@@ -53,7 +53,7 @@ namespace TNLean.MPS.AreaLaw
 
 section Graph
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q R : ℕ} {κ : Type*} [Fintype κ]
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q R : ℕ} [NeZero q] {κ : Type*} [Fintype κ]
   {T : κ → Finset ι}
 
 /-- Localization of the Heisenberg evolution of a finite sum of local perturbations, on a
@@ -148,6 +148,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
         (L : ℝ) * Real.exp (v * |t| - ℓ / 2) := by
   classical
   intro K K' C Z B G b₀ a v
+  have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
     ⟨g.term, g.supported⟩
@@ -211,6 +212,7 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
         (Λ.card : ℝ) * Real.exp (v * |t| - (m : ℝ) / 2) := by
   classical
   intro K K' C Z B G b₀ a v
+  have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
       (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.supported⟩
