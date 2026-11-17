@@ -76,8 +76,7 @@ theorem norm_gaussianFilteredTerm_apply_le_commutator {q ΔE : ℝ} (hq : 0 ≤ 
   have hcoef (k : n) : ‖⟪b k, x⟫_ℂ‖ ≤ ΔE⁻¹ * Real.exp (-q / 2) * ‖⟪b k, y⟫_ℂ‖ := by
     rw [inner_gaussianFilteredTerm hq hH W (hb k) hψ']
     rcases eq_or_ne (hH.eigenvalues k) E₀ with hk | hk
-    · have hmem : b k ∈ groundSpace H E₀ :=
-        mem_groundSpace_iff_mulVec.mpr (by simpa [hk] using hb k)
+    · have hmem : b k ∈ groundSpace H E₀ := eigenvectorBasis_mem_groundSpace hH hk
       rw [hcenter _ hmem, mul_zero, norm_zero]
       positivity
     · have hgapk : E₀ + ΔE ≤ hH.eigenvalues k := (hgap k).resolve_left hk
@@ -99,12 +98,7 @@ theorem norm_gaussianFilteredTerm_apply_le_commutator {q ΔE : ℝ} (hq : 0 ≤ 
           gcongr
           exact le_mul_of_one_le_left (norm_nonneg _) hinv
         _ = ΔE⁻¹ * Real.exp (-q / 2) * (d * ‖⟪b k, toEuclideanLin W ψ⟫_ℂ‖) := by ring
-  have hsq : ‖x‖ ^ 2 ≤ (ΔE⁻¹ * Real.exp (-q / 2) * ‖y‖) ^ 2 := by
-    rw [← b.sum_sq_norm_inner_right x, mul_pow, ← b.sum_sq_norm_inner_right y, Finset.mul_sum]
-    refine Finset.sum_le_sum fun k _ => ?_
-    rw [← mul_pow]
-    exact pow_le_pow_left₀ (norm_nonneg _) (hcoef k) 2
-  exact (pow_le_pow_iff_left₀ (norm_nonneg _) (by positivity) two_ne_zero).mp hsq
+  exact norm_le_of_inner_coefficients_le b x y (by positivity) hcoef
 
 /-- Under a gapped unique ground state, every eigenvalue of `H` equals the ground energy or is at
 least the ground energy plus the gap: the spectral hypothesis of the filtered-term estimates. -/
