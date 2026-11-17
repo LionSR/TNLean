@@ -106,7 +106,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
     have hloc := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) (h.swappedDoubled D).term
       (h.swappedDoubled D).hermitian (h.swappedDoubled D).supported b₀
-      (h.swappedDoubled D).sum_norm_terms_containing_le hqq Q
+      (h.swappedDoubled D).sum_norm_terms_containing_le Q
       (isSupportedOn_of_mem_supportedOperators hW) ℓ hℓ t
     have hc : (Q.card : ℝ) ≤ (L : ℝ) := by
       have hcNat : Q.card ≤ L := by

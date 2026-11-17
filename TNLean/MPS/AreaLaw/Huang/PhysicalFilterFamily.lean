@@ -36,7 +36,7 @@ noncomputable def huangFilterApproximant {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
     (c Delta : ℝ) (j : Fin (huangEnergyCount c Delta L)) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  positiveChainGaussianApproximant hq h h0 (huangFilterVariance c Delta L)
+  positiveChainGaussianApproximant h h0 (huangFilterVariance c Delta L)
     (timeMeshNode L (huangEnergyMesh c Delta L) j) (huangFilterTime c Delta L)
     (huangFilterEta c L) (huangFilterEta c L)
 

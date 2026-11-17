@@ -154,7 +154,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
         siteExpectation q N (ManyBody.heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
     have hloc := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) h.term h.hermitian h.supported b₀
-      h.sum_norm_terms_containing_le hq Z hZ ℓ hℓ s
+      h.sum_norm_terms_containing_le Z hZ ℓ hℓ s
     refine hloc.trans (mul_le_mul_of_nonneg_left
       (Real.exp_mul_sub_le_exp_mul_sub hv hs)
       (by positivity))

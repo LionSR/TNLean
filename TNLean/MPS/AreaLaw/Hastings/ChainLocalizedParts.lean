@@ -153,7 +153,7 @@ theorem ChainHamiltonian.norm_gaussianFilteredTerm_sub_localized_le_of_commutato
     intro s hs
     have hlr := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) h.term h.hermitian h.supported _
-      h.sum_norm_terms_containing_le hq S hA ℓ hℓ s
+      h.sum_norm_terms_containing_le S hA ℓ hℓ s
     have hsT : |s| ≤ T := abs_le.mpr hs
     have hcard : (S.card : ℝ) ^ 2 ≤ (n : ℝ) ^ 2 :=
       pow_le_pow_left₀ (Nat.cast_nonneg _) (by exact_mod_cast hSn) 2

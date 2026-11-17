@@ -27,11 +27,11 @@ namespace TNLean.MPS.AreaLaw
 /-- **The physical chain propagator.** The grid propagator at the Lieb--Robinson radius of
 the time window and accuracy, with grid width `2r + 2`. Huang, arXiv:1406.6355v6,
 Section 5.4, Lemma 19. -/
-noncomputable def physicalChainPropagator {L q : ℕ} (hq : 1 ≤ q)
+noncomputable def physicalChainPropagator {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hHerm : ∀ i, (h i).IsHermitian) (T epsilon : ℝ) (t : ℝ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  chainGridPropagator (w := 2 * chainPropagationRadius L T epsilon + 2) hq (by omega)
+  chainGridPropagator (w := 2 * chainPropagationRadius L T epsilon + 2) (by omega)
     (chainPropagationRadius L T epsilon) h hHerm t
 
 /-- The physical chain propagator approximates the evolution within the time window at
@@ -43,7 +43,7 @@ theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
-    let K := physicalChainPropagator hq h hHerm T epsilon
+    let K := physicalChainPropagator h hHerm T epsilon
     (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
@@ -86,16 +86,16 @@ theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
-  ⟨physicalChainPropagator hq h hHerm T epsilon,
+  ⟨physicalChainPropagator h hHerm T epsilon,
     physicalChainPropagator_spec hq h hs hHerm hnorm hT hepsilon⟩
 
 /-- **The propagator of a positive chain**: the physical chain propagator, with
 Hermiticity of the terms derived from positivity. Huang, arXiv:1406.6355v6, Section 2
 and Section 5.4, Lemma 19. -/
-noncomputable def positiveChainPropagator {L q : ℕ} (hq : 1 ≤ q)
+noncomputable def positiveChainPropagator {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
     (T epsilon : ℝ) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  physicalChainPropagator hq h (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
+  physicalChainPropagator h (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
     T epsilon t
 
 /-- The propagation conclusion for the original positive-contraction interactions,
@@ -107,7 +107,7 @@ theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
-    let K := positiveChainPropagator hq h h0 T epsilon
+    let K := positiveChainPropagator h h0 T epsilon
     (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
@@ -130,7 +130,7 @@ theorem exists_positive_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
-  ⟨positiveChainPropagator hq h h0 T epsilon,
+  ⟨positiveChainPropagator h h0 T epsilon,
     positiveChainPropagator_spec hq h hs h0 h1 hT hepsilon⟩
 
 end TNLean.MPS.AreaLaw

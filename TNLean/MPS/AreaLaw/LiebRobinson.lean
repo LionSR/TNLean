@@ -216,7 +216,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin L,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
-    (_hq : 1 ≤ q) (S : Finset (Fin L))
+    (S : Finset (Fin L))
     {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
@@ -279,7 +279,7 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin Λ.card,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
-    (_hq : 1 ≤ q) (S : Finset (Fin Λ.card))
+    (S : Finset (Fin Λ.card))
     {A : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
     (ℓ : ℝ) (t : ℝ) :

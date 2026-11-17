@@ -104,7 +104,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
           (fun X : DomainSupport Λ R ↦ X) (h.swappedDoubled D).term
           (h.swappedDoubled D).hermitian (h.swappedDoubled D).supported b₀
-          (h.swappedDoubled D).sum_norm_terms_containing_le hqq Q
+          (h.swappedDoubled D).sum_norm_terms_containing_le Q
           (isSupportedOn_of_mem_supportedOperators hW) (m : ℝ) t
     have hc : (Q.card : ℝ) ≤ (Λ.card : ℝ) := by
       have hcNat : Q.card ≤ Λ.card := by

@@ -81,7 +81,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
           a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - ℓ / 2) := by
     exact norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) g.term g.hermitian g.supported b₀
-      g.sum_norm_terms_containing_le hqq S hA ℓ hℓ t
+      g.sum_norm_terms_containing_le S hA ℓ hℓ t
   have hcommon (S : Finset (Fin L)) (hS : S ⊆ Z)
       (A : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :

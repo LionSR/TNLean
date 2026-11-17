@@ -54,13 +54,13 @@ noncomputable def positiveChainGaussianSampleCount {L q : ℕ}
 time mesh, of the phase-shifted positive-chain propagators at the mesh nodes: an
 approximation to the Gaussian filter `exp(-variance (H - E)² / 2)` with simultaneous
 cut-rank bounds. Huang, arXiv:1406.6355v6, Section 5.4, equation (22) and Lemma 19. -/
-noncomputable def positiveChainGaussianApproximant {L q : ℕ} (hq : 1 ≤ q)
+noncomputable def positiveChainGaussianApproximant {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
     (variance : ℝ≥0) (energy T eta rho : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   let delta := eta / (‖(∑ i, h i) - (energy : ℂ) • 1‖ + 1)
   ∑ j : Fin (timeMeshCount T delta), timeMeshWeight variance T delta j •
     (Complex.exp (((-energy * timeMeshNode T delta j : ℝ) : ℂ) * Complex.I) •
-      positiveChainPropagator hq h h0 T rho (-timeMeshNode T delta j))
+      positiveChainPropagator h h0 T rho (-timeMeshNode T delta j))
 
 /-- The Gaussian approximant has at least one and at most polynomially many nodes,
 approximates the Gaussian filter to accuracy `2 exp(-T²/(2 variance)) + eta + rho`, and
@@ -75,7 +75,7 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     let H := ∑ i, h i
     let r := chainPropagationRadius L T rho
     let N := positiveChainGaussianSampleCount h energy T eta
-    let Q := positiveChainGaussianApproximant hq h h0 variance energy T eta rho
+    let Q := positiveChainGaussianApproximant h h0 variance energy T eta rho
     1 ≤ N ∧ (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 ∧
       ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
         2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
@@ -124,7 +124,7 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
         push_cast
         ring
   obtain ⟨hKerror, hKrank⟩ := positiveChainPropagator_spec hq h hs h0 h1 hT hrho
-  let K := positiveChainPropagator hq h h0 T rho
+  let K := positiveChainPropagator h h0 T rho
   have hQdef : Q = ∑ j : Fin N, weights j • (phase (times j) • K (-times j)) := rfl
   have hsamples (j : Fin N) :
       ‖hermitianUnitaryPath Hcenter (times j) - phase (times j) • K (-times j)‖ ≤ rho := by
@@ -176,7 +176,7 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
         (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) Q) ≤
           N * q ^ (8 * r + 8) :=
   ⟨positiveChainGaussianSampleCount h energy T eta,
-    positiveChainGaussianApproximant hq h h0 variance energy T eta rho,
+    positiveChainGaussianApproximant h h0 variance energy T eta rho,
     positiveChainGaussianApproximant_spec hq h hs h0 h1 variance energy hT heta hrho⟩
 
 end TNLean.MPS.AreaLaw
