@@ -37,7 +37,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
         (n := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
         (T i) (AreaLaw.nearestNeighborSupport i)) ∧
       (∀ i, (T i).IsHermitian) ∧ (∀ i, ‖T i‖ ≤ J) ∧
-      (∑ i, T i) = ((h.toAreaLawHamiltonian hhJ) hhJ).operator := by
+      (∑ i, T i) = (h.toAreaLawHamiltonian hhJ).operator := by
   let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
     (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
   let cfg := AreaLaw.rectangleConfigurationEquiv L L q
@@ -45,14 +45,14 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
   · intro i
     have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
       (AreaLaw.rectangleSiteEquiv L L).injective
-      ((QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.hermitianPart.mem (e.symm i))))
+      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.hermitianPart.mem (e.symm i)))
     rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
     have hi : (AreaLaw.rectangleAreaLawSupport L L (e.symm i)).val =
         AreaLaw.nearestNeighborSupport i := by
       simpa only [e, Equiv.apply_symm_apply] using
-        squareAreaLawSupport_val_eq_nearestNeighborSupport L (e.symm i)
+        rectangleAreaLawSupport_val_eq_nearestNeighborSupport L (e.symm i)
     apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    simpa only [← hi, cfg, squareAreaLawSupport, Finset.coe_image] using hs
+    simpa only [← hi, cfg, AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
   · exact fun i ↦ (h.isHermitian_hermitianPart_term (e.symm i)).reindex cfg
   · exact fun i ↦ (Matrix.l2_opNorm_reindex_equiv cfg (h.hermitianPart.term (e.symm i))).le.trans
       (((h.norm_hermitianPart_term_le (e.symm i)).trans (hhJ (e.symm i))))
@@ -63,6 +63,6 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
         (map_sum (Matrix.reindexAlgEquiv ℂ ℂ cfg) h.hermitianPart.term Finset.univ).symm
       _ = Matrix.reindex cfg cfg h.hamiltonian :=
         congrArg (Matrix.reindex cfg cfg) (h.hamiltonian_hermitianPart hh)
-      _ = _ := h.toAreaLawHamiltonian_operator hhJ hh.symm
+      _ = _ := (h.toAreaLawHamiltonian_operator hhJ hh).symm
 
 end TNLean.PEPS.Approximation

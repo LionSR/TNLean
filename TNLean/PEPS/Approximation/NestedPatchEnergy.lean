@@ -73,7 +73,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
       let φ : Lattice.StateSpace Λ q := U
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ x)
-      (inner ℂ φ (Matrix.toEuclideanLin ((h.toAreaLawHamiltonian hhJ) hhJ).operator φ)).re - E₀ ≤
+      (inner ℂ φ (Matrix.toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
   intro Λ m regions a U Ωᵤ x hx hmin φ
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)

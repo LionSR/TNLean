@@ -68,7 +68,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
           (squareLatticeSiteOrEdgeSupport i : Set (Vertex L)) :=
     TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
       (squareLatticeSiteOrEdgeSupport i)
-          ((QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.hermitianPart.mem i)))
+          (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.hermitianPart.mem i))
   have hFn : ‖F‖ ≤ 1 :=
     (Matrix.l2_opNorm_reindex_equiv p (TNLean.Lattice.sheetSwapOp q R)).le.trans
       (TNLean.Lattice.norm_sheetSwapOp_le_one R)
@@ -132,7 +132,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
         (AreaLaw.rectangleSiteEquiv L L).injective (hBsupport i)
       rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
-      simpa only [squareAreaLawSupport, Finset.coe_image] using hs
+      simpa only [AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
       exact Submodule.zero_mem _
   · intro X
