@@ -96,13 +96,14 @@ theorem norm_commutator_gaussianFilteredTerm_le_mass (q ΔE : ℝ) {H : Matrix n
 /-- **Localization of a filtered term by partial trace.** If the normalized partial trace onto
 `K` approximates `W(t)` within `ε` for all `|t| ≤ T`, then it approximates `W_tilde` within `ε` plus
 `2 ‖W‖` times the Gaussian mass of the complement of `[-T, T]`. The approximant
-`ManyBody.regionExpectation K W_tilde` acts on `K` (`siteExpectation_mem_supportedOperators`) and has norm at
-most `‖W‖` (`norm_siteExpectation_le`, `norm_gaussianFilteredTerm_le`).
+`ManyBody.regionExpectation K W_tilde` acts on `K`
+(`ManyBody.regionExpectation_mem_supportedOperators`) and has norm at most `‖W‖`
+(`ManyBody.norm_regionExpectation_le`, `norm_gaussianFilteredTerm_le`).
 
 This replaces the truncated dynamics of Hastings' `M_i`, arXiv:cond-mat/0508554v3, eqs. `mid`,
 `odef` (lines 285–320) and eq. `truncb` (lines 1507–1522), by the partial trace. -/
 theorem norm_sub_regionExpectation_gaussianFilteredTerm_le_mass {ι : Type*} [Fintype ι]
-    [DecidableEq ι] {d : ℕ} [NeZero d] (q ΔE : ℝ) {H : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    [DecidableEq ι] {d : ℕ} (q ΔE : ℝ) {H : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hH : H.IsHermitian) (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) (K : Finset ι) {T ε : ℝ}
     (hε : 0 ≤ ε)
     (hloc : ∀ t ∈ Set.Icc (-T) T,
@@ -112,7 +113,8 @@ theorem norm_sub_regionExpectation_gaussianFilteredTerm_le_mass {ι : Type*} [Fi
     ‖gaussianFilteredTerm q ΔE H W -
         ManyBody.regionExpectation K (gaussianFilteredTerm q ΔE H W)‖ ≤
       ε + 2 * ‖W‖ * (gaussianReal 0 (q / ΔE ^ 2).toNNReal).real (Set.Icc (-T) T)ᶜ := by
-  set L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
+  set L := ContinuousLinearMap.id ℂ _ -
+    ManyBody.regionExpectationCLM (X := fun _ : ι ↦ Fin d) K
   have hL : ∀ M, L M = M - ManyBody.regionExpectation K M := fun _ => rfl
   have := norm_map_gaussianFilteredTerm_le_mass q ΔE hH W L hε (C := 2 * ‖W‖)
     (by simpa only [hL] using hloc) fun t => by

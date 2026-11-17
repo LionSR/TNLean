@@ -47,7 +47,7 @@ open scoped Matrix.Norms.L2Operator NNReal
 
 namespace TNLean.Lattice
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ℕ} [NeZero d]
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ℕ}
 
 /-- **Localizing the change made by the filter.** Suppose the evolved commutator
 `C(s) = τ_s(i[H, W])` is within `ε` of its partial trace onto `K` for `|s| ≤ T`. Then
@@ -73,7 +73,8 @@ theorem norm_gaussianFilteredTerm_sub_localized_le_mass (q ΔE : ℝ)
   set c := ‖H * W - W * H‖
   set f : ℝ → Matrix (ι → Fin d) (ι → Fin d) ℂ := fun t =>
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) - W
-  set L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
+  set L := ContinuousLinearMap.id ℂ _ -
+    ManyBody.regionExpectationCLM (X := fun _ : ι ↦ Fin d) K
   have hL : ∀ M, L M = M - ManyBody.regionExpectation K M := fun _ => rfl
   have hint0 := integrable_intertwinerIntegrand (q / ΔE ^ 2).toNNReal hH hH W
   have hint : Integrable f μ := hint0.sub (integrable_const W)

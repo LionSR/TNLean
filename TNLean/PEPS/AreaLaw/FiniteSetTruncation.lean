@@ -122,7 +122,7 @@ lines 457–478). Suppose the constraints satisfy `‖kᵢ - E_{N_l(aᵢ)} kᵢ�
 graph ball of radius `d` has at most `K_b (d + 1)²` sites, every site anchors at most `μ`
 labels, and the shell series is bounded by `A e^{-(c/2) r₀^α}`. Then the truncated sum
 differs from `∑ᵢ kᵢ` by at most `C μ K_b |S₀| A e^{-(c/2) r₀^α}`. -/
-theorem norm_sum_truncatedConstraint_sub_le {q : ℕ} [NeZero q] {κ : Type*} [Fintype κ]
+theorem norm_sum_truncatedConstraint_sub_le {q : ℕ} {κ : Type*} [Fintype κ]
     (G : SimpleGraph ι) (S₀ : Finset ι) (a : κ → ι)
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) {C c α Kb μ A : ℝ} (hC : 0 ≤ C)
     (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ)

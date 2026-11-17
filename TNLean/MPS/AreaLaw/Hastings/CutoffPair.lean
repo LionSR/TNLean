@@ -72,7 +72,7 @@ noncomputable def partLocalizationError (R : ℕ) (J s ΔE T k : ℝ) : ℝ :=
 /-- The centered localized part `M = W + E_K(W_tilde - W)` of a part `P` of the Hamiltonian,
 with `W = P - ⟨Ω, P Ω⟩` and `W_tilde` its Gaussian filter of variance `s / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 779–828. -/
-noncomputable def ChainHamiltonian.localizedPart [NeZero q] (h : ChainHamiltonian L q R J)
+noncomputable def ChainHamiltonian.localizedPart (h : ChainHamiltonian L q R J)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (s ΔE : ℝ) (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (K : Finset (Fin L)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   groundCentered Ω P +
@@ -91,10 +91,9 @@ theorem chainNeighborhood_interval_subset (a b k : ℕ) :
 
 section Localized
 
-variable [NeZero q] (h : ChainHamiltonian L q R J) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+variable (h : ChainHamiltonian L q R J) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
   (s ΔE : ℝ)
 
-omit [NeZero q] in
 /-- Centering does not change `W_tilde - W`. -/
 theorem ChainHamiltonian.gaussianFilteredTerm_groundCentered_sub
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
@@ -134,7 +133,6 @@ theorem ChainHamiltonian.isSupportedOn_localizedPart
   · exact supportedOperators_mono (by simp) ((mem_supportedOperators_of_isSupportedOn
       (ManyBody.regionExpectation_mem_supportedOperators K _)))
 
-omit [NeZero q] in
 /-- The centered part of `0` is `0`. -/
 theorem groundCentered_zero :
     groundCentered Ω (0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) = 0 := by
@@ -183,7 +181,6 @@ theorem ChainHamiltonian.isSupportedOn_localizedPart_rightPart {c m k : ℕ} (hm
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
 
-omit [NeZero q] in
 /-- Centering does not change the commutator with `H`. -/
 theorem ChainHamiltonian.commutator_groundCentered (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
     h.operator * groundCentered Ω P - groundCentered Ω P * h.operator =
@@ -224,7 +221,6 @@ theorem ChainHamiltonian.norm_localizedPart_apply_le {E₀ : ℝ}
   exact (norm_sub_le _ _).trans (add_le_add hG hR)
 
 end Localized
-
 
 /-! ### The cut-offs -/
 

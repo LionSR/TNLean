@@ -81,18 +81,19 @@ theorem norm_spectatorRootChannel_le {k : Matrix (ι → Fin q) (ι → Fin q) �
 
 /-- The actual local root channel is contractive, uniformly in the spectator dimension
 (`09-amplification.tex`, lines 101–107). -/
-theorem norm_localRootChannel_le [NeZero q] (K : Finset ι)
+theorem norm_localRootChannel_le (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannel K k B‖ ≤ ‖B‖ :=
-  norm_spectatorRootChannel_le ((Matrix.nonneg_iff_posSemidef.mpr
-      (ManyBody.posSemidef_regionExpectation (D := K) (Matrix.nonneg_iff_posSemidef.mp
-          hk₀)))) (((ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq ManyBody.regionExpectation_one)) B
+  norm_spectatorRootChannel_le
+    (Matrix.nonneg_iff_posSemidef.mpr
+      (ManyBody.posSemidef_regionExpectation (Matrix.nonneg_iff_posSemidef.mp hk₀)))
+    ((ManyBody.regionExpectation_mono hk₁).trans_eq ManyBody.regionExpectation_one) B
 
 /-- The actual error `‖k - E_K(k)‖ ≤ ε` gives the completely bounded root-channel
 estimate `4 sqrt ε`, expressed for every spectator system and every observable
 (`03-quasilocal.tex`, `eq:quasilocal-channel-tail`, lines 365–368). -/
-theorem norm_spectatorRootChannel_sub_localRootChannel_le [NeZero q] (K : Finset ι)
+theorem norm_spectatorRootChannel_sub_localRootChannel_le (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) {ε : ℝ}
     (hε : ‖k - ManyBody.regionExpectation K k‖ ≤ ε)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
@@ -122,7 +123,7 @@ theorem norm_spectatorRootChannel_sub_localRootChannel_le [NeZero q] (K : Finset
 
 /-- The local channel fixes the commutant of all physical operators on `K`, also for
 observables acting on spectators (`09-amplification.tex`, lines 107–110 and 120). -/
-theorem localRootChannel_eq_self_of_forall_commute [NeZero q] (K : Finset ι)
+theorem localRootChannel_eq_self_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
     (hB : ∀ A ∈ supportedOperators q (K : Set ι),
@@ -143,7 +144,7 @@ theorem localRootChannel_eq_self_of_forall_commute [NeZero q] (K : Finset ι)
 
 /-- The local channel intertwines commutators with any operator in the physical
 regional commutant, with spectators (`09-amplification.tex`, lines 122–127). -/
-theorem localRootChannel_commutator_of_forall_commute [NeZero q] (K : Finset ι)
+theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {A : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
     (hA : ∀ C ∈ supportedOperators q (K : Set ι),

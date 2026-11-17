@@ -43,7 +43,7 @@ namespace TNLean.PEPS.AreaLaw
 open QuantumCircuit
 
 /-- Each truncated constraint is a positive contraction (`03-quasilocal.tex`, line 426). -/
-theorem truncatedConstraint_mem_Icc {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι]
+theorem truncatedConstraint_mem_Icc {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
     (G : SimpleGraph ι) (S₀ : Finset ι) (r₀ : ℕ) (a : ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) :
     0 ≤ truncatedConstraint q G S₀ r₀ a k ∧ truncatedConstraint q G S₀ r₀ a k ≤ 1 := by

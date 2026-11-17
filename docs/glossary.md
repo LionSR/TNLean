@@ -2362,33 +2362,29 @@ in `MPS/Preparation/` uses it.
   budget `μ_R J`, and `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` is
   the resulting Lemma 4.1 of the area-law manuscript.
 
-#### `QuantumCircuit.siteExpectation`
+#### `ManyBody.regionExpectation`
 
 - **Declaration:**
-  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
-  with the linear map `QuantumCircuit.siteExpectationLM`.
-- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+  `ManyBody.regionExpectation (D : Finset V) (A : Matrix (Config X) (Config X) ℂ)`,
+  with the linear map `ManyBody.regionExpectationLM`; QICLean,
+  `QICLean/ManyBody/Sites/RegionExpectation.lean`. TNLean uses it at
+  `X := fun _ ↦ Fin q`; the former `QuantumCircuit.siteExpectation` was deleted in
+  follow-up F12 of `docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md`.
 - **Meaning:** the normalized partial trace
-  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  `E_K(B) = |X_{V∖K}|⁻¹ Tr_{V∖K}(B) ⊗ 1`, with the factors at their
   original sites.
 - **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
   `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
-- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
-  average over products of on-site Weyl operators outside `K`),
-  `siteExpectation_mem_supportedOperators`,
-  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
-  `norm_siteExpectation_le`, `ManyBody.regionExpectationLM_isKrausCPTP`,
-  `norm_sub_siteExpectation_le` (error through on-site commutators), and
-  `ManyBody.norm_heisenberg_sub_regionExpectation_graphBall_le` (localization of the
-  dynamics onto graph balls under a sphere-growth hypothesis).
-- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+- **Sanctioned bridges:** none in TNLean. The spectator form
+  `QuantumCircuit.spectatorSiteExpectation` is the region expectation of the
+  system with one extra site carrying the spectator, by definition.
 
 #### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
   constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
   from QICLean and their ball expectations
-  `QuantumCircuit.siteExpectation q (ManyBody.graphBall G aᵢ l) kᵢ`.
+  `ManyBody.regionExpectation (ManyBody.graphBall G aᵢ l) kᵢ`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
   Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and

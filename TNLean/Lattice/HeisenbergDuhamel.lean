@@ -67,7 +67,7 @@ normalized partial-trace expectation onto `K`, then so is the increment
 Use site: Hastings, arXiv:0705.2024v4, appendix, `law16.tex` lines 816–828
 ("Using the Lieb-Robinson bound ... approximate \tilde H_L^0 ... by M_L"). -/
 theorem norm_conj_sub_sub_regionExpectation_le {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {d : ℕ} [NeZero d] {H A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    {d : ℕ} {H A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (K : Finset ι) {t ε : ℝ}
     (hloc : ∀ s ∈ Set.uIcc 0 t,
       ‖hermitianUnitaryPath H s * (Complex.I • (H * A - A * H)) * hermitianUnitaryPath H (-s) -
@@ -77,7 +77,8 @@ theorem norm_conj_sub_sub_regionExpectation_le {ι : Type*} [Fintype ι] [Decida
     ‖(hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t) - A) -
         ManyBody.regionExpectation K
           (hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t) - A)‖ ≤ ε * |t| := by
-  let L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
+  let L := ContinuousLinearMap.id ℂ _ -
+    ManyBody.regionExpectationCLM (X := fun _ : ι ↦ Fin d) K
   have hL (B : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
       L B = B - ManyBody.regionExpectation K B := rfl
   have hcont : Continuous (fun s : ℝ => hermitianUnitaryPath H s *

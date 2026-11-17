@@ -52,7 +52,7 @@ private theorem hermitianUnitaryPath_fin_sum_of_commute
 /-- The exponential path of an operator supported on a region stays in its supported
 operator algebra. This supplies the block factors in Osborne, Figure 2. -/
 theorem hermitianUnitaryPath_mem_supported
-    {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ) [NeZero q] (S : Finset ι)
+    {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ) (S : Finset ι)
     {H : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hH : H ∈ supportedOperators q (S : Set ι)) (t : ℝ) :
     hermitianUnitaryPath H t ∈ supportedOperators q (S : Set ι) := by

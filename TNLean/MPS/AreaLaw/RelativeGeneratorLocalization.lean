@@ -93,13 +93,9 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
       intro y hy
       obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hy).2
       exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hS hx, hxy⟩
-    exact ((ManyBody.norm_sub_regionExpectation_le_two_mul_norm_sub B (ManyBody.heisenbergEvolution
-        K' t A) (ManyBody.regionExpectation N
-          (ManyBody.heisenbergEvolution K' t
-              A)) (isSupportedOn_of_mem_supportedOperators (supportedOperators_mono (Finset.coe_subset.mpr hNB)
-        ((mem_supportedOperators_of_isSupportedOn
-            (ManyBody.regionExpectation_mem_supportedOperators N (ManyBody.heisenbergEvolution K' t
-                A)))))))).trans
+    exact (ManyBody.norm_sub_regionExpectation_le_two_mul_norm_sub B _ _
+        (ManyBody.supportedOperators_mono hNB
+          (ManyBody.regionExpectation_mem_supportedOperators N _))).trans
           (mul_le_mul_of_nonneg_left (hloc S A hA) (by norm_num))
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)

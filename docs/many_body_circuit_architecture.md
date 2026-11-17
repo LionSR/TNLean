@@ -220,8 +220,9 @@ introduced were repaired by step 0.3, and the set is empty:
   `ProjectedRelativeEvolution`, `DisjointRelativeEvolution` and
   `SupportedGaussianIntegral`, which state results about that evolution, were
   dynamics modules; they and `Circuit/LiebRobinson` are now QICLean's
-  `ManyBody/Dynamics` (tracker #10718), and the one TNLean dynamics module left,
-  `Circuit/SiteExpectationGraphLocalization`, is listed as such in the checker;
+  `ManyBody/Dynamics` (tracker #10718); the one TNLean dynamics module left by
+  that move, `Circuit/SiteExpectationGraphLocalization`, was deleted with
+  `siteExpectation` in follow-up F12;
 - two modules of `Lattice/Sheet` imported `RegionSplit` and `RegionalSwap`,
   site notions that were kept among the Hamiltonian modules and are now
   modules of `TNLean/Circuit`.
@@ -354,7 +355,7 @@ other directories.
 - One placement of a regional matrix as `K ⊗ 1`, along a region or along an
   injection of sites; the nine constructions above become this one or
   specializations of it by definition.
-- One partial trace onto a region (`siteExpectation`), one product vector, one
+- One partial trace onto a region (`ManyBody.regionExpectation`), one product vector, one
   expectation.
 - Lieb–Robinson bounds for a family of supported Hermitian terms on a graph,
   moved unchanged.

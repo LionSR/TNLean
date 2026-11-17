@@ -37,7 +37,7 @@ open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 namespace TNLean.PEPS.AreaLaw
 
-variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] [NeZero q]
+variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
 /-- Component support makes every sufficiently large ball expectation exact.
@@ -47,7 +47,8 @@ theorem regionExpectation_graphBall_eq_of_component_support
     (hk : k ∈ supportedOperators q {x | G.Reachable a x})
     {n : ℕ} (hn : Finset.univ.sup (G.dist a) ≤ n) :
     ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k := by
-  apply siteExpectation_of_mem_supportedOperators
+  apply ManyBody.regionExpectation_of_mem_supportedOperators
+  apply isSupportedOn_of_mem_supportedOperators
   rwa [ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a hn]
 
 /-- The actual localization error vanishes beyond the component cutoff.
@@ -99,7 +100,7 @@ theorem localRootChannelShell_graphBall_succ_eq_zero_of_component_support
 contains the anchor's component. Only actual localization errors up to that
 finite cutoff are needed. Source: area law,
 `eq:amplification-oscillation-increment`, lines 124–139. -/
-theorem siteOscillation_spectatorRootChannel_le_of_component_support
+theorem siteOscillation_spectatorRootChannel_le_of_component_support [NeZero q]
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (hk : k ∈ supportedOperators q {x | G.Reachable a x})
@@ -118,7 +119,7 @@ theorem siteOscillation_spectatorRootChannel_le_of_component_support
 /-- A component-supported full channel cannot increase oscillation at a site
 in a different component. Source: area law,
 `09-amplification.tex`, lines 133–139. -/
-theorem siteOscillation_spectatorRootChannel_le_of_edist_eq_top
+theorem siteOscillation_spectatorRootChannel_le_of_edist_eq_top [NeZero q]
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (hk : k ∈ supportedOperators q {x | G.Reachable a x})

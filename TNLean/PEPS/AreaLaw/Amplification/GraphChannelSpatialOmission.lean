@@ -40,7 +40,7 @@ component: beyond the largest distance in the component the graph balls stop
 growing, while the tail tends to zero. Source: area law, `09-amplification.tex`,
 lines 135–137. -/
 theorem mem_supportedOperators_reachable_of_forall_tail
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     {C c α : ℝ} (hc : 0 < c) (hα : 0 < α)
     (hε : ∀ l : ℕ, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤

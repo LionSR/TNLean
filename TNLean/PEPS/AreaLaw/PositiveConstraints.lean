@@ -72,7 +72,7 @@ theorem commute_filterIntegral_of_forall_commute {p : ℕ} (hp : 1 ≤ p) {δ : 
 
 /-- **Exact component support** (Proposition 4.3, `03-quasilocal.tex`, lines 244–245 and
 330–334): each positive constraint acts on the connected component of its anchor. -/
-theorem positiveConstraint_mem_supportedOperators_component [NeZero q] {p : ℕ} (hp : 1 ≤ p)
+theorem positiveConstraint_mem_supportedOperators_component {p : ℕ} (hp : 1 ≤ p)
     {δ : ℝ} (hδ : 0 < δ) {κ : Type*} [Fintype κ]
     (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
     (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
@@ -118,7 +118,10 @@ theorem positiveConstraint_mem_supportedOperators_component [NeZero q] {p : ℕ}
   have hM : Commute (centeredFilter p δ H Ω (h i)) B :=
     hF.sub_left ((Commute.one_left B).smul_left _)
   have hMh := isHermitian_centeredFilter p δ hH Ω (hHerm i)
-  exact (hM.cfcAbs_of_isHermitian hMh).smul_left _
+  have hA : Commute (CFC.abs (centeredFilter p δ H Ω (h i))) B := by
+    rw [CFC.abs_eq_cfc_norm _ hMh.isSelfAdjoint]
+    exact hM.cfc_real _
+  exact hA.smul_left _
 
 /-- The prefactor of the graph-ball localization estimate, with `|K_g|` in place of `K_g`. -/
 noncomputable def localizationPrefactor (R : ℕ) (Kg : ℝ) (kg : ℕ) : ℝ :=
@@ -218,9 +221,8 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
       CFC.abs (ManyBody.regionExpectationLM K M) := by
     simp only [ManyBody.regionExpectationLM_apply]
     exact (ManyBody.regionExpectation_of_mem_supportedOperators (D := K)
-        (ManyBody.abs_mem_supportedOperators (isSupportedOn_of_mem_supportedOperators
-            ((mem_supportedOperators_of_isSupportedOn
-                (ManyBody.regionExpectation_mem_supportedOperators K M))))))
+        (ManyBody.abs_mem_supportedOperators
+          (ManyBody.regionExpectation_mem_supportedOperators K M)))
   have hloc : ∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h i *
         Matrix.hermitianUnitaryPath H (-t) - ManyBody.regionExpectationLM K
           (Matrix.hermitianUnitaryPath H t * h i * Matrix.hermitianUnitaryPath H (-t))‖ ≤
@@ -247,7 +249,8 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
     refine mul_le_mul ?_ hexp (Real.exp_pos _).le (localizationPrefactor_nonneg R Kg kg)
     simp only [CL, localizationPrefactor]
     gcongr
-  exact htail hH hΩ (hHerm i) (hJh i) (ManyBody.regionExpectationLM K) (norm_siteExpectation_le K)
+  exact htail hH hΩ (hHerm i) (hJh i) (ManyBody.regionExpectationLM K)
+    (fun B ↦ ManyBody.norm_regionExpectation_le B)
     ((ManyBody.regionExpectation_one (D := K))) (fun Y hY =>
         (ManyBody.isHermitian_regionExpectation (D := K) hY)) hfix
     (Nat.cast_nonneg l) hloc

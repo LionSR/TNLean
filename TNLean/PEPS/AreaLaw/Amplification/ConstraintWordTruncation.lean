@@ -257,10 +257,10 @@ theorem card_anchor_graphNeighborhood_le {R : ℕ} (a : AdmissibleSupport Λ R �
 /-- Every product of the radius-`r` local roots `(I - E_{N_r(a_i)} k_i)^{1/2}` over labels
 anchored in `N_r(S)` is supported on `N_{2r}(S)`.
 Source: area law, `09-amplification.tex`, lines 232–234. -/
-theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ} [NeZero q]
+theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ}
     {κ : Type*} (a : κ → Site Λ) {S : Finset (Site Λ)} {r : ℕ}
     (k : {i // a i ∈ graphNeighborhood Λ r S} →
-      Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hk₁ : ∀ i, k i ≤ 1) :
+      Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
     ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
       contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
           ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i))
@@ -271,11 +271,8 @@ theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ} [NeZe
     set K := ManyBody.graphBall (domainGraph Λ) (a i) r
     have hK : CFC.sqrt (1 - ManyBody.regionExpectation K (k i)) ∈
         supportedOperators q (K : Set (Site Λ)) :=
-      (mem_supportedOperators_of_isSupportedOn (ManyBody.sqrt_mem_supportedOperators
-          (isSupportedOn_of_mem_supportedOperators ((supportedOperators q (K : Set (Site
-              Λ))).sub_mem (one_mem_supportedOperators _)
-          ((mem_supportedOperators_of_isSupportedOn
-              (ManyBody.regionExpectation_mem_supportedOperators K (k i))))))))
+      mem_supportedOperators_of_isSupportedOn <| ManyBody.sqrt_mem_supportedOperators <|
+        sub_mem (one_mem _) (ManyBody.regionExpectation_mem_supportedOperators K (k i))
     exact supportedOperators_mono
       (by exact_mod_cast graphBall_subset_graphNeighborhood_two_mul i.2) hK
   intro m
@@ -341,7 +338,7 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
   obtain ⟨hint, hle⟩ := integrable_and_integral_norm_contractionWord_retained_sub_le P
     (fun i : {i // P i} => k i) kr (fun i => hk₀ i) hkr₀ hε t
   refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
-    contractionWord_regionExpectation_mem_supportedOperators a _ (fun i => hk₁ i) _ _⟩⟩
+    contractionWord_regionExpectation_mem_supportedOperators a _ _ _⟩⟩
   have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
     rw [Fintype.card_subtype]; exact card_filter_anchor_mem_graphNeighborhood_le a hμ hfiber S r
   have hε0 : 0 ≤ ε := by positivity

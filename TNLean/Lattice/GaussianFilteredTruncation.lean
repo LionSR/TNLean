@@ -215,24 +215,24 @@ theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (
   set c : ℝ := (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖A‖ *
     Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * |t| - μ * m)
   have hloc : ‖τA - ManyBody.regionExpectation Yᶜ τA‖ ≤ ∑ _y ∈ Yᶜᶜ, c :=
-    norm_sub_siteExpectation_le Yᶜ τA (fun _ => c) fun y hy U hU hUu => by
+    ManyBody.norm_sub_regionExpectation_le Yᶜ τA (fun _ => c) fun y hy U hU hUu => by
       have hyY : y ∈ Y := by simpa using hy
       let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
         ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
       have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm
         R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hA) y
-        (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton]))
+        hU
         μ hμ m (fun x hx => hm x hx y hyY) t
       rw [CStarRing.norm_of_mem_unitary hUu, mul_one] at hLR
       exact hLR
   rw [compl_compl, Finset.sum_const, nsmul_eq_mul] at hloc
   have hcomm : Commute B (ManyBody.regionExpectation Yᶜ τA) :=
     commute_of_mem_supportedOperators (by simp [Finset.coe_compl, disjoint_compl_right]) hB
-      ((mem_supportedOperators_of_isSupportedOn (ManyBody.regionExpectation_mem_supportedOperators
-          _ _)))
+      (mem_supportedOperators_of_isSupportedOn
+        (ManyBody.regionExpectation_mem_supportedOperators _ _))
   have hsplit : B * τA - τA * B =
-      B * (τA - ManyBody.regionExpectation Yᶜ τA) - (τA - ManyBody.regionExpectation Yᶜ
-          τA) * B := by
+      B * (τA - ManyBody.regionExpectation Yᶜ τA) -
+        (τA - ManyBody.regionExpectation Yᶜ τA) * B := by
     rw [Matrix.mul_sub, Matrix.sub_mul, hcomm.eq]
     abel
   rw [hsplit]

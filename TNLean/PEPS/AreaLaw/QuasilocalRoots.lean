@@ -58,7 +58,7 @@ both root channels are unital, and for every finite auxiliary system they are po
 contractive on the extended algebra, with
 `‖(ℰ - ℰ_l) ⊗ id‖ ≤ 4 √ε` (`eq:quasilocal-channel-tail`); and `ℰ_l` fixes every operator
 commuting with all operators acting on `K`. -/
-theorem quasilocalRoots [NeZero q] (K : Finset ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+theorem quasilocalRoots (K : Finset ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) {Ω : (ι → Fin q) → ℂ} (hkΩ : k *ᵥ Ω = 0) {ε : ℝ}
     (hε : ‖k - ManyBody.regionExpectation K k‖ ≤ ε) :
     let kl := ManyBody.regionExpectation K k

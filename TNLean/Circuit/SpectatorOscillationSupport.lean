@@ -35,11 +35,10 @@ namespace QuantumCircuit
 variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
-omit [Fintype Aux] [DecidableEq Aux] in
 /-- A spectator operator is fixed by the native site expectation precisely
 when each physical matrix block is supported on the retained sites.
 Source: area law, `09-amplification.tex`, lines 114–121 and 173. -/
-theorem spectatorSiteExpectation_eq_self_iff [NeZero q] (K : Finset ι)
+theorem spectatorSiteExpectation_eq_self_iff (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     spectatorSiteExpectation q K B = B ↔
       ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
@@ -49,21 +48,21 @@ theorem spectatorSiteExpectation_eq_self_iff [NeZero q] (K : Finset ι)
     have hblock : ManyBody.regionExpectation K (Matrix.of fun σ τ => B (σ, a) (τ, b)) =
         Matrix.of fun σ τ => B (σ, a) (τ, b) := by
       ext σ τ
-      exact congrArg (fun M => M (σ, a) (τ, b)) h
+      rw [← spectatorSiteExpectation_apply, h]
+      rfl
     rw [← hblock]
     exact (mem_supportedOperators_of_isSupportedOn
         (ManyBody.regionExpectation_mem_supportedOperators K _))
   · intro h
     ext ⟨σ, a⟩ ⟨τ, b⟩
-    change ManyBody.regionExpectation K (Matrix.of fun σ' τ' => B (σ', a) (τ', b)) σ τ = _
-    rw [(ManyBody.regionExpectation_of_mem_supportedOperators (D := K)
-        (isSupportedOn_of_mem_supportedOperators (h a b)))]
+    rw [spectatorSiteExpectation_apply, ManyBody.regionExpectation_of_mem_supportedOperators
+      (isSupportedOn_of_mem_supportedOperators (h a b))]
     rfl
 
 /-- A supported operator, with an arbitrary finite spectator, has zero
 oscillation at any physical site outside its support. Source: area law,
 `09-amplification.tex`, lines 109–121 and the initial estimate at line 173. -/
-theorem siteOscillation_eq_zero_of_not_mem_support [NeZero q] (K : Finset ι)
+theorem siteOscillation_eq_zero_of_not_mem_support (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     (hB : ∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
       supportedOperators q (K : Set ι)) {y : ι} (hy : y ∉ K) :

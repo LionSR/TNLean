@@ -105,7 +105,7 @@ theorem isSupportedOn_localized_sub_self (K : Finset ι)
 
 /-- The localized operator `M = W + E_K(W_tilde - W)` of a Hermitian `W` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
-theorem isHermitian_localized [NeZero d] (q' ΔE : ℝ) {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+theorem isHermitian_localized (q' ΔE : ℝ) {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hH : H.IsHermitian) (hW : W.IsHermitian) (K : Finset ι) :
     (W + ManyBody.regionExpectation K (gaussianFilteredTerm q' ΔE H W - W)).IsHermitian := by
   exact hW.add ((ManyBody.isHermitian_regionExpectation (D := K) ((isHermitian_gaussianFilteredTerm
