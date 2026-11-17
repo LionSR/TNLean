@@ -578,7 +578,8 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_mul_e
     T₂'.u_unitary hU₁ hU₂' hdU
   obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq f T₁.v_unitary
     T₂'.v_unitary hV₁ hV₂' hdV
-  exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂ γu γv γu.continuous
+  exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂
+    γu γv γu.continuous
     γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
     (by rw [γu.source, γv.source]; exact T₁) (by rw [γu.target, γv.target]; exact T₂')
     (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
@@ -648,7 +649,8 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_eq_of
       S₂.u_unitary hu₁ hu₂ hu
     obtain ⟨γv, hγv⟩ := Matrix.IsUnitaryBetween.joinedIn_real_of_det_eq f S₁.v_unitary
       S₂.v_unitary hv₁ hv₂ hv
-    exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂ γu γv γu.continuous
+    exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂
+      γu γv γu.continuous
       γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
       (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
       (fun p ↦ exists_local_conjugation_of_real (hγu p).2 (hγv p).2)
@@ -670,7 +672,8 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_det_eq_of
       simp only [x, y, hstar]
       ext i j
       simp [Matrix.kroneckerMap_apply]
-    exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂ γu γv γu.continuous
+    exact strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path eP hcf₁ hcf₂
+      γu γv γu.continuous
       γv.continuous (fun p ↦ (hγu p).1) (fun p ↦ (hγv p).1)
       (by rw [γu.source, γv.source]; exact S₁) (by rw [γu.target, γv.target]; exact S₂)
       (fun p ↦ ⟨x, y, (hγu p).2, by rw [hyx]; exact (hγv p).2⟩)
