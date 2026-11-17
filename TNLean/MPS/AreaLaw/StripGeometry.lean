@@ -132,7 +132,8 @@ theorem crossingSupport_meets_stripBand {L w R a b : ℕ}
       (stripInterval L w a b)) :
     ∃ x ∈ stripInterval L w a (a + R) ∪ stripInterval L w (b - R) b, x ∈ X.1 := by
   classical
-  obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := (Finset.mem_filter.mp hX).2
+  simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+  obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := hX
   have hxy := stripColumn_le_add_range X hx hy
   have hyx := stripColumn_le_add_range X hy hx
   refine ⟨x, ?_, hx⟩
@@ -235,7 +236,8 @@ theorem card_crossingTerms_stripPrefix_le {L w R c : ℕ}
       (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A ⊆
       band.biUnion (fun v ↦ Finset.univ.filter fun X ↦ v ∈ X.1) := by
     intro X hX
-    obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := (Finset.mem_filter.mp hX).2
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+    obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := hX
     have hxcol := mem_stripInterval.mp (hright hxA)
     have hycol : c ≤ stripColumn y := by
       by_contra hn
