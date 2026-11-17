@@ -1163,7 +1163,8 @@
         v_{23}(u\otimes u) & =\sigma(x\otimes x^\dagger)v_{23}^\dagger.
     \end{align}
     Conversely, these derived-rank and local-equation conditions imply
-    $W^{(N)}=W^{(N)\dagger}$ at every even $N>1$.
+    $W^{(N)}=W^{(N)\dagger}$ at every even $N>1$; this direction needs no
+    canonical form (Lemma~\ref{lem:mpu_local_time_reversal_certificate}).
     Thus the two conditions are equivalent. No normalization of the supplied
     half factors is assumed. Every standard form in the sense of
     \cite[Definition~III.9]{Cirac2017MPU} is of this kind, because the source
@@ -1189,6 +1190,51 @@
     For the converse, the inverse comparison gives a normalized source
     certificate with unitary $z=XxY^\dagger$. Its actual even-ring
     contraction yields the asserted periodic adjoint symmetry.
+\end{proof}
+
+\begin{lemma}[Local certificate for time reversal without canonical form]
+    \label{lem:mpu_local_time_reversal_certificate}
+    \lean{MPOTensor.twoSiteCircuit_conjTranspose,
+        MPOTensor.mpo_blockTwo_submatrix_shifted,
+        MPOTensor.adjoint_gate_gauges_of_local_sign,
+        MPOTensor.TwoSiteStandardFormData.mpo_blockTwo_eq_conjTranspose_of_local_sign,
+        MPOTensor.mpo_even_eq_conjTranspose_of_blockTwo,
+        MPOTensor.doubledU_eq_reindex_staircase,
+        MPOTensor.doubledV_eq_reindex_staircase,
+        MPOTensor.mpo_standardFormTensorOfGates_even_eq_adjoint_of_timeReversal_certificate}
+    \leanok
+    \discussion{10781}
+    \uses{PropChiral, def:mpu_tensor_from_two_gates, thm:mpu_supplied_two_site_periodic_circuit}
+    Let $V$ be a tensor whose two-site block has a standard form with gates
+    $A,B$ of equal intermediate dimensions $q$, and suppose
+    \begin{align}
+        A & =\sigma(x\otimes x^\dagger)B^\dagger
+    \end{align}
+    for a unitary $x$ and $\sigma\in\{1,-1\}$. Then the operators of the
+    two-site block of $V$ are self-adjoint on every ring, so the operators of
+    $V$ are self-adjoint on every ring of an even number of sites. No canonical
+    form of $V$ is assumed. In particular, if square unitary gates $u,v$ satisfy
+    \begin{align}
+        v_{23}(u\otimes u) & =\sigma(x\otimes x^\dagger)v_{23}^\dagger,
+    \end{align}
+    then the tensor in standard form built from $u$ and $v$ generates
+    self-adjoint operators on every ring of an even number of standard-form
+    sites.
+    % Source lines: paper_v2.tex 1214--1236.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit}
+    The operator of the two-site block on $N$ sites is the circuit
+    $C(A,B)$ of the unshifted layer of $A$ followed by the shifted layer of
+    $B$. Its adjoint is the circuit $C(B^\dagger,A^\dagger)$ read on the chain
+    translated by one site of $V$. The local equation gives unitaries $X,Y$ with
+    $B^\dagger=(X\otimes Y)A$ and $A^\dagger=B(Y^\dagger\otimes X^\dagger)$, a
+    gauge of the gates, so $C(B^\dagger,A^\dagger)=C(A,B)$. The operator of a
+    two-site block is the operator of $V$ on $2N$ sites, which is invariant under
+    the translation by one site, and hence $C(A,B)^\dagger=C(A,B)$. For gates
+    $u,v$, the two-site block of the tensor in standard form has the doubled
+    standard form with gates $v_{23}(u\otimes u)$ and $v_{23}$.
 \end{proof}
 
 \begin{lemma}[Normalized physical-adjoint source factors]
