@@ -36,7 +36,7 @@ theorem squareAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
     simp only [squareAreaLawSupport, squareLatticeSiteOrEdgeSupport,
       AreaLaw.nearestNeighborSupport, Finset.image_singleton, Finset.image_insert,
       Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Sum.elim_inl, Sum.elim_inr,
-      Equiv.trans_apply, ManyBody.Edge.equiv_apply]
+      ManyBody.Edge.equiv_apply]
   exact (Finset.coe_injective
     (Finset.coe_pair.trans
       ((Set.pair_eq_pair_iff.mpr
