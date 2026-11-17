@@ -27,8 +27,8 @@ The constants are named and depend only on `R, J, Δ, r`:
 
 The polynomial-PEPS manuscript treats only site and nearest-neighbour terms on the open square,
 which is range one; the statements here extend its reset to range `R`. The range-one
-statements on the open square, `SquareHamiltonian.reset_localized_filter` and
-`SquareHamiltonian.reset_unitary` with `resetRadius` and `resetUnitaryPrefactor`, are
+statements on the open square, `ManyBody.SquareInteraction.reset_localized_filter` and
+`ManyBody.SquareInteraction.reset_unitary` with `resetRadius` and `resetUnitaryPrefactor`, are
 unchanged.
 
 ## Main statements

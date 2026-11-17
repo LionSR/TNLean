@@ -43,7 +43,7 @@ with the companion code's own filter types is recorded in
 https://sirui-lu.com/QICLean/paper-gaps/oai26_zero_floor_energy_scope.pdf.
 -/
 
-open ManyBody (Edge)
+open ManyBody (Edge SquareInteraction)
 
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
@@ -61,11 +61,12 @@ at-most-one-crossing condition are supplied; crossings count unordered edges onc
 Source: the companion `EnergyOptimizer.lean`, `exists_maximizer_energy`,
 lines 62–109, at the revision cited in the module docstring. The vectors and
 regional matrices below are in the canonical integer square coordinates. -/
-theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
-    {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
+theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity
+    {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
-    {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.operator E₀ Δ)
-    (hΩs : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.hamiltonian E₀ Δ)
+    (hΩs : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (D : ℕ → Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
     (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
@@ -83,23 +84,23 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
           (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
         (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K' j)) →
         ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K' fun _ ↦ True))
-            (squareAreaLawState Ω)‖ ≤
+            (AreaLaw.rectangleAreaLawState Ω)‖ ≤
           ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-            (squareAreaLawState Ω)‖) ∧
+            (AreaLaw.rectangleAreaLawState Ω)‖) ∧
       let ψ := toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-        (squareAreaLawState Ω)
+        (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.operator φ⟫_ℂ).re - E₀| ≤
+        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
-        Δ * (1 - ‖⟪squareAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
+        Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
-  obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms
-  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hΩn hΩg hΩs
-  have hΩ0 : squareAreaLawState Ω ≠ 0 := fun h0 ↦ by
+  obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
+  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩn hΩg hΩs
+  have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm
   have hsplit : ∀ i : Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
@@ -119,8 +120,8 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
       exact hsingle e j k
         ((AreaLaw.inr_mem_crossingTerms_iff (D j) e).mp (hc j hj))
         ((AreaLaw.inr_mem_crossingTerms_iff (D k) e).mp (hc k hk))
-  have heig : toEuclideanLin (∑ i, T i) (squareAreaLawState Ω) =
-      (E₀ : ℂ) • squareAreaLawState Ω := by
+  have heig : toEuclideanLin (∑ i, T i) (AreaLaw.rectangleAreaLawState Ω) =
+      (E₀ : ℂ) • AreaLaw.rectangleAreaLawState Ω := by
     rw [hsum]
     exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
   obtain ⟨K, hK, hmax, hpos, hunit, henergy⟩ :=
@@ -139,12 +140,12 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
       AreaLaw.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a
   rw [hsum, hbudget] at henergy
   refine ⟨K, hK, hmax, hpos, hunit, henergy, ?_⟩
-  have hgap := Matrix.PosSemidef.gap_le (Ω := squareAreaLawState Ω)
-    (hgs.posSemidef_sub_smul_one h.toAreaLawHamiltonian.operator_isHermitian hΩ hspan)
+  have hgap := Matrix.PosSemidef.gap_le (Ω := AreaLaw.rectangleAreaLawState Ω)
+    (hgs.posSemidef_sub_smul_one (h.toAreaLawHamiltonian hhJ).operator_isHermitian hΩ hspan)
     (((‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-      (squareAreaLawState Ω)‖⁻¹ : ℝ) : ℂ) •
+      (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ) •
       toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-        (squareAreaLawState Ω))
+        (AreaLaw.rectangleAreaLawState Ω))
   rw [hunit, one_pow, mul_one] at hgap
   exact hgap.trans ((le_abs_self _).trans henergy)
 

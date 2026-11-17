@@ -28,7 +28,7 @@ September 24, 2026, `02-information.tex`, lines 416–424 and 513–524,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator
@@ -41,11 +41,11 @@ zero local dimension are included, and the original individual interactions
 need not be Hermitian.
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 513–524. -/
-theorem SquareHamiltonian.swapped_doubled_boundary_bound
-    {L q : ℕ} {J : ℝ} (h : SquareHamiltonian L q J)
+theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
+    {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     (R : Finset (SquareLatticeVertex L L)) :
     let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
-    let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.operator)
+    let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
     let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
     let boundary : Finset (Edge (squareLatticeGraph L L)) :=
       Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -58,8 +58,8 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
     (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
   change F * K * Fᴴ - K = ∑ e ∈ boundary,
-    (F * Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e)) * Fᴴ -
-      Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e))) at hsum
+    (F * Matrix.reindex p p (doubledHamiltonian (h.term (.inr e))) * Fᴴ -
+      Matrix.reindex p p (doubledHamiltonian (h.term (.inr e)))) at hsum
   have hnorm (A : Matrix (Configuration L q) (Configuration L q) ℂ) :
       ‖F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ -
         Matrix.reindex p p (doubledHamiltonian A)‖ ≤ 4 * ‖A‖ := by
@@ -96,21 +96,21 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
           (fun e : Edge (squareLatticeGraph L L) ↦
             ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))) he))
         (hlocal {e.1.1, e.1.2}
-          (by simpa only [Finset.coe_insert, Finset.coe_singleton] using h.edge_supported e)))
+          (mem_supportedOperators_of_isSupportedOn (h.mem (.inr e)))))
   have hbound : ‖F * K * Fᴴ - K‖ ≤ (boundary.card : ℝ) * (4 * J) := by
     simpa only [hsum, nsmul_eq_mul] using
       (norm_sum_le boundary (fun e ↦
-        F * Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e)) * Fᴴ -
-          Matrix.reindex p p (doubledHamiltonian (h.edgeTerm e)))).trans
+        F * Matrix.reindex p p (doubledHamiltonian (h.term (.inr e))) * Fᴴ -
+          Matrix.reindex p p (doubledHamiltonian (h.term (.inr e))))).trans
         (Finset.sum_le_card_nsmul boundary _ (4 * J) (fun e _ ↦
-          (hnorm (h.edgeTerm e)).trans
-            (mul_le_mul_of_nonneg_left (h.edge_norm_le e) (by norm_num))))
+          (hnorm (h.term (.inr e))).trans
+            (mul_le_mul_of_nonneg_left (hhJ (.inr e)) (by norm_num))))
   have hbcard : boundary.card ≤ 2 * L ^ 2 :=
     (Finset.card_le_univ boundary).trans (TNLean.PEPS.card_squareLatticeEdges_le L)
   have hJ (hL : L ≠ 0) : 0 ≤ J :=
-    (norm_nonneg (h.siteTerm
-      (⟨0, Nat.pos_of_ne_zero hL⟩, ⟨0, Nat.pos_of_ne_zero hL⟩))).trans
-      (h.site_norm_le _)
+    (norm_nonneg (h.term
+      (.inl (⟨0, Nat.pos_of_ne_zero hL⟩, ⟨0, Nat.pos_of_ne_zero hL⟩)))).trans
+      (hhJ (.inl _))
   exact ⟨hsupport, if hL : L = 0 then
     hbound.trans_eq (by
       simp [hL, Nat.eq_zero_of_le_zero (n := boundary.card) (by simpa [hL] using hbcard)])

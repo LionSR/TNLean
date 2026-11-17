@@ -18,7 +18,8 @@ with `I_Ω(A : C) ≤ b`, and cores `A₀ ⊆ A`, `C₀ ⊆ C` at sup-distance g
 
 The manuscript states Lemma 3.3 for site and nearest-neighbour terms only, which is range
 one; this module extends it to range `R`. The range-one statement on the open square,
-`SquareHamiltonian.information_reset_of_resetThreshold_le` with the width `resetWidth J Δ p`,
+`ManyBody.SquareInteraction.information_reset_of_resetThreshold_le` with the width
+`resetWidth J Δ p`,
 is unchanged.
 
 The proof is the range-one proof with the range-`R` reset unitary of
@@ -48,6 +49,8 @@ soon as `ℓ + R ≤ w`; at range one the offset is `1`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open scoped Matrix.Norms.L2Operator
 
 open ManyBody (SquareLatticeVertex)
 
@@ -205,7 +208,7 @@ and let `A, C` be disjoint regions with `I_Ω(A : C) ≤ b`, `b ≥ 0`. If the c
 of `C`, with `C_p = rangeResetWidth R J Δ p`, then `I_Ω(A₀ : C₀) ≤ L^(-p)`.
 
 The manuscript states Lemma 3.3 for range one only; this is its extension to range `R`. The
-range-one statement is `SquareHamiltonian.information_reset_of_resetThreshold_le`.
+range-one statement is `ManyBody.SquareInteraction.information_reset_of_resetThreshold_le`.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
 theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ}
     (hΔ : 0 < Δ) (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L)
@@ -230,7 +233,7 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
 only on `q, R, J, Δ, p`.
 
 The manuscript states Lemma 3.3 for range one only; this is its extension to range `R`. The
-range-one statement is `SquareHamiltonian.information_reset`.
+range-one statement is `ManyBody.SquareInteraction.information_reset`.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
 theorem information_reset (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧

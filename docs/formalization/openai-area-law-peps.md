@@ -64,9 +64,9 @@ Source: [Theorem 1.1](https://github.com/openai/math/blob/adc7f1241b42e322a64518
 |---|---|---|
 | Fixed `q ≥ 2`, `J, Δ > 0` | Parameters before `∃ C c` in `PolynomialPEPSApproximation` | Constants depend only on these parameters. |
 | Every open `L × L` grid, `L ≥ 2` | `squareLatticeGraph L L` | No periodic edges or extra routing vertices. |
-| One supported term per site and edge, norm at most `J` | `SquareHamiltonian.siteTerm`, `edgeTerm`, support and norm fields | Individual summands are not required to be Hermitian. |
-| Hermitian total `H` | `SquareHamiltonian.hermitian` | Refers to the sum of the site terms plus the sum of the edge terms. |
-| Unique unit ground vector and full-system projector gap | `‖Ω‖ = 1`, `ManyBody.IsGapped h.operator E₀ Δ` and `ManyBody.groundSpace h.operator E₀ = span {Ω}` in `IsSquareGroundState` | Same coordinates; for `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these conditions with the printed operator inequality. |
+| One supported term per site and edge, norm at most `J` | `h : ManyBody.SquareInteraction L q` (its `term` and `mem`) with the hypothesis `∀ i, ‖h.term i‖ ≤ J` | Individual summands are not required to be Hermitian. |
+| Hermitian total `H` | the hypothesis `h.hamiltonian.IsHermitian` | Refers to the sum of the site terms plus the sum of the edge terms. |
+| Unique unit ground vector and full-system projector gap | `‖Ω‖ = 1`, `ManyBody.IsGapped h.hamiltonian E₀ Δ` and `ManyBody.groundSpace h.hamiltonian E₀ = span {Ω}` in `IsSquareGroundState` | Same coordinates; for `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these conditions with the printed operator inequality. |
 | PEPS on the same grid | `A : Tensor (squareLatticeGraph L L) q` | Uses TNLean's existing edge-dependent tensor family. |
 | Positive bond dimensions and `Dmax ≤ C L^c` | Both universal edge clauses of `HasPEPSApproximation` | Each original edge is bounded; dimensions need not be equal. |
 | Nonzero contraction `Φ` | `pepsVector A ≠ 0` | Nonvanishing is required before normalization. |
@@ -199,7 +199,7 @@ hypothesis to the printed one.
 |---|---|---|
 | Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `LocalHamiltonian`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
 | Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
-| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `SquareHamiltonian.sum_hermitianTerm` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
+| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `ManyBody.Interaction.hamiltonian_hermitianPart` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |
 | Template (Definition 9.3) | `Geometry.Template`, `Template.IsSeparated` | Definition. Polygons are read as nondegenerate ([paper-gap note](../paper-gaps/arealaw2d_nondegenerate_templates.tex)). |
 | Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound`, `sublinearCollarBound_real` | Proved for every real `D₀ > 2R + 10` and `C_tpl ≥ 24`. |

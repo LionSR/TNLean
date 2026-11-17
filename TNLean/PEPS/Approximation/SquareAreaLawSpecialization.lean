@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import QICLean.Entropy.MovementEtaRegional
 import QICLean.Entropy.RegionCovariance
-import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
+import TNLean.PEPS.AreaLaw.RectangularHamiltonian
+import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TwoFamilies
@@ -28,8 +30,6 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 
 ## Main definitions and results
 
-* `squareAreaLawSupport_isAdmissibleSupport`: designated supports are
-  admissible at range one.
 * `finiteProductEntropy_relabel`: regional entropy is unchanged by relabeling sites.
 * `card_edgeBoundary_rectangle`: original crossing edges and integer-domain
   crossing edges have the same number.
@@ -55,7 +55,10 @@ specialization is `TNLean.PEPS.AreaLaw.squareEntropyAreaLaw`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge
+  SquareInteraction)
 
 open scoped BigOperators ComplexOrder
 
@@ -66,14 +69,6 @@ open TNLean.Lattice
 open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
-
-/-- Every designated support is a nonempty set of induced graph diameter at
-most one in the integer rectangle. Source: polynomial-PEPS `eq:model`
-(`00-introduction.tex`, lines 40–45) and area-law Corollary 1.2. -/
-theorem squareAreaLawSupport_isAdmissibleSupport (L : ℕ) (i : SquareLatticeSiteOrEdge L L) :
-    ManyBody.IsAdmissibleSupport (AreaLaw.rectangularDomain L L) 1
-      (squareAreaLawSupport L i).1 :=
-  (squareAreaLawSupport L i).2
 
 section Relabel
 
@@ -197,14 +192,16 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
       groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
-    {L : ℕ} (h : SquareHamiltonian L q J) {E₀ : ℝ} {Ω : StateSpace L q}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
+    {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+        {E₀ : ℝ} {Ω : StateSpace L q}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
     FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΩ hgap hspan
-  have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
-    (squareAreaLawState Ω) hΩ' hgap' hspan' (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
+  have := hbound (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
+    (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
+        (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
     this
@@ -219,7 +216,7 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
     (harea : AreaLaw.UniformAreaLaw) : SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) 1 J Δ hJ hΔ
-  exact ⟨C, hC, fun _ _ ⟨h, _, hΩ, hgap, hspan⟩ A ↦
-    finiteProductEntropy_le_of_areaLawBound hbound h hΩ hgap hspan A⟩
+  exact ⟨C, hC, fun _ _ ⟨h, hh, hhJ, _, hΩ, hgap, hspan⟩ A ↦
+    finiteProductEntropy_le_of_areaLawBound hbound h hh hhJ hΩ hgap hspan A⟩
 
 end TNLean.PEPS.Approximation

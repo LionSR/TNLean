@@ -44,7 +44,9 @@ use the proposition as a premise independently of its proof.
   accuracy `L^{-60}`, `06-geometry.tex`, lines 440–445.
 -/
 
-open ManyBody (SquareLatticeVertex)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareLatticeVertex SquareInteraction)
 
 noncomputable section
 
@@ -79,9 +81,10 @@ with the conventions of lines 4–13, under `eq:model` and `eq:global-gap`
 def AngularInformationBound (q : ℕ) (J Δ : ℝ) : Prop :=
   ∀ a A₀ : ℝ, 0 < a → 1 ≤ A₀ → ∀ m₀ : ℕ, ∀ p : ℝ, 0 < p →
     ∃ D L₀ : ℝ, ∀ L : ℕ, L₀ ≤ L →
-      ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ,
+          ∀ Ω : StateSpace L q,
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
         ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
@@ -155,7 +158,7 @@ theorem AngularInformationBound.exists_isAngularScale {q : ℕ} {J Δ : ℝ}
     {p : ℕ} (hp : 0 < p) :
     ∃ D L₀ : ℝ, IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ := by
   obtain ⟨D, L₀, hD⟩ := hang a A₀ ha hA₀ m₀ p (by exact_mod_cast hp)
-  exact ⟨D, L₀, IsAngularScale.of_sitePosition fun L hL Ω ⟨h, E₀, hΩ, hgap, hspan⟩ ↦
-    hD L hL h E₀ Ω hΩ hgap hspan⟩
+  exact ⟨D, L₀, IsAngularScale.of_sitePosition fun L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦
+    hD L hL h hh hhJ E₀ Ω hΩ hgap hspan⟩
 
 end TNLean.PEPS.Approximation

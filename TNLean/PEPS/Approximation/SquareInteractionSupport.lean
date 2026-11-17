@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
+import TNLean.PEPS.AreaLaw.RectangularHamiltonian
+import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.IsoTransport
 
@@ -26,14 +28,14 @@ namespace TNLean.PEPS.Approximation
 /-- Relabelling the original sites and forward edges gives precisely the
 nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
-theorem squareAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
+theorem rectangleAreaLawSupport_val_eq_nearestNeighborSupport (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     (i : SquareLatticeSiteOrEdge L L) :
     let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
       (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
-    (squareAreaLawSupport L i).val = AreaLaw.nearestNeighborSupport (e i) := by
+    (AreaLaw.rectangleAreaLawSupport L L i).val = AreaLaw.nearestNeighborSupport (e i) := by
   rcases i with v | e <;>
-    simp only [squareAreaLawSupport, squareLatticeSiteOrEdgeSupport,
+    simp only [AreaLaw.rectangleAreaLawSupport, squareLatticeSiteOrEdgeSupport,
       AreaLaw.nearestNeighborSupport, Finset.image_singleton, Finset.image_insert,
       Equiv.sumCongr_apply, Sum.map_inl, Sum.map_inr, Sum.elim_inl, Sum.elim_inr,
       ManyBody.Edge.equiv_apply]

@@ -5918,12 +5918,12 @@ no additional helper is proposed.
 - **Pattern:** Transport membership in a supported-operator algebra through the
   site bijection, replace the resulting embedding by matrix reindexing, and
   identify the image support.
-- **Seen:** 2 occurrences: `SquareHamiltonian.toAreaLawHamiltonian` in
-  `PEPS/Approximation/SquareAreaLawHamiltonian.lean` and
-  `SquareHamiltonian.exists_nearestNeighbor_terms` in
+- **Seen:** 2 occurrences: `ManyBody.RectangleInteraction.toAreaLawHamiltonian` in
+  `PEPS/AreaLaw/RectangularHamiltonian.lean` and
+  `ManyBody.SquareInteraction.exists_nearestNeighbor_terms` in
   `PEPS/Approximation/SquareInteractionTerms.lean`.
 - **Abstraction:** The existing `embedOp_mem_supportedOperators_image` and
-  `embedOp_rectangle_eq_reindex` perform the two transports. At a third
+  `embedOp_rectangular_eq_reindex` perform the two transports. At a third
   occurrence, consider a lemma giving the reindexed Hermitian term's
   supported-operator membership directly.
 - **Notes:** The second occurrence also relabels sites and edges. The support
@@ -7725,7 +7725,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `n * (1 + c * J * n * T) ≤ (1 + c * J) * L ^ 4 * (1 + T)` from `n ≤ L ^ 4 (1 + T)` and
   `c J n² T ≤ c J L ^ 4 (1 + T)`, combined by `add_le_add`. Then rearrange with `gcongr`
   and close with `GaussianFilter.localization_error_bound_of_parameter_constant`.
-- **Seen:** 2 occurrences, `SquareHamiltonian.reset_localized_filter` in
+- **Seen:** 2 occurrences, `ManyBody.SquareInteraction.reset_localized_filter` in
   `PEPS/Approximation/ResetUnitary.lean` (lines 167–221) and
   `LocalHamiltonian.reset_localized_filter` in `PEPS/Approximation/RangeResetUnitary.lean`
   (lines 144–201). The two blocks differ only in the constants: `L ^ 2` versus `Λ.card`, the

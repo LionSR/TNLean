@@ -28,8 +28,10 @@ Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground stat
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace)
+
+open ManyBody (IsGapped groundSpace SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -76,9 +78,10 @@ has a PEPS approximation with bond dimensions at most `C L^c` and normalized err
 Source: polynomial-PEPS Theorem 1.1 and its proof in §8 (`07-assembly.tex`, lines 9–214). -/
 theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ} (hJ : 0 < J)
     (hΔ : 0 < Δ) :
-    ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+    ∀ L : ℕ, 2 ≤ L → ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian →
+        (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         HasPEPSApproximation (pepsBondPrefactor q J Δ) (pepsBondExponent q J Δ) L q Ω := by
   have hA := AreaLaw.squareEntropyAreaLawAt_closed (q := q) (by omega) hJ.le hΔ
   have hD : IsAngularScale q (IsSquareGroundState q J Δ) (angularConstant / 2) 1 4 60
@@ -87,8 +90,9 @@ theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : �
       (by norm_num) le_rfl le_rfl
   have hlarge := polynomialPEPSApproximation_of_ratios hq hJ hΔ hA
     (one_le_angularScale _ _ _ _) hD
-  intro L hL h E₀ Ω hΩ hgap hspan
+  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan
   exact hasPEPSApproximation_of_sufficiently_large_le (by omega) hL
-    (pepsBondExponent_pos q J Δ).le hΩ (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, E₀, hΩ, hgap, hspan⟩)
+    (pepsBondExponent_pos q J Δ).le hΩ
+        (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩)
 
 end TNLean.PEPS.Approximation

@@ -59,10 +59,12 @@ Proposition 3.4 of the polynomial-PEPS manuscript.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.PEPS.AreaLaw
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace SquareInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -390,9 +392,10 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
     {J Δ D₀ Ctpl : ℝ} (hΔ : 0 < Δ)
     (hcol : SublinearCollarBound q 1 J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v + c ∈ T),
@@ -403,7 +406,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   classical
   obtain ⟨β, hβ, C, u₀, hmain⟩ :=
     coarse_mutualInformation_le_of_sublinearCollarBound hΔ hcol N₀ A₀
-  refine ⟨β, hβ, C, u₀, fun u hu L h E₀ Ω hΩ hgap hspan c T hT hdiam X hX E hE ↦ ?_⟩
+  refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ hgap hspan c T hT hdiam X hX E hE ↦ ?_⟩
   set σ := rectangleSiteEquiv L L
   have hdist (x y : ℤ × ℤ) :
       Scan.ambientSupDistance (x + -c) y = Scan.ambientSupDistance x (y + c) := by
@@ -413,9 +416,9 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   have hdist' (x y : ℤ × ℤ) :
       Scan.ambientSupDistance (x + -c) (y + -c) = Scan.ambientSupDistance x y := by
     rw [hdist, neg_add_cancel_right]
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΩ hgap hspan
-  have h := hmain u hu (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
-    (squareAreaLawState Ω) hΩ' hgap' hspan'
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
+  have h := hmain u hu (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
+    (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
     (T.image fun t ↦ t + -c) (hT.translate (-c))
     (by
       simp only [Finset.mem_image]
@@ -436,7 +439,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
       rintro _ ⟨t, ht, rfl⟩ _ ⟨v, hv, rfl⟩
       rw [Equiv.toEmbedding_apply, rectangleSiteEquiv_val, hdist]
       exact hE t ht v hv)
-  rwa [squareAreaLawState, show AreaLaw.rectangleConfigurationEquiv L L q =
+  rwa [AreaLaw.rectangleAreaLawState, show AreaLaw.rectangleConfigurationEquiv L L q =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     finiteProductMutualInformation_relabel] at h
 

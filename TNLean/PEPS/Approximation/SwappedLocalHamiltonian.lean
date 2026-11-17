@@ -35,8 +35,8 @@ The sites of the crossing supports and their walks to both sides of `A` are in
 The polynomial-PEPS manuscript treats only site and nearest-neighbour terms on the open square,
 which is range one; this file extends its boundary estimate to range `R`. The range-one
 statements on the open square, with the constant `8 J L²`, are
-`SquareHamiltonian.swapped_doubled_boundary_bound` and
-`SquareHamiltonian.supported_buffer_gaussian_integral`, and are unchanged.
+`ManyBody.SquareInteraction.swapped_doubled_boundary_bound` and
+`ManyBody.SquareInteraction.supported_buffer_gaussian_integral`, and are unchanged.
 
 ## References
 
@@ -264,7 +264,7 @@ intertwiner with error at most
 The polynomial-PEPS manuscript treats range one only; this is the extension to range `R`. The
 range-one statement on the open square, with `C = squareLocalizationPrefactor`,
 `v = squareLocalizationVelocity J` and the factor `1 + 8 J L² T`, is
-`SquareHamiltonian.supported_buffer_gaussian_integral`.
+`ManyBody.SquareInteraction.supported_buffer_gaussian_integral`.
 Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562, with the
 constants of `eq:info-lr` (lines 486–496). -/
 theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
