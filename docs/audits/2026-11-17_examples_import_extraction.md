@@ -22,7 +22,11 @@ GHZSectorParent imports the shared GHZ tensor/sectors from the preceding partiti
 
 Move arbitrary-tensor counterexamples, embedding sharpness, and the weighted counterexample consumer into Examples/MultiBlock. Keep the three old module paths as import-only compatibility modules.
 
-At this point in the series, the checker records 9 example-import edges and 56 mutual-directory pairs. Each unit removes only entries that its source changes resolve.
+### symmetry
+
+Move the concrete CZX permuted-block, Z3 fusion, Ising fusion, and Kramers-Wannier demonstrations into their Examples directories. Keep the four old module paths as import-only compatibility modules and update direct example consumers.
+
+At this point in the series, the checker records 1 example-import edges and 55 mutual-directory pairs. Each unit removes only entries that its source changes resolve.
 
 ## Compatibility semantics
 

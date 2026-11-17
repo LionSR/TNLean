@@ -150,7 +150,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
         "MPS/Core <-> MPS/ParentHamiltonian",
         "MPS/Core <-> Spectral",
         "MPS/Examples <-> MPS/MPU",
-        "MPS/Examples <-> MPS/Symmetry",
         "MPS/FundamentalTheorem <-> MPS/MPDO",
         "MPS/FundamentalTheorem <-> MPS/MPU",
         "MPS/FundamentalTheorem <-> MPS/ParentHamiltonian",
@@ -193,14 +192,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
 # move the declaration the library needs out of the example.
 EXAMPLES_IMPORTS: frozenset[str] = frozenset(
     {
-        "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.CZX.CZXAnomalyClass",
-        "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.GHZ",
-        "TNLean.MPS.Symmetry.MPOSymmetry.Examples -> TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation",
-        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraOnePsi",
-        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraOneSigma",
-        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraPsiSigma",
-        "TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion -> TNLean.MPS.Examples.Ising.IsingFusionAlgebraSigma",
-        "TNLean.MPS.Symmetry.MPOSymmetry.KramersWannierBimodule -> TNLean.MPS.Examples.KramersWannier.KramersWannierSource",
         "TNLean.PEPS.KitaevCheckerboardBlocking -> TNLean.PEPS.Examples.QuantumDouble",
     }
 )
