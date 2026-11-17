@@ -165,7 +165,7 @@ theorem regionEntropy_prefix_le_of_factorization (h : ChainHamiltonian L q R J)
         field_simp] at this
     have hl' : (2 * l : ℝ) ≤ l₀ := by exact_mod_cast hl
     nlinarith
-  refine regionEntropy_prefix_le_of_windowClaim_of_le (by omega) h hΩ hgap hspan hξ' hC₁' hC l₀
+  refine regionEntropy_prefix_le_of_windowClaim_of_le (by omega) hΩ hξ' hC₁' hC l₀
     (le_max_left _ _) (fun i l ↦ windowEntropy Ω i l₀ l)
     (fun i k hik _ ↦ by
       have := cutEntropy_sub_le (q := q) hΩ hik

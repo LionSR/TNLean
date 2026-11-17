@@ -29,7 +29,7 @@ argument and viable-set specialization are separate results.
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -40,7 +40,7 @@ with interaction norms at most one. This is the general norm variant of the auxi
 energy inference in LVV, arXiv:1307.5143v1, `algo53.tex`, proof of Lemma `l:within`,
 lines 509–515. -/
 theorem ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one
-    (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1)
     (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (hv : ‖v‖ = 1) (hover : 1 - δ ≤ ‖⟪Ω, v⟫_ℂ‖) :
     (⟪v, toEuclideanLin h.operator v⟫_ℂ).re - E₀ ≤ 8 * L * δ := by
@@ -73,11 +73,11 @@ theorem ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one
 at most `8c`. This is an auxiliary bound for LVV, arXiv:1307.5143v1, `algo53.tex`, proof of
 Lemma `l:within`, lines 509–515. -/
 theorem ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one
-    (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1)
     (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (hL : 0 < L) (hv : ‖v‖ = 1) (hover : 1 - c / L ≤ ‖⟪Ω, v⟫_ℂ‖) :
     (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 8 * c := by
-  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hΩ hgap hspan hv hover
+  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hΩ hspan hv hover
   have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
   have hcancel : (8 : ℝ) * L * (c / L) = 8 * c := by field_simp [hL0]
   rw [hcancel] at henergy

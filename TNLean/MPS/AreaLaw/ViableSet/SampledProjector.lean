@@ -152,8 +152,7 @@ arXiv:1307.5143v1, `algo53.tex`, lines 283–284 and 607. -/
 lemma groundEnergy_nonneg_and_le [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
-    {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    {E₀ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1)
     (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) :
     0 ≤ E₀ ∧ E₀ + 1 ≤ L := by
   have hΓ := hΩ
@@ -241,7 +240,7 @@ lemma norm_scaledBondComplementWord_sub_le [NeZero L]
     (I : Fin m → Fin L) :
     ‖scaledBondComplementWord h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ ≤
       powerNormalization L E₀ ^ m + 1 := by
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
   have hC : 0 ≤ powerNormalization L E₀ ^ m :=
     pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m
   calc _ ≤ ‖scaledBondComplementWord h E₀ I‖ + ‖powerProjector (∑ i, h i) L E₀ m‖ :=
@@ -269,7 +268,7 @@ lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
         2 * (powerNormalization L E₀ ^ m + 1) * t / 3))) := by
   set A := powerProjector (∑ i, h i) L E₀ m
   set R := powerNormalization L E₀ ^ m + 1
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
   have hR1 : 1 ≤ R := le_add_of_nonneg_left
     (pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m)
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hd | hd
@@ -548,7 +547,7 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
   set D := 2 * R ^ 2 + 2 * R * η / 3
   have hL : (0 : ℝ) < L := Nat.cast_pos.mpr (Nat.pos_of_neZero L)
   have hℓ0 : (0 : ℝ) < ℓ := Nat.cast_pos.mpr (Nat.pos_of_neZero ℓ)
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
   have hR1 : 1 ≤ R := le_add_of_nonneg_left
     (pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m)
   have hD : 0 < D := by positivity

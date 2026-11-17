@@ -137,7 +137,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
       h hs h0 h1 hΩ hgap hspan hΔ hδ hδ1
     obtain ⟨N, A, B', _, hdec, _, hgood⟩ := hcuts i hiL
     have hout := hgood _ _ (bondTrimSet hiL m T₀) hT₁
-    obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
+    obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
     have hbudgets := hsample L E₀ hL hE₀ hE₀L hEB
     have hηeq : α / (L : ℝ) ^ a / 8 = (α / 8) / (L : ℝ) ^ a := by ring
     simp only [hηeq] at hout

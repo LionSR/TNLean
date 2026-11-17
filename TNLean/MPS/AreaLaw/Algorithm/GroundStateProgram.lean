@@ -168,10 +168,9 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
     have hchain : chain.operator = ∑ j, h j :=
       ChainHamiltonian.ofNearestNeighborPositive_operator h hs h0 h1
-    have hgapC : IsGapped chain.operator E Delta := by rw [hchain]; assumption
     have hspanC : groundSpace chain.operator E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hgapC hspanC hw'norm hover
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E).trans henergy

@@ -257,10 +257,9 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
       exact hover
     let chain := ChainHamiltonian.ofBonds h hs h0 h1
     have hchain : chain.operator = ∑ j, h j := ChainHamiltonian.ofBonds_operator h hs h0 h1
-    have hgapC : IsGapped chain.operator E₀ Δ := by rw [hchain]; assumption
     have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hgapC hspanC hw'norm hover'
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy

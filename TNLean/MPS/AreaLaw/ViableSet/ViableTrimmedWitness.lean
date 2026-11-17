@@ -78,7 +78,7 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
   have hΓψ : 1 - c / L ≤ ‖⟪Γ, ψ⟫_ℂ‖ := by
     rw [norm_inner_symm]
     exact hψΓ
-  have hE := h.re_inner_le_of_overlap_div_of_range_one hΩ hgap hspan hL hψ hΓψ
+  have hE := h.re_inner_le_of_overlap_div_of_range_one hΩ hspan hL hψ hΓψ
   let D := constantCutBond q 1 1 Δ c
   obtain ⟨PΓ, hPΓ⟩ := exists_isTrimmingProjection
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Γ) D

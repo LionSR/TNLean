@@ -198,7 +198,7 @@ theorem exists_sampledGroundStateProgram_success_cost_polynomial_of_valid (hq : 
   refine ⟨C, p, P, d, hC, hP, ?_⟩
   intro L _ h hs h0 h1 E₀ Γ hΩ hgap hspan hEB o hv δ
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hgap hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
   obtain ⟨hδ0, hδ1, hδc, hover⟩ := sampledPrecision_spec hΔ hη hL
   obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
   have hD1 : 1 ≤ sampledRankBound q L E₀ Δ δ := Nat.one_le_pow _ _ (by omega)
