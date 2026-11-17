@@ -62,26 +62,27 @@ theorem norm_gaussianFilteredTerm_sub_localized_le_mass (q ΔE : ℝ)
     (hε : 0 ≤ ε)
     (hloc : ∀ s ∈ Set.Icc (-T) T,
       ‖hermitianUnitaryPath H s * (Complex.I • (H * W - W * H)) * hermitianUnitaryPath H (-s) -
-        QuantumCircuit.siteExpectation d K
+        ManyBody.regionExpectation K
           (hermitianUnitaryPath H s * (Complex.I • (H * W - W * H)) *
             hermitianUnitaryPath H (-s))‖ ≤ ε) :
     ‖gaussianFilteredTerm q ΔE H W -
-        (W + QuantumCircuit.siteExpectation d K (gaussianFilteredTerm q ΔE H W - W))‖ ≤
+        (W + ManyBody.regionExpectation K (gaussianFilteredTerm q ΔE H W - W))‖ ≤
       T * ε + 2 * ‖H * W - W * H‖ *
         ∫ t in (Set.Icc (-T) T)ᶜ, |t| ∂(gaussianReal 0 (q / ΔE ^ 2).toNNReal) := by
   set μ := gaussianReal 0 (q / ΔE ^ 2).toNNReal
   set c := ‖H * W - W * H‖
   set f : ℝ → Matrix (ι → Fin d) (ι → Fin d) ℂ := fun t =>
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) - W
-  set L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
-  have hL : ∀ M, L M = M - QuantumCircuit.siteExpectation d K M := fun _ => rfl
+  set L := (LinearMap.id - ManyBody.regionExpectationLM (X := fun _ : ι ↦ Fin d)
+    K).toContinuousLinearMap
+  have hL : ∀ M, L M = M - ManyBody.regionExpectation K M := fun _ => rfl
   have hint0 := integrable_intertwinerIntegrand (q / ΔE ^ 2).toNNReal hH hH W
   have hint : Integrable f μ := hint0.sub (integrable_const W)
   have hdiff : gaussianFilteredTerm q ΔE H W - W = ∫ t, f t ∂μ := by
     rw [integral_sub hint0 (integrable_const W), integral_const, probReal_univ, one_smul]
     rfl
   have hrw : gaussianFilteredTerm q ΔE H W -
-      (W + QuantumCircuit.siteExpectation d K (gaussianFilteredTerm q ΔE H W - W)) =
+      (W + ManyBody.regionExpectation K (gaussianFilteredTerm q ΔE H W - W)) =
       L (gaussianFilteredTerm q ΔE H W - W) := by
     rw [hL]; abel
   -- Duhamel: `‖τ_t(W) - W‖ ≤ |t| ‖[H, W]‖`.
@@ -99,16 +100,16 @@ theorem norm_gaussianFilteredTerm_sub_localized_le_mass (q ΔE : ℝ)
       le_rfl).abs
   have hshort (t : ℝ) (ht : t ∈ Set.Icc (-T) T) : ‖L (f t)‖ ≤ T * ε := by
     simp only [hL, f]
-    refine (norm_conj_sub_sub_siteExpectation_le K (fun s hs => hloc s ?_)).trans ?_
+    refine (norm_conj_sub_sub_regionExpectation_le K (fun s hs => hloc s ?_)).trans ?_
     · rcases ht with ⟨h1, h2⟩
       rcases Set.mem_uIcc.mp hs with ⟨h3, h4⟩ | ⟨h3, h4⟩ <;> constructor <;> linarith
     · rw [mul_comm]
       exact mul_le_mul_of_nonneg_right (abs_le.mpr ht) hε
   have hglob (t : ℝ) : ‖L (f t)‖ ≤ 2 * c * |t| := by
     rw [hL]
-    calc ‖f t - QuantumCircuit.siteExpectation d K (f t)‖
-        ≤ ‖f t‖ + ‖QuantumCircuit.siteExpectation d K (f t)‖ := norm_sub_le _ _
-      _ ≤ ‖f t‖ + ‖f t‖ := by gcongr; exact QuantumCircuit.norm_siteExpectation_le K (f t)
+    calc ‖f t - ManyBody.regionExpectation K (f t)‖
+        ≤ ‖f t‖ + ‖ManyBody.regionExpectation K (f t)‖ := norm_sub_le _ _
+      _ ≤ ‖f t‖ + ‖f t‖ := by gcongr; exact (ManyBody.norm_regionExpectation_le (D := K)) (f t)
       _ ≤ 2 * c * |t| := by linarith [hf t]
   rw [hrw, hdiff, ← L.integral_comp_comm hint,
     ← integral_add_compl (s := Set.Icc (-T) T) measurableSet_Icc (L.integrable_comp hint)]
@@ -129,11 +130,11 @@ theorem norm_gaussianFilteredTerm_sub_localized_le (q ΔE : ℝ)
     (hε : 0 ≤ ε)
     (hloc : ∀ s ∈ Set.Icc (-T) T,
       ‖hermitianUnitaryPath H s * (Complex.I • (H * W - W * H)) * hermitianUnitaryPath H (-s) -
-        QuantumCircuit.siteExpectation d K
+        ManyBody.regionExpectation K
           (hermitianUnitaryPath H s * (Complex.I • (H * W - W * H)) *
             hermitianUnitaryPath H (-s))‖ ≤ ε) :
     ‖gaussianFilteredTerm q ΔE H W -
-        (W + QuantumCircuit.siteExpectation d K (gaussianFilteredTerm q ΔE H W - W))‖ ≤
+        (W + ManyBody.regionExpectation K (gaussianFilteredTerm q ΔE H W - W))‖ ≤
       T * ε + 2 * ‖H * W - W * H‖ *
         (Real.sqrt (2 * (q / ΔE ^ 2).toNNReal / Real.pi) *
           Real.exp (-T ^ 2 / (2 * (q / ΔE ^ 2).toNNReal))) := by

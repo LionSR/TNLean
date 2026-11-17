@@ -46,22 +46,17 @@ example :
       (1 : Matrix (Unit → Fin 2) (Unit → Fin 2) ℂ) ⊗ₖ
         diagonal ![(1 / 2 : ℂ), 2] := by
   ext ⟨σ, a⟩ ⟨τ, b⟩
-  simp only [spectatorSiteExpectation, siteExpectation, traceOutside, embedOp,
-    Matrix.of_apply, Matrix.smul_apply, smul_eq_mul, Fintype.card_unique]
-  rw [sum_empty_complement]
-  have hglue (u : (∅ : Finset Unit) → Fin 2) (i : Fin 2) :
-      glueCfg ∅ u (fun _ => i) = fun _ => i := by
+  simp only [spectatorSiteExpectation, Matrix.of_apply, ManyBody.regionExpectation_apply]
+  have hcard : Fintype.card (ManyBody.ComplConfig (fun _ : Unit ↦ Fin 2) ∅) = 2 := by
+    simp [ManyBody.ComplConfig, Fintype.card_pi, Finset.prod_const, Finset.card_univ]
+  rw [hcard, sum_empty_complement]
+  have hcut (u : (∅ : Finset Unit) → Fin 2) (i : Fin 2) :
+      (ManyBody.cutEquiv (fun _ : Unit ↦ Fin 2) ∅).symm (u, fun _ => i) = fun _ => i := by
     funext x
-    simp [glueCfg]
-  simp only [hglue, Matrix.vecMulVec_apply, Pi.star_apply]
-  have hAgree : AgreeOff (fun x : (∅ : Finset Unit) => (x : Unit)) σ τ ↔ σ = τ := by
-    constructor
-    · intro h
-      funext x
-      exact h x (fun j => False.elim ((Finset.notMem_empty _) j.property))
-    · rintro rfl x _
-      rfl
-  simp only [hAgree]
+    exact ManyBody.cutEquiv_symm_apply_not_mem _ _ (Finset.notMem_empty x)
+  have hAgree : (∀ x ∉ (∅ : Finset Unit), σ x = τ x) ↔ σ = τ := by
+    simp [funext_iff]
+  simp only [hcut, hAgree, Matrix.vecMulVec_apply, Pi.star_apply]
   fin_cases a <;> fin_cases b <;>
     simp [entangled, Matrix.kroneckerMap_apply, Matrix.one_apply]
 

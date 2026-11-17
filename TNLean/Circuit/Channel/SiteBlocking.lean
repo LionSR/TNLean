@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.Channel.Conversion
 import TNLean.Circuit.Channel.NativeRegisterWires
-import TNLean.Circuit.SiteExpectationOrder
+import TNLean.Circuit.SupportProjection
+import QICLean.ManyBody.Sites.RegionExpectation
 
 /-!
 # Blocking sites inside a local channel conversion

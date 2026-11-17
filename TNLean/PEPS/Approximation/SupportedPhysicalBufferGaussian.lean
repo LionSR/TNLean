@@ -99,13 +99,13 @@ theorem SquareHamiltonian.supported_buffer_gaussian_integral
               (Lattice.Configuration Λ (q * q)) ℂ,
             U 0 = 1 ∧
             (∀ t, HasDerivAt U
-              ((Complex.I • siteExpectation (q * q) B
+              ((Complex.I • ManyBody.regionExpectation B
                 (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
             (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
             (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ))) ∧
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let M := ∫ t : ℝ in Set.Icc (-T) T,
-                siteExpectation (q * q) B (ManyBody.heisenbergEvolution K' t V) * U t
+                ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                   ∂gaussianReal 0 η
               M ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
               ‖M‖ ≤ ‖W‖ ∧
@@ -205,13 +205,13 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
                 (Lattice.Configuration Λ (q * q)) ℂ,
               U 0 = 1 ∧
               (∀ t, HasDerivAt U
-                ((Complex.I • siteExpectation (q * q) B
+                ((Complex.I • ManyBody.regionExpectation B
                   (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
               (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
               (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ))) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
-                  siteExpectation (q * q) B (ManyBody.heisenbergEvolution K' t V) * U t
+                  ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                     ∂gaussianReal 0 η
                 M ∈ supportedOperators (q * q) (B : Set (Lattice.Site Λ)) ∧
                 ‖M‖ ≤ ‖W‖ ∧

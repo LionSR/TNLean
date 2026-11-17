@@ -41,9 +41,6 @@ import TNLean.Circuit.SelectedZeroRegisterSupport
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SiteEmbeddingNorm
 import TNLean.Circuit.SiteEmbeddingOrder
-import TNLean.Circuit.SiteExpectation
-import TNLean.Circuit.SiteExpectationGraphLocalization
-import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Circuit.SiteOperators
 import TNLean.Circuit.SiteOscillation
 import TNLean.Circuit.SitePermutation

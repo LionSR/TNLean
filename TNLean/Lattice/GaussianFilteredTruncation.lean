@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Sites.Twirl
 import Mathlib.Analysis.Convex.Integral
 import QICLean.Analysis.ProjectedEvolution
 import TNLean.Algebra.MatrixHermitianSum
@@ -214,27 +215,29 @@ theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (
   set τA := ManyBody.heisenbergEvolution (∑ k, h k) t A
   set c : ℝ := (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖A‖ *
     Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * |t| - μ * m)
-  have hloc : ‖τA - siteExpectation d Yᶜ τA‖ ≤ ∑ _y ∈ Yᶜᶜ, c :=
-    norm_sub_siteExpectation_le Yᶜ τA (fun _ => c) fun y hy U hU hUu => by
+  have hloc : ‖τA - ManyBody.regionExpectation Yᶜ τA‖ ≤ ∑ _y ∈ Yᶜᶜ, c :=
+    ManyBody.norm_sub_regionExpectation_le Yᶜ τA (fun _ => c) fun y hy U hU hUu => by
       have hyY : y ∈ Y := by simpa using hy
       let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
         ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
       have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ a ha hHerm
         R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hA) y
-        (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton]))
+        hU
         μ hμ m (fun x hx => hm x hx y hyY) t
       rw [CStarRing.norm_of_mem_unitary hUu, mul_one] at hLR
       exact hLR
   rw [compl_compl, Finset.sum_const, nsmul_eq_mul] at hloc
-  have hcomm : Commute B (siteExpectation d Yᶜ τA) :=
+  have hcomm : Commute B (ManyBody.regionExpectation Yᶜ τA) :=
     commute_of_mem_supportedOperators (by simp [Finset.coe_compl, disjoint_compl_right]) hB
-      (siteExpectation_mem_supportedOperators _ _)
+      ((QuantumCircuit.mem_supportedOperators_of_isSupportedOn
+        (ManyBody.regionExpectation_mem_supportedOperators _ _)))
   have hsplit : B * τA - τA * B =
-      B * (τA - siteExpectation d Yᶜ τA) - (τA - siteExpectation d Yᶜ τA) * B := by
+      B * (τA - ManyBody.regionExpectation Yᶜ τA) - (τA - ManyBody.regionExpectation Yᶜ τA) * B :=
+        by
     rw [Matrix.mul_sub, Matrix.sub_mul, hcomm.eq]
     abel
   rw [hsplit]
-  calc _ ≤ 2 * ‖τA - siteExpectation d Yᶜ τA‖ * ‖B‖ := norm_commutator_le B _
+  calc _ ≤ 2 * ‖τA - ManyBody.regionExpectation Yᶜ τA‖ * ‖B‖ := norm_commutator_le B _
     _ ≤ 2 * ((Y.card : ℝ) * c) * ‖B‖ := by gcongr
     _ = _ := by ring
 

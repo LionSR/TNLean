@@ -43,7 +43,7 @@ theorem mem_supportedOperators_reachable_of_forall_tail
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     {C c α : ℝ} (hc : 0 < c) (hα : 0 < α)
-    (hε : ∀ l : ℕ, ‖k - siteExpectation q (ManyBody.graphBall G a l) k‖ ≤
+    (hε : ∀ l : ℕ, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α))) :
     k ∈ supportedOperators q {x | G.Reachable a x} := by
   classical
@@ -56,12 +56,13 @@ theorem mem_supportedOperators_reachable_of_forall_tail
       Filter.atTop (nhds 0) := by
     have h := ((tendsto_rpow_atTop hα).comp tendsto_natCast_atTop_atTop).const_mul_atTop hc
     simpa using (Real.tendsto_exp_atBot.comp (Filter.tendsto_neg_atTop_atBot.comp h)).const_mul C
-  have hzero : ‖k - siteExpectation q (ManyBody.graphBall G a n) k‖ ≤ 0 :=
+  have hzero : ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a n) k‖ ≤ 0 :=
     ge_of_tendsto htend (Filter.eventually_atTop.mpr ⟨n, fun l hl => hball l hl ▸ hε l⟩)
-  have hk : siteExpectation q (ManyBody.graphBall G a n) k = k :=
+  have hk : ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k :=
     (sub_eq_zero.mp (norm_le_zero_iff.mp hzero)).symm
   rw [← hk, ← ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl]
-  exact siteExpectation_mem_supportedOperators _ k
+  exact (mem_supportedOperators_of_isSupportedOn
+    (ManyBody.regionExpectation_mem_supportedOperators _ k))
 
 /-- The prefactor `2 A₀ L` of the spatial omission bound, with `A₀ = 2 + 8 √C e^{c/2}` and
 `L = omittedAnchorTailConstant K μ (c / 2) (c / (4 · 2^α)) α`. Source: area law,
@@ -114,7 +115,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
       (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-      (∀ i l, l ≤ N → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+      (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
         (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
@@ -266,7 +267,7 @@ theorem exists_integrable_and_integral_channelWordOmissionDefect_le
         (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-        (∀ i l, l ≤ N → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+        (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
           (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),

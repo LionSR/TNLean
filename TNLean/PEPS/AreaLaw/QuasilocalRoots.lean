@@ -60,8 +60,8 @@ contractive on the extended algebra, with
 commuting with all operators acting on `K`. -/
 theorem quasilocalRoots [NeZero q] (K : Finset ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) {Ω : (ι → Fin q) → ℂ} (hkΩ : k *ᵥ Ω = 0) {ε : ℝ}
-    (hε : ‖k - siteExpectation q K k‖ ≤ ε) :
-    let kl := siteExpectation q K k
+    (hε : ‖k - ManyBody.regionExpectation K k‖ ≤ ε) :
+    let kl := ManyBody.regionExpectation K k
     let G := CFC.sqrt (1 - k)
     let Kr := CFC.sqrt k
     let Gl := CFC.sqrt (1 - kl)
@@ -81,8 +81,10 @@ theorem quasilocalRoots [NeZero q] (K : Finset ι) {k : Matrix (ι → Fin q) (�
       (∀ B : Matrix (ι → Fin q) (ι → Fin q) ℂ,
         (∀ A ∈ supportedOperators q (K : Set ι), Commute A B) → rootChannel Gl Kl B = B) := by
   intro kl G Kr Gl Kl
-  have hl₀ : 0 ≤ kl := siteExpectation_nonneg K hk₀
-  have hl₁ : kl ≤ 1 := siteExpectation_le_one K hk₁
+  have hl₀ : 0 ≤ kl := (by simpa only [ManyBody.regionExpectation_zero] using
+    (ManyBody.regionExpectation_mono (D := K) hk₀))
+  have hl₁ : kl ≤ 1 := (by simpa only [ManyBody.regionExpectation_one] using
+    (ManyBody.regionExpectation_mono (D := K) hk₁))
   have hG : 0 ≤ G := CFC.sqrt_nonneg _
   have hKr : 0 ≤ Kr := CFC.sqrt_nonneg _
   have hGl : 0 ≤ Gl := CFC.sqrt_nonneg _
@@ -123,6 +125,7 @@ theorem quasilocalRoots [NeZero q] (K : Finset ι) {k : Matrix (ι → Fin q) (�
       linarith
     exact mul_le_mul_of_nonneg_right h1 hB
   · exact rootChannel_sqrt_eq_self_of_commute hl₀ hl₁
-      (hB _ (siteExpectation_mem_supportedOperators K k))
+      (hB _ ((mem_supportedOperators_of_isSupportedOn
+        (ManyBody.regionExpectation_mem_supportedOperators K k))))
 
 end TNLean.PEPS.AreaLaw

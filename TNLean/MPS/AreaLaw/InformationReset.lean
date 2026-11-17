@@ -190,7 +190,8 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨path, _, _, _, _, hpathIntegral⟩ :=
     hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)
   let M := ∫ t : ℝ in Set.Icc (-(T₀ * B)) (T₀ * B),
-    siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t V) * path t ∂gaussianReal 0 η
+    ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t V) * path t ∂gaussianReal
+      0 η
   obtain ⟨hMs, _, hMerr⟩ := hpathIntegral Q V hVsupp η (T₀ * B) hT
   have hMclose : ‖M - M₀‖ ≤ ε := by
     calc

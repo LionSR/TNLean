@@ -75,13 +75,15 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i)
+          l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
         let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
         let G := fun i : κ => CFC.sqrt (1 - k i)
         let Gr := fun i : κ =>
-          CFC.sqrt (1 - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i))
+          CFC.sqrt (1 - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) r) (k
+            i))
         let ret := fun w : PoissonWord.Word κ => (List.ofFn w.2).filter fun i => decide (P i)
         let D := fun w : PoissonWord.Word κ => ((List.ofFn w.2).reverse.map G).prod
         let Dret := fun w : PoissonWord.Word κ => ((ret w).reverse.map G).prod
@@ -112,15 +114,17 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
       (PoissonWord.partitionWords P w).1.1 (PoissonWord.partitionWords P w).1.2 = Dret w :=
     contractionWord_partitionWords_fst P k w
   have hLw (w : PoissonWord.Word κ) : contractionWord
-      (fun i : {i // P i} => siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i))
+      (fun i : {i // P i} => ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i)
+        r) (k i))
       (PoissonWord.partitionWords P w).1.1 (PoissonWord.partitionWords P w).1.2 = L w :=
     contractionWord_partitionWords_fst P
-      (fun i => siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)) w
+      (fun i => ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) r) (k i)) w
   have e : (fun w : PoissonWord.Word κ => ‖Dret w - L w‖) = fun w =>
       ‖contractionWord (fun i : {i // P i} => k i)
           (PoissonWord.partitionWords P w).1.1 (PoissonWord.partitionWords P w).1.2 -
         contractionWord
-          (fun i : {i // P i} => siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r) (k
+          (fun i : {i // P i} => ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a
+            i) r) (k
               i))
           (PoissonWord.partitionWords P w).1.1 (PoissonWord.partitionWords P w).1.2‖ :=
     funext fun w => by rw [hDret, hLw]

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import TNLean.Circuit.EntropySupport
-import TNLean.Circuit.SiteExpectationGraphLocalization
+import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!
 # Lieb–Robinson commutator estimate on finite integer domains
@@ -87,7 +87,7 @@ theorem norm_heisenberg_commutator_le_domainDistance
 /-- Real-radius localization on a finite induced integer domain, extending the chain
 estimate of the TNLean note, `part2a_mps_information.tex`, Lemma `lem:LR`,
 lines 274–280, to the finite domains of `part0_preamble.tex`, lines 191–215. -/
-theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
+theorem norm_heisenberg_sub_regionExpectation_domainNeighborhood_le
     {Λ : Finset ℤ} {q R : ℕ} {κ : Type*} [Fintype κ]
     (X : κ → DomainSupport Λ R)
     (h : κ → Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ)
@@ -101,7 +101,7 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
-        QuantumCircuit.siteExpectation q
+        ManyBody.regionExpectation
           (S.biUnion fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)
           (ManyBody.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -118,7 +118,7 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     simp only [pow_zero, mul_one]
     exact_mod_cast domainGraph_card_sphere_le_two Λ x d
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
-  have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
+  have hGraph := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le
     (domainGraph Λ) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
     (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   simp only [pow_zero, Nat.factorial_zero, Nat.cast_one, mul_one, Nat.cast_add] at hGraph

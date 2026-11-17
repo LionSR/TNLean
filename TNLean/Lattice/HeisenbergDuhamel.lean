@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 import QICLean.Analysis.HermitianUnitaryPath
-import TNLean.Circuit.SiteExpectation
+import QICLean.ManyBody.Sites.RegionExpectation
+import TNLean.Circuit.EntropySupport
 
 /-!
 # Duhamel formula for the Heisenberg evolution and localization of its increment
@@ -65,20 +66,21 @@ normalized partial-trace expectation onto `K`, then so is the increment
 `e^{itH} A e^{-itH} - A`, up to the factor `|t|`.
 Use site: Hastings, arXiv:0705.2024v4, appendix, `law16.tex` lines 816–828
 ("Using the Lieb-Robinson bound ... approximate \tilde H_L^0 ... by M_L"). -/
-theorem norm_conj_sub_sub_siteExpectation_le {ι : Type*} [Fintype ι] [DecidableEq ι]
+theorem norm_conj_sub_sub_regionExpectation_le {ι : Type*} [Fintype ι] [DecidableEq ι]
     {d : ℕ} [NeZero d] {H A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (K : Finset ι) {t ε : ℝ}
     (hloc : ∀ s ∈ Set.uIcc 0 t,
       ‖hermitianUnitaryPath H s * (Complex.I • (H * A - A * H)) * hermitianUnitaryPath H (-s) -
-        QuantumCircuit.siteExpectation d K
+        ManyBody.regionExpectation K
           (hermitianUnitaryPath H s * (Complex.I • (H * A - A * H)) *
             hermitianUnitaryPath H (-s))‖ ≤ ε) :
     ‖(hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t) - A) -
-        QuantumCircuit.siteExpectation d K
+        ManyBody.regionExpectation K
           (hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t) - A)‖ ≤ ε * |t| := by
-  let L := QuantumCircuit.subSiteExpectationCLM (ι := ι) d K
+  let L := (LinearMap.id - ManyBody.regionExpectationLM (X := fun _ : ι ↦ Fin d)
+    K).toContinuousLinearMap
   have hL (B : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-      L B = B - QuantumCircuit.siteExpectation d K B := rfl
+      L B = B - ManyBody.regionExpectation K B := rfl
   have hcont : Continuous (fun s : ℝ => hermitianUnitaryPath H s *
       (Complex.I • (H * A - A * H)) * hermitianUnitaryPath H (-s)) := by
     have := continuous_hermitianUnitaryPath H

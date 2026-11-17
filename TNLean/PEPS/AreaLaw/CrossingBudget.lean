@@ -388,6 +388,7 @@ theorem truncatedConstraint_mem_supportedOperators {q : ℕ} [NeZero q] (G : Sim
   · have hc : ((componentFinset G a : Finset ι) : Set ι) = {x | G.Reachable a x} := by
       ext x; simp [componentFinset]
     rw [hc]; exact hk
-  · exact siteExpectation_mem_supportedOperators _ k
+  · exact (mem_supportedOperators_of_isSupportedOn
+    (ManyBody.regionExpectation_mem_supportedOperators _ k))
 
 end TNLean.PEPS.AreaLaw

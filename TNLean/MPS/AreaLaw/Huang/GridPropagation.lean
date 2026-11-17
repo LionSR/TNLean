@@ -7,7 +7,8 @@ import TNLean.MPS.AreaLaw.Huang.GridEvolution
 import TNLean.MPS.AreaLaw.Huang.GridLocalization
 import TNLean.MPS.AreaLaw.Huang.BlockProductBonds
 import QICLean.ManyBody.Dynamics.DisjointRelativeEvolution
-import TNLean.Circuit.SiteExpectationGraphLocalization
+import QICLean.ManyBody.Dynamics.GraphLocalization
+import TNLean.Circuit.EntropySupport
 
 /-!
 # A physical two-layer approximation to chain propagation
@@ -112,18 +113,17 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
   constructor
   · have herror (k : Fin ((L - 1) / w)) (s : ℝ) (hs' : s ∈ Set.uIcc 0 t) :
         ‖ManyBody.heisenbergEvolution A s (B k) -
-          siteExpectation q (buffers k) (ManyBody.heisenbergEvolution A s (B k))‖ ≤
+          ManyBody.regionExpectation (buffers k) (ManyBody.heisenbergEvolution A s (B k))‖ ≤
           chainGridLRPrefactor * Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) := by
       have hst : |s| ≤ |t| := by
         simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs'
       have hv : 0 ≤ chainGridLRVelocity := by unfold chainGridLRVelocity; positivity
-      exact (norm_chainGridBoundaryTerm_sub_siteExpectation_le hq hw h hs hHerm hnorm k r s).trans
+      exact (norm_chainGridBoundaryTerm_sub_regionExpectation_le hq hw h hs hHerm hnorm k r s).trans
         (mul_le_mul_of_nonneg_left
           (Real.exp_le_exp.mpr (by nlinarith [mul_le_mul_of_nonneg_left hst hv]))
           chainGridLRPrefactor_pos.le)
     have herr := hcompare t (fun _ ↦ chainGridLRPrefactor *
       Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2)) fun k s hs ↦ by
-        rw [← siteExpectation_eq_regionExpectation]
         exact herror k s hs
     change ‖hermitianUnitaryPath
         (chainGridRetainedHamiltonian hw h - ∑ j, chainGridBoundaryTerm hw h j) (-t) -

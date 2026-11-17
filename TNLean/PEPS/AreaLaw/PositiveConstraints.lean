@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SiteExpectationOrder
-import TNLean.Circuit.SiteExpectationGraphLocalization
+import TNLean.Circuit.SupportProjection
+import QICLean.ManyBody.Sites.RegionExpectation
+import QICLean.ManyBody.Dynamics.GraphLocalization
+import TNLean.Circuit.EntropySupport
 import QICLean.ManyBody.Dynamics.ComponentLocality
 import QICLean.Analysis.SpectralFilter.FilterLocality
 
@@ -22,7 +24,7 @@ component of its anchor. The constants are chosen before the graph and the inter
 The spectral part comes from `SpectralFilter.positive_replacement`. The locality estimate
 instantiates `SpectralFilter.exists_norm_positiveConstraint_sub_map_le` with the normalized
 site expectation onto the graph ball, whose localization hypothesis is
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le`.
+`ManyBody.norm_heisenberg_sub_regionExpectation_graphBall_le`.
 
 The graph is a general finite graph with the support, multiplicity and sphere-growth bounds
 used by the propagation estimate; the induced lattice domains of the source satisfy them.
@@ -189,9 +191,9 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
       cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ∧
-        siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ∧
+        ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
+        ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
       (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) := by
   set CL := localizationPrefactor R Kg kg
@@ -208,22 +210,32 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
     exact Finset.sum_congr rfl fun j _ => hHerm j
   set K := ManyBody.graphBall G (a i) l
   obtain ⟨hk0, hk1, -⟩ := hk i
-  refine ⟨siteExpectation_nonneg K hk0, siteExpectation_le_one K hk1, ?_⟩
+  refine ⟨(by simpa only [ManyBody.regionExpectation_zero] using (ManyBody.regionExpectation_mono
+    (D := K) hk0)), (by simpa only [ManyBody.regionExpectation_one] using
+    (ManyBody.regionExpectation_mono (D := K) hk1)), ?_⟩
   set M := centeredFilter p (Δ / 2) H Ω (h i)
   have hMh : M.IsHermitian := isHermitian_centeredFilter p _ hH Ω (hHerm i)
-  have hfix : siteExpectationLM q K (CFC.abs (siteExpectationLM q K M)) =
-      CFC.abs (siteExpectationLM q K M) := by
-    simp only [siteExpectationLM_apply]
-    exact siteExpectation_abs_of_mem_supportedOperators K (isHermitian_siteExpectation K hMh)
-      (siteExpectation_mem_supportedOperators K M)
+  have hfix : ManyBody.regionExpectationLM (X := fun _ ↦ Fin q) K (CFC.abs
+    (ManyBody.regionExpectationLM (X := fun _ ↦ Fin q) K M)) =
+      CFC.abs (ManyBody.regionExpectationLM (X := fun _ ↦ Fin q) K M) := by
+    simp only [ManyBody.regionExpectationLM_apply]
+    apply ManyBody.regionExpectation_of_mem_supportedOperators
+    apply ManyBody.mem_supportedOperators_iff_forall_commute.mpr
+    intro Y hY
+    have hY' : Y ∈ supportedOperators q ((K : Set ι)ᶜ) := by
+      simpa only [Finset.coe_compl] using mem_supportedOperators_of_isSupportedOn hY
+    exact (commute_of_mem_supportedOperators disjoint_compl_right
+      (mem_supportedOperators_of_isSupportedOn
+        (ManyBody.regionExpectation_mem_supportedOperators K M)) hY').cfcAbs_of_isHermitian
+          (ManyBody.isHermitian_regionExpectation hMh)
   have hloc : ∀ t : ℝ, ‖Matrix.hermitianUnitaryPath H t * h i *
-        Matrix.hermitianUnitaryPath H (-t) - siteExpectationLM q K
+        Matrix.hermitianUnitaryPath H (-t) - ManyBody.regionExpectationLM (X := fun _ ↦ Fin q) K
           (Matrix.hermitianUnitaryPath H t * h i * Matrix.hermitianUnitaryPath H (-t))‖ ≤
       ‖h i‖ * min 2 (CL * Real.exp (v * |t| - 1 / 2 * (l : ℝ))) := by
     intro t
     let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) X :=
       ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-    have hLR := norm_heisenberg_sub_siteExpectation_graphBall_le G Φ a ha hHerm R
+    have hLR := ManyBody.norm_heisenberg_sub_regionExpectation_graphBall_le G Φ a ha hHerm R
       hDiam vR hCard b₀ hBudget Kg kg hGrowth i (Φ.mem i) l t
     refine hLR.trans (mul_le_mul_of_nonneg_left (min_le_min_left _ ?_) (norm_nonneg _))
     have hKg : Kg ≤ |Kg| := le_abs_self Kg
@@ -242,8 +254,10 @@ theorem positiveQuasilocalConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R vR
     refine mul_le_mul ?_ hexp (Real.exp_pos _).le (localizationPrefactor_nonneg R Kg kg)
     simp only [CL, localizationPrefactor]
     gcongr
-  exact htail hH hΩ (hHerm i) (hJh i) (siteExpectationLM q K) (norm_siteExpectation_le K)
-    (siteExpectation_one K) (fun Y hY => isHermitian_siteExpectation K hY) hfix
+  exact htail hH hΩ (hHerm i) (hJh i) (ManyBody.regionExpectationLM (X := fun _ ↦ Fin q) K)
+    ((ManyBody.norm_regionExpectation_le (D := K)))
+    ((ManyBody.regionExpectation_one (D := K))) (fun Y hY =>
+      (ManyBody.isHermitian_regionExpectation (D := K)) hY) hfix
     (Nat.cast_nonneg l) hloc
 
 /-- **Positive replacement of the Hamiltonian, at the named filter-locality constants**
@@ -273,9 +287,9 @@ theorem positiveQuasilocalConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R vR : 
       cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ∧
-        siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ∧
+        ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
+        ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           positiveConstraintLocalityConst p Δ J (localizationPrefactor R Kg kg) (1 / 2) *
             Real.exp (-(positiveConstraintLocalityRate p Δ (localizationVelocity R vR b₀) (1 / 2) *
               (l : ℝ) ^ kernelExponent p))) ∧
@@ -319,9 +333,9 @@ theorem exists_positiveQuasilocalConstraints {p : ℕ} (hp : 1 ≤ p) (R vR : �
         cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           cs⁻¹ • ((∑ j, h j) - (E₀ : ℂ) • 1) ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ∧
-          siteExpectation q (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ∧
+          ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i) ≤ 1 ∧
+          ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) := by
   obtain ⟨C₃, c₃, hC₃, hc₃, htail⟩ := exists_norm_positiveConstraint_sub_map_le hp hΔ hJ

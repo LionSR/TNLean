@@ -94,9 +94,10 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
         cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         ∑ i, k i ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ∧
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k
+        i) ∧
+        ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+        ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
           C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
       (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
   intro q _ Λ h a ha E₀ Ω hgs
@@ -186,9 +187,10 @@ theorem latticePositiveConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {
         cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         ∑ i, k i ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ∧
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k
+        i) ∧
+        ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+        ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
           latticePositiveConstraintConst R J Δ p *
             Real.exp (-(latticePositiveConstraintRate R J Δ p * (l : ℝ) ^ kernelExponent p))) ∧
       (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) :=
@@ -224,9 +226,10 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ∧
-          siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l)
+          (k i) ∧
+          ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
   exact ⟨_, _, latticePositiveConstraintConst_nonneg R J Δ p,
@@ -252,7 +255,7 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
         ∀ (i : AdmissibleSupport Λ R) (l : ℕ),
         let k := positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
-        let kl := siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) l) k
+        let kl := ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) (a i) l) k
         let G := CFC.sqrt (1 - k)
         let Kr := CFC.sqrt k
         let Gl := CFC.sqrt (1 - kl)

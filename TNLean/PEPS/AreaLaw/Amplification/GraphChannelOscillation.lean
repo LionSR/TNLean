@@ -42,7 +42,7 @@ theorem siteOscillation_spectatorRootChannel_le_exp_of_component_support
     (hk : k ∈ supportedOperators q {x | G.Reachable a x})
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ) (hn : Finset.univ.sup (G.dist a) ≤ n)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (ManyBody.graphBall G a l) k‖ ≤
+    (hε : ∀ l ≤ n, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     siteOscillation q y (spectatorRootChannel k B) ≤ siteOscillation q y B +

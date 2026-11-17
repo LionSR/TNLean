@@ -445,7 +445,8 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ := fun u =>
     contractionWord (fun i : {i // Pr i} => k i) (PoissonWord.partitionWords Pr u).1.1
       (PoissonWord.partitionWords Pr u).1.2
-  let kr := fun i : {i // Pr i} => siteExpectation q (ManyBody.graphBall (domainGraph Λ) (a i) r)
+  let kr := fun i : {i // Pr i} => ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ)
+    (a i) r)
       (k i)
   let Lt : PoissonWord.Word (AdmissibleSupport Λ R) →
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ := fun u =>

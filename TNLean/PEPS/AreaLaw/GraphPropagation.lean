@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
-import TNLean.Circuit.SiteExpectationGraphLocalization
+import QICLean.ManyBody.Dynamics.GraphLocalization
+import TNLean.Circuit.EntropySupport
 
 /-!
 # Graph-distance propagation for finite-domain Hamiltonians
@@ -34,7 +35,7 @@ graph; sites joined only through a hole are far apart.
   commutator bound.
 * `TNLean.Lattice.LocalHamiltonian.commutator_eq_zero_of_edist_eq_top`: exact vanishing
   between different connected components of the domain.
-* `TNLean.Lattice.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le`: the explicit
+* `TNLean.Lattice.LocalHamiltonian.norm_sub_regionExpectation_graphBall_le`: the explicit
   graph-ball localization bound.
 * `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson`: Lemma 4.1 of the source, with
   constants depending only on `R` and `J`.
@@ -226,19 +227,19 @@ with `C₀ = 2 e^R · 2 · 2² 2! e^{1/2} / (1 - e^{-1/2})`.
 
 Source: OpenAI area law, Lemma 4.1, `eq:quasilocal-lr-ce` (`03-quasilocal.tex`,
 lines 65–68 and 117–128), with `E_{i,l}` from `eq:quasilocal-ce` (lines 17–29). -/
-theorem norm_sub_siteExpectation_graphBall_le [NeZero q] (h : LocalHamiltonian Λ q R J)
+theorem norm_sub_regionExpectation_graphBall_le [NeZero q] (h : LocalHamiltonian Λ q R J)
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
     (hA : A ∈ supportedOperators q (X.1 : Set (Site Λ))) (l : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.operator t A -
-        siteExpectation q (ManyBody.graphBall (domainGraph Λ) a l)
+        ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) a l)
           (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
       ‖A‖ * min 2
         (2 * Real.exp R * 2 * (2 ^ 2 * 2 ! * Real.exp (1 / 2) /
             (1 - Real.exp (-(1 / 2)))) *
           Real.exp (2 * (1 + 2 * R * (R + 1) : ℕ) *
             ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J) * Real.exp (2 * R) * |t| - l / 2)) := by
-  have hBound := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le
+  have hBound := ManyBody.norm_heisenberg_sub_regionExpectation_graphBall_le
     (domainGraph Λ) h.interaction (anchors X a) (anchors_mem ha) h.hermitian
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) 2 2
@@ -284,7 +285,7 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
               B * ManyBody.heisenbergEvolution h.operator t A = 0)) ∧
         ∀ l : ℕ,
           ‖ManyBody.heisenbergEvolution h.operator t A -
-              siteExpectation q (ManyBody.graphBall (domainGraph Λ) a l)
+              ManyBody.regionExpectation (ManyBody.graphBall (domainGraph Λ) a l)
                 (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
             ‖A‖ * min 2 (C * Real.exp (v * |t| - c * l)) := by
   have : NeZero q := ⟨by omega⟩
@@ -310,7 +311,7 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     · exact le_max_left _ _
     · exact le_max_left _ _
     · exact min_le_left _ _
-  · refine (h.norm_sub_siteExpectation_graphBall_le X ha hA l t).trans ?_
+  · refine (h.norm_sub_regionExpectation_graphBall_le X ha hA l t).trans ?_
     gcongr ‖A‖ * min 2 ?_
     have hc : min c₁ (1 / 2) * (l : ℝ) ≤ (l : ℝ) / 2 := by
       have := mul_le_mul_of_nonneg_right (min_le_right c₁ (1 / 2 : ℝ)) (Nat.cast_nonneg l)

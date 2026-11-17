@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Sites.RegionExpectation
 
 /-!
 # Tensor-factor support and matrix entries
@@ -90,5 +91,22 @@ theorem mem_supportedOperators_of_isSupportedOn {S : Finset ι}
     have hzero : A = 0 := Subsingleton.elim _ _
     rw [hzero]
     exact Submodule.zero_mem _
+
+open scoped Matrix.Norms.L2Operator in
+/-- Comparing an operator with any supported approximant controls its expectation error.
+Source: area-law localization, `03-quasilocal.tex`, lines 27–29; this is the
+triangle inequality and contractivity after subtracting a fixed point. -/
+theorem norm_sub_regionExpectation_le_two_mul_norm_sub_of_mem_supportedOperators
+    (B : Finset ι) (A A₀ : Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (hA₀ : A₀ ∈ ManyBody.supportedOperators (fun _ : ι ↦ Fin q) B) :
+    ‖A - ManyBody.regionExpectation B A‖ ≤ 2 * ‖A - A₀‖ := by
+  have hfix := ManyBody.regionExpectation_of_mem_supportedOperators hA₀
+  have heq : A - ManyBody.regionExpectation B A =
+      (A - A₀) - ManyBody.regionExpectation B (A - A₀) := by
+    rw [ManyBody.regionExpectation_sub, hfix]
+    abel
+  rw [heq]
+  exact (norm_sub_le _ _).trans (by
+    linarith [ManyBody.norm_regionExpectation_le (D := B) (A - A₀)])
 
 end QuantumCircuit

@@ -273,7 +273,7 @@ theorem sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
     (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
-    (hε : ∀ i l, l ≤ N → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+    (hε : ∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
@@ -314,7 +314,7 @@ theorem graphChannelEventKernel_bounds_of_component_support {C K μ c α : ℝ}
       (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-      (∀ i l, l ≤ N → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+      (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       (∀ y, (∑ z,
         graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
@@ -360,7 +360,7 @@ theorem exists_graphChannelEventKernel_bounds_of_component_support {C K μ c α 
         (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-        (∀ i l, l ≤ N → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+        (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         (∀ y, (∑ z,
           graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))

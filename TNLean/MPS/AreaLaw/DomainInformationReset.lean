@@ -182,7 +182,8 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨path, _, _, _, _, hpathIntegral⟩ :=
     hlocal q hq Λ h D ℓ
   let M := ∫ t : ℝ in Set.Icc (-(T₀ * B)) (T₀ * B),
-    siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t V) * path t ∂gaussianReal 0 η
+    ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t V) * path t ∂gaussianReal
+      0 η
   obtain ⟨hMs, _, hMerr⟩ := hpathIntegral Q V hVsupp η (T₀ * B) hT
   have hMclose : ‖M - M₀‖ ≤ ε := by
     calc

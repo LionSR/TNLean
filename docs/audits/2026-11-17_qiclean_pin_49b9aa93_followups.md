@@ -60,22 +60,32 @@ call and converts its supports with the two lemmas of `Circuit/EntropySupport`.
 `ManyBody.graphBall` is defined from `SimpleGraph.ball`; the three scanner
 modules that unfolded the old filter definition use `ManyBody.mem_graphBall`.
 
-### What stays, and why
+### F12: canonical region expectation
 
-`siteExpectation q K` and `ManyBody.regionExpectation K` are two definitions of
-one normalized partial trace. The new module
-`Circuit/SiteExpectationGraphLocalization` proves them equal
-(`QuantumCircuit.siteExpectation_eq_regionExpectation`) and keeps
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, now
-the QICLean region-expectation estimates rewritten along that equation, for
-their 53 consumers stated with `siteExpectation`. The QICLean projected and
-disjoint relative evolutions and the supported Gaussian integral take
-region-expectation bounds; their five TNLean consumers (`Hastings/BoundaryLocalization`,
-`Huang/GridPropagation`, the three `SupportedGaussianIntegral` modules) feed
-them site-expectation bounds through the same equation, and keep their
-site-expectation statements. `QuantumCircuit.norm_sub_siteExpectation_le` stays
-in `Circuit/SiteExpectation`. All three, with the equation, go in F12.
+F12 is stacked on the exact pin-migration head
+`efb510ea31fc4af347869e563c3f848ad99fa6e3`, retaining QICLean
+`49b9aa933615d4a9ce663f94d2556a93ce7b76ea`. At that head, 50 Lean source files
+mention `siteExpectation` as a word, including its owner and translation bridge.
+Their consumers now use `ManyBody.regionExpectation` and `regionExpectationLM`
+directly. `Circuit/SiteExpectation`, `Circuit/SiteExpectationOrder`, and
+`Circuit/SiteExpectationGraphLocalization` are deleted, including the original
+expectation and linear/deviation-map definitions, the equality bridge, and both
+forwarding graph-localization theorems. No compatibility alias replaces them.
+
+The Weyl calculation and its Kraus CPTP proof now characterize the canonical
+expectation in `Circuit/SpectatorSiteExpectation`; the amplified spectator map
+uses that same expectation on each matrix block. Its Weyl representation keeps
+its existing `NeZero q` assumption. Ordinary region expectations use the
+upstream empty-type-inclusive API. Functional-calculus support proofs live in
+`Circuit/SupportProjection`; the supported-approximant error estimate lives in
+`Circuit/EntropySupport` and now takes canonical finite-region support, with no
+nonzero-dimension assumption.
+
+This does not migrate the separate legacy support predicate, Hamiltonian
+structures, or `Entropy.crossingTerms` (F13). It adds no new support predicate or
+translation shim. Existing support-characterization lemmas are used at the
+remaining legacy support consumers. The independent F13 branch and the pin
+migration's final-head CI are separate from F12 validation.
 
 ## Follow-ups
 

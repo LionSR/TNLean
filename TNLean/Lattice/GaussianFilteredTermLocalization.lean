@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixHermitianSum
-import TNLean.Circuit.SiteExpectationGraphLocalization
-import TNLean.Circuit.SiteExpectationOrder
+import QICLean.ManyBody.Dynamics.GraphLocalization
+import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SupportProjection
+import QICLean.ManyBody.Sites.RegionExpectation
 import TNLean.Lattice.GaussianFilteredGround
 import TNLean.Lattice.GaussianFilteredLocality
 
@@ -55,7 +57,7 @@ metric spaces in `GaussianFilteredMetricTruncation`, without polynomial growth; 
 
 The constants of the Lieb–Robinson bound are those of
 `ManyBody.norm_heisenberg_commutator_le_graphDistance_finset` and
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. These provide
+`ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le`. These provide
 analogues of the source's localization terms; the support-radius conversion above must be made
 before comparing them. The statements here keep `q` and `T` free.
 
@@ -127,14 +129,14 @@ set of sites within graph distance `l` of `S`. The normalized partial trace of `
 sites. This is an analogue of Hastings, arXiv:cond-mat/0508554v3, eq. `apb`
 (lines 300–320, proved at lines 1458–1533), with the partial trace in place of truncated
 dynamics and the radius conversion described in the module docstring. -/
-theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZero d]
+theorem norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood [NeZero d]
     (Kg : ℝ) (kg : ℕ)
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W -
-        siteExpectation d (S.biUnion fun x => ManyBody.graphBall G x l)
+        ManyBody.regionExpectation (S.biUnion fun x => ManyBody.graphBall G x l)
           (gaussianFilteredTerm q ΔE (∑ k, h k) W)‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) ^ 2 * ‖W‖ * Kg *
           (2 ^ kg * kg.factorial * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))) *
@@ -155,11 +157,11 @@ theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZe
         exact (Nat.cast_nonneg _).trans this
       positivity
   have hv : 0 ≤ v := by positivity
-  refine norm_sub_siteExpectation_gaussianFilteredTerm_le hq hH W _ hT (by positivity)
+  refine norm_sub_regionExpectation_gaussianFilteredTerm_le hq hH W _ hT (by positivity)
     fun t ht => ?_
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
     ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-  have hLR := norm_heisenberg_sub_siteExpectation_graphNeighborhood_le G Φ a ha hHerm
+  have hLR := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le G Φ a ha hHerm
     R hDiam vR hCard b₀ hBudget Kg kg hGrowth S (isSupportedOn_of_mem_supportedOperators hW) l t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) hP)
   have htT : |t| ≤ T := abs_le.mpr ht
@@ -168,7 +170,7 @@ theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZe
 /-- **The approximation `M` of a filtered term on a finite graph.** Let `W` act on `S`, and let
 `K` be the set of sites within graph distance `l` of `S`. There is an operator `M` acting on
 `K` with `‖M‖ ≤ ‖W‖`, Hermitian when `W` is, and with `‖W_tilde - M‖` at most the bound of
-`norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood`. With `W = H_i` and
+`norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood`. With `W = H_i` and
 `‖H_i‖ ≤ J`, this gives an analogue of the approximation in Hastings,
 arXiv:cond-mat/0508554v3, lines 285–320. If `H_i` is supported within radius `R` of `i`,
 the support radius here is `l + R`; obtaining radius `l_proj` requires
@@ -188,10 +190,13 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
             Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
   have hH : (∑ k, h k).IsHermitian := isHermitian_sum _ fun k _ => hHerm k
-  exact ⟨_, siteExpectation_mem_supportedOperators _ _,
-    (norm_siteExpectation_le _ _).trans (norm_gaussianFilteredTerm_le q ΔE hH W),
-    fun hW' => isHermitian_siteExpectation _ (isHermitian_gaussianFilteredTerm q ΔE hH hW'),
-    norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood G X a ha h hHerm
+  exact ⟨_, (QuantumCircuit.mem_supportedOperators_of_isSupportedOn
+    (ManyBody.regionExpectation_mem_supportedOperators _ _)),
+    ((ManyBody.norm_regionExpectation_le (D := _)) _).trans (norm_gaussianFilteredTerm_le q ΔE hH
+      W),
+    fun hW' => (ManyBody.isHermitian_regionExpectation (D := _)) (isHermitian_gaussianFilteredTerm
+      q ΔE hH hW'),
+    norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X a ha h hHerm
       hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hq S hW l hT⟩
 
 end Graph

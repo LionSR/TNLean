@@ -52,7 +52,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         ∃ U : ℝ → Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
-            ((Complex.I • siteExpectation (q * q) (N Z)
+            ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin L → Fin (q * q)) ℂ) ∧
           (∀ t, U t ∈ supportedOperators (q * q) (N Z : Set (Fin L))) ∧
@@ -62,7 +62,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
-                siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
+                ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
               M ∈ supportedOperators (q * q) (B : Set (Fin L)) ∧
               ‖M‖ ≤ ‖W‖ ∧
@@ -88,22 +88,21 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
     ManyBody.exists_supported_gaussian_integral_of_projection_bounds
       (h.swappedDoubled D).operator_isHermitian h.doubled.operator_isHermitian (N Z)
-  simp only [← siteExpectation_eq_regionExpectation] at hU haverage
   refine ⟨U, hU0, hU, hunit, fun t ↦ mem_supportedOperators_of_isSupportedOn (hsupport t), ?_⟩
   intro Q W hW η T hT B M
   have hgen (s : ℝ) (hs : |s| ≤ T) :
       ‖ManyBody.heisenbergEvolution K' s (K' - K) -
-        siteExpectation (q * q) (N Z) (ManyBody.heisenbergEvolution K' s (K' - K))‖ ≤
+        ManyBody.regionExpectation (N Z) (ManyBody.heisenbergEvolution K' s (K' - K))‖ ≤
           d * (L : ℝ) * Real.exp (v * T - ℓ / 2) :=
-    (h.norm_relativeGenerator_sub_siteExpectation_le D hq ℓ hℓ s).trans
+    (h.norm_relativeGenerator_sub_regionExpectation_le D hq ℓ hℓ s).trans
       (mul_le_mul_of_nonneg_left
         (Real.exp_mul_sub_le_exp_mul_sub hv.le hs)
         (mul_nonneg hd (Nat.cast_nonneg _)))
   have hnear (t : ℝ) (ht : |t| ≤ T) :
       ‖ManyBody.heisenbergEvolution K' t W -
-        siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
+        ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
           ‖W‖ * a * (L : ℝ) ^ 2 * Real.exp (v * T - ℓ / 2) := by
-    have hloc := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
+    have hloc := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) (h.swappedDoubled D).term
       (h.swappedDoubled D).hermitian (h.swappedDoubled D).supported b₀
       (h.swappedDoubled D).sum_norm_terms_containing_le hqq Q
