@@ -73,9 +73,6 @@ blocks have standard forms of the same ranks. If they are equivalent under
 conjugation symmetry, both standard forms are in Case I or both are in Case II of
 Proposition `corconj`.
 
-**Local fix (missing argument):** see the module docstring and
-`docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex`.
-
 Source: arXiv:1703.09188, Corollary `cor:equiv-under-conjugation`,
 lines 1548--1554, "only if" direction. -/
 theorem same_case_of_equivalentUnderSymmetry_conjugation
@@ -138,9 +135,6 @@ comparable Theorem `prop:conjsym-strict-equiv` (line 1482). Conjugation invarian
 is the standing hypothesis of the section (lines 1008--1010), and simplicity in
 canonical form II is the reading of a tensor in standard form recorded in
 `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`.
-
-**Local fix (missing argument):** see the module docstring and
-`docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex`.
 
 Source: arXiv:1703.09188, Corollary `cor:equiv-under-conjugation`,
 lines 1548--1567. -/
