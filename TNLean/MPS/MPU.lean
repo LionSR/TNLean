@@ -148,6 +148,7 @@ import TNLean.MPS.MPU.KetLeftMul
 import TNLean.MPS.MPU.KetLeftMulCanonicalForm
 import TNLean.MPS.MPU.LeafIntervalCircuit
 import TNLean.MPS.MPU.LengthDependentPhase
+import TNLean.MPS.MPU.LevelTriangularReduction
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.MinimalCutEndpointMetrics

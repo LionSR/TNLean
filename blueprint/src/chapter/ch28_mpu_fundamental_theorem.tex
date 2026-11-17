@@ -2551,6 +2551,38 @@
     % ours does not. Documented in docs/paper-gaps/mpu_equivalence_fixed_bond.tex.
 \end{definition}
 
+\begin{lemma}[Discarding the off-diagonal blocks of a block-triangular tensor]
+    \label{lem:mpu_level_triangular_reduction}
+    \lean{MPOTensor.levelScale, MPOTensor.levelDiag, MPOTensor.IsLevelTriangular,
+        MPOTensor.levelScale_one, MPOTensor.levelScale_zero,
+        MPOTensor.continuous_levelScale, MPOTensor.mpo_levelScale,
+        MPOTensor.joinedIn_sameMPOSet_levelDiag,
+        MPOTensor.joinedIn_sameMPOSet_padBond_of_levelDiag_eq}
+    \leanok
+    \uses{def:strictly-equivalent-tensors}
+    Grade the virtual directions of a tensor $\mathcal W$ of bond dimension $D$
+    by levels $w\colon\{1,\ldots,D\}\to\mathbb N$, and suppose that every letter
+    vanishes from a higher level to a lower one:
+    $(\mathcal W^{ij})_{\beta\alpha}=0$ whenever $w(\beta)<w(\alpha)$. Let
+    $\mathcal W_0$ keep only the entries with $w(\beta)=w(\alpha)$. Then
+    $\mathcal W$ and $\mathcal W_0$ are joined by a continuous path of tensors
+    whose periodic operators $W^{(N)}$ are those of $\mathcal W$ at every
+    $N\geq1$. In particular, if $\mathcal W_0$ is a smaller tensor with
+    adjoined unused directions, the path ends at that tensor.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $s\in\mathbb C$ multiply the entry $(\beta,\alpha)$ of every letter by
+    $s^{w(\beta)-w(\alpha)}$; this is a polynomial in $s$ because the entries
+    with $w(\beta)<w(\alpha)$ vanish. For $s\neq0$ it is the conjugation of
+    every letter by $\operatorname{diag}(s^{w(\beta)})$, which leaves every
+    trace of a product of letters, hence every $W^{(N)}$, unchanged. The
+    periodic operators are continuous in $s$, so they are also unchanged at
+    $s=0$, where the scaled tensor is $\mathcal W_0$. The path is $s=1-t$,
+    $t\in[0,1]$.
+\end{proof}
+
 \begin{lemma}[Normalized transfer data under identity ancillas]
     \label{thm:mpu_identity_ancilla_reduced_cfii}
     \lean{MPOTensor.normalizedFlattening_tensorPhysicalId,
