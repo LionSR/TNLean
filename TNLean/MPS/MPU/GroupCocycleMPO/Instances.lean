@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
 import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
-import TNLean.MPS.Examples.CZX.CZXUnitary
+import TNLean.MPS.Chain.BinaryPhase
 import TNLean.MPS.MPU.GroupCocycleMPO
 
 /-!

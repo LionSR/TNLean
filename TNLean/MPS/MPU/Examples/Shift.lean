@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.MPU.Identity
 import Mathlib.LinearAlgebra.Matrix.Permutation
 import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.MPDO.AreaLaw
@@ -20,7 +21,8 @@ The examples in arXiv:1703.09188, lines 1980--2001.
 
 * `rightShiftTensor` and `leftShiftTensor`: bond-$d$ tensors for the right and
   left cyclic shifts.
-* `identityMPUTensor`: the bond-one identity tensor.
+* `identityMPUTensor`: the bond-one identity tensor, imported from
+  `TNLean.MPS.MPU.Identity`.
 * `shiftExampleU₁`, `shiftExampleU₂`, and `shiftExampleU₃`: the three operator
   families $U_1$, $U_2$, and $U_3$ from the source.
 
@@ -115,19 +117,6 @@ theorem mpo_leftShiftTensor (d N : ℕ) [NeZero N] :
 /-- The left-shift tensor is an MPU. -/
 theorem leftShiftTensor_isMPU (d : ℕ) : IsMPU (leftShiftTensor d) :=
   (rightShiftTensor_isMPU d).physicalAdjointTensor
-
-/-- The bond-one identity MPO tensor. -/
-noncomputable def identityMPUTensor (d : ℕ) : MPOTensor d 1 := idTensor d
-
-/-- The identity tensor generates the identity on every chain. -/
-theorem mpo_identityMPUTensor (d N : ℕ) : mpo (identityMPUTensor d) N = 1 :=
-  mpo_idTensor d N
-
-/-- The identity tensor is an MPU. -/
-theorem identityMPUTensor_isMPU (d : ℕ) : IsMPU (identityMPUTensor d) := by
-  intro N _hN
-  rw [mpo_identityMPUTensor, Matrix.mem_unitaryGroup_iff]
-  simp
 
 /-- The paper's $U_1$, the identity on two spins at each site. -/
 noncomputable def shiftExampleU₁ (d : ℕ) : MPOTensor (d * d) 1 :=

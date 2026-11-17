@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOAction
-import TNLean.MPS.MPDO.PhysicalBasisAction
 
 /-!
 # The block-injective mixed path and the action of its common MPO
@@ -526,7 +526,8 @@ private theorem endpoint_block_action_entry {D : Fin s → ℕ} {χ : ℕ}
     (fun Z : Matrix (Fin (χ * D x)) (Fin (χ * D x)) ℂ =>
       Z (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j)))
     (h.letter (finSigmaFinEquiv ⟨y, finProdFinEquiv (r, t)⟩))
-  simp only [MPOTensor.actTensor_apply_finProdFinEquiv, Matrix.sum_apply] at hh
+  simp only [MPOTensor.actTensor, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply] at hh
   rw [sum_sectorTensor A x (fun q Z => T _ q α β * Z i j) (by simp),
     sum_sigma_sectorTensor A y _ (fun q Z => (W x q.1 q.2 * Z * V x q.1 q.2)
       (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j))) (by simp)] at hh
