@@ -206,8 +206,6 @@ EXAMPLES_IMPORTS: frozenset[str] = frozenset(
         "TNLean.MPS.MPDO.CZXFusionTensors -> TNLean.MPS.MPU.Examples.Shift",
         "TNLean.MPS.MPDO.CZXGHZAction -> TNLean.MPS.Examples.GHZ",
         "TNLean.MPS.MPDO.CZXGaussCircuitTuple -> TNLean.MPS.Examples.ZMod2",
-        "TNLean.MPS.MPU.GroupCocycleMPO.Instances -> TNLean.MPS.Examples.CZX.CZXUnitary",
-        "TNLean.MPS.MPU.IdentityIndex -> TNLean.MPS.MPU.Examples.ShiftSourceFactors",
         "TNLean.MPS.Preparation.GHZSectorParent -> TNLean.MPS.Examples.GHZ",
         "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.CZX.CZXAnomalyClass",
         "TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks -> TNLean.MPS.Examples.GHZ",
