@@ -1135,11 +1135,34 @@ Theorem~\ref{thm:mpug_anomaly_obstruction}.
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_incoming_blocks,def:glm_boundary_zipper_family,
+        thm:mpdo_bnt_common_positive_blocked_fusion,
+        thm:mpdo_one_letter_simultaneous_inverse,
         lem:mpoalg_fusion_counit_unital_representation}
-    Wedderburn--Artin gives $\psi$. Injectivity of $\phi$ means that its
-    matrix coefficients separate points, so they span $\mathcal A^*$.
-    Their images therefore span all blocks simultaneously and give the
-    one-letter inverse. The direct sum representation of $\mathcal A^*$
+    Wedderburn--Artin gives $\psi$. Write $\phi_{ik}(x)=\phi(x)_{ik}$.
+    Injectivity of $\phi$ gives
+    \begin{align}
+        \bigcap_{i,k}\ker\phi_{ik}                & =\{0\},        &
+        \operatorname{span}_{\C}\{\phi_{ik}:i,k\} & =\mathcal A^*.
+        \notag
+    \end{align}
+    Indeed, the first equality says that the annihilator of the displayed
+    span is zero; finite-dimensional duality gives the second. Transporting
+    this span through the algebra isomorphism $\psi$ yields
+    \begin{align}
+        \operatorname{span}_{\C}\{(T_c^{ik})_c:i,k\}
+         & =\prod_c\MN{D_c}.
+        \notag
+    \end{align}
+    Projecting this simultaneous span to each block gives one-letter
+    injectivity, as in Lemma~\ref{thm:mpdo_bnt_common_positive_blocked_fusion}.
+    Lemma~\ref{thm:mpdo_one_letter_simultaneous_inverse} gives coefficients
+    $K_{(c,x,y),(i,k)}$ satisfying
+    \begin{align}
+        \sum_{i,k}K_{(c,x,y),(i,k)}(T_d^{ik})_{x'y'}
+         & =\delta_{cd}\delta_{xx'}\delta_{yy'}.
+        \notag
+    \end{align}
+    The direct sum representation of $\mathcal A^*$
     is faithful. Its arbitrary-boundary operators are exactly the
     represented elements $\rho_n(x)$ with one element $x$ for all lengths.
     Since $\rho_n(xy)=\rho_n(x)\rho_n(y)$ for $n>0$, these operators are
