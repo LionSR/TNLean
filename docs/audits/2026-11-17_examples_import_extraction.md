@@ -18,7 +18,11 @@ Extract GHZ tensor/sectors into `MPS/Core/GHZ` and binary-group algebra into `Al
 
 GHZSectorParent imports the shared GHZ tensor/sectors from the preceding partition.
 
-At this point in the series, the checker records 11 example-import edges and 57 mutual-directory pairs. Each unit removes only entries that its source changes resolve.
+### fundamental-theorem
+
+Move arbitrary-tensor counterexamples, embedding sharpness, and the weighted counterexample consumer into Examples/MultiBlock. Keep the three old module paths as import-only compatibility modules.
+
+At this point in the series, the checker records 9 example-import edges and 56 mutual-directory pairs. Each unit removes only entries that its source changes resolve.
 
 ## Compatibility semantics
 
