@@ -326,7 +326,7 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (vObs : ℕ) (hSCard : S.card ≤ vObs)
     (l : ℕ) (Y : Finset ι)
-    (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
+    (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
       groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤
@@ -422,7 +422,7 @@ theorem norm_groundCompression_observables_commutator_le_exp_edist [NeZero d]
   intro l hlt
   exact norm_groundCompression_observables_commutator_le_exp G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (Y j) (hW j) vObs (hYCard j)
-    l (Y i : Set ι)
+    l (Y i)
     (disjoint_biUnion_graphBall_of_lt_edist G Y c hc Robs hYDiam i j l hlt) (hW i)
 
 omit ha in
@@ -438,7 +438,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (i j : κ) (l : ℕ)
-    (hY : Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i)) :
+    (hY : Disjoint ((X j).biUnion fun x => ManyBody.graphBall G x l) (X i)) :
     ‖groundCompression (∑ k, h k) E₀ (h j) * groundCompression (∑ k, h k) E₀ (h i) -
         groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖ ≤
       commutatorConst R vR b₀ Kg kg * ‖h j‖ * ‖h i‖ *
